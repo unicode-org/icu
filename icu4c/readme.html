@@ -31,7 +31,7 @@
     <h1>International Components for Unicode<br>
      ICU 2.1 ReadMe</h1>
 
-    <p>Version: 2002-Apr-15<br>
+    <p>Version: 2002-May-13<br>
      Copyright &copy; 1997-2002 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -42,16 +42,16 @@
     <ul class="TOC">
       <li><a href="#Introduction">Introduction</a></li>
 
-      <li><a href="#GettingStarted">Getting started</a></li>
+      <li><a href="#GettingStarted">Getting Started</a></li>
 
-      <li><a href="#News">What is new in this release?</a></li>
+      <li><a href="#News">What Is New In This release?</a></li>
 
-      <li><a href="#Download">How to Download the Source Code</a></li>
+      <li><a href="#Download">How To Download the Source Code</a></li>
 
       <li><a href="#SourceCode">ICU Source Code Organization</a></li>
 
       <li>
-        <a href="#HowToBuild">How to Build And Install ICU</a> 
+        <a href="#HowToBuild">How To Build And Install ICU</a> 
 
         <ul class="TOC">
           <li><a href="#HowToBuildSupported">Supported Platforms</a></li>
@@ -70,15 +70,18 @@
         <a href="#ImportantNotes">Important Notes About Using ICU</a> 
 
         <ul class="TOC">
+          <li><a href="#ImportantNotesCPlusPlus">Using ICU in a Multithreaded
+          Environment</a></li>
+
           <li><a href="#ImportantNotesWindows">Windows Platform</a></li>
 
           <li><a href="#ImportantNotesUnix">Unix Type Platforms</a></li>
 
-          <li><a href="#ImportantNotesDefaultCP">Using the default
-          codepage</a></li>
+          <li><a href="#ImportantNotesDefaultCP">Using the Default
+          Codepage</a></li>
 
-          <li><a href="#ImportantNotesDeprecatedAPI">Methods for enabling
-          deprecated APIs</a></li>
+          <li><a href="#ImportantNotesDeprecatedAPI">Methods For Enabling
+          Deprecated APIs</a></li>
         </ul>
       </li>
 
@@ -306,7 +309,7 @@
     thread safe manner. This has been fixed.</p>
     <hr>
 
-    <h2><a name="Download" href="#Download">How to Download the Source
+    <h2><a name="Download" href="#Download">How To Download the Source
     Code</a></h2>
 
     <p>There are two ways to download ICU releases:</p>
@@ -650,7 +653,7 @@
         <td>Mac OS X (10.1)</td>
 
         <td>gcc-932.1, based on gcc version 2.95.2<br>
-        (Developer Tools December 2001)</td>
+         (Developer Tools December 2001)</td>
 
         <td>Regularly tested</td>
       </tr>
@@ -792,10 +795,10 @@
       <li>You are now able to develop applications with ICU by using the
       libraries and tools in <i>&lt;ICU&gt;</i>\bin\. The headers are in
       <i>&lt;ICU&gt;</i>\include\ and the link libraries are in
-      <i>&lt;ICU&gt;</i>\lib\. To install the ICU runtime on a machine,
-      or ship it with your application, copy the needed components from
-      <i>&lt;ICU&gt;</i>\bin\</li> to a location on the system PATH or to
-      your application directory.
+      <i>&lt;ICU&gt;</i>\lib\. To install the ICU runtime on a machine, or ship
+      it with your application, copy the needed components from
+      <i>&lt;ICU&gt;</i>\bin\ to a location on the system PATH or to your
+      application directory.</li>
     </ol>
 
     <p><a name="HowToBuildWindowsCommandLine"><strong>Using MSDEV At The
@@ -1106,7 +1109,7 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
             <br>
           </li>
           <!--li>Add QCXXN, to your build process library list. This results in
-                                                                                                                                                                                                                                      the resolution of CRTCPPMOD used by the icc compiler</li-->
+                                                                                                                                                                                                                                                the resolution of CRTCPPMOD used by the icc compiler</li-->
 
           <li>
             In order to get the tests to run correctly, the QUTCOFFSET needs to
@@ -1150,6 +1153,27 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
 
     <h2><a name="ImportantNotes" href="#ImportantNotes">Important Notes About
     Using ICU</a></h2>
+
+    <h3><a name="ImportantNotesCPlusPlus" href="ImportantNotesCPlusPlus">Using
+    ICU in a Multithreaded Environment</a></h3>
+
+    <p>If you are using ICU in a multithreaded application, there may be a
+    chance that the ICU global mutex isn't initialized properly. Normally the
+    ICU global mutex is initialized during C++ static initialization, but there
+    are some compilers and linkers that do not properly perform C++ static
+    initialization in a library (this sometimes happens on HP/UX and on MacOS
+    X).</p>
+
+    <p>Upon the first usage of most ICU APIs, the global mutex will get
+    initialized. For example, uloc_countAvailable() or uloc_getDefault() will
+    initialize the global mutex; however, those functions should be called
+    before any other threads use ICU. Without one of these function calls from
+    a single thread, the data caches inside ICU may get initialized more than
+    once, which may cause memory leaks and other problems.</p>
+
+    <p>ICU does not use C++ static initialization for anything else, and
+    disabling threads in ICU will disable all C++ static initialization in
+    ICU.</p>
 
     <h3><a name="ImportantNotesWindows" href="#ImportantNotesWindows">Windows
     Platform</a></h3>
