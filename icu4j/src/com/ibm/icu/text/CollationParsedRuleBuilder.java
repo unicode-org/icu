@@ -900,7 +900,8 @@ final class CollationParsedRuleBuilder
 	        // Latin 1
             int trieinitialvalue = RuleBasedCollator.CE_SPECIAL_FLAG_
                                    | (CE_NOT_FOUND_TAG_ << 24);
-	        m_mapping_ = new IntTrieBuilder(null, 0x100000, trieinitialvalue, 
+	    // temporary fix for jb3822, 0x100000 -> 10000
+	        m_mapping_ = new IntTrieBuilder(null, 0x10000, trieinitialvalue, 
                                             trieinitialvalue, true); 
 	        m_prefixLookup_ = new Hashtable();
 	        // uhash_open(prefixLookupHash, prefixLookupComp);
