@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationParsedRuleBuilder.java,v $ 
-* $Date: 2003/10/09 23:27:18 $ 
-* $Revision: 1.26 $
+* $Date: 2004/01/09 07:31:57 $ 
+* $Revision: 1.27 $
 *
 *******************************************************************************
 */
@@ -1437,7 +1437,14 @@ final class CollationParsedRuleBuilder
 	    int strength = token.m_strength_;
 	    int low = lows[fstrength * 3 + strength];
 	    int high = highs[fstrength * 3 + strength];
-	    int maxbyte = (strength == Collator.TERTIARY) ? 0x3F : 0xFF;
+	    int maxbyte = 0;
+	    if(strength == Collator.TERTIARY) {
+	    	maxbyte = 0x3F;
+	    } else if(strength == Collator.PRIMARY) {
+	    	maxbyte = 0xFE;
+	    } else {
+	    	maxbyte = 0xFF;
+	    }
 	
 	    int count = token.m_toInsert_;
 	

@@ -404,7 +404,14 @@ U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t* lows, uint32_
   uint32_t strength = tok->strength;
   uint32_t low = lows[fStrength*3+strength];
   uint32_t high = highs[fStrength*3+strength];
-  uint32_t maxByte = (strength == UCOL_TERTIARY)?0x3F:0xFF;
+  uint32_t maxByte = 0;
+  if(strength == UCOL_TERTIARY) {
+      maxByte = 0x3F;
+  } else if(strength == UCOL_PRIMARY) {
+      maxByte = 0xFE;
+  } else {
+      maxByte = 0xFF;
+  }
 
   uint32_t count = tok->toInsert;
 
