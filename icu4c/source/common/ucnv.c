@@ -745,7 +745,7 @@ int32_t   ucnv_fromUChars (const UConverter * converter,
   myTarget_limit = target + targetSize;
 
   if(myTarget_limit < target)       /*if targetsize is such that the limit*/
-    myTarget_limit = U_MAX_PTR;     /* would wrap around, truncate it.    */
+    myTarget_limit = (char *)U_MAX_PTR;     /* would wrap around, truncate it.    */
 
   if (targetSize > 0)
     {
@@ -853,7 +853,7 @@ int32_t ucnv_toUChars (const UConverter * converter,
   myTarget_limit = target + targetSize - 1;
 
   if(myTarget_limit < target)       /*if targetsize is such that the limit*/
-    myTarget_limit = U_MAX_PTR - 1; /* would wrap around, truncate it.    */
+    myTarget_limit = ((UChar*)U_MAX_PTR) - 1; /* would wrap around, truncate it.    */
 
 
   /*Not in pure pre-flight mode */
