@@ -58,6 +58,9 @@ private:
     int32_t scriptStart;
     int32_t scriptEnd;
     UScriptCode scriptCode;
+
+    UScriptCode parenStack[128];
+    int32_t parenSP;
 };
 
 inline ScriptRun::ScriptRun()
@@ -95,6 +98,7 @@ inline void ScriptRun::reset()
     scriptStart = charStart;
     scriptEnd   = charStart;
     scriptCode  = USCRIPT_INVALID_CODE;
+    parenSP     = -1;
 }
 
 inline void ScriptRun::reset(int32_t start, int32_t length)
