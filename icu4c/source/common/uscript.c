@@ -770,7 +770,7 @@ findCodeIndex(const UScriptCode unsorted[], const UScriptCode target, int size){
     return -1;
 }
 
-U_CAPI int32_t 
+U_CAPI int32_t  U_EXPORT2
 uscript_getCode(const char* nameOrAbbrOrLocale,
                 UScriptCode* fillIn,
                 int32_t capacity,
@@ -845,7 +845,7 @@ uscript_getCode(const char* nameOrAbbrOrLocale,
     return numFilled;
 }
 
-U_CAPI const char* 
+U_CAPI const char*  U_EXPORT2
 uscript_getName(UScriptCode scriptCode){
     int index = -1;
     if(scriptCode > USCRIPT_CODE_LIMIT){
@@ -859,7 +859,7 @@ uscript_getName(UScriptCode scriptCode){
     }
 
 }
-U_CAPI const char* 
+U_CAPI const char*  U_EXPORT2
 uscript_getShortName(UScriptCode scriptCode){
     int index = -1;
     if(scriptCode > USCRIPT_CODE_LIMIT){
@@ -873,7 +873,7 @@ uscript_getShortName(UScriptCode scriptCode){
     }
 }
 
-U_CAPI UScriptCode 
+U_CAPI UScriptCode  U_EXPORT2
 uscript_getScript(UChar32 codepoint, UErrorCode *err){
     
     if(codepoint > 0x10ffff){

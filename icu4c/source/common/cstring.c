@@ -26,7 +26,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 
-char*
+U_CAPI char* U_EXPORT2
 T_CString_toLowerCase(char* str)
 {
     char* origPtr = str;
@@ -40,7 +40,7 @@ T_CString_toLowerCase(char* str)
     return origPtr;
 }
 
-char*
+U_CAPI char* U_EXPORT2
 T_CString_toUpperCase(char* str)
 {
     char* origPtr = str;
@@ -56,7 +56,8 @@ T_CString_toUpperCase(char* str)
 
 /*Takes a int32_t and     fills in  a char* string with that number "radix"-based*/
 
-void T_CString_integerToString(char* buffer, int32_t i, int32_t radix)
+U_CAPI void U_EXPORT2
+T_CString_integerToString(char* buffer, int32_t i, int32_t radix)
 {
   int32_t length=0;
   int32_t num = 0;
@@ -86,7 +87,7 @@ void T_CString_integerToString(char* buffer, int32_t i, int32_t radix)
 }
 
 
-int32_t
+U_CAPI int32_t U_EXPORT2
 T_CString_stringToInteger(const char *integerString, int32_t radix)
 {
     char *end;
@@ -174,7 +175,8 @@ T_CString_strnicmp(const char *str1, const char *str2, uint32_t n) {
     return 0;
 }
 
-U_CAPI char *uprv_strdup(const char *src) {
+U_CAPI char* U_EXPORT2
+uprv_strdup(const char *src) {
     size_t len = strlen(src) + 1;
     char *dup = (char *) malloc(len);
 

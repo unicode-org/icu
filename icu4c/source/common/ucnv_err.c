@@ -41,7 +41,8 @@
 
 
 /*Function Pointer STOPS at the ILLEGAL_SEQUENCE */
-void   UCNV_FROM_U_CALLBACK_STOP (
+U_CAPI void    U_EXPORT2
+UCNV_FROM_U_CALLBACK_STOP (
                   const void *context,
                   UConverterFromUnicodeArgs *fromUArgs,
                   const UChar* codeUnits,
@@ -56,7 +57,8 @@ void   UCNV_FROM_U_CALLBACK_STOP (
 
 
 /*Function Pointer STOPS at the ILLEGAL_SEQUENCE */
-void   UCNV_TO_U_CALLBACK_STOP (
+U_CAPI void    U_EXPORT2
+UCNV_TO_U_CALLBACK_STOP (
                    const void *context,
                    UConverterToUnicodeArgs *toUArgs,
                    const char* codePoints,
@@ -68,7 +70,8 @@ void   UCNV_TO_U_CALLBACK_STOP (
   return;
 }
 
-void   UCNV_FROM_U_CALLBACK_SKIP (                  
+U_CAPI void    U_EXPORT2
+UCNV_FROM_U_CALLBACK_SKIP (                  
                   const void *context,
                   UConverterFromUnicodeArgs *fromUArgs,
                   const UChar* codeUnits,
@@ -103,7 +106,8 @@ void   UCNV_FROM_U_CALLBACK_SKIP (
     }
 }
 
-void   UCNV_FROM_U_CALLBACK_SUBSTITUTE (
+U_CAPI void    U_EXPORT2
+UCNV_FROM_U_CALLBACK_SUBSTITUTE (
                   const void *context,
                   UConverterFromUnicodeArgs *fromArgs,
                   const UChar* codeUnits,
@@ -146,7 +150,8 @@ void   UCNV_FROM_U_CALLBACK_SUBSTITUTE (
  *escape sequence to the target codepage (if conversion failure happens then
  *we revert to substituting with subchar)
  */
-void   UCNV_FROM_U_CALLBACK_ESCAPE (
+U_CAPI void    U_EXPORT2
+UCNV_FROM_U_CALLBACK_ESCAPE (
                          const void *context,
                          UConverterFromUnicodeArgs *fromArgs,
                          const UChar *codeUnits,
@@ -289,7 +294,8 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
 
 
 
-void UCNV_TO_U_CALLBACK_SKIP (
+U_CAPI void  U_EXPORT2
+UCNV_TO_U_CALLBACK_SKIP (
                  const void *context,
                  UConverterToUnicodeArgs *toArgs,
                  const char* codeUnits,
@@ -323,7 +329,8 @@ void UCNV_TO_U_CALLBACK_SKIP (
     }
 }
 
-void   UCNV_TO_U_CALLBACK_SUBSTITUTE (
+U_CAPI void    U_EXPORT2
+UCNV_TO_U_CALLBACK_SUBSTITUTE (
                  const void *context,
                  UConverterToUnicodeArgs *toArgs,
                  const char* codeUnits,
@@ -364,7 +371,8 @@ void   UCNV_TO_U_CALLBACK_SUBSTITUTE (
 /*uses uprv_itou to get a unicode escape sequence of the offensive sequence,
  *and uses that as the substitution sequence
  */
-void  UCNV_TO_U_CALLBACK_ESCAPE (
+U_CAPI void   U_EXPORT2
+UCNV_TO_U_CALLBACK_ESCAPE (
                  const void *context,
                  UConverterToUnicodeArgs *toArgs,
                  const char* codeUnits,

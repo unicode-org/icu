@@ -122,8 +122,7 @@ U_CAPI void U_EXPORT2 ucmpe32_close(CompactEIntArray* array);
  */
 #define ucmpe32_get(this_obj, index) (this_obj->stage2[(this_obj->stage1[(index >> _UCMPE32_TRIE_SHIFT)] )+ \
                            (index & _UCMPE32_STAGE_2_MASK)])
-U_CAPI
-int32_t 
+U_CAPI int32_t U_EXPORT2 
 ucmpe32_get32(CompactEIntArray* this_obj, UChar32 code);
 
 /** 
@@ -162,7 +161,7 @@ U_CAPI  void U_EXPORT2 ucmpe32_set32(CompactEIntArray *array,
  * @param end end of the range
  * @param value value to be set
  */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 ucmpe32_setRange32(CompactEIntArray* this_obj, UChar32 start, UChar32 end, int32_t value);
 
 /** 

@@ -203,7 +203,7 @@ typedef enum {
  *         the output was truncated, and the error code is set to U_BUFFER_OVERFLOW_ERROR.
  * @stable
  */
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2 
 unorm_normalize(const UChar *source, int32_t sourceLength,
                 UNormalizationMode mode, int32_t options,
                 UChar *result, int32_t resultLength,

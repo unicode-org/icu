@@ -500,7 +500,7 @@ u_iscntrl(UChar32 c) {
 }
 
 /* Checks if the Unicode character is a space character.*/
-UBool
+U_CAPI UBool U_EXPORT2
 u_isspace(UChar32 c) {
     return (UBool)(((1UL<<GET_CATEGORY(GET_PROPS(c)))&
             (1UL<<U_SPACE_SEPARATOR|1UL<<U_LINE_SEPARATOR|1UL<<U_PARAGRAPH_SEPARATOR)
@@ -914,7 +914,7 @@ static const UBlockCodeMap blockCodeIndex[UBLOCK_CODE_INDEX_SIZE] = {
 };
 
 /* Get the script associated with the character*/
-UBlockCode
+U_CAPI UBlockCode U_EXPORT2
 ublock_getCode(UChar32 codepoint)
 {
     /* binary search the map and return the code */
@@ -991,7 +991,7 @@ static const UChar cellWidthValues[] =
 
 #define NUM_CELL_WIDTH_VALUES (sizeof(cellWidthValues)/sizeof(cellWidthValues[0]))
 /* Gets table cell width of the Unicode character.*/
-uint16_t
+U_CAPI uint16_t U_EXPORT2
 u_charCellWidth(UChar32 ch)
 {
     int16_t i;
@@ -1030,7 +1030,8 @@ u_charCellWidth(UChar32 ch)
     }
 }
 
-void u_getUnicodeVersion(UVersionInfo versionArray) {
+U_CAPI void U_EXPORT2
+u_getUnicodeVersion(UVersionInfo versionArray) {
     if(versionArray!=NULL) {
         if(HAVE_DATA) {
             uprv_memcpy(versionArray, dataVersion, U_MAX_VERSION_LENGTH);

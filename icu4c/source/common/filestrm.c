@@ -26,7 +26,7 @@
 
 #include <stdio.h>
 
-U_CAPI FileStream*
+U_CAPI FileStream* U_EXPORT2
 T_FileStream_open(const char* filename, const char* mode)
 {
   if(filename != NULL && *filename != 0 && mode != NULL && *mode != 0) {
@@ -38,7 +38,7 @@ T_FileStream_open(const char* filename, const char* mode)
 }
 
 
-U_CAPI FileStream*
+U_CAPI FileStream* U_EXPORT2
 T_FileStream_wopen(const wchar_t* filename, const wchar_t* mode)
 {
   /* TBD: _wfopen is believed to be MS-specific? */
@@ -68,13 +68,13 @@ T_FileStream_wopen(const wchar_t* filename, const wchar_t* mode)
 #endif
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 T_FileStream_close(FileStream* fileStream)
 {
     if (fileStream != 0) fclose((FILE*)fileStream);
 }
 
-U_CAPI UBool
+U_CAPI UBool U_EXPORT2
 T_FileStream_file_exists(const char* filename)
 {
     FILE* temp = fopen(filename, "r");
@@ -97,40 +97,40 @@ T_FileStream_tmpfile()
 }
 */
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 T_FileStream_read(FileStream* fileStream, void* addr, int32_t len)
 {
     return fread(addr, 1, len, (FILE*)fileStream);
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 T_FileStream_write(FileStream* fileStream, const void* addr, int32_t len)
 {
 
     return fwrite(addr, 1, len, (FILE*)fileStream);
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 T_FileStream_rewind(FileStream* fileStream)
 {
     rewind((FILE*)fileStream);
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 T_FileStream_putc(FileStream* fileStream, int32_t ch)
 {
     int32_t c = fputc(ch, (FILE*)fileStream);
     return c;
 }
 
-U_CAPI int
+U_CAPI int U_EXPORT2
 T_FileStream_getc(FileStream* fileStream)
 {
     int c = fgetc((FILE*)fileStream);
     return c;
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 T_FileStream_ungetc(int32_t ch, FileStream* fileStream)
 {
 
@@ -138,27 +138,26 @@ T_FileStream_ungetc(int32_t ch, FileStream* fileStream)
     return c;
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 T_FileStream_peek(FileStream* fileStream)
 {
     int32_t c = fgetc((FILE*)fileStream);
     return ungetc(c, (FILE*)fileStream);
 }
 
-/*Added by Bertrand A. D. */
-U_CAPI char *
+U_CAPI char* U_EXPORT2
 T_FileStream_readLine(FileStream* fileStream, char* buffer, int32_t length)
 {
     return fgets(buffer, length, (FILE*)fileStream);
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 T_FileStream_writeLine(FileStream* fileStream, const char* buffer)
 {
     return fputs(buffer, (FILE*)fileStream);
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 T_FileStream_size(FileStream* fileStream)
 {
     int32_t savedPos = ftell((FILE*)fileStream);
@@ -172,19 +171,19 @@ T_FileStream_size(FileStream* fileStream)
     return size;
 }
 
-U_CAPI int
+U_CAPI int U_EXPORT2
 T_FileStream_eof(FileStream* fileStream)
 {
     return feof((FILE*)fileStream);
 }
 
-U_CAPI int
+U_CAPI int U_EXPORT2
 T_FileStream_error(FileStream* fileStream)
 {
     return (fileStream == 0 || ferror((FILE*)fileStream));
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 T_FileStream_setError(FileStream* fileStream)
 {
     /* force the stream to set its error flag*/
@@ -192,20 +191,20 @@ T_FileStream_setError(FileStream* fileStream)
 }
 
 
-U_CAPI FileStream*
+U_CAPI FileStream* U_EXPORT2
 T_FileStream_stdin(void)
 {
     return (FileStream*)stdin;
 }
 
-U_CAPI FileStream*
+U_CAPI FileStream* U_EXPORT2
 T_FileStream_stdout(void)
 {
     return (FileStream*)stdout;
 }
 
 
-U_CAPI FileStream*
+U_CAPI FileStream* U_EXPORT2
 T_FileStream_stderr(void)
 {
     return (FileStream*)stderr;

@@ -228,14 +228,14 @@ static const int32_t sOffsets [] = {
 };
 
 
-void
+U_CAPI void U_EXPORT2
 scsu_init(UnicodeCompressor *comp)
 {
   /* initialize to defaults*/
   scsu_reset(comp);
 }
 
-void
+U_CAPI void U_EXPORT2
 scsu_compress(UnicodeCompressor *comp,
               uint8_t           **target,
               const uint8_t     *targetLimit,
@@ -834,7 +834,7 @@ scsu_compress(UnicodeCompressor *comp,
     *status = U_BUFFER_OVERFLOW_ERROR;
 }
 
-void 
+U_CAPI void U_EXPORT2
 scsu_decompress(UnicodeCompressor *comp,
                 UChar             **target,
                 const UChar       *targetLimit,
@@ -1228,7 +1228,7 @@ scsu_decompress(UnicodeCompressor *comp,
 }
 
 /** Reset the compressor to its initial state. */
-void 
+U_CAPI void U_EXPORT2
 scsu_reset(UnicodeCompressor *comp)
 {
   int32_t i;

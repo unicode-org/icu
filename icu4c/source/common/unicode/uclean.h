@@ -54,6 +54,7 @@
  *
  * @draft ICU 2.0
  */
-U_CAPI void U_EXPORT2 u_cleanup(void);
+U_CAPI void U_EXPORT2 
+u_cleanup(void);
 
 #endif

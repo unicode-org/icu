@@ -177,7 +177,7 @@ static char* u_bottomNBytesOfDouble(double* d, int n);
   ---------------------------------------------------------------------------*/
 
 /* Get UTC (GMT) time measured in seconds since 0:00 on 1/1/70.*/
-int32_t
+U_CAPI int32_t U_EXPORT2
 uprv_getUTCtime()
 {
 #ifdef XP_MAC
@@ -211,7 +211,7 @@ uprv_getUTCtime()
   for getNaN and getInfinity, and false for isNaN and isInfinite.
   ---------------------------------------------------------------------------*/
 
-UBool
+U_CAPI UBool U_EXPORT2
 uprv_isNaN(double number)
 {
 #if IEEE_754
@@ -255,7 +255,7 @@ uprv_isNaN(double number)
 #endif
 }
 
-UBool
+U_CAPI UBool U_EXPORT2
 uprv_isInfinite(double number)
 {
 #if IEEE_754
@@ -295,7 +295,7 @@ uprv_isInfinite(double number)
 #endif
 }
 
-UBool
+U_CAPI UBool U_EXPORT2
 uprv_isPositiveInfinity(double number)
 {
 #if IEEE_754 || defined(OS390)
@@ -305,7 +305,7 @@ uprv_isPositiveInfinity(double number)
 #endif
 }
 
-UBool
+U_CAPI UBool U_EXPORT2
 uprv_isNegativeInfinity(double number)
 {
 #if IEEE_754 || defined(OS390)
@@ -319,7 +319,7 @@ uprv_isNegativeInfinity(double number)
 #endif
 }
 
-double
+U_CAPI double U_EXPORT2
 uprv_getNaN()
 {
 #if IEEE_754 || defined(OS390)
@@ -344,7 +344,7 @@ uprv_getNaN()
 #endif
 }
 
-double
+U_CAPI double U_EXPORT2
 uprv_getInfinity()
 {
 #if IEEE_754 || defined(OS390)
@@ -366,56 +366,56 @@ uprv_getInfinity()
 #endif
 }
 
-double
+U_CAPI double U_EXPORT2
 uprv_floor(double x)
 {
     return floor(x);
 }
 
-double
+U_CAPI double U_EXPORT2
 uprv_ceil(double x)
 {
     return ceil(x);
 }
 
-double
+U_CAPI double U_EXPORT2
 uprv_round(double x)
 {
     return uprv_floor(x + 0.5);
 }
 
-double
+U_CAPI double U_EXPORT2
 uprv_fabs(double x)
 {
     return fabs(x);
 }
 
-double
+U_CAPI double U_EXPORT2
 uprv_modf(double x, double* y)
 {
     return modf(x, y);
 }
 
-double
+U_CAPI double U_EXPORT2
 uprv_fmod(double x, double y)
 {
     return fmod(x, y);
 }
 
-double
+U_CAPI double U_EXPORT2
 uprv_pow(double x, double y)
 {
     /* This is declared as "double pow(double x, double y)" */
     return pow(x, y);
 }
 
-double
+U_CAPI double U_EXPORT2
 uprv_pow10(int32_t x)
 {
     return pow(10.0, (double)x);
 }
 
-double
+U_CAPI double U_EXPORT2
 uprv_fmax(double x, double y)
 {
 #if IEEE_754
@@ -436,13 +436,13 @@ uprv_fmax(double x, double y)
     return (x > y ? x : y);
 }
 
-int32_t
+U_CAPI int32_t U_EXPORT2
 uprv_max(int32_t x, int32_t y)
 {
     return (x > y ? x : y);
 }
 
-double
+U_CAPI double U_EXPORT2
 uprv_fmin(double x, double y)
 {
 #if IEEE_754
@@ -463,7 +463,7 @@ uprv_fmin(double x, double y)
     return (x > y ? y : x);
 }
 
-int32_t
+U_CAPI int32_t U_EXPORT2
 uprv_min(int32_t x, int32_t y)
 {
     return (x > y ? y : x);
@@ -476,7 +476,7 @@ uprv_min(int32_t x, int32_t y)
  * floor(3.3) = 3, floor(-3.3) = -4
  * ceil(3.3) = 4, ceil(-3.3) = -3
  */
-double
+U_CAPI double U_EXPORT2
 uprv_trunc(double d)
 {
 #if IEEE_754
@@ -513,7 +513,7 @@ uprv_longBitsFromDouble(double d, int32_t *hi, uint32_t *lo)
  * Return the largest positive number that can be represented by an integer
  * type of arbitrary bit length.
  */
-double
+U_CAPI double U_EXPORT2
 uprv_maxMantissa(void)
 {
     return pow(2.0, DBL_MANT_DIG + 1.0) - 1.0;
@@ -526,7 +526,7 @@ uprv_maxMantissa(void)
  * must be positive and finite.
  * (Thanks to Alan Liu for supplying this function.)
  */
-int16_t
+U_CAPI int16_t U_EXPORT2
 uprv_log10(double d)
 {
 #ifdef OS400
@@ -553,13 +553,13 @@ uprv_log10(double d)
 #endif
 }
 
-double
+U_CAPI double U_EXPORT2
 uprv_log(double d)
 {
     return log(d);
 }
 
-int32_t
+U_CAPI int32_t U_EXPORT2
 uprv_digitsAfterDecimal(double x)
 {
     char buffer[20];
@@ -602,7 +602,7 @@ uprv_digitsAfterDecimal(double x)
     return numDigits;
 }
 
-double
+U_CAPI double U_EXPORT2
 uprv_nextDouble(double d, UBool next)
 {
 #if IEEE_754
@@ -735,7 +735,7 @@ static char* u_bottomNBytesOfDouble(double* d, int n)
   ---------------------------------------------------------------------------*/
 
 /* Time zone utilities */
-void
+U_CAPI void U_EXPORT2
 uprv_tzset()
 {
 #ifdef U_TZSET
@@ -745,7 +745,7 @@ uprv_tzset()
 #endif
 }
 
-int32_t
+U_CAPI int32_t U_EXPORT2
 uprv_timezone()
 {
 #if U_HAVE_TIMEZONE
@@ -771,7 +771,7 @@ uprv_timezone()
 #endif
 }
 
-char*
+U_CAPI char* U_EXPORT2
 uprv_tzname(int n)
 {
 #ifdef U_TZNAME
@@ -1080,7 +1080,7 @@ static const char *uprv_getPOSIXID()
 }
 #endif
 
-const char*
+U_CAPI const char* U_EXPORT2
 uprv_getDefaultLocaleID()
 {
 #if U_POSIX_LOCALE
@@ -1354,7 +1354,8 @@ The leftmost codepage (.xxx) wins.
 
 }
 
-const char* uprv_getDefaultCodepage()
+U_CAPI const char*  U_EXPORT2
+uprv_getDefaultCodepage()
 {
 #if defined(OS400)
     uint32_t ccsid = 37; /* Default to ibm-37 */
@@ -1622,7 +1623,7 @@ u_UCharsToChars(const UChar *us, char *cs, UTextOffset length) {
 
 /* end of platform-specific implementation */
 
-U_CFUNC void
+U_CAPI void U_EXPORT2
 u_versionFromString(UVersionInfo versionArray, const char *versionString) {
     char *end;
     uint16_t part=0;

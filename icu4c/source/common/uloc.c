@@ -439,12 +439,14 @@ _copyCount(char *dest, int32_t destCapacity, const char *src) {
   API function definitions
 *******************************************************************************/
 
-const char* uloc_getDefault()
+U_CAPI const char*  U_EXPORT2
+uloc_getDefault()
 {
     return locale_get_default();
 }
 
-void uloc_setDefault(const char*   newDefaultLocale,
+U_CAPI void  U_EXPORT2
+uloc_setDefault(const char*   newDefaultLocale,
              UErrorCode* err) 
 {
     if (U_FAILURE(*err))
@@ -461,7 +463,8 @@ void uloc_setDefault(const char*   newDefaultLocale,
 }
 
 
-int32_t uloc_getParent(const char*    localeID,
+U_CAPI int32_t  U_EXPORT2
+uloc_getParent(const char*    localeID,
                char* parent,
                int32_t parentCapacity,
                UErrorCode* err)
@@ -542,7 +545,7 @@ _getLanguage(const char *localeID,
     return i;
 }
 
-int32_t
+U_CAPI int32_t U_EXPORT2
 uloc_getLanguage(const char*    localeID,
          char* language,
          int32_t languageCapacity,
@@ -597,7 +600,8 @@ _getCountry(const char *localeID,
     return i;
 }
 
-int32_t uloc_getCountry(const char* localeID,
+U_CAPI int32_t  U_EXPORT2
+uloc_getCountry(const char* localeID,
             char* country,
             int32_t countryCapacity,
             UErrorCode* err) 
@@ -665,7 +669,8 @@ _getVariant(const char *localeID,
     return i;
 }
 
-int32_t uloc_getVariant(const char* localeID,
+U_CAPI int32_t  U_EXPORT2
+uloc_getVariant(const char* localeID,
                         char* variant,
                         int32_t variantCapacity,
                         UErrorCode* err) 
@@ -698,7 +703,8 @@ int32_t uloc_getVariant(const char* localeID,
     return u_terminateChars(variant, variantCapacity, i, err);
 }
 
-int32_t uloc_getName(const char* localeID,
+U_CAPI int32_t  U_EXPORT2
+uloc_getName(const char* localeID,
              char* name,
              int32_t nameCapacity,
              UErrorCode* err)  
@@ -747,7 +753,8 @@ int32_t uloc_getName(const char* localeID,
     return u_terminateChars(name, nameCapacity, i, err);
 }
        
-const char* uloc_getISO3Language(const char* localeID) 
+U_CAPI const char*  U_EXPORT2
+uloc_getISO3Language(const char* localeID) 
 {
   int16_t offset;
   char lang[TEMPBUFSIZE];
@@ -766,7 +773,8 @@ const char* uloc_getISO3Language(const char* localeID)
   return _languages3[offset];
 }
 
-const char* uloc_getISO3Country(const char* localeID) 
+U_CAPI const char*  U_EXPORT2
+uloc_getISO3Country(const char* localeID) 
 {
     int16_t offset;
     char cntry[TEMPBUFSIZE];
@@ -786,7 +794,8 @@ const char* uloc_getISO3Country(const char* localeID)
     return _countries3[offset];
 }
 
-uint32_t uloc_getLCID(const char* localeID) 
+U_CAPI uint32_t  U_EXPORT2
+uloc_getLCID(const char* localeID) 
 {
     UErrorCode err = U_ZERO_ERROR;
     char temp[30];
@@ -1026,7 +1035,7 @@ _getStringOrCopyKey(const char *path, const char *locale,
     return u_terminateUChars(dest, destCapacity, length, pErrorCode);
 }
 
-int32_t
+U_CAPI int32_t U_EXPORT2
 uloc_getDisplayLanguage(const char *locale,
                         const char *displayLocale,
                         UChar *dest, int32_t destCapacity,
@@ -1061,7 +1070,7 @@ uloc_getDisplayLanguage(const char *locale,
                                pErrorCode);
 }
 
-int32_t
+U_CAPI int32_t U_EXPORT2
 uloc_getDisplayCountry(const char *locale,
                        const char *displayLocale,
                        UChar *dest, int32_t destCapacity,
@@ -1101,7 +1110,7 @@ uloc_getDisplayCountry(const char *locale,
  * by getting each tag's display string and concatenating them with ", "
  * in between - similar to uloc_getDisplayName()
  */
-int32_t
+U_CAPI int32_t U_EXPORT2
 uloc_getDisplayVariant(const char *locale,
                        const char *displayLocale,
                        UChar *dest, int32_t destCapacity,
@@ -1143,7 +1152,7 @@ uloc_getDisplayVariant(const char *locale,
                                pErrorCode);
 }
 
-int32_t
+U_CAPI int32_t U_EXPORT2
 uloc_getDisplayName(const char *locale,
                     const char *displayLocale,
                     UChar *dest, int32_t destCapacity,
@@ -1258,7 +1267,7 @@ uloc_getDisplayName(const char *locale,
     return u_terminateUChars(dest, destCapacity, length, pErrorCode);
 }
 
-const char*
+U_CAPI const char* U_EXPORT2
 uloc_getAvailable(int32_t offset) 
 {
     
@@ -1272,7 +1281,8 @@ uloc_getAvailable(int32_t offset)
 
 }
 
-int32_t uloc_countAvailable()
+U_CAPI int32_t  U_EXPORT2
+uloc_countAvailable()
 {
     if (_installedLocales == NULL)
         _lazyEvaluate_installedLocales();
@@ -1353,7 +1363,8 @@ static void _lazyEvaluate_installedLocales()
  * by ICU-- do not delete them, and do not write through them.  The array is
  * terminated with a null pointer.
  */
-const char* const* uloc_getISOLanguages() 
+U_CAPI const char* const*  U_EXPORT2
+uloc_getISOLanguages() 
 {
     return _languages;
 }
@@ -1364,7 +1375,8 @@ const char* const* uloc_getISOLanguages()
  * owned by ICU-- do not delete them, and do not write through them.  The array is
  * terminated with a null pointer.
  */
-const char* const* uloc_getISOCountries() 
+U_CAPI const char* const*  U_EXPORT2
+uloc_getISOCountries() 
 {
     return _countries;
 }

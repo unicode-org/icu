@@ -24,7 +24,7 @@
 
 /* builder data ------------------------------------------------------------- */
 
-CompactEIntArray* 
+U_CAPI CompactEIntArray* U_EXPORT2
 ucmpe32_open(int32_t defaultValue, int32_t surrogateValue, int32_t leadSurrogateValue, UErrorCode *status)
 {
   int32_t *bla;
@@ -83,7 +83,7 @@ ucmpe32_open(int32_t defaultValue, int32_t surrogateValue, int32_t leadSurrogate
 /*
  * Set a range of UnicodeChars to the same value 
  */
-void
+U_CAPI void U_EXPORT2
 ucmpe32_setRange32(CompactEIntArray* this_obj, UChar32 start, UChar32 end, int32_t value) {
     UChar32 code = 0;
 
@@ -130,7 +130,7 @@ ucmpe32_setRange32(CompactEIntArray* this_obj, UChar32 start, UChar32 end, int32
 }
 
 
-int32_t 
+U_CAPI int32_t U_EXPORT2
 ucmpe32_get32(CompactEIntArray* this_obj, UChar32 code) {
   int16_t stage1 = (this_obj->stage1[(code >> _UCMPE32_TRIE_SHIFT)]); 
   int32_t offset = (code & _UCMPE32_STAGE_2_MASK);
@@ -141,7 +141,7 @@ ucmpe32_get32(CompactEIntArray* this_obj, UChar32 code) {
 }
 
 /********* THIS IS THE ADD FUNCTION ********************/
-void  
+U_CAPI void  U_EXPORT2
 ucmpe32_set32(CompactEIntArray* this_obj, UChar32 code, int32_t value)
 {
     uint16_t stage2Block, k;
@@ -185,7 +185,7 @@ ucmpe32_set32(CompactEIntArray* this_obj, UChar32 code, int32_t value)
     this_obj->stage2[k] = value;
 }
 
-void  
+U_CAPI void U_EXPORT2
 ucmpe32_setSurrogate(CompactEIntArray* this_obj, UChar lead, UChar trail, int32_t value)
 {
     if (this_obj->fCompact == TRUE) {
@@ -284,7 +284,7 @@ foldSupplementary(CompactEIntArray* this_obj, int32_t top) {
     return top;
 }
 
-void 
+U_CAPI void U_EXPORT2
 ucmpe32_compact(CompactEIntArray* this_obj) {
 
   if(this_obj->fCompact == FALSE) { /* compacting can be done only once */
@@ -346,7 +346,7 @@ ucmpe32_compact(CompactEIntArray* this_obj) {
 }
 
 
-CompactEIntArray* 
+U_CAPI CompactEIntArray* U_EXPORT2
 ucmpe32_clone(CompactEIntArray* orig, UErrorCode *status)
 {
   CompactEIntArray* this_obj = NULL;
@@ -395,7 +395,7 @@ ucmpe32_clone(CompactEIntArray* orig, UErrorCode *status)
 }
 
 
-CompactEIntArray* 
+U_CAPI CompactEIntArray*  U_EXPORT2
 ucmpe32_openFromData(      const uint8_t **source, 
                                            UErrorCode *status)
 {
@@ -444,7 +444,7 @@ ucmpe32_openFromData(      const uint8_t **source,
   return this_obj;
 }
 
-uint32_t
+U_CAPI uint32_t U_EXPORT2
 ucmpe32_flattenMem (const CompactEIntArray* this_obj, UMemoryStream *MS)
 {
   /* This dumps stuff in memory */
@@ -473,7 +473,8 @@ ucmpe32_flattenMem (const CompactEIntArray* this_obj, UMemoryStream *MS)
 
 /*=======================================================*/
 
-void ucmpe32_close(CompactEIntArray* this_obj) 
+U_CAPI void  U_EXPORT2
+ucmpe32_close(CompactEIntArray* this_obj) 
 {
   if(this_obj != NULL) {
     if(this_obj->fAlias == FALSE) {
@@ -488,7 +489,7 @@ void ucmpe32_close(CompactEIntArray* this_obj)
   }
 }
 
-int32_t 
+U_CAPI int32_t  U_EXPORT2
 ucmpe32_getSurrogateEx(CompactEIntArray *array, UChar lead, UChar trail) {
   if(array->fCompact == FALSE) {
     return(ucmpe32_get(array, (int32_t)UTF16_GET_PAIR_VALUE(lead, trail)));
