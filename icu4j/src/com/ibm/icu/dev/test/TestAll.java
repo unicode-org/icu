@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestAll.java,v $ 
- * $Date: 2001/10/22 21:53:10 $ 
- * $Revision: 1.14 $
+ * $Date: 2001/11/06 11:22:25 $ 
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -55,7 +55,8 @@ public class TestAll extends TestFmwk {
         run(new TestFmwk[] {
             new com.ibm.test.rbbi.SimpleBITest(),
             new com.ibm.test.rbbi.BreakIteratorTest(),
-            new com.ibm.test.rbbi.RBBITest()
+            new com.ibm.test.rbbi.RBBITest(),
+            new com.ibm.test.rbbi.RBBIAPITest()
                 });
     }
 
