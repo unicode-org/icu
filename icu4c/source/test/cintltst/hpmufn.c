@@ -73,7 +73,7 @@ static char *safeGetICUDataDirectory() {
 int    gBlockCount = 0;
 const void  *gContext;
 
-void   *myMemAlloc(const void *context, size_t size) {
+static void   *myMemAlloc(const void *context, size_t size) {
     char *retPtr = (char *)malloc(size+8);
     if (retPtr != NULL) {
         retPtr += 8;
@@ -82,7 +82,7 @@ void   *myMemAlloc(const void *context, size_t size) {
     return retPtr;
 }
 
-void  myMemFree(const void *context, void *mem) {
+static void  myMemFree(const void *context, void *mem) {
     char *freePtr = (char *)mem;
     if (freePtr != NULL) {
         freePtr -= 8;
@@ -91,8 +91,8 @@ void  myMemFree(const void *context, void *mem) {
 }
 
 
-    
-void  *myMemRealloc(const void *context, void *mem, size_t size) {
+
+static void  *myMemRealloc(const void *context, void *mem, size_t size) {
     char *p = (char *)mem;
     char *retPtr;
 
@@ -194,7 +194,7 @@ typedef struct DummyMutex {
 } DummyMutex;
 
 
-void myMutexInit(const void *context, UMTX *mutex, UErrorCode *status) {
+static void myMutexInit(const void *context, UMTX *mutex, UErrorCode *status) {
     DummyMutex *theMutex;
 
     TEST_STATUS(*status, U_ZERO_ERROR);
@@ -208,7 +208,7 @@ void myMutexInit(const void *context, UMTX *mutex, UErrorCode *status) {
 }
 
 
-void myMutexDestroy(const void *context, UMTX  *mutex) {
+static void myMutexDestroy(const void *context, UMTX  *mutex) {
     DummyMutex *This = *(DummyMutex **)mutex;
 
     gTotalMutexesActive--;
@@ -219,7 +219,7 @@ void myMutexDestroy(const void *context, UMTX  *mutex) {
     free(This);
 }
 
-void  myMutexLock(const void *context, UMTX *mutex) {
+static void  myMutexLock(const void *context, UMTX *mutex) {
     DummyMutex *This = *(DummyMutex **)mutex;
 
     TEST_ASSERT(This->fMagic == 123456);
@@ -227,7 +227,7 @@ void  myMutexLock(const void *context, UMTX *mutex) {
     gAccumulatedLocks++;
 }
 
-void  myMutexUnlock(const void *context, UMTX *mutex) {
+static void  myMutexUnlock(const void *context, UMTX *mutex) {
     DummyMutex *This = *(DummyMutex **)mutex;
 
     TEST_ASSERT(This->fMagic == 123456);
