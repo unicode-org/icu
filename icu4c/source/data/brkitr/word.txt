@@ -56,9 +56,20 @@ $Extend     = [[:Grapheme_Extend = TRUE:]];
 #
 ####################################################################################
 
-$Format    = [[:Cf:]];
+$Format    = [[:Cf:]];  
 
-
+# ALetter2  -  There are some characters, e.g. \u0fa9, that are both combining marks ($Extend)  
+#              and alphabetic (ALetter).  $ALetter2 is ALetter from the Unicode TR, less all such chars.
+#              We need this because of sequences of the form
+#                 <Letter>  <MidLetter> <alpha combining mark>  <Numeric>
+#              Rule 3 says treat graphme clusters as a unit, as their first character.
+#                 The <MidLetter> <alpha combining mark> thus should be treated as just <MidLetter>
+#              Rules for this are awkward, because the sequence
+#                 <Letter> <MidLetter> <Letter> <Numeric>
+#              should not break, but the sequence
+#                 <Letter> <MidLetter> <Numeric>
+#              should break after the <Letter>. 
+$ALetter2   = [$ALetter - $Extend];
 
 # Rule 3:  Treat a grapheme cluster as if it were a single character.
 #          Hangul Syllables are easier to deal with here than they are in Grapheme Clusters
@@ -71,18 +82,18 @@ $Format    = [[:Cf:]];
 #  "Extended"  definitions.  Grapheme Cluster + Format Chars, treated like the base char.
 #
 $ALetterEx    = $ALetter   $Extend*; 
+$ALetter2Ex   = $ALetter2  $Extend*;
 $NumericEx    = $Numeric   $Extend*;
 $MidNumEx     = $MidNum    $Extend*;
 $MidNumLetEx  = $MidNumLet $Extend*;
 $MidLetterEx  = $MidLetter $Extend*;
 $KatakanaEx   = $Katakana  $Extend*;
-$FormatEx     = $Format    $Extend*;
 
 
 #
 #  Numbers.  Rules 8, 11, 12 form the TR.
 #
-$NumberSequence = $NumericEx ($FormatEx* ($MidNumEx | $MidNumLetEx)? $FormatEx* $NumericEx)*;
+$NumberSequence = $NumericEx ($Format* ($MidNumEx | $MidNumLetEx)? $Format* $NumericEx)*;
 $NumberSequence {100};
 
 #
@@ -91,13 +102,19 @@ $NumberSequence {100};
 #     - may include both letters and numbers.
 #     - may include  MideLetter, MidNumber punctuation.
 #
-$LetterSequence = $ALetterEx ($FormatEx* ($MidLetterEx | $MidNumLetEx)? $FormatEx* $ALetterEx)*;     # rules #6, #7
-($NumberSequence $FormatEx*)? $LetterSequence ($FormatEx* ($NumberSequence | $LetterSequence))* {200};
+#$LetterSequence   = $ALetterEx ($Format* ($MidLetterEx | $MidNumLetEx)? $Format* $ALetterEx)*;     # rules #6, #7
+$WordGlue          = $MidLetterEx | $MidNumLetEx;
+$MidWordFragment   = ($WordGlue $ALetter2Ex | $WordGlue $Format+ $ALetterEx);
+$WordSequence      = $ALetterEx ($Format* ($ALetterEx | $MidWordFragment))*;
+$WordSequence2     = $ALetter2Ex ($Format* ($ALetterEx | $MidWordFragment))*;
+$WordTail          = ($Format* $NumberSequence $Format+ $WordSequence) |  ($Format* $NumberSequence $WordSequence2?);
+($NumberSequence $Format+)? $WordSequence  $WordTail* {200};
+($NumberSequence)?          $WordSequence2 $WordTail* {200};
 
 #
 #  Do not break between Katakana.   Rule #13.
 #
-$KatakanaEx ($FormatEx* $KatakanaEx)* {300};
+$KatakanaEx ($Format* $KatakanaEx)* {300};
 [:Hiragana:] $Extend* {300};
 
 #
