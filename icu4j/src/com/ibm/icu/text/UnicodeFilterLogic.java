@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/UnicodeFilterLogic.java,v $ 
- * $Date: 2000/03/10 04:07:25 $ 
- * $Revision: 1.3 $
+ * $Date: 2001/09/24 19:57:18 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -28,7 +28,7 @@ public final class UnicodeFilterLogic {
      */
     public static UnicodeFilter not(final UnicodeFilter f) {
         return new UnicodeFilter() {
-            public boolean contains(char c) {
+            public boolean contains(int c) {
                 return !f.contains(c);
             }
         };
@@ -51,7 +51,7 @@ public final class UnicodeFilterLogic {
             return f;
         }
         return new UnicodeFilter() {
-            public boolean contains(char c) {
+            public boolean contains(int c) {
                 return f.contains(c) && g.contains(c);
             }
         };
@@ -66,7 +66,7 @@ public final class UnicodeFilterLogic {
      */
     public static UnicodeFilter and(final UnicodeFilter[] f) {
         return new UnicodeFilter() {
-            public boolean contains(char c) {
+            public boolean contains(int c) {
                 for (int i=0; i<f.length; ++i) {
                     if (!f[i].contains(c)) {
                         return false;
@@ -94,7 +94,7 @@ public final class UnicodeFilterLogic {
             return f;
         }
         return new UnicodeFilter() {
-            public boolean contains(char c) {
+            public boolean contains(int c) {
                 return f.contains(c) || g.contains(c);
             }
         };
@@ -109,7 +109,7 @@ public final class UnicodeFilterLogic {
      */
     public static UnicodeFilter or(final UnicodeFilter[] f) {
         return new UnicodeFilter() {
-            public boolean contains(char c) {
+            public boolean contains(int c) {
                 for (int i=0; i<f.length; ++i) {
                     if (f[i].contains(c)) {
                         return true;

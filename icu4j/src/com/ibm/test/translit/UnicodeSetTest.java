@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/UnicodeSetTest.java,v $ 
- * $Date: 2001/09/08 01:17:50 $ 
- * $Revision: 1.11 $
+ * $Date: 2001/09/24 19:56:41 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -181,8 +181,8 @@ public class UnicodeSetTest extends TestFmwk {
         set.clear();
         set.applyPattern("[A-Y 1-8 b-d l-y]");
         for (int i = 0; i<set.getRangeCount(); ++i) {
-            char a = set.getRangeStart(i);
-            char b = set.getRangeEnd(i);
+            int a = set.getRangeStart(i);
+            int b = set.getRangeEnd(i);
             if (!set.contains(a, b)) {
                 errln("FAIL, should contain " + (char)a + '-' + (char)b +
                       " but doesn't: " + set);
@@ -219,7 +219,7 @@ public class UnicodeSetTest extends TestFmwk {
         if (c.equals(exp)) {
             logln("c.complement(): " + c);
         } else {
-            errln("FAIL: c.complement() = " + c + ", expect " + exp);
+            errln(Utility.escape("FAIL: c.complement() = " + c + ", expect " + exp));
         }
         c.complement();
         exp.set((char)3, (char)15);
@@ -252,13 +252,13 @@ public class UnicodeSetTest extends TestFmwk {
     public void TestIndexOf() {
         UnicodeSet set = new UnicodeSet("[a-cx-y3578]");
         for (int i=0; i<set.size(); ++i) {
-            char c = set.charAt(i);
+            int c = set.charAt(i);
             if (set.indexOf(c) != i) {
                 errln("FAIL: charAt(" + i + ") = " + c +
                       " => indexOf() => " + set.indexOf(c));
             }
         }
-        char c = set.charAt(set.size());
+        int c = set.charAt(set.size());
         if (c != '\uFFFE') {
             errln("FAIL: charAt(<out of range>) = " +
                   Utility.escape(String.valueOf(c)));

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/Attic/UnicodeFilterLogicTest.java,v $ 
- * $Date: 2000/10/04 23:12:33 $ 
- * $Revision: 1.2 $
+ * $Date: 2001/09/24 19:56:41 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -29,7 +29,7 @@ public class UnicodeFilterLogicTest extends TestFmwk {
 
 
    UnicodeFilter Filter1=new UnicodeFilter() {
-        public boolean contains(char c) {
+        public boolean contains(int c) {
             if(c == 0x0061 || c == 0x0041 || c == 0x0063 || c == 0x0043)
                 return false;
             else
@@ -37,7 +37,7 @@ public class UnicodeFilterLogicTest extends TestFmwk {
        }
    };
    UnicodeFilter Filter2=new UnicodeFilter() {
-        public boolean contains(char c) {
+        public boolean contains(int c) {
             if(c == 0x0079 || c == 0x0059 || c == 0x007a || c == 0x005a  || c == 0x0061 || c == 0x0063)
                 return false;
             else
@@ -47,7 +47,7 @@ public class UnicodeFilterLogicTest extends TestFmwk {
 
    public void TestAllFilters() {
 
-        Transliterator t1 = Transliterator.getInstance("Unicode-Hex");
+        Transliterator t1 = Transliterator.getInstance("Any-Hex");
         String source="abcdABCDyzYZ";
 
         //sanity testing wihtout any filter

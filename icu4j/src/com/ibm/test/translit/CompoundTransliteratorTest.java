@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/CompoundTransliteratorTest.java,v $ 
- * $Date: 2001/09/08 01:17:50 $ 
- * $Revision: 1.2 $
+ * $Date: 2001/09/24 19:56:41 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -111,7 +111,7 @@ public class CompoundTransliteratorTest extends TestFmwk {
  
     public void TestGetTransliterator(){
         logln("Testing the getTransliterator() API of CompoundTransliterator");
-        String ID="Latin-Greek;Greek-Latin;Latin-Devanagari;Devanagari-Latin;Latin-Cyrillic;Cyrillic-Latin;Unicode-Hex;Hex-Unicode";
+        String ID="Latin-Greek;Greek-Latin;Latin-Devanagari;Devanagari-Latin;Latin-Cyrillic;Cyrillic-Latin;Any-Hex;Hex-Any";
         CompoundTransliterator ct1=null;
         try{
             ct1=new CompoundTransliterator(ID);
@@ -141,9 +141,9 @@ public class CompoundTransliteratorTest extends TestFmwk {
         logln("Testing the handleTransliterate() API of CompoundTransliterator");
         CompoundTransliterator ct1=null;
         try{
-            ct1=new CompoundTransliterator("Unicode-Hex;Hex-Unicode");
+            ct1=new CompoundTransliterator("Any-Hex;Hex-Any");
         }catch(IllegalArgumentException iae){
-            errln("FAIL: construction using CompoundTransliterator(String ID) failed for " + "Unicode-Hex;Hex-Unicode");
+            errln("FAIL: construction using CompoundTransliterator(String ID) failed for " + "Any-Hex;Hex-Any");
             throw iae;
         }
     
@@ -167,8 +167,8 @@ public class CompoundTransliteratorTest extends TestFmwk {
        
         String Data[]={
              //ID, input string, transliterated string
-             "Unicode-Hex;Hex-Unicode;Unicode-Hex",     "hello",  "\\u0068\\u0065\\u006C\\u006C\\u006F", 
-             "Unicode-Hex;Hex-Unicode",                 "hello! How are you?",  "hello! How are you?",
+             "Any-Hex;Hex-Any;Any-Hex",     "hello",  "\\u0068\\u0065\\u006C\\u006C\\u006F", 
+             "Any-Hex;Hex-Any",                 "hello! How are you?",  "hello! How are you?",
              "Devanagari-Latin;Latin-Devanagari",       "\u092D\u0948'\u0930'\u0935",  "\u092D\u0948\u0930\u0935", // quotes lost
              "Latin-Cyrillic;Cyrillic-Latin",           "a'b'k'd'e'f'g'h'i'j'Shch'shch'zh'h", "abkdefghijShchshchzhh",
              "Latin-Greek;Greek-Latin",                 "ABGabgAKLMN", "ABGabgAKLMN",

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/Attic/UnicodeToHexTransliteratorTest.java,v $ 
- * $Date: 2000/10/16 16:58:29 $ 
- * $Revision: 1.3 $
+ * $Date: 2001/09/24 19:56:41 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -32,7 +32,7 @@ public class UnicodeToHexTransliteratorTest extends TestFmwk {
     * Used by TestConstruction() and TestTransliterate.
     */
     UnicodeFilter UniFilter=new UnicodeFilter() {
-        public boolean contains(char c) {
+        public boolean contains(int c) {
             if(c==0x0063 || c==0x0061 || c==0x0043 || c==0x0041)
                 return false;
             else

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeFilter.java,v $ 
- * $Date: 2000/03/10 04:07:25 $ 
- * $Revision: 1.4 $
+ * $Date: 2001/09/24 19:57:18 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -30,5 +30,5 @@ public interface UnicodeFilter {
      * filtered</b>, then <tt>contains()</tt> returns
      * <b><tt>false</tt></b>.
      */
-    boolean contains(char c);
+    boolean contains(int c);
 }
