@@ -19,7 +19,7 @@
 #include "unicode/utypes.h"
 #include "unicode/uiter.h"
 
-/** Simple declaration for u_strToTitle() to avoid including unicode/ubrk.h. @draft ICU 2.1*/
+/** Simple declaration for u_strToTitle() to avoid including unicode/ubrk.h. @stable ICU 2.1*/
 #ifndef UBRK_TYPEDEF_UBREAK_ITERATOR
 #   define UBRK_TYPEDEF_UBREAK_ITERATOR
     typedef void *UBreakIterator;
@@ -1113,7 +1113,7 @@ u_strToLower(UChar *dest, int32_t destCapacity,
  *                  which must not indicate a failure before the function call.
  * @return The length of the result string. It may be greater than destCapacity. In that case,
  *         only some of the result was written to the destination buffer.
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 U_CAPI int32_t U_EXPORT2
 u_strToTitle(UChar *dest, int32_t destCapacity,

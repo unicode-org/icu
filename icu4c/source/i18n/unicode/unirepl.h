@@ -26,7 +26,7 @@ class UnicodeSet;
  *
  * <p>This is a mixin class.
  * @author Alan Liu
- * @draft ICu 2.4
+ * @draft ICU 2.4
  */
 class U_I18N_API UnicodeReplacer /* not : public UObject because this is an interface/mixin class */ {
 
@@ -54,7 +54,7 @@ class U_I18N_API UnicodeReplacer /* not : public UObject because this is an inte
      * of a transliteration rule, at least one must update it.
      * @return the number of 16-bit code units in the text replacing
      * the characters at offsets start..(limit-1) in text
-     * @draft ICu 2.4
+     * @draft ICU 2.4
      */
     virtual int32_t replace(Replaceable& text,
                             int32_t start,
@@ -73,7 +73,7 @@ class U_I18N_API UnicodeReplacer /* not : public UObject because this is an inte
      * \\Uxxxxxxxx.  Unprintable characters are defined by
      * Utility.isUnprintable().
      * @return a reference to 'result'.
-     * @draft ICu 2.4
+     * @draft ICU 2.4
      */
     virtual UnicodeString& toReplacerPattern(UnicodeString& result,
                                              UBool escapeUnprintable) const = 0;
@@ -82,7 +82,7 @@ class U_I18N_API UnicodeReplacer /* not : public UObject because this is an inte
      * Union the set of all characters that may output by this object
      * into the given set.
      * @param toUnionTo the set into which to union the output characters
-     * @draft ICu 2.4
+     * @draft ICU 2.4
      */
     virtual void addReplacementSetTo(UnicodeSet& toUnionTo) const = 0;
 };

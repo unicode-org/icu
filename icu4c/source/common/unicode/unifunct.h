@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2002, International Business Machines Corporation
+*   Copyright (c) 2002-2003, International Business Machines Corporation
 *   and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -23,7 +23,7 @@ class TransliterationRuleData;
  * <code>UnicodeFunctor</code> is an abstract base class for objects
  * that perform match and/or replace operations on Unicode strings.
  * @author Alan Liu
- * @draft ICu 2.4
+ * @draft ICU 2.4
  */
 class U_COMMON_API UnicodeFunctor : public UObject {
 
@@ -31,7 +31,7 @@ class U_COMMON_API UnicodeFunctor : public UObject {
 
     /**
      * Destructor
-     * @draft ICu 2.4
+     * @draft ICU 2.4
      */
     virtual ~UnicodeFunctor();
 
@@ -39,7 +39,7 @@ class U_COMMON_API UnicodeFunctor : public UObject {
      * Return a copy of this object.  All UnicodeFunctor objects
      * have to support cloning in order to allow classes using
      * UnicodeFunctor to implement cloning.
-     * @draft ICu 2.4
+     * @draft ICU 2.4
      */
     virtual UnicodeFunctor* clone() const = 0;
 
@@ -51,7 +51,7 @@ class U_COMMON_API UnicodeFunctor : public UObject {
      * cannot be cast to a pointer to a UnicodeMatcher, since
      * UnicodeMatcher is a mixin that does not derive from
      * UnicodeFunctor.
-     * @draft ICu 2.4
+     * @draft ICU 2.4
      */
     virtual UnicodeMatcher* toMatcher() const;
 
@@ -63,7 +63,7 @@ class U_COMMON_API UnicodeFunctor : public UObject {
      * cannot be cast to a pointer to a UnicodeReplacer, since
      * UnicodeReplacer is a mixin that does not derive from
      * UnicodeFunctor.
-     * @draft ICu 2.4
+     * @draft ICU 2.4
      */
     virtual UnicodeReplacer* toReplacer() const;
 
@@ -101,7 +101,7 @@ class U_COMMON_API UnicodeFunctor : public UObject {
      * @return The class ID for this object. All objects of a given
      * class have the same class ID.  Objects of other classes have
      * different class IDs.
-     * @draft ICu 2.4
+     * @draft ICU 2.4
      */
     virtual UClassID getDynamicClassID(void) const = 0;
 
@@ -111,7 +111,7 @@ class U_COMMON_API UnicodeFunctor : public UObject {
      * method is required when assigning a functor to a different data
      * object.  This function MAY GO AWAY later if the architecture is
      * changed to pass data object pointers through the API.
-     * @draft ICU 2.1
+     * @internal ICU 2.1
      */
     virtual void setData(const TransliterationRuleData*) = 0;
 

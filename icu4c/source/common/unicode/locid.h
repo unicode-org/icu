@@ -516,14 +516,14 @@ public:
      * with services that can be instantiated from non-locale data 
      * in addition to locale (for example, collation can be 
      * instantiated from a locale and from a rule set). 
-     * @draft ICU 2.1
+     * @stable ICU 2.1
      */
     void setToBogus();
 
     /**
      * Gets the bogus state. Locale object can be bogus if it doesn't exist
      * @return FALSE if it is a real locale, TRUE if it is a bogus locale
-     * @draft ICU 2.1
+     * @stable ICU 2.1
      */
     UBool isBogus(void) const;
 

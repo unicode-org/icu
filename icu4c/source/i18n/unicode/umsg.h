@@ -303,7 +303,7 @@ u_vparseMessage(const char  *locale,
  * @return The total buffer size needed; if greater than resultLength, the
  * output was truncated.
  * @see u_parseMessage
- * @draft ICU 2.0
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2 
 u_formatMessageWithError(   const char    *locale,
@@ -332,7 +332,7 @@ u_formatMessageWithError(   const char    *locale,
  * in pattern.
  * @return The total buffer size needed; if greater than resultLength, the
  * output was truncated.
- * @draft ICU 2.0
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2 
 u_vformatMessageWithError(  const char   *locale,
@@ -360,7 +360,7 @@ u_vformatMessageWithError(  const char   *locale,
  * @param ... A variable-length argument list containing the arguments
  * specified in pattern.
  * @see u_formatMessage
- * @draft ICU 2.0
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2 
 u_parseMessageWithError(const char  *locale,
@@ -388,7 +388,7 @@ u_parseMessageWithError(const char  *locale,
  * @param status A pointer to an UErrorCode to receive any errors
  * specified in pattern.
  * @see u_formatMessage
- * @draft ICU 2.0
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2 
 u_vparseMessageWithError(const char  *locale,
@@ -403,7 +403,7 @@ u_vparseMessageWithError(const char  *locale,
 /*----------------------- New experimental API --------------------------- */
 /** 
  * The message format object
- * @draft ICU 2.0
+ * @stable ICU 2.0
  */
 typedef void* UMessageFormat;
 
@@ -418,7 +418,7 @@ typedef void* UMessageFormat;
  * @param status        A pointer to an UErrorCode to receive any errors.
  * @return              A pointer to a UMessageFormat to use for formatting 
  *                      messages, or 0 if an error occurred. 
- * @draft ICU 2.0
+ * @stable ICU 2.0
  */
 U_CAPI UMessageFormat* U_EXPORT2 
 umsg_open(  const UChar     *pattern,
@@ -431,7 +431,7 @@ umsg_open(  const UChar     *pattern,
  * Close a UMessageFormat.
  * Once closed, a UMessageFormat may no longer be used.
  * @param format The formatter to close.
- * @draft ICU 2.0
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2 
 umsg_close(UMessageFormat* format);
@@ -442,7 +442,7 @@ umsg_close(UMessageFormat* format);
  * @param fmt The formatter to copy
  * @param status A pointer to an UErrorCode to receive any errors.
  * @return A pointer to a UDateFormat identical to fmt.
- * @draft ICU 2.0
+ * @stable ICU 2.0
  */
 U_CAPI UMessageFormat U_EXPORT2 
 umsg_clone(const UMessageFormat *fmt,
@@ -453,7 +453,7 @@ umsg_clone(const UMessageFormat *fmt,
  * format information.
  * @param fmt The formatter to set
  * @param locale The locale the formatter should use.
- * @draft ICU 2.0
+ * @stable ICU 2.0
  */
 U_CAPI void  U_EXPORT2 
 umsg_setLocale(UMessageFormat *fmt,
@@ -464,7 +464,7 @@ umsg_setLocale(UMessageFormat *fmt,
  * format information.
  * @param fmt The formatter to querry
  * @return the locale.
- * @draft ICU 2.0
+ * @stable ICU 2.0
  */
 U_CAPI const char*  U_EXPORT2 
 umsg_getLocale(UMessageFormat *fmt);
@@ -479,7 +479,7 @@ umsg_getLocale(UMessageFormat *fmt);
  * @param status        Output param set to success/failure code on
  *                      exit. If the pattern is invalid, this will be
  *                      set to a failure result.
- * @draft ICU 2.0
+ * @stable ICU 2.0
  */
 U_CAPI void  U_EXPORT2 
 umsg_applyPattern( UMessageFormat *fmt,
@@ -497,7 +497,7 @@ umsg_applyPattern( UMessageFormat *fmt,
  *                     exit. If the pattern is invalid, this will be
  *                     set to a failure result.  
  * @return the pattern of the format
- * @draft ICU 2.0
+ * @stable ICU 2.0
  */
 U_CAPI int32_t  U_EXPORT2 
 umsg_toPattern(UMessageFormat *fmt,

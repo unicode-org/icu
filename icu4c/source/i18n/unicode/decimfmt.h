@@ -278,7 +278,7 @@ public:
      * @param parseError        Output param to receive errors occured during parsing 
      * @param status            Output param set to success/failure code. If the
      *                          pattern is invalid this will be set to a failure code.
-     * @draft ICU 2.0
+     * @stable ICU 2.0
      */
     DecimalFormat(  const UnicodeString& pattern,
                     DecimalFormatSymbols* symbolsToAdopt,
@@ -993,7 +993,7 @@ public:
      * @param status    Output param set to success/failure code on
      *                  exit. If the pattern is invalid, this will be
      *                  set to a failure result.
-     * @draft ICU 2.0
+     * @stable ICU 2.0
      */
     virtual void applyLocalizedPattern(const UnicodeString& pattern,
                                        UParseError& parseError,

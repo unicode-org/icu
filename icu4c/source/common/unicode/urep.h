@@ -117,7 +117,7 @@ typedef struct UReplaceableCallbacks {
      * be copied
      * @param dst array in which to copy characters.  The length of
      * <tt>dst</tt> must be at least <tt>(limit - start)</tt>.
-     * @draft ICU 2.1
+     * @stable ICU 2.1
      */
     void    (*extract)(UReplaceable* rep,
                        int32_t start,

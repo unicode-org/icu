@@ -2364,7 +2364,7 @@ public:
    *                  If none is provided (0), then a standard titlecase
    *                  break iterator is opened.
    * @return A reference to this.
-   * @draft ICU 2.1
+   * @stable ICU 2.1
    */
   UnicodeString &toTitle(BreakIterator *titleIter);
 
@@ -2392,7 +2392,7 @@ public:
    *                  break iterator is opened.
    * @param locale    The locale to consider.
    * @return A reference to this.
-   * @draft ICU 2.1
+   * @stable ICU 2.1
    */
   UnicodeString &toTitle(BreakIterator *titleIter, const Locale &locale);
 

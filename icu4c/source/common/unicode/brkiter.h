@@ -457,7 +457,7 @@ public:
      * used; neither the requested locale nor any of its fall back locales
      * could be found.
      * The caller owns the returned object and is responsible for deleting it.
-     * @draft ICU 2.1
+     * @stable ICU 2.1
      */
     static BreakIterator* createTitleInstance(const Locale& where,
                                                        UErrorCode& status);
