@@ -51,7 +51,7 @@ ucbuf_autodetect_fs(FileStream* in, const char** cp, UConverter** conv, int32_t*
     /* initial 0xa5 bytes: make sure that if we read <4 bytes we don't misdetect something */
     char start[4]={ '\xa5', '\xa5', '\xa5', '\xa5' };
     char* pStart = start;
-    UBool autodetect;
+    UBool autodetect=TRUE;
     
     numRead=0;
 
@@ -435,7 +435,7 @@ ucbuf_open(const char* fileName,const char** cp,UBool showWarning, UBool buffere
             buf->currentPos=buf->buffer;
             buf->bufLimit=buf->buffer;
             if(U_FAILURE(*error)){
-                fprintf(stderr, "Could not open codepage [%s]: %s\n", cp, u_errorName(*error));
+                fprintf(stderr, "Could not open codepage [%s]: %s\n", *cp, u_errorName(*error));
                 return NULL;
             }
             buf=ucbuf_fillucbuf(buf,error);

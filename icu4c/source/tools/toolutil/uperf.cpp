@@ -278,7 +278,7 @@ UBool UPerfTest::runTestLoop( char* testname, char* par )
                 fprintf(stderr, "%s returned an illegal operations/iteration()", name);
                 return FALSE;
             }
-            double t;
+            double t=0;
             int32_t n = 1;
             long events = -1;
             if (iterations > 0) {
@@ -325,13 +325,13 @@ UBool UPerfTest::runTestLoop( char* testname, char* par )
             }
             //print info only in verbose mode
             if(verbose==TRUE){
-                if(events = -1){
+                if(events == -1){
                     fprintf(stdout,"= %s end: %f operations: %i \n",name , t , testFunction->getOperationsPerIteration());
                 }else{
                     fprintf(stdout,"= %s end: %f operations: %i events: %i\n",name , t , testFunction->getOperationsPerIteration(), events);
                 }
             }else{
-                 if(events = -1){
+                 if(events == -1){
                     fprintf(stdout,"= %f %i \n", t , testFunction->getOperationsPerIteration());
                 }else{
                     fprintf(stdout,"= %f %i %i\n", t , testFunction->getOperationsPerIteration(), events);
