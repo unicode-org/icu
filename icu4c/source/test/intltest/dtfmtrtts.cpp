@@ -12,6 +12,7 @@
 #include "unicode/smpdtfmt.h"
 #include "unicode/gregocal.h"
 #include "dtfmtrtts.h"
+#include "caltest.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -125,6 +126,11 @@ void DateFormatRoundTripTest::TestDateFormatRoundTrip()
     for (int i=0; i < locCount; ++i) {
         test(avail[i]);
     }
+
+    int32_t jCount = CalendarTest::testLocaleCount();
+    for (int32_t j=0; j < jCount; ++j) {
+        test(Locale(CalendarTest::testLocaleID(j)));
+    }
 # endif
 #endif
 
@@ -224,6 +230,15 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
         errln("DateFormat wasn't a SimpleDateFormat");
         return;
     }
+    
+    UBool isGregorian = FALSE;
+    UErrorCode minStatus = U_ZERO_ERROR;
+    UDate minDate = CalendarTest::minDateOfCalendar(*fmt->getCalendar(), isGregorian, minStatus);
+    if(U_FAILURE(minStatus)) {
+      errln((UnicodeString)"Failure getting min date for " + origLocale.getName());
+      return;
+    } 
+    //logln(UnicodeString("Min date is ") + fullFormat(minDate)  + " for " + origLocale.getName());
 
     pat = ((SimpleDateFormat*)fmt)->toPattern(pat);
 
@@ -249,7 +264,11 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
             UDate *d                = new UDate    [DEPTH];
             UnicodeString *s    = new UnicodeString[DEPTH];
 
-            d[0] = generateDate();
+            if(isGregorian == TRUE) {
+              d[0] = generateDate();
+            } else {
+              d[0] = generateDate(minDate);
+            }
 
             UErrorCode status = U_ZERO_ERROR;
 
@@ -268,6 +287,9 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
                 }
 
                 s[loop] = fmt->format(d[loop], s[loop]);
+                
+                // For displaying which date is being tested
+                //logln(s[loop] + " = " + fullFormat(d[loop]));
                 
                 if(s[loop].length() == 0) {
                   errln("FAIL: fmt->format gave 0-length string in " + pat + " with number " + d[loop] + " in locale " + origLocale.getName());
@@ -347,12 +369,14 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
                 }                
             }
 
-            if((dmatch > maxDmatch || smatch > maxSmatch) && // Special case for Japanese (could have large negative years)
-               !strcmp(fmt->getCalendar()->getType(),"japanese")) {
-                    maxSmatch = 4;
-                    maxDmatch = 4;
+            if(dmatch > maxDmatch || smatch > maxSmatch) { // Special case for Japanese and Islamic (could have large negative years)
+              const char *type = fmt->getCalendar()->getType();
+              if(!strcmp(type,"japanese")) {
+                maxSmatch = 4;
+                maxDmatch = 4;
+              }
             }
-            
+
             // Use @v to see verbose results on successful cases
             UBool fail = (dmatch > maxDmatch || smatch > maxSmatch);
             if (optionv || fail) {
@@ -432,6 +456,33 @@ UnicodeString& DateFormatRoundTripTest::escape(const UnicodeString& src, Unicode
     }
 
     return dst;
+}
+
+#define U_MILLIS_PER_YEAR (365.25 * 24 * 60 * 60 * 1000)
+
+UDate DateFormatRoundTripTest::generateDate(UDate minDate)
+{
+  // Bring range in conformance to generateDate() below.
+  if(minDate < (U_MILLIS_PER_YEAR * -(4000-1970))) {
+    minDate = (U_MILLIS_PER_YEAR * -(4000-1970));
+  }
+  for(int i=0;i<8;i++) {
+    double a = randFraction();
+    
+    // Range from (min) to  (8000-1970) AD
+    double dateRange = (0.0 - minDate) + (U_MILLIS_PER_YEAR + (8000-1970));
+    
+    a *= dateRange;
+
+    // Now offset from minDate
+    a += minDate;
+   
+    // Last sanity check
+    if(a>=minDate) {
+      return a;
+    }
+  }
+  return minDate;
 }
 
 UDate DateFormatRoundTripTest::generateDate() 
