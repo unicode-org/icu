@@ -30,7 +30,6 @@
 #include "toupptrn.h"
 #include "unicode/translit.h"
 #include "uni2name.h"
-#include "unicode/unicode.h"
 #include "unicode/unifilt.h"
 #include "unicode/unifltlg.h"
 #include "unicode/uniset.h"

@@ -12,7 +12,6 @@
 #include "rbt_data.h"
 #include "unicode/unifilt.h"
 #include "unicode/uniset.h"
-#include "unicode/unicode.h"
 #include "cmemory.h"
 #include "strmatch.h"
 #include "strrepl.h"

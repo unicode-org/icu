@@ -25,7 +25,7 @@
 #include "cmemory.h"
 #include "unicode/ustring.h"
 #include "unicode/unistr.h"
-#include "unicode/unicode.h"
+#include "unicode/uchar.h"
 #include "unicode/ucnv.h"
 #include "unicode/ubrk.h"
 #include "uhash.h"
@@ -451,19 +451,19 @@ UnicodeString::numDisplayCells( int32_t start,
 
   while(start < limit) {
     UTF_NEXT_CHAR(fArray, start, limit, c);
-    switch(Unicode::getCellWidth(c)) {
-    case Unicode::ZERO_WIDTH:
+    switch(u_charCellWidth(c)) {
+    case U_ZERO_WIDTH:
       break;
 
-    case Unicode::HALF_WIDTH:
+    case U_HALF_WIDTH:
       result += 1;
       break;
 
-    case Unicode::FULL_WIDTH:
+    case U_FULL_WIDTH:
       result += 2;
       break;
 
-    case Unicode::NEUTRAL:
+    case U_NEUTRAL_WIDTH:
       result += (asian ? 2 : 1);
       break;
     }
@@ -1441,7 +1441,7 @@ UnicodeString::trim()
       break;
     }
     UTF_PREV_CHAR(fArray, 0, i, c);
-    if(!(c == 0x20 || Unicode::isWhitespace(c))) {
+    if(!(c == 0x20 || u_isWhitespace(c))) {
       break;
     }
   }
@@ -1458,7 +1458,7 @@ UnicodeString::trim()
       break;
     }
     UTF_NEXT_CHAR(fArray, i, length, c);
-    if(!(c == 0x20 || Unicode::isWhitespace(c))) {
+    if(!(c == 0x20 || u_isWhitespace(c))) {
       break;
     }
   }
