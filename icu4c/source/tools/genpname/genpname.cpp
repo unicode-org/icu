@@ -653,7 +653,7 @@ void Builder::buildStringPool(const AliasName* propertyNames,
         p += len;
         *p++ = 0;
         stringPool_offsetArray[i] = soFar;
-        soFar += len+1;
+        soFar += (Offset)(len+1);
     }
     U_ASSERT(soFar == stringPool_size);
     U_ASSERT(p == (stringPool + stringPool_size));
@@ -806,7 +806,7 @@ void Builder::fixupMiscellaneousOffsets() {
     EnumValue* e = enumToValue->getEnumArray();
     U_ASSERT(valueMap_count == enumToValue->count);
     for (i=0; i<valueMap_count; ++i) {
-        p[i] = valueMap_offset + sizeof(ValueMap) * i;
+        p[i] = (Offset)(valueMap_offset + sizeof(ValueMap) * i);
     }
 
     // 4:
