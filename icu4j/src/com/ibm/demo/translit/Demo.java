@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/demo/translit/Attic/Demo.java,v $ 
- * $Date: 2001/11/20 19:51:37 $ 
- * $Revision: 1.5 $
+ * $Date: 2001/11/21 00:53:05 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -27,7 +27,7 @@ import com.ibm.text.*;
  * <p>Copyright (c) IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Demo.java,v $ $Revision: 1.5 $ $Date: 2001/11/20 19:51:37 $
+ * @version $RCSfile: Demo.java,v $ $Revision: 1.6 $ $Date: 2001/11/21 00:53:05 $
  */
 public class Demo extends Frame {
 
@@ -87,9 +87,7 @@ public class Demo extends Frame {
         add(text);
 
         setSize(width, height);
-        
-        translit = Transliterator.getInstance("Latin-Greek");
-        text.setTransliterator(translit);
+        setTransliterator("Any-Null");
         
     }
 
@@ -193,7 +191,46 @@ public class Demo extends Frame {
         mbar.add(sizeMenu);
         
         translit = null;
+        
         mbar.add(translitMenu = new Menu("Transliterator"));
+        
+        translitMenu.add(mitem = new MenuItem("Convert Selection"));
+        mitem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                handleBatchTransliterate(translit);
+            }
+        });
+        
+        translitMenu.add(mitem = new MenuItem("Invert Selection"));
+        mitem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                handleBatchTransliterate(translit.getInverse());
+            }
+        });
+        
+        translitMenu.add(mitem = new MenuItem("Flush"));
+        mitem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                text.flush();
+            }
+        });
+        
+        translitMenu.add(historyMenu = new Menu("History"));
+        
+        historyMenu.add(mitem = new MenuItem("Inverse"));
+        mitem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Transliterator inv = translit.getInverse();
+                if (inv == null) {
+                    getToolkit().beep(); // LIU: Add audio feedback of NOP
+                    return;
+                } 
+                setTransliterator(inv.getID());
+            }
+        });
+        
+        
+        translitMenu.addSeparator();
         
         Iterator sources = add(new TreeSet(), Transliterator.getAvailableSources()).iterator();
         while(sources.hasNext()) {
@@ -221,26 +258,55 @@ public class Demo extends Frame {
             }
             translitMenu.add(targetMenu);
         }
-        
-
-        mbar.add(menu = new Menu("Batch"));
-        menu.add(mitem = new MenuItem("Transliterate Selection"));
-        mitem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                handleBatchTransliterate();
-            }
-        });
     }
     
-    class TransliterationListener implements ActionListener {
+    Menu historyMenu;
+    Map historyMap = new HashMap();
+    CheckboxMenuItem currentHistory = new CheckboxMenuItem();
+    
+    void setTransliterator(String name) {
+        System.out.println("Got: " + name);
+        translit = Transliterator.getInstance(name);
+        text.setTransliterator(translit);
+        
+        addHistory(translit, true);
+        
+        Transliterator inv = translit.getInverse();
+        if (inv != null) {
+            addHistory(inv, false);
+        }
+    }
+    
+    void addHistory(Transliterator translit, boolean makeSelected) {
+        String name = translit.getID();
+        CheckboxMenuItem cmi = (CheckboxMenuItem) historyMap.get(name);
+        if (!currentHistory.equals(cmi)) {
+            if (makeSelected) currentHistory.setState(false);
+            if (cmi == null) {
+                cmi = new CheckboxMenuItem(translit.getDisplayName(name));
+                cmi.addItemListener(new TransliterationListener(name));
+                historyMenu.add(cmi);
+                historyMap.put(name, cmi);
+            }
+            if (makeSelected) cmi.setState(true);
+            currentHistory = cmi;
+        }
+    }
+    
+    class TransliterationListener implements ActionListener, ItemListener {
         String name;
         public TransliterationListener(String name) {
             this.name = name;
         }
         public void actionPerformed(ActionEvent e) {
-            System.out.println("Got: " + name);
-            translit = Transliterator.getInstance(name);
-            text.setTransliterator(translit);
+            setTransliterator(name);
+        }
+        public void itemStateChanged(ItemEvent e) {
+            if (e.getStateChange() == e.SELECTED) {
+                setTransliterator(name);
+            } else {
+                setTransliterator("Any-Null");
+            }
         }
     }
     
@@ -344,7 +410,7 @@ public class Demo extends Frame {
     }
     */
 
-    private void handleBatchTransliterate() {
+    private void handleBatchTransliterate(Transliterator translit) {
         if (translit == null) {
             return;
         }

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/components/Attic/DumbTextComponent.java,v $ 
- * $Date: 2000/03/10 04:07:26 $ 
- * $Revision: 1.2 $
+ * $Date: 2001/11/21 00:53:40 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -22,7 +22,7 @@ public class DumbTextComponent extends Canvas
   {
     private transient static final String copyright =
       "Copyright \u00A9 1998, Mark Davis. All Rights Reserved.";
-    private transient static boolean DEBUG = false;
+    private transient static boolean DEBUG = true;
 
     private String contents = "";
     private Selection selection = new Selection();
@@ -55,7 +55,7 @@ public class DumbTextComponent extends Canvas
     private transient Point startPoint = new Point();
     private transient Point endPoint = new Point();
     private transient Point caretPoint = new Point();
-    private transient static String clipBoard;
+    //private transient static String clipBoard;
 
     private static final char CR = '\015'; // LIU
 
@@ -152,7 +152,7 @@ public class DumbTextComponent extends Canvas
 	    }
 	    select(tempSelection);
     }
-
+    
 	public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
         if (DEBUG) System.out.println("keyPressed "
@@ -161,24 +161,32 @@ public class DumbTextComponent extends Canvas
         int end = selection.getEnd();
         boolean shift = (e.getModifiers() & KeyEvent.SHIFT_MASK) != 0;
         boolean ctrl = (e.getModifiers() & KeyEvent.CTRL_MASK) != 0;
+                
         switch (code) {
         case KeyEvent.VK_Q:
             if (!ctrl || !editable) break;
             fixHex();
             break;
         case KeyEvent.VK_V:
-            if (!ctrl || !editable) break;
-            insertText(clipBoard);
+            if (!ctrl) break;
+            if (!editable) {
+                this.getToolkit().beep();
+            } else {
+                paste();
+            }
             break;
         case KeyEvent.VK_C:
             if (!ctrl) break;
-            clipBoard = contents.substring(selection.getStart(), selection.getEnd());
+            copy();
             break;
         case KeyEvent.VK_X:
             if (!ctrl) break;
-            clipBoard = contents.substring(selection.getStart(), selection.getEnd());
-            if (editable) break;
-            insertText("");
+            if (!editable) {
+                this.getToolkit().beep();
+            } else {
+                copy();
+                insertText("");
+            }
             break;
         case KeyEvent.VK_A:
             if (!ctrl) break;
@@ -227,6 +235,28 @@ public class DumbTextComponent extends Canvas
         }
     }
 
+    void copy() {
+        Clipboard cb = this.getToolkit().getSystemClipboard();
+        StringSelection ss = new StringSelection(
+            contents.substring(selection.getStart(), selection.getEnd()));
+        cb.setContents(ss, ss);
+    }
+    
+    void paste () {
+        Clipboard cb = this.getToolkit().getSystemClipboard();
+        Transferable t = cb.getContents(this);
+        if (t == null) {
+            this.getToolkit().beep();
+            return;
+        }
+        try {
+            String temp = (String) t.getTransferData(DataFlavor.stringFlavor);
+            insertText(temp);
+        } catch (Exception e) {
+            this.getToolkit().beep();
+        }            
+    }
+
     /**
      * LIU: Given an offset into contents, moves up or down by lines,
      * according to lineStarts[].
@@ -262,17 +292,32 @@ public class DumbTextComponent extends Canvas
         if (DEBUG) System.out.println("keyTyped "
           + hex((char)ch) + ", " + hex((char)e.getModifiers()));
         if ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0) return;
+        int start, end;
         switch (ch) {
         case KeyEvent.CHAR_UNDEFINED:
             break;
         case KeyEvent.VK_BACK_SPACE:
             if (!editable) break;
             if (contents.length() == 0) break;
-            int start = selection.getStart();
-            int end = selection.getEnd();
+            start = selection.getStart();
+            end = selection.getEnd();
             if (start == end) {
                 --start;
                 if (start < 0) {
+                    getToolkit().beep(); // LIU: Add audio feedback of NOP
+                    return;
+                }
+            }
+            replaceRange("", start, end);
+            break;        
+        case KeyEvent.VK_DELETE:
+            if (!editable) break;
+            if (contents.length() == 0) break;
+            start = selection.getStart();
+            end = selection.getEnd();
+            if (start == end) {
+                ++end;
+                if (end > contents.length()) {
                     getToolkit().beep(); // LIU: Add audio feedback of NOP
                     return;
                 }

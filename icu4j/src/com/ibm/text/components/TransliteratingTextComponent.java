@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/components/Attic/TransliteratingTextComponent.java,v $ 
- * $Date: 2001/11/20 19:51:37 $ 
- * $Revision: 1.7 $
+ * $Date: 2001/11/21 00:53:39 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -25,7 +25,7 @@ import com.ibm.text.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliteratingTextComponent.java,v $ $Revision: 1.7 $ $Date: 2001/11/20 19:51:37 $
+ * @version $RCSfile: TransliteratingTextComponent.java,v $ $Revision: 1.8 $ $Date: 2001/11/21 00:53:39 $
  */
 public class TransliteratingTextComponent extends DumbTextComponent {
 
@@ -70,11 +70,21 @@ public class TransliteratingTextComponent extends DumbTextComponent {
      */
 	protected void handleKeyTyped(KeyEvent e) {
         char ch = e.getKeyChar();
-
+        
         if (translit == null) {
             super.handleKeyTyped(e);
             return;
         }
+
+        transliterate(ch, false);
+    }
+    
+    public void flush() {
+        transliterate('\uFFFF', true);
+    }
+    
+    
+    protected void transliterate(char ch, boolean flush) {
 
         // ------------------------------------------------------------
         // The following case motivates the two lines that recompute
@@ -123,7 +133,11 @@ public class TransliteratingTextComponent extends DumbTextComponent {
                 + "; '" + ch + "'");
         }
 
-        translit.transliterate(buf, index, ch);
+        if (flush) {
+            translit.finishTransliteration(buf, index);
+        } else {
+            translit.transliterate(buf, index, ch);
+        }
         
         if (DEBUG) {
             System.out.println("To:\t" + '"' + buf.toString() + '"'
@@ -169,7 +183,7 @@ public class TransliteratingTextComponent extends DumbTextComponent {
         }
         */
     }
-
+    
     /**
      * Set the {@link com.ibm.text.Transliterator} and direction to
      * use to process incoming <code>KeyEvent</code>s.
