@@ -66,6 +66,8 @@ private:
 
     void TestCloseOver(void);
 
+    void TestEscapePattern(void);
+
 private:
 
     UBool toPatternAux(UChar32 start, UChar32 end);
