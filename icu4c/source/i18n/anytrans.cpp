@@ -4,7 +4,7 @@
 * and others.  All Rights Reserved.
 *****************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/anytrans.cpp,v $ 
-* $Revision: 1.3 $
+* $Revision: 1.4 $
 *****************************************************************
 * Date        Name        Description
 * 06/06/2002  aliu        Creation.
@@ -28,12 +28,15 @@ static const UChar LATIN_PIVOT[] = {45,76,97,116,105,110,59,76,97,116,105,110,45
 
 //------------------------------------------------------------
 
+U_CDECL_BEGIN
 /**
  * Deleter function for Transliterator*.
  */
-static void _deleteTransliterator(void *obj) {
+static void
+_deleteTransliterator(void *obj) {
     delete (Transliterator*) obj;    
 }
+U_CDECL_END
 
 //------------------------------------------------------------
 
