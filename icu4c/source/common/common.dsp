@@ -1176,8 +1176,8 @@ SOURCE=.\unicode\unorm.h
 # Begin Custom Build
 InputPath=.\unicode\unorm.h
 
-"..\..\include\unorm.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    unicode\unorm.h    ..\..\include\unorm.h
+"..\..\include\unicode\unorm.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    unicode\unorm.h    ..\..\include\unicode
 
 # End Custom Build
 
