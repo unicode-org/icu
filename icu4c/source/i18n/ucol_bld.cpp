@@ -1029,14 +1029,19 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
               el.uchars[0] = (UChar)u;
               el.cPoints = el.uchars;
               el.cSize = 1;
-              el.noOfCEs = 0;
               el.prefix = el.prefixChars;
               el.prefixSize = 0;
+              el.noOfCEs = 0;
               ucol_setText(colEl, decomp, noOfDec, status);
               while((el.CEs[el.noOfCEs] = ucol_next(colEl, status)) != UCOL_NULLORDER) {
                 el.noOfCEs++;
               }
             } else {
+              el.uchars[0] = (UChar)u;
+              el.cPoints = el.uchars;
+              el.cSize = 1;
+              el.prefix = el.prefixChars;
+              el.prefixSize = 0;
               el.noOfCEs = 1;
               el.CEs[0] = prefix->mapCE;
             }
