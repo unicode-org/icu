@@ -33,8 +33,15 @@ ulocdata_getExemplarSet(USet *fillIn, const char *localeID,
     }
     
     bundle = ures_open(NULL, localeID, status);
+    if (U_FAILURE(*status)) {
+        return NULL;
+    }
     
-    exemplarChars = ures_getStringByKey(bundle, EXEMPLAR_CHARS, &len, status);
+    UErrorCode localStatus = U_ZERO_ERROR;
+    exemplarChars = ures_getStringByKey(bundle, EXEMPLAR_CHARS, &len, &localStatus);
+    if (U_FAILURE(localStatus) || (*status != U_USING_DEFAULT_WARNING && localStatus != U_ZERO_ERROR)) {
+        *status = localStatus;
+    }
     
     if(fillIn != NULL){
         uset_applyPattern(fillIn, exemplarChars, len, 
