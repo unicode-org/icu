@@ -11,6 +11,7 @@
 #include "unicode/name2uni.h"
 #include "unicode/unifilt.h"
 #include "unicode/unicode.h"
+#include "unicode/convert.h"
 
 const char* NameUnicodeTransliterator::_ID = "Name-Any";
 
@@ -75,7 +76,8 @@ Transliterator* NameUnicodeTransliterator::clone(void) const {
 void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPosition& offsets,
                                                     UBool isIncremental) const {
     // Accomodate the longest possible name plus padding
-    char buf[LONGEST_NAME + 8];
+    UChar buf[LONGEST_NAME + 8];
+    char cbuf[LONGEST_NAME + 8]; // Default converter
 
     // The only characters used in names are (as of Unicode 3.0.0):
     //  -0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ
@@ -92,6 +94,8 @@ void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPos
     int32_t openPos = offsets.start; // position of openDelimiter
 
     UnicodeString str;
+
+    UnicodeConverter converter; // default converter
 
     for (; cursor < limit; ++cursor) {
         UChar c = filteredCharAt(text, cursor);
@@ -129,7 +133,15 @@ void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPos
                 }
                 buf[ibuf] = 0; // Add terminating zero
                 UErrorCode status = U_ZERO_ERROR;
-                UChar32 ch = u_charFromName(U_UNICODE_CHAR_NAME, buf, &status);
+
+                // Convert UChar to char
+                char *out = cbuf;
+                const UChar *in = buf;
+                converter.fromUnicode(out, cbuf+sizeof(cbuf),
+                                      in, buf+ibuf, NULL, TRUE, status);
+                *out = 0;
+
+                UChar32 ch = u_charFromName(U_UNICODE_CHAR_NAME, cbuf, &status);
                 if (ch != (UChar32) 0xFFFF && U_SUCCESS(status)) {
                     // Lookup succeeded
                     str.truncate(0);
@@ -150,9 +162,9 @@ void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPos
                 continue;
             }
             
-            if (c >= (UChar)0x0061 && c <= (UChar)0x007A) {
-                c -= 0x0020; // [a-z] => [A-Z]
-            }
+            //if (c >= (UChar)0x0061 && c <= (UChar)0x007A) {
+            //    c -= 0x0020; // [a-z] => [A-Z]
+            //}
 
             // Check if c =~ [-A-Z0-9]
             if (c == (UChar)0x002D ||
