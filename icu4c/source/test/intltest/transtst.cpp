@@ -60,6 +60,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         CASE(17,TestArbitraryVariableValues);
         CASE(18,TestPositionHandling);
         CASE(19,TestHiraganaKatakana);
+        CASE(20,TestCopyJ476);
         default: name = ""; break;
     }
 }
@@ -826,6 +827,28 @@ void TransliteratorTest::TestHiraganaKatakana(void) {
         }
     }
 
+}
+
+/**
+ * Test cloning / copy constructor of RBT.
+ */
+void TransliteratorTest::TestCopyJ476(void) {
+    // The real test here is what happens when the destructors are
+    // called.  So we let one object get destructed, and check to
+    // see that its copy still works.
+    RuleBasedTransliterator *t2 = 0;
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        RuleBasedTransliterator t1("t1", "a>A;b>B;", status);
+        if (U_FAILURE(status)) {
+            errln("FAIL: RBT constructor");
+            return;
+        }
+        t2 = new RuleBasedTransliterator(t1);
+        expect(t1, "abc", "ABc");
+    }
+    expect(*t2, "abc", "ABc");
+    delete t2;
 }
 
 //======================================================================

@@ -63,6 +63,12 @@ public:
     TransliterationRuleSet();
 
     /**
+     * Copy constructor.
+     */
+    TransliterationRuleSet(const TransliterationRuleSet&,
+                           const TransliterationRuleData& data);
+
+    /**
      * Destructor.
      */
     virtual ~TransliterationRuleSet();

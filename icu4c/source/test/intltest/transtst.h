@@ -120,6 +120,10 @@ class TransliteratorTest : public IntlTest {
      */
     void TestHiraganaKatakana(void);
 
+    /**
+     * Test cloning / copy constructor of RBT.
+     */
+    void TestCopyJ476(void);
 
     //======================================================================
     // Support methods

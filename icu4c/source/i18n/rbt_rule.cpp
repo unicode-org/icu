@@ -12,6 +12,7 @@
 #include "rbt_data.h"
 #include "unicode/unifilt.h"
 #include "unicode/uniset.h"
+#include "cmemory.h"
 
 /**
  * Construct a new rule with the given input, output text, and other
@@ -69,6 +70,51 @@ TransliterationRule::TransliterationRule(const UnicodeString& input,
                                          UErrorCode& status) {
     init(input, anteContextPos, postContextPos,
          output, cursorPos, 0, NULL, status);
+}
+
+/**
+ * Copy constructor.
+ */
+TransliterationRule::TransliterationRule(TransliterationRule& other,
+                                         const TransliterationRuleData& data) :
+    pattern(other.pattern),
+    output(other.output),
+    anteContextLength(other.anteContextLength),
+    keyLength(other.keyLength),
+    cursorPos(other.cursorPos) {
+
+    segments = 0;
+    if (other.segments != 0) {
+        int32_t len = other.getSegmentsLength(data);
+        segments = new int32_t[len];
+        uprv_memcpy(segments, other.segments, len*sizeof(segments[0]));
+    }
+}
+
+/**
+ * Return the length of segments[].  We only use this for the copy
+ * constructor.  There are three ways of doing this: 1. Keep the
+ * length as a data member.  This adds 4 bytes to the size of each
+ * rule, and we only use this parameter during copy construction.
+ * 2. Just use the maximum possible length during copying, which is
+ * 9*2 = 18 values.  3. Compute the value on the fly when we need it.
+ *
+ * We use the third option.
+ */
+int32_t
+TransliterationRule::getSegmentsLength(const TransliterationRuleData& data) const {
+    int32_t len = 0;
+    for (int32_t i=0; i<output.length(); ++i) {
+        UChar c = output.charAt(i);
+        int32_t b = data.lookupSegmentReference(c);
+        if (b >= 0) {
+            b = 2*(b+1);
+            if (b > len) {
+                len = b;
+            }
+        }
+    }
+    return len;
 }
 
 void TransliterationRule::init(const UnicodeString& input,
