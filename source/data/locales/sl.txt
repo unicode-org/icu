@@ -1,0 +1,115 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+sl {
+    Version{"1.1"}
+    CollationElements { 
+        Version { "1.0" }
+        Sequence { "& C < c\u030C , C\u030C & S < s\u030C , S\u030C & Z < z\u030C , Z\u030C" }
+//      Sequence { "& C < c\u030C , C\u030C < c\u0301 , C\u0301 & D < \u01F3"
+//        " , \u01F2 , \u01F1 < \u01C6 , \u01C5 , \u01C4 < \u0111 , \u0110 & L < \u0142 , "
+//        "\u0141 & N < nj , nJ , Nj , NJ & S < s\u030C , S\u030C < s\u0301, S\u0301 & Z <"
+//        " z\u030C , Z\u030C < z\u0301 , Z\u0301 < z\u0307 , Z\u0307 " }
+    }
+    Countries { 
+        SI { "Slovenija" }
+    }
+    DateTimePatterns { 
+        "H:mm:ss z",
+        "H:mm:ss z",
+        "H:mm:ss",
+        "H:mm",
+        "EEEE, dd. MMMM yyyy",
+        "dd. MMMM yyyy",
+        "yyyy.M.d",
+        "yy.M.d",
+        "{1} {0}",
+    }
+    DayAbbreviations { 
+        "ned",
+        "pon",
+        "tor",
+        "sre",
+        "\u010det",
+        "pet",
+        "sob",
+    }
+    DayNames { 
+        "nedelja",
+        "ponedeljek",
+        "torek",
+        "sreda",
+        "\u010detrtek",
+        "petek",
+        "sobota",
+    }
+    Eras { 
+        "pr.n.\u0161.",
+        "po Kr.",
+    }
+    Languages { 
+        sl { "Sloven\u0161\u010Dina" }
+    }
+    LocaleID:int { 0x24 }
+//    LocaleString { "sl" }
+    MonthAbbreviations { 
+        "jan",
+        "feb",
+        "mar",
+        "apr",
+        "maj",
+        "jun",
+        "jul",
+        "avg",
+        "sep",
+        "okt",
+        "nov",
+        "dec",
+    }
+    MonthNames { 
+        "januar",
+        "februar",
+        "marec",
+        "april",
+        "maj",
+        "junij",
+        "julij",
+        "avgust",
+        "september",
+        "oktober",
+        "november",
+        "december",
+    }
+    NumberElements { 
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+    }
+//    ShortLanguage { "slv" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
+    zoneStrings { 
+        {
+            "Africa/Casablanca",
+            "GMT",
+            "GMT",
+            "GMT",
+            "GMT",
+        }
+    }
+//    LocaleScript{ 
+//        "Latn",  // ISO 15924 Name 
+//    }
+    ExemplarCharacters { "[a-p r-v z \u010d \u0161 \u017e]" }
+}

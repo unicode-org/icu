@@ -1,0 +1,106 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *   Generated from Universal Locales for Linux Project
+// ***************************************************************************
+
+de_BE {
+    Version{ "1.0" }
+//    AmPmMarkers { 
+//        "vorm",
+//        "nachm",
+//    }
+    CurrencyElements { 
+        "\u20AC",
+        "EUR",
+        ",",
+    }
+    DateTimePatterns { 
+        "HH 'h' mm 'min' ss 's' z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "EEEE d MMMM yyyy",
+        "d MMMM yyyy",
+        "d-MMM-yy",
+        "d/MM/yy",
+        "{1} {0}",
+    }
+    DateTimeElements:intvector {
+        2,
+        1,
+    }
+    DayAbbreviations { 
+        "Son",
+        "Mon",
+        "Die",
+        "Mit",
+        "Don",
+        "Fre",
+        "Sam",
+    }
+//    DayNames { 
+//        "Sonntag",
+//        "Montag",
+//        "Dienstag",
+//        "Mittwoch",
+//        "Donnerstag",
+//        "Freitag",
+//        "Samstag",
+//    }
+//    Measurement { "Metric" }
+    MonthAbbreviations { 
+        "Jan",
+        "Feb",
+        "M\u00E4r",
+        "Apr",
+        "Mai",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Okt",
+        "Nov",
+        "Dez",
+    }
+//    MonthNames { 
+//        "Januar",
+//        "Februar",
+//        "M\u00E4rz",
+//        "April",
+//        "Mai",
+//        "Juni",
+//        "Juli",
+//        "August",
+//        "September",
+//        "Oktober",
+//        "November",
+//        "Dezember",
+//    }
+//    NumberElements {
+//        ",",
+//        ".",
+//        ";",
+//        "%",
+//        "0",
+//        "#",
+//        "-",
+//        "E",
+//        "\u2030",
+//        "\u221E",
+//        "\uFFFD",
+//    }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "#,##0.00 \u00A4;-#,##0.00 \u00A4",
+        "#,##0%",
+        "#E0",
+    }
+//    PaperSize { 
+//        Hieght { "297" }
+//        Width { "210" }
+//        Units { "mm" }
+//    }
+//    LocaleString{ "de_BE" }
+}

@@ -1,0 +1,9 @@
+tmp
+Debug
+Release
+Makefile
+*.d
+*.pdb
+*.plg
+gennorm
+gennorm.[0-9]

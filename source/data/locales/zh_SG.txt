@@ -1,0 +1,192 @@
+﻿  // -*- Coding: utf-8; -*-
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+// Singapore locale: Data By Syn Wee Quek
+
+
+zh_SG {
+    Version { "1.1" }
+
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;-\u00A4#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    CurrencyElements { 
+        // most commonly used currency sign
+//            "$",
+        "S$",   // #1 symbol
+        "SGD",  // #2 int'l symbol
+        ".",    // #3 decimal sep
+//            ","
+    }
+//    AmPmMarkers { 
+//        "\u4E0A\u5348", // am
+//        "\u4E0B\u5348" // pm
+//    }
+    DateTimePatterns {
+        // most commonly used formal time format 
+        "a hh:mm:ss",
+        "a hh:mm:ss",
+        "a hh:mm",
+        "a hh:mm",
+        // most commonly used date format
+        "dd MMMM yyyy",
+        "dd MMM yyyy",
+        "dd-MMM-yy",
+        "dd/MM/yy",
+        "{1} {0}"
+    }
+
+    LocaleID:int { 0x1004 }
+
+//    ShortCountry { "SIN" } // copied from zh_EN.txt
+
+    zoneStrings { 
+        {
+            "SST",
+            "Singapore Standard Time",
+            "SST",
+            "Singapore Standard Time",
+            "SST",
+//            "Singapore"
+        }
+    }
+
+    // Duplicates from zh locale according to Syn Wee have been removed.
+    Languages
+    {
+        root { "\u6839 \u6e90" }
+
+        //ar { "阿拉伯文" }       // Arabic
+        //de { "德语" }           // German
+        //el { "希腊语" }         // Greek
+        //es { "西班牙语" }       // Spanish
+        //eu { "巴斯克" }         // Basque
+        //fr { "法语" }           // French
+        //he { "希伯来语" }       // Hebrew
+        //hi { "印度语" }         // Hindi
+        //hu { "匈牙利语" }       // Hungarian
+        //id { "印度尼西亚语" }   // Indonesian
+        //it { "意大利语" }       // Italian
+        //ja { "日语" }           // Japanese
+        ko { "\u97e9\u6587" }           // Korean
+//        ko { "韩语" }           // Korean
+        //pl { "波兰" }           // Polish
+        //pt { "葡萄牙语" }       // Portuguese
+        //ro { "罗马尼亚语" }     // Romanian
+        //ru { "俄语" }           // Russian
+        sh { "\u585e\u5c14\u7ef4\u4e9a\u514b\u7f57\u5730\u4e9a\u6587" }   // SerboCroatian
+//        sh { "塞尔维亚克罗" }   // SerboCroatian
+        //sk { "斯洛伐克语" }     // Slovak
+        //sl { "斯洛文尼亚语" }   // Slovenian
+        //sq { "阿尔巴尼亚" }     // Albanian
+        //sr { "塞尔维亚语" }     // Serbian
+        //sv { "瑞典语" }         // Swedish
+        //ta { "泰米尔语" }       // Tamil
+        //th { "泰语" }           // Thai
+        //tr { "土耳其语" }       // Turkish
+        //vi { "越语" }           // Vietnamese
+    }
+
+    // Duplicates from zh locale according to Syn Wee have been removed.
+    Countries
+    {
+        //AL { "\u963f\u5c14\u5df4\u5c3c\u4e9a" }
+        //AE { "阿拉伯联合 "} #do not do this yet, missing a part.   United Arab Emirates 
+        //AR { "阿根廷" }         // Argentina
+        //AT { "奥地利" }         // Austria
+        AU { "澳洲" }           // Australia
+        //BE { "比利时" }         // Belgium
+        //BY { "白俄罗斯" }       // Belarus
+        //BG { "保加利亚" }       // Bulgaria
+        //BH { "巴林" }           // Bahrain
+        //BO { "玻利维亚" }       // Bolivia
+        //BW { "博茨瓦纳" }       // Botswana
+        //BR { "巴西" }           // Brazil
+        //CA { "加拿大" }         // Canada
+        //CH { "瑞士" }           // Switzerland
+        //CL { "智利" }           // Chile
+        //CO { "哥伦比亚" }       // Colombia
+        //CR { "哥斯达黎加" }     // CostaRica
+        CZ { "捷克" }           // Czech Republic
+        //DE { "德国" }           // Germany
+        //DK { "丹麦" }           // Denmark
+        //DO { "多米尼加共和国" } // Dominican Republic
+        //DZ { "阿尔及利亚" }     // Algeria
+        //EC { "厄瓜多尔" }       // Ecuador
+        //EE { "爱沙尼亚" }       // Estonia
+        //EG { "埃及" }           // Egypt
+        //ES { "西班牙" }         // Spain
+        //FI { "芬兰" }           // Finland
+        //FR { "法国" }           // France
+        //GB { "英国" }           // UnitedKingdom
+        GL { "格陵兰" }         // Greenland
+        //GR { "希腊" }           // Greece
+        //GT { "危地马拉" }       // Guatemala
+        //HN { "洪都拉斯" }       // Honduras
+        //HR { "克罗地亚" }       // Croatia
+        //HU { "匈牙利" }         // Hungary
+        ID { "印尼" }           // Indonesia
+        //IE { "爱尔兰" }         // Ireland
+        //IL { "以色列" }         // Israel
+        //IN { "印度" }           // India
+        //IQ { "伊拉克" }         // Iraq
+        //IR { "伊朗" }           // Iran
+        //IS { "冰岛" }           // Iceland
+        //IT { "意大利" }         // Italy
+        //JO { "约旦" }           // Jordan
+        //JP { "日本" }           // Japan
+        //KE { "肯尼亚" }         // Kenya
+        KR { "南韩" }           // South Korea
+        //KW { "科威特" }         // Kuwait
+        //LB { "黎巴嫩" }         // Lebanon
+        //LT { "立陶宛" }         // Lithuania
+        //LU { "卢森堡" }         // Luxembourg
+        //LV { "拉脱维亚" }       // Latvia
+        //LY { "利比亚" }         // Libya
+        //MA { "摩洛哥" }         // Morocco
+        MK { "马其顿" }         // Macedonia
+        //MT { "马耳他" }         // Malta
+        //MX { "墨西哥" }         // Mexico
+        //NI { "尼加拉瓜" }       // Nicaragua
+        //NL { "荷兰" }           // Netherlands
+        //NO { "挪威" }           // Norway
+        NZ { "纽西兰" }         // New Zealand
+        //OM { "阿曼" }           // Oman
+        //PA { "巴拿马" }         // Panama
+        //PE { "秘鲁" }           // Peru
+        //PL { "波兰" }           // Poland
+        PR { "波多黎各" }       // Puerto Rico
+        //PT { "葡萄牙" }         // Portugal
+        //PY { "巴拉圭" }         // Paraguay
+        //QA { "卡塔尔" }         // Qatar
+        //RO { "罗马尼亚" }       // Romania
+        //RU { "俄罗斯" }         // Russia
+        SA { "沙地阿拉伯" }     // Saudi Arabia
+        //SD { "苏丹" }           // Sudan
+        //SE { "瑞典" }           // Sweden
+        //SI { "斯洛文尼亚" }     // Slovenia
+        //SK { "斯洛伐克" }       // Slovakia
+        //SV { "萨尔瓦多" }       // El Salvador
+        //SY { "叙利亚" }         // Syria
+        //TH { "泰国" }           // Thailand
+        //TN { "突尼斯" }         // Tunisia
+        //TR { "土耳其" }         // Turkey
+        //TZ { "坦桑尼亚" }       // Tanzania
+        //UA { "乌克兰" }         // Ukraine
+        //US { "美国" }           // United States
+        //UY { "乌拉圭" }         // Uruguay
+        //VE { "委内瑞拉" }       // Venezuela
+        //VN { "越南" }           // Vietnam
+        //YE { "也门" }           // Yemen
+        //YU { "南斯拉夫" }       // Yugoslavia
+        //ZA { "\u5357\u975e" }   // South Africa
+        //ZW { "津巴布韦" }       // Zimbabwe
+    }
+}

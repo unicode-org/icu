@@ -1,0 +1,85 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+kl{
+    Version { "1.0" }
+
+    DayAbbreviations { 
+        "sab",
+        "ata",
+        "mar",
+        "pin",
+        "sis",
+        "tal",
+        "arf",
+    }
+    DayNames { 
+        "sabaat",
+        "ataasinngorneq",
+        "marlunngorneq",
+        "pingasunngorneq",
+        "sisamanngorneq",
+        "tallimanngorneq",
+        "arfininngorneq",
+    }
+    MonthAbbreviations { 
+        "jan",
+        "feb",
+        "mar",
+        "apr",
+        "maj",
+        "jun",
+        "jul",
+        "aug",
+        "sep",
+        "okt",
+        "nov",
+        "dec",
+    }
+    MonthNames { 
+        "januari",
+        "februari",
+        "martsi",
+        "aprili",
+        "maji",
+        "juni",
+        "juli",
+        "augustusi",
+        "septemberi",
+        "oktoberi",
+        "novemberi",
+        "decemberi",
+    }
+    NumberElements { 
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221e",
+        "\ufffd",
+    }
+    ExemplarCharacters { "[a-z \u00e1 \u00e9 \u00ed \u00fa \u00e2 \u00ea \u00ee \u00f4 \u00fb \u00e6 \u00e5 \u00f8 \u00e3 \u0129 \u0169 \u0138]" }
+
+//    LocaleScript{ 
+//        "Latn",  // ISO 15924 Name 
+//    }
+
+            // /**************** Info Below is needed ****************/
+            // CollationElements{}
+            // Countries{}
+            // Eras{}
+            // Languages{}
+            // ShortLanguage { }
+            // localPatternChars{}
+            //
+
+}
