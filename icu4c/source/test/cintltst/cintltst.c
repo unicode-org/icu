@@ -205,45 +205,42 @@ ctest_setTestDirectory(const char* newDir)
  *                       tests dynamically load some data.
  */
 void ctest_setICU_DATA() {
-    const char *original_ICU_DATA;
+    const char *original_ICU_DATA = getenv("ICU_DATA");
 
-    original_ICU_DATA = getenv("ICU_DATA");
     if (original_ICU_DATA != NULL) {
-        /*  If the user set ICU_DATA, don't second-guess him. */
+        /*  If the user set ICU_DATA, don't second-guess the person. */
         return;
     }
 
-
     /* U_SRCDATADIR is set by the makefiles on UNIXes when building cintltst and intltst
      *              to point to "wherever/icu/data"
-     *              We can make a path from there to "wherever/icu/source/data"
+	 *              We can make a path from there to "wherever/icu/source/data"
      *   The value is complete with quotes, so it can be used as-is as a string constant.
      */
 #if defined (U_SRCDATADIR)
     {
-        static char env_string[] = "ICU_DATA=" U_SRCDATADIR "/../source/data";
-        putenv(env_string);
+        static char env_string[] = U_SRCDATADIR "/../source/data/";
+        u_setDataDirectory(env_string);
         return;
     }
 #endif
-
 
     /* On Windows, the file name obtained from __FILE__ includes a full path.
      *             This file is "wherever\icu\source\test\cintltst\cintltst.c"
      *             Change to    "wherever\icu\source\data"
      */
     {
-        char *p;
+        char p[sizeof(__FILE__) + 1];
         char *pBackSlash;
         int i;
 
-        p = ctst_malloc(strlen("ICU_DATA=\\data") + strlen(__FILE__) + 1);
-        strcpy(p, "ICU_DATA=");
-        strcat(p, __FILE__);
+//        p = new char [strlen("\\data") + strlen(__FILE__) + 1];  //  <<< LEAK
+//        strcpy(p, "ICU_DATA=");
+        strcpy(p, __FILE__);
         /* We want to back over three '\' chars.                            */
         /*   Only Windows should end up here, so looking for '\' is safe.   */
         for (i=1; i<=3; i++) {
-            pBackSlash = strrchr(p, '\\');
+            pBackSlash = strrchr(p, U_FILE_SEP_CHAR);
             if (pBackSlash != NULL) {
                 *pBackSlash = 0;        /* Truncate the string at the '\'   */
             }
@@ -253,8 +250,8 @@ void ctest_setICU_DATA() {
             /* We found and truncated three names from the path.
              *  Now append "source\data" and set the environment
              */
-            strcpy(pBackSlash, "\\data");
-            putenv(p);     /*  p is "ICU_DATA=wherever\icu\source\data"    */
+            strcpy(pBackSlash, U_FILE_SEP_STRING "data" U_FILE_SEP_STRING);
+            u_setDataDirectory(p);     /*  p is "ICU_DATA=wherever\icu\source\data"    */
             return;
         }
     }
