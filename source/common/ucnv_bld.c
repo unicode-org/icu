@@ -51,7 +51,7 @@ converterData[UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES]={
     &_EBCDICStatefulData, &_ISO2022Data, 
     &_LMBCSData1,&_LMBCSData2, &_LMBCSData3, &_LMBCSData4, &_LMBCSData5, &_LMBCSData6,
     &_LMBCSData8,&_LMBCSData11,&_LMBCSData16,&_LMBCSData17,&_LMBCSData18,&_LMBCSData19,
-    &_HZData, &_SCSUData
+    &_HZData, &_SCSUData, &_ASCIIData
 };
 
 static struct {
@@ -92,7 +92,8 @@ static struct {
   { "LMBCS-18",UCNV_LMBCS_18 },
   { "LMBCS-19",UCNV_LMBCS_19 },
   { "HZ",UCNV_HZ },
-  { "SCSU", UCNV_SCSU }
+  { "SCSU", UCNV_SCSU },
+  { "US-ASCII", UCNV_US_ASCII }
 };
 
 
