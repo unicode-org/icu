@@ -121,19 +121,14 @@
 
     <!-- build everything but dist-related stuff -->
     <target name="all" depends="core,tests,tools,richedit,demos,jar,docs"/>
-<!--
-    <target name="resources" depends="init">
-         use this target to force resources to be rebuilt
-        	<unjar src="${src.dir}/com/ibm/icu/impl/data/ICULocaleData.jar" dest="${build.dir}"/>
-        	<touch file="${build.dir}/com/ibm/icu/impl/data/LocaleElements_index.class"/>
 
--->
-	<target name="resources" depends="init">
-		<unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}"/>
-		<touch file="${build.dir}/${icu4j.data.path}/res_index.res"/>
-		<unjar src="${src.dir}/com/ibm/icu/dev/data/testdata.jar" dest="${build.dir}"/>
-		<touch file="${build.dir}/${icu4j.testdata.path}/root.res"/>
-	</target>
+    <target name="resources" depends="init">
+	<unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}"/>
+	<touch file="${build.dir}/${icu4j.data.path}/res_index.res"/>
+	<unjar src="${src.dir}/com/ibm/icu/dev/data/testdata.jar" dest="${build.dir}"/>
+	<touch file="${build.dir}/${icu4j.testdata.path}/root.res"/>
+    </target>
+
     <target name="icudata" depends="init" if="icu4j.resources">
         <!-- use this target to force resources to be rebuilt -->
         <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}"/>
@@ -145,6 +140,7 @@
         <unjar src="${src.dir}/com/ibm/icu/dev/data/testdata.jar" dest="${build.dir}"/>
     	<touch file="${build.dir}/${icu4j.testdata.path}/root.res"/>
     </target>
+
 <!--
     <target name="icu" depends="init" if="icu4j.resources">
          use this target to conditionally build resources only if icu4j.resources is set
@@ -152,6 +148,7 @@
         <touch file="${build.dir}/com/ibm/icu/impl/data/LocaleElements_index.class"/>
     </target>
  -->
+
     <!-- core does not build richedit or tests -->
     <target name="core" depends="init,coreData,icudata,icudata">
         <javac includes="com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java,com/ibm/icu/math/**/*.java,com/ibm/icu/impl/**/*.java,com/ibm/icu/lang/*.java"
@@ -454,30 +451,18 @@
         Targets to copy the required *.icu files
      -->
     <target name="copyICUData" depends="init">
-        <copy file="${src.dir}/com/ibm/icu/impl/data/unorm.icu"
-            todir="${build.dir}/com/ibm/icu/impl/data/"/>
-        <copy file="${src.dir}/com/ibm/icu/impl/data/uprops.icu"
-            todir="${build.dir}/com/ibm/icu/impl/data/"/>
-        <!-- with introduction of back level normalization
-             we need the below data files to support it -->
-        <copy file="${src.dir}/com/ibm/icu/impl/data/unames.icu"
-            todir="${build.dir}/com/ibm/icu/impl/data/"/>
-        <copy file="${src.dir}/com/ibm/icu/impl/data/pnames.icu"
-            todir="${build.dir}/com/ibm/icu/impl/data/"/>
+	<unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
+	    <patternset includes="/**/unorm.icu;/**/uprops.icu;/**/unames.icu;/**/pnames.icu"/>
+	</unjar>
     </target>
 
     <target name="copyICUPropsData" depends="init">
-        <copy file="${src.dir}/com/ibm/icu/impl/data/unorm.icu"
-            todir="${build.dir}/com/ibm/icu/impl/data/"/>
-        <copy file="${src.dir}/com/ibm/icu/impl/data/uprops.icu"
-            todir="${build.dir}/com/ibm/icu/impl/data/"/>
-        <!-- For basic support names data is not needed
-        <copy file="${src.dir}/com/ibm/icu/impl/data/unames.icu"
-            todir="${build.dir}/com/ibm/icu/impl/data/"/> -->
-        <copy file="${src.dir}/com/ibm/icu/impl/data/pnames.icu"
-            todir="${build.dir}/com/ibm/icu/impl/data/"/>
-
+	<unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
+            <!-- For basic support names data is not needed -->
+	    <patternset includes="/**/unorm.icu;/**/uprops.icu;/**/pnames.icu"/>
+	</unjar>
     </target>
+
     <target name="copyAllICUData" depends="init">
          <copy todir="${build.dir}/com/ibm/icu/impl/data">
               <fileset dir="${src.dir}/com/ibm/icu/impl/data"
