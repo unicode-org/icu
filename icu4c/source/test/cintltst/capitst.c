@@ -1117,15 +1117,16 @@ void TestGetLocale() {
 
   int32_t i = 0;
 
+  /* Now that the collation tree is separate, actual==valid at all times. [alan] */
   static const struct {
     const char* requestedLocale;
     const char* validLocale;
     const char* actualLocale;
   } testStruct[] = {
-    { "sr_YU", "sr_YU", "ru" },
-    { "sh_YU", "sh_YU", "sh" },
-    { "en_US_CALIFORNIA", "en_US", "en" },
-    { "fr_FR_NONEXISTANT", "fr_FR", "fr" }
+    { "sr_YU", "sr", "ru" },
+    { "sh_YU", "sh", "sh" },
+    { "en_BE_FOO", "en_BE", "en_BE" },
+    { "fr_FR_NONEXISTANT", "fr", "fr" }
   };
 
   /* test opening collators for different locales */
