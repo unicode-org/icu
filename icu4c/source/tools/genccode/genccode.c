@@ -120,6 +120,18 @@ static const struct AssemblyType {
 
     ".long "
     },
+    {"gcc-darwin",
+
+    ".file\t\"%s.s\"\n"
+    "\t.section __TEXT,__text,regular,pure_instructions\n"
+    "\t.section __TEXT,__picsymbolstub1,symbol_stubs,pure_instructions,32\n"
+    ".globl _%s\n"
+    "\t.text\n"
+     "\t.align 5\n"  /* 1<<5 = 32 */
+    "_%s:\n\n",
+
+    ".long "
+    },
     {"xlc",
     "",
     ""}
