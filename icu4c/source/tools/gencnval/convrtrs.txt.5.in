@@ -28,9 +28,10 @@ aliases information.
 Each converter and its aliases are described on a separate lines; fields
 on each line are separated by white space. The order of records in
 .B convrtrs.txt
-is important: if a given name appears multiple times, the last one prevails.
+is significant: if a given name appears multiple times, the last one prevails.
 Names of converters and aliases are compared without considering case; the
-dash, underscore, and space characters are also ignored during comparison
+characters U+002D HYPHEN-MINUS, U+005F LOW LINE, and
+U+0020 SPACE are also ignored during comparison
 (even though spaces cannot be used in
 .B convrtrs.txt
 since white space is significant as a field delimiter).
