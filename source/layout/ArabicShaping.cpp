@@ -1,5 +1,5 @@
 /*
- * @(#)ArabicShaping.cpp	1.10 00/03/15
+ * @(#)ArabicShaping.cpp    1.10 00/03/15
  *
  * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
@@ -210,7 +210,7 @@ void CharShaper::shape(le_int32 outIndex, le_int32 shapeOffset)
     chars[outIndex] += (LEUnicode) shapeOffset;
 }
 
-LEUnicode CharShaper::isolateShapes[] = 
+const LEUnicode CharShaper::isolateShapes[] = 
 {
     0xfe80, 0xfe81, 0xfe83, 0xfe85, 0xfe87, 0xfe89, 0xfe8d, 0xfe8f, 0xfe93, 0xfe95,
     0xfe99, 0xfe9d, 0xfea1, 0xfea5, 0xfea9, 0xfeab, 0xfead, 0xfeaf, 0xfeb1, 0xfeb5,
