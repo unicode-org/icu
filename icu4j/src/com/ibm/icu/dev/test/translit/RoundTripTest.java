@@ -368,7 +368,7 @@ public class RoundTripTest extends TestFmwk {
                 },
         new String [] {  "DEVANAGARI-KANNADA",
            "[:Devanagari:]", "[:KANNADA:]",
-                  "[\u0cde\u0cd5\u0cd6\u0950\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]]", /*roundtrip exclusions*/
+                  "[{\u0cb0\u0cbc}{\u0cb3\u0cbc}\u0cde\u0cd5\u0cd6\u0950\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]]", /*roundtrip exclusions*/
                   },
 
         new String [] {  "MALAYALAM-DEVANAGARI",
@@ -431,7 +431,7 @@ public class RoundTripTest extends TestFmwk {
                 },
         new String [] {  "BENGALI-KANNADA",
            "[:BENGALI:]", "[:KANNADA:]",
-                  "[\u0cc6\u0cca\u0cd5\u0cd6\u0cc7\u0C8E\u0C92\u0CB1\u0cb3\u0cb5\u0cde]", /*roundtrip exclusions*/
+                  "[{\u0cb0\u0cbc}{\u0cb3\u0cbc}\u0cc6\u0cca\u0cd5\u0cd6\u0cc7\u0C8E\u0C92\u0CB1\u0cb3\u0cb5\u0cde]", /*roundtrip exclusions*/
                   },
 
         new String [] {  "MALAYALAM-BENGALI",
@@ -463,7 +463,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "TAMIL-GURMUKHI",
           "[:TAMIL:]", "[:GURMUKHI:]",
-                "[\u0A02\u0a33\u0a36\u0a3c\u0a70\u0a71\u0a47\u0A16\u0A17\u0A18\u0A1B\u0A1D\u0A20\u0A21\u0A22\u0A25\u0A26\u0A27\u0A2B\u0A2C\u0A2D\u0A59\u0A5A\u0A5B\u0A5C\u0A5E\u0A72\u0A73\u0A74]", /*roundtrip exclusions*/
+                "[\u0A01\u0A02\u0a33\u0a36\u0a3c\u0a70\u0a71\u0a47\u0A16\u0A17\u0A18\u0A1B\u0A1D\u0A20\u0A21\u0A22\u0A25\u0A26\u0A27\u0A2B\u0A2C\u0A2D\u0A59\u0A5A\u0A5B\u0A5C\u0A5E\u0A72\u0A73\u0A74]", /*roundtrip exclusions*/
                 },
         new String [] {  "GURMUKHI-TAMIL",
            "[:GURMUKHI:]", "[:TAMIL:]",
@@ -480,16 +480,16 @@ public class RoundTripTest extends TestFmwk {
                   },
         new String [] {  "KANNADA-GURMUKHI",
           "[:KANNADA:]", "[:GURMUKHI:]",
-                "[\u0A02\u0a33\u0a36\u0a3c\u0a70\u0a71\u0A59\u0A5A\u0A5B\u0A5C\u0A5E\u0A72\u0A73\u0A74]", /*roundtrip exclusions*/
+                "[\u0A01\u0A02\u0a33\u0a36\u0a3c\u0a70\u0a71\u0A59\u0A5A\u0A5B\u0A5C\u0A5E\u0A72\u0A73\u0A74]", /*roundtrip exclusions*/
                 },
         new String [] {  "GURMUKHI-KANNADA",
            "[:GURMUKHI:]", "[:KANNADA:]",
-                  "[\u0c82\u0c83\u0cb3\u0cb6\u0cc4\u0cc3\u0cc6\u0cca\u0cd5\u0cd6\u0C8B\u0C8C\u0C8E\u0C92\u0CB1\u0CB7\u0cbd\u0CE0\u0CE1\u0cde]", /*roundtrip exclusions*/
+                  "[{\u0cb0\u0cbc}{\u0cb3\u0cbc}\u0c82\u0c83\u0cb3\u0cb6\u0cc4\u0cc3\u0cc6\u0cca\u0cd5\u0cd6\u0C8B\u0C8C\u0C8E\u0C92\u0CB1\u0CB7\u0cbd\u0CE0\u0CE1\u0cde]", /*roundtrip exclusions*/
                   },
 
         new String [] {  "MALAYALAM-GURMUKHI",
           "[:MALAYALAM:]", "[:GURMUKHI:]",
-                "[\u0A02\u0a4b\u0a4c\u0a33\u0a36\u0a3c\u0a70\u0a71\u0A59\u0A5A\u0A5B\u0A5C\u0A5E\u0A72\u0A73\u0A74]", /*roundtrip exclusions*/
+                "[\u0A01\u0A02\u0a4b\u0a4c\u0a33\u0a36\u0a3c\u0a70\u0a71\u0A59\u0A5A\u0A5B\u0A5C\u0A5E\u0A72\u0A73\u0A74]", /*roundtrip exclusions*/
                 },
         new String [] {  "GURMUKHI-MALAYALAM",
            "[:GURMUKHI:]", "[:MALAYALAM:]",
@@ -529,7 +529,7 @@ public class RoundTripTest extends TestFmwk {
                 },
         new String [] {  "GUJARATI-KANNADA",
            "[:GUJARATI:]", "[:KANNADA:]",
-                  "[\u0cc6\u0cca\u0cd5\u0cd6\u0C8C\u0C8E\u0C92\u0CB1\u0CDE\u0CE1]", /*roundtrip exclusions*/
+                  "[{\u0cb0\u0cbc}{\u0cb3\u0cbc}\u0cc6\u0cca\u0cd5\u0cd6\u0C8C\u0C8E\u0C92\u0CB1\u0CDE\u0CE1]", /*roundtrip exclusions*/
                   },
 
         new String [] {  "MALAYALAM-GUJARATI",
@@ -565,7 +565,7 @@ public class RoundTripTest extends TestFmwk {
                 },
         new String [] {  "ORIYA-KANNADA",
            "[:ORIYA:]", "[:KANNADA:]",
-                  "[\u0cc4\u0cc6\u0cca\u0cd5\u0cc7\u0C8E\u0C92\u0CB1\u0CB5\u0CDE]", /*roundtrip exclusions*/
+                  "[{\u0cb0\u0cbc}{\u0cb3\u0cbc}\u0cc4\u0cc6\u0cca\u0cd5\u0cc7\u0C8E\u0C92\u0CB1\u0CB5\u0CDE]", /*roundtrip exclusions*/
                   },
 
         new String [] {  "MALAYALAM-ORIYA",
@@ -632,7 +632,7 @@ public class RoundTripTest extends TestFmwk {
                 },
         new String [] {  "Latin-Gurmukhi",
            latinForIndic, "[[:Gurmukhi:][\u0964\u0965]]",
-               "[\u0a02\u0965\u0a72\u0a73\u0a74]", /*roundtrip exclusions*/
+               "[\u0a01\u0a02\u0965\u0a72\u0a73\u0a74]", /*roundtrip exclusions*/
                 },
         new String [] {  "Latin-Gujarati",
             latinForIndic, "[[:Gujarati:][\u0964\u0965]]",
