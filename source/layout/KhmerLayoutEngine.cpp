@@ -19,14 +19,15 @@ U_NAMESPACE_BEGIN
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(KhmerOpenTypeLayoutEngine)
 
 KhmerOpenTypeLayoutEngine::KhmerOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
-                    const GlyphSubstitutionTableHeader *gsubTable)
-    : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, gsubTable)
+                    le_int32 typoFlags, const GlyphSubstitutionTableHeader *gsubTable)
+    : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable)
 {
     fFeatureOrder = KhmerReordering::getFeatureOrder();
 }
 
-KhmerOpenTypeLayoutEngine::KhmerOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode)
-    : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode)
+KhmerOpenTypeLayoutEngine::KhmerOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
+						     le_int32 typoFlags)
+    : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags)
 {
     fFeatureOrder = KhmerReordering::getFeatureOrder();
 }

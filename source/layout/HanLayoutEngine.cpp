@@ -19,8 +19,8 @@ U_NAMESPACE_BEGIN
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(HanOpenTypeLayoutEngine)
 
 HanOpenTypeLayoutEngine::HanOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
-                        const GlyphSubstitutionTableHeader *gsubTable)
-    : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, gsubTable)
+                        le_int32 typoFlags, const GlyphSubstitutionTableHeader *gsubTable)
+    : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, typoFlags, gsubTable)
 {
     // nothing else to do...
 }

@@ -115,7 +115,8 @@ SingleSubstitutionSubtables.o \
 SubstitutionLookups.o \
 ValueRecords.o \
 KhmerLayoutEngine.o \
-KhmerReordering.o
+KhmerReordering.o \
+KernTable.o
 
 STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 

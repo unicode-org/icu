@@ -233,6 +233,9 @@
 				RelativePath=".\IndicReordering.cpp">
 			</File>
 			<File
+				RelativePath=".\KernTable.cpp">
+			</File>
+			<File
 				RelativePath=".\KhmerLayoutEngine.cpp">
 			</File>
 			<File
@@ -451,6 +454,9 @@
 			</File>
 			<File
 				RelativePath=".\IndicReordering.h">
+			</File>
+			<File
+				RelativePath=".\KernTable.h">
 			</File>
 			<File
 				RelativePath=".\KhmerLayoutEngine.h">

@@ -17,8 +17,8 @@ U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(ThaiLayoutEngine)
 
-ThaiLayoutEngine::ThaiLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode)
-    : LayoutEngine(fontInstance, scriptCode, languageCode)
+ThaiLayoutEngine::ThaiLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, le_int32 typoFlags)
+    : LayoutEngine(fontInstance, scriptCode, languageCode, typoFlags)
 {
     fErrorChar = 0x25CC;
 

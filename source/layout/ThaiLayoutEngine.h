@@ -43,7 +43,7 @@ public:
      *
      * @internal
      */
-    ThaiLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode);
+    ThaiLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, le_int32 typoFlags);
 
     /**
      * The destructor, virtual for correct polymorphic invocation.
