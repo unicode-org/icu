@@ -37,6 +37,8 @@ U_CDECL_BEGIN
 #include "genprops.h"
 U_CDECL_END
 
+#define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
+
 UBool beVerbose=FALSE, haveCopyright=TRUE;
 
 /* prototypes --------------------------------------------------------------- */
@@ -883,10 +885,38 @@ repeatAreaProps() {
 
 static void
 parseDB(const char *filename, UErrorCode *pErrorCode) {
+    /* default Bidi classes for unassigned code points */
+    static const uint32_t defaultBidi[][2]={ /* { limit, class } */
+        { 0x0590, U_LEFT_TO_RIGHT },
+        { 0x0600, U_RIGHT_TO_LEFT },
+        { 0x07C0, U_RIGHT_TO_LEFT_ARABIC },
+        { 0xFB1D, U_LEFT_TO_RIGHT },
+        { 0xFB50, U_RIGHT_TO_LEFT },
+        { 0xFE00, U_RIGHT_TO_LEFT_ARABIC },
+        { 0xFE70, U_LEFT_TO_RIGHT },
+        { 0xFF00, U_RIGHT_TO_LEFT_ARABIC },
+        { 0x110000, U_LEFT_TO_RIGHT }
+    };
+
     char *fields[15][2];
+    uint32_t prev;
+    int32_t i;
 
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return;
+    }
+
+    /*
+     * Set default Bidi classes for unassigned code points.
+     * See table 3-7 "Bidirectional Character Types" in UAX #9.
+     * http://www.unicode.org/reports/tr9/
+     */
+    prev=0;
+    for(i=0; i<LENGTHOF(defaultBidi); ++i) {
+        if(defaultBidi[i][1]!=0) {
+            repeatProps(prev, defaultBidi[i][0]-1, defaultBidi[i][1]<<UPROPS_BIDI_SHIFT);
+        }
+        prev=defaultBidi[i][0];
     }
 
     /* while unicodeAreas[unicodeAreaIndex] is unused, set its first to a bogus value */
