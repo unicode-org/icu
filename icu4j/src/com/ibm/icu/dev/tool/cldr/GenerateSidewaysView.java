@@ -139,7 +139,7 @@ import com.ibm.icu.util.UResourceBundle;
 			}
         }
         
-        public static String get(String id) {
+        public static String get(Object id) {
             if (map == null) init();
         	return (String) map.get(id);
         }
@@ -236,10 +236,12 @@ import com.ibm.icu.util.UResourceBundle;
             GenerateSidewaysView temp = getCLDR(current);
             this.removeAll(temp);
        }
-        detectAliases(filename);
     }
     
+    Set badTimezoneIDs = null;
+    
     private void detectAliases(String filename) {
+        /*
         Set problems = new TreeSet();
         for (Iterator it = data.iterator(); it.hasNext();) {
             ElementChain key = (ElementChain) it.next();
@@ -256,7 +258,8 @@ import com.ibm.icu.util.UResourceBundle;
                 }
             }
         }
-        for (Iterator it = problems.iterator(); it.hasNext();) {
+        */
+        for (Iterator it = badTimezoneIDs.iterator(); it.hasNext();) {
             String oldOne = (String)it.next();
             String newOne = TimeZoneAliases.get(oldOne);
         	log.println("Fix Timezone Alias: " + filename + "\t" + oldOne + " => " + newOne);
@@ -289,15 +292,39 @@ import com.ibm.icu.util.UResourceBundle;
         //SAX.parse(f, DEFAULT_HANDLER);
     }
     
+    private Set findDuplicateZoneIDs() {
+        Set result = new HashSet();
+        // if a set contains both EST and America/Indianapolis, remove the former
+    	for (Iterator it = zoneIDs.iterator(); it.hasNext();) {
+            Object possibleOmission = it.next();
+    		Object o = TimeZoneAliases.get(possibleOmission);
+            if (o == null) continue;
+            if (zoneIDs.contains(o)) result.add(possibleOmission);
+        }
+        return result;
+    }
+    
     public String toString() {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n"
         + "<!DOCTYPE ldml SYSTEM \"http://www.unicode.org/cldr/dtd/1.2/alpha/ldml.dtd\">\r\n");
         
+        Set duplicateZoneIDs = findDuplicateZoneIDs();
+        badTimezoneIDs = new TreeSet();
+        
         ElementChain empty = new ElementChain();
         ElementChain old = empty;
         for (Iterator it = data.iterator(); it.hasNext();) {
             ElementChain key = (ElementChain) it.next();
+            if (FIX_ZONE_ALIASES) {
+                Element zoneElement = key.getElement("zone");
+                if (zoneElement != null) {
+                	String zoneTypeValue = zoneElement.getValue("type");
+                    if (zoneTypeValue != null) {
+                		if (duplicateZoneIDs.contains(zoneTypeValue)) continue;
+                    }
+                }
+            }
             String value = (String) data.get(key);
             key.getDifference(old, value, buffer);
             old = key;           
@@ -345,7 +372,10 @@ import com.ibm.icu.util.UResourceBundle;
         }
     }
     
-    static class SimpleAttributes implements Comparable {
+    static final boolean FIX_ZONE_ALIASES = true;
+    Set zoneIDs = new HashSet();
+    
+    class SimpleAttributes implements Comparable {
         Set contents = new TreeSet();
         
         SimpleAttributes(SimpleAttributes other, String elementName) {
@@ -353,10 +383,17 @@ import com.ibm.icu.util.UResourceBundle;
         }
         
         SimpleAttributes(Attributes attributes, String elementName) {
+            boolean inZone = elementName.equals("zone");
             if (attributes != null) {
                 for (int i = 0; i < attributes.getLength(); ++i) {
                     String name = attributes.getQName(i);
                     String value = attributes.getValue(i);
+                    
+                    if (FIX_ZONE_ALIASES && inZone) {
+                    	if (name.equals("type")) {
+                            zoneIDs.add(value);
+                        }
+                    }
                     
                     // hack to removed #IMPLIED
                     if (elementName.equals("ldml")
@@ -370,12 +407,16 @@ import com.ibm.icu.util.UResourceBundle;
             }
         }
         
-        public String toString() {return toString(true);}
-        public String toString(boolean path) {
+        public String toString() {return toString(true, false);}
+        public String toString(boolean path, boolean isZone) {
             StringBuffer buffer = new StringBuffer();
             for (Iterator it = contents.iterator(); it.hasNext();) {
                 SimpleAttribute a = (SimpleAttribute)it.next();
                 if (path && IGNOREABLE.contains(a.name)) continue;
+                if (isZone && a.name.equals("type")) {
+                    String replacement = TimeZoneAliases.get(a.value);
+                    if (replacement != null) a = new SimpleAttribute("type", replacement);
+                }
                 buffer.append(a.toString(path));
             }
             return buffer.toString();
@@ -423,9 +464,23 @@ import com.ibm.icu.util.UResourceBundle;
             contents.add(new SimpleAttribute(attribute, value));
             return this;
         }
+
+		/**
+		 * @param attributeName
+		 * @return
+		 */
+		public String getValue(String attributeName) {
+            for (Iterator it = contents.iterator(); it.hasNext();) {
+                SimpleAttribute sa = (SimpleAttribute) it.next();
+                if (sa.name.equals(attributeName)) {
+                    return sa.value;
+                }
+            }
+            return null;
+		}
     }
     
-    static class Element implements Comparable {
+    class Element implements Comparable {
         String elementName;
         SimpleAttributes attributes;
 
@@ -434,7 +489,21 @@ import com.ibm.icu.util.UResourceBundle;
             this.elementName = elementName;
             this.attributes = new SimpleAttributes(attributes, elementName);
         }
-        Element(Element other) {
+        /**
+		 * @param string
+		 * @param fixed
+		 */
+		public void setAttribute(String attribute, String value) {
+			attributes.set(attribute, value);			
+		}
+		/**
+		 * @param string
+		 * @return
+		 */
+		public String getValue(String attributeName) {
+			return attributes.getValue(attributeName);
+		}
+		Element(Element other) {
             //elementOrdering.add(elementName);
             this.elementName = other.elementName;
             this.attributes = new SimpleAttributes(other.attributes, elementName);
@@ -445,7 +514,7 @@ import com.ibm.icu.util.UResourceBundle;
         }
         static final int NO_VALUE = 0, START_VALUE = 1, END_VALUE = 2;
         public String toString(int type, boolean path) {
-            String a = attributes.toString(path);
+            String a = attributes.toString(path, elementName.equals("zone"));
             String result;
             if (path) {
                 if (type == NO_VALUE) return elementName + a + "-NOVALUE";
@@ -476,7 +545,7 @@ import com.ibm.icu.util.UResourceBundle;
         */
     }
     
-    static class ElementChain implements Comparable {
+    class ElementChain implements Comparable {
         List contexts;
         
         ElementChain() {
@@ -484,6 +553,18 @@ import com.ibm.icu.util.UResourceBundle;
         }
         
         /**
+		 * @param string
+		 * @return
+		 */
+		public Element getElement(String string) {
+            for (int i = 0; i < contexts.size(); ++i) {
+                Element x = (Element)contexts.get(i);
+                if (string.equals(x.elementName)) return x;
+            }
+            return null;
+		}
+
+		/**
          * @param string
          * @param string2
          * @param string3
@@ -592,11 +673,7 @@ import com.ibm.icu.util.UResourceBundle;
          * @return
          */
         public boolean containsElement(String string) {
-            for (int i = 0; i < contexts.size(); ++i) {
-                Element x = (Element)contexts.get(i);
-                if (string.equals(x.elementName)) return true;
-            }
-            return false;
+            return getElement(string) != null;
         }
 
 		/**
