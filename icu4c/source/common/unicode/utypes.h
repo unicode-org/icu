@@ -88,7 +88,7 @@
  *
  * <p>Those "invariant characters" should be all the uppercase and lowercase
  * latin letters, the digits, the space, and "basic punctuation".
- * Also, '\n', '\r', '\t' should be available.</p>
+ * Also, '\\n', '\\r', '\\t' should be available.</p>
  *
  * <p>The list of "invariant characters" is:<br>
  * \code
@@ -312,6 +312,13 @@ typedef void* UClassID;
  * This can be set as a compiler option while building ICU, and it
  * needs to be the first one tested to override U_COMMON_API, U_I18N_API, etc.
  * @stable ICU 2.0
+ */
+
+/**
+ * \def U_DATA_API
+ * Set to export library symbols from inside the stubdata library,
+ * and to import them from outside.
+ * @draft ICU 3.0
  */
 
 /**

@@ -927,24 +927,24 @@ u_memrchr32(const UChar *s, UChar32 c, int32_t count);
  * Unicode characters to the destination buffer.  The following escape
  * sequences are recognized:
  *
- * \uhhhh       4 hex digits; h in [0-9A-Fa-f]
- * \Uhhhhhhhh   8 hex digits
- * \xhh         1-2 hex digits
- * \x{h...}     1-8 hex digits
- * \ooo         1-3 octal digits; o in [0-7]
- * \cX          control-X; X is masked with 0x1F
+ * \\uhhhh       4 hex digits; h in [0-9A-Fa-f]
+ * \\Uhhhhhhhh   8 hex digits
+ * \\xhh         1-2 hex digits
+ * \\x{h...}     1-8 hex digits
+ * \\ooo         1-3 octal digits; o in [0-7]
+ * \\cX          control-X; X is masked with 0x1F
  *
  * as well as the standard ANSI C escapes:
  *
- * \a => U+0007, \b => U+0008, \t => U+0009, \n => U+000A,
- * \v => U+000B, \f => U+000C, \r => U+000D, \e => U+001B,
- * \" => U+0022, \' => U+0027, \? => U+003F, \\ => U+005C
+ * \\a => U+0007, \\b => U+0008, \\t => U+0009, \\n => U+000A,
+ * \\v => U+000B, \\f => U+000C, \\r => U+000D, \\e => U+001B,
+ * \\" => U+0022, \\' => U+0027, \\? => U+003F, \\\\ => U+005C
  *
  * Anything else following a backslash is generically escaped.  For
- * example, "[a\-z]" returns "[a-z]".
+ * example, "[a\\-z]" returns "[a-z]".
  *
  * If an escape sequence is ill-formed, this method returns an empty
- * string.  An example of an ill-formed sequence is "\u" followed by
+ * string.  An example of an ill-formed sequence is "\\u" followed by
  * fewer than 4 hex digits.
  *
  * The above characters are recognized in the compiler's codepage,

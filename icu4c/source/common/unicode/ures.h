@@ -701,7 +701,7 @@ ures_openAvailableLocales(const char *path, UErrorCode *status);
  * @param isAvailable If non-null, pointer to fillin parameter that indicates whether the 
  * requested locale was available. The locale is defined as 'available' if it physically 
  * exists within the specified tree.
- * @param omitDefault if TRUE, omit keyword and value if default. 'de_DE@collation=standard' -> 'de_DE'
+ * @param omitDefault if TRUE, omit keyword and value if default. 'de_DE\@collation=standard' -> 'de_DE'
  * @param status error code
  * @return  the actual buffer size needed for the full locale.  If it's greater 
  * than resultCapacity, the returned full name will be truncated and an error code will be returned.

@@ -108,7 +108,7 @@ class BreakIterator;        // unicode/brkiter.h
  *
  * <p>In ICU, a Unicode string consists of 16-bit Unicode <em>code units</em>.
  * A Unicode character may be stored with either
- * one code unit &mdash; which is the most common case &mdash; or with a matched pair of
+ * one code unit &#8212; which is the most common case &#8212; or with a matched pair of
  * special code units ("surrogates").
  * The data type for code units is UChar.<br>
  * For single-character handling, a Unicode character code <em>point</em> is a value
@@ -2762,23 +2762,23 @@ public:
    * Unescape a string of characters and return a string containing
    * the result.  The following escape sequences are recognized:
    *
-   * \uhhhh       4 hex digits; h in [0-9A-Fa-f]
-   * \Uhhhhhhhh   8 hex digits
-   * \xhh         1-2 hex digits
-   * \ooo         1-3 octal digits; o in [0-7]
-   * \cX          control-X; X is masked with 0x1F
+   * \\uhhhh       4 hex digits; h in [0-9A-Fa-f]
+   * \\Uhhhhhhhh   8 hex digits
+   * \\xhh         1-2 hex digits
+   * \\ooo         1-3 octal digits; o in [0-7]
+   * \\cX          control-X; X is masked with 0x1F
    *
    * as well as the standard ANSI C escapes:
    *
-   * \a => U+0007, \b => U+0008, \t => U+0009, \n => U+000A,
-   * \v => U+000B, \f => U+000C, \r => U+000D, \e => U+001B,
-   * \" => U+0022, \' => U+0027, \? => U+003F, \\ => U+005C
+   * \\a => U+0007, \\b => U+0008, \\t => U+0009, \\n => U+000A,
+   * \\v => U+000B, \\f => U+000C, \\r => U+000D, \\e => U+001B,
+   * \\" => U+0022, \\' => U+0027, \\? => U+003F, \\\\ => U+005C
    *
    * Anything else following a backslash is generically escaped.  For
-   * example, "[a\-z]" returns "[a-z]".
+   * example, "[a\\-z]" returns "[a-z]".
    *
    * If an escape sequence is ill-formed, this method returns an empty
-   * string.  An example of an ill-formed sequence is "\u" followed by
+   * string.  An example of an ill-formed sequence is "\\u" followed by
    * fewer than 4 hex digits.
    *
    * This function is similar to u_unescape() but not identical to it.

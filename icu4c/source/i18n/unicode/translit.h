@@ -865,8 +865,8 @@ public:
      * @param result the string to receive the rules.  Previous
      * contents will be deleted.
      * @param escapeUnprintable if TRUE then convert unprintable
-     * character to their hex escape representations, \uxxxx or
-     * \Uxxxxxxxx.  Unprintable characters are those other than
+     * character to their hex escape representations, \\uxxxx or
+     * \\Uxxxxxxxx.  Unprintable characters are those other than
      * U+000A, U+0020..U+007E.
      * @stable ICU 2.0
      */

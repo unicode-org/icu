@@ -158,10 +158,11 @@
 #   define UCONFIG_NO_REGULAR_EXPRESSIONS 0
 #endif
 
-/**
+/*
  * \def UCONFIG_NO_SERVICE
  * This switch turns off service registration.
- * note: NOT implemented in ICU 3.0.  
+ * note: NOT implemented in ICU 3.0. 
+ * note: Change this back to a .doc comment when this is implemented!
  *
  * @internal ICU 3.0
  */

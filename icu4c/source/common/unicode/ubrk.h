@@ -396,8 +396,8 @@ ubrk_setText(UBreakIterator* bi,
  * Determine the most recently-returned text boundary.
  *
  * @param bi The break iterator to use.
- * @return The character index most recently returned by \Ref{ubrk_next}, \Ref{ubrk_previous},
- * \Ref{ubrk_first}, or \Ref{ubrk_last}.
+ * @return The character index most recently returned by \ref ubrk_next, \ref ubrk_previous,
+ * \ref ubrk_first, or \ref ubrk_last.
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2
@@ -492,7 +492,7 @@ ubrk_getAvailable(int32_t index);
 /**
 * Determine how many locales have text breaking information available.
 * This function is most useful as determining the loop ending condition for
-* calls to \Ref{ubrk_getAvailable}.
+* calls to \ref ubrk_getAvailable.
 * @return The number of locales for which text breaking information is available.
 * @see ubrk_getAvailable
 * @stable ICU 2.0

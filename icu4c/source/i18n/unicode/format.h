@@ -247,9 +247,10 @@ public:
     const char* getLocaleID(ULocDataLocaleType type, UErrorCode &status) const;
 
  protected:
-    
+    /** @draft ICU 2.8 */
     void setLocales(const ResourceBundle& res);
 
+    /** @draft ICU 2.8 */
     void setLocaleIDs(const char* valid, const char* actual);
 
 protected:

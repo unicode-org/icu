@@ -26,7 +26,7 @@
  * The ICU resource bundles obey standard ICU inheritance policies.
  * To facilitate this, sets and messages are flattened into one tier.
  * This is done by creating resource bundle keys of the form
- * <set_num>%<msg_num> where set_num is the set number and msg_num is
+ * &lt;set_num&gt;%&lt;msg_num&gt; where set_num is the set number and msg_num is
  * the message number, formatted as decimal strings.
  *
  * Example:  Consider a message catalog containing two sets:

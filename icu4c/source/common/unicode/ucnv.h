@@ -69,6 +69,7 @@ typedef struct UConverter UConverter;
  * @draft ICU 2.6
  */
 struct USet;
+/** @draft ICU 2.6 */
 typedef struct USet USet;
 
 #endif

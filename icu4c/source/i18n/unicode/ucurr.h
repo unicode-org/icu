@@ -11,6 +11,9 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+/**
+ * @internal
+ */
 typedef const void* UCurrRegistryKey;
 
 /**

@@ -84,8 +84,8 @@
  * accordingly. UTF-16 was the default.</p>
  *
  * <p>This concept has been abandoned.
- * A lot of the ICU source code &mdash; especially low-level code like
- * conversion, normalization, and collation &mdash; assumes UTF-16,
+ * A lot of the ICU source code &#8212; especially low-level code like
+ * conversion, normalization, and collation &#8212; assumes UTF-16,
  * utf.h enforces the default of UTF-16.
  * The UTF-8 and UTF-32 macros remain for now for completeness and backward compatibility.</p>
  *

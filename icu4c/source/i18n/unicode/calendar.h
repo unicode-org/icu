@@ -1132,7 +1132,7 @@ public:
      * Concrete subclasses of Calendar must implement getDynamicClassID() and also a
      * static method and data member:
      *
-     *      static UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+     *      static UClassID getStaticClassID() { return (UClassID)&amp;fgClassID; }
      *      static char fgClassID;
      *
      * @return   The class ID for this object. All objects of a given class have the
@@ -1583,6 +1583,7 @@ protected:
      * computed.  This occurs only in setTimeInMillis().  A calendar set
      * to this state will compute all fields from the time if it becomes
      * necessary, but otherwise will delay such computation.
+     * @draft ICU 3.0
      */
     UBool fAreFieldsVirtuallySet;
 
@@ -1790,6 +1791,8 @@ protected:
      *              the first week because
      *              {@link #getMinimalDaysInFirstWeek getMinimalDaysInFirstWeek}
      *              is more than one.
+     *
+     * @draft ICU 2.8
      */
     int32_t weekNumber(int32_t desiredDay, int32_t dayOfPeriod, int32_t dayOfWeek);
 
@@ -1974,7 +1977,7 @@ private:
      * #validateField(int)} on each field that has been set.  This method
      * should only be called if this calendar is not lenient.
      * @see #isLenient
-     * @see #validateField(int)
+     * @see #validateField(int, int&)
      * @internal
      */
     void validateFields(UErrorCode &status);
@@ -1984,7 +1987,7 @@ private:
      * override this method to validate any calendar-specific fields.
      * Generic fields can be handled by
      * <code>Calendar.validateField()</code>.
-     * @see #validateField(int, int, int)
+     * @see #validateField(int, int, int, int&)
      * @internal
      */
     virtual void validateField(UCalendarDateFields field, UErrorCode &status);
@@ -1994,7 +1997,7 @@ private:
      * maximum allowed value.  If the field is out of range, 
      * <code>U_ILLEGAL_ARGUMENT_ERROR</code> will be set.  Subclasses may
      * use this method in their implementation of {@link
-     * #validateField(int)}.
+     * #validateField(int, int&)}.
      * @internal
      */
     void validateField(UCalendarDateFields field, int32_t min, int32_t max, UErrorCode& status);
