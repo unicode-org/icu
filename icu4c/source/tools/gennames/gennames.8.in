@@ -11,9 +11,6 @@
 .SH SYNOPSIS
 .B gennames
 [
-.BR "\-V\fP, \fB\-\-version"
-]
-[
 .BR "\-h\fP, \fB\-?\fP, \fB\-\-help"
 ]
 [
