@@ -196,7 +196,7 @@ th {
     Languages { 
         th { "\u0E44\u0E17\u0E22" }
     }
-    LocaleID { "041e" }
+    LocaleID { "1e" }
     LocaleString { "th" }
     MonthAbbreviations { 
             "\u0E21.\u0E04.",

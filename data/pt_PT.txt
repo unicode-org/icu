@@ -18,4 +18,5 @@ pt_PT {
             "#,##0%",
     }
     ShortCountry { "PRT" }
+    LocaleID { "0816" }
 }

@@ -878,7 +878,7 @@ zh {
     Languages { 
         zh { "\u4E2D\u6587" }
     }
-    LocaleID { "0804" }
+    LocaleID { "04" }
     LocaleString { "zh" }
     MonthAbbreviations { 
             "\u4E00\u6708",

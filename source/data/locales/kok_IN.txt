@@ -2,6 +2,7 @@
 // Konkani locale
 
 kok_IN {
+    LocaleID { "0457" }
     ShortCountry { IND }
 
     CurrencyElements {

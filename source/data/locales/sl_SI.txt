@@ -18,4 +18,5 @@ sl_SI {
             "#,##0%",
     }
     ShortCountry { "SVN" }
+    LocaleID { "0424" }
 }

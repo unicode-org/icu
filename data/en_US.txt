@@ -18,4 +18,5 @@ en_US {
             "#,##0%",
     }
     ShortCountry { "USA" }
+    LocaleID { "0409" }
 }

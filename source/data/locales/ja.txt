@@ -830,7 +830,7 @@ ja {
     Languages { 
         ja { "\u65E5\u672C\u8A9E" }
     }
-    LocaleID { "0411" }
+    LocaleID { "11" }
     LocaleString { "ja" }
     MonthAbbreviations { 
             "1",

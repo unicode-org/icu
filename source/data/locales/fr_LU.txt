@@ -13,4 +13,5 @@ fr_LU {
     }
     LocaleString { "fr_LU" }
     ShortCountry { "LUX" }
+    LocaleID { "140c" }
 }

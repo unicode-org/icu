@@ -46,7 +46,7 @@ ca {
     Languages { 
         ca { "catal\u00E0" }
     }
-    LocaleID { "0403" }
+    LocaleID { "03" }
     LocaleString { "ca" }
     MonthAbbreviations { 
             "gen.",

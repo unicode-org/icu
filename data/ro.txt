@@ -52,7 +52,7 @@ ro {
     Languages { 
         ro { "rom\u00E2n\u0103" }
     }
-    LocaleID { "0418" }
+    LocaleID { "18" }
     LocaleString { "ro" }
     MonthAbbreviations { 
             "Ian",

@@ -964,7 +964,7 @@ ko {
     Languages { 
         ko { "\uD55C\uAD6D\uC5B4" }
     }
-    LocaleID { "0412" }
+    LocaleID { "12" }
     LocaleString { "ko" }
     MonthAbbreviations { 
             "1\uC6D4",

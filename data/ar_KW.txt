@@ -13,4 +13,5 @@ ar_KW {
     }
     LocaleString { "ar_KW" }
     ShortCountry { "KWT" }
+    LocaleID { "3401" }
 }

@@ -23,4 +23,6 @@ zh_CN {
         TW { "\u53F0\u6E7E" }
         HK { "\u9999\u6E2F" }
     }
+    LocaleID { "0804" }
 }
+

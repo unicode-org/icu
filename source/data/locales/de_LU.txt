@@ -18,4 +18,5 @@ de_LU {
             "#,##0%",
     }
     ShortCountry { "LUX" }
+    LocaleID { "1007" }
 }

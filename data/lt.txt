@@ -52,7 +52,7 @@ lt {
     Languages { 
         lt { "Lietuvi\u0159" }
     }
-    LocaleID { "0427" }
+    LocaleID { "27" }
     LocaleString { "lt" }
     MonthAbbreviations { 
             "Sau",

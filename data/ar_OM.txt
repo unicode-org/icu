@@ -13,4 +13,5 @@ ar_OM {
     }
     LocaleString { "ar_OM" }
     ShortCountry { "OMN" }
+    LocaleID { "2001" }
 }

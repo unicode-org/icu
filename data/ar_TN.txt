@@ -13,4 +13,5 @@ ar_TN {
     }
     LocaleString { "ar_TN" }
     ShortCountry { "TUN" }
+    LocaleID { "1c01" }
 }

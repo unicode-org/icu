@@ -53,7 +53,7 @@ sl {
     Languages { 
         sl { "Sloven\u0161\u010Dina" }
     }
-    LocaleID { "0424" }
+    LocaleID { "24" }
     LocaleString { "sl" }
     MonthAbbreviations { 
             "jan",

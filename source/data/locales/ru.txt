@@ -73,7 +73,7 @@ ru {
     Languages { 
         ru { "\u0440\u0443\u0441\u0441\u043A\u0438\u0439" }
     }
-    LocaleID { "0419" }
+    LocaleID { "19" }
     LocaleString { "ru" }
     MonthAbbreviations { 
             "\u044F\u043D\u0432",

@@ -317,7 +317,7 @@ Languages {
         ji { "\u0408\u0438\u0434\u0438\u0448" }
         yi { "\u0408\u0438\u0434\u0438\u0448" }
     }
-    LocaleID { "0c1a" }
+    LocaleID { "1a" }
     LocaleString { "sr" }
     MonthAbbreviations { 
             "\u0408\u0430\u043D",

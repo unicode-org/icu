@@ -52,4 +52,5 @@ ar_LB {
             "",
     }
     ShortCountry { "LBN" }
+    LocaleID { "3001" }
 }

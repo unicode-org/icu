@@ -69,7 +69,7 @@ be {
     Languages { 
         be { "\u0431\u0435\u043B\u0430\u0440\u0443\u0441\u043A\u0456" }
     }
-    LocaleID { "0423" }
+    LocaleID { "23" }
     LocaleString { "be" }
     MonthAbbreviations { 
             "\u0441\u0442\u0434",

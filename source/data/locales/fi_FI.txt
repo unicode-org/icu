@@ -18,4 +18,5 @@ fi_FI {
             "#,##0%",
     }
     ShortCountry { "FIN" }
+    LocaleID { "040b" }
 }

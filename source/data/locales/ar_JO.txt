@@ -52,4 +52,5 @@ ar_JO {
             "",
     }
     ShortCountry { "JOR" }
+    LocaleID { "2c01" }
 }

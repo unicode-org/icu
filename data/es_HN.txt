@@ -22,7 +22,7 @@ es_HN {
             "MM-dd-yy",
             "{1} {0}",
     }
-    LocaleID { "" }
+    LocaleID { "480a" }
     LocaleString { "es_HN" }
     NumberElements { 
             ".",

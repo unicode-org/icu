@@ -56,7 +56,7 @@ it {
     Languages { 
         it { "italiano" }
     }
-    LocaleID { "0410" }
+    LocaleID { "10" }
     LocaleString { "it" }
     MonthAbbreviations { 
             "gen",

@@ -13,4 +13,5 @@ ar_DZ {
     }
     LocaleString { "ar_DZ" }
     ShortCountry { "DZA" }
+    LocaleID { "1401" }
 }

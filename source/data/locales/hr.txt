@@ -49,7 +49,7 @@ hr {
     Languages { 
         hr { "hrvatski" }
     }
-    LocaleID { "041a" }
+    LocaleID { "1a" }
     LocaleString { "hr" }
     MonthAbbreviations { 
             "sij",

@@ -18,4 +18,5 @@ mk_MK {
             "#,##0%",
     }
     ShortCountry { "MKD" }
+    LocaleID { "042f" }
 }

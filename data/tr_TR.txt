@@ -18,4 +18,5 @@ tr_TR {
             "#,##0%",
     }
     ShortCountry { "TUR" }
+    LocaleID { "041f" }
 }
