@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Gujarati_InterIndic.txt,v $
-# $Date: 2002/09/19 18:11:23 $
-# $Revision: 1.6 $
+# $Date: 2004/05/07 02:57:41 $
+# $Revision: 1.7 $
 #--------------------------------------------------------------------
 
 # Gujarati-InterIndic
@@ -19,6 +19,7 @@
 \u0a89>\ue009; # LETTER U
 \u0a8a>\ue00a; # LETTER UU
 \u0a8b>\ue00b; # LETTER VOCALIC R
+\u0a8c>\ue00c; # LETTER VOCALLIC L
 \u0a8d>\ue00d; # VOWEL CANDRA E
 \u0a8f>\ue00f; # LETTER E
 \u0a90>\ue010; # LETTER AI
@@ -77,6 +78,7 @@
 \u0acd>\ue04d; # SIGN VIRAMA
 \u0ad0>\ue050; # OM
 \u0ae0>\ue060; # LETTER VOCALIC RR
+\u0ae1>\ue061; # LETTER VOCALIC LL
 \u0ae6>\ue066; # DIGIT ZERO
 \u0ae7>\ue067; # DIGIT ONE
 \u0ae8>\ue068; # DIGIT TWO

@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_InterIndic_Devanagari.txt,v $
-# $Date: 2002/09/19 18:11:23 $
-# $Revision: 1.9 $
+# $Date: 2004/05/07 02:57:41 $
+# $Revision: 1.10 $
 #--------------------------------------------------------------------
 
 # InterIndic-Devanagari
@@ -34,6 +34,7 @@
  \ue001 >  \u0901;  # SIGN CANDRABINDU
  \ue002 >  \u0902;  # SIGN ANUSVARA
  \ue003 >  \u0903;  # SIGN VISARGA
+ \ue004 >  \u0904;  # SIGN SHORT A
  \ue005 >  \u0905;  # LETTER A
  \ue006 >  \u0906;  # LETTER AA
  \ue007 >  \u0907;  # LETTER I
@@ -141,7 +142,7 @@
  \ue071>\u0930;     # LETTER RA WITH MIDDLE DIAGONAL
  \ue072>\u0930;     # LETTER RA WITH LOWER DIAGONAL
  \ue073>;           # RUPEE MARK
- \ue074>;           # RUPEE SIGN
+ \ue074>\u0930\u0942;           # RUPEE SIGN
  \ue075>;           # CURRENCY NUMERATOR ONE
  \ue076>;           # CURRENCY NUMERATOR TWO
  \ue077>;           # CURRENCY NUMERATOR THREE
@@ -154,7 +155,7 @@
  \uE07E>;           # IRI
  \uE07F>;           # URA
  \uE080>;           # EK ONKAR
-
+ \uE081>\u0935;		# FALLBACK FOR ORIYA LETTER WA 
  
 #         \u0970  # UNMAPPED Devanagari-InterIndic: ABBREVIATION SIGN
 #    :: NFC;

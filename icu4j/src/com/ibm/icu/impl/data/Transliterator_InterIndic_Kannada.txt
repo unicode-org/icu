@@ -3,16 +3,17 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_InterIndic_Kannada.txt,v $
-# $Date: 2002/09/19 18:11:23 $
-# $Revision: 1.10 $
+# $Date: 2004/05/07 02:57:40 $
+# $Revision: 1.11 $
 #--------------------------------------------------------------------
 
 # InterIndic-Kannada
 #:: NFD (NFC) ;
-\ue032\ue03c>\u0cde; # LETTER FA
+\ue033\ue03c>\u0cde; # LETTER FA
 \ue001>\u0c82; # REMAP (indicExceptions.txt): \u0c81>\u0c82 = SIGN CANDRABINDU>SIGN ANUSVARA
 \ue002>\u0c82; # SIGN ANUSVARA
 \ue003>\u0c83; # SIGN VISARGA
+\uE004>\u0c85; # FALLBACK TO LETTER A
 \ue005>\u0c85; # LETTER A
 \ue006>\u0c86; # LETTER AA
 \ue007>\u0c87; # LETTER I
@@ -68,8 +69,8 @@
 \ue038>\u0cb8; # LETTER SA
 \ue039>\u0cb9; # LETTER HA
 
-\ue03c>; # FALLBACK BLOW AWAY NUKTA
-\ue03d>; # FALLBACK BLOW AWAY AVAGRAHA
+\ue03c>\u0cbc; # NUKTA
+\ue03d>\u0cbd; # AVAGRAHA
 
 \ue03e>\u0cbe; # VOWEL SIGN AA
 \ue03f>\u0cbf; # VOWEL SIGN I
@@ -136,7 +137,7 @@
 \uE07E>;       # IRI
 \uE07F>;       # URA
 \uE080>;       # EK ONKAR
-
+\uE081>\u0cb5; # FALLBACK FOR ORIYA LETTER WA 
 0 > \u0ce6;       # FALLBACK FOR TAMIL
 1 > \u0ce7;
 

@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_InterIndic_Bengali.txt,v $
-# $Date: 2002/09/19 18:11:23 $
-# $Revision: 1.10 $
+# $Date: 2004/05/07 02:57:40 $
+# $Revision: 1.11 $
 #--------------------------------------------------------------------
 
 # InterIndic-Bengali
@@ -12,6 +12,7 @@
 \uE001>\u0981;          # SIGN CANDRABINDU
 \uE002>\u0982;          # SIGN ANUSVARA
 \uE003>\u0983;          # SIGN VISARGA
+\uE004>\u0985;          # FALLBACK TO LETTER A
 \uE005>\u0985;          # LETTER A
 \uE006>\u0986;          # LETTER AA
 \uE007>\u0987;          # LETTER I
@@ -66,7 +67,7 @@
 \uE038>\u09B8;          # LETTER SA
 \uE039>\u09B9;          # LETTER HA
 \uE03C>\u09BC;          # SIGN NUKTA
-\uE03D>;                # FALLBACK BLOW AWAY AVAGRAHA
+\uE03D>\u09bd;          # SIGN AVAGRAHA
 \uE03E>\u09BE;          # VOWEL SIGN AA
 \uE03F>\u09BF;          # VOWEL SIGN I
 \uE040>\u09C0;          # VOWEL SIGN II
@@ -132,7 +133,7 @@
 \uE07E>;                # IRI
 \uE07F>;                # URA
 \uE080>;                # EK ONKAR
-
+\uE081>\u09AC;			# FALLBACK FOR ORIYA LETTER WA 
 0 > \u09E6;       # FALLBACK FOR TAMIL
 1 > \u09E7;
 

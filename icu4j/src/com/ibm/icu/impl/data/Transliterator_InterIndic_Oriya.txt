@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_InterIndic_Oriya.txt,v $
-# $Date: 2002/09/19 18:11:23 $
-# $Revision: 1.9 $
+# $Date: 2004/05/07 02:57:40 $
+# $Revision: 1.10 $
 #--------------------------------------------------------------------
 
 # InterIndic-Oriya
@@ -12,6 +12,7 @@
 \ue001>\u0b01; # SIGN CANDRABINDU
 \ue002>\u0b02; # SIGN ANUSVARA
 \ue003>\u0b03; # SIGN VISARGA
+\uE004>\u0b05; # FALLBACK TO LETTER A
 \ue005>\u0b05; # LETTER A
 \ue006>\u0b06; # LETTER AA
 \ue007>\u0b07; # LETTER I
@@ -60,7 +61,7 @@
 \ue032>\u0b32; # LETTER LA
 \ue033>\u0b33; # LETTER LLA
 \ue034>\u0b33\u0b3c; # FALLBACK  LETTER LLLA>LETTER LLA
-\ue035>\u0b2c; # FALLBACK LETTER VA>LETTER BA
+\ue035>\u0b35; # LETTER VA
 \ue036>\u0b36; # LETTER SHA
 \ue037>\u0b37; # LETTER SSA
 \ue038>\u0b38; # LETTER SA
@@ -132,7 +133,7 @@
 \uE07E>;       # IRI
 \uE07F>;       # URA
 \uE080>;       # EK ONKAR
-
+\uE081>\u0B71;  # LETTER WA
 0 > \u0b66;    # FALLBACK FOR TAMIL
 1 > \u0b67;
 
