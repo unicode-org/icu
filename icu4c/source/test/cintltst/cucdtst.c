@@ -25,7 +25,7 @@
 #include "unicode/uscript.h"
 #include "usc_impl.h"
 #include "uprops.h"
-
+#include "cstring.h"
 #include <string.h>
 #include <math.h>
 #include <stdlib.h>
@@ -2386,6 +2386,16 @@ static void TestUScriptCodeAPI(){
         }
         if(err>0){
             log_err("uscript_getScript failed for %d codepoints\n", err);
+        }
+    }
+    {
+        UScriptCode code = USCRIPT_INVALID_CODE;
+        int32_t i =0;
+        for(;(UScriptCode)i< USCRIPT_CODE_LIMIT; i++){
+            const char* name = uscript_getName((UScriptCode)i);
+            if(name==NULL || uprv_strcmp(name,"")==0){
+                log_err("uscript_getName fialed for code : %i\n",i);
+            }
         }
     }
                 
