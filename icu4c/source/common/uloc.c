@@ -74,7 +74,7 @@ static char** _installedLocales = NULL;
 static int32_t _installedLocalesCount = 0;
 
 
-static const char * const _languages =
+static const char _languages[] =
 "aa\0ab\0af\0am\0ar\0as\0ay\0az\0"
 "ba\0be\0bg\0bh\0bi\0bn\0bo\0br\0"
 "ca\0co\0cs\0cy\0da\0de\0dz\0"
@@ -91,7 +91,7 @@ static const char * const _languages =
 "ug\0uk\0ur\0uz\0vi\0vo\0wo\0xh\0yi\0yo\0za\0zh\0zu";
 /* This list MUST be in sorted order, and MUST contain only two-letter codes! */
 
-static const char * const _languages3 =
+static const char _languages3[] =
 "aar\0abk\0afr\0amh\0ara\0asm\0aym\0aze\0"
 "bak\0bel\0bul\0bih\0bis\0ben\0bod\0bre\0"
 "cat\0cos\0ces\0cym\0dan\0deu\0dzo\0"
@@ -110,7 +110,7 @@ static const char * const _languages3 =
    list above, and they MUST ne in the same order (i.e., the same language must
    be in the same place in both lists)! */
 
-static const char * const _countries =
+static const char _countries[] =
 "AD\0AE\0AF\0AG\0AI\0AL\0AM\0AN\0AO\0AQ\0AR\0AS\0AT\0AU\0AW\0AZ\0"
 "BA\0BB\0BD\0BE\0BF\0BG\0BH\0BI\0BJ\0BM\0BN\0BO\0BR\0BS\0BT\0BV\0BW\0BY\0BZ\0"
 "CA\0CC\0CF\0CG\0CH\0CI\0CK\0CL\0CM\0CN\0CO\0CR\0CU\0CV\0CX\0CY\0CZ\0"
@@ -129,7 +129,7 @@ static const char * const _countries =
 "WF\0WS\0YE\0YT\0YU\0ZA\0ZM\0ZR\0ZW";
 /* This list MUST be in sorted order, and MUST contain only two-letter codes! */
 
-static const char * const _countries3 =
+static const char _countries3[] =
 "AND\0ARE\0AFG\0ATG\0AIA\0ALB\0ARM\0ANT\0AGO\0ATA\0ARG\0ASM\0AUT\0AUS\0ABW\0AZE\0"
 "BIH\0BRB\0BGD\0BEL\0BFA\0BGR\0BHR\0BDI\0BEN\0BMU\0BRN\0BOL\0BRA\0BHS\0BTN\0BVT\0BWA"
 "\0BLR\0BLZ\0"
