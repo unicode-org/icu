@@ -37,14 +37,14 @@ static void printSeqErr(const unsigned char* a, int len);
 static void printUSeq(const UChar* a, int len);
 static void printUSeqErr(const UChar* a, int len);
 static UBool convertFromU( const UChar *source, int sourceLen,  const uint8_t *expect, int expectLen, 
-                const char *codepage, int32_t *expectOffsets, UBool doFlush, UErrorCode expectedStatus);
+                const char *codepage, const int32_t *expectOffsets, UBool doFlush, UErrorCode expectedStatus);
 static UBool convertToU( const uint8_t *source, int sourceLen, const UChar *expect, int expectLen, 
-               const char *codepage, int32_t *expectOffsets, UBool doFlush, UErrorCode expectedStatus);
+               const char *codepage, const int32_t *expectOffsets, UBool doFlush, UErrorCode expectedStatus);
 
 static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_t *expect, int expectLen, 
-                const char *codepage, UConverterFromUCallback callback, int32_t *expectOffsets, UBool testReset);
+                const char *codepage, UConverterFromUCallback callback, const int32_t *expectOffsets, UBool testReset);
 static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *expect, int expectlen, 
-               const char *codepage, UConverterToUCallback callback, int32_t *expectOffsets, UBool testReset);
+               const char *codepage, UConverterToUCallback callback, const int32_t *expectOffsets, UBool testReset);
 
 static void setNuConvTestName(const char *codepage, const char *direction)
 {
@@ -178,9 +178,9 @@ static void TestSurrogateBehaviour(){
     }
     log_verbose("Testing for ISO-2022-cn\n");
     {
-        UChar    sampleText[] =   { 0x4e00, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
+        static const UChar    sampleText[] =   { 0x4e00, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
 
-        const uint8_t expected[] = {
+        static const uint8_t expected[] = {
                                     0x1B, 0x24, 0x29, 0x41, 0x0E, 0x52, 0x3B, 
                                     0x36, 0x21,
                                     0x0F, 0x31, 
@@ -190,7 +190,7 @@ static void TestSurrogateBehaviour(){
 
         
 
-        int32_t offsets[] = {
+        static const int32_t offsets[] = {
                                     0,    0,    0,    0,    0,    0,    0,      
                                     1,    1,
                                     2,    2,
@@ -207,9 +207,9 @@ static void TestSurrogateBehaviour(){
     }
         log_verbose("Testing for ISO-2022-kr\n");
     {
-        UChar    sampleText[] =   { 0x4e00,0xd801, 0xdc01, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
+        static const UChar    sampleText[] =   { 0x4e00,0xd801, 0xdc01, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
 
-        const uint8_t expected[] = {0x1B, 0x24, 0x29, 0x43, 
+        static const uint8_t expected[] = {0x1B, 0x24, 0x29, 0x43, 
                                     0x0E, 0x6C, 0x69, 
                                     0x0f, 0x1A, 
                                     0x0e, 0x6F, 0x4B, 
@@ -217,7 +217,7 @@ static void TestSurrogateBehaviour(){
                                     0x1A, 
                                     0x32 };        
 
-        int32_t offsets[] = {-1, -1, -1, -1,
+        static const int32_t offsets[] = {-1, -1, -1, -1,
                               0, 0, 0, 
                               1, 1,  
                               3, 3, 3, 
@@ -236,9 +236,9 @@ static void TestSurrogateBehaviour(){
     }
         log_verbose("Testing for HZ\n");
     {
-        UChar    sampleText[] =   { 0x4e00, 0xd801, 0xdc01, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
+        static const UChar    sampleText[] =   { 0x4e00, 0xd801, 0xdc01, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
 
-        const uint8_t expected[] = {0x7E, 0x7B, 0x52, 0x3B,
+        static const uint8_t expected[] = {0x7E, 0x7B, 0x52, 0x3B,
                                     0x7E, 0x7D, 0x1A, 
                                     0x7E, 0x7B, 0x36, 0x21, 
                                     0x7E, 0x7D, 0x31, 
@@ -246,7 +246,7 @@ static void TestSurrogateBehaviour(){
                                     0x32 };
 
 
-        int32_t offsets[] = {0,0,0,0,
+        static const int32_t offsets[] = {0,0,0,0,
                              1,1,1,
                              3,3,3,3,
                              4,4,4,
@@ -264,15 +264,15 @@ static void TestSurrogateBehaviour(){
     /*UTF-8*/
      log_verbose("Testing for UTF8\n");
     {
-        UChar    sampleText[] =   { 0x4e00, 0x0701, 0x0031, 0xbfc1, 0xd801, 0xdc01, 0x0032};
-        int32_t offsets[]={0x00, 0x00, 0x00, 0x01, 0x01, 0x02,
+        static const UChar    sampleText[] =   { 0x4e00, 0x0701, 0x0031, 0xbfc1, 0xd801, 0xdc01, 0x0032};
+        static const int32_t offsets[]={0x00, 0x00, 0x00, 0x01, 0x01, 0x02,
                            0x03, 0x03, 0x03, 0x04, 0x04, 0x04,
                            0x04, 0x06 };
-        const uint8_t expected[] = {0xe4, 0xb8, 0x80, 0xdc, 0x81, 0x31, 
+        static const uint8_t expected[] = {0xe4, 0xb8, 0x80, 0xdc, 0x81, 0x31, 
             0xeb, 0xbf, 0x81, 0xF0, 0x90, 0x90, 0x81, 0x32};
 
 
-        int32_t fromOffsets[] = { 0x0000, 0x0003, 0x0005, 0x0006, 0x0009, 0x0009, 0x000D }; 
+        static const int32_t fromOffsets[] = { 0x0000, 0x0003, 0x0005, 0x0006, 0x0009, 0x0009, 0x000D }; 
         /*UTF-8*/
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
             expected, sizeof(expected), "UTF8", offsets, TRUE, U_ZERO_ERROR ))
@@ -310,10 +310,10 @@ static void TestSurrogateBehaviour(){
 static void TestErrorBehaviour(){
     log_verbose("Testing for SBCS and LATIN_1\n");
     {
-        UChar    sampleText[] =   { 0x0031, 0xd801};
-        UChar    sampleText2[] =   { 0x0031, 0xd801, 0x0032};
-        const uint8_t expected[] =          { 0x31};
-        const uint8_t expected2[] =         { 0x31, 0x1a, 0x32};
+        static const UChar    sampleText[] =   { 0x0031, 0xd801};
+        static const UChar    sampleText2[] =   { 0x0031, 0xd801, 0x0032};
+        static const uint8_t expected[] =          { 0x31};
+        static const uint8_t expected2[] =         { 0x31, 0x1a, 0x32};
 
         /*SBCS*/
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
@@ -343,21 +343,21 @@ static void TestErrorBehaviour(){
 
     log_verbose("Testing for DBCS and MBCS\n");
     {
-        UChar    sampleText[]    = { 0x00a1, 0xd801};
-        const uint8_t expected[] = { 0xa2, 0xae};
-        int32_t offsets[]        = { 0x00, 0x00, 0x01, 0x01};
+        static const UChar    sampleText[]    = { 0x00a1, 0xd801};
+        static const uint8_t expected[] = { 0xa2, 0xae};
+        static const int32_t offsets[]        = { 0x00, 0x00, 0x01, 0x01};
 
-        UChar       sampleText2[] = { 0x00a1, 0xd801, 0x00a4};
-        const uint8_t expected2[] = { 0xa2, 0xae, 0xa1, 0xe0, 0xa2, 0xb4};
-        int32_t offsets2[]        = { 0x00, 0x00, 0x01, 0x01, 0x02, 0x02};
+        static const UChar       sampleText2[] = { 0x00a1, 0xd801, 0x00a4};
+        static const uint8_t expected2[] = { 0xa2, 0xae, 0xa1, 0xe0, 0xa2, 0xb4};
+        static const int32_t offsets2[]        = { 0x00, 0x00, 0x01, 0x01, 0x02, 0x02};
 
-        UChar       sampleText3MBCS[] = { 0x0001, 0x00a4, 0xdc01};
-        const uint8_t expected3MBCS[] = { 0x01, 0xa2, 0xb4, 0xa1, 0xe0};
-        int32_t offsets3MBCS[]        = { 0x00, 0x01, 0x01, 0x02, 0x02};
+        static const UChar       sampleText3MBCS[] = { 0x0001, 0x00a4, 0xdc01};
+        static const uint8_t expected3MBCS[] = { 0x01, 0xa2, 0xb4, 0xa1, 0xe0};
+        static const int32_t offsets3MBCS[]        = { 0x00, 0x01, 0x01, 0x02, 0x02};
 
-        UChar       sampleText4MBCS[] = { 0x0061, 0x00a6, 0xdc01};
-        const uint8_t expected4MBCS[] = { 0x61, 0x8f, 0xa2, 0xc3, 0xf4, 0xfe};
-        int32_t offsets4MBCS[]        = { 0x00, 0x01, 0x01, 0x01, 0x02, 0x02 };
+        static const UChar       sampleText4MBCS[] = { 0x0061, 0x00a6, 0xdc01};
+        static const uint8_t expected4MBCS[] = { 0x61, 0x8f, 0xa2, 0xc3, 0xf4, 0xfe};
+        static const int32_t offsets4MBCS[]        = { 0x00, 0x01, 0x01, 0x01, 0x02, 0x02 };
 
 
 
@@ -421,21 +421,21 @@ static void TestErrorBehaviour(){
     /*iso-2022-jp*/
     log_verbose("Testing for iso-2022-jp\n");
     {
-        UChar    sampleText[]    = { 0x0031, 0xd801};
-        const uint8_t expected[] = {  0x31};
-        int32_t offsets[]        = { 0x00};
+        static const UChar    sampleText[]    = { 0x0031, 0xd801};
+        static const uint8_t expected[] = {  0x31};
+        static const int32_t offsets[]        = { 0x00};
 
-        UChar       sampleText2[] = { 0x0031, 0xd801, 0x0032};
-        const uint8_t expected2[] = {  0x31,0x1A,0x32};
-        int32_t offsets2[]        = { 0x00,0x01,0x02};
+        static const UChar       sampleText2[] = { 0x0031, 0xd801, 0x0032};
+        static const uint8_t expected2[] = {  0x31,0x1A,0x32};
+        static const int32_t offsets2[]        = { 0x00,0x01,0x02};
 
-        UChar       sampleText3MBCS[] = { 0x3000, 0x0050, 0xdc01,0x3001};
-        const uint8_t expected3MBCS[] = { 0x1B, 0x24, 0x42, 0x21, 0x21, 0x1B, 0x28, 0x42, 0x50, 0x1A, 0x1B, 0x24, 0x42, 0x21, 0x22,};
-        int32_t offsets3MBCS[]        = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x02, 0x03, 0x03, 0x03, 0x03, 0x03,};
+        static const UChar       sampleText3MBCS[] = { 0x3000, 0x0050, 0xdc01,0x3001};
+        static const uint8_t expected3MBCS[] = { 0x1B, 0x24, 0x42, 0x21, 0x21, 0x1B, 0x28, 0x42, 0x50, 0x1A, 0x1B, 0x24, 0x42, 0x21, 0x22,};
+        static const int32_t offsets3MBCS[]        = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x02, 0x03, 0x03, 0x03, 0x03, 0x03,};
 
-        UChar       sampleText4MBCS[] = { 0x0061, 0x4e00, 0xdc01};
-        const uint8_t expected4MBCS[] = { 0x61, 0x1b, 0x24, 0x42, 0x30, 0x6c,0x1b,0x28,0x42,0x1a};
-        int32_t offsets4MBCS[]        = { 0x00, 0x01, 0x01 ,0x01, 0x01, 0x01,0x02,0x02,0x02,0x02 };
+        static const UChar       sampleText4MBCS[] = { 0x0061, 0x4e00, 0xdc01};
+        static const uint8_t expected4MBCS[] = { 0x61, 0x1b, 0x24, 0x42, 0x30, 0x6c,0x1b,0x28,0x42,0x1a};
+        static const int32_t offsets4MBCS[]        = { 0x00, 0x01, 0x01 ,0x01, 0x01, 0x01,0x02,0x02,0x02,0x02 };
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expected, sizeof(expected), "iso-2022-jp", offsets, TRUE, U_TRUNCATED_CHAR_FOUND))
             log_err("u-> iso-2022-jp [UCNV_MBCS] \n");
@@ -470,21 +470,21 @@ static void TestErrorBehaviour(){
     /*iso-2022-cn*/
     log_verbose("Testing for iso-2022-cn\n");
     {
-        UChar    sampleText[]    = { 0x0031, 0xd801};
-        const uint8_t expected[] = { 0x0f, 0x31};
-        int32_t offsets[]        = { 0x00, 0x00};
+        static const UChar    sampleText[]    = { 0x0031, 0xd801};
+        static const uint8_t expected[] = { 0x0f, 0x31};
+        static const int32_t offsets[]        = { 0x00, 0x00};
 
-        UChar       sampleText2[] = { 0x0031, 0xd801, 0x0032};
-        const uint8_t expected2[] = { 0x0f, 0x31, 0x1A,0x32};
-        int32_t offsets2[]        = { 0x00, 0x00, 0x01,0x02};
+        static const UChar       sampleText2[] = { 0x0031, 0xd801, 0x0032};
+        static const uint8_t expected2[] = { 0x0f, 0x31, 0x1A,0x32};
+        static const int32_t offsets2[]        = { 0x00, 0x00, 0x01,0x02};
 
-        UChar       sampleText3MBCS[] = { 0x0051, 0x0050, 0xdc01};
-        const uint8_t expected3MBCS[] = {0x0f, 0x51, 0x50, 0x1A};
-        int32_t offsets3MBCS[]        = { 0x00, 0x00, 0x01, 0x02 };
+        static const UChar       sampleText3MBCS[] = { 0x0051, 0x0050, 0xdc01};
+        static const uint8_t expected3MBCS[] = {0x0f, 0x51, 0x50, 0x1A};
+        static const int32_t offsets3MBCS[]        = { 0x00, 0x00, 0x01, 0x02 };
 
-        UChar       sampleText4MBCS[] = { 0x0061, 0x4e00, 0xdc01};
-        const uint8_t expected4MBCS[] = { 0x0f, 0x61, 0x1b, 0x24, 0x29, 0x41, 0x0e, 0x52, 0x3b, 0x0f, 0x1a };
-        int32_t offsets4MBCS[]        = { 0x00, 0x00, 0x01, 0x01 ,0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02 };
+        static const UChar       sampleText4MBCS[] = { 0x0061, 0x4e00, 0xdc01};
+        static const uint8_t expected4MBCS[] = { 0x0f, 0x61, 0x1b, 0x24, 0x29, 0x41, 0x0e, 0x52, 0x3b, 0x0f, 0x1a };
+        static const int32_t offsets4MBCS[]        = { 0x00, 0x00, 0x01, 0x01 ,0x01, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02 };
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expected, sizeof(expected), "iso-2022-cn", offsets, TRUE, U_TRUNCATED_CHAR_FOUND))
             log_err("u-> iso-2022-cn [UCNV_MBCS] \n");
@@ -519,25 +519,25 @@ static void TestErrorBehaviour(){
     /*iso-2022-kr*/
     log_verbose("Testing for iso-2022-kr\n");
     {
-        UChar    sampleText[]    = { 0x0031, 0xd801};
-        const uint8_t expected[] = { 0x1b, 0x24, 0x29, 0x43, 0x31};
-        int32_t offsets[]        = { -1,   -1,   -1,   -1,   0x00};
+        static const UChar    sampleText[]    = { 0x0031, 0xd801};
+        static const uint8_t expected[] = { 0x1b, 0x24, 0x29, 0x43, 0x31};
+        static const int32_t offsets[]        = { -1,   -1,   -1,   -1,   0x00};
 
-        UChar       sampleText2[] = { 0x0031, 0xd801, 0x0032};
-        const uint8_t expected2[] = { 0x1b, 0x24, 0x29, 0x43, 0x31, 0x1A, 0x32};
-        int32_t offsets2[]        = { -1,   -1,   -1,   -1,   0x00, 0x01, 0x02};
+        static const UChar       sampleText2[] = { 0x0031, 0xd801, 0x0032};
+        static const uint8_t expected2[] = { 0x1b, 0x24, 0x29, 0x43, 0x31, 0x1A, 0x32};
+        static const int32_t offsets2[]        = { -1,   -1,   -1,   -1,   0x00, 0x01, 0x02};
 
-        UChar       sampleText3MBCS[] = { 0x0051, 0x0050, 0xdc01};
-        const uint8_t expected3MBCS[] = { 0x1b, 0x24, 0x29, 0x43,  0x51, 0x50, 0x1A };
-        int32_t offsets3MBCS[]        = { -1,   -1,   -1,   -1,    0x00, 0x01, 0x02, 0x02 };
+        static const UChar       sampleText3MBCS[] = { 0x0051, 0x0050, 0xdc01};
+        static const uint8_t expected3MBCS[] = { 0x1b, 0x24, 0x29, 0x43,  0x51, 0x50, 0x1A };
+        static const int32_t offsets3MBCS[]        = { -1,   -1,   -1,   -1,    0x00, 0x01, 0x02, 0x02 };
 
-        UChar       sampleText4MBCS[] = { 0x0061, 0x4e00, 0xdc01,0x4e00};
-        const uint8_t expected4MBCS[] = { 0x1b, 0x24, 0x29, 0x43,
+        static const UChar       sampleText4MBCS[] = { 0x0061, 0x4e00, 0xdc01,0x4e00};
+        static const uint8_t expected4MBCS[] = { 0x1b, 0x24, 0x29, 0x43,
                                           0x61, 
                                           0x0e, 0x6c, 0x69, 
                                           0x0f, 0x1a,
                                           0x0e, 0x6c, 0x69,};
-        int32_t offsets4MBCS[]        = { -1,   -1,   -1,   -1, 0x00, 0x01 ,0x01, 0x01, 0x02, 0x02, 0x03, 0x03, 0x03 };
+        static const int32_t offsets4MBCS[]        = { -1,   -1,   -1,   -1, 0x00, 0x01 ,0x01, 0x01, 0x02, 0x02, 0x03, 0x03, 0x03 };
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expected, sizeof(expected), "iso-2022-kr", offsets, TRUE, U_TRUNCATED_CHAR_FOUND))
             log_err("u-> iso-2022-kr [UCNV_MBCS] \n");
@@ -573,21 +573,21 @@ static void TestErrorBehaviour(){
     /*HZ*/
     log_verbose("Testing for HZ\n");
     {
-        UChar    sampleText[]    = { 0x0031, 0xd801};
-        const uint8_t expected[] = { 0x7e, 0x7d, 0x31};
-        int32_t offsets[]        = { 0x00, 0x00, 0x00};
+        static const UChar    sampleText[]    = { 0x0031, 0xd801};
+        static const uint8_t expected[] = { 0x7e, 0x7d, 0x31};
+        static const int32_t offsets[]        = { 0x00, 0x00, 0x00};
 
-        UChar       sampleText2[] = { 0x0031, 0xd801, 0x0032};
-        const uint8_t expected2[] = { 0x7e, 0x7d, 0x31,  0x1A,  0x32 };
-        int32_t offsets2[]        = { 0x00, 0x00, 0x00, 0x01,  0x02 };
+        static const UChar       sampleText2[] = { 0x0031, 0xd801, 0x0032};
+        static const uint8_t expected2[] = { 0x7e, 0x7d, 0x31,  0x1A,  0x32 };
+        static const int32_t offsets2[]        = { 0x00, 0x00, 0x00, 0x01,  0x02 };
 
-        UChar       sampleText3MBCS[] = { 0x0051, 0x0050, 0xdc01};
-        const uint8_t expected3MBCS[] = { 0x7e, 0x7d, 0x51, 0x50,  0x1A };
-        int32_t offsets3MBCS[]        = { 0x00, 0x00, 0x00, 0x01, 0x02};
+        static const UChar       sampleText3MBCS[] = { 0x0051, 0x0050, 0xdc01};
+        static const uint8_t expected3MBCS[] = { 0x7e, 0x7d, 0x51, 0x50,  0x1A };
+        static const int32_t offsets3MBCS[]        = { 0x00, 0x00, 0x00, 0x01, 0x02};
 
-        UChar       sampleText4MBCS[] = { 0x0061, 0x4e00, 0xdc01};
-        const uint8_t expected4MBCS[] = { 0x7e, 0x7d, 0x61, 0x7e, 0x7b, 0x52, 0x3b, 0x7e, 0x7d, 0x1a };
-        int32_t offsets4MBCS[]        = { 0x00, 0x00, 0x00, 0x01, 0x01, 0x01 ,0x01, 0x02, 0x02, 0x02 };
+        static const UChar       sampleText4MBCS[] = { 0x0061, 0x4e00, 0xdc01};
+        static const uint8_t expected4MBCS[] = { 0x7e, 0x7d, 0x61, 0x7e, 0x7b, 0x52, 0x3b, 0x7e, 0x7d, 0x1a };
+        static const int32_t offsets4MBCS[]        = { 0x00, 0x00, 0x00, 0x01, 0x01, 0x01 ,0x01, 0x02, 0x02, 0x02 };
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expected, sizeof(expected), "HZ", offsets, TRUE, U_TRUNCATED_CHAR_FOUND))
             log_err("u-> HZ [UCNV_MBCS] \n");
@@ -906,7 +906,7 @@ static void TestWithBufferSize(int32_t insize, int32_t outsize){
 }
 
 static UBool convertFromU( const UChar *source, int sourceLen,  const uint8_t *expect, int expectLen, 
-                const char *codepage, int32_t *expectOffsets, UBool doFlush, UErrorCode expectedStatus)
+                const char *codepage, const int32_t *expectOffsets, UBool doFlush, UErrorCode expectedStatus)
 {
 
     int32_t i=0;
@@ -995,7 +995,7 @@ static UBool convertFromU( const UChar *source, int sourceLen,  const uint8_t *e
 
 
 static UBool convertToU( const uint8_t *source, int sourceLen, const UChar *expect, int expectLen, 
-               const char *codepage, int32_t *expectOffsets, UBool doFlush, UErrorCode expectedStatus)
+               const char *codepage, const int32_t *expectOffsets, UBool doFlush, UErrorCode expectedStatus)
 {
     UErrorCode status = U_ZERO_ERROR;
     UConverter *conv = 0;
@@ -1092,7 +1092,7 @@ static UBool convertToU( const uint8_t *source, int sourceLen, const UChar *expe
 
 
 static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_t *expect, int expectLen, 
-                const char *codepage, UConverterFromUCallback callback , int32_t *expectOffsets, UBool testReset)
+                const char *codepage, UConverterFromUCallback callback , const int32_t *expectOffsets, UBool testReset)
 {
     UErrorCode status = U_ZERO_ERROR;
     UConverter *conv = 0;
@@ -1264,7 +1264,7 @@ static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_
 }
 
 static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *expect, int expectlen, 
-               const char *codepage, UConverterToUCallback callback, int32_t *expectOffsets, UBool testReset)
+               const char *codepage, UConverterToUCallback callback, const int32_t *expectOffsets, UBool testReset)
 {
     UErrorCode status = U_ZERO_ERROR;
     UConverter *conv = 0;
@@ -1436,13 +1436,13 @@ static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *
 static void TestResetBehaviour(void){
     log_verbose("Testing  Reset for SBCS and LATIN_1\n");
     {
-        UChar sampleText[] = {0x0031, 0xd801, 0xdc01, 0x0032};
-        const uint8_t expected[] = {0x31, 0x1a, 0x32};
-        int32_t offsets[] =  { 0,1,3};
+        static const UChar sampleText[] = {0x0031, 0xd801, 0xdc01, 0x0032};
+        static const uint8_t expected[] = {0x31, 0x1a, 0x32};
+        static const int32_t offsets[] =  { 0,1,3};
 
-        UChar sampleText1[] = {0x0031, 0x0033, 0x0034, 0x0032};
-        const uint8_t expected1[] = {0x31, 0x33,0x34, 0x32};
-        int32_t offsets1[] =  { 0,1,2,3};
+        static const UChar sampleText1[] = {0x0031, 0x0033, 0x0034, 0x0032};
+        static const uint8_t expected1[] = {0x31, 0x33,0x34, 0x32};
+        static const int32_t offsets1[] =  { 0,1,2,3};
 
         /*SBCS*/
         if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
@@ -1467,14 +1467,14 @@ static void TestResetBehaviour(void){
     }
     log_verbose("Testing Reset for DBCS and MBCS\n");
     {
-        UChar sampleText[]       = {0x00a1, 0xd801, 0xdc01, 0x00a4};
-        const uint8_t expected[] = {0xa2, 0xae, 0xa1, 0xe0, 0xa2, 0xb4};
-        int32_t offsets[]        = {0x00, 0x00, 0x01, 0x01, 0x03, 0x03 };
+        static const UChar sampleText[]       = {0x00a1, 0xd801, 0xdc01, 0x00a4};
+        static const uint8_t expected[] = {0xa2, 0xae, 0xa1, 0xe0, 0xa2, 0xb4};
+        static const int32_t offsets[]        = {0x00, 0x00, 0x01, 0x01, 0x03, 0x03 };
 
         
-        UChar sampleText1[] = {0x00a1, 0x00a4, 0x00a7, 0x00a8};
-        const uint8_t expected1[] = {0xa2, 0xae,0xA2,0xB4,0xA1,0xD7,0xA1,0xA7};
-        int32_t offsets1[] =  { 0,2,4,6};
+        static const UChar sampleText1[] = {0x00a1, 0x00a4, 0x00a7, 0x00a8};
+        static const uint8_t expected1[] = {0xa2, 0xae,0xA2,0xB4,0xA1,0xD7,0xA1,0xA7};
+        static const int32_t offsets1[] =  { 0,2,4,6};
 
         /*DBCS*/
         if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
@@ -1504,19 +1504,19 @@ static void TestResetBehaviour(void){
     }
     log_verbose("Testing Reset for ISO-2022-jp\n");
     {
-        UChar    sampleText[] =   { 0x4e00, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
+        static const UChar    sampleText[] =   { 0x4e00, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
 
-        const uint8_t expected[] = {0x1b, 0x24, 0x42,0x30,0x6c,0x43,0x7a,0x1b,0x28,0x42,
+        static const uint8_t expected[] = {0x1b, 0x24, 0x42,0x30,0x6c,0x43,0x7a,0x1b,0x28,0x42,
                                     0x31,0x1A, 0x32};
 
 
-        int32_t offsets[] = {0,0,0,0,0,1,1,2,2,2,2,3,5 };
+        static const int32_t offsets[] = {0,0,0,0,0,1,1,2,2,2,2,3,5 };
 
         
-        UChar sampleText1[] = {0x4e00, 0x04e01, 0x0031,0x001A, 0x0032};
-        const uint8_t expected1[] = {0x1b, 0x24, 0x42,0x30,0x6c,0x43,0x7a,0x1b,0x28,0x42,
+        static const UChar sampleText1[] = {0x4e00, 0x04e01, 0x0031,0x001A, 0x0032};
+        static const uint8_t expected1[] = {0x1b, 0x24, 0x42,0x30,0x6c,0x43,0x7a,0x1b,0x28,0x42,
                                     0x31,0x1A, 0x32};
-        int32_t offsets1[] =  { 3,5,10,11,12};
+        static const int32_t offsets1[] =  { 3,5,10,11,12};
 
         /*iso-2022-jp*/
         if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
@@ -1534,9 +1534,9 @@ static void TestResetBehaviour(void){
     }
     log_verbose("Testing Reset for ISO-2022-cn\n");
     {
-        UChar    sampleText[] =   { 0x4e00, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
+        static const UChar    sampleText[] =   { 0x4e00, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
 
-        const uint8_t expected[] = {
+        static const uint8_t expected[] = {
                                     0x1B, 0x24, 0x29, 0x41, 0x0E, 0x52, 0x3B, 
                                     0x36, 0x21,
                                     0x0f, 0x31,
@@ -1545,7 +1545,7 @@ static void TestResetBehaviour(void){
                                     };
         
 
-        int32_t offsets[] = {
+        static const int32_t offsets[] = {
                                     0,    0,    0,    0,    0,    0,    0,      
                                     1,    1,
                                     2,    2,
@@ -1553,14 +1553,14 @@ static void TestResetBehaviour(void){
                                     5,    5,  };
         
         UChar sampleText1[] = {0x4e00, 0x04e01, 0x0031,0x001A, 0x0032};
-        const uint8_t expected1[] = {
+        static const uint8_t expected1[] = {
                                     0x1B, 0x24, 0x29, 0x41, 0x0E, 0x52, 0x3B, 
                                     0x36, 0x21,
                                     0x1B, 0x24, 0x29, 0x47, 0x1B, 0x4E, 0x24, 0x22, 
                                     0x0f, 0x1A, 
                                     0x32
                                     };
-        int32_t offsets1[] =  { 5,7,15,18,19};
+        static const int32_t offsets1[] =  { 5,7,15,18,19};
 
         /*iso-2022-CN*/
         if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
@@ -1579,7 +1579,7 @@ static void TestResetBehaviour(void){
     {
         UChar    sampleText[] =   { 0x4e00,0xd801, 0xdc01, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
 
-        const uint8_t expected[] = {0x1B, 0x24, 0x29, 0x43, 
+        static const uint8_t expected[] = {0x1B, 0x24, 0x29, 0x43, 
                                     0x0E, 0x6C, 0x69, 
                                     0x0f, 0x1A, 
                                     0x0e, 0x6F, 0x4B, 
@@ -1587,7 +1587,7 @@ static void TestResetBehaviour(void){
                                     0x1A, 
                                     0x32 };        
 
-        int32_t offsets[] = {-1, -1, -1, -1,
+        static const int32_t offsets[] = {-1, -1, -1, -1,
                               0, 0, 0, 
                               1, 1,  
                               3, 3, 3, 
@@ -1595,9 +1595,9 @@ static void TestResetBehaviour(void){
                               5, 
                               7,
                             };
-        UChar    sampleText1[] =   { 0x4e00,0x0041, 0x04e01, 0x0031, 0x0042, 0x0032};
+        static const UChar    sampleText1[] =   { 0x4e00,0x0041, 0x04e01, 0x0031, 0x0042, 0x0032};
 
-        const uint8_t expected1[] = {0x1B, 0x24, 0x29, 0x43, 
+        static const uint8_t expected1[] = {0x1B, 0x24, 0x29, 0x43, 
                                     0x0E, 0x6C, 0x69, 
                                     0x0f, 0x41, 
                                     0x0e, 0x6F, 0x4B, 
@@ -1605,7 +1605,7 @@ static void TestResetBehaviour(void){
                                     0x42, 
                                     0x32 };        
 
-        int32_t offsets1[] = {
+        static const int32_t offsets1[] = {
                               5, 8, 10, 
                               13, 14, 15  
                       
@@ -1624,9 +1624,9 @@ static void TestResetBehaviour(void){
     }
         log_verbose("Testing Reset for HZ\n");
     {
-        UChar    sampleText[] =   { 0x4e00, 0xd801, 0xdc01, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
+        static const UChar    sampleText[] =   { 0x4e00, 0xd801, 0xdc01, 0x04e01, 0x0031, 0xd801, 0xdc01, 0x0032};
 
-        const uint8_t expected[] = {0x7E, 0x7B, 0x52, 0x3B,
+        static const uint8_t expected[] = {0x7E, 0x7B, 0x52, 0x3B,
                                     0x7E, 0x7D, 0x1A, 
                                     0x7E, 0x7B, 0x36, 0x21, 
                                     0x7E, 0x7D, 0x31, 
@@ -1634,15 +1634,15 @@ static void TestResetBehaviour(void){
                                     0x32 };
 
 
-        int32_t offsets[] = {0,0,0,0,
+        static const int32_t offsets[] = {0,0,0,0,
                              1,1,1,
                              3,3,3,3,
                              4,4,4,
                              5,
                              7,};
-        UChar    sampleText1[] =   { 0x4e00, 0x0035, 0x04e01, 0x0031, 0x0041, 0x0032};
+        static const UChar    sampleText1[] =   { 0x4e00, 0x0035, 0x04e01, 0x0031, 0x0041, 0x0032};
 
-        const uint8_t expected1[] = {0x7E, 0x7B, 0x52, 0x3B,
+        static const uint8_t expected1[] = {0x7E, 0x7B, 0x52, 0x3B,
                                     0x7E, 0x7D, 0x35, 
                                     0x7E, 0x7B, 0x36, 0x21, 
                                     0x7E, 0x7D, 0x31, 
@@ -1650,7 +1650,7 @@ static void TestResetBehaviour(void){
                                     0x32 };
 
 
-        int32_t offsets1[] = {2,6,9,13,14,15
+        static const int32_t offsets1[] = {2,6,9,13,14,15
                             };
 
         /*hz*/
@@ -1668,15 +1668,15 @@ static void TestResetBehaviour(void){
     /*UTF-8*/
      log_verbose("Testing for UTF8\n");
     {
-        UChar    sampleText[] =   { 0x4e00, 0x0701, 0x0031, 0xbfc1, 0xd801, 0xdc01, 0x0032};
+        static const UChar    sampleText[] =   { 0x4e00, 0x0701, 0x0031, 0xbfc1, 0xd801, 0xdc01, 0x0032};
         int32_t offsets[]={0x00, 0x00, 0x00, 0x01, 0x01, 0x02,
                            0x03, 0x03, 0x03, 0x04, 0x04, 0x04,
                            0x04, 0x06 };
-        const uint8_t expected[] = {0xe4, 0xb8, 0x80, 0xdc, 0x81, 0x31, 
+        static const uint8_t expected[] = {0xe4, 0xb8, 0x80, 0xdc, 0x81, 0x31, 
             0xeb, 0xbf, 0x81, 0xF0, 0x90, 0x90, 0x81, 0x32};
 
 
-        int32_t fromOffsets[] = { 0x0000, 0x0003, 0x0005, 0x0006, 0x0009, 0x0009, 0x000D }; 
+        static const int32_t fromOffsets[] = { 0x0000, 0x0003, 0x0005, 0x0006, 0x0009, 0x0009, 0x000D }; 
         /*UTF-8*/
         if(!testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
             expected, sizeof(expected), "UTF8", UCNV_FROM_U_CALLBACK_SUBSTITUTE,offsets , TRUE))
