@@ -32,6 +32,7 @@ testdata_test.icu
 testdata_test1.cnv
 testdata_test3.cnv
 testdata_test4.cnv
+testdata_ibm9027.cnv
 testdata_idna_rules.res
 <<
 
@@ -65,4 +66,7 @@ $(TESTDATABLD)\testdata_test.icu : {"$(ICUTOOLS)\gentest\$(CFG)"}gentest.exe
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv"  -d"$(TESTDATABLD)" -t -p testdata  $**
 
 "$(TESTDATABLD)\testdata_test4.cnv": "$(TESTDATA)\test4.ucm"
+	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv"  -d"$(TESTDATABLD)" -t -p testdata $**
+
+"$(TESTDATABLD)\testdata_ibm9027.cnv": "$(TESTDATA)\ibm9027.ucm"
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv"  -d"$(TESTDATABLD)" -t -p testdata $**

@@ -312,7 +312,7 @@ TESTDT=$(TESTDATA)_
 # File definitions 
 TEST_DAT_FILES=$(TESTBUILDDIR)/$(TESTDT)test.icu
 
-TEST_UCM_SOURCE= test1.ucm test3.ucm test4.ucm
+TEST_UCM_SOURCE= test1.ucm test3.ucm test4.ucm ibm9027.ucm
 TEST_UCM_FILES=$(TEST_UCM_SOURCE:%=$(TESTSRCDATADIR)/data/%)
 TEST_CNV_FILES=$(TEST_UCM_SOURCE:%.ucm=$(TESTBUILDDIR)/$(TESTDT)%.cnv)
 
