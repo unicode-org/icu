@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/PropertyLister.java,v $
-* $Date: 2001/08/31 00:30:17 $
-* $Revision: 1.2 $
+* $Date: 2001/09/19 23:33:16 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -15,6 +15,7 @@ package com.ibm.text.UCD;
 
 import java.io.*;
 import com.ibm.text.utility.*;
+import java.text.NumberFormat;
 
 
 abstract public class PropertyLister implements UCD_Types {
@@ -24,9 +25,10 @@ abstract public class PropertyLister implements UCD_Types {
 
 
     protected UCD ucdData;
-    protected PrintStream output;
+    protected PrintWriter output;
     protected boolean showOnConsole;
     protected boolean usePropertyComment = true;
+    protected boolean breakByCategory = true;
     protected int firstRealCp = -2;
     protected int lastRealCp = -2;
     protected boolean alwaysBreaks = false; // set to true if property only breaks
@@ -51,7 +53,7 @@ abstract public class PropertyLister implements UCD_Types {
     }
 
     public String optionalComment(int cp) {
-        if (!usePropertyComment) return "";
+        if (!usePropertyComment || !breakByCategory) return "";
         int cat = ucdData.getCategory(cp);
         if (cat == Lt || cat == Ll || cat == Lu) return "L&";
         return ucdData.getCategoryID(cp);
@@ -167,7 +169,7 @@ abstract public class PropertyLister implements UCD_Types {
             if (s == INCLUDE && firstRealCp != -1) {
                 byte cat = ucdData.getCategory(cp);
                 if (cat == Lt || cat == Ll) cat = Lu;
-                if (cat != firstRealCpCat) s = BREAK;
+                if (breakByCategory && cat != firstRealCpCat) s = BREAK;
             }
 
             switch(s) {
@@ -208,9 +210,12 @@ abstract public class PropertyLister implements UCD_Types {
         }
 
         if (count == 0) System.out.println("WARNING -- ZERO COUNT FOR " + header);
+        NumberFormat nf = NumberFormat.getInstance();
+        nf.setMaximumFractionDigits(0);
         output.println();
-        output.println("# Total code points: " + count);
+        output.println("# Total code points: " + nf.format(count));
         output.println();
         return count;
     }
+    
 }

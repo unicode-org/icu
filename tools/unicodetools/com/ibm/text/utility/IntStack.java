@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/IntStack.java,v $
-* $Date: 2001/08/31 00:19:16 $
-* $Revision: 1.2 $
+* $Date: 2001/09/19 23:33:52 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -17,7 +17,7 @@ package com.ibm.text.utility;
 // Simple stack mechanism, with push, pop and access
 // =============================================================
 
-public final class IntStack {
+public final class IntStack implements Comparable {
     private int[] values;
     private int top = 0;
 
@@ -50,5 +50,32 @@ public final class IntStack {
 
     public boolean isEmpty() {
         return top == 0;
+    }
+    
+    public void clear() {
+        top = 0;
+    }
+    
+    public int compareTo(Object other) {
+        IntStack that = (IntStack) other;
+        int min = top;
+        if (min < that.top) min = that.top;
+        for (int i = 0; i < min; ++i) {
+            int result = values[i] - that.values[i];
+            if (result != 0) return result;
+        }
+        return top - that.top;
+    }
+
+    public boolean equals(Object other) {
+        return compareTo(other) == 0;
+    }
+
+    public int hashCode() {
+        int result = top;
+        for (int i = 0; i < top; ++i) {
+            result = result * 37 + values[i];
+        }
+        return result;
     }
 }

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/TestData.java,v $
-* $Date: 2001/09/01 00:06:15 $
-* $Revision: 1.3 $
+* $Date: 2001/09/19 23:33:16 $
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -145,7 +145,7 @@ public class TestData implements UCD_Types {
 
     static final int HEADER_EXTEND = 0, HEADER_DERIVED = 1, HEADER_SCRIPTS = 2;
 
-    public static void doHeader(String fileName, PrintStream output, int headerChoice) {
+    public static void doHeader(String fileName, PrintWriter output, int headerChoice) {
         output.println("# " + fixFile(fileName));
         output.println("#");
         if (headerChoice == HEADER_SCRIPTS) {
@@ -167,8 +167,8 @@ public class TestData implements UCD_Types {
     }
 
     public static void generateDerived (int bitMask, int headerChoice, String fileName) throws IOException {
-        ucd = UCD.make("310");
-        PrintStream output = new PrintStream(new FileOutputStream(GEN_DIR + fileName));
+        ucd = UCD.make("3.1.0");
+        PrintWriter output = Utility.openPrintWriter(fileName);
         doHeader(fileName, output, headerChoice);
         for (int i = 0; i < 32; ++i) {
             if ((bitMask & (1<<i)) == 0) continue;
@@ -183,9 +183,9 @@ public class TestData implements UCD_Types {
 
     /*
     public static void listStrings(String file, int type, int subtype) throws IOException {
-        ucd = UCD.make("310");
-        UCD ucd30 = UCD.make("300");
-        PrintStream output = new PrintStream(new FileOutputStream(GEN_DIR + file));
+        ucd = UCD.make("3.1.0");
+        UCD ucd30 = UCD.make("3.0.0");
+        PrintWriter output = new PrintStream(new FileOutputStream(GEN_DIR + file));
 
         for (int i = 0; i < 0x10FFFF; ++i) {
             if ((i & 0xFFF) == 0) System.out.println("# " + i);
@@ -203,7 +203,7 @@ public class TestData implements UCD_Types {
     */
 
     public static void generateCompExclusions() throws IOException {
-        PrintStream output = new PrintStream(new FileOutputStream(GEN_DIR + "CompositionExclusionsDelta.txt"));
+        PrintWriter output = Utility.openPrintWriter("CompositionExclusionsDelta.txt");
         new CompLister(output).print();
         output.close();
     }
@@ -212,10 +212,10 @@ public class TestData implements UCD_Types {
         UCD oldUCD;
         int oldLength = 0;
 
-        public CompLister(PrintStream output) {
+        public CompLister(PrintWriter output) {
             this.output = output;
-            ucdData = UCD.make("310");
-            oldUCD = UCD.make("300");
+            ucdData = UCD.make("3.1.0");
+            oldUCD = UCD.make("3.0.0");
             showOnConsole = true;
         }
         public String propertyName(int cp) {
@@ -249,7 +249,7 @@ public class TestData implements UCD_Types {
         //*/
 
 
-        PrintStream output = new PrintStream(new FileOutputStream(GEN_DIR + file));
+        PrintWriter output = Utility.openPrintWriter(file);
         doHeader(file, output, headerChoice);
         int last = -1;
         for (int i = startEnum; i < endEnum; ++i) {

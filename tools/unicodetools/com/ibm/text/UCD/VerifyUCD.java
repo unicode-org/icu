@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/VerifyUCD.java,v $
-* $Date: 2001/09/06 01:29:48 $
-* $Revision: 1.4 $
+* $Date: 2001/09/19 23:33:15 $
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.io.*;
 //import java.text.*;
+import com.ibm.text.*;
 
 import com.ibm.text.utility.*;
 
@@ -331,6 +332,7 @@ public class VerifyUCD implements UCD_Types {
         System.out.println("Checking Prohibited and Unassigned");
         System.out.println();
         for (int cp = 0; cp <= 0x10FFFF; ++cp) {
+            Utility.dot(cp);
             if (mappedOut.get(cp)) continue;
 
             boolean ucdUnassigned = !ucd.isAllocated(cp);
@@ -339,33 +341,89 @@ public class VerifyUCD implements UCD_Types {
             boolean idnProhibited = prohibited.get(cp);
 
             if (ucdUnassigned && !idnUnassigned) {
-                showError("UCD Unassigned but not IDN Unassigned: ", cp);
+                showError("?UCD Unassigned but not IDN Unassigned", cp, "");
                 ++errorCount;
             } else if (!ucdUnassigned && idnUnassigned) {
-                showError("Not UCD Unassigned but IDN Unassigned: ", cp);
+                showError("?Not UCD Unassigned but IDN Unassigned", cp, "");
                 ++errorCount;
             }
 
             if (idnProhibited && unassigned.get(cp)) {
-                showError("Both IDN Unassigned AND IDN Prohibited: ", cp);
+                showError("?Both IDN Unassigned AND IDN Prohibited", cp, "");
                 ++errorCount;
             }
 
             if (guess && !idnProhibited) {
-                showError("UCD ?prohibited? but not IDN Prohibited: ", cp);
+                showError("?UCD ?prohibited? but not IDN Prohibited ", cp, "");
                 ++errorCount;
             } else if (!guess && idnProhibited) {
-                showError("Not UCD ?prohibited? but IDN Prohibited: ", cp);
+                showError("?Not UCD ?prohibited? but IDN Prohibited ", cp, "");
                 ++errorCount;
+            }
+            
+            if (cp == 0x3131) {
+                System.out.println("Debug: " + idnProhibited
+                    + ", " + idnUnassigned
+                    + ", " + nfkc.hasDecomposition(cp)
+                    + ", " + ucd.getCodeAndName(nfkc.normalize(cp))
+                    + ", " + ucd.getCodeAndName(nfc.normalize(cp)));
+            } 
+            
+            if (!idnProhibited && ! idnUnassigned && nfkc.hasDecomposition(cp)) {
+                String kc = nfkc.normalize(cp);
+                String c = nfc.normalize(cp);
+                if (kc.equals(c)) continue;
+                int cp2;
+                boolean excluded = false;
+                for (int j = 0; j < kc.length(); j += UTF16.getCharCount(cp2)) {
+                    cp2 = UTF16.charAt(kc, j);
+                    if (prohibited.get(cp2)) {
+                        showError("Prohibited with NFKC, but output with NFC", cp, "");
+                        excluded = true;
+                        break;
+                    }
+                }
+                if (!excluded) {
+                    showError("Remapped to core abstract character with NFKC (but not NFC)", cp, ""); // , "\t=> " + ucd.getCodeAndName(kc));
+                }
             }
 
         }
-        System.out.println();
-        System.out.println("Total Errors: " + errorCount);
+        System.out.println("Writing IDNCheck.txt");
+        
+        
+        PrintWriter log = Utility.openPrintWriter("IDNCheck.txt");
+        log.println("IDN Check");
+        log.println("Total Errors: " + errorCount);
+       
+        Iterator it = idnMap.keySet().iterator();
+        while (it.hasNext()) {
+            String description = (String) it.next();
+            Map map = (Map) idnMap.get(description);
+            log.println();
+            log.println(description);
+            log.println("Total: " + map.size());
+            log.println();
+            
+            Iterator it2 = map.keySet().iterator();
+            while (it2.hasNext()) {
+                Object key = it2.next();
+                String line = (String) map.get(key);
+                log.println("  " + line);
+            }
+        }
+        log.close();
     }
+    
+    static Map idnMap = new HashMap();
 
-    static void showError(String description, int cp) {
-        System.out.println(description + ucd.getCodeAndName(cp) + " (" + ucd.getCategoryID(cp) + ")");
+    static void showError(String description, int cp, String option) {
+        Map probe = (Map) idnMap.get(description);
+        if (probe == null) {
+            probe = new TreeMap();
+            idnMap.put(description, probe);
+        }
+        probe.put(new Integer(cp), ucd.getCodeAndName(cp) + " (" + ucd.getCategoryID(cp) + ")" + option);
     }
 
 
@@ -611,8 +669,7 @@ E0020-E007F; [TAGGING CHARACTERS]
                 if (reason.equals("Map out")) {
                     value = Utility.fromHex(parts[1]);
                     Utility.fixDot();
-                    System.out.println("Note, Mapping Out: " + ucd.getCodeAndName(cp)
-                        + ", " + ucd.getCodeAndName(value) + ", " + ucd.getCategoryID(cp));
+                    showError("Mapping Out: ", cp, "");
                     mappedOut.set(cp);
                 }
                 idnFold.put(key, value);
@@ -1033,26 +1090,37 @@ E0020-E007F; [TAGGING CHARACTERS]
     int sum = 0;
     long start, end;
     
+    java.text.NumberFormat nf = java.text.NumberFormat.getPercentInstance();
+    
+    start = System.currentTimeMillis();
+    for (int i = count; i >= 0; --i) {
+        sum += dummy0(i).length();
+    }
+    end = System.currentTimeMillis();
+    double base = end - start;
+    
+    System.out.println("unsynchronized static char[]: " + nf.format((end - start)/base));
+
     start = System.currentTimeMillis();
     for (int i = count; i >= 0; --i) {
         sum += dummy2(i).length();
     }
     end = System.currentTimeMillis();
-    System.out.println("synchronized: " + (end - start));
+    System.out.println("synchronized static char[]: " + nf.format((end - start)/base));
 
     start = System.currentTimeMillis();
     for (int i = count; i >= 0; --i) {
         sum += dummy1(i).length();
     }
     end = System.currentTimeMillis();
-    System.out.println("char[] each time: " + (end - start));
+    System.out.println("char[] each time: " + nf.format((end - start)/base));
     
     start = System.currentTimeMillis();
     for (int i = count; i >= 0; --i) {
         sum += dummy3(i).length();
     }
     end = System.currentTimeMillis();
-    System.out.println("String +: " + (end - start));
+    System.out.println("two valueofs: " + nf.format((end - start)/base));
     
     System.out.println(sum);
   }
@@ -1072,6 +1140,12 @@ E0020-E007F; [TAGGING CHARACTERS]
         temp2[1] = (char)a;
         return new String(temp2);
     }
+  }
+  
+  static String dummy0(int a) {
+        temp2[0] = (char)(a >>> 16);
+        temp2[1] = (char)a;
+        return new String(temp2);
   }
   
   static String dummy3(int a) {

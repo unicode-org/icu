@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2001/09/06 01:29:48 $
-* $Revision: 1.5 $
+* $Date: 2001/09/19 23:33:16 $
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -22,9 +22,9 @@ import com.ibm.text.utility.*;
 
 public class GenerateData implements UCD_Types {
 
-    public static void main (String[] args) throws IOException {
+    public static void main (String inVersion, String[] args) throws IOException {
         System.out.println("START");
-        ucd = UCD.make();
+        ucd = UCD.make(inVersion);
         System.out.println("Loaded UCD " + ucd.getVersion() + " " + (new Date(ucd.getDate())));
         String version = ucd.getVersion();
 
@@ -36,10 +36,7 @@ public class GenerateData implements UCD_Types {
             Utility.fixDot();
             System.out.println("Argument: " + args[i]);
 
-            if (arg.equalsIgnoreCase("version")) {
-                version = args[++i];
-                ucd = UCD.make(version);
-            } else if (arg.equalsIgnoreCase("partition")) {
+            if (arg.equalsIgnoreCase("partition")) {
                 partitionProperties();
             } else if (arg.equalsIgnoreCase("list")) {
                 listProperties();
@@ -91,8 +88,11 @@ public class GenerateData implements UCD_Types {
                     
             } else if (arg.equalsIgnoreCase("DerivedCoreProperties")) {
                 mask = Utility.setBits(0, DerivedProperty.PropMath, DerivedProperty.Mod_ID_Continue_NO_Cf);
-                mask = Utility.setBits(mask, DerivedProperty.DefaultIgnorable, DerivedProperty.LIMIT-1);
+                mask = Utility.setBits(mask, DerivedProperty.DefaultIgnorable, DerivedProperty.FC_NFC_Closure-1);
                 generateDerived(mask, HEADER_DERIVED, "DerivedCoreProperties-" + version );
+                
+            } else if (arg.equalsIgnoreCase("DerivedAge")) {
+                generateAge("DerivedAge-" + version );
                 
             } else if (arg.equalsIgnoreCase("DerivedLineBreak")) {
                 generateVerticalSlice(LINE_BREAK, LINE_BREAK+NEXT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
@@ -181,7 +181,7 @@ public class GenerateData implements UCD_Types {
 
     static final int HEADER_EXTEND = 0, HEADER_DERIVED = 1, HEADER_SCRIPTS = 2;
 
-    public static void doHeader(String fileName, PrintStream output, int headerChoice) {
+    public static void doHeader(String fileName, PrintWriter output, int headerChoice) {
         output.println("# " + fileName + ".txt");
         output.println("#");
         if (headerChoice == HEADER_SCRIPTS) {
@@ -203,7 +203,7 @@ public class GenerateData implements UCD_Types {
     }
 
     public static void generateDerived (int bitMask, int headerChoice, String fileName) throws IOException {
-        PrintStream output = new PrintStream(new FileOutputStream(GEN_DIR + fileName + "dX.txt"));
+        PrintWriter output = Utility.openPrintWriter(fileName + "dX.txt");
         doHeader(fileName, output, headerChoice);
         for (int i = 0; i < DerivedProperty.LIMIT; ++i) {
             if ((bitMask & (1<<i)) == 0) continue;
@@ -218,8 +218,8 @@ public class GenerateData implements UCD_Types {
 
     /*
     public static void listStrings(String file, int type, int subtype) throws IOException {
-        ucd = UCD.make("310");
-        UCD ucd30 = UCD.make("300");
+        ucd = UCD.make("3.1.0");
+        UCD ucd30 = UCD.make("3.0.0");
         PrintStream output = new PrintStream(new FileOutputStream(GEN_DIR + file));
 
         for (int i = 0; i < 0x10FFFF; ++i) {
@@ -238,7 +238,7 @@ public class GenerateData implements UCD_Types {
     */
 
     public static void generateCompExclusions() throws IOException {
-        PrintStream output = new PrintStream(new FileOutputStream(GEN_DIR + "CompositionExclusionsDelta.txt"));
+        PrintWriter output = Utility.openPrintWriter("CompositionExclusionsDelta.txt");
         new CompLister(output).print();
         output.close();
     }
@@ -247,10 +247,10 @@ public class GenerateData implements UCD_Types {
         UCD oldUCD;
         int oldLength = 0;
 
-        public CompLister(PrintStream output) {
+        public CompLister(PrintWriter output) {
             this.output = output;
-            ucdData = UCD.make("310");
-            oldUCD = UCD.make("300");
+            ucdData = UCD.make("3.1.0");
+            oldUCD = UCD.make("3.0.0");
             showOnConsole = true;
         }
         public String propertyName(int cp) {
@@ -310,7 +310,7 @@ public class GenerateData implements UCD_Types {
 
     public static void listDifferences() throws IOException {
 
-        PrintStream output = new PrintStream(new FileOutputStream(GEN_DIR + "PropertyDifferences.txt"));
+        PrintWriter output = Utility.openPrintWriter("PropertyDifferences.txt");
 
         for (int i = 1; i < LIMIT_ENUM; ++i) {
             int iType = i & 0xFF00;
@@ -441,7 +441,7 @@ public class GenerateData implements UCD_Types {
         //*/
 
 
-        PrintStream output = new PrintStream(new FileOutputStream(GEN_DIR + file + "dX.txt"));
+        PrintWriter output = Utility.openPrintWriter(file + "dX.txt");
         doHeader(file, output, headerChoice);
         int last = -1;
         for (int i = startEnum; i < endEnum; ++i) {
@@ -685,5 +685,81 @@ public class GenerateData implements UCD_Types {
         "\u0592\u05B7\u05BC\u05A5\u05B0\u05C0\u05C4\u05AD"
 
     };
+    
+    static final void generateAge(String filename) throws IOException {
+        PrintWriter log = Utility.openPrintWriter(filename + "dX.txt");
+        try {
+            log.println("# Derived file showing when various code points were allocated in Unicode");
+            log.println("# author: M. Davis");
+            log.println("# generated: " + new Date());
+            log.println("# Notes:");
+            log.println("# - The old Hangul Syllables (removed from 2.0) are not included in the 1.1.0 listing.");
+            log.println("# - The supplementary private use code points and the non-character code points");
+            log.println("#   were allocated in version 2.0, but not specifically listed in the UCD");
+            log.println("#   until versions 3.0.1 and 3.1.0 respectively.");
+            
+            log.println("# ================================================");
+            log.println();
+            new DiffPropertyLister(null, "1.1.0", log).print();
+            log.println("# ================================================");
+            log.println();
+            new DiffPropertyLister("1.1.0", "2.0.0", log).print();
+            log.println("# ================================================");
+            log.println();
+            new DiffPropertyLister("2.0.0", "2.1.2", log).print();
+            log.println("# ================================================");
+            log.println();
+            new DiffPropertyLister("2.1.2", "3.0.0", log).print();
+            log.println("# ================================================");
+            log.println();
+            new DiffPropertyLister("3.0.0", "3.1.0", log).print();
+            /*
+            printDiff("110", "200");
+	        UnicodeSet u11 = fromFile(BASE_DIR + "UnicodeData\\Versions\\UnicodeData-1.1.txt", false);
+	        UnicodeSet u20 = fromFile(BASE_DIR + "UnicodeData\\Versions\\UnicodeData-2.0.txt", false);
+	        UnicodeSet u21 = fromFile(BASE_DIR + "UnicodeData\\Versions\\UnicodeData-2.1.txt", false);
+	        UnicodeSet u30 = fromFile(BASE_DIR + "UnicodeData\\Versions\\UnicodeData-3.0.txt", false);
+	        UnicodeSet u31 = fromFile(BASE_DIR + "UnicodeData\\Versions\\UnicodeData-3.1.txt", false);
+
+            log.println();
+            log.println("# Code points assigned in Unicode 1.1 (minus Hangul Syllables): "
+                + n.format(u11.count()));
+            log.println();
+            u11.print(log, false, false, "1.1");
+
+            UnicodeSet u20m = new UnicodeSet(u20).remove(u11);
+            log.println();
+            log.println("# Code points assigned in Unicode 2.0 (minus Unicode 1.1): "
+                + n.format(u20m.count()));
+            log.println();
+            u20m.print(log, false, false, "2.0");
+
+            UnicodeSet u21m = new UnicodeSet(u21).remove(u20);
+            log.println();
+            log.println("# Code points assigned in Unicode 2.1 (minus Unicode 2.0): "
+                + n.format(u21m.count()));
+            log.println();
+            u21m.print(log, false, false, "2.1");
+
+            UnicodeSet u30m = new UnicodeSet(u30).remove(u21);
+            log.println();
+            log.println("# Code points assigned in Unicode 3.0 (minus Unicode 2.1): "
+                + n.format(u30m.count()));
+            log.println();
+            u30m.print(log, false, false, "3.0");
+
+            UnicodeSet u31m = new UnicodeSet(u31).remove(u30);
+            log.println();
+            log.println("# Code points assigned in Unicode 3.1 (minus Unicode 3.0): "
+                + n.format(u31m.count()));
+            log.println();
+            u31m.print(log, false, false, "3.1");
+            */
+        } finally {
+            if (log != null) log.close();
+        }
+
+    }
+    
 
 }

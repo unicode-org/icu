@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/UTF8StreamWriter.java,v $
-* $Date: 2001/08/31 00:19:16 $
-* $Revision: 1.2 $
+* $Date: 2001/09/19 23:33:52 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -56,7 +56,7 @@ public final class UTF8StreamWriter extends Writer {
         TRAILING_TOP = 0x80;
 
     private static final int MAGIC = 0x10000 + ((0 - 0xD800) << 10) + (0 - 0xDC00);
-
+    
     public final void write(char[] buffer, int cStart, int cLength) throws IOException {
         int cEnd = cStart + cLength;
         while (cStart < cEnd) {
@@ -71,6 +71,8 @@ public final class UTF8StreamWriter extends Writer {
             // get code point
 
             int utf32 = buffer[cStart++];
+            
+            if (utf32 == 0x0D) continue; // skip write
 
             // special check for surrogates
 

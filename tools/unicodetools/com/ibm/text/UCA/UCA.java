@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA.java,v $ 
-* $Date: 2001/09/06 01:30:31 $ 
-* $Revision: 1.3 $
+* $Date: 2001/09/19 23:32:21 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -766,21 +766,24 @@ final public class UCA {
     static final int EXCEPTION_CE_MASK = 0xFFC00000;
     
     /**
-     * Any unsupported characters (those not in the UCA data tables) 
-     * are marked with a exception bit combination
-     * so that they can be treated specially.<br>
-     * There are at least 34 values, so that we can use a range for surrogates
-     * However, we do add to the first weight if we have surrogate pairs!
-     */
-    static final int UNSUPPORTED = 0xFFC20101;
-    
-    /**
      * Used to composed Hangul and Han characters
      */
      
     static final int NEUTRAL_SECONDARY = 0x20;
     static final int NEUTRAL_TERTIARY = 0x02;
        
+    /**
+     * Any unsupported characters (those not in the UCA data tables) 
+     * are marked with a exception bit combination
+     * so that they can be treated specially.<br>
+     * There are at least 34 values, so that we can use a range for surrogates
+     * However, we do add to the first weight if we have surrogate pairs!
+     */
+    static final int UNSUPPORTED_P = 0xFFC2;
+    static final int UNSUPPORTED = makeKey(UNSUPPORTED_P, NEUTRAL_SECONDARY, NEUTRAL_TERTIARY);
+    
+    // was 0xFFC20101;
+    
     /**
      * Contracting characters are marked with a exception bit combination 
      * in the collationElement table.
@@ -968,9 +971,14 @@ final public class UCA {
             // in code order.
                     // add bottom 5 bits to UNSUPPORTED, and push rest
                     //return UNSUPPORTED + (bigChar & 0xFFFF0000);    // top bits added
+            expandingStack.push(makeKey((bigChar & 0x7FFF) | 0x8000, 0, 0)); // primary = bottom 15 bits plus turn bottom bit on.
+            // secondary and tertiary are both zero
+            return makeKey(UNSUPPORTED_P + (bigChar >> 15), NEUTRAL_SECONDARY, NEUTRAL_TERTIARY); // top 34 values plus UNSUPPORTED
+            /*
             expandingStack.push(((bigChar & 0x7FFF) << 16) | 0x10000000); // primary = bottom 15 bits plus turn bottom bit on.
             // secondary and tertiary are both zero
             return UNSUPPORTED + ((bigChar << 1) & 0xFFFF0000); // top 34 values plus UNSUPPORTED
+            */
         }
         if (ce == CONTRACTING) {
             // Contracting is probably the most interesting (read "tricky") part
@@ -1127,11 +1135,11 @@ final public class UCA {
         return new Hashtable(multiTable);
     }
     
-    public CollationContents getCollationContents(byte ceLimit, Normalizer skipDecomps) {
-        return new CollationContents(ceLimit, skipDecomps);
+    public UCAContents getContents(byte ceLimit, Normalizer skipDecomps) {
+        return new UCAContents(ceLimit, skipDecomps);
     }
     
-    public class CollationContents {
+    public class UCAContents {
         int current = -1;
         Normalizer skipDecomps = new Normalizer(Normalizer.NFD);
         Iterator enum = null;
@@ -1140,16 +1148,15 @@ final public class UCA {
         /**
          * use FIXED_CE as the limit
          */
-        CollationContents(byte ceLimit, Normalizer skipDecomps) {
+        UCAContents(byte ceLimit, Normalizer skipDecomps) {
             this.ceLimit = ceLimit;
             this.skipDecomps = skipDecomps;
         }
-       
+        
         /**
-         * returns a string and its ces
+         * returns a string
          */
-        public String next(int[] ces, int[] len) {
-
+        public String next() {
             String result = null; // null if done
             
             // normal case
@@ -1158,7 +1165,6 @@ final public class UCA {
                 if (getCEType(ch) >= ceLimit) continue;
                 if (skipDecomps != null && skipDecomps.hasDecomposition(ch)) continue;
                 result = String.valueOf(ch);
-                len[0] = getCEs(result, true, ces);
                 return result;
             }
             
@@ -1166,10 +1172,35 @@ final public class UCA {
             if (enum == null) enum = multiTable.keySet().iterator();
             if (enum.hasNext()) {
                 result = (String)enum.next();
-                len[0] = getCEs(result, true, ces);
             }
             
             return result;
+        }
+        
+       
+        /**
+         * returns a string and its ces
+         */
+        public String next(int[] ces, int[] len) {
+
+            String result = next(); // null if done
+            if (result != null) {
+                len[0] = getCEs(result, true, ces);
+            }
+            return result;
+        }
+        
+        int[] lengthBuffer = new int[1];
+        
+        /**
+         * returns a string and its ces
+         */
+        public boolean next(Pair result) {
+            String s = next(ceListBuffer, lengthBuffer);
+            if (s == null) return false;
+            result.first = new CEList(ceListBuffer, 0, lengthBuffer[0]);
+            result.second = s;
+            return true;
         }
     }
     

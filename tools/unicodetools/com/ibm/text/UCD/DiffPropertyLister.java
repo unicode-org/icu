@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DiffPropertyLister.java,v $
-* $Date: 2001/08/31 00:30:17 $
-* $Revision: 1.2 $
+* $Date: 2001/09/19 23:33:16 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -17,14 +17,11 @@ import java.io.*;
 class DiffPropertyLister extends PropertyLister {
     private UCD oldUCD;
 
-    public DiffPropertyLister(String oldUCDName, String newUCDName, PrintStream output) {
+    public DiffPropertyLister(String oldUCDName, String newUCDName, PrintWriter output) {
         this.output = output;
         this.ucdData = UCD.make(newUCDName);
         if (oldUCDName != null) this.oldUCD = UCD.make(oldUCDName);
-    }
-
-    public byte status (int cp) {
-        return INCLUDE;
+        breakByCategory = false;
     }
 
     public String propertyName(int cp) {
@@ -42,14 +39,23 @@ class DiffPropertyLister extends PropertyLister {
     */
 
 
-    public byte status(int lastCp, int cp) {
+    public byte status(int cp) {
         /*if (cp == 0xFFFF) {
             System.out.println("# " + Utility.hex(cp));
         }
         */
         return ucdData.isAllocated(cp) && (oldUCD == null || !oldUCD.isAllocated(cp)) ? INCLUDE : EXCLUDE;
     }
-
+    
+    public String headerString() {
+        if (oldUCD != null) {
+            return "# Differences between " + ucdData.getVersion() + " and " + oldUCD.getVersion();
+        } else {
+            return "# Allocated as of " + ucdData.getVersion();
+        }
+    }
+    
+    /*
     public int print() {
         String status;
         if (oldUCD != null) {
@@ -73,6 +79,7 @@ class DiffPropertyLister extends PropertyLister {
         output.println();
         return count;
     }
+    */
 
 }
 
