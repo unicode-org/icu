@@ -364,6 +364,10 @@ uhash_hashUChars(const void *key);
 U_CAPI int32_t
 uhash_hashChars(const void *key);
 
+/* Used by UnicodeString to compute its hashcode - Not public API. */
+U_CAPI int32_t
+uhash_hashUCharsN(const UChar *key, int32_t length);
+
 /**
  * Generate a case-insensitive hash code for a null-terminated char*
  * string.  If the string is not null-terminated do not use this
