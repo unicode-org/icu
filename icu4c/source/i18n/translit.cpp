@@ -36,7 +36,7 @@
  * <li><code>REVERSE_RULE_BASED_PLACEHOLDER</code>.  Like
  * <code>RULE_BASED_PLACEHOLDER</code>, except the entity names in
  * the ID are reversed, and the argument
- * RuleBasedTransliterator.REVERSE is pased to the
+ * RuleBasedTransliterator::REVERSE is pased to the
  * RuleBasedTransliterator constructor.
  * </ul>
  */
@@ -628,8 +628,8 @@ Transliterator* Transliterator::_createInstance(const UnicodeString& ID) {
         if (rules != 0 && U_SUCCESS(status)) {
 
             data = TransliterationRuleParser::parse(*rules, isReverse
-                                                    ? RuleBasedTransliterator.REVERSE
-                                                    : RuleBasedTransliterator.FORWARD);
+                                    ? RuleBasedTransliterator::REVERSE
+                                    : RuleBasedTransliterator::FORWARD);
             
             // Double check to see if someone has modified the entry
             // since we last looked at it.
