@@ -16,6 +16,8 @@
 *                           numerous feature enhancements and bug fixes.
 *    08/10/98    stephen        JDK 1.2 sync.
 *    09/17/98    stephen        Fixed getOffset() for last hour of year and DST
+*   12/02/99    aliu        Added TimeMode and constructor and setStart/EndRule
+*                           methods that take TimeMode. Whitespace cleanup.
 ********************************************************************************
 */
 
@@ -29,7 +31,7 @@ char SimpleTimeZone::fgClassID = 0; // Value is irrelevant
 // since we don't handle leap years. Could handle assuming always
 // Gregorian, since we know they didn't have daylight time when
 // Gregorian calendar started.
-const int32_t SimpleTimeZone::staticMonthLength[] = {31,28,31,30,31,30,31,31,30,31,30,31};
+const int8_t SimpleTimeZone::staticMonthLength[] = {31,28,31,30,31,30,31,31,30,31,30,31};
 
 // *****************************************************************************
 // class SimpleTimeZone
@@ -42,10 +44,12 @@ SimpleTimeZone::SimpleTimeZone(int32_t rawOffset, const UnicodeString& ID)
     startDay(0),
     startDayOfWeek(0),
     startTime(0),
+    startTimeMode(WALL_TIME),
     endMonth(0),
     endDay(0),
     endDayOfWeek(0),
     endTime(0),
+    endTimeMode(WALL_TIME),
     startYear(0),
     dstSavings(U_MILLIS_PER_HOUR),
     startMode(DOM_MODE),
@@ -62,24 +66,13 @@ SimpleTimeZone::SimpleTimeZone(int32_t rawOffset, const UnicodeString& ID,
     int8_t startDayOfWeek, int32_t startTime,
     int8_t endMonth, int8_t endDay,
     int8_t endDayOfWeek, int32_t endTime,
-    UErrorCode& status)
-:   startYear(0)
-{
-    setID(ID);
-    this->rawOffset     = rawOffset;
-    this->startMonth     = startMonth;
-    this->startDay         = startDay;
-    this->startDayOfWeek= startDayOfWeek;
-    this->startTime     = startTime;
-    this->endMonth         = endMonth;
-    this->endDay         = endDay;
-    this->endDayOfWeek     = endDayOfWeek;
-    this->endTime         = endTime;
-    this->dstSavings     = U_MILLIS_PER_HOUR;
-    this->startMode      = DOM_MODE;
-    this->endMode        = DOM_MODE;
-
-    decodeRules(status);
+    UErrorCode& status) {
+    construct(rawOffset, ID,
+              startMonth, startDay, startDayOfWeek,
+              startTime, WALL_TIME,
+              endMonth, endDay, endDayOfWeek,
+              endTime, WALL_TIME,
+              U_MILLIS_PER_HOUR, status);
 }
 
 // -------------------------------------
@@ -89,26 +82,61 @@ SimpleTimeZone::SimpleTimeZone(int32_t rawOffset, const UnicodeString& ID,
     int8_t startDayOfWeek, int32_t startTime,
     int8_t endMonth, int8_t endDay,
     int8_t endDayOfWeek, int32_t endTime,
-    int32_t dstSavings, UErrorCode& status)
-:   startYear(0)
-{
-    setID(ID);
-    this->rawOffset     = rawOffset;
+    int32_t dstSavings, UErrorCode& status) {
+    construct(rawOffset, ID,
+              startMonth, startDay, startDayOfWeek,
+              startTime, WALL_TIME,
+              endMonth, endDay, endDayOfWeek,
+              endTime, WALL_TIME,
+              dstSavings, status);
+}
+
+// -------------------------------------
+
+SimpleTimeZone::SimpleTimeZone(int32_t rawOffset, const UnicodeString& ID,
+    int8_t startMonth, int8_t startDay,
+    int8_t startDayOfWeek, int32_t startTime, TimeMode startTimeMode,
+    int8_t endMonth, int8_t endDay,
+    int8_t endDayOfWeek, int32_t endTime, TimeMode endTimeMode,
+    int32_t dstSavings, UErrorCode& status) {
+    construct(rawOffset, ID,
+              startMonth, startDay, startDayOfWeek,
+              startTime, startTimeMode,
+              endMonth, endDay, endDayOfWeek,
+              endTime, endTimeMode,
+              dstSavings, status);
+}
+
+/**
+ * Internal construction method.
+ */
+void SimpleTimeZone::construct(int32_t rawOffset, const UnicodeString& ID,
+                               int8_t startMonth, int8_t startDay, int8_t startDayOfWeek,
+                               int32_t startTime, TimeMode startTimeMode,
+                               int8_t endMonth, int8_t endDay, int8_t endDayOfWeek,
+                               int32_t endTime, TimeMode endTimeMode,
+                               int32_t dstSavings, UErrorCode& status) {
+    this->rawOffset      = rawOffset;
     this->startMonth     = startMonth;
-    this->startDay         = startDay;
-    this->startDayOfWeek= startDayOfWeek;
-    this->startTime     = startTime;
-    this->endMonth         = endMonth;
+    this->startDay       = startDay;
+    this->startDayOfWeek = startDayOfWeek;
+    this->startTime      = startTime;
+    this->startTimeMode  = startTimeMode;
+    this->endMonth       = endMonth;
     this->endDay         = endDay;
-    this->endDayOfWeek     = endDayOfWeek;
-    this->endTime         = endTime;
+    this->endDayOfWeek   = endDayOfWeek;
+    this->endTime        = endTime;
+    this->endTimeMode    = endTimeMode;
     this->dstSavings     = dstSavings;
+
+    setID(ID);
+    this->startYear      = 0;
     this->startMode      = DOM_MODE;
     this->endMode        = DOM_MODE;
 
     decodeRules(status);
 
-    if(dstSavings <= 0) {
+    if (dstSavings <= 0) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
     }
 }
@@ -136,20 +164,22 @@ SimpleTimeZone::operator=(const SimpleTimeZone &right)
     if (this != &right)
     {
         TimeZone::operator=(right);
-        rawOffset         = right.rawOffset;
-        startMonth         = right.startMonth;
-        startDay         = right.startDay;
-        startDayOfWeek     = right.startDayOfWeek;
-        startTime         = right.startTime;
-        startMode         = right.startMode;
-        endMonth         = right.endMonth;
-        endDay             = right.endDay;
-        endDayOfWeek     = right.endDayOfWeek;
-        endTime         = right.endTime;
-        endMode         = right.endMode;
-        startYear         = right.startYear;
-        dstSavings         = right.dstSavings;
-        useDaylight     = right.useDaylight;
+        rawOffset      = right.rawOffset;
+        startMonth     = right.startMonth;
+        startDay       = right.startDay;
+        startDayOfWeek = right.startDayOfWeek;
+        startTime      = right.startTime;
+        startTimeMode  = right.startTimeMode;
+        startMode      = right.startMode;
+        endMonth       = right.endMonth;
+        endDay         = right.endDay;
+        endDayOfWeek   = right.endDayOfWeek;
+        endTime        = right.endTime;
+        endTimeMode    = right.endTimeMode;
+        endMode        = right.endMode;
+        startYear      = right.startYear;
+        dstSavings     = right.dstSavings;
+        useDaylight    = right.useDaylight;
     }
     return *this;
 }
@@ -234,12 +264,13 @@ SimpleTimeZone::setStartYear(int32_t year)
  
 void
 SimpleTimeZone::setStartRule(int32_t month, int32_t dayOfWeekInMonth, int32_t dayOfWeek,
-                         int32_t time, UErrorCode& status)
+                             int32_t time, TimeMode mode, UErrorCode& status)
 {
-    startMonth         = month;
-    startDay         = dayOfWeekInMonth;
-    startDayOfWeek     = dayOfWeek;
-    startTime         = time;
+    startMonth     = (int8_t)month;
+    startDay       = (int8_t)dayOfWeekInMonth;
+    startDayOfWeek = (int8_t)dayOfWeek;
+    startTime      = time;
+    startTimeMode  = mode;
     decodeStartRule(status);
 }
 
@@ -247,21 +278,19 @@ SimpleTimeZone::setStartRule(int32_t month, int32_t dayOfWeekInMonth, int32_t da
 
 void 
 SimpleTimeZone::setStartRule(int32_t month, int32_t dayOfMonth, 
-                                int32_t time, UErrorCode& status) 
+                             int32_t time, TimeMode mode, UErrorCode& status) 
 {
-    setStartRule(month, dayOfMonth, 0, time, status);
+    setStartRule(month, dayOfMonth, 0, time, mode, status);
 }
 
 // -------------------------------------
 
 void 
 SimpleTimeZone::setStartRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek, 
-                                int32_t time, bool_t after, UErrorCode& status)
+                             int32_t time, TimeMode mode, bool_t after, UErrorCode& status)
 {
-    if (after)
-        setStartRule(month, dayOfMonth, -dayOfWeek, time, status);
-    else
-        setStartRule(month, -dayOfMonth, -dayOfWeek, time, status);
+    setStartRule(month, after ? dayOfMonth : -dayOfMonth,
+                 -dayOfWeek, time, mode, status);
 }
 
 // -------------------------------------
@@ -286,12 +315,13 @@ SimpleTimeZone::setStartRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWee
 
 void
 SimpleTimeZone::setEndRule(int32_t month, int32_t dayOfWeekInMonth, int32_t dayOfWeek,
-                       int32_t time, UErrorCode& status)
+                           int32_t time, TimeMode mode, UErrorCode& status)
 {
-    endMonth     = month;
-    endDay         = dayOfWeekInMonth;
-    endDayOfWeek= dayOfWeek;
-    endTime     = time;
+    endMonth     = (int8_t)month;
+    endDay       = (int8_t)dayOfWeekInMonth;
+    endDayOfWeek = (int8_t)dayOfWeek;
+    endTime      = time;
+    endTimeMode  = mode;
     decodeEndRule(status);
 }
 
@@ -299,21 +329,19 @@ SimpleTimeZone::setEndRule(int32_t month, int32_t dayOfWeekInMonth, int32_t dayO
 
 void 
 SimpleTimeZone::setEndRule(int32_t month, int32_t dayOfMonth, 
-                            int32_t time, UErrorCode& status)
+                           int32_t time, TimeMode mode, UErrorCode& status)
 {
-    setEndRule(month, dayOfMonth, 0, time, status);
+    setEndRule(month, dayOfMonth, 0, time, mode, status);
 }
 
 // -------------------------------------
 
 void 
 SimpleTimeZone::setEndRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek, 
-                            int32_t time, bool_t after, UErrorCode& status)
+                           int32_t time, TimeMode mode, bool_t after, UErrorCode& status)
 {
-    if (after)
-        setEndRule(month, dayOfMonth, -dayOfWeek, time, status);
-    else
-        setEndRule(month, -dayOfMonth, -dayOfWeek, time, status);
+    setEndRule(month, after ? dayOfMonth : -dayOfMonth,
+               -dayOfWeek, time, mode, status);
 }
 
 // -------------------------------------
@@ -349,8 +377,33 @@ SimpleTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
 
 int32_t 
 SimpleTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
-                           uint8_t dayOfWeek, int32_t millis, 
-                           int32_t monthLength, UErrorCode& status) const
+                          uint8_t dayOfWeek, int32_t millis, 
+                          int32_t monthLength, UErrorCode& status) const {
+    // Check the month before indexing into staticMonthLength. This
+	// duplicates a test that occurs in the 9-argument getOffset(),
+	// however, this is unavoidable. We don't mind because this method, in
+	// fact, should not be called; internal code should always call the
+	// 9-argument getOffset(), and outside code should use Calendar.get(int
+	// field) with fields ZONE_OFFSET and DST_OFFSET. We can't get rid of
+	// this method because it's public API. - liu 8/10/98
+    if (month < Calendar::JANUARY
+        || month > Calendar::DECEMBER) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return -1;
+    }
+
+    // TODO FIX We don't handle leap years yet!
+	int32_t prevMonthLength = (month >= 1) ? staticMonthLength[month - 1] : 31;
+
+    return getOffset(era, year, month, day, dayOfWeek, millis,
+                     monthLength, prevMonthLength, status);
+}
+
+int32_t 
+SimpleTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
+                          uint8_t dayOfWeek, int32_t millis, 
+                          int32_t monthLength, int32_t prevMonthLength,
+                          UErrorCode& status) const
 {
     if(U_FAILURE(status)) return 0;
 
@@ -381,9 +434,11 @@ SimpleTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
 
     // Compare the date to the starting and ending rules.+1 = date>rule, -1
     // = date<rule, 0 = date==rule.
-    int32_t startCompare = compareToRule(month, monthLength, day, dayOfWeek, millis,
-                                     startMode, startMonth, startDayOfWeek,
-                                     startDay, startTime);
+    int32_t startCompare = compareToRule((int8_t)month, (int8_t)monthLength, (int8_t)prevMonthLength,
+                                         (int8_t)day, (int8_t)dayOfWeek, millis,
+                                         startTimeMode == UTC_TIME ? -rawOffset : 0,
+                                         startMode, (int8_t)startMonth, (int8_t)startDayOfWeek,
+                                         (int8_t)startDay, startTime);
     int32_t endCompare = 0;
 
     /* We don't always have to compute endCompare.  For many instances,
@@ -393,22 +448,12 @@ SimpleTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
      * must have DST.  This is reflected in the way the next if statement
      * (not the one immediately following) short circuits. */
     if(southern != (startCompare >= 0)) {
-        /* For the ending rule comparison, we add the dstSavings to the millis
-         * passed in to convert them from standard to wall time.  We then must
-         * normalize the millis to the range 0..millisPerDay-1. */
-        millis += dstSavings; // Assume dstSavings > 0
-        while(millis >= U_MILLIS_PER_DAY) {
-            millis -= U_MILLIS_PER_DAY;
-            ++day;
-            dayOfWeek = 1 + (dayOfWeek % 7); // Assume dayOfWeek is one-based
-            if (day > monthLength) {
-                day = 1;
-                ++month;
-            }
-        }
-        endCompare = compareToRule(month, monthLength, day, dayOfWeek, millis,
-                                   endMode, endMonth, endDayOfWeek,
-                                   endDay, endTime);
+        endCompare = compareToRule((int8_t)month, (int8_t)monthLength, (int8_t)prevMonthLength,
+                                   (int8_t)day, (int8_t)dayOfWeek, millis,
+                                   endTimeMode == WALL_TIME ? dstSavings :
+                                    (endTimeMode == UTC_TIME ? -rawOffset : 0),
+                                   endMode, (int8_t)endMonth, (int8_t)endDayOfWeek,
+                                   (int8_t)endDay, endTime);
     }
 
     // Check for both the northern and southern hemisphere cases.  We
@@ -434,11 +479,37 @@ SimpleTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
  *          the rule date, or 0 if the date is equal to the rule date.
  */
 int32_t 
-SimpleTimeZone::compareToRule(int32_t month, int32_t monthLen, int32_t dayOfMonth,
-                                 int32_t dayOfWeek, int32_t millis,
-                                 EMode ruleMode, int32_t ruleMonth, int32_t ruleDayOfWeek,
-                                 int32_t ruleDay, int32_t ruleMillis)
+SimpleTimeZone::compareToRule(int8_t month, int8_t monthLen, int8_t prevMonthLen,
+                              int8_t dayOfMonth,
+                              int8_t dayOfWeek, int32_t millis, int32_t millisDelta,
+                              EMode ruleMode, int8_t ruleMonth, int8_t ruleDayOfWeek,
+                              int8_t ruleDay, int32_t ruleMillis)
 {
+    // Make adjustments for startTimeMode and endTimeMode
+    millis += millisDelta;
+    while (millis >= U_MILLIS_PER_DAY) {
+        millis -= U_MILLIS_PER_DAY;
+        ++dayOfMonth;
+        dayOfWeek = 1 + (dayOfWeek % 7); // dayOfWeek is one-based
+        if (dayOfMonth > monthLen) {
+            dayOfMonth = 1;
+            /* When incrementing the month, it is desirible to overflow
+             * from DECEMBER to DECEMBER+1, since we use the result to
+             * compare against a real month. Wraparound of the value
+             * leads to bug 4173604. */
+            ++month;
+        }
+    }
+    while (millis < 0) {
+        millis += U_MILLIS_PER_DAY;
+        --dayOfMonth;
+        dayOfWeek = 1 + ((dayOfWeek+5) % 7); // dayOfWeek is one-based
+        if (dayOfMonth < 1) {
+            dayOfMonth = prevMonthLen;
+            --month;
+        }
+    }
+
     // first compare months.  If they're different, we don't have to worry about days
     // and times
     if (month < ruleMonth) return -1;
@@ -589,17 +660,19 @@ SimpleTimeZone::hasSameRules(const TimeZone& other) const
         (!useDaylight
          // Only check rules if using DST
          || (dstSavings     == that->dstSavings &&
-             startMode         == that->startMode &&
+             startMode      == that->startMode &&
              startMonth     == that->startMonth &&
-             startDay         == that->startDay &&
+             startDay       == that->startDay &&
              startDayOfWeek == that->startDayOfWeek &&
-             startTime         == that->startTime &&
-             endMode         == that->endMode &&
-             endMonth         == that->endMonth &&
+             startTime      == that->startTime &&
+             startTimeMode  == that->startTimeMode &&
+             endMode        == that->endMode &&
+             endMonth       == that->endMonth &&
              endDay         == that->endDay &&
-             endDayOfWeek     == that->endDayOfWeek &&
-             endTime         == that->endTime &&
-             startYear         == that->startYear));
+             endDayOfWeek   == that->endDayOfWeek &&
+             endTime        == that->endTime &&
+             endTimeMode    == that->endTimeMode &&
+             startYear      == that->startYear));
 }
 
 // -------------------------------------
@@ -709,7 +782,8 @@ SimpleTimeZone::decodeStartRule(UErrorCode& status)
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
-        if (startTime < 0 || startTime > U_MILLIS_PER_DAY) {
+        if (startTime < 0 || startTime > U_MILLIS_PER_DAY ||
+            startTimeMode < WALL_TIME || startTimeMode > UTC_TIME) {
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
@@ -760,7 +834,8 @@ SimpleTimeZone::decodeEndRule(UErrorCode& status)
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
-        if (endTime < 0 || endTime > U_MILLIS_PER_DAY) {
+        if (endTime < 0 || endTime > U_MILLIS_PER_DAY ||
+            endTimeMode < WALL_TIME || endTimeMode > UTC_TIME) {
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
