@@ -216,7 +216,8 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
                                  const ValueRuns  *levelRuns,
                                  const ValueRuns  *scriptRuns,
                                  const LocaleRuns *localeRuns,
-                                 UBiDiLevel paragraphLevel, le_bool vertical)
+                                 UBiDiLevel paragraphLevel, le_bool vertical,
+								 LEErrorCode &status)
                                  : fChars(chars), fCharCount(count),
                                    fFontRuns(NULL), fLevelRuns(levelRuns), fScriptRuns(scriptRuns), fLocaleRuns(localeRuns),
                                    fVertical(vertical), fClientLevels(true), fClientScripts(true), fClientLocales(true), fEmbeddingLevels(NULL),
@@ -228,6 +229,12 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
                                  /*fVisualRuns(NULL), fStyleRunInfo(NULL), fVisualRunCount(-1),
                                    fFirstVisualRun(-1), fLastVisualRun(-1),*/ fVisualRunLastX(0), fVisualRunLastY(0)
 {
+
+	if (LE_FAILURE(status)) {
+		fCharCount = -1;
+		return;
+	}
+
     // FIXME: should check the limit arrays for consistency...
 
     computeLevels(paragraphLevel);
@@ -240,7 +247,13 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
         computeLocales();
     }
 
-    computeSubFonts(fontRuns);
+    computeSubFonts(fontRuns, status);
+
+	if (LE_FAILURE(status)) {
+		//other stuff?
+		fCharCount = -1;
+		return;
+	}
 
     // now intersect the font, direction and script runs...
     const RunArray *styleRunArrays[] = {fFontRuns, fLevelRuns, fScriptRuns, fLocaleRuns};
@@ -448,7 +461,7 @@ le_bool ParagraphLayout::isComplex(const LEUnicode chars[], le_int32 count)
 
 le_int32 ParagraphLayout::getAscent() const
 {
-    if (fAscent <= 0) {
+    if (fAscent <= 0 && fCharCount > 0) {
         ((ParagraphLayout *) this)->computeMetrics();
     }
 
@@ -457,7 +470,7 @@ le_int32 ParagraphLayout::getAscent() const
 
 le_int32 ParagraphLayout::getDescent() const
 {
-    if (fAscent <= 0) {
+    if (fAscent <= 0 && fCharCount > 0) {
         ((ParagraphLayout *) this)->computeMetrics();
     }
 
@@ -466,7 +479,7 @@ le_int32 ParagraphLayout::getDescent() const
 
 le_int32 ParagraphLayout::getLeading() const
 {
-    if (fAscent <= 0) {
+    if (fAscent <= 0 && fCharCount > 0) {
         ((ParagraphLayout *) this)->computeMetrics();
     }
 
@@ -587,8 +600,12 @@ void ParagraphLayout::computeLocales()
     fClientLocales = false;
 }
 
-void ParagraphLayout::computeSubFonts(const FontRuns *fontRuns)
+void ParagraphLayout::computeSubFonts(const FontRuns *fontRuns, LEErrorCode &status)
 {
+	if (LE_FAILURE(status)) {
+		return;
+	}
+
     const RunArray *styleRunArrays[] = {fontRuns, fScriptRuns};
     le_int32 styleCount = sizeof styleRunArrays / sizeof styleRunArrays[0];
     StyleRuns styleRuns(styleRunArrays, styleCount);
@@ -606,10 +623,14 @@ void ParagraphLayout::computeSubFonts(const FontRuns *fontRuns)
     for (run = 0; run < styleRunCount; run += 1) {
         const LEFontInstance *runFont = fontRuns->getFont(si[0]);
         le_int32 script = fScriptRuns->getValue(si[1]);
-        LEErrorCode success = LE_NO_ERROR;
 
         while (offset < styleRunLimits[run]) {
-            const LEFontInstance *subFont = runFont->getSubFont(fChars, &offset, styleRunLimits[run], script, success);
+            const LEFontInstance *subFont = runFont->getSubFont(fChars, &offset, styleRunLimits[run], script, status);
+
+			if (LE_FAILURE(status)) {
+				delete subFontRuns;
+				goto cleanUp;
+			}
 
             subFontRuns->add(subFont, offset);
         }
@@ -619,6 +640,7 @@ void ParagraphLayout::computeSubFonts(const FontRuns *fontRuns)
 
     fFontRuns = subFontRuns;
 
+cleanUp:
     LE_DELETE_ARRAY(styleIndices);
     LE_DELETE_ARRAY(styleRunLimits);
 }
@@ -949,6 +971,15 @@ le_int32 ParagraphLayout::Line::getLeading() const
     }
 
     return fLeading;
+}
+
+le_int32 ParagraphLayout::Line::getWidth() const
+{
+	const VisualRun *lastRun = getVisualRun(fRunCount - 1);
+	le_int32 glyphCount = lastRun->getGlyphCount();
+	const float *positions = lastRun->getPositions();
+	
+	return (le_int32) positions[glyphCount * 2];
 }
 
 const ParagraphLayout::VisualRun *ParagraphLayout::Line::getVisualRun(le_int32 runIndex) const
