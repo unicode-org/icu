@@ -177,22 +177,23 @@ compareBytes(UCMTable *lTable, const UCMapping *l,
 
 /* compare UCMappings for sorting */
 static int32_t
-compareMappings(UCMTable *table, const void *left, const void *right, UBool uFirst) {
-    const UCMapping *l=(const UCMapping *)left, *r=(const UCMapping *)right;
+compareMappings(UCMTable *lTable, const UCMapping *l,
+                UCMTable *rTable, const UCMapping *r,
+                UBool uFirst) {
     int32_t result;
 
     /* choose which side to compare first */
     if(uFirst) {
         /* Unicode then bytes */
-        result=compareUnicode(table, l, table, r);
+        result=compareUnicode(lTable, l, rTable, r);
         if(result==0) {
-            result=compareBytes(table, l, table, r, FALSE); /* not lexically, like canonucm */
+            result=compareBytes(lTable, l, rTable, r, FALSE); /* not lexically, like canonucm */
         }
     } else {
         /* bytes then Unicode */
-        result=compareBytes(table, l, table, r, TRUE); /* lexically, for builder */
+        result=compareBytes(lTable, l, rTable, r, TRUE); /* lexically, for builder */
         if(result==0) {
-            result=compareUnicode(table, l, table, r);
+            result=compareUnicode(lTable, l, rTable, r);
         }
     }
 
@@ -207,7 +208,9 @@ compareMappings(UCMTable *table, const void *left, const void *right, UBool uFir
 /* sorting by Unicode first sorts mappings directly */
 static int32_t
 compareMappingsUnicodeFirst(const void *context, const void *left, const void *right) {
-    return compareMappings((UCMTable *)context, left, right, TRUE);
+    return compareMappings(
+        (UCMTable *)context, (const UCMapping *)left,
+        (UCMTable *)context, (const UCMapping *)right, TRUE);
 }
 
 /* sorting by bytes first sorts the reverseMap; use indirection to mappings */
@@ -215,7 +218,9 @@ static int32_t
 compareMappingsBytesFirst(const void *context, const void *left, const void *right) {
     UCMTable *table=(UCMTable *)context;
     int32_t l=*(const int32_t *)left, r=*(const int32_t *)right;
-    return compareMappings(table, table->mappings+l, table->mappings+r, FALSE);
+    return compareMappings(
+        table, table->mappings+l,
+        table, table->mappings+r, FALSE);
 }
 
 U_CAPI void U_EXPORT2
@@ -260,28 +265,6 @@ ucm_sortTable(UCMTable *t) {
     }
 }
 
-/*
-
-### TODO normalization function for a table (in or for rptp2ucm)
-sort table
-if there are mappings with the same code points and bytes but |1 and |3, merge them into one |0 (or make |2 where necessary)
-if mappings were merged, sort again
--> for rptp2ucm
-
-*/
-
-/* lookups ------------------------------------------------------------------ */
-
-/*
-### TODO lookups?
-
-binary search for first mapping with some code point or byte sequence
-check if a code point is the first of any mapping (RT or FB)
-check if a byte sequence is a prefix of any mapping (RT or RFB)
-check if there is a mapping with the same source units; return whether the target is same or different
-
-*/
-
 enum {
     MOVE_TO_EXT=0x10,
     REMOVE_MAPPING=0x20,
@@ -291,23 +274,23 @@ enum {
 /*
  * move mappings with MOVE_ANY ored into their flags from the base table
  * to the extension table
+ *
+ * works only with explicit precision flags because it uses some of the
+ * flags bits
  */
 static void
 moveMappings(UCMTable *base, UCMTable *ext) {
     UCMapping *mb, *mbLimit;
     int8_t flag;
-    UBool didMove;
 
     mb=base->mappings;
     mbLimit=mb+base->mappingsLength;
-    didMove=FALSE;
 
     while(mb<mbLimit) {
         flag=mb->f;
         if(flag&MOVE_ANY) {
             /* restore the original flag value */
             mb->f=flag&~MOVE_ANY;
-            didMove=TRUE;
 
             if(ext!=NULL && (flag&MOVE_TO_EXT)) {
                 /* add the mapping to the extension table */
@@ -322,15 +305,6 @@ moveMappings(UCMTable *base, UCMTable *ext) {
             --base->mappingsLength;
         } else {
             ++mb;
-        }
-    }
-
-    if(didMove) {
-        ucm_sortTable(base);
-        ucm_printTable(base, stdout, TRUE); puts(""); /* ### TODO */
-        if(ext!=NULL) {
-            ucm_sortTable(ext);
-            ucm_printTable(ext, stdout, TRUE); puts(""); /* ### TODO */
         }
     }
 }
@@ -577,9 +551,156 @@ ucm_checkBaseExt(UCMStates *baseStates, UCMTable *base, UCMTable *ext, UBool mov
     if(result&NEEDS_MOVE) {
         moveMappings(ext, NULL);
         moveMappings(base, ext);
+        ucm_sortTable(base);
+        ucm_sortTable(ext);
     }
 
     return TRUE;
+}
+
+/* merge tables for rptp2ucm ------------------------------------------------ */
+
+U_CAPI void U_EXPORT2
+ucm_mergeTables(UCMTable *fromUTable, UCMTable *toUTable,
+                const uint8_t *subchar, int32_t subcharLength,
+                uint8_t subchar1) {
+    UCMapping *fromUMapping, *toUMapping;
+    int32_t fromUIndex, toUIndex, fromUTop, toUTop, cmp;
+
+    ucm_sortTable(fromUTable);
+    ucm_sortTable(toUTable);
+
+    fromUMapping=fromUTable->mappings;
+    toUMapping=toUTable->mappings;
+
+    fromUTop=fromUTable->mappingsLength;
+    toUTop=toUTable->mappingsLength;
+
+    fromUIndex=toUIndex=0;
+
+    while(fromUIndex<fromUTop && toUIndex<toUTop) {
+        cmp=compareMappings(fromUTable, fromUMapping, toUTable, toUMapping, TRUE);
+        if(cmp==0) {
+            /* equal: roundtrip, nothing to do (flags are initially 0) */
+            ++fromUMapping;
+            ++toUMapping;
+
+            ++fromUIndex;
+            ++toUIndex;
+        } else if(cmp<0) {
+            /*
+             * the fromU mapping does not have a toU counterpart:
+             * fallback Unicode->codepage
+             */
+            if( (fromUMapping->bLen==subcharLength &&
+                 0==uprv_memcmp(UCM_GET_BYTES(fromUTable, fromUMapping), subchar, subcharLength) ||
+                (subchar1!=0 && fromUMapping->bLen==1 && fromUMapping->b.bytes[0]==subchar1))
+            ) {
+                fromUMapping->f=2; /* SUB mapping */
+            } else {
+                fromUMapping->f=1; /* normal fallback */
+            }
+
+            ++fromUMapping;
+            ++fromUIndex;
+        } else {
+            /*
+             * the toU mapping does not have a fromU counterpart:
+             * (reverse) fallback codepage->Unicode, copy it to the fromU table
+             */
+
+            /* ignore reverse fallbacks to Unicode SUB */
+            if(!(toUMapping->uLen==1 && (toUMapping->u==0xfffd || toUMapping->u==0x1a))) {
+                toUMapping->f=3; /* reverse fallback */
+                ucm_addMapping(fromUTable, toUMapping, UCM_GET_CODE_POINTS(toUTable, toUMapping), UCM_GET_BYTES(toUTable, toUMapping));
+
+                /* the table may have been reallocated */
+                fromUMapping=fromUTable->mappings+fromUIndex;
+            }
+
+            ++toUMapping;
+            ++toUIndex;
+        }
+    }
+
+    /* either one or both tables are exhausted */
+    while(fromUIndex<fromUTop) {
+        /* leftover fromU mappings are fallbacks */
+        if( (fromUMapping->bLen==subcharLength &&
+             0==uprv_memcmp(UCM_GET_BYTES(fromUTable, fromUMapping), subchar, subcharLength) ||
+            (subchar1!=0 && fromUMapping->bLen==1 && fromUMapping->b.bytes[0]==subchar1))
+        ) {
+            fromUMapping->f=2; /* SUB mapping */
+        } else {
+            fromUMapping->f=1; /* normal fallback */
+        }
+
+        ++fromUMapping;
+        ++fromUIndex;
+    }
+
+    while(toUIndex<toUTop) {
+        /* leftover toU mappings are reverse fallbacks */
+
+        /* ignore reverse fallbacks to Unicode SUB */
+        if(!(toUMapping->uLen==1 && (toUMapping->u==0xfffd || toUMapping->u==0x1a))) {
+            toUMapping->f=3; /* reverse fallback */
+            ucm_addMapping(fromUTable, toUMapping, UCM_GET_CODE_POINTS(toUTable, toUMapping), UCM_GET_BYTES(toUTable, toUMapping));
+        }
+
+        ++toUMapping;
+        ++toUIndex;
+    }
+}
+
+/* separate extension mappings out of base table for rptp2ucm --------------- */
+
+U_CAPI UBool U_EXPORT2
+ucm_separateMappings(UCMFile *ucm, UBool isSISO) {
+    UCMTable *table;
+    UCMapping *m, *mLimit;
+    int32_t type;
+    UBool needsMove, isOK;
+
+    table=ucm->base;
+    m=table->mappings;
+    mLimit=m+table->mappingsLength;
+
+    needsMove=FALSE;
+    isOK=TRUE;
+
+    for(; m<mLimit; ++m) {
+        if(isSISO && m->bLen==1 && (m->b.bytes[0]==0xe || m->b.bytes[0]==0xf)) {
+            fprintf(stderr, "warning: removing illegal mapping from an SI/SO-stateful table\n");
+            ucm_printMapping(table, m, stderr);
+            m->f|=REMOVE_MAPPING;
+            needsMove=TRUE;
+            continue;
+        }
+
+        type=ucm_mappingType(
+                &ucm->states, m,
+                UCM_GET_CODE_POINTS(table, m), UCM_GET_BYTES(table, m));
+        if(type<0) {
+            /* illegal byte sequence */
+            printMapping(m, UCM_GET_CODE_POINTS(table, m), UCM_GET_BYTES(table, m), stderr);
+            isOK=FALSE;
+        } else if(type>0) {
+            m->f|=MOVE_TO_EXT;
+            needsMove=TRUE;
+        }
+    }
+
+    if(!isOK) {
+        return FALSE;
+    }
+    if(needsMove) {
+        moveMappings(ucm->base, ucm->ext);
+        return ucm_checkBaseExt(&ucm->states, ucm->base, ucm->ext, TRUE);
+    } else {
+        ucm_sortTable(ucm->base);
+        return TRUE;
+    }
 }
 
 /* ucm parser --------------------------------------------------------------- */
@@ -588,6 +709,7 @@ U_CAPI int8_t U_EXPORT2
 ucm_parseBytes(uint8_t bytes[UCNV_EXT_MAX_BYTES], const char *line, const char **ps) {
     const char *s=*ps;
     char *end;
+    uint8_t byte;
     int8_t bLen;
 
     bLen=0;
@@ -600,17 +722,18 @@ ucm_parseBytes(uint8_t bytes[UCNV_EXT_MAX_BYTES], const char *line, const char *
             break;
         }
 
-        if(bLen==UCNV_EXT_MAX_BYTES) {
-            fprintf(stderr, "ucm error: too many bytes on \"%s\"\n", line);
-            return -1;
-        }
         if( s[1]!='x' ||
-            (bytes[bLen]=(uint8_t)uprv_strtoul(s+2, &end, 16), end)!=s+4
+            (byte=(uint8_t)uprv_strtoul(s+2, &end, 16), end)!=s+4
         ) {
             fprintf(stderr, "ucm error: byte must be formatted as \\xXX (2 hex digits) - \"%s\"\n", line);
             return -1;
         }
-        ++bLen;
+
+        if(bLen==UCNV_EXT_MAX_BYTES) {
+            fprintf(stderr, "ucm error: too many bytes on \"%s\"\n", line);
+            return -1;
+        }
+        bytes[bLen++]=byte;
         s=end;
     }
 
@@ -626,6 +749,7 @@ ucm_parseMappingLine(UCMapping *m,
                      const char *line) {
     const char *s;
     char *end;
+    UChar32 cp;
     int32_t u16Length;
     int8_t uLen, bLen, f;
 
@@ -642,22 +766,23 @@ ucm_parseMappingLine(UCMapping *m,
             break;
         }
 
-        if(uLen==UCNV_EXT_MAX_UCHARS) {
-            fprintf(stderr, "ucm error: too many code points on \"%s\"\n", line);
-            return FALSE;
-        }
         if( s[1]!='U' ||
-            (codePoints[uLen]=(UChar32)uprv_strtoul(s+2, &end, 16), end)==s+2 ||
+            (cp=(UChar32)uprv_strtoul(s+2, &end, 16), end)==s+2 ||
             *end!='>'
         ) {
             fprintf(stderr, "ucm error: Unicode code point must be formatted as <UXXXX> (1..6 hex digits) - \"%s\"\n", line);
             return FALSE;
         }
-        if((uint32_t)codePoints[uLen]>0x10ffff || U_IS_SURROGATE(codePoints[uLen])) {
+        if((uint32_t)cp>0x10ffff || U_IS_SURROGATE(cp)) {
             fprintf(stderr, "ucm error: Unicode code point must be 0..d7ff or e000..10ffff - \"%s\"\n", line);
             return FALSE;
         }
-        ++uLen;
+
+        if(uLen==UCNV_EXT_MAX_UCHARS) {
+            fprintf(stderr, "ucm error: too many code points on \"%s\"\n", line);
+            return FALSE;
+        }
+        codePoints[uLen++]=cp;
         s=end+1;
     }
 
@@ -864,47 +989,74 @@ ucm_close(UCMFile *ucm) {
     }
 }
 
+U_CAPI int32_t U_EXPORT2
+ucm_mappingType(UCMStates *baseStates,
+                UCMapping *m,
+                UChar32 codePoints[UCNV_EXT_MAX_UCHARS],
+                uint8_t bytes[UCNV_EXT_MAX_BYTES]) {
+    /* check validity of the bytes and count the characters in them */
+    int32_t count=ucm_countChars(baseStates, bytes, m->bLen);
+    if(count<1) {
+        /* illegal byte sequence */
+        return -1;
+    }
+
+    /*
+     * Suitable for an ICU conversion base table means:
+     * - a 1:1 mapping
+     * - not a |2 SUB mappings for <subchar1>
+     * - not a |1 fallback from something other than U+0000 to 0x00
+     */
+    if( m->uLen==1 && count==1 &&
+        !((m->f==2 && m->bLen==1 && baseStates->maxCharLength>1) ||
+          (m->f==1 && m->bLen==1 && bytes[0]==0 && !(m->uLen==1 && codePoints[0]==0)))
+    ) {
+        return 0; /* suitable for a base table */
+    } else {
+        return 1; /* needs to go into an extension table */
+    }
+}
+
+U_CAPI UBool U_EXPORT2
+ucm_addMappingAuto(UCMFile *ucm, UBool forBase, UCMStates *baseStates,
+                   UCMapping *m,
+                   UChar32 codePoints[UCNV_EXT_MAX_UCHARS],
+                   uint8_t bytes[UCNV_EXT_MAX_BYTES]) {
+    int32_t type;
+
+    if(baseStates!=NULL) {
+        /* check validity of the bytes and count the characters in them */
+        type=ucm_mappingType(baseStates, m, codePoints, bytes);
+        if(type<0) {
+            /* illegal byte sequence */
+            printMapping(m, codePoints, bytes, stderr);
+            return FALSE;
+        }
+    } else {
+        /* not used - adding a mapping for an extension-only table before its base table is read */
+        type=1;
+    }
+
+    /*
+     * Add the mapping to the base table if this is requested and suitable.
+     * Otherwise, add it to the extension table.
+     */
+    if(forBase && type==0) {
+        ucm_addMapping(ucm->base, m, codePoints, bytes);
+    } else {
+        ucm_addMapping(ucm->ext, m, codePoints, bytes);
+    }
+
+    return TRUE;
+}
+
 U_CAPI UBool U_EXPORT2
 ucm_addMappingFromLine(UCMFile *ucm, const char *line, UBool forBase, UCMStates *baseStates) {
     UCMapping m={ 0 };
     UChar32 codePoints[UCNV_EXT_MAX_UCHARS];
     uint8_t bytes[UCNV_EXT_MAX_BYTES];
-    int32_t count;
 
-    if(!ucm_parseMappingLine(&m, codePoints, bytes, line)) {
-        return FALSE;
-    }
-
-    if(baseStates!=NULL) {
-        /* check validity of the bytes and count the characters in them */
-        count=ucm_countChars(baseStates, bytes, m.bLen);
-        if(count<1) {
-            /* illegal byte sequence */
-            printMapping(&m, codePoints, bytes, stderr);
-            return FALSE;
-        }
-    } else {
-        /* not used - adding a mapping for an extension-only table before its base table is read */
-        count=0;
-    }
-
-    /*
-     * Add the mapping to the base table if this is requested
-     * and it is a 1:1 mapping.
-     * Otherwise, add it to the extension table.
-     *
-     * Also add |2 SUB mappings for <subchar1>
-     * and |1 fallbacks from something other than U+0000 to 0x00
-     * to the extension table.
-     */
-    if( forBase && m.uLen==1 && count==1 &&
-        !((m.f==2 && m.bLen==1 && ucm->states.maxCharLength>1) ||
-          (m.f==1 && m.bLen==1 && bytes[0]==0 && !(m.uLen==1 && codePoints[0]==0)))
-    ) {
-        ucm_addMapping(ucm->base, &m, codePoints, bytes);
-        return TRUE;
-    }
-
-    ucm_addMapping(ucm->ext, &m, codePoints, bytes);
-    return TRUE;
+    return
+        ucm_parseMappingLine(&m, codePoints, bytes, line) &&
+        ucm_addMappingAuto(ucm, forBase, baseStates, &m, codePoints, bytes);
 }
