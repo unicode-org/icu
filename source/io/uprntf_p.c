@@ -529,10 +529,7 @@ u_printf_uinteger_handler(const u_printf_stream_handler *handler,
         unum_setAttribute(format, UNUM_MIN_INTEGER_DIGITS, info->fPrecision);
     }
 
-    /* set whether to show the sign */
-    if(info->fShowSign) {
-        u_printf_set_sign(format, info, prefixBuffer, &prefixBufferLen, &status);
-    }
+    /* To mirror other stdio implementations, we ignore the sign argument */
 
     /* format the number */
     resultLen = unum_formatInt64(format, num, result, UPRINTF_BUFFER_SIZE, 0, &status);
@@ -544,12 +541,6 @@ u_printf_uinteger_handler(const u_printf_stream_handler *handler,
     /* restore the number format */
     if (minDigits != -1) {
         unum_setAttribute(format, UNUM_MIN_INTEGER_DIGITS, minDigits);
-    }
-
-    if (info->fShowSign) {
-        /* Reset back to original value regardless of what the error was */
-        UErrorCode localStatus = U_ZERO_ERROR;
-        u_printf_reset_sign(format, info, prefixBuffer, &prefixBufferLen, &localStatus);
     }
 
     return handler->pad_and_justify(context, info, result, resultLen);
