@@ -48,6 +48,10 @@ README text !eol
 *.spp -text
 *.tri2 -text
 
+icu4c/docs/collflow.gif -text
+icu4c/source/test/testdata/en_US.uni -text
+icu4c/source/test/testdata/uni-text.txt -text
+
 # The following file types are stored in Git-LFS.
 *.jar filter=lfs diff=lfs merge=lfs -text
 *.dat filter=lfs diff=lfs merge=lfs -text

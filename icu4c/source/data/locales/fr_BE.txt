@@ -1,0 +1,55 @@
+// ****************************************************************************
+// *                                                                          *
+// * COPYRIGHT:                                                               *
+// * (C) Copyright Taligent, Inc.,  1997                                      *
+// * (C) Copyright International Business Machines Corporation,  1997-99      *
+// * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
+// * US Government Users Restricted Rights - Use, duplication, or disclosure  *
+// * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
+// *                                                                          *
+// ****************************************************************************
+
+fr_BE {
+    CurrencyElements { 
+            "FB",
+            "BEF",
+            ",",
+    }
+    DateTimePatterns { 
+            "H' h 'mm' min 'ss' s 'z",
+            "H:mm:ss z",
+            "H:mm:ss",
+            "H:mm",
+            "EEEE d MMMM yyyy",
+            "d MMMM yyyy",
+            "dd-MMM-yy",
+            "d/MM/yy",
+            "{1} {0}",
+    }
+    LocaleID { "080c" }
+    LocaleString { "fr_BE" }
+    NumberElements { 
+            ",",
+            ".",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    ShortCountry { "BEL" }
+    localPatternChars { "GanjkHmsSEDFwWxhKz" }
+    zoneStrings { 
+        {
+                "Africa/Casablanca",
+                "GMT",
+                "GMT",
+                "GMT",
+                "GMT",
+        }
+    }
+}

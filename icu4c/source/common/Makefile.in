@@ -1,0 +1,128 @@
+## Makefile.in for ICU - icu.so
+## Stephen F. Booth
+
+## Shell to use
+SHELL = @SHELL@
+
+## Install directory information
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+
+bindir = @bindir@
+sbindir = @sbindir@
+datadir = @datadir@
+libdir = @libdir@
+includedir = @includedir@
+
+pkgdatadir = $(datadir)/@PACKAGE@
+pkglibdir = $(libdir)/@PACKAGE@
+pkgincludedir = $(includedir)/@PACKAGE@
+
+## Install program information
+mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
+
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_DATA = @INSTALL_DATA@
+
+## Compiler/tools information
+CC = @CC@
+CXX = @CXX@
+PACKAGE = @PACKAGE@
+VERSION = @VERSION@
+
+## Platform-specific setup
+@host_frag@
+
+## Build directory information
+top_builddir = ..
+subdir = common
+
+## Extra files to remove for 'make clean'
+CLEANFILES = *~
+
+## Target information
+TARGET = libicu-uc.$(SO)
+
+DEFS = @DEFS@
+CPPFLAGS = @CPPFLAGS@ -DICU_DATA_DIR=\"$(pkgdatadir)/$(VERSION)/\"
+CFLAGS = @CFLAGS@
+CXXFLAGS = @CXXFLAGS@
+LDFLAGS = @LDFLAGS@
+LIBS = @LIBS@
+
+OBJECTS = chariter.o umutex.o compdata.o compitr.o convert.o		\
+cpputils.o cstring.o dcmpdata.o digitlst.o filestrm.o locid.o locmap.o	\
+mutex.o normlzr.o putil.o rbcache.o resbund.o schriter.o scsu.o		\
+uchar.o uchriter.o ucmp8.o ucmp16.o ucmp32.o ucnv.o ucnv_bld.o		\
+ucnv_cnv.o ucnv_err.o ucnv_io.o uhash.o uloc.o unicode.o unistr.o	\
+ures.o ustring.o rbread.o rbdata.o
+
+DEPS = $(OBJECTS:.o=.d)
+
+## Header files to install
+HEADERS= utypes.h uloc.h ures.h ustring.h uchar.h chariter.h		\
+uchriter.h locid.h resbund.h unicode.h putil.h platform.h unistr.h	\
+schriter.h normlzr.h ucnv_err.h ucnv.h ucnv_bld.h convert.h
+
+## List of phony targets
+.PHONY : all all-local install install-local clean clean-local	\
+distclean distclean-local install-library install-headers dist	\
+dist-local check check-local
+
+## Clear suffix list
+.SUFFIXES :
+
+## List of standard targets
+all: all-local
+install: install-local
+clean: clean-local
+distclean : distclean-local
+dist: dist-local
+check: check-local
+
+all-local: $(TARGET)
+
+install-local: install-headers install-library
+
+install-library: all-local
+	$(mkinstalldirs) $(libdir)
+	$(INSTALL) $(TARGET) $(libdir)/$(TARGET)
+
+install-headers:
+	$(mkinstalldirs) $(includedir)
+	@list='$(HEADERS)'; for file in $$list; do \
+	 echo " $(INSTALL_DATA) $$file $(includedir)/$$file"; \
+	 $(INSTALL_DATA) $$file $(includedir)/$$file; \
+	done
+
+dist-local:
+
+clean-local:
+	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
+	rm -f $(OBJECTS) $(TARGET)
+
+distclean-local: clean-local
+	rm -f Makefile $(DEPS)
+
+check-local:
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+platform.h: $(srcdir)/platform.h.in $(top_builddir)/config.status
+	cd $(top_builddir) \
+	 && CONFIG_FILES= CONFIG_HEADERS=$(subdir)/$@ $(SHELL) ./config.status
+
+$(TARGET) : $(OBJECTS)
+	$(SHLIB.cc) -o $@ $^ $(LIBS)
+
+ifneq ($(MAKECMDGOALS),distclean)
+-include $(DEPS)
+endif
+
+
+

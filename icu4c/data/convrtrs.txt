@@ -1,0 +1,102 @@
+#This is an alias file used by the character set converter
+#format:
+#Actual File Name || Algorithm name     alias1 alias2 ...
+#except for column1(file names) case insensitive
+
+# Algorithmic: DO NOT CHANGE LEFT COLUMN OF ALGORITHMIC CONVERTERS
+UTF8                  utf8 utf-8 ibm-1208 utf_8 ibm1208 cp1208
+# If ICU is run on the intel platforms, NT, Linux etc., be sure to update the UTF16 entry with the following two lines:
+# UTF16_BigEndian       utf-16le utf-16 ibm-1200 ibm1200 cp1200 iso-10646-ucs-2 ucs-2
+# UTF16_LittleEndian    utf-16be
+UTF16_BigEndian       utf-16be utf-16 ibm-1200 ibm1200 cp1200 iso-10646-ucs-2 ucs-2
+UTF16_LittleEndian    utf-16le
+LATIN_1               iso-8859-1 iso_8859-1 ibm-819 ibm819 cp819 latin1 latin-1 ascii ascii-7 us-ascii 8859-1 csisolatin1 iso-ir-100 iso_8859-1:1978
+ISO_2022	iso-2022	2022  cp2022 iso2022 iso_2022
+
+# Table-based
+
+# Interchange codepages
+ibm-912         iso-8859-2 iso_8859-2 ibm912 cp912 latin2 8859-2 csisolatin2 iso-ir-101 iso_8859-2:1987  # Central Europe
+ibm-913         iso-8859-3 iso_8859-3 latin3 cp913 ibm913 8859-3 csisolatin3 iso-ir-109 iso_8859-3:1988  # Maltese Esperanto
+ibm-914         iso-8859-4 iso_8859-4 latin4 cp914 ibm914 8859-4 csisolatin4 iso-ir-110 iso_8859-4:1988  # Baltic
+ibm-915         iso-8859-5 iso_8859-5 cyrillic cp915 ibm915 8859-5 csisolatincyrillic iso-ir-144 iso_8859-5:1988  # Cyrillic
+ibm-1089        iso-8859-6 iso_8859-6 arabic cp1089 ibm1089 8859-6 csisolatinarabic iso-ir-127 iso_8859-6:1987 ecma-114 asmo-708   # Arabic
+ibm-813         iso-8859-7 iso_8859-7 ibm813 cp813 greek greek8 elot_928 ecma-118 8859-7 csisolatingreek iso-ir-126 iso_8859-7:1987  # Greek
+ibm-916         iso-8859-8 iso-8859-8i iso_8859-8 hebrew cp916 ibm916 8859-8 csisolatinhebrew iso-ir-138 iso_8859-8:1988   # hebrew 
+ibm-920         iso-8859-9 iso_8859-9 latin5 cp920 ibm920 8859-9 csisolatin5 iso-ir-148  # Turkish
+ibm-923         iso-8859-15 iso_8859-15 latin9 cp923 ibm923 8859-15 latin0 csisolatin0 csisolatin9       # Latin 9
+ibm-1252        windows-1252  cp1252  ibm-1004 cp1004        # Windows Latin 1
+ibm-943         shift_jis sjis shiftjis shift-jis ibm943 cp943 ibm-932 ibm-932 ibm-932 cp932 ms_kanji csshiftjis windows-31j cswindows31j x-sjis  # japanese. Unicode name is \u30b7\u30d5\u30c8\u7b26\u53f7\u5316\u8868\u73fe
+ibm-949         ibm949 ksc-5601 ksc_5601 johab ks_x_1001:1992       # KSC-5601-1992, korean
+ibm-950         big-5 big5 x-big5 cp950 ibm950               # Taiwan Big-5
+ibm-1386        gbk chinese gb cp936 ibm1386 gb2312 gb2312-80 gb2312-1980 gb_2312-80  # Chinese GBK
+#ibm-954         euc-jp eucJP ibm-eucJP eucjis extended_unix_code_packed_format_for_japanese cseuckdfmtjapanese x-euc-jp x-eucjp  # Japan EUC
+ibm-970         euc-kr euckr ibm-eucKR                       # Korean EUC
+#ibm-964         euc-tw euctw ibm-eucTW cns11643              # Taiwan EUC
+ibm-1361        cp949 ksc korean                              # Korean KSC
+ibm-1383        euc-cn euccn ibm-eucCN                       # China EUC
+ibm-874         tis-620 ibm874 cp874 windows-874 ms874       # Thai
+
+# Platform codepages
+ibm-437         ibm437 cp437            # PC US
+# HSYS:
+#ibm-850         ibm850 cp850 ibm-858 ibm858 cp858    # PC latin1
+ibm-858		ibm858 cp858 ibm-850 ibm850 cp850     # PC latin1 with Euro
+ibm-852         ibm852 cp852            # PC latin2
+ibm-855         ibm855 cp855            # PC cyrillic
+ibm-856         ibm856 cp856            # PC Hebrew (old)
+ibm-857         ibm857 cp857            # PC Latin 5 (Turkish)
+ibm-859         ibm859 cp859            # PC Latin 9
+ibm-860         ibm860 cp860            # PC Portugal
+ibm-861         ibm861 cp861            # PC Iceland
+#ibm-862         ibm862 cp862 ibm-867 ibm867 cp867 cspc862latinhebrew  # PC Hebrew
+ibm-867		ibm867 cp867 ibm-862 ibm862 cp862 cspc862latinhebrew  # PC Hebrew
+ibm-863         ibm863 cp863            # PC Canadian French
+ibm-864         ibm864 cp864            # PC Arabic
+ibm-865         ibm865 cp865            # PC Nordic
+ibm-866         ibm866 cp866            # PC Russian
+ibm-868         ibm868 cp868            # PC Urdu
+ibm-869         ibm869 cp869            # PC Greek
+ibm-878         koi8-r ibm878 cp878 koi8 cskoi8r  # Russian internet
+ibm-921         ibm921 cp921            # PC Baltic
+ibm-922         ibm922 cp922            # PC Estonian
+ibm-942         shift_jis78 sjis78      # Old s_jis
+ibm-1038        Adobe-Symbol-Encoding symbol
+ibm-1250        windows-1250  cp1250    # Windows Latin2
+ibm-1251        windows-1251  cp1251    # Windows Cyrillic
+ibm-1253        windows-1253  cp1253    # Windows Greek
+ibm-1254        windows-1254  cp1254    # Windows Turkish
+ibm-1255        windows-1255  cp1255    # Windows Hebrew
+ibm-1256        windows-1256  cp1256    # Windows Arabic
+ibm-1257        windows-1257  cp1257    # Windows Baltic
+ibm-1258	windows-1258  cp1258    # Windows Vietnamese
+ibm-1275        macintosh mac           # Apple latin 1
+ibm-1276        Adobe-Standard-Encoding
+ibm-1277        Adobe-Latin1-Encoding
+ibm-1280        macgr                   # Apple Greek
+ibm-1281        mactr                   # Apple Turkish
+ibm-1282        macce                   # Apple Central Europe
+ibm-1283        maccy                   # Apple Cyrillic
+ibm-834         #Korean Host DBCS
+# EBCDIC codepages
+ibm-37          ibm-037    ebcdic-cp-us cp037
+ibm-420         ebcdic-ar  cp420        # EBCDIC Arabic
+ibm-424         ebcdic-he  cp424        # EBCDIC Hebrew
+ibm-930         ibm930 cp930            # Japan EBCDIC DBCS
+ibm-933         ibm933 cp933            # Korea EBCDIC DBCS
+ibm-935         ibm935 cp935            # China EBCDIC DBCS
+ibm-937         ibm937 cp937            # Taiwan EBCDIC DBCS
+ibm-1047                                # EBCDIC Open systems Latin1
+ibm-1112                                # Baltic EBCDIC
+ibm-1123                                # Cyrillic Ukraine EBCDIC
+ibm-1140        ebcdic-us               # EBCDIC US...
+ibm-1141        ebcdic-de  cp273        # EBCDIC Germanay, Austria...
+ibm-1142        ebcdic-dk  cp277        # EBCDIC Denmark...
+ibm-1143        ebcdic-sv  cp278        # EBCDIC Sweden
+ibm-1144        ebcdic-it  cp280        # EBCDIC Italy
+ibm-1145        ebcdic-es  cp284        # EBCDIC Spain
+ibm-1146        ebcdic-gb  cp285        # EBCDIC UK Ireland
+ibm-1147        ebcdic-fr  cp297        # EBCDIC France
+ibm-1148        ebcdic-be  cp500        # EBCDIC International Latin1
+
+

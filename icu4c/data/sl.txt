@@ -1,0 +1,112 @@
+// ****************************************************************************
+// *                                                                          *
+// * COPYRIGHT:                                                               *
+// * (C) Copyright Taligent, Inc.,  1997                                      *
+// * (C) Copyright International Business Machines Corporation,  1997-99      *
+// * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
+// * US Government Users Restricted Rights - Use, duplication, or disclosure  *
+// * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
+// *                                                                          *
+// ****************************************************************************
+
+sl {
+    CollationElements { "& C < c\u030C , C\u030C < c\u0301 , C\u0301 & D < \u01F3"
+        " , \u01F2 , \u01F1 < \u01C6 , \u01C5 , \u01C4 < \u0111 , \u0110 & L < \u0142 , "
+        "\u0141 & N < nj , nJ , Nj , NJ & S < s\u030C , S\u030C < s\u0301, S\u0301 & Z <"
+        " z\u030C , Z\u030C < z\u0301 , Z\u0301 < z\u0307 , Z\u0307 " }
+    Countries { 
+        SI { "Slovenija" }
+    }
+    DateTimePatterns { 
+            "H:mm:ss z",
+            "H:mm:ss z",
+            "H:mm:ss",
+            "H:mm",
+            "EEEE, yyyy, MMMM d",
+            "EEEE, yyyy, MMMM d",
+            "yyyy.M.d",
+            "y.M.d",
+            "{1} {0}",
+    }
+    DayAbbreviations { 
+            "Ned",
+            "Pon",
+            "Tor",
+            "Sre",
+            "\u010Cet",
+            "Pet",
+            "Sob",
+    }
+    DayNames { 
+            "Nedelja",
+            "Ponedeljek",
+            "Torek",
+            "Sreda",
+            "\u010Cetrtek",
+            "Petek",
+            "Sobota",
+    }
+    Eras { 
+            "pr.n.\u0161.",
+            "po Kr.",
+    }
+    Languages { 
+        sl { "Sloven\u0161\u010Dina" }
+    }
+    LocaleID { "0424" }
+    LocaleString { "sl" }
+    MonthAbbreviations { 
+            "jan",
+            "feb",
+            "mar",
+            "apr",
+            "maj",
+            "jun",
+            "jul",
+            "avg",
+            "sep",
+            "okt",
+            "nov",
+            "dec",
+            "",
+    }
+    MonthNames { 
+            "januar",
+            "februar",
+            "marec",
+            "april",
+            "maj",
+            "junij",
+            "julij",
+            "avgust",
+            "september",
+            "oktober",
+            "november",
+            "december",
+            "",
+    }
+    NumberElements { 
+            ",",
+            ".",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    ShortLanguage { "slv" }
+    localPatternChars { "GanjkHmsSEDFwWxhKz" }
+    zoneStrings { 
+        {
+                "Africa/Casablanca",
+                "GMT",
+                "GMT",
+                "GMT",
+                "GMT",
+        }
+    }
+}

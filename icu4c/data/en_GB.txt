@@ -1,0 +1,57 @@
+// ****************************************************************************
+// *                                                                          *
+// * COPYRIGHT:                                                               *
+// * (C) Copyright Taligent, Inc.,  1997                                      *
+// * (C) Copyright International Business Machines Corporation,  1997-99      *
+// * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
+// * US Government Users Restricted Rights - Use, duplication, or disclosure  *
+// * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
+// *                                                                          *
+// ****************************************************************************
+
+en_GB {
+    Countries { 
+        US { "United States" }
+        GB { "United Kingdom" }
+        CA { "Canada" }
+        IE { "Ireland" }
+        AU { "Australia" }
+        NZ { "New Zealand" }
+    }
+    CurrencyElements { 
+            "\u00A3",
+            "GBP",
+            ".",
+    }
+    DateTimeElements { 
+            "2",
+            "1",
+    }
+    DateTimePatterns { 
+            "HH:mm:ss 'o''clock' z",
+            "HH:mm:ss z",
+            "HH:mm:ss",
+            "HH:mm",
+            "dd MMMM yyyy",
+            "dd MMMM yyyy",
+            "dd-MMM-yy",
+            "dd/MM/yy",
+            "{1} {0}",
+    }
+    Languages { 
+        en { "English" }
+    }
+    LocaleID { "0809" }
+    LocaleString { "en_GB" }
+    ShortCountry { "GBR" }
+    localPatternChars { "GyMdkHmsSEDFwWahKz" }
+    zoneStrings { 
+        {
+                "Europe/London",
+                "Greenwich Mean Time",
+                "GMT",
+                "British Summer Time",
+                "BST",
+        }
+    }
+}

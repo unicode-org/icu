@@ -1,0 +1,77 @@
+// ****************************************************************************
+// *                                                                          *
+// * COPYRIGHT:                                                               *
+// * (C) Copyright Taligent, Inc.,  1997                                      *
+// * (C) Copyright International Business Machines Corporation,  1997-99      *
+// * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
+// * US Government Users Restricted Rights - Use, duplication, or disclosure  *
+// * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
+// *                                                                          *
+// ****************************************************************************
+
+de_AT {
+    CurrencyElements { 
+            "\u00F6S",
+            "ATS",
+            ",",
+    }
+    DateTimeElements { 
+            "2",
+            "1",
+    }
+    DateTimePatterns { 
+            "HH:mm' Uhr 'z",
+            "HH:mm:ss z",
+            "HH:mm:ss",
+            "HH:mm",
+            "EEEE, dd. MMMM yyyy",
+            "dd. MMMM yyyy",
+            "dd.MM.yyyy",
+            "dd.MM.yy",
+            "{1} {0}",
+    }
+    LocaleID { "0c07" }
+    LocaleString { "de_AT" }
+    MonthAbbreviations { 
+            "J\u00E4n",
+            "Feb",
+            "M\u00E4r",
+            "Apr",
+            "Mai",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Okt",
+            "Nov",
+            "Dez",
+            "",
+    }
+    MonthNames { 
+            "J\u00E4nner",
+            "Februar",
+            "M\u00E4rz",
+            "April",
+            "Mai",
+            "Juni",
+            "Juli",
+            "August",
+            "September",
+            "Oktober",
+            "November",
+            "Dezember",
+            "",
+    }
+    /* Discarding duplicate data for tag: NumberPatterns */
+    ShortCountry { "AUT" }
+    localPatternChars { "GuMtkHmsSEDFwWahKz" }
+    zoneStrings { 
+        {
+                "Africa/Casablanca",
+                "GMT",
+                "GMT",
+                "GMT",
+                "GMT",
+        }
+    }
+}

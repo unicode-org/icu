@@ -1,0 +1,111 @@
+// ****************************************************************************
+// *                                                                          *
+// * COPYRIGHT:                                                               *
+// * (C) Copyright Taligent, Inc.,  1997                                      *
+// * (C) Copyright International Business Machines Corporation,  1997-99      *
+// * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
+// * US Government Users Restricted Rights - Use, duplication, or disclosure  *
+// * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
+// *                                                                          *
+// ****************************************************************************
+
+lv {
+    CollationElements { "@& C < c\u030C , C\u030C & G < g\u0327 , G\u0327 & I < "
+        "y, Y& K < k\u0327 , K\u0327 & L < l\u0327 , L\u0327 & N < n\u0327 , N\u0327 & S"
+        " < s\u030C , S\u030C & Z < z\u030C , Z\u030C " }
+    Countries { 
+        LV { "Latvija" }
+    }
+    DateTimePatterns { 
+            "HH:mm:ss z",
+            "HH:mm:ss z",
+            "HH:mm:ss",
+            "HH:mm",
+            "EEEE, yyyy, d MMMM",
+            "EEEE, yyyy, d MMMM",
+            "yyyy.d.M",
+            "yy.d.M",
+            "{1} {0}",
+    }
+    DayAbbreviations { 
+            "Sv",
+            "P",
+            "O",
+            "T",
+            "C",
+            "Pk",
+            "S",
+    }
+    DayNames { 
+            "sv\u0113tdiena",
+            "pirmdiena",
+            "otrdiena",
+            "tre\u0161diena",
+            "ceturdien",
+            "piektdiena",
+            "sestdiena",
+    }
+    Eras { 
+            "pm\u0113",
+            "m\u0113",
+    }
+    Languages { 
+        lv { "Latvie\u0161u" }
+    }
+    LocaleID { "0426" }
+    LocaleString { "lv" }
+    MonthAbbreviations { 
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "Maijs",
+            "J\u016Bn",
+            "J\u016Bl",
+            "Aug",
+            "Sep",
+            "Okt",
+            "Nov",
+            "Dec",
+            "",
+    }
+    MonthNames { 
+            "janv\u0101ris",
+            "febru\u0101ris",
+            "marts",
+            "apr\u012Blis",
+            "maijs",
+            "j\u016Bnijs",
+            "j\u016Blijs",
+            "augusts",
+            "septembris",
+            "oktobris",
+            "novembris",
+            "decembris",
+            "",
+    }
+    NumberElements { 
+            ",",
+            "\u00A0",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    ShortLanguage { "lav" }
+    localPatternChars { "GanjkHmsSEDFwWxhKz" }
+    zoneStrings { 
+        {
+                "Africa/Casablanca",
+                "GMT",
+                "GMT",
+                "GMT",
+                "GMT",
+        }
+    }
+}

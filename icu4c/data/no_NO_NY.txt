@@ -1,0 +1,44 @@
+// ****************************************************************************
+// *                                                                          *
+// * COPYRIGHT:                                                               *
+// * (C) Copyright Taligent, Inc.,  1997                                      *
+// * (C) Copyright International Business Machines Corporation,  1997-99      *
+// * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
+// * US Government Users Restricted Rights - Use, duplication, or disclosure  *
+// * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
+// *                                                                          *
+// ****************************************************************************
+
+no_NO_NY {
+    DayAbbreviations { 
+            "su",
+            "m\u00E5",
+            "ty",
+            "on",
+            "to",
+            "fr",
+            "lau",
+    }
+    DayNames { 
+            "sundag",
+            "m\u00E5ndag",
+            "tysdag",
+            "onsdag",
+            "torsdag",
+            "fredag",
+            "laurdag",
+    }
+    /* Discarding duplicate data for tag: Languages */
+    LocaleID { "0814" }
+    LocaleString { "no_NO_NY" }
+    localPatternChars { "GyMdkHmsSEDFwWahKz" }
+    zoneStrings { 
+        {
+                "Africa/Casablanca",
+                "GMT",
+                "GMT",
+                "GMT",
+                "GMT",
+        }
+    }
+}

@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title>IntlTest Test Suite Doumentation</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h1>IntlTest Test Suite Documentation</h1>
+
+<hr>
+
+<p>COPYRIGHT:<br>
+© Copyright Taligent, Inc., 1997<br>
+© Copyright International Business Machines Corporation, 1997-1999<br>
+Licensed Material - Program-Property of IBM - All Rights Reserved.<br>
+US Government Users Restricted Rights - Use, duplication, or disclosure<br>
+restricted by GSA ADP Schedule Contract with IBM Corp.</p>
+
+<hr>
+
+<p>The IntlTest suite contains all of the tests for the C++ API of IBM's International
+Classes for Unicode. These tests may be automatically run by typing &quot;intltest&quot;
+at the command line. Since the verbose option prints out a lot of information, it is
+recommended that the output be redirected to a file:<br>
+&quot;intltest -v &gt; testOutput&quot;. </p>
+
+<h3>Building</h3>
+
+<p>To compile this test suite using MSVC, follow the instructions in <a
+href="../readme.html#HowToInstall">intlwork/readme.html#HowToInstall</a> for building the
+&quot;alCPP&quot; (All C++ interfaces) workspace. This builds the libraries as well as the
+intltest executable.</p>
+
+<h3>Executing</h3>
+
+<p>To run the test suite from the command line, change directories to
+&quot;intlwork/source/test/intltest/Debug&quot;, then type:<br>
+&quot;intltest -v &gt; testOutput&quot;.&nbsp; For the release build, the executable will
+reside in &quot;intlwork/source/test/intltest/Release&quot;.</p>
+
+<h3>Usage</h3>
+
+<p>Type just &quot;intltest -h&quot; to see the usage:</p>
+
+<pre>### Syntax:
+### IntlTest [-option1 -option2 ...] [testname1 testname2 ...] 
+### where options are: verbose (v), all (a), noerrormsg (n), 
+### exhaustive (e) and leaks (l). 
+### (Specify either -all (shortcut -a) or a test name). 
+### -all will run all of the tests.
+### 
+### To get a list of the test names type: intltest LIST 
+### To run just the utility tests type: intltest utility 
+### 
+### Test names can be nested using slashes (&quot;testA/subtest1&quot;) 
+### For example to list the utility tests type: intltest utility/LIST 
+### To run just the Locale test type: intltest utility/LocaleTest 
+### 
+### A parameter can be specified for a test by appending '@' and the value 
+### to the testname. 
+</pre>
+
+<p><a href="../readme.html">ReadMe for </a><a href="../readme.html#API">IBM's
+International Classes for Unicode</a></p>
+
+<hr>
+</body>
+</html>
