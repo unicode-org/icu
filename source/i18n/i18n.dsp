@@ -1858,6 +1858,14 @@ SOURCE=.\regeximp.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\regexst.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\regexst.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\rematch.cpp
 # End Source File
 # Begin Source File
