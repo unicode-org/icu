@@ -40,23 +40,23 @@ void printSeq(const char* a, int len)
 void printUSeq(const UChar* a, int len)
 {
 	int i=0;
-	log_verbose("\n{");
-	while (i<len) log_verbose("%04X, ", (unsigned char) a[i++]);
+	log_verbose("{");
+	while (i<len) log_verbose("  %4x, ", (unsigned char) a[i++]);
 	log_verbose("}\n");
 }
 
 void printSeqErr(const char* a, int len)
 {
 	int i=0;
-	fprintf(stderr, "\n{");
-	while (i<len)  fprintf(stderr, "%02X, ", (unsigned char) a[i++]);
+	fprintf(stderr, "{");
+	while (i<len)  fprintf(stderr, "  %2x, ", (unsigned char) a[i++]);
 	fprintf(stderr, "}\n");
 }
 void printUSeqErr(const UChar* a, int len)
 {
 	int i=0;
-	fprintf(stderr, "\n{");
-	while (i<len) fprintf(stderr, "%04X, ", (unsigned char) a[i++]);
+	fprintf(stderr, "{");
+	while (i<len) fprintf(stderr, "%4x, ", a[i++]);
 	fprintf(stderr,"}\n");
 }
 void setNuConvTestName(const char *codepage, const char *direction)
@@ -596,6 +596,7 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const char *ex
 	{	
 		log_err("String does not match. %s\n", gNuConvTestName);
 		log_verbose("String does not match. %s\n", gNuConvTestName);
+        printUSeqErr(source, sourceLen);
 		printSeqErr(junkout, expectLen);
 		printSeqErr(expect, expectLen);
 		return FALSE;
@@ -760,19 +761,20 @@ UBool testConvertToUnicode( const char *source, int sourcelen, const UChar *expe
 	{
 		if(memcmp(junokout,expectOffsets,(targ-junkout) * sizeof(int32_t)))
 		{
-		log_err("\n\ndid not get the expected offsets while %s \n", gNuConvTestName);			log_err("\nGot  : ");
-
-		for(p=junkout;p<targ;p++)
-		  log_err("%d, ", junokout[p-junkout]); 
-		log_err("\nExpected: ");
-		for(i=0; i<(targ-junkout); i++)
-		  log_err("%d,", expectOffsets[i]);
-		log_err("");
-		for(i=0; i<(targ-junkout); i++)
-		  log_err("%X,", junkout[i]);
-		log_err("");
-		for(i=0; i<(src-source); i++)
-		  log_err("%X,", (unsigned char)source[i]);
+		    log_err("\n\ndid not get the expected offsets while %s \n", gNuConvTestName);
+            log_err("\nGot offsets:      ");
+		    for(p=junkout;p<targ;p++)
+		      log_err("  %2d,", junokout[p-junkout]); 
+		    log_err("\nExpected offsets: ");
+		    for(i=0; i<(targ-junkout); i++)
+		      log_err("  %2d,", expectOffsets[i]);
+		    log_err("\nGot output:       ");
+		    for(i=0; i<(targ-junkout); i++)
+		      log_err("%4x,", junkout[i]);
+		    log_err("\nFrom source:      ");
+		    for(i=0; i<(src-source); i++)
+		      log_err("  %2x,", (unsigned char)source[i]);
+		    log_err("\n");
 		}
 	}
 

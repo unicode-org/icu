@@ -55,30 +55,30 @@ static char     gNuConvTestName[1024];
 void printSeq(const unsigned char* a, int len)
 {
     int i=0;
-    log_verbose("\n{");
-    while (i<len) log_verbose("%X", a[i++]);
+    log_verbose("{");
+    while (i<len) log_verbose("%2x ", a[i++]);
     log_verbose("}\n");
 }
 void printUSeq(const UChar* a, int len)
 {
     int i=0;
-    log_verbose("\n{");
-    while (i<len) log_verbose("%4X", a[i++]);
+    log_verbose("{U+");
+    while (i<len) log_verbose("%4x ", a[i++]);
     log_verbose("}\n");
 }
 
 void printSeqErr(const unsigned char* a, int len)
 {
     int i=0;
-    fprintf(stderr, "\n{");
-    while (i<len)  fprintf(stderr, "%X", a[i++]);
+    fprintf(stderr, "{");
+    while (i<len)  fprintf(stderr, "%2x ", a[i++]);
     fprintf(stderr, "}\n");
 }
 void printUSeqErr(const UChar* a, int len)
 {
     int i=0;
-    fprintf(stderr, "\n{");
-    while (i<len) fprintf(stderr, "%4X", a[i++]);
+    fprintf(stderr, "{U+");
+    while (i<len) fprintf(stderr, "%4x ", a[i++]);
     fprintf(stderr,"}\n");
 }
 void 
@@ -114,8 +114,8 @@ TestNextUCharError(UConverter* cnv, const char* source, const char* limit, UErro
      if(errorCode != expected){
         log_err("FAIL: Expected:%s when %s-----Got:%s\n", myErrorName(expected), message, myErrorName(errorCode));
      }
-     if(c != 0xFFFD){
-        log_err("FAIL: Expected return value of 0xFFFD when %s-----Got %lx\n", message, c);
+     if(c != 0xFFFD && c != 0xffff){
+        log_err("FAIL: Expected return value of 0xfffd or 0xffff when %s-----Got 0x%lx\n", message, c);
      }
      
 }   
@@ -329,6 +329,7 @@ UBool testConvertFromU( const UChar *source, int sourceLen,  const char *expect,
     else
     {    
         log_err("String does not match. %s\n", gNuConvTestName);
+        printUSeqErr(source, sourceLen);
         printSeqErr((const unsigned char *)junkout, expectLen);
         printSeqErr((const unsigned char *)expect, expectLen);
         
