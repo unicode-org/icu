@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Normalizer.java,v $ 
- * $Date: 2000/07/19 15:16:34 $ 
- * $Revision: 1.6 $
+ * $Date: 2000/07/19 15:43:07 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -617,7 +617,7 @@ public final class Normalizer {
 
                 // We can only combine a character with the base if we haven't
                 // already seen a combining character with the same canonical class.
-                if (type == ComposeData.COMBINING && (classesSeen & cclass) == 0
+                if (index < ComposeData.COMBINING_COUNT && (classesSeen & cclass) == 0
                     && (action = composeAction(baseIndex, index)) > 0)
                 {
                     if (action > ComposeData.MAX_COMPOSED) {
