@@ -81,17 +81,25 @@
 /* the global mutex. Use it proudly and wash it often. */
 UMTX    gGlobalMutex = NULL;
 
-void umtx_lock( UMTX *mutex )
+#if defined(WIN32)
+static CRITICAL_SECTION gPlatformMutex;
+
+#elif defined(POSIX)
+static pthread_mutex_t gPlatformMutex;
+
+#endif
+
+void umtx_lock(UMTX *mutex)
 {
 #if (ICU_USE_THREADS == 1)
-  if( mutex == NULL )
+    if (mutex == NULL)
     {
-      mutex = &gGlobalMutex;
+        mutex = &gGlobalMutex;
     }
 
-  if(*mutex == NULL)
+    if (*mutex == NULL)
     {
-      umtx_init(mutex);
+        umtx_init(mutex);
     }
 
 #if defined(WIN32)
@@ -101,11 +109,10 @@ void umtx_lock( UMTX *mutex )
 #elif defined(POSIX)
 
 #  ifdef POSIX_DEBUG_REENTRANCY
-    if(gInMutex == TRUE) /* in the mutex -- possible deadlock*/
-      if(pthread_equal(gLastThread,pthread_self()))
-        WeAreDeadlocked();
+    if (gInMutex == TRUE) /* in the mutex -- possible deadlock*/
+        if(pthread_equal(gLastThread, pthread_self()))
+            WeAreDeadlocked();
 #  endif
-
     pthread_mutex_lock((pthread_mutex_t*) *mutex);
 
 #  ifdef POSIX_DEBUG_REENTRANCY
@@ -116,25 +123,25 @@ void umtx_lock( UMTX *mutex )
 #endif /* ICU_USE_THREADS==1 */
 }
 
-void umtx_unlock( UMTX* mutex )
+void umtx_unlock(UMTX* mutex)
 {
 #if (ICU_USE_THREADS==1)
-  if( mutex == NULL )
+    if(mutex == NULL)
     {
-      mutex = &gGlobalMutex;
-
-      if(*mutex == NULL)
-        {
-          return; /* jitterbug 135, fix for multiprocessor machines */
-        }
+        mutex = &gGlobalMutex;
     }
 
-#if defined(WIN32)
+    if(*mutex == NULL)
+    {
+        return; /* jitterbug 135, fix for multiprocessor machines */
+    }
 
+#if defined (WIN32)
     LeaveCriticalSection((CRITICAL_SECTION*)*mutex);
 
-#elif defined(POSIX)
+#elif defined (POSIX)
     pthread_mutex_unlock((pthread_mutex_t*)*mutex);
+
 #ifdef POSIX_DEBUG_REENTRANCY
     gInMutex = FALSE;
 #endif
@@ -143,32 +150,40 @@ void umtx_unlock( UMTX* mutex )
 #endif /* ICU_USE_THREADS == 1 */
 }
 
-U_CAPI void umtx_init( UMTX *mutex )
+U_CAPI void umtx_init(UMTX *mutex)
 {
 #if (ICU_USE_THREADS == 1)
 
-if( mutex == NULL ) /* initialize the global mutex */
+    if (mutex == NULL) /* initialize the global mutex */
     {
-      mutex = &gGlobalMutex;
+        mutex = &gGlobalMutex;
     }
 
-  if(*mutex != NULL) /* someone already did it. */
-    return;
+    if (*mutex != NULL) /* someone already did it. */
+        return;
 
-#if defined(WIN32)
-  *mutex = uprv_malloc(sizeof(CRITICAL_SECTION));
-  InitializeCriticalSection((CRITICAL_SECTION*)*mutex);
-
+    if (*mutex == gGlobalMutex)
+    {
+        *mutex = &gPlatformMutex;
+    }
+    else
+    {
+#if defined (WIN32)
+        *mutex = uprv_malloc(sizeof(CRITICAL_SECTION));
 #elif defined( POSIX )
-
-  *mutex = uprv_malloc(sizeof(pthread_mutex_t));
-
-#if defined(HPUX_CMA)
-    pthread_mutex_init((pthread_mutex_t*)*mutex, pthread_mutexattr_default);
-#else
-    pthread_mutex_init((pthread_mutex_t*)*mutex,NULL);
+        *mutex = uprv_malloc(sizeof(pthread_mutex_t));
 #endif
+    }
 
+#if defined (WIN32)
+    InitializeCriticalSection((CRITICAL_SECTION*)*mutex);
+
+#elif defined (POSIX)
+# if defined (HPUX_CMA)
+    pthread_mutex_init((pthread_mutex_t*)*mutex, pthread_mutexattr_default);
+# else
+    pthread_mutex_init((pthread_mutex_t*)*mutex, NULL);
+# endif
 
 # ifdef POSIX_DEBUG_REENTRANCY
     gInMutex = FALSE;
@@ -178,9 +193,27 @@ if( mutex == NULL ) /* initialize the global mutex */
 #endif /* ICU_USE_THREADS==1 */
 }
 
+U_CAPI void umtx_destroy(UMTX *mutex) {
+    if (mutex == NULL) /* initialize the global mutex */
+    {
+        mutex = &gGlobalMutex;
+    }
 
+    if (*mutex == NULL) /* someone already did it. */
+        return;
 
+#if defined (WIN32)
+    DeleteCriticalSection((CRITICAL_SECTION*)*mutex);
 
+#elif defined (POSIX)
+    pthread_mutex_destroy((pthread_mutex_t*)*mutex);
 
+#endif
 
+    if (*mutex != gGlobalMutex)
+    {
+        uprv_free(*mutex);
+    }
 
+    *mutex = NULL;
+}
