@@ -54,6 +54,8 @@ static void TestDirectAccess(void);
 
 static void TestResourceLevelAliasing(void);
 
+static void TestErrorCodes(void);
+
 /**
 * extensive subtests called by TestResourceBundles
 **/
