@@ -13,6 +13,75 @@
                      }
     }
     TestData {
+        TestSafeSurrogates {
+            Info {
+                Description { "It turned out that surrogates were not skipped properly "
+                              "when iterating backwards if they were in the middle of a "
+                              "contraction. This test assures that this is fixed."
+                            }
+            }
+            Settings {
+                {
+                    Rules {
+                                "&a < x\ud800\udc00b"
+                    }
+                }
+            }
+            Cases {
+                "a<x\ud800\udc00b"
+            }
+        }
+                
+        TestCIgnorableContraction {
+            Info {
+                Description { "Checks whether completely ignorable code points are "
+                              "skipped in contractions."
+                              }
+            }
+            Settings {
+                {
+                    TestLocale { "sh" }
+                }
+                {
+                    Rules {
+                                "& L < lj, Lj <<< LJ"
+                                "& N < nj, Nj <<< NJ "
+                    }
+                }
+            }
+            Cases {
+                "njiva=n\ud834\udd65jiva=n\uD834\uDD79jiva=n\u0000\u0000\u0000jiva=n\u0000jiva=n\ud800jiva=n\ufffejiva",
+                "ljubav=l\u0000jubav=l\uD834\uDD79jubav=l\u0000\u0000\u0000jubav=l\ud800jubav=l\ufffejubav",
+                "Ljubav=L\u0000jubav=L\uD834\uDD79jubav=L\u0000\u0000\u0000jubav=L\ud800jubav=L\ufffejubav",
+            }
+        }
+                
+
+        TestCIgnorablePrefix {
+            Info {
+                Description { "Checks whether completely ignorable code points are "
+                              "skipped in prefix processing."
+                              }
+            }
+            Settings {
+                {
+                    TestLocale { "ja" }
+                }
+            }
+            Cases {
+               "\u30A1\u30FC"
+               "= \u30A1\uDB40\uDC30\u30FC"
+               "= \u30A1\uD800\u30FC"
+               "= \u30A1\uFFFE\u30FC"
+               "= \u30A1\uD834\uDD79\u30FC"
+               "= \u30A1\u0000\u0000\u0000\u30FC"
+               "= \u30A1\u0000\u30FC"
+               "= \u30A1\u30FC"
+               "= \u30A1\u0000\u059a\u30FC"
+               "= \u30A1\u30FC"
+            }
+        }
+  
         da_TestPrimary {
             Info {
                 Description { "This test goes through primary strength cases" }
