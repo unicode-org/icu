@@ -18,7 +18,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "cintltst.h"
-#include "unicode/ustrtrns.h"
 #include "unicode/utypes.h"
 #include "cmemory.h"
 
