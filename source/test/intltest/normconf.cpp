@@ -221,7 +221,7 @@ static UChar parseInt(const UnicodeString& s, int32_t pos) {
     while (pos < limit) {
         int8_t digit = Unicode::digit(s.charAt(pos++), 16);
         if (digit < 0) {
-            return -1; // Bogus hex digit -- shouldn't happen
+            return (UChar) -1; // Bogus hex digit -- shouldn't happen
         }
         value = (value << 4) | digit;
     }
