@@ -372,7 +372,10 @@ public final class UScriptRun
 				// pop it from the stack
 				if (pairIndex >= 0 && (pairIndex & 1) != 0 && parenSP >= 0) {
 					parenSP -= 1;
-					startSP -= 1;
+                    
+                    if (parenSP < startSP) {
+                        startSP = parenSP;
+                    }
 				}
 			} else {
 			    // We've just seen the first character of
