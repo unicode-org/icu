@@ -254,11 +254,12 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt, const Formattable& value)
             min_numeric_error = error;
     }
 
-    if(show)
-        logln(/*value.getString(temp) +*/ typeOf(value, temp) + " F> " +
+    if (show) {
+        errln(/*value.getString(temp) +*/ typeOf(value, temp) + " F> " +
             escape(s) + " P> " +
             /*n.getString(temp) +*/ typeOf(n, temp) + " F> " +
             escape(s2));
+    }
 }
 
 double 
