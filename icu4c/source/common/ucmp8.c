@@ -132,7 +132,7 @@ CompactByteArray* ucmp8_open(int8_t defaultValue)
  */
   CompactByteArray* this_obj = (CompactByteArray*) uprv_malloc(sizeof(CompactByteArray));
   int32_t i;
-  
+
   if (this_obj == NULL) return NULL;
 
   this_obj->fStructSize = sizeof(CompactByteArray);
@@ -177,21 +177,8 @@ CompactByteArray* ucmp8_openAdopt(uint16_t *indexArray,
                   int32_t count)
 {
   CompactByteArray* this_obj = (CompactByteArray*) uprv_malloc(sizeof(CompactByteArray));
-  if (!this_obj) return NULL;
-  
-  this_obj->fArray = NULL;
-  this_obj->fIndex = NULL; 
-  this_obj->fCount = count;
-  this_obj->fBogus = FALSE;
-  this_obj->fStructSize = sizeof(CompactByteArray);
-  
-  this_obj->fArray = newValues;
-  this_obj->fIndex = indexArray;
-  this_obj->fCompact = (UBool)((count < UCMP8_kUnicodeCount) ? TRUE : FALSE);
-  this_obj->fAlias = FALSE;
-  this_obj->fIAmOwned = FALSE;
 
-  return this_obj;
+  return ucmp8_initAdopt(this_obj, indexArray, newValues, count);
 }
 
 CompactByteArray* ucmp8_openAlias(uint16_t *indexArray,
@@ -199,25 +186,58 @@ CompactByteArray* ucmp8_openAlias(uint16_t *indexArray,
                   int32_t count)
 {
   CompactByteArray* this_obj = (CompactByteArray*) uprv_malloc(sizeof(CompactByteArray));
-  if (!this_obj) return NULL;
-  
-  this_obj->fArray = NULL;
-  this_obj->fIndex = NULL; 
-  this_obj->fCount = count;
-  this_obj->fBogus = FALSE;
-  this_obj->fStructSize = sizeof(CompactByteArray);
-  
-  this_obj->fArray = newValues;
-  this_obj->fIndex = indexArray;
-  this_obj->fCompact = (UBool)((count < UCMP8_kUnicodeCount) ? TRUE : FALSE);
-  this_obj->fAlias = TRUE;
-  this_obj->fIAmOwned = FALSE;
+
+  return ucmp8_initAlias(this_obj, indexArray, newValues, count);
+}
+
+/*=======================================================*/
+
+CompactByteArray* ucmp8_initAdopt(CompactByteArray *this_obj,
+                  uint16_t *indexArray,
+                  int8_t *newValues,
+                  int32_t count)
+{
+  if (this_obj) {
+    this_obj->fArray = NULL;
+    this_obj->fIndex = NULL; 
+    this_obj->fCount = count;
+    this_obj->fBogus = FALSE;
+    this_obj->fStructSize = sizeof(CompactByteArray);
+
+    this_obj->fArray = newValues;
+    this_obj->fIndex = indexArray;
+    this_obj->fCompact = (UBool)((count < UCMP8_kUnicodeCount) ? TRUE : FALSE);
+    this_obj->fAlias = FALSE;
+    this_obj->fIAmOwned = FALSE;
+  }
+
+  return this_obj;
+}
+
+CompactByteArray* ucmp8_initAlias(CompactByteArray *this_obj,
+                  uint16_t *indexArray,
+                  int8_t *newValues,
+                  int32_t count)
+{
+  if (this_obj) {
+    this_obj->fArray = NULL;
+    this_obj->fIndex = NULL; 
+    this_obj->fCount = count;
+    this_obj->fBogus = FALSE;
+    this_obj->fStructSize = sizeof(CompactByteArray);
+
+    this_obj->fArray = newValues;
+    this_obj->fIndex = indexArray;
+    this_obj->fCompact = (UBool)((count < UCMP8_kUnicodeCount) ? TRUE : FALSE);
+    this_obj->fAlias = TRUE;
+    this_obj->fIAmOwned = FALSE;
+  }
 
   return this_obj;
 }
 
 /*=======================================================*/
- 
+
 void ucmp8_close(CompactByteArray* this_obj) 
 {
   if(this_obj != NULL) {

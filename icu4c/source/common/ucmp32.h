@@ -76,7 +76,7 @@
  * @see                CompactIntArray
  * @see                CompactCharArray
  * @see                CompactStringArray
- * @version            $Revision: 1.10 $ 8/25/98
+ * @version            $Revision: 1.11 $ 8/25/98
  * @author             Helena Shih
  */
 /*====================================*/
@@ -107,16 +107,32 @@ U_CAPI CompactIntArray* U_EXPORT2 ucmp32_open(int32_t defaultValue);
 
  /**
   * Construct a CompactIntArray from a pre-computed index and values array. The values
-  * will be adobped by the CompactIntArray. Note: for speed, the compact method will
-  * only re-use blocks in the values array that are on a block boundary. The pre-computed
-  * arrays passed in to this constructor may re-use blocks at any position in the values
-  * array.
+  * will be adopted by the CompactIntArray. Memory is allocated with uprv_malloc.
+  * Note: for speed, the compact method will only re-use blocks in the values array
+  * that are on a block boundary. The pre-computed arrays passed in to this constructor
+  * may re-use blocks at any position in the values array.
   * @param indexArray the index array to be adopted
-  * @param newValues the value array to be adobptd
+  * @param newValues the value array to be adopted
   * @param count the number of entries in the value array
   * @see compact
   */
 U_CAPI CompactIntArray* U_EXPORT2 ucmp32_openAdopt(uint16_t *indexArray,
+                          int32_t *newValues,
+                          int32_t count);
+
+ /**
+  * Initialize a CompactIntArray from a pre-computed index and values array. The values
+  * will be adopted by the CompactIntArray. No memory is allocated. Note: for speed,
+  * the compact method will only re-use blocks in the values array that are on a block
+  * boundary. The pre-computed arrays passed in to this constructor may re-use blocks
+  * at any position in the values array.
+  * @param indexArray the index array to be adopted
+  * @param newValues the value array to be adopted
+  * @param count the number of entries in the value array
+  * @see compact
+  */
+U_CAPI CompactIntArray* U_EXPORT2 ucmp32_initAdopt(CompactIntArray *this_obj,
+                          uint16_t *indexArray,
                           int32_t *newValues,
                           int32_t count);
 
