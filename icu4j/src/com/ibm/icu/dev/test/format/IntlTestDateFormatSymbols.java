@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/IntlTestDateFormatSymbols.java,v $ 
- * $Date: 2001/10/19 11:43:37 $ 
- * $Revision: 1.1 $
+ * $Date: 2001/10/23 13:12:31 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  **/
@@ -179,7 +179,7 @@ public class IntlTestDateFormatSymbols extends com.ibm.test.TestFmwk
 
 //        final String pattern = DateFormatSymbols.getPatternChars();
 
-        String localPattern, pat1, pat2;
+        String localPattern; // pat1, pat2; //The variable is never used
         localPattern = en.getLocalPatternChars();
         fr.setLocalPatternChars(localPattern);
         if(! en.getLocalPatternChars().equals(fr.getLocalPatternChars())) {
@@ -187,7 +187,7 @@ public class IntlTestDateFormatSymbols extends com.ibm.test.TestFmwk
         }
 
 
-        DateFormatSymbols foo = new DateFormatSymbols();
+        //DateFormatSymbols foo = new DateFormatSymbols(); //The variable is never used
 
         en = (DateFormatSymbols) fr.clone();
 

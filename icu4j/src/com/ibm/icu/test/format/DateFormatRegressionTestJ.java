@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/test/format/Attic/DateFormatRegressionTestJ.java,v $ 
- * $Date: 2001/10/22 02:02:33 $ 
- * $Revision: 1.2 $
+ * $Date: 2001/10/23 13:10:05 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -116,7 +116,10 @@ public class DateFormatRegressionTestJ extends com.ibm.test.TestFmwk {
     //DateFormat.format works wrongly?
     public void Test4250359() {
         Locale.setDefault(Locale.US);
-        Date d = new Date(101, 9, 9, 17, 53);
+        Calendar cal = Calendar.getInstance();
+        cal.clear();
+        cal.set(101 + 1900, 9, 9, 17, 53);
+        Date d = cal.getTime();
         DateFormat tf = DateFormat.getTimeInstance(DateFormat.SHORT);
         String act_result = tf.format(d);
         String exp_result = "5:53 PM";
@@ -163,7 +166,10 @@ public class DateFormatRegressionTestJ extends com.ibm.test.TestFmwk {
     //SimpleDateFormat inconsistent for number of digits for years
     public void Test4358730() {
         SimpleDateFormat sdf = new SimpleDateFormat();
-        Date today = new Date(2001-1900,11,10);
+        Calendar cal = Calendar.getInstance();
+        cal.clear();
+        cal.set(2001,11,10);
+        Date today = cal.getTime();
     
         sdf.applyPattern("MM d y");
         logln(sdf.format(today));
@@ -213,11 +219,10 @@ public class DateFormatRegressionTestJ extends com.ibm.test.TestFmwk {
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
 
         if (sdf.getTimeZone().useDaylightTime()) {
-            logln("original date: " + d.toString());
+            logln("original date: " + origin_d.toString());
             str = sdf.format(d);
             logln(" after format----->" + str);
             
-            boolean sv = sdf.getTimeZone().useDaylightTime();
             d = sdf.parse(str, new ParsePosition(0));
             logln(" after parse----->" + d.toString());
     

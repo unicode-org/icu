@@ -1,7 +1,7 @@
 /***************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/IntlTestDateFormat.java,v $ 
- * $Date: 2001/10/19 11:57:54 $ 
- * $Revision: 1.2 $
+ * $Date: 2001/10/23 13:11:35 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -43,13 +43,13 @@ public class IntlTestDateFormat extends com.ibm.test.TestFmwk {
     private static final long ONEMINUTE = 60 * ONESECOND;
     private static final long ONEHOUR = 60 * ONEMINUTE;
     private static final long ONEDAY = 24 * ONEHOUR;
-    private static final double ONEYEAR = 365.25 * ONEDAY; // Approximate
+    //private static final double ONEYEAR = 365.25 * ONEDAY; // Approximate //The variable is never used
 
     // EModes
-    private static final byte GENERIC = 0;
-    private static final byte TIME = GENERIC + 1;
-    private static final byte DATE = TIME + 1;
-    private static final byte DATE_TIME = DATE + 1;
+    //private static final byte GENERIC = 0;
+    //private static final byte TIME = GENERIC + 1; //The variable is never used
+    //private static final byte DATE = TIME + 1; //The variable is never used
+    //private static final byte DATE_TIME = DATE + 1; //The variable is never used
 
     private DateFormat fFormat = DateFormat.getInstance();
     private String fTestName = new String("getInstance");

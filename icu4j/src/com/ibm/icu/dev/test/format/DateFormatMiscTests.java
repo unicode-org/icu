@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatMiscTests.java,v $ 
- * $Date: 2001/10/19 11:26:32 $ 
- * $Revision: 1.2 $
+ * $Date: 2001/10/23 13:08:16 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -89,15 +89,13 @@ public class DateFormatMiscTests extends com.ibm.test.TestFmwk {
         String bc = "\u7D00\u5143\u524D";
         String ad = "\u897f\u66a6";
         //char adC[] = {0x897F, 0x66A6};
-        //UnicodeString ad(adC, 2, 2);
         String jstLong = "\u65e5\u672c\u6a19\u6e96\u6642";
-        char jstLongC[] = {0x65e5, 0x672c, 0x6a19, 0x6e96, 0x6642};
-        //UnicodeString jstLong(jstLongC, 5, 5);
+        //char jstLongC[] = {0x65e5, 0x672c, 0x6a19, 0x6e96, 0x6642}; //The variable is never used
         String jstShort = "JST";
     
         DateFormatSymbols symbols = new DateFormatSymbols(Locale.JAPAN);
         final String[] eras = symbols.getEras();
-        int eraCount = eras.length;
+        //int eraCount = eras.length; //The variable is never used
         logln("BC = " + eras[0]);
         if (!eras[0].equals(bc)) {
             errln("*** Should have been " + bc);
@@ -109,7 +107,7 @@ public class DateFormatMiscTests extends com.ibm.test.TestFmwk {
         }
     
         final String zones[][] = symbols.getZoneStrings();
-        int rowCount = zones.length, colCount = zones[0].length;
+        //int rowCount = zones.length, colCount = zones[0].length; //The variable is never used
         logln("Long zone name = " + zones[0][1]);
         if (!zones[0][1].equals(jstLong)) {
             errln("*** Should have been " + jstLong);

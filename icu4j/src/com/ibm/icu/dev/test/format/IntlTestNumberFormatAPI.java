@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/IntlTestNumberFormatAPI.java,v $ 
- * $Date: 2001/10/19 12:13:23 $ 
- * $Revision: 1.1 $
+ * $Date: 2001/10/23 13:14:05 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  **/
@@ -67,7 +67,13 @@ public class IntlTestNumberFormatAPI extends com.ibm.test.TestFmwk
         NumberFormat integer = NumberFormat.getIntegerInstance();
         
         NumberFormat int_fr = NumberFormat.getIntegerInstance(Locale.FRENCH);
-
+        
+        //Fix "The variable is never used" compilation warnings
+        logln("Currency : " + cur.format(1234.5));
+        logln("Percent : " + per.format(1234.5));
+        logln("Integer : " + integer.format(1234.5));
+        logln("Int_fr : " + int_fr.format(1234.5));
+        
         // ======= Test equality
 
         logln("Testing equality operator");

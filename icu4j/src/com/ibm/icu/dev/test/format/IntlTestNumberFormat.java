@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/IntlTestNumberFormat.java,v $ 
- * $Date: 2001/10/19 12:12:47 $ 
- * $Revision: 1.1 $
+ * $Date: 2001/10/23 13:13:49 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -254,7 +254,6 @@ public class IntlTestNumberFormat extends com.ibm.test.TestFmwk {
         logln(count + " available locales");
         if (count != 0)
         {
-            String name;
             String all = "";
             for (int i = 0; i< count; ++i)
             {

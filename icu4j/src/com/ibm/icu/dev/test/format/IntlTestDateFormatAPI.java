@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/IntlTestDateFormatAPI.java,v $ 
- * $Date: 2001/10/19 11:43:37 $ 
- * $Revision: 1.1 $
+ * $Date: 2001/10/23 13:12:14 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  **/
@@ -57,7 +57,7 @@ public class IntlTestDateFormatAPI extends com.ibm.test.TestFmwk
 
         if (b instanceof SimpleDateFormat)
         {
-            double ONE_YEAR = 365*24*60*60*1000.0;
+            //double ONE_YEAR = 365*24*60*60*1000.0; //The variable is never used
             try {
 //                ((SimpleDateFormat)b).setTwoDigitStartDate(start.getTime() + 50*ONE_YEAR);
 //                if (a.equals(b))
