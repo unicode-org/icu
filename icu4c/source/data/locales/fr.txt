@@ -218,14 +218,12 @@ fr {
         ANG { "ANG", "florin des Antilles n\u00E9erl." }
         AOA { "AOA", "kwanza angolais" }
         AOK { "AOK", "kwanza angolais (1977-1990)" }
-        AOK { "AOK", "kwanza" }
         AON { "AON", "nouveau kwanza angolais (1990-2000)" }
         AOR { "AOR", "kwanza angolais r\u00E9ajust\u00E9 (1995-1999)" }
         AOS { "AOS", "escudo angolais" }
         ARA { "ARA", "austral" }
         ARM { "ARM", "Argentine Peso Moneda Nacional" }
         ARP { "ARP", "peso argentin (1983-1985)" }
-        ARP { "ARP", "peso argentin" }
         ARS { "Arg$","peso argentin" }
         ATS { "ATS", "schilling autrichien" }
         AUD { "AUD", "dollar australien" }
@@ -300,7 +298,6 @@ fr {
         CWG { "CWG", "florin de Curacao" }
         CYP { "CYP", "livre cypriote" }
         CZK { "CZK", "couronne tch\u00E8que" }
-        CZK { "CZK", "Czech Republic Koruna" }
         DDM { "DDM", "mark est-allemand" }
         DEM { "DEM", "deutsche mark" }
         DES { "DES", "sperrmark allemand" }
@@ -438,7 +435,6 @@ fr {
         MWK { "MWK", "kwacha" }
         MWP { "MWP", "livre de Malawi" }
         MXP { "MXP", "peso d'argent mexicain (1861-1992)" }
-        MXP { "MXP", "peso mexicain" }
         MXV { "MXV", "unit\u00E9 de conversion mexicaine (UDI)" }
         MYR { "MYR", "ringgit" }
         MZE { "MZE", "escudo du Mozambique" }
@@ -465,16 +461,13 @@ fr {
         PEI { "PEI", "Inti p\u00E9ruvien" }
         PEN { "PEN", "nouveau sol p\u00E9ruvien" }
         PES { "PES", "sol p\u00E9ruvien" }
-        PES { "PES", "sol" }
         PGK { "PGK", "kina" }
         PHP { "PHP", "peso philippin" }
         PKR { "PKR", "roupie du Pakistan" }
         PLX { "PLX", "dollar US polonais (certificat de devises \u00E9trang\u00E8res)" }
         PLZ { "PLZ", "zloty (1950-1995)" }
-        PLZ { "PLZ", "zloty" }
         PSP { "PSP", "livre palestinienne" }
         PTC { "PTC", "conto portugais" }
-        PTE { "PTE", "escudo portugais" }
         PTE { "PTE", "escudo portugais" }
         PYG { "PYG", "guarani" }
         QAR { "QAR", "rial du Qatar" }
@@ -482,7 +475,6 @@ fr {
         ROL { "ROL", "leu" }
         RON { "RON", "nouveau leu" }
         RUR { "RUR", "rouble de Russie (1991-1998)" }
-        RUR { "RUR", "rouble de Russie" }
         RWF { "RWF", "franc du Rwanda" }
         SAR { "SAR", "riyal saoudien" }
         SAS { "SAS", "riyal saoudien" }
