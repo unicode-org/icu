@@ -1,15 +1,16 @@
 # Scripts-4.0.0.txt
-# Date: 2003-03-14, 20:22:09 GMT [MD]
+# Date: 2003-03-20, 20:07:48 GMT [MD]
 #
 # For documentation, see UCD.html
-# Note: Unassigned and Noncharacter codepoints are omitted,
-#       except when listing Noncharacter or Cn.
+# Note: Unassigned and Noncharacter codepoints may be omitted
+#       if they have default property values.
 # ================================================
 
 
 # ================================================
 # Script
-#	The value for all code points not explicitly listed in this file is COMMON.
+#	All code points not explicitly listed in this file have the property
+#	value:   COMMON.
 # ================================================
 
 0041..005A    ; LATIN # L&  [26] LATIN CAPITAL LETTER A..LATIN CAPITAL LETTER Z

@@ -1,16 +1,18 @@
 # DerivedJoiningGroup-4.0.0.txt
-# Date: 2003-02-20,17:13:55 GMT [MD]
+# Date: 2003-04-05, 02:41:45 GMT [MD]
 #
 # Unicode Character Database: Derived Property Data
 # Generated algorithmically from the Unicode Character Database
 # For documentation, see UCD.html
-# Note: Unassigned and Noncharacter codepoints are omitted,
-#       except when listing Noncharacter or Cn.
+# Note: Unassigned and Noncharacter codepoints may be omitted
+#       if they have default property values.
 # ================================================
 
 
 # ================================================
-# Joining Group (listing ArabicShaping.txt, field 2)
+# Joining Group (listing ArabicShaping.txt, field 3)
+#	All code points not explicitly listed in this file have the property
+#	value:   NO_JOINING_GROUP.
 # ================================================
 
 0639..063A    ; AIN # Lo   [2] ARABIC LETTER AIN..ARABIC LETTER GHAIN
