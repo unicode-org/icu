@@ -476,7 +476,7 @@ print(UChar* src, int32_t srcLen,const char *tagStart,const char *tagEnd,  UErro
     }
     
     buf = (char*) (uprv_malloc(bufCapacity));
-    if(buf=0){
+    if(buf==0){
         fprintf(stderr, "Could not allocate memory!!");
         exit(U_MEMORY_ALLOCATION_ERROR);
     }
@@ -530,14 +530,14 @@ printComments(struct UString *src, const char *resName, UBool printTranslate, UE
     const char* translateAttr = " translate=\"";
     UChar* desc  = (UChar*) uprv_malloc(U_SIZEOF_UCHAR * capacity);
     UChar* trans = (UChar*) uprv_malloc(U_SIZEOF_UCHAR * capacity);
-    UChar* note  = (UChar*) uprv_malloc(U_SIZEOF_UCHAR * capacity);
-    int32_t descLen = 0, transLen=0, noteLen=0;
+
+    int32_t descLen = 0, transLen=0;
     if(status==NULL || U_FAILURE(*status)){
         uprv_free(desc);
         uprv_free(trans);
         return;
     }
-    if(desc==NULL || trans==NULL || note==NULL){
+    if(desc==NULL || trans==NULL){
         *status = U_MEMORY_ALLOCATION_ERROR;
         uprv_free(desc);
         uprv_free(trans);
@@ -585,12 +585,6 @@ string_write_xml(struct SResource *res, const char* id, const char* language, UE
     const char* valStrEnd = "</source>\n";
     const char* strEnd = "</trans-unit>\n";
     
-    UChar* desc = NULL;
-    int32_t descLen = 0;
-    UChar* note = NULL;
-    int32_t noteLen = 0;
-    UChar* translate = NULL;
-    int32_t translateLen =0;
     if(status==NULL || U_FAILURE(*status)){
         return;
     }
@@ -1118,8 +1112,6 @@ table_write_xml(struct SResource *res, const char* id, const char* language, UEr
     const char* idstr   = " id = \"";
     const char* end   = "</group>\n";
     const char* startKey= "resname=\"";
-    const char* noteStart = "<note>";
-    const char* noteEnd   ="</note>";
 
     if (U_FAILURE(*status)) {
         return ;
@@ -1272,7 +1264,6 @@ bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outpu
     const char* file2 = "original = \"";
     const char* file3 = "\" tool = \"genrb\" ";
     const char* file4 = "date = \"";
-    const char* file5 = "\" ts = \"";
     const char* fileEnd = "</file>\n";
     const char* headerStart = "<header>";
     const char* headerEnd = "</header>\n";
