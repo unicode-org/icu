@@ -191,7 +191,7 @@ UnicodeString&
 LocaleKey::prefix(UnicodeString& result) const {
     if (_kind != KIND_ANY) {
         UChar buffer[64];
-        uprv_itou(buffer, _kind, 10, 0);
+        uprv_itou(buffer, 64, _kind, 10, 0);
         UnicodeString temp(buffer);
         result.append(temp);
     }
