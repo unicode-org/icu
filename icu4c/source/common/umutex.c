@@ -83,13 +83,12 @@
  *   have no effect.
  *
  */ 
- 
+
 /* The global ICU mutex.   */
 #if defined(WIN32) 
 static UMTX              gGlobalMutex      = NULL;
-#endif
 
-#if defined(POSIX) 
+#elif defined(POSIX) 
 #if (ICU_USE_THREADS == 1)
 static pthread_mutex_t   gGlobalPosixMutex = PTHREAD_MUTEX_INITIALIZER;
 static UMTX              gGlobalMutex      = &gGlobalPosixMutex;
@@ -97,9 +96,17 @@ static UMTX              gIncDecMutex      = NULL;
 #else
 static UMTX              gGlobalMutex      = NULL;
 static UMTX              gIncDecMutex      = NULL;
-#endif
-#endif  /* POSIX */
+#endif  
 
+#else 
+/* Unknown platform.  OK so long as ICU_USE_THREAD is not set.  
+                      Note that user can still set mutex functions at run time,
+                      and that the global mutex variable is still needed in that case. */
+static UMTX              gGlobalMutex      = NULL;
+#if (ICU_USE_THREADS == 1)
+#error no ICU mutex implementation for this platform
+#endif
+#endif
 
 /* Detect Recursive locking of the global mutex.  For debugging only. */
 #if defined(WIN32) && defined(_DEBUG) && (ICU_USE_THREADS==1)
@@ -433,10 +440,10 @@ u_setMutexFunctions(const void *context, UMtxInitFn *i, UMtxFn *d, UMtxFn *l, UM
  *
  *----------------------------------------------------------------*/
 
-/* Pointers to user-supplied inc/dec functions.  Null if not funcs have been set.  */
+/* Pointers to user-supplied inc/dec functions.  Null if no funcs have been set.  */
 static UMtxAtomicFn  *pIncFn = NULL;
 static UMtxAtomicFn  *pDecFn = NULL;
-static void *gIncDecContext;
+static void *gIncDecContext  = NULL;
 
 
 U_CAPI int32_t U_EXPORT2
