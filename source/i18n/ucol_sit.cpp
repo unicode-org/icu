@@ -15,6 +15,7 @@
 
 #include "utracimp.h"
 #include "ucol_imp.h"
+#include "ucol_tok.h"
 #include "unormimp.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -191,7 +192,7 @@ U_CDECL_END
 
 U_CDECL_BEGIN
 static const char* U_CALLCONV
-_processRFC3066Locale(CollatorSpec *spec, uint32_t value1, const char* string, 
+_processRFC3066Locale(CollatorSpec *spec, uint32_t, const char* string, 
                       UErrorCode *status) 
 {
     char terminator = *string;
@@ -213,7 +214,6 @@ static const char* U_CALLCONV
 _processCollatorOption(CollatorSpec *spec, uint32_t option, const char* string, 
                        UErrorCode *status) 
 {
-    int32_t i = 0;
     spec->options[option] = ucol_sit_letterToAttributeValue(*string, status);
     if((*(++string) != '_' && *string) || U_FAILURE(*status)) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -241,7 +241,7 @@ readHexCodeUnit(const char **string, UErrorCode *status)
             *status = U_ILLEGAL_ARGUMENT_ERROR;
             return 0;
         }
-        result = (result << 4) | value;
+        result = (result << 4) | (UChar)value;
         noDigits++;
         (*string)++;
     }
@@ -301,7 +301,7 @@ static
 const char* ucol_sit_readOption(const char *start, CollatorSpec *spec, 
                             UErrorCode *status) 
 {
-  int32_t i = 0, j = 0, k = 0;
+  int32_t i = 0;
 
   for(i = 0; i < UCOL_SIT_ITEMS_COUNT; i++) {
       if(*start == options[i].optionStart) {
@@ -379,7 +379,6 @@ static void
 ucol_sit_calculateWholeLocale(CollatorSpec *s) {
     // put the locale together, unless we have a done
     // locale
-    int32_t i = 0;
     if(s->locale[0] == 0) {
         // first the language
         uprv_strcat(s->locale, s->locElements[0]);
@@ -436,7 +435,6 @@ ucol_openFromShortString( const char *definition,
     // settings
 
     // analyse the string in order to get everything we need.
-    int32_t definitionLen = uprv_strlen(definition);
     const char *string = definition;
     CollatorSpec s;
     ucol_sit_initCollatorSpecs(&s);
@@ -534,7 +532,7 @@ ucol_getShortDefinitionString(const UCollator *coll,
         appendShortStringElement(tempbuff, elementSize, buffer, &resultSize, keywordArg);
     } 
 
-    int32_t i = 0, j = 0;
+    int32_t i = 0;
     UColAttributeValue attribute = UCOL_DEFAULT;
     for(i = 0; i < UCOL_SIT_ITEMS_COUNT; i++) {
         if(options[i].action == _processCollatorOption) {
@@ -672,7 +670,6 @@ ucol_collatorToIdentifier(const UCollator *coll,
 {
     uint32_t result = 0;
     int32_t i = 0, j = 0;
-    int32_t valueIndex = 0;
     UColAttributeValue attrValue = UCOL_DEFAULT;
 
     // if variable top is not default, we need to use strings
@@ -703,7 +700,7 @@ ucol_openFromIdentifier(uint32_t identifier,
                         UBool forceDefaults,
                         UErrorCode *status) 
 {
-    int32_t i = 0, j = 0;
+    int32_t i = 0;
     int32_t value = 0, keyword = 0;
     char locale[internalBufferSize];
 
@@ -861,8 +858,9 @@ ucol_getAttributeOrDefault(const UCollator *coll, UColAttribute attr, UErrorCode
 
 struct contContext {
     const UCollator *coll;
-    USet      *conts;
-    UErrorCode *status;
+    USet            *conts;
+    USet            *removedContractions;
+    UErrorCode      *status;
 };
 
 
@@ -875,8 +873,12 @@ addContraction(const UCollator *coll, USet *contractions, UChar *buffer, int32_t
     const UChar *UCharOffset = (UChar *)coll->image+getContractOffset(CE);
     uint32_t newCE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
     // we might have a contraction that ends from previous level
-    if(newCE != UCOL_NOT_FOUND && rightIndex > leftIndex) {
-        uset_addString(contractions, buffer+leftIndex, rightIndex - leftIndex + 1);
+    if(newCE != UCOL_NOT_FOUND) {
+        if(isSpecial(newCE) && getCETag(newCE) == SPEC_PROC_TAG) {
+            addContraction(coll, contractions, buffer, bufLen, newCE, leftIndex, rightIndex, status);
+        } else if(rightIndex > leftIndex) {
+            uset_addString(contractions, buffer+leftIndex, rightIndex - leftIndex + 1);
+        }
     }
 
     UCharOffset++;
@@ -914,10 +916,17 @@ _processContractions(const void *context, UChar32 start, UChar32 limit, uint32_t
 {
     UErrorCode *status = ((contContext *)context)->status;
     USet *unsafe = ((contContext *)context)->conts;
+    USet *removed = ((contContext *)context)->removedContractions;
     const UCollator *coll = ((contContext *)context)->coll;
     UChar contraction[internalBufferSize];
     if(isSpecial(CE) && (getCETag(CE) == CONTRACTION_TAG || getCETag(CE) == SPEC_PROC_TAG)) {
         while(start < limit && U_SUCCESS(*status)) {
+            // if there are suppressed contractions, we don't 
+            // want to add them.
+            if(removed && uset_contains(removed, start)) {
+                start++;
+                continue;
+            }
             // we start our contraction from middle, since we don't know if it
             // will grow toward right or left
             int32_t middle = internalBufferSize/2;
@@ -958,9 +967,21 @@ ucol_getContractions( const UCollator *coll,
                   UErrorCode *status)
 {
     uset_clear(contractions);
-    contContext c = { NULL, contractions, status };
+    int32_t rulesLen = 0;
+    const UChar* rules = ucol_getRules(coll, &rulesLen);
+    UColTokenParser src;
+    ucol_tok_initTokenList(&src, rules, rulesLen, coll->UCA, status);
+
+    contContext c = { NULL, contractions, src.removeSet, status };
 
     coll->mapping->getFoldingOffset = _getTrieFoldingOffset;
+
+    // TODO: if you're supressing contractions in the tailoring
+    // you want to remove (or rather not include) contractions
+    // from the UCA.
+    // Probably want to pass a set of contraction starters that
+    // are suppressed. However, we don't want a dependency on 
+    // the builder, so this is going to be hard to pull off.
 
     // Add the UCA contractions
     c.coll = coll->UCA;
@@ -968,6 +989,7 @@ ucol_getContractions( const UCollator *coll,
     
     // This is collator specific. Add contractions from a collator
     c.coll = coll;
+    c.removedContractions =  NULL;
     utrie_enum(coll->mapping, NULL, _processContractions, &c);
 
     return uset_getItemCount(contractions);
@@ -1004,7 +1026,7 @@ ucol_getUnsafeSet( const UCollator *coll,
     for(i = 0; i < contsSize; i++) {
         len = uset_getItem(contractions, i, NULL, NULL, buffer, internalBufferSize, status);
         if(len > 0) {
-            for(j = 0; j < len; j++) {
+            for(j = 1; j < len; j++) {
                 uset_add(unsafe, buffer[j]);
             }
         }
