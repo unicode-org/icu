@@ -547,10 +547,10 @@ public:
     static inline UClassID getStaticClassID(void);
 
     /**
-     * return the calendar type, "gregorian".
+     * Get the calendar type, "gregorian", for use in DateFormatSymbols.
      *
      * @return calendar type
-     * @internal
+     * @draft ICU 2.6
      */
     virtual const char * getType() const;
 
@@ -588,6 +588,7 @@ protected:
      * Return the ERA.  We need a special method for this because the
      * default ERA is AD, but a zero (unset) ERA is BC.
      * @return    the ERA.
+     * @internal
      */
     virtual int32_t internalGetEra() const;
 
@@ -595,6 +596,7 @@ protected:
      * return the length of the given month.
      * @param month    the given month.
      * @return    the length of the given month.
+     * @internal
      */
     virtual int32_t monthLength(int32_t month) const;
 
@@ -603,6 +605,7 @@ protected:
      * @param month    the given month.
      * @param year     the given year.
      * @return         the length of the month
+     * @internal
      */
     virtual int32_t monthLength(int32_t month, int32_t year) const;
     
@@ -610,12 +613,14 @@ protected:
      * return the length of the given year.
      * @param year    the given year.
      * @return        the length of the given year.
+     * @internal
      */
     int32_t yearLength(int32_t year) const;
     
     /**
      * return the length of the year field.
      * @return    the length of the year field
+     * @internal
      */
     int32_t yearLength(void) const;
 
@@ -624,6 +629,7 @@ protected:
      * month to jump around.  E.g., we don't want Jan 31 + 1 month to go to Mar
      * 3, we want it to go to Feb 28.  Adjustments which might run into this
      * problem call this method to retain the proper month.
+     * @internal
      */
     void pinDayOfMonth(void);
 
@@ -632,6 +638,7 @@ protected:
      * is day zero.
      * @param status Fill-in parameter which receives the status of this operation.
      * @return       the day number with respect to the epoch.  
+     * @internal
      */
     virtual UDate getEpochDay(UErrorCode& status);
 

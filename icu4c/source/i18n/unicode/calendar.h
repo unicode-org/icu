@@ -52,16 +52,16 @@ typedef const void* URegistryKey;
  *
  * <p>
  * Subclasses of <code>Calendar</code> interpret a <code>UDate</code>
- * according to the rules of a specific calendar system. The JDK
- * provides one concrete subclass of <code>Calendar</code>:
- * <code>GregorianCalendar</code>. Future subclasses could represent
+ * according to the rules of a specific calendar system. 
+ * The most commonly used subclass of <code>Calendar</code> is
+ * <code>GregorianCalendar</code>. Other subclasses could represent
  * the various types of lunar calendars in use in many parts of the world.
  *
  * <p>
  * Like other locale-sensitive classes, <code>Calendar</code> provides a
  * static method, <code>createInstance</code>, for getting a generally useful
- * object of this type. <code>Calendar</code>'s <code>createInstance</code> method currently
- * returns a <code>GregorianCalendar</code> object whose
+ * object of this type. <code>Calendar</code>'s <code>createInstance</code> method 
+ * returns the appropriate <code>Calendar</code> subclass whose
  * time fields have been initialized with the current date and time:
  * <blockquote>
  * <pre>
@@ -1133,6 +1133,16 @@ public:
      */
     virtual UClassID getDynamicClassID(void) const = 0;
 
+    /**
+     * Returns the resource key string used for this calendar type.
+     * For example, prepending "Eras_" to this string could return "Eras_japanese"
+     * or "Eras_gregorian".  
+     *
+     * @returns static string, for example, "gregorian" or "japanese"
+     * @draft ICU 2.6
+     */
+    virtual const char * getType() const = 0;
+
 protected:
 
      /**
@@ -1417,20 +1427,10 @@ private:
      */
     static const char kDefaultCalendar[];
 
+ public:
     /** 
      * INTERNAL FOR 2.6 --  Registration.
      */
- public:
-    /**
-     * Returns the resource key string used for this calendar type.
-     * For example, prepending "Eras_" to this string could return "Eras_japanese"
-     * or "Eras_gregorian".
-     *
-     * @returns static string, for example, "gregorian" or "japanese"
-     * @internal
-     */
-    virtual const char * getType() const = 0;
-    
 
     /**
      * Return a StringEnumeration over the locales available at the time of the call, 
