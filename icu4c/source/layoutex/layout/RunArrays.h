@@ -133,18 +133,18 @@ public:
     le_int32 add(le_int32 limit);
 
     /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @stable ICU 3.2
-     */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
-
-    /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @stable ICU 3.2
      */
     static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @stable ICU 3.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
 
 protected:
     /**
@@ -328,18 +328,18 @@ public:
     le_int32 add(const LEFontInstance *font, le_int32 limit);
 
     /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @stable ICU 3.2
-     */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
-
-    /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @stable ICU 3.2
      */
     static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @stable ICU 3.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
 
 protected:
     virtual void init(le_int32 capacity);
@@ -465,18 +465,18 @@ public:
     le_int32 add(const Locale *locale, le_int32 limit);
 
     /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @stable ICU 3.2
-     */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
-
-    /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @stable ICU 3.2
      */
     static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @stable ICU 3.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
 
 protected:
     virtual void init(le_int32 capacity);
@@ -599,18 +599,18 @@ public:
     le_int32 add(le_int32 value, le_int32 limit);
 
     /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @stable ICU 3.2
-     */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
-
-    /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @stable ICU 3.2
      */
     static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @stable ICU 3.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
 
 protected:
     virtual void init(le_int32 capacity);
