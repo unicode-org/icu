@@ -4,3 +4,5 @@ Debug
 Release
 Makefile
 icucfg.h
+*.ao
+
