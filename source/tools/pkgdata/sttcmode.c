@@ -139,7 +139,7 @@ writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
         parents = pkg_appendToList(parents, NULL, uprv_strdup(infiles->str));
 
         /* make up commands.. */
-        sprintf(stanza, "$(INVOKE) $(GENCCODE) -n $(ENTRYPOINT) -d $(TEMP_DIR) <");
+        sprintf(stanza, "$(INVOKE) $(GENCCODE) -n $(ENTRYPOINT) -d $(TEMP_DIR) $<");
         commands = pkg_appendToList(commands, NULL, uprv_strdup(stanza));
 
         sprintf(stanza, "$(COMPILE.c) -o $@ $(TEMP_DIR)/%s", cfile);
