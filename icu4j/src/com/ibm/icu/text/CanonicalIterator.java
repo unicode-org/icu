@@ -5,17 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CanonicalIterator.java,v $ 
- * $Date: 2002/06/20 01:21:18 $ 
- * $Revision: 1.10 $
+ * $Date: 2002/07/31 03:01:19 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
 
-import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.*;
-import java.util.Enumeration;
-import java.util.Vector;
 import java.util.*;
 import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.USerializedSet;
@@ -491,8 +488,7 @@ public class CanonicalIterator {
         }
         if (PROGRESS) System.out.println();
     }
-    */
-    // the following is just for a map from characters to a set of characters
+        // the following is just for a map from characters to a set of characters
     
     private static class CharMap {
         Map storage = new HashMap();
@@ -525,5 +521,7 @@ public class CanonicalIterator {
             return this;
         }
     }
+    */
+
 }
     
