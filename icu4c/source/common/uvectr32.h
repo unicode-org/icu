@@ -290,7 +290,7 @@ inline int32_t UVector32::push(int32_t i, UErrorCode &status) {
 
 inline int32_t UVector32::popi(void) {
     int32_t result = 0;
-    if (count >= 0) {
+    if (count > 0) {
         count--;
         result = elements[count];
     }
