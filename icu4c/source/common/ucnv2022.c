@@ -581,7 +581,7 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
             myConverterData->myConverterArray[4]=   ucnv_open("jisx-208", errorCode);
             myConverterData->myConverterArray[5]=   ucnv_open("jisx-212", errorCode);
             myConverterData->myConverterArray[6]=   ucnv_open("gb_2312_80-1", errorCode);
-            myConverterData->myConverterArray[7]=   ucnv_open("ksc_5601_1", errorCode);
+            myConverterData->myConverterArray[7]=   ucnv_open("ksc_5601", errorCode);
             myConverterData->myConverterArray[8]=   ucnv_open("jisx-201", errorCode);
             myConverterData->myConverterArray[9]=   NULL;
 
