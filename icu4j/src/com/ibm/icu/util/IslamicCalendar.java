@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/IslamicCalendar.java,v $ 
- * $Date: 2002/02/16 03:06:28 $ 
- * $Revision: 1.10 $
+ * $Date: 2002/08/07 03:10:18 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -302,6 +302,8 @@ public class IslamicCalendar extends Calendar {
      *
      * @param day   The # of days since the start of the Islamic calendar.
      */
+    // private and uncalled, perhaps not used yet?
+    ///CLOVER:OFF
     private static final int absoluteDayToDayOfWeek(long day)
     {
         // Calculate the day of the week.
@@ -312,6 +314,7 @@ public class IslamicCalendar extends Calendar {
         }
         return dayOfWeek;
     }
+    ///CLOVER:ON
 
     /**
      * Determine whether a year is a leap year in the Islamic civil calendar

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/HebrewCalendar.java,v $ 
- * $Date: 2002/02/16 03:06:28 $ 
- * $Revision: 1.8 $
+ * $Date: 2002/08/07 03:10:20 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -578,11 +578,13 @@ public class HebrewCalendar extends Calendar {
      * @param day   The # of days since the start of the Hebrew calendar,
      *              1-based (i.e. 1/1/1 AM is day 1).
      */
+    ///CLOVER:OFF
     private static int absoluteDayToDayOfWeek(long day)
     {
         // We know that 1/1/1 AM is a Monday, which makes the math easy...
         return (int)(day % 7) + 1;
     }
+    ///CLOVER:ON
 
     /**
      * Returns the the type of a given year.

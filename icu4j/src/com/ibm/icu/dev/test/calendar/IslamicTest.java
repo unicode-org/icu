@@ -5,17 +5,21 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/IslamicTest.java,v $ 
- * $Date: 2002/02/16 03:05:06 $ 
- * $Revision: 1.4 $
+ * $Date: 2002/08/07 03:10:18 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
 
-import com.ibm.icu.dev.test.*;
-import java.util.*;
-import java.text.*;
-import com.ibm.icu.util.*;
+import java.util.Date;
+import java.util.Locale;
+
+import com.ibm.icu.impl.LocaleUtility;
+import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.IslamicCalendar;
+import com.ibm.icu.util.TimeZone;
 
 /**
  * Tests for the <code>IslamicCalendar</code> class.
@@ -133,6 +137,86 @@ public class IslamicTest extends CalendarTest {
               cal.get(YEAR) + "/" +
               cal.get(MONTH) + "/" + 
               cal.get(DATE));
+    }
+
+    public void TestCoverage() {
+	{
+	    // new IslamicCalendar(TimeZone)
+	    IslamicCalendar cal = new IslamicCalendar(TimeZone.getDefault());
+	}
+	
+	{
+	    // new IslamicCalendar(Locale)
+	    IslamicCalendar cal = new IslamicCalendar(Locale.getDefault());
+	}
+
+	{
+	    // new IslamicCalendar(Date)
+	    IslamicCalendar cal = new IslamicCalendar(new Date());
+	}
+
+	{
+	    // new IslamicCalendar(int year, int month, int date)
+	    IslamicCalendar cal = new IslamicCalendar(800, IslamicCalendar.RAMADAN, 1);
+	}
+
+	{
+	    // new IslamicCalendar(int year, int month, int date, int hour, int minute, int second)
+	    IslamicCalendar cal = new IslamicCalendar(800, IslamicCalendar.RAMADAN, 1, 1, 1, 1);
+	}
+
+	{
+	    // setCivil/isCivil
+	    // operations on non-civil calendar
+	    IslamicCalendar cal = new IslamicCalendar(800, IslamicCalendar.RAMADAN, 1, 1, 1, 1);
+	    cal.setCivil(false);
+	    if (cal.isCivil()) {
+		errln("islamic calendar is civil");
+	    }
+
+	    Date now = new Date();
+	    cal.setTime(now);
+
+	    Date then = cal.getTime();
+	    if (!now.equals(then)) {
+		errln("get/set time failed with non-civil islamic calendar");
+	    }
+
+	    logln(then.toString());
+
+	    cal.add(cal.MONTH, 1);
+	    cal.add(cal.DAY_OF_MONTH, 1);
+	    cal.add(cal.YEAR, 1);
+
+	    logln(cal.getTime().toString());
+	}
+	
+	{
+	    // data
+	    IslamicCalendar cal = new IslamicCalendar(800, IslamicCalendar.RAMADAN, 1);
+	    Date time = cal.getTime();
+
+	    String[] calendarLocales = {
+		"ar_AE", "ar_BH", "ar_DZ", "ar_EG", "ar_JO", "ar_KW", "ar_OM", 
+		"ar_QA", "ar_SA", "ar_SY", "ar_YE", "ms_MY"
+	    };
+
+	    String[] formatLocales = {
+		"en", "ar", "fi", "fr", "hu", "iw", "nl"
+	    };
+	    for (int i = 0; i < calendarLocales.length; ++i) {
+		String calLocName = calendarLocales[i];
+		Locale calLocale = LocaleUtility.getLocaleFromName(calLocName);
+		cal = new IslamicCalendar(calLocale);
+
+		for (int j = 0; j < formatLocales.length; ++j) {
+		    String locName = formatLocales[j];
+		    Locale formatLocale = LocaleUtility.getLocaleFromName(locName);
+		    DateFormat format = DateFormat.getDateTimeInstance(cal, DateFormat.FULL, DateFormat.FULL, formatLocale);
+		    logln(calLocName + "/" + locName + " --> " + format.format(time));
+		}
+	    }
+	}
     }
 
     private static IslamicCalendar newCivil() {

@@ -4,16 +4,23 @@
  * others. All Rights Reserved.
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/IBMCalendarTest.java,v $ 
- * $Date: 2002/07/31 18:23:42 $ 
- * $Revision: 1.10 $
+ * $Date: 2002/08/07 03:10:18 $ 
+ * $Revision: 1.11 $
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
-import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.util.*;
-import java.text.*;
+
 import java.util.Date;
 import java.util.Locale;
+
+import com.ibm.icu.impl.LocaleUtility;
+import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.util.BuddhistCalendar;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.JapaneseCalendar;
+import com.ibm.icu.util.TimeZone;
 
 /**
  * @test
@@ -187,6 +194,65 @@ public class IBMCalendarTest extends CalendarTest {
                                // BE 2542 == 1999 CE
                                0, 2542, 1999, Calendar.JUNE, 4
                            });
+    }
+
+    public void TestBuddhistCoverage() {
+	{
+	    // new BuddhistCalendar(TimeZone)
+	    BuddhistCalendar cal = new BuddhistCalendar(TimeZone.getDefault());
+	}
+	
+	{
+	    // new BuddhistCalendar(Locale)
+	    BuddhistCalendar cal = new BuddhistCalendar(Locale.getDefault());
+	}
+
+	{
+	    // new BuddhistCalendar(TimeZone, Locale)
+	    BuddhistCalendar cal = new BuddhistCalendar(TimeZone.getDefault(), Locale.getDefault());
+	}
+
+	{
+	    // new BuddhistCalendar(Date)
+	    BuddhistCalendar cal = new BuddhistCalendar(new Date());
+	}
+
+	{
+	    // new BuddhistCalendar(int year, int month, int date)
+	    BuddhistCalendar cal = new BuddhistCalendar(2543, Calendar.MAY, 22);
+	}
+
+	{
+	    // new BuddhistCalendar(int year, int month, int date, int hour, int minute, int second)
+	    BuddhistCalendar cal = new BuddhistCalendar(2543, Calendar.MAY, 22, 1, 1, 1);
+	}
+
+	{
+	    // data
+	    BuddhistCalendar cal = new BuddhistCalendar(2543, Calendar.MAY, 22);
+	    Date time = cal.getTime();
+
+	    String[] calendarLocales = {
+		"th_TH"
+	    };
+
+	    String[] formatLocales = {
+		"en", "ar", "hu", "th"
+	    };
+
+	    for (int i = 0; i < calendarLocales.length; ++i) {
+		String calLocName = calendarLocales[i];
+		Locale calLocale = LocaleUtility.getLocaleFromName(calLocName);
+		cal = new BuddhistCalendar(calLocale);
+
+		for (int j = 0; j < formatLocales.length; ++j) {
+		    String locName = formatLocales[j];
+		    Locale formatLocale = LocaleUtility.getLocaleFromName(locName);
+		    DateFormat format = DateFormat.getDateTimeInstance(cal, DateFormat.FULL, DateFormat.FULL, formatLocale);
+		    logln(calLocName + "/" + locName + " --> " + format.format(time));
+		}
+	    }
+	}
     }
 
     /**
