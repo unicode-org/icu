@@ -112,19 +112,19 @@ sh {
         LS { "Lesoto" }
         LR { "Liberija" }
         LY { "Libija" }
-        LI { "Lihen\u0160tajn" }
+        LI { "Lihen\u0161tajn" }
         LT { "Litvanija" }
         LU { "Luksemburg" }
-        MK { "Makedonia" }
+        MK { "Makedonija" }
         MG { "Madagaskar" }
         MY { "Malezija" }
         ML { "Mali" }
         MT { "Malta" }
         MQ { "Martinik" }
-        MR { "Mauritania" }
+        MR { "Mauritanija" }
         MU { "Mauricius" }
         MX { "Meksiko" }
-        FM { "Micronezia" }
+        FM { "Mikronezija" }
         MD { "Moldavija" }
         MC { "Monako" }
         MN { "Mongolija" }
@@ -164,7 +164,7 @@ sh {
         SK { "Slova\u010Dka" }
         SI { "Slovenija" }
         SO { "Somalija" }
-        ZA { "Ju\017Ena Afrika" }
+        ZA { "Ju\u017Ena Afrika" }
         ES { "\u0160panija" }
         LK { "\u0160rilanka" }
         SD { "Sudan" }
@@ -192,8 +192,8 @@ sh {
         VA { "Vatikan" }
         VE { "Venecuela" }
         VN { "Vijetnam" }
-        VG { "Britanska Devi\u010Dnska Ostrva" }
-        VI { "S.A.D. Devi\u010Dnska Ostrva" }
+        VG { "Britanska Devi\u010Danska Ostrva" }
+        VI { "S.A.D. Devi\u010Danska Ostrva" }
         EH { "Zapadna Sahara" }
         YE { "Jemen" }
         YU { "Jugoslavija" }
@@ -258,8 +258,8 @@ sh {
         fi { "Finski" }
         fr { "Francuski" }
         ka { "Gruzijski" }
-        de { "Nema\u010dki" }
-        el { "Gr\u010dki" }
+        de { "Nema\u010Dki" }
+        el { "Gr\u010Dki" }
         he { "Hebrejski" }
         iw { "Hebrejski" }
         hu { "Ma\u0111arski" }
@@ -288,11 +288,11 @@ sh {
         sa { "Sanskrit" }
         sr { "Srpski" }
         sh { "Srpsko-Hrvatski" }
-        sk { "Slova\u010dki" }
-        sl { "Slovena\010dki" }
+        sk { "Slova\u010Dki" }
+        sl { "Slovena\u010Dki" }
         es { "\u0160panski" }
         sw { "Svahili" }
-        sv { "\0160vedski" }
+        sv { "\u0160vedski" }
         tr { "Turski" }
         uk { "Ukrajnski" }
         vi { "Vijetnamski" }
