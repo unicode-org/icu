@@ -398,6 +398,7 @@ MessageFormat::applyPattern(const UnicodeString& newPattern,
     }
     UnicodeString segments[4];
     int32_t part = 0;
+    int32_t maxFormatNumber = 0;
     int32_t formatNumber = 0;
     UBool inQuote = FALSE;
     int32_t braceStack = 0;
@@ -408,6 +409,7 @@ MessageFormat::applyPattern(const UnicodeString& newPattern,
     parseError.preContext[0] = parseError.postContext[0] = (UChar)0;
     int32_t patLen = newPattern.length();
     for (; i < patLen; ++i) {
+        int32_t currFormatNumber;
         UChar ch = newPattern[i];
         if (part == 0) {
             if (ch == SINGLE_QUOTE) {
@@ -442,12 +444,15 @@ MessageFormat::applyPattern(const UnicodeString& newPattern,
             case RIGHT_CURLY_BRACE:
                 if (braceStack == 0) {
                     part = 0;
-                    makeFormat(/*i,*/ formatNumber, segments, parseError,success);
+                    currFormatNumber = makeFormat(/*i,*/ formatNumber, segments, parseError,success);
                     if(U_FAILURE(success)){
                         syntaxError(newPattern,i,parseError);
                         return;
                     }
                     formatNumber++;
+                    if (currFormatNumber > maxFormatNumber) {
+                        maxFormatNumber = currFormatNumber;
+                    }
                 } else {
                     --braceStack;
                     segments[part] += ch;
@@ -470,7 +475,7 @@ MessageFormat::applyPattern(const UnicodeString& newPattern,
         //throw new IllegalArgumentException("Unmatched braces in the pattern.");
     }
     fPattern = segments[0];
-    fListCount = formatNumber;
+    fListCount = maxFormatNumber + 1;
 }
 // -------------------------------------
 // Converts this MessageFormat instance to a pattern. 
@@ -1145,7 +1150,7 @@ MessageFormat::itos(int32_t i,
 // -------------------------------------
 // Checks which format instance we are really using based on the segments.
  
-void
+int32_t
 MessageFormat::makeFormat(/*int32_t position, */
                           int32_t offsetNumber, 
                           UnicodeString* segments,
@@ -1153,15 +1158,14 @@ MessageFormat::makeFormat(/*int32_t position, */
                           UErrorCode& success)
 {
     if(U_FAILURE(success))
-        return;
+        return -1;
 
     // get the number
-    int32_t argumentNumber;
+    int32_t argumentNumber = stoi(segments[1]); // always unlocalized!
     int32_t oldMaxOffset = fMaxOffset;
-    argumentNumber = stoi(segments[1]); // always unlocalized!
     if (argumentNumber < 0 || argumentNumber > 9) {
         success = U_INVALID_FORMAT_ERROR;
-        return;
+        return argumentNumber;
     }
     fMaxOffset = offsetNumber;
     fOffsets[offsetNumber] = segments[0].length();
@@ -1195,14 +1199,14 @@ MessageFormat::makeFormat(/*int32_t position, */
             newFormat = NumberFormat::createInstance(fLocale, success);
             if(U_FAILURE(success)) {
                 newFormat = NULL;
-                return;
+                return argumentNumber;
             }
             if(newFormat->getDynamicClassID() == DecimalFormat::getStaticClassID()){
                 ((DecimalFormat*)newFormat)->applyPattern(segments[3],parseError,success);
             }
             if(U_FAILURE(success)) {
                 fMaxOffset = oldMaxOffset;
-                return;
+                return argumentNumber;
             }
             break;
         }
@@ -1285,23 +1289,24 @@ MessageFormat::makeFormat(/*int32_t position, */
         newFormat = new ChoiceFormat(segments[3],parseError,success);
         if(U_FAILURE(success)) {
             fMaxOffset = oldMaxOffset;
-            return;
+            return argumentNumber;
         }
         break;
     default:
         fMaxOffset = oldMaxOffset;
         success = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
+        return argumentNumber;
     }
 
     if(newFormat != NULL) {
-         delete fFormats[offsetNumber];
+        delete fFormats[offsetNumber];
         fFormats[offsetNumber] = newFormat;
     }
     segments[1].remove();   // throw away other segments
     segments[2].remove();
     segments[3].remove();
 
+    return argumentNumber;
 }
  
 // -------------------------------------
