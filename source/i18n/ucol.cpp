@@ -887,8 +887,8 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
             CE = firstCE;
             firstCE = UCOL_NOT_FOUND;
             source->pos--; /* spit out yet another char, which led us in this contraction */
-            break;
           }
+          break;
         } else if(isContraction(CE)) { /* fix for the bug. Other places need to be checked */
         /* this is contraction, and we will continue. However, we can fail along the */
         /* th road, which means that we have part of contraction correct */
