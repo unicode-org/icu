@@ -50,6 +50,7 @@ zh_MO {
         "#,##0%",
         "#E0",
     }
+    //Keys:alias { "zh_TW" }
     Types:alias { "zh_TW" }
     Variants:alias { "zh_TW" }
 //    zoneStrings { 

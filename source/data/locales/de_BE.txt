@@ -98,4 +98,8 @@ de_BE {
 //        Units { "mm" }
 //    }
 //    LocaleString{ "de_BE" }
+    
+    Currencies {
+        FRF { "FF",  "Franken" }
+    }
 }

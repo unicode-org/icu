@@ -1462,19 +1462,29 @@ en {
         // the lenient-parse rules allow several different characters to be used
         // as delimiters between hours, minutes, and seconds
         "%%lenient-parse:\n"
-            "& ':' = '.' = ' ' = '-';\n" 
+            "& ':' = '.' = ' ' = '-';\n"
+    }
+    Keys{
+         collation { "Collation" }
+         calendar  { "Calendar" }
     }
     Types{
         // variants for collation (traditional may also be used for traditional chinese)
-        PHONEBOOK   { "Phonebook Order" }
-        PINYIN      { "Pinyin Order"    }
-        TRADITIONAL { "Traditional"     }
-        STROKE      { "Stroke Order"    }
-        DIRECT      { "Direct Order"    }
+        collation{
+          phonebook   { "Phonebook Order" }
+          pinyin      { "Pinyin Order"    }
+          traditional { "Traditional"     }
+          stroke      { "Stroke Order"    }
+          direct      { "Direct Order"    }
+       }
+       calendar{
+         traditional{ "Traditional Calendar" }
+       }
     }
+
     // each variant name that occurs in locales should be listed with %% and a display string
     Variants{
-        PREEURO { "Pre-Euro" }   // PREEURO variant display name
+        //PREEURO { "Pre-Euro" }   // PREEURO variant display name
         EURO    { "Euro" }         // EURO variant display name
         NY      { "Nynorsk" }      // Norwegian variant display name
         POSIX   { "Posix" }
@@ -1488,9 +1498,9 @@ en {
     // This is the English form of this resource.
     "%Translit%Hex"         { "Hex Escape" }
     "%Translit%UnicodeName" { "Unicode Name" }
-    "%Translit%UnicodeChar" { "Unicode Character" } 
+    "%Translit%UnicodeChar" { "Unicode Character" }
 
-    zoneStrings { 
+    zoneStrings {
         {
             "PST",
             "Pacific Standard Time",

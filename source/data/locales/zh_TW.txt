@@ -2226,14 +2226,23 @@ zh_TW {
         "\u9F52\u9F54-\u9F59\u9F5B-\u9F61\u9F63-\u9F67\u9F6A-\u9F6C"
         "\u9F6E-\u9F72\u9F74-\u9F7B\u9F7E\u9F8D\u9F90-\u9F92"
         "\u9F94-\u9F95\u9F98\u9F9C\u9FA0\u9FA2\u9FA4]"
-    }
+    }     
+    // Keys{
+    //   collation { "" }
+    //   calendar  { "" }
+    // }
     Types{
-        STROKE { "\u7B46\u5283\u987a\u5e8f" }   // Traditional Chinese.
-        TRADITIONAL { "\u50B3\u7D71\u66C6\u6CD5" }
+        collation{
+            stroke      { "\u7B46\u5283\u987a\u5e8f" }   // Traditional Chinese.
+            traditional { "\u50B3\u7D71\u66C6\u6CD5" }
+        }
+        calendar{
+            traditional { "\u50B3\u7D71\u66C6\u6CD5" }
+        }
     }
     Variants{
         EURO    { "\u6B50\u5143" }
-        PREEURO { "\u820A\u5E63" }
+       // PREEURO { "\u820A\u5E63" }
         REVISED { "\u5DF2\u4FEE\u8A02" }
     }
     // Fall back to zh

@@ -7,13 +7,32 @@
 
 es {
     Version { "3.0" }
+    Keys{
+         collation { "Colaci\u00f3n" }
+         calendar  { "Calendario" }
+    }
     Types {
-        TRADITIONAL { "Tradicional" }
+        collation{
+            direct      { "Directo Orden"    }
+            phonebook   { "Gu\u00FDa Orden" }
+            // PINYIN      { "PINYIN"    }
+            stroke	{ "Pincelada Orden"    }
+            traditional { "Tradicional Orden" }
+        }
+        calendar{
+            traditional{ "Tradicional" }
+	    // japanese  { "JAPANESE"  }
+	    // buddhist  { "BUDDHIST"  }
+	    // islamic   { "ISLAMIC"   }
+	    // hebrew    { "HEBREW"    }
+	    // chinese   { "CHINESE"   }
+	    // gregorian { "GREGORIAN" }
+        }
     }
     Variants {
         REVISED { "Revisado" }
     }
-    CollationElements { 
+    CollationElements {
         Version { "1.0" }
         Sequence { "& N < n\u0303<<< N\u0303" }
     }
