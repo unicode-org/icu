@@ -57,17 +57,22 @@ U_NAMESPACE_BEGIN
  *   The following structs map exactly onto the raw data from ICU common data file. 
  */
 struct RBBIDataHeader {
-    uint32_t         fMagic;       /*  == 0xbla0 */
-    uint32_t         fVersion;     /*  == 1 */
-    uint32_t         fLength;      /*  Total length in bytes of this RBBI Data, */
-                                   /*      including all sections, not just the header. */
-    uint32_t         fCatCount;    /*  Number of character categories. */
+    uint32_t         fMagic;           /*  == 0xbla0                                               */
+    uint8_t          fFormatVersion[4]; /* Data Format.  Same as the value in struct UDataInfo      */
+                                       /*   if there is one associated with this data.             */
+                                       /*     (version originates in rbbi, is copied to UDataInfo) */
+                                       /*   For ICU 3.2 and earlier, this field was                */
+                                       /*       uint32_t  fVersion                                 */
+                                       /*   with a value of 1.                                     */
+    uint32_t         fLength;          /*  Total length in bytes of this RBBI Data,                */
+                                       /*      including all sections, not just the header.        */
+    uint32_t         fCatCount;        /*  Number of character categories.                         */
 
-    /*  */
-    /*  Offsets and sizes of each of the subsections within the RBBI data. */
-    /*  All offsets are bytes from the start of the RBBIDataHeader. */
-    /*  All sizes are in bytes. */
-    /*  */
+    /*                                                                        */
+    /*  Offsets and sizes of each of the subsections within the RBBI data.    */
+    /*  All offsets are bytes from the start of the RBBIDataHeader.           */
+    /*  All sizes are in bytes.                                               */
+    /*                                                                        */
     uint32_t         fFTable;         /*  forward state transition table. */
     uint32_t         fFTableLen;
     uint32_t         fRTable;         /*  Offset to the reverse state transition table. */
