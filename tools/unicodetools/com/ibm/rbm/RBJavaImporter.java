@@ -65,7 +65,7 @@ public class RBJavaImporter extends RBImporter {
             Enumeration enum = base_lrb.getKeys();
             while (enum.hasMoreElements()) {
                 String key = enum.nextElement().toString();
-                System.out.println("Resource -> " + key + " = " + base_lrb.getString(key));
+                RBManagerGUI.debugMsg("Resource -> " + key + " = " + base_lrb.getString(key));
             }
         }
     }
