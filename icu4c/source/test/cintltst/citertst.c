@@ -116,8 +116,8 @@ static void TestBug672() {
 
 
 
-//  Running this test with normalization enabled showed up a bug in the incremental
-//    normalization code.
+/*  Running this test with normalization enabled showed up a bug in the incremental
+    normalization code. */
 static void TestBug672Normalize() {
     UErrorCode  status = U_ZERO_ERROR;
     UChar       pattern[20];
@@ -704,16 +704,14 @@ static void backAndForth(UCollationElements *iter)
 
         ucol_reset(iter);
         log_err("\nnext: ");
-        while ((o = ucol_next(iter, &status)) != UCOL_NULLORDER)
+        if ((o = ucol_next(iter, &status)) != UCOL_NULLORDER)
         {
             log_err("Error at %x\n", o);
-            break;
         }
         log_err("\nprev: ");
-        while ((o = ucol_previous(iter, &status)) != UCOL_NULLORDER)
+        if ((o = ucol_previous(iter, &status)) != UCOL_NULLORDER)
         {
             log_err("Error at %x\n", o);
-            break;
         }
         log_verbose("\n");
     }
