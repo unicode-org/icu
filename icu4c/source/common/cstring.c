@@ -126,6 +126,17 @@ T_CString_stricmp(const char *str1, const char *str2) {
     }
 }
 
+U_CAPI char *uprv_strdup(const char *src) {
+    size_t len = strlen(src) + 1;
+    char *dup = (char *) malloc(len);
+
+    if (dup) {
+	uprv_memcpy(dup, src, len);
+    }
+
+    return dup;
+}
+
 #if !U_HAVE_WCHAR_H
 U_CAPI wchar_t *uprv_wcscat(wchar_t *dst, const wchar_t *src) {
     wchar_t *start=dst;
