@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-os390,v 1.34 2002/02/12 20:04:52 yves-oss Exp $
+## $Id: mh-os390,v 1.35 2002/05/09 21:33:50 grhoten-oss Exp $
 
 ###################################################################
 #                    IMPORTANT NOTE                               #
@@ -71,10 +71,10 @@ SO = dll
 ## Non-shared intermediate object suffix
 STATIC_O = o
 
+ifeq ($(OS390BATCH),1)
 ## Suffix of the subset data library for batch mode
 BATCH_STUB_SUFFIX=_390
 
-ifeq ($(OS390BATCH),1)
 BATCH_STUB_TARGET=	"//'${LOADMOD}(IXMI${SO_TARGET_VERSION_MAJOR}D1)'"
 BATCH_LIBICUUC=		"//'${LOADEXP}(IXMI${SO_TARGET_VERSION_MAJOR}UC)'"
 BATCH_LIBICUDT=		"//'${LOADEXP}(IXMI${SO_TARGET_VERSION_MAJOR}D1)'"
@@ -82,7 +82,7 @@ endif
 
 ## Link commands to link to ICU libs
 LIBICUDT=	$(top_builddir)/stubdata/lib$(ICUDATA_NAME)$(ICULIBSUFFIX)$(BATCH_STUB_SUFFIX).x
-LIBICUUC=	$(top_builddir)/common/li$(ICUPREFIX)uc$(ICULIBSUFFIX).$(SO_TARGET_VERSION).x
+LIBICUUC=	$(top_builddir)/common/lib$(ICUPREFIX)uc$(ICULIBSUFFIX).$(SO_TARGET_VERSION).x
 LIBICUI18N=	$(top_builddir)/i18n/lib$(ICUPREFIX)i18n$(ICULIBSUFFIX).$(SO_TARGET_VERSION).x
 LIBICULE=	$(top_builddir)/layout/lib$(ICUPREFIX)le$(ICULIBSUFFIX).$(SO_TARGET_VERSION).x
 LIBCTESTFW=	$(top_builddir)/tools/ctestfw/lib$(ICUPREFIX)ctestfw$(ICULIBSUFFIX).$(SO_TARGET_VERSION).x
