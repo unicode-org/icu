@@ -268,6 +268,8 @@ void LocaleTest::TestBasicGetters() {
     if (temp != UnicodeString("SPECIAL") )
       errln("  Variant code mismatch: " + temp + "  versus \"SPECIAL\"");
 
+    if (Locale::getDefault() != Locale::createFromName(NULL))
+      errln("Locale::getDefault() == Locale::createFromName(NULL)");
 
     /*----------*/
     // NOTE: There used to be a special test for locale names that had language or
