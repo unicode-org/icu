@@ -17,8 +17,8 @@ LINK.c=		$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
 LINK.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 
 ## Commands to make a shared library
-SHLIB.c=	$(CC) -dynamiclib -dynamic $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
-SHLIB.cc=	$(CXX) -dynamiclib -dynamic $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+SHLIB.c=	$(CC) -dynamiclib -dynamic $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -install_name $(DESTDIR)$(libdir)/$(TARGET)
+SHLIB.cc=	$(CXX) -dynamiclib -dynamic $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -install_name $(DESTDIR)$(libdir)/$(TARGET)
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	-L
