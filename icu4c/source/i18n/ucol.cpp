@@ -1854,6 +1854,9 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
           if(CE == UCOL_NOT_FOUND) { // there are tailored surrogates in this block, but not this one.
             // We need to backup
             loadState(source, &state, TRUE);
+          } else if (getCETag(CE) == IMPLICIT_TAG) { // got an untailored surrogate here
+            uint32_t cp = ((((uint32_t)ch)<<10UL)+(trail)-(((uint32_t)0xd800<<10UL)+0xdc00-0x10000));
+            return getImplicit(cp, source, 0);
           }
         }
       }
