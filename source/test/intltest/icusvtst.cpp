@@ -45,7 +45,7 @@ class LKFSubclass : public LocaleKeyFactory {
     }
 
     protected:
-	virtual const Hashtable* getSupportedIDs(UErrorCode &status) const {
+	virtual const Hashtable* getSupportedIDs(UErrorCode &/*status*/) const {
 		return &table;
 	}
 };
@@ -57,7 +57,7 @@ class Integer : public UObject {
     Integer(int32_t val) : _val(val) {
     }
 
-    Integer(const Integer& rhs) : _val(rhs._val) {
+    Integer(const Integer& rhs) : UObject(rhs), _val(rhs._val) {
     }
     virtual ~Integer() {
     }
@@ -126,7 +126,8 @@ ICUServiceTest::~ICUServiceTest() {
 }
 
 void 
-ICUServiceTest::runIndexedTest(int32_t index, UBool exec, const char* &name, char* par)
+ICUServiceTest::runIndexedTest(int32_t index, UBool exec, const char* &name,
+char* /*par*/)
 {
     switch (index) {
         TESTCASE(0,testAPI_One);
@@ -155,7 +156,7 @@ UnicodeString append(UnicodeString& result, const UObject* obj)
             sprintf(buffer, "%d", ((Integer*)obj)->_val);
             result.append(buffer);
         } else {
-            sprintf(buffer, "%x", obj);
+            sprintf(buffer, "%p", (const void*)obj);
             result.append(buffer);
         }
     }
@@ -487,11 +488,11 @@ class AnonymousStringFactory : public ICUServiceFactory
         return new UnicodeString(key.getID());
     }
 
-    virtual void updateVisibleIDs(Hashtable& result, UErrorCode& status) const {
+    virtual void updateVisibleIDs(Hashtable& /*result*/, UErrorCode& /*status*/) const {
         // do nothing
     }
 
-    virtual UnicodeString& getDisplayName(const UnicodeString& id, const Locale& locale, UnicodeString& result) const {
+    virtual UnicodeString& getDisplayName(const UnicodeString& /*id*/, const Locale& /*locale*/, UnicodeString& result) const {
         // do nothing
         return result;
     }
@@ -1160,7 +1161,7 @@ void ICUServiceTest::testLocale() {
             logln("locales: ");
             {
                 const char* p;
-                while (p = locales->next(NULL, status)) {
+                while ((p = locales->next(NULL, status))) {
                     logln(p);
                 }
             }
