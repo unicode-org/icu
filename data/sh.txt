@@ -13,7 +13,6 @@ sh {
     CollationElements { "& D < dz, Dz, dZ, DZ < \u0111, \u0110& L < lj, Lj, lJ, "
         "LJ < \u0142, \u0141& N < nj, Nj, nJ, NJ& Z < \u017C, \u017B" }
     Countries { 
-        YU { "Jugoslavija" }
         AF { "Avganistan" }
         AL { "Albanija" }
         DZ { "Al\u017Eir" }
