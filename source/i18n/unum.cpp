@@ -592,62 +592,62 @@ unum_getTextAttribute(const UNumberFormat*  fmt,
 {
     if(U_FAILURE(*status))
         return -1;
-    
+
     UnicodeString res;
     if(!(result==NULL && resultLength==0)) {
         // NULL destination for pure preflighting: empty dummy string
         // otherwise, alias the destination buffer
         res.setTo(result, 0, resultLength);
     }
-    
+
     if (((const NumberFormat*)fmt)->getDynamicClassID() == DecimalFormat::getStaticClassID()) {
-      const DecimalFormat* df = (const DecimalFormat*) fmt;
-      switch(tag) {
-      case UNUM_POSITIVE_PREFIX:
-        df->getPositivePrefix(res);
-        break;
-        
-      case UNUM_POSITIVE_SUFFIX:
-        df->getPositiveSuffix(res);
-        break;
-        
-      case UNUM_NEGATIVE_PREFIX:
-        df->getNegativePrefix(res);
-        break;
-        
-      case UNUM_NEGATIVE_SUFFIX:
-        df->getNegativeSuffix(res);
-        break;
-        
-      case UNUM_PADDING_CHARACTER:
-        res = df->getPadCharacterString();
-        break;
-        
-      case UNUM_CURRENCY_CODE:
-        res = UnicodeString(df->getCurrency());
-        break;
-        
-      default:
-        *status = U_UNSUPPORTED_ERROR;
-        return -1;
-      }
+        const DecimalFormat* df = (const DecimalFormat*) fmt;
+        switch(tag) {
+        case UNUM_POSITIVE_PREFIX:
+            df->getPositivePrefix(res);
+            break;
+
+        case UNUM_POSITIVE_SUFFIX:
+            df->getPositiveSuffix(res);
+            break;
+
+        case UNUM_NEGATIVE_PREFIX:
+            df->getNegativePrefix(res);
+            break;
+
+        case UNUM_NEGATIVE_SUFFIX:
+            df->getNegativeSuffix(res);
+            break;
+
+        case UNUM_PADDING_CHARACTER:
+            res = df->getPadCharacterString();
+            break;
+
+        case UNUM_CURRENCY_CODE:
+            res = UnicodeString(df->getCurrency());
+            break;
+
+        default:
+            *status = U_UNSUPPORTED_ERROR;
+            return -1;
+        }
     } else {
-      U_ASSERT(((const NumberFormat*)fmt)->getDynamicClassID() == RuleBasedNumberFormat::getStaticClassID());
-      const RuleBasedNumberFormat* rbnf = (const RuleBasedNumberFormat*)fmt;
-      if (tag == UNUM_DEFAULT_RULESET) {
-    res = rbnf->getDefaultRuleSetName();
-      } else if (tag == UNUM_PUBLIC_RULESETS) {
-    int32_t count = rbnf->getNumberOfRuleSetNames();
-    for (int i = 0; i < count; ++i) {
-      res += rbnf->getRuleSetName(i);
-      res += (UChar)0x003b; // semicolon
+        U_ASSERT(((const NumberFormat*)fmt)->getDynamicClassID() == RuleBasedNumberFormat::getStaticClassID());
+        const RuleBasedNumberFormat* rbnf = (const RuleBasedNumberFormat*)fmt;
+        if (tag == UNUM_DEFAULT_RULESET) {
+            res = rbnf->getDefaultRuleSetName();
+        } else if (tag == UNUM_PUBLIC_RULESETS) {
+            int32_t count = rbnf->getNumberOfRuleSetNames();
+            for (int i = 0; i < count; ++i) {
+                res += rbnf->getRuleSetName(i);
+                res += (UChar)0x003b; // semicolon
+            }
+        } else {
+            *status = U_UNSUPPORTED_ERROR;
+            return -1;
+        }
     }
-      } else {
-    *status = U_UNSUPPORTED_ERROR;
-    return -1;
-      }
-    }
-    
+
     return res.extract(result, resultLength, *status);
 }
 
