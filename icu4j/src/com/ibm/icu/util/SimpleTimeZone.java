@@ -180,6 +180,34 @@ public class SimpleTimeZone extends TimeZone {
     }
 
     /**
+     * Constructor for TimeZoneData.  Takes as input an array and an index
+     * into the array.  The array format is that of TimeZoneData.DATA.
+     */
+    SimpleTimeZone(String ID, int[] data, int i) {
+        setID(ID);
+        rawOffset = data[i+1]*1000;
+        if (data[i] == 0) {
+            dstSavings = millisPerHour; // In case user sets rules later
+        } else {
+            startMonth     = data[i+2];
+            startDay       = data[i+3];
+            startDayOfWeek = data[i+4];
+            startTime      = data[i+5]*60000;
+            startTimeMode  = data[i+6];
+            endMonth       = data[i+7];
+            endDay         = data[i+8];
+            endDayOfWeek   = data[i+9];
+            endTime        = data[i+10]*60000;
+            endTimeMode    = data[i+11];
+            dstSavings     = data[i+12]*60000;
+            decodeRules();
+            if (dstSavings <= 0) {
+                throw new IllegalArgumentException("Illegal DST savings");
+            }
+        }
+    }
+
+    /**
      * Sets the daylight savings starting year.
      *
      * @param year  The daylight savings starting year.
