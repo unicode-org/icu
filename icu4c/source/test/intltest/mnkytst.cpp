@@ -38,10 +38,9 @@
 #define MAX(x,y) ((x) > (y) ? (x) : (y))
 #endif
 
-const UnicodeString CollationMonkeyTest::source("-abcdefghijklmnopqrstuvwxyz#&^$@", "");
-
 CollationMonkeyTest::CollationMonkeyTest()
-: myCollator(0)
+: myCollator(0),
+  source("-abcdefghijklmnopqrstuvwxyz#&^$@", "")
 {
     UErrorCode status = U_ZERO_ERROR;
     myCollator = Collator::createInstance("en_US", status);

@@ -52,7 +52,7 @@ private:
 
     void doTest(RuleBasedCollator *myCollation, UnicodeString source, UnicodeString target, Collator::EComparisonResult result);
 
-    static const UnicodeString source;
+    const UnicodeString source;
 
     Collator *myCollator;
 };
