@@ -41,7 +41,8 @@ UnicodeSetTest::runIndexedTest(int32_t index, UBool exec,
         CASE(4,TestMinimalRep);
         CASE(5,TestAPI);
         CASE(6,TestScriptSet);
-        CASE(7,TestExhaustive);
+        CASE(7,TestPropertySet);
+        CASE(8,TestExhaustive);
         default: name = ""; break;
     }
 }
@@ -103,16 +104,18 @@ UnicodeSetTest::TestCategories(void) {
 void
 UnicodeSetTest::TestCloneEqualHash(void) {
     UErrorCode status = U_ZERO_ERROR;
-    int8_t category=Unicode::LOWERCASE_LETTER;
-    UnicodeSet *set1=new UnicodeSet(category, status); //  :Li: Letter, lowercase
+    //int8_t category=Unicode::LOWERCASE_LETTER;
+    //UnicodeSet *set1=new UnicodeSet(category, status); //  :Li: Letter, lowercase
+    UnicodeSet *set1=new UnicodeSet("[:Ll:]", status); //  Letter, lowercase
     if (U_FAILURE(status)){
-        errln((UnicodeString)"FAIL: Can't construst set with cateegory->Ll");
+        errln((UnicodeString)"FAIL: Can't construst set with category->Ll");
         return;
     }
-    category=Unicode::DECIMAL_DIGIT_NUMBER;
-    UnicodeSet *set2=new UnicodeSet(category, status);   //Number, Decimal digit
+    //category=Unicode::DECIMAL_DIGIT_NUMBER;
+    //UnicodeSet *set2=new UnicodeSet(category, status);   //Number, Decimal digit
+    UnicodeSet *set2=new UnicodeSet("[:Nd:]", status);   //Number, Decimal digit
     if (U_FAILURE(status)){
-        errln((UnicodeString)"FAIL: Can't construct set with cateegory->Nd");
+        errln((UnicodeString)"FAIL: Can't construct set with category->Nd");
         return;
     }
 
@@ -407,6 +410,22 @@ void UnicodeSetTest::TestScriptSet() {
     expectContainment(set2, "[:Greek:]", CharsToUnicodeString("\\u0391\\u03B1"), "aA");
 }
 
+/**
+ * Test the [:Latin:] syntax.
+ */
+void UnicodeSetTest::TestPropertySet() {
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeSet set("[:Latin:]", status);
+    if (U_FAILURE(status)) { errln("FAIL"); return; }
+    expectContainment(set, "aA", CharsToUnicodeString("\\u0391\\u03B1"));
+    set.applyPattern("[\\p{Greek}]", status);
+    if (U_FAILURE(status)) { errln("FAIL"); return; }
+    expectContainment(set, CharsToUnicodeString("\\u0391\\u03B1"), "aA");
+    set.applyPattern("\\P{ GENERAL Category = upper case letter }", status);
+    if (U_FAILURE(status)) { errln("FAIL"); return; }
+    expectContainment(set, "abc", "ABC");
+}
+
 void UnicodeSetTest::TestExhaustive() {
     // exhaustive tests. Simulate UnicodeSets with integers.
     // That gives us very solid tests (except for large memory tests).
@@ -567,6 +586,15 @@ UnicodeString UnicodeSetTest::getPairs(const UnicodeSet& set) {
         pairs.append((UChar)start).append((UChar)end);
     }
     return pairs;
+}
+
+void
+UnicodeSetTest::expectContainment(const UnicodeSet& set,
+                                  const UnicodeString& charsIn,
+                                  const UnicodeString& charsOut) {
+    UnicodeString pat;
+    set.toPattern(pat);
+    expectContainment(set, pat, charsIn, charsOut);
 }
 
 void

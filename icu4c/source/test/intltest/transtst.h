@@ -210,6 +210,11 @@ class TransliteratorTest : public IntlTest {
      */
     void TestCompoundFilterID(void);
 
+    /**
+     * Test new property set syntax
+     */
+    void TestPropertySet(void);
+
     /* Devanagari-Latin rules Test */
     void TestDevanagariLatinRT(void);
 

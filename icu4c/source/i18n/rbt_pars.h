@@ -108,6 +108,13 @@ class TransliteratorParser {
      */
     UnicodeString undefinedVariableName;
 
+    /**
+     * The stand-in character for the 'dot' set, represented by '.' in
+     * patterns.  This is allocated the first time it is needed, and
+     * reused thereafter.
+     */
+    UChar dotStandIn;
+
 public:
 
     /**
@@ -189,6 +196,12 @@ private:
      * the matcher (adopt it).
      */
     UChar generateStandInFor(UnicodeMatcher* adopted);
+
+    /**
+     * Return the stand-in for the dot set.  It is allocated the first
+     * time and reused thereafter.
+     */
+    UChar getDotStandIn();
 
     /**
      * Append the value of the given variable name to the given

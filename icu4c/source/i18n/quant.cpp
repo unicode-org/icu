@@ -46,9 +46,15 @@ UMatchDegree Quantifier::matches(const Replaceable& text,
     int32_t start = offset;
     uint32_t count = 0;
     while (count < maxCount) {
+        int32_t pos = offset;
         UMatchDegree m = matcher->matches(text, offset, limit, incremental);
         if (m == U_MATCH) {
             ++count;
+            if (pos == offset) {
+                // If offset has not moved we have a zero-width match.
+                // Don't keep matching it infinitely.
+                break;
+            }
         } else if (incremental && m == U_PARTIAL_MATCH) {
             return U_PARTIAL_MATCH;
         } else {

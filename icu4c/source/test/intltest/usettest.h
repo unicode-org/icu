@@ -41,6 +41,11 @@ private:
 
     void TestScriptSet(void);
 
+    /**
+     * Test the [:Latin:] syntax.
+     */
+    void TestPropertySet(void);
+
     void TestExhaustive(void);
 
 private:
@@ -79,6 +84,9 @@ private:
      */
     static UnicodeString getPairs(const UnicodeSet& set);
 
+    void expectContainment(const UnicodeSet& set,
+                           const UnicodeString& charsIn,
+                           const UnicodeString& charsOut);
     void expectContainment(const UnicodeSet& set,
                            const UnicodeString& setName,
                            const UnicodeString& charsIn,

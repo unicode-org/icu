@@ -71,7 +71,7 @@ cpdtrans.o hextouni.o rbt.o rbt_data.o rbt_pars.o rbt_rule.o rbt_set.o \
 dbbi.o dbbi_tbl.o rbbi.o rbbi_tbl.o nultrans.o \
 remtrans.o titletrn.o tolowtrn.o toupptrn.o xformtrn.o \
 name2uni.o uni2name.o unitohex.o nortrans.o unifilt.o quant.o transreg.o \
-llong.o nfrs.o nfrule.o nfsubs.o rbnf.o
+llong.o nfrs.o nfrule.o nfsubs.o rbnf.o upropset.o
 
 
 
