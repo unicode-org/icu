@@ -658,7 +658,7 @@ TimeZoneRegressionTest::Test4154525()
     
     int32_t DATA [] = {
         1, GOOD,
-        0, BAD,
+        0, GOOD,
         -1, BAD,
         60*60*1000, GOOD,
         INT32_MIN, BAD,
