@@ -314,6 +314,11 @@ icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Asian.txt -text svn
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Chinese.txt -text svneol=unset#application/octet-stream
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Japanese.txt -text
 icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Japanese_h.txt -text svneol=unset#application/octet-stream
+icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Japanese_k.txt -text svneol=unset#application/octet-stream
+icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Korean.txt -text
+icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Latin.txt -text
+icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_Russian.txt -text
+icu4j/src/com/ibm/icu/dev/test/perf/data/collation/TestNames_SerbianSH.txt -text
 icu4j/src/com/ibm/icu/dev/test/rbbi/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/test/search/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/test/translit/package.html svneol=native#text/html
