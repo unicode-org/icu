@@ -72,7 +72,8 @@
     } \
 }
 
-#define UTF16_GET_CHAR_SAFE(s, start, i, length, c, strict) { \
+#define _UTF16_GET_CHAR_SAFE_1(s, start, i, length, c) \
+{ \
     (c)=(s)[i]; \
     if(UTF_IS_SURROGATE(c)) { \
         uint16_t __c2; \
@@ -80,22 +81,53 @@
             if((i)+1<(length) && UTF_IS_SECOND_SURROGATE(__c2=(s)[(i)+1])) { \
                 (c)=UTF16_GET_PAIR_VALUE((c), __c2); \
                 /* strict: ((c)&0xfffe)==0xfffe is caught by UTF_IS_ERROR() */ \
-            } else if(strict) {\
-                /* unmatched first surrogate */ \
-                (c)=UTF_ERROR_VALUE; \
-            } \
+            }
+
+#define _UTF16_GET_CHAR_SAFE_2(s, start, i, length, c) \
         } else { \
             if((i)>(start) && UTF_IS_FIRST_SURROGATE(__c2=(s)[(i)-1])) { \
                 (c)=UTF16_GET_PAIR_VALUE(__c2, (c)); \
                 /* strict: ((c)&0xfffe)==0xfffe is caught by UTF_IS_ERROR() */ \
-            } else if(strict) {\
-                /* unmatched second surrogate */ \
+            }
+
+#define _UTF16_SAFE_ERROR(c) \
+            { \
+                /* unmatched first surrogate */ \
                 (c)=UTF_ERROR_VALUE; \
-            } \
+            }
+
+#define _UTF16_GET_CHAR_SAFE_END \
         } \
     /* else strict: (c)==0xfffe is caught by UTF_IS_ERROR() */ \
     } \
 }
+
+#define UTF16_GET_CHAR_SAFE(s, start, i, length, c, strict) \
+    _UTF16_GET_CHAR_SAFE_1(s, start, i, length, c) \
+            else if(strict) \
+            _UTF16_SAFE_ERROR(c) \
+    _UTF16_GET_CHAR_SAFE_2(s, start, i, length, c) \
+            else if(strict) \
+            _UTF16_SAFE_ERROR(c) \
+    _UTF16_GET_CHAR_SAFE_END
+
+/*
+ * The following two macros will get around compilers complaining
+ * about constant conditional statements.
+ */
+#define UTF16_GET_CHAR_SAFE_STRICT(s, start, i, length, c) \
+    _UTF16_GET_CHAR_SAFE_1(s, start, i, length, c) \
+            else \
+            _UTF16_SAFE_ERROR(c) \
+    _UTF16_GET_CHAR_SAFE_2(s, start, i, length, c) \
+            else \
+            _UTF16_SAFE_ERROR(c) \
+    _UTF16_GET_CHAR_SAFE_END
+
+#define UTF16_GET_CHAR_SAFE_LENIENT(s, start, i, length, c) \
+    _UTF16_GET_CHAR_SAFE_1(s, start, i, length, c) \
+    _UTF16_GET_CHAR_SAFE_2(s, start, i, length, c) \
+    _UTF16_GET_CHAR_SAFE_END
 
 /* definitions with forward iteration --------------------------------------- */
 
@@ -159,7 +191,7 @@
 
 /* safe versions with error-checking and optional regularity-checking */
 
-#define UTF16_NEXT_CHAR_SAFE(s, i, length, c, strict) { \
+#define _UTF16_NEXT_CHAR_SAFE_1(s, i, length, c) \
     (c)=(s)[(i)++]; \
     if(UTF_IS_FIRST_SURROGATE(c)) { \
         uint16_t __c2; \
@@ -167,14 +199,33 @@
             ++(i); \
             (c)=UTF16_GET_PAIR_VALUE((c), __c2); \
             /* strict: ((c)&0xfffe)==0xfffe is caught by UTF_IS_ERROR() */ \
-        } else if(strict) {\
-            /* unmatched first surrogate */ \
-            (c)=UTF_ERROR_VALUE; \
-        } \
-    } else if(strict && UTF_IS_SECOND_SURROGATE(c)) { \
-        /* unmatched second surrogate */ \
-        (c)=UTF_ERROR_VALUE; \
-    /* else strict: (c)==0xfffe is caught by UTF_IS_ERROR() */ \
+        }
+
+#define _UTF16_NEXT_CHAR_SAFE_END \
+    } \
+}
+
+#define UTF16_NEXT_CHAR_SAFE(s, i, length, c, strict) \
+{ \
+    _UTF16_NEXT_CHAR_SAFE_1(s, i, length, c) \
+        else if(strict) \
+        _UTF16_SAFE_ERROR(c) \
+    } else if(strict && UTF_IS_SECOND_SURROGATE(c)) \
+    _UTF16_SAFE_ERROR(c) \
+}
+
+#define UTF16_NEXT_CHAR_SAFE_STRICT(s, i, length, c) \
+{ \
+    _UTF16_NEXT_CHAR_SAFE_1(s, i, length, c) \
+        else \
+        _UTF16_SAFE_ERROR(c) \
+    } else if(UTF_IS_SECOND_SURROGATE(c)) \
+    _UTF16_SAFE_ERROR(c) \
+}
+
+#define UTF16_NEXT_CHAR_SAFE_LENIENT(s, i, length, c) \
+{ \
+    _UTF16_NEXT_CHAR_SAFE_1(s, i, length, c) \
     } \
 }
 
@@ -267,7 +318,7 @@
 
 /* safe versions with error-checking and optional regularity-checking */
 
-#define UTF16_PREV_CHAR_SAFE(s, start, i, c, strict) { \
+#define _UTF16_PREV_CHAR_SAFE_1(s, start, i, c) \
     (c)=(s)[--(i)]; \
     if(UTF_IS_SECOND_SURROGATE(c)) { \
         uint16_t __c2; \
@@ -275,14 +326,30 @@
             --(i); \
             (c)=UTF16_GET_PAIR_VALUE(__c2, (c)); \
             /* strict: ((c)&0xfffe)==0xfffe is caught by UTF_IS_ERROR() */ \
-        } else if(strict) {\
-            /* unmatched second surrogate */ \
-            (c)=UTF_ERROR_VALUE; \
-        } \
-    } else if(strict && UTF_IS_FIRST_SURROGATE(c)) { \
-        /* unmatched first surrogate */ \
-        (c)=UTF_ERROR_VALUE; \
-    /* else strict: (c)==0xfffe is caught by UTF_IS_ERROR() */ \
+        }
+
+
+#define UTF16_PREV_CHAR_SAFE(s, start, i, c, strict) \
+{ \
+    _UTF16_PREV_CHAR_SAFE_1(s, start, i, c) \
+        else if(strict) \
+        _UTF16_SAFE_ERROR(c) \
+    } else if(strict && UTF_IS_FIRST_SURROGATE(c)) \
+    _UTF16_SAFE_ERROR(c) \
+}
+
+#define UTF16_PREV_CHAR_SAFE_STRICT(s, start, i, c) \
+{ \
+    _UTF16_PREV_CHAR_SAFE_1(s, start, i, c) \
+        else \
+        _UTF16_SAFE_ERROR(c) \
+    } else if (UTF_IS_FIRST_SURROGATE(c)) \
+    _UTF16_SAFE_ERROR(c) \
+}
+
+#define UTF16_PREV_CHAR_SAFE_LENIENT(s, start, i, c) \
+{ \
+    _UTF16_PREV_CHAR_SAFE_1(s, start, i, c) \
     } \
 }
 
