@@ -1,4 +1,4 @@
-# Copyright (c) 2002, International Business Machines Corporation and
+# Copyright (c) 2002-2003, International Business Machines Corporation and
 # others. All Rights Reserved.
 #
 #  word.txt    Word Breaking Rules for ICU Rules Based Break Iterator.
