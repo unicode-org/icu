@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/normalizer/Attic/NormalizerBuilder.java,v $ 
- * $Date: 2000/07/18 19:20:16 $ 
- * $Revision: 1.8 $
+ * $Date: 2000/07/21 21:25:28 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -42,7 +42,7 @@ public final class NormalizerBuilder
 
     /**
      * Map of characters whose full canonical decomposition is
-     * identical to their full compatibility decomposition.
+     * DIFFERENT from their full compatibility decomposition.
      */
     private DecompMap explodeCompat = new DecompMap();
 
@@ -629,9 +629,11 @@ public final class NormalizerBuilder
 
     // We need to represent each canonical character class as a single bit
     // so that we can OR together a mask of all combining char classes seen
-    // Build an array that maps from combining class to bit mask.
+    // Build an array that maps from combining class to a compacted integer
+    // from 0..n-1, where n is the number of distinct combining classes.
+    // E.g., in 3.0, there are 53 distinct combining classes.
     int[] classMap = new int[256];
-    int[] typeMask;
+    int[] typeBit;
 
     // Build a two-dimensional array of the action to take for each base/combining pair
     CompactCharArray actions = new CompactCharArray((char)0);
@@ -715,7 +717,10 @@ public final class NormalizerBuilder
 
             // Add explosions for all compatibility decompositions,
             // including the Jamo --> Conjoining Jamo decomps.
-            if (explodeCompat.contains(ch))
+            // If the canonical decomposition is exactly one character
+            // one (4 hex digits) then we deal with it separately below.
+            if (explodeCompat.contains(ch) &&
+                uinfo.getDecomposition(ch).length() != 4)
             {
                 maxCompat = put(replace, explodeCompat.get(ch), 0);
                 addExplosion(lookup, ch, maxCompat);
@@ -727,41 +732,38 @@ public final class NormalizerBuilder
         //
         for (char ch = 0; ch < 0xFFFF; ch++) {
             short cclass = uinfo.getCanonicalClass(ch);
+            String explosion = null;
 
             if (explodeOnly.contains(ch) && uinfo.hasCanonicalDecomposition(ch)) {
                 maxCanon = put(replace, explodeOnly.get(ch), maxCompat);
                 addExplosion(lookup, ch, maxCanon);
             }
-            else if (!combining.contains(ch) && cclass != 0 && classMap[cclass] != 0) {
-                //
+
+//          else if (!combining.contains(ch) && cclass != 0 && classMap[cclass] != 0) {
+//              //
+//              // If a combining character didn't happen to end up in one of
+//              // the pairwise combinations or explosions we use but still has
+//              // a combining class that is the same as a character we *do* use,
+//              // we need to save its class so that we don't combine things "past" it.
+//              //
+//              // However, if the character has an explosion we *don't* need it, because
+//              // we'll never see it, only the results of its explosion.
+//              //
+//              addChar(lookup, ch, COMBINING, 0);
+//              nccCount++;
+//          }
+
+            // I'm rewriting this logic.  Having an index of zero means that
+            // the typeBit[index] gets overwritten with multiple different
+            // values.  So we must use real index values that are unique
+            // per combining class.  Also, it doesn't matter if the class
+            // has been seen or not; we still need to record the character
+            // in order to have its type and class during composition.
+            else if (!combining.contains(ch) && cclass != 0) {
                 // If a combining character didn't happen to end up in one of
                 // the pairwise combinations or explosions we use but still has
                 // a combining class that is the same as a character we *do* use,
-                // we need to save its class so that we don't combine things "past" it.
-                //
-                // However, if the character has an explosion we *don't* need it, because
-                // we'll never see it, only the results of its explosion.
-                //
-
-                // ZERO INDEX BUG:
-                // 
-                // Normalizer is showing two bugs.  These are:
-                //        0041 0316 0300  =>  0041 0316 0300  ;  expect 00C0 0316
-                //   class:  0  220  230
-                //
-                //        0063 0321 0327  =>  0063 0327 0321  ;  expect 0063 0321 0327
-                //   class:  0  202  202
-                // 
-                // To fix these, I'm eliminating from the table all combining
-                // characters with index zero, since these seem to be the
-                // problem.  I'm instead treating these as ordinary combining
-                // charactes.  This may result in larger tables and failure to
-                // short-circuit certain operations, but it appears to create
-                // correct data.  This should be revisited by a normalization
-                // expert at some point. - Liu
-
-                // addChar(lookup, ch, COMBINING, 0); // ORIGINAL CODE
-                // nccCount++;                        // ORIGINAL CODE
+                // we need to save its class.
 
                 // As our index, use combineCount and up.  Reuse values by
                 // mapping them through nccMap, which keeps track of previously
@@ -774,18 +776,47 @@ public final class NormalizerBuilder
 
         nccCount = (short) nccMap.getIndexCount(); // Liu
 
-        // Now run through the combining classes again and assign bitmasks
-        // in the same ascending order as the canonical classes
-        int maskShift = 0;
-        for (int i = 0; i < 256; i++) {
-            if (classMap[i] != 0) {
-                classMap[i] = (1 << (maskShift++));
+        // Remap characters that have a canonical decomposition to a singleton,
+        // and also different compatibility and canonical full decompositions
+        // (that is, also are members of explodeCompat).  These characters can't
+        // be exploded to their full decomposition since that breaks canonical
+        // composition (normalization form C).  Instead, we place their
+        // singleton decomposition in the table, at the end.  This works because
+        // the singleton will get recursively exploded by Normalizer.  As of
+        // Unicode 3.0, this fix applies to U+1FFE, 1FFD, 2000, and 2001. - Liu
+        int singleton = replace.length();
+        for (char ch = 0; ch < 0xFFFF; ch++) {
+            if (!explodingBases.contains(ch) &&
+                explodeCompat.contains(ch) &&
+                uinfo.getDecomposition(ch).length() == 4) {
+              
+                // There might be a cleaner way to do this, perhaps by folding
+                // this logic into the code above (perhaps calling
+                // addExplosion() instead of addChar()), but I couldn't find it.
+                char remap = (char)
+                    Integer.parseInt(uinfo.getDecomposition(ch), 16);
+
+                int index = put(replace, String.valueOf(remap), singleton);
+                addChar(lookup, ch, EXPLODING_BASE, index);
+
+                outv("Canonical singleton " + uinfo.hex(ch) +
+                     " remaps to " + uinfo.hex(remap) + " index=" + index); 
             }
         }
-        if (maskShift > 32) {
-            err(Integer.toString(maskShift) + "combining classes; max is 32");
+
+        // Now run through the combining classes again and assign bit numbers
+        // in the same ascending order as the canonical classes
+        int maskShift = 0;
+        int bit = 0;
+        for (int i = 0; i < 256; i++) {
+            if (classMap[i] != 0) {
+                classMap[i] = ++bit;
+            }
         }
-        outv("# of combining classes is " + maskShift);
+        if (bit >= 64) {
+            err(String.valueOf(bit+1) + " combining classes; max is 64");
+        }
+        outv("# of combining classes is " + (bit+1));
 
         outv("baseCount=" + baseCount + ", combineCount=" + combineCount
                             + ", nccCount=" + nccCount);
@@ -839,9 +870,10 @@ public final class NormalizerBuilder
             index++;
         }
 
-        // Fill in the "type mask" array that maps from combining character index
-        // to a bit mask representing the canonical combining class
-        typeMask = new int[combineCount + nccCount];
+        // Fill in the array that maps from combining class value
+        // to a bit numbe representing the canonical combining class.
+        // That is, map from 0..240 (in 3.0) to 0..52.
+        typeBit = new int[combineCount + nccCount];
 
         for (char ch = 0; ch < 0xFFFF; ch++) {
             int value = lookup.elementAt(ch);
@@ -850,11 +882,11 @@ public final class NormalizerBuilder
             if (type == COMBINING) {
                 int ind = value >>> INDEX_SHIFT;
                 int cclass = uinfo.getCanonicalClass(ch);
-                if (typeMask[ind] != 0 && typeMask[ind] != classMap[cclass]) {
-                    err("Overwriting typeMask[" + ind + "], was " +
-                        typeMask[ind] + ", changing to " + classMap[cclass] + " for class " + cclass);
+                if (typeBit[ind] != 0 && typeBit[ind] != classMap[cclass]) {
+                    err("Overwriting typeBit[" + ind + "], was " +
+                        typeBit[ind] + ", changing to " + classMap[cclass] + " for class " + cclass);
                 }
-                typeMask[ind] = classMap[cclass];
+                typeBit[ind] = classMap[cclass];
             }
         }
 
@@ -874,15 +906,15 @@ public final class NormalizerBuilder
             int actionSize = actions.getIndexArray().length * 2 + actions.getValueArray().length * 2;
             int actIndexSize = actionIndex.length * 2;
             int replaceSize = replace.length();
-            int typeMaskSize = typeMask.length * 2;
+            int typeBitSize = typeBit.length * 2;
 
             outv("Total runtime size of compose data is "
-                + (lookupSize + actionSize + actIndexSize + replaceSize + typeMaskSize));
+                + (lookupSize + actionSize + actIndexSize + replaceSize + typeBitSize));
 
             outv("  lookup:       " + lookupSize);
             outv("  actions:      " + actionSize);
             outv("  actionIndex:  " + actIndexSize);
-            outv("  typeMask:     " + typeMaskSize);
+            outv("  typeBit:      " + typeBitSize);
             outv("  replace:      " + replaceSize);
         }
     }
@@ -920,7 +952,7 @@ public final class NormalizerBuilder
         out.write("actions",        actions       );
         out.write("actionIndex",    actionIndex   );
         out.write("replace",        replace       );
-        out.write("typeMask",       typeMask      );
+        out.write("typeBit",        typeBit);
 
         out.close();
     }

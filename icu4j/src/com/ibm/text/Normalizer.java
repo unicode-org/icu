@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Normalizer.java,v $ 
- * $Date: 2000/07/19 15:43:07 $ 
- * $Revision: 1.7 $
+ * $Date: 2000/07/21 21:26:34 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -352,6 +352,8 @@ public final class Normalizer {
      */
     public static String normalize(String str, Mode mode, int options) {
         if (mode.compose()) {
+            // compose() implicitly decomposes its input before
+            // composing starts.  No need to call decompose() first.
             return compose(str, mode.compat(), options);
         }
         if (mode.decomp()) {
@@ -392,7 +394,8 @@ public final class Normalizer {
         int     explodePos = EMPTY;         // Position in input buffer
         int     basePos = 0;                // Position of last base in output string
         int     baseIndex = 0;              // Index of last base in "actions" array
-        int     classesSeen = 0;            // Combining classes seen since last base
+        int     classesSeenL = 0;           // Combining classes seen since last base
+        int     classesSeenH = 0;           //  64-bit mask
         int     action;
 
         // Compatibility explosions have lower indices; skip them if necessary
@@ -419,34 +422,38 @@ public final class Normalizer {
             int charInfo = composeLookup(ch);
             int type = charInfo & ComposeData.TYPE_MASK;
             int index = charInfo >>> ComposeData.INDEX_SHIFT;
-
+            
             if (DEBUG) System.out.println("Got char " + hex(ch) + ", type=" + type + ", index=" + index);
 
-            // Added addition parens (type == ... minExplode) to make
-            // precedence explicit, but I'm not sure if this is what
-            // was meant.  Parens the other way (type == ... || type
-            // == ...)  cause Normalizer to crash. - liu
+            // Examples of NON_COMPOSING_COMBINING with an index < minExplode:
+            // 00A8 017F 03D2 1FBF 1FFE
             if (type == ComposeData.BASE || (type == ComposeData.NON_COMPOSING_COMBINING && index < minExplode)) {
                 if (DEBUG) System.out.println("New base " + hex(ch) + ", type=" + type + ", index=" + index);
-                classesSeen = 0;
+                classesSeenL = classesSeenH = 0;
                 baseIndex = index;
                 basePos = result.length();
                 result.append(ch);
             }
-            else if (type == ComposeData.COMBINING && index > 0)
+            // Index is always > 0 for COMBINING chars
+            else if (type == ComposeData.COMBINING /*&& index > 0*/)
             {
-                int cclass = ComposeData.typeMask[index];
+                int cclass = ComposeData.typeBit[index];
+                boolean seen = 0 != ((cclass < 32) ?
+                    (classesSeenL & (1 << cclass)) :
+                    (classesSeenH & (1 << (cclass & 31))));
+
                 if (DEBUG) System.out.println("Class of " + hex(ch) + " = " + cclass +
-                    " seen:" + ((classesSeen & cclass) != 0) +
+                    " seen:" + seen +
                     " baseIndex:" + baseIndex +
                     " action:" + composeAction(baseIndex, index));
 
                 // We can only combine a character with the base if we haven't
                 // already seen a combining character with the same canonical class.
-                // We also only combine characters with an index from
+                // We only combine characters with an index from
                 // 1..COMBINING_COUNT-1.  Indices >= COMBINING_COUNT are
-                // non-combining; these formerly had an index of zero.
-                if (index < ComposeData.COMBINING_COUNT && (classesSeen & cclass) == 0
+                // also combining characters, but we know that they don't
+                // compose with anything.
+                if (index < ComposeData.COMBINING_COUNT && !seen
                     && (action = composeAction(baseIndex, index)) > 0)
                 {
                     if (action > ComposeData.MAX_COMPOSED) {
@@ -482,14 +489,18 @@ public final class Normalizer {
                             explodeBuf.append(result.charAt(j));
                         }
                         result.setLength(basePos+1);
-                        classesSeen = 0;
+                        classesSeenL = classesSeenH = 0;
                         if (explodePos == EMPTY) explodePos = 0;
                     }
                 } else {
                     // No combination with this character
                     if (DEBUG) System.out.println("No action");
                     bubbleAppend(result, ch, cclass);
-                    classesSeen |= cclass;
+                    if (cclass < 32) {
+                        classesSeenL |= 1 << cclass;
+                    } else {
+                        classesSeenH |= 1 << (cclass & 31);
+                    }
                 }
             }
             else if (index > minExplode) {
@@ -506,13 +517,13 @@ public final class Normalizer {
                 explodePos = 0;
             }
             else if (type == ComposeData.INITIAL_JAMO) {
-                classesSeen = 0;
+                classesSeenL = classesSeenH = 0;
                 baseIndex = ComposeData.INITIAL_JAMO_INDEX;
                 basePos = result.length();
                 result.append(ch);
                 if (DEBUG) System.out.println("got initial jamo " + hex(ch));
             }
-            else if (type == ComposeData.MEDIAL_JAMO && classesSeen == 0
+            else if (type == ComposeData.MEDIAL_JAMO && classesSeenL == 0 && classesSeenH == 0
                         && baseIndex == ComposeData.INITIAL_JAMO_INDEX) {
                 // If the last character was an initial jamo, we can combine it with this
                 // one to create a Hangul character.
@@ -525,7 +536,7 @@ public final class Normalizer {
 
                 baseIndex = ComposeData.MEDIAL_JAMO_INDEX;
             }
-            else if (type == ComposeData.FINAL_JAMO && classesSeen == 0
+            else if (type == ComposeData.FINAL_JAMO && classesSeenL == 0 && classesSeenH == 0
                         && baseIndex == ComposeData.MEDIAL_JAMO_INDEX) {
                 // If the last character was a medial jamo that we turned into Hangul,
                 // we can add this character too.
@@ -536,12 +547,12 @@ public final class Normalizer {
 
                 baseIndex = 0;
                 basePos = -1;
-                classesSeen = 0;
+                classesSeenL = classesSeenH = 0;
             } else {
-                if (DEBUG) System.out.println("No base (?) as of " + hex(ch));
+                if (DEBUG) System.out.println("No base as of " + hex(ch));
                 baseIndex = 0;
                 basePos = -1;
-                classesSeen = 0;
+                classesSeenL = classesSeenH = 0;
                 result.append(ch);
             }
         }
@@ -570,7 +581,8 @@ public final class Normalizer {
         int     explodePos = EMPTY;         // Position in input buffer
         int     basePos = 0;                // Position of last base in output string
         int     baseIndex = 0;              // Index of last base in "actions" array
-        int     classesSeen = 0;            // Combining classes seen since last base
+        int     classesSeenL = 0;           // Combining classes seen since last base
+        int     classesSeenH = 0;           //  64-bit mask
         int     action;
         char    lastBase = 0;
         boolean chFromText = true;
@@ -601,7 +613,7 @@ public final class Normalizer {
                     if (DEBUG) System.out.println("returning early because we hit a new base");
                     break;
                 }
-                classesSeen = 0;
+                classesSeenL = classesSeenH = 0;
                 baseIndex = index;
                 basePos = buffer.length();
                 buffer.append(ch);
@@ -610,14 +622,17 @@ public final class Normalizer {
             }
             else if (type == ComposeData.COMBINING && index > 0)
             {
-                int cclass = ComposeData.typeMask[index];
+                int cclass = ComposeData.typeBit[index];
+                boolean seen = 0 != ((cclass < 32) ?
+                    (classesSeenL & (1 << cclass)) :
+                    (classesSeenH & (1 << (cclass & 31))));
 
                 if (DEBUG) System.out.println("got COMBINING char " + hex(ch) + ", type=" + type + ", index=" + index
-                        + ", class=" + Integer.toString(cclass,16));
+                        + ", class=" + cclass);
 
                 // We can only combine a character with the base if we haven't
                 // already seen a combining character with the same canonical class.
-                if (index < ComposeData.COMBINING_COUNT && (classesSeen & cclass) == 0
+                if (index < ComposeData.COMBINING_COUNT && !seen
                     && (action = composeAction(baseIndex, index)) > 0)
                 {
                     if (action > ComposeData.MAX_COMPOSED) {
@@ -658,14 +673,18 @@ public final class Normalizer {
                             explodeBuf.append(buffer.charAt(j));
                         }
                         buffer.setLength(basePos+1);
-                        classesSeen = 0;
+                        classesSeenL = classesSeenH = 0;
                         if (explodePos == EMPTY) explodePos = 0;
                     }
                 } else {
                     if (DEBUG) System.out.println("char doesn't combine");
                     // No combination with this character
                     bubbleAppend(buffer, ch, cclass);
-                    classesSeen |= cclass;
+                    if (cclass < 32) {
+                        classesSeenL |= 1 << cclass;
+                    } else {
+                        classesSeenH |= 1 << (cclass & 31);
+                    }
                 }
             }
             else if (index > minExplode) {
@@ -688,13 +707,13 @@ public final class Normalizer {
                     if (DEBUG) System.out.println("returning early because we hit a new base");
                     break;
                 }
-                classesSeen = 0;
+                classesSeenL = classesSeenH = 0;
                 baseIndex = ComposeData.INITIAL_JAMO_INDEX;
                 basePos = buffer.length();
                 buffer.append(ch);
                 if (DEBUG) System.out.println("got initial jamo " + hex(ch));
             }
-            else if (type == ComposeData.MEDIAL_JAMO && classesSeen == 0
+            else if (type == ComposeData.MEDIAL_JAMO && classesSeenL == 0 && classesSeenH == 0
                         && baseIndex == ComposeData.INITIAL_JAMO_INDEX) {
                 // If the last character was an initial jamo, we can combine it with this
                 // one to create a Hangul character.
@@ -707,7 +726,7 @@ public final class Normalizer {
 
                 baseIndex = ComposeData.MEDIAL_JAMO_INDEX;
             }
-            else if (type == ComposeData.FINAL_JAMO && classesSeen == 0
+            else if (type == ComposeData.FINAL_JAMO && classesSeenL == 0 && classesSeenH == 0
                         && baseIndex == ComposeData.MEDIAL_JAMO_INDEX) {
                 // If the last character was a medial jamo that we turned into Hangul,
                 // we can add this character too.
@@ -718,12 +737,12 @@ public final class Normalizer {
 
                 baseIndex = 0;
                 basePos = -1;
-                classesSeen = 0;
+                classesSeenL = classesSeenH = 0;
             } else {
                 // TODO: deal with JAMO character types
                 baseIndex = 0;
                 basePos = -1;
-                classesSeen = 0;
+                classesSeenL = classesSeenH = 0;
                 buffer.append(ch);
                 if (DEBUG) System.out.println("UNKNOWN char " + hex(ch));
             }
@@ -840,7 +859,7 @@ public final class Normalizer {
         int charInfo = composeLookup(ch);
         int type = charInfo & ComposeData.TYPE_MASK;
         if (type == ComposeData.COMBINING) {
-            cclass = ComposeData.typeMask[charInfo >>> ComposeData.INDEX_SHIFT];
+            cclass = ComposeData.typeBit[charInfo >>> ComposeData.INDEX_SHIFT];
         }
         return cclass;
     }
@@ -857,7 +876,7 @@ public final class Normalizer {
     static final void explode(StringBuffer target, int index) {
         char ch;
         while ((ch = ComposeData.replace.charAt(index++)) != 0)
-        target.append(ch);
+            target.append(ch);
     }
 
     static final char pairExplode(StringBuffer target, int action) {
@@ -1583,7 +1602,7 @@ public final class Normalizer {
 
     private static final boolean DEBUG = false;
 
-    private Mode           mode = DECOMP;
+    private Mode                mode = DECOMP;
     private int                 options = 0;
     private transient int       minDecomp;
 
