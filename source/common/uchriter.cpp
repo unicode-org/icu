@@ -356,7 +356,7 @@ void UCharCharacterIterator::setText(const UChar* newText,
 }
 
 void
-UCharCharacterIterator::getText(UnicodeString& result) {
+UCharCharacterIterator::getText(UnicodeString& result) const {
     result = UnicodeString(text, textLength);
 }
 
