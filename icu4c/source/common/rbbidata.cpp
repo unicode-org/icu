@@ -7,12 +7,13 @@
 
 #include "unicode/utypes.h"
 #include "rbbidata.h"
+#include "rbbirb.h"
 #include "utrie.h"
 #include "udatamem.h"
 #include "cmemory.h"
+#include "cstring.h"
 
 #include "uassert.h"
-#include <stdio.h>
 
 
 U_NAMESPACE_BEGIN
@@ -21,7 +22,7 @@ const char RBBIDataWrapper::fgClassID=0;
 
 //-----------------------------------------------------------------------------
 //
-//    Constructors.   
+//    Constructors.
 //
 //-----------------------------------------------------------------------------
 RBBIDataWrapper::RBBIDataWrapper(const RBBIDataHeader *data, UErrorCode &status) {
@@ -57,7 +58,7 @@ U_CDECL_END
 //-----------------------------------------------------------------------------
 //
 //    init().   Does most of the work of construction, shared between the
-//              constructors.   
+//              constructors.
 //
 //-----------------------------------------------------------------------------
 void RBBIDataWrapper::init(const RBBIDataHeader *data, UErrorCode &status) {
@@ -91,11 +92,12 @@ void RBBIDataWrapper::init(const RBBIDataHeader *data, UErrorCode &status) {
     fRuleSource   = (UChar *)((char *)data + fHeader->fRuleSource);
     fRuleString.setTo(TRUE, fRuleSource, -1);
 
-    fRefCount = 1;   
+    fRefCount = 1;
 
-    char *debugEnv = getenv("U_RBBIDEBUG");      // TODO:  make conditional on some compile time setting
-    if (debugEnv && strstr(debugEnv, "data")) {this->printData();}
-
+#ifdef RBBI_DEBUG
+    char *debugEnv = getenv("U_RBBIDEBUG");
+    if (debugEnv && uprv_strstr(debugEnv, "data")) {this->printData();}
+#endif
 }
 
 
@@ -114,7 +116,7 @@ RBBIDataWrapper::~RBBIDataWrapper() {
 }
 
 
-        
+
 //-----------------------------------------------------------------------------
 //
 //   Operator ==    Consider two RBBIDataWrappers to be equal if they
@@ -184,36 +186,36 @@ const UnicodeString &RBBIDataWrapper::getRuleSourceString() {
 void  RBBIDataWrapper::printData() {
     uint32_t c, s;
 
-    printf("RBBI Data at %p\n", (void *)fHeader);
-    printf("   Version = %d\n", fHeader->fVersion);
-    printf("   total length of data  = %d\n", fHeader->fLength);
-    printf("   number of character categories = %d\n\n", fHeader->fCatCount);
+    RBBIDebugPrintf("RBBI Data at %p\n", (void *)fHeader);
+    RBBIDebugPrintf("   Version = %d\n", fHeader->fVersion);
+    RBBIDebugPrintf("   total length of data  = %d\n", fHeader->fLength);
+    RBBIDebugPrintf("   number of character categories = %d\n\n", fHeader->fCatCount);
 
-    printf("   Forward State Transition Table\n");
-    printf("State |  Acc  LA   Tag");
-    for (c=0; c<fHeader->fCatCount; c++) {printf("%3d ", c);};
-    printf("\n------|---------------"); for (c=0;c<fHeader->fCatCount; c++) {printf("----");}
-    printf("\n");
+    RBBIDebugPrintf("   Forward State Transition Table\n");
+    RBBIDebugPrintf("State |  Acc  LA   Tag");
+    for (c=0; c<fHeader->fCatCount; c++) {RBBIDebugPrintf("%3d ", c);};
+    RBBIDebugPrintf("\n------|---------------"); for (c=0;c<fHeader->fCatCount; c++) {RBBIDebugPrintf("----");}
+    RBBIDebugPrintf("\n");
 
     for (s=0; s<fForwardTable->fNumStates; s++) {
         RBBIStateTableRow *row = (RBBIStateTableRow *)
                                   (fForwardTable->fTableData + (fForwardTable->fRowLen * s));
-        printf("%4d  |  %3d %3d %3d ", s, row->fAccepting, row->fLookAhead, row->fTag);
+        RBBIDebugPrintf("%4d  |  %3d %3d %3d ", s, row->fAccepting, row->fLookAhead, row->fTag);
         for (c=0; c<fHeader->fCatCount; c++)  {
-            printf("%3d ", row->fNextState[c]);
+            RBBIDebugPrintf("%3d ", row->fNextState[c]);
         };
-        printf("\n");
+        RBBIDebugPrintf("\n");
     }
 
-    printf("\nOrignal Rules source:\n");
+    RBBIDebugPrintf("\nOrignal Rules source:\n");
     c = 0;
     for (;;) {
         if (fRuleSource[c] == 0)
             break;
-        putchar(fRuleSource[c]);
+        RBBIDebugPrintf("%c", fRuleSource[c]);
         c++;
     }
-    printf("\n\n");
+    RBBIDebugPrintf("\n\n");
 }
 
 

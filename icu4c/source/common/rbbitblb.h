@@ -44,8 +44,6 @@ public:
                                         //     Sufficient memory must exist at
                                         //     the specified location.
 
-    //  TODO:  add getter function(s) for the built table.
-
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *

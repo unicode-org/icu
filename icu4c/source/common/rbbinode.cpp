@@ -26,8 +26,6 @@
 
 #include "uassert.h"
 
-#include <stdio.h>     // TODO - getrid of this.
-
 
 U_NAMESPACE_BEGIN
 
@@ -291,13 +289,13 @@ static const char *nodeTypeNames[] = {
 };
 
 void RBBINode::print() {
-    printf("%10p  %12s  %10p  %10p  %10p      %4d     %6d   %d ",
+    RBBIDebugPrintf("%10p  %12s  %10p  %10p  %10p      %4d     %6d   %d ",
         (void *)this, nodeTypeNames[fType], (void *)fParent, (void *)fLeftChild, (void *)fRightChild,
         fSerialNum, fFirstPos, fVal);
     if (fType == varRef) {
         printUnicodeString(fText);
     }
-    putc('\n', stdout);
+    RBBIDebugPrintf("\n");
 }
 
 
@@ -305,10 +303,11 @@ void RBBINode::printUnicodeString(const UnicodeString &s, int minWidth)
 {
     int i;
     for (i=0; i<s.length(); i++) {
-        putc(s.charAt(i), stdout);
+        RBBIDebugPrintf("%c", s.charAt(i));
+        // putc(s.charAt(i), stdout);
     }
     for (i=s.length(); i<minWidth; i++) {
-        putc(' ', stdout);
+        RBBIDebugPrintf(" ");
     }
 }
 
@@ -320,8 +319,8 @@ void RBBINode::printUnicodeString(const UnicodeString &s, int minWidth)
 //-------------------------------------------------------------------------
 void RBBINode::printTree(UBool printHeading, UBool doVars) {
     if (printHeading) {
-        printf( "-------------------------------------------------------------------\n"
-                "    Address       type         Parent   LeftChild  RightChild    serial  position value\n"
+        RBBIDebugPrintf( "-------------------------------------------------------------------\n"
+                         "    Address       type         Parent   LeftChild  RightChild    serial  position value\n"
               );
     }
     this->print();

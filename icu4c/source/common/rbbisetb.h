@@ -95,7 +95,7 @@ public:
     RBBISetBuilder(RBBIRuleBuilder *rb);
     ~RBBISetBuilder();
 
-    void     build();              // TODO:  needs an out parameter for the TRIE.
+    void     build();
     void     addValToSets(UVector *sets, uint32_t val);
     int32_t  getNumCharCategories();   // CharCategories are the same as input symbol set to the
                                    //    runtime state machine, which are the same as

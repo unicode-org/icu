@@ -18,8 +18,6 @@
 #include "rbbirb.h"
 #include "rbbinode.h"
 
-#include <stdio.h>     // TODO - getrid of this.
-
 
 U_NAMESPACE_BEGIN
 
@@ -232,7 +230,7 @@ RBBISymbolTableEntry::~RBBISymbolTableEntry() {
 //  RBBISymbolTable::print    Debugging function, dump out the symbol table contents.
 //
 void RBBISymbolTable::print() const {
-    printf("Variable Definitions\n"
+    RBBIDebugPrintf("Variable Definitions\n"
            "Name               Node Val     String Val\n"
            "----------------------------------------------------------------------\n");
 
@@ -246,12 +244,12 @@ void RBBISymbolTable::print() const {
         RBBISymbolTableEntry  *s   = (RBBISymbolTableEntry *)e->value.pointer;
 
         RBBINode::printUnicodeString(s->key, 15);
-        printf("   %8p   ", (void *)s->val);
+        RBBIDebugPrintf("   %8p   ", (void *)s->val);
         RBBINode::printUnicodeString(s->val->fLeftChild->fText);
-        printf("\n");
+        RBBIDebugPrintf("\n");
     }
 
-    printf("\nParsed Variable Definitions\n");
+    RBBIDebugPrintf("\nParsed Variable Definitions\n");
     pos = -1;
     for (;;) {
         e = uhash_nextElement(fHashTable,  &pos);
@@ -261,7 +259,7 @@ void RBBISymbolTable::print() const {
         RBBISymbolTableEntry  *s   = (RBBISymbolTableEntry *)e->value.pointer;
         RBBINode::printUnicodeString(s->key);
         s->val->fLeftChild->printTree();
-        printf("\n");
+        RBBIDebugPrintf("\n");
     }
 }
 
