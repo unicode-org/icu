@@ -18,7 +18,6 @@
 
 #include "GDEFMarkFilter.h"
 
-//#include "CDACLayout.h"
 #include "IndicReordering.h"
 
 IndicOpenTypeLayoutEngine::IndicOpenTypeLayoutEngine(LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
@@ -67,48 +66,4 @@ le_int32 IndicOpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[],
     // (probably better than doing the worst case stuff here...)
     return IndicReordering::reorder(&chars[offset], count, fScriptCode, outChars, charIndices, featureTags);
 }
-
-#if 0
-CDACOpenTypeLayoutEngine::CDACOpenTypeLayoutEngine(LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
-                                                   const CDACLayout::ScriptInfo *scriptInfo)
-    : IndicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode), fScriptInfo(scriptInfo)
-{
-    fGSUBTable = (GlyphSubstitutionTableHeader *) fScriptInfo->glyphSubstitutionTable;
-    fGDEFTable = (GlyphDefinitionTableHeader *) fScriptInfo->glyphDefinitionTable;
-}
-
-CDACOpenTypeLayoutEngine::~CDACOpenTypeLayoutEngine()
-{
-    reset();
-}
-
-// "glyph" -> char
-// char -> glyph
-le_int32 CDACOpenTypeLayoutEngine::glyphPostProcessing(LEGlyphID tempGlyphs[], le_int32 tempCharIndices[], le_int32 tempGlyphCount,
-                LEGlyphID *&glyphs, le_int32 *&charIndices)
-{
-    LEUnicode *tempChars;
-    le_int32 glyphCount = CDACLayout::countCDACGlyphs(fScriptInfo, tempGlyphs, tempGlyphCount);
-
-    tempChars = new LEUnicode[glyphCount];
-    glyphs = new LEGlyphID[glyphCount];
-    charIndices = new le_int32[glyphCount];
-
-    // NOTE: might want mapCDACGlyphsToChars to count output chars and allocate the array to hold them...
-    // or it could make a guess and grow the array if the guess is too small...
-    CDACLayout::mapCDACGlyphsToChars(fScriptInfo, tempGlyphs, tempCharIndices, tempGlyphCount, tempChars, charIndices);
-    IndicOpenTypeLayoutEngine::mapCharsToGlyphs(tempChars, 0, glyphCount, false, false, glyphs, charIndices);
-
-    delete[] tempChars;
-
-    return glyphCount;
-}
-
-void CDACOpenTypeLayoutEngine::mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, le_bool mirror, LEGlyphID *&glyphs, le_int32 *&charIndices)
-{
-    glyphs = new LEGlyphID[count];
-
-    CDACLayout::initCDACGlyphs(fScriptInfo, chars, offset, count, glyphs);
-}
-#endif
 
