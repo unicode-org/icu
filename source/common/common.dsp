@@ -211,10 +211,6 @@ SOURCE=.\icunotif.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\icurwlck.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\icuserv.cpp
 # End Source File
 # Begin Source File
