@@ -29,6 +29,7 @@
 #include "unicode/udata.h"
 #include "udataswp.h"
 #include "uresdata.h"
+#include "ucnv_io.h"
 #include "uoptions.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
@@ -245,7 +246,9 @@ static const struct {
     uint8_t dataFormat[4];
     UDataSwapFn *swapFn;
 } swapFns[]={
-    { { 0x52, 0x65, 0x73, 0x42 }, ures_swap }           /* dataFormat="ResB" */
+    { { 0x52, 0x65, 0x73, 0x42 }, ures_swap },          /* dataFormat="ResB" */
+    /* insert data formats here, descending by expected frequency of occurrence */
+    { { 0x43, 0x76, 0x41, 0x6c }, ucnv_swapAliases }    /* dataFormat="CvAl" */
 };
 
 static int32_t

@@ -149,6 +149,19 @@ ucnv_io_getDefaultConverterName(void);
 U_CFUNC void
 ucnv_io_setDefaultConverterName(const char *name);
 
+/* forward declaration */
+struct UDataSwapper;
+typedef struct UDataSwapper UDataSwapper;
+
+/**
+ * Swap an ICU converter alias table. See ucnv_io.h.
+ * @internal
+ */
+U_CAPI int32_t U_EXPORT2
+ucnv_swapAliases(const UDataSwapper *ds,
+                 const void *inData, int32_t length, void *outData,
+                 UErrorCode *pErrorCode);
+
 #endif /* _UCNV_IO */
 
 /*
