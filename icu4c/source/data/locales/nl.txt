@@ -460,4 +460,42 @@ nl {
             "GMT",
         }
     }
+
+    // International Calendars Data.
+    // NOTE (ICU 2.6) - the format of this data WILL CHANGE in future releases.  
+    // Islamic calendar
+    Eras_islamic:array { 
+            "Sa'na Hizjria"
+    }
+
+    MonthAbbreviations_islamic { // Copied from MonthNames
+            "Moeharram",            // Muharram
+            "Safar",                // Safar
+            "Rabi'a al awal ",      // Rabi' al-awwal
+            "Rabi'a al thani",      // Rabi' al-thani
+            "Joemad'al awal",       // Jumada al-awwal
+            "Joemad'al thani",      // Jumada al-thani
+            "Rajab",                // Rajab
+            "Sja'aban",             // Sha'ban
+            "Ramadan",              // Ramadan
+            "Sjawal",               // Shawwal
+            "Doe al ka'aba",        // Dhu al-Qi'dah
+            "Doe al hizja",         // Dhu al-Hijjah
+    }
+
+    MonthNames_islamic {
+            "Moeharram",            // Muharram
+            "Safar",                // Safar
+            "Rabi'a al awal ",      // Rabi' al-awwal
+            "Rabi'a al thani",      // Rabi' al-thani
+            "Joemad'al awal",       // Jumada al-awwal
+            "Joemad'al thani",      // Jumada al-thani
+            "Rajab",                // Rajab
+            "Sja'aban",             // Sha'ban
+            "Ramadan",              // Ramadan
+            "Sjawal",               // Shawwal
+            "Doe al ka'aba",        // Dhu al-Qi'dah
+            "Doe al hizja",         // Dhu al-Hijjah
+     }   
+
 }
