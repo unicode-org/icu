@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2003, International Business Machines
+*   Copyright (C) 1999-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -24,7 +24,6 @@
 #include <stdlib.h>
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
-#include "unicode/uset.h"
 #include "unicode/putil.h"
 #include "unicode/uclean.h"
 #include "cmemory.h"
@@ -43,30 +42,12 @@ U_CDECL_END
 
 UBool beVerbose=FALSE, haveCopyright=TRUE;
 
-/*
- * Unicode set collecting the case-sensitive characters;
- * see uchar.h UCHAR_CASE_SENSITIVE.
- * Add code points from case mappings/foldings in
- * the root locale and with default options.
- */
-static USet *caseSensitive;
-
 /* prototypes --------------------------------------------------------------- */
-
-static void
-parseBidiMirroring(const char *filename, UErrorCode *pErrorCode);
-
-static void
-parseSpecialCasing(const char *filename, UErrorCode *pErrorCode);
-
-static void
-parseCaseFolding(const char *filename, UErrorCode *pErrorCode);
 
 static void
 parseDB(const char *filename, UErrorCode *pErrorCode);
 
 /* -------------------------------------------------------------------------- */
-
 
 enum
 {
@@ -174,19 +155,6 @@ main(int argc, char* argv[]) {
 
     /* initialize */
     initStore();
-    caseSensitive=uset_open(1, 0); /* empty set (start>end) */
-
-    /* process BidiMirroring.txt */
-    writeUCDFilename(basename, "BidiMirroring", suffix);
-    parseBidiMirroring(filename, &errorCode);
-
-    /* process SpecialCasing.txt */
-    writeUCDFilename(basename, "SpecialCasing", suffix);
-    parseSpecialCasing(filename, &errorCode);
-
-    /* process CaseFolding.txt */
-    writeUCDFilename(basename, "CaseFolding", suffix);
-    parseCaseFolding(filename, &errorCode);
 
     /* process UnicodeData.txt */
     writeUCDFilename(basename, "UnicodeData", suffix);
@@ -202,6 +170,7 @@ main(int argc, char* argv[]) {
         generateData(destDir);
     }
 
+    exitStore();
     u_cleanup();
     return errorCode;
 }
@@ -270,301 +239,6 @@ getTokenIndex(const char *const tokens[], int32_t countTokens, const char *s) {
     return -1;
 }
 
-static void
-_set_addAll(USet *set, const UChar *s, int32_t length) {
-    UChar32 c;
-    int32_t i;
-
-    /* needs length>=0 */
-    for(i=0; i<length; /* U16_NEXT advances i */) {
-        U16_NEXT(s, i, length, c);
-        uset_add(set, c);
-    }
-}
-
-/* parser for BidiMirroring.txt --------------------------------------------- */
-
-#define MAX_MIRROR_COUNT 2000
-
-static uint32_t mirrorMappings[MAX_MIRROR_COUNT][2];
-static int32_t mirrorCount=0;
-
-static void U_CALLCONV
-mirrorLineFn(void *context,
-             char *fields[][2], int32_t fieldCount,
-             UErrorCode *pErrorCode) {
-    char *end;
-    static uint32_t prevCode=0;
-
-    mirrorMappings[mirrorCount][0]=(uint32_t)uprv_strtoul(fields[0][0], &end, 16);
-    if(end<=fields[0][0] || end!=fields[0][1]) {
-        fprintf(stderr, "genprops: syntax error in BidiMirroring.txt field 0 at %s\n", fields[0][0]);
-        *pErrorCode=U_PARSE_ERROR;
-        exit(U_PARSE_ERROR);
-    }
-
-    mirrorMappings[mirrorCount][1]=(uint32_t)uprv_strtoul(fields[1][0], &end, 16);
-    if(end<=fields[1][0] || end!=fields[1][1]) {
-        fprintf(stderr, "genprops: syntax error in BidiMirroring.txt field 1 at %s\n", fields[1][0]);
-        *pErrorCode=U_PARSE_ERROR;
-        exit(U_PARSE_ERROR);
-    }
-
-    /* check that the code points (mirrorMappings[mirrorCount][0]) are in ascending order */
-    if(mirrorMappings[mirrorCount][0]<=prevCode && mirrorMappings[mirrorCount][0]>0) {
-        fprintf(stderr, "genprops: error - BidiMirroring entries out of order, U+%04lx after U+%04lx\n",
-                (unsigned long)mirrorMappings[mirrorCount][0],
-                (unsigned long)prevCode);
-        *pErrorCode=U_PARSE_ERROR;
-        exit(U_PARSE_ERROR);
-    }
-    prevCode=mirrorMappings[mirrorCount][0];
-
-    if(++mirrorCount==MAX_MIRROR_COUNT) {
-        fprintf(stderr, "genprops: too many mirror mappings\n");
-        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-        exit(U_INDEX_OUTOFBOUNDS_ERROR);
-    }
-}
-
-static void
-parseBidiMirroring(const char *filename, UErrorCode *pErrorCode) {
-    char *fields[2][2];
-
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return;
-    }
-
-    u_parseDelimitedFile(filename, ';', fields, 2, mirrorLineFn, NULL, pErrorCode);
-}
-
-/* parser for SpecialCasing.txt --------------------------------------------- */
-
-#define MAX_SPECIAL_CASING_COUNT 500
-
-static SpecialCasing specialCasings[MAX_SPECIAL_CASING_COUNT];
-static int32_t specialCasingCount=0;
-
-static void U_CALLCONV
-specialCasingLineFn(void *context,
-                    char *fields[][2], int32_t fieldCount,
-                    UErrorCode *pErrorCode) {
-    char *end;
-
-    /* get code point */
-    specialCasings[specialCasingCount].code=(uint32_t)uprv_strtoul(u_skipWhitespace(fields[0][0]), &end, 16);
-    end=(char *)u_skipWhitespace(end);
-    if(end<=fields[0][0] || end!=fields[0][1]) {
-        fprintf(stderr, "genprops: syntax error in SpecialCasing.txt field 0 at %s\n", fields[0][0]);
-        *pErrorCode=U_PARSE_ERROR;
-        exit(U_PARSE_ERROR);
-    }
-
-    /* is this a complex mapping? */
-    if(*(end=(char *)u_skipWhitespace(fields[4][0]))!=0 && *end!=';' && *end!='#') {
-        /* there is some condition text in the fifth field */
-        specialCasings[specialCasingCount].isComplex=TRUE;
-
-        /* do not store any actual mappings for this */
-        specialCasings[specialCasingCount].lowerCase[0]=0;
-        specialCasings[specialCasingCount].upperCase[0]=0;
-        specialCasings[specialCasingCount].titleCase[0]=0;
-    } else {
-        /* just set the "complex" flag and get the case mappings */
-        specialCasings[specialCasingCount].isComplex=FALSE;
-        specialCasings[specialCasingCount].lowerCase[0]=
-            (UChar)u_parseString(fields[1][0], specialCasings[specialCasingCount].lowerCase+1, 31, NULL, pErrorCode);
-        specialCasings[specialCasingCount].upperCase[0]=
-            (UChar)u_parseString(fields[3][0], specialCasings[specialCasingCount].upperCase+1, 31, NULL, pErrorCode);
-        specialCasings[specialCasingCount].titleCase[0]=
-            (UChar)u_parseString(fields[2][0], specialCasings[specialCasingCount].titleCase+1, 31, NULL, pErrorCode);
-        if(U_FAILURE(*pErrorCode)) {
-            fprintf(stderr, "genprops: error parsing special casing at %s\n", fields[0][0]);
-            exit(*pErrorCode);
-        }
-
-        uset_add(caseSensitive, (UChar32)specialCasings[specialCasingCount].code);
-        _set_addAll(caseSensitive, specialCasings[specialCasingCount].lowerCase+1, specialCasings[specialCasingCount].lowerCase[0]);
-        _set_addAll(caseSensitive, specialCasings[specialCasingCount].upperCase+1, specialCasings[specialCasingCount].upperCase[0]);
-        _set_addAll(caseSensitive, specialCasings[specialCasingCount].titleCase+1, specialCasings[specialCasingCount].titleCase[0]);
-    }
-
-    if(++specialCasingCount==MAX_SPECIAL_CASING_COUNT) {
-        fprintf(stderr, "genprops: too many special casing mappings\n");
-        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-        exit(U_INDEX_OUTOFBOUNDS_ERROR);
-    }
-}
-
-static int
-compareSpecialCasings(const void *left, const void *right) {
-    return ((const SpecialCasing *)left)->code-((const SpecialCasing *)right)->code;
-}
-
-static void
-parseSpecialCasing(const char *filename, UErrorCode *pErrorCode) {
-    char *fields[5][2];
-    int32_t i, j;
-
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return;
-    }
-
-    u_parseDelimitedFile(filename, ';', fields, 5, specialCasingLineFn, NULL, pErrorCode);
-
-    /* sort the special casing entries by code point */
-    if(specialCasingCount>0) {
-        qsort(specialCasings, specialCasingCount, sizeof(SpecialCasing), compareSpecialCasings);
-    }
-
-    /* replace multiple entries for any code point by one "complex" one */
-    j=0;
-    for(i=1; i<specialCasingCount; ++i) {
-        if(specialCasings[i-1].code==specialCasings[i].code) {
-            /* there is a duplicate code point */
-            specialCasings[i-1].code=0x7fffffff;    /* remove this entry in the following qsort */
-            specialCasings[i].isComplex=TRUE;       /* make the following one complex */
-            specialCasings[i].lowerCase[0]=0;
-            specialCasings[i].upperCase[0]=0;
-            specialCasings[i].titleCase[0]=0;
-            ++j;
-        }
-    }
-
-    /* if some entries just were removed, then re-sort */
-    if(j>0) {
-        qsort(specialCasings, specialCasingCount, sizeof(SpecialCasing), compareSpecialCasings);
-        specialCasingCount-=j;
-    }
-
-    /*
-     * Add one complex mapping to caseSensitive that was filtered out above:
-     * Greek final Sigma has a conditional mapping but not locale-sensitive,
-     * and it is taken when lowercasing just U+03A3 alone.
-     * 03A3; 03C2; 03A3; 03A3; Final_Sigma; # GREEK CAPITAL LETTER SIGMA
-     */
-    uset_add(caseSensitive, 0x3c2);
-}
-
-/* parser for CaseFolding.txt ----------------------------------------------- */
-
-#define MAX_CASE_FOLDING_COUNT 2000
-
-static CaseFolding caseFoldings[MAX_CASE_FOLDING_COUNT];
-static int32_t caseFoldingCount=0;
-
-static void U_CALLCONV
-caseFoldingLineFn(void *context,
-                  char *fields[][2], int32_t fieldCount,
-                  UErrorCode *pErrorCode) {
-    char *end;
-    static uint32_t prevCode=0;
-    int32_t count;
-    char status;
-
-    /* get code point */
-    caseFoldings[caseFoldingCount].code=(uint32_t)uprv_strtoul(u_skipWhitespace(fields[0][0]), &end, 16);
-    end=(char *)u_skipWhitespace(end);
-    if(end<=fields[0][0] || end!=fields[0][1]) {
-        fprintf(stderr, "genprops: syntax error in CaseFolding.txt field 0 at %s\n", fields[0][0]);
-        *pErrorCode=U_PARSE_ERROR;
-        exit(U_PARSE_ERROR);
-    }
-
-    /* get the status of this mapping */
-    caseFoldings[caseFoldingCount].status=status=*u_skipWhitespace(fields[1][0]);
-    if(status!='L' && status!='E' && status!='C' && status!='S' && status!='F' && status!='I' && status!='T') {
-        fprintf(stderr, "genprops: unrecognized status field in CaseFolding.txt at %s\n", fields[0][0]);
-        *pErrorCode=U_PARSE_ERROR;
-        exit(U_PARSE_ERROR);
-    }
-
-    /* ignore all case folding mappings that are the same as the UnicodeData.txt lowercase mappings */
-    if(status=='L') {
-        return;
-    }
-
-    /* get the mapping */
-    count=caseFoldings[caseFoldingCount].full[0]=
-        (UChar)u_parseString(fields[2][0], caseFoldings[caseFoldingCount].full+1, 31, &caseFoldings[caseFoldingCount].simple, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        fprintf(stderr, "genprops: error parsing CaseFolding.txt mapping at %s\n", fields[0][0]);
-        exit(*pErrorCode);
-    }
-
-    /* there is a simple mapping only if there is exactly one code point (count is in UChars) */
-    if(count==0 || count>2 || (count==2 && UTF_IS_SINGLE(caseFoldings[caseFoldingCount].full[1]))) {
-        caseFoldings[caseFoldingCount].simple=0;
-    }
-
-    /* update the case-sensitive set */
-    if(status!='T') {
-        uset_add(caseSensitive, (UChar32)caseFoldings[caseFoldingCount].code);
-        _set_addAll(caseSensitive, caseFoldings[caseFoldingCount].full+1, caseFoldings[caseFoldingCount].full[0]);
-    }
-
-    /* check the status */
-    if(status=='S') {
-        /* check if there was a full mapping for this code point before */
-        if( caseFoldingCount>0 &&
-            caseFoldings[caseFoldingCount-1].code==caseFoldings[caseFoldingCount].code &&
-            caseFoldings[caseFoldingCount-1].status=='F'
-        ) {
-            /* merge the two entries */
-            caseFoldings[caseFoldingCount-1].simple=caseFoldings[caseFoldingCount].simple;
-            return;
-        }
-    } else if(status=='F') {
-        /* check if there was a simple mapping for this code point before */
-        if( caseFoldingCount>0 &&
-            caseFoldings[caseFoldingCount-1].code==caseFoldings[caseFoldingCount].code &&
-            caseFoldings[caseFoldingCount-1].status=='S'
-        ) {
-            /* merge the two entries */
-            uprv_memcpy(caseFoldings[caseFoldingCount-1].full, caseFoldings[caseFoldingCount].full, 32*U_SIZEOF_UCHAR);
-            return;
-        }
-    } else if(status=='I' || status=='T') {
-        /* check if there was a default mapping for this code point before (remove it) */
-        while(caseFoldingCount>0 &&
-              caseFoldings[caseFoldingCount-1].code==caseFoldings[caseFoldingCount].code
-        ) {
-            prevCode=0;
-            --caseFoldingCount;
-        }
-        /* store only a marker for special handling for cases like dotless i */
-        caseFoldings[caseFoldingCount].simple=0;
-        caseFoldings[caseFoldingCount].full[0]=0;
-    }
-
-    /* check that the code points (caseFoldings[caseFoldingCount].code) are in ascending order */
-    if(caseFoldings[caseFoldingCount].code<=prevCode && caseFoldings[caseFoldingCount].code>0) {
-        fprintf(stderr, "genprops: error - CaseFolding entries out of order, U+%04lx after U+%04lx\n",
-                (unsigned long)caseFoldings[caseFoldingCount].code,
-                (unsigned long)prevCode);
-        *pErrorCode=U_PARSE_ERROR;
-        exit(U_PARSE_ERROR);
-    }
-    prevCode=caseFoldings[caseFoldingCount].code;
-
-    if(++caseFoldingCount==MAX_CASE_FOLDING_COUNT) {
-        fprintf(stderr, "genprops: too many case folding mappings\n");
-        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-        exit(U_INDEX_OUTOFBOUNDS_ERROR);
-    }
-}
-
-static void
-parseCaseFolding(const char *filename, UErrorCode *pErrorCode) {
-    char *fields[3][2];
-
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return;
-    }
-
-    u_parseDelimitedFile(filename, ';', fields, 3, caseFoldingLineFn, NULL, pErrorCode);
-}
-
 /* parser for UnicodeData.txt ----------------------------------------------- */
 
 /* general categories */
@@ -578,12 +252,6 @@ genCategoryNames[U_CHAR_CATEGORY_COUNT]={
     "Pd", "Ps", "Pe", "Pc", "Po",
     "Sm", "Sc", "Sk", "So",
     "Pi", "Pf"
-};
-
-const char *const
-bidiNames[U_CHAR_DIRECTION_COUNT]={
-    "L", "R", "EN", "ES", "ET", "AN", "CS", "B", "S",
-    "WS", "ON", "LRE", "LRO", "AL", "RLE", "RLO", "PDF", "NSM", "BN"
 };
 
 const char *const
@@ -613,7 +281,7 @@ static struct {
     char name[80];
 } unicodeAreas[32];
 
-static int32_t unicodeAreaIndex=0, mirrorIndex=0, specialCasingIndex=0, caseFoldingIndex=0;
+static int32_t unicodeAreaIndex=0;
 
 static void U_CALLCONV
 unicodeDataLineFn(void *context,
@@ -643,17 +311,6 @@ unicodeDataLineFn(void *context,
     } else {
         fprintf(stderr, "genprops: unknown general category \"%s\" at code 0x%lx\n",
             fields[2][0], (unsigned long)p.code);
-        *pErrorCode=U_PARSE_ERROR;
-        exit(U_PARSE_ERROR);
-    }
-
-    /* get BiDi category, field 4 */
-    i=getTokenIndex(bidiNames, U_CHAR_DIRECTION_COUNT, fields[4][0]);
-    if(i>=0) {
-        p.bidi=(uint8_t)i;
-    } else {
-        fprintf(stderr, "genprops: unknown BiDi category \"%s\" at code 0x%lx\n",
-            fields[4][0], (unsigned long)p.code);
         *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
@@ -769,80 +426,6 @@ unicodeDataLineFn(void *context,
             *pErrorCode=U_PARSE_ERROR;
             exit(U_PARSE_ERROR);
         }
-    }
-
-    /* get Mirrored flag, field 9 */
-    if(*fields[9][0]=='Y') {
-        p.isMirrored=1;
-    } else if(fields[9][1]-fields[9][0]!=1 || *fields[9][0]!='N') {
-        fprintf(stderr, "genprops: syntax error in field 9 at code 0x%lx\n",
-            (unsigned long)p.code);
-        *pErrorCode=U_PARSE_ERROR;
-        exit(U_PARSE_ERROR);
-    }
-
-    /* get uppercase mapping, field 12 */
-    value=(uint32_t)uprv_strtoul(fields[12][0], &end, 16);
-    if(end!=fields[12][1]) {
-        fprintf(stderr, "genprops: syntax error in field 12 at code 0x%lx\n",
-            (unsigned long)p.code);
-        *pErrorCode=U_PARSE_ERROR;
-        exit(U_PARSE_ERROR);
-    }
-    if(value!=0 && value!=p.code) {
-        p.upperCase=value;
-        uset_add(caseSensitive, (UChar32)p.code);
-        uset_add(caseSensitive, (UChar32)value);
-    }
-
-    /* get lowercase value, field 13 */
-    value=(uint32_t)uprv_strtoul(fields[13][0], &end, 16);
-    if(end!=fields[13][1]) {
-        fprintf(stderr, "genprops: syntax error in field 13 at code 0x%lx\n",
-            (unsigned long)p.code);
-        *pErrorCode=U_PARSE_ERROR;
-        exit(U_PARSE_ERROR);
-    }
-    if(value!=0 && value!=p.code) {
-        p.lowerCase=value;
-        uset_add(caseSensitive, (UChar32)p.code);
-        uset_add(caseSensitive, (UChar32)value);
-    }
-
-    /* get titlecase value, field 14 */
-    value=(uint32_t)uprv_strtoul(fields[14][0], &end, 16);
-    if(end!=fields[14][1]) {
-        fprintf(stderr, "genprops: syntax error in field 14 at code 0x%lx\n",
-            (unsigned long)p.code);
-        *pErrorCode=U_PARSE_ERROR;
-        exit(U_PARSE_ERROR);
-    }
-    if(value!=0 && value!=p.code) {
-        p.titleCase=value;
-        uset_add(caseSensitive, (UChar32)p.code);
-        uset_add(caseSensitive, (UChar32)value);
-    }
-
-    /* set additional properties from previously parsed files */
-    if(mirrorIndex<mirrorCount && p.code==mirrorMappings[mirrorIndex][0]) {
-        p.mirrorMapping=mirrorMappings[mirrorIndex++][1];
-    }
-    if(specialCasingIndex<specialCasingCount && p.code==specialCasings[specialCasingIndex].code) {
-        p.specialCasing=specialCasings+specialCasingIndex++;
-    } else {
-        p.specialCasing=NULL;
-    }
-    if(caseFoldingIndex<caseFoldingCount && p.code==caseFoldings[caseFoldingIndex].code) {
-        p.caseFolding=caseFoldings+caseFoldingIndex++;
-
-        /* ignore "Common" mappings (simple==full) that map to the same code point as the regular lowercase mapping */
-        if( p.caseFolding->status=='C' &&
-            p.caseFolding->simple==p.lowerCase
-        ) {
-            p.caseFolding=NULL;
-        }
-    } else {
-        p.caseFolding=NULL;
     }
 
     value=makeProps(&p);
@@ -966,39 +549,10 @@ repeatAreaProps() {
 
 static void
 parseDB(const char *filename, UErrorCode *pErrorCode) {
-    /* default Bidi classes for unassigned code points */
-    static const uint32_t defaultBidi[][2]={ /* { limit, class } */
-        { 0x0590, U_LEFT_TO_RIGHT },
-        { 0x0600, U_RIGHT_TO_LEFT },
-        { 0x07C0, U_RIGHT_TO_LEFT_ARABIC },
-        { 0xFB1D, U_LEFT_TO_RIGHT },
-        { 0xFB50, U_RIGHT_TO_LEFT },
-        { 0xFE00, U_RIGHT_TO_LEFT_ARABIC },
-        { 0xFE70, U_LEFT_TO_RIGHT },
-        { 0xFF00, U_RIGHT_TO_LEFT_ARABIC },
-        { 0x110000, U_LEFT_TO_RIGHT }
-    };
-
     char *fields[15][2];
-    UChar32 start, end;
-    uint32_t prev;
-    int32_t i;
 
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return;
-    }
-
-    /*
-     * Set default Bidi classes for unassigned code points.
-     * See table 3-7 "Bidirectional Character Types" in UAX #9.
-     * http://www.unicode.org/reports/tr9/
-     */
-    prev=0;
-    for(i=0; i<LENGTHOF(defaultBidi); ++i) {
-        if(defaultBidi[i][1]!=0) {
-            repeatProps(prev, defaultBidi[i][0]-1, defaultBidi[i][1]<<UPROPS_BIDI_SHIFT);
-        }
-        prev=defaultBidi[i][0];
     }
 
     /* while unicodeAreas[unicodeAreaIndex] is unused, set its first to a bogus value */
@@ -1016,35 +570,8 @@ parseDB(const char *filename, UErrorCode *pErrorCode) {
 
     repeatAreaProps();
 
-    /* are all sub-properties consumed? */
-    if(mirrorIndex<mirrorCount) {
-        fprintf(stderr, "genprops: error - some code points in BidiMirroring.txt are missing from UnicodeData.txt\n");
-        *pErrorCode=U_PARSE_ERROR;
-        exit(U_PARSE_ERROR);
-    }
-    if(specialCasingIndex<specialCasingCount) {
-        fprintf(stderr, "genprops: error - some code points in SpecialCasing.txt are missing from UnicodeData.txt\n");
-        *pErrorCode=U_PARSE_ERROR;
-        exit(U_PARSE_ERROR);
-    }
-    if(caseFoldingIndex<caseFoldingCount) {
-        fprintf(stderr, "genprops: error - some code points in CaseFolding.txt are missing from UnicodeData.txt\n");
-        *pErrorCode=U_PARSE_ERROR;
-        exit(U_PARSE_ERROR);
-    }
-
     if(U_FAILURE(*pErrorCode)) {
         return;
-    }
-
-    for(i=0;
-        0==uset_getItem(caseSensitive, i, &start, &end, NULL, 0, pErrorCode) && U_SUCCESS(*pErrorCode);
-        ++i
-    ) {
-        addCaseSensitive(start, end);
-    }
-    if(*pErrorCode==U_INDEX_OUTOFBOUNDS_ERROR) {
-        *pErrorCode=U_ZERO_ERROR;
     }
 }
 
@@ -1056,4 +583,3 @@ parseDB(const char *filename, UErrorCode *pErrorCode) {
  * End:
  *
  */
-
