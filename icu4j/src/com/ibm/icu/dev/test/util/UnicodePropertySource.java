@@ -6,8 +6,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/UnicodePropertySource.java,v $
- * $Date: 2003/11/21 19:10:43 $
- * $Revision: 1.2 $
+ * $Date: 2003/12/17 04:55:28 $
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -20,10 +20,13 @@ import java.util.Map;
 import java.util.List;
 import java.util.Arrays;
 
-import com.ibm.icu.lang.*;
-import com.ibm.icu.util.*;
-import com.ibm.icu.impl.*;
-import com.ibm.icu.text.*;
+import com.ibm.icu.lang.UProperty;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.Normalizer;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.text.UnicodeSetIterator;
+
 
 /**
  * Provides a general interface for Unicode Properties, and
@@ -301,7 +304,7 @@ public abstract class UnicodePropertySource implements Cloneable {
      */
     static public void addAll(UnicodeSetIterator source, UnicodeSet result) {
         while (source.nextRange()) {
-            if (source.codepoint == source.IS_STRING) {
+            if (source.codepoint == UnicodeSetIterator.IS_STRING) {
                 result.add(source.string);
             } else {
                 result.add(source.codepoint, source.codepointEnd);

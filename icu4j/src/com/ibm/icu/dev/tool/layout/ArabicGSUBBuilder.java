@@ -7,19 +7,15 @@
  * Created on Dec 3, 2003
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/Attic/ArabicGSUBBuilder.java,v $
- * $Date: 2003/12/09 01:18:11 $
- * $Revision: 1.1 $
+ * $Date: 2003/12/17 04:54:40 $
+ * $Revision: 1.2 $
  * 
  *******************************************************************************
  */
 package com.ibm.icu.dev.tool.layout;
 
 import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.lang.UCharacterCategory;
-import com.ibm.icu.text.Normalizer;
-import com.ibm.icu.text.Transliterator;
 import com.ibm.icu.text.UnicodeSet;
-import com.ibm.icu.text.UnicodeSetIterator;
 import com.ibm.icu.text.UTF16;
 
 public class ArabicGSUBBuilder
@@ -47,14 +43,14 @@ public class ArabicGSUBBuilder
                break;
                
            default:
-               return decomp + UTF16.toString(ligature);
+               return decomp + UCharacter.toString(ligature);
         }
         
         char[] chars = decomp.toCharArray();
               
         ArabicShaping.shape(chars, leftType, rightType, isolClassTable);
   
-        return new String(chars) + UTF16.toString(ligature);
+        return new String(chars) + UCharacter.toString(ligature);
     }
     
     static void buildContextualForms(CharacterData data, ClassTable initClassTable, ClassTable mediClassTable,
@@ -119,7 +115,7 @@ public class ArabicGSUBBuilder
                     break;
                     
                 case UCharacter.DecompositionType.CANONICAL:
-                    cannonicalTree.insert(decomposition + UTF16.toString(ligature));
+                    cannonicalTree.insert(decomposition + UCharacter.toString(ligature));
                     break;
                 }
             }

@@ -5,14 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/TestBNF.java,v $
- * $Date: 2003/11/21 01:03:39 $
- * $Revision: 1.1 $
+ * $Date: 2003/12/17 04:55:28 $
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.test.util;
 
-import java.text.ParseException;
 import java.util.Random;
 
 //TODO integrate this into the test framework
@@ -237,7 +236,7 @@ public class TestBNF {
             System.out.println();
             System.out.println("Input: " + t.getSource());
             int type = 0;
-            while (type != t.DONE) {
+            while (type != Tokenizer.DONE) {
                 type = t.next();
                 System.out.println(t.toString(type, false));
             }

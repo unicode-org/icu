@@ -7,16 +7,17 @@
  * Created on Dec 3, 2003
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/LigatureTree.java,v $
- * $Date: 2003/12/09 01:18:11 $
- * $Revision: 1.1 $
+ * $Date: 2003/12/17 04:54:41 $
+ * $Revision: 1.2 $
  * 
  *******************************************************************************
  */
 package com.ibm.icu.dev.tool.layout;
 
-import java.io.*;
-import java.lang.*;
-import java.util.*;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Writer;
 
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.impl.Utility;

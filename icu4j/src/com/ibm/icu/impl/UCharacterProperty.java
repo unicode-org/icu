@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2003/10/04 00:37:18 $ 
-* $Revision: 1.34 $
+* $Date: 2003/12/17 04:56:04 $ 
+* $Revision: 1.35 $
 *
 *******************************************************************************
 */
@@ -1595,6 +1595,9 @@ public final class UCharacterProperty implements Trie.DataManipulate
     {
         // jar access
         InputStream i = getClass().getResourceAsStream(DATA_FILE_NAME_);
+        if(i==null){
+            throw new IOException("Could not load the file: "+DATA_FILE_NAME_);
+        }
         BufferedInputStream b = new BufferedInputStream(i, 
                                                         DATA_BUFFER_SIZE_);
         UCharacterPropertyReader reader = new UCharacterPropertyReader(b);

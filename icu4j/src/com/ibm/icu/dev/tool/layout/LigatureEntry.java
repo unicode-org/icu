@@ -7,15 +7,12 @@
  * Created on Dec 3, 2003
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/LigatureEntry.java,v $
- * $Date: 2003/12/09 01:18:11 $
- * $Revision: 1.1 $
+ * $Date: 2003/12/17 04:54:42 $
+ * $Revision: 1.2 $
  * 
  *******************************************************************************
  */
 package com.ibm.icu.dev.tool.layout;
-
-import java.util.*;
-import java.lang.*;
 
 public class LigatureEntry
 {
