@@ -352,8 +352,11 @@ u_strcmpCodePointOrder(const UChar *s1, const UChar *s2) {
     for(;;) {
         c1=*s1++;
         c2=*s2++;
-        if (c1 != c2 || c1 == 0) {
+        if (c1 != c2) {
             break;
+        }
+        if (c1 == 0) {
+            return 0;
         }
     }
 
@@ -514,29 +517,32 @@ u_memmove(UChar *dest, const UChar *src, int32_t count) {
 
 U_CAPI UChar * U_EXPORT2
 u_memset(UChar *dest, UChar c, int32_t count) {
-    UChar *ptr = dest;
-    UChar *limit = dest + count;
+    if(count > 0) {
+        UChar *ptr = dest;
+        UChar *limit = dest + count;
 
-    while (ptr < limit) {
-        *(ptr++) = c;
+        while (ptr < limit) {
+            *(ptr++) = c;
+        }
     }
     return dest;
 }
 
 U_CAPI int32_t U_EXPORT2
 u_memcmp(UChar *buf1, UChar *buf2, int32_t count) {
-    UChar *limit = buf1 + count;
-    int32_t result;
+    if(count > 0) {
+        UChar *limit = buf1 + count;
+        int32_t result;
 
-    while (buf1 < limit) {
-        result = (int32_t)(uint16_t)*buf1 - (int32_t)(uint16_t)*buf2;
-        if (result != 0) {
-            return result;
+        while (buf1 < limit) {
+            result = (int32_t)(uint16_t)*buf1 - (int32_t)(uint16_t)*buf2;
+            if (result != 0) {
+                return result;
+            }
+            buf1++;
+            buf2++;
         }
-        buf1++;
-        buf2++;
     }
-
     return 0;
 }
 
@@ -552,7 +558,7 @@ u_memcmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t count) {
     limit=s1+count;
 
     /* compare identical prefixes - they do not need to be fixed up */
-    do {
+    for(;;) {
         c1=*s1;
         c2=*s2;
         if(c1!=c2) {
@@ -560,7 +566,10 @@ u_memcmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t count) {
         }
         ++s1;
         ++s2;
-    } while(s1<limit);
+        if(s1==limit) {
+            return 0;
+        }
+    }
 
    /* c1!=c2, fix up each one if they're both in or above the surrogate range, then compare them */
    if (c1 >= 0xD800 && c2 >= 0xD800) {
@@ -574,34 +583,40 @@ u_memcmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t count) {
 
 U_CAPI UChar * U_EXPORT2
 u_memchr(UChar *src, UChar ch, int32_t count) {
-    UChar *ptr = src;
-    UChar *limit = src + count;
+    if(count > 0) {
+        UChar *ptr = src;
+        UChar *limit = src + count;
 
-    while (ptr < limit) {
-        if (*ptr == ch) {
-            return ptr;
-        }
-        ptr++;
+        do {
+            if (*ptr == ch) {
+                return ptr;
+            }
+        } while (++ptr < limit);
     }
-
     return NULL;
 }
 
 U_CAPI UChar * U_EXPORT2
 u_memchr32(UChar *src, UChar32 ch, int32_t count) {
-    int32_t strItr = 0;
-    int32_t lastIndex;
-    UChar32 stringCh;
-
-    while (strItr < count) {
-        lastIndex = strItr;
-        UTF_NEXT_CHAR_SAFE(src, strItr, count, stringCh, TRUE);
-        if (stringCh == ch) {
-            return src + (strItr - (strItr - lastIndex));
-        }
+    if(count<=0 || (uint32_t)ch>0x10ffff) {
+        return NULL; /* no string, or illegal arguments */
     }
 
-    return NULL;
+    if(ch<=0xffff) {
+        return u_memchr(src, (UChar)ch, count); /* BMP, single UChar */
+    } else if(count<2) {
+        return NULL; /* too short for a surrogate pair */
+    } else {
+        const UChar *limit=src+count-1; /* -1 so that we do not need a separate check for the trail unit */
+        UChar lead=UTF16_LEAD(ch), trail=UTF16_TRAIL(ch);
+
+        do {
+            if(*src==lead && *(src+1)==trail) {
+                return src;
+            }
+        } while(++src<limit);
+        return NULL;
+    }
 }
 
 /* string casing ------------------------------------------------------------ */
