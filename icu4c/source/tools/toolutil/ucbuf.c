@@ -335,7 +335,7 @@ ucbuf_getc(UCHARBUF* buf,UErrorCode* error){
 /* get a UChar32 from the stream*/
 U_CAPI int32_t U_EXPORT2
 ucbuf_getc32(UCHARBUF* buf,UErrorCode* error){
-    int32_t retVal =U_EOF;
+    int32_t retVal = (int32_t)U_EOF;
     if(error==NULL || U_FAILURE(*error)){
         return FALSE;
     }
@@ -776,5 +776,7 @@ ucbuf_readline(UCHARBUF* buf,int32_t* len,UErrorCode* err){
             }
         }
     }
-    return NULL;
+    /* not reached */
+    /* A compiler warning will appear if all paths don't contain a return statement. */
+/*    return NULL;*/
 }
