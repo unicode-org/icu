@@ -429,6 +429,27 @@ u_strlen(const UChar *s)
 #endif
 }
 
+UChar *
+u_memcpy(UChar *dest, const UChar *src, int32_t count) {
+    return (UChar *)uprv_memcpy(dest, src, count*U_SIZEOF_UCHAR);
+}
+
+UChar *
+u_memmove(UChar *dest, const UChar *src, int32_t count) {
+    return (UChar *)uprv_memmove(dest, src, count*U_SIZEOF_UCHAR);
+}
+
+UChar *
+u_memset(UChar *dest, UChar c, int32_t count) {
+    UChar *ptr = dest;
+    UChar *limit = dest + count;
+
+    while(ptr < limit) {
+        *(ptr++) = c;
+    }
+    return dest;
+}
+
 /* string casing ------------------------------------------------------------ */
 
 /*

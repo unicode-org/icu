@@ -325,6 +325,48 @@ U_CAPI char* U_EXPORT2 u_austrncpy(char *dst,
             const UChar *src,
             int32_t n );
 
+
+/**
+ * synonym for uprv_memcpy
+ * @draft
+ */
+UChar *u_memcpy(UChar *dest, const UChar *src, int32_t count);
+
+/**
+ * synonym for uprv_memmove
+ * @draft
+ */
+UChar *u_memmove(UChar *dest, const UChar *src, int32_t count);
+
+/**
+ * Initialize <TT>count</TT> characters of <TT>dest</TT> to <TT>c</TT>.
+ *
+ * @param dest The destination string.
+ * @param c The character to initialize the string.
+ * @param count The maximum number of characters to set.
+ * @return A pointer to <TT>dest</TT>.
+ * @draft
+ */
+UChar *u_memset(UChar *dest, UChar c, int32_t count);
+
+/**
+ * synonym for u_strncmp
+ * @draft
+ */
+#define u_memcmp(buf1, buf2, count) u_strncmp(buf1, buf2, count)
+
+/**
+ * synonym for u_strchr
+ * @draft
+ */
+#define u_memchr(buf, c, count) u_strchr(buf, c, count)
+
+/**
+ * synonym for u_strchr32
+ * @draft
+ */
+#define u_memchr32(buf, c, count) u_strchr32(buf, c, count)
+
 /**
  * Unicode String literals in C.
  * We need one macro to declare a variable for the string
