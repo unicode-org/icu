@@ -124,7 +124,7 @@ static CRITICAL_SECTION  gGlobalWinMutex;
  * one function, e.g., to perform a custom action, followed by a
  * standard call to EnterCriticalSection.
  */
-#if defined(_DEBUG) && (ICU_USE_THREADS==1)
+#if defined(U_DEBUG) && (ICU_USE_THREADS==1)
 static int32_t gRecursionCount = 0; /* detect global mutex locking */      
 static int32_t gRecursionCountPool[MAX_MUTEXES]; /* ditto for non-global */
 #endif
@@ -214,7 +214,7 @@ umtx_lock(UMTX *mutex)
 #endif /* ICU_USE_THREADS==1 */
     }
 
-#if defined(WIN32) && defined(_DEBUG) && (ICU_USE_THREADS==1)
+#if defined(WIN32) && defined(U_DEBUG) && (ICU_USE_THREADS==1)
     if (mutex == &gGlobalMutex) {         /* Detect Reentrant locking of the global mutex.      */
         gRecursionCount++;                /* Recursion causes deadlocks on Unixes.              */
         U_ASSERT(gRecursionCount == 1);   /* Detection works on Windows.  Debug problems there. */
@@ -234,7 +234,7 @@ umtx_lock(UMTX *mutex)
           U_ASSERT(((CRITICAL_SECTION*)*mutex)->RecursionCount == 1);
         */
     }
-#endif /*_DEBUG*/
+#endif /*U_DEBUG*/
 }
 
 
@@ -254,7 +254,7 @@ umtx_unlock(UMTX* mutex)
         return; 
     }
 
-#if defined (WIN32) && defined (_DEBUG) && (ICU_USE_THREADS==1)
+#if defined (WIN32) && defined (U_DEBUG) && (ICU_USE_THREADS==1)
     if (mutex == &gGlobalMutex) {
         gRecursionCount--;
         U_ASSERT(gRecursionCount == 0);  /* Detect unlock of an already unlocked mutex */
@@ -329,7 +329,9 @@ static void initGlobalMutex() {
         int i;
         for (i=0; i<MAX_MUTEXES; i++) {
             InitializeCriticalSection(&gMutexes[i]);
+#if defined (U_DEBUG)
             gRecursionCountPool[i] = 0; /* see comments above */
+#endif
         }
         gMutexPoolInitialized = TRUE;
     }
