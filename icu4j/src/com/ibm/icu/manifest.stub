@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Specification-Title: ICU4J
+Specification-Version: 2.1
+Specification-Vendor: International Business Machines Corp.
+Implementation-Title: com.ibm.icu
+Implementation-Version: 2.1
+Implementation-Vendor: International Business Machines Corp.
+Implementation-Vendor-Id: com.ibm
+
+Name: com/ibm/icu/
+Sealed: true
