@@ -166,6 +166,18 @@ class DateFormat;
  * interpreted literally, regardless of the number of digits.  So using the
  * pattern "MM/dd/yyyy", "01/11/12" parses to Jan 11, 12 A.D.
  *
+ * <p>
+ * When numeric fields abut one another directly, with no intervening delimiter
+ * characters, they constitute a run of abutting numeric fields.  Such runs are
+ * parsed specially.  For example, the format "HHmmss" parses the input text
+ * "123456" to 12:34:56, parses the input text "12345" to 1:23:45, and fails to
+ * parse "1234".  In other words, the leftmost field of the run is flexible,
+ * while the others keep a fixed width.  If the parse fails anywhere in the run,
+ * then the leftmost field is shortened by one character, and the entire run is
+ * parsed again. This is repeated until either the parse succeeds or the
+ * leftmost field is one character in length.  If the parse still fails at that
+ * point, the parse of the run fails.
+ *
  * <P>
  * For time zones that have no names, SimpleDateFormat uses strings GMT+hours:minutes or
  * GMT-hours:minutes.
@@ -630,6 +642,12 @@ private:
                                      int32_t value,
                                      int32_t minDigits,
                                      int32_t maxDigits) const;
+
+    /**
+     * Return true if the given format character, occuring count
+     * times, represents a numeric field.
+     */
+    static UBool isNumeric(UChar formatChar, int32_t count);
 
     /**
      * Called by several of the constructors to load pattern data and formatting symbols

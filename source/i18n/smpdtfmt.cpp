@@ -84,6 +84,8 @@ const int32_t   SimpleDateFormat::fgSystemDefaultCenturyYear    = -1;
 UDate           SimpleDateFormat::fgSystemDefaultCenturyStart       = DBL_MIN;
 int32_t         SimpleDateFormat::fgSystemDefaultCenturyStartYear   = -1;
 
+static const UChar QUOTE = 0x27; // Single quote
+
 //----------------------------------------------------------------------
 
 SimpleDateFormat::~SimpleDateFormat()
@@ -428,11 +430,11 @@ SimpleDateFormat::format(Calendar& cal, UnicodeString& appendTo, FieldPosition& 
             subFormat(appendTo, prevCh, count, pos, cal, status);
             count = 0;
         }
-        if (ch == 0x0027 /*'\''*/) {
+        if (ch == QUOTE) {
             // Consecutive single quotes are a single quote literal,
             // either outside of quotes or between quotes
-            if ((i+1) < fPattern.length() && fPattern[i+1] == 0x0027 /*'\''*/) {
-                appendTo += (UChar)0x0027 /*'\''*/;
+            if ((i+1) < fPattern.length() && fPattern[i+1] == QUOTE) {
+                appendTo += (UChar)QUOTE;
                 ++i;
             } else {
                 inQuote = ! inQuote;
@@ -692,193 +694,189 @@ SimpleDateFormat::zeroPaddingNumber(UnicodeString &appendTo, int32_t value, int3
 
 //----------------------------------------------------------------------
 
+/**
+ * Format characters that indicate numeric fields.  The character
+ * at index 0 is treated specially.
+ */
+static const UChar NUMERIC_FORMAT_CHARS[] = {0x4D, 0x79, 0x75, 0x64, 0x68, 0x48, 0x6D, 0x73, 0x53, 0x44, 0x46, 0x77, 0x57, 0x6B, 0x4B, 0x00}; /* "MyudhHmsSDFwWkK" */
+
+/**
+ * Return true if the given format character, occuring count
+ * times, represents a numeric field.
+ */
+UBool SimpleDateFormat::isNumeric(UChar formatChar, int32_t count) {
+    UnicodeString s(NUMERIC_FORMAT_CHARS);
+    int32_t i = s.indexOf(formatChar);
+    return (i > 0 || (i == 0 && count < 3));
+}
+
 void
 SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition& pos) const
 {
     int32_t start = pos.getIndex();
     int32_t oldStart = start;
     UBool ambiguousYear[] = { FALSE };
-
-    UBool inQuote = FALSE;
-    UChar prevCh = 0;
     int32_t count = 0;
-    int32_t interQuoteCount = 1; // Number of chars between quotes
-    UBool allowNegative = TRUE;
 
-    // loop through the pattern string character by character, using it to control how
-    // we match characters in the input
-    for (int32_t i = 0; i < fPattern.length();++i) {
-        UChar ch = fPattern[i];
-        
-        // if we're inside a quoted string, match characters exactly until we hit
-        // another single quote (two single quotes in a row match one single quote
-        // in the input)
-        if (inQuote)
-        {
-            if (ch == 0x0027 /*'\''*/)
-            {
-                // ends with 2nd single quote
-                inQuote = FALSE;
-                // two consecutive quotes outside a quote means we have
-                // a quote literal we need to match.
-                if (count == 0)
-                {
-                    if(start > text.length() || ch != text[start])
-                        {
-                            pos.setIndex(oldStart);
-                            pos.setErrorIndex(start);
-                            return;
-                        }
-                        ++start;
+    // For parsing abutting numeric fields. 'abutPat' is the
+    // offset into 'pattern' of the first of 2 or more abutting
+    // numeric fields.  'abutStart' is the offset into 'text'
+    // where parsing the fields begins. 'abutPass' starts off as 0
+    // and increments each time we try to parse the fields.
+    int32_t abutPat = -1; // If >=0, we are in a run of abutting numeric fields
+    int32_t abutStart = 0;
+    int32_t abutPass = 0;
+
+    const UnicodeString numericFormatChars(NUMERIC_FORMAT_CHARS);
+
+    for (int32_t i=0; i<fPattern.length(); ++i) {
+        UChar ch = fPattern.charAt(i);
+
+        // Handle quoted strings.  Two consecutive quotes is a
+        // quote literal, inside or outside of quotes.
+        if (ch == QUOTE) {
+            abutPat = -1; // End of any abutting fields
+
+            // Match a quote literal '' outside of quotes
+            if ((i+1)<fPattern.length() && fPattern.charAt(i+1)==ch) {
+                if (start==text.length() || text.charAt(start) != ch) {
+                    pos.setIndex(oldStart);
+                    pos.setErrorIndex(start);
+                    return;
                 }
-                count = 0;
-                interQuoteCount = 0;
+                ++start;
+                ++i; // Skip over doubled quote
+                continue;
             }
-            else
-                {
-                    // pattern uses text following from 1st single quote.
-                    if (start >= text.length() || ch != text[start]) {
-                        // Check for cases like: 'at' in pattern vs "xt"
-                        // in time text, where 'a' doesn't match with 'x'.
-                        // If fail to match, return null.
-                        pos.setIndex(oldStart); // left unchanged
+
+            // Match a quoted string, including any embedded ''
+            // quote literals.  Note that we allow an unclosed
+            // quote for backward compatibility.
+            while (++i<fPattern.length()) {
+                ch = fPattern.charAt(i);
+                if (ch == QUOTE) {
+                    if ((i+1)<fPattern.length() && fPattern.charAt(i+1)==ch) {
+                        ++i;
+                        // Fall through and match literal quote
+                    } else {
+                        break; // Closing quote seen
+                    }
+                }
+                if (start==text.length() || text.charAt(start) != ch) {
+                    pos.setIndex(oldStart);
+                    pos.setErrorIndex(start);
+                    return;
+                }
+                ++start;
+            }
+            continue;
+        }
+
+        // Handle alphabetic field characters.
+        if ((ch >= 0x41 && ch <= 0x5A) || (ch >= 0x61 && ch <= 0x7A)) { // [A-Za-z]
+            int32_t fieldPat = i;
+
+            // Count the length of this field specifier
+            count = 1;
+            while ((i+1)<fPattern.length() &&
+                   fPattern.charAt(i+1) == ch) {
+                ++count;
+                ++i;
+            }
+
+            if (isNumeric(ch, count)) {
+                if (abutPat < 0) {
+                    // Determine if there is an abutting numeric field.  For
+                    // most fields we can just look at the next characters,
+                    // but the 'm' field is either numeric or text,
+                    // depending on the count, so we have to look ahead for
+                    // that field.
+                    if ((i+1)<fPattern.length()) {
+                        UBool abutting;
+                        UChar nextCh = fPattern.charAt(i+1);
+                        int32_t k = numericFormatChars.indexOf(nextCh);
+                        if (k == 0) {
+                            int32_t j = i+2;
+                            while (j<fPattern.length() &&
+                                   fPattern.charAt(j) == nextCh) {
+                                ++j;
+                            }
+                            abutting = (j-i) < 4; // nextCount < 3
+                        } else {
+                            abutting = k > 0;
+                        }
+
+                        // Record the start of a set of abutting numeric
+                        // fields.
+                        if (abutting) {
+                            abutPat = fieldPat;
+                            abutStart = start;
+                            abutPass = 0;
+                        }
+                    }
+                }
+            } else {
+                abutPat = -1; // End of any abutting fields
+            }
+
+            // Handle fields within a run of abutting numeric fields.  Take
+            // the pattern "HHmmss" as an example. We will try to parse
+            // 2/2/2 characters of the input text, then if that fails,
+            // 1/2/2.  We only adjust the width of the leftmost field; the
+            // others remain fixed.  This allows "123456" => 12:34:56, but
+            // "12345" => 1:23:45.  Likewise, for the pattern "yyyyMMdd" we
+            // try 4/2/2, 3/2/2, 2/2/2, and finally 1/2/2.
+            if (abutPat >= 0) {
+                // If we are at the start of a run of abutting fields, then
+                // shorten this field in each pass.  If we can't shorten
+                // this field any more, then the parse of this set of
+                // abutting numeric fields has failed.
+                if (fieldPat == abutPat) {
+                    count -= abutPass++;
+                    if (count == 0) {
+                        pos.setIndex(oldStart);
                         pos.setErrorIndex(start);
                         return;
                     }
-                    ++count;
-                    ++start;
                 }
+
+                start = subParse(text, start, ch, count,
+                                 TRUE, FALSE, ambiguousYear, cal);
+
+                // If the parse fails anywhere in the run, back up to the
+                // start of the run and retry.
+                if (start < 0) {
+                    i = abutPat - 1;
+                    start = abutStart;
+                    continue;
+                }
+            }
+
+            // Handle non-numeric fields and non-abutting numeric
+            // fields.
+            else {
+                int32_t k = start;
+                start=subParse(text, start, ch, count,
+                               FALSE, TRUE, ambiguousYear, cal);
+
+                if (start < 0) {
+                    pos.setErrorIndex(k);
+                    pos.setIndex(oldStart);
+                    return;
+                }
+            }
         }
 
-        // if we're not inside a quoted string...
+        // Handle unquoted non-alphabetic characters.  These are
+        // treated as literals.
         else {
-            
-            // ...a quote mark puts us into a quoted string (and we parse any pending
-            // pattern symbols)
-            if (ch == 0x0027 /*'\''*/) {
-                inQuote = TRUE;
-                if (count > 0) 
-                {
-                    int32_t startOffset = start;
-                    start = subParse(text, start, prevCh, count, FALSE, allowNegative, ambiguousYear, cal);
-                    allowNegative = TRUE;
-                    if ( start < 0 ) {
-                        pos.setErrorIndex(startOffset);
-                        pos.setIndex(oldStart);
-                        // {sfb} correct Date
-                        return;
-                    }
-                    count = 0;
-                }
-
-                    if (interQuoteCount == 0)
-                    {
-                        // This indicates two consecutive quotes inside a quote,
-                        // for example, 'o''clock'.  We need to parse this as
-                        // representing a single quote within the quote.
-                        int32_t startOffset = start;
-                        if (start >= text.length() ||  ch != text[start])
-                        {
-                            pos.setErrorIndex(startOffset);
-                            pos.setIndex(oldStart);
-                            // {sfb} correct Date
-                            return;
-                        }
-                        ++start;
-                        count = 1; // Make it look like we never left
-                    }
+            abutPat = -1; // End of any abutting fields
+            if (start==text.length() || text.charAt(start) != ch) {
+                pos.setIndex(oldStart);
+                pos.setErrorIndex(start);
+                return;
             }
-            
-            // if we're on a letter, collect copies of the same letter to determine
-            // the whole parse symbol.  when we hit a different character, parse the
-            // input based on the resulting symbol
-        else if ((ch >= 0x0061 /*'a'*/ && ch <= 0x007A /*'z'*/) 
-             || (ch >= 0x0041 /*'A'*/ && ch <= 0x005A /*'Z'*/))
-          {
-                // ch is a date-time pattern
-                if (ch != prevCh && count > 0) // e.g., yyyyMMdd
-                {
-                    int32_t startOffset = start;
-                    // This is the only case where we pass in 'true' for
-                    // obeyCount.  That's because the next field directly
-                    // abuts this one, so we have to use the count to know when
-                    // to stop parsing. [LIU]
-                    // Don't allow negatives in this field or in the next.
-                    // This prevents anomalies like HHmmss matching 12-34
-                    // as 12:-3:4, or 11:57:04.
-                    start = subParse(text, start, prevCh, count, TRUE, FALSE, ambiguousYear, cal);
-                    allowNegative = FALSE;
-                    if (start < 0) {
-                        pos.setErrorIndex(startOffset);
-                        pos.setIndex(oldStart);
-                        // {sfb} correct Date
-                        return;
-                    }
-                    prevCh = ch;
-                    count = 1;
-                }
-                else {
-                    if (ch != prevCh) 
-                        prevCh = ch;
-                    count++;
-                }
-            }
-
-            // if we're on a non-letter, parse based on any pending pattern symbols
-            else if (count > 0) 
-            {
-                // handle cases like: MM-dd-yy, HH:mm:ss, or yyyy MM dd,
-                // where ch = '-', ':', or ' ', repectively.
-                int32_t startOffset = start;
-                start = subParse( text, start, prevCh, count, FALSE, allowNegative, ambiguousYear, cal);
-                allowNegative = TRUE;
-                if ( start < 0 ) {
-                    pos.setErrorIndex(startOffset);
-                    pos.setIndex(oldStart);
-                    return;
-                }
-                if (start >= text.length() || ch != text[start]) {
-                    // handle cases like: 'MMMM dd' in pattern vs. "janx20"
-                    // in time text, where ' ' doesn't match with 'x'.
-                    pos.setErrorIndex(start);
-                    pos.setIndex(oldStart);
-                    return;
-                }
-                start++;
-                count = 0;
-                prevCh = 0;
-            }
-
-            // otherwise, match characters exactly
-            else 
-            {
-                if (start >= text.length() || ch != text[start]) {
-                    // handle cases like: 'MMMM   dd' in pattern vs.
-                    // "jan,,,20" in time text, where "   " doesn't
-                    // match with ",,,".
-
-                    pos.setErrorIndex(start);
-                    pos.setIndex(oldStart);
-                    return;
-                }
-                start++;
-            }
-
-            ++interQuoteCount;
-        }
-    }
-
-    // if we still have a pending pattern symbol after we're done looping through
-    // characters in the pattern string, parse the input based on the final pending
-    // pattern symbol
-    if (count > 0) 
-    {
-        int32_t startOffset = start;
-        start = subParse(text, start, prevCh, count, FALSE, allowNegative, ambiguousYear, cal);
-        if ( start < 0 ) {
-            pos.setIndex(oldStart);
-            pos.setErrorIndex(startOffset);
-            return;
+            ++start;
         }
     }
 
@@ -1407,11 +1405,11 @@ void SimpleDateFormat::translatePattern(const UnicodeString& originalPattern,
   for (int32_t i = 0; i < originalPattern.length(); ++i) {
     UChar c = originalPattern[i];
     if (inQuote) {
-      if (c == 0x0027 /*'\''*/) 
+      if (c == QUOTE) 
     inQuote = FALSE;
     }
     else {
-      if (c == 0x0027 /*'\''*/) 
+      if (c == QUOTE) 
     inQuote = TRUE;
       else if ((c >= 0x0061 /*'a'*/ && c <= 0x007A) /*'z'*/ 
            || (c >= 0x0041 /*'A'*/ && c <= 0x005A /*'Z'*/)) {
