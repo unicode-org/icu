@@ -175,7 +175,7 @@ u_vfprintf_u(    UFILE        *f,
         }
 
         /* parse and print the specifier */
-        patCount = u_printf_print_spec(&g_stream_handler, alias, f, &f->fBundle, patCount, &written, (va_list*)&ap);
+        patCount = u_printf_print_spec(&g_stream_handler, alias, f, &f->str.fBundle, patCount, &written, (va_list*)&ap);
 
         /* update the pointer in pattern and continue */
         alias += patCount;

@@ -26,13 +26,13 @@
 #include "locbund.h"
 #include "uprintf.h"
 
-typedef struct u_localized_string {
+typedef struct u_localized_print_string {
     UChar     *str;     /* Place to write the string */
     int32_t   available;/* Number of codeunits available to write to */
     int32_t   len;      /* Maximum number of code units that can be written to output */
 
     ULocaleBundle  fBundle;     /* formatters */
-} u_localized_string;
+} u_localized_print_string;
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 

@@ -26,7 +26,7 @@
 #include "unicode/unum.h"
 #include "unicode/udat.h"
 #include "unicode/uset.h"
-#include "sscanf.h"
+#include "ufile.h"
 #include "uscanf_p.h"
 #include "locbund.h"
 
@@ -117,22 +117,16 @@ static int32_t
 u_scanf_skip_leading_ws(u_localized_string    *input,
                         UChar     pad)
 {
-    UChar     c;
-    int32_t   count = input->pos;
-    int32_t   skipped;
+    UChar    c;
+    UChar   *origPos = input->fPos;
 
     /* skip all leading ws in the input */
-    while( ((c = input->str[count]) != U_EOF) && (c == pad || u_isWhitespace(c)) )
+    while( ((c = *input->fPos) != 0) && (c == pad || u_isWhitespace(c)) )
     {
-        count++;
+        input->fPos++;
     }
 
-    if(c == U_EOF)
-        count++;
-
-    skipped = count - input->pos;
-    input->pos = count;
-    return skipped;
+    return input->fPos - origPos;
 }
 
 static int32_t 
@@ -143,7 +137,7 @@ u_scanf_simple_percent_handler(u_localized_string    *input,
                                int32_t            *consumed)
 {
     /* make sure the next character in the input is a percent */
-    if(input->str[input->pos++] != 0x0025) {
+    if(*(input->fPos++) != 0x0025) {
         return -1;
     }
     return 0;
@@ -177,7 +171,7 @@ u_scanf_string_handler(u_localized_string    *input,
     if(U_FAILURE(status))
         return -1;
 
-    while( ((c = input->str[input->pos++]) != U_EOF)
+    while( ((c = *(input->fPos++)) != 0)
         && (c != info->fPadChar && !u_isWhitespace(c))
         && (info->fWidth == -1 || count < info->fWidth) )
     {
@@ -202,8 +196,8 @@ u_scanf_string_handler(u_localized_string    *input,
     }
 
     /* put the final character we read back on the input */
-    if(c != U_EOF)
-        input->pos--;
+    if(c != 0)
+        input->fPos--;
 
     /* add the terminator */
     *alias = 0x00;
@@ -233,7 +227,7 @@ u_scanf_ustring_handler(u_localized_string    *input,
     /* get the string one character at a time, truncating to the width */
     count = 0;
 
-    while( ((c = input->str[input->pos++]) != U_EOF)
+    while( ((c = *(input->fPos++)) != 0)
         && (c != info->fPadChar && ! u_isWhitespace(c))
         && (info->fWidth == -1 || count < info->fWidth) )
     {
@@ -246,8 +240,8 @@ u_scanf_ustring_handler(u_localized_string    *input,
     }
 
     /* put the final character we read back on the input */
-    if(c != U_EOF)
-        input->pos--;
+    if(c != 0)
+        input->fPos--;
 
     /* add the terminator */
     *alias = 0x0000;
@@ -291,7 +285,7 @@ u_scanf_double_handler(u_localized_string    *input,
     u_scanf_skip_leading_ws(input, info->fPadChar);
 
     /* determine the size of the input's buffer */
-    len = input->len - input->pos;
+    len = input->fLimit - input->fPos;
 
     /* truncate to the width, if specified */
     if(info->fWidth != -1)
@@ -305,14 +299,14 @@ u_scanf_double_handler(u_localized_string    *input,
         return 0;
 
     /* parse the number */
-    *num = unum_parseDouble(format, &(input->str[input->pos]), len, &parsePos, &status);
+    *num = unum_parseDouble(format, input->fPos, len, &parsePos, &status);
 
     /* mask off any necessary bits */
     /*  if(! info->fIsLong_double)
     num &= DBL_MAX;*/
 
     /* update the input's position to reflect consumed data */
-    input->pos += parsePos;
+    input->fPos += parsePos;
 
     /* we converted 1 arg */
     return 1;
@@ -336,7 +330,7 @@ u_scanf_scientific_handler(u_localized_string    *input,
     u_scanf_skip_leading_ws(input, info->fPadChar);
 
     /* determine the size of the input's buffer */
-    len = input->len - input->pos;
+    len = input->fLimit - input->fPos;
 
     /* truncate to the width, if specified */
     if(info->fWidth != -1)
@@ -350,14 +344,14 @@ u_scanf_scientific_handler(u_localized_string    *input,
         return 0;
 
     /* parse the number */
-    *num = unum_parseDouble(format, &(input->str[input->pos]), len, &parsePos, &status);
+    *num = unum_parseDouble(format, input->fPos, len, &parsePos, &status);
 
     /* mask off any necessary bits */
     /*  if(! info->fIsLong_double)
     num &= DBL_MAX;*/
 
     /* update the input's position to reflect consumed data */
-    input->pos += parsePos;
+    input->fPos += parsePos;
 
     /* we converted 1 arg */
     return 1;
@@ -390,7 +384,7 @@ u_scanf_scidbl_handler(u_localized_string    *input,
     u_scanf_skip_leading_ws(input, info->fPadChar);
 
     /* determine the size of the input's buffer */
-    len = input->len - input->pos;
+    len = input->fLimit - input->fPos;
 
     /* truncate to the width, if specified */
     if(info->fWidth != -1)
@@ -406,10 +400,10 @@ u_scanf_scidbl_handler(u_localized_string    *input,
 
     /* parse the number using each format*/
 
-    scientificResult = unum_parseDouble(scientificFormat, &(input->str[input->pos]), len,
+    scientificResult = unum_parseDouble(scientificFormat, input->fPos, len,
         &scientificParsePos, &scientificStatus);
 
-    genericResult = unum_parseDouble(genericFormat, &(input->str[input->pos]), len,
+    genericResult = unum_parseDouble(genericFormat, input->fPos, len,
         &genericParsePos, &genericStatus);
 
     /* determine which parse made it farther */
@@ -417,13 +411,13 @@ u_scanf_scidbl_handler(u_localized_string    *input,
         /* stash the result in num */
         *num = scientificResult;
         /* update the input's position to reflect consumed data */
-        input->pos += scientificParsePos;
+        input->fPos += scientificParsePos;
     }
     else {
         /* stash the result in num */
         *num = genericResult;
         /* update the input's position to reflect consumed data */
-        input->pos += genericParsePos;
+        input->fPos += genericParsePos;
     }
 
     /* mask off any necessary bits */
@@ -453,7 +447,7 @@ u_scanf_integer_handler(u_localized_string    *input,
     u_scanf_skip_leading_ws(input, info->fPadChar);
 
     /* determine the size of the input's buffer */
-    len = input->len - input->pos;
+    len = input->fLimit - input->fPos;
 
     /* truncate to the width, if specified */
     if(info->fWidth != -1)
@@ -467,7 +461,7 @@ u_scanf_integer_handler(u_localized_string    *input,
         return 0;
 
     /* parse the number */
-    result = unum_parseInt64(format, &(input->str[input->pos]), len, &parsePos, &status);
+    result = unum_parseInt64(format, input->fPos, len, &parsePos, &status);
 
     /* mask off any necessary bits */
     if (info->fIsShort)
@@ -478,7 +472,7 @@ u_scanf_integer_handler(u_localized_string    *input,
         *(int32_t*)num = (int32_t)(UINT32_MAX & result);
 
     /* update the input's position to reflect consumed data */
-    input->pos += parsePos;
+    input->fPos += parsePos;
 
     /* we converted 1 arg */
     return 1;
@@ -522,7 +516,7 @@ u_scanf_percent_handler(u_localized_string    *input,
     u_scanf_skip_leading_ws(input, info->fPadChar);
 
     /* determine the size of the input's buffer */
-    len = input->len - input->pos;
+    len = input->fLimit - input->fPos;
 
     /* truncate to the width, if specified */
     if(info->fWidth != -1)
@@ -536,14 +530,14 @@ u_scanf_percent_handler(u_localized_string    *input,
         return 0;
 
     /* parse the number */
-    *num = unum_parseDouble(format, &(input->str[input->pos]), len, &parsePos, &status);
+    *num = unum_parseDouble(format, input->fPos, len, &parsePos, &status);
 
     /* mask off any necessary bits */
     /*  if(! info->fIsLong_double)
     num &= DBL_MAX;*/
 
     /* update the input's position to reflect consumed data */
-    input->pos += parsePos;
+    input->fPos += parsePos;
 
     /* we converted 1 arg */
     return 1;
@@ -565,10 +559,10 @@ u_scanf_char_handler(u_localized_string    *input,
 
     /* get the character from the input, truncating to the width */
     if(info->fWidth == -1 || info->fWidth > 1)
-        uc = input->str[input->pos++];
+        uc = *(input->fPos++);
 
     /* handle EOF */
-    if(uc == U_EOF)
+    if(uc == 0)
         return -1;
 
     /* convert the character to the default codepage */
@@ -596,10 +590,10 @@ u_scanf_uchar_handler(u_localized_string    *input,
 
     /* get the character from the input, truncating to the width */
     if(info->fWidth == -1 || info->fWidth > 1)
-        *c = input->str[input->pos];
+        *c = *(input->fPos++);
 
     /* handle EOF */
-    if(*c == U_EOF)
+    if(*c == 0)
         return -1;
 
     /* we converted 1 arg */
@@ -624,7 +618,7 @@ u_scanf_spellout_handler(u_localized_string    *input,
     u_scanf_skip_leading_ws(input, info->fPadChar);
 
     /* determine the size of the input's buffer */
-    len = input->len - input->pos;
+    len = input->fLimit - input->fPos;
 
     /* truncate to the width, if specified */
     if(info->fWidth != -1)
@@ -638,14 +632,14 @@ u_scanf_spellout_handler(u_localized_string    *input,
         return 0;
 
     /* parse the number */
-    *num = unum_parseDouble(format, &(input->str[input->pos]), len, &parsePos, &status);
+    *num = unum_parseDouble(format, input->fPos, len, &parsePos, &status);
 
     /* mask off any necessary bits */
     /*  if(! info->fIsLong_double)
     num &= DBL_MAX;*/
 
     /* update the input's position to reflect consumed data */
-    input->pos += parsePos;
+    input->fPos += parsePos;
 
     /* we converted 1 arg */
     return 1;
@@ -667,26 +661,26 @@ u_scanf_hex_handler(u_localized_string    *input,
     u_scanf_skip_leading_ws(input, info->fPadChar);
 
     /* determine the size of the input's buffer */
-    len = input->len - input->pos;
+    len = input->fLimit - input->fPos;
 
     /* truncate to the width, if specified */
     if(info->fWidth != -1)
         len = ufmt_min(len, info->fWidth);
 
     /* check for alternate form */
-    if( input->str[input->pos] == 0x0030 &&
-        (input->str[input->pos + 1] == 0x0078 || input->str[input->pos + 1] == 0x0058) ) {
+    if( *(input->fPos) == 0x0030 &&
+        (*(input->fPos + 1) == 0x0078 || *(input->fPos + 1) == 0x0058) ) {
 
         /* skip the '0' and 'x' or 'X' if present */
-        input->pos += 2;
+        input->fPos += 2;
         len -= 2;
     }
 
     /* parse the number */
-    result = ufmt_uto64(&(input->str[input->pos]), &len, 16);
+    result = ufmt_uto64(input->fPos, &len, 16);
 
     /* update the input's position to reflect consumed data */
-    input->pos += len;
+    input->fPos += len;
 
     /* mask off any necessary bits */
     if (info->fIsShort)
@@ -715,17 +709,17 @@ u_scanf_octal_handler(u_localized_string    *input,
     u_scanf_skip_leading_ws(input, info->fPadChar);
 
     /* determine the size of the input's buffer */
-    len = input->len - input->pos;
+    len = input->fLimit - input->fPos;
 
     /* truncate to the width, if specified */
     if(info->fWidth != -1)
         len = ufmt_min(len, info->fWidth);
 
     /* parse the number */
-    result = ufmt_uto64(&(input->str[input->pos]), &len, 8);
+    result = ufmt_uto64(input->fPos, &len, 8);
 
     /* update the input's position to reflect consumed data */
-    input->pos += len;
+    input->fPos += len;
 
     /* mask off any necessary bits */
     if (info->fIsShort)
@@ -754,17 +748,17 @@ u_scanf_pointer_handler(u_localized_string    *input,
     u_scanf_skip_leading_ws(input, info->fPadChar);
 
     /* determine the size of the input's buffer */
-    len = input->len - input->pos;
+    len = input->fLimit - input->fPos;
 
     /* truncate to the width, if specified */
     if(info->fWidth != -1)
         len = ufmt_min(len, info->fWidth);
 
     /* parse the pointer - cast to void** to assign to *p */
-    *(void**)p = (void*) ufmt_uto64(&(input->str[input->pos]), &len, 16);
+    *(void**)p = (void*) ufmt_uto64(input->fPos, &len, 16);
 
     /* update the input's position to reflect consumed data */
-    input->pos += len;
+    input->fPos += len;
 
     /* we converted 1 arg */
     return 1;
@@ -791,7 +785,7 @@ u_scanf_scanset_handler(u_localized_string    *input,
     fmt--;
 
     /* determine the size of the input's buffer */
-    len = input->len - input->pos;
+    len = input->fLimit - input->fPos;
 
     /* truncate to the width, if specified */
     if(info->fWidth != -1)
@@ -809,8 +803,11 @@ u_scanf_scanset_handler(u_localized_string    *input,
 
         /* grab characters one at a time and make sure they are in the scanset */
         while(alias < limit) {
-            U16_NEXT(input->str,input->pos,input->len,c);
-            if(c != U_EOF && uset_contains(scanset, c)) {
+            int32_t pos = 0;
+            len = input->fLimit - input->fPos;
+            U16_NEXT(input->fPos, pos, len, c);
+            input->fPos+=pos;
+            if(c != 0 && uset_contains(scanset, c)) {
                 int32_t idx = 0;
                 UBool isError = FALSE;
                 int32_t capacity = (int32_t)(1 + (limit - alias));
@@ -828,8 +825,8 @@ u_scanf_scanset_handler(u_localized_string    *input,
         }
 
         /* put the final character we read back on the input */
-        if(c != U_EOF) {
-            input->pos--;
+        if(c != 0) {
+            input->fPos--;
         }
     }
 
@@ -974,9 +971,9 @@ u_vsscanf_u(const UChar *buffer,
     /* alias the pattern */
     alias = patternSpecification;
 
-    inStr.str = (UChar *)buffer;
-    inStr.len = u_strlen(buffer);
-    inStr.pos = 0;
+    inStr.fBuffer = (UChar *)buffer;
+    inStr.fPos = (UChar *)buffer;
+    inStr.fLimit = buffer + u_strlen(buffer);
 
     /* haven't converted anything yet */
     converted = 0;
@@ -989,7 +986,7 @@ u_vsscanf_u(const UChar *buffer,
     for(;;) {
 
         /* match any characters up to the next '%' */
-        while(*alias != UP_PERCENT && *alias != 0x0000 && inStr.str[inStr.pos++] == *alias) {
+        while(*alias != UP_PERCENT && *alias != 0x0000 && *(inStr.fPos++) == *alias) {
             alias++;
         }
 
