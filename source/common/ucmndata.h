@@ -50,9 +50,26 @@ typedef struct {
 
 typedef struct {
     uint32_t count;
-    UDataOffsetTOCEntry entry[2];    /* Acutal size of array is from count. */
+    UDataOffsetTOCEntry entry[2];    /* Actual size of array is from count. */
 } UDataOffsetTOC;
 
+/**
+ * Get the header size from a const DataHeader *udh.
+ * Handles opposite-endian data.
+ *
+ * @internal
+ */
+U_CFUNC uint16_t
+udata_getHeaderSize(const DataHeader *udh);
+
+/**
+ * Get the UDataInfo.size from a const UDataInfo *info.
+ * Handles opposite-endian data.
+ *
+ * @internal
+ */
+U_CFUNC uint16_t
+udata_getInfoSize(const UDataInfo *info);
 
 /*
  *  "Virtual" functions for data lookup.

@@ -26,6 +26,33 @@
 #include "ucmndata.h"
 #include "udatamem.h"
 
+U_CFUNC uint16_t
+udata_getHeaderSize(const DataHeader *udh) {
+    if(udh==NULL) {
+        return 0;
+    } else if(udh->info.isBigEndian==U_IS_BIG_ENDIAN) {
+        /* same endianness */
+        return udh->dataHeader.headerSize;
+    } else {
+        /* opposite endianness */
+        uint16_t x=udh->dataHeader.headerSize;
+        return (uint16_t)((x<<8)|(x>>8));
+    }
+}
+
+U_CFUNC uint16_t
+udata_getInfoSize(const UDataInfo *info) {
+    if(info==NULL) {
+        return 0;
+    } else if(info->isBigEndian==U_IS_BIG_ENDIAN) {
+        /* same endianness */
+        return info->size;
+    } else {
+        /* opposite endianness */
+        uint16_t x=info->size;
+        return (uint16_t)((x<<8)|(x>>8));
+    }
+}
 
 /*----------------------------------------------------------------------------------*
  *                                                                                  *
@@ -199,7 +226,7 @@ void udata_checkCommonData(UDataMemory *udm, UErrorCode *err) {
         ) {
         /* dataFormat="CmnD" */
         udm->vFuncs = &CmnDFuncs;
-        udm->toc=(const char *)udm->pHeader+udm->pHeader->dataHeader.headerSize;
+        udm->toc=(const char *)udm->pHeader+udata_getHeaderSize(udm->pHeader);
     }
     else if(udm->pHeader->info.dataFormat[0]==0x54 &&
         udm->pHeader->info.dataFormat[1]==0x6f &&
@@ -209,7 +236,7 @@ void udata_checkCommonData(UDataMemory *udm, UErrorCode *err) {
         ) {
         /* dataFormat="ToCP" */
         udm->vFuncs = &ToCPFuncs;
-        udm->toc=(const char *)udm->pHeader+udm->pHeader->dataHeader.headerSize;
+        udm->toc=(const char *)udm->pHeader+udata_getHeaderSize(udm->pHeader);
     }
     else {
         /* dataFormat not recognized */
