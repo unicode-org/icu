@@ -28,23 +28,31 @@ goto endofperl
 #
 # Alan Liu 5/19/00 2/27/01
 
-$DIR = shift || "../../text/resources";
+use Getopt::Long;
+
+my $DIR = "../../text/resources";
+my $ID = '';
+
+GetOptions('dir=s' => \$DIR,
+           'id=s' => \$ID,
+           '<>' => \&usage) || die;
+
+usage() if (@ARGV);
+
+$ID =~ s/-/_/;
 if (! -d $DIR) {
     print STDERR "$DIR is not a directory\n";
     usage();
 }
-$ID = shift;
-$ID =~ s/-/_/;
 
 sub usage {
     my $me = $0;
     $me =~ s|.+[/\\]||;
-    print "Usage: $me <dir> [<id>]\n";
-    print " where <dir> contains the Transliterator_*.utf8.txt\n";
-    print " files.\n";
-    print "e.g., $me F:/icu4j/src/com/ibm/text/resources\n";
-    print " optional <id> specifies single ID to transform, e.g.\n";
-    print " Fullwidth-Halfwidth\n";
+    print "Usage: $me [-dir <dir>] [-id <id>]\n";
+    print " --dir <dir> Specify the directory containing the\n";
+    print "             Transliterator_*.txt files\n";
+    print " --id <id>   Specify a single ID to transform, e.g.\n";
+    print "             Fullwidth-Halfwidth\n";
     die;
 }
 
@@ -91,45 +99,6 @@ mkdir($OUTDIR,0777);
              "Kanji_English" => $JAVA_ONLY,
              "Kanji_OnRomaji" => $JAVA_ONLY,
              );
-
-#             "Fullwidth_Halfwidth" =>        "fullhalf",
-#             "Hiragana_Katakana" =>          "kana",
-#             "KeyboardEscape_Latin1" =>      "kbdescl1",
-#             "Latin_Arabic" =>               "larabic",
-#             "Latin_Cyrillic" =>             "lcyril",
-#             "Latin_Devanagari" =>           "ldevan",
-#             "Latin_Greek" =>                "lgreek",
-#             "Latin_Hebrew" =>               "lhebrew",
-#             "Latin_Jamo" =>                 "ljamo",
-#             "Latin_Kana" =>                 "lkana",
-#             "StraightQuotes_CurlyQuotes" => "quotes",
-#             "UnicodeName_UnicodeChar" =>    "ucname",
-#             
-#             # An ICU name of "" means the ICU name == the ID
-#             "Bengali_InterIndic" =>         "",
-#             "Devanagari_InterIndic" =>      "",
-#             "Gujarati_InterIndic" =>        "",
-#             "Gurmukhi_InterIndic" =>        "",
-#             "Kannada_InterIndic" =>         "",
-#             "Malayalam_InterIndic" =>       "",
-#             "Oriya_InterIndic" =>           "",
-#             "Tamil_InterIndic" =>           "",
-#             "Telugu_InterIndic" =>          "",
-#             "InterIndic_Bengali" =>         "",
-#             "InterIndic_Devanagari" =>      "",
-#             "InterIndic_Gujarati" =>        "",
-#             "InterIndic_Gurmukhi" =>        "",
-#             "InterIndic_Kannada" =>         "",
-#             "InterIndic_Malayalam" =>       "",
-#             "InterIndic_Oriya" =>           "",
-#             "InterIndic_Tamil" =>           "",
-#             "InterIndic_Telugu" =>          "",
-#             
-#             # These files are large, so ICU doesn't want them
-#             "Han_Pinyin" => $JAVA_ONLY,
-#             "Kanji_English" => $JAVA_ONLY,
-#             "Kanji_OnRomaji" => $JAVA_ONLY,
-#             );
 
 # Header blocks of text written at start of ICU output files
 $HEADER1 = <<END;
@@ -293,12 +262,13 @@ sub file {
     # Show input size. Show output size later -- useful for quick sanity check.
     print "$id (", -s $IN, ") -> $OUT (";
 
-    # Write output file header
+    # Open file, write UTF8 marker, close it, and reopen in text mode
     open(OUT, ">$OUTDIR/$OUT") or die;
     binmode OUT; # Must do this so we can write our UTF8 marker
-    
-    # Write UTF8 marker
-    print OUT pack("C3", 0xEF, 0xBB, 0xBF);
+    print OUT pack("C3", 0xEF, 0xBB, 0xBF); # Write UTF8 marker
+    close(OUT);
+
+    open(OUT, ">>$OUTDIR/$OUT") or die;
     print OUT " // -*- Coding: utf-8; -*-\n";
 
     header(\*OUT, $IN);
