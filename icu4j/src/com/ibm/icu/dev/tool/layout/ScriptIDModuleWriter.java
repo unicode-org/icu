@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/ScriptIDModuleWriter.java,v $
- * $Date: 2003/12/09 01:18:11 $
- * $Revision: 1.1 $
+ * $Date: 2003/12/10 19:09:32 $
+ * $Revision: 1.2 $
  *
  *******************************************************************************
  */
@@ -25,7 +25,7 @@ public class ScriptIDModuleWriter extends ScriptModuleWriter
 	    int maxScript = scriptData.getMaxValue();
 	    
 	    openFile(fileName);
-	    writeHeader("__LESCRIPTS_H", null);
+	    writeHeader("__LESCRIPTS_H", includeFiles);
 	    output.println(scriptPreamble);
 	    
 	    for (int script = minScript; script <= maxScript; script += 1) {
@@ -57,7 +57,7 @@ public class ScriptIDModuleWriter extends ScriptModuleWriter
         int maxLanguage = languageData.getMaxValue();
         
         openFile(fileName);
-        writeHeader("__LELANGUAGES_H", null);
+        writeHeader("__LELANGUAGES_H", includeFiles);
         output.println(languagePreamble);
         
         for (int language = minLanguage; language <= maxLanguage; language += 1) {
@@ -82,6 +82,8 @@ public class ScriptIDModuleWriter extends ScriptModuleWriter
         writeTrailer();
         closeFile();
     }
+    
+    private static final String[] includeFiles = {"LETypes.h"};
     
     private static final String scriptPreamble = 
     "/**\n" +
