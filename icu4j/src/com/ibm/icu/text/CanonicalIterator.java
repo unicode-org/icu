@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CanonicalIterator.java,v $
- * $Date: 2003/06/09 23:31:10 $
- * $Revision: 1.16 $
+ * $Date: 2003/12/01 23:39:13 $
+ * $Revision: 1.17 $
  *
  *****************************************************************************************
  */
@@ -106,7 +106,7 @@ public final class CanonicalIterator {
 
     /**
      * Set a new source for this iterator. Allows object reuse.
-     * @param set the source string to iterate against. This allows the same iterator to be used
+     * @param newSource the source string to iterate against. This allows the same iterator to be used
      * while changing the source string, saving object creation.
      * @draft ICU 2.4
      */
@@ -153,7 +153,8 @@ public final class CanonicalIterator {
      * Simple implementation of permutation.
      * <br><b>Warning: The strings are not guaranteed to be in any particular order.</b>
      * @param source the string to find permutations for
-     * @param the set to add the results to
+     * @param skipZeros set to true to skip characters with canonical combining class zero
+     * @param output the set to add the results to
      * @internal
      */
     public static void permute(String source, boolean skipZeros, Set output) {

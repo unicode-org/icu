@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $
-* $Date: 2003/11/21 22:52:05 $
-* $Revision: 1.38 $
+* $Date: 2003/12/01 23:39:13 $
+* $Revision: 1.39 $
 *
 *******************************************************************************
 */
@@ -229,7 +229,7 @@ public abstract class Collator implements Comparator, Cloneable
      * otherwise by the locale used to create the Collator.</p>
      *
      * <p>See the Collator class description for an example of use.</p>
-     * @param new Strength the new strength value.
+     * @param newStrength the new strength value.
      * @see #getStrength
      * @see #PRIMARY
      * @see #SECONDARY
