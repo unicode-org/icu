@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/rbbi/DBBIDemo.java,v $ 
- * $Date: 2000/03/10 03:47:43 $ 
- * $Revision: 1.4 $
+ * $Date: 2000/05/12 01:29:30 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -303,7 +303,7 @@ text.setWrapStyleWord(true);
 + "Hehasabdicatedgovernmenthere,bydeclaringusoutofhisprotectionandwagingwaragainstus.\n"
 + "Hehasplunderedourseas,ravagedourcoasts,burnedourtowns,anddestroyedthelivesofourpeople.\n"
 + "Heisatthistimetransportinglargearmiesofforeignmercenariestocompletetheworksofdeath,desolationandtyranny,"
-+ "alreadybegunwithcircumstancesofcrueltyandperfidyscarcelyparalleledinthemostbarbarousages,andtotalyunworth"
++ "alreadybegunwithcircumstancesofcrueltyandperfidyscarcelyparalleledinthemostbarbarousages,andtotallyunworthy"
 + "theheadofacivilizednation.\n"
 + "Hehasconstrainedourfellowcitizenstakencaptiveonthehighseastobeararmsagainsttheircountry,tobecomethe"
 + "executionersoftheirfriendsandbrethren,ortofallthemselvesbytheirhands.\n"
