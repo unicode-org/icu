@@ -22,7 +22,7 @@ SRCDATADIR=$(top_srcdir)/../data
 UNICODEDATADIR=$(SRCDATADIR)/unidata
 TESTSRCDATADIR=$(top_srcdir)/test/testdata
 TESTOBJDATADIR=$(top_builddir)/test/testdata
-SRCLISTDEPS=Makefile Makefile.in $(SRCDATADIR)/resfiles.mk $(SRCDATADIR)/ucmfiles.mk
+SRCLISTDEPS=Makefile $(srcdir)/Makefile.in $(SRCDATADIR)/resfiles.mk $(SRCDATADIR)/ucmfiles.mk
 
 OBJDATADIR=.
 CURDIR=$(shell /bin/pwd)
