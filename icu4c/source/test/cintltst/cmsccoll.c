@@ -1247,6 +1247,9 @@ static void RamsRulesTest( ) {
       log_verbose("Testing locale %s\n", locName);
       coll = ucol_open(locName, &status);
       if(U_SUCCESS(status)) {
+        if(coll->image->jamoSpecial == TRUE) {
+          log_err("%s has special JAMOs\n", locName);
+        }
         ucol_setAttribute(coll, UCOL_CASE_FIRST, UCOL_OFF, &status);
         testCollator(coll, &status);
         testCEs(coll, &status);
