@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/02/16 03:05:56 $ 
-* $Revision: 1.23 $
+* $Date: 2002/02/19 19:07:32 $ 
+* $Revision: 1.24 $
 *
 *******************************************************************************
 */
@@ -92,8 +92,8 @@ import com.ibm.icu.text.UTF16;
 * </p>
 * @author Syn Wee Quek
 * @since oct 06 2000
-* @see com.ibm.icu.text.UCharacterCategory
-* @see com.ibm.icu.text.UCharacterDirection
+* @see com.ibm.icu.lang.UCharacterCategory
+* @see com.ibm.icu.lang.UCharacterDirection
 */
 
 public final class UCharacter
