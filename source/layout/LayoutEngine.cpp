@@ -291,17 +291,7 @@ LayoutEngine *LayoutEngine::layoutEngineFactory(LEFontInstance *fontInstance, le
             case tamlScriptCode:
             case teluScriptCode:
             {
-#if 0
-                const CDACLayout::ScriptInfo *scriptInfo = CDACLayout::getCDACScriptInfo(fontInstance, scriptCode);
-
-                if (scriptInfo != NULL) {
-                    return new CDACOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, scriptInfo);
-                } else {
-                    return new IndicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode);
-                }
-#else
                 return new IndicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode);
-#endif
             }
 
             case arabScriptCode:
