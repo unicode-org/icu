@@ -2290,7 +2290,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
         return;
     }
     // Clear error struct
-    parseError.offset = 0;
+    parseError.offset = -1;
     parseError.preContext[0] = parseError.postContext[0] = (UChar)0;
 
     // Set the significant pattern symbols

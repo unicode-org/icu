@@ -154,8 +154,7 @@ static void maskingError(const U_NAMESPACE_QUALIFIER TransliterationRule& rule1,
     U_NAMESPACE_QUALIFIER UnicodeString r;
     int32_t len;
 
-    parseError.line = 0;
-    parseError.offset = 0;
+    parseError.line = parseError.offset = -1;
     
     // for pre-context
     rule1.toRule(r, FALSE);

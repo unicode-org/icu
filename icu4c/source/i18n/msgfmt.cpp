@@ -403,7 +403,7 @@ MessageFormat::applyPattern(const UnicodeString& newPattern,
     int32_t i = 0;
     fMaxOffset = -1;
     // Clear error struct
-    parseError.offset = 0;
+    parseError.offset = -1;
     parseError.preContext[0] = parseError.postContext[0] = (UChar)0;
     int32_t patLen = newPattern.length();
     for (; i < patLen; ++i) {

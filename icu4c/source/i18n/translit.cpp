@@ -1174,7 +1174,8 @@ Transliterator* Transliterator::parseID(const UnicodeString& ID,
             if (registry == 0) {
                 initializeRegistry();
             }
-            parseError.line = parseError.offset = 0;
+            /* clear the error struct */
+            parseError.line = parseError.offset = -1;
             parseError.preContext[0] = parseError.postContext[0] = 0;
             TransliteratorAlias* alias = 0;
             {
