@@ -1048,11 +1048,17 @@ static void TestAlias() {
 
         alias0 = ucnv_getAlias(name, 0, &status);
         for (j=1; j<na; ++j) {
-            const char *alias = ucnv_getAlias(name, j, &status);
+            const char *alias;
             /* Make sure each alias maps back to the the same list of
                aliases.  Assume that if alias 0 is the same, the whole
                list is the same (this should always be true). */
             const char *mapBack;
+
+            status = U_ZERO_ERROR;
+            alias = ucnv_getAlias(name, j, &status);
+            if (status == U_AMBIGUOUS_ALIAS_WARNING) {
+                log_err("FAIL: Converter \"%s\"is ambiguous\n", name);
+            }
 
             if (alias == NULL) {
                 log_err("FAIL: Converter \"%s\" -> "
@@ -1072,10 +1078,15 @@ static void TestAlias() {
             }
 
             if (0 != uprv_strcmp(alias0, mapBack)) {
-                log_err("FAIL: Converter \"%s\" -> "
-                        "alias[%d]=\"%s\" -> "
-                        "alias[0]=\"%s\", exp. \"%s\"\n",
-                        name, j, alias, mapBack, alias0);
+                if (status != U_AMBIGUOUS_ALIAS_WARNING) {
+                    log_err("FAIL: Converter \"%s\" -> "
+                            "alias[%d]=\"%s\" -> "
+                            "alias[0]=\"%s\", exp. \"%s\"\n",
+                            name, j, alias, mapBack, alias0);
+                }
+                else {
+                    ucnv_getAlias(mapBack, 0, &status);
+                }
             }
         }
     }

@@ -17,6 +17,7 @@
 
 #define UCNV_AMBIGUOUS_ALIAS_MAP_BIT 0x8000
 #define UCNV_CONVERTER_INDEX_MASK 0xFFF
+#define UCNV_NUM_RESERVED_TAGS 2
 
 /**
  * Map a converter alias name to a canonical converter name.

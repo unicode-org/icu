@@ -224,6 +224,8 @@ ucnv_compareNames(const char *name1, const char *name2);
  * <code>UCNV_OPTION_SEP_CHAR</code> between the name and the first option and
  * also between adjacent options.</p>
  *
+ * If the alias is ambiguous, then the preferred converter is used
+ * and the status is set to U_AMBIGUOUS_ALIAS_WARNING.
  * @param converterName : name of the uconv table, may have options appended
  * @param err outgoing error status <TT>U_MEMORY_ALLOCATION_ERROR, U_FILE_ACCESS_ERROR</TT>
  * @return the created Unicode converter object, or <TT>NULL</TT> if an error occured
@@ -245,6 +247,8 @@ ucnv_open   (const char *converterName, UErrorCode * err);
  * E.g., the names "UTF8", "utf-8", and "Utf 8" are all equivalent.
  * If <TT>NULL</TT> is passed for the converter name, it will create 
  * one with the ucnv_getDefaultName() return value.
+ * If the alias is ambiguous, then the preferred converter is used
+ * and the status is set to U_AMBIGUOUS_ALIAS_WARNING.
  * @param name : name of the uconv table in a zero terminated 
  *        Unicode string
  * @param err outgoing error status <TT>U_MEMORY_ALLOCATION_ERROR, 
@@ -307,6 +311,9 @@ ucnv_openU (const UChar * name,
  *     sprintf(name, "cp%hu", codepageID);
  *     cnv=ucnv_open(name, &errorCode);
  * \endcode
+ *
+ * If the alias is ambiguous, then the preferred converter is used
+ * and the status is set to U_AMBIGUOUS_ALIAS_WARNING.
  *
  * @param codepage codepage number to create
  * @param platform the platform in which the codepage number exists
@@ -1014,6 +1021,8 @@ ucnv_getAvailableName (int32_t n);
 
 /**
  * Gives the number of aliases for a given converter or alias name.
+ * If the alias is ambiguous, then the preferred converter is used
+ * and the status is set to U_AMBIGUOUS_ALIAS_WARNING.
  * This method only enumerates the listed entries in the alias file.
  * @param alias alias name
  * @param pErrorCode error status
@@ -1026,6 +1035,8 @@ ucnv_countAliases(const char *alias, UErrorCode *pErrorCode);
 /**
  * Gives the name of the alias at given index of alias list.
  * This method only enumerates the listed entries in the alias file.
+ * If the alias is ambiguous, then the preferred converter is used
+ * and the status is set to U_AMBIGUOUS_ALIAS_WARNING.
  * @param alias alias name
  * @param n index in alias list
  * @param pErrorCode result of operation
@@ -1039,6 +1050,8 @@ ucnv_getAlias(const char *alias, uint16_t n, UErrorCode *pErrorCode);
 /**
  * Fill-up the list of alias names for the given alias.
  * This method only enumerates the listed entries in the alias file.
+ * If the alias is ambiguous, then the preferred converter is used
+ * and the status is set to U_AMBIGUOUS_ALIAS_WARNING.
  * @param alias alias name
  * @param aliases fill-in list, aliases is a pointer to an array of
  *        <code>ucnv_countAliases()</code> string-pointers
