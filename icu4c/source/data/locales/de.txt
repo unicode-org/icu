@@ -519,6 +519,78 @@ de {
         zh { "Chinesisch" }
         // zu { "Zulu" }
     }
+
+    // I "verified" each of these by searching www.google.de for
+    // "Bopomofo Schrift", "Koptische Schrift", etc.
+    // Ones that are commented out and have no further comment I don't know
+    // and could not find.
+    // Note: The script names in German that are used directly as English or
+    // native transliterated names are often used with a dash between them and
+    // "Schrift", e.g., "Kannada-Schrift".
+    // Other script names are used as in "Arabische Schrift".
+    // Sometimes I included "Schrift" in the display name here because it
+    // would not make any sense without it, even with "Schrift" in a higher-level
+    // menu or similar.
+    // markus 2003-nov-20
+    Scripts {
+        Arab { "Arabisch" }
+        Armn { "Armenisch" }
+        Beng { "Bengalisch" }
+        Bopo { "Bopomofo" }
+        Brai { "Blindenschrift" }
+        //Buhd { "Buhid" }
+        //Cans { "Unified Canadian Aboriginal Symbols" }
+        Cher { "Cherokee" }
+        Cprt { "Zypriotisch" }
+        Cyrl { "Kyrillisch" }
+        Deva { "Devanagari" }
+        //Dsrt { "Deseret" }
+        Ethi { "\u00C4thiopisch" }
+        Geor { "Georgisch" }
+        Goth { "Gotisch" }
+        Grek { "Griechisch" }
+        Gujr { "Gujarati" }
+        Guru { "Gurmukhi" }
+        Hang { "Hangul" }
+        //Hano { "Hanunoo" }
+        Hani { "Chinesisch" }
+        Hans { "Vereinfachte Chinesische Schrift" }
+        Hant { "Traditionelle Chinesische Schrift" }
+        Hebr { "Hebr\u00e4isch" }
+        Hira { "Hiragana" }
+        Ital { "Altitalisch" }
+        Kana { "Katakana" }
+        Khmr { "Khmer" }
+        Knda { "Kannada" }
+        Laoo { "Laotisch" }
+        Latn { "Lateinisch" }
+        Limb { "Limbu" }
+        Linb { "Linear B" }
+        Mlym { "Malaysisch" }
+        Mong { "Mongolisch" }
+        Mymr { "Burmesisch" }
+        Ogam { "Ogham" }
+        Orya { "Oriya" }
+        Osma { "Osmanisch" }
+        Qaac { "Koptisch" }
+        Qaai { "Geerbter Schriftwert" }
+        Runr { "Runenschrift" }
+        //Shaw { "Shavian" }
+        Sinh { "Singhalesisch" }
+        Syrc { "Syrisch" }
+        //Tagb { "Tagbanwa" }
+        //Tale { "Tai Le" }
+        Taml { "Tamilisch" }
+        Telu { "Telugu" }
+        Tglg { "Tagalog" }
+        //Thaa { "Thana" }
+        //Thai { "Thai" } // Just happens to be a duplicate - in German, too
+        Tibt { "Tibetisch" }
+        Ugar { "Ugaritisch" }
+        Yiii { "Yi" }
+        Zyyy { "Unbestimmt" }
+    }
+
     MonthAbbreviations { 
         "Jan",
         "Feb",
