@@ -100,8 +100,8 @@ const char *DecimalFormat::fgNumberPatterns="NumberPatterns";
 DecimalFormat::DecimalFormat(UErrorCode& status)
 : NumberFormat(), 
   fPosPrefixPattern(0), 
-  fNegPrefixPattern(0), 
   fPosSuffixPattern(0), 
+  fNegPrefixPattern(0), 
   fNegSuffixPattern(0),
   fSymbols(0)
 {
@@ -116,8 +116,8 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern,
                              UErrorCode& status)
 : NumberFormat(),
   fPosPrefixPattern(0), 
-  fNegPrefixPattern(0), 
   fPosSuffixPattern(0), 
+  fNegPrefixPattern(0), 
   fNegSuffixPattern(0),
   fSymbols(0)
 {
@@ -134,8 +134,8 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern,
                              UErrorCode& status)
 : NumberFormat(),
   fPosPrefixPattern(0), 
-  fNegPrefixPattern(0), 
   fPosSuffixPattern(0), 
+  fNegPrefixPattern(0), 
   fNegSuffixPattern(0),
   fSymbols(0)
 {
@@ -153,8 +153,8 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern,
                              UErrorCode& status)
 : NumberFormat(),
   fPosPrefixPattern(0), 
-  fNegPrefixPattern(0), 
   fPosSuffixPattern(0), 
+  fNegPrefixPattern(0), 
   fNegSuffixPattern(0),
   fSymbols(0)
 {

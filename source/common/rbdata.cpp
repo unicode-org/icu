@@ -22,12 +22,12 @@ UClassID TaggedList::fgClassID = 0; // Value is irrelevant
 //-----------------------------------------------------------------------------
 
 StringList::StringList()
-  : fStrings(0), fCount(0) 
+  : fCount(0), fStrings(0)
 {}
 
 StringList::StringList(UnicodeString *adopted, 
-		       int32_t count) 
-  : fStrings(adopted), fCount(count) 
+                       int32_t count) 
+  : fCount(count), fStrings(adopted)
 {}
 
 StringList::~StringList() 
@@ -52,8 +52,8 @@ String2dList::String2dList()
 {}
   
 String2dList::String2dList(UnicodeString **adopted, 
-			   int32_t rowCount, 
-			   int32_t colCount) 
+                           int32_t rowCount, 
+                           int32_t colCount) 
   : fStrings(adopted), fRowCount(rowCount), fColCount(colCount) 
 {}
 
@@ -67,7 +67,7 @@ String2dList::~String2dList()
   
 const UnicodeString& 
 String2dList::getString(int32_t rowIndex, 
-			int32_t colIndex) 
+                        int32_t colIndex) 
 { return fStrings[rowIndex][colIndex]; }
   
 UClassID 
@@ -96,7 +96,7 @@ int32_t TaggedList::count() const {
 
 void 
 TaggedList::put(const UnicodeString& tag, 
-		const UnicodeString& data) {
+                const UnicodeString& data) {
     UErrorCode status = U_ZERO_ERROR;
     hash->put(tag, new UnicodeString(data), status);
 }
