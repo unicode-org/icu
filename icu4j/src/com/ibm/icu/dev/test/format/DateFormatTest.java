@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatTest.java,v $ 
- * $Date: 2002/08/22 21:55:51 $ 
- * $Revision: 1.9 $
+ * $Date: 2002/12/18 21:20:52 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -20,7 +20,9 @@ package com.ibm.icu.dev.test.format;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.util.*;
+import com.ibm.icu.impl.*;
 import java.util.Date;
+import java.util.ResourceBundle;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Locale;
@@ -877,6 +879,31 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                       DATA[i] + "\" => " +
                       output + ", expected " + exp);
             }
+        }
+    }
+
+    public void TestCoverage() {
+        Date now = new Date();
+        Calendar cal = new GregorianCalendar();
+        DateFormat f = DateFormat.getTimeInstance();
+        logln("time: " + f.format(now));
+
+        int hash = f.hashCode(); // sigh, everyone overrides this
+
+        f = DateFormat.getInstance(cal);
+        logln("time again: " + f.format(now));
+
+        f = DateFormat.getTimeInstance(cal, f.FULL);
+        logln("time yet again: " + f.format(now));
+
+        ResourceBundle rb = ICULocaleData.getLocaleElements("de_DE");
+        DateFormatSymbols sym = new DateFormatSymbols(rb, Locale.GERMANY);
+        DateFormatSymbols sym2 = (DateFormatSymbols)sym.clone();
+        if (sym.hashCode() != sym2.hashCode()) {
+            errln("fail, date format symbols hashcode not equal");
+        }
+        if (!sym.equals(sym2)) {
+            errln("fail, date format symbols not equal");
         }
     }
 }

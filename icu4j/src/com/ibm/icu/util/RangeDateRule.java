@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/RangeDateRule.java,v $ 
- * $Date: 2002/12/04 01:03:39 $ 
- * $Revision: 1.6 $
+ * $Date: 2002/12/18 21:20:52 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -30,8 +30,9 @@ public class RangeDateRule implements DateRule
     }
 
     /**
-     * @draft ICU 2.2
+     * @internal
      */
+    // Range is a package-private class so this should be package-private too, probably
     public RangeDateRule(Range[] ranges)
     {
         for (int i = 0; i < ranges.length; i++) {

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DateFormatSymbols.java,v $
- * $Date: 2002/12/05 01:21:36 $
- * $Revision: 1.14 $
+ * $Date: 2002/12/18 21:20:52 $
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -529,7 +529,6 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * Compares the equality of the two arrays of String.
      * @param current this String array.
      * @param other that String array.
-     */
     private final boolean equals(String[] current, String[] other)
     {
         int count = current.length;
@@ -539,6 +538,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
                 return false;
         return true;
     }
+     */
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
