@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1998-2003, International Business Machines
+*   Copyright (C) 1998-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -197,8 +197,8 @@ public:
   /**
    * Greater than operator. Performs only bitwise comparison.
    * @param text The UnicodeString to compare to this one.
-   * @return TRUE if the characters in <TT>text</TT> are bitwise
-   * greater than the characters in this, FALSE otherwise
+   * @return TRUE if the characters in this are bitwise
+   * greater than the characters in <code>text</code>, FALSE otherwise
    * @stable ICU 2.0
    */
   inline UBool operator> (const UnicodeString& text) const;
@@ -206,8 +206,8 @@ public:
   /**
    * Less than operator. Performs only bitwise comparison.
    * @param text The UnicodeString to compare to this one.
-   * @return TRUE if the characters in <TT>text</TT> are bitwise
-   * less than the characters in this, FALSE otherwise
+   * @return TRUE if the characters in this are bitwise
+   * less than the characters in <code>text</code>, FALSE otherwise
    * @stable ICU 2.0
    */
   inline UBool operator< (const UnicodeString& text) const;
@@ -215,8 +215,8 @@ public:
   /**
    * Greater than or equal operator. Performs only bitwise comparison.
    * @param text The UnicodeString to compare to this one.
-   * @return TRUE if the characters in <TT>text</TT> are bitwise
-   * greater than or equal to the characters in this, FALSE otherwise
+   * @return TRUE if the characters in this are bitwise
+   * greater than or equal to the characters in <code>text</code>, FALSE otherwise
    * @stable ICU 2.0
    */
   inline UBool operator>= (const UnicodeString& text) const;
@@ -224,21 +224,21 @@ public:
   /**
    * Less than or equal operator. Performs only bitwise comparison.
    * @param text The UnicodeString to compare to this one.
-   * @return TRUE if the characters in <TT>text</TT> are bitwise
-   * less than or equal to the characters in this, FALSE otherwise
+   * @return TRUE if the characters in this are bitwise
+   * less than or equal to the characters in <code>text</code>, FALSE otherwise
    * @stable ICU 2.0
    */
   inline UBool operator<= (const UnicodeString& text) const;
 
   /**
    * Compare the characters bitwise in this UnicodeString to
-   * the characters in <TT>text</TT>.
+   * the characters in <code>text</code>.
    * @param text The UnicodeString to compare to this one.
-   * @return The result of bitwise character comparison: 0 if <TT>text</TT>
-   * contains the same characters as this, -1 if the characters in 
-   * <TT>text</TT> are bitwise less than the characters in this, +1 if the
-   * characters in <TT>text</TT> are bitwise greater than the characters 
-   * in this.
+   * @return The result of bitwise character comparison: 0 if this
+   * contains the same characters as <code>text</code>, -1 if the characters in 
+   * this are bitwise less than the characters in <code>text</code>, +1 if the
+   * characters in this are bitwise greater than the characters 
+   * in <code>text</code>.
    * @stable ICU 2.0
    */
   inline int8_t compare(const UnicodeString& text) const;
@@ -246,20 +246,20 @@ public:
   /**
    * Compare the characters bitwise in the range 
    * [<TT>start</TT>, <TT>start + length</TT>) with the characters 
-   * in <TT>srcText</TT>
+   * in <TT>text</TT>
    * @param start the offset at which the compare operation begins
    * @param length the number of characters of text to compare.
    * @param srcText the text to be compared
-   * @return The result of bitwise character comparison: 0 if <TT>text</TT>
-   * contains the same characters as this, -1 if the characters in 
-   * <TT>text</TT> are bitwise less than the characters in this, +1 if the
-   * characters in <TT>text</TT> are bitwise greater than the characters 
-   * in this.
+   * @return The result of bitwise character comparison: 0 if this
+   * contains the same characters as <code>text</code>, -1 if the characters in 
+   * this are bitwise less than the characters in <code>text</code>, +1 if the
+   * characters in this are bitwise greater than the characters 
+   * in <code>text</code>.
    * @stable ICU 2.0
    */
   inline int8_t compare(int32_t start,
          int32_t length,
-         const UnicodeString& srcText) const;
+         const UnicodeString& text) const;
 
   /**
    * Compare the characters bitwise in the range 
@@ -271,11 +271,11 @@ public:
    * @param srcText the text to be compared
    * @param srcStart the offset into <TT>srcText</TT> to start comparison
    * @param srcLength the number of characters in <TT>src</TT> to compare
-   * @return The result of bitwise character comparison: 0 if <TT>text</TT>
-   * contains the same characters as this, -1 if the characters in 
-   * <TT>text</TT> are bitwise less than the characters in this, +1 if the
-   * characters in <TT>text</TT> are bitwise greater than the characters 
-   * in this.
+   * @return The result of bitwise character comparison: 0 if this
+   * contains the same characters as <code>srcText</code>, -1 if the characters in 
+   * this are bitwise less than the characters in <code>srcText</code>, +1 if the
+   * characters in this are bitwise greater than the characters 
+   * in <code>srcText</code>.
    * @stable ICU 2.0
    */
    inline int8_t compare(int32_t start,
@@ -289,11 +289,11 @@ public:
    * <TT>srcLength</TT> characters in <TT>srcChars</TT>.
    * @param srcChars The characters to compare to this UnicodeString.
    * @param srcLength the number of characters in <TT>srcChars</TT> to compare
-   * @return The result of bitwise character comparison: 0 if <TT>text</TT>
-   * contains the same characters as this, -1 if the characters in 
-   * <TT>text</TT> are bitwise less than the characters in this, +1 if the
-   * characters in <TT>text</TT> are bitwise greater than the characters 
-   * in this.
+   * @return The result of bitwise character comparison: 0 if this
+   * contains the same characters as <code>srcChars</code>, -1 if the characters in 
+   * this are bitwise less than the characters in <code>srcChars</code>, +1 if the
+   * characters in this are bitwise greater than the characters 
+   * in <code>srcChars</code>.
    * @stable ICU 2.0
    */
   inline int8_t compare(const UChar *srcChars,
@@ -306,11 +306,11 @@ public:
    * @param start the offset at which the compare operation begins
    * @param length the number of characters to compare.
    * @param srcChars the characters to be compared
-   * @return The result of bitwise character comparison: 0 if <TT>text</TT>
-   * contains the same characters as this, -1 if the characters in 
-   * <TT>text</TT> are bitwise less than the characters in this, +1 if the
-   * characters in <TT>text</TT> are bitwise greater than the characters 
-   * in this.
+   * @return The result of bitwise character comparison: 0 if this
+   * contains the same characters as <code>srcChars</code>, -1 if the characters in 
+   * this are bitwise less than the characters in <code>srcChars</code>, +1 if the
+   * characters in this are bitwise greater than the characters 
+   * in <code>srcChars</code>.
    * @stable ICU 2.0
    */
   inline int8_t compare(int32_t start,
@@ -327,11 +327,11 @@ public:
    * @param srcChars the characters to be compared
    * @param srcStart the offset into <TT>srcChars</TT> to start comparison
    * @param srcLength the number of characters in <TT>srcChars</TT> to compare
-   * @return The result of bitwise character comparison: 0 if <TT>text</TT>
-   * contains the same characters as this, -1 if the characters in 
-   * <TT>text</TT> are bitwise less than the characters in this, +1 if the
-   * characters in <TT>text</TT> are bitwise greater than the characters 
-   * in this.
+   * @return The result of bitwise character comparison: 0 if this
+   * contains the same characters as <code>srcChars</code>, -1 if the characters in 
+   * this are bitwise less than the characters in <code>srcChars</code>, +1 if the
+   * characters in this are bitwise greater than the characters 
+   * in <code>srcChars</code>.
    * @stable ICU 2.0
    */
   inline int8_t compare(int32_t start,
@@ -350,11 +350,11 @@ public:
    * @param srcText the text to be compared
    * @param srcStart the offset into <TT>srcText</TT> to start comparison
    * @param srcLimit the offset into <TT>srcText</TT> to limit comparison
-   * @return The result of bitwise character comparison: 0 if <TT>text</TT>
-   * contains the same characters as this, -1 if the characters in 
-   * <TT>text</TT> are bitwise less than the characters in this, +1 if the
-   * characters in <TT>text</TT> are bitwise greater than the characters 
-   * in this.
+   * @return The result of bitwise character comparison: 0 if this
+   * contains the same characters as <code>srcText</code>, -1 if the characters in 
+   * this are bitwise less than the characters in <code>srcText</code>, +1 if the
+   * characters in this are bitwise greater than the characters 
+   * in <code>srcText</code>.
    * @stable ICU 2.0
    */
   inline int8_t compareBetween(int32_t start,
