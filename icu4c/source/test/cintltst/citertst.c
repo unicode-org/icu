@@ -100,29 +100,30 @@ static void TestUnicodeChar()
  */
 static void TestPrevious()
 {
-    UCollator *en_us=NULL;
+    UCollator *coll=NULL;
     UChar rule[50];
     UChar *source;
     UCollator *c1, *c2, *c3;
     UCollationElements *iter;
     UErrorCode status = U_ZERO_ERROR;
+    
     test1=(UChar*)malloc(sizeof(UChar) * 50);
     test2=(UChar*)malloc(sizeof(UChar) * 50);
     u_uastrcpy(test1, "What subset of all possible test cases?");
     u_uastrcpy(test2, "has the highest probability of detecting");
-    en_us = ucol_open("en_US", &status);
+    coll = ucol_open("coll", &status);
 
-    iter=ucol_openElements(en_us, test1, u_strlen(test1), &status);
+    iter=ucol_openElements(coll, test1, u_strlen(test1), &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n", 
             myErrorName(status));
-        ucol_close(en_us);
+        ucol_close(coll);
         return;
     }
     /* A basic test to see if it's working at all */
     backAndForth(iter);
     ucol_closeElements(iter);
-    ucol_close(en_us);
+    ucol_close(coll);
 
     /* Test with a contracting character sequence */
     u_uastrcpy(rule, "&a,A < b,B < c,C, d,D < z,Z < ch,cH,Ch,CH");
@@ -191,6 +192,29 @@ static void TestPrevious()
     backAndForth(iter);
     ucol_closeElements(iter);
     ucol_close(c3);
+
+    source[0] = 0x0e41;
+    source[1] = 0x0e02;
+    source[2] = 0x0e41;
+    source[3] = 0x0e02;
+    source[4] = 0x0e27;
+    source[5] = 0x61;
+    source[6] = 0x62;
+    source[7] = 0x63;
+    source[8] = 0;
+
+    coll = ucol_open("th_TH", &status);
+
+    iter=ucol_openElements(coll, source, u_strlen(source), &status);
+    if(U_FAILURE(status)){
+        log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n", 
+            myErrorName(status));
+        return;
+    }
+    backAndForth(iter);
+    ucol_closeElements(iter);
+    ucol_close(coll);
+
     free(source);
     free(test1);
     free(test2);
@@ -363,6 +387,9 @@ static void backAndForth(UCollationElements *iter)
       }
     }
 
+    while (index != 0 && orders[-- index] == 0) {
+    }
+
     if (index != 0)
     {
         log_err("Didn't get back to beginning - index is %d\n", index);
@@ -381,10 +408,9 @@ static void backAndForth(UCollationElements *iter)
         log_verbose("\n");
     }
 
-    free(orders);
-
-    
+    free(orders);    
 }
+
 /** @bug 4108762
  * Test for getMaxExpansion()
  */
@@ -496,4 +522,5 @@ static void assertEqual(UCollationElements *i1, UCollationElements *i2)
     }
     while (c1 != UCOL_NULLORDER);
 }
+
 
