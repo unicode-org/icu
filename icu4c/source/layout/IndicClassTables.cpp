@@ -246,7 +246,7 @@ static const IndicClassTable mlymClassTable = {0x0D00, 0x0D6F, 3, MLYM_SCRIPT_FL
 //
 // IndicClassTable addresses
 //
-static const IndicClassTable *indicClassTables[] = {
+static const IndicClassTable * const indicClassTables[] = {
     NULL,            /* 'zyyy' (COMMON) */
     NULL,            /* 'qaai' (INHERITED) */
     NULL,            /* 'arab' (ARABIC) */
