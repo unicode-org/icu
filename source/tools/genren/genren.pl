@@ -94,7 +94,7 @@ for(;@ARGV; shift(@ARGV)) {
     foreach (@NMRESULT) { # Process every line of result and stuff it in $_
         ($_, $address, $type) = split(/\|/);
         &verbose( "type: \"$type\" ");
-        if(!($type =~ /[UAwW]/)) {
+        if(!($type =~ /[UAwW?]/)) {
             if(/@@/) { # These would be imports
                 &verbose( "Import: $_ \"$type\"\n");
             } elsif (/::/) { # C++ methods, stuff class name in associative array
@@ -109,7 +109,9 @@ for(;@ARGV; shift(@ARGV)) {
                 @CppName = split(/\(/, $CppName[0]); ## remove function args
                 $CppClasses{$CppName[0]}++;
             } elsif ( /\(/) { # These are strange functions
-                print STDOUT "$_\n";
+                print STDERR "$_\n";
+            } elsif ( /icu_/) {
+                print STDERR "Skipped strange mangled function $_\n";
             } else { # This is regular C function 
                 &verbose( "C func: $_\n");
                 @funcname = split(/[\(\s+]/);
