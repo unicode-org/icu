@@ -27,7 +27,13 @@
 # define ICU_USE_THREADS 0
 #endif
 
-/* Default: use threads. */
+/* ICU_USE_THREADS
+ *
+ *   Allows thread support (use of mutexes) to be compiled out of ICU.
+ *   Default: use threads.
+ *   Even with thread support compiled out, applications may override the
+ *   (empty) mutex implementation with the u_setMutexFunctions() functions.
+ */ 
 #ifndef ICU_USE_THREADS
 # define ICU_USE_THREADS 1
 #endif
@@ -66,10 +72,11 @@ U_CAPI void U_EXPORT2 umtx_unlock ( UMTX* mutex );
 
 /* Initialize a mutex. Use it this way:
    umtx_init( &aMutex ); 
- * ICU Mutexes must be explicitly initialized before use.
+ * ICU Mutexes do not need explicit initialization before use.  Use of this
+ *   function is not necessary.
  * Initialization of an already initialized mutex has no effect, and is safe to do.
- * Initialization of mutexes (other than the global mutex) is thread safe.  Two
- *   threads can concurrently attempt to init the same mutex without causing problems.
+ * Initialization of mutexes is thread safe.  Two threads can concurrently 
+ *   initialize the same mutex without causing problems.
  * @param mutex The given mutex to be initialized
  */
 U_CAPI void U_EXPORT2 umtx_init   ( UMTX* mutex );

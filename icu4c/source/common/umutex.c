@@ -32,7 +32,6 @@
 #endif
 
 
-/* Check our settings... */
 #include "unicode/utypes.h"
 #include "uassert.h"
 #include "ucln_cmn.h"
@@ -56,11 +55,36 @@
 #include "umutex.h"
 #include "cmemory.h"
 
-
-/* The global ICU mutex.    
- * Handled differently than other ICU mutexes to allow thread safe lazy initialization (windows)
- *   or pure static C style initialization (Posix)
- */
+/*
+ * A note on ICU Mutex Initialization and ICU startup:
+ *
+ *   ICU mutexes, as used through the rest of the ICU code, are self-initializing.
+ *   To make this work, ICU uses the _ICU GLobal Mutex_ to synchronize the lazy init
+ *   of other ICU mutexes.  For the global mutex itself, we need some other mechanism
+ *   to safely initialize it on first use.  This becomes important if two or more
+ *   threads were more or less simultaenously the first to use ICU in a process, and
+ *   were racing into the mutex initialization code.
+ *
+ *   The solution for the global mutex init is platform dependent.
+ *   On POSIX systems, C-style init can be used on a mutex, with the 
+ *   macro PTHREAD_MUTEX_INITIALIZER.  The mutex is then ready for use, without
+ *   first calling pthread_mutex_init().
+ *
+ *   Windows has no equivalent statically initialized mutex or CRITICAL SECION.
+ *   InitializeCriticalSection() must be called.  If the global mutex does not
+ *   appear to be initialized, a thread will create and initialize a new
+ *   CRITICAL_SECTION, then use a Windows InterlockedCompareAndExchange to
+ *   avoid problems with race conditions.
+ *
+ *   If an application has overridden the ICU mutex implementation
+ *   by calling u_setMutexFunctions(), the user supplied init function must
+ *   be safe in the event that multiple threads concurrently attempt to init
+ *   the same mutex.  The first thread should do the init, and the others should
+ *   have no effect.
+ *
+ */ 
+ 
+/* The global ICU mutex.   */ 
 #if defined(WIN32) || (ICU_USE_THREADS==0)
 static UMTX              gGlobalMutex      = NULL;
 #endif
@@ -218,16 +242,10 @@ static void umtx_raw_init(UMTX *mutex) {
 static void initGlobalMutex() {
     /*
      * Call user mutex init function if one has been specified and the global mutex
-     *  is not already initialized.  For POSIX, the default C style initialization
-     *  will is used, so we need to consider the global mutex to not yet be
-     *  initialized if it has just its C initial value.
+     *  is not already initialized.  
      */
     if (pMutexInitFn != NULL) {
-        if (gGlobalMutex==NULL 
-#if defined(POSIX)
-                                || gGlobalMutex==&gGlobalPosixMutex 
-#endif
-       ) {
+        if (gGlobalMutex==NULL) {
             UErrorCode status = U_ZERO_ERROR;
             (*pMutexInitFn)(gMutexContext, &gGlobalMutex, &status);
             if (U_FAILURE(status)) {
