@@ -556,22 +556,6 @@ inline UnicodeString ures_getUnicodeString(const UResourceBundle *resB, UErrorCo
     return UnicodeString(TRUE, r, len);
 }
 
-
-/**
- * Returns the next string in a resource or NULL if there are no more resources 
- * to iterate over. 
- *
- * @param resB              a resource
- * @param status            fills in the outgoing error code
- * @return an UnicodeString object.
- * @draft
- */
-inline UnicodeString ures_getNextUnicodeString(UResourceBundle *resB, UErrorCode* status) {
-    int32_t len = 0;
-    const UChar* r = ures_getNextString(resB, &len, 0, status);
-    return UnicodeString(TRUE, r, len);
-}
-
 /**
  * Returns the next string in a resource or NULL if there are no more resources 
  * to iterate over. 
