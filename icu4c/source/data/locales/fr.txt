@@ -12,7 +12,7 @@ fr {
         Fallback{ "en"}
         AD { "Andorre" }
         AE { "\u00c9mirats arabes unis" }
-        AG { "Antigua et Barbuda" }
+        AG { "Antigua-et-Barbuda" }
         AQ { "Antarctique" }
         AL { "Albanie" }
         AM { "Arm\u00E9nie" }
@@ -33,14 +33,14 @@ fr {
         BR { "Br\u00E9sil" }
         BT { "Bhoutan" }
         BV { "\u00CEle Bouvet" }
-        BY { "Bi\u00E9larussie" }
+        BY { "B\u00E9larus" }
         //BZ { "Belize" }
 
-        CC { "\u00EEles Cocos" }
+        CC { "\u00CEles Cocos" }
         CD { "R\u00E9publique d\u00E9mocratique du Congo" }
         CF { "R\u00E9publique centrafricaine" }
         CH { "Suisse" }
-        CK { "\u00EEles Sandwich du Sud" }
+        CK { "\u00CEles Cook" }
         CL { "Chili" }
         CM { "Cameroun" }
         CN { "Chine" }
@@ -94,7 +94,7 @@ fr {
         //IQ { "Iraq" }
         IL { "Isra\u00EBl" }
         IN { "Inde" }
-        IO { "Territoire britannique de l'oc\u00E9an indien" }
+        IO { "Territoire britannique de l\u2019oc\u00E9an indien" }
         IS { "Islande" }
         IT { "Italie" }
 
@@ -108,6 +108,7 @@ fr {
         KN { "Saint Kitts et Nevis" }
         KP { "Cor\u00E9e du Nord" }    // alternate name { "Cor\u00E9e, R\u00E9publique populaire d\u00E9mocratique de" }
         KR { "Cor\u00E9e du Sud" }    // alternate name { "Cor\u00E9e, R\u00E9publique de" }
+        KY { "\u00celes Ca\u00efmanes" }
         KW { "Kowe\u00EFt" }
 
         LB { "Liban" }
@@ -124,7 +125,7 @@ fr {
         //MM { "Myanmar" }
         MN { "Mongolie" }
         MO { "Macao R.A.S. de Chine" }
-        MP { "Mariannes du Nord" }
+        MP { "\u00celes Mariannes du Nord" }
         MR { "Mauritanie" }
         MT { "Malte" }
         MU { "Maurice" }
@@ -186,12 +187,12 @@ fr {
         US { "\u00C9tats-Unis" }
         UZ { "Ouzb\u00e9kistan" }
 
-        VA { "Le Saint-Si\u00E8ge (Etat de la Cit\u00E9 du Vatican)" }
-        VC { "Saint Vincent et les Grenadines" }
+        VA { "Saint-Si\u00E8ge (Etat de la Cit\u00E9 du Vatican)" }
+        VC { "Saint-Vincent-et-les Grenadines" }
         VE { "V\u00e9n\u00e9zuela" }
         VG { "\u00CEles Vierges Britanniques" }
         VI { "\u00CEles Vierges des \u00C9tats-Unis" }
-        VN { "Vi\u00eat Nam" }
+        VN { "Viet Nam" }
 
         WF { "Wallis et Futuna" }
 
@@ -228,7 +229,7 @@ fr {
         ATS { "ATS", "schilling autrichien" }
         AUD { "AUD", "dollar australien" }
         AUP { "AUP", "livre australienne" }
-        AWG { "AWG", "florin d'Aruba" }
+        AWG { "AWG", "florin d\u2019Aruba" }
         AZM { "AZM", "Azerbaijanian Manat" }
         BAD { "BAD", "dinar de Bosnie-Herzegovine" }
         BAM { "KM",  "mark convertible de Bosnie-Herzegovine" }
@@ -358,7 +359,7 @@ fr {
         HRK { "HRK", "kuna" }
         HTG { "HTG", "gourde" }
         HUF { "HUF", "forint" }
-        IBP { "IBP", "livre d'Irlande du Nord" }
+        IBP { "IBP", "livre d\u2019Irlande du Nord" }
         IDG { "IDG", "florin de Nica" }
         IDJ { "IDJ", "roupie de Java" }
         IDN { "IDN", "nouvelle roupie indon\u00E9sienne" }
@@ -367,14 +368,14 @@ fr {
         ILL { "ILL", "sh\u00E9kel" }
         ILP { "ILP", "livre isra\u00E9lienne" }
         ILS { "ILS", "sh\u00E9kel" }
-        IMP { "IMP", "livre sterling de l'Ile de Man" }
+        IMP { "IMP", "livre sterling de l\u2019Ile de Man" }
         INR { "=0#Rs.|1#Re.|1<Rs.", "roupie indienne" }
         IQD { "IQD", "dinar irakien" }
         IRR { "IRR", "rial iranien" }
         ISK { "ISK", "couronne islandaise" }
         ITL { "\u20A4", "lire italienne" }
         JEP { "JEP", "livre sterling de Jersey" }
-        JMD { "JMD", "dollar jamaicain" }
+        JMD { "JMD", "dollar jama\u00EFcain" }
         JMP { "JMP", "livre jama\u00EFcaine" }
         JOD { "JOD", "dinar jordanien" }
         JPY { "\u00A5", "yen" }
@@ -405,7 +406,7 @@ fr {
         LUF { "LUF", "franc luxembourgeois" }
         LVL { "LVL", "lats letton" }
         LVR { "LVR", "rouble letton" }
-        LYB { "LYB", "lire de l'autori\u00E9 militaire britannique de Libye" }
+        LYB { "LYB", "lire de l\u2019autori\u00E9 militaire britannique de Libye" }
         LYD { "LD",  "dinar Iibyen" }
         LYP { "LYP", "livre libyenne" }
         MAD { "MAD", "dirham marocain" }
@@ -429,12 +430,12 @@ fr {
         MRO { "MRO", "ouguija" }
         MTL { "Lm",  "lire maltaise"         }
         MTP { "MTP", "livre maltaise" }
-        MUR { "MUR", "roupie de l'\u00EEle Maurice" }
+        MUR { "MUR", "roupie de l\u2019\u00EEle Maurice" }
         MVP { "MVP", "roupie des Maldives" }
         MVR { "MVR", "roupie des Maldives" }
         MWK { "MWK", "kwacha" }
         MWP { "MWP", "livre de Malawi" }
-        MXP { "MXP", "peso d'argent mexicain (1861-1992)" }
+        MXP { "MXP", "peso d\u2019argent mexicain (1861-1992)" }
         MXV { "MXV", "unit\u00E9 de conversion mexicaine (UDI)" }
         MYR { "MYR", "ringgit" }
         MZE { "MZE", "escudo du Mozambique" }
@@ -445,8 +446,8 @@ fr {
         NGP { "NGP", "livre nig\u00E9riane" }
         NHF { "NHF", "franc CFP des Nouvelles H\u00E9brides" }
         NIC { "NIC", "cordoba" }
-        NIG { "NIG", "cordoba d'or" }
-        NIO { "NIO", "cordoba d'or" }
+        NIG { "NIG", "cordoba d\u2019or" }
+        NIO { "NIO", "cordoba d\u2019or" }
         NLG { "NLG", "florin n\u00E9erlandais" }
         NOK { "NOK", "couronne norv\u00E9gienne" }
         NPR { "NPR", "roupie du N\u00E9pal" }
@@ -508,7 +509,7 @@ fr {
         TJS { "TJS", "somoni du Tadjikistan" }
         TMM { "TMM", "Turkmenistan Manat" }
         TND { "TND", "dinar tunisien" }
-        TOP { "TOP", "pa'anga" }
+        TOP { "TOP", "pa\u02bbanga" }
         TOS { "TOS", "livre sterling du Tonga" }
         TPE { "TPE", "escudo de Timor" }
         TPP { "TPP", "pataca de Timor" }
@@ -562,7 +563,7 @@ fr {
         XNF { "XNF", "franc CFA antillais" }
         XOF { "XOF", "franc CFA (BCEAO)" }
         XPF { "XPF", "franc CFP" }
-        XPS { "XPS", "livre sterling" }
+        //XPS { "XPS", "livre sterling" }
         XSS { "XSS", "shilling sterling" }
         XTR { "XTR", "rouble transf\u00E9rable du COMECON" }
         YDD { "YDD", "dinar du Y\u00E9men" }
@@ -573,7 +574,7 @@ fr {
         YUG { "YUG", "dinar yougoslave 1994" }
         YUM { "YUM", "dinar yougoslave Noviy" }
         YUN { "YUN", "dinar yougoslave convertible" }
-        YUO { "YUO", "dinar yougoslave d'Octobre" }
+        YUO { "YUO", "dinar yougoslave d\u2019Octobre" }
         YUR { "YUR", "dinar yougoslave r\u00E9form\u00E9" }
         ZAL { "ZAL", "rand sud-africain (financier)"     }
         ZAP { "ZAP", "livre sud-africaine" }
@@ -605,7 +606,7 @@ fr {
         ar { "arabe" }
         as { "assamais" }
         av { "avar" }
-        ay { "aymar\u00E0" }
+        ay { "aymara" }
         az { "az\u00E9ri" }
         ba { "bachkir" }
         be { "bi\u00E9lorusse" }
@@ -621,10 +622,11 @@ fr {
         ca { "catalan" }
         ce { "tch\u00E9tch\u00E8ne" }
         ch { "chamorro" }
+        chr { "cherokee" }
         co { "corse" }
         cr { "cree" }
         cs { "tch\u00E8que" }
-        cu  { "slavon" }
+        cu  { "slavon d\u2019\u00e9glise" }
         cv { "tchouvache" }
         cy { "gallois" }
         da { "danois" }
@@ -666,7 +668,7 @@ fr {
         id { "indon\u00E9sien" }
         ie { "interlingue" }
         ig { "igbo" }
-        ii { "yi du Sichuan" }
+        ii { "yi de Sichuan" }
         ik { "inupiaq" }
         io { "ido" }
         is { "islandais" }
@@ -675,9 +677,9 @@ fr {
         ja { "japonais" }
         jv { "javanais" }
         ka { "g\u00E9orgien" }
-        kg { "kikongo" }
-        ki { "kikouyou" }
-        kj { "ochikouanyama" }
+        kg { "kongo" }
+        ki { "kikuyu" }
+        kj { "kuanyama" }
         kk { "kazakh" }
         kl { "groenlandais" }
         km { "khmer" }
@@ -700,7 +702,7 @@ fr {
         lu { "luba-katanga" }
         lv { "letton" }
         mg { "malgache" }
-        mh { "marshallais" }
+        mh { "marshall" }
         mi { "maori" }
         mk { "mac\u00E9donien" }
         ml { "malayalam" }
@@ -710,7 +712,7 @@ fr {
         ms { "malais" }
         mt { "maltais" }
         my { "birman" }
-        na { "nauri" }
+        na { "nauruan" }
         nb { "bokm\u00E5l norv\u00E9gien" }
         nd { "nd\u00E9b\u00E9l\u00E9 du Nord" }
         ne { "n\u00E9palais" }
@@ -720,9 +722,9 @@ fr {
         no { "norv\u00E9gien" }
         nr { "nd\u00E9b\u00E9l\u00E9 du Sud" }
         nv { "navaho" }
-        ny { "nyandja" }
-        oc { "occitan" }
-        oj { "odjibw\u00E9" }
+        ny { "nyanja" }
+        oc { "occitan (apr\u00e8s 1500)" }
+        oj { "ojibwa" }
         om { "galla" }
         or { "oriya" }
         os { "oss\u00E8te" }
@@ -731,7 +733,7 @@ fr {
         pl { "polonais" }
         ps { "pachto" }
         pt { "portugais" }
-        qu { "qu\u00E9chua" }
+        qu { "quechua" }
         rm { "rh\u00E9to-roman" }
         rn { "roundi" }
         ro { "roumain" }
@@ -740,7 +742,7 @@ fr {
         sa { "sanskrit" }
         sc { "sarde" }
         sd { "sindhi" }
-        se { "lapon du Nord" }
+        se { "sami du Nord" }
         sg { "sango" }
         sh { "serbo-croate" }
         si { "singhalais" }
@@ -752,7 +754,7 @@ fr {
         so { "somali" }
         sq { "albanais" }
         sr { "serbe" }
-        ss { "swazi" }
+        ss { "swati" }
         st { "sotho du Sud" }
         su { "soundanais" }
         sv { "su\u00E9dois" }
@@ -767,7 +769,7 @@ fr {
         tk { "turkm\u00E8ne" }
         tl { "tagalog" }
         tn { "setswana" }
-        to { "kitonga" }
+        to { "tongan (\u00celes Tonga)" }
         tr { "turc" }
         ts { "tsonga" }
         tt { "tatar" }
@@ -784,7 +786,7 @@ fr {
         wo { "wolof" }
         xh { "xhosa" }
         yi { "yiddish" }
-        yo { "yorouba" }
+        yo { "yoruba" }
         za { "zhuang" }
         zh { "chinois" }
         zu { "zoulou" }
@@ -824,7 +826,7 @@ fr {
         Cyrl { "cyrillique" }
         Deva { "d\u00E9van\u00E2gar\u00EE" }
         Dsrt { "d\u00E9s\u00E9ret" }
-        Ethi { "\u00E9thiopien" }
+        Ethi { "\u00E9thiopique" }
         Geor { "g\u00E9orgien" }
         Goth { "gotique" }
         Grek { "grec" }
@@ -946,7 +948,7 @@ fr {
     Types {
         collation{
             direct      { "Ordre direct" }
-            phonebook   { "Ordre de l'annuaire" }
+            phonebook   { "Ordre de l\u2019annuaire" }
             pinyin      { "Ordre pinyin" }
             stroke      { "Ordre des traits" }
             traditional { "Ordre traditionnel" }
@@ -965,6 +967,241 @@ fr {
         REVISED { "R\u00e9vis\u00e9" }
     }
 
+    zoneStrings {
+         {
+            "PST",
+            "Heure Normale du Pacifique",
+            "PST",
+            "Heure Avanc\u00e9e du Pacifique",
+            "PDT",
+            "Los Angeles",
+        }
+        {
+            "America/Los_Angeles",
+            "Heure Normale du Pacifique",
+            "PST",
+            "Heure Avanc\u00e9e du Pacifique",
+            "PDT",
+            "Los Angeles",
+        }
+        {
+            "MST",
+            "Heure Normale des Rocheuses",
+            "MST",
+            "Heure Avanc\u00e9e des Rocheuses",
+            "MDT",
+            "Denver",
+        }
+        {
+            "America/Denver",
+            "Heure Normale des Rocheuses",
+            "MST",
+            "Heure Avanc\u00e9e des Rocheuses",
+            "MDT",
+            "Denver",
+        }
+        {
+            "PNT",
+            "Heure Normale des Rocheuses",
+            "MST",
+            "Heure Normale des Rocheuses",
+            "MST",
+            "Phoenix",
+        }
+        {
+            "America/Phoenix",
+            "Heure Normale des Rocheuses",
+            "MST",
+            "Heure Normale des Rocheuses",
+            "MST",
+            "Phoenix",
+        }
+        {
+            "CST",
+            "Heure Normale du Centre",
+            "CST",
+            "Heure Avanc\u00e9e du Centre",
+            "CDT",
+            "Chicago",
+        }
+        {
+            "America/Chicago",
+            "Heure Normale du Centre",
+            "CST",
+            "Heure Avanc\u00e9e du Centre",
+            "CDT",
+            "Chicago",
+        }
+        {
+            "EST",
+            "Heure Normale de l\u2019Est",
+            "EST",
+            "Heure Avanc\u00e9e de l\u2019Est",
+            "EDT",
+            "New York",
+        }
+        {
+            "America/New_York",
+            "Heure Normale de l\u2019Est",
+            "EST",
+            "Heure Avanc\u00e9e de l\u2019Est",
+            "EDT",
+            "New York",
+        }
+        {
+            "IET",
+            "Heure Normale de l\u2019Est",
+            "EST",
+            "Heure Normale de l\u2019Est",
+            "EST",
+            "Indianapolis",
+        }
+        {
+            "America/Indianapolis",
+            "Heure Normale de l\u2019Est",
+            "EST",
+            "Heure Normale de l\u2019Est",
+            "EST",
+            "Indianapolis",
+        }
+        {
+            "HST",
+            "Heure Normale de Hawa\u00ef",
+            "HST",
+            "Heure Normale de Hawa\u00ef",
+            "HST",
+            "Honolulu",
+        }
+        {
+            "Pacific/Honolulu",
+            "Heure Normale de Hawa\u00ef",
+            "HST",
+            "Heure Normale de Hawa\u00ef",
+            "HST",
+            "Honolulu",
+        }
+        {
+            "AST",
+            "Heure Normale de l\u2019Alaska",
+            "AST",
+            "Heure Avanc\u00e9e de l\u2019Alaska",
+            "ADT",
+            "Anchorage"
+        }
+        {
+            "America/Anchorage",
+            "Heure Normale de l\u2019Alaska",
+            "AST",
+            "Heure Avanc\u00e9e de l\u2019Alaska",
+            "ADT",
+            "Anchorage",
+        }
+        {
+            "America/Halifax",
+            "Heure Normale de l\u2019Atlantique",
+            "AST",
+            "Heure Avanc\u00e9e de l\u2019Atlantique",
+            "ADT",
+            "Halifax"
+        }
+        {
+            "CNT",
+            "Heure Normale de Terre-Neuve",
+            "CNT",
+            "Heure Avanc\u00e9e de Terre-Neuve",
+            "CDT",
+            "St. Johns",
+        }
+        {
+            "America/St_Johns",
+            "Heure Normale de Terre-Neuve",
+            "CNT",
+            "Heure Avanc\u00e9e de Terre-Neuve",
+            "CDT",
+            "St. Johns",
+        }
+        {
+            "ECT",
+            "Heure Normale de l\u2019Europe Centrale",
+            "CET",
+            "Heure Avanc\u00e9e de l\u2019Europe Centrale",
+            "CEST",
+            "Paris",
+        }
+        {
+            "Europe/Paris",
+            "Heure Normale de l\u2019Europe Centrale",
+            "CET",
+            "Heure Avanc\u00e9e de l\u2019Europe Centrale",
+            "CEST",
+            "Paris",
+        }
+        {
+            "GMT",
+            "Greenwich Mean Time",
+            "GMT",
+            "Greenwich Mean Time",
+            "GMT",
+            "London",
+        }
+        {
+            "Africa/Casablanca",
+            "Temps Moyen de Greenwich",
+            "GMT",
+            "Temps Moyen de Greenwich",
+            "GMT",
+            "Casablanca",
+        }
+        {
+            "Asia/Jerusalem",
+            "Heure Normale d\u2019Isra\u00ebl",
+            "IST",
+            "Heure Avanc\u00e9e d\u2019Isra\u00ebl",
+            "IDT",
+            "Jerusalem",
+        }
+        {
+            "JST",
+            "Heure Normale du Japon",
+            "JST",
+            "Heure Normale du Japon",
+            "JST",
+            "Tokyo",
+        }
+        {
+            "Asia/Tokyo",
+            "Heure Normale du Japon",
+            "JST",
+            "Heure Normale du Japon",
+            "JST",
+            "Tokyo",
+        }
+        {
+            "Europe/Bucharest",
+            "Heure Normale de l\u2019Europe de l\u2019Est",
+            "EET",
+            "Heure Avanc\u00e9e de l\u2019Europe de l\u2019Est",
+            "EEST",
+            "Bucharest",
+        }
+        {
+            "CTT",
+            "Heure Normale de Chine",
+            "CTT",
+            "Heure Normale de Chine",
+            "CDT",
+            "Shanghai",
+        }
+        {
+            "Asia/Shanghai",
+            "Heure Normale de Chine",
+            "CTT",
+            "Heure Normale de Chine",
+            "CDT",
+            "Shanghai",
+        }
+    }
+
     calendar{
         islamic{
             //eras:array {
@@ -978,15 +1215,15 @@ fr {
                     wide {
                         "Mouharram",            // Muharram
                         "Safar",                // Safar
-                        "Rabi'-oul-Aououal",    // Rabi' al-awwal
-                        "Rabi'-out-Tani",       // Rabi' al-thani
+                        "Rabi\u02bb-oul-Aououal",    // Rabi' al-awwal
+                        "Rabi\u02bb-out-Tani",       // Rabi' al-thani
                         "Djoumada-l-Oula",      // Jumada al-awwal
                         "Djoumada-t-Tania",     // Jumada al-thani
                         "Radjab",               // Rajab
-                        "Cha'ban",              // Sha'ban
+                        "Cha\u02bbban",              // Sha'ban
                         "Ramadan",              // Ramadan
                         "Chaououal",            // Shawwal
-                        "Dou-l-Qa'da",          // Dhu al-Qi'dah
+                        "Dou-l-Qa\u02bbda",          // Dhu al-Qi'dah
                         "Dou-l-Hidjja",         // Dhu al-Hijjah
                     }
                 }

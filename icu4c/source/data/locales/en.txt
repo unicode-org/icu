@@ -51,7 +51,7 @@ en {
         CF { "Central African Republic" }
         CG { "Congo" }
         CH { "Switzerland" }
-        CI { "C\u00F4te d'Ivoire" }
+        CI { "C\u00F4te d\u2019Ivoire" }
         CK { "Cook Islands" }
         CL { "Chile" }
         CM { "Cameroon" }
@@ -455,7 +455,7 @@ en {
         KHR { "CR",  "Cambodian Riel"       } // 03/20/1980-
         KID { "KID", "Kiribati Dollar"      } // 07/12/1979-
         KMF { "CF",  "Comoro Franc"         } // 07/06/1975-
-        KPP { "KPP", "North Korean People's Won" } // 1947-02/1959
+        KPP { "KPP", "North Korean People\u2019s Won" } // 1947-02/1959
         KPW { "KPW", "North Korean Won"     } // 02/1959-
         KRH { "KRH", "South Korean Hwan"    } // 02/15/1953-06/10/1962
         KRO { "KRO", "South Korean Old Won" } // 1947-02/15/1953
@@ -582,7 +582,7 @@ en {
         TJS { "TJS", "Tajikistan Somoni"    } // 01/01/2001-
         TMM { "TMM", "Turkmenistan Manat"   } // 11/01/1993-
         TND { "TND", "Tunisian Dinar"       } // 11/01/1958-
-        TOP { "T$",  "Tonga Pa\u00b4anga"   } // 02/14/1966-
+        TOP { "T$",  "Tonga Pa\u02bbanga"   } // 02/14/1966-
         TOS { "TOS", "Tonga Pound Sterling" } // 1921-02/14/1966
         TPE { "TPE", "Timor Escudo"         } // 01/02/1959-12/07/1975
         TPP { "TPP", "Timor Pataca"         } // 1895-12/31/1958
@@ -637,7 +637,7 @@ en {
         XNF { "XNF", "French Antilles CFA Franc" } // 01/01/1960-1975
         XOF { "XOF", "CFA Franc BCEAO"      } // 12/04/1958-
         XPF { "CFPF","CFP Franc"            } // 12/26/1945-
-        XPS { "XPS", "Pound Sterling"       } // 07/27/1694-
+        //XPS { "XPS", "Pound Sterling"       } // 07/27/1694-
         XSS { "XSS", "Shilling Sterling"    } // 07/27/1694-
         XTR { "XTR", "COMECON Transferable Ruble" } // 1960-1992
         YDD { "YDD", "Yemeni Dinar"         } // 4/1/1965-05/22/1990
@@ -821,7 +821,7 @@ en {
         grc { "Greek, Ancient (to 1453)" }
         gu  { "Gujarati" }
         gv  { "Manx" }
-        gwi { "Gwich'in" }
+        gwi { "Gwich\u02bbin" }
         ha  { "Hausa" }
         hai { "Haida" }
         haw { "Hawaiian" }

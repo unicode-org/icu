@@ -6,7 +6,7 @@
 // ***************************************************************************
 
 it {
-    Version{ "2.0" }
+    Version{ "3.0" }
     Countries { 
         Fallback{ "en"}
         //AD { "Andorra" }
@@ -18,20 +18,20 @@ it {
         //AM { "Armenia" }
         AN { "Antille Olandesi" }
         //AO { "Angola" }
-        AQ { "Antartico" }
+        AQ { "Antartide" }
         //AR { "Argentina" }
         AS { "Samoa Americane" }
         //AT { "Austria" }
         //AU { "Australia" }
         //AW { "Aruba" }
-        //AZ { "Azerbaijan" }
+        AZ { "Azerbaigian" }
         BA { "Bosnia Erzegovina" }
         //BB { "Barbados" }
         //BD { "Bangladesh" }
         BE { "Belgio" }
         //BF { "Burkina Faso" }
         //BG { "Bulgaria" }
-        //BH { "Bahrain" }
+        BH { "Bahrein" }
         //BI { "Burundi" }
         //BJ { "Benin" }
         //BM { "Bermuda" }
@@ -50,7 +50,7 @@ it {
         CF { "Repubblica Centrafricana" }
         //CG { "Congo" }
         CH { "Svizzera" }
-        CI { "Costa d'Avorio" }
+        CI { "Costa d\u2019Avorio" }
         CK { "Isole Cook" }
         CL { "Cile" }
         CM { "Camerun" }
@@ -59,7 +59,7 @@ it {
         //CR { "Costa Rica" }
         //CU { "Cuba" }
         CV { "Capo Verde" }
-        CX { "Isola di Natale" }
+        CX { "Isola Christmas" }
         CY { "Cipro" }
         CZ { "Repubblica Ceca" }
         DE { "Germania" }
@@ -94,12 +94,12 @@ it {
         GP { "Guadalupa" }
         GQ { "Guinea Equatoriale" }
         GR { "Grecia" }
-        GS { "Sud Georgia e Isole Sandwich del Sud" }
+        GS { "Georgia del Sud e Isole Sandwich del Sud" }
         //GT { "Guatemala" }
         //GU { "Guam" }
         //GW { "Guinea-Bissau" }
         //GY { "Guyana" }
-        HK { "Hong Kong (Cina)" }
+        HK { "Regione Amministrativa Speciale di Hong Kong, Cina" }
         HM { "Isole Heard ed Isole McDonald" }
         //HN { "Honduras" }
         HR { "Croazia" }
@@ -109,7 +109,7 @@ it {
         IE { "Irlanda" }
         IL { "Israele" }
         //IN { "India" }
-        IO { "Territori Britannici dell'Oceano Indiano" }
+        IO { "Territorio Britannico dell\u2019Oceano Indiano" }
         //IQ { "Iraq" }
         //IR { "Iran" }
         IS { "Islanda" }
@@ -130,7 +130,7 @@ it {
         KZ { "Kazakistan" }
         //LA { "Laos" }
         LB { "Libano" }
-        LC { "Santa Lucia" }
+        LC { "Saint Lucia" }
         //LI { "Liechtenstein" }
         //LK { "Sri Lanka" }
         //LR { "Liberia" }
@@ -148,8 +148,8 @@ it {
         //ML { "Mali" }
         //MM { "Myanmar" }
         //MN { "Mongolia" }
-        MO { "Macao (Cina)" }
-        //MP { "Northern Mariana Islands" }
+        MO { "Regione Amministrativa Speciale di Macao, Cina" }
+        MP { "Isole Marianne Settentrionali" }
         MQ { "Martinica" }
         //MR { "Mauritania" }
         //MS { "Montserrat" }
@@ -166,7 +166,7 @@ it {
         NF { "Isola Norfolk" }
         //NG { "Nigeria" }
         //NI { "Nicaragua" }
-        NL { "Olanda" }
+        NL { "Paesi Bassi" }
         NO { "Norvegia" }
         //NP { "Nepal" }
         //NR { "Nauru" }
@@ -174,7 +174,7 @@ it {
         NZ { "Nuova Zelanda" }
         //OM { "Oman" }
         //PA { "Panama" }
-        //PE { "Peru" }
+        PE { "Per\u00f9" }
         PF { "Polinesia Francese" }
         PG { "Papua Nuova Guinea" }
         PH { "Filippine" }
@@ -188,7 +188,7 @@ it {
         //PW { "Palau" }
         //PY { "Paraguay" }
         //QA { "Qatar" }
-        RE { "Reunion" }
+        RE { "R\u00e9union" }
         //RO { "Romania" }
         RU { "Federazione Russa" }
         RW { "Ruanda" }
@@ -198,7 +198,7 @@ it {
         //SD { "Sudan" }
         SE { "Svezia" }
         //SG { "Singapore" }
-        //SH { "Saint Helena" }
+        SH { "Sant\u2019Elena" }
         //SI { "Slovenia" }
         SJ { "Svalbard e Jan Mayen" }
         SK { "Slovacchia" }
@@ -207,16 +207,16 @@ it {
         //SN { "Senegal" }
         //SO { "Somalia" }
         //SR { "Suriname" }
-        ST { "Sao Tome e Principe" }
+        ST { "S\u00e3o Tom\u00e9 e Pr\u00edncipe" }
         //SV { "El Salvador" }
         SY { "Siria" }    // alternate name { "Repubblica Araba di Siria" }
         //SZ { "Swaziland" }
         TC { "Isole Turks e Caicos" }
         TD { "Ciad" }
-        TF { "Territori francesi del sud" }
+        TF { "Territori australi francesi" }
         //TG { "Togo" }
-        TH { "Thailandia" }
-        //TJ { "Tajikistan" }
+        TH { "Tailandia" }
+        TJ { "Tagikistan" }
         //TK { "Tokelau" }
         TL { "Timor Est" }
         //TM { "Turkmenistan" }
@@ -229,7 +229,7 @@ it {
         //TZ { "Tanzania" }
         UA { "Ucraina" }
         //UG { "Uganda" }
-        UM { "Isole minori Americane" }
+        UM { "Isole Minori lontane dagli Stati Uniti" }
         US { "Stati Uniti" }
         //UY { "Uruguay" }
         //UZ { "Uzbekistan" }
@@ -322,7 +322,7 @@ it {
         CDF { "CDF", "Franco Congolese" }
         CDG { "CDG", "Franco della Repubblica Congolese" }
         CDL { "CDL", "Zaire Congolese" }
-        CFF { "CFF", "Franco CFA della Repubblica dell'Africa Centrale" }
+        CFF { "CFF", "Franco CFA della Repubblica dell\u2019Africa Centrale" }
         CHF { "SFr.", "Franco Svizzero" }
         CKD { "CKD", "Dollaro delle Isole Cook" }
         CLC { "CLC", "Condor Cileno" }
@@ -354,9 +354,9 @@ it {
         DZD { "DA",  "Dinaro Algerino" }
         DZF { "DZF", "Nuovo franco algerino" }
         DZG { "DZG", "Franco germinale algerino" }
-        ECS { "ECS", "Sucre dell'Ecuador" }
-        ECV { "ECV", "Unidad de Valor Constante (UVC) dell'Ecuador" }
-        EEK { "EEK", "Corona dell'Estonia" }
+        ECS { "ECS", "Sucre dell\u2019Ecuador" }
+        ECV { "ECV", "Unidad de Valor Constante (UVC) dell\u2019Ecuador" }
+        EEK { "EEK", "Corona dell\u2019Estonia" }
         EGP { "EGP", "Sterlina Egiziana" }
         ERN { "ERN", "Nakfa Eritreo" }
         ESP { "ESP", "Peseta Spagnola" }
@@ -404,7 +404,7 @@ it {
         HRK { "HRK", "Kuna Croata" }
         HTG { "HTG", "Gourde Haitiano" }
         HUF { "HUF", "Fiorino Ungherese" }
-        IBP { "IBP", "Sterlina dell'Irlanda del Nord" }
+        IBP { "IBP", "Sterlina dell\u2019Irlanda del Nord" }
         IDG { "IDG", "Fiorino Nica indonesiano" }
         IDJ { "IDJ", "Rupia indonesiana di Java" }
         IDN { "IDN", "Nuova rupia indonesiana" }
@@ -413,7 +413,7 @@ it {
         ILL { "ILL", "Sheqel Israeliano" }
         ILP { "ILP", "Sterlina Israeliana" }
         ILS { "ILS","Nuovo sheqel israeliano" }
-        IMP { "IMP", "Lira Sterlina dell'Isola di Man" }
+        IMP { "IMP", "Lira Sterlina dell\u2019Isola di Man" }
         INR { "=0#Rs.|1#Re.|1<Rs.", "Rupia Indiana" }
         IQD { "ID",  "Dinaro Iracheno" }
         IRR { "RI",  "Rial Iraniano" }
@@ -481,7 +481,7 @@ it {
         MWK { "MK",  "Kwacha Malawiano" }
         MWP { "MWP", "Sterlina Malawiana" }
         MXN { "MEX$","Peso Messicano" }
-        MXP { "MXP", "Peso messicano d'argento (1861-1992)" }
+        MXP { "MXP", "Peso messicano d\u2019argento (1861-1992)" }
         MXV { "MXV", "Unidad de Inversion (UDI) Messicana" }
         MYR { "RM",  "Ringgit della Malesia" }
         MZE { "MZE", "Escudo del Mozambico" }
@@ -492,7 +492,7 @@ it {
         NGP { "NGP", "Sterlina Nigeriana" }
         NHF { "NHF", "Franco CFP delle Nuove Ebridi" }
         NIC { "NIC", "Cordoba Nicaraguense" }
-        NIG { "NIG", "C\u00F3rdoba d'oro nicaraguense" }
+        NIG { "NIG", "C\u00F3rdoba d\u2019oro nicaraguense" }
         NIO { "NIO", "C\u00F3rdoba oro nicaraguense" }
         NLG { "NLG", "Fiorino Olandese" }
         NOK { "NOK", "Corona Norvegese" }
@@ -500,7 +500,7 @@ it {
         NZD { "$NZ", "Dollaro Neozelandese" }
         NZP { "NZP", "Sterlina Neozelandese" }
         OMR { "RO",  "Rial Omanita" }
-        OMS { "OMS", "Rial Saidi dell'Oman" }
+        OMS { "OMS", "Rial Saidi dell\u2019Oman" }
         PAB { "PAB", "Balboa di Panama" }
         PDK { "PDK", "Coupon in rubli della Transdniestria" }
         PDN { "PDN", "Nuovo rublo della Transdniestria" }
@@ -533,7 +533,7 @@ it {
         SDP { "SDP", "Sterlina Sudanese" }
         SEK { "SEK", "Corona Svedese" }
         SGD { "SGD", "Dollaro di Singapore" }
-        SHP { "SHP", "Sterlina di Sant'Elena" }
+        SHP { "SHP", "Sterlina di Sant\u2019Elena" }
         SIB { "SIB", "Tallero Bons Sloveno" }
         SIT { "SIT", "Tallero Sloveno" }
         SKK { "Sk",  "Corona Slovacca" }
@@ -557,7 +557,7 @@ it {
         TJS { "TJS", "Somoni del Tajikistan" }
         TMM { "TMM", "Manat Turkmeno" }
         TND { "TND", "Dinaro Tunisino" }
-        TOP { "T$",  "Pa'anga di Tonga" }
+        TOP { "T$",  "Pa\u02BBanga di Tonga" }
         TOS { "TOS", "Lira sterlina di Tonga" }
         TPE { "TPE", "Escudo di Timor" }
         TPP { "TPP", "Pataca di Timor" }
@@ -574,11 +574,11 @@ it {
         USD { "$", "Dollaro Statunitense" }
         USN { "USN", "Dollaro Statunitense (Next day)" }
         USS { "USS", "Dollaro Statunitense (Same day)" }
-        UYF { "UYF", "Peso Fuerte dell'Uruguaiano" }
+        UYF { "UYF", "Peso Fuerte dell\u2019Uruguaiano" }
         UYP { "UYP", "Peso Uruguaiano (1975-1993)" }
         UYU { "Ur$", "Peso Uruguayo uruguaiano" }
-        UZC { "UZC", "Som Coupon dell'Uzbekistan" }
-        UZS { "UZS", "Sum dell'Uzbekistan" }
+        UZC { "UZC", "Som Coupon dell\u2019Uzbekistan" }
+        UZS { "UZS", "Sum dell\u2019Uzbekistan" }
         VAL { "VAL", "Lira della Citt\u00E0 del Vaticano" }
         VDD { "VDD", "Piastre Dong Viet nordvietnamita" }
         VDN { "VDN", "Nuovo Dong nordvietnamita" }
@@ -612,7 +612,7 @@ it {
         XNF { "XNF", "Franco CFA delle Antille Francesi" }
         XOF { "XOF", "Franco CFA BCEAO" }
         XPF { "CFPF","Franco CFP" }
-        XPS { "XPS", "Lira Sterlina" }
+        //XPS { "XPS", "Lira Sterlina" }
         XSS { "XSS", "Sterlina" }
         XTR { "XTR", "Rublo Trasferibile COMECON" }
         YDD { "YDD", "Dinaro dello Yemen" }
@@ -636,119 +636,476 @@ it {
     }
 
     Languages {
-
+        aa  { "afar" }
+        ab  { "abkhazian" }
+        ace { "accinese" }
+        ach { "acioli" }
+        ada { "adangme" }
+        ady { "adyghe" }
+        ae  { "avestan" }
         af  { "afrikaans" }
+        afa { "afro-asiatica (altra lingua)" }
+        afh { "afrihili" }
+        ak  { "akan" }
+        akk { "accado" }
+        ale { "aleuto" }
+        alg { "lingue algonchine" }
         am  { "amarico" }
+        an  { "aragonese" }
+        ang { "inglese, antico (ca.450-1100)" }
+        apa { "lingue apache"}
         ar  { "arabo" }
+        arc { "aramaico" }
+        arn { "araucano" }
+        arp { "arapaho" }
+        art { "artificiale (altra lingua)" }
+        arw { "aruaco" }
+        as  { "assamese" }
+        ast { "asturiano" }
+        ath { "lingue athabaska" }
+        aus { "lingue australiane" }
+        av  { "avaro" }
+        awa { "awadhi" }
+        ay  { "aymara" }
+        az  { "azerbaigiano" }
+        ba  { "baschiro" }
+        bad { "banda" }
+        bai { "lingue bamileke" }
+        bal { "beluci" }
+        bam { "bambara" }
+        ban { "balinese" }
+        bas { "basa" }
+        bat { "baltica (altra lingua)" }
         be  { "bielorusso" }
+        bej { "begia" }
+        bem { "wemba" }
+        ber { "berbero" }
         bg  { "bulgaro" }
-        bn  { "bengali" }
+        bh  { "bihari" }
+        bho { "bhojpuri" }
+        bi  { "bislama" }
+        bik { "bicol" }
+        bin { "bini" }
+        bla { "siksika" }   // blackfoot
+        bm  { "bambara" }
+        bn  { "bengalese" }
+        bnt { "bantu" }
         bo  { "tibetano" }
         br  { "bretone" }
+        bra { "braj" }
         bs  { "bosniaco"}
+        btk { "batak" }
+        bua { "buriat" }
+        bug { "bugi" }
+        byn { "blin" }
         ca  { "catalano" }
+        cad { "caddo" }
+        cai { "indiana dell\u2019America Centrale (altra lingua)" }
+        car { "caribico" }
+        cau { "caucasica (altra lingua)" }
         ce  { "ceceno" }
+        ceb { "cebuano" }
+        cel { "celtica altra lingua" }
+        ch  { "chamorro" }
+        chb { "chibcha" }
+        chg { "ciagataico" }
+        chk { "chuukese" }
+        chm { "mari" }
+        chn { "gergo chinook" }
+        cho { "choctaw" }
+        chp { "chipewyan" }
+        chr { "cherokee" }
+        chy { "cheyenne" }
+        cmc { "lingue chamic" }
         co  { "corso" }
+        cop { "copto" }
+        cpe { "creolo e pidgins, basato sull\u2019inglese (altra lingua)" }
+        cpf { "creolo e pidgins, basato sul francese (altra lingua)" }
+        cpp { "creolo e pidgins, basato sul portoghese (altra lingua)" }
+        cr  { "cree" }
+        crh { "turco crimeo; tatar crimeo" }
+        crp { "creola e Pidgins (altra lingua)" }
         cs  { "ceco" }
+        csb { "kashubian" }
+        cu  { "slavo della Chiesa" }
+        cus { "cuscitica (altra lingua)" }
+        cv  { "chuvash" }
         cy  { "gallese" }
         da  { "danese" }
+        dak { "dakota" }
+        dar { "dargwa" }
+        day { "dayak" }
         de  { "tedesco" }
+        del { "delaware" }
+        den { "slave" }
+        dgr { "dogrib" }
+        din { "dinca" }
+        doi { "dogri" }
+        dra { "dravidica (altra lingua)" }
+        dsb { "basso sorabo" }
+        dua { "duala" }
+        dum { "olandese, medio (ca. 1050-1350)" }
+        dv  { "divehi" }
+        dyu { "diula" }
+        dz  { "dzongkha" }
+        ee  { "ewe" }
+        efi { "efik" }
+        egy { "egiziano (antico)" }
+        eka { "ekajuka" }
         el  { "greco" }
+        elx { "elamitico" }
         en  { "inglese" }
+        enm { "inglese, medio (1100-1500)" }
         eo  { "esperanto" }
         es  { "spagnolo" }
         et  { "estone" }
         eu  { "basco" }
+        ewo { "ewondo" }
         fa  { "persiano" }
+        // fan { "fan" }
+        fat { "fanti" }
+        ff  { "fulah" }
         fi  { "finlandese" }
+        fiu { "ugrofinnica (altra lingua)" }
         fj  { "figiano" }
         fo  { "faroese" }
+        // fon { "fon" }
         fr  { "francese" }
+        frm { "francese, medio (ca.1400-1600)" }
+        fro { "francese, antico (842-ca.1400)" }
+        fur { "friulano" }
         fy  { "frisone" }
         ga  { "irlandese" }
+        gaa { "ga" }
+        gay { "gayo" }
+        gba { "gbaya" }
         gd  { "gaelico scozzese" }
+        gem { "germanica (altra lingua)" }
+        gez { "geez" }
+        gil { "gilbertese" }
         gl  { "galiziano" }
+        gmh { "tedesco, medio alto (ca.1050-1500)" }
         gn  { "guarana" }
+        goh { "tedesco, antico alto (ca.750-1050)" }
+        gon { "gondi" }
+        gor { "gorontalo" }
+        got { "gotico" }
+        grb { "gerbo" }
+        grc { "greco, antico (fino al 1453)" }
         gu  { "gujarati" }
         gv  { "manx" }
+        gwi { "gwich\u02bbin" }
         ha  { "haussa" }
+        hai { "haida" }
         haw { "hawaiano" }
-        he  { "ebreo" }
+        he  { "ebraico" }
         hi  { "hindi" }
+        hil { "hiligayna" }
+        him { "himachali" }
+        hit { "hittite" }
+        hmn { "hmong" }
+        ho  { "hiri motu" }
         hr  { "croato" }
+        hsb { "alto sorabo" }
+        ht  { "haitian" }
         hu  { "ungherese" }
+        hup { "hupa" }
         hy  { "armeno" }
+        hz  { "herero" }
+        ia  { "interlingua" }
+        iba { "iban" }
         id  { "indonesiano" }
+        ie  { "interlingue" }
+        ig  { "igbo" }
+        ii  { "sichuan yi" }
+        // ijo { "ijo" }
         ik  { "inupiak" }
+        ilo { "ilocano" }
+        inc { "indiana (altra lingua)" }
+        ine { "indoeuropea (altra lingua)" }
+        inh { "ingush" }
+        io  { "ido" }
+        ira { "iraniana" }
+        iro { "lingue irochesi" }
         is  { "islandese" }
         it  { "italiano" }
         iu  { "inuktitut" }
         ja  { "giapponese" }
-        kl  { "kalaallisut" }
+        jbo { "lojban" }
+        jpr { "giudeo persiano" }
+        jrb { "giudeo arabo" }
         jv  { "giavanese" }
+        kl  { "kalaallisut" }
         ka  { "georgiano" }
+        kaa { "kara-kalpak" }
+        kab { "kabyle" }
+        kac { "kachin" }
+        kam { "kamba" }
+        kar { "karen" }
+        kaw { "kawi" }
+        kbd { "kabardia" }
+        kg  { "kongo" }
+        kha { "khasi" }
+        khi { "khoisan (altra lingua)" }
+        kho { "khotanese" }
+        ki  { "kikuyu" }
+        kj  { "kuanyama" }
         kk  { "kazako" }
+        km  { "khmer" }
+        kmb { "kimbundu" }
         kn  { "kannada" }
         ko  { "coreano" }
+        kok { "konkani" }
+        kos { "Kosraean" }
+        kpe { "kpelle" }
+        kr  { "kanuri" }
+        krc { "karachay-Balkar" }
+        kro { "kru" }
+        kru { "kurukh" }
+        ks  { "kashmiri" }
         ku  { "curdo" }
-        kw  { "cornish" }
+        kum { "kumyk" }
+        kut { "kutenai" }
+        kv  { "komi" }
+        kw  { "cornico" }
         ky  { "kirghiso" }
         la  { "latino" }
+        lad { "ladino" }
+        lah { "lahnda" }
+        lam { "lamba" }
         lb  { "lussemburghese" }
+        lez { "lezghian" }
+        lg  { "ganda" }
+        li  { "limburgish" }
+        ln  { "lingala" }
+        lo  { "lao" }
+        lol { "lolo (bantu)" }
+        loz { "lozi" }
         lt  { "lituano" }
+        lu  { "luba-katanga" }
+        lua { "luba-lulua" }
+        lui { "luiseno" }
+        lun { "lunda" }
+        luo { "luo (Kenia e Tanzania)" }
+        lus { "lushai" }
         lv  { "lettone" }
+        mad { "madurese" }
+        mag { "magahi" }
+        mai { "maithili" }
+        mak { "makasar" }
+        man { "mandingo" }
+        map { "austronesiano" }
+        mas { "masai" }
+        mdf { "moksha" }
+        mdr { "mandar" }
+        men { "mende" }
+        mg  { "malagasy" }
+        mga { "irlandese medio (900-1200)" }
+        mh  { "marshallese"}
+        mi  { "maori" }
+        mic { "micmac" }
+        min { "menangkabau" }
+        mis { "lingue diverse" }
         mk  { "macedone" }
+        mkh { "mon-khmer (altra lingua)" }
+        ml  { "malayalam" }
         mn  { "mongolo" }
+        mnc { "manchu" }
+        mni { "manipuri" }
+        mno { "manobo" }
         mo  { "moldavo" }
+        moh { "mohawk" }
+        mos { "mossi" }
         mr  { "marathi" }
+        ms  { "malay" }
         mt  { "maltese" }
+        mul { "multilingua" }
+        mun { "munda (altra lingua)" }
+        mus { "creek" }
+        mwr { "marwari" }
+        my  { "burmese" }
+        myn { "lingue maya" }
+        myv { "erzya" }
+        na  { "nauru" }
+        nah { "nahuatl" }
+        nai { "indiano del Nord America (altra lingua)" }
+        nap { "napoletano" }
         nb  { "norvegese bokm\u00e5l" }
         nd  { "ndebele del nord" }
+        nds { "basso tedesco; basso sassone" }
+        ne  { "nepali" }
+        new { "newari" }
+        ng  { "ndonga" }
+        // nia { "nia" }
+        nic { "niger - cordofan (altra lingua)" }
+        niu { "niue" }
         nl  { "olandese" }
         nn  { "norvegese nynorsk" }
         no  { "norvegese" }
+        nog { "nogai" }
+        non { "norse antico" }
         nr  { "ndebele del sud" }
+        nso { "sotho del nord" }
+        nub { "nubiano" }
+        nv  { "navajo"}
+        ny  { "nyanja; chichewa; chewa" }
+        nym { "nyamwezi" }
+        nyn { "nyankole" }
+        nyo { "nyoro" }
+        nzi { "nzima" }
+        oc  { "occitano (post 1500); provenzale"}
+        oj  { "ojibwa" }
         om  { "oromo" }
+        or  { "oriya" }
         os  { "ossetico" }
+        osa { "osage" }
+        ota { "turco ottomano (1500-1928)" }
+        oto { "lingue otomi" }
+        pa  { "punjabi" }
+        paa { "papuano-australiano (altra lingua)" }
+        pag { "pangasinan" }
+        pal { "pahlavi" }
+        pam { "pampanga" }
+        pap { "papiamento" }
+        pau { "palau" }
+        peo { "antico persiano (600-400 A.C.)" }
+        phi { "filippino (altra lingua)" }
+        phn { "fenicio" }
+        pi  { "pali" }
         pl  { "polacco" }
+        pon { "ponape" }
+        pra { "pracrito" }
+        pro { "provenzale, antico (fino al 1500)" }
+        ps  { "pashto" }
         pt  { "portoghese" }
+        qu  { "quechua" }
+        raj { "rajasthani" }
+        rap { "rapanui" }
+        rar { "rarotonga" }
         rm  { "lingua rhaeto-romance" }
+        rn  { "rundi" }
         ro  { "romeno" }
+        roa { "lingua romanza (altra lingua)" }
+        rom { "romani" }
         ru  { "russo" }
+        rw  { "kinyarwanda" }
         sa  { "sanscrito" }
+        sad { "sandawe" }
+        sah { "yakut" }
+        sai { "indiano del Sud America (altra lingua)" }
+        sal { "lingue salish" }
+        sam { "aramaico samaritano" }
+        sas { "sasak" }
+        sat { "santali" }
         sc  { "sardo" }
+        sco { "scozzese" }
+        sd  { "sindhi" }
         se  { "sami del nord" }
-        sh  { "serbo-croata" }
+        sel { "selkup" }
+        sem { "semitico (altra lingua)" }
+        sg  { "sango" }
+        sga { "irlandese, antico (fino al \u2019900)" }
+        sgn { "lingue sign" }
+        sh  { "serbo-croato" }
+        shn { "shan" }
         si  { "singalese" }
+        sid { "sidamo" }
+        sio { "lingue sioux" }
+        sit { "sino-tibetano (altra lingua)" }
         sk  { "slovacco" }
         sl  { "sloveno" }
+        sla { "slavo (altra lingua)" }
         sm  { "samoano" }
+        sma { "sami del sud" }
+        smi { "lingue sami (altra lingua)" }
+        smj { "sami lule" }
+        smn { "sami inari" }
+        sms { "sami skolt" }
+        sn  { "shona" }
+        snk { "soninke" }
         so  { "somalo" }
-        sq  { "albanian" }
+        sog { "sogdiano" }
+        son { "songhai" }
+        sq  { "albanese" }
         sr  { "serbo" }
+        srr { "serer" }
+        ss  { "swati" }
+        ssa { "nilo-sahariana (altra lingua)" }
         st  { "sotho del sud" }
+        su  { "sundanese" }
+        suk { "sukuma" }
+        sus { "susu" }
+        sux { "sumero"}
         sv  { "svedese" }
         sw  { "swahili" }
         syr { "siriaco" }
         ta  { "tamil" }
+        tai { "tailandese (altra lingua)" }
+        te  { "telugu" }
+        tem { "temne" }
+        ter { "tereno" }
+        tet { "tetum" }
         tg  { "tagicco" }
         th  { "thai" }
         ti  { "tigrinya" }
+        tig { "tigre" }
+        // tiv { "tiv" }
         tk  { "turcomanno" }
+        tkl { "tokelau" }
+        tl  { "tagalog" }
+        tli { "tlingit" }
+        tmh { "tamashek" }
+        tn  { "tswana" }
         to  { "tonga (Isole Tonga)" }
+        tog { "tonga (nyasa)" }
+        tpi { "tok pisin" }
         tr  { "turco" }
+        ts  { "tsonga" }
+        tsi { "tsimshian" }
         tt  { "tatarico" }
+        tum { "tumbuka" }
+        tup { "lingue tupi" }
+        tut { "turco-tatarica (altra lingua)" }
+        tvl { "tuvalu" }
         tw  { "ci" }
         ty  { "taitiano" }
+        tyv { "tuvinian" }
+        udm { "udmurt" }
         ug  { "uigurico" }
+        uga { "ugaritico" }
         uk  { "ucraino" }
+        umb { "mbundu" }
+        und { "lingua imprecisata" }
+        ur  { "urdu" }
         uz  { "usbeco" }
+        // vai { "vai" }
+        ve  { "venda" }
         vi  { "vietnamita" }
+        vo  { "volap\u00fck" }   // Yes the iso-639 standard uses the umlaut in the English name
+        vot { "voto" }
+        wa  { "walloon" }
+        wak { "lingue wakash" }
+        wal { "walamo" }
+        war { "waray" }
+        was { "washo" }
+        wen { "sorabo" }
         wo  { "volof" }
+        xal { "kalmyk" }
         xh  { "xosa" }
+        yao { "yao (bantu)" }
+        yap { "Yapese" }
+        yi  { "yiddish" }
+        yo  { "yoruba" }
+        ypk { "lingue yupik" }
+        za  { "zhuang" }
+        zap { "zapotec" }
+        zen { "zenaga" }
         zh  { "cinese" }
         //zh_cn { "Cinese (Semplificato)" }
         //zh_tw { "Cinese (Tradizionale)" }
+        znd { "zande" }
+        zu  { "zulu" }
+        zun { "zuni" }
     }
     ExemplarCharacters { "[a-z\u00e9\u00f3\u00e0\u00e8\u00ec\u00f2\u00ed\u00fa\u00f9\u00ef]" }
     LocaleScript{ 
@@ -772,29 +1129,59 @@ it {
     Scripts {
         Arab { "arabo" }
         Armn { "armenio" }
+        Beng { "bengali" }
+        Bopo { "bopomofo" }
+        Brai { "braille" }
+        Buhd { "buhid" }
         Cans { "simboli aborigeni canadesi unificati" }
+        Cher { "cherokee" }
         Cprt { "cipriota" }
         Cyrl { "cirillico" }
+        Deva { "devanagari" }
+        Dsrt { "deseret" }
         Ethi { "etiope" }
         Geor { "georgiano" }
         Goth { "gotico" }
         Grek { "greco" }
+        Gujr { "gujarati" }
+        Guru { "gurmukhi" }
+        Hang { "hangul" }
+        Hano { "hanunoo" }
         Hani { "han" }
         Hans { "han semplificato" }
         Hant { "han tradizionale" }
         Hebr { "ebreo" }
+        Hira { "hiragana" }
         Ital { "italico antico" }
+        Kana { "katakana" }
+        Khmr { "khmer" }
+        Knda { "kannada" }
+        Laoo { "lao" }
         Latn { "latino" }
+        Limb { "limbu" }
+        Linb { "B lineare" }
+        Mlym { "malayalam" }
         Mong { "mongolo" }
+        Mymr { "myanmar" }
+        Ogam { "ogham" }
+        Orya { "oriya" }
+        Osma { "osmanya" }
         Qaac { "copto" } // Coptic is not a formal part of ISO-15924 yet
         Qaai { "ereditato" } // PUA
         Runr { "runico" }
         Shaw { "shaviano" }
         Sinh { "singalese" }
         Syrc { "siriano" }
+        Tagb { "tagbanwa" }
+        Tale { "tai le" }
+        Taml { "tamil" }
+        Telu { "telugu" }
+        Tglg { "tagalog" }
+        Thaa { "thaana" }
         Thai { "tailandese" }
         Tibt { "tibetano" }
         Ugar { "ugarita" }
+        Yiii { "yi" }
         Zyyy { "comune" } // This may need to become "undetermined script"
     }
     //------------------------------------------------------------
@@ -1023,6 +1410,241 @@ it {
                     }
                 }
             }
+        }
+    }
+    
+    zoneStrings {
+        {
+            "PST",
+            "Ora Standard Pacifico",
+            "PST",
+            "Ora Legale Pacifico",
+            "PDT",
+            "Los Angeles",
+        }
+        {
+            "America/Los_Angeles",
+            "Ora Standard Pacifico",
+            "PST",
+            "Ora Legale Pacifico",
+            "PDT",
+            "Los Angeles",
+        }
+        {
+            "MST",
+            "Ora Standard Mountain",
+            "MST",
+            "Ora Legale Mountain",
+            "MDT",
+            "Denver",
+        }
+        {
+            "America/Denver",
+            "Ora Standard Mountain",
+            "MST",
+            "Ora Legale Mountain",
+            "MDT",
+            "Denver",
+        }
+        {
+            "PNT",
+            "Ora Standard Mountain",
+            "MST",
+            "Ora Standard Mountain",
+            "MST",
+            "Phoenix",
+        }
+        {
+            "America/Phoenix",
+            "Ora Standard Mountain",
+            "MST",
+            "Ora Standard Mountain",
+            "MST",
+            "Phoenix",
+        }
+        {
+            "CST",
+            "Ora Standard Centrale",
+            "CST",
+            "Ora Legale Centrale",
+            "CDT",
+            "Chicago",
+        }
+        {
+            "America/Chicago",
+            "Ora Standard Centrale",
+            "CST",
+            "Ora Legale Centrale",
+            "CDT",
+            "Chicago",
+        }
+        {
+            "EST",
+            "Ora Standard Orientale",
+            "EST",
+            "Ora Legale Orientale",
+            "EDT",
+            "New York",
+        }
+        {
+            "America/New_York",
+            "Ora Standard Orientale",
+            "EST",
+            "Ora Legale Orientale",
+            "EDT",
+            "New York",
+        }
+        {
+            "IET",
+            "Ora Standard Orientale",
+            "EST",
+            "Ora Standard Orientale",
+            "EST",
+            "Indianapolis",
+        }
+        {
+            "America/Indianapolis",
+            "Ora Standard Orientale",
+            "EST",
+            "Ora Standard Orientale",
+            "EST",
+            "Indianapolis",
+        }
+        {
+            "HST",
+            "Ora Standard Hawaii",
+            "HST",
+            "Ora Standard Hawaii",
+            "HST",
+            "Honolulu",
+        }
+        {
+            "Pacific/Honolulu",
+            "Ora Standard Hawaii",
+            "HST",
+            "Ora Standard Hawaii",
+            "HST",
+            "Honolulu",
+        }
+        {
+            "AST",
+            "Ora Standard Alaska",
+            "AST",
+            "Ora Legale Alaska",
+            "ADT",
+            "Anchorage"
+        }
+        {
+            "America/Anchorage",
+            "Ora Standard Alaska",
+            "AST",
+            "Ora Legale Alaska",
+            "ADT",
+            "Anchorage",
+        }
+        {
+            "America/Halifax",
+            "Ora Standard Atlantico",
+            "AST",
+            "Ora Legale Atlantico",
+            "ADT",
+            "Halifax"
+        }
+        {
+            "CNT",
+            "Ora Standard Newfoundland",
+            "CNT",
+            "Ora Legale Newfoundland",
+            "CDT",
+            "St. Johns",
+        }
+        {
+            "America/St_Johns",
+            "Ora Standard Newfoundland",
+            "CNT",
+            "Ora Legale Newfoundland",
+            "CDT",
+            "St. Johns",
+        }
+        {
+            "ECT",
+            "Ora Standard Centrale Europeo",
+            "CET",
+            "Ora Legale Centrale Europeo",
+            "CEST",
+            "Parigi",
+        }
+        {
+            "Europe/Paris",
+            "Ora Standard Centrale Europeo",
+            "CET",
+            "Ora Legale Centrale Europeo",
+            "CEST",
+            "Parigi",
+        }
+        {
+            "GMT",
+            "Ora Meridiano Greenwich",
+            "GMT",
+            "Ora Meridiano Greenwich",
+            "GMT",
+            "Londra",
+        }
+        {
+            "Africa/Casablanca",
+            "Ora Meridiano Greenwich",
+            "GMT",
+            "Ora Meridiano Greenwich",
+            "GMT",
+            "Casablanca",
+        }
+        {
+            "Asia/Jerusalem",
+            "Ora Standard Israele",
+            "IST",
+            "Ora Legale Israele",
+            "IDT",
+            "Gerusalemme",
+        }
+        {
+            "JST",
+            "Ora Standard Giappone",
+            "JST",
+            "Ora Standard Giappone",
+            "JST",
+            "Tokyo",
+        }
+        {
+            "Asia/Tokyo",
+            "Ora Standard Giappone",
+            "JST",
+            "Ora Standard Giappone", 
+            "JST",
+            "Tokyo",
+        }
+        {
+            "Europe/Bucharest",
+            "Ora Standard Europa Orientale",
+            "EET",
+            "Ora Legale Europa Orientale",
+            "EEST",
+            "Bucarest",
+        }
+        {
+            "CTT",
+            "Ora Standard Cina",
+            "CTT",
+            "Ora Standard Cina",
+            "CDT",
+            "Shanghai",
+        }
+        {
+            "Asia/Shanghai",
+            "Ora Standard Cina",
+            "CTT",
+            "Ora Standard Cina",
+            "CDT",
+            "Shanghai",
         }
     }
 }

@@ -25,7 +25,7 @@ es {
         //AU { "Australia" }
         //AW { "Aruba" }
         AZ { "Azerbaiy\u00E1n" }
-        BA { "Bosnia y Hercegovina" }
+        BA { "Bosnia-Herzegovina" }
         //BB { "Barbados" }
         //BD { "Bangladesh" }
         BE { "B\u00E9lgica" }
@@ -59,7 +59,7 @@ es {
         //CR { "Costa Rica" }
         //CU { "Cuba" }
         CV { "Cabo Verde" }
-        CX { "Isla de Christmas" }
+        CX { "Isla Navidad" }
         CY { "Chipre" }
         CZ { "Rep\u00FAblica Checa" }
         //CZ { "Chequia" } // Old value
@@ -77,7 +77,7 @@ es {
         ES { "Espa\u00F1a" }
         ET { "Etiop\u00EDa" }
         FI { "Finlandia" }
-        FJ { "Fidji" }
+        FJ { "Fiyi" }
         FK { "Islas Falkland (Malvinas)" }    // alternate name { "Islas Malvinas" }
         //FM { "Micronesia, Estados Federados de" }
         FO { "Islas Feroe" }
@@ -100,7 +100,7 @@ es {
         //GU { "Guam" }
         //GW { "Guinea-Bissau" }
         //GY { "Guyana" }
-        HK { "Hong Kong, Regi\u00F3n administrativa especial de China" }
+        HK { "Hong-Kong, Regi\u00F3n administrativa especial de China" }
         HM { "Islas Heard y McDonald" }
         //HN { "Honduras" }
         HR { "Croacia" }
@@ -110,8 +110,8 @@ es {
         IE { "Irlanda" }
         //IL { "Israel" }
         //IN { "India" }
-        IO { "Territorios Brit\u00E1nicos del Oc\u00E9ano \u00CDndico" }
-        IQ { "Irak" }
+        IO { "Territorios Brit\u00E1nico del Oc\u00E9ano \u00CDndico" }
+        //IQ { "Iraq" }
         IR { "Ir\u00E1n" }
         IS { "Islandia" }
         IT { "Italia" }
@@ -122,20 +122,20 @@ es {
         KG { "Kirguizist\u00E1n" }
         KH { "Camboya" }
         //KI { "Kiribati" }
-        KM { "Comores" }
+        KM { "Comoras" }
         KN { "San Crist\u00F3bal y Nieves" }
         KP { "Corea del Norte" }    // alternate name { "Corea, Rep\u00FAblica Popular Democr\u00E1tica de" }
         KR { "Corea del Sur" }    // alternate name { "Corea, Rep\u00FAblica de " }
         //KW { "Kuwait" }
         KY { "Islas Caim\u00E1n" }
-        KZ { "Kazajist\u00E1n" }
+        KZ { "Kazajst\u00E1n" }
         //LA { "Rep\u00FAblica Democr\u00E1tica Popular Lao" } // From translation center
         LB { "L\u00EDbano" }
         //LC { "Santa Lucia" }
         //LI { "Liechtenstein" }
         //LK { "Sri Lanka" }
         //LR { "Liberia" }
-        LS { "Lesoto" }
+        //LS { "Lesotho" }
         LT { "Lituania" }
         LU { "Luxemburgo" }
         LV { "Letonia" }
@@ -157,7 +157,7 @@ es {
         //MT { "Malta" }
         MU { "Mauricio" }
         MV { "Maldivas" }
-        MW { "Malaui" }
+        //MW { "Malawi" }
         MX { "M\u00E9xico" }
         MY { "Malasia" }
         //MZ { "Mozambique" }
@@ -171,7 +171,7 @@ es {
         NO { "Noruega" }
         //NP { "Nepal" }
         //NR { "Nauru" }
-        //NU { "Niue" }
+        NU { "Isla Niue" }
         NZ { "Nueva Zelanda" }
         OM { "Om\u00E1n" }
         PA { "Panam\u00E1" }
@@ -191,7 +191,7 @@ es {
         //PY { "Paraguay" }
         //QA { "Qatar" }
         //RE { "Reuni\u00F3n" }
-        RO { "Rumania" }
+        RO { "Ruman\u00EDa" }
         RU { "Rusia" }
         //RU { "Federaci\u00F3n Rusa" } // From translation center
         RW { "Ruanda" }
@@ -209,7 +209,7 @@ es {
         //SM { "San Marino" }
         //SN { "Senegal" }
         //SO { "Somalia" }
-        SP { "Serbia" }
+        //SP { "Serbia" }
         //SR { "Surinam" }
         ST { "Santo Tom\u00E9 y Pr\u00EDncipe" }
         //SV { "El Salvador" }
@@ -221,7 +221,7 @@ es {
         //TG { "Togo" }
         TH { "Tailandia" }
         TJ { "Tayikist\u00E1n" }
-        //TK { "Tokelau" }
+        TK { "Islas Tokelau" }
         TL { "Timor Oriental" }
         TM { "Turkmenist\u00E1n" }
         TN { "T\u00FAnez" }
@@ -233,7 +233,7 @@ es {
         //TZ { "Tanzania" }
         UA { "Ucrania" }
         //UG { "Uganda" }
-        UM { "Islas menores alejadas de Estados Unidos" }
+        UM { "Islas menores alejadas de los Estados Unidos" }
         //UM { "Islas Perif\u00E9ricas Menores de los Estados Unidos" } // Old value
         US { "Estados Unidos" }
         //UY { "Uruguay" }
@@ -427,7 +427,7 @@ es {
         ISK { "ISK", "corona islandesa" } // 12/1/1918-
         ITL { "\u20A4", "lira italiana" } // 11/10/1859-
         JEP { "JEP", "libra esterlina de Jersey" } // 1840-
-        JMD { "J$", "D\u00F3lar de Jamaica" } // 09/08/1969-
+        JMD { "J$", "d\u00F3lar de Jamaica" } // 09/08/1969-
         JMP { "JMP", "libra jamaicana" } // 1900-09/08/1969
         JOD { "JD",  "dinar jordano" } // 07/01/1950-
         JPY { "\u00A5","yen japon\u00E9s" } // 06/1871
@@ -564,7 +564,7 @@ es {
         TJS { "TJS", "somoni tayiko" } // 01/01/2001-
         TMM { "TMM", "manat turcomano" } // 11/01/1993-
         TND { "TND", "dinar tunecino" } // 11/01/1958-
-        TOP { "T$",  "pa'anga tongano" } // 02/14/1966-
+        TOP { "T$",  "pa\u02bbanga tongano" } // 02/14/1966-
         TOS { "TOS", "libra esterlina tongana" } // 1921-02/14/1966
         TPE { "TPE", "escudo timorense" } // 01/02/1959-12/07/1975
         TPP { "TPP", "pataca timorense" } // 1895-12/31/1958
@@ -619,7 +619,7 @@ es {
         XNF { "XNF", "franco CFA de las Antillas Francesas" } // 01/01/1960-1975
         XOF { "XOF", "franco CFA BCEAO" } // 12/04/1958-
         XPF { "CFPF","franco CFP" } // 12/26/1945-
-        XPS { "XPS", "libra esterlina" } // 07/27/1694-
+        //XPS { "XPS", "libra esterlina" } // 07/27/1694-
         XSS { "XSS", "chel\u00EDn esterlino" } // 07/27/1694-
         XTR { "XTR", "rublo transferible del COMECON" } // 1960-1992
         YDD { "YDD", "dinar yemen\u00ED" } // 4/1/1965-05/22/1990
@@ -647,24 +647,43 @@ es {
         root{"ra\u00EDz" }    // The only exception to ISO-639
 
         aa { "afar" }
+        ab  { "abkhaziano" }
+        ae  { "av\u00e9stico" }
         af { "afrikaans" }
+        ak  { "akan" }
         am { "am\u00E1rico" }
+        an  { "aragon\u00e9s" }
         ar { "\u00E1rabe" }
         as { "asam\u00E9s" }
-        az { "azerbayano" }
+        av  { "avar" }
+        ay  { "aymara" }
+        az { "azer\u00ed" }
+        ba  { "bashkir" }
         be { "bielorruso" }
         bg { "b\u00FAlgaro" }
         bh { "bihari" }
         bi { "bislama" }
+        bm  { "bambara" }
         bn { "bengal\u00ED" }
         bo { "tibetano" }
         br { "bret\u00F3n" }
+        bs  { "bosnio"}
+        byn { "blin" }
         ca { "catal\u00E1n" }
+        ce  { "checheno" }
+        ch  { "chamorro" }
+        chr { "cherokee" }
         co { "corso" }
+        cr  { "cree" }
         cs { "checo" }
+        cu  { "eslavo eclesi\u00e1stico" }
+        cv  { "chuvash" }
         cy { "gal\u00E9s" }
         da { "dan\u00E9s" }
         de { "alem\u00E1n" }
+        dv  { "divehi" }
+        dz  { "bhutan\u00ed" }
+        ee  { "ewe" }
         el { "griego" }
         en { "ingl\u00E9s" }
         eo { "esperanto" }
@@ -672,44 +691,69 @@ es {
         et { "estonio" }
         eu { "vasco" }
         fa { "farsi" }
+        ff  { "fula" }
         fi { "finland\u00E9s" }
+        fj  { "fidji" }
         fo { "fero\u00E9s" }
         fr { "franc\u00E9s" }
+        fy  { "fris\u00f3n" }
         ga { "irland\u00E9s" }
         gd { "ga\u00E9lico escoc\u00E9s" }
+        gez { "geez" }
         gl { "gallego" }
-        gu { "goujarat\u00ED" } // If this changes, then change Gujr in Scripts too.
+        gn  { "guaran\u00ed" }
+        gu { "gujarati" } // If this changes, then change Gujr in Scripts too.
         gv { "ga\u00E9lico man\u00E9s" }
         ha { "hausa" }
         haw { "hawaiano" }
         he { "hebreo" }
         hi { "hindi" }
+        ho  { "hiri motu" }
         hr { "croata" }
+        ht  { "haitiano" }
         hu { "h\u00FAngaro" }
         hy { "armenio" }
+        hz  { "herero" }
+        ia  { "interlingua" }
         id { "indonesio" }
         ie { "interlingue" }
+        ig  { "igbo" }
+        ii  { "sichuan yi" }
         ik { "inupiak" }
+        io  { "ido" }
         is { "island\u00e9s" }
         it { "italiano" }
         iu { "inuktitut" }
         ja { "japon\u00E9s" }
+        jv  { "javan\u00e9s" }
         ka { "georgiano" }
+        kg  { "kongo" }
+        ki  { "kikuyu" }
+        kj  { "kuanyama" }
         kk { "kazajo" }
         kl { "groenland\u00E9s" }
-        km { "kmer" } // If this changes, then change Khmr in Scripts too.
-        kn { "canara" } // If this changes, then change Knda in Scripts too.
+        km { "jemer" } // If this changes, then change Khmr in Scripts too.
+        kn { "canar\u00e9s" } // If this changes, then change Knda in Scripts too.
         ko { "coreano" }
+        kok { "konkani" }
+        kr  { "kanuri" }
+        ks  { "cachemiro" }
         ku { "kurdo" }
+        kv  { "komi" }
         kw { "c\u00F3rnico" }
         ky { "kirghiz" }
         la { "lat\u00EDn" }
+        lb  { "luxemburgu\u00e9s" }
+        lg  { "ganda" }
+        li  { "limburgu\u00e9s" }
         ln { "lingala" }
         lo { "laosiano" }
         lt { "lituano" }
+        lu  { "luba-katanga" }
         //lv { "let\u00F3n" } // Old value
-        lv { "letonio" }
+        lv { "let\u00f3n" }
         mg { "malgache" }
+        mh  { "marshal\u00e9s"}
         mi { "maor\u00ED" }
         mk { "macedonio" }
         ml { "malayalam" }
@@ -720,49 +764,79 @@ es {
         mt { "malt\u00e9s" }
         my { "birmano" }
         na { "nauruano" }
-        nl { "holand\u00E9s" }
         nb { "bokmal noruego" }
+        nd  { "ndebele septentrional" }
         ne { "nepal\u00ED" }
-        no { "noruego" }
+        ng  { "ndonga" }
+        nl { "holand\u00E9s" }
         nn { "nynorsk noruego" }
+        no { "noruego" }
+        nr  { "ndebele meridional" }
+        nv  { "navajo"}
+        ny  { "nyanja" }
+        oc  { "occitano (despu\u00e9s del 1500)"}
+        oj  { "ojibwa" } 
         om { "oromo" }
         or { "oriya" }
+        os  { "os\u00e9tico" }
         pa { "punjab\u00ED" }
+        pi  { "pali" }
         pl { "polaco" }
         ps { "pashto" }
         pt { "portugu\u00E9s" }
         qu { "quechua" }
+        rm  { "reto-romance" }
+        rn  { "kiroundi" }
         ro { "rumano" }
         ru { "ruso" }
+        rw  { "kinyarwanda" }
         sa { "s\u00E1nscrito" }
+        sc  { "sardo" }
+        sd  { "sindhi" }
+        se  { "sami septentrional" }
         sg { "sango" }
-        sh { "serbocroata" }
-        si { "cingal\u00E9s" }
+        sh { "serbo-croata" }
+        si { "singal\u00E9s" }
+        sid { "sidamo" }
         sk { "eslovaco" }
         sl { "esloveno" }
         sm { "samoano" }
+        sn  { "shona" }
         so { "somal\u00ED" }
         sq { "alban\u00E9s" }
         sr { "serbio" }
+        ss  { "siswati" }
+        st  { "sesotho" }
         su { "sundan\u00E9s" }
         sv { "sueco" }
         sw { "swahili" }
+        syr { "siriaco" }
         ta { "tamil" }
         te { "telugu" }
+        tg  { "tayiko" }
         th { "tailand\u00E9s" }
         ti { "tigrinya" }
+        tig { "tigr\u00e9" }
+        tk  { "turkmeno" }
         tl { "tagalo" }
+        tn  { "setchwana" }
+        to  { "tonga (Islas Tonga)" }
         tr { "turco" }
         ts { "tsonga" }
-        tt { "t\u00E1taro" }
+        tt { "tatar" }
+        tw  { "twi" }
+        ty  { "tahitiano" }
         ug { "uigur" }
         uk { "ucraniano" }
         ur { "urdu" }
         uz { "uzbeko" }
+        ve  { "venda" }
         vi { "vietnamita" }
         vo { "volapuk" }
+        wa  { "val\u00f3n" }
         wo { "uolof" }
         xh { "xhosa" }
+        yi  { "yidish" }
         yo { "yoruba" }
         za { "zhuang" }
         zh { "chino" }
@@ -785,23 +859,23 @@ es {
         Arab { "\u00E1rabe" }
         Armn { "armenio" }
         Beng { "bengal\u00ED" }
-        // ? Bopo { "bopomofo" }
+        Bopo { "bopomofo" }
         Brai { "braille" }
-        // ? Buhd { "buhid" }
+        Buhd { "buhid" }
         Cans { "s\u00EDmbolos abor\u00EDgenes canadienses unificados" }
         Cher { "cherokee" }
         Cprt { "chipriota" } // grecochipriota?
         Cyrl { "cir\u00EDlico" }
         Deva { "devanagari" }
-        // ? Dsrt { "deseret" }
+        Dsrt { "deseret" }
         Ethi { "et\u00EDopico" }
         Geor { "georgiano" }
         Goth { "g\u00F3tico" }
         Grek { "griego" }
-        Gujr { "goujarat\u00ED" }
+        Gujr { "gujarati" }
         Guru { "gurmuji" }
         Hang { "hangul" }
-        // ? Hano { "hanunoo" }
+        Hano { "hanunoo" }
         Hani { "han" }
         Hans { "han simplificado" } // Not a formal part of ISO-15924 yet
         Hant { "han tradicional" } // Not a formal part of ISO-15924 yet
@@ -810,11 +884,11 @@ es {
         Ital { "antigua bastardilla" }
         Kana { "katakana" }
         Khmr { "jemer" }
-        Knda { "canara" }
+        Knda { "canar\u00e9s" }
         Laoo { "lao" }
         Latn { "lat\u00EDn" }
-        // ? Limb { "limbu" }
-        // ? Linb { "linear B" }
+        Limb { "limbu" }
+        Linb { "linear B" }
         Mlym { "malay\u00E1lam" }
         Mong { "mongoliano" }
         Mymr { "myanmar" }
@@ -824,7 +898,7 @@ es {
         Qaac { "copto" } // Coptic is not a formal part of ISO-15924 yet
         // ? Qaai { "inherited" } // PUA  Difficult to translate
         Runr { "r\u00FAnico" }
-        // ? Shaw { "shavian" }
+        Shaw { "shavian" }
         Sinh { "binhala" }
         Syrc { "siriaco" }
         Tagb { "tagban\u00FAa" }
@@ -905,7 +979,7 @@ es {
         "1,000,000,000: =#,##0= (incomplete data);" 
     }
     Keys{
-         collation { "colaci\u00f3n" }
+         collation { "intercalaci\u00f3n" }
          calendar  { "calendario" }
          currency  { "moneda" }
     }
@@ -913,7 +987,7 @@ es {
     Types {
         collation{
             direct      { "orden directo" }
-            phonebook   { "orden gu\u00EDa de telef\u00F3nos" }
+            phonebook   { "orden de list\u00edn telef\u00f3nico" }
             pinyin      { "orden pinyin" }
             stroke      { "orden pincelada" }
             traditional { "orden tradicional" }
@@ -930,6 +1004,241 @@ es {
     }
     Variants {
         REVISED { "Revisado" }
+    }
+
+    zoneStrings {
+          {
+            "PST",
+            "Hora est\u00e1ndar del Pac\u00edfico",
+            "PST",
+            "Hora de verano del Pac\u00edfico",
+            "PDT",
+            "Los \u00c1ngeles",
+        }
+        {
+            "America/Los_Angeles",
+            "Hora est\u00e1ndar del Pac\u00edfico",
+            "PST",
+            "Hora de verano del Pac\u00edfico",
+            "PDT",
+            "Los \u00c1ngeles",
+        }
+        {
+            "MST",
+            "Hora est\u00e1ndar de Monta\u00f1a",
+            "MST",
+            "Hora de verano de Monta\u00f1a",
+            "MDT",
+            "Denver",
+        }
+        {
+            "America/Denver",
+            "Hora est\u00e1ndar de Monta\u00f1a",
+            "MST",
+            "Hora de verano de Monta\u00f1a",
+            "MDT",
+            "Denver",
+        }
+        {
+            "PNT",
+            "Hora est\u00e1ndar de Monta\u00f1a",
+            "MST",
+            "Hora est\u00e1ndar de Monta\u00f1a",
+            "MST",
+            "Phoenix",
+        }
+        {
+            "America/Phoenix",
+            "Hora est\u00e1ndar de Monta\u00f1a",
+            "MST",
+            "Hora est\u00e1ndar de Monta\u00f1a",
+            "MST",
+            "Phoenix",
+        }
+        {
+            "CST",
+            "Hora est\u00e1ndar central",
+            "CST",
+            "Hora de verano central",
+            "CDT",
+            "Chicago",
+        }
+        {
+            "America/Chicago",
+            "Hora est\u00e1ndar central",
+            "CST",
+            "Hora de verano central",
+            "CDT",
+            "Chicago",
+        }
+        {
+            "EST",
+            "Hora est\u00e1ndar oriental",
+            "EST",
+            "Hora de verano oriental",
+            "EDT",
+            "Nueva York",
+        }
+        {
+            "America/New_York",
+            "Hora est\u00e1ndar oriental",
+            "EST",
+            "Hora de verano oriental",
+            "EDT",
+            "Nueva York",
+        }
+        {
+            "IET",
+            "Hora est\u00e1ndar oriental",
+            "EST",
+            "Hora est\u00e1ndar oriental",
+            "EST",
+            "Indian\u00e1polis",
+        }
+        {
+            "America/Indianapolis",
+            "Hora est\u00e1ndar oriental",
+            "EST",
+            "Hora est\u00e1ndar oriental",
+            "EST",
+            "Indian\u00e1polis",
+        }
+        {
+            "HST",
+            "Hora est\u00e1ndar de Hawai",
+            "HST",
+            "Hora est\u00e1ndar de Hawai",
+            "HST",
+            "Honolulu",
+        }
+        {
+            "Pacific/Honolulu",
+            "Hora est\u00e1ndar de Hawai",
+            "HST",
+            "Hora est\u00e1ndar de Hawai",
+            "HST",
+            "Honolulu",
+        }
+        {
+            "AST",
+            "Hora est\u00e1ndar de Alaska",
+            "AST",
+            "Hora de verano de Alaska",
+            "ADT",
+            "Anchorage"
+        }
+        {
+            "America/Anchorage",
+            "Hora est\u00e1ndar de Alaska",
+            "AST",
+            "Hora de verano de Alaska",
+            "ADT",
+            "Anchorage",
+        }
+        {
+            "America/Halifax",
+            "Hora est\u00e1ndar del Atl\u00e1ntico",
+            "AST",
+            "Hora de verano del Atl\u00e1ntico",
+            "ADT",
+            "Halifax"
+        }
+        {
+            "CNT",
+            "Hora est\u00e1ndar de Newfoundland",
+            "CNT",
+            "Hora de verano de Newfoundland",
+            "CDT",
+            "St. Johns",
+        }
+        {
+            "America/St_Johns",
+            "Hora est\u00e1ndar de Newfoundland",
+            "CNT",
+            "Hora de verano de Newfoundland",
+            "CDT",
+            "St. Johns",
+        }
+        {
+            "ECT",
+            "Hora est\u00e1ndar de Europa Central",
+            "CET",
+            "Hora de verano de Europa Central",
+            "CEST",
+            "Par\u00eds",
+        }
+        {
+            "Europe/Paris",
+            "Hora est\u00e1ndar de Europa Central",
+            "CET",
+            "Hora de verano de Europa Central",
+            "CEST",
+            "Par\u00eds",
+        }
+        {
+            "GMT",
+            "Hora media de Greenwich",
+            "GMT",
+            "Hora media de Greenwich",
+            "GMT",
+            "Londres",
+        }
+        {
+            "Africa/Casablanca",
+            "Hora media de Greenwich",
+            "GMT",
+            "Hora media de Greenwich",
+            "GMT",
+            "Casablanca",
+        }
+        {
+            "Asia/Jerusalem",
+            "Hora est\u00e1ndar de Israel",
+            "IST",
+            "Hora de verano de Israel",
+            "IDT",
+            "Jerusal\u00e9n",
+        }
+        {
+            "JST",
+            "Hora est\u00e1ndar de Jap\u00f3n",
+            "JST",
+            "Hora est\u00e1ndar de Jap\u00f3n",
+            "JST",
+            "Tokio",
+        }
+        {
+            "Asia/Tokyo",
+            "Hora est\u00e1ndar de Jap\u00f3n",
+            "JST",
+            "Hora est\u00e1ndar de Jap\u00f3n",
+            "JST",
+            "Tokio",
+        }
+        {
+            "Europe/Bucharest",
+            "Hora est\u00e1ndar de Europa del Este",
+            "EET",
+            "Hora de verano de Europa del Este",
+            "EEST",
+            "Bucarest",
+        }
+        {
+            "CTT",
+            "Hora est\u00e1ndar de China",
+            "CTT",
+            "Hora est\u00e1ndar de China",
+            "CDT",
+            "Shanghai",
+        }
+        {
+            "Asia/Shanghai",
+            "Hora est\u00e1ndar de China",
+            "CTT",
+            "Hora est\u00e1ndar de China",
+            "CDT",
+            "Shanghai",
+        }
     }
 
     calendar{

@@ -7,165 +7,6 @@
 
 fi {
     Version { "3.0" }
-    calendar{
-        islamic{
-            //eras {
-            //    "AH"   // Anno Hid\u017Era (in root)
-            //}          
-            monthNames{
-                format{
-                    abbreviated:alias {  // same as MonthNames (no data)
-                        "fi/calendar/islamic/monthNames/format/wide"
-                    }
-                    wide {
-                        "Muh\u00E1rram",                // Muharram
-                        "S\u00E1far",                   // Safar
-                        "Rab\u00ED' al-\u00E1wwal",     // Rabi' al-awwal
-                        "Rab\u00ED' al-\u00E1khir",     // Rabi' al-thani
-                        "D\u017Eumada-l-\u00FAla",      // Jumada al-awwal
-                        "D\u017Eumada-l-\u00E1khira",   // Jumada al-thani
-                        "Rad\u017Eab",                  // Rajab
-                        "\u0160a'b\u00E1n",             // Sha'ban
-                        "Ramad\u00E1n",                 // Ramadan
-                        "\u0160awwal",                  // Shawwal
-                        "Dhu-l-qada",                   // Dhu al-Qi'dah
-                        "Dhu-l-hidd\u017Ea"            // Dhu al-Hijjah
-                    }
-                }
-            }
-        }
-        islamic-civil{
-            monthNames:alias{
-                "fi/calendar/islamic/monthNames"
-            }   
-        }
-        hebrew{
-            monthNames{
-                format{
-                    wide {
-                        "Ti\u0161r\u00ECkuu",       // Tishri
-                        "He\u0161v\u00E1nkuu",      // Heshvan
-                        "Kisl\u00E9vkuu",           // Kislev
-                        "Tev\u00E9tkuu",            // Tevet
-                        "\u0160evatkuu",            // Shevat
-                        "Ad\u00E1rkuu",             // Adar I
-                        "Ad\u00E1rkuu II",          // Adar
-                        "Nis\u00E1nkuu",            // Nisan
-                        "Ijj\u00E1rkuu",            // Iyar
-                        "Siv\u00E1nkuu",            // Sivan
-                        "Tamm\u00FAzkuu",           // Tamuz
-                        "Abkuu",                    // Av
-                        "El\u00FAlkuu",             // Elul
-                    }
-                    abbreviated:alias {
-                        "fi/calendar/hebrew/monthNames/format/wide" // no data
-                    }
-                }
-           }
-        }
-        gregorian{
-            AmPmMarkers {
-                "ap.",
-                "ip."
-            }
-            DateTimeElements:intvector {
-                2,
-                4,
-            }
-            DateTimePatterns{
-                "HH:mm:ss z",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "d. MMMM'ta 'yyyy",
-                "d. MMMM'ta 'yyyy",
-                "d.M.yyyy",
-                "d.M.yyyy",
-                "{1} {0}",
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "su",
-                        "ma",
-                        "ti",
-                        "ke",
-                        "to",
-                        "pe",
-                        "la",
-                    }
-                    narrow{
-                        "S",
-                        "M",
-                        "T",
-                        "K",
-                        "T",
-                        "P",
-                        "L",
-                    }
-                    wide{
-                        "sunnuntai",
-                        "maanantai",
-                        "tiistai",
-                        "keskiviikko",
-                        "torstai",
-                        "perjantai",
-                        "lauantai",
-                    }
-                }
-            }
-            eras {
-                "eaa.",
-                "jaa."
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "tammi",
-                        "helmi",
-                        "maalis",
-                        "huhti",
-                        "touko",
-                        "kes\u00E4",
-                        "hein\u00E4",
-                        "elo",
-                        "syys",
-                        "loka",
-                        "marras",
-                        "joulu",
-                    }
-                    narrow{
-                        "T",
-                        "H",
-                        "M",
-                        "H",
-                        "T",
-                        "K",
-                        "H",
-                        "E",
-                        "S",
-                        "L",
-                        "M",
-                        "J",
-                    }
-                    wide{
-                        "tammikuu",
-                        "helmikuu",
-                        "maaliskuu",
-                        "huhtikuu",
-                        "toukokuu",
-                        "kes\u00E4kuu",
-                        "hein\u00E4kuu",
-                        "elokuu",
-                        "syyskuu",
-                        "lokakuu",
-                        "marraskuu",
-                        "joulukuu",
-                    }
-                }
-            }
-        }
-    }
     Countries { 
         Fallback{ "en"}
         AE { "Arabiemiirikunnat" }
@@ -182,7 +23,7 @@ fi {
         BE { "Belgia" }
         BR { "Brasilia" }
         BS { "Bahama" }
-        BV { "Bouvet'nsaari" }
+        BV { "Bouvet\u2019nsaari" }
         BY { "Valko-Ven\u00E4j\u00E4" }
         CA { "Kanada" }
         CC { "Kookossaaret" }
@@ -203,7 +44,7 @@ fi {
         DE { "Saksa" }
         DK { "Tanska" }
         DO { "Dominikaaninen tasavalta" }
-        EC { "Equador" }
+        // EC { "Ecuador" }
         EE { "Viro" }
         EG { "Egypti" }
         EH { "L\u00E4nsi-Sahara" }
@@ -241,7 +82,7 @@ fi {
         KM { "Komorit" }
         KN { "Saint Kitts ja Nevis" }
         KP { "Pohjois-Korea" }    // alternate name { "Korean demokraattinen kansantasavalta" }
-        KR { "Etel\u00E4-Korea" }    // alternate name { "Korean tasavalta" }
+        KR { "Korean tasavalta" }    // alternate name { "Etel\u00E4-Korea" }
         KY { "Caymansaaret" }
         KZ { "Kazakstan" }
         LA { "Laos" }
@@ -264,7 +105,7 @@ fi {
         NF { "Norfolkinsaari" }
         NL { "Alankomaat" }
         NO { "Norja" }
-        NZ { "Uusi Seelanti" }
+        NZ { "Uusi-Seelanti" }
         //NZ { "Uusi-Seelanti" } // From translation center
         PF { "Ranskan Polynesia" }
         PG { "Papua-Uusi-Guinea" }
@@ -615,7 +456,7 @@ fi {
         TJS { "TJS", "Tad\u017Eikistanin somoni" } // 01/01/2001-
         TMM { "TMM", "Turkmenistanin manat" } // 11/01/1993-
         TND { "TND", "Tunisian dinaari" } // 11/01/1958-
-        TOP { "T$",  "Tongan pa\u00B4anga" } // 02/14/1966-
+        TOP { "T$",  "Tongan pa\u02BBanga" } // 02/14/1966-
         TOS { "TOS", "Tongan sterling-punta" } // 1921-02/14/1966
         TPE { "TPE", "Timorin escudo" } // 01/02/1959-12/07/1975
         TPP { "TPP", "Timorin pataca" } // 1895-12/31/1958
@@ -670,7 +511,7 @@ fi {
         XNF { "XNF", "Ranskan Antillien CFA-frangi" } // 01/01/1960-1975
         XOF { "XOF", "CFA-frangi BCEAO" } // 12/04/1958-
         XPF { "CFPF","CFP-frangi" } // 12/26/1945-
-        XPS { "XPS", "sterling-punta" } // 07/27/1694-
+        //XPS { "XPS", "sterling-punta" } // 07/27/1694-
         XSS { "XSS", "sterling-shillinki" } // 07/27/1694-
         XTR { "XTR", "COMECONin siirrett\u00E4v\u00E4 rupla" } // 1960-1992
         YDD { "YDD", "Jemenin dinaari" } // 4/1/1965-05/22/1990
@@ -692,157 +533,475 @@ fi {
         ZRZ { "ZRZ", "Zairen zaire" } // 10/27/1971-11/01/1993
         ZWD { "Z$",  "Zimbabwen dollari" } // 04/18/1980-
     }
-    Languages { 
+
+    Languages {
+    	aa  { "afar" }
         ab  { "abhaasi" }
+        ace { "aceh" }
+        ada { "adangme" }
+        ady { "adyghe" }
         ae  { "avesta" }
-        af  { "afrikanhollanti" }
-        am  { "amharan kieli" }
+        af  { "afrikaans" }
+        afa { "muut afroaasialaiset kielet" }
+        afh { "afrihili" }
+        ak  { "akan" }
+        akk { "akkadi" }
+        ale { "aleutti" }
+        alg { "algonkin-kielet" }
+        am  { "amhara" }
         an  { "aragonia" }
+        ang { "muinaisenglanti" }
+        apa { "apassi"}
         ar  { "arabia" }
+        arc { "aramea" }
+        arn { "araukaani" }
+        arp { "arapaho" }
+        art { "muut tekokielet" }
+        arw { "arawak" }
         as  { "assami" }
+        ast { "astuuri" }
+        ath { "athabasca-kielet" }
+        aus { "australialaiset kielet" }
         av  { "avaari" }
+        awa { "awadhi" }
         ay  { "aimara" }
         az  { "azerbaizani" }
         ba  { "ba\u0161kiiri" }  // This is not baski
+        bad { "banda" }
+        bai { "bamileke" }
+        bal { "balut\u0161i" }
+        bam { "bambara" }
+        ban { "bali" }
+        bas { "basa" }
+        bat { "muut balttilaiset kielet" }
         be  { "valkoven\u00e4j\u00e4" }
+        bej { "bedauje" }
+        bem { "bemba" }
+        ber { "berberi" }
         bg  { "bulgaria" }
         bh  { "bihari" }
-        bn  { "bengali" }
+        bho { "bhod\u017epuri" }
+        bi  { "bislama" }
+        bik { "bicol" }
+        bin { "bini" }
+        bla { "mustajalka" }   // Blackfoot
+        bm  { "bambara" }
+        bn { "bengali" }
+        bnt { "bantu" }
         bo  { "tiibet" }
         br  { "bretoni" }
+        bra { "brad\u017e" }
         bs  { "bosnia"}
-        ca  { "katalaani" }
+        btk { "batakki" }
+        bua { "burjaatti" }
+        bug { "bugi" }
+        byn { "blin" }
+        ca { "katalaani" }
+        cad { "caddo" }
+        cai { "muut Keski-Amerikan intiaanikielet" }
+        car { "karib" }
+        cau { "muut kaukasialaiset kielet" }
         ce  { "t\u0161et\u0161eeni" }
+        ceb { "sebuano" }
+        cel { "muut kelttil\u00e4iset kielet" }
+        ch  { "chamorro" }
+        chb { "chibcha" }
+        chg { "t\u0161agatai" }
+        chk { "truk" }
+        chm { "mari" }
+        chn { "chinook" }
+        cho { "choctaw" }
+        chp { "chipewya" }
+        chr { "cherokee" }
+        chy { "cheyenne" }
+        cmc { "t\u0161am" }
         co  { "korsika" }
-        cs  { "t\u0161ekki" }
+        cop { "kopti" }
+        cpe { "pidginenglanti" }
+        cpf { "muut ranskaan perustuvat kreolit ja pidginit" }
+        cpp { "muut portugaliin perustuvat kreolit ja pidginit" }
+        cr  { "cree" }
+        crh { "krimin turkki; krimin tataari" }
+        crp { "muut kreolit ja pidginit" }
+        cs { "tsekki" }
+        csb { "kashubi" }
         cu  { "kirkkoslaavi" }
+        cus { "muut kuusilaiset kielet" }
         cv  { "t\u0161uvassi" }
         cy  { "kymri" }
-        da  { "tanska" }
-        de  { "saksa" }
+        da { "tanska" }
+        dak { "sioux" }
+        dar { "dargva" }
+        day { "dajakki" }
+        de { "saksa" }
+        del { "delaware" }
+        den { "slaavi" }
+        dgr { "dogrib" }
+        din { "dinka" }
+        doi { "dogri" }
+        dra { "muut dravidakielet" }
+        dsb { "ala-sorbi" }
+        dua { "duala" }
+        dum { "keskihollanti" }
         dv  { "malediivi" }
+        dyu { "djula" }
         dz  { "bhutani" }
-        el  { "kreikka" }
-        en  { "englanti" }
-        eo  { "esperanto" }
-        es  { "espanja" }
-        et  { "viro" }
-        eu  { "baski" }
-        fa  { "farsi" }
+        ee  { "ewe" }
+        efi { "efik" }
+        egy { "muinaisegypti" }
+        eka { "ekajuk" }
+        el { "kreikka" }
+        elx { "elami" }
+        en { "englanti" }
+        enm { "keskienglanti" }
+        eo { "esperanto" }
+        es { "espanja" }
+        et { "viro" }
+        eu { "baski" }
+        ewo { "ewondo" }
+        fa { "farsi" }
+        fan { "fang" }
+        fat { "fanti" }
         ff  { "fulani" }
-        fi  { "suomi" }
-        fj  { "fid\u017Ei" }
-        fo  { "f\u00e4\u00e4ri" }
-        fr  { "ranska" }
+        fi { "suomi" }
+        fiu { "muut suomalais-ugrilaiset kielet" }
+        fj  { "fid\u017ei" }
+        fo { "f\u00e4\u00e4ri" }
+        fon { "fong" }
+        fr { "ranska" }
+        frm { "keskiranska" }
+        fro { "muinaisranska" }
+        fur { "friuli" }
         fy  { "friisi" }
-        ga  { "iiri" }
+        ga { "iiri" }
+        gaa { "ga" }
+        gay { "gayo" }
+        gba { "gbaja" }
         gd  { "gaeli" }
+        gem { "muut germaaniset kielet" }
         gez { "etiopia" }
-        gl  { "galicia" }
-        gu  { "gujarati" }
-        gv  { "manx" }
+        gil { "kiribati" }
+        gl { "galicia" }
+        gmh { "keskiyl\u00e4saksa" }
+        gn  { "guarani" }
+        goh { "muinaisyl\u00e4saksa" }
+        gon { "gondi" }
+        gor { "gorontalo" }
+        got { "gootti" }
+        grb { "grebo" }
+        grc { "muinaiskreikka" }
+        gu { "gujarati" }
+        gv { "manx" }
+        gwi { "gwit\u015fin" }
+        ha  { "hausa" }
+        hai { "haida" }
         haw { "havaiji" }
-        he  { "heprea" }
-        hi  { "hindi" }
+        he { "heprea" }
+        hi { "hindi" }
+        hil { "ilongo" }
+        him { "himachali" }
+        hit { "heetti" }
+        hmn { "hmong" }
         ho  { "hiri-motu" }
-        hr  { "kroaatti" }
+        hr { "kroaatti" }
+        hsb { "yl\u00e4-sorbi" }
         ht  { "haiti" }
-        hu  { "unkari" }
-        hy  { "armenia" }
-        id  { "indonesia" }
+        hu { "unkari" }
+        hup { "hupa" }
+        hy { "armenia" }
+        hz  { "herero" }
+        ia  { "interlingua" }
+        iba { "iban" }
+        id { "indonesia" }
+        ie  { "interlingue" }
+        ig  { "igbo" }
         ii  { "pohjois-ji" }
+        // ijo { "ijo" }
         ik  { "inupiak" }
-        is  { "islanti" }
-        it  { "italia" }
-        iu  { "eskimo" }
-        ja  { "japani" }
+        ilo { "iloko" }
+        inc { "muut intialaiset kielet" }
+        ine { "muut indoeurooppalaiset kielet" }
+        inh { "inguu\u0161i" }
+        io  { "ido" }
+        ira { "iran" }
+        iro { "irokeesi" }
+        is { "islanti" }
+        it { "italia" }
+        iu { "eskimo" }
+        ja { "japani" }
+        jbo { "lojba" }
+        jpr { "juutalaispersia" }
+        jrb { "juutalaisarabia" }
         jv  { "jaava" }
-        ka  { "georgia" }
+        ka { "georgia" }
+        kaa { "karakalpakki" }
+        kab { "kabyyli" }
+        kac { "d\u017eingpho" }
+        kam { "kamba" }
+        kar { "karen" }
+        kaw { "kavi" }
+        kbd { "kabardi" }
+        kg  { "kongo" }
+        kha { "khasi" }
+        khi { "muut khoisankielet" }
+        kho { "khotani" }
         ki  { "kikuju" }
         kj  { "kuanjama" }
         kk  { "kazakki" }
-        kl  { "gr\u00f6\u00f6nlandi" }
+        kl  { "gr\u00f6nlanti" }
         km  { "khmer" }
+        kmb { "kimbundu" }
         kn  { "kannada" }
         ko  { "korea" }
+        kok { "konkani" }
+        kos { "kosrae" }
+        kpe { "kpelle" }
+        kr  { "kanuri" }
+        krc { "karachay-balkar" }
+        kro { "kru-kielet" }
+        kru { "kurukh" }
         ks  { "ka\u0161miri" }
         ku  { "kurdi" }
+        kum { "kumukki" }
+        kut { "kutenai" }
+        kv  { "komi" }
         kw  { "korni" }
         ky  { "kirgiisi" }
         la  { "latina" }
+        lad { "juutalaisespanja" }
+        lah { "lahnda" }
+        lam { "lamba" }
         lb  { "luxemburg" }
+        lez { "lezgi" }
+        lg  { "ganda" }
         li  { "limburgi" }
         ln  { "lingala" }
         lo  { "lao" }
-        lt  { "liettua" }
+        lol { "mongo" }
+        loz { "lozi" }
+        lt { "liettua" }
         lu  { "katangan luba" }
-        lv  { "latvia" }
+        lua { "luba" }
+        lui { "luiseno" }
+        lun { "lunda" }
+        // luo { "luo" }
+        lus { "lushai" }
+        lv { "latvia" }
+        mad { "madura" }
+        mag { "magahi" }
+        mai { "maithili" }
+        mak { "makassar" }
+        man { "mandingo" }
+        map { "austronesia" }
+        mas { "maasai" }
+        mdf { "mok\u0161a" }
+        mdr { "mandar" }
+        men { "mende" }
         mg  { "malagasi" }
+        mga { "keski-iiri" }
         mh  { "marshalli"}
+        mi  { "maori" }
+        mic { "micmac" }
+        min { "minangkabau" }
+        mis { "sekalaiset kielet" }
         mk  { "makedonia" }
+        mkh { "muut mon-khmer-kielet" }
         ml  { "malajalam" }
         mn  { "mongoli" }
+        mnc { "mant\u0161u" }
+        mni { "manipuri" }
+        mno { "manobo-kielet" }
         mo  { "moldova" }
-        mr  { "marathi" }
+        moh { "mohawk" }
+        mos { "mosi" }
+        mr { "marathi" }
         ms  { "malaiji" }
-        mt  { "malta" }
-        my  { "burma" }
-        nb  { "kirjanorja" }
+        mt { "malta" }
+        mul { "monikielinen" }
+        mun { "mundakielet" }
+        mus { "muskogi" }
+        mwr { "marwari" }
+        my { "burma" }
+        myn { "maya" }
+        myv { "ers\u00e4" }
+        na  { "nauru" }
+        nah { "nahuatl" }
+        nai { "muut Pohjois-Amerikan intiaanikielet" }
+        nap { "napolin italia" }
+        nb { "kirjanorja" }
         nd  { "pohjoisndebele" }
-        nl  { "hollanti" }
-        nn  { "uusnorja" }
-        no  { "norja" }
-        nr  { "etel\u00E4ndebele" }
+        nds { "alasaksa" }
+        ne  { "nepali" }
+        new { "newari" }
+        ng  { "ndonga" }
+        nia { "nias" }
+        nic { "muut nigeril\u00e4is-kongolaiset kielet" }
+        niu { "niue" }
+        nl { "hollanti" }
+        nn { "uusnorja" }
+        no { "norja" }
+        nog { "nogai" }
+        non { "muinaisskandinaavi" }
+        nr  { "etel\u00e4ndebele" }
+        nso { "pedi" }
+        nub { "nuubialaiset kielet" }
         nv  { "navaho"}
-        ny  { "njand\u017Ea, t\u0161ewa" }
+        ny  { "njand\u017ea, t\u0161ewa" }
+        nym { "nyamwezi" }
+        nyn { "nyankole" }
+        nyo { "nyoro" }
+        nzi { "nzima" }
         oc  { "oksitaani, provensaali"}
-        om  { "oromo" }
+        oj  { "ojibwa" }
+        om { "oromo" }
         or  { "orija" }
         os  { "osseetti" }
-        pl  { "puola" }
+        osa { "osage" }
+        ota { "osmani" }
+        oto { "otomangelaiset kielet" }
+        pa  { "punjabi" }
+        paa { "muut papualaiskielet" }
+        pag { "pangasinan" }
+        pal { "pahlavi" }
+        pam { "pampanga" }
+        pap { "papiamentu" }
+        pau { "palau" }
+        peo { "muinaispersia" }
+        phi { "muut filippiinil\u00e4iskielet" }
+        phn { "foinikia" }
+        pi  { "pali" }
+        pl { "puola" }
+        pon { "pohnpei" }
+        pra { "prakriitit" }
+        pro { "muinaisprovensaali" }
         ps  { "pa\u0161to" }
-        pt  { "portugali" }
+        pt { "portugali" }
         qu  { "ket\u0161ua" }
+        raj { "rajasthani" }
+        rap { "rapanui" }
+        rar { "rarotonga" }
         rm  { "retoromaani" }
-        ro  { "romania" }
-        ru  { "ven\u00e4j\u00e4" }
+        rn  { "rundi" }
+        ro { "romania" }
+        roa { "muut romaaniset kielet" }
+        rom { "romani" }
+        ru { "ven\u00e4j\u00e4" }
         rw  { "ruanda" }
         sa  { "sanskriitti" }
+        sad { "sandawe" }
+        sah { "jakuutti" }
+        sai { "muut Etel\u00e4-Amerikan intiaanikielet" }
+        sal { "sali\u0161" }
+        sam { "l\u00e4nsiaramea" }
+        sas { "sasak" }
+        sat { "santali" }
         sc  { "sardi" }
+        sco { "skotti" }
+        sd  { "sindhi" }
         se  { "pohjoissaame" }
-        sh  { "serbokroatia" }
+        sel { "selkuppi" }
+        sem { "muut seemil\u00e4iset kielet" }
+        sg  { "sango" }
+        sga { "muinaisiiri" }
+        sgn { "viittomakielet" }
+        sh { "serbokroatia" }
+        shn { "\u0161an" }
         si  { "singaleesi" }
-        sk  { "slovakki" }
-        sl  { "sloveeni" }
+        sid { "sidamo" }
+        sio { "siouxilaiset kielet" }
+        sit { "muut sinotiibetil\u00e4iset kielet" }
+        sk { "slovakki" }
+        sl { "sloveeni" }
+        sla { "muut slaavilaiset kielet" }
         sm  { "samoa" }
-        so  { "somali" }
-        sq  { "albania" }
-        sr  { "serbia" }
+        sma { "etel\u00e4saame" }
+        smi { "muut saamen kielet" }
+        smj { "luulajan saame" }
+        smn { "inarinsaame" }
+        sms { "koltansaame" }
+        sn  { "shona" }
+        snk { "soninke" }
+        so { "somali" }
+        sog { "sogdi" }
+        son { "songhai" }
+        sq { "albania" }
+        sr { "serbia" }
+        srr { "serer" }
         ss  { "swazi" }
-        st  { "etel\u00E4sotho" }
+        ssa { "muut nilosaharalaiset kielet" }
+        st  { "etel\u00e4sotho" }
         su  { "sunda" }
-        sv  { "ruotsi" }
-        sw  { "suahili" }
+        suk { "sukuma" }
+        sus { "susu" }
+        sux { "sumeri"}
+        sv { "ruotsi" }
+        sw { "suahili" }
         syr { "syyria" }
-        ta  { "tamili" }
-        te  { "telugu" }
-        tg  { "tad\u017Eikki" }
-        th  { "thai" }
-        ti  { "tigrinja" }
+        ta { "tamili" }
+        tai { "muut thaikielet" }
+        te { "telugu" }
+        tem { "temne" }
+        ter { "tereno" }
+        tet { "tetum" }
+        tg  { "tad\u017eikki" }
+        th { "thai" }
+        ti { "tigrinja" }
+        tig { "tigre" }
+        // tiv { "tiv" }
         tk  { "turkmeeni" }
+        tkl { "tokelau" }
+        tl { "tagalog" }
+        tli { "tlingit" }
+        tmh { "tama\u0161ek" }
+        tn  { "tswana" }
         to  { "Tonga-saarten tonga" }
-        tr  { "turkki" }
+        tog { "tonga" }
+        tpi { "tok-pisin" }
+        tr { "turkki" }
+        ts  { "tsonga" }
+        tsi { "tsimshian" }
         tt  { "tataari" }
+        tum { "tumbuka" }
+        tup { "tupilaiset kielet" }
+        tut { "muut altailaiset kielet" }
+        tvl { "tuvalu" }
+        tw  { "twi" }
         ty  { "tahiti" }
-        uk  { "ukraina" }
-        ur  { "urdu" }
-        uz  { "uzbekki" }
-        vi  { "vietnam" }
+        tyv { "tuviini" }
+        udm { "udmurtti" }
+        ug  { "uiguuri" }
+        uga { "ugarit" }
+        uk { "ukraina" }
+        umb { "umbundu" }
+        und { "m\u00e4\u00e4rittelem\u00e4t\u00f6n" }
+        ur { "urdu" }
+        uz { "uzbekki" }
+        // vai { "vai" }
+        ve  { "venda" }
+        vi { "vietnam" }
+        vo  { "volap\u00fck" }   // Yes the iso-639 standard uses the umlaut in the English name
+        vot { "vatja" }
         wa  { "valloni" }
+        wak { "wakasilaiset kielet" }
+        wal { "walamo" }
+        war { "waray" }
+        was { "washo" }
+        wen { "sorbi" }
+        wo  { "wolof" }
+        xal { "kalmukki" }
         xh  { "kafferi" }
+        yao { "jao" }
+        yap { "jap" }
         yi  { "jiddi" }
         yo  { "joruba" }
-        zh  { "kiina" }
+        ypk { "juppik-kielet" }
+        za  { "zhuang" }
+        zap { "zapoteekki" }
+        zen { "zenaga" }
+        zh { "kiina" }
+        znd { "zande" }
+        zu  { "zulu" }
+        zun { "zuni" }
     }
     localPatternChars { "GanjkHmsSEDFwWxhKzAeugXZ" }
 
@@ -909,6 +1068,400 @@ fi {
             hebrew        { "Juutalainen kalenteri" }
             chinese       { "Kiinalainen kalenteri" }
             gregorian     { "Gregoriaaninen kalenteri" }
+        }
+    }
+    calendar{
+        islamic{
+            //eras {
+            //    "AH"   // Anno Hid\u017Era (in root)
+            //}          
+            monthNames{
+                format{
+                    abbreviated:alias {  // same as MonthNames (no data)
+                        "fi/calendar/islamic/monthNames/format/wide"
+                    }
+                    wide {
+                        "Muh\u00E1rram",                // Muharram
+                        "S\u00E1far",                   // Safar
+                        "Rab\u00ED\u02bb al-\u00E1wwal",     // Rabi' al-awwal
+                        "Rab\u00ED\u02bb al-\u00E1khir",     // Rabi' al-thani
+                        "D\u017Eumada-l-\u00FAla",      // Jumada al-awwal
+                        "D\u017Eumada-l-\u00E1khira",   // Jumada al-thani
+                        "Rad\u017Eab",                  // Rajab
+                        "\u0160a\u02bbb\u00E1n",             // Sha'ban
+                        "Ramad\u00E1n",                 // Ramadan
+                        "\u0160awwal",                  // Shawwal
+                        "Dhu-l-qada",                   // Dhu al-Qi'dah
+                        "Dhu-l-hidd\u017Ea"            // Dhu al-Hijjah
+                    }
+                }
+            }
+        }
+        islamic-civil{
+            monthNames:alias{
+                "fi/calendar/islamic/monthNames"
+            }   
+        }
+        hebrew{
+            monthNames{
+                format{
+                    wide {
+                        "Ti\u0161r\u00ECkuu",       // Tishri
+                        "He\u0161v\u00E1nkuu",      // Heshvan
+                        "Kisl\u00E9vkuu",           // Kislev
+                        "Tev\u00E9tkuu",            // Tevet
+                        "\u0160evatkuu",            // Shevat
+                        "Ad\u00E1rkuu",             // Adar I
+                        "Ad\u00E1rkuu II",          // Adar
+                        "Nis\u00E1nkuu",            // Nisan
+                        "Ijj\u00E1rkuu",            // Iyar
+                        "Siv\u00E1nkuu",            // Sivan
+                        "Tamm\u00FAzkuu",           // Tamuz
+                        "Abkuu",                    // Av
+                        "El\u00FAlkuu",             // Elul
+                    }
+                    abbreviated:alias {
+                        "fi/calendar/hebrew/monthNames/format/wide" // no data
+                    }
+                }
+           }
+        }
+        gregorian{
+			 AmPmMarkers {
+				 "ap.",
+				 "ip."
+			 }
+            DateTimeElements:intvector {
+                2,
+                4,
+            }
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "d. MMMM'ta 'yyyy",
+                "d. MMMM'ta 'yyyy",
+                "d.M.yyyy",
+                "d.M.yyyy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "su",
+                        "ma",
+                        "ti",
+                        "ke",
+                        "to",
+                        "pe",
+                        "la",
+                    }
+                    narrow{
+		                "S",
+		                "M",
+		                "T",
+		                "K",
+		                "T",
+		                "P",
+		                "L",
+                    }
+                    wide{
+                        "sunnuntai",
+                        "maanantai",
+                        "tiistai",
+                        "keskiviikko",
+                        "torstai",
+                        "perjantai",
+                        "lauantai",
+                    }
+                }
+            }
+             eras {
+                 "eaa.",
+                 "jaa."
+             }
+            monthNames{
+                format{
+                    abbreviated{
+                        "tammi",
+                        "helmi",
+                        "maalis",
+                        "huhti",
+                        "touko",
+                        "kes\u00E4",
+                        "hein\u00E4",
+                        "elo",
+                        "syys",
+                        "loka",
+                        "marras",
+                        "joulu",
+                    }
+                    narrow{
+		                "T",
+		                "H",
+		                "M",
+		                "H",
+		                "T",
+		                "K",
+		                "H",
+		                "E",
+		                "S",
+		                "L",
+		                "M",
+		                "J",
+                    }
+                    wide{
+                        "tammikuu",
+                        "helmikuu",
+                        "maaliskuu",
+                        "huhtikuu",
+                        "toukokuu",
+                        "kes\u00E4kuu",
+                        "hein\u00E4kuu",
+                        "elokuu",
+                        "syyskuu",
+                        "lokakuu",
+                        "marraskuu",
+                        "joulukuu",
+                    }
+                }
+            }
+        }
+    }
+    
+   zoneStrings {
+        {
+            "PST",
+            "Tyynenmeren normaaliaika",
+            "PST",
+            "Tyynenmeren kes\u00e4aika",
+            "PDT",
+            "Los Angeles",
+        }
+        {
+            "America/Los_Angeles",
+            "Tyynenmeren normaaliaika",
+            "PST",
+            "Tyynenmeren kes\u00e4aika",
+            "PDT",
+            "Los Angeles",
+        }
+        {
+            "MST",
+            "Kalliovuorten normaaliaika",
+            "MST",
+            "Kalliovuorten kes\u00e4aika",
+            "MDT",
+            "Denver",
+        }
+        {
+            "America/Denver",
+            "Kalliovuorten normaaliaika",
+            "MST",
+            "Kalliovuorten kes\u00e4aika",
+            "MDT",
+            "Denver",
+        }
+        {
+            "PNT",
+            "Kalliovuorten normaaliaika",
+            "MST",
+            "Kalliovuorten normaaliaika",
+            "MST",
+            "Phoenix",
+        }
+        {
+            "America/Phoenix",
+            "Kalliovuorten normaaliaika",
+            "MST",
+            "Kalliovuorten normaaliaika",
+            "MST",
+            "Phoenix",
+        }
+        {
+            "CST",
+            "Keskinen normaaliaika",
+            "CST",
+            "Keskinen kes\u00e4aika",
+            "CDT",
+            "Chicago",
+        }
+        {
+            "America/Chicago",
+            "Keskinen normaaliaika",
+            "CST",
+            "Keskinen kes\u00e4aika",
+            "CDT",
+            "Chicago",
+        }
+        {
+            "EST",
+            "It\u00e4inen normaaliaika",
+            "EST",
+            "It\u00e4inen kes\u00e4aika",
+            "EDT",
+            "New York",
+        }
+        {
+            "America/New_York",
+            "It\u00e4inen normaaliaika",
+            "EST",
+            "It\u00e4inen kes\u00e4aika",
+            "EDT",
+            "New York",
+        }
+        {
+            "IET",
+            "It\u00e4inen normaaliaika",
+            "EST",
+            "It\u00e4inen normaaliaika",
+            "EST",
+            "Indianapolis",
+        }
+        {
+            "America/Indianapolis",
+            "It\u00e4inen normaaliaika",
+            "EST",
+            "It\u00e4inen normaaliaika",
+            "EST",
+            "Indianapolis",
+        }
+        {
+            "HST",
+            "Havaijin normaaliaika",
+            "HST",
+            "Havaijin kes\u00e4aika",
+            "HST",
+            "Honolulu",
+        }
+        {
+            "Pacific/Honolulu",
+            "Havaijin normaaliaika",
+            "HST",
+            "Havaijin normaaliaika",
+            "HST",
+            "Honolulu",
+        }
+        {
+            "AST",
+            "Alaskan normaaliaika",
+            "AST",
+            "Alaskan kes\u00e4aika",
+            "ADT",
+            "Anchorage"
+        }
+        {
+            "America/Anchorage",
+            "Alaskan normaaliaika",
+            "AST",
+            "Alaskan kes\u00e4aika",
+            "ADT",
+            "Anchorage",
+        }
+        {
+            "America/Halifax",
+            "Atlantin normaaliaika",
+            "AST",
+            "Atlantin kes\u00e4aika",
+            "ADT",
+            "Halifax"
+        }
+        {
+            "CNT",
+            "Newfoundlandin normaaliaika",
+            "CNT",
+            "Newfoundlandin kes\u00e4aika",
+            "CDT",
+            "St. Johns",
+        }
+        {
+            "America/St_Johns",
+            "Newfoundlandin normaaliaika",
+            "CNT",
+            "Newfoundlandin kes\u00e4aika",
+            "CDT",
+            "St. Johns",
+        }
+        {
+            "ECT",
+            "Keski-Euroopan normaaliaika",
+            "CET",
+            "Keski-Euroopan kes\u00e4aika",
+            "CEST",
+            "Pariisi",
+        }
+        {
+            "Europe/Paris",
+            "Keski-Euroopan normaaliaika",
+            "CET",
+            "Keski-Euroopan kes\u00e4aika",
+            "CEST",
+            "Pariisi",
+        }
+        {
+            "GMT",
+            "Greenwichin aika",
+            "GMT",
+            "Greenwichin aika",
+            "GMT",
+            "Lontoo",
+        }
+        {
+            "Africa/Casablanca",
+            "Greenwichin aika",
+            "GMT",
+            "Greenwichin aika",
+            "GMT",
+            "Casablanca",
+        }
+        {
+            "Asia/Jerusalem",
+            "Israelin normaaliaika",
+            "IST",
+            "Israelin kes\u00e4aika",
+            "IDT",
+            "Jerusalem",
+        }
+        {
+            "JST",
+            "Japanin normaaliaika",
+            "JST",
+            "Japanin normaaliaika",
+            "JST",
+            "Tokio",
+        }
+        {
+            "Asia/Tokyo",
+            "Japanin normaaliaika",
+            "JST",
+            "Japanin normaaliaika",
+            "JST",
+            "Tokio",
+        }
+        {
+            "Europe/Bucharest",
+            "It\u00e4-Euroopan normaaliaika",
+            "EET",
+            "It\u00e4-Euroopan kes\u00e4aika",
+            "EEST",
+            "Bukarest",
+        }
+        {
+            "CTT",
+            "Kiinan normaaliaika",
+            "CTT",
+            "Kiinan normaaliaika",
+            "CDT",
+            "Shanghai",
+        }
+        {
+            "Asia/Shanghai",
+            "Kiinan normaaliaika",
+            "CTT",
+            "Kiinan normaaliaika",
+            "CDT",
+            "Shanghai",
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿// ***************************************************************************
+// ***************************************************************************
 // *
 // *   Copyright (C) 1997-2004, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
@@ -206,19 +206,20 @@ da {
         //SM { "San Marino" }
         //SN { "Senegal" }
         //SO { "Somalia" }
+        SP { "Serbien" }
         SR { "Surinam" }
-        ST { "Sao Tome og Principe" }
+        ST { "S\u00e3o Tom\u00e9 og Pr\u00edncipe" }
         //SV { "El Salvador" }
         SY { "Syrien" }
         //SZ { "Swaziland" }
-        //TC { "Turks and Caicos Islands" }
+        TC { "Turks- og Caicos\u00f8erne" }
         TD { "Tchad" }
         TF { "Franske Besiddelser i Det Sydlige Indiske Ocean" }
         //TG { "Togo" }
         //TH { "Thailand" }
         TJ { "Tadsjikistan" }
         //TK { "Tokelau" }
-        TL { "\u00D8sttimor" }
+        //TL { "Timor-Leste" }    // This was called East Timor
         //TM { "Turkmenistan" }
         TN { "Tunesien" }
         //TO { "Tonga" }
@@ -230,7 +231,7 @@ da {
         //UA { "Ukraine" }
         //UG { "Uganda" }
         UM { "De Mindre Amerikanske Overs\u00f8iske \u00d8er" }
-        US { "Amerikas Forenede Stater" }
+        US { "USA" }
         //UY { "Uruguay" }
         UZ { "Usbekistan" }
         VA { "Vatikanstaten" }
@@ -416,7 +417,9 @@ da {
         KGS { "som", "Kirgisisk som"        } // 05/10/1993-
         KHO { "KHO", "Gammel cambodjansk riel"    } // 01/01/1955-1975
         KHR { "CR",  "Cambodjansk riel"        } // 03/20/1980-
+        //KID { "KID", "Kiribati dollar"      } // 07/12/1979-
         KMF { "CF",  "Comorisk franc"         } // 07/06/1975-
+        //KPP { "KPP", "North Korean People\u2019s Won" } // 1947-02/1959
         KPW { "KPW", "Nordkoreansk won"     } // 02/1959-
         KRH { "KRH", "Sydkoreansk hwan"    } // 02/15/1953-06/10/1962
         KRO { "KRO", "Gammel sydkoreansk won" } // 1947-02/15/1953
@@ -537,7 +540,7 @@ da {
         TJS { "TJS", "Tadsjikisk somoni"    } // 01/01/2001-
         TMM { "TMM", "Turkmensk manat"   } // 11/01/1993-
         TND { "TND", "Tunesisk dinar"       } // 11/01/1958-
-        TOP { "T$",  "Tongask pa\u00B4anga"   } // 02/14/1966-
+        TOP { "T$",  "Tongask pa\u02BBanga"   } // 02/14/1966-
         TOS { "TOS", "Tongask pund" } // 1921-02/14/1966
         TPE { "TPE", "Escudo fra Timor"         } // 01/02/1959-12/07/1975
         TPP { "TPP", "Pataca fra Timor"         } // 1895-12/31/1958
@@ -551,6 +554,7 @@ da {
         UAK { "UAK", "Ukrainsk karbovanetz" } // 11/13/1992-10/17/1993
         UGS { "UGS", "Ugandisk shilling (1966-1987)" } // 08/15/1966-05/15/1987
         UGX { "U Sh","Ugandisk shilling"      } // 05/15/1987-
+        USD { "US$", "Amerikanske dollar"            } // 04/04/1792-
         USN { "USN", "Amerikansk dollar (n\u00E6ste dag)" }
         USS { "USS", "Amerikansk dollar (samme dag)" }
         UYF { "UYF", "Uruguaysk peso fuerte"  } // 06/23/1862-07/01/1975
@@ -578,7 +582,7 @@ da {
         XFU { "XFU", "Fransk UIC-franc"     }
         XID { "XID", "Islamisk dinar"        }
         XPF { "CFPF","CFP-franc"            } // 12/26/1945-
-        XPS { "XPS", "Pund sterling"       } // 07/27/1694-
+        //XPS { "XPS", "Pund sterling"       } // 07/27/1694-
         YDD { "YDD", "Yemenitisk dinar"         } // 4/1/1965-05/22/1990
         YEI { "YEI", "Yemenitisk imadi riyal"   } // 1904-02/1964
         YER { "YRl", "Yemenitisk rial"          } // 02/1964-
@@ -599,111 +603,474 @@ da {
         ZWD { "Z$",  "Zimbabwisk dollar"      } // 04/18/1980-
     }
     Languages {
+        aa  { "Afar" }
         ab  { "Abkhasisk" }
+        ace { "Achinesisk" }
+        ach { "Acoli" }
+        ada { "Adangme" }
+        ady { "Adyghe" }
+        ae  { "Avestan" }
+        af  { "Afrikaans" }
+        afa { "Afro-asiatisk (\u00f8vrige)" }
+        afh { "Afrihili" }
+        ak  { "Akan" }
+        akk { "Akkadisk" }
+        ale { "Aleutiske sprog" }
+        alg { "Algonkiske sprog" }
         am  { "Amharisk" }
         an  { "Aragonesisk" }
+        ang { "Angelsaksisk (ca.450-1100)" }
+        apa { "Apache sprog"}
         ar  { "Arabisk" }
+        arc { "Aram\u00e6isk" }
+        arn { "Araukansk" }
+        arp { "Arapaho" }
+        art { "Kunstsprog (\u00f8vrige)" }
+        arw { "Arawak" }
         as  { "Assamesisk" }
+        ast { "Asturisk" }
+        //ath { "Athapascan Languages" }
+        aus { "Australske sprog" }
         av  { "Avarisk" }
+        awa { "Awadhi" }
+        ay  { "Aymara" }
         az  { "Aserbajdsjan" }
+        ba  { "Bashkir" }
+        bad { "Banda" }
+        //bai { "Bamileke Languages" }
+        bal { "Baluchi" }
+        bam { "Bambara" }
+        ban { "Balinesisk" }
+        bas { "Basa" }
+        bat { "Baltiske sprog (\u00f8vrige)" }
         be  { "Hviderussisk" }
+        bej { "Beja" }
+        bem { "Bemba" }
+        ber { "Berberiske sprog" }
         bg  { "Bulgarsk" }
+        bh  { "Bihari" }
+        bho { "Bhojpuri" }
+        bi  { "Bislama" }
+        bik { "Bikol" }
+        bin { "Bini" }
+        bla { "Siksika" }   // Blackfoot
+        bm  { "Bambara" }
         bn  { "Bengalsk" }
+        bnt { "Bantu" }
         bo  { "Tibetansk" }
         br  { "Bretonsk" }
+        bra { "Braj" }
         bs  { "Bosnisk"}
+        btk { "Batak" }
+        bua { "Buriat" }
+        bug { "Buginesisk" }
+        byn { "Blin" }
         ca  { "Katalansk" }
+        cad { "Caddo" }
+        cai { "Mellemamerikanske indianske sprog (\u00f8vrige)" }
+        car { "Caribisk" }
+        cau { "Kaukasiske sprog (\u00f8vrige)" }
         ce  { "Tjetjensk" }
+        ceb { "Cebuano" }
+        cel { "Keltiske sprog (\u00f8vrige)" }
+        ch  { "Chamorro" }
+        chb { "Chibcha" }
+        chg { "Chagatai" }
+        chk { "Chuukese" }
+        chm { "Mari" }
+        chn { "Chinook" }
+        cho { "Choctaw" }
+        chp { "Chipewyan" }
+        chr { "Cherokee" }
+        chy { "Cheyenne" }
+        cmc { "Chamic sprog" }
         co  { "Korsikansk" }
+        cop { "Koptisk" }
+        cpe { "Kreolsk og pidgin, baseret p\u00e5 engelsk (\u00f8vrige)" }
+        cpf { "Kreolsk og pidgin, baseret p\u00e5 fransk (\u00f8vrige)" }
+        cpp { "Kreolsk og pidgin, baseret p\u00e5 portugisisk (\u00f8vrige)" }
+        cr  { "Cree" }
+        crh { "Krim-tyrkisk; Krim-tatarisk" }
+        crp { "Kreolsk og pidgin (\u00f8vrige)" }
         cs  { "Tjekkisk" }
+        csb { "Kashubian" }
         cu  { "Kirkeslavisk" }
+        cus { "Kusjitiske sprog (\u00f8vrige)" }
+        cv  { "Chuvash" }
         cy  { "Walisisk" }
         //da { "dansk" } // Old value
         da  { "Dansk" }
+        dak { "Dakota" }
+        dar { "Dargwa" }
+        day { "Dayak" }
         de  { "Tysk" }
+        del { "Delaware" }
+        den { "Slave (Athapascan)" }
+        dgr { "Dogrib" }
+        din { "Dinka" }
+        doi { "Dogri" }
+        dra { "Dravidiske sprog (\u00f8vrige)" }
+        dsb { "Nedre sorbisk" }
+        dua { "Duala" }
+        dum { "Hollandsk (ca. 1050-1350)" }
+        dv  { "Divehi" }
+        dyu { "Dyula" }
+        dz  { "Dzongkha" }
+        ee  { "Ewe" }
+        efi { "Efik" }
+        egy { "Egyptisk (oldtid)" }
+        eka { "Ekajuk" }
         el  { "Gr\u00E6sk" }
+        elx { "Elamitisk" }
         en  { "Engelsk" }
+        enm { "Engelsk, Middel- (1100-1500)" }
+        eo  { "Esperanto" }
         es  { "Spansk" }
         et  { "Estisk" }
         eu  { "Baskisk" }
+        ewo { "Ewondo" }
         fa  { "Persisk" }
+        fan { "Fang" }
+        fat { "Fanti" }
+        ff  { "Fulah" }
         fi  { "Finsk" }
+        fiu { "Finsk-ugriske sprog (\u00f8vrige)" }
+        fj  { "Fijian" }
         fo  { "F\u00e6r\u00f8sk" }
+        fon { "Fon" }
         fr  { "Fransk" }
+        frm { "Fransk, Middel- (ca.1400-1600)" }
+        fro { "Fransk, Old- (842-ca.1400)" }
+        fur { "Friulian" }
         fy  { "Frisisk" }
         ga  { "Irsk" }
-        gd  { "G\u00E6lisk (skotsk)" }
+        gaa { "Ga" }
+        gay { "Gayo" }
+        gba { "Gbaya" }
+        gd  { "G\u00e6lisk (skotsk)" }
+        gem { "Germanske sprog (\u00f8vrige)" }
+        gez { "Geez" }
+        gil { "Gilbertesisk" }
         gl  { "Galicisk" }
+        gmh { "Tysk, Middelh\u00f8j- (ca.1050-1500)" }
+        gn  { "Guarani" }
+        goh { "Tysk, Oldh\u00f8j- (ca.750-1050)" }
+        gon { "Gondi" }
+        gor { "Gorontalo" }
+        got { "Gotisk" }
+        grb { "Grebo" }
+        grc { "Gr\u00e6sk, Old- (til 1453)" }
         gu  { "Gujaratisk" }
+        gv  { "Manx" }
+        gwi { "Gwich\u02bbin" }
+        ha  { "Hausa" }
+        hai { "Haida" }
         haw { "Hawaiiansk" }
         he  { "Hebraisk" }
+        hi  { "Hindi" }
+        hil { "Hiligaynon" }
+        him { "Himachali" }
+        hit { "Hittitisk" }
+        hmn { "Hmong" }
+        ho  { "Hiri Motu" }
         hr  { "Kroatisk" }
+        hsb { "\u00d8vre sorbisk" }
         ht  { "Haitisk" }
         hu  { "Ungarsk" }
+        hup { "Hupa" }
         hy  { "Armensk" }
+        hz  { "Herero" }
+        ia  { "Interlingua" }
+        iba { "Iban" }
         id  { "Indonesisk" }
+        ie  { "Interlingue" }
+        ig  { "Igbo" }
+        ii  { "Sichuan Yi" }
+        ijo { "Ijo" }
+        ik  { "Inupiaq" }
+        ilo { "Iloko" }
+        inc { "Indiske sprog (\u00f8vrige)" }
+        ine { "Indoeurop\u00e6iske sprog (\u00f8vrige)" }
+        inh { "Ingush" }
+        io  { "Ido" }
+        ira { "Iranske sprog (\u00f8vrige)" }
+        iro { "Irokesiske sprog" }
         is  { "Islandsk" }
         it  { "Italiensk" }
+        iu  { "Inuktitut" }
         ja  { "Japansk" }
+        jbo { "Lojban" }
+        jpr { "J\u00f8disk-persisk" }
+        jrb { "J\u00f8disk-arabisk" }
         jv  { "Javanesisk" }
         ka  { "Georgisk" }
+        kaa { "Karakalpakisk" }
+        kab { "Kabyle" }
+        kac { "Kachin" }
+        kam { "Kamba" }
+        kar { "Karen" }
+        kaw { "Kawi" }
+        kbd { "Kabardian" }
+        kg  { "Kongo" }
+        kha { "Khasi" }
+        khi { "Khoisan (\u00f8vrige)" }
+        kho { "Khotanesisk" }
+        ki  { "Kikuyu" }
+        kj  { "Kuanyama" }
         kk  { "Kasakhisk" }
+         kl  { "Kalaallisut" }
+        km  { "Khmer" }
+        kmb { "Kimbundu" }
         kn  { "Kannaresisk" }
         ko  { "Koreansk" }
+         kok { "Konkani" }
+        kos { "Kosraean" }
+        kpe { "Kpelle" }
+        kr  { "Kanuri" }
+        krc { "Karachay-Balkar" }
+        kro { "Kru" }
+        kru { "Kurukh" }
+        ks  { "Kashmiri" }
         ku  { "Kurdisk" }
         kw  { "Cornisk" }
         ky  { "Kirgisisk" }
+        la  { "Latin" }
+        lad { "Ladino" }
+        lah { "Lahnda" }
+        lam { "Lamba" }
         lb  { "Luxembourgsk" }
+        lez { "Lezghian" }
+        lg  { "Ganda" }
         li  { "Limburgsk" }
+        ln  { "Lingala" }
+        lo  { "Lao" }
+        lol { "Mongo" }
+        loz { "Lozi" }
         lt  { "Litauisk" }
+        lu  { "Luba-Katanga" }
+        lua { "Luba-Lulua" }
+        lui { "Luiseno" }
+        lun { "Lunda" }
+        luo { "Luo" }
+        lus { "Lushai" }
         lv  { "Lettisk" }
+        mad { "Madurese" }
+        mag { "Magahi" }
+        mai { "Maithili" }
+        mak { "Makasar" }
+        man { "Mandingo" }
+        map { "Malajo-polynesiske sprog (\u00f8vrige)" }
+        mas { "Masai" }
+        mdf { "Moksha" }
+        mdr { "Mandar" }
+        men { "Mende" }
+        mg  { "Malagasy" }
+        mga { "Irsk, Middel- (900-1200)" }
+        mh  { "Marshallese"}
+        mi  { "Maori" }
+        mic { "Micmac" }
+        min { "Minangkabau" }
+        mis { "Diverse sprog" }
         mk  { "Makedonsk" }
+        mkh { "Mon-khmer (\u00f8vrige)" }
+        ml  { "Malayalam" }
         mn  { "Mongolsk" }
+        mnc { "Manchu" }
+        mni { "Manipuri" }
+        //mno { "Manobo Languages" }
         mo  { "Moldovisk" }
+        moh { "Mohawk" }
+        mos { "Mossi" }
         mr  { "Marathisk" }
+        ms  { "Malay" }
         mt  { "Maltesisk" }
+        mul { "Flere sprog" }
+        mun { "Munda (\u00f8vrige)" }
+        mus { "Creek" }
+        mwr { "Marwari" }
         my  { "Burmesisk" }
-        nb  { "Norsk Bokm\u00E5l" }
+        myn { "Maya sprog" }
+        myv { "Erzya" }
+        na  { "Nauru" }
+        nah { "Nahuatl" }
+        nai { "Nordamerikanske indianske sprog (\u00f8vrige)" }
+        nap { "Neapolitansk" }
+        nb  { "Norsk Bokm\u00e5l" }
         nd  { "Ndebele, Nord" }
+        nds { "Nedertysk; nedersachsisk" }
         ne  { "Nepalesisk" }
+        new { "Newari" }
+        ng  { "Ndonga" }
+        nia { "Nias" }
+        nic { "Niger-Congo sprog (\u00f8vrige)" }
+        niu { "Niuean" }
         nl  { "Hollandsk" }
+        nn  { "Nynorsk" }
         no  { "Norsk" }
+        nog { "Nogai" }
+        non { "Islandsk, Old-" }
         nr  { "Ndebele, Syd" }
+        nso { "Sotho, Nord" }
+        nub { "Nubiske sprog" }
+        nv  { "Navajo"}
+        ny  { "Nyanja; Chichewa; Chewa" }
+        nym { "Nyamwezi" }
+        nyn { "Nyankole" }
+        nyo { "Nyoro sprog" }
+        nzi { "Nzima" }
         oc  { "Occitansk (efter 1500); Provencalsk"}
+        oj  { "Ojibwa" }
+        om  { "Oromo" }
+        or  { "Oriya" }
         os  { "Ossetisk" }
+        osa { "Osage" }
+        ota { "Osmannisk (1500-1928)" }
+        oto { "Otomi sprog" }
+        pa  { "Punjabi" }
+        paa { "Papua-australske sprog (\u00f8vrige)" }
+        pag { "Pangasinan" }
+        pal { "Pahlavi" }
+        pam { "Pampanga" }
+        pap { "Papiamento" }
+        pau { "Palauansk" }
+        peo { "Persisk, Old- (ca. 600-400 f. Kr.)" }
+        phi { "Filippinske sprog (\u00f8vrige)" }
+        phn { "F\u00f8nikisk" }
+        pi  { "Pali" }
         pl  { "Polsk" }
+        pon { "Ponape" }
+        //pra { "Prakrit Languages" }
+        pro { "Provencalsk (f\u00f8r 1500)" }
+        ps  { "Pashto (Pushto)" }
         pt  { "Portugisisk" }
-        rm  { "R\u00E6toromansk" }
+        qu  { "Quechua" }
+        raj { "Rajasthani" }
+        rap { "Rapanui" }
+        rar { "Rarotongan" }
+        rm  { "R\u00e6toromansk" }
+        rn  { "Rundi" }
         ro  { "Rum\u00E6nsk" }
+        roa { "Romanske sprog (\u00f8vrige)" }
+        rom { "Romani" }
         ru  { "Russisk" }
+        rw  { "Kinyarwanda" }
+        sa  { "Sanskrit" }
+        sad { "Sandawe" }
+        sah { "Yakut" }
+        sai { "Sydamerikanske indianske sprog (\u00f8vrige)" }
+        //sal { "Salishan languages" }
+        sam { "Samaritansk" }
+        sas { "Sasak" }
+        sat { "Santali" }
         sc  { "Sardinsk" }
+        sco { "Skotsk" }
+        sd  { "Sindhi" }
         se  { "Nordsamisk" }
+        sel { "Selkupisk" }
+        sem { "Semitiske sprog (\u00f8vrige)" }
+        sg  { "Sango" }
+        sga { "Irsk, Old- (indtil 900)" }
+        sgn { "Tegnsprog" }
         sh  { "Serbokroatisk" }
+        shn { "Shan" }
         si  { "Singalesisk" }
+        sid { "Sidamo" }
+        //sio { "Siouan Languages" }
+        sit { "Sino-tibetanske sprog (\u00f8vrige)" }
         sk  { "Slovakisk" }
         sl  { "Slovensk" }
+         sla { "Slaviske sprog (\u00f8vrige)" }
         sm  { "Samoansk" }
+        sma { "Sydsamisk" }
+        smi { "Samiske sprog (\u00f8vrige)" }
+        smj { "Lule Sami" }
+        smn { "Inari Sami" }
+        sms { "Skolt Sami" }
+        sn  { "Shona" }
+        snk { "Soninke" }
         so  { "Somalisk" }
+        sog { "Sogdiansk" }
+        son { "Songhai" }
         sq  { "Albansk" }
         sr  { "Serbisk" }
+        srr { "Serer" }
+        ss  { "Swati" }
+        ssa { "Afrikanske sprog syd for Sahara (\u00f8vrige)" }
+        st  { "Sotho, Southern" }
         su  { "Sundanesisk" }
+        suk { "Sukuma" }
+        sus { "Susu" }
+        sux { "Sumerisk"}
         sv  { "Svensk" }
+        sw  { "Swahili" }
         syr { "Syrisk" }
         ta  { "Tamilsk" }
+        tai { "Tai (\u00f8vrige)" }
+        te  { "Telugu" }
+        tem { "Temne" }
+        ter { "Tereno" }
+        tet { "Tetum" }
+        tg  { "Tajik" }
         th  { "Thailandsk" }
+        ti  { "Tigrinya" }
+        tig { "Tigre" }
+        tiv { "Tivi" }
         tk  { "Turkmensk" }
-        to  { "Tonga (Tonga\u00F8erne)" }
+        tkl { "Tokelau" }
+        tl  { "Tagalog" }
+        tli { "Tlingit" }
+        tmh { "Tamashek" }
+        tn  { "Tswana" }
+        to  { "Tonga (Tonga\u00f8erne)" }
+        tog { "Tonga (Nyasa)" }
+        tpi { "Tok Pisin" }
         tr  { "Tyrkisk" }
+        ts  { "Tsonga" }
+        tsi { "Tsimshisk" }
+        tt  { "Tatarisk" }
+        tum { "Tumbuka" }
+        //tup { "Tupi languages" }
+        tut { "Tyrkisk-tatariske sprog (\u00f8vrige)" }
+        tvl { "Tuvalu" }
+        tw  { "Twi" }
         ty  { "Tahitiansk" }
+        tyv { "Tuvinian" }
+        udm { "Udmurt" }
         ug  { "Uigurisk" }
+        uga { "Ugaristisk" }
         uk  { "Ukrainsk" }
+        umb { "Umbundu" }
+        und { "Sproget kan ikke bestemmes" }
+        ur  { "Urdu" }
         uz  { "Usbekisk" }
+        vai { "Vai" }
+        ve  { "Venda" }
         vi  { "Vietnamesisk" }
+        vo  { "Volap\u00fck" }   // Yes the iso-639 standard uses the umlaut in the English name
+        vot { "Votisk" }
         wa  { "Vallonsk" }
+        //wak { "Wakashan Languages" }
+        wal { "Walamo" }
+        war { "Waray" }
+        was { "Washo" }
+        wen { "Vendiske sprog" }
+        wo  { "Wolof" }
+        xal { "Kalmyk" }
+        xh  { "Xhosa" }
+        yao { "Yao" }
+        yap { "Yap" }
         yi  { "Jiddisch" }
+        yo  { "Yoruba" }
+        //ypk { "Yupik Languages" }
+        za  { "Zhuang" }
+        zap { "Zapotec" }
+        zen { "Zenaga" }
         zh  { "Kinesisk" }
         //zh_cn { "Kinesisk (Forkortet)" }
         //zh_tw { "Kinesisk (Uforkortet)" }
+        znd { "Zande" }
+        zu  { "Zulu" }
+        zun { "Zuni" }
     }
     localPatternChars { "GuMtkHmsSEDFwWahKzUeygAZ" }
     NumberElements { 
@@ -898,6 +1265,240 @@ da {
                     }
                 }
             }
+        }
+    }
+    zoneStrings {
+         {
+            "PST",
+            "Pacific-normaltid",
+            "PST",
+            "Pacific-sommertid",
+            "PDT",
+            "Los Angeles",
+        }
+        {
+            "America/Los_Angeles",
+            "Pacific-normaltid",
+            "PST",
+            "Pacific-sommertid",
+            "PDT",
+            "Los Angeles",
+        }
+        {
+            "MST",
+            "Mountain-normaltid",
+            "MST",
+            "Mountain-sommertid",
+            "MDT",
+            "Denver",
+        }
+        {
+            "America/Denver",
+            "Mountain-normaltid",
+            "MST",
+            "Mountain-sommertid",
+            "MDT",
+            "Denver",
+        }
+        {
+            "PNT",
+            "Mountain-normaltid",
+            "MST",
+            "Mountain-normaltid",
+            "MST",
+            "Phoenix",
+        }
+        {
+            "America/Phoenix",
+            "Mountain-normaltid",
+            "MST",
+            "Mountain-normaltid",
+            "MST",
+            "Phoenix",
+        }
+        {
+            "CST",
+            "Central-normaltid",
+            "CST",
+            "Central-sommertid",
+            "CDT",
+            "Chicago",
+        }
+        {
+            "America/Chicago",
+            "Central-normaltid",
+            "CST",
+            "Central-sommertid",
+            "CDT",
+            "Chicago",
+        }
+        {
+            "EST",
+            "Eastern-normaltid",
+            "EST",
+            "Eastern-sommertid",
+            "EDT",
+            "New York",
+        }
+        {
+            "America/New_York",
+            "Eastern-normaltid",
+            "EST",
+            "Eastern-sommertid",
+            "EDT",
+            "New York",
+        }
+        {
+            "IET",
+            "Eastern-normaltid",
+            "EST",
+            "Eastern-normaltid",
+            "EST",
+            "Indianapolis",
+        }
+        {
+            "America/Indianapolis",
+            "Eastern-normaltid",
+            "EST",
+            "Eastern-normaltid",
+            "EST",
+            "Indianapolis",
+        }
+        {
+            "HST",
+            "Hawaii-normaltid",
+            "HST",
+            "Hawaii--normaltid",
+            "HST",
+            "Honolulu",
+        }
+        {
+            "Pacific/Honolulu",
+            "Hawaii-normaltid",
+            "HST",
+            "Hawaii-normaltid",
+            "HST",
+            "Honolulu",
+        }
+        {
+            "AST",
+            "Alaska-normaltid",
+            "AST",
+            "Alaska-sommertid",
+            "ADT",
+            "Anchorage"
+        }
+        {
+            "America/Anchorage",
+            "Alaska-normaltid",
+            "AST",
+            "Alaska-sommertid",
+            "ADT",
+            "Anchorage",
+        }
+        {
+            "America/Halifax",
+            "Atlantic-normaltid",
+            "AST",
+            "Atlantic-sommertid",
+            "ADT",
+            "Halifax"
+        }
+        {
+            "CNT",
+            "Newfoundland-normaltid",
+            "CNT",
+            "Newfoundland-sommertid",
+            "CDT",
+            "St. Johns",
+        }
+        {
+            "America/St_Johns",
+            "Newfoundland-normaltid",
+            "CNT",
+            "Newfoundland-sommertid",
+            "CDT",
+            "St. Johns",
+        }
+        {
+            "ECT",
+            "Mellemeurop\u00e6isk normaltid",
+            "CET",
+            "Mellemeurop\u00e6isk sommertid",
+            "CEST",
+            "Paris",
+        }
+        {
+            "Europe/Paris",
+            "Mellemeurop\u00e6isk normaltid",
+            "CET",
+            "Mellemeurop\u00e6isk sommertid",
+            "CEST",
+            "Paris",
+        }
+        {
+            "GMT",
+            "Verdenstid",
+            "GMT",
+            "Verdenstid",
+            "GMT",
+            "London",
+        }
+        {
+            "Africa/Casablanca",
+            "Verdenstid",
+            "GMT",
+            "Verdenstid",
+            "GMT",
+            "Casablanca",
+        }
+        {
+            "Asia/Jerusalem",
+            "Israelsk normaltid",
+            "IST",
+            "Israelsk sommertid",
+            "IDT",
+            "Jerusalem",
+        }
+        {
+            "JST",
+            "Japansk normaltid",
+            "JST",
+            "Japansk normaltid",
+            "JST",
+            "Tokyo",
+        }
+        {
+            "Asia/Tokyo",
+            "Japansk normaltid",
+            "JST",
+            "Japansk normaltid",
+            "JST",
+            "Tokyo",
+        }
+        {
+            "Europe/Bucharest",
+            "\u00d8steurop\u00e6isk normaltid",
+            "EET",
+            "\u00d8steurop\u00e6isk sommertid",
+            "EEST",
+            "Bukarest",
+        }
+        {
+            "CTT",
+            "Kinesisk normaltid",
+            "CTT",
+            "Kinesisk normaltid",
+            "CDT",
+            "Shanghai",
+        }
+        {
+            "Asia/Shanghai",
+            "Kinesisk normaltid",
+            "CTT",
+            "Kinesisk normaltid",
+            "CDT",
+            "Shanghai",
         }
     }
 }

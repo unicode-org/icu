@@ -50,7 +50,7 @@ lt {
         CF { "Centrin\u0117s Afrikos Respublika" }
         CG { "Kongas" }
         CH { "\u0160veicarija" }
-        CI { "Kot d'Ivuar" }
+        CI { "Kot d\u2019Ivuar" }
         CK { "Kuko salos" }
         CL { "\u010Cil\u0117" }
         CM { "Kamer\u016Bnas" }

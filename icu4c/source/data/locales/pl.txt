@@ -6,7 +6,7 @@
 // ***************************************************************************
 
 pl {
-    Version{ "2.0" }
+    Version{ "3.0" }
     Countries { 
         Fallback{ "en"}
         AD { "Andora" }
@@ -388,18 +388,32 @@ pl {
             monthNames{
                 format{
                     abbreviated{
-                        "sty",
+                        "st",
                         "lut",
-                        "mar",
-                        "kwi",
+                        "mrz",
+                        "kw",
                         "maj",
-                        "cze",
+                        "cz",
                         "lip",
-                        "sie",
+                        "sier",
                         "wrz",
-                        "pa\u017A",
+                        "pa\u017a",
                         "lis",
-                        "gru",
+                        "gr"
+                    }
+                    narrow {
+                        "s",
+                        "l",
+                        "m",
+                        "k",
+                        "m",
+                        "c",
+                        "l",
+                        "s",
+                        "w",
+                        "p",
+                        "l",
+                        "g"
                     }
                     wide{
                         "stycze\u0144",
@@ -413,7 +427,51 @@ pl {
                         "wrzesie\u0144",
                         "pa\u017Adziernik",
                         "listopad",
-                        "grudzie\u0144",
+                        "grudzie\u0144"
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "st",
+                        "lut",
+                        "mrz",
+                        "kw",
+                        "maj",
+                        "cz",
+                        "lip",
+                        "sier",
+                        "wrz",
+                        "pa\u017a",
+                        "lis",
+                        "gr"
+                    }
+                    narrow {
+                        "s",
+                        "l",
+                        "m",
+                        "k",
+                        "m",
+                        "c",
+                        "l",
+                        "s",
+                        "w",
+                        "p",
+                        "l",
+                        "g"
+                    }
+                    wide{
+                        "Stycze\u0144",
+                        "Luty",
+                        "Marzec",
+                        "Kwiecie\u0144",
+                        "Maj",
+                        "Czerwiec",
+                        "Lipiec",
+                        "Sierpie\u0144",
+                        "Wrzesie\u0144",
+                        "Pa\u017adziernik",
+                        "Listopad",
+                        "Grudzie\u0144"
                     }
                 }
             }
