@@ -32,7 +32,7 @@
   <abbr title="International Components for Unicode">ICU</abbr> 2.8
   ReadMe</h1>
 
-  <p>Version: 2004-Apr-01<br>
+  <p>Version: 2004-Apr-30<br>
   Copyright &copy; 1997-2004 International Business Machines Corporation and
   others. All Rights Reserved.</p>
   <!-- Remember that there is a copyright at the end too -->
@@ -1118,6 +1118,13 @@
     ICU number formatting functions to work properly. The APAR affects C and
     C++ code.</li>
 
+    <li>The makedep executable that is used with the z/OS ICU build process
+    is not shipped with ICU. It is available at the <a href=
+    "http://www.ibm.com/servers/eserver/zseries/zos/unix/bpxa1ty1.html#opensrc">
+    z/OS UNIX - Tools and Toys</a> site. The PATH environment variable should
+    be updated to contain the location of this executable prior to build.
+    Alternatively, makedep may be moved into an existing PATH directory.</li>
+
     <li>The gnu utilities gmake and gzip/gunzip are needed and can be
     obtained for z/OS from <a href=
     "http://www.ibm.com/servers/eserver/zseries/zos/unix/bpxa1ty1.html#opensrc">
@@ -1125,6 +1132,19 @@
     at the <a href=
     "http://publib-b.boulder.ibm.com/Redbooks.nsf/RedbookAbstracts/sg245944.html">
     Open Source Software for z/OS UNIX</a> Red Book.</li>
+
+    <li>Since the default make on z/OS is not gmake, the pkgdata tool
+    requires that the "make" command is aliased to your installed version of
+    gmake. You may also need to set $MAKE equal to the fully qualified path
+    of GNU make. GNU make is available with the "z/OS UNIX - Tools and Toys"
+    that was mentioned above. ICU requires the same GNU make as described in
+    the UNIX build instructions.</li>
+
+    <li>Since USS does not support using the mmap() function over NFS, it is
+    recommended that you build ICU on a local filesystem. Once ICU has been
+    built, you should not have this problem while using ICU when the data
+    library has been built as a shared library, which is this is the default
+    setting.</li>
 
     <li>Encoding considerations: The source code assumes that it is compiled
     with codepage ibm-1047 (to be exact, the UNIX System Services variant of
@@ -1167,20 +1187,6 @@
       <p>Note: XPLINK, which is enabled for z/OS 1.2 and later, requires the
       PTF PQ69418 to build XPLINK-enabled binaries.</p>
     </li>
-
-    <li>Since the default make on z/OS is not gmake, the pkgdata tool
-    requires that the "make" command is aliased to your installed version of
-    gmake. You may also need to set $MAKE equal to the fully qualified path
-    of GNU make. GNU make is available with the "z/OS UNIX - Tools and Toys"
-    that was mentioned above. The required version is the same UNIX build
-    instructions.</li>
-
-    <li>The makedep executable that is used with the z/OS ICU build process
-    is not shipped with ICU. It is available at the <a href=
-    "http://www.ibm.com/servers/eserver/zseries/zos/unix/bpxa1ty1.html#opensrc">
-    z/OS UNIX - Tools and Toys</a> site. The PATH environment variable should
-    be updated to contain the location of this executable prior to build.
-    Alternatively, makedep may be moved into an existing PATH directory.</li>
 
     <li>
       <p>When you build ICU on a system such as z/OS 1.2, the binaries that
