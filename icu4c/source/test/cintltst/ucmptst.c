@@ -56,8 +56,7 @@ static void TestUCMP8API(){
     CompactByteArray ucmp8Array1;
     CompactByteArray ucmp8Array2;
     CompactByteArray ucmp8Clone;
-    int32_t i=0;
-    uint8_t *values;
+    int8_t *values;
     uint8_t *valuesSet;
     uint8_t const TEST_DEFAULT_VALUE = (uint8_t)0xFF;
     
@@ -94,7 +93,7 @@ static void TestUCMP8API(){
     if(ucmp8_getkBlockCount() != 128 ){
         log_err("Error in ucmp8_getkBlockCount()\n");
     } 
-    values=(uint8_t*)ucmp8_getArray(&ucmp8Array1);
+    values=(int8_t*)ucmp8_getArray(&ucmp8Array1);
     if(values[0] !=TEST_DEFAULT_VALUE){
         log_err("Error: getArray() or init failed\n");
     }
@@ -167,7 +166,8 @@ openAdopt, initAdopt, openAlias, initAlias
       const uint16_t *tIndex = ucmp8_getIndex(&ucmp8Array1);
       const int8_t *tValues = ucmp8_getArray(&ucmp8Array1);
       uint16_t *index = (uint16_t *)malloc(UCMP8_kIndexCount*sizeof(uint16_t));
-      int8_t *values = (int8_t *)malloc(count);
+
+      values = (int8_t *)malloc(count);
 
       memcpy(index, tIndex, UCMP8_kIndexCount*sizeof(uint16_t));
       memcpy(values, tValues, count);
