@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE difference_xml SYSTEM "./ResultXML.dtd" >
+
+<difference_xml>
+    <difference_element parent_node="test" node_name="test" id="1" index="test">
+        <icu case_diff="false" > </icu>
+        <ibm_toronto case_diff="false"> </ibm_toronto>
+        <windows case_diff="false"> </windows>
+        <sun_jdk case_diff="false"> </sun_jdk>
+        <ibm_jdk case_diff="false"> </ibm_jdk>
+        <solaris case_diff="false"> </solaris>
+        <apple case_diff="false"> </apple>
+        <hp_ux case_diff="false"> </hp_ux>
+        <other case_diff="false"> </other>
+    </difference_element>
+</difference_xml>
