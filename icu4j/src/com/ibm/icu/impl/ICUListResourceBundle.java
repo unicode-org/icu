@@ -170,7 +170,8 @@ public class ICUListResourceBundle extends ListResourceBundle {
 		}
 		return data;
     }
-    
+
+    ///CLOVER:OFF
     public static class CompressedString{
         private String expanded=null;
         private String compressed=null;
@@ -187,6 +188,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
             return expanded;
         }
     }
+    ///CLOVER:ON
     
     public static class CompressedBinary{
         private byte[] expanded=null;
