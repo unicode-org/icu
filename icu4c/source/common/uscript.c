@@ -14,252 +14,207 @@
 */
 
 #include "unicode/uscript.h"
+#include "unicode/ures.h"
+#include "cstring.h"
 
-#define U_SCRIPT_NAMES_ARRAY_SIZE 38
-#define U_SCRIPT_ABBR_ARRAY_SIZE 41
+#define USCRIPT_NAMES_ARRAY_SIZE 38
+#define USCRIPT_ABBR_ARRAY_SIZE 41
 
 static const char kLocaleScript[] = "LocaleScript";
 
 static const char * const scriptNames[]={
-        "ARABIC",     /* U_ARABIC     */
-        "ARMENIAN",   /* U_ARMENIAN   */
-        "BENGALI",    /* U_BENGALI    */
-        "BOPOMOFO",   /* U_BOPOMOFO   */
-        "CHEROKEE",   /* U_CHEROKEE   */
-        "CYRILLIC",   /* U_CYRILLIC   */
-        "DESERET",    /* U_DESERET    */
-        "DEVANAGARI", /* U_DEVANAGARI */
-        "ETHIOPIC",   /* U_ETHIOPIC   */
-        "GEORGIAN",   /* U_GEORGIAN   */
-        "GOTHIC",     /* U_GOTHIC     */
-        "GREEK",      /* U_GREEK      */
-        "GUJARATI",   /* U_GUJARATI   */
-        "GURMUKHI",   /* U_GURMUKHI   */
-        "HAN",        /* U_HAN        */
-        "HANGUL",     /* U_HANGUL     */
-        "HEBREW",     /* U_HEBREW     */
-        "HIRAGANA",   /* U_HIRAGANA   */
-        "INHERITED",  /* U_INHERITED  */
-        "KANNADA",    /* U_KANNADA    */
-        "KATAKANA",   /* U_KATAKANA   */
-        "KHMER",      /* U_KHMER      */
-        "LATIN",      /* U_LATIN      */
-        "MALAYALAM",  /* U_MALAYALAM  */
-        "MONGOLIAN",  /* U_MONGOLIAN  */
-        "MYANMAR",    /* U_MYANMAR    */
-        "OGHAM",      /* U_OGHAM      */
-        "OLD_ITALIC", /* U_OLD_ITALIC */
-        "ORIYA",      /* U_ORIYA      */
-        "RUNIC",      /* U_RUNIC      */
-        "SINHALA",    /* U_SINHALA    */
-        "SYRIAC",     /* U_SYRIAC     */
-        "TAMIL",      /* U_TAMIL      */
-        "TELUGU",     /* U_TELUGU     */
-        "THAANA",     /* U_THANA      */
-        "THAI",       /* U_THAI       */
-        "TIBETAN",    /* U_TIBETAN    */
-        "UCAS",       /* U_UCAS       */
+        "ARABIC",     /* USCRIPT_ARABIC     */
+        "ARMENIAN",   /* USCRIPT_ARMENIAN   */
+        "BENGALI",    /* USCRIPT_BENGALI    */
+        "BOPOMOFO",   /* USCRIPT_BOPOMOFO   */
+        "CHEROKEE",   /* USCRIPT_CHEROKEE   */
+        "CYRILLIC",   /* USCRIPT_CYRILLIC   */
+        "DESERET",    /* USCRIPT_DESERET    */
+        "DEVANAGARI", /* USCRIPT_DEVANAGARI */
+        "ETHIOPIC",   /* USCRIPT_ETHIOPIC   */
+        "GEORGIAN",   /* USCRIPT_GEORGIAN   */
+        "GOTHIC",     /* USCRIPT_GOTHIC     */
+        "GREEK",      /* USCRIPT_GREEK      */
+        "GUJARATI",   /* USCRIPT_GUJARATI   */
+        "GURMUKHI",   /* USCRIPT_GURMUKHI   */
+        "HAN",        /* USCRIPT_HAN        */
+        "HANGUL",     /* USCRIPT_HANGUL     */
+        "HEBREW",     /* USCRIPT_HEBREW     */
+        "HIRAGANA",   /* USCRIPT_HIRAGANA   */
+        "INHERITED",  /* USCRIPT_INHERITED  */
+        "KANNADA",    /* USCRIPT_KANNADA    */
+        "KATAKANA",   /* USCRIPT_KATAKANA   */
+        "KHMER",      /* USCRIPT_KHMER      */
+        "LATIN",      /* USCRIPT_LATIN      */
+        "MALAYALAM",  /* USCRIPT_MALAYALAM  */
+        "MONGOLIAN",  /* USCRIPT_MONGOLIAN  */
+        "MYANMAR",    /* USCRIPT_MYANMAR    */
+        "OGHAM",      /* USCRIPT_OGHAM      */
+        "OLD_ITALIC", /* USCRIPT_OLD_ITALIC */
+        "ORIYA",      /* USCRIPT_ORIYA      */
+        "RUNIC",      /* USCRIPT_RUNIC      */
+        "SINHALA",    /* USCRIPT_SINHALA    */
+        "SYRIAC",     /* USCRIPT_SYRIAC     */
+        "TAMIL",      /* USCRIPT_TAMIL      */
+        "TELUGU",     /* USCRIPT_TELUGU     */
+        "THAANA",     /* USCRIPT_THANA      */
+        "THAI",       /* USCRIPT_THAI       */
+        "TIBETAN",    /* USCRIPT_TIBETAN    */
+        "UCAS",       /* USCRIPT_UCAS       */
     
 };
 
 static const char * const scriptAbbr[]= {
-        "Arab",       /* U_ARABIC     */
-        "Armn",       /* U_ARMENIAN   */
-        "Beng",       /* U_BENGALI    */
-        "Bopo",       /* U_BOPOMOFO   */
-        "Cans",       /* U_UCAS       */
-        "Cher",       /* U_CHEROKEE   */
-        "Cyrl",       /* U_CYRILLIC   */
-       /* "Cyrs",       */ /* U_CYRILLIC   */
-        "Deva",       /* U_DEVANAGARI */
-        "Dsrt",       /* U_DESERET    */
-        "Ethi",       /* U_ETHIOPIC   */
-       /* "Geoa",       */ /* U_GEORGIAN   */
-       /* "Geon",       */ /* U_GEORGIAN   */
-        "Geor",       /* U_GEORGIAN   */
-        "Goth",       /* U_GOTHIC     */
-        "Grek",       /* U_GREEK      */
-        "Gujr",       /* U_GUJARATI   */
-        "Guru",       /* U_GURMUKHI   */
-        "Hang",       /* U_HANGUL     */
-        "Hani",       /* U_HAN        */
-        "Hebr",       /* U_HEBREW     */
-        "Hira",       /* U_HIRAGANA   */
-        "Ital",       /* U_OLD_ITALIC */
-        "Kana",       /* U_KATAKANA   */
-        "Khmr",       /* U_KHMER      */
-        "Knda",       /* U_KANNADA    */
-        "Lao",        /* U_LAO        */
-        /*"Laoo",       */ /* U_LAO        */
-        /*"Latf",       */ /* U_LATIN      */
-        /*"Latg",       */ /* U_LATIN      */
-        "Latn",       /* U_LATIN      */
-        "Mlym",       /* U_MALAYALAM  */
-        "Mong",       /* U_MONGOLIAN  */
-        "Mymr",       /* U_MYANMAR    */
-        "Ogam",       /* U_OGHAM      */
-        "Orya",       /* U_ORIYA      */
-        "Qaac",       /* U_COPTIC     */
-        "Qaai",       /* U_INHERITED  */
-        "Runr",       /* U_RUNIC      */
-        "Sinh",       /* U_SINHALA    */
-        "Syrc",       /* U_SYRIAC     */
-       /* "Syre",       */ /* U_SYRIAC     */
-       /* "Syrj",       */ /* U_SYRIAC     */
-       /* "Syrn",       */ /* U_SYRIAC     */
-        "Taml",       /* U_TAMIL      */
-        "Telu",       /* U_TELUGU     */
-        "Thaa",       /* U_THANA      */
-        "Thai",       /* U_THAI       */
-        "Tibt",       /* U_TIBETAN    */
-        "Yiii",       /* U_YI         */
-        "Zyyy",       /* U_COMMON     */    
+        "Arab",       /* USCRIPT_ARABIC     */
+        "Armn",       /* USCRIPT_ARMENIAN   */
+        "Beng",       /* USCRIPT_BENGALI    */
+        "Bopo",       /* USCRIPT_BOPOMOFO   */
+        "Cans",       /* USCRIPT_UCAS       */
+        "Cher",       /* USCRIPT_CHEROKEE   */
+        "Cyrl",       /* USCRIPT_CYRILLIC   */
+       /* "Cyrs",  */ /* USCRIPT_CYRILLIC   */
+        "Deva",       /* USCRIPT_DEVANAGARI */
+        "Dsrt",       /* USCRIPT_DESERET    */
+        "Ethi",       /* USCRIPT_ETHIOPIC   */
+       /* "Geoa",  */ /* USCRIPT_GEORGIAN   */
+       /* "Geon",  */ /* USCRIPT_GEORGIAN   */
+        "Geor",       /* USCRIPT_GEORGIAN   */
+        "Goth",       /* USCRIPT_GOTHIC     */
+        "Grek",       /* USCRIPT_GREEK      */
+        "Gujr",       /* USCRIPT_GUJARATI   */
+        "Guru",       /* USCRIPT_GURMUKHI   */
+        "Hang",       /* USCRIPT_HANGUL     */
+        "Hani",       /* USCRIPT_HAN        */
+        "Hebr",       /* USCRIPT_HEBREW     */
+        "Hira",       /* USCRIPT_HIRAGANA   */
+        "Ital",       /* USCRIPT_OLD_ITALIC */
+        "Kana",       /* USCRIPT_KATAKANA   */
+        "Khmr",       /* USCRIPT_KHMER      */
+        "Knda",       /* USCRIPT_KANNADA    */
+        "Lao",        /* USCRIPT_LAO        */
+        /*"Laoo",  */ /* USCRIPT_LAO        */
+        /*"Latf",  */ /* USCRIPT_LATIN      */
+        /*"Latg",  */ /* USCRIPT_LATIN      */
+        "Latn",       /* USCRIPT_LATIN      */
+        "Mlym",       /* USCRIPT_MALAYALAM  */
+        "Mong",       /* USCRIPT_MONGOLIAN  */
+        "Mymr",       /* USCRIPT_MYANMAR    */
+        "Ogam",       /* USCRIPT_OGHAM      */
+        "Orya",       /* USCRIPT_ORIYA      */
+        "Qaac",       /* USCRIPT_COPTIC     */
+        "Qaai",       /* USCRIPT_INHERITED  */
+        "Runr",       /* USCRIPT_RUNIC      */
+        "Sinh",       /* USCRIPT_SINHALA    */
+        "Syrc",       /* USCRIPT_SYRIAC     */
+       /* "Syre",  */ /* USCRIPT_SYRIAC     */
+       /* "Syrj",  */ /* USCRIPT_SYRIAC     */
+       /* "Syrn",  */ /* USCRIPT_SYRIAC     */
+        "Taml",       /* USCRIPT_TAMIL      */
+        "Telu",       /* USCRIPT_TELUGU     */
+        "Thaa",       /* USCRIPT_THANA      */
+        "Thai",       /* USCRIPT_THAI       */
+        "Tibt",       /* USCRIPT_TIBETAN    */
+        "Yiii",       /* USCRIPT_YI         */
+        "Zyyy",       /* USCRIPT_COMMON     */    
     };
 
 
 static const UScriptCode scriptNameCodes[]= {
-         U_ARABIC     ,
-         U_ARMENIAN   ,
-         U_BENGALI    ,
-         U_BOPOMOFO   ,
-         U_CHEROKEE   ,
-         U_CYRILLIC   ,
-         U_DESERET    ,
-         U_DEVANAGARI ,
-         U_ETHIOPIC   ,
-         U_GEORGIAN   ,
-         U_GOTHIC     ,
-         U_GREEK      ,
-         U_GUJARATI   ,
-         U_GURMUKHI   ,
-         U_HAN        ,
-         U_HANGUL     ,
-         U_HEBREW     ,
-         U_HIRAGANA   ,
-         U_INHERITED  ,
-         U_KANNADA    ,
-         U_KATAKANA   ,
-         U_KHMER      ,
-         U_LATIN      ,
-         U_MALAYALAM  ,
-         U_MONGOLIAN  ,
-         U_MYANMAR    ,
-         U_OGHAM      ,
-         U_OLD_ITALIC ,
-         U_ORIYA      ,
-         U_RUNIC      ,
-         U_SINHALA    ,
-         U_SYRIAC     ,
-         U_TAMIL      ,
-         U_TELUGU     ,
-         U_THAANA     ,
-         U_THAI       ,
-         U_TIBETAN    ,
-         U_UCAS       ,
+         USCRIPT_ARABIC     ,
+         USCRIPT_ARMENIAN   ,
+         USCRIPT_BENGALI    ,
+         USCRIPT_BOPOMOFO   ,
+         USCRIPT_CHEROKEE   ,
+         USCRIPT_CYRILLIC   ,
+         USCRIPT_DESERET    ,
+         USCRIPT_DEVANAGARI ,
+         USCRIPT_ETHIOPIC   ,
+         USCRIPT_GEORGIAN   ,
+         USCRIPT_GOTHIC     ,
+         USCRIPT_GREEK      ,
+         USCRIPT_GUJARATI   ,
+         USCRIPT_GURMUKHI   ,
+         USCRIPT_HAN        ,
+         USCRIPT_HANGUL     ,
+         USCRIPT_HEBREW     ,
+         USCRIPT_HIRAGANA   ,
+         USCRIPT_INHERITED  ,
+         USCRIPT_KANNADA    ,
+         USCRIPT_KATAKANA   ,
+         USCRIPT_KHMER      ,
+         USCRIPT_LATIN      ,
+         USCRIPT_MALAYALAM  ,
+         USCRIPT_MONGOLIAN  ,
+         USCRIPT_MYANMAR    ,
+         USCRIPT_OGHAM      ,
+         USCRIPT_OLD_ITALIC ,
+         USCRIPT_ORIYA      ,
+         USCRIPT_RUNIC      ,
+         USCRIPT_SINHALA    ,
+         USCRIPT_SYRIAC     ,
+         USCRIPT_TAMIL      ,
+         USCRIPT_TELUGU     ,
+         USCRIPT_THAANA     ,
+         USCRIPT_THAI       ,
+         USCRIPT_TIBETAN    ,
+         USCRIPT_UCAS       ,
         
 };
 
 
 static const UScriptCode scriptAbbrCodes[] = {
-        U_ARABIC     ,
-        U_ARMENIAN   ,
-        U_BENGALI    ,
-        U_BOPOMOFO   ,
-        U_UCAS       ,
-        U_CHEROKEE   ,
-        U_CYRILLIC   ,
-       /* U_CYRILLIC   ,*/
-        U_DEVANAGARI ,
-        U_DESERET    ,
-        U_ETHIOPIC   ,
-      /*  U_GEORGIAN   , */
-      /*  U_GEORGIAN   , */
-        U_GEORGIAN   ,
-        U_GOTHIC     ,
-        U_GREEK      ,
-        U_GUJARATI   ,
-        U_GURMUKHI   ,
-        U_HANGUL     ,
-        U_HAN        ,
-        U_HEBREW     ,
-        U_HIRAGANA   ,
-        U_OLD_ITALIC ,
-        U_KATAKANA   ,
-        U_KHMER      ,
-        U_KANNADA    ,
-        U_LAO        ,
-      /*  U_LAO        , */
-      /*  U_LATIN      , */
-      /*  U_LATIN      , */
-        U_LATIN      ,
-        U_MALAYALAM  ,
-        U_MONGOLIAN  ,
-        U_MYANMAR    ,
-        U_OGHAM      ,
-        U_ORIYA      ,
-        U_COPTIC     ,
-        U_INHERITED  ,
-        U_RUNIC      ,
-        U_SINHALA    ,
-        U_SYRIAC     ,
-      /*  U_SYRIAC     , */
-      /*  U_SYRIAC     , */
-        U_SYRIAC     ,
-        U_TAMIL      ,
-        U_TELUGU     ,
-        U_THAANA     ,
-        U_THAI       ,
-        U_TIBETAN    ,
-        U_YI         ,
-        U_COMMON     , 
+        USCRIPT_ARABIC     ,
+        USCRIPT_ARMENIAN   ,
+        USCRIPT_BENGALI    ,
+        USCRIPT_BOPOMOFO   ,
+        USCRIPT_UCAS       ,
+        USCRIPT_CHEROKEE   ,
+        USCRIPT_CYRILLIC   ,
+       /* USCRIPT_CYRILLIC   , */
+        USCRIPT_DEVANAGARI ,
+        USCRIPT_DESERET    ,
+        USCRIPT_ETHIOPIC   ,
+      /*  USCRIPT_GEORGIAN   , */
+      /*  USCRIPT_GEORGIAN   , */
+        USCRIPT_GEORGIAN   ,
+        USCRIPT_GOTHIC     ,
+        USCRIPT_GREEK      ,
+        USCRIPT_GUJARATI   ,
+        USCRIPT_GURMUKHI   ,
+        USCRIPT_HANGUL     ,
+        USCRIPT_HAN        ,
+        USCRIPT_HEBREW     ,
+        USCRIPT_HIRAGANA   ,
+        USCRIPT_OLD_ITALIC ,
+        USCRIPT_KATAKANA   ,
+        USCRIPT_KHMER      ,
+        USCRIPT_KANNADA    ,
+        USCRIPT_LAO        ,
+      /*  USCRIPT_LAO        , */
+      /*  USCRIPT_LATIN      , */
+      /*  USCRIPT_LATIN      , */
+        USCRIPT_LATIN      ,
+        USCRIPT_MALAYALAM  ,
+        USCRIPT_MONGOLIAN  ,
+        USCRIPT_MYANMAR    ,
+        USCRIPT_OGHAM      ,
+        USCRIPT_ORIYA      ,
+        USCRIPT_COPTIC     ,
+        USCRIPT_INHERITED  ,
+        USCRIPT_RUNIC      ,
+        USCRIPT_SINHALA    ,
+        USCRIPT_SYRIAC     ,
+      /*  USCRIPT_SYRIAC     , */
+      /*  USCRIPT_SYRIAC     , */
+        USCRIPT_SYRIAC     ,
+        USCRIPT_TAMIL      ,
+        USCRIPT_TELUGU     ,
+        USCRIPT_THAANA     ,
+        USCRIPT_THAI       ,
+        USCRIPT_TIBETAN    ,
+        USCRIPT_YI         ,
+        USCRIPT_COMMON     , 
 };
-static const char * const scriptCodeName[]={
-    "U_INVALID_CODE",
-    "U_COMMON",    
-    "U_INHERITED", 
-    "U_ARABIC",    
-    "U_ARMENIAN",  
-    "U_BENGALI",   
-    "U_BOPOMOFO",  
-    "U_CHEROKEE",  
-    "U_COPTIC",    
-    "U_CYRILLIC",  
-    "U_DESERET",   
-    "U_DEVANAGARI",
-    "U_ETHIOPIC",  
-    "U_GEORGIAN",  
-    "U_GOTHIC",    
-    "U_GREEK",     
-    "U_GUJARATI",  
-    "U_GURMUKHI",  
-    "U_HAN",       
-    "U_HANGUL",   
-    "U_HEBREW",    
-    "U_HIRAGANA",  
-    "U_KANNADA",   
-    "U_KATAKANA",  
-    "U_KHMER",     
-    "U_LAO",       
-    "U_LATIN",     
-    "U_MALAYALAM", 
-    "U_MONGOLIAN", 
-    "U_MYANMAR",   
-    "U_OGHAM",     
-    "U_OLD_ITALIC",
-    "U_ORIYA",     
-    "U_RUNIC",     
-    "U_SINHALA",   
-    "U_SYRIAC",    
-    "U_TAMIL",     
-    "U_TELUGU",    
-    "U_THAANA",    
-    "U_THAI",      
-    "U_TIBETAN",   
-    "U_UCAS",      
-    "U_YI",  
-    "U_SCRIPT_CODE_LIMIT",
-};
-
 /* binary search the string array */
 static int 
 findStringIndex(const char* const *sortedArr, const char* target, int size){
@@ -313,8 +268,8 @@ findCodeIndex(const UScriptCode unsorted[], const UScriptCode target, int size){
 }
 
 U_CAPI UScriptCode 
-uchar_getScriptCode(const char* nameOrAbbrOrLocale, UErrorCode* err){
-    UScriptCode code = U_INVALID_SCRIPT_CODE;
+uscript_getCode(const char* nameOrAbbrOrLocale, UErrorCode* err){
+    UScriptCode code = USCRIPT_INVALID_CODE;
     int strIndex=0;
 
     /* check arguments */
@@ -322,20 +277,20 @@ uchar_getScriptCode(const char* nameOrAbbrOrLocale, UErrorCode* err){
         return code;
     }
     /* try the Names array first */
-    strIndex = findStringIndex(scriptNames, nameOrAbbrOrLocale, U_SCRIPT_NAMES_ARRAY_SIZE);
+    strIndex = findStringIndex(scriptNames, nameOrAbbrOrLocale, USCRIPT_NAMES_ARRAY_SIZE);
     
-    if(strIndex>=0 && strIndex < U_SCRIPT_NAMES_ARRAY_SIZE){ 
+    if(strIndex>=0 && strIndex < USCRIPT_NAMES_ARRAY_SIZE){ 
         code = (UScriptCode) scriptNameCodes[strIndex];
     }
     /* we did not find in names array so try abbr array*/
-    if(code ==U_INVALID_SCRIPT_CODE){
-        strIndex = findStringIndex(scriptAbbr, nameOrAbbrOrLocale, U_SCRIPT_ABBR_ARRAY_SIZE);
-        if(strIndex>=0 && strIndex < U_SCRIPT_NAMES_ARRAY_SIZE){ 
+    if(code ==USCRIPT_INVALID_CODE){
+        strIndex = findStringIndex(scriptAbbr, nameOrAbbrOrLocale, USCRIPT_ABBR_ARRAY_SIZE);
+        if(strIndex>=0 && strIndex < USCRIPT_NAMES_ARRAY_SIZE){ 
             code = (UScriptCode) scriptAbbrCodes[strIndex];
         }
     }
     /* we still haven't found it try locale */
-    if(code==U_INVALID_SCRIPT_CODE){
+    if(code==USCRIPT_INVALID_CODE){
         UResourceBundle* resB = ures_open(u_getDataDirectory(),nameOrAbbrOrLocale,err);
         if(U_SUCCESS(*err)&& *err != U_USING_DEFAULT_ERROR){
             int32_t len=0;
@@ -345,7 +300,7 @@ uchar_getScriptCode(const char* nameOrAbbrOrLocale, UErrorCode* err){
             if(U_SUCCESS(*err) ){
                 char cName[50] = {'\0'};
                 u_UCharsToChars(name,cName,len);
-                index = findStringIndex(scriptNames, cName, U_SCRIPT_NAMES_ARRAY_SIZE);
+                index = findStringIndex(scriptNames, cName, USCRIPT_NAMES_ARRAY_SIZE);
                 code = (UScriptCode) scriptNameCodes[index];
             }
             ures_close(resD);
@@ -357,12 +312,12 @@ uchar_getScriptCode(const char* nameOrAbbrOrLocale, UErrorCode* err){
 }
 
 U_CAPI const char* 
-uchar_getScriptName(UScriptCode scriptCode){
+uscript_getName(UScriptCode scriptCode){
     int index = -1;
-    if(scriptCode > U_SCRIPT_CODE_LIMIT){
+    if(scriptCode > USCRIPT_CODE_LIMIT){
         return "";
     }
-    index = findCodeIndex(scriptNameCodes,scriptCode,U_SCRIPT_NAMES_ARRAY_SIZE);
+    index = findCodeIndex(scriptNameCodes,scriptCode,USCRIPT_NAMES_ARRAY_SIZE);
     if(index >=0){
         return scriptNames[index];
     }else{
@@ -371,12 +326,12 @@ uchar_getScriptName(UScriptCode scriptCode){
 
 }
 U_CAPI const char* 
-uchar_getScriptAbbr(UScriptCode scriptCode){
+uscript_getShortName(UScriptCode scriptCode){
     int index = -1;
-    if(scriptCode > U_SCRIPT_CODE_LIMIT){
+    if(scriptCode > USCRIPT_CODE_LIMIT){
         return "";
     }
-    index = findCodeIndex(scriptAbbrCodes,scriptCode,U_SCRIPT_ABBR_ARRAY_SIZE);
+    index = findCodeIndex(scriptAbbrCodes,scriptCode,USCRIPT_ABBR_ARRAY_SIZE);
     if(index >=0){
         return scriptAbbr[index];
     }else{
@@ -384,11 +339,3 @@ uchar_getScriptAbbr(UScriptCode scriptCode){
     }
 }
 
-U_CAPI const char* 
-uchar_scriptCodeName(UScriptCode code){
-    if(code>=0 && code<U_SCRIPT_CODE_LIMIT) {
-        return scriptCodeName[code+1];
-    } else{
-        return scriptCodeName[U_INVALID_SCRIPT_CODE+1];
-    }
-}
