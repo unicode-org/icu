@@ -341,14 +341,14 @@ ucnv_io_countStandards(UErrorCode *pErrorCode) {
 U_CFUNC const char *
 ucnv_io_getStandard(uint16_t n, UErrorCode *pErrorCode) {
     if (haveAliasData(pErrorCode) && tagTable) {
-        const char *p = (const char *) tagTable + 1 + *tagTable * *converterTable;
         int16_t count = (int16_t) *tagTable;
+        const char *tags = (const char *) (tagTable + 1 + count * *converterTable);
 
         while (n-- && count--) {
-            p += strlen(p);
+            tags += strlen(tags) + 1;
         }
 
-        return count >= 0 ? p : NULL;
+        return count ? tags : NULL;
     }
 
     return NULL;
