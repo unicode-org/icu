@@ -10,4 +10,8 @@
  * validSubLocale of "fi"
  */
 fi_FI{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }

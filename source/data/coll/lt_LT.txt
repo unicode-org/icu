@@ -10,4 +10,8 @@
  * validSubLocale of "lt"
  */
 lt_LT{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }

@@ -10,4 +10,8 @@
  * validSubLocale of "root"
  */
 pt_BR{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }

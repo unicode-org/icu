@@ -10,4 +10,8 @@
  * validSubLocale of "root"
  */
 ms_BN{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }

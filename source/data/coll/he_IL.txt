@@ -10,4 +10,8 @@
  * validSubLocale of "he"
  */
 he_IL{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }

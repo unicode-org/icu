@@ -10,4 +10,8 @@
  * validSubLocale of "root"
  */
 nl_NL{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }

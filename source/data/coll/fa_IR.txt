@@ -10,4 +10,8 @@
  * validSubLocale of "fa"
  */
 fa_IR{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }

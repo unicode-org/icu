@@ -10,4 +10,8 @@
  * validSubLocale of "sr"
  */
 sr_YU{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }

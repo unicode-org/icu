@@ -10,4 +10,8 @@
  * validSubLocale of "pa"
  */
 pa_IN{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }

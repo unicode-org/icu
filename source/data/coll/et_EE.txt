@@ -10,4 +10,8 @@
  * validSubLocale of "et"
  */
 et_EE{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }

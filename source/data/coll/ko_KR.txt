@@ -10,4 +10,8 @@
  * validSubLocale of "ko"
  */
 ko_KR{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }

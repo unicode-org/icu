@@ -10,4 +10,8 @@
  * validSubLocale of "hr"
  */
 hr_HR{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }

@@ -10,4 +10,8 @@
  * validSubLocale of "root"
  */
 id_ID{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }

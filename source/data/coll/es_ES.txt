@@ -10,4 +10,8 @@
  * validSubLocale of "es"
  */
 es_ES{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }

@@ -10,4 +10,8 @@
  * validSubLocale of "mr"
  */
 mr_IN{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }

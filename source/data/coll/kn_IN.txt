@@ -10,4 +10,8 @@
  * validSubLocale of "kn"
  */
 kn_IN{
+    /**
+     * so genrb doesn't issue warnings
+     */
+    ___{""}
 }
