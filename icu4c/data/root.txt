@@ -912,7 +912,7 @@ root {
         pl  { "Polish" }             
         pon { "Pohnpeian" }
         pra { "Prakrit Languages" }
-        pro {  "Provençal, Old (to 1500)" }     
+        pro { "Proven\u00E7al, Old (to 1500)" }     
         ps  { "Pashto (Pushto)" }  
         pt  { "Portuguese" }
         qu  { "Quechua" }            
