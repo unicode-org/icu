@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatMiscTests.java,v $ 
- * $Date: 2001/10/23 13:08:16 $ 
- * $Revision: 1.3 $
+ * $Date: 2001/10/29 12:49:02 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -68,17 +68,55 @@ public class DateFormatMiscTests extends com.ibm.test.TestFmwk {
         }
     }
     
-    /*
-     * @bug 4099975
+    /* @Bug 4099975
+     * SimpleDateFormat constructor SimpleDateFormat(String, DateFormatSymbols)
+     * should clone the DateFormatSymbols parameter
      */
-    public void Test4099975() {
-        DateFormatSymbols symbols = new DateFormatSymbols();
-        SimpleDateFormat df = new SimpleDateFormat("E hh:mm", symbols);
-        logln(df.toLocalizedPattern());
-        symbols.setLocalPatternChars("abcdefghijklmonpqr"); // change value of field
-        logln(df.toLocalizedPattern());
+    public void Test4099975new() {
         Date d = new Date();
-        logln(df.format(d));
+        //test SimpleDateFormat Constructor
+        {
+            DateFormatSymbols symbols = new DateFormatSymbols(Locale.US);
+            SimpleDateFormat df = new SimpleDateFormat("E hh:mm", symbols);
+            SimpleDateFormat dfClone = (SimpleDateFormat) df.clone();
+            
+            logln(df.toLocalizedPattern());
+            String s0 = df.format(d);
+            String s_dfClone = dfClone.format(d);
+            
+            symbols.setLocalPatternChars("abcdefghijklmonpqr"); // change value of field
+            logln(df.toLocalizedPattern());
+            String s1 = df.format(d);
+            
+            if (!s1.equals(s0) || !s1.equals(s_dfClone)) {
+                errln("Constructor: the formats are not equal");
+            }
+            if (!df.equals(dfClone)) {
+                errln("The Clone Object does not equal with the orignal source");
+            }
+        }
+        //test SimpleDateFormat.setDateFormatSymbols()
+        {
+            DateFormatSymbols symbols = new DateFormatSymbols(Locale.US);
+            SimpleDateFormat df = new SimpleDateFormat("E hh:mm");
+            df.setDateFormatSymbols(symbols);
+            SimpleDateFormat dfClone = (SimpleDateFormat) df.clone();
+            
+            logln(df.toLocalizedPattern());
+            String s0 = df.format(d);
+            String s_dfClone = dfClone.format(d);
+            
+            symbols.setLocalPatternChars("abcdefghijklmonpqr"); // change value of field
+            logln(df.toLocalizedPattern());
+            String s1 = df.format(d);
+            
+            if (!s1.equals(s0) || !s1.equals(s_dfClone)) {
+                errln("setDateFormatSymbols: the formats are not equal");
+            }
+            if (!df.equals(dfClone)) {
+                errln("The Clone Object does not equal with the orignal source");
+            }
+        }
     }
     
     /*
