@@ -15,7 +15,7 @@ uprv_strtod(const char* source, char** end);
 U_CAPI char* U_EXPORT2 
 uprv_dtostr(double value, char *buffer, int maximumDigits,UBool fixedPoint);
 U_CAPI int32_t U_EXPORT2
-uprv_itou (UChar * buffer, uint32_t i, uint32_t radix, int32_t pad);
+uprv_itou (UChar * buffer, int32_t capacity, uint32_t i, uint32_t radix, int32_t minwidth);
 
 
 #endif
