@@ -2699,19 +2699,23 @@ TestConsistency() {
     set1=uset_open(1, 0);
     set2=uset_open(1, 0);
 
-    unorm_getCanonStartSet(0x49, &sset);
-    _setAddSerialized(set1, &sset);
+    if (unorm_getCanonStartSet(0x49, &sset)) {
+        _setAddSerialized(set1, &sset);
 
-    /* enumerate all characters that are plausible to be latin letters */
-    for(start=0xa0; start<0x2000; ++start) {
-        if(unorm_getDecomposition(start, FALSE, buffer16, LENGTHOF(buffer16))>1 && buffer16[0]==0x49) {
-            uset_add(set2, start);
+        /* enumerate all characters that are plausible to be latin letters */
+        for(start=0xa0; start<0x2000; ++start) {
+            if(unorm_getDecomposition(start, FALSE, buffer16, LENGTHOF(buffer16))>1 && buffer16[0]==0x49) {
+                uset_add(set2, start);
+            }
         }
+
+        compareUSets(set1, set2,
+                     "[canon start set of 0049]", "[all c with canon decomp with 0049]",
+                     TRUE);
+    } else {
+      log_err("error calling unorm_getCanonStartSet()\n");
     }
 
-    compareUSets(set1, set2,
-                 "[canon start set of 0049]", "[all c with canon decomp with 0049]",
-                 TRUE);
     uset_close(set1);
     uset_close(set2);
 
