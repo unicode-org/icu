@@ -477,6 +477,7 @@ uloc_getISO3Country(const char* localeID);
 
 /**
  * Gets the Win32 LCID value for the specified locale.
+ * If the ICU locale is not recognized by Windows, 0 will be returned.
  *
  * @param localeID the locale to get the Win32 LCID value with
  * @return country the Win32 LCID for localeID
