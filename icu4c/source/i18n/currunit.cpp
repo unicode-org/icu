@@ -28,7 +28,8 @@ CurrencyUnit::CurrencyUnit(const UChar* _isoCode, UErrorCode& ec) {
     }
 }
 
-CurrencyUnit::CurrencyUnit(const CurrencyUnit& other) {
+CurrencyUnit::CurrencyUnit(const CurrencyUnit& other) :
+    MeasureUnit(other) {
     *this = other;
 }
 
