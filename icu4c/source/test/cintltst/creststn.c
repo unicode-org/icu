@@ -1827,6 +1827,11 @@ static void TestResourceLevelAliasing(void) {
       log_err("Referencing alias didn't get the right string\n");
     }
 
+    string = ures_getStringByKey(aliasB, "referencingalias", &strLen, &status);
+    if(seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
+      log_err("Referencing alias didn't get the right string\n");
+    }
+
     tb = ures_getByKey(aliasB, "CollationElements", tb, &status);
     tb = ures_getByKey(tb, "Sequence", tb, &status);
     string = ures_getString(tb, &strLen, &status);
