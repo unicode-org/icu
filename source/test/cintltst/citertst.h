@@ -106,14 +106,6 @@
      Internal utilities
      */
 
-    static void backAndForth(UCollationElements* iter);
-    
-    /**
-     * Return an integer array containing all of the collation orders
-     * returned by calls to next on the specified iterator
-     */
-    static int32_t* getOrders(UCollationElements* iter, int32_t *orderLength);
-
     
     static void assertEqual(UCollationElements *i1, UCollationElements *i2);
 
