@@ -14,7 +14,7 @@ include $(top_builddir)/icudefs.mk
 
 SECTION = 1
 
-MAN_FILES = $(TARGET).$(SECTION) $(DERB).$(SECTION)
+MAN_FILES = $(TARGET).$(SECTION)
 
 ## Build directory information
 subdir = tools/genbrk
@@ -25,8 +25,8 @@ CLEANFILES = *~ $(MAN_FILES) $(DEPS)
 ## Target information
 TARGET = genbrk
 
-CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
-LIBS = $(LIBICUI18N) $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
+CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
+LIBS = $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
 OBJECTS = genbrk.o
 
@@ -58,7 +58,7 @@ install-local: all-local
 
 clean-local: 
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
-	$(RMV) $(TARGET) $(DERB) $(OBJECTS) $(DERB_OBJ)
+	$(RMV) $(TARGET) $(OBJECTS)
 
 distclean-local: clean-local
 	$(RMV) Makefile
@@ -70,10 +70,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 $(TARGET) : $(OBJECTS)
-	$(LINK.c) -o $@ $^ $(LIBS) 
-
-$(DERB) : $(DERB_OBJ)
-	$(LINK.c) -o $@ $^ $(LIBS) 
+	$(LINK.cc) -o $@ $^ $(LIBS) 
 
 
 # the 'mv' will always fail if you are building in the source dir
