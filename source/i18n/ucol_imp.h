@@ -20,6 +20,7 @@
 * 02/16/2001  synwee    Added UCOL_GETPREVCE for the use in ucoleitr
 * 02/27/2001  synwee    Added getMaxExpansion data structure in UCollator   
 * 03/02/2001  synwee    Added UCOL_IMPLICIT_CE                    
+* 03/12/2001  synwee    Added pointer start to collIterate.
 */
 
 #ifndef UCOL_IMP_H
@@ -69,6 +70,8 @@
 
 struct collIterate {
   UChar *string; /* Original string */
+  UChar *start;  /* Pointer to the start of the source string. Either points to string
+                    or to writableBuffer */
   UChar *len;   /* Original string length */
   UChar *pos; /* This is position in the string */
   uint32_t *toReturn; /* This is the CE from CEs buffer that should be returned */
@@ -76,7 +79,6 @@ struct collIterate {
   uint32_t CEs[UCOL_EXPAND_CE_BUFFER_SIZE]; /* This is where we store CEs */
   UBool isThai; /* Have we already encountered a Thai prevowel */
   UBool isWritable; /* is the source buffer writable? */
-  UBool isUsingWritable; /* are we currently using writable buffer */
   UChar stackWritableBuffer[UCOL_WRITABLE_BUFFER_SIZE]; /* A writable buffer. */
   UChar *writableBuffer;
   const UCollator *coll;
@@ -216,14 +218,13 @@ struct incrementalContext {
 /* initializes collIterate structure */
 /* made as macro to speed up things */
 #define init_collIterate(collator, sourceString, sourceLen, s, isSourceWritable) { \
-    (s)->string = (s)->pos = (UChar *)(sourceString); \
+    (s)->start = (s)->string = (s)->pos = (UChar *)(sourceString); \
     (s)->len = (UChar *)(sourceString)+(sourceLen); \
     (s)->CEpos = (s)->toReturn = (s)->CEs; \
 	(s)->isThai = TRUE; \
 	(s)->isWritable = (isSourceWritable); \
 	(s)->writableBuffer = (s)->stackWritableBuffer; \
     (s)->coll = (collator); \
-(s)->isUsingWritable = FALSE; \
 }
 
 /* a macro that gets a simple CE */
@@ -269,10 +270,7 @@ struct incrementalContext {
     }                                                                        \
   }                                                                          \
   else {                                                                     \
-    /* weiv tentatively */\
-    /*if ((data).pos == (data).string || (data).pos == (data).writableBuffer) {*/\
-    if (((data).pos <= (data).string && !(data).isUsingWritable) ||          \
-        ((data).pos <= (data).writableBuffer && (data).isUsingWritable)) {   \
+    if ((data).pos == (data).start) {                                        \
       (order) = UCOL_NO_MORE_CES;                                            \
     }                                                                        \
     else {                                                                   \
@@ -284,8 +282,7 @@ struct incrementalContext {
       }                                                                      \
       else                                                                   \
         if ((data).isThai && UCOL_ISTHAIBASECONSONANT(ch) &&                 \
-               ((data).pos) != (data).string &&                              \
-               ((data).pos) != (data).writableBuffer &&                      \
+               ((data).pos) != (data).start &&                               \
                UCOL_ISTHAIPREVOWEL(*((data).pos -1))) {                      \
           result = UCOL_THAI;                                                \
         }                                                                    \
