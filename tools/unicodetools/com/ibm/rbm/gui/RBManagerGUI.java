@@ -533,14 +533,14 @@ public class RBManagerGUI extends JFrame implements ActionListener, MouseListene
 				}
 			} else if (ev.getActionCommand().equals(Resources.getTranslation("menu_file_export_XLF"))) {
 				   // Menu -> File -> Export -> XLIFF
-/*				RBxliffExporter exp = new RBxliffExporter();
+				RBxliffExporter exp = new RBxliffExporter();
 				try {
 					if (rbm != null && rbm.getBundles() != null)
 					    exp.export(rbm);
 				} catch (IOException ioe) {
 					JOptionPane.showMessageDialog(this, Resources.getTranslation("error_export"),
 					Resources.getTranslation("error"), JOptionPane.ERROR_MESSAGE);
-				}*/
+				}
 			} else if (ev.getActionCommand().equals(Resources.getTranslation("menu_options_addfile"))) {
 																					   // Menu -> Options -> Add New Resource
 				createResourceFile();

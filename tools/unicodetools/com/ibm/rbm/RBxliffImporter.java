@@ -54,26 +54,32 @@ public class RBxliffImporter extends RBImporter {
     protected void beginImport() throws IOException {
         super.beginImport();
         File xlf_file = getChosenFile();
+        FileInputStream fis;
 		
         try {
-            InputSource is = new InputSource(new FileInputStream(xlf_file));
+        	fis = new FileInputStream(xlf_file);
+            InputSource is = new InputSource(fis);
             //is.setEncoding("UTF-8");
             DOMParser parser = new DOMParser();
             parser.parse(is);
             xlf_xml = (DocumentImpl)parser.getDocument();
+            fis.close();
         } catch (SAXException e) {
             RBManagerGUI.debugMsg(e.getMessage());
             e.printStackTrace(System.err);
+            return;
         }
         if (xlf_xml == null) return;
         
         importDoc();
+        fis.close();
+        
     }
     
     private void importDoc() {
         if (xlf_xml == null)
             return;
-        String language = null;
+        String language = "";
         String bundleNote = null;
         ElementImpl root = (ElementImpl)xlf_xml.getDocumentElement();
         Node fileNode = root.getFirstChild();
@@ -91,12 +97,14 @@ public class RBxliffImporter extends RBImporter {
         }
         if (header.getNodeName().equalsIgnoreCase("header")) {
         	// Get the notes if from the header if they exist.
-            NodeList header_not_list = ((ElementImpl)header).getElementsByTagName("note");
-            if (header_not_list.getLength() > 0) {
-	            TextImpl text_elem = (TextImpl)header_not_list.item(0);
-	            String value = text_elem.getNodeValue();
-	            if (value != null && value.length() > 0) {
-	            	bundleNote = value;
+            NodeList header_note_list = ((ElementImpl)header).getElementsByTagName("note");
+            if (header_note_list.getLength() > 0) {
+	            TextImpl text_elem = (TextImpl)header_note_list.item(0).getChildNodes().item(0);
+	            if (text_elem != null) {
+		            String value = text_elem.getNodeValue();
+		            if (value != null && value.length() > 0) {
+		            	bundleNote = value;
+		            }
 	            }
             }
         }
@@ -158,6 +166,7 @@ public class RBxliffImporter extends RBImporter {
         language = String.valueOf(array);
         localeNames.add(language);
         resolveEncodings(localeNames);
+        rbm.getBundle(language).comment = bundleNote;
 
         for (int i=0; i < tu_list.getLength(); i++) {
             if (!(tu_list.item(i) instanceof ElementImpl)) {
@@ -176,7 +185,7 @@ public class RBxliffImporter extends RBImporter {
                 String groupComment = "";
                 NodeList notes_list = tu_elem.getElementsByTagName("note");
                 if (notes_list.getLength() > 0) {
-    	            TextImpl text_elem = (TextImpl)notes_list.item(0);
+    	            TextImpl text_elem = (TextImpl)notes_list.item(0).getChildNodes().item(0);
     	            String value = text_elem.getNodeValue();
     	            if (value != null && value.length() > 0) {
     	            	groupComment = value;
@@ -206,7 +215,6 @@ public class RBxliffImporter extends RBImporter {
             // This is a template, or a skeleton
             target_elem = (ElementImpl)trans_unit_elem.getElementsByTagName("source").item(0);
         }
-        ElementImpl note_elem = (ElementImpl)trans_unit_elem.getElementsByTagName("note").item(0);
         if (target_elem.getLength() < 1)
             return;
         target_elem.normalize();
@@ -214,8 +222,8 @@ public class RBxliffImporter extends RBImporter {
         if (text_list.getLength() < 1)
             return;
         TextImpl text_elem = (TextImpl)text_list.item(0);
-        String value = text_elem.getNodeValue();
-        if (value == null || value.length() < 1)
+        String transValue = text_elem.getNodeValue();
+        if (transValue == null || transValue.length() < 1)
             return;
         /*NamedNodeMap attribMap = trans_unit_elem.getAttributes();
         for (int k = 0; k < attribMap.getLength(); k++) {
@@ -226,8 +234,54 @@ public class RBxliffImporter extends RBImporter {
         if (name == null || name.length() < 1)
             return;
         // Create the bundle item
-        BundleItem item = new BundleItem(null, name, value);
+        BundleItem item = new BundleItem(null, name, transValue);
         // Get creation, modification values
+
+        String state = trans_unit_elem.getAttribute("state");
+        if (state != null && state.length() > 0) {
+            item.setTranslated(state.equalsIgnoreCase("translated"));
+        }
+
+        String date = trans_unit_elem.getAttribute("date");
+        if (date != null && date.length() > 0) {
+            item.setModifiedDate(date);
+        }
+
+        ElementImpl note_elem = (ElementImpl)trans_unit_elem.getElementsByTagName("note").item(0);
+        if (note_elem != null) {
+            NodeList note_list = note_elem.getChildNodes();
+            if (note_list.getLength() > 0) {
+	            TextImpl note_text_elem = (TextImpl)note_list.item(0);
+	            String comment = note_text_elem.getNodeValue();
+	            if (comment != null && comment.length() > 0) {
+	            	item.setComment(comment);
+	            }
+            }
+        }
+
+        ElementImpl prop_group_elem = (ElementImpl)trans_unit_elem.getElementsByTagName("prop-group").item(0);
+        if (prop_group_elem != null) {
+            NodeList prop_list = prop_group_elem.getChildNodes();
+        	int propertyLen = prop_list.getLength();
+            for (int prop = 0; prop < propertyLen; prop++) {
+            	if (prop_list.item(prop) instanceof ElementImpl) {
+	            	ElementImpl property_elem = (ElementImpl)prop_list.item(prop);
+	            	String propertyType = property_elem.getAttribute("prop-type");
+	            	if (propertyType != null) {
+			            String value = property_elem.getChildNodes().item(0).getNodeValue();
+			            if (value != null && value.length() > 0) {
+			            	if (propertyType.equals("creator")) {
+				            	item.setCreator(value);
+			            	}
+			            	else if (propertyType.equals("modifier")) {
+				            	item.setModifier(value);
+			            	}
+			            }
+	            	}
+            	}
+            }
+        }
+
         /*item.setCreatedDate(tuv_elem.getAttribute("creationdate"));
         item.setModifiedDate(tuv_elem.getAttribute("changedate"));
         if (tuv_elem.getAttribute("changeid") != null) item.setModifier(tuv_elem.getAttribute("changeid"));
@@ -238,25 +292,6 @@ public class RBxliffImporter extends RBImporter {
         for (int k=0; k < prop_list.getLength(); k++) {
             ElementImpl prop_elem = (ElementImpl)prop_list.item(k);
             String type = prop_elem.getAttribute("type");
-            if (type != null && type.equals("x-Comment")) {
-                // Get the comment
-                prop_elem.normalize();
-                text_list = prop_elem.getChildNodes();
-                if (text_list.getLength() < 1) continue;
-                text_elem = (TextImpl)text_list.item(0);
-                String comment = text_elem.getNodeValue();
-                if (comment != null && comment.length() > 0) item.setComment(comment);
-            } else if (type != null && type.equals("x-Translated")) {
-                // Get the translated flag value
-                prop_elem.normalize();
-                text_list = prop_elem.getChildNodes();
-                if (text_list.getLength() < 1) continue;
-                text_elem = (TextImpl)text_list.item(0);
-                if (text_elem.getNodeValue() != null) {
-                    if (text_elem.getNodeValue().equalsIgnoreCase("true")) item.setTranslated(true);
-                    else if (text_elem.getNodeValue().equalsIgnoreCase("false")) item.setTranslated(false);
-                    else item.setTranslated(getDefaultTranslated());
-                } else item.setTranslated(getDefaultTranslated());
             } else if (type != null && type.equals("x-Lookup")) {
                 // Get a lookup value
                 prop_elem.normalize();

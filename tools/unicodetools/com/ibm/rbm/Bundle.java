@@ -399,6 +399,7 @@ public class Bundle {
             	addBundleGroup(item.getParentGroup());
             item.getParentGroup().addBundleItem(item);
             allItems.put(item.getKey(), item);
+            removeUntranslatedItem(item.getKey());
             if (!item.isTranslated())
             	addUntranslatedItem(item);
         }
