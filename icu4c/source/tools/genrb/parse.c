@@ -30,6 +30,9 @@
 
 
 #define U_ICU_UNIDATA "unidata"
+#define CR      0x000D
+#define LF      0x000A
+#define SPACE   0x0020
 
 U_STRING_DECL(k_start_string, "string", 6);
 U_STRING_DECL(k_start_binary, "binary", 6);
@@ -520,13 +523,17 @@ parse(UCHARBUF* buf, const char *inputDir,
                     UChar32 c=0;
                     UCHARBUF* ucbuf;
                     int size = T_FileStream_size(in);
+                    /* We allocate more space than actually required
+                     * since the actual size needed for storing UChars 
+                     * is not known in UTF-8 byte stream
+                     */
                     UChar* pTarget = (UChar*) uprv_malloc(sizeof(UChar)*size);
                     UChar* target = pTarget;
                     UChar* targetLimit = pTarget+size;
                     ucbuf= ucbuf_open(in,status);
-                    do{
-                        c = ucbuf_getc(ucbuf,status);
-                        ucbuf_ungetc(c,ucbuf);
+
+                    /*read the rules into the buffer */
+                    while(c!=U_EOF && (target<targetLimit)){
                         c = ucbuf_getc(ucbuf,status);
                         if(c==0x005c){
                             c = unescape(ucbuf,status);
@@ -534,8 +541,15 @@ parse(UCHARBUF* buf, const char *inputDir,
                                 goto finish;
                             }
                         }
+                        /* ignore spaces carriage returns 
+                         * and line feed unless in the form \uXXXX
+                         */
+                        else if(c==SPACE || c==CR || c==LF){
+                            continue;
+                        }
+                        /* Append UChar* after dissembling if c>0xffff*/
                         U_APPEND_CHAR32(c,target);
-                    }while(c!=U_EOF && (target<targetLimit));
+                    }
                                     
                     /* Add it to bundle */
                     temp = string_open(bundle,cTag, pTarget, target-pTarget, status);
