@@ -200,6 +200,47 @@ u_strncmp(const UChar     *ucs1,
      int32_t     n);
 
 /**
+ * Compare two strings case-insensitively using full case folding.
+ * This is equivalent to u_strcmp(u_strFoldCase(s1, options), u_strFoldCase(s2, options)).
+ *
+ * @param s1 A string to compare.
+ * @param s2 A string to compare.
+ * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
+ * @return A negative, zero, or positive integer indicating the comparison result.
+ * @draft
+ */
+U_CAPI int32_t U_EXPORT2
+u_strcasecmp(const UChar *s1, const UChar *s2, uint32_t options);
+
+/**
+ * Compare two strings case-insensitively using full case folding.
+ * This is equivalent to u_strcmp(u_strFoldCase(s1, at most n, options), u_strFoldCase(s2, at most n, options)).
+ *
+ * @param s1 A string to compare.
+ * @param s2 A string to compare.
+ * @param n The maximum number of characters each string to case-fold and then compare.
+ * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
+ * @return A negative, zero, or positive integer indicating the comparison result.
+ * @draft
+ */
+U_CAPI int32_t U_EXPORT2
+u_strncasecmp(const UChar *s1, const UChar *s2, int32_t n, uint32_t options);
+
+/**
+ * Compare two strings case-insensitively using full case folding.
+ * This is equivalent to u_strcmp(u_strFoldCase(s1, n, options), u_strFoldCase(s2, n, options)).
+ *
+ * @param s1 A string to compare.
+ * @param s2 A string to compare.
+ * @param n The number of characters in each string to case-fold and then compare.
+ * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
+ * @return A negative, zero, or positive integer indicating the comparison result.
+ * @draft
+ */
+U_CAPI int32_t U_EXPORT2
+u_memcasecmp(const UChar *s1, const UChar *s2, int32_t length, uint32_t options);
+
+/**
  * Copy a ustring.
  * Adds a null terminator.
  * @param dst The destination string.
@@ -473,5 +514,33 @@ u_strToLower(UChar *dest, int32_t destCapacity,
              const UChar *src, int32_t srcLength,
              const char *locale,
              UErrorCode *pErrorCode);
+
+/**
+ * Case-fold the characters in a string.
+ * Case-folding is locale-independent and not context-sensitive,
+ * but there is an option for whether to include or exclude mappings for dotted I
+ * and dotless i that are marked with 'I' in CaseFolding.txt.
+ * The result may be longer or shorter than the original.
+ * The source string and the destination buffer are allowed to overlap.
+ *
+ * @param dest      A buffer for the result string. The result will be zero-terminated if
+ *                  the buffer is large enough.
+ * @param destCapacity The size of the buffer (number of UChars). If it is 0, then
+ *                  dest may be NULL and the function will only return the length of the result
+ *                  without writing any of the result string.
+ * @param src       The original string
+ * @param srcLength The length of the original string. If -1, then src must be zero-terminated.
+ * @param options   Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
+ * @param pErrorCode Must be a valid pointer to an error code value,
+ *                  which must not indicate a failure before the function call.
+ * @return The length of the result string. It may be greater than destCapacity. In that case,
+ *         only some of the result was written to the destination buffer.
+ * @draft
+ */
+U_CAPI int32_t U_EXPORT2
+u_strFoldCase(UChar *dest, int32_t destCapacity,
+              const UChar *src, int32_t srcLength,
+              uint32_t options,
+              UErrorCode *pErrorCode);
 
 #endif
