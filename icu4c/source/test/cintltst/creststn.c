@@ -1263,10 +1263,22 @@ static void TestFallback()
         log_err("Expected U_USING_FALLBACK_ERROR when trying to get ShortLanguage from fr_FR, got %d\n", 
             status);
     }
-
+    
     status = U_ZERO_ERROR;
 
     ures_close(fr_FR);
+
+    /* Test Jitterbug 552 fallback mechanism of aliased data */
+    {
+        UErrorCode err =U_ZERO_ERROR;
+        UResourceBundle* myResB = ures_open(NULL,"no_NO",&err);
+        const UChar*  myLocID = ures_get(myResB,"LocaleID",&err);
+        UResourceBundle* tResB = ures_getByKey(myResB, "DayNames", NULL, &err);
+        if(err!= U_USING_FALLBACK_ERROR){
+            log_err("Expected U_USING_FALLBACK_ERROR when trying to test no_NO aliased with nn_NO  %d\n",err);
+        }
+    }
+
 }
 
 static void printUChars(UChar* uchars){
