@@ -19,20 +19,43 @@ import java.util.TreeMap;
 import com.ibm.icu.impl.ICUResourceBundle;
 
 /**
- * A class is analogous to {@link java.util.Locale} and provides additional
+ * A class analogous to {@link java.util.Locale} that provides additional
  * support for ICU protocol.  In ICU 3.0 this class is enhanced to support
  * RFC 3066 language identifiers.
  *
- * <p>Many classes and services in ICU follow a factory idiom, in which a
- * factory method or object responds to a client request with an
- * object.  The request includes a locale (the <i>requested</i>
+ * <p>Many classes and services in ICU follow a factory idiom, in
+ * which a factory method or object responds to a client request with
+ * an object.  The request includes a locale (the <i>requested</i>
  * locale), and the returned object is constructed using data for that
  * locale.  The system may lack data for the requested locale, in
  * which case the locale fallback mechanism will be invoked until a
  * populated locale is found (the <i>valid</i> locale).  Furthermore,
- * even when a valid locale is found, further fallback may be required
- * to reach a locale containing the specific data required by the
- * service (the <i>actual</i> locale).
+ * even when a populated locale is found (the <i>valid</i> locale),
+ * further fallback may be required to reach a locale containing the
+ * specific data required by the service (the <i>actual</i> locale).
+ *
+ * <p>ULocale performs <b>'normalization'</b> and <b>'canonicalization'</b> of locale ids.
+ * Normalization 'cleans up' ICU locale ids as follows:
+ * <ul>
+ * <li>language, script, country, variant, and keywords are properly cased<br>
+ * (lower, title, upper, upper, and lower case respectively)</li>
+ * <li>hyphens used as separators are converted to underscores</li>
+ * <li>three-letter language and country ids are converted to two-letter
+ * equivalents where available</li>
+ * <li>surrounding spaces are removed from keywords and values</li>
+ * <li>if there are multiple keywords, they are put in sorted order</li>
+ * </li>
+ * Canonicalization additionally performs the following:
+ * <ul>
+ * <li>POSIX ids are converted to ICU format IDs</li>
+ * <li>'grandfathered' 3066 ids are converted to ICU standard form</li>
+ * <li>'PRE_EURO' and 'EURO' variants are converted to currency keyword form, with the currency
+ * id appropriate to the country of the locale (for PRE_EURO) or EUR (for EURO).
+ * </ul>
+ * All ULocale constructors automatically normalize the locale id.  To handle
+ * POSIX ids, the <code>canonicalize</code> can be called to convert the id
+ * to canonical form, or the <code>canonicalInstance</code> factory method
+ * can be called.</p>
  *
  * <p>This class provides selectors {@link #VALID_LOCALE} and {@link
  * #ACTUAL_LOCALE} intended for use in methods named
@@ -56,7 +79,7 @@ import com.ibm.icu.impl.ICUResourceBundle;
  * @author weiv
  * @author Alan Liu
  * @author Ram Viswanadha
- * @draft ICU 2.8
+ * @draft ICU 2.8 
  */
 public final class ULocale implements Serializable {
     /** 
@@ -284,8 +307,12 @@ public final class ULocale implements Serializable {
         "zu",  "zun", 
     };
 
+    private static final String[] replacementLanguages = {
+	"id", "he", "yi", "jv", "sr", "nb",/* replacement language codes */
+    };
+
     private static final String[] obsoleteLanguages = {
-        "in",  "iw",  "ji",  "jw",  "sh",    /* obsolete language codes */         
+        "in",  "iw",  "ji",  "jw",  "sh", "no",    /* obsolete language codes */         
     };
     
     /* This list MUST contain a three-letter code for every two-letter code in the
@@ -530,60 +557,64 @@ public final class ULocale implements Serializable {
         "FXX", "ROM", "TMP", "ZAR",    
     };
 
-    /* The left side is the result after getName is processes the name */
-    /* The right side is what the locale should be converted to. */
+    /**
+     * This table lists pairs of locale ids for canonicalization.  The
+     * The first item is the normalized id, the second item is the
+     * canonicalized id.
+     */
     private static final String[][] variantsToKeywords = {
-        { EMPTY_STRING,     "en_US_POSIX" }, /* .NET name */
-        { "C",              "en_US_POSIX" }, /* POSIX name */
-        { "art_LOJBAN",     "jbo" }, /* registered name */
-        { "az_AZ_CYRL",     "az_Cyrl_AZ" }, /* .NET name */
-        { "az_AZ_LATN",     "az_Latn_AZ" }, /* .NET name */
-        { "ca_ES_PREEURO",  "ca_ES@currency=ESP" },
-        { "cel_GAULISH",    "cel__GAULISH" }, /* registered name */
-        { "de_1901",        "de__1901" }, /* registered name */
-        { "de_1906",        "de__1906" }, /* registered name */
-        { "de__PHONEBOOK",  "de@collation=phonebook" },
-        { "de_AT_PREEURO",  "de_AT@currency=ATS" },
-        { "de_DE_PREEURO",  "de_DE@currency=DEM" },
-        { "de_LU_PREEURO",  "de_LU@currency=EUR" },
-        { "el_GR_PREEURO",  "el_GR@currency=GRD" },
-        { "en_BOONT",       "en__BOONT" }, /* registered name */
-        { "en_SCOUSE",      "en__SCOUSE" }, /* registered name */
-        { "en_BE_PREEURO",  "en_BE@currency=BEF" },
-        { "en_IE_PREEURO",  "en_IE@currency=IEP" },
-        { "es__TRADITIONAL", "es@collation=traditional" },
-        { "es_ES_PREEURO",  "es_ES@currency=ESP" },
-        { "eu_ES_PREEURO",  "eu_ES@currency=ESP" },
-        { "fi_FI_PREEURO",  "fi_FI@currency=FIM" },
-        { "fr_BE_PREEURO",  "fr_BE@currency=BEF" },
-        { "fr_FR_PREEURO",  "fr_FR@currency=FRF" },
-        { "fr_LU_PREEURO",  "fr_LU@currency=LUF" },
-        { "ga_IE_PREEURO",  "ga_IE@currency=IEP" },
-        { "gl_ES_PREEURO",  "gl_ES@currency=ESP" },
-        { "hi__DIRECT",     "hi@collation=direct" },
-        { "it_IT_PREEURO",  "it_IT@currency=ITL" },
-        { "ja_JP_TRADITIONAL", "ja_JP@calendar=japanese" },
-        { "nl_BE_PREEURO",  "nl_BE@currency=BEF" },
-        { "nl_NL_PREEURO",  "nl_NL@currency=NLG" },
-        { "pt_PT_PREEURO",  "pt_PT@currency=PTE" },
-        { "sl_ROZAJ",       "sl__ROZAJ" }, /* registered name */
-        { "sr_SP_CYRL",     "sr_Cyrl_SP" }, /* .NET name */
-        { "sr_SP_LATN",     "sr_Latn_SP" }, /* .NET name */
-        { "uz_UZ_CYRL",     "uz_Cyrl_UZ" }, /* .NET name */
-        { "uz_UZ_LATN",     "uz_Latn_UZ" }, /* .NET name */
-        { "zh_CHS",         "zh_Hans" }, /* .NET name */
-        { "zh_CHT",         "zh_TW" }, /* .NET name TODO: This should be zh_Hant once the locale structure is fixed. */
-        { "zh_GAN",         "zh__GAN" }, /* registered name */
-        { "zh_GUOYU",       "zh" }, /* registered name */
-        { "zh_HAKKA",       "zh__HAKKA" }, /* registered name */
-        { "zh_MIN",         "zh__MIN" }, /* registered name */
-        { "zh_MIN_NAN",     "zh__MINNAN" }, /* registered name */
-        { "zh_WUU",         "zh__WUU" }, /* registered name */
-        { "zh_XIANG",       "zh__XIANG" }, /* registered name */
-        { "zh_YUE",         "zh__YUE" }, /* registered name */
-        { "th_TH_TRADITIONAL", "th_TH@calendar=buddhist" },
-        { "zh_TW_STROKE",   "zh_TW@collation=stroke" },
-        { "zh__PINYIN",     "zh@collation=pinyin" }
+        { EMPTY_STRING,     "en_US_POSIX", null, null }, /* .NET name */
+        { "C",              "en_US_POSIX", null, null }, /* POSIX name */
+        { "art_LOJBAN",     "jbo", null, null }, /* registered name */
+        { "az_AZ_CYRL",     "az_Cyrl_AZ", null, null }, /* .NET name */
+        { "az_AZ_LATN",     "az_Latn_AZ", null, null }, /* .NET name */
+        { "ca_ES_PREEURO",  "ca_ES", "currency", "ESP" },
+        { "cel_GAULISH",    "cel__GAULISH", null, null }, /* registered name */
+        { "de_1901",        "de__1901", null, null }, /* registered name */
+        { "de_1906",        "de__1906", null, null }, /* registered name */
+        { "de__PHONEBOOK",  "de", "collation", "phonebook" },
+        { "de_AT_PREEURO",  "de_AT", "currency", "ATS" },
+        { "de_DE_PREEURO",  "de_DE", "currency", "DEM" },
+        { "de_LU_PREEURO",  "de_LU", "currency", "EUR" },
+        { "el_GR_PREEURO",  "el_GR", "currency", "GRD" },
+        { "en_BOONT",       "en__BOONT", null, null }, /* registered name */
+        { "en_SCOUSE",      "en__SCOUSE", null, null }, /* registered name */
+        { "en_BE_PREEURO",  "en_BE", "currency", "BEF" },
+        { "en_IE_PREEURO",  "en_IE", "currency", "IEP" },
+        { "es__TRADITIONAL", "es", "collation", "traditional" },
+        { "es_ES_PREEURO",  "es_ES", "currency", "ESP" },
+        { "eu_ES_PREEURO",  "eu_ES", "currency", "ESP" },
+        { "fi_FI_PREEURO",  "fi_FI", "currency", "FIM" },
+        { "fr_BE_PREEURO",  "fr_BE", "currency", "BEF" },
+        { "fr_FR_PREEURO",  "fr_FR", "currency", "FRF" },
+        { "fr_LU_PREEURO",  "fr_LU", "currency", "LUF" },
+        { "ga_IE_PREEURO",  "ga_IE", "currency", "IEP" },
+        { "gl_ES_PREEURO",  "gl_ES", "currency", "ESP" },
+        { "hi__DIRECT",     "hi", "collation", "direct" },
+        { "it_IT_PREEURO",  "it_IT", "currency", "ITL" },
+        { "ja_JP_TRADITIONAL", "ja_JP", "calendar", "japanese" },
+	{ "nb_NO_NY",       "nn_NO", null, null }, 	// "markus said this was ok" :-)
+        { "nl_BE_PREEURO",  "nl_BE", "currency", "BEF" },
+        { "nl_NL_PREEURO",  "nl_NL", "currency", "NLG" },
+        { "pt_PT_PREEURO",  "pt_PT", "currency", "PTE" },
+        { "sl_ROZAJ",       "sl__ROZAJ", null, null }, /* registered name */
+        { "sr_SP_CYRL",     "sr_Cyrl_SP", null, null }, /* .NET name */
+        { "sr_SP_LATN",     "sr_Latn_SP", null, null }, /* .NET name */
+        { "uz_UZ_CYRL",     "uz_Cyrl_UZ", null, null }, /* .NET name */
+        { "uz_UZ_LATN",     "uz_Latn_UZ", null, null }, /* .NET name */
+        { "zh_CHS",         "zh_Hans", null, null }, /* .NET name */
+        { "zh_CHT",         "zh_TW", null, null }, /* .NET name TODO: This should be zh_Hant once the locale structure is fixed. */
+        { "zh_GAN",         "zh__GAN", null, null }, /* registered name */
+        { "zh_GUOYU",       "zh", null, null }, /* registered name */
+        { "zh_HAKKA",       "zh__HAKKA", null, null }, /* registered name */
+        { "zh_MIN",         "zh__MIN", null, null }, /* registered name */
+        { "zh_MIN_NAN",     "zh__MINNAN", null, null }, /* registered name */
+        { "zh_WUU",         "zh__WUU", null, null }, /* registered name */
+        { "zh_XIANG",       "zh__XIANG", null, null }, /* registered name */
+        { "zh_YUE",         "zh__YUE", null, null }, /* registered name */
+        { "th_TH_TRADITIONAL", "th_TH", "calendar", "buddhist" },
+        { "zh_TW_STROKE",   "zh_TW", "collation", "stroke" },
+        { "zh__PINYIN",     "zh", "collation", "pinyin" }
     };
 
     /**
@@ -600,7 +631,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 2.8
      */
     public ULocale(Locale loc) {
-        this.localeID = loc.toString();
+        this.localeID = getName(loc.toString());
         this.locale = loc;
     }
 
@@ -614,7 +645,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 2.8
      */ 
     public ULocale(String localeID) {
-        this.localeID = localeID;
+        this.localeID = getName(localeID);
     }
 
     /**
@@ -637,26 +668,31 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public ULocale(String lang, String script, String country, String variant) {
+        localeID = getName(lscvToID(lang, script, country, variant));
+    }
+
+    private static String lscvToID(String lang, String script, String country, String variant) {
         StringBuffer buf = new StringBuffer();
-        
-        buf.append(lang.toLowerCase());
-        if(script!=null && script.length() > 0){
+     
+	if (lang != null && lang.length() > 0) {
+	    buf.append(lang);
+	}
+        if (script != null && script.length() > 0) {
             buf.append(UNDERSCORE);
-            buf.append(script.substring(0, 1).toUpperCase());
-            buf.append(script.substring(1).toLowerCase());
+	    buf.append(script);
         }
-        if(country!=null && country.length() > 0){
+        if (country != null && country.length() > 0) {
             buf.append(UNDERSCORE);
-            buf.append(country.toUpperCase());
+	    buf.append(country);
         }
-        if(variant!=null && variant.length() > 0){
+        if (variant != null && variant.length() > 0) {
             if (country == null || country.length() == 0) {
                 buf.append(UNDERSCORE);
             }
             buf.append(UNDERSCORE);
-            buf.append(variant.toUpperCase());
+            buf.append(variant);
         }
-        localeID = buf.toString();
+	return buf.toString();
     }
 
     /**
@@ -885,7 +921,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */ 
     public String getName() {
-        return getName(localeID);   
+        return localeID; // always normalized
     }
 
     /**
@@ -908,8 +944,9 @@ public final class ULocale implements Serializable {
     }
 
     /**
-     * Gets an iterator over keywords for the specified locale.
-     * @return iterator over keywords
+     * Gets an iterator over keywords for the specified locale.  If there 
+     * are no keywords, returns null.
+     * @return iterator over keywords, or null if there are no keywords.
      * @draft ICU 3.0
      */
     public Iterator getKeywords() {
@@ -917,8 +954,10 @@ public final class ULocale implements Serializable {
     }
 
     /**
-     * Gets an iterator over keywords for the specified locale.
-     * @return an iterator over the keywords in the specified locale.
+     * Gets an iterator over keywords for the specified locale.  If there 
+     * are no keywords, returns null.
+     * @return an iterator over the keywords in the specified locale, or null
+     * if there are no keywords.
      * @draft ICU 3.0
      */
     public static Iterator getKeywords(String localeID){
@@ -926,9 +965,9 @@ public final class ULocale implements Serializable {
     }
 
     /**
-     * Get the value for a keyword. Locale name does not need to be normalized.
+     * Get the value for a keyword. If the keyword is not defined, null is returned.
      * @param keywordName name of the keyword for which we want the value. Case insensitive.
-     * @return String the value of the keyword as a string
+     * @return the value of the keyword, or null.
      * @draft ICU 3.0
      */
     public String getKeywordValue(String keywordName){
@@ -953,6 +992,12 @@ public final class ULocale implements Serializable {
         private int index;
         private char[] buffer;
         private int blen;
+	// um, don't handle POSIX ids unless we request it.  why not?  well... because.
+	private boolean canonicalize;
+
+      // used when canonicalizing
+      Map keywords;
+      String baseName;
 
         /**
          * Parsing constants.
@@ -964,11 +1009,16 @@ public final class ULocale implements Serializable {
         private static final char ITEM_SEPARATOR        = ';';
         private static final char DOT                   = '.';
 
-        private IDParser(String localeID){
+	private IDParser(String localeID) {
+	    this(localeID, false);
+	}
+
+        private IDParser(String localeID, boolean canonicalize) {
             id = localeID.toCharArray();
             index = 0;
             buffer = new char[id.length + 5];
             blen = 0;
+	    this.canonicalize = canonicalize;
         }
 
         private void reset() {
@@ -1063,7 +1113,7 @@ public final class ULocale implements Serializable {
         /**
          * Return true if the character is an id separator (underscore or hyphen).
          */
-        private static boolean isIDSeparator(char c) {
+        private boolean isIDSeparator(char c) {
             return c == UNDERSCORE || c == HYPHEN;
         }
 
@@ -1071,17 +1121,18 @@ public final class ULocale implements Serializable {
          * Return true if the character is a terminator (keyword separator, dot, or DONE).
          * Dot is a terminator because of the POSIX form, where dot precedes the codepage.
          */
-        private static boolean isTerminator(char c){
-            return c == KEYWORD_SEPARATOR || c == DOT || c == DONE;   
+        private boolean isTerminator(char c) {
+	    // always terminate at DOT, even if not handling POSIX.  It's an error...
+            return c == KEYWORD_SEPARATOR || c == DONE || (c == DOT);
         }
 
         /**
          * Return true if the character is a terminator or id separator.
          */
-        private static boolean isTerminatorOrIDSeparator(char c) {
-            return (c == KEYWORD_SEPARATOR) || (c == DOT) || 
+        private boolean isTerminatorOrIDSeparator(char c) {
+            return (c == KEYWORD_SEPARATOR) || 
                 (c == UNDERSCORE || c == HYPHEN) || 
-                (c == DONE);   
+                (c == DONE) || (canonicalize && c == DOT);   
         }
 
         /**
@@ -1130,19 +1181,30 @@ public final class ULocale implements Serializable {
             }
             --index;
 
-            if (blen == 3) {
-                /* convert 3 character code to 2 character code if possible *CWB*/
-                String lang = getString(0);
-                int offset = findIndex(languages3, lang);
-                if (offset >= 0) {
-                    set(0, languages[offset]);
-                } else {
-                    offset = findIndex(obsoleteLanguages3, lang);
-                    if (offset >= 0) {
-                        set(0, obsoleteLanguages[offset]);
-                    }
-                }
-            }
+	    if (blen == 3) {
+	      /* convert 3 character code to 2 character code if possible *CWB*/
+	      String lang = getString(0);
+	      int offset = findIndex(languages3, lang);
+	      if (offset >= 0) {
+		set(0, languages[offset]);
+	      } else {
+		offset = findIndex(obsoleteLanguages3, lang);
+		if (offset >= 0) {
+		  if (canonicalize) {
+		    set(0, replacementLanguages[offset]);
+		  } else {
+		    set(0, obsoleteLanguages[offset]);
+		  }
+		}
+	      }
+	    } else if (canonicalize && blen == 2) {
+	      // update canonical languages
+	      String lang = getString(0);
+	      int offset = findIndex(obsoleteLanguages, lang);
+	      if (offset >= 0) {
+		set(0, replacementLanguages[offset]);
+	      }
+	    }
 
             return 0;
         }
@@ -1300,17 +1362,20 @@ public final class ULocale implements Serializable {
          * We identify this use of '@' in POSIX ids by looking for an '=' following
          * the '@'.  If there is one, we consider '@' to start a keyword list, instead of
          * being part of a POSIX id.
+	 *
+	 * Note:  since it was decided that we want an option to not handle POSIX ids, this
+	 * becomes a bit more complex.
          */
         private int parseVariant() {
             int oldBlen = blen;
 
             boolean first = true;
             char c = next();
-            if (c == DOT) {
-		// if we have a DOT, we ignore anything after the '@'
+            if (canonicalize && c == DOT) {
+		// if we have a DOT, we ignore anything up to the '@'
                 while (!isTerminator(c = next())); // skip to terminator, assume no more DOTs
             } 
-	    if (c != DONE && (c != KEYWORD_SEPARATOR || !haveKeywordAssign())) {
+	    if (c != DONE && (c != KEYWORD_SEPARATOR || (canonicalize && !haveKeywordAssign()))) {
                 // we have more text, and either had an id separator, or 
                 // had a keyword separator in a POSIX locale
                 // either way, we accumulate text until a terminator
@@ -1388,7 +1453,14 @@ public final class ULocale implements Serializable {
             };
         }
 
+      public void setBaseName(String baseName) {
+	this.baseName = baseName;
+      }
+
         public void parseBaseName() {
+	  if (baseName != null) {
+	    set(0, baseName);
+	  } else {
             reset();
             parseLanguage();
             parseScript();
@@ -1399,6 +1471,7 @@ public final class ULocale implements Serializable {
             if (blen > 1 && buffer[blen-1] == UNDERSCORE) {
                 --blen;
             }
+	  }
         }
 
         /**
@@ -1406,6 +1479,9 @@ public final class ULocale implements Serializable {
          * form does not include keywords.
          */
         public String getBaseName() {
+	  if (baseName != null) {
+	    return baseName;
+	  }
             parseBaseName();
             return getString(0);
         }
@@ -1429,12 +1505,19 @@ public final class ULocale implements Serializable {
         private boolean setToKeywordStart() {
             for (int i = index; i < id.length; ++i) {
                 if (id[i] == KEYWORD_SEPARATOR) {
-                    for (int j = ++i; j < id.length; ++j) { // increment i past separator for return
-                        if (id[j] == KEYWORD_ASSIGN) {
-                            index = i;
-                            return true;
-                        }
-                    }
+		    if (canonicalize) {
+			for (int j = ++i; j < id.length; ++j) { // increment i past separator for return
+			    if (id[j] == KEYWORD_ASSIGN) {
+				index = i;
+				return true;
+			    }
+			}
+		    } else {
+			if (++i < id.length) {
+			    index = i;
+			    return true;
+			}
+		    }
                 }
             }
             return false;
@@ -1462,41 +1545,47 @@ public final class ULocale implements Serializable {
             return new String(id, start, index-start).trim(); // leave case alone
         }
 
+	private Comparator getKeyComparator() {
+	    final Comparator comp = new Comparator() {
+		    public int compare(Object lhs, Object rhs) {
+			return ((String)lhs).compareTo(rhs);
+		    }
+		};
+	    return comp;
+	}
+
         /**
-         * Return a map of the keywords and values.
+         * Return a map of the keywords and values, or null if there are none.
          */
         private Map getKeywordMap() {
-            Map m = null;
+	    if (keywords == null) {
+		TreeMap m = null;
+		if (setToKeywordStart()) {
+		    // trim spaces and convert to lower case, both keywords and values.
+		    do {
+			String key = getKeyword();
+			if (key.length() == 0) {
+			    break;
+			}
+			if (next() != KEYWORD_ASSIGN) {
+			    throw new IllegalArgumentException("key '" + key + "' missing a value.");
+			}
+			String value = getValue();
+			if (value.length() == 0) {
+			    throw new IllegalArgumentException("key '" + key + "' missing a value.");
+			}
+			if (m == null) {
+			    m = new TreeMap(getKeyComparator());
+			} else if (m.containsKey(key)) {
+			    throw new IllegalArgumentException("key '" + key + "' already has a value.");
+			}
+			m.put(key, value);
+		    } while (next() == ITEM_SEPARATOR);
+		}		
+		keywords = m != null ? m : Collections.EMPTY_MAP;
+	    }
 
-            if (setToKeywordStart()) {
-                // trim spaces and convert to lower case, both keywords and values.
-                do {
-                    String key = getKeyword();
-                    if (key.length() == 0) {
-                        break;
-                    }
-                    if (next() != KEYWORD_ASSIGN) {
-                        throw new IllegalArgumentException("key '" + key + "' missing a value.");
-                    }
-                    String value = getValue();
-                    if (value.length() == 0) {
-                        throw new IllegalArgumentException("key '" + key + "' missing a value.");
-                    }
-                    if (m == null) {
-                        final Comparator comp = new Comparator() {
-                                public int compare(Object lhs, Object rhs) {
-                                    return ((String)lhs).compareTo(rhs);
-                                }
-                            };
-                        m = new TreeMap(comp);
-                    }
-                    if (m.containsKey(key)) {
-                        throw new IllegalArgumentException("key '" + key + "' already has a value.");
-                    }
-                    m.put(key, value);
-                } while (next() == ITEM_SEPARATOR);
-            }
-            return m == null ? Collections.EMPTY_MAP : m;
+	    return keywords;
         }
 
         /**
@@ -1505,27 +1594,30 @@ public final class ULocale implements Serializable {
         private int parseKeywords() {
             int oldBlen = blen;
             Map m = getKeywordMap();
-            Iterator iter = m.entrySet().iterator();
-            boolean first = true;
-            while (iter.hasNext()) {
-                append(first ? KEYWORD_SEPARATOR : ITEM_SEPARATOR);
-                first = false;
-                Map.Entry e = (Map.Entry)iter.next();
-                append((String)e.getKey());
-                append(KEYWORD_ASSIGN);
-                append((String)e.getValue());
-            }
-            if (blen != oldBlen) {
-                ++oldBlen;
-            }
+	    if (!m.isEmpty()) {
+		Iterator iter = m.entrySet().iterator();
+		boolean first = true;
+		while (iter.hasNext()) {
+		    append(first ? KEYWORD_SEPARATOR : ITEM_SEPARATOR);
+		    first = false;
+		    Map.Entry e = (Map.Entry)iter.next();
+		    append((String)e.getKey());
+		    append(KEYWORD_ASSIGN);
+		    append((String)e.getValue());
+		}
+		if (blen != oldBlen) {
+		    ++oldBlen;
+		}
+	    }
             return oldBlen;
         }
 
         /**
-         * Return an iterator over the keywords.
+         * Return an iterator over the keywords, or null if we have an empty map.
          */
         public Iterator getKeywords() {
-            return getKeywordMap().keySet().iterator();
+	    Map m = getKeywordMap();
+            return m.isEmpty() ? null : m.keySet().iterator();
         }
 
         /**
@@ -1533,8 +1625,70 @@ public final class ULocale implements Serializable {
          * present.
          */
         public String getKeywordValue(String keywordName) {
-            return (String)getKeywordMap().get(keywordName.trim().toLowerCase());
+	    Map m = getKeywordMap();
+            return m.isEmpty() ? null : (String)m.get(keywordName.trim().toLowerCase());
         }
+
+	/**
+	 * Set the keyword value only if it is not already set to something else.
+	 */
+	public void defaultKeywordValue(String keywordName, String value) {
+	    setKeywordValue(keywordName, value, false);
+	}
+	    
+	/**
+	 * Set the value for the named keyword, or unset it if value is null.  If
+	 * keywordName itself is null, unset all keywords.  If keywordName is not null,
+	 * value must not be null.
+	 */
+	public void setKeywordValue(String keywordName, String value) {
+	    setKeywordValue(keywordName, value, true);
+	}
+
+	/**
+	 * Set the value for the named keyword, or unset it if value is null.  If
+	 * keywordName itself is null, unset all keywords.  If keywordName is not null,
+	 * value must not be null.  If reset is true, ignore any previous value for 
+	 * the keyword, otherwise do not change the keyword (including removal of
+	 * one or all keywords).
+	 */
+	private void setKeywordValue(String keywordName, String value, boolean reset) {
+	    if (keywordName == null) {
+		if (reset) {
+		    // force new map, ignore value
+		    keywords = Collections.EMPTY_MAP;
+		}
+	    } else {
+		keywordName = keywordName.trim().toLowerCase();
+		if (keywordName.length() == 0) {
+		    throw new IllegalArgumentException("keyword must not be empty");
+		}
+		value = value.trim();
+		if (value.length() == 0) {
+		    throw new IllegalArgumentException("value must not be empty");
+		}
+		Map m = getKeywordMap();
+		if (m.isEmpty()) { // it is EMPTY_MAP
+		    if (value != null) {
+			// force new map
+			keywords = new TreeMap(getKeyComparator());
+			keywords.put(keywordName, value.trim());
+		    }
+		} else {
+		    if (reset || !m.containsKey(keywordName)) {
+			if (value != null) {
+			    m.put(keywordName, value);
+			} else {
+			    m.remove(keywordName);
+			    if (m.isEmpty()) {
+				// force new map
+				keywords = Collections.EMPTY_MAP;
+			    }
+			}
+		    }
+		}
+	    }
+	}
     }
 
     /**
@@ -1559,25 +1713,79 @@ public final class ULocale implements Serializable {
      * @draft ICU 3.0
      */
     public static String canonicalize(String localeID){
-        String locStr = new IDParser(localeID).getName();
-        // now we have an ID in the form xx_Yyyy_ZZ_KKKKK
+      IDParser parser = new IDParser(localeID, true);
+      String baseName = parser.getBaseName();
+      boolean foundVariant = false;
+      
+        // we have an ID in the form xx_Yyyy_ZZ_KKKKK
+
         /* See if this is an already known locale */
         for (int i = 0; i < variantsToKeywords.length; i++) {
-            if (variantsToKeywords[i][0].equals(locStr)) {
-                locStr = variantsToKeywords[i][1];
+            if (variantsToKeywords[i][0].equals(baseName)) {
+		foundVariant = true;
+
+		String[] vals = variantsToKeywords[i];
+                parser.setBaseName(vals[1]);
+		if (vals[2] != null) {
+		    parser.defaultKeywordValue(vals[2], vals[3]);
+		}
                 break;
             }
         }
 
         /* convert the Euro variant to appropriate ID */
-        int idx = locStr.indexOf("_EURO");
-        if (idx > -1) {
-            locStr = locStr.substring(0,idx)+"@currency=EUR";       
-        }
-        
-        return locStr;
+	if (!foundVariant) {
+	  int idx = baseName.indexOf("_EURO");
+	  if (idx > -1) {
+	    parser.setBaseName(baseName.substring(0, idx));
+	    parser.defaultKeywordValue("currency", "EUR");
+	  }
+	}
+
+	/* total mondo hack for Norwegian, fortunately the main NY case is handled earlier */
+	if (!foundVariant) {
+	    if (parser.getLanguage().equals("nb") && parser.getVariant().equals("NY")) {
+		parser.setBaseName(lscvToID("nn", parser.getScript(), parser.getCountry(), null));
+	    }
+	}
+
+        return parser.getName();
     }
     
+    /**
+     * Given a locale id, a keyword, and a value, return a new locale id with an updated
+     * keyword and value.  If keyword is null, this removes all keywords from the locale id.
+     * Otherwise, if the value is null, this removes the value for this keyword from the
+     * locale id.  Otherwise, this adds/replaces the value for this keyword in the locale id.
+     * The keyword and value must not be empty.
+     * @param localeID the locale id to modify
+     * @param keyword the keyword to add/remove, or null to remove all keywords.
+     * @param the value to add/set, or null to remove this particular keyword.
+     * @return the updated locale id
+     * @internal
+     */
+    private static String setKeywordValue(String localeID, String keyword, String value) {
+	IDParser parser = new IDParser(localeID);
+	parser.setKeywordValue(keyword, value);
+	return parser.getName();
+    }
+
+    /**
+     * Given a locale id, a keyword, and a value, return a new locale id with an updated
+     * keyword and value, if the keyword does not already have a value.  The keyword and
+     * value must not be null or empty.
+     * @param localeID the locale id to modify
+     * @param keyword the keyword to add, if not already present
+     * @param the value to add, if not already present
+     * @return the updated locale id
+     * @internal
+     */
+    private static String defaultKeywordValue(String localeID, String keyword, String value) {
+	IDParser parser = new IDParser(localeID);
+	parser.defaultKeywordValue(keyword, value);
+	return parser.getName();
+    }
+
     /**
      * Returns a three-letter abbreviation for this locale's language.  If the locale
      * doesn't specify a language, this will be the empty string.  Otherwise, this will
@@ -2010,23 +2218,26 @@ public final class ULocale implements Serializable {
             }
         }
 
-        Iterator keys = parser.getKeywordMap().entrySet().iterator();
-        while (keys.hasNext()) {
-            if (buf.length() > 0) {
-                if (haveLanguage & !openParen) {
-                    buf.append(" (");
-                    openParen = true;
-                } else {
-                    buf.append(", ");
-                }
-            }
-            Map.Entry e = (Map.Entry)keys.next();
-            String key = (String)e.getKey();
-            String val = (String)e.getValue();
-            buf.append(getTableString("Keys", null, key, bundle));
-            buf.append("=");
-            buf.append(getTableString("Types", key, val, bundle));
-        }
+	Map m = parser.getKeywordMap();
+	if (!m.isEmpty()) {
+	    Iterator keys = m.entrySet().iterator();
+	    while (keys.hasNext()) {
+		if (buf.length() > 0) {
+		    if (haveLanguage & !openParen) {
+			buf.append(" (");
+			openParen = true;
+		    } else {
+			buf.append(", ");
+		    }
+		}
+		Map.Entry e = (Map.Entry)keys.next();
+		String key = (String)e.getKey();
+		String val = (String)e.getValue();
+		buf.append(getTableString("Keys", null, key, bundle));
+		buf.append("=");
+		buf.append(getTableString("Types", key, val, bundle));
+	    }
+	}
 
         if (openParen) {
             buf.append(")");
