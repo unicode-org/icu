@@ -604,6 +604,7 @@ static UBool convertFile(const char *pname,
             initMsg(pname);
             u_wmsg(stderr, "problemCvtToU", str.getBuffer(), u_wmsg_errorName(err));
             willexit = 1;
+            err = U_ZERO_ERROR; /* reset the error for the rest of the conversion. */
         }
 
         // At the last conversion, the converted characters should be
