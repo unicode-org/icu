@@ -20,17 +20,14 @@
 #ifndef UNISTR_H
 #define UNISTR_H
 
-#include <limits.h>
-
 #include "unicode/utypes.h"
-#include "unicode/unicode.h"
-#include "unicode/ucnv.h"
 #include "unicode/rep.h"
 
-class Locale;
+class Locale;               // unicode/locid.h
 class UCharReference;
-class UnicodeStringStreamer;
-class UnicodeConverter;
+class UnicodeStringStreamer;// unicode/unistrm.h
+class UnicodeConverter;     // unicode/convert.h
+struct UConverter;          // unicode/ucnv.h
 
 // for unistrm.h
 /**
@@ -135,9 +132,9 @@ public:
   //========================================
   // Read-only operations
   //========================================
-  
+
   /* Comparison - bitwise only - for international comparison use collation */
-  
+
   /**
    * Equality operator. Performs only bitwise comparison.
    * @param text The UnicodeString to compare to this one.
@@ -146,7 +143,7 @@ public:
    * @stable
    */
   inline UBool operator== (const UnicodeString& text) const;
-  
+
   /**
    * Inequality operator. Performs only bitwise comparison.
    * @param text The UnicodeString to compare to this one.
@@ -347,7 +344,7 @@ public:
   inline UBool startsWith(const UnicodeString& srcText,
             UTextOffset srcStart,
             int32_t srcLength) const;
-  
+
   /**
    * Determine if this starts with the characters in <TT>srcChars</TT>
    * @param srcChars The characters to match.
@@ -358,7 +355,7 @@ public:
    */
   inline UBool startsWith(const UChar *srcChars,
             int32_t srcLength) const;
- 
+
   /**
    * Determine if this ends with the characters in <TT>srcChars</TT> 
    * in the range  [<TT>srcStart</TT>, <TT>srcStart + srcLength</TT>).   
@@ -406,7 +403,7 @@ public:
    */
   inline UBool endsWith(const UChar *srcChars,
           int32_t srcLength) const;
- 
+
   /**
    * Determine if this ends with the characters in <TT>srcChars</TT> 
    * in the range  [<TT>srcStart</TT>, <TT>srcStart + srcLength</TT>).   
@@ -421,7 +418,7 @@ public:
           UTextOffset srcStart,
           int32_t srcLength) const;
 
- 
+
   /* Searching - bitwise only */
 
   /**
@@ -867,7 +864,7 @@ public:
            int32_t length, 
            UChar *dst, 
            UTextOffset dstStart = 0) const;
-  
+
   /**
    * Copy the characters in the range 
    * [<tt>start</tt>, <tt>start + length</tt>) into the  UnicodeString
@@ -992,7 +989,7 @@ public:
    */
   inline UBool isBogus(void) const;
 
-  
+
   //========================================
   // Write operations
   //========================================
@@ -1918,7 +1915,7 @@ public:
   //========================================
   // Implementation methods
   //========================================
-  
+
 private:
 
   inline int8_t
@@ -1927,7 +1924,7 @@ private:
            const UnicodeString& srcText,
            UTextOffset srcStart,
            int32_t srcLength) const;
-  
+
   int8_t doCompare(UTextOffset start,
            int32_t length,
            const UChar *srcChars,
@@ -1946,11 +1943,11 @@ private:
          int32_t length, 
          UChar *dst, 
          UTextOffset dstStart) const;
-  
+
   inline void doExtract(UTextOffset start,
          int32_t length,
          UnicodeString& target) const;
-  
+
   inline UChar doCharAt(UTextOffset offset)  const;
 
   UnicodeString& doReplace(UTextOffset start, 
@@ -1970,7 +1967,7 @@ private:
 
   // calculate hash code
   int32_t doHashCode(void) const;
-  
+
   // get pointer to start of array
   inline UChar* getArrayStart(void);
   inline const UChar* getArrayStart(void) const;
