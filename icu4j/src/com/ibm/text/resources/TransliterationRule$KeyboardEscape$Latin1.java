@@ -125,7 +125,7 @@ public class TransliterationRule$KeyboardEscape$Latin1 extends ListResourceBundl
                 + "y{acute}{esc}>\u00FD;"
                 + "y{esc}>\u00A5;" // yen sign
                 + "th{esc}>\u00FE;"
-                + "ss{esc}>\u00FF;"
+                // + "ss{esc}>\u00FF;" // masked
             }
         };
     }

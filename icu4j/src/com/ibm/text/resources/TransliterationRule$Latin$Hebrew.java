@@ -260,7 +260,6 @@ public class TransliterationRule$Latin$Hebrew extends ListResourceBundle {
                 + "sh<{SHIN};"
                 + "th<{TAV};"
                 + "t''<{TET}[{HE};"
-                + "t''<{TET}[{HE};"
                 + "t''<{TET}[{SAMEKH};"
                 + "t''<{TET}[{SHIN};"
                 + "t<{TET};"
