@@ -20,7 +20,7 @@
  * use LayoutEngine in a way that is consistent with the rest
  * of ICU.
  *
- *(LayoutEngine was developed seperately from ICU and
+ * (LayoutEngine was developed seperately from ICU and
  * the same source is used in non-ICU environments, so it cannot
  * be changed to match ICU coding conventions).
  *
@@ -46,24 +46,6 @@
 class U_LAYOUT_API ICULayoutEngine
 {
 private:
-	/**
-	 * This is the table used to translate UScriptCode
-	 * values to the script codes defined in LEScripts.h.
-	 */
-	static int32_t le_scriptCodes[];
-
-	/**
-	 * This method converts an UScriptCode value to
-	 * a LayoutEngine script code as defined in LEScripts.
-	 *
-	 * @param script - the UScriptCode value
-	 *
-	 * @return the LayoutEngine script code.
-	 *
-	 * @see LEScripts.h
-	 */
-	static int32_t le_scriptCode(UScriptCode script);
-
 	/**
 	 * This holds the instance of LayoutEngine that does all
 	 * the work.
@@ -337,20 +319,11 @@ inline ICULayoutEngine *ICULayoutEngine::createInstance(const LEFontInstance *fo
 														Locale &locale, UErrorCode &success)
 {
 	LayoutEngine *engine = LayoutEngine::layoutEngineFactory(fontInstance,
-															 le_scriptCode(script),
+															 (le_int32) script,
 															 0,
 															 (LEErrorCode &) success);
 	
 	return new ICULayoutEngine(engine);
-}
-
-inline int32_t ICULayoutEngine::le_scriptCode(UScriptCode script)
-{
-	if (script < 0 || script >= USCRIPT_CODE_LIMIT) {
-		return 0;
-	}
-
-	return le_scriptCodes[script];
 }
 
 #endif

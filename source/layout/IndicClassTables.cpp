@@ -233,15 +233,48 @@ const IndicClassTable mlymClassTable = {0x0D00, 0x0D6F, 3, MLYM_SCRIPT_FLAGS, ml
 // IndicClassTable addresses
 //
 const IndicClassTable *indicClassTables[] = {
-    &devaClassTable, // 'deva'
-    &bengClassTable, // 'beng'
-    &punjClassTable, // 'punj' punjabi == gurmukhi
-    &gujrClassTable, // 'gujr'
-    &oryaClassTable, // 'orya'
-    &tamlClassTable, // 'taml'
-    &teluClassTable, // 'telu'
-    &kndaClassTable, // 'knda'
-    &mlymClassTable  // 'mlyn'
+    NULL,            /* 'zyyy' (COMMON) */
+    NULL,            /* 'qaai' (INHERITED) */
+    NULL,            /* 'arab' (ARABIC) */
+    NULL,            /* 'armn' (ARMENIAN) */
+    &bengClassTable, /* 'beng' (BENGALI) */
+    NULL,            /* 'bopo' (BOPOMOFO) */
+    NULL,            /* 'cher' (CHEROKEE) */
+    NULL,            /* 'qaac' (COPTIC) */
+    NULL,            /* 'cyrl' (CYRILLIC) */
+    NULL,            /* 'dsrt' (DESERET) */
+    &devaClassTable, /* 'deva' (DEVANAGARI) */
+    NULL,            /* 'ethi' (ETHIOPIC) */
+    NULL,            /* 'geor' (GEORGIAN) */
+    NULL,            /* 'goth' (GOTHIC) */
+    NULL,            /* 'grek' (GREEK) */
+    &gujrClassTable, /* 'gujr' (GUJARATI) */
+    &punjClassTable, /* 'guru' (GURMUKHI) */
+    NULL,            /* 'hani' (HAN) */
+    NULL,            /* 'hang' (HANGUL) */
+    NULL,            /* 'hebr' (HEBREW) */
+    NULL,            /* 'hira' (HIRAGANA) */
+    &kndaClassTable, /* 'knda' (KANNADA) */
+    NULL,            /* 'kata' (KATAKANA) */
+    NULL,            /* 'khmr' (KHMER) */
+    NULL,            /* 'laoo' (LAO) */
+    NULL,            /* 'latn' (LATIN) */
+    &mlymClassTable, /* 'mlym' (MALAYALAM) */
+    NULL,            /* 'mong' (MONGOLIAN) */
+    NULL,            /* 'mymr' (MYANMAR) */
+    NULL,            /* 'ogam' (OGHAM) */
+    NULL,            /* 'ital' (OLD-ITALIC) */
+    &oryaClassTable, /* 'orya' (ORIYA) */
+    NULL,            /* 'runr' (RUNIC) */
+    NULL,            /* 'sinh' (SINHALA) */
+    NULL,            /* 'syrc' (SYRIAC) */
+    &tamlClassTable, /* 'taml' (TAMIL) */
+    &teluClassTable, /* 'telu' (TELUGU) */
+    NULL,            /* 'thaa' (THAANA) */
+    NULL,            /* 'thai' (THAI) */
+    NULL,            /* 'tibt' (TIBETAN) */
+    NULL,            /* 'cans' (CANADIAN-ABORIGINAL) */
+    NULL             /* 'yiii' (YI) */
 };
 
 IndicClassTable::CharClass IndicClassTable::getCharClass(LEUnicode ch) const
@@ -263,11 +296,11 @@ IndicClassTable::CharClass IndicClassTable::getCharClass(LEUnicode ch) const
 
 const IndicClassTable *IndicClassTable::getScriptClassTable(le_int32 scriptCode)
 {
-    if (scriptCode < devaScriptCode || scriptCode > mlymScriptCode) {
-        return NULL;
-    }
+	if (scriptCode < 0 || scriptCode >= scriptCodeCount) {
+		return NULL;
+	}
 
-    return indicClassTables[scriptCode - devaScriptCode];
+	return indicClassTables[scriptCode];
 }
 
 le_int32 IndicReordering::getWorstCaseExpansion(le_int32 scriptCode)
