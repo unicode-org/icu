@@ -173,6 +173,10 @@ enum UCalendarDateFields {
   UCAL_ZONE_OFFSET,
   /** DST offset field */
   UCAL_DST_OFFSET,
+  /** Year / week of year */
+  UCAL_YEAR_WOY,
+  /** Day of week, localized (1..7) */
+  UCAL_DOW_LOCAL,
   /** Field count */
   UCAL_FIELD_COUNT
 };
