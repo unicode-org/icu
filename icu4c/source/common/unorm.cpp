@@ -2207,22 +2207,15 @@ _composePart(UChar *stackBuffer, UChar *&buffer, int32_t &bufferCapacity, int32_
              uint32_t qcMask, uint8_t &prevCC,
              UErrorCode *pErrorCode) {
     UChar *recomposeLimit;
-    uint32_t decompQCMask;
-    UChar minNoMaybe;
     uint8_t trailCC;
+    UBool compat;
 
-    decompQCMask=(qcMask<<2)&0xf; /* decomposition quick check mask */
-
-    if(!(decompQCMask&_NORM_QC_NFKD)) {
-        minNoMaybe=(UChar)indexes[_NORM_INDEX_MIN_NFD_NO_MAYBE];
-    } else {
-        minNoMaybe=(UChar)indexes[_NORM_INDEX_MIN_NFKD_NO_MAYBE];
-    }
+    compat=(UBool)((qcMask&_NORM_QC_NFKC)!=0);
 
     /* decompose [prevStarter..src[ */
     length=_decompose(buffer, bufferCapacity,
                       prevStarter, src-prevStarter,
-                      (decompQCMask&_NORM_QC_NFKD)!=0, FALSE,
+                      compat, FALSE,
                       trailCC);
     if(length>bufferCapacity) {
         if(!u_growBufferFromStatic(stackBuffer, &buffer, &bufferCapacity, 2*length, 0)) {
@@ -2231,7 +2224,7 @@ _composePart(UChar *stackBuffer, UChar *&buffer, int32_t &bufferCapacity, int32_
         }
         length=_decompose(buffer, bufferCapacity,
                           prevStarter, src-prevStarter,
-                          (decompQCMask&_NORM_QC_NFKD)!=0, FALSE,
+                          compat, FALSE,
                           trailCC);
     }
 
