@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/rbbi/TestAll.java,v $
- * $Date: 2003/06/03 18:49:30 $
- * $Revision: 1.3 $
+ * $Date: 2003/06/04 20:24:14 $
+ * $Revision: 1.4 $
  *
  *******************************************************************************
  */
@@ -30,6 +30,7 @@ public class TestAll extends TestGroup {
                   "BreakIteratorTest",
                   "RBBITest",
                   "RBBIAPITest",
+		  "BreakIteratorRegTest",
               },
               " BreakIterator and RuleBasedBreakIterator Tests");
     }

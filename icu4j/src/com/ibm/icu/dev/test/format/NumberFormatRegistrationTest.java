@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberFormatRegistrationTest.java,v $
- * $Date: 2003/02/26 05:32:57 $
- * $Revision: 1.2 $
+ * $Date: 2003/06/04 20:24:14 $
+ * $Revision: 1.3 $
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.format;
@@ -13,6 +13,7 @@ package com.ibm.icu.dev.test.format;
 import com.ibm.icu.text.*;
 import com.ibm.icu.text.NumberFormat.*;
 
+import java.util.Arrays;
 import java.util.Locale;
 
 public class NumberFormatRegistrationTest extends com.ibm.icu.dev.test.TestFmwk {
@@ -29,9 +30,13 @@ public class NumberFormatRegistrationTest extends com.ibm.icu.dev.test.TestFmwk 
             NumberFormat currencyStyle;
 
             TestFactory() {
-                super(SRC_LOC, true);
-                currencyStyle = NumberFormat.getIntegerInstance(SWAP_LOC);
+		this(SRC_LOC, SWAP_LOC);
             }
+
+	    TestFactory(Locale srcLoc, Locale swapLoc) {
+		super(srcLoc);
+		currencyStyle = NumberFormat.getIntegerInstance(swapLoc);
+	    }
 
             public NumberFormat createFormat(Locale loc, int formatType) {
                 if (formatType == FORMAT_CURRENCY) {
@@ -40,15 +45,44 @@ public class NumberFormatRegistrationTest extends com.ibm.icu.dev.test.TestFmwk 
                 return null;
             }
         }
-        
+
+	{
+	    // coverage before registration
+
+	    try {
+		NumberFormat.unregister(null);
+		errln("did not throw exception on null unregister");
+	    }
+	    catch (Exception e) {
+	    }
+
+	    try {
+		NumberFormat.registerFactory(null);
+		errln("did not throw exception on null register");
+	    }
+	    catch (Exception e) {
+	    }
+
+	    if (NumberFormat.unregister("")) {
+		errln("unregister of empty string key succeeded");
+	    }
+	}
+
+	Locale fu_FU = new Locale("fu", "FU");
         NumberFormat f0 = NumberFormat.getIntegerInstance(SWAP_LOC);
         NumberFormat f1 = NumberFormat.getIntegerInstance(SRC_LOC);
         NumberFormat f2 = NumberFormat.getCurrencyInstance(SRC_LOC);
         Object key = NumberFormat.registerFactory(new TestFactory());
+	Object key2 = NumberFormat.registerFactory(new TestFactory(fu_FU, Locale.GERMANY));
+	if (!Arrays.asList(NumberFormat.getAvailableLocales()).contains(fu_FU)) {
+	    errln("did not list fu_FU");
+	}
         NumberFormat f3 = NumberFormat.getCurrencyInstance(SRC_LOC);
         NumberFormat f4 = NumberFormat.getIntegerInstance(SRC_LOC);
         NumberFormat.unregister(key); // restore for other tests
         NumberFormat f5 = NumberFormat.getCurrencyInstance(SRC_LOC);
+
+	NumberFormat.unregister(key2);
 
         float n = 1234.567f;
         logln("f0 swap int: " + f0.format(n));
@@ -67,5 +101,8 @@ public class NumberFormatRegistrationTest extends com.ibm.icu.dev.test.TestFmwk 
         if (!f5.format(n).equals(f2.format(n))) {
             errln("unregistered service did not match original");
         }
+
+	// coverage
+	NumberFormat f6 = NumberFormat.getNumberInstance(fu_FU);
     }
 }

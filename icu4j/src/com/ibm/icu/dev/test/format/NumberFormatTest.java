@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberFormatTest.java,v $ 
- * $Date: 2003/06/03 18:49:29 $ 
- * $Revision: 1.17 $
+ * $Date: 2003/06/04 20:24:14 $ 
+ * $Revision: 1.18 $
  *
  *****************************************************************************************
  */
@@ -21,9 +21,10 @@ import com.ibm.icu.text.*;
 import com.ibm.icu.text.NumberFormat.*;
 import com.ibm.icu.util.*;
 
-import java.util.Locale;
-import java.text.ParsePosition;
+import java.math.BigInteger;
 import java.text.FieldPosition;
+import java.text.ParsePosition;
+import java.util.Locale;
 
 public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     private static final char EURO = '\u20ac';
@@ -236,52 +237,6 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                       ", expected " + DATA[i+3]);
             }
         }
-    }
-
-    /**
-     * Test the Currency registration-related API.
-     */
-    public void TestCurrencyRegistration() {
-        /* dlf
-        // available locales
-        Locale[] locales = Currency.getAvailableLocales();
-        logln("available locales");
-        for (int i = 0; i < locales.length; ++i) {
-            logln("[" + i + "] " + locales[i].toString());
-        }
-
-        // identical instance
-        Currency fr0 = Currency.getInstance(Locale.FRANCE);
-        Currency fr1 = Currency.getInstance(Locale.FRANCE);
-        if (fr0 != fr1) {
-            errln("non-identical currencies for locale");
-        }
-
-        Currency us0 = Currency.getInstance(Locale.US);
-
-        // replace US with FR
-        Object key = Currency.register(fr0, Locale.US);
-
-        logln("FRENCH currency: " + fr0);
-        logln("US currency: " + us0);
-
-        // query US and get FR back
-        Currency us1 = Currency.getInstance(Locale.US);
-        logln("got currency: " + us1);
-        if (us1 != fr0) {
-            errln("registry failed");
-        }
-        logln("new US currency: " + us1);
-
-        // unregister and get US back
-        if (!Currency.unregister(key)) {
-            errln("failed to unregister key: " + key);
-        }
-        Currency us2 = Currency.getInstance(Locale.US);
-        if (!us2.equals(us0)) {
-            errln("after unregister US didn't get original currency back: " + us2 + " != " + us0);
-        }
-        */
     }
 
     /**
@@ -777,6 +732,42 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         if (!f5.format(n).equals(f2.format(n))) {
             errln("unregistered service did not match original");
         }
+    }
+
+    // additional coverage tests
+    
+    // sigh, can't have static inner classes, why not?
+
+    static final class PI extends Number {
+	private PI() {};
+	public int intValue() { return (int)Math.PI; }
+	public long longValue() { return (long)Math.PI; }
+	public float  floatValue() { return (float)Math.PI; }
+	public double doubleValue() { return (double)Math.PI; }
+	public byte byteValue() { return (byte)Math.PI; }
+	public short shortValue() { return (short)Math.PI; }
+
+	public static final Number INSTANCE = new PI();
+    }
+
+    public void TestCoverage() {
+	NumberFormat fmt = NumberFormat.getNumberInstance(); // default locale
+	logln(fmt.format(new BigInteger("1234567890987654321234567890987654321", 10)));
+
+	fmt = NumberFormat.getScientificInstance(); // default locale
+
+	logln(fmt.format(PI.INSTANCE));
+
+	try {
+	    logln(fmt.format("12345"));
+	    errln("numberformat of string did not throw exception");
+	}
+	catch (Exception e) {
+	}
+
+	int hash = fmt.hashCode();
+
+	logln("compare to string returns: " + fmt.equals(""));
     }
 
     public void TestWhiteSpaceParsing() {
