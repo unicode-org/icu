@@ -60,7 +60,7 @@
 #       define MAP_FAILED ((void*)-1)
 #   endif
 
-#   if defined(OS390) && defined (UDATA_DLL)
+#   if defined(OS390) && defined (OS390_STUBDATA)
         /*   No memory mapping for 390 batch mode.  Fake it using dll loading.  */
 #       include <dll.h>
 #       include "cstring.h"
