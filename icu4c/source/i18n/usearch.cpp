@@ -1288,7 +1288,7 @@ int32_t doNextCanonicalPrefixMatch(UStringSearch *strsrch,
     int32_t         accentsindex[INITIAL_ARRAY_SIZE_];      
     int32_t         accentsize = getUnblockedAccentIndex(accents, 
                                                                  accentsindex);
-    int32_t         count      = (2 << (accentsize - 1)) - 2;  
+    int32_t         count      = (2 << (accentsize - 1)) - 1; 
     UChar               buffer[INITIAL_ARRAY_SIZE_];
     UCollationElements *coleiter   = strsrch->utilIter;
     while (U_SUCCESS(*status) && count > 0) {
@@ -1560,8 +1560,8 @@ UBool doNextCanonicalMatch(UStringSearch *strsrch,
     int32_t accentsindex[INITIAL_ARRAY_SIZE_];
     int32_t size = getUnblockedAccentIndex(accents, accentsindex);
 
-    // 2 power n - 1 minus the full set of accents
-    int32_t  count = (2 << (size - 1)) - 2;  
+    // 2 power n - 1 plus the full set of accents
+    int32_t  count = (2 << (size - 1)) - 1;
     while (U_SUCCESS(*status) && count > 0) {
         UChar *rearrange = strsrch->canonicalSuffixAccents;
         // copy the base characters
@@ -1984,7 +1984,7 @@ int32_t doPreviousCanonicalSuffixMatch(UStringSearch *strsrch,
         int32_t         accentsindex[INITIAL_ARRAY_SIZE_];      
         int32_t         accentsize = getUnblockedAccentIndex(accents, 
                                                          accentsindex);
-        int32_t         count      = (2 << (accentsize - 1)) - 2;  
+        int32_t         count      = (2 << (accentsize - 1)) - 1;  
         UChar               buffer[INITIAL_ARRAY_SIZE_];
         UCollationElements *coleiter = strsrch->utilIter;
         while (U_SUCCESS(*status) && count > 0) {
@@ -2217,8 +2217,8 @@ UBool doPreviousCanonicalMatch(UStringSearch *strsrch,
     int32_t accentsindex[INITIAL_ARRAY_SIZE_];
     int32_t size = getUnblockedAccentIndex(accents, accentsindex);
 
-    // 2 power n - 1 minus the full set of accents
-    int32_t  count = (2 << (size - 1)) - 2;  
+    // 2 power n - 1 plus the full set of accents
+    int32_t  count = (2 << (size - 1)) - 1;  
     while (U_SUCCESS(*status) && count > 0) {
         UChar *rearrange = strsrch->canonicalPrefixAccents;
         // copy the base characters
@@ -2989,9 +2989,16 @@ U_CAPI int32_t U_EXPORT2 usearch_next(UStringSearch *strsrch,
 			}
             
             if (U_FAILURE(*status)) {
+                // bcos of the backwards iteration, we might have detected a 
+                // match too far front
                 return USEARCH_DONE;
             }
-            
+
+            if (search->matchedIndex < offset) {
+                setMatchNotFound(strsrch);
+                return USEARCH_DONE; 
+            }
+
             return search->matchedIndex;
         }
     }
