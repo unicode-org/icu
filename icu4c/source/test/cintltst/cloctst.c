@@ -2330,7 +2330,7 @@ static void TestCanonicalization(void)
         { "uz-UZ-Cyrl",     "uz_Cyrl_UZ",     "uz_Cyrl_UZ" }, /* .NET name */
         { "uz-UZ-Latn",     "uz_Latn_UZ",     "uz_Latn_UZ" }, /* .NET name */
         { "zh-CHS",         "zh_Hans",        "zh_Hans" }, /* .NET name */
-        { "zh-CHT",         "zh_Hant",        "zh_Hant" }, /* .NET name */
+        { "zh-CHT",         "zh_TW",          "zh_TW" }, /* .NET name This may change back to zh_Hant */
     };
     
     UErrorCode status = U_ZERO_ERROR;
