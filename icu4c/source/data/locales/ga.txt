@@ -10,6 +10,72 @@
 ga{
     Version { "2.0" }
 
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "a.m.",
+                "p.m.",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Domh",
+                        "Luan",
+                        "Máirt",
+                        "Céad",
+                        "Déar",
+                        "Aoine",
+                        "Sath",
+                    }
+                    wide{
+                        "Dé Domhnaigh",
+                        "Dé Luain",
+                        "Dé Máirt",
+                        "Dé Céadaoin",
+                        "Déardaoin",
+                        "Dé hAoine",
+                        "Dé Sathairn",
+                    }
+                }
+            }
+            eras{
+                "RC",
+                "AD",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Ean",
+                        "Feabh",
+                        "Márta",
+                        "Aib",
+                        "Beal",
+                        "Meith",
+                        "Iúil",
+                        "Lún",
+                        "MFómh",
+                        "DFómh",
+                        "Samh",
+                        "Noll",
+                    }
+                    wide{
+                        "Eanáir",
+                        "Feabhra",
+                        "Márta",
+                        "Aibreán",
+                        "Bealtaine",
+                        "Meitheamh",
+                        "Iúil",
+                        "Lúnasa",
+                        "Meán Fómhair",
+                        "Deireadh Fómhair",
+                        "Samhain",
+                        "Nollaig",
+                    }
+                }
+            }
+        }
+    }
     Countries {
         AD { "Andóra" }
         AE { "Aontas na nÉimíríochtaí Arabacha" }
@@ -644,8 +710,6 @@ ga{
         XNF { "XNF", "CFA Franc na nAntillí Francach" }
         XOF { "XOF", "CFA Franc BCEAO" }
         XPF { "CFPF","CFP Franc" }
-        //XPS { "XPS", "Punt Steirling" }
-        XSS { "XSS", "Scilling Steirling" }
         XTR { "XTR", "Rúbal Inaistrithe COMECON" }
         YDD { "YDD", "Dínear Éimin" }
         YEI { "YEI", "Imadi Riyal Éimin" }
@@ -1174,71 +1238,5 @@ ga{
             "Londain",
         }
        // many others could go in here if desired
-    }
-    calendar{
-        gregorian{
-            AmPmMarkers{
-                "a.m.",
-                "p.m.",
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Domh",
-                        "Luan",
-                        "Máirt",
-                        "Céad",
-                        "Déar",
-                        "Aoine",
-                        "Sath",
-                    }
-                    wide{
-                        "Dé Domhnaigh",
-                        "Dé Luain",
-                        "Dé Máirt",
-                        "Dé Céadaoin",
-                        "Déardaoin",
-                        "Dé hAoine",
-                        "Dé Sathairn",
-                    }
-                }
-            }
-            eras{
-                "RC",
-                "AD",
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "Ean",
-                        "Feabh",
-                        "Márta",
-                        "Aib",
-                        "Beal",
-                        "Meith",
-                        "Iúil",
-                        "Lún",
-                        "MFómh",
-                        "DFómh",
-                        "Samh",
-                        "Noll",
-                    }
-                    wide{
-                        "Eanáir",
-                        "Feabhra",
-                        "Márta",
-                        "Aibreán",
-                        "Bealtaine",
-                        "Meitheamh",
-                        "Iúil",
-                        "Lúnasa",
-                        "Meán Fómhair",
-                        "Deireadh Fómhair",
-                        "Samhain",
-                        "Nollaig",
-                    }
-                }
-            }
-        }
     }
 }

@@ -7,6 +7,106 @@
 
 nb {
     Version{"2.0"}
+    calendar{
+        gregorian{
+            DateTimeElements:intvector {
+                2,
+                4,
+            }
+            DateTimePatterns{
+                "'kl. 'HH.mm.ss z",
+                "HH.mm.ss z",
+                "HH.mm.ss",
+                "HH.mm",
+                "EEEE d. MMMM yyyy",
+                "d. MMMM yyyy",
+                "d. MMM. yyyy",
+                "dd.MM.yy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "s\u00F8",
+                        "ma",
+                        "ti",
+                        "on",
+                        "to",
+                        "fr",
+                        "l\u00F8",
+                    }
+                    narrow{
+                        "S",
+                        "M",
+                        "T",
+                        "O",
+                        "T",
+                        "F",
+                        "L",
+                    }
+                    wide{
+                        "s\u00F8ndag",
+                        "mandag",
+                        "tirsdag",
+                        "onsdag",
+                        "torsdag",
+                        "fredag",
+                        "l\u00F8rdag",
+                    }
+                }
+            }
+            eras{
+                "f.Kr.",
+                "e.Kr.",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "jan",
+                        "feb",
+                        "mar",
+                        "apr",
+                        "mai",
+                        "jun",
+                        "jul",
+                        "aug",
+                        "sep",
+                        "okt",
+                        "nov",
+                        "des",
+                    }
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
+                    wide{
+                        "januar",
+                        "februar",
+                        "mars",
+                        "april",
+                        "mai",
+                        "juni",
+                        "juli",
+                        "august",
+                        "september",
+                        "oktober",
+                        "november",
+                        "desember",
+                    }
+                }
+            }
+        }
+    }
     Countries {
         Fallback{ "en"}
         //AD { "Andorra" }
@@ -613,7 +713,7 @@ nb {
         XOF { "XOF", "CFA Franc BCEAO" } // 12/04/1958-
         XPF { "CFPF","CFP Franc" } // 12/26/1945-
         //XPS { "XPS", "Pund sterling" } // 07/27/1694-
-        XSS { "XSS", "Shilling sterling" } // 07/27/1694-
+        //XSS { "XSS", "Shilling sterling" } // 07/27/1694-
         XTR { "XTR", "COMECON Transferable Ruble" } // 1960-1992
         YDD { "YDD", "Jemenittiske dinarer" } // 4/1/1965-05/22/1990
         YEI { "YEI", "Jemenittiske imadi-riyaler" } // 1904-02/1964
@@ -639,97 +739,97 @@ nb {
         aa  { "afar" }
         ab  { "abkhasisk" }
         ae  { "avestisk" }
-        af { "afrikaans" }
+        af  { "afrikaans" }
         ak  { "akan" }
-        am { "amharisk" }
+        am  { "amharisk" }
         an  { "aragonsk" }
-        ar { "arabisk" }
+        ar  { "arabisk" }
         as  { "assamisk" }
         av  { "avarisk" }
         ay  { "aymara" }
         az  { "aserbajdsjansk" }
         ba  { "basjkirsk" }
-        be { "hviterussisk" }
-        bg { "bulgarsk" }
+        be  { "hviterussisk" }
+        bg  { "bulgarsk" }
         bh  { "bihari" }
         bi  { "bislama" }
         bm  { "bambara" }
-        bn { "bengali" }
+        bn  { "bengali" }
         bo  { "tibetansk" }
         br  { "bretonsk" }
         bs  { "bosnisk"}
         byn { "blin" }
-        ca { "katalansk" }
+        ca  { "katalansk" }
         ce  { "tsjetsjensk" }
         ch  { "chamorro" }
         chr { "cherokee" }
         co  { "korsikansk" }
         cr  { "cree" }
-        cs { "tsjekkisk" }
+        cs  { "tsjekkisk" }
         cu  { "kirkeslavisk" }
         cv  { "tsjuvansk" }
         cy  { "walisisk" }
-        da { "dansk" }
-        de { "tysk" }
+        da  { "dansk" }
+        de  { "tysk" }
         dv  { "divehi" }
         dz  { "dzongkha" }
         ee  { "ewe" }
-        el { "gresk" }
-        en { "engelsk" }
-        eo { "esperanto" }
-        es { "spansk" }
-        et { "estisk" }
-        eu { "baskisk" }
-        fa { "persisk" }
+        el  { "gresk" }
+        en  { "engelsk" }
+        eo  { "esperanto" }
+        es  { "spansk" }
+        et  { "estisk" }
+        eu  { "baskisk" }
+        fa  { "persisk" }
         ff  { "fulani" }
-        fi { "finsk" }
+        fi  { "finsk" }
         fj  { "fijiansk" }
-        fo { "f\u00e6r\u00F8ysk" }
-        fr { "fransk" }
+        fo  { "f\u00e6r\u00F8ysk" }
+        fr  { "fransk" }
         fy  { "frisisk" }
-        ga { "irsk" }
+        ga  { "irsk" }
         gd  { "skotsk g\u00e6lisk" }
         gez { "ges" }
-        gl { "galicisk" }
+        gl  { "galicisk" }
         gn  { "guarani" }
-        gu { "gujarati" }
-        gv { "manx" }
+        gu  { "gujarati" }
+        gv  { "manx" }
         haw { "hawaiisk" }
-        he { "hebraisk" }
-        hi { "hindi" }
+        he  { "hebraisk" }
+        hi  { "hindi" }
         ho  { "hiri motu" }
-        hr { "kroatisk" }
+        hr  { "kroatisk" }
         ht  { "haitisk" }
-        hu { "ungarsk" }
-        hy { "armensk" }
+        hu  { "ungarsk" }
+        hy  { "armensk" }
         hz  { "herero" }
         ia  { "interlingua" }
-        id { "indonesisk" }
+        id  { "indonesisk" }
         ie  { "interlingue" }
         ig  { "ibo" }
         ii  { "sichuan-yi" }
         ik  { "unupiak" }
         io  { "ido" }
-        is { "islandsk" }
-        it { "italiensk" }
-        iu { "inuktitut" }
-        ja { "japansk" }
+        is  { "islandsk" }
+        it  { "italiensk" }
+        iu  { "inuktitut" }
+        ja  { "japansk" }
         jv  { "javanesisk" }
         ka  { "georgisk" }
         kg  { "kikongo" }
         ki  { "kikuyu" }
         kj  { "kuanyama" }
         kk  { "kasakhisk" }
-        kl { "kalaallisut" }
+        kl  { "kalaallisut" }
         km  { "khmer" }
-        kn { "kannada" }
-        ko { "koreansk" }
+        kn  { "kannada" }
+        ko  { "koreansk" }
         kok { "konkani" }
         kr  { "kanuri" }
         ks  { "kasjmiri" }
         ku  { "kurdisk" }
         kv  { "komi" }
-        kw { "kornisk" }
+        kw  { "kornisk" }
         ky  { "kirgisisk" }
         la  { "latin" }
         lb  { "luxemburgsk" }
@@ -737,89 +837,89 @@ nb {
         li  { "limburgisk" }
         ln  { "lingala" }
         lo  { "laotisk" }
-        lt { "litauisk" }
+        lt  { "litauisk" }
         lu  { "luba-katanga" }
-        lv { "latvisk" }
+        lv  { "latvisk" }
         mg  { "madagassisk" }
         mh  { "marshallesisk"}
         mi  { "maori" }
-        mk { "makedonsk" }
+        mk  { "makedonsk" }
         ml  { "malayalam" }
         mn  { "mongolsk" }
         mo  { "moldavisk" }
-        mr { "marathi" }
+        mr  { "marathi" }
         ms  { "malayisk" }
-        mt { "maltesisk" }
+        mt  { "maltesisk" }
         my  { "burmesisk" }
         na  { "nauru" }
-        nb { "norsk bokm\u00E5l" }
+        nb  { "norsk bokm\u00E5l" }
         nd  { "ndebele (nord)" }
         ne  { "nepalsk" }
         ng  { "ndonga" }
-        nl { "nederlandsk" }
-        nn { "norsk nynorsk" }
-        no { "norsk" }
+        nl  { "nederlandsk" }
+        nn  { "norsk nynorsk" }
+        no  { "norsk" }
         nr  { "ndebele, s\u00f8r" }
         nv  { "navajo"}
         ny  { "nyanja" }
         oc  { "oksitansk (etter 1500)"}
         oj  { "ojibwa" }
-        om { "oromo" }
+        om  { "oromo" }
         or  { "oriya" }
         os  { "ossetisk" }
         pa  { "panjabi" }
         pi  { "pali" }
-        pl { "polsk" }
+        pl  { "polsk" }
         ps  { "pashto" }
-        pt { "portugisisk" }
+        pt  { "portugisisk" }
         qu  { "quechua" }
         rm  { "retoromansk" }
         rn  { "rundi" }
-        ro { "rumensk" }
-        ru { "russisk" }
+        ro  { "rumensk" }
+        ru  { "russisk" }
         rw  { "kinjarwanda" }
         sa  { "sanskrit" }
         sc  { "sardinsk" }
         sd  { "sindhi" }
         se  { "nordsamisk" }
         sg  { "sango" }
-        sh { "serbokroatisk" }
+        sh  { "serbokroatisk" }
         si  { "singalesisk" }
         sid { "sidamo" }
-        sk { "slovakisk" }
-        sl { "slovensk" }
+        sk  { "slovakisk" }
+        sl  { "slovensk" }
         sm  { "samoansk" }
         sn  { "shona" }
-        so { "somalisk" }
-        sq { "albansk" }
-        sr { "serbisk" }
+        so  { "somalisk" }
+        sq  { "albansk" }
+        sr  { "serbisk" }
         ss  { "swati" }
         st  { "sotho (s\u00f8rlig)" }
         su  { "sundanesisk" }
-        sv { "svensk" }
-        sw { "swahili" }
+        sv  { "svensk" }
+        sw  { "swahili" }
         syr { "syrisk" }
-        ta { "tamil" }
+        ta  { "tamil" }
         te  { "telugu" }
         tg  { "tatsjikisk" }
-        th { "thai" }
+        th  { "thai" }
         ti  { "tigrinja" }
         tig { "tigr\u00e9" }
         tk  { "turkmensk" }
         tl  { "tagalog" }
         tn  { "tswana" }
         to  { "tonga (Tonga-\u00f8yene)" }
-        tr { "tyrkisk" }
+        tr  { "tyrkisk" }
         ts  { "tsonga" }
         tt  { "tatarisk" }
         tw  { "twi" }
         ty  { "tahitisk" }
         ug  { "uigurisk" }
-        uk { "ukrainsk" }
+        uk  { "ukrainsk" }
         ur  { "urdu" }
         uz  { "usbekisk" }
         ve  { "venda" }
-        vi { "vietnamesisk" }
+        vi  { "vietnamesisk" }
         vo  { "volapyk" }   // Yes the iso-639 standard uses the umlaut in the English name
         wa  { "vallonsk" }
         wo  { "wolof" }
@@ -827,7 +927,7 @@ nb {
         yi  { "jiddisk" }
         yo  { "joruba" }
         za  { "zhuang" }
-        zh { "kinesisk" }
+        zh  { "kinesisk" }
         //zh_cn { "kinesisk (forenklet)" }
         //zh_tw { "kinesisk (tradisjonell)" }
         zu  { "zulu" }
@@ -944,7 +1044,6 @@ nb {
     }
 
     zoneStrings {
-
         {
             "Europe/Bucharest",
             "Eastern European Standard Time",
@@ -953,107 +1052,6 @@ nb {
             "EEST",
             "Bucuresti",
         }
-
-	}
-
-    calendar{
-        gregorian{
-            DateTimeElements:intvector {
-                2,
-                4,
-            }
-            DateTimePatterns{
-                "'kl. 'HH.mm.ss z",
-                "HH.mm.ss z",
-                "HH.mm.ss",
-                "HH.mm",
-                "EEEE d. MMMM yyyy",
-                "d. MMMM yyyy",
-                "d. MMM. yyyy",
-                "dd.MM.yy",
-                "{1} {0}",
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "s\u00F8",
-                        "ma",
-                        "ti",
-                        "on",
-                        "to",
-                        "fr",
-                        "l\u00F8",
-                    }
-                    narrow{
-		                "S",
-		                "M",
-		                "T",
-		                "O",
-		                "T",
-		                "F",
-		                "L",
-                    }
-                    wide{
-                        "s\u00F8ndag",
-                        "mandag",
-                        "tirsdag",
-                        "onsdag",
-                        "torsdag",
-                        "fredag",
-                        "l\u00F8rdag",
-                    }
-                }
-            }
-            eras{
-                "f.Kr.",
-                "e.Kr.",
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "jan",
-                        "feb",
-                        "mar",
-                        "apr",
-                        "mai",
-                        "jun",
-                        "jul",
-                        "aug",
-                        "sep",
-                        "okt",
-                        "nov",
-                        "des",
-                    }
-                    narrow{
-		                "J",
-		                "F",
-		                "M",
-		                "A",
-		                "M",
-		                "J",
-		                "J",
-		                "A",
-		                "S",
-		                "O",
-		                "N",
- 		                "D",
-                    }
-                    wide{
-                        "januar",
-                        "februar",
-                        "mars",
-                        "april",
-                        "mai",
-                        "juni",
-                        "juli",
-                        "august",
-                        "september",
-                        "oktober",
-                        "november",
-                        "desember",
-                    }
-                }
-            }
-        }
     }
+
 }
