@@ -2633,7 +2633,6 @@ inline UChar getPrevNormalizedChar(collIterate *data)
 
 uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, collIterate *source, UErrorCode *status) {
   collIterateState entryState;
-  UChar    buffer[UCOL_MAX_BUFFER];
   backupState(source, &entryState);
   UChar32 cp = ch;
 
@@ -2736,52 +2735,30 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
             source->origFlags         = source->flags;
             source->flags            |= UCOL_ITER_INNORMBUF;
             source->flags            &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN | UCOL_USE_ITERATOR);
-
-            CE = ucol_IGetNextCE(coll, source, status); // UCOL_IGNORABLE;
-          } else { // stuff is already normalized... what to do here???
-            int32_t decompLen = unorm_getDecomposition(cp, FALSE, &buffer[1], UCOL_MAX_BUFFER-1);
-            if(decompLen < 0) {
-              decompLen = -decompLen;
-            }
-            if(decompLen >= 2 && U16_IS_LEAD(buffer[1]) && U16_IS_TRAIL(buffer[2])) {
-              buffer[0] = buffer[1];
-              buffer[1] = buffer[2];
-              buffer[2] = ch;
-            } else {
-              buffer[0] = buffer[1];
-              buffer[1] = ch;
-            }
-            buffer[decompLen+1] = 0; // we added the prevowel
-            // we will construct a new iterator and suck out CEs.
-            collIterate temp;
-            // Here is the string initialization. We have decomposed character (decompLen) + 1 Thai + trailing zero
-            IInit_collIterate(coll, buffer, decompLen+2, &temp);
-            // We need the trailing zero so that we can tell the iterate function that it is in the normalized and reordered
-            // buffer. This buffer is always zero terminated. 
-            temp.flags |= UCOL_ITER_INNORMBUF;
-            // This is where to return after iteration is done. We point at the end of the string
-            temp.fcdPosition = buffer+decompLen+2;
-            temp.flags &= ~UCOL_ITER_NORM;
-
-            CE = ucol_IGetNextCE(coll, &temp, status);
-            uint32_t *endCEBuffer = source->CEs + UCOL_EXPAND_CE_BUFFER_SIZE;
-            while (CE != UCOL_NO_MORE_CES) {
-                *(source->CEpos ++) = CE;
-                if (source->CEpos == endCEBuffer) {
-                    /* ran out of CE space, bail.
-                    there's no guarantee of the right character position after
-                    this bail*/
-                    *status = U_BUFFER_OVERFLOW_ERROR;
-                    source->CEpos = source->CEs;
-                    freeHeapWritableBuffer(&temp);
-                    return UCOL_NULLORDER;
-                }
-                CE = ucol_IGetNextCE(coll, &temp, status);
-            }
-            freeHeapWritableBuffer(&temp);
-            // return the first of CEs so that we save a call
-            CE = *(source->toReturn++);
+          } 
+          else { 
+              // stuff is already normalized... what to do here???
+            
+              // if we are in the normalization buffer, thCh must be in it
+              // prove by contradiction
+              // if thCh is not in the normalization buffer,
+              // that means that trailCh is the normalization buffer
+              // that means that trailCh is a trail surrogate by the above
+              // bounding if block, this is a contradiction because there
+              // are no characters at the moment that decomposes to an 
+              // unmatched surrogate. qed.
+              if (cp >= 0x10000) {
+                  source->writableBuffer[0] = source->writableBuffer[1];
+                  source->writableBuffer[1] = source->writableBuffer[2];
+                  source->writableBuffer[2] = ch;
+              }
+              else {
+                  source->writableBuffer[0] = source->writableBuffer[1];
+                  source->writableBuffer[1] = ch;
+              }
+              source->pos = source->writableBuffer;
           }
+          CE = ucol_IGetNextCE(coll, source, status); // UCOL_IGNORABLE;
       }
       break;
     case SPEC_PROC_TAG:
