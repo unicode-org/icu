@@ -295,7 +295,7 @@ void UniToHexTransliteratorTest::TestSimpleTransliterate(){
 		status=U_ZERO_ERROR;
 		return;
 	}
-	Transliterator::Position index(1,5,2);
+	UTransPosition index={1,5,2,5};
 	UnicodeString source("Hello");
 	UnicodeString rsource(source);
 	UnicodeString expected("He\\U+006C\\U+006C\\U+006F");
@@ -352,13 +352,14 @@ void UniToHexTransliteratorTest::expectTranslit(const UnicodeToHexTransliterator
 												const UnicodeString& expectedResult){
     
 
-	Transliterator::Position index(start, limit, cursor);
+	UTransPosition _index={start, limit, cursor, limit};
+    UTransPosition index = _index;
    	UnicodeString rsource(source);
 	t.handleTransliterate(rsource, index, FALSE);
 	expectAux(t.getID() + ":handleTransliterator(increment=FALSE) " + message, source + "-->" + rsource, rsource==expectedResult, expectedResult);
     
 	UnicodeString rsource2(source);
-	index=Transliterator::Position(start, limit, cursor);
+	index=_index;
 	t.handleTransliterate(rsource2, index, TRUE);
 	expectAux(t.getID() + ":handleTransliterator(increment=TRUE) "+ message, source + "-->" + rsource2, rsource2==expectedResult, expectedResult);
    
@@ -366,13 +367,13 @@ void UniToHexTransliteratorTest::expectTranslit(const UnicodeToHexTransliterator
 	UnicodeToHexTransliterator *copy=new UnicodeToHexTransliterator(t);
 	rsource2.remove();
 	rsource2.append(source);
-	index=Transliterator::Position(start, limit, cursor);
+	index=_index;
 	copy->handleTransliterate(rsource2, index, FALSE);
 	expectAux(t.getID() + "COPY:handleTransliterator(increment=FALSE) " + message, source + "-->" + rsource2, rsource2==expectedResult, expectedResult);
     
 	rsource2.remove();
 	rsource2.append(source);
-	index=Transliterator::Position(start, limit, cursor);
+	index=_index;
 	copy->handleTransliterate(rsource2, index, TRUE);
 	expectAux(t.getID() + "COPY:handleTransliterator(increment=TRUE) " + message, source + "-->" + rsource2, rsource2==expectedResult, expectedResult);
     delete copy;
@@ -381,13 +382,13 @@ void UniToHexTransliteratorTest::expectTranslit(const UnicodeToHexTransliterator
 	UnicodeToHexTransliterator *clone=(UnicodeToHexTransliterator*)t.clone();
 	rsource2.remove();
 	rsource2.append(source);
-	index=Transliterator::Position(start, limit, cursor);
+	index=_index;
 	clone->handleTransliterate(rsource2, index, FALSE);
 	expectAux(t.getID() + "CLONE:handleTransliterator(increment=FALSE) "+ message,source + "-->" + rsource2, rsource2==expectedResult, expectedResult);
     
 	rsource2.remove();
 	rsource2.append(source);
-	index=Transliterator::Position(start, limit, cursor);
+	index=_index;
 	clone->handleTransliterate(rsource2, index, TRUE);
 	expectAux(t.getID() + "CLONE:handleTransliterator(increment=TRUE) "+ message, source + "-->" + rsource2, rsource2==expectedResult, expectedResult);
    
@@ -395,13 +396,13 @@ void UniToHexTransliteratorTest::expectTranslit(const UnicodeToHexTransliterator
 	UnicodeToHexTransliterator equal=t;
 	rsource2.remove();
 	rsource2.append(source);
-	index=Transliterator::Position(start, limit, cursor);
+	index=_index;
 	equal.handleTransliterate(rsource2, index, FALSE);
 	expectAux(t.getID() + "=OPERATOR:handleTransliterator(increment=FALSE) "+ message, source + "-->" + rsource2, rsource2==expectedResult, expectedResult);
     
 	rsource2.remove();
 	rsource2.append(source);
-	index=Transliterator::Position(start, limit, cursor);
+	index=_index;
 	equal.handleTransliterate(rsource2, index, TRUE);
 	expectAux(t.getID() + "=OPERATOR:handleTransliterator(increment=TRUE) "+ message, source + "-->" + rsource2, rsource2==expectedResult, expectedResult);
    
@@ -451,7 +452,7 @@ void UniToHexTransliteratorTest::expect(const UnicodeToHexTransliterator& t,
 	// Test handleTransliterate (incremental) transliteration -- 
     rsource.remove();
 	rsource.append(source);
-    Transliterator::Position index(0,source.length(),0);
+    UTransPosition index={0,source.length(),0,source.length()};
 	t.handleTransliterate(rsource, index, TRUE);
 	expectAux(t.getID() + ":handleTransliterate " + message, source + "->" + rsource, rsource==expectedResult, expectedResult);
 

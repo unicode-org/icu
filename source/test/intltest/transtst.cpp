@@ -72,9 +72,9 @@ void TransliteratorTest::TestInstantiation() {
                   i + ") returned empty string");
             continue;
         }
-        ParseError parseError;
+        UParseError parseError;
         Transliterator* t = Transliterator::createInstance(id,
-                              Transliterator::FORWARD, &parseError);
+                              UTRANS_FORWARD, &parseError);
         name.truncate(0);
         Transliterator::getDisplayName(id, name);
         if (t == 0) {
@@ -82,7 +82,7 @@ void TransliteratorTest::TestInstantiation() {
                   ", parse error " + parseError.code +
                   ", line " + parseError.line +
                   ", offset " + parseError.offset +
-                  ", context " + prettify(parseError.context));
+                  ", context " + prettify(parseError.preContext));
             // When createInstance fails, it deletes the failing
             // entry from the available ID list.  We detect this
             // here by looking for a change in countAvailableIDs.
@@ -220,7 +220,7 @@ void TransliteratorTest::TestRuleBasedInverse(void) {
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedTransliterator fwd("<ID>", RULES, status);
     RuleBasedTransliterator rev("<ID>", RULES,
-                                RuleBasedTransliterator::REVERSE, status);
+                                UTRANS_REVERSE, status);
     if (U_FAILURE(status)) {
         errln("FAIL: RBT constructor failed");
         return;
@@ -327,7 +327,7 @@ void TransliteratorTest::TestKeyboard3(void) {
 void TransliteratorTest::keyboardAux(const Transliterator& t,
                                      const char* DATA[], int32_t DATA_length) {
     UErrorCode status = U_ZERO_ERROR;
-    Transliterator::Position index(0, 0);
+    UTransPosition index={0, 0, 0, 0};
     UnicodeString s;
     for (int32_t i=0; i<DATA_length; i+=2) {
         UnicodeString log;
@@ -536,7 +536,7 @@ void TransliteratorTest::TestJ277(void) {
                 "y <>           $ypsilon;"
                 "n <>           $nu;",
                 "");
-    RuleBasedTransliterator mini("mini", rules, Transliterator::REVERSE, status);
+    RuleBasedTransliterator mini("mini", rules, UTRANS_REVERSE, status);
     if (U_FAILURE(status)) { errln("FAIL: Transliterator constructor failed"); return; }
     expect(mini, syn, "syn");
     expect(mini, sayn, "saun");
@@ -607,10 +607,10 @@ void TransliteratorTest::TestJ329(void) {
 
     for (int32_t i=0; i<DATA_length; ++i) {
         UErrorCode status = U_ZERO_ERROR;
-        ParseError parseError;
+        UParseError parseError;
         RuleBasedTransliterator rbt("<ID>",
                                     DATA[i].rule,
-                                    Transliterator::FORWARD,
+                                    UTRANS_FORWARD,
                                     0,
                                     parseError,
                                     status);
@@ -621,7 +621,7 @@ void TransliteratorTest::TestJ329(void) {
             desc = desc + ", ParseError code=" + parseError.code +
                 " line=" + parseError.line +
                 " offset=" + parseError.offset +
-                " context=" + parseError.context;
+                " context=" + parseError.preContext;
         }
         if (gotError == DATA[i].containsErrors) {
             logln(UnicodeString("Ok:   ") + desc);
@@ -763,7 +763,7 @@ void TransliteratorTest::expect(const Transliterator& t,
     // Test keyboard (incremental) transliteration -- this result
     // must be the same after we finalize (see below).
     rsource.remove();
-    Transliterator::Position index(0, 0);
+    UTransPosition index={0, 0, 0, 0};
     UnicodeString log;
 
     for (int32_t i=0; i<source.length(); ++i) {
