@@ -209,7 +209,7 @@ void SimpleThread::sleep(int32_t millis)
    cma_sleep(millis/100);
 #else
    useconds_t m = millis * 1000;
-   if (m >= 1000000) m = 100000;
+   if (m > 1000000) m = 1000000;
    usleep(m); 
 #endif
 }
@@ -244,7 +244,7 @@ void MultithreadTest::runIndexedTest( int32_t index, bool_t exec,
    TestThreads -- see if threads really work at all.
 
    Set up N threads pointing at N chars. When they are started, they will
-   each sleep 2 seconds and then set their chars. At the end we make sure they
+   each sleep 1 second and then set their chars. At the end we make sure they
    are all set.
  */
 
@@ -254,7 +254,7 @@ class TestThreadsThread : public SimpleThread
 {
 public:
     TestThreadsThread(char* whatToChange) { fWhatToChange = whatToChange; }
-    virtual void run() { SimpleThread::sleep(2000); *fWhatToChange = '*'; }
+    virtual void run() { SimpleThread::sleep(1000); *fWhatToChange = '*'; }
 private:
     char *fWhatToChange;
 };
@@ -316,7 +316,7 @@ public:
     virtual void run()
     {
         Mutex m;                        // grab the lock first thing
-        SimpleThread::sleep(2000);      // then wait
+        SimpleThread::sleep(900);      // then wait
         fDone = TRUE;                   // finally, set our flag
     }
 public:
@@ -329,7 +329,7 @@ public:
     TestMutexThread2(TestMutexThread1& r) : fOtherThread(r), fDone(FALSE), fErr(FALSE) {}
     virtual void run()
     {
-        SimpleThread::sleep(1000);          // wait, make sure they aquire the lock
+        SimpleThread::sleep(500);          // wait, make sure they aquire the lock
         fElapsed = uprv_getUTCtime();
         {
             Mutex m;                        // wait here
@@ -763,7 +763,7 @@ void MultithreadTest::TestThreadedIntl()
             return;
         }
 
-        SimpleThread::sleep(1000);
+        SimpleThread::sleep(900);
     }
     errln("patience exceeded. ");
 }
