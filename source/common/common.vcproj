@@ -598,6 +598,26 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\utrace.c">
+			</File>
+			<File
+				RelativePath=".\unicode\utrace.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy    $(InputPath)    ..\..\include\unicode"
+						Outputs="..\..\include\unicode\$(InputName).h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy    $(InputPath)    ..\..\include\unicode"
+						Outputs="..\..\include\unicode\$(InputName).h"/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\unicode\utypes.h">
 				<FileConfiguration
 					Name="Release|Win32">
