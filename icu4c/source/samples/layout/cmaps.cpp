@@ -147,7 +147,7 @@ LEGlyphID CMAPFormat4Mapper::unicodeToGlyph(LEUnicode32 unicode32) const
         if (fIdRangeOffset[index] == 0) {
             result = (LEGlyphID) unicode;
         } else {
-            le_uint16 offset = unicode - SWAPW(fStartCodes[index]);
+            le_uint16 offset = unicode - SWAPU16(fStartCodes[index]);
             le_uint16 rangeOffset = SWAPW(fIdRangeOffset[index]);
             le_uint16 *glyphIndexTable = (le_uint16 *) ((char *) &fIdRangeOffset[index] + rangeOffset);
 
