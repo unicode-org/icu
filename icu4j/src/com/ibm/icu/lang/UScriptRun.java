@@ -46,6 +46,8 @@ import com.ibm.icu.text.UForwardCharacterIterator;
  *     }
  *  }
  * </pre>
+ *
+ * @internal
  */
 public final class UScriptRun
 {
