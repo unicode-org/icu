@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2002/04/03 04:32:00 $ 
-* $Revision: 1.36 $
+* $Date: 2002/04/05 01:38:11 $ 
+* $Revision: 1.37 $
 *
 *******************************************************************************
 */
@@ -686,10 +686,39 @@ public final class UCharacterTest extends TestFmwk
    	*/
   	public void TestNameIteration()
   	{
-  		ValueIterator iterator = UCharacter.getNameIterator();
+  		ValueIterator iterator = UCharacter.getExtendedNameIterator();
   		ValueIterator.Element element = new ValueIterator.Element();
    	 	ValueIterator.Element old     = new ValueIterator.Element();
     	// testing subrange
+    	iterator.setRange(-10, -5);
+    	if (iterator.next(element)) {
+    		errln("Fail, expected iterator to return false when range is set outside the meaningful range");
+    	}
+    	iterator.setRange(0x110000, 0x111111);
+    	if (iterator.next(element)) {
+    		errln("Fail, expected iterator to return false when range is set outside the meaningful range");
+    	}
+    	try {
+    		iterator.setRange(50, 10);
+    		errln("Fail, expected exception when encountered invalid range");
+    	} catch (Exception e) {
+    	}
+    		
+    	iterator.setRange(-10, 10);
+    	if (!iterator.next(element) || element.integer != 0) {
+    		errln("Fail, expected iterator to return 0 when range start limit is set outside the meaningful range");
+    	}
+    	
+    	iterator.setRange(0x10FFFE, 0x200000);
+    	int last = 0;
+    	while (iterator.next(element)) {
+    		last = element.integer;
+    	}
+    	if (last != 0x10FFFF) {
+    		errln("Fail, expected iterator to return 0x10FFFF when range end limit is set outside the meaningful range");
+    	}
+    	
+    	iterator = UCharacter.getNameIterator();	
  		iterator.setRange(0xF, 0x45);
  		while (iterator.next(element)) {
     		if (element.integer <= old.integer) {
