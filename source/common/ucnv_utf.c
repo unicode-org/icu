@@ -794,102 +794,368 @@ const UConverterSharedData _UTF8Data={
     0
 };
 
+/* UTF-16 Platform Endian --------------------------------------------------- */
+
+U_CFUNC void
+_UTF16PEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
+                             UErrorCode *pErrorCode) {
+    UConverter *cnv;
+    const uint8_t *source;
+    UChar *target;
+    int32_t *offsets;
+    int32_t targetCapacity, length, count, sourceIndex;
+
+    /* set up the local pointers */
+    cnv=pArgs->converter;
+    source=(const uint8_t *)pArgs->source;
+    length=(const uint8_t *)pArgs->sourceLimit-source;
+    target=pArgs->target;
+    targetCapacity=pArgs->targetLimit-pArgs->target;
+    offsets=pArgs->offsets;
+    sourceIndex=0;
+
+    if(length<=0) {
+        /* no input, nothing to do */
+        return;
+    }
+
+    if(targetCapacity<=0) {
+        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+        return;
+    }
+
+    /* complete a partial UChar from the last call */
+    if(cnv->toUnicodeStatus!=0) {
+        /*
+         * copy the byte from the last call and the first one here into the target,
+         * byte-wise to keep the platform endianness
+         */
+        uint8_t *p=(uint8_t *)target++;
+        *p++=(uint8_t)cnv->toUnicodeStatus;
+        cnv->toUnicodeStatus=0;
+        *p=*source++;
+        --length;
+        --targetCapacity;
+        if(offsets!=NULL) {
+            *offsets++=-1;
+        }
+    }
+
+    /* copy an even number of bytes for complete UChars */
+    count=2*targetCapacity;
+    if(count>length) {
+        count=length&~1;
+    }
+    if(count>0) {
+        uprv_memcpy(target, source, count);
+        source+=count;
+        length-=count;
+        count>>=1;
+        target+=count;
+        targetCapacity-=count;
+        if(offsets!=NULL) {
+            while(count>0) {
+                *offsets++=sourceIndex;
+                sourceIndex+=2;
+                --count;
+            }
+        }
+    }
+
+    /* check for a remaining source byte and store the status */
+    if(length>=2) {
+        /* it must be targetCapacity==0 because otherwise the above would have copied more */
+        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+    } else if(length==1) {
+        if(pArgs->flush) {
+            /* a UChar remains incomplete */
+            *pErrorCode=U_TRUNCATED_CHAR_FOUND;
+        } else {
+            /* consume the last byte and store it, making sure that it will never set the status to 0 */
+            cnv->toUnicodeStatus=*source++|0x100;
+        }
+    /* } else length==0 { nothing to do */
+    }
+
+    /* write back the updated pointers */
+    pArgs->source=(const char *)source;
+    pArgs->target=target;
+    pArgs->offsets=offsets;
+}
+
+U_CFUNC void
+_UTF16PEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
+                               UErrorCode *pErrorCode) {
+    UConverter *cnv;
+    const UChar *source;
+    uint8_t *target;
+    int32_t *offsets;
+    int32_t targetCapacity, length, count, sourceIndex;
+
+    /* set up the local pointers */
+    cnv=pArgs->converter;
+    source=pArgs->source;
+    length=pArgs->sourceLimit-source;
+    target=(uint8_t *)pArgs->target;
+    targetCapacity=pArgs->targetLimit-pArgs->target;
+    offsets=pArgs->offsets;
+    sourceIndex=0;
+
+    if(length<=0 && cnv->fromUnicodeStatus==0) {
+        /* no input, nothing to do */
+        return;
+    }
+
+    if(targetCapacity<=0) {
+        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+        return;
+    }
+
+    /* complete a partial UChar from the last call */
+    if(cnv->fromUnicodeStatus!=0) {
+        *target++=(uint8_t)cnv->fromUnicodeStatus;
+        cnv->fromUnicodeStatus=0;
+        --targetCapacity;
+        if(offsets!=NULL) {
+            *offsets++=-1;
+        }
+    }
+
+    /* copy an even number of bytes for complete UChars */
+    count=2*length;
+    if(count>targetCapacity) {
+        count=targetCapacity&~1;
+    }
+    if(count>0) {
+        uprv_memcpy(target, source, count);
+        target+=count;
+        targetCapacity-=count;
+        count>>=1;
+        source+=count;
+        length-=count;
+        if(offsets!=NULL) {
+            while(count>0) {
+                *offsets++=sourceIndex;
+                *offsets++=sourceIndex++;
+                --count;
+            }
+        }
+    }
+
+    if(length>0) {
+        /* it must be targetCapacity<=1 because otherwise the above would have copied more */
+        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+        if(targetCapacity>0) /* targetCapacity==1 */ {
+            /* copy one byte and keep the other in the status */
+            const uint8_t *p=(const uint8_t *)source++;
+            *target++=*p++;
+            cnv->fromUnicodeStatus=*p|0x100;
+            if(offsets!=NULL) {
+                *offsets++=sourceIndex;
+            }
+        }
+    }
+
+    /* write back the updated pointers */
+    pArgs->source=source;
+    pArgs->target=(char *)target;
+    pArgs->offsets=offsets;
+}
+
+/* UTF-16 Opposite Endian --------------------------------------------------- */
+
+/*
+ * For opposite-endian UTF-16, we keep a byte pointer to the UChars
+ * and copy two bytes at a time and reverse them.
+ */
+
+U_CFUNC void
+_UTF16OEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
+                             UErrorCode *pErrorCode) {
+    UConverter *cnv;
+    const uint8_t *source;
+    UChar *target;
+    uint8_t *target8; /* byte pointer to the target */
+    int32_t *offsets;
+    int32_t targetCapacity, length, count, sourceIndex;
+
+    /* set up the local pointers */
+    cnv=pArgs->converter;
+    source=(const uint8_t *)pArgs->source;
+    length=(const uint8_t *)pArgs->sourceLimit-source;
+    target=pArgs->target;
+    targetCapacity=pArgs->targetLimit-pArgs->target;
+    target8=(uint8_t *)target;
+    offsets=pArgs->offsets;
+    sourceIndex=0;
+
+    if(length<=0) {
+        /* no input, nothing to do */
+        return;
+    }
+
+    if(targetCapacity<=0) {
+        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+        return;
+    }
+
+    /* complete a partial UChar from the last call */
+    if(cnv->toUnicodeStatus!=0) {
+        /*
+         * copy the byte from the last call and the first one here into the target,
+         * byte-wise, reversing the platform endianness
+         */
+        *target8++=*source++;
+        *target8++=(uint8_t)cnv->toUnicodeStatus;
+        cnv->toUnicodeStatus=0;
+        ++target;
+        --length;
+        --targetCapacity;
+        if(offsets!=NULL) {
+            *offsets++=-1;
+        }
+    }
+
+    /* copy an even number of bytes for complete UChars */
+    count=2*targetCapacity;
+    if(count>length) {
+        count=length&~1;
+    }
+    if(count>0) {
+        length-=count;
+        count>>=1;
+        targetCapacity-=count;
+        if(offsets==NULL) {
+            while(count>0) {
+                target8[1]=*source++;
+                target8[0]=*source++;
+                target8+=2;
+                --count;
+            }
+        } else {
+            while(count>0) {
+                target8[1]=*source++;
+                target8[0]=*source++;
+                target8+=2;
+                *offsets++=sourceIndex;
+                sourceIndex+=2;
+                --count;
+            }
+        }
+        target=(UChar *)target8;
+    }
+
+    /* check for a remaining source byte and store the status */
+    if(length>=2) {
+        /* it must be targetCapacity==0 because otherwise the above would have copied more */
+        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+    } else if(length==1) {
+        if(pArgs->flush) {
+            /* a UChar remains incomplete */
+            *pErrorCode=U_TRUNCATED_CHAR_FOUND;
+        } else {
+            /* consume the last byte and store it, making sure that it will never set the status to 0 */
+            cnv->toUnicodeStatus=*source++|0x100;
+        }
+    /* } else length==0 { nothing to do */
+    }
+
+    /* write back the updated pointers */
+    pArgs->source=(const char *)source;
+    pArgs->target=target;
+    pArgs->offsets=offsets;
+}
+
+U_CFUNC void
+_UTF16OEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
+                               UErrorCode *pErrorCode) {
+    UConverter *cnv;
+    const UChar *source;
+    const uint8_t *source8; /* byte pointer to the source */
+    uint8_t *target;
+    int32_t *offsets;
+    int32_t targetCapacity, length, count, sourceIndex;
+
+    /* set up the local pointers */
+    cnv=pArgs->converter;
+    source=pArgs->source;
+    length=pArgs->sourceLimit-source;
+    source8=(const uint8_t *)source;
+    target=(uint8_t *)pArgs->target;
+    targetCapacity=pArgs->targetLimit-pArgs->target;
+    offsets=pArgs->offsets;
+    sourceIndex=0;
+
+    if(length<=0 && cnv->fromUnicodeStatus==0) {
+        /* no input, nothing to do */
+        return;
+    }
+
+    if(targetCapacity<=0) {
+        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+        return;
+    }
+
+    /* complete a partial UChar from the last call */
+    if(cnv->fromUnicodeStatus!=0) {
+        *target++=(uint8_t)cnv->fromUnicodeStatus;
+        cnv->fromUnicodeStatus=0;
+        --targetCapacity;
+        if(offsets!=NULL) {
+            *offsets++=-1;
+        }
+    }
+
+    /* copy an even number of bytes for complete UChars */
+    count=2*length;
+    if(count>targetCapacity) {
+        count=targetCapacity&~1;
+    }
+    if(count>0) {
+        targetCapacity-=count;
+        count>>=1;
+        length-=count;
+        if(offsets==NULL) {
+            while(count>0) {
+                target[1]=*source8++;
+                target[0]=*source8++;
+                target+=2;
+                --count;
+            }
+        } else {
+            while(count>0) {
+                target[1]=*source8++;
+                target[0]=*source8++;
+                target+=2;
+                *offsets++=sourceIndex;
+                *offsets++=sourceIndex++;
+                --count;
+            }
+        }
+        source=(const UChar *)source8;
+    }
+
+    if(length>0) {
+        /* it must be targetCapacity<=1 because otherwise the above would have copied more */
+        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+        if(targetCapacity>0) /* targetCapacity==1 */ {
+            /* copy one byte and keep the other in the status */
+            cnv->fromUnicodeStatus=*source8++|0x100;
+            *target++=*source8;
+            ++source;
+            if(offsets!=NULL) {
+                *offsets++=sourceIndex;
+            }
+        }
+    }
+
+    /* write back the updated pointers */
+    pArgs->source=source;
+    pArgs->target=(char *)target;
+    pArgs->offsets=offsets;
+}
+
 /* UTF-16BE ----------------------------------------------------------------- */
-
-U_CFUNC void T_UConverter_toUnicode_UTF16_BE (UConverterToUnicodeArgs * args,
-                                      UErrorCode * err)
-{
-    const unsigned char *mySource = (unsigned char *) args->source;
-    UChar *myTarget = args->target;
-    int32_t mySourceIndex = 0;
-    int32_t myTargetIndex = 0;
-    int32_t targetLength = args->targetLimit - myTarget;
-    int32_t sourceLength = args->sourceLimit - (char *) mySource;
-    UChar mySourceChar = 0x0000;
-    UChar oldmySourceChar = 0x0000;
-
-    while (mySourceIndex < sourceLength)
-    {
-        if (myTargetIndex < targetLength)
-        {
-            /*gets the corresponding UChar */
-            mySourceChar = (unsigned char) mySource[mySourceIndex++];
-            oldmySourceChar = mySourceChar;
-            if (args->converter->toUnicodeStatus == 0)
-            {
-                args->converter->toUnicodeStatus = 
-                    (unsigned char) mySourceChar == 0 ? 0xFFFF : mySourceChar;
-            }
-            else
-            {
-                if (args->converter->toUnicodeStatus != 0xFFFF)
-                    mySourceChar = (UChar) ((args->converter->toUnicodeStatus << 8) | mySourceChar);
-                args->converter->toUnicodeStatus = 0;
-
-                myTarget[myTargetIndex++] = mySourceChar;
-            }
-        }
-        else
-        {
-            *err = U_BUFFER_OVERFLOW_ERROR;
-            break;
-        }
-    }
-
-    if (U_SUCCESS(*err) && args->flush
-      && (mySourceIndex == sourceLength)
-      && (args->converter->toUnicodeStatus != 0x00))
-    {
-        if (U_SUCCESS(*err)) 
-        {
-            *err = U_TRUNCATED_CHAR_FOUND;
-            args->converter->toUnicodeStatus = 0x00;
-        }
-    }
-
-    args->target += myTargetIndex;
-    args->source += mySourceIndex;
-}
-
-U_CFUNC void  T_UConverter_fromUnicode_UTF16_BE (UConverterFromUnicodeArgs * args,
-                                         UErrorCode * err)
-{
-    const UChar *mySource = args->source;
-    unsigned char *myTarget = (unsigned char *) args->target;
-    int32_t mySourceIndex = 0;
-    int32_t myTargetIndex = 0;
-    int32_t targetLength = args->targetLimit - (char *) myTarget;
-    int32_t sourceLength = args->sourceLimit - mySource;
-    UChar mySourceChar;
-
-    /*writing the char to the output stream */
-    while (mySourceIndex < sourceLength)
-    {
-        if (myTargetIndex < targetLength)
-        {
-            mySourceChar = (UChar) mySource[mySourceIndex++];
-            myTarget[myTargetIndex++] = (char) (mySourceChar >> 8);
-            if (myTargetIndex < targetLength)
-            {
-                myTarget[myTargetIndex++] = (char) mySourceChar;
-            }
-            else
-            {
-                args->converter->charErrorBuffer[0] = (char) mySourceChar;
-                args->converter->charErrorBufferLength = 1;
-                *err = U_BUFFER_OVERFLOW_ERROR;
-            }
-        }
-        else
-        {
-            *err = U_BUFFER_OVERFLOW_ERROR;
-            break;
-        }
-    }
-
-    args->target += myTargetIndex;
-    args->source += mySourceIndex;
-}
 
 U_CFUNC UChar32 T_UConverter_getNextUChar_UTF16_BE(UConverterToUnicodeArgs* args,
                                                    UErrorCode* err)
@@ -949,10 +1215,17 @@ static const UConverterImpl _UTF16BEImpl={
     NULL,
     NULL,
 
-    T_UConverter_toUnicode_UTF16_BE,
-    NULL,
-    T_UConverter_fromUnicode_UTF16_BE,
-    NULL,
+#if U_IS_BIG_ENDIAN
+    _UTF16PEToUnicodeWithOffsets,
+    _UTF16PEToUnicodeWithOffsets,
+    _UTF16PEFromUnicodeWithOffsets,
+    _UTF16PEFromUnicodeWithOffsets,
+#else
+    _UTF16OEToUnicodeWithOffsets,
+    _UTF16OEToUnicodeWithOffsets,
+    _UTF16OEFromUnicodeWithOffsets,
+    _UTF16OEFromUnicodeWithOffsets,
+#endif
     T_UConverter_getNextUChar_UTF16_BE,
 
     NULL,
@@ -961,8 +1234,8 @@ static const UConverterImpl _UTF16BEImpl={
 
 /* Todo: verify that UTF-16BE == (ccsid (ibm-codepage) 1200) for unicode version 2.0 and 3.0 */
 const UConverterStaticData _UTF16BEStaticData={
-  sizeof(UConverterStaticData),
-"UTF16_BigEndian",
+    sizeof(UConverterStaticData),
+    "UTF16_BigEndian",
     1200, UCNV_IBM, UCNV_UTF16_BigEndian, 2, 2,
     { 0xff, 0xfd, 0, 0 },2,FALSE,FALSE,
     0,
@@ -977,105 +1250,6 @@ const UConverterSharedData _UTF16BEData={
 };
 
 /* UTF-16LE ----------------------------------------------------------------- */
-
-U_CFUNC void  T_UConverter_toUnicode_UTF16_LE (UConverterToUnicodeArgs * args,
-                                       UErrorCode * err)
-{
-    const unsigned char *mySource = (unsigned char *) args->source;
-    UChar *myTarget = args->target;
-    int32_t mySourceIndex = 0;
-    int32_t myTargetIndex = 0;
-    int32_t targetLength = args->targetLimit - myTarget;
-    int32_t sourceLength = args->sourceLimit - (char *) mySource;
-    UChar mySourceChar = 0x0000;
-
-    while (mySourceIndex < sourceLength)
-    {
-        if (myTargetIndex < targetLength)
-        {
-            /*gets the corresponding UniChar */
-            mySourceChar = (unsigned char) mySource[mySourceIndex++];
-
-            if (args->converter->toUnicodeStatus == 0x00)
-            {
-                args->converter->toUnicodeStatus = (unsigned char) mySourceChar == 0x00 ? 0xFFFF : mySourceChar;
-            }
-            else
-            {
-                if (args->converter->toUnicodeStatus == 0xFFFF) {
-                    mySourceChar = (UChar) (mySourceChar << 8);
-                }
-                else
-                {
-                    mySourceChar <<= 8;
-                    mySourceChar |= (UChar) (args->converter->toUnicodeStatus);
-                }
-                args->converter->toUnicodeStatus = 0x00;
-                myTarget[myTargetIndex++] = mySourceChar;
-            }
-        }
-        else
-        {
-            *err = U_BUFFER_OVERFLOW_ERROR;
-            break;
-        }
-    }
-
-
-    if (U_SUCCESS(*err) && args->flush
-      && (mySourceIndex == sourceLength)
-      && (args->converter->toUnicodeStatus != 0x00))
-    {
-        if (U_SUCCESS(*err)) 
-        {
-          *err = U_TRUNCATED_CHAR_FOUND; 
-          args->converter->toUnicodeStatus = 0x00;
-        }
-    }
-
-    args->target += myTargetIndex;
-    args->source += mySourceIndex;
-}
-
-U_CFUNC void T_UConverter_fromUnicode_UTF16_LE (UConverterFromUnicodeArgs * args,
-                                          UErrorCode * err)
-{
-    const UChar *mySource = args->source;
-    unsigned char *myTarget = (unsigned char *) args->target;
-    int32_t mySourceIndex = 0;
-    int32_t myTargetIndex = 0;
-    int32_t targetLength = args->targetLimit - (char *) myTarget;
-    int32_t sourceLength = args->sourceLimit - mySource;
-    UChar mySourceChar;
-
-    /*writing the char to the output stream */
-    while (mySourceIndex < sourceLength)
-    {
-        if (myTargetIndex < targetLength)
-        {
-            mySourceChar = (UChar) mySource[mySourceIndex++];
-            myTarget[myTargetIndex++] = (char) mySourceChar;
-            if (myTargetIndex < targetLength)
-            {
-                myTarget[myTargetIndex++] = (char) (mySourceChar >> 8);
-            }
-            else
-            {
-                args->converter->charErrorBuffer[0] = (char) (mySourceChar >> 8);
-                args->converter->charErrorBufferLength = 1;
-                *err = U_BUFFER_OVERFLOW_ERROR;
-            }
-        }
-        else
-        {
-            *err = U_BUFFER_OVERFLOW_ERROR;
-            break;
-        }
-    }
-
-    args->target += myTargetIndex;
-    args->source += mySourceIndex;
-}
 
 U_CFUNC UChar32 T_UConverter_getNextUChar_UTF16_LE(UConverterToUnicodeArgs* args,
                                                    UErrorCode* err)
@@ -1140,10 +1314,17 @@ static const UConverterImpl _UTF16LEImpl={
     NULL,
     NULL,
 
-    T_UConverter_toUnicode_UTF16_LE,
-    NULL,
-    T_UConverter_fromUnicode_UTF16_LE,
-    NULL,
+#if !U_IS_BIG_ENDIAN
+    _UTF16PEToUnicodeWithOffsets,
+    _UTF16PEToUnicodeWithOffsets,
+    _UTF16PEFromUnicodeWithOffsets,
+    _UTF16PEFromUnicodeWithOffsets,
+#else
+    _UTF16OEToUnicodeWithOffsets,
+    _UTF16OEToUnicodeWithOffsets,
+    _UTF16OEFromUnicodeWithOffsets,
+    _UTF16OEFromUnicodeWithOffsets,
+#endif
     T_UConverter_getNextUChar_UTF16_LE,
 
     NULL,
