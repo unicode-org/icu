@@ -425,7 +425,7 @@ void Paragraph::draw(void *surface, int32_t firstLine, int32_t lastLine)
 
         x = MARGIN;
 
-        ubidi_setLine(fBidi, firstChar, lastChar, lBidi, &bidiStatus);
+        ubidi_setLine(fBidi, firstChar, lastChar + 1, lBidi, &bidiStatus);
 
         dirCount = ubidi_countRuns(lBidi, &bidiStatus);
 
