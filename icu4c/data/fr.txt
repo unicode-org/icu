@@ -247,7 +247,7 @@ fr {
                    // at 2,000, the multiplier is added
             "    2000: << mille[ >>];\n"
             "    1,000,000: << million[ >>];\n"
-            "    1,000,000,000: << milliarde[ >>];\n"
+            "    1,000,000,000: << milliard[ >>];\n"
             "    1,000,000,000,000: << billion[ >>];\n"
             "    1,000,000,000,000,000: =#,##0=;\n"
             // %%alt-ones is used to insert "et" when the ones digit is 1
