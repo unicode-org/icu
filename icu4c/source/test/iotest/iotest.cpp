@@ -487,17 +487,23 @@ static void TestFprintfFormat() {
     TestFPrintFormat("%8c", 0x65, "%8c", 0x65);
     TestFPrintFormat("%-8c", 0x65, "%-8c", 0x65);
 
-    TestFPrintFormat("%8K", (UChar)0x65, "%8c", 0x65);
-    TestFPrintFormat("%-8K", (UChar)0x65, "%-8c", 0x65);
+    TestFPrintFormat("%8K", (UChar)0x65, "%8c", (char)0x65);
+    TestFPrintFormat("%-8K", (UChar)0x65, "%-8c", (char)0x65);
 
-    TestFPrintFormat("%8f", 1.23456789, "%8f", 1.23456789);
-    TestFPrintFormat("%-8f", 1.23456789, "%-8f", 1.23456789);
+    TestFPrintFormat("%10f", 1.23456789, "%10f", 1.23456789);
+    TestFPrintFormat("%-10f", 1.23456789, "%-10f", 1.23456789);
+    TestFPrintFormat("%10f", 123.456789, "%10f", 123.456789);
+    TestFPrintFormat("%-10f", 123.456789, "%-10f", 123.456789);
 
-    TestFPrintFormat("%8e", 1.23456789, "%8e", 1.23456789);
-    TestFPrintFormat("%-8e", 1.23456789, "%-8e", 1.23456789);
+    TestFPrintFormat("%10e", 1.23456789, "%10e", 1.23456789);
+    TestFPrintFormat("%-10e", 1.23456789, "%-10e", 1.23456789);
+    TestFPrintFormat("%10e", 123.456789, "%10e", 123.456789);
+    TestFPrintFormat("%-10e", 123.456789, "%-10e", 123.456789);
 
-    TestFPrintFormat("%8g", 1.23456789, "%8g", 1.23456789);
-    TestFPrintFormat("%-8g", 1.23456789, "%-8g", 1.23456789);
+    TestFPrintFormat("%10g", 1.23456789, "%10g", 1.23456789);
+    TestFPrintFormat("%-10g", 1.23456789, "%-10g", 1.23456789);
+    TestFPrintFormat("%10g", 123.456789, "%10g", 123.456789);
+    TestFPrintFormat("%-10g", 123.456789, "%-10g", 123.456789);
 
     TestFPrintFormat("%8x", 123456, "%8x", 123456);
     TestFPrintFormat("%-8x", 123456, "%-8x", 123456);
@@ -519,48 +525,59 @@ static void TestFprintfFormat() {
 
     TestFPrintFormat("%8d", 123456, "%8d", 123456);
     TestFPrintFormat("%-8d", 123456, "%-8d", 123456);
+    TestFPrintFormat("% d", 123456, "% d", 123456);
+    TestFPrintFormat("% d", -123456, "% d", -123456);
 
     TestFPrintFormat("%8i", 123456, "%8i", 123456);
     TestFPrintFormat("%-8i", 123456, "%-8i", 123456);
 
-    TestFPrintFormat("% d", 123456, "% d", 123456);
-    TestFPrintFormat("% d", -123456, "% d", -123456);
-
     log_verbose("Get really crazy with the formatting.\n");
 
-    TestFPrintFormat("%-+ #12x", 123, "%-+ #12x", 123);
-    TestFPrintFormat("%-+ #12x", -123, "%-+ #12x", -123);
-    TestFPrintFormat("%+ #12x", 123, "%+ #12x", 123);
-    TestFPrintFormat("%+ #12x", -123, "%+ #12x", -123);
+    TestFPrintFormat("%-#12x", 123, "%-#12x", 123);
+    TestFPrintFormat("%-#12x", -123, "%-#12x", -123);
+    TestFPrintFormat("%#12x", 123, "%#12x", 123);
+    TestFPrintFormat("%#12x", -123, "%#12x", -123);
 
-    TestFPrintFormat("%-+ 12d", 123, "%-+ 12d", 123);
-    TestFPrintFormat("%-+ 12d", -123, "%-+ 12d", -123);
-    TestFPrintFormat("%+ 12d", 123, "%+ 12d", 123);
-    TestFPrintFormat("%+ 12d", -123, "%+ 12d", -123);
-    TestFPrintFormat("%+12d", 123, "%+12d", 123);
-    TestFPrintFormat("%+12d", -123, "%+12d", -123);
-    TestFPrintFormat("%- 12d", 123, "%- 12d", 123);
+    TestFPrintFormat("%-+12d", 123,  "%-+12d", 123);
+    TestFPrintFormat("%-+12d", -123, "%-+12d", -123);
+    TestFPrintFormat("%- 12d", 123,  "%- 12d", 123);
     TestFPrintFormat("%- 12d", -123, "%- 12d", -123);
-    TestFPrintFormat("% 12d", 123, "% 12d", 123);
-    TestFPrintFormat("% 12d", -123, "% 12d", -123);
+    TestFPrintFormat("%+12d", 123,   "%+12d", 123);
+    TestFPrintFormat("%+12d", -123,  "%+12d", -123);
+    TestFPrintFormat("% 12d", 123,   "% 12d", 123);
+    TestFPrintFormat("% 12d", -123,  "% 12d", -123);
+    TestFPrintFormat("%12d", 123,    "%12d", 123);
+    TestFPrintFormat("%12d", -123,   "%12d", -123);
 
-    TestFPrintFormat("%-+ 12.1e", 1.234, "%-+ 12.1e", 1.234);
-    TestFPrintFormat("%-+ 12.1e", -1.234, "%-+ 12.1e", -1.234);
-    TestFPrintFormat("%+ 12.1e", 1.234, "%+ 12.1e", 1.234);
-    TestFPrintFormat("%+ 12.1e", -1.234, "%+ 12.1e", -1.234);
-    TestFPrintFormat("%+12.1e", 1.234, "%+12.1e", 1.234);
-    TestFPrintFormat("%+12.1e", -1.234, "%+12.1e", -1.234);
-    TestFPrintFormat("% 12.1e", 1.234, "% 12.1e", 1.234);
-    TestFPrintFormat("% 12.1e", -1.234, "% 12.1e", -1.234);
+    TestFPrintFormat("%-+12.1e", 1.234,  "%-+12.1e", 1.234);
+    TestFPrintFormat("%-+12.1e", -1.234, "%-+12.1e", -1.234);
+    TestFPrintFormat("%- 12.1e", 1.234,  "%- 12.1e", 1.234);
+    TestFPrintFormat("%- 12.1e", -1.234, "%- 12.1e", -1.234);
+    TestFPrintFormat("%+12.1e", 1.234,   "%+12.1e", 1.234);
+    TestFPrintFormat("%+12.1e", -1.234,  "%+12.1e", -1.234);
+    TestFPrintFormat("% 12.1e", 1.234,   "% 12.1e", 1.234);
+    TestFPrintFormat("% 12.1e", -1.234,  "% 12.1e", -1.234);
+    TestFPrintFormat("%12.1e", 1.234,    "%12.1e", 1.234);
+    TestFPrintFormat("%12.1e", -1.234,   "%12.1e", -1.234);
+    TestFPrintFormat("%.2e", 1.234,      "%.2e", 1.234);
+    TestFPrintFormat("%.2e", -1.234,     "%.2e", -1.234);
+    TestFPrintFormat("%3e", 1.234,       "%3e", 1.234);
+    TestFPrintFormat("%3e", -1.234,      "%3e", -1.234);
 
-    TestFPrintFormat("%-+ 12.1f", 1.234, "%-+ 12.1f", 1.234);
-    TestFPrintFormat("%-+ 12.1f", -1.234, "%-+ 12.1f", -1.234);
-    TestFPrintFormat("%+ 12.1f", 1.234, "%+ 12.1f", 1.234);
-    TestFPrintFormat("%+ 12.1f", -1.234, "%+ 12.1f", -1.234);
-    TestFPrintFormat("%+12.1f", 1.234, "%+12.1f", 1.234);
-    TestFPrintFormat("%+12.1f", -1.234, "%+12.1f", -1.234);
-    TestFPrintFormat("% 12.1f", 1.234, "% 12.1f", 1.234);
-    TestFPrintFormat("% 12.1f", -1.234, "% 12.1f", -1.234);
+    TestFPrintFormat("%-+12.1f", 1.234,  "%-+12.1f", 1.234);
+    TestFPrintFormat("%-+12.1f", -1.234, "%-+12.1f", -1.234);
+    TestFPrintFormat("%- 12.1f", 1.234,  "%- 12.1f", 1.234);
+    TestFPrintFormat("%- 12.1f", -1.234, "%- 12.1f", -1.234);
+    TestFPrintFormat("%+12.1f", 1.234,   "%+12.1f", 1.234);
+    TestFPrintFormat("%+12.1f", -1.234,  "%+12.1f", -1.234);
+    TestFPrintFormat("% 12.1f", 1.234,   "% 12.1f", 1.234);
+    TestFPrintFormat("% 12.1f", -1.234,  "% 12.1f", -1.234);
+    TestFPrintFormat("%12.1f", 1.234,    "%12.1f", 1.234);
+    TestFPrintFormat("%12.1f", -1.234,   "%12.1f", -1.234);
+    TestFPrintFormat("%.2f", 1.234,      "%.2f", 1.234);
+    TestFPrintFormat("%.2f", -1.234,     "%.2f", -1.234);
+    TestFPrintFormat("%3f", 1.234,       "%3f", 1.234);
+    TestFPrintFormat("%3f", -1.234,      "%3f", -1.234);
 }
 
 #undef TestFPrintFormat
@@ -823,17 +840,23 @@ static void TestSprintfFormat() {
     TestSPrintFormat("%8c", 0x65, "%8c", 0x65);
     TestSPrintFormat("%-8c", 0x65, "%-8c", 0x65);
 
-    TestSPrintFormat("%8K", (UChar)0x65, "%8c", 0x65);
-    TestSPrintFormat("%-8K", (UChar)0x65, "%-8c", 0x65);
+    TestSPrintFormat("%8K", (UChar)0x65, "%8c", (char)0x65);
+    TestSPrintFormat("%-8K", (UChar)0x65, "%-8c", (char)0x65);
 
-    TestSPrintFormat("%8f", 1.23456789, "%8f", 1.23456789);
-    TestSPrintFormat("%-8f", 1.23456789, "%-8f", 1.23456789);
+    TestSPrintFormat("%10f", 1.23456789, "%10f", 1.23456789);
+    TestSPrintFormat("%-10f", 1.23456789, "%-10f", 1.23456789);
+    TestSPrintFormat("%10f", 123.456789, "%10f", 123.456789);
+    TestSPrintFormat("%-10f", 123.456789, "%-10f", 123.456789);
 
-    TestSPrintFormat("%8e", 1.23456789, "%8e", 1.23456789);
-    TestSPrintFormat("%-8e", 1.23456789, "%-8e", 1.23456789);
+    TestSPrintFormat("%10e", 1.23456789, "%10e", 1.23456789);
+    TestSPrintFormat("%-10e", 1.23456789, "%-10e", 1.23456789);
+    TestSPrintFormat("%10e", 123.456789, "%10e", 123.456789);
+    TestSPrintFormat("%-10e", 123.456789, "%-10e", 123.456789);
 
-    TestSPrintFormat("%8g", 1.23456789, "%8g", 1.23456789);
-    TestSPrintFormat("%-8g", 1.23456789, "%-8g", 1.23456789);
+    TestSPrintFormat("%10g", 1.23456789, "%10g", 1.23456789);
+    TestSPrintFormat("%-10g", 1.23456789, "%-10g", 1.23456789);
+    TestSPrintFormat("%10g", 123.456789, "%10g", 123.456789);
+    TestSPrintFormat("%-10g", 123.456789, "%-10g", 123.456789);
 
     TestSPrintFormat("%8x", 123456, "%8x", 123456);
     TestSPrintFormat("%-8x", 123456, "%-8x", 123456);
@@ -855,48 +878,59 @@ static void TestSprintfFormat() {
 
     TestSPrintFormat("%8d", 123456, "%8d", 123456);
     TestSPrintFormat("%-8d", 123456, "%-8d", 123456);
+    TestSPrintFormat("% d", 123456, "% d", 123456);
+    TestSPrintFormat("% d", -123456, "% d", -123456);
 
     TestSPrintFormat("%8i", 123456, "%8i", 123456);
     TestSPrintFormat("%-8i", 123456, "%-8i", 123456);
 
-    TestSPrintFormat("% d", 123456, "% d", 123456);
-    TestSPrintFormat("% d", -123456, "% d", -123456);
-
     log_verbose("Get really crazy with the formatting.\n");
 
-    TestSPrintFormat("%-+ #12x", 123, "%-+ #12x", 123);
-    TestSPrintFormat("%-+ #12x", -123, "%-+ #12x", -123);
-    TestSPrintFormat("%+ #12x", 123, "%+ #12x", 123);
-    TestSPrintFormat("%+ #12x", -123, "%+ #12x", -123);
+    TestSPrintFormat("%-#12x", 123, "%-#12x", 123);
+    TestSPrintFormat("%-#12x", -123, "%-#12x", -123);
+    TestSPrintFormat("%#12x", 123, "%#12x", 123);
+    TestSPrintFormat("%#12x", -123, "%#12x", -123);
 
-    TestSPrintFormat("%-+ 12d", 123, "%-+ 12d", 123);
-    TestSPrintFormat("%-+ 12d", -123, "%-+ 12d", -123);
-    TestSPrintFormat("%+ 12d", 123, "%+ 12d", 123);
-    TestSPrintFormat("%+ 12d", -123, "%+ 12d", -123);
-    TestSPrintFormat("%+12d", 123, "%+12d", 123);
-    TestSPrintFormat("%+12d", -123, "%+12d", -123);
-    TestSPrintFormat("%- 12d", 123, "%- 12d", 123);
+    TestSPrintFormat("%-+12d", 123,  "%-+12d", 123);
+    TestSPrintFormat("%-+12d", -123, "%-+12d", -123);
+    TestSPrintFormat("%- 12d", 123,  "%- 12d", 123);
     TestSPrintFormat("%- 12d", -123, "%- 12d", -123);
-    TestSPrintFormat("% 12d", 123, "% 12d", 123);
-    TestSPrintFormat("% 12d", -123, "% 12d", -123);
+    TestSPrintFormat("%+12d", 123,   "%+12d", 123);
+    TestSPrintFormat("%+12d", -123,  "%+12d", -123);
+    TestSPrintFormat("% 12d", 123,   "% 12d", 123);
+    TestSPrintFormat("% 12d", -123,  "% 12d", -123);
+    TestSPrintFormat("%12d", 123,    "%12d", 123);
+    TestSPrintFormat("%12d", -123,   "%12d", -123);
 
-    TestSPrintFormat("%-+ 12.1e", 1.234, "%-+ 12.1e", 1.234);
-    TestSPrintFormat("%-+ 12.1e", -1.234, "%-+ 12.1e", -1.234);
-    TestSPrintFormat("%+ 12.1e", 1.234, "%+ 12.1e", 1.234);
-    TestSPrintFormat("%+ 12.1e", -1.234, "%+ 12.1e", -1.234);
-    TestSPrintFormat("%+12.1e", 1.234, "%+12.1e", 1.234);
-    TestSPrintFormat("%+12.1e", -1.234, "%+12.1e", -1.234);
-    TestSPrintFormat("% 12.1e", 1.234, "% 12.1e", 1.234);
-    TestSPrintFormat("% 12.1e", -1.234, "% 12.1e", -1.234);
+    TestSPrintFormat("%-+12.1e", 1.234,  "%-+12.1e", 1.234);
+    TestSPrintFormat("%-+12.1e", -1.234, "%-+12.1e", -1.234);
+    TestSPrintFormat("%- 12.1e", 1.234,  "%- 12.1e", 1.234);
+    TestSPrintFormat("%- 12.1e", -1.234, "%- 12.1e", -1.234);
+    TestSPrintFormat("%+12.1e", 1.234,   "%+12.1e", 1.234);
+    TestSPrintFormat("%+12.1e", -1.234,  "%+12.1e", -1.234);
+    TestSPrintFormat("% 12.1e", 1.234,   "% 12.1e", 1.234);
+    TestSPrintFormat("% 12.1e", -1.234,  "% 12.1e", -1.234);
+    TestSPrintFormat("%12.1e", 1.234,    "%12.1e", 1.234);
+    TestSPrintFormat("%12.1e", -1.234,   "%12.1e", -1.234);
+    TestSPrintFormat("%.2e", 1.234,      "%.2e", 1.234);
+    TestSPrintFormat("%.2e", -1.234,     "%.2e", -1.234);
+    TestSPrintFormat("%3e", 1.234,       "%3e", 1.234);
+    TestSPrintFormat("%3e", -1.234,      "%3e", -1.234);
 
-    TestSPrintFormat("%-+ 12.1f", 1.234, "%-+ 12.1f", 1.234);
-    TestSPrintFormat("%-+ 12.1f", -1.234, "%-+ 12.1f", -1.234);
-    TestSPrintFormat("%+ 12.1f", 1.234, "%+ 12.1f", 1.234);
-    TestSPrintFormat("%+ 12.1f", -1.234, "%+ 12.1f", -1.234);
-    TestSPrintFormat("%+12.1f", 1.234, "%+12.1f", 1.234);
-    TestSPrintFormat("%+12.1f", -1.234, "%+12.1f", -1.234);
-    TestSPrintFormat("% 12.1f", 1.234, "% 12.1f", 1.234);
-    TestSPrintFormat("% 12.1f", -1.234, "% 12.1f", -1.234);
+    TestSPrintFormat("%-+12.1f", 1.234,  "%-+12.1f", 1.234);
+    TestSPrintFormat("%-+12.1f", -1.234, "%-+12.1f", -1.234);
+    TestSPrintFormat("%- 12.1f", 1.234,  "%- 12.1f", 1.234);
+    TestSPrintFormat("%- 12.1f", -1.234, "%- 12.1f", -1.234);
+    TestSPrintFormat("%+12.1f", 1.234,   "%+12.1f", 1.234);
+    TestSPrintFormat("%+12.1f", -1.234,  "%+12.1f", -1.234);
+    TestSPrintFormat("% 12.1f", 1.234,   "% 12.1f", 1.234);
+    TestSPrintFormat("% 12.1f", -1.234,  "% 12.1f", -1.234);
+    TestSPrintFormat("%12.1f", 1.234,    "%12.1f", 1.234);
+    TestSPrintFormat("%12.1f", -1.234,   "%12.1f", -1.234);
+    TestSPrintFormat("%.2f", 1.234,      "%.2f", 1.234);
+    TestSPrintFormat("%.2f", -1.234,     "%.2f", -1.234);
+    TestSPrintFormat("%3f", 1.234,       "%3f", 1.234);
+    TestSPrintFormat("%3f", -1.234,      "%3f", -1.234);
 }
 
 #undef TestSPrintFormat
