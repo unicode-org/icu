@@ -790,7 +790,7 @@ void IntlTest::errln( const UnicodeString &message )
 /* convenience functions that include sprintf formatting */
 void IntlTest::log(const char *fmt, ...)
 {
-    char buffer[512];
+    char buffer[4000];
     va_list ap;
 
     va_start(ap, fmt);
@@ -804,7 +804,7 @@ void IntlTest::log(const char *fmt, ...)
 
 void IntlTest::logln(const char *fmt, ...)
 {
-    char buffer[512];
+    char buffer[4000];
     va_list ap;
 
     va_start(ap, fmt);
@@ -819,7 +819,7 @@ void IntlTest::logln(const char *fmt, ...)
 /* convenience functions that include sprintf formatting */
 void IntlTest::info(const char *fmt, ...)
 {
-    char buffer[512];
+    char buffer[4000];
     va_list ap;
 
     va_start(ap, fmt);
@@ -831,7 +831,7 @@ void IntlTest::info(const char *fmt, ...)
 
 void IntlTest::infoln(const char *fmt, ...)
 {
-    char buffer[512];
+    char buffer[4000];
     va_list ap;
 
     va_start(ap, fmt);
@@ -843,7 +843,7 @@ void IntlTest::infoln(const char *fmt, ...)
 
 void IntlTest::err(const char *fmt, ...)
 {
-    char buffer[512];
+    char buffer[4000];
     va_list ap;
 
     va_start(ap, fmt);
@@ -854,7 +854,7 @@ void IntlTest::err(const char *fmt, ...)
 
 void IntlTest::errln(const char *fmt, ...)
 {
-    char buffer[512];
+    char buffer[4000];
     va_list ap;
 
     va_start(ap, fmt);
