@@ -3982,6 +3982,113 @@ static void TestSettings(void) {
   }
 }
 
+static int32_t TestEqualsForCollator(const char* locName, UCollator *source, UCollator *target) {
+  UErrorCode status = U_ZERO_ERROR;
+  int32_t errorNo = 0;
+  const UChar *sourceRules = NULL;
+  int32_t sourceRulesLen = 0;
+  UColAttributeValue french = UCOL_OFF;
+  int32_t cloneSize = 0;
+
+  if(!ucol_equals(source, target)) {
+    log_err("Same collators, different address not equal\n");
+    errorNo++;
+  }
+  ucol_close(target);
+  if(uprv_strcmp(ucol_getLocale(source, ULOC_REQUESTED_LOCALE, &status), ucol_getLocale(source, ULOC_ACTUAL_LOCALE, &status)) == 0) {
+    /* currently, safeClone is implemented through getRules/openRules
+     * so it is the same as the test below - I will comment that test out.
+     */
+    /* preflight */
+    target = ucol_safeClone(source, NULL, &cloneSize, &status);
+    /* real thing */
+    target = ucol_safeClone(source, NULL, &cloneSize, &status);
+    if(U_FAILURE(status)) {
+      log_err("Error creating clone\n");
+      errorNo++;
+      return errorNo;
+    }
+    if(!ucol_equals(source, target)) {
+      log_err("Collator different from it's clone\n");
+      errorNo++;
+    }
+    french = ucol_getAttribute(source, UCOL_FRENCH_COLLATION, &status);
+    if(french == UCOL_ON) {
+      ucol_setAttribute(target, UCOL_FRENCH_COLLATION, UCOL_OFF, &status);
+    } else {
+      ucol_setAttribute(target, UCOL_FRENCH_COLLATION, UCOL_ON, &status);
+    }
+    if(U_FAILURE(status)) {
+      log_err("Error setting attributes\n");
+      errorNo++;
+      return errorNo;
+    }
+    if(ucol_equals(source, target)) {
+      log_err("Collators same even when options changed\n");
+      errorNo++;
+    }
+    ucol_close(target);
+    /* commented out since safeClone uses exactly the same technique */
+    /*
+    sourceRules = ucol_getRules(source, &sourceRulesLen);
+    target = ucol_openRules(sourceRules, sourceRulesLen, UCOL_DEFAULT, UCOL_DEFAULT, &parseError, &status);
+    if(U_FAILURE(status)) {
+      log_err("Error instantiating target from rules\n");
+      errorNo++;
+      return errorNo;
+    }
+    if(!ucol_equals(source, target)) {
+      log_err("Collator different from collator that was created from the same rules\n");
+      errorNo++;
+    }
+    ucol_close(target);
+    */
+  }
+  return errorNo;
+}
+
+
+static void TestEquals(void) {
+  /* ucol_equals is not currently a public API. There is a chance that it will become
+   * something like this, but currently it is only used by RuleBasedCollator::operator==
+   */
+  /* test whether the two collators instantiated from the same locale are equal */
+  UErrorCode status = U_ZERO_ERROR;
+  int32_t noOfLoc = uloc_countAvailable();
+  const char *locName = NULL;
+  UCollator *source = NULL, *target = NULL;
+  int32_t i = 0;
+  int32_t cloneSize = 0;
+
+  source = ucol_open("root", &status);
+  target = ucol_safeClone(source, NULL, &cloneSize, &status);
+  target = ucol_safeClone(source, NULL, &cloneSize, &status);
+  log_verbose("Testing root\n");
+  if(!ucol_equals(source, source)) {
+    log_err("Same collator not equal\n");
+  }
+  if(TestEqualsForCollator(locName, source, target)) {
+    log_err("Errors for root\n", locName);
+  }
+  ucol_close(source);
+
+  for(i = 0; i<noOfLoc; i++) {
+    status = U_ZERO_ERROR;
+    locName = uloc_getAvailable(i);
+    /*if(hasCollationElements(locName)) {*/
+      log_verbose("Testing equality for locale %s\n", locName);
+      source = ucol_open(locName, &status);
+      target = ucol_open(locName, &status);
+      if(TestEqualsForCollator(locName, source, target)) {
+        log_err("Errors for locale %s\n", locName);
+      }
+      ucol_close(source);
+    /*}*/
+  }
+
+
+}
+
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
 
 void addMiscCollTest(TestNode** root)
@@ -4034,6 +4141,7 @@ void addMiscCollTest(TestNode** root)
     TEST(TestHebrewUCA);
     TEST(TestPartialSortKeyTermination);
     TEST(TestSettings);
+    TEST(TestEquals);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
