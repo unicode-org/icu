@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2001/12/01 01:47:32 $ 
- * $Revision: 1.19 $
+ * $Date: 2001/12/03 18:32:24 $ 
+ * $Revision: 1.20 $
  *
  *****************************************************************************************
  */
@@ -42,20 +42,6 @@ public class UnicodeSetTest extends TestFmwk {
                 if (!toPatternAux(0, i)) continue;
                 if (!toPatternAux(i, 0xFFFF)) continue;
             }
-        }
-
-        String spat = "[:nonspacing mark:]";
-        UnicodeSet s = new UnicodeSet(spat);
-        String tpat = s.toPattern(true);
-        try {
-            UnicodeSet t = new UnicodeSet(tpat);
-            if (!s.equals(t)) {
-                errln("FAIL: " + spat + ".toPattern().new UnicodeSet() => " +
-                      t.toPattern(true));
-            }
-        } catch (Exception e) {
-            errln("FAIL: " + spat + ".toPattern() => " + tpat +
-                  ": INVALID PATTERN");
         }
     }
     
