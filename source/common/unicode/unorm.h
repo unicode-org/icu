@@ -433,13 +433,6 @@ unorm_concatenate(const UChar *left, int32_t leftLength,
 #define U_COMPARE_IGNORE_CASE       0x10000
 
 /**
- * Option bit for unorm_compare:
- * Compare strings in code point order instead of code unit order.
- * @draft ICU 2.2
- */
-#define U_COMPARE_CODE_POINT_ORDER  0x8000
-
-/**
  * Compare two strings for canonical equivalence.
  * Further options include case-insensitive comparison and
  * code point order (as opposed to code unit order).
@@ -477,7 +470,7 @@ unorm_concatenate(const UChar *left, int32_t leftLength,
  *
  *   - U_COMPARE_CODE_POINT_ORDER
  *     Set to choose code point order instead of code unit order
- *     (see u_strcmpCodePointOrder for details).
+ *     (see u_strCompare for details).
  *
  *   - U_COMPARE_IGNORE_CASE
  *     Set to compare strings case-insensitively using case folding,
@@ -487,7 +480,7 @@ unorm_concatenate(const UChar *left, int32_t leftLength,
  *   - Options as used with case-insensitive comparisons, currently:
  *
  *   - U_FOLD_CASE_EXCLUDE_SPECIAL_I
- *    (see u_strcasecmp for details)
+ *    (see u_strCaseCompare for details)
  *
  * @param pErrorCode ICU error code in/out parameter.
  *                   Must fulfill U_SUCCESS before the function call.
@@ -495,10 +488,10 @@ unorm_concatenate(const UChar *left, int32_t leftLength,
  *
  * @see unorm_normalize
  * @see UNORM_FCD
- * @see u_strcasecmp
- * @see u_strcmpCodePointOrder
+ * @see u_strCompare
+ * @see u_strCaseCompare
  *
- * @draft ICU 2.1
+ * @draft ICU 2.2
  */
 U_CAPI int32_t U_EXPORT2
 unorm_compare(const UChar *s1, int32_t length1,
