@@ -2,12 +2,13 @@
 // Konkani locale
 
 kok_IN {
+    Version { "1.1" }
     LocaleID { "0457" }
     ShortCountry { IND }
 
     CurrencyElements {
         "\u0930\u0941",
-        RUP,  // Rs. ? No.
+        INR,  // Rs. ? No.
         "."
     }
     DateTimePatterns {
@@ -25,5 +26,5 @@ kok_IN {
         "1",
         "1"
     }
-   Version { "0.1" }
+
 }

@@ -3,7 +3,7 @@
 
 hi_IN {
     ShortCountry { IND }
-
+    Vesion{ "1.1" }
     NumberPatterns {
         "#,##,##0.###",
         "\u00A4 #,##0.00;-\u00A4 #,##0.00",
@@ -11,7 +11,7 @@ hi_IN {
     }
     CurrencyElements {
         "\u0930\u0942",
-        RUP,  // Rs. ? No.
+        INR,  // Rs. ? No.
         "."
     }
     DateTimePatterns {

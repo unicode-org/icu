@@ -14,7 +14,7 @@ eo {
 	    Version { "1.0" }
 		Sequence { "[normalization on]" }
 	}
-    Version { "1.0" } 
+    Version { "1.1" } 
     Countries { 
         AT { "A\u016dstrujo" }
         BE { "Belgujo" }

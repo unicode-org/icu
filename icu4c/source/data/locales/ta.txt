@@ -2,7 +2,7 @@
 
 ta {
    LocaleID { "49" }
-    Version { "0.1" }
+    Version { "1.1" }
 
     ShortLanguage { tam }
     Languages {

@@ -7,7 +7,7 @@
 // *******************************************************************************
 
 kw_GB {
-   Version { "x0.0" }
+   Version { "1.1" }
 
     ///* Discarding duplicate data for tag: AmPmMarkers */
     CurrencyElements { 

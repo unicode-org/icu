@@ -2,12 +2,13 @@
 // Tamil locale.  Based on Hindi locale
 
 ta_IN {
-   LocaleID { "449" }
+    Version { "1.1" }
+    LocaleID { "449" }
     ShortCountry { IND }
 
     CurrencyElements {
         "$",
-        RUP,  // Rs. ? No.
+        INR,  // Rs. ? No.
         "."
     }
     LocaleString { "ta_IN" }
@@ -26,5 +27,5 @@ ta_IN {
         "1",
         "1"
     }
-   Version { "0.1" }
+
 }
