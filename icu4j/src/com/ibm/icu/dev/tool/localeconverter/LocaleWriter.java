@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/LocaleWriter.java,v $ 
- * $Date: 2003/08/14 22:10:25 $ 
- * $Revision: 1.4 $
+ * $Date: 2003/08/14 22:13:23 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -322,12 +322,16 @@ public abstract class LocaleWriter {
     }
     
     protected void appendEscapedChar(char c, StringBuffer buffer) {
-        buffer.append(getEscapeChar());
-        int value = ((int)c) & 0xFFFF;
-        buffer.append(HEX_DIGIT[(value & 0xF000) >> 12]);
-        buffer.append(HEX_DIGIT[(value & 0x0F00) >> 8]);
-        buffer.append(HEX_DIGIT[(value & 0x00F0) >> 4]);
-        buffer.append(HEX_DIGIT[(value & 0x000F)]);
+        if(c>=0x20 && c < 0x7f){
+            buffer.append(c);
+        }else{
+            buffer.append(getEscapeChar());
+            int value = ((int)c) & 0xFFFF;
+            buffer.append(HEX_DIGIT[(value & 0xF000) >> 12]);
+            buffer.append(HEX_DIGIT[(value & 0x0F00) >> 8]);
+            buffer.append(HEX_DIGIT[(value & 0x00F0) >> 4]);
+            buffer.append(HEX_DIGIT[(value & 0x000F)]);
+        }
     }
     
     protected String getEscapeChar() {
