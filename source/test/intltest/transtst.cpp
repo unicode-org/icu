@@ -2024,6 +2024,8 @@ void TransliteratorTest::TestCompoundFilterID(void) {
         "Latin-Greek; [abc];", NULL, NULL, NULL, // misplaced filter
         "[b]; Latin-Greek; Upper; ([xyz])", "F", "abc", "a\\u0392c",
         "[b]; (Lower); Latin-Greek; Upper(); ([\\u0392])", "R", "\\u0391\\u0392\\u0393", "\\u0391b\\u0393",
+        "#\n::[b]; ::Latin-Greek; ::Upper; ::([xyz]);", "F", "abc", "a\\u0392c",
+        "#\n::[b]; ::(Lower); ::Latin-Greek; ::Upper(); ::([\\u0392]);", "R", "\\u0391\\u0392\\u0393", "\\u0391b\\u0393",
         NULL,
     };
 
@@ -2041,7 +2043,11 @@ void TransliteratorTest::TestCompoundFilterID(void) {
         Transliterator* t = NULL;
         UParseError pe;
         UErrorCode ec = U_ZERO_ERROR;
-        t = Transliterator::createInstance(id, direction, pe, ec);
+        if (id.charAt(0) == 0x23/*#*/) {
+            t = Transliterator::createFromRules("ID", id, direction, pe, ec);
+        } else {
+            t = Transliterator::createInstance(id, direction, pe, ec);
+        }
         UBool ok = (t != NULL && U_SUCCESS(ec));
         if (ok == expOk) {
             logln((UnicodeString)"Ok: " + id + " => " + (t!=0?t->getID():"NULL") + ", " +
