@@ -260,15 +260,15 @@ ubrk_isBoundary(UBreakIterator *bi, int32_t offset)
 
 
 U_CAPI  int32_t U_EXPORT2
-ubrk_getRuleStatus(UBreakIterator *bi)
+ubrk_getRuleStatus(const UBreakIterator *bi)
 {
-    return ((RuleBasedBreakIterator *)bi)->getRuleStatus();
+    return ((const RuleBasedBreakIterator *)bi)->getRuleStatus();
 }
 
 U_CAPI  int32_t U_EXPORT2
-ubrk_getRuleStatusVec(UBreakIterator *bi, int32_t *fillInVec, int32_t capacity, UErrorCode *status)
+ubrk_getRuleStatusVec(const UBreakIterator *bi, int32_t *fillInVec, int32_t capacity, UErrorCode *status)
 {
-    return ((RuleBasedBreakIterator *)bi)->getRuleStatusVec(fillInVec, capacity, *status);
+    return ((/*const TODO: make this const*/ RuleBasedBreakIterator *)bi)->getRuleStatusVec(fillInVec, capacity, *status);
 }
 
 

@@ -290,7 +290,7 @@ public:
      * @stable ICU 2.0
      */
     const char*
-      getKey(void);
+      getKey(void) const;
 
     /**
      * Gets the locale ID of the resource bundle as a string.
@@ -300,7 +300,7 @@ public:
      * @stable ICU 2.0
      */
     const char*
-      getName(void);
+      getName(void) const;
 
 
     /**
@@ -310,7 +310,7 @@ public:
      * @stable ICU 2.0
      */
     UResType 
-      getType(void);
+      getType(void) const;
 
     /**
      * Returns the next resource in a given resource or NULL if there are no more resources 

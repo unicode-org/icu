@@ -949,7 +949,7 @@ U_CAPI uint32_t U_EXPORT2 ures_getUInt(const UResourceBundle* resB, UErrorCode *
 }
 
 
-U_CAPI UResType U_EXPORT2 ures_getType(UResourceBundle *resB) {
+U_CAPI UResType U_EXPORT2 ures_getType(const UResourceBundle *resB) {
   UResType type;
 
   if(resB == NULL) {
@@ -959,7 +959,7 @@ U_CAPI UResType U_EXPORT2 ures_getType(UResourceBundle *resB) {
   return type == URES_TABLE32 ? URES_TABLE : type;
 }
 
-U_CAPI const char * U_EXPORT2 ures_getKey(UResourceBundle *resB) {
+U_CAPI const char * U_EXPORT2 ures_getKey(const UResourceBundle *resB) {
   if(resB == NULL) {
     return NULL;
   }
@@ -967,7 +967,7 @@ U_CAPI const char * U_EXPORT2 ures_getKey(UResourceBundle *resB) {
   return(resB->fKey);
 }
 
-U_CAPI int32_t U_EXPORT2 ures_getSize(UResourceBundle *resB) {
+U_CAPI int32_t U_EXPORT2 ures_getSize(const UResourceBundle *resB) {
   if(resB == NULL) {
     return 0;
   }
@@ -994,7 +994,7 @@ U_CAPI void U_EXPORT2 ures_resetIterator(UResourceBundle *resB){
   resB->fIndex = -1;
 }
 
-U_CAPI UBool U_EXPORT2 ures_hasNext(UResourceBundle *resB) {
+U_CAPI UBool U_EXPORT2 ures_hasNext(const UResourceBundle *resB) {
   if(resB == NULL) {
     return FALSE;
   }
@@ -1786,7 +1786,7 @@ U_CFUNC void ures_setIsStackObject( UResourceBundle* resB, UBool state) {
     }
 }
 
-U_CFUNC UBool ures_isStackObject(UResourceBundle* resB) {
+U_CFUNC UBool ures_isStackObject(const UResourceBundle* resB) {
   return((resB->fMagic1 == MAGIC1 && resB->fMagic2 == MAGIC2)?FALSE:TRUE);
 }
 

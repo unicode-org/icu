@@ -523,7 +523,7 @@ ubrk_isBoundary(UBreakIterator *bi, int32_t offset);
  * @stable ICU 2.2
  */
 U_STABLE  int32_t U_EXPORT2
-ubrk_getRuleStatus(UBreakIterator *bi);
+ubrk_getRuleStatus(const UBreakIterator *bi);
 
 /**
  * Get the statuses from the break rules that determined the most recently
@@ -543,7 +543,7 @@ ubrk_getRuleStatus(UBreakIterator *bi);
  * @draft ICU 3.0
  */
 U_DRAFT  int32_t U_EXPORT2
-ubrk_getRuleStatusVec(UBreakIterator *bi, int32_t *fillInVec, int32_t capacity, UErrorCode *status);
+ubrk_getRuleStatusVec(const UBreakIterator *bi, int32_t *fillInVec, int32_t capacity, UErrorCode *status);
 
 /**
  * Return the locale of the break iterator. You can choose between the valid and

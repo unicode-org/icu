@@ -293,15 +293,15 @@ int32_t ResourceBundle::getInt(UErrorCode& status) const {
     return ures_getInt(fResource, &status);
 }
 
-const char *ResourceBundle::getName(void) {
+const char *ResourceBundle::getName(void) const {
     return ures_getName(fResource);
 }
 
-const char *ResourceBundle::getKey(void) {
+const char *ResourceBundle::getKey(void) const {
     return ures_getKey(fResource);
 }
 
-UResType ResourceBundle::getType(void) {
+UResType ResourceBundle::getType(void) const {
     return ures_getType(fResource);
 }
 
