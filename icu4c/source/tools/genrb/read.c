@@ -119,6 +119,7 @@ static enum ETokenType getStringToken(UCHARBUF* buf,
     UChar    target[3] = { '\0' };
     UChar    *pTarget   = target;
     int      len=0;
+    UBool    isFollowingCharEscaped=FALSE;
     /* We are guaranteed on entry that initialChar is not a whitespace
        character. If we are at the EOF, or have some other problem, it
        doesn't matter; we still want to validly return the initialChar
@@ -162,7 +163,7 @@ static enum ETokenType getStringToken(UCHARBUF* buf,
                     return TOK_ERROR;
                 }
 
-                if (c == QUOTE) {
+                if (c == QUOTE && !isFollowingCharEscaped) {
                     break;
                 }
 
@@ -178,7 +179,13 @@ static enum ETokenType getStringToken(UCHARBUF* buf,
                 U_APPEND_CHAR32(c, pTarget,len);
                 pTarget = target;
                 ustr_uscat(token, pTarget,len, status);
+                isFollowingCharEscaped = FALSE;
                 len=0;
+                
+                if(c==ESCAPE && !isFollowingCharEscaped){
+                    isFollowingCharEscaped = TRUE;
+                }
+                
                 if (U_FAILURE(*status)) {
                     return TOK_ERROR;
                 }
