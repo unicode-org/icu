@@ -13,24 +13,18 @@
 *********************************************************************************
 */
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
+#include "cmemory.h"
 #include "unicode/uloc.h"
 #include "unicode/ucnv.h"
 #include "cintltst.h"
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
 
-#define MAX_LENGTH 99
-
-#ifdef TEST_BUFFER_SIZE
-#undef TEST_BUFFER_SIZE
-#endif
-/* (UNICODE_LIMIT + 1) * sizeof(uint32_t) + (extra fluff) */
-#define TEST_BUFFER_SIZE 0x84000F
+#define MAX_LENGTH 999
 
 #define UNICODE_LIMIT 0x10FFFF
+#define SURROGATE_HIGH_START    0xD800
+#define SURROGATE_LOW_END       0xDFFF
 
 static int32_t  gInBufferSize = 0;
 static int32_t  gOutBufferSize = 0;
@@ -731,202 +725,78 @@ static void TestGetNextErrorBehaviour(){
     ucnv_close(cnv);
 }
 
+#define MAX_UTF16_LEN 2
+#define MAX_UTF8_LEN 4
+
 /*Regression test for utf8 converter*/
 static void TestRegressionUTF8(){
-    uint8_t *buffer=0;
-    UChar32 c;
-    char *targ;
-    char *targetLimit;
-    UChar *source;
-    const UChar *src=0;
-    const UChar *sourceLimit=0;
-    UChar *extractedTargetBuffer=0;
-    UChar *extractedTarget=0;
-    UChar *target=0;
-    UChar *limit=0;
-    int32_t count=0;
+    UChar32 currCh = 0;
+    int32_t offset8;
+    int32_t offset16;
+    UChar *standardForm = (UChar*)uprv_malloc(MAX_LENGTH*sizeof(UChar));
+    uint8_t *utf8 = (uint8_t*)uprv_malloc(MAX_LENGTH);
 
-    int32_t offset=0;
-    int32_t i=0;
-    UErrorCode status=U_ZERO_ERROR;
-    UConverter *conv=ucnv_open("utf8", &status);
-    if(U_FAILURE(status)) {
-        log_err("Unable to open a utf-8 converter: %s\n", u_errorName(status));
-    }
-    source=(UChar*)malloc(TEST_BUFFER_SIZE);
-    extractedTargetBuffer=(UChar*)malloc(TEST_BUFFER_SIZE);
-    buffer=(uint8_t*)malloc(TEST_BUFFER_SIZE);
-
-    u_memset((UChar *)buffer, (UChar)0xFFF0, TEST_BUFFER_SIZE/sizeof(UChar));
-    u_memset(source, (UChar)0xFFF1, TEST_BUFFER_SIZE/sizeof(UChar));
-    u_memset(extractedTargetBuffer, (UChar)0xFFF2, TEST_BUFFER_SIZE/sizeof(UChar));
-    for(c=0x0000; c <= UNICODE_LIMIT; c++){
-        UTF16_APPEND_CHAR_SAFE(source, offset, TEST_BUFFER_SIZE, c);
-        count++;
-    }
-    log_verbose("\nThe the No: of code units=%ld,  The no: of Code Points=%d\n", offset, count);
-    
-    src=source;
-    sourceLimit=src+(offset);
-    targ=(char *)buffer;
-    targetLimit=targ+(TEST_BUFFER_SIZE);
-    ucnv_fromUnicode (conv,
-                  &targ,
-                  targetLimit,
-                  &src,
-                  sourceLimit,
-                  NULL,
-                  TRUE, 
-                  &status);
-    if(U_FAILURE(status)){
-        log_err("FAILED: error= %s at offset=0x%04X and target=0x%02X\n", myErrorName(status), (UNICODE_LIMIT-(sourceLimit-src)/sizeof(UChar)) , *targ);
-    }
-
-    log_verbose("The No: of bytes in target buffer =%ld\n", (const char *)(targ-(const char *)buffer));
-
-    targetLimit=targ;
-    targ=(char *)buffer;
-
-    extractedTarget=extractedTargetBuffer;
-    limit=extractedTarget+TEST_BUFFER_SIZE;
-    ucnv_toUnicode(conv, 
-                   &extractedTarget, 
-                   limit, 
-                   (const char **) &targ, 
-                   targetLimit, 
-                   NULL, 
-                   TRUE, 
-                   &status);
-
-    /*if(memcmp(source, extractedTarget, extractedTarget-extractedTargetBuffer) != 0){
-        log_err("FAILED\n");
-    }*/
-    src=source;
-    target=extractedTargetBuffer;
-    while(target < extractedTarget){
-        if(*src != *target){
-            log_err("FAILED: comparision failed at source=0x%04X, extracted=0x%04X\n", *src, *target);
-            break;
+    while (currCh <= UNICODE_LIMIT) {
+        offset16 = 0;
+        offset8 = 0;
+        while(currCh <= UNICODE_LIMIT
+            && offset16 < (MAX_LENGTH/sizeof(UChar) - MAX_UTF16_LEN)
+            && offset8 < (MAX_LENGTH - MAX_UTF8_LEN))
+        {
+            if (currCh == SURROGATE_HIGH_START) {
+                currCh = SURROGATE_LOW_END + 1; /* Skip surrogate range */
+            }
+            UTF16_APPEND_CHAR_SAFE(standardForm, offset16, MAX_LENGTH, currCh);
+            UTF8_APPEND_CHAR_SAFE(utf8, offset8, MAX_LENGTH, currCh);
+            currCh++;
         }
-        src++;
-        target++;
-
+        if(!convertFromU(standardForm, offset16, 
+            utf8, offset8, "UTF8", 0, TRUE, U_ZERO_ERROR )) {
+            log_err("Unicode->UTF8 did not match.\n");
+        }
+        if(!convertToU(utf8, offset8, 
+            standardForm, offset16, "UTF8", 0, TRUE, U_ZERO_ERROR )) {
+            log_err("UTF8->Unicode did not match.\n");
+        }
     }
-    if((extractedTarget-extractedTargetBuffer) != (sourceLimit-source)){
-        log_err("The conversion didn't go through the whole range: Expected= %d, Got=%d\n", (sourceLimit-source), (extractedTarget-extractedTargetBuffer));
-
-    }
-    ucnv_close(conv);
-    free(source);
-    free(extractedTargetBuffer);
-    free(buffer);
-
+    uprv_free(standardForm);
+    uprv_free(utf8);
 }
 
+#define MAX_UTF32_LEN 1
+
 static void TestRegressionUTF32(){
-    uint32_t *buffer=0;
-    UChar32 c;
-    char *targ;
-    char *targetLimit;
-    UChar *source;
-    const UChar *src=0;
-    const UChar *sourceLimit=0;
-    UChar *extractedTargetBuffer=0;
-    UChar *extractedTarget=0;
-    UChar *target=0;
-    UChar *limit=0;
-    int32_t count=0;
+    UChar32 currCh = 0;
+    int32_t offset32;
+    int32_t offset16;
+    UChar *standardForm = (UChar*)uprv_malloc(MAX_LENGTH*sizeof(UChar));
+    UChar32 *utf32 = (UChar32*)uprv_malloc(MAX_LENGTH*sizeof(UChar32));
 
-    int32_t offset=0;
-    int32_t i=0;
-    UErrorCode status=U_ZERO_ERROR;
-    UConverter *conv=ucnv_open("utf32", &status);
-    if(U_FAILURE(status)) {
-        log_err("Unable to open a utf-32 converter: %s\n", u_errorName(status));
-    }
-    source=(UChar*)malloc(TEST_BUFFER_SIZE);
-    extractedTargetBuffer=(UChar*)malloc(TEST_BUFFER_SIZE);
-    buffer=(uint32_t*)malloc(TEST_BUFFER_SIZE);
-
-    u_memset((UChar *)buffer, (UChar)0xF0F0, TEST_BUFFER_SIZE/sizeof(UChar));
-    u_memset(source, (UChar)0xFFF1, TEST_BUFFER_SIZE/sizeof(UChar));
-    u_memset(extractedTargetBuffer, (UChar)0xFFF2, TEST_BUFFER_SIZE/sizeof(UChar));
-    UTF16_APPEND_CHAR_SAFE(source, offset, TEST_BUFFER_SIZE, 0);
-    count++;
-    for(c = UNICODE_LIMIT; c > 0; c--){
-        UTF16_APPEND_CHAR_SAFE(source, offset, TEST_BUFFER_SIZE, c);
-        count++;
-    }
-
-    log_verbose("\nThe the No: of code units=%ld,  The no: of Code Points=%d\n", offset, count);
-    
-    src=source;
-    sourceLimit=src+(offset);
-    targ=(char *)buffer;
-    targetLimit=targ+(TEST_BUFFER_SIZE);
-    ucnv_fromUnicode (conv,
-                  &targ,
-                  targetLimit,
-                  &src,
-                  sourceLimit,
-                  NULL,
-                  TRUE, 
-                  &status);
-    if(U_FAILURE(status)){
-        log_err("FAILED: error= %s at offset=0x%04X and target=0x%02X\n", myErrorName(status), (UNICODE_LIMIT-(sourceLimit-src)/sizeof(UChar)) , *targ);
-    }
-
-    log_verbose("The No: of bytes in target buffer =%ld\n", (const char *)(targ-(const char *)buffer));
-
-    if (buffer[0] == 0) {
-        for(c=1; c <= (UNICODE_LIMIT+1) && buffer[c] == (UNICODE_LIMIT+1-c); c--){
+    while (currCh <= UNICODE_LIMIT) {
+        offset16 = 0;
+        offset32 = 0;
+        while(currCh <= UNICODE_LIMIT
+            && offset16 < (MAX_LENGTH/sizeof(UChar) - MAX_UTF16_LEN)
+            && offset32 < (MAX_LENGTH/sizeof(UChar32) - MAX_UTF32_LEN))
+        {
+            if (currCh == SURROGATE_HIGH_START) {
+                currCh = SURROGATE_LOW_END + 1; /* Skip surrogate range */
+            }
+            UTF16_APPEND_CHAR_SAFE(standardForm, offset16, MAX_LENGTH, currCh);
+            UTF32_APPEND_CHAR_SAFE(utf32, offset32, MAX_LENGTH, currCh);
+            currCh++;
         }
-
-        if (c != 0) {
-            log_err("FAILED: at offset=0x%04X and target=0x%02X\n", c, buffer[c]);
+        if(!convertFromU(standardForm, offset16, 
+            (const uint8_t *)utf32, offset32*sizeof(UChar32), "UTF32", 0, TRUE, U_ZERO_ERROR )) {
+            log_err("Unicode->UTF8 did not match.\n");
+        }
+        if(!convertToU((const uint8_t *)utf32, offset32*sizeof(UChar32), 
+            standardForm, offset16, "UTF32", 0, TRUE, U_ZERO_ERROR )) {
+            log_err("UTF32->Unicode did not match.\n");
         }
     }
-    else {
-        log_err("FAILED to convert 0\n");
-    }
-
-    targetLimit=targ;
-    targ=(char *)buffer;
-
-    extractedTarget=extractedTargetBuffer;
-    limit=extractedTarget+TEST_BUFFER_SIZE;
-    ucnv_toUnicode(conv, 
-                   &extractedTarget, 
-                   limit, 
-                   (const char **) &targ, 
-                   targetLimit, 
-                   NULL, 
-                   TRUE, 
-                   &status);
-
-    /*if(memcmp(source, extractedTarget, extractedTarget-extractedTargetBuffer) != 0){
-        log_err("FAILED\n");
-    }*/
-    src=source;
-    target=extractedTargetBuffer;
-    while(target < extractedTarget){
-        if(*src != *target){
-            log_err("FAILED: comparision failed at source=0x%04X, extracted=0x%04X\n", *src, *target);
-            break;
-        }
-        src++;
-        target++;
-
-    }
-    if((extractedTarget-extractedTargetBuffer) != (sourceLimit-source)){
-        log_err("The conversion didn't go through the whole range: Expected= %d, Got=%d\n", (sourceLimit-source), (extractedTarget-extractedTargetBuffer));
-
-    }
-    ucnv_close(conv);
-    free(source);
-    free(extractedTargetBuffer);
-    free(buffer);
-
+    uprv_free(standardForm);
+    uprv_free(utf32);
 }
 
 /*Walk through the available converters*/
