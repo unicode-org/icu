@@ -2080,7 +2080,7 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
 #endif
                 defUstr = ures_getStringByKey(&bund1, DEFAULT_TAG, &defLen, &subStatus);
                 if(U_SUCCESS(subStatus) && defLen) {
-                    u_UCharsToChars(defUstr, defVal, 1023);
+                    u_UCharsToChars(defUstr, defVal, u_strlen(defUstr));
 #if defined(URES_TREE_DEBUG)
                     fprintf(stderr, "%s;%s -> default %s=%s,  %s\n", 
                         path?path:"ICUDATA", parent, keyword, defVal, u_errorName(subStatus));
