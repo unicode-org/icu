@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2001/12/03 23:08:50 $
- * $Revision: 1.92 $
+ * $Date: 2001/12/04 05:25:39 $
+ * $Revision: 1.93 $
  *
  *****************************************************************************************
  */
@@ -1125,6 +1125,18 @@ public class TransliteratorTest extends TestFmwk {
             RBT,
             "$a=[:Zs:]; $b=[x$a]; $b{a} > A;",
             "[x[:Zs:]]{a} > A;",
+
+            RBT,
+            "$accentMinus = [ [\\u0300-\\u0345] & [:M:] - [\\u0338]] ;"+
+            "$macron = \\u0304 ;"+
+            "$evowel = [aeiouyAEIOUY] ;"+
+            "$iotasub = \\u0345 ;"+
+            "($evowel $macron $accentMinus *) i > | $1 $iotasub ;",
+            "([AEIOUYaeiouy]\\u0304[[\\u0300-\\u0345]&[:M:]-[\\u0338]]*)i > | $1 \\u0345;",
+            
+            RBT,
+            "([AEIOUYaeiouy]\\u0304[[:M:]-[\\u0304\\u0345]]*)i > | $1 \\u0345;",
+            "([AEIOUYaeiouy]\\u0304[[:M:]-[\\u0304\\u0345]]*)i > | $1 \\u0345;",
         };
 
         for (int d=0; d < DATA.length; d+=3) {
