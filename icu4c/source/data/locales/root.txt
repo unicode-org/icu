@@ -1137,6 +1137,35 @@ root {
         JPY { "\uFFE5" } // Yen
     }
 
+    // Currency metadata.  Unlike the "Currencies" element, this is
+    // NOT true locale data.  It exists only in root.  The two
+    // integers are the fraction digits for each currency, and the
+    // rounding increment.  The fraction digits must be an integer
+    // from 0..9.  If there is no rounding, the rounding increment is
+    // zero.  Otherwise the rounding increment is given in units of
+    // 10^(-fraction_digits).  The special tag "DEFAULT" gives the
+    // meta data for all currencies not otherwise listed.
+    // TODO: ? Move this out into a separate resource bundle file,
+    //       ? since it isn't real locale data.
+    CurrencyMeta {
+        BYB:intvector { 0,  0 }
+        CHF:intvector { 2, 25 }
+        ESP:intvector { 0,  0 }
+        IQD:intvector { 3,  0 }
+        ITL:intvector { 0,  0 }
+        JOD:intvector { 3,  0 }
+        JPY:intvector { 0,  0 }
+        KWD:intvector { 3,  0 }
+        LUF:intvector { 0,  0 }
+        LYD:intvector { 3,  0 }
+        PTE:intvector { 0,  0 }
+        PYG:intvector { 0,  0 }
+        TND:intvector { 3,  0 }
+        TRL:intvector { 0,  0 }
+
+        DEFAULT:intvector { 2, 0 }
+    }
+
     LocaleID:int { 0x0000 }
 //    LocaleString { "en" }
     MonthAbbreviations { 
