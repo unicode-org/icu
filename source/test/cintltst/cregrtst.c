@@ -1604,7 +1604,7 @@ void doBreakInvariantTest(UBreakIteratorType type, UChar* testChars)
     UBreakIterator *tb;
     UTextOffset i, j;
     UErrorCode status = U_ZERO_ERROR;
-    UChar work[3]; 
+    UChar work[4]; 
     UChar breaks[10];
     UChar c;
     UChar *ustr;
