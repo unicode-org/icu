@@ -386,10 +386,9 @@ u_sprintf_pad_and_justify(u_localized_string *output,
     }
     /* just write the formatted output */
     else {
-        written += u_minstrncpy(output, result, resultLen);
+        written = u_minstrncpy(output, result, resultLen);
     }
 
-    output->available -= written;
     return written;
 }
 
@@ -1225,8 +1224,12 @@ u_vsnprintf_u(UChar    *buffer,
     }
 
     /* break if at end of string */
-    if(*alias == 0x0000)
+    if(*alias == 0x0000) {
+      if (outStr.available > 0) {
+        outStr.str[written] = 0; /* NULL terminate it just in case */
+      }
       break;
+    }
     
     /* parse the specifier */
     patCount = u_sprintf_parse_spec(alias, &spec);
