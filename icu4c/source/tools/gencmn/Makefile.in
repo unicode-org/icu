@@ -41,7 +41,7 @@ top_builddir = ../..
 subdir = tools/gencmn
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~
+CLEANFILES = *~ mkmap.tmp
 
 ## Target information
 TARGET = gencmn
