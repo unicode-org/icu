@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSetIterator.java,v $ 
- * $Date: 2002/02/25 22:43:58 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/03/13 19:52:34 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -23,6 +23,13 @@ import java.io.*;
  * @draft
  */
 public final class UnicodeSetIterator {
+	
+	public static int IS_STRING = -1;
+	
+	// for results of iteration
+	
+	public int codepoint;
+	public String string;
 
     /**
      *@set set to iterate over
@@ -32,23 +39,40 @@ public final class UnicodeSetIterator {
     }
         
     /**
-     *@return next character in the set. Returns -1 when done!
+     *convenience
      */
-    public int next() {
-        if (abbreviated) {
-            if (element >= startElement + 50 && element <= endElement - 50) {
-                element = endElement - 50;
-            }
+    public UnicodeSetIterator() {
+        reset(new UnicodeSet());
+    }
+        
+    /**
+     *@return true if there was another element in the set.
+     *if so, if codepoint == IS_STRING, the value is a string in the string field
+     *else the value is a single code point in the codepoint field.
+     */
+    public boolean next() {
+        if (nextElement <= endElement) {
+        	codepoint = nextElement++;
+            return true;
         }
-        if (element < endElement) {
-            return ++element;
+        if (range < endRange) {
+        	++range;
+        	nextElement = startElement = set.getRangeStart(range);
+        	endElement = set.getRangeEnd(range);
+        	if (abbreviated && (endElement > startElement + 50)) {
+            	endElement = startElement + 50;
+        	}
+        	codepoint = nextElement++;
+        	return true;
         }
-        if (range >= endRange) return -1;
-        ++range;
-        endElement = set.getRangeEnd(range);
-        startElement = set.getRangeStart(range);
-        element = set.getRangeStart(range);
-        return element;
+        
+        // stringIterator == null iff there are no string elements remaining
+        
+        if (stringIterator == null) return false;
+        codepoint = IS_STRING; // signal that value is actually a string
+        string = (String)stringIterator.next();
+        if (!stringIterator.hasNext()) stringIterator = null;
+        return true;
     }
         
     /**
@@ -69,31 +93,19 @@ public final class UnicodeSetIterator {
     }
     
     /**
-     * TODO: Move to UnicodeSet!
-     *@param s the string to test
-     *@return true if and only if no character from s are in the set.
+     * Causes the interation to only to part of long ranges
+     * @internal
      */
-    public static boolean containsNone(UnicodeSet set, String s) {
-        int cp;
-        for (int i = 0; i < s.length(); i += UTF16.getCharCount(i)) {
-            cp = UTF16.charAt(s, i);
-            if (set.contains(cp)) return false;
-        }
-        return true;
+    public void setAbbreviated(boolean abbr) {
+        abbreviated = abbr;
     }
-        
+    
     /**
-     * TODO: Move to UnicodeSet!
-     *@param s the string to test
-     *@return true if and only if all characters from s are in the set.
+     * Causes the interation to only to part of long ranges
+     * @internal
      */
-    public static boolean containsAll(UnicodeSet set, String s) {
-        int cp;
-        for (int i = 0; i < s.length(); i += UTF16.getCharCount(i)) {
-            cp = UTF16.charAt(s, i);
-            if (!set.contains(cp)) return false;
-        }
-        return true;
+    public boolean getAbbreviated() {
+        return abbreviated;
     }
     
     // ======================= PRIVATES ===========================
@@ -103,17 +115,29 @@ public final class UnicodeSetIterator {
     private int range = 0;
     private int startElement = 0;
     private int endElement;
-    private int element;
+    private int nextElement;
     private boolean abbreviated = false;
+    private Iterator stringIterator = null;
+    
+    /**
+     * Invariant: stringIterator is null when there are no (more) strings remaining
+     */
         
     private void resetInternal() {
         range = 0;
-        endElement = 0;
-        element = 0;            
+        endElement = -1;
+        nextElement = 0;            
         if (endRange >= 0) {
-            element = set.getRangeStart(range);
+            nextElement = startElement = set.getRangeStart(range);
             endElement = set.getRangeEnd(range);
-            startElement = set.getRangeStart(range);
+            if (abbreviated && (endElement > startElement + 50)) {
+            	endElement = startElement + 50;
+        	}
+        }
+        stringIterator = null;
+        if (set.strings != null) {
+        	stringIterator = set.strings.iterator();
+        	if (!stringIterator.hasNext()) stringIterator = null;
         }
     }
 }

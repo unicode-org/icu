@@ -868,9 +868,8 @@ public class RoundTripTest extends TestFmwk {
                 }
                 
                 usi.reset(sourceRange);
-                while (true) {
-                    int c = usi.next();
-                    if (c < 0) break;
+                while (usi.next()) {
+                    int c = usi.codepoint;
                     
                     String cs = UTF16.valueOf(c);
                     String targ = sourceToTarget.transliterate(cs);
@@ -881,9 +880,8 @@ public class RoundTripTest extends TestFmwk {
                 }
                 
                 usi.reset(targetRange);
-                while (true) {
-                    int c = usi.next();
-                    if (c < 0) break;
+                while (usi.next()) {
+                    int c = usi.codepoint;
                     
                     String cs = UTF16.valueOf(c);
                     String targ = targetToSource.transliterate(cs);
@@ -904,17 +902,16 @@ public class RoundTripTest extends TestFmwk {
                 if (!sourceRange.contains(c)) continue;
                 */
             usi.reset(sourceRange);
-            while (true) {
-                int c = usi.next();
-                if (c < 0) break;
+            while (usi.next()) {
+                int c = usi.codepoint;
                 
                 String cs = UTF16.valueOf(c);
                 String targ = sourceToTarget.transliterate(cs);
-                if (!UnicodeSetIterator.containsAll(toTarget, targ) 
-                        || UnicodeSetIterator.containsSome(badCharacters, targ)) {
+                if (!toTarget.containsAll(targ) 
+                        || badCharacters.containsSome(targ)) {
                     String targD = Normalizer.normalize(targ, Normalizer.DECOMP, 0);
-                    if (!UnicodeSetIterator.containsAll(toTarget, targD) 
-                            || UnicodeSetIterator.containsSome(badCharacters, targD)) {
+                    if (!toTarget.containsAll(targD) 
+                            || badCharacters.containsSome(targD)) {
                         logWrongScript("Source-Target", cs, targ);
                         failSourceTarg.add(c);
                         continue;
@@ -943,10 +940,11 @@ public class RoundTripTest extends TestFmwk {
             
             boolean skipSome = log.getInclusion() < 10;
             
-            usi.reset(sourceRangeMinusFailures, skipSome);
-            while (true) {
-                int c = usi.next();
-                if (c < 0) break;
+            usi.reset(sourceRangeMinusFailures);
+            usi.setAbbreviated(skipSome);
+            
+            while (usi.next()) {
+                int c = usi.codepoint;
              
                 /*
                 for (char d = 0; d < 0xFFFF; ++d) {
@@ -954,18 +952,19 @@ public class RoundTripTest extends TestFmwk {
                         !sourceRange.contains(d)) continue;
                     if (failSourceTarg.get(d)) continue;
                 */
-                usi2.reset(sourceRangeMinusFailures, skipSome);
-                while (true) {
-                    int d = usi2.next();
-                    if (d < 0) break;
+                usi2.reset(sourceRangeMinusFailures);
+            	usi2.setAbbreviated(skipSome);
+                
+                while (usi2.next()) {
+                    int d = usi2.codepoint;
                     
                     String cs = UTF16.valueOf(c) + UTF16.valueOf(d);
                     String targ = sourceToTarget.transliterate(cs);
-                    if (!UnicodeSetIterator.containsAll(toTarget,targ) 
-                            || UnicodeSetIterator.containsSome(badCharacters, targ)) {
+                    if (!toTarget.containsAll(targ) 
+                            || badCharacters.containsSome(targ)) {
                         String targD = Normalizer.normalize(targ, Normalizer.DECOMP, 0);
-                        if (!UnicodeSetIterator.containsAll(toTarget,targD) 
-                                || UnicodeSetIterator.containsSome(badCharacters, targD)) {
+                        if (!toTarget.containsAll(targD) 
+                                || badCharacters.containsSome(targD)) {
                             logWrongScript("Source-Target", cs, targ);
                             continue;
                         }
@@ -989,19 +988,18 @@ public class RoundTripTest extends TestFmwk {
                     */
                     
             usi.reset(targetRange);
-            while (true) {
-                int c = usi.next();
-                if (c < 0) break;
+            while (usi.next()) {
+                int c = usi.codepoint;
                     
                 String cs = UTF16.valueOf(c);
                 String targ = targetToSource.transliterate(cs);
                 String reverse = sourceToTarget.transliterate(targ);
                 
-                if (!UnicodeSetIterator.containsAll(toSource, targ) 
-                        || UnicodeSetIterator.containsSome(badCharacters, targ)) {
+                if (!toSource.containsAll(targ) 
+                        || badCharacters.containsSome(targ)) {
                     String targD = Normalizer.normalize(targ, Normalizer.DECOMP, 0);
-                    if (!UnicodeSetIterator.containsAll(toSource, targD) 
-                            || UnicodeSetIterator.containsSome(badCharacters, targD)) {
+                    if (!toSource.containsAll(targD) 
+                            || badCharacters.containsSome(targD)) {
                         logWrongScript("Target-Source", cs, targ);
                         failTargSource.add(c);
                         continue;
@@ -1033,11 +1031,11 @@ public class RoundTripTest extends TestFmwk {
                     !targetRange.contains(c)) continue;
                     */
             
-            usi.reset(targetRangeMinusFailures, skipSome);
-
-            while (true) {
-                int c = usi.next();
-                if (c < 0) break;
+            usi.reset(targetRangeMinusFailures);
+            usi.setAbbreviated(skipSome);
+            	
+            while (usi.next()) {
+                int c = usi.codepoint;
                 
                 if (++count > pairLimit) {
                     throw new TestTruncated("Test truncated at " + pairLimit + " x 64k pairs");
@@ -1049,20 +1047,22 @@ public class RoundTripTest extends TestFmwk {
                     if (TestUtility.isUnassigned(d) ||
                         !targetRange.contains(d)) continue;
                         */
-                usi2.reset(targetRangeMinusFailures, skipSome);
-                while (true) {
-                    int d = usi2.next();
+                usi2.reset(targetRangeMinusFailures);
+            	usi2.setAbbreviated(skipSome);
+            	
+            	while (usi2.next()) {
+                    int d = usi2.codepoint;
                     if (d < 0) break;
                     
                     String cs = UTF16.valueOf(c) + UTF16.valueOf(d);
                     String targ = targetToSource.transliterate(cs);
                     String reverse = sourceToTarget.transliterate(targ);
                     
-                    if (!UnicodeSetIterator.containsAll(toSource, targ) /*&& !failTargSource.contains(c) && !failTargSource.contains(d)*/
-                            || UnicodeSetIterator.containsSome(badCharacters, targ)) {
+                    if (!toSource.containsAll(targ) /*&& !failTargSource.contains(c) && !failTargSource.contains(d)*/
+                            || badCharacters.containsSome(targ)) {
                         String targD = Normalizer.normalize(targ, Normalizer.DECOMP, 0);
-                        if (!UnicodeSetIterator.containsAll(toSource, targD) /*&& !failTargSource.contains(c) && !failTargSource.contains(d)*/
-                                || UnicodeSetIterator.containsSome(badCharacters, targD)) {
+                        if (!toSource.containsAll(targD) /*&& !failTargSource.contains(c) && !failTargSource.contains(d)*/
+                                || badCharacters.containsSome(targD)) {
                             logWrongScript("Target-Source", cs, targ);
                             continue;
                         }
