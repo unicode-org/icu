@@ -67,10 +67,6 @@ Transcode the data to
 .IR encoding .
 .SH CAVEATS AND BUGS
 The
-.BI "\-\-list-converters"
-option does not yet list tags after the converter names.
-.PP
-The
 .BI "\-L\fP, \fB\-\-list-transliterators"
 option is not implemented at this point and
 .B uconv
