@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/Attic/readme.txt,v $
-* $Date: 2003/03/17 23:23:38 $
-* $Revision: 1.6 $
+* $Date: 2003/03/18 00:03:31 $
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -37,6 +37,7 @@ exist:
 
 <GEN_DIR>/DerivedData
 <GEN_DIR>/DerivedData/ExtractedProperties
+<UCD_DIR>/EXTRAS-Update
 
 
 2. Download all of the UnicodeData files for each version into UCD_DIR.
@@ -61,17 +62,24 @@ the value for BASE_DIR
 2c. Here is an example of the default directory structure with files:
 
 C://DATA/
-    BIN/
-    Collation/
-        allkeys-3.1.1.txt
-    GEN/
-    UCD/
-        3.0.0-Update/
-            Unihan-3.2.0.txt
-        4.0.0-Update/
-            ArabicShaping-4.0.0d14b.txt
-            BidiMirroring-4.0.0d1b.txt
-            ...
+
+        BIN/
+    
+        Collation/
+            allkeys-3.1.1.txt
+        
+        GEN/
+            DerivedData/
+                ExtractedProperties
+        UCD/
+            3.0.0-Update/
+                Unihan-3.2.0.txt
+                ...
+            4.0.0-Update/
+                ArabicShaping-4.0.0d14b.txt
+                BidiMirroring-4.0.0d1b.txt
+                ...
+            EXTRAS-Update/
 
 
 3. All of the following have "version X" on the command line. If you want a specific version
