@@ -69,15 +69,15 @@ void TransliteratorErrorTest::TestTransliteratorErrors() {
     }
     len = testString.length();
     stoppedAt = t->transliterate(testString, 0, 100);
-    if (stoppedAt != 0) {
-        errln("FAIL: Out of bounds check failed.");
+    if (stoppedAt != -1) {
+        errln("FAIL: Out of bounds check failed (1).");
     } else if (testString.length() != len) {
         testString="A quick fox jumped over the lazy dog.";        
         errln("FAIL: Transliterate fails and the target string was modified.");
     }
     stoppedAt = t->transliterate(testString, 100, testString.length()-1);
-    if (stoppedAt != 0)
-        errln("FAIL: Out of bounds check failed.");
+    if (stoppedAt != -1)
+        errln("FAIL: Out of bounds check failed (2).");
     else if (testString.length() != len) {
         testString="A quick fox jumped over the lazy dog.";        
         errln("FAIL: Transliterate fails and the target string was modified.");
@@ -126,7 +126,7 @@ void TransliteratorErrorTest::TestTransliteratorErrors() {
     pos.start = 5;
     t->transliterate(testString, pos, insertString, status);
     if (U_SUCCESS(status)) {
-        errln("FAIL: Out of bounds check failed.");
+        errln("FAIL: Out of bounds check failed (3).");
         if (testString.length() != len)
             errln("FAIL: The input string was modified though the offsets were out of bounds.");
     }
