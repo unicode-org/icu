@@ -65,6 +65,7 @@ static void debugout(UnicodeString s) {
 // *****************************************************************************
 
 char DecimalFormat::fgClassID = 0; // Value is irrelevan
+UParseError DecimalFormat::fParseError;
 
 // Constants for characters used in programmatic (unlocalized) patterns.
 const UChar DecimalFormat::kPatternZeroDigit           = 0x0030 /*'0'*/;
@@ -103,7 +104,7 @@ DecimalFormat::DecimalFormat(UErrorCode& status)
   fNegSuffixPattern(0),
   fSymbols(0)
 {
-    construct(status);
+    construct(status,fParseError);
 }
 
 //------------------------------------------------------------------------------
@@ -119,7 +120,7 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern,
   fNegSuffixPattern(0),
   fSymbols(0)
 {
-    construct(status, &pattern);
+    construct(status,fParseError, &pattern);
 }
 
 //------------------------------------------------------------------------------
@@ -139,9 +140,24 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern,
 {
     if (symbolsToAdopt == NULL)
         status = U_ILLEGAL_ARGUMENT_ERROR;
-    construct(status, &pattern, symbolsToAdopt);
+    construct(status,fParseError, &pattern, symbolsToAdopt);
 }
  
+DecimalFormat::DecimalFormat(  const UnicodeString& pattern,
+                    DecimalFormatSymbols* symbolsToAdopt,
+                    UParseError& parseErr,
+                    UErrorCode& status)
+: NumberFormat(),
+  fPosPrefixPattern(0), 
+  fPosSuffixPattern(0), 
+  fNegPrefixPattern(0), 
+  fNegSuffixPattern(0),
+  fSymbols(0)
+{
+    if (symbolsToAdopt == NULL)
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+    construct(status,parseErr, &pattern, symbolsToAdopt);
+}
 //------------------------------------------------------------------------------
 // Constructs a DecimalFormat instance with the specified number format
 // pattern and the number format symbols in the default locale.  The
@@ -157,7 +173,7 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern,
   fNegSuffixPattern(0),
   fSymbols(0)
 {
-    construct(status, &pattern, new DecimalFormatSymbols(symbols));
+    construct(status,fParseError, &pattern, new DecimalFormatSymbols(symbols));
 }
 
 //------------------------------------------------------------------------------
@@ -167,6 +183,7 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern,
 
 void
 DecimalFormat::construct(UErrorCode&             status,
+                         UParseError&           parseErr,
                          const UnicodeString*   pattern,
                          DecimalFormatSymbols*  symbolsToAdopt,
                          const Locale&          locale)
@@ -192,7 +209,9 @@ DecimalFormat::construct(UErrorCode&             status,
     fMinExponentDigits = 0;
 
     if (fSymbols == NULL)
+    {
         fSymbols = new DecimalFormatSymbols(locale, status);
+    }
 
     UnicodeString str;
     // Uses the default locale's number format pattern if there isn't
@@ -206,9 +225,11 @@ DecimalFormat::construct(UErrorCode&             status,
     }
 
     if (U_FAILURE(status))
+    {
         return;
-
-    applyPattern(*pattern, FALSE /*not localized*/, status);
+    }
+    
+    applyPattern(*pattern, FALSE /*not localized*/,parseErr, status);
 }
 
 //------------------------------------------------------------------------------
@@ -2151,15 +2172,36 @@ DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
 void
 DecimalFormat::applyPattern(const UnicodeString& pattern, UErrorCode& status)
 {
-    applyPattern(pattern, FALSE, status);
+    UParseError parseError;
+    applyPattern(pattern, FALSE, parseError, status);
 }
 
 //------------------------------------------------------------------------------
 
 void
+DecimalFormat::applyPattern(const UnicodeString& pattern,
+                            UParseError& parseError, 
+                            UErrorCode& status)
+{
+    applyPattern(pattern, FALSE, parseError, status);
+}
+//------------------------------------------------------------------------------
+
+void
 DecimalFormat::applyLocalizedPattern(const UnicodeString& pattern, UErrorCode& status)
 {
-    applyPattern(pattern, TRUE, status);
+    UParseError parseError;
+    applyPattern(pattern, TRUE,parseError,status);
+}
+
+//------------------------------------------------------------------------------
+
+void
+DecimalFormat::applyLocalizedPattern(const UnicodeString& pattern,
+                                     UParseError& parseError,
+                                     UErrorCode& status)
+{
+    applyPattern(pattern, TRUE,parseError,status);
 }
 
 //------------------------------------------------------------------------------
@@ -2167,10 +2209,17 @@ DecimalFormat::applyLocalizedPattern(const UnicodeString& pattern, UErrorCode& s
 void
 DecimalFormat::applyPattern(const UnicodeString& pattern,
                             UBool localized,
+                            UParseError& parseError,
                             UErrorCode& status)
 {
     if (U_FAILURE(status))
+    {
         return;
+    }
+    // Clear error struct
+    parseError.offset = 0;
+    parseError.preContext[0] = parseError.postContext[0] = (UChar)0;
+
     // Set the significant pattern symbols
     UChar zeroDigit         = kPatternZeroDigit;
     UChar groupingSeparator = kPatternGroupingSeparator;
@@ -2263,7 +2312,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                     if (digitRightCount > 0) {
                         // Unexpected '0'
                         debug("Unexpected '0'")
-                        status = U_ILLEGAL_ARGUMENT_ERROR;
+                        syntaxError(pattern,pos,parseError,status);
                         return;
                     }
                     ++zeroDigitCount;
@@ -2280,7 +2329,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                     if (decimalPos >= 0) {
                         // Grouping separator after decimal
                         debug("Grouping separator after decimal")
-                        status = U_ILLEGAL_ARGUMENT_ERROR;
+                        syntaxError(pattern,pos,parseError,status);
                         return;
                     }
                     groupingCount2 = groupingCount;
@@ -2289,7 +2338,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                     if (decimalPos >= 0) {
                         // Multiple decimal separators
                         debug("Multiple decimal separators")
-                        status = U_ILLEGAL_ARGUMENT_ERROR;
+                        syntaxError(pattern,pos,parseError,status);
                         return;
                     }
                     // Intentionally incorporate the digitRightCount,
@@ -2301,13 +2350,13 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                         if (expDigits >= 0) {
                             // Multiple exponential symbols
                             debug("Multiple exponential symbols")
-                            status = U_ILLEGAL_ARGUMENT_ERROR;
+                            syntaxError(pattern,pos,parseError,status);
                             return;
                         }
                         if (groupingCount >= 0) {
                             // Grouping separator in exponential pattern
                             debug("Grouping separator in exponential pattern")
-                            status = U_ILLEGAL_ARGUMENT_ERROR;
+                            syntaxError(pattern,pos,parseError,status);
                             return;
                         }
                         // Check for positive prefix
@@ -2328,7 +2377,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                             expDigits < 1) {
                             // Malformed exponential pattern
                             debug("Malformed exponential pattern")
-                            status = U_ILLEGAL_ARGUMENT_ERROR;
+                            syntaxError(pattern,pos,parseError,status);
                             return;
                         }
                     }
@@ -2387,7 +2436,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                     if (subpart == 1 || part == 1) {
                         // Unexpected separator
                         debug("Unexpected separator")
-                        status = U_ILLEGAL_ARGUMENT_ERROR;
+                        syntaxError(pattern,pos,parseError,status);
                         return;
                     }
                     sub2Limit = pos;
@@ -2398,7 +2447,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                     if (multiplier != 1) {
                         // Too many percent/perMill characters
                         debug("Too many percent/perMill characters")
-                        status = U_ILLEGAL_ARGUMENT_ERROR;
+                        syntaxError(pattern,pos,parseError,status);
                         return;
                     }
                     affix->append(kQuote); // Encode percent/perMill
@@ -2414,7 +2463,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                     if (padPos >= 0 ||               // Multiple pad specifiers
                         (pos+1) == pattern.length()) { // Nothing after padEscape
                         debug("Multiple pad specifiers")
-                        status = U_ILLEGAL_ARGUMENT_ERROR;
+                        syntaxError(pattern,pos,parseError,status);
                         return;
                     }
                     padPos = pos;
@@ -2494,7 +2543,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
             groupingCount == 0 || groupingCount2 == 0 ||
             subpart > 2) { // subpart > 2 == unmatched quote
             debug("Syntax error")
-            status = U_ILLEGAL_ARGUMENT_ERROR;
+            syntaxError(pattern,pos,parseError,status);
             return;
         }
 
@@ -2511,7 +2560,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
             } else {
                 // Illegal pad position
                 debug("Illegal pad position")
-                status = U_ILLEGAL_ARGUMENT_ERROR;
+                syntaxError(pattern,pos,parseError,status);
                 return;
             }
         }

@@ -35,9 +35,9 @@
 
 char        ChoiceFormat::fgClassID = 0; // Value is irrelevant
 
-UMTX ChoiceFormat::fgMutex = NULL; // lock for fgNumberFormat
+//UMTX ChoiceFormat::fgMutex = NULL; // lock for fgNumberFormat
 
-NumberFormat* ChoiceFormat::fgNumberFormat = 0;
+//NumberFormat* ChoiceFormat::fgNumberFormat = 0;
 
 inline double _getDouble(const Formattable& f) {
     return (f.getType() == Formattable::kLong) ?
@@ -114,6 +114,21 @@ ChoiceFormat::ChoiceFormat(const    ChoiceFormat&   that)
 }
 
 // -------------------------------------
+// Private constructor that creates a 
+// ChoiceFormat instance based on the 
+// pattern and populates UParseError
+
+ChoiceFormat::ChoiceFormat(const UnicodeString& newPattern,
+                           UParseError& parseError,
+                           UErrorCode& status)
+: fChoiceLimits(0),
+  fClosures(0),
+  fChoiceFormats(0),
+  fCount(0)
+{
+    applyPattern(newPattern,parseError, status);
+}
+// -------------------------------------
 
 UBool
 ChoiceFormat::operator==(const Format& that) const
@@ -172,7 +187,7 @@ ChoiceFormat::~ChoiceFormat()
 
 // -------------------------------------
 // NumberFormat cache management
-
+/*
 NumberFormat* 
 ChoiceFormat::getNumberFormat(UErrorCode &status)
 {
@@ -199,7 +214,8 @@ ChoiceFormat::getNumberFormat(UErrorCode &status)
 
     return theFormat;
 }
-
+*/
+/*
 void 
 ChoiceFormat::releaseNumberFormat(NumberFormat *adopt)
 {
@@ -216,56 +232,41 @@ ChoiceFormat::releaseNumberFormat(NumberFormat *adopt)
 
     delete adopt;
 }
-
+*/
 /**
- * Convert a string to a double value using a default NumberFormat object
- * which is static (shared by all ChoiceFormat instances).
+ * Convert a string to a double value
+
  */
 double
 ChoiceFormat::stod(const UnicodeString& string,
                    UErrorCode& status)
 {
-    // Use a shared global number format to convert a double value to 
-    // or string or vice versa.
-    NumberFormat *myFormat = getNumberFormat(status);
-
-    if(U_FAILURE(status))
-        return -1; // OK?
-
-    Formattable result;
-    myFormat->parse(string, result, status);
-    releaseNumberFormat(myFormat);
-    double value = 0.0;
-    if (U_SUCCESS(status)) {
-        value = _getDouble(result);
-        if (uprv_isNaN(value)) {
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-        }
-    }
-    return value;
+    
+    char source[256] = { '\0' };
+    char* end;
+    u_UCharsToChars(string.getUChars(),source,string.length());
+    return uprv_strtod(source,&end);
 }
 
 // -------------------------------------
 
 /**
- * Convert a double value to a string using a default NumberFormat object
- * which is static (shared by all ChoiceFormat instances).
+ * Convert a double value to a string
+
  */
 UnicodeString&
 ChoiceFormat::dtos(double value,
                    UnicodeString& string,
                    UErrorCode& status)
 {
-    NumberFormat *myFormat = getNumberFormat(status);
-
-    if (U_SUCCESS(status)) {
-        FieldPosition fieldPos(0);
-        myFormat->format(value, string, fieldPos);
-    }
-    releaseNumberFormat(myFormat);
+    char temp[256] = {'\0'};
+    uprv_dtostr(value,temp,3,TRUE);
+    string = UnicodeString(temp);
     return string;
 }
 
+
+#if 0
 // -------------------------------------
 // Applies the pattern to this ChoiceFormat instance.
 
@@ -407,7 +408,167 @@ ChoiceFormat::applyPattern(const UnicodeString& pattern,
     delete[] newFormats;
     return;
 }
+#endif
+// -------------------------------------
+// calls the overloaded applyPattern method.
 
+void
+ChoiceFormat::applyPattern(const UnicodeString& pattern,
+                           UErrorCode& status)
+{
+    UParseError parseError;
+    applyPattern(pattern,parseError,status);
+}
+
+// -------------------------------------
+// Applies the pattern to this ChoiceFormat instance.
+
+void
+ChoiceFormat::applyPattern(const UnicodeString& pattern,
+                           UParseError& parseError,
+                           UErrorCode& status)
+{
+    if (U_FAILURE(status)) 
+    {
+        return;
+    }
+
+    // Clear error struct
+    parseError.offset = 0;
+    parseError.preContext[0] = parseError.postContext[0] = (UChar)0;
+
+    // Perform 2 passes.  The first computes the number of limits in
+    // this pattern (fCount), which is 1 more than the number of
+    // literal VERTICAL_BAR characters.
+    int32_t count = 1;
+    int32_t i;
+    for (i=0; i<pattern.length(); ++i) {
+        UChar c = pattern[i];
+        if (c == SINGLE_QUOTE) {
+            // Skip over the entire quote, including embedded
+            // contiguous pairs of SINGLE_QUOTE.
+            for (;;) {
+                do {
+                    ++i;
+                } while (i<pattern.length() &&
+                         pattern[i] != SINGLE_QUOTE);
+                if ((i+1)<pattern.length() &&
+                    pattern[i+1] == SINGLE_QUOTE) {
+                    // SINGLE_QUOTE pair; skip over it
+                    ++i;
+                } else {
+                    break;
+                }
+            }
+        } else if (c == VERTICAL_BAR) {
+            ++count;
+        }
+    }
+
+    // Allocate the required storage.
+    double *newLimits = new double[count];
+    UBool *newClosures = new UBool[count];
+    UnicodeString *newFormats = new UnicodeString[count];
+
+    // Perform the second pass
+    int32_t k = 0; // index into newXxx[] arrays
+    UnicodeString buf; // scratch buffer
+    UBool inQuote = FALSE;
+    UBool inNumber = TRUE; // TRUE before < or #, FALSE after
+    for (i=0; i<pattern.length(); ++i) {
+        UChar c = pattern[i];
+        if (c == SINGLE_QUOTE) {
+            // Check for SINGLE_QUOTE pair indicating a literal quote
+            if ((i+1) < pattern.length() &&
+                pattern[i+1] == SINGLE_QUOTE) {
+                buf += SINGLE_QUOTE;
+                ++i;
+            } else {
+                inQuote = !inQuote;
+            }
+        } else if (inQuote) {
+            buf += c;
+        } else if (c == LESS_THAN || c == LESS_EQUAL || c == LESS_EQUAL2) {
+            if (!inNumber || buf.length() == 0) {
+                goto error;
+            }
+            inNumber = FALSE;
+
+            double limit;
+            buf.trim();
+            if (!buf.compare(fgPositiveInfinity, POSITIVE_INF_STRLEN)) {
+                limit = uprv_getInfinity();
+            } else if (!buf.compare(fgNegativeInfinity, NEGATIVE_INF_STRLEN)) {
+                limit = -uprv_getInfinity();
+            } else {
+                limit = stod(buf, status);
+                if (U_FAILURE(status)) {
+                    goto error;
+                }
+            }
+
+            if (k == count) {
+                // This shouldn't happen.  If it does, it means that
+                // the count determined in the first pass did not
+                // match the number of elements found in the second
+                // pass.
+                goto error;
+            }
+            newLimits[k] = limit;
+            newClosures[k] = (c == LESS_THAN);
+
+            if (k > 0 && limit <= newLimits[k-1]) {
+                // Each limit must be strictly > than the previous
+                // limit.  One exception: Two subsequent limits may be
+                // == if the first closure is FALSE and the second
+                // closure is TRUE.  This places the limit value in
+                // the second interval.
+                if (!(limit == newLimits[k-1] &&
+                      !newClosures[k-1] &&
+                      newClosures[k])) {
+                    goto error;
+                }
+            }
+
+            buf.truncate(0);
+        } else if (c == VERTICAL_BAR) {
+            if (inNumber) {
+                goto error;
+            }
+            inNumber = TRUE;
+
+            newFormats[k] = buf;
+            ++k;
+            buf.truncate(0);
+        } else {
+            buf += c;
+        }        
+    }
+
+    if (k != (count-1) || inNumber || inQuote) {
+        goto error;
+    }
+    newFormats[k] = buf;
+
+    // Don't modify this object until the parse succeeds
+    delete[] fChoiceLimits;
+    delete[] fClosures;
+    delete[] fChoiceFormats;
+    fCount = count;
+    fChoiceLimits  = newLimits;
+    fClosures      = newClosures;
+    fChoiceFormats = newFormats;
+    return;
+
+ error:
+    //status = U_ILLEGAL_ARGUMENT_ERROR;
+    syntaxError(pattern,i,parseError,status);
+    delete[] newLimits;
+    delete[] newClosures;
+    delete[] newFormats;
+    return;
+
+}
 // -------------------------------------
 // Reconstruct the original input pattern.
 
@@ -473,7 +634,7 @@ ChoiceFormat::adoptChoices(double *limits,
                            UnicodeString *formats, 
                            int32_t cnt )
 {
-    adoptChoices(limits, 0, formats, cnt);
+    adoptChoices(limits, (UBool *)0, formats, cnt);
 }
 
 // -------------------------------------

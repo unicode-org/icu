@@ -20,7 +20,7 @@
 // *****************************************************************************
  
 #include "unicode/format.h"
- 
+
 // *****************************************************************************
 // class Format
 // *****************************************************************************
@@ -97,6 +97,32 @@ Format::operator==(const Format& /*that*/) const
 {
     // Add this implementation to make linker happy.
     return TRUE;
+}
+//------------------------------------------------------------------------------
+// handle syntax errors
+inline void
+Format::syntaxError(const UnicodeString& pattern, 
+                           int32_t pos, 
+                           UParseError& parseError,
+                           UErrorCode& status){
+    parseError.offset = pos;
+
+    // for pre-context
+    int32_t start = (pos <=U_PARSE_CONTEXT_LEN)? 0 : (pos - U_PARSE_CONTEXT_LEN);
+    int32_t stop  = pos;
+    pattern.extract(start,stop,parseError.preContext,0);
+    //null terminate the buffer
+    parseError.preContext[stop-start] = 0;
+    
+    //for post-context
+    start = pos;
+    stop  = ((pos+U_PARSE_CONTEXT_LEN)<=pattern.length()) ? (pos+U_PARSE_CONTEXT_LEN) : 
+                                                            pattern.length();
+    pattern.extract(start,stop,parseError.postContext,0);
+    //null terminate the buffer
+    parseError.postContext[stop-start]= 0;
+
+    status = U_PARSE_ERROR;
 }
 
 //eof

@@ -23,6 +23,7 @@
 
 #include "ucol_imp.h"
 #include "uhash.h"
+#include "unicode\parseerr.h"
 
 #define UCOL_TOK_UNSET 0xFFFFFFFF
 #define UCOL_TOK_RESET 0xDEADBEEF
@@ -112,22 +113,26 @@ typedef struct {
       (((ch) <= 0x007E) && ((ch) >= 0x007B))))
 
 
-U_CFUNC uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status);
+U_CFUNC uint32_t ucol_tok_assembleTokenList(UColTokenParser *src,UParseError *parseError, UErrorCode *status);
 U_CFUNC void ucol_tok_closeTokenList(UColTokenParser *src);
 
 void ucol_uprv_tok_setOptionInImage(UColOptionSet *opts, UColAttribute attrib, UColAttributeValue value);
 UBool ucol_uprv_tok_readAndSetOption(UColOptionSet *opts, const UChar* start, const UChar *end, UBool *variableTop, UBool *top, UErrorCode *status);
 
 void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint32_t rulesLength, UCollator *UCA, UErrorCode *status);
-uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status);
+uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UParseError *parseError,UErrorCode *status);
 U_CAPI const UChar U_EXPORT2 *ucol_tok_parseNextToken(UColTokenParser *src, 
                         uint32_t *strength, 
                         uint32_t *chOffset, uint32_t *chLen, 
                         uint32_t *exOffset, uint32_t *exLen,
                         uint8_t *specs,
                         UBool startOfRules,
+                        UParseError *parseError,
                         UErrorCode *status);
 
+U_CFUNC int32_t uhash_hashTokens(const UHashKey k);
+U_CFUNC UBool uhash_compareTokens(const UHashKey key1, const UHashKey key2);
+U_CFUNC void deleteToken(void *token);
 
 #endif
 
