@@ -5,17 +5,20 @@
  **********************************************************************
 */
 
-#include "unicode/utypes.h"
 #include "mutex.h"
-#include "umutex.h"
+#include "ucln_cmn.h"
 
 /* Initialize the global mutex only when we can use it. */
 #if (ICU_USE_THREADS == 1)
 
 static int GlobalMutexInitialize()
 {
-  umtx_init( NULL );
-  return 0;
+    UErrorCode status = U_ZERO_ERROR;
+
+    umtx_init(NULL);
+    ucnv_init(&status);
+    ures_init(&status);
+    return 0;
 }
 
 static int initializesGlobalMutex = GlobalMutexInitialize();

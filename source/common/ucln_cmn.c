@@ -16,18 +16,15 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uclean.h"
-#include "unicode/uchar.h"
-#include "unicode/uloc.h"
-#include "unicode/uidna.h"
 #include "ustr_imp.h"
 #include "unormimp.h"
 #include "ucln_cmn.h"
 #include "umutex.h"
 #include "ucln.h"
 
-static UMTX     InitMutex = NULL;  
-
 static cleanupFunc *gCleanupFunctions[UCLN_COMMON] = {
+    NULL,
+    NULL,
     NULL,
     NULL,
     NULL
@@ -91,7 +88,6 @@ u_cleanup(void)
      * time. The global mutex is being destroyed so that heap and
      * resource checkers don't complain. [grhoten]
      */
-    umtx_destroy(&InitMutex);
     umtx_destroy(NULL);
 }
 
@@ -107,8 +103,9 @@ u_cleanup(void)
 U_CAPI void U_EXPORT2
 u_init(UErrorCode *status) {
     /* Make sure the global mutex is initialized. */
-    umtx_lock(NULL);
-    umtx_unlock(NULL);
+    umtx_init(NULL);
+    ucnv_init(status);
+    ures_init(status);
 
     /* Do any required init for services that don't have open operations
      * and use "only" the double-check initialization method for performance
