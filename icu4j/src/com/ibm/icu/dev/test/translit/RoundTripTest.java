@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/RoundTripTest.java,v $
- * $Date: 2003/04/25 19:33:42 $
- * $Revision: 1.51 $
+ * $Date: 2003/05/05 22:41:49 $
+ * $Revision: 1.52 $
  *
  *******************************************************************************
  */
@@ -201,7 +201,7 @@ public class RoundTripTest extends TestFmwk {
     public void TestCyrillic() throws IOException, ParseException {
         long start = System.currentTimeMillis();
         new Test("Latin-Cyrillic")
-          .test("[a-zA-Z\u0110\u0111]", "[\u0400-\u045F]", null, this, new Legal());
+          .test("[a-zA-Z\u0110\u0111\u02BA\u02B9]", "[\u0400-\u045F]", null, this, new Legal());
         showElapsed(start, "TestCyrillic");
     }
 
@@ -224,7 +224,10 @@ public class RoundTripTest extends TestFmwk {
     public void TestThai() throws IOException, ParseException {
         long start = System.currentTimeMillis();
         new Test("Latin-Thai")
-          .test("[a-zA-Z\u0142\u1ECD\u00E6\u0131\u0268]", "[\u0E01-\u0E3A\u0E40-\u0E5B]", null, this, new LegalThai());
+          .test("[a-zA-Z\u0142\u1ECD\u00E6\u0131\u0268\u02CC]",
+				"[\u0E01-\u0E3A\u0E40-\u0E5B]", 
+				"[a-zA-Z\u0142\u1ECD\u00E6\u0131\u0268\u02B9\u02CC]",
+				null, this, new LegalThai());
         showElapsed(start, "TestThai");
     }
 
@@ -936,6 +939,12 @@ public class RoundTripTest extends TestFmwk {
             test(sourceRange, targetRange, sourceRange, roundtripExclusions, log, legalSource);
         }
 
+		/**
+		 * Will test 
+		 * that everything in sourceRange maps to targetRange,
+		 * that everything in targetRange maps to backtoSourceRange
+		 * that everything roundtrips from target -> source -> target, except roundtripExceptions
+		 */
         public void test(String sourceRange, String targetRange, String backtoSourceRange,
           String roundtripExclusions, RoundTripTest log, Legal legalSource)
           throws java.io.IOException, java.text.ParseException {
@@ -1022,6 +1031,7 @@ public class RoundTripTest extends TestFmwk {
             AbbreviatedUnicodeSetIterator usi2 = new AbbreviatedUnicodeSetIterator();
 
             log.logln("Checking that at least one irrevant characters is not NFC'ed");
+			out.println("<h3>Checking that at least one irrevant characters is not NFC'ed</h3>");
 
             String irrelevants = "\u2000\u2001\u2126\u212A\u212B\u2329"; // string is from NFC_NO in the UCD
 
@@ -1060,7 +1070,13 @@ public class RoundTripTest extends TestFmwk {
                     throw e;
                 }
 
-                usi.reset(sourceRange);
+			   out.println("<h3>Roundtrip Exclusions: " + new UnicodeSet(roundtripExclusions) + "</h3>");
+			   out.flush();
+
+			  log.logln("Checking that source -> target -> source");
+			  out.println("<h3>Checking that source -> target -> source</h3>");
+			  
+              usi.reset(sourceRange);
                 while (usi.next()) {
                     int c = usi.codepoint;
 
@@ -1072,7 +1088,9 @@ public class RoundTripTest extends TestFmwk {
                     }
                 }
 
-                usi.reset(targetRange);
+				log.logln("Checking that target -> source -> target");
+				out.println("<h3>Checking that target -> source -> target</h3>");
+               usi.reset(targetRange);
                 while (usi.next()) {
                     int c = usi.codepoint;
 
@@ -1087,6 +1105,7 @@ public class RoundTripTest extends TestFmwk {
 
 
             log.logln("Checking that source characters convert to target - Singles");
+			out.println("<h3>Checking that source characters convert to target - Singles</h3>");
 
             UnicodeSet failSourceTarg = new UnicodeSet();
 
@@ -1105,7 +1124,7 @@ public class RoundTripTest extends TestFmwk {
                     String targD = Normalizer.normalize(targ, Normalizer.NFD);
                     if (!toTarget.containsAll(targD)
                             || badCharacters.containsSome(targD)) {
-                        logWrongScript("Source-Target", cs, targ);
+                        logWrongScript("Source-Target", cs, targ, toTarget, badCharacters);
                         failSourceTarg.add(c);
                         continue;
                     }
@@ -1119,6 +1138,7 @@ public class RoundTripTest extends TestFmwk {
             }
 
             log.logln("Checking that source characters convert to target - Doubles");
+			out.println("<h3>Checking that source characters convert to target - Doubles</h3>");
 
             /*
             for (char c = 0; c < 0xFFFF; ++c) {
@@ -1156,7 +1176,7 @@ public class RoundTripTest extends TestFmwk {
                         String targD = Normalizer.normalize(targ, Normalizer.NFD);
                         if (!toTarget.containsAll(targD)
                                 || badCharacters.containsSome(targD)) {
-                            logWrongScript("Source-Target", cs, targ);
+                            logWrongScript("Source-Target", cs, targ, toTarget, badCharacters);
                             continue;
                         }
                     }
@@ -1169,6 +1189,7 @@ public class RoundTripTest extends TestFmwk {
             }
 
             log.logln("Checking that target characters convert to source and back - Singles");
+			out.println("<h3>Checking that target characters convert to source and back - Singles</h3>");
 
             UnicodeSet failTargSource = new UnicodeSet();
             UnicodeSet failRound = new UnicodeSet();
@@ -1198,7 +1219,8 @@ public class RoundTripTest extends TestFmwk {
                     String targD = Normalizer.normalize(targ, Normalizer.NFD);
                     if (!toSource.containsAll(targD)
                             || badCharacters.containsSome(targD)) {
-                        logWrongScript("Target-Source", cs, targ);
+								UnicodeSet temp = new UnicodeSet().addAll(targD);
+                        logWrongScript("Target-Source", cs, targ, toSource, badCharacters);
                         failTargSource.add(cs);
                         continue;
                     }
@@ -1217,6 +1239,7 @@ public class RoundTripTest extends TestFmwk {
             }
 
             log.logln("Checking that target characters convert to source and back - Doubles");
+			out.println("<h3>Checking that target characters convert to source and back - Doubles</h3>");
             int count = 0;
 
             UnicodeSet targetRangeMinusFailures = new UnicodeSet(targetRange);
@@ -1238,7 +1261,7 @@ public class RoundTripTest extends TestFmwk {
                 if (++count > pairLimit) {
                     throw new TestTruncated("Test truncated at " + pairLimit + " x 64k pairs");
                 }
-                log.log(TestUtility.hex(c));
+                //log.log(TestUtility.hex(c));
 
                 /*
                 for (char d = 0; d < 0xFFFF; ++d) {
@@ -1260,7 +1283,7 @@ public class RoundTripTest extends TestFmwk {
                         String targD = Normalizer.normalize(targ, Normalizer.NFD);
                         if (!toSource.containsAll(targD) /*&& !failTargSource.contains(c) && !failTargSource.contains(d)*/
                                 || badCharacters.containsSome(targD)) {
-                            logWrongScript("Target-Source", cs, targ);
+                            logWrongScript("Target-Source", cs, targ, toSource, badCharacters);
                             continue;
                         }
                     }
@@ -1281,32 +1304,44 @@ public class RoundTripTest extends TestFmwk {
             log.logln("");
         }
 
-        final void logWrongScript(String label, String from, String to) {
+		final String info(String s) {
+			StringBuffer result = new StringBuffer();
+			result.append("\u200E").append(s).append("\u200E (").append(TestUtility.hex(s)).append("/");
+			if (false) { // append age, as a check
+				int cp = 0;	
+				for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
+					cp = UTF16.charAt(s, i);
+					if (i > 0) result.append(", ");
+					result.append(UCharacter.getAge(cp));
+				}
+			}
+			result.append(")");
+			return result.toString();
+		}
+
+        final void logWrongScript(String label, String from, String to, 
+          UnicodeSet shouldContainAll, UnicodeSet shouldNotContainAny) {
             if (++errorCount > errorLimit) {
                 throw new TestTruncated("Test truncated; too many failures");
             }
-            out.println("<br>Fail " + label + ": \u200E" +
-                        from + "\u200E (" +
-                        TestUtility.hex(from) + ") => \u200E" +
-                        to + "\u200E (" +
-                        TestUtility.hex(to) + ")"
+			String toD = Normalizer.normalize(to, Normalizer.NFD);
+			UnicodeSet temp = new UnicodeSet().addAll(toD);
+			UnicodeSet bad = new UnicodeSet(shouldNotContainAny).retainAll(temp)
+				.addAll(new UnicodeSet(temp).removeAll(shouldContainAll));
+
+            out.println("<br>Fail " + label + ": " +
+                        info(from) + " => " + info(to) + " " + bad
                         );
         }
-
+        
         final void logNotCanonical(String label, String from, String to, String fromCan, String toCan) {
             if (++errorCount > errorLimit) {
                 throw new TestTruncated("Test truncated; too many failures");
             }
-            out.println("<br>Fail (can.equiv) " + label + ": \u200E" +
-                        from + "\u200E (" +
-                        TestUtility.hex(from) + ") => \u200E" +
-                        to + "\u200E (" +
-                        TestUtility.hex(to) + ")" +
-                        " -- \u200E" +
-                        fromCan + "\u200E (" +
-                        TestUtility.hex(fromCan) + ") => \u200E" +
-                        toCan + "\u200E (" +
-                        TestUtility.hex(toCan) + ")"
+            out.println("<br>Fail (can.equiv) " + label + ": " +
+                        info(from) + " => " + info(to) +
+                        " -- " +
+                        info(fromCan) + " => " + info(toCan) + ")"
                         );
         }
 
@@ -1321,13 +1356,8 @@ public class RoundTripTest extends TestFmwk {
             if (++errorCount > errorLimit) {
                 throw new TestTruncated("Test truncated; too many failures");
             }
-            out.println("<br>Fail (can.equiv) " + label + ": \u200E" +
-                        from + "\u200E (" +
-                        TestUtility.hex(from) + ") => \u200E" +
-                        to + "\u200E (" +
-                        TestUtility.hex(to) + ")\u200E" +
-                        toCan + "\u200E (" +
-                        TestUtility.hex(toCan) + ")"
+            out.println("<br>Fail (can.equiv) " + label + ": " +
+                        info(from) + " => " + info(to) + ", " + info(toCan)
                         );
         }
 
@@ -1337,13 +1367,8 @@ public class RoundTripTest extends TestFmwk {
             if (++errorCount > errorLimit) {
                 throw new TestTruncated("Test truncated; too many failures");
             }
-            out.println("<br>Fail Roundtrip: \u200E" +
-                        from + "\u200E (" +
-                        TestUtility.hex(from) + ") "+toID+"=> \u200E" +
-                        to + "\u200E (" +
-                        TestUtility.hex(to) + ") " + backID+"=> \u200E" +
-                        back + "\u200E (" +
-                        TestUtility.hex(back) + ")"
+            out.println("<br>Fail Roundtrip: " +
+                        info(from) + " "+toID+" => " + info(to) + " " + backID+" => " + info(back)
                         );
         }
 
