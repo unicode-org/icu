@@ -57,7 +57,7 @@ VERSION = @VERSION@
 CLEANFILES = *~
 
 SUBDIRS = ctestfw makeconv genrb gencol rbdump \
-toolutil genccode gennames gencmn 
+toolutil genccode gennames gencmn gencnval
 
 ## List of phony targets
 .PHONY : all all-local all-recursive install install-local install-everything install-files install-dlls build-data build-cmnfile build-dll		\
@@ -96,7 +96,7 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 
 all-local: build-local
 
-DATAFILES=$(SRCDATADIR)/unames.dat
+DATAFILES=$(SRCDATADIR)/unames.dat $(SRCDATADIR)/cnvalias.dat
 SRCDATAFILES=$(DATAFILES:.dat=_dat.c)
 OBJDATAFILES=$(SRCDATAFILES:.c=.o)
 COMMONFILE=$(SRCDATADIR)/icudata.dat
