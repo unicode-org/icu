@@ -154,7 +154,10 @@ tempUCATable * uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts
     maxet->size     = 0;
   }
   t->maxJamoExpansions = maxjet;
+  maxjet->endExpansionCE = NULL;
+  maxjet->isV = NULL;
   maxjet->size = 0;
+  maxjet->position = 0;
   maxjet->maxLSize = 1;
   maxjet->maxVSize = 1;
   maxjet->maxTSize = 1;
@@ -228,16 +231,13 @@ tempUCATable *uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
     r->maxJamoExpansions->maxLSize = t->maxJamoExpansions->maxLSize;
     r->maxJamoExpansions->maxVSize = t->maxJamoExpansions->maxVSize;
     r->maxJamoExpansions->maxTSize = t->maxJamoExpansions->maxTSize;
-    if(t->maxJamoExpansions->endExpansionCE != NULL) {
+    if(t->maxJamoExpansions->size != 0) {
       r->maxJamoExpansions->endExpansionCE = (uint32_t *)uprv_malloc(sizeof(uint32_t)*t->maxJamoExpansions->size);
       uprv_memcpy(r->maxJamoExpansions->endExpansionCE, t->maxJamoExpansions->endExpansionCE, t->maxJamoExpansions->size*sizeof(uint32_t));
-    } else {
-      r->maxJamoExpansions->endExpansionCE = NULL;
-    }
-    if(t->maxJamoExpansions->isV != NULL) {
       r->maxJamoExpansions->isV = (UBool *)uprv_malloc(sizeof(UBool)*t->maxJamoExpansions->size);
       uprv_memcpy(r->maxJamoExpansions->isV, t->maxJamoExpansions->isV, t->maxJamoExpansions->size*sizeof(UBool));
     } else {
+      r->maxJamoExpansions->endExpansionCE = NULL;
       r->maxJamoExpansions->isV = NULL;
     }
   }
@@ -275,8 +275,8 @@ void uprv_uca_closeTempTable(tempUCATable *t) {
   if (t->maxJamoExpansions->size > 0) {
     uprv_free(t->maxJamoExpansions->endExpansionCE);
     uprv_free(t->maxJamoExpansions->isV);
-    uprv_free(t->maxJamoExpansions);
   }
+  uprv_free(t->maxJamoExpansions);
 
   uprv_free(t->unsafeCP);
   uprv_free(t->contrEndCP);
@@ -490,10 +490,10 @@ int uprv_uca_setMaxJamoExpansion(UChar                  ch,
   int       pos             = maxexpansion->position;
 
   while (pos > 0) {
+      pos --;
       if (*(pendexpansionce + pos) == endexpansion) {
           return maxexpansion->position;
       }
-      pos --;
   }
 
   *(pendexpansionce + maxexpansion->position) = endexpansion;
