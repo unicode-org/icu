@@ -15,11 +15,13 @@ import java.util.ResourceBundle;
 /**
  * An abstract class representing a holiday.
  * @draft ICU 2.8
+ * @deprecated This is a draft API and might change in a future release of ICU.
  */
 public abstract class Holiday implements DateRule
 {
     /**
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static Holiday[] getHolidays()
     {
@@ -28,6 +30,7 @@ public abstract class Holiday implements DateRule
 
     /**
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static Holiday[] getHolidays(Locale locale)
     {
@@ -53,6 +56,7 @@ public abstract class Holiday implements DateRule
      *
      * @see #firstBetween
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public Date firstAfter(Date start) {
         return rule.firstAfter(start);
@@ -70,6 +74,7 @@ public abstract class Holiday implements DateRule
      *
      * @see #firstAfter
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public Date firstBetween(Date start, Date end) {
         return rule.firstBetween(start, end);
@@ -83,7 +88,7 @@ public abstract class Holiday implements DateRule
      * @param date  The date to check.
      * @return      true if this holiday occurs on the given date.
      * @draft ICU 2.8
-     *
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public boolean isOn(Date date) {
         //System.out.println(name + ".isOn(" + date.toString() + "):");
@@ -94,6 +99,7 @@ public abstract class Holiday implements DateRule
      * Check whether this holiday occurs at least once between the two
      * dates given.
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public boolean isBetween(Date start, Date end) {
         return rule.isBetween(start, end);
@@ -111,6 +117,7 @@ public abstract class Holiday implements DateRule
      *              falls.  Holiday's implementation of the DateRule inteface
      *              simply delegates to this DateRule object.
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     protected Holiday(String name, DateRule rule)
     {
@@ -121,6 +128,7 @@ public abstract class Holiday implements DateRule
     /**
      * Return the name of this holiday in the language of the default locale
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String getDisplayName() {
         return getDisplayName(Locale.getDefault());
@@ -136,6 +144,7 @@ public abstract class Holiday implements DateRule
      *
      * @see ResourceBundle
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String getDisplayName(Locale locale)
     {
@@ -153,6 +162,7 @@ public abstract class Holiday implements DateRule
 
     /**
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public DateRule getRule() {
         return rule;
@@ -160,6 +170,7 @@ public abstract class Holiday implements DateRule
 
     /**
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public void setRule(DateRule rule) {
         this.rule = rule;

@@ -12,7 +12,7 @@ import com.ibm.icu.text.UTF16;
 import java.util.Arrays;
 
 /**
- * Builder lass to manipulate and generate a trie.
+ * Builder class to manipulate and generate a trie.
  * This is useful for ICU data in primitive types.
  * Provides a compact way to store information that is indexed by Unicode 
  * values, such as character properties, types, keyboard values, etc. This is 
@@ -30,15 +30,15 @@ import java.util.Arrays;
  */
 public class IntTrieBuilder extends TrieBuilder
 {
-	// public constructor ----------------------------------------------
-		
-	/**
-	 * Copy constructor
-	 */
-	public IntTrieBuilder(IntTrieBuilder table)
+    // public constructor ----------------------------------------------
+                
+    /**
+     * Copy constructor
+     */
+    public IntTrieBuilder(IntTrieBuilder table)
     {
-    	super(table);
-		m_data_ = new int[m_dataCapacity_];
+        super(table);
+        m_data_ = new int[m_dataCapacity_];
         System.arraycopy(table.m_data_, 0, m_data_, 0, m_dataLength_);
         m_initialValue_ = table.m_initialValue_;
         m_leadUnitValue_ = table.m_leadUnitValue_;
@@ -56,106 +56,106 @@ public class IntTrieBuilder extends TrieBuilder
                           int initialvalue, int leadunitvalue, 
                           boolean latin1linear) 
     {
-    	super();
-    	if (maxdatalength < DATA_BLOCK_LENGTH || (latin1linear 
-	                                               && maxdatalength < 1024)) {
-	        throw new IllegalArgumentException(
-	                                   "Argument maxdatalength is too small");
-	    }
-	    
-	    if (aliasdata != null) {
-	        m_data_ = aliasdata;
-	    } 
-	    else {
-	        m_data_ = new int[maxdatalength];
-	    }
-	
-	    // preallocate and reset the first data block (block index 0)
-	    int j = DATA_BLOCK_LENGTH;
-	
-	    if (latin1linear) {
-	        // preallocate and reset the first block (number 0) and Latin-1 
-	        // (U+0000..U+00ff) after that made sure above that 
-	        // maxDataLength >= 1024
-	        // set indexes to point to consecutive data blocks
-	        int i = 0;
-	        do {
-	            // do this at least for trie->index[0] even if that block is 
-	            // only partly used for Latin-1
-	            m_index_[i ++] = j;
-	            j += DATA_BLOCK_LENGTH;
-	        } while (i < (256 >> SHIFT_));
-	    }
-	
+        super();
+        if (maxdatalength < DATA_BLOCK_LENGTH || (latin1linear 
+                                                  && maxdatalength < 1024)) {
+            throw new IllegalArgumentException(
+                                               "Argument maxdatalength is too small");
+        }
+            
+        if (aliasdata != null) {
+            m_data_ = aliasdata;
+        } 
+        else {
+            m_data_ = new int[maxdatalength];
+        }
+        
+        // preallocate and reset the first data block (block index 0)
+        int j = DATA_BLOCK_LENGTH;
+        
+        if (latin1linear) {
+            // preallocate and reset the first block (number 0) and Latin-1 
+            // (U+0000..U+00ff) after that made sure above that 
+            // maxDataLength >= 1024
+            // set indexes to point to consecutive data blocks
+            int i = 0;
+            do {
+                // do this at least for trie->index[0] even if that block is 
+                // only partly used for Latin-1
+                m_index_[i ++] = j;
+                j += DATA_BLOCK_LENGTH;
+            } while (i < (256 >> SHIFT_));
+        }
+        
         m_dataLength_ = j;
-	    // reset the initially allocated blocks to the initial value
+        // reset the initially allocated blocks to the initial value
         Arrays.fill(m_data_, 0, m_dataLength_, initialvalue);
-	    m_initialValue_ = initialvalue;
+        m_initialValue_ = initialvalue;
         m_leadUnitValue_ = leadunitvalue;
-	    m_dataCapacity_ = maxdatalength;
-	    m_isLatin1Linear_ = latin1linear;
-	    m_isCompacted_ = false;
-	}
+        m_dataCapacity_ = maxdatalength;
+        m_isLatin1Linear_ = latin1linear;
+        m_isCompacted_ = false;
+    }
 
-	// public methods -------------------------------------------------------
+    // public methods -------------------------------------------------------
      
     /*public final void print()
-    {
-        int i = 0;
-        int oldvalue = m_index_[i];
-        int count = 0;
-        System.out.println("index length " + m_indexLength_ 
-                           + " --------------------------");
-        while (i < m_indexLength_) {
-            if (m_index_[i] != oldvalue) {
-                System.out.println("index has " + count + " counts of " 
-                                   + Integer.toHexString(oldvalue));
-                count = 0;
-                oldvalue = m_index_[i];
-            }
-            count ++;
-            i ++;
-        }
-        System.out.println("index has " + count + " counts of " 
-                           + Integer.toHexString(oldvalue));
-        i = 0;
-        oldvalue = m_data_[i];
-        count = 0;
-        System.out.println("data length " + m_dataLength_ 
-                           + " --------------------------");
-        while (i < m_dataLength_) {
-            if (m_data_[i] != oldvalue) {
-                if ((oldvalue & 0xf1000000) == 0xf1000000) {
-                    int temp = oldvalue & 0xffffff; 
-                    temp += 0x320;
-                    oldvalue = 0xf1000000 | temp;
-                }
-                if ((oldvalue & 0xf2000000) == 0xf2000000) {
-                    int temp = oldvalue & 0xffffff; 
-                    temp += 0x14a;
-                    oldvalue = 0xf2000000 | temp;
-                }
-                System.out.println("data has " + count + " counts of " 
-                                   + Integer.toHexString(oldvalue));
-                count = 0;
-                oldvalue = m_data_[i];
-            }
-            count ++;
-            i ++;
-        }
-        if ((oldvalue & 0xf1000000) == 0xf1000000) {
-            int temp = oldvalue & 0xffffff; 
-            temp += 0x320;
-            oldvalue = 0xf1000000 | temp;
-        }
-        if ((oldvalue & 0xf2000000) == 0xf2000000) {
-            int temp = oldvalue & 0xffffff; 
-            temp += 0x14a;
-            oldvalue = 0xf2000000 | temp;
-        }
-        System.out.println("data has " + count + " counts of " 
-                           + Integer.toHexString(oldvalue));
-    }
+      {
+      int i = 0;
+      int oldvalue = m_index_[i];
+      int count = 0;
+      System.out.println("index length " + m_indexLength_ 
+      + " --------------------------");
+      while (i < m_indexLength_) {
+      if (m_index_[i] != oldvalue) {
+      System.out.println("index has " + count + " counts of " 
+      + Integer.toHexString(oldvalue));
+      count = 0;
+      oldvalue = m_index_[i];
+      }
+      count ++;
+      i ++;
+      }
+      System.out.println("index has " + count + " counts of " 
+      + Integer.toHexString(oldvalue));
+      i = 0;
+      oldvalue = m_data_[i];
+      count = 0;
+      System.out.println("data length " + m_dataLength_ 
+      + " --------------------------");
+      while (i < m_dataLength_) {
+      if (m_data_[i] != oldvalue) {
+      if ((oldvalue & 0xf1000000) == 0xf1000000) {
+      int temp = oldvalue & 0xffffff; 
+      temp += 0x320;
+      oldvalue = 0xf1000000 | temp;
+      }
+      if ((oldvalue & 0xf2000000) == 0xf2000000) {
+      int temp = oldvalue & 0xffffff; 
+      temp += 0x14a;
+      oldvalue = 0xf2000000 | temp;
+      }
+      System.out.println("data has " + count + " counts of " 
+      + Integer.toHexString(oldvalue));
+      count = 0;
+      oldvalue = m_data_[i];
+      }
+      count ++;
+      i ++;
+      }
+      if ((oldvalue & 0xf1000000) == 0xf1000000) {
+      int temp = oldvalue & 0xffffff; 
+      temp += 0x320;
+      oldvalue = 0xf1000000 | temp;
+      }
+      if ((oldvalue & 0xf2000000) == 0xf2000000) {
+      int temp = oldvalue & 0xffffff; 
+      temp += 0x14a;
+      oldvalue = 0xf2000000 | temp;
+      }
+      System.out.println("data has " + count + " counts of " 
+      + Integer.toHexString(oldvalue));
+      }
     */   
     /**
      * Gets a 32 bit data from the table data
@@ -349,16 +349,16 @@ public class IntTrieBuilder extends TrieBuilder
         return true;
     }
     
-	// protected data member ------------------------------------------------
-		
-	protected int m_data_[];
-	protected int m_initialValue_;  
+    // protected data member ------------------------------------------------
+                
+    protected int m_data_[];
+    protected int m_initialValue_;  
     
     //  private data member ------------------------------------------------
         
     private int m_leadUnitValue_;  
      
-	// private methods ------------------------------------------------------
+    // private methods ------------------------------------------------------
    
     private int allocDataBlock() 
     {
@@ -445,7 +445,7 @@ public class IntTrieBuilder extends TrieBuilder
             // search for an identical block
             if (start >= overlapStart) {
                 int i = findSameDataBlock(m_data_, newStart, start,
-                             overlap ? DATA_GRANULARITY_ : DATA_BLOCK_LENGTH);
+                                          overlap ? DATA_GRANULARITY_ : DATA_BLOCK_LENGTH);
                 if (i >= 0) {
                     // found an identical block, set the other block's index 
                     // value for the current block
@@ -462,17 +462,17 @@ public class IntTrieBuilder extends TrieBuilder
             int x = m_data_[start];
             int i = 0;
             if (x == m_data_[prevEnd] && overlap && start >= overlapStart) 
-            {
-                // overlap by at least one
-                for (i = 1; i < DATA_BLOCK_LENGTH 
-                     && x == m_data_[start + i] 
-                     && x == m_data_[prevEnd - i]; ++ i) 
                 {
-                }
+                    // overlap by at least one
+                    for (i = 1; i < DATA_BLOCK_LENGTH 
+                             && x == m_data_[start + i] 
+                             && x == m_data_[prevEnd - i]; ++ i) 
+                        {
+                        }
     
-                // overlap by i, rounded down for the data block granularity
-                i &= ~(DATA_GRANULARITY_ - 1);
-            } 
+                    // overlap by i, rounded down for the data block granularity
+                    i &= ~(DATA_GRANULARITY_ - 1);
+                } 
             if (i > 0) {
                 // some overlap
                 m_map_[start >>> SHIFT_] = newStart - i;
@@ -512,7 +512,7 @@ public class IntTrieBuilder extends TrieBuilder
      * @param step
      */
     private static final int findSameDataBlock(int data[], int dataLength,
-                                                int otherBlock, int step) 
+                                               int otherBlock, int step) 
     {
         // ensure that we do not even partially get past dataLength
         dataLength -= DATA_BLOCK_LENGTH;
@@ -598,12 +598,12 @@ public class IntTrieBuilder extends TrieBuilder
                 // point, set it for the lead surrogate code unit
 
                 int value = manipulate.getFoldedValue(c, 
-                                                block + SURROGATE_BLOCK_COUNT_);
+                                                      block + SURROGATE_BLOCK_COUNT_);
                 if (value != getValue(UTF16.getLeadSurrogate(c))) {
                     if (!setValue(UTF16.getLeadSurrogate(c), value)) {
                         // data table overflow 
                         throw new ArrayIndexOutOfBoundsException(
-                                                        "Data table overflow");
+                                                                 "Data table overflow");
                     }
                     // if we did not find an identical index block...
                     if (block == indexLength) {

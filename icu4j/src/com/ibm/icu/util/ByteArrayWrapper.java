@@ -18,6 +18,7 @@ package com.ibm.icu.util;
  * </p> 
  * @author syn wee
  * @draft ICU 2.8
+ * @deprecated This is a draft API and might change in a future release of ICU.
  */
 public class ByteArrayWrapper 
 {
@@ -26,6 +27,7 @@ public class ByteArrayWrapper
     /**
      * Internal byte array.
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public byte[] bytes;
     /**
@@ -33,6 +35,7 @@ public class ByteArrayWrapper
      * Different from bytes.length, size will be &lt;= bytes.length. 
      * Semantics of size is similar to java.util.Vector.size().
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public int size;
     
@@ -41,6 +44,7 @@ public class ByteArrayWrapper
     /** 
      * Construct a new ByteArrayWrapper with no data.
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public ByteArrayWrapper() {
     }
@@ -54,6 +58,7 @@ public class ByteArrayWrapper
      * The contents of the array (between 0 and size) remain unchanged. 
      * @param capacity minimum length of internal byte array.
      * @draft ICU 2.8 
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public void ensureCapacity(int capacity) 
     {
@@ -73,6 +78,7 @@ public class ByteArrayWrapper
      * @param start start offset of src to copy from
      * @param limit end + 1 offset of src to copy from
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public final void set(byte[] src, int start, int limit) 
     {
@@ -88,6 +94,7 @@ public class ByteArrayWrapper
      * @param start start offset of src to copy from
      * @param limit end + 1 offset of src to copy from
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public final void append(byte[] src, int start, int limit) 
     {
@@ -102,6 +109,7 @@ public class ByteArrayWrapper
      * byte array to null and its size to 0.
      * @return internal byte array.
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public final byte[] releaseBytes()
     {

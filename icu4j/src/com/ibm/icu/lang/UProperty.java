@@ -310,6 +310,7 @@ public interface UProperty
      * mapping or _in_ the target of a case mapping. Not the same as
      * the general category Cased_Letter.</p>
      * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int CASE_SENSITIVE = 34;
 
@@ -318,6 +319,7 @@ public interface UProperty
      * Sentence Terminal. Used in UAX #29: Text Boundaries
      * (http://www.unicode.org/reports/tr29/)
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int S_TERM = 35;
 
@@ -327,73 +329,89 @@ public interface UProperty
      * For details on the behavior of these characters,
      * see StandardizedVariants.html and 15.6 Variation Selectors.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int VARIATION_SELECTOR = 36;
 
-    /** Binary property NFD_Inert.
-        ICU-specific property for characters that are inert under NFD,
-        i.e., they do not interact with adjacent characters.
-        Used for example in normalizing transforms in incremental mode
-        to find the boundary of safely normalizable text despite possible
-        text additions.
-
-        There is one such property per normalization form.
-        These properties are computed as follows - an inert character is:
-        a) unassigned, or ALL of the following:
-        b) of combining class 0.
-        c) not decomposed by this normalization form.
-        AND if NFC or NFKC,
-        d) can never compose with a previous character.
-        e) can never compose with a following character.
-        f) can never change if another character is added.
-        Example: a-breve might satisfy all but f, but if you
-        add an ogonek it changes to a-ogonek + breve
-
-        See also com.ibm.text.UCD.NFSkippable in the ICU4J repository,
-        and icu/source/common/unormimp.h .
-        @draft ICU 3.0 */
+    /** 
+     * Binary property NFD_Inert.
+     * ICU-specific property for characters that are inert under NFD,
+     * i.e., they do not interact with adjacent characters.
+     * Used for example in normalizing transforms in incremental mode
+     * to find the boundary of safely normalizable text despite possible
+     * text additions.
+     *
+     * There is one such property per normalization form.
+     * These properties are computed as follows - an inert character is:
+     * a) unassigned, or ALL of the following:
+     * b) of combining class 0.
+     * c) not decomposed by this normalization form.
+     * AND if NFC or NFKC,
+     * d) can never compose with a previous character.
+     * e) can never compose with a following character.
+     * f) can never change if another character is added.
+     * Example: a-breve might satisfy all but f, but if you
+     * add an ogonek it changes to a-ogonek + breve
+     *
+     * See also com.ibm.text.UCD.NFSkippable in the ICU4J repository,
+     * and icu/source/common/unormimp.h .
+     * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
     public static final int NFD_INERT = 37;
 
-    /** Binary property NFKD_Inert.
-        ICU-specific property for characters that are inert under NFKD,
-        i.e., they do not interact with adjacent characters.
-        Used for example in normalizing transforms in incremental mode
-        to find the boundary of safely normalizable text despite possible
-        text additions.
-        @see #NFD_INERT
-        @draft ICU 3.0 */
+    /** 
+     * Binary property NFKD_Inert.
+     * ICU-specific property for characters that are inert under NFKD,
+     * i.e., they do not interact with adjacent characters.
+     * Used for example in normalizing transforms in incremental mode
+     * to find the boundary of safely normalizable text despite possible
+     * text additions.
+     * @see #NFD_INERT
+     * @draft ICU 3.0 
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
     public static final int NFKD_INERT = 38;
 
-    /** Binary property NFC_Inert.
-        ICU-specific property for characters that are inert under NFC,
-        i.e., they do not interact with adjacent characters.
-        Used for example in normalizing transforms in incremental mode
-        to find the boundary of safely normalizable text despite possible
-        text additions.
-        @see #NFD_INERT
-        @draft ICU 3.0 */
+    /** 
+     * Binary property NFC_Inert.
+     * ICU-specific property for characters that are inert under NFC,
+     * i.e., they do not interact with adjacent characters.
+     * Used for example in normalizing transforms in incremental mode
+     * to find the boundary of safely normalizable text despite possible
+     * text additions.
+     * @see #NFD_INERT
+     * @draft ICU 3.0 
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
     public static final int NFC_INERT = 39;
 
-    /** Binary property NFKC_Inert.
-        ICU-specific property for characters that are inert under NFKC,
-        i.e., they do not interact with adjacent characters.
-        Used for example in normalizing transforms in incremental mode
-        to find the boundary of safely normalizable text despite possible
-        text additions.
-        @see #NFD_INERT
-        @draft ICU 3.0 */
+    /** 
+     * Binary property NFKC_Inert.
+     * ICU-specific property for characters that are inert under NFKC,
+     * i.e., they do not interact with adjacent characters.
+     * Used for example in normalizing transforms in incremental mode
+     * to find the boundary of safely normalizable text despite possible
+     * text additions.
+     * @see #NFD_INERT
+     * @draft ICU 3.0 
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
     public static final int NFKC_INERT = 40;
 
-    /** Binary Property Segment_Starter.
-        ICU-specific property for characters that are starters in terms of
-        Unicode normalization and combining character sequences.
-        They have ccc=0 and do not occur in non-initial position of the
-        canonical decomposition of any character
-        (like " in NFD(a-umlaut) and a Jamo T in an NFD(Hangul LVT)).
-        ICU uses this property for segmenting a string for generating a set of
-        canonically equivalent strings, e.g. for canonical closure while
-        processing collation tailoring rules.
-        @draft ICU 3.0 */
+    /**
+     * Binary Property Segment_Starter.
+     * ICU-specific property for characters that are starters in terms of
+     * Unicode normalization and combining character sequences.
+     * They have ccc=0 and do not occur in non-initial position of the
+     * canonical decomposition of any character
+     * (like " in NFD(a-umlaut) and a Jamo T in an NFD(Hangul LVT)).
+     * ICU uses this property for segmenting a string for generating a set of
+     * canonically equivalent strings, e.g. for canonical closure while
+     * processing collation tailoring rules.
+     * @draft ICU 3.0 
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
     public static final int SEGMENT_STARTER = 41;
 
     /** 
@@ -491,6 +509,7 @@ public interface UProperty
      * Enumerated property Hangul_Syllable_Type, new in Unicode 4.
      * Returns HangulSyllableType values. 
      * @draft ICU 2.6 
+     * @deprecated This is a draft API and might change in a future release of ICU.
      * */
     public static final int HANGUL_SYLLABLE_TYPE = 0x100B;
 
@@ -498,6 +517,7 @@ public interface UProperty
      * Enumerated property NFD_Quick_Check.
      * Returns numeric values compatible with Normalizer.QuickCheckResult.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int NFD_QUICK_CHECK = 0x100C;
 
@@ -505,6 +525,7 @@ public interface UProperty
      * Enumerated property NFKD_Quick_Check.
      * Returns numeric values compatible with Normalizer.QuickCheckResult.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int NFKD_QUICK_CHECK = 0x100D;
 
@@ -512,6 +533,7 @@ public interface UProperty
      * Enumerated property NFC_Quick_Check.
      * Returns numeric values compatible with Normalizer.QuickCheckResult.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int NFC_QUICK_CHECK = 0x100E;
 
@@ -519,6 +541,7 @@ public interface UProperty
      * Enumerated property NFKC_Quick_Check.
      * Returns numeric values compatible with Normalizer.QuickCheckResult.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int NFKC_QUICK_CHECK = 0x100F;
 
@@ -530,6 +553,7 @@ public interface UProperty
      * see Normalizer.FCD and http://www.unicode.org/notes/tn5/#FCD .
      * Returns 8-bit numeric values like CANONICAL_COMBINING_CLASS.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int LEAD_CANONICAL_COMBINING_CLASS = 0x1010;
 
@@ -541,6 +565,7 @@ public interface UProperty
      * see Normalizer.FCD and http://www.unicode.org/notes/tn5/#FCD .
      * Returns 8-bit numeric values like CANONICAL_COMBINING_CLASS.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int TRAIL_CANONICAL_COMBINING_CLASS = 0x1011;
 

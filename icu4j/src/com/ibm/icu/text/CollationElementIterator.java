@@ -551,6 +551,7 @@ public final class CollationElementIterator
      * will be created for use.</p>
      * @param source the new source string iterator for iteration.
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public void setText(UCharacterIterator source)
     {

@@ -257,6 +257,7 @@ public final class RuleBasedCollator extends Collator
      * will be created for use.
      * @see CollationElementIterator
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public CollationElementIterator getCollationElementIterator(
                                                 UCharacterIterator source)
@@ -465,6 +466,7 @@ public final class RuleBasedCollator extends Collator
      * @see #getNumericCollation
      * @see #setNumericCollation
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public void setNumericCollationDefault()
     {
@@ -601,6 +603,7 @@ public final class RuleBasedCollator extends Collator
      * @see #getVariableTop
      * @see RuleBasedCollator#setAlternateHandlingShifted
      * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public int setVariableTop(String varTop)
     {
@@ -646,6 +649,7 @@ public final class RuleBasedCollator extends Collator
      * @see #getVariableTop
      * @see #setVariableTop
      * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public void setVariableTop(int varTop)
     {
@@ -660,6 +664,7 @@ public final class RuleBasedCollator extends Collator
      * @see #getNumericCollation
      * @see #setNumericCollationDefault
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public void setNumericCollation(boolean flag)
     {
@@ -691,6 +696,7 @@ public final class RuleBasedCollator extends Collator
      * @return the current rules that defines this Collator.
      * @see #getRules
      * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String getRules(boolean fullrules)
     {
@@ -771,6 +777,7 @@ public final class RuleBasedCollator extends Collator
      * @see #compare(String, String)
      * @see RawCollationKey
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public RawCollationKey getRawCollationKey(String source, 
                                               RawCollationKey key)
@@ -930,6 +937,7 @@ public final class RuleBasedCollator extends Collator
      * @return the variable top value of a Collator.
      * @see #setVariableTop
      * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public int getVariableTop()
     {
@@ -945,6 +953,7 @@ public final class RuleBasedCollator extends Collator
      * @see #setNumericCollationDefault
      * @return true if numeric collation is turned on, false otherwise
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public boolean getNumericCollation()
     {
@@ -4410,6 +4419,7 @@ public final class RuleBasedCollator extends Collator
     /** Get the version of this collator object.
      *  @return the version object associated with this collator
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public VersionInfo getVersion() {
     	/* RunTime version  */
@@ -4441,6 +4451,7 @@ public final class RuleBasedCollator extends Collator
     /** Get the UCA version of this collator object.
      *  @return the version object associated with this collator
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public VersionInfo getUCAVersion() {
     	return UCA_.m_UCA_version_;

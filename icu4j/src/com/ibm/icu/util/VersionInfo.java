@@ -92,6 +92,7 @@ public final class VersionInfo
     /**
      * Unicode 4.0 version
      * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final VersionInfo UNICODE_4_0;
     
@@ -105,24 +106,28 @@ public final class VersionInfo
      * Data version string for ICU's internal data
      * @internal
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final String ICU_DATA_VERSION = "30b";
     
     /**
      * ICU4J collator runtime version
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final VersionInfo UCOL_RUNTIME_VERSION;
 
     /**
      * ICU4J collator builder version
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final VersionInfo UCOL_BUILDER_VERSION;
     
     /**
      * ICU4J collator tailorings version
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final VersionInfo UCOL_TAILORINGS_VERSION; 
 	

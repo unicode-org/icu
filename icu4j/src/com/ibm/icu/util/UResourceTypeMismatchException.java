@@ -12,6 +12,7 @@ package com.ibm.icu.util;
  * is not the same type as the available resource
  * @author ram
  * @draft ICU 3.0
+ * @deprecated This is a draft API and might change in a future release of ICU.
  */
 public class UResourceTypeMismatchException extends RuntimeException {
     private String message;
@@ -20,6 +21,7 @@ public class UResourceTypeMismatchException extends RuntimeException {
      * Constuct the exception with the given message
      * @param msg the error message for this exception
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public UResourceTypeMismatchException(String msg){
         message = msg;       
@@ -28,6 +30,7 @@ public class UResourceTypeMismatchException extends RuntimeException {
      * Returns the error message stored in this exception
      * @return String the error message string
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String toString(){
         return message;   

@@ -1069,6 +1069,7 @@ public final class UTF16
      * @return the updated StringBuffer
      * @throws IllegalArgumentException if cp is not a valid code point
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static StringBuffer appendCodePoint(StringBuffer target, int cp) {
         return append(target, cp);
@@ -2317,6 +2318,7 @@ public final class UTF16
      * @throws IllegalArgumentException if an invalid code point is encountered
      * @throws IndexOutOfBoundsException  if the offset or count are out of bounds.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String newString(int[] codePoints, int offset, int count) {
         if (count < 0) {

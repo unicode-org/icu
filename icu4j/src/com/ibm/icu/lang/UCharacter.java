@@ -103,6 +103,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         
         /** 
          * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock NO_BLOCK 
 	    = new UnicodeBlock("NO_BLOCK", 0);
@@ -608,6 +609,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /** 
          * Unicode 4.0.1 renames the "Cyrillic Supplementary" block to "Cyrillic Supplement".
          * @draft ICU 3.0
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock CYRILLIC_SUPPLEMENT 
 	    = new UnicodeBlock("CYRILLIC_SUPPLEMENT", 97);
@@ -678,79 +680,94 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
    
         /** 
          * @draft ICU 2.6 
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock LIMBU 
 	    = new UnicodeBlock("LIMBU", 111);
         /** 
          * @draft ICU 2.6 
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock TAI_LE 
 	    = new UnicodeBlock("TAI LE", 112);
         /** 
          * @draft ICU 2.6 
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock KHMER_SYMBOLS 
 	    = new UnicodeBlock("KHMER SYMBOLS", 113);
 
         /** 
          * @draft ICU 2.6 
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock PHONETIC_EXTENSIONS 
 	    = new UnicodeBlock("PHONETIC EXTENSIONS", 114);
 
         /** 
          * @draft ICU 2.6 
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock MISCELLANEOUS_SYMBOLS_AND_ARROWS 
 	    = new UnicodeBlock("MISCELLANEOUS_SYMBOLS_AND_ARROWS", 115);
         /** 
          * @draft ICU 2.6 
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock YIJING_HEXAGRAM_SYMBOLS 
 	    = new UnicodeBlock("YIJING_HEXAGRAM_SYMBOLS", 116);
         /** 
          * @draft ICU 2.6 
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock LINEAR_B_SYLLABARY 
 	    = new UnicodeBlock("LINEAR_B_SYLLABARY", 117);
         /** 
          * @draft ICU 2.6 
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock LINEAR_B_IDEOGRAMS 
 	    = new UnicodeBlock("LINEAR_B_IDEOGRAMS", 118);
         /** 
          * @draft ICU 2.6 
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock AEGEAN_NUMBERS 
 	    = new UnicodeBlock("AEGEAN_NUMBERS", 119);                                               
         /** 
          * @draft ICU 2.6 
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock UGARITIC 
 	    = new UnicodeBlock("UGARITIC", 120);
         /** 
          * @draft ICU 2.6 
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock SHAVIAN 
 	    = new UnicodeBlock("SHAVIAN", 121);
         /** 
          * @draft ICU 2.6 
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock OSMANYA 
 	    = new UnicodeBlock("OSMANYA", 122);
         /** 
          * @draft ICU 2.6 
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock CYPRIOT_SYLLABARY 
 	    = new UnicodeBlock("CYPRIOT_SYLLABARY", 123);
         /** 
          * @draft ICU 2.6 
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock TAI_XUAN_JING_SYMBOLS 
 	    = new UnicodeBlock("TAI_XUAN_JING_SYMBOLS", 124);
         
         /** 
          * @draft ICU 2.6 
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock VARIATION_SELECTORS_SUPPLEMENT 
 	    = new UnicodeBlock("VARIATION_SELECTORS_SUPPLEMENT", 125);                                      
@@ -1180,7 +1197,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /** 
          * Unicode 4.0.1 renames the "Cyrillic Supplementary" block to "Cyrillic Supplement".
          * @draft ICU 3.0
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
+
         public static final int CYRILLIC_SUPPLEMENT_ID = 97;
         /** 
          * @stable ICU 2.4 
@@ -1235,35 +1254,80 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          */
         public static final int SUPPLEMENTARY_PRIVATE_USE_AREA_B_ID = 110;
         
-	/** @draft ICU 2.6 */
+	/** 
+	 * @draft ICU 2.6 
+	 * @deprecated This is a draft API and might change in a future release of ICU.
+	 */
 	public static final int LIMBU_ID = 111; /*[1900]*/
-	/** @draft ICU 2.6 */
+	/**
+	 * @draft ICU 2.6 
+	 * @deprecated This is a draft API and might change in a future release of ICU.
+	 */
 	public static final int TAI_LE_ID = 112; /*[1950]*/
-	/** @draft ICU 2.6 */
+	/** 
+	 * @draft ICU 2.6 
+	 * @deprecated This is a draft API and might change in a future release of ICU.
+	 */
 	public static final int KHMER_SYMBOLS_ID = 113; /*[19E0]*/
-	/** @draft ICU 2.6 */
+	/** 
+	 * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
+	 */
 	public static final int PHONETIC_EXTENSIONS_ID = 114; /*[1D00]*/
-	/** @draft ICU 2.6 */
+	/** 
+	 * @draft ICU 2.6 
+	 * @deprecated This is a draft API and might change in a future release of ICU.
+	 */
 	public static final int MISCELLANEOUS_SYMBOLS_AND_ARROWS_ID = 115; /*[2B00]*/
-	/** @draft ICU 2.6 */
+	/**
+	 * @draft ICU 2.6 
+	 * @deprecated This is a draft API and might change in a future release of ICU.
+	 */
 	public static final int YIJING_HEXAGRAM_SYMBOLS_ID = 116; /*[4DC0]*/
-	/** @draft ICU 2.6 */
+	/** 
+	 * @draft ICU 2.6 
+	 * @deprecated This is a draft API and might change in a future release of ICU.
+	 */
 	public static final int LINEAR_B_SYLLABARY_ID = 117; /*[10000]*/
-	/** @draft ICU 2.6 */
+	/**
+	 *  @draft ICU 2.6 
+	 * @deprecated This is a draft API and might change in a future release of ICU.
+	 */
 	public static final int LINEAR_B_IDEOGRAMS_ID = 118; /*[10080]*/
-	/** @draft ICU 2.6 */
+	/** 
+	 * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
+	 */
 	public static final int AEGEAN_NUMBERS_ID = 119; /*[10100]*/
-	/** @draft ICU 2.6 */
+	/**
+	 * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
+	 */
 	public static final int UGARITIC_ID = 120; /*[10380]*/
-	/** @draft ICU 2.6 */
+	/**
+	 * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
+	 */
 	public static final int SHAVIAN_ID = 121; /*[10450]*/
-	/** @draft ICU 2.6 */
+	/**
+	 * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
+	 */
 	public static final int OSMANYA_ID = 122; /*[10480]*/
-	/** @draft ICU 2.6 */
+	/**
+	 * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
+	 */
 	public static final int CYPRIOT_SYLLABARY_ID = 123; /*[10800]*/
-	/** @draft ICU 2.6 */
+	/**
+	 * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
+	 */
 	public static final int TAI_XUAN_JING_SYMBOLS_ID = 124; /*[1D300]*/
-	/** @draft ICU 2.6 */
+	/**
+	 * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
+	 */
 	public static final int VARIATION_SELECTORS_SUPPLEMENT_ID = 125; /*[E0100]*/
         /** 
          * @stable ICU 2.4 
@@ -1330,6 +1394,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @return the UnicodeBlock with that name
          * @throws IllegalArgumentException if the blockName could not be matched
          * @draft ICU 3.0
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock forName(String blockName) {
             Map m = null;
@@ -1835,14 +1900,17 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final int ZAIN = 50;
         /** 
          * @draft ICU 2.6 
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int FE = 51;        
         /** 
          * @draft ICU 2.6 
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int KHAPH = 52;
         /**
          *  @draft ICU 2.6 
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int ZHAIN =53;   
         /**
@@ -1926,6 +1994,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /**
          * Renamed from the misspelled "inseperable" in Unicode 4.0.1.
          * @draft ICU 3.0
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int INSEPARABLE = 15;
         /**
@@ -1983,11 +2052,13 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         
         /**
          * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int NEXT_LINE = 29;       /*[NL]*/ /* from here on: new in Unicode 4/ICU 2.6 */
         
         /**
          * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int  WORD_JOINER = 30;      /*[WJ]*/
         
@@ -2031,35 +2102,43 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      *
      * @see UProperty#HANGUL_SYLLABLE_TYPE
      * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static interface HangulSyllableType 
     {
 	/**
          * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
 	public static final int NOT_APPLICABLE      = 0;   /*[NA]*/ /*See note !!*/
 	/**
          * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
 	public static final int LEADING_JAMO        = 1;   /*[L]*/
 	/**
          * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
 	public static final int VOWEL_JAMO          = 2;   /*[V]*/
 	/**
          * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
 	public static final int TRAILING_JAMO       = 3;   /*[T]*/
 	/**
          * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
 	public static final int LV_SYLLABLE         = 4;   /*[LV]*/
 	/**
          * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
 	public static final int LVT_SYLLABLE        = 5;   /*[LVT]*/
 	/**
          * @draft ICU 2.6
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
 	public static final int COUNT                       = 6;
     }
@@ -3736,12 +3815,14 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     /**
      * Option value for case folding: use default mappings defined in CaseFolding.txt.
      * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int FOLD_CASE_DEFAULT    =      0x0000;
     /** 
      * Option value for case folding: exclude the mappings for dotted I 
      * and dotless i marked with 'I' in CaseFolding.txt. 
      * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int FOLD_CASE_EXCLUDE_SPECIAL_I = 0x0001;
     
@@ -3759,6 +3840,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      *                       any; otherwise the character itself.
      * @see                  #foldCase(String, boolean)
      * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     /*
      * Issue for canonical caseless match (UAX #21):
@@ -3849,6 +3931,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      *                       any; otherwise the character itself.
      * @see                  #foldCase(int, boolean)
      * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final String foldCase(String str, int options){
         int          size   = str.length();
@@ -4489,6 +4572,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     /**
      * Provide the java.lang.Character forDigit API, for convenience.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static char forDigit(int digit, int radix) {
         return java.lang.Character.forDigit(digit, radix);
@@ -4500,6 +4584,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Cover the JDK 1.5 API, for convenience.
      * @see UTF16#LEAD_SURROGATE_MIN_VALUE
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final char MIN_HIGH_SURROGATE = UTF16.LEAD_SURROGATE_MIN_VALUE;
 
@@ -4507,6 +4592,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Cover the JDK 1.5 API, for convenience.
      * @see UTF16#LEAD_SURROGATE_MAX_VALUE
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final char MAX_HIGH_SURROGATE = UTF16.LEAD_SURROGATE_MAX_VALUE;
 
@@ -4514,6 +4600,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Cover the JDK 1.5 API, for convenience.
      * @see UTF16#TRAIL_SURROGATE_MIN_VALUE
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final char MIN_LOW_SURROGATE = UTF16.TRAIL_SURROGATE_MIN_VALUE;
 
@@ -4521,6 +4608,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Cover the JDK 1.5 API, for convenience.
      * @see UTF16#TRAIL_SURROGATE_MAX_VALUE
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final char MAX_LOW_SURROGATE = UTF16.TRAIL_SURROGATE_MAX_VALUE;
 
@@ -4528,6 +4616,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Cover the JDK 1.5 API, for convenience.
      * @see UTF16#SURROGATE_MIN_VALUE
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final char MIN_SURROGATE = UTF16.SURROGATE_MIN_VALUE;
 
@@ -4535,6 +4624,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Cover the JDK 1.5 API, for convenience.
      * @see UTF16#SURROGATE_MAX_VALUE
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final char MAX_SURROGATE = UTF16.SURROGATE_MAX_VALUE;
 
@@ -4542,6 +4632,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Cover the JDK 1.5 API, for convenience.
      * @see UTF16#SUPPLEMENTARY_MIN_VALUE
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int  MIN_SUPPLEMENTARY_CODE_POINT = UTF16.SUPPLEMENTARY_MIN_VALUE;
 
@@ -4549,6 +4640,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Cover the JDK 1.5 API, for convenience.
      * @see UTF16#CODEPOINT_MAX_VALUE
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int  MAX_CODE_POINT = UTF16.CODEPOINT_MAX_VALUE;
 
@@ -4556,6 +4648,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * Cover the JDK 1.5 API, for convenience.
      * @see UTF16#CODEPOINT_MIN_VALUE
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int  MIN_CODE_POINT = UTF16.CODEPOINT_MIN_VALUE;
 
@@ -4564,6 +4657,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param cp the code point to check
      * @return true if cp is a valid code point
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final boolean isValidCodePoint(int cp) {
         return cp >= 0 && cp <= MAX_CODE_POINT;
@@ -4574,6 +4668,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param cp the code point to check
      * @return true if cp is a supplementary code point
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final boolean isSupplementaryCodePoint(int cp) {
         return cp >= UTF16.SUPPLEMENTARY_MIN_VALUE
@@ -4585,6 +4680,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param ch the char to check
      * @return true if ch is a high (lead) surrogate
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static boolean isHighSurrogate(char ch) {
         return ch >= MIN_HIGH_SURROGATE && ch <= MAX_HIGH_SURROGATE;
@@ -4595,6 +4691,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param ch the char to check
      * @return true if ch is a low (trail) surrogate
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static boolean isLowSurrogate(char ch) {
         return ch >= MIN_LOW_SURROGATE && ch <= MAX_LOW_SURROGATE;
@@ -4607,6 +4704,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param low the low (trail) char
      * @return true if high, low form a surrogate pair
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final boolean isSurrogatePair(char high, char low) {
         return isHighSurrogate(high) && isLowSurrogate(low);
@@ -4620,6 +4718,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @return the number of chars needed to represent the code point
      * @see UTF16#getCharCount
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static int charCount(int cp) {
         return UTF16.getCharCount(cp);
@@ -4632,6 +4731,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param low the low (trail) surrogate
      * @return the code point formed by the surrogate pair
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int toCodePoint(char high, char low) {
         return UCharacterProperty.getRawSupplementary(high, low);
@@ -4645,6 +4745,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param index the index of the first or only char forming the code point
      * @return the code point at the index
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int codePointAt(CharSequence seq, int index) {
         char c1 = seq.charAt(index++);
@@ -4667,11 +4768,39 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param index the index of the first or only char forming the code point
      * @return the code point at the index
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int codePointAt(char[] text, int index) {
         char c1 = text[index++];
         if (isHighSurrogate(c1)) {
             if (index < text.length) {
+                char c2 = text[index];
+                if (isLowSurrogate(c2)) {
+                    return toCodePoint(c1, c2);
+                }
+            }
+        }
+        return c1;
+    }
+
+    /**
+     * Cover the JDK 1.5 API, for convenience.  Return the code point at index.
+     * <br/><b>Note</b>: the semantics of this API is different from the related UTF16
+     * API.  This examines only the characters at index and index+1.
+     * @param text the characters to check
+     * @param index the index of the first or only char forming the code point
+     * @param limit the limit of the valid text
+     * @return the code point at the index
+     * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int codePointAt(char[] text, int index, int limit) {
+	if (index >= limit || limit > text.length) {
+	    throw new IndexOutOfBoundsException();
+	}
+        char c1 = text[index++];
+        if (isHighSurrogate(c1)) {
+            if (index < limit) {
                 char c2 = text[index];
                 if (isLowSurrogate(c2)) {
                     return toCodePoint(c1, c2);
@@ -4689,6 +4818,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param index the index after the last or only char forming the code point
      * @return the code point before the index
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int codePointBefore(CharSequence seq, int index) {
         char c2 = seq.charAt(--index);
@@ -4711,11 +4841,39 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param index the index after the last or only char forming the code point
      * @return the code point before the index
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int codePointBefore(char[] text, int index) {
         char c2 = text[--index];
         if (isLowSurrogate(c2)) {
             if (index > 0) {
+                char c1 = text[--index];
+                if (isHighSurrogate(c1)) {
+                    return toCodePoint(c1, c2);
+                }
+            }
+        }
+        return c2;
+    }
+
+    /**
+     * Cover the JDK 1.5 API, for convenience.  Return the code point before index.
+     * <br/><b>Note</b>: the semantics of this API is different from the related UTF16
+     * API.  This examines only the characters at index-1 and index-2.
+     * @param text the characters to check
+     * @param index the index after the last or only char forming the code point
+     * @param limit the start of the valid text
+     * @return the code point before the index
+     * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int codePointBefore(char[] text, int index, int limit) {
+	if (index <= limit || limit < 0) {
+	    throw new IndexOutOfBoundsException();
+	}
+        char c2 = text[--index];
+        if (isLowSurrogate(c2)) {
+            if (index > limit) {
                 char c1 = text[--index];
                 if (isHighSurrogate(c1)) {
                     return toCodePoint(c1, c2);
@@ -4734,6 +4892,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @return the count of the number of chars written (1 or 2)
      * @throws IllegalArgumentException if cp is not a valid code point
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int toChars(int cp, char[] dst, int dstIndex) {
         if (cp >= 0) {
@@ -4757,6 +4916,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @return an array containing the char(s) representing the code point
      * @throws IllegalArgumentException if cp is not a valid code point
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final char[] toChars(int cp) {
         if (cp >= 0) {
@@ -4784,6 +4944,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @return the directionality of the code point
      * @see #getDirection
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static byte getDirectionality(int cp)
     {
@@ -4798,6 +4959,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param limit the limit of the range
      * @return the number of code points in the range
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static int codePointCount(CharSequence text, int start, int limit) {
 	if (start < 0 || limit < start || limit > text.length()) {
@@ -4827,6 +4989,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param limit the limit of the range
      * @return the number of code points in the range
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static int codePointCount(char[] text, int start, int limit) {
 	if (start < 0 || limit < start || limit > text.length) {
@@ -4856,6 +5019,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param codePointOffset the number of code points by which to offset the index
      * @return the adjusted index
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static int offsetByCodePoints(CharSequence text, int index, int codePointOffset) {
 	if (index < 0 || index > text.length()) {
@@ -4902,6 +5066,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param codePointOffset the number of code points by which to offset the index
      * @return the adjusted index
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static int offsetByCodePoints(char[] text, int start, int count, int index, int codePointOffset) {
 	int limit = start + count;
@@ -5305,6 +5470,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @param ch code point whose property value is to be retrieved
      * @return property value of code point
      * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     private static int getProperty(int ch)
     {

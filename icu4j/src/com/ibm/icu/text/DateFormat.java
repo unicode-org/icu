@@ -191,6 +191,7 @@ public abstract class DateFormat extends UFormat {
      * FieldPosition selector for 'S' field alignment,
      * corresponding to the {@link Calendar#MILLISECOND} field.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public final static int FRACTIONAL_SECOND_FIELD = 8;
 
@@ -272,6 +273,7 @@ public abstract class DateFormat extends UFormat {
      * FieldPosition selector for 'Y' field alignment,
      * corresponding to the {@link Calendar#YEAR_WOY} field.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public final static int YEAR_WOY_FIELD = 18;
 
@@ -279,6 +281,7 @@ public abstract class DateFormat extends UFormat {
      * FieldPosition selector for 'e' field alignment,
      * corresponding to the {@link Calendar#DOW_LOCAL} field.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public final static int DOW_LOCAL_FIELD = 19;
 
@@ -286,6 +289,7 @@ public abstract class DateFormat extends UFormat {
      * FieldPosition selector for 'u' field alignment,
      * corresponding to the {@link Calendar#EXTENDED_YEAR} field.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public final static int EXTENDED_YEAR_FIELD = 20;
 
@@ -293,6 +297,7 @@ public abstract class DateFormat extends UFormat {
      * FieldPosition selector for 'g' field alignment,
      * corresponding to the {@link Calendar#JULIAN_DAY} field.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public final static int JULIAN_DAY_FIELD = 21;
 
@@ -300,6 +305,7 @@ public abstract class DateFormat extends UFormat {
      * FieldPosition selector for 'A' field alignment,
      * corresponding to the {@link Calendar#MILLISECONDS_IN_DAY} field.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public final static int MILLISECONDS_IN_DAY_FIELD = 22;
 
@@ -308,6 +314,7 @@ public abstract class DateFormat extends UFormat {
      * corresponding to the {@link Calendar#ZONE_OFFSET} and
      * {@link Calendar#DST_OFFSET} fields.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public final static int TIMEZONE_RFC_FIELD = 23;
 
@@ -315,6 +322,7 @@ public abstract class DateFormat extends UFormat {
      * Number of FieldPosition selectors for DateFormat.
      * Valid selectors range from 0 to FIELD_COUNT-1.
      * @draft ICU 3.0
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public final static int FIELD_COUNT = 24; // must == DateFormatSymbols.patternChars.length()
 

@@ -14,46 +14,57 @@ import java.text.ParseException;
  *
  * @author Ram Viswanadha
  * @draft ICU 2.8
+ * @deprecated This is a draft API and might change in a future release of ICU.
  */
 public class StringPrepParseException extends ParseException {
     /**
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int INVALID_CHAR_FOUND      = 0;
     /**
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int ILLEGAL_CHAR_FOUND      = 1;
     /**
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int PROHIBITED_ERROR        = 2;
     /**
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int UNASSIGNED_ERROR        = 3;
     /**
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int CHECK_BIDI_ERROR        = 4;
     /**
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int STD3_ASCII_RULES_ERROR  = 5;
     /**
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int ACE_PREFIX_ERROR        = 6;
     /**
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int VERIFICATION_ERROR      = 7;
     /**
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int LABEL_TOO_LONG_ERROR    = 8;
     /**
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int BUFFER_OVERFLOW_ERROR   = 9;
     
@@ -64,6 +75,7 @@ public class StringPrepParseException extends ParseException {
      * @param message A string describing the type of error that occurred
      * @param error   The error that has occurred
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public StringPrepParseException(String message,int error){
         super(message, -1);
@@ -80,6 +92,7 @@ public class StringPrepParseException extends ParseException {
      * @param rules   The input rules string 
      * @param pos     The position of error in the rules string
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public StringPrepParseException(String message,int error, String rules, int pos){
         super(message, -1);
@@ -100,6 +113,7 @@ public class StringPrepParseException extends ParseException {
      *                   is -1. It will be set to 0 if the code populating this struct is not
      *                   using line numbers.
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public StringPrepParseException(String message, int error, String rules, int pos, int lineNumber){
         super(message, -1);
@@ -115,6 +129,7 @@ public class StringPrepParseException extends ParseException {
      * @param other The exception that this object should be compared to
      * @return true if the objects are equal, false if unequal
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public boolean equals(Object other){
         if(!(other instanceof StringPrepParseException)){
@@ -128,6 +143,7 @@ public class StringPrepParseException extends ParseException {
      * 
      * @return String
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String toString(){
         StringBuffer buf = new StringBuffer();
@@ -149,6 +165,7 @@ public class StringPrepParseException extends ParseException {
      * is -1. It will be set to 0 if the code populating this struct is not
      * using line numbers.
      * @draft ICU 2.8  
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     private int line;
 
@@ -157,6 +174,7 @@ public class StringPrepParseException extends ParseException {
      * Textual context before the error.  Null-terminated.
      * May be the empty string if not implemented by parser.
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     private StringBuffer preContext = new StringBuffer();
 
@@ -164,6 +182,7 @@ public class StringPrepParseException extends ParseException {
      * Textual context after the error.  Null-terminated.
      * May be the empty string if not implemented by parser.
      * @draft ICU 2.8   
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     private StringBuffer postContext =  new StringBuffer();
     

@@ -75,6 +75,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * Default constructor.  (For invocation by subclass constructors,
      * typically implicit.)
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public TimeZone() {
     }
@@ -130,6 +131,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * @see Calendar#DST_OFFSET
      * @see #getOffset(long, boolean, int[])
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public int getOffset(long date) {
 	int[] result = new int[2];
@@ -157,6 +159,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      * zero; otherwise it is a positive value, typically one hour.
      *
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public void getOffset(long date, boolean local, int[] offsets) {
         offsets[0] = getRawOffset();
@@ -474,6 +477,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
      *
      * @return the amount of saving time in milliseconds
      * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public int getDSTSavings() {
 	if (useDaylightTime()) {

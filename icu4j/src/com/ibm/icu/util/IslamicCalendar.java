@@ -62,13 +62,14 @@ import java.util.Locale;
  * is called, an approximation of the true lunar calendar will be used.
  * <p>
  * Note This API has not been promoted to @stable and instead has been left
- * as @draft ICU 2.4.  It may yet change or be removed in a future release.
+ * as @draft ICU 2.8.  It may yet change or be removed in a future release.
  *
  * @see com.ibm.icu.util.GregorianCalendar
  *
  * @author Laura Werner
  * @author Alan Liu
- * @draft ICU 2.4
+ * @draft ICU 2.8
+ * @deprecated This is a draft API and might change in a future release of ICU.
  */
 public class IslamicCalendar extends Calendar {
 
@@ -80,73 +81,85 @@ public class IslamicCalendar extends Calendar {
     
     /**
      * Constant for Muharram, the 1st month of the Islamic year. 
-     * @draft ICU 2.4 
+     * @draft ICU 2.8 
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int MUHARRAM = 0;
 
     /**
      * Constant for Safar, the 2nd month of the Islamic year. 
-     * @draft ICU 2.4 
+     * @draft ICU 2.8 
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int SAFAR = 1;
 
     /**
      * Constant for Rabi' al-awwal (or Rabi' I), the 3rd month of the Islamic year. 
-     * @draft ICU 2.4 
+     * @draft ICU 2.8 
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int RABI_1 = 2;
 
     /**
      * Constant for Rabi' al-thani or (Rabi' II), the 4th month of the Islamic year. 
-     * @draft ICU 2.4 
+     * @draft ICU 2.8 
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int RABI_2 = 3;
 
     /**
      * Constant for Jumada al-awwal or (Jumada I), the 5th month of the Islamic year. 
-     * @draft ICU 2.4 
+     * @draft ICU 2.8 
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int JUMADA_1 = 4;
 
     /**
      * Constant for Jumada al-thani or (Jumada II), the 6th month of the Islamic year. 
-     * @draft ICU 2.4 
+     * @draft ICU 2.8 
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int JUMADA_2 = 5;
 
     /**
      * Constant for Rajab, the 7th month of the Islamic year. 
-     * @draft ICU 2.4 
+     * @draft ICU 2.8 
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int RAJAB = 6;
 
     /**
      * Constant for Sha'ban, the 8th month of the Islamic year. 
-     * @draft ICU 2.4 
+     * @draft ICU 2.8 
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int SHABAN = 7;
 
     /**
      * Constant for Ramadan, the 9th month of the Islamic year. 
-     * @draft ICU 2.4 
+     * @draft ICU 2.8 
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int RAMADAN = 8;
 
     /**
      * Constant for Shawwal, the 10th month of the Islamic year. 
-     * @draft ICU 2.4 
+     * @draft ICU 2.8 
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int SHAWWAL = 9;
 
     /**
      * Constant for Dhu al-Qi'dah, the 11th month of the Islamic year. 
-     * @draft ICU 2.4 
+     * @draft ICU 2.8 
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int DHU_AL_QIDAH = 10;
 
     /**
      * Constant for Dhu al-Hijjah, the 12th month of the Islamic year. 
-     * @draft ICU 2.4 
+     * @draft ICU 2.8 
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int DHU_AL_HIJJAH = 11;
 
@@ -160,7 +173,8 @@ public class IslamicCalendar extends Calendar {
     /**
      * Constructs a default <code>IslamicCalendar</code> using the current time
      * in the default time zone with the default locale.
-     * @draft ICU 2.4
+     * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public IslamicCalendar()
     {
@@ -171,7 +185,8 @@ public class IslamicCalendar extends Calendar {
      * Constructs an <code>IslamicCalendar</code> based on the current time
      * in the given time zone with the default locale.
      * @param zone the given time zone.
-     * @draft ICU 2.4
+     * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public IslamicCalendar(TimeZone zone)
     {
@@ -183,7 +198,8 @@ public class IslamicCalendar extends Calendar {
      * in the default time zone with the given locale.
      *
      * @param aLocale the given locale.
-     * @draft ICU 2.4
+     * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public IslamicCalendar(Locale aLocale)
     {
@@ -196,7 +212,8 @@ public class IslamicCalendar extends Calendar {
      *
      * @param zone the given time zone.
      * @param aLocale the given locale.
-     * @draft ICU 2.4
+     * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public IslamicCalendar(TimeZone zone, Locale aLocale)
     {
@@ -209,7 +226,8 @@ public class IslamicCalendar extends Calendar {
      * in the default time zone with the default locale.
      *
      * @param date      The date to which the new calendar is set.
-     * @draft ICU 2.4
+     * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public IslamicCalendar(Date date) {
         super(TimeZone.getDefault(), Locale.getDefault());
@@ -224,7 +242,8 @@ public class IslamicCalendar extends Calendar {
      * @param month the value used to set the {@link #MONTH MONTH} time field in the calendar.
      *              Note that the month value is 0-based. e.g., 0 for Muharram.
      * @param date the value used to set the {@link #DATE DATE} time field in the calendar.
-     * @draft ICU 2.4
+     * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public IslamicCalendar(int year, int month, int date)
     {
@@ -248,7 +267,8 @@ public class IslamicCalendar extends Calendar {
      *              in the calendar.
      * @param second the value used to set the {@link #SECOND SECOND} time field
      *              in the calendar.
-     * @draft ICU 2.4
+     * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public IslamicCalendar(int year, int month, int date, int hour,
                              int minute, int second)
@@ -268,7 +288,8 @@ public class IslamicCalendar extends Calendar {
      *
      * @param beCivil   <code>true</code> to use the civil calendar,
      *                  <code>false</code> to use the astronomical calendar.
-     * @draft ICU 2.4
+     * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public void setCivil(boolean beCivil)
     {
@@ -286,7 +307,8 @@ public class IslamicCalendar extends Calendar {
      * Returns <code>true</code> if this object is using the fixed-cycle civil
      * calendar, or <code>false</code> if using the religious, astronomical
      * calendar.
-     * @draft ICU 2.4
+     * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public boolean isCivil() {
         return civil;
@@ -324,7 +346,8 @@ public class IslamicCalendar extends Calendar {
     };
 
     /**
-     * @draft ICU 2.4
+     * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     protected int handleGetLimit(int field, int limitType) {
         return LIMITS[field][limitType];
@@ -486,7 +509,8 @@ public class IslamicCalendar extends Calendar {
      *
      * @param extendedYear  The hijri year
      * @param month The hijri month, 0-based
-     * @draft ICU 2.4
+     * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     protected int handleGetMonthLength(int extendedYear, int month) {
 
@@ -506,7 +530,8 @@ public class IslamicCalendar extends Calendar {
 
     /**
      * Return the number of days in the given Islamic year
-     * @draft ICU 2.4
+     * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     protected int handleGetYearLength(int extendedYear) {
         if (civil) {
@@ -523,7 +548,8 @@ public class IslamicCalendar extends Calendar {
 
     // Return JD of start of given month/year
     /**
-     * @draft ICU 2.4
+     * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     protected int handleComputeMonthStart(int eyear, int month, boolean useMonth) {
         return (int) monthStart(eyear, month) + 1948439;
@@ -534,7 +560,8 @@ public class IslamicCalendar extends Calendar {
     //-------------------------------------------------------------------------
 
     /**
-     * @draft ICU 2.4
+     * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     protected int handleGetExtendedYear() {
         int year;
@@ -560,7 +587,8 @@ public class IslamicCalendar extends Calendar {
      * The DAY_OF_WEEK and DOW_LOCAL fields are already set when this
      * method is called. The getGregorianXxx() methods return Gregorian
      * calendar equivalents for the given Julian day.
-     * @draft ICU 2.4
+     * @draft ICU 2.8
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     protected void handleComputeFields(int julianDay) {
         int year, month, dayOfMonth, dayOfYear;
