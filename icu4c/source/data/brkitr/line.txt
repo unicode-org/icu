@@ -216,6 +216,6 @@ $CM* $ALcm+;    # The $CM* is from rule 7C, and unattached CM is treated as AL
 #            Note that the initial .. is to back over both halves of a CR/LF sequence
 #            at the current position.
 #
-
+!!reverse;
 !. . [^$LF $CR $NL $BK]* [$BK $CR $LF $NL];
 #!.*;

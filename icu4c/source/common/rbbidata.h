@@ -54,6 +54,10 @@ struct RBBIDataHeader {
     uint32_t         fFTableLen;
     uint32_t         fRTable;      // Offset to the reverse state transition table.
     uint32_t         fRTableLen;
+    uint32_t         fSFTable;     // safe point forward transition table
+    uint32_t         fSFTableLen;
+    uint32_t         fSRTable;     // safe point reverse transition table
+    uint32_t         fSRTableLen;
     uint32_t         fTrie;        // Offset to Trie data for character categories
     uint32_t         fTrieLen;
     uint32_t         fRuleSource;  // Offset to the source for for the break
@@ -110,6 +114,7 @@ public:
     int32_t               hashCode();
     const UnicodeString  &getRuleSourceString();
     void                  printData();
+    void                  printTable(const char *heading, const RBBIStateTable *table);
 
     //
     //  Pointers to items within the data
@@ -117,6 +122,8 @@ public:
     const RBBIDataHeader     *fHeader;
     const RBBIStateTable     *fForwardTable;
     const RBBIStateTable     *fReverseTable;
+    const RBBIStateTable     *fSafeFwdTable;
+    const RBBIStateTable     *fSafeRevTable;
     const UChar              *fRuleSource;
 
     UTrie               fTrie;

@@ -319,10 +319,12 @@ UBool RBBIRuleScanner::doParseActions(EParseAction action)
         // The ';' that terminates an expression really just functions as a '|' with
         //   a low operator prededence.
         //
-        // Forward and reverse rules are collected separately.  Or this rule into
-        //  the appropriate group of them.
+        // Each of the four sets of rules are collected separately.  
+        //  (Forward, Reverse, ForwardSafe, ReverseSafe)
+        //  OR this rule into the appropriate group of them.
         //
-        RBBINode **destRules = (fReverseRule? &fRB->fReverseTree : &fRB->fForwardTree);
+        // RBBINode **destRules = (fReverseRule? &fRB->fReverseTree : &fRB->fForwardTree); TODO: delete
+        RBBINode **destRules = (fReverseRule? &fRB->fReverseTree : fRB->fDefaultTree);
 
         if (*destRules != NULL) {
             // This is not the first rule encounted.
@@ -471,6 +473,14 @@ UBool RBBIRuleScanner::doParseActions(EParseAction action)
                 fRB->fChainRules = TRUE;
             } else if (opt == "LBCMNoChain") {
                 fRB->fLBCMNoChain = TRUE;
+            } else if (opt == "forward") {
+                fRB->fDefaultTree = &fRB->fForwardTree;
+            } else if (opt == "reverse") {
+                fRB->fDefaultTree = &fRB->fReverseTree;
+            } else if (opt == "safe_forward") {
+                fRB->fDefaultTree = &fRB->fSafeFwdTree;
+            } else if (opt == "safe_reverse") {
+                fRB->fDefaultTree = &fRB->fSafeRevTree;
             } else {
                 error(U_BRK_UNRECOGNIZED_OPTION);
             }
@@ -1025,6 +1035,10 @@ void RBBIRuleScanner::parse() {
         fRB->fForwardTree->printTree();
         RBBIDebugPrintf("\nCompleted Reverse Rules Parse Tree...\n");
         fRB->fReverseTree->printTree();
+        RBBIDebugPrintf("\nCompleted Safe Point Forward Rules Parse Tree...\n");
+        fRB->fSafeFwdTree->printTree();
+        RBBIDebugPrintf("\nCompleted Safe Point Reverse Rules Parse Tree...\n");
+        fRB->fSafeRevTree->printTree();
     }
 
 }
