@@ -11,6 +11,14 @@
 #include "uvector.h"
 #include "unicode/unistr.h"
 
+// For UVector of UnicodeRange* objects
+U_CDECL_BEGIN
+static void U_CALLCONV
+UnicodeRange_deleter(void* e) {
+    delete (UnicodeRange*) e;
+}
+U_CDECL_END
+
 U_NAMESPACE_BEGIN
 
 UnicodeRange::UnicodeRange(UChar theStart, int32_t theLength) {
@@ -74,7 +82,7 @@ UnicodeRange::largestUnusedSubrange(const UnicodeString& str, UErrorCode &status
     if (U_FAILURE(status)) {
         return NULL;
     }
-    v.setDeleter(UnicodeRange::deleter);
+    v.setDeleter(UnicodeRange_deleter);
     v.addElement(clone(), status);
     for (int32_t i=0; i<n; ++i) {
         UChar c = str.charAt(i);
@@ -107,10 +115,6 @@ UnicodeRange::largestUnusedSubrange(const UnicodeString& str, UErrorCode &status
     return bestRange;
 }
 
-// For UVector of UnicodeRange* objects
-void U_CALLCONV UnicodeRange::deleter(void* e) {
-    delete (UnicodeRange*) e;
-}
 
 U_NAMESPACE_END
 

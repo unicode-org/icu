@@ -70,11 +70,6 @@ public:
      */
     UnicodeRange* largestUnusedSubrange(const UnicodeString& str, UErrorCode &status) const;
 
-private:
-
-    // For UVector of UnicodeRange* objects
-    static void U_CALLCONV deleter(void*);
-
 };
 
 U_NAMESPACE_END

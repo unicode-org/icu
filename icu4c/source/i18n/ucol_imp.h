@@ -601,6 +601,8 @@ typedef struct {
 #define UCOL_INV_OFFSETMASK 0x000FFFFF
 #define UCOL_INV_SHIFTVALUE 20
 
+U_CDECL_BEGIN
+
 typedef struct {
   uint32_t byteSize;
   uint32_t tableSize;
@@ -678,6 +680,8 @@ struct UCollator {
     UChar          minUnsafeCP;        /* Smallest unsafe Code Point. */
     UChar          minContrEndCP;      /* Smallest code point at end of a contraction */
 };
+
+U_CDECL_END
 
 /* various internal functions */
 
