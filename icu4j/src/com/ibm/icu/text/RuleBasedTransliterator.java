@@ -181,9 +181,12 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.5 $ $Date: 1999/12/22 01:40:54 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.6 $ $Date: 2000/01/04 21:43:57 $
  *
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.6  2000/01/04 21:43:57  Alan
+ * Add rule indexing, and move masking check to TransliterationRuleSet.
+ *
  * Revision 1.5  1999/12/22 01:40:54  Alan
  * Consolidate rule pattern anteContext, key, and postContext into one string.
  *
@@ -632,25 +635,14 @@ public class RuleBasedTransliterator extends Transliterator {
                 i = limit + 1;
             }
 
-            // Check for masking, O(n^2).
-            // Build time, no checking  : 3400 ms
-            // Build time, with checking: 8200 ms
-            if (CHECK_MASKING) {
-                n = data.ruleSet.size();
-                for (i=0; i<n-1; ++i) {
-                    TransliterationRule r1 = data.ruleSet.elementAt(i);
-                    // Earlier rules must not mask later ones
-                    for (int j=i+1; j<n; ++j) {
-                        TransliterationRule r2 = data.ruleSet.elementAt(j);
-                        if (r1.masks(r2)) {
-                            if (errors == null) {
-                                errors = new StringBuffer();
-                            } else {
-                                errors.append("\n");
-                            }
-                            errors.append("Rule " + r1 + " masks " + r2);
-                        }
-                    }
+            // Index the rules
+            try {
+                data.ruleSet.freeze(data.setVariables);
+            } catch (IllegalArgumentException e) {
+                if (errors == null) {
+                    errors = new StringBuffer(e.getMessage());
+                } else {
+                    errors.append("\n").append(e.getMessage());
                 }
             }
 

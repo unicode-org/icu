@@ -15,9 +15,12 @@ import java.util.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.4 $ $Date: 1999/12/22 01:40:54 $
+ * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.5 $ $Date: 2000/01/04 21:43:57 $
  *
  * $Log: TransliterationRuleSet.java,v $
+ * Revision 1.5  2000/01/04 21:43:57  Alan
+ * Add rule indexing, and move masking check to TransliterationRuleSet.
+ *
  * Revision 1.4  1999/12/22 01:40:54  Alan
  * Consolidate rule pattern anteContext, key, and postContext into one string.
  *
@@ -29,29 +32,30 @@ import java.util.*;
  *
  */
 class TransliterationRuleSet {
-    /* Note: There was an old implementation that indexed by first letter of
-     * key.  Problem with this is that key may not have a meaningful first
-     * letter; e.g., {Lu}>*.  One solution is to keep a separate vector of all
-     * rules whose intial key letter is a category variable.  However, the
-     * problem is that they must be kept in order with respect to other rules.
-     * One solution -- add a sequence number to each rule.  Do the usual
-     * first-letter lookup, and also a lookup from the spare bin with rules like
-     * {Lu}>*.  Take the lower sequence number.  This seems complex and not
-     * worth the trouble, but we may revisit this later.  For documentation (or
-     * possible resurrection) the old code is included below, commented out
-     * with the remark "// OLD INDEXED IMPLEMENTATION".  Under the old
-     * implementation, <code>rules</code> is a Hashtable, not a Vector.
-     */
-
     /**
-     * Vector of rules, in the order added.
+     * Vector of rules, in the order added.  This is only used while the rule
+     * set is getting built.  After that, freeze() reorders and indexes the
+     * rules, and this Vector is freed.
      */
-    private Vector rules;
+    private Vector ruleVector;
 
     /**
      * Length of the longest preceding context
      */
     private int maxContextLength;
+
+    /**
+     * Sorted and indexed table of rules.  This is created by freeze() from
+     * the rules in ruleVector.
+     */
+    private TransliterationRule[] rules;
+
+    /**
+     * Index table.  For text having a first character c, compute x = c&0xFF.
+     * Now use rules[index[x]..index[x+1]-1].  This index table is created by
+     * freeze().
+     */
+    private int[] index;
 
     private static final String COPYRIGHT =
         "\u00A9 IBM Corporation 1999. All rights reserved.";
@@ -60,7 +64,7 @@ class TransliterationRuleSet {
      * Construct a new empty rule set.
      */
     public TransliterationRuleSet() {
-        rules = new Vector();
+        ruleVector = new Vector();
         maxContextLength = 0;
     }
 
@@ -78,19 +82,106 @@ class TransliterationRuleSet {
      * @param rule the rule to add
      */
     public void addRule(TransliterationRule rule) {
-        rules.addElement(rule);
+        if (ruleVector == null) {
+            throw new IllegalArgumentException("Cannot add rules after freezing");
+        }
+        ruleVector.addElement(rule);
         int len;
         if ((len = rule.getAnteContextLength()) > maxContextLength) {
             maxContextLength = len;
         }
     }
 
-    public final int size() {
-        return rules.size();
-    }
+    /**
+     * Close this rule set to further additions, check it for masked rules,
+     * and index it to optimize performance.  Once this method is called,
+     * addRule() can no longer be called.
+     * @exception IllegalArgumentException if some rules are masked
+     */
+    public void freeze(Dictionary variables) {
+        /* Construct the rule array and index table.  We reorder the
+         * rules by sorting them into 256 bins.  Each bin contains all
+         * rules matching the index value for that bin.  A rule
+         * matches an index value if string whose first key character
+         * has a low byte equal to the index value can match the rule.
+         *
+         * Each bin contains zero or more rules, in the same order
+         * they were found originally.  However, the total rules in
+         * the bins may exceed the number in the original vector,
+         * since rules that have a variable as their first key
+         * character will generally fall into more than one bin.
+         *
+         * That is, each bin contains all rules that either have that
+         * first index value as their first key character, or have
+         * a set containing the index value as their first character.
+         */
+        int n = ruleVector.size();
+        index = new int[257]; // [sic]
+        Vector v = new Vector(2*n); // heuristic; adjust as needed
 
-    public final TransliterationRule elementAt(int i) {
-        return (TransliterationRule) rules.elementAt(i);
+        /* Precompute the index values.  This saves a LOT of time.
+         */
+        int[] indexValue = new int[n];
+        for (int j=0; j<n; ++j) {
+            TransliterationRule r = (TransliterationRule) ruleVector.elementAt(j);
+            indexValue[j] = r.getIndexValue(variables);
+        }
+        for (int x=0; x<256; ++x) {
+            index[x] = v.size();
+            for (int j=0; j<n; ++j) {
+                if (indexValue[j] >= 0) {
+                    if (indexValue[j] == x) {
+                        v.addElement(ruleVector.elementAt(j));
+                    }
+                } else {
+                    // If the indexValue is < 0, then the first key character is
+                    // a set, and we must use the more time-consuming
+                    // matchesIndexValue check.  In practice this happens
+                    // rarely, so we seldom tread this code path.
+                    TransliterationRule r = (TransliterationRule) ruleVector.elementAt(j);
+                    if (r.matchesIndexValue(x, variables)) {
+                        v.addElement(r);
+                    }
+                }
+            }
+        }
+        index[256] = v.size();
+
+        /* Freeze things into an array.
+         */
+        rules = new TransliterationRule[v.size()];
+        v.copyInto(rules);
+        ruleVector = null;
+
+        StringBuffer errors = null;
+
+        /* Check for masking.  This is MUCH faster than our old check,
+         * which was each rule against each following rule, since we
+         * only have to check for masking within each bin now.  It's
+         * 256*O(n2^2) instead of O(n1^2), where n1 is the total rule
+         * count, and n2 is the per-bin rule count.  But n2<<n1, so
+         * it's a big win.
+         */
+        for (int x=0; x<256; ++x) {
+            for (int j=index[x]; j<index[x+1]-1; ++j) {
+                TransliterationRule r1 = rules[j];
+                for (int k=j+1; k<index[x+1]; ++k) {
+                    TransliterationRule r2 = rules[k];
+                    if (r1.masks(r2)) {
+                        if (errors == null) {
+                            errors = new StringBuffer();
+                        } else {
+                            errors.append("\n");
+                        }
+                        errors.append("Rule " + r1 + " masks " + r2);
+                    }
+                }
+            }
+        }
+
+        if (errors != null) {
+            throw new IllegalArgumentException(errors.toString());
+        }
     }
 
     /**
@@ -118,15 +209,21 @@ class TransliterationRuleSet {
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
      * @return the matching rule, or null if none found.
+
      */
     public TransliterationRule findMatch(String text, int start, int limit,
                                          StringBuffer result, int cursor,
                                          Dictionary variables,
                                          UnicodeFilter filter) {
-        for (Enumeration e = rules.elements(); e.hasMoreElements(); ) {
-            TransliterationRule rule = (TransliterationRule) e.nextElement();
-            if (rule.matches(text, start, limit, result, cursor, variables, filter)) {
-                return rule;
+        /* We only need to check our indexed bin of the rule table,
+         * based on the low byte of the first key character.
+         */
+        int rlen = result.length();
+        int x = 0xFF & (cursor < rlen ? result.charAt(cursor)
+                        : text.charAt(cursor - rlen + start));
+        for (int i=index[x]; i<index[x+1]; ++i) {
+            if (rules[i].matches(text, start, limit, result, cursor, variables, filter)) {
+                return rules[i];
             }
         }
         return null;
@@ -154,10 +251,13 @@ class TransliterationRuleSet {
                                          int cursor,
                                          Dictionary variables,
                                          UnicodeFilter filter) {
-        for (Enumeration e = rules.elements(); e.hasMoreElements(); ) {
-            TransliterationRule rule = (TransliterationRule) e.nextElement();
-            if (rule.matches(text, start, limit, cursor, variables, filter)) {
-                return rule;
+        /* We only need to check our indexed bin of the rule table,
+         * based on the low byte of the first key character.
+         */
+        int x = text.charAt(cursor) & 0xFF;
+        for (int i=index[x]; i<index[x+1]; ++i) {
+            if (rules[i].matches(text, start, limit, cursor, variables, filter)) {
+                return rules[i];
             }
         }
         return null;
@@ -195,14 +295,17 @@ class TransliterationRuleSet {
                                                     Dictionary variables,
                                                     boolean partial[],
                                                     UnicodeFilter filter) {
+        /* We only need to check our indexed bin of the rule table,
+         * based on the low byte of the first key character.
+         */
         partial[0] = false;
-        for (Enumeration e = rules.elements(); e.hasMoreElements(); ) {
-            TransliterationRule rule = (TransliterationRule) e.nextElement();
-            int match = rule.getMatchDegree(text, start, limit, cursor,
-                                            variables, filter);
+        int x = text.charAt(cursor) & 0xFF;
+        for (int i=index[x]; i<index[x+1]; ++i) {
+            int match = rules[i].getMatchDegree(text, start, limit, cursor,
+                                                variables, filter);
             switch (match) {
             case TransliterationRule.FULL_MATCH:
-                return rule;
+                return rules[i];
             case TransliterationRule.PARTIAL_MATCH:
                 partial[0] = true;
                 return null;

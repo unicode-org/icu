@@ -21,9 +21,12 @@ import java.util.Dictionary;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.4 $ $Date: 1999/12/22 01:40:54 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.5 $ $Date: 2000/01/04 21:43:57 $
  *
  * $Log: TransliterationRule.java,v $
+ * Revision 1.5  2000/01/04 21:43:57  Alan
+ * Add rule indexing, and move masking check to TransliterationRuleSet.
+ *
  * Revision 1.4  1999/12/22 01:40:54  Alan
  * Consolidate rule pattern anteContext, key, and postContext into one string.
  *
@@ -162,6 +165,32 @@ class TransliterationRule {
      */
     public int getAnteContextLength() {
         return anteContextLength;
+    }
+
+    /**
+     * Internal method.  Returns 8-bit index value for this rule.
+     * This is the low byte of the first character of the key,
+     * unless the first character of the key is a set.  If it's a
+     * set, the index value is -1.
+     */
+    final int getIndexValue(Dictionary variables) {
+        char c = pattern.charAt(anteContextLength);
+        return variables.get(new Character(c)) == null ? (c & 0xFF) : -1;
+    }
+
+    /**
+     * Internal method.  Returns true if this rule matches the given
+     * index value.  The index value is an 8-bit integer, 0..255,
+     * representing the low byte of the first character of the key.
+     * It matches this rule if it matches the first character of the
+     * key, or if the first character of the key is a set, and the set
+     * contains any character with a low byte equal to the index
+     * value.
+     */
+    final boolean matchesIndexValue(int v, Dictionary variables) {
+        char c = pattern.charAt(anteContextLength);
+        UnicodeSet set = (UnicodeSet) variables.get(new Character(c));
+        return set == null ? (c & 0xFF) == v : set.containsIndexValue(v);
     }
 
     /**
@@ -449,8 +478,8 @@ class TransliterationRule {
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
      */
-    protected static boolean charMatches(char keyChar, char textChar,
-                                         Dictionary variables, UnicodeFilter filter) {
+    protected static final boolean charMatches(char keyChar, char textChar,
+                                               Dictionary variables, UnicodeFilter filter) {
         UnicodeSet set = null;
         return (filter == null || filter.isIn(textChar)) &&
             ((set = (UnicodeSet) variables.get(new Character(keyChar)))
