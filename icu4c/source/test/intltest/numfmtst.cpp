@@ -54,14 +54,13 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
 
         CASE(14,TestCurrencyObject);
         CASE(15,TestCurrencyPatterns);
-
         CASE(16,TestDigitList);
         CASE(17,TestWhiteSpaceParsing);
         CASE(18,TestComplexCurrency);
-
         CASE(19,TestRegCurrency);
-
         CASE(20,TestSymbolsWithBadLocale);
+        CASE(21,TestAdoptDecimalFormatSymbols);
+
         default: name = ""; break;
     }
 }
@@ -1240,6 +1239,81 @@ void NumberFormatTest::TestSymbolsWithBadLocale(void) {
     status = U_ZERO_ERROR;
     Locale::setDefault(locDefault, status);
     logln("Current locale is %s", Locale::getDefault().getName());
+}
+
+/**
+ * Check that adoptDecimalFormatSymbols and setDecimalFormatSymbols
+ * behave the same, except for memory ownership semantics. (No
+ * version of this test on Java, since Java has only one method.)
+ */
+void NumberFormatTest::TestAdoptDecimalFormatSymbols(void) {
+    UErrorCode ec = U_ZERO_ERROR;
+    DecimalFormatSymbols *sym = new DecimalFormatSymbols(Locale::getUS(), ec);
+    if (U_FAILURE(ec)) {
+        errln("Fail: DecimalFormatSymbols constructor");
+        delete sym;
+        return;
+    }
+    UnicodeString pat(" #,##0.00");
+    pat.insert(0, (UChar)0x00A4);
+    DecimalFormat fmt(pat, sym, ec);
+    if (U_FAILURE(ec)) {
+        errln("Fail: DecimalFormat constructor");
+        return;
+    }
+
+    UnicodeString str;
+    fmt.format(2350.75, str);
+    if (str == "$ 2,350.75") {
+        logln(str);
+    } else {
+        errln("Fail: " + str + ", expected $ 2,350.75");
+    }
+
+    sym = new DecimalFormatSymbols(Locale::getUS(), ec);
+    if (U_FAILURE(ec)) {
+        errln("Fail: DecimalFormatSymbols constructor");
+        delete sym;
+        return;
+    }
+    sym->setSymbol(DecimalFormatSymbols::kCurrencySymbol, "Q");
+    fmt.adoptDecimalFormatSymbols(sym);
+
+    str.truncate(0);
+    fmt.format(2350.75, str);
+    if (str == "Q 2,350.75") {
+        logln(str);
+    } else {
+        errln("Fail: adoptDecimalFormatSymbols -> " + str + ", expected Q 2,350.75");
+    }
+
+    sym = new DecimalFormatSymbols(Locale::getUS(), ec);
+    if (U_FAILURE(ec)) {
+        errln("Fail: DecimalFormatSymbols constructor");
+        delete sym;
+        return;
+    }
+    DecimalFormat fmt2(pat, sym, ec);
+    if (U_FAILURE(ec)) {
+        errln("Fail: DecimalFormat constructor");
+        return;
+    }
+    
+    DecimalFormatSymbols sym2(Locale::getUS(), ec);
+    if (U_FAILURE(ec)) {
+        errln("Fail: DecimalFormatSymbols constructor");
+        return;
+    }
+    sym2.setSymbol(DecimalFormatSymbols::kCurrencySymbol, "Q");
+    fmt2.setDecimalFormatSymbols(sym2);
+
+    str.truncate(0);
+    fmt2.format(2350.75, str);
+    if (str == "Q 2,350.75") {
+        logln(str);
+    } else {
+        errln("Fail: setDecimalFormatSymbols -> " + str + ", expected Q 2,350.75");
+    }
 }
 
 //----------------------------------------------------------------------
