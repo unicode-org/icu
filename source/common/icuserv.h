@@ -426,12 +426,13 @@ class U_COMMON_API ICUService : public ICUNotifier {
      */
     const UnicodeString name;
 
+ private:
+
     /**
      * single lock used by this service.
      */
     UMTX lock;
 
- private:
     /**
      * Timestamp so iterators can be fail-fast.
      */
