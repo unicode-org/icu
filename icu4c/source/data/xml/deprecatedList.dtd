@@ -1,0 +1,18 @@
+<!--
+    Copyright (c) 2004 International Business Machines Corporation and others. All rights reserved.
+
+    DTD for the ICU deprecated-locales list.
+-->
+
+<!ELEMENT deprecatedList ( deprecates* ) >
+<!ATTLIST deprecatedList version CDATA #FIXED "1.0" >
+
+<!ELEMENT deprecates ( alias* ) >
+<!ATTLIST deprecates type NMTOKEN #REQUIRED >
+
+<!ELEMENT alias EMPTY >
+<!ATTLIST alias from CDATA #REQUIRED >
+<!ATTLIST alias to CDATA #REQUIRED >
+<!ATTLIST alias xpath CDATA #IMPLIED >
+
+

@@ -64,6 +64,7 @@ icu4c/source/data/xml/collation/zh_Hant.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/zh_MO.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/zh_TW.xml svneol=native#text/xml
 icu4c/source/data/xml/collation/zh_TW_STROKE.xml svneol=native#text/xml
+icu4c/source/data/xml/deprecatedList.xml svneol=native#text/xml
 icu4c/source/data/xml/main/aa.xml svneol=native#text/xml
 icu4c/source/data/xml/main/aa_DJ.xml svneol=native#text/xml
 icu4c/source/data/xml/main/aa_ER.xml svneol=native#text/xml
