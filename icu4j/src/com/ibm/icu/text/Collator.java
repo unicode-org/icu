@@ -401,10 +401,10 @@ public abstract class Collator implements Comparator, Cloneable
                 shim = (ServiceShim)cls.newInstance();
             }
             catch (Exception e) {
-		///CLOVER:OFF
+                ///CLOVER:OFF
                 e.printStackTrace();
                 throw new RuntimeException(e.getMessage());
-		///CLOVER:ON
+                ///CLOVER:ON
             }
         }
         return shim;
@@ -424,18 +424,8 @@ public abstract class Collator implements Comparator, Cloneable
      * @draft ICU 3.0
      */
     public static final Collator getInstance(ULocale locale) {
-	/*
-        Collator coll = null;
-        if (shim == null) {
-            coll = new RuleBasedCollator(locale);
-        } else {
-            // TODO: If the shim creates the collator, it is responsible
-            // for calling setLocale() on the new object.
-            coll = shim.getInstance(locale);
-        }
-        return coll;
-	*/
-	return getShim().getInstance(locale);
+        // fetching from service cache is faster than instantiation
+        return getShim().getInstance(locale);
     }
 
     /**
@@ -862,19 +852,19 @@ public abstract class Collator implements Comparator, Cloneable
      */
     public abstract void setVariableTop(int varTop);
 
-	/** Get the version of this collator object.
-	 *  @return the version object associated with this collator
-	 * @draft ICU 2.8
-	 */
-	public abstract VersionInfo getVersion();
-	
-	/** Get the UCA version of this collator object.
-	 *  @return the version object associated with this collator
-	 * @draft ICU 2.8
-	 */
-	public abstract VersionInfo getUCAVersion();
-	
-	// protected constructor -------------------------------------------------
+        /** Get the version of this collator object.
+         *  @return the version object associated with this collator
+         * @draft ICU 2.8
+         */
+        public abstract VersionInfo getVersion();
+        
+        /** Get the UCA version of this collator object.
+         *  @return the version object associated with this collator
+         * @draft ICU 2.8
+         */
+        public abstract VersionInfo getUCAVersion();
+        
+        // protected constructor -------------------------------------------------
 
     /**
      * Empty default constructor to make javadocs happy

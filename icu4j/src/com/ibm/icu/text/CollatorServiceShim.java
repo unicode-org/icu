@@ -23,9 +23,10 @@ import com.ibm.icu.impl.ICUResourceBundle;
 final class CollatorServiceShim extends Collator.ServiceShim {
 
     Collator getInstance(ULocale locale) {
-        if (service.isDefault()) {
-            return new RuleBasedCollator(locale);
-        }
+	// use service cache, it's faster than instantiation
+//          if (service.isDefault()) {
+//              return new RuleBasedCollator(locale);
+//          }
 
         try {
             ULocale[] actualLoc = new ULocale[1];
