@@ -38,6 +38,84 @@ addUTransTest(TestNode** root) {
     TEST(TestRegisterUnregister);
 }
 
+/*------------------------------------------------------------------
+ * Replaceable glue
+ *
+ * To test the Replaceable glue we have to dummy up a C-based
+ * Replaceable callback.  This code is for testing purposes only.
+ *------------------------------------------------------------------*/
+
+typedef struct XReplaceable {
+    UChar* text;    /* MUST BE null-terminated */
+} XReplaceable;
+
+static void InitXReplaceable(XReplaceable* rep, const char* cstring) {
+    rep->text = uprv_malloc(sizeof(UChar) * (uprv_strlen(cstring)+1));
+    u_uastrcpy(rep->text, cstring);
+}
+
+static void FreeXReplaceable(XReplaceable* rep) {
+    if (rep->text != NULL) {
+        uprv_free(rep->text);
+        rep->text = NULL;
+    }
+}
+
+// UReplaceableCallbacks callback
+static int32_t Xlength(const UReplaceable* rep) {
+    const XReplaceable* x = (const XReplaceable*)rep;
+    return u_strlen(x->text);
+}
+
+// UReplaceableCallbacks callback
+static UChar XcharAt(const UReplaceable* rep, int32_t offset) {
+    const XReplaceable* x = (const XReplaceable*)rep;
+    return x->text[offset];
+}
+
+// UReplaceableCallbacks callback
+static UChar32 Xchar32At(const UReplaceable* rep, int32_t offset) {
+    const XReplaceable* x = (const XReplaceable*)rep;
+    return x->text[offset];
+}
+
+// UReplaceableCallbacks callback
+static void Xreplace(UReplaceable* rep, int32_t start, int32_t limit,
+              const UChar* text, int32_t textLength) {
+    XReplaceable* x = (XReplaceable*)rep;
+    int32_t newLen = Xlength(rep) + limit - start + textLength;
+    UChar* newText = (UChar*) uprv_malloc(sizeof(UChar) * (newLen+1));
+    u_strncpy(newText, x->text, start);
+    u_strncpy(newText + start, text, textLength);
+    u_strcpy(newText + start + textLength, x->text + limit);
+    uprv_free(x->text);
+    x->text = newText;
+}
+
+// UReplaceableCallbacks callback
+static void Xcopy(UReplaceable* rep, int32_t start, int32_t limit, int32_t dest) {
+    XReplaceable* x = (XReplaceable*)rep;
+    int32_t newLen = Xlength(rep) + limit - start;
+    UChar* newText = (UChar*) uprv_malloc(sizeof(UChar) * (newLen+1));
+    u_strncpy(newText, x->text, dest);
+    u_strncpy(newText + dest, x->text + start, limit - start);
+    u_strcpy(newText + dest + limit - start, x->text + dest);
+    uprv_free(x->text);
+    x->text = newText;
+}
+
+static void InitXReplaceableCallbacks(UReplaceableCallbacks* callbacks) {
+    callbacks->length = Xlength;
+    callbacks->charAt = XcharAt;
+    callbacks->char32At = Xchar32At;
+    callbacks->replace = Xreplace;
+    callbacks->copy = Xcopy;
+}
+
+/*------------------------------------------------------------------
+ * Tests
+ *------------------------------------------------------------------*/
+
 static void TestAPI() {
     enum { BUF_CAP = 128 };
     char buf[BUF_CAP], buf2[BUF_CAP];
@@ -379,6 +457,8 @@ static void _expect(const UTransliterator* trans,
     UErrorCode status = U_ZERO_ERROR;
     int32_t limit;
     UTransPosition pos;
+    XReplaceable xrep;
+    UReplaceableCallbacks xrepVtable;
 
     u_uastrcpy(from, cfrom);
     u_uastrcpy(to, cto);
@@ -426,4 +506,49 @@ static void _expect(const UTransliterator* trans,
         log_err("FAIL: utrans_transIncrementalUChars(%s) x %s -> %s, expected %s\n",
                 id, cfrom, actual, cto);
     }
+
+    /* utrans_trans() */
+    InitXReplaceableCallbacks(&xrepVtable);
+    InitXReplaceable(&xrep, cfrom);
+    limit = u_strlen(from);
+    utrans_trans(trans, &xrep, &xrepVtable, 0, &limit, &status);
+    if (U_FAILURE(status)) {
+        log_err("FAIL: utrans_trans() failed, error=%s\n",
+                u_errorName(status));
+        return;
+    }
+
+    if (0 == u_strcmp(xrep.text, to)) {
+        log_verbose("Ok: utrans_trans(%s) x %s -> %s\n",
+                    id, cfrom, cto);
+    } else {
+        char actual[CAP];
+        u_austrcpy(actual, xrep.text);
+        log_err("FAIL: utrans_trans(%s) x %s -> %s, expected %s\n",
+                id, cfrom, actual, cto);
+    }
+    FreeXReplaceable(&xrep);
+
+    /* utrans_transIncremental() */
+    InitXReplaceable(&xrep, cfrom);
+    pos.start = pos.contextStart = 0;
+    pos.limit = pos.contextLimit = u_strlen(from);
+    utrans_transIncremental(trans, &xrep, &xrepVtable, &pos, &status);
+    utrans_trans(trans, &xrep, &xrepVtable, pos.start, &pos.limit, &status);
+    if (U_FAILURE(status)) {
+        log_err("FAIL: utrans_transIncremental() failed, error=%s\n",
+                u_errorName(status));
+        return;
+    }
+
+    if (0 == u_strcmp(xrep.text, to)) {
+        log_verbose("Ok: utrans_transIncremental(%s) x %s -> %s\n",
+                    id, cfrom, cto);
+    } else {
+        char actual[CAP];
+        u_austrcpy(actual, xrep.text);
+        log_err("FAIL: utrans_transIncremental(%s) x %s -> %s, expected %s\n",
+                id, cfrom, actual, cto);
+    }
+    FreeXReplaceable(&xrep);
 }
