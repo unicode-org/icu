@@ -1,7 +1,7 @@
 /*
  * %W% %E%
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
  */
 
@@ -24,12 +24,14 @@
 
 U_NAMESPACE_BEGIN
 
+class LEGlyphStorage;
+
 class LookupProcessor : public UMemory {
 public:
     static const LETag notSelected;
     static const LETag defaultFeature;
 
-    le_int32 process(LEGlyphID *&glyphs, GlyphPositionAdjustment *glyphPositionAdjustments, const LETag **&glyphTags, le_int32 *&charIndices, le_int32 glyphCount,
+    le_int32 process(LEGlyphStorage &glyphStorage, GlyphPositionAdjustment *glyphPositionAdjustments,
                  le_bool rightToLeft, const GlyphDefinitionTableHeader *glyphDefinitionTableHeader, const LEFontInstance *fontInstance) const;
 
     le_uint32 applyLookupTable(const LookupTable *lookupTable, GlyphIterator *glyphIterator, const LEFontInstance *fontInstance) const;

@@ -1,5 +1,7 @@
 /*
- * (C) Copyright IBM Corp. 2002-2003 - All Rights Reserved
+ *
+ * (C) Copyright IBM Corp. 2002-2004 - All Rights Reserved
+ *
  */
 
 #ifndef __MPREFIXUPS_H
@@ -14,6 +16,8 @@
 
 U_NAMESPACE_BEGIN
 
+class LEGlyphStorage;
+
 // Might want to make this a private member...
 struct FixupData;
 
@@ -25,7 +29,7 @@ public:
 
     void add(le_int32 baseIndex, le_int32 mpreIndex);
     
-    void apply(LEGlyphID *glyphs, le_int32 *charIndices);
+    void apply(LEGlyphStorage &glyphStorage);
 
 private:
     FixupData *fFixupData;

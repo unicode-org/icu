@@ -1,7 +1,7 @@
 /*
  * %W% %E%
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
  */
 
@@ -15,6 +15,7 @@
 #include "GlyphDefinitionTables.h"
 #include "GlyphPositionAdjustments.h"
 #include "LookupProcessor.h"
+#include "LEGlyphStorage.h"
 #include "LESwaps.h"
 
 U_NAMESPACE_BEGIN
@@ -48,16 +49,18 @@ le_uint32 LookupProcessor::applyLookupTable(const LookupTable *lookupTable, Glyp
     return 1;
 }
 
-le_int32 LookupProcessor::process(LEGlyphID *&glyphs, GlyphPositionAdjustment *glyphPositionAdjustments, const LETag **&glyphTags, le_int32 *&charIndices, le_int32 glyphCount,
+le_int32 LookupProcessor::process(LEGlyphStorage &glyphStorage, GlyphPositionAdjustment *glyphPositionAdjustments,
                               le_bool rightToLeft, const GlyphDefinitionTableHeader *glyphDefinitionTableHeader,
                               const LEFontInstance *fontInstance) const
 {
+	le_int32 glyphCount = glyphStorage.getGlyphCount();
+
     if (lookupSelectArray == NULL) {
         return glyphCount;
     }
 
-	GlyphIterator glyphIterator(glyphs, glyphPositionAdjustments, charIndices, glyphCount,
-								rightToLeft, 0, 0, glyphTags, glyphDefinitionTableHeader);
+	GlyphIterator glyphIterator(glyphStorage, glyphPositionAdjustments,
+								rightToLeft, 0, 0, glyphDefinitionTableHeader);
 	le_int32 newGlyphCount = glyphCount;
 
     for (le_uint16 order = 0; order < lookupOrderCount; order += 1) {

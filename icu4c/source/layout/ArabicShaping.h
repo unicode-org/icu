@@ -1,5 +1,4 @@
 /*
- * @(#)ArabicShaping.h  1.6 00/03/15
  *
  * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
  *
@@ -18,12 +17,7 @@
 
 U_NAMESPACE_BEGIN
 
-class Shaper /* not : public UObject because this is an interface/mixin class */ {
-public:
-    virtual inline ~Shaper() {};
-    virtual void init(LEUnicode ch, le_int32 outIndex, le_bool isloate) = 0;
-    virtual void shape(le_int32 outIndex, le_int32 shapeOffset) = 0;
-};
+class LEGlyphStorage;
 
 class ArabicShaping /* not : public UObject because all methods are static */ {
 public:
@@ -51,7 +45,7 @@ public:
     typedef le_int32 ShapeType;
 
     static void shape(const LEUnicode *chars, le_int32 offset, le_int32 charCount, le_int32 charMax,
-                      le_bool rightToLeft, Shaper &shaper);
+                      le_bool rightToLeft, LEGlyphStorage &glyphStorage);
 
     static const LETag *getFeatureOrder();
 
@@ -63,47 +57,13 @@ private:
     // forbid instantiation
     ArabicShaping();
 
-    static ShapeType getShapeType(LEUnicode c);
-
-    static const ShapeType shapeTypes[];
-};
-
-class GlyphShaper : public UMemory, public Shaper
-{
-public:
-    virtual void init(LEUnicode ch, le_int32 outIndex, le_bool isolate);
-    virtual void shape(le_int32 outIndex, le_int32 shapeOffset);
-
-    GlyphShaper(const LETag **outputTags);
-    ~GlyphShaper();
-
-private:
-    const LETag **charTags;
-
     static const LETag tagArray[];
 
-    GlyphShaper(const GlyphShaper &other); // forbid copying of this class
-    GlyphShaper &operator=(const GlyphShaper &other); // forbid copying of this class
-};
+	static ShapeType getShapeType(LEUnicode c);
 
-class CharShaper : public UMemory, public Shaper
-{
-public:
-    virtual void init(LEUnicode ch, le_int32 outIndex, le_bool isolate);
-    virtual void shape(le_int32 outIndex, le_int32 shapeOffset);
+    static const ShapeType shapeTypes[];
 
-    CharShaper(LEUnicode *outputChars);
-    ~CharShaper();
-
-private:
-    LEUnicode *chars;
-    
-    static const LEUnicode isolateShapes[];
-
-    static LEUnicode getToIsolateShape(LEUnicode ch);
-
-    CharShaper(const CharShaper &other); // forbid copying of this class
-    CharShaper &operator=(const CharShaper &other); // forbid copying of this class
+	static void adjustTags(le_int32 outIndex, le_int32 shapeOffset, LEGlyphStorage &glyphStorage); 
 };
 
 U_NAMESPACE_END

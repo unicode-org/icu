@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2003, International Business Machines
+ *   Copyright (C) 1999-2004, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -14,6 +14,7 @@
 #include "LETypes.h"
 #include "LEScripts.h"
 #include "LEFontInstance.h"
+#include "LEGlyphStorage.h"
 
 U_NAMESPACE_BEGIN
 
@@ -36,7 +37,7 @@ const LEFontInstance *LEFontInstance::getSubFont(const LEUnicode chars[], le_int
 }
 
 void LEFontInstance::mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count,
-                                      le_bool reverse, const LECharMapper *mapper, LEGlyphID glyphs[]) const
+                                      le_bool reverse, const LECharMapper *mapper, LEGlyphStorage &glyphStorage) const
 {
     le_int32 i, out = 0, dir = 1;
 
@@ -57,11 +58,11 @@ void LEFontInstance::mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, 
             }
         }
 
-        glyphs[out] = mapCharToGlyph(code, mapper);
+		glyphStorage[out] = mapCharToGlyph(code, mapper);
 
         if (code >= 0x10000) {
             i += 1;
-            glyphs[out += dir] = 0xFFFF;
+			glyphStorage[out += dir] = 0xFFFF;
         }
     }
 }

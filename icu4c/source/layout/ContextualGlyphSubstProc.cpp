@@ -1,7 +1,6 @@
 /*
- * @(#)ContextualGlyphSubstProc.cpp	1.6 00/03/15
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
  */
 
@@ -12,6 +11,7 @@
 #include "SubtableProcessor.h"
 #include "StateTableProcessor.h"
 #include "ContextualGlyphSubstProc.h"
+#include "LEGlyphStorage.h"
 #include "LESwaps.h"
 
 U_NAMESPACE_BEGIN
@@ -36,7 +36,7 @@ void ContextualGlyphSubstitutionProcessor::beginStateTable()
     markGlyph = 0;
 }
 
-ByteOffset ContextualGlyphSubstitutionProcessor::processStateEntry(LEGlyphID *glyphs, le_int32 * /*charIndices*/, le_int32 &currGlyph, le_int32 /*glyphCount*/, EntryTableIndex index)
+ByteOffset ContextualGlyphSubstitutionProcessor::processStateEntry(LEGlyphStorage &glyphStorage, le_int32 &currGlyph, EntryTableIndex index)
 {
     const ContextualGlyphSubstitutionStateEntry *entry = &entryTable[index];
     ByteOffset newState = SWAPW(entry->newStateOffset);
@@ -46,16 +46,18 @@ ByteOffset ContextualGlyphSubstitutionProcessor::processStateEntry(LEGlyphID *gl
 
     if (markOffset != 0) {
         const le_int16 *table = (const le_int16 *) ((char *) &stateTableHeader->stHeader + markOffset * 2);
-        TTGlyphID newGlyph = SWAPW(table[LE_GET_GLYPH(glyphs[markGlyph])]);
+		LEGlyphID mGlyph = glyphStorage[markGlyph];
+        TTGlyphID newGlyph = SWAPW(table[LE_GET_GLYPH(mGlyph)]);
 
-         glyphs[markGlyph] = LE_SET_GLYPH(glyphs[markGlyph], newGlyph);
+         glyphStorage[markGlyph] = LE_SET_GLYPH(mGlyph, newGlyph);
     }
 
     if (currOffset != 0) {
         const le_int16 *table = (const le_int16 *) ((char *) &stateTableHeader->stHeader + currOffset * 2);
-        TTGlyphID newGlyph = SWAPW(table[LE_GET_GLYPH(glyphs[currGlyph])]);
+		LEGlyphID thisGlyph = glyphStorage[currGlyph];
+        TTGlyphID newGlyph = SWAPW(table[LE_GET_GLYPH(thisGlyph)]);
 
-        glyphs[currGlyph] = LE_SET_GLYPH(glyphs[currGlyph], newGlyph);
+        glyphStorage[currGlyph] = LE_SET_GLYPH(thisGlyph, newGlyph);
     }
 
     if (flags & cgsSetMark) {

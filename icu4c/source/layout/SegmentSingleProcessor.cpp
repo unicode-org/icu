@@ -1,7 +1,6 @@
 /*
- * @(#)SegmentSingleProcessor.cpp	1.6 00/03/15
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
  */
 
@@ -11,6 +10,7 @@
 #include "NonContextualGlyphSubst.h"
 #include "NonContextualGlyphSubstProc.h"
 #include "SegmentSingleProcessor.h"
+#include "LEGlyphStorage.h"
 #include "LESwaps.h"
 
 U_NAMESPACE_BEGIN
@@ -33,18 +33,20 @@ SegmentSingleProcessor::~SegmentSingleProcessor()
 {
 }
 
-void SegmentSingleProcessor::process(LEGlyphID *glyphs, le_int32 * /*charIndices*/, le_int32 glyphCount)
+void SegmentSingleProcessor::process(LEGlyphStorage &glyphStorage)
 {
     const LookupSegment *segments = segmentSingleLookupTable->segments;
+	le_int32 glyphCount = glyphStorage.getGlyphCount();
     le_int32 glyph;
 
     for (glyph = 0; glyph < glyphCount; glyph += 1) {
-        const LookupSegment *lookupSegment = segmentSingleLookupTable->lookupSegment(segments, glyphs[glyph]);
+		LEGlyphID thisGlyph = glyphStorage[glyph];
+        const LookupSegment *lookupSegment = segmentSingleLookupTable->lookupSegment(segments, thisGlyph);
 
         if (lookupSegment != NULL) {
-            TTGlyphID newGlyph = (TTGlyphID) LE_GET_GLYPH(glyphs[glyph]) + SWAPW(lookupSegment->value);
+            TTGlyphID   newGlyph  = (TTGlyphID) LE_GET_GLYPH(thisGlyph) + SWAPW(lookupSegment->value);
 
-            glyphs[glyph] = LE_SET_GLYPH(glyphs[glyph], newGlyph);
+			glyphStorage[glyph] = LE_SET_GLYPH(thisGlyph, newGlyph);
         }
     }
 }

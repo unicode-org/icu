@@ -1,11 +1,14 @@
 /*
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ *
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
+ *
  */
 
 #include "LETypes.h"
 #include "OpenTypeTables.h"
 #include "OpenTypeUtilities.h"
 #include "IndicReordering.h"
+#include "LEGlyphStorage.h"
 #include "MPreFixups.h"
 
 U_NAMESPACE_BEGIN
@@ -13,10 +16,9 @@ U_NAMESPACE_BEGIN
 class ReorderingOutput : public UMemory {
 private:
     le_int32 fOutIndex;
+	LEUnicode *fOutChars;
 
-    LEUnicode *fOutChars;
-    le_int32 *fCharIndices;
-    const LETag **fCharTags;
+    LEGlyphStorage &fGlyphStorage;
 
     LEUnicode fMpre;
     LEUnicode fMbelow;
@@ -70,8 +72,8 @@ private:
     }
 
 public:
-    ReorderingOutput(LEUnicode *outChars, le_int32 *charIndices, const LETag **charTags, MPreFixups *mpreFixups)
-        : fOutIndex(0), fOutChars(outChars), fCharIndices(charIndices), fCharTags(charTags),
+    ReorderingOutput(LEUnicode *outChars, LEGlyphStorage &glyphStorage, MPreFixups *mpreFixups)
+        : fOutIndex(0), fOutChars(outChars), fGlyphStorage(glyphStorage),
           fMpre(0), fMbelow(0), fMabove(0), fMpost(0), fLengthMark(0), fMatraIndex(0), fMatraTags(NULL),
           fMPreOutIndex(-1), fMPreFixups(mpreFixups),
           fVMabove(0), fVMpost(0), fVMIndex(0), fVMTags(NULL),
@@ -239,9 +241,12 @@ public:
     
     void writeChar(LEUnicode ch, le_uint32 charIndex, const LETag *charTags)
     {
+		LEErrorCode success = LE_NO_ERROR;
+
         fOutChars[fOutIndex] = ch;
-        fCharIndices[fOutIndex] = charIndex;
-        fCharTags[fOutIndex] = charTags;
+
+		fGlyphStorage.setCharIndex(fOutIndex, charIndex, success);
+		fGlyphStorage.setAuxData(fOutIndex, (void *) charTags, success);
 
         fOutIndex += 1;
     }
@@ -337,7 +342,7 @@ le_int32 IndicReordering::findSyllable(const IndicClassTable *classTable, const 
 }
 
 le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le_int32 scriptCode,
-                                  LEUnicode *outChars, le_int32 *charIndices, const LETag **charTags,
+                                  LEUnicode *outChars, LEGlyphStorage &glyphStorage,
                                   MPreFixups **outMPreFixups)
 {
     MPreFixups *mpreFixups = NULL;
@@ -347,7 +352,7 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
         mpreFixups = new MPreFixups(charCount);
     }
 
-    ReorderingOutput output(outChars, charIndices, charTags, mpreFixups);
+    ReorderingOutput output(outChars, glyphStorage, mpreFixups);
     le_int32 i, prev = 0;
 
     while (prev < charCount) {
@@ -604,10 +609,10 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
     return output.getOutputIndex();
 }
 
-void IndicReordering::adjustMPres(MPreFixups *mpreFixups, LEGlyphID *glyphs, le_int32 *charIndices)
+void IndicReordering::adjustMPres(MPreFixups *mpreFixups, LEGlyphStorage &glyphStorage)
 {
     if (mpreFixups != NULL) {
-        mpreFixups->apply(glyphs, charIndices);
+        mpreFixups->apply(glyphStorage);
         
         delete mpreFixups;
     }

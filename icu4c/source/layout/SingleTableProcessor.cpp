@@ -1,7 +1,6 @@
 /*
- * @(#)SingleTableProcessor.cpp	1.6 00/03/15
  *
- * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
  *
  */
 
@@ -11,6 +10,7 @@
 #include "NonContextualGlyphSubst.h"
 #include "NonContextualGlyphSubstProc.h"
 #include "SingleTableProcessor.h"
+#include "LEGlyphStorage.h"
 #include "LESwaps.h"
 
 U_NAMESPACE_BEGIN
@@ -33,16 +33,17 @@ SingleTableProcessor::~SingleTableProcessor()
 {
 }
 
-void SingleTableProcessor::process(LEGlyphID *glyphs, le_int32 * /*charIndices*/, le_int32 glyphCount)
+void SingleTableProcessor::process(LEGlyphStorage &glyphStorage)
 {
     const LookupSingle *entries = singleTableLookupTable->entries;
     le_int32 glyph;
+	le_int32 glyphCount = glyphStorage.getGlyphCount();
 
     for (glyph = 0; glyph < glyphCount; glyph += 1) {
-        const LookupSingle *lookupSingle = singleTableLookupTable->lookupSingle(entries, glyphs[glyph]);
+        const LookupSingle *lookupSingle = singleTableLookupTable->lookupSingle(entries, glyphStorage[glyph]);
 
         if (lookupSingle != NULL) {
-            glyphs[glyph] = SWAPW(lookupSingle->value);
+            glyphStorage[glyph] = SWAPW(lookupSingle->value);
         }
     }
 } 
