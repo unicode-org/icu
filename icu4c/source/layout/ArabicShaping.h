@@ -49,9 +49,9 @@ public:
     static void shape(const LEUnicode *chars, le_int32 offset, le_int32 charCount, le_int32 charMax,
                       le_bool rightToLeft, Shaper &shaper);
 
-    static le_uint8 glyphSubstitutionTable[];
+    static const le_uint8 glyphSubstitutionTable[];
   //static le_uint8 ligatureSubstitutionSubtable[];
-    static le_uint8 glyphDefinitionTable[];
+    static const le_uint8 glyphDefinitionTable[];
 
 private:
     static ShapeType getShapeType(LEUnicode c);

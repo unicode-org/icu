@@ -85,8 +85,9 @@ public:
 
 private:
 
-    static le_uint8 classTable[];
-    static StateTransition thaiStateTable[][classCount];
+    static const le_uint8 classTable[];
+    static const StateTransition thaiStateTable[][classCount];
+
     static StateTransition getTransition(le_uint8 state, le_uint8 currClass);
     static le_uint8 doTransition(StateTransition transition, LEUnicode currChar, le_int32 inputIndex, le_uint8 glyphSet,
         LEUnicode errorChar, LEUnicode *outputBuffer, le_int32 *charIndicies, le_int32 &outputIndex);

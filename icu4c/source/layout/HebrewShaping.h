@@ -19,8 +19,8 @@ public:
     static void shape(const LEUnicode *chars, le_int32 offset, le_int32 charCount, le_int32 charMax,
                       le_bool rightToLeft, const LETag **tags);
 
-    static le_uint8 glyphSubstitutionTable[];
-    static le_uint8 glyphDefinitionTable[];
+    static const le_uint8 glyphSubstitutionTable[];
+    static const le_uint8 glyphDefinitionTable[];
 };
 
 U_NAMESPACE_END
