@@ -860,6 +860,18 @@ U_CAPI int32_t U_EXPORT2 ures_getSize(UResourceBundle *resB) {
   return resB->fSize;
 }
 
+static const UChar* ures_getStringWithAlias(const UResourceBundle *resB, Resource r, int32_t sIndex, int32_t *len, UErrorCode *status) {
+  if(RES_GET_TYPE(r) == URES_ALIAS) {
+    const UChar* result = 0;
+    UResourceBundle *tempRes = ures_getByIndex(resB, sIndex, NULL, status);
+    result = ures_getString(tempRes, len, status);
+    ures_close(tempRes);
+    return result;
+  } else {
+    return res_getString(&(resB->fResData), r, len); 
+  }
+}
+
 U_CAPI void U_EXPORT2 ures_resetIterator(UResourceBundle *resB){
   if(resB == NULL) {
     return;
@@ -899,21 +911,15 @@ U_CAPI const UChar* U_EXPORT2 ures_getNextString(UResourceBundle *resB, int32_t*
       if(r == RES_BOGUS && resB->fHasFallback) {
         /* TODO: do the fallback */
       }
-      return res_getString(&(resB->fResData), r, len); 
+      return ures_getStringWithAlias(resB, r, resB->fIndex, len, status);
     case URES_ARRAY:
       r = res_getArrayItem(&(resB->fResData), resB->fRes, resB->fIndex);
       if(r == RES_BOGUS && resB->fHasFallback) {
         /* TODO: do the fallback */
       }
-      return res_getString(&(resB->fResData), r, len);
+      return ures_getStringWithAlias(resB, r, resB->fIndex, len, status);
     case URES_ALIAS:
-      {
-        const UChar* result = 0;
-        UResourceBundle *tempRes = ures_getByIndex(resB, resB->fIndex, NULL, status);
-        result = ures_getString(tempRes, len, status);
-        ures_close(tempRes);
-        return result;
-      }
+      return ures_getStringWithAlias(resB, resB->fRes, resB->fIndex, len, status);
     case URES_INT_VECTOR:
     default:
       return NULL;
@@ -1037,21 +1043,15 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByIndex(const UResourceBundle *resB,
             if(r == RES_BOGUS && resB->fHasFallback) {
                 /* TODO: do the fallback */
             }
-            return res_getString(&(resB->fResData), r, len);
+            return ures_getStringWithAlias(resB, r, indexS, len, status);
         case URES_ARRAY:
             r = res_getArrayItem(&(resB->fResData), resB->fRes, indexS);
             if(r == RES_BOGUS && resB->fHasFallback) {
                 /* TODO: do the fallback */
             }
-            return res_getString(&(resB->fResData), r, len);
+            return ures_getStringWithAlias(resB, r, indexS, len, status);
         case URES_ALIAS:
-          {
-            const UChar* result = 0;
-            UResourceBundle *tempRes = ures_getByIndex(resB, indexS, NULL, status);
-            result = ures_getString(tempRes, len, status);
-            ures_close(tempRes);
-            return result;
-          }
+          return ures_getStringWithAlias(resB, resB->fRes, indexS, len, status);
 
         /*case URES_INT_VECTOR:*/
         /*default:*/
