@@ -38,10 +38,6 @@
 #include "sprpimpl.h"
 #include "testidna.h"
 
-#ifdef WIN32
-#   pragma warning(disable: 4100)
-#endif
-
 UBool beVerbose=FALSE, haveCopyright=TRUE;
 
 /* prototypes --------------------------------------------------------------- */
@@ -69,11 +65,11 @@ static UBool cleanup();
 
 static void 
 compareMapping(uint32_t codepoint, uint32_t* mapping, int32_t mapLength, 
-               UBool withNorm, UErrorCode *status);
+               UBool withNorm);
 
 static void
 compareFlagsForRange(uint32_t start, uint32_t end,
-                     UBool isUnassigned, UErrorCode *status);
+                     UBool isUnassigned);
 
 static void
 testAllCodepoints(TestIDNA& test);
@@ -89,16 +85,6 @@ static const char* fileNames[] = {
                                 };
 /* -------------------------------------------------------------------------- */
 
-static UOption options[]={
-    UOPTION_HELP_H,
-    UOPTION_HELP_QUESTION_MARK,
-    UOPTION_VERBOSE,
-    UOPTION_COPYRIGHT,
-    UOPTION_DESTDIR,
-    UOPTION_SOURCEDIR,
-    { "unicode", NULL, NULL, NULL, 'u', UOPT_REQUIRES_ARG, 0 }
-};
-
 /* file definitions */
 #define DATA_NAME "uidna"
 #define DATA_TYPE "icu"
@@ -109,7 +95,7 @@ extern int
 testData(TestIDNA& test) {
     char* filename = (char*) malloc(strlen(IntlTest::pathToDataDirectory())*3);
     //TODO get the srcDir dynamically 
-    const char *srcDir=IntlTest::pathToDataDirectory(), *destDir=NULL, *suffix=NULL;
+    const char *srcDir=IntlTest::pathToDataDirectory();
     char *basename=NULL;
     UErrorCode errorCode=U_ZERO_ERROR;
     char *saveBasename =NULL;
@@ -187,7 +173,7 @@ testData(TestIDNA& test) {
 U_CDECL_BEGIN
 static void U_CALLCONV
 caseMapLineFn(void *context,
-              char *fields[][2], int32_t fieldCount,
+              char *fields[][2], int32_t /*fieldCount*/,
               UErrorCode *pErrorCode) {
     uint32_t mapping[40];
     char *end, *s;
@@ -208,7 +194,7 @@ caseMapLineFn(void *context,
 
     /* store the mapping */
 
-    compareMapping(code,mapping, length, *mapWithNorm, pErrorCode);
+    compareMapping(code,mapping, length, *mapWithNorm);
 }
 U_CDECL_END
 
@@ -234,7 +220,7 @@ U_CDECL_BEGIN
 
 static void U_CALLCONV
 unicodeDataLineFn(void *context,
-                  char *fields[][2], int32_t fieldCount,
+                  char *fields[][2], int32_t /*fieldCount*/,
                   UErrorCode *pErrorCode) {
     uint32_t rangeStart=0,rangeEnd =0;
     UBool* isUnassigned = (UBool*) context;
@@ -247,7 +233,7 @@ unicodeDataLineFn(void *context,
     }
 
 
-    compareFlagsForRange(rangeStart,rangeEnd,*isUnassigned, pErrorCode);
+    compareFlagsForRange(rangeStart,rangeEnd,*isUnassigned);
 
 }
 
@@ -256,7 +242,6 @@ U_CDECL_END
 static void
 parseTable(const char *filename,UBool isUnassigned,TestIDNA& test, UErrorCode *pErrorCode) {
     char *fields[2][2];
-    int32_t len=0;
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return;
     }
@@ -326,7 +311,7 @@ static inline void getValues(uint32_t result, int8_t& flag,
 
 static void 
 compareMapping(uint32_t codepoint, uint32_t* mapping,int32_t mapLength, 
-               UBool withNorm, UErrorCode *status){
+               UBool withNorm){
     if(isDataLoaded){
         uint32_t result = 0;
         UTRIE_GET16(&idnTrie,codepoint, result);
@@ -387,7 +372,7 @@ compareMapping(uint32_t codepoint, uint32_t* mapping,int32_t mapLength,
 
 static void
 compareFlagsForRange(uint32_t start, uint32_t end,
-                     UBool isUnassigned, UErrorCode *status){
+                     UBool isUnassigned){
     if(isDataLoaded){
         uint32_t result =0 ;
         while(start < end+1){

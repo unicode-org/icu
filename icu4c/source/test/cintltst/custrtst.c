@@ -42,6 +42,8 @@ static void TestCountChar32(void);
 static void TestUCharIterator(void);
 static void TestUNormIterator(void);
 
+void addUStringTest(TestNode** root);
+
 void addUStringTest(TestNode** root)
 {
     addTest(root, &TestStringCopy, "tsutil/custrtst/TestStringCopy");

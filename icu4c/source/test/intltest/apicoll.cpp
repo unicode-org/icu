@@ -551,11 +551,11 @@ CollationAPITest::TestCollationKey(/* char* par */)
     doAssert(sortkEmpty.compareTo(sortk1) == Collator::LESS, "Result should be (empty key) <<< \"Abcda\"");
     doAssert(sortk1.compareTo(sortkEmpty) == Collator::GREATER, "Result should be \"Abcda\" >>> (empty key)");
     doAssert(sortkEmpty.compareTo(sortkEmpty) == Collator::EQUAL, "Result should be (empty key) == (empty key)");
-    doAssert(sortk1.compareTo(sortk3, success) == Collator::GREATER, "Result should be \"Abcda\" >>> \"abcda\"");
-    doAssert(sortk2.compareTo(sortk3, success) == Collator::EQUAL, "Result should be \"abcda\" == \"abcda\"");
-    doAssert(sortkEmpty.compareTo(sortk1, success) == Collator::LESS, "Result should be (empty key) <<< \"Abcda\"");
-    doAssert(sortk1.compareTo(sortkEmpty, success) == Collator::GREATER, "Result should be \"Abcda\" >>> (empty key)");
-    doAssert(sortkEmpty.compareTo(sortkEmpty, success) == Collator::EQUAL, "Result should be (empty key) == (empty key)");
+    doAssert(sortk1.compareTo(sortk3, success) == UCOL_GREATER, "Result should be \"Abcda\" >>> \"abcda\"");
+    doAssert(sortk2.compareTo(sortk3, success) == UCOL_EQUAL, "Result should be \"abcda\" == \"abcda\"");
+    doAssert(sortkEmpty.compareTo(sortk1, success) == UCOL_LESS, "Result should be (empty key) <<< \"Abcda\"");
+    doAssert(sortk1.compareTo(sortkEmpty, success) == UCOL_GREATER, "Result should be \"Abcda\" >>> (empty key)");
+    doAssert(sortkEmpty.compareTo(sortkEmpty, success) == UCOL_EQUAL, "Result should be (empty key) == (empty key)");
 
     int32_t    cnt1, cnt2, cnt3, cnt4;
 

@@ -136,7 +136,7 @@ NamePrepTransform::~NamePrepTransform(){
 int32_t NamePrepTransform::map(const UChar* src, int32_t srcLength, 
                         UChar* dest, int32_t destCapacity, 
                         UBool allowUnassigned,
-                        UParseError* parseError,
+                        UParseError* /*parseError*/,
                         UErrorCode& status ){
 
     if(U_FAILURE(status)){
@@ -160,7 +160,7 @@ int32_t NamePrepTransform::map(const UChar* src, int32_t srcLength,
         int32_t bufIndex=0;
         UChar32 ch =0 ;
         for(;bufIndex<bufLen;){
-             U16_NEXT(buffer, bufIndex, bufLen, ch);
+            U16_NEXT(buffer, bufIndex, bufLen, ch);
             if(unassigned.contains(ch)){
                 status = U_IDNA_UNASSIGNED_CODEPOINT_FOUND_ERROR;
                 rsource.releaseBuffer();

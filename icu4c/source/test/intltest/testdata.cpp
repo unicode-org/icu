@@ -68,11 +68,11 @@ fCases(NULL)
   fSettingsSize = ures_getSize(fSettings);
   UResourceBundle *info = ures_getByKey(data, "Info", NULL, &intStatus);
   if(U_SUCCESS(intStatus)) {
-    fInfo = new RBDataMap(info, intStatus);
+    fInfo = new RBDataMap(info, status);
   } else {
     intStatus = U_ZERO_ERROR;
   }
-  fCases = ures_getByKey(data, "Cases", NULL, &intStatus);
+  fCases = ures_getByKey(data, "Cases", NULL, &status);
   fCasesSize = ures_getSize(fCases);
 
   ures_close(info);
@@ -87,7 +87,7 @@ RBTestData::~RBTestData()
   ures_close(fCases);
 }
 
-UBool RBTestData::getInfo(const DataMap *& info, UErrorCode &status) const
+UBool RBTestData::getInfo(const DataMap *& info, UErrorCode &/*status*/) const
 {
   if(fInfo) {
     info = fInfo;

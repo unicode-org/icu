@@ -22,6 +22,8 @@ void TestMessageCatalog(void);
 /**********************************************************************/
 /* Add our tests into the hierarchy */
 
+void addPosixTest(TestNode** root);
+
 void addPosixTest(TestNode** root)
 {
     addTest(root, &TestMessageCatalog, "tsutil/cposxtst/TestMessageCatalog");
