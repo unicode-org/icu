@@ -1217,12 +1217,12 @@ void TransliteratorRoundTripTest::TestDevanagariLatin() {
     Legal *legal = new LegalIndic();
 
     if (isICUVersionAtLeast(ICU_30)) {
+        infoln("Warning: TestDevanagariLatin needs to be updated to remove Unicode 3.2 filter");
         // We temporarily filter against Unicode 3.2, but we only do this
         // before version 3.0.    
         test.test(UnicodeString(latinForIndic, ""), 
               UnicodeString("[[:Devanagari:]&[:Age=3.2:]]", ""), NULL, this, quick, 
               legal, 50);
-        return;
     } else {
         logln("Warning: TestDevanagariLatin needs to be updated to remove Unicode 3.2 filter");
     }
@@ -1495,6 +1495,7 @@ void TransliteratorRoundTripTest::TestInterIndic() {
         Legal *legal = new LegalIndic();
 
         if (isICUVersionAtLeast(ICU_30)) {
+            infoln("Warning: TestDevanagariLatin needs to be updated to remove Unicode 3.2 filter");
             // We temporarily filter against Unicode 3.2, but we only do this
             // before version 3.0.    
             UnicodeString temp1 = "[";
@@ -1508,7 +1509,6 @@ void TransliteratorRoundTripTest::TestInterIndic() {
                       temp2, 
                       interIndicArray[i*INTER_INDIC_ARRAY_WIDTH + 3], // roundtrip exclusions 
                       this, quick, legal, 50);
-            return;
         } else {
             logln("Warning: TestDevanagariLatin needs to be updated to remove Unicode 3.2 filter");
         }
