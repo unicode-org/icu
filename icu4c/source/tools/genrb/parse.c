@@ -1196,8 +1196,7 @@ parseImport(char *tag, uint32_t startline, UErrorCode *status)
     }
 
     len  = T_FileStream_size(file);
-    data = (uint8_t*)uprv_malloc(len* sizeof(uint8_t)* 3);
-    uprv_memset(data,0xFF, len *3);
+    data = (uint8_t*)uprv_malloc(len * sizeof(uint8_t));
     /* test for NULL */
     if(data == NULL)
     {
