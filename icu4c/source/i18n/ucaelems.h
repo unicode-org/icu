@@ -34,7 +34,6 @@ typedef struct {
     int32_t size;
 } ExpansionTable;
 
-
 typedef struct {
     UChar codepoint;
     UChar uchars[128];
@@ -52,10 +51,18 @@ typedef struct {
 } UCAElements;
 
 typedef struct {
-  CompactIntArray *mapping; 
-  ExpansionTable *expansions; 
-  struct CntTable *contractions;
-  UCATableHeader *image;
+  uint32_t *endExpansionCE;
+  uint8_t  *expansionCESize;
+  int      position;
+  int      size;
+} MaxExpansionTable;
+
+typedef struct {
+  CompactIntArray   *mapping; 
+  ExpansionTable    *expansions; 
+  struct CntTable   *contractions;
+  UCATableHeader    *image;
+  MaxExpansionTable *maxExpansions;
 } tempUCATable; 
 
 U_CAPI tempUCATable * U_EXPORT2 uprv_uca_initTempTable(UCATableHeader *image, UErrorCode *status);

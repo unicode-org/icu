@@ -18,7 +18,7 @@
 * Modification history
 * Date        Name      Comments
 * 02/16/2001  synwee    Added UCOL_GETPREVCE for the use in ucoleitr
-*                       
+* 02/27/2001  synwee    Added getMaxExpansion data structure in UCollator                      
 */
 
 #ifndef UCOL_IMP_H
@@ -272,6 +272,56 @@ struct incrementalContext {
   }                                                                          \
 }
 
+/* 
+* Macro to get the maximum size of an expansion ending with the argument ce.
+* Used in the Boyer Moore algorithm.
+* @param coll const UCollator pointer
+* @param order last collation element of the expansion sequence
+* @param result size of the longest expansion with argument collation element
+*        as the last element
+*/
+#define UCOL_GETCOLLATORMAXEXPANSION(coll, order, result) {                  \
+  const uint32_t *start;                                                     \
+  const uint32_t *limit;                                                     \
+  const uint32_t *mid;                                                       \
+  start = (coll)->endExpansionCE;                                            \
+  limit = (coll)->lastEndExpansionCE;                                        \
+  while (start < limit - 1) {                                                \
+    mid = start + ((limit - start) >> 1);                                    \
+    if ((order) <= *mid) {                                                   \
+      limit = mid;                                                           \
+    }                                                                        \
+    else {                                                                   \
+      start = mid;                                                           \
+    }                                                                        \
+  }                                                                          \
+  if (*start == order) {                                                     \
+    result = *((coll)->expansionCESize + (start - (coll)->endExpansionCE));  \
+  }                                                                          \
+  else                                                                       \
+  if (*limit == order) {                                                     \
+    result = *(coll->expansionCESize + (limit - coll->endExpansionCE));      \
+  }                                                                          \
+  else {                                                                     \
+    result = 0;                                                              \
+  }                                                                          \
+}
+
+/* 
+* Macro to get the maximum size of an expansion ending with the argument ce.
+* Used in the Boyer Moore algorithm.
+* @param coll const UCollator pointer
+* @param order last collation element of the expansion sequence
+* @param result size of the longest expansion with argument collation element
+*        as the last element
+*/
+#define UCOL_GETMAXEXPANSION(coll, order, result) {                          \
+  UCOL_GETCOLLATORMAXEXPANSION((coll), (order), (result));                   \
+  if ((result) != 0) {                                                       \
+    result = ucol_getMaxExpansionUCA((order));                               \
+  }                                                                          \
+}
+
 uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, UErrorCode *status);
 uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE, 
                           collIterate *source, uint32_t length, 
@@ -280,6 +330,8 @@ U_CFUNC uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSou
 uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *status);
 uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource, 
                          uint32_t length, UErrorCode *status);
+uint8_t ucol_getMaxExpansionUCA(uint32_t order);
+
 void incctx_cleanUpContext(incrementalContext *ctx);
 UChar incctx_appendChar(incrementalContext *ctx, UChar c);
 
@@ -428,6 +480,16 @@ typedef struct {
       uint32_t contractionCEs;   /* uint32_t *contractionCEs;       */
       uint32_t contractionSize;  /* needed for various closures */
       uint32_t latinOneMapping;  /* fast track to latin1 chars      */
+      
+      uint32_t endExpansionCE;      /* array of last collation element in 
+                                       expansion */
+      uint32_t expansionCESize;     /* array of maximum expansion size 
+                                       corresponding to the expansion 
+                                       collation elements with last element
+                                       in endExpansionCE*/
+      int32_t  endExpansionCECount; /* size of endExpansionCE */
+      uint32_t unsafeCP;
+
       int32_t CEcount;
       UChar variableTopValue;
       UVersionInfo version;
@@ -481,6 +543,15 @@ struct UCollator {
     UChar *rules;
     UChar zero;
     UDataInfo dataInfo;               /* Data info of UCA table */
+
+    const uint32_t *endExpansionCE;    /* array of last ces in an expansion ce.
+                                          corresponds to expansionCESize */
+    const uint32_t *lastEndExpansionCE;/* pointer to the last element in endExpansionCE */
+    const uint8_t  *expansionCESize;   /* array of the maximum size of a 
+                                         expansion ce with the last ce 
+                                         corresponding to endExpansionCE, 
+                                         terminated with a null */
+    const uint8_t *unsafeCP;          /* unsafe code points hashtable */
 };
 
 /* various internal functions */

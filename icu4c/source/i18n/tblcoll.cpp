@@ -504,10 +504,9 @@ CollationKey& RuleBasedCollator::getCollationKey(const UChar* source,
  */
 int32_t RuleBasedCollator::getMaxExpansion(int32_t order) const
 {
-  /*
-  synwee : have to remove NULL later when Vladimir finishes his codes
-  */
-  return ucol_getMaxExpansion(NULL, order);
+  uint8_t result;
+  UCOL_GETMAXEXPANSION(ucollator, (uint32_t)order, result);
+  return result;
 }
 
 uint8_t* RuleBasedCollator::cloneRuleData(int32_t &length, 
