@@ -369,7 +369,7 @@ U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t* lows, uint32_
 
   uint32_t count = tok->toInsert;
 
-  if(low == high && strength > UCOL_PRIMARY) {
+  if(low >= high && strength > UCOL_PRIMARY) {
     int32_t s = strength;
     for(;;) {
       s--;
@@ -378,7 +378,7 @@ U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t* lows, uint32_
           low = UCOL_COMMON_TOP2<<24;
           high = 0xFFFFFFFF;
         } else {
-          //low = 0x02000000;
+          low = 0x02000000;
           high = 0x40000000;
         }
         break;
@@ -701,7 +701,7 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
     /* first, check if there are any expansions */
     /* if there are expansions, we need to do a little bit more processing */
     /* since parts of expansion can be tailored, while others are not */
-    if(tok->expansion != 0) {
+    if(tok->expansion != 0 && tok->prefix == 0) {
       uint32_t len = tok->expansion >> 24;
       uint32_t currentSequenceLen = len;
       uint32_t expOffset = tok->expansion & 0x00FFFFFF;
@@ -881,6 +881,9 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     /* According to strength                                                          */
     if(U_SUCCESS(*status)) {
       ucol_initBuffers(&src->lh[i], status);
+    }
+    if(U_FAILURE(*status)) {
+      return NULL;
     }
 
   }
