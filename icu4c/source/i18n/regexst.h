@@ -30,9 +30,12 @@ class  UnicodeSet;
 
 class RegexStaticSets {
 public:
+    static RegexStaticSets *gStaticSets;  // Ptr to all lazily initialized constant
+                                          //   shared sets.
+
     RegexStaticSets(UErrorCode *status);         
     ~RegexStaticSets();
-    static void    initGlobals(RegexStaticSets **p, UErrorCode *status);
+    static void    initGlobals(UErrorCode *status);
 
     UnicodeSet    *fPropSets[URX_LAST_SET];     // The sets for common regex items, e.g. \s
     Regex8BitSet   fPropSets8[URX_LAST_SET];    // Fast bitmap sets for latin-1 range for above.
