@@ -48,6 +48,7 @@ class CollationElementIterator;
 
 // This is just temporary, for prototyping.
 struct collIterate;
+struct incrementalContext;
 typedef void *  UCollator;
 
 //=============================================================================
@@ -134,10 +135,16 @@ private:
 
 // This is just temporary, for prototyping.
     friend int32_t ucol_getNextCE(const UCollator *coll, collIterate *source, UErrorCode *status);
+    friend int32_t ucol_getIncrementalCE(const UCollator *coll, incrementalContext *source, UErrorCode *status); 
     friend int32_t getComplicatedCE(const UCollator *coll, collIterate *source, UErrorCode *status);
   friend int32_t ucol_getSortKey(const    UCollator    *coll, const    UChar        *source,
         int32_t        sourceLength, uint8_t        *result, int32_t        resultLength);
   friend UCollationResult ucol_strcoll(    const    UCollator    *coll,
+        const    UChar        *source,
+        int32_t            sourceLength,
+        const    UChar        *target,
+        int32_t            targetLength);
+  friend UCollationResult ucol_strcollEx(    const    UCollator    *coll,
         const    UChar        *source,
         int32_t            sourceLength,
         const    UChar        *target,
