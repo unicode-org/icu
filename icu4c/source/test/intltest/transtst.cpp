@@ -2330,8 +2330,7 @@ void TransliteratorTest::TestSanskritLatinRT(){
 
 
 void TransliteratorTest::TestCompoundLatinRT(){
-    const int MAX_LEN =16;
-    const char* const source[MAX_LEN] = {
+    const char* const source[] = {
         "rmk\\u1E63\\u0113t",
         "\\u015Br\\u012Bmad",
         "bhagavadg\\u012Bt\\u0101",
@@ -2350,6 +2349,7 @@ void TransliteratorTest::TestCompoundLatinRT(){
         "kimakurvata",
         "san\\u0304java"
     };
+    const int MAX_LEN = sizeof(source)/sizeof(source[0]);
     const char* const expected[MAX_LEN] = {
         "\\u0930\\u094D\\u092E\\u094D\\u0915\\u094D\\u0937\\u0947\\u0924\\u094D",
         "\\u0936\\u094d\\u0930\\u0940\\u092e\\u0926\\u094d",
@@ -2369,11 +2369,16 @@ void TransliteratorTest::TestCompoundLatinRT(){
         "\\u0915\\u093f\\u092e\\u0915\\u0941\\u0930\\u094d\\u0935\\u0924",
         "\\u0938\\u0902\\u091c\\u0935"
     };
+    if(MAX_LEN != sizeof(expected)/sizeof(expected[0])) {
+        errln("error in TestCompoundLatinRT: source[] and expected[] have different lengths!");
+        return;
+    }
+
     UErrorCode status = U_ZERO_ERROR;
     UParseError parseError;
     UnicodeString message;
-    Transliterator* latinToDevToLatin=Transliterator::createInstance("Latin-Devanagari;Devanagari-Latin", UTRANS_FORWARD, parseError, status);
     Transliterator* devToLatinToDev  =Transliterator::createInstance("Devanagari-Latin;Latin-Devanagari", UTRANS_FORWARD, parseError, status);
+    Transliterator* latinToDevToLatin=Transliterator::createInstance("Latin-Devanagari;Devanagari-Latin", UTRANS_FORWARD, parseError, status);
     Transliterator* devToTelToDev    =Transliterator::createInstance("Devanagari-Telugu;Telugu-Devanagari", UTRANS_FORWARD, parseError, status);
     Transliterator* latinToTelToLatin=Transliterator::createInstance("Latin-Telugu;Telugu-Latin", UTRANS_FORWARD, parseError, status);
 
@@ -2383,10 +2388,10 @@ void TransliteratorTest::TestCompoundLatinRT(){
         return;
     }
     UnicodeString gotResult;
-    for(int i= 0; i<1; i++){
+    for(int i= 0; i<MAX_LEN; i++){
         gotResult = source[i];
-        expect(*latinToDevToLatin,CharsToUnicodeString(source[i]),CharsToUnicodeString(source[i]));
         expect(*devToLatinToDev,CharsToUnicodeString(expected[i]),CharsToUnicodeString(expected[i]));
+        expect(*latinToDevToLatin,CharsToUnicodeString(source[i]),CharsToUnicodeString(source[i]));
         expect(*devToTelToDev,CharsToUnicodeString(expected[i]),CharsToUnicodeString(expected[i]));
         expect(*latinToTelToLatin,CharsToUnicodeString(source[i]),CharsToUnicodeString(source[i]));
 
