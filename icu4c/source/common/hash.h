@@ -48,9 +48,15 @@ public:
 
     void* put(const UnicodeString& key, void* value, UErrorCode& status);
 
+    int32_t puti(const UnicodeString& key, int32_t value, UErrorCode& status);
+
     void* get(const UnicodeString& key) const;
     
+    int32_t geti(const UnicodeString& key) const;
+    
     void* remove(const UnicodeString& key);
+
+    int32_t removei(const UnicodeString& key);
 
     const UHashElement* find(const UnicodeString& key) const;
 
@@ -107,12 +113,24 @@ inline void* Hashtable::put(const UnicodeString& key, void* value, UErrorCode& s
     return uhash_put(hash, new UnicodeString(key), value, &status);
 }
 
+inline int32_t Hashtable::puti(const UnicodeString& key, int32_t value, UErrorCode& status) {
+    return uhash_puti(hash, new UnicodeString(key), value, &status);
+}
+
 inline void* Hashtable::get(const UnicodeString& key) const {
     return uhash_get(hash, &key);
 }
 
+inline int32_t Hashtable::geti(const UnicodeString& key) const {
+    return uhash_geti(hash, &key);
+}
+
 inline void* Hashtable::remove(const UnicodeString& key) {
     return uhash_remove(hash, &key);
+}
+
+inline int32_t Hashtable::removei(const UnicodeString& key) {
+    return uhash_removei(hash, &key);
 }
 
 inline const UHashElement* Hashtable::find(const UnicodeString& key) const {
