@@ -210,6 +210,21 @@ class TransliteratorTest : public IntlTest {
      */
     void TestCompoundFilterID(void);
 
+    /* Devanagari-Latin rules Test */
+    void TestDevanagariLatinRT(void);
+
+    /* Telugu-Latin rules Test */
+    void TestTeluguLatinRT(void);
+    
+    /* Gujarati-Latin rules Test */
+    void TestGujaratiLatinRT(void);
+    
+    /* Sanskrit-Latin rules Test */
+    void TestSanskritLatinRT(void);
+    
+    /* Test Compound Indic-Latin transliterators*/
+    void TestCompoundLatinRT(void);
+    
     //======================================================================
     // Support methods
     //======================================================================

@@ -165,7 +165,7 @@ Latin_InterIndic{
 
     "$depVowelAbove=[\ue03e-\ue040\ue045-\ue04c];"
     "$depVowelBelow=[\ue041-\ue044];"
-    "$endThing=[$danda$doubleDanda \u005c\u005cu0000-\udfff\ue080-\ufffd];"
+    "$endThing=[$danda$doubleDanda];"
     
     // $x was originally called '&'; $z was '%'
     "$x=[$virama$aa$ai$au$ii$i$uu$u$rrh$rh$lh$e$o$se$ce$so$co];"
