@@ -139,8 +139,7 @@ static void TestSurrogateBehaviour(){
     {
         UChar sampleText[]       = {0x00a1, 0xd801, 0xdc01, 0x00a4};
         const uint8_t expected[] = {0xa2, 0xae, 0xa1, 0xe0, 0xa2, 0xb4};
-        int32_t offsets[]        = {0x00, 0x00, 0x01, 0x01, 0x02, 0x02 };
-        int32_t offsets2[]        = {0x00, 0x00, 0x01, 0x01, 0x03, 0x03 };
+        int32_t offsets[]        = {0x00, 0x00, 0x01, 0x01, 0x03, 0x03 };
 
         /*DBCS*/
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
@@ -154,7 +153,7 @@ static void TestSurrogateBehaviour(){
                 expected, sizeof(expected), "ibm-1363", 0 , TRUE, U_ZERO_ERROR))
             log_err("u-> ibm-1363 [UCNV_MBCS] not match.\n");
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-                expected, sizeof(expected), "ibm-1363", offsets2 , TRUE, U_ZERO_ERROR))
+                expected, sizeof(expected), "ibm-1363", offsets, TRUE, U_ZERO_ERROR))
             log_err("u-> ibm-1363 [UCNV_MBCS] not match.\n");
     }
     log_verbose("Testing for ISO-2022-jp\n");
