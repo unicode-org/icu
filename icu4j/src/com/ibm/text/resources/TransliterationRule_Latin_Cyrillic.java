@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/TransliterationRule_Latin_Cyrillic.java,v $ 
- * $Date: 2000/04/21 21:17:08 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/04/26 21:34:16 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -136,6 +136,8 @@ public class TransliterationRule_Latin_Cyrillic extends ListResourceBundle {
                 // #############################################
                 // Special titlecase forms, not duplicated
                 // #############################################
+
+                + "Sh''ch<>$SH$ch;" // LIU Distinguish $SH$ch from $SHCH
                 
                 + "Ch>$CH;" + "Ch<$CH}$lower;"
                 + "Kh>$KH;" + "Kh<$KH}$lower;"
@@ -168,7 +170,8 @@ public class TransliterationRule_Latin_Cyrillic extends ListResourceBundle {
                 
                 + "SH''<$SH}$BECOMES_C;"
                 + "T''<$T}$BECOMES_S;"
-                
+                + "T''<$T}[$CH$SHCH$shch];" // LIU add special cases
+
                 + "K''<$K}$BECOMES_H;"
                 + "S''<$S}$BECOMES_H;"
                 + "T''<$T}$BECOMES_H;"
@@ -247,6 +250,7 @@ public class TransliterationRule_Latin_Cyrillic extends ListResourceBundle {
                 
                 + "sh''<$sh}$becomes_c;"
                 + "t''<$t}$becomes_s;"
+                + "t''<$t}[$ch$shch];" // LIU add special cases
                 
                 + "k''<$k}$becomes_h;"
                 + "s''<$s}$becomes_h;"
