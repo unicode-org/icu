@@ -40,7 +40,7 @@ itrbbi.o rbbiapts.o rbbitst.o ittrans.o transapi.o cpdtrtst.o unhxtrts.o hxuntrt
 ufltlgts.o testutil.o transrt.o trnserr.o normconf.o sfwdchit.o \
 jamotest.o srchtest.o reptest.o regextst.o \
 itrbnf.o itrbnfrt.o tstdtmod.o testdata.o datamap.o ucaconf.o icusvtst.o \
-uobjtest.o
+uobjtest.o idnaref.o nptrans.o punyref.o testidn.o testidna.o
 
 
 DEPS = $(OBJECTS:.o=.d)
