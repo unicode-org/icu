@@ -1615,8 +1615,16 @@ UnicodeString::UnicodeString(const UnicodeString& that)
 //========================================
 inline bool_t
 UnicodeString::operator== (const UnicodeString& text) const
-{ return (fLength == text.fLength 
-      && doCompare(0, fLength, text, 0, text.fLength) == 0); }
+{
+  if(isBogus()) {
+    return text.isBogus();
+  } else {
+    return
+      !text.isBogus() &&
+      fLength == text.fLength &&
+      doCompare(0, fLength, text, 0, text.fLength) == 0;
+  }
+}
 
 inline bool_t
 UnicodeString::operator!= (const UnicodeString& text) const

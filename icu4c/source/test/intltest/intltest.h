@@ -68,17 +68,29 @@ public:
     virtual void setCaller( IntlTest* callingTest ); // for internal use only
     virtual void setPath( char* path ); // for internal use only
 
-    virtual void log( UnicodeString message );
+    virtual void log( const UnicodeString &message );
+
+    // convenience function; assume that the message contains only invariant charcters
+    virtual void log( const char *message );
     
-    virtual void logln( UnicodeString message );
+    virtual void logln( const UnicodeString &message );
+
+    // convenience function; assume that the message contains only invariant charcters
+    virtual void logln( const char *message );
 
     virtual void logln( void );
 
     virtual void err(void);
     
-    virtual void err( UnicodeString message );
+    virtual void err( const UnicodeString &message );
 
-    virtual void errln( UnicodeString message );
+    // convenience function; assume that the message contains only invariant charcters
+    virtual void err( const char *message );
+
+    virtual void errln( const UnicodeString &message );
+
+    // convenience function; assume that the message contains only invariant charcters
+    virtual void errln( const char *message );
     
     virtual void usage( void ) ;
 
@@ -136,6 +148,21 @@ public:
 
 };
 
+inline void IntlTest::log( const char *message ) {
+    log(UnicodeString(message, ""));
+}
+
+inline void IntlTest::logln( const char *message ) {
+    logln(UnicodeString(message, ""));
+}
+
+inline void IntlTest::err( const char *message ) {
+    err(UnicodeString(message, ""));
+}
+
+inline void IntlTest::errln( const char *message ) {
+    errln(UnicodeString(message, ""));
+}
 
 void it_log( UnicodeString message );
 void it_logln( UnicodeString message );

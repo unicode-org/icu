@@ -26,20 +26,32 @@
 #include <string.h>
 #include "uchar.h"
 #include "ustring.h"
+#include "ucnv.h"
 
 static char* _testDirectory=NULL;
 int main ( int argc, char **argv )
 {
-      
-  
-  TestNode *root = NULL;
-  addAllTests(&root);
-  processArgs(root, argc, argv);
- 
+    TestNode *root;
 
-   return 0;
+    /* initial check for the default converter */
+    UErrorCode errorCode = U_ZERO_ERROR;
+    UConverter *cnv = ucnv_open(NULL, &errorCode);
+    if(cnv != NULL) {
+        // ok
+        ucnv_close(cnv);
+    } else {
+        fprintf(stderr,
+            "*** Failure! The default converter cannot be opened.\n"
+            "*** Check the ICU_DATA environment variable and \n"
+            "*** check that the data files are present.\n");
+        return 1;
+    }
 
-    
+    root = NULL;
+    addAllTests(&root);
+    processArgs(root, argc, argv);
+
+    return 0;
 }
 
 void 

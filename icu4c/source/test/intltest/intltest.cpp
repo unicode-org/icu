@@ -654,7 +654,7 @@ bool_t IntlTest::runTestLoop( char* testname, char* par )
 /**
 * Adds given string to the log if we are in verbose mode.
 */
-void IntlTest::log( UnicodeString message )
+void IntlTest::log( const UnicodeString &message )
 {
     if( verbose ) {
         LL_message( message, FALSE );
@@ -665,7 +665,7 @@ void IntlTest::log( UnicodeString message )
 * Adds given string to the log if we are in verbose mode. Adds a new line to
 * the given message.
 */
-void IntlTest::logln( UnicodeString message )
+void IntlTest::logln( const UnicodeString &message )
 {
     if( verbose ) {
         LL_message( message, TRUE );
@@ -690,13 +690,13 @@ void IntlTest::err() {
     IncErrorCount();
 }
     
-void IntlTest::err( UnicodeString message )
+void IntlTest::err( const UnicodeString &message )
 {
     IncErrorCount();
     if (!no_err_msg) LL_message( message, FALSE );
 }
 
-void IntlTest::errln( UnicodeString message )
+void IntlTest::errln( const UnicodeString &message )
 {
     IncErrorCount();
     if (!no_err_msg) LL_message( message, TRUE );
@@ -861,6 +861,19 @@ main(int argc, char* argv[])
     cout << "   Exhaustive (e)        : " << (!quick?     "On" : "Off") << endl;
     cout << "   Leaks (l)             : " << (leaks?      "On" : "Off") << endl;
     cout << "-----------------------------------------------" << endl << endl;
+
+    // initial check for the default converter
+    UErrorCode errorCode = U_ZERO_ERROR;
+    UConverter *cnv = ucnv_open(0, &errorCode);
+    if(cnv != 0) {
+        // ok
+        ucnv_close(cnv);
+    } else {
+        cout << "*** Failure! The default converter cannot be opened." << endl <<
+                "*** Check the ICU_DATA environment variable and " << endl <<
+                "*** check that the data files are present." << endl;
+        return 1;
+    }
 
     if (all) {
         major.runTest();

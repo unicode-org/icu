@@ -89,11 +89,16 @@ CollationMonkeyTest::checkValue(int32_t value)
 
 void CollationMonkeyTest::TestCollationKey( char* par )
 {
+    if(source.length() == 0) {
+        errln(UNICODE_STRING("CollationMonkeyTest::TestCollationKey(): source is empty - ICU_DATA not set or data missing?", 92));
+        return;
+    }
+
     srand( (unsigned)time( NULL ) );
-    int32_t s = checkValue(rand() % source.size());
-    int32_t t = checkValue(rand() % source.size());
-    int32_t slen = checkValue((rand() - source.size()) % source.size());
-    int32_t tlen = checkValue((rand() - source.size()) % source.size());
+    int32_t s = checkValue(rand() % source.length());
+    int32_t t = checkValue(rand() % source.length());
+    int32_t slen = checkValue((rand() - source.length()) % source.length());
+    int32_t tlen = checkValue((rand() - source.length()) % source.length());
     UnicodeString subs, subt;
 
     source.extract(MIN(s, slen), MAX(s, slen), subs);
@@ -156,15 +161,19 @@ void CollationMonkeyTest::TestCollationKey( char* par )
 void 
 CollationMonkeyTest::TestCompare(char* par)
 {
+    if(source.length() == 0) {
+        errln(UNICODE_STRING("CollationMonkeyTest::TestCompare(): source is empty - ICU_DATA not set or data missing?", 87));
+        return;
+    }
 
     /* Seed the random-number generator with current time so that
      * the numbers will be different every time we run.
      */
     srand( (unsigned)time( NULL ) );
-    int32_t s = checkValue(rand() % source.size());
-    int32_t t = checkValue(rand() % source.size());
-    int32_t slen = checkValue((rand() - source.size()) % source.size());
-    int32_t tlen = checkValue((rand() - source.size()) % source.size());
+    int32_t s = checkValue(rand() % source.length());
+    int32_t t = checkValue(rand() % source.length());
+    int32_t slen = checkValue((rand() - source.length()) % source.length());
+    int32_t tlen = checkValue((rand() - source.length()) % source.length());
     UnicodeString subs, subt;
 
     source.extract(MIN(s, slen), MAX(s, slen), subs);

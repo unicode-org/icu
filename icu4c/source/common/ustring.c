@@ -36,11 +36,16 @@ UChar*
 u_strcat(UChar     *dst, 
     const UChar     *src)
 {
-  UChar *anchor = dst;       /* save a pointer to start of dst */
- 
-  while(*dst++);               /* To end of first string          */
-  dst--;                       /* Return to the null              */
-  while(*dst++ = *src++);      /* copy string 2 over              */
+  UChar *anchor = dst;            /* save a pointer to start of dst */
+
+  while(*dst != 0) {              /* To end of first string          */
+    ++dst;
+  }
+  while((*dst = *src) != 0) {     /* copy string 2 over              */
+    ++dst;
+    ++src;
+  }
+
   return anchor;
 }
 
@@ -49,26 +54,37 @@ u_strncat(UChar     *dst,
      const UChar     *src, 
      int32_t     n ) 
 {
-  UChar *anchor = dst;       /* save a pointer to start of dst */
+  if(n > 0) {
+    UChar *anchor = dst;            /* save a pointer to start of dst */
+
+    while(*dst != 0) {              /* To end of first string          */
+      ++dst;
+    }
+    while((*dst = *src) != 0) {     /* copy string 2 over              */
+      ++dst;
+      if(--n == 0) {
+        *dst = 0;
+        break;
+      }
+      ++src;
+    }
   
-  if (!n) return dst;
-  while(*dst++);               /* To end of first string          */
-  dst--;                       /* Return to the null              */
-  while((*dst++ = *src++) && --n);    /* copy string 2 over              */
-  *dst = 0x0000;
-  
-  return anchor;
+    return anchor;
+  } else {
+    return dst;
+  }
 }
 
 UChar*
 u_strchr(const UChar     *s, 
     UChar     c) 
 {
-  while((*s != c) && *s) 
-    s++;
-  
-  if(*s == c)
-    return (UChar*) s;
+  while(*s != 0) {
+    if(*s == c) {
+      return (UChar *)s;
+    }
+    ++s;
+  }
   return NULL;
 }
 
@@ -76,12 +92,15 @@ int32_t
 u_strcmp(const UChar *s1, 
     const UChar *s2) 
 {
-  while((*s1 == *s2) && *s1) {
-    s1++;
-    s2++;
+  int32_t rc;
+  for(;;) {
+    rc = (int32_t)*s1 - (int32_t)*s2;
+    if(rc != 0 || *s1 == 0) {
+      return rc;
+    }
+    ++s1;
+    ++s2;
   }
-
-  return (int32_t)*s1 - (int32_t)*s2;
 }
 
 int32_t  
@@ -89,21 +108,32 @@ u_strncmp(const UChar     *s1,
      const UChar     *s2, 
      int32_t     n) 
 {
-  if (!n) return 0;
-  while((*s1 == *s2) && *s1 && --n) {
-    s1++;
-    s2++;
+  if(n > 0) {
+    int32_t rc;
+    for(;;) {
+      rc = (int32_t)*s1 - (int32_t)*s2;
+      if(rc != 0 || *s1 == 0 || --n == 0) {
+        return rc;
+      }
+      ++s1;
+      ++s2;
+    }
+  } else {
+    return 0;
   }
-  return  (int32_t)*s1 - (int32_t)*s2;
 }
 
 UChar*
 u_strcpy(UChar     *dst, 
     const UChar     *src) 
 {
-  UChar *anchor = dst;     /* save the start of result string */
-  
-  while(*dst++ = *src++);
+  UChar *anchor = dst;            /* save a pointer to start of dst */
+
+  while((*dst = *src) != 0) {     /* copy string 2 over              */
+    ++dst;
+    ++src;
+  }
+
   return anchor;
 }
 
@@ -112,22 +142,36 @@ u_strncpy(UChar     *dst,
      const UChar     *src, 
      int32_t     n) 
 {
-  UChar *anchor = dst;     /* save the start of result string */
-  
-  if (!n) return dst;
-  while((*dst++ = *src++) && --n);
-  *dst = 0x0000;
+  UChar *anchor = dst;            /* save a pointer to start of dst */
+
+  if(n > 0) {
+    while((*dst = *src) != 0) {   /* copy string 2 over              */
+      ++dst;
+      if(--n == 0) {
+        *dst = 0;
+        break;
+      }
+      ++src;
+    }
+  } else {
+    *dst = 0;
+  }
+
   return anchor;
 }
 
 int32_t  
 u_strlen(const UChar *s) 
 {
-  int32_t  i = 0;
-  
-  while(*s++)
-    i++;
-  return  i;
+  if(U_SIZEOF_WCHAR_T == sizeof(UChar)) {
+    return icu_wcslen(s);
+  } else {
+    const UChar *t = s;
+    while(*t != 0) {
+      ++t;
+    }
+    return t - s;
+  }
 }
 
 
@@ -136,12 +180,14 @@ UChar* u_uastrcpy(UChar *ucs1,
 {
   UErrorCode err = U_ZERO_ERROR;
   ucnv_toUChars(defaultConverter,
-        ucs1,
-        MAX_STRLEN,
-        s2,
-        icu_strlen(s2),
-        &err);
-  
+                  ucs1,
+                  MAX_STRLEN,
+                  s2,
+                  icu_strlen(s2),
+                  &err);
+  if(U_FAILURE(err)) {
+    *ucs1 = 0;
+  }
   return ucs1;
 }
 
@@ -150,33 +196,29 @@ UChar* u_uastrncpy(UChar *ucs1,
            int32_t n)
 {
   UErrorCode err = U_ZERO_ERROR;
-  int32_t end = ucnv_toUChars(defaultConverter,
+  ucnv_toUChars(defaultConverter,
                   ucs1,
                   n,
                   s2,
                   icu_strlen(s2),
                   &err);
-  
-  ucs1[icu_min(end,n)] = 0x0000;
+
+  if(U_FAILURE(err)) {
+    *ucs1 = 0;
+  }
   return ucs1;
 }
 
 char* u_austrcpy(char *s1,
          const UChar *ucs2 )
 {
-  char * anchor = s1;     /* save the start of result string */
   UErrorCode err = U_ZERO_ERROR;
   int32_t len = ucnv_fromUChars(defaultConverter,
                 s1,
                 MAX_STRLEN,
                 ucs2,
                 &err);
-  
-  s1[len] = '\0';
+
+  s1[len] = 0;
   return s1;
-  
 }
-
-
-
-

@@ -109,7 +109,11 @@ Normalizer::~Normalizer()
 Normalizer*    
 Normalizer::clone() const
 {
-  return new Normalizer(*this);
+  if(this!=0) {
+    return new Normalizer(*this);
+  } else {
+    return 0;
+  }
 }
 
 /**
