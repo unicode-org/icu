@@ -228,6 +228,8 @@ void TestPUtilAPI(){
         udataDir=(UChar*)malloc(sizeof(UChar) * (strlen(dataDirectory) + 1));
         u_charsToUChars(dataDirectory, udataDir, (strlen(dataDirectory)+1));
         u_uastrcpy(temp, dataDirectory);
+        /* This cannot really work on a japanese system. u_uastrcpy will have different results than */
+        /* u_charsToUChars when there is a backslash in the string! */
         if(u_strcmp(temp, udataDir) != 0){
             log_err("ERROR: u_charsToUChars failed. Expected %s, Got %s\n", austrdup(temp), austrdup(udataDir));
         }

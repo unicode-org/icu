@@ -46,12 +46,12 @@ UnicodeSetTest::runIndexedTest(int32_t index, UBool exec,
 void
 UnicodeSetTest::TestPatterns(void) {
     UnicodeSet set;
-    expectPattern(set, "[[a-m]&[d-z]&[k-y]]",  "km");
-    expectPattern(set, "[[a-z]-[m-y]-[d-r]]",  "aczz");
-    expectPattern(set, "[a\\-z]",  "--aazz");
-    expectPattern(set, "[-az]",  "--aazz");
-    expectPattern(set, "[az-]",  "--aazz");
-    expectPattern(set, "[[[a-z]-[aeiou]i]]", "bdfnptvz");
+    expectPattern(set, UnicodeString("[[a-m]&[d-z]&[k-y]]", ""),  "km");
+    expectPattern(set, UnicodeString("[[a-z]-[m-y]-[d-r]]", ""),  "aczz");
+    expectPattern(set, UnicodeString("[a\\-z]", ""),  "--aazz");
+    expectPattern(set, UnicodeString("[-az]", ""),  "--aazz");
+    expectPattern(set, UnicodeString("[az-]", ""),  "--aazz");
+    expectPattern(set, UnicodeString("[[[a-z]-[aeiou]i]]", ""), "bdfnptvz");
 
     // Throw in a test of complement
     set.complement();

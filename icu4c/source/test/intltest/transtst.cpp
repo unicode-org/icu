@@ -420,12 +420,13 @@ void TransliteratorTest::TestCompoundHex(void) {
         delete b;
         return;
     }
-
+    // Do some basic tests of a
+    expect(*a, "01", UnicodeString("\\u0030\\u0031", ""));
     // Do some basic tests of b
     expect(*b, UnicodeString("\\u0030\\u0031", ""), "01");
 
     Transliterator* ab = new CompoundTransliterator(transab, 2);
-    UnicodeString s("abcde");
+    UnicodeString s("abcde", "");
     expect(*ab, s, s);
 
     UnicodeString str(s);
@@ -592,7 +593,7 @@ void TransliteratorTest::TestJ243(void) {
            "abcd5fx012&#x00033;");
     // Try custom Unicode-Hex (default is tested elsewhere)
     status = U_ZERO_ERROR;
-    UnicodeToHexTransliterator hex3("&\\#x###0;", status);
+    UnicodeToHexTransliterator hex3(UnicodeString("&\\#x###0;", ""), status);
     expect(hex3, "012", "&#x30;&#x31;&#x32;");
 #endif
 }

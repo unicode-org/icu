@@ -456,25 +456,25 @@ UBool RTHangulTest::isSource(UChar c) {
 void TransliteratorRoundTripTest::TestHiragana() {
     RTTest test("Latin-Kana",
                 TestUtility::LATIN_SCRIPT, TestUtility::HIRAGANA_SCRIPT);
-    test.test("[a-z]", "[\\u3040-\\u3094]", this);
+    test.test("[a-z]", UnicodeString("[\\u3040-\\u3094]", ""), this);
 }
 
 void TransliteratorRoundTripTest::TestKatakana() {
     RTTest test("Latin-Kana", 
                 TestUtility::LATIN_SCRIPT, TestUtility::KATAKANA_SCRIPT);
-    test.test("[A-Z]", "[\\u30A1-\\u30FA]", this);
+    test.test("[A-Z]", UnicodeString("[\\u30A1-\\u30FA]", ""), this);
 }
 
  void TransliteratorRoundTripTest::TestArabic() {
     RTTest test("Latin-Arabic", 
                 TestUtility::LATIN_SCRIPT, TestUtility::ARABIC_SCRIPT);
-    test.test("[a-z]", "[\\u0620-\\u065F-[\\u0640]]", this);
+    test.test("[a-z]", UnicodeString("[\\u0620-\\u065F-[\\u0640]]", ""), this);
 }
 
 void TransliteratorRoundTripTest::TestHebrew() {
     RTTest test("Latin-Hebrew", 
                 TestUtility::LATIN_SCRIPT, TestUtility::HEBREW_SCRIPT);
-    test.test("", "[\\u05D0-\\u05EF]", this);
+    test.test("", UnicodeString("[\\u05D0-\\u05EF]", ""), this);
 }
 
 void TransliteratorRoundTripTest::TestHangul() {
@@ -500,11 +500,11 @@ void TransliteratorRoundTripTest::TestJamoHangul() {
 void TransliteratorRoundTripTest::TestGreek() {
     RTTest test("Latin-Greek", 
                 TestUtility::LATIN_SCRIPT, TestUtility::GREEK_SCRIPT);
-    test.test("", "[\\u0380-\\u03CF]", this);
+    test.test("", UnicodeString("[\\u0380-\\u03CF]", ""), this);
 }
 
 void TransliteratorRoundTripTest::TestCyrillic() {
     RTTest test("Latin-Cyrillic", 
                 TestUtility::LATIN_SCRIPT, TestUtility::CYRILLIC_SCRIPT);
-    test.test("", "[\\u0401\\u0410-\\u044F\\u0451]", this);
+    test.test("", UnicodeString("[\\u0401\\u0410-\\u044F\\u0451]", ""), this);
 }
