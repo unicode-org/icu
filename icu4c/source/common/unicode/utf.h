@@ -91,8 +91,8 @@
  * ANSI C headers:
  * stddef.h defines wchar_t
  */
-#include <stddef.h>
 #include "unicode/umachine.h"
+#include <stddef.h>
 /* include the utfXX.h after the following definitions */
 
 /* If there is no compiler option for the preferred UTF size, then default to UTF-16. */
