@@ -626,7 +626,7 @@ ucol_setVariableTop(UCollator *coll,
  * @see ucol_restoreVariableTop
  * @draft ICU 2.0
  */
-U_CAPI uint32_t ucol_getVariableTop(const UCollator *coll, UErrorCode *status);
+U_CAPI uint32_t U_EXPORT2 ucol_getVariableTop(const UCollator *coll, UErrorCode *status);
 
 /** 
  * Sets the variable top to a collation element value supplied. Variable top is 
