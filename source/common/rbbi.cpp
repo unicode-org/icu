@@ -211,14 +211,19 @@ RuleBasedBreakIterator::clone(void) const {
  */
 UBool
 RuleBasedBreakIterator::operator==(const BreakIterator& that) const {
-    if (that.getDynamicClassID() != getDynamicClassID())
-        return FALSE;
+    UBool r = FALSE;
+    if (that.getDynamicClassID() != getDynamicClassID()) {
+        return r;
+    }
 
-
-    const RuleBasedBreakIterator& that2 = (const RuleBasedBreakIterator&)that;
-    UBool r = (that2.fText == fText);
-    r |= (*that2.fText == *fText);
-    r &= (*that2.fData == *fData);
+    const RuleBasedBreakIterator& that2 = (const RuleBasedBreakIterator&) that;
+    if (fText == that2.fText ||
+        (fText != NULL && that2.fText != NULL && *that2.fText == *fText)) {
+        if (that2.fData == fData || 
+            (fData != NULL && that2.fData != NULL && *that2.fData == *fData)) {
+            r = TRUE;
+        }
+    }
     return r;
 }
 
