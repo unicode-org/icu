@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UTF16.java,v $ 
-* $Date: 2002/03/15 23:47:10 $ 
-* $Revision: 1.16 $
+* $Date: 2002/03/20 01:44:49 $ 
+* $Revision: 1.17 $
 *
 *******************************************************************************
 */
@@ -1013,7 +1013,7 @@ public final class UTF16
     {
         offset16 += start;
         if (offset16 > limit) {
-        throw new StringIndexOutOfBoundsException(offset16);
+        	throw new StringIndexOutOfBoundsException(offset16);
         }
          
         int result = 0;
@@ -1022,15 +1022,15 @@ public final class UTF16
         
         for (int i = start; i < offset16; ++ i) 
         {
-        ch = source[i];
-        if (hadLeadSurrogate && isTrailSurrogate(ch)) {
-            hadLeadSurrogate = false;           // count valid trail as zero
-        }
-        else
-        {
-            hadLeadSurrogate = isLeadSurrogate(ch);
-            ++ result;                          // count others as 1
-        }
+        	ch = source[i];
+        	if (hadLeadSurrogate && isTrailSurrogate(ch)) {
+            	hadLeadSurrogate = false; // count valid trail as zero
+        	}
+        	else
+        	{
+            	hadLeadSurrogate = isLeadSurrogate(ch);
+            	++ result;                          // count others as 1
+        	}
         }
         
         if (offset16 == limit) {
@@ -1040,7 +1040,7 @@ public final class UTF16
         // end of source being the less significant surrogate character
         // shift result back to the start of the supplementary character
         if (hadLeadSurrogate && (isTrailSurrogate(source[offset16]))) {
-        result --;
+        	result --;
         }
           
         return result;
@@ -1142,8 +1142,7 @@ public final class UTF16
         if (source == null || source.length == 0) {
             return 0;
         }
-        return findCodePointOffset(source, start, limit, limit) -
-                findCodePointOffset(source, start, limit, start);
+        return findCodePointOffset(source, start, limit, limit - start);
     }
       
     /**
