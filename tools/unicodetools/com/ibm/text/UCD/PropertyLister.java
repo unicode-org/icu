@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/PropertyLister.java,v $
-* $Date: 2001/12/03 19:29:35 $
-* $Revision: 1.4 $
+* $Date: 2001/12/05 02:41:23 $
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -33,6 +33,7 @@ abstract public class PropertyLister implements UCD_Types {
     protected int firstRealCp = -2;
     protected int lastRealCp = -2;
     protected boolean alwaysBreaks = false; // set to true if property only breaks
+    protected boolean commentOut = false;
     private UnicodeSet set = new UnicodeSet();
 
     public static final byte INCLUDE = 0, BREAK = 1, CONTINUE = 2, EXCLUDE = 3;
@@ -69,11 +70,17 @@ abstract public class PropertyLister implements UCD_Types {
         try {
             set.add(startCp, endCp);
             String prop = propertyName(startCp);
+            String opt = "";
+            String optCom = "";
+            String commentSep = " # ";
+            if (commentOut) commentSep = "";
+            
             if (prop.length() > 0) prop = "; " + prop;
-            String opt = optionalName(startCp);
+            opt = optionalName(startCp);
             if (opt.length() > 0) opt = "; " + opt;
-            String optCom = optionalComment(startCp);
+            optCom = optionalComment(startCp);
             if (optCom.length() > 0) optCom += " ";
+            
             String startName = getKenName(startCp);
             String line;
             String pgap = Utility.repeat(" ", minPropertyWidth() - prop.length() - opt.length());
@@ -85,7 +92,7 @@ abstract public class PropertyLister implements UCD_Types {
                 String gap = Utility.repeat(" ", 12 - width(startCp) - width(endCp));
 
                 line = Utility.hex(startCp,4) + ".." + Utility.hex(endCp,4) + gap
-                        + prop + opt + pgap + " # " + optCom
+                        + prop + opt + pgap + commentSep + optCom
                         + countStr;
                 if (startName.length() != 0 || endName.length() != 0) {
                     int com = 0;
@@ -105,8 +112,11 @@ abstract public class PropertyLister implements UCD_Types {
                     ? " "
                     : "      ";
                 line = Utility.hex(startCp,4) + gap
-                        + prop + opt + pgap + " # " + optCom + gap2
+                        + prop + opt + pgap + commentSep + optCom + gap2
                         + startName;
+            }
+            if (commentOut) {
+                line = "# " + line;
             }
             output.println(line);
             if (showOnConsole) System.out.println(line);
@@ -170,6 +180,7 @@ abstract public class PropertyLister implements UCD_Types {
         }
         for (int cp = 0; cp <= 0x10FFFF; ++cp) {
             byte s = status(cp);
+            if (alwaysBreaks && s == INCLUDE) s = BREAK;
             if (s == INCLUDE && firstRealCp != -1) {
                 byte cat = ucdData.getCategory(cp);
                 if (cat == Lt || cat == Ll) cat = Lu;
@@ -216,11 +227,12 @@ abstract public class PropertyLister implements UCD_Types {
         if (count == 0) System.out.println("WARNING -- ZERO COUNT FOR " + header);
         NumberFormat nf = NumberFormat.getInstance();
         nf.setMaximumFractionDigits(0);
+        nf.setGroupingUsed(false);
         output.println();
         output.println("# Total code points: " + nf.format(count));
         output.println();
-        System.out.println(headerString());
-        System.out.println(set.toPattern(true));
+        //System.out.println(headerString());
+        //System.out.println(set.toPattern(true));
         return count;
     }
     

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2001/12/03 19:29:35 $
-* $Revision: 1.6 $
+* $Date: 2001/12/05 02:41:23 $
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -25,6 +25,9 @@ import com.ibm.text.utility.*;
 
 
 public final class UCD implements UCD_Types {
+    
+    static final boolean DEBUG = false;
+    
     /**
      * Used for the default version.
      */
@@ -306,7 +309,7 @@ public final class UCD implements UCD_Types {
         StringBuffer result = new StringBuffer();
         int cp;
         byte currentCaseType = caseType;
-        DerivedProperty dp = new DerivedProperty(this);
+        UnicodeProperty defaultIgnorable = DerivedProperty.make(DerivedProperty.DefaultIgnorable, this);
         
         for (int i = 0; i < s.length(); i += UTF32.count16(cp)) {
             cp = UTF32.char32At(s, i);
@@ -318,7 +321,7 @@ public final class UCD implements UCD_Types {
                 if (cp == SHY || cp == '\'' || cp == APOSTROPHE) continue;
                 byte cat = getCategory(cp);
                 if (cat == Mn || cat == Me || cat == Cf || cat == Lm) continue;
-                if (dp.hasProperty(cp, DerivedProperty.DefaultIgnorable)) continue;
+                if (defaultIgnorable.hasValue(cp)) continue;
                 // if DefaultIgnorable is not supported, then 
                 // check for (Cf + Cc + Cs) - White_Space
                 // if (cat == Cs && cp != 0x85 && (cp < 9 || cp > 0xD)) continue;                
@@ -543,6 +546,10 @@ public final class UCD implements UCD_Types {
         return UCD_Names.GC[prop];
     }
     
+    public static String getCategoryID_fromIndex(byte prop, byte style) {
+        return (style != LONG) ? UCD_Names.GC[prop] : UCD_Names.LONG_GC[prop];
+    }
+    
     public String getCombiningID(int codePoint, byte style) {
         return getCombiningID_fromIndex(getCombiningClass(codePoint), style);
     }
@@ -585,7 +592,11 @@ public final class UCD implements UCD_Types {
     }
 
     public static String getBidiClassID_fromIndex(byte prop) {
-        return UCD_Names.BC[prop];
+        return getBidiClassID_fromIndex(prop, NORMAL);
+    }
+    
+    public static String getBidiClassID_fromIndex(byte prop, byte style) {
+        return style == SHORT ? UCD_Names.BC[prop] : UCD_Names.LONG_BC[prop];
     }
 
     public String getCombiningClassID(int codePoint) {
@@ -601,7 +612,10 @@ public final class UCD implements UCD_Types {
     }
 
     public static String getDecompositionTypeID_fromIndex(byte prop) {
-        return UCD_Names.DT[prop];
+        return getDecompositionTypeID_fromIndex(NORMAL);
+    }
+    public static String getDecompositionTypeID_fromIndex(byte prop, byte style) {
+        return style == SHORT ? UCD_Names.SHORT_DT[prop] : UCD_Names.DT[prop];
     }
 
     public String getNumericTypeID(int codePoint) {
@@ -665,7 +679,11 @@ public final class UCD implements UCD_Types {
     }
 
     public static String getBinaryPropertiesID_fromIndex(byte bit) {
-        return UCD_Names.BP[bit];
+        return getBinaryPropertiesID_fromIndex(bit, NORMAL);
+    }
+
+    public static String getBinaryPropertiesID_fromIndex(byte bit, byte style) {
+        return style == SHORT ? UCD_Names.SHORT_BP[bit] : UCD_Names.BP[bit];
     }
 
     public static int mapToRepresentative(int ch, boolean old) {
@@ -832,6 +850,9 @@ to guarantee identifier closure.
 
     // access data for codepoint
     UData get(int codePoint, boolean fixStrings) {
+        if (codePoint < 0 || codePoint > 0x10FFFF) {
+            throw new IllegalArgumentException("Illegal Code Point: " + Utility.hex(codePoint));
+        }
         //if (codePoint == lastCode && fixStrings <= lastCodeFixed) return lastResult;
         /*
         // we play some funny tricks for performance
@@ -1026,7 +1047,7 @@ to guarantee identifier closure.
                 UData uData = new UData();
                 uData.readBytes(dataIn);
 
-                if (uData.codePoint == 0x2801) {
+                if (DEBUG && uData.codePoint == 0x2801) {
                     System.out.println("SPOT-CHECK: " + uData);
                 }
 

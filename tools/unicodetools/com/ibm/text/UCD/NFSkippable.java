@@ -61,7 +61,7 @@ public final class NFSkippable extends UnicodeProperty {
     
     String cause = "";
     
-    public boolean hasProperty(int cp) {
+    public boolean hasValue(int cp) {
         // quick check on some special classes
         if (DEBUG) cause = "\t\tunassigned";
         if (!ucd.isAssigned(cp)) return true;
@@ -196,7 +196,7 @@ public final class NFSkippable extends UnicodeProperty {
         PrintWriter out = Utility.openPrintWriter("NFSafeSets.txt");
         
         for (int mode = NFD_UnsafeStart; mode <= NFKC_UnsafeStart; ++mode) {
-            UnicodeProperty up = DerivedProperty.getProperty(mode, UCD.make(version));
+            UnicodeProperty up = DerivedProperty.make(mode, UCD.make(version));
             generateSet(out, "UNSAFE[" + Normalizer.getName((byte)(mode-NFD_UnsafeStart)) + "]", up);
         }
         
@@ -213,7 +213,7 @@ public final class NFSkippable extends UnicodeProperty {
         UnicodeSet result = new UnicodeSet();
         for (int cp = 0; cp <= limit; ++cp) {
             Utility.dot(cp);
-            if (up.hasProperty(cp)) result.add(cp);
+            if (up.hasValue(cp)) result.add(cp);
         }
         Utility.fixDot();
             

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2001/11/13 02:31:55 $
-* $Revision: 1.10 $
+* $Date: 2001/12/05 02:41:23 $
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -24,14 +24,39 @@ import com.ibm.text.UTF16;
 
 public class GenerateData implements UCD_Types {
     
+    static final boolean DEBUG = false;
+    
     static final String HORIZONTAL_LINE = "# ================================================";
 
-    static UnifiedBinaryProperty ubp;
+    //static UnifiedBinaryProperty ubp;
+    
+    static final String[] ALL = {
+        "CaseFolding",
+        "CompositionExclusions",
+        "DerivedBidiClass",
+        "DerivedBinaryProperties",
+        "DerivedCombiningClass",
+        "DerivedCoreProperties",
+        "DerivedDecompositionType",
+        "DerivedEastAsianWidth",
+        "DerivedGeneralCategory",
+        "DerivedJoiningGroup",
+        "DerivedJoiningType",
+        "DerivedLineBreak",
+        "DerivedNormalizationProperties",
+        "DerivedNumericType",
+        "DerivedNumericValues",
+        "NormalizationTest",
+        "PropList",
+        "Scripts",
+        "DerivedAge",
+    };
+        
     
     public static void main (String inVersion, String[] args) throws IOException {
         System.out.println("START");
         ucd = UCD.make(inVersion);
-        ubp = new UnifiedBinaryProperty(ucd);
+        //ubp = new UnifiedBinaryProperty(ucd);
         
         System.out.println("Loaded UCD " + ucd.getVersion() + " " + (new Date(ucd.getDate())));
         String version = ucd.getVersion();
@@ -46,6 +71,12 @@ public class GenerateData implements UCD_Types {
 
             if (arg.equalsIgnoreCase("partition")) {
                 partitionProperties();
+            } else if (arg.equalsIgnoreCase("All")) {
+                // Append all args at end
+                String[] temp = new String[args.length + ALL.length];
+                System.arraycopy(args, 0, temp, 0, args.length);
+                System.arraycopy(ALL, 0, temp, args.length, ALL.length);
+                args = temp;
             } else if (arg.equalsIgnoreCase("PropertyAliases")) {
                 listProperties();                
             } else if (arg.equalsIgnoreCase("listAccents")) {
@@ -61,52 +92,55 @@ public class GenerateData implements UCD_Types {
                 listDifferences();
             } else if (arg.equalsIgnoreCase("DerivedBidiClass")) {
                 generateVerticalSlice(BIDI_CLASS, BIDI_CLASS+NEXT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
-                    "DerivedBidiClass-" + version );
+                    "DerivedData/DerivedBidiClass-" + version );
                     
             } else if (arg.equalsIgnoreCase("DerivedNormalizationProperties")) {
                 mask = Utility.setBits(0, DerivedProperty.FC_NFKC_Closure, DerivedProperty.ExpandsOnNFKC);
                 mask = Utility.clearBit(mask, DerivedProperty.FullCompInclusion);
-                generateDerived(mask, HEADER_DERIVED, "DerivedNormalizationProperties-" + version );
+                generateDerived(mask, HEADER_DERIVED, "DerivedData/DerivedNormalizationProperties-" + version );
                 
             } else if (arg.equalsIgnoreCase("DerivedFullNormalization")) {
                 mask = Utility.setBits(0, DerivedProperty.GenNFD, DerivedProperty.GenNFKC);
-                generateDerived(mask, HEADER_DERIVED, "DerivedFullNormalization-" + version );
+                generateDerived(mask, HEADER_DERIVED, "DerivedData/DerivedFullNormalization-" + version );
                 
             } else if (arg.equalsIgnoreCase("DerivedEastAsianWidth")) {
                 generateVerticalSlice(EAST_ASIAN_WIDTH, EAST_ASIAN_WIDTH+NEXT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
-                    "DerivedEastAsianWidth-" + version );
+                    "DerivedData/DerivedEastAsianWidth-" + version );
             } else if (arg.equalsIgnoreCase("DerivedGeneralCategory")) {
                 generateVerticalSlice(CATEGORY, CATEGORY+NEXT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
-                    "DerivedGeneralCategory-" + version );
+                    "DerivedData/DerivedGeneralCategory-" + version );
+            } else if (arg.equalsIgnoreCase("DerivedGeneralCategoryTEST")) {
+                generateVerticalSlice(CATEGORY+29, CATEGORY+32, KEEP_SPECIAL, HEADER_DERIVED,
+                    "DerivedData/DerivedGeneralCategory-" + version );
             } else if (arg.equalsIgnoreCase("DerivedCombiningClass")) {
                 generateVerticalSlice(COMBINING_CLASS, COMBINING_CLASS+NEXT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
-                    "DerivedCombiningClass-" + version );
+                    "DerivedData/DerivedCombiningClass-" + version );
             } else if (arg.equalsIgnoreCase("DerivedDecompositionType")) {
                 generateVerticalSlice(DECOMPOSITION_TYPE, DECOMPOSITION_TYPE+NEXT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
-                    "DerivedDecompositionType-" + version );
+                    "DerivedData/DerivedDecompositionType-" + version );
             } else if (arg.equalsIgnoreCase("DerivedNumericType")) {
                 generateVerticalSlice(NUMERIC_TYPE, NUMERIC_TYPE+NEXT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
-                    "DerivedNumericType-" + version );
+                    "DerivedData/DerivedNumericType-" + version );
             } else if (arg.equalsIgnoreCase("DerivedEastAsianWidth")) {
                 generateVerticalSlice(EAST_ASIAN_WIDTH, EAST_ASIAN_WIDTH+NEXT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
-                    "DerivedEastAsianWidth-" + version );
+                    "DerivedData/DerivedEastAsianWidth-" + version );
             } else if (arg.equalsIgnoreCase("DerivedJoiningType")) {
                 generateVerticalSlice(JOINING_TYPE, JOINING_TYPE+NEXT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
-                    "DerivedJoiningType-" + version );
+                    "DerivedData/DerivedJoiningType-" + version );
             } else if (arg.equalsIgnoreCase("DerivedJoiningGroup")) {
                 generateVerticalSlice(JOINING_GROUP, JOINING_GROUP+NEXT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
-                    "DerivedJoiningGroup-" + version );
+                    "DerivedData/DerivedJoiningGroup-" + version );
             } else if (arg.equalsIgnoreCase("DerivedBinaryProperties")) {
                 generateVerticalSlice(BINARY_PROPERTIES, BINARY_PROPERTIES+1, KEEP_SPECIAL, HEADER_DERIVED,
-                    "DerivedBinaryProperties-" + version );
+                    "DerivedData/DerivedBinaryProperties-" + version );
             } else if (arg.equalsIgnoreCase("DerivedNumericValues")) {
                 generateVerticalSlice(LIMIT_ENUM, LIMIT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
-                    "DerivedNumericValues-" + version );
+                    "DerivedData/DerivedNumericValues-" + version );
                     
             } else if (arg.equalsIgnoreCase("DerivedCoreProperties")) {
                 mask = Utility.setBits(0, DerivedProperty.PropMath, DerivedProperty.Mod_ID_Continue_NO_Cf);
                 mask = Utility.setBits(mask, DerivedProperty.DefaultIgnorable, DerivedProperty.FC_NFC_Closure-1);
-                generateDerived(mask, HEADER_DERIVED, "DerivedCoreProperties-" + version );
+                generateDerived(mask, HEADER_DERIVED, "DerivedData/DerivedCoreProperties-" + version );
                 
             } else if (arg.equalsIgnoreCase("caseignorable")) {
                 mask = Utility.setBits(0, DerivedProperty.Other_Case_Ignorable, DerivedProperty.Type_i);
@@ -121,23 +155,24 @@ public class GenerateData implements UCD_Types {
                 generateDerived(mask, HEADER_DERIVED, "NFUnsafeStart-" + version);
                 
             } else if (arg.equalsIgnoreCase("DerivedAge")) {
-                generateAge("DerivedAge-" + version );
+                generateAge("DerivedData/DerivedAge-" + version);
                 
             } else if (arg.equalsIgnoreCase("DerivedLineBreak")) {
                 generateVerticalSlice(LINE_BREAK, LINE_BREAK+NEXT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
-                    "DerivedLineBreak-" + version );
+                    "DerivedData/DerivedLineBreak-" + version );
             } else if (arg.equalsIgnoreCase("Scripts")) {
-                generateVerticalSlice(SCRIPT+1, SCRIPT + NEXT_ENUM, KEEP_SPECIAL, HEADER_SCRIPTS, "Scripts-");
+                generateVerticalSlice(SCRIPT+1, SCRIPT + NEXT_ENUM, 
+                        KEEP_SPECIAL, HEADER_SCRIPTS, "DerivedData/Scripts-" + version);
             } else if (arg.equalsIgnoreCase("PropList")) {
                 generateVerticalSlice(BINARY_PROPERTIES + White_space, BINARY_PROPERTIES + NEXT_ENUM,
-                        KEEP_SPECIAL, HEADER_EXTEND, "PropList-" + version);
+                        KEEP_SPECIAL, HEADER_EXTEND, "DerivedData/PropList-" + version);
             } else if (arg.equalsIgnoreCase("AllBinary")) {
                 generateVerticalSlice(BINARY_PROPERTIES, BINARY_PROPERTIES + NEXT_ENUM,
                         KEEP_SPECIAL, HEADER_EXTEND, "AllBinary-" + version);
             } else if (arg.equalsIgnoreCase("NormalizationTest")) {
-                writeNormalizerTestSuite("NormalizationTest-" + version + ".txt" );
-            } else if (arg.equalsIgnoreCase("generateCompExclusions")) {
-                generateCompExclusions();
+                writeNormalizerTestSuite("DerivedData/NormalizationTest-" + version + "dX.txt" );
+            } else if (arg.equalsIgnoreCase("CompositionExclusions")) {
+                generateCompExclusions(version);
             }else {
                 System.out.println(" ! Unknown option -- must be one of the following (case-insensitive)");
                 System.out.println(" ! generateCompExclusions,...");
@@ -149,10 +184,10 @@ public class GenerateData implements UCD_Types {
 
 
                 //generateDerived(Utility.setBits(0, DerivedProperty.PropMath, DerivedProperty.Mod_ID_Continue_NO_Cf),
-                //    HEADER_DERIVED, "DerivedPropData2-" + version );
+                //    HEADER_DERIVED, "DerivedData/DerivedPropData2-" + version );
             //generateVerticalSlice(SCRIPT, SCRIPT+1, KEEP_SPECIAL, "ScriptCommon-" + version );
             //listStrings("LowerCase-" + version , 0,0);
-            //generateVerticalSlice(0, LIMIT_ENUM, SKIP_SPECIAL, PROPLIST1, "DerivedPropData1-" + version );
+            //generateVerticalSlice(0, LIMIT_ENUM, SKIP_SPECIAL, PROPLIST1, "DerivedData/DerivedPropData1-" + version );
 
             // AGE stuff
             //UCD ucd = UCD.make();
@@ -234,7 +269,7 @@ public class GenerateData implements UCD_Types {
     public static void generateDerived (long bitMask, int headerChoice, String fileName) throws IOException {
         PrintWriter output = Utility.openPrintWriter(fileName + "dX.txt");
         doHeader(fileName, output, headerChoice);
-        for (int i = 0; i < DerivedProperty.LIMIT; ++i) {
+        for (int i = 0; i < DERIVED_PROPERTY_LIMIT; ++i) {
             if ((bitMask & (1L<<i)) == 0) continue;
             System.out.print('.');
             output.println(HORIZONTAL_LINE);
@@ -266,34 +301,101 @@ public class GenerateData implements UCD_Types {
     }
     */
 
-    public static void generateCompExclusions() throws IOException {
-        PrintWriter output = Utility.openPrintWriter("CompositionExclusionsDelta.txt");
-        new CompLister(output).print();
+    public static void generateCompExclusions(String version) throws IOException {
+        PrintWriter output = Utility.openPrintWriter("DerivedData/CompositionExclusions-" + version + "dX.txt" );
+        output.println("# CompositionExclusions-" + version + ".txt");
+        output.println("#");
+        output.println("# Composition Exclusions");
+        output.println("# This file lists the characters from the UAX #15 Composition Exclusion Table.");
+        output.println("#");
+        output.println("# For more information, see");
+        output.println("# http://www.unicode.org/unicode/reports/tr15/#Primary Exclusion List Table");
+        output.println("# Generated: " + new Date() + ", MD");
+        output.println(HORIZONTAL_LINE);
+        output.println();
+        output.println("# (1) Script Specifics");
+        output.println("# This list of characters cannot be derived from the UnicodeData file.");
+        output.println(HORIZONTAL_LINE);
+        output.println();
+        
+        new CompLister(output, ucd, 1).print();
+        
+        output.println(HORIZONTAL_LINE);
+        output.println("# (2) Post Composition Version precomposed characters");
+        output.println("# These characters can be derived from a post-3.0.0 UnicodeData file");
+        output.println("# by comparison to the 3.0.0 UnicodeData file.");
+        output.println(HORIZONTAL_LINE);
+        output.println();
+        
+        new CompLister(output, ucd, 2).print();
+
+        output.println(HORIZONTAL_LINE);
+        output.println("# (3) Singleton Decompositions");
+        output.println("# These characters can be derived from the UnicodeData file");
+        output.println("# by including all characters whose canonical decomposition");
+        output.println("# consists of a single character.");
+        output.println("# These characters are simply quoted here for reference.");
+        output.println(HORIZONTAL_LINE);
+        output.println();
+
+        new CompLister(output, ucd, 3).print();
+        
+        output.println(HORIZONTAL_LINE);
+        output.println("# (4) Non-Starter Decompositions");
+        output.println("# These characters can be derived from the UnicodeData file");
+        output.println("# by including all characters whose canonical decomposition consists");
+        output.println("# of a sequence of characters, the first of which has a non-zero");
+        output.println("# combining class.");
+        output.println("# These characters are simply quoted here for reference.");        
+        output.println(HORIZONTAL_LINE);
+        output.println();
+        new CompLister(output, ucd, 4).print();
+        
         output.close();
     }
 
     static class CompLister extends PropertyLister {
         UCD oldUCD;
-        int oldLength = 0;
+        int type;
 
-        public CompLister(PrintWriter output) {
+        public CompLister(PrintWriter output, UCD ucd, int type) {
             this.output = output;
-            ucdData = UCD.make("3.1.0");
-            oldUCD = UCD.make("3.0.0");
-            showOnConsole = true;
+            ucdData = ucd;
+            oldUCD = UCD.make("3.0.1");
+            // showOnConsole = true;
+            alwaysBreaks = type <= 2; // CHANGE LATER
+            commentOut = type > 2;
+            this.type = type;
         }
+
+        public String optionalComment(int cp) { return ""; }
+        /*
         public String propertyName(int cp) {
             return UTF32.length32(ucdData.getDecompositionMapping(cp)) + "";
         }
+        */
         public byte status(int cp) {
-            if (ucdData.getDecompositionType(cp) == CANONICAL
-              && oldUCD.getDecompositionType(cp) != CANONICAL) {
-                int temp = oldLength;
-                oldLength = UTF32.length32(ucdData.getDecompositionMapping(cp));
-                if (temp != oldLength) return BREAK;
-                return INCLUDE;
-            }
+            if (getType(cp) == type) return INCLUDE;
             return EXCLUDE;
+        }
+        
+        public int getType(int cp) {
+            if (!ucdData.isAssigned(cp)) return -1;
+            if (ucdData.getDecompositionType(cp) != CANONICAL) return -1;
+            
+            if (oldUCD.getBinaryProperty(cp, CompositionExclusion)) return 1;
+            if (cp == 0xFB1D) return 1; // special
+            
+            String decomp = ucdData.getDecompositionMapping(cp);
+            int len = UTF32.length32(decomp);
+            if (len == 1) return 3;
+            int first = UTF32.char32At(decomp,0);
+            if (ucdData.getCombiningClass(first) != 0) return 4;
+            
+            if (oldUCD.getDecompositionType(cp) == CANONICAL) return -1;
+            if (ucdData.getDecompositionType(cp) == CANONICAL) return 2;
+            
+            return -1;
         }
     }
 
@@ -306,7 +408,7 @@ public class GenerateData implements UCD_Types {
         for (int i = 1; i < LIMIT_ENUM; ++i) { //   || iType == SCRIPT
             int iType = i & 0xFF00;
             if (iType == JOINING_GROUP || iType == AGE || iType == COMBINING_CLASS) continue;
-            if (!ubp.isDefined(i)) continue;
+            if (UnifiedBinaryProperty.make(i, ucd) == null) continue;
             props[count++] = i;
         }
         System.out.println("props: " + count);
@@ -321,7 +423,8 @@ public class GenerateData implements UCD_Types {
             if (!ucd.isAllocated(cp)) continue;
 
             for (int i = 0; i < count; ++i) {
-                boolean iProp = ubp.get(cp, props[i]);
+                UnicodeProperty up = UnifiedBinaryProperty.make(props[i], ucd);
+                boolean iProp = up.hasValue(cp);
                 if (iProp) probe.set(i); else probe.clear(i);
             }
 
@@ -344,9 +447,11 @@ public class GenerateData implements UCD_Types {
         for (int i = 1; i < LIMIT_ENUM; ++i) {
             int iType = i & 0xFF00;
             if (iType == JOINING_GROUP || iType == AGE || iType == COMBINING_CLASS || iType == SCRIPT) continue;
-            if (!ubp.isDefined(i)) continue;
-            String iNameShort = ubp.getFullID(i, SHORT);
-            String iNameLong = ubp.getFullID(i, LONG);
+            UnicodeProperty upi = UnifiedBinaryProperty.make(i, ucd);
+            if (upi == null) continue;
+            
+            String iNameShort = upi.getFullName(SHORT);
+            String iNameLong = upi.getFullName(LONG);
 
             System.out.println();
             System.out.println();
@@ -358,7 +463,8 @@ public class GenerateData implements UCD_Types {
                 int jType = j & 0xFF00;
                 if (jType == JOINING_GROUP || jType == AGE || jType == COMBINING_CLASS || jType == SCRIPT
                     || (jType == iType && jType != BINARY_PROPERTIES)) continue;
-                if (!ubp.isDefined(j)) continue;
+                UnicodeProperty upj = UnifiedBinaryProperty.make(j, ucd);
+                if (upj == null) continue;
 
                 if ((j >> 8) != last) {
                     last = j >> 8;
@@ -378,8 +484,8 @@ public class GenerateData implements UCD_Types {
                     if (cat == UNASSIGNED || cat == PRIVATE_USE || cat == SURROGATE) continue;
                     if (!ucd.isAllocated(cp)) continue;
 
-                    boolean iProp = ubp.get(cp, i);
-                    boolean jProp = ubp.get(cp, j);
+                    boolean iProp = upi.hasValue(cp);
+                    boolean jProp = upj.hasValue(cp);
 
                     if (jProp) ++jCount;
                     if (iProp) {
@@ -390,7 +496,7 @@ public class GenerateData implements UCD_Types {
                 }
                 if (iCount == 0 || jCount == 0) continue;
 
-                String jNameShort = ubp.getFullID(j, SHORT);
+                String jNameShort = upj.getFullName(SHORT);
                 //String jNameLong = ubp.getFullID(j, LONG);
 
                 String rel = bothCount == 0 ? "DISJOINT"
@@ -484,19 +590,21 @@ public class GenerateData implements UCD_Types {
             if (type == AGE) continue;
             if (i == (BINARY_PROPERTIES | CaseFoldTurkishI)) continue;
             
+            UnicodeProperty up = UnifiedBinaryProperty.make(i, ucd);
+            if (up == null) continue;
+            if (!up.isStandard()) continue;
+            
             if (type == i && type != BINARY_PROPERTIES && type != DERIVED) {
-                propAbb = fixGaps(ubp.getPropertyName(i, SHORT), false);
-                prop = fixGaps(ubp.getPropertyName(i, LONG), true);
+                propAbb = fixGaps(up.getProperty(SHORT), false);
+                prop = fixGaps(up.getProperty(LONG), true);
                 spacing = Utility.repeat(" ", 10-propAbb.length());
                 sorted.add("BB; " + propAbb + spacing + "; " + prop);
                 checkDuplicate(duplicates, accumulation, propAbb, prop);
                 if (!prop.equals(propAbb)) checkDuplicate(duplicates, accumulation, prop, prop);
             }
             
-            if (!ubp.isDefined(i)) continue;
-            if (ubp.isTest(i)) continue;
             
-            value = ubp.getID(i, LONG);
+            value = up.getValue(LONG);
             if (value.length() == 0) value = "none";
             else if (value.equals("<unused>")) continue;
             value = fixGaps(value, true);
@@ -505,7 +613,7 @@ public class GenerateData implements UCD_Types {
                 value = ucd.getCase(value, FULL, TITLE);
             }
             
-            valueAbb = ubp.getID(i, SHORT);
+            valueAbb = up.getValue(SHORT);
             if (valueAbb.length() == 0) valueAbb = "no";
             valueAbb = fixGaps(valueAbb, false);
 
@@ -720,7 +828,9 @@ public class GenerateData implements UCD_Types {
         doHeader(file, output, headerChoice);
         int last = -1;
         for (int i = startEnum; i < endEnum; ++i) {
-            if (!ubp.isDefined(i)) continue;
+            UnicodeProperty up = UnifiedBinaryProperty.make(i, ucd);
+            if (up == null) continue;
+            
             if (i == DECOMPOSITION_TYPE || i == NUMERIC_TYPE
                 || i == (BINARY_PROPERTIES | Non_break)
                 || i == (BINARY_PROPERTIES | CaseFoldTurkishI)
@@ -733,18 +843,20 @@ public class GenerateData implements UCD_Types {
             if ((last & 0xFF00) != (i & 0xFF00) && (i <= BINARY_PROPERTIES || i >= SCRIPT)) {
                 output.println();
                 output.println(HORIZONTAL_LINE);
-                output.println("# " + UCD_Names.UNIFIED_PROPERTIES[i>>8]);
+                output.println("# " + up.getHeader());
                 output.println(HORIZONTAL_LINE);
                 output.println();
                 System.out.println();
-                System.out.println(UCD_Names.UNIFIED_PROPERTIES[i>>8]);
+                System.out.println(up.getHeader());
                 last = i;
             } else {
                 output.println(HORIZONTAL_LINE);
                 output.println();
             }
             System.out.print(".");
+            if (DEBUG) System.out.println(i);
             new MyPropertyLister(ucd, i, output).print();
+            output.flush();
         }
         if (endEnum == LIMIT_ENUM) {
             output.println();

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/MyPropertyLister.java,v $
-* $Date: 2001/10/25 20:33:46 $
-* $Revision: 1.4 $
+* $Date: 2001/12/05 02:41:23 $
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -22,13 +22,13 @@ final class MyPropertyLister extends PropertyLister {
 
     private int propMask;
     
-    UnifiedBinaryProperty ubp;
+    UnicodeProperty up;
 
     public MyPropertyLister(UCD ucd, int propMask, PrintWriter output) {
         this.propMask = propMask;
         this.output = output;
         this.ucdData = ucd;
-        ubp = new UnifiedBinaryProperty(ucd);
+        up = UnifiedBinaryProperty.make(propMask, ucd);
         if (propMask < COMBINING_CLASS) usePropertyComment = false; // skip gen cat
     }
 
@@ -43,14 +43,17 @@ final class MyPropertyLister extends PropertyLister {
         } else if (main == JOINING_GROUP) {
             return "";
         } else {
-            String shortID = ubp.getID(propMask, SHORT);
-            String longID = ubp.getID(propMask, LONG);
-            return "# " + shortID + (shortID.equals(longID) ? "" : "\t(" + longID + ")");
+            return "";
+            /*
+            String shortID = up.getName(SHORT);
+            String longID = up.getName(LONG);
+            return "# ???? " + shortID + (shortID.equals(longID) ? "" : "\t(" + longID + ")");
+            */
         }
     }
 
     public String propertyName(int cp) {
-        return ubp.getID(propMask);
+        return up.getValue(cp);
     }
 
     public String optionalComment(int cp) {
@@ -87,7 +90,7 @@ final class MyPropertyLister extends PropertyLister {
             else return EXCLUDE;
         }
 
-        boolean inSet = ubp.get(cp, propMask);
+        boolean inSet = up.hasValue(cp);
         /*
         if (cp >= 0x1D400 && cp <= 0x1D7C9 && cat != Cn) {
             if (propMask == (SCRIPT | LATIN_SCRIPT)) inSet = cp <= 0x1D6A3;
