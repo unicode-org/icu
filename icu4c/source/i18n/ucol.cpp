@@ -308,8 +308,12 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *sta
         uint32_t cp = (((ch)<<10UL)+(nextChar)-((0xd800<<10UL)+0xdc00));
         collationSource->pos++;
         /* This is a code point minus 0x10000, that's what algorithm requires */
+        /*
         order = 0xE08080C3 | (cp & 0xF0000) << 8 | (cp & 0x0FFFC) << 7;
         *(collationSource->CEpos++) = 0x20000080 | (cp & 0x00003) << 30;
+        */
+        order = 0xE0010303 | (cp & 0xFFE00) << 8;
+        *(collationSource->CEpos++) = 0x80200080 | (cp & 0x001FF) << 22;
       } else {
         /* otherwise */
         /* Make up an artifical CE from code point as per UCA */
@@ -755,11 +759,6 @@ ucol_calcSortKey(const    UCollator    *coll,
     uint8_t *caseStart = cases;
     uint8_t *quadStart = quads;
 
-    *(secondaries++) = UCOL_LEVELTERMINATOR;
-    *(tertiaries++) = UCOL_LEVELTERMINATOR;
-    *(cases++) = UCOL_LEVELTERMINATOR;
-    *(quads++) = UCOL_LEVELTERMINATOR;
-
     uint32_t order = 0;
     uint32_t ce = 0;
 
@@ -769,6 +768,7 @@ ucol_calcSortKey(const    UCollator    *coll,
     uint8_t primary3 = 0;
     uint8_t secondary = 0;
     uint8_t tertiary = 0;
+    UBool caseBit = FALSE;
 
     UBool finished = FALSE;
     UBool resultOverflow = FALSE;
@@ -793,7 +793,10 @@ ucol_calcSortKey(const    UCollator    *coll,
             /* We're saving order in ce, since we will destroy order in order to get primary, secondary, tertiary in order ;)*/
             ce = order;
 
-            tertiary = (order & UCOL_TERTIARYORDERMASK);
+            caseBit = ((tertiary & 0x40) != 0);
+
+            //tertiary = (order & UCOL_TERTIARYORDERMASK);
+            tertiary = (order & 0x3f); /* this is temporary - removing case bit */         
             secondary = (order >>= 8) & 0xFF;
             primary3 = 0; /* the third primary */
             primary2 = (order >>= 8) & 0xFF;;
@@ -815,7 +818,8 @@ ucol_calcSortKey(const    UCollator    *coll,
               if(upperFirst) { /* if there is a case bit */
                 /* Upper cases have this bit turned on, so that they always come after the lower cases */
                 /* if we want to reverse this situation, we'll flip this bit */
-                tertiary ^= UCOL_CASE_BIT_MASK;
+                /*tertiary ^= UCOL_CASE_BIT_MASK; */ /* temporary removing case bit */
+                caseBit = !caseBit;
               }
               if(scriptOrder != NULL) {
                 primary1 = scriptOrder[primary1];
@@ -860,12 +864,13 @@ ucol_calcSortKey(const    UCollator    *coll,
                   sortKeySize++;
                   caseShift = 7;
                 }
-                *(cases-1) |= (tertiary & 0x80) >> (8-caseShift--);
+                /**(cases-1) |= (tertiary & 0x80) >> (8-caseShift--);*/
+                *(cases-1) |= caseBit << (caseShift--);
               }
 
               if(secondary > compareSec) { 
                 /* This is compression code. */
-                if (secondary == UCOL_COMMON2) {
+                if (secondary == UCOL_COMMON2 && !(isContinuation(ce))) {
 				  ++count2;
                 } else {
 				  if (count2 > 0) {
@@ -909,7 +914,7 @@ ucol_calcSortKey(const    UCollator    *coll,
                 if(tertiary > compareTer) { 
                   /* This is compression code. */
                   /* sequence size check is included in the if clause */
-                  if (tertiary == UCOL_COMMON3) {
+                  if (tertiary == UCOL_COMMON3 && !(isContinuation(ce))) {
 				    ++count3;
                   } else {
                     if(tertiary > UCOL_COMMON3) {
@@ -988,8 +993,17 @@ ucol_calcSortKey(const    UCollator    *coll,
     if(U_SUCCESS(*status)) {
       /* we have done all the CE's, now let's put them together to form a key */
       if(compareSec == 0) {
-        *(primaries++) = UCOL_LEVELTERMINATOR;
+		if (count2 > 0) {
+		  while (count2 >= UCOL_BOT_COUNT2) {
+		    *secondaries++ = UCOL_COMMON_BOT2 + UCOL_BOT_COUNT2;
+            sortKeySize++;
+		    count2 -= UCOL_BOT_COUNT2;
+		  }
+		  *secondaries++ = UCOL_COMMON_BOT2 + count2;
+          sortKeySize++;
+		}
         uint32_t secsize = secondaries-secStart;
+        *(primaries++) = UCOL_LEVELTERMINATOR;
         if(isFrenchSec) { /* do the reverse copy */
           /* If there are any unresolved continuation secondaries, reverse them here so that we can reverse the whole secondary thing */
           if(frenchStartPtr != NULL) { 
@@ -999,23 +1013,35 @@ ucol_calcSortKey(const    UCollator    *coll,
               *(primaries++) = *(secondaries-i-1);
           }
         } else { 
-          uprv_memcpy(primaries, secStart+1, secsize); 
+          uprv_memcpy(primaries, secStart, secsize); 
           primaries += secsize;
         }
 
       }
 
       if(doCase) {
+        *(primaries++) = UCOL_LEVELTERMINATOR;
         uint32_t casesize = cases - caseStart;
         uprv_memcpy(primaries, caseStart, casesize);
         primaries += casesize;
       }
 
       if(compareTer == 0) {
+		if (count3 > 0) {
+		  while (count3 >= UCOL_BOT_COUNT3) {
+			*tertiaries++ = UCOL_COMMON_BOT3 + UCOL_BOT_COUNT3;
+            sortKeySize++;
+			count3 -= UCOL_BOT_COUNT3;
+		  }
+		  *tertiaries++ = UCOL_COMMON_BOT3 + count3;
+          sortKeySize++;
+		}
+        *(primaries++) = UCOL_LEVELTERMINATOR;
         uint32_t tersize = tertiaries - terStart;
         uprv_memcpy(primaries, terStart, tersize);
         primaries += tersize;
         if(compareQuad == 0) {
+            *(primaries++) = UCOL_LEVELTERMINATOR;
             uint32_t quadsize = quads - quadStart;
             uprv_memcpy(primaries, quadStart, quadsize);
             primaries += quadsize;
@@ -1023,11 +1049,13 @@ ucol_calcSortKey(const    UCollator    *coll,
 
         if(compareIdent) {
 		    UChar *ident = s.string;
+/*          const UChar *ident = source;*/
             uint8_t idByte = 0;
             sortKeySize += len * sizeof(UChar);
             *(primaries++) = UCOL_LEVELTERMINATOR;
             if(sortKeySize <= resultLength) {
 		        while(ident < s.len) {
+/*		        while(ident < source+sourceLength) {*/
                     idByte = (*(ident) >> 8) + utf16fixup[*(ident) >> 11];
                     if(idByte < 0x02) {
                         if(sortKeySize < resultLength) {
