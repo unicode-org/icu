@@ -490,6 +490,24 @@ NewResourceBundleTest::TestOtherAPI(){
         errln("copy construction failed\n");
     }
 
+    ResourceBundle defaultSub = defaultresource.get(1, err);
+    ResourceBundle defSubCopy(defaultSub);
+    if(strcmp(defSubCopy.getName(), defaultSub.getName() ) !=0  ||
+        strcmp(defSubCopy.getLocale().getName(), defaultSub.getLocale().getName() ) !=0  ){
+        errln("copy construction for subresource failed\n");
+    }
+
+
+
+    UVersionInfo ver;
+    copyRes.getVersion(ver);
+
+    logln("Version returned: [%d.%d.%d.%d]\n", ver[0], ver[1], ver[2], ver[3]);
+
+
+
+
+    
 
 }
 
@@ -802,6 +820,19 @@ NewResourceBundleTest::testTag(const char* frag,
                     record_fail();
                 }
 
+            }
+
+            for(index=0; index <tag_count; index++){
+                ResourceBundle tagelement=tags.get(index, status);
+                const char *tkey=NULL;
+                UnicodeString value=tagelement.getNextString(&tkey, status);
+                UnicodeString key(tkey);
+                logln("tag = " + key + ", value = " + value );
+                if(key.startsWith("tag") && value.startsWith(base)){
+                    record_pass();
+                }else{
+                    record_fail();
+                }
             }
         }else{
             tag_count=0;
