@@ -1,13 +1,12 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 2001-2002, International Business Machines
+// *   Copyright (C) 2001-2003, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
 
 sa {
     Version { "x1.1" }
-    LocaleID:int { 0x4F }
     Languages {
         sa { "\u0938\u0902\u0938\u094D\u0915\u0943\u0924" }
     }
@@ -18,9 +17,6 @@ sa {
         "\u092A\u0942\u0930\u094D\u0935\u093E\u0939\u094D\u0928",
         "\u0905\u092A\u0930\u093E\u0939\u094D\u0928"
     }
-//    ShortLanguage{
-//        "SAN"
-//    }
     DayNames{
         "\u0930\u0935\u093F\u0935\u093E\u0938\u0930\u0903",
         "\u0938\u094B\u092E\u0935\u093E\u0938\u0930\u0903",
@@ -78,11 +74,16 @@ sa {
         "%",
         "\u0966",
         "#",
+        "+",
         "-",
         "E",
         "\u2030",
         "\u221e",
         "\ufffd",
+        "."
+    }
+    Currencies {
+        INR { "\u0930\u0941", "INR" }
     }
     NumberPatterns {
         "##,##,##0.###;-##,##,##0.###",

@@ -1,20 +1,12 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 2001-2002, International Business Machines
+// *   Copyright (C) 2001-2003, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
 
 sa_IN {
     Version { "x0.3" }
-    LocaleID:int { 0x044F }
-//    ShortCountry { IND }
-
-    CurrencyElements {
-        "\u0930\u0941",
-        "INR",  
-        "."
-    }
     DateTimePatterns {
         "hh:mm:ss a z",
         "hh:mm:ss a z",

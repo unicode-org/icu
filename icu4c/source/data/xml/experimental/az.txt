@@ -1,16 +1,12 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 2001-2002, International Business Machines
+// *   Copyright (C) 2001-2003, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
 
 az{
-    Version{ "x0.2" }
-    LocaleID:int { 0x2c }
-//    ShortLanguage{
-//        "AZE"
-//    }
+    Version{ "x0.3" }
     Languages {
         az { "\u0410\u0437\u04D9\u0440\u0431\u0430\u0458\u04B9\u0430\u043D" }
     }
@@ -71,14 +67,16 @@ az{
         "%",
         "0",
         "#",
+        "+",
         "-",
         "E",
         "\u2030",
         "\u221e",
         "\ufffd",
+        ",",
     }
 
-    CollationElements {     
+    CollationElements {
         Version { "1.0" }
         Sequence { 
              "[normalization on]"
@@ -86,4 +84,7 @@ az{
     }
     LocaleScript:array{ "CYRL" }
     ExemplarCharacters { "[\u0430-\u0438 \u043a-\u0445 \u0447 \u0448 \u044b \u0458 \u0493 \u049d \u04af \u04b9 \u04bb \u04d9 \u04e9]" }
+    Currencies {
+        AZM { "\u043C\u0430\u043D.", "AZM" }
+    }
 }

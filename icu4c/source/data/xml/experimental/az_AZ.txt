@@ -1,27 +1,17 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 2001-2002, International Business Machines
+// *   Copyright (C) 2001-2003, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
 
 az_AZ {
-    Version{ "x0.1" }
-    LocaleID:int { 0x082C }
-//    ShortCountry{
-//    "AZE"
-//    }
-    CurrencyElements{
-        "\u043C\u0430\u043D.",
-        "AZM",
-        ","
-    }
-
+    Version{ "x0.2" }
     DateTimePatterns{
+        "hh:mm:ss a z",
         "hh:mm:ss a",
         "hh:mm:ss a",
-        "H:mm:ss",
-        "H:mm:ss",
+        "hh:mm:ss a",
         "d MMMM yyyy",
         "d MMMM yyyy",
         "dd.MM.yyyy",

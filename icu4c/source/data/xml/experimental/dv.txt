@@ -1,13 +1,12 @@
 // ***************************************************************************
 // *
-// *   Copyright (C) 2001-2002, International Business Machines
+// *   Copyright (C) 2001-2003, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // ***************************************************************************
 
 dv {
-    Version{ "x0.2" }
-    LocaleID:int { 0x65 }
+    Version{ "x0.3" }
     Languages {
         dv { "\u078B\u07A8\u0788\u07AC\u0780\u07A8\u0784\u07A6\u0790\u07B0" }
     }
@@ -75,11 +74,13 @@ dv {
         "%",
         "\u0660",
         "#",
+        "+",
         "-",
         "E",
         "\u2030",
         "\u221e",
         "\ufffd",
+        "."
     }
     NumberPatterns {
         "#,##,##0.###;-#,##,##0.###",
@@ -96,5 +97,8 @@ dv {
         Sequence { 
              "[normalization on]"
         }
+    }
+    Currencies {
+        MVR { "\u0783.", "MVR" }
     }
 }
