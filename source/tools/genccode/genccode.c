@@ -226,20 +226,20 @@ writeObjectCode(const char *filename, const char *destdir) {
     objHeader.fileHeader.NumberOfSymbols=1;
 
     /* set the section for the linker options */
-    uprv_strncpy(objHeader.sections[0].Name, ".drectve", 8);
+    uprv_strncpy((char *)objHeader.sections[0].Name, ".drectve", 8);
     objHeader.sections[0].SizeOfRawData=length;
     objHeader.sections[0].PointerToRawData=IMAGE_SIZEOF_FILE_HEADER+2*IMAGE_SIZEOF_SECTION_HEADER;
     objHeader.sections[0].Characteristics=IMAGE_SCN_LNK_INFO|IMAGE_SCN_LNK_REMOVE|IMAGE_SCN_ALIGN_1BYTES;
 
     /* set the data section */
-    uprv_strncpy(objHeader.sections[1].Name, ".rdata", 6);
+    uprv_strncpy((char *)objHeader.sections[1].Name, ".rdata", 6);
     objHeader.sections[1].SizeOfRawData=size;
     objHeader.sections[1].PointerToRawData=IMAGE_SIZEOF_FILE_HEADER+2*IMAGE_SIZEOF_SECTION_HEADER+length;
     objHeader.sections[1].Characteristics=IMAGE_SCN_CNT_INITIALIZED_DATA|IMAGE_SCN_ALIGN_16BYTES|IMAGE_SCN_MEM_READ;
 
     /* set the symbol table */
     if(entryLength<=8) {
-        uprv_strncpy(symbols[0].N.ShortName, entry, entryLength);
+        uprv_strncpy((char *)symbols[0].N.ShortName, entry, entryLength);
         symbolNames.sizeofLongNames=4;
     } else {
         symbols[0].N.Name.Short=0;
@@ -334,14 +334,14 @@ write8(FileStream *out, uint8_t byte) {
 
     /* convert the byte value to a string */
     if(byte>=100) {
-        s[i++]='0'+byte/100;
+        s[i++]=(char)('0'+byte/100);
         byte%=100;
     }
     if(i>0 || byte>=10) {
-        s[i++]='0'+byte/10;
+        s[i++]=(char)('0'+byte/10);
         byte%=10;
     }
-    s[i++]='0'+byte;
+    s[i++]=(char)('0'+byte);
     s[i]=0;
 
     /* write the value, possibly with comma and newline */
