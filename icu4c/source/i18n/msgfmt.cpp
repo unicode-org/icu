@@ -254,6 +254,10 @@ MessageFormat::MessageFormat(const MessageFormat& that)
 
 MessageFormat::~MessageFormat()
 {
+    int32_t idx;
+    for (idx = 0; idx < subformatCount; idx++) {
+        delete subformats[idx].format;
+    }
     uprv_free(subformats);
     subformats = NULL;
     subformatCount = subformatCapacity = 0;
