@@ -199,7 +199,7 @@ public:
      * @return          The class ID for all objects of this class.
      * @stable ICU 2.0
      */
-    static UClassID getStaticClassID(void);
+    static inline UClassID getStaticClassID(void);
 
 protected:
     //=======================================================================
