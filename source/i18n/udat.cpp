@@ -90,7 +90,7 @@ udat_openPattern(    const   UChar           *pattern,
   return retVal;
 }
 */
-U_CAPI UDateFormat*
+U_CAPI UDateFormat* U_EXPORT2
 udat_open(UDateFormatStyle  timeStyle,
           UDateFormatStyle  dateStyle,
           const char        *locale,
@@ -160,14 +160,14 @@ udat_open(UDateFormatStyle  timeStyle,
 }
 
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 udat_close(UDateFormat* format)
 {
 
   delete (DateFormat*)format;
 }
 
-U_CAPI UDateFormat*
+U_CAPI UDateFormat* U_EXPORT2
 udat_clone(const UDateFormat *fmt,
        UErrorCode *status)
 {
@@ -184,7 +184,7 @@ udat_clone(const UDateFormat *fmt,
   return (UDateFormat*) res;
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 udat_format(    const    UDateFormat*    format,
         UDate           dateToFormat,
         UChar*          result,
@@ -211,7 +211,7 @@ udat_format(    const    UDateFormat*    format,
   return res.extract(result, resultLength, *status);
 }
 
-U_CAPI UDate
+U_CAPI UDate U_EXPORT2
 udat_parse(    const    UDateFormat*        format,
         const    UChar*          text,
         int32_t         textLength,
@@ -243,14 +243,14 @@ udat_parse(    const    UDateFormat*        format,
   return res;
 }
 
-U_CAPI UBool
+U_CAPI UBool U_EXPORT2
 udat_isLenient(const UDateFormat* fmt)
 {
 
   return ((DateFormat*)fmt)->isLenient();
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 udat_setLenient(    UDateFormat*    fmt,
             UBool          isLenient)
 {
@@ -258,14 +258,14 @@ udat_setLenient(    UDateFormat*    fmt,
   ((DateFormat*)fmt)->setLenient(isLenient);
 }
 
-U_CAPI const UCalendar*
+U_CAPI const UCalendar* U_EXPORT2
 udat_getCalendar(const UDateFormat* fmt)
 {
 
   return (const UCalendar*) ((DateFormat*)fmt)->getCalendar();
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 udat_setCalendar(            UDateFormat*    fmt,
                     const   UCalendar*      calendarToSet)
 {
@@ -273,14 +273,14 @@ udat_setCalendar(            UDateFormat*    fmt,
   ((DateFormat*)fmt)->setCalendar(*((Calendar*)calendarToSet));
 }
 
-U_CAPI const UNumberFormat*
+U_CAPI const UNumberFormat* U_EXPORT2
 udat_getNumberFormat(const UDateFormat* fmt)
 {
 
   return (const UNumberFormat*) ((DateFormat*)fmt)->getNumberFormat();
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 udat_setNumberFormat(            UDateFormat*    fmt,
                     const   UNumberFormat*  numberFormatToSet)
 {
@@ -288,20 +288,20 @@ udat_setNumberFormat(            UDateFormat*    fmt,
   ((DateFormat*)fmt)->setNumberFormat(*((NumberFormat*)numberFormatToSet));
 }
 
-U_CAPI const char*
+U_CAPI const char* U_EXPORT2
 udat_getAvailable(int32_t index)
 {
   return uloc_getAvailable(index);
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 udat_countAvailable()
 {
 
   return uloc_countAvailable();
 }
 
-U_CAPI UDate
+U_CAPI UDate U_EXPORT2
 udat_get2DigitYearStart(    const   UDateFormat     *fmt,
                 UErrorCode      *status)
 {
@@ -310,7 +310,7 @@ udat_get2DigitYearStart(    const   UDateFormat     *fmt,
   return ((SimpleDateFormat*)fmt)->get2DigitYearStart(*status);
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 udat_set2DigitYearStart(    UDateFormat     *fmt,
                 UDate           d,
                 UErrorCode      *status)
@@ -320,7 +320,7 @@ udat_set2DigitYearStart(    UDateFormat     *fmt,
   ((SimpleDateFormat*)fmt)->set2DigitYearStart(d, *status);
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 udat_toPattern(    const   UDateFormat     *fmt,
         UBool          localized,
         UChar           *result,
@@ -341,7 +341,7 @@ udat_toPattern(    const   UDateFormat     *fmt,
 }
 
 // TBD: should this take an UErrorCode?
-U_CAPI void
+U_CAPI void U_EXPORT2
 udat_applyPattern(            UDateFormat     *format,
                     UBool          localized,
                     const   UChar           *pattern,
@@ -358,7 +358,7 @@ udat_applyPattern(            UDateFormat     *format,
     ((SimpleDateFormat*)format)->applyPattern(pat);
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 udat_getSymbols(const   UDateFormat             *fmt,
         UDateFormatSymbolType   type,
         int32_t                 index,
@@ -428,7 +428,7 @@ udat_getSymbols(const   UDateFormat             *fmt,
   return 0;
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 udat_countSymbols(    const    UDateFormat                *fmt,
             UDateFormatSymbolType    type)
 {
@@ -470,7 +470,7 @@ udat_countSymbols(    const    UDateFormat                *fmt,
   return count;
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 udat_setSymbols(    UDateFormat             *format,
             UDateFormatSymbolType   type,
             int32_t                 index,

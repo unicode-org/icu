@@ -15,7 +15,7 @@
 
 U_NAMESPACE_USE
 
-U_CAPI const UChar*
+U_CAPI const UChar* U_EXPORT2
 ucal_getAvailableTZIDs(        int32_t         rawOffset,
                 int32_t         index,
                 UErrorCode*     status)
@@ -43,7 +43,7 @@ ucal_getAvailableTZIDs(        int32_t         rawOffset,
   return retVal;
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 ucal_countAvailableTZIDs(int32_t rawOffset)
 {  
 
@@ -61,7 +61,7 @@ ucal_countAvailableTZIDs(int32_t rawOffset)
   return count;
 }
 
-U_CAPI UDate 
+U_CAPI UDate  U_EXPORT2
 ucal_getNow()
 {
 
@@ -69,7 +69,7 @@ ucal_getNow()
 }
 
 // ignore type until we add more subclasses
-U_CAPI UCalendar* 
+U_CAPI UCalendar*  U_EXPORT2
 ucal_open(    const    UChar*          zoneID,
             int32_t        len,
         const    char*       locale,
@@ -96,14 +96,14 @@ ucal_open(    const    UChar*          zoneID,
   return (UCalendar*)Calendar::createInstance(zone, Locale(locale), *status);
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 ucal_close(UCalendar *cal)
 {
 
   delete (Calendar*) cal;
 }
 
-U_CAPI void 
+U_CAPI void  U_EXPORT2
 ucal_setTimeZone(    UCalendar*      cal,
             const    UChar*            zoneID,
             int32_t        len,
@@ -130,7 +130,7 @@ ucal_setTimeZone(    UCalendar*      cal,
   ((Calendar*)cal)->adoptTimeZone(zone);
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 ucal_getTimeZoneDisplayName(const     UCalendar*                 cal,
                     UCalendarDisplayNameType     type,
                     const char             *locale,
@@ -165,7 +165,7 @@ ucal_getTimeZoneDisplayName(const     UCalendar*                 cal,
   return id.extract(result, resultLength, *status);
 }
 
-U_CAPI UBool 
+U_CAPI UBool  U_EXPORT2
 ucal_inDaylightTime(    const    UCalendar*      cal, 
             UErrorCode*     status )
 {
@@ -174,7 +174,7 @@ ucal_inDaylightTime(    const    UCalendar*      cal,
   return ((Calendar*)cal)->inDaylightTime(*status);
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 ucal_getAttribute(    const    UCalendar*              cal,
             UCalendarAttribute      attr)
 {
@@ -195,7 +195,7 @@ ucal_getAttribute(    const    UCalendar*              cal,
   return -1;
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 ucal_setAttribute(      UCalendar*              cal,
             UCalendarAttribute      attr,
             int32_t                 newValue)
@@ -216,21 +216,21 @@ ucal_setAttribute(      UCalendar*              cal,
   }
 }
 
-U_CAPI const char*
+U_CAPI const char* U_EXPORT2
 ucal_getAvailable(int32_t index)
 {
 
   return uloc_getAvailable(index);
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 ucal_countAvailable()
 {
 
   return uloc_countAvailable();
 }
 
-U_CAPI UDate 
+U_CAPI UDate  U_EXPORT2
 ucal_getMillis(    const    UCalendar*      cal,
         UErrorCode*     status)
 {
@@ -240,7 +240,7 @@ ucal_getMillis(    const    UCalendar*      cal,
   return ((Calendar*)cal)->getTime(*status);
 }
 
-U_CAPI void 
+U_CAPI void  U_EXPORT2
 ucal_setMillis(        UCalendar*      cal,
             UDate           dateTime,
             UErrorCode*     status )
@@ -251,7 +251,7 @@ ucal_setMillis(        UCalendar*      cal,
 }
 
 // TBD: why does this take an UErrorCode?
-U_CAPI void 
+U_CAPI void  U_EXPORT2
 ucal_setDate(        UCalendar*        cal,
             int32_t            year,
             int32_t            month,
@@ -265,7 +265,7 @@ ucal_setDate(        UCalendar*        cal,
 }
 
 // TBD: why does this take an UErrorCode?
-U_CAPI void 
+U_CAPI void  U_EXPORT2
 ucal_setDateTime(    UCalendar*        cal,
             int32_t            year,
             int32_t            month,
@@ -280,7 +280,7 @@ ucal_setDateTime(    UCalendar*        cal,
   ((Calendar*)cal)->set(year, month, date, hour, minute, second);
 }
 
-U_CAPI UBool 
+U_CAPI UBool  U_EXPORT2
 ucal_equivalentTo(    const UCalendar*      cal1,
             const UCalendar*      cal2)
 {
@@ -288,7 +288,7 @@ ucal_equivalentTo(    const UCalendar*      cal1,
   return ((Calendar*)cal1)->equivalentTo(*((Calendar*)cal2));
 }
 
-U_CAPI void 
+U_CAPI void  U_EXPORT2
 ucal_add(    UCalendar*                cal,
         UCalendarDateFields        field,
         int32_t                    amount,
@@ -300,7 +300,7 @@ ucal_add(    UCalendar*                cal,
   ((Calendar*)cal)->add((Calendar::EDateFields)field, amount, *status);
 }
 
-U_CAPI void 
+U_CAPI void  U_EXPORT2
 ucal_roll(        UCalendar*            cal,
             UCalendarDateFields field,
             int32_t                amount,
@@ -312,7 +312,7 @@ ucal_roll(        UCalendar*            cal,
   ((Calendar*)cal)->roll((Calendar::EDateFields)field, amount, *status);
 }
 
-U_CAPI int32_t 
+U_CAPI int32_t  U_EXPORT2
 ucal_get(    const    UCalendar*                cal,
         UCalendarDateFields        field,
         UErrorCode*                status )
@@ -323,7 +323,7 @@ ucal_get(    const    UCalendar*                cal,
   return ((Calendar*)cal)->get((Calendar::EDateFields)field, *status);
 }
 
-U_CAPI void 
+U_CAPI void  U_EXPORT2
 ucal_set(    UCalendar*                cal,
         UCalendarDateFields        field,
         int32_t                    value)
@@ -332,7 +332,7 @@ ucal_set(    UCalendar*                cal,
   ((Calendar*)cal)->set((Calendar::EDateFields)field, value);
 }
 
-U_CAPI UBool 
+U_CAPI UBool  U_EXPORT2
 ucal_isSet(    const    UCalendar*                cal,
         UCalendarDateFields        field)
 {
@@ -340,7 +340,7 @@ ucal_isSet(    const    UCalendar*                cal,
   return ((Calendar*)cal)->isSet((Calendar::EDateFields)field);
 }
 
-U_CAPI void 
+U_CAPI void  U_EXPORT2
 ucal_clearField(    UCalendar*            cal,
             UCalendarDateFields field)
 {
@@ -348,14 +348,14 @@ ucal_clearField(    UCalendar*            cal,
   ((Calendar*)cal)->clear((Calendar::EDateFields)field);
 }
 
-U_CAPI void 
+U_CAPI void  U_EXPORT2
 ucal_clear(UCalendar* calendar)
 {
 
   ((Calendar*)calendar)->clear();
 }
 
-U_CAPI int32_t 
+U_CAPI int32_t  U_EXPORT2
 ucal_getLimit(    const    UCalendar*              cal,
             UCalendarDateFields     field,
             UCalendarLimitType      type,

@@ -30,7 +30,7 @@ typedef struct collIterate collIterator;
 /**
 * Since this is going to be deprecated, I'll leave it as it is
 */
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 ucol_keyHashCode(const uint8_t *key, 
                        int32_t  length)
 {
@@ -40,7 +40,7 @@ ucol_keyHashCode(const uint8_t *key,
 }
 
 
-UCollationElements*
+U_CAPI UCollationElements* U_EXPORT2
 ucol_openElements(const UCollator  *coll,
                   const UChar      *text,
                         int32_t    textLength,
@@ -65,7 +65,7 @@ ucol_openElements(const UCollator  *coll,
   return result;
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 ucol_closeElements(UCollationElements *elems)
 {
   collIterate *ci = &elems->iteratordata_;
@@ -79,7 +79,7 @@ ucol_closeElements(UCollationElements *elems)
   uprv_free(elems);
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 ucol_reset(UCollationElements *elems)
 {
   collIterate *ci = &(elems->iteratordata_);
@@ -102,7 +102,7 @@ ucol_reset(UCollationElements *elems)
   ci->fcdPosition = NULL;
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 ucol_next(UCollationElements *elems, 
           UErrorCode         *status)
 {
@@ -122,7 +122,7 @@ ucol_next(UCollationElements *elems,
   return result;
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 ucol_previous(UCollationElements *elems,
               UErrorCode         *status)
 {
@@ -157,7 +157,7 @@ ucol_previous(UCollationElements *elems,
   }
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 ucol_getMaxExpansion(const UCollationElements *elems,
                            int32_t            order)
 {
@@ -166,7 +166,7 @@ ucol_getMaxExpansion(const UCollationElements *elems,
   return result;
 }
  
-U_CAPI void
+U_CAPI void U_EXPORT2
 ucol_setText(      UCollationElements *elems,
              const UChar              *text,
                    int32_t            textLength,
@@ -192,7 +192,7 @@ ucol_setText(      UCollationElements *elems,
   elems->reset_   = TRUE;
 }
 
-U_CAPI UTextOffset
+U_CAPI UTextOffset U_EXPORT2
 ucol_getOffset(const UCollationElements *elems)
 {
   const collIterate *ci = &(elems->iteratordata_);
@@ -212,7 +212,7 @@ ucol_getOffset(const UCollationElements *elems)
   }
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 ucol_setOffset(UCollationElements    *elems,
                UTextOffset           offset,
                UErrorCode            *status)

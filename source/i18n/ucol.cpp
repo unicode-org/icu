@@ -129,7 +129,8 @@ inline void  IInit_collIterate(const UCollator *collator, const UChar *sourceStr
     }
 }
 
-U_CAPI void init_collIterate(const UCollator *collator, const UChar *sourceString,
+U_CAPI void  U_EXPORT2
+init_collIterate(const UCollator *collator, const UChar *sourceString,
                              int32_t sourceLen, collIterate *s){
     /* Out-of-line version for use from other files. */
     IInit_collIterate(collator, sourceString, sourceLen, s);
@@ -261,7 +262,7 @@ inline void freeHeapWritableBuffer(collIterate *data)
 /* Following are the open/close functions                                   */
 /*                                                                          */
 /****************************************************************************/
-U_CAPI UCollator*
+U_CAPI UCollator* U_EXPORT2
 ucol_open(    const    char         *loc,
         UErrorCode      *status)
 {
@@ -335,7 +336,7 @@ ucol_openVersion(const char *loc,
 }
 
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 ucol_close(UCollator *coll)
 {
   /* Here, it would be advisable to close: */
@@ -364,7 +365,7 @@ ucol_close(UCollator *coll)
   uprv_free(coll);
 }
 
-U_CAPI UCollator*
+U_CAPI UCollator* U_EXPORT2
 ucol_openRules( const UChar        *rules,
                 int32_t            rulesLength,
                 UColAttributeValue normalizationMode,
@@ -487,7 +488,7 @@ ucol_openRules( const UChar        *rules,
 
 /* This one is currently used by genrb & tests. After constructing from rules (tailoring),*/
 /* you should be able to get the binary chunk to write out...  Doesn't look very full now */
-U_CAPI uint8_t *
+U_CAPI uint8_t* U_EXPORT2
 ucol_cloneRuleData(const UCollator *coll, int32_t *length, UErrorCode *status)
 {
   uint8_t *result = NULL;
@@ -1060,7 +1061,8 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
 }
 
 /* ucol_getNextCE, out-of-line version for use from other files.   */
-U_CAPI uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UErrorCode *status) {
+U_CAPI uint32_t  U_EXPORT2
+ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UErrorCode *status) {
     return ucol_IGetNextCE(coll, collationSource, status);
     }
 
@@ -1382,14 +1384,16 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
 
 
 /*   ucol_getPrevCE, out-of-line version for use from other files.  */
-U_CAPI uint32_t ucol_getPrevCE(const UCollator *coll, collIterate *data,
+U_CAPI uint32_t  U_EXPORT2
+ucol_getPrevCE(const UCollator *coll, collIterate *data,
                         UErrorCode *status) {
     return ucol_IGetPrevCE(coll, data, status);
 }
 
 
 /* this should be connected to special Jamo handling */
-uint32_t ucol_getFirstCE(const UCollator *coll, UChar u, UErrorCode *status) {
+U_CAPI uint32_t  U_EXPORT2
+ucol_getFirstCE(const UCollator *coll, UChar u, UErrorCode *status) {
   collIterate colIt;
   uint32_t order;
   IInit_collIterate(coll, &u, 1, &colIt);
@@ -2890,7 +2894,7 @@ while((start)<(end)) { \
  *
  * @draft
  */
-int32_t
+U_CAPI int32_t U_EXPORT2
 ucol_mergeSortkeys(const uint8_t *src1, int32_t src1Length,
                    const uint8_t *src2, int32_t src2Length,
                    uint8_t *dest, int32_t destCapacity) {
@@ -2965,7 +2969,7 @@ ucol_mergeSortkeys(const uint8_t *src1, int32_t src1Length,
 }
 
 /* sortkey API */
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 ucol_getSortKey(const    UCollator    *coll,
         const    UChar        *source,
         int32_t        sourceLength,
@@ -4198,7 +4202,7 @@ inline void uprv_appendByteToHexString(char *dst, uint8_t val) {
 }
 
 /* this function makes a string with representation of a sortkey */
-U_CAPI char U_EXPORT2 *ucol_sortKeyToString(const UCollator *coll, const uint8_t *sortkey, char *buffer, uint32_t *len) {
+U_CAPI char* U_EXPORT2 ucol_sortKeyToString(const UCollator *coll, const uint8_t *sortkey, char *buffer, uint32_t *len) {
   int32_t strength = UCOL_PRIMARY;
   uint32_t res_size = 0;
   UBool doneCase = FALSE;
@@ -4291,7 +4295,8 @@ void ucol_updateInternalState(UCollator *coll) {
 
 }
 
-U_CAPI uint32_t ucol_setVariableTop(UCollator *coll, const UChar *varTop, int32_t len, UErrorCode *status) {
+U_CAPI uint32_t  U_EXPORT2
+ucol_setVariableTop(UCollator *coll, const UChar *varTop, int32_t len, UErrorCode *status) {
   if(U_FAILURE(*status) || coll == NULL) {
     return 0;
   }
@@ -4332,14 +4337,16 @@ U_CAPI uint32_t ucol_getVariableTop(const UCollator *coll, UErrorCode *status) {
   return coll->variableTopValue<<16;
 }
 
-U_CAPI void ucol_restoreVariableTop(UCollator *coll, const uint32_t varTop, UErrorCode *status) {
+U_CAPI void  U_EXPORT2
+ucol_restoreVariableTop(UCollator *coll, const uint32_t varTop, UErrorCode *status) {
   if(U_FAILURE(*status) || coll == NULL) {
     return;
   }
   coll->variableTopValue = (varTop & UCOL_PRIMARYMASK)>>16;
 }
 /* Attribute setter API */
-U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttributeValue value, UErrorCode *status) {
+U_CAPI void  U_EXPORT2
+ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttributeValue value, UErrorCode *status) {
     if(U_FAILURE(*status) || coll == NULL) {
       return;
     }
@@ -4453,7 +4460,8 @@ U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttribute
     ucol_updateInternalState(coll);
 }
 
-U_CAPI UColAttributeValue ucol_getAttribute(const UCollator *coll, UColAttribute attr, UErrorCode *status) {
+U_CAPI UColAttributeValue  U_EXPORT2
+ucol_getAttribute(const UCollator *coll, UColAttribute attr, UErrorCode *status) {
     if(U_FAILURE(*status) || coll == NULL) {
       return UCOL_DEFAULT;
     }
@@ -4481,7 +4489,7 @@ U_CAPI UColAttributeValue ucol_getAttribute(const UCollator *coll, UColAttribute
 }
 
 // deprecated
-U_CAPI void
+U_CAPI void U_EXPORT2
 ucol_setNormalization(  UCollator            *coll,
             UNormalizationMode    mode)
 {
@@ -4502,7 +4510,7 @@ ucol_setNormalization(  UCollator            *coll,
 }
 
 // deprecated
-U_CAPI UNormalizationMode
+U_CAPI UNormalizationMode U_EXPORT2
 ucol_getNormalization(const UCollator* coll)
 {
   UErrorCode status = U_ZERO_ERROR;
@@ -4513,7 +4521,7 @@ ucol_getNormalization(const UCollator* coll)
   }
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 ucol_setStrength(    UCollator                *coll,
             UCollationStrength        strength)
 {
@@ -4521,7 +4529,7 @@ ucol_setStrength(    UCollator                *coll,
   ucol_setAttribute(coll, UCOL_STRENGTH, strength, &status);
 }
 
-U_CAPI UCollationStrength
+U_CAPI UCollationStrength U_EXPORT2
 ucol_getStrength(const UCollator *coll)
 {
   UErrorCode status = U_ZERO_ERROR;
@@ -4533,7 +4541,7 @@ ucol_getStrength(const UCollator *coll)
 /* there are new APIs and some compatibility APIs                           */
 /****************************************************************************/
 
-U_CAPI UCollator *
+U_CAPI UCollator* U_EXPORT2
 ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, UErrorCode *status)
 {
     UCollator * localCollator;
@@ -4584,7 +4592,7 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
     return localCollator;
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int32_t bufferLen) {
   UErrorCode status = U_ZERO_ERROR;
   int32_t len = 0;
@@ -4613,7 +4621,7 @@ ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int3
 
 static const UChar _NUL = 0;
 
-U_CAPI const UChar*
+U_CAPI const UChar* U_EXPORT2
 ucol_getRules(    const    UCollator       *coll,
         int32_t            *length)
 {
@@ -4638,7 +4646,7 @@ ucol_getRules(    const    UCollator       *coll,
   }
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 ucol_getDisplayName(    const    char        *objLoc,
             const    char        *dispLoc,
             UChar             *result,
@@ -4652,19 +4660,19 @@ ucol_getDisplayName(    const    char        *objLoc,
   return dst.extract(result, resultLength, *status);
 }
 
-U_CAPI const char*
+U_CAPI const char* U_EXPORT2
 ucol_getAvailable(int32_t index)
 {
   return uloc_getAvailable(index);
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 ucol_countAvailable()
 {
   return uloc_countAvailable();
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 ucol_getVersion(const UCollator* coll,
                 UVersionInfo versionInfo)
 {
@@ -4691,7 +4699,8 @@ ucol_getVersion(const UCollator* coll,
 
 
 /* This internal API checks whether a character is tailored or not */
-U_CAPI UBool isTailored(const UCollator *coll, const UChar u, UErrorCode *status) {
+U_CAPI UBool  U_EXPORT2
+isTailored(const UCollator *coll, const UChar u, UErrorCode *status) {
   uint32_t CE = UCOL_NOT_FOUND;
   const UChar *ContractionStart = NULL;
   if(U_SUCCESS(*status) && coll != NULL) {
@@ -4922,7 +4931,7 @@ static UCollationResult ucol_compareUsingSortKeys(const    UCollator    *coll,
 /*                                                                      */
 /* ucol_strcoll     Main public API string comparison function          */
 /*                                                                      */
-U_CAPI UCollationResult
+U_CAPI UCollationResult U_EXPORT2
 ucol_strcoll( const UCollator    *coll,
               const UChar        *source,
               int32_t            sourceLength,
@@ -5488,7 +5497,7 @@ commonReturn:
 }
 
 /* convenience function for comparing strings */
-U_CAPI UBool
+U_CAPI UBool U_EXPORT2
 ucol_greater(    const    UCollator        *coll,
         const    UChar            *source,
         int32_t            sourceLength,
@@ -5500,7 +5509,7 @@ ucol_greater(    const    UCollator        *coll,
 }
 
 /* convenience function for comparing strings */
-U_CAPI UBool
+U_CAPI UBool U_EXPORT2
 ucol_greaterOrEqual(    const    UCollator    *coll,
             const    UChar        *source,
             int32_t        sourceLength,
@@ -5512,7 +5521,7 @@ ucol_greaterOrEqual(    const    UCollator    *coll,
 }
 
 /* convenience function for comparing strings */
-U_CAPI UBool
+U_CAPI UBool U_EXPORT2
 ucol_equal(        const    UCollator        *coll,
             const    UChar            *source,
             int32_t            sourceLength,

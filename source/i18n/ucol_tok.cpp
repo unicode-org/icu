@@ -25,7 +25,7 @@
 #include "ucol_tok.h"
 
 U_CDECL_BEGIN
-static int32_t U_CALLCONV
+static int32_t U_EXPORT2 U_CALLCONV
 uhash_hashTokens(const UHashTok k)
 {
     int32_t hash = 0;
@@ -48,7 +48,7 @@ uhash_hashTokens(const UHashTok k)
     return hash;
 }
 
-static UBool U_CALLCONV
+static UBool U_EXPORT2 U_CALLCONV
 uhash_compareTokens(const UHashTok key1, const UHashTok key2)
 {
     //uint32_t p1 = (uint32_t) key1.integer;
@@ -84,6 +84,11 @@ uhash_compareTokens(const UHashTok key1, const UHashTok key2)
     }
 }
 U_CDECL_END
+
+static inline void U_CALLCONV
+uhash_freeBlockWrapper(void *obj) {
+  uhash_freeBlock(obj);
+}
 
 void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint32_t rulesLength, UCollator *UCA, UErrorCode *status) {
   uint32_t nSize = 0;
@@ -380,7 +385,8 @@ uint8_t ucol_uprv_tok_readAndSetOption(UColOptionSet *opts, const UChar* start, 
   }
 }
 
-const UChar *ucol_tok_parseNextToken(UColTokenParser *src, 
+U_CAPI const UChar* U_EXPORT2
+ucol_tok_parseNextToken(UColTokenParser *src, 
                         uint32_t *strength, 
                         uint32_t *chOffset, uint32_t *chLen, 
                         uint32_t *exOffset, uint32_t *exLen,
