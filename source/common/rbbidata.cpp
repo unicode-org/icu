@@ -75,10 +75,20 @@ void RBBIDataWrapper::init(const RBBIDataHeader *data, UErrorCode &status) {
     }
 
     fUDataMem     = NULL;
-    fForwardTable = (RBBIStateTable *)((char *)data + fHeader->fFTable);
     fReverseTable = NULL;
+    fSafeFwdTable = NULL;
+    fSafeRevTable = NULL;
+    if (data->fFTableLen != 0) {
+        fForwardTable = (RBBIStateTable *)((char *)data + fHeader->fFTable);
+    }
     if (data->fRTableLen != 0) {
         fReverseTable = (RBBIStateTable *)((char *)data + fHeader->fRTable);
+    }
+    if (data->fSFTableLen != 0) {
+        fSafeFwdTable = (RBBIStateTable *)((char *)data + fHeader->fSFTable);
+    }
+    if (data->fSRTableLen != 0) {
+        fSafeRevTable = (RBBIStateTable *)((char *)data + fHeader->fSRTable);
     }
 
 
@@ -185,38 +195,48 @@ const UnicodeString &RBBIDataWrapper::getRuleSourceString() {
 //  print   -  debugging function to dump the runtime data tables.
 //
 //-----------------------------------------------------------------------------
-void  RBBIDataWrapper::printData() {
+void  RBBIDataWrapper::printTable(const char *heading, const RBBIStateTable *table) {
 #ifdef RBBI_DEBUG
-    uint32_t c, s;
+    uint32_t   c;
+    uint32_t   s;
 
-    RBBIDebugPrintf("RBBI Data at %p\n", (void *)fHeader);
-    RBBIDebugPrintf("   Version = %d\n", fHeader->fVersion);
-    RBBIDebugPrintf("   total length of data  = %d\n", fHeader->fLength);
-    RBBIDebugPrintf("   number of character categories = %d\n\n", fHeader->fCatCount);
-
-    RBBIDebugPrintf("   Forward State Transition Table\n");
+    RBBIDebugPrintf("   %s\n", heading);
     RBBIDebugPrintf("State |  Acc  LA   Tag");
     for (c=0; c<fHeader->fCatCount; c++) {RBBIDebugPrintf("%3d ", c);}
-    RBBIDebugPrintf("\n------|---------------"); for (c=0;c<fHeader->fCatCount; c++) {RBBIDebugPrintf("----");}
+    RBBIDebugPrintf("\n------|---------------"); for (c=0;c<fHeader->fCatCount; c++) {
+        RBBIDebugPrintf("----");
+    }
     RBBIDebugPrintf("\n");
 
-    for (s=0; s<fForwardTable->fNumStates; s++) {
+    for (s=0; s<table->fNumStates; s++) {
         RBBIStateTableRow *row = (RBBIStateTableRow *)
-                                  (fForwardTable->fTableData + (fForwardTable->fRowLen * s));
+                                  (table->fTableData + (table->fRowLen * s));
         RBBIDebugPrintf("%4d  |  %3d %3d %3d ", s, row->fAccepting, row->fLookAhead, row->fTag);
         for (c=0; c<fHeader->fCatCount; c++)  {
             RBBIDebugPrintf("%3d ", row->fNextState[c]);
         }
         RBBIDebugPrintf("\n");
     }
+    RBBIDebugPrintf("\n");
+#endif
+}
+
+
+void  RBBIDataWrapper::printData() {
+#ifdef RBBI_DEBUG
+    RBBIDebugPrintf("RBBI Data at %p\n", (void *)fHeader);
+    RBBIDebugPrintf("   Version = %d\n", fHeader->fVersion);
+    RBBIDebugPrintf("   total length of data  = %d\n", fHeader->fLength);
+    RBBIDebugPrintf("   number of character categories = %d\n\n", fHeader->fCatCount);
+
+    printTable("Forward State Transition Table", fForwardTable);
+    printTable("Reverse State Transition Table", fReverseTable);
+    printTable("Safe Forward State Transition Table", fSafeFwdTable);
+    printTable("Safe Reverse State Transition Table", fSafeRevTable);
 
     RBBIDebugPrintf("\nOrignal Rules source:\n");
-    c = 0;
-    for (;;) {
-        if (fRuleSource[c] == 0)
-            break;
+    for (int32_t c=0; fRuleSource[c] != 0; c++) {
         RBBIDebugPrintf("%c", fRuleSource[c]);
-        c++;
     }
     RBBIDebugPrintf("\n\n");
 #endif
@@ -317,6 +337,14 @@ ubrk_swap(const UDataSwapper *ds, const void *inData, int32_t length, void *outD
     // Reverse state table.  Same layout as forward table, above.
     ds->swapArray32(ds, inBytes+rbbiDH->fRTable,   8,                    outBytes, status);
     ds->swapArray16(ds, inBytes+rbbiDH->fRTable+8, rbbiDH->fRTableLen-8, outBytes, status);
+
+    // Safe Forward state table.  Same layout as forward table, above.
+    ds->swapArray32(ds, inBytes+rbbiDH->fSFTable,   8,                     outBytes, status);
+    ds->swapArray16(ds, inBytes+rbbiDH->fSFTable+8, rbbiDH->fSFTableLen-8, outBytes, status);
+
+    // Safe Reverse state table.  Same layout as forward table, above.
+    ds->swapArray32(ds, inBytes+rbbiDH->fSRTable,   8,                     outBytes, status);
+    ds->swapArray16(ds, inBytes+rbbiDH->fSRTable+8, rbbiDH->fSRTableLen-8, outBytes, status);
 
     // Trie table for character categories
     utrie_swap(ds, inBytes+rbbiDH->fTrie, rbbiDH->fTrieLen, outBytes+rbbiDH->fTrie, status);
