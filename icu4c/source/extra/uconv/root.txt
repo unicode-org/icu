@@ -1,6 +1,6 @@
 ﻿// -*- Coding: utf-8; -*-  [all uconv resource files]
 // Copyright (c) 2000 IBM, Inc. and Others.
-// $Revision: 1.20 $
+// $Revision: 1.21 $
 //
 // Root translation file for uconv messages.
 // So you want to translate this file??? Great!
@@ -45,7 +45,7 @@ root
 	  "          --from-callback callback      use callback on original encoding\n"
 	  "          -i                            ignore invalid sequences in the input\n"
           "          --callback callback           use callback on both encodings\n"
-	  "          -b, --block-size size         read size bytes blocks (default: 4096)"
+	  "          -b, --block-size size         read size bytes blocks (default: 4096)\n"
 	  "          --fallback                    use fallback mapping\n"
 	  "          --no-fallback                 do not use fallback mapping\n"
 	  "          -f, --from-code code          set the original encoding\n"
