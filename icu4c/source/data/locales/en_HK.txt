@@ -16,10 +16,10 @@ en_HK {
         "h:mm:ss a z",
         "h:mm:ss a",
         "h:mm a",
-        "EEEE, MMMM d, yyyy",
-        "MMMM d, yyyy",
-        "d-MMM-yy",
-        "dd/MM/yy",
+        "EEEE, d MMMM yyyy",
+        "d MMMM yyyy",
+        "d MMM yyyy",
+        "dd/MM/yyyy",
         "{1} {0}",
     }
 //    NumberElements {
