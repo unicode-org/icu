@@ -563,6 +563,10 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
                             Calendar& cal,
                             UErrorCode& status) const
 {
+    if (U_FAILURE(status)) {
+        return;
+    }
+
     // this function gets called by format() to produce the appropriate substitution
     // text for an individual pattern symbol (e.g., "HH" or "yyyy")
 
@@ -575,6 +579,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     if (patternCharPtr == NULL)
     {
         status = U_INVALID_FORMAT_ERROR;
+        return;
     }
 
     patternCharIndex = (EField)(patternCharPtr - DateFormatSymbols::getPatternUChars());

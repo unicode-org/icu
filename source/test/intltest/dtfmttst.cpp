@@ -46,6 +46,7 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCASE(18,TestSpaceParsing);
         TESTCASE(19,TestExactCountFormat);
         TESTCASE(20,TestWhiteSpaceParsing);
+        TESTCASE(21,TestInvalidPattern);
         default: name = ""; break;
     }
 }
@@ -1081,6 +1082,18 @@ void DateFormatTest::TestWhiteSpaceParsing() {
     const int32_t DATA_len = sizeof(DATA)/sizeof(DATA[0]);
     
     expectParse(DATA, DATA_len, Locale("en"));
+}
+
+
+void DateFormatTest::TestInvalidPattern() {
+    UErrorCode ec = U_ZERO_ERROR;
+    SimpleDateFormat f(UnicodeString("Yesterday"), ec);
+    UnicodeString out;
+    FieldPosition pos;
+    f.format((UDate)0, out, pos);
+    logln(out);
+    // The bug is that the call to format() will crash.  By not
+    // crashing, the test passes.
 }
 
 /**
