@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/TestCanonicalIterator.java,v $ 
- * $Date: 2002/03/14 22:43:03 $ 
- * $Revision: 1.6 $
+ * $Date: 2002/03/19 00:18:44 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -41,7 +41,18 @@ public class TestCanonicalIterator extends TestFmwk {
     
     public void TestExhaustive() {
     	int counter = 0;
+    	int mixedCounter = 0;
+    	int lastMixedCounter = -1;
     	CanonicalIterator it = new CanonicalIterator("");
+    	/*
+    	CanonicalIterator slowIt = new CanonicalIterator("");
+    	slowIt.SKIP_ZEROS = false;
+    	*/
+    	Transliterator name = Transliterator.getInstance("[^\\u0020-\\u007F] name");
+    	Set itSet = new TreeSet();
+    	Set slowItSet = new TreeSet();
+    	
+    	
     	for (int i = 0; i < 0x10FFFF; ++i) {
     		
     		// skip characters we know don't have decomps
@@ -65,14 +76,97 @@ public class TestCanonicalIterator extends TestFmwk {
     		while (true) {
     			String item = it.next();
     			if (item == null) break;
-    			if (!item.equals(s)) gotSource = true;
-    			if (!item.equals(decomp)) gotDecomp = true;
-    			if (!item.equals(comp)) gotComp = true;
+    			if (item.equals(s)) gotSource = true;
+    			if (item.equals(decomp)) gotDecomp = true;
+    			if (item.equals(comp)) gotComp = true;
+    			if ((mixedCounter & 0x7F) == 0 && (i < 0xAD00 || i > 0xAC00 + 11172)) {
+    				if (lastMixedCounter != mixedCounter) {
+    					logln("");
+    					lastMixedCounter = mixedCounter;
+    				}
+    				logln("\t" + mixedCounter + "\t" + name.transliterate(item)
+    				+ (item.equals(s) ? "\t(*original*)" : "")
+    				+ (item.equals(decomp) ? "\t(*decomp*)" : "")
+    				+ (item.equals(comp) ? "\t(*comp*)" : "")
+    				);
+    			}
     		}
+    		
+    		// check that zeros optimization doesn't mess up.
+    		/*
+    		if (true) {
+    			it.reset();
+    			itSet.clear();
+    			while (true) {
+    				String item = it.next();
+    				if (item == null) break;
+    				itSet.add(item);
+    			}
+    			slowIt.setSource(s);
+    			slowItSet.clear();
+    			while (true) {
+    				String item = slowIt.next();
+    				if (item == null) break;
+    				slowItSet.add(item);
+    			}
+    			if (!itSet.equals(slowItSet)) {
+    				errln("Zero optimization failure with " + getReadable(s));
+    			}
+    		}
+    		*/
+    		
+    		mixedCounter++;
     		if (!gotSource || !gotDecomp || !gotComp) {
     			errln("FAIL CanonicalIterator: " + s);
     		}
     	}
+    }
+    
+    public int TestSpeed() {
+         // skip unless verbose
+        if (!isVerbose()) return 0;
+
+   		String s = "\uAC01\u0345";
+   		
+    	CanonicalIterator it = new CanonicalIterator(s);
+    	double start, end;
+    	int x = 0; // just to keep code from optimizing away.
+    	int iterations = 10000;
+    	double slowDelta = 0;
+    	
+    	/*
+    	CanonicalIterator slowIt = new CanonicalIterator(s);
+    	slowIt.SKIP_ZEROS = false;
+
+    	start = System.currentTimeMillis();
+    	for (int i = 0; i < iterations; ++i) {
+    		slowIt.setSource(s);
+    		while (true) {
+    			String item = slowIt.next();
+    			if (item == null) break;
+    			x += item.length();
+    		}
+    	}
+    	end = System.currentTimeMillis();
+    	double slowDelta = (end-start) / iterations;
+    	logln("Slow iteration: " + slowDelta);
+    	*/
+
+    	start = System.currentTimeMillis();
+    	for (int i = 0; i < iterations; ++i) {
+    		it.setSource(s);
+    		while (true) {
+    			String item = it.next();
+    			if (item == null) break;
+    			x += item.length();
+    		}
+    	}
+    	end = System.currentTimeMillis();
+    	double fastDelta = (end-start) / iterations;
+    	logln("Fast iteration: " + fastDelta + (slowDelta != 0 ? ", " + (fastDelta/slowDelta) : ""));
+    	
+    	
+    	return x;
     }
     
     public void TestBasic() {
@@ -88,7 +182,9 @@ public class TestCanonicalIterator extends TestFmwk {
         // check permute
         // NOTE: we use a TreeSet below to sort the output, which is not guaranteed to be sorted!
         
-        expectEqual("Simple permutation ", "", collectionToString(new TreeSet(CanonicalIterator.permute("ABC"))), "ABC, ACB, BAC, BCA, CAB, CBA");
+        Set results = new TreeSet();
+        CanonicalIterator.permute("ABC", false, results);
+        expectEqual("Simple permutation ", "", collectionToString(results), "ABC, ACB, BAC, BCA, CAB, CBA");
         
         // try samples
         SortedSet set = new TreeSet();
