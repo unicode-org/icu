@@ -288,7 +288,7 @@ public class LDMLComparator {
                         indexwriter.println(" <td><a href=\"" + localeStr+".html" + "\">" +
                             ourLocale.getDisplayName() + "</a></td>");
                         indexwriter.println(" <td>" + m_totalCount + "</td>");
-                        indexwriter.println(" <td>" + ourCvsVersion + "</td>");
+                        indexwriter.println(" <td>" + getCvsLink(localeStr,ourCvsVersion) +  ourCvsVersion + "</a></td>");
                         indexwriter.println("</tr>");
                         is.close();
                     }
@@ -808,7 +808,8 @@ public class LDMLComparator {
                                     "<a href=\"./index.html\">Main and About</a>, "+
                                     "</b></p>\n");                                    
                   if((ourCvsVersion!=null) && (ourCvsVersion.length()>0)) {
-                    writer.println("<h3><tt>"+localeStr + ".xml version " + ourCvsVersion + "</tt></h3>");
+                    writer.println("<h3><tt>"+ getCvsLink(localeStr) + localeStr + ".xml</a> version " +
+                        getCvsLink(localeStr,ourCvsVersion) + ourCvsVersion + "</a></tt></h3>");
                   } 
                   writer.print(         "        <table>\n");
         }
@@ -1086,11 +1087,13 @@ public class LDMLComparator {
                 if(alt!=null) {
                     if(alt.equals(LDMLConstants.PROPOSED)) {
                         if(subDraft == false) {
-                            System.err.println("***** ERROR Proposed but not draft? " + childOfSource.toString());
+                            throw new IllegalArgumentException("***** ERROR Proposed but not draft? " + childOfSource.toString());
+                            //NOTREACHED
                         }
                         altForChild = LDMLUtilities.getNonAltNodeLike(node, childOfSource);
                         if(altForChild == null) {
-                            throw new IllegalArgumentException("ERR: can't find a node like this one: " + childOfSource.toString());
+                            System.out.println("WARNING: can't find a node like this one: " + childOfSource.toString() + " - consider removing the alt=\"proposed\" attribute.");
+                            alt = null;
                         }
 //                        altReferenceUrl = LDMLUtilities.getAttributeValue(altForChild, LDMLConstants.REFERENCES);
 //                        if((altReferenceUrl!=null)&&(altReferenceUrl.length()==0)) {
@@ -1818,5 +1821,16 @@ public class LDMLComparator {
             return;
         }
 
+    }
+    
+    private static final String getCvsLink(String locale)
+    {
+        return "<a href=\"http://oss.software.ibm.com/cvs/icu/locale/common/main/" + locale + ".xml\">";
+    }
+    
+    private static final String getCvsLink(String locale, String version)
+    {
+        return "<a href=\"http://oss.software.ibm.com/cvs/icu/locale/common/main/" + locale + ".xml?rev=" +
+            version + "&content-type=text/x-cvsweb-markup\">";
     }
 } //end of class definition/declaration
