@@ -494,18 +494,19 @@ ucnv_io_getDefaultConverterName() {
         }
 
         /* if the name is there, test it out */
-
         if(name != NULL) {
           UErrorCode errorCode = U_ZERO_ERROR;
           UConverter *cnv;
           cnv = ucnv_open(name, &errorCode);
           if(U_FAILURE(errorCode) || (cnv == NULL)) {
-
             /* Panic time, let's use a fallback. */
 #if (U_CHARSET_FAMILY == U_ASCII_FAMILY) 
             name = "US-ASCII";
+            /* there is no 'algorithmic' converter for EBCDIC */
+#elif defined(OS390)
+            name = "ibm-1047-s390";
 #else
-            name = "ibm-37";  /* there is no 'algorithmic' converter for ebcdic.  */
+            name = "ibm-37";
 #endif
           }
           ucnv_close(cnv);
