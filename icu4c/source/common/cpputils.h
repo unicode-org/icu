@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1997-1999, International Business Machines
+*   Copyright (C) 1997-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -15,11 +15,10 @@
 #define CPPUTILS_H
 
 #include "unicode/utypes.h"
-
-#ifdef XP_CPLUSPLUS
-
 #include "cmemory.h"
-#include "unicode/unistr.h"
+
+// forward declaration
+class UnicodeString;
 
 /*===========================================================================*/
 /* Array copy utility functions */
@@ -58,18 +57,11 @@ uprv_arrayCopy(const UChar *src, int32_t srcStart,
         UChar *dst, int32_t dstStart, int32_t count)
 { uprv_memcpy(dst+dstStart, src+srcStart, (size_t)(count * sizeof(*src))); }
 
-/******************************************************
- * Simple utility to set output buffer parameters
- ******************************************************/
-
-U_CAPI void U_EXPORT2 T_fillOutputParams(const UnicodeString* temp,
-				       UChar* result, 
-				       const int32_t resultLength,
-				       int32_t* resultLengthOut, 
-				       UErrorCode* status);
-#endif
-
-
-
+/** Simple utility to fill a UChar array from a UnicodeString */
+U_CAPI int32_t U_EXPORT2
+uprv_fillOutputString(const UnicodeString &temp,
+                      UChar *dest, 
+                      int32_t destCapacity,
+                      UErrorCode *status);
 
 #endif /* _CPPUTILS */
