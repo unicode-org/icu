@@ -8,32 +8,39 @@
 *
 *
 *  ucnv_io.c:
-*  initializes global variables and defines functions pertaining to file access,
-*  and name resolution aspect of the library.
+*  initializes global variables and defines functions pertaining to file
+*  access, and name resolution aspect of the library.
 *
 *   new implementation:
 *
 *   created on: 1999nov22
 *   created by: Markus W. Scherer
 *
-*   Use the binary cnvalias.dat (created from convrtrs.txt) to work
+*   Use the binary cnvalias.icu (created from convrtrs.txt) to work
 *   with aliases for converter names.
+*
+*   Date        Name        Description
+*   11/22/1999  markus      Created
+*   06/28/2002  grhoten     Major overhaul of the converter alias design.
+*                           Now an alias can map to different converters
+*                           depending on the specified standard.
 *******************************************************************************
 */
 
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
 #include "unicode/ucnv.h"           /* This file implements ucnv_xXXX() APIs */
+#include "unicode/udata.h"
+
 #include "umutex.h"
 #include "cstring.h"
 #include "cmemory.h"
 #include "ucnv_io.h"
-#include "unicode/udata.h"
 #include "ucln_cmn.h"
 
 /* Format of cnvalias.icu -----------------------------------------------------
  *
- * cnvalias.dat is a binary, memory-mappable form of convrtrs.txt.
+ * cnvalias.icu is a binary, memory-mappable form of convrtrs.txt.
  * This binary form contains several tables. All indexes are to uint16_t
  * units, and not to the bytes (uint8_t units). Addressing everything on
  * 16-bit boundaries allows us to store more information with small index
@@ -215,7 +222,7 @@ haveAliasData(UErrorCode *pErrorCode) {
             converterListNum        = ((const uint32_t *)(table))[1];
             tagListNum              = ((const uint32_t *)(table))[2];
             aliasListNum            = ((const uint32_t *)(table))[3];
-            untaggedConvArraySize  = ((const uint32_t *)(table))[4];
+            untaggedConvArraySize   = ((const uint32_t *)(table))[4];
             taggedAliasArraySize    = ((const uint32_t *)(table))[5];
             taggedAliasListsSize    = ((const uint32_t *)(table))[6];
             reservedSize1           = ((const uint32_t *)(table))[7];   /* reserved */
