@@ -31,7 +31,6 @@
 
 #include "unicode/udata.h"
 
-class SimpleTimeZone;
 struct TZHeader;
 struct OffsetIndex;
 struct CountryIndex;
@@ -532,9 +531,10 @@ private:
 
     static TimeZone*        fgDefaultZone; // default time zone (lazy evaluated)
 
-    static const UnicodeString      GMT_ID;
+    static const UChar              GMT_ID[];
     static const int32_t            GMT_ID_LENGTH;
-    static const UnicodeString      CUSTOM_ID;
+    static const UChar              CUSTOM_ID[];
+    static const TimeZone           GMT_OBJ;
 
     ////////////////////////////////////////////////////////////////
     // Pointers into memory-mapped icudata.  Writing to this memory
@@ -601,8 +601,13 @@ private:
      */
     static void             initDefault(void);
 
+    /**
+     * Get the the GMT TimeZone.
+     */
+    static const TimeZone  *getGMT(void);
+
     // See source file for documentation
-    static void   loadZoneData(void);
+    static void             loadZoneData(void);
 
     // See source file for documentation
     static UBool U_CALLCONV isDataAcceptable(void *context,
