@@ -3877,6 +3877,24 @@ static void TestJ2726(void) {
   ucol_close(coll);
 }
 
+static void NullRule(void) {
+  UChar r[3] = {0};
+  UErrorCode status = U_ZERO_ERROR;
+  UCollator *coll = ucol_openRules(r, 1, UCOL_DEFAULT, UCOL_DEFAULT, NULL, &status);
+  if(U_SUCCESS(status)) {
+    log_err("This should have been an error!\n");
+    ucol_close(coll);
+  } else {
+    status = U_ZERO_ERROR;
+  }
+  coll = ucol_openRules(r, 0, UCOL_DEFAULT, UCOL_DEFAULT, NULL, &status);
+  if(U_FAILURE(status)) {
+    log_err("Empty rules should have produced a valid collator\n");
+  } else {
+    ucol_close(coll);
+  }
+}
+
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
 
 void addMiscCollTest(TestNode** root)
@@ -3930,6 +3948,7 @@ void addMiscCollTest(TestNode** root)
     TEST(TestSettings);
     TEST(TestEquals);
     TEST(TestJ2726);
+    TEST(NullRule);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
