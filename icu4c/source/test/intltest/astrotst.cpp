@@ -114,7 +114,7 @@ void AstroTest::TestLunarPosition(void) {
   };
   logln("");
   
-  for (int32_t i = 0; i < sizeof(tests)/sizeof(tests[0]); i++) {
+  for (int32_t i = 0; i < (int32_t)(sizeof(tests)/sizeof(tests[0])); i++) {
     gc->clear();
     gc->set((int32_t)tests[i][0], (int32_t)tests[i][1]-1, (int32_t)tests[i][2], (int32_t)tests[i][3], (int32_t)tests[i][4]);
     astro->setDate(gc->getTime(status));
