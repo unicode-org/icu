@@ -258,14 +258,6 @@ public class CollationThaiTest extends TestFmwk {
                 return null;
             }
             if (c == 0xD || c == 0xA) {
-                try {
-                    c = in.readByte();
-                } catch (EOFException ee) {
-                    return null;
-                } catch (IOException e) {
-                    errln("Cannot read line from the file");
-                    return null;
-                }
                 break;
             }
             bytes[i++] = c;
