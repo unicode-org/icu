@@ -284,7 +284,7 @@ hr {
         lt { "litvanski" }
         lv { "latvijski" }
         nl { "nizozemski" }
-        no { "norve\u0161kin" }
+        no { "norve\u0161ki" }
         pl { "poljski" }
         pt { "portugalski" }
         ro { "rumunjski" }
@@ -307,6 +307,10 @@ hr {
         "yyyy.MM.dd",
         "yyyy.MM.dd",
         "{1} {0}",
+    }
+    DateTimeElements:intvector {
+        2,
+        1, // "Minimal Days in First Week" is unknown. Root value used instead
     }
     DayAbbreviations { 
         "ned",

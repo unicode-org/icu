@@ -269,6 +269,10 @@ ro {
         "dd.MM.yyyy",
         "{1} {0}",
     }
+    DateTimeElements:intvector {
+        2,
+        1, // "Minimal Days in First Week" is unknown. Root value used instead
+    }
     DayAbbreviations { 
         "D",
         "L",
