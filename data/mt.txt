@@ -23,7 +23,7 @@
 //  but, U+0307 is the DOT ABOVE needed for z., c., and g. (in collation rules)
 
 mt {
-    Version { "0.9" } // Tue, Jul 20, 2000 srl
+    Version { "0.9.1" } // Tue, Jul 20, 2000 srl,     Oct 09, 2000 george
     ShortLanguage { mlt }
     Languages {
 
@@ -149,18 +149,18 @@ mt {
         ZA { "Afrika t'Isfel" }
     }
     MonthNames {
-	Jannar,
-	Frar,
-	Marzu,
-	April,
-	Mejju,
-	\u0120unju,
-	Lulju,	
-	Awissu,
-	Settembru,
-	Ottubru,
-	Novembru,
-	Di\u010Bembru
+        Jannar,
+        Frar,
+        Marzu,
+        April,
+        Mejju,
+        \u0120unju,
+        Lulju,
+        Awissu,
+        Settembru,
+        Ottubru,
+        Novembru,
+        Di\u010Bembru
         ""
     }
 //Jan Fra Mar Apr Mej Gun Lul Aww* Set Ott Nov Dic
@@ -197,12 +197,12 @@ mt {
 
     DayAbbreviations { 
         "\u0126ad",
-	"Tne",
-	"Tli",
-	"Erb", 
-	"\u0126am",
-	"\u0120im",
-	"Sib"
+        "Tne",
+        "Tli",
+        "Erb", 
+        "\u0126am",
+        "\u0120im",
+        "Sib"
     }
 
 
@@ -246,9 +246,9 @@ mt {
 
    CollationElements
    {
-	    Version { "1.0" }
-		Override { "FALSE" }
-		Sequence { "& B < c\u0307 , C\u0307 "                       // c.  C.
+        Version { "1.0" }
+        Override { "FALSE" }
+        Sequence { "& B < c\u0307 , C\u0307 "                       // c.  C.
          " < c,C"      
       "& F < g\u0307 , G\u0307 "                       // g.  G.
          " < g,G"
@@ -271,6 +271,7 @@ mt {
         }
     }
 
+    LocaleID {"3A"}
 
 }
 
