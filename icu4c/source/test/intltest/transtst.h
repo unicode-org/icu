@@ -259,45 +259,59 @@ class TransliteratorTest : public IntlTest {
     /**
      * Make sure parse errors reference the right line.
      */
-    void TestParseError();
+    void TestParseError(void);
 
     /**
      * Make sure sets on output are disallowed.
      */
-    void TestOutputSet();
+    void TestOutputSet(void);
 
     /**
      * Test the use variable range pragma, making sure that use of
      * variable range characters is detected and flagged as an error.
      */
-    void TestVariableRange();
+    void TestVariableRange(void);
 
     /**
      * Test invalid post context error handling
      */
-    void TestInvalidPostContext();
+    void TestInvalidPostContext(void);
 
     /**
      * Test ID form variants
      */
-    void TestIDForms();
+    void TestIDForms(void);
 
     /**
      * Mark's toRules test.
      */
-    void TestToRulesMark();
+    void TestToRulesMark(void);
 
     /**
      * Test Escape and Unescape transliterators.
      */
-    void TestEscape();
+    void TestEscape(void);
 
-    void TestAnchorMasking();
+    void TestAnchorMasking(void);
 
     /**
      * Make sure display names of variants look reasonable.
      */
-    void TestDisplayName();
+    void TestDisplayName(void);
+    
+    /** 
+     * Check to see if case mapping works correctly.
+     */
+    void TestSpecialCases(void);
+    /**
+     * Check to see that incremental gets at least part way through a reasonable string.
+     */
+    void TestIncrementalProgress(void);
+
+    /** 
+     * Check that casing handles surrogates.
+     */
+    void TestSurrogateCasing (void);
 
     //======================================================================
     // Support methods
@@ -333,6 +347,9 @@ class TransliteratorTest : public IntlTest {
 
     void checkRules(const UnicodeString& label, Transliterator& t2,
                     const UnicodeString& testRulesForward);
+    UnicodeString CheckIncrementalAux(const Transliterator* t, 
+                             const UnicodeString& input);
+
 };
 
 #endif

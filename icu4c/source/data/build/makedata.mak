@@ -234,6 +234,7 @@ CLEAN :
 	-@erase "*.obj"
 	-@erase "*.brk"
 	-@erase "*.dat"
+    -@erase "*.dll"
 	@cd "$(TESTDATAOUT)"
 	-@erase "*.dat"
 	-@erase "*.cnv"
