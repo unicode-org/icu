@@ -438,17 +438,25 @@ utrace_cleanup() {
 
 
 static const char * const
-trFnName[] = {"u_init",
-             "u_cleanup",
-             0};
+trFnName[] = {
+    "u_init",
+    "u_cleanup",
+    NULL
+};
 
 
 static const char * const
 trConvNames[] = {
     "ucnv_open",
+    "ucnv_openPackage",
+    "ucnv_openAlgorithmic",
+    "ucnv_clone",
     "ucnv_close",
     "ucnv_flushCache",
-    0};
+    "ucnv_load",
+    "ucnv_unload",
+    NULL
+};
 
     
 static const char * const
@@ -460,8 +468,8 @@ trCollNames[] = {
     "ucol_getLocale",
     "ucol_nextSortKeyPart",
     "ucol_strcollIter",
-    0};
-
+    NULL
+};
 
                 
 U_CAPI const char * U_EXPORT2
