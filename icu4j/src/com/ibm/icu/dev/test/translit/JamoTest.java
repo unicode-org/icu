@@ -44,6 +44,9 @@ public class JamoTest extends TransliteratorTest {
             "la", "(R)(A)", "ra",
             "bs", "(Bi)(EU)(Sf)", "beus",
             "kalgga", "(Ki)(A)(L)(GGi)(A)", null,
+
+            // 'r' in a final position is treated like 'l'
+            "karka", "(Ki)(A)(L)(Ki)(A)", "kalka",
         };
 
         for (int i=0; i<CASE.length; i+=3) {
