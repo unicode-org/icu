@@ -406,6 +406,9 @@ public class LDMLUtilities {
     public static Document resolveAliases(Document doc, String sourceDir, String thisLocale){
        // this is going to be interesting
        NodeList list =  doc.getElementsByTagName(LDMLConstants.ALIAS);
+       // node list is dynamic .. if a node is deleted, then 
+       // list is immidiately updated.
+       // so first cache the nodes returned and do stuff 
        Node[] array = new Node[list.getLength()];
        for(int i=0; i<list.getLength(); i++){
            array[i] = list.item(i);
