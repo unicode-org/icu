@@ -17,6 +17,7 @@ root {
     "%%B"    { "Bokm\u00e5l" }  // Norwegian variant display name
     "%%NY"   { "Nynorsk" }      // Norwegian variant display name
     "%%AL" { "\u00C5land" } // Aland variant display name
+    "%%UCARULES" { "UCARules.txt"} // UCARules
     // no collation elements any more
     // CollationElements { 
     //	    Version { "1.0" }
