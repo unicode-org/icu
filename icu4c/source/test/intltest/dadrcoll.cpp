@@ -29,7 +29,9 @@ DataDrivenCollatorTest::DataDrivenCollatorTest()
 : seq(StringCharacterIterator(""))
 {
   UErrorCode status = U_ZERO_ERROR;
-  driver = TestDataDriver::createTestInstance("DataDrivenCollationTest", status);
+  TestLog testLog;
+
+  driver = TestDataModule::getTestDataModule("DataDrivenCollationTest", testLog, status);
 }
 
 DataDrivenCollatorTest::~DataDrivenCollatorTest() 
@@ -44,20 +46,25 @@ void DataDrivenCollatorTest::runIndexedTest( int32_t index, UBool exec, const ch
       logln("TestSuite Collator: ");
   }
   UErrorCode status = U_ZERO_ERROR;
-
-  if(index >= driver->countTests()) {
-    name = "";
-  } else {
-    driver->getTest(index, name, status);
-    if(U_SUCCESS(status)) {
-      if(exec) {
-        log(name);
+  const DataMap *info = NULL;
+  TestData *testData = driver->createTestData(index, status);
+  if(U_SUCCESS(status)) {
+    name = testData->getName();
+    if(testData->getInfo(info, status)) {
+      log(info->getString("Description", status));
+    }
+    if(exec) {
+      log(name);
         logln("---");
         logln("");
-        processTest(status);
-      }
+        processTest(testData, status);
     }
+    delete testData;
+  } else {
+    name = "";
   }
+
+
 }
 
 UBool
@@ -146,8 +153,9 @@ DataDrivenCollatorTest::processArguments(Collator *col, const UChar *start, int3
 }
 
 void 
-DataDrivenCollatorTest::processTest(UErrorCode &status) {
+DataDrivenCollatorTest::processTest(TestData *testData, UErrorCode &status) {
   Collator *col = NULL;
+/*
   UnicodeString testInit[256];
   const char **testNames = new const char*[256];
   int32_t settingsSetSize = 0;
@@ -211,6 +219,67 @@ DataDrivenCollatorTest::processTest(UErrorCode &status) {
     delete col;
   }
   delete testNames;
+*/
+  const UChar *arguments = NULL;
+  int32_t argLen = 0;
+  const DataMap *settings = NULL;
+  const DataMap *currentCase = NULL;
+  UErrorCode intStatus = U_ZERO_ERROR;
+  UnicodeString testSetting;
+  while(testData->nextSettings(settings, status)) {
+    // try to get a locale
+    testSetting = settings->getString("TestLocale", intStatus);
+    if(U_SUCCESS(intStatus)) {
+      char localeName[256];
+      testSetting.extract(0, testSetting.length(), localeName, "");
+      col = Collator::createInstance(localeName, status);
+      if(U_SUCCESS(status)) {
+        logln("Testing collator for locale "+testSetting);
+      } else {
+        errln("Unable to instantiate collator for locale "+testSetting);
+        return;
+      }
+    } else {
+      // if no locale, try from rules
+      intStatus = U_ZERO_ERROR;
+      testSetting = settings->getString("Rules", intStatus);
+      if(U_SUCCESS(intStatus)) {
+        col = new RuleBasedCollator(testSetting, status);
+        if(U_SUCCESS(status)) {
+          logln("Testing collator for rules "+testSetting);
+        } else {
+          errln("Unable to instantiate collator for rules "+testSetting);
+          return;
+        }
+      } else {
+        errln("No collator definition!");
+      }
+    }
+    if(col != NULL) {
+      // get attributes
+      testSetting = settings->getString("Arguments", intStatus);
+      if(U_SUCCESS(intStatus)) {
+        logln("Arguments: "+testSetting);
+        argLen = testSetting.length();
+        arguments = testSetting.getBuffer();
+        processArguments(col, arguments, argLen, intStatus);
+        if(U_FAILURE(intStatus)) {
+          errln("Couldn't process arguments");
+          break;
+        }
+      }
+      // Start the processing
+      while(testData->nextCase(currentCase, status)) {
+        UnicodeString sequence = currentCase->getString("sequence", status);
+        if(U_SUCCESS(status)) {
+            processSequence(col, sequence, status);
+        }
+      }
+    } else {
+      errln("Couldn't instantiate a collator!");
+    }
+    delete col;
+  }
 }
 
 void 

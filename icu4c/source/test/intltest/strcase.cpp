@@ -24,7 +24,7 @@
 #include "unicode/locid.h"
 #include "unicode/ubrk.h"
 #include "ustrtest.h"
-#include "tedadrvr.h"
+#include "tstdtmod.h"
 
 void
 StringCaseTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {
@@ -313,35 +313,39 @@ StringCaseTest::TestTitleCasing() {
   UErrorCode status = U_ZERO_ERROR;
   UBreakIterator *iter;
   char cLocaleID[100];
-  const int32_t capacity = 4; // 4 test values per test case
-  int32_t noOfElements = 0;
-  UnicodeString testcase[4], result;
+  UnicodeString locale, input, result;
   int32_t type;
-  TestDataDriver *driver = TestDataDriver::createTestInstance("casing", status);
+  TestLog myLog;
+  TestDataModule *driver = TestDataModule::getTestDataModule("casing", myLog, status);
   if(U_SUCCESS(status)) {
-    driver->getTest("titlecasing", status);
-    while(noOfElements = driver->getNextTestCase(testcase, 4, status)) {
-      testcase[2].extract(0, 0x7fffffff, cLocaleID, sizeof(cLocaleID), "");
-      type = TestDataDriver::utoi(testcase[3]);
+    TestData *casingTest = driver->createTestData("titlecasing", status);
+    const DataMap *myCase = NULL;
+    while(casingTest->nextCase(myCase, status)) {
+      locale = myCase->getString("Locale", status);
+      locale.extract(0, 0x7fffffff, cLocaleID, sizeof(cLocaleID), "");
+      type = myCase->getInt("Type", status);
+      
 
+      input = myCase->getString("Input", status);
       if(type<0) {
           iter=0;
       } else {
-          iter=ubrk_open((UBreakIteratorType)type, cLocaleID, testcase[0].getBuffer(), testcase[0].length(), &status);
+          iter=ubrk_open((UBreakIteratorType)type, cLocaleID, input.getBuffer(), input.length(), &status);
       }
 
       if(U_FAILURE(status)) {
           errln("error: TestTitleCasing() ubrk_open(%d) failed for test case  from casing.res: %s", type,  u_errorName(status));
           status = U_ZERO_ERROR;
       } else {
-          result=testcase[0];
+          result=input;
           result.toTitle((BreakIterator *)iter, Locale(cLocaleID));
-          if(result!=testcase[1]) {
+          if(result!=myCase->getString("Output", status)) {
               errln("error: TestTitleCasing() got a wrong result for test case from casing.res");
           }
       }
       ubrk_close(iter);
     }
+    delete casingTest;
   }
   delete driver;
 
