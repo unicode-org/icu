@@ -59,6 +59,7 @@
 #endif
 
 #include "umutex.h"
+#include "cmemory.h"
 
 /* the global mutex. Use it proudly and wash it often. */
 UMTX    gGlobalMutex = NULL;
