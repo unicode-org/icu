@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/search/Attic/SearchTest.java,v $ 
- * $Date: 2001/09/12 00:22:19 $ 
- * $Revision: 1.8 $
+ * $Date: 2001/11/17 01:25:28 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -435,6 +435,43 @@ public class SearchTest extends com.ibm.test.TestFmwk {
 			    "\" match in text \"" + strings[i] + "\"");
 			}
         }
+    }
+    
+    public void TestJitterBug1513()
+    {
+        String contents ="<HTML>\n<HEAD>\n<TITLE>External Ano</TITLE>\n" +
+                   "</HEAD>\n<BODY>\n<B>Hello world.</B>\n\n<TABLE>\n" +
+                   "<TR><TH>Cars</TH><TH>Colors</TH><TH>Interiors</TH></TR>\n"
+                   + "<TR><TH>2\nDoor</TH><TH>Red</TH><TH>Leather</TH></TR>\n"
+                   + "<TR><TH>4\nDoor</TH><TH>Blue</TH><TH>Cloth</TH></TR>\n" 
+                   + "\n<TR><TD>Convertible</TD><TD>Black</TD>" +
+                   "<TD>Vinyl</TD></TR>\n\n</TABLE>\n\nRemove This text.\n" +
+                   "\n\n\n<TABLE>\n<TR><TH><B>Warranty</B></TH>" +
+                   "<TH><B>Length</B></TH><TH>Restrictions</TH></TR>\n" +
+                   "<TR><TH>Silver</TH><TH>2\nYears</TH><TH>Yes</TH></TR>\n" +
+                   "<TR><TH>Gold</TH><TH>5\nYears</TH><TH>No</TH></TR>\n" +
+                   "</TABLE>\n\n</BODY>\n</HTML>\n\n\n\n\n\n\n\n/B>\n" +
+                   "<TABLE>\n" +
+                   "<TR><TH>Cars</TH><TH>Colors</TH><TH>Interiors</TH></TR>\n"
+                   + "<TR><TH>2\nDoor</TH><TH>Red</TH><TH>Leather</TH></TR>\n"
+                   + "<TR><TH>4\nDoor</TH><TH>Blue</TH><TH>Cloth</TH></TR>\n" 
+                   + "<TR><TD>Convertible</TD><TD>Black</TD>" +
+                   "<TD>Vinyl</TD></TR>\n</TABLE>\n\nRemove This text.\n\n\n"
+                   + "\n<TABLE>\n" +
+                   "<TR><TH><B>Warranty</B></TH><TH><B>Length</B></TH>" +
+                   "<TH>Restrictions</TH></TR>\n<TR><TH>Silver</TH><TH>2\n" +
+                   "Years</TH><TH>Yes</TH></TR>\n<TR><TH>Gold</TH>";
+        String pattern = "HE";
+
+		System.out.println("Searching for all occurrences of pattern " +
+						   pattern + " following contents:\n" + contents);
+
+	    StringSearch searcher = new StringSearch(pattern, contents);
+	    int	    	 offset;
+
+	    while ((offset = searcher.next()) != SearchIterator.DONE) {
+		    System.out.println( "Found match at offset " + offset );
+		}
     }
     
     //-------------------------------------------------------------------------
