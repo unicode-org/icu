@@ -66,8 +66,7 @@ void UVectorTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
         errln("UVectorTest failure at line %d.\n", __LINE__);\
     }
 
-U_CDECL_BEGIN
-static int8_t U_CALLCONV
+static int8_t
 UVectorTest_compareInt32(UHashTok key1, UHashTok key2) {
     if (key1.integer > key2.integer) {
         return 1;
@@ -78,6 +77,7 @@ UVectorTest_compareInt32(UHashTok key1, UHashTok key2) {
     return 0;
 }
 
+U_CDECL_BEGIN
 static int8_t U_CALLCONV
 UVectorTest_compareCstrings(const UHashTok key1, const UHashTok key2) {
     return !strcmp((const char *)key1.pointer, (const char *)key2.pointer);
