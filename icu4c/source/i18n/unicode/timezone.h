@@ -120,7 +120,7 @@ public:
     /**
      * The GMT zone has a raw offset of zero and does not use daylight
      * savings time.
-     * @obsolete ICU 2.4. Use getGMT() instead since this variable will be removed in that release.
+     * @obsolete ICU 2.6. Use getGMT() instead since this variable will be removed in that release.
      */
     static const TimeZone* GMT;
 #endif
