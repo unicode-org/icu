@@ -91,6 +91,9 @@ U_CAPI int32_t U_EXPORT2
 T_CString_integerToString(char *buffer, int32_t n, int32_t radix);
 
 U_CAPI int32_t U_EXPORT2
+T_CString_int64ToString(char *buffer, int64_t n, uint32_t radix);
+
+U_CAPI int32_t U_EXPORT2
 T_CString_stringToInteger(const char *integerString, int32_t radix);
 
 U_CAPI int U_EXPORT2
