@@ -135,32 +135,32 @@ private:
 	UChar32 MAX_;
 };
 
-void isAlpha(UChar32 ch) 
+inline void isAlpha(UChar32 ch) 
 {
     u_isalpha(ch);
 }
 
-void isUpper(UChar32 ch)
+inline void isUpper(UChar32 ch)
 {
 	u_isupper(ch);
 }
 
-void isLower(UChar32 ch)
+inline void isLower(UChar32 ch)
 {
 	u_islower(ch);
 }
 
-void isDigit(UChar32 ch)
+inline void isDigit(UChar32 ch)
 {
 	u_isdigit(ch);
 }
 
-void isSpace(UChar32 ch)
+inline void isSpace(UChar32 ch)
 {
 	u_isspace(ch);
 }
 
-void isAlphaNumeric(UChar32 ch)
+inline void isAlphaNumeric(UChar32 ch)
 {
 	u_isalnum(ch);
 }
@@ -170,57 +170,57 @@ void isAlphaNumeric(UChar32 ch)
  * iswgraph is not used for testing since it is a subset of iswprint with the
  * exception of returning true for white spaces. no match found in icu4c.
  */
-void isPrint(UChar32 ch)
+inline void isPrint(UChar32 ch)
 {
 	u_isprint(ch);
 }
 
-void isControl(UChar32 ch)
+inline void isControl(UChar32 ch)
 {
 	u_iscntrl(ch);
 }
 
-void toLower(UChar32 ch)
+inline void toLower(UChar32 ch)
 {
 	u_tolower(ch);
 }
 
-void toUpper(UChar32 ch)
+inline void toUpper(UChar32 ch)
 {
 	u_toupper(ch);
 }
 
-void isWhiteSpace(UChar32 ch)
+inline void isWhiteSpace(UChar32 ch)
 {
 	u_isWhitespace(ch);
 }
 
-void StdLibIsAlpha(wchar_t ch)
+inline void StdLibIsAlpha(wchar_t ch)
 {
 	iswalpha(ch);
 }
 
-void StdLibIsUpper(wchar_t ch)
+inline void StdLibIsUpper(wchar_t ch)
 {
 	iswupper(ch);
 }
 
-void StdLibIsLower(wchar_t ch)
+inline void StdLibIsLower(wchar_t ch)
 {
 	iswlower(ch);
 }
 
-void StdLibIsDigit(wchar_t ch)
+inline void StdLibIsDigit(wchar_t ch)
 {
 	iswdigit(ch);
 }
 
-void StdLibIsSpace(wchar_t ch)
+inline void StdLibIsSpace(wchar_t ch)
 {
 	iswspace(ch);
 }
 
-void StdLibIsAlphaNumeric(wchar_t ch)
+inline void StdLibIsAlphaNumeric(wchar_t ch)
 {
 	iswalnum(ch);
 }
@@ -230,27 +230,27 @@ void StdLibIsAlphaNumeric(wchar_t ch)
  * iswgraph is not used for testing since it is a subset of iswprint with the
  * exception of returning true for white spaces. no match found in icu4c.
  */
-void StdLibIsPrint(wchar_t ch)
+inline void StdLibIsPrint(wchar_t ch)
 {
 	iswprint(ch);
 }
 
-void StdLibIsControl(wchar_t ch)
+inline void StdLibIsControl(wchar_t ch)
 {
 	iswcntrl(ch);
 }
 
-void StdLibToLower(wchar_t ch)
+inline void StdLibToLower(wchar_t ch)
 {
 	towlower(ch);
 }
 
-void StdLibToUpper(wchar_t ch)
+inline void StdLibToUpper(wchar_t ch)
 {
 	towupper(ch);
 }
 
-void StdLibIsWhiteSpace(wchar_t ch)
+inline void StdLibIsWhiteSpace(wchar_t ch)
 {
 	iswspace(ch);
 }
