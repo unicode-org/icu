@@ -161,14 +161,14 @@
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="nmake /nologo /f $(InputName).mak icup=$(ProjectDir)..\..\.. CFG=Release"
+						CommandLine="nmake /nologo /f $(InputName).mak icup=&quot;$(ProjectDir)..\..\..&quot; CFG=Release"
 						Outputs="Release/uconvmsg.lib"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="nmake /nologo /f $(InputName).mak icup=$(ProjectDir)..\..\.. CFG=Debug"
+						CommandLine="nmake /nologo /f $(InputName).mak icup=&quot;$(ProjectDir)..\..\..&quot; CFG=Debug"
 						Outputs="Debug/uconvmsg.lib"/>
 				</FileConfiguration>
 			</File>
