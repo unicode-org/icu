@@ -106,6 +106,13 @@ const UChar32 UnicodeSet::MIN_VALUE = UNICODESET_LOW;
  */
 const UChar32 UnicodeSet::MAX_VALUE = UNICODESET_HIGH - 1;
 
+// HEY WHAT'S THIS DOING HERE?
+// This is here until we have sufficient reason to add an entire
+// separate unimatch.cpp source file just for one line.
+const char UnicodeMatcher::fgClassID = 0;
+
+const char UnicodeSet::fgClassID = 0;
+
 //----------------------------------------------------------------
 // Constructors &c
 //----------------------------------------------------------------
@@ -978,7 +985,12 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
             if (ivarValueBuffer < varValueBuffer->length()) {
                 c = varValueBuffer->char32At(ivarValueBuffer);
                 ivarValueBuffer += UTF_CHAR_LENGTH(c);
-                nestedSet = symbols->lookupSet(c); // may be NULL
+                const UnicodeMatcher *m = symbols->lookupMatcher(c); // may be NULL
+                if (m != NULL && m->getDynamicClassID() != UnicodeSet::getStaticClassID()) {
+                    status = U_ILLEGAL_ARGUMENT_ERROR;
+                    return;
+                }
+                nestedSet = (UnicodeSet*) m;
                 nestedPatDone = FALSE;
             } else {
                 varValueBuffer = NULL;
