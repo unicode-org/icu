@@ -1,5 +1,5 @@
-Generate: Derived.*
-DeltaVersion: 12
+Generate:
+DeltaVersion: 13
 CopyrightYear: 2005
 
 File: auxiliary/GraphemeBreakProperty
@@ -58,6 +58,13 @@ Value:	4.1
 File:	extracted/DerivedBidiClass
 Property:	Bidi_Class
 # Bidi Class (listing UnicodeData.txt, field 4: see UCD.html)
+# Unlike other properties, unassigned code points in blocks reserved for right-to-left scripts are given either types R or AL.
+# The unassigned characters that default to R are:
+#   Hebrew, Cypriot_Syllabary, Kharoshthi, and the ranges \u07C0-\u08FF \uFB1D-\uFB4F \U00010840-\U00010FFF
+# The unassigned characters that default to AL are:
+#   Arabic, Syriac, Thaana, Arabic_Presentation_Forms_A, Arabic_Presentation_Forms_B, Arabic_Supplement,
+#   and the range \u0750-\u077F, minus the Noncharacter_Code_Points
+# For all other cases:
 Format:	valueStyle=short skipUnassigned=Left_To_Right
 
 File:	extracted/DerivedBinaryProperties
@@ -67,8 +74,6 @@ Property:	Bidi_Mirrored
 File:	extracted/DerivedCombiningClass
 Property:	Canonical_Combining_Class
 # Combining Class (listing UnicodeData.txt, field 3: see UCD.html)
-#	All code points not explicitly listed in this file have the property
-#	value:   0.
 Format: nameStyle=none valueStyle=short skipUnassigned=Not_Reordered
 
 File:	DerivedCoreProperties

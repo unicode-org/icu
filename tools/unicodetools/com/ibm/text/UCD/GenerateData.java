@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2005/03/10 02:37:19 $
-* $Revision: 1.37 $
+* $Date: 2005/03/26 05:40:04 $
+* $Revision: 1.38 $
 *
 *******************************************************************************
 */
@@ -744,16 +744,19 @@ public class GenerateData implements UCD_Types {
     
     static public void writeNormalizerTestSuite(String directory, String fileName) throws IOException {
         
+    	UnicodeDataFile fc = UnicodeDataFile.openAndWriteHeader(directory, fileName);
+        PrintWriter log = fc.out;
+        
         String newFile = directory + fileName + UnicodeDataFile.getFileSuffix(true);
-        PrintWriter log = Utility.openPrintWriter(newFile, Utility.UTF8_UNIX);
-        String[] batName = {""};
-        String mostRecent = UnicodeDataFile.generateBat(directory, fileName, UnicodeDataFile.getFileSuffix(true), batName);
+        //PrintWriter log = Utility.openPrintWriter(newFile, Utility.UTF8_UNIX);
+        //String[] batName = {""};
+        //String mostRecent = UnicodeDataFile.generateBat(directory, fileName, UnicodeDataFile.getFileSuffix(true), batName);
 
         String[] example = new String[256];
 
-        log.println("# " + fileName + UnicodeDataFile.getFileSuffix(false));
-        log.println(UnicodeDataFile.generateDateLine());
-        log.println("#");
+        //log.println("# " + fileName + UnicodeDataFile.getFileSuffix(false));
+        //log.println(UnicodeDataFile.generateDateLine());
+        /*log.println("#");
         log.println("# Normalization Test Suite");
         log.println("# Format:");
         log.println("#");
@@ -787,7 +790,7 @@ public class GenerateData implements UCD_Types {
 
         log.println("#");
         log.println("@Part0 # Specific cases");
-        log.println("#");
+        log.println("#");*/
 
         for (int j = 0; j < testSuiteCases.length; ++j) {
             writeLine(testSuiteCases[j], log, false);
@@ -891,8 +894,8 @@ public class GenerateData implements UCD_Types {
         Utility.fixDot();
         log.println("#");
         log.println("# END OF FILE");
-        log.close();
-        Utility.renameIdentical(mostRecent, Utility.getOutputName(newFile), batName[0]);
+        fc.close();
+        //Utility.renameIdentical(mostRecent, Utility.getOutputName(newFile), batName[0]);
     }
     
     static void handleIdentical() throws IOException {
@@ -942,12 +945,13 @@ public class GenerateData implements UCD_Types {
 
     // not recursive!!!
     static final String comma(String s) {
+    	//if (true) return s;
         commaResult.setLength(0);
         int cp;
-        for (int i = 0; i < s.length(); i += UTF32.count16(i)) {
-            cp = UTF32.char32At(s, i);
+        for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
+            cp = UTF16.charAt(s, i);
             if (Default.ucd().getCategory(cp) == Mn) commaResult.append('\u25CC');
-            UTF32.append32(commaResult, cp);
+            UTF16.append(commaResult, cp);
         }
         return commaResult.toString();
     }

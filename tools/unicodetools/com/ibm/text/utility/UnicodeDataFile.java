@@ -15,15 +15,17 @@ public class UnicodeDataFile {
     private String newFile;
     private String batName;
     private String mostRecent;
+    private String filename;
     private UnicodeDataFile(){};
     
     public static UnicodeDataFile openAndWriteHeader(String directory, String filename) throws IOException {
         UnicodeDataFile result = new UnicodeDataFile();
         result.newFile = directory + filename + UnicodeDataFile.getFileSuffix(true);
-        result.out = Utility.openPrintWriter(result.newFile, Utility.LATIN1_UNIX);
+        result.out = Utility.openPrintWriter(result.newFile, Utility.UTF8_UNIX);
         String[] batName = {""};
         result.mostRecent = UnicodeDataFile.generateBat(directory, filename, UnicodeDataFile.getFileSuffix(true), batName);
         result.batName = batName[0];
+    	result.filename = filename;
         
         result.out.println("# " + filename + UnicodeDataFile.getFileSuffix(false));
         result.out.println(generateDateLine());
@@ -50,6 +52,9 @@ public class UnicodeDataFile {
     }
     
     public void close() throws IOException {
+        try {
+            Utility.appendFile(filename + "Footer.txt", Utility.LATIN1, out);
+        } catch (FileNotFoundException e) {}
         out.close();           
         Utility.renameIdentical(mostRecent, Utility.getOutputName(newFile), batName);
     }

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateCaseFolding.java,v $
-* $Date: 2004/02/12 08:23:15 $
-* $Revision: 1.16 $
+* $Date: 2005/03/26 05:40:04 $
+* $Revision: 1.17 $
 *
 *******************************************************************************
 */
@@ -574,14 +574,19 @@ public class GenerateCaseFolding implements UCD_Types {
         log.close();
         
         System.out.println("Writing");
-        String newFile = "DerivedData/SpecialCasing" + suffix2 + UnicodeDataFile.getFileSuffix(true);
-        PrintWriter out = Utility.openPrintWriter(newFile, Utility.LATIN1_UNIX);
-        String[] batName = {""};
+        //String newFile = "DerivedData/SpecialCasing" + suffix2 + UnicodeDataFile.getFileSuffix(true);
+        //PrintWriter out = Utility.openPrintWriter(newFile, Utility.LATIN1_UNIX);
+        
+        UnicodeDataFile udf = UnicodeDataFile.openAndWriteHeader("DerivedData/", "SpecialCasing" + suffix2);
+        PrintWriter out = udf.out;
+        
+ /*       String[] batName = {""};
         String mostRecent = UnicodeDataFile.generateBat("DerivedData/", "SpecialCasing", suffix2 + UnicodeDataFile.getFileSuffix(true), batName);
         out.println("# SpecialCasing" + UnicodeDataFile.getFileSuffix(false));
         out.println(UnicodeDataFile.generateDateLine());
         out.println("#");
         Utility.appendFile("SpecialCasingHeader.txt", Utility.UTF8, out);
+*/        
 
         Iterator it = sorted.keySet().iterator();
         int lastOrder = -1;
@@ -612,8 +617,8 @@ public class GenerateCaseFolding implements UCD_Types {
             }
             out.println(line);
         }
-        Utility.appendFile("SpecialCasingFooter.txt", Utility.UTF8, out);
-        out.close();
-        Utility.renameIdentical(mostRecent, Utility.getOutputName(newFile), batName[0]);
+        //Utility.appendFile("SpecialCasingFooter.txt", Utility.UTF8, out);
+        udf.close();
+        //Utility.renameIdentical(mostRecent, Utility.getOutputName(newFile), batName[0]);
     }
 }

@@ -1,3 +1,4 @@
+#
 # Special Casing Properties
 #
 # This file is a supplement to the UnicodeData file.

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/TestData.java,v $
-* $Date: 2005/03/10 02:37:19 $
-* $Revision: 1.18 $
+* $Date: 2005/03/26 05:40:05 $
+* $Revision: 1.19 $
 *
 *******************************************************************************
 */
@@ -151,7 +151,12 @@ public class TestData implements UCD_Types {
 	
 	static class GenStringPrep {
 		UnicodeSet[] coreChars = new UnicodeSet[100];
-		UnicodeSet[] decompChars = new UnicodeSet[100];
+		UnicodeSet decomposable = new UnicodeSet();
+		UnicodeSet pattern = new UnicodeSet();
+		ToolUnicodePropertySource ups = ToolUnicodePropertySource.make("");
+		//UnicodeSet id_continue = ups.getSet("ID_Continue=true");
+		UnicodeSet xid_continue = ups.getSet("XID_Continue=true");
+		//UnicodeSet[] decompChars = new UnicodeSet[100];
 		UCD ucd = Default.ucd();
 
 		Collator uca = Collator.getInstance(ULocale.ENGLISH);
@@ -167,10 +172,13 @@ public class TestData implements UCD_Types {
 
 
 		void genStringPrep() throws IOException {
+			//BagFormatter bf = new BagFormatter();
+			//System.out.println(bf.showSetDifferences("ID_Continue", id_continue, "XID_Continue", xid_continue));
 			StringBuffer inbuffer = new StringBuffer();
 			StringBuffer intermediate, outbuffer;
 			for (int cp = 0; cp <= 0x10FFFF; ++cp) {
 				Utility.dot(cp);
+				if (!Default.nfd().isNormalized(cp)) decomposable.add(cp);
 				inbuffer.setLength(0);
 				UTF16.append(inbuffer, cp);
 				try {
@@ -189,15 +197,9 @@ public class TestData implements UCD_Types {
 				if (!TestData.equals(inbuffer, outbuffer))
 					continue;
 				int script = ucd.getScript(cp);
-				if (!Default.nfd().isNormalized(cp)) {
-					if (decompChars[script] == null)
-						decompChars[script] = new UnicodeSet();
-					decompChars[script].add(cp);
-				} else {
-					if (coreChars[script] == null)
-						coreChars[script] = new UnicodeSet();
-					coreChars[script].add(cp);
-				}
+				if (coreChars[script] == null)
+					coreChars[script] = new UnicodeSet();
+				coreChars[script].add(cp);
 			}
 			// find characters with no uppercase
 			for (UnicodeSetIterator it = new UnicodeSetIterator(lowercase); it.next();) {
@@ -212,8 +214,11 @@ public class TestData implements UCD_Types {
 					.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
 			out.println("<title>IDN Characters</title><style>");
 			out.println("<!--");
-			out
-					.println(".script       { font-size: 150%; background-color: #C0C0C0 }");
+			out.println(".script       { font-size: 150%; background-color: #CCCCCC }");
+			out.println(".Atomic       { background-color: #CCCCFF }");
+			out.println(".Atomic-no-uppercase       { background-color: #CCFFCC }");
+			out.println(".Non-ID       { background-color: #FFCCCC }");
+			out.println(".Decomposable       { background-color: #FFFFCC }");
 			out.println("th           { text-align: left }");
 			out.println("-->");
 			out.println("</style></head><body><table>");
@@ -240,15 +245,16 @@ public class TestData implements UCD_Types {
 		 * @param scriptCode
 		 */
 		private void showCodes(PrintWriter out, int scriptCode) {
-			if (coreChars[scriptCode] == null
-					&& decompChars[scriptCode] == null)
-				return;
+			if (coreChars[scriptCode] == null) return;
 			System.out.println(ucd.getScriptID_fromIndex((byte) scriptCode));
-			String script = Default.ucd().getScriptID_fromIndex(
-					(byte) scriptCode);
+			String script = Default.ucd().getScriptID_fromIndex((byte) scriptCode);
 			out.println();
 			out.println("<tr><th class='script'>Script: " + script + "</th></tr>");
 			UnicodeSet core = new UnicodeSet(coreChars[scriptCode]);
+			UnicodeSet decomp = new UnicodeSet(core).retainAll(decomposable);
+			core.removeAll(decomp);
+			UnicodeSet non_id = new UnicodeSet(core).removeAll(xid_continue);
+			core.removeAll(non_id);
 			UnicodeSet otherCore = new UnicodeSet(core).removeAll(hasUpper);
 			core.removeAll(otherCore);
 			if (core.size() == 0) {
@@ -257,9 +263,9 @@ public class TestData implements UCD_Types {
 				otherCore = temp;
 			}
 			printlnSet(out, "Atomic", core, scriptCode);
-			if (otherCore.size() != 0) printlnSet(out, "Atomic [noUpper]", otherCore, scriptCode);							
-			UnicodeSet decomp = decompChars[scriptCode];
-			if (decomp != null && decomp.size() != 0) printlnSet(out, "Decomposable", decomp, scriptCode);
+			if (otherCore.size() != 0) printlnSet(out, "Atomic-no-uppercase", otherCore, scriptCode);
+			if (non_id.size() != 0) printlnSet(out, "Non-ID", non_id, scriptCode);
+			if (decomp.size() != 0) printlnSet(out, "Decomposable", decomp, scriptCode);
 		}
 
 		/**
@@ -277,7 +283,7 @@ public class TestData implements UCD_Types {
 					&& unicodeset.containsNone(bidiL) ? " dir='rtl'" : "";
 			out.println("<tr><th class='" + title + "'>" + title + " ("
 					+ nf.format(size) + ")</th></tr>");
-			out.print("<tr><td" + dir + ">");
+			out.print("<tr><td class='" + title + "'" + dir + ">");
 			UnicodeSetIterator usi = new UnicodeSetIterator();
 			if (scriptCode == HAN_SCRIPT || scriptCode == HANGUL_SCRIPT) {
 				usi.reset(unicodeset);
