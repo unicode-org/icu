@@ -883,8 +883,16 @@ void RBBITest::doMultipleSelectionTest(RuleBasedBreakIterator& iterator, BITestD
             count++;
             offset = iterator.next();
 
-            if (offset != RuleBasedBreakIterator::DONE && *testIterator == iterator)
-                errln("operator== failed: Two unequal iterators compared equal.");
+            if (offset != RuleBasedBreakIterator::DONE && *testIterator == iterator) {
+                errln("operator== failed: Two unequal iterators compared equal. count=%d offset=%d", count, offset);
+                if (count > 10000 || offset == -1) {
+                    errln("operator== failed too many times. Stopping test.");
+                    if (offset == -1) {
+                        errln("Does (RuleBasedBreakIterator::DONE == -1)?");
+                    }
+                    return;
+                }
+            }
         }
     } while (offset != RuleBasedBreakIterator::DONE);
 
