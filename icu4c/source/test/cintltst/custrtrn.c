@@ -36,7 +36,7 @@ addUCharTransformTest(TestNode** root)
    addTest(root, &Test_UChar_WCHART_API,  "custrtrn/Test_UChar_WCHART_API");
 }
 
-static const uint32_t src32[]={
+static const UChar32 src32[]={
     0x00A8, 0x3003, 0x3005, 0x2015, 0xFF5E, 0x2016, 0x2026, 0x2018, 0x000D, 0x000A,
     0x2019, 0x201C, 0x201D, 0x3014, 0x3015, 0x3008, 0x3009, 0x300A, 0x000D, 0x000A,
     0x300B, 0x300C, 0x300D, 0x300E, 0x300F, 0x3016, 0x3017, 0x3010, 0x000D, 0x000A,
@@ -116,15 +116,15 @@ static void Test_UChar_UTF32_API(void){
 
     UErrorCode err = U_ZERO_ERROR;
     UChar uTemp[1];
-    uint32_t u32Temp[1];
+    UChar32 u32Temp[1];
     UChar* uTarget=uTemp;
-    const uint32_t* u32Src = src32;
+    const UChar32* u32Src = src32;
     int32_t u32SrcLen = sizeof(src32)/4;
     int32_t uTargetLength = 0;
     int32_t uDestLen=0;
     const UChar* uSrc = src16;
     int32_t uSrcLen   = sizeof(src16)/2;
-    uint32_t* u32Target = u32Temp;
+    UChar32* u32Target = u32Temp;
     uint32_t u32TargetLength =0;
     int32_t u32DestLen =0;
     UBool failed = FALSE;
@@ -132,9 +132,9 @@ static void Test_UChar_UTF32_API(void){
     {
         /* preflight */
         u_strToUTF32(u32Target,u32TargetLength, &u32DestLen, uSrc, uSrcLen,&err);
-        if(err = U_BUFFER_OVERFLOW_ERROR){
+        if(err == U_BUFFER_OVERFLOW_ERROR){
             err = U_ZERO_ERROR; 
-            u32Target = (uint32_t*) malloc (sizeof(uint32_t) * (u32DestLen+1));
+            u32Target = (UChar32*) malloc (sizeof(uint32_t) * (u32DestLen+1));
             u32TargetLength = u32DestLen+1;
         
             u_strToUTF32(u32Target,u32TargetLength, &u32DestLen, uSrc, uSrcLen,&err);
@@ -161,7 +161,7 @@ static void Test_UChar_UTF32_API(void){
 
         /* preflight */
         u_strFromUTF32(uTarget,uTargetLength,&uDestLen,u32Src,u32SrcLen,&err);
-        if(err = U_BUFFER_OVERFLOW_ERROR){
+        if(err == U_BUFFER_OVERFLOW_ERROR){
             err = U_ZERO_ERROR; 
             uTarget = (UChar*) malloc( sizeof(UChar) * (uDestLen+1));
             uTargetLength =  uDestLen+1;
@@ -197,9 +197,9 @@ static void Test_UChar_UTF32_API(void){
 
        /* preflight */
         u_strToUTF32(NULL,u32TargetLength, &u32DestLen, uSrc, uSrcLen,&err);
-        if(err = U_BUFFER_OVERFLOW_ERROR){
+        if(err == U_BUFFER_OVERFLOW_ERROR){
             err = U_ZERO_ERROR; 
-            u32Target = (uint32_t*) malloc (sizeof(uint32_t) * (u32DestLen+1));
+            u32Target = (UChar32*) malloc (sizeof(uint32_t) * (u32DestLen+1));
             u32TargetLength = u32DestLen+1;
         
             u_strToUTF32(u32Target,u32TargetLength, &u32DestLen, uSrc, uSrcLen,&err);
@@ -221,7 +221,7 @@ static void Test_UChar_UTF32_API(void){
 
         /* preflight */
         u_strFromUTF32(NULL,uTargetLength,&uDestLen,u32Src,u32SrcLen,&err);
-        if(err = U_BUFFER_OVERFLOW_ERROR){
+        if(err == U_BUFFER_OVERFLOW_ERROR){
             err = U_ZERO_ERROR; 
             uTarget = (UChar*) malloc( sizeof(UChar) * (uDestLen+1));
             uTargetLength =  uDestLen+1;
@@ -249,15 +249,15 @@ static void Test_UChar_UTF8_API(void){
 
     UErrorCode err = U_ZERO_ERROR;
     UChar uTemp[1];
-    uint8_t u8Temp[1];
+    char u8Temp[1];
     UChar* uTarget=uTemp;
-    const uint8_t* u8Src;
+    const char* u8Src;
     int32_t u8SrcLen = 0;
     int32_t uTargetLength = 0;
     int32_t uDestLen=0;
     const UChar* uSrc = src16;
     int32_t uSrcLen   = sizeof(src16)/2;
-    uint8_t* u8Target = u8Temp;
+    char* u8Target = u8Temp;
     int32_t u8TargetLength =0;
     int32_t u8DestLen =0;
     UBool failed = FALSE;
@@ -267,7 +267,7 @@ static void Test_UChar_UTF8_API(void){
         u_strToUTF8(u8Target,u8TargetLength, &u8DestLen, uSrc, uSrcLen,&err);
         if(err == U_BUFFER_OVERFLOW_ERROR){
             err = U_ZERO_ERROR;       
-            u8Target = (uint8_t*) malloc (sizeof(uint8_t) * (u8DestLen+1));
+            u8Target = (char*) malloc (sizeof(uint8_t) * (u8DestLen+1));
             u8TargetLength = u8DestLen;
         
             u_strToUTF8(u8Target,u8TargetLength, &u8DestLen, uSrc, uSrcLen,&err);
@@ -337,7 +337,7 @@ static void Test_UChar_UTF8_API(void){
         u_strToUTF8(NULL,u8TargetLength, &u8DestLen, uSrc, uSrcLen,&err);
         if(err == U_BUFFER_OVERFLOW_ERROR){
             err = U_ZERO_ERROR;       
-            u8Target = (uint8_t*) malloc (sizeof(uint8_t) * (u8DestLen+1));
+            u8Target = (char*) malloc (sizeof(uint8_t) * (u8DestLen+1));
             u8TargetLength = u8DestLen;
         
             u_strToUTF8(u8Target,u8TargetLength, &u8DestLen, uSrc, uSrcLen,&err);

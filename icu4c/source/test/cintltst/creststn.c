@@ -362,7 +362,6 @@ static void TestNewTypes() {
 
     /* this tests if escapes are preserved or not */
     {
-        int len =0;
         const UChar* str = ures_getStringByKey(theBundle,"testescape",&len,&status);
         CONFIRM_ErrorCode(status, U_ZERO_ERROR);
         if(U_SUCCESS(status)){
@@ -386,7 +385,6 @@ static void TestEmptyTypes() {
     UResourceBundle* resArray = NULL;
     const uint8_t *binResult = NULL;
     int32_t len = 0;
-    int32_t i = 0;
     int32_t intResult = 0;
     const UChar *zeroString;
     const int32_t *zeroIntVect;
