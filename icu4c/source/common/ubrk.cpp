@@ -43,6 +43,10 @@ ubrk_open(UBreakIteratorType type,
   case UBRK_SENTENCE:
     result = BreakIterator::createSentenceInstance(Locale(locale), *status);
     break;
+
+  case UBRK_TITLE:
+    result = BreakIterator::createTitleInstance(Locale(locale), *status);
+    break;
   }
 
   // check for allocation error

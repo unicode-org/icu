@@ -198,6 +198,14 @@ protected:
      */
     virtual UBool isLookaheadState(int32_t state) const;
 
+#ifdef RBBI_DEBUG
+    //
+    // Print out state table and character classes.
+    //    For debugging only.
+    //
+    void debugDumpTables() const;
+#endif
+
     friend class RuleBasedBreakIterator;
     friend class DictionaryBasedBreakIterator;
 };
