@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-04-08" />
+		<version number="2.0">Various notes and changes in version 2.0</version>
+		<generation date="2003-06-25" />
 		<language type="bg"></language>
 	</identity>
 	<localeDisplayNames>
@@ -21,36 +26,41 @@
 	<layout>
 		<orientation lines="top-to-bottom" characters="left-to-right" />
 	</layout>
-	<encodings>
+	<characters>
 		<exemplarCharacters>[а-ь юяѣѫ]</exemplarCharacters>
-	</encodings>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Cyrl</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
 	<dates>
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
 		<calendars>
 			<default type="gregorian"/>
 			<calendar type="gregorian">
 				<monthNames>
-					<month type="1">Януари</month>
-					<month type="2">Февруари</month>
-					<month type="3">Март</month>
-					<month type="4">Април</month>
-					<month type="5">Май</month>
-					<month type="6">Юни</month>
-					<month type="7">Юли</month>
-					<month type="8">Август</month>
-					<month type="9">Септември</month>
-					<month type="10">Октомври</month>
-					<month type="11">Ноември</month>
-					<month type="12">Декември</month>
+					<month type="1">януари</month>
+					<month type="2">февруари</month>
+					<month type="3">март</month>
+					<month type="4">април</month>
+					<month type="5">май</month>
+					<month type="6">юни</month>
+					<month type="7">юли</month>
+					<month type="8">август</month>
+					<month type="9">септември</month>
+					<month type="10">октомври</month>
+					<month type="11">ноември</month>
+					<month type="12">декември</month>
 				</monthNames>
 				<monthAbbr>
 					<month type="1">ян.</month>
 					<month type="2">фев.</month>
-					<month type="3">март.</month>
+					<month type="3">март</month>
 					<month type="4">апр.</month>
-					<month type="5">май.</month>
-					<month type="6">юни.</month>
-					<month type="7">юли.</month>
+					<month type="5">май</month>
+					<month type="6">юни</month>
+					<month type="7">юли</month>
 					<month type="8">авг.</month>
 					<month type="9">сеп.</month>
 					<month type="10">окт.</month>
@@ -67,16 +77,16 @@
 					<day type="sat">събота</day>
 				</dayNames>
 				<dayAbbr>
-					<day type="sun">нд</day>
-					<day type="mon">пн</day>
-					<day type="tue">вт</day>
-					<day type="wed">ср</day>
-					<day type="thu">чт</day>
-					<day type="fri">пт</day>
-					<day type="sat">сб</day>
+					<day type="sun">нед.</day>
+					<day type="mon">пон.</day>
+					<day type="tue">вт.</day>
+					<day type="wed">ср.</day>
+					<day type="thu">четв.</day>
+					<day type="fri">пет.</day>
+					<day type="sat">съб.</day>
 				</dayAbbr>
 				<week>
-					<minDays count="2"/>
+					<minDays count="1"/>
 					<firstDay day="mon"/>
 				</week>
 				<eras>
@@ -87,45 +97,57 @@
 				</eras>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormatStyle type="full">
+					<dateFormatLength type="full">
 						<dateFormat >
 							<pattern>dd MMMM yyyy, EEEE</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="long">
+					</dateFormatLength >
+					<dateFormatLength type="long">
 						<dateFormat >
 							<pattern>dd MMMM yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="medium">
+					</dateFormatLength >
+					<dateFormatLength type="medium">
 						<dateFormat >
 							<pattern>dd.MM.yy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="short">
+					</dateFormatLength >
+					<dateFormatLength type="short">
 						<dateFormat >
 							<pattern>dd.MM.yy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
+					</dateFormatLength >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>
-					<timeFormat type="full">
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-					<timeFormat type="long">
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-					<timeFormat type="medium">
-						<pattern>HH:mm:ss</pattern>
-					</timeFormat>
-					<timeFormat type="short">
-						<pattern>HH:mm</pattern>
-					</timeFormat>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
 				</timeFormats>
-				<dateTimeFormat>
-					<pattern>{1} {0}</pattern>
-				</dateTimeFormat>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
 		<timeZoneNames>
@@ -146,11 +168,17 @@
 			<infinity>∞</infinity>
 			<nan>�</nan>
 		</symbols>
+		<currencies>
+			<currency type="BGL">
+				<displayName>BGL</displayName>
+				<symbol>лв</symbol>
+			</currency>
+		</currencies>
 	</numbers>
-		<collations>
-			<collation  >
-				<suppress_contractions>[0400-045f]</suppress_contractions>
-				<special owner="http://oss.software.ibm.com/icu/" version="1.1" />
-			</collation  >
-		</collations>
-</localeData>
+<collations version="3.1.1">
+	<collation  >
+		<suppress_contractions>[Ѐ-џ]</suppress_contractions>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.1" />
+	</collation  >
+</collations >
+</ldml>

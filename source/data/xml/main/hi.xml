@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="1.1">Various notes and changes in version 1.1</version>
-		<generation date="2003-04-08" />
+		<version number="2.0">Various notes and changes in version 2.0</version>
+		<generation date="2003-06-25" />
 		<language type="hi"></language>
 	</identity>
 	<localeDisplayNames>
@@ -180,9 +185,14 @@
 	<layout>
 		<orientation lines="top-to-bottom" characters="left-to-right" />
 	</layout>
-	<encodings>
-		<exemplarCharacters>[:Deva:]</exemplarCharacters>
-	</encodings>
+	<characters>
+		<exemplarCharacters>[[:Deva:]‌‍]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Deva</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
 	<dates>
 		<calendars>
 			<default type="gregorian"/>
@@ -233,14 +243,14 @@
 					<day type="fri">शुक्र</day>
 					<day type="sat">शनि</day>
 				</dayAbbr>
+				<am>पूर्वाह्न</am>
+				<pm>अपराह्न</pm>
 				<eras>
 					<eraAbbr>
 						<era type="1">ईसापूर्व</era>
 						<era type="2">सन</era>
 					</eraAbbr>
 				</eras>
-				<am>पूर्वाह्न</am>
-				<pm>अपराह्न</pm>
 			</calendar>
 		</calendars>
 		<timeZoneNames>
@@ -261,44 +271,336 @@
 			<infinity>∞</infinity>
 			<nan>�</nan>
 		</symbols>
+		<currencies>
+			<currency type="INR">
+				<displayName>INR</displayName>
+				<symbol>रु</symbol>
+			</currency>
+		</currencies>
 	</numbers>
-		<collations>
-			<collation  >
-				<settings normalization="on"/>
-				<rules>
-					<reset><top/></reset>
-					<pc>ॐ।॥॰०१२३४५६७८९अआइईउऊऋॠऌॡऍऎएऐऑऒओऔकक़</pc>
-					<i>क़</i>
-					<pc>कँकंकःक॑क॒क॓क॔कऽक्काकिकीकुकूकृकॄकॢकॣकॅकॆकेकैकॉकॊकोकौखख़</pc>
-					<i>ख़</i>
-					<pc>खँखंखःख॑ख॒ख॓ख॔खऽख्खाखिखीखुखूखृखॄखॢखॣखॅखॆखेखैखॉखॊखोखौगग़</pc>
-					<i>ग़</i>
-					<pc>गँगंगःग॑ग॒ग॓ग॔गऽग्गागिगीगुगूगृगॄगॢगॣगॅगॆगेगैगॉगॊगोगौघङचछजज़</pc>
-					<i>ज़</i>
-					<pc>जँजंजःज॑ज॒ज॓ज॔जऽज्जाजिजीजुजूजृजॄजॢजॣजॅजॆजेजैजॉजॊजोजौझञटठडड़</pc>
-					<i>ड़</i>
-					<pc>डँडंडःड॑ड॒ड॓ड॔डऽड्डाडिडीडुडूडृडॄडॢडॣडॅडॆडेडैडॉडॊडोडौढढ़</pc>
-					<i>ढ़</i>
-					<pc>ढँढंढःढ॑ढ॒ढ॓ढ॔ढऽढ्ढाढिढीढुढूढृढॄढॢढॣढॅढॆढेढैढॉढॊढोढौणतथदधनऩ</pc>
-					<i>ऩ</i>
-					<pc>नँनंनःन॑न॒न॓न॔नऽन्नानिनीनुनूनृनॄनॢनॣनॅनॆनेनैनॉनॊनोनौपफफ़</pc>
-					<i>फ़</i>
-					<pc>फँफंफःफ॑फ॒फ॓फ॔फऽफ्फाफिफीफुफूफृफॄफॢफॣफॅफॆफेफैफॉफॊफोफौबभमयय़</pc>
-					<i>य़</i>
-					<pc>यँयंयःय॑य॒य॓य॔यऽय्यायियीयुयूयृयॄयॢयॣयॅयॆयेयैयॉयॊयोयौरऱ</pc>
-					<i>ऱ</i>
-					<pc>रँरंरःर॑र॒र॓र॔रऽर्रारिरीरुरूरृरॄरॢरॣरॅरॆरेरैरॉरॊरोरौलळऴ</pc>
-					<i>ऴ</i>
-					<pc>ळँळंळःळ॑ळ॒ळ॓ळ॔ळऽळ्ळाळिळीळुळूळृळॄळॢळॣळॅळॆळेळैळॉळॊळोळौवशषसह़ँंः॒॑॓॔ऽ्ािीुूृॄॢॣॅॆेैॉॊो</pc>
-				</rules>
-				<special owner="http://oss.software.ibm.com/icu/" version="2.0" />
-			</collation  >
-			<collation key="DIRECT" >
-				<rules>
-					<reset><top/></reset>
-					<pc>ँंःअआइईउऊऋऌऍऎएऐऑऒओऔकखगघङचछजझञटठडढणतथदधनऩपफबभमयरऱलळऴवशषसह़ऽािीुूृॄॅॆेैॉॊोौ्ॐ॒॑॓॔क़ख़ग़ज़ड़ढ़फ़य़ॠॡॢॣ।॥०१२३४५६७८९</pc>
-				</rules>
-				<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
-			</collation  >
-		</collations>
-</localeData>
+<collations version="3.1.1">
+	<collation  >
+		<settings normalization="on"  />
+		<rules>
+			<reset><last_non_ignorable/></reset>
+			<pc>ॐ।॥॰०१२३४५६७८९अआइईउऊऋॠऌॡऍऎएऐऑऒओऔक</pc>
+			<p>क़</p>
+			<i>क़</i>
+			<p>कँ</p>
+			<p>कं</p>
+			<p>कः</p>
+			<p>क॑</p>
+			<p>क॒</p>
+			<p>क॓</p>
+			<p>क॔</p>
+			<p>कऽ</p>
+			<p>क्</p>
+			<p>का</p>
+			<p>कि</p>
+			<p>की</p>
+			<p>कु</p>
+			<p>कू</p>
+			<p>कृ</p>
+			<p>कॄ</p>
+			<p>कॢ</p>
+			<p>कॣ</p>
+			<p>कॅ</p>
+			<p>कॆ</p>
+			<p>के</p>
+			<p>कै</p>
+			<p>कॉ</p>
+			<p>कॊ</p>
+			<p>को</p>
+			<pc>कौख</pc>
+			<p>ख़</p>
+			<i>ख़</i>
+			<p>खँ</p>
+			<p>खं</p>
+			<p>खः</p>
+			<p>ख॑</p>
+			<p>ख॒</p>
+			<p>ख॓</p>
+			<p>ख॔</p>
+			<p>खऽ</p>
+			<p>ख्</p>
+			<p>खा</p>
+			<p>खि</p>
+			<p>खी</p>
+			<p>खु</p>
+			<p>खू</p>
+			<p>खृ</p>
+			<p>खॄ</p>
+			<p>खॢ</p>
+			<p>खॣ</p>
+			<p>खॅ</p>
+			<p>खॆ</p>
+			<p>खे</p>
+			<p>खै</p>
+			<p>खॉ</p>
+			<p>खॊ</p>
+			<p>खो</p>
+			<pc>खौग</pc>
+			<p>ग़</p>
+			<i>ग़</i>
+			<p>गँ</p>
+			<p>गं</p>
+			<p>गः</p>
+			<p>ग॑</p>
+			<p>ग॒</p>
+			<p>ग॓</p>
+			<p>ग॔</p>
+			<p>गऽ</p>
+			<p>ग्</p>
+			<p>गा</p>
+			<p>गि</p>
+			<p>गी</p>
+			<p>गु</p>
+			<p>गू</p>
+			<p>गृ</p>
+			<p>गॄ</p>
+			<p>गॢ</p>
+			<p>गॣ</p>
+			<p>गॅ</p>
+			<p>गॆ</p>
+			<p>गे</p>
+			<p>गै</p>
+			<p>गॉ</p>
+			<p>गॊ</p>
+			<p>गो</p>
+			<pc>गौघङचछज</pc>
+			<p>ज़</p>
+			<i>ज़</i>
+			<p>जँ</p>
+			<p>जं</p>
+			<p>जः</p>
+			<p>ज॑</p>
+			<p>ज॒</p>
+			<p>ज॓</p>
+			<p>ज॔</p>
+			<p>जऽ</p>
+			<p>ज्</p>
+			<p>जा</p>
+			<p>जि</p>
+			<p>जी</p>
+			<p>जु</p>
+			<p>जू</p>
+			<p>जृ</p>
+			<p>जॄ</p>
+			<p>जॢ</p>
+			<p>जॣ</p>
+			<p>जॅ</p>
+			<p>जॆ</p>
+			<p>जे</p>
+			<p>जै</p>
+			<p>जॉ</p>
+			<p>जॊ</p>
+			<p>जो</p>
+			<pc>जौझञटठड</pc>
+			<p>ड़</p>
+			<i>ड़</i>
+			<p>डँ</p>
+			<p>डं</p>
+			<p>डः</p>
+			<p>ड॑</p>
+			<p>ड॒</p>
+			<p>ड॓</p>
+			<p>ड॔</p>
+			<p>डऽ</p>
+			<p>ड्</p>
+			<p>डा</p>
+			<p>डि</p>
+			<p>डी</p>
+			<p>डु</p>
+			<p>डू</p>
+			<p>डृ</p>
+			<p>डॄ</p>
+			<p>डॢ</p>
+			<p>डॣ</p>
+			<p>डॅ</p>
+			<p>डॆ</p>
+			<p>डे</p>
+			<p>डै</p>
+			<p>डॉ</p>
+			<p>डॊ</p>
+			<p>डो</p>
+			<pc>डौढ</pc>
+			<p>ढ़</p>
+			<i>ढ़</i>
+			<p>ढँ</p>
+			<p>ढं</p>
+			<p>ढः</p>
+			<p>ढ॑</p>
+			<p>ढ॒</p>
+			<p>ढ॓</p>
+			<p>ढ॔</p>
+			<p>ढऽ</p>
+			<p>ढ्</p>
+			<p>ढा</p>
+			<p>ढि</p>
+			<p>ढी</p>
+			<p>ढु</p>
+			<p>ढू</p>
+			<p>ढृ</p>
+			<p>ढॄ</p>
+			<p>ढॢ</p>
+			<p>ढॣ</p>
+			<p>ढॅ</p>
+			<p>ढॆ</p>
+			<p>ढे</p>
+			<p>ढै</p>
+			<p>ढॉ</p>
+			<p>ढॊ</p>
+			<p>ढो</p>
+			<pc>ढौणतथदधन</pc>
+			<p>ऩ</p>
+			<i>ऩ</i>
+			<p>नँ</p>
+			<p>नं</p>
+			<p>नः</p>
+			<p>न॑</p>
+			<p>न॒</p>
+			<p>न॓</p>
+			<p>न॔</p>
+			<p>नऽ</p>
+			<p>न्</p>
+			<p>ना</p>
+			<p>नि</p>
+			<p>नी</p>
+			<p>नु</p>
+			<p>नू</p>
+			<p>नृ</p>
+			<p>नॄ</p>
+			<p>नॢ</p>
+			<p>नॣ</p>
+			<p>नॅ</p>
+			<p>नॆ</p>
+			<p>ने</p>
+			<p>नै</p>
+			<p>नॉ</p>
+			<p>नॊ</p>
+			<p>नो</p>
+			<pc>नौपफ</pc>
+			<p>फ़</p>
+			<i>फ़</i>
+			<p>फँ</p>
+			<p>फं</p>
+			<p>फः</p>
+			<p>फ॑</p>
+			<p>फ॒</p>
+			<p>फ॓</p>
+			<p>फ॔</p>
+			<p>फऽ</p>
+			<p>फ्</p>
+			<p>फा</p>
+			<p>फि</p>
+			<p>फी</p>
+			<p>फु</p>
+			<p>फू</p>
+			<p>फृ</p>
+			<p>फॄ</p>
+			<p>फॢ</p>
+			<p>फॣ</p>
+			<p>फॅ</p>
+			<p>फॆ</p>
+			<p>फे</p>
+			<p>फै</p>
+			<p>फॉ</p>
+			<p>फॊ</p>
+			<p>फो</p>
+			<pc>फौबभमय</pc>
+			<p>य़</p>
+			<i>य़</i>
+			<p>यँ</p>
+			<p>यं</p>
+			<p>यः</p>
+			<p>य॑</p>
+			<p>य॒</p>
+			<p>य॓</p>
+			<p>य॔</p>
+			<p>यऽ</p>
+			<p>य्</p>
+			<p>या</p>
+			<p>यि</p>
+			<p>यी</p>
+			<p>यु</p>
+			<p>यू</p>
+			<p>यृ</p>
+			<p>यॄ</p>
+			<p>यॢ</p>
+			<p>यॣ</p>
+			<p>यॅ</p>
+			<p>यॆ</p>
+			<p>ये</p>
+			<p>यै</p>
+			<p>यॉ</p>
+			<p>यॊ</p>
+			<p>यो</p>
+			<pc>यौर</pc>
+			<p>ऱ</p>
+			<i>ऱ</i>
+			<p>रँ</p>
+			<p>रं</p>
+			<p>रः</p>
+			<p>र॑</p>
+			<p>र॒</p>
+			<p>र॓</p>
+			<p>र॔</p>
+			<p>रऽ</p>
+			<p>र्</p>
+			<p>रा</p>
+			<p>रि</p>
+			<p>री</p>
+			<p>रु</p>
+			<p>रू</p>
+			<p>रृ</p>
+			<p>रॄ</p>
+			<p>रॢ</p>
+			<p>रॣ</p>
+			<p>रॅ</p>
+			<p>रॆ</p>
+			<p>रे</p>
+			<p>रै</p>
+			<p>रॉ</p>
+			<p>रॊ</p>
+			<p>रो</p>
+			<pc>रौलळ</pc>
+			<p>ऴ</p>
+			<i>ऴ</i>
+			<p>ळँ</p>
+			<p>ळं</p>
+			<p>ळः</p>
+			<p>ळ॑</p>
+			<p>ळ॒</p>
+			<p>ळ॓</p>
+			<p>ळ॔</p>
+			<p>ळऽ</p>
+			<p>ळ्</p>
+			<p>ळा</p>
+			<p>ळि</p>
+			<p>ळी</p>
+			<p>ळु</p>
+			<p>ळू</p>
+			<p>ळृ</p>
+			<p>ळॄ</p>
+			<p>ळॢ</p>
+			<p>ळॣ</p>
+			<p>ळॅ</p>
+			<p>ळॆ</p>
+			<p>ळे</p>
+			<p>ळै</p>
+			<p>ळॉ</p>
+			<p>ळॊ</p>
+			<p>ळो</p>
+			<pc>ळौवशषसह़ँंः॒॑॓॔ऽ्ािीुूृॄॢॣॅॆेैॉॊो</pc>
+		</rules>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="2.0" />
+	</collation  >
+	<collation type="DIRECT" >
+		<rules>
+			<reset><last_non_ignorable/></reset>
+			<pc>ँंःअआइईउऊऋऌऍऎएऐऑऒओऔकखगघङचछजझञटठडढणतथदधनऩपफबभमयरऱलळऴवशषसह़ऽािीुूृॄॅॆेैॉॊोौ्ॐ॒॑॓॔क़ख़ग़ज़ड़ढ़फ़य़ॠॡॢॣ।॥०१२३४५६७८९</pc>
+		</rules>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
+	</collation  >
+</collations >
+</ldml>

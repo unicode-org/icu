@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="1.1">Various notes and changes in version 1.1</version>
-		<generation date="2003-04-08" />
+		<version number="2.0">Various notes and changes in version 2.0</version>
+		<generation date="2003-06-25" />
 		<language type="lv"></language>
 	</identity>
 	<localeDisplayNames>
@@ -21,9 +26,9 @@
 	<layout>
 		<orientation lines="top-to-bottom" characters="left-to-right" />
 	</layout>
-	<encodings>
+	<characters>
 		<exemplarCharacters>[a-z ā ē ī ō ū ģ ķ ļ ņ ŗ č š ž]</exemplarCharacters>
-	</encodings>
+	</characters>
 	<dates>
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
 		<calendars>
@@ -76,7 +81,7 @@
 					<day type="sat">S</day>
 				</dayAbbr>
 				<week>
-					<minDays count="2"/>
+					<minDays count="1"/>
 					<firstDay day="mon"/>
 				</week>
 				<eras>
@@ -87,45 +92,57 @@
 				</eras>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormatStyle type="full">
+					<dateFormatLength type="full">
 						<dateFormat >
-							<pattern>EEEE, yyyy, d MMMM</pattern>
+							<pattern>EEEE, yyyy'. gada 'd. MMMM</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="long">
+					</dateFormatLength >
+					<dateFormatLength type="long">
 						<dateFormat >
-							<pattern>EEEE, yyyy, d MMMM</pattern>
+							<pattern>yyyy'. gada 'd. MMMM</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="medium">
+					</dateFormatLength >
+					<dateFormatLength type="medium">
 						<dateFormat >
 							<pattern>yyyy.d.M</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="short">
+					</dateFormatLength >
+					<dateFormatLength type="short">
 						<dateFormat >
 							<pattern>yy.d.M</pattern>
 						</dateFormat>
-					</dateFormatStyle >
+					</dateFormatLength >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>
-					<timeFormat type="full">
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-					<timeFormat type="long">
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-					<timeFormat type="medium">
-						<pattern>HH:mm:ss</pattern>
-					</timeFormat>
-					<timeFormat type="short">
-						<pattern>HH:mm</pattern>
-					</timeFormat>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
 				</timeFormats>
-				<dateTimeFormat>
-					<pattern>{1} {0}</pattern>
-				</dateTimeFormat>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
 		<timeZoneNames>
@@ -146,37 +163,42 @@
 			<infinity>∞</infinity>
 			<nan>�</nan>
 		</symbols>
+		<currencies>
+			<currency type="LVL">
+				<displayName>LVL</displayName>
+				<symbol>Ls</symbol>
+			</currency>
+		</currencies>
 	</numbers>
-		<collations>
-			<collation  >
-				<settings caseFirst="upper"/>
-				<settings backwards="2"/>
-				<rules>
-					<reset>C</reset>
-					<p>č</p>
-					<t>Č</t>
-					<reset>G</reset>
-					<p>ģ</p>
-					<t>Ģ</t>
-					<reset>I</reset>
-					<p>y</p>
-					<t>Y</t>
-					<reset>K</reset>
-					<p>ķ</p>
-					<t>Ķ</t>
-					<reset>L</reset>
-					<p>ļ</p>
-					<t>Ļ</t>
-					<reset>N</reset>
-					<p>ņ</p>
-					<t>Ņ</t>
-					<reset>S</reset>
-					<p>š</p>
-					<t>Š</t>
-					<reset>Z</reset>
-					<p>ž</p>
-				</rules>
-				<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
-			</collation  >
-		</collations>
-</localeData>
+<collations version="3.1.1">
+	<collation  >
+		<settings caseFirst="upper" backwards="on"  />
+		<rules>
+			<reset>C</reset>
+			<p>č</p>
+			<t>Č</t>
+			<reset>G</reset>
+			<p>ģ</p>
+			<t>Ģ</t>
+			<reset>I</reset>
+			<p>y</p>
+			<t>Y</t>
+			<reset>K</reset>
+			<p>ķ</p>
+			<t>Ķ</t>
+			<reset>L</reset>
+			<p>ļ</p>
+			<t>Ļ</t>
+			<reset>N</reset>
+			<p>ņ</p>
+			<t>Ņ</t>
+			<reset>S</reset>
+			<p>š</p>
+			<t>Š</t>
+			<reset>Z</reset>
+			<p>ž</p>
+		</rules>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
+	</collation  >
+</collations >
+</ldml>

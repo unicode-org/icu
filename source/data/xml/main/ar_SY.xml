@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-04-08" />
+		<version number="2.0">Various notes and changes in version 2.0</version>
+		<generation date="2003-06-25" />
 		<language type="ar"></language>
 		<territory type="SYR">SY</territory>
 	</identity>
@@ -13,62 +18,96 @@
 			<key type="calendar">calendar</key>
 		</keys>
 	</localeDisplayNames>
-		<dates>
-			<calendars>
-				<default type="gregorian"/>
-				<calendar type="gregorian">
-					<monthNames>
-						<month type="1">كانون الثاني</month>
-						<month type="2">شباط</month>
-						<month type="3">آذار</month>
-						<month type="4">نيسان</month>
-						<month type="5">نواران</month>
-						<month type="6">حزير</month>
-						<month type="7">تموز</month>
-						<month type="8">آب</month>
-						<month type="9">أيلول</month>
-						<month type="10">تشرين الأول</month>
-						<month type="11">تشرين الثاني</month>
-						<month type="12">كانون الأول</month>
-					</monthNames>
-					<monthAbbr>
-						<month type="1">كانون الثاني</month>
-						<month type="2">شباط</month>
-						<month type="3">آذار</month>
-						<month type="4">نيسان</month>
-						<month type="5">نوار</month>
-						<month type="6">حزيران</month>
-						<month type="7">تموز</month>
-						<month type="8">آب</month>
-						<month type="9">أيلول</month>
-						<month type="10">تشرين الأول</month>
-						<month type="11">تشرين الثاني</month>
-						<month type="12">كانون الأول</month>
-					</monthAbbr>
-					<dayAbbr>
-						<day type="sun">الأحد</day>
-						<day type="mon">الاثنين</day>
-						<day type="tue">الثلاثاء</day>
-						<day type="wed">الأربعاء</day>
-						<day type="thu">الخميس</day>
-						<day type="fri">الجمعة</day>
-						<day type="sat">السبت</day>
-					</dayAbbr>
-					<week>
-						<minDays count="5"/>
-						<firstDay day="mon"/>
-					</week>
-				</calendar>
-			</calendars>
-		</dates>
-		<numbers>
-			<currencies>
-				<default type="SYP"/>
-				<currency type="SYP">
-					<symbol>ل.س.‏</symbol>
-					<displayName>SYP</displayName>
-					<decimal>.</decimal>
-				</currency>
-			</currencies>
-		</numbers>
-</localeData>
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">كانون الثاني</month>
+					<month type="2">شباط</month>
+					<month type="3">آذار</month>
+					<month type="4">نيسان</month>
+					<month type="5">نوار</month>
+					<month type="6">حزيران</month>
+					<month type="7">تموز</month>
+					<month type="8">آب</month>
+					<month type="9">أيلول</month>
+					<month type="10">تشرين الأول</month>
+					<month type="11">تشرين الثاني</month>
+					<month type="12">كانون الأول</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">كانون الثاني</month>
+					<month type="2">شباط</month>
+					<month type="3">آذار</month>
+					<month type="4">نيسان</month>
+					<month type="5">نوار</month>
+					<month type="6">حزيران</month>
+					<month type="7">تموز</month>
+					<month type="8">آب</month>
+					<month type="9">أيلول</month>
+					<month type="10">تشرين الأول</month>
+					<month type="11">تشرين الثاني</month>
+					<month type="12">كانون الأول</month>
+				</monthAbbr>
+				<dayAbbr>
+					<day type="sun">الأحد</day>
+					<day type="mon">الاثنين</day>
+					<day type="tue">الثلاثاء</day>
+					<day type="wed">الأربعاء</day>
+					<day type="thu">الخميس</day>
+					<day type="fri">الجمعة</day>
+					<day type="sat">السبت</day>
+				</dayAbbr>
+				<week>
+					<minDays count="1"/>
+					<firstDay day="thu"/>
+				</week>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group>.</group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+		<decimalFormats>
+			<decimalFormatLength >
+				<decimalFormat >
+					<pattern>###0.###;###0.###-</pattern>
+				</decimalFormat>
+			</decimalFormatLength >
+		</decimalFormats>
+		<scientificFormats>
+			<scientificFormatLength >
+				<scientificFormat >
+					<pattern>#E0</pattern>
+				</scientificFormat>
+			</scientificFormatLength >
+		</scientificFormats>
+		<percentFormats>
+			<percentFormatLength >
+				<percentFormat >
+					<pattern>#,##0%</pattern>
+				</percentFormat>
+			</percentFormatLength >
+		</percentFormats>
+		<currencyFormats>
+			<currencyFormatLength >
+				<currencyFormat >
+					<pattern>¤###0.00;-¤###0.00</pattern>
+				</currencyFormat>
+			</currencyFormatLength >
+		</currencyFormats>
+	</numbers>
+</ldml>

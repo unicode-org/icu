@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="1.1">Various notes and changes in version 1.1</version>
-		<generation date="2003-04-08" />
+		<version number="2.0">Various notes and changes in version 2.0</version>
+		<generation date="2003-06-25" />
 		<language type="fr"></language>
 	</identity>
 	<localeDisplayNames>
@@ -44,7 +49,7 @@
 			<language type="fr">français</language>
 			<language type="fy">frison</language>
 			<language type="ga">irlandais</language>
-			<language type="gd">ecossais gaélique</language>
+			<language type="gd">eécossais gaélique</language>
 			<language type="gl">galicien</language>
 			<language type="gn">guarani</language>
 			<language type="gu">goudjrati</language>
@@ -56,16 +61,16 @@
 			<language type="hy">arménien</language>
 			<language type="ia">interlingua</language>
 			<language type="id">indonésien</language>
-			<language type="ie">interlingue</language>
+			<language type="ie">interlinguë</language>
 			<language type="ik">inupiaq</language>
 			<language type="is">islandais</language>
 			<language type="it">italien</language>
 			<language type="iu">inuktitut</language>
 			<language type="ja">japonais</language>
 			<language type="jv">javanais</language>
-			<language type="ka">georgien</language>
+			<language type="ka">geéorgien</language>
 			<language type="kk">kazakh</language>
-			<language type="kl">groenlandais</language>
+			<language type="kl">groeénlandais</language>
 			<language type="km">khmer</language>
 			<language type="kn">kannada</language>
 			<language type="ko">coréen</language>
@@ -98,9 +103,9 @@
 			<language type="pl">polonais</language>
 			<language type="ps">pachto</language>
 			<language type="pt">portugais</language>
-			<language type="qu">quechua</language>
+			<language type="qu">queéchua</language>
 			<language type="rm">rhétoroman</language>
-			<language type="rn">rundi</language>
+			<language type="rn">roundi</language>
 			<language type="ro">roumain</language>
 			<language type="root">racine</language>
 			<language type="ru">russe</language>
@@ -123,7 +128,7 @@
 			<language type="sv">suédois</language>
 			<language type="sw">swahili</language>
 			<language type="ta">tamoul</language>
-			<language type="te">telugu</language>
+			<language type="te">teélougou</language>
 			<language type="tg">tadjik</language>
 			<language type="th">thaï</language>
 			<language type="ti">tigrigna</language>
@@ -156,6 +161,7 @@
 			<territory type="AM">Arménie</territory>
 			<territory type="AN">Antilles Néerlandaises</territory>
 			<territory type="AR">Argentine</territory>
+			<territory type="AS">Samoa Américaines</territory>
 			<territory type="AT">Autriche</territory>
 			<territory type="AU">Australie</territory>
 			<territory type="AZ">Azerbaïdjan</territory>
@@ -170,7 +176,8 @@
 			<territory type="BT">Bhoutan</territory>
 			<territory type="BY">Biélo-Russie</territory>
 			<territory type="BZ">Bélize</territory>
-			<territory type="CF">République Centre-Africaine</territory>
+			<territory type="CD">République Démocratique du Congo</territory>
+			<territory type="CF">République  Centrafricaine</territory>
 			<territory type="CH">Suisse</territory>
 			<territory type="CL">Chili</territory>
 			<territory type="CM">Cameroun</territory>
@@ -195,15 +202,16 @@
 			<territory type="FJ">Fidji</territory>
 			<territory type="FM">Micronésie</territory>
 			<territory type="GB">Royaume-Uni</territory>
+			<territory type="GD">Grenade</territory>
 			<territory type="GE">Géorgie</territory>
-			<territory type="GF">Guinée Française</territory>
+			<territory type="GF">Guyane Française</territory>
+			<territory type="GL">Groenland</territory>
 			<territory type="GM">Gambie</territory>
 			<territory type="GN">Guinée</territory>
 			<territory type="GQ">Guinée Equatoriale</territory>
 			<territory type="GR">Grèce</territory>
 			<territory type="GW">Guinée-Bissau</territory>
-			<territory type="GY">Guyane</territory>
-			<territory type="HK">Hong-Kong SAR</territory>
+			<territory type="HK">Hong-Kong R.A.S.</territory>
 			<territory type="HR">Croatie</territory>
 			<territory type="HT">Haïti</territory>
 			<territory type="HU">Hongrie</territory>
@@ -221,16 +229,17 @@
 			<territory type="KM">Comores</territory>
 			<territory type="KP">Corée du Nord</territory>
 			<territory type="KR">Corée du Sud</territory>
-			<territory type="KW">Koweit</territory>
+			<territory type="KW">Koweït</territory>
 			<territory type="LB">Liban</territory>
+			<territory type="LC">Sainte-Lucie</territory>
+			<territory type="LR">Libéria</territory>
 			<territory type="LT">Lithuanie</territory>
 			<territory type="LV">Lettonie</territory>
 			<territory type="LY">Libye</territory>
 			<territory type="MA">Maroc</territory>
-			<territory type="MD">Moldavie</territory>
 			<territory type="MK">Macédoine</territory>
 			<territory type="MN">Mongolie</territory>
-			<territory type="MO">Macao SAR</territory>
+			<territory type="MO">Macao R.A.S.</territory>
 			<territory type="MR">Mauritanie</territory>
 			<territory type="MT">Malte</territory>
 			<territory type="MU">Maurice</territory>
@@ -242,44 +251,52 @@
 			<territory type="NL">Pays-Bas</territory>
 			<territory type="NO">Norvège</territory>
 			<territory type="NP">Népal</territory>
+			<territory type="NU">Niué</territory>
 			<territory type="NZ">Nouvelle-Zélande</territory>
 			<territory type="PE">Pérou</territory>
 			<territory type="PF">Polynésie Française</territory>
 			<territory type="PG">Papouasie-Nouvelle-Guinée</territory>
 			<territory type="PL">Pologne</territory>
+			<territory type="PM">Saint-Pierre-et-Miquelon</territory>
 			<territory type="PR">Porto Rico</territory>
+			<territory type="PW">Palaos</territory>
 			<territory type="RO">Roumanie</territory>
 			<territory type="RU">Russie</territory>
 			<territory type="SA">Arabie Saoudite</territory>
 			<territory type="SD">Soudan</territory>
 			<territory type="SE">Suède</territory>
 			<territory type="SG">Singapour</territory>
+			<territory type="SH">Sainte-Hélène</territory>
 			<territory type="SI">Slovénie</territory>
 			<territory type="SK">Slovaquie</territory>
+			<territory type="SM">Saint-Marin</territory>
 			<territory type="SN">Sénégal</territory>
 			<territory type="SO">Somalie</territory>
 			<territory type="SP">Serbie</territory>
+			<territory type="ST">Sao Tomé-et-Principe</territory>
 			<territory type="SY">Syrie</territory>
 			<territory type="TD">Tchad</territory>
-			<territory type="TF">Territoires Français du Sud</territory>
+			<territory type="TF">Terres Française Australes</territory>
 			<territory type="TH">Thaïlande</territory>
 			<territory type="TJ">Tadjikistan</territory>
-			<territory type="TL">Timor Oriental</territory>
+			<territory type="TL">Timor</territory>
 			<territory type="TN">Tunisie</territory>
 			<territory type="TR">Turquie</territory>
 			<territory type="TT">Trinité-et-Tobago</territory>
+			<territory type="TW">Taïwan, Province de Chine</territory>
 			<territory type="TZ">Tanzanie</territory>
 			<territory type="UG">Ouganda</territory>
+			<territory type="UM">Îles Mineures Éloignées des États-Unis</territory>
 			<territory type="US">États-Unis</territory>
 			<territory type="UZ">Ouzbékistan</territory>
 			<territory type="VE">Vénézuela</territory>
 			<territory type="VG">Iles Vierges Britanniques</territory>
 			<territory type="VI">Iles Vierges Américaines</territory>
+			<territory type="WF">Wallis et Futuna</territory>
 			<territory type="YE">Yémen</territory>
 			<territory type="YU">Yougoslavie</territory>
 			<territory type="ZA">Afrique du Sud</territory>
 			<territory type="ZM">Zambie</territory>
-			<territory type="ZR">Zaïre</territory>
 		</territories>
 		<keys>
 			<key type="collation">collation</key>
@@ -289,9 +306,9 @@
 	<layout>
 		<orientation lines="top-to-bottom" characters="left-to-right" />
 	</layout>
-	<encodings>
-		<exemplarCharacters>[a-z é è ù ç à â ê î ô û æ œ ë ï]</exemplarCharacters>
-	</encodings>
+	<characters>
+		<exemplarCharacters>[a-z é è ù ç à â ê î ô û æ œ ë ï ÿ]</exemplarCharacters>
+	</characters>
 	<dates>
 		<localizedPatternChars>GaMjkHmsSEDFwWxhKzAe</localizedPatternChars>
 		<calendars>
@@ -351,45 +368,57 @@
 				</eras>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormatStyle type="full">
+					<dateFormatLength type="full">
 						<dateFormat >
 							<pattern>EEEE d MMMM yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="long">
+					</dateFormatLength >
+					<dateFormatLength type="long">
 						<dateFormat >
 							<pattern>d MMMM yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="medium">
+					</dateFormatLength >
+					<dateFormatLength type="medium">
 						<dateFormat >
 							<pattern>d MMM yy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="short">
+					</dateFormatLength >
+					<dateFormatLength type="short">
 						<dateFormat >
 							<pattern>dd/MM/yy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
+					</dateFormatLength >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>
-					<timeFormat type="full">
-						<pattern>HH' h 'mm z</pattern>
-					</timeFormat>
-					<timeFormat type="long">
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-					<timeFormat type="medium">
-						<pattern>HH:mm:ss</pattern>
-					</timeFormat>
-					<timeFormat type="short">
-						<pattern>HH:mm</pattern>
-					</timeFormat>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>HH' h 'mm z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
 				</timeFormats>
-				<dateTimeFormat>
-					<pattern>{1} {0}</pattern>
-				</dateTimeFormat>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
 		<timeZoneNames>
@@ -410,45 +439,694 @@
 			<infinity>∞</infinity>
 			<nan>�</nan>
 		</symbols>
-		<numberFormats>
-			<default type="decimal"/>
-			<numberFormatStyle type="decimal" >
-				<numberFormat >
-					<pattern>#,##0.###</pattern>
-					<pattern>-#,##0.###</pattern>
-				</numberFormat>
-			</numberFormatStyle  >
-			<numberFormatStyle type="currency" >
-				<numberFormat >
-					<pattern>#,##0.00 ¤</pattern>
-					<pattern>-#,##0.00 ¤</pattern>
-				</numberFormat>
-			</numberFormatStyle  >
-			<numberFormatStyle type="percent" >
-				<numberFormat >
-					<pattern>#,##0%</pattern>
-				</numberFormat>
-			</numberFormatStyle  >
-			<numberFormatStyle type="scientific" >
-				<numberFormat >
+		<decimalFormats>
+			<decimalFormatLength >
+				<decimalFormat >
+					<pattern>#,##0.###;-#,##0.###</pattern>
+				</decimalFormat>
+			</decimalFormatLength >
+		</decimalFormats>
+		<scientificFormats>
+			<scientificFormatLength >
+				<scientificFormat >
 					<pattern>#E0</pattern>
-				</numberFormat>
-			</numberFormatStyle  >
-		</numberFormats>
+				</scientificFormat>
+			</scientificFormatLength >
+		</scientificFormats>
+		<percentFormats>
+			<percentFormatLength >
+				<percentFormat >
+					<pattern>#,##0%</pattern>
+				</percentFormat>
+			</percentFormatLength >
+		</percentFormats>
+		<currencyFormats>
+			<currencyFormatLength >
+				<currencyFormat >
+					<pattern>#,##0.00 ¤;-#,##0.00 ¤</pattern>
+				</currencyFormat>
+			</currencyFormatLength >
+		</currencyFormats>
+		<currencies>
+			<currency type="AED">
+				<displayName>dirham des E A.U.</displayName>
+				<symbol>AED</symbol>
+			</currency>
+			<currency type="AFA">
+				<displayName>afghani</displayName>
+				<symbol>AFA</symbol>
+			</currency>
+			<currency type="ALL">
+				<displayName>lek</displayName>
+				<symbol>ALL</symbol>
+			</currency>
+			<currency type="ANG">
+				<displayName>florin des Antilles néerl.</displayName>
+				<symbol>ANG</symbol>
+			</currency>
+			<currency type="AOK">
+				<displayName>kwanza</displayName>
+				<symbol>AOK</symbol>
+			</currency>
+			<currency type="ARA">
+				<displayName>austral</displayName>
+				<symbol>ARA</symbol>
+			</currency>
+			<currency type="ARP">
+				<displayName>peso argentin</displayName>
+				<symbol>ARP</symbol>
+			</currency>
+			<currency type="ATS">
+				<displayName>schilling autrichien</displayName>
+				<symbol>ATS</symbol>
+			</currency>
+			<currency type="AUD">
+				<displayName>dollar australien</displayName>
+				<symbol>AUD</symbol>
+			</currency>
+			<currency type="BBD">
+				<displayName>dollar de Barbade</displayName>
+				<symbol>BBD</symbol>
+			</currency>
+			<currency type="BDT">
+				<displayName>taka</displayName>
+				<symbol>BDT</symbol>
+			</currency>
+			<currency type="BEF">
+				<displayName>franc belge</displayName>
+				<symbol>FB</symbol>
+			</currency>
+			<currency type="BGL">
+				<displayName>lev</displayName>
+				<symbol>BGL</symbol>
+			</currency>
+			<currency type="BHD">
+				<displayName>dinar de Bahrein</displayName>
+				<symbol>BHD</symbol>
+			</currency>
+			<currency type="BIF">
+				<displayName>franc du Burundi</displayName>
+				<symbol>BIF</symbol>
+			</currency>
+			<currency type="BMD">
+				<displayName>dollar des Bermudes</displayName>
+				<symbol>BMD</symbol>
+			</currency>
+			<currency type="BND">
+				<displayName>dollar de Brunei</displayName>
+				<symbol>BND</symbol>
+			</currency>
+			<currency type="BOP">
+				<displayName>peso bolivien</displayName>
+				<symbol>BOP</symbol>
+			</currency>
+			<currency type="BRC">
+				<displayName>cruzeiro</displayName>
+				<symbol>BRC</symbol>
+			</currency>
+			<currency type="BSD">
+				<displayName>dollar des Bahamas</displayName>
+				<symbol>BSD</symbol>
+			</currency>
+			<currency type="BUK">
+				<displayName>kyat</displayName>
+				<symbol>BUK</symbol>
+			</currency>
+			<currency type="BWP">
+				<displayName>pula</displayName>
+				<symbol>BWP</symbol>
+			</currency>
+			<currency type="BZD">
+				<displayName>dollar de Belize</displayName>
+				<symbol>BZD</symbol>
+			</currency>
+			<currency type="CAD">
+				<displayName>dollar canadien</displayName>
+				<symbol>CAD</symbol>
+			</currency>
+			<currency type="CHF">
+				<displayName>franc suisse</displayName>
+				<symbol>sFr.</symbol>
+			</currency>
+			<currency type="CLP">
+				<displayName>peso chilien</displayName>
+				<symbol>CLP</symbol>
+			</currency>
+			<currency type="CNY">
+				<displayName>Yuan Ren-min-bi</displayName>
+				<symbol>CNY</symbol>
+			</currency>
+			<currency type="COP">
+				<displayName>peso colombien</displayName>
+				<symbol>COP</symbol>
+			</currency>
+			<currency type="CRC">
+				<displayName>colon</displayName>
+				<symbol>CRC</symbol>
+			</currency>
+			<currency type="CSK">
+				<displayName>couronne tchèque</displayName>
+				<symbol>CSK</symbol>
+			</currency>
+			<currency type="CUP">
+				<displayName>peso cubain</displayName>
+				<symbol>CUP</symbol>
+			</currency>
+			<currency type="CVE">
+				<displayName>escudo du Cap-Vert</displayName>
+				<symbol>CVE</symbol>
+			</currency>
+			<currency type="CYP">
+				<displayName>livre cypriote</displayName>
+				<symbol>CYP</symbol>
+			</currency>
+			<currency type="CZK">
+				<displayName>couronne tchèque</displayName>
+				<symbol>CZK</symbol>
+			</currency>
+			<currency type="DEM">
+				<displayName>deutsche mark</displayName>
+				<symbol>DEM</symbol>
+			</currency>
+			<currency type="DKK">
+				<displayName>couronne danoise</displayName>
+				<symbol>DKK</symbol>
+			</currency>
+			<currency type="DOP">
+				<displayName>peso dominicain</displayName>
+				<symbol>DOP</symbol>
+			</currency>
+			<currency type="DZD">
+				<displayName>dinar algérien</displayName>
+				<symbol>DZD</symbol>
+			</currency>
+			<currency type="ECS">
+				<displayName>sucre</displayName>
+				<symbol>ECS</symbol>
+			</currency>
+			<currency type="EGP">
+				<displayName>livre égyptienne</displayName>
+				<symbol>EGP</symbol>
+			</currency>
+			<currency type="ESP">
+				<displayName>peseta espagnole</displayName>
+				<symbol>ESP</symbol>
+			</currency>
+			<currency type="ETB">
+				<displayName>birr</displayName>
+				<symbol>ETB</symbol>
+			</currency>
+			<currency type="EUR">
+				<displayName>euro</displayName>
+				<symbol>€</symbol>
+			</currency>
+			<currency type="FIM">
+				<displayName>mark finlandais</displayName>
+				<symbol>FIM</symbol>
+			</currency>
+			<currency type="FJD">
+				<displayName>dollar de Fidji</displayName>
+				<symbol>FJD</symbol>
+			</currency>
+			<currency type="FKP">
+				<displayName>livre des Falkland</displayName>
+				<symbol>FKP</symbol>
+			</currency>
+			<currency type="FRF">
+				<displayName>franc français</displayName>
+				<symbol>F</symbol>
+			</currency>
+			<currency type="GBP">
+				<displayName>livre sterling</displayName>
+				<symbol>£</symbol>
+			</currency>
+			<currency type="GHC">
+				<displayName>cedi</displayName>
+				<symbol>GHC</symbol>
+			</currency>
+			<currency type="GIP">
+				<displayName>livre de Gibraltar</displayName>
+				<symbol>GIP</symbol>
+			</currency>
+			<currency type="GMD">
+				<displayName>dalasie</displayName>
+				<symbol>GMD</symbol>
+			</currency>
+			<currency type="GNS">
+				<displayName>syli</displayName>
+				<symbol>GNS</symbol>
+			</currency>
+			<currency type="GQE">
+				<displayName>ekwele</displayName>
+				<symbol>GQE</symbol>
+			</currency>
+			<currency type="GRD">
+				<displayName>drachme</displayName>
+				<symbol>GRD</symbol>
+			</currency>
+			<currency type="GTQ">
+				<displayName>quetzal</displayName>
+				<symbol>GTQ</symbol>
+			</currency>
+			<currency type="GWP">
+				<displayName>peso de Guinée-Bissau</displayName>
+				<symbol>GWP</symbol>
+			</currency>
+			<currency type="GYD">
+				<displayName>dollar de Guyane</displayName>
+				<symbol>GYD</symbol>
+			</currency>
+			<currency type="HKD">
+				<displayName>dollar de Hong Kong</displayName>
+				<symbol>HKD</symbol>
+			</currency>
+			<currency type="HNL">
+				<displayName>lempira</displayName>
+				<symbol>HNL</symbol>
+			</currency>
+			<currency type="HRD">
+				<displayName>dinar croate</displayName>
+				<symbol>HRD</symbol>
+			</currency>
+			<currency type="HTG">
+				<displayName>gourde</displayName>
+				<symbol>HTG</symbol>
+			</currency>
+			<currency type="HUF">
+				<displayName>forint</displayName>
+				<symbol>HUF</symbol>
+			</currency>
+			<currency type="IDR">
+				<displayName>rupiah</displayName>
+				<symbol>IDR</symbol>
+			</currency>
+			<currency type="IEP">
+				<displayName>livre irlandaise</displayName>
+				<symbol>IEP</symbol>
+			</currency>
+			<currency type="ILS">
+				<displayName>shékel</displayName>
+				<symbol>ILS</symbol>
+			</currency>
+			<currency type="INR">
+				<displayName>roupie indienne</displayName>
+				<symbol>=0#Rs.|1#Re.|1&lt;Rs.</symbol>
+			</currency>
+			<currency type="IQD">
+				<displayName>dinar irakien</displayName>
+				<symbol>IQD</symbol>
+			</currency>
+			<currency type="IRR">
+				<displayName>rial iranien</displayName>
+				<symbol>IRR</symbol>
+			</currency>
+			<currency type="ISK">
+				<displayName>couronne islandaise</displayName>
+				<symbol>ISK</symbol>
+			</currency>
+			<currency type="ITL">
+				<displayName>lire italienne</displayName>
+				<symbol>₤</symbol>
+			</currency>
+			<currency type="JMD">
+				<displayName>dollar jamaicain</displayName>
+				<symbol>JMD</symbol>
+			</currency>
+			<currency type="JOD">
+				<displayName>dinar jordanien</displayName>
+				<symbol>JOD</symbol>
+			</currency>
+			<currency type="JPY">
+				<displayName>yen</displayName>
+				<symbol>¥</symbol>
+			</currency>
+			<currency type="KES">
+				<displayName>shilling du Kenya</displayName>
+				<symbol>KES</symbol>
+			</currency>
+			<currency type="KHR">
+				<displayName>riel</displayName>
+				<symbol>KHR</symbol>
+			</currency>
+			<currency type="KMF">
+				<displayName>franc des Comores</displayName>
+				<symbol>KMF</symbol>
+			</currency>
+			<currency type="KPW">
+				<displayName>won nord-coréen</displayName>
+				<symbol>KPW</symbol>
+			</currency>
+			<currency type="KRW">
+				<displayName>won</displayName>
+				<symbol>KRW</symbol>
+			</currency>
+			<currency type="KWD">
+				<displayName>dinar koweitien</displayName>
+				<symbol>KWD</symbol>
+			</currency>
+			<currency type="KYD">
+				<displayName>dollar des Caimanes</displayName>
+				<symbol>KYD</symbol>
+			</currency>
+			<currency type="LAK">
+				<displayName>kip</displayName>
+				<symbol>LAK</symbol>
+			</currency>
+			<currency type="LBP">
+				<displayName>livre libanaise</displayName>
+				<symbol>LBP</symbol>
+			</currency>
+			<currency type="LKR">
+				<displayName>roupie de Sri Lanka</displayName>
+				<symbol>LKR</symbol>
+			</currency>
+			<currency type="LRD">
+				<displayName>dollar libérien</displayName>
+				<symbol>LRD</symbol>
+			</currency>
+			<currency type="LUF">
+				<displayName>franc luxembourgeois</displayName>
+				<symbol>LUF</symbol>
+			</currency>
+			<currency type="LYD">
+				<displayName>dinar Iybien</displayName>
+				<symbol>LYD</symbol>
+			</currency>
+			<currency type="MAD">
+				<displayName>dirham marocain</displayName>
+				<symbol>MAD</symbol>
+			</currency>
+			<currency type="MGF">
+				<displayName>franc malgache</displayName>
+				<symbol>MGF</symbol>
+			</currency>
+			<currency type="MLF">
+				<displayName>franc malien</displayName>
+				<symbol>MLF</symbol>
+			</currency>
+			<currency type="MNT">
+				<displayName>tugrik</displayName>
+				<symbol>MNT</symbol>
+			</currency>
+			<currency type="MOP">
+				<displayName>pataca</displayName>
+				<symbol>MOP</symbol>
+			</currency>
+			<currency type="MRO">
+				<displayName>ouguija</displayName>
+				<symbol>MRO</symbol>
+			</currency>
+			<currency type="MTP">
+				<displayName>livre maltaise</displayName>
+				<symbol>MTP</symbol>
+			</currency>
+			<currency type="MUR">
+				<displayName>roupie de l'île Maurice</displayName>
+				<symbol>MUR</symbol>
+			</currency>
+			<currency type="MVR">
+				<displayName>roupie des Maldives</displayName>
+				<symbol>MVR</symbol>
+			</currency>
+			<currency type="MWK">
+				<displayName>kwacha</displayName>
+				<symbol>MWK</symbol>
+			</currency>
+			<currency type="MXP">
+				<displayName>peso mexicain</displayName>
+				<symbol>MXP</symbol>
+			</currency>
+			<currency type="MYR">
+				<displayName>ringgit</displayName>
+				<symbol>MYR</symbol>
+			</currency>
+			<currency type="MZM">
+				<displayName>metical</displayName>
+				<symbol>MZM</symbol>
+			</currency>
+			<currency type="NGN">
+				<displayName>naira</displayName>
+				<symbol>NGN</symbol>
+			</currency>
+			<currency type="NIC">
+				<displayName>cordoba</displayName>
+				<symbol>NIC</symbol>
+			</currency>
+			<currency type="NLG">
+				<displayName>florin néerlandais</displayName>
+				<symbol>NLG</symbol>
+			</currency>
+			<currency type="NOK">
+				<displayName>couronne norvégienne</displayName>
+				<symbol>NOK</symbol>
+			</currency>
+			<currency type="NPR">
+				<displayName>roupie du Népal</displayName>
+				<symbol>NPR</symbol>
+			</currency>
+			<currency type="NZD">
+				<displayName>dollar néo-zélandais</displayName>
+				<symbol>NZD</symbol>
+			</currency>
+			<currency type="OMR">
+				<displayName>rial omani</displayName>
+				<symbol>OMR</symbol>
+			</currency>
+			<currency type="PAB">
+				<displayName>balboa</displayName>
+				<symbol>PAB</symbol>
+			</currency>
+			<currency type="PES">
+				<displayName>sol</displayName>
+				<symbol>PES</symbol>
+			</currency>
+			<currency type="PGK">
+				<displayName>kina</displayName>
+				<symbol>PGK</symbol>
+			</currency>
+			<currency type="PHP">
+				<displayName>peso philippin</displayName>
+				<symbol>PHP</symbol>
+			</currency>
+			<currency type="PKR">
+				<displayName>roupie du Pakistan</displayName>
+				<symbol>PKR</symbol>
+			</currency>
+			<currency type="PLZ">
+				<displayName>zloty</displayName>
+				<symbol>PLZ</symbol>
+			</currency>
+			<currency type="PTE">
+				<displayName>escudo portugais</displayName>
+				<symbol>PTE</symbol>
+			</currency>
+			<currency type="PYG">
+				<displayName>guarani</displayName>
+				<symbol>PYG</symbol>
+			</currency>
+			<currency type="QAR">
+				<displayName>rial du Qatar</displayName>
+				<symbol>QAR</symbol>
+			</currency>
+			<currency type="ROL">
+				<displayName>leu</displayName>
+				<symbol>ROL</symbol>
+			</currency>
+			<currency type="RUR">
+				<displayName>rouble de Russie</displayName>
+				<symbol>RUR</symbol>
+			</currency>
+			<currency type="RWF">
+				<displayName>franc du Rwanda</displayName>
+				<symbol>RWF</symbol>
+			</currency>
+			<currency type="SAR">
+				<displayName>riyal saoudien</displayName>
+				<symbol>SAR</symbol>
+			</currency>
+			<currency type="SBD">
+				<displayName>dollar de Salomon</displayName>
+				<symbol>SBD</symbol>
+			</currency>
+			<currency type="SCR">
+				<displayName>roupie des Seychelles</displayName>
+				<symbol>SCR</symbol>
+			</currency>
+			<currency type="SDP">
+				<displayName>livre soudanaise</displayName>
+				<symbol>SDP</symbol>
+			</currency>
+			<currency type="SEK">
+				<displayName>couronne suédoise</displayName>
+				<symbol>SEK</symbol>
+			</currency>
+			<currency type="SGD">
+				<displayName>dollar de Singapour</displayName>
+				<symbol>SGD</symbol>
+			</currency>
+			<currency type="SHP">
+				<displayName>livre de Sainte-Hélène</displayName>
+				<symbol>SHP</symbol>
+			</currency>
+			<currency type="SIT">
+				<displayName>monnaie slovène</displayName>
+				<symbol>SIT</symbol>
+			</currency>
+			<currency type="SKK">
+				<displayName>couronne slovaque</displayName>
+				<symbol>SKK</symbol>
+			</currency>
+			<currency type="SLL">
+				<displayName>leone</displayName>
+				<symbol>SLL</symbol>
+			</currency>
+			<currency type="SOS">
+				<displayName>shilling de Somalie</displayName>
+				<symbol>SOS</symbol>
+			</currency>
+			<currency type="SRG">
+				<displayName>florin de Surinam</displayName>
+				<symbol>SRG</symbol>
+			</currency>
+			<currency type="STD">
+				<displayName>dobra</displayName>
+				<symbol>STD</symbol>
+			</currency>
+			<currency type="SUR">
+				<displayName>rouble de C.E.I.</displayName>
+				<symbol>SUR</symbol>
+			</currency>
+			<currency type="SYP">
+				<displayName>livre syrienne</displayName>
+				<symbol>SYP</symbol>
+			</currency>
+			<currency type="SZL">
+				<displayName>lilangeni</displayName>
+				<symbol>SZL</symbol>
+			</currency>
+			<currency type="THB">
+				<displayName>baht</displayName>
+				<symbol>THB</symbol>
+			</currency>
+			<currency type="TND">
+				<displayName>dinar tunisien</displayName>
+				<symbol>TND</symbol>
+			</currency>
+			<currency type="TOP">
+				<displayName>pa'anga</displayName>
+				<symbol>TOP</symbol>
+			</currency>
+			<currency type="TPE">
+				<displayName>escudo de Timor</displayName>
+				<symbol>TPE</symbol>
+			</currency>
+			<currency type="TRL">
+				<displayName>livre turque</displayName>
+				<symbol>TRL</symbol>
+			</currency>
+			<currency type="TTD">
+				<displayName>dollar de la Trinité</displayName>
+				<symbol>TTD</symbol>
+			</currency>
+			<currency type="TWD">
+				<displayName>dollar taïwanien</displayName>
+				<symbol>TWD</symbol>
+			</currency>
+			<currency type="TZS">
+				<displayName>shilling de Tanzanie</displayName>
+				<symbol>TZS</symbol>
+			</currency>
+			<currency type="UGS">
+				<displayName>shilling ougandais</displayName>
+				<symbol>UGS</symbol>
+			</currency>
+			<currency type="USD">
+				<displayName>dollar des Etats-Unis</displayName>
+				<symbol>$</symbol>
+			</currency>
+			<currency type="UYP">
+				<displayName>peso uruguayen</displayName>
+				<symbol>UYP</symbol>
+			</currency>
+			<currency type="VEB">
+				<displayName>bolivar</displayName>
+				<symbol>VEB</symbol>
+			</currency>
+			<currency type="VND">
+				<displayName>dong</displayName>
+				<symbol>VND</symbol>
+			</currency>
+			<currency type="VUV">
+				<displayName>vatu</displayName>
+				<symbol>VUV</symbol>
+			</currency>
+			<currency type="WST">
+				<displayName>tala</displayName>
+				<symbol>WST</symbol>
+			</currency>
+			<currency type="XAF">
+				<displayName>franc CFA (BEAC)</displayName>
+				<symbol>XAF</symbol>
+			</currency>
+			<currency type="XCD">
+				<displayName>dollar des Caraïbes</displayName>
+				<symbol>XCD</symbol>
+			</currency>
+			<currency type="XEU">
+				<displayName>unité de compte européenne (ECU)</displayName>
+				<symbol>XEU</symbol>
+			</currency>
+			<currency type="XOF">
+				<displayName>franc CFA (BCEAO)</displayName>
+				<symbol>XOF</symbol>
+			</currency>
+			<currency type="XPF">
+				<displayName>franc CFP</displayName>
+				<symbol>XPF</symbol>
+			</currency>
+			<currency type="YDD">
+				<displayName>dinar du Yémen</displayName>
+				<symbol>YDD</symbol>
+			</currency>
+			<currency type="YER">
+				<displayName>riyal du Yémen</displayName>
+				<symbol>YER</symbol>
+			</currency>
+			<currency type="YUD">
+				<displayName>nouveau dinar yougoslave</displayName>
+				<symbol>YUD</symbol>
+			</currency>
+			<currency type="ZAR">
+				<displayName>rand</displayName>
+				<symbol>ZAR</symbol>
+			</currency>
+			<currency type="ZMK">
+				<displayName>kwacha</displayName>
+				<symbol>ZMK</symbol>
+			</currency>
+			<currency type="ZRZ">
+				<displayName>zaïre</displayName>
+				<symbol>ZRZ</symbol>
+			</currency>
+			<currency type="ZWD">
+				<displayName>Zimbabwe dollar</displayName>
+				<symbol>ZWD</symbol>
+			</currency>
+		</currencies>
 	</numbers>
-	<special owner="http://oss.software.ibm.com/icu/"  >
-		<ruleBasedNumberFormats>
-			<ruleBasedNumberFormat type="spellout">%main:<cp hex="000A" />    -x: moins &gt;&gt;;<cp hex="000A" />    x.x: &lt;&lt; virgule &gt;&gt;;<cp hex="000A" />    zéro; un; deux; trois; quatre; cinq; six; sept; huit; neuf;<cp hex="000A" />    dix; onze; douze; treize; quatorze; quinze; seize;<cp hex="000A" />        dix-sept; dix-huit; dix-neuf;<cp hex="000A" />    20: vingt[-&gt;%%alt-ones&gt;];<cp hex="000A" />    30: trente[-&gt;%%alt-ones&gt;];<cp hex="000A" />    40: quarante[-&gt;%%alt-ones&gt;];<cp hex="000A" />    50: cinquante[-&gt;%%alt-ones&gt;];<cp hex="000A" />    60/20: soixante[-&gt;%%alt-ones&gt;];<cp hex="000A" />    71: soixante et onze;<cp hex="000A" />    72/20: soixante-&gt;%%alt-ones&gt;;<cp hex="000A" />    80: quatre-vingts; 81/20: quatre-vingt-&gt;&gt;;<cp hex="000A" />    100: cent[ &gt;&gt;];<cp hex="000A" />    200: &lt;&lt; cents[ &gt;&gt;];<cp hex="000A" />    1000: mille[ &gt;&gt;];<cp hex="000A" />    1100&gt;: onze cents[ &gt;&gt;];<cp hex="000A" />    1200: mille &gt;&gt;;<cp hex="000A" />    2000: &lt;&lt; mille[ &gt;&gt;];<cp hex="000A" />    1,000,000: &lt;&lt; million[ &gt;&gt;];<cp hex="000A" />    1,000,000,000: &lt;&lt; milliard[ &gt;&gt;];<cp hex="000A" />    1,000,000,000,000: &lt;&lt; billion[ &gt;&gt;];<cp hex="000A" />    1,000,000,000,000,000: =#,##0=;<cp hex="000A" />%%alt-ones:<cp hex="000A" />    ; et-un; =%main=;<cp hex="000A" />%%lenient-parse:<cp hex="000A" />    &amp;<cp hex="0000" /> &lt;&lt; ' ' &lt;&lt; ',' &lt;&lt; '-';<cp hex="000A" /></ruleBasedNumberFormat>
-		</ruleBasedNumberFormats>
-	</special>
-	<collations>
-		<collation  >
-			<settings backwards="2"/>
-			<rules>
-				<reset>A</reset>
-				<s>æe</s>
-			</rules>
-			<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
-		</collation  >
-	</collations>
-</localeData>
+<collations version="3.1.1">
+	<collation  >
+		<settings backwards="on"  />
+		<rules>
+			<reset>A</reset>
+			<s>æe</s>
+		</rules>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
+	</collation  >
+</collations >
+<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+	<icu:ruleBasedNumberFormats>
+		<icu:ruleBasedNumberFormat type="spellout">%main:<cp hex="000A" />    -x: moins &gt;&gt;;<cp hex="000A" />    x.x: &lt;&lt; virgule &gt;&gt;;<cp hex="000A" />    zéro; un; deux; trois; quatre; cinq; six; sept; huit; neuf;<cp hex="000A" />    dix; onze; douze; treize; quatorze; quinze; seize;<cp hex="000A" />        dix-sept; dix-huit; dix-neuf;<cp hex="000A" />    20: vingt[-&gt;%%alt-ones&gt;];<cp hex="000A" />    30: trente[-&gt;%%alt-ones&gt;];<cp hex="000A" />    40: quarante[-&gt;%%alt-ones&gt;];<cp hex="000A" />    50: cinquante[-&gt;%%alt-ones&gt;];<cp hex="000A" />    60/20: soixante[-&gt;%%alt-ones&gt;];<cp hex="000A" />    71: soixante et onze;<cp hex="000A" />    72/20: soixante-&gt;%%alt-ones&gt;;<cp hex="000A" />    80: quatre-vingts; 81/20: quatre-vingt-&gt;&gt;;<cp hex="000A" />    100: cent[ &gt;&gt;];<cp hex="000A" />    200: &lt;&lt; cents[ &gt;&gt;];<cp hex="000A" />    1000: mille[ &gt;&gt;];<cp hex="000A" />    1100&gt;: onze cents[ &gt;&gt;];<cp hex="000A" />    1200: mille &gt;&gt;;<cp hex="000A" />    2000: &lt;&lt; mille[ &gt;&gt;];<cp hex="000A" />    1,000,000: &lt;&lt; million[ &gt;&gt;];<cp hex="000A" />    1,000,000,000: &lt;&lt; milliard[ &gt;&gt;];<cp hex="000A" />    1,000,000,000,000: &lt;&lt; billion[ &gt;&gt;];<cp hex="000A" />    1,000,000,000,000,000: =#,##0=;<cp hex="000A" />%%alt-ones:<cp hex="000A" />    ; et-un; =%main=;<cp hex="000A" />%%lenient-parse:<cp hex="000A" />    &amp;<cp hex="0000" /> &lt;&lt; ' ' &lt;&lt; ',' &lt;&lt; '-';<cp hex="000A" /></icu:ruleBasedNumberFormat>
+	</icu:ruleBasedNumberFormats>
+</special>
+</ldml>

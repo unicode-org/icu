@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="x0.2">Various notes and changes in version x0.2</version>
-		<generation date="2003-04-08" />
+		<version number="x0.3">Various notes and changes in version x0.3</version>
+		<generation date="2003-06-25" />
 		<language type="fr"></language>
 		<territory type="MCO">MC</territory>
 	</identity>
@@ -13,39 +18,31 @@
 			<key type="calendar">calendar</key>
 		</keys>
 	</localeDisplayNames>
-		<dates>
-			<calendars>
-				<default type="gregorian"/>
-				<calendar type="gregorian">
-					<week>
-						<minDays count="2"/>
-						<firstDay day="mon"/>
-					</week>
-				</calendar>
-			</calendars>
-		</dates>
-		<numbers>
-			<symbols>
-				<decimal>,</decimal>
-				<group> </group>
-				<list>;</list>
-				<percentSign>%</percentSign>
-				<nativeZeroDigit>0</nativeZeroDigit>
-				<patternDigit>#</patternDigit>
-				<plusSign>+</plusSign>
-				<minusSign>-</minusSign>
-				<exponential>E</exponential>
-				<perMille>‰</perMille>
-				<infinity>∞</infinity>
-				<nan>�</nan>
-			</symbols>
-			<currencies>
-				<default type="EUR"/>
-				<currency type="EUR">
-					<symbol>€</symbol>
-					<displayName>EUR</displayName>
-					<decimal>,</decimal>
-				</currency>
-			</currencies>
-		</numbers>
-</localeData>
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<week>
+					<minDays count="1"/>
+					<firstDay day="mon"/>
+				</week>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group> </group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+	</numbers>
+</ldml>

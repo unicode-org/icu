@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-04-08" />
+		<version number="2.0">Various notes and changes in version 2.0</version>
+		<generation date="2003-06-25" />
 		<language type="id"></language>
 	</identity>
 	<localeDisplayNames>
@@ -15,98 +20,107 @@
 	<layout>
 		<orientation lines="top-to-bottom" characters="left-to-right" />
 	</layout>
-		<dates>
-			<calendars>
-				<default type="gregorian"/>
-				<calendar type="gregorian">
-					<monthNames>
-						<month type="1">Januari</month>
-						<month type="2">Februari</month>
-						<month type="3">Maret</month>
-						<month type="4">April</month>
-						<month type="5">Mei</month>
-						<month type="6">Juni</month>
-						<month type="7">Juli</month>
-						<month type="8">Agustus</month>
-						<month type="9">September</month>
-						<month type="10">Oktober</month>
-						<month type="11">November</month>
-						<month type="12">Desember</month>
-					</monthNames>
-					<monthAbbr>
-						<month type="1">Jan</month>
-						<month type="2">Feb</month>
-						<month type="3">Mar</month>
-						<month type="4">Apr</month>
-						<month type="5">Mei</month>
-						<month type="6">Jun</month>
-						<month type="7">Jul</month>
-						<month type="8">August</month>
-						<month type="9">Sep</month>
-						<month type="10">Okt</month>
-						<month type="11">Nov</month>
-						<month type="12">Des</month>
-					</monthAbbr>
-					<dayNames>
-						<day type="sun">Minggu</day>
-						<day type="mon">Senin</day>
-						<day type="tue">Selasa</day>
-						<day type="wed">Rabu</day>
-						<day type="thu">Kamis</day>
-						<day type="fri">Jumat</day>
-						<day type="sat">Sabtu</day>
-					</dayNames>
-					<dayAbbr>
-						<day type="sun">Minggu</day>
-						<day type="mon">Sen</day>
-						<day type="tue">Sel</day>
-						<day type="wed">Rabu</day>
-						<day type="thu">Kamis</day>
-						<day type="fri">Jumat</day>
-						<day type="sat">Sabtu</day>
-					</dayAbbr>
-				</calendar>
-			</calendars>
-		</dates>
-		<numbers>
-			<symbols>
-				<decimal>,</decimal>
-				<group>.</group>
-				<list>;</list>
-				<percentSign>%</percentSign>
-				<nativeZeroDigit>0</nativeZeroDigit>
-				<patternDigit>#</patternDigit>
-				<plusSign>+</plusSign>
-				<minusSign>-</minusSign>
-				<exponential>E</exponential>
-				<perMille>‰</perMille>
-				<infinity>∞</infinity>
-				<nan>�</nan>
-			</symbols>
-			<numberFormats>
-				<default type="decimal"/>
-				<numberFormatStyle type="decimal" >
-					<numberFormat >
-						<pattern>#,##0.###</pattern>
-						<pattern>-#,##0.###</pattern>
-					</numberFormat>
-				</numberFormatStyle  >
-				<numberFormatStyle type="currency" >
-					<numberFormat >
-						<pattern>¤#,##0.00</pattern>
-						<pattern>-¤#,##0.00</pattern>
-					</numberFormat>
-				</numberFormatStyle  >
-				<numberFormatStyle type="percent" >
-					<numberFormat >
-						<pattern>#,##0%</pattern>
-					</numberFormat>
-				</numberFormatStyle  >
-				<numberFormatStyle type="scientific" >
-					<numberFormat >
-						<pattern>#E0</pattern>
-					</numberFormat>
-				</numberFormatStyle  >
-			</numberFormats>
-		</numbers>
-</localeData>
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">Januari</month>
+					<month type="2">Februari</month>
+					<month type="3">Maret</month>
+					<month type="4">April</month>
+					<month type="5">Mei</month>
+					<month type="6">Juni</month>
+					<month type="7">Juli</month>
+					<month type="8">Agustus</month>
+					<month type="9">September</month>
+					<month type="10">Oktober</month>
+					<month type="11">November</month>
+					<month type="12">Desember</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">Jan</month>
+					<month type="2">Feb</month>
+					<month type="3">Mar</month>
+					<month type="4">Apr</month>
+					<month type="5">Mei</month>
+					<month type="6">Jun</month>
+					<month type="7">Jul</month>
+					<month type="8">August</month>
+					<month type="9">Sep</month>
+					<month type="10">Okt</month>
+					<month type="11">Nov</month>
+					<month type="12">Des</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">Minggu</day>
+					<day type="mon">Senin</day>
+					<day type="tue">Selasa</day>
+					<day type="wed">Rabu</day>
+					<day type="thu">Kamis</day>
+					<day type="fri">Jumat</day>
+					<day type="sat">Sabtu</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">Minggu</day>
+					<day type="mon">Sen</day>
+					<day type="tue">Sel</day>
+					<day type="wed">Rabu</day>
+					<day type="thu">Kamis</day>
+					<day type="fri">Jumat</day>
+					<day type="sat">Sabtu</day>
+				</dayAbbr>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group>.</group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+		<decimalFormats>
+			<decimalFormatLength >
+				<decimalFormat >
+					<pattern>#,##0.###;-#,##0.###</pattern>
+				</decimalFormat>
+			</decimalFormatLength >
+		</decimalFormats>
+		<scientificFormats>
+			<scientificFormatLength >
+				<scientificFormat >
+					<pattern>#E0</pattern>
+				</scientificFormat>
+			</scientificFormatLength >
+		</scientificFormats>
+		<percentFormats>
+			<percentFormatLength >
+				<percentFormat >
+					<pattern>#,##0%</pattern>
+				</percentFormat>
+			</percentFormatLength >
+		</percentFormats>
+		<currencyFormats>
+			<currencyFormatLength >
+				<currencyFormat >
+					<pattern>¤#,##0.00;-¤#,##0.00</pattern>
+				</currencyFormat>
+			</currencyFormatLength >
+		</currencyFormats>
+		<currencies>
+			<currency type="IDR">
+				<displayName>IDR</displayName>
+				<symbol>Rp</symbol>
+			</currency>
+		</currencies>
+	</numbers>
+</ldml>
