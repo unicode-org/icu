@@ -178,7 +178,8 @@ public:
     // def to xyz and moves the cursor to before abc.  Offset characters
     // must be at the start or end, and they cannot move the cursor past
     // the ante- or postcontext text.  Placeholders are only valid in
-    // output text.
+    // output text.  The length of the ante and post context is
+    // determined at runtime, because of supplementals and quantifiers.
     int32_t cursorOffset; // only nonzero on output side
 
     // Position of first CURSOR_OFFSET on _right_.  This will be -1
