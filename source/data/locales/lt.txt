@@ -54,7 +54,7 @@ lt {
         "po.Kr.",
     }
     Languages { 
-        lt { "Lietuvi\u0159" }
+        lt { "Lietuvi\u0173" }
     }
     LocaleID:int { 0x27 }
 //    LocaleString { "lt" }
