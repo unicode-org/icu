@@ -90,11 +90,6 @@ tempUCATable * uprv_uca_initTempTable(UCATableHeader *image, const UCollator *UC
   MaxExpansionTable *maxet = (MaxExpansionTable *)uprv_malloc(
                                                    sizeof(MaxExpansionTable));
   t->image = image;
-  if(UCA == NULL) {
-    t->image->jamoSpecial = FALSE;
-  } else {
-    t->image->jamoSpecial = UCA->image->jamoSpecial;
-  }
 
   t->UCA = UCA;
   t->expansions = (ExpansionTable *)uprv_malloc(sizeof(ExpansionTable));
@@ -481,7 +476,8 @@ void uprv_uca_getMaxExpansionHangul(CompactIntArray   *mapping,
   }
 }
 
-UCATableHeader *uprv_uca_reassembleTable(tempUCATable *t, UCATableHeader *mD, UErrorCode *status) {
+
+UCATableHeader *uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
     CompactIntArray *mapping = t->mapping;
     ExpansionTable *expansions = t->expansions;
     CntTable *contractions = t->contractions; 
@@ -494,12 +490,7 @@ UCATableHeader *uprv_uca_reassembleTable(tempUCATable *t, UCATableHeader *mD, UE
     uint32_t beforeContractions = (paddedsize(sizeof(UCATableHeader))+paddedsize(expansions->position*sizeof(uint32_t)))/sizeof(UChar);
 
     int32_t contractionsSize = 0;
-    if(mD == NULL) {
-      contractionsSize = uprv_cnttab_constructTable(contractions, beforeContractions, status);
-    } else {
-      contractionsSize = mD->contractionSize;
-      uprv_cnttab_moveTable(contractions, mD->contractionIndex/sizeof(UChar), beforeContractions, status);
-    }
+    contractionsSize = uprv_cnttab_constructTable(contractions, beforeContractions, status);
 
     ucmp32_compact(mapping, 1);
     UMemoryStream *ms = uprv_mstrm_openNew(8192);
@@ -523,16 +514,25 @@ UCATableHeader *uprv_uca_reassembleTable(tempUCATable *t, UCATableHeader *mD, UE
                                      paddedsize(maxexpansion->position * sizeof(uint8_t)) +
                                      paddedsize(UCOL_UNSAFECP_TABLE_SIZE);
 
-    if(mD == NULL) {
-      dataStart = (uint8_t *)malloc(toAllocate);
-    } else {
-      dataStart = (uint8_t *)realloc(mD, toAllocate);
-    }
+    dataStart = (uint8_t *)malloc(toAllocate);
 
     UCATableHeader *myData = (UCATableHeader *)dataStart;
-    myData->contractionSize = contractionsSize;
+    uprv_memcpy(myData, t->image, sizeof(UCATableHeader));
+
+#if 0
+    /* above memcpy should save us from problems */
+    myData->variableTopValue = t->image->variableTopValue;
+    myData->strength = t->image->strength;
+    myData->frenchCollation = t->image->frenchCollation;
+    myData->alternateHandling = t->image->alternateHandling; /* attribute for handling variable elements*/
+    myData->caseFirst = t->image->caseFirst;         /* who goes first, lower case or uppercase */
+    myData->caseLevel = t->image->caseLevel;         /* do we have an extra case level */
+    myData->normalizationMode = t->image->normalizationMode; /* attribute for normalization */
     myData->version[0] = t->image->version[0];
-    myData->version[1] = t->image->version[1];
+    myData->version[1] = t->image->version[1];  
+#endif
+
+    myData->contractionSize = contractionsSize;
 
     tableOffset += paddedsize(sizeof(UCATableHeader));
 
@@ -597,24 +597,10 @@ UCATableHeader *uprv_uca_reassembleTable(tempUCATable *t, UCATableHeader *mD, UE
     }
 
     myData->size = tableOffset;
-    
-    myData->variableTopValue = t->image->variableTopValue;
-    myData->strength = t->image->strength;
-    myData->frenchCollation = t->image->frenchCollation;
-    myData->alternateHandling = t->image->alternateHandling; /* attribute for handling variable elements*/
-    myData->caseFirst = t->image->caseFirst;         /* who goes first, lower case or uppercase */
-    myData->caseLevel = t->image->caseLevel;         /* do we have an extra case level */
-    myData->normalizationMode = t->image->normalizationMode; /* attribute for normalization */
-
-
     /* This should happen upon ressurection */
     /*const uint8_t *mapPosition = (uint8_t*)myData+myData->mappingPosition;*/
     uprv_mstrm_close(ms);
     return myData;
-}
-
-UCATableHeader *uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
-  return uprv_uca_reassembleTable(t, 0, status);
 }
 
 
