@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/ImplicitCEGenerator.java,v $
- * $Date: 2004/01/28 02:05:51 $
- * $Revision: 1.2 $
+ * $Date: 2004/01/29 19:17:14 $
+ * $Revision: 1.3 $
  *
  *******************************************************************************
  */
@@ -318,7 +318,7 @@ public class ImplicitCEGenerator {
      * Generate the implicit CE, from raw integer.
      * Left shifted to put the first byte at the top of an int.
      * @param cp code point
-     * @return
+     * @return Primary implicit weight
      */
     public int getImplicitFromRaw(int cp) {
         if (cp < 0 || cp > MAX_INPUT) {
@@ -368,7 +368,7 @@ public class ImplicitCEGenerator {
      * swaps (which produces a raw value 0..220000, 
      * then converts raw to implicit.
      * @param cp
-     * @return
+     * @return Primary implicit weight
      */
     public int getImplicitFromCodePoint(int cp) {
         if (DEBUG) System.out.println("Incoming: " + Utility.hex(cp));
@@ -437,14 +437,14 @@ public class ImplicitCEGenerator {
     
 
     /**
-     * @return
+     * @return Minimal trail value
      */
     public int getMinTrail() {
         return minTrail;
     }
 
     /**
-     * @return
+     * @return Maximal trail value
      */
     public int getMaxTrail() {
         return maxTrail;
