@@ -427,7 +427,7 @@ udat_toPattern(    const   UDateFormat     *fmt,
 * @param pattern The new pattern
 * @param patternLength The length of pattern, or -1 if null-terminated.
 * @see udat_toPattern
-* @draft
+* @stable
 */
 U_CAPI void U_EXPORT2 
 udat_applyPattern(            UDateFormat     *format,
