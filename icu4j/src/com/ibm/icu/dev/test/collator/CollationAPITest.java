@@ -515,7 +515,7 @@ public class CollationAPITest extends TestFmwk {
         }
     
         logln("Test getVersion");
-        VersionInfo expectedVersion = VersionInfo.getInstance(0x21, 0x40, 0x01, 0x04);
+        VersionInfo expectedVersion = VersionInfo.getInstance(0x29, 0x80, 0x01, 0x04);
         doAssert(col.getVersion().equals(expectedVersion), "Expected version "+expectedVersion.toString()+" got "+col.getVersion().toString());
         
         logln("Test getUCAVersion");
