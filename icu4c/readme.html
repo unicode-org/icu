@@ -22,8 +22,8 @@
       caption {font-weight: bold; text-align: left}
       div.indent {margin-left: 2em}
       ul.TOC {list-style-type: none}
-      code {margin-left: 2em; border-width: 1px; border-style: solid; padding: 1em; display: block; background-color: #EEEEEE}
-      samp {margin-left: 2em; border-width: 1px; border-style: solid; padding: 1em; display: block; background-color: #EEEEEE}
+      code {margin-left: 2em; border-style: groove; padding: 1em; display: block; background-color: #EEEEEE}
+      samp {margin-left: 2em; border-style: groove; padding: 1em; display: block; background-color: #EEEEEE}
 </style>
   </head>
 
@@ -1040,8 +1040,7 @@
 <samp>IXMICUUC --&gt; libicuuc<i>XX</i>.dll
 IXMICUDA --&gt; libicudt<i>XX</i>e.dll
 IXMICUD1 --&gt; libicudt<i>XX</i>e_390.dll
-IXMICUTE --&gt; libtestdata.dll
-</samp>
+IXMICUTE --&gt; libtestdata.dll</samp>
 </pre>
 
     <p>Example PDS attributes are as follows:</p>
@@ -1074,8 +1073,7 @@ Record length . . . : 80
 Block size  . . . . : 3200
 1st extent cylinders: 3
 Secondary cylinders : 3
-Data set name type  : PDS
-</samp>
+Data set name type  : PDS</samp>
 </pre>
 
     <h3><a name="HowToBuildOS400">OS/400 (iSeries) Platform</a></h3>
@@ -1129,8 +1127,7 @@ Data set name type  : PDS
 ADDENVVAR ENVVAR(CC) VALUE('/usr/bin/icc')
 ADDENVVAR ENVVAR(CXX) VALUE('/usr/bin/icc')
 ADDENVVAR ENVVAR(MAKE) VALUE('/usr/bin/gmake')
-ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')
-</samp>
+ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
 </pre>
             <i>libraryname</i> identifies target as400 library for *module,
             *pgm and *srvpgm objects.<br>
@@ -1289,8 +1286,7 @@ int main(){
     if(U_FAILURE(status)){
         .... /* handle the error */
     }
-}
-</code>
+}</code>
 </pre>
 
     <h4>C++</h4>
