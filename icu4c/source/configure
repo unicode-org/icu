@@ -3422,14 +3422,6 @@ else
     mkdir -p $DATABUILDDIR
 fi
 
-if test -d $DATABUILDDIR/translit
-then
-    :
-else
-    echo creating $DATABUILDDIR/translit
-    mkdir $DATABUILDDIR/translit
-fi
-
 if test -d $DATABUILDDIR/../source/test/testdata
 then
     :
