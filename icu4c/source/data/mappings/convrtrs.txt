@@ -108,8 +108,8 @@ ibm-33722               EUC-JP { MIME } ibm-eucJP eucjis extended_unix_code_pack
 ibm-970                 EUC-KR { IANA MIME } ibm-eucKR csEUCKR                       # Korean EUC
 ibm-964                 EUC-TW { MIME } ibm-eucTW cns11643              # Taiwan EUC
 ibm-1383                EUC-CN { MIME } ibm-eucCN                       # China EUC
-ibm-1162                ibm-1161 tis-620 cp874 windows-874 { MIME } ms874 cp9066 # Thai (w/ euro update)
-ibm-874                 # Same as 1162 (w/o euro update)
+ibm-1162                tis-620 cp874 windows-874 { MIME } ms874 cp9066 # Thai (w/ euro update)
+ibm-874                 ibm-1161 # Same as 1162 (w/o euro update)
 
 lmb-excp                # Special exceptions list for LMBCS algorithm
 
@@ -135,8 +135,8 @@ ibm-863                 IBM863 { IANA } cp863 { MIME } 863 csIBM863           # 
 ibm-17248               cp864 { MIME } csIBM864 # PC Arabic (w/ euro update)
 ibm-864                 IBM864 { IANA } # PC Arabic (w/o euro update)
 ibm-865                 IBM865 { IANA } cp865 { MIME } 865 csIBM865            # PC Nordic
-ibm-808                 866 csIBM866 # PC Russian (w/ euro update)
-ibm-866                 cp866 { MIME } # PC Russian (w/o euro update)
+ibm-808                 cp866 { MIME } 866 csIBM866 # PC Russian (w/ euro update)
+ibm-866                 # PC Russian (w/o euro update)
 ibm-868                 IBM868 { IANA } cp868 { MIME } cp-ar csIBM868            # PC Urdu
 ibm-9061                cp869 { MIME } 869 cp-gr csIBM869 # PC Greek (w/ euro update)
 ibm-869                 IBM869 { IANA } # PC Greek (w/o euro update)
