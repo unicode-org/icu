@@ -2910,6 +2910,7 @@ void TransliteratorTest::TestAnchorMasking(){
               ", context " + prettify(parseError.preContext, TRUE) +
               ", rules: " + prettify(rule, TRUE));
     }
+    delete t;
 }
 
 /**
