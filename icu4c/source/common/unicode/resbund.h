@@ -429,18 +429,14 @@ public:
      *
      * @draft ICU 2.2
      */
-    virtual inline UClassID 
-      getDynamicClassID() const 
-    { return getStaticClassID(); }
+    virtual inline UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @draft ICU 2.2
      */
-    static inline UClassID 
-      getStaticClassID() 
-    { return (UClassID)&fgClassID; }
+    static inline UClassID getStaticClassID();
 
 private:
     UResourceBundle *resource;
@@ -459,6 +455,14 @@ private:
      */
     static const char fgClassID;
 };
+
+inline UClassID 
+ResourceBundle::getStaticClassID() 
+{ return (UClassID)&fgClassID; }
+
+inline UClassID 
+ResourceBundle::getDynamicClassID() const 
+{ return ResourceBundle::getStaticClassID(); }
 
 U_NAMESPACE_END
 #endif

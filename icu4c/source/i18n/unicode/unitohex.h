@@ -214,17 +214,25 @@ public:
      *
      * @draft ICU 2.2
      */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+    virtual inline UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @draft ICU 2.2
      */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+    static inline UClassID getStaticClassID();
 };
 
 inline UnicodeToHexTransliterator::~UnicodeToHexTransliterator() {}
+
+inline UClassID
+UnicodeToHexTransliterator::getStaticClassID()
+{ return (UClassID)&fgClassID; }
+
+inline UClassID
+UnicodeToHexTransliterator::getDynamicClassID() const
+{ return UnicodeToHexTransliterator::getStaticClassID(); }
 
 U_NAMESPACE_END
 #endif /* ICU_COMPOUNDTRANSLITERATOR_USE_DEPRECATES */

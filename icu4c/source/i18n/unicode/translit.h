@@ -1195,7 +1195,7 @@ public:
      * @return          The class ID for all objects of this class.
      * @stable ICU 2.0
      */
-    static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
+    static inline UClassID getStaticClassID(void);
 
     /**
      * Returns a unique class ID <b>polymorphically</b>.  This method
@@ -1304,6 +1304,10 @@ protected:
 
 #endif
 };
+
+inline UClassID
+Transliterator::getStaticClassID(void)
+{ return (UClassID)&fgClassID; }
 
 inline int32_t Transliterator::getMaximumContextLength(void) const {
     return maximumContextLength;

@@ -545,7 +545,7 @@ public:
      * @return          The class ID for all objects of this class.
      * @stable ICU 2.0
      */
-    static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
+    static inline UClassID getStaticClassID(void);
 
     /**
      * Returns a unique class ID POLYMORPHICALLY. Pure virtual override. This
@@ -558,7 +558,7 @@ public:
      *                  other classes have different class IDs.
      * @stable ICU 2.0
      */
-    virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); }
+    virtual UClassID getDynamicClassID(void) const;
 
 private:
     static const char fgClassID;
@@ -832,6 +832,14 @@ public:
     static const UDate        fgSystemDefaultCentury;
     // TODO Not supposed to be public: make it private in 2.8!
 };
+
+inline UClassID
+SimpleDateFormat::getStaticClassID(void)
+{ return (UClassID)&fgClassID; }
+
+inline UClassID
+SimpleDateFormat::getDynamicClassID(void) const
+{ return SimpleDateFormat::getStaticClassID(); }
 
 inline UDate
 SimpleDateFormat::get2DigitYearStart(UErrorCode& /*status*/) const

@@ -462,9 +462,6 @@ protected:
 
 };
 
-
-
-
 //----------------------------------------------------------------------------------
 //
 //   Inline Functions Definitions ...
@@ -475,15 +472,13 @@ inline UBool RuleBasedBreakIterator::operator!=(const BreakIterator& that) const
     return !operator==(that);
 }
 
-inline UClassID RuleBasedBreakIterator::getDynamicClassID(void) const {
-    return RuleBasedBreakIterator::getStaticClassID();
-}
-
 inline UClassID RuleBasedBreakIterator::getStaticClassID(void) {
     return (UClassID)(&fgClassID);
 }
 
-
+inline UClassID RuleBasedBreakIterator::getDynamicClassID(void) const {
+    return RuleBasedBreakIterator::getStaticClassID();
+}
 
 U_NAMESPACE_END
 

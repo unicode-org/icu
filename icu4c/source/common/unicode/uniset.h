@@ -1034,7 +1034,7 @@ public:
      * @return          The class ID for all objects of this class.
      * @stable ICU 2.0
      */
-    static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
+    static UClassID getStaticClassID(void);
 
     /**
      * Implement UnicodeFunctor API.
@@ -1044,7 +1044,7 @@ public:
      * different class IDs.
      * @draft ICU 2.4
      */
-    virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); }
+    virtual UClassID getDynamicClassID(void) const;
 
 private:
 
@@ -1258,6 +1258,14 @@ private:
 
     friend class UnicodeSetIterator;
 };
+
+inline UClassID
+UnicodeSet::getStaticClassID(void)
+{ return (UClassID)&fgClassID; }
+
+inline UClassID
+UnicodeSet::getDynamicClassID(void) const
+{ return UnicodeSet::getStaticClassID(); }
 
 inline UBool UnicodeSet::operator!=(const UnicodeSet& o) const {
     return !operator==(o);

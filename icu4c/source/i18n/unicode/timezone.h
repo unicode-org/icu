@@ -564,7 +564,7 @@ public:
      * @return The class ID for all objects of this class.
      * @stable ICU 2.0
      */
-    static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
+    static inline UClassID getStaticClassID(void);
 
     /**
      * Returns a unique class ID POLYMORPHICALLY. Pure virtual method. This method is to
@@ -637,6 +637,10 @@ private:
     UnicodeString           fID;    // this time zone's ID
 };
 
+
+inline UClassID
+TimeZone::getStaticClassID(void)
+{ return (UClassID)&fgClassID; }
 
 // -------------------------------------
 
