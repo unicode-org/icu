@@ -2306,6 +2306,14 @@ SOURCE=.\propname.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\ruleiter.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ruleiter.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\symtable.h
 # End Source File
 # Begin Source File
