@@ -19,6 +19,7 @@
 
 #include "ucol_sol.h"
 #include "ucol_tok.h"
+#include "cmemory.h"
 
 const UChar *rulesToParse = 0;
 
@@ -71,4 +72,9 @@ UBool uhash_compareTokens(const void *key1, const void *key2) {
     } else {
       return FALSE;
     }
+}
+
+void deleteToken(void *token) {
+    UColToken *tok = (UColToken *)token;
+    uprv_free(tok);
 }
