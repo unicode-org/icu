@@ -222,30 +222,6 @@ U_NAMESPACE_END
 
 #endif
 
-U_CDECL_BEGIN
-
-/**
- * Internal API for iterative normalizing - see Normalizer.
- * @internal
- */
-U_CAPI int32_t U_EXPORT2
-unorm_nextNormalize(UChar *dest, int32_t destCapacity,
-                    UCharIterator *src,
-                    UNormalizationMode mode, UBool ignoreHangul,
-                    UErrorCode *pErrorCode);
-
-/**
- * Internal API for iterative normalizing - see Normalizer.
- * @internal
- */
-U_CAPI int32_t U_EXPORT2
-unorm_previousNormalize(UChar *dest, int32_t destCapacity,
-                        UCharIterator *src,
-                        UNormalizationMode mode, UBool ignoreHangul,
-                        UErrorCode *pErrorCode);
-
-U_CDECL_END
-
 /**
  * Description of the format of unorm.dat. ### TODO describe 2.0 with UTrie
  *

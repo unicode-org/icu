@@ -118,25 +118,25 @@
 
 /**
  * Constants for normalization modes.
- * @draft ICU 1.8
+ * @stable except for deprecated constants
  */
 typedef enum {
-  /** No decomposition/composition. @draft ICU 1.8 */
+  /** No decomposition/composition. @stable */
   UNORM_NONE = 1, 
-  /** Canonical decomposition. @draft ICU 1.8 */
+  /** Canonical decomposition. @stable */
   UNORM_NFD = 2,
-  /** Compatibility decomposition. @draft ICU 1.8 */
+  /** Compatibility decomposition. @stable */
   UNORM_NFKD = 3,
-  /** Canonical decomposition followed by canonical composition. @draft ICU 1.8 */
+  /** Canonical decomposition followed by canonical composition. @stable */
   UNORM_NFC = 4,
-  /** Default normalization. @draft ICU 1.8 */
+  /** Default normalization. @stable */
   UNORM_DEFAULT = UNORM_NFC, 
-  /** Compatibility decomposition followed by canonical composition. @draft ICU 1.8 */
+  /** Compatibility decomposition followed by canonical composition. @stable */
   UNORM_NFKC =5,
   /** "Fast C or D" form. @draft ICU 2.0 */
   UNORM_FCD = 6,
 
-  /** One more than the highest normalization mode constant. @draft ICU 1.8 */
+  /** One more than the highest normalization mode constant. @stable */
   UNORM_MODE_COUNT,
 
   /* *** The rest of this enum is entirely deprecated. *** */
@@ -219,7 +219,7 @@ unorm_normalize(const UChar *source, int32_t sourceLength,
 /**
  * Result values for unorm_quickCheck().
  * For details see Unicode Technical Report 15.
- * @draft ICU 1.8
+ * @stable
  */
 typedef enum UNormalizationCheckResult {
   /** 
@@ -253,11 +253,124 @@ typedef enum UNormalizationCheckResult {
  * @paran mode         which normalization form to test for
  * @param status       a pointer to a UErrorCode to receive any errors
  * @return UNORM_YES, UNORM_NO or UNORM_MAYBE
- * @draft ICU 1.8
+ * @stable
  */
 U_CAPI UNormalizationCheckResult U_EXPORT2
 unorm_quickCheck(const UChar *source, int32_t sourcelength,
                  UNormalizationMode mode,
                  UErrorCode *status);
+
+/**
+ * Iterative normalization forward.
+ * This function (together with unorm_previous) is somewhat
+ * similar to the C++ Normalizer class (see its non-static functions).
+ *
+ * Iterative normalization is useful when only a small portion of a longer
+ * string/text needs to be processed.
+ *
+ * For example, the likelihood may be high that processing the first 10% of some
+ * text will be sufficient to find certain data.
+ * Another example: When one wants to concatenate two normalized strings and get a
+ * normalized result, it is much more efficient to normalize just a small part of
+ * the result around the concatenation place instead of re-normalizing everything.
+ *
+ * The input text is an instance of the C character iteration API UCharIterator.
+ * It may wrap around a simple string, a CharacterIterator, a Replaceable, or any
+ * other kind of text object.
+ *
+ * If a buffer overflow occurs, then the caller needs to reset the iterator to the
+ * old index and call the function again with a larger buffer - if the caller cares
+ * for the actual output.
+ * Regardless of the output buffer, the iterator will always be moved to the next
+ * normalization boundary.
+ *
+ * This function (like unorm_previous) serves two purposes:
+ *
+ * 1) To find the next boundary so that the normalization of the part of the text
+ * from the current position to that boundary does not affect and is not affected
+ * by the part of the text beyond that boundary.
+ *
+ * 2) To normalize the text up to the boundary.
+ *
+ * The second step is optional, per the doNormalize parameter.
+ * It is omitted for operations like string concatenation, where the two adjacent
+ * string ends need to be normalized together.
+ * In such a case, the output buffer will just contain a copy of the text up to the
+ * boundary.
+ *
+ * pNeededToNormalize is an output-only parameter. Its output value is only defined
+ * if normalization was requested (doNormalize) and successful (especially, no
+ * buffer overflow).
+ * It is useful for operations like a normalizing transliterator, where one would
+ * not want to replace a piece of text if it is not modified.
+ *
+ * If doNormalize==TRUE and pNeededToNormalize!=NULL then *pNeeded... is set TRUE
+ * if the normalization was necessary.
+ *
+ * If doNormalize==FALSE then *pNeededToNormalize will be set to FALSE.
+ *
+ * If the buffer overflows, then *pNeededToNormalize will be undefined;
+ * essentially, whenever U_FAILURE is true (like in buffer overflows), this result
+ * will be undefined.
+ *
+ * @param src The input text in the form of a C character iterator.
+ * @param dest The output buffer; can be NULL if destCapacity==0 for pure preflighting.
+ * @param destCapacity The number of UChars that fit into dest.
+ * @param mode The normalization mode.
+ * @param options A bit set of normalization options.
+ * @param doNormalize Indicates if the source text up to the next boundary
+ *                    is to be normalized (TRUE) or just copied (FALSE).
+ * @param pNeededToNormalize Output flag indicating if the normalization resulted in
+ *                           different text from the input.
+ *                           Not defined if an error occurs including buffer overflow.
+ *                           Always FALSE if !doNormalize.
+ * @param pErrorCode ICU error code in/out parameter.
+ *                   Must fulfill U_SUCCESS before the function call.
+ * @return Length of output (number of UChars) when successful or buffer overflow.
+ *
+ * @see unorm_previous
+ * @see unorm_normalize
+ *
+ * @draft ICU 2.1
+ */
+U_CAPI int32_t U_EXPORT2
+unorm_next(UCharIterator *src,
+           UChar *dest, int32_t destCapacity,
+           UNormalizationMode mode, int32_t options,
+           UBool doNormalize, UBool *pNeededToNormalize,
+           UErrorCode *pErrorCode);
+
+/**
+ * Iterative normalization backward.
+ * This function (together with unorm_next) is somewhat
+ * similar to the C++ Normalizer class (see its non-static functions).
+ * For all details see unorm_next.
+ *
+ * @param src The input text in the form of a C character iterator.
+ * @param dest The output buffer; can be NULL if destCapacity==0 for pure preflighting.
+ * @param destCapacity The number of UChars that fit into dest.
+ * @param mode The normalization mode.
+ * @param options A bit set of normalization options.
+ * @param doNormalize Indicates if the source text up to the next boundary
+ *                    is to be normalized (TRUE) or just copied (FALSE).
+ * @param pNeededToNormalize Output flag indicating if the normalization resulted in
+ *                           different text from the input.
+ *                           Not defined if an error occurs including buffer overflow.
+ *                           Always FALSE if !doNormalize.
+ * @param pErrorCode ICU error code in/out parameter.
+ *                   Must fulfill U_SUCCESS before the function call.
+ * @return Length of output (number of UChars) when successful or buffer overflow.
+ *
+ * @see unorm_next
+ * @see unorm_normalize
+ *
+ * @draft ICU 2.1
+ */
+U_CAPI int32_t U_EXPORT2
+unorm_previous(UCharIterator *src,
+               UChar *dest, int32_t destCapacity,
+               UNormalizationMode mode, int32_t options,
+               UBool doNormalize, UBool *pNeededToNormalize,
+               UErrorCode *pErrorCode);
 
 #endif

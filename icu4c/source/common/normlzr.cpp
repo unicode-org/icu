@@ -527,17 +527,19 @@ Normalizer::nextNormalize() {
 
     errorCode=U_ZERO_ERROR;
     p=buffer.getBuffer(-1);
-    length=unorm_nextNormalize(p, buffer.getCapacity(), text,
-                               fUMode, (fOptions&IGNORE_HANGUL)!=0,
-                               &errorCode);
+    length=unorm_next(text, p, buffer.getCapacity(),
+                      fUMode, fOptions!=0,
+                      TRUE, 0,
+                      &errorCode);
     buffer.releaseBuffer(length);
     if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
         errorCode=U_ZERO_ERROR;
         text->move(text, nextIndex, UITERATOR_START);
         p=buffer.getBuffer(length);
-        length=unorm_nextNormalize(p, buffer.getCapacity(), text,
-                                   fUMode, (fOptions&IGNORE_HANGUL)!=0,
-                                   &errorCode);
+        length=unorm_next(text, p, buffer.getCapacity(),
+                          fUMode, fOptions!=0,
+                          TRUE, 0,
+                          &errorCode);
         buffer.releaseBuffer(length);
     }
 
@@ -560,17 +562,19 @@ Normalizer::previousNormalize() {
 
     errorCode=U_ZERO_ERROR;
     p=buffer.getBuffer(-1);
-    length=unorm_previousNormalize(p, buffer.getCapacity(), text,
-                                   fUMode, (fOptions&IGNORE_HANGUL)!=0,
-                                   &errorCode);
+    length=unorm_previous(text, p, buffer.getCapacity(),
+                          fUMode, fOptions,
+                          TRUE, 0,
+                          &errorCode);
     buffer.releaseBuffer(length);
     if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
         errorCode=U_ZERO_ERROR;
         text->move(text, currentIndex, UITERATOR_START);
         p=buffer.getBuffer(length);
-        length=unorm_previousNormalize(p, buffer.getCapacity(), text,
-                                       fUMode, (fOptions&IGNORE_HANGUL)!=0,
-                                       &errorCode);
+        length=unorm_previous(text, p, buffer.getCapacity(),
+                              fUMode, fOptions,
+                              TRUE, 0,
+                              &errorCode);
         buffer.releaseBuffer(length);
     }
 
