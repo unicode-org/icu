@@ -101,6 +101,7 @@ sl{
         GU{"Guam"}
         GW{"Gvineja Bissau"}
         GY{"Gvajana"}
+        HK{"Hong Kong S.A.R. Kitajske"}
         HM{"Heardov otok in McDonaldovi otoki"}
         HN{"Honduras"}
         HR{"Hrvaška"}
@@ -149,6 +150,7 @@ sl{
         ML{"Mali"}
         MM{"Myanmar"}
         MN{"Mongolija"}
+        MO{"Makao S.A.R. Kitajske"}
         MP{"Severni Marianski otoki"}
         MQ{"Martinik"}
         MR{"Mavretanija"}
@@ -214,7 +216,7 @@ sl{
         SZ{"Svazi"}
         TC{"Otočji Turks in Caicos"}
         TD{"Čad"}
-        TF{"Francoski zahodni teritorij"}
+        TF{"Francoski južni teritorij"}
         TG{"Togo"}
         TH{"Tajska"}
         TJ{"Tadžikistan"}
@@ -257,6 +259,11 @@ sl{
         }
     }
     ExemplarCharacters{"[a-pr-vzčšž]"}
+    Keys{
+        calendar{"Kolendar"}
+        collation{"Zlaganje"}
+        currency{"Valuta"}
+    }
     Languages{
         ar{"Arabščina"}
         bg{"Bolgarščina"}
@@ -306,6 +313,24 @@ sl{
         "�",
         "+",
     }
+    Types{
+        calendar{
+            buddhist{"Budistični kolendar"}
+            chinese{"Kitajski kolendar"}
+            gregorian{"Gregorijanski kolendar"}
+            hebrew{"Hebrejski kolendar"}
+            islamic{"Islamski kolendar"}
+            islamic-civil{"Islamski civilni kolendar"}
+            japanese{"Japonski kolendar"}
+        }
+        collation{
+            direct{"Direktno zlaganje"}
+            phonebook{"Zlaganje po abecedi"}
+            pinyin{"Pinyin zlaganje"}
+            stroke{"Stroke order zlaganje"}
+            traditional{"Tradicionano zlaganje"}
+        }
+    }
     Version{"1.2"}
     calendar{
         gregorian{
@@ -334,6 +359,15 @@ sl{
                         "čet",
                         "pet",
                         "sob",
+                    }
+                    narrow{
+                        "n",
+                        "p",
+                        "t",
+                        "s",
+                        "č",
+                        "p",
+                        "s",
                     }
                     wide{
                         "nedelja",
@@ -367,6 +401,20 @@ sl{
                         "okt",
                         "nov",
                         "dec",
+                    }
+                    narrow{
+                        "j",
+                        "f",
+                        "m",
+                        "a",
+                        "m",
+                        "j",
+                        "j",
+                        "a",
+                        "s",
+                        "o",
+                        "n",
+                        "d",
                     }
                     wide{
                         "januar",

@@ -63,23 +63,23 @@ GENRB_SOURCE = af.txt af_ZA.txt am.txt am_ET.txt\
  is.txt is_IS.txt it.txt it_CH.txt it_IT.txt\
  ja.txt ja_JP.txt kk.txt kk_KZ.txt kl.txt\
  kl_GL.txt kn.txt kn_IN.txt ko.txt ko_KR.txt\
- kok.txt kok_IN.txt kw.txt kw_GB.txt lo.txt\
- lo_LA.txt lt.txt lt_LT.txt lv.txt lv_LV.txt\
- mk.txt mk_MK.txt ml.txt ml_IN.txt mr.txt\
- mr_IN.txt ms.txt ms_BN.txt ms_MY.txt mt.txt\
- mt_MT.txt nb.txt nb_NO.txt nl.txt nl_BE.txt\
- nl_NL.txt nn.txt nn_NO.txt om.txt om_ET.txt\
- om_KE.txt or.txt or_IN.txt pa.txt pa_IN.txt\
- pl.txt pl_PL.txt ps.txt ps_AF.txt pt.txt\
- pt_BR.txt pt_PT.txt ro.txt ro_RO.txt ru.txt\
- ru_RU.txt ru_UA.txt sk.txt sk_SK.txt sl.txt\
- sl_SI.txt so.txt so_DJ.txt so_ET.txt so_KE.txt\
- so_SO.txt sq.txt sq_AL.txt sr.txt sr_Cyrl.txt\
- sr_Cyrl_YU.txt sr_Latn.txt sr_Latn_YU.txt sr_YU.txt sv.txt\
- sv_FI.txt sv_SE.txt sw.txt sw_KE.txt sw_TZ.txt\
- ta.txt ta_IN.txt te.txt te_IN.txt th.txt\
- th_TH.txt ti.txt ti_ER.txt ti_ET.txt tr.txt\
- tr_TR.txt uk.txt uk_UA.txt vi.txt vi_VN.txt\
- zh.txt zh_Hans.txt zh_Hans_CN.txt zh_Hans_SG.txt zh_Hant.txt\
- zh_Hant_HK.txt zh_Hant_MO.txt zh_Hant_TW.txt
+ kok.txt kok_IN.txt kw.txt kw_GB.txt lt.txt\
+ lt_LT.txt lv.txt lv_LV.txt mk.txt mk_MK.txt\
+ ml.txt ml_IN.txt mr.txt mr_IN.txt ms.txt\
+ ms_BN.txt ms_MY.txt mt.txt mt_MT.txt nb.txt\
+ nb_NO.txt nl.txt nl_BE.txt nl_NL.txt nn.txt\
+ nn_NO.txt om.txt om_ET.txt om_KE.txt or.txt\
+ or_IN.txt pa.txt pa_IN.txt pl.txt pl_PL.txt\
+ ps.txt ps_AF.txt pt.txt pt_BR.txt pt_PT.txt\
+ ro.txt ro_RO.txt ru.txt ru_RU.txt ru_UA.txt\
+ sk.txt sk_SK.txt sl.txt sl_SI.txt so.txt\
+ so_DJ.txt so_ET.txt so_KE.txt so_SO.txt sq.txt\
+ sq_AL.txt sr.txt sr_Cyrl.txt sr_Cyrl_YU.txt sr_Latn.txt\
+ sr_Latn_YU.txt sr_YU.txt sv.txt sv_FI.txt sv_SE.txt\
+ sw.txt sw_KE.txt sw_TZ.txt ta.txt ta_IN.txt\
+ te.txt te_IN.txt th.txt th_TH.txt ti.txt\
+ ti_ER.txt ti_ET.txt tr.txt tr_TR.txt uk.txt\
+ uk_UA.txt vi.txt vi_VN.txt zh.txt zh_Hans.txt\
+ zh_Hans_CN.txt zh_Hans_SG.txt zh_Hant.txt zh_Hant_HK.txt zh_Hant_MO.txt\
+ zh_Hant_TW.txt
 

@@ -27,4 +27,14 @@ en_GB{
             }
         }
     }
+    zoneStrings{
+        {
+            "Europe/London",
+            "Greenwich Mean Time",
+            "GMT",
+            "British Daylight Time",
+            "BDT",
+            "London",
+        }
+    }
 }
