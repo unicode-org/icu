@@ -74,7 +74,7 @@ clean:
 	$(RM) $(addprefix debian/,$(DEBIAN_FILES))
 	dh_clean
 
-	test $(builddir) != $(srcdir) && rmdir `find $(builddir) -type d -print`
+	test $(builddir) != $(srcdir) && rmdir `find $(builddir) -type d -print | sort -r`
 
 install: build
 	dh_testdir
