@@ -361,6 +361,117 @@ void CollationIteratorTest::TestClearBuffers(/* char* par */)
     delete c;
 }
 
+/**
+ * Testing the assignment operator
+ */
+void CollationIteratorTest::TestAssignment()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    RuleBasedCollator *coll = 
+        (RuleBasedCollator *)Collator::createInstance(status);
+
+    if (coll == NULL || U_FAILURE(status))
+    {
+        errln("Couldn't create a default collator.");
+        return;
+    }
+
+    UnicodeString source("abcd");
+    CollationElementIterator *iter1 = 
+        coll->createCollationElementIterator(source);
+
+    CollationElementIterator iter2 = *iter1;
+
+    if (*iter1 != iter2) {
+        errln("Fail collation iterator assignment does not produce the same elements");
+    }
+
+    CollationElementIterator iter3(*iter1);
+
+    if (*iter1 != iter3) {
+        errln("Fail collation iterator copy constructor does not produce the same elements");
+    }
+
+    delete iter1;
+    delete coll;
+}
+
+/**
+ * Testing the constructors
+ */
+void CollationIteratorTest::TestConstructors()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    RuleBasedCollator *coll = 
+        (RuleBasedCollator *)Collator::createInstance(status);
+    if (coll == NULL || U_FAILURE(status))
+    {
+        errln("Couldn't create a default collator.");
+        return;
+    }
+
+    // testing protected constructor with character iterator as argument
+    StringCharacterIterator chariter(test1);
+    CollationElementIterator *iter1 = 
+        coll->createCollationElementIterator(chariter);
+    if (U_FAILURE(status)) {
+        errln("Couldn't create collation element iterator with character iterator.");
+        return;
+    }
+    CollationElementIterator *iter2 = 
+        coll->createCollationElementIterator(test1);
+
+    assertEqual(*iter1, *iter2);
+    delete iter1;
+    delete iter2;
+    delete coll;
+}
+
+/**
+ * Testing the strength order
+ */
+void CollationIteratorTest::TestStrengthOrder()
+{
+    int order = 0x0123ABCD;
+
+    UErrorCode status = U_ZERO_ERROR;
+    RuleBasedCollator *coll = 
+        (RuleBasedCollator *)Collator::createInstance(status);
+    if (coll == NULL || U_FAILURE(status))
+    {
+        errln("Couldn't create a default collator.");
+        return;
+    }
+
+    coll->setStrength(Collator::PRIMARY);
+    CollationElementIterator *iter = 
+        coll->createCollationElementIterator(test1);
+
+    if (iter == NULL) {
+        errln("Couldn't create a collation element iterator from default collator");
+        return;
+    }
+
+    if (iter->strengthOrder(order) != 0x01230000) {
+        errln("Strength order for a primary strength collator should be the first 2 bytes");
+        return;
+    }
+
+    coll->setStrength(Collator::SECONDARY);
+    if (iter->strengthOrder(order) != 0x0123AB00) {
+        errln("Strength order for a secondary strength collator should be the third byte");
+        return;
+    }
+
+    coll->setStrength(Collator::TERTIARY);
+    if (iter->strengthOrder(order) != order) {
+        errln("Strength order for a tertiary strength collator should be the third byte");
+        return;
+    }
+    delete iter;
+    delete coll;
+}
+
 void CollationIteratorTest::backAndForth(CollationElementIterator &iter)
 {
     // Run through the iterator forwards and stick it into an array
@@ -522,12 +633,15 @@ void CollationIteratorTest::runIndexedTest(int32_t index, UBool exec, const char
 
     switch (index)
     {
-        case  0: name = "TestPrevious";        if (exec) TestPrevious(/* par */);     break;
-        case  1: name = "TestOffset";        if (exec) TestOffset(/* par */);         break;
-        case  2: name = "TestSetText";        if (exec) TestSetText(/* par */);         break;
-        case  3: name = "TestMaxExpansion";    if (exec) TestMaxExpansion(/* par */); break;
-        case  4: name = "TestClearBuffers"; if (exec) TestClearBuffers(/* par */); break;
-        case  5: name = "TestUnicodeChar"; if (exec) TestUnicodeChar(/* par */); break;
+        case  0: name = "TestPrevious";      if (exec) TestPrevious(/* par */);     break;
+        case  1: name = "TestOffset";        if (exec) TestOffset(/* par */);       break;
+        case  2: name = "TestSetText";       if (exec) TestSetText(/* par */);      break;
+        case  3: name = "TestMaxExpansion";  if (exec) TestMaxExpansion(/* par */); break;
+        case  4: name = "TestClearBuffers";  if (exec) TestClearBuffers(/* par */); break;
+        case  5: name = "TestUnicodeChar";   if (exec) TestUnicodeChar(/* par */);  break;
+        case  6: name = "TestAssignment";    if (exec) TestAssignment(/* par */);    break;
+        case  7: name = "TestConstructors";  if (exec) TestConstructors(/* par */); break;
+        case  8: name = "TestStrengthOrder"; if (exec) TestStrengthOrder(/* par */); break;
         default: name = ""; break;
     }
 }

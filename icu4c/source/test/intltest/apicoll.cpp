@@ -34,6 +34,7 @@
 #include "apicoll.h"
 #include "unicode/chariter.h"
 #include "unicode/schriter.h"
+#include "unicode/ustring.h"
 
 #include "sfwdchit.h"
 #include "cmemory.h"
@@ -130,6 +131,7 @@ CollationAPITest::TestProperty(/* char* par */)
     logln("testing Collator::getStrength() method ...");
     doAssert((col->getStrength() == Collator::TERTIARY), "collation object has the wrong strength");
     doAssert((col->getStrength() != Collator::PRIMARY), "collation object's strength is primary difference");
+
         
     logln("testing Collator::setStrength() method ...");
     col->setStrength(Collator::SECONDARY);
@@ -272,6 +274,18 @@ CollationAPITest::TestRuleBasedColl()
     }
 
     status = U_ZERO_ERROR;
+    Locale locale("aa", "AA");
+    col3 = (RuleBasedCollator *)Collator::createInstance(locale, status);
+    if (U_FAILURE(status)) {
+        errln("Fallback Collator creation failed.: %s\n");
+        return;
+    }
+    else {
+        logln("PASS: Fallback Collator creation passed\n");
+    }
+    delete col3;
+
+    status = U_ZERO_ERROR;
     col3 = (RuleBasedCollator *)Collator::createInstance(status);
     if (U_FAILURE(status)) {
         errln("Default Collator creation failed.: %s\n");
@@ -297,7 +311,14 @@ CollationAPITest::TestRuleBasedColl()
 
     UnicodeString rule4 = col4->getRules();
     doAssert(rule2 == rule4, "Default collator getRules failed");
+    int32_t length4 = 0;
+    uint8_t *clonedrule4 = col4->cloneRuleData(length4, status);
+    if (U_FAILURE(status)) {
+        errln("Cloned rule data failed.\n");
+        return;
+    }
 
+    free(clonedrule4);
     delete col1;
     delete col2;
     delete col3;
@@ -450,15 +471,31 @@ CollationAPITest::TestCollationKey(/* char* par */)
     CollationKey sortk1, sortk2;
     UnicodeString test1("Abcda"), test2("abcda");
     UErrorCode key1Status = U_ZERO_ERROR, key2Status = U_ZERO_ERROR;
-                
+
+    logln("Testing weird arguments");
+    col->getCollationKey(NULL, 0, sortk1, key1Status);
+    // key gets reset here
+    int32_t length;
+    sortk1.getByteArray(length);
+    doAssert(sortk1.isBogus() == FALSE && length == 0, 
+             "Empty string should return an empty collation key");
+    // bogus key returned here
+    key1Status = U_ILLEGAL_ARGUMENT_ERROR;
+    col->getCollationKey(NULL, 0, sortk1, key1Status);
+    doAssert(sortk1.getByteArray(length) == NULL && length == 0, 
+        "Error code should return bogus collation key");
+
+    key1Status = U_ZERO_ERROR;
     logln("Use tertiary comparison level testing ....");
 
-    doAssert((col->getCollationKey(test1, sortk1, key1Status).compareTo(col->getCollationKey(test2, sortk2, key2Status))) 
+    col->getCollationKey(test1, sortk1, key1Status);
+    doAssert((sortk1.compareTo(col->getCollationKey(test2, sortk2, key2Status))) 
                  == Collator::GREATER, 
                 "Result should be \"Abcda\" >>> \"abcda\"");
 
     CollationKey sortk3(sortk2), sortkNew, sortkEmpty;
 
+    
     sortkNew = sortk1;
     doAssert((sortk1 != sortk2), "The sort keys should be different");
     doAssert((sortk1.hashCode() != sortk2.hashCode()), "sort key hashCode() failed");
@@ -877,6 +914,413 @@ CollationAPITest::TestGetAll(/* char* par */)
     }
 }
 
+void CollationAPITest::TestSortKey()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    /* 
+    this is supposed to open default date format, but later on it treats 
+    it like it is "en_US" 
+    - very bad if you try to run the tests on machine where default 
+      locale is NOT "en_US" 
+    */
+    Collator *col = Collator::createInstance(Locale::ENGLISH, status);
+    if (U_FAILURE(status)) {
+        errln("ERROR: Default collation creation failed.: %s\n", u_errorName(status));
+        return;
+    }
+
+    if (col->getStrength() != Collator::TERTIARY)
+    {
+        errln("ERROR: default collation did not have UCOL_DEFAULT_STRENGTH !\n");
+    }
+
+    /* Need to use identical strength */
+    col->setAttribute(UCOL_STRENGTH, UCOL_IDENTICAL, status);
+
+    uint8_t key2compat[] = { 
+        /* 1.8.1 key.*/
+        0x19, 0x1B, 0x1D, 0x1F, 0x19, 
+        0x01, 0x0A, 0x01, 0x0A, 0x01, 
+        0x92, 0x93, 0x94, 0x95, 0x92, 
+        0x00 
+    };
+    
+    UChar test1[6] = {0x41, 0x62, 0x63, 0x64, 0x61, 0}, 
+          test2[6] = {0x61, 0x62, 0x63, 0x64, 0x61, 0}, 
+          test3[6] = {0x61, 0x62, 0x63, 0x64, 0x61, 0};
+
+    uint8_t sortkey1[64];
+    uint8_t sortkey2[64];
+    uint8_t sortkey3[64];
+
+    logln("Use tertiary comparison level testing ....\n");
+
+    CollationKey key1;
+    col->getCollationKey(test1, u_strlen(test1), key1, status);
+
+    CollationKey key2;
+    col->getCollationKey(test2, u_strlen(test2), key2, status);
+
+    CollationKey key3;
+    col->getCollationKey(test3, u_strlen(test3), key3, status);
+
+    doAssert(key1.compareTo(key2) == Collator::GREATER, 
+        "Result should be \"Abcda\" > \"abcda\"");
+    doAssert(key2.compareTo(key1) == Collator::LESS, 
+        "Result should be \"abcda\" < \"Abcda\"");
+    doAssert(key2.compareTo(key3) == Collator::EQUAL, 
+        "Result should be \"abcda\" ==  \"abcda\"");
+
+    int32_t keylength = 0;
+    doAssert(strcmp((const char *)(key2.getByteArray(keylength)), 
+                    (const char *)key2compat) == 0, 
+        "Binary format for 'abcda' sortkey different!");
+
+    col->getSortKey(test1, sortkey1, 64);
+    col->getSortKey(test2, sortkey2, 64);
+    col->getSortKey(test3, sortkey3, 64);
+
+    const uint8_t *tempkey = key1.getByteArray(keylength);
+    doAssert(memcmp(tempkey, sortkey1, keylength) == 0, 
+        "Test1 string should have the same collation key and sort key");
+    tempkey = key2.getByteArray(keylength);
+    doAssert(memcmp(tempkey, sortkey2, keylength) == 0, 
+        "Test2 string should have the same collation key and sort key");
+    tempkey = key3.getByteArray(keylength);
+    doAssert(memcmp(tempkey, sortkey3, keylength) == 0, 
+        "Test3 string should have the same collation key and sort key");
+
+    col->getSortKey(test1, 5, sortkey1, 64);
+    col->getSortKey(test2, 5, sortkey2, 64);
+    col->getSortKey(test3, 5, sortkey3, 64);
+
+    tempkey = key1.getByteArray(keylength);
+    doAssert(memcmp(tempkey, sortkey1, keylength) == 0, 
+        "Test1 string should have the same collation key and sort key");
+    tempkey = key2.getByteArray(keylength);
+    doAssert(memcmp(tempkey, sortkey2, keylength) == 0, 
+        "Test2 string should have the same collation key and sort key");
+    tempkey = key3.getByteArray(keylength);
+    doAssert(memcmp(tempkey, sortkey3, keylength) == 0, 
+        "Test3 string should have the same collation key and sort key");
+
+    UnicodeString strtest1(test1);
+    col->getSortKey(strtest1, sortkey1, 64);
+    UnicodeString strtest2(test2);
+    col->getSortKey(strtest2, sortkey2, 64);
+    UnicodeString strtest3(test3);
+    col->getSortKey(strtest3, sortkey3, 64);
+
+    tempkey = key1.getByteArray(keylength);
+    doAssert(memcmp(tempkey, sortkey1, keylength) == 0, 
+        "Test1 string should have the same collation key and sort key");
+    tempkey = key2.getByteArray(keylength);
+    doAssert(memcmp(tempkey, sortkey2, keylength) == 0, 
+        "Test2 string should have the same collation key and sort key");
+    tempkey = key3.getByteArray(keylength);
+    doAssert(memcmp(tempkey, sortkey3, keylength) == 0, 
+        "Test3 string should have the same collation key and sort key");
+
+    logln("Use secondary comparision level testing ...\n");
+    col->setStrength(Collator::SECONDARY);
+    
+    col->getCollationKey(test1, u_strlen(test1), key1, status);
+    col->getCollationKey(test2, u_strlen(test2), key2, status);
+    col->getCollationKey(test3, u_strlen(test3), key3, status);
+    
+    doAssert(key1.compareTo(key2) == Collator::EQUAL, 
+        "Result should be \"Abcda\" == \"abcda\"");
+    doAssert(key2.compareTo(key3) == Collator::EQUAL, 
+        "Result should be \"abcda\" ==  \"abcda\"");
+
+    tempkey = key2.getByteArray(keylength);
+    doAssert(memcmp(tempkey, key2compat, keylength - 1) == 0, 
+             "Binary format for 'abcda' sortkey different!");
+
+    col->getSortKey(test1, sortkey1, 64);
+    col->getSortKey(test2, sortkey2, 64);
+    col->getSortKey(test3, sortkey3, 64);
+
+    tempkey = key1.getByteArray(keylength);
+    doAssert(memcmp(tempkey, sortkey1, keylength) == 0, 
+        "Test1 string should have the same collation key and sort key");
+    tempkey = key2.getByteArray(keylength);
+    doAssert(memcmp(tempkey, sortkey2, keylength) == 0, 
+        "Test2 string should have the same collation key and sort key");
+    tempkey = key3.getByteArray(keylength);
+    doAssert(memcmp(tempkey, sortkey3, keylength) == 0, 
+        "Test3 string should have the same collation key and sort key");
+
+    col->getSortKey(test1, 5, sortkey1, 64);
+    col->getSortKey(test2, 5, sortkey2, 64);
+    col->getSortKey(test3, 5, sortkey3, 64);
+
+    tempkey = key1.getByteArray(keylength);
+    doAssert(memcmp(tempkey, sortkey1, keylength) == 0, 
+        "Test1 string should have the same collation key and sort key");
+    tempkey = key2.getByteArray(keylength);
+    doAssert(memcmp(tempkey, sortkey2, keylength) == 0, 
+        "Test2 string should have the same collation key and sort key");
+    tempkey = key3.getByteArray(keylength);
+    doAssert(memcmp(tempkey, sortkey3, keylength) == 0, 
+        "Test3 string should have the same collation key and sort key");
+
+    col->getSortKey(strtest1, sortkey1, 64);
+    col->getSortKey(strtest2, sortkey2, 64);
+    col->getSortKey(strtest3, sortkey3, 64);
+
+    tempkey = key1.getByteArray(keylength);
+    doAssert(memcmp(tempkey, sortkey1, keylength) == 0, 
+        "Test1 string should have the same collation key and sort key");
+    tempkey = key2.getByteArray(keylength);
+    doAssert(memcmp(tempkey, sortkey2, keylength) == 0, 
+        "Test2 string should have the same collation key and sort key");
+    tempkey = key3.getByteArray(keylength);
+    doAssert(memcmp(tempkey, sortkey3, keylength) == 0, 
+        "Test3 string should have the same collation key and sort key");
+
+    logln("testing sortkey ends...");
+    delete col;
+}
+
+void CollationAPITest::TestMaxExpansion()
+{
+    UErrorCode          status = U_ZERO_ERROR;
+    UChar               ch     = 0;
+    UChar               supplementary[2] = {0xD800, 0xDC00};
+    uint32_t            sorder = 0;
+    uint32_t            temporder = 0;
+
+    UnicodeString rule("&a < ab < c/aba < d < z < ch");
+    RuleBasedCollator coll(rule, status);
+    UnicodeString str(ch);
+    CollationElementIterator *iter = 
+                                  coll.createCollationElementIterator(str);
+
+    while (ch < 0xFFFF && U_SUCCESS(status)) {
+        int      count = 1;
+        uint32_t order;
+        int32_t  size = 0;
+
+        ch ++;
+
+        str.setCharAt(0, ch);
+        iter->setText(str, status);
+        order = iter->previous(status);
+
+        /* thai management */
+        if (order == 0)
+            order = iter->previous(status);
+
+        while (U_SUCCESS(status) &&
+            ((uint32_t)iter->previous(status) != UCOL_NULLORDER)) {
+            count ++;
+        }
+
+        size = coll.getMaxExpansion(order);
+        if (U_FAILURE(status) || size < count) {
+            errln("Failure at codepoint %d, maximum expansion count < %d\n",
+                  ch, count);
+        }
+    }
+
+    /* testing for exact max expansion */
+    ch = 0;
+    while (ch < 0x61) {
+        uint32_t order;
+        int32_t  size;
+        str.setCharAt(0, ch);
+        iter->setText(str, status);
+        order = iter->previous(status);
+        size  = coll.getMaxExpansion(order);
+        if (U_FAILURE(status) || size != 1) {
+            errln("Failure at codepoint %d, maximum expansion count < %d\n",
+                ch, 1);
+        }
+        ch ++;
+    }
+
+    ch = 0x63;
+    str.setTo(ch); 
+    iter->setText(str, status);
+    temporder = iter->previous(status);
+
+    if (U_FAILURE(status) || coll.getMaxExpansion(temporder) != 3) {
+        errln("Failure at codepoint %d, maximum expansion count != %d\n",
+              ch, 3);
+    }
+
+    ch = 0x64;
+    str.setTo(ch); 
+    iter->setText(str, status);
+    temporder = iter->previous(status);
+
+    if (U_FAILURE(status) || coll.getMaxExpansion(temporder) != 1) {
+        errln("Failure at codepoint %d, maximum expansion count != %d\n",
+                ch, 3);
+    }
+
+    str.setTo(supplementary, 2);
+    iter->setText(str, status);
+    sorder = iter->previous(status);
+
+    if (U_FAILURE(status) || coll.getMaxExpansion(sorder) != 2) {
+        errln("Failure at supplementary codepoints, maximum expansion count < %d\n",
+              2);
+    }
+
+    /* testing jamo */
+    ch = 0x1165;
+    str.setTo(ch);
+    iter->setText(str, status);
+    temporder = iter->previous(status);
+    if (U_FAILURE(status) || coll.getMaxExpansion(temporder) > 3) {
+        errln("Failure at codepoint %d, maximum expansion count > %d\n",
+              ch, 3);
+    }
+
+    delete iter;
+
+    /* testing special jamo &a<\u1160 */
+    rule = CharsToUnicodeString("\\u0026\\u0071\\u003c\\u1165\\u002f\\u0071\\u0071\\u0071\\u0071");
+    
+    RuleBasedCollator jamocoll(rule, status);
+    iter = jamocoll.createCollationElementIterator(str);
+    temporder = iter->previous(status);
+    if (U_FAILURE(status) || iter->getMaxExpansion(temporder) != 6) {
+        errln("Failure at codepoint %d, maximum expansion count > %d\n",
+              ch, 5);
+    }
+
+    delete iter;
+}
+
+void CollationAPITest::TestDisplayName()
+{
+    UErrorCode error = U_ZERO_ERROR;
+    Collator *coll = Collator::createInstance("en_US", error);
+    if (U_FAILURE(error)) {
+        errln("Failure creating english collator");
+        return;
+    }
+    UnicodeString name;
+    UnicodeString result;
+    coll->getDisplayName(Locale::CANADA_FRENCH, result);
+    Locale::CANADA_FRENCH.getDisplayName(name);
+    if (result.compare(name)) {
+        errln("Failure getting the correct name for locale en_US");
+    }
+
+    coll->getDisplayName(Locale::SIMPLIFIED_CHINESE, result);
+    Locale::SIMPLIFIED_CHINESE.getDisplayName(name);
+    if (result.compare(name)) {
+        errln("Failure getting the correct name for locale zh_SG");
+    }
+    delete coll;
+}
+
+void CollationAPITest::TestAttribute()
+{
+    UErrorCode error = U_ZERO_ERROR;
+    Collator *coll = Collator::createInstance(error);
+    
+    if (U_FAILURE(error)) {
+        errln("Creation of default collator failed");
+        return;
+    }
+    
+    coll->setAttribute(UCOL_FRENCH_COLLATION, UCOL_OFF, error);
+    if (coll->getAttribute(UCOL_FRENCH_COLLATION, error) != UCOL_OFF ||
+        U_FAILURE(error)) {
+        errln("Setting and retrieving of the french collation failed");
+    }
+
+    coll->setAttribute(UCOL_FRENCH_COLLATION, UCOL_ON, error);
+    if (coll->getAttribute(UCOL_FRENCH_COLLATION, error) != UCOL_ON ||
+        U_FAILURE(error)) {
+        errln("Setting and retrieving of the french collation failed");
+    }
+
+    coll->setAttribute(UCOL_ALTERNATE_HANDLING, UCOL_SHIFTED, error);
+    if (coll->getAttribute(UCOL_ALTERNATE_HANDLING, error) != UCOL_SHIFTED ||
+        U_FAILURE(error)) {
+        errln("Setting and retrieving of the alternate handling failed");
+    }
+
+    coll->setAttribute(UCOL_ALTERNATE_HANDLING, UCOL_NON_IGNORABLE, error);
+    if (coll->getAttribute(UCOL_ALTERNATE_HANDLING, error) != UCOL_NON_IGNORABLE ||
+        U_FAILURE(error)) {
+        errln("Setting and retrieving of the alternate handling failed");
+    }
+
+    coll->setAttribute(UCOL_CASE_FIRST, UCOL_LOWER_FIRST, error);
+    if (coll->getAttribute(UCOL_CASE_FIRST, error) != UCOL_LOWER_FIRST ||
+        U_FAILURE(error)) {
+        errln("Setting and retrieving of the case first attribute failed");
+    }
+
+    coll->setAttribute(UCOL_CASE_FIRST, UCOL_UPPER_FIRST, error);
+    if (coll->getAttribute(UCOL_CASE_FIRST, error) != UCOL_UPPER_FIRST ||
+        U_FAILURE(error)) {
+        errln("Setting and retrieving of the case first attribute failed");
+    }
+
+    coll->setAttribute(UCOL_CASE_LEVEL, UCOL_ON, error);
+    if (coll->getAttribute(UCOL_CASE_LEVEL, error) != UCOL_ON ||
+        U_FAILURE(error)) {
+        errln("Setting and retrieving of the case level attribute failed");
+    }
+
+    coll->setAttribute(UCOL_CASE_LEVEL, UCOL_OFF, error);
+    if (coll->getAttribute(UCOL_CASE_LEVEL, error) != UCOL_OFF ||
+        U_FAILURE(error)) {
+        errln("Setting and retrieving of the case level attribute failed");
+    }
+
+    coll->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_ON, error);
+    if (coll->getAttribute(UCOL_NORMALIZATION_MODE, error) != UCOL_ON ||
+        U_FAILURE(error)) {
+        errln("Setting and retrieving of the normalization on/off attribute failed");
+    }
+
+    coll->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_OFF, error);
+    if (coll->getAttribute(UCOL_NORMALIZATION_MODE, error) != UCOL_OFF ||
+        U_FAILURE(error)) {
+        errln("Setting and retrieving of the normalization on/off attribute failed");
+    }
+    
+    coll->setAttribute(UCOL_STRENGTH, UCOL_PRIMARY, error);
+    if (coll->getAttribute(UCOL_STRENGTH, error) != UCOL_PRIMARY ||
+        U_FAILURE(error)) {
+        errln("Setting and retrieving of the collation strength failed");
+    }
+
+    coll->setAttribute(UCOL_STRENGTH, UCOL_SECONDARY, error);
+    if (coll->getAttribute(UCOL_STRENGTH, error) != UCOL_SECONDARY ||
+        U_FAILURE(error)) {
+        errln("Setting and retrieving of the collation strength failed");
+    }
+
+    coll->setAttribute(UCOL_STRENGTH, UCOL_TERTIARY, error);
+    if (coll->getAttribute(UCOL_STRENGTH, error) != UCOL_TERTIARY ||
+        U_FAILURE(error)) {
+        errln("Setting and retrieving of the collation strength failed");
+    }
+
+    coll->setAttribute(UCOL_STRENGTH, UCOL_QUATERNARY, error);
+    if (coll->getAttribute(UCOL_STRENGTH, error) != UCOL_QUATERNARY ||
+        U_FAILURE(error)) {
+        errln("Setting and retrieving of the collation strength failed");
+    }
+
+    coll->setAttribute(UCOL_STRENGTH, UCOL_IDENTICAL, error);
+    if (coll->getAttribute(UCOL_STRENGTH, error) != UCOL_IDENTICAL ||
+        U_FAILURE(error)) {
+        errln("Setting and retrieving of the collation strength failed");
+    }
+
+    delete coll;
+}
 
 void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par */)
 {
@@ -893,6 +1337,10 @@ void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &n
         case 8: name = "TestRuleBasedColl"; if (exec)   TestRuleBasedColl(/* par */); break;
         case 9: name = "TestDecomposition"; if (exec)   TestDecomposition(/* par */); break;
         case 10: name = "TestSafeClone"; if (exec)   TestSafeClone(/* par */); break;
+        case 11: name = "TestSortKey";   if (exec)   TestSortKey(); break;
+        case 12: name = "TestMaxExpansion";   if (exec)   TestMaxExpansion(); break;
+        case 13: name = "TestDisplayName";   if (exec)   TestDisplayName(); break;
+        case 14: name = "TestAttribute";   if (exec)   TestAttribute(); break;
         default: name = ""; break;
     }
 }
