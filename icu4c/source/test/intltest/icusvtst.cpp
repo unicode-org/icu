@@ -1359,9 +1359,9 @@ void ICUServiceTest::testCoverage()
       errln("visible IDs contains en_US");
     }
     delete obj;
+    delete key;
   }
 
-  delete key;
 
 #if 0
   // ResourceBundleFactory
