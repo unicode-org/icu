@@ -432,7 +432,7 @@ ucol_allocWeights(uint32_t lowerLimit, uint32_t upperLimit,
                 /* set the bytes in the end weight at length+1..length2 to maxByte */
                 byte=(maxByte<<24)|(maxByte<<16)|(maxByte<<8)|maxByte; /* this used to be 0xffffffff */
                 ranges[0].end=truncateWeight(ranges[0].end, i)|
-                              (byte>>(8*i))&(byte<<(8*(4-minLength)));
+                              ((byte>>(8*i))&(byte<<(8*(4-minLength))));
 
                 /* set the start of the second range to immediately follow the end of the first one */
                 ranges[1].start=incWeight(ranges[0].end, minLength, maxByte);
