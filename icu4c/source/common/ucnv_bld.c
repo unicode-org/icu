@@ -18,11 +18,11 @@
 #include "uhash.h"
 #include "ucmp16.h"
 #include "ucmp8.h"
-#include "ucnv_bld.h"
-#include "ucnv_err.h"
+#include "unicode/ucnv_bld.h"
+#include "unicode/ucnv_err.h"
 #include "ucnv_imp.h"
-#include "udata.h"
-#include "ucnv.h"
+#include "unicode/udata.h"
+#include "unicode/ucnv.h"
 #include "umutex.h"
 #include "cstring.h"
 #include "cmemory.h"
@@ -100,7 +100,7 @@ char *
 {
   int32_t i = 0;
 
-  while (name[i] = icu_toupper (name[i]))
+  while (name[i] = uprv_toupper (name[i]))
     i++;
 
   return name;
@@ -153,7 +153,7 @@ char *
 int32_t uhash_hashIString(const void* name)
 {
   char myName[UCNV_MAX_CONVERTER_NAME_LENGTH];
-  icu_strcpy(myName, (char*)name);
+  uprv_strcpy(myName, (char*)name);
   strtoupper(myName);
 
   return uhash_hashString(myName);
@@ -181,7 +181,7 @@ CompactShortArray*  createCompactShortArrayFromFile (FileStream * infile, UError
       *err = U_INVALID_TABLE_FILE;
       return NULL;
     }
-  myShortArray = (int16_t *) icu_malloc (myValuesCount * sizeof (int16_t));
+  myShortArray = (int16_t *) uprv_malloc (myValuesCount * sizeof (int16_t));
   if (myShortArray == NULL)
     {
       *err = U_MEMORY_ALLOCATION_ERROR;
@@ -192,15 +192,15 @@ CompactShortArray*  createCompactShortArrayFromFile (FileStream * infile, UError
 
   if (myIndexCount < 0)
     {
-      icu_free (myShortArray);
+      uprv_free (myShortArray);
       *err = U_INVALID_TABLE_FILE;
       return NULL;
     }
 
-  myIndexArray = (uint16_t *) icu_malloc (myIndexCount * sizeof (uint16_t));
+  myIndexArray = (uint16_t *) uprv_malloc (myIndexCount * sizeof (uint16_t));
   if (myIndexArray == NULL)
     {
-      icu_free (myShortArray);
+      uprv_free (myShortArray);
       *err = U_MEMORY_ALLOCATION_ERROR;
       return NULL;
     }
@@ -235,7 +235,7 @@ CompactByteArray*  createCompactByteArrayFromFile (FileStream * infile,
       *err = U_INVALID_TABLE_FILE;
       return NULL;
     }
-  myByteArray = (int8_t *) icu_malloc (myValuesCount * sizeof (int8_t));
+  myByteArray = (int8_t *) uprv_malloc (myValuesCount * sizeof (int8_t));
   if (myByteArray == NULL)
     {
       *err = U_MEMORY_ALLOCATION_ERROR;
@@ -246,14 +246,14 @@ CompactByteArray*  createCompactByteArrayFromFile (FileStream * infile,
 
   if (myIndexCount < 0)
     {
-      icu_free (myByteArray);
+      uprv_free (myByteArray);
       *err = U_INVALID_TABLE_FILE;
       return NULL;
     }
-  myIndexArray = (uint16_t *) icu_malloc (myIndexCount * sizeof (uint16_t));
+  myIndexArray = (uint16_t *) uprv_malloc (myIndexCount * sizeof (uint16_t));
   if (myIndexArray == NULL)
     {
-      icu_free (myByteArray);
+      uprv_free (myByteArray);
       *err = U_MEMORY_ALLOCATION_ERROR;
       return NULL;
     }
@@ -308,7 +308,7 @@ UConverter*  createConverterFromFile (const char *fileName, UErrorCode * err)
       return NULL;
     }
 
-  myConverter = (UConverter *) icu_malloc (sizeof (UConverter));
+  myConverter = (UConverter *) uprv_malloc (sizeof (UConverter));
   if (myConverter == NULL)
     {
       udata_close(data);
@@ -322,7 +322,7 @@ UConverter*  createConverterFromFile (const char *fileName, UErrorCode * err)
   if (myConverter->sharedData == NULL)
     {
       udata_close(data);
-      icu_free (myConverter);
+      uprv_free (myConverter);
       *err = U_MEMORY_ALLOCATION_ERROR;
       return NULL;
     }
@@ -336,7 +336,7 @@ UConverter*  createConverterFromFile (const char *fileName, UErrorCode * err)
   if(U_FAILURE(*err))
     {
       udata_close(data);
-      icu_free (myConverter);
+      uprv_free (myConverter);
       *err = U_MEMORY_ALLOCATION_ERROR;
       return NULL;
     }
@@ -357,12 +357,12 @@ void
     {
     case UCNV_IBM:
       {
-        icu_strcpy (platformString, "ibm");
+        uprv_strcpy (platformString, "ibm");
         break;
       }
     default:
       {
-        icu_strcpy (platformString, "");
+        uprv_strcpy (platformString, "");
         break;
       }
     };
@@ -375,29 +375,29 @@ void
 UConverterType 
   getAlgorithmicTypeFromName (const char *realName)
 {
-  if (icu_strcmp (realName, "UTF8") == 0)
+  if (uprv_strcmp (realName, "UTF8") == 0)
     return UCNV_UTF8;
-  else if (icu_strcmp (realName, "UTF16_BigEndian") == 0)
+  else if (uprv_strcmp (realName, "UTF16_BigEndian") == 0)
     return UCNV_UTF16_BigEndian;
-  else if (icu_strcmp (realName, "UTF16_LittleEndian") == 0)
+  else if (uprv_strcmp (realName, "UTF16_LittleEndian") == 0)
     return UCNV_UTF16_LittleEndian;
-  else if (icu_strcmp (realName, "LATIN_1") == 0)
+  else if (uprv_strcmp (realName, "LATIN_1") == 0)
     return UCNV_LATIN_1;
-  else if (icu_strcmp (realName, "JIS") == 0)
+  else if (uprv_strcmp (realName, "JIS") == 0)
     return UCNV_JIS;
-  else if (icu_strcmp (realName, "EUC") == 0)
+  else if (uprv_strcmp (realName, "EUC") == 0)
     return UCNV_EUC;
-  else if (icu_strcmp (realName, "GB") == 0)
+  else if (uprv_strcmp (realName, "GB") == 0)
     return UCNV_GB;
-  else if (icu_strcmp (realName, "ISO_2022") == 0)
+  else if (uprv_strcmp (realName, "ISO_2022") == 0)
     return UCNV_ISO_2022;
-  else if (icu_strcmp (realName, "UTF16_PlatformEndian") == 0)
+  else if (uprv_strcmp (realName, "UTF16_PlatformEndian") == 0)
 #  if U_IS_BIG_ENDIAN
       return UCNV_UTF16_BigEndian;
 #  else
       return UCNV_UTF16_LittleEndian;
 #  endif
-  else if (icu_strcmp (realName, "UTF16_OppositeEndian") == 0)
+  else if (uprv_strcmp (realName, "UTF16_OppositeEndian") == 0)
 #  if U_IS_BIG_ENDIAN
       return UCNV_UTF16_LittleEndian;
 #  else
@@ -417,7 +417,7 @@ UConverterPlatform
   getToken (myPlatform, name, mySeparators);
   strtoupper (myPlatform);
 
-  if (icu_strcmp (myPlatform, "IBM") == 0)
+  if (uprv_strcmp (myPlatform, "IBM") == 0)
     return UCNV_IBM;
   else
     return UCNV_UNKNOWN;
@@ -502,7 +502,7 @@ bool_t   deleteSharedConverterData (UConverterSharedData * deadSharedData)
     case UCNV_SBCS:
     {
         ucmp8_close (deadSharedData->table->sbcs.fromUnicode);
-        icu_free (deadSharedData->table);
+        uprv_free (deadSharedData->table);
     };
     break;
     
@@ -510,7 +510,7 @@ bool_t   deleteSharedConverterData (UConverterSharedData * deadSharedData)
     {
         ucmp16_close (deadSharedData->table->mbcs.fromUnicode);
         ucmp16_close (deadSharedData->table->mbcs.toUnicode);
-	icu_free (deadSharedData->table);
+	uprv_free (deadSharedData->table);
     };
     break;
 
@@ -519,7 +519,7 @@ bool_t   deleteSharedConverterData (UConverterSharedData * deadSharedData)
     {
         ucmp16_close (deadSharedData->table->dbcs.fromUnicode);
         ucmp16_close (deadSharedData->table->dbcs.toUnicode);
-	icu_free (deadSharedData->table);
+	uprv_free (deadSharedData->table);
     };
     break;
 
@@ -532,7 +532,7 @@ bool_t   deleteSharedConverterData (UConverterSharedData * deadSharedData)
         udata_close(data);
     }
 
-    icu_free (deadSharedData);
+    uprv_free (deadSharedData);
     
     return TRUE;
 }
@@ -661,7 +661,7 @@ UConverter *
       else
         {
           /*Is already cached, point to an existing one */
-          myUConverter = (UConverter *) icu_malloc (sizeof (UConverter));
+          myUConverter = (UConverter *) uprv_malloc (sizeof (UConverter));
           if (myUConverter == NULL)
             {
               *err = U_MEMORY_ALLOCATION_ERROR;
@@ -690,7 +690,7 @@ UConverter *
           myUConverter = createConverterFromAlgorithmicType (realName, err);
           if (U_FAILURE (*err) || (myUConverter == NULL))
             {
-              icu_free (myUConverter);
+              uprv_free (myUConverter);
               return NULL;
             }
           else
@@ -702,7 +702,7 @@ UConverter *
         }
       else
         {
-          myUConverter = (UConverter *) icu_malloc (sizeof (UConverter));
+          myUConverter = (UConverter *) uprv_malloc (sizeof (UConverter));
           if (myUConverter == NULL)
             {
               *err = U_MEMORY_ALLOCATION_ERROR;
@@ -736,7 +736,7 @@ void   initializeDataConverter (UConverter * myUConverter)
   myUConverter->UCharErrorBufferLength = 0;
   myUConverter->charErrorBufferLength = 0;
   myUConverter->subCharLen = myUConverter->sharedData->defaultConverterValues.subCharLen;
-  icu_memcpy (myUConverter->subChar,
+  uprv_memcpy (myUConverter->subChar,
               myUConverter->sharedData->defaultConverterValues.subChar,
               myUConverter->subCharLen);
   myUConverter->toUnicodeStatus = 0x00;
@@ -788,9 +788,9 @@ void
     myConverter->fromUnicodeStatus = 0; /* srl */ 
         myConverter->sharedData->platform = UCNV_IBM;
         myConverter->sharedData->codepage = 1208;
-        icu_strcpy(myConverter->sharedData->name, "UTF8");
-        icu_memcpy (myConverter->subChar, UTF8_subChar, 3);
-        icu_memcpy (myConverter->sharedData->defaultConverterValues.subChar, UTF8_subChar, 3);
+        uprv_strcpy(myConverter->sharedData->name, "UTF8");
+        uprv_memcpy (myConverter->subChar, UTF8_subChar, 3);
+        uprv_memcpy (myConverter->sharedData->defaultConverterValues.subChar, UTF8_subChar, 3);
 
         break;
       }
@@ -804,7 +804,7 @@ void
         myConverter->toUnicodeStatus = 0;
         myConverter->sharedData->platform = UCNV_IBM;
         myConverter->sharedData->codepage = 819;
-        icu_strcpy(myConverter->sharedData->name, "LATIN_1");
+        uprv_strcpy(myConverter->sharedData->name, "LATIN_1");
         *(myConverter->subChar) = LATIN1_subChar;
         *(myConverter->sharedData->defaultConverterValues.subChar) = LATIN1_subChar;
         break;
@@ -819,11 +819,11 @@ void
         myConverter->subCharLen = 2;
         myConverter->toUnicodeStatus = 0;
         myConverter->fromUnicodeStatus = 0; 
-        icu_strcpy(myConverter->sharedData->name, "UTF_16BE");
+        uprv_strcpy(myConverter->sharedData->name, "UTF_16BE");
         myConverter->sharedData->platform = UCNV_IBM;
         myConverter->sharedData->codepage = 1200;
-        icu_memcpy (myConverter->subChar, UTF16BE_subChar, 2);
-        icu_memcpy (myConverter->sharedData->defaultConverterValues.subChar, UTF16BE_subChar, 2);
+        uprv_memcpy (myConverter->subChar, UTF16BE_subChar, 2);
+        uprv_memcpy (myConverter->sharedData->defaultConverterValues.subChar, UTF16BE_subChar, 2);
 
         break;
       }
@@ -839,9 +839,9 @@ void
         myConverter->fromUnicodeStatus = 0; 
         myConverter->sharedData->platform = UCNV_IBM;
         myConverter->sharedData->codepage = 1200;
-        icu_strcpy(myConverter->sharedData->name, "UTF_16LE");
-        icu_memcpy (myConverter->subChar, UTF16LE_subChar, 2);
-        icu_memcpy (myConverter->sharedData->defaultConverterValues.subChar, UTF16LE_subChar, 2);
+        uprv_strcpy(myConverter->sharedData->name, "UTF_16LE");
+        uprv_memcpy (myConverter->subChar, UTF16LE_subChar, 2);
+        uprv_memcpy (myConverter->sharedData->defaultConverterValues.subChar, UTF16LE_subChar, 2);
         break;
       }
     case UCNV_EUC:
@@ -852,8 +852,8 @@ void
         myConverter->sharedData->defaultConverterValues.subCharLen = 2;
         myConverter->subCharLen = 2;
         myConverter->toUnicodeStatus = 0;
-        icu_memcpy (myConverter->subChar, EUC_subChar, 2);
-        icu_memcpy (myConverter->sharedData->defaultConverterValues.subChar, EUC_subChar, 2);
+        uprv_memcpy (myConverter->subChar, EUC_subChar, 2);
+        uprv_memcpy (myConverter->sharedData->defaultConverterValues.subChar, EUC_subChar, 2);
         break;
       }
     case UCNV_ISO_2022:
@@ -870,10 +870,10 @@ void
         myConverter->toUnicodeStatus = 0;
     myConverter->fromUnicodeStatus = 0; /* srl */ 
         myConverter->sharedData->codepage = 2022;
-        icu_strcpy(myConverter->sharedData->name, "ISO_2022");
+        uprv_strcpy(myConverter->sharedData->name, "ISO_2022");
         *(myConverter->subChar) = LATIN1_subChar;
         *(myConverter->sharedData->defaultConverterValues.subChar) = LATIN1_subChar;
-        myConverter->extraInfo = icu_malloc (sizeof (UConverterDataISO2022));
+        myConverter->extraInfo = uprv_malloc (sizeof (UConverterDataISO2022));
         ((UConverterDataISO2022 *) myConverter->extraInfo)->currentConverter = NULL;
         ((UConverterDataISO2022 *) myConverter->extraInfo)->escSeq2022Length = 0;
         break;
@@ -886,8 +886,8 @@ void
         myConverter->sharedData->defaultConverterValues.subCharLen = 2;
         myConverter->subCharLen = 2;
         myConverter->toUnicodeStatus = 0;
-        icu_memcpy (myConverter->subChar, GB_subChar, 2);
-        icu_memcpy (myConverter->sharedData->defaultConverterValues.subChar, GB_subChar, 2);
+        uprv_memcpy (myConverter->subChar, GB_subChar, 2);
+        uprv_memcpy (myConverter->sharedData->defaultConverterValues.subChar, GB_subChar, 2);
         break;
       }
     case UCNV_JIS:
@@ -898,8 +898,8 @@ void
         myConverter->sharedData->defaultConverterValues.subCharLen = 2;
         myConverter->subCharLen = 2;
         myConverter->toUnicodeStatus = 0;
-        icu_memcpy (myConverter->subChar, JIS_subChar, 2);
-        icu_memcpy (myConverter->sharedData->defaultConverterValues.subChar, JIS_subChar, 2);
+        uprv_memcpy (myConverter->subChar, JIS_subChar, 2);
+        uprv_memcpy (myConverter->sharedData->defaultConverterValues.subChar, JIS_subChar, 2);
         break;
       }
     default:
@@ -927,7 +927,7 @@ UConverter *
   if (U_FAILURE (*err))
     return NULL;
 
-  myConverter = (UConverter *) icu_malloc (sizeof (UConverter));
+  myConverter = (UConverter *) uprv_malloc (sizeof (UConverter));
   if (myConverter == NULL)
     {
       *err = U_MEMORY_ALLOCATION_ERROR;
@@ -935,17 +935,17 @@ UConverter *
     }
 
   myConverter->sharedData = NULL;
-  mySharedData = (UConverterSharedData *) icu_malloc (sizeof (UConverterSharedData));
+  mySharedData = (UConverterSharedData *) uprv_malloc (sizeof (UConverterSharedData));
   if (mySharedData == NULL)
     {
       *err = U_MEMORY_ALLOCATION_ERROR;
-      icu_free (myConverter);
+      uprv_free (myConverter);
       return NULL;
     }
   mySharedData->structSize = sizeof(UConverterSharedData);
   mySharedData->table = NULL;
   mySharedData->dataMemory = NULL;
-  icu_strcpy (mySharedData->name, actualName);
+  uprv_strcpy (mySharedData->name, actualName);
   /*Initializes the referenceCounter to 1 */
   mySharedData->referenceCounter = 1;
   mySharedData->platform = UCNV_UNKNOWN;
@@ -974,7 +974,7 @@ UConverterSharedData* ucnv_data_unFlattenClone(const UConverterSharedData *sourc
 
   data = (UConverterSharedData*) malloc(sizeof(UConverterSharedData));
   raw = (uint8_t*)source;
-  icu_memcpy(data,source,sizeof(UConverterSharedData));
+  uprv_memcpy(data,source,sizeof(UConverterSharedData));
   
   raw += data->structSize;
 
@@ -993,7 +993,7 @@ UConverterSharedData* ucnv_data_unFlattenClone(const UConverterSharedData *sourc
 
     case UCNV_EBCDIC_STATEFUL:
     case UCNV_DBCS:
-      data->table = icu_malloc(sizeof(UConverterDBCSTable));
+      data->table = uprv_malloc(sizeof(UConverterDBCSTable));
 
       oldraw = raw;
 
@@ -1007,7 +1007,7 @@ UConverterSharedData* ucnv_data_unFlattenClone(const UConverterSharedData *sourc
       break;
 
     case UCNV_MBCS:
-      data->table = icu_malloc(sizeof(UConverterMBCSTable));
+      data->table = uprv_malloc(sizeof(UConverterMBCSTable));
 
       data->table->mbcs.starters = (bool_t*)raw;
       raw += sizeof(bool_t)*256;

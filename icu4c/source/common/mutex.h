@@ -19,7 +19,7 @@
 //------------------------------------------------------------------------------
 #ifndef MUTEX_H
 #define MUTEX_H
-#include "utypes.h"
+#include "unicode/utypes.h"
 
 #include "umutex.h"
 

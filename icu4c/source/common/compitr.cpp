@@ -9,7 +9,7 @@
 
 #include "compitr.h"
 
-#include "normlzr.h"
+#include "unicode/normlzr.h"
 
 /**
  * Constant that indicates the iteration has completed.

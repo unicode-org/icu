@@ -12,8 +12,8 @@
 #ifndef UCNV_CNV_H
 #define UCNV_CNV_H
 
-#include "utypes.h"
-#include "ucnv_bld.h"
+#include "unicode/utypes.h"
+#include "unicode/ucnv_bld.h"
 
 bool_t CONVERSION_U_SUCCESS (UErrorCode err);
 

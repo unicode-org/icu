@@ -1,7 +1,7 @@
 #define  EXTENDED_FUNCTIONALITY
 #include "cpputils.h"
 #include "cstring.h"
-#include "ustring.h"
+#include "unicode/ustring.h"
 
 /**********************************************************************
  *   Copyright (C) 1999, International Business Machines
@@ -21,7 +21,7 @@ void T_fillOutputParams(const UnicodeString* temp,
   
   const int32_t actual = temp->length();
   const bool_t overflowed = actual >= resultLength;
-  const int32_t returnedSize = icu_min(actual, resultLength-1);
+  const int32_t returnedSize = uprv_min(actual, resultLength-1);
   if ((temp->length() < resultLength) && (result != temp->getUChars()) && (returnedSize > 0)) {
     u_strcpy(result, temp->getUChars());
   }

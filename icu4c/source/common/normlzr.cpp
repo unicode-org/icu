@@ -10,12 +10,12 @@
 #include "dcmpdata.h"
 #include "compdata.h"
 
-#include "normlzr.h"
-#include "utypes.h"
-#include "unistr.h"
-#include "chariter.h"
-#include "schriter.h"
-#include "unicode.h"
+#include "unicode/normlzr.h"
+#include "unicode/utypes.h"
+#include "unicode/unistr.h"
+#include "unicode/chariter.h"
+#include "unicode/schriter.h"
+#include "unicode/unicode.h"
 #include "mutex.h"
 
 

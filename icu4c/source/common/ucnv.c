@@ -21,20 +21,20 @@
    *   04/04/99    helena      Fixed internal header inclusion.
  */
 #include "umutex.h"
-#include "ures.h"
+#include "unicode/ures.h"
 #include "uhash.h"
 #include "ucmp16.h"
 #include "ucmp8.h"
-#include "ucnv_bld.h"
+#include "unicode/ucnv_bld.h"
 #include "ucnv_io.h"
-#include "ucnv_err.h"
+#include "unicode/ucnv_err.h"
 #include "ucnv_cnv.h"
 #include "ucnv_imp.h"
-#include "ucnv.h"
+#include "unicode/ucnv.h"
 #include "cmemory.h"
 #include "cstring.h"
-#include "ustring.h"
-#include "uloc.h"
+#include "unicode/ustring.h"
+#include "unicode/uloc.h"
 
 #define CHUNK_SIZE 5*1024
 
@@ -207,8 +207,8 @@ UConverter*  ucnv_openCCSID (int32_t codepage,
     return NULL;
 
   copyPlatformString (myName, platform);
-  icu_strcat (myName, "-");
-  T_CString_integerToString (myName + icu_strlen (myName), codepage, 10);
+  uprv_strcat (myName, "-");
+  T_CString_integerToString (myName + uprv_strlen (myName), codepage, 10);
 
 
   return createConverter (myName, err);
@@ -225,13 +225,13 @@ void ucnv_close (UConverter * converter)
       (converter->mode == UCNV_SO))
     {
       ucnv_close (((UConverterDataISO2022 *) (converter->extraInfo))->currentConverter);
-      icu_free (converter->extraInfo);
+      uprv_free (converter->extraInfo);
     }
 
   umtx_lock (NULL);
   converter->sharedData->referenceCounter--;
   umtx_unlock (NULL);
-  icu_free (converter);
+  uprv_free (converter);
 
   return;
 }
@@ -306,7 +306,7 @@ void   ucnv_getSubstChars (const UConverter * converter,
       return;
     }
 
-  icu_memcpy (mySubChar, converter->subChar, converter->subCharLen);	/*fills in the subchars */
+  uprv_memcpy (mySubChar, converter->subChar, converter->subCharLen);	/*fills in the subchars */
   *len = converter->subCharLen;	/*store # of bytes copied to buffer */
 
   return;
@@ -330,7 +330,7 @@ void   ucnv_setSubstChars (UConverter * converter,
       return;
     }
 
-  icu_memcpy (converter->subChar, mySubChar, len);	/*copies the subchars */
+  uprv_memcpy (converter->subChar, mySubChar, len);	/*copies the subchars */
   converter->subCharLen = len;	/*sets the new len */
 
   return;
@@ -373,7 +373,7 @@ int32_t  ucnv_getDisplayName (const UConverter * converter,
        *sets stringToWriteLength (which accounts for a NULL terminator)
        *and stringToWrite
        */
-      stringToWriteLength = icu_strlen (converter->sharedData->name) + 1;
+      stringToWriteLength = uprv_strlen (converter->sharedData->name) + 1;
       stringToWrite = u_uastrcpy (stringToWriteBuffer, converter->sharedData->name);
 
       /*Hides the fallback to the internal name from the user */
@@ -931,7 +931,7 @@ UChar ucnv_getNextUChar (UConverter * converter,
          *Note that in the call itself we decrement
          *UCharErrorBufferLength
        */
-      icu_memmove (converter->UCharErrorBuffer,
+      uprv_memmove (converter->UCharErrorBuffer,
 		   converter->UCharErrorBuffer + 1,
 		   --(converter->UCharErrorBufferLength) * sizeof (UChar));
       return myUChar;
@@ -1151,6 +1151,6 @@ void ucnv_getStarters(const UConverter* converter,
     }
   
   /*fill's in the starters boolean array*/
-  icu_memcpy(starters, converter->sharedData->table->mbcs.starters, 256*sizeof(bool_t));
+  uprv_memcpy(starters, converter->sharedData->table->mbcs.starters, 256*sizeof(bool_t));
   return;
 }

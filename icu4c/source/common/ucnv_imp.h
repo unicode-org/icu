@@ -20,7 +20,7 @@
 #ifndef UCNV_IMP_H
 #define UCNV_IMP_H
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 
 #ifndef UHASH_H
 typedef struct _UHashtable UHashtable;

@@ -23,10 +23,10 @@
 #endif
 
 #include "cmemory.h"
-#include "utypes.h"
-#include "ustring.h"
-#include "uchar.h"
-#include "ubidi.h"
+#include "unicode/utypes.h"
+#include "unicode/ustring.h"
+#include "unicode/uchar.h"
+#include "unicode/ubidi.h"
 #include "ubidiimp.h"
 
 /*
@@ -154,14 +154,14 @@ ubidi_openSized(UTextOffset maxLength, UTextOffset maxRunCount, UErrorCode *pErr
     }
 
     /* allocate memory for the object */
-    pBiDi=(UBiDi *)icu_malloc(sizeof(UBiDi));
+    pBiDi=(UBiDi *)uprv_malloc(sizeof(UBiDi));
     if(pBiDi==NULL) {
         *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
 
     /* reset the object, all pointers NULL, all flags FALSE, all sizes 0 */
-    icu_memset(pBiDi, 0, sizeof(UBiDi));
+    uprv_memset(pBiDi, 0, sizeof(UBiDi));
 
     /* allocate memory for arrays as requested */
     if(maxLength>0) {
@@ -211,7 +211,7 @@ getMemory(void **pMemory, UTextOffset *pSize, bool_t mayAllocate, UTextOffset si
     /* check for existing memory */
     if(*pMemory==NULL) {
         /* we need to allocate memory */
-        if(mayAllocate && (*pMemory=icu_malloc(sizeNeeded))!=NULL) {
+        if(mayAllocate && (*pMemory=uprv_malloc(sizeNeeded))!=NULL) {
             *pSize=sizeNeeded;
             return TRUE;
         } else {
@@ -226,7 +226,7 @@ getMemory(void **pMemory, UTextOffset *pSize, bool_t mayAllocate, UTextOffset si
             /* we may try to grow or shrink */
             void *memory;
 
-            if((memory=icu_realloc(*pMemory, sizeNeeded))!=NULL) {
+            if((memory=uprv_realloc(*pMemory, sizeNeeded))!=NULL) {
                 *pMemory=memory;
                 *pSize=sizeNeeded;
                 return TRUE;
@@ -245,15 +245,15 @@ U_CAPI void U_EXPORT2
 ubidi_close(UBiDi *pBiDi) {
     if(pBiDi!=NULL) {
         if(pBiDi->dirPropsMemory!=NULL) {
-            icu_free(pBiDi->dirPropsMemory);
+            uprv_free(pBiDi->dirPropsMemory);
         }
         if(pBiDi->levelsMemory!=NULL) {
-            icu_free(pBiDi->levelsMemory);
+            uprv_free(pBiDi->levelsMemory);
         }
         if(pBiDi->runsMemory!=NULL) {
-            icu_free(pBiDi->runsMemory);
+            uprv_free(pBiDi->runsMemory);
         }
-        icu_free(pBiDi);
+        uprv_free(pBiDi);
     }
 }
 

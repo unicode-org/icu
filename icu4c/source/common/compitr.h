@@ -11,8 +11,8 @@
 #define COMPITR_H
 
 
-#include "utypes.h"
-#include "unistr.h"
+#include "unicode/utypes.h"
+#include "unicode/unistr.h"
 
 
 /**

@@ -14,7 +14,7 @@
 */
 
 #include "uhash.h"
-#include "ustring.h"
+#include "unicode/ustring.h"
 #include "cstring.h"
 #include "cmemory.h"
 
@@ -90,7 +90,7 @@ uhash_openSize(UHashFunction func,
   
   if(U_FAILURE(*status)) return NULL;
   
-  result = (UHashtable*) icu_malloc(sizeof(UHashtable));
+  result = (UHashtable*) uprv_malloc(sizeof(UHashtable));
   if(result == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
@@ -107,7 +107,7 @@ uhash_openSize(UHashFunction func,
   uhash_initialize(result, uhash_leastGreaterPrimeIndex(size), status);
 
   if(U_FAILURE(*status)) {
-    icu_free(result);
+    uprv_free(result);
     return 0;
   }
 
@@ -135,9 +135,9 @@ uhash_close(UHashtable *hash)
       while (toBeDeletedCount--)    my_free(toBeDeleted[toBeDeletedCount]);
 
   }
-  icu_free(hash->values);
-  icu_free(hash->hashes);
-  icu_free(hash->toBeDeleted);
+  uprv_free(hash->values);
+  uprv_free(hash->hashes);
+  uprv_free(hash->toBeDeleted);
 }
 
 U_CAPI int32_t
@@ -182,7 +182,7 @@ uhash_putKey(UHashtable *hash,
       void * result = hash->values[index];
     if (result != value) /*Make sure the same object isn't scheduled for a double deletion*/
       {
-        hash->toBeDeleted = (void**) icu_realloc(hash->toBeDeleted, sizeof(void*)*(++(hash->toBeDeletedCount)));
+        hash->toBeDeleted = (void**) uprv_realloc(hash->toBeDeleted, sizeof(void*)*(++(hash->toBeDeletedCount)));
         hash->toBeDeleted[(hash->toBeDeletedCount)-1] = result;
       }
       hash->values[index] = 0;
@@ -232,7 +232,7 @@ uhash_put(UHashtable *hash,
       void* result = hash->values[index];
     if (result != value) /*Make sure the same object isn't scheduled for a double deletion*/
       {
-        hash->toBeDeleted = (void**) icu_realloc(hash->toBeDeleted,
+        hash->toBeDeleted = (void**) uprv_realloc(hash->toBeDeleted,
                          sizeof(void*)*(++(hash->toBeDeletedCount)));
         hash->toBeDeleted[(hash->toBeDeletedCount)-1] = result;
       }
@@ -344,16 +344,16 @@ uhash_initialize(UHashtable *hash,
   hash->primeIndex     = primeIndex;
   hash->length         = UHASH_PRIMES[primeIndex];
 
-  hash->values         = (void**) icu_malloc(sizeof(void*) * hash->length);
+  hash->values         = (void**) uprv_malloc(sizeof(void*) * hash->length);
   if(hash->values == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return;
   }
 
-  hash->hashes         = (int32_t*) icu_malloc(sizeof(int32_t) * hash->length);
+  hash->hashes         = (int32_t*) uprv_malloc(sizeof(int32_t) * hash->length);
   if(hash->values == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
-    icu_free(hash->values);
+    uprv_free(hash->values);
     return;
   }
 
@@ -413,8 +413,8 @@ uhash_rehash(UHashtable *hash,
     }
   }
   
-  icu_free(oldValues);
-  icu_free(oldHashList);
+  uprv_free(oldValues);
+  uprv_free(oldHashList);
 }
 
 void
@@ -536,7 +536,7 @@ uhash_hashString(const void *parm)
 {
   if(parm != NULL) {
     const char *key     = (const char*) parm;
-    int32_t len         = icu_strlen(key);
+    int32_t len         = uprv_strlen(key);
     int32_t hash         = UHASH_INVALID;
     const char *limit     = key + len;
     int32_t inc         = (len >= 128 ? len/64 : 1);

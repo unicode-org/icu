@@ -28,38 +28,38 @@
 #include <string.h>
 #include <ctype.h>
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 
-#define icu_strcpy(dst, src) strcpy(dst, src)
-#define icu_strcpyWithSize(dst, src, size) strncpy(dst, src, size)
-#define icu_strncpy(dst, src, size) strncpy(dst, src, size)
-#define icu_strlen(str) strlen(str)
-#define icu_strcmp(s1, s2) strcmp(s1, s2)
-#define icu_strncmp(s1, s2, n) strncmp(s1, s2, n)
-#define icu_strcat(dst, src) strcat(dst, src)
-#define icu_strncat(dst, src, n) strncat(dst, src, n)
-#define icu_strchr(s, c) strchr(s, c)
-#define icu_strstr(s, c) strstr(s, c)
-#define icu_strrchr(s, c) strrchr(s, c)
-#define icu_toupper(c) toupper(c)
-#define icu_tolower(c) tolower(c)
-#define icu_strtoul(str, end, base) strtoul(str, end, base)
+#define uprv_strcpy(dst, src) strcpy(dst, src)
+#define uprv_strcpyWithSize(dst, src, size) strncpy(dst, src, size)
+#define uprv_strncpy(dst, src, size) strncpy(dst, src, size)
+#define uprv_strlen(str) strlen(str)
+#define uprv_strcmp(s1, s2) strcmp(s1, s2)
+#define uprv_strncmp(s1, s2, n) strncmp(s1, s2, n)
+#define uprv_strcat(dst, src) strcat(dst, src)
+#define uprv_strncat(dst, src, n) strncat(dst, src, n)
+#define uprv_strchr(s, c) strchr(s, c)
+#define uprv_strstr(s, c) strstr(s, c)
+#define uprv_strrchr(s, c) strrchr(s, c)
+#define uprv_toupper(c) toupper(c)
+#define uprv_tolower(c) tolower(c)
+#define uprv_strtoul(str, end, base) strtoul(str, end, base)
 #ifdef WIN32
-#   define icu_stricmp(str1, str2) _stricmp(str1, str2)
+#   define uprv_stricmp(str1, str2) _stricmp(str1, str2)
 #elif defined(POSIX)
-#   define icu_stricmp(str1, str2) strcasecmp(str1, str2)
+#   define uprv_stricmp(str1, str2) strcasecmp(str1, str2)
 #else
-#   define icu_stricmp(str1, str2) T_CString_stricmp(str1, str2)
+#   define uprv_stricmp(str1, str2) T_CString_stricmp(str1, str2)
 #endif
 
 /*===========================================================================*/
 /* Wide-character functions                                                  */
 /*===========================================================================*/
-#define icu_wcscat(dst, src) wcscat(dst, src)
-#define icu_wcscpy(dst, src) wcscpy(dst, src)
-#define icu_wcslen(src) wcslen(src)
-#define icu_wcstombs(mbstr, wcstr, count) wcstombs(mbstr, wcstr, count)
-#define icu_mbstowcs(wcstr, mbstr, count) mbstowcs(wcstr, mbstr, count)
+#define uprv_wcscat(dst, src) wcscat(dst, src)
+#define uprv_wcscpy(dst, src) wcscpy(dst, src)
+#define uprv_wcslen(src) wcslen(src)
+#define uprv_wcstombs(mbstr, wcstr, count) wcstombs(mbstr, wcstr, count)
+#define uprv_mbstowcs(wcstr, mbstr, count) mbstowcs(wcstr, mbstr, count)
 
 U_CAPI char* U_EXPORT2
 T_CString_toLowerCase(char* str);

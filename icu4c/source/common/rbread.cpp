@@ -19,10 +19,10 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
-#include "ustring.h"
+#include "unicode/ustring.h"
 #include "rbdata.h"
 
-#include "unistr.h"
+#include "unicode/unistr.h"
 #include "rbdata.h"
 
 
@@ -62,8 +62,8 @@ read_ustring(FileStream *rb,
   while(remain != 0) {
 
     /* Read the next chunk of data */
-    readLen = icu_min(BUF_SIZE, remain);
-    icu_memset(buf, 0, readLen*sizeof(UChar));
+    readLen = uprv_min(BUF_SIZE, remain);
+    uprv_memset(buf, 0, readLen*sizeof(UChar));
     T_FileStream_read(rb, buf, sizeof(UChar) * readLen);
 
     /* Append the chunk to the string */

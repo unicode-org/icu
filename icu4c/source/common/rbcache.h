@@ -18,7 +18,7 @@
 */
 
 #include "uhash.h"
-#include "unistr.h"
+#include "unicode/unistr.h"
 
 /**
  * A class which represents an ordinary Hashtable which deletes its contents when it

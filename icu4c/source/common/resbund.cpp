@@ -47,7 +47,7 @@
 
 #include "rbcache.h"
 
-#include "resbund.h"
+#include "unicode/resbund.h"
 #include "mutex.h"
 
 #include "unistrm.h"
@@ -342,9 +342,9 @@ ResourceBundle::ResourceBundle(const wchar_t* path,
   : fgCache(fgUserCache),
     fgVisitedFiles(fgUserVisitedFiles)
 {
-  int32_t wideNameLen = icu_mbstowcs(NULL, kDefaultSuffix, kDefaultSuffixLen);
+  int32_t wideNameLen = uprv_mbstowcs(NULL, kDefaultSuffix, kDefaultSuffixLen);
   wchar_t* wideName = new wchar_t[wideNameLen + 1];
-  icu_mbstowcs(wideName, kDefaultSuffix, kDefaultSuffixLen);
+  uprv_mbstowcs(wideName, kDefaultSuffix, kDefaultSuffixLen);
   wideName[wideNameLen] = 0;
   constructForLocale(PathInfo(path, wideName), locale, err);
   delete [] wideName;
@@ -914,25 +914,25 @@ ResourceBundle::getVersionNumber()  const
     // the length of the major part + the length of the separator
     // (==1) + the length of the minor part (+ 1 for the zero byte at
     // the end).
-    int32_t len = icu_strlen(ICU_VERSION);
+    int32_t len = uprv_strlen(ICU_VERSION);
     int32_t minor_len = 0;
     if(U_SUCCESS(status) && minor_version.length() > 0) 
       minor_len = minor_version.length();
-    len += (minor_len > 0) ? minor_len : 1 /*==icu_strlen(kDefaultMinorVersion)*/;
+    len += (minor_len > 0) ? minor_len : 1 /*==uprv_strlen(kDefaultMinorVersion)*/;
     ++len; // Add length of separator
     
     // Allocate the string, and build it up.
     // + 1 for zero byte
     ((ResourceBundle*)this)->fVersionID = new char[1 + len]; 
     
-    icu_strcpy(fVersionID, ICU_VERSION);
-    icu_strcat(fVersionID, kVersionSeparator);
+    uprv_strcpy(fVersionID, ICU_VERSION);
+    uprv_strcat(fVersionID, kVersionSeparator);
     if(minor_len > 0) {
       minor_version.extract(0, minor_len, fVersionID + len - minor_len);
       fVersionID[len] =  0;
     }
     else {
-      icu_strcat(fVersionID, kDefaultMinorVersion);
+      uprv_strcat(fVersionID, kDefaultMinorVersion);
     }
   }
   return fVersionID;
@@ -1148,10 +1148,10 @@ ResourceBundle::PathInfo::PathInfo(const PathInfo& source)
     fWPrefix(NULL), fWSuffix(NULL)
 {
   if(source.fWPrefix) {
-    fWPrefix = new wchar_t[icu_wcslen(source.fWPrefix)+1];
-    fWSuffix = new wchar_t[icu_wcslen(source.fWSuffix)+1];
-    icu_wcscpy(fWPrefix, source.fWPrefix);
-    icu_wcscpy(fWSuffix, source.fWSuffix);
+    fWPrefix = new wchar_t[uprv_wcslen(source.fWPrefix)+1];
+    fWSuffix = new wchar_t[uprv_wcslen(source.fWSuffix)+1];
+    uprv_wcscpy(fWPrefix, source.fWPrefix);
+    uprv_wcscpy(fWSuffix, source.fWSuffix);
   }
 }
 
@@ -1176,10 +1176,10 @@ ResourceBundle::PathInfo::PathInfo(const wchar_t* path,
     fWPrefix(NULL), 
     fWSuffix(NULL)
 {
-  fWPrefix = new wchar_t[icu_wcslen(path)+1];
-  fWSuffix = new wchar_t[icu_wcslen(suffix)+1];
-  icu_wcscpy(fWPrefix, path);
-  icu_wcscpy(fWSuffix, suffix);
+  fWPrefix = new wchar_t[uprv_wcslen(path)+1];
+  fWSuffix = new wchar_t[uprv_wcslen(suffix)+1];
+  uprv_wcscpy(fWPrefix, path);
+  uprv_wcscpy(fWSuffix, suffix);
 }
 
 ResourceBundle::PathInfo::~PathInfo()
@@ -1195,10 +1195,10 @@ ResourceBundle::PathInfo::operator=(const PathInfo& source)
     wchar_t* tempPref = NULL;
     wchar_t* tempSuff = NULL;
     if(source.fWPrefix) {
-      tempPref = new wchar_t[icu_wcslen(source.fWPrefix)+1];
-      tempSuff = new wchar_t[icu_wcslen(source.fWSuffix)+1];
-      icu_wcscpy(tempPref, source.fWPrefix);
-      icu_wcscpy(tempSuff, source.fWSuffix);
+      tempPref = new wchar_t[uprv_wcslen(source.fWPrefix)+1];
+      tempSuff = new wchar_t[uprv_wcslen(source.fWSuffix)+1];
+      uprv_wcscpy(tempPref, source.fWPrefix);
+      uprv_wcscpy(tempSuff, source.fWSuffix);
     }
     delete fWPrefix;
     fWPrefix = tempPref;
@@ -1229,18 +1229,18 @@ ResourceBundle::PathInfo::makeCacheKey(const UnicodeString& name) const
   if(fWPrefix) {
     UnicodeString key;
     
-    size_t prefSize = icu_wcstombs(NULL, fWPrefix, ((size_t)-1) >> 1);
-    size_t suffSize = icu_wcstombs(NULL, fWSuffix, ((size_t)-1) >> 1);
-    size_t tempSize = icu_max((int32_t)prefSize, (int32_t)suffSize);
+    size_t prefSize = uprv_wcstombs(NULL, fWPrefix, ((size_t)-1) >> 1);
+    size_t suffSize = uprv_wcstombs(NULL, fWSuffix, ((size_t)-1) >> 1);
+    size_t tempSize = uprv_max((int32_t)prefSize, (int32_t)suffSize);
     char *temp = new char[tempSize + 1];
 
-    tempSize = icu_wcstombs(temp, fWPrefix, prefSize);
+    tempSize = uprv_wcstombs(temp, fWPrefix, prefSize);
     temp[tempSize] = 0;
     key += UnicodeString(temp);
     
     key += name;
     
-    tempSize = icu_wcstombs(temp, fWSuffix, suffSize);
+    tempSize = uprv_wcstombs(temp, fWSuffix, suffSize);
     temp[tempSize] = 0;
     key += UnicodeString(temp);
     
@@ -1265,18 +1265,18 @@ ResourceBundle::PathInfo::makeHashkey(const UnicodeString& localeName) const
     
     key += kSeparator;
     
-    size_t prefSize = icu_wcstombs(NULL, fWPrefix, ((size_t)-1) >> 1);
-    size_t suffSize = icu_wcstombs(NULL, fWSuffix, ((size_t)-1) >> 1);
-    size_t tempSize = icu_max((int32_t)prefSize, (int32_t)suffSize);
+    size_t prefSize = uprv_wcstombs(NULL, fWPrefix, ((size_t)-1) >> 1);
+    size_t suffSize = uprv_wcstombs(NULL, fWSuffix, ((size_t)-1) >> 1);
+    size_t tempSize = uprv_max((int32_t)prefSize, (int32_t)suffSize);
     char *temp = new char[tempSize + 1];
     
-    tempSize = icu_wcstombs(temp, fWSuffix, suffSize);
+    tempSize = uprv_wcstombs(temp, fWSuffix, suffSize);
     temp[tempSize] = 0;
     key += UnicodeString(temp);
     
     key += kSeparator;
     
-    tempSize = icu_wcstombs(temp, fWPrefix, prefSize);
+    tempSize = uprv_wcstombs(temp, fWPrefix, prefSize);
     temp[tempSize] = 0;
     key += UnicodeString(temp);
     
@@ -1303,29 +1303,29 @@ ResourceBundle::PathInfo::openFile(const UnicodeString& localeName) const
     char* temp = new char[nameSize + 1];
     localeName.extract(0, nameSize, temp);
     temp[nameSize] = 0;
-    int32_t wideNameLen = icu_mbstowcs(NULL, temp, nameSize);
+    int32_t wideNameLen = uprv_mbstowcs(NULL, temp, nameSize);
     wchar_t* wideName = new wchar_t[wideNameLen + 1];
-    icu_mbstowcs(wideName, temp, nameSize);
+    uprv_mbstowcs(wideName, temp, nameSize);
     wideName[wideNameLen] = 0;
     delete [] temp;
     
-    size_t prefLen = icu_wcslen(fWPrefix);
-    size_t suffLen = icu_wcslen(fWSuffix);
+    size_t prefLen = uprv_wcslen(fWPrefix);
+    size_t suffLen = uprv_wcslen(fWSuffix);
     
     int32_t destSize = prefLen + suffLen + wideNameLen;
     wchar_t* dest = new wchar_t[destSize + 1];
-    icu_wcscpy(dest, fWPrefix);
+    uprv_wcscpy(dest, fWPrefix);
     dest[prefLen] = 0;
     
-    icu_wcscat(dest, wideName);
+    uprv_wcscat(dest, wideName);
     dest[prefLen + wideNameLen] = 0;
     
-    icu_wcscat(dest, fWSuffix);
+    uprv_wcscat(dest, fWSuffix);
     dest[destSize] = 0;
     
-    int32_t fmodeLen = icu_mbstowcs(NULL, "rb", 2);
+    int32_t fmodeLen = uprv_mbstowcs(NULL, "rb", 2);
     wchar_t* fmode = new wchar_t[fmodeLen + 1];
-    icu_mbstowcs(fmode, "rb", 2);
+    uprv_mbstowcs(fmode, "rb", 2);
     fmode[fmodeLen] = 0;
 
     FileStream* result = T_FileStream_wopen(dest, fmode);

@@ -23,8 +23,8 @@
 #include "ustdio.h"
 #include "ufile.h"
 #include "ufmt_cmn.h"
-#include "ucnv.h"
-#include "ustring.h"
+#include "unicode/ucnv.h"
+#include "unicode/ustring.h"
 
 #include <string.h>
 

@@ -20,8 +20,8 @@
 /* set import/export definitions */
 #ifdef U_COMMON_IMPLEMENTATION
 
-#include "utypes.h"
-#include "uchar.h"
+#include "unicode/utypes.h"
+#include "unicode/uchar.h"
 
 /* miscellaneous definitions ------------------------------------------------ */
 

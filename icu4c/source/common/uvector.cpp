@@ -127,7 +127,7 @@ bool_t UVector::ensureCapacity(int32_t minimumCapacity) {
             outOfMemory = TRUE;
             return FALSE;
         }
-        icu_memcpy(newElems, elements, sizeof(void*) * count);
+        uprv_memcpy(newElems, elements, sizeof(void*) * count);
         delete[] elements;
         elements = newElems;
         capacity = newCap;

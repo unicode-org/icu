@@ -4,7 +4,7 @@
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
 */
-// $Revision: 1.4 $
+// $Revision: 1.5 $
 //
 // Provides functionality for mapping between
 // LCID and Posix IDs.
@@ -29,7 +29,7 @@
 #include <math.h>
 
 #include "locmap.h"
-#include "locid.h"
+#include "unicode/locid.h"
 #include "mutex.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -244,7 +244,7 @@ IGlobalLocales::convertToLCID(const char* posixID)
 
     mid = (low + high) / 2;
 
-    int32_t compVal = icu_strcmp(langID, fgPosixIDmap[mid].posixLangID());
+    int32_t compVal = uprv_strcmp(langID, fgPosixIDmap[mid].posixLangID());
 
     if (mid == 0)  // not found
        break;
@@ -446,7 +446,7 @@ ILcidPosixMap::hostID(const char* posixID) const
 
     mid = (low + high) / 2;
 
-    int32_t compVal = icu_strcmp(posixID, fRegionMaps[mid].fPosixID);
+    int32_t compVal = uprv_strcmp(posixID, fRegionMaps[mid].fPosixID);
 
     if (compVal < 0)
       high = mid - 1;

@@ -19,18 +19,18 @@
 *******************************************************************************
 */
 
-#include "uchar.h"
+#include "unicode/uchar.h"
 
 #include "uscanf.h"
 #include "uscanf_p.h"
 #include "uscanset.h"
 #include "ustdio.h"
 #include "ufile.h"
-#include "ustring.h"
+#include "unicode/ustring.h"
 #include "locbund.h"
 #include "umutex.h"
-#include "unum.h"
-#include "udat.h"
+#include "unicode/unum.h"
+#include "unicode/udat.h"
 
 #include <string.h>
 #include <stdlib.h>

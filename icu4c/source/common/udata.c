@@ -17,13 +17,13 @@
 *   created by: Markus W. Scherer
 */
 
-#include "utypes.h"
-#include "putil.h"
+#include "unicode/utypes.h"
+#include "unicode/putil.h"
 #include "umutex.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
-#include "udata.h"
+#include "unicode/udata.h"
 
 #if !defined(HAVE_DLOPEN)
 # define HAVE_DLOPEN 0
@@ -151,8 +151,8 @@ LOAD_LIBRARY(const char *path, const char *basename, bool_t isCommon) {
     UErrorCode errorCode=U_ZERO_ERROR;
 
     /* set up the mapping name and the filename */
-    icu_strcpy(buffer, "icu ");
-    icu_strcat(buffer, basename);
+    uprv_strcpy(buffer, "icu ");
+    uprv_strcat(buffer, basename);
 
     /* open the mapping */
     map=OpenFileMapping(FILE_MAP_READ, FALSE, buffer);
@@ -184,7 +184,7 @@ LOAD_LIBRARY(const char *path, const char *basename, bool_t isCommon) {
     }
 
     /* allocate the data structure */
-    pData=(UDataMemory *)icu_malloc(sizeof(UDataMemory));
+    pData=(UDataMemory *)uprv_malloc(sizeof(UDataMemory));
     if(pData==NULL) {
         UnmapViewOfFile(pData->p);
         CloseHandle(map);
@@ -212,7 +212,7 @@ udata_close(UDataMemory *pData) {
             UnmapViewOfFile(pData->p);
             CloseHandle(pData->map);
         }
-        icu_free(pData);
+        uprv_free(pData);
     }
 }
 
@@ -350,7 +350,7 @@ LOAD_LIBRARY(const char *path, const char *basename, bool_t isCommon) {
 #endif
     
     /* allocate the data structure */
-    pData=(UDataMemory *)icu_malloc(sizeof(UDataMemory));
+    pData=(UDataMemory *)uprv_malloc(sizeof(UDataMemory));
     if(pData==NULL) {
         munmap(data, length);
         return NULL;
@@ -376,7 +376,7 @@ udata_close(UDataMemory *pData) {
         if(pData->length!=0 && munmap(pData->p, pData->length)==-1) {
             perror("munmap");
         }
-        icu_free(pData);
+        uprv_free(pData);
     }
 }
 #   endif 
@@ -409,7 +409,7 @@ getChoice(Library lib, const char *entry,
 
 #define NO_LIBRARY NULL
 #define IS_LIBRARY(lib) ((lib)!=NULL)
-#define UNLOAD_LIBRARY(lib) icu_free(lib)
+#define UNLOAD_LIBRARY(lib) uprv_free(lib)
 
 static Library
 LOAD_LIBRARY(const char *path, const char *basename, bool_t isCommon) {
@@ -431,7 +431,7 @@ LOAD_LIBRARY(const char *path, const char *basename, bool_t isCommon) {
     }
 
     /* allocate the data structure */
-    pData=(UDataMemory *)icu_malloc(fileLength);
+    pData=(UDataMemory *)uprv_malloc(fileLength);
     if(pData==NULL) {
         T_FileStream_close(file);
         return NULL;
@@ -439,7 +439,7 @@ LOAD_LIBRARY(const char *path, const char *basename, bool_t isCommon) {
 
     /* read the file */
     if(fileLength!=T_FileStream_read(file, pData, fileLength)) {
-        icu_free(pData);
+        uprv_free(pData);
         T_FileStream_close(file);
         return NULL;
     }
@@ -452,7 +452,7 @@ LOAD_LIBRARY(const char *path, const char *basename, bool_t isCommon) {
 U_CAPI void U_EXPORT2
 udata_close(UDataMemory *pData) {
     if(pData!=NULL) {
-        icu_free(pData);
+        uprv_free(pData);
     }
 }
 
@@ -474,7 +474,7 @@ udata_getInfo(UDataMemory *pData, UDataInfo *pInfo) {
             if(size>info->size) {
                 pInfo->size=info->size;
             }
-            icu_memcpy((uint16_t *)pInfo+1, (uint16_t *)info+1, size-2);
+            uprv_memcpy((uint16_t *)pInfo+1, (uint16_t *)info+1, size-2);
         } else {
             pInfo->size=0;
         }
@@ -496,7 +496,7 @@ udata_close(UDataMemory *pData) {
         if(IS_LIBRARY(pData->lib)) {
             UNLOAD_LIBRARY(pData->lib);
         }
-        icu_free(pData);
+        uprv_free(pData);
     }
 }
 
@@ -518,14 +518,14 @@ getCommonMapData(const UDataMemory *data, const char *dataName) {
         limit=*toc++;   /* number of names in this table of contents */
         while(start<limit-1) {
             number=(start+limit)/2;
-            if(icu_strcmp(dataName, (const char *)(base+toc[2*number]))<0) {
+            if(uprv_strcmp(dataName, (const char *)(base+toc[2*number]))<0) {
                 limit=number;
             } else {
                 start=number;
             }
         }
 
-        if(icu_strcmp(dataName, (const char *)(base+toc[2*start]))==0) {
+        if(uprv_strcmp(dataName, (const char *)(base+toc[2*start]))==0) {
             /* found it */
             return (MappedData *)(base+toc[2*start+1]);
         } else {
@@ -574,7 +574,7 @@ udata_getInfo(UDataMemory *pData, UDataInfo *pInfo) {
             if(size>info->size) {
                 pInfo->size=info->size;
             }
-            icu_memcpy((uint16_t *)pInfo+1, (uint16_t *)info+1, size-2);
+            uprv_memcpy((uint16_t *)pInfo+1, (uint16_t *)info+1, size-2);
         } else {
             pInfo->size=0;
         }
@@ -591,8 +591,8 @@ static const char *strcpy_dllentry(char *target, const char *src)
 {
     int i, length;
 
-    icu_strcpy(target,src);
-    length = icu_strlen(target);
+    uprv_strcpy(target,src);
+    length = uprv_strlen(target);
     for(i=0;i<length;i++)
     {
          if(target[i] == '-')
@@ -607,11 +607,11 @@ static const char *strcat_dllentry(char *target, const char *src)
 {
     int i, length;
 
-    i = icu_strlen(target); /* original size */
+    i = uprv_strlen(target); /* original size */
 
-    icu_strcat(target,src);
+    uprv_strcat(target,src);
 
-    length = i + icu_strlen(src);
+    length = i + uprv_strlen(src);
 
     for(;i<length;i++)
     {
@@ -645,8 +645,8 @@ doOpenChoice(const char *path, const char *type, const char *name,
         /* copy the path to the path buffer */
         path=u_getDataDirectory();
         if(path!=NULL && *path!=0) {
-            int length=icu_strlen(path);
-            icu_memcpy(pathBuffer, path, length);
+            int length=uprv_strlen(path);
+            uprv_memcpy(pathBuffer, path, length);
             basename+=length;
             hasPath=TRUE;
         } else {
@@ -655,11 +655,11 @@ doOpenChoice(const char *path, const char *type, const char *name,
 
         /* add (prefix and) basename */
 #       ifndef LIB_PREFIX
-            icu_strcpy(basename, COMMON_DATA_NAME);
+            uprv_strcpy(basename, COMMON_DATA_NAME);
             suffix=basename+COMMON_DATA_NAME_LENGTH;
 #       else
-            icu_memcpy(basename, LIB_PREFIX, LIB_PREFIX_LENGTH);
-            icu_strcpy(basename+LIB_PREFIX_LENGTH, COMMON_DATA_NAME);
+            uprv_memcpy(basename, LIB_PREFIX, LIB_PREFIX_LENGTH);
+            uprv_strcpy(basename+LIB_PREFIX_LENGTH, COMMON_DATA_NAME);
             suffix=basename+LIB_PREFIX_LENGTH+COMMON_DATA_NAME_LENGTH;
 #       endif
         hasBasename=TRUE;
@@ -669,14 +669,14 @@ doOpenChoice(const char *path, const char *type, const char *name,
         isICUData=FALSE;
 
         /* find the last file sepator */
-        basename=icu_strrchr(path, '/');
+        basename=uprv_strrchr(path, '/');
         if(basename==NULL) {
             basename=(char *)path;
         } else {
             ++basename;
         }
 
-        basename2=icu_strrchr(basename, '\\');
+        basename2=uprv_strrchr(basename, '\\');
         if(basename2!=NULL) {
             basename=basename2+1;
         }
@@ -684,16 +684,16 @@ doOpenChoice(const char *path, const char *type, const char *name,
         if(path!=basename) {
 #           ifndef LIB_PREFIX
                 /* copy the path/basename to the path buffer */
-                icu_strcpy(pathBuffer, path);
+                uprv_strcpy(pathBuffer, path);
                 basename=pathBuffer+(basename-path);
 #           else
                 /* copy the path to the path buffer */
-                icu_memcpy(pathBuffer, path, basename-path);
+                uprv_memcpy(pathBuffer, path, basename-path);
 
                 /* add prefix and basename */
                 suffix=pathBuffer+(basename-path);
-                icu_memcpy(suffix, LIB_PREFIX, LIB_PREFIX_LENGTH);
-                icu_strcpy(suffix+LIB_PREFIX_LENGTH, basename);
+                uprv_memcpy(suffix, LIB_PREFIX, LIB_PREFIX_LENGTH);
+                uprv_strcpy(suffix+LIB_PREFIX_LENGTH, basename);
                 basename=suffix;
 #           endif
             hasPath=TRUE;
@@ -701,8 +701,8 @@ doOpenChoice(const char *path, const char *type, const char *name,
             /* copy the path to the path buffer */
             path=u_getDataDirectory();
             if(path!=NULL && *path!=0) {
-                int length=icu_strlen(path);
-                icu_memcpy(pathBuffer, path, length);
+                int length=uprv_strlen(path);
+                uprv_memcpy(pathBuffer, path, length);
                 suffix=pathBuffer+length;
                 hasPath=TRUE;
             } else {
@@ -712,16 +712,16 @@ doOpenChoice(const char *path, const char *type, const char *name,
 
             /* add (prefix and) basename */
 #           ifndef LIB_PREFIX
-                icu_strcpy(suffix, basename);
+                uprv_strcpy(suffix, basename);
 #           else
-                icu_memcpy(suffix, LIB_PREFIX, LIB_PREFIX_LENGTH);
-                icu_strcpy(suffix+LIB_PREFIX_LENGTH, basename);
+                uprv_memcpy(suffix, LIB_PREFIX, LIB_PREFIX_LENGTH);
+                uprv_strcpy(suffix+LIB_PREFIX_LENGTH, basename);
 #           endif
             basename=suffix;
         }
         hasBasename= *basename!=0;
         if(hasBasename) {
-            suffix=basename+icu_strlen(basename);
+            suffix=basename+uprv_strlen(basename);
         }
     }
     path=pathBuffer;
@@ -731,19 +731,19 @@ doOpenChoice(const char *path, const char *type, const char *name,
 #ifdef UDATA_DLL
         strcpy_dllentry(entryNameBuffer, name);
 #else
-        icu_strcpy(entryNameBuffer, name);
+        uprv_strcpy(entryNameBuffer, name);
 #endif
 
 #       ifdef UDATA_DLL
-            icu_strcat(entryNameBuffer, "_");
+            uprv_strcat(entryNameBuffer, "_");
 #       else
-            icu_strcat(entryNameBuffer, ".");
+            uprv_strcat(entryNameBuffer, ".");
 #       endif
 
 #ifdef UDATA_DLL
         strcat_dllentry(entryNameBuffer, type);
 #else
-        icu_strcat(entryNameBuffer, type);
+        uprv_strcat(entryNameBuffer, type);
 #endif
 
         entryName=entryNameBuffer;
@@ -772,7 +772,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
             /* load the common data if neccessary */
             if(!IS_LIBRARY(lib)) {
                 /* try path/basename first */
-                icu_strcpy(suffix, LIB_SUFFIX);
+                uprv_strcpy(suffix, LIB_SUFFIX);
                 lib=LOAD_LIBRARY(path, basename, TRUE);
                 if(!IS_LIBRARY(lib)) {
                     /* try basename only next */
@@ -820,9 +820,9 @@ doOpenChoice(const char *path, const char *type, const char *name,
     /* try basename+"_"+entryName[+LIB_SUFFIX] first */
     if(p==NULL && hasBasename) {
         *suffix='_';
-        icu_strcpy(suffix+1, entryName);
+        uprv_strcpy(suffix+1, entryName);
 #       ifdef UDATA_DLL
-            icu_strcat(suffix+1, LIB_SUFFIX);
+            uprv_strcat(suffix+1, LIB_SUFFIX);
 #       endif
 
         /* try path/basename first */
@@ -849,12 +849,12 @@ doOpenChoice(const char *path, const char *type, const char *name,
     /* try entryName[+LIB_SUFFIX] next */
     if(p==NULL) {
 #       ifndef LIB_PREFIX
-            icu_strcpy(basename, entryName);
+            uprv_strcpy(basename, entryName);
 #       else
-            icu_strcpy(basename+LIB_PREFIX_LENGTH, entryName);
+            uprv_strcpy(basename+LIB_PREFIX_LENGTH, entryName);
 #       endif
 #       ifdef UDATA_DLL
-            icu_strcat(basename, LIB_SUFFIX);
+            uprv_strcat(basename, LIB_SUFFIX);
 #       endif
 
         /* try path/basename first */
@@ -896,7 +896,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
 #           endif
 
             /* allocate the data structure */
-            pData=(UDataMemory *)icu_malloc(sizeof(UDataMemory));
+            pData=(UDataMemory *)uprv_malloc(sizeof(UDataMemory));
             if(pData==NULL) {
                 if(IS_LIBRARY(lib)) {
                     UNLOAD_LIBRARY(lib);
@@ -909,7 +909,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
                 pData->lib=lib;
 #           else
                 /* defined(UDATA_MAP) && !IS_LIBRARY(lib) */
-                icu_memset(pData, 0, sizeof(pData));
+                uprv_memset(pData, 0, sizeof(pData));
 #           endif
 
             pData->p=p;

@@ -22,10 +22,10 @@
 #ifndef LOCBUND_H
 #define LOCBUND_H
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 
-#include "unum.h"
-#include "udat.h"
+#include "unicode/unum.h"
+#include "unicode/udat.h"
 
 struct ULocaleBundle {
   char         *fLocale;

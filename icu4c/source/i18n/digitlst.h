@@ -24,7 +24,7 @@
 #ifndef DIGITLST_H
 #define DIGITLST_H
  
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include <float.h>
 
 // Decimal digits in a 32-bit int

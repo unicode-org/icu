@@ -22,7 +22,7 @@
 #ifndef USCANSET_H
 #define USCANSET_H
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 
 
 /**

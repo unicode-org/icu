@@ -33,7 +33,7 @@
 
 
 
-#define arrayRegionMatches(source, sourceStart, target, targetStart, len) (icu_memcmp(&source[sourceStart], &target[targetStart], len * sizeof(int16_t)) != 0)
+#define arrayRegionMatches(source, sourceStart, target, targetStart, len) (uprv_memcmp(&source[sourceStart], &target[targetStart], len * sizeof(int16_t)) != 0)
 
 /* internal constants*/
 #define UCMP16_kMaxUnicode_int 65535
@@ -78,7 +78,7 @@ int32_t ucmp16_getkBlockCount()
 CompactShortArray* ucmp16_open(int16_t defaultValue)
 {
   int32_t i;
-  CompactShortArray* this_obj = (CompactShortArray*) icu_malloc(sizeof(CompactShortArray));
+  CompactShortArray* this_obj = (CompactShortArray*) uprv_malloc(sizeof(CompactShortArray));
   if (this_obj == NULL) return NULL;
   
   this_obj->fStructSize = sizeof(CompactShortArray);
@@ -91,17 +91,17 @@ CompactShortArray* ucmp16_open(int16_t defaultValue)
   this_obj->fHashes = NULL; 
   this_obj->fDefaultValue = defaultValue;
   
-  this_obj->fArray = (int16_t*)icu_malloc(UCMP16_kUnicodeCount * sizeof(int16_t));
+  this_obj->fArray = (int16_t*)uprv_malloc(UCMP16_kUnicodeCount * sizeof(int16_t));
   if (this_obj->fArray == NULL)
     {
       this_obj->fBogus = TRUE;
       return NULL;
     }
   
-  this_obj->fIndex = (uint16_t*)icu_malloc(UCMP16_kIndexCount * sizeof(uint16_t));
+  this_obj->fIndex = (uint16_t*)uprv_malloc(UCMP16_kIndexCount * sizeof(uint16_t));
   if (this_obj->fIndex == NULL)
     {
-      icu_free(this_obj->fArray);
+      uprv_free(this_obj->fArray);
       this_obj->fArray = NULL;
       
       this_obj->fBogus = TRUE;
@@ -115,11 +115,11 @@ CompactShortArray* ucmp16_open(int16_t defaultValue)
       this_obj->fArray[i] = defaultValue;
     }
   
-  this_obj->fHashes =(int32_t*)icu_malloc(UCMP16_kIndexCount * sizeof(int32_t));
+  this_obj->fHashes =(int32_t*)uprv_malloc(UCMP16_kIndexCount * sizeof(int32_t));
   if (this_obj->fHashes == NULL)
     {
-      icu_free(this_obj->fArray);
-      icu_free(this_obj->fIndex);
+      uprv_free(this_obj->fArray);
+      uprv_free(this_obj->fIndex);
       this_obj->fBogus = TRUE;
       return NULL;
     }
@@ -138,7 +138,7 @@ CompactShortArray* ucmp16_openAdopt(uint16_t *indexArray,
                     int32_t count,
                     int16_t defaultValue)
 {
-  CompactShortArray* this_obj = (CompactShortArray*) icu_malloc(sizeof(CompactShortArray));
+  CompactShortArray* this_obj = (CompactShortArray*) uprv_malloc(sizeof(CompactShortArray));
   if (this_obj == NULL) return NULL;
   this_obj->fHashes = NULL;
   this_obj->fCount = count; 
@@ -179,7 +179,7 @@ CompactShortArray* ucmp16_openAlias(uint16_t *indexArray,
                     int32_t count,
                     int16_t defaultValue)
 {
-  CompactShortArray* this_obj = (CompactShortArray*) icu_malloc(sizeof(CompactShortArray));
+  CompactShortArray* this_obj = (CompactShortArray*) uprv_malloc(sizeof(CompactShortArray));
   if (this_obj == NULL) return NULL;
   this_obj->fHashes = NULL;
   this_obj->fCount = count; 
@@ -202,16 +202,16 @@ void ucmp16_close(CompactShortArray* this_obj)
   if(this_obj != NULL) {
     if(!this_obj->fAlias) {
       if(this_obj->fArray != NULL) {
-        icu_free(this_obj->fArray);
+        uprv_free(this_obj->fArray);
       }
       if(this_obj->fIndex != NULL) {
-        icu_free(this_obj->fIndex);
+        uprv_free(this_obj->fIndex);
       }
     }
     if(this_obj->fHashes != NULL) {
-      icu_free(this_obj->fHashes);
+      uprv_free(this_obj->fHashes);
     }
-    icu_free(this_obj);
+    uprv_free(this_obj);
   }
 }
 
@@ -219,13 +219,13 @@ CompactShortArray* setToBogus(CompactShortArray* this_obj)
 {
   if(this_obj != NULL) {
     if(!this_obj->fAlias) {
-      icu_free(this_obj->fArray);
+      uprv_free(this_obj->fArray);
       this_obj->fArray = NULL;
   
-      icu_free(this_obj->fIndex);
+      uprv_free(this_obj->fIndex);
       this_obj->fIndex = NULL;
     }
-    icu_free(this_obj->fHashes);
+    uprv_free(this_obj->fHashes);
     this_obj->fHashes = NULL;
 
     this_obj->fCount = 0;
@@ -242,7 +242,7 @@ void ucmp16_expand(CompactShortArray* this_obj)
   if (this_obj->fCompact)
     {
       int32_t i;
-      int16_t *tempArray = (int16_t*)icu_malloc(UCMP16_kUnicodeCount * sizeof(int16_t));
+      int16_t *tempArray = (int16_t*)uprv_malloc(UCMP16_kUnicodeCount * sizeof(int16_t));
       
       if (tempArray == NULL)
     {
@@ -260,7 +260,7 @@ void ucmp16_expand(CompactShortArray* this_obj)
       this_obj->fIndex[i] = (uint16_t)(i<<this_obj->kBlockShift);
         }
       
-      icu_free(this_obj->fArray);
+      uprv_free(this_obj->fArray);
       this_obj->fArray = tempArray;
       this_obj->fCompact = FALSE;
     }
@@ -357,7 +357,7 @@ void ucmp16_compact(CompactShortArray* this_obj)
           if (this_obj->fIndex[i] == 0xFFFF)
         {
           /* we didn't match, so copy & update*/
-          icu_memcpy(&(this_obj->fArray[jBlockStart]), 
+          uprv_memcpy(&(this_obj->fArray[jBlockStart]), 
                  &(this_obj->fArray[iBlockStart]),
                  (1 << this_obj->kBlockShift)*sizeof(int16_t));
           
@@ -378,14 +378,14 @@ void ucmp16_compact(CompactShortArray* this_obj)
         /* we are done compacting, so now make the array shorter*/
       {
     int32_t newSize = limitCompacted * (1 << this_obj->kBlockShift);
-    int16_t *result = (int16_t*) icu_malloc(sizeof(int16_t) * newSize);
+    int16_t *result = (int16_t*) uprv_malloc(sizeof(int16_t) * newSize);
     
-    icu_memcpy(result, this_obj->fArray, newSize * sizeof(int16_t));
+    uprv_memcpy(result, this_obj->fArray, newSize * sizeof(int16_t));
 
-    icu_free(this_obj->fArray);
+    uprv_free(this_obj->fArray);
     this_obj->fArray = result;
     this_obj->fCount = newSize;
-    icu_free(this_obj->fHashes);
+    uprv_free(this_obj->fHashes);
     this_obj->fHashes = NULL;
 
     this_obj->fCompact = TRUE;
@@ -453,7 +453,7 @@ U_CAPI  CompactShortArray * U_EXPORT2 ucmp16_cloneFromData(const uint8_t **sourc
     }
   array = (CompactShortArray*)malloc(sizeof(*array));
   
-  icu_memcpy(array,*source, sizeof(*array));
+  uprv_memcpy(array,*source, sizeof(*array));
 
   *source += array->fStructSize;
 

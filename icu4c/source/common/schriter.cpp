@@ -13,8 +13,8 @@
 *******************************************************************************
 */
 
-#include "chariter.h"
-#include "schriter.h"
+#include "unicode/chariter.h"
+#include "unicode/schriter.h"
 
 
 UClassID StringCharacterIterator::fgClassID = 0;
