@@ -652,7 +652,8 @@ bidiClassLineFn(void *context,
                 char *fields[][2], int32_t fieldCount,
                 UErrorCode *pErrorCode) {
     char *s;
-    uint32_t oldStart, start, limit, value, props32;
+    uint32_t oldStart, start, limit, props32;
+    int32_t value;
     UBool didSet;
 
     /* get the code point range */
