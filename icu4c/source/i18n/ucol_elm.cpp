@@ -592,8 +592,9 @@ uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *elemen
     }
 }
 
-void uprv_uca_getMaxExpansionHangul(CompactIntArray   *mapping, 
+void uprv_uca_getMaxExpansionJamo(CompactIntArray   *mapping, 
                                     MaxExpansionTable *maxexpansion,
+                                    UBool             jamospecial,
                                     UErrorCode        *status)
 {
   const uint32_t VBASE  = 0x1161;
@@ -605,18 +606,45 @@ void uprv_uca_getMaxExpansionHangul(CompactIntArray   *mapping,
   uint32_t t = TBASE + TCOUNT - 1;
   uint32_t ce;
 
-  while (v >= VBASE)
-  {
-    ce = ucmp32_get(mapping, v);
-    uprv_uca_setMaxExpansion(ce, 2, maxexpansion, status);
-    v --;
-  }
+  if (jamospecial) {
+      /* gets the max expansion in all unicode characters */
+      int     count   = maxexpansion->position;
+      uint8_t maxsize = 0;
+      while (count >= 0) {
+          uint8_t size = maxexpansion->expansionCESize[count];
+          if (size > maxsize) {
+              maxsize = size;
+          }
+      }
 
-  while (t >= TBASE)
-  {
-    ce = ucmp32_get(mapping, t);
-    uprv_uca_setMaxExpansion(ce, 3, maxexpansion, status);
-    t --;
+      while (v >= VBASE)
+      {
+        ce = ucmp32_get(mapping, v);
+        uprv_uca_setMaxExpansion(ce, maxsize << 1, maxexpansion, status);
+        v --;
+      }
+
+      while (t >= TBASE)
+      {
+        ce = ucmp32_get(mapping, t);
+        uprv_uca_setMaxExpansion(ce, maxsize * 3, maxexpansion, status);
+        t --;
+      }
+  }
+  else {
+      while (v >= VBASE)
+      {
+        ce = ucmp32_get(mapping, v);
+        uprv_uca_setMaxExpansion(ce, 2, maxexpansion, status);
+        v --;
+      }
+
+      while (t >= TBASE)
+      {
+        ce = ucmp32_get(mapping, t);
+        uprv_uca_setMaxExpansion(ce, 3, maxexpansion, status);
+        t --;
+      }
   }
 }
 
@@ -641,8 +669,9 @@ UCATableHeader *uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
     int32_t mappingSize = ucmp32_flattenMem(mapping, ms);
     const uint8_t *flattened = uprv_mstrm_getBuffer(ms, &mappingSize);
 
-    /* sets hangul expansions */
-    uprv_uca_getMaxExpansionHangul(mapping, maxexpansion, status);
+    /* sets jamo expansions */
+    uprv_uca_getMaxExpansionJamo(mapping, maxexpansion, t->image->jamoSpecial, 
+                                 status);
 
     uint32_t tableOffset = 0;
     uint8_t *dataStart;
