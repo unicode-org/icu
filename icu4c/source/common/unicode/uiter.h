@@ -55,17 +55,32 @@ enum {
     /**
      * Constant value that may be returned by UCharIteratorMove
      * indicating that the final UTF-16 index is not known, but that the move succeeded.
-     * This can occur after a setState() when the current UTF-16 index is not known
-     * and a move relative to the current index is requested.
+     * This can occur when moving relative to limit or length, or
+     * when moving relative to the current index after a setState()
+     * when the current UTF-16 index is not known.
+     *
      * It would be very inefficient to have to count from the beginning of the text
-     * just to get the current index after moving relative to it.
+     * just to get the current/limit/length index after moving relative to it.
      * The actual index can be determined with getIndex(UITER_CURRENT)
      * which will count the UChars if necessary.
      *
      * @draft ICU 2.6
      */
-    UITER_MOVE_UNKNOWN_INDEX=-2
+    UITER_UNKNOWN_INDEX=-2
 };
+
+/**
+ * Constant for UCharIterator getState() indicating an error or
+ * an unknown state.
+ * Returned by uiter_getState()/UCharIteratorGetState
+ * when an error occurs.
+ * Also, some UCharIterator implementations may not be able to return
+ * a valid state for each position. This will be clearly documented
+ * for each such iterator (none of the public ones here).
+ *
+ * @draft ICU 2.6
+ */
+#define UITER_NO_STATE ((uint32_t)0xffffffff)
 
 /**
  * Function type declaration for UCharIterator.getIndex().
@@ -103,22 +118,23 @@ UCharIteratorGetIndex(UCharIterator *iter, UCharIteratorOrigin origin);
  * because an iterator implementation may have to count the rest of the
  * UChars if the native storage is not UTF-16.
  *
- * When moving relative to the current position after setState() was called,
- * move() may return UITER_MOVE_UNKNOWN_INDEX (-2) to avoid an inefficient
+ * When moving relative to the limit or length, or
+ * relative to the current position after setState() was called,
+ * move() may return UITER_UNKNOWN_INDEX (-2) to avoid an inefficient
  * determination of the actual UTF-16 index.
  * The actual index can be determined with getIndex(UITER_CURRENT)
  * which will count the UChars if necessary.
- * See UITER_MOVE_UNKNOWN_INDEX for details.
+ * See UITER_UNKNOWN_INDEX for details.
  *
  * @param iter the UCharIterator structure ("this pointer")
  * @param delta can be positive, zero, or negative
  * @param origin move relative to the 0, start, limit, length, or current index
  * @return the new index, or U_SENTINEL on an error condition,
- *         or UITER_MOVE_UNKNOWN_INDEX when the index is not known.
+ *         or UITER_UNKNOWN_INDEX when the index is not known.
  *
  * @see UCharIteratorOrigin
  * @see UCharIterator
- * @see UITER_MOVE_UNKNOWN_INDEX
+ * @see UITER_UNKNOWN_INDEX
  * @draft ICU 2.1
  */
 typedef int32_t U_CALLCONV
@@ -242,11 +258,16 @@ UCharIteratorReserved(UCharIterator *iter, int32_t something);
  * the correct text contents and move relative to the current position
  * without performance degradation.
  *
+ * Some UCharIterator implementations may not be able to return
+ * a valid state for each position, in which case they return UITER_NO_STATE instead.
+ * This will be clearly documented for each such iterator (none of the public ones here).
+ *
  * @param iter the UCharIterator structure ("this pointer")
  * @return the state word
  *
  * @see UCharIterator
  * @see UCharIteratorSetState
+ * @see UITER_NO_STATE
  * @draft ICU 2.6
  */
 typedef uint32_t U_CALLCONV
@@ -495,13 +516,19 @@ uiter_previous32(UCharIterator *iter);
 /**
  * Get the "state" of the iterator in the form of a single 32-bit word.
  * This is a convenience function that calls iter->getState(iter)
- * if iter->getState is not NULL; if it is NULL, then 0xffffffff is returned.
+ * if iter->getState is not NULL;
+ * if it is NULL or any other error occurs, then UITER_NO_STATE is returned.
+ *
+ * Some UCharIterator implementations may not be able to return
+ * a valid state for each position, in which case they return UITER_NO_STATE instead.
+ * This will be clearly documented for each such iterator (none of the public ones here).
  *
  * @param iter the UCharIterator structure ("this pointer")
  * @return the state word
  *
  * @see UCharIterator
  * @see UCharIteratorGetState
+ * @see UITER_NO_STATE
  * @draft ICU 2.6
  */
 U_CAPI uint32_t U_EXPORT2
@@ -596,7 +623,8 @@ uiter_setUTF16BE(UCharIterator *iter, const char *s, int32_t length);
  *   (from a 4-byte UTF-8 sequence for the corresponding supplementary code point)
  *
  * getState() cannot also encode the UTF-16 index in the state value.
- * move() after setState() may return UITER_MOVE_UNKNOWN_INDEX.
+ * move(relative to limit or length), or
+ * move(relative to current) after setState(), may return UITER_UNKNOWN_INDEX.
  *
  * @param iter UCharIterator structure to be set for iteration
  * @param s UTF-8 string to iterate over
