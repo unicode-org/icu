@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TestTextPanel.java,v $ $Revision: 1.6 $ $Date: 2000/04/24 20:34:46 $
+ * @(#)$RCSfile: TestTextPanel.java,v $ $Revision: 1.7 $ $Date: 2000/04/24 21:11:45 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -13,8 +13,6 @@
  * will not be liable for any third party claims against you.
  */
 package com.ibm.richtext.tests;
-
-import com.ibm.test.TestFmwk;
 
 import java.util.Random;
 import java.awt.Color;
@@ -43,13 +41,12 @@ import com.ibm.textlayout.attributes.AttributeSet;
 import com.ibm.textlayout.attributes.TextAttribute;
 import com.ibm.textlayout.attributes.AttributeMap;
 
+// Note:  this used to be a TestFmwk test.  If you add
+// more tests to it, be sure to add them to 
+// com.ibm.test.richtext.FmwkTestTextPanel.test() -
+// otherwise they won't get run!
+
 public class TestTextPanel /*extends TestFmwk*/ {
-
-    public static void main(String[] args) throws Exception {
-
-        //new TestTextPanel().run(args);
-        new TestTextPanel().test();
-    }
 
     private final class TestListener implements TextPanelListener {
         
