@@ -748,6 +748,14 @@ SOURCE=.\uvector.cpp
 
 SOURCE=.\uvector.h
 # End Source File
+# Begin Source File
+
+SOURCE=.\uvectr32.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\uvectr32.h
+# End Source File
 # End Group
 # Begin Group "configuration"
 
