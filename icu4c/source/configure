@@ -3716,7 +3716,10 @@ if test x"$msg" = x; then
 fi
 echo "$ac_t""$msg" 1>&6
 
-ICULIBSUFFIXCNAME=`echo _$ICULIBSUFFIX | sed 's/[^A-Za-z0-9_]/_/g'`
+if test "$ICULIBSUFFIX" != ""
+then
+    ICULIBSUFFIXCNAME=`echo _$ICULIBSUFFIX | sed 's/[^A-Za-z0-9_]/_/g'`
+fi
 
 
 # Check whether --enable-tests or --disable-tests was given.
