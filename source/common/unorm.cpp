@@ -23,7 +23,14 @@
 */
 
 #include "unicode/utypes.h"
+
+// moved up to make unorm_cmpEquivFold work without normalization
 #include "unicode/ustring.h"
+#include "unormimp.h"
+#include "ustr_imp.h"
+
+#if !UCONFIG_NO_NORMALIZATION
+
 #include "unicode/udata.h"
 #include "unicode/uchar.h"
 #include "unicode/uiter.h"
@@ -31,11 +38,9 @@
 #include "unicode/usetiter.h"
 #include "unicode/unorm.h"
 #include "cmemory.h"
-#include "ustr_imp.h"
 #include "umutex.h"
 #include "utrie.h"
 #include "unicode/uset.h"
-#include "unormimp.h"
 
 /*
  * Status of tailored normalization
@@ -3834,6 +3839,29 @@ unorm_concatenate(const UChar *left, int32_t leftLength,
 
 /* compare canonically equivalent ------------------------------------------- */
 
+#else
+
+/*
+ * Normalization is not built into the ICU library, but case-insensitive
+ * comparisons are possible using unorm_cmpEquivFold().
+ * The following simply disables the decomposition part.
+ */
+
+static inline UBool
+_haveData(UErrorCode &errorCode) {
+    if(U_SUCCESS(errorCode)) {
+        errorCode=U_INTERNAL_PROGRAM_ERROR;
+    }
+    return FALSE;
+}
+
+static inline const UChar *
+_decompose(UChar32 /*c*/, UChar /*buffer*/[4], int32_t &/*length*/) {
+    return NULL;
+}
+
+#endif /* #if !UCONFIG_NO_NORMALIZATION */
+
 /*
  * Compare two strings for canonical equivalence.
  * Further options include case-insensitive comparison and
@@ -4281,6 +4309,8 @@ unorm_cmpEquivFold(const UChar *s1, int32_t length1,
     }
 }
 
+#if !UCONFIG_NO_NORMALIZATION
+
 U_CAPI int32_t U_EXPORT2
 unorm_compare(const UChar *s1, int32_t length1,
               const UChar *s2, int32_t length2,
@@ -4436,3 +4466,5 @@ cleanup:
 
     return result;
 }
+
+#endif /* #if !UCONFIG_NO_NORMALIZATION */

@@ -1,11 +1,11 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2002, International Business Machines
+*   Copyright (C) 2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
-*   file name:  testidn.c
+*   file name:  testidn.cpp
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -22,6 +22,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_IDNA
+
 #include "unicode/uchar.h"
 #include "unicode/putil.h"
 #include "cmemory.h"
@@ -494,6 +497,8 @@ loadIDNData(UErrorCode &errorCode) {
 
     return isDataLoaded;
 }
+
+#endif /* #if !UCONFIG_NO_IDNA */
 
 /*
  * Hey, Emacs, please set the following:

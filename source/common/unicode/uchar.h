@@ -2029,6 +2029,8 @@ UCharEnumTypeRange(const void *context, UChar32 start, UChar32 limit, UCharCateg
 U_CAPI void U_EXPORT2
 u_enumCharTypes(UCharEnumTypeRange *enumRange, const void *context);
 
+#if !UCONFIG_NO_NORMALIZATION
+
 /**
  * Returns the combining class of the code point as specified in UnicodeData.txt.
  *
@@ -2038,6 +2040,8 @@ u_enumCharTypes(UCharEnumTypeRange *enumRange, const void *context);
  */
 U_CAPI uint8_t U_EXPORT2
 u_getCombiningClass(UChar32 c);
+
+#endif
 
 /**
  * Returns the decimal digit value of a decimal digit character.

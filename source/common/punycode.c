@@ -31,6 +31,9 @@ http://www.nicemice.net/amc/
  */
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_IDNA
+
 #include "ustr_imp.h"
 #include "cstring.h"
 #include "cmemory.h"
@@ -561,3 +564,5 @@ u_strFromPunycode(const UChar *src, int32_t srcLength,
 }
 
 /* ### check notes on overflow handling - only necessary if not IDNA? are these Punycode functions to be public? */
+
+#endif /* #if !UCONFIG_NO_IDNA */

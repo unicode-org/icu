@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2002, International Business Machines
+ *   Copyright (C) 2003, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -13,6 +13,10 @@
  *   created on: 2003feb1
  *   created by: Ram Viswanadha
  */
+
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_IDNA
 
 #include "strprep.h"
 #include "utrie.h"
@@ -532,3 +536,4 @@ UBool StringPrep::isLabelSeparator(UChar32 ch, UErrorCode& status){
 
 U_NAMESPACE_END
 
+#endif /* #if !UCONFIG_NO_IDNA */

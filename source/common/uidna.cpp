@@ -1,11 +1,11 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2002, International Business Machines
+ *   Copyright (C) 2003, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
- *   file name:  strprep.cpp
+ *   file name:  uidna.cpp
  *   encoding:   US-ASCII
  *   tab size:   8 (not used)
  *   indentation:4
@@ -13,6 +13,11 @@
  *   created on: 2003feb1
  *   created by: Ram Viswanadha
  */
+
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_IDNA
+
 #include "unicode/uidna.h"
 #include "unicode/ustring.h"
 #include "strprep.h"
@@ -739,3 +744,4 @@ CLEANUP:
     return result;
 }
 
+#endif /* #if !UCONFIG_NO_IDNA */

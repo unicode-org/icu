@@ -60,6 +60,25 @@ Each 16-bit IDN word contains:
 /* file data ---------------------------------------------------------------- */
 /* indexes[] value names */
 
+#if UCONFIG_NO_IDNA
+
+/* dummy UDataInfo cf. udata.h */
+static UDataInfo dataInfo = {
+    sizeof(UDataInfo),
+    0,
+
+    U_IS_BIG_ENDIAN,
+    U_CHARSET_FAMILY,
+    U_SIZEOF_UCHAR,
+    0,
+
+    { 0, 0, 0, 0 },                 /* dummy dataFormat */
+    { 0, 0, 0, 0 },                 /* dummy formatVersion */
+    { 0, 0, 0, 0 }                  /* dummy dataVersion */
+};
+
+#else
+
 static int32_t indexes[_IDNA_INDEX_TOP]={ 0 };
 
 static uint16_t mappingData[_IDNA_MAPPING_DATA_SIZE]={0};
@@ -264,13 +283,23 @@ getFoldedValue(UNewTrie *trie, UChar32 start, int32_t offset) {
     }
 }
 
+#endif /* #if !UCONFIG_NO_IDNA */
+
 extern void
 generateData(const char *dataDir) {
     static uint8_t idnTrieBlock[100000];
 
     UNewDataMemory *pData;
     UErrorCode errorCode=U_ZERO_ERROR;
-    int32_t size, idnTrieSize, dataLength;
+    int32_t size, dataLength;
+
+#if UCONFIG_NO_IDNA
+
+    size=0;
+
+#else
+
+    int32_t idnTrieSize;
 
     idnTrieSize=utrie_serialize(&idnTrie, idnTrieBlock, sizeof(idnTrieBlock), getFoldedValue, TRUE, &errorCode);
     if(U_FAILURE(errorCode)) {
@@ -286,6 +315,7 @@ generateData(const char *dataDir) {
         printf("Maximum length of the mapping string is : %i \n", maxLength);
     }
 
+#endif
     
     /* write the data */
     pData=udata_create(dataDir, DATA_TYPE, U_ICUDATA_NAME "_" DATA_NAME, &dataInfo,
@@ -294,12 +324,17 @@ generateData(const char *dataDir) {
         fprintf(stderr, "gennorm: unable to create the output file, error %d\n", errorCode);
         exit(errorCode);
     }
+
+#if !UCONFIG_NO_IDNA
+
     indexes[_IDNA_INDEX_TRIE_SIZE]=idnTrieSize;
     indexes[_IDNA_INDEX_MAPPING_DATA_SIZE]=sizeof(mappingData);
 
     udata_writeBlock(pData, indexes, sizeof(indexes));
     udata_writeBlock(pData, idnTrieBlock, idnTrieSize);
     udata_writeBlock(pData, mappingData, sizeof(mappingData));
+
+#endif
 
     /* finish up */
     dataLength=udata_finish(pData, &errorCode);
@@ -314,6 +349,9 @@ generateData(const char *dataDir) {
         exit(U_INTERNAL_PROGRAM_ERROR);
     }
 }
+
+#if !UCONFIG_NO_IDNA
+
 extern void
 cleanUpData(void) {
 
@@ -321,6 +359,7 @@ cleanUpData(void) {
 
 }
 
+#endif /* #if !UCONFIG_NO_IDNA */
 
 /*
  * Hey, Emacs, please set the following:

@@ -1,11 +1,11 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2002, International Business Machines
+ *   Copyright (C) 2003, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
- *   file name:  strprep.cpp
+ *   file name:  nameprep.cpp
  *   encoding:   US-ASCII
  *   tab size:   8 (not used)
  *   indentation:4
@@ -13,6 +13,10 @@
  *   created on: 2003feb1
  *   created by: Ram Viswanadha
  */
+
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_IDNA
 
 #include "nameprep.h"
 // *****************************************************************************
@@ -37,5 +41,4 @@ UBool NamePrep::isNotProhibited(UChar32 ch){
 
 U_NAMESPACE_END
 
-
-
+#endif /* #if !UCONFIG_NO_IDNA */

@@ -16,7 +16,7 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_COLLATION
+#if !UCONFIG_NO_COLLATION && !UCONFIG_NO_NORMALIZATION
 
 #include "unicode/uiter.h"
 #include "unicode/unorm.h"
@@ -637,4 +637,4 @@ unorm_setIter(UNormIterator *uni, UCharIterator *iter, UNormalizationMode mode, 
     return &uni->api;
 }
 
-#endif
+#endif /* uconfig.h switches */
