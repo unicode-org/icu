@@ -40,10 +40,10 @@ static int dotestname(const char *name, const char *standard, const char *expect
 
     error = U_ZERO_ERROR;
     tag = ucnv_getStandardName(name, standard, &error);
-    if (!tag) {
+    if (!tag && expected) {
         log_err("FAIL: could not find %s standard name for %s\n", standard, name);
         res = 0;
-    } else if (expected && uprv_stricmp(expected, tag)) {
+    } else if (expected && (name == expected || uprv_stricmp(expected, tag))) {
         log_err("FAIL: expected %s for %s standard name for %s, got %s\n", expected, standard, name, tag);
         res = 0;
     }
@@ -90,9 +90,12 @@ static void TestStandardName()
         /*dotestname("cp1252", "MIME", "windows-1252") &&*/
         dotestname("ascii", "MIME", "us-ascii") &&
         dotestname("ascii", "IANA", "ANSI_X3.4-1968") &&
-        dotestname("cp850", "IANA", "IBM850"))
+        dotestname("cp850", "IANA", "IBM850") &&
+        dotestname("crazy", "MIME", NULL) &&
+        dotestname("ASCII", "crazy", NULL) &&
+        dotestname("LMBCS-1", "MIME", NULL))
     {
-        log_verbose("PASS: getting IANA and MIME stadard names works\n");
+        log_verbose("PASS: getting IANA and MIME standard names works\n");
     }
 }
 
@@ -151,6 +154,7 @@ static void TestStandardNames()
     static const char *asciiMIME[] = {
         "US-ASCII"
     };
+
     doTestNames("ASCII", "IANA", asciiIANA, ARRAY_SIZE(asciiIANA));
     doTestNames("US-ASCII", "IANA", asciiIANA, ARRAY_SIZE(asciiIANA));
     doTestNames("ASCII", "MIME", asciiMIME, ARRAY_SIZE(asciiMIME));
@@ -158,4 +162,6 @@ static void TestStandardNames()
 
     doTestNames("ASCII", "crazy", asciiMIME, -1);
     doTestNames("crazy", "MIME", asciiMIME, -1);
+
+    doTestNames("LMBCS-1", "MIME", asciiMIME, 0);
 }
