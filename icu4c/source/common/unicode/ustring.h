@@ -71,7 +71,7 @@
  * Determine the length of an array of UChar.
  *
  * @param s The array of UChars, NULL (U+0000) terminated.
- * @return The number of UChars in <TT>chars</TT>, minus the terminator.
+ * @return The number of UChars in <code>chars</code>, minus the terminator.
  * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
@@ -115,13 +115,13 @@ U_CAPI UBool U_EXPORT2
 u_strHasMoreChar32Than(const UChar *s, int32_t length, int32_t number);
 
 /**
- * Concatenate two ustrings.  Appends a copy of <TT>src</TT>,
- * including the null terminator, to <TT>dst</TT>. The initial copied
- * character from <TT>src</TT> overwrites the null terminator in <TT>dst</TT>.
+ * Concatenate two ustrings.  Appends a copy of <code>src</code>,
+ * including the null terminator, to <code>dst</code>. The initial copied
+ * character from <code>src</code> overwrites the null terminator in <code>dst</code>.
  *
  * @param dst The destination string.
  * @param src The source string.
- * @return A pointer to <TT>dst</TT>.
+ * @return A pointer to <code>dst</code>.
  * @stable ICU 2.0
  */
 U_CAPI UChar* U_EXPORT2
@@ -130,13 +130,16 @@ u_strcat(UChar     *dst,
 
 /**
  * Concatenate two ustrings.  
- * Appends at most <TT>n</TT> characters from <TT>src</TT> to <TT>dst</TT>.
- * Adds a null terminator.
+ * Appends at most <code>n</code> characters from <code>src</code> to <code>dst</code>.
+ * Adds a terminating NUL.
+ * If src is too long, then only <code>n-1</code> characters will be copied
+ * before the terminating NUL.
+ * If <code>n&lt;=0</code> then dst is not modified.
  *
  * @param dst The destination string.
  * @param src The source string.
  * @param n The maximum number of characters to compare.
- * @return A pointer to <TT>dst</TT>.
+ * @return A pointer to <code>dst</code>.
  * @stable ICU 2.0
  */
 U_CAPI UChar* U_EXPORT2
@@ -319,22 +322,30 @@ U_CAPI UChar * U_EXPORT2
 u_strrchr32(const UChar *s, UChar32 c);
 
 /**
- * Locates the first occurrence in the string str of any of the characters
- * in the string accept.
+ * Locates the first occurrence in the string <code>string</code> of any of the characters
+ * in the string <code>matchSet</code>.
  * Works just like C's strpbrk but with Unicode.
  *
- * @return A pointer to the  character in str that matches one of the
- *         characters in accept, or NULL if no such character is found.
+ * @param string The string in which to search, NUL-terminated.
+ * @param matchSet A NUL-terminated string defining a set of code points
+ *                 for which to search in the text string.
+ * @return A pointer to the  character in <code>string</code> that matches one of the
+ *         characters in <code>matchSet</code>, or NULL if no such character is found.
  * @stable ICU 2.0
  */
 U_CAPI UChar * U_EXPORT2
 u_strpbrk(const UChar *string, const UChar *matchSet);
 
 /**
- * Returns the number of consecutive characters in string1,
- * beginning with the first, that do not occur somewhere in string2.
+ * Returns the number of consecutive characters in <code>string</code>,
+ * beginning with the first, that do not occur somewhere in <code>matchSet</code>.
  * Works just like C's strcspn but with Unicode.
  *
+ * @param string The string in which to search, NUL-terminated.
+ * @param matchSet A NUL-terminated string defining a set of code points
+ *                 for which to search in the text string.
+ * @return The number of initial characters in <code>string</code> that do not
+ *         occur in <code>matchSet</code>.
  * @see u_strspn
  * @stable ICU 2.0
  */
@@ -342,10 +353,15 @@ U_CAPI int32_t U_EXPORT2
 u_strcspn(const UChar *string, const UChar *matchSet);
 
 /**
- * Returns the number of consecutive characters in string1,
- * beginning with the first, that occur somewhere in string2.
+ * Returns the number of consecutive characters in <code>string</code>,
+ * beginning with the first, that occur somewhere in <code>matchSet</code>.
  * Works just like C's strspn but with Unicode.
  *
+ * @param string The string in which to search, NUL-terminated.
+ * @param matchSet A NUL-terminated string defining a set of code points
+ *                 for which to search in the text string.
+ * @return The number of initial characters in <code>string</code> that do
+ *         occur in <code>matchSet</code>.
  * @see u_strcspn
  * @stable ICU 2.0
  */
@@ -387,9 +403,9 @@ u_strtok_r(UChar    *src,
  *
  * @param s1 A string to compare.
  * @param s2 A string to compare.
- * @return 0 if <TT>s1</TT> and <TT>s2</TT> are bitwise equal; a negative
- * value if <TT>s1</TT> is bitwise less than <TT>s2,/TT>; a positive
- * value if <TT>s1</TT> is bitwise greater than <TT>s2,/TT>.
+ * @return 0 if <code>s1</code> and <code>s2</code> are bitwise equal; a negative
+ * value if <code>s1</code> is bitwise less than <code>s2,/code>; a positive
+ * value if <code>s1</code> is bitwise greater than <code>s2,/code>.
  * @stable ICU 2.0
  */
 U_CAPI int32_t  U_EXPORT2
@@ -497,14 +513,14 @@ u_strCaseCompare(const UChar *s1, int32_t length1,
 
 /**
  * Compare two ustrings for bitwise equality. 
- * Compares at most <TT>n</TT> characters.
+ * Compares at most <code>n</code> characters.
  *
  * @param ucs1 A string to compare.
  * @param ucs2 A string to compare.
  * @param n The maximum number of characters to compare.
- * @return 0 if <TT>s1</TT> and <TT>s2</TT> are bitwise equal; a negative
- * value if <TT>s1</TT> is bitwise less than <TT>s2,/TT>; a positive
- * value if <TT>s1</TT> is bitwise greater than <TT>s2,/TT>.
+ * @return 0 if <code>s1</code> and <code>s2</code> are bitwise equal; a negative
+ * value if <code>s1</code> is bitwise less than <code>s2,/code>; a positive
+ * value if <code>s1</code> is bitwise greater than <code>s2,/code>.
  * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2
@@ -603,7 +619,7 @@ u_memcasecmp(const UChar *s1, const UChar *s2, int32_t length, uint32_t options)
  *
  * @param dst The destination string.
  * @param src The source string.
- * @return A pointer to <TT>dst</TT>.
+ * @return A pointer to <code>dst</code>.
  * @stable ICU 2.0
  */
 U_CAPI UChar* U_EXPORT2
@@ -612,13 +628,13 @@ u_strcpy(UChar     *dst,
 
 /**
  * Copy a ustring.
- * Copies at most <TT>n</TT> characters.  The result will be null terminated
- * if the length of <TT>src</TT> is less than <TT>n</TT>.
+ * Copies at most <code>n</code> characters.  The result will be null terminated
+ * if the length of <code>src</code> is less than <code>n</code>.
  *
  * @param dst The destination string.
  * @param src The source string.
  * @param n The maximum number of characters to copy.
- * @return A pointer to <TT>dst</TT>.
+ * @return A pointer to <code>dst</code>.
  * @stable ICU 2.0
  */
 U_CAPI UChar* U_EXPORT2
@@ -633,7 +649,7 @@ u_strncpy(UChar     *dst,
  *
  * @param dst The destination string.
  * @param src The source string.
- * @return A pointer to <TT>dst</TT>.
+ * @return A pointer to <code>dst</code>.
  * @stable ICU 2.0
  */
 U_CAPI UChar* U_EXPORT2 u_uastrcpy(UChar *dst,
@@ -641,14 +657,14 @@ U_CAPI UChar* U_EXPORT2 u_uastrcpy(UChar *dst,
 
 /**
  * Copy a byte string encoded in the default codepage to a ustring.
- * Copies at most <TT>n</TT> characters.  The result will be null terminated
- * if the length of <TT>src</TT> is less than <TT>n</TT>.
+ * Copies at most <code>n</code> characters.  The result will be null terminated
+ * if the length of <code>src</code> is less than <code>n</code>.
  * Performs a host byte to UChar conversion
  *
  * @param dst The destination string.
  * @param src The source string.
  * @param n The maximum number of characters to copy.
- * @return A pointer to <TT>dst</TT>.
+ * @return A pointer to <code>dst</code>.
  * @stable ICU 2.0
  */
 U_CAPI UChar* U_EXPORT2 u_uastrncpy(UChar *dst,
@@ -662,7 +678,7 @@ U_CAPI UChar* U_EXPORT2 u_uastrncpy(UChar *dst,
  *
  * @param dst The destination string.
  * @param src The source string.
- * @return A pointer to <TT>dst</TT>.
+ * @return A pointer to <code>dst</code>.
  * @stable ICU 2.0
  */
 U_CAPI char* U_EXPORT2 u_austrcpy(char *dst,
@@ -670,14 +686,14 @@ U_CAPI char* U_EXPORT2 u_austrcpy(char *dst,
 
 /**
  * Copy ustring to a byte string encoded in the default codepage.
- * Copies at most <TT>n</TT> characters.  The result will be null terminated
- * if the length of <TT>src</TT> is less than <TT>n</TT>.
+ * Copies at most <code>n</code> characters.  The result will be null terminated
+ * if the length of <code>src</code> is less than <code>n</code>.
  * Performs a UChar to host byte conversion
  *
  * @param dst The destination string.
  * @param src The source string.
  * @param n The maximum number of characters to copy.
- * @return A pointer to <TT>dst</TT>.
+ * @return A pointer to <code>dst</code>.
  * @stable ICU 2.0
  */
 U_CAPI char* U_EXPORT2 u_austrncpy(char *dst,
@@ -689,7 +705,7 @@ U_CAPI char* U_EXPORT2 u_austrncpy(char *dst,
  * @param dest The destination string
  * @param src The source string
  * @param count The number of characters to copy
- * @return A pointer to <TT>dest</TT>
+ * @return A pointer to <code>dest</code>
  * @stable ICU 2.0
  */
 U_CAPI UChar* U_EXPORT2
@@ -700,26 +716,26 @@ u_memcpy(UChar *dest, const UChar *src, int32_t count);
  * @param dest The destination string
  * @param src The source string
  * @param count The number of characters to move
- * @return A pointer to <TT>dest</TT>
+ * @return A pointer to <code>dest</code>
  * @stable ICU 2.0
  */
 U_CAPI UChar* U_EXPORT2
 u_memmove(UChar *dest, const UChar *src, int32_t count);
 
 /**
- * Initialize <TT>count</TT> characters of <TT>dest</TT> to <TT>c</TT>.
+ * Initialize <code>count</code> characters of <code>dest</code> to <code>c</code>.
  *
  * @param dest The destination string.
  * @param c The character to initialize the string.
  * @param count The maximum number of characters to set.
- * @return A pointer to <TT>dest</TT>.
+ * @return A pointer to <code>dest</code>.
  * @stable ICU 2.0
  */
 U_CAPI UChar* U_EXPORT2
 u_memset(UChar *dest, UChar c, int32_t count);
 
 /**
- * Compare the first <TT>count</TT> UChars of each buffer.
+ * Compare the first <code>count</code> UChars of each buffer.
  *
  * @param buf1 The first string to compare.
  * @param buf2 The second string to compare.
@@ -926,6 +942,7 @@ U_CAPI int32_t U_EXPORT2
 u_unescape(const char *src,
            UChar *dest, int32_t destCapacity);
 
+U_CDECL_BEGIN
 /**
  * Callback function for u_unescapeAt() that returns a character of
  * the source text given an offset and a context pointer.  The context
@@ -938,7 +955,6 @@ u_unescape(const char *src,
  * @see u_unescapeAt
  * @stable ICU 2.0
  */
-U_CDECL_BEGIN
 typedef UChar (U_CALLCONV *UNESCAPE_CHAR_AT)(int32_t offset, void *context);
 U_CDECL_END
 
