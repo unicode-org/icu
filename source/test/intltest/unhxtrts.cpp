@@ -169,9 +169,12 @@ void UniToHexTransliteratorTest::TestCloneEqual(){
 	
 
 	logln("Testing the =operator of the UnicodeToHexTransliterator");
-	UnicodeToHexTransliterator *transdefaultequal=transdefault;
-	UnicodeToHexTransliterator *trans1equal=trans1;
-	UnicodeToHexTransliterator *trans2equal=trans2;
+    UnicodeToHexTransliterator *transdefaultequal=new UnicodeToHexTransliterator();
+    UnicodeToHexTransliterator *trans1equal=new UnicodeToHexTransliterator();
+	UnicodeToHexTransliterator *trans2equal=new UnicodeToHexTransliterator();
+    *transdefaultequal=*transdefault;
+    *trans1equal=*trans1;
+    *trans2equal=*trans2;
 
 	if(transdefault->toPattern() != transdefaultequal->toPattern()      ||
 		transdefault->isUppercase() != transdefaultequal->isUppercase() ||
@@ -192,7 +195,9 @@ void UniToHexTransliteratorTest::TestCloneEqual(){
 		trans2clone->isUppercase() != trans2equal->isUppercase() ) {
 		errln("Error: equal() or clone() failed");
 	}
-
+    delete transdefaultequal;
+    delete trans1equal;
+    delete trans2equal;
 	delete transdefault;
 	delete trans1;
 	delete trans2;
