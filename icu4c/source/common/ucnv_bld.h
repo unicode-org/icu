@@ -216,15 +216,6 @@ struct UConverter {
 
 U_CDECL_END /* end of UConverter */
 
-typedef struct
-  {
-    UConverter *OptGrpConverter[0x20];    /* Converter per Opt. grp. */
-    uint8_t    OptGroup;                  /* default Opt. grp. for this LMBCS session */
-    uint8_t    localeConverterIndex;      /* reasonable locale match for index */
-
-  }
-UConverterDataLMBCS;
-
 #define CONVERTER_FILE_EXTENSION ".cnv"
 
 /**

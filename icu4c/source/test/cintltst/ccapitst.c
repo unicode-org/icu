@@ -21,6 +21,7 @@
 #include "unicode/ucnv_err.h"
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
+#include "ucnv_bld.h" /* for sizeof(UConverter) */
 #include "cintltst.h"
 #include "ccapitst.h"
 
@@ -1560,17 +1561,56 @@ static void TestConvertSafeCloneCallback()
     }
 }
 
+static UBool
+containsAnyOtherByte(uint8_t *p, int32_t length, uint8_t b) {
+    while(length>0) {
+        if(*p!=b) {
+            return TRUE;
+        }
+        ++p;
+        --length;
+    }
+    return FALSE;
+}
+
+static UBool
+usedStackBuffer(const void *p, const void *q) {
+    return
+        (UBool)
+            (p==q ||
+                ((const char *)p-(const char *)q)<16);
+}
+
 static void TestConvertSafeClone()
 {
-#define CLONETEST_CONVERTER_COUNT 12
+    /* one 'regular' & all the 'private stateful' converters */
+    static const char *const names[] = {
+        "ibm-1047",
+        "ISO_2022,locale=zh,version=1",
+        "SCSU",
+        "HZ",
+        "lmbcs",
+        "ISCII,version=0",
+        "ISO_2022,locale=kr,version=1",
+        "ISO_2022,locale=jp,version=2",
+        "BOCU-1",
+        "UTF-7",
+        "IMAP-mailbox-name",
+        "ibm-1047-s390"
+    };
+
+    static const int32_t bufferSizes[] = {
+        U_CNV_SAFECLONE_BUFFERSIZE,
+        (int32_t)(3*sizeof(UConverter))/2,  /* 1.5*sizeof(UConverter) */
+        (int32_t)sizeof(UConverter)/2       /* 0.5*sizeof(UConverter) */
+    };
 
     char charBuffer [21];   /* Leave at an odd number for alignment testing */
-    uint8_t buffer [CLONETEST_CONVERTER_COUNT] [U_CNV_SAFECLONE_BUFFERSIZE];
-    int32_t bufferSize = U_CNV_SAFECLONE_BUFFERSIZE;
-    UConverter * someConverters [CLONETEST_CONVERTER_COUNT];
-    UConverter * someClonedConverters [CLONETEST_CONVERTER_COUNT];
-    UConverter * cnv;
-    UErrorCode err = U_ZERO_ERROR;
+    uint8_t buffer [3] [U_CNV_SAFECLONE_BUFFERSIZE];
+    int32_t bufferSize, maxBufferSize;
+    const char *maxName;
+    UConverter * cnv, *cnv2;
+    UErrorCode err;
 
     char *pCharBuffer;
     const char *pConstCharBuffer;
@@ -1584,139 +1624,172 @@ static void TestConvertSafeClone()
     UChar *pUCharTargetLimit = uniCharBuffer + sizeof(uniCharBuffer)/sizeof(*uniCharBuffer);
     const UChar * pUniBuffer;
     const UChar *uniBufferLimit = uniBuffer + sizeof(uniBuffer)/sizeof(*uniBuffer);
-    int index;
+    int32_t index, j;
 
-    /* one 'regular' & all the 'private stateful' converters */
-    someConverters[0] = ucnv_open("ibm-1047", &err);
-    someConverters[1] = ucnv_open("ISO_2022,locale=zh,version=1", &err);
-    someConverters[2] = ucnv_open("SCSU", &err);
-    someConverters[3] = ucnv_open("HZ", &err);
-    someConverters[4] = ucnv_open("lmbcs", &err);
-    someConverters[5] = ucnv_open("ISCII,version=0",&err);
-    someConverters[6] = ucnv_open("ISO_2022,locale=kr,version=1",&err);
-    someConverters[7] = ucnv_open("ISO_2022,locale=jp,version=1",&err);
-    someConverters[8] = ucnv_open("BOCU-1", &err);
-    someConverters[9] = ucnv_open("UTF-7", &err);
-    someConverters[10] = ucnv_open("IMAP-mailbox-name", &err);
-    someConverters[11] = ucnv_open("ibm-1047-s390", &err);
+    err = U_ZERO_ERROR;
+    cnv = ucnv_open(names[0], &err);
+    if(U_SUCCESS(err)) {
+        /* Check the various error & informational states: */
+
+        /* Null status - just returns NULL */
+        bufferSize = U_CNV_SAFECLONE_BUFFERSIZE;
+        if (0 != ucnv_safeClone(cnv, buffer[0], &bufferSize, 0))
+        {
+            log_err("FAIL: Cloned converter failed to deal correctly with null status\n");
+        }
+        /* error status - should return 0 & keep error the same */
+        err = U_MEMORY_ALLOCATION_ERROR;
+        if (0 != ucnv_safeClone(cnv, buffer[0], &bufferSize, &err) || err != U_MEMORY_ALLOCATION_ERROR)
+        {
+            log_err("FAIL: Cloned converter failed to deal correctly with incoming error status\n");
+        }
+        err = U_ZERO_ERROR;
+
+        /* Null buffer size pointer - just returns NULL & set error to U_ILLEGAL_ARGUMENT_ERROR*/
+        if (0 != ucnv_safeClone(cnv, buffer[0], 0, &err) || err != U_ILLEGAL_ARGUMENT_ERROR)
+        {
+            log_err("FAIL: Cloned converter failed to deal correctly with null bufferSize pointer\n");
+        }
+        err = U_ZERO_ERROR;
+
+        /* buffer size pointer is 0 - fill in pbufferSize with a size */
+        bufferSize = 0;
+        if (0 != ucnv_safeClone(cnv, buffer[0], &bufferSize, &err) || U_FAILURE(err) || bufferSize <= 0)
+        {
+            log_err("FAIL: Cloned converter failed a sizing request ('preflighting')\n");
+        }
+        /* Verify our define is large enough  */
+        if (U_CNV_SAFECLONE_BUFFERSIZE < bufferSize)
+        {
+            log_err("FAIL: Pre-calculated buffer size is too small\n");
+        }
+        /* Verify we can use this run-time calculated size */
+        if (0 == (cnv2 = ucnv_safeClone(cnv, buffer[0], &bufferSize, &err)) || U_FAILURE(err))
+        {
+            log_err("FAIL: Converter can't be cloned with run-time size\n");
+        }
+        if (cnv2) {
+            ucnv_close(cnv2);
+        }
+
+        /* size one byte too small - should allocate & let us know */
+        --bufferSize;
+        if (0 == (cnv2 = ucnv_safeClone(cnv, 0, &bufferSize, &err)) || err != U_SAFECLONE_ALLOCATED_WARNING)
+        {
+            log_err("FAIL: Cloned converter failed to deal correctly with too-small buffer size\n");
+        }
+        if (cnv2) {
+            ucnv_close(cnv2);
+        }
+
+        err = U_ZERO_ERROR;
+        bufferSize = U_CNV_SAFECLONE_BUFFERSIZE;
+
+        /* Null buffer pointer - return converter & set error to U_SAFECLONE_ALLOCATED_ERROR */
+        if (0 == (cnv2 = ucnv_safeClone(cnv, 0, &bufferSize, &err)) || err != U_SAFECLONE_ALLOCATED_WARNING)
+        {
+            log_err("FAIL: Cloned converter failed to deal correctly with null buffer pointer\n");
+        }
+        if (cnv2) {
+            ucnv_close(cnv2);
+        }
+
+        err = U_ZERO_ERROR;
     
-    if(U_FAILURE(err)) {
-      log_data_err("problems creating converters to clone- check the data.\n");
-      return; /* bail - leak */
-    }
-    /* Check the various error & informational states: */
+        /* Null converter - return NULL & set U_ILLEGAL_ARGUMENT_ERROR */
+        if (0 != ucnv_safeClone(0, buffer[0], &bufferSize, &err) || err != U_ILLEGAL_ARGUMENT_ERROR)
+        {
+            log_err("FAIL: Cloned converter failed to deal correctly with null converter pointer\n");
+        }
 
-    /* Null status - just returns NULL */
-    if (0 != ucnv_safeClone(someConverters[0], buffer[0], &bufferSize, 0))
-    {
-        log_err("FAIL: Cloned converter failed to deal correctly with null status\n");
-    }
-    /* error status - should return 0 & keep error the same */
-    err = U_MEMORY_ALLOCATION_ERROR;
-    if (0 != ucnv_safeClone(someConverters[0], buffer[0], &bufferSize, &err) || err != U_MEMORY_ALLOCATION_ERROR)
-    {
-        log_err("FAIL: Cloned converter failed to deal correctly with incoming error status\n");
-    }
-    err = U_ZERO_ERROR;
-
-    /* Null buffer size pointer - just returns NULL & set error to U_ILLEGAL_ARGUMENT_ERROR*/
-    if (0 != ucnv_safeClone(someConverters[0], buffer[0], 0, &err) || err != U_ILLEGAL_ARGUMENT_ERROR)
-    {
-        log_err("FAIL: Cloned converter failed to deal correctly with null bufferSize pointer\n");
-    }
-    err = U_ZERO_ERROR;
-
-    /* buffer size pointer is 0 - fill in pbufferSize with a size */
-    bufferSize = 0;
-    if (0 != ucnv_safeClone(someConverters[0], buffer[0], &bufferSize, &err) || U_FAILURE(err) || bufferSize <= 0)
-    {
-        log_err("FAIL: Cloned converter failed a sizing request ('preflighting')\n");
-    }
-    /* Verify our define is large enough  */
-    if (U_CNV_SAFECLONE_BUFFERSIZE < bufferSize)
-    {
-        log_err("FAIL: Pre-calculated buffer size is too small\n");
-    }
-    /* Verify we can use this run-time calculated size */
-    if (0 == (cnv = ucnv_safeClone(someConverters[0], buffer[0], &bufferSize, &err)) || U_FAILURE(err))
-    {
-        log_err("FAIL: Converter can't be cloned with run-time size\n");
-    }
-    if (cnv)
         ucnv_close(cnv);
-    /* size one byte too small - should allocate & let us know */
-    --bufferSize;
-    if (0 == (cnv = ucnv_safeClone(someConverters[0], 0, &bufferSize, &err)) || err != U_SAFECLONE_ALLOCATED_WARNING)
-    {
-        log_err("FAIL: Cloned converter failed to deal correctly with too-small buffer size\n");
-    }
-    if (cnv)
-        ucnv_close(cnv);
-    err = U_ZERO_ERROR;
-    bufferSize = U_CNV_SAFECLONE_BUFFERSIZE;
-
-    /* Null buffer pointer - return converter & set error to U_SAFECLONE_ALLOCATED_ERROR */
-    if (0 == (cnv = ucnv_safeClone(someConverters[0], 0, &bufferSize, &err)) || err != U_SAFECLONE_ALLOCATED_WARNING)
-    {
-        log_err("FAIL: Cloned converter failed to deal correctly with null buffer pointer\n");
-    }
-    if (cnv)
-        ucnv_close(cnv);
-    err = U_ZERO_ERROR;
-    
-    /* Null converter - return NULL & set U_ILLEGAL_ARGUMENT_ERROR */
-    if (0 != ucnv_safeClone(0, buffer[0], &bufferSize, &err) || err != U_ILLEGAL_ARGUMENT_ERROR)
-    {
-        log_err("FAIL: Cloned converter failed to deal correctly with null converter pointer\n");
     }
 
-    err = U_ZERO_ERROR;
+    maxBufferSize = 0;
+    maxName = "";
 
     /* Do these cloned converters work at all - shuffle UChars to chars & back again..*/
 
-    for (index = 0; index < CLONETEST_CONVERTER_COUNT; index++)
-    {
-        bufferSize = U_CNV_SAFECLONE_BUFFERSIZE;
-        someClonedConverters[index] = ucnv_safeClone(someConverters[index], buffer[index], &bufferSize, &err);
-
-        /* close the original immediately to make sure that the clone works by itself */
-        ucnv_close(someConverters[index]);
-
-        pCharBuffer = charBuffer;
-        pUniBuffer = uniBuffer;
-
-        ucnv_fromUnicode(someClonedConverters[index], 
-                        &pCharBuffer, 
-                        charBufferLimit,
-                        &pUniBuffer,
-                        uniBufferLimit,
-                        NULL,
-                        TRUE,
-                        &err);
-        if(U_FAILURE(err)){
-            log_err("FAIL: cloned converter failed to do fromU conversion. Error: %s\n",u_errorName(err));
-        }
-        ucnv_toUnicode(someClonedConverters[index],
-                       &pUCharTarget,
-                       pUCharTargetLimit,
-                       &pCharSource,
-                       pCharSourceLimit,
-                       NULL,
-                       TRUE,
-                       &err
-                       );
-
-        if(U_FAILURE(err)){
-            log_err("FAIL: cloned converter failed to do toU conversion. Error: %s\n",u_errorName(err));
-        }
-
-        pConstCharBuffer = charBuffer;
-        if (uniBuffer [0] != ucnv_getNextUChar(someClonedConverters[index], &pConstCharBuffer, pCharBuffer, &err))
+    for(j = 0; j < LENGTHOF(bufferSizes); ++j) {
+        for (index = 0; index < LENGTHOF(names); index++)
         {
-            log_err("FAIL: Cloned converter failed to do conversion. Error: %s\n",u_errorName(err));
+            err = U_ZERO_ERROR;
+            cnv = ucnv_open(names[index], &err);
+            if(U_FAILURE(err)) {
+                log_data_err("ucnv_open(\"%s\") failed - %s\n", names[index], u_errorName(err));
+                continue;
+            }
+
+            if(j == 0) {
+                /* preflight to get maxBufferSize */
+                bufferSize = 0;
+                ucnv_safeClone(cnv, NULL, &bufferSize, &err);
+                if(bufferSize > maxBufferSize) {
+                    maxBufferSize = bufferSize;
+                    maxName = names[index];
+                }
+            }
+
+            memset(buffer, 0xaa, sizeof(buffer));
+
+            bufferSize = bufferSizes[j];
+            cnv2 = ucnv_safeClone(cnv, buffer[1], &bufferSize, &err);
+
+            /* close the original immediately to make sure that the clone works by itself */
+            ucnv_close(cnv);
+
+            /* check if the clone function overwrote any bytes that it is not supposed to touch */
+            if(
+                usedStackBuffer(cnv2, buffer[1]) ?
+                    bufferSize > bufferSizes[j] ||
+                    containsAnyOtherByte(buffer[0], (int32_t)sizeof(buffer[0]), 0xaa) ||
+                    containsAnyOtherByte(buffer[1]+bufferSize, (int32_t)(sizeof(buffer)-(sizeof(buffer[0])+bufferSize)), 0xaa)
+                :
+                    containsAnyOtherByte(buffer[0], (int32_t)sizeof(buffer), 0xaa)
+            ) {
+                log_err("cloning %s overwrote bytes outside the bufferSize %d (requested %d)\n",
+                    names[index], bufferSize, bufferSizes[j]);
+            }
+
+            pCharBuffer = charBuffer;
+            pUniBuffer = uniBuffer;
+
+            ucnv_fromUnicode(cnv2, 
+                            &pCharBuffer, 
+                            charBufferLimit,
+                            &pUniBuffer,
+                            uniBufferLimit,
+                            NULL,
+                            TRUE,
+                            &err);
+            if(U_FAILURE(err)){
+                log_err("FAIL: cloned converter failed to do fromU conversion. Error: %s\n",u_errorName(err));
+            }
+            ucnv_toUnicode(cnv2,
+                           &pUCharTarget,
+                           pUCharTargetLimit,
+                           &pCharSource,
+                           pCharSourceLimit,
+                           NULL,
+                           TRUE,
+                           &err
+                           );
+
+            if(U_FAILURE(err)){
+                log_err("FAIL: cloned converter failed to do toU conversion. Error: %s\n",u_errorName(err));
+            }
+
+            pConstCharBuffer = charBuffer;
+            if (uniBuffer [0] != ucnv_getNextUChar(cnv2, &pConstCharBuffer, pCharBuffer, &err))
+            {
+                log_err("FAIL: Cloned converter failed to do conversion. Error: %s\n",u_errorName(err));
+            }
+            ucnv_close(cnv2);
         }
-        ucnv_close(someClonedConverters[index]);
     }
+
+    log_info("ucnv_safeClone(): sizeof(UConverter)=%lu  max preflighted clone size=%d (%s)  U_CNV_SAFECLONE_BUFFERSIZE=%d\n",
+        sizeof(UConverter), maxBufferSize, maxName, (int)U_CNV_SAFECLONE_BUFFERSIZE);
 }
 
 static void TestCCSID() {
