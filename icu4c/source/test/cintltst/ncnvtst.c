@@ -1322,16 +1322,16 @@ static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *
         srcLimit = nct_min(realSourceEnd, src + gInBufferSize);
 
         if(targ == realBufferEnd)
-          {
-        log_err("Error, the end would overflow the real output buffer while about to call toUnicode! tarjey=%08lx %s",targ,gNuConvTestName);
-        return FALSE;
-          }
+        {
+            log_err("Error, the end would overflow the real output buffer while about to call toUnicode! tarjey=%08lx %s",targ,gNuConvTestName);
+            return FALSE;
+        }
         log_verbose("calling toUnicode @ %08lx to %08lx\n", targ,end);
 
         /* oldTarg = targ; */
 
         status = U_ZERO_ERROR;
-        doFlush=(gInBufferSize ==999 && gOutBufferSize==999)?(UBool)(srcLimit == realSourceEnd) : FALSE;
+        doFlush=(UBool)((gInBufferSize ==999 && gOutBufferSize==999)?(srcLimit == realSourceEnd) : FALSE);
             
         ucnv_toUnicode (conv,
                 &targ,

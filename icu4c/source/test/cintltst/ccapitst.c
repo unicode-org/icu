@@ -1273,7 +1273,7 @@ void bug1()
    static char char_out[CHUNK_SIZE*2];
 
    /* GB 18030 equivalent of U+10000 is 90308130 */
-   static const char test_seq[]={ (char)0x90, 0x30, (char)0x81, 0x30 };
+   static const char test_seq[]={ 0x90u, 0x30, 0x81u, 0x30 };
 
    UErrorCode err = U_ZERO_ERROR;
    int32_t i, test_seq_len = sizeof(test_seq);
