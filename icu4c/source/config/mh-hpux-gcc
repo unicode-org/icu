@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-hpux-gcc,v 1.5 2004/03/26 18:07:36 grhoten-oss Exp $
+## $Id: mh-hpux-gcc,v 1.6 2004/03/26 22:33:12 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
@@ -73,9 +73,9 @@ STATIC_O = o
 ## Versioned libraries rules
 
 %.$(SO).$(SO_TARGET_VERSION_MAJOR): %.$(SO).$(SO_TARGET_VERSION)
-	$(RM) $@ && ln -s $< $@
+	$(RM) $@ && ln -s ${<F} $@
 %.$(SO): %.$(SO).$(SO_TARGET_VERSION_MAJOR)
-	$(RM) $@ && ln -s $*.$(SO).$(SO_TARGET_VERSION) $@
+	$(RM) $@ && ln -s ${*F}.$(SO).$(SO_TARGET_VERSION) $@
 
 ## End HPUX/gcc specific setup
 

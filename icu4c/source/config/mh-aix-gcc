@@ -97,9 +97,9 @@ STATIC_O = o
 
 ## Versioned libraries rules
 %$(SO_TARGET_VERSION_MAJOR).$(SO): %$(SO_TARGET_VERSION).$(SO)
-	$(RM) $@ && ln -s $*$(SO_TARGET_VERSION).$(SO) $@
+	$(RM) $@ && ln -s ${*F}$(SO_TARGET_VERSION).$(SO) $@
 %.$(SO): %$(SO_TARGET_VERSION).$(SO)
-	$(RM) $@ && ln -s $*$(SO_TARGET_VERSION).$(SO) $@
+	$(RM) $@ && ln -s ${*F}$(SO_TARGET_VERSION).$(SO) $@
 
 
 ## BIR  - bind with internal references [so app data and icu data doesn't collide]

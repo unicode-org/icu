@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-aix-va,v 1.32 2004/03/10 18:28:14 grhoten-oss Exp $
+## $Id: mh-aix-va,v 1.33 2004/03/26 22:33:12 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -M $(DEFS) $(CPPFLAGS)
@@ -104,8 +104,8 @@ STATIC_O = o
 
 ## Versioned libraries rules
 %$(SO_TARGET_VERSION_MAJOR).$(SO): %$(SO_TARGET_VERSION).$(SO)
-	$(RM) $@ && ln -s $*$(SO_TARGET_VERSION).$(SO) $@
+	$(RM) $@ && ln -s ${*F}$(SO_TARGET_VERSION).$(SO) $@
 %.$(SO): %$(SO_TARGET_VERSION).$(SO)
-	$(RM) $@ && ln -s $*$(SO_TARGET_VERSION).$(SO) $@
+	$(RM) $@ && ln -s ${*F}$(SO_TARGET_VERSION).$(SO) $@
 
 ## End Aix-specific setup
