@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationParsedRuleBuilder.java,v $ 
-* $Date: 2003/07/09 00:12:44 $ 
-* $Revision: 1.21 $
+* $Date: 2003/07/16 05:52:08 $ 
+* $Revision: 1.22 $
 *
 *******************************************************************************
 */
@@ -1476,9 +1476,9 @@ final class CollationParsedRuleBuilder
 	        if (Utility.compareUnsigned(low, 
                                RuleBasedCollator.COMMON_BOTTOM_2_ << 24) < 0) {
 	            g.m_rangesLength_ = allocateWeights(
-                                         RuleBasedCollator.COMMON_TOP_2_ << 24, 
+                                         RuleBasedCollator.COMMON_BOTTOM_2_ << 24, 
                                          high, count, maxbyte, g.m_ranges_);
-	            g.m_current_ = RuleBasedCollator.COMMON_BOTTOM_2_;
+	            g.m_current_ = RuleBasedCollator.COMMON_BOTTOM_2_ << 24;
 	            return g.m_current_;
 	        }
 	    } 
@@ -3177,7 +3177,7 @@ final class CollationParsedRuleBuilder
         //if (m_utilWeightRange_.m_end_ >= m_utilWeightRange_.m_start_) {
             m_utilWeightRange_.m_count_ 
                    = ((m_utilWeightRange_.m_end_ - m_utilWeightRange_.m_start_) 
-                      >> 24) + 1;
+                      >>> 24) + 1;
         } 
         else {
             // eliminate overlaps
