@@ -15,6 +15,8 @@
 
 #include "ThaiShaping.h"
 
+#include "cmemory.h"
+
 U_NAMESPACE_BEGIN
 
 /**
