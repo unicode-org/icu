@@ -20,12 +20,22 @@
 #define UCNV_NUM_RESERVED_TAGS 2
 
 /**
+ * Remove the underscores, dashes and spaces from the name, and convert
+ * the name to lower case.
+ * @param dst The destination buffer, which is <= the buffer of name.
+ * @param dst The destination buffer, which is <= the buffer of name.
+ * @return the destination buffer.
+ */
+U_CFUNC char * U_EXPORT2
+ucnv_io_stripForCompare(char *dst, const char *name);
+
+/**
  * Map a converter alias name to a canonical converter name.
  * The alias is searched for case-insensitively, the converter name
  * is returned in mixed-case.
  * Returns NULL if the alias is not found.
  * @param alias The alias name to be searched.
- * @pErrorCode The error code
+ * @param pErrorCode The error code
  * @return the converter name in mixed-case, return NULL if the alias is not found.
  */
 U_CFUNC const char *
@@ -34,7 +44,7 @@ ucnv_io_getConverterName(const char *alias, UErrorCode *pErrorCode);
 /**
  * The count for ucnv_io_getAliases and ucnv_io_getAlias
  * @param alias The alias name to be counted
- * @pErrorCode The error code
+ * @param pErrorCode The error code
  * @return the alias count
  */
 U_CFUNC uint16_t
@@ -62,7 +72,7 @@ ucnv_io_getAliases(const char *alias, uint16_t start, const char **aliases, UErr
  * Returns NULL if the alias is not found.
  * @param alias The converter alias
  * @param n The number specifies which alias to get
- * @pErrorCode The error code
+ * @param pErrorCode The error code
  * @return the (n)th alias and return NULL if the alias is not found.
  */
 U_CFUNC const char *

@@ -333,6 +333,25 @@ static uint32_t getTagNumber(const char *tagname) {
     return UINT32_MAX;
 }
 
+/* @see ucnv_compareNames */
+U_CFUNC char * U_EXPORT2
+ucnv_io_stripForCompare(char *dst, const char *name) {
+    char c1 = *name;
+    char *dstItr = dst;
+
+    while (c1) {
+        /* Ignore delimiters '-', '_', and ' ' */
+        while ((c1 = *name) == '-' || c1 == '_' || c1 == ' ') {
+            ++name;
+        }
+
+        /* lowercase for case-insensitive comparison */
+        *(dstItr++) = uprv_tolower(c1);
+        ++name;
+    }
+    return dst;
+}
+
 /**
  * Do a fuzzy compare of a two converter/alias names.  The comparison
  * is case-insensitive.  It also ignores the characters '-', '_', and
@@ -349,6 +368,8 @@ static uint32_t getTagNumber(const char *tagname) {
  * @return 0 if the names match, or a negative value if the name1
  * lexically precedes name2, or a positive value if the name1
  * lexically follows name2.
+ *
+ * @see ucnv_io_stripForCompare
  */
 U_CAPI int U_EXPORT2
 ucnv_compareNames(const char *name1, const char *name2) {
