@@ -291,11 +291,17 @@
  * @stable ICU 2.1
  */
 typedef enum {
-  /** This is locale the data actually comes from */
+  /** This is locale the data actually comes from 
+   * @stable ICU 2.1
+   */
   ULOC_ACTUAL_LOCALE    = 0,
-  /** This is the most specific locale supported by ICU */
+  /** This is the most specific locale supported by ICU 
+   * @stable ICU 2.1
+   */
   ULOC_VALID_LOCALE    = 1,
-  /** This is the requested locale */
+  /** This is the requested locale
+   *  @deprecated ICU 2.8 
+   */
   ULOC_REQUESTED_LOCALE = 2,
   ULOC_DATA_LOCALE_TYPE_LIMIT
 } ULocDataLocaleType ;

@@ -50,6 +50,16 @@
 U_CFUNC void locale_set_default(const char *id);
 U_CFUNC const char *locale_get_default(void);
 
+/* to make compiler silent */
+U_CFUNC int32_t
+locale_getKeywords(const char *localeID,
+            char prev,
+            char *keywords, int32_t keywordCapacity,
+            char *values, int32_t valuesCapacity, int32_t *valLen,
+            UBool valuesToo,
+            UErrorCode *status);
+
+
 /* These strings describe the resources we attempt to load from
  the locale ResourceBundle data file.*/
 static const char _kLanguages[]       = "Languages";
@@ -697,6 +707,25 @@ uloc_getCountry(const char* localeID,
     return u_terminateChars(country, countryCapacity, i, err);
 }
 
+U_CFUNC const char * 
+locale_getKeywordsStart(const char *localeID) {
+    const char *result = NULL;
+    const uint8_t ebcdicSigns[] = { 0x44, 0x66, 0x80, 0xAC, 0xAE, 0xAF, 0xB5, 0xEC, 0xEF, 0x00 };
+    if((result = uprv_strchr(localeID, '@')) != NULL) {
+        return result;
+    } else if(U_CHARSET_FAMILY == U_EBCDIC_FAMILY) {
+        const uint8_t *charToFind = ebcdicSigns;
+        while(charToFind) {
+            if((result = uprv_strchr(localeID, *charToFind)) != NULL) {
+                return result;
+            }
+            charToFind++;
+        }
+    }
+    return NULL;
+}
+
+
 static int32_t
 _getVariant(const char *localeID,
             char prev,
@@ -722,7 +751,7 @@ _getVariant(const char *localeID,
     if(i==0) {
         if(prev=='@') {
             /* keep localeID */
-        } else if((localeID=uprv_strrchr(localeID, '@'))!=NULL) {
+        } else if((localeID=locale_getKeywordsStart(localeID))!=NULL) {
             ++localeID; /* point after the '@' */
         } else {
             return 0;
@@ -757,6 +786,7 @@ compareKeywordStructs(const void *context, const void *left, const void *right) 
     const char* rightString = ((const keywordStruct *)right)->keyword;
     return uprv_strcmp(leftString, rightString);
 }
+
 
 U_CFUNC int32_t
 locale_getKeywords(const char *localeID,
@@ -919,11 +949,11 @@ uloc_getVariant(const char* localeID,
     
     /* removed by weiv. We don't want to handle POSIX variants anymore. Use canonicalization function */
     /* if we do not have a variant tag yet then try a POSIX variant after '@' */
-    /*
+/*
     if(!haveVariant && (localeID=uprv_strrchr(localeID, '@'))!=NULL) {
         i=_getVariant(localeID+1, '@', variant, variantCapacity);
     }
-    */
+*/
     return u_terminateChars(variant, variantCapacity, i, err);
 }
 
@@ -1022,7 +1052,7 @@ uloc_openKeywords(const char* localeID,
     }
 
     /* keywords are located after '@' */
-    if((localeID = uprv_strchr(localeID, '@')) != NULL) {
+    if((localeID = locale_getKeywordsStart(localeID)) != NULL) {
         i=locale_getKeywords(localeID+1, '@', keywords, keywordsCapacity, NULL, 0, NULL, FALSE, status);
     }
 
@@ -1109,7 +1139,7 @@ uloc_getNameInternal(const char* localeID,
 
     if(!stripKeywords) {
         /* if we do not have a variant tag yet then try a POSIX variant after '@' */
-        if((localeID=uprv_strrchr(localeID, '@'))!=NULL) {
+        if((localeID=locale_getKeywordsStart(localeID))!=NULL) {
             const char *keywordIndicator = uprv_strchr(localeID, ULOC_KEYWORD_ASSIGN);
             const char *separatorIndicator = uprv_strchr(localeID, ULOC_KEYWORD_ITEM_SEPARATOR);
             if(keywordIndicator && (!separatorIndicator || separatorIndicator > keywordIndicator)) {
@@ -2126,9 +2156,8 @@ uloc_getKeywordValue(const char* localeID,
                      const char* keywordName,
                      char* buffer, int32_t bufferCapacity,
                      UErrorCode* status)
-{
+{ 
     const char* nextSeparator = NULL;
-    int32_t localeIDLen = 0;
     int32_t keywordNameLen = uprv_strlen(keywordName);
     char keywordNameBuffer[ULOC_KEYWORD_BUFFER_LEN];
     char localeKeywordNameBuffer[ULOC_KEYWORD_BUFFER_LEN];

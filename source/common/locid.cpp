@@ -290,6 +290,7 @@ Locale::Locale( const   char * newLanguage,
         int32_t lsize = 0;
         int32_t csize = 0;
         int32_t vsize = 0;
+        int32_t ksize = 0;
         char    *p;
 
         // Calculate the size of the resulting string.
@@ -340,6 +341,13 @@ Locale::Locale( const   char * newLanguage,
             size += 1;  // at least: _v
         }
 
+        if ( newKeywords != NULL) 
+        {
+            ksize = (int32_t)uprv_strlen(newKeywords);
+            size += ksize + 1;
+        }
+
+
         //  NOW we have the full locale string..
 
         /*if the whole string is longer than our internal limit, we need
@@ -382,6 +390,13 @@ Locale::Locale( const   char * newLanguage,
             uprv_strncpy(p, newVariant, vsize);  // Must use strncpy because
             p += vsize;                          // of trimming (above).
             *p = 0; // terminate
+        }
+
+        if ( ksize != 0)
+        {
+            *p++ = '@';
+            uprv_strcpy(p, newKeywords);
+            p += ksize;
         }
 
         // Parse it, because for example 'language' might really be a complete
