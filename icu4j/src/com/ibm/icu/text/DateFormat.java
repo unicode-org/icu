@@ -278,7 +278,9 @@ public abstract class DateFormat extends Format {
     public final StringBuffer format(Object obj, StringBuffer toAppendTo,
                                      FieldPosition fieldPosition)
     {
-        if (obj instanceof Date)
+        if (obj instanceof Calendar)
+            return format( (Calendar)obj, toAppendTo, fieldPosition );
+        else if (obj instanceof Date)
             return format( (Date)obj, toAppendTo, fieldPosition );
         else if (obj instanceof Number)
             return format( new Date(((Number)obj).longValue()),
@@ -286,6 +288,32 @@ public abstract class DateFormat extends Format {
         else 
             throw new IllegalArgumentException("Cannot format given Object as a Date");
     }
+
+    /**
+     * Formats a date into a date/time string.
+     * @param cal a Calendar set to the date and time to be formatted
+     * into a date/time string.
+     * @param toAppendTo the string buffer for the returning date/time string.
+     * @param fieldPosition keeps track of the position of the field
+     * within the returned string.
+     * On input: an alignment field,
+     * if desired. On output: the offsets of the alignment field. For
+     * example, given a time text "1996.07.10 AD at 15:08:56 PDT",
+     * if the given fieldPosition is DateFormat.YEAR_FIELD, the
+     * begin index and end index of fieldPosition will be set to
+     * 0 and 4, respectively.
+     * Notice that if the same time field appears
+     * more than once in a pattern, the fieldPosition will be set for the first
+     * occurence of that time field. For instance, formatting a Date to
+     * the time string "1 PM PDT (Pacific Daylight Time)" using the pattern
+     * "h a z (zzzz)" and the alignment field DateFormat.TIMEZONE_FIELD,
+     * the begin index and end index of fieldPosition will be set to
+     * 5 and 8, respectively, for the first occurence of the timezone
+     * pattern character 'z'.
+     * @return the formatted date/time string.
+     */
+    public abstract StringBuffer format(Calendar cal, StringBuffer toAppendTo,
+                                        FieldPosition fieldPosition);
 
     /**
      * Formats a Date into a date/time string.
@@ -309,8 +337,12 @@ public abstract class DateFormat extends Format {
      * pattern character 'z'.
      * @return the formatted date/time string.
      */
-    public abstract StringBuffer format(Date date, StringBuffer toAppendTo,
-                                        FieldPosition fieldPosition);
+    public final StringBuffer format(Date date, StringBuffer toAppendTo,
+                                     FieldPosition fieldPosition) {
+        // Use our Calendar object
+        calendar.setTime(date);
+        return format(calendar, toAppendTo, fieldPosition);
+    }
 
     /**
      * Formats a Date into a date/time string.
@@ -344,6 +376,33 @@ public abstract class DateFormat extends Format {
     }
 
     /**
+     * Parse a date/time string according to the given parse position.
+     * For example, a time text "07/10/96 4:5 PM, PDT" will be parsed
+     * into a Calendar that is equivalent to Date(837039928046).  The
+     * caller should clear the calendar before calling this method,
+     * unless existing field information is to be kept.
+     *
+     * <p> By default, parsing is lenient: If the input is not in the form used
+     * by this object's format method but can still be parsed as a date, then
+     * the parse succeeds.  Clients may insist on strict adherence to the
+     * format by calling setLenient(false).
+     *
+     * @see #setLenient(boolean)
+     *
+     * @param text  The date/time string to be parsed
+     *
+     * @param cal   The calendar into which parsed data will be stored.
+     *              In general, this should be cleared before calling this
+     *              method.  If this parse fails, the calendar may still
+     *              have been modified.
+     *
+     * @param pos   On input, the position at which to start parsing; on
+     *              output, the position at which parsing terminated, or the
+     *              start position if the parse failed.
+     */
+    public abstract void parse(String text, Calendar cal, ParsePosition pos);
+
+    /**
      * Parse a date/time string according to the given parse position.  For
      * example, a time text "07/10/96 4:5 PM, PDT" will be parsed into a Date
      * that is equivalent to Date(837039928046).
@@ -363,7 +422,23 @@ public abstract class DateFormat extends Format {
      *
      * @return      A Date, or null if the input could not be parsed
      */
-    public abstract Date parse(String text, ParsePosition pos);
+    public final Date parse(String text, ParsePosition pos) {
+        int start = pos.getIndex();
+        calendar.clear();
+        parse(text, calendar, pos);
+        if (pos.getIndex() != start) {
+            try {
+                return calendar.getTime();
+            } catch (IllegalArgumentException e) {
+                // This occurs if the calendar is non-lenient and there is
+                // an out-of-range field.  We don't know which field was
+                // illegal so we set the error index to the start.
+                pos.setIndex(start);
+                pos.setErrorIndex(start);
+            }
+        }
+        return null;
+    }
 
     /**
      * Parse a date/time string into an Object.  This convenience method simply

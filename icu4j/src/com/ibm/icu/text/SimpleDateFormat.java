@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SimpleDateFormat.java,v $ 
- * $Date: 2002/02/16 03:06:14 $ 
- * $Revision: 1.10 $
+ * $Date: 2002/03/02 00:07:28 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -393,15 +393,12 @@ public class SimpleDateFormat extends DateFormat {
      * @return the formatted date-time string.
      * @see DateFormat
      */
-    public StringBuffer format(Date date, StringBuffer toAppendTo,
+    public StringBuffer format(Calendar cal, StringBuffer toAppendTo,
                                FieldPosition pos)
     {
         // Initialize
         pos.setBeginIndex(0);
         pos.setEndIndex(0);
-
-        // Convert input date to time field list
-        calendar.setTime(date);
 
         boolean inQuote = false; // true when between single quotes
         char prevCh = 0; // previous pattern character
@@ -412,7 +409,7 @@ public class SimpleDateFormat extends DateFormat {
             // when a different pattern or non-pattern character is seen
             if (ch != prevCh && count > 0) {
                 toAppendTo.append(
-                        subFormat(prevCh, count, toAppendTo.length(), pos, formatData));
+                        subFormat(prevCh, count, toAppendTo.length(), pos, formatData, cal));
                 count = 0;
             }
             if (ch == '\'') {
@@ -439,7 +436,7 @@ public class SimpleDateFormat extends DateFormat {
         // Format the last item in the pattern, if any
         if (count > 0) {
             toAppendTo.append(
-                    subFormat(prevCh, count, toAppendTo.length(), pos, formatData));
+                    subFormat(prevCh, count, toAppendTo.length(), pos, formatData, cal));
         }
         return toAppendTo;
     }
@@ -480,7 +477,8 @@ public class SimpleDateFormat extends DateFormat {
      * @param formatData the symbols for this formatter
      */
     protected String subFormat(char ch, int count, int beginOffset,
-                             FieldPosition pos, DateFormatSymbols formatData)
+                               FieldPosition pos, DateFormatSymbols formatData,
+                               Calendar cal)
          throws IllegalArgumentException
     {
         int     patternCharIndex = -1;
@@ -489,7 +487,7 @@ public class SimpleDateFormat extends DateFormat {
 
         // TEMPORARY HACK TODO fix this
         if (ch == 'u') { // 'u' - EXTENDED_YEAR
-            return zeroPaddingNumber(calendar.get(Calendar.EXTENDED_YEAR),
+            return zeroPaddingNumber(cal.get(Calendar.EXTENDED_YEAR),
                                      1, maxIntCount);
         }
 
@@ -498,7 +496,7 @@ public class SimpleDateFormat extends DateFormat {
                                                "'" + ch + "'");
 
         int field = PATTERN_INDEX_TO_CALENDAR_FIELD[patternCharIndex];
-        int value = calendar.get(field);
+        int value = cal.get(field);
 
         switch (patternCharIndex) {
         case 0: // 'G' - ERA
@@ -527,7 +525,7 @@ public class SimpleDateFormat extends DateFormat {
         case 4: // 'k' - HOUR_OF_DAY: 1-based.  eg, 23:59 + 1 hour =>> 24:59
             if (value == 0)
                 current = zeroPaddingNumber(
-                                            calendar.getMaximum(Calendar.HOUR_OF_DAY)+1,
+                                            cal.getMaximum(Calendar.HOUR_OF_DAY)+1,
                                             count, maxIntCount);
             else
                 current = zeroPaddingNumber(value, count, maxIntCount);
@@ -544,14 +542,14 @@ public class SimpleDateFormat extends DateFormat {
         case 15: // 'h' - HOUR:1-based.  eg, 11PM + 1 hour =>> 12 AM
             if (value == 0)
                 current = zeroPaddingNumber(
-                                            calendar.getLeastMaximum(Calendar.HOUR)+1,
+                                            cal.getLeastMaximum(Calendar.HOUR)+1,
                                             count, maxIntCount);
             else
                 current = zeroPaddingNumber(value, count, maxIntCount);
             break;
         case 17: // 'z' - ZONE_OFFSET
             int zoneIndex
-                = formatData.getZoneIndex (calendar.getTimeZone().getID());
+                = formatData.getZoneIndex (cal.getTimeZone().getID());
             if (zoneIndex == -1)
             {
                 // For time zones that have no names, use strings
@@ -559,8 +557,8 @@ public class SimpleDateFormat extends DateFormat {
                 // For instance, France time zone uses GMT+01:00.
                 StringBuffer zoneString = new StringBuffer();
 
-                value = calendar.get(Calendar.ZONE_OFFSET) +
-                    calendar.get(Calendar.DST_OFFSET);
+                value = cal.get(Calendar.ZONE_OFFSET) +
+                    cal.get(Calendar.DST_OFFSET);
 
                 if (value < 0)
                 {
@@ -577,7 +575,7 @@ public class SimpleDateFormat extends DateFormat {
                                                     (int)((value%millisPerHour)/millisPerMinute), 2, 2));
                 current = zoneString.toString();
             }
-            else if (calendar.get(Calendar.DST_OFFSET) != 0)
+            else if (cal.get(Calendar.DST_OFFSET) != 0)
             {
                 if (count >= 4)
                     current = formatData.zoneStrings[zoneIndex][3];
@@ -634,13 +632,11 @@ public class SimpleDateFormat extends DateFormat {
      * Overrides DateFormat
      * @see DateFormat
      */
-    public Date parse(String text, ParsePosition pos)
+    public void parse(String text, Calendar cal, ParsePosition pos)
     {
         int start = pos.getIndex();
         int oldStart = start;
         boolean[] ambiguousYear = {false};
-
-        calendar.clear(); // Clears all the time fields
 
         boolean inQuote = false; // inQuote set true when hits 1st single quote
         char prevCh = 0;
@@ -665,7 +661,7 @@ public class SimpleDateFormat extends DateFormat {
                         {
                             pos.setIndex(oldStart);
                             pos.setErrorIndex(start);
-                            return null;
+                            return;
                         }
                         ++start;
                     }
@@ -678,10 +674,10 @@ public class SimpleDateFormat extends DateFormat {
                     if (start >= text.length() || ch != text.charAt(start)) {
                         // Check for cases like: 'at' in pattern vs "xt"
                         // in time text, where 'a' doesn't match with 'x'.
-                        // If fail to match, return null.
+                        // If fail to match, return.
                         pos.setIndex(oldStart); // left unchanged
                         pos.setErrorIndex(start);
-                        return null;
+                        return;
                     }
                     ++count;
                     ++start;
@@ -696,11 +692,11 @@ public class SimpleDateFormat extends DateFormat {
                     {
                         int startOffset = start;
                         start=subParse(text, start, prevCh, count,
-                                       false, ambiguousYear);
+                                       false, ambiguousYear, cal);
                         if ( start<0 ) {
                             pos.setErrorIndex(startOffset);
                             pos.setIndex(oldStart);
-                            return null;
+                            return;
                         }
                         count = 0;
                     }
@@ -715,7 +711,7 @@ public class SimpleDateFormat extends DateFormat {
                         {
                             pos.setErrorIndex(startOffset);
                             pos.setIndex(oldStart);
-                            return null;
+                            return;
                         }
                         ++start;
                         count = 1; // Make it look like we never left
@@ -732,11 +728,11 @@ public class SimpleDateFormat extends DateFormat {
                         // abuts this one, so we have to use the count to know when
                         // to stop parsing. [LIU]
                         start = subParse(text, start, prevCh, count, true,
-                                         ambiguousYear);
+                                         ambiguousYear, cal);
                         if (start < 0) {
                             pos.setErrorIndex(startOffset);
                             pos.setIndex(oldStart);
-                            return null;
+                            return;
                         }
                         prevCh = ch;
                         count = 1;
@@ -754,18 +750,18 @@ public class SimpleDateFormat extends DateFormat {
                     // where ch = '-', ':', or ' ', repectively.
                     int startOffset = start;
                     start=subParse(text, start, prevCh, count,
-                                   false, ambiguousYear);
+                                   false, ambiguousYear, cal);
                     if ( start < 0 ) {
                         pos.setErrorIndex(startOffset);
                         pos.setIndex(oldStart);
-                        return null;
+                        return;
                     }
                     if (start >= text.length() || ch != text.charAt(start)) {
                         // handle cases like: 'MMMM dd' in pattern vs. "janx20"
                         // in time text, where ' ' doesn't match with 'x'.
                         pos.setErrorIndex(start);
                         pos.setIndex(oldStart);
-                        return null;
+                        return;
                     }
                     start++;
                     count = 0;
@@ -779,7 +775,7 @@ public class SimpleDateFormat extends DateFormat {
                         // match with ",,,".
                         pos.setErrorIndex(start);
                         pos.setIndex(oldStart);
-                        return null;
+                        return;
                     }
                     start++;
                 }
@@ -792,11 +788,11 @@ public class SimpleDateFormat extends DateFormat {
         {
             int startOffset = start;
             start=subParse(text, start, prevCh, count,
-                           false, ambiguousYear);
+                           false, ambiguousYear, cal);
             if ( start < 0 ) {
                 pos.setIndex(oldStart);
                 pos.setErrorIndex(startOffset);
-                return null;
+                return;
             }
         }
 
@@ -815,10 +811,10 @@ public class SimpleDateFormat extends DateFormat {
         // add 100 years, and get April 3 2004 at 3:30 am.  Note that April 3 2004 is
         // a Saturday, so it can have a 2:30 am -- and it should. [LIU]
         /*
-        Date parsedDate = calendar.getTime();
+        Date parsedDate = cal.getTime();
         if( ambiguousYear[0] && !parsedDate.after(defaultCenturyStart) ) {
-            calendar.add(Calendar.YEAR, 100);
-            parsedDate = calendar.getTime();
+            cal.add(Calendar.YEAR, 100);
+            parsedDate = cal.getTime();
         }
         */
         // Because of the above condition, save off the fields in case we need to readjust.
@@ -828,7 +824,6 @@ public class SimpleDateFormat extends DateFormat {
         // when the two-digit year is equal to the start year, and thus might fall at the
         // front or the back of the default century.  This only works because we adjust
         // the year correctly to start with in other cases -- see subParse().
-        Date parsedDate;
         try {
             if (ambiguousYear[0]) // If this is true then the two-digit year == the default start year
             {
@@ -836,26 +831,21 @@ public class SimpleDateFormat extends DateFormat {
                 // complete(), which will recalculate the fields.  Since we can't access
                 // the fields[] array in Calendar, we clone the entire object.  This will
                 // stop working if Calendar.clone() is ever rewritten to call complete().
-                Calendar savedCalendar = (Calendar)calendar.clone();
-                parsedDate = calendar.getTime();
+                Calendar copy = (Calendar)cal.clone();
+                Date parsedDate = copy.getTime();
                 if (parsedDate.before(defaultCenturyStart))
                 {
                     // We can't use add here because that does a complete() first.
-                    savedCalendar.set(Calendar.YEAR, defaultCenturyStartYear + 100);
-                    parsedDate = savedCalendar.getTime();
+                    cal.set(Calendar.YEAR, defaultCenturyStartYear + 100);
                 }
             }
-            else parsedDate = calendar.getTime();
         }
         // An IllegalArgumentException will be thrown by Calendar.getTime()
         // if any fields are out of range, e.g., MONTH == 17.
         catch (IllegalArgumentException e) {
             pos.setErrorIndex(start);
             pos.setIndex(oldStart);
-            return null;
         }
-
-        return parsedDate;
     }
 
     /**
@@ -863,7 +853,7 @@ public class SimpleDateFormat extends DateFormat {
      * strings.  Since multiple strings in the array may match (for
      * example, if the array contains "a", "ab", and "abc", all will match
      * the input string "abcd") the longest match is returned.  As a side
-     * effect, the given field of <code>calendar</code> is set to the index
+     * effect, the given field of <code>cal</code> is set to the index
      * of the best match, if there is one.
      * @param text the time text being parsed.
      * @param start where to start parsing.
@@ -871,10 +861,10 @@ public class SimpleDateFormat extends DateFormat {
      * @param data the string array to parsed.
      * @return the new start position if matching succeeded; a negative
      * number indicating matching failure, otherwise.  As a side effect,
-     * sets the <code>calendar</code> field <code>field</code> to the index
+     * sets the <code>cal</code> field <code>field</code> to the index
      * of the best match, if matching succeeded.
      */
-    protected int matchString(String text, int start, int field, String[] data)
+    protected int matchString(String text, int start, int field, String[] data, Calendar cal)
     {
         int i = 0;
         int count = data.length;
@@ -900,7 +890,7 @@ public class SimpleDateFormat extends DateFormat {
         }
         if (bestMatch >= 0)
         {
-            calendar.set(field, bestMatch);
+            cal.set(field, bestMatch);
             return start + bestMatchLength;
         }
         return -start;
@@ -921,10 +911,9 @@ public class SimpleDateFormat extends DateFormat {
     }	
 
     /**
-     * find time zone 'text' matched zoneStrings and set to internal
-     * calendar.
+     * find time zone 'text' matched zoneStrings and set cal
      */
-    private int subParseZoneString(String text, int start) {
+    private int subParseZoneString(String text, int start, Calendar cal) {
 	// At this point, check for named time zones by looking through
 	// the locale data from the DateFormatZoneData strings.
 	// Want to be able to parse both short and long forms.
@@ -954,10 +943,10 @@ public class SimpleDateFormat extends DateFormat {
 	    }
 	}
 	if (tz != null) { // Matched any ?
-	    calendar.set(Calendar.ZONE_OFFSET, tz.getRawOffset());
+	    cal.set(Calendar.ZONE_OFFSET, tz.getRawOffset());
 	    // The code below time zone is assumed to be instance of
 	    // SimpleTimeZone.
-	    calendar.set(Calendar.DST_OFFSET, 
+	    cal.set(Calendar.DST_OFFSET, 
 			 j >= 3 ? ((SimpleTimeZone)tz).getDSTSavings() : 0);
 	    return (start + formatData.zoneStrings[i][j].length());
 	}
@@ -966,7 +955,7 @@ public class SimpleDateFormat extends DateFormat {
 
     /**
      * Protected method that converts one field of the input string into a
-     * numeric field value in <code>calendar</code>.  Returns -start (for
+     * numeric field value in <code>cal</code>.  Returns -start (for
      * ParsePosition) if failed.  Subclasses may override this method to
      * modify or add parsing capabilities.
      * @param text the time text to be parsed.
@@ -979,11 +968,11 @@ public class SimpleDateFormat extends DateFormat {
      * is true, then a two-digit year was parsed and may need to be readjusted.
      * @return the new start position if matching succeeded; a negative
      * number indicating matching failure, otherwise.  As a side effect,
-     * set the appropriate field of <code>calendar</code> with the parsed
+     * set the appropriate field of <code>cal</code> with the parsed
      * value.
      */
     protected int subParse(String text, int start, char ch, int count,
-                           boolean obeyCount, boolean[] ambiguousYear)
+                           boolean obeyCount, boolean[] ambiguousYear, Calendar cal)
     {
         Number number = null;
         int value = 0;
@@ -1012,7 +1001,7 @@ public class SimpleDateFormat extends DateFormat {
                 return -start;
             }
             value = number.intValue();
-            calendar.set(Calendar.EXTENDED_YEAR, value);
+            cal.set(Calendar.EXTENDED_YEAR, value);
             return pos.getIndex();
         }
 
@@ -1057,7 +1046,7 @@ public class SimpleDateFormat extends DateFormat {
         switch (patternCharIndex)
         {
         case 0: // 'G' - ERA
-            return matchString(text, start, Calendar.ERA, formatData.eras);
+            return matchString(text, start, Calendar.ERA, formatData.eras, cal);
         case 1: // 'y' - YEAR
             // If there are 3 or more YEAR pattern characters, this indicates
             // that the year value is to be treated literally, without any
@@ -1083,7 +1072,7 @@ public class SimpleDateFormat extends DateFormat {
                 value += (defaultCenturyStartYear/100)*100 +
                     (value < ambiguousTwoDigitYear ? 100 : 0);
             }
-            calendar.set(Calendar.YEAR, value);
+            cal.set(Calendar.YEAR, value);
             return pos.getIndex();
         case 2: // 'M' - MONTH
             if (count <= 2) // i.e., M or MM.
@@ -1091,7 +1080,7 @@ public class SimpleDateFormat extends DateFormat {
                 // Don't want to parse the month if it is a string
                 // while pattern uses numeric style: M or MM.
                 // [We computed 'value' above.]
-                calendar.set(Calendar.MONTH, value - 1);
+                cal.set(Calendar.MONTH, value - 1);
                 return pos.getIndex();
             }
             else
@@ -1101,34 +1090,34 @@ public class SimpleDateFormat extends DateFormat {
                 // Try count == 4 first:
                 int newStart = 0;
                 if ((newStart=matchString(text, start, Calendar.MONTH,
-                                          formatData.months)) > 0)
+                                          formatData.months, cal)) > 0)
                     return newStart;
                 else // count == 4 failed, now try count == 3
                     return matchString(text, start, Calendar.MONTH,
-                                       formatData.shortMonths);
+                                       formatData.shortMonths, cal);
             }
         case 4: // 'k' - HOUR_OF_DAY: 1-based.  eg, 23:59 + 1 hour =>> 24:59
             // [We computed 'value' above.]
-            if (value == calendar.getMaximum(Calendar.HOUR_OF_DAY)+1) value = 0;
-            calendar.set(Calendar.HOUR_OF_DAY, value);
+            if (value == cal.getMaximum(Calendar.HOUR_OF_DAY)+1) value = 0;
+            cal.set(Calendar.HOUR_OF_DAY, value);
             return pos.getIndex();
         case 9: { // 'E' - DAY_OF_WEEK
             // Want to be able to parse both short and long forms.
             // Try count == 4 (DDDD) first:
             int newStart = 0;
             if ((newStart=matchString(text, start, Calendar.DAY_OF_WEEK,
-                                      formatData.weekdays)) > 0)
+                                      formatData.weekdays, cal)) > 0)
                 return newStart;
             else // DDDD failed, now try DDD
                 return matchString(text, start, Calendar.DAY_OF_WEEK,
-                                   formatData.shortWeekdays);
+                                   formatData.shortWeekdays, cal);
         }
         case 14:    // 'a' - AM_PM
-            return matchString(text, start, Calendar.AM_PM, formatData.ampms);
+            return matchString(text, start, Calendar.AM_PM, formatData.ampms, cal);
         case 15: // 'h' - HOUR:1-based.  eg, 11PM + 1 hour =>> 12 AM
             // [We computed 'value' above.]
-            if (value == calendar.getLeastMaximum(Calendar.HOUR)+1) value = 0;
-            calendar.set(Calendar.HOUR, value);
+            if (value == cal.getLeastMaximum(Calendar.HOUR)+1) value = 0;
+            cal.set(Calendar.HOUR, value);
             return pos.getIndex();
         case 17: // 'z' - ZONE_OFFSET
             // First try to parse generic forms such as GMT-07:00. Do this first
@@ -1147,7 +1136,7 @@ public class SimpleDateFormat extends DateFormat {
                 if ((text.length() - start) >= GMT.length() &&
                     text.regionMatches(true, start, GMT, 0, GMT.length()))
                 {
-                    calendar.set(Calendar.DST_OFFSET, 0);
+                    cal.set(Calendar.DST_OFFSET, 0);
 
                     pos.setIndex(start + GMT.length());
 
@@ -1160,7 +1149,7 @@ public class SimpleDateFormat extends DateFormat {
 		    } catch(StringIndexOutOfBoundsException e) {
                     }
 		    if (sign == 0) {
-			calendar.set(Calendar.ZONE_OFFSET, 0 );
+			cal.set(Calendar.ZONE_OFFSET, 0 );
 			return pos.getIndex();
 		    }
 
@@ -1195,7 +1184,7 @@ public class SimpleDateFormat extends DateFormat {
                     // At this point, check for named time zones by looking through
                     // the locale data from the DateFormatZoneData strings.
                     // Want to be able to parse both short and long forms.
-		    i = subParseZoneString(text, start);
+		    i = subParseZoneString(text, start, cal);
 		    if (i != 0)
 			return i;
 
@@ -1229,12 +1218,12 @@ public class SimpleDateFormat extends DateFormat {
                 {
                     offset *= millisPerMinute * sign;
 
-                    if (calendar.getTimeZone().useDaylightTime())
+                    if (cal.getTimeZone().useDaylightTime())
                     {
-                        calendar.set(Calendar.DST_OFFSET, millisPerHour);
+                        cal.set(Calendar.DST_OFFSET, millisPerHour);
                         offset -= millisPerHour;
                     }
-                    calendar.set(Calendar.ZONE_OFFSET, offset);
+                    cal.set(Calendar.ZONE_OFFSET, offset);
 
                     return pos.getIndex();
                 }
@@ -1263,7 +1252,7 @@ public class SimpleDateFormat extends DateFormat {
             }
             else number = numberFormat.parse(text, pos);
             if (number != null) {
-                calendar.set(field, number.intValue());
+                cal.set(field, number.intValue());
                 return pos.getIndex();
             }
             return -start;
