@@ -23,6 +23,7 @@
 #include "uvector.h"
 #include "uvectr32.h"
 #include "regeximp.h"
+#include "regexst.h"
 
 // #include <malloc.h>        // Needed for heapcheck testing
 
@@ -52,7 +53,7 @@ RegexMatcher::RegexMatcher(const RegexPattern *pat)  {
         fDeferredStatus = U_MEMORY_ALLOCATION_ERROR;
     }
         
-    reset();
+    reset(*RegexPattern::gStaticSets->fEmptyString);
 }
 
 
@@ -98,7 +99,7 @@ RegexMatcher::RegexMatcher(const UnicodeString &regexp,
     if (fStack == NULL || fData == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
     }
-    reset();
+    reset(*RegexPattern::gStaticSets->fEmptyString);
 }
 
 
