@@ -14,7 +14,7 @@ include $(top_builddir)/icudefs.mk
 
 SECTION = 1
 
-MAN_FILES = $(TARGET).$(SECTION) $(DERB).$(SECTION)
+MAN_FILES = $(TARGET:$(EXEEXT)=).$(SECTION) $(DERB:$(EXEEXT)=).$(SECTION)
 
 ## Build directory information
 subdir = tools/genrb
@@ -23,8 +23,8 @@ subdir = tools/genrb
 CLEANFILES = *~ $(MAN_FILES) $(DEPS) 
 
 ## Target information
-TARGET = genrb
-DERB = derb
+TARGET = genrb$(EXEEXT)
+DERB = derb$(EXEEXT)
 
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
 LIBS = $(LIBICUI18N) $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
@@ -75,10 +75,10 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 $(TARGET) : $(OBJECTS)
-	$(LINK.c) -o $@ $^ $(LIBS) 
+	$(LINK.c) $(OUTOPT)$@ $^ $(LIBS) 
 
 $(DERB) : $(DERB_OBJ)
-	$(LINK.c) -o $@ $^ $(LIBS) 
+	$(LINK.c) $(OUTOPT)$@ $^ $(LIBS) 
 
 
 # the 'mv' will always fail if you are building in the source dir

@@ -121,11 +121,11 @@ endif
 
 ifneq ($(ENABLE_SHARED),)
 $(FINAL_SO_TARGET): $(OBJECTS)
-	$(SHLIB.cc) $(LD_SONAME) -o $@ $^ $(LIBS)
+	$(SHLIB.cc) $(LD_SONAME) $(OUTOPT)$@ $^ $(LIBS)
 
 ifeq ($(OS390BATCH),1)
 $(BATCH_TARGET): $(OBJECTS)
-	$(SHLIB.cc) $(LD_SONAME) -o $@ $^ $(BATCH_LIBS)
+	$(SHLIB.cc) $(LD_SONAME) $(OUTOPT)$@ $^ $(BATCH_LIBS)
 endif # OS390BATCH
 
 endif

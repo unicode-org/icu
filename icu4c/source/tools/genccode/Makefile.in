@@ -18,7 +18,7 @@ subdir = tools/genccode
 
 SECTION = 8
 
-MANX_FILES = $(TARGET).$(SECTION)
+MANX_FILES = $(TARGET:$(EXEEXT)=).$(SECTION)
 
 ALL_MAN_FILES = $(MANX_FILES)
 
@@ -26,7 +26,7 @@ ALL_MAN_FILES = $(MANX_FILES)
 CLEANFILES = *~ $(DEPS) $(RES_FILES) $(TEST_FILES) $(ALL_MAN_FILES)
 
 ## Target information
-TARGET = genccode
+TARGET = genccode$(EXEEXT)
 
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil $(BIR_CPPFLAGS)
 LIBS = $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M) $(LIBICUTOOLUTIL)
@@ -83,7 +83,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 $(TARGET) : $(OBJECTS)
-	$(LINK.c) -o $@ $^ $(LIBS) 
+	$(LINK.c) $(OUTOPT)$@ $^ $(LIBS) 
 
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)
