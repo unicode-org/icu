@@ -424,8 +424,8 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
     oText = pos.start;
     keyLimit = 0;
     while (oPattern < (pattern.length() - anteContextLength)) {
-        if (incremental && oText == pos.contextLimit) {
-            // We've reached the context limit without a mismatch and
+        if (incremental && oText == pos.limit) {
+            // We've reached the limit without a mismatch and
             // without completing our match.
             m = U_PARTIAL_MATCH;
             goto exit;
