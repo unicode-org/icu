@@ -5,7 +5,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: Transliterator_index.txt
-// Date: Fri Mar  2 12:50:49 2001
+// Date: Thu Oct 25 22:17:22 2001
 //--------------------------------------------------------------------
 
 //--------------------------------------------------------------------
@@ -61,77 +61,70 @@ translit_index {
 
 // Bidirectional rule files
 
-{ "Fullwidth-Halfwidth", "file", "fullhalf", "FORWARD" },
-{ "Halfwidth-Fullwidth", "file", "fullhalf", "REVERSE" },
+{ "Fullwidth-Halfwidth", "file", "translit_Fullwidth_Halfwidth", "FORWARD" },
+{ "Halfwidth-Fullwidth", "file", "translit_Fullwidth_Halfwidth", "REVERSE" },
 
-{ "Latin-Arabic", "file", "larabic", "FORWARD" },
-{ "Arabic-Latin", "file", "larabic", "REVERSE" },
+{ "Latin-Cyrillic", "file", "translit_Cyrillic_Latin", "REVERSE" },
+{ "Cyrillic-Latin", "file", "translit_Cyrillic_Latin", "FORWARD" },
 
-{ "Latin-Cyrillic", "file", "lcyril", "FORWARD" },
-{ "Cyrillic-Latin", "file", "lcyril", "REVERSE" },
+{ "Latin-Greek", "file", "translit_Greek_Latin", "REVERSE" },
+{ "Greek-Latin", "file", "translit_Greek_Latin", "FORWARD" },
 
-//{ "Latin-Devanagari", "file", "ldevan", "FORWARD" },
-//{ "Devanagari-Latin", "file", "ldevan", "REVERSE" },
+{ "LowerLatin-Jamo", "internal", "translit_Latin_Jamo", "FORWARD" },
+{ "Latin-Jamo", "alias", "Any-Lower;LowerLatin-Jamo", "" },
+{ "Jamo-Latin", "file", "translit_Latin_Jamo", "REVERSE" },
 
-{ "Latin-Greek", "file", "lgreek", "FORWARD" },
-{ "Greek-Latin", "file", "lgreek", "REVERSE" },
+{ "Latin-Katakana", "file", "translit_Latin_Katakana", "FORWARD" },
+{ "Katakana-Latin", "file", "translit_Latin_Katakana", "REVERSE" },
 
-{ "Latin-Hebrew", "file", "lhebrew", "FORWARD" },
-{ "Hebrew-Latin", "file", "lhebrew", "REVERSE" },
+{ "Latin-Hiragana", "file", "translit_Hiragana_Latin", "REVERSE" },
+{ "Hiragana-Latin", "file", "translit_Hiragana_Latin", "FORWARD" },
 
-{ "Latin-Jamo", "file", "ljamo", "FORWARD" },
-{ "Jamo-Latin", "file", "ljamo", "REVERSE" },
+{ "Hiragana-Katakana", "file", "translit_Hiragana_Katakana", "FORWARD" },
+{ "Katakana-Hiragana", "file", "translit_Hiragana_Katakana", "REVERSE" },
 
-{ "Latin-Kana", "file", "lkana", "FORWARD" },
-{ "Kana-Latin", "file", "lkana", "REVERSE" },
+{ "Any-Accents", "file", "translit_Any_Accents", "FORWARD" },
+{ "Accents-Any", "file", "translit_Any_Accents", "REVERSE" },
 
-{ "Hiragana-Katakana", "file", "kana", "FORWARD" },
-{ "Katakana-Hiragana", "file", "kana", "REVERSE" },
-
-{ "StraightQuotes-CurlyQuotes", "file", "quotes", "FORWARD" },
-{ "CurlyQuotes-StraightQuotes", "file", "quotes", "REVERSE" },
+{ "Any-Publishing", "file", "translit_Any_Publishing", "FORWARD" },
+{ "Publishing-Any", "file", "translit_Any_Publishing", "REVERSE" },
 
 // One way rules (forward only)
 
 // Java only: { "Han-Pinyin", "file", "-", "FORWARD" },
 // Java only: { "Kanji-English", "file", "-", "FORWARD" },
 // Java only: { "Kanji-OnRomaji", "file", "-", "FORWARD" },
-{ "KeyboardEscape-Latin1", "file", "kbdescl1", "FORWARD" },
-
-// Replaced by algorithmic transliterator:
-// { "UnicodeName-UnicodeChar", "file", "ucname", "FORWARD" },
 
 // Compound rules
 
-/// TODO
-{ "Latin-Hangul", "alias", "[:Latin:];Latin-Jamo;[\u1100-\u11FF]NFC", "" },
+{ "Latin-Hangul", "alias", "[\p{Latin}];Latin-Jamo;[\u1100-\u11FF]NFC", "" },
 { "Hangul-Latin", "alias", "[\uAC00-\uD7AF];NFD;Jamo-Latin", "" },
 
 // Inter-Indic composed rules
-{ "Latin-InterIndic", "internal", "Latin_InterIndic", "FORWARD" },
-{ "Devanagari-InterIndic", "internal", "Devanagari_InterIndic", "FORWARD" },
-{ "Bengali-InterIndic", "internal", "Bengali_InterIndic", "FORWARD" },
-{ "Gurmukhi-InterIndic", "internal", "Gurmukhi_InterIndic", "FORWARD" },
-{ "Gujarati-InterIndic", "internal", "Gujarati_InterIndic", "FORWARD" },
-{ "Oriya-InterIndic", "internal", "Oriya_InterIndic", "FORWARD" },
-{ "Tamil-InterIndic", "internal", "Tamil_InterIndic", "FORWARD" },
-{ "Telugu-InterIndic", "internal", "Telugu_InterIndic", "FORWARD" },
-{ "Kannada-InterIndic", "internal", "Kannada_InterIndic", "FORWARD" },
-{ "Malayalam-InterIndic", "internal", "Malayalam_InterIndic", "FORWARD" },
+{ "Latin-InterIndic", "internal", "translit_Latin_InterIndic", "FORWARD" },
+{ "Devanagari-InterIndic", "internal", "translit_Devanagari_InterIndic", "FORWARD" },
+{ "Bengali-InterIndic", "internal", "translit_Bengali_InterIndic", "FORWARD" },
+{ "Gurmukhi-InterIndic", "internal", "translit_Gurmukhi_InterIndic", "FORWARD" },
+{ "Gujarati-InterIndic", "internal", "translit_Gujarati_InterIndic", "FORWARD" },
+{ "Oriya-InterIndic", "internal", "translit_Oriya_InterIndic", "FORWARD" },
+{ "Tamil-InterIndic", "internal", "translit_Tamil_InterIndic", "FORWARD" },
+{ "Telugu-InterIndic", "internal", "translit_Telugu_InterIndic", "FORWARD" },
+{ "Kannada-InterIndic", "internal", "translit_Kannada_InterIndic", "FORWARD" },
+{ "Malayalam-InterIndic", "internal", "translit_Malayalam_InterIndic", "FORWARD" },
 
-{ "InterIndic-Latin", "internal", "InterIndic_Latin", "FORWARD" },
-{ "InterIndic-Devanagari", "internal", "InterIndic_Devanagari", "FORWARD" },
-{ "InterIndic-Bengali", "internal", "InterIndic_Bengali", "FORWARD" },
-{ "InterIndic-Gurmukhi", "internal", "InterIndic_Gurmukhi", "FORWARD" },
-{ "InterIndic-Gujarati", "internal", "InterIndic_Gujarati", "FORWARD" },
-{ "InterIndic-Oriya", "internal", "InterIndic_Oriya", "FORWARD" },
-{ "InterIndic-Tamil", "internal", "InterIndic_Tamil", "FORWARD" },
-{ "InterIndic-Telugu", "internal", "InterIndic_Telugu", "FORWARD" },
-{ "InterIndic-Kannada", "internal", "InterIndic_Kannada", "FORWARD" },
-{ "InterIndic-Malayalam", "internal", "InterIndic_Malayalam", "FORWARD" },
+{ "InterIndic-Latin", "internal", "translit_InterIndic_Latin", "FORWARD" },
+{ "InterIndic-Devanagari", "internal", "translit_InterIndic_Devanagari", "FORWARD" },
+{ "InterIndic-Bengali", "internal", "translit_InterIndic_Bengali", "FORWARD" },
+{ "InterIndic-Gurmukhi", "internal", "translit_InterIndic_Gurmukhi", "FORWARD" },
+{ "InterIndic-Gujarati", "internal", "translit_InterIndic_Gujarati", "FORWARD" },
+{ "InterIndic-Oriya", "internal", "translit_InterIndic_Oriya", "FORWARD" },
+{ "InterIndic-Tamil", "internal", "translit_InterIndic_Tamil", "FORWARD" },
+{ "InterIndic-Telugu", "internal", "translit_InterIndic_Telugu", "FORWARD" },
+{ "InterIndic-Kannada", "internal", "translit_InterIndic_Kannada", "FORWARD" },
+{ "InterIndic-Malayalam", "internal", "translit_InterIndic_Malayalam", "FORWARD" },
 
-//Latin-X transliterators
-{ "Latin-Devanagari", "alias", "NFD;Latin-InterIndic;InterIndic-Devanagari;NFC", ""  },
+//Latin-Indic transliterators
+{ "Latin-Devanagari", "alias", "NFD;Latin-InterIndic;InterIndic-Devanagari;NFC", "" },
 { "Latin-Bengali", "alias", "NFD;Latin-InterIndic;InterIndic-Bengali;NFC", "" },
 { "Latin-Gurmukhi", "alias", "NFD;Latin-InterIndic;InterIndic-Gurmukhi;NFC", "" },
 { "Latin-Gujarati", "alias", "NFD;Latin-InterIndic;InterIndic-Gujarati;NFC", "" },
@@ -141,8 +134,8 @@ translit_index {
 { "Latin-Kannada", "alias", "NFD;Latin-InterIndic;InterIndic-Kannada;NFC", "" },
 { "Latin-Malayalam", "alias", "NFD;Latin-InterIndic;InterIndic-Malayalam;NFC", "" },
 
-//X-Latin transliterators
-{ "Devanagari-Latin","alias", "NFD;Devanagari-InterIndic;InterIndic-Latin;NFC", "" },
+//Indic-Latin transliterators
+{ "Devanagari-Latin", "alias", "NFD;Devanagari-InterIndic;InterIndic-Latin;NFC", "" },
 { "Bengali-Latin", "alias", "NFD;Bengali-InterIndic;InterIndic-Latin;NFC", "" },
 { "Gurmukhi-Latin", "alias", "NFD;Bengali-InterIndic;InterIndic-Latin;NFC", "" },
 { "Gujarati-Latin", "alias", "NFD;Gujarati-InterIndic;InterIndic-Latin;NFC", "" },
@@ -151,7 +144,6 @@ translit_index {
 { "Telugu-Latin", "alias", "NFD;Telugu-InterIndic;InterIndic-Latin;NFC", "" },
 { "Kannada-Latin", "alias", "NFD;Kannada-InterIndic;InterIndic-Latin;NFC", "" },
 { "Malayalam-Latin", "alias", "NFD;Malayalam-InterIndic;InterIndic-Latin;NFC", "" },
-
 
 { "Devanagari-Bengali", "alias", "NFD;Devanagari-InterIndic;InterIndic-Bengali;NFC", "" },
 { "Devanagari-Gurmukhi", "alias", "NFD;Devanagari-InterIndic;InterIndic-Gurmukhi;NFC", "" },
@@ -177,7 +169,7 @@ translit_index {
 { "Gurmukhi-Telugu", "alias", "NFD;Gurmukhi-InterIndic;InterIndic-Telugu;NFC", "" },
 { "Gurmukhi-Kannada", "alias", "NFD;Gurmukhi-InterIndic;InterIndic-Kannada;NFC", "" },
 { "Gurmukhi-Malayalam", "alias", "NFD;Gurmukhi-InterIndic;InterIndic-Malayalam;NFC", "" },
-{ "Gujarati-Devanagari", "alias", "NFD;Gujarati-InterIndic;InterIndic-Devanagari;NFC", "" },
+{ "Gujarati-Devanagari", "alias", "Gujarati-InterIndic;InterIndic-Devanagari;NFC", "" },
 { "Gujarati-Bengali", "alias", "NFD;Gujarati-InterIndic;InterIndic-Bengali;NFC", "" },
 { "Gujarati-Gurmukhi", "alias", "NFD;Gujarati-InterIndic;InterIndic-Gurmukhi;NFC", "" },
 { "Gujarati-Oriya", "alias", "NFD;Gujarati-InterIndic;InterIndic-Oriya;NFC", "" },
@@ -227,5 +219,6 @@ translit_index {
 { "Malayalam-Kannada", "alias", "NFD;Malayalam-InterIndic;InterIndic-Kannada;NFC", "" },
 
 // eof
+
   }
 }
