@@ -49,7 +49,7 @@ CLEANFILES = *~
 SUBDIRS = testdata intltest cintltst ieeetest
 
 ## List of phony targets
-.PHONY : all all-local all-recursive install install-local		\
+.PHONY : everything all all-local all-recursive install install-local		\
 install-recursive clean clean-local clean-recursive distclean		\
 distclean-local distclean-recursive dist dist-recursive dist-local	\
 check check-recursive check-local
@@ -58,12 +58,15 @@ check check-recursive check-local
 .SUFFIXES :
 
 ## List of standard targets
-all: all-recursive all-local
+everything: all-recursive all-local
+all:
+	@echo simply use \`make\' \(or \`make everything\'\) to do all
+
 install: install-recursive install-local
 clean: clean-recursive clean-local
 distclean : distclean-recursive distclean-local
 dist: dist-recursive dist-local
-check: all check-recursive check-local
+check: everything check-recursive check-local
 
 ## Recursive targets
 all-recursive install-recursive clean-recursive distclean-recursive dist-recursive check-recursive:
