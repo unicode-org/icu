@@ -113,7 +113,7 @@ u_vsscanf_u(const UChar *buffer,
         return 0;
     }
 
-    converted = u_scanf_parse(&inStr, patternSpecification, (va_list*)&ap);
+    converted = u_scanf_parse(&inStr, patternSpecification, ap);
 
     u_locbund_close(&inStr.str.fBundle);
 
