@@ -417,25 +417,31 @@ static void TestCurrency(void)
     {
         str=NULL;
         currencyFmt = unum_open(UNUM_CURRENCY, NULL,0,locale[i],NULL, &status);
+
         if(U_FAILURE(status)){
             log_err("Error in the construction of number format with style currency:\n%s\n",
                 myErrorName(status));
+        } else {
+            lneed=0;
+            lneed= unum_formatDouble(currencyFmt, 1.50, NULL, lneed, NULL, &status);
+            if(status==U_BUFFER_OVERFLOW_ERROR){
+                status=U_ZERO_ERROR;
+                str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
+                pos.field = 0;
+                unum_formatDouble(currencyFmt, 1.50, str, lneed+1, &pos, &status);
+            }
+
+            if(U_FAILURE(status)) {
+                log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status) );
+            } else {
+                u_charsToUChars(result[i], res, (int32_t)strlen(result[i])+1);
+
+                if (u_strcmp(str, res) != 0){
+                    log_err("FAIL: Expected %s Got: %s for locale: %s\n", result[i], aescstrdup(str, -1), locale[i]);
+                }
+            }
         }
-        lneed=0;
-        lneed= unum_formatDouble(currencyFmt, 1.50, NULL, lneed, NULL, &status);
-        if(status==U_BUFFER_OVERFLOW_ERROR){
-            status=U_ZERO_ERROR;
-            str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
-            pos.field = 0;
-            unum_formatDouble(currencyFmt, 1.50, str, lneed+1, &pos, &status);
-        }
-        if(U_FAILURE(status)) {
-            log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status) );
-        }
-        u_charsToUChars(result[i], res, (int32_t)strlen(result[i])+1);
-        if (u_strcmp(str, res) != 0){
-            log_err("FAIL: Expected %s Got: %s for locale: %s\n", result[i], aescstrdup(str, -1), locale[i]);
-        }
+
         unum_close(currencyFmt);
         free(str);
     }
@@ -475,27 +481,33 @@ static void TestCurrencyPreEuro(void)
             continue;
         }
         currencyFmt = unum_open(UNUM_CURRENCY, NULL,0,curID,NULL, &status);
+
         if(U_FAILURE(status)){
             log_err("Error in the construction of number format with style currency:\n%s\n",
                 myErrorName(status));
+        } else {
+            lneed=0;
+            lneed= unum_formatDouble(currencyFmt, 1.50, NULL, lneed, NULL, &status);
+
+            if(status==U_BUFFER_OVERFLOW_ERROR){
+                status=U_ZERO_ERROR;
+                str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
+                pos.field = 0;
+                unum_formatDouble(currencyFmt, 1.50, str, lneed+1, &pos, &status);
+            }
+
+            if(U_FAILURE(status)) {
+                log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status) );
+            } else {
+                res=(UChar*)malloc(sizeof(UChar) * (strlen(result[i])+1) );
+                u_unescape(result[i],res,(int32_t)(strlen(result[i])+1));
+
+                if (u_strcmp(str, res) != 0){
+                    log_err("FAIL: Expected %s Got: %s for locale: %s\n", result[i],aescstrdup(str, -1),locale[i]);
+                }
+            }
         }
-        lneed=0;
-        lneed= unum_formatDouble(currencyFmt, 1.50, NULL, lneed, NULL, &status);
-        if(status==U_BUFFER_OVERFLOW_ERROR){
-            status=U_ZERO_ERROR;
-            str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
-            pos.field = 0;
-            unum_formatDouble(currencyFmt, 1.50, str, lneed+1, &pos, &status);
-        }
-        if(U_FAILURE(status)) {
-            log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status) );
-        }
-        res=(UChar*)malloc(sizeof(UChar) * (strlen(result[i])+1) );
-        u_unescape(result[i],res,(int32_t)(strlen(result[i])+1));
-        if (u_strcmp(str, res) != 0){
-            log_err("FAIL: Expected %s Got: %s for locale: %s\n", result[i],aescstrdup(str, -1),locale[i]);
-        }
-        
+            
         unum_close(currencyFmt);
         free(str);
         free(res);
@@ -539,41 +551,47 @@ static void TestCurrencyObject(void)
         if(U_FAILURE(status)){
             log_err("Error in the construction of number format with style currency:\n%s\n",
                 myErrorName(status));
-        }
-        if (*currency[i]) {
-            u_uastrcpy(isoCode, currency[i]);
-            unum_setTextAttribute(currencyFmt, UNUM_CURRENCY_CODE,
-                isoCode, u_strlen(isoCode), &status);
-            if(U_FAILURE(status)) {
-                log_err("FAIL: can't set currency code %s\n", myErrorName(status) );
+        } else {
+            if (*currency[i]) {
+                u_uastrcpy(isoCode, currency[i]);
+                unum_setTextAttribute(currencyFmt, UNUM_CURRENCY_CODE,
+                    isoCode, u_strlen(isoCode), &status);
+
+                if(U_FAILURE(status)) {
+                    log_err("FAIL: can't set currency code %s\n", myErrorName(status) );
+                }
             }
-        }
-        unum_getTextAttribute(currencyFmt, UNUM_CURRENCY_CODE,
-            isoCode, sizeof(isoCode), &status);
-        if(U_FAILURE(status)) {
-            log_err("FAIL: can't get currency code %s\n", myErrorName(status) );
-        }
-        u_UCharsToChars(isoCode,cStr,u_strlen(isoCode));
-        log_verbose("ISO code %s\n", cStr);
-        if (*currency[i] && uprv_strcmp(cStr, currency[i])) {
-            log_err("FAIL: currency should be %s, but is %s\n", currency[i], cStr);
-        }
-        
-        lneed=0;
-        lneed= unum_formatDouble(currencyFmt, 1234.56, NULL, lneed, NULL, &status);
-        if(status==U_BUFFER_OVERFLOW_ERROR){
-            status=U_ZERO_ERROR;
-            str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
-            pos.field = 0;
-            unum_formatDouble(currencyFmt, 1234.56, str, lneed+1, &pos, &status);
-        }
-        if(U_FAILURE(status)) {
-            log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status) );
-        }
-        res=(UChar*)malloc(sizeof(UChar) * (strlen(result[i])+1) );
-        u_unescape(result[i],res, (int32_t)(strlen(result[i])+1));
-        if (u_strcmp(str, res) != 0){
-            log_err("FAIL: Expected %s Got: %s for locale: %s\n", result[i],aescstrdup(str, -1),locale[i]);
+
+            unum_getTextAttribute(currencyFmt, UNUM_CURRENCY_CODE,
+                isoCode, sizeof(isoCode), &status);
+
+            if(U_FAILURE(status)) {
+                log_err("FAIL: can't get currency code %s\n", myErrorName(status) );
+            }
+
+            u_UCharsToChars(isoCode,cStr,u_strlen(isoCode));
+            log_verbose("ISO code %s\n", cStr);
+            if (*currency[i] && uprv_strcmp(cStr, currency[i])) {
+                log_err("FAIL: currency should be %s, but is %s\n", currency[i], cStr);
+            }
+            
+            lneed=0;
+            lneed= unum_formatDouble(currencyFmt, 1234.56, NULL, lneed, NULL, &status);
+            if(status==U_BUFFER_OVERFLOW_ERROR){
+                status=U_ZERO_ERROR;
+                str=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
+                pos.field = 0;
+                unum_formatDouble(currencyFmt, 1234.56, str, lneed+1, &pos, &status);
+            }
+            if(U_FAILURE(status)) {
+                log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status) );
+            } else {
+                res=(UChar*)malloc(sizeof(UChar) * (strlen(result[i])+1) );
+                u_unescape(result[i],res, (int32_t)(strlen(result[i])+1));
+                if (u_strcmp(str, res) != 0){
+                    log_err("FAIL: Expected %s Got: %s for locale: %s\n", result[i],aescstrdup(str, -1),locale[i]);
+                }
+            }
         }
         
         unum_close(currencyFmt);
@@ -593,16 +611,19 @@ static void TestRounding487(void)
      - very bad if you try to run the tests on machine where default locale is NOT "en_US" */
     /* nnf = unum_open(UNUM_DEFAULT, NULL, &status); */
     nnf = unum_open(UNUM_DEFAULT, NULL,0,"en_US",NULL, &status);
+
     if(U_FAILURE(status)){
         log_err("FAIL: failure in the construction of number format: %s\n", myErrorName(status));
+    } else {
+        roundingTest(nnf, 0.00159999, 4, "0.0016");
+        roundingTest(nnf, 0.00995, 4, "0.01");
+        
+        roundingTest(nnf, 12.3995, 3, "12.4");
+        
+        roundingTest(nnf, 12.4999, 0, "12");
+        roundingTest(nnf, - 19.5, 0, "-20");
     }
-    roundingTest(nnf, 0.00159999, 4, "0.0016");
-    roundingTest(nnf, 0.00995, 4, "0.01");
-    
-    roundingTest(nnf, 12.3995, 3, "12.4");
-    
-    roundingTest(nnf, 12.4999, 0, "12");
-    roundingTest(nnf, - 19.5, 0, "-20");
+
     unum_close(nnf);
 }
  
@@ -652,19 +673,26 @@ static void TestDoubleAttribute(void)
     UNumberFormatAttribute attr;
     UNumberFormatStyle style= UNUM_DEFAULT;
     UNumberFormat *def;
-    def=unum_open(style, NULL,0,NULL,NULL, &status);
+
     log_verbose("\nTesting get and set DoubleAttributes\n");
-    attr=UNUM_ROUNDING_INCREMENT;
-    dvalue=unum_getDoubleAttribute(def, attr);
-    for (i = 0; i<9 ; i++)
-    {
-        dvalue = mydata[i]; 
-        unum_setDoubleAttribute(def, attr, dvalue);
-        if(unum_getDoubleAttribute(def,attr)!=mydata[i])
-            log_err("Fail: error in setting and getting double attributes for UNUM_ROUNDING_INCREMENT\n");
-        else
-            log_verbose("Pass: setting and getting double attributes for UNUM_ROUNDING_INCREMENT works fine\n");
+    def=unum_open(style, NULL,0,NULL,NULL, &status);
+
+    if (U_FAILURE(status)) {
+        log_err("Fail: error creating a default number formatter\n");
+    } else {
+        attr=UNUM_ROUNDING_INCREMENT;
+        dvalue=unum_getDoubleAttribute(def, attr);
+        for (i = 0; i<9 ; i++)
+        {
+            dvalue = mydata[i]; 
+            unum_setDoubleAttribute(def, attr, dvalue);
+            if(unum_getDoubleAttribute(def,attr)!=mydata[i])
+                log_err("Fail: error in setting and getting double attributes for UNUM_ROUNDING_INCREMENT\n");
+            else
+                log_verbose("Pass: setting and getting double attributes for UNUM_ROUNDING_INCREMENT works fine\n");
+        }
     }
+
     unum_close(def);
 }
 

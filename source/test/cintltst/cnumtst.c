@@ -119,8 +119,13 @@ static void TestNumberFormat()
     status = U_ZERO_ERROR;
     log_verbose("Testing  unum_open() with default style and locale\n");
     def=unum_open(style, NULL,0,NULL, NULL,&status);
+
+    /* Might as well pack it in now if we can't even get a default NumberFormat... */
     if(U_FAILURE(status))
-        log_err("Error in creating NumberFormat default using unum_open(): %s\n", myErrorName(status));
+    {
+        log_err("Error in creating default NumberFormat using unum_open(): %s\n", myErrorName(status));
+        return;
+    }
 
     log_verbose("\nTesting unum_open() with french locale and default style(decimal)\n");
     fr=unum_open(style,NULL,0, "fr_FR",NULL, &status);
