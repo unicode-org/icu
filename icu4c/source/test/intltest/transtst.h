@@ -120,11 +120,6 @@ class TransliteratorTest : public IntlTest {
     void expectAux(const UnicodeString& tag,
                    const UnicodeString& summary, bool_t pass,
                    const UnicodeString& expectedResult);
-
-    /**
-     * Escape non-ASCII characters as Unicode.
-     */
-    static UnicodeString escape(const UnicodeString& s);
 };
 
 #endif
