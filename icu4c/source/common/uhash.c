@@ -5,6 +5,8 @@
 ******************************************************************************
 *   Date        Name        Description
 *   03/22/00    aliu        Adapted from original C++ ICU Hashtable.
+*   07/06/01    aliu        Modified to support int32_t keys on
+*                           platforms with sizeof(void*) < 32.
 ******************************************************************************
 */
 
@@ -107,9 +109,10 @@ static const float RESIZE_POLICY_RATIO_TABLE[6] = {
 
 #define IS_EMPTY_OR_DELETED(x) ((x) < 0)
 
-#define HASH_DELETE_KEY_VALUE(hash, key, value) \
-            if (hash->keyDeleter != NULL && key != NULL) { \
-                (*hash->keyDeleter)(key); \
+/* This macro expects a UHashKey.pointer as its keypointer parameter */
+#define HASH_DELETE_KEY_VALUE(hash, keypointer, value) \
+            if (hash->keyDeleter != NULL && keypointer != NULL) { \
+                (*hash->keyDeleter)(keypointer); \
             } \
             if (hash->valueDeleter != NULL && value != NULL) { \
                 (*hash->valueDeleter)(value); \
@@ -151,13 +154,21 @@ static void _uhash_allocate(UHashtable *hash, int32_t primeIndex,
 
 static void _uhash_rehash(UHashtable *hash);
 
-static UHashElement* _uhash_find(const UHashtable *hash, const void* key,
+static UHashElement* _uhash_find(const UHashtable *hash, UHashKey key,
                                  int32_t hashcode);
+
+static void* _uhash_put(UHashtable *hash,
+                        UHashKey key,
+                        void* value,
+                        UErrorCode *status);
+
+static void* _uhash_remove(UHashtable *hash,
+                           UHashKey key);
 
 static void* _uhash_internalRemoveElement(UHashtable *hash, UHashElement* e);
 
 static void* _uhash_setElement(UHashtable* hash, UHashElement* e,
-                               int32_t hashcode, void* key, void* value);
+                               int32_t hashcode, UHashKey key, void* value);
 
 static void _uhash_internalSetResizePolicy(UHashtable *hash, enum UHashResizePolicy policy);
 
@@ -194,7 +205,7 @@ uhash_close(UHashtable *hash) {
             int32_t pos=-1;
             UHashElement *e;
             while ((e = (UHashElement*) uhash_nextElement(hash, &pos)) != NULL) {
-                HASH_DELETE_KEY_VALUE(hash, e->key, e->value);
+                HASH_DELETE_KEY_VALUE(hash, e->key.pointer, e->value);
             }
         }
         uprv_free(hash->elements);
@@ -247,7 +258,17 @@ uhash_count(const UHashtable *hash) {
 U_CAPI void*
 uhash_get(const UHashtable *hash,
           const void* key) {
-    return _uhash_find(hash, key, hash->keyHasher(key))->value;
+    UHashKey keyholder;
+    keyholder.pointer = (void*) key;
+    return _uhash_find(hash, keyholder, hash->keyHasher(keyholder))->value;
+}
+
+U_CAPI void*
+uhash_geti(const UHashtable *hash,
+           int32_t key) {
+    UHashKey keyholder;
+    keyholder.integer = key;
+    return _uhash_find(hash, keyholder, hash->keyHasher(keyholder))->value;
 }
 
 U_CAPI void*
@@ -255,85 +276,35 @@ uhash_put(UHashtable *hash,
           void* key,
           void* value,
           UErrorCode *status) {
+    UHashKey keyholder;
+    keyholder.pointer = key;
+    return _uhash_put(hash, keyholder, value, status);
+}
 
-    /* Put finds the position in the table for the new value.  If the
-     * key is already in the table, it is deleted, if there is a
-     * non-NULL keyDeleter.  Then the key, the hash and the value are
-     * all put at the position in their respective arrays.
-     */
-    int32_t hashcode;
-    UHashElement* e;
-
-    if (U_FAILURE(*status)) {
-        goto err;
-    }
-    assert(hash != NULL);
-    if (value == NULL) {
-        /* Disallow storage of NULL values, since NULL is returned by
-         * get() to indicate an absent key.  Storing NULL == removing.
-         */
-        return uhash_remove(hash, key);
-    }
-    if (hash->count > hash->highWaterMark) {
-        _uhash_rehash(hash);
-    }
-
-    hashcode = (*hash->keyHasher)(key);
-    e = _uhash_find(hash, key, hashcode);
-    assert(e != NULL);
-
-    if (IS_EMPTY_OR_DELETED(e->hashcode)) {
-        /* Important: We must never actually fill the table up.  If we
-         * do so, then _uhash_find() will return NULL, and we'll have
-         * to check for NULL after every call to _uhash_find().  To
-         * avoid this we make sure there is always at least one empty
-         * or deleted slot in the table.  This only is a problem if we
-         * are out of memory and rehash isn't working.
-         */
-        ++hash->count;
-        if (hash->count == hash->length) {
-            /* Don't allow count to reach length */
-            --hash->count;
-            *status = U_MEMORY_ALLOCATION_ERROR;
-            goto err;
-        }
-    }
-
-    /* We must in all cases handle storage properly.  If there was an
-     * old key, then it must be deleted (if the deleter != NULL).
-     * Make hashcodes stored in table positive.
-     */
-    return _uhash_setElement(hash, e, hashcode & 0x7FFFFFFF, key, value);
-
- err:
-    /* If the deleters are non-NULL, this method adopts its key and/or
-     * value arguments, and we must be sure to delete the key and/or
-     * value in all cases, even upon failure.
-     */
-    HASH_DELETE_KEY_VALUE(hash, key, value);
-    return NULL;
+void*
+uhash_puti(UHashtable *hash,
+           int32_t key,
+           void* value,
+           UErrorCode *status) {
+    UHashKey keyholder;
+    keyholder.integer = key;
+    return _uhash_put(hash, keyholder, value, status);
 }
 
 U_CAPI void*
 uhash_remove(UHashtable *hash,
              const void* key) {
-    /* First find the position of the key in the table.  If the object
-     * has not been removed already, remove it.  If the user wanted
-     * keys deleted, then delete it also.  We have to put a special
-     * hashcode in that position that means that something has been
-     * deleted, since when we do a find, we have to continue PAST any
-     * deleted values.
-     */
-    void* result = NULL;
-    UHashElement* e = _uhash_find(hash, key, hash->keyHasher(key));
-    assert(e != NULL);
-    if (!IS_EMPTY_OR_DELETED(e->hashcode)) {
-        result = _uhash_internalRemoveElement(hash, e);
-        if (hash->count < hash->lowWaterMark) {
-            _uhash_rehash(hash);
-        }
-    }
-    return result;
+    UHashKey keyholder;
+    keyholder.pointer = (void*) key;
+    return _uhash_remove(hash, keyholder);
+}
+
+U_CAPI void*
+uhash_removei(UHashtable *hash,
+              int32_t key) {
+    UHashKey keyholder;
+    keyholder.integer = key;
+    return _uhash_remove(hash, keyholder);
 }
 
 U_CAPI void
@@ -347,6 +318,15 @@ uhash_removeAll(UHashtable *hash) {
         }
     }
     assert(hash->count == 0);
+}
+
+U_CAPI const UHashElement*
+uhash_find(const UHashtable *hash, const void* key) {
+    UHashKey keyholder;
+    const UHashElement *e;
+    keyholder.pointer = (void*) key;
+	e = _uhash_find(hash, keyholder, hash->keyHasher(keyholder));
+    return IS_EMPTY_OR_DELETED(e->hashcode) ? NULL : e;
 }
 
 U_CAPI const UHashElement*
@@ -390,10 +370,10 @@ uhash_removeElement(UHashtable *hash, const UHashElement* e) {
   the output range. [LIU]
 */
 
-#define STRING_HASH(TYPE, STRLEN, DEREF)      \
+#define STRING_HASH(TYPE, STR, STRLEN, DEREF) \
     int32_t hash = 0;                         \
-    if (key != NULL) {                        \
-        const TYPE *p = (const TYPE*) key;    \
+    const TYPE *p = (const TYPE*) STR;        \
+    if (p != NULL) {                          \
         int32_t len = STRLEN;                 \
         int32_t inc = ((len - 32) / 32) + 1;  \
         const TYPE *limit = p + len;          \
@@ -405,24 +385,24 @@ uhash_removeElement(UHashtable *hash, const UHashElement* e) {
     return hash
 
 U_CAPI int32_t
-uhash_hashUChars(const void *key) {
-    STRING_HASH(UChar, u_strlen(p), *p);
+uhash_hashUChars(const UHashKey key) {
+    STRING_HASH(UChar, key.pointer, u_strlen(p), *p);
 }
 
 /* Used by UnicodeString to compute its hashcode - Not public API. */
 U_CAPI int32_t
-uhash_hashUCharsN(const UChar *key, int32_t length) {
-    STRING_HASH(UChar, length, *p);
+uhash_hashUCharsN(const UChar *str, int32_t length) {
+    STRING_HASH(UChar, str, length, *p);
 }
 
 U_CAPI int32_t
-uhash_hashChars(const void *key) {
-    STRING_HASH(uint8_t, uprv_strlen((char*)p), *p);
+uhash_hashChars(const UHashKey key) {
+    STRING_HASH(uint8_t, key.pointer, uprv_strlen((char*)p), *p);
 }
 
 U_CAPI int32_t
-uhash_hashIChars(const void *key) {
-    STRING_HASH(uint8_t, uprv_strlen((char*)p), uprv_tolower(*p));
+uhash_hashIChars(const UHashKey key) {
+    STRING_HASH(uint8_t, key.pointer, uprv_strlen((char*)p), uprv_tolower(*p));
 }
 
 /********************************************************************
@@ -430,9 +410,9 @@ uhash_hashIChars(const void *key) {
  ********************************************************************/
 
 U_CAPI UBool
-uhash_compareUChars(const void *key1, const void *key2) {
-    const UChar *p1 = (const UChar*) key1;
-    const UChar *p2 = (const UChar*) key2;
+uhash_compareUChars(const UHashKey key1, const UHashKey key2) {
+    const UChar *p1 = (const UChar*) key1.pointer;
+    const UChar *p2 = (const UChar*) key2.pointer;
     if (p1 == p2) {
         return TRUE;
     }
@@ -447,9 +427,9 @@ uhash_compareUChars(const void *key1, const void *key2) {
 }
 
 U_CAPI UBool
-uhash_compareChars(const void *key1, const void *key2) {
-    const char *p1 = (const char*) key1;
-    const char *p2 = (const char*) key2;
+uhash_compareChars(const UHashKey key1, const UHashKey key2) {
+    const char *p1 = (const char*) key1.pointer;
+    const char *p2 = (const char*) key2.pointer;
     if (p1 == p2) {
         return TRUE;
     }
@@ -464,9 +444,9 @@ uhash_compareChars(const void *key1, const void *key2) {
 }
 
 U_CAPI UBool
-uhash_compareIChars(const void *key1, const void *key2) {
-    const char *p1 = (const char*) key1;
-    const char *p2 = (const char*) key2;
+uhash_compareIChars(const UHashKey key1, const UHashKey key2) {
+    const char *p1 = (const char*) key1.pointer;
+    const char *p2 = (const char*) key2.pointer;
     if (p1 == p2) {
         return TRUE;
     }
@@ -485,13 +465,13 @@ uhash_compareIChars(const void *key1, const void *key2) {
  ********************************************************************/
 
 U_CAPI int32_t
-uhash_hashLong(const void *key) {
-    return (int32_t) key;
+uhash_hashLong(const UHashKey key) {
+    return key.integer;
 }
 
 U_CAPI UBool
-uhash_compareLong(const void *key1, const void *key2) {
-    return (UBool)(key1 == key2);
+uhash_compareLong(const UHashKey key1, const UHashKey key2) {
+    return (UBool)(key1.integer == key2.integer);
 }
 
 /********************************************************************
@@ -554,6 +534,7 @@ _uhash_allocate(UHashtable *hash,
                 UErrorCode *status) {
 
     UHashElement *p, *limit;
+    UHashKey emptykey;
 
     if (U_FAILURE(*status)) return;
 
@@ -570,9 +551,12 @@ _uhash_allocate(UHashtable *hash,
         return;
     }
 
+    emptykey.pointer = NULL; /* Only one of these two is needed */
+    emptykey.integer = 0;    /* but we don't know which one. */
+    
     limit = p + hash->length;
     while (p < limit) {
-        p->key = NULL;
+        p->key = emptykey;
         p->value = NULL;
         p->hashcode = HASH_EMPTY;
         ++p;
@@ -665,7 +649,7 @@ _uhash_rehash(UHashtable *hash) {
  * hash) is relatively prime to the table length.
  */
 static UHashElement*
-_uhash_find(const UHashtable *hash, const void* key,
+_uhash_find(const UHashtable *hash, UHashKey key,
             int32_t hashcode) {
 
     int32_t firstDeleted = -1;  /* assume invalid index */
@@ -717,13 +701,99 @@ _uhash_find(const UHashtable *hash, const void* key,
 }
 
 static void*
-_uhash_setElement(UHashtable *hash, UHashElement* e,
-                  int32_t hashcode, void* key, void* value) {
+_uhash_put(UHashtable *hash,
+           UHashKey key,
+           void* value,
+           UErrorCode *status) {
 
-    void* oldKey = e->key;
+    /* Put finds the position in the table for the new value.  If the
+     * key is already in the table, it is deleted, if there is a
+     * non-NULL keyDeleter.  Then the key, the hash and the value are
+     * all put at the position in their respective arrays.
+     */
+    int32_t hashcode;
+    UHashElement* e;
+
+    if (U_FAILURE(*status)) {
+        goto err;
+    }
+    assert(hash != NULL);
+    if (value == NULL) {
+        /* Disallow storage of NULL values, since NULL is returned by
+         * get() to indicate an absent key.  Storing NULL == removing.
+         */
+        return _uhash_remove(hash, key);
+    }
+    if (hash->count > hash->highWaterMark) {
+        _uhash_rehash(hash);
+    }
+
+    hashcode = (*hash->keyHasher)(key);
+    e = _uhash_find(hash, key, hashcode);
+    assert(e != NULL);
+
+    if (IS_EMPTY_OR_DELETED(e->hashcode)) {
+        /* Important: We must never actually fill the table up.  If we
+         * do so, then _uhash_find() will return NULL, and we'll have
+         * to check for NULL after every call to _uhash_find().  To
+         * avoid this we make sure there is always at least one empty
+         * or deleted slot in the table.  This only is a problem if we
+         * are out of memory and rehash isn't working.
+         */
+        ++hash->count;
+        if (hash->count == hash->length) {
+            /* Don't allow count to reach length */
+            --hash->count;
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            goto err;
+        }
+    }
+
+    /* We must in all cases handle storage properly.  If there was an
+     * old key, then it must be deleted (if the deleter != NULL).
+     * Make hashcodes stored in table positive.
+     */
+    return _uhash_setElement(hash, e, hashcode & 0x7FFFFFFF, key, value);
+
+ err:
+    /* If the deleters are non-NULL, this method adopts its key and/or
+     * value arguments, and we must be sure to delete the key and/or
+     * value in all cases, even upon failure.
+     */
+    HASH_DELETE_KEY_VALUE(hash, key.pointer, value);
+    return NULL;
+}
+
+static void*
+_uhash_remove(UHashtable *hash,
+              UHashKey key) {
+    /* First find the position of the key in the table.  If the object
+     * has not been removed already, remove it.  If the user wanted
+     * keys deleted, then delete it also.  We have to put a special
+     * hashcode in that position that means that something has been
+     * deleted, since when we do a find, we have to continue PAST any
+     * deleted values.
+     */
+    void* result = NULL;
+    UHashElement* e = _uhash_find(hash, key, hash->keyHasher(key));
+    assert(e != NULL);
+    if (!IS_EMPTY_OR_DELETED(e->hashcode)) {
+        result = _uhash_internalRemoveElement(hash, e);
+        if (hash->count < hash->lowWaterMark) {
+            _uhash_rehash(hash);
+        }
+    }
+    return result;
+}
+
+static void*
+_uhash_setElement(UHashtable *hash, UHashElement* e,
+                  int32_t hashcode, UHashKey key, void* value) {
+
+    void* oldKey = e->key.pointer;
     void* oldValue = e->value;
     if (hash->keyDeleter != NULL && oldKey != NULL &&
-        oldKey != key) { /* Avoid double deletion */
+        oldKey != key.pointer) { /* Avoid double deletion */
         (*hash->keyDeleter)(oldKey);
     }
     if (oldValue == value) { /* Avoid double deletion */
@@ -733,6 +803,10 @@ _uhash_setElement(UHashtable *hash, UHashElement* e,
         (*hash->valueDeleter)(oldValue);
         oldValue = NULL;
     }
+    /* Compilers should copy the UHashKey union correctly.  If they do
+     * not, replace this line with e->key.pointer = key.pointer for
+     * platforms with sizeof(void*) >= sizeof(int32_t), e->key.integer
+     * = key.integer otherwise.  */
     e->key = key;
     e->value = value;
     e->hashcode = hashcode;
@@ -744,9 +818,11 @@ _uhash_setElement(UHashtable *hash, UHashElement* e,
  */
 static void*
 _uhash_internalRemoveElement(UHashtable *hash, UHashElement* e) {
+    UHashKey emptykey;
     assert(!IS_EMPTY_OR_DELETED(e->hashcode));
     --hash->count;
-    return _uhash_setElement(hash, e, HASH_DELETED, NULL, NULL);
+    emptykey.pointer = NULL; emptykey.integer = 0;
+    return _uhash_setElement(hash, e, HASH_DELETED, emptykey, NULL);
 }
 
 static void

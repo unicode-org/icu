@@ -318,12 +318,12 @@ ResourceBundle::~ResourceBundle()
     }
 }
 
+#ifdef ICU_RESBUND_USE_DEPRECATES
 void
-ResourceBundle::deleteValue(void *value) {
-    delete (ResourceBundleData *)value;
+ResourceBundle::deleteValue(UHashKey value) {
+    delete (ResourceBundleData *)value.pointer;
 }
 
-#ifdef ICU_RESBUND_USE_DEPRECATES
 void ResourceBundle::initItemCache(UErrorCode& error) {
     if(fItemCache == 0) {
         fItemCache = uhash_open(uhash_hashChars, uhash_compareChars, &error);

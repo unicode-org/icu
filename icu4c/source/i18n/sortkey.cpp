@@ -305,7 +305,9 @@ CollationKey::hashCode() const
 
     if (fHashCode == kInvalidHashCode)
     {
-        ((CollationKey *)this)->fHashCode = uhash_hashChars(fBytes);
+        UHashKey key;
+        key.pointer = fBytes;
+        ((CollationKey *)this)->fHashCode = uhash_hashChars(key);
 #if 0
         // We compute the hash by iterating sparsely over 64 (at most) characters
         // spaced evenly through the string.  For each character, we multiply the
