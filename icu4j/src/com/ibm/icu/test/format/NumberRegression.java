@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/test/format/Attic/NumberRegression.java,v $ 
- * $Date: 2001/10/23 13:16:20 $ 
- * $Revision: 1.2 $
+ * $Date: 2001/10/25 06:37:15 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  **/
@@ -1398,7 +1398,7 @@ public class NumberRegression extends com.ibm.test.TestFmwk {
         bytes[875] = (byte) 0x24; //setMinimumFractionDigits
         bytes[874] = (byte) 0x01;    
         bytes[865] = (byte) 0x23; //setMaximumFractionDigits
-        bytes[865] = (byte) 0x01;
+        bytes[864] = (byte) 0x01;
         
         {
             ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
@@ -1415,20 +1415,21 @@ public class NumberRegression extends com.ibm.test.TestFmwk {
         bytes[879] = (byte) 0x11; //setMinimumIntegerDigits
         bytes[878] = (byte) 0x03;    
         bytes[869] = (byte) 0x12; //setMaximumIntegerDigits
-        bytes[868] = (byte) 0x02;
+        bytes[868] = (byte) 0x03;
         bytes[875] = (byte) 0x13; //setMinimumFractionDigits
         bytes[874] = (byte) 0x03;    
         bytes[865] = (byte) 0x14; //setMaximumFractionDigits
-        bytes[865] = (byte) 0x03;
+        bytes[864] = (byte) 0x03;
     
         {
             ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
-            try {
-                NumberFormat format = (NumberFormat) ois.readObject();
-                logln("format: " + format.format(1234.56)); //fix "The variable is never used"
+            NumberFormat format = (NumberFormat) ois.readObject();
+            //For compatibility with previous version
+            if ((format.getMaximumIntegerDigits() != 309) 
+                || format.getMaximumFractionDigits() != 340) {
                 errln("FAIL: Deserialized bogus NumberFormat");
-            } catch (InvalidObjectException e) {
-                logln("Ok: " + e.getMessage());
+            } else {
+                logln("Ok: Digit count out of range");
             }
         }
     }
