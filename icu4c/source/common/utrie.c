@@ -450,7 +450,7 @@ utrie_fold(UNewTrie *trie, UNewTrieGetFoldedValue *getFoldedValue, UErrorCode *p
                     *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
                     return;
                 }
-utrie_get32(trie, U16_LEAD(c), NULL);
+
                 /* if we did not find an identical index block... */
                 if(block==indexLength) {
                     /* move the actual index (stage 1) entries from the supplementary position to the new one */
@@ -459,7 +459,6 @@ utrie_get32(trie, U16_LEAD(c), NULL);
                                  4*UTRIE_SURROGATE_BLOCK_COUNT);
                     indexLength+=UTRIE_SURROGATE_BLOCK_COUNT;
                 }
-utrie_get32(trie, U16_LEAD(c), NULL);
             }
             c+=0x400;
         } else {
@@ -752,11 +751,9 @@ utrie_serialize(UNewTrie *trie, void *dt, int32_t capacity,
 
         /* fold the supplementary part of the index array */
         utrie_fold(trie, getFoldedValue, pErrorCode);
-utrie_get32(trie, U16_LEAD(0x10400), NULL);
 
         /* compact again with overlap for minimum data array length */
         utrie_compact(trie, TRUE, pErrorCode);
-utrie_get32(trie, U16_LEAD(0x10400), NULL);
 
         trie->isCompacted=TRUE;
         if(U_FAILURE(*pErrorCode)) {
@@ -990,23 +987,25 @@ utrie_enum(UTrie *trie,
     for(l=0xd800; l<0xdc00;) {
         /* lead surrogate access */
         offset=index[l>>UTRIE_SHIFT]<<UTRIE_INDEX_SHIFT;
-        if(data32!=NULL) {
-            if(offset==0) {
-                /* no entries for a whole block of lead surrogates */
-                l+=UTRIE_DATA_BLOCK_LENGTH;
-                c+=UTRIE_DATA_BLOCK_LENGTH<<10;
-                continue;
+        if(offset==(data32!=NULL ? 0 : trie->indexLength)) {
+            /* no entries for a whole block of lead surrogates */
+            if(prevValue!=initialValue) {
+                if(prev<c) {
+                    if(!enumRange(context, prev, c, prevValue)) {
+                        return;
+                    }
+                }
+                prevBlock=0;
+                prev=c;
+                prevValue=initialValue;
             }
-            value=data32[offset+(l&UTRIE_MASK)];
-        } else {
-            if(offset==trie->indexLength) {
-                /* no entries for a whole block of lead surrogates */
-                l+=UTRIE_DATA_BLOCK_LENGTH;
-                c+=UTRIE_DATA_BLOCK_LENGTH<<10;
-                continue;
-            }
-            value=index[offset+(l&UTRIE_MASK)];
+
+            l+=UTRIE_DATA_BLOCK_LENGTH;
+            c+=UTRIE_DATA_BLOCK_LENGTH<<10;
+            continue;
         }
+
+        value= data32!=NULL ? data32[offset+(l&UTRIE_MASK)] : index[offset+(l&UTRIE_MASK)];
 
         /* enumerate trail surrogates for this lead surrogate */
         offset=trie->getFoldingOffset(value);
