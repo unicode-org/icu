@@ -66,7 +66,7 @@ Mark the character names as belong to the specified
 of Unicode. The default version is 3.1.1.
 .TP
 .BI "\-1\fP, \fB\-\-unicode1-names"
-Store Unicode 1.0 names instead of Unicode 2.0 names for
+Store Unicode 1.0 names in addition of Unicode 2.0 names for
 those code points whose names were changed for Unicode 2.0.
 .SH ENVIRONMENT
 .TP 10
