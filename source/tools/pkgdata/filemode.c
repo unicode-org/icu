@@ -135,6 +135,7 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   tail = NULL;
   copyCommands =  pkg_appendToList(copyCommands, &tail, uprv_strdup
 				   ("@for file in $?; do \\\n"
+				    "\techo $(INSTALL_DATA) $$file $(TARGETDIR) ; \\\n"
 				    "\t$(INSTALL_DATA) $$file $(TARGETDIR) ; \\\n"
 				    "done;\n\n"));
 
