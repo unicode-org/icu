@@ -128,7 +128,7 @@ const UCollationResult results[] = {
 
 
 static
-inline void uprv_appendByteToHexString(char *dst, uint8_t val) {
+void uprv_appendByteToHexString(char *dst, uint8_t val) {
   uint32_t len = (uint32_t)uprv_strlen(dst);
   *(dst+len) = T_CString_itosOffset((val >> 4));
   *(dst+len+1) = T_CString_itosOffset((val & 0xF));
@@ -136,7 +136,7 @@ inline void uprv_appendByteToHexString(char *dst, uint8_t val) {
 }
 
 /* this function makes a string with representation of a sortkey */
-U_CAPI char* U_EXPORT2 ucol_sortKeyToString(const UCollator *coll, const uint8_t *sortkey, char *buffer, uint32_t *len) {
+static char* U_EXPORT2 sortKeyToString(const UCollator *coll, const uint8_t *sortkey, char *buffer, uint32_t *len) {
   int32_t strength = UCOL_PRIMARY;
   uint32_t res_size = 0;
   UBool doneCase = FALSE;
@@ -389,11 +389,11 @@ static void doTestVariant(UCollator* myCollation, const UChar source[], const UC
     gSortklen2 = uprv_strlen((const char *)sortKey2)+1;
     if(sortklen1 != gSortklen1){
         log_err("SortKey length does not match Expected: %i Got: %i\n",sortklen1, gSortklen1);
-        log_verbose("Generated sortkey: %s\n", ucol_sortKeyToString(myCollation, sortKey1, buffer, &len));
+        log_verbose("Generated sortkey: %s\n", sortKeyToString(myCollation, sortKey1, buffer, &len));
     }
     if(sortklen2!= gSortklen2){
         log_err("SortKey length does not match Expected: %i Got: %i\n", sortklen2, gSortklen2);
-        log_verbose("Generated sortkey: %s\n", ucol_sortKeyToString(myCollation, sortKey2, buffer, &len));
+        log_verbose("Generated sortkey: %s\n", sortKeyToString(myCollation, sortKey2, buffer, &len));
     }
 
     if(temp < 0) {
