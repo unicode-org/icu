@@ -23,6 +23,7 @@
 #include "unicode/ures.h"
 #include "unicode/ustdio.h"
 #include "unicode/uloc.h"
+#include "unicode/ustring.h"
 #include "uoptions.h"
 #include "toolutil.h"
 
