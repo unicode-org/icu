@@ -214,16 +214,14 @@ init() {
 static UHashtable* hashTable = NULL;
 
 
-struct ValueStruct {
+typedef struct ValueStruct {
     UChar* mapping;
     int16_t length;
     UStringPrepType type;
-};
-
-typedef struct ValueStruct ValueStruct;
+} ValueStruct;
 
 /* Callback for deleting the value from the hashtable */
-void U_CALLCONV valueDeleter(void* obj){
+static void U_CALLCONV valueDeleter(void* obj){
     ValueStruct* value = (ValueStruct*) obj;
     uprv_free(value->mapping);
     uprv_free(value);
@@ -498,7 +496,6 @@ storeMapping(uint32_t codepoint, uint32_t* mapping,int32_t length,
 extern void
 storeRange(uint32_t start, uint32_t end, UStringPrepType type,UErrorCode* status){
     uint16_t trieWord = 0;
-    uint32_t i=0;
 
     trieWord += (_SPREP_TYPE_THRESHOLD + type); /* the top 4 bits contain the value */
     if(trieWord > 0xFFFF){
