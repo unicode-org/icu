@@ -72,11 +72,12 @@
  * FROM_U_CALLBACK_ESCAPE options
  * @draft ICU 1.8
  */
-#define UCNV_ESCAPE_ICU     NULL
-#define UCNV_ESCAPE_JAVA    "J"
-#define UCNV_ESCAPE_C       "C"
-#define UCNV_ESCAPE_XML_DEC "D"
-#define UCNV_ESCAPE_XML_HEX "X"
+#define UCNV_ESCAPE_ICU       NULL
+#define UCNV_ESCAPE_JAVA      "J"
+#define UCNV_ESCAPE_C         "C"
+#define UCNV_ESCAPE_XML_DEC   "D"
+#define UCNV_ESCAPE_XML_HEX   "X"
+#define UCNV_ESCAPE_CODEPOINT "U"
 
 /** 
  * The process condition code to be used with the callbacks.  
