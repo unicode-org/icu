@@ -103,7 +103,7 @@ void printExp(uint32_t CE, uint32_t oldCE, char* primb, char* secb, char *terb, 
             sprintf(temp, "%02X ", UCOL_SECONDARYORDER(oldCE));
             strcat(secb, temp);
         }
-        if(UCOL_TERTIARYORDER(oldCE)&0x7F != 0) {
+        if((UCOL_TERTIARYORDER(oldCE)&0x7F) != 0) {
             sprintf(temp, "%02X ", UCOL_TERTIARYORDER(oldCE)&0x7F);
             strcat(terb, temp);
         }
