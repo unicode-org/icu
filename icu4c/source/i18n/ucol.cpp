@@ -349,9 +349,10 @@ ucol_open(    const    char         *loc,
   UCollator *result = NULL;
   UResourceBundle *b = ures_open(NULL, loc, status);
   UResourceBundle *collElem = ures_getByKey(b, "CollationElements", NULL, status);
-  UResourceBundle *binary = ures_getByKey(collElem, "%%CollationBin", NULL, status);
+  UResourceBundle *binary = NULL;
+  UErrorCode binaryStatus = U_ZERO_ERROR;  
 
-  if(*status == U_MISSING_RESOURCE_ERROR) { /* if we don't find tailoring, we'll fallback to UCA */
+  if(*status == U_MISSING_RESOURCE_ERROR) { /* We didn't find the tailoring data, we fallback to the UCA */
     *status = U_USING_DEFAULT_WARNING;
     result = ucol_initCollator(UCA->image, result, status);
     // if we use UCA, real locale is root
@@ -360,37 +361,45 @@ ucol_open(    const    char         *loc,
     if(U_FAILURE(*status)) {
       goto clean;
     }
-    ures_close(binary);
     ures_close(b);
     result->hasRealData = FALSE;
-  } else if(U_SUCCESS(*status)) { /* otherwise, we'll pick a collation data that exists */
-    int32_t len = 0;
-    const uint8_t *inData = ures_getBinary(binary, &len, status);
-    UCATableHeader *colData = (UCATableHeader *)inData;
-    if(uprv_memcmp(colData->UCAVersion, UCA->image->UCAVersion, sizeof(UVersionInfo)) != 0 ||
-      uprv_memcmp(colData->UCDVersion, UCA->image->UCDVersion, sizeof(UVersionInfo)) != 0) {
+  } else if(U_SUCCESS(*status)) {   
+    binary = ures_getByKey(collElem, "%%CollationBin", NULL, &binaryStatus);
+
+    if(binaryStatus == U_MISSING_RESOURCE_ERROR) { /* we didn't find the binary image, we should use the rules */
       result = tryOpeningFromRules(collElem, status);
-    } else {
-      if(U_FAILURE(*status)){
+      if(U_FAILURE(*status)) {
         goto clean;
       }
-      if((uint32_t)len > (paddedsize(sizeof(UCATableHeader)) + paddedsize(sizeof(UColOptionSet)))) {
-        result = ucol_initCollator((const UCATableHeader *)inData, result, status);
-        if(U_FAILURE(*status)){
-          goto clean;
-        }
-        result->hasRealData = TRUE;
+    } else if(U_SUCCESS(*status)) { /* otherwise, we'll pick a collation data that exists */
+      int32_t len = 0;
+      const uint8_t *inData = ures_getBinary(binary, &len, status);
+      UCATableHeader *colData = (UCATableHeader *)inData;
+      if(uprv_memcmp(colData->UCAVersion, UCA->image->UCAVersion, sizeof(UVersionInfo)) != 0 ||
+        uprv_memcmp(colData->UCDVersion, UCA->image->UCDVersion, sizeof(UVersionInfo)) != 0) {
+        result = tryOpeningFromRules(collElem, status);
       } else {
-        result = ucol_initCollator(UCA->image, result, status);
-        ucol_setOptionsFromHeader(result, (UColOptionSet *)(inData+((const UCATableHeader *)inData)->options), status);
         if(U_FAILURE(*status)){
           goto clean;
         }
-        result->hasRealData = FALSE;
+        if((uint32_t)len > (paddedsize(sizeof(UCATableHeader)) + paddedsize(sizeof(UColOptionSet)))) {
+          result = ucol_initCollator((const UCATableHeader *)inData, result, status);
+          if(U_FAILURE(*status)){
+            goto clean;
+          }
+          result->hasRealData = TRUE;
+        } else {
+          result = ucol_initCollator(UCA->image, result, status);
+          ucol_setOptionsFromHeader(result, (UColOptionSet *)(inData+((const UCATableHeader *)inData)->options), status);
+          if(U_FAILURE(*status)){
+            goto clean;
+          }
+          result->hasRealData = FALSE;
+        }
       }
+      result->binary = binary;
+      result->rb = b;
     }
-    result->binary = binary;
-    result->rb = b;
   } else { /* There is another error, and we're just gonna clean up */
 clean:
     ures_close(b);
