@@ -61,8 +61,13 @@ public class JamoTest extends TransliteratorTest {
         }
     }
 
+    /**
+     * These are problems turned up by the Hangul-Jamo;Jamo-Latin
+     * round trip test.
+     */
     public void TestRoundTrip() {
-        String HANGUL[] = { "\uAC03\uC2F8" };
+        String HANGUL[] = { "\uAC03\uC2F8",
+                            "\uC544\uC5B4"};
         
         Transliterator latinJamo = Transliterator.getInstance("Latin-Jamo");
         Transliterator jamoLatin = latinJamo.getInverse();
