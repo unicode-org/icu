@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/07/08 23:52:13 $ 
-* $Revision: 1.41 $
+* $Date: 2002/07/16 00:34:28 $ 
+* $Revision: 1.42 $
 *
 *******************************************************************************
 */
@@ -746,17 +746,12 @@ public final class UCharacter
     * Result returned belongs to the interface 
     * <a href=UCharacterDirection.html>UCharacterDirection</a>
     * @param ch the code point to be determined its direction
-    * @return direction constant from UCharacterDirection. Otherwise is 
-    *         character is not defined, UCharacterDirection.BOUNDARY_NEUTRAL
-    *         will be returned.
+    * @return direction constant from UCharacterDirection.
     */
     public static int getDirection(int ch)
     {
         int props = getProps(ch);
-        if (props != 0) {
-            return UCharacterProperty.getDirection(props);
-        }
-        return UCharacterDirection.BOUNDARY_NEUTRAL;
+        return UCharacterProperty.getDirection(props);
     }
 
     /**
