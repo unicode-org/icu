@@ -202,7 +202,7 @@ $(ICUDATA)\word_th.brk : $(ICUDATA)\word_thLE.brk
 icudata.dat : $(CNV_FILES) unames.dat cnvalias.dat tz.dat
 	@echo Creating memory-mapped file
 	@cd $(ICUDATA)
- 	@$(ICUTOOLS)\gencmn\$(CFG)\gencmn 1000000 <<
+ 	@$(ICUTOOLS)\gencmn\$(CFG)\gencmn -c 1000000 <<
 $(ICUDATA)\unames.dat
 $(ICUDATA)\cnvalias.dat
 $(ICUDATA)\tz.dat
@@ -293,7 +293,7 @@ $(CPP_FLAGS) $<
 unames.dat : UnicodeData-3.0.0.txt
 	@echo Creating data file for Unicode Names
 	@set ICU_DATA=$(ICUDATA)
-	@$(ICUTOOLS)\gennames\$(CFG)\gennames -v- -c- UnicodeData-3.0.0.txt
+	@$(ICUTOOLS)\gennames\$(CFG)\gennames UnicodeData-3.0.0.txt
 
 unames_dat.c : unames.dat
 	@echo Creating C source file for Unicode Names
@@ -304,7 +304,7 @@ unames_dat.c : unames.dat
 cnvalias.dat : convrtrs.txt
 	@echo Creating data file for Converter Aliases
 	@set ICU_DATA=$(ICUDATA)
-	@$(ICUTOOLS)\gencnval\$(CFG)\gencnval -c-
+	@$(ICUTOOLS)\gencnval\$(CFG)\gencnval
 
 cnvalias_dat.c : cnvalias.dat
 	@echo Creating C source file for Converter Aliases
@@ -314,7 +314,7 @@ cnvalias_dat.c : cnvalias.dat
 tz.dat : {$(ICUTOOLS)\gentz}tz.txt
 	@echo Creating data file for Timezones
 	@set ICU_DATA=$(ICUDATA)
-	@$(ICUTOOLS)\gentz\$(CFG)\gentz -c- $(ICUTOOLS)\gentz\tz.txt
+	@$(ICUTOOLS)\gentz\$(CFG)\gentz $(ICUTOOLS)\gentz\tz.txt
 
 tz_dat.c : tz.dat
 	@echo Creating C source file for Timezones

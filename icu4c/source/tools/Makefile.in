@@ -184,7 +184,7 @@ $(COMMONFILE):	$(DATAFILES)
 	@echo -n Generating common file $(COMMONFILE).  Number of files:
 	-@wc -l gencmn/mkmap.tmp
 	-rm -f $(COMMONFILE)
-	@(cd gencmn ; ICU_DATA=$(OBJDATADIR)	./gencmn 1000000 mkmap.tmp )
+	@(cd gencmn ; ICU_DATA=$(OBJDATADIR)	./gencmn -c 1000000 mkmap.tmp )
 	-@ls -l $(COMMONFILE)
 
 build-dll: $(COMMONDLL)
