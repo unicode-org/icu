@@ -411,11 +411,17 @@ static char *opNames[] = {
         "NOP",
         "START_CAPTURE",
         "END_CAPTURE",
-        "URX_BACKSLASH_A",
+        "UNUSED10",
         "SETREF",
         "DOTANY",
         "JMP",
-        "FAIL"
+        "FAIL",
+        "URX_BACKSLASH_A",
+        "URX_BACKSLASH_B",
+        "URX_BACKSLASH_G",
+        "URX_BACKSLASH_W",
+        "URX_BACKSLASH_X",
+        "URX_BACKSLASH_Z"
 };
 
 void   RegexPattern::dump() {
@@ -451,6 +457,9 @@ void   RegexPattern::dump() {
         case URX_NOP:
         case URX_DOTANY:
         case URX_FAIL:
+        case URX_BACKSLASH_A:
+        case URX_BACKSLASH_G:
+        case URX_BACKSLASH_X:
             // Types with no operand field of interest.
             break;
 
@@ -459,6 +468,9 @@ void   RegexPattern::dump() {
         case URX_SETREF:
         case URX_STATE_SAVE:
         case URX_JMP:
+        case URX_BACKSLASH_B:
+        case URX_BACKSLASH_W:
+        case URX_BACKSLASH_Z:
             // types with an integer operand field.
             printf("%d", val);
             break;
