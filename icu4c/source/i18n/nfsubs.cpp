@@ -782,7 +782,7 @@ FractionalPartSubstitution::doSubstitution(double number, UnicodeString& toInser
     DigitList dl;
     dl.set(number, 20, TRUE);
     
-    UBool pad = false;
+    UBool pad = FALSE;
     while (dl.fCount > (dl.fDecimalAt <= 0 ? 0 : dl.fDecimalAt)) {
       if (pad && useSpaces) {
         toInsertInto.insert(_pos + getPos(), gSpace);
