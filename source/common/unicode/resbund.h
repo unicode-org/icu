@@ -51,19 +51,8 @@
 #include "unicode/unistr.h"
 #include "unicode/locid.h"
 
-#ifndef _FILESTRM
-typedef struct _FileStream FileStream;
-#endif
-
 /* forward declarations */
-class Locale;
 class RuleBasedCollator;
-class ResourceBundle;
-
-#ifdef ICU_RESBUND_USE_DEPRECATES
-struct UHashtable;
-union UHashKey;
-#endif
 
 /**
  * A class representing a collection of resource information pertaining to a given
@@ -354,164 +343,6 @@ public:
      * @stable
      */
     UnicodeString getStringEx(const char* key, UErrorCode& status) const;
-
-#ifdef ICU_RESBUND_USE_DEPRECATES
-    /**
-     * Returns the contents of a string resource. Resource data is undifferentiated
-     * Unicode text. The resource file may contain quoted strings or escape sequences;
-     * these will be parsed prior to the data's return.
-     *
-     * @param resourceTag  The resource tag of the string resource the caller wants
-     * @param err          Set to U_MISSING_RESOURCE_ERROR if a resource with the
-     *                     specified tag couldn't be found.
-     * @return A pointer to the string from the resource bundle, or NULL if there was
-     *           an error.(its lifetime is that of the resource bundle.)
-     * @deprecated to be removed in first release in 2001. Use getStringEx() instead.
-     */
-    const UnicodeString*    getString(  const char                *resourceTag,
-                                        UErrorCode&                err) const;
-
-    /**
-     * Returns the contents of a string-array resource. This will return the contents of
-     * a string-array (comma-delimited-list) resource as a C++ array of UnicodeString
-     * objects. The number of elements in the array is returned in numArrayItems.
-     * Calling getStringArray on a resource of type string will return an array with one
-     * element; calling it on a resource of type tagged-array results in a
-     * U_MISSING_RESOURCE_ERROR error.
-     *
-     * @param resourceTag    The resource tag of the string-array resource the caller
-     *                       wants
-     * @param numArrayItems  Receives the number of items in the array the function
-     *                       returns.
-     * @param err            Set to U_MISSING_RESOURCE_ERROR if a resource with the
-     *                       specified tag couldn't be found.
-     * @return               The resource requested, as a pointer to an array of
-     *                       UnicodeStrings. The caller does not own the storage and
-     *                       must not delete it. (its lifetime is that of the resource bundle.)
-     * @deprecated to be removed in first release in 2001. Use getStringEx() instead.
-     */
-    const UnicodeString*    getStringArray( const char             *resourceTag,
-                                            int32_t&                numArrayItems,
-                                            UErrorCode&              err) const;
-
-
-    /**
-     * Returns a single item from a string-array resource. This will return the contents
-     * of a single item in a resource of string-array (comma-delimited-list) type. If
-     * the resource is not an array, a U_MISSING_RESOURCE_ERROR will be returned in err.
-     *
-     * @param resourceTag   The resource tag of the resource the caller wants to extract
-     *                      an item from.
-     * @param index         The index (zero-based) of the particular array item the user
-     *                      wants to extract from the resource.
-     * @param err           Set to U_MISSING_RESOURCE_ERROR if a resource with the
-     *                      specified tag couldn't be found, or if the index was out of range.
-     * @return A pointer to the text of the array item, or NULL is there was an error. 
-     *                      (its lifetime is that of the resource bundle.)
-     * @deprecated to be removed in first release in 2001. Use getStringEx() instead.
-     */
-    const UnicodeString*    getArrayItem(   const char                *resourceTag,
-                                            int32_t                    index,
-                                            UErrorCode&                err) const;
-
-    /**
-     * Return the contents of a 2-dimensional array resource. The return value will be a
-     * UnicodeString** array. (This is really an array of pointers; each pointer is a
-     * ROW of the data.) The number of rows and columns is returned. If the resource is
-     * of the wrong type, or not present, U_MISSING_RESOURCE_ERROR is placed in err.
-     *
-     * @param resourceTag  The resource tag of the string-array resource the caller
-     *                     wants
-     * @param rowCount     Receives the number of rows in the array the function
-     *                     returns.
-     * @param columnCount  Receives the number of columns in the array the function
-     *                     returns.
-     * @param err          Set to U_MISSING_RESOURCE_ERROR if a resource with the
-     *                     specified tag couldn't be found.
-     * @return             The resource requested, as a UnicodeStrings**. The caller
-     *                     does not own the storage and must not delete it. (its lifetime 
-     *                      is that of the resource bundle.)
-     * @deprecated to be removed in first release in 2001. Use getStringEx() instead.
-     */
-    const UnicodeString**   get2dArray(const char          *resourceTag,
-                                       int32_t&             rowCount,
-                                       int32_t&             columnCount,
-                                       UErrorCode&           err) const;
-
-
-    /**
-     * Return a single string from a 2-dimensional array resource. If the resource does
-     * not exists, or if it is not a 2-d array, or if the row or column indices are out
-     * of bounds, err is set to U_MISSING_RESOURCE_ERROR.
-     *
-     * @param resourceTag   The resource tag of the resource the caller wants to extract
-     *                      an item from.
-     * @param rowIndex      The row index (zero-based) of the array item the user wants
-     *                      to extract from the resource.
-     * @param columnIndex   The column index (zero-based) of the array item the user
-     *                      wants to extract from the resource.
-     * @param err           Set to U_MISSING_RESOURCE_ERROR if a resource with the
-     *                      specified tag couldn't be found, if the resource data was in
-     *                      the wrong format, or if either index is out of bounds.
-     * @return A pointer to the text of the array item, or NULL is there was an error.
-     *                      (its lifetime is that of the resource bundle.)
-     * @deprecated to be removed in first release in 2001. Use getStringEx() instead.
-     */
-    const UnicodeString*    get2dArrayItem( const char                *resourceTag,
-                                            int32_t                    rowIndex,
-                                            int32_t                    columnIndex,
-                                            UErrorCode&                err) const;
-
-
-    /**
-     * Returns a single item from a tagged-array resource This will return the contents
-     * of a single item in a resource of type tagged-array. If this function is called
-     * for a resource that is not of type tagged-array, it will set err to
-     * MISSING_RESOUCE_ERROR.
-     *
-     * @param resourceTag   The resource tag of the resource the caller wants to extract
-     *                      an item from.
-     * @param itemTag       The item tag for the item the caller wants to extract.
-     * @param err           Set to U_MISSING_RESOURCE_ERROR if a resource with the
-     *                      specified resource tag couldn't be found, or if an item
-     *                      with the specified item tag coldn't be found in the resource.
-     * @return A pointer to the text of the array item, or NULL is there was an error.
-     *                      (its lifetime is that of the resource bundle.)
-     * @deprecated to be removed in first release in 2001. Use getStringEx() instead.
-     */
-    const UnicodeString*    getTaggedArrayItem( const char             *resourceTag,
-                                                const UnicodeString&    itemTag,
-                                                UErrorCode&                err) const;
-
-    /**
-     * Returns a tagged-array resource.  The contents of the resource is returned as two
-     * separate arrays of UnicodeStrings, the addresses of which are placed in "itemTags"
-     * and "items".  After calling this function, the items in the resource will be in the
-     * list pointed to by "items", and for each items[i], itemTags[i] will be the tag that
-     * corresponds to it.  The total number of entries in both arrays is returned in
-     * numItems.
-     *
-     * @param resourceTag   The resource tag of the resource the caller wants to extract
-     *                      an item from.
-     * @param itemTags      Set to point to an array of UnicodeStrings representing the
-     *                      tags in the specified resource.  The caller DOES own this array,
-     *                      and must delete it.
-     * @param items         Set to point to an array of UnicodeStrings containing the
-     *                      individual resource items themselves.  itemTags[i] will
-     *                      contain the tag corresponding to items[i].  The caller DOES
-     *                      own this array, and must delete it.
-     * @param numItems      Receives the number of items in the arrays pointed to by
-     *                      items and itemTags.
-     * @param err           Set to U_MISSING_RESOURCE_ERROR if a resource with the
-     *                      specified tag couldn't be found.
-     * @deprecated to be removed in first release in 2001. Use getStringEx() instead.
-     */
-    void                getTaggedArray( const char             *resourceTag,
-                                        UnicodeString*&         itemTags,
-                                        UnicodeString*&         items,
-                                        int32_t&                numItems,
-                                        UErrorCode&              err) const;
-#endif
     
     /**
      * Return the version number associated with this ResourceBundle. This version
@@ -532,7 +363,7 @@ public:
      *          string.
      * @draft
      */
-    const char*         getVersionNumber(void) const;
+    const char*   getVersionNumber(void) const;
 
     void getVersion(UVersionInfo versionInfo) const;
 
@@ -548,9 +379,6 @@ private:
     UResourceBundle *resource;
     void constructForLocale(const UnicodeString& path, const Locale& locale, UErrorCode& error);
     void constructForLocale(const wchar_t* path, const Locale& locale, UErrorCode& error);
-#ifdef ICU_RESBUND_USE_DEPRECATES
-    void initItemCache(UErrorCode& error);
-#endif
 
     friend class RuleBasedCollator;
 
@@ -566,15 +394,7 @@ private:
 private:
     Locale                      fRealLocale;
 
-#ifdef ICU_RESBUND_USE_DEPRECATES
-    static void U_CALLCONV deleteValue(UHashKey value);
-    UHashtable*                 fItemCache;
-#endif
-
-    static const char*          kDefaultSuffix;
-    static const int32_t        kDefaultSuffixLen;
     static const char*          kDefaultFilename;
-    static const char*          kDefaultLocaleName;
 };
 
 #endif

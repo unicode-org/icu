@@ -31,41 +31,6 @@ void TestFallback(void);
 
 /*****************************************************************************/
 
-#ifdef ICU_URES_USE_DEPRECATES
-/**
- * Convert an integer, positive or negative, to a character string radix 10.
- */
-static char*
-itoa1(int32_t i, char* buf)
-{
-  char *p = 0;
-  char* result = buf;
-  /* Handle negative */
-  if(i < 0) {
-    *buf++ = '-';
-    i = -i;
-  }
-
-  /* Output digits in reverse order */
-  p = buf;
-  do {
-    *p++ = (char)('0' + (i % 10));
-    i /= 10;
-  }
-  while(i);
-  *p-- = 0;
-
-  /* Reverse the string */
-  while(buf < p) {
-    char c = *buf;
-    *buf++ = *p;
-    *p-- = c;
-  }
-
-  return result;
-}
-#endif
-
 const UChar kERROR[] = { 0x0045 /*E*/, 0x0052 /*'R'*/, 0x0052 /*'R'*/,
              0x004F /*'O'*/, 0x0052/*'R'*/, 0x0000 /*'\0'*/};
 
@@ -301,17 +266,6 @@ UBool testTag(const char* frag,
     int32_t actual_bundle;
     int32_t resultLen;
     char testdatapath[256];
-
-#ifdef ICU_URES_USE_DEPRECATES
-    int32_t row_count=0;
-    int32_t column_count=0;
-    int32_t count = 0;
-    int32_t index = 0;
-    UErrorCode expected_status;
-    int32_t k,row,col;
-    char buf[5];
-#endif
-
     const char *directory= u_getDataDirectory();
 
     uprv_strcpy(testdatapath, directory);
@@ -449,161 +403,8 @@ UBool testTag(const char* frag,
 
         }
 
-
-
         CONFIRM_EQ(string, expected_string);
 
-
-#ifdef ICU_URES_USE_DEPRECATES
-
-        /*-------------------------------------------------------------------- */
-        /*-------------------------------------------------------------------- */
-        /* arrayItem */
-
-        strcpy(tag,"array_");
-        strcat(tag,frag);
-
-        strcpy(action,param[i].name);
-        strcat(action, ".ures_getArrayItem(");
-        strcat(action, tag);
-        strcat(action, ")");
-        count=ures_countArrayItems(theBundle, tag, &status);
-
-
-        for(j = 0; j < count; j++)
-        {
-
-            status = U_ZERO_ERROR;
-            string = kERROR;
-
-            index=j;
-            ures_getArrayItem(theBundle, tag,index , &status);
-            if(U_SUCCESS(status))
-                string=ures_getArrayItem(theBundle, tag, index, &status);
-
-
-            /* how could 'index==j' ever be >= count ? */
-            expected_status = (index >= 0 && index < count) ? expected_resource_status : U_MISSING_RESOURCE_ERROR;
-
-            log_verbose("Status for %s was %d, expected %d\n", action, status, expected_status);
-
-            CONFIRM_ErrorCode(status,expected_status);
-
-            if (U_SUCCESS(status))
-            {
-                UChar element[3];
-
-                u_uastrcpy(element, itoa1(index,buf));
-
-                u_strcpy(expected_string,base);
-                u_strcat(expected_string,element);
-
-
-            }
-            else
-            {
-                u_strcpy(expected_string,kERROR);
-            }
-            CONFIRM_EQ(string,expected_string);
-        }
-
-
-        /*-------------------------------------------------------------------- */
-        /* 2dArrayItem */
-
-        strcpy(tag,"array_2d_");
-        strcat(tag,frag);
-
-        strcpy(action,param[i].name);
-        strcat(action, ".get2dArrayItem(");
-        strcat(action, tag);
-        strcat(action, ")");
-        row_count=ures_countArrayItems(theBundle, tag, &status);
-        column_count=2;
-
-        for(k=0;k<row_count;k++){
-            for (j=0; j<column_count; ++j){
-
-                status = U_ZERO_ERROR;
-                string = kERROR;
-                row=k;
-                col=j;
-                ures_get2dArrayItem( theBundle, tag, row, col, &status);
-                if(U_SUCCESS(status))
-                    string=ures_get2dArrayItem(theBundle, tag, row, col, &status);
-
-
-                expected_status = (row >= 0 && row < row_count && col >= 0 && col < column_count) ?
-                expected_resource_status : U_MISSING_RESOURCE_ERROR;
-
-                CONFIRM_ErrorCode(status,expected_status);
-
-                if (U_SUCCESS(status))
-                {
-                    UChar element[3];
-                    u_strcpy(expected_string,base);
-                    u_uastrcpy(element,itoa1(row,buf));
-                    u_strcat(expected_string, element);
-                    u_uastrcpy(element,itoa1(col,buf));
-                    u_strcat(expected_string, element);
-
-                }
-                else
-                {
-                    u_strcpy(expected_string,kERROR);
-                }
-                CONFIRM_EQ(string,expected_string);
-            }
-        }
-
-
-
-        /*-------------------------------------------------------------------- */
-        /* taggedArrayItem */
-
-        strcpy(tag,"tagged_array_");
-        strcat(tag,frag);
-
-        strcpy(action,param[i].name);
-        strcat(action,".getTaggedArrayItem(");
-        strcat(action, tag);
-        strcat(action,")");
-
-        count = 0;
-        for (index=-20; index<20; ++index)
-        {
-            strcpy(item_tag, "tag");
-            strcat(item_tag, itoa1(index,buf));
-
-            status = U_ZERO_ERROR;
-            string = kERROR;
-
-
-            ures_getTaggedArrayItem( theBundle, tag, item_tag, &status);
-            if(U_SUCCESS(status))
-                string=ures_getTaggedArrayItem(theBundle, tag, item_tag, &status);
-
-
-            if (index < 0)
-            {
-                CONFIRM_ErrorCode(status,U_MISSING_RESOURCE_ERROR);
-            }
-            else
-            {
-                UChar* element;
-                if (strcmp(myErrorName(status),"U_MISSING_RESOURCE_ERROR")!=0) {
-                    count++;
-                    u_strcpy(expected_string,base);
-                    element=(UChar*)malloc(sizeof(UChar) * (strlen(buf)+1));
-                    u_uastrcpy(element,buf);
-                    u_strcat(expected_string,element);
-                    free(element);
-                    CONFIRM_EQ(string,expected_string);
-                }
-            }
-
-        }
-#endif
         free(expected_string);
         ures_close(theBundle);
     }
