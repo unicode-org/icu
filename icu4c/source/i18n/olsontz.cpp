@@ -179,7 +179,7 @@ OlsonTimeZone::OlsonTimeZone(const UResourceBundle* top,
         r = ures_getByIndex(res, 1, NULL, &ec);
         typeOffsets = ures_getIntVector(r, &i, &ec);
         ures_close(r);
-        if ((i<2 || i>0x7FFF || (i&1!=0)) && U_SUCCESS(ec)) {
+        if ((i<2 || i>0x7FFF || ((i&1)!=0)) && U_SUCCESS(ec)) {
             ec = U_INVALID_FORMAT_ERROR;
         }
         typeCount = (int16_t) i >> 1;
