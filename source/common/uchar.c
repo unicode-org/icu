@@ -1434,6 +1434,45 @@ u_internalToTitle(UChar32 c, UCharIterator *iter,
  * a full mapping, i.e., a string.
  * If the case folding for a code point is the same as its simple (1:1) lowercase mapping,
  * then only the lowercase mapping is stored.
+ *
+ * Some special cases are hardcoded because their conditions cannot be
+ * parsed and processed from CaseFolding.txt.
+ *
+ * Unicode 3.2 CaseFolding.txt specifies for its status field:
+
+# C: common case folding, common mappings shared by both simple and full mappings.
+# F: full case folding, mappings that cause strings to grow in length. Multiple characters are separated by spaces.
+# S: simple case folding, mappings to single characters where different from F.
+# T: special case for uppercase I and dotted uppercase I
+#    - For non-Turkic languages, this mapping is normally not used.
+#    - For Turkic languages (tr, az), this mapping can be used instead of the normal mapping for these characters.
+#
+# Usage:
+#  A. To do a simple case folding, use the mappings with status C + S.
+#  B. To do a full case folding, use the mappings with status C + F.
+#
+#    The mappings with status T can be used or omitted depending on the desired case-folding
+#    behavior. (The default option is to exclude them.)
+
+ * Unicode 3.2 has 'T' mappings as follows:
+
+0049; T; 0131; # LATIN CAPITAL LETTER I
+0130; T; 0069; # LATIN CAPITAL LETTER I WITH DOT ABOVE
+
+ * while the default mappings for these code points are:
+
+0049; C; 0069; # LATIN CAPITAL LETTER I
+0130; F; 0069 0307; # LATIN CAPITAL LETTER I WITH DOT ABOVE
+
+ * U+0130 is otherwise lowercased to U+0069 (UnicodeData.txt).
+ *
+ * In case this code is used with CaseFolding.txt from an older version of Unicode
+ * where CaseFolding.txt contains mappings with a status of 'I' that
+ * have the opposite polarity ('I' mappings are included by default but excluded for Turkic),
+ * we must also hardcode the Unicode 3.2 mappings for the code points 
+ * with 'I' mappings.
+ * Unicode 3.1.1 has 'I' mappings for U+0130 and U+0131.
+ * Unicode 3.2 has a 'T' mapping for U+0130, and lowercases U+0131 to itself (see UnicodeData.txt).
  */
 
 /* return the simple case folding mapping for c */
@@ -1467,11 +1506,26 @@ u_foldCase(UChar32 c, uint32_t options) {
                 pe=oldPE;
             } else {
                 /* special case folding mappings, hardcoded */
-                if((options&_FOLD_CASE_OPTIONS_MASK)==U_FOLD_CASE_DEFAULT && (uint32_t)(c-0x130)<=1) {
-                    /* map dotted I and dotless i to U+0069 small i */
-                    return 0x69;
+                if((options&_FOLD_CASE_OPTIONS_MASK)==U_FOLD_CASE_DEFAULT) {
+                    /* default mappings */
+                    if(c==0x49) {
+                        /* 0049; C; 0069; # LATIN CAPITAL LETTER I */
+                        return 0x69;
+                    } else if(c==0x130) {
+                        /* no simple default mapping for U+0130, use UnicodeData.txt */
+                        return 0x69;
+                    }
+                } else {
+                    /* Turkic mappings */
+                    if(c==0x49) {
+                        /* 0049; T; 0131; # LATIN CAPITAL LETTER I */
+                        return 0x131;
+                    } else if(c==0x130) {
+                        /* 0130; T; 0069; # LATIN CAPITAL LETTER I WITH DOT ABOVE */
+                        return 0x69;
+                    }
                 }
-                /* return c itself because it is excluded from case folding */
+                /* return c itself because there is no special mapping for it */
                 return c;
             }
         }
@@ -1526,12 +1580,33 @@ u_internalFoldCase(UChar32 c,
                 return length;
             } else {
                 /* special case folding mappings, hardcoded */
-                if((options&_FOLD_CASE_OPTIONS_MASK)==U_FOLD_CASE_DEFAULT && (uint32_t)(c-0x130)<=1) {
-                    /* map dotted I and dotless i to U+0069 small i */
-                    result =0x69;
-                    /* goto single; */
+                if((options&_FOLD_CASE_OPTIONS_MASK)==U_FOLD_CASE_DEFAULT) {
+                    /* default mappings */
+                    if(c==0x49) {
+                        /* 0049; C; 0069; # LATIN CAPITAL LETTER I */
+                        result=0x69;
+                    } else if(c==0x130) {
+                        /* 0130; F; 0069 0307; # LATIN CAPITAL LETTER I WITH DOT ABOVE */
+                        if(0<destCapacity) {
+                            dest[0]=0x69;
+                        }
+                        if(1<destCapacity) {
+                            dest[1]=0x307;
+                        }
+                        return 2;
+                    }
+                } else {
+                    /* Turkic mappings */
+                    if(c==0x49) {
+                        /* 0049; T; 0131; # LATIN CAPITAL LETTER I */
+                        result=0x131;
+                    } else if(c==0x130) {
+                        /* 0130; T; 0069; # LATIN CAPITAL LETTER I WITH DOT ABOVE */
+                        result=0x69;
+                    }
                 }
-                /* return c itself because it is excluded from case folding */
+                /* return c itself because there is no special mapping for it */
+                /* goto single; */
             }
         } else if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_LOWERCASE)) {
             i=EXC_LOWERCASE;
