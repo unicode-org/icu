@@ -113,11 +113,11 @@ public:
  * RBBITest is medium top level test class RuleBasedBreakIterator
  */
 
-const UnicodeString  halfNA  = CharsToUnicodeString("\\u0928\\u094d\\u200d");  //halfform NA = devanigiri NA + virama(supresses inherent vowel)+ zero width joiner   
-const UnicodeString  halfSA  = CharsToUnicodeString("\\u0938\\u094d\\u200d"); 
-const UnicodeString  halfCHA = CharsToUnicodeString("\\u091a\\u094d\\u200d"); 
-const UnicodeString  halfKA  = CharsToUnicodeString("\\u0915\\u094d\\u200d"); 
-const UnicodeString  deadTA  = CharsToUnicodeString("\\u0924\\u094d");
+static const UChar  halfNA[]  = {0x0928, 0x094d, 0x200d, 0};  //halfform NA = devanigiri NA + virama(supresses inherent vowel)+ zero width joiner   
+static const UChar  halfSA[]  = {0x0938, 0x094d, 0x200d, 0};
+static const UChar  halfCHA[] = {0x091a, 0x094d, 0x200d, 0}; 
+static const UChar  halfKA[]  = {0x0915, 0x094d, 0x200d, 0}; 
+static const UChar  deadTA[]  = {0x0924, 0x094d, 0};
 //--------------------------------------------------------------------
 //tests default rules based character iteration
 //--------------------------------------------------------------------
@@ -315,8 +315,8 @@ void RBBITest::TestDefaultRuleBasedWordIteration()
 //--------------------------------------------------------------------
 //tests default rules based word iteration
 //--------------------------------------------------------------------
-const UnicodeString kParagraphSeparator = CharsToUnicodeString("\\u2029");
-const UnicodeString kLineSeparator = CharsToUnicodeString("\\u2028");
+static const UChar kParagraphSeparator[] = {0x2029, 0};
+static const UChar kLineSeparator[]      = {0x2028, 0};
 
 void RBBITest::TestDefaultRuleBasedSentenceIteration()
 {
@@ -348,12 +348,12 @@ void RBBITest::TestDefaultRuleBasedSentenceIteration()
       sentdata->addElement("Che la dritta via aveo smarrita. ");
       sentdata->addElement("He said, that I said, that you said!! ");
 
-      sentdata->addElement("Don't rock the boat." + kParagraphSeparator);
+      sentdata->addElement((UnicodeString)"Don't rock the boat." + kParagraphSeparator);
 
       sentdata->addElement("Because I am the daddy, that is why. ");
       sentdata->addElement("Not on my time (el timo.)! ");
 
-      sentdata->addElement("So what!!" + kParagraphSeparator);
+      sentdata->addElement((UnicodeString)"So what!!" + kParagraphSeparator);
 
       sentdata->addElement("\"But now,\" he said, \"I know!\" ");
       sentdata->addElement("Harris thumbed down several, including \"Away We Go\" (which became the huge success Oklahoma!). ");
@@ -457,7 +457,7 @@ void RBBITest::TestDefaultRuleBasedLineIteration()
       linedata->addElement("Hello ");
       linedata->addElement("How\n");
       linedata->addElement("are\r");
-      linedata->addElement("you" + kLineSeparator);
+      linedata->addElement((UnicodeString)"you" + kLineSeparator);
       linedata->addElement("fine.\t");
       linedata->addElement("good.  ");
 
@@ -531,12 +531,12 @@ void RBBITest::TestDefaultRuleBasedLineIteration()
 //Testing the BreakIterator for devanagari script
 //--------------------------------------------------------------------
  
-const UnicodeString deadRA  = CharsToUnicodeString("\\u0930\\u094d");         /*deadform RA = devanagari RA + virama*/
-const UnicodeString deadPHA = CharsToUnicodeString("\\u092b\\u094d");         /*deadform PHA = devanagari PHA + virama*/
-const UnicodeString deadTTHA= CharsToUnicodeString("\\u0920\\u094d");
-const UnicodeString deadPA  = CharsToUnicodeString("\\u092a\\u094d");
-const UnicodeString deadSA  = CharsToUnicodeString("\\u0938\\u094d");
-const UnicodeString visarga = CharsToUnicodeString("\\u0903");              /*devanagari visarga looks like a english colon*/
+static const UChar deadRA[]  = {0x0930, 0x094d, 0};         /*deadform RA = devanagari RA + virama*/
+static const UChar deadPHA[] = {0x092b, 0x094d, 0};         /*deadform PHA = devanagari PHA + virama*/
+static const UChar deadTTHA[]= {0x0920, 0x094d, 0};
+static const UChar deadPA[]  = {0x092a, 0x094d, 0};
+static const UChar deadSA[]  = {0x0938, 0x094d, 0};
+static const UChar visarga[] = {0x0903, 0};              /*devanagari visarga looks like a english colon*/
 
 void RBBITest::TestHindiCharacterBreak()
 {
@@ -637,7 +637,7 @@ void RBBITest::TestHindiWordBreak()
     hindiWordData->addElement(CharsToUnicodeString("\\u092a\\u095d\\u094b"));
     // hindiWordData->addElement(CharsToUnicodeString("\\u0964")); //fails here doesn't break at danda
     hindiWordData->addElement(" ");
-    hindiWordData->addElement(deadSA + deadTA + CharsToUnicodeString("\\u0930\\u093f"));       //deadSA+deadTA+RA+vowel I->sthri
+    hindiWordData->addElement((UnicodeString)deadSA + deadTA + CharsToUnicodeString("\\u0930\\u093f"));       //deadSA+deadTA+RA+vowel I->sthri
     hindiWordData->addElement(".");
     hindiWordData->addElement(" ");
     hindiWordData->addElement(CharsToUnicodeString("\\u0968\\u0966.\\u0969\\u096f"));            //hindi numbers
