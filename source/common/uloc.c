@@ -39,6 +39,7 @@
 #include "ucln_cmn.h"
 #include "locmap.h"
 
+
 /****************************************************************************
   Global variable and type definitions
 *****************************************************************************/
@@ -49,22 +50,13 @@ U_CFUNC const char *locale_get_default(void);
 
 /* These strings describe the resources we attempt to load from
  the locale ResourceBundle data file.*/
-static const char _kLocaleID[]       = "LocaleID";
 static const char _kLanguages[]      = "Languages";
+static const char _kScripts[]        = "Scripts";
 static const char _kCountries[]      = "Countries";
 static const char _kVariants[]       = "Variants";
 static const char _kKeys[]           = "Keys";
 static const char _kIndexLocaleName[] = "res_index";
 static const char _kIndexTag[]       = "InstalledLocales";
-
-#if 0
-/* We don't use these resources currently */
-static const char* _kLocaleString   = "LocaleString";
-static const char* _kShortLanguage  = "ShortLanguage";
-static const char* _kShortCountry   = "ShortCountry";
-#endif
-
-#define TEMPBUFSIZE 8
 
 static char** _installedLocales = NULL;
 static int32_t _installedLocalesCount = 0;
@@ -388,9 +380,6 @@ NULL
   Implementation function definitions
 *******************************************************************************/
 
-/*Lazy evaluated the list of installed locales*/
-static void _load_installedLocales(void);
-
 /*returns TRUE if a is an ID separator FALSE otherwise*/
 #define _isIDSeparator(a) (a == '_' || a == '-')
 
@@ -575,11 +564,74 @@ uloc_getLanguage(const char*    localeID,
 }
 
 static int32_t
+_getScript(const char *localeID,
+            char *script, int32_t scriptCapacity,
+            const char **pEnd)
+{
+    int32_t idLen = 0;
+
+    if (pEnd != NULL) {
+        *pEnd = localeID;
+    }
+
+    /* copy the country as far as possible and count its length */
+    while(!_isTerminator(localeID[idLen]) && !_isIDSeparator(localeID[idLen])) {
+        idLen++;
+    }
+
+    /* If it's exactly 4 characters long, then it's a script and not a country. */
+    if (idLen == 4) {
+        int32_t i;
+        if (pEnd != NULL) {
+            *pEnd = localeID+idLen;
+        }
+        if(idLen > scriptCapacity) {
+            idLen = scriptCapacity;
+        }
+        if (idLen >= 1) {
+            script[0]=(char)uprv_toupper(*(localeID++));
+        }
+        for (i = 1; i < idLen; i++) {
+            script[i]=(char)uprv_tolower(*(localeID++));
+        }
+    }
+    else {
+        idLen = 0;
+    }
+    return idLen;
+}
+
+U_CAPI int32_t U_EXPORT2
+uloc_getScript(const char*    localeID,
+         char* script,
+         int32_t scriptCapacity,
+         UErrorCode* err)
+{
+    int32_t i=0;
+
+    if(err==NULL || U_FAILURE(*err)) {
+        return 0;
+    }
+
+    if(localeID==NULL) {
+        localeID=uloc_getDefault();
+    }
+
+    /* skip the language */
+    _getLanguage(localeID, NULL, 0, &localeID);
+    if(_isIDSeparator(*localeID)) {
+        i=_getScript(localeID+1, script, scriptCapacity, NULL);
+    }
+    return u_terminateChars(script, scriptCapacity, i, err);
+}
+
+static int32_t
 _getCountry(const char *localeID,
             char *country, int32_t countryCapacity,
-            const char **pEnd) {
+            const char **pEnd)
+{
     int32_t i=0;
-    char cnty[4]={ 0, 0, 0, 0 };
+    char cnty[ULOC_COUNTRY_CAPACITY]={ 0, 0, 0, 0 };
     int32_t offset;
 
     /* copy the country as far as possible and count its length */
@@ -587,7 +639,7 @@ _getCountry(const char *localeID,
         if(i<countryCapacity) {
             country[i]=(char)uprv_toupper(*localeID);
         }
-        if(i<3) {   /*CWB*/
+        if(i<(ULOC_COUNTRY_CAPACITY-1)) {   /*CWB*/
             cnty[i]=(char)uprv_toupper(*localeID);
         }
         i++;
@@ -624,10 +676,19 @@ uloc_getCountry(const char* localeID,
         localeID=uloc_getDefault();
     }
 
-    /* skip the language */
+    /* Skip the language */
     _getLanguage(localeID, NULL, 0, &localeID);
     if(_isIDSeparator(*localeID)) {
-        i=_getCountry(localeID+1, country, countryCapacity, NULL);
+        const char *scriptID;
+        /* Skip the script if available */
+        _getScript(localeID+1, NULL, 0, &scriptID);
+        if(scriptID != localeID+1) {
+            /* Found optional script */
+            localeID = scriptID;
+        }
+        if(_isIDSeparator(*localeID)) {
+            i=_getCountry(localeID+1, country, countryCapacity, NULL);
+        }
     }
     return u_terminateChars(country, countryCapacity, i, err);
 }
@@ -694,9 +755,17 @@ uloc_getVariant(const char* localeID,
         localeID=uloc_getDefault();
     }
 
-    /* skip the language and the country */
+    /* Skip the language */
     _getLanguage(localeID, NULL, 0, &localeID);
     if(_isIDSeparator(*localeID)) {
+        const char *scriptID;
+        /* Skip the script if available */
+        _getScript(localeID+1, NULL, 0, &scriptID);
+        if(scriptID != localeID+1) {
+            /* Found optional script */
+            localeID = scriptID;
+        }
+        /* Skip the Country */
         _getCountry(localeID+1, NULL, 0, &localeID);
         if(_isIDSeparator(*localeID)) {
             haveVariant=TRUE;
@@ -710,6 +779,7 @@ uloc_getVariant(const char* localeID,
     }
     return u_terminateChars(variant, variantCapacity, i, err);
 }
+
 
 U_CAPI int32_t  U_EXPORT2
 uloc_getName(const char* localeID,
@@ -731,19 +801,40 @@ uloc_getName(const char* localeID,
     fieldCount=0;
     i=_getLanguage(localeID, name, nameCapacity, &localeID);
     if(_isIDSeparator(*localeID)) {
+        int32_t scriptSize;
+        const char *scriptID;
+
         ++fieldCount;
         if(i<nameCapacity) {
             name[i]='_';
         }
         ++i;
-        i+=_getCountry(localeID+1, name+i, nameCapacity-i, &localeID);
-        if(_isIDSeparator(*localeID)) {
+
+        scriptSize=_getScript(localeID+1, name+i, nameCapacity-i, &scriptID);
+        if(scriptSize > 0) {
+            /* Found optional script */
+            localeID = scriptID;
             ++fieldCount;
-            if(i<nameCapacity) {
-                name[i]='_';
+            i+=scriptSize;
+            if (_isIDSeparator(*localeID)) {
+                /* If there is something else, then we add the _ */
+                if(i<nameCapacity) {
+                    name[i]='_';
+                }
+                ++i;
             }
-            ++i;
-            i+=_getVariant(localeID+1, *localeID, name+i, nameCapacity-i);
+        }
+
+        if (_isIDSeparator(*localeID)) {
+            i+=_getCountry(localeID+1, name+i, nameCapacity-i, &localeID);
+            if(_isIDSeparator(*localeID)) {
+                ++fieldCount;
+                if(i<nameCapacity) {
+                    name[i]='_';
+                }
+                ++i;
+                i+=_getVariant(localeID+1, *localeID, name+i, nameCapacity-i);
+            }
         }
     }
 
@@ -764,35 +855,35 @@ uloc_getName(const char* localeID,
 U_CAPI const char*  U_EXPORT2
 uloc_getISO3Language(const char* localeID) 
 {
-  int16_t offset;
-  char lang[TEMPBUFSIZE];
-  UErrorCode err = U_ZERO_ERROR;
-
-  if (localeID == NULL)
-  {
-      localeID = uloc_getDefault();
-  }
-  uloc_getLanguage(localeID, lang, TEMPBUFSIZE, &err);
-  if (U_FAILURE(err))
-      return "";
-  offset = _findIndex(_languages, lang);
-  if (offset < 0)
-      return "";
-  return _languages3[offset];
-}
-
-U_CAPI const char*  U_EXPORT2
-uloc_getISO3Country(const char* localeID) 
-{
     int16_t offset;
-    char cntry[TEMPBUFSIZE];
+    char lang[ULOC_LANG_CAPACITY];
     UErrorCode err = U_ZERO_ERROR;
     
     if (localeID == NULL)
     {
         localeID = uloc_getDefault();
     }
-    uloc_getCountry(localeID, cntry, TEMPBUFSIZE, &err);
+    uloc_getLanguage(localeID, lang, ULOC_LANG_CAPACITY, &err);
+    if (U_FAILURE(err))
+        return "";
+    offset = _findIndex(_languages, lang);
+    if (offset < 0)
+        return "";
+    return _languages3[offset];
+}
+
+U_CAPI const char*  U_EXPORT2
+uloc_getISO3Country(const char* localeID) 
+{
+    int16_t offset;
+    char cntry[ULOC_LANG_CAPACITY];
+    UErrorCode err = U_ZERO_ERROR;
+    
+    if (localeID == NULL)
+    {
+        localeID = uloc_getDefault();
+    }
+    uloc_getCountry(localeID, cntry, ULOC_LANG_CAPACITY, &err);
     if (U_FAILURE(err))
         return "";
     offset = _findIndex(_countries, cntry);
@@ -1010,7 +1101,7 @@ uloc_getDisplayLanguage(const char *locale,
                         const char *displayLocale,
                         UChar *dest, int32_t destCapacity,
                         UErrorCode *pErrorCode) {
-    char localeBuffer[200];
+    char localeBuffer[ULOC_FULLNAME_CAPACITY*2];
     int32_t length;
 
     /* argument checking */
@@ -1041,11 +1132,47 @@ uloc_getDisplayLanguage(const char *locale,
 }
 
 U_CAPI int32_t U_EXPORT2
+uloc_getDisplayScript(const char* locale,
+                      const char* displayLocale,
+                      UChar *dest, int32_t destCapacity,
+                      UErrorCode *pErrorCode)
+{
+    char localeBuffer[ULOC_FULLNAME_CAPACITY*2];
+    int32_t length;
+
+    /* argument checking */
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+
+    if(destCapacity<0 || (destCapacity>0 && dest==NULL)) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    *pErrorCode=U_ZERO_ERROR;   /* necessary because we will check for a warning code */
+    length=uloc_getScript(locale, localeBuffer, sizeof(localeBuffer), pErrorCode);
+    if(U_FAILURE(*pErrorCode) || *pErrorCode==U_STRING_NOT_TERMINATED_WARNING) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    if(length==0) {
+        return u_terminateUChars(dest, destCapacity, 0, pErrorCode);
+    }
+
+    return _getStringOrCopyKey(NULL, displayLocale,
+                               _kScripts, localeBuffer,
+                               localeBuffer,
+                               dest, destCapacity,
+                               pErrorCode);
+}
+
+U_CAPI int32_t U_EXPORT2
 uloc_getDisplayCountry(const char *locale,
                        const char *displayLocale,
                        UChar *dest, int32_t destCapacity,
                        UErrorCode *pErrorCode) {
-    char localeBuffer[200];
+    char localeBuffer[ULOC_FULLNAME_CAPACITY*2];
     int32_t length;
 
     /* argument checking */
@@ -1085,7 +1212,7 @@ uloc_getDisplayVariant(const char *locale,
                        const char *displayLocale,
                        UChar *dest, int32_t destCapacity,
                        UErrorCode *pErrorCode) {
-    char localeBuffer[200];
+    char localeBuffer[ULOC_FULLNAME_CAPACITY*2];
     int32_t length;
 
     /* argument checking */
@@ -1235,40 +1362,6 @@ uloc_getDisplayName(const char *locale,
     return u_terminateUChars(dest, destCapacity, length, pErrorCode);
 }
 
-U_CAPI const char* U_EXPORT2
-uloc_getAvailable(int32_t offset) 
-{
-    
-    _load_installedLocales();
-    
-    if (offset > _installedLocalesCount)
-        return NULL;
-    else
-        return _installedLocales[offset];
-
-}
-
-U_CAPI int32_t  U_EXPORT2
-uloc_countAvailable()
-{
-    _load_installedLocales();
-    return _installedLocalesCount;
-}
-
-UBool uloc_cleanup(void) {
-    char ** temp;
-
-    if (_installedLocales) {
-        temp = _installedLocales;
-        _installedLocales = NULL;
-
-        _installedLocalesCount = 0;
-
-        uprv_free(temp);
-    }
-    return TRUE;
-}
-
 static void _load_installedLocales()
 {
     UBool   localesLoaded;
@@ -1315,6 +1408,40 @@ static void _load_installedLocales()
     }
 }
 
+
+U_CAPI const char* U_EXPORT2
+uloc_getAvailable(int32_t offset) 
+{
+    
+    _load_installedLocales();
+    
+    if (offset > _installedLocalesCount)
+        return NULL;
+    else
+        return _installedLocales[offset];
+
+}
+
+U_CAPI int32_t  U_EXPORT2
+uloc_countAvailable()
+{
+    _load_installedLocales();
+    return _installedLocalesCount;
+}
+
+UBool uloc_cleanup(void) {
+    char ** temp;
+
+    if (_installedLocales) {
+        temp = _installedLocales;
+        _installedLocales = NULL;
+
+        _installedLocalesCount = 0;
+
+        uprv_free(temp);
+    }
+    return TRUE;
+}
 
 
 /**
