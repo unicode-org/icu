@@ -81,6 +81,7 @@ void HangulJamoTransliterator::handleTransliterate(Replaceable& text, UTransPosi
         }
     }
 
+    offsets.contextLimit += limit - offsets.limit;
     offsets.limit = limit;
     offsets.start = cursor;
 }
