@@ -1865,6 +1865,7 @@ uint32_t getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, collIterate 
         //UChar  *sourcePointer = source->pos;
         UChar32 normOutput = 0;
         Normalizer n(source->string, source->pos-source->string, UNORM_NFC);
+        //Normalizer n(source->string, source->pos-source->string, UNORM_NFD);
         n.last();
         for(;;) {
         // This loop will run once per source string character, for as long as we
@@ -1872,6 +1873,14 @@ uint32_t getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, collIterate 
 
         // First we position ourselves at the begining of contraction sequence 
         const UChar *ContractionStart = UCharOffset = (UChar *)coll->image+getContractOffset(CE);
+#if 0
+        if(sourcePointer == source->string) {
+          CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
+          break;
+        }
+        schar = *sourcePointer--;
+#endif
+
         if(normOutput <= 0xFFFF) { // if the previous normalized char was a BMP, we continue processing
           normOutput = n.previous();
           if(normOutput==Normalizer::DONE) {
@@ -1891,6 +1900,7 @@ uint32_t getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, collIterate 
           // get the leading  surrogate
           schar = UTF16_LEAD(normOutput);
         }
+
 
         while(schar > (tchar = *UCharOffset)) { /* since the contraction codepoints should be ordered, we skip all that are smaller */
           UCharOffset++;
@@ -2479,6 +2489,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
         UChar schar, tchar;
         //UChar *sourcePointer = source->pos;
         UChar32 normOutput = 0;
+        //Normalizer n(source->string, source->pos-source->string+1, UNORM_NFD);
         Normalizer n(source->string, source->pos-source->string+1, UNORM_NFC);
         n.last();
         for(;;) {
@@ -4774,6 +4785,49 @@ inline void UCOL_CEBUF_PUT(ucol_CEBuf *b, uint32_t ce, collIterate *ci) {
     *(b)->pos++ = ce;
 };
 
+/* This is a trick string compare function that goes in and uses sortkeys to compare */
+/* It is used when compare gets in trouble and needs to bail out                     */
+static UCollationResult ucol_compareUsingSortKeys(const    UCollator    *coll,
+        const    UChar        *source,
+        int32_t            sourceLength,
+        const    UChar        *target,
+        int32_t            targetLength)
+{
+    uint8_t sourceKey[UCOL_MAX_BUFFER], targetKey[UCOL_MAX_BUFFER];
+    uint8_t *sourceKeyP = sourceKey;
+    uint8_t *targetKeyP = targetKey;
+    int32_t sourceKeyLen = UCOL_MAX_BUFFER, targetKeyLen = UCOL_MAX_BUFFER;
+
+    sourceKeyLen = ucol_getSortKey(coll, source, sourceLength, sourceKeyP, sourceKeyLen);
+    if(sourceKeyLen > UCOL_MAX_BUFFER) {
+        sourceKeyP = (uint8_t*)uprv_malloc(sourceKeyLen*sizeof(uint8_t));
+        sourceKeyLen = ucol_getSortKey(coll, source, sourceLength, sourceKeyP, sourceKeyLen);
+    }
+
+    targetKeyLen = ucol_getSortKey(coll, target, targetLength, targetKeyP, targetKeyLen);
+    if(targetKeyLen > UCOL_MAX_BUFFER) {
+        targetKeyP = (uint8_t*)uprv_malloc(targetKeyLen*sizeof(uint8_t));
+        targetKeyLen = ucol_getSortKey(coll, target, targetLength, targetKeyP, targetKeyLen);
+    }
+
+    int32_t result = uprv_strcmp((const char*)sourceKeyP, (const char*)targetKeyP);
+
+    if(sourceKeyP != sourceKey) {
+        uprv_free(sourceKeyP);
+    }
+
+    if(targetKeyP != targetKey) {
+        uprv_free(targetKeyP);
+    }
+
+    if(result<0) {
+        return UCOL_LESS;
+    } else if(result>0) {
+        return UCOL_GREATER;
+    } else {
+        return UCOL_EQUAL;
+    }
+}
 
 
 /*                                                                      */
@@ -4900,6 +4954,9 @@ ucol_strcoll( const UCollator    *coll,
     UBool qShifted = shifted && checkQuad;
     UBool doHiragana = (coll->hiraganaQ == UCOL_ON) && checkQuad;
 
+    if(doHiragana && shifted) {
+      return (ucol_compareUsingSortKeys(coll, source, sourceLength, target, targetLength));
+    }
     uint8_t caseSwitch = coll->caseSwitch;
     uint8_t tertiaryMask = coll->tertiaryMask;
 
@@ -5063,12 +5120,14 @@ ucol_strcoll( const UCollator    *coll,
         tInShifted = FALSE;
 
         if(sOrder == tOrder) {
+          /*
             if(doHiragana && hirResult == UCOL_EQUAL) {
               if((sColl.flags & UCOL_WAS_HIRAGANA) != (tColl.flags & UCOL_WAS_HIRAGANA)) {
                 hirResult = ((sColl.flags & UCOL_WAS_HIRAGANA) > (tColl.flags & UCOL_WAS_HIRAGANA)) 
                   ? UCOL_LESS:UCOL_GREATER;
               }
             }
+          */
             if(sOrder == UCOL_NO_MORE_CES_PRIMARY) {
               break;
             } else {
