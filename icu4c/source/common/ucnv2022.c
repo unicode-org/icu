@@ -120,6 +120,45 @@ UCNV_TableStates_2022 getKey_2022(char source,
                                   int32_t* key,
                                   int32_t* offset);
 
+static void
+_ISO2022Open(UConverter *cnv, const char *name, const char *locale, UErrorCode *errorCode) {
+    cnv->charErrorBufferLength = 3;
+    cnv->charErrorBuffer[0] = 0x1b;
+    cnv->charErrorBuffer[1] = 0x25;
+    cnv->charErrorBuffer[2] = 0x42;
+    cnv->extraInfo = uprv_malloc (sizeof (UConverterDataISO2022));
+    if(cnv->extraInfo != NULL) {
+        ((UConverterDataISO2022 *) cnv->extraInfo)->currentConverter = NULL;
+        ((UConverterDataISO2022 *) cnv->extraInfo)->escSeq2022Length = 0;
+    } else {
+        *errorCode = U_MEMORY_ALLOCATION_ERROR;
+    }
+}
+
+static void
+_ISO2022Close(UConverter *converter) {
+    if (converter->mode == UCNV_SO) {
+        ucnv_close (((UConverterDataISO2022 *) (converter->extraInfo))->currentConverter);
+        uprv_free (converter->extraInfo);
+    }
+
+}
+
+static void
+_ISO2022Reset(UConverter *converter) {
+  if (converter->mode == UCNV_SO)
+    {
+      converter->charErrorBufferLength = 3;
+      converter->charErrorBuffer[0] = 0x1b;
+      converter->charErrorBuffer[1] = 0x25;
+      converter->charErrorBuffer[2] = 0x42;
+      ucnv_close (((UConverterDataISO2022 *) (converter->extraInfo))->currentConverter);
+      ((UConverterDataISO2022 *) (converter->extraInfo))->currentConverter = NULL;
+      ((UConverterDataISO2022 *) (converter->extraInfo))->escSeq2022Length = 0;
+      converter->mode = UCNV_SI;
+    }
+}
+
 void T_UConverter_fromUnicode_ISO_2022(UConverter* _this,
                                        char** target,
                                        const char* targetLimit,
@@ -632,6 +671,13 @@ UChar T_UConverter_getNextUChar_ISO_2022(UConverter* converter,
 static UConverterImpl _ISO2022Impl={
     UCNV_ISO_2022,
 
+    NULL,
+    NULL,
+
+    _ISO2022Open,
+    _ISO2022Close,
+    _ISO2022Reset,
+
     T_UConverter_toUnicode_ISO_2022,
     T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC,
     T_UConverter_fromUnicode_ISO_2022,
@@ -647,6 +693,12 @@ extern UConverterSharedData _ISO2022Data={
 };
 
 /* EBCDICStateful ----------------------------------------------------------- */
+
+U_CFUNC void
+_DBCSLoad(UConverterSharedData *sharedData, const uint8_t *raw, UErrorCode *pErrorCode);
+
+U_CFUNC void
+_DBCSUnload(UConverterSharedData *sharedData);
 
 void T_UConverter_toUnicode_EBCDIC_STATEFUL (UConverter * _this,
                                              UChar ** target,
@@ -1222,6 +1274,13 @@ UChar T_UConverter_getNextUChar_EBCDIC_STATEFUL(UConverter* converter,
 
 static UConverterImpl _EBCDICStatefulImpl={
     UCNV_EBCDIC_STATEFUL,
+
+    _DBCSLoad,
+    _DBCSUnload,
+
+    NULL,
+    NULL,
+    NULL,
 
     T_UConverter_toUnicode_EBCDIC_STATEFUL,
     T_UConverter_toUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC,

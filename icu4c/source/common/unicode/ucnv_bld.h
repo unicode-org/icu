@@ -153,6 +153,10 @@ typedef struct UConverterImpl UConverterImpl;
  * useful state fields in UConverter that are reserved for the callbacks,
  * and directly included structures instead of pointers to allocated
  * memory, like for UConverterTable and its variant fields.
+ *
+ * Also, with the more C++-like converter implementation,
+ * the conversionType does not need to be in UConverterSharedData any more:
+ * it is in UConverterImpl and hardly used.
  */
 
 /*
@@ -253,8 +257,5 @@ typedef struct
 UConverterDataISO2022;
 
 #define CONVERTER_FILE_EXTENSION ".cnv"
-
-/*case insensitive hash key*/
-U_CAPI int32_t U_EXPORT2 uhash_hashIString(const void* name);
 
 #endif /* _UCNV_BLD */
