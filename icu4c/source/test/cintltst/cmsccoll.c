@@ -1785,6 +1785,6 @@ void addMiscCollTest(TestNode** root)
     /*addTest(root, &TestUnmappedSpaces, "tscoll/cmsccoll/TestUnmappedSpaces");*/   
     /*addTest(root, &PrintMarkDavis, "tscoll/cmsccoll/PrintMarkDavis");*/
     /*addTest(root, &TestVariableTop, "tscoll/cmsccoll/TestVariableTop");*/
-    /*addTest(root, &TestComposeDecompose, "tscoll/cmsccoll/TestComposeDecompose");*/
+    addTest(root, &TestComposeDecompose, "tscoll/cmsccoll/TestComposeDecompose");
 }
 
