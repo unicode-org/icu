@@ -460,11 +460,14 @@ BreakIterator::getLocale(ULocDataLocaleType type, UErrorCode& status) const
 {
   switch(type) {
   case ULOC_VALID_LOCALE:
+#if 0
+      // TODO: need bufferClone problems fixed before this code can work.
     return validLocale;
     break;
   case ULOC_ACTUAL_LOCALE:
     return actualLocale;
     break;
+#endif
   default:
     status = U_UNSUPPORTED_ERROR;
     return Locale("");
