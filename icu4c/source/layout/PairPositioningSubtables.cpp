@@ -52,12 +52,16 @@ le_uint32 PairPositioningFormat1Subtable::process(GlyphIterator *glyphIterator, 
     if (coverageIndex >= 0 && glyphIterator->next()) {
         Offset pairSetTableOffset = SWAPW(pairSetTableOffsetArray[coverageIndex]);
         PairSetTable *pairSetTable = (PairSetTable *) ((char *) this + pairSetTableOffset);
+        le_uint16 pairValueCount = SWAPW(pairSetTable->pairValueCount);
         le_int16 valueRecord1Size = ValueRecord::getSize(SWAPW(valueFormat1));
         le_int16 valueRecord2Size = ValueRecord::getSize(SWAPW(valueFormat2));
         le_int16 recordSize = sizeof(PairValueRecord) - sizeof(ValueRecord) + valueRecord1Size + valueRecord2Size;
         LEGlyphID secondGlyph = glyphIterator->getCurrGlyphID();
-        const PairValueRecord *pairValueRecord =
-            findPairValueRecord((TTGlyphID) LE_GET_GLYPH(secondGlyph), pairSetTable->pairValueRecordArray, SWAPW(pairSetTable->pairValueCount), recordSize);
+        const PairValueRecord *pairValueRecord = NULL;
+
+        if (pairValueCount != 0) {
+            pairValueRecord = findPairValueRecord((TTGlyphID) LE_GET_GLYPH(secondGlyph), pairSetTable->pairValueRecordArray, pairValueCount, recordSize);
+        }
 
         if (pairValueRecord == NULL) {
             return 0;
