@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/Main.java,v $ 
-* $Date: 2002/09/25 06:40:13 $ 
-* $Revision: 1.10 $
+* $Date: 2002/10/03 22:58:17 $ 
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -76,6 +76,10 @@ public class Main {
             else if (arg.equalsIgnoreCase("writeCaseFolding")) WriteCollationData.writeCaseFolding();
             else if (arg.equalsIgnoreCase("javatest")) WriteCollationData.javatest();
             else if (arg.equalsIgnoreCase("short")) shortPrint = true;
+            
+            else if (arg.equalsIgnoreCase("writeAllocation")) WriteCharts.writeAllocation();
+            
+            
             else {
                 System.out.println();
                 System.out.println("UNKNOWN OPTION (" + arg + "): must be one of the following (case-insensitive)");

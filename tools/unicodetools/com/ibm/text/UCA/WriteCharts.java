@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCharts.java,v $
-* $Date: 2002/09/25 06:40:13 $
-* $Revision: 1.12 $
+* $Date: 2002/10/03 22:58:17 $
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */
@@ -22,6 +22,7 @@ import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSetIterator;
 import com.ibm.icu.text.Transliterator;
 import com.ibm.icu.text.UnicodeSet;
+import java.text.NumberFormat;
 
 
 import java.text.SimpleDateFormat;
@@ -921,6 +922,100 @@ public class WriteCharts implements UCD_Types {
     }
 
 
+    public static void writeAllocation() throws IOException {
+    	Default.setUCD();
+        int counter = 0;
+        UnicodeSet[] values = new UnicodeSet[500];
+        String[] names = new String[values.length];
+        int[] starts = new int[values.length];
+        int[] ends = new int[values.length];
+        BufferedReader in = Utility.openUnicodeFile("Blocks", "", true, false);
+        try {
+            while (true) {
+                // 0000..007F; Basic Latin
+                String line = Utility.readDataLine(in);
+                if (line == null) break;
+                if (line.length() == 0) continue;
+                int pos1 = line.indexOf('.');
+                int pos2 = line.indexOf(';', pos1);
+                int start = Integer.parseInt(line.substring(0, pos1), 16);
+                int end = Integer.parseInt(line.substring(pos1+2, pos2), 16);
+                String name = line.substring(pos2+1).trim(); // .replace(' ', '_');
+                names[counter] = name;
+                values[counter] = new UnicodeSet(start, end);
+                starts[counter] = start;
+                ends[counter] = end;
+                //System.out.println(names[counter] + ", " + values[counter]);
+                ++counter;
+            }
+        } finally {
+            in.close();
+        }
+            
+        PrintWriter out = Utility.openPrintWriter("Allocation.html", Utility.LATIN1_WINDOWS);
+        try {
+            out.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
+            out.println("<title>Unicode Allocation</title></head>");
+            out.println("<body bgcolor='#FFFFFF'><h1 align='center'><a href='#Notes'>Unicode Allocation</a></h1>");
+            out.println("<table border='1' width='100%' cellspacing='0'>");
+            out.println("<tr><th>Start</th><th align='left'>Block Name</th><th align='left'>Size</th></tr>");
+  
+            UnicodeSetIterator it = new UnicodeSetIterator();
+
+            int lastEnd = -1;
+            for (int i = 0; i < counter; ++i) {
+                if (starts[i] != lastEnd + 1) {
+                    drawAllocation(out, lastEnd + 1, "<i>reserved</i>", starts[i] - lastEnd + 1, 0);
+                }
+                int total = values[i].size();
+                int alloc = 0;
+                it.reset(values[i]);
+                while (it.nextRange()) {
+                    for (int j = it.codepoint; j <= it.codepointEnd; ++j) {
+                        if (Default.ucd.isAllocated(j)) ++alloc;
+                    }
+                }
+                System.out.println(names[i] + "\t" + alloc + "\t" + total);
+                drawAllocation(out, starts[i], names[i], total, alloc);
+                lastEnd = ends[i];
+            }
+            out.println("</table>");
+            out.println("<p><a name='Notes'></a>This chart lists all the Unicode blocks and their starting code points. "
+                + "The area of each bar is proportional to the total number of code points in each block, "
+                + "with green for the proportion of assigned code points. "
+                + "Tooltips on the bars show the total number of code points and the number assigned. "
+                + "(Remember that assigned <i>code points</i> are not necessarily assigned <i>characters</i>.)"
+                + "</p>");
+            out.println("</body></html>");
+        } finally {
+            out.close();
+        }
+    }
+    
+    static double longestBar = 1000;
+    static int longestBlock = 722402;
+    static NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
+    static {nf.setMaximumFractionDigits(0);}
+    
+    static void drawAllocation(PrintWriter out, int start, String title, int total, int alloc) {
+        int unalloc = total - alloc;
+        
+        double totalWidth = longestBar*(Math.sqrt(total) / Math.sqrt(longestBlock));
+        double allocWidth = alloc * totalWidth / total;
+        double unallocWidth = totalWidth - allocWidth;
+ 
+        out.println("<tr><td  align='right'><code>" + Utility.hex(start)
+            + "</code></td><td>" + title
+            + "</td><td title='total: " + nf.format(total) + ", assigned: " + nf.format(alloc)
+            + "'><table border='0' cellspacing='0' cellpadding='0'><tr>");
+                
+        if (alloc != 0) out.println("<td style='font-size:1;width:" + allocWidth + ";height:" + totalWidth
+            + "' bgcolor='#00FF00'>&nbsp;</td>");
+        if (unalloc != 0) out.println("<td style='font-size:1;width:" + unallocWidth + ";height:" + totalWidth
+            + "' bgcolor='#000000'>&nbsp;</td>");
+        out.println("</tr></table></td></tr>");
+    }
+    
 }
 
 
