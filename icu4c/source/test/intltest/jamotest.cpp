@@ -15,15 +15,8 @@
 #include "unicode/rbt.h"
 #include "unicode/cpdtrans.h"
 
-#define CASE(id,test) case id:                          \
-                          name = #test;                 \
-                          if (exec) {                   \
-                              logln(#test "---");       \
-                              logln((UnicodeString)""); \
-                              test();                   \
-                          }                             \
-                          break
-
+// SEP is the disambiguation separator used by Latin-Jamo and Jamo-Latin
+#define SEP "'"
 
 JamoTest::JamoTest()
 {
@@ -56,9 +49,9 @@ void
 JamoTest::runIndexedTest(int32_t index, UBool exec,
                          const char* &name, char* /*par*/) {
     switch (index) {
-        CASE(0,TestJamo);
-        CASE(1,TestRealText);
-        CASE(2,TestPiecemeal);
+        TESTCASE(0,TestJamo);
+        TESTCASE(1,TestRealText);
+        TESTCASE(2,TestPiecemeal);
         default: name = ""; break;
     }
 }
@@ -92,11 +85,11 @@ JamoTest::TestJamo() {
         // Column 3 is expected value of L2.  If the expected
         // value of L2 is L1, then L2 is NULL.
         "bab", "(Bi)(A)(Bf)", NULL,
-        "babb", "(Bi)(A)(Bf)(Bi)(EU)", "bab-beu",
+        "babb", "(Bi)(A)(Bf)(Bi)(EU)", "bab" SEP "beu",
         "babbba", "(Bi)(A)(Bf)(BB)(A)", NULL,
         "bagg", "(Bi)(A)(GGf)", NULL,
         "baggga", "(Bi)(A)(GGf)(Gi)(A)", NULL,
-        "bag-gga", "(Bi)(A)(Gf)(GGi)(A)", NULL,
+        "bag" SEP "gga", "(Bi)(A)(Gf)(GGi)(A)", NULL,
         "kabsa", "(Ki)(A)(Bf)(Si)(A)", NULL,
         "kabska", "(Ki)(A)(BS)(Ki)(A)", NULL,
         "gabsbka", "(Gi)(A)(BS)(Bi)(EU)(Ki)(A)", "gabsbeuka", // not (Kf)
