@@ -988,7 +988,7 @@ Entry* TransliteratorRegistry::findInBundle(const Spec& specToOpen,
             utag.append(TRANSLITERATE);
         }
         UnicodeString s(specToFind.get());
-        utag.append(s.toUpper());
+        utag.append(s.toUpper(""));
         CharString tag(utag);
         
         UErrorCode status = U_ZERO_ERROR;
