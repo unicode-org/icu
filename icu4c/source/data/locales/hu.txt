@@ -433,5 +433,26 @@ hu {
     MonthAbbreviations_islamic-civil:alias {
         "hu/MonthAbbreviations_islamic"
     }
+    MonthNames_hebrew {
+                "Tisri",                        // Tishri
+                "Hesv\u00E1n",                  // Heshvan
+                "Kiszl\u00E9v",                 // Kislev
+                "T\u00E9v\u00E9sz",             // Tevet
+                "Sv\u00E1t",                    // Shevat
+                "\u00C1d\u00E1r ris\u00F3n",    // Adar I
+                "\u00C1d\u00E1r s\u00E9ni",     // Adar
+                "Nisz\u00E1n",                  // Nisan
+                "Ij\u00E1r",                    // Iyar
+                "Sziv\u00E1n",                  // Sivan
+                "Tamuz",                        // Tamuz
+                "\u00C1v",                      // Av
+                "Elul",                         // Elul
+    }
+    MonthAbbreviations_hebrew:alias {
+       "hu/MonthNames_hebrew" // no data
+    }
+    Eras_hebrew:array {
+                "T\u00C9"
+    }
 
 }

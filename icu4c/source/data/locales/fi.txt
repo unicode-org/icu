@@ -363,4 +363,23 @@ fi {
         "fi/MonthAbbreviations_islamic"
     }
 
+    MonthNames_hebrew {
+                "Ti\u0161r\u00ECkuu",       // Tishri
+                "He\u0161v\u00E1nkuu",      // Heshvan
+                "Kisl\u00E9vkuu",           // Kislev
+                "Tev\u00E9tkuu",            // Tevet
+                "\u0160evatkuu",            // Shevat
+                "Ad\u00E1rkuu",             // Adar I
+                "Ad\u00E1rkuu II",          // Adar
+                "Nis\u00E1nkuu",            // Nisan
+                "Ijj\u00E1rkuu",            // Iyar
+                "Siv\u00E1nkuu",            // Sivan
+                "Tamm\u00FAzkuu",           // Tamuz
+                "Abkuu",                    // Av
+                "El\u00FAlkuu",             // Elul
+    }
+    MonthAbbreviations_hebrew:alias {
+       "fi/MonthNames_hebrew" // no data
+    }
+
 }
