@@ -1,13 +1,7 @@
 /*
  *****************************************************************************
- * Copyright (C) 2000-2002, International Business Machines Corporation and  *
+ * Copyright (C) 2000-2004, International Business Machines Corporation and  *
  * others. All Rights Reserved.                                              *
- *****************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/rbm/ScanResult.java,v $ 
- * $Date: 2002/05/20 18:53:08 $ 
- * $Revision: 1.1 $
- *
  *****************************************************************************
  */
 package com.ibm.rbm;
@@ -19,7 +13,7 @@ import java.util.*;
  * This class represents the results found for each resource key while
  * performing the code scan done by RBReporter.
  * 
- * @author Jared Jackson - Email: <a href="mailto:jjared@almaden.ibm.com">jjared@almaden.ibm.com</a>
+ * @author Jared Jackson
  * @see com.ibm.rbm.RBReporter
  */
 public class ScanResult {
