@@ -12,7 +12,7 @@ usage()
     echo "          1. 'AIX4.1.5xlC' if you are using xlC on AIX4.1.5"
     echo "          2. 'SOLARISCC' if you are using native CC compiler on Solaris"
     echo "          3. 'SOLARISGCC' if you are using GNU C++ compiler on Solaris"
-    echo "          4. 'LinuxRedHat6.0' if you are using GNU C++ compiler on Linux"
+    echo "          4. 'LinuxRedHat5.2 or LinuxRedHat6.0' if you are using GNU C++ compiler on Linux"
     echo "          5. 'HP/UX10.2CC' if you are using native C++ compiler on HP-UX10.2"
     echo "          6. 'HP/UX10.2ACC' if you are using Advanced C++ compiler on HP-UX10.2"
     echo "          7. 'HP/UX11CC' if you are using native C++ compiler on HP-UX11"
@@ -38,6 +38,9 @@ rm -f config.cache
 rm -f config.log
 rm -f config.status
 
+mapped="--enable-mapped=yes"
+mapdll="--enable-mapped-dll=yes"
+
 case $platform in
         AIX4.1.5xlC)
                 echo Running configure for AIX using xlC compiler ...
@@ -45,37 +48,37 @@ case $platform in
                 CXX=/usr/lpp/xlC/bin/xlC_r; export CXX
                 #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
                 #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
-                ./configure;;
+                ./configure $mapped $mapdll ;;
         AIX4.3xlC)
                 echo Running configure for AIX using xlC compiler ...
                 CC=/usr/ibmcxx/bin/xlc; export CC
                 CXX=/usr/ibmcxx/bin/xlC_r; export CXX
                 #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
                 #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
-                ./configure;;
+                ./configure $mapped $mapdll ;;
         SOLARISCC)
                 echo Running configure for SOLARIS using native CC compiler ...
                 CC=/usr/local/SUNWspro/bin/cc; export CC
                 CXX=/usr/local/SUNWspro/bin/CC; export CXX
-                ./configure;;
+                ./configure $mapped $mapdll ;;
         SOLARISGCC)
                 echo Running configure for Solaris using gcc compiler ...
                 CXXFLAGS=-I/usr/local/include/g++; export CXXFLAGS
 				LDFLAGS=-R/usr/local/lib; export LDFLAGS
-                ./configure;;
+                ./configure $mapped $mapdll ;;
         SOL2.7CC)
                 echo Running configure for SOLARIS2.7cc using native CC compiler
                 CC=/usr/local/SUNWspro/bin/cc; export CC
                 CXX=/usr/local/SUNWspro/bin/CC; export CXX 
-                ./configure;;
+                ./configure $mapped $mapdll ;;
 
-        LinuxRedHat6.0)
+        LinuxRedHat*)
                 echo Running configure for Linux using gcc compiler ...
                 CXX=g++; export CXX 
 		        CC=gcc; export CC
                 CXXFLAGS=-g; export CXXFLAGS
 		        CFLAGS=-g; export CFLAGS
-		        ./configure;; 
+                ./configure $mapped $mapdll ;;
         HP/UX10.2CC)
                 echo Running configure for HP10.2 using native CC compiler ...
 				CC=cc; export CC
