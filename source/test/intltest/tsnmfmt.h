@@ -62,7 +62,7 @@ static double randDouble()
     // Assume 8-bit (or larger) rand values.  Also assume
     // that the system rand() function is very poor, which it always is.
     double d;
-    int32_t i;
+    uint32_t i;
     char* poke = (char*)&d;
     for (i=0; i < sizeof(double); ++i)
     {
@@ -79,7 +79,7 @@ static uint32_t randLong()
     // Assume 8-bit (or larger) rand values.  Also assume
     // that the system rand() function is very poor, which it always is.
     uint32_t d;
-    int32_t i;
+    uint32_t i;
     char* poke = (char*)&d;
     for (i=0; i < sizeof(uint32_t); ++i)
     {

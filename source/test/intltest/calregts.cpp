@@ -1867,7 +1867,7 @@ void CalendarRegressionTest::TestJ81() {
                     (sign==PLUS>0 ? DATA[i].after : DATA[i].before);
                 cal.setTime(date, status);
                 if (U_FAILURE(status)) {
-                    errln((UnicodeString)"FAIL: setTime returned error code " + status);
+                    errln((UnicodeString)"FAIL: setTime returned error code " + u_errorName(status));
                     continue;
                 }
                 if (action == ADD) {
@@ -1878,12 +1878,12 @@ void CalendarRegressionTest::TestJ81() {
                 if (U_FAILURE(status)) {
                     errln((UnicodeString)"FAIL: " +
                           (action==ADD?"add ":"roll ") + FIELD_NAME[DATA[i].field] +
-                          " returned error code " + status);
+                          " returned error code " + u_errorName(status));
                     continue;
                 }
                 UDate result = cal.getTime(status);
                 if (U_FAILURE(status)) {
-                    errln((UnicodeString)"FAIL: getTime returned error code " + status);
+                    errln((UnicodeString)"FAIL: getTime returned error code " + u_errorName(status));
                     continue;
                 }
                 if (result == expected) {

@@ -9,6 +9,7 @@
 */
 
 #include "thcoll.h"
+#include "unicode/utypes.h"
 #include "unicode/coll.h"
 #include "unicode/sortkey.h"
 #include "cstring.h"
@@ -150,7 +151,7 @@ void CollationThaiTest::TestDictionary(void) {
                     coll->getCollationKey(lastWord, k1, status);
                     coll->getCollationKey(word, k2, status);
                     if (U_FAILURE(status)) {
-                        errln((UnicodeString)"Fail: getCollationKey returned " + status);
+                        errln((UnicodeString)"Fail: getCollationKey returned " + u_errorName(status));
                         return;
                     }
                     msg.append("key1: ").append(prettify(k1, str)).append("\n");
@@ -265,7 +266,7 @@ void CollationThaiTest::compareArray(const Collator& c, const char* tests[],
             c.getCollationKey(s1, k1, status);
             c.getCollationKey(s2, k2, status);
             if (U_FAILURE(status)) {
-                errln((UnicodeString)"Fail: getCollationKey returned " + status);
+                errln((UnicodeString)"Fail: getCollationKey returned " + u_errorName(status));
                 return;
             }
             errln((UnicodeString)"  key1: " + prettify(k1, t1) );
@@ -278,7 +279,7 @@ void CollationThaiTest::compareArray(const Collator& c, const char* tests[],
             c.getCollationKey(s1, k1, status);
             c.getCollationKey(s2, k2, status);
             if (U_FAILURE(status)) {
-                errln((UnicodeString)"Fail: getCollationKey returned " + status);
+                errln((UnicodeString)"Fail: getCollationKey returned " + u_errorName(status));
                 return;
             }
 
