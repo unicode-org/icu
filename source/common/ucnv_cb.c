@@ -21,6 +21,7 @@
 #include "unicode/utypes.h"
 #include "unicode/ucnv_cb.h"
 #include "ucnv_bld.h"
+#include "ucnv_cnv.h"
 #include "cmemory.h"
 
 /* need to update the offsets when the target moves. */
@@ -201,44 +202,19 @@ void ucnv_cbFromUWriteUChars(UConverterFromUnicodeArgs *args,
 
 void ucnv_cbFromUWriteSub (UConverterFromUnicodeArgs *args,
                            int32_t offsetIndex,
-                       UErrorCode * err)
+                           UErrorCode * err)
 {
-    char togo[5];
-    int32_t togoLen;
-
-    if(U_FAILURE(*err))
-    {
-      return;
+    if(U_FAILURE(*err)) {
+        return;
     }
 
-    /*In case we're dealing with a modal converter a la UCNV_EBCDIC_STATEFUL,
-    we need to make sure that the emitting of the substitution charater in the right mode*/
-    uprv_memcpy(togo, args->converter->subChar, togoLen = args->converter->subCharLen);
-    if (ucnv_getType(args->converter) == UCNV_EBCDIC_STATEFUL)
-    {
-        if ((args->converter->fromUnicodeStatus)&&(togoLen != 2))
-        {
-            togo[0] = UCNV_SI;
-            togo[1] = args->converter->subChar[0];
-            togo[2] = UCNV_SO;
-            togoLen = 3;
-        }
-        else if (!(args->converter->fromUnicodeStatus)&&(togoLen != 1))
-        {
-            togo[0] = UCNV_SO;
-            togo[1] = args->converter->subChar[0];
-            togo[2] = args->converter->subChar[1];
-            togo[3] = UCNV_SI;
-            togoLen = 4;
-        }
+    if(args->converter->sharedData->impl->writeSub!=NULL) {
+        args->converter->sharedData->impl->writeSub(args, offsetIndex, err);
+    } else {
+        ucnv_cbFromUWriteBytes(args,
+                               (const char *)args->converter->subChar, args->converter->subCharLen,
+                               offsetIndex, err);
     }
-
-    /*if we have enough space on the output buffer we just copy
-    the subchar there and update the pointer */  
-    ucnv_cbFromUWriteBytes(args, togo, togoLen, offsetIndex, err);
-
-
-    return;
 }
 
 void ucnv_cbToUWriteUChars (UConverterToUnicodeArgs *args,

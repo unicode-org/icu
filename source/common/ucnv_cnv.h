@@ -160,11 +160,21 @@ typedef UChar32 (*T_GetNextUCharFunction) (UConverterToUnicodeArgs *, UErrorCode
 typedef void (*UConverterGetStarters)(const UConverter* converter,
                                       UBool starters[256],
                                       UErrorCode *pErrorCode);
+
 /* If this function pointer is null or if the function returns null
  * the name field in static data struct should be returned by 
  * ucnv_getName() API function
  */
 typedef const char * (*UConverterGetName) (const UConverter *cnv);
+
+/**
+ * Write the codepage substitution character.
+ * If this function is not set, then ucnv_cbFromUWriteSub() writes
+ * the substitution character from UConverter.
+ * For stateful converters, it is typically necessary to handle this
+ * specificially for the converter in order to properly maintain the state.
+ */
+typedef void (*UConverterWriteSub) (UConverterFromUnicodeArgs *pArgs, int32_t offsetIndex, UErrorCode *pErrorCode);
 
 UBool CONVERSION_U_SUCCESS (UErrorCode err);
 
@@ -216,6 +226,7 @@ struct UConverterImpl {
 
     UConverterGetStarters getStarters;
     UConverterGetName getName;
+    UConverterWriteSub writeSub;
 };
 
 extern const UConverterSharedData
