@@ -79,6 +79,62 @@ u_strstr(const UChar *s, const UChar *substring) {
   return NULL;                      /* No match */
 }
 
+/**
+ * Check if there is an unmatched surrogate c in a string [start..limit[ at s.
+ * start<=s<limit or limit==NULL
+ * @return TRUE if *s is unmatched
+ */
+static U_INLINE UBool
+uprv_isSingleSurrogate(const UChar *start, const UChar *s, UChar c, const UChar *limit) {
+    if(UTF_IS_SURROGATE_FIRST(c)) {
+        ++s;
+        return (UBool)(s==limit || !UTF_IS_TRAIL(*s));
+    } else {
+        return (UBool)(s==start || !UTF_IS_LEAD(*(s-1)));
+    }
+}
+
+U_CFUNC const UChar *
+uprv_strFindSurrogate(const UChar *s, int32_t length, UChar surrogate) {
+    const UChar *limit, *t;
+    UChar c;
+
+    if(length>=0) {
+        limit=s+length;
+    } else {
+        limit=NULL;
+    }
+
+    for(t=s; t!=limit && ((c=*t)!=0 || limit!=NULL); ++t) {
+        if(c==surrogate && uprv_isSingleSurrogate(s, t, c, limit)) {
+            return t;
+        }
+    }
+
+    return NULL;
+}
+
+U_CFUNC const UChar *
+uprv_strFindLastSurrogate(const UChar *s, int32_t length, UChar surrogate) {
+    const UChar *limit, *t;
+    UChar c;
+
+    if(length>=0) {
+        limit=s+length;
+    } else {
+        limit=s+u_strlen(s);
+    }
+
+    for(t=limit; t!=s;) {
+        c=*--t;
+        if(c==surrogate && uprv_isSingleSurrogate(s, t, c, limit)) {
+            return t;
+        }
+    }
+
+    return NULL;
+}
+
 U_CAPI UChar * U_EXPORT2
 u_strchr32(const UChar *s, UChar32 c) {
   if(c < 0xd800) {
@@ -86,25 +142,7 @@ u_strchr32(const UChar *s, UChar32 c) {
     return u_strchr(s, (UChar)c);
   } else if(c <= 0xdfff) {
     /* surrogate code point */
-    UChar *t;
-
-    for(;;) {
-      t = u_strchr(s, (UChar)c);
-      if(t == NULL) {
-        return NULL;
-      }
-      if(
-        UTF_IS_SURROGATE_FIRST(*t) ?
-          UTF_IS_TRAIL(*(t+1)) :
-          (s<t && UTF_IS_LEAD(*(t-1)))
-      ) {
-        /* matched surrogate, not a surrogate code point, continue searching */
-        s = t + 1;
-      } else {
-        return t;
-      }
-    }
-    return NULL;
+    return (UChar *)uprv_strFindSurrogate(s, -1, (UChar)c);
   } else if(c <= 0xffff) {
     /* non-surrogate BMP code point */
     return u_strchr(s, (UChar)c);
@@ -630,8 +668,13 @@ u_memchr32(const UChar *src, UChar32 ch, int32_t count) {
         return NULL; /* no string, or illegal arguments */
     }
 
-    if(ch<=0xffff) {
-        /* ### TODO: needs fix for surrogates, see u_strchr32(), j1542 */
+    if(ch<0xd800) {
+        /* non-surrogate BMP code point */
+        return u_memchr(src, (UChar)ch, count); /* BMP, single UChar */
+    } else if(ch<=0xdfff) {
+        /* surrogate code point */
+        return (UChar *)uprv_strFindSurrogate(src, count, (UChar)ch);
+    } else if(ch<=0xffff) {
         return u_memchr(src, (UChar)ch, count); /* BMP, single UChar */
     } else if(count<2) {
         return NULL; /* too short for a surrogate pair */

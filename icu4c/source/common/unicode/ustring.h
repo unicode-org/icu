@@ -497,8 +497,20 @@ U_CAPI UChar* U_EXPORT2
 u_memchr(const UChar *src, UChar ch, int32_t count);
 
 /**
- * Search for a UChar32 within a Unicode string until <TT>count</TT>
- * is reached. This also includes surrogates in UTF-16.
+ * Find the first occurence of a specified code point in a string.
+ *
+ * This function finds code points, which differs for BMP code points
+ * from u_memchr() only for surrogates:
+ * While u_memchr() finds any surrogate code units in a string,
+ * u_memchr32() finds only unmatched surrogate code points,
+ * i.e., only those that do not combine with an adjacent surrogate
+ * to form a supplementary code point.
+ * For example, in a string "\ud800\udc00" u_memchr()
+ * will find code units U+d800 at 0 and U+dc00 at 1,
+ * but u_memchr32() will find neither because they
+ * combine to the code point U+10000.
+ * Either function will find U+d800 in "a\ud800b".
+ * This behavior ensures that UTF_GET_CHAR(u_memchr32(c))==c.
  *
  * @param src string to search in
  * @param ch character to find
