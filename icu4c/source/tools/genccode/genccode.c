@@ -173,7 +173,7 @@ static const struct AssemblyType {
         "\t.csect %s{RO}, 4\n",
 
         ".long "
-    }
+    },
     {"aCC",
         "\t.SPACE  $TEXT$\n"
         "\t.SUBSPA $LIT$\n"
@@ -182,7 +182,7 @@ static const struct AssemblyType {
         "\t.ALIGN  16\n",
 
         ".WORD "
-    },
+    }
 };
 
 static int32_t assemblyHeaderIndex = -1;
