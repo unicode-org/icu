@@ -38,6 +38,7 @@ The following names can be supplied as the argument for platform:
     HP/UX11ACC              Use the Advanced C++ compiler on HP-UX 11
     LinuxRedHat             Use the GNU C++ compiler on Linux
     CygWin                  Use the GNU C++ compiler on CygWin
+    MacOSX                  Use the GNU C++ compiler on MacOS X (Darwin)
     SOLARISCC               Use Sun's CC compiler on Solaris 
     SOLARISGCC              Use the GNU C++ compiler on Solaris
     SOLARISX86              Use Sun's CC compiler on Solaris x86
@@ -200,31 +201,31 @@ case $platform in
         RELEASE_CFLAGS='-O4'
         RELEASE_CXXFLAGS='-O4'       
         ;;
-    ALPHA/LINUXGCC)
-        THE_OS="Linux"
-        THE_COMP="the GNU C++"
-        CC=gcc; export CC
-        CXX=g++; export CXX
-        ;;
     TRU64V5.1/CXX)
         THE_OS="OSF1"
         THE_COMP="Compaq cxx"
         CC=cxx; export CC
         CXX=cxx; export CXX
         ;;
+    ALPHA/LINUXGCC)
+        THE_OS="Linux"
+        THE_COMP="the GNU C++"
+        ;;
     LinuxRedHat*)
         THE_OS="Linux"
         THE_COMP="the GNU C++"
-        CC=gcc; export CC
-        CXX=g++; export CXX 
         ;;
     CygWin)
+        THE_OS="CygWin"
+        THE_COMP="the GNU C++"
+        ;;
+    MacOSX)
+        THE_OS="MacOS X (Darwin)"
+        THE_COMP="the GNU C++"
         ;;
     *BSD)
         THE_OS="BSD"
         THE_COMP="the GNU C++"
-        CC=gcc; export CC
-        CXX=g++; export CXX 
         ;;
     zOS/cxx)
         THE_OS="z/OS"
