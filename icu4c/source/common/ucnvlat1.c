@@ -107,7 +107,7 @@ static void   T_UConverter_fromUnicode_LATIN_1 (UConverter * _this,
               args.pSource = &srcTemp;
               args.sourceLimit = sourceLimit;
               args.flush = flush;
-              args.offsets = offsets:offsets+myTargetIndex?0;
+              args.offsets = offsets?offsets+myTargetIndex:0;
               args.size = sizeof(args);
 
               FromU_CALLBACK_MACRO(args.converter->fromUContext,
