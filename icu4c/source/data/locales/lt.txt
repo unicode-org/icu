@@ -9,7 +9,7 @@ lt {
     CollationElements { 
 	    Version { "1.0" }
 		Override { "FALSE" }
-		Sequence { "@& C < c\u030C , C\u030C & I ; y = \u0131 , Y = \u0130 "
+		Sequence { "[backwards 2]& C < c\u030C , C\u030C & I ; y = \u0131 , Y = \u0130 "
         "& S < s\u030C , S\u030C & X < y\u0301, Y\u0301 < y\u0302 , Y\u0302 < y\u0308, Y"
         "\u0308 & Z < z\u030C , Z\u030C " }
 	}
