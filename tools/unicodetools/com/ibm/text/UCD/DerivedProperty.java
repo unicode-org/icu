@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DerivedProperty.java,v $
-* $Date: 2001/09/19 23:33:16 $
-* $Revision: 1.4 $
+* $Date: 2001/10/25 20:33:46 $
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -14,55 +14,13 @@
 package com.ibm.text.UCD;
 import com.ibm.text.utility.*;
 import com.ibm.text.*;
+import java.util.*;
 
 public class DerivedProperty implements UCD_Types {
   
     UCD ucdData;
     
-    static final int
-        PropMath = 0,
-        PropAlphabetic = 1,
-        PropLowercase = 2,
-        PropUppercase = 3,
-
-        ID_Start = 4,
-        ID_Continue_NO_Cf = 5,
-
-        Mod_ID_Start = 6,
-        Mod_ID_Continue_NO_Cf = 7,
-
-        Missing_Uppercase = 8,
-        Missing_Lowercase = 9,
-        Missing_Mixedcase = 10,
-
-        FC_NFKC_Closure = 11,
-
-        FullCompExclusion = 12,
-        FullCompInclusion = 13,
-
-        QuickNFD = 14,
-        QuickNFC = 15,
-        QuickNFKD = 16,
-        QuickNFKC = 17,
-
-        ExpandsOnNFD = 18,
-        ExpandsOnNFC = 19,
-        ExpandsOnNFKD = 20,
-        ExpandsOnNFKC = 21,
-
-        GenNFD = 22,
-        GenNFC = 23,
-        GenNFKD = 24,
-        GenNFKC = 25,
-        
-        DefaultIgnorable = 26,
-        GraphemeExtend = 27,
-        GraphemeBase = 28,
-        
-        FC_NFC_Closure = 29,
-
-        LIMIT = 30;
-    
+    // ADD CONSTANT to UCD_TYPES
     
     public DerivedProperty(UCD ucd) {
       ucdData = ucd;
@@ -74,9 +32,9 @@ public class DerivedProperty implements UCD_Types {
         else return "Unimplemented!!";
     }
 
-    public String getName(int propNumber) {
+    public String getName(int propNumber, byte style) {
         DProp dp = dprops[propNumber];
-        if (dp != null) return dp.getName();
+        if (dp != null) return dp.getName(style);
         else return "Unimplemented!!";
     }
 
@@ -87,10 +45,17 @@ public class DerivedProperty implements UCD_Types {
     }
     
     public boolean isDefined(int propNumber) {
+        if (propNumber < 0 || propNumber >= dprops.length) return false;
         return dprops[propNumber] != null;
     }
     
+    public boolean isTest(int propNumber) {
+        if (!isDefined(propNumber)) return false;
+        return dprops[propNumber].isTest();
+    }
+    
     public boolean hasProperty(int cp, int propNumber) {
+        if (!isDefined(propNumber)) return false;
         return dprops[propNumber].hasProperty(cp);
     }
     
@@ -112,9 +77,15 @@ public class DerivedProperty implements UCD_Types {
                 "Mixedcase"};
                     
     private abstract class DProp {
-        String name, header;
-        String getName() { return name; }
+        boolean testStatus = false;
+        byte defaultStyle = LONG;
+        String name, shortName, header;
+        String getName(byte style) { 
+            if (style == NORMAL) style = defaultStyle;
+            return style < LONG ? shortName : name;
+        }
         String getHeader() { return header; }
+        boolean isTest() { return testStatus; }
         abstract boolean hasProperty(int cp);
         public boolean propertyVaries() { return false; }
         public String getProperty(int cp) { return hasProperty(cp) ? name : ""; }
@@ -125,6 +96,7 @@ public class DerivedProperty implements UCD_Types {
         ExDProp(int i) {
             nfx = nf[i-ExpandsOnNFD];
             name = "Expands_On_" + NAME[i-ExpandsOnNFD];
+            shortName = "XO_" + NAME[i-ExpandsOnNFD];
             header = "# Derived Property: " + name
                 + "\r\n#   Generated according to UAX #15."
                 + "\r\n#   Characters whose normalized length is not one."
@@ -139,11 +111,80 @@ public class DerivedProperty implements UCD_Types {
         }
     };
     
+    class NF_UnsafeStartProp extends DProp {
+        Normalizer nfx;
+        int prop;
+        
+        NF_UnsafeStartProp(int i) {
+            prop = i-NFD_UnsafeStart;
+            nfx = nf[prop];
+            name = NAME[prop] + "_UnsafeStart";
+            shortName = NAME[prop] + "_SS";
+            header = "# Derived Property: " + name
+                + "\r\n#   Generated according to UAX #15."
+                + "\r\n#   Characters that are cc==0, BUT which may interact with previous characters."
+                ;
+        }
+        boolean hasProperty(int cp) {
+            if (ucdData.getCombiningClass(cp) != 0) return false;
+            String norm = nfx.normalize(cp);
+            int first = UTF16.charAt(norm, 0);
+            if (ucdData.getCombiningClass(first) != 0) return true;
+            if ((prop == 1 || prop == 3) 
+                && dprops[NFC_TrailingZero].hasProperty(first)) return true; // 1,3 == composing
+            return false;
+        }
+    };
+    
+    
+    class NFC_Prop extends DProp {
+        BitSet bitset;
+        boolean filter = false;
+        boolean keepNonZero = true;
+        
+        NFC_Prop(int i) {
+            BitSet[] bitsets = new BitSet[3];
+            switch(i) {
+                case NFC_Leading: bitsets[0] = bitset = new BitSet(); break;
+                case NFC_Resulting: bitsets[2] = bitset = new BitSet(); break;
+                case NFC_TrailingZero: keepNonZero = false; // FALL THRU
+                case NFC_TrailingNonZero: bitsets[1] = bitset = new BitSet(); break;
+            }
+            filter = bitsets[1] != null;
+            nfc.getCompositionStatus(bitsets[0], bitsets[1], bitsets[2]);
+            
+            name = Names[i-NFC_Leading];
+            shortName = SNames[i-NFC_Leading];
+            header = "# Derived Property: " + name
+                + "\r\n#   " + Description[i-NFC_Leading]
+                + "\r\n#   NFKC characters are the same, after subtracting the NFKD = NO values."
+                + "\r\n#   Generated according to UAX #15."
+                + "\r\n#   WARNING: Normalization of STRINGS must use the algorithm in UAX #15 because characters may interact."
+                + "\r\n#            The length of a normalized string is not necessarily the sum of the lengths of the normalized characters!";
+        }
+        boolean hasProperty(int cp) {
+            boolean result = bitset.get(cp);
+            if (result && filter) {
+                result = (ucdData.getCombiningClass(cp) != 0) == keepNonZero;
+            }
+            return result;
+        }
+        final String[] Names = {"NFC_Leading", "NFC_TrailingNonZero", "NFC_TrailingZero", "NFC_Resulting"};
+        final String[] SNames = {"NFC_L", "NFC_TNZ", "NFC_TZ", "NFC_R"};
+        final String[] Description = {
+            "Characters that can combine with following characters in NFC",
+            "Characters that can combine with previous characters in NFC, and have non-zero combining class",
+            "Characters that can combine with previous characters in NFC, and have zero combining class",
+            "Characters that can result from a combination of other characters in NFC",
+        };
+    };
+    
     class GenDProp extends DProp {
         Normalizer nfx;
         Normalizer nfComp = null;
         
         GenDProp (int i) {
+            testStatus = true;
             nfx = nf[i-GenNFD];
             name = NAME[i-GenNFD];
             String compName = "the character itself";
@@ -201,6 +242,7 @@ public class DerivedProperty implements UCD_Types {
             name = "Possible_Missing_" + CaseNames[i-Missing_Uppercase];
             header = "# Derived Property: " + name
             + "\r\n#  Generated from: NFKD has >0 " + CaseNames[i-Missing_Uppercase] + ", no other cases";
+            testStatus = true;
         }
         boolean hasProperty(int cp) {
             byte cat = ucdData.getCategory(cp);
@@ -221,6 +263,7 @@ public class DerivedProperty implements UCD_Types {
             NO = NAME[i-QuickNFD] + "_NO";
             MAYBE = NAME[i-QuickNFD] + "_MAYBE";
             name = NAME[i-QuickNFD] + "_QuickCheck";
+            shortName = NAME[i-QuickNFD] + "_QC";
             header = "# Derived Property: " + name
             + "\r\n#  Generated from computing decomposibles"
             + ((i == QuickNFC || i == QuickNFKC)
@@ -250,9 +293,18 @@ public class DerivedProperty implements UCD_Types {
             dprops[i] = new GenDProp(i);
         }
         
+        for (int i = NFC_Leading; i <= NFC_Resulting; ++i) {
+            dprops[i] = new NFC_Prop(i);
+        }
+        
+        for (int i = NFD_UnsafeStart; i <= NFKC_UnsafeStart; ++i) {
+            dprops[i] = new NF_UnsafeStartProp(i);
+        }
+        
         dprops[ID_Start] = new DProp() {
             {
                 name = "ID_Start";
+                shortName = "IDS";
                 header = "# Derived Property: " + name
                     + "\r\n#  Characters that can start an identifier."
                     + "\r\n#  Generated from Lu+Ll+Lt+Lm+Lo+Nl";
@@ -265,6 +317,7 @@ public class DerivedProperty implements UCD_Types {
         dprops[ID_Continue_NO_Cf] = new DProp() {
             {
                 name = "ID_Continue";
+                shortName = "IDC";
                 header = "# Derived Property: " + name
                     + "\r\n#  Characters that can continue an identifier."
                     + "\r\n#  Generated from: ID_Start + Mn+Mc+Nd+Pc"
@@ -278,6 +331,7 @@ public class DerivedProperty implements UCD_Types {
         dprops[Mod_ID_Start] = new DProp() {
             {
                 name = "XID_Start";
+                shortName = "XIDS";
                 header = "# Derived Property: " + name
                     + "\r\n#  ID_Start modified for closure under NFKx"
                     + "\r\n#  Modified as described in UAX #15"
@@ -292,6 +346,7 @@ public class DerivedProperty implements UCD_Types {
         dprops[Mod_ID_Continue_NO_Cf] = new DProp() {
             {
                 name = "XID_Continue";
+                shortName = "XIDC";
                 header = "# Derived Property: " + name
                     + "\r\n#  Mod_ID_Continue modified for closure under NFKx"
                     + "\r\n#  Modified as described in UAX #15"
@@ -307,6 +362,7 @@ public class DerivedProperty implements UCD_Types {
         dprops[PropMath] = new DProp() {
             {
                 name = "Math";
+                shortName = name;
                 header = "# Derived Property: " + name
                     + "\r\n#  Generated from: Sm + Other_Math";
             }
@@ -321,6 +377,7 @@ public class DerivedProperty implements UCD_Types {
         dprops[PropAlphabetic] = new DProp() {
             {
                 name = "Alphabetic";
+                shortName = "Alpha";
                 header = "# Derived Property: " + name
                     + "\r\n#  Generated from: Lu+Ll+Lt+Lm+Lo+Nl + Other_Alphabetic";
             }
@@ -335,6 +392,7 @@ public class DerivedProperty implements UCD_Types {
         dprops[PropLowercase] = new DProp() {
             {
                 name = "Lowercase";
+                shortName = "Lower";
                 header = "# Derived Property: " + name
                     + "\r\n#  Generated from: Ll + Other_Lowercase";
             }
@@ -349,6 +407,7 @@ public class DerivedProperty implements UCD_Types {
         dprops[PropUppercase] = new DProp() {
             {
                 name = "Uppercase";
+                shortName = "Upper";
                 header = "# Derived Property: " + name
                     + "\r\n#  Generated from: Lu + Other_Uppercase";
             }
@@ -373,7 +432,9 @@ of characters, the first of which has a non-zero combining class.
 */
         dprops[FullCompExclusion] = new DProp() {
             {
-                name = "Comp_Ex";
+                name = "Full_Composition_Exclusion";
+                shortName = "Comp_Ex";
+                defaultStyle = SHORT;
                 header = "# Derived Property: " + name
                     + ": Full Composition Exclusion"
                     + "\r\n#  Generated from: Composition Exclusions + Singletons + Non-Starter Decompositions";
@@ -390,7 +451,10 @@ of characters, the first of which has a non-zero combining class.
         
         dprops[FullCompInclusion] = new DProp() {
             {
-                name = "Comp_In";
+                name = "Full_Composition_Inclusion";
+                shortName = "Comp_In";
+                defaultStyle = SHORT;
+                testStatus = true;
                 header = "# Derived Property: " + name
                     + ": Full Composition Inclusion"
                     + "\r\n#  characters with Canonical Decompositions MINUS Full Composition Exclusion";
@@ -408,6 +472,7 @@ of characters, the first of which has a non-zero combining class.
         dprops[FC_NFKC_Closure] = new DProp() {
             {
                 name = "FC_NFKC_Closure";
+                shortName = "FC_NFKC";
                 header = "# Derived Property: " + name
                     + "\r\n#  Generated from computing: b = NFKC(Fold(a)); c = NFKC(Fold(b));"
                     + "\r\n#  Then if (c != b) add the mapping from a to c to the set of"
@@ -427,6 +492,7 @@ of characters, the first of which has a non-zero combining class.
         dprops[FC_NFC_Closure] = new DProp() {
             {
                 name = "FC_NFC_Closure";
+                shortName = "FC_NFC";
                 header = "# Derived Property: " + name
                     + "\r\n#  Generated from computing: b = NFC(Fold(a)); c = NFC(Fold(b));"
                     + "\r\n#  Then if (c != b) add the mapping from a to c to the set of"
@@ -450,8 +516,9 @@ of characters, the first of which has a non-zero combining class.
         dprops[DefaultIgnorable] = new DProp() {
             {
                 name = "Default_Ignorable_Code_Point";
+                shortName = "DI";
                 header = header = "# Derived Property: " + name
-                    + "\r\n#  Generated from Other_Default_Ignorable_Code_Point + Cf + Cc + Cs - WhiteSpace";
+                    + "\r\n#  Generated from Other_Default_Ignorable_Code_Point + Cf + Cc + Cs - White_Space";
             }
             boolean hasProperty(int cp) {
                 if (ucdData.getBinaryProperty(cp, White_space)) return false;
@@ -471,11 +538,12 @@ of characters, the first of which has a non-zero combining class.
 */
         dprops[GraphemeExtend] = new DProp() {
             {
-                name = "GraphemeExtend";
+                name = "Grapheme_Extend";
+                shortName = "GrExt";
                 header = header = "# Derived Property: " + name
-                    + "\r\n#  Generated from: Me + Mn + Mc + Other_GraphemeExtend - GraphemeLink"
+                    + "\r\n#  Generated from: Me + Mn + Mc + Other_Grapheme_Extend - Grapheme_Link"
                     + "\r\n#  Used in the definition of GraphemeCluster: "
-                    + "\r\n#    GraphemeCluster ::= GraphameBase? ( GraphemeExtend | GraphemeLink Join_Control? GraphemeBase? )*";
+                    + "\r\n#    GraphemeCluster ::= GraphameBase? ( Grapheme_Extend | Grapheme_Link Join_Control? Grapheme_Base? )*";
             }
             boolean hasProperty(int cp) {
                 if (ucdData.getBinaryProperty(cp, GraphemeExtend)) return false;
@@ -486,13 +554,80 @@ of characters, the first of which has a non-zero combining class.
             }
         };
 
+        dprops[Other_Case_Ignorable] = new DProp() {
+            {
+                name = "Other_Case_Ignorable";
+                shortName = "OCI";
+                
+                header = header = "# Binary Property";
+            }
+            boolean hasProperty(int cp) {
+                switch(cp) {
+                    case 0x27: case 0x2019: case 0xAD: return true;
+                    //  case 0x2d: case 0x2010: case 0x2011: 
+/*
+0027          ; Other_Case_Ignorable # Po       APOSTROPHE
+00AD          ; Other_Case_Ignorable # Pd       SOFT HYPHEN
+2019          ; Other_Case_Ignorable # Pf       RIGHT SINGLE QUOTATION MARK
+*/
+                }
+                return false;
+            }
+        };
+        
+        dprops[Type_i] = new DProp() {
+            {
+                name = "Special_Dotted";
+                shortName = "SDot";
+                header = header = "# Derived Property: " + name
+                    + "\r\n#  Generated from: all characters whose canonical decompositions end with a combining character sequence that"
+                    + "\r\n# - starts with i or j"
+                    + "\r\n# - has no combining marks above"
+                    + "\r\n# - has no combining marks with zero canonical combining class"
+                ;
+            }
+            boolean hasProperty(int cp) {
+                if (cp == 'i' || cp == 'j') return true;
+                if (!nfkd.hasDecomposition(cp)) return false;
+                String decomp = nfd.normalize(cp);
+                boolean ok = false;
+                for (int i = decomp.length()-1; i >= 0; --i) {
+                    char ch = decomp.charAt(i);
+                    int cc = ucdData.getCombiningClass(ch);
+                    if (cc == 230) return false;
+                    if (cc == 0) {
+                        if (ch == 'i' || ch == 'j') ok = true;
+                        else return false;
+                    }
+                }
+                return ok;
+            }
+        };
+        
+        dprops[Case_Ignorable] = new DProp() {
+            {
+                name = "Case_Ignorable";
+                shortName = "CI";
+                header = header = "# Derived Property: " + name
+                    + "\r\n#  Generated from: Other_Case_Ignorable + Lm + Mn + Me + Cf";
+            }
+            boolean hasProperty(int cp) {
+                byte cat = ucdData.getCategory(cp);
+                if (cat == Lm || cat == Cf || cat == Mn || cat == Me) return true;
+                if (dprops[Other_Case_Ignorable].hasProperty(cp)) return true;
+                return false;
+            }
+        };
+        
         dprops[GraphemeBase] = new DProp() {
             {
-                name = "GraphemeBase";
+                name = "Grapheme_Base";
+                shortName = "GrBase";
+                
                 header = header = "# Derived Property: " + name
-                    + "\r\n#  Generated from: [0..10FFFF] - Cc - Cf - Cs - Co - Cn - Zl - Zp - GraphemeLink - GraphemeExtend"
+                    + "\r\n#  Generated from: [0..10FFFF] - Cc - Cf - Cs - Co - Cn - Zl - Zp - Grapheme_Link - Grapheme_Extend"
                     + "\r\n#  Used in the definition of GraphemeCluster: "
-                    + "\r\n#    GraphemeCluster ::= GraphameBase? ( GraphemeExtend | GraphemeLink Join_Control? GraphemeBase? )*";
+                    + "\r\n#    GraphemeCluster ::= GraphameBase? ( Grapheme_Extend | Grapheme_Link Join_Control? Grapheme_Base? )*";
             }
             boolean hasProperty(int cp) {
                 byte cat = ucdData.getCategory(cp);

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UData.java,v $
-* $Date: 2001/08/31 00:29:50 $
-* $Revision: 1.2 $
+* $Date: 2001/10/25 20:33:46 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -185,7 +185,7 @@ class UData implements UCD_Types {
         result.append(" n='").append(Utility.quoteXML(name)).append("'\r\n");
 
         int lastPos = result.length();
-
+        
         if (full || generalCategory != Lo) result.append(" gc='").append(UCD_Names.GC[generalCategory]).append('\'');
         if (full || combiningClass != 0) result.append(" cc='").append(combiningClass & 0xFF).append('\'');
         if (full || decompositionType != NONE) result.append(" dt='").append(UCD_Names.DT[decompositionType]).append('\'');
@@ -232,7 +232,7 @@ class UData implements UCD_Types {
         result.append("/>");
         return result.toString();
     }
-
+    
     public void writeBytes(DataOutputStream os) throws IOException {
         compact();
         os.writeInt(codePoint);

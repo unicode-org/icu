@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Names.java,v $
-* $Date: 2001/09/01 00:06:15 $
-* $Revision: 1.3 $
+* $Date: 2001/10/25 20:33:46 $
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -17,6 +17,22 @@ import com.ibm.text.utility.*;
 
 
 final class UCD_Names implements UCD_Types {
+    
+    public static String[][] NON_ENUMERATED = {
+        {"na", "Name"},
+        {"dm", "Decomposition_Mapping"},
+        {"nv", "Numeric_Value"},
+        {"bmg", "Bidi_Mirroring_Glyph"},
+        {"lc", "Lowercase_Mapping"},
+        {"uc", "Uppercase_Mapping"},
+        {"tc", "Titlecase_Mapping"},
+        {"cf", "Case_Folding"},
+        {"slc", "Simple_Lowercase_Mapping"},
+        {"suc", "Simple_Uppercase_Mapping"},
+        {"stc", "Simple_Titlecase_Mapping"},
+        {"sfc", "Simple_Case_Folding"},
+        {"scc", "Special_Case_Condition"}
+    };
 
     static final String[] UNIFIED_PROPERTIES = {
         "General Category (listing UnicodeData.txt, field 2: see UnicodeData.html)",
@@ -32,7 +48,8 @@ final class UCD_Names implements UCD_Types {
         "Joining Group (listing ArabicShaping.txt, field 2)",
         "BidiMirrored (listing UnicodeData.txt, field 9: see UnicodeData.html)",
         "Script",
-        "Age (from a comparison of UCD versions 1.1 [minus Hangul], 2.0, 2.1, 3.0, 3.1)"
+        "Age (from a comparison of UCD versions 1.1 [minus Hangul], 2.0, 2.1, 3.0, 3.1)",
+        "Derived"
     };
 
     static final String[] SHORT_UNIFIED_PROPERTIES = {
@@ -45,9 +62,10 @@ final class UCD_Names implements UCD_Types {
         "LineBreak",
         "JoiningType",
         "JoiningGroup",
-        "Value",
+        "",
         "Script",
-        "Age"
+        "Age",
+        ""
     };
 
     static final String[] ABB_UNIFIED_PROPERTIES = {
@@ -60,15 +78,16 @@ final class UCD_Names implements UCD_Types {
         "lb",
         "jt",
         "jg",
-        "va",
+        "",
         "sc",
-        "Ag"
+        "ag",
+        "",
     };
 
 
     static final String[] BP = {
-	    "BidiMirrored",
-	    "CompositionExclusion",
+	    "Bidi_Mirrored",
+	    "Composition_Exclusion",
         "White_Space",
         "NonBreak",
 	    "Bidi_Control",
@@ -87,46 +106,46 @@ final class UCD_Names implements UCD_Types {
         "Other_Lowercase",
         "Other_Uppercase",
         "Noncharacter_Code_Point",
-        "CaseFoldTurkishI",
-        "Other_GraphemeExtend",
-        "GraphemeLink",
-        "IDS_BinaryOperator",
-        "IDS_TrinaryOperator",
+        "Case_Fold_Turkish_I",
+        "Other_Grapheme_Extend",
+        "Grapheme_Link",
+        "IDS_Binary_Operator",
+        "IDS_Trinary_Operator",
         "Radical",
-        "UnifiedIdeograph",
+        "Unified_Ideograph",
         "Other_Default_Ignorable_Code_Point",
         "Deprecated",
     };
 
     static final String[] SHORT_BP = {
 	    "BidiM",
-	    "CExc",
-        "WhSp",
+	    "CE",
+        "WSpace",
         "NBrk",
-	    "BdCon",
-        "JCon",
+	    "BidiC",
+        "JoinC",
         "Dash",
-        "Hyph",
+        "Hyphen",
         "QMark",
-        "TPunc",
+        "Term",
         "OMath",
-        "HexD",
-        "AHexD",
-	    "OAlph",
+        "Hex",
+        "AHex",
+	    "OAlpha",
         "Ideo",
-        "Diac",
+        "Dia",
         "Ext",
-        "OLoc",
-        "OUpc",
+        "OLower",
+        "OUpper",
         "NChar",
         "TurkI",
-        "OGrX",
+        "OGrExt",
         "GrLink",
         "IDSB",
         "IDST",
         "Radical",
-        "UCJK",
-        "RCf",
+        "UIdeo",
+        "ODI",
         "Dep",
     };
 
@@ -196,7 +215,7 @@ final class UCD_Names implements UCD_Types {
         "Numeric", "Alphabetic", "Ideographic", "Inseperable", "Hyphen",
         "CombiningMark", "BreakBefore", "BreakAfter", "Space",
         "MandatoryBreak", "CarriageReturn", "LineFeed", "ContingentBreak",
-        "ComplexContext", "Ambiguous", "BreakBeforeAndAfter", "Surrogate", "ZWSpace"
+        "ComplexContext", "Ambiguous", "BreakBoth", "Surrogate", "ZWSpace"
     };
 
 	public static final String[] SCRIPT = {

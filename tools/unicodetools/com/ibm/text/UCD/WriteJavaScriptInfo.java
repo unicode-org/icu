@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/WriteJavaScriptInfo.java,v $
-* $Date: 2001/08/31 00:29:50 $
-* $Revision: 1.2 $
+* $Date: 2001/10/25 20:33:46 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -18,7 +18,34 @@ import java.io.*;
 //import java.text.*;
 import com.ibm.text.utility.*;
 
-public class WriteJavaScriptInfo {
+public class WriteJavaScriptInfo implements UCD_Types {
+    
+    static public void assigned() throws IOException {
+        PrintWriter log = Utility.openPrintWriter("assigned.js");
+        UCD ucd = UCD.make();
+        boolean wasIn = false;
+        int lastWritten = -100;
+        int i;
+        for (i = 0; i <= 0x10FFFF; ++i) {
+            byte cat = ucd.getCategory(i);
+            boolean in = cat != Cn && cat != Co && cat != Cs;
+            if (wasIn == in) continue;
+            if (in) {
+                log.print(i + ",");
+                lastWritten = i;
+            } else {
+                if (lastWritten != i-1) log.print(i-1);
+                log.println(",");
+            }
+            wasIn = in;
+        }
+        if (wasIn) {
+            if (lastWritten != i-1) log.print(i-1);
+            log.println(",");
+        }
+        log.close();
+    }
+    
     /* TODO: fix enumeration of compositions
 
     static public void writeJavascriptInfo() throws IOException {

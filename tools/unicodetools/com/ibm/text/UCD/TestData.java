@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/TestData.java,v $
-* $Date: 2001/09/19 23:33:16 $
-* $Revision: 1.4 $
+* $Date: 2001/10/25 20:33:46 $
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -30,7 +30,7 @@ public class TestData implements UCD_Types {
         checkHoffman("\u05B8\u05B9\u05B1\u0591\u05C3\u05B0\u05AC\u059F");
         checkHoffman("\u0592\u05B7\u05BC\u05A5\u05B0\u05C0\u05C4\u05AD");
 
-        int mask = 0;
+        long mask = 0;
 
         if (false) {
 
@@ -166,7 +166,7 @@ public class TestData implements UCD_Types {
         output.println();
     }
 
-    public static void generateDerived (int bitMask, int headerChoice, String fileName) throws IOException {
+    public static void generateDerived (long bitMask, int headerChoice, String fileName) throws IOException {
         ucd = UCD.make("3.1.0");
         PrintWriter output = Utility.openPrintWriter(fileName);
         doHeader(fileName, output, headerChoice);
@@ -251,9 +251,11 @@ public class TestData implements UCD_Types {
 
         PrintWriter output = Utility.openPrintWriter(file);
         doHeader(file, output, headerChoice);
+        UnifiedBinaryProperty ubp = new UnifiedBinaryProperty(ucd);
+        
         int last = -1;
         for (int i = startEnum; i < endEnum; ++i) {
-            if (!MyPropertyLister.isUnifiedBinaryPropertyDefined(ucd, i)) continue;
+            if (!ubp.isDefined(i)) continue;
             if (i == DECOMPOSITION_TYPE || i == NUMERIC_TYPE
                 || i == (CATEGORY | UNUSED_CATEGORY)
                 || i == (BINARY_PROPERTIES | Non_break)

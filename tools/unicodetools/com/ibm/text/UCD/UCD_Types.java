@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Types.java,v $
-* $Date: 2001/09/19 23:33:16 $
-* $Revision: 1.3 $
+* $Date: 2001/10/25 20:33:46 $
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -37,6 +37,10 @@ public interface UCD_Types {
  13	Lower case equivalent mapping. Similar to 12. This field is informative.
  14	Title case equivalent mapping. Similar to 12. This field is informative.
     */
+    
+    
+    // for IDs
+    static final byte SHORT = -1, NORMAL = 0, LONG = 1, BOTH = 2;
 
     // Binary ENUM Grouping
     public static final int
@@ -52,8 +56,9 @@ public interface UCD_Types {
         BINARY_PROPERTIES = 0x900,
         SCRIPT = 0xA00,
         AGE = 0xB00,
+        DERIVED = 0xC00,
         NEXT_ENUM = 0x100,
-        LIMIT_ENUM = AGE + 0x100;
+        LIMIT_ENUM = DERIVED + 0x100;
 
     public static final int LIMIT_COMBINING_CLASS = 256;
 
@@ -384,4 +389,65 @@ public static byte
     YUDH_HE = 48,
     ZAIN = 49,
     LIMIT_JOINING_GROUP = 50;
+    
+    // DERIVED PROPERTY
+    
+    static final int
+        PropMath = 0,
+        PropAlphabetic = 1,
+        PropLowercase = 2,
+        PropUppercase = 3,
+
+        ID_Start = 4,
+        ID_Continue_NO_Cf = 5,
+
+        Mod_ID_Start = 6,
+        Mod_ID_Continue_NO_Cf = 7,
+
+        Missing_Uppercase = 8,
+        Missing_Lowercase = 9,
+        Missing_Mixedcase = 10,
+
+        FC_NFKC_Closure = 11,
+
+        FullCompExclusion = 12,
+        FullCompInclusion = 13,
+
+        QuickNFD = 14,
+        QuickNFC = 15,
+        QuickNFKD = 16,
+        QuickNFKC = 17,
+
+        ExpandsOnNFD = 18,
+        ExpandsOnNFC = 19,
+        ExpandsOnNFKD = 20,
+        ExpandsOnNFKC = 21,
+
+        GenNFD = 22,
+        GenNFC = 23,
+        GenNFKD = 24,
+        GenNFKC = 25,
+        
+        DefaultIgnorable = 26,
+        GraphemeExtend = 27,
+        GraphemeBase = 28,
+        
+        FC_NFC_Closure = 29,
+        
+        Other_Case_Ignorable = 30,
+        Case_Ignorable = 31,
+        Type_i = 32,
+        
+        NFC_Leading = 33,
+        NFC_TrailingNonZero = 34,
+        NFC_TrailingZero = 35,
+        NFC_Resulting = 36,
+        
+        NFD_UnsafeStart = 37,
+        NFC_UnsafeStart = 38,
+        NFKD_UnsafeStart = 39,
+        NFKC_UnsafeStart = 40,
+
+        LIMIT = 41;
+    
 }
