@@ -224,6 +224,7 @@ u_formatMessage(const char  *locale,
  * @return The total buffer size needed; if greater than resultLength, the
  * output was truncated.
  * @see u_parseMessage
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2 
 u_vformatMessage(   const char  *locale,
@@ -273,6 +274,7 @@ u_parseMessage( const char   *locale,
  * @param status A pointer to an UErrorCode to receive any errors
  * specified in pattern.
  * @see u_formatMessage
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2 
 u_vparseMessage(const char  *locale,
@@ -425,7 +427,7 @@ umsg_open(  const UChar     *pattern,
  * Close a UMessageFormat.
  * Once closed, a UMessageFormat may no longer be used.
  * @param format The formatter to close.
- * @stable ICU 2.0
+ * @draft ICU 2.0
  */
 U_CAPI void U_EXPORT2 
 umsg_close(UMessageFormat* format);
@@ -436,7 +438,7 @@ umsg_close(UMessageFormat* format);
  * @param fmt The formatter to copy
  * @param status A pointer to an UErrorCode to receive any errors.
  * @return A pointer to a UDateFormat identical to fmt.
- * @stable ICU 2.0
+ * @draft ICU 2.0
  */
 U_CAPI UMessageFormat U_EXPORT2 
 umsg_clone(const UMessageFormat *fmt,
@@ -447,6 +449,7 @@ umsg_clone(const UMessageFormat *fmt,
  * format information.
  * @param fmt The formatter to set
  * @param locale The locale the formatter should use.
+ * @draft ICU 2.0
  */
 U_CAPI void  U_EXPORT2 
 umsg_setLocale(UMessageFormat *fmt,
@@ -457,7 +460,7 @@ umsg_setLocale(UMessageFormat *fmt,
  * format information.
  * @param fmt The formatter to querry
  * @return the locale.
- * @stable ICU 2.0
+ * @draft ICU 2.0
  */
 U_CAPI const char*  U_EXPORT2 
 umsg_getLocale(UMessageFormat *fmt);
@@ -533,6 +536,7 @@ umsg_format(    UMessageFormat *fmt,
  *                     specified in pattern.
  * @return             The total buffer size needed; if greater than resultLength, 
  *                     the output was truncated.
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2 
 umsg_vformat(   UMessageFormat *fmt,
@@ -576,6 +580,7 @@ umsg_parse( UMessageFormat *fmt,
  * @param status        A pointer to an UErrorCode to receive any errors
  *                      specified in pattern.
  * @see u_formatMessage
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2 
 umsg_vparse(UMessageFormat *fmt,

@@ -64,6 +64,7 @@ public:
      * UTC time.  Although it might seem that all times could be
      * converted to wall time, thus eliminating the need for this
      * parameter, this is not the case.
+     * @stable ICU 2.0
      */
     enum TimeMode {
         WALL_TIME = 0,
@@ -162,14 +163,88 @@ public:
         int8_t savingsEndMonth, int8_t savingsEndDayOfWeekInMonth,
         int8_t savingsEndDayOfWeek, int32_t savingsEndTime,
         UErrorCode& status);
-
+    /**
+     * Construct a SimpleTimeZone with the given raw GMT offset, time zone ID,
+     * and times to start and end daylight savings time. To create a TimeZone that
+     * doesn't observe daylight savings time, don't use this constructor; use
+     * SimpleTimeZone(rawOffset, ID) instead. Normally, you should use
+     * TimeZone.createInstance() to create a TimeZone instead of creating a
+     * SimpleTimeZone directly with this constructor.
+     * <P>
+     * Various types of daylight-savings time rules can be specfied by using different
+     * values for startDay and startDayOfWeek and endDay and endDayOfWeek.  For a
+     * complete explanation of how these parameters work, see the documentation for
+     * setStartRule().
+     *
+     * @param rawOffsetGMT      The new SimpleTimeZone's raw GMT offset
+     * @param ID                The new SimpleTimeZone's time zone ID.
+     * @param savingsStartMonth The daylight savings starting month. Month is
+     *                          0-based. eg, 0 for January.
+     * @param savingsStartDayOfWeekInMonth   The daylight savings starting
+     *                          day-of-week-in-month. See setStartRule() for a
+     *                          complete explanation.
+     * @param savingsStartDayOfWeek The daylight savings starting day-of-week.
+     *                          See setStartRule() for a complete explanation.
+     * @param savingsStartTime  The daylight savings starting time, expressed as the
+     *                          number of milliseconds after midnight.
+     * @param savingsEndMonth   The daylight savings ending month. Month is
+     *                          0-based. eg, 0 for January.
+     * @param savingsEndDayOfWeekInMonth     The daylight savings ending day-of-week-in-month.
+     *                          See setStartRule() for a complete explanation.
+     * @param savingsEndDayOfWeek The daylight savings ending day-of-week.
+     *                          See setStartRule() for a complete explanation.
+     * @param savingsEndTime    The daylight savings ending time, expressed as the
+     *                          number of milliseconds after midnight.
+     * @param savingsDST        The number of milliseconds added to standard time
+     *                          to get DST time. Default is one hour.
+     * @param status            An UErrorCode to receive the status.
+     * @stable ICU 2.0
+     */
     SimpleTimeZone(int32_t rawOffsetGMT, const UnicodeString& ID,
         int8_t savingsStartMonth, int8_t savingsStartDayOfWeekInMonth,
         int8_t savingsStartDayOfWeek, int32_t savingsStartTime,
         int8_t savingsEndMonth, int8_t savingsEndDayOfWeekInMonth,
         int8_t savingsEndDayOfWeek, int32_t savingsEndTime,
         int32_t savingsDST, UErrorCode& status);
-
+    /**
+     * Construct a SimpleTimeZone with the given raw GMT offset, time zone ID,
+     * and times to start and end daylight savings time. To create a TimeZone that
+     * doesn't observe daylight savings time, don't use this constructor; use
+     * SimpleTimeZone(rawOffset, ID) instead. Normally, you should use
+     * TimeZone.createInstance() to create a TimeZone instead of creating a
+     * SimpleTimeZone directly with this constructor.
+     * <P>
+     * Various types of daylight-savings time rules can be specfied by using different
+     * values for startDay and startDayOfWeek and endDay and endDayOfWeek.  For a
+     * complete explanation of how these parameters work, see the documentation for
+     * setStartRule().
+     *
+     * @param rawOffsetGMT      The new SimpleTimeZone's raw GMT offset
+     * @param ID                The new SimpleTimeZone's time zone ID.
+     * @param savingsStartMonth The daylight savings starting month. Month is
+     *                          0-based. eg, 0 for January.
+     * @param savingsStartDayOfWeekInMonth   The daylight savings starting
+     *                          day-of-week-in-month. See setStartRule() for a
+     *                          complete explanation.
+     * @param savingsStartDayOfWeek The daylight savings starting day-of-week.
+     *                          See setStartRule() for a complete explanation.
+     * @param savingsStartTime  The daylight savings starting time, expressed as the
+     *                          number of milliseconds after midnight.
+     * @param savingsEndMonth   The daylight savings ending month. Month is
+     *                          0-based. eg, 0 for January.
+     * @param savingsEndDayOfWeekInMonth     The daylight savings ending day-of-week-in-month.
+     *                          See setStartRule() for a complete explanation.
+     * @param savingsEndDayOfWeek The daylight savings ending day-of-week.
+     *                          See setStartRule() for a complete explanation.
+     * @param savingsEndTime    The daylight savings ending time, expressed as the
+     *                          number of milliseconds after midnight.
+     * @param savingsEndTimeMode Whether the end time is local wall time, local
+     *                          standard time, or UTC time. Default is local wall time.
+     * @param savingsDST        The number of milliseconds added to standard time
+     *                          to get DST time. Default is one hour.
+     * @param status            An UErrorCode to receive the status.
+     * @stable ICU 2.0
+     */
     SimpleTimeZone(int32_t rawOffsetGMT, const UnicodeString& ID,
         int8_t savingsStartMonth, int8_t savingsStartDayOfWeekInMonth,
         int8_t savingsStartDayOfWeek, int32_t savingsStartTime,
@@ -225,17 +300,69 @@ public:
      * the member description for an example.
      * @param time the daylight savings starting time. Please see the member
      * description for an example.
+     * @param status An UErrorCode
+     * @stable ICU 2.0
+     */
+    void setStartRule(int32_t month, int32_t dayOfWeekInMonth, int32_t dayOfWeek,
+                      int32_t time, UErrorCode& status);
+    /**
+     * Sets the daylight savings starting rule. For example, in the U.S., Daylight Savings
+     * Time starts at the first Sunday in April, at 2 AM in standard time.
+     * Therefore, you can set the start rule by calling:
+     * setStartRule(TimeFields.APRIL, 1, TimeFields.SUNDAY, 2*60*60*1000);
+     * The dayOfWeekInMonth and dayOfWeek parameters together specify how to calculate
+     * the exact starting date.  Their exact meaning depend on their respective signs,
+     * allowing various types of rules to be constructed, as follows:<ul>
+     *   <li>If both dayOfWeekInMonth and dayOfWeek are positive, they specify the
+     *       day of week in the month (e.g., (2, WEDNESDAY) is the second Wednesday
+     *       of the month).
+     *   <li>If dayOfWeek is positive and dayOfWeekInMonth is negative, they specify
+     *       the day of week in the month counting backward from the end of the month.
+     *       (e.g., (-1, MONDAY) is the last Monday in the month)
+     *   <li>If dayOfWeek is zero and dayOfWeekInMonth is positive, dayOfWeekInMonth
+     *       specifies the day of the month, regardless of what day of the week it is.
+     *       (e.g., (10, 0) is the tenth day of the month)
+     *   <li>If dayOfWeek is zero and dayOfWeekInMonth is negative, dayOfWeekInMonth
+     *       specifies the day of the month counting backward from the end of the
+     *       month, regardless of what day of the week it is (e.g., (-2, 0) is the
+     *       next-to-last day of the month).
+     *   <li>If dayOfWeek is negative and dayOfWeekInMonth is positive, they specify the
+     *       first specified day of the week on or after the specfied day of the month.
+     *       (e.g., (15, -SUNDAY) is the first Sunday after the 15th of the month
+     *       [or the 15th itself if the 15th is a Sunday].)
+     *   <li>If dayOfWeek and DayOfWeekInMonth are both negative, they specify the
+     *       last specified day of the week on or before the specified day of the month.
+     *       (e.g., (-20, -TUESDAY) is the last Tuesday before the 20th of the month
+     *       [or the 20th itself if the 20th is a Tuesday].)</ul>
+     * @param month the daylight savings starting month. Month is 0-based.
+     * eg, 0 for January.
+     * @param dayOfWeekInMonth the daylight savings starting
+     * day-of-week-in-month. Please see the member description for an example.
+     * @param dayOfWeek the daylight savings starting day-of-week. Please see
+     * the member description for an example.
+     * @param time the daylight savings starting time. Please see the member
+     * description for an example.
      * @param mode whether the time is local wall time, local standard time,
      * or UTC time. Default is local wall time.
      * @param status An UErrorCode
      * @stable ICU 2.0
      */
     void setStartRule(int32_t month, int32_t dayOfWeekInMonth, int32_t dayOfWeek,
-                      int32_t time, UErrorCode& status);
-
-    void setStartRule(int32_t month, int32_t dayOfWeekInMonth, int32_t dayOfWeek,
                       int32_t time, TimeMode mode, UErrorCode& status);
 
+    /**
+     * Sets the DST start rule to a fixed date within a month.
+     *
+     * @param month         The month in which this rule occurs (0-based).
+     * @param dayOfMonth    The date in that month (1-based).
+     * @param time          The time of that day (number of millis after midnight)
+     *                      when DST takes effect in local wall time, which is
+     *                      standard time in this case.
+     * @param status An UErrorCode
+     * @stable ICU 2.0
+     */
+    void setStartRule(int32_t month, int32_t dayOfMonth, int32_t time,
+                      UErrorCode& status);
     /**
      * Sets the DST start rule to a fixed date within a month.
      *
@@ -249,9 +376,6 @@ public:
      * @param status An UErrorCode
      * @stable ICU 2.0
      */
-    void setStartRule(int32_t month, int32_t dayOfMonth, int32_t time,
-                      UErrorCode& status);
-
     void setStartRule(int32_t month, int32_t dayOfMonth, int32_t time,
                       TimeMode mode, UErrorCode& status);
 
@@ -275,9 +399,51 @@ public:
      */
     void setStartRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek,
                       int32_t time, UBool after, UErrorCode& status);
-
+    /**
+     * Sets the DST start rule to a weekday before or after a give date within
+     * a month, e.g., the first Monday on or after the 8th.
+     *
+     * @param month         The month in which this rule occurs (0-based).
+     * @param dayOfMonth    A date within that month (1-based).
+     * @param dayOfWeek     The day of the week on which this rule occurs.
+     * @param time          The time of that day (number of millis after midnight)
+     *                      when DST takes effect in local wall time, which is
+     *                      standard time in this case.
+     * @param mode whether the time is local wall time, local standard time,
+     * or UTC time. Default is local wall time.
+     * @param after         If true, this rule selects the first dayOfWeek on
+     *                      or after dayOfMonth.  If false, this rule selects
+     *                      the last dayOfWeek on or before dayOfMonth.
+     * @param status An UErrorCode
+     * @stable ICU 2.0
+     */
     void setStartRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek,
                       int32_t time, TimeMode mode, UBool after, UErrorCode& status);
+
+    /**
+     * Sets the daylight savings ending rule. For example, in the U.S., Daylight
+     * Savings Time ends at the last (-1) Sunday in October, at 2 AM in standard time.
+     * Therefore, you can set the end rule by calling:
+     * <pre>
+     * .   setEndRule(TimeFields.OCTOBER, -1, TimeFields.SUNDAY, 2*60*60*1000);
+     * </pre>
+     * Various other types of rules can be specified by manipulating the dayOfWeek
+     * and dayOfWeekInMonth parameters.  For complete details, see the documentation
+     * for setStartRule().
+     *
+     * @param month the daylight savings ending month. Month is 0-based.
+     * eg, 0 for January.
+     * @param dayOfWeekInMonth the daylight savings ending
+     * day-of-week-in-month. See setStartRule() for a complete explanation.
+     * @param dayOfWeek the daylight savings ending day-of-week. See setStartRule()
+     * for a complete explanation.
+     * @param time the daylight savings ending time. Please see the member
+     * description for an example.
+     * @param status An UErrorCode
+     * @stable ICU 2.0
+     */
+    void setEndRule(int32_t month, int32_t dayOfWeekInMonth, int32_t dayOfWeek,
+                    int32_t time, UErrorCode& status);
 
     /**
      * Sets the daylight savings ending rule. For example, in the U.S., Daylight
@@ -304,10 +470,20 @@ public:
      * @stable ICU 2.0
      */
     void setEndRule(int32_t month, int32_t dayOfWeekInMonth, int32_t dayOfWeek,
-                    int32_t time, UErrorCode& status);
-
-    void setEndRule(int32_t month, int32_t dayOfWeekInMonth, int32_t dayOfWeek,
                     int32_t time, TimeMode mode, UErrorCode& status);
+
+    /**
+     * Sets the DST end rule to a fixed date within a month.
+     *
+     * @param month         The month in which this rule occurs (0-based).
+     * @param dayOfMonth    The date in that month (1-based).
+     * @param time          The time of that day (number of millis after midnight)
+     *                      when DST ends in local wall time, which is daylight
+     *                      time in this case.
+     * @param status An UErrorCode
+     * @stable ICU 2.0
+     */
+    void setEndRule(int32_t month, int32_t dayOfMonth, int32_t time, UErrorCode& status);
 
     /**
      * Sets the DST end rule to a fixed date within a month.
@@ -322,10 +498,27 @@ public:
      * @param status An UErrorCode
      * @stable ICU 2.0
      */
-    void setEndRule(int32_t month, int32_t dayOfMonth, int32_t time, UErrorCode& status);
-
     void setEndRule(int32_t month, int32_t dayOfMonth, int32_t time,
                     TimeMode mode, UErrorCode& status);
+
+    /**
+     * Sets the DST end rule to a weekday before or after a give date within
+     * a month, e.g., the first Monday on or after the 8th.
+     *
+     * @param month         The month in which this rule occurs (0-based).
+     * @param dayOfMonth    A date within that month (1-based).
+     * @param dayOfWeek     The day of the week on which this rule occurs.
+     * @param time          The time of that day (number of millis after midnight)
+     *                      when DST ends in local wall time, which is daylight
+     *                      time in this case.
+     * @param after         If true, this rule selects the first dayOfWeek on
+     *                      or after dayOfMonth.  If false, this rule selects
+     *                      the last dayOfWeek on or before dayOfMonth.
+     * @param status An UErrorCode
+     * @stable ICU 2.0
+     */
+    void setEndRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek,
+                    int32_t time, UBool after, UErrorCode& status);
 
     /**
      * Sets the DST end rule to a weekday before or after a give date within
@@ -345,9 +538,6 @@ public:
      * @param status An UErrorCode
      * @stable ICU 2.0
      */
-    void setEndRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek,
-                    int32_t time, UBool after, UErrorCode& status);
-
     void setEndRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek,
                     int32_t time, TimeMode mode, UBool after, UErrorCode& status);
 
@@ -373,10 +563,32 @@ public:
      */
     virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                               uint8_t dayOfWeek, int32_t millis, UErrorCode& status) const;
-
+#ifdef ICU_TIMEZONE_USE_DEPRECATES
+    /**
+     * @obsolete ICU 1.8. Use the other getOffset() since this API will be removed in that release.
+     */
     virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                               uint8_t dayOfWeek, int32_t millis) const;
+#endif
 
+    /**
+     * Gets the time zone offset, for current date, modified in case of
+     * daylight savings. This is the offset to add *to* UTC to get local time.
+     * @param era the era of the given date.
+     * @param year the year in the given date.
+     * @param month the month in the given date.
+     * Month is 0-based. e.g., 0 for January.
+     * @param day the day-in-month of the given date.
+     * @param dayOfWeek the day-of-week of the given date.
+     * @param milliseconds the millis in day in <em>standard</em> local time.
+     * @param monthLength the length of the given month in days.
+     * @param status     An UErrorCode to receive the status.
+     * @return the offset to add *to* GMT to get local time.
+     * @stable ICU 2.0
+     */
+    virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
+                           uint8_t dayOfWeek, int32_t milliseconds,
+                           int32_t monthLength, UErrorCode& status) const;
     /**
      * Gets the time zone offset, for current date, modified in case of
      * daylight savings. This is the offset to add *to* UTC to get local time.
@@ -393,10 +605,6 @@ public:
      * @return the offset to add *to* GMT to get local time.
      * @stable ICU 2.0
      */
-    virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
-                           uint8_t dayOfWeek, int32_t milliseconds,
-                           int32_t monthLength, UErrorCode& status) const;
-
     virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                               uint8_t dayOfWeek, int32_t milliseconds,
                               int32_t monthLength, int32_t prevMonthLength,
