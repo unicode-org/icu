@@ -134,14 +134,17 @@ int main(int argc, const char* const argv[])
             warnOnMissingData = 1;
             warnOrErr = "Warning";
         }
-        else if (strcmp( argv[i], "-t_info") == 0) {
-            ICU_TRACE = UTRACE_INFO;
-        }
         else if (strcmp( argv[i], "-t_error") == 0) {
             ICU_TRACE = UTRACE_ERROR;
         }
         else if (strcmp( argv[i], "-t_warn") == 0) {
             ICU_TRACE = UTRACE_WARNING;
+        }
+        else if (strcmp( argv[i], "-t_oc") == 0) {
+            ICU_TRACE = UTRACE_OPEN_CLOSE;
+        }
+        else if (strcmp( argv[i], "-t_info") == 0) {
+            ICU_TRACE = UTRACE_INFO;
         }
         else if (strcmp( argv[i], "-t_verbose") == 0) {
             ICU_TRACE = UTRACE_VERBOSE;
