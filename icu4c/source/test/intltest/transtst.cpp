@@ -102,6 +102,8 @@ TransliteratorTest::TransliteratorTest()
 {
 }
 
+TransliteratorTest::~TransliteratorTest() {}
+
 void
 TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
                                    const char* &name, char* /*par*/) {

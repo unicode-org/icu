@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2003, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -60,7 +60,7 @@ private:
 
 public:
 
-    virtual ~IntlTestNumberFormat() {}
+    virtual ~IntlTestNumberFormat();
 
     /*
      * Return a random double that isn't too large.

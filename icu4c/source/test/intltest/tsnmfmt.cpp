@@ -12,6 +12,8 @@
 #include "tsnmfmt.h"
 #include <float.h>
 
+IntlTestNumberFormat::~IntlTestNumberFormat() {}
+
 static const char * formattableTypeName(Formattable::Type t)
 {
   switch(t) {
