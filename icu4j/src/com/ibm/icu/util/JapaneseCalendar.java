@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/JapaneseCalendar.java,v $ 
- * $Date: 2000/11/18 00:30:54 $ 
- * $Revision: 1.6 $
+ * $Date: 2000/11/30 21:29:49 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -191,26 +191,36 @@ public class JapaneseCalendar extends GregorianCalendar {
         super.handleComputeFields(julianDay);
         int year = internalGet(EXTENDED_YEAR);
 
-        // Binary search
-        int low = 0, high = ERAS.length / 3;
-        
-        while (low < high - 1) {
-            int i = (low + high) / 2;
-            int diff = year - ERAS[i*3];
+        int low = 0;
 
-            // If years are the same, then compare the months, and if those
-            // are the same, compare days of month.  In the ERAS array
-            // months are 1-based for easier maintenance.
-            if (diff == 0) {
-                diff = internalGet(MONTH) - (ERAS[i*3 + 1] - 1);
+        // Short circuit for recent years.  Most modern computations will
+        // occur in the current era and won't require the binary search.
+        // Note that if the year is == the current era year, then we use
+        // the binary search to handle the month/dom comparison.
+        if (year > ERAS[ERAS.length - 3]) {
+            low = CURRENT_ERA;
+        } else {
+            // Binary search
+            int high = ERAS.length / 3;
+        
+            while (low < high - 1) {
+                int i = (low + high) / 2;
+                int diff = year - ERAS[i*3];
+
+                // If years are the same, then compare the months, and if those
+                // are the same, compare days of month.  In the ERAS array
+                // months are 1-based for easier maintenance.
                 if (diff == 0) {
-                    diff = internalGet(DAY_OF_MONTH) - ERAS[i*3 + 2];
+                    diff = internalGet(MONTH) - (ERAS[i*3 + 1] - 1);
+                    if (diff == 0) {
+                        diff = internalGet(DAY_OF_MONTH) - ERAS[i*3 + 2];
+                    }
                 }
-            }
-            if (diff >= 0) {
-                low = i;
-            } else {
-                high = i;
+                if (diff >= 0) {
+                    low = i;
+                } else {
+                    high = i;
+                }
             }
         }
 
