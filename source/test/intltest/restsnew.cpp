@@ -1099,7 +1099,7 @@ NewResourceBundleTest::TestNewTypes() {
         UnicodeString str = theBundle.getStringEx("testescape",status);
         CONFIRM_UErrorCode(status, U_ZERO_ERROR);
         if(U_SUCCESS(status)){
-			u_charsToUChars(expect,uExpect,uprv_strlen(expect)+1);
+			u_charsToUChars(expect,uExpect,(int32_t)uprv_strlen(expect)+1);
             if(str.compare(uExpect)!=0){
                 errln("Did not get the expected string for testescape expected. Expected : " 
 					+UnicodeString(uExpect )+ " Got: " + str);
@@ -1111,7 +1111,7 @@ NewResourceBundleTest::TestNewTypes() {
         UnicodeString str = theBundle.getStringEx("test_underscores",status);
         expect ="test message ....";
         CONFIRM_UErrorCode(status, U_ZERO_ERROR);
-		u_charsToUChars(expect,uExpect,uprv_strlen(expect)+1);
+		u_charsToUChars(expect,uExpect,(int32_t)uprv_strlen(expect)+1);
         if(str.compare(uExpect)!=0){
             errln("Did not get the expected string for test_underscores.\n");
         }

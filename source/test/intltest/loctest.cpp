@@ -1703,8 +1703,8 @@ LocaleTest::TestGetBaseName(void) {
  * prefix + '_' + x, then return 1.  Otherwise return a value < 0.
  */
 static UBool _loccmp(const char* string, const char* prefix) {
-    int32_t slen = uprv_strlen(string),
-            plen = uprv_strlen(prefix);
+    int32_t slen = (int32_t)strlen(string),
+            plen = (int32_t)strlen(prefix);
     int32_t c = uprv_strncmp(string, prefix, plen);
     /* 'root' is "less than" everything */
     if (uprv_strcmp(prefix, "root") == 0) {

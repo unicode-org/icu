@@ -526,7 +526,7 @@ static void TestMisc()
     /* Tests the ICU version #*/
     u_getVersion(realVersion);
     u_versionToString(realVersion, icuVersion);
-    if (strncmp(icuVersion, U_ICU_VERSION, uprv_min(strlen(icuVersion), strlen(U_ICU_VERSION))) != 0)
+    if (strncmp(icuVersion, U_ICU_VERSION, uprv_min((int32_t)strlen(icuVersion), (int32_t)strlen(U_ICU_VERSION))) != 0)
     {
         log_err("ICU version test failed. Header says=%s, got=%s \n", U_ICU_VERSION, icuVersion);
     }
@@ -1426,7 +1426,8 @@ static int32_t MakeProp(char* str)
         log_err("unrecognized type letter ");
         log_err(str);
     }
-    else result = ((matchPosition - tagStrings) / 2);
+    else
+        result = (int32_t)((matchPosition - tagStrings) / 2);
     return result;
 }
 

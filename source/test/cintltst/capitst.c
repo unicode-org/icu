@@ -1586,8 +1586,8 @@ void TestGetTailoredSet() {
 }
 
 static int tMemCmp(const uint8_t *first, const uint8_t *second) {
-   int32_t firstLen = strlen((const char *)first);
-   int32_t secondLen = strlen((const char *)second);
+   int32_t firstLen = (int32_t)strlen((const char *)first);
+   int32_t secondLen = (int32_t)strlen((const char *)second);
    return memcmp(first, second, uprv_min(firstLen, secondLen));
 }
 static const char * strengthsC[] = {
