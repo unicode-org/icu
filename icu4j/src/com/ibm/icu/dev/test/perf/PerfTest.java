@@ -8,14 +8,14 @@
 */
 package com.ibm.icu.dev.test.perf;
 import com.ibm.icu.dev.tool.UOption;
-import com.ibm.icu.text.NumberFormat;
-import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.impl.LocaleUtility;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Iterator;
+import java.util.TreeSet;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -196,7 +196,10 @@ public abstract class PerfTest {
     static final int LINE_MODE = 10;
     static final int BULK_MODE = 11;
     static final int LOCALE = 12;
+    // Options above here are identical to those in C; keep in sync with C
+    // Options below here are unique to Java; shift down as necessary
     static final int GARBAGE_COLLECT = 13;
+    static final int LIST = 14;
 
     UOption[] getOptions() {
         return new UOption[] {
@@ -214,7 +217,11 @@ public abstract class PerfTest {
             UOption.DEF( "bulk-mode",     'b', UOption.NO_ARG),
             UOption.DEF( "locale",        'L', UOption.REQUIRES_ARG),
 
+            // Options above here are identical to those in C; keep in sync
+            // Options below here are unique to Java
+
             UOption.DEF( "gc",            'g', UOption.NO_ARG), 
+            UOption.DEF( "list",     (char)-1, UOption.NO_ARG), 
         };
     }
 
@@ -327,15 +334,21 @@ public abstract class PerfTest {
             break;
         }
 
-        if (methodList.size() < 1) {
-            StringBuffer buf = new StringBuffer();
-            while (i<remainingArgc) {
-                if (buf.length() != 0) {
-                    buf.append(", ");
-                }
-                buf.append('"').append(args[i]).append('"');
+        if (methodList.size() < 1 || options[LIST].doesOccur) {
+            System.err.println("Available tests:");
+            Iterator methods = getAvailableTests().values().iterator();
+            TreeSet methodNames = new TreeSet();
+            while (methods.hasNext()) {
+                methodNames.add(((Method)methods.next()).getName());
             }
-            throw new UsageException("Must specify at least one method name.  Unprocessed args: {" + buf.toString() + '}');
+            Iterator tests = methodNames.iterator();
+            while (tests.hasNext()) {
+                System.err.println(" " + tests.next());
+            }
+            if (options[LIST].doesOccur) {
+                System.exit(0);
+            }
+            throw new UsageException("Must specify at least one method name");
         }
 
         // Pass remaining arguments, if any, through to the subclass
