@@ -57,15 +57,15 @@ static void TestStandardNames()
     /* Iterate over all standards. */
 
     for (i = 0, count = ucnv_countStandards(); i < count; ++i) {
-        const char *std;
+        const char *standard;
 
         err = U_ZERO_ERROR;
-        std = ucnv_getStandard(i, &err);
+        standard = ucnv_getStandard(i, &err);
         if (U_FAILURE(err)) {
             log_err("FAIL: ucnv_getStandard(%d), error=%s\n", i, u_errorName(err));
             res = 0;
-        } else if (!std || !*std) {
-            log_err("FAIL: %s standard name at index %d\n", (std ? "empty" :
+        } else if (!standard || !*standard) {
+            log_err("FAIL: %s standard name at index %d\n", (standard ? "empty" :
                 "null"), i);
             res = 0;
         }
