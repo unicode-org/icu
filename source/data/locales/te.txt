@@ -1,0 +1,106 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../locale/common/main/te.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main/te.xml
+ */
+te{
+    Countries{
+        IN{"భారత దేళ౦"}
+    }
+    Currencies{
+        INR{
+            "రూ.",
+            "INR",
+        }
+    }
+    ExemplarCharacters{"[[:Telu:]‌‍]"}
+    Languages{
+        te{"తెలుగు"}
+    }
+    LocaleScript{
+        "Telu",
+    }
+    NumberElements{
+        ".",
+        ",",
+        ";",
+        "%",
+        "౦",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "�",
+        "+",
+    }
+    Version{"1.2"}
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "పూర్వాహ్న",
+                "అపరాహ్న",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "ఆది",
+                        "సోమ",
+                        "మంగళ",
+                        "బుధ",
+                        "గురు",
+                        "శుక్ర",
+                        "శని",
+                    }
+                    wide{
+                        "ఆదివారం",
+                        "సోమవారం",
+                        "మంగళవారం",
+                        "బుధవారం",
+                        "గురువారం",
+                        "శుక్రవారం",
+                        "శనివారం",
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "జనవరి",
+                        "ఫిబ్రవరి",
+                        "మార్చి",
+                        "ఏప్రిల్",
+                        "మే",
+                        "జూన్",
+                        "జూలై",
+                        "ఆగస్టు",
+                        "సెప్టెంబర్",
+                        "అక్టోబర్",
+                        "నవంబర్",
+                        "డిసెంబర్",
+                    }
+                    wide{
+                        "జనవరి",
+                        "ఫిబ్రవరి",
+                        "మార్చి",
+                        "ఏప్రిల్",
+                        "మే",
+                        "జూన్",
+                        "జూలై",
+                        "ఆగస్టు",
+                        "సెప్టెంబర్",
+                        "అక్టోబర్",
+                        "నవంబర్",
+                        "డిసెంబర్",
+                    }
+                }
+            }
+        }
+    }
+}

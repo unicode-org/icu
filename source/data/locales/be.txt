@@ -1,0 +1,124 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../locale/common/main/be.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main/be.xml
+ */
+be{
+    Countries{
+        BY{"Беларусь"}
+    }
+    Currencies{
+        BYB{
+            "Руб",
+            "BYB",
+        }
+    }
+    ExemplarCharacters{"[а-з й-ш ы-я ’ёіў {дж} {дз}]"}
+    Languages{
+        be{"Беларускі"}
+    }
+    LocaleScript{
+        "Cyrl",
+    }
+    NumberElements{
+        ",",
+        " ",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "�",
+        "+",
+    }
+    Version{"1.2"}
+    calendar{
+        gregorian{
+            DateTimeElements:intvector{
+                2,
+                1,
+            }
+            DateTimePatterns{
+                "HH.mm.ss z",
+                "HH.mm.ss z",
+                "HH.mm.ss",
+                "HH.mm",
+                "EEEE, d MMMM yyyy",
+                "d MMMM yyyy",
+                "d.M.yyyy",
+                "d.M.yy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "нд",
+                        "пн",
+                        "аў",
+                        "ср",
+                        "чц",
+                        "пт",
+                        "сб",
+                    }
+                    wide{
+                        "нядзеля",
+                        "панядзелак",
+                        "аўторак",
+                        "серада",
+                        "чацвер",
+                        "пятніца",
+                        "субота",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "да н.е.",
+                    "н.е.",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "сту",
+                        "лют",
+                        "сак",
+                        "кра",
+                        "май",
+                        "чэр",
+                        "ліп",
+                        "жні",
+                        "вер",
+                        "кас",
+                        "ліс",
+                        "сне",
+                    }
+                    wide{
+                        "студзень",
+                        "люты",
+                        "сакавік",
+                        "красавік",
+                        "май",
+                        "чэрвень",
+                        "ліпень",
+                        "жнівень",
+                        "верасень",
+                        "кастрычнік",
+                        "лістапад",
+                        "снежань",
+                    }
+                }
+            }
+        }
+    }
+    localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZ"}
+}

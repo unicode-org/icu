@@ -1,0 +1,32 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../locale/common/main/es_PR.xml
+// *
+// ***************************************************************************
+es_PR{
+    Currencies{
+        USD{
+            "$",
+            "Dólar Americano",
+        }
+    }
+    Version{"1.2"}
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "hh:mm:ss a z",
+                "hh:mm:ss a z",
+                "hh:mm:ss a",
+                "hh:mm a",
+                "EEEE d' de 'MMMM' de 'yyyy",
+                "d' de 'MMMM' de 'yyyy",
+                "MM/dd/yyyy",
+                "MM/dd/yy",
+                "{1} {0}",
+            }
+        }
+    }
+}

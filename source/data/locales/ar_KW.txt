@@ -1,0 +1,17 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../locale/common/main/ar_KW.xml
+// *
+// ***************************************************************************
+ar_KW{
+    NumberPatterns{
+        "#,##0.###;#,##0.###-",
+        "¤ #,##0.000;¤ #,##0.000-",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.2"}
+}
