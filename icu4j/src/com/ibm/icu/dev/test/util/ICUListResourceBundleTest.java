@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/ICUListResourceBundleTest.java,v $
- * $Date: 2003/10/07 17:24:18 $
- * $Revision: 1.7 $
+ * $Date: 2003/11/20 01:41:01 $
+ * $Revision: 1.8 $
  *
  *******************************************************************************
  */
@@ -15,6 +15,7 @@ package com.ibm.icu.dev.test.util;
 import java.util.ResourceBundle;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.ICUListResourceBundle;
 import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.Utility;
 
@@ -38,6 +39,8 @@ public final class ICUListResourceBundleTest extends TestFmwk
             if(((String)colElemArr[0][0]).equals("%%CollationBin")){   
 	           binaryData = (byte[]) colElemArr[0][1];
             }
+        }else{
+            errln("Did not get the expected object");
         }
         logln("got binaryData: " + binaryData + " length: " + (binaryData == null ? 0 : binaryData.length));
 		Object[] stringArrayData = (Object[])rb.getObject("CollationElements");
@@ -265,6 +268,8 @@ public final class ICUListResourceBundleTest extends TestFmwk
             }else{
                 errln("Alias mechanism failed for fr_BE SpelloutRules");
             }
+        }else{
+            errln("Did not get the expected object for CollationElements");
         }
         
     }
@@ -281,5 +286,36 @@ public final class ICUListResourceBundleTest extends TestFmwk
         }
         errln("Did not get the expected Exception for circular aliases");
     }
+    
+    public void TestGetObjectWithFallback(){
+        ResourceBundle bundle = ICULocaleData.getResourceBundle("com.ibm.icu.impl.data","LocaleElements","te_IN");
+        if(bundle instanceof ICUListResourceBundle){
+            ICUListResourceBundle ilrb = (ICUListResourceBundle) bundle;
+            String key = (String) ilrb.getObjectWithFallback("Keys/collation");
+            if(!key.equals("COLLATION")){
+                errln("Did not get the expected result from getObjectWithFallback method.");
+            }
+            String type = (String) ilrb.getObjectWithFallback("Types/collation/direct");
+            if(!type.equals("DIRECT")){
+                errln("Did not get the expected result form getObjectWithFallback method.");
+            }
+        }else{
+            errln("Did not get the expected bundle.");
+        }
+        
+        /*
+        ResourceBundle bundle1 = ICULocaleData.getResourceBundle("com.ibm.icu.impl.data","LocaleElements","de__PHONEBOOK");
+        if(bundle instanceof ICUListResourceBundle){
+            ICUListResourceBundle ilrb = (ICUListResourceBundle) bundle1;
+            String key = (String) ilrb.getObjectWithFallback("collations/collation/default");
+            if(!key.equals("phonebook")){
+                errln("Did not get the expected result from getObjectWithFallback method.");
+            }
 
+        }else{
+            errln("Did not get the expected bundle.");
+        } 
+        */        
+    }
+    
 }

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICUListResourceBundle.java,v $
- * $Date: 2003/11/20 00:35:13 $
- * $Revision: 1.14 $
+ * $Date: 2003/11/20 01:41:23 $
+ * $Revision: 1.15 $
  *
  *******************************************************************************
  */
@@ -278,14 +278,15 @@ public class ICUListResourceBundle extends ListResourceBundle {
             return "";
         }
     }
-
+    
+    private static final char RES_PATH_SEP_CHAR = '/';
+    
     public static class Alias{
         public Alias(String path){
             pathToResource = path;
         };
-        private final char RES_PATH_SEP_CHAR = '/';
+        
         private String pathToResource;
-
 
         private Object getResource(String className, String parentKey, int index, Hashtable visited){
             String packageName=null,bundleName=null, locale=null, keyPath=null;
@@ -333,25 +334,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
             return findResource(bundle, className, parentKey, index, keyPath, visited);
         
         }
-
-
-
-        private boolean isIndex(String s){
-             if(s.length()==1){
-                char c = s.charAt(0);
-                return Character.isDigit(c);
-             }
-             return false;
-        }
-        private int getIndex(String s){
-             if(s.length()==1){
-                char c = s.charAt(0);
-                if(Character.isDigit(c)){
-                  return Integer.valueOf(s).intValue();
-                }
-             }
-             return -1;
-        }
+        
         private Object findResource(Object[][] contents, String key){
             for (int i = 0; i < contents.length; ++i) {
                 // key must be non-null String, value must be non-null
@@ -366,6 +349,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
             }
             return null;
         }
+        
         private Object findResource(Object o , String[] keys, int start, int index){
             Object obj = o;
             if( start < keys.length && keys[start] !=null){
@@ -438,32 +422,159 @@ public class ICUListResourceBundle extends ListResourceBundle {
             return o;
         }
 
-        private String[] split(String source, char delimiter){
 
-            char[] src = source.toCharArray();
-            int index = 0;
-            int numdelimit=0;
-            // first count the number of delimiters
-            for(int i=0;i<source.length();i++){
-                if(src[i]==delimiter){
-                    numdelimit++;
-                }
-            }
-            String[] values =null;
-            values = new String[numdelimit+2];
-            // now split
-            int old=0;
-            for(int j=0;j<src.length;j++){
-                if(src[j]==delimiter){
-                    values[index++] = new String(src,old,j-old);
-                    old=j+1/* skip after the delimiter*/;
-                }
-            }
-            if(old <src.length)
-                values[index++]=new String(src,old,src.length-old);
-            return values;
-        }
     }
+    private static String[] split(String source, char delimiter){
 
+        char[] src = source.toCharArray();
+        int index = 0;
+        int numdelimit=0;
+        // first count the number of delimiters
+        for(int i=0;i<source.length();i++){
+            if(src[i]==delimiter){
+                numdelimit++;
+            }
+        }
+        String[] values =null;
+        values = new String[numdelimit+2];
+        // now split
+        int old=0;
+        for(int j=0;j<src.length;j++){
+            if(src[j]==delimiter){
+                values[index++] = new String(src,old,j-old);
+                old=j+1/* skip after the delimiter*/;
+            }
+        }
+        if(old <src.length)
+            values[index++]=new String(src,old,src.length-old);
+        return values;
+    }
+    
+    /**
+     * This method performs multilevel fallback for fetching items from the bundle
+     * e.g:
+     * If resource is in the form
+     * de__PHONEBOOK{
+     *      collations{
+     *              default{ "phonebook"}
+     *      }
+     * }
+     * If the value of "default" key needs to be accessed, then do:
+     * <code>
+     *  ResourceBundle bundle = new ResourceBundle(getLocaleFromString("de__PHONEBOOK"));
+     *  Object result = null;
+     *  if(bundle instanceof ICUListResourceBundle){
+     *      result = ((ICUListResourceBundle) bundle).getObjectWithFallback("collations/default");
+     *  }
+     * </code>
+     * @param path  The path to the required resource key
+     * @return Object represented by the key
+     * @exception MissingResourceException
+     */
+    public final Object getObjectWithFallback(String path) 
+                  throws MissingResourceException{
+        String[] keys = split(path, RES_PATH_SEP_CHAR);
+        Object result = null;      
+        ICUListResourceBundle actualBundle = this;
+        
+        // get the top level resource 
+        // getObject is a method on the ResourceBundle class that
+        // performs the normal fallback
+        result = getObject(keys[0], actualBundle);
+        
+        // now find the bundle from the actual bundle 
+        // if this bundle does not contain the top level resource,
+        // then we can be sure that it does not contain the sub elements
+        result = findResourceWithFallback(result, keys, 1, 0, actualBundle);
+        
+        // now recuse to pick up sub levels of the items
+                    
+        if(result == null){
+            throw new MissingResourceException("Could not find the resource in ",this.getClass().getName(),path);
+        }
+        return result;
+    }
+    private Object findResourceWithFallback(Object[][] contents, String key){
+        Object obj = null;
+
+        for (int i = 0; i < contents.length; ++i) {
+            // key must be non-null String
+            String tempKey = (String) contents[i][0];
+            obj = contents[i][1];
+            if(tempKey != null && tempKey.equals(key)){
+                return obj;
+            }
+        }
+
+        return obj;
+    }
+    private Object findResourceWithFallback(Object o , String[] keys, int start, 
+                                            int index,
+                                            ICUListResourceBundle actualBundle){
+        Object obj = o;
+        
+        while(actualBundle != null){
+            if( start < keys.length && keys[start] !=null){
+                if(obj instanceof Object[][]){
+                    obj = findResourceWithFallback((Object[][])obj,keys[start]);
+                }else if(obj instanceof Object[] && isIndex(keys[start])){
+                    obj = ((Object[])obj)[getIndex(keys[start])];
+                }
+                if(start+1 < keys.length && keys[start+1] !=null){
+                    obj = findResourceWithFallback(obj,keys,start+1, index, 
+                                                   actualBundle);
+                }
+            }else{
+                //try to find the corresponding index resource
+                if(index>=0){
+                    if(obj instanceof Object[][]){
+                        obj = findResourceWithFallback((Object[][])obj,
+                                                        Integer.toString(index));
+                    }else if(obj instanceof Object[]){
+                        obj = ((Object[])obj)[index];
+                    }
+                }
+            }
+            // did we get the contents? the break
+            if(obj != null){
+                break;
+            }
+            // if not try the parent bundle
+            actualBundle = (ICUListResourceBundle) actualBundle.parent;
+        }
+        return obj;
+    }
+    private final Object getObject(String key, 
+                                   ICUListResourceBundle actualBundle) {
+        Object obj = handleGetObject(key);
+        if (obj == null) {
+            ICUListResourceBundle p = (ICUListResourceBundle) this.parent;
+            while( p!=null){
+                obj = p.handleGetObject(key);
+                if(obj != null){
+                    actualBundle = p;
+                    break; 
+                }
+                p = (ICUListResourceBundle) p.parent;
+            }
+        }
+        return obj;
+    }
+    private static boolean isIndex(String s){
+         if(s.length()==1){
+            char c = s.charAt(0);
+            return Character.isDigit(c);
+         }
+         return false;
+    }
+    private static int getIndex(String s){
+         if(s.length()==1){
+            char c = s.charAt(0);
+            if(Character.isDigit(c)){
+              return Integer.valueOf(s).intValue();
+            }
+         }
+         return -1;
+    }
 }
 
