@@ -101,7 +101,7 @@ SOURCE=.\bidi.cpp
 # Begin Source File
 
 SOURCE=.\chariter.cpp
-# ADD CPP /Ze
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
@@ -111,17 +111,17 @@ SOURCE=.\compdata.cpp
 # Begin Source File
 
 SOURCE=.\compitr.cpp
-# ADD CPP /Ze
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\convert.cpp
-# ADD CPP /Ze
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\cpputils.cpp
-# ADD CPP /Ze
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
@@ -151,7 +151,7 @@ SOURCE=.\filestrm.c
 # Begin Source File
 
 SOURCE=.\locid.cpp
-# ADD CPP /Ze
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
@@ -166,7 +166,7 @@ SOURCE=.\mutex.cpp
 # Begin Source File
 
 SOURCE=.\normlzr.cpp
-# ADD CPP /Ze
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
@@ -176,17 +176,17 @@ SOURCE=.\putil.c
 # Begin Source File
 
 SOURCE=.\rbdata.cpp
-# ADD CPP /Ze
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\resbund.cpp
-# ADD CPP /Ze
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\schriter.cpp
-# ADD CPP /Ze
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
@@ -216,7 +216,7 @@ SOURCE=.\uchar.c
 # Begin Source File
 
 SOURCE=.\uchriter.cpp
-# ADD CPP /Ze
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
@@ -311,7 +311,7 @@ SOURCE=.\uhash.c
 # Begin Source File
 
 SOURCE=.\uhash_us.cpp
-# ADD CPP /Ze
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
@@ -341,12 +341,12 @@ SOURCE=.\unicode.cpp
 # Begin Source File
 
 SOURCE=.\unistr.cpp
-# ADD CPP /Ze
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\unorm.cpp
-# ADD CPP /Ze
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
@@ -362,6 +362,11 @@ SOURCE=.\uresdata.c
 
 SOURCE=.\ushape.c
 # ADD CPP /Za
+# End Source File
+# Begin Source File
+
+SOURCE=.\ustream.cpp
+# ADD CPP /Ze
 # End Source File
 # Begin Source File
 
@@ -1107,10 +1112,6 @@ InputPath=.\unicode\unistr.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\unistrm.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\unicode\unorm.h
 
 !IF  "$(CFG)" == "common - Win32 Release"
@@ -1232,6 +1233,33 @@ InputPath=.\unicode\ushape.h
 # Begin Source File
 
 SOURCE=.\ustr_imp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\ustream.h
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\ustream.h
+
+"..\..\include\unicode\ustream.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\ustream.h
+
+"..\..\include\unicode\ustream.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
