@@ -23,7 +23,7 @@
 *   03/07/2001  synwee     merged UCA's maxexpansion and tailoring's
 */
 
-#include "ucaelems.h"
+#include "ucol_elm.h"
 #include "unicode/uchar.h"
 
 void uprv_uca_reverseElement(ExpansionTable *expansions, UCAElements *el) {

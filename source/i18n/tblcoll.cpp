@@ -54,7 +54,7 @@
 * 01/29/01     synwee      Modified into a C++ wrapper calling C APIs (ucol.h)
 */
 
-#include "ucolimp.h"
+#include "ucol_imp.h"
 #include "unicode/tblcoll.h"
 #include "unicode/coleitr.h"
 #include "uhash.h"

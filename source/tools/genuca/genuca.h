@@ -22,12 +22,12 @@
 #ifndef UCADATA_H
 #define UCADATA_H
 
-#include "ucaelems.h"
+#include "ucol_elm.h"
 #include <stdio.h>
 #include <string.h>
 #include "unicode/utypes.h"
 #include "unicode/unicode.h"
-#include "ucolimp.h"
+#include "ucol_imp.h"
 #include "ucmp32.h"
 #include "compitr.h"
 #include "uhash.h"

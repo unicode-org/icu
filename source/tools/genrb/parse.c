@@ -16,7 +16,7 @@
 *******************************************************************************
 */
 
-#include "ucolimp.h"
+#include "ucol_imp.h"
 #include "parse.h"
 #include "error.h"
 #include "uhash.h"

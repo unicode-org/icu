@@ -5,7 +5,7 @@
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
-*   file name:  ucaelems.h
+*   file name:  ucol_elm.h
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -21,11 +21,11 @@
 #ifndef UCOL_UCAELEMS_H
 #define UCOL_UCAELEMS_H
 
-#include "cnttable.h"
+#include "ucol_cnt.h"
 
 #include <stdio.h>
 #include "unicode/utypes.h"
-#include "ucolimp.h"
+#include "ucol_imp.h"
 #include "cmemory.h"
 
 typedef struct {

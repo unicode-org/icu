@@ -23,7 +23,6 @@
 */
 
 #include "genuca.h"
-#include "cnttable.h"
 #include "uoptions.h"
 #include "toolutil.h"
 #include "cstring.h"
