@@ -102,7 +102,7 @@ void CollationThaiTest::TestDictionary(void) {
     uprv_strcpy(buffer, IntlTest::getTestDirectory());
     uprv_strcat(buffer, TEST_FILE);
 
-    FileStream *in = T_FileStream_open(buffer, "r");
+    FileStream *in = T_FileStream_open(buffer, "rb");
     if (in == 0) {
         errln((UnicodeString)"Error: could not open test file " + buffer);
         return;        
