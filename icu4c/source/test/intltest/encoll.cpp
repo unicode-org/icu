@@ -318,11 +318,16 @@ void CollationEnglishTest::TestSecondary(/* char* par */)
 void CollationEnglishTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite CollationEnglishTest: ");
-    switch (index) {
-        case 0: name = "TestPrimary";   if (exec)   TestPrimary(/* par */); break;
-        case 1: name = "TestSecondary"; if (exec)   TestSecondary(/* par */); break;
-        case 2: name = "TestTertiary";  if (exec)   TestTertiary(/* par */); break;
-        default: name = ""; break;
+    if(myCollation) {
+      switch (index) {
+          case 0: name = "TestPrimary";   if (exec)   TestPrimary(/* par */); break;
+          case 1: name = "TestSecondary"; if (exec)   TestSecondary(/* par */); break;
+          case 2: name = "TestTertiary";  if (exec)   TestTertiary(/* par */); break;
+          default: name = ""; break;
+      }
+    } else {
+      errln("Collator couldn't be instantiated!");
+      name = "";
     }
 }
 

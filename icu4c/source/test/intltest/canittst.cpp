@@ -164,23 +164,27 @@ void CanonicalIteratorTest::TestBasic() {
     set->setValueDeleter(uhash_deleteUnicodeString);
     int32_t i = 0;
     CanonicalIterator it("", status);
-    for (i = 0; i < ARRAY_LENGTH(testArray); ++i) {
-        //logln("Results for: " + name.transliterate(testArray[i]));
-        UnicodeString testStr = CharsToUnicodeString(testArray[i][0]);
-        it.setSource(testStr, status);
-        set->removeAll();
-        while (TRUE) {
-            //UnicodeString *result = new UnicodeString(it.next());
-            UnicodeString result(it.next());
-            if (result.isBogus()) {
-                break;
-            }
-            set->put(result, new UnicodeString(result), status); // Add result to the table
-            //logln(++counter + ": " + hex.transliterate(result));
-            //logln(" = " + name.transliterate(result));
-        }
-        expectEqual(i + ": ", testStr, collectionToString(set), CharsToUnicodeString(testArray[i][1]));
+    if(U_SUCCESS(status)) {
+      for (i = 0; i < ARRAY_LENGTH(testArray); ++i) {
+          //logln("Results for: " + name.transliterate(testArray[i]));
+          UnicodeString testStr = CharsToUnicodeString(testArray[i][0]);
+          it.setSource(testStr, status);
+          set->removeAll();
+          while (TRUE) {
+              //UnicodeString *result = new UnicodeString(it.next());
+              UnicodeString result(it.next());
+              if (result.isBogus()) {
+                  break;
+              }
+              set->put(result, new UnicodeString(result), status); // Add result to the table
+              //logln(++counter + ": " + hex.transliterate(result));
+              //logln(" = " + name.transliterate(result));
+          }
+          expectEqual(i + ": ", testStr, collectionToString(set), CharsToUnicodeString(testArray[i][1]));
 
+      }
+    } else {
+      errln("Couldn't instantiate canonical iterator. Error: %s", u_errorName(status));
     }
     delete set;
 }
@@ -216,7 +220,9 @@ UnicodeString CanonicalIteratorTest::getReadable(const UnicodeString &s) {
 #endif
     UnicodeString sHex = s;
 #if !UCONFIG_NO_TRANSLITERATION
-    hexTrans->transliterate(sHex);
+    if(hexTrans) { // maybe there is no data and transliterator cannot be instantiated
+      hexTrans->transliterate(sHex);
+    }
 #endif
     result += sHex;
     result += "]";

@@ -1166,6 +1166,10 @@ void NumberFormatTest::TestRegCurrency(void) {
   UErrorCode status = U_ZERO_ERROR;
   const UChar* USD = ucurr_forLocale("en_US", &status);
   const UChar* YEN = ucurr_forLocale("ja_JP", &status);
+  if(U_FAILURE(status)) {
+    errln("Unable to get currency for locale, error %s", u_errorName(status));
+    return;
+  }
 
   UCurrRegistryKey enkey = ucurr_register(YEN, "en_US", &status);
   UCurrRegistryKey enUSEUROkey = ucurr_register(EUR, "en_US_EURO", &status);

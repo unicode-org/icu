@@ -160,6 +160,7 @@ void NormalizerConformanceTest::TestConformance(FileStream *input, int32_t optio
     enum { BUF_SIZE = 1024 };
     char lineBuf[BUF_SIZE];
     UnicodeString fields[FIELD_COUNT];
+    UErrorCode status = U_ZERO_ERROR;
     int32_t passCount = 0;
     int32_t failCount = 0;
     UChar32 c;
@@ -218,10 +219,14 @@ void NormalizerConformanceTest::TestConformance(FileStream *input, int32_t optio
             other.remove(c);
         }
 
-        if (checkConformance(fields, lineBuf, options)) {
+        if (checkConformance(fields, lineBuf, options, status)) {
             ++passCount;
         } else {
             ++failCount;
+            if(status == U_FILE_ACCESS_ERROR) {
+              errln("Something is wrong with the normalizer, skipping the rest of the test.");
+              break;
+            }
         }
         if ((count % 1000) == 0) {
             logln("Line %d", count);
@@ -250,10 +255,14 @@ void NormalizerConformanceTest::TestConformance(FileStream *input, int32_t optio
         fields[0]=fields[1]=fields[2]=fields[3]=fields[4].setTo(c);
         sprintf(lineBuf, "not mentioned code point U+%04lx", (long)c);
 
-        if (checkConformance(fields, lineBuf, options)) {
+        if (checkConformance(fields, lineBuf, options, status)) {
             ++passCount;
         } else {
             ++failCount;
+            if(status == U_FILE_ACCESS_ERROR) {
+              errln("Something is wrong with the normalizer, skipping the rest of the test.");
+              break;
+            }
         }
         if ((c % 0x1000) == 0) {
             logln("Code point U+%04lx", c);
@@ -285,9 +294,10 @@ void NormalizerConformanceTest::TestConformance(FileStream *input, int32_t optio
  */
 UBool NormalizerConformanceTest::checkConformance(const UnicodeString* field,
                                                   const char *line,
-                                                  int32_t options) {
+                                                  int32_t options,
+                                                  UErrorCode &status) {
     UBool pass = TRUE, result;
-    UErrorCode status = U_ZERO_ERROR;
+    //UErrorCode status = U_ZERO_ERROR;
     UnicodeString out, fcd;
     int32_t fieldNum;
 
@@ -558,11 +568,12 @@ void NormalizerConformanceTest::TestCase6(void) {
 }
 
 void NormalizerConformanceTest::_testOneLine(const char *line) {
+  UErrorCode status = U_ZERO_ERROR;
     UnicodeString fields[FIELD_COUNT];
     if (!hexsplit(line, ';', fields, FIELD_COUNT)) {
         errln((UnicodeString)"Unable to parse line " + line);
     } else {
-        checkConformance(fields, line, 0);
+        checkConformance(fields, line, 0, status);
     }
 }
 

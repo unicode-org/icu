@@ -137,10 +137,18 @@ void TimeZoneRegressionTest:: Test4073215()
         errln("Fail: DST not active");
 
     GregorianCalendar cal(1997, UCAL_JANUARY, 31, status);
+    if(U_FAILURE(status)) {
+      errln("Error creating calendar %s", u_errorName(status));
+      return;
+    }
     failure(status, "new GregorianCalendar");
     cal.adoptTimeZone(z);
 
     SimpleDateFormat sdf((UnicodeString)"E d MMM yyyy G HH:mm", status); 
+    if(U_FAILURE(status)) {
+      errln("Error creating date format %s", u_errorName(status));
+      return;
+    }
     sdf.setCalendar(cal); 
     failure(status, "new SimpleDateFormat");
 
@@ -289,6 +297,11 @@ void TimeZoneRegressionTest:: Test4096952() {
 void TimeZoneRegressionTest:: Test4109314() {
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar *testCal = (GregorianCalendar*)Calendar::createInstance(status); 
+    if(U_FAILURE(status)) {
+      errln("Error creating calendar %s", u_errorName(status));
+      delete testCal;
+      return;
+    }
     failure(status, "Calendar::createInstance");
     TimeZone *PST = TimeZone::createTimeZone("PST");
     /*Object[] testData = {
@@ -426,6 +439,11 @@ void TimeZoneRegressionTest:: Test4126678()
 {
     UErrorCode status = U_ZERO_ERROR;
     Calendar *cal = Calendar::createInstance(status);
+    if(U_FAILURE(status)) {
+      errln("Error creating calendar %s", u_errorName(status));
+      delete cal;
+      return;
+    }
     failure(status, "Calendar::createInstance");
     TimeZone *tz = TimeZone::createTimeZone("PST");
     cal->adoptTimeZone(tz);
@@ -797,6 +815,11 @@ TimeZoneRegressionTest::Test4162593()
 {
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat *fmt = new SimpleDateFormat("z", Locale::getUS(), status);
+    if(U_FAILURE(status)) {
+      errln("Error creating calendar %s", u_errorName(status));
+      delete fmt;
+      return;
+    }
     const int32_t ONE_HOUR = 60*60*1000;
 
     SimpleTimeZone *asuncion = new SimpleTimeZone(-4*ONE_HOUR, "America/Asuncion" /*PY%sT*/,

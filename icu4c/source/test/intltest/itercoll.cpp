@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2003, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -27,6 +27,13 @@ CollationIteratorTest::CollationIteratorTest()
    test2("has the highest probability of detecting", "")
 {
     en_us = (RuleBasedCollator *)Collator::createInstance(Locale::getUS(), status);
+    if(U_FAILURE(status)) {
+      delete en_us;
+      en_us = 0;
+      errln("Collator creation failed with %s", u_errorName(status));
+      return;
+    }
+
 }
 
 CollationIteratorTest::~CollationIteratorTest()
@@ -606,18 +613,23 @@ void CollationIteratorTest::runIndexedTest(int32_t index, UBool exec, const char
         logln("Collation Iteration Tests: ");
     }
 
-    switch (index)
-    {
-        case  0: name = "TestPrevious";      if (exec) TestPrevious(/* par */);     break;
-        case  1: name = "TestOffset";        if (exec) TestOffset(/* par */);       break;
-        case  2: name = "TestSetText";       if (exec) TestSetText(/* par */);      break;
-        case  3: name = "TestMaxExpansion";  if (exec) TestMaxExpansion(/* par */); break;
-        case  4: name = "TestClearBuffers";  if (exec) TestClearBuffers(/* par */); break;
-        case  5: name = "TestUnicodeChar";   if (exec) TestUnicodeChar(/* par */);  break;
-        case  6: name = "TestAssignment";    if (exec) TestAssignment(/* par */);    break;
-        case  7: name = "TestConstructors";  if (exec) TestConstructors(/* par */); break;
-        case  8: name = "TestStrengthOrder"; if (exec) TestStrengthOrder(/* par */); break;
-        default: name = ""; break;
+    if(en_us) {
+      switch (index)
+      {
+          case  0: name = "TestPrevious";      if (exec) TestPrevious(/* par */);     break;
+          case  1: name = "TestOffset";        if (exec) TestOffset(/* par */);       break;
+          case  2: name = "TestSetText";       if (exec) TestSetText(/* par */);      break;
+          case  3: name = "TestMaxExpansion";  if (exec) TestMaxExpansion(/* par */); break;
+          case  4: name = "TestClearBuffers";  if (exec) TestClearBuffers(/* par */); break;
+          case  5: name = "TestUnicodeChar";   if (exec) TestUnicodeChar(/* par */);  break;
+          case  6: name = "TestAssignment";    if (exec) TestAssignment(/* par */);    break;
+          case  7: name = "TestConstructors";  if (exec) TestConstructors(/* par */); break;
+          case  8: name = "TestStrengthOrder"; if (exec) TestStrengthOrder(/* par */); break;
+          default: name = ""; break;
+      }
+    } else {
+      errln("Class iterator not instantiated");
+      name = "";
     }
 }
 

@@ -51,7 +51,7 @@ NamePrepTransform* TestIDNA::getInstance(UErrorCode& status){
         UParseError parseError;
         TestIDNA::prep = NamePrepTransform::createInstance(parseError, status);
         if(TestIDNA::prep ==NULL){
-           status = U_MEMORY_ALLOCATION_ERROR;
+           //status = U_MEMORY_ALLOCATION_ERROR;
            return NULL;
         }
     }

@@ -99,6 +99,11 @@ void G7CollationTest::TestG7Locales(/* char* par */)
         RuleBasedCollator* tblColl1 = 0;
 
         myCollation = Collator::createInstance(locales[i], status);
+        if(U_FAILURE(status)) {
+          delete myCollation;
+          errln("Couldn't instantiate collator. Error: %s", u_errorName(status));
+          return;
+        }
         myCollation->setStrength(Collator::QUATERNARY);
         myCollation->setAttribute(UCOL_ALTERNATE_HANDLING, UCOL_SHIFTED, status);
         if (U_FAILURE(status))
@@ -154,6 +159,11 @@ void G7CollationTest::TestDemo1(/* char* par */)
     logln("Demo Test 1 : Create a new table collation with rules \"& Z < p, P\"");
     UErrorCode status = U_ZERO_ERROR;
     Collator *col = Collator::createInstance("en_US", status);
+    if(U_FAILURE(status)) {
+      delete col;
+      errln("Couldn't instantiate collator. Error: %s", u_errorName(status));
+      return;
+    }
     const UnicodeString baseRules = ((RuleBasedCollator*)col)->getRules();
     UnicodeString newRules(" & Z < p, P");
     newRules.insert(0, baseRules);
@@ -183,6 +193,11 @@ void G7CollationTest::TestDemo2(/* char* par */)
     logln("Demo Test 2 : Create a new table collation with rules \"& C < ch , cH, Ch, CH\"");
     UErrorCode status = U_ZERO_ERROR;
     Collator *col = Collator::createInstance("en_US", status);
+    if(U_FAILURE(status)) {
+      delete col;
+      errln("Couldn't instantiate collator. Error: %s", u_errorName(status));
+      return;
+    }
     const UnicodeString baseRules = ((RuleBasedCollator*)col)->getRules();
     UnicodeString newRules("& C < ch , cH, Ch, CH");
     newRules.insert(0, baseRules);
@@ -212,6 +227,11 @@ void G7CollationTest::TestDemo3(/* char* par */)
     logln("Demo Test 3 : Create a new table collation with rules \"& Question'-'mark ; '?' & Hash'-'mark ; '#' & Ampersand ; '&'\"");
     UErrorCode status = U_ZERO_ERROR;
     Collator *col = Collator::createInstance("en_US", status);
+    if(U_FAILURE(status)) {
+      errln("Couldn't instantiate collator. Error: %s", u_errorName(status));
+      delete col;
+      return;
+    }
     const UnicodeString baseRules = ((RuleBasedCollator*)col)->getRules();
     UnicodeString newRules = "& Question'-'mark ; '?' & Hash'-'mark ; '#' & Ampersand ; '&'";
     newRules.insert(0, baseRules);
@@ -241,16 +261,16 @@ void G7CollationTest::TestDemo4(/* char* par */)
     logln("Demo Test 4 : Create a new table collation with rules \" & aa ; a'-' & ee ; e'-' & ii ; i'-' & oo ; o'-' & uu ; u'-' \"");
     UErrorCode status = U_ZERO_ERROR;
     Collator *col = Collator::createInstance("en_US", status);
+    if(U_FAILURE(status)) {
+      delete col;
+      errln("Couldn't instantiate collator. Error: %s", u_errorName(status));
+      return;
+    }
+
     const UnicodeString baseRules = ((RuleBasedCollator*)col)->getRules();
     UnicodeString newRules = " & aa ; a'-' & ee ; e'-' & ii ; i'-' & oo ; o'-' & uu ; u'-' ";
     newRules.insert(0, baseRules);
     RuleBasedCollator *myCollation = new RuleBasedCollator(newRules, status);
-
-    if (U_FAILURE(status))
-    {
-        errln( "Demo Test 4 Table Collation object creation failed." );
-        return;
-    }
 
     int32_t j, n;
     for (j = 0; j < TOTALTESTSET; j++)

@@ -695,6 +695,11 @@ DateFormatTest::TestBadInput135a()
 {
   UErrorCode status = U_ZERO_ERROR;
   SimpleDateFormat* dateParse = new SimpleDateFormat(status);
+  if(U_FAILURE(status)) {
+    errln("Failed creating SimpleDateFormat with %s. Quitting test", u_errorName(status));
+    delete dateParse;
+    return;
+  }
   const char* s;
   UDate date;
   const uint32_t PF_LENGTH = (int32_t)(sizeof(parseFormats)/sizeof(parseFormats[0]));
@@ -812,6 +817,11 @@ DateFormatTest::TestDateFormatZone061()
     date= 859248000000.0;
     logln((UnicodeString)"Date 1997/3/25 00:00 GMT: " + date);
     formatter = new SimpleDateFormat((UnicodeString)"dd-MMM-yyyyy HH:mm", Locale::getUK(), status);
+    if(U_FAILURE(status)) {
+      errln("Failed creating SimpleDateFormat with %s. Quitting test", u_errorName(status));
+      delete formatter;
+      return;
+    }
     formatter->adoptTimeZone(TimeZone::createTimeZone("GMT"));
     UnicodeString temp; formatter->format(date, temp);
     logln((UnicodeString)"Formatted in GMT to: " + temp);

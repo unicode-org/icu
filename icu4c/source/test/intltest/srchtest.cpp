@@ -38,6 +38,19 @@ StringSearchTest::StringSearchTest() :
     m_fr_fr_ = (RuleBasedCollator *)Collator::createInstance("fr_FR", status);
     m_de_    = (RuleBasedCollator *)Collator::createInstance("de_DE", status);
     m_es_    = (RuleBasedCollator *)Collator::createInstance("es_ES", status);
+    if(U_FAILURE(status)) {
+      delete m_en_us_;
+      delete m_fr_fr_;
+      delete m_de_;
+      delete m_es_;
+      m_en_us_ = 0;
+      m_fr_fr_ = 0;
+      m_de_ = 0;
+      m_es_ = 0;
+      errln("Collator creation failed with %s", u_errorName(status));
+      return;
+    }
+
     
     UnicodeString rules;
     rules.setTo(((RuleBasedCollator *)m_de_)->getRules());

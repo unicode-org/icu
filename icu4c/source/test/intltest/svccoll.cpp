@@ -28,6 +28,12 @@ void CollationServiceTest::TestRegister()
 
   Collator* frcol = Collator::createInstance(FR, status);
   Collator* uscol = Collator::createInstance(US, status);
+  if(U_FAILURE(status)) {
+    errln("Failed to create collators with %s", u_errorName(status));
+    delete frcol;
+    delete uscol;
+    return;
+  }
 
   { // try override en_US collator
     URegistryKey key = Collator::registerInstance(frcol, US, status);
@@ -306,6 +312,14 @@ void CollationServiceTest::TestRegisterFactory(void)
     Collator* frcol = Collator::createInstance(Locale::getFrance(), status);
     Collator* gecol = Collator::createInstance(Locale::getGermany(), status);
     Collator* jpcol = Collator::createInstance(Locale::getJapan(), status);
+    if(U_FAILURE(status)) {
+      errln("Failed to create collators with %s", u_errorName(status));
+      delete frcol;
+      delete gecol;
+      delete jpcol;
+      delete fuFUNames;
+      return;
+    }
     
     CollatorInfo** info = new CollatorInfo*[4];
     if (!info) {
