@@ -425,19 +425,27 @@ private:
     Hashtable* _ids;
 
 public:
-    CFactory(CollatorFactory* delegate) 
+    CFactory(CollatorFactory* delegate, UErrorCode& status) 
         : LocaleKeyFactory(delegate->visible() ? VISIBLE : INVISIBLE)
         , _delegate(delegate)
         , _ids(NULL)
     {
-        UErrorCode status = U_ZERO_ERROR;
-        int32_t count = 0;
-        _ids = new Hashtable(status);
-        if (_ids) {
-            const UnicodeString * const idlist = _delegate->getSupportedIDs(count, status);
-            for (int i = 0; i < count; ++i) {
-                _ids->put(idlist[i], (void*)this, status);
-            }
+		if (U_SUCCESS(status)) {
+			int32_t count = 0;
+			_ids = new Hashtable(status);
+			if (_ids) {
+				const UnicodeString * idlist = _delegate->getSupportedIDs(count, status);
+				for (int i = 0; i < count; ++i) {
+					_ids->put(idlist[i], (void*)this, status);
+					if (U_FAILURE(status)) {
+						delete _ids;
+						_ids = NULL;
+						return;
+					}
+				}
+			} else {
+				status = U_MEMORY_ALLOCATION_ERROR;
+			}
         }
     }
 
@@ -504,7 +512,7 @@ URegistryKey
 Collator::registerFactory(CollatorFactory* toAdopt, UErrorCode& status)
 {
     if (U_SUCCESS(status)) {
-        CFactory* f = new CFactory(toAdopt);
+        CFactory* f = new CFactory(toAdopt, status);
         if (f) {
             return getService()->registerFactory(f, status);
         }
