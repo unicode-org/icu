@@ -172,6 +172,31 @@ void addNewInverse(UCAElements *element, UErrorCode *status) {
   }
 }
 
+void insertInverse(UCAElements *element, uint32_t position, UErrorCode *status) {
+
+  if(VERBOSE && isContinuation(element->CEs[1])) {
+    fprintf(stdout, "+");
+  }
+  if(position <= inversePos) {
+    /*move stuff around */
+    uprv_memcpy(inverseTable[position+1], inverseTable[position], (inversePos - position+1)*sizeof(inverseTable[0]));
+  }
+  inverseTable[position][0] = element->CEs[0];
+  if(element->noOfCEs > 1 && isContinuation(element->CEs[1])) {
+    inverseTable[position][1] = element->CEs[1];
+  } else {
+    inverseTable[position][1] = 0;
+  }
+  if(element->cSize < 2) {
+    inverseTable[position][2] = element->cPoints[0];
+  } else { /* add a new store of cruft */
+    inverseTable[position][2] = ((element->cSize+1) << UCOL_INV_SHIFTVALUE) | sContPos;
+    memcpy(stringContinue+sContPos, element->cPoints, element->cSize*sizeof(UChar));
+    sContPos += element->cSize+1;
+  }
+  inversePos++;
+}
+
 void addToExistingInverse(UCAElements *element, uint32_t position, UErrorCode *status) {
 
       if((inverseTable[position][2] & UCOL_INV_SIZEMASK) == 0) { /* single element, have to make new extension place and put both guys there */
@@ -204,8 +229,12 @@ uint32_t addToInverse(UCAElements *element, UErrorCode *status) {
 
   if(inverseTable[inversePos][0] > element->CEs[0]) {
     uint32_t position = inversePos;
-    while(inverseTable[--position][0] > element->CEs[0])
-    addToExistingInverse(element, position, status);
+    while(inverseTable[--position][0] > element->CEs[0]);
+    if(inverseTable[position][0] == element->CEs[0]) {
+      addToExistingInverse(element, position, status);
+    } else {
+      insertInverse(element, position+1, status);
+    }
   } else if(inverseTable[inversePos][0] == element->CEs[0] && inversePos != 0) {
     if(element->noOfCEs > 1 && isContinuation(element->CEs[1]) 
       && inverseTable[inversePos][1] != element->CEs[1]) {
@@ -569,10 +598,10 @@ write_uca_table(const char *filename,
     myD->variableTopValue = variableTopValue;
     myD->strength = UCOL_TERTIARY;
     myD->frenchCollation = UCOL_OFF;
-    myD->alternateHandling = UCOL_SHIFTED; /* attribute for handling variable elements*/
+    myD->alternateHandling = UCOL_NON_IGNORABLE; /* attribute for handling variable elements*/
     myD->caseFirst = UCOL_OFF;         /* who goes first, lower case or uppercase */
     myD->caseLevel = UCOL_OFF;         /* do we have an extra case level */
-    myD->normalizationMode = UCOL_ON; /* attribute for normalization */
+    myD->normalizationMode = UCOL_OFF; /*UCOL_ON*/ /* attribute for normalization */
     /* populate the version info struct with version info*/
     myD->version[0] = UCOL_BUILDER_VERSION;
     /*TODO:The fractional rules version should be taken from FractionalUCA.txt*/
