@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003, International Business Machines
+* Copyright (c) 2003-2004, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -345,18 +345,17 @@ void OlsonTimeZone::getOffset(UDate date, UBool local, int32_t& rawoff,
     // and finalZone == 0.  For this case we add "&& finalZone != 0".
     if (date >= finalMillis && finalZone != 0) {
         int32_t year, month, dom, dow;
-        double days = uprv_floor(date / U_MILLIS_PER_DAY);
+        double millis;
+        double days = Math::floorDivide(date, U_MILLIS_PER_DAY, millis);
         
         Grego::dayToFields(days, year, month, dom, dow);
 
-        int32_t millis = (int32_t) (date - days * U_MILLIS_PER_DAY);
         rawoff = finalZone->getRawOffset();
 
         if (!local) {
             // Adjust from GMT to local
             date += rawoff;
-            double days2 = uprv_floor(date / U_MILLIS_PER_DAY);
-            millis = (int32_t) (date - days2 * U_MILLIS_PER_DAY);
+            double days2 = Math::floorDivide(date, U_MILLIS_PER_DAY, millis);
             if (days2 != days) {
                 Grego::dayToFields(days2, year, month, dom, dow);
             }
@@ -364,7 +363,7 @@ void OlsonTimeZone::getOffset(UDate date, UBool local, int32_t& rawoff,
 
         dstoff = finalZone->getOffset(
             GregorianCalendar::AD, year, month,
-            dom, (uint8_t) dow, millis, ec) - rawoff;
+            dom, (uint8_t) dow, (int32_t) millis, ec) - rawoff;
         return;
     }
 

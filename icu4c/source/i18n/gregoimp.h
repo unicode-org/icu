@@ -63,6 +63,19 @@ class U_I18N_API Math {
      */
     static int32_t floorDivide(double numerator, int32_t denominator,
                                int32_t& remainder);
+
+    /**
+     * For a positive divisor, return the quotient and remainder
+     * such that dividend = quotient*divisor + remainder and
+     * 0 <= remainder < divisor.
+     *
+     * Works around edge-case bugs.  Handles pathological input
+     * (divident >> divisor) reasonably.
+     *
+     * Calling with a divisor <= 0 is disallowed.
+     */
+    static double floorDivide(double dividend, double divisor,
+                              double& remainder);
 };
 
 // Useful millisecond constants

@@ -29,14 +29,22 @@
 #include "cformtst.h"
 #include "cmemory.h"
 
+#include <math.h>
+
+static void TestExtremeDates(void);
+
+#define LEN(a) (sizeof(a)/sizeof(a[0]))
+
 void addDateForTest(TestNode** root);
 
+#define TESTCASE(x) addTest(root, &x, "tsformat/cdattst/" #x)
 
 void addDateForTest(TestNode** root)
 {
-    addTest(root, &TestDateFormat, "tsformat/cdattst/TestDateFormat");
-    addTest(root, &TestSymbols, "tsformat/cdattst/TestSymbols");
-    addTest(root, &TestDateFormatCalendar, "tsformat/cdattst/TestDateFormatCalendar");
+    TESTCASE(TestDateFormat);
+    TESTCASE(TestSymbols);
+    TESTCASE(TestDateFormatCalendar);
+    TESTCASE(TestExtremeDates);
 }
 /* Testing the DateFormat API */
 static void TestDateFormat()
@@ -800,6 +808,87 @@ static UChar* myNumformat(const UNumberFormat* numfor, double d)
     }
     
     return result2;
+}
+
+/**
+ * The search depth for TestExtremeDates.  The total number of
+ * dates that will be tested is (2^EXTREME_DATES_DEPTH) - 1.
+ */
+#define EXTREME_DATES_DEPTH 8
+
+/**
+ * Support for TestExtremeDates (below).
+ *
+ * Test a single date to see whether udat_format handles it properly.
+ */
+static UBool _aux1ExtremeDates(UDateFormat* fmt, UDate date,
+                               UChar* buf, int32_t buflen, char* cbuf,
+                               UErrorCode* ec) {
+    int32_t len = udat_format(fmt, date, buf, buflen, 0, ec);
+    if (!assertSuccess("udat_format", ec)) return FALSE;
+    u_austrncpy(cbuf, buf, buflen);
+    if (len < 4) {
+        log_err("FAIL: udat_format(%g) => \"%s\"\n", date, cbuf);
+    } else {
+        log_verbose("udat_format(%g) => \"%s\"\n", date, cbuf);
+    }
+    return TRUE;
+}
+
+/**
+ * Support for TestExtremeDates (below).
+ *
+ * Recursively test between 'small' and 'large', up to the depth
+ * limit specified by EXTREME_DATES_DEPTH.
+ */
+static UBool _aux2ExtremeDates(UDateFormat* fmt, UDate small, UDate large,
+                               UChar* buf, int32_t buflen, char* cbuf,
+                               int32_t count,
+                               UErrorCode* ec) {
+    /* Logarithmic midpoint; see below */
+    UDate mid = (UDate) exp((log(small) + log(large)) / 2);
+    if (count == EXTREME_DATES_DEPTH) {
+        return TRUE;
+    }
+    return
+        _aux1ExtremeDates(fmt, mid, buf, buflen, cbuf, ec) &&
+        _aux2ExtremeDates(fmt, small, mid, buf, buflen, cbuf, count+1, ec) &&
+        _aux2ExtremeDates(fmt, mid, large, buf, buflen, cbuf, count+1, ec);
+}
+
+/**
+ * http://www.jtcsv.com/cgibin/icu-bugs?findid=3659
+ *
+ * For certain large dates, udat_format crashes on MacOS.  This test
+ * attempts to reproduce this problem by doing a recursive logarithmic*
+ * binary search of a predefined interval (from 'small' to 'large').
+ *
+ * The limit of the search is given by EXTREME_DATES_DEPTH, above.
+ *
+ * *The search has to be logarithmic, not linear.  A linear search of the
+ *  range 0..10^30, for example, will find 0.5*10^30, then 0.25*10^30 and
+ *  0.75*10^30, etc.  A logarithmic search will find 10^15, then 10^7.5
+ *  and 10^22.5, etc.
+ */
+static void TestExtremeDates() {
+    UDateFormat *fmt;
+    UErrorCode ec;
+    UChar buf[256];
+    char cbuf[256];
+    const double small = 1000; /* 1 sec */
+    const double large = 1e+30; /* well beyond usable UDate range */
+
+    /* There is no need to test larger values from 1e+30 to 1e+300;
+       the failures occur around 1e+27, and never above 1e+30. */
+    
+    ec = U_ZERO_ERROR;
+    fmt = udat_open(UDAT_LONG, UDAT_LONG, "en_US",
+                    0, 0, 0, 0, &ec);
+    if (!assertSuccess("udat_open", &ec)) return;
+
+    _aux2ExtremeDates(fmt, small, large, buf, LEN(buf), cbuf, 0, &ec);
+
+    udat_close(fmt);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
