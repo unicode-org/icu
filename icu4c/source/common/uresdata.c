@@ -137,10 +137,10 @@ isAcceptable(void *context,
         pInfo->isBigEndian==U_IS_BIG_ENDIAN &&
         pInfo->charsetFamily==U_CHARSET_FAMILY &&
         pInfo->sizeofUChar==U_SIZEOF_UCHAR &&
-        pInfo->dataFormat[0]==0x55 &&   /* dataFormat="UPro" */
-        pInfo->dataFormat[1]==0x50 &&
-        pInfo->dataFormat[2]==0x72 &&
-        pInfo->dataFormat[3]==0x6f &&
+        pInfo->dataFormat[0]==0x52 &&   /* dataFormat="ResB" */
+        pInfo->dataFormat[1]==0x65 &&
+        pInfo->dataFormat[2]==0x73 &&
+        pInfo->dataFormat[3]==0x42 &&
         pInfo->formatVersion[0]==1;
 }
 
