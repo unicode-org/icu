@@ -163,8 +163,7 @@ void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPos
                 (c >= (UChar)0x0041 && c <= (UChar)0x005A) ||
                 (c >= (UChar)0x0061 && c <= (UChar)0x007A) ||
                 (c >= (UChar)0x0030 && c <= (UChar)0x0039) ||
-                c == (UChar)0x003C || c == (UChar)0x003E ||
-		c == 0x0020) {
+                c == (UChar)0x003C || c == (UChar)0x003E) {
                 buf[ibuf++] = (char) c;
                 // If we go a bit past the longest possible name then abort
                 if (ibuf == (LONGEST_NAME + 4)) {
