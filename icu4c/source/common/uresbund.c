@@ -745,7 +745,6 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
         ures_setIsStackObject(resB, FALSE);
         resB->fResPath = NULL;
         resB->fResPathLen = 0;
-        resB->fRequestedLocale = NULL;
     } else {
         if(resB->fData != NULL) {
             entryClose(resB->fData);
@@ -756,7 +755,6 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
         if(ures_isStackObject(resB) != FALSE) {
             ures_initStackObject(resB);
         }
-        ures_freeRequestedLocale(resB);
         ures_freeResPath(resB);
     }
     resB->fData = realData;
@@ -1288,17 +1286,17 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
             UResourceDataEntry *dataEntry = resB->fData;
             char path[256];
             char* myPath = path;
-            uprv_strncpy(path, resB->fResPath, resB->fResPathLen);
-            /*path[resB->fResPathLen] = '/';*/
-            uprv_strcpy(path+resB->fResPathLen, inKey);
 
-            key = inKey;
             while(res == RES_BOGUS && dataEntry->fParent != NULL) { /* Otherwise, we'll look in parents */
                 dataEntry = dataEntry->fParent;
                 if(dataEntry->fBogus == U_ZERO_ERROR) {
-                    i++;
-                    res = res_findResource(&(dataEntry->fData), dataEntry->fData.rootRes, &myPath, &key); 
-                    /*res = res_getTableItemByKey(&(resB->fData), resB->fData.rootRes, &indexR, resTag);*/
+                  uprv_strncpy(path, resB->fResPath, resB->fResPathLen);
+                  uprv_strcpy(path+resB->fResPathLen, inKey);
+                  myPath = path;
+                  key = inKey;
+                  i++;
+                  res = res_findResource(&(dataEntry->fData), dataEntry->fData.rootRes, &myPath, &key); 
+                  /*res = res_getTableItemByKey(&(resB->fData), resB->fData.rootRes, &indexR, resTag);*/
                 }
             }
             /*const ResourceData *rd = getFallbackData(resB, &key, &realData, &res, status);*/
@@ -1497,11 +1495,7 @@ ures_getLocaleByType(const UResourceBundle* resourceBundle,
         return resourceBundle->fTopLevelData->fName;
         break;
       case ULOC_REQUESTED_LOCALE:
-        parent = resourceBundle;
-        while(parent->fParentRes) {
-          parent = parent->fParentRes;
-        }
-        return parent->fRequestedLocale;
+        return NULL;
         break;
       default:
         *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -1553,13 +1547,6 @@ U_CFUNC void ures_freeResPath(UResourceBundle *resB) {
   }
   resB->fResPath = NULL;
   resB->fResPathLen = 0;
-}
-
-U_CFUNC void ures_freeRequestedLocale(UResourceBundle *resB) {
-  if (resB->fRequestedLocale && resB->fRequestedLocale != resB->fResBuf) {
-    uprv_free(resB->fRequestedLocale);
-  }
-  resB->fRequestedLocale = NULL;
 }
 
 
@@ -1621,14 +1608,6 @@ ures_openFillIn(UResourceBundle *r, const char* path,
         r->fTopLevelData = r->fData;
 
         ures_freeResPath(r);
-        ures_freeRequestedLocale(r);
-        if(uprv_strlen(localeID) >= RES_BUFSIZE) {
-          r->fRequestedLocale = uprv_malloc(uprv_strlen(localeID)+1);
-        } else {
-          r->fRequestedLocale = r->fResBuf;
-        }
-
-        strcpy(r->fRequestedLocale, localeID);
     }
 }
 
@@ -1693,18 +1672,6 @@ ures_open(const char* path,
     /*r->fParent = RES_BOGUS;*/
     r->fSize = res_countArrayItems(&(r->fResData), r->fRes);
     r->fResPath = NULL;
-    if(localeID) {
-      if(uprv_strlen(localeID) >= RES_BUFSIZE) {
-        r->fRequestedLocale = uprv_malloc(uprv_strlen(localeID)+1);
-      } else {
-        r->fRequestedLocale = r->fResBuf;
-      }
-
-      strcpy(r->fRequestedLocale, localeID);
-    } else {
-      r->fRequestedLocale = r->fResBuf;
-      r->fResBuf[0] = 0;
-    }
 
     /*
     if(r->fData->fPath != NULL) {
@@ -1803,13 +1770,6 @@ ures_openDirect(const char* path, const char* localeID, UErrorCode* status) {
     r->fParentRes = NULL;
     r->fTopLevelData = r->fData;
 
-    if(uprv_strlen(localeID) >= RES_BUFSIZE) {
-      r->fRequestedLocale = uprv_malloc(uprv_strlen(localeID)+1);
-    } else {
-      r->fRequestedLocale = r->fResBuf;
-    }
-
-    strcpy(r->fRequestedLocale, localeID);
     return r;
 }
 
@@ -1875,7 +1835,6 @@ ures_close(UResourceBundle*    resB)
             uprv_free(resB->fVersion);
         }
         ures_freeResPath(resB);
-        ures_freeRequestedLocale(resB);
 
         if(ures_isStackObject(resB) == FALSE) {
             uprv_free(resB);

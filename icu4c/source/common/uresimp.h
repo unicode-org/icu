@@ -74,7 +74,6 @@ struct UResourceBundle {
     Resource fRes;
 
     UResourceDataEntry *fTopLevelData; /* for getting the valid locale */
-    char *fRequestedLocale;
     const UResourceBundle *fParentRes; /* needed to get the actual locale for a child resource */
 
 };
