@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2002, International Business Machines
+*   Copyright (C) 1999-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -19,6 +19,7 @@
 #define UCNV_CNV_H
 
 #include "unicode/utypes.h"
+#include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
 #include "ucnv_bld.h"
 #include "ucnvmbcs.h"
@@ -97,6 +98,12 @@ typedef UConverter * (*UConverterSafeClone) (const UConverter   *cnv,
                                              int32_t            *pBufferSize, 
                                              UErrorCode         *status);
 
+/** ### TODO @draft ICU 2.6 */
+typedef void (*UConverterGetUnicodeSet) (const UConverter *cnv,
+                                         USet *set,
+                                         UConverterUnicodeSet which,
+                                         UErrorCode *pErrorCode);
+
 UBool CONVERSION_U_SUCCESS (UErrorCode err);
 
 void ucnv_flushInternalUnicodeBuffer (UConverter * _this,
@@ -149,6 +156,7 @@ struct UConverterImpl {
     UConverterGetName getName;
     UConverterWriteSub writeSub;
     UConverterSafeClone safeClone;
+    UConverterGetUnicodeSet getUnicodeSet; /* ### TODO ICU 2.6 */
 };
 
 extern const UConverterSharedData
@@ -230,5 +238,17 @@ ucnv_getNextUCharFromToUImpl(UConverterToUnicodeArgs *pArgs,
                              T_ToUnicodeFunction toU,
                              UBool collectPairs,
                              UErrorCode *pErrorCode);
+
+U_CFUNC void
+ucnv_getCompleteUnicodeSet(const UConverter *cnv,
+                   USet *set,
+                   UConverterUnicodeSet which,
+                   UErrorCode *pErrorCode);
+
+U_CFUNC void
+ucnv_getNonSurrogateUnicodeSet(const UConverter *cnv,
+                               USet *set,
+                               UConverterUnicodeSet which,
+                               UErrorCode *pErrorCode);
 
 #endif /* UCNV_CNV */

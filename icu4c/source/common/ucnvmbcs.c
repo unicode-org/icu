@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2000-2001, International Business Machines
+*   Copyright (C) 2000-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -43,6 +43,7 @@
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_cb.h"
 #include "unicode/udata.h"
+#include "unicode/uset.h"
 #include "ucnv_bld.h"
 #include "ucnvmbcs.h"
 #include "ucnv_cnv.h"
@@ -398,7 +399,7 @@ _MBCSSizeofFromUBytes(UConverterMBCSTable *mbcsTable) {
 
         for(st1=0; st1<maxStage1; ++st1) {
             st2=table[st1];
-            if(st2!=0) {
+            if(st2>maxStage1) {
                 stage2=table+st2;
                 for(st2=0; st2<64; ++st2) {
                     st3=stage2[st2];
@@ -419,7 +420,7 @@ _MBCSSizeofFromUBytes(UConverterMBCSTable *mbcsTable) {
 
         for(st1=0; st1<maxStage1; ++st1) {
             st2=table[st1];
-            if(st2!=0) {
+            if(st2>(maxStage1>>1)) {
                 stage2=(const uint32_t *)table+st2;
                 for(st2=0; st2<64; ++st2) {
                     st3=stage2[st2]&0xffff;
@@ -449,6 +450,105 @@ _MBCSSizeofFromUBytes(UConverterMBCSTable *mbcsTable) {
             break;
         }
         return maxStage3;
+    }
+}
+
+static void
+_MBCSGetUnicodeSet(const UConverter *cnv,
+                   USet *set,
+                   UConverterUnicodeSet which,
+                   UErrorCode *pErrorCode) {
+    UConverterMBCSTable *mbcsTable;
+    const uint16_t *table;
+
+    uint32_t st3;
+    uint16_t st1, maxStage1, st2;
+
+    UChar32 c;
+
+    if(cnv->options&_MBCS_OPTION_GB18030) {
+        uset_addRange(set, 0, 0xd7ff);
+        uset_addRange(set, 0xe000, 0x10ffff);
+        return;
+    }
+
+    /* enumerate the from-Unicode trie table */
+    mbcsTable=&cnv->sharedData->table->mbcs;
+    table=mbcsTable->fromUnicodeTable;
+    if(mbcsTable->unicodeMask&UCNV_HAS_SUPPLEMENTARY) {
+        maxStage1=0x440;
+    } else {
+        maxStage1=0x40;
+    }
+
+    c=0; /* keep track of the current code point while enumerating */
+
+    if(mbcsTable->outputType==MBCS_OUTPUT_1) {
+        const uint16_t *stage2, *stage3, *results;
+
+        results=(const uint16_t *)mbcsTable->fromUnicodeBytes;
+
+        for(st1=0; st1<maxStage1; ++st1) {
+            st2=table[st1];
+            if(st2>maxStage1) {
+                stage2=table+st2;
+                for(st2=0; st2<64; ++st2) {
+                    if((st3=stage2[st2])!=0) {
+                        /* read the stage 3 block */
+                        stage3=results+st3;
+
+                        /*
+                         * Add code points for which the roundtrip flag is set.
+                         * Once we get a set for fallback mappings, we have to use
+                         * a threshold variable with a value of 0x800.
+                         * See _MBCSSingleFromBMPWithOffsets() and
+                         * MBCS_SINGLE_RESULT_FROM_U() for details.
+                         */
+                        do {
+                            if(*stage3++>=0xf00) {
+                                uset_add(set, c);
+                            }
+                        } while((++c&0xf)!=0);
+                    } else {
+                        c+=16; /* empty stage 3 block */
+                    }
+                }
+            } else {
+                c+=1024; /* empty stage 2 block */
+            }
+        }
+    } else {
+        const uint32_t *stage2;
+
+        for(st1=0; st1<maxStage1; ++st1) {
+            st2=table[st1];
+            if(st2>(maxStage1>>1)) {
+                stage2=(const uint32_t *)table+st2;
+                for(st2=0; st2<64; ++st2) {
+                    if((st3=stage2[st2])!=0) {
+                        /* get the roundtrip flags for the stage 3 block */
+                        st3>>=16;
+
+                        /*
+                         * Add code points for which the roundtrip flag is set.
+                         * Once we get a set for fallback mappings, we have to check
+                         * non-roundtrip stage 3 results for whether they are 0.
+                         * See _MBCSFromUnicodeWithOffsets() for details.
+                         */
+                        do {
+                            if(st3&1) {
+                                uset_add(set, c);
+                            }
+                            st3>>=1;
+                        } while((++c&0xf)!=0);
+                    } else {
+                        c+=16; /* empty stage 3 block */
+                    }
+                }
+            } else {
+                c+=1024; /* empty stage 2 block */
+            }
+        }
     }
 }
 
@@ -3561,7 +3661,9 @@ static const UConverterImpl _MBCSImpl={
 
     _MBCSGetStarters,
     _MBCSGetName,
-    _MBCSWriteSub
+    _MBCSWriteSub,
+    NULL,
+    _MBCSGetUnicodeSet
 };
 
 

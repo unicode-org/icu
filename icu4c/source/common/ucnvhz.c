@@ -20,10 +20,11 @@
 
 #include "cmemory.h"
 #include "unicode/ucnv_err.h"
-#include "ucnv_bld.h"
 #include "unicode/ucnv.h"
-#include "ucnv_cnv.h"
 #include "unicode/ucnv_cb.h"
+#include "unicode/uset.h"
+#include "ucnv_bld.h"
+#include "ucnv_cnv.h"
 
 #define UCNV_TILDE 0x7E          /* ~ */
 #define UCNV_OPEN_BRACE 0x7B     /* { */
@@ -635,7 +636,20 @@ _HZ_SafeClone(const UConverter *cnv,
     return &localClone->cnv;
 }
 
+static void
+_HZ_GetUnicodeSet(const UConverter *cnv,
+                  USet *set,
+                  UConverterUnicodeSet which,
+                  UErrorCode *pErrorCode) {
+    /* the tilde '~' is hardcoded in the converter */
+    uset_add(set, 0x7e);
 
+    /* add all of the code points that the sub-converter handles */
+    ((UConverterDataHZ*)cnv->extraInfo)->
+        gbConverter->sharedData->impl->
+            getUnicodeSet(((UConverterDataHZ*)cnv->extraInfo)->gbConverter,
+                          set, which, pErrorCode);
+}
 
 static const UConverterImpl _HZImpl={
 
@@ -657,7 +671,8 @@ static const UConverterImpl _HZImpl={
     NULL,
     NULL,
     _HZ_WriteSub,
-    _HZ_SafeClone
+    _HZ_SafeClone,
+    _HZ_GetUnicodeSet
 };
 
 static const UConverterStaticData _HZStaticData={

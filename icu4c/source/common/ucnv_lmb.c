@@ -519,7 +519,11 @@ static const UConverterImpl _LMBCSImpl##n={\
     _LMBCSFromUnicode,\
     _LMBCSFromUnicode,\
     _LMBCSGetNextUChar,\
-    NULL\
+    NULL,\
+    NULL,\
+    NULL,\
+    NULL,\
+    ucnv_getCompleteUnicodeSet\
 };\
 static const UConverterStaticData _LMBCSStaticData##n={\
   sizeof(UConverterStaticData),\
