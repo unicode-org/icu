@@ -115,11 +115,19 @@
         <property name="richedit.jar.file" value="${richedit.dir}/richedit.jar"/>
         <property name="richedit.zip.file" value="${richedit.dir}/richedit.zip"/>
         <property name="richedit.manifest" value="${src.dir}/com/ibm/richtext/manifest.stub"/>
+        
+        <!-- Load environment variables -->
+        <property environment="env"/>
+
+        <!-- Capture the computer name in a cross-platform manner -->
+        <property name="env.COMPUTERNAME" value="${env.HOSTNAME}"/>
+
         <mkdir dir="${build.dir}"/>
         <echo message="java home: ${java.home}"/>
         <echo message="java version: ${java.version}"/>
         <echo message="ant java version: ${ant.java.version}"/>
         <echo message="${ant.version}"/>
+        <echo message="${env.COMPUTERNAME} with ${os.name} ${os.version} on ${os.arch}"/>
         <echo message="clover initstring = '${clover.initstring}'"/>
 
         <uptodate property="icu4j.resources" targetfile="${src.dir}/com/ibm/icu/impl/data">
