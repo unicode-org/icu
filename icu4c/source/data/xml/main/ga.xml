@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE ldml SYSTEM "http://www.unicode.org/cldr/dtd/1.1/ldml.dtd">
+<!DOCTYPE ldml SYSTEM " 	http://www.unicode.org/cldr/dtd/1.1/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " http://www.unicode.org/cldr/dtd/1.1/ldmlICU.dtd"> 
+%icu;
+]
+>
 <ldml>
 	<identity>
-		<version number="1.1"/>
+		<version number="2.0"/>
 		<generation date="2004-05-27" />
 		<language type="ga" /> 
 	</identity>
@@ -374,6 +379,11 @@
 	</localeDisplayNames>
 	<characters>
 		<exemplarCharacters>[a-z á é í ó ú]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Latn</icu:script>
+			</icu:scripts>
+		</special>
 	</characters>
 	<dates>
 		<localizedPatternChars>RbMLkUnsSElFtTauKcBeyrAC</localizedPatternChars>
@@ -2002,4 +2012,275 @@
 			</currency>
 		</currencies>
 	</numbers>
+	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+		<icu:ruleBasedNumberFormats>
+			<icu:ruleBasedNumberFormat type="spellout">
+%default:
+-x: míneas &gt;&gt;;
+x.x: &lt;&lt; pointe &gt;&gt;;
+a náid; a haon; a dó; a trí; a ceathair; a cúig;
+a sé; a seacht; a hocht; a naoi; a deich;
+a haon déag; a dó dhéag;
+&gt;&gt; déag;
+20: fiche[ &gt;&gt;];
+30: tríocha[ &gt;&gt;];
+40: daichead[ &gt;&gt;];
+50: caoga[ &gt;&gt;];
+60: seasca[ &gt;&gt;];
+70: seachtó[ &gt;&gt;];
+80: ochtó[ &gt;&gt;];
+90: nócha[ &gt;&gt;];
+100: &lt;%%hundreds&lt;[ &gt;%%hundreds_is&gt;];
+1,000: &lt;%%thousands&lt;[, &gt;&gt;];
+1,000,000: &lt;%%millions&lt;[, &gt;&gt;];
+1,000,000,000: &lt;%%billions&lt;[, &gt;&gt;];
+1,000,000,000,000: &lt;%%trillions&lt;[, &gt;&gt;];
+1,000,000,000,000,000: =#,##0=;
+%%cardwithnumber: ; aon; dhá; trí; ceithre; cúig; sé; seacht; ocht; naoi; deich;
+ aon; dhá; trí; ceithre; cúig; sé; seacht; ocht; naoi;
+20: fiche[ is &gt;&gt;];
+30: tríocha[ is &gt;&gt;];
+40: daichead[ is &gt;&gt;];
+50: caoga[ is &gt;&gt;];
+60: seasca[ is &gt;&gt;];
+70: seachtó[ is &gt;&gt;];
+80: ochtó[ is &gt;&gt;];
+90: nócha[ is &gt;&gt;];
+100: &lt;%%hundreds&lt;[ &gt;%%hundreds_is&gt;];
+1,000: &lt;%%thousands&lt;[ &gt;%%cardwithnumber&gt;];
+1,000,000: &lt;%%millions&lt;[ &gt;%%cardwithnumber&gt;];
+1,000,000,000: &lt;%%billions&lt;[ &gt;%%cardwithnumber&gt;];
+1,000,000,000: &lt;%%trillions&lt;[ &gt;%%cardwithnumber&gt;];
+1,000,000,000,000,000: =#,##0=;
+%%hundreds:
+1: céad;
+2: &lt;%%cardwithnumber&lt; chéad;
+7: &lt;%%cardwithnumber&lt; gcéad;
+%%hundreds_is:
+0:;
+=%default=;
+20: is =%default=;
+21: =%default=;
+30: is =%default=;
+31: =%default=;
+40: is =%default=;
+41: =%default=;
+50: is =%default=;
+51: =%default=;
+60: is =%default=;
+61: =%default=;
+70: is =%default=;
+71: =%default=;
+80: is =%default=;
+81: =%default=;
+90: is =%default=;
+91: =%default=;
+%%thousands:
+0: míle;
+2: &lt;%%cardwithnumber&lt; mhíle;
+7: &lt;%%cardwithnumber&lt; míle;
+11&gt;: &lt;%%cardwithnumber&lt; mhíle dhéag;
+17&gt;: &lt;%%cardwithnumber&lt; míle dhéag;
+20&gt;: &lt;%%cardwithnumber&lt; míle;
+21&gt;: &lt;%%cardwithnumber&lt; mhíle;
+27&gt;: &lt;%%cardwithnumber&lt; míle;
+31&gt;: &lt;%%cardwithnumber&lt; mhíle;
+37&gt;: &lt;%%cardwithnumber&lt; míle;
+41&gt;: &lt;%%cardwithnumber&lt; mhíle;
+47&gt;: &lt;%%cardwithnumber&lt; míle;
+51&gt;: &lt;%%cardwithnumber&lt; mhíle;
+57&gt;: &lt;%%cardwithnumber&lt; míle;
+61&gt;: &lt;%%cardwithnumber&lt; mhíle;
+67&gt;: &lt;%%cardwithnumber&lt; míle;
+71&gt;: &lt;%%cardwithnumber&lt; mhíle;
+77&gt;: &lt;%%cardwithnumber&lt; míle;
+81&gt;: &lt;%%cardwithnumber&lt; mhíle;
+87&gt;: &lt;%%cardwithnumber&lt; míle;
+91&gt;: &lt;%%cardwithnumber&lt; mhíle;
+97&gt;: &lt;%%cardwithnumber&lt; míle;
+   100: &lt;%%hundreds&lt; &gt;%%thousands_is&gt;;
+%%thousands_is:
+0: míle;
+1: is =%%cardwithnumber= mhíle;
+7: is =%%cardwithnumber= míle;
+11&gt;: is &lt;%%thousands&lt;;
+20: is =%%thousands=;
+21: =%%thousands=;
+30: is =%%thousands=;
+31: =%%thousands=;
+40: is =%%thousands=;
+41: =%%thousands=;
+50: is =%%thousands=;
+51: =%%thousands=;
+60: is =%%thousands=;
+61: =%%thousands=;
+70: is =%%thousands=;
+71: =%%thousands=;
+80: is =%%thousands=;
+81: =%%thousands=;
+90: is =%%thousands=;
+91: =%%thousands=;
+%%millions:
+1: milliún;
+2: &lt;%%cardwithnumber&lt; mhilliún;
+7: &lt;%%cardwithnumber&lt; milliún;
+11&gt;: &lt;%%cardwithnumber&lt; mhilliún déag;
+17&gt;: &lt;%%cardwithnumber&lt; milliún déag;
+20&gt;: &lt;%%cardwithnumber&lt; milliún;
+21&gt;: &lt;%%cardwithnumber&lt; mhilliún;
+27&gt;: &lt;%%cardwithnumber&lt; milliún;
+31&gt;: &lt;%%cardwithnumber&lt; mhilliún;
+37&gt;: &lt;%%cardwithnumber&lt; milliún;
+41&gt;: &lt;%%cardwithnumber&lt; mhilliún;
+47&gt;: &lt;%%cardwithnumber&lt; milliún;
+51&gt;: &lt;%%cardwithnumber&lt; mhilliún;
+57&gt;: &lt;%%cardwithnumber&lt; milliún;
+61&gt;: &lt;%%cardwithnumber&lt; mhilliún;
+67&gt;: &lt;%%cardwithnumber&lt; milliún;
+71&gt;: &lt;%%cardwithnumber&lt; mhilliún;
+77&gt;: &lt;%%cardwithnumber&lt; milliún;
+81&gt;: &lt;%%cardwithnumber&lt; mhilliún;
+87&gt;: &lt;%%cardwithnumber&lt; milliún;
+91&gt;: &lt;%%cardwithnumber&lt; mhilliún;
+97&gt;: &lt;%%cardwithnumber&lt; milliún;
+   100: &lt;%%hundreds&lt; &gt;%%millions_is&gt;;
+%%millions_is:
+0: milliún;
+1: is =%%cardwithnumber= mhilliún;
+7: is =%%cardwithnumber= milliún;
+11&gt;: is &lt;%%millions&lt;;
+20: is =%%millions=;
+21: =%%millions=;
+30: is =%%millions=;
+31: =%%millions=;
+40: is =%%millions=;
+41: =%%millions=;
+50: is =%%millions=;
+51: =%%millions=;
+60: is =%%millions=;
+61: =%%millions=;
+70: is =%%millions=;
+71: =%%millions=;
+80: is =%%millions=;
+81: =%%millions=;
+90: is =%%millions=;
+91: =%%millions=;
+%%billions:
+1: billiún; &lt;%%cardwithnumber&lt; billiún;
+11&gt;: &lt;%%cardwithnumber&lt; billiún déag;
+20&gt;: &lt;%%cardwithnumber&lt; billiún;
+100: &lt;%%hundreds&lt; &gt;%%billions_is&gt;;
+%%billions_is:
+0: billiún;
+1: is =%%cardwithnumber= billiún;
+7: is =%%cardwithnumber= billiún;
+11&gt;: is &lt;%%billions&lt;;
+20: is =%%billions=;
+21: =%%billions=;
+30: is =%%billions=;
+31: =%%billions=;
+40: is =%%billions=;
+41: =%%billions=;
+50: is =%%billions=;
+51: =%%billions=;
+60: is =%%billions=;
+61: =%%billions=;
+70: is =%%billions=;
+71: =%%billions=;
+80: is =%%billions=;
+81: =%%billions=;
+90: is =%%billions=;
+91: =%%billions=;
+%%trillions:
+1: milliún;
+2: &lt;%%cardwithnumber&lt; thrilliún;
+7: &lt;%%cardwithnumber&lt; dtrilliún;
+11&gt;: &lt;%%cardwithnumber&lt; thrilliún déag;
+17&gt;: &lt;%%cardwithnumber&lt; dtrilliún déag;
+20&gt;: &lt;%%cardwithnumber&lt; dtrilliún;
+21&gt;: &lt;%%cardwithnumber&lt; thrilliún;
+27&gt;: &lt;%%cardwithnumber&lt; dtrilliún;
+31&gt;: &lt;%%cardwithnumber&lt; thrilliún;
+37&gt;: &lt;%%cardwithnumber&lt; dtrilliún;
+41&gt;: &lt;%%cardwithnumber&lt; thrilliún;
+47&gt;: &lt;%%cardwithnumber&lt; dtrilliún;
+51&gt;: &lt;%%cardwithnumber&lt; thrilliún;
+57&gt;: &lt;%%cardwithnumber&lt; dtrilliún;
+61&gt;: &lt;%%cardwithnumber&lt; thrilliún;
+67&gt;: &lt;%%cardwithnumber&lt; dtrilliún;
+71&gt;: &lt;%%cardwithnumber&lt; thrilliún;
+77&gt;: &lt;%%cardwithnumber&lt; dtrilliún;
+81&gt;: &lt;%%cardwithnumber&lt; thrilliún;
+87&gt;: &lt;%%cardwithnumber&lt; dtrilliún;
+91&gt;: &lt;%%cardwithnumber&lt; thrilliún;
+97&gt;: &lt;%%cardwithnumber&lt; dtrilliún;
+   100: &lt;%%hundreds&lt; &gt;%%trillions_is;
+%%trillions_is:
+0: trilliún;
+1: is =%%cardwithnumber= thrilliún;
+7: is =%%cardwithnumber= dtrilliún;
+11&gt;: is &lt;%%trillions&lt;;
+20: is =%%trillions=;
+21: =%%trillions=;
+30: is =%%trillions=;
+31: =%%trillions=;
+40: is =%%trillions=;
+41: =%%trillions=;
+50: is =%%trillions=;
+51: =%%trillions=;
+60: is =%%trillions=;
+61: =%%trillions=;
+70: is =%%trillions=;
+71: =%%trillions=;
+80: is =%%trillions=;
+81: =%%trillions=;
+90: is =%%trillions=;
+91: =%%trillions=;
+%%lenient-parse:
+&amp; ' ' , ',' ;
+
+			</icu:ruleBasedNumberFormat>
+			<icu:ruleBasedNumberFormat type="duration">
+%with-words:
+=0= soicind;
+60/60: &lt;%%min&lt;[, &gt;&gt;];
+3600/60: &lt;%%hr&lt;[, &gt;&gt;&gt;];
+%%min:
+=0= nóiméad;
+%%hr:
+0: =0= uair;
+3: =0= huaire;
+5: =0= uaire;
+6: =0= huaire;
+7: =0= n-uaire;
+10: =0= n-uair;
+11: =0= &gt;%%uaire&gt;;
+20: =0= uair; =0= &gt;%%uaire&gt;;
+%%uaire:
+1: uair;
+3: huaire;
+5: uaire;
+6: huaire;
+7: n-uaire;
+%hms:
+0: :=00=;
+60/60: :&lt;00&lt;&gt;&gt;&gt;;
+3600/60: &lt;#,##0&lt;&gt;&gt;&gt;;
+%in-numerals:
+=0=s;
+60: =%%min-sec=;
+3600: =%%hr-min-sec=;
+%%min-sec:
+0: :=00=;
+60/60: &lt;0&lt;&gt;&gt;;
+%%hr-min-sec:
+0: :=00=;
+60/60: &lt;00&lt;&gt;&gt;;
+3600/60: &lt;#,##0&lt;:&gt;&gt;&gt;;
+%%lenient-parse:
+&amp; ':' = '.' = ' ' = '-';
+
+			</icu:ruleBasedNumberFormat>
+		</icu:ruleBasedNumberFormats>
+	</special>
 </ldml>
