@@ -1212,18 +1212,12 @@ void MultithreadTest::TestCollators()
     UErrorCode status = U_ZERO_ERROR;
     FILE *testFile = NULL;
     char testDataPath[1024];
-    strcpy(testDataPath, IntlTest::loadTestData(status));
+    strcpy(testDataPath, IntlTest::getSourceTestData(status));
     char* index = 0;
     if (U_FAILURE(status)) {
         errln("ERROR: could not open test data %s", u_errorName(status));
         return;
     }
-    index=strrchr(testDataPath,(char)U_FILE_SEP_CHAR);
-
-    if((unsigned int)(index-testDataPath) != (strlen(testDataPath)-1)){
-        *(index+1)=0;
-    }
-    strcat(testDataPath,".."U_FILE_SEP_STRING);
     strcat(testDataPath, "CollationTest_");
 
     const char* type = "NON_IGNORABLE";

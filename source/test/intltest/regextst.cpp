@@ -1336,27 +1336,15 @@ void RegexTest::API_Pattern() {
 const char *
 RegexTest::getPath(char buffer[2048], const char *filename) {
     UErrorCode status=U_ZERO_ERROR;
-    const char *testDataDirectory = loadTestData(status);
+    const char *testDataDirectory = IntlTest::getSourceTestData(status);
     if (U_FAILURE(status)) {
         errln("ERROR: loadTestData() failed - %s", u_errorName(status));
 	    return NULL;
     }
 
-    const char *folder=U_FILE_SEP_STRING "out" U_FILE_SEP_STRING "testdata";
-    const char *outTestdata=strstr(testDataDirectory, folder);
-    if(outTestdata!=NULL) {
-        /* skip the initial '/' */
-        outTestdata+=strlen(U_FILE_SEP_STRING);
-        int32_t length=outTestdata-testDataDirectory;
-
-        /* replace the trailing folder with the filename */
-        memcpy(buffer, testDataDirectory, length);
-        strcpy(buffer+length, filename);
-        return buffer;
-    } else {
-        errln("Could not find test data file %s because test data directory does not contain %s", filename, folder);
-        return NULL;
-    }
+    strcpy(buffer, testDataDirectory);
+    strcat(buffer, filename);
+    return buffer;
 }
 
 void RegexTest::Extended() {
