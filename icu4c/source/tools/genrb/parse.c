@@ -498,7 +498,13 @@ parseUCARules(char *tag, uint32_t startline, UErrorCode *status)
         }
     }
 
+	/* terminate the string */
+    if(target < targetLimit){
+        *target = 0x0000;
+    }
+
     result = string_open(bundle, tag, pTarget, (int32_t)(target - pTarget), NULL, status);
+
 
     ucbuf_close(ucbuf);
     uprv_free(pTarget);
