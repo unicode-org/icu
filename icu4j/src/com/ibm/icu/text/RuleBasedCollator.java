@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $ 
-* $Date: 2002/11/21 23:14:52 $ 
-* $Revision: 1.25 $
+* $Date: 2002/11/22 00:08:32 $ 
+* $Revision: 1.26 $
 *
 *******************************************************************************
 */
@@ -3631,8 +3631,9 @@ public final class RuleBasedCollator extends Collator
         m_ContInfo_ = new ContractionInfo();
       }
       char ch = 0;
-      StringBuffer sCh = new StringBuffer();
-      CollationElementIterator it = getCollationElementIterator(sCh.toString());
+      //StringBuffer sCh = new StringBuffer();
+      //CollationElementIterator it = getCollationElementIterator(sCh.toString());
+      CollationElementIterator it = getCollationElementIterator("");
     
       shiftValues s = new shiftValues();
       int CE = 0;
@@ -3653,9 +3654,10 @@ public final class RuleBasedCollator extends Collator
         } else {
           switch (RuleBasedCollator.getTag(CE)) {
           case CollationElementIterator.CE_EXPANSION_TAG_:
-            sCh.delete(0, sCh.length());
-            sCh.append(ch);
-            it.setText(sCh.toString());
+            //sCh.delete(0, sCh.length());
+            //sCh.append(ch);
+            //it.setText(sCh.toString());
+            it.setText(Character.toString(ch));
             while((CE = it.next()) != CollationElementIterator.NULLORDER) {
               if(s.primShift < 0 || s.secShift < 0 || s.terShift < 0) {
                 latinOneCEs_[ch] = BAIL_OUT_CE_;
