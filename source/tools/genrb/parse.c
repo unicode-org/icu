@@ -28,6 +28,7 @@
 #include "ustr.h"
 #include "list.h"
 #include "rblist.h"
+#include "ustring.h"
 
 /* Node IDs for the state transition table. */
 enum ENode {
