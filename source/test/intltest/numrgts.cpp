@@ -1901,7 +1901,7 @@ void NumberFormatRegressionTest::Test4170798(void) {
  * toPattern only puts the first grouping separator in.
  */
 void NumberFormatRegressionTest::Test4176114(void) {
-    char* DATA[] = {
+    const char* DATA[] = {
         "00", "#00",
         "000", "#000", // No grouping
         "#000", "#000", // No grouping
@@ -1933,7 +1933,7 @@ void NumberFormatRegressionTest::Test4176114(void) {
  * DecimalFormat is incorrectly rounding numbers like 1.2501 to 1.2
  */
 void NumberFormatRegressionTest::Test4179818(void) {
-    char* DATA[] = {
+    const char* DATA[] = {
         // Input  Pattern  Expected output
         "1.2511", "#.#",   "1.3",
         "1.2501", "#.#",   "1.3",
@@ -2067,7 +2067,7 @@ void NumberFormatRegressionTest::Test4212072(void) {
     // trip properly.  Test stream in/out integrity too.
     int32_t n;
     const Locale* avail = NumberFormat::getAvailableLocales(n);
-    static char* type[] = {
+    static const char* type[] = {
         "",
         "$ ",
         "% ",
@@ -2178,8 +2178,8 @@ void NumberFormatRegressionTest::Test4216742(void) {
  * digits.
  */
 void NumberFormatRegressionTest::Test4217661(void) {
-    double D[] = {  0.001, 1.001, 0.006,  1.006 };
-    char*  S[] = { "0",   "1",   "0.01", "1.01" };
+    const double D[] = {  0.001, 1.001, 0.006,  1.006 };
+    const char*  S[] = { "0",   "1",   "0.01", "1.01" };
     int D_length = sizeof(D) / sizeof(D[0]);
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *fmt = NumberFormat::createInstance(Locale::US, status);
@@ -2227,8 +2227,8 @@ void NumberFormatRegressionTest::Test4243011(void) {
     DecimalFormat fmt(UnicodeString("0."), sym, status);
     failure(status, "DecimalFormat ct");
 
-    double NUM[] = {  -2.5,  -1.5,  -0.5,  0.5,  1.5,  2.5,  3.5,  4.5 };
-    char*  STR[] = { "-2.", "-2.", "-0.", "0.", "2.", "2.", "4.", "4." };
+    const double NUM[] = {  -2.5,  -1.5,  -0.5,  0.5,  1.5,  2.5,  3.5,  4.5 };
+    const char*  STR[] = { "-2.", "-2.", "-0.", "0.", "2.", "2.", "4.", "4." };
     int32_t  N   = sizeof(NUM) / sizeof(NUM[0]);
 
     for (int32_t i=0; i<N; ++i) {

@@ -88,7 +88,7 @@ NumberFormatTest::TestExponential(void)
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols sym(Locale::US, status);
     if (U_FAILURE(status)) { errln("FAIL: Bad status returned by DecimalFormatSymbols ct"); return; }
-    char* pat[] = { "0.####E0", "00.000E00", "##0.######E000", "0.###E0;[0.###E0]"  };
+    const char* pat[] = { "0.####E0", "00.000E00", "##0.######E000", "0.###E0;[0.###E0]"  };
     int32_t pat_length = sizeof(pat) / sizeof(pat[0]);
 
 // The following #if statements allow this test to be built and run on
@@ -102,7 +102,7 @@ NumberFormatTest::TestExponential(void)
 #if DBL_MAX_10_EXP > 300
     double val[] = { 0.01234, 123456789, 1.23e300, -3.141592653e-271 };
     int32_t val_length = sizeof(val) / sizeof(val[0]);
-    char* valFormat[] =
+    const char* valFormat[] =
     {
         // 0.####E0
         "1.234E-2", "1.2346E8", "1.23E300", "-3.1416E-271",
@@ -152,7 +152,7 @@ NumberFormatTest::TestExponential(void)
 
     int32_t lval[] = { 0, -1, 1, 123456789 };
     int32_t lval_length = sizeof(lval) / sizeof(lval[0]);
-    char* lvalFormat[] =
+    const char* lvalFormat[] =
     {
         // 0.####E0
         "0E0", "-1E0", "1E0", "1.2346E8",
@@ -580,8 +580,8 @@ void NumberFormatTest::TestScientific(void) {
     CHECK(status, "DecimalFormatSymbols constructor");
 
     // Test pattern round-trip
-    char* PAT[] = { "#E0", "0.####E0", "00.000E00", "##0.####E000",
-                    "0.###E0;[0.###E0]" };
+    const char* PAT[] = { "#E0", "0.####E0", "00.000E00", "##0.####E000",
+                          "0.###E0;[0.###E0]" };
     int32_t PAT_length = sizeof(PAT) / sizeof(PAT[0]);
     int32_t DIGITS[] = {
         // min int, max int, min frac, max frac
