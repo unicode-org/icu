@@ -233,9 +233,10 @@ static const u_sprintf_info g_u_sprintf_infos[108] = {
 
 /* buffer size for formatting */
 #define USPRINTF_BUFFER_SIZE 1024
-#define USPRINTF_EXP_BUFFER_SIZE 8
+#define USPRINTF_SYMBOL_BUFFER_SIZE 8
 
-static UChar gNullStr[] = {0x28, 0x6E, 0x75, 0x6C, 0x6C, 0x29, 0}; /* (null) */
+static UChar gNullStr[] = {0x28, 0x6E, 0x75, 0x6C, 0x6C, 0x29, 0}; /* "(null)" */
+static UChar gSpaceStr[] = {0x20, 0}; /* " " */
 
 U_CAPI int32_t U_EXPORT2
 u_sprintf(UChar       *buffer,
@@ -412,6 +413,37 @@ u_sprintf_pad_and_justify(u_localized_string *output,
     return written;
 }
 
+/* Sets the sign of a format based on u_sprintf_spec_info */
+/* TODO: Is setting the prefix symbol to a positive sign a good idea in all locales? */
+static void
+u_sprintf_set_sign(UNumberFormat        *format,
+                   const u_sprintf_spec_info     *info,
+                   UErrorCode *status)
+{
+    if(info->fShowSign) {
+        if (info->fSpace) {
+            /* Setting UNUM_PLUS_SIGN_SYMBOL affects the exponent too. */
+            /* unum_setSymbol(format, UNUM_PLUS_SIGN_SYMBOL, gSpaceStr, 1, &status); */
+            unum_setTextAttribute(format, UNUM_POSITIVE_PREFIX, gSpaceStr, 1, status);
+        }
+        else {
+            UChar plusSymbol[USPRINTF_SYMBOL_BUFFER_SIZE];
+            int32_t symbolLen;
+
+            symbolLen = unum_getSymbol(format,
+                UNUM_PLUS_SIGN_SYMBOL,
+                plusSymbol,
+                sizeof(plusSymbol)/sizeof(*plusSymbol),
+                status);
+            unum_setTextAttribute(format,
+                UNUM_POSITIVE_PREFIX,
+                plusSymbol,
+                symbolLen,
+                status);
+        }
+    }
+}
+
 /* handle a '%' */
 
 int32_t
@@ -522,16 +554,16 @@ u_sprintf_integer_handler(u_localized_string *output,
             format           = u_locbund_getNumberFormat(output->fBundle);
         }
 
-        /* set whether to show the sign*/
-        /* {sfb} TODO */
+        u_sprintf_set_sign(format, info, &status);
     }
 
     /* format the number */
     unum_format(format, num, result, USPRINTF_BUFFER_SIZE, 0, &status);
 
     /* restore the number format */
-    if(minDigits != -1)
+    if(minDigits != -1) {
         unum_setAttribute(format, UNUM_MIN_INTEGER_DIGITS, minDigits);
+    }
 
     return u_sprintf_pad_and_justify(output, info, result, u_strlen(result));
 }
@@ -679,10 +711,7 @@ u_sprintf_double_handler(u_localized_string *output,
     }
 
     /* set whether to show the sign */
-    if(info->fShowSign) {
-        /* set whether to show the sign*/
-        /* {sfb} TODO */
-    }
+    u_sprintf_set_sign(format, info, &status);
 
     /* format the number */
     unum_formatDouble(format, num, result, USPRINTF_BUFFER_SIZE, 0, &status);
@@ -749,7 +778,6 @@ u_sprintf_pointer_handler(u_localized_string *output,
     return u_sprintf_pad_and_justify(output, info, result, len);
 }
 
-
 int32_t
 u_sprintf_scientific_handler(u_localized_string *output,
                              const u_sprintf_spec_info     *info,
@@ -761,9 +789,9 @@ u_sprintf_scientific_handler(u_localized_string *output,
     int32_t        minDecimalDigits;
     int32_t        maxDecimalDigits;
     UErrorCode        status        = U_ZERO_ERROR;
-    UChar srcExpBuf[USPRINTF_EXP_BUFFER_SIZE];
+    UChar srcExpBuf[USPRINTF_SYMBOL_BUFFER_SIZE];
     int32_t srcLen, expLen;
-    UChar expBuf[USPRINTF_EXP_BUFFER_SIZE];
+    UChar expBuf[USPRINTF_SYMBOL_BUFFER_SIZE];
 
 
     /* mask off any necessary bits */
@@ -837,10 +865,7 @@ u_sprintf_scientific_handler(u_localized_string *output,
     }
 
     /* set whether to show the sign */
-    if(info->fShowSign) {
-        /* set whether to show the sign*/
-        /* {sfb} TODO */
-    }
+    u_sprintf_set_sign(format, info, &status);
 
     /* format the number */
     unum_formatDouble(format, num, result, USPRINTF_BUFFER_SIZE, 0, &status);
@@ -965,10 +990,7 @@ u_sprintf_percent_handler(u_localized_string *output,
     }
 
     /* set whether to show the sign */
-    if(info->fShowSign) {
-        /* set whether to show the sign*/
-        /* {sfb} TODO */
-    }
+    u_sprintf_set_sign(format, info, &status);
 
     /* format the number */
     unum_formatDouble(format, num, result, USPRINTF_BUFFER_SIZE, 0, &status);
@@ -1039,10 +1061,7 @@ u_sprintf_currency_handler(u_localized_string *output,
     }
 
     /* set whether to show the sign */
-    if(info->fShowSign) {
-        /* set whether to show the sign*/
-        /* {sfb} TODO */
-    }
+    u_sprintf_set_sign(format, info, &status);
 
     /* format the number */
     unum_formatDouble(format, num, result, USPRINTF_BUFFER_SIZE, 0, &status);
@@ -1221,10 +1240,7 @@ u_sprintf_spellout_handler(u_localized_string *output,
     }
 
     /* set whether to show the sign */
-    if(info->fShowSign) {
-        /* set whether to show the sign*/
-        /* {sfb} TODO */
-    }
+    u_sprintf_set_sign(format, info, &status);
 
     /* format the number */
     unum_formatDouble(format, num, result, USPRINTF_BUFFER_SIZE, 0, &status);
