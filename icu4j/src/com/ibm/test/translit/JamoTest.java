@@ -179,7 +179,8 @@ public class JamoTest extends TransliteratorTest {
         "\ud68c\uc0ac\uc640 \uac19\uc740 \uc5c5\uacc4 " +
         "\uc120\ub450\uc8fc\uc790\uc5d0 \uc758\ud574 " +
         "\ucc44\ud0dd\ub418\uc5c8\uc2b5\ub2c8\ub2e4. \uc720\ub2c8\ucf54\ub4dc\ub294 " +
-        // "XML, Java, ECMAScript(JavaScript), LDAP, CORBA 3.0, WML " + "\ub4f1\uacfc " +
+        // "XML, Java, ECMAScript(JavaScript), LDAP, CORBA 3.0, WML " +
+        "\ub4f1\uacfc " +
         "\uac19\uc774 \ud604\uc7ac \ub110\ub9ac \uc0ac\uc6a9\ub418\ub294 " +
         "\ud45c\uc900\uc5d0\uc11c \ud544\uc694\ud558\uba70 \uc774\ub294 ISO/IEC " +
         "10646\uc744 \uad6c\ud604\ud558\ub294 \uacf5\uc2dd\uc801\uc778 " +
