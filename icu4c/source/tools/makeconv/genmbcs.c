@@ -571,6 +571,10 @@ MBCSAddToUnicode(MBCSData *mbcsData,
             case 16|MBCS_STATE_VALID_16_PAIR:
                 /* bits 26..16 are not used, 0 */
                 /* bits 15..7 contain the final offset delta to two 16-bit code units */
+                if(UTF_IS_FIRST_SURROGATE(c)) {
+                    fprintf(stderr, "error: cannot assign single first surrogate to surrogate-pair state: %lx (U+%lx)\n", b, c);
+                    return FALSE;
+                }
                 offset+=(uint16_t)entry>>7;
                 if(isFallback>0) {
                     /* assign only if there is no precise mapping */
