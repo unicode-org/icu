@@ -441,8 +441,7 @@ propListNames[]={
     "Other_Default_Ignorable_Code_Point",
     "Deprecated",
     "Soft_Dotted",
-    "Logical_Order_Exception",
-    "Other_Case_Ignorable"
+    "Logical_Order_Exception"
 };
 
 static void
