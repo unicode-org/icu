@@ -452,10 +452,8 @@ U_CFUNC void UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs 
             /* only DBCS or SBCS characters are expected*/
             /* DB haracters with high bit set to 1 are expected */
             if(length > 2 || length==0 ||(((targetUniChar & 0x8080) != 0x8080)&& length==2)){
-                reason =UCNV_UNASSIGNED;
-                *err =U_INVALID_CHAR_FOUND;
+                targetUniChar= missingCharMarker;
             }
- 
             if (targetUniChar != missingCharMarker){
                myConverterData->isTargetUCharDBCS = isTargetUCharDBCS = (UBool)(targetUniChar>0x00FF);     
                  if(oldIsTargetUCharDBCS != isTargetUCharDBCS || !myConverterData->isEscapeAppended ){
@@ -509,7 +507,11 @@ U_CFUNC void UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs 
                 }
             }
             else{
-                
+                /* oops.. the code point is unassingned
+                 * set the error and reason
+                 */
+                reason =UCNV_UNASSIGNED;
+                *err =U_INVALID_CHAR_FOUND;
                 /*Handle surrogates */
                 /*check if the char is a First surrogate*/
                 if(UTF_IS_SURROGATE(mySourceChar)) {
@@ -524,7 +526,8 @@ getTrail:
                                 ++mySourceIndex;
                                 mySourceChar=UTF16_GET_PAIR_VALUE(args->converter->fromUSurrogateLead, trail);
                                 args->converter->fromUSurrogateLead=0x00;
-                                /* convert this surrogate code point */
+                                /* there are no surrogates in GB2312*/
+                                reason=UCNV_UNASSIGNED;
                                 /* exit this condition tree */
                             } else {
                                 /* this is an unmatched lead code unit (1st surrogate) */
