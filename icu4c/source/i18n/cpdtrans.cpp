@@ -18,6 +18,9 @@ static const UChar ID_SEP   = 0x002D; /*-*/
 static const UChar ID_DELIM = 0x003B; /*;*/
 static const UChar NEWLINE  = 10;
 
+// Empty string
+static const UChar EMPTY[] = {0}; //""
+
 U_NAMESPACE_BEGIN
 
 /**
@@ -365,12 +368,12 @@ void CompoundTransliterator::handleTransliterate(Replaceable& text, UTransPositi
      * of transliterator i+1.  Finally, the overall limit is fixed
      * up before we return.
      *
-     * Assumptions we make here:
-     * (1) contextStart <= start <= limit ;cursor valid on entry
+     * Assumptions we make for each call to filteredTransliterate:
+     * (1) contextStart <= start <= limit <= contextLimit
      * (2) start <= start' <= limit' ;cursor doesn't move back
      * (3) start <= limit'           ;text before start unchanged
-     * - start' is the value of start after calling handleKT
-     * - limit' is the value of limit after calling handleKT
+     * - start' is the value of start after calling filteredTransliterate
+     * - limit' is the value of limit after calling filteredTransliterate
      */
 
     /**
@@ -418,6 +421,30 @@ void CompoundTransliterator::handleTransliterate(Replaceable& text, UTransPositi
     // operation.
     int32_t compoundStart = index.start;
     
+    // Rollback may be required.  Consider a compound
+    // transliterator with two or more transliterators in it.  For
+    // discussion purposes, assume that the first transliterator
+    // processes the '^' character in conjunction with other
+    // characters, and when it sees an isolated '^' it deletes it.
+    // Suppose the second transliterator generated '^' characters
+    // and backs up before them as part of its processing.  During
+    // incremental transliteration, if there is a partial match in
+    // the second transliterator, it may exit leaving an
+    // intermediate '^'.  The next call into the compound
+    // transliterator's handleTransliterate() method will pass
+    // this partially processed text to the first transliterator,
+    // which will see the isolated '^' and delete it.
+    UBool performRollback = incremental && count >= 2;
+    UBool doRollback = FALSE;
+    int32_t rollbackCopy = 0;
+    if (performRollback) {
+        // Make a rollback copy at the end of the string
+        rollbackCopy = text.length();
+        text.copy(compoundStart, compoundLimit, rollbackCopy);
+    }
+
+    int32_t delta = 0; // delta in length
+
     // Give each transliterator a crack at the run of characters.
     // See comments at the top of the method for more detail.
     for (int32_t i=0; i<count; ++i) {
@@ -426,10 +453,19 @@ void CompoundTransliterator::handleTransliterate(Replaceable& text, UTransPositi
         
         trans[i]->filteredTransliterate(text, index, incremental);
         
-        // Adjust overall limit for insertions/deletions
-        compoundLimit += index.limit - limit;
+        // Cumulative delta for insertions/deletions
+        delta += index.limit - limit;
         
         if (incremental) {
+            // If one component transliterator does not complete,
+            // then roll everything back and return.  It's okay if
+            // component zero doesn't complete since it gets
+            // called again first.
+            if (index.start < index.limit && i > 0) {
+                doRollback = TRUE;
+                break;
+            }
+
             // In the incremental case, only allow subsequent
             // transliterators to modify what has already been
             // completely processed by prior transliterators.  In the
@@ -437,6 +473,36 @@ void CompoundTransliterator::handleTransliterate(Replaceable& text, UTransPositi
             // process the entire text.
             index.limit = index.start;
         }
+    }
+
+    compoundLimit += delta;
+    rollbackCopy += delta;
+
+    if (doRollback) {
+        // Replace [rollbackStart, limit) -- this is the
+        // original filtered segment -- with
+        // [rollbackCopy, text.length()), the rollback
+        // copy, then delete the rollback copy.
+        int32_t rollbackLen = text.length() - rollbackCopy;
+        
+        // Delete the partially transliterated segment
+        text.handleReplaceBetween(compoundStart, compoundLimit, EMPTY);
+        rollbackCopy -= compoundLimit - compoundStart;
+        
+        // Copy the rollback copy back
+        text.copy(rollbackCopy, text.length(), compoundStart);
+        
+        // Delete the rollback copy
+        rollbackCopy += rollbackLen;
+        text.handleReplaceBetween(rollbackCopy, text.length(), EMPTY);
+        
+        // Restore indices
+        index.start = compoundStart;
+        compoundLimit -= delta;
+        index.contextLimit -= delta;
+    } else if (performRollback) {
+        // Delete the rollback copy
+        text.handleReplaceBetween(rollbackCopy, text.length(), EMPTY);
     }
 
     // Start is good where it is -- where the last transliterator left
