@@ -103,6 +103,14 @@ static const UChar gLastResortZoneStrings[5][4] =
     {0x0047, 0x004D, 0x0054, 0x0000}  /* "GMT" */
 };
 
+static UnicodeString *gPatternCharsStr = NULL;
+
+U_CFUNC UBool dateFormatSymbols_cleanup() {
+    if (gPatternCharsStr != NULL) {
+        delete gPatternCharsStr;
+    }
+    return TRUE;
+}
 
 U_NAMESPACE_BEGIN
 
@@ -427,14 +435,6 @@ DateFormatSymbols::setZoneStrings(const UnicodeString* const *strings, int32_t r
 }
 
 //------------------------------------------------------
-static UnicodeString *gPatternCharsStr = NULL;
-
-U_CFUNC UBool dateFormatSymbols_cleanup() {
-    if (gPatternCharsStr != NULL) {
-        delete gPatternCharsStr;
-    }
-    return TRUE;
-}
 
 const UnicodeString&
 DateFormatSymbols::getPatternChars(void)
