@@ -304,7 +304,7 @@ void UnicodeTest::TestUnicodeData()
     char path[256];
 
     strcpy(path ,  icu_getDefaultDataDirectory());
-    strcat(path, "UnicodeData-3.0.0.beta.txt");
+    strcat(path, "UnicodeData-3.0.0.txt");
     
         input = fopen( path, "r");
 #ifdef WIN32
@@ -353,7 +353,7 @@ void UnicodeTest::TestUnicodeData()
 int32_t UnicodeTest::MakeProp(char* str) 
 {
     int32_t result = 0;
-    char* matchPosition;
+    const char* matchPosition;
     
     matchPosition = strstr(tagStrings, str);
     if (matchPosition == 0) errln((UnicodeString)"unrecognized type letter " + str);

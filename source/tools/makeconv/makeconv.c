@@ -414,7 +414,7 @@ void loadSBCSTableFromFile(FileStream* convFile, UConverter* myConverter, UError
     }
 
   /*create a compact array with replacement chars as default chars*/
-  myFromUnicode = ucmp8_open((int8_t)replacementChar);  
+  myFromUnicode = ucmp8_open(0);  
   if (myFromUnicode == NULL) 
     {
       icu_free(myConverterTable);

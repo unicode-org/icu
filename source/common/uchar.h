@@ -18,8 +18,9 @@
 *   04/02/97    aliu        Creation.
 *   03/29/99    helena      Updated for C APIs.
 *   4/15/99     Madhu       Updated for C Implementation and Javadoc
-*   5/20/99     Madhu		Added the function u_getVersion()
-*   8/19/1999   srl            Upgraded scripts to Unicode 3.0
+*   5/20/99     Madhu       Added the function u_getVersion()
+*   8/19/1999   srl         Upgraded scripts to Unicode 3.0
+*   8/27/1999   schererm    UCharDirection constants: U_...
 ********************************************************************************
 */
 
@@ -139,27 +140,26 @@ typedef enum UCharCategory UCharCategory;
  */
 
 enum UCharDirection   { 
-    LEFT_TO_RIGHT               = 0, 
-    RIGHT_TO_LEFT               = 1, 
-    EUROPEAN_NUMBER             = 2,
-    EUROPEAN_NUMBER_SEPARATOR   = 3,
-    EUROPEAN_NUMBER_TERMINATOR  = 4,
-    ARABIC_NUMBER               = 5,
-    COMMON_NUMBER_SEPARATOR     = 6,
-    BLOCK_SEPARATOR             = 7,
-    SEGMENT_SEPARATOR           = 8,
-    WHITE_SPACE_NEUTRAL         = 9, 
-    OTHER_NEUTRAL               = 10, 
-	LEFT_TO_RIGHT_EMBEDDING     = 11,
-    LEFT_TO_RIGHT_OVERRIDE      = 12,
-	RIGHT_TO_LEFT_ARABIC        = 13,
-	RIGHT_TO_LEFT_EMBEDDING     = 14,
-	RIGHT_TO_LEFT_OVERRIDE      = 15,
-	POP_DIRECTIONAL_FORMAT      = 16,
-	DIR_NON_SPACING_MARK        = 17,
-	BOUNDARY_NEUTRAL            = 18
-   
-	
+    U_LEFT_TO_RIGHT               = 0, 
+    U_RIGHT_TO_LEFT               = 1, 
+    U_EUROPEAN_NUMBER             = 2,
+    U_EUROPEAN_NUMBER_SEPARATOR   = 3,
+    U_EUROPEAN_NUMBER_TERMINATOR  = 4,
+    U_ARABIC_NUMBER               = 5,
+    U_COMMON_NUMBER_SEPARATOR     = 6,
+    U_BLOCK_SEPARATOR             = 7,
+    U_SEGMENT_SEPARATOR           = 8,
+    U_WHITE_SPACE_NEUTRAL         = 9, 
+    U_OTHER_NEUTRAL               = 10, 
+	U_LEFT_TO_RIGHT_EMBEDDING     = 11,
+    U_LEFT_TO_RIGHT_OVERRIDE      = 12,
+	U_RIGHT_TO_LEFT_ARABIC        = 13,
+	U_RIGHT_TO_LEFT_EMBEDDING     = 14,
+	U_RIGHT_TO_LEFT_OVERRIDE      = 15,
+	U_POP_DIRECTIONAL_FORMAT      = 16,
+	U_DIR_NON_SPACING_MARK        = 17,
+	U_BOUNDARY_NEUTRAL            = 18,
+    UCharDirectionCount
 };
 
 typedef enum UCharDirection UCharDirection;
