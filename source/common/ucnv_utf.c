@@ -402,9 +402,9 @@ morebytes:
                 else
                 {
                     /* write out the surrogates */
-                    *(myOffsets++) = offsetNum;
                     ch -= HALF_BASE;
                     *(myTarget++) = (UChar) ((ch >> HALF_SHIFT) + SURROGATE_HIGH_START);
+                    *(myOffsets++) = offsetNum;
                     ch = (ch & HALF_MASK) + SURROGATE_LOW_START;
                     if (myTarget < targetLimit)
                     {
@@ -690,6 +690,7 @@ lowsurogate:
 
     args->target = (char *) myTarget;
     args->source = mySource;
+    args->offsets = myOffsets;
 }
 
 U_CFUNC UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
@@ -1624,6 +1625,7 @@ donefornow:
 
     args->target = myTarget;
     args->source = (const char *) mySource;
+    args->offsets = myOffsets;
 }
 
 static void
@@ -1774,6 +1776,7 @@ lowsurogate:
 
     args->target = (char *) myTarget;
     args->source = mySource;
+    args->offsets = myOffsets;
 }
 
 static UChar32
@@ -2061,6 +2064,7 @@ morebytes:
                 /* write out the surrogates */
                 ch -= HALF_BASE;
                 *(myTarget++) = (UChar) ((ch >> HALF_SHIFT) + SURROGATE_HIGH_START);
+                *(myOffsets++) = offsetNum;
                 ch = (ch & HALF_MASK) + SURROGATE_LOW_START;
                 if (myTarget < targetLimit)
                 {
@@ -2105,6 +2109,7 @@ donefornow:
 
     args->target = myTarget;
     args->source = (const char *) mySource;
+    args->offsets = myOffsets;
 }
 
 static void
@@ -2255,6 +2260,7 @@ lowsurogate:
 
     args->target = (char *) myTarget;
     args->source = mySource;
+    args->offsets = myOffsets;
 }
 
 static UChar32
