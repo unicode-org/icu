@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2002/12/05 01:22:35 $
- * $Revision: 1.86 $
+ * $Date: 2003/01/28 18:55:42 $
+ * $Revision: 1.87 $
  *
  *****************************************************************************************
  */
@@ -15,13 +15,13 @@ package com.ibm.icu.text;
 import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.data.ResourceReader;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.impl.UtilityExtensions;
 import com.ibm.icu.util.CaseInsensitiveString;
 import com.ibm.icu.impl.UCharacterProperty;
 
 import java.io.UnsupportedEncodingException;
 import java.text.MessageFormat;
 import java.text.ParsePosition;
-import java.text.RuleBasedCollator;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Locale;
@@ -675,7 +675,7 @@ public abstract class Transliterator {
      * incremental and non-incremental transliteration.  Let
      * <code>originalStart</code> refer to the value of
      * <code>pos.start</code> upon entry.
-     * 
+     *
      * <ul>
      *  <li>If <code>incremental</code> is false, then this method
      *  should transliterate all characters between
@@ -695,7 +695,7 @@ public abstract class Transliterator {
      *  transliterator and characters [<code>pos.start</code>,
      *  <code>pos.limit</code>) are unchanged.</li>
      * </ul>
-     * 
+     *
      * <p>Implementations of this method should also obey the
      * following invariants:</p>
      *
@@ -718,13 +718,13 @@ public abstract class Transliterator {
      *  <li>Text before <code>pos.contextStart</code> and text after
      *  <code> pos.contextLimit</code> should be ignored.</li>
      * </ul>
-     *    
+     *
      * <p>Subclasses may safely assume that all characters in
      * [<code>pos.start</code>, <code>pos.limit</code>) are filtered.
      * In other words, the filter has already been applied by the time
      * this method is called.  See
      * <code>filteredTransliterate()</code>.
-     *    
+     *
      * <p>This method is <b>not</b> for public consumption.  Calling
      * this method directly will transliterate
      * [<code>pos.start</code>, <code>pos.limit</code>) without
@@ -732,19 +732,19 @@ public abstract class Transliterator {
      * transliterate()</code> instead of this method. Subclass code
      * should call <code>filteredTransliterate()</code> instead of
      * this method.<p>
-     * 
+     *
      * @param text the buffer holding transliterated and
      * untransliterated text
-     * 
+     *
      * @param pos the indices indicating the start, limit, context
      * start, and context limit of the text.
-     * 
+     *
      * @param incremental if true, assume more text may be inserted at
      * <code>pos.limit</code> and act accordingly.  Otherwise,
      * transliterate all text between <code>pos.start</code> and
      * <code>pos.limit</code> and move <code>pos.start</code> up to
      * <code>pos.limit</code>.
-     * 
+     *
      * @see #transliterate
      * @stable ICU 2.0
      */
@@ -757,7 +757,7 @@ public abstract class Transliterator {
      * public API methods eventually call this method with a rollback argument
      * of TRUE.  Other entities may call this method but rollback should be
      * FALSE.
-     * 
+     *
      * <p>If this transliterator has a filter, break up the input text into runs
      * of unfiltered characters.  Pass each run to
      * <subclass>.handleTransliterate().
@@ -835,14 +835,14 @@ public abstract class Transliterator {
             if (filter != null) {
                 // Narrow the range to be transliterated to the first run
                 // of unfiltered characters at or after index.start.
-                
+
                 // Advance past filtered chars
                 int c;
                 while (index.start < globalLimit &&
                        !filter.contains(c=text.char32At(index.start))) {
                     index.start += UTF16.getCharCount(c);
                 }
-                
+
                 // Find the end of this run of unfiltered chars
                 index.limit = index.start;
                 while (index.limit < globalLimit &&
@@ -900,7 +900,7 @@ public abstract class Transliterator {
                 if (DEBUG) {
                     log.setLength(0);
                     System.out.println("filteredTransliterate{"+getID()+"}i: IN=" +
-                                       Utility.formatInput(text, index));
+                                       UtilityExtensions.formatInput(text, index));
                 }
 
                 int runStart = index.start;
@@ -948,7 +948,7 @@ public abstract class Transliterator {
                     if (DEBUG) {
                         log.setLength(0);
                         log.append("filteredTransliterate{"+getID()+"}i: ");
-                        Utility.formatInput(log, text, index);
+                        UtilityExtensions.formatInput(log, text, index);
                     }
 
                     // Delegate to subclass for actual transliteration.  Upon
@@ -959,11 +959,11 @@ public abstract class Transliterator {
 
                     if (DEBUG) {
                         log.append(" => ");
-                        Utility.formatInput(log, text, index);
+                        UtilityExtensions.formatInput(log, text, index);
                     }
 
                     delta = index.limit - passLimit; // change in length
-            
+
                     // We failed to completely transliterate this pass.
                     // Roll back the text.  Indices remain unchanged; reset
                     // them where necessary.
@@ -971,13 +971,13 @@ public abstract class Transliterator {
                         // Find the rollbackStart, adjusted for length changes
                         // and the deletion of partially transliterated text.
                         int rs = rollbackStart + delta - (index.limit - passStart);
-                    
+
                         // Delete the partially transliterated text
                         text.replace(passStart, index.limit, "");
-                    
+
                         // Copy the rollback text back
                         text.copy(rs, rs + uncommittedLength, passStart);
-                    
+
                         // Restore indices to their original values
                         index.start = passStart;
                         index.limit = passLimit;
@@ -1030,7 +1030,7 @@ public abstract class Transliterator {
                 if (DEBUG) {
                     log.setLength(0);
                     log.append("filteredTransliterate{"+getID()+"}: ");
-                    Utility.formatInput(log, text, index);
+                    UtilityExtensions.formatInput(log, text, index);
                 }
 
                 int limit = index.limit;
@@ -1039,7 +1039,7 @@ public abstract class Transliterator {
 
                 if (DEBUG) {
                     log.append(" => ");
-                    Utility.formatInput(log, text, index);
+                    UtilityExtensions.formatInput(log, text, index);
                 }
 
                 // In a properly written transliterator, start == limit after
@@ -1066,7 +1066,7 @@ public abstract class Transliterator {
             if (filter == null || isIncrementalRun) {
                 break;
             }
-            
+
             // If we did completely transliterate this
             // run, then repeat with the next unfiltered run.
         }
@@ -1077,7 +1077,7 @@ public abstract class Transliterator {
 
         if (DEBUG) {
             System.out.println("filteredTransliterate{"+getID()+"}: OUT=" +
-                               Utility.formatInput(text, index));
+                               UtilityExtensions.formatInput(text, index));
         }
     }
 
@@ -1178,10 +1178,10 @@ public abstract class Transliterator {
      */
     public static String getDisplayName(String id, Locale inLocale) {
 
-		// Resource bundle containing display name keys and the
-		// RB_RULE_BASED_IDS array.
-		//
-		//If we ever integrate this with the Sun JDK, the resource bundle
+        // Resource bundle containing display name keys and the
+        // RB_RULE_BASED_IDS array.
+        //
+        //If we ever integrate this with the Sun JDK, the resource bundle
         // root will change to sun.text.resources.LocaleElements
 
         ResourceBundle bundle = ICULocaleData.getLocaleElements(inLocale);
@@ -1551,7 +1551,7 @@ public abstract class Transliterator {
     /**
      * Register a Transliterator object with the given ID.
      * @param ID the ID of this transliterator
-     * @param trans the Transliterator object 
+     * @param trans the Transliterator object
      * @draft ICU 2.2
      */
     public static void registerInstance(Transliterator trans) {

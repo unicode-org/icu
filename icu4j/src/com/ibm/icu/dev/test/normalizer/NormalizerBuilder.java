@@ -4,39 +4,42 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.BitSet;
-import com.ibm.icu.dev.test.*;
+
+import com.ibm.icu.dev.test.TestUtil;
+import com.ibm.icu.dev.test.UTF16Util;
+
 
 /**
  * Builds the normalization tables. This is a separate class so that it
  * can be unloaded once not needed.<br>
- * Copyright © 1998-2002 Unicode, Inc. All Rights Reserved.<br>
+ * Copyright ? 1998-2002 Unicode, Inc. All Rights Reserved.<br>
  * The Unicode Consortium makes no expressed or implied warranty of any
  * kind, and assumes no liability for errors or omissions.
  * No liability is assumed for incidental and consequential damages
  * in connection with or arising out of the use of the information here.
  * @author Mark Davis
- * Updates for supplementary code points: 
+ * Updates for supplementary code points:
  * Vladimir Weinstein & Markus Scherer
  */
 class NormalizerBuilder {
-    static final String copyright = "Copyright © 1998-1999 Unicode, Inc.";
-    
+    static final String copyright = "Copyright ? 1998-1999 Unicode, Inc.";
+
     /**
      * Testing flags
      */
-    
+
     private static final boolean DEBUG = false;
     private static final boolean GENERATING = false;
-    
+
     /**
      * Constants for the data file version to use.
      */
     /*static final boolean NEW_VERSION = true;
     private static final String DIR = "D:\\UnicodeData\\" + (NEW_VERSION ? "WorkingGroups\\" : "");
-    
+
     static final String UNIDATA_VERSION = NEW_VERSION ? "3.0.0d12" : "2.1.9";
     static final String EXCLUSIONS_VERSION = NEW_VERSION ? "1d4" : "1";
-    
+
     public static final String UNICODE_DATA = DIR + "UnicodeData-" + UNIDATA_VERSION + ".txt";
     public static final String COMPOSITION_EXCLUSIONS = DIR + "CompositionExclusions-" + EXCLUSIONS_VERSION +".txt";
     */
@@ -44,7 +47,7 @@ class NormalizerBuilder {
     /**
      * Called exactly once by NormalizerData to build the static data
      */
-    
+
     static NormalizerData build(boolean fullData) {
         try {
             IntHashtable canonicalClass = new IntHashtable(0);
@@ -56,14 +59,14 @@ class NormalizerBuilder {
                 //System.out.println("Building Normalizer Data from file.");
                 readExclusionList(isExcluded);
                 //System.out.println(isExcluded.get(0x00C0));
-                buildDecompositionTables(canonicalClass, decompose, compose, 
+                buildDecompositionTables(canonicalClass, decompose, compose,
                   isCompatibility, isExcluded);
             } else {    // for use in Applets
                 //System.out.println("Building abridged data.");
-                setMinimalDecomp(canonicalClass, decompose, compose, 
-                  isCompatibility, isExcluded); 
+                setMinimalDecomp(canonicalClass, decompose, compose,
+                  isCompatibility, isExcluded);
             }
-            return new NormalizerData(canonicalClass, decompose, compose, 
+            return new NormalizerData(canonicalClass, decompose, compose,
                   isCompatibility, isExcluded);
         } catch (java.io.IOException e) {
             System.err.println("Can't load data file." + e + ", " + e.getMessage());
@@ -88,11 +91,11 @@ class NormalizerBuilder {
             System.err.println("Fail to read the file CompositionExclusions.txt!");
             System.exit(1);
         }
-        
+
         while (true) {
-            
+
             // read a line, discarding comments and blank lines
-            
+
             String line = in.readLine();
             if (line == null) break;
             int comment = line.indexOf('#');                    // strip comments
@@ -102,7 +105,7 @@ class NormalizerBuilder {
                 line = line.substring(0, line.indexOf(' '));
             }
             // store -1 in the excluded table for each character hit
-            
+
             int value = Integer.parseInt(line,16);
             isExcluded.set(value);
             //System.out.println("Excluding " + hex(value));
@@ -110,12 +113,12 @@ class NormalizerBuilder {
         in.close();
         if (DEBUG) System.out.println("Done reading Exclusions");
     }
-    
+
     /**
      * Builds a decomposition table from a UnicodeData file
      */
     private static void buildDecompositionTables(
-      IntHashtable canonicalClass, IntStringHashtable decompose, 
+      IntHashtable canonicalClass, IntStringHashtable decompose,
       LongHashtable compose, BitSet isCompatibility, BitSet isExcluded)
       throws java.io.IOException {
         if (DEBUG) System.out.println("Reading Unicode Character Database");
@@ -127,14 +130,14 @@ class NormalizerBuilder {
             System.err.println("Failed to read UnicodeData.txt");
             System.exit(1);
         }
-        
+
         int value;
         long pair;
         int counter = 0;
         while (true) {
-            
+
             // read a line, discarding comments and blank lines
-            
+
             String line = in.readLine();
             if (line == null) break;
             int comment = line.indexOf('#');                    // strip comments
@@ -144,10 +147,10 @@ class NormalizerBuilder {
                 counter++;
                 if ((counter & 0xFF) == 0) System.out.println("At: " + line);
             }
-            
+
             // find the values of the particular fields that we need
             // Sample line: 00C0;LATIN ...A GRAVE;Lu;0;L;0041 0300;;;;N;LATIN ... GRAVE;;;00E0;
-            
+
             int start = 0;
             int end = line.indexOf(';'); // code
             value = Integer.parseInt(line.substring(start,end),16);
@@ -158,27 +161,27 @@ class NormalizerBuilder {
             String name = line.substring(start,end);
             end = line.indexOf(';',start=end+1); // general category
             end = line.indexOf(';',start=end+1); // canonical class
-            
+
             // check consistency: canonical classes must be from 0 to 255
-            
+
             int cc = Integer.parseInt(line.substring(start,end));
             if (cc != (cc & 0xFF)) System.err.println("Bad canonical class at: " + line);
             canonicalClass.put(value,cc);
             end = line.indexOf(';',start=end+1); // BIDI
             end = line.indexOf(';',start=end+1); // decomp
-            
+
             // decomp requires more processing.
             // store whether it is canonical or compatibility.
             // store the decomp in one table, and the reverse mapping (from pairs) in another
-            
+
             if (start != end) {
                 String segment = line.substring(start, end);
                 boolean compat = segment.charAt(0) == '<';
                 if (compat) isCompatibility.set(value);
                 String decomp = fromHex(segment);
-                
+
                 // a small snippet of code to generate the Applet data
-                
+
                 /*if (GENERATING) {
                     if (value < 0xFF) {
                         System.out.println(
@@ -188,28 +191,28 @@ class NormalizerBuilder {
                             + "// " + name);
                     }
                 }*/
-                
+
                 // check consistency: all canon decomps must be singles or pairs!
                 int decompLen = UTF16Util.countCodePoint(decomp);
                 if (decompLen < 1 || decompLen > 2 && !compat) {
                     System.err.println("Bad decomp at: " + line);
                 }
                 decompose.put(value, decomp);
-                
+
                 // only compositions are canonical pairs
                 // skip if script exclusion
-                
+
                 if (!compat && !isExcluded.get(value)) {
                     int first = '\u0000';
                     int second = UTF16Util.nextCodePoint(decomp, 0);
                     if (decompLen > 1) {
                         first = second;
-                        second = UTF16Util.nextCodePoint(decomp, 
+                        second = UTF16Util.nextCodePoint(decomp,
                             UTF16Util.codePointLength(first));
                     }
-                    
+
                     // store composition pair in single integer
-                    
+
                     pair = ((long)first << 32) | second;
                     if (DEBUG && value == '\u00C0') {
                         System.out.println("debug2: " + line);
@@ -222,13 +225,13 @@ class NormalizerBuilder {
         }
         in.close();
         if (DEBUG) System.out.println("Done reading Unicode Character Database");
-        
+
         // add algorithmic Hangul decompositions
         // this is more compact if done at runtime, but for simplicity we
         // do it this way.
-        
+
         if (DEBUG) System.out.println("Adding Hangul");
-        
+
         for (int SIndex = 0; SIndex < SCount; ++SIndex) {
             int TIndex = SIndex % TCount;
             char first, second;
@@ -250,16 +253,16 @@ class NormalizerBuilder {
     /**
      * Hangul composition constants
      */
-    static final int 
+    static final int
         SBase = 0xAC00, LBase = 0x1100, VBase = 0x1161, TBase = 0x11A7,
         LCount = 19, VCount = 21, TCount = 28,
         NCount = VCount * TCount,   // 588
         SCount = LCount * NCount;   // 11172
-    
+
     /**
      * For use in an applet: just load a minimal set of data.
      */
-    private static void setMinimalDecomp(IntHashtable canonicalClass, IntStringHashtable decompose, 
+    private static void setMinimalDecomp(IntHashtable canonicalClass, IntStringHashtable decompose,
       LongHashtable compose, BitSet isCompatibility, BitSet isExcluded) {
         String[] decomposeData = {
             "\u005E", "\u0020\u0302", "K",
@@ -412,10 +415,10 @@ class NormalizerBuilder {
             0x0360, 234,
             0x0361, 234
         };
-    
+
         // build the same tables we would otherwise get from the
         // Unicode Character Database, just with limited data
-         
+
         for (int i = 0; i < decomposeData.length; i+=3) {
             char value = decomposeData[i].charAt(0);
             String decomp = decomposeData[i+1];
@@ -427,19 +430,19 @@ class NormalizerBuilder {
                 int second = UTF16Util.nextCodePoint(decomp, 0);
                 if (decomp.length() > 1) {
                     first = second;
-                    second = UTF16Util.nextCodePoint(decomp, 
+                    second = UTF16Util.nextCodePoint(decomp,
                         UTF16Util.codePointLength(first));
                 }
                 long pair = (first << 16) | second;
                 compose.put(pair, value);
             }
         }
-        
+
         for (int i = 0; i < classData.length;) {
             canonicalClass.put(classData[i++], classData[i++]);
         }
     }
-    
+
     /**
      * Utility: Parses a sequence of hex Unicode characters separated by spaces
      */
@@ -449,8 +452,8 @@ class NormalizerBuilder {
             char c = source.charAt(i);
             switch (c) {
               case ' ': break; // ignore
-              case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': 
-              case '8': case '9': case 'A': case 'B': case 'C': case 'D': case 'E': case 'F': 
+              case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7':
+              case '8': case '9': case 'A': case 'B': case 'C': case 'D': case 'E': case 'F':
               case 'a': case 'b': case 'c': case 'd': case 'e': case 'f':
                 int end = 0;
                 int value = 0;
@@ -481,7 +484,7 @@ class NormalizerBuilder {
         }
         return result.toString();
     }
-    
+
     /**
      * Utility: Supplies a zero-padded hex representation of an integer (without 0x)
      */
@@ -489,7 +492,7 @@ class NormalizerBuilder {
         String result = Long.toString(i & 0xFFFFFFFFL, 16).toUpperCase();
         return "00000000".substring(result.length(),8) + result;
     }
-    
+
     /**
      * Utility: Supplies a zero-padded hex representation of a Unicode character (without 0x, \\u)
      */
@@ -497,16 +500,16 @@ class NormalizerBuilder {
         String result = Integer.toString(i, 16).toUpperCase();
         return "0000".substring(result.length(),4) + result;
     }
-    
+
     /**
      * Utility: Supplies a zero-padded hex representation of a Unicode character (without 0x, \\u)
      */
-	public static String hex(String s, String sep) {
-	    StringBuffer result = new StringBuffer();
-	    for (int i = 0; i < s.length(); ++i) {
-	        if (i != 0) result.append(sep);
-	        result.append(hex(s.charAt(i)));
-	    }
-	    return result.toString();
-	}
+    public static String hex(String s, String sep) {
+        StringBuffer result = new StringBuffer();
+        for (int i = 0; i < s.length(); ++i) {
+            if (i != 0) result.append(sep);
+            result.append(hex(s.charAt(i)));
+        }
+        return result.toString();
+    }
 }

@@ -4,18 +4,22 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: 
- * $Date: 
- * $Revision: 
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/NormalizationMonkeyTest.java,v $
+ * $Date: 2003/01/28 18:55:34 $
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
 
 package com.ibm.icu.dev.test.normalizer;
-import com.ibm.icu.dev.test.*;
-import com.ibm.icu.lang.*;
-import com.ibm.icu.text.*;
+
 import java.util.Random;
+
+import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UCharacterCategory;
+import com.ibm.icu.text.Normalizer;
+import com.ibm.icu.text.UTF16;
 
 public class NormalizationMonkeyTest extends TestFmwk {
     int loopCount = 100;

@@ -4,9 +4,9 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeMatcher.java,v $ 
- * $Date: 2002/12/05 01:23:15 $ 
- * $Revision: 1.8 $
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeMatcher.java,v $
+ * $Date: 2003/01/28 18:55:42 $
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -27,7 +27,7 @@ public interface UnicodeMatcher {
      * @stable ICU 2.0
      */
     public static final int U_MISMATCH = 0;
-    
+
     /**
      * Constant returned by <code>matches()</code> indicating a
      * partial match between the text and this matcher.  This value is
@@ -39,7 +39,7 @@ public interface UnicodeMatcher {
      * @stable ICU 2.0
      */
     public static final int U_PARTIAL_MATCH = 1;
-    
+
     /**
      * Constant returned by <code>matches()</code> indicating a
      * complete match between the text and this matcher.  For an
@@ -51,6 +51,14 @@ public interface UnicodeMatcher {
     public static final int U_MATCH = 2;
 
     /**
+     * The character at index i, where i < contextStart || i >= contextLimit,
+     * is ETHER.  This allows explicit matching by rules and UnicodeSets
+     * of text outside the context.  In traditional terms, this allows anchoring
+     * at the start and/or end.
+     */
+    static final char ETHER = '\uFFFF';
+
+    /**
      * Return a UMatchDegree value indicating the degree of match for
      * the given text at the given offset.  Zero, one, or more
      * characters may be matched.
@@ -58,7 +66,7 @@ public interface UnicodeMatcher {
      * Matching in the forward direction is indicated by limit >
      * offset.  Characters from offset forwards to limit-1 will be
      * considered for matching.
-     * 
+     *
      * Matching in the reverse direction is indicated by limit <
      * offset.  Characters from offset backwards to limit+1 will be
      * considered for matching.

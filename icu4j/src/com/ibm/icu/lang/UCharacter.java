@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2003/01/25 00:05:03 $ 
-* $Revision: 1.61 $
+* $Date: 2003/01/28 18:55:39 $ 
+* $Revision: 1.62 $
 *
 *******************************************************************************
 */
@@ -47,7 +47,7 @@ import com.ibm.icu.impl.UPropertyAliases;
  * E.g. In Windows <br>
  * <code>set CLASSPATH=%CLASSPATH%;$JAR_FILE_PATH/ucharacter.jar</code>.<br>
  * Otherwise, another method would be to copy the files uprops.dat and 
- * unames.icu from the icu4j source subdirectory 
+ * unames.icu from the icu4j source subdirectory
  * <i>$ICU4J_SRC/src/com.ibm.icu.impl.data</i> to your class directory 
  * <i>$ICU4J_CLASS/com.ibm.icu.impl.data</i>.
  * </p>
@@ -2771,6 +2771,9 @@ public final class UCharacter
      */
     public static String getName(int ch)
     {
+    	if(NAME_==null){
+            throw new RuntimeException("Could not load unames.icu");
+        }
         return NAME_.getName(ch, UCharacterNameChoice.UNICODE_CHAR_NAME);
     }
       
@@ -2787,6 +2790,9 @@ public final class UCharacter
      */
     public static String getName1_0(int ch)
     {
+    	if(NAME_==null){
+            throw new RuntimeException("Could not load unames.icu");
+        }
         return NAME_.getName(ch, 
                              UCharacterNameChoice.UNICODE_10_CHAR_NAME);
     }
@@ -2811,6 +2817,9 @@ public final class UCharacter
      */
     public static String getExtendedName(int ch) 
     {
+    	if(NAME_==null){
+            throw new RuntimeException("Could not load unames.icu");
+        }
         return NAME_.getName(ch, UCharacterNameChoice.EXTENDED_CHAR_NAME);
     }
     
@@ -2829,7 +2838,9 @@ public final class UCharacter
         if (ch < UCharacter.MIN_VALUE || ch > UCharacter.MAX_VALUE) {
             return null;
         }
-        
+        if(NAME_==null){
+            throw new RuntimeException("Could not load unames.icu");
+        }    
         String result = NAME_.getGroupName(ch, 
                                            UCharacterNameChoice.ISO_COMMENT_);
         return result;
@@ -2846,7 +2857,10 @@ public final class UCharacter
      * @stable ICU 2.1
      */
     public static int getCharFromName(String name)
-    {
+    {     
+        if(NAME_==null){
+            throw new RuntimeException("Could not load unames.icu");
+        }
         return NAME_.getCharFromName(
                             UCharacterNameChoice.UNICODE_CHAR_NAME, name);
     }
@@ -2863,6 +2877,9 @@ public final class UCharacter
      */
     public static int getCharFromName1_0(String name)
     {
+    	if(NAME_==null){
+            throw new RuntimeException("Could not load unames.icu");
+        }
         return NAME_.getCharFromName(
                          UCharacterNameChoice.UNICODE_10_CHAR_NAME, name);
     }
@@ -2888,6 +2905,9 @@ public final class UCharacter
      */
     public static int getCharFromExtendedName(String name)
     {
+    	if(NAME_==null){
+            throw new RuntimeException("Could not load unames.icu");
+        }
         return NAME_.getCharFromName(
                             UCharacterNameChoice.EXTENDED_CHAR_NAME, name);
     }
@@ -3520,6 +3540,9 @@ public final class UCharacter
      */
     public static ValueIterator getNameIterator()
     {
+    	if(NAME_==null){
+            throw new RuntimeException("Could not load unames.icu");
+        }
         return new UCharacterNameIterator(NAME_,
                                    UCharacterNameChoice.UNICODE_CHAR_NAME);
     }
@@ -3545,6 +3568,9 @@ public final class UCharacter
      */
     public static ValueIterator getName1_0Iterator()
     {
+    	if(NAME_==null){
+            throw new RuntimeException("Could not load unames.icu");
+        }
         return new UCharacterNameIterator(NAME_,
                                  UCharacterNameChoice.UNICODE_10_CHAR_NAME);
     }
@@ -3570,6 +3596,9 @@ public final class UCharacter
      */
     public static ValueIterator getExtendedNameIterator()
     {
+    	if(NAME_==null){
+            throw new RuntimeException("Could not load unames.icu");
+        }
         return new UCharacterNameIterator(NAME_,
                                  UCharacterNameChoice.EXTENDED_CHAR_NAME);
     }
@@ -3904,24 +3933,26 @@ public final class UCharacter
     /**
     * Database storing the sets of character name
     */
-    static final UCharacterName NAME_;
+    static UCharacterName NAME_ = null;
 
     /**
      * Singleton object encapsulating the imported pnames.icu property aliases
      */
-    static final UPropertyAliases PNAMES_;
+    static UPropertyAliases PNAMES_ = null;
       
     // block to initialise name database and unicode 1.0 data 
     static
     {
         try
         {
-            NAME_ = UCharacterName.getInstance();
             PNAMES_ = new UPropertyAliases();
+            NAME_ = UCharacterName.getInstance();
         }
         catch (Exception e)
         {
-            throw new RuntimeException(e.getMessage());
+            //throw new RuntimeException(e.getMessage());
+            // DONOT throw an exception
+            // we might be building ICU modularly wothout names.icu and pnames.icu
         }
     }
         

@@ -28,11 +28,11 @@ public final class UScript {
      */
     private static final String copyrightNotice
         = "Copyright \u00a92001 IBM Corp.  All rights reserved.";
-    
+
     /**
      * Invalid code
      * @stable ICU 2.4
-     */    
+     */
     public static final int INVALID_CODE = -1;
     /**
      * Common
@@ -268,24 +268,25 @@ public final class UScript {
      * Limit
      * @stable ICU 2.4
      */
-    public static final int CODE_LIMIT   = 46; 
-    
+    public static final int CODE_LIMIT   = 46;
+
     private static final int SCRIPT_MASK   = 0x0000007f;
     private static final UCharacterProperty prop= UCharacterProperty.getInstance();
-    
+
+    private static final String INVALID_NAME = "Invalid";
     /**
      * Helper function to find the code from locale.
      * @param Locale the locale.
      */
     private static int[] findCodeFromLocale(Locale locale) {
-
         ResourceBundle rb = ICULocaleData.getLocaleElements(locale);
-
+        if (rb==null) {
+            throw new MissingResourceException("Could not find data for {0} {1}", "com.ibm.icu.impl.dataLocaleElements", locale.toString());
+        }
         // if rb is not a strict fallback of the requested locale, return null
-        if (rb==null || !LocaleUtility.isFallbackOf(rb.getLocale(), locale)) {
+        if(!LocaleUtility.isFallbackOf(rb.getLocale(), locale)){
             return null;
         }
-
         String[] scripts = rb.getStringArray("LocaleScript");
         int[] result = new int[scripts.length];
         int w = 0;
@@ -293,7 +294,7 @@ public final class UScript {
               int code = UCharacter.getPropertyValueEnum(UProperty.SCRIPT,
                                                            scripts[i]);
               result[w++] = code;
-            
+
         }
 
         if (w < result.length) {
@@ -302,23 +303,23 @@ public final class UScript {
 
         return result;
     }
-         
+
     /**
-     * Gets a script codes associated with the given locale or ISO 15924 abbreviation or name. 
+     * Gets a script codes associated with the given locale or ISO 15924 abbreviation or name.
      * Returns MALAYAM given "Malayam" OR "Mlym".
-     * Returns LATIN given "en" OR "en_US" 
+     * Returns LATIN given "en" OR "en_US"
      * @param locale Locale
-     * @return The script codes array. null if the the code cannot be found. 
+     * @return The script codes array. null if the the code cannot be found.
      * @stable ICU 2.4
      */
     public static final int[] getCode(Locale locale){
         return findCodeFromLocale(locale);
     }
-    
+
     /**
-     * Gets a script codes associated with the given locale or ISO 15924 abbreviation or name. 
+     * Gets a script codes associated with the given locale or ISO 15924 abbreviation or name.
      * Returns MALAYAM given "Malayam" OR "Mlym".
-     * Returns LATIN given "en" OR "en_US" 
+     * Returns LATIN given "en" OR "en_US"
      *
      * <p>Note: To search by short or long script alias only, use
      * UCharacater.getPropertyValueEnum(UProperty.SCRIPT, alias)
@@ -339,11 +340,11 @@ public final class UScript {
         }
     }
 
-    /** 
+    /**
      * Gets the script code associated with the given codepoint.
-     * Returns UScript.MALAYAM given 0x0D02 
+     * Returns UScript.MALAYAM given 0x0D02
      * @param codepoint UChar32 codepoint
-     * @return The script code 
+     * @return The script code
      * @stable ICU 2.4
      */
     public static final int getScript(int codepoint){
@@ -351,11 +352,11 @@ public final class UScript {
             return (int)(prop.getAdditional(codepoint,0) & SCRIPT_MASK);
         }else{
             throw new IllegalArgumentException(Integer.toString(codepoint));
-        } 
+        }
     }
-    
+
     /**
-     * Gets a script name associated with the given script code. 
+     * Gets a script name associated with the given script code.
      * Returns  "Malayam" given MALAYAM
      * @param scriptCode int script code
      * @return script name as a string in full as given in TR#24
@@ -366,11 +367,11 @@ public final class UScript {
                                                scriptCode,
                                                UProperty.NameChoice.LONG);
     }
-    
+
     /**
-     * Gets a script name associated with the given script code. 
+     * Gets a script name associated with the given script code.
      * Returns  "Mlym" given MALAYAM
-     * @param scriptCode int script code 
+     * @param scriptCode int script code
      * @return script abbreviated name as a string  as given in TR#24
      * @stable ICU 2.4
      */

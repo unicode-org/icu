@@ -3,8 +3,8 @@
 * Copyright (c) 2002, International Business Machines Corporation
 * and others.  All Rights Reserved.
 *****************************************************************
-* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/AnyTransliterator.java,v $ 
-* $Revision: 1.1 $
+* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/AnyTransliterator.java,v $
+* $Revision: 1.2 $
 *****************************************************************
 * Date        Name        Description
 * 06/06/2002  aliu        Creation.
@@ -17,12 +17,12 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.HashMap;
 import java.util.Map;
-
+import java.util.MissingResourceException;
 /**
  * A transliterator that translates multiple input scripts to a single
  * output script.  It is named Any-T or Any-T/V, where T is the target
  * and V is the optional variant.  The target T is a script.
- * 
+ *
  * <p>An AnyTransliterator partitions text into runs of the same
  * script, together with adjacent COMMON or INHERITED characters.
  * After determining the script of each run, it transliterates from
@@ -34,7 +34,7 @@ import java.util.Map;
  * <p>At startup, all possible AnyTransliterators are registered with
  * the system, as determined by examining the registered script
  * transliterators.
- * 
+ *
  * @since ICU 2.2
  * @author Alan Liu
  */
@@ -42,13 +42,13 @@ class AnyTransliterator extends Transliterator {
 
     //------------------------------------------------------------
     // Constants
-    
+
     static final char TARGET_SEP = '-';
     static final char VARIANT_SEP = '/';
     static final String ANY = "Any";
     static final String NULL_ID = "Null";
     static final String LATIN_PIVOT = "-Latin;Latin-";
-    
+
     /**
      * Cache mapping UScriptCode values to Transliterator*.
      */
@@ -132,7 +132,7 @@ class AnyTransliterator extends Transliterator {
         super(id, null);
         targetScript = theTargetScript;
         cache = new HashMap();
-        
+
         target = theTarget;
         if (theVariant.length() > 0) {
             target = theTarget + VARIANT_SEP + theVariant;
@@ -157,10 +157,10 @@ class AnyTransliterator extends Transliterator {
         if (t == null) {
             String sourceName = UScript.getName(source);
             String id = sourceName + TARGET_SEP + target;
-        
+
             t = Transliterator.getInstance(id, FORWARD);
             if (t == null) {
-            
+
                 // Try to pivot around Latin, our most common script
                 id = sourceName + LATIN_PIVOT + target;
                 t = Transliterator.getInstance(id, FORWARD);
@@ -196,7 +196,7 @@ class AnyTransliterator extends Transliterator {
                 // Only process each target once
                 if (seen.contains(target)) continue;
                 seen.add(target);
-            
+
                 // Get the script code for the target.  If not a script, ignore.
                 int targetScript = scriptNameToCode(target);
                 if (targetScript == UScript.INVALID_CODE) continue;
@@ -204,7 +204,7 @@ class AnyTransliterator extends Transliterator {
                 for (Enumeration v=Transliterator.getAvailableVariants(source, target);
                      v.hasMoreElements(); ) {
                     String variant = (String) v.nextElement();
-                
+
                     String id;
                     id = TransliteratorIDParser.STVtoID(ANY, target, variant);
                     AnyTransliterator trans = new AnyTransliterator(id, target, variant,
@@ -221,10 +221,14 @@ class AnyTransliterator extends Transliterator {
      * UScript.INVALID_CODE if not found.
      */
     private static int scriptNameToCode(String name) {
-        int[] codes = UScript.getCode(name);
-        return codes != null ? codes[0] : UScript.INVALID_CODE;
+        try{
+            int[] codes = UScript.getCode(name);
+            return codes != null ? codes[0] : UScript.INVALID_CODE;
+        }catch( MissingResourceException e){
+            return UScript.INVALID_CODE;
+        }
     }
-    
+
     //------------------------------------------------------------
     // ScriptRunIterator
 

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2003/01/21 21:12:35 $
- * $Revision: 1.84 $
+ * $Date: 2003/01/28 18:55:43 $
+ * $Revision: 1.85 $
  *
  *****************************************************************************************
  */
@@ -80,7 +80,7 @@ import java.util.Iterator;
  *     </tr>
  *     <tr>
  *       <td nowrap valign="top" align="left"><code>[a-e]</code></td>
- *       <td valign="top">The characters 'a' through 'e' inclusive, in Unicode code 
+ *       <td valign="top">The characters 'a' through 'e' inclusive, in Unicode code
  *       point order</td>
  *     </tr>
  *     <tr>
@@ -89,7 +89,7 @@ import java.util.Iterator;
  *     </tr>
  *     <tr>
  *       <td nowrap valign="top" align="left"><code>[a{ab}{ac}]</code></td>
- *       <td valign="top">The character 'a' and the multicharacter strings &quot;ab&quot; and 
+ *       <td valign="top">The character 'a' and the multicharacter strings &quot;ab&quot; and
  *       &quot;ac&quot;</td>
  *     </tr>
  *     <tr>
@@ -275,7 +275,7 @@ public class UnicodeSet extends UnicodeFilter {
     private int[] list;   // MUST be terminated with HIGH
     private int[] rangeList; // internal buffer
     private int[] buffer; // internal buffer
-    
+
     // NOTE: normally the field should be of type SortedSet; but that is missing a public clone!!
     // is not private so that UnicodeSetIterator can get access
     TreeSet strings = new TreeSet();
@@ -744,26 +744,26 @@ public class UnicodeSet extends UnicodeFilter {
                        int[] offset,
                        int limit,
                        boolean incremental) {
-        
+
         if (offset[0] == limit) {
             // Strings, if any, have length != 0, so we don't worry
             // about them here.  If we ever allow zero-length strings
             // we much check for them here.
-            if (contains(TransliterationRule.ETHER)) {
+            if (contains(UnicodeMatcher.ETHER)) {
                 return incremental ? U_PARTIAL_MATCH : U_MATCH;
             } else {
                 return U_MISMATCH;
             }
         } else {
             if (strings.size() != 0) { // try strings first
-            
+
                 // might separate forward and backward loops later
                 // for now they are combined
 
                 // TODO Improve efficiency of this, at least in the forward
                 // direction, if not in both.  In the forward direction we
                 // can assume the strings are sorted.
-            
+
                 Iterator it = strings.iterator();
                 boolean forward = offset[0] < limit;
 
@@ -790,7 +790,7 @@ public class UnicodeSet extends UnicodeFilter {
                     // forward direction.
                     if (forward && c > firstChar) break;
                     if (c != firstChar) continue;
-                        
+
                     int len = matchRest(text, offset[0], limit, trial);
 
                     if (incremental) {
@@ -825,7 +825,7 @@ public class UnicodeSet extends UnicodeFilter {
             return super.matches(text, offset, limit, incremental);
         }
     }
-    
+
     /**
      * Returns the longest match for s in text at the given position.
      * If limit > start then match forward from start+1 to limit
@@ -866,7 +866,7 @@ public class UnicodeSet extends UnicodeFilter {
         }
         return maxLen;
     }
-        
+
 
     /**
      * Implementation of UnicodeMatcher API.  Union the set of all
@@ -1000,7 +1000,7 @@ public class UnicodeSet extends UnicodeFilter {
 
         // HIGH is 0x110000
         // assert(list[len-1] == HIGH);
-        
+
         // empty = [HIGH]
         // [start_0, limit_0, start_1, limit_1, HIGH]
 
@@ -1064,7 +1064,7 @@ public class UnicodeSet extends UnicodeFilter {
             list[i+1] = c+1;
             len += 2;
         }
-        
+
         pat = null;
         return this;
     }
@@ -1074,23 +1074,23 @@ public class UnicodeSet extends UnicodeFilter {
      * present.  If this set already contains the multicharacter,
      * the call leaves this set unchanged.
      * Thus "ch" => {"ch"}
-	 * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
+     * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
      * @param s the source string
      * @return this object, for chaining
      * @stable ICU 2.0
      */
     public final UnicodeSet add(String s) {
-        
+
         int cp = getSingleCP(s);
         if (cp < 0) {
-        	strings.add(s);
-        	pat = null;
-		} else {
-			add(cp, cp);
-		}
+            strings.add(s);
+            pat = null;
+        } else {
+            add(cp, cp);
+        }
         return this;
     }
-    
+
     /**
      * @return a code point IF the string consists of a single one.
      * otherwise returns -1.
@@ -1098,19 +1098,19 @@ public class UnicodeSet extends UnicodeFilter {
      */
     private static int getSingleCP(String s) {
         if (s.length() < 1) {
-        	throw new IllegalArgumentException("Can't use zero-length strings in UnicodeSet");
+            throw new IllegalArgumentException("Can't use zero-length strings in UnicodeSet");
         }
-    	if (s.length() > 2) return -1;
-    	if (s.length() == 1) return s.charAt(0);
-    	
-    	// at this point, len = 2
+        if (s.length() > 2) return -1;
+        if (s.length() == 1) return s.charAt(0);
+
+        // at this point, len = 2
         int cp = UTF16.charAt(s, 0);
         if (cp > 0xFFFF) { // is surrogate pair
-        	return cp;
+            return cp;
         }
         return -1;
     }
-    
+
     /**
      * Adds each of the characters in this string to the set. Thus "ch" => {"c", "h"}
      * If this set already any particular character, it has no effect on that character.
@@ -1135,7 +1135,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public final UnicodeSet retainAll(String s) {
-    	return retainAll(fromAll(s));
+        return retainAll(fromAll(s));
     }
 
     /**
@@ -1146,7 +1146,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public final UnicodeSet complementAll(String s) {
-    	return complementAll(fromAll(s));
+        return complementAll(fromAll(s));
     }
 
     /**
@@ -1157,12 +1157,12 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public final UnicodeSet removeAll(String s) {
-    	return removeAll(fromAll(s));
+        return removeAll(fromAll(s));
     }
 
     /**
      * Makes a set from a multicharacter string. Thus "ch" => {"ch"}
-	 * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
+     * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
      * @param s the source string
      * @return a newly created set containing the given string
      * @stable ICU 2.0
@@ -1171,7 +1171,7 @@ public class UnicodeSet extends UnicodeFilter {
         return new UnicodeSet().add(s);
     }
 
-    
+
     /**
      * Makes a set from each of the characters in the string. Thus "ch" => {"c", "h"}
      * @param s the source string
@@ -1216,7 +1216,7 @@ public class UnicodeSet extends UnicodeFilter {
     public final UnicodeSet retain(int c) {
         return retain(c, c);
     }
-    
+
     /**
      * Retain the specified string in this set if it is present.
      * The set will not contain the specified character once the call
@@ -1228,14 +1228,14 @@ public class UnicodeSet extends UnicodeFilter {
     public final UnicodeSet retain(String s) {
         int cp = getSingleCP(s);
         if (cp < 0) {
-        	if (strings.size() == 1 && strings.contains(s)) return this;
-        	strings.clear();
-        	strings.add(s);
-        	pat = null;
-		} else {
-			retain(cp, cp);
-		}
-		return this;
+            if (strings.size() == 1 && strings.contains(s)) return this;
+            strings.clear();
+            strings.add(s);
+            pat = null;
+        } else {
+            retain(cp, cp);
+        }
+        return this;
     }
 
     /**
@@ -1284,12 +1284,12 @@ public class UnicodeSet extends UnicodeFilter {
     public final UnicodeSet remove(String s) {
         int cp = getSingleCP(s);
         if (cp < 0) {
-        	strings.remove(s);
-        	pat = null;
-		} else {
-			remove(cp, cp);
-		}
-		return this;
+            strings.remove(s);
+            pat = null;
+        } else {
+            remove(cp, cp);
+        }
+        return this;
     }
 
     /**
@@ -1346,12 +1346,12 @@ public class UnicodeSet extends UnicodeFilter {
         pat = null;
         return this;
     }
-    
+
     /**
      * Complement the specified string in this set.
      * The set will not contain the specified string once the call
      * returns.
-	 * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
+     * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
      * @param s the string to complement
      * @return this object, for chaining
      * @stable ICU 2.0
@@ -1359,14 +1359,14 @@ public class UnicodeSet extends UnicodeFilter {
     public final UnicodeSet complement(String s) {
         int cp = getSingleCP(s);
         if (cp < 0) {
-        	if (strings.contains(s)) strings.remove(s);
-        	else strings.add(s);
-        	pat = null;
-		} else {
-			complement(cp, cp);
-		}
-		return this;
-    }    
+            if (strings.contains(s)) strings.remove(s);
+            else strings.add(s);
+            pat = null;
+        } else {
+            complement(cp, cp);
+        }
+        return this;
+    }
 
     /**
      * Returns true if this set contains the given character.
@@ -1417,7 +1417,7 @@ public class UnicodeSet extends UnicodeFilter {
         // list[len - 1] == HIGH and that c is legal (0..HIGH-1).
         if (c < list[0]) return 0;
         // High runner test.  c is often after the last range, so an
-        // initial check for this condition pays off. 
+        // initial check for this condition pays off.
         if (len >= 2 && c >= list[len-2]) return len-1;
         int lo = 0;
         int hi = len - 1;
@@ -1482,7 +1482,7 @@ public class UnicodeSet extends UnicodeFilter {
 //            validate();
 //        }
 //        int temp;
-//        
+//
 //        // set up initial range to search. Each subrange is a power of two in length
 //        int high = searchValue < list[topOfLow] ? topOfLow : topOfHigh;
 //
@@ -1490,48 +1490,48 @@ public class UnicodeSet extends UnicodeFilter {
 //        // Each case deliberately falls through to the next
 //        // Logically, list[-1] < all_search_values && list[count] > all_search_values
 //        // although the values -1 and count are never actually touched.
-//        
+//
 //        // The bounds at each point are low & high,
 //        // where low == high - delta*2
 //        // so high - delta is the midpoint
-//        
+//
 //        // The invariant AFTER each line is that list[low] < searchValue <= list[high]
-//        
+//
 //        switch (power) {
 //        //case 31: if (searchValue < list[temp = high-0x40000000]) high = temp; // no unsigned int in Java
 //        case 30: if (searchValue < list[temp = high-0x20000000]) high = temp;
 //        case 29: if (searchValue < list[temp = high-0x10000000]) high = temp;
-//        
+//
 //        case 28: if (searchValue < list[temp = high- 0x8000000]) high = temp;
 //        case 27: if (searchValue < list[temp = high- 0x4000000]) high = temp;
 //        case 26: if (searchValue < list[temp = high- 0x2000000]) high = temp;
 //        case 25: if (searchValue < list[temp = high- 0x1000000]) high = temp;
-//        
+//
 //        case 24: if (searchValue < list[temp = high-  0x800000]) high = temp;
 //        case 23: if (searchValue < list[temp = high-  0x400000]) high = temp;
 //        case 22: if (searchValue < list[temp = high-  0x200000]) high = temp;
 //        case 21: if (searchValue < list[temp = high-  0x100000]) high = temp;
-//        
+//
 //        case 20: if (searchValue < list[temp = high-   0x80000]) high = temp;
 //        case 19: if (searchValue < list[temp = high-   0x40000]) high = temp;
 //        case 18: if (searchValue < list[temp = high-   0x20000]) high = temp;
 //        case 17: if (searchValue < list[temp = high-   0x10000]) high = temp;
-//        
+//
 //        case 16: if (searchValue < list[temp = high-    0x8000]) high = temp;
 //        case 15: if (searchValue < list[temp = high-    0x4000]) high = temp;
 //        case 14: if (searchValue < list[temp = high-    0x2000]) high = temp;
 //        case 13: if (searchValue < list[temp = high-    0x1000]) high = temp;
-//        
+//
 //        case 12: if (searchValue < list[temp = high-     0x800]) high = temp;
 //        case 11: if (searchValue < list[temp = high-     0x400]) high = temp;
 //        case 10: if (searchValue < list[temp = high-     0x200]) high = temp;
 //        case  9: if (searchValue < list[temp = high-     0x100]) high = temp;
-//        
+//
 //        case  8: if (searchValue < list[temp = high-      0x80]) high = temp;
 //        case  7: if (searchValue < list[temp = high-      0x40]) high = temp;
 //        case  6: if (searchValue < list[temp = high-      0x20]) high = temp;
 //        case  5: if (searchValue < list[temp = high-      0x10]) high = temp;
-//        
+//
 //        case  4: if (searchValue < list[temp = high-       0x8]) high = temp;
 //        case  3: if (searchValue < list[temp = high-       0x4]) high = temp;
 //        case  2: if (searchValue < list[temp = high-       0x2]) high = temp;
@@ -1580,15 +1580,15 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public final boolean contains(String s) {
-        
+
         int cp = getSingleCP(s);
         if (cp < 0) {
-        	return strings.contains(s);
-		} else {
-			return contains(cp);
-		}
+            return strings.contains(s);
+        } else {
+            return contains(cp);
+        }
     }
-    
+
     /**
      * Returns true if this set contains all the characters and strings
      * of the given set.
@@ -1609,7 +1609,7 @@ public class UnicodeSet extends UnicodeFilter {
         if (!strings.containsAll(c.strings)) return false;
         return true;
     }
-    
+
     /**
      * Returns true if this set contains all the characters
      * of the given string.
@@ -1625,7 +1625,7 @@ public class UnicodeSet extends UnicodeFilter {
         }
         return true;
     }
-    
+
     /**
      * Returns true if this set contains none of the characters
      * of the given range.
@@ -1668,7 +1668,7 @@ public class UnicodeSet extends UnicodeFilter {
         if (!SortedSetRelation.hasRelation(strings, SortedSetRelation.DISJOINT, c.strings)) return false;
         return true;
     }
-    
+
     /**
      * Returns true if this set contains none of the characters
      * of the given string.
@@ -1684,7 +1684,7 @@ public class UnicodeSet extends UnicodeFilter {
         }
         return true;
     }
-        
+
     /**
      * Returns true if this set contains one or more of the characters
      * in the given range.
@@ -1694,9 +1694,9 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public final boolean containsSome(int start, int end) {
-    	return !containsNone(start, end);
+        return !containsNone(start, end);
     }
-        
+
     /**
      * Returns true if this set contains one or more of the characters
      * and strings of the given set.
@@ -1705,9 +1705,9 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public final boolean containsSome(UnicodeSet s) {
-    	return !containsNone(s);
+        return !containsNone(s);
     }
-        
+
     /**
      * Returns true if this set contains one or more of the characters
      * of the given string.
@@ -1716,10 +1716,10 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public final boolean containsSome(String s) {
-    	return !containsNone(s);
+        return !containsNone(s);
     }
-        
-        
+
+
     /**
      * Adds all of the elements in the specified set to this set if
      * they're not already present.  This operation effectively
@@ -1950,7 +1950,7 @@ public class UnicodeSet extends UnicodeFilter {
         int nestedPatStart = -1; // see below for usage
         boolean nestedPatDone = false; // see below for usage
         StringBuffer multiCharBuffer = new StringBuffer();
-        
+
 
         boolean invert = false;
         clear();
@@ -2095,7 +2095,7 @@ public class UnicodeSet extends UnicodeFilter {
                     rebuildPattern = true;
 
                     i = pp.getIndex(); // advance past property pattern
-                    
+
                     if (mode == 3) {
                         // Entire pattern is a category; leave parse
                         // loop.  This is one of 2 ways we leave this
@@ -2179,7 +2179,7 @@ public class UnicodeSet extends UnicodeFilter {
                     multiCharBuffer.setLength(0);
                     while (i < pattern.length()) {
                         int ch = UTF16.charAt(pattern, i);
-                        i += UTF16.getCharCount(ch); 
+                        i += UTF16.getCharCount(ch);
                         if (ch == '}') {
                             length = -length; // signal that we saw '}'
                             break;
@@ -2273,7 +2273,7 @@ public class UnicodeSet extends UnicodeFilter {
                 if (anchor == 2) {
                     rebuildPattern = true;
                     newPat.append(SymbolTable.SYMBOL_REF);
-                    add(TransliterationRule.ETHER);
+                    add(UnicodeMatcher.ETHER);
                 }
                 mode = 4;
                 break;
@@ -2316,9 +2316,9 @@ public class UnicodeSet extends UnicodeFilter {
         if (lastChar == SymbolTable.SYMBOL_REF && !isLastLiteral) {
             rebuildPattern = true;
             newPat.append((char) lastChar);
-            add(TransliterationRule.ETHER);
+            add(UnicodeMatcher.ETHER);
         }
-        
+
         else if (lastChar != NONE) {
             add(lastChar, lastChar);
             _appendToPat(newPat, lastChar, false);
@@ -2612,7 +2612,7 @@ public class UnicodeSet extends UnicodeFilter {
     private static final int max(int a, int b) {
         return (a > b) ? a : b;
     }
-    
+
     //----------------------------------------------------------------
     // Generic filter-based scanning code
     //----------------------------------------------------------------
@@ -2737,7 +2737,7 @@ public class UnicodeSet extends UnicodeFilter {
     //----------------------------------------------------------------
     // Property set API
     //----------------------------------------------------------------
-    
+
     /**
      * Modifies this set to contain those code points which have the
      * given value for the given binary or enumerated property, as
@@ -2877,7 +2877,7 @@ public class UnicodeSet extends UnicodeFilter {
             // valueAlias is empty.  Interpret as General Category, Script,
             // Binary property, or ANY or ASCII.  Upon success, p and v will
             // be set.
-            try { 
+            try {
                 p = UProperty.GENERAL_CATEGORY_MASK;
                 v = UCharacter.getPropertyValueEnum(p, propertyAlias);
             } catch (IllegalArgumentException e) {
@@ -2926,7 +2926,7 @@ public class UnicodeSet extends UnicodeFilter {
     //----------------------------------------------------------------
     // Property set patterns
     //----------------------------------------------------------------
-    
+
     /**
      * Return true if the given position, in the given pattern, appears
      * to be the start of a property set pattern.
@@ -3000,12 +3000,12 @@ public class UnicodeSet extends UnicodeFilter {
             propName = pattern.substring(pos, equals);
             valueName = pattern.substring(equals+1, close);
         }
-        
+
         else {
             // Handle case where no '=' is seen, and \N{}
             propName = pattern.substring(pos, close);
             valueName = "";
-            
+
             // Handle \N{name}
             if (isName) {
                 // This is a little inefficient since it means we have to

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2002/09/09 16:33:43 $
- * $Revision: 1.117 $
+ * $Date: 2003/01/28 18:55:35 $
+ * $Revision: 1.118 $
  *
  *****************************************************************************************
  */
@@ -15,6 +15,7 @@ import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.impl.UtilityExtensions;
 import com.ibm.icu.util.CaseInsensitiveString;
 import java.util.*;
 
@@ -332,7 +333,7 @@ public class TransliteratorTest extends TestFmwk {
                 log = new StringBuffer(s.toString() + " => ");
                 t.finishTransliteration(s, index);
             }
-            Utility.formatInput(log, s, index);
+            UtilityExtensions.formatInput(log, s, index);
             if (s.toString().equals(DATA[i+1])) {
                 logln(log.toString());
             } else {
@@ -839,7 +840,7 @@ public class TransliteratorTest extends TestFmwk {
 
         // round trip
         Transliterator t = Transliterator.getInstance("Any-Name;Name-Any");
-        
+
         String s = "{\u00A0abc\u4E01\\N{x\u00B5\u0A81\uFFFD\u0004\u0009\u0081\uFFFF\u0004\\N{";
         expect(t, s, s);
     }
@@ -915,8 +916,8 @@ public class TransliteratorTest extends TestFmwk {
             {"\u212b",             "A\u030a",            "\u00c5"            }, // angstrom_sign
             {"\u00c5",             "A\u030a",            "\u00c5"            }, // A-ring
 
-            {"\u00fdffin",         "y\u0301ffin",        "\u00fdffin"        },	//updated with 3.0
-            {"\u00fd\uFB03n",      "y\u0301\uFB03n",     "\u00fd\uFB03n"     },	//updated with 3.0
+            {"\u00fdffin",         "y\u0301ffin",        "\u00fdffin"        }, //updated with 3.0
+            {"\u00fd\uFB03n",      "y\u0301\uFB03n",     "\u00fd\uFB03n"     }, //updated with 3.0
 
             {"Henry IV",           "Henry IV",           "Henry IV"          },
             {"Henry \u2163",       "Henry \u2163",       "Henry \u2163"      },
@@ -934,7 +935,7 @@ public class TransliteratorTest extends TestFmwk {
             // Input               Decomposed            Composed
             {"\uFB4f",             "\u05D0\u05DC",       "\u05D0\u05DC"      }, // Alef-Lamed vs. Alef, Lamed
 
-            {"\u00fdffin",         "y\u0301ffin",        "\u00fdffin"        },	//updated for 3.0
+            {"\u00fdffin",         "y\u0301ffin",        "\u00fdffin"        }, //updated for 3.0
             {"\u00fd\uFB03n",      "y\u0301ffin",        "\u00fdffin"        }, // ffi ligature -> f + f + i
 
             {"Henry IV",           "Henry IV",           "Henry IV"          },
@@ -1155,7 +1156,7 @@ public class TransliteratorTest extends TestFmwk {
             "$iotasub = \\u0345 ;"+
             "($evowel $macron $accentMinus *) i > | $1 $iotasub ;",
             "([AEIOUYaeiouy]\\u0304[[\\u0300-\\u0345]&[:M:]-[\\u0338]]*)i > | $1 \\u0345;",
-            
+
             RBT,
             "([AEIOUYaeiouy]\\u0304[[:M:]-[\\u0304\\u0345]]*)i > | $1 \\u0345;",
             "([AEIOUYaeiouy]\\u0304[[:M:]-[\\u0304\\u0345]]*)i > | $1 \\u0345;",
@@ -1266,7 +1267,7 @@ public class TransliteratorTest extends TestFmwk {
         expect(Transliterator.getInstance("Any-Hex/Unicode"),
                CharsToUnicodeString("\\U00010330\\U0010FF00\\U000E0061\\u00A0"),
                "U+10330U+10FF00U+E0061U+00A0");
-  
+
         expect(Transliterator.getInstance("Any-Hex/C"),
                CharsToUnicodeString("\\U00010330\\U0010FF00\\U000E0061\\u00A0"),
                "\\U00010330\\U0010FF00\\U000E0061\\u00A0");
@@ -1819,10 +1820,10 @@ public class TransliteratorTest extends TestFmwk {
     public void  TestTeluguLatinRT(){
         String[]  source = {
             "raghur\u0101m vi\u015Bvan\u0101dha",                           /* Raghuram Viswanadha    */
-            "\u0101nand vaddir\u0101ju",                                    /* Anand Vaddiraju 	      */
+            "\u0101nand vaddir\u0101ju",                                    /* Anand Vaddiraju        */
             "r\u0101j\u012Bv ka\u015Barab\u0101da",                         /* Rajeev Kasarabada      */
             "san\u0304j\u012Bv ka\u015Barab\u0101da",                       /* sanjeev kasarabada     */
-            "san\u0304j\u012Bb sen'gupta",                                  /* sanjib sengupata 	  */
+            "san\u0304j\u012Bb sen'gupta",                                  /* sanjib sengupata       */
             "amar\u0113ndra hanum\u0101nula",                               /* Amarendra hanumanula   */
             "ravi kum\u0101r vi\u015Bvan\u0101dha",                         /* Ravi Kumar Viswanadha  */
             "\u0101ditya kandr\u0113gula",                                  /* Aditya Kandregula      */
@@ -1971,7 +1972,7 @@ public class TransliteratorTest extends TestFmwk {
             expect.setCharAt(0,(char) (vIter.codepoint+0x0100));
             expect(trans,src.toString(),expect.toString());
         }
-        
+
         expect.setCharAt(1,'\u0A70');
         while(nvIter.next()){
             //src.setCharAt(0,(char) nvIter.codepoint);
@@ -2275,6 +2276,56 @@ public class TransliteratorTest extends TestFmwk {
         }
     }
 
+    /**
+     * This test is not in trnstst.cpp. This test has been moved from com/ibm/icu/dev/test/lang/TestUScript.java
+     * during ICU4J modularization to remove dependency of tests on Transliterator.
+     */
+     public void TestScriptAllCodepoints(){
+            int code;
+             String oldId="";
+             String oldAbbrId="";
+            for( int i =0; i <= 0x10ffff; i++){
+                code =UScript.INVALID_CODE;
+                code = UScript.getScript(i);
+                if(code==UScript.INVALID_CODE){
+                    errln("UScript.getScript for codepoint 0x"+ hex(i)+" failed");
+                }
+                 String id =UScript.getName(code);
+                 String abbr = UScript.getShortName(code);
+                 String newId ="[:"+id+":];NFD";
+                 String newAbbrId ="[:"+abbr+":];NFD";
+                 if(!oldId.equals(newId)){
+                     try{
+                         Transliterator t = Transliterator.getInstance(newId);
+                         if(t==null){
+                              errln("Failed to create transliterator for "+hex(i)+
+                              " script code: " +id);
+                         }
+                     }catch(Exception e){
+                         errln("Failed to create transliterator for "+hex(i)
+                                 +" script code: " +id
+                                 + " Exception: "+e.getMessage());
+                     }
+                 }
+                 oldId = newId;
+                 if(!oldAbbrId.equals(newAbbrId)){
+                     try{
+                         Transliterator t = Transliterator.getInstance(newAbbrId);
+                         if(t==null){
+                              errln("Failed to create transliterator for "+hex(i)+
+                              " script code: " +abbr);
+                         }
+                     }catch(Exception e){
+                         errln("Failed to create transliterator for "+hex(i)
+                                 +" script code: " +abbr
+                                 + " Exception: "+e.getMessage());
+                     }
+                 }
+                 oldAbbrId = newAbbrId;
+            }
+    }
+
+
     static final String[][] registerRules = {
         {"Any-Dev1", "x > X; y > Y;"},
         {"Any-Dev2", "XY > Z"},
@@ -2311,12 +2362,12 @@ public class TransliteratorTest extends TestFmwk {
         //TODO: enable this test once Titlecase works right
         //{"Title", "\uFB00i\u0131I\u0130 \u01C7\u01C8\u01C9 " + DESERET_dee + DESERET_DEE,
         //          "Ffi\u0131ii \u01C8\u01C9\u01C9 " + DESERET_DEE + DESERET_dee},
-        
+
         {"Upper", "ab'cD \uFB00i\u0131I\u0130 \u01C7\u01C8\u01C9 " + DESERET_dee + DESERET_DEE,
                   "AB'CD FFIII\u0130 \u01C7\u01C7\u01C7 " + DESERET_DEE + DESERET_DEE},
         {"Lower", "ab'cD \uFB00i\u0131I\u0130 \u01C7\u01C8\u01C9 " + DESERET_dee + DESERET_DEE,
                   "ab'cd \uFB00i\u0131ii\u0307 \u01C9\u01C9\u01C9 " + DESERET_dee + DESERET_dee},
-                  
+
         {"Upper", "ab'cD \uFB00i\u0131I\u0130 \u01C7\u01C8\u01C9 " + DESERET_dee + DESERET_DEE},
         {"Lower", "ab'cD \uFB00i\u0131I\u0130 \u01C7\u01C8\u01C9 " + DESERET_dee + DESERET_DEE},
 
@@ -2336,7 +2387,7 @@ public class TransliteratorTest extends TestFmwk {
     };
 
     public void TestSpecialCases() {
-        
+
         for (int i = 0; i < registerRules.length; ++i) {
             Transliterator t = Transliterator.createFromRules(registerRules[i][0],
                 registerRules[i][1], Transliterator.FORWARD);
@@ -2350,7 +2401,7 @@ public class TransliteratorTest extends TestFmwk {
             String target = null;
 
             // Automatic generation of targets, to make it simpler to add test cases (and more fail-safe)
-            
+
             if (testCases[i].length > 2)    target = testCases[i][2];
             else if (id.equalsIgnoreCase("NFD"))    target = com.ibm.icu.text.Normalizer.normalize(source, com.ibm.icu.text.Normalizer.NFD);
             else if (id.equalsIgnoreCase("NFC"))    target = com.ibm.icu.text.Normalizer.normalize(source, com.ibm.icu.text.Normalizer.NFC);
@@ -2459,14 +2510,14 @@ public class TransliteratorTest extends TestFmwk {
         // we have a few special cases. Any-Remove (pos.start = 0, but also = limit) and U+XXXXX?X?
 
         if (pos.start == 0 && pos.limit != 0 && !t.getID().equals("Hex-Any/Unicode")) {
-            errln("No Progress, " + t.getID() + ": " + Utility.formatInput(test, pos));
+            errln("No Progress, " + t.getID() + ": " + UtilityExtensions.formatInput(test, pos));
             gotError = true;
         } else {
-            logln("PASS Progress, " + t.getID() + ": " + Utility.formatInput(test, pos));
+            logln("PASS Progress, " + t.getID() + ": " + UtilityExtensions.formatInput(test, pos));
         }
         t.finishTransliteration(test, pos);
         if (pos.start != pos.limit) {
-            errln("Incomplete, " + t.getID() + ":  " + Utility.formatInput(test, pos));
+            errln("Incomplete, " + t.getID() + ":  " + UtilityExtensions.formatInput(test, pos));
             gotError = true;
         }
     }
@@ -2491,7 +2542,7 @@ public class TransliteratorTest extends TestFmwk {
             errln("FAIL: toRules() => " + r +
                   ", expected " + rule);
         }
-        
+
         expect(t, "The Quick Brown Fox",
                "T(t=\\u0074)he Q(q=\\u0071)uick B(b=\\u0062)rown F(f=\\u0066)ox");
         rule =
@@ -2510,7 +2561,7 @@ public class TransliteratorTest extends TestFmwk {
             errln("FAIL: toRules() => " + r +
                   ", expected " + rule);
         }
-        
+
         expect(t, "\u0301",
                "U+0301 \\N{COMBINING ACUTE ACCENT}");
     }
@@ -2523,14 +2574,14 @@ public class TransliteratorTest extends TestFmwk {
             if (t != null) {
                 errln("FAIL: createFromRules should have returned NULL");
             }
-	        errln("FAIL: Ok: . > $1; => no error");
-	        Transliterator t2= Transliterator.createFromRules("Test2", rule2, Transliterator.FORWARD);
+            errln("FAIL: Ok: . > $1; => no error");
+            Transliterator t2= Transliterator.createFromRules("Test2", rule2, Transliterator.FORWARD);
             if (t2 != null) {
                 errln("FAIL: createFromRules should have returned NULL");
             }
-	        errln("FAIL: Ok: . > $1; => no error");
-        } catch (IllegalArgumentException e) {        
-          	 logln("Ok: . > $1; => " + e.getMessage());
+            errln("FAIL: Ok: . > $1; => no error");
+        } catch (IllegalArgumentException e) {
+             logln("Ok: . > $1; => " + e.getMessage());
         }
     }
 
@@ -2542,13 +2593,13 @@ public class TransliteratorTest extends TestFmwk {
             "       [b{bc}]      > z;" +
             "[{gd}] { e          > q;" +
             "         e } [{fg}] > r;" ;
-        
+
         Transliterator t = Transliterator.createFromRules("Test", rule, Transliterator.FORWARD);
         if (t == null) {
             errln("FAIL: createFromRules failed");
             return;
         }
-        
+
         expect(t, "a aa ab bc d gd de gde gdefg ddefg",
                   "y x yz z d gd de gdq gdqfg ddrfg");
 
@@ -2559,13 +2610,13 @@ public class TransliteratorTest extends TestFmwk {
             "           b          > y;" +
             "           c          > z;" +
             " q [t {st} {rst}] { e > p;" ;
-        
+
         t = Transliterator.createFromRules("Test", rule, Transliterator.FORWARD);
         if (t == null) {
             errln("FAIL: createFromRules failed");
             return;
         }
-        
+
         expect(t, "a ab abc qte qste qrste",
                   "x x x qtp qstp qrstp");
     }
@@ -2624,7 +2675,7 @@ public class TransliteratorTest extends TestFmwk {
         public Transliterator getInstance(String ID) {
             return (Transliterator) m.get(new CaseInsensitiveString(ID));
         }
-        
+
         static void unregister() {
             Iterator ids = m.keySet().iterator();
             while (ids.hasNext()) {
@@ -2641,7 +2692,7 @@ public class TransliteratorTest extends TestFmwk {
     public void TestAnyX() {
         Transliterator anyLatin =
             Transliterator.getInstance("Any-Latin", Transliterator.FORWARD);
-        
+
         expect(anyLatin,
                "greek:\u03B1\u03B2\u03BA\u0391\u0392\u039A hiragana:\u3042\u3076\u304F cyrillic:\u0430\u0431\u0446",
                "greek:abkABK hiragana:abuku cyrillic:abc");
@@ -2781,16 +2832,16 @@ public class TransliteratorTest extends TestFmwk {
         rsource.replace(0, rsource.length(), "");
         if (pos != null) {
             rsource.replace(0, 0, source);
-            v.add(Utility.formatInput(rsource, index));
+            v.add(UtilityExtensions.formatInput(rsource, index));
             t.transliterate(rsource, index);
-            v.add(Utility.formatInput(rsource, index));
+            v.add(UtilityExtensions.formatInput(rsource, index));
         } else {
             for (int i=0; i<source.length(); ++i) {
                 //v.add(i == 0 ? "" : " + " + source.charAt(i) + "");
                 //log.append(source.charAt(i)).append(" -> "));
                 t.transliterate(rsource, index, source.charAt(i));
-                //v.add(Utility.formatInput(rsource, index) + source.substring(i+1));
-                v.add(Utility.formatInput(rsource, index) +
+                //v.add(UtilityExtensions.formatInput(rsource, index) + source.substring(i+1));
+                v.add(UtilityExtensions.formatInput(rsource, index) +
                       ((i<source.length()-1)?(" + '" + source.charAt(i+1) + "' ->"):" =>"));
             }
         }

@@ -5,19 +5,22 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/UnicodeNormalizerConformanceTest.java,v $ 
- * $Date: 2002/12/09 22:50:40 $ 
- * $Revision: 1.1 $
+ * $Date: 2003/01/28 18:55:34 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
 
 package com.ibm.icu.dev.test.normalizer;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+
+import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
-import java.io.*;
-import com.ibm.icu.dev.test.*;
-import com.ibm.icu.text.*;
-import com.ibm.icu.impl.Utility;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
+
 
 public class UnicodeNormalizerConformanceTest extends TestFmwk {
 
