@@ -22,12 +22,11 @@
 
 #if !UCONFIG_NO_BREAK_ITERATION
 
+#include <malloc.h>
 #include "unicode/uloc.h"
 #include "unicode/ubrk.h"
 #include "unicode/ustring.h"
 #include "unicode/ucnv.h"
-#include "ustr_imp.h"
-#include "cmemory.h"
 #include "cintltst.h"
 #include "cbiapts.h"
 
@@ -73,7 +72,7 @@ static UChar* toUChar(const char *src, void **freeHook) {
         return NULL;
     };
 
-    cnv = u_getDefaultConverter(&status);
+	cnv = ucnv_open(NULL, &status);
     if(U_FAILURE(status) || cnv == NULL) {
         return NULL;
     }
@@ -98,7 +97,7 @@ static UChar* toUChar(const char *src, void **freeHook) {
     }
 
     ucnv_reset(cnv); /* be good citizens */
-    u_releaseDefaultConverter(cnv);
+    ucnv_close(cnv);
     if (dest == NULL) {
         return NULL;
     }
