@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationRuleParser.java,v $ 
-* $Date: 2004/01/22 06:41:09 $ 
-* $Revision: 1.16 $
+* $Date: 2004/01/28 02:05:50 $ 
+* $Revision: 1.17 $
 *
 *******************************************************************************
 */
@@ -968,10 +968,19 @@ final class CollationRuleParser
                         int baseContCE = INDIRECT_BOUNDARIES_[
                                m_parsedToken_.m_indirectIndex_].m_startContCE_;
                         int ce[] = new int[2]; 
-                        CollationParsedRuleBuilder.InverseUCA invuca
-                                     = CollationParsedRuleBuilder.INVERSE_UCA_;
-                        invuca.getInversePrevCE(baseCE, baseContCE, strength, 
-                                                ce);
+                        if((baseCE >>> 24 >= RuleBasedCollator.UCA_CONSTANTS_.PRIMARY_IMPLICIT_MIN_) 
+						&& (baseCE >>> 24 <=  RuleBasedCollator.UCA_CONSTANTS_.PRIMARY_IMPLICIT_MAX_)) { /* implicits - */
+                        	int primary = baseCE & RuleBasedCollator.CE_PRIMARY_MASK_ | (baseContCE & RuleBasedCollator.CE_PRIMARY_MASK_) >> 16;
+                        	int raw = RuleBasedCollator.impCEGen_.getRawFromImplicit(primary);
+                        	int primaryCE = RuleBasedCollator.impCEGen_.getImplicitFromRaw(raw-1);
+                        	ce[0] = primaryCE & RuleBasedCollator.CE_PRIMARY_MASK_ | 0x0505;
+                        	ce[1] = (primaryCE << 16) & RuleBasedCollator.CE_PRIMARY_MASK_ | RuleBasedCollator.CE_CONTINUATION_MARKER_;
+                        } else {
+                        	CollationParsedRuleBuilder.InverseUCA invuca
+								= CollationParsedRuleBuilder.INVERSE_UCA_;
+                        	invuca.getInversePrevCE(baseCE, baseContCE, strength, 
+                        			ce);
+                        }
                         m_listHeader_[m_resultLength_].m_baseCE_ = ce[0];
                         m_listHeader_[m_resultLength_].m_baseContCE_ = ce[1];
                         m_listHeader_[m_resultLength_].m_nextCE_ = 0;

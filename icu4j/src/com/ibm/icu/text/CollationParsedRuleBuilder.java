@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationParsedRuleBuilder.java,v $ 
-* $Date: 2004/01/22 06:41:10 $ 
-* $Revision: 1.28 $
+* $Date: 2004/01/28 02:05:51 $ 
+* $Revision: 1.29 $
 *
 *******************************************************************************
 */
@@ -193,7 +193,7 @@ final class CollationParsedRuleBuilder
 	        if ((listheader.m_baseCE_ >>> 24) 
                 >= RuleBasedCollator.UCA_CONSTANTS_.PRIMARY_IMPLICIT_MIN_
 	            && (listheader.m_baseCE_ >>> 24)
-                < RuleBasedCollator.UCA_CONSTANTS_.PRIMARY_IMPLICIT_MAX_) 
+                <= RuleBasedCollator.UCA_CONSTANTS_.PRIMARY_IMPLICIT_MAX_) 
             { 
 	            // implicits -
 			    listheader.m_pos_[0] = 0;

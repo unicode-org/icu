@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $
-* $Date: 2004/01/22 06:40:38 $
-* $Revision: 1.56 $
+* $Date: 2004/01/28 02:05:51 $
+* $Revision: 1.57 $
 *
 *******************************************************************************
 */
@@ -1918,6 +1918,7 @@ public final class RuleBasedCollator extends Collator
     private static final byte BYTE_SHIFT_PREFIX_ = (byte)0x03;
     private static final byte BYTE_UNSHIFTED_MIN_ = BYTE_SHIFT_PREFIX_;
     private static final byte BYTE_FIRST_UCA_ = BYTE_COMMON_;
+    static final byte CODAN_PLACEHOLDER = 0x24;
     private static final byte BYTE_LAST_LATIN_PRIMARY_ = (byte)0x4C;
     private static final byte BYTE_FIRST_NON_LATIN_PRIMARY_ = (byte)0x4D;
     private static final byte BYTE_UNSHIFTED_MAX_ = (byte)0xFF;

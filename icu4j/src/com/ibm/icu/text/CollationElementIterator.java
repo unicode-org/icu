@@ -392,9 +392,9 @@ public final class CollationElementIterator
             }
             else if (ch <= 0xFF) {
                 result = m_collator_.m_trie_.getLatin1LinearValue(ch);
-                if (RuleBasedCollator.isSpecial(result)) {
-                    result = previousSpecial(m_collator_, result, ch);
-                }
+                //if (RuleBasedCollator.isSpecial(result)) {
+                    //result = previousSpecial(m_collator_, result, ch);
+                //}
             }
             else {
                 result = m_collator_.m_trie_.getLeadValue(ch);
@@ -2157,10 +2157,10 @@ public final class CollationElementIterator
                          (char)(m_utilStringBuffer_.charAt(endIndex - 1) - 1));            
                 
             // We want to skip over the first two slots in the buffer. 
-            // The first slot is reserved for the header byte 0x1B. 
+            // The first slot is reserved for the header byte CODAN_PLACEHOLDER. 
             // The second slot is for the sign/exponent byte: 
             // 0x80 + (decimalPos/2) & 7f.
-            m_utilStringBuffer_.setCharAt(0, (char)0x1B);
+            m_utilStringBuffer_.setCharAt(0, (char)RuleBasedCollator.CODAN_PLACEHOLDER);
             m_utilStringBuffer_.setCharAt(1, 
                                      (char)(0x80 + ((digIndx >>> 1) & 0x7F)));
         
@@ -2807,10 +2807,10 @@ public final class CollationElementIterator
             m_utilStringBuffer_.setCharAt(2, 
                                     (char)(m_utilStringBuffer_.charAt(2) - 1));          
             // We want to skip over the first two slots in the buffer. 
-            // The first slot is reserved for the header byte 0x1B. 
+            // The first slot is reserved for the header byte CODAN_PLACEHOLDER. 
             // The second slot is for the sign/exponent byte: 
             // 0x80 + (decimalPos/2) & 7f.
-            m_utilStringBuffer_.setCharAt(0, (char)0x1B);
+            m_utilStringBuffer_.setCharAt(0, (char)RuleBasedCollator.CODAN_PLACEHOLDER);
             m_utilStringBuffer_.setCharAt(1, 
                                     (char)(0x80 + ((digIndx >>> 1) & 0x7F)));
         
