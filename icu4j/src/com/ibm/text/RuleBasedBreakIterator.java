@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/RuleBasedBreakIterator.java,v $ 
- * $Date: 2000/07/25 21:11:59 $ 
- * $Revision: 1.9 $
+ * $Date: 2000/09/15 16:07:52 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -240,7 +240,7 @@ import java.io.*;
  * &nbsp; For examples, see the resource data (which is annotated).</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.9 $ $Date: 2000/07/25 21:11:59 $
+ * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.10 $ $Date: 2000/09/15 16:07:52 $
  */
 public class RuleBasedBreakIterator extends BreakIterator {
 
@@ -408,8 +408,14 @@ out.write(0x27);
 writeSwappedShort((short)20, out, littleEndian);
 // write reserved bytes
 writeSwappedShort((short)0, out, littleEndian);
+
 // write flag indicating whether we're big-endian
-out.write(0);
+if (littleEndian) {
+    out.write(0);
+} else {
+    out.write(1);
+}
+
 // write character set family code (0 means ASCII)
 out.write(0);
 // write size of UChar in this file
