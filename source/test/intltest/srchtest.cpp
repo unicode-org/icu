@@ -1633,6 +1633,10 @@ void StringSearchTest::TestBreakIteratorCanonical()
         }
         search  = &(BREAKITERATOREXACT[count + 1]);
         breaker = getBreakIterator(search->breaker);
+        if (breaker == NULL) {
+            errln("Error creating BreakIterator");
+            return;
+        }
         breaker->setText(strsrch->getText());
         strsrch->setBreakIterator(breaker, status);
         if (U_FAILURE(status) || strsrch->getBreakIterator() != breaker) {
