@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/12/11 19:41:02 $ 
-* $Revision: 1.57 $
+* $Date: 2002/12/11 19:48:32 $ 
+* $Revision: 1.58 $
 *
 *******************************************************************************
 */
@@ -2898,6 +2898,11 @@ public final class UCharacter
      * have more than one name.  The nameChoice determines which one
      * is returned.
      *
+     * In addition, this function maps the property
+     * UProperty.GENERAL_CATEGORY_MASK to the synthetic names "gcm" /
+     * "General_Category_Mask".  These names are not in
+     * PropertyAliases.txt.
+     * 
      * @param property UProperty selector.
      *
      * @param nameChoice UProperty.NameChoice selector for which name
@@ -2930,6 +2935,11 @@ public final class UCharacter
      * specified in the Unicode database file PropertyAliases.txt.
      * Short, long, and any other variants are recognized.
      *
+     * In addition, this function maps the synthetic names "gcm" /
+     * "General_Category_Mask" to the property
+     * UProperty.GENERAL_CATEGORY_MASK.  These names are not in
+     * PropertyAliases.txt.
+     *
      * @param propertyAlias the property name to be matched.  The name
      * is compared using "loose matching" as described in
      * PropertyAliases.txt.
@@ -2951,6 +2961,12 @@ public final class UCharacter
      * the Unicode database file PropertyValueAliases.txt.  Most
      * values have more than one name.  The nameChoice determines
      * which one is returned.
+     *
+     * Note: Some of the names in PropertyValueAliases.txt can only be
+     * retrieved using UProperty.GENERAL_CATEGORY_MASK, not
+     * UProperty.GENERAL_CATEGORY.  These include: "C" / "Other", "L" /
+     * "Letter", "LC" / "Cased_Letter", "M" / "Mark", "N" / "Number", "P"
+     * / "Punctuation", "S" / "Symbol", and "Z" / "Separator".
      *
      * @param property UProperty selector constant.
      * UProperty.INT_START &lt;= property &lt; UProperty.INT_LIMIT or
@@ -2998,6 +3014,12 @@ public final class UCharacter
      * Return the property value integer for a given value name, as
      * specified in the Unicode database file PropertyValueAliases.txt.
      * Short, long, and any other variants are recognized.
+     *
+     * Note: Some of the names in PropertyValueAliases.txt will only be
+     * recognized with UProperty.GENERAL_CATEGORY_MASK, not
+     * UProperty.GENERAL_CATEGORY.  These include: "C" / "Other", "L" /
+     * "Letter", "LC" / "Cased_Letter", "M" / "Mark", "N" / "Number", "P"
+     * / "Punctuation", "S" / "Symbol", and "Z" / "Separator".
      *
      * @param property UProperty selector constant.
      * UProperty.INT_START &lt;= property &lt; UProperty.INT_LIMIT or
