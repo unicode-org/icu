@@ -6,11 +6,17 @@
  */
 package com.ibm.icu.dev.test.util;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -46,7 +52,7 @@ public class DisplayNameTest extends TestFmwk {
 
     String[] countries = addUnknown(ULocale.getISOCountries(),2);
     String[] languages = addUnknown(ULocale.getISOLanguages(),2);
-    String[] zones = addUnknown(TimeZone.getAvailableIDs(),5);
+    String[] zones = addUnknown(getRealZoneIDs(),5);
     String[] scripts = addUnknown(getCodes(new ULocale("en","US",""), "Scripts"),4);
     // TODO fix once there is a way to get a list of all script codes
     String[] currencies = addUnknown(getCodes(new ULocale("en","",""), "Currencies"),3);
@@ -59,8 +65,21 @@ public class DisplayNameTest extends TestFmwk {
         }
     }
 
+    /**
+     * @return
+     */
+    private String[] getRealZoneIDs() {
+        Set temp = new TreeSet(Arrays.asList(TimeZone.getAvailableIDs()));
+        temp.removeAll(getAliasMap().keySet());
+        return (String[])temp.toArray(new String[temp.size()]);
+    }
+
     public void TestEnglish() {
         checkLocale(ULocale.ENGLISH);
+    }
+
+    public void TestFrench() {
+        checkLocale(ULocale.FRENCH);
     }
 
     private void checkLocale(ULocale locale) {
@@ -91,7 +110,7 @@ public class DisplayNameTest extends TestFmwk {
         // comment this out, because the zone string information is lost
         // we'd have to access the resources directly to test them
 
-        if (false) check("Zones", locale, zones, zoneFormats, new DisplayNameGetter() {
+        check("Zones", locale, zones, zoneFormats, new DisplayNameGetter() {
             // TODO replace once we have real API
             public String get(ULocale locale, String code, Object context) {
                 return getZoneString(locale, code, ((Integer)context).intValue());
@@ -106,16 +125,19 @@ public class DisplayNameTest extends TestFmwk {
         Map data = (Map)zoneData.get(locale);
         if (data == null) {
             data = new HashMap();
+            if (SHOW_ALL) System.out.println();
+            if (SHOW_ALL) System.out.println("zones for " + locale);
             ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(locale);
             ICUResourceBundle table = bundle.getWithFallback("zoneStrings");
-            for (int i = 0; ; ++i) {
+            for (int i = 0; i < table.getSize(); ++i) {
                 ICUResourceBundle stringSet = table.get(i);
-                if (stringSet == null) break;
+                //ICUResourceBundle stringSet = table.getWithFallback(String.valueOf(i));
                 String key = stringSet.getString(0);
+                if (SHOW_ALL) System.out.println("key: " + key);
                 ArrayList list = new ArrayList();
-                for (int j = 1; ; ++j) {
+                for (int j = 1; j < stringSet.getSize(); ++j) {
                     String entry = stringSet.getString(j);
-                    if (entry == null) break;
+                    if (SHOW_ALL) System.out.println("  entry: " + entry);
                     list.add(entry);
                 }
                 data.put(key, list.toArray(new String[list.size()]));
@@ -126,6 +148,163 @@ public class DisplayNameTest extends TestFmwk {
         if (strings == null || item >= strings.length) return olsonID;
         return strings[item];
     }
+    
+    static String[][] zonesAliases = {
+        {"America/Atka", "America/Atka"},
+        {"America/Ensenada", "America/Ensenada"},
+        {"America/Fort_Wayne", "America/Fort_Wayne"},
+        {"America/Indiana/Indianapolis", "America/Indiana/Indianapolis"},
+        {"America/Kentucky/Louisville", "America/Kentucky/Louisville"},
+        {"America/Knox_IN", "America/Knox_IN"},
+        {"America/Porto_Acre", "America/Porto_Acre"},
+        {"America/Rosario", "America/Rosario"},
+        {"America/Shiprock", "America/Shiprock"},
+        {"America/Virgin", "America/Virgin"},
+        {"Antarctica/South_Pole", "Antarctica/South_Pole"},
+        {"Arctic/Longyearbyen", "Arctic/Longyearbyen"},
+        {"Asia/Ashkhabad", "Asia/Ashkhabad"},
+        {"Asia/Chungking", "Asia/Chungking"},
+        {"Asia/Dacca", "Asia/Dacca"},
+        {"Asia/Istanbul", "Asia/Istanbul"},
+        {"Asia/Macao", "Asia/Macao"},
+        {"Asia/Tel_Aviv", "Asia/Tel_Aviv"},
+        {"Asia/Thimbu", "Asia/Thimbu"},
+        {"Asia/Ujung_Pandang", "Asia/Ujung_Pandang"},
+        {"Asia/Ulan_Bator", "Asia/Ulan_Bator"},
+        {"Australia/ACT", "Australia/ACT"},
+        {"Australia/Canberra", "Australia/Canberra"},
+        {"Australia/LHI", "Australia/LHI"},
+        {"Australia/NSW", "Australia/NSW"},
+        {"Australia/North", "Australia/North"},
+        {"Australia/Queensland", "Australia/Queensland"},
+        {"Australia/South", "Australia/South"},
+        {"Australia/Tasmania", "Australia/Tasmania"},
+        {"Australia/Victoria", "Australia/Victoria"},
+        {"Australia/West", "Australia/West"},
+        {"Australia/Yancowinna", "Australia/Yancowinna"},
+        {"Brazil/Acre", "Brazil/Acre"},
+        {"Brazil/DeNoronha", "Brazil/DeNoronha"},
+        {"Brazil/East", "Brazil/East"},
+        {"Brazil/West", "Brazil/West"},
+        {"CST6CDT", "CST6CDT"},
+        {"Canada/Atlantic", "Canada/Atlantic"},
+        {"Canada/Central", "Canada/Central"},
+        {"Canada/East-Saskatchewan", "Canada/East-Saskatchewan"},
+        {"Canada/Eastern", "Canada/Eastern"},
+        {"Canada/Mountain", "Canada/Mountain"},
+        {"Canada/Newfoundland", "Canada/Newfoundland"},
+        {"Canada/Pacific", "Canada/Pacific"},
+        {"Canada/Saskatchewan", "Canada/Saskatchewan"},
+        {"Canada/Yukon", "Canada/Yukon"},
+        {"Chile/Continental", "Chile/Continental"},
+        {"Chile/EasterIsland", "Chile/EasterIsland"},
+        {"Cuba", "Cuba"},
+        {"EST", "EST"},
+        {"EST5EDT", "EST5EDT"},
+        {"Egypt", "Egypt"},
+        {"Eire", "Eire"},
+        {"Etc/GMT+0", "Etc/GMT+0"},
+        {"Etc/GMT-0", "Etc/GMT-0"},
+        {"Etc/GMT0", "Etc/GMT0"},
+        {"Etc/Greenwich", "Etc/Greenwich"},
+        {"Etc/Universal", "Etc/Universal"},
+        {"Etc/Zulu", "Etc/Zulu"},
+        {"Europe/Nicosia", "Europe/Nicosia"},
+        {"Europe/Tiraspol", "Europe/Tiraspol"},
+        {"GB", "GB"},
+        {"GB-Eire", "GB-Eire"},
+        {"GMT", "GMT"},
+        {"GMT+0", "GMT+0"},
+        {"GMT-0", "GMT-0"},
+        {"GMT0", "GMT0"},
+        {"Greenwich", "Greenwich"},
+        {"HST", "HST"},
+        {"Hongkong", "Hongkong"},
+        {"Iceland", "Iceland"},
+        {"Iran", "Iran"},
+        {"Israel", "Israel"},
+        {"Jamaica", "Jamaica"},
+        {"Japan", "Japan"},
+        {"Kwajalein", "Kwajalein"},
+        {"Libya", "Libya"},
+        {"MST", "MST"},
+        {"MST7MDT", "MST7MDT"},
+        {"Mexico/BajaNorte", "Mexico/BajaNorte"},
+        {"Mexico/BajaSur", "Mexico/BajaSur"},
+        {"Mexico/General", "Mexico/General"},
+        {"Mideast/Riyadh87", "Mideast/Riyadh87"},
+        {"Mideast/Riyadh88", "Mideast/Riyadh88"},
+        {"Mideast/Riyadh89", "Mideast/Riyadh89"},
+        {"NZ", "NZ"},
+        {"NZ-CHAT", "NZ-CHAT"},
+        {"Navajo", "Navajo"},
+        {"PRC", "PRC"},
+        {"PST8PDT", "PST8PDT"},
+        {"Pacific/Samoa", "Pacific/Samoa"},
+        {"Poland", "Poland"},
+        {"Portugal", "Portugal"},
+        {"ROC", "ROC"},
+        {"ROK", "ROK"},
+        {"Singapore", "Singapore"},
+        {"SystemV/AST4", "SystemV/AST4"},
+        {"SystemV/AST4ADT", "SystemV/AST4ADT"},
+        {"SystemV/CST6", "SystemV/CST6"},
+        {"SystemV/CST6CDT", "SystemV/CST6CDT"},
+        {"SystemV/EST5", "SystemV/EST5"},
+        {"SystemV/EST5EDT", "SystemV/EST5EDT"},
+        {"SystemV/HST10", "SystemV/HST10"},
+        {"SystemV/MST7", "SystemV/MST7"},
+        {"SystemV/MST7MDT", "SystemV/MST7MDT"},
+        {"SystemV/PST8", "SystemV/PST8"},
+        {"SystemV/PST8PDT", "SystemV/PST8PDT"},
+        {"SystemV/YST9", "SystemV/YST9"},
+        {"SystemV/YST9YDT", "SystemV/YST9YDT"},
+        {"Turkey", "Turkey"},
+        {"UCT", "UCT"},
+        {"US/Alaska", "US/Alaska"},
+        {"US/Aleutian", "US/Aleutian"},
+        {"US/Arizona", "US/Arizona"},
+        {"US/Central", "US/Central"},
+        {"US/East-Indiana", "US/East-Indiana"},
+        {"US/Eastern", "US/Eastern"},
+        {"US/Hawaii", "US/Hawaii"},
+        {"US/Indiana-Starke", "US/Indiana-Starke"},
+        {"US/Michigan", "US/Michigan"},
+        {"US/Mountain", "US/Mountain"},
+        {"US/Pacific", "US/Pacific"},
+        {"US/Pacific-New", "US/Pacific-New"},
+        {"US/Samoa", "US/Samoa"},
+        {"UTC", "UTC"},
+        {"Universal", "Universal"},
+        {"W-SU", "W-SU"},
+        {"Zulu", "Zulu"},
+        {"ACT", "ACT"},
+        {"AET", "AET"},
+        {"AGT", "AGT"},
+        {"ART", "ART"},
+        {"AST", "AST"},
+        {"BET", "BET"},
+        {"BST", "BST"},
+        {"CAT", "CAT"},
+        {"CNT", "CNT"},
+        {"CST", "CST"},
+        {"CTT", "CTT"},
+        {"EAT", "EAT"},
+        {"ECT", "ECT"},
+        {"IET", "IET"},
+        {"IST", "IST"},
+        {"JST", "JST"},
+        {"MIT", "MIT"},
+        {"NET", "NET"},
+        {"NST", "NST"},
+        {"PLT", "PLT"},
+        {"PNT", "PNT"},
+        {"PRT", "PRT"},
+        {"PST", "PST"},
+        {"SST", "SST"},
+        {"VST", "VST"},
+    };
+
     /**
      * Hack to get code list
      * @return
@@ -157,6 +336,19 @@ public class DisplayNameTest extends TestFmwk {
         System.arraycopy(strings,0,result,2,strings.length);
         return result;
     }
+    
+    Map bogusZones = null;
+    
+    private Map getAliasMap() {
+        if (bogusZones == null) {
+            bogusZones = new TreeMap();
+            for (int i = 0; i < zonesAliases.length; ++i) {
+                bogusZones.put(zonesAliases[i][0], zonesAliases[i][1]);
+            }
+        }
+        return bogusZones;
+    }
+
 
     private void check(String type, ULocale locale, 
       String[] codes, Object[] contextList, DisplayNameGetter getter) {
@@ -169,29 +361,29 @@ public class DisplayNameTest extends TestFmwk {
                 String name = getter.get(locale, code, context);
                 if (name == null || name.length() == 0) {
                     errln(
-                        locale + "[" + locale.getDisplayName(ULocale.ENGLISH) + "]"
-                        + ": Null or Zero-Length Display Name " + type
-                        + ((context != null) ? "\t(" + context + "]" : "")
-                        + "\t" + code + "[" + getter.get(ULocale.ENGLISH, code, context) + "]"
+                        "Null or Zero-Length Display Name\t" + type
+                        + "\t(" + ((context != null) ? context : "") + ")"
+                        + ":\t" + locale + " [" + locale.getDisplayName(ULocale.ENGLISH) + "]"
+                        + "\t" + code + " [" + getter.get(ULocale.ENGLISH, code, context) + "]"
                     );
                     continue;            
                 }
                 String otherCode = (String) codeToName[k].get(name);
                 if (otherCode != null) {
                     errln(
-                        locale + "[" + locale.getDisplayName(ULocale.ENGLISH) + "]"
-                        + ": Display Names collide for " + type
-                        + ((context != null) ? "\t(" + context + "]" : "")
-                        + "\t" + code + "[" + getter.get(ULocale.ENGLISH, code, context) + "]"
-                        + " & " + otherCode + "[" + getter.get(ULocale.ENGLISH, otherCode, context) + "]"
+                        "Display Names collide for\t" + type
+                        + "\t(" + ((context != null) ? context : "") + ")"
+                        + ":\t" + locale + " [" + locale.getDisplayName(ULocale.ENGLISH) + "]"
+                        + "\t" + code + " [" + getter.get(ULocale.ENGLISH, code, context) + "]"
+                        + "\t& " + otherCode + " [" + getter.get(ULocale.ENGLISH, otherCode, context) + "]"
                         + "\t=> " + name
                     );
                 } else {
                     codeToName[k].put(name, code);
                     if (SHOW_ALL) logln(
-                        locale + "[" + locale.getDisplayName(ULocale.ENGLISH) + "]"
-                        + "\t" + type 
-                        + ((context != null) ? "\t(" + context + "]" : "")
+                        type 
+                        + " (" + ((context != null) ? context : "") + ")"
+                        + "\t" + locale + " [" + locale.getDisplayName(ULocale.ENGLISH) + "]"
                         + "\t" + code + "[" + getter.get(ULocale.ENGLISH, code, context) + "]"
                         + "\t=> " + name 
                     );
