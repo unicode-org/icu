@@ -360,6 +360,16 @@ res_findResource(const ResourceData *pResData, Resource r, char** path, const ch
   Resource t2;
   int32_t indexR = 0;
   UResType type = RES_GET_TYPE(t1);
+
+  /* if you come in with an empty path, you'll be getting back the same resource */
+  if(!uprv_strlen(pathP)) {
+      return r;
+  }
+
+  /* one needs to have an aggregate resource in order to search in it */
+  if(!(type == URES_TABLE || type == URES_TABLE32 || type == URES_ARRAY)) {
+      return RES_BOGUS;
+  }
   
   while(nextSepP && *pathP && t1 != RES_BOGUS &&
         (type == URES_TABLE || type == URES_TABLE32 || type == URES_ARRAY)
