@@ -187,6 +187,7 @@ void NewResourceBundleTest::runIndexedTest( int32_t index, UBool exec, const cha
     case 2: name = "TestIteration"; if (exec) TestIteration(); break;
     case 3: name = "TestOtherAPI";  if(exec) TestOtherAPI(); break;
     case 4: name = "TestNewTypes";  if(exec) TestNewTypes(); break;
+    case 5: name = "TestGetByFallback";  if(exec) TestGetByFallback(); break;
         default: name = ""; break; //needed to end loop
     }
 }
@@ -1117,6 +1118,33 @@ NewResourceBundleTest::TestNewTypes() {
         }
     }
 
+
+}
+
+void
+NewResourceBundleTest::TestGetByFallback() {
+    UErrorCode status = U_ZERO_ERROR;
+
+    ResourceBundle heRes(NULL, "he", status);
+
+    heRes.getWithFallback("calendar", status).getWithFallback("islamic-civil", status).getWithFallback("DateTimePatterns", status);
+    if(U_SUCCESS(status)) {
+        errln("he locale's Islamic DateTimePatterns resource exists. How did it get here?\n");
+    }
+    status = U_ZERO_ERROR;
+
+    heRes.getWithFallback("calendar", status).getWithFallback("islamic-civil", status).getWithFallback("eras", status);
+    if(U_FAILURE(status)) {
+        errln("Didn't get Islamic Eras. I know they are there!\n");
+    }
+    status = U_ZERO_ERROR;
+
+    ResourceBundle rootRes(NULL, "root", status);
+    rootRes.getWithFallback("calendar", status).getWithFallback("islamic-civil", status).getWithFallback("DateTimePatterns", status);
+    if(U_SUCCESS(status)) {
+        errln("Root's Islamic DateTimePatterns resource exists. How did it get here?\n");
+    }
+    status = U_ZERO_ERROR;
 
 }
 //eof
