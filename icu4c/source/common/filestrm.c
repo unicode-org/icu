@@ -29,12 +29,12 @@
 U_CAPI FileStream* U_EXPORT2
 T_FileStream_open(const char* filename, const char* mode)
 {
-  if(filename != NULL && *filename != 0 && mode != NULL && *mode != 0) {
-    FILE *file = fopen(filename, mode);
-    return (FileStream*)file;
-  } else {
-    return NULL;
-  }
+    if(filename != NULL && *filename != 0 && mode != NULL && *mode != 0) {
+        FILE *file = fopen(filename, mode);
+        return (FileStream*)file;
+    } else {
+        return NULL;
+    }
 }
 
 
@@ -71,7 +71,8 @@ T_FileStream_wopen(const wchar_t* filename, const wchar_t* mode)
 U_CAPI void U_EXPORT2
 T_FileStream_close(FileStream* fileStream)
 {
-    if (fileStream != 0) fclose((FILE*)fileStream);
+    if (fileStream != 0)
+        fclose((FILE*)fileStream);
 }
 
 U_CAPI UBool U_EXPORT2

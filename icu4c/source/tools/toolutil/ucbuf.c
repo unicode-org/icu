@@ -545,9 +545,6 @@ ucbuf_close(UCHARBUF* buf){
         if(buf->conv){
             ucnv_close(buf->conv);
         }
-        buf->in=NULL;
-        buf->currentPos=NULL;
-        buf->bufLimit=NULL;
         T_FileStream_close(buf->in);
         ucbuf_closebuf(buf);
         uprv_free(buf);
