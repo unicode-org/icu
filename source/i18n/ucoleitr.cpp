@@ -93,6 +93,7 @@ ucol_reset(UCollationElements *elems)
   if (ci->stackWritableBuffer != ci->writableBuffer) {
     uprv_free(ci->writableBuffer);
     ci->writableBuffer = ci->stackWritableBuffer;
+    ci->writableBufSize = UCOL_WRITABLE_BUFFER_SIZE;
   }
 }
 
