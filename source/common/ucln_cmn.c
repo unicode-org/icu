@@ -57,7 +57,7 @@ u_cleanup(void)
 {
     ECleanupLibraryType libType;
 
-    UTRACE_ENTRY(UTRACE_U_CLEANUP);
+    UTRACE_ENTRY_OC(UTRACE_U_CLEANUP);
     for (libType = UCLN_START+1; libType<UCLN_COMMON; libType++) {
         if (gCleanupFunctions[libType])
         {
@@ -109,13 +109,13 @@ u_cleanup(void)
 
 U_CAPI void U_EXPORT2
 u_init(UErrorCode *status) {
-    UTRACE_ENTRY(UTRACE_U_INIT);
+    UTRACE_ENTRY_OC(UTRACE_U_INIT);
     /* Make sure the global mutexes are initialized. */
     umtx_init(NULL);
     umtx_lock(&gICUInitMutex);
     if (gICUInitialized || U_FAILURE(*status)) {
         umtx_unlock(&gICUInitMutex);
-        UTRACE_EXIT_S(*status);
+        UTRACE_EXIT_STATUS(*status);
         return;
     }
 
@@ -134,7 +134,7 @@ u_init(UErrorCode *status) {
 #endif
     gICUInitialized = TRUE;    /* TODO:  don't set if U_FAILURE? */
     umtx_unlock(&gICUInitMutex);
-    UTRACE_EXIT_S(*status);
+    UTRACE_EXIT_STATUS(*status);
 }
 
 
