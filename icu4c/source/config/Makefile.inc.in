@@ -2,7 +2,7 @@
 #******************************************************************************
 #   Copyright (C) 1999-2003, International Business Machines
 #   Corporation and others.  All Rights Reserved.
-# $Revision: 1.35 $
+# $Revision: 1.36 $
 #******************************************************************************
 # This Makefile.inc is designed to be included into projects which make use
 # of the ICU.
@@ -42,6 +42,11 @@ UNICODE_VERSION = @UNICODE_VERSION@
 ICUPREFIX = icu
 PACKAGE = @PACKAGE@
 LIBICU = lib$(ICUPREFIX)
+
+# Static library prefix and file extension
+STATIC_PREFIX = s
+LIBSICU = lib$(STATIC_PREFIX)$(ICUPREFIX)
+A = a
 
 # Suffix at the end of libraries. Usually empty.
 ICULIBSUFFIX = @ICULIBSUFFIX@
