@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004, International Business Machines
+*   Copyright (C) 2004-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -135,7 +135,8 @@ ucase_isCaseSensitive(const UCaseProps *csp, UChar32 c);
  * It does not support random access or an arbitrary change of
  * iteration direction.
  *
- * The direction parameter either starts
+ * The code point being case-mapped itself is never returned by
+ * this iterator.
  *
  * @param context A pointer to the iterator's working data.
  * @param dir If <0 then start iterating backward from the character;
