@@ -316,6 +316,16 @@ void CompoundTransliterator::adoptTransliterators(Transliterator* adoptedTransli
     setID(joinIDs(trans, count));
 }
 
+/**
+ * Append c to buf, unless buf is empty or buf already ends in c.
+ */
+static void _smartAppend(UnicodeString& buf, UChar c) {
+    if (buf.length() != 0 &&
+        buf.charAt(buf.length() - 1) != c) {
+        buf.append(c);
+    }
+}
+
 UnicodeString& CompoundTransliterator::toRules(UnicodeString& rulesSource,
                                                UBool escapeUnprintable) const {
     // We do NOT call toRules() on our component transliterators, in
@@ -325,6 +335,12 @@ UnicodeString& CompoundTransliterator::toRules(UnicodeString& rulesSource,
     // compoundRBTIndex >= 0.  For the transliterator at compoundRBTIndex,
     // we do call toRules() recursively.
     rulesSource.truncate(0);
+    if (compoundRBTIndex >= 0 && getFilter() != NULL) {
+        // If we are a compound RBT and if we have a global
+        // filter, then emit it at the top.
+        UnicodeString pat;
+        rulesSource.append("::").append(getFilter()->toPattern(pat, escapeUnprintable)).append(ID_DELIM);
+    }
     for (int32_t i=0; i<count; ++i) {
         UnicodeString rule;
         if (i == compoundRBTIndex) {
@@ -332,15 +348,9 @@ UnicodeString& CompoundTransliterator::toRules(UnicodeString& rulesSource,
         } else {
             trans[i]->Transliterator::toRules(rule, escapeUnprintable);
         }
-        if (rulesSource.length() != 0 &&
-            rulesSource.charAt(rulesSource.length() - 1) != NEWLINE) {
-            rulesSource.append(NEWLINE);
-        }
+        _smartAppend(rulesSource, NEWLINE);
         rulesSource.append(rule);
-        if (rulesSource.length() != 0 &&
-            rulesSource.charAt(rulesSource.length() - 1) != ID_DELIM) {
-            rulesSource.append(ID_DELIM);
-        }
+        _smartAppend(rulesSource, ID_DELIM);
     }
     return rulesSource;
 }

@@ -282,6 +282,11 @@ class TransliteratorTest : public IntlTest {
      */
     void TestIDForms();
 
+    /**
+     * Mark's toRules test.
+     */
+    void TestToRulesMark();
+
     //======================================================================
     // Support methods
     //======================================================================
@@ -313,6 +318,9 @@ class TransliteratorTest : public IntlTest {
     static UnicodeString& formatInput(UnicodeString &appendTo,
                                       const UnicodeString& input,
                                       const UTransPosition& pos);
+
+    void checkRules(const UnicodeString& label, Transliterator& t2,
+                    const UnicodeString& testRulesForward);
 };
 
 #endif
