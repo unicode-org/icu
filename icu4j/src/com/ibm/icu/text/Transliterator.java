@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2001/11/29 22:31:18 $
- * $Revision: 1.70 $
+ * $Date: 2001/11/29 22:59:49 $
+ * $Revision: 1.71 $
  *
  *****************************************************************************************
  */
@@ -242,7 +242,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.70 $ $Date: 2001/11/29 22:31:18 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.71 $ $Date: 2001/11/29 22:59:49 $
  */
 public abstract class Transliterator {
     /**
@@ -1090,9 +1090,17 @@ public abstract class Transliterator {
      * localized.
      * @see java.text.MessageFormat
      */
-    public static String getDisplayName(String ID, Locale inLocale) {
+    public static String getDisplayName(String id, Locale inLocale) {
         ResourceBundle bundle = ResourceBundle.getBundle(
             RB_LOCALE_ELEMENTS, inLocale);
+
+        // Normalize the ID
+        String stv[] = IDtoSTV(id);
+        if (stv[1].length() < 1) {
+            // No target; malformed id
+            return "";
+        }
+        String ID = stv[0] + '-' + stv[1] + stv[2];
 
         // Use the registered display name, if any
         String n = (String) displayNameCache.get(new CaseInsensitiveString(ID));
@@ -1112,14 +1120,10 @@ public abstract class Transliterator {
             MessageFormat format = new MessageFormat(
                     bundle.getString(RB_DISPLAY_NAME_PATTERN));
             // Construct the argument array
-            int i = ID.indexOf('-');
-            Object[] args = (i < 0)
-                ? new Object[] { new Integer(1), ID }
-                : new Object[] { new Integer(2), ID.substring(0, i),
-                                 ID.substring(i+1) };
+            Object[] args = new Object[] { new Integer(2), stv[0], stv[1] };
 
             // Use display names for the scripts, if they exist
-            for (int j=1; j<=((i<0)?1:2); ++j) {
+            for (int j=1; j<=2; ++j) {
                 try {
                     args[j] = bundle.getString(RB_SCRIPT_DISPLAY_NAME_PREFIX +
                                                (String) args[j]);
@@ -1127,7 +1131,7 @@ public abstract class Transliterator {
             }
 
             // Format it using the pattern in the resource
-            return format.format(args);
+            return format.format(args) + stv[2];
         } catch (MissingResourceException e2) {}
 
         // We should not reach this point unless there is something
@@ -1388,50 +1392,55 @@ public abstract class Transliterator {
         }
     }
 
-//  /**
-//   * Parse an ID into pieces.  Take IDs of the form T, T/V, S-T, S-T/V, or S/V-T.
-//   * If the source is missing, return a source of ANY.
-//   * @param id the id string, in any of several forms
-//   * @return an array of 4 strings: source, target, variant, and isSourcePresent.
-//   * Source and 
-//   */
-//  static String[] IDtoSTV(String id) {
-//      String source = ANY;
-//      String target = null;
-//      String variant = ""; // Variant INCLUDING "/"
-
-//      int sep = id.indexOf(ID_SEP);
-//      int var = id.indexOf(VARIANT_SEP);
-//      if (var < 0) {
-//          var = id.length();
-//      }
-//      boolean isSourcePresent = false;
-//      
-//      if (sep < 0) {
-//          // Form: T/V or T (or /V)
-//          target = id.substring(0, var);
-//          variant = id.substring(var);
-//      } else if (sep < var) {
-//          // Form: S-T/V or S-T (or -T/V or -T)
-//          if (sep > 0) {
-//              source = id.substring(0, sep);
-//              isSourcePresent = true;
-//          }
-//          target = id.substring(++sep, var);
-//          variant = id.substring(var);
-//      } else {
-//          // Form: (S/V-T or /V-T)
-//          if (var > 0) {
-//              source = id.substring(0, var);
-//              isSourcePresent = true;
-//          }
-//          variant = id.substring(var, sep++);
-//          target = id.substring(sep);
-//      }
-
-//      return new String[] { source, target, variant,
-//                            isSourcePresent ? "1" : "" };
-//  }
+    /**
+     * Parse an ID into pieces.  Take IDs of the form T, T/V, S-T,
+     * S-T/V, or S/V-T.  If the source is missing, return a source of
+     * ANY.
+     * @param id the id string, in any of several forms
+     * @return an array of 4 strings: source, target, variant, and
+     * isSourcePresent.  If the source is not present, ANY will be
+     * given as the source, and isSourcePresent will be "".  Otherwise
+     * isSourcePresent will be != "".  The target may be empty if the
+     * id is not well-formed.  The variant may be empty; if it is not,
+     * it will contain a leading '/'.
+     */
+    static String[] IDtoSTV(String id) {
+        String source = ANY;
+        String target = null;
+        String variant = ""; // Variant INCLUDING "/"
+        
+        int sep = id.indexOf(ID_SEP);
+        int var = id.indexOf(VARIANT_SEP);
+        if (var < 0) {
+            var = id.length();
+        }
+        boolean isSourcePresent = false;
+        
+        if (sep < 0) {
+            // Form: T/V or T (or /V)
+            target = id.substring(0, var);
+            variant = id.substring(var);
+        } else if (sep < var) {
+            // Form: S-T/V or S-T (or -T/V or -T)
+            if (sep > 0) {
+                source = id.substring(0, sep);
+              isSourcePresent = true;
+            }
+            target = id.substring(++sep, var);
+            variant = id.substring(var);
+        } else {
+            // Form: (S/V-T or /V-T)
+            if (var > 0) {
+                source = id.substring(0, var);
+                isSourcePresent = true;
+            }
+            variant = id.substring(var, sep++);
+            target = id.substring(sep);
+        }
+        
+        return new String[] { source, target, variant,
+                              isSourcePresent ? "1" : "" };
+  }
 
     /**
      * Parse a single ID, possibly including an inline filter, and return
@@ -1563,39 +1572,12 @@ public abstract class Transliterator {
             // produces T-S/V, with a default S of "Any".  If the ID has a special
             // non-canonical inverse, look it up (e.g., NFC -> NFD, Null -> Null).
             if (id.length() > 0) { // We handle empty IDs below
-                String source = ANY;
-                String target = null;
-                String variant = ""; // Variant INCLUDING "/"
+                String[] stv = IDtoSTV(id.toString());
+                String source = stv[0];
+                String target = stv[1];
+                String variant = stv[2];
+                boolean isSourcePresent = stv[3].length() != 0;
 
-                String idSTR = id.toString();
-                int sep = idSTR.indexOf(ID_SEP);
-                int var = idSTR.indexOf(VARIANT_SEP);
-                if (var < 0) {
-                    var = id.length();
-                }
-                boolean isSourcePresent = false;
-                
-                if (sep < 0) {
-                    // Form: T/V or T (or /V)
-                    target = id.substring(0, var);
-                    variant = id.substring(var);
-                } else if (sep < var) {
-                    // Form: S-T/V or S-T (or -T/V or -T)
-                    if (sep > 0) {
-                        source = id.substring(0, sep);
-                        isSourcePresent = true;
-                    }
-                    target = id.substring(++sep, var);
-                    variant = id.substring(var);
-                } else {
-                    // Form: (S/V-T or /V-T)
-                    if (var > 0) {
-                        source = id.substring(0, var);
-                        isSourcePresent = true;
-                    }
-                    variant = id.substring(var, sep++);
-                    target = id.substring(sep);
-                }
                 id.setLength(0);
                 // Source and variant may be empty, but target may not be.
                 if (target.length() == 0) {

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $
- * $Date: 2001/11/29 18:58:33 $
- * $Revision: 1.86 $
+ * $Date: 2001/11/29 23:01:51 $
+ * $Revision: 1.87 $
  *
  *****************************************************************************************
  */
@@ -323,7 +323,7 @@ public class TransliteratorTest extends TestFmwk {
                 log = new StringBuffer(s.toString() + " => ");
                 t.finishTransliteration(s, index);
             }
-            formatInput(log, s, index);
+            Utility.formatInput(log, s, index);
             if (s.toString().equals(DATA[i+1])) {
                 logln(log.toString());
             } else {
@@ -2126,6 +2126,46 @@ public class TransliteratorTest extends TestFmwk {
                "\\x{41}\\x{10BEEF}\\x{FEED}");
     }
 
+    /**
+     * Make sure display names of variants look reasonable.
+     */
+    public void TestDisplayName() {
+        String DATA[] = {
+            // ID, forward name, reverse name
+            // Update the text as necessary -- the important thing is
+            // not the text itself, but how various cases are handled.
+
+            // Basic test
+            "Any-Hex", "Any to Hex Escape", "Hex Escape to Any",
+
+            // Variants
+            "Any-Hex/Perl", "Any to Hex Escape/Perl", "Hex Escape to Any/Perl",
+
+            // Target-only IDs
+            "NFC", "Any to NFC", "Any to NFD",
+        };
+
+        Locale US = Locale.US;
+
+        for (int i=0; i<DATA.length; i+=3) {
+            String name = Transliterator.getDisplayName(DATA[i], US);
+            if (!name.equals(DATA[i+1])) {
+                errln("FAIL: " + DATA[i] + ".getDisplayName() => " +
+                      name + ", expected " + DATA[i+1]);
+            } else {
+                logln("Ok: " + DATA[i] + ".getDisplayName() => " + name);
+            }
+            Transliterator t = Transliterator.getInstance(DATA[i], Transliterator.REVERSE);
+            name = Transliterator.getDisplayName(t.getID(), US);
+            if (!name.equals(DATA[i+2])) {
+                errln("FAIL: " + t.getID() + ".getDisplayName() => " +
+                      name + ", expected " + DATA[i+2]);
+            } else {
+                logln("Ok: " + t.getID() + ".getDisplayName() => " + name);
+            }
+        }
+    }
+
     //======================================================================
     // icu4j ONLY
     // These tests are not mirrored (yet) in icu4c at
@@ -2282,7 +2322,6 @@ public class TransliteratorTest extends TestFmwk {
         }
         return test.toString();
     }
-        
 
     //======================================================================
     // Support methods
@@ -2356,16 +2395,16 @@ public class TransliteratorTest extends TestFmwk {
         rsource.replace(0, rsource.length(), "");
         if (pos != null) {
             rsource.replace(0, 0, source);
-            v.add(formatInput(rsource, index));
+            v.add(Utility.formatInput(rsource, index));
             t.transliterate(rsource, index);
-            v.add(formatInput(rsource, index));
+            v.add(Utility.formatInput(rsource, index));
         } else {
             for (int i=0; i<source.length(); ++i) {
                 //v.add(i == 0 ? "" : " + " + source.charAt(i) + "");
                 //log.append(source.charAt(i)).append(" -> "));
                 t.transliterate(rsource, index, source.charAt(i));
-                //v.add(formatInput(rsource, index) + source.substring(i+1));
-                v.add(formatInput(rsource, index) +
+                //v.add(Utility.formatInput(rsource, index) + source.substring(i+1));
+                v.add(Utility.formatInput(rsource, index) +
                       ((i<source.length()-1)?(" + '" + source.charAt(i+1) + "' ->"):" =>"));
             }
         }
@@ -2385,46 +2424,6 @@ public class TransliteratorTest extends TestFmwk {
                   expectedResult);
     }
 
-    String formatInput(final ReplaceableString input,
-                       final Transliterator.Position pos) {
-        return formatInput(new StringBuffer(), input, pos).toString();
-    }
-                       
-    /**
-     * @param appendTo result is appended to this param.
-     * @param input the string being transliterated
-     * @param pos the index struct
-     */
-    StringBuffer formatInput(StringBuffer appendTo,
-                             final ReplaceableString input,
-                             final Transliterator.Position pos) {
-        // Output a string of the form aaa{bbb|ccc|ddd}eee, where
-        // the {} indicate the context start and limit, and the ||
-        // indicate the start and limit.
-        if (0 <= pos.contextStart &&
-            pos.contextStart <= pos.start &&
-            pos.start <= pos.limit &&
-            pos.limit <= pos.contextLimit &&
-            pos.contextLimit <= input.length()) {
-
-            String a, b, c, d, e;
-            a = input.substring(0, pos.contextStart);
-            b = input.substring(pos.contextStart, pos.start);
-            c = input.substring(pos.start, pos.limit);
-            d = input.substring(pos.limit, pos.contextLimit);
-            e = input.substring(pos.contextLimit, input.length());
-            appendTo.append(a).append('{').append(b).
-                append('|').append(c).append('|').append(d).
-                append('}').append(e);
-        } else {
-            appendTo.append("INVALID Transliterator.Position {cs=" +
-                            pos.contextStart + ", s=" + pos.start + ", l=" +
-                            pos.limit + ", cl=" + pos.contextLimit + "} on " +
-                            input);
-        }
-        return appendTo;
-    }
-    
     boolean expectAux(String tag, String source,
                    String result, String expectedResult) {
         return expectAux(tag, new String[] {source, result},
