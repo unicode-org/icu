@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - tools/ctestfw
-## Copyright (c) 1999-2003, International Business Machines Corporation and
+## Copyright (c) 1999-2004, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ## Stephen F. Booth
 
@@ -23,7 +23,7 @@ ifneq ($(ENABLE_STATIC),)
 TARGET = $(LIBSICU)ctestfw$(ICULIBSUFFIX).a
 endif
 
-CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
+CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)
 DEFS += -DT_CTEST_IMPLEMENTATION
 
 
@@ -38,9 +38,9 @@ DYNAMICCPPFLAGS = $(SHAREDLIBCPPFLAGS)
 DYNAMICCFLAGS = $(SHAREDLIBCFLAGS)
 DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
 
-LIBS = $(DEFAULT_LIBS)
+LIBS = $(LIBICUUC) $(DEFAULT_LIBS)
 
-OBJECTS = ctest.o
+OBJECTS = ctest.o tstdtmod.o testdata.o datamap.o
 
 STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 

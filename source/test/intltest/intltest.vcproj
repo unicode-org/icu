@@ -23,7 +23,7 @@
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
 				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="..\..\..\include,..\..\..\source\common,..\..\..\source\i18n,..\..\tools\toolutil"
+				AdditionalIncludeDirectories="..\..\..\include,..\..\..\source\common,..\..\..\source\i18n,..\..\tools\toolutil,..\..\tools\ctestfw"
 				PreprocessorDefinitions="WIN32,_DEBUG,_CONSOLE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -43,6 +43,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
+				AdditionalDependencies="icuucd.lib icuind.lib ctestfwd.lib"
 				OutputFile=".\Debug/intltest.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
@@ -87,7 +88,7 @@
 				Optimization="3"
 				InlineFunctionExpansion="2"
 				ImproveFloatingPointConsistency="TRUE"
-				AdditionalIncludeDirectories="..\..\..\include,..\..\..\source\common,..\..\..\source\i18n,..\..\tools\toolutil"
+				AdditionalIncludeDirectories="..\..\..\include,..\..\..\source\common,..\..\..\source\i18n,..\..\tools\toolutil,..\..\tools\ctestfw"
 				PreprocessorDefinitions="WIN32,NDEBUG,_CONSOLE"
 				StringPooling="TRUE"
 				RuntimeLibrary="0"
@@ -105,6 +106,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
+				AdditionalDependencies="icuuc.lib icuin.lib ctestfw.lib"
 				OutputFile=".\Release/intltest.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -627,12 +629,6 @@
 			Name="misc"
 			Filter="">
 			<File
-				RelativePath=".\datamap.cpp">
-			</File>
-			<File
-				RelativePath=".\datamap.h">
-			</File>
-			<File
 				RelativePath=".\intltest.cpp">
 			</File>
 			<File
@@ -651,22 +647,10 @@
 				RelativePath=".\itutil.h">
 			</File>
 			<File
-				RelativePath=".\testdata.cpp">
-			</File>
-			<File
-				RelativePath=".\testdata.h">
-			</File>
-			<File
 				RelativePath=".\testutil.cpp">
 			</File>
 			<File
 				RelativePath=".\testutil.h">
-			</File>
-			<File
-				RelativePath=".\tstdtmod.cpp">
-			</File>
-			<File
-				RelativePath=".\tstdtmod.h">
 			</File>
 		</Filter>
 		<Filter
