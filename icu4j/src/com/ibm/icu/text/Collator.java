@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $ 
-* $Date: 2002/11/16 01:01:05 $ 
-* $Revision: 1.14 $
+* $Date: 2002/11/21 23:47:42 $ 
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -486,7 +486,7 @@ public abstract class Collator implements Comparator, Cloneable
 	   *         in the UCA. 
 	   * @draft ICU 2.4
 	   */
-  	public UnicodeSet getTailoredSet() throws Exception
+  	public UnicodeSet getTailoredSet()
   	{
   		return new UnicodeSet(0, 0x10FFFF);
   	}
