@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/BreakIteratorRules_th.java,v $ 
- * $Date: 2001/02/06 22:37:45 $ 
- * $Revision: 1.4 $
+ * $Date: 2001/10/19 23:06:38 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -89,8 +89,8 @@ public class BreakIteratorRules_th extends ListResourceBundle {
                 + "$paiyannoi=[\u0e2f];"
                 + "$maiyamok=[\u0e46];"
                 + "$thai_etc=($paiyannoi\u0e25$paiyannoi);"
-                + "$pre_word=[[[:Sc:]-[\u00a2]][:Ps:]\\\"];"
-                + "$post_word=[[:Pe:]\\!\\%\\.\\,\\:\\;\\?\\\"\u00a2\u00b0\u066a\u2030-\u2034\u2103"
+                + "$pre_word=[[[:Sc:]-[\u00a2]][:Ps:][:Pi:]\\\"];"
+                + "$post_word=[[:Pe:][:Pf:]\\!\\%\\.\\,\\:\\;\\?\\\"\u00a2\u00b0\u066a\u2030-\u2034\u2103"
                         + "\u2105\u2109\u3001\u3002\u3005\u3041\u3043\u3045\u3047\u3049\u3063"
                         + "\u3083\u3085\u3087\u308e\u3099-\u309e\u30a1\u30a3\u30a5\u30a7\u30a9"
                         + "\u30c3\u30e3\u30e5\u30e7\u30ee\u30f5\u30f6\u30fc-\u30fe\uff01\uff0e"

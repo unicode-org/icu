@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/BreakIteratorRules.java,v $
- * $Date: 2001/10/17 23:31:56 $
- * $Revision: 1.7 $
+ * $Date: 2001/10/19 23:06:38 $
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -221,12 +221,12 @@ public class BreakIteratorRules extends ListResourceBundle {
 
             // characters that stick to a word if they precede it: currency symbols
             // (except the cents sign) and starting punctuation
-            + "$pre_word=[[[:Sc:]-[\u00a2]][:Ps:]\\\"\\\'];"
+            + "$pre_word=[[[:Sc:]-[\u00a2]][:Ps:][:Pi:]\\\"\\\'];"
 
             // characters that stick to a word if they follow it: ending punctuation,
             // other punctuation that usually occurs at the end of a sentence,
             // small Kana characters, some CJK diacritics, etc.
-            + "$post_word=[[:Pe:]\\!\\\"\\\'\\%\\.\\,\\:\\;\\?\u00a2\u00b0\u066a\u2030-\u2034"
+            + "$post_word=[[:Pe:][:Pf:]\\!\\\"\\\'\\%\\.\\,\\:\\;\\?\u00a2\u00b0\u066a\u2030-\u2034"
                     + "\u2103\u2105\u2109\u3001\u3002\u3005\u3041\u3043\u3045\u3047\u3049\u3063"
                     + "\u3083\u3085\u3087\u308e\u3099-\u309e\u30a1\u30a3\u30a5\u30a7\u30a9"
                     + "\u30c3\u30e3\u30e5\u30e7\u30ee\u30f5\u30f6\u30fc-\u30fe\uff01\uff0c"
@@ -293,11 +293,11 @@ public class BreakIteratorRules extends ListResourceBundle {
 
             // punctuation which may occur at the beginning of a sentence: "starting
             // punctuation" and quotation marks
-            + "$start=[[:Ps:]\\\"\\\'];"
+            + "$start=[[:Ps:][:Pi:]\\\"\\\'];"
 
             // punctuation with may occur at the end of a sentence: "ending punctuation"
             // and quotation marks
-            + "$end=[[:Pe:]\\\"\\\'];"
+            + "$end=[[:Pe:][:Pf:]\\\"\\\'];"
 
             // digits
             + "$digit=[:N:];"
