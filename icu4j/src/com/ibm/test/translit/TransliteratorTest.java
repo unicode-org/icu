@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $
- * $Date: 2001/11/03 04:43:12 $
- * $Revision: 1.62 $
+ * $Date: 2001/11/05 20:25:23 $
+ * $Revision: 1.63 $
  *
  *****************************************************************************************
  */
@@ -1905,7 +1905,7 @@ public class TransliteratorTest extends TestFmwk {
         expect(t, "\u0430", "a");
 
         t = Transliterator.getInstance("en-el");
-        expect(t, "a", "\u1F00");
+        expect(t, "a", "\u03B1");
     }
 
     /**
