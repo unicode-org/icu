@@ -56,4 +56,7 @@ t_Mlym_InterIndic.txt\
 t_Orya_InterIndic.txt\
 t_Taml_InterIndic.txt\
 t_Telu_InterIndic.txt\
+t_Latn_NPinyn.txt\
+t_Tone_Digit.txt\
+t_Hani_SpHan.txt\
 translit_index.txt
