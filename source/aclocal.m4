@@ -58,6 +58,32 @@ else
   $1_FALSE=
 fi])
 
+dnl AC_SEARCH_LIBS_FIRST(FUNCTION, SEARCH-LIBS [, ACTION-IF-FOUND
+dnl            [, ACTION-IF-NOT-FOUND [, OTHER-LIBRARIES]]])
+dnl Search for a library defining FUNC, then see if it's not already available.
+ 
+AC_DEFUN(AC_SEARCH_LIBS_FIRST,
+[AC_PREREQ([2.13])
+AC_CACHE_CHECK([for library containing $1], [ac_cv_search_$1],
+[ac_func_search_save_LIBS="$LIBS"
+ac_cv_search_$1="no"
+for i in $2; do
+LIBS="-l$i $5 $ac_func_search_save_LIBS"
+AC_TRY_LINK_FUNC([$1],
+[ac_cv_search_$1="-l$i"
+break])
+done
+if test "$ac_cv_search_$1" = "no"; then
+AC_TRY_LINK_FUNC([$1], [ac_cv_search_$1="none required"])
+fi
+LIBS="$ac_func_search_save_LIBS"])
+if test "$ac_cv_search_$1" != "no"; then
+  test "$ac_cv_search_$1" = "none required" || LIBS="$ac_cv_search_$1 $LIBS"
+  $3
+else :
+  $4
+fi])
+
 dnl Strict compilation options.
 AC_DEFUN(AC_CHECK_STRICT_COMPILE,
 [

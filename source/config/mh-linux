@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-linux,v 1.21 2000/10/16 18:05:34 yves Exp $
+## $Id: mh-linux,v 1.22 2000/10/18 20:35:21 yves Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
@@ -14,7 +14,7 @@ SHAREDLIBCFLAGS = -fPIC
 SHAREDLIBCXXFLAGS = -fPIC
 SHAREDLIBCPPFLAGS = -DPIC
 
-## Additional flags when building libraries
+## Additional flags when building libraries and with threads
 LIBCPPFLAGS = -D_REENTRANT
 THREADSCPPFLAGS = -D_REENTRANT
 
