@@ -12,7 +12,7 @@
 *
 *   Date        Name        Description
 *   05/25/99    stephen     Creation.
-*   5/10/01     Ram			removed ustdio dependency
+*   5/10/01     Ram         removed ustdio dependency
 *******************************************************************************
 */
 
@@ -22,13 +22,13 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
-#include "ucbuf.h"
+
 U_CDECL_BEGIN
 
 extern int32_t lineCount;
 extern char  lastTag[];
 
-
+#include "ucbuf.h"
 #include "error.h"
 #include "parse.h"
 #include "util.h"
