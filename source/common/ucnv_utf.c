@@ -1726,7 +1726,7 @@ UChar32 T_UConverter_getNextUChar_UTF32_BE(UConverterToUnicodeArgs* args,
                 | (mySource[3]);
 
         args->source = (const char *)(mySource + 4);
-        if (myUChar <= MAXIMUM_UTF) {
+        if (myUChar <= MAXIMUM_UTF && myUChar >= 0) {
             return myUChar;
         }
 
@@ -2200,7 +2200,7 @@ UChar32 T_UConverter_getNextUChar_UTF32_LE(UConverterToUnicodeArgs* args,
                 | (mySource[3] << 24);
 
         args->source = (const char *)(mySource + 4);
-        if (myUChar <= MAXIMUM_UTF) {
+        if (myUChar <= MAXIMUM_UTF && myUChar >= 0) {
             return myUChar;
         }
 
