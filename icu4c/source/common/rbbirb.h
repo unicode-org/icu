@@ -171,8 +171,7 @@ public:
     RBBINode                      *fReverseTree;     //   then manipulated by subsequent steps.
 
     RBBISetBuilder                *fSetBuilder;      // Set and Character Category builder.
-    RBBINode                      *fSetsListHead;    // Head of the linked list of UnicodeSets
-                                                     //   (uset nodes.)
+    UVector                       *fUSetNodes;       // Vector of all uset nodes.
 
     RBBITableBuilder              *fForwardTables;   // State transition tables
     RBBITableBuilder              *fReverseTables;
