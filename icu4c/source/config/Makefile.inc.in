@@ -2,7 +2,7 @@
 #******************************************************************************
 #   Copyright (C) 1999-2002, International Business Machines
 #   Corporation and others.  All Rights Reserved.
-# $Revision: 1.27 $
+# $Revision: 1.28 $
 #******************************************************************************
 # This Makefile.inc is designed to be included into projects which make use
 # of the ICU.
@@ -50,10 +50,30 @@ ICULIBSUFFIX = @ICULIBSUFFIX@
 # libicuuc21.so for example.
 
 # rpath links a library search path right into the binaries.
+## mh-files MUST NOT override RPATHLDFLAGS unless they provide
+## equivalent '#SH#' lines for icu-config fixup
 ENABLE_RPATH = @ENABLE_RPATH@
 ifeq ($(ENABLE_RPATH),YES)
 RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
 endif
+
+#SH## icu-config version of above 'if':
+#SH#case "$ENABLE_RPATH" in 
+#SH#     [yY]*)
+#SH# 	ENABLE_RPATH=YES
+#SH# 	RPATHLDFLAGS="${LD_RPATH}${LD_RPATH_PRE}${libdir}"
+#SH# 	;;
+#SH#
+#SH#     [nN]*)
+#SH# 	ENABLE_RPATH=NO
+#SH# 	RPATHLDFLAGS=""
+#SH# 	;;
+#SH#
+#SH#     *)
+#SH# 	echo $0: Unknown --enable-rpath value ${ENABLE_RPATH} 1>&2
+#SH# 	exit 3
+#SH# 	;;
+#SH#esac
 
 
 ### To link your application with ICU:

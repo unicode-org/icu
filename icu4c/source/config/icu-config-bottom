@@ -1,25 +1,9 @@
 ## -*-sh-*-
-## BEGIN of icu-config-bottom. $Revision: 1.2 $
+## BEGIN of icu-config-bottom. $Revision: 1.3 $
 ## Copyright (c) 2002, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ICUUC_FILE=${libdir}/${ICULIBS_COMMON_LIB_NAME}
-#  case "$ENABLE_RPATH" in 
-#      [yY]*)
-#  	ENABLE_RPATH=YES
-#  	RPATH_LDFLAGS="${LD_RPATH}${LD_RPATH_PRE}${libdir}"
-#  	;;
-
-#      [nN]*)
-#  	ENABLE_RPATH=NO
-#  	RPATH_LDFLAGS=""
-#  	;;
-
-#      *)
-#  	echo $0: Unknown --enable-rpath value ${ENABLE_RPATH} 1>&2
-#  	exit 3
-#  	;;
-#  esac
     
 #  echo ENABLE RPATH $ENABLE_RPATH and RPATHLDFLAGS=${RPATH_LDFLAGS}
 if [ "x$PKGDATA_MODE" = "x" ]; then
@@ -46,7 +30,7 @@ allflags()
     echo "  --exists               Return with 0 status if ICU exists else fail"
     echo "  --help, -?, --usage    Print this message"
     echo "  --icudata              Print shortname of ICU data file (icudt21l)"
-    echo "  --icudata-installdir   Print path to install data to - use as --install option ot pkgdata(1)"
+    echo "  --icudata-install-dir  Print path to install data to - use as --install option to pkgdata(1)"
     echo "  --icudata-mode         Print default ICU pkgdata mode (dll) - use as --mode option to pkgdata(1)."
     echo "  --icudatadir           Print path to packaged archive data. Can set as [ICU_DATA]"
     echo "  --invoke               Print commands to invoke an ICU program"
