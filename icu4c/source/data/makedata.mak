@@ -483,7 +483,7 @@ res_index {
 # If you modify this, modify winmode.c in pkgdata.
 "$(ICUTMP)\icudata.res": "$(ICUMISC)\icudata.rc"
 	@echo Creating data DLL version information from $**
-	@rc.exe /i "..\..\..\..\..\include" /r /fo $@ $**
+	@rc.exe /i "..\..\..\..\common" /r /fo $@ $**
 
 # Targets for unames.icu
 "$(ICUBLD)\unames.icu": "$(ICUUNIDATA)\*.txt" "$(ICUTOOLS)\gennames\$(CFG)\gennames.exe"
