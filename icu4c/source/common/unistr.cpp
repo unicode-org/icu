@@ -330,7 +330,7 @@ UnicodeString::UnicodeString(const UnicodeString& that)
     fArray(fStackBuffer),
     fFlags(kShortString)
 {
-  *this = that;
+  copyFrom(that);
 }
 
 UnicodeString::UnicodeString(const UnicodeString& that,
@@ -402,9 +402,19 @@ UnicodeString::~UnicodeString()
 //========================================
 // Assignment
 //========================================
-UnicodeString&
-UnicodeString::operator= (const UnicodeString& src)
-{
+
+UnicodeString &
+UnicodeString::operator=(const UnicodeString &src) {
+  return copyFrom(src);
+}
+
+UnicodeString &
+UnicodeString::fastCopyFrom(const UnicodeString &src) {
+  return copyFrom(src, TRUE);
+}
+
+UnicodeString &
+UnicodeString::copyFrom(const UnicodeString &src, UBool fastCopy) {
   // if assigning to ourselves, do nothing
   if(this == 0 || this == &src) {
     return *this;
@@ -442,13 +452,22 @@ UnicodeString::operator= (const UnicodeString& src)
     // src uses a refCounted string buffer, use that buffer with refCount
     // src is const, use a cast - we don't really change it
     ((UnicodeString &)src).addRef();
-    // fall through to readonly alias copying: copy all fields
-  case kReadonlyAlias:
-    // src is a readonly alias, do the same
+    // copy all fields, share the reference-counted buffer
     fArray = src.fArray;
     fCapacity = src.fCapacity;
     fFlags = src.fFlags;
     break;
+  case kReadonlyAlias:
+    if(fastCopy) {
+      // src is a readonly alias, do the same
+      // -> maintain the readonly alias as such
+      fArray = src.fArray;
+      fCapacity = src.fCapacity;
+      fFlags = src.fFlags;
+      break;
+    }
+    // else if(!fastCopy) fall through to case kWritableAlias
+    // -> allocate a new buffer and copy the contents
   case kWritableAlias:
     // src is a writable alias; we make a copy of that instead
     if(allocate(fLength)) {
