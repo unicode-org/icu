@@ -67,12 +67,12 @@ char convertersToCheck[][15] = {
   "ibm16804",
   "ibm-858", /* was "cp850" changed 2000nov28 */
   /* duplicate "cp850" removed 2000nov28 */
-  "cp1026",
+  "cpibm1155",
   "cp857",
   "cp1025",
   "cp1123",
-  "cp1122",
-  "cp1112",
+  "cpibm1157",
+  "cpibm1156",
   "ibm-12712", /* was "cp424" changed 2000nov28 */
   "ibm-4899", /* was "cp803" changed 2000nov28 */
   "cp862",
@@ -83,7 +83,7 @@ char convertersToCheck[][15] = {
   "cp1253",
   /*  "cp819",
       "cp13488",*/
-  "cp875",
+  "cpibm4971",
   "cp869",
   "cp813",
   "cp852",
