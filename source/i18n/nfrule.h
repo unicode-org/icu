@@ -26,7 +26,7 @@ class ParsePosition;
 class RuleBasedNumberFormat;
 class UnicodeString;
 
-class NFRule : public UObject {
+class NFRule : public UMemory {
 public:
 
     enum ERuleType {
@@ -72,20 +72,6 @@ public:
 
     void appendRuleText(UnicodeString& result) const;
 
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 2.2
-     */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for this class.
-     *
-     * @draft ICU 2.2
-     */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
-
 private:
     void parseRuleDescriptor(UnicodeString& descriptor, UErrorCode& status);
     void extractSubstitutions(const NFRuleSet* ruleSet, const NFRule* predecessor, const RuleBasedNumberFormat* rbnf, UErrorCode& status);
@@ -112,11 +98,8 @@ private:
     NFSubstitution* sub2;
     const RuleBasedNumberFormat* formatter;
 
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
+    NFRule(const NFRule &other); // forbid copying of this class
+    NFRule &operator=(const NFRule &other); // forbid copying of this class
 };
 
 U_NAMESPACE_END

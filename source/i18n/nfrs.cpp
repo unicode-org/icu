@@ -114,8 +114,6 @@ static const UChar gPercentPercent[] =
     0x25, 0x25, 0
 }; /* "%%" */
 
-const char NFRuleSet::fgClassID=0;
-
 NFRuleSet::NFRuleSet(UnicodeString* descriptions, int32_t index, UErrorCode& status)
   : name()
   , rules(0)

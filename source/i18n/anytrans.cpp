@@ -60,7 +60,7 @@ U_NAMESPACE_BEGIN
  * transliterator can consider common characters both before and after
  * the scripts.
  */
-class ScriptRunIterator : public UObject {
+class ScriptRunIterator : public UMemory {
 private:
     const Replaceable& text;
     int32_t textStart;
@@ -103,30 +103,10 @@ public:
      */
     void adjustLimit(int32_t delta);
 
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 2.2
-     */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for this class.
-     *
-     * @draft ICU 2.2
-     */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
-
 private:
-
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
+    ScriptRunIterator(const ScriptRunIterator &other); // forbid copying of this class
+    ScriptRunIterator &operator=(const ScriptRunIterator &other); // forbid copying of this class
 };
-
-const char ScriptRunIterator::fgClassID=0;
 
 ScriptRunIterator::ScriptRunIterator(const Replaceable& theText,
                                      int32_t myStart, int32_t myLimit) :
