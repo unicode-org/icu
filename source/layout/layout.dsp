@@ -44,8 +44,8 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "LAYOUT_EXPORTS"  /FD /c
-# ADD CPP /nologo /MD /Za /W3 /GX /O2 /Ob2 /I "..\..\include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "LAYOUT_EXPORTS" /D "U_LAYOUT_IMPLEMENTATION"  /FD /c
+# ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "LAYOUT_EXPORTS" /FD /c
+# ADD CPP /nologo /MD /Za /W3 /GX /O2 /Ob2 /I "..\..\include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "LAYOUT_EXPORTS" /D "U_LAYOUT_IMPLEMENTATION" /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -71,8 +71,8 @@ LINK32=link.exe
 # PROP Intermediate_Dir "Debug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "LAYOUT_EXPORTS"  /FD /GZ /c
-# ADD CPP /nologo /MDd /Za /W3 /Gm /GX /ZI /Od /I "..\..\include" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "LAYOUT_EXPORTS" /D "U_LAYOUT_IMPLEMENTATION" /FR  /FD /GZ /c
+# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "LAYOUT_EXPORTS" /FD /GZ /c
+# ADD CPP /nologo /MDd /Za /W3 /Gm /GX /ZI /Od /I "..\..\include" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "LAYOUT_EXPORTS" /D "U_LAYOUT_IMPLEMENTATION" /FR /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -98,8 +98,8 @@ LINK32=link.exe
 # PROP Intermediate_Dir "Release"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN64" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "LAYOUT_EXPORTS"  /FD /c
-# ADD CPP /nologo /MD /Za /W3    /I "..\..\include" /D"WIN64" /D"NDEBUG" /D"_WINDOWS" /D"_MBCS" /D"_USRDLL" /D"LAYOUT_EXPORTS" /D"U_LAYOUT_IMPLEMENTATION"  /FD /c /O2 /GX /Op /QIA64_fmaopt /D"_IA64_" /Zi /D"WIN64" /D"WIN32" /D"_AFX_NO_DAO_SUPPORT" /Wp64 /Zm600
+# ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN64" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "LAYOUT_EXPORTS" /FD /c
+# ADD CPP /nologo /MD /Za /W3 /I "..\..\include" /D"WIN64" /D"NDEBUG" /D"_WINDOWS" /D"_MBCS" /D"_USRDLL" /D"LAYOUT_EXPORTS" /D"U_LAYOUT_IMPLEMENTATION"  /FD /c /O2 /GX /Op /QIA64_fmaopt /D"_IA64_" /Zi /D"WIN64" /D"WIN32" /D"_AFX_NO_DAO_SUPPORT" /Wp64 /Zm600
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win64
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win64
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -110,7 +110,6 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:IA64
 # ADD LINK32 ..\..\lib\icuuc.lib /nologo /dll /machine:IA64 /out:"..\..\bin\icule21.dll" /implib:"..\..\lib\icule.lib" /incremental:no
-# SUBTRACT LINK32 
 
 !ELSEIF  "$(CFG)" == "layout - Win64 Debug"
 
@@ -125,8 +124,8 @@ LINK32=link.exe
 # PROP Intermediate_Dir "Debug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN64" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "LAYOUT_EXPORTS"  /FD /GZ /c
-# ADD CPP /nologo /MDd /Za /W3 /Gm    /I "..\..\include" /D"WIN64" /D"_DEBUG" /D"_WINDOWS" /D"_MBCS" /D"_USRDLL" /D"LAYOUT_EXPORTS" /D"U_LAYOUT_IMPLEMENTATION" /FR  /FD /GZ /c /Od /GX /Op /QIA64_fmaopt /D"_IA64_" /Zi /D"WIN64" /D"WIN32" /D"_AFX_NO_DAO_SUPPORT" /Wp64 /Zm600
+# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN64" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "LAYOUT_EXPORTS" /FD /GZ /c
+# ADD CPP /nologo /MDd /Za /W3 /Gm /I "..\..\include" /D"WIN64" /D"_DEBUG" /D"_WINDOWS" /D"_MBCS" /D"_USRDLL" /D"LAYOUT_EXPORTS" /D"U_LAYOUT_IMPLEMENTATION" /FR  /FD /GZ /c /Od /GX /Op /QIA64_fmaopt /D"_IA64_" /Zi /D"WIN64" /D"WIN32" /D"_AFX_NO_DAO_SUPPORT" /Wp64 /Zm600
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win64
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win64
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -137,7 +136,6 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:IA64 /pdbtype:sept
 # ADD LINK32 ..\..\lib\icuucd.lib /nologo /dll /debug /machine:IA64 /out:"..\..\bin\icule21d.dll" /implib:"..\..\lib\iculed.lib" /pdbtype:sept /incremental:no
-# SUBTRACT LINK32 
 
 !ENDIF 
 
@@ -512,7 +510,7 @@ SOURCE=.\LayoutEngine.h
 InputPath=.\LayoutEngine.h
 
 "..\..\include\layout\LayoutEngine.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+    copy  $(InputPath)  ..\..\include\layout
 
 # End Custom Build
 
@@ -522,7 +520,7 @@ InputPath=.\LayoutEngine.h
 InputPath=.\LayoutEngine.h
 
 "..\..\include\layout\LayoutEngine.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+    copy  $(InputPath)  ..\..\include\layout
 
 # End Custom Build
 
@@ -532,7 +530,7 @@ InputPath=.\LayoutEngine.h
 InputPath=.\LayoutEngine.h
 
 "..\..\include\layout\LayoutEngine.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+    copy  $(InputPath)  ..\..\include\layout
 
 # End Custom Build
 
@@ -542,7 +540,7 @@ InputPath=.\LayoutEngine.h
 InputPath=.\LayoutEngine.h
 
 "..\..\include\layout\LayoutEngine.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+    copy  $(InputPath)  ..\..\include\layout
 
 # End Custom Build
 
@@ -563,7 +561,7 @@ SOURCE=.\LEFontInstance.h
 InputPath=.\LEFontInstance.h
 
 "..\..\include\layout\LEFontInstance.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+    copy  $(InputPath)  ..\..\include\layout
 
 # End Custom Build
 
@@ -573,7 +571,7 @@ InputPath=.\LEFontInstance.h
 InputPath=.\LEFontInstance.h
 
 "..\..\include\layout\LEFontInstance.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+    copy  $(InputPath)  ..\..\include\layout
 
 # End Custom Build
 
@@ -583,7 +581,7 @@ InputPath=.\LEFontInstance.h
 InputPath=.\LEFontInstance.h
 
 "..\..\include\layout\LEFontInstance.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+    copy  $(InputPath)  ..\..\include\layout
 
 # End Custom Build
 
@@ -593,7 +591,7 @@ InputPath=.\LEFontInstance.h
 InputPath=.\LEFontInstance.h
 
 "..\..\include\layout\LEFontInstance.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+    copy  $(InputPath)  ..\..\include\layout
 
 # End Custom Build
 
@@ -610,7 +608,7 @@ SOURCE=.\LEGlyphFilter.h
 InputPath=.\LEGlyphFilter.h
 
 "..\..\include\layout\LEGlyphFilter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+    copy  $(InputPath)  ..\..\include\layout
 
 # End Custom Build
 
@@ -620,7 +618,7 @@ InputPath=.\LEGlyphFilter.h
 InputPath=.\LEGlyphFilter.h
 
 "..\..\include\layout\LEGlyphFilter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+    copy  $(InputPath)  ..\..\include\layout
 
 # End Custom Build
 
@@ -630,7 +628,7 @@ InputPath=.\LEGlyphFilter.h
 InputPath=.\LEGlyphFilter.h
 
 "..\..\include\layout\LEGlyphFilter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+    copy  $(InputPath)  ..\..\include\layout
 
 # End Custom Build
 
@@ -640,7 +638,7 @@ InputPath=.\LEGlyphFilter.h
 InputPath=.\LEGlyphFilter.h
 
 "..\..\include\layout\LEGlyphFilter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+    copy  $(InputPath)  ..\..\include\layout
 
 # End Custom Build
 
@@ -657,7 +655,7 @@ SOURCE=.\LEScripts.h
 InputPath=.\LEScripts.h
 
 "..\..\include\layout\LEScripts.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+    copy  $(InputPath)  ..\..\include\layout
 
 # End Custom Build
 
@@ -667,7 +665,7 @@ InputPath=.\LEScripts.h
 InputPath=.\LEScripts.h
 
 "..\..\include\layout\LEScripts.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+    copy  $(InputPath)  ..\..\include\layout
 
 # End Custom Build
 
@@ -677,7 +675,7 @@ InputPath=.\LEScripts.h
 InputPath=.\LEScripts.h
 
 "..\..\include\layout\LEScripts.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+    copy  $(InputPath)  ..\..\include\layout
 
 # End Custom Build
 
@@ -687,7 +685,7 @@ InputPath=.\LEScripts.h
 InputPath=.\LEScripts.h
 
 "..\..\include\layout\LEScripts.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+    copy  $(InputPath)  ..\..\include\layout
 
 # End Custom Build
 
@@ -704,7 +702,7 @@ SOURCE=.\LESwaps.h
 InputPath=.\LESwaps.h
 
 "..\..\include\layout\LESwaps.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+    copy  $(InputPath)  ..\..\include\layout
 
 # End Custom Build
 
@@ -714,7 +712,7 @@ InputPath=.\LESwaps.h
 InputPath=.\LESwaps.h
 
 "..\..\include\layout\LESwaps.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+    copy  $(InputPath)  ..\..\include\layout
 
 # End Custom Build
 
@@ -724,7 +722,7 @@ InputPath=.\LESwaps.h
 InputPath=.\LESwaps.h
 
 "..\..\include\layout\LESwaps.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+    copy  $(InputPath)  ..\..\include\layout
 
 # End Custom Build
 
@@ -734,7 +732,7 @@ InputPath=.\LESwaps.h
 InputPath=.\LESwaps.h
 
 "..\..\include\layout\LESwaps.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+    copy  $(InputPath)  ..\..\include\layout
 
 # End Custom Build
 
@@ -751,7 +749,7 @@ SOURCE=.\LETypes.h
 InputPath=.\LETypes.h
 
 "..\..\include\layout\LETypes.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+    copy  $(InputPath)  ..\..\include\layout
 
 # End Custom Build
 
@@ -761,7 +759,7 @@ InputPath=.\LETypes.h
 InputPath=.\LETypes.h
 
 "..\..\include\layout\LETypes.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+    copy  $(InputPath)  ..\..\include\layout
 
 # End Custom Build
 
@@ -771,7 +769,7 @@ InputPath=.\LETypes.h
 InputPath=.\LETypes.h
 
 "..\..\include\layout\LETypes.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+    copy  $(InputPath)  ..\..\include\layout
 
 # End Custom Build
 
@@ -781,7 +779,7 @@ InputPath=.\LETypes.h
 InputPath=.\LETypes.h
 
 "..\..\include\layout\LETypes.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+    copy  $(InputPath)  ..\..\include\layout
 
 # End Custom Build
 
@@ -809,8 +807,8 @@ SOURCE=.\unicode\loengine.h
 # Begin Custom Build
 InputPath=.\unicode\loengine.h
 
-"..\..\include\unicode\loengine.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+"..\..\include\layout\loengine.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+    copy  $(InputPath)  ..\..\include\layout
 
 # End Custom Build
 
@@ -819,8 +817,8 @@ InputPath=.\unicode\loengine.h
 # Begin Custom Build
 InputPath=.\unicode\loengine.h
 
-"..\..\include\unicode\loengine.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+"..\..\include\layout\loengine.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+    copy  $(InputPath)  ..\..\include\layout
 
 # End Custom Build
 
@@ -829,8 +827,8 @@ InputPath=.\unicode\loengine.h
 # Begin Custom Build
 InputPath=.\unicode\loengine.h
 
-"..\..\include\unicode\loengine.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+"..\..\include\layout\loengine.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+    copy  $(InputPath)  ..\..\include\layout
 
 # End Custom Build
 
@@ -839,8 +837,8 @@ InputPath=.\unicode\loengine.h
 # Begin Custom Build
 InputPath=.\unicode\loengine.h
 
-"..\..\include\unicode\loengine.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\layout
+"..\..\include\layout\loengine.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+    copy  $(InputPath)  ..\..\include\layout
 
 # End Custom Build
 
