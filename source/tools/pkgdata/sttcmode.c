@@ -34,7 +34,11 @@
 /** set if AR is NOT to be called implicitly by gnumake 
  ** (i.e. if  the form   libblah.a($(OBJECTS) doesnt work) 
  **/
-#define NO_IMPLICIT_AR  0
+#if defined(OS400)
+#    define NO_IMPLICIT_AR  1
+#else
+#    define NO_IMPLICIT_AR  0
+#endif
 
 void pkg_sttc_writeReadme(struct UPKGOptions_ *o, const char *libName, UErrorCode *status)
 {
