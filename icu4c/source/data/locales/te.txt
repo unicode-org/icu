@@ -10,7 +10,7 @@
 te {
     Version{ "2.0" }
     Countries {
-        IN { "\u0c2d\u0c3e\u0c30\u0c24 \u0c26\u0c46\u0c33\u0c66" }
+        IN { "\u0c2d\u0c3e\u0c30\u0c24 \u0c26\u0c47\u0c33\u0c66" }
     }
     Languages {
         te { "\u0c24\u0c46\u0c32\u0c41\u0c17\u0c41" }
