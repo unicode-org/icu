@@ -40,10 +40,10 @@ isAcceptableInvUCA(void * /*context*/,
         pInfo->dataFormat[1]==invUcaDataInfo.dataFormat[1] &&
         pInfo->dataFormat[2]==invUcaDataInfo.dataFormat[2] &&
         pInfo->dataFormat[3]==invUcaDataInfo.dataFormat[3] &&
-        pInfo->formatVersion[0]==ucaDataInfo.formatVersion[0] &&
-        pInfo->formatVersion[1]==ucaDataInfo.formatVersion[1] &&
-        pInfo->formatVersion[2]==ucaDataInfo.formatVersion[2] &&
-        pInfo->formatVersion[3]==ucaDataInfo.formatVersion[3] &&
+        pInfo->formatVersion[0]==invUcaDataInfo.formatVersion[0] &&
+        pInfo->formatVersion[1]==invUcaDataInfo.formatVersion[1] &&
+        pInfo->formatVersion[2]==invUcaDataInfo.formatVersion[2] &&
+        pInfo->formatVersion[3]==invUcaDataInfo.formatVersion[3] &&
         pInfo->dataVersion[0]==invUcaDataInfo.dataVersion[0] &&
         pInfo->dataVersion[1]==invUcaDataInfo.dataVersion[1] &&
         pInfo->dataVersion[2]==invUcaDataInfo.dataVersion[2] &&

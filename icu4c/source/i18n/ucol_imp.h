@@ -44,7 +44,9 @@ static const UDataInfo ucaDataInfo={
 
     {0x55, 0x43, 0x6f, 0x6c},     /* dataFormat="UCol"            */
     /* 03/26/2002 bumped up version since format has changed */
-    {2, 0, 0, 0},                 /* formatVersion                */
+    /* 09/16/2002 bumped up version since we went from UColAttributeValue */
+    /*            to int32_t in UColOptionSet */
+    {2, 1, 0, 0},                 /* formatVersion                */
     {3, 0, 0, 0}                  /* dataVersion = Unicode Version*/
 };
 
@@ -529,13 +531,14 @@ typedef enum {
 
 typedef struct {
       uint32_t variableTopValue;
-      UColAttributeValue frenchCollation;
-      UColAttributeValue alternateHandling; /* attribute for handling variable elements*/
-      UColAttributeValue caseFirst;         /* who goes first, lower case or uppercase */
-      UColAttributeValue caseLevel;         /* do we have an extra case level */
-      UColAttributeValue normalizationMode; /* attribute for normalization */
-      UColAttributeValue strength;          /* attribute for strength */
-      UColAttributeValue hiraganaQ;         /* attribuge for special Hiragana */
+      /*UColAttributeValue*/ int32_t frenchCollation;
+      /*UColAttributeValue*/ int32_t alternateHandling; /* attribute for handling variable elements*/
+      /*UColAttributeValue*/ int32_t caseFirst;         /* who goes first, lower case or uppercase */
+      /*UColAttributeValue*/ int32_t caseLevel;         /* do we have an extra case level */
+      /*UColAttributeValue*/ int32_t normalizationMode; /* attribute for normalization */
+      /*UColAttributeValue*/ int32_t strength;          /* attribute for strength */
+      /*UColAttributeValue*/ int32_t hiraganaQ;         /* attribuge for special Hiragana */
+      uint8_t reserved[64];                 /* for future use */
 } UColOptionSet;
 
 typedef struct {
