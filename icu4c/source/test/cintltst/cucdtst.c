@@ -603,7 +603,7 @@ void setUpDataTable()
     
 }
 
-void cleanUpDataTable()
+U_CFUNC void cleanUpDataTable()
 {
     int32_t i,j;
     if(dataTable != NULL) {
