@@ -14,6 +14,6 @@
 // 
 #include "ucln_cmn.h"
 
-static UBool initializesGlobalMutex = u_ICUStaticInitFunc();
+//static UBool initializesGlobalMutex = u_ICUStaticInitFunc();
 
 

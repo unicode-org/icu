@@ -56,10 +56,21 @@
 #include "umutex.h"
 #include "cmemory.h"
 
-/* the global mutexes.  */
-static UMTX    gGlobalMutex = NULL;     /* The global ICU mutex                        */
-static UMTX    gIncDecMutex = NULL;     /* mutex for atomic inc/dec, for platforms     */
-                                        /*   that can't do those ops directly.         */
+
+/* The global ICU mutex.    
+ * Special cased to allow thread safe lazy initialization (windows)
+ *   or pure static C style initialization (Posix)
+ */
+#if defined( WIN32 )
+static UMTX              gGlobalMutex      = NULL;
+
+#elif defined( POSIX )
+static pthread_mutex_t   gGlobalPosixMutex = PTHREAD_MUTEX_INITIALIZER;
+static UMTX              gGlobalMutex      = &gGlobalPosixMutex;
+
+static UMTX              gIncDecMutex      = NULL;
+#endif /* cascade of platforms */
+
 
 /* Detect Recursive locking of the global mutex.  For debugging only. */
 static int32_t gRecursionCount = 0;       
@@ -74,7 +85,7 @@ static UMtxInitFn    *pMutexInitFn    = NULL;
 static UMtxFn        *pMutexDestroyFn = NULL;
 static UMtxFn        *pMutexLockFn    = NULL;
 static UMtxFn        *pMutexUnlockFn  = NULL;
-static const void    *gMutexContext = NULL;
+static const void    *gMutexContext   = NULL;
 
 
 
@@ -89,12 +100,8 @@ umtx_lock(UMTX *mutex)
     }
 
     if (*mutex == NULL) {
-        /* Attempt to lock an uninitialized mutex.  Not Supported.
-         *  Note that earlier versions of ICU supported lazy mutex initialization.
-         *    That was not thread safe on CPUs that reorder memory operations.  */
-        /* U_ASSERT(FALSE);   TODO:  activate this assert. */
-        umtx_init(mutex);    /*  But, in case someone really screwed up, we will
-                              *   still do the lazy init to try to avoid a crash  */
+        /* Lock of an uninitialized mutex.  Initialize it before proceeding.   */
+        umtx_init(mutex);    
     }
 
     if (pMutexLockFn != NULL) {
@@ -126,13 +133,11 @@ umtx_lock(UMTX *mutex)
 U_CAPI void  U_EXPORT2
 umtx_unlock(UMTX* mutex)
 {
-    if(mutex == NULL)
-    {
+    if(mutex == NULL) {
         mutex = &gGlobalMutex;
     }
 
-    if(*mutex == NULL)
-    {
+    if(*mutex == NULL)    {
         U_ASSERT(FALSE);  /* This mutex is not initialized.     */
         return; 
     }
@@ -161,6 +166,7 @@ umtx_unlock(UMTX* mutex)
 
 /*
  *   umtx_raw_init    Do the platform specific mutex allocation and initialization
+ *                    for all ICU mutexes _except_ the ICU global mutex.
  */
 static void umtx_raw_init(UMTX *mutex) {
     if (pMutexInitFn != NULL) {
@@ -181,7 +187,7 @@ static void umtx_raw_init(UMTX *mutex) {
         InitializeCriticalSection(cs);
         *mutex = cs;
     #elif defined( POSIX )
-        pthread_mutex_t *m = uprv_malloc(sizeof(pthread_mutex_t));
+        pthread_mutex_t *m = (pthread_mutex_t *)uprv_malloc(sizeof(pthread_mutex_t));
         if (m == NULL) {
             return;
         }
@@ -203,30 +209,78 @@ static void umtx_raw_init(UMTX *mutex) {
 
 
 
+/*
+ *   initGlobalMutex    Do the platform specific initialization of the ICU global mutex.
+ *                      Separated out from the other mutexes because it is different:
+ *                      Mutex storage is static for POSIX, init must be thread safe 
+ *                      without the use of another mutex.
+ */
+static void initGlobalMutex() {
+    /*
+     * Call user mutex init function if one has been specified and the global mutex
+     *  is not already initialized.  For POSIX, the default C style initialization
+     *  will is used, so we need to consider the global mutex to not yet be
+     *  initialized if it has just its C initial value.
+     */
+    if (pMutexInitFn != NULL) {
+        if (gGlobalMutex==NULL 
+#if defined(POSIX)
+                                || gGlobalMutex==&gGlobalPosixMutex 
+#endif
+       ) {
+            UErrorCode status = U_ZERO_ERROR;
+            (*pMutexInitFn)(gMutexContext, &gGlobalMutex, &status);
+            if (U_FAILURE(status)) {
+                /* TODO:  how should errors here be handled? */
+                return;
+            }
+        }
+        return;
+    }
+
+    /* No user override of mutex functions.
+     *   Use default ICU mutex implementations.
+     */
+#if (ICU_USE_THREADS == 1)
+    #if defined (WIN32)
+    {
+        void              *t;
+        CRITICAL_SECTION  *ourCritSec = uprv_malloc(sizeof(CRITICAL_SECTION)); 
+        InitializeCriticalSection(ourCritSec);
+        t = InterlockedCompareExchangePointer(&gGlobalMutex, ourCritSec, NULL);
+        if (t != NULL) {
+            /* Some other thread stored into gGlobalMutex first.  Discard the critical
+             *  section we just created; the system will go with the other one.
+             */
+            DeleteCriticalSection(ourCritSec);
+            uprv_free(ourCritSec);
+        }
+    }
+    #elif defined( POSIX )
+        /*  No Action Required.  Global mutex set up with C static initialization. */
+        U_ASSERT(gGlobalMutex = &gGlobalPosixMutex);
+    #endif /* cascade of platforms */
+#else  /* ICU_USE_THREADS */
+        gGlobalMutex = &gGlobalMutex  /* With no threads, we must still set the mutex to
+                                        * some non-null value to make the rest of the
+                                        *   (not ifdefed) mutex code think that it is initialized.
+                                        */
+#endif /* ICU_USE_THREADS */
+}
+
+
+
+
+
 U_CAPI void  U_EXPORT2
 umtx_init(UMTX *mutex)
 {
-    if (mutex == NULL) {
-        mutex = &gGlobalMutex;
-    }
-
-    if (mutex == &gGlobalMutex) {
-        /* Initialization of the global mutex. */
-        if (*mutex != NULL) {
-            /* Global mutex is already initialized.  Nothing more required   */
-            return;
-        }
-        umtx_raw_init(mutex);
-        gRecursionCount = 0;
-
-        /* Initialize the inc/dec mutex, if needed, at the same time as the global ICU mutex */
-       #ifdef POSIX
-       umtx_raw_init(&gIncDecMutex);
-       #endif
-
+    if (mutex == NULL || mutex == &gGlobalMutex) {
+        initGlobalMutex();
     } else {
-        /* The mutex to initialize is not the global mutex.
-         *  Thread safe initialization, using the global mutex.
+        /* 
+         *  Thread safe initialization of mutexes other than the global one,
+         *  using the global mutex.
          */  
         UBool isInitialized; 
         UMTX tMutex = NULL;
@@ -270,28 +324,39 @@ umtx_destroy(UMTX *mutex) {
     if (*mutex == NULL) {  /* someone already did it. */
         return;
     }
-    
+
+#if defined (POSIX)
+    /*  The life of the inc/dec mutex for POSIX is tied to that of the global mutex. */
+    if (mutex == &gGlobalMutex) {
+        umtx_destroy(&gIncDecMutex);
+    }
+#endif
+
     if (pMutexDestroyFn != NULL) {
         (*pMutexDestroyFn)(gMutexContext, mutex);
+        *mutex = NULL;
     } else {
 #if (ICU_USE_THREADS == 1)
 #if defined (WIN32)
         DeleteCriticalSection((CRITICAL_SECTION*)*mutex);
         uprv_free(*mutex);
+        *mutex = NULL;
 #elif defined (POSIX)
-        pthread_mutex_destroy((pthread_mutex_t*)*mutex);
-        uprv_free(*mutex);
-#endif
-#endif /* ICU_USE_THREADS==1 */
+        if (*mutex != &gGlobalPosixMutex) {
+            /* Only POSIX mutexes other than the ICU global mutex get destroyed. */
+            pthread_mutex_destroy((pthread_mutex_t*)*mutex);
+            uprv_free(*mutex);
+            *mutex = NULL;
+        } 
+#endif /* chain of platforms */
+#else  /* ICU_USE_THREADS==1 */
+           /* NO ICU Threads.  We still need to zero out the mutex pointer, so that
+            * it appears to be uninitialized     */
+        *mutex = NULL;
+#endif   /* ICU_USE_THREADS */
         
     }
-    *mutex = NULL;
 
-#if defined (POSIX)
-    if (mutex == &gGlobalMutex) {
-        umtx_destroy(&gIncDecMutex);
-    }
-#endif /* POSIX */
 }
 
 
@@ -321,7 +386,9 @@ u_setMutexFunctions(const void *context, UMtxInitFn *i, UMtxFn *d, UMtxFn *l, UM
     pMutexLockFn    = l;
     pMutexUnlockFn  = u;
     gMutexContext   = context;
-
+    gGlobalMutex    = NULL;         /* For POSIX, the global mutex will be pre-initialized */
+                                    /*   Undo that, force re-initialization when u_init()  */
+                                    /*   happens.                                          */
 }
 
 
@@ -349,10 +416,9 @@ umtx_atomic_inc(int32_t *p)  {
         #if defined (WIN32) && ICU_USE_THREADS == 1
             retVal = InterlockedIncrement(p);
         #elif defined (POSIX) && ICU_USE_THREADS == 1
-            pthread_mutex_t *m = (pthread_mutex_t*) gIncDecMutex;
-            pthread_mutex_lock(m);
+            umtx_lock(&gIncDecMutex);
             retVal = ++(*p);
-            pthread_mutex_unlock(m);
+            umtx_unlock(&gIncDecMutex);
         #else
             /* Unknown Platform, or ICU thread support compiled out. */
             retVal = ++(*p);
@@ -370,10 +436,9 @@ umtx_atomic_dec(int32_t *p) {
         #if defined (WIN32) && ICU_USE_THREADS == 1
             retVal = InterlockedDecrement(p);
         #elif defined (POSIX) && ICU_USE_THREADS == 1
-            pthread_mutex_t *m = (pthread_mutex_t*) gIncDecMutex;
-            pthread_mutex_lock(m);
+            umtx_lock(&gIncDecMutex);
             retVal = --(*p);
-            pthread_mutex_unlock(m);
+            umtx_unlock(&gIncDecMutex);
         #else
             /* Unknown Platform, or ICU thread support compiled out. */
             retVal = --(*p);
@@ -430,6 +495,12 @@ U_CFUNC UBool umtx_cleanup(void) {
     pMutexLockFn    = NULL;
     pMutexUnlockFn  = NULL;
     gMutexContext   = NULL;
+
+    gGlobalMutex    = NULL;
+#if defined (POSIX)
+    gIncDecMutex    = NULL;
+    gGlobalMutex    = &gGlobalPosixMutex;
+#endif
 
     pIncFn         = NULL;
     pDecFn         = NULL;
