@@ -289,7 +289,12 @@ static const ILcidPosixElement en[] = {
     {0x007f, "en_US_POSIX"}, /* duplicate for roundtripping */
     {0x2409, "en_VI"},  /* Virgin Islands AKA Caribbean Islands (en_CB). */
     {0x1c09, "en_ZA"},
-    {0x3009, "en_ZW"}
+    {0x3009, "en_ZW"},
+    {0x0409, "en_AS"},  /* Alias for en_US. Leave last. */
+    {0x0409, "en_GU"},  /* Alias for en_US. Leave last. */
+    {0x0409, "en_MH"},  /* Alias for en_US. Leave last. */
+    {0x0409, "en_MP"},  /* Alias for en_US. Leave last. */
+    {0x0409, "en_UM"}   /* Alias for en_US. Leave last. */
 };
 
 static const ILcidPosixElement en_US_POSIX[] = {
@@ -409,9 +414,10 @@ static const ILcidPosixElement nl[] = {
 /* The "no" locale split into nb and nn.  By default in ICU, "no" is nb.*/
 static const ILcidPosixElement no[] = {
     {0x14,   "nb"},     /* really nb */
-    {0x0414, "nb_NO"},  /* really nb_NO */
+    {0x0414, "nb_NO"},  /* really nb_NO. Keep first in the 414 list. */
     {0x0414, "no"},     /* really nb_NO */
-    {0x0814, "nn_NO"},  /* really nn_NO */
+    {0x0414, "no_NO"},  /* really nb_NO */
+    {0x0814, "nn_NO"},  /* really nn_NO. Keep first in the 814 list.  */
     {0x0814, "nn"},     /* It's 0x14 or 0x814, pick one to make the test program happy. */
     {0x0814, "no_NO_NY"}/* really nn_NO */
 };
