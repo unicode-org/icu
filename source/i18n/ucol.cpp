@@ -79,15 +79,21 @@ isAcceptableUCA(void * /*context*/,
         pInfo->dataFormat[2]==ucaDataInfo.dataFormat[2] &&
         pInfo->dataFormat[3]==ucaDataInfo.dataFormat[3] &&
         pInfo->formatVersion[0]==ucaDataInfo.formatVersion[0] &&
-        pInfo->formatVersion[1]>=ucaDataInfo.formatVersion[1] &&
+        pInfo->formatVersion[1]>=ucaDataInfo.formatVersion[1]// &&
         //pInfo->formatVersion[1]==ucaDataInfo.formatVersion[1] &&
         //pInfo->formatVersion[2]==ucaDataInfo.formatVersion[2] && // Too harsh
         //pInfo->formatVersion[3]==ucaDataInfo.formatVersion[3] && // Too harsh
-        pInfo->dataVersion[0]==ucaDataInfo.dataVersion[0] &&
-        pInfo->dataVersion[1]>=ucaDataInfo.dataVersion[1]) { // &&
+        ) {
+        UVersionInfo UCDVersion;
+        u_getUnicodeVersion(UCDVersion);
+        if(pInfo->dataVersion[0]==UCDVersion[0] &&
+          pInfo->dataVersion[1]>=UCDVersion[1]) { // &&
         //pInfo->dataVersion[2]==ucaDataInfo.dataVersion[2] &&
         //pInfo->dataVersion[3]==ucaDataInfo.dataVersion[3]) {
-        return TRUE;
+          return TRUE;
+        } else {
+          return FALSE;
+        }
     } else {
         return FALSE;
     }
@@ -324,6 +330,14 @@ inline void freeHeapWritableBuffer(collIterate *data)
 /* Following are the open/close functions                                   */
 /*                                                                          */
 /****************************************************************************/
+static UCollator*
+tryOpeningFromRules(UResourceBundle *collElem, UErrorCode *status) {
+  int32_t rulesLen = 0;
+  const UChar *rules = ures_getStringByKey(collElem, "Sequence", &rulesLen, status);
+  return ucol_openRules(rules, rulesLen, UCOL_DEFAULT, UCOL_DEFAULT, NULL, status);
+
+}
+
 U_CAPI UCollator* U_EXPORT2
 ucol_open(    const    char         *loc,
         UErrorCode      *status)
@@ -354,22 +368,28 @@ ucol_open(    const    char         *loc,
   } else if(U_SUCCESS(*status)) { /* otherwise, we'll pick a collation data that exists */
     int32_t len = 0;
     const uint8_t *inData = ures_getBinary(binary, &len, status);
-    if(U_FAILURE(*status)){
-      goto clean;
-    }
-    if((uint32_t)len > (paddedsize(sizeof(UCATableHeader)) + paddedsize(sizeof(UColOptionSet)))) {
-      result = ucol_initCollator((const UCATableHeader *)inData, result, status);
-      if(U_FAILURE(*status)){
-        goto clean;
-      }
-      result->hasRealData = TRUE;
+    UCATableHeader *colData = (UCATableHeader *)inData;
+    if(uprv_memcmp(colData->UCAVersion, UCA->image->UCAVersion, sizeof(UVersionInfo)) != 0 ||
+      uprv_memcmp(colData->UCDVersion, UCA->image->UCDVersion, sizeof(UVersionInfo)) != 0) {
+      result = tryOpeningFromRules(collElem, status);
     } else {
-      result = ucol_initCollator(UCA->image, result, status);
-      ucol_setOptionsFromHeader(result, (UColOptionSet *)(inData+((const UCATableHeader *)inData)->options), status);
       if(U_FAILURE(*status)){
         goto clean;
       }
-      result->hasRealData = FALSE;
+      if((uint32_t)len > (paddedsize(sizeof(UCATableHeader)) + paddedsize(sizeof(UColOptionSet)))) {
+        result = ucol_initCollator((const UCATableHeader *)inData, result, status);
+        if(U_FAILURE(*status)){
+          goto clean;
+        }
+        result->hasRealData = TRUE;
+      } else {
+        result = ucol_initCollator(UCA->image, result, status);
+        ucol_setOptionsFromHeader(result, (UColOptionSet *)(inData+((const UCATableHeader *)inData)->options), status);
+        if(U_FAILURE(*status)){
+          goto clean;
+        }
+        result->hasRealData = FALSE;
+      }
     }
     result->binary = binary;
     result->rb = b;
@@ -541,6 +561,14 @@ ucol_openRules( const UChar        *rules,
     /* also, if we wanted to remove some contractions, we should make a tailoring */
     table = ucol_assembleTailoringTable(&src, status);
     if(U_SUCCESS(*status)) {
+      // builder version
+      table->version[0] = UCOL_BUILDER_VERSION;
+      // no tailoring information on this level
+      table->version[1] = table->version[2] = table->version[3] = 0;
+      // set UCD version
+      u_getUnicodeVersion(table->UCDVersion);
+      // set UCA version
+      uprv_memcpy(table->UCAVersion, UCA->image->UCAVersion, sizeof(UVersionInfo));
       result = ucol_initCollator(table,0,status);
       result->hasRealData = TRUE;
     }
@@ -6733,7 +6761,7 @@ ucol_getVersion(const UCollator* coll,
     /* RunTime version  */
     uint8_t rtVersion = UCOL_RUNTIME_VERSION;
     /* Builder version*/
-    uint8_t bdVersion = coll->dataInfo.dataVersion[0];
+    uint8_t bdVersion = coll->image->version[0];
 
     /* Charset Version. Need to get the version from cnv files
      * makeconv should populate cnv files with version and
@@ -6747,8 +6775,8 @@ ucol_getVersion(const UCollator* coll,
     /* Tailoring rules */
     versionInfo[0] = (uint8_t)(cmbVersion>>8);
     versionInfo[1] = (uint8_t)cmbVersion;
-    versionInfo[2] = coll->dataInfo.dataVersion[1];
-    versionInfo[3] = UCA->dataInfo.dataVersion[1];
+    versionInfo[2] = coll->image->version[1];
+    versionInfo[3] = UCA->image->UCAVersion[0];
 }
 
 
