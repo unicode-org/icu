@@ -121,10 +121,18 @@ icuio {
                     "%G", "1.23457E+006", "d", "1234567.89"
                 }
                 {
-                    "%hx",
-                    "8ace",
-                    "2",
-                    "8ace"
+                    "%hx", "8ace", "2", "8ace"
+                }
+            }
+        }
+        printfPrecision {
+            Headers { "format", "result", "argumentType", "argument", "precision" }
+            Cases {
+                {
+                    "%+1.*e", "+1.2346e+000", "d", "1.2345678", :int{4}
+                }
+                {
+                    "%+2.*e", "+1.234568e+000", "d", "1.2345678", :int{6}
                 }
             }
         }
