@@ -1,8 +1,0 @@
-tmp*
-Debug
-Release
-Makefile
-*.d
-*.pdb
-*.plg
-genqchk

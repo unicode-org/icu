@@ -57,7 +57,7 @@ VERSION = @VERSION@
 
 
 SUBDIRS = ctestfw toolutil makeconv genrb genuca \
-genccode genqchk genfchk genprops gennames gennorm gencmn gencnval gentz gentest pkgdata
+genccode genprops gennames gennorm gencmn gencnval gentz gentest pkgdata
 
 ## List of phony targets
 .PHONY : all all-local all-recursive install install-local install-files install-dlls build-cmnfile build-dll		\
@@ -96,7 +96,7 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 
 all-local: build-local
 
-DAT_FILES=qchk.dat fchk.dat uprops.dat unames.dat cnvalias.dat tz.dat
+DAT_FILES=uprops.dat unames.dat cnvalias.dat tz.dat
 # ALL of these files can be deleted (the following BRK files) - they are copied
 BRK_FILES=char.brk line.brk line_th.brk sent.brk word.brk word_th.brk
 # don't include thaidict.brk - it goes into a resource bundle - plus it isn't deleted

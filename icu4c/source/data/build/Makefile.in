@@ -53,7 +53,7 @@ all-local: thaidict.brk build-local
 ##### Define all the data files. the build rule that depends on them is below.
 
 ## DAT files - Misc. data files.
-DAT_FILES=qchk.dat fchk.dat uprops.dat unames.dat unorm.dat cnvalias.dat tz.dat ucadata.dat invuca.dat
+DAT_FILES=uprops.dat unames.dat unorm.dat cnvalias.dat tz.dat ucadata.dat invuca.dat
 TEST_DAT_FILES=$(TESTOBJDATADIR)/test.dat
 
 ## BRK files
@@ -135,16 +135,6 @@ build-testdata:  $(ALL_TEST_FILES) $(TESTOBJDATADIR)/testdata.lst
 ####################################################    DAT
 # DAT FILES
 
-# qchk.dat
-qchk.dat: $(UNICODEDATADIR)/QuickCheck.txt $(TOOLDIR)/genqchk/genqchk
-	@echo Creating qchk.dat
-	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genqchk/genqchk -s $(UNICODEDATADIR) -d . -u $(UNICODE_VERSION)
-	
-# fchk.dat
-fchk.dat: $(UNICODEDATADIR)/FCDCheck.txt $(TOOLDIR)/genfchk/genfchk
-	@echo Creating fchk.dat
-	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genfchk/genfchk -s $(UNICODEDATADIR) -d . -u $(UNICODE_VERSION)
-
 # uprops.dat
 uprops.dat: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/Mirror.txt $(TOOLDIR)/genprops/genprops
 	@echo Creating uprops.dat
@@ -224,7 +214,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 ###########
 ########### 390 support
 UCMFILES390=ebcdic-xml-us.ucm ibm-37-s390.ucm ibm-1047-s390.ucm ibm-4909.ucm
-ALLFILES390=qchk.dat fchk.dat uprops.dat unorm.dat cnvalias.dat $(UCMFILES390:.ucm=.cnv)
+ALLFILES390=uprops.dat unorm.dat cnvalias.dat $(UCMFILES390:.ucm=.cnv)
 
 icudata390.lst:  $(SRCLISTDEPS)
 	@echo Generating $@ list of 390 data files
