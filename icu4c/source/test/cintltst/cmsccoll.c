@@ -738,6 +738,128 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
   }
 }
 
+static void testCEs(UCollator *coll, UErrorCode *status) {
+
+  const UChar *rules = NULL, *current = NULL;
+  int32_t ruleLen = 0;
+
+  uint32_t strength = 0;
+  uint32_t maxStrength = UCOL_IDENTICAL;
+  uint32_t baseCE, baseContCE, nextCE, nextContCE, currCE, currContCE;
+  uint32_t lastCE;
+  uint32_t lastContCE;
+
+  int32_t result = 0;
+  uint32_t chOffset = 0; uint32_t chLen = 0;
+  uint32_t exOffset = 0; uint32_t exLen = 0;
+  uint32_t oldOffset = 0;
+
+  /*  uint32_t rExpsLen = 0; */
+  uint32_t firstLen = 0;
+  UBool varT = FALSE; UBool top_ = TRUE;
+  UBool startOfRules = TRUE;
+  UColTokenParser src;
+  UCATableHeader img;
+
+  UChar *rulesCopy = NULL;
+  collIterate c;
+
+  baseCE=baseContCE=nextCE=nextContCE=currCE=currContCE=lastCE=lastContCE = UCOL_NOT_FOUND;
+
+  src.image = &img;
+
+  rules = ucol_getRules(coll, &ruleLen);
+
+  ucol_initInverseUCA(status);
+
+  if(U_SUCCESS(*status) && ruleLen > 0) {
+    rulesCopy = (UChar *)uprv_malloc((ruleLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
+    uprv_memcpy(rulesCopy, rules, ruleLen*sizeof(UChar));
+    src.source = src.current = rulesCopy;
+    src.end = rulesCopy+ruleLen;
+    src.extraCurrent = src.end;
+    src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
+
+    while ((current = ucol_tok_parseNextToken(&src, &strength, 
+                      &chOffset, &chLen, &exOffset, &exLen,
+                      &varT, &top_, startOfRules, status)) != NULL) {
+      startOfRules = FALSE;
+
+      init_collIterate(coll, rulesCopy+chOffset, chLen, &c, FALSE);
+
+      currCE = ucol_getNextCE(coll, &c, status);
+      if(currCE == 0 && UCOL_ISTHAIPREVOWEL(*(rulesCopy+chOffset))) {
+        log_verbose("Thai prevowel detected. Will pick next CE\n");
+        currCE = ucol_getNextCE(coll, &c, status);
+      }
+
+      currContCE = ucol_getNextCE(coll, &c, status);
+      if(!isContinuation(currContCE)) {
+        currContCE = 0;
+      }
+
+      if(strength == UCOL_TOK_RESET) {
+        if(top_ == TRUE) {
+          nextCE = baseCE = currCE = 0x9FFF0000;
+          nextContCE = baseContCE = currContCE = 0;
+        } else {
+          nextCE = baseCE = currCE;
+          nextContCE = baseContCE = currContCE;
+        }
+        maxStrength = UCOL_IDENTICAL;
+      } else {
+        if(strength < maxStrength) {
+          maxStrength = strength;
+          if(baseCE == 0x9FFF0000) {
+              log_verbose("Resetting to [top]\n");
+              nextCE = 0xD0000000;
+              nextContCE = 0;
+          } else {
+            result = ucol_inv_getNextCE(baseCE, baseContCE, &nextCE, &nextContCE, maxStrength);
+          }
+          if(result < 0) {
+            if(isTailored(coll, *(rulesCopy+oldOffset), status)) {
+              log_verbose("Reset is tailored codepoint %04X, don't know how to continue, taking next test\n", *(rulesCopy+oldOffset));
+              return;
+            } else {
+              log_err("couldn't find the CE\n");
+              return;
+            }
+          }
+        }
+
+        currCE &= 0xFFFFFF3F;
+        currContCE &= 0xFFFFFFBF;
+
+        if(maxStrength == UCOL_IDENTICAL) {
+          if(baseCE != currCE || baseContCE != currContCE) {
+            log_err("current CE  (initial strength UCOL_EQUAL)\n");
+          }
+        } else {
+          if(strength == UCOL_IDENTICAL) {
+            if(lastCE != currCE || lastContCE != currContCE) {
+              log_err("current CE  (initial strength UCOL_EQUAL)\n");
+            }
+          } else {
+            if(currCE > nextCE || (currCE == nextCE && currContCE >= nextContCE)) {
+              log_err("current CE is not less than base CE\n");
+            }
+            if(currCE < lastCE || (currCE == lastCE && currContCE <= lastContCE)) {
+              log_err("sequence of generated CEs is broken\n");
+            }
+          }
+        }
+
+      }
+
+      oldOffset = chOffset;
+      lastCE = currCE & 0xFFFFFF3F;
+      lastContCE = currContCE & 0xFFFFFFBF;
+    }
+    uprv_free(rulesCopy);
+  }
+}
+
 static const char* localesToTest[] = {
 "ar", "bg", "ca", "cs", "da",
 "el", "en_BE", "en_US_POSIX", 
@@ -770,6 +892,7 @@ static void RamsRulesTest( ) {
     log_verbose("Testing locale: %s\n", localesToTest[i]);
     if(U_SUCCESS(status)) {
       testCollator(coll, &status);
+      testCEs(coll, &status);
       ucol_close(coll);
     }
   }
@@ -781,6 +904,7 @@ static void RamsRulesTest( ) {
     coll = ucol_openRules(rule, ruleLen, UCOL_NO_NORMALIZATION, UCOL_TERTIARY, &status);
     if(U_SUCCESS(status)) {
       testCollator(coll, &status);
+      testCEs(coll, &status);
       ucol_close(coll);
     }
   }
