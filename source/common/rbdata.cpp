@@ -48,13 +48,13 @@ StringList::getStaticClassID()
 //-----------------------------------------------------------------------------
 
 String2dList::String2dList() 
-  : fStrings(0), fRowCount(0), fColCount(0) 
+  : fRowCount(0), fColCount(0), fStrings(0) 
 {}
   
 String2dList::String2dList(UnicodeString **adopted, 
                            int32_t rowCount, 
                            int32_t colCount) 
-  : fStrings(adopted), fRowCount(rowCount), fColCount(colCount) 
+  : fRowCount(rowCount), fColCount(colCount), fStrings(adopted) 
 {}
 
 String2dList::~String2dList() 
