@@ -38,7 +38,7 @@ import com.ibm.icu.text.RuleBasedCollator.UCAConstants;
 final class CollatorReader
 {          
 	static char[] read(RuleBasedCollator rbc, UCAConstants ucac) throws IOException {
-		InputStream i = ICUData.getRequiredStream(UResourceBundle.ICU_BUNDLE+"ucadata.icu");
+		InputStream i = ICUData.getRequiredStream(UResourceBundle.ICU_BUNDLE+"/ucadata.icu");
 		BufferedInputStream b = new BufferedInputStream(i, 90000);
 		CollatorReader reader = new CollatorReader(b);
 		char[] result = reader.readImp(rbc, ucac);
@@ -64,7 +64,7 @@ final class CollatorReader
 	
 	static InverseUCA getInverseUCA() throws IOException {
 		InverseUCA result = null;
-		InputStream i = ICUData.getRequiredStream(UResourceBundle.ICU_BUNDLE+"invuca.icu");
+		InputStream i = ICUData.getRequiredStream(UResourceBundle.ICU_BUNDLE+"/invuca.icu");
 //		try	{
 //			String invdat = "/com/ibm/icu/impl/data/invuca.icu";
 //			InputStream i = CollationParsedRuleBuilder.class.getResourceAsStream(invdat);

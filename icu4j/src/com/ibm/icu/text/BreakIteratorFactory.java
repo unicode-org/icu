@@ -125,7 +125,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         		// Class for new RBBI engine.
         		// Open a stream to the .brk file.  Path to the brk files has this form:
         		//      data/icudt30b/line.brk      (30 is version number)
-        		String rulesFileName = UResourceBundle.ICU_BUNDLE + KIND_NAMES_2[kind] + ".brk";
+        		String rulesFileName = UResourceBundle.ICU_BUNDLE +"/"+ KIND_NAMES_2[kind] + ".brk";
         		InputStream is = ICUData.getStream(rulesFileName);
         		if (is == null) {
         			// Temporary!!! Try again with break files named data/icudt28b_char.brk
@@ -133,7 +133,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         			//              used during development, this code can be removed once
         			//              the data is in the data directory, above.  TODO:  remove 
         			//              the following code, make this catch turn around and throw.
-        			rulesFileName = UResourceBundle.ICU_BUNDLE + 
+        			rulesFileName = UResourceBundle.ICU_BUNDLE + "/" + 
 						KIND_NAMES_2[kind] + ".brk";
         			is = ICUData.getRequiredStream(rulesFileName);
         		}
