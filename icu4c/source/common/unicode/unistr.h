@@ -22,6 +22,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/rep.h"
+#include "unicode/uchar.h"
 
 class Locale;               // unicode/locid.h
 class UCharReference;
@@ -488,6 +489,123 @@ public:
                                              const UnicodeString& srcText,
                                              UTextOffset srcStart,
                                              UTextOffset srcLimit) const;
+
+  /**
+   * Compare two strings case-insensitively using full case folding.
+   * This is equivalent to this->foldCase(options).compare(text.foldCase(options)).
+   *
+   * @param text Another string to compare this one to.
+   * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
+   * @return A negative, zero, or positive integer indicating the comparison result.
+   * @draft
+   */
+  inline int8_t caseCompare(const UnicodeString& text, uint32_t options) const;
+
+  /**
+   * Compare two strings case-insensitively using full case folding.
+   * This is equivalent to this->foldCase(options).compare(srcText.foldCase(options)).
+   *
+   * @param start The start offset in this string at which the compare operation begins.
+   * @param length The number of code units from this string to compare.
+   * @param srcText Another string to compare this one to.
+   * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
+   * @return A negative, zero, or positive integer indicating the comparison result.
+   * @draft
+   */
+  inline int8_t caseCompare(UTextOffset start,
+         int32_t length,
+         const UnicodeString& srcText,
+         uint32_t options) const;
+
+  /**
+   * Compare two strings case-insensitively using full case folding.
+   * This is equivalent to this->foldCase(options).compare(srcText.foldCase(options)).
+   *
+   * @param start The start offset in this string at which the compare operation begins.
+   * @param length The number of code units from this string to compare.
+   * @param srcText Another string to compare this one to.
+   * @param srcStart The start offset in that string at which the compare operation begins.
+   * @param srcLength The number of code units from that string to compare.
+   * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
+   * @return A negative, zero, or positive integer indicating the comparison result.
+   * @draft
+   */
+  inline int8_t caseCompare(UTextOffset start,
+         int32_t length,
+         const UnicodeString& srcText,
+         UTextOffset srcStart,
+         int32_t srcLength,
+         uint32_t options) const;
+
+  /**
+   * Compare two strings case-insensitively using full case folding.
+   * This is equivalent to this->foldCase(options).compare(srcChars.foldCase(options)).
+   *
+   * @param srcChars A pointer to another string to compare this one to.
+   * @param srcLength The number of code units from that string to compare.
+   * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
+   * @return A negative, zero, or positive integer indicating the comparison result.
+   * @draft
+   */
+  inline int8_t caseCompare(const UChar *srcChars,
+         int32_t srcLength,
+         uint32_t options) const;
+
+  /**
+   * Compare two strings case-insensitively using full case folding.
+   * This is equivalent to this->foldCase(options).compare(srcChars.foldCase(options)).
+   *
+   * @param start The start offset in this string at which the compare operation begins.
+   * @param length The number of code units from this string to compare.
+   * @param srcChars A pointer to another string to compare this one to.
+   * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
+   * @return A negative, zero, or positive integer indicating the comparison result.
+   * @draft
+   */
+  inline int8_t caseCompare(UTextOffset start,
+         int32_t length,
+         const UChar *srcChars,
+         uint32_t options) const;
+
+  /**
+   * Compare two strings case-insensitively using full case folding.
+   * This is equivalent to this->foldCase(options).compare(srcChars.foldCase(options)).
+   *
+   * @param start The start offset in this string at which the compare operation begins.
+   * @param length The number of code units from this string to compare.
+   * @param srcChars A pointer to another string to compare this one to.
+   * @param srcStart The start offset in that string at which the compare operation begins.
+   * @param srcLength The number of code units from that string to compare.
+   * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
+   * @return A negative, zero, or positive integer indicating the comparison result.
+   * @draft
+   */
+  inline int8_t caseCompare(UTextOffset start,
+         int32_t length,
+         const UChar *srcChars,
+         UTextOffset srcStart,
+         int32_t srcLength,
+         uint32_t options) const;
+
+  /**
+   * Compare two strings case-insensitively using full case folding.
+   * This is equivalent to this->foldCase(options).compareBetween(text.foldCase(options)).
+   *
+   * @param start The start offset in this string at which the compare operation begins.
+   * @param limit The offset after the last code unit from this string to compare.
+   * @param srcText Another string to compare this one to.
+   * @param srcStart The start offset in that string at which the compare operation begins.
+   * @param srcLimit The offset after the last code unit from that string to compare.
+   * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
+   * @return A negative, zero, or positive integer indicating the comparison result.
+   * @draft
+   */
+  inline int8_t caseCompareBetween(UTextOffset start,
+            UTextOffset limit,
+            const UnicodeString& srcText,
+            UTextOffset srcStart,
+            UTextOffset srcLimit,
+            uint32_t options) const;
 
   /**
    * Determine if this starts with the characters in <TT>text</TT>
@@ -1837,21 +1955,34 @@ public:
   UnicodeString& toUpper(const Locale& locale);
 
   /**
-   * Convert the characters in this to UPPER CASE following the conventions of
-   * the default.
+   * Convert the characters in this to lower case following the conventions of
+   * the default locale.
    * @return A reference to this.
    * @stable
    */
   UnicodeString& toLower(void);
 
   /**
-   * Convert the characters in this to UPPER CASE following the conventions of
+   * Convert the characters in this to lower case following the conventions of
    * a specific locale.
    * @param locale The locale containing the conventions to use.
    * @return A reference to this.
    * @stable
    */
   UnicodeString& toLower(const Locale& locale);
+
+  /**
+   * Case-fold the characters in this string.
+   * Case-folding is locale-independent and not context-sensitive,
+   * but there is an option for whether to include or exclude mappings for dotted I
+   * and dotless i that are marked with 'I' in CaseFolding.txt.
+   * The result may be longer or shorter than the original.
+   *
+   * @param options Either U_FOLD_CASE_DEFAULT or U_FOLD_CASE_EXCLUDE_SPECIAL_I
+   * @return A reference to this.
+   * @draft
+   */
+  UnicodeString &foldCase(uint32_t options=U_FOLD_CASE_DEFAULT);
 
 
   //========================================
@@ -2111,6 +2242,22 @@ private:
                                  UTextOffset srcStart,
                                  int32_t srcLength) const;
 
+  inline int8_t
+  doCaseCompare(UTextOffset start,
+                int32_t length,
+                const UnicodeString &srcText,
+                UTextOffset srcStart,
+                int32_t srcLength,
+                uint32_t options) const;
+
+  int8_t
+  doCaseCompare(UTextOffset start,
+                int32_t length,
+                const UChar *srcChars,
+                UTextOffset srcStart,
+                int32_t srcLength,
+                uint32_t options) const;
+
   UTextOffset doIndexOf(UChar c,
             UTextOffset start,
             int32_t length) const;
@@ -2207,6 +2354,12 @@ private:
   growBuffer(void *context,
              UChar **buffer, int32_t *pCapacity, int32_t reqCapacity,
              int32_t length);
+
+  // common function for case mappings
+  UnicodeString &
+  caseMap(const Locale& locale,
+          uint32_t options,
+          int32_t toWhichCase);
 
   // ref counting
   inline int32_t addRef(void);
@@ -2490,6 +2643,82 @@ UnicodeString::doCompareCodePointOrder(UTextOffset start,
     srcChars=0;
   }
   return doCompareCodePointOrder(start, length, srcChars, srcStart, srcLength);
+}
+
+inline int8_t 
+UnicodeString::caseCompare(const UnicodeString &text, uint32_t options) const {
+  return doCaseCompare(0, fLength, text, 0, text.fLength, options);
+}
+
+inline int8_t 
+UnicodeString::caseCompare(UTextOffset start,
+                           int32_t length,
+                           const UnicodeString &srcText,
+                           uint32_t options) const {
+  return doCaseCompare(start, length, srcText, 0, srcText.fLength, options);
+}
+
+inline int8_t 
+UnicodeString::caseCompare(const UChar *srcChars,
+                           int32_t srcLength,
+                           uint32_t options) const {
+  return doCaseCompare(0, fLength, srcChars, 0, srcLength, options);
+}
+
+inline int8_t 
+UnicodeString::caseCompare(UTextOffset start,
+                           int32_t length,
+                           const UnicodeString &srcText,
+                           UTextOffset srcStart,
+                           int32_t srcLength,
+                           uint32_t options) const {
+  return doCaseCompare(start, length, srcText, srcStart, srcLength, options);
+}
+
+inline int8_t
+UnicodeString::caseCompare(UTextOffset start,
+                           int32_t length,
+                           const UChar *srcChars,
+                           uint32_t options) const {
+  return doCaseCompare(start, length, srcChars, 0, length, options);
+}
+
+inline int8_t 
+UnicodeString::caseCompare(UTextOffset start,
+                           int32_t length,
+                           const UChar *srcChars,
+                           UTextOffset srcStart,
+                           int32_t srcLength,
+                           uint32_t options) const {
+  return doCaseCompare(start, length, srcChars, srcStart, srcLength, options);
+}
+
+inline int8_t
+UnicodeString::caseCompareBetween(UTextOffset start,
+                                  UTextOffset limit,
+                                  const UnicodeString &srcText,
+                                  UTextOffset srcStart,
+                                  UTextOffset srcLimit,
+                                  uint32_t options) const {
+  return doCaseCompare(start, limit - start, srcText, srcStart, srcLimit - srcStart, options);
+}
+
+inline int8_t
+UnicodeString::doCaseCompare(UTextOffset start,
+                             int32_t length,
+                             const UnicodeString &srcText,
+                             UTextOffset srcStart,
+                             int32_t srcLength,
+                             uint32_t options) const
+{
+  const UChar *srcChars;
+  if(!srcText.isBogus()) {
+    srcText.pinIndices(srcStart, srcLength);
+    srcChars=srcText.getArrayStart();
+  } else {
+    srcChars=0;
+  }
+  return doCaseCompare(start, length, srcChars, srcStart, srcLength, options);
 }
 
 inline UTextOffset 
