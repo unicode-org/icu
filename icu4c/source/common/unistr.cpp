@@ -30,6 +30,7 @@
 #include "unicode/ubrk.h"
 #include "uhash.h"
 #include "ustr_imp.h"
+#include "unormimp.h"
 #include "umutex.h"
 
 #if 0
@@ -633,7 +634,7 @@ UnicodeString::doCompareCodePointOrder(int32_t start,
   // pin indices to legal values
   pinIndices(start, length);
 
-  int32_t diff = u_strCompareCodePointOrder(fArray + start, length, srcChars + srcStart, srcLength, FALSE);
+  int32_t diff = u_strCompare(fArray + start, length, srcChars + srcStart, srcLength, FALSE, TRUE);
   /* translate the 32-bit result into an 8-bit one */
   if(diff!=0) {
     return (int8_t)(diff >> 15 | 1);
@@ -664,11 +665,6 @@ UnicodeString::doCaseCompare(int32_t start,
   // pin indices to legal values
   pinIndices(start, length);
 
-  // get the srcLength if necessary
-  if(srcLength < 0) {
-    srcLength = u_strlen(srcChars + srcStart);
-  }
-
   // get the correct pointer
   const UChar *chars = getArrayStart();
 
@@ -676,12 +672,20 @@ UnicodeString::doCaseCompare(int32_t start,
   srcChars += srcStart;
 
   if(chars != srcChars) {
-    int32_t result=u_internalStrcasecmp(chars, length, srcChars, srcLength, options);
+    UErrorCode errorCode=U_ZERO_ERROR;
+    int32_t result=unorm_cmpEquivFold(chars, length, srcChars, srcLength,
+                                      options|U_COMPARE_IGNORE_CASE, &errorCode);
     if(result!=0) {
       return (int8_t)(result >> 24 | 1);
     }
-  } else if(length != srcLength) {
-    return (int8_t)((length - srcLength) >> 24 | 1);
+  } else {
+    // get the srcLength if necessary
+    if(srcLength < 0) {
+      srcLength = u_strlen(srcChars + srcStart);
+    }
+    if(length != srcLength) {
+      return (int8_t)((length - srcLength) >> 24 | 1);
+    }
   }
   return 0;
 }

@@ -22,6 +22,7 @@
 #include "unicode/ustring.h"
 #include "unicode/ubrk.h"
 #include "cmemory.h"
+#include "unormimp.h"
 #include "ustr_imp.h"
 
 /* string casing ------------------------------------------------------------ */
@@ -260,188 +261,24 @@ u_strFoldCase(UChar *dest, int32_t destCapacity,
 
 U_CAPI int32_t U_EXPORT2
 u_strcasecmp(const UChar *s1, const UChar *s2, uint32_t options) {
-    UChar t1[32], t2[32]; /* temporary buffers holding case-folded parts of s1 and s2 */
-    UChar32 c;
-    UChar uc;
-    int32_t pos1, pos2, len1, len2, result;
-
-    if(!uprv_haveProperties()) {
-        /* hardcode ASCII strcasecmp() */
-        UChar c1, c2;
-
-        for(;;) {
-            c1=*s1++;
-            if((uint16_t)(c1-0x41)<26) {
-                c1+=0x20;
-            }
-            c2=*s2++;
-            if((uint16_t)(c2-0x41)<26) {
-                c2+=0x20;
-            }
-            result=(int32_t)c1-(int32_t)c2;
-            if(result!=0 || c1==0) {
-                return result;
-            }
-        }
-    }
-
-    pos1=pos2=len1=len2=0;
-    for(;;) {
-        /* make sure that the temporary buffers are not empty */
-        if(pos1>=len1) {
-            c=*s1++;
-            if(c!=0) {
-                if(UTF_IS_FIRST_SURROGATE(c) && UTF_IS_SECOND_SURROGATE(uc=*s1)) {
-                    c=UTF16_GET_PAIR_VALUE(c, uc);
-                    ++s1;
-                }
-                len1=u_internalFoldCase(c, t1, 32, options);
-                if(len1<0) {
-                    len1=-len1;
-                }
-                pos1=0;
-            } else if(pos2>=len2 && *s2==0) {
-                return 0;
-            } else {
-                return -1;
-            }
-        }
-        if(pos2>=len2) {
-            c=*s2++;
-            if(c!=0) {
-                if(UTF_IS_FIRST_SURROGATE(c) && UTF_IS_SECOND_SURROGATE(uc=*s2)) {
-                    c=UTF16_GET_PAIR_VALUE(c, uc);
-                    ++s2;
-                }
-                len2=u_internalFoldCase(c, t2, 32, options);
-                if(len2<0) {
-                    len2=-len2;
-                }
-                pos2=0;
-            } else {
-                return 1;
-            }
-        }
-
-        /* compare the head code units from both folded strings */
-        result=(int32_t)t1[pos1++]-(int32_t)t2[pos2++];
-        if(result!=0) {
-            return result;
-        }
-    }
-}
-
-U_CFUNC int32_t
-u_internalStrcasecmp(const UChar *s1, int32_t length1,
-                     const UChar *s2, int32_t length2,
-                     uint32_t options) {
-    UChar t1[32], t2[32]; /* temporary buffers holding case-folded parts of s1 and s2 */
-    UChar32 c;
-    UChar uc;
-    int32_t pos1, pos2, len1, len2, result;
-
-    if(!uprv_haveProperties()) {
-        /* hardcode ASCII strcasecmp() */
-        UChar c1, c2;
-
-        for(;;) {
-            if(length1<=0) {
-                if(length2<=0) {
-                    return 0;
-                } else {
-                    return -1;
-                }
-            } else if(length2<=0) {
-                return 1;
-            }
-
-            c1=*s1++;
-            if((uint16_t)(c1-0x41)<26) {
-                c1+=0x20;
-            }
-            c2=*s2++;
-            if((uint16_t)(c2-0x41)<26) {
-                c2+=0x20;
-            }
-            result=(int32_t)c1-(int32_t)c2;
-            if(result!=0) {
-                return result;
-            }
-
-            --length1;
-            --length2;
-        }
-    }
-
-    pos1=pos2=len1=len2=0;
-    for(;;) {
-        /* make sure that the temporary buffers are not empty */
-        if(pos1>=len1) {
-            if(length1>0) {
-                c=*s1++;
-                if(UTF_IS_FIRST_SURROGATE(c) && length1>1 && UTF_IS_SECOND_SURROGATE(uc=*s1)) {
-                    c=UTF16_GET_PAIR_VALUE(c, uc);
-                    ++s1;
-                    length1-=2;
-                } else {
-                    --length1;
-                }
-                len1=u_internalFoldCase(c, t1, 32, options);
-                if(len1<0) {
-                    len1=-len1;
-                }
-                pos1=0;
-            } else if(pos2>=len2 && length2<=0) {
-                return 0;
-            } else {
-                return -1;
-            }
-        }
-        if(pos2>=len2) {
-            if(length2>0) {
-                c=*s2++;
-                if(UTF_IS_FIRST_SURROGATE(c) && length2>1 && UTF_IS_SECOND_SURROGATE(uc=*s2)) {
-                    c=UTF16_GET_PAIR_VALUE(c, uc);
-                    ++s2;
-                    length2-=2;
-                } else {
-                    --length2;
-                }
-                len2=u_internalFoldCase(c, t2, 32, options);
-                if(len2<0) {
-                    len2=-len2;
-                }
-                pos2=0;
-            } else {
-                return 1;
-            }
-        }
-
-        /* compare the head code units from both folded strings */
-        result=(int32_t)t1[pos1++]-(int32_t)t2[pos2++];
-        if(result!=0) {
-            return result;
-        }
-    }
+    UErrorCode errorCode=U_ZERO_ERROR;
+    return unorm_cmpEquivFold(s1, -1, s2, -1,
+                              options|U_COMPARE_IGNORE_CASE,
+                              &errorCode);
 }
 
 U_CAPI int32_t U_EXPORT2
 u_memcasecmp(const UChar *s1, const UChar *s2, int32_t length, uint32_t options) {
-    return u_internalStrcasecmp(s1, length, s2, length, options);
+    UErrorCode errorCode=U_ZERO_ERROR;
+    return unorm_cmpEquivFold(s1, length, s2, length,
+                              options|U_COMPARE_IGNORE_CASE,
+                              &errorCode);
 }
 
 U_CAPI int32_t U_EXPORT2
 u_strncasecmp(const UChar *s1, const UChar *s2, int32_t n, uint32_t options) {
-    /*
-     * This is a simple, sub-optimal implementation:
-     * Determine the actual lengths of the strings and call u_internalStrcasecmp().
-     * This saves us from having an additional variant of the above strcasecmp().
-     */
-    const UChar *s;
-    int32_t length1, length2;
-
-    for(s=s1, length1=0; length1<n && *s!=0; ++s, ++length1) {}
-    for(s=s2, length2=0; length2<n && *s!=0; ++s, ++length2) {}
-
-    return u_internalStrcasecmp(s1, length1, s2, length2, options);
+    UErrorCode errorCode=U_ZERO_ERROR;
+    return unorm_cmpEquivFold(s1, n, s2, n,
+                              options|(U_COMPARE_IGNORE_CASE|_STRNCMP_STYLE),
+                              &errorCode);
 }
