@@ -51,6 +51,7 @@ typedef enum ECleanupLibraryType {
     UCLN_START = -1,
     UCLN_CUSTOM,    /* Custom is for anyone else. */
     UCLN_LAYOUT,
+    UCLN_LAYOUTEX,
     UCLN_USTDIO,
     UCLN_I18N,
     UCLN_COMMON /* This must be the last one to cleanup. */
