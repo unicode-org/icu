@@ -7,12 +7,11 @@
 
 es {
     CollationElements { 
-	    Version { "1.0" }
-		Override { "FALSE" }
-		Sequence { "& N < n\u0303, N\u0303 " }
-	}
+        Version { "1.0" }
+        Override { "FALSE" }
+        Sequence { "& N < n\u0303, N\u0303 " }
+    }
     Countries { 
-        ES { "Espa\u00F1a" }
         AR { "Argentina" }
         BO { "Bolivia" }
         CL { "Chile" }
@@ -20,6 +19,7 @@ es {
         CR { "Costa Rica" }
         DO { "Rep\u00FAblica Dominicana" }
         EC { "Ecuador" }
+        ES { "Espa\u00F1a" }
         GT { "Guatemala" }
         HN { "Honduras" }
         MX { "M\u00E9xico" }
@@ -30,6 +30,7 @@ es {
         PY { "Paraguay" }
         SV { "El Salvador" }
         UY { "Uruguay" }
+        US { "Estados Unidos" }
         VE { "Venezuela" }
     }
     DateTimeElements { 
@@ -65,8 +66,36 @@ es {
             "viernes",
             "s\u00E1bado",
     }
+    Eras { 
+            "AC",
+            "AD",
+    }
     Languages { 
+        ar { "ar\u00E1bigo" }
+        cs { "checo" }
+        de { "alam\u00E1n" }
+        el { "griego" }
+        en { "ingl\u00E9s" }
         es { "espa\u00F1ol" }
+        ga { "irland\u00E9s" }
+        fr { "franc\u00E9s" }
+        fi { "finland\u00E9s" }
+        he { "hebreo" }
+        hr { "croata" }
+        it { "italiano" }
+        ja { "japon\u00E9s" }
+        ko { "coreano" }
+        nl { "holand\u00E9s" }
+        no { "noruego" }
+        pl { "polaco" }
+        pt { "portugu\u00E9s" }
+        ru { "ruso" }
+        sk { "eslovaco" }
+        sr { "servio" }
+        sv { "sueco" }
+        th { "tailand\u00E9s" }
+        vi { "vietnam\u00E9s" }
+        zh { "chino" }
     }
     LocaleID { "0a" }
     LocaleString { "es" }
