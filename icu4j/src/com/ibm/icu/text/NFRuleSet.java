@@ -5,12 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NFRuleSet.java,v $ 
- * $Date: 2002/02/16 03:06:09 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/07/26 22:51:50 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
+
+import com.ibm.icu.impl.UCharacterProperty;
 
 import java.text.*;
 import java.util.Vector;
@@ -21,7 +23,7 @@ import java.util.Vector;
  * appropriate rule for formatting a particular number and dispatch
  * control to it, and to arbitrate between different rules when parsing
  * a number.
- * $RCSfile: NFRuleSet.java,v $ $Revision: 1.3 $ $Date: 2002/02/16 03:06:09 $
+ * $RCSfile: NFRuleSet.java,v $ $Revision: 1.4 $ $Date: 2002/07/26 22:51:50 $
  */
 final class NFRuleSet {
     //-----------------------------------------------------------------------
@@ -95,7 +97,7 @@ final class NFRuleSet {
                 throw new IllegalArgumentException("Rule set name doesn't end in colon");
             } else {
                 name = description.substring(0, pos);
-                while (pos < description.length() && Character.isWhitespace(description.
+                while (pos < description.length() && UCharacterProperty.isRuleWhiteSpace(description.
                                 charAt(++pos))) {
                 }
                 description = description.substring(pos);
