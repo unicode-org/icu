@@ -1,0 +1,119 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+hu {
+    Version{ "1.1" }
+    AmPmMarkers { 
+        "DE",
+        "DU",
+    }
+    CollationElements { 
+        Version { "1.0" }
+        Sequence { "& C < cs , cS , Cs , CS & D < \u0111, \u0110 "
+        "& G < gy, gY, Gy, GY & L < ly, lY, Ly, LY"
+        "& O < o\u0308 , O\u0308 < o\u030B , O\u030B"
+        "& S < sz , sZ , Sz , SZ & U < u\u0308 , U\u0308 < u\u030B , U\u030B"
+        "& Z < zs , zS , Zs , ZS" }
+    }
+    Countries { 
+        HU { "Magyarorsz\u00E1g" }
+    }
+    DateTimePatterns { 
+        "H:mm:ss z",
+        "H:mm:ss z",
+        "H:mm:ss",
+        "H:mm",
+        "yyyy. MMMM d.",
+        "yyyy. MMMM d.",
+        "yyyy.MM.dd.",
+        "yyyy.MM.dd.",
+        "{1} {0}",
+    }
+    DayAbbreviations { 
+        "V",
+        "H",
+        "K",
+        "Sze",
+        "Cs",
+        "P",
+        "Szo",
+    }
+    DayNames { 
+        "vas\u00E1rnap",
+        "h\u00E9tf\u0151",
+        "kedd",
+        "szerda",
+        "cs\u00FCt\u00F6rt\u00F6k",
+        "p\u00E9ntek",
+        "szombat",
+    }
+    Eras { 
+        "i.e.",
+        "i.u.",
+    }
+    Languages { 
+        hu { "magyar" }
+    }
+    LocaleID:int { 0x0e }
+//    LocaleString { "hu" }
+    MonthAbbreviations { 
+        "jan.",
+        "febr.",
+        "m\u00E1rc.",
+        "\u00E1pr.",
+        "m\u00E1j.",
+        "j\u00FAn.",
+        "j\u00FAl.",
+        "aug.",
+        "szept.",
+        "okt.",
+        "nov.",
+        "dec.",
+    }
+    MonthNames { 
+        "janu\u00E1r",
+        "febru\u00E1r",
+        "m\u00E1rcius",
+        "\u00E1prilis",
+        "m\u00E1jus",
+        "j\u00FAnius",
+        "j\u00FAlius",
+        "augusztus",
+        "szeptember",
+        "okt\u00F3ber",
+        "november",
+        "december",
+    }
+    NumberElements { 
+        ",",
+        "\u00A0",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+    }
+//    ShortLanguage { "hun" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
+    zoneStrings { 
+        {
+            "Africa/Casablanca",
+            "GMT",
+            "GMT",
+            "GMT",
+            "GMT",
+        }
+    }
+//    LocaleScript{
+//        "Latn",  // ISO 15924 Name 
+//    }
+    ExemplarCharacters { "[a-z \u00e1 \u00e9 \u00ed \u00f3 \u00fa \u00f6 \u00fc \u0151 \u0171]" }
+}

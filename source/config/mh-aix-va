@@ -1,0 +1,98 @@
+## -*-makefile-*-
+## Aix-specific setup (for Visual Age 5+)
+## Copyright (c) 1999-2002, International Business Machines Corporation and
+## others. All Rights Reserved.
+##
+## $Id: mh-aix-va,v 1.24 2002/05/13 23:50:12 grhoten-oss Exp $
+
+## Commands to generate dependency files
+GEN_DEPS.c=	$(CC) -E -M $(DEFS) $(CPPFLAGS)
+GEN_DEPS.cc=	$(CXX) -E -M $(DEFS) $(CPPFLAGS)
+
+# Make the strings readonly. This helps in the common data library
+CFLAGS += -qroconst
+CXXFLAGS += -qroconst
+
+LDFLAGS += -brtl -bh:5
+
+## Commands to link
+## We need to use the C++ linker, even when linking C programs, since
+##  our libraries contain C++ code (C++ static init not called)
+LINK.c=		$(CXX) $(CXXFLAGS) $(LDFLAGS)
+LINK.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS)
+
+## Commands to make a shared library
+## -G means -berok -brtl -bnortllib -bnosymbolic -bnoautoexp
+## -bh:8 means halt on errors or worse.  We don't display warnings about
+##      duplicate inline symbols.
+SHLIB.c=	$(CXX) -qmkshrobj -G $(LDFLAGS)
+SHLIB.cc=	$(CXX) -qmkshrobj -G $(LDFLAGS)
+
+## Compiler switch to embed a runtime search path
+LD_RPATH=	-I
+LD_RPATH_PRE=	
+
+## Environment variable to set a runtime search path
+LDLIBRARYPATH_ENVVAR = LIBPATH
+
+## Override Versioned target for a shared library.
+FINAL_SO_TARGET=  $(basename $(SO_TARGET))$(SO_TARGET_VERSION)$(ICULIBSUFFIX).$(SO)
+MIDDLE_SO_TARGET= $(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR)$(ICULIBSUFFIX).$(SO)
+
+# The following is for Makefile.inc's use.
+ICULIBSUFFIX_VERSION = $(LIB_VERSION_MAJOR)
+
+# this one is for icudefs.mk's use
+SO_TARGET_VERSION_SUFFIX = $(SO_TARGET_VERSION_MAJOR)
+
+LD_SONAME = 
+
+## Shared object suffix
+SO=		so
+## Non-shared intermediate object suffix
+STATIC_O = o
+
+## Build archive from shared object
+%.a : %.so
+	$(AR) $(ARFLAGS) $@ $<
+
+## Build import list from export list
+%.e : %.exp
+	@echo "Building an import list for $<"
+	@$(SHELL) -ec "echo '#! $*.a($*.so)' | cat - $< > $@"
+
+## Compilation rules
+%.$(STATIC_O): $(srcdir)/%.c
+	$(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS) -o $@ $<
+%.o: $(srcdir)/%.c
+	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
+
+%.$(STATIC_O): $(srcdir)/%.cpp
+	$(COMPILE.cc) $(STATICCPPFLAGS) $(STATICCXXFLAGS) -o $@ $<
+%.o: $(srcdir)/%.cpp
+	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<
+
+../data/%.o: ../data/%.c
+	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
+
+## Dependency rules
+%.d : %.u
+	@$(SHELL) -ec 'cat $<  \
+		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
+		[ -s $@ ] || rm -f $@ ; rm -f $<'
+
+%.u : $(srcdir)/%.c
+	@echo "generating dependency information for $<"
+	@$(SHELL) -ec '$(GEN_DEPS.c) $< > /dev/null'
+
+%.u : $(srcdir)/%.cpp
+	@echo "generating dependency information for $<"
+	@$(SHELL) -ec '$(GEN_DEPS.cc) $< > /dev/null'
+
+## Versioned libraries rules
+%$(SO_TARGET_VERSION_MAJOR).$(SO): %$(SO_TARGET_VERSION)$(ICULIBSUFFIX).$(SO)
+	$(RM) $@ && ln -s $*$(SO_TARGET_VERSION)$(ICULIBSUFFIX).$(SO) $@
+%.$(SO): %$(SO_TARGET_VERSION)$(ICULIBSUFFIX).$(SO)
+	$(RM) $@ && ln -s $*$(SO_TARGET_VERSION)$(ICULIBSUFFIX).$(SO) $@
+
+## End Aix-specific setup

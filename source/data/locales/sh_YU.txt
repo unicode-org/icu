@@ -1,0 +1,18 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+sh_YU {
+    Version { "1.0" }
+    CurrencyElements { 
+        "Din",
+        "YUN",
+        ",",
+    }
+//    LocaleString { "sh_YU" }
+//    ShortCountry { "YUG" }
+    LocaleID:int { 0x081a }
+}

@@ -1,0 +1,35 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+fr_LU {
+    Version{"1.0"}
+    CurrencyElements { 
+        "\u20AC",
+        "EUR",
+        ",",
+    }
+    DateTimeElements:intvector {
+        2,
+        1,
+    }
+    NumberElements {
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+    }
+//    LocaleString { "fr_LU" }
+//    ShortCountry { "LUX" }
+    LocaleID:int { 0x140c }
+}

@@ -1,0 +1,35 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+pt_BR {
+    Version{ "1.1" }
+    CurrencyElements { 
+        "R$",
+        "BRL",
+        ",",
+    }
+    DateTimePatterns { 
+        "HH'h'mm'min'ss's' z",
+        "H'h'm'min's's' z",
+        "HH:mm:ss",
+        "HH:mm",
+        "EEEE, d' de 'MMMM' de 'yyyy",
+        "d' de 'MMMM' de 'yyyy",
+        "dd/MM/yyyy",
+        "dd/MM/yy",
+        "{1} {0}",
+    }
+    LocaleID:int { 0x0416 }
+//    LocaleString { "pt_BR" }
+//    NumberPatterns { 
+//        "#,##0.###;-#,##0.###",
+//        "\u00A4 #,##0.00;-\u00A4 #,##0.00",
+//        "#,##0%",
+//        "#E0",
+//    }
+//    ShortCountry { "BRA" }
+}

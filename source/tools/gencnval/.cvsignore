@@ -1,0 +1,10 @@
+tmp
+Debug
+Release
+Makefile
+*.d
+*.pdb
+gencnval
+gencnval.[0-9]
+convrtrs.txt.[0-9]
+

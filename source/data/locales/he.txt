@@ -1,0 +1,135 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+he {
+    Version{"1.1"}
+    CollationElements { 
+        Version { "2.0" }
+        Sequence { "[normalization on]& Z < \u05D0 < \u05D1 < \u05D2 < \u05D3 < \u05D4 < \u05D5 < "
+        "\u05F0 < \u05F1 < \u05D6 < \u05D7 < \u05D8 < \u05D9 < \u05F2 < \u05DA , \u05DB "
+        "< \u05DC < \u05DD , \u05DE < \u05DF , \u05E0 < \u05E1 < \u05E2 < \u05E3 , \u05E4"
+        " < \u05E5 , \u05E6 < \u05E7 < \u05E8 < \u05E9 < \u05EA" }
+    }
+    Countries { 
+        IL { "\u05D9\u05E9\u05E8\u05D0\u05DC" }
+    }
+    DateTimePatterns { 
+        "HH:mm:ss z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "EEEE d MMMM yyyy",
+        "d MMMM yyyy",
+        "dd/MM/yyyy",
+        "dd/MM/yy",
+        "{0} {1}",
+    }
+    DayAbbreviations { 
+        "\u05D0",
+        "\u05D1",
+        "\u05D2",
+        "\u05D3",
+        "\u05D4",
+        "\u05D5",
+        "\u05E9",
+    }
+    DayNames { 
+        "\u05D9\u05D5\u05DD \u05E8\u05D0\u05E9\u05D5\u05DF",
+        "\u05D9\u05D5\u05DD \u05E9\u05E0\u05D9",
+        "\u05D9\u05D5\u05DD \u05E9\u05DC\u05D9\u05E9\u05D9",
+        "\u05D9\u05D5\u05DD \u05E8\u05D1\u05D9\u05E2\u05D9",
+        "\u05D9\u05D5\u05DD \u05D7\u05DE\u05D9\u05E9\u05D9",
+        "\u05D9\u05D5\u05DD \u05E9\u05D9\u05E9\u05D9",
+        "\u05E9\u05D1\u05EA",
+    }
+    Eras { 
+        "\u05DC\u05E1\u05D4\u0022\u05E0",
+        "\u05DC\u05E4\u05E1\u05D4\u0022\u05E0",
+    }
+    Languages { 
+        he { "\u05E2\u05D1\u05E8\u05D9\u05EA" }
+        //iw { "\u05E2\u05D1\u05E8\u05D9\u05EA" } //Use he instead
+    }
+    LocaleID:int { 0x0d }
+//    LocaleString { "he" }
+    MonthAbbreviations { 
+        "\u05D9\u05E0\u05D5",
+        "\u05E4\u05D1\u05E8",
+        "\u05DE\u05E8\u05E5",
+        "\u05D0\u05E4\u05E8",
+        "\u05DE\u05D0\u05D9",
+        "\u05D9\u05D5\u05E0",
+        "\u05D9\u05D5\u05DC",
+        "\u05D0\u05D5\u05D2",
+        "\u05E1\u05E4\u05D8",
+        "\u05D0\u05D5\u05E7",
+        "\u05E0\u05D5\u05D1",
+        "\u05D3\u05E6\u05DE",
+    }
+    MonthNames { 
+        "\u05D9\u05E0\u05D5\u05D0\u05E8",
+        "\u05E4\u05D1\u05E8\u05D5\u05D0\u05E8",
+        "\u05DE\u05E8\u05E5",
+        "\u05D0\u05E4\u05E8\u05D9\u05DC",
+        "\u05DE\u05D0\u05D9",
+        "\u05D9\u05D5\u05E0\u05D9",
+        "\u05D9\u05D5\u05DC\u05D9",
+        "\u05D0\u05D5\u05D2\u05D5\u05E1\u05D8",
+        "\u05E1\u05E4\u05D8\u05DE\u05D1\u05E8",
+        "\u05D0\u05D5\u05E7\u05D8\u05D5\u05D1\u05E8",
+        "\u05E0\u05D5\u05D1\u05DE\u05D1\u05E8",
+        "\u05D3\u05E6\u05DE\u05D1\u05E8",
+    }
+//    ShortLanguage { "heb" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
+    zoneStrings { 
+        {
+            "Africa/Casablanca",
+            "GMT",
+            "GMT",
+            "GMT",
+            "GMT",
+        }
+    }
+    LocaleScript:array { 
+        "Hebr"    // ISO 15924 Name 
+    }
+    ExemplarCharacters{"[:Hebr:]"}
+    //------------------------------------------------------------
+    // Rule Based Number Format Support
+    //------------------------------------------------------------
+
+//         * Spellout rules for Hebrew.  Hebrew actually has inflected forms for
+//         * most of the lower-order numbers.  The masculine forms are shown
+//         * here.
+
+    // This data is woefully incomplete.  Can someone fill me in on the
+    // various inflected forms of the numbers, which seem to be necessary
+    // to do Hebrew correctly?  Can somone supply me with data for values
+    // from 1,000,000 on up?  What about the word for zero?  What about
+    // information on negatives and decimals?
+
+    SpelloutRules {
+        "zero (incomplete data); \u05d0\u05d4\u05d3; \u05e9\u05d2\u05d9\u05d9\u05dd; \u05e9\u05dc\u05d5\u05e9\u05d4;\n"
+        "4: \u05d0\u05d3\u05d1\u05e6\u05d4; \u05d7\u05d2\u05d5\u05d9\u05e9\u05d4; \u05e9\u05e9\u05d4;\n"
+        "7: \u05e9\u05d1\u05e6\u05d4; \u05e9\u05de\u05d5\u05d2\u05d4; \u05ea\u05e9\u05e6\u05d4;\n"
+        "10: \u05e6\u05e9\u05d3\u05d4[ >>];\n"
+        "20: \u05e6\u05e9\u05d3\u05d9\u05dd[ >>];\n"
+        "30: \u05e9\u05dc\u05d5\u05e9\u05d9\u05dd[ >>];\n"
+        "40: \u05d0\u05d3\u05d1\u05e6\u05d9\u05dd[ >>];\n"
+        "50: \u05d7\u05de\u05d9\u05e9\u05d9\u05dd[ >>];\n"
+        "60: \u05e9\u05e9\u05d9\u05dd[ >>];\n"
+        "70: \u05e9\u05d1\u05e6\u05d9\u05dd[ >>];\n"
+        "80: \u05e9\u05de\u05d5\u05d2\u05d9\u05dd[ >>];\n"
+        "90: \u05ea\u05e9\u05e6\u05d9\u05dd[ >>];\n"
+        "100: \u05de\u05d0\u05d4[ >>];\n"
+        "200: << \u05de\u05d0\u05d4[ >>];\n"
+        "1000: \u05d0\u05dc\u05e3[ >>];\n"
+        "2000: << \u05d0\u05dc\u05e3[ >>];\n"
+        "1,000,000: =#,##0= (incomplete data);" 
+    }
+}

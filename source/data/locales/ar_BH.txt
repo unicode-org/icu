@@ -1,0 +1,18 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+ar_BH {
+    Version{"1.0"}
+    CurrencyElements { 
+        "\u062F.\u0628.\u200F",
+        "BHD",
+        ".",
+    }
+//    LocaleString { "ar_BH" }
+//    ShortCountry { "BHR" }
+    LocaleID:int { 0x3c01 }
+}

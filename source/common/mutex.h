@@ -1,0 +1,102 @@
+/*
+******************************************************************************
+*
+*   Copyright (C) 1997-2001, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+******************************************************************************
+*/
+//----------------------------------------------------------------------------
+// File:     mutex.h
+//
+// Lightweight C++ wrapper for umtx_ C mutex functions
+//
+// Author:   Alan Liu  1/31/97
+// History:
+// 06/04/97   helena         Updated setImplementation as per feedback from 5/21 drop.
+// 04/07/1999  srl               refocused as a thin wrapper
+//
+//----------------------------------------------------------------------------
+#ifndef MUTEX_H
+#define MUTEX_H
+
+#include "unicode/utypes.h"
+#include "unicode/uobject.h"
+#include "umutex.h"
+
+U_NAMESPACE_BEGIN
+
+//----------------------------------------------------------------------------
+// Code within this library which accesses protected data
+// should instantiate a Mutex object while doing so. You should make your own 
+// private mutex where possible.
+
+// For example:
+// 
+// UMTX myMutex;
+// 
+// int InitializeMyMutex()
+// {
+//    umtx_init( &myMutex );
+//    return 0;
+// }
+// 
+// static int initializeMyMutex = InitializeMyMutex();
+//
+// void Function(int arg1, int arg2)
+// {
+//    static Object* foo; // Shared read-write object
+//    Mutex mutex(&myMutex);  // or no args for the global lock
+//    foo->Method();
+//    // When 'mutex' goes out of scope and gets destroyed here, the lock is released
+// }
+//
+// Note:  Do NOT use the form 'Mutex mutex();' as that merely forward-declares a function
+//        returning a Mutex. This is a common mistake which silently slips through the
+//        compiler!!
+//
+
+class U_COMMON_API Mutex : public UObject {
+public:
+  inline Mutex(UMTX *mutex = NULL);
+  inline ~Mutex();
+
+  /**
+   * ICU "poor man's RTTI", returns a UClassID for the actual class.
+   *
+   * @draft ICU 2.2
+   */
+  virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+  /**
+   * ICU "poor man's RTTI", returns a UClassID for this class.
+   *
+   * @draft ICU 2.2
+   */
+  static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
+private:
+  UMTX   *fMutex;
+
+  /**
+   * The address of this static class variable serves as this class's ID
+   * for ICU "poor man's RTTI".
+   */
+  static const char fgClassID;
+};
+
+inline Mutex::Mutex(UMTX *mutex)
+  : fMutex(mutex)
+{
+  umtx_lock(fMutex);
+}
+
+inline Mutex::~Mutex()
+{
+  umtx_unlock(fMutex);
+}
+
+U_NAMESPACE_END
+
+#endif //_MUTEX_
+//eof

@@ -1,0 +1,109 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+is {
+    Version{ "1.0" }
+    CollationElements { 
+        Version { "1.0" }
+        Sequence { "@& A < a\u0301, A\u0301 & D < \u00F0, \u00D0& E < e\u0301"
+        ", E\u0301 & I < i\u0301, I\u0301 & O < o\u0301, O\u0301 & U < u\u0301, U\u0301 "
+        "& Y < y\u0301, Y\u0301 & Z < \u00fe, \u00DE < \u00E6, \u00C6< o\u0308, O\u0308"
+        " ; \u00F8, \u00D8" }
+    }
+    Countries { 
+        IS { "\u00CDsland" }
+    }
+    DateTimePatterns { 
+        "HH:mm:ss z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "d. MMMM yyyy",
+        "d. MMMM yyyy",
+        "d.M.yyyy",
+        "d.M.yyyy",
+        "{1} {0}",
+    }
+    DayAbbreviations { 
+        "sun.",
+        "m\u00E1n.",
+        "\u00FEri.",
+        "mi\u00F0.",
+        "fim.",
+        "f\u00F6s.",
+        "lau.",
+    }
+    DayNames { 
+        "sunnudagur",
+        "m\u00E1nudagur",
+        "\u00FEri\u00F0judagur",
+        "mi\u00F0vikudagur",
+        "fimmtudagur",
+        "f\u00F6studagur",
+        "laugardagur",
+    }
+    Languages { 
+        is { "\u00EDslenska" }
+    }
+    LocaleID:int { 0x0f }
+//    LocaleString { "is" }
+    MonthAbbreviations { 
+        "jan.",
+        "feb.",
+        "mar.",
+        "apr.",
+        "ma\u00ED",
+        "j\u00FAn.",
+        "j\u00FAl.",
+        "\u00E1g\u00FA.",
+        "sep.",
+        "okt.",
+        "n\u00F3v.",
+        "des.",
+    }
+    MonthNames { 
+        "jan\u00FAar",
+        "febr\u00FAar",
+        "mars",
+        "apr\u00EDl",
+        "ma\u00ED",
+        "j\u00FAn\u00ED",
+        "j\u00FAl\u00ED",
+        "\u00E1g\u00FAst",
+        "september",
+        "okt\u00F3ber",
+        "n\u00F3vember",
+        "desember",
+    }
+    NumberElements { 
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+    }
+//    ShortLanguage { "isl" }
+    zoneStrings { 
+        {
+            "Africa/Casablanca",
+            "GMT",
+            "GMT",
+            "GMT",
+            "GMT",
+        }
+    }
+//    LocaleScript{   
+//        "Latn",  // ISO 15924 Name 
+//    }
+    ExemplarCharacters { "[a-z \u00e1 \u00e9 \u00ed \u00f3 \u00fa \u00fd \u00f6 \u00e6 \u00f0 \u00fe]" }
+}

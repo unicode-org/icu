@@ -1,0 +1,48 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+fa_IR {
+    Version { "1.2" }
+
+    CurrencyElements { 
+        "\ufeff\u0631\u064a\u0627\u0644",
+        "IRR",
+        "\u066b",
+    }
+    // This may be in the wrong order with incomplete data.
+    DateTimePatterns { 
+        "ss:mm:h a",
+        "ss:mm:HH",
+        "ss:mm:HH",
+        "ss:mm:HH",
+        "yyyy/MM/dd",
+        "yyyy/MM/dd",
+        "yyyy/MM/dd",
+        "yyyy/MM/dd",
+        "{1} {0}",
+    }
+    NumberElements { 
+        "\u066b",
+        "\u066c",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221e",
+        "\ufffd",
+    }
+    NumberPatterns {
+        "#,##0.###;-#,##0.###",
+        "#,##0.00\u00a4;#,##0.00- \u00a4",
+        "#,##0%",
+        "#E0",
+    }
+    LocaleID:int { 0x0429 }
+}

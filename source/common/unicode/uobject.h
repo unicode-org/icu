@@ -1,0 +1,113 @@
+/*
+******************************************************************************
+*
+*   Copyright (C) 2002, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+******************************************************************************
+*   file name:  uobject.h
+*   encoding:   US-ASCII
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created on: 2002jun26
+*   created by: Markus W. Scherer
+*/
+
+#ifndef __UOBJECT_H__
+#define __UOBJECT_H__
+
+#include "unicode/utypes.h"
+
+U_NAMESPACE_BEGIN
+
+/**
+ * \file
+ * \brief C++ API: Common ICU base class UObject.
+ */
+
+/* TODO undefine this symbol except for tests! See uobject.cpp */
+// #define U_CPP_MEMORY_TEST
+
+/**
+ * UObject is the common ICU base class.
+ * All other ICU C++ classes are derived from UObject (starting with ICU 2.2).
+ *
+ * This is primarily to make it possible and simple to override the
+ * C++ memory management by adding new/delete operators to this base class.
+ * ICU itself will not declare and implement these new/delete operators, but
+ * users of ICU can modify the ICU code for the base class.
+ *
+ * UObject contains pure virtual methods to allow derived classes like Format
+ * (which used to be base classes themselves before UObject was introduced)
+ * to have pure virtual methods.
+ *
+ * @draft ICU 2.2
+ */
+class U_COMMON_API UObject {
+public:
+    /**
+     * Destructor.
+     *
+     * @draft ICU 2.2
+     */
+    virtual inline ~UObject() {}
+
+    // possible overrides for ICU4C C++ memory management,
+    // not provided by ICU itself;
+    // simple, non-class types are allocated using the macros in common/cmemory.h
+    // (uprv_malloc(), uprv_free(), uprv_realloc());
+    // they or something else could be used here to implement C++ new/delete
+    // for ICU4C C++ classes
+#ifdef U_CPP_MEMORY_TEST
+    void *operator new(size_t size);
+    void *operator new[](size_t size);
+    void operator delete(void *p);
+    void operator delete[](void *p);
+    void operator delete(void *p, size_t size);
+    void operator delete[](void *p, size_t size);
+#endif
+
+    /**
+     * ICU4C "poor man's RTTI", returns a UClassID for the actual ICU class.
+     *
+     * @draft ICU 2.2
+     */
+    virtual inline UClassID getDynamicClassID() const = 0;
+
+protected:
+    // the following functions are protected to prevent instantiation and
+    // direct use of UObject itself
+
+    // default constructor
+    // commented out because UObject is abstract (see getDynamicClassID)
+    // inline UObject() {}
+
+    // copy constructor
+    // commented out because UObject is abstract (see getDynamicClassID)
+    // inline UObject(const UObject &other) {}
+
+#if U_ICU_VERSION_MAJOR_NUM>2 || (U_ICU_VERSION_MAJOR_NUM==2 && U_ICU_VERSION_MINOR_NUM>2)
+    // TODO post ICU 2.2
+    // some or all of the following "boilerplate" functions may be made public
+    // in a future ICU4C release when all subclasses implement them
+
+    // assignment operator
+    // (not virtual, see "Taligent's Guide to Designing Programs" pp.73..74)
+    // commented out because the implementation is the same as a compiler's default
+    // UObject &operator=(const UObject &other) { return *this; }
+
+    // comparison operators
+    virtual inline UBool operator==(const UObject &other) const { return this==&other; }
+    inline UBool operator!=(const UObject &other) const { return !operator==(other); }
+
+    // clone() commented out from the base class:
+    // some compilers do not support co-variant return types
+    // (i.e., subclasses would have to return UObject& as well, instead of SubClass&)
+    // virtual UObject *clone() const;
+#endif
+};
+
+U_NAMESPACE_END
+
+#endif

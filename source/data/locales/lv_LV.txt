@@ -1,0 +1,24 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+lv_LV {
+    Version{ "1.1" }
+    CurrencyElements { 
+        "Ls",
+        "LVL",
+        ",",
+    }
+//    LocaleString { "lv_LV" }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "#,##0.00 \u00A4;-#,##0.00 \u00A4",
+        "#,##0%",
+        "#E0",
+    }
+//    ShortCountry { "LVA" }
+    LocaleID:int { 0x0426 }
+}

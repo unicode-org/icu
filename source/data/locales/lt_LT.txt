@@ -1,0 +1,24 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+lt_LT {
+    Version{ "1.1" }
+    CurrencyElements { 
+        "Lt",
+        "LTL",
+        ",",
+    }
+//    LocaleString { "lt_LT" }
+    NumberPatterns { 
+        "##,##0.##;-##,##0.##",
+        "#,##0.00 \u00A4;-#,##0.00 \u00A4",
+        "#,##%",
+        "#E0",
+    }
+//    ShortCountry { "LTU" }
+    LocaleID:int { 0x0427 }
+}
