@@ -60,7 +60,8 @@
 /* May need to use U_UPPER_ORDINAL*/
 #define T_CString_itosOffset(a) ((a)<=9?('0'+(a)):('A'+(a)-10))
 
-U_CAPI char *uprv_strdup(const char *src);
+U_CAPI char* U_EXPORT2
+uprv_strdup(const char *src);
 
 U_CAPI char* U_EXPORT2
 T_CString_toLowerCase(char* str);
