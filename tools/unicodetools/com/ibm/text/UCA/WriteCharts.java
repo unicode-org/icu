@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCharts.java,v $ 
-* $Date: 2002/04/23 22:45:41 $ 
-* $Revision: 1.6 $
+* $Date: 2002/04/24 02:38:52 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -166,8 +166,8 @@ public class WriteCharts implements UCD_Types {
             String comp = Default.nfc.normalize(s);
             
             String outline = breaker + classname 
-                + " title='" + Utility.quoteXML(name) + ": " + UCA.toString(sortKey) + "'>"
-                + Utility.quoteXML(comp)
+                + " title='" + Utility.quoteXML(name, true) + ": " + UCA.toString(sortKey) + "'>"
+                + Utility.quoteXML(comp, true)
                 + "<br><tt>"
                 + Utility.hex(s)
                 //+ "<br>" + script
@@ -188,7 +188,11 @@ public class WriteCharts implements UCD_Types {
         Set set = new TreeSet();
         
         for (int i = 0; i <= 0x10FFFF; ++i) {
-        	if (!Default.ucd.isRepresented(i)) continue;
+        	if (!Default.ucd.isRepresented(i)) {
+        		if (i < 0xAC00) continue;
+        		if (i > 0xD7A3) continue;
+        		if (i > 0xACFF && i < 0xD700) continue;
+        	}
         	byte cat = Default.ucd.getCategory(i);
         	if (cat == Cs || cat == Co) continue;
         	
@@ -198,7 +202,7 @@ public class WriteCharts implements UCD_Types {
         	byte script = getBestScript(decomp);
         	
             set.add(new Pair(new Integer(script == COMMON_SCRIPT ? cat + CAT_OFFSET : script),
-            		new Pair(decomp,
+            		new Pair(Default.ucd.getCase(decomp, FULL, FOLD),
             				 new Integer(i))));
         }
           
@@ -308,7 +312,7 @@ public class WriteCharts implements UCD_Types {
         	if (script == 0) script = getBestScript(decomp);
         	
             set.add(new Pair(new Integer(script == COMMON_SCRIPT ? cat + CAT_OFFSET : script),
-            		new Pair(decomp,
+            		new Pair(Default.ucd.getCase(decomp, FULL, FOLD),
             				 new Integer(i))));
         }
           
@@ -409,9 +413,9 @@ public class WriteCharts implements UCD_Types {
         String comp = Default.nfc.normalize(s);
             
         String outline = prefix 
-            + (skipName ? "" : " title='" + Utility.quoteXML(name) + "'")
+            + (skipName ? "" : " title='" + Utility.quoteXML(name, true) + "'")
             + extra + ">"
-            + Utility.quoteXML(comp)
+            + Utility.quoteXML(comp, true)
             + "<br><tt>"
             + Utility.hex(s)
             //+ "<br>" + script

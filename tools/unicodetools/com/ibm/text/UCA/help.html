@@ -48,9 +48,6 @@ characters. The characters are arranged in the following groups:</p>
       code-point order</th>
   </tr>
 </table>
-<p>Characters from large blocks, such as CJK-Ideographs, Hangul Syllables, 
-Private Use Area, etc. are represented by a sampling. Some unassigned code 
-points, non-characters and other edge cases are also added to the list.</p>
 <p>The characters* within each group are arranged in cells. The color of the 
 cell indicates the strength of the difference between that character and the <i>previous</i> 
 character in the chart, as follows.</p>
@@ -109,6 +106,19 @@ character in the chart, as follows.</p>
       <tt>0B92 0BD7</tt></td>
   </tr>
 </table>
+<h3><b>Notes</b></h3>
+<ul>
+  <li>The UCA results are versioned <i>both</i> by the version of the UCA <i>and</i> 
+    by the version of The Unicode Standard used to process the data.</li>
+  <li>These charts only provide one of the alternatives for handling variable 
+    characters (punctuation), whereby these characters are <b>non-ignorable.</b></li>
+  <li>Characters from large blocks, such as CJK-Ideographs, Hangul Syllables, 
+    Private Use Area, etc. are represented by a sampling.</li>
+  <li>Some unassigned code points, noncharacters and other edge cases are also 
+    added to the list for comparison.</li>
+  <li>For more information, see <a href="http://www.unicode.org/unicode/reports/tr10/">UTS 
+    #10: Unicode Collation Algorithm</a>.</li>
+</ul>
 
 </body>
 

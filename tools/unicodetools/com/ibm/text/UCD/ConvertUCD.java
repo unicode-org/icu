@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/ConvertUCD.java,v $
-* $Date: 2002/03/20 00:21:43 $
-* $Revision: 1.6 $
+* $Date: 2002/04/24 02:38:53 $
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -589,7 +589,7 @@ public final class ConvertUCD implements UCD_Types {
             it = charData.keySet().iterator();
             while (it.hasNext()) {
                 Integer cc = (Integer) it.next();
-                output.write(" <e c='" + Utility.quoteXML(cc.intValue()) + "'" );
+                output.write(" <e c='" + Utility.quoteXML(cc.intValue()) + "'");
                 /*
                 UData data = (UData) charData.get(cc);
                 Iterator dataIt = data.keySet().iterator();

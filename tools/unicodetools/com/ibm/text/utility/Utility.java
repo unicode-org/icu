@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2002/04/23 22:45:41 $
-* $Revision: 1.14 $
+* $Date: 2002/04/24 02:38:52 $
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -402,12 +402,13 @@ public final class Utility {    // COMMON UTILITIES
         }
 	}
 
-    public static String quoteXML(int c) {
+    public static String quoteXML(int c, boolean HTML) {
         switch (c) {
             case '<': return "&lt;";
             case '>': return "&gt;";
             case '&': return "&amp;";
-            case '\'': return "&apos;";
+            case '\'': if (!HTML) return "&apos;";
+            	break;
             case '"': return "&quot;";
 
             // fix controls, since XML can't handle
@@ -443,16 +444,25 @@ public final class Utility {    // COMMON UTILITIES
         return "&#x" + hex(c,1) + ";";
     }
 
-    public static String quoteXML(String source) {
+    public static String quoteXML(String source, boolean HTML) {
         if (source == null) return "null";
         StringBuffer result = new StringBuffer();
         for (int i = 0; i < source.length(); ++i) {
             int c = UTF32.char32At(source, i);
             if (UTF32.isSupplementary(c)) ++i;
-            result.append(quoteXML(c));
+            result.append(quoteXML(c, HTML));
         }
         return result.toString();
     }
+    
+    public static String quoteXML(String source) {
+    	return quoteXML(source, false);
+    }
+    
+    public static String quoteXML(int source) {
+    	return quoteXML(source, false);
+    }
+    
 
     public static int compare(char[] a, int aStart, int aEnd, char[] b, int bStart, int bEnd) {
         while (aStart < aEnd && bStart < bEnd) {
