@@ -264,7 +264,7 @@ class DefaultCalendarFactory : public ICUResourceBundleFactory {
 
     if(!loc.getKeywordValue("calendar", keyword, sizeof(keyword)-1, status)) {
       // fetch default calendar id
-      char funcEquiv[256];
+      char funcEquiv[ULOC_FULLNAME_CAPACITY];
       ures_getFunctionalEquivalent(funcEquiv, sizeof(funcEquiv)-1,
                                    NULL, "calendar", "calendar",
                                    loc.getName(), 
@@ -296,7 +296,7 @@ class DefaultCalendarFactory : public ICUResourceBundleFactory {
 class CalendarService : public ICULocaleService {
 public:
   CalendarService()
-    : ICULocaleService("Calendar")
+    : ICULocaleService(UNICODE_STRING_SIMPLE("Calendar"))
   {
     UErrorCode status = U_ZERO_ERROR;
     registerFactory(new DefaultCalendarFactory(), status);
@@ -618,23 +618,40 @@ Calendar::createInstance(const Locale& aLocale, UErrorCode& success)
 Calendar* U_EXPORT2
 Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& success)
 {
-  Locale actualLoc;
-  UObject* u;
+    Locale actualLoc;
+    UObject* u;
 #if UCONFIG_NO_SERVICE
-  {
-    char calLocaleType[ULOC_FULLNAME_CAPACITY] = {"@calendar="};
-    int32_t calLocaleTypeLen = uprv_strlen(calLocaleType);
-    int32_t keywordCapacity = aLocale.getKeywordValue("calendar", calLocaleType+calLocaleTypeLen, sizeof(calLocaleType)-calLocaleTypeLen, success);
-    if (keywordCapacity == 0) {
-            // no calendar type.  Default to nothing.
-            calLocaleType[0] = 0;
-        }
-    u = createStandardCalendar(calLocaleType, aLocale, success);
-  }
-#else
-  u = getCalendarService(success)->get(aLocale, LocaleKey::KIND_ANY, &actualLoc, success);
+    {
+        char calLocaleType[ULOC_FULLNAME_CAPACITY] = {"@calendar="};
+        int32_t calLocaleTypeLen = uprv_strlen(calLocaleType);
+        int32_t keywordCapacity = aLocale.getKeywordValue("calendar", calLocaleType+calLocaleTypeLen, sizeof(calLocaleType)-calLocaleTypeLen-1, success);
+        if (keywordCapacity == 0) {
+            char funcEquiv[ULOC_FULLNAME_CAPACITY];
+
+            // fetch default calendar id
+            ures_getFunctionalEquivalent(funcEquiv, sizeof(funcEquiv)-1,
+                                        NULL, "calendar", "calendar",
+                                        aLocale.getName(), 
+                                        NULL, FALSE, &success);
+            keywordCapacity = uloc_getKeywordValue(funcEquiv, "calendar", calLocaleType+calLocaleTypeLen, 
+                                sizeof(calLocaleType)-calLocaleTypeLen-1, &success);
+            if (keywordCapacity == 0 || U_FAILURE(success)) {
+                // no calendar type.  Default to nothing.
+                calLocaleType[0] = 0;
+            }
+#ifdef U_DEBUG_CALSVC
+            fprintf(stderr, "  getFunctionalEquivalent calendar=%s [%s]\n", keyword, u_errorName(status));
 #endif
-  Calendar* c = NULL;
+        }
+#ifdef U_DEBUG_CALSVC
+        else { fprintf(stderr, "  explicit calendar=%s\n", keyword); }
+#endif
+        u = createStandardCalendar(calLocaleType, aLocale, success);
+    }
+#else
+    u = getCalendarService(success)->get(aLocale, LocaleKey::KIND_ANY, &actualLoc, success);
+#endif
+    Calendar* c = NULL;
 
   if(U_FAILURE(success) || !u) {
     delete zone;
