@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2003/01/28 18:55:42 $
- * $Revision: 1.87 $
+ * $Date: 2003/04/24 23:05:03 $
+ * $Revision: 1.88 $
  *
  *****************************************************************************************
  */
@@ -367,6 +367,51 @@ public abstract class Transliterator {
             this.contextLimit = contextLimit;
             this.start = start;
             this.limit = limit;
+        }
+
+        /**
+         * Constructs a Position object that is a copy of another.
+         * @draft ICU 2.6
+         */
+        public Position(Position pos) {
+            set(pos);
+        }
+
+        /**
+         * Copies the indices of this position from another.
+         * @draft ICU 2.6
+         */
+        public void set(Position pos) {
+            contextStart = pos.contextStart;
+            contextLimit = pos.contextLimit;
+            start = pos.start;
+            limit = pos.limit;
+        }
+
+        /**
+         * Returns true if this Position is equal to the given object.
+         */
+        public boolean equals(Object obj) {
+            if (obj instanceof Position) {
+                Position pos = (Position) obj;
+                return contextStart == pos.contextStart &&
+                    contextLimit == pos.contextLimit &&
+                    start == pos.start &&
+                    limit == pos.limit;
+            }
+            return false;
+        }
+
+        /**
+         * Returns a string representation of this Position.
+         * @draft ICU 2.6
+         */
+        public String toString() {
+            return "[cs=" + contextStart
+    			+ ", s=" + start
+    			+ ", l=" + limit
+    			+ ", cl=" + contextLimit
+    			+ "]";
         }
 
         /**
