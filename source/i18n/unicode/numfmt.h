@@ -668,7 +668,7 @@ public:
      * other classes have different class IDs.
      * @stable ICU 2.0
      */
-    virtual UClassID getDynamicClassID(void) const;
+    virtual UClassID getDynamicClassID(void) const = 0;
 
 protected:
 
