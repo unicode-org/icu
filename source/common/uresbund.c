@@ -32,13 +32,13 @@ static UBool isMutexInited = FALSE;
 static UMTX resbMutex = NULL;
 
 /* INTERNAL: hashes an entry  */
-int32_t hashEntry(const void *parm) {
+static int32_t hashEntry(const void *parm) {
     UResourceDataEntry *b = (UResourceDataEntry *)parm;
     return uhash_hashChars(b->fName)+37*uhash_hashChars(b->fPath);
 }
 
 /* INTERNAL: compares two entries */
-UBool compareEntries(const void *p1, const void *p2) {
+static UBool compareEntries(const void *p1, const void *p2) {
     UResourceDataEntry *b1 = (UResourceDataEntry *)p1;
     UResourceDataEntry *b2 = (UResourceDataEntry *)p2;
 
@@ -51,7 +51,7 @@ UBool compareEntries(const void *p1, const void *p2) {
  *  Internal function, gets parts of locale name according 
  *  to the position of '_' character
  */
-UBool chopLocale(char *name) {
+static UBool chopLocale(char *name) {
     char *i = uprv_strrchr(name, '_');
 
     if(i != NULL) {
@@ -62,14 +62,17 @@ UBool chopLocale(char *name) {
     return FALSE;
 }
 
-void entryIncrease(UResourceDataEntry *entry) {
-        umtx_lock(&resbMutex);
-        entry->fCountExisting++;
-        while(entry->fParent != NULL) {
-          entry = entry->fParent;
-          entry->fCountExisting++;
-        }
-        umtx_unlock(&resbMutex);
+/**
+ *  Internal function
+ */
+static void entryIncrease(UResourceDataEntry *entry) {
+    umtx_lock(&resbMutex);
+    entry->fCountExisting++;
+    while(entry->fParent != NULL) {
+      entry = entry->fParent;
+      entry->fCountExisting++;
+    }
+    umtx_unlock(&resbMutex);
 }
 
 /**
@@ -117,7 +120,7 @@ const ResourceData *getFallbackData(const UResourceBundle* resBundle, const char
 }
 
 /** INTERNAL: Initializes the cache for resources */
-void initCache(UErrorCode *status) {
+static void initCache(UErrorCode *status) {
     if(isMutexInited == FALSE) {
         umtx_lock(NULL);
         if(isMutexInited == FALSE) {
@@ -145,7 +148,7 @@ void initCache(UErrorCode *status) {
 
 /** INTERNAL: sets the name (locale) of the resource bundle to given name */
 
-void setEntryName(UResourceDataEntry *res, char *name, UErrorCode *status) {
+static void setEntryName(UResourceDataEntry *res, char *name, UErrorCode *status) {
     if(res->fName != NULL) {
         uprv_free(res->fName);
     }
@@ -160,7 +163,7 @@ void setEntryName(UResourceDataEntry *res, char *name, UErrorCode *status) {
 /**
  *  INTERNAL: Inits and opens an entry from a data DLL.
  */
-UResourceDataEntry *init_entry(const char *localeID, const char *path, UErrorCode *status) {
+static UResourceDataEntry *init_entry(const char *localeID, const char *path, UErrorCode *status) {
     UResourceDataEntry *r = NULL;
     UResourceDataEntry find;
     int32_t hashValue;
@@ -276,7 +279,8 @@ UResourceDataEntry *init_entry(const char *localeID, const char *path, UErrorCod
     return r;
 }
 
-UResourceDataEntry *entryOpen(const char* path, const char* localeID, UErrorCode* status) {
+/* INTERNAL: */
+static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UErrorCode* status) {
     UErrorCode initstatus = U_ZERO_ERROR;
     UResourceDataEntry *r = NULL;
     UResourceDataEntry *t1 = NULL;
@@ -409,7 +413,8 @@ U_CFUNC UResourceBundle* ures_openNoFallback(const char* path, const char* local
     return r;
 }
 
-UResourceBundle *init_resb_result(const ResourceData *rdata, const Resource r, const char *key, UResourceDataEntry *realData, UResourceBundle *resB, UErrorCode *status) {
+/* INTERNAL: */
+static UResourceBundle *init_resb_result(const ResourceData *rdata, const Resource r, const char *key, UResourceDataEntry *realData, UResourceBundle *resB, UErrorCode *status) {
     if(status == NULL || U_FAILURE(*status)) {
         return resB;
     }
