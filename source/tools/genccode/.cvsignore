@@ -1,9 +1,10 @@
-tmp
-Debug
-Release
-Makefile
+
 *.d
 *.pdb
-genccode
 *.plg
-
+Debug
+Makefile
+Release
+genccode
+genccode.8
+tmp
