@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICUListResourceBundle.java,v $
- * $Date: 2004/02/06 21:54:01 $
- * $Revision: 1.19 $
+ * $Date: 2004/03/09 22:25:45 $
+ * $Revision: 1.20 $
  *
  *******************************************************************************
  */
@@ -64,23 +64,18 @@ public class ICUListResourceBundle extends ListResourceBundle {
      */
     protected Object[][] getContents(){
         // we replace any redirected values with real values in a cloned array
-        try{
-            if (realContents == null) {
-                realContents = contents;
-                for (int i = 0; i < contents.length; ++i) {
-                    Object newValue = getRedirectedResource((String)contents[i][0],contents[i][1], -1);
-                    if (newValue != null) {
-                        if (realContents == contents) {
-                             realContents = (Object[][])contents.clone();
-                        }
-                        realContents[i] = new Object[] { contents[i][0], newValue };
+        if (realContents == null) {
+            realContents = contents;
+            for (int i = 0; i < contents.length; ++i) {
+                Object newValue = getRedirectedResource((String)contents[i][0],contents[i][1], -1);
+                if (newValue != null) {
+                    if (realContents == contents) {
+                        realContents = (Object[][])contents.clone();
                     }
+                    realContents[i] = new Object[] { contents[i][0], newValue };
                 }
             }
-        }catch (Exception e){
-            throw new MissingResourceException("Internal Program error: " + e.toString(), this.getClass().getName(),"");
         }
-
         return realContents;
     }
 
@@ -88,8 +83,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
      * Return null if value is already in existing contents array, otherwise fetch the
      * real value and return it.
      */
-    private Object getRedirectedResource(String key, Object value, int index) 
-                                        throws Exception{
+    private Object getRedirectedResource(String key, Object value, int index) {
 
         if (value instanceof Object[][]) {
             Object[][] aValue = (Object[][])value;
@@ -122,77 +116,85 @@ public class ICUListResourceBundle extends ListResourceBundle {
         return value;
     }
 
-    private static byte[] readToEOS(InputStream stream)  throws Exception{
-
-        ArrayList vec = new ArrayList();
-        int count = 0;
-        int pos = 0;
-        final int MAXLENGTH = 0x8000; // max buffer size - 32K
-        int length = 0x80; // start with small buffers and work up
-        do {
-            pos = 0;
-            length = length >= MAXLENGTH ? MAXLENGTH : length * 2;
-            byte[] buffer = new byte[length];
-            
-            do {
-                int n = stream.read(buffer, pos, length - pos);
-                if (n == -1) {
-                break;
-                }
-                pos += n;
-            } while (pos < length);
-
-            vec.add(buffer);
-            count += pos;
-        } while (pos == length);
-
-
-        byte[] data = new byte[count];
-        pos = 0;
-        for (int i = 0; i < vec.size(); ++i) {
-            byte[] buf = (byte[])vec.get(i);
-            int len = Math.min(buf.length, count - pos);
-            System.arraycopy(buf, 0, data, pos, len);
-            pos += len;
-        }
-        return data;
-    }
-
-    private static char[] readToEOS(InputStreamReader stream)throws Exception {
-        ArrayList vec = new ArrayList();
-        int count = 0;
-        int pos = 0;
-        final int MAXLENGTH = 0x8000; // max buffer size - 32K
-        int length = 0x100; // start with small buffers and work up
-        do {
-            pos = 0;
-            length = length >= MAXLENGTH ? MAXLENGTH : length * 2;
-            char[] buffer = new char[length];
-            try {
+    private static byte[] readToEOS(InputStream stream) {
+        // As of 3.0 this method reads streams of length 264..274008
+        // from the core data.  We progressively double the buffer
+        // size to reduce the number of allocations required.
+        try {
+            ArrayList vec = new ArrayList();
+            int count = 0;
+            int length = 0x200; // smallest 2^n >= min stream len
+            final int MAXLENGTH = 0x8000;
+            int pos = -1;
+            for (;;) {
+                byte[] buffer = new byte[length];
+                pos = 0;
                 do {
                     int n = stream.read(buffer, pos, length - pos);
                     if (n == -1) {
-                    break;
+                        break;
                     }
                     pos += n;
                 } while (pos < length);
+                count += pos;
+                vec.add(buffer);
+                if (pos < length) {
+                    break;
+                }
+                if (length < MAXLENGTH) {
+                    length <<= 1;
+                }
             }
-            catch (IOException e) {
-                throw e;
-            }
-            vec.add(buffer);
-            count += pos;
-        } while (pos == length);
 
-        char[] data = new char[count];
-        pos = 0;
-        for (int i = 0; i < vec.size(); ++i) {
-            char[] buf = (char[])vec.get(i);
-            int len = Math.min(buf.length, count - pos);
-            System.arraycopy(buf, 0, data, pos, len);
-            pos += len;
+            // System.out.println("\ncount " + count + " bytes from " + stream);
+
+            byte[] data = new byte[count];
+            pos = 0;
+            for (int i = 0; i < vec.size(); ++i) {
+                byte[] buf = (byte[])vec.get(i);
+                int len = Math.min(buf.length, count - pos);
+                System.arraycopy(buf, 0, data, pos, len);
+                pos += len;
+            }
+            // assert pos==count;
+            return data;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        return data;
+    }
+
+    private static char[] readToEOS(InputStreamReader stream) {
+        // As of 3.0 this method reads streams of length 41990..41994
+        // from the core data.  The IBM 1.4 UTF8 converter doesn't
+        // handle buffering reliably (it throws an exception) so we
+        // are forced to read everything in one chunk.
+        try {
+            int length = 0x10000; // smallest 2^n >= max stream len
+            final int MAXLENGTH = 0x40000000;
+            int n;
+            char[] buffer;
+            for (;;) {
+                buffer = new char[length];
+                n = stream.read(buffer, 0, length);
+                if (n >= 0 && n < length) {
+                    break;
+                }
+                if (length < MAXLENGTH) {
+                    stream.reset();
+                    length <<= 1;
+                } else {
+                    throw new RuntimeException("maximum input stream length exceeded");
+                }
+            }
+
+            // System.out.println("\ncount " + n + " chars from " + stream);
+
+            char[] data = new char[n];
+            System.arraycopy(buffer, 0, data, 0, n);
+            return data;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
     /*
     public static class CompressedString implements RedirectedResource{
@@ -231,7 +233,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
 
     }
     private interface RedirectedResource{
-        public Object getResource(Object obj) throws Exception;
+        public Object getResource(Object obj);
     }
 
     public static class ResourceBinary implements RedirectedResource{
@@ -240,7 +242,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
         public ResourceBinary(String name){
             resName="data/" + name;
         }
-        public Object getResource(Object obj) throws Exception{
+        public Object getResource(Object obj) {
             if(expanded==null){
                 InputStream stream = ICUData.getStream(resName);
                 if(stream!=null){
@@ -259,7 +261,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
         public ResourceString(String name){
             resName="data/"+name;
         }
-        public Object getResource(Object obj) throws Exception{
+        public Object getResource(Object obj) {
             if(expanded==null){
                 // Resource strings are always UTF-8
                 InputStream stream = ICUData.getStream(resName);
