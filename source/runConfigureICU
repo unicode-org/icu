@@ -46,7 +46,9 @@ The following names can be supplied as the argument for platform:
     SOLARISGCC              Use the GNU C++ compiler on Solaris
     SOLARISX86              Use Sun's CC compiler on Solaris x86
     TRU64V5.1/CXX           Use Compaq's cxx compiler on Tru64 (OSF)
-    zOS/cxx                 Use IBM's cxx compiler on z/OS (os/390)
+    zOS                     Use IBM's cxx compiler on z/OS (os/390)
+    zOSV1R2                 Use IBM's cxx compiler for z/OS 1.2
+    OS390V2R10              Use IBM's cxx compiler for OS/390 2.10
 EOE
     fi
 
@@ -253,13 +255,36 @@ case $platform in
         THE_COMP="QNX cc"
         CC=qcc; export CC
         CXX=QCC; export CXX
-         ;;
-    zOS/cxx)
+        ;;
+    zOS)
         THE_OS="z/OS (OS/390)"
         THE_COMP="z/OS 1.2 (through OS/390 v2r10) C/C++"
         CC=cc; export CC
         CXX=cxx; export CXX
-        export IEEE390=1
+        export RELEASE_CFLAGS='-2'
+        export RELEASE_CXXFLAGS='-2'
+        ;;
+    zOSV1R2)
+        THE_OS="z/OS 1.2"
+        THE_COMP="z/OS 1.2 C/C++"
+        CC=cc; export CC
+        CXX=cxx; export CXX
+        export COMPILE_LINK_ENVVAR='_CXX_CVERSION=0x41020000 _C89_CVERSION=0x41020000 _CC_CVERSION=0x41020000 _CXX_PVERSION=0x41020000 _C89_PVERSION=0x41020000 _CC_PVERSION=0x41020000'
+        export LD_FLAGS=-Wl,"compat=pm3"
+        export CFLAGS=-Wc,"target(zOSV1R2)"
+        export CXXFLAGS=-Wc,"target(zOSV1R2)"
+        export RELEASE_CFLAGS='-2'
+        export RELEASE_CXXFLAGS='-2'
+        ;;
+    OS390V2R10)
+        THE_OS="OS/390 2.10"
+        THE_COMP="OS/390 2.10 C/C++"
+        CC=cc; export CC
+        CXX=cxx; export CXX
+        export COMPILE_LINK_ENVVAR='_CXX_CVERSION=0x220A0000 _C89_CVERSION=0x220A0000 _CC_CVERSION=0x220A0000 _CXX_PVERSION=0x220A0000 _C89_PVERSION=0x220A0000 _CC_PVERSION=0x220A0000'
+        export LD_FLAGS=-Wl,"compat=pm3"
+        export CFLAGS=-Wc,"target(OSV2R10)"
+        export CXXFLAGS=-Wc,"target(OSV2R10)"
         export RELEASE_CFLAGS='-2'
         export RELEASE_CXXFLAGS='-2'
         ;;

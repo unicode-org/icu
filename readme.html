@@ -32,7 +32,7 @@
      <abbr title="International Components for Unicode">ICU</abbr> 2.6
     ReadMe</h1>
 
-    <p>Version: 2003-May-02<br>
+    <p>Version: 2003-May-22<br>
      Copyright &copy; 1997-2003 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -1049,8 +1049,22 @@
 
         <p>Examples for configuring ICU:<br>
          Debug build: <code>IEEE390=1 ./runConfigureICU --enable-debug
-        zOS/cxx</code><br>
-         Release build: <code>IEEE390=1 ./runConfigureICU zOS/cxx</code></p>
+        zOS</code><br>
+         Release build: <code>IEEE390=1 ./runConfigureICU zOS</code></p>
+      </li>
+
+      <li>
+        <p>z/OS introduced the concept of Extra Performance Linkage (XPLINK) to
+        bring performance improvement opportunities to call-intensive C and C++
+        applications such as ICU. XPLINK is enabled on a DLL-by-DLL basis, so
+        if you are considering using XPLINK in your application that uses ICU,
+        you should consider building the XPLINK-enabled version of ICU. You
+        need to set ICU's environment variable <code>OS390_XPLINK=1</code>
+        prior to invoking the make process to produce binaries that are enabled
+        for XPLINK.</p>
+
+        <p>Note: XPLINK, enabled for z/OS 1.2 and later, requires the PTF for
+        PQ69418 to build XPLINK-enabled binaries.</p>
       </li>
 
       <li>Since the default make on z/OS is not gmake, the pkgdata tool
@@ -1066,6 +1080,28 @@
       z/OS Unix - Tools and Toys</a> site. The PATH environment variable should
       be updated to contain the location of this executable prior to build.
       Alternatively, makedep may be moved into an existing PATH directory.</li>
+
+      <li>
+        <p>When you build ICU on a system such as z/OS 1.2, the binaries that
+        result can run on that level of the operating system and later, such as
+        z/OS 1.3 and z/OS 1.4. It's possible that you may have a z/OS 1.4
+        system and, for example, need to deliver binaries on z/OS 1.2 and
+        above. z/OS gives you this ability by targetting the complier and
+        linker to run at the older level, thereby producing the desired
+        binaries.</p>
+
+        <p>To set the compiler and LE environment to OS/390 2.10,
+        specify the following:</p>
+<pre>
+<samp>./runConfigureICU OS390V2R10</samp>
+</pre>
+
+        <p>To set the compiler and LE environment to z/OS 1.2 specify the
+        following:</p>
+<pre>
+<samp>./runConfigureICU zOSV1R2</samp>
+</pre>
+      </li>
 
       <li>The rest of the instructions for building and testing ICU on z/OS
       with Unix System Services are the same as the <a href=
