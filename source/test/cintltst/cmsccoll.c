@@ -3,14 +3,14 @@
  * Copyright (c) 2001, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
-/********************************************************************************
+/*******************************************************************************
 *
 * File cmsccoll.C
 *
-*********************************************************************************/
+*******************************************************************************/
 /**
- * These are the tests specific to ICU 1.8 and above, that I didn't know where to 
- * fit.
+ * These are the tests specific to ICU 1.8 and above, that I didn't know where
+ * to fit.
  */
 
 #include <stdlib.h>
@@ -20,7 +20,6 @@
 #include "unicode/ucoleitr.h"
 #include "unicode/uloc.h"
 #include "cintltst.h"
-#include "cdetst.h"
 #include "ccolltst.h"
 #include "callcoll.h"
 #include "unicode/ustring.h"
@@ -30,7 +29,7 @@
 #include "cmemory.h"
 
 static UCollator *myCollation;
-const static UChar rules[MAX_TOKEN_LEN] =
+const static UChar gRules[MAX_TOKEN_LEN] =
 /*" & 0 < 1,\u2461<a,A"*/
 { 0x0026, 0x0030, 0x003C, 0x0031, 0x002C, 0x2460, 0x003C, 0x0061, 0x002C, 0x0041, 0x0000 };
 
@@ -88,7 +87,6 @@ const static char cnt2[][10] = {
 
 static void TestCase( )
 {
-    
     int32_t i,j,k;
     UErrorCode status = U_ZERO_ERROR;
     myCollation = ucol_open("en_US", &status);
@@ -108,9 +106,9 @@ static void TestCase( )
         }
       }
     }
-    ucol_close(myCollation);    
-    
-    myCollation = ucol_openRules(rules, u_strlen(rules), UNORM_NONE, UCOL_TERTIARY, &status);
+    ucol_close(myCollation);
+
+    myCollation = ucol_openRules(gRules, u_strlen(gRules), UNORM_NONE, UCOL_TERTIARY, &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
 	return;
@@ -342,7 +340,7 @@ const static char nonignorable[][20] = {
   "blackbirds"
 };
 
-void BlackBirdTest( ) {
+static void BlackBirdTest( ) {
   UErrorCode status = U_ZERO_ERROR;
   UChar *t1 =(UChar*)malloc(sizeof(UChar) * 90);
   UChar *t2 =(UChar*)malloc(sizeof(UChar) * 90);
@@ -463,24 +461,24 @@ UColAttributeValue strengths[] = {
     UCOL_IDENTICAL
 };
 
-char * caseFirstC[] = {
+static const char * caseFirstC[] = {
     "UCOL_OFF",
     "UCOL_LOWER_FIRST",
     "UCOL_UPPER_FIRST"
 };
 
 
-char * alternateHandlingC[] = {
+static const char * alternateHandlingC[] = {
     "UCOL_NON_IGNORABLE",
     "UCOL_SHIFTED"
 };
 
-char * caseLevelC[] = {
+static const char * caseLevelC[] = {
     "UCOL_OFF",
     "UCOL_ON"
 };
 
-char * strengthsC[] = {
+static const char * strengthsC[] = {
     "UCOL_PRIMARY",
     "UCOL_SECONDARY",
     "UCOL_TERTIARY",
@@ -568,7 +566,7 @@ static void BillFairmanTest( ) {
 
 }
 
-void testPrimary(UCollator* col, const UChar* p,const UChar* q){
+static void testPrimary(UCollator* col, const UChar* p,const UChar* q){
     UChar source[256] = { '\0'};
     UChar target[256] = { '\0'};
 
@@ -592,7 +590,7 @@ void testPrimary(UCollator* col, const UChar* p,const UChar* q){
 */
 }
    
-void testSecondary(UCollator* col, const UChar* p,const UChar* q){
+static void testSecondary(UCollator* col, const UChar* p,const UChar* q){
     UChar source[256] = { '\0'};
     UChar target[256] = { '\0'};
 
@@ -627,7 +625,7 @@ void testSecondary(UCollator* col, const UChar* p,const UChar* q){
 */
 }
 
-void testTertiary(UCollator* col, const UChar* p,const UChar* q){
+static void testTertiary(UCollator* col, const UChar* p,const UChar* q){
     UChar source[256] = { '\0'};
     UChar target[256] = { '\0'};
 
@@ -659,9 +657,12 @@ void testTertiary(UCollator* col, const UChar* p,const UChar* q){
     fprintf(file,"Tertiary is swamped by 3rd failed  source: %s target: %s \n",utfSource,utfTarget);
 */
 }
-void testEquality(UCollator* col, const UChar* p,const UChar* q){
+
+static void testEquality(UCollator* col, const UChar* p,const UChar* q){
+/*
     UChar source[256] = { '\0'};
     UChar target[256] = { '\0'};
+*/
 
     doTest(col, p, q, UCOL_EQUAL);
 /*
@@ -669,13 +670,13 @@ void testEquality(UCollator* col, const UChar* p,const UChar* q){
 */
 }
 
-void testCollator(UCollator *coll, UErrorCode *status) {
+static void testCollator(UCollator *coll, UErrorCode *status) {
   const UChar *rules = NULL, *current = NULL;
-  uint32_t ruleLen = 0;
+  int32_t ruleLen = 0;
   uint32_t strength = 0;
   uint32_t chOffset = 0; uint32_t chLen = 0;
   uint32_t exOffset = 0; uint32_t exLen = 0;
-  uint32_t rExpsLen = 0;
+/*  uint32_t rExpsLen = 0; */
   uint32_t firstLen = 0;
   UBool varT = FALSE; UBool top_ = TRUE;
   UBool startOfRules = TRUE;
@@ -719,11 +720,11 @@ void testCollator(UCollator *coll, UErrorCode *status) {
           testPrimary(coll,first,second);
           break;
       case UCOL_SECONDARY:
-         testSecondary(coll,first,second);
-         break;
+          testSecondary(coll,first,second);
+          break;
       case UCOL_TERTIARY:
-         testTertiary(coll,first,second);
-         break;
+          testTertiary(coll,first,second);
+          break;
       case UCOL_TOK_RESET:
       default:
           break;
@@ -737,7 +738,7 @@ void testCollator(UCollator *coll, UErrorCode *status) {
   }
 }
 
-static char* localesToTest[] = {
+static const char* localesToTest[] = {
 "ar", "bg", "ca", "cs", "da",
 "el", "en_BE", "en_US_POSIX", 
 "es", "et", "fi", "fr", "hi", 
@@ -749,7 +750,7 @@ static char* localesToTest[] = {
 "vi", "zh", "zh_TW"
 };
 
-static char* rulesToTest[] = {
+static const char* rulesToTest[] = {
   "& Z < p, P",
     "& abe < d < b < e",
     "& a < d/be < b < e"
