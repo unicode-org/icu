@@ -11,7 +11,7 @@ ja {
             "\u5348\u5F8C",
     }
     CollationElements { 
-	    Version { "1.0" }
+	    Version { "2.0" }
 		Override { "FALSE" }
 		Sequence { "&\u0486;\u30FC;\u3099;\u309A;\u30FB,\u303F&\u2212 <\u309B"
 "<\u309C"
