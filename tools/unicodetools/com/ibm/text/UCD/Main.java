@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2003/03/15 02:36:48 $
-* $Revision: 1.28 $
+* $Date: 2003/03/19 17:30:57 $
+* $Revision: 1.29 $
 *
 *******************************************************************************
 */
@@ -40,8 +40,22 @@ public final class Main implements UCD_Types {
         "HangulSyllableType",
         "DerivedAge",
         "StandardizedVariants",
-        //"HangulSyllable",
+        "HangulSyllable",
         //"OtherDerivedProperties",
+    };
+
+    static final String[] EXTRACTED_FILES = {
+        "DerivedBidiClass",
+        "DerivedBinaryProperties",
+        "DerivedCombiningClass",
+        "DerivedDecompositionType",
+        "DerivedEastAsianWidth",
+        "DerivedGeneralCategory",
+        "DerivedJoiningGroup",
+        "DerivedJoiningType",
+        "DerivedLineBreak",
+        "DerivedNumericType",
+        "DerivedNumericValues",
     };
 
     public static void main (String[] args) throws Exception {
@@ -60,6 +74,13 @@ public final class Main implements UCD_Types {
             
             if (arg.equalsIgnoreCase("All")) {
                 args = Utility.append(ALL_FILES, Utility.subarray(args, i+1));
+                i = -1;
+                continue;
+            }
+            
+            if (arg.equalsIgnoreCase("EXTRACTED")) {
+                args = Utility.append(EXTRACTED_FILES, Utility.subarray(args, i+1));
+                i = -1;
                 continue;
             }
             

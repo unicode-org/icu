@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA.java,v $ 
-* $Date: 2003/03/18 00:28:18 $ 
-* $Revision: 1.19 $
+* $Date: 2003/03/19 17:30:56 $ 
+* $Revision: 1.20 $
 *
 *******************************************************************************
 */
@@ -926,7 +926,7 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
      */
     static final char EMPTY = '\uFFFF';
     char rearrangeBuffer = EMPTY;
-    UnicodeSet rearrangeList = new UnicodeSet();
+    UnicodeSet rearrangeList = null;
     int hangulBufferPosition = 0;
     StringBuffer hangulBuffer = new StringBuffer();
 
@@ -1308,6 +1308,12 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
         StringBuffer multiChars = new StringBuffer(); // used for contracting chars
         String inputLine = "";
         boolean[] wasImplicitLeadPrimary = new boolean[1];
+        
+        // In UAX 3.1, the rearrange list is moved to UCD.
+        
+        rearrangeList = UnifiedBinaryProperty.make(UCD.BINARY_PROPERTIES + UCD.Logical_Order_Exception, ucd)
+            .getSet();
+        
             
         while (true) try {
             inputLine = in.readLine();
@@ -1422,11 +1428,10 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
             UCD.BINARY_PROPERTIES + UCD.Logical_Order_Exception, ucd);
         UnicodeSet desiredSet = ubp.getSet();
         
-        /*if (!rearrangeList.equals(desiredSet)) {
+        if (!rearrangeList.equals(desiredSet)) {
             throw new IllegalArgumentException("Rearrangement should be " + desiredSet.toPattern(true)
                 + ", but is " + rearrangeList.toPattern(true));
         }
-        */
         
         ucaData.checkConsistency();
 

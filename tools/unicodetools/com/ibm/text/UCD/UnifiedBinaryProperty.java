@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UnifiedBinaryProperty.java,v $
-* $Date: 2003/02/25 23:38:22 $
-* $Revision: 1.11 $
+* $Date: 2003/03/19 17:30:56 $
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -233,7 +233,7 @@ public final class UnifiedBinaryProperty extends UnicodeProperty {
         return false;
     }
     
-    public boolean isDefaultValue() {
+    public boolean skipInDerivedListing() {
         switch ((majorProp<<8) | propValue) {
             //case CATEGORY | Cn:
             //case COMBINING_CLASS | 0:
@@ -244,17 +244,32 @@ public final class UnifiedBinaryProperty extends UnicodeProperty {
             // case LINE_BREAK | LB_XX:
             case JOINING_TYPE | JT_U:
             case JOINING_GROUP | NO_SHAPING:
-            case BINARY_PROPERTIES | Non_break:
-            case BINARY_PROPERTIES | CaseFoldTurkishI:
             case SCRIPT | COMMON_SCRIPT:
             case HANGUL_SYLLABLE_TYPE | NA:
+            case BINARY_PROPERTIES | Non_break:
+            case BINARY_PROPERTIES | CaseFoldTurkishI:
                 return true;
         }
         return false;
     }
       
-    
-    
+    public boolean isDefaultValue() {
+        switch (majorProp) {
+            case CATEGORY>>8:           return propValue == Cn;
+            case COMBINING_CLASS>>8:    return propValue == 0;
+            case BIDI_CLASS>>8:         return propValue == BIDI_L;
+            case DECOMPOSITION_TYPE>>8: return propValue == NONE;
+            case NUMERIC_TYPE>>8:       return propValue == NUMERIC_NONE;
+            case EAST_ASIAN_WIDTH>>8:   return propValue == EAN;
+            case LINE_BREAK>>8:         return propValue == LB_XX;
+            case JOINING_TYPE>>8:       return propValue == JT_U;
+            case JOINING_GROUP>>8:      return propValue == NO_SHAPING;
+            case SCRIPT>>8:             return propValue == COMMON_SCRIPT;
+            case HANGUL_SYLLABLE_TYPE>>8: return propValue == NA;
+        }
+        return false;
+    }
+      
     public boolean hasValue(int cp) {
         try {
             switch (majorProp) {

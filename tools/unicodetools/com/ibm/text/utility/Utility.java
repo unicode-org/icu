@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2003/03/15 02:36:47 $
-* $Revision: 1.29 $
+* $Date: 2003/03/19 17:30:56 $
+* $Revision: 1.30 $
 *
 *******************************************************************************
 */
@@ -906,6 +906,7 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
         } else {
             if (line1 == null) line1 = "<end of file>";
             if (line2 == null) line2 = "<end of file>";
+            fixDot();
             System.out.println("Found difference in : " + file1 + ", " + file2);
             int diff = compare(line1, line2);
             System.out.println(" Line1: '" + line1.substring(0,diff) + "', '" + line1.substring(diff));

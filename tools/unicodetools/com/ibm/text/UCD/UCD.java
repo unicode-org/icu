@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2003/03/15 02:36:48 $
-* $Revision: 1.22 $
+* $Date: 2003/03/19 17:30:56 $
+* $Revision: 1.23 $
 *
 *******************************************************************************
 */
@@ -26,7 +26,7 @@ import java.io.FileInputStream;
 import java.io.BufferedReader;
 
 import com.ibm.text.utility.*;
-
+import com.ibm.icu.text.UnicodeSet;
 
 public final class UCD implements UCD_Types {
     
@@ -346,11 +346,76 @@ public final class UCD implements UCD_Types {
         return combiningClassSet.get(0xFF & value);
     }
 
+    static UnicodeSet BIDI_R_SET, BIDI_AL_SET;
+    
     /**
      * Get the bidi class
      */
     public byte getBidiClass(int codePoint) {
-        return get(codePoint, false).bidiClass;
+        if (getCategory(codePoint) != Cn) return get(codePoint, false).bidiClass;
+        
+        if (BIDI_R_SET == null) { // build it
+            
+            BIDI_R_SET = new UnicodeSet();
+            BIDI_AL_SET = new UnicodeSet();
+        
+            int blockId = 0;
+            BlockData blockData = new BlockData();
+            while (Default.ucd.getBlockData(blockId++, blockData)) {
+                if (blockData.name.equals("Hebrew")
+                 || blockData.name.equals("Cypriot_Syllabary")
+                ) {
+                    System.out.println("R:  Adding " + blockData.name + ": " 
+                        + Utility.hex(blockData.start) 
+                        + ".." + Utility.hex(blockData.end));
+                    BIDI_R_SET.add(blockData.start, blockData.end);
+                } else if (blockData.name.equals("Arabic")
+                 || blockData.name.equals("Syriac")
+                 || blockData.name.equals("Thaana")
+                 || blockData.name.equals("Arabic_Presentation_Forms-A")
+                 || blockData.name.equals("Arabic_Presentation_Forms-B")
+                ) {
+                    System.out.println("AL: Adding " + blockData.name + ": " 
+                        + Utility.hex(blockData.start) 
+                        + ".." + Utility.hex(blockData.end));
+                    BIDI_AL_SET.add(blockData.start, blockData.end);
+                } else {
+                    if (false) System.out.println("SKIPPING: " + blockData.name + ": " 
+                        + Utility.hex(blockData.start) 
+                        + ".." + Utility.hex(blockData.end));
+                }
+            }
+            
+            System.out.println("BIDI_R_SET: " + BIDI_R_SET);
+            System.out.println("BIDI_AL_SET: " + BIDI_AL_SET);
+
+            UnicodeSet BIDI_R_Delta = new UnicodeSet(0xFB1D, 0xFB4F).add(0x10800, 0x10FFF).add(0x07BF,0x8FF);
+            BIDI_R_Delta.removeAll(BIDI_R_SET);
+            System.out.println("R: Adding " + BIDI_R_Delta);
+            BIDI_R_SET.addAll(BIDI_R_Delta);
+            
+            UnicodeSet BIDI_AL_Delta = new UnicodeSet(0x0750, 0x077F);
+            BIDI_AL_Delta.removeAll(BIDI_AL_SET);
+            System.out.println("AL: Adding " + BIDI_AL_Delta);
+            BIDI_AL_SET.addAll(BIDI_AL_Delta);
+            
+            UnicodeSet noncharacters = UnifiedBinaryProperty.make(BINARY_PROPERTIES + Noncharacter_Code_Point).getSet();
+            
+            System.out.println("Removing Noncharacters!  " + noncharacters);
+            BIDI_R_SET.removeAll(noncharacters);
+            BIDI_AL_SET.removeAll(noncharacters);
+            
+            System.out.println("BIDI_R_SET: " + BIDI_R_SET);
+            System.out.println("BIDI_AL_SET: " + BIDI_AL_SET);
+        }
+
+        if (BIDI_R_SET.contains(codePoint)) {
+            return BIDI_R;
+        }
+        if (BIDI_AL_SET.contains(codePoint)) {
+            return BIDI_AL;
+        }
+        return BIDI_L;
     }
 
     /**
