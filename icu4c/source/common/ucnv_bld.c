@@ -375,7 +375,7 @@ UConverter *
   UConverter *myUConverter = NULL;
   UConverterSharedData *mySharedConverterData = NULL;
   UErrorCode internalErrorCode = U_ZERO_ERROR;
-  uint32_t version=0;
+  uint32_t options=0;
   if (U_FAILURE (*err))
     return NULL;
 
@@ -391,7 +391,7 @@ UConverter *
     /* the default converter name is already canonical */
   } else {
     /* separate the converter name from the options */
-    parseConverterOptions(converterName, cnvName, locale,&version);
+    parseConverterOptions(converterName, cnvName, locale,&options);
 
     /* get the canonical converter name */
     realName = ucnv_io_getConverterName(cnvName, &internalErrorCode);
@@ -406,7 +406,7 @@ UConverter *
 
   /* separate the converter name from the options */
   if(realName != cnvName) {
-    parseConverterOptions(realName, cnvName, locale,&version);
+    parseConverterOptions(realName, cnvName, locale,&options);
     realName = cnvName;
   }
 
@@ -464,7 +464,7 @@ UConverter *
   uprv_memcpy (myUConverter->subChar, myUConverter->sharedData->staticData->subChar, myUConverter->subCharLen);
 
   if(myUConverter != NULL && myUConverter->sharedData->impl->open != NULL) {
-    myUConverter->sharedData->impl->open(myUConverter, realName, locale,&version, err);
+    myUConverter->sharedData->impl->open(myUConverter, realName, locale,options, err);
     if(U_FAILURE(*err)) {
       ucnv_close(myUConverter);
       return NULL;

@@ -265,7 +265,7 @@ U_CFUNC void
 _MBCSOpen(UConverter *cnv,
           const char *name,
           const char *locale,
-          uint32_t *options,
+          uint32_t options,
           UErrorCode *pErrorCode) {
     _MBCSReset(cnv);
     if(uprv_strstr(name, "gb18030")!=NULL || uprv_strstr(name, "GB18030")!=NULL) {
