@@ -414,7 +414,7 @@ BreakIterator::createInstance(const Locale& loc, UBreakIteratorType kind, UError
         // handleDefault calls), so we don't touch it.  YES, A COMMENT
         // THIS LONG is a sign of bad code -- so the action item is to
         // revisit this in ICU 3.0 and clean it up/fix it/remove it.
-        if (*actualLoc.getName() != 0) {
+        if (U_SUCCESS(status) && (result != NULL) && *actualLoc.getName() != 0) {
             U_LOCALE_BASED(locBased, *result);
             locBased.setLocaleIDs(actualLoc.getName(), actualLoc.getName());
         }
