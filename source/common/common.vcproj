@@ -756,9 +756,6 @@
 				RelativePath=".\ucnv.c">
 			</File>
 			<File
-				RelativePath=".\ucnv_set.c">
-			</File>
-			<File
 				RelativePath=".\unicode\ucnv.h">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -855,6 +852,9 @@
 				RelativePath=".\ucnv_lmb.c">
 			</File>
 			<File
+				RelativePath=".\ucnv_set.c">
+			</File>
+			<File
 				RelativePath=".\ucnv_u16.c">
 			</File>
 			<File
@@ -868,6 +868,9 @@
 			</File>
 			<File
 				RelativePath=".\ucnvbocu.c">
+			</File>
+			<File
+				RelativePath=".\ucnvdisp.c">
 			</File>
 			<File
 				RelativePath=".\ucnvhz.c">
@@ -1522,12 +1525,6 @@
 				RelativePath=".\uset.cpp">
 			</File>
 			<File
-				RelativePath=".\uset_imp.h">
-			</File>
-			<File
-				RelativePath=".\uset_props.cpp">
-			</File>
-			<File
 				RelativePath=".\unicode\uset.h">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -1545,6 +1542,12 @@
 "
 						Outputs="..\..\include\unicode\$(InputFileName)"/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\uset_imp.h">
+			</File>
+			<File
+				RelativePath=".\uset_props.cpp">
 			</File>
 			<File
 				RelativePath=".\usetiter.cpp">

@@ -1540,6 +1540,10 @@ SOURCE=.\ucnvbocu.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\ucnvdisp.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\ucnvhz.c
 # End Source File
 # Begin Source File
