@@ -86,6 +86,9 @@ public:
     // convenience function; assume that the message contains only invariant charcters
     virtual void errln( const char *message );
     
+    // Print ALL named errors encountered so far
+    void printErrors(); 
+        
     virtual void usage( void ) ;
 
     FILE *testoutfp;
