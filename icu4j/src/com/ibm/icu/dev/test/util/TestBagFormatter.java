@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/TestBagFormatter.java,v $
- * $Date: 2003/12/29 19:48:57 $
- * $Revision: 1.5 $
+ * $Date: 2004/01/27 23:13:13 $
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -62,9 +62,9 @@ public class TestBagFormatter {
             BagFormatter bf = new BagFormatter();
 
             UnicodeSet us = new UnicodeSet("[:numeric_value=2:]");   
-            bf.showSetNames(bf.CONSOLE,"[:numeric_value=2:]", us);
+            bf.showSetNames(BagFormatter.CONSOLE,"[:numeric_value=2:]", us);
             us = new UnicodeSet("[:numeric_type=numeric:]");   
-            bf.showSetNames(bf.CONSOLE,"[:numeric_type=numeric:]", us);
+            bf.showSetNames(BagFormatter.CONSOLE,"[:numeric_type=numeric:]", us);
             
             if (true) return;
             //showNames("Name", ".*MARK.*");

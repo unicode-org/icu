@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/chart/UnicodeChart.java,v $ 
- * $Date: 2003/12/29 19:48:58 $ 
- * $Revision: 1.3 $
+ * $Date: 2004/01/27 23:13:25 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -14,9 +14,7 @@
 package com.ibm.icu.dev.demo.chart;
 import java.io.*;
 import com.ibm.icu.dev.test.util.*;
-import com.ibm.icu.text.*;
 import com.ibm.icu.lang.*;
-import com.ibm.icu.impl.*;
 
 public class UnicodeChart {
     public static void main(String[] args) throws IOException {

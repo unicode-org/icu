@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/timezone/TimeZoneAliasTest.java,v $ 
- * $Date: 2003/12/29 19:48:59 $ 
- * $Revision: 1.1 $
+ * $Date: 2004/01/27 23:13:13 $ 
+ * $Revision: 1.2 $
  *
  *******************************************************************************
 */
@@ -16,15 +16,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedMap;
-import java.util.SortedSet;
-//import java.util.TimeZone;
-import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Iterator;
 
@@ -32,8 +27,6 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 
 import com.ibm.icu.dev.test.*;
-
-import com.ibm.icu.dev.test.util.BagFormatter;
 import com.ibm.icu.util.TimeZone;
 
 
@@ -62,8 +55,8 @@ public class TimeZoneAliasTest extends TestFmwk {
                 if (zone.minRecentOffset != zone.maxRecentOffset) {
                     errln(
                         "Standard or Daylight Time not constant: " + id 
-                        + ": " + zone.formatHours(zone.minRecentOffset)
-                        + " != " + zone.formatHours(zone.maxRecentOffset));
+                        + ": " + Zone.formatHours(zone.minRecentOffset)
+                        + " != " + Zone.formatHours(zone.maxRecentOffset));
                 }
             }
             Set aliases = zone.getPurportedAliases();
