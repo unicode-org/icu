@@ -24,9 +24,6 @@ subdir = .
 
 AUTOCONF = @AUTOCONF@
 
-## Platform-specific setup
-include @platform_make_fragment@
-
 ## Optional directory setup
 @EXTRAS_TRUE@EXTRA = extra
 @EXTRAS_FALSE@EXTRA = 
@@ -77,6 +74,7 @@ clean: clean-recursive-with-twist clean-local
 distclean : distclean-recursive distclean-local
 dist: dist-recursive dist-local
 check: all check-recursive check-local
+check-recursive: all
 
 ifeq ($(DOXYGEN),)
 doc:
