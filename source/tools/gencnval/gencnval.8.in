@@ -71,8 +71,8 @@ important to make sure that it is present if
 .B ICU_DATA
 is set.
 .SH FILES
-.TP \w'\fB@thedatadir@/icu/@VERSION@/convrtrs.txt'u+3n
-.B @thedatadir@/icu/@VERSION@/convrtrs.txt
+.TP \w'\fB@sysconfdir@/icu/convrtrs.txt'u+3n
+.B @sysconfdir@/icu/convrtrs.txt
 Description of ICU's converters and their aliases.
 .SH VERSION
 @VERSION@
