@@ -15,30 +15,43 @@
 // constructor
 //=======================================================================
 
-RuleBasedBreakIteratorTables::RuleBasedBreakIteratorTables(const void* image)
+RuleBasedBreakIteratorTables::RuleBasedBreakIteratorTables(UDataMemory* memory)
 : refCount(0),
   ownTables(FALSE)
 {
-    const int32_t* im = (const int32_t*)(image);
-    const int8_t*  base = (const int8_t*)(image);
+  if(memory != 0) {
+    fMemory = memory;
+    const void* image = udata_getMemory(memory);
 
-    // the memory image begins with an index that gives the offsets into the
-    // image for each of the fields in the BreakIteratorTables object--
-    // use those to initialize the tables object (it will end up pointing
-    // into the memory image for everything)
-    numCategories = (int32_t)im[0];
-    description = UnicodeString(TRUE, (UChar*)((int32_t)im[1] + base), -1);
-    charCategoryTable = ucmp8_openAdopt((uint16_t*)((int32_t)im[2] + base),
-            (int8_t*)((int32_t)im[3] + base), 0);
-    stateTable = (int16_t*)((int32_t)im[4] + base);
-    backwardsStateTable = (int16_t*)((int32_t)im[5] + base);
-    endStates = (int8_t*)((int32_t)im[6] + base);
-    lookaheadStates = (int8_t*)((int32_t)im[7] + base);
+    if(image != 0) {
+
+      const int32_t* im = (const int32_t*)(image);
+      const int8_t*  base = (const int8_t*)(image);
+
+      // the memory image begins with an index that gives the offsets into the
+      // image for each of the fields in the BreakIteratorTables object--
+      // use those to initialize the tables object (it will end up pointing
+      // into the memory image for everything)
+      numCategories = (int32_t)im[0];
+      description = UnicodeString(TRUE, (UChar*)((int32_t)im[1] + base), -1);
+      charCategoryTable = ucmp8_openAlias((uint16_t*)((int32_t)im[2] + base),
+					  (int8_t*)((int32_t)im[3] + base), 0);
+      stateTable = (int16_t*)((int32_t)im[4] + base);
+      backwardsStateTable = (int16_t*)((int32_t)im[5] + base);
+      endStates = (int8_t*)((int32_t)im[6] + base);
+      lookaheadStates = (int8_t*)((int32_t)im[7] + base);
+    } else {
+      udata_close(fMemory);
+    }
+  } else {
+    fMemory = 0;
+  }
 }
 
 RuleBasedBreakIteratorTables::RuleBasedBreakIteratorTables()
 : refCount(0),
-  ownTables(TRUE)
+  ownTables(TRUE),
+  fMemory(0)
 {
     // everything else is null-initialized.  This constructor depends on
     // a RuleBasedBreakIteratorBuilder filling in all the members
@@ -61,6 +74,9 @@ RuleBasedBreakIteratorTables::~RuleBasedBreakIteratorTables() {
     }
     else {
         uprv_free(charCategoryTable);
+	if(fMemory != 0) {
+	  udata_close(fMemory);
+	}
     }
 }
 

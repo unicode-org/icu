@@ -54,7 +54,7 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(RuleBasedBreakIteratorTables* tab
 // This constructor uses the udata interface to create a BreakIterator whose
 // internal tables live in a memory-mapped file.  "image" is a pointer to the
 // beginning of that file.
-RuleBasedBreakIterator::RuleBasedBreakIterator(const void* image)
+RuleBasedBreakIterator::RuleBasedBreakIterator(UDataMemory* image)
 : tables(image != NULL ? new RuleBasedBreakIteratorTables(image) : NULL),
   text(NULL)
 {
