@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/stringprep/TestIDNA.java,v $
- * $Date: 2003/09/02 23:30:20 $
- * $Revision: 1.5 $
+ * $Date: 2003/12/02 03:17:15 $
+ * $Revision: 1.6 $
  *
  *******************************************************************************
 */
@@ -689,18 +689,18 @@ public class TestIDNA extends TestFmwk {
     }
     public void TestCompareRefImpl() throws Exception{
         
-        StringBuffer src = new StringBuffer();
-
         for(int i = 0x40000 ; i< 0x10ffff; i++){
-            src.setLength(0);
+            StringBuffer src = new StringBuffer();
+           
             if(isQuick()==true && i> 0x1FFFF){
                 return;
             }
-            if(i >= 0x30000){
+            if(i >= 0x30000 && i<=0xf0000){
                i+=0xB0000;
             }
             UTF16.append(src,i);
             doTestCompareReferenceImpl(src);
+
         }  
     }  
 }
