@@ -1857,7 +1857,7 @@ public:
    * @stable
    */
   inline UnicodeString& remove(UTextOffset start, 
-                               int32_t length = INT32_MAX);
+                               int32_t length = (int32_t)INT32_MAX);
 
   /**
    * Remove the characters in the range 
@@ -1868,7 +1868,7 @@ public:
    * @stable
    */
   inline UnicodeString& removeBetween(UTextOffset start,
-                                      UTextOffset limit = INT32_MAX);
+                                      UTextOffset limit = (int32_t)INT32_MAX);
 
 
   /* Length operations */
