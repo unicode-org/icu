@@ -55,4 +55,6 @@ U_CFUNC UBool putil_cleanup(void);
 
 U_CFUNC UBool uset_cleanup(void);
 
+U_CFUNC UBool service_cleanup(void);
+
 #endif
