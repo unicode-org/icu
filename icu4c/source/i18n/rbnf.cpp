@@ -289,7 +289,7 @@ private:
         COMMA = 0x002c,
         TICK = 0x0027,
         QUOTE = 0x0022,
-        SPACE = 0x0020,
+        SPACE = 0x0020
     };
     
     void inc(void) { ++p; ch = 0xffff; }
@@ -870,34 +870,34 @@ RuleBasedNumberFormat::getRuleSetDisplayNameLocale(int32_t index, UErrorCode& st
             bp = new char[cap];
         }
         int32_t len = name.extract(0, name.length(), bp, cap, UnicodeString::kInvariant);
-        Locale locale(bp);
+        Locale retLocale(bp);
         if (bp != buffer) {
             delete[] bp;
         }
-        return locale;
+        return retLocale;
     }
     status = U_ILLEGAL_ARGUMENT_ERROR;
-    Locale locale;
-    return locale;
+    Locale retLocale;
+    return retLocale;
 }
 
 UnicodeString 
-RuleBasedNumberFormat::getRuleSetDisplayName(int32_t index, const Locale& locale) {
+RuleBasedNumberFormat::getRuleSetDisplayName(int32_t index, const Locale& localeParam) {
     if (localizations && index >= 0 && index < localizations->getNumberOfRuleSets()) {
-        UnicodeString localeName(locale.getBaseName(), -1, UnicodeString::kInvariant); 
+        UnicodeString localeName(localeParam.getBaseName(), -1, UnicodeString::kInvariant); 
         int32_t len = localeName.length();
-        UChar* locale = localeName.getBuffer(len + 1);
+        UChar* localeStr = localeName.getBuffer(len + 1);
         while (len >= 0) {
-            locale[len] = 0;
-            int32_t ix = localizations->indexForLocale(locale);
+            localeStr[len] = 0;
+            int32_t ix = localizations->indexForLocale(localeStr);
             if (ix >= 0) {
                 UnicodeString name(TRUE, localizations->getDisplayName(ix, index), -1);
                 return name;
             }
             
             // trim trailing portion, skipping over ommitted sections
-            do { --len;} while (len > 0 && locale[len] != 0x005f); // underscore
-            while (len > 0 && locale[len-1] == 0x005F) --len;
+            do { --len;} while (len > 0 && localeStr[len] != 0x005f); // underscore
+            while (len > 0 && localeStr[len-1] == 0x005F) --len;
         }
         UnicodeString name(TRUE, localizations->getRuleSetName(index), -1);
         return name;
@@ -908,11 +908,11 @@ RuleBasedNumberFormat::getRuleSetDisplayName(int32_t index, const Locale& locale
 }
 
 UnicodeString 
-RuleBasedNumberFormat::getRuleSetDisplayName(const UnicodeString& ruleSetName, const Locale& locale) {
+RuleBasedNumberFormat::getRuleSetDisplayName(const UnicodeString& ruleSetName, const Locale& localeParam) {
     if (localizations) {
         UnicodeString rsn(ruleSetName);
         int32_t ix = localizations->indexForRuleSet(rsn.getTerminatedBuffer());
-        return getRuleSetDisplayName(ix, locale);
+        return getRuleSetDisplayName(ix, localeParam);
     }
     UnicodeString bogus;
     bogus.setToBogus();
