@@ -30,7 +30,7 @@
 *   accordingly. UTF-16 is the default.<br>
 *   In praxis, since a lot of the ICU source code &mdash; especially low-level code like
 *   conversion and collation &mdash; assumes UTF-16, utf.h enforces the default of UTF-16.
-*   This is unlikely to change in the future. Only some files (ubidi.h) should work with any UTF.</p>
+*   This is unlikely to change in the future. Only some files (like ubidi.h and most of unistr.h) should work with any UTF.</p>
 *
 *   <p>Accordinly, utf.h defines UChar to be an unsigned 16-bit integer. If this matches wchar_t, then
 *   UChar is defined to be exactly wchar_t, otherwise uint16_t.</p>
@@ -55,11 +55,26 @@
 *   Otherwise, irregular sequences are detected as well (like single surrogates in UTF-8/32).
 *   Safe macros return special error code points for illegal/irregular sequences:
 *   Typically, U+ffff, or for UTF-8 values that would result in a byte sequence of the same length
-*   as the illegal input sequence.</p>
+*   as the illegal input sequence.<br>
+*   Note that _UNSAFE macros have fewer parameters: They do not have the strictness parameter, and
+*   they do not have start/length parameters for boundary checking.</p>
 *
-*   <p>It is possible to change the choice for the general alias macros to be unsafe, safe/not strict or safe/strict.
+*   <p>Here, the macros are aliased in two steps:
+*   In the first step, the UTF-specific macros with UTF16_ prefix and _UNSAFE and _SAFE suffixes are
+*   aliased according to the UTF_SIZE to macros with UTF_ prefix and the same suffixes and signatures.
+*   Then, in a second step, the default, general alias macros are set to use either the unsafe or
+*   the safe/not strict (default) or the safe/strict macro;
+*   these general macros do not have a strictness parameter.</p>
+*
+*   <p>It is possible to change the default choice for the general alias macros to be unsafe, safe/not strict or safe/strict.
 *   The default is safe/not strict. It is not recommended to select the unsafe macros as the basis for
 *   Unicode string handling in ICU! To select this, define UTF_SAFE, UTF_STRICT, or UTF_UNSAFE.</p>
+*
+*   <p>For general use, one should use the default, general macros with UTF_ prefix and no _SAFE/_UNSAFE suffix.
+*   Only in some cases it may be necessary to control the choice of macro directly and use a less generic alias.
+*   For example, if it can be assumed that a string is well-formed and the index will stay within the bounds,
+*   then the _UNSAFE version may be used.
+*   If a UTF-8 string is to be processed, then the macros with UTF8_ prefixes need to be used.</p>
 */
 
 #ifndef __UTF_H__
@@ -128,7 +143,7 @@ typedef int32_t UTextOffset;
 /* internal definitions ----------------------------------------------------- */
 
 /**
- * <p>Special error values for UTF-8,
+ * <p>UTF8_ERROR_VALUE_1 and UTF8_ERROR_VALUE_2 are special error values for UTF-8,
  * which need 1 or 2 bytes in UTF-8:<br>
  * U+0015 = NAK = Negative Acknowledge, C0 control character<br>
  * U+009f = highest C1 control character</p>
@@ -139,10 +154,8 @@ typedef int32_t UTextOffset;
  *
  * @internal
  */
-/*@{*/
 #define UTF8_ERROR_VALUE_1 0x15
 #define UTF8_ERROR_VALUE_2 0x9f
-/*@}*/
 
 /**
  * Error value for all UTFs. This code point value will be set by macros with error
@@ -191,13 +204,6 @@ typedef int32_t UTextOffset;
  * If wchar_t is not 16 bits wide, then define UChar to be uint16_t.
  */
 
-/**
- * <p>All these macros are aliases to the selected UTF implementation macros.
- * In an ICU build, they are always macros to the UTF-16 macros (with UTF16_ prefixes).
- * In essence, they remove the UTF size from the macro names so that all macros will
- * have a UTF_ prefix.</p>
- */
-/*@{*/
 #if UTF_SIZE==8
 
 #   error UTF-8 is not implemented, undefine UTF_SIZE or define it to 16
@@ -234,34 +240,54 @@ typedef int32_t UTextOffset;
     /** Estimate the number of code units for a string based on the number of UTF-16 code units. */
 #   define UTF_ARRAY_SIZE(size)                         UTF16_ARRAY_SIZE(size)
 
+    /** See file documentation and UTF_GET_CHAR. */
 #   define UTF_GET_CHAR_UNSAFE(s, i, c)                 UTF16_GET_CHAR_UNSAFE(s, i, c)
+    /** See file documentation and UTF_GET_CHAR. */
 #   define UTF_GET_CHAR_SAFE(s, start, i, length, c, strict) UTF16_GET_CHAR_SAFE(s, start, i, length, c, strict)
 
+    /** See file documentation and UTF_NEXT_CHAR. */
 #   define UTF_NEXT_CHAR_UNSAFE(s, i, c)                UTF16_NEXT_CHAR_UNSAFE(s, i, c)
+    /** See file documentation and UTF_NEXT_CHAR. */
 #   define UTF_NEXT_CHAR_SAFE(s, i, length, c, strict)  UTF16_NEXT_CHAR_SAFE(s, i, length, c, strict)
 
+    /** See file documentation and UTF_APPEND_CHAR. */
 #   define UTF_APPEND_CHAR_UNSAFE(s, i, c)              UTF16_APPEND_CHAR_UNSAFE(s, i, c)
+    /** See file documentation and UTF_APPEND_CHAR. */
 #   define UTF_APPEND_CHAR_SAFE(s, i, length, c)        UTF16_APPEND_CHAR_SAFE(s, i, length, c)
 
+    /** See file documentation and UTF_FWD_1. */
 #   define UTF_FWD_1_UNSAFE(s, i)                       UTF16_FWD_1_UNSAFE(s, i)
+    /** See file documentation and UTF_FWD_1. */
 #   define UTF_FWD_1_SAFE(s, i, length)                 UTF16_FWD_1_SAFE(s, i, length)
 
+    /** See file documentation and UTF_FWD_N. */
 #   define UTF_FWD_N_UNSAFE(s, i, n)                    UTF16_FWD_N_UNSAFE(s, i, n)
+    /** See file documentation and UTF_FWD_N. */
 #   define UTF_FWD_N_SAFE(s, i, length, n)              UTF16_FWD_N_SAFE(s, i, length, n)
 
+    /** See file documentation and UTF_SET_CHAR_START. */
 #   define UTF_SET_CHAR_START_UNSAFE(s, i)              UTF16_SET_CHAR_START_UNSAFE(s, i)
+    /** See file documentation and UTF_SET_CHAR_START. */
 #   define UTF_SET_CHAR_START_SAFE(s, start, i)         UTF16_SET_CHAR_START_SAFE(s, start, i)
 
+    /** See file documentation and UTF_PREV_CHAR. */
 #   define UTF_PREV_CHAR_UNSAFE(s, i, c)                UTF16_PREV_CHAR_UNSAFE(s, i, c)
+    /** See file documentation and UTF_PREV_CHAR. */
 #   define UTF_PREV_CHAR_SAFE(s, start, i, c, strict)   UTF16_PREV_CHAR_SAFE(s, start, i, c, strict)
 
+    /** See file documentation and UTF_BACK_1. */
 #   define UTF_BACK_1_UNSAFE(s, i)                      UTF16_BACK_1_UNSAFE(s, i)
+    /** See file documentation and UTF_BACK_1. */
 #   define UTF_BACK_1_SAFE(s, start, i)                 UTF16_BACK_1_SAFE(s, start, i)
 
+    /** See file documentation and UTF_BACK_N. */
 #   define UTF_BACK_N_UNSAFE(s, i, n)                   UTF16_BACK_N_UNSAFE(s, i, n)
+    /** See file documentation and UTF_BACK_N. */
 #   define UTF_BACK_N_SAFE(s, start, i, n)              UTF16_BACK_N_SAFE(s, start, i, n)
 
+    /** See file documentation and UTF_SET_CHAR_LIMIT. */
 #   define UTF_SET_CHAR_LIMIT_UNSAFE(s, i)              UTF16_SET_CHAR_LIMIT_UNSAFE(s, i)
+    /** See file documentation and UTF_SET_CHAR_LIMIT. */
 #   define UTF_SET_CHAR_LIMIT_SAFE(s, start, i, length) UTF16_SET_CHAR_LIMIT_SAFE(s, start, i, length)
 
 #elif UTF_SIZE==32
@@ -273,7 +299,6 @@ typedef int32_t UTextOffset;
 #else
 #   error UTF_SIZE must be undefined or one of { 8, 16, 32 } - only 16 is implemented
 #endif
-/*@}*/
 
 /* Define the default macros for handling UTF characters. ------------------- */
 
@@ -302,7 +327,7 @@ typedef int32_t UTextOffset;
  * Append the code units of code point c to the string at index i
  * and advance i to beyond the new code units (post-increment).
  * The code units beginning at index i will be overwritten.
- * \pre 0<c<0x10ffff
+ * \pre 0<=c<=0x10ffff
  * \pre 0<=i<length
  * \post 0<i<=length
  */
