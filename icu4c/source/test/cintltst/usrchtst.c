@@ -1180,7 +1180,7 @@ static void TestGetMatch()
             log_err("Error expecting errors with NULL string search\n");
         }
         status = U_ZERO_ERROR;
-        if (usearch_getMatchedText(strsrch, NULL, 128, &status) != 
+        if (usearch_getMatchedText(strsrch, NULL, 0, &status) != 
             (int32_t)matchlength || U_SUCCESS(status)){
             log_err("Error pre-flighting match length\n");
         }
