@@ -49,13 +49,13 @@ ArabicOpenTypeLayoutEngine::ArabicOpenTypeLayoutEngine(const LEFontInstance *fon
                         const GlyphSubstitutionTableHeader *gsubTable)
     : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, gsubTable)
 {
-    // nothing else to do...
+    fFeatureOrder = ArabicShaping::getFeatureOrder();
 }
 
 ArabicOpenTypeLayoutEngine::ArabicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode)
     : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode)
 {
-    // nothing else to do...
+    fFeatureOrder = ArabicShaping::getFeatureOrder();
 }
 
 ArabicOpenTypeLayoutEngine::~ArabicOpenTypeLayoutEngine()
