@@ -313,6 +313,61 @@ static UDataMemory *udata_cacheDataItem(const char *path, UDataMemory *item, UEr
 
 
 
+/*-------------------------------------------------------------------------------
+ *
+ *   TinyString   -  a small set of really simple string functions, for 
+ *                   the purpose of consolidating buffer overflow code in one place
+ *
+ *                   Use wherever you would otherwise declare a fixed sized  char[xx] buffer.
+ *                   Do non-growing ops by accessing fields of struct directly
+ *                   Grow using the append function to automatically extend buffer
+ *                   as needed.
+ *
+ *-------------------------------------------------------------------------------*/
+typedef struct TinyString {
+    char      *s;
+    int32_t    length;
+    char       fStaticBuf[100];
+    int32_t    fCapacity;
+} TinyString;
+
+static TinyString_init(TinyString *This) {
+    This->s = This->fStaticBuf;
+    *This->s = 0;
+    This->length = 0;
+    This->fCapacity = sizeof(This->fStaticBuf)-1;
+}
+
+static TinyString_append(TinyString *This, const char *what) {
+    int32_t  newLen;
+    newLen = This->length + uprv_strlen(what); 
+    if (newLen >= This->fCapacity) { 
+        int32_t newCapacity = newLen * 2; 
+        char *newBuf = (char *)uprv_malloc(newCapacity+1); 
+        if (newBuf != NULL) { 
+            uprv_strcpy(newBuf, This->s); 
+            if (This->s != This->fStaticBuf) { 
+                uprv_free(This->s);
+            } 
+            This->s = newBuf; 
+            This->fCapacity = newCapacity; 
+        } 
+    }
+    if (newLen < This->fCapacity) { 
+        uprv_strcat(This->s, what);
+        This->length = newLen;
+    } 
+}
+    
+static TinyString_dt(TinyString *This) {
+    if (This->s != This->fStaticBuf) { 
+        uprv_free(This->s); 
+    }
+    TinyString_init(This);
+}
+
+
+
 
 /*----------------------------------------------------------------------*==============
  *                                                                      *
@@ -930,15 +985,18 @@ doOpenChoice(const char *path, const char *type, const char *name,
              UDataMemoryIsAcceptable *isAcceptable, void *context,
              UErrorCode *pErrorCode)
 {
-    UDataPathIterator iter;
-    const char *pathBuffer;
+    UDataMemory         *retVal = NULL;
 
-    char                tocEntryName[100];
+    UDataPathIterator   iter;
+    const char         *pathBuffer;
+
+    TinyString          tocEntryName;
     char                oldStylePath[1024];
     char                oldStylePathBasename[100];
     const char         *dataPath;
 
     const char         *tocEntrySuffix;
+    int32_t             tocEntrySuffixIndex;
     UDataMemory         dataMemory;
     UDataMemory        *pCommonData;
     UDataMemory        *pEntryData;
@@ -951,20 +1009,21 @@ doOpenChoice(const char *path, const char *type, const char *name,
      */
 
     /* prepend the package */
-    uprv_strcpy(tocEntryName, packageNameFromPath(path));
+    TinyString_init(&tocEntryName);
+    TinyString_append(&tocEntryName, packageNameFromPath(path));
 
-    tocEntrySuffix = tocEntryName+uprv_strlen(tocEntryName); /* suffix starts here */
+    tocEntrySuffixIndex = tocEntryName.length;
 
-    uprv_strcat(tocEntryName, "_");
-
-    uprv_strcat(tocEntryName, name);
+    TinyString_append(&tocEntryName, "_");
+    TinyString_append(&tocEntryName, name);
     if(type!=NULL && *type!=0) {
-        uprv_strcat(tocEntryName, ".");
-        uprv_strcat(tocEntryName, type);
+        TinyString_append(&tocEntryName, ".");
+        TinyString_append(&tocEntryName, type);
     }
+    tocEntrySuffix = tocEntryName.s+tocEntrySuffixIndex; /* suffix starts here */
 
 #ifdef UDATA_DEBUG
-    fprintf(stderr, " tocEntryName = %s\n", tocEntryName);
+    fprintf(stderr, " tocEntryName = %s\n", tocEntryName->s);
 #endif    
 
 
@@ -1006,7 +1065,8 @@ doOpenChoice(const char *path, const char *type, const char *name,
             path = oldStylePath;
         } else {
             *pErrorCode = U_FILE_ACCESS_ERROR;  /* hopelessly bad case */
-            return NULL;
+            retVal = NULL;
+            goto commonReturn;
         }
     }
     /* End of dealing with a null basename */
@@ -1037,7 +1097,8 @@ doOpenChoice(const char *path, const char *type, const char *name,
                 fprintf(stderr, "** Mapped file: %s\n", pathBuffer);
 #endif
                 udata_pathiter_dt(&iter);
-                return pEntryData;
+                retVal = pEntryData;
+                goto commonReturn;
             }
             
             /* the data is not acceptable, or some error occured.  Either way, unmap the memory */
@@ -1046,7 +1107,8 @@ doOpenChoice(const char *path, const char *type, const char *name,
             /* If we had a nasty error, bail out completely.  */
             if (U_FAILURE(*pErrorCode)) {
                 udata_pathiter_dt(&iter);
-                return NULL;
+                retVal = NULL;
+                goto commonReturn;
             }
             
             /* Otherwise remember that we found data but didn't like it for some reason  */
@@ -1076,7 +1138,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
             int32_t length;
 
             /* look up the data piece in the common data */
-            pHeader=pCommonData->vFuncs->Lookup(pCommonData, tocEntryName, &length, &errorCode);
+            pHeader=pCommonData->vFuncs->Lookup(pCommonData, tocEntryName.s, &length, &errorCode);
 #ifdef UDATA_DEBUG
             fprintf(stderr, "pHeader=%p\n", pHeader);
 #endif
@@ -1086,11 +1148,13 @@ doOpenChoice(const char *path, const char *type, const char *name,
             fprintf(stderr, "pEntryData=%p\n", pEntryData);
 #endif
                 if (U_FAILURE(*pErrorCode)) {
-                    return NULL;
+                    retVal = NULL;
+                    goto commonReturn;
                 }
                 if (pEntryData != NULL) {
                     pEntryData->length = length;
-                    return pEntryData;
+                    retVal =  pEntryData;
+                    goto commonReturn;
                 }
             }
         }
@@ -1112,7 +1176,10 @@ doOpenChoice(const char *path, const char *type, const char *name,
             *pErrorCode=errorCode;
         }
     }
-    return NULL;
+
+commonReturn:
+    TinyString_dt(&tocEntryName);
+    return retVal;
 }
 
 
