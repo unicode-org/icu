@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_InterIndic_Latin.txt,v $
-# $Date: 2002/03/02 00:27:26 $
-# $Revision: 1.6 $
+# $Date: 2002/07/25 21:20:26 $
+# $Revision: 1.7 $
 #--------------------------------------------------------------------
 
 # InterIndic-Latin
@@ -177,6 +177,7 @@
     $ena }$x            > n\u0331  ;
     $ena$virama         > n\u0331  ;
     $ena                > n\u0331a ;
+    $uka		> qa       ;
     $ka$nukta }$x       > q        ;
     $ka$nukta$virama    > q        ;
     $ka$nukta           > qa       ;
@@ -185,9 +186,12 @@
     $kha$nukta          > k\u0331h\u0331a ;
     $ukha$virama        > k\u0331h\u0331;
     $ukha               > k\u0331h\u0331a;
+    $ugha		> g\u0307a ;
     $ga$nukta }$x       > g\u0307  ;
     $ga$nukta$virama    > g\u0307  ;
     $ga$nukta           > g\u0307a ;
+    
+    $ujha                > za       ;	
     $ja$nukta }$x       > z        ;
     $ja$nukta$virama    > z        ;
     $ja$nukta           > za       ;
@@ -198,7 +202,8 @@
     $uddha}$x           > r\u0323  ;
     $uddha$virama       > r\u0323 ;
     $uddha              > r\u0323a;
-
+    
+    $udha               > r\u0323a ;
     $dda$nukta}$x       > r\u0323  ;
     $dda$nukta$virama   > r\u0323  ;
     $dda$nukta          > r\u0323a ;

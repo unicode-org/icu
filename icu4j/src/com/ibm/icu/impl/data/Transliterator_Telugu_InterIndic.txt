@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Telugu_InterIndic.txt,v $
-# $Date: 2002/03/02 00:27:27 $
-# $Revision: 1.5 $
+# $Date: 2002/07/25 21:20:26 $
+# $Revision: 1.6 $
 #--------------------------------------------------------------------
 
 # Telugu-InterIndic
@@ -80,6 +80,8 @@
 \u0C56>\uE056;      # AI LENGTH MARK
 \u0C60>\uE060;      # LETTER VOCALIC RR
 \u0C61>\uE061;      # LETTER VOCALIC LL
+\u0C64>\uE064;
+\u0C65>\uE065;
 \u0C66>\uE066;      # DIGIT ZERO
 \u0C67>\uE067;      # DIGIT ONE
 \u0C68>\uE068;      # DIGIT TWO
