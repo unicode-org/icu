@@ -20,7 +20,9 @@
 * Usage:
 *     dumpce options...
 *         -locale name          ICU locale to use.  Default is en_US
-*         -outputfile file_name Path for outputing the serialized collation 
+*         -serialize            Serializes the collation elements in -locale 
+*                               and outputs them into -outputfile
+*         -destdir     dir_name Path for outputing the serialized collation 
 *                               elements. Default standard output.
 */
 #include <unicode/utypes.h>
@@ -29,8 +31,8 @@
 #include <unicode/ucoleitr.h>
 #include <unicode/uchar.h>
 #include <unicode/utf16.h>
+#include <unicode/putil.h>
 #include <stdio.h>
-#include "cmemory.h"
 #include "ucol_tok.h"
 #include "cstring.h"
 #include "uoptions.h"
@@ -44,13 +46,20 @@
 static UOption options[]={
     UOPTION_HELP_H,
     UOPTION_HELP_QUESTION_MARK,
-    {"locale",       NULL, NULL, NULL, 'l', UOPT_REQUIRES_ARG, 0},
-    {"serialize",    NULL, NULL, NULL, 's', UOPT_NO_ARG,       0},
-	{"outputfile",   NULL, NULL, NULL, 'o', UOPT_OPTIONAL_ARG, 0},
+    {"locale",      NULL, NULL, NULL, 'l', UOPT_REQUIRES_ARG, 0},
+    {"serialize",   NULL, NULL, NULL, 's', UOPT_NO_ARG, 0},
+	UOPTION_DESTDIR,
 	UOPTION_VERBOSE
 };
 
-static UCollator *collator = 0;
+/**
+* Collator used in this program
+*/
+static UCollator *COLLATOR_;
+/**
+* Output strea, used in this program
+*/
+static FILE *OUTPUT_;
 
 /**
 * Writes the hexadecimal of a null-terminated array of codepoints into a 
@@ -187,39 +196,21 @@ void serialize() {
     UChar       str[128];
     int         strlen = 0;
 
-    // FileStream *f;
-    FILE *f;
-    if (options[4].doesOccur) {
-        f = fopen(options[4].value, "w");
-        if (f == NULL) {
-            fprintf(stdout, "Cannot open file:%s\n", 
-                      (char *)options[4].value);
-            return;
-        }
-    }
-    else {
-        f = stdout;
-    }
-
-    UVersionInfo version;
-    ucol_getVersion(collator, version);
-    fprintf(f, "# This file contains the serialized collation elements\n");
-    fprintf(f, "# as of the collation version indicated below.\n");
-    fprintf(f, "# Data format: xxxx xxxx..; [yyyyyyyy yyyyyy..]\n");
-    fprintf(f, "#              where xxxx are codepoints in hexadecimals\n");
-    fprintf(f, "#              and yyyyyyyy are the corresponding\n");
-    fprintf(f, "#              collation elements in hexadecimals\n");
-    fprintf(f, "# Collation version number: %d.%d.%d.%d\n", version[0],
-              version[1], version[2], version[3]);
-
-    UCollationElements *iter = ucol_openElements(collator, str, strlen, 
+    fprintf(OUTPUT_, "# This file contains the serialized collation elements\n");
+    fprintf(OUTPUT_, "# as of the collation version indicated below.\n");
+    fprintf(OUTPUT_, "# Data format: xxxx xxxx..; [yyyyyyyy yyyyyy..]\n");
+    fprintf(OUTPUT_, "#              where xxxx are codepoints in hexadecimals\n");
+    fprintf(OUTPUT_, "#              and yyyyyyyy are the corresponding\n");
+    fprintf(OUTPUT_, "#              collation elements in hexadecimals\n");
+    
+    UCollationElements *iter = ucol_openElements(COLLATOR_, str, strlen, 
                                                  &error);
     if (U_FAILURE(error)) {
         fprintf(stdout, "Error creating iterator\n");
         return;
     }
 
-    fprintf(f, "\n# Range of unicode characters\n\n");
+    fprintf(OUTPUT_, "\n# Range of unicode characters\n\n");
 
     while (codepoint <= UCHAR_MAX_VALUE) { 
         if (u_isdefined(codepoint)) {
@@ -231,29 +222,30 @@ void serialize() {
                 fprintf(stdout, "Error setting text in iterator\n");
                 return;
             }
-            serialize(f, iter);
+            serialize(OUTPUT_, iter);
         }
         codepoint ++;
     }
     
-    fprintf(f, "\n# Contractions\n\n");
+    fprintf(OUTPUT_, "\n# Contractions\n\n");
     
     UChar    ucarules[0x10000];
     UChar   *rules      = ucarules;
-    int32_t  rulelength = ucol_getRulesEx(collator, UCOL_FULL_RULES, 
-                                                ucarules, 0x10000);
-    if (rulelength > 0x10000) {
-        rules = (UChar *)uprv_malloc(sizeof(UChar) * rulelength);
-        ucol_getRulesEx(collator, UCOL_FULL_RULES, rules, rulelength);
+    int32_t  rulelength = ucol_getRulesEx(COLLATOR_, UCOL_FULL_RULES, ucarules, 
+                                          0x10000);
+    if (rulelength + UCOL_TOK_EXTRA_RULE_SPACE_SIZE > 0x10000) {
+        rules = (UChar *)malloc(sizeof(UChar) * 
+                               (rulelength + UCOL_TOK_EXTRA_RULE_SPACE_SIZE));
+        rulelength = ucol_getRulesEx(COLLATOR_, UCOL_FULL_RULES, rules, 
+                                     rulelength);
     }
-    serialize(f, rules, rulelength, iter);
-    if (rules != ucarules) {
-        uprv_free(rules);
-    }
-
+    serialize(OUTPUT_, rules, rulelength, iter);
+        
     ucol_closeElements(iter);
-    if (options[4].doesOccur) {
-        fclose(f);
+    ucol_close(COLLATOR_);
+
+    if (rules != ucarules) {
+        free(rules);
     }
 }
 
@@ -268,32 +260,81 @@ int main(int argc, char *argv[]) {
     
     // error handling, printing usage message
     if (argc < 0) {
-        fprintf(stdout, "error in command line argument:");
+        fprintf(stdout, "error in command line argument: ");
         fprintf(stdout, argv[-argc]);
+        fprintf(stdout, "\n");
     }
     if (argc < 0 || options[0].doesOccur || options[1].doesOccur) {
         fprintf(stdout, "Usage: strperf options...\n"
-                        "-help                 Display this message.\n"
-                        "-locale     name      ICU locale to use. Default is en_US\n"
-                        "-serialize            Serializes the collation elements in -locale and outputs them into -outputfile\n"
-                        "-outputfile file_name Path for outputing the serialized collation elements. Defaults to stdout if no defined\n");
+                        "--help                 Display this message.\n"
+                        "--locale    [name|all] ICU locale to use. Default is en_US\n"
+                        "--serialize            Serializes the collation elements in -locale or all locales available and outputs them into --outputdir/locale_ce.txt\n"
+                        "--destdir   dir_name   Path for outputing the serialized collation elements. Defaults to stdout if no defined\n");
         return argc < 0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
-    //  Set up an ICU collator
-    UErrorCode status   = U_ZERO_ERROR;
-               collator = ucol_open((char *)options[2].value, &status);
-    if (U_FAILURE(status)) {
-        fprintf(stdout, "Collator creation failed:");
-        fprintf(stdout, u_errorName(status));
-        return -1;
-    }
-
-    if (options[3].doesOccur) {
-        serialize();
-    }
+    const char    *locale      = (char *)options[2].value;
+          int32_t  localeindex = 0;
     
-    ucol_close(collator);
+    if (strcmp(locale, "all") == 0) {
+        localeindex = ucol_countAvailable() - 1;
+        fprintf(stdout, "Number of locales: %d\n", localeindex + 1);
+        locale      = ucol_getAvailable(localeindex);
+    }
 
+    while (TRUE) {
+        UErrorCode error = U_ZERO_ERROR;
+        COLLATOR_ = ucol_open(locale, &error);
+        if (U_FAILURE(error)) {
+            fprintf(stdout, "Collator creation failed:");
+            fprintf(stdout, u_errorName(error));
+            return -1;
+        }
+
+        if (options[4].doesOccur) {
+            const char *dir      = options[4].value;
+            int  dirlength = strlen(dir);
+            char filename[128];
+            
+            strcpy(filename, dir);
+            char dirending = dir[dirlength - 1];
+            if (dirending != U_FILE_SEP_CHAR) {
+                filename[dirlength] = U_FILE_SEP_CHAR;
+                filename[dirlength + 1] = 0;
+            }
+
+            strcat(filename, locale);
+            strcat(filename, "_ce.txt");
+            OUTPUT_ = fopen(filename, "w");
+            if (OUTPUT_ == NULL) {
+                fprintf(stdout, "Cannot open file:%s\n", filename);
+                return -1;
+            }
+        }
+        else {
+            OUTPUT_ = stdout;
+        }
+
+        fprintf(OUTPUT_, "# Locale: %s\n", locale);
+        fprintf(stdout, "Locale: %s\n", locale);
+        UVersionInfo version;
+        ucol_getVersion(COLLATOR_, version);
+        fprintf(OUTPUT_, "# Collation version number: %d.%d.%d.%d\n", 
+                         version[0], version[1], version[2], version[3]);
+
+        if (options[3].doesOccur) {
+            serialize();
+        }
+
+        if (options[4].doesOccur) {
+            fclose(OUTPUT_);
+        }
+    
+        localeindex --;
+        if (localeindex < 0) {
+            break;
+        }
+        locale = ucol_getAvailable(localeindex);
+    }
     return 0;
 }
