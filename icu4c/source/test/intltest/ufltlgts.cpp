@@ -33,8 +33,9 @@ void UnicodeFilterLogicTest::runIndexedTest( int32_t index, UBool exec, const ch
         default: name = ""; break; /*needed to end loop*/
     }
 }
-
+int32_t gFilter1ClassID;
 class Filter1: public UnicodeFilter{
+  virtual UClassID getDynamicClassID() const { return (UClassID)&gFilter1ClassID; }
     virtual UnicodeFunctor* clone() const{
         return new Filter1(*this);
     }
@@ -54,7 +55,9 @@ class Filter1: public UnicodeFilter{
     }
     virtual void addMatchSetTo(UnicodeSet& toUnionTo) const {}
 };
+uint32_t gFilter2ClassID = 0;
 class Filter2: public UnicodeFilter{
+  virtual UClassID getDynamicClassID() const { return (UClassID)&gFilter2ClassID; }
     virtual UnicodeFunctor* clone() const{
         return new Filter2(*this);
     }

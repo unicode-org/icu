@@ -99,6 +99,7 @@ class MyNumberFormatTest : public NumberFormat
 {
 public:
 
+    virtual UClassID getDynamicClassID(void) const;
   
     virtual UnicodeString& format(    double            number, 
                     UnicodeString&        toAppendTo, 
@@ -147,7 +148,6 @@ public:
     }
     virtual Format* clone() const 
     { return NULL; }
-  
     virtual UnicodeString& format(int32_t, 
                 UnicodeString& foo, 
                 FieldPosition&) const

@@ -18,6 +18,12 @@
 #include "unicode/resbund.h"
 #include "unicode/calendar.h"
 #include "unicode/datefmt.h"
+int32_t gMyNumberFormatTestClassID;
+UClassID MyNumberFormatTest::getDynamicClassID()  const
+{
+	return (UClassID)&gMyNumberFormatTestClassID;
+}
+
 
 // *****************************************************************************
 // class NumberFormatRegressionTest

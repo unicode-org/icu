@@ -668,11 +668,15 @@ void TransliteratorAPITest::TestRegisterUnregister(){
 }
 
 
+int gTestFilter1ClassID = 0;
+int gTestFilter2ClassID = 0;
+int gTestFilter3ClassID = 0;
 
 /**
  * Used by TestFiltering().
  */
 class TestFilter1 : public UnicodeFilter {
+    UClassID getDynamicClassID()const { return &gTestFilter1ClassID; }
     virtual UnicodeFunctor* clone() const {
         return new TestFilter1(*this);
     }
@@ -693,6 +697,7 @@ class TestFilter1 : public UnicodeFilter {
     virtual void addMatchSetTo(UnicodeSet& toUnionTo) const {}
 };
 class TestFilter2 : public UnicodeFilter {
+    UClassID getDynamicClassID()const { return &gTestFilter2ClassID; }
     virtual UnicodeFunctor* clone() const {
         return new TestFilter2(*this);
     }
@@ -713,6 +718,7 @@ class TestFilter2 : public UnicodeFilter {
     virtual void addMatchSetTo(UnicodeSet& toUnionTo) const {}
 };
 class TestFilter3 : public UnicodeFilter {
+    UClassID getDynamicClassID()const { return &gTestFilter3ClassID; }
     virtual UnicodeFunctor* clone() const {
         return new TestFilter3(*this);
     }

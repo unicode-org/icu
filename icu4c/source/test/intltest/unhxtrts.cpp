@@ -71,7 +71,9 @@ static void pseudoHandleTransliterate(const Transliterator* t,
 /**
  * Used by TestConstruction() and TestTransliterate.
  */
+int32_t gTestUniFilterClassID;
 class TestUniFilter : public UnicodeFilter {
+  virtual UClassID getDynamicClassID() const { return &gTestUniFilterClassID; }
     virtual UnicodeFunctor* clone() const {
         return new TestUniFilter(*this);
     }
