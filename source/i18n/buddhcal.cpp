@@ -186,7 +186,7 @@ void BuddhistCalendar::add(UCalendarDateFields field, int32_t amount, UErrorCode
         return;   // Do nothing!
     
     if(field == UCAL_YEAR /* || field == UCAL_YEAR_WOY */) {
-        int32_t year = internalGet(field);
+        int32_t year = get(field, status); // not internalGet -- force completion
 
         year += amount;
         
