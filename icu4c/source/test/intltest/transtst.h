@@ -13,8 +13,6 @@
 #include "unicode/translit.h"
 #include "intltest.h"
 
-class Transliterator;
-
 /**
  * @test
  * @summary General test of Transliterator

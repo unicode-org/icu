@@ -16,6 +16,7 @@
 #include "unicode/unistr.h"
 #include "unicode/ucnv.h"
 
+U_NAMESPACE_BEGIN
 /**
  * This class is deprecated and will be removed.
  * Use the more powerful C conversion API with the UConverter type and ucnv_... functions.
@@ -408,4 +409,5 @@ UBool isAmbiguous(void) const;
  */
 typedef UnicodeConverter UnicodeConverterCPP;   /* Backwards compatibility. */
 
+U_NAMESPACE_END
 #endif

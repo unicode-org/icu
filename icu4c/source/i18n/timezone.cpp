@@ -45,9 +45,7 @@
 #include "ucln_in.h"
 
 // static initialization
-const char                 TimeZone::fgClassID = 0; // Value is irrelevant
 
-static TimeZone*           DEFAULT_ZONE = NULL;
 
 static const UChar         GMT_ID[] = {0x47, 0x4D, 0x54, 0x00}; /* "GMT" */
 static const int32_t       GMT_ID_LENGTH = 3;
@@ -65,27 +63,19 @@ static const TZHeader *    DATA = NULL;
 static const uint32_t*     INDEX_BY_ID = 0;
 static const OffsetIndex*  INDEX_BY_OFFSET = 0;
 static const CountryIndex* INDEX_BY_COUNTRY = 0;
-static UnicodeString*      ZONE_IDS = 0;
 static UDataMemory*        UDATA_POINTER = 0;
 static UMTX                LOCK;
 static UBool               DATA_LOADED = FALSE;
-
-static TimeZone*           GMT = NULL;
-
 static void                loadZoneData(void);
+
+U_NAMESPACE_BEGIN
+static TimeZone*           DEFAULT_ZONE = NULL;
+static TimeZone*           GMT = NULL;
+static UnicodeString*      ZONE_IDS = 0;
+const char                 TimeZone::fgClassID = 0; // Value is irrelevant
+
 static const TZEquivalencyGroup* lookupEquivalencyGroup(const UnicodeString& id);
-
-// -------------------------------------
-
-const TimeZone*
-TimeZone::getGMT(void)
-{
-    if (!DATA_LOADED) {
-        loadZoneData();
-    }
-    return GMT;
-}
-
+U_NAMESPACE_END
 /**
  * udata callback to verify the zone data.
  */
@@ -108,6 +98,8 @@ U_CDECL_END
 
 UBool timeZone_cleanup()
 {
+    U_NAMESPACE_USE
+
     DATA = NULL;
     INDEX_BY_ID = NULL;
     INDEX_BY_OFFSET = NULL;
@@ -124,9 +116,9 @@ UBool timeZone_cleanup()
         umtx_destroy(&LOCK);
         LOCK = NULL;
     }
-    if (::GMT) {
-        delete ::GMT;
-        ::GMT = NULL;
+    if (U_NAMESPACE_QUALIFIER GMT) {
+        delete U_NAMESPACE_QUALIFIER GMT;
+        U_NAMESPACE_QUALIFIER GMT = NULL;
     }
     if (DEFAULT_ZONE) {
         delete DEFAULT_ZONE;
@@ -150,6 +142,8 @@ UBool timeZone_cleanup()
  * initialized.
  */
 static void loadZoneData() {
+    U_NAMESPACE_USE
+
     if (!DATA_LOADED) {
         umtx_lock(NULL);
         Mutex lock(&LOCK);
@@ -197,10 +191,21 @@ static void loadZoneData() {
 
             // Whether we succeed or fail, stop future attempts
             DATA_LOADED = TRUE;
-            ::GMT = new SimpleTimeZone(0, UnicodeString(GMT_ID, GMT_ID_LENGTH));
+            U_NAMESPACE_QUALIFIER GMT = new SimpleTimeZone(0, UnicodeString(GMT_ID, GMT_ID_LENGTH));
             ucln_i18n_registerCleanup();
         }
     }
+}
+
+// -------------------------------------
+U_NAMESPACE_BEGIN
+const TimeZone*
+TimeZone::getGMT(void)
+{
+    if (!DATA_LOADED) {
+        loadZoneData();
+    }
+    return GMT;
 }
 
 // *****************************************************************************
@@ -802,5 +807,7 @@ TimeZone::hasSameRules(const TimeZone& other) const
     return (getRawOffset() == other.getRawOffset() && 
             useDaylightTime() == other.useDaylightTime());
 }
+
+U_NAMESPACE_END
 
 //eof

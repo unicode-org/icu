@@ -51,6 +51,8 @@
 
 #include "uresimp.h"
 
+U_NAMESPACE_BEGIN
+
 /*-----------------------------------------------------------------------------
  * Implementation Notes
  *
@@ -418,3 +420,4 @@ const Locale &ResourceBundle::getLocale(void) const
 }
 
 //eof
+U_NAMESPACE_END

@@ -25,6 +25,8 @@
 #include "unicode/gregocal.h"
 #include "tzdat.h"
 
+U_NAMESPACE_BEGIN
+
 const char SimpleTimeZone::fgClassID = 0; // Value is irrelevant
 
 // WARNING: assumes that no rule is measured from the end of February,
@@ -922,5 +924,7 @@ SimpleTimeZone::decodeEndRule(UErrorCode& status)
         }
     }
 }
+
+U_NAMESPACE_END
 
 //eof

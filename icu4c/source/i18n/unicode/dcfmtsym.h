@@ -28,6 +28,8 @@
 #include "unicode/utypes.h"
 #include "unicode/locid.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * This class represents the set of symbols needed by DecimalFormat
  * to format numbers. DecimalFormat creates for itself an instance of
@@ -816,5 +818,8 @@ inline void DecimalFormatSymbols::setPadEscape(UChar c) {
     fSymbols[kPadEscapeSymbol] = c;
 }
 #endif /* ICU_DECIMALFORMATSYMBOLS_USE_DEPRECATES */
+
+U_NAMESPACE_END
+
 #endif // _DCFMTSYM
 //eof

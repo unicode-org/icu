@@ -10,6 +10,8 @@
 
 #include "unicode/toupptrn.h"
 
+U_NAMESPACE_BEGIN
+
 const char* UppercaseTransliterator::_ID = "Any-Upper";
 
 /**
@@ -63,3 +65,6 @@ UBool UppercaseTransliterator::hasTransform(UChar32 c) const {
 void UppercaseTransliterator::transform(UnicodeString& s) const {
     s.toUpper(loc);
 }
+
+U_NAMESPACE_END
+

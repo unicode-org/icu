@@ -12,6 +12,8 @@
 #include "cmemory.h"
 #include "unicode/resbund.h"
 
+U_NAMESPACE_BEGIN
+
 //=================================================================================
 // deserialization
 //=================================================================================
@@ -228,4 +230,6 @@ BreakDictionary::internalAt(int32_t row, int32_t col) const
     // array because two-dimensional arrays are inefficient in Java)
     return table[row * numCols + col];
 }
+
+U_NAMESPACE_END
 

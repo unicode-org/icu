@@ -8,10 +8,8 @@
 #define _CALENDARREGRESSIONTEST_
  
 #include "unicode/calendar.h"
-
+#include "unicode/gregocal.h"
 #include "intltest.h"
-
-class GregorianCalendar;
 
 /** 
  * Performs regression test for Calendar

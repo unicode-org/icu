@@ -15,6 +15,11 @@
 #include "unicode/brkiter.h"
 #include "unicode/usearch.h"
 
+struct USearch;
+typedef struct USearch USearch;
+
+U_NAMESPACE_BEGIN
+
 /**
  * <tt>SearchIterator</tt> is an abstract base class that provides 
  * methods to search for a pattern within a text string. Instances of
@@ -53,9 +58,6 @@
  *
  * @see StringSearch
  */
-
-struct USearch;
-typedef struct USearch USearch;
 
 /**
 * Data structure for searching
@@ -462,6 +464,7 @@ inline UBool SearchIterator::operator!=(const SearchIterator &that) const
 {
    return !operator==(that); 
 }
+U_NAMESPACE_END
 
 #endif
 

@@ -23,6 +23,8 @@
 
 #include "umutex.h"
 
+U_NAMESPACE_BEGIN
+
 //----------------------------------------------------------------------------
 // Code within this library which accesses protected data
 // should instantiate a Mutex object while doing so. You should make your own 
@@ -73,6 +75,8 @@ inline Mutex::~Mutex()
 {
   umtx_unlock(fMutex);
 }
+
+U_NAMESPACE_END
 
 #endif //_MUTEX_
 //eof

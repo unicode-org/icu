@@ -14,6 +14,8 @@
 #include "filestrm.h"
 #include "cmemory.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * A token used as a character-category value to identify ignore characters
  */
@@ -654,3 +656,6 @@ BreakIterator *  RuleBasedBreakIterator::createBufferClone(void *stackBuffer,
  
     return localIterator;    
 }
+
+U_NAMESPACE_END
+

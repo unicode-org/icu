@@ -8,8 +8,6 @@
 #define __CalendarLimitTest__
  
 #include "caltztst.h"
-class Calendar;
-class DateFormat;
 
 /**
  * This test verifies the behavior of Calendar around the very earliest limits

@@ -12,6 +12,7 @@
 #ifndef JAMOTEST_H
 #define JAMOTEST_H
 
+#include "unicode/translit.h"
 #include "transtst.h"
 
 /**

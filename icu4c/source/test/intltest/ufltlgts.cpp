@@ -12,13 +12,13 @@
 *   03/22/2000   Madhu        Creation.
 ************************************************************************/
 
-#include "ittrans.h"
-#include "ufltlgts.h"
 #include "unicode/utypes.h"
 #include "unicode/translit.h"
 #include "unicode/unifilt.h"
 #include "unicode/unifltlg.h"
 #include "intltest.h"
+#include "ittrans.h"
+#include "ufltlgts.h"
 
 //---------------------------------------------
 // runIndexedTest

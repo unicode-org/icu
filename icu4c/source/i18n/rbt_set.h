@@ -11,6 +11,8 @@
 #include "uvector.h"
 #include "unicode/utrans.h"
 
+U_NAMESPACE_BEGIN
+
 class Replaceable;
 class TransliterationRule;
 class TransliterationRuleData;
@@ -129,4 +131,6 @@ public:
     virtual UnicodeString& toRules(UnicodeString& result,
                                    UBool escapeUnprintable) const;
 };
+
+U_NAMESPACE_END
 #endif

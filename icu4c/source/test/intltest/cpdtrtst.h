@@ -17,8 +17,6 @@
 #include "unicode/cpdtrans.h"
 #include "intltest.h"
 
-class CompoundTransliterator;
-
 /**
  * @test
  * @summary General test of Compound Transliterator

@@ -10,6 +10,8 @@
 #include "unicode/rep.h"
 #include "rbt_rule.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * Default implementation of UnicodeMatcher::matches() for Unicode
  * filters.  Matches a single 16-bit code unit at offset.
@@ -51,5 +53,7 @@ UnicodeString& UnicodeFilter::toPattern(UnicodeString& result,
 UBool UnicodeFilter::matchesIndexValue(uint8_t v) const {
     return FALSE;
 }
+
+U_NAMESPACE_END
 
 //eof

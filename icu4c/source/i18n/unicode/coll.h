@@ -48,6 +48,8 @@
 #include "unicode/normlzr.h"
 #include "unicode/locid.h"
 
+U_NAMESPACE_BEGIN
+
 class CollationKey;
 
 /**
@@ -776,4 +778,6 @@ inline Normalizer::EMode Collator::getDecomposition() const
   return decmp;
 }
 */
+U_NAMESPACE_END
+
 #endif

@@ -11,6 +11,8 @@
 #include "unicode/uchar.h"
 #include "unicode/titletrn.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * ID for this transliterator.
  */
@@ -134,3 +136,6 @@ void TitlecaseTransliterator::handleTransliterate(
         text.handleReplaceBetween(bufStart, bufLimit, buffer);
     }
 }
+
+U_NAMESPACE_END
+

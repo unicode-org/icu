@@ -38,6 +38,100 @@
 #include "uhash.h"
 #include "ucln_cmn.h"
 
+U_NAMESPACE_BEGIN
+
+static Locale*  availableLocaleList = NULL;
+static int32_t  availableLocaleListCount;
+typedef enum ELocalePos {
+    eENGLISH,
+    eFRENCH,
+    eGERMAN,
+    eITALIAN,
+    eJAPANESE,
+    eKOREAN,
+    eCHINESE,
+
+    eFRANCE,
+    eGERMANY,
+    eITALY,
+    eJAPAN,
+    eKOREA,
+    eCHINA,      /* Alias for PRC */
+    eTAIWAN,
+    eUK,
+    eUS,
+    eCANADA,
+    eCANADA_FRENCH,
+
+
+    eDEFAULT,
+    eMAX_LOCALES
+} ELocalePos;
+
+/* Use void * to make it properly aligned */
+/* Add 1 for rounding */
+static void *gByteLocaleCache[(eMAX_LOCALES + 1) * sizeof(Locale) / sizeof(void*)];
+
+static Locale *gLocaleCache = NULL;
+
+U_NAMESPACE_END
+
+UBool
+locale_cleanup(void)
+{
+    U_NAMESPACE_USE
+
+    if (availableLocaleList) {
+        delete []availableLocaleList;
+        availableLocaleList = NULL;
+    }
+    availableLocaleListCount = 0;
+    if (gLocaleCache) {
+        gLocaleCache[eDEFAULT].~Locale();
+        gLocaleCache = NULL;
+    }
+    return TRUE;
+}
+
+void U_NAMESPACE_QUALIFIER locale_set_default_internal(const char *id)
+{
+    U_NAMESPACE_USE
+
+#ifdef ICU_LOCID_USE_DEPRECATES
+    Locale::fgDefaultLocale.init(id);
+#else
+if (gLocaleCache == NULL) {
+        Locale::initLocaleCache();
+    }
+
+    {
+        Mutex lock;
+        gLocaleCache[eDEFAULT].init(id);
+    }
+#endif
+}
+
+/* sfb 07/21/99 */
+U_CFUNC void
+locale_set_default(const char *id)
+{
+    U_NAMESPACE_USE
+
+    locale_set_default_internal(id);
+}
+/* end */
+
+U_CFUNC const char *
+locale_get_default(void)
+{
+    U_NAMESPACE_USE
+
+    return Locale::getDefault().getName();
+}
+
+
+U_NAMESPACE_BEGIN
+
 /*Character separating the posix id fields*/
 // '_'
 // In the platform codepage.
@@ -46,9 +140,6 @@
 /**
  * static variables
  */
-static Locale*  availableLocaleList = NULL;
-static int32_t  availableLocaleListCount;
-
 #ifdef ICU_LOCID_USE_DEPRECATES
 Locale Locale::fgDefaultLocale;
 
@@ -81,32 +172,6 @@ const Locale  Locale::CANADA    ("en", "CA");
 const Locale  Locale::CANADA_FRENCH("fr", "CA");
 
 #else
-typedef enum ELocalePos {
-    eENGLISH,
-    eFRENCH,
-    eGERMAN,
-    eITALIAN,
-    eJAPANESE,
-    eKOREAN,
-    eCHINESE,
-
-    eFRANCE,
-    eGERMANY,
-    eITALY,
-    eJAPAN,
-    eKOREA,
-    eCHINA,      /* Alias for PRC */
-    eTAIWAN,
-    eUK,
-    eUS,
-    eCANADA,
-    eCANADA_FRENCH,
-
-
-    eDEFAULT,
-    eMAX_LOCALES
-} ELocalePos;
-
 const Locale::LocaleProxy Locale::ENGLISH  = {eENGLISH};
 const Locale::LocaleProxy Locale::FRENCH   = {eFRENCH};
 const Locale::LocaleProxy Locale::GERMAN   = {eGERMAN};
@@ -129,12 +194,6 @@ const Locale::LocaleProxy Locale::UK       = {eUK};
 const Locale::LocaleProxy Locale::US       = {eUS};
 const Locale::LocaleProxy Locale::CANADA   = {eCANADA};
 const Locale::LocaleProxy Locale::CANADA_FRENCH={eCANADA_FRENCH};
-
-/* Use void * to make it properly aligned */
-/* Add 1 for rounding */
-static void *gByteLocaleCache[(eMAX_LOCALES + 1) * sizeof(Locale) / sizeof(void*)];
-
-static Locale *gLocaleCache = NULL;
 
 Locale::LocaleProxy::operator const Locale&(void) const
 {
@@ -436,37 +495,6 @@ Locale::getDefault()
 #endif
 }
 
-
-void locale_set_default_internal(const char *id)
-{
-#ifdef ICU_LOCID_USE_DEPRECATES
-    Locale::fgDefaultLocale.init(id);
-#else
-    if (gLocaleCache == NULL) {
-        Locale::initLocaleCache();
-    }
-
-    {
-        Mutex lock;
-        gLocaleCache[eDEFAULT].init(id);
-    }
-#endif
-}
-
-/* sfb 07/21/99 */
-U_CFUNC void
-locale_set_default(const char *id)
-{
-    locale_set_default_internal(id);
-}
-/* end */
-
-U_CFUNC const char *
-locale_get_default(void)
-{
-    return Locale::getDefault().getName();
-}
-
 void 
 Locale::setDefault( const   Locale&     newLocale, 
                             UErrorCode&  status) 
@@ -709,22 +737,6 @@ Locale::getDisplayName(const Locale &displayLocale,
 
     return result;
 }
-
-UBool
-locale_cleanup(void)
-{
-    if (availableLocaleList) {
-        delete []availableLocaleList;
-        availableLocaleList = NULL;
-    }
-    availableLocaleListCount = 0;
-    if (gLocaleCache) {
-        gLocaleCache[eDEFAULT].~Locale();
-        gLocaleCache = NULL;
-    }
-    return TRUE;
-}
-
 const Locale*
 Locale::getAvailableLocales(int32_t& count) 
 {
@@ -971,5 +983,4 @@ Locale::initLocaleCache(void)
 #endif
 
 //eof
-
-
+U_NAMESPACE_END

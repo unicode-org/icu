@@ -10,12 +10,11 @@
 
 #include <stdlib.h>
 
-#include "intltest.h"
-
+#include "unicode/numfmt.h"
 #include "unicode/fmtable.h"
 #include "unicode/locid.h"
+#include "intltest.h"
 
-class NumberFormat;
 
 /**
  * This test does round-trip testing (format -> parse -> format -> parse -> etc.) of

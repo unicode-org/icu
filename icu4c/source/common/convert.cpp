@@ -7,6 +7,15 @@
 /* C++ wrappers for the ICUs Codeset Conversion Routines*/
 
 #include "unicode/utypes.h"
+
+U_NAMESPACE_BEGIN
+
+class Locale;
+class UnicodeString;
+class Mutex;
+
+U_NAMESPACE_END
+
 #include "unicode/resbund.h"
 #include "cmemory.h"
 #include "mutex.h"
@@ -16,6 +25,7 @@
 #include "unicode/ucnv.h"
 #include "unicode/convert.h"
 #include "ucln_cmn.h"
+
 
 /* list of converter and alias names */
 static const char **availableConverterNames=NULL;
@@ -32,6 +42,7 @@ UBool UnicodeConverter_cleanup()
     return TRUE;
 }
 
+U_NAMESPACE_BEGIN
 UnicodeConverter::UnicodeConverter()
 {
     UErrorCode err = U_ZERO_ERROR;
@@ -451,7 +462,7 @@ int32_t  UnicodeConverter::flushCache()
     return ucnv_flushCache();
 }
 
-/* HSYS: To be cleaned up.  The usage of UChar* and UnicodeString in
+/* TODO: To be cleaned up.  The usage of UChar* and UnicodeString in
 the C++ APIs need to be revisited. */
 void UnicodeConverter::fixFileSeparator(UnicodeString& source) const {
     if(this==NULL || &source==NULL || source.length()<=0) {
@@ -466,3 +477,4 @@ UBool UnicodeConverter::isAmbiguous(void) const
     return ucnv_isAmbiguous(myUnicodeConverter);
 }
 
+U_NAMESPACE_END

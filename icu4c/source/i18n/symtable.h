@@ -10,6 +10,9 @@
 #ifndef SYMTABLE_H
 #define SYMTABLE_H
 
+U_NAMESPACE_BEGIN
+ 
+
 class ParsePosition;
 class UnicodeSet;
 class UnicodeString;
@@ -60,5 +63,7 @@ public:
     virtual UnicodeString parseReference(const UnicodeString& text,
                                          ParsePosition& pos, int32_t limit) const = 0;
 };
+U_NAMESPACE_END
+ 
 
 #endif

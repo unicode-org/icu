@@ -13,6 +13,8 @@
 
 #include "unicode/rbbi.h"
 
+U_NAMESPACE_BEGIN
+
 /* forward declaration */
 class DictionaryBasedBreakIteratorTables;
 
@@ -224,5 +226,6 @@ inline UClassID DictionaryBasedBreakIterator::getStaticClassID(void) {
 inline void DictionaryBasedBreakIterator::bumpDictionaryCharCount(void) {
     ++dictionaryCharCount;
 }
+U_NAMESPACE_END
 
 #endif

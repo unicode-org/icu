@@ -12,6 +12,9 @@
 #include "unicode/unifilt.h"
 #include "unicode/unicode.h"
 
+
+U_NAMESPACE_BEGIN
+
 /**
  * ID for this transliterator.
  */
@@ -360,3 +363,6 @@ void HexToUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPo
     offsets.limit = limit;
     offsets.start = cursor;
 }
+
+U_NAMESPACE_END
+

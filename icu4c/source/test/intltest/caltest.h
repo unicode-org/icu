@@ -7,8 +7,9 @@
 #ifndef __CalendarTest__
 #define __CalendarTest__
  
-#include "caltztst.h"
 #include "unicode/calendar.h"
+#include "unicode/smpdtfmt.h"
+#include "caltztst.h"
 
 class CalendarTest: public CalendarTimeZoneTest {
 public:

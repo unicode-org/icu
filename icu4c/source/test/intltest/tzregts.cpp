@@ -4,12 +4,10 @@
  * others. All Rights Reserved.
  ********************************************************************/
  
-#include "tzregts.h"
-
-#include "calregts.h"
-
 #include "unicode/simpletz.h"
 #include "unicode/smpdtfmt.h"
+#include "tzregts.h"
+#include "calregts.h"
 
 // *****************************************************************************
 // class TimeZoneRegressionTest

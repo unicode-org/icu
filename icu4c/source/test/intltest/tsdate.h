@@ -7,11 +7,9 @@
 #ifndef _INTLTESTDATEFORMAT
 #define _INTLTESTDATEFORMAT
 
-
+#include "unicode/unistr.h"
+#include "unicode/datefmt.h"
 #include "intltest.h"
-
-
-class DateFormat;
 
 /**
  *  Performs some tests in many variations on DateFormat

@@ -24,6 +24,9 @@
 /* Define whether inttypes.h is available */
 #define U_HAVE_INTTYPES_H 0
 
+/* Define whether namespace is supported */
+#define U_HAVE_NAMESPACE 0
+
 /*
  * Define what support for C++ streams is available.
  *     If U_IOSTREAM_SOURCE is set to 199711, then <iostream> is available

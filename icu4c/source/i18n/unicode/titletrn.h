@@ -12,6 +12,8 @@
 
 #include "unicode/translit.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * A transliterator that converts all letters (as defined by
  * <code>UCharacter.isLetter()</code>) to lower case, except for those
@@ -61,5 +63,7 @@ class U_I18N_API TitlecaseTransliterator : public Transliterator {
     void handleTransliterate(Replaceable& text, UTransPosition& offset,
                              UBool isIncremental) const;
 };
+
+U_NAMESPACE_END
 
 #endif

@@ -26,7 +26,7 @@
 #include "unicode/locid.h"
 #include "unicode/timezone.h"
 
-
+U_NAMESPACE_BEGIN
 
 /**
  * <code>Calendar</code> is an abstract base class for converting between
@@ -1097,5 +1097,7 @@ Calendar::internalSet(EDateFields field, int32_t value)
 {
     fFields[field] = value;
 }
+
+U_NAMESPACE_END
 
 #endif // _CALENDAR

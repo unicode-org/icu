@@ -21,7 +21,7 @@
 #ifndef URENAME_H
 #define URENAME_H
 
-
+/* TODO: Review the duplicate C++ defines in perl script. */
 /* C exports renaming data */
 #define ArabicOpenTypeLayoutEngine ArabicOpenTypeLayoutEngine_1_9
 #define BreakIterator BreakIterator_1_9
@@ -982,6 +982,8 @@
 #define utrans_unregister utrans_unregister_1_9
 
 /* C++ class names renaming defines */
+#if !U_HAVE_NAMESPACE
+
 #define AlternateSubstitutionSubtable AlternateSubstitutionSubtable_1_9
 #define AnchorTable AnchorTable_1_9
 #define ArabicOpenTypeLayoutEngine ArabicOpenTypeLayoutEngine_1_9
@@ -1145,4 +1147,5 @@
 #define UnicodeToHexTransliterator UnicodeToHexTransliterator_1_9
 #define UppercaseTransliterator UppercaseTransliterator_1_9
 #define ValueRecord ValueRecord_1_9
+#endif
 #endif

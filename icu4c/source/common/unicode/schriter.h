@@ -22,6 +22,7 @@
 #include "unicode/chariter.h"
 #include "unicode/uchriter.h"
 
+U_NAMESPACE_BEGIN
 /**
  * A concrete subclass of CharacterIterator that iterates over the
  * characters (code units or code points) in a UnicodeString.
@@ -147,4 +148,5 @@ private:
   static const char        fgClassID;
 };
 
+U_NAMESPACE_END
 #endif

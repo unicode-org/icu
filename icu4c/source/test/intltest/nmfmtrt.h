@@ -8,11 +8,9 @@
 #define _NUMBERFORMATROUNDTRIPTEST_
  
 #include <stdlib.h>
-#include "intltest.h"
-
+#include "unicode/numfmt.h"
 #include "unicode/fmtable.h"
-
-class NumberFormat;
+#include "intltest.h"
 
 /** 
  * Performs round-trip tests for NumberFormat

@@ -12,6 +12,8 @@
 #include "unicode/utrans.h"
 #include "unicode/unimatch.h"
 
+U_NAMESPACE_BEGIN
+
 class Replaceable;
 class TransliterationRuleData;
 
@@ -272,5 +274,7 @@ public:
 inline void TransliterationRule::setData(const TransliterationRuleData* d) {
     data = d;
 }
+
+U_NAMESPACE_END
 
 #endif

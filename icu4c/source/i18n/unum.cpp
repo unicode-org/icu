@@ -20,6 +20,7 @@
 #include "cpputils.h"
 #include "unicode/fmtable.h"
 #include "unicode/dcfmtsym.h"
+U_NAMESPACE_USE
 /*
 U_CAPI UNumberFormat*
 unum_open(    UNumberFormatStyle    style,
@@ -94,6 +95,7 @@ unum_open(  UNumberFormatStyle    style,
             UParseError*       parseErr,
             UErrorCode*        status)
 {
+
   if(U_FAILURE(*status))
   { 
       return 0;
@@ -180,6 +182,7 @@ unum_open(  UNumberFormatStyle    style,
 U_CAPI void
 unum_close(UNumberFormat* fmt)
 {
+ 
   delete (NumberFormat*) fmt;
 }
 
@@ -187,6 +190,7 @@ U_CAPI UNumberFormat*
 unum_clone(const UNumberFormat *fmt,
        UErrorCode *status)
 {
+ 
   if(U_FAILURE(*status)) return 0;
 
   Format *res = ((DecimalFormat*)fmt)->clone();
@@ -207,6 +211,7 @@ unum_format(    const    UNumberFormat*    fmt,
         UFieldPosition    *pos,
         UErrorCode*        status)
 {
+ 
   if(U_FAILURE(*status)) return -1;
 
   UnicodeString res(result, 0, resultLength);
@@ -233,6 +238,7 @@ unum_formatDouble(    const    UNumberFormat*  fmt,
             UFieldPosition  *pos, /* 0 if ignore */
             UErrorCode*     status)
 {
+ 
   if(U_FAILURE(*status)) return -1;
 
   UnicodeString res(result, 0, resultLength);
@@ -258,6 +264,7 @@ unum_parse(    const   UNumberFormat*  fmt,
         int32_t         *parsePos /* 0 = start */,
         UErrorCode      *status)
 {
+ 
   if(U_FAILURE(*status)) return 0;
 
   int32_t len = (textLength == -1 ? u_strlen(text) : textLength);
@@ -292,6 +299,7 @@ unum_parseDouble(    const   UNumberFormat*  fmt,
             int32_t         *parsePos /* 0 = start */,
             UErrorCode      *status)
 {
+ 
   if(U_FAILURE(*status))
       return 0;
 
@@ -323,12 +331,14 @@ unum_parseDouble(    const   UNumberFormat*  fmt,
 U_CAPI const char*
 unum_getAvailable(int32_t index)
 {
+ 
   return uloc_getAvailable(index);
 }
 
 U_CAPI int32_t
 unum_countAvailable()
 {
+ 
   return uloc_countAvailable();
 }
 
@@ -336,6 +346,7 @@ U_CAPI int32_t
 unum_getAttribute(const UNumberFormat*          fmt,
           UNumberFormatAttribute  attr)
 {
+ 
   switch(attr) {
   case UNUM_PARSE_INT_ONLY:
     return ((NumberFormat*)fmt)->isParseIntegerOnly();
@@ -393,6 +404,7 @@ unum_setAttribute(    UNumberFormat*          fmt,
             UNumberFormatAttribute  attr,
             int32_t                 newValue)
 {
+ 
   switch(attr) {
   case UNUM_PARSE_INT_ONLY:
     ((NumberFormat*)fmt)->setParseIntegerOnly((UBool)newValue);
@@ -467,6 +479,7 @@ U_CAPI double
 unum_getDoubleAttribute(const UNumberFormat*          fmt,
           UNumberFormatAttribute  attr)
 {
+ 
   if (attr == UNUM_ROUNDING_INCREMENT) {
     return ((DecimalFormat*)fmt)->getRoundingIncrement();
   } else {
@@ -479,6 +492,7 @@ unum_setDoubleAttribute(    UNumberFormat*          fmt,
             UNumberFormatAttribute  attr,
             double                 newValue)
 {
+ 
   if (attr == UNUM_ROUNDING_INCREMENT) {   
     ((DecimalFormat*)fmt)->setRoundingIncrement(newValue);
   }
@@ -491,6 +505,7 @@ unum_getTextAttribute(const UNumberFormat*  fmt,
             int32_t                         resultLength,
             UErrorCode*                     status)
 {
+ 
   if(U_FAILURE(*status))
       return -1;
 
@@ -532,6 +547,7 @@ unum_setTextAttribute(    UNumberFormat*                    fmt,
             int32_t                            newValueLength,
             UErrorCode                        *status)
 {
+ 
   if(U_FAILURE(*status)) return;
 
   int32_t len = (newValueLength == -1 ? u_strlen(newValue) : newValueLength);
@@ -571,6 +587,7 @@ unum_toPattern(    const    UNumberFormat*          fmt,
         int32_t                 resultLength,
         UErrorCode*             status)
 {
+ 
   if(U_FAILURE(*status)) return -1;
 
   UnicodeString pat(result, 0, resultLength);
@@ -588,6 +605,7 @@ U_CAPI void
 unum_getSymbols(const UNumberFormat* fmt,
         UNumberFormatSymbols *syms)
 {
+ 
   UnicodeString temp;
   int32_t len;
   const DecimalFormatSymbols *dfs = 
@@ -637,6 +655,7 @@ unum_setSymbols(            UNumberFormat*          fmt,
                     const   UNumberFormatSymbols*   symbolsToSet,
                     UErrorCode *status)
 {
+ 
   if(U_FAILURE(*status)) return;
 
   DecimalFormatSymbols *syms = new DecimalFormatSymbols(*status);
@@ -677,6 +696,7 @@ unum_getSymbol(UNumberFormat *fmt,
                UChar *buffer,
                int32_t size,
                UErrorCode *status) {
+ 
   if(status==NULL || U_FAILURE(*status)) {
     return 0;
   }
@@ -696,6 +716,7 @@ unum_setSymbol(UNumberFormat *fmt,
                const UChar *value,
                int32_t length,
                UErrorCode *status) {
+ 
   if(status==NULL || U_FAILURE(*status)) {
     return;
   }
@@ -733,6 +754,7 @@ unum_applyPattern(  UNumberFormat  *format,
                     UParseError    *parseError,
                     UErrorCode*    status)
 {
+ 
   UErrorCode tStatus = U_ZERO_ERROR;
   UParseError tParseError;
   

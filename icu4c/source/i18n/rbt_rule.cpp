@@ -15,8 +15,6 @@
 #include "unicode/unicode.h"
 #include "cmemory.h"
 
-const UChar TransliterationRule::ETHER = 0xFFFF;
-
 static const UChar APOSTROPHE = 0x0027; // '\''
 static const UChar BACKSLASH  = 0x005C; // '\' 
 
@@ -37,6 +35,10 @@ static const UChar BACKSLASH  = 0x005C; // '\'
 #define SEGMENTS_LEN(x) (SEGMENTS_COUNT(x)*4+4)
 #define SEGMENTS_POS(x,i) x[FIRST_SEG_POS_INDEX+i]
 #define SEGMENTS_NUM(x,i) (x[x[1]+i]-FIRST_SEG_POS_INDEX)
+
+U_NAMESPACE_BEGIN
+
+const UChar TransliterationRule::ETHER = 0xFFFF;
 
 /**
  * Construct a new rule with the given input, output text, and other
@@ -825,5 +827,7 @@ UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
     }
     return rule;
 }
+
+U_NAMESPACE_END
 
 //eof

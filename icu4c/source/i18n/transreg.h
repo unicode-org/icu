@@ -15,6 +15,8 @@
 #include "hash.h"
 #include "uvector.h"
 
+U_NAMESPACE_BEGIN
+
 class Entry;
 class Spec;
 class UnicodeString;
@@ -336,6 +338,8 @@ class TransliteratorRegistry {
      */
     UVector availableIDs;
 };
+
+U_NAMESPACE_END
 
 #endif
 //eof

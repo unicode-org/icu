@@ -14,10 +14,14 @@
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 
+U_NAMESPACE_BEGIN
+
 class ParsePosition;
 class SymbolTable;
 class TransliterationRuleParser;
 class TransliterationRule;
+class Transliterator;
+class TransliteratorParser;
 
 /**
  * A mutable set of Unicode characters.  Objects of this class
@@ -791,5 +795,7 @@ private:
 inline UBool UnicodeSet::operator!=(const UnicodeSet& o) const {
 	return !operator==(o);
 }
+
+U_NAMESPACE_END
 
 #endif

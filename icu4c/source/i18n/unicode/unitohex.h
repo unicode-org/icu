@@ -12,6 +12,8 @@
 #include "unicode/translit.h"
 #include "unicode/unistr.h"
 
+U_NAMESPACE_BEGIN
+
 class UnicodeFilter;
 
 /**
@@ -195,5 +197,7 @@ public:
 };
 
 inline UnicodeToHexTransliterator::~UnicodeToHexTransliterator() {}
+
+U_NAMESPACE_END
 
 #endif

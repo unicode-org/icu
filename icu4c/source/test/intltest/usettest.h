@@ -14,10 +14,9 @@
 #ifndef _TESTUNISET
 #define _TESTUNISET
 
+#include "unicode/unistr.h"
+#include "unicode/uniset.h"
 #include "intltest.h"
-
-class UnicodeSet;
-class UnicodeString;
 
 /**
  * UnicodeSet test

@@ -37,6 +37,8 @@
 
 #include "uhash.h"
 
+U_NAMESPACE_BEGIN
+
 // A hash code of kInvalidHashCode indicates that the has code needs
 // to be computed. A hash code of kEmptyHashCode is used for empty keys
 // and for any key whose computed hash code is kInvalidHashCode.
@@ -337,3 +339,5 @@ CollationKey::hashCode() const
 
     return fHashCode;
 }
+
+U_NAMESPACE_END

@@ -58,6 +58,10 @@
 #include "unicode/sortkey.h"
 #include "unicode/normlzr.h"
 
+U_NAMESPACE_BEGIN
+
+class RuleBasedCollatorStreamer;
+class StringSearch;
 class CollationElementIterator;
 
 /**
@@ -1079,5 +1083,7 @@ inline UCollationStrength RuleBasedCollator::getUCollationStrength(
     return UCOL_IDENTICAL;
   }
 }
+
+U_NAMESPACE_END
 
 #endif

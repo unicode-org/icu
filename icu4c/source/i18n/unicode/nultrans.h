@@ -12,6 +12,8 @@
 
 #include "unicode/translit.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * A transliterator that leaves text unchanged.
  * @author Alan Liu
@@ -55,5 +57,7 @@ public:
 inline NullTransliterator::NullTransliterator() : Transliterator(ID, 0) {}
 
 inline NullTransliterator::~NullTransliterator() {}
+
+U_NAMESPACE_END
 
 #endif

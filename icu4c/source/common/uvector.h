@@ -15,6 +15,8 @@
 #include "unicode/utypes.h"
 #include "uhash.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * <p>Ultralightweight C++ implementation of a <tt>void*</tt> vector
  * that is (mostly) compatible with java.util.Vector.
@@ -254,5 +256,7 @@ inline int32_t UStack::push(int32_t i, UErrorCode &status) {
     addElement(i, status);
     return i;
 }
+
+U_NAMESPACE_END
 
 #endif

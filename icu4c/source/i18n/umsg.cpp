@@ -26,6 +26,8 @@
 #include "unicode/msgfmt.h"
 #include "unicode/unistr.h"
 
+U_NAMESPACE_USE
+
 U_CAPI int32_t
 u_formatMessage(const char  *locale,
                 const UChar *pattern,

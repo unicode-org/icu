@@ -10,6 +10,8 @@
 
 #include "unicode/utypes.h"
 
+U_NAMESPACE_BEGIN
+
 class Replaceable;
 class UnicodeString;
 
@@ -143,5 +145,7 @@ protected:
 
 inline UnicodeMatcher::UnicodeMatcher() {}
 inline UnicodeMatcher::~UnicodeMatcher() {}
+
+U_NAMESPACE_END
 
 #endif

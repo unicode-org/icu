@@ -504,10 +504,18 @@ u_errorName(UErrorCode code);
  */
 typedef void *UMTX;
 
+
+
 /*===========================================================================*/
 /* Include header for platform utilies */
 /*===========================================================================*/
 
 #include "unicode/putil.h"
 
+/* TODO: Should we put in the using namespace clause here so the user doesn't have to? */
+/*
+#if U_HAVE_NAMESPACE
+U_NAMESPACE_USE
+#endif
+*/
 #endif /* _UTYPES */

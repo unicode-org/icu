@@ -43,17 +43,6 @@ static const UChar ID_DELIM    = 0x003B; /*;*/
 static const UChar VARIANT_SEP = 0x002F; // '/'
 static const UChar OPEN_PAREN  = 40;
 static const UChar CLOSE_PAREN = 41;
-
-/**
- * The mutex controlling access to registry object.
- */
-static UMTX registryMutex = 0;
-
-/**
- * System transliterator registry; non-null when initialized.
- */
-static TransliteratorRegistry* registry = 0;
-
 /**
  * Prefix for resource bundle key for the display name for a
  * transliterator.  The ID is appended to this to form the key.
@@ -83,6 +72,18 @@ static const char* RB_DISPLAY_NAME_PATTERN = "TransliteratorNamePattern";
  * to obtain the class name in which the RB_RULE key will be sought.
  */
 static const char* RB_RULE_BASED_IDS = "RuleBasedTransliteratorIDs";
+
+U_NAMESPACE_BEGIN
+
+/**
+ * The mutex controlling access to registry object.
+ */
+static UMTX registryMutex = 0;
+
+/**
+ * System transliterator registry; non-null when initialized.
+ */
+static TransliteratorRegistry* registry = 0;
 
 /**
  * Class identifier for subclasses of Transliterator that do not
@@ -1378,6 +1379,8 @@ void Transliterator::initializeRegistry(void) {
      * The extra blank field on "alias" lines is to make the array square.
      */
 
+    Locale indexLoc("translit_index");
+
     UResourceBundle *bundle, *transIDs, *colBund;
     // TODO call internal ures_openXYZ() that guarantees to not canonicalize
     // (uloc_getName()) the ch resource bundle name, and that also
@@ -1456,5 +1459,7 @@ U_CFUNC UBool transliterator_cleanup(void) {
     umtx_destroy(&registryMutex);
     return TRUE;
 }
+
+U_NAMESPACE_END
 
 //eof

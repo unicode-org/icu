@@ -14,6 +14,8 @@
 #include "unicode/coleitr.h"
 #include "unicode/search.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * <tt>StringSearch</tt> is a <tt>SearchIterator</tt> that provides
  * language-sensitive text searching based on the comparison rules defined
@@ -436,6 +438,8 @@ private :
     */
     UStringSearch     *m_strsrch_;
 };
+
+U_NAMESPACE_END
 
 #endif
 

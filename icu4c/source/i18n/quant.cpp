@@ -9,6 +9,8 @@
 #include "quant.h"
 #include "unicode/unistr.h"
 
+U_NAMESPACE_BEGIN
+
 Quantifier::Quantifier(UnicodeMatcher *adopted,
                        uint32_t minCount, uint32_t maxCount) {
     // assert(adopted != 0);
@@ -113,5 +115,7 @@ UnicodeString& Quantifier::toPattern(UnicodeString& result,
 UBool Quantifier::matchesIndexValue(uint8_t v) const {
     return (minCount == 0) || matcher->matchesIndexValue(v);
 }
+
+U_NAMESPACE_END
 
 //eof

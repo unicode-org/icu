@@ -10,6 +10,8 @@
 
 #include "rbt_set.h"
 
+U_NAMESPACE_BEGIN
+
 class UnicodeString;
 class UnicodeMatcher;
 class Hashtable;
@@ -114,5 +116,7 @@ public:
         return (UChar)(segmentBase - ref + 1);
     }
 };
+
+U_NAMESPACE_END
 
 #endif

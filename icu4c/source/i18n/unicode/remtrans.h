@@ -12,6 +12,8 @@
 
 #include "unicode/translit.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * A transliterator that removes text.
  * @author Alan Liu
@@ -50,5 +52,7 @@ public:
 inline RemoveTransliterator::RemoveTransliterator() : Transliterator(ID, 0) {}
 
 inline RemoveTransliterator::~RemoveTransliterator() {}
+
+U_NAMESPACE_END
 
 #endif

@@ -15,7 +15,6 @@
 #include "unicode/unifltlg.h"
 #include "intltest.h"
 
-class UnicodeFilterLogic;
 
 /**
  * @test

@@ -15,6 +15,8 @@
 #include "unicode/schriter.h"
 #include "cmemory.h"
 
+U_NAMESPACE_BEGIN
+
 char DictionaryBasedBreakIterator::fgClassID = 0;
 
 //=======================================================================
@@ -555,3 +557,6 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
     positionInCache = 0;
 }
 
+U_NAMESPACE_END
+
+/* eof */

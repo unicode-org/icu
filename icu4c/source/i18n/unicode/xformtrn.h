@@ -12,6 +12,8 @@
 
 #include "unicode/translit.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * An abstract class for transliterators based on a transform
  * operation.  To create a transliterator that implements a
@@ -51,5 +53,7 @@ class U_I18N_API TransformTransliterator : public Transliterator {
      */
     virtual void transform(UnicodeString& s) const = 0;
 };
+
+U_NAMESPACE_END
 
 #endif

@@ -10,6 +10,8 @@
 #include "rbt_data.h"
 #include "rbt_rule.h"
 
+U_NAMESPACE_BEGIN
+
 StringMatcher::StringMatcher(const UnicodeString& theString,
                              int32_t start,
                              int32_t limit,
@@ -140,4 +142,7 @@ UBool StringMatcher::matchesIndexValue(uint8_t v) const {
     return (m == 0) ? ((c & 0xFF) == v) : m->matchesIndexValue(v);
 }
 
+U_NAMESPACE_END
+
 //eof
+

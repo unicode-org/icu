@@ -30,6 +30,7 @@
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
 
+U_NAMESPACE_BEGIN
 /**
  * This class is deprecated and will be removed.
  * Use the C API, see uchar.h and utf.h.
@@ -1338,5 +1339,6 @@ inline void
 Unicode::getUnicodeVersion(UVersionInfo versionArray) {
     u_getUnicodeVersion(versionArray);
 }
+U_NAMESPACE_END
 
 #endif

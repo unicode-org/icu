@@ -12,7 +12,10 @@
 
 #include "unicode/translit.h"
 
+U_NAMESPACE_BEGIN
+
 class U_I18N_API UVector;
+class TransliteratorRegistry;
 
 /**
  * A transliterator that is composed of two or more other
@@ -34,7 +37,7 @@ class U_I18N_API UVector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.19 $ $Date: 2001/10/04 22:20:46 $
+ * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.20 $ $Date: 2001/10/08 23:25:22 $
  * @draft
  */
 class U_I18N_API CompoundTransliterator : public Transliterator {
@@ -273,5 +276,7 @@ inline CompoundTransliterator::CompoundTransliterator(const UnicodeString& id,
 }
 
 #endif
+
+U_NAMESPACE_END
 
 #endif

@@ -37,9 +37,6 @@
 #define LEFT_CURLY_BRACE  ((UChar)0x007B)
 #define RIGHT_CURLY_BRACE ((UChar)0x007D)
 
-// -------------------------------------
-const char MessageFormat::fgClassID = 0; // Value is irrelevant
-
 //---------------------------------------
 // static data
 
@@ -102,10 +99,11 @@ static const UChar *g_umsgDateModifierList[] = {
  
 static const int32_t g_umsgListLength = 9;
 
-//--------------------------------------
-// This global NumberFormat instance is shared by all MessageFormat to 
-// convert a number to(format)/from(parse) a string.
-//NumberFormat* MessageFormat::fgNumberFormat = 0;
+
+U_NAMESPACE_BEGIN
+
+// -------------------------------------
+const char MessageFormat::fgClassID = 0; // Value is irrelevant
 
 // -------------------------------------
 // Creates a MessageFormat instance based on the pattern.
@@ -1385,5 +1383,7 @@ MessageFormat::createIntegerFormat(const Locale& locale, UErrorCode& status) con
 
     return temp;
 }
+
+U_NAMESPACE_END
 
 //eof

@@ -12,6 +12,8 @@
 #include "unicode/parseerr.h"
 #include "unicode/utrans.h" // UTransPosition, UTransDirection
 
+U_NAMESPACE_BEGIN
+
 class Replaceable;
 class UnicodeFilter;
 class UnicodeSet;
@@ -19,6 +21,8 @@ class TransliterationRuleData;
 class Hashtable;
 class U_I18N_API UVector;
 class CompoundTransliterator;
+class TransliteratorParser;
+class NormalizationTransliterator;
 
 /**
  * <code>Transliterator</code> is an abstract class that
@@ -1007,6 +1011,8 @@ inline Transliterator* Transliterator::createInverse() const{
 }
 
 #endif
+
+U_NAMESPACE_END
 
 #endif
 
