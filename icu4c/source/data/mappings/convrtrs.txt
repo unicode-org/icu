@@ -341,14 +341,14 @@ ibm-949_P11A-2000
                         ksc5601_1992 # KSC-5601-1992
                         ksc5601_1987 # Needed by Java
 
-ibm-1370                Big5 { IANA* MIME* } csBig5 x-big5 cp950 950 # Taiwan Big-5 (w/ euro update)
+ibm-1370_P100-2000      ibm-1370 ibm-1370_VSUB_VPUA Big5 { IANA* MIME* } csBig5 x-big5 cp950 950 # Taiwan Big-5 (w/ euro update)
 ibm-950                 # Taiwan Big-5 (w/o euro update)
-ibm-1386                gbk { IANA* } cp936 windows-936 ms936 zh_cn # Chinese GBK removed
+ibm-1386_P100-2002      ibm-1386 ibm-1386_VSUB_VPUA gbk { IANA* } cp936 windows-936 ms936 zh_cn # Chinese GBK removed
 
 ibm-33722_P120-2000     ibm-33722_VASCII_VPUA ibm-33722 cp33722 33722 ibm-5050 # Japan EUC with \ <-> Yen mapping
 ibm-33722_P12A-2000     ibm-33722_VPUA EUC-JP { MIME* } ibm-eucJP eucjis Extended_UNIX_Code_Packed_Format_for_Japanese { IANA* } cseucpkdfmtjapanese X-EUC-JP # Japan EUC. x-euc-jp is a MIME name
-ibm-970                 EUC-KR { IANA* MIME* } ibm-eucKR csEUCKR  # Korean EUC. x-euc-kr is a MIME name
-ibm-964                 EUC-TW ibm-eucTW cns11643               # Taiwan EUC. x-euc-tw is a MIME name
+ibm-970_P110-2000       ibm-970 ibm-970_VPUA EUC-KR { IANA* MIME* } ibm-eucKR csEUCKR  # Korean EUC. x-euc-kr is a MIME name
+ibm-964_P110-2000       ibm-964 ibm-964_VPUA EUC-TW ibm-eucTW cns11643 # Taiwan EUC. x-euc-tw is a MIME name
 
 ibm-1363_P110-2000      ibm-1363 ibm-1363_VASCII_VSUB_VPUA ibm-1362 # Korean KSC Korean Windows MBCS 
 
