@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2001/12/03 21:33:59 $
- * $Revision: 1.53 $
+ * $Date: 2001/12/13 23:00:49 $
+ * $Revision: 1.54 $
  *
  *****************************************************************************************
  */
@@ -204,7 +204,7 @@ import com.ibm.util.Utility;
  * Unicode property
  * </table>
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.53 $ $Date: 2001/12/03 21:33:59 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.54 $ $Date: 2001/12/13 23:00:49 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -702,7 +702,11 @@ public class UnicodeSet extends UnicodeFilter {
      */
     public int charAt(int index) {
         if (index >= 0) {
-            for (int i=0; i < len;) {
+            // len2 is the largest even integer <= len, that is, it is len
+            // for even values and len-1 for odd values.  With odd values
+            // the last entry is UNICODESET_HIGH.
+            int len2 = len & ~1;
+            for (int i=0; i < len2;) {
                 int start = list[i++];
                 int count = list[i++] - start;
                 if (index < count) {
