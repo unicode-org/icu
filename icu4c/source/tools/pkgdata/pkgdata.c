@@ -313,6 +313,16 @@ main(int argc, const char *argv[]) {
     }
 
     /*getcwd(pwd, 1024);*/
+#ifdef WIN32
+    sprintf(cmd, "%s %s%s -f \"%s\" %s %s %s",
+            make,
+            o.install ? "INSTALLTO=" : "",
+            o.install ? o.install    : "",
+            o.makeFile,
+            o.clean   ? "clean"      : "",
+            o.rebuild ? "rebuild"    : "",
+            o.install ? "install"    : "");
+#else
     sprintf(cmd, "%s %s%s -f %s %s %s %s",
             make,
             o.install ? "INSTALLTO=" : "",
@@ -321,6 +331,7 @@ main(int argc, const char *argv[]) {
             o.clean   ? "clean"      : "",
             o.rebuild ? "rebuild"    : "",
             o.install ? "install"    : "");
+#endif
     if(o.verbose) {
       puts(cmd);
     }

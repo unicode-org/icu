@@ -15,19 +15,46 @@
 *  common types for pkgdata
 */
 
+#include <stdio.h>
+#include <stdlib.h>
 #include "unicode/utypes.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "pkgtypes.h"
 
+
+#ifdef WIN32
+const char *pkg_writeCharListWrap(FileStream *s, CharList *l, const char *delim, const char *brk, int32_t quote)
+#else
 const char *pkg_writeCharListWrap(FileStream *s, CharList *l, const char *delim, const char *brk)
+#endif
 {
   int32_t ln = 0;
+  char buffer[1024];
   while(l != NULL)
     {
       if(l->str)
       {
-        T_FileStream_write(s, l->str, uprv_strlen(l->str));
+		uprv_strcpy(buffer, l->str);
+#ifdef WIN32
+		if(quote < 0) { /* remove quotes */
+			if(buffer[uprv_strlen(buffer)-1] == '"') {
+				buffer[uprv_strlen(buffer)-1] = '\0';
+			}
+			if(buffer[0] == '"') {
+				uprv_strcpy(buffer, buffer+1);
+			}
+		} else if(quote > 0) { /* add quotes */
+			if(l->str[0] != '"') {
+				uprv_strcpy(buffer, "\"");
+				uprv_strcat(buffer, l->str);
+			}
+			if(l->str[uprv_strlen(l->str)-1] != '"') {
+				uprv_strcat(buffer, "\"");
+			}
+		}
+#endif
+        T_FileStream_write(s, buffer, uprv_strlen(buffer));
       }
 
 	ln  += uprv_strlen(l->str);
@@ -46,13 +73,38 @@ const char *pkg_writeCharListWrap(FileStream *s, CharList *l, const char *delim,
   return NULL;
 }
 
+
+#ifdef WIN32
+const char *pkg_writeCharList(FileStream *s, CharList *l, const char *delim, int32_t quote)
+#else
 const char *pkg_writeCharList(FileStream *s, CharList *l, const char *delim)
+#endif
 {
+	char buffer[1024];
   while(l != NULL)
     {
       if(l->str)
       {
-        T_FileStream_write(s, l->str, uprv_strlen(l->str));
+		uprv_strcpy(buffer, l->str);
+#ifdef WIN32
+		if(quote < 0) { /* remove quotes */
+			if(buffer[uprv_strlen(buffer)-1] == '"') {
+				buffer[uprv_strlen(buffer)-1] = '\0';
+			}
+			if(buffer[0] == '"') {
+				uprv_strcpy(buffer, buffer+1);
+			}
+		} else if(quote > 0) { /* add quotes */
+			if(l->str[0] != '"') {
+				uprv_strcpy(buffer, "\"");
+				uprv_strcat(buffer, l->str);
+			}
+			if(l->str[uprv_strlen(l->str)-1] != '"') {
+				uprv_strcat(buffer, "\"");
+			}
+		}
+#endif
+        T_FileStream_write(s, buffer, uprv_strlen(buffer));
       }
 
       if(l->next && delim)
@@ -63,6 +115,7 @@ const char *pkg_writeCharList(FileStream *s, CharList *l, const char *delim)
     }
   return NULL;
 }
+
 
 /*
  * Count items . 0 if null
