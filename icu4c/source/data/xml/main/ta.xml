@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="ta" /> 
 	</identity>
 	<localeDisplayNames>
@@ -17,17 +17,17 @@
 			<language type="ab">அப்காஸின்</language>
 			<language type="af">ஆப்ரிகன்ஸ்</language>
 			<language type="am">அம்ஹாரிக்</language>
-			<language type="ar">அரபிக்</language>
-			<language type="as">அஸாமீஸ்</language>
+			<language type="ar">அரபு</language>
+			<language type="as">அஸ்ஸாமி</language>
 			<language type="ay">அயமரா</language>
 			<language type="az">அசர்பாய்ஜானி</language>
 			<language type="ba">பாஷ்கிர்0</language>
 			<language type="be">பைலோருஷ்ன்</language>
-			<language type="bg">பல்கெரியன்</language>
+			<language type="bg">பல்கேரியன்</language>
 			<language type="bh">பிஹாரி</language>
 			<language type="bi">பிஸ்லாமா</language>
-			<language type="bn">பெங்காலி</language>
-			<language type="bo">திபெத்தியன்</language>
+			<language type="bn">வங்காளம்</language>
+			<language type="bo">திபெத்து</language>
 			<language type="br">பிரிடன்</language>
 			<language type="ca">காடலான்</language>
 			<language type="co">கார்சியன்</language>
@@ -36,17 +36,17 @@
 			<language type="da">டானிஷ்</language>
 			<language type="de">ஜெர்மன்</language>
 			<language type="dz">புடானி</language>
-			<language type="el">கிரிக்</language>
+			<language type="el">கிரேக்கம்</language>
 			<language type="en">ஆங்கிலம்</language>
 			<language type="eo">எஸ்பரேன்டோ</language>
 			<language type="es">ஸ்பேனிஷ்</language>
 			<language type="et">எஸ்டோனியன்</language>
 			<language type="eu">பஸ்க்</language>
 			<language type="fa">பர்ஸியன்</language>
-			<language type="fi">பின்ஷ்</language>
+			<language type="fi">பின்னிஷ்</language>
 			<language type="fj">பிஜி</language>
 			<language type="fo">பைரோஸி</language>
-			<language type="fr">பிரன்ச்</language>
+			<language type="fr">பிரெஞ்சு</language>
 			<language type="fy">பிரிஷியன்</language>
 			<language type="ga">ஐரிஷ்</language>
 			<language type="gd">ஸ்காட்ஸ் காலெக்</language>
@@ -66,15 +66,15 @@
 			<language type="is">ஐஸ்லென்டிக்</language>
 			<language type="it">இத்தாலியன்</language>
 			<language type="iu">இனுகிடட்</language>
-			<language type="ja">ஜாபனீஸ்</language>
+			<language type="ja">ஜப்பானீஸ்</language>
 			<language type="jv">ஜாவானீஸ்</language>
-			<language type="ka">ஜார்ஜியன்</language>
+			<language type="ka">கன்னடம்</language>
 			<language type="kk">கசாக்</language>
 			<language type="kl">கிரின்லென்டிக்</language>
 			<language type="km">கம்போடியன்</language>
 			<language type="kn">கன்னடா</language>
 			<language type="ko">கொரியன்</language>
-			<language type="kok">கோங்க்கனி</language>
+			<language type="kok">கொங்கனி</language>
 			<language type="ks">காஷ்மிரி</language>
 			<language type="ku">குர்திஷ்</language>
 			<language type="ky">கிர்கிஷ்</language>
@@ -86,7 +86,7 @@
 			<language type="mg">மலகெஸி</language>
 			<language type="mi">மோரி</language>
 			<language type="mk">மெக்கடோனியன்</language>
-			<language type="ml">மலயாழம்</language>
+			<language type="ml">மலையாளம்</language>
 			<language type="mn">மங்கோலியன்</language>
 			<language type="mo">மோல்டேவியன்</language>
 			<language type="mr">மராத்தி</language>
@@ -95,7 +95,7 @@
 			<language type="my">பர்மிஸ்</language>
 			<language type="na">நாரூ</language>
 			<language type="ne">நேப்பாலி</language>
-			<language type="nl">டச்</language>
+			<language type="nl">டச்சு</language>
 			<language type="no">நார்வேகியன்</language>
 			<language type="oc">ஆகிடியன்</language>
 			<language type="om">ஒரோம (அபன்)</language>
@@ -103,7 +103,7 @@
 			<language type="pa">பஞ்சாபி</language>
 			<language type="pl">போலிஷ்</language>
 			<language type="ps">பேஷ்டோ (புஷ்டோ)</language>
-			<language type="pt">போர்ச்சிகீஸ்</language>
+			<language type="pt">போர்த்துகீஸ்</language>
 			<language type="qu">கியுசா</language>
 			<language type="rm">ரைட்டோ-ரோமென்ஸ்</language>
 			<language type="rn">கிருந்தி</language>
@@ -111,11 +111,11 @@
 			<language type="root">தமிழ்</language>
 			<language type="ru">ரஷியன்</language>
 			<language type="rw">கின்யர்வென்டா</language>
-			<language type="sa">சமஸ்கிரிதம்</language>
+			<language type="sa">சமஸ்கிருதம்</language>
 			<language type="sd">சிந்தி</language>
 			<language type="sg">சென்க்ரோ</language>
 			<language type="sh">செர்போ-க்ரோஷியன்</language>
-			<language type="si">சிங்களிஸ்</language>
+			<language type="si">சிங்களம்</language>
 			<language type="sk">ஸ்லோவெக்</language>
 			<language type="sl">ஸ்லோவினேயின்</language>
 			<language type="sm">ஸெமோன்</language>
@@ -127,7 +127,7 @@
 			<language type="st">ஷெஸ்ஸோதோ</language>
 			<language type="su">சுடானீஸ்</language>
 			<language type="sv">ஷீவிடிஸ்</language>
-			<language type="sw">ஸ்வெஹிலி</language>
+			<language type="sw">சுவாஹிலி</language>
 			<language type="ta">தமிழ்</language>
 			<language type="te">தெலுங்கு</language>
 			<language type="tg">தாஜிக்</language>
@@ -152,7 +152,7 @@
 			<language type="yi">ஈத்திஷ</language>
 			<language type="yo">யோருப்பா</language>
 			<language type="za">ஜுவாங்</language>
-			<language type="zh">சயனீஸ்</language>
+			<language type="zh">சீனம்</language>
 			<language type="zu">ஜூலூ</language>
 		</languages>
 		<territories>
@@ -322,109 +322,121 @@
 			<territory type="ZA">தென் ஆப்ரிக்கா</territory>
 			<territory type="ZW">ஜிம்பாப்வே</territory>
 		</territories>
-</localeDisplayNames>
-<characters>
-	<exemplarCharacters>[[:Taml:]‌‍]</exemplarCharacters>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:scripts>
-			<icu:script type="1">Taml</icu:script>
-		</icu:scripts>
-	</special>
-</characters>
-<dates>
-	<calendars>
-		<calendar type="gregorian">
-			<monthNames>
-				<month type="1">ஜனவரி</month>
-				<month type="2">பெப்ரவரி</month>
-				<month type="3">மார்ச்</month>
-				<month type="4">ஏப்ரல்</month>
-				<month type="5">மே</month>
-				<month type="6">ஜூன்</month>
-				<month type="7">ஜூலை</month>
-				<month type="8">ஆகஸ்ட்</month>
-				<month type="9">செப்டம்பர்</month>
-				<month type="10">அக்டோபர்</month>
-				<month type="11">நவம்பர்</month>
-				<month type="12">டிசம்பர்</month>
-			</monthNames>
-			<monthAbbr>
-				<month type="1">ஜன.</month>
-				<month type="2">பெப்.</month>
-				<month type="3">மார்.</month>
-				<month type="4">ஏப்.</month>
-				<month type="5">மே</month>
-				<month type="6">ஜூன்</month>
-				<month type="7">ஜூலை</month>
-				<month type="8">ஆக.</month>
-				<month type="9">செப்.</month>
-				<month type="10">அக்.</month>
-				<month type="11">நவ.</month>
-				<month type="12">டிச.</month>
-			</monthAbbr>
-			<dayNames>
-				<day type="sun">ஞாயிறு</day>
-				<day type="mon">திங்கள்</day>
-				<day type="tue">செவ்வாய்</day>
-				<day type="wed">புதன்</day>
-				<day type="thu">வியாழன்</day>
-				<day type="fri">வெள்ளி</day>
-				<day type="sat">சனி</day>
-			</dayNames>
-			<dayAbbr>
-				<day type="sun">ஞா</day>
-				<day type="mon">தி</day>
-				<day type="tue">செ</day>
-				<day type="wed">பு</day>
-				<day type="thu">வி</day>
-				<day type="fri">வெ</day>
-				<day type="sat">ச</day>
-			</dayAbbr>
-			<am>காலை</am>
-			<pm>மாலை</pm>
-			<eras>
-				<eraAbbr>
-					<era type="1">கிமு</era>
-					<era type="2">கிபி</era>
-				</eraAbbr>
-			</eras>
-		</calendar>
-	</calendars>
-</dates>
-<numbers>
-	<decimalFormats>
-		<decimalFormatLength >
-			<decimalFormat >
-				<pattern>#,##,##0.###;-#,##,##0.###</pattern>
-			</decimalFormat>
-		</decimalFormatLength >
-	</decimalFormats>
-	<scientificFormats>
-		<scientificFormatLength >
-			<scientificFormat >
-				<pattern>#E0</pattern>
-			</scientificFormat>
-		</scientificFormatLength >
-	</scientificFormats>
-	<percentFormats>
-		<percentFormatLength >
-			<percentFormat >
-				<pattern>#,##,##0%</pattern>
-			</percentFormat>
-		</percentFormatLength >
-	</percentFormats>
-	<currencyFormats>
-		<currencyFormatLength >
-			<currencyFormat >
-				<pattern>¤ #,##,##0.00;-¤ #,##,##0.00</pattern>
-			</currencyFormat>
-		</currencyFormatLength >
-	</currencyFormats>
-	<currencies>
-		<currency type="INR">
-			<displayName>INR</displayName>
-			<symbol>ரூ</symbol>
-		</currency>
-	</currencies>
-</numbers>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[[:Taml:]‌‍]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Taml</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">ஜனவரி</month>
+					<month type="2">பிப்ரவரி</month>
+					<month type="3">மார்ச்</month>
+					<month type="4">ஏப்ரல்</month>
+					<month type="5">மே</month>
+					<month type="6">ஜூன்</month>
+					<month type="7">ஜூலை</month>
+					<month type="8">ஆகஸ்ட்</month>
+					<month type="9">செப்டம்பர்</month>
+					<month type="10">அக்டோபர்</month>
+					<month type="11">நவம்பர்</month>
+					<month type="12">டிசம்பர்</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">ஜன.</month>
+					<month type="2">பிப்.</month>
+					<month type="3">மார்.</month>
+					<month type="4">ஏப்.</month>
+					<month type="5">மே</month>
+					<month type="6">ஜூன்</month>
+					<month type="7">ஜூலை</month>
+					<month type="8">ஆக.</month>
+					<month type="9">செப்.</month>
+					<month type="10">அக்.</month>
+					<month type="11">நவ.</month>
+					<month type="12">டிச.</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">ஞாயிறு</day>
+					<day type="mon">திங்கள்</day>
+					<day type="tue">செவ்வாய்</day>
+					<day type="wed">புதன்</day>
+					<day type="thu">வியாழன்</day>
+					<day type="fri">வெள்ளி</day>
+					<day type="sat">சனி</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">ஞா</day>
+					<day type="mon">தி</day>
+					<day type="tue">செ</day>
+					<day type="wed">பு</day>
+					<day type="thu">வி</day>
+					<day type="fri">வெ</day>
+					<day type="sat">ச</day>
+				</dayAbbr>
+				<am>காலை</am>
+				<pm>மாலை</pm>
+				<eras>
+					<eraAbbr>
+						<era type="1">கிமு</era>
+						<era type="2">கிபி</era>
+					</eraAbbr>
+				</eras>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+			<zone type="Asia/Calcutta">
+				<long>
+				<standard>இந்திய நேரப்படி</standard>
+				<daylight>இந்திய நேரப்படி</daylight>
+				</long>
+				<short>
+					<standard>IST</standard>
+					<daylight>IST</daylight>
+				</short>
+			</zone>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<decimalFormats>
+			<decimalFormatLength >
+				<decimalFormat >
+					<pattern>#,##,##0.###;-#,##,##0.###</pattern>
+				</decimalFormat>
+			</decimalFormatLength >
+		</decimalFormats>
+		<scientificFormats>
+			<scientificFormatLength >
+				<scientificFormat >
+					<pattern>#E0</pattern>
+				</scientificFormat>
+			</scientificFormatLength >
+		</scientificFormats>
+		<percentFormats>
+			<percentFormatLength >
+				<percentFormat >
+					<pattern>#,##,##0%</pattern>
+				</percentFormat>
+			</percentFormatLength >
+		</percentFormats>
+		<currencyFormats>
+			<currencyFormatLength >
+				<currencyFormat >
+					<pattern>¤ #,##,##0.00;-¤ #,##,##0.00</pattern>
+				</currencyFormat>
+			</currencyFormatLength >
+		</currencyFormats>
+		<currencies>
+			<currency type="INR">
+				<displayName>INR</displayName>
+				<symbol>ரூ</symbol>
+			</currency>
+		</currencies>
+	</numbers>
 </ldml>

@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="it" /> 
 	</identity>
 	<localeDisplayNames>
@@ -464,21 +464,6 @@
 				</dateTimeFormats>
 			</calendar>
 		</calendars>
-		<timeZoneNames>
-			<zone type="Rome">
-				<long>
-					<generic>CET</generic>
-					<standard>CET</standard>
-					<daylight>CET</daylight>
-				</long>
-				<short>
-					<generic>Europe/Rome</generic>
-					<standard>CET</standard>
-					<daylight>CET</daylight>
-				</short>
-				<exemplarCity>Rome</exemplarCity>
-			</zone>
-		</timeZoneNames>
 	</dates>
 	<numbers>
 		<symbols>

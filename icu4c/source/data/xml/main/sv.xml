@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="sv" /> 
 	</identity>
 	<localeDisplayNames>
@@ -745,21 +745,6 @@
 				</dateTimeFormats>
 			</calendar>
 		</calendars>
-		<timeZoneNames>
-			<zone type="Stockholm">
-				<long>
-					<generic>Central European Time</generic>
-					<standard>Central European Time</standard>
-					<daylight>Central European Time (DST)</daylight>
-				</long>
-				<short>
-					<generic>Europe/Stockholm</generic>
-					<standard>MET</standard>
-					<daylight>MET</daylight>
-				</short>
-				<exemplarCity>Stockholm</exemplarCity>
-			</zone>
-		</timeZoneNames>
 	</dates>
 	<numbers>
 		<symbols>

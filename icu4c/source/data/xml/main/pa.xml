@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
+	<identity>
+		<version number="1.0"/>
+		<generation date="2003-12-17" />
+		<language type="pa" /> 
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="pa">ਪੰਜਾਬੀ</language>
+		</languages>
+		<territories>
+			<territory type="IN">ਭਾਰਤ</territory>
+		</territories>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[[:Guru:]‌‍]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Guru</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">ਜਨਵਰੀ</month>
+					<month type="2">ਫ਼ਰਵਰੀ</month>
+					<month type="3">ਮਾਰਚ</month>
+					<month type="4">ਅਪ੍ਰੈਲ</month>
+					<month type="5">ਮਈ</month>
+					<month type="6">ਜੂਨ</month>
+					<month type="7">ਜੁਲਾਈ</month>
+					<month type="8">ਅਗਸਤ</month>
+					<month type="9">ਸਤੰਬਰ</month>
+					<month type="10">ਅਕਤੂਬਰ</month>
+					<month type="11">ਨਵੰਬਰ</month>
+					<month type="12">ਦਸੰਬਰ</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">ਜਨਵਰੀ</month>
+					<month type="2">ਫ਼ਰਵਰੀ</month>
+					<month type="3">ਮਾਰਚ</month>
+					<month type="4">ਅਪ੍ਰੈਲ</month>
+					<month type="5">ਮਈ</month>
+					<month type="6">ਜੂਨ</month>
+					<month type="7">ਜੁਲਾਈ</month>
+					<month type="8">ਅਗਸਤ</month>
+					<month type="9">ਸਤੰਬਰ</month>
+					<month type="10">ਅਕਤੂਬਰ</month>
+					<month type="11">ਨਵੰਬਰ</month>
+					<month type="12">ਦਸੰਬਰ</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">ਐਤਵਾਰ</day>
+					<day type="mon">ਸੋਮਵਾਰ</day>
+					<day type="tue">ਮੰਗਲਵਾਰ</day>
+					<day type="wed">ਬੁਧਵਾਰ</day>
+					<day type="thu">ਵੀਰਵਾਰ</day>
+					<day type="fri">ਸ਼ੁੱਕਰਵਾਰ</day>
+					<day type="sat">ਸ਼ਨੀਚਰਵਾਰ</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">ਐਤ.</day>
+					<day type="mon">ਸੋਮ.</day>
+					<day type="tue">ਮੰਗਲ.</day>
+					<day type="wed">ਬੁਧ.</day>
+					<day type="thu">ਵੀਰ.</day>
+					<day type="fri">ਸ਼ੁਕਰ.</day>
+					<day type="sat">ਸ਼ਨੀ.</day>
+				</dayAbbr>
+				<am>ਸਵੇਰੇ</am>
+				<pm>ਸ਼ਾਮ</pm>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<symbols>
+			<decimal>.</decimal>
+			<group>,</group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>੦</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+		<decimalFormats>
+			<decimalFormatLength >
+				<decimalFormat >
+					<pattern>##,##,##0.###;-##,##,##0.###</pattern>
+				</decimalFormat>
+			</decimalFormatLength >
+		</decimalFormats>
+		<scientificFormats>
+			<scientificFormatLength >
+				<scientificFormat >
+					<pattern>#E0</pattern>
+				</scientificFormat>
+			</scientificFormatLength >
+		</scientificFormats>
+		<percentFormats>
+			<percentFormatLength >
+				<percentFormat >
+					<pattern>##,##,##0%</pattern>
+				</percentFormat>
+			</percentFormatLength >
+		</percentFormats>
+		<currencyFormats>
+			<currencyFormatLength >
+				<currencyFormat >
+					<pattern>¤ ##,##,##0.00;-¤ ##,##,##0.00</pattern>
+				</currencyFormat>
+			</currencyFormatLength >
+		</currencyFormats>
+		<currencies>
+			<currency type="INR">
+				<displayName>INR</displayName>
+				<symbol>रु</symbol>
+			</currency>
+		</currencies>
+	</numbers>
+</ldml>

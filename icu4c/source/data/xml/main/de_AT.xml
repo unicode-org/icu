@@ -8,117 +8,99 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="de" /> 
 		<territory type="AT" /> 
 	</identity>
-<dates>
-	<calendars>
-		<calendar type="gregorian">
-			<monthNames>
-				<month type="1">Jänner</month>
-				<month type="2">Februar</month>
-				<month type="3">März</month>
-				<month type="4">April</month>
-				<month type="5">Mai</month>
-				<month type="6">Juni</month>
-				<month type="7">Juli</month>
-				<month type="8">August</month>
-				<month type="9">September</month>
-				<month type="10">Oktober</month>
-				<month type="11">November</month>
-				<month type="12">Dezember</month>
-			</monthNames>
-			<monthAbbr>
-				<month type="1">Jän</month>
-				<month type="2">Feb</month>
-				<month type="3">Mär</month>
-				<month type="4">Apr</month>
-				<month type="5">Mai</month>
-				<month type="6">Jun</month>
-				<month type="7">Jul</month>
-				<month type="8">Aug</month>
-				<month type="9">Sep</month>
-				<month type="10">Okt</month>
-				<month type="11">Nov</month>
-				<month type="12">Dez</month>
-			</monthAbbr>
-			<week>
-				<minDays count="1"/>
-				<firstDay day="mon"/>
-			</week>
-			<dateFormats>
-				<default type="medium"/>
-				<dateFormatLength type="full">
-					<dateFormat >
-						<pattern>EEEE, dd. MMMM yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="long">
-					<dateFormat >
-						<pattern>dd. MMMM yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="medium">
-					<dateFormat >
-						<pattern>dd.MM.yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="short">
-					<dateFormat >
-						<pattern>dd.MM.yy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-			</dateFormats>
-			<timeFormats>
-				<default type="medium"/>
-				<timeFormatLength type="full">
-					<timeFormat >
-						<pattern>HH:mm' Uhr 'z</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="long">
-					<timeFormat >
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="medium">
-					<timeFormat >
-						<pattern>HH:mm:ss</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="short">
-					<timeFormat >
-						<pattern>HH:mm</pattern>
-					</timeFormat>
-				</timeFormatLength >
-			</timeFormats>
-			<dateTimeFormats>
-				<dateTimeFormatLength >
-					<dateTimeFormat>
-						<pattern>{1} {0}</pattern>
-					</dateTimeFormat>
-				</dateTimeFormatLength >
-			</dateTimeFormats>
-		</calendar>
-	</calendars>
-</dates>
-<collations version="3.1.1">
-	<collation type="PHONEBOOK" >
-		<rules>
-			<reset>ae</reset>
-			<t>ä</t>
-			<reset>AE</reset>
-			<t>Ä</t>
-			<reset>oe</reset>
-			<t>ö</t>
-			<reset>OE</reset>
-			<t>Ö</t>
-			<reset>ue</reset>
-			<t>ü</t>
-			<reset>UE</reset>
-		</rules>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
-	</collation  >
-</collations >
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">Jänner</month>
+					<month type="2">Februar</month>
+					<month type="3">März</month>
+					<month type="4">April</month>
+					<month type="5">Mai</month>
+					<month type="6">Juni</month>
+					<month type="7">Juli</month>
+					<month type="8">August</month>
+					<month type="9">September</month>
+					<month type="10">Oktober</month>
+					<month type="11">November</month>
+					<month type="12">Dezember</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">Jän</month>
+					<month type="2">Feb</month>
+					<month type="3">Mär</month>
+					<month type="4">Apr</month>
+					<month type="5">Mai</month>
+					<month type="6">Jun</month>
+					<month type="7">Jul</month>
+					<month type="8">Aug</month>
+					<month type="9">Sep</month>
+					<month type="10">Okt</month>
+					<month type="11">Nov</month>
+					<month type="12">Dez</month>
+				</monthAbbr>
+				<week>
+					<minDays count="1"/>
+					<firstDay day="mon"/>
+				</week>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormatLength type="full">
+						<dateFormat >
+							<pattern>EEEE, dd. MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="long">
+						<dateFormat >
+							<pattern>dd. MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="medium">
+						<dateFormat >
+							<pattern>dd.MM.yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="short">
+						<dateFormat >
+							<pattern>dd.MM.yy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>HH:mm' Uhr 'z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+	</dates>
 </ldml>

@@ -8,41 +8,153 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="hu" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
+			<language type="aa">afar</language>
+			<language type="ab">abház</language>
+			<language type="af">afrikai</language>
+			<language type="am">amhara</language>
 			<language type="ar">arab</language>
+			<language type="as">asszámi</language>
+			<language type="ay">ajmara</language>
+			<language type="az">azerbajdzsáni</language>
+			<language type="ba">baskír</language>
+			<language type="be">belorusz</language>
 			<language type="bg">bolgár</language>
+			<language type="bh">bihari</language>
+			<language type="bi">bislama</language>
+			<language type="bn">bengáli</language>
+			<language type="bo">tibeti</language>
+			<language type="br">breton</language>
+			<language type="ca">katalán</language>
+			<language type="co">korzikai</language>
 			<language type="cs">cseh</language>
+			<language type="cy">walesi</language>
 			<language type="da">dán</language>
 			<language type="de">német</language>
+			<language type="dz">butáni</language>
 			<language type="el">görög</language>
 			<language type="en">angol</language>
+			<language type="eo">eszperantó</language>
 			<language type="es">spanyol</language>
 			<language type="et">észt</language>
+			<language type="eu">baszk</language>
+			<language type="fa">perzsa</language>
 			<language type="fi">finn</language>
+			<language type="fj">fidzsi</language>
+			<language type="fo">feröeri</language>
 			<language type="fr">francia</language>
+			<language type="fy">fríz</language>
+			<language type="ga">ír</language>
+			<language type="gd">skót (gael)</language>
+			<language type="gl">galíciai</language>
+			<language type="gn">guarani</language>
+			<language type="gu">gudzsaráti</language>
+			<language type="ha">hausza</language>
 			<language type="he">héber</language>
+			<language type="hi">hindi</language>
 			<language type="hr">horvát</language>
 			<language type="hu">magyar</language>
+			<language type="hy">örmény</language>
+			<language type="ia">interlingua</language>
+			<language type="id">indonéz</language>
+			<language type="ie">interlingue</language>
+			<language type="ik">inupiak</language>
+			<language type="in">indonéz</language>
+			<language type="is">izlandi</language>
 			<language type="it">olasz</language>
+			<language type="iu">inuktitut</language>
+			<language type="iw">héber</language>
 			<language type="ja">japán</language>
+			<language type="ji">zsidó</language>
+			<language type="jw">jávai</language>
+			<language type="ka">grúz</language>
+			<language type="kk">kazah</language>
+			<language type="kl">grönlandi</language>
+			<language type="km">kambodzsai</language>
+			<language type="kn">kannada</language>
 			<language type="ko">koreai</language>
+			<language type="ks">kasmíri</language>
+			<language type="ku">kurd</language>
+			<language type="ky">kirgiz</language>
+			<language type="la">latin</language>
+			<language type="ln">lingala</language>
+			<language type="lo">laoszi</language>
 			<language type="lt">litván</language>
 			<language type="lv">lett</language>
+			<language type="mg">madagaszkári</language>
+			<language type="mi">maori</language>
+			<language type="mk">macedón</language>
+			<language type="ml">malajalam</language>
+			<language type="mn">mongol</language>
+			<language type="mo">moldvai</language>
+			<language type="mr">marati</language>
+			<language type="ms">maláj</language>
+			<language type="mt">máltai</language>
+			<language type="my">burmai</language>
+			<language type="na">naurui</language>
+			<language type="ne">nepáli</language>
 			<language type="nl">holland</language>
 			<language type="no">norvég</language>
+			<language type="oc">okszitán</language>
+			<language type="om">oromói</language>
+			<language type="or">orija</language>
+			<language type="pa">pandzsábi</language>
 			<language type="pl">lengyel</language>
+			<language type="ps">pastu (afgán)</language>
 			<language type="pt">portugál</language>
+			<language type="qu">kecsua</language>
+			<language type="rm">rétoromán</language>
+			<language type="rn">kirundi</language>
 			<language type="ro">román</language>
 			<language type="ru">orosz</language>
+			<language type="rw">kiruanda</language>
+			<language type="sa">szanszkrit</language>
+			<language type="sd">szindi</language>
+			<language type="sg">sango</language>
+			<language type="sh">szerb-horvát</language>
+			<language type="si">szingaléz</language>
 			<language type="sk">szlovák</language>
 			<language type="sl">szlovén</language>
+			<language type="sm">szamoai</language>
+			<language type="sn">sona</language>
+			<language type="so">szomáli</language>
+			<language type="sq">albán</language>
+			<language type="sr">szerb</language>
+			<language type="ss">sziszuati</language>
+			<language type="st">szeszotó</language>
+			<language type="su">szundanéz</language>
 			<language type="sv">svéd</language>
+			<language type="sw">szuahéli</language>
+			<language type="ta">tamil</language>
+			<language type="te">telugu</language>
+			<language type="tg">tadzsik</language>
+			<language type="th">thai</language>
+			<language type="ti">tigrinya</language>
+			<language type="tk">türkmén</language>
+			<language type="tl">tagalog</language>
+			<language type="tn">szecsuáni</language>
+			<language type="to">tonga</language>
 			<language type="tr">török</language>
+			<language type="ts">conga</language>
+			<language type="tt">tatár</language>
+			<language type="tw">tui</language>
+			<language type="ug">ujgur</language>
+			<language type="uk">ukrán</language>
+			<language type="ur">urdu</language>
+			<language type="uz">üzbég</language>
+			<language type="vi">vietnámi</language>
+			<language type="vo">volapük</language>
+			<language type="wo">volof</language>
+			<language type="xh">hosza</language>
+			<language type="yi">zsidó</language>
+			<language type="yo">joruba</language>
+			<language type="za">zsuang</language>
 			<language type="zh">kínai</language>
+			<language type="zu">zulu</language>
 		</languages>
 		<territories>
 			<territory type="AD">Andorra</territory>
@@ -287,153 +399,153 @@
 			<territory type="ZM">Zambia</territory>
 			<territory type="ZW">Zimbabwe</territory>
 		</territories>
-</localeDisplayNames>
-<characters>
-	<exemplarCharacters>[a-z á é í ó ú ö ü ő ű]</exemplarCharacters>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:scripts>
-			<icu:script type="1">Latn</icu:script>
-		</icu:scripts>
-	</special>
-</characters>
-<dates>
-	<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
-	<calendars>
-		<calendar type="gregorian">
-			<monthNames>
-				<month type="1">január</month>
-				<month type="2">február</month>
-				<month type="3">március</month>
-				<month type="4">április</month>
-				<month type="5">május</month>
-				<month type="6">június</month>
-				<month type="7">július</month>
-				<month type="8">augusztus</month>
-				<month type="9">szeptember</month>
-				<month type="10">október</month>
-				<month type="11">november</month>
-				<month type="12">december</month>
-			</monthNames>
-			<monthAbbr>
-				<month type="1">jan.</month>
-				<month type="2">febr.</month>
-				<month type="3">márc.</month>
-				<month type="4">ápr.</month>
-				<month type="5">máj.</month>
-				<month type="6">jún.</month>
-				<month type="7">júl.</month>
-				<month type="8">aug.</month>
-				<month type="9">szept.</month>
-				<month type="10">okt.</month>
-				<month type="11">nov.</month>
-				<month type="12">dec.</month>
-			</monthAbbr>
-			<dayNames>
-				<day type="sun">vasárnap</day>
-				<day type="mon">hétfő</day>
-				<day type="tue">kedd</day>
-				<day type="wed">szerda</day>
-				<day type="thu">csütörtök</day>
-				<day type="fri">péntek</day>
-				<day type="sat">szombat</day>
-			</dayNames>
-			<dayAbbr>
-				<day type="sun">V</day>
-				<day type="mon">H</day>
-				<day type="tue">K</day>
-				<day type="wed">Sze</day>
-				<day type="thu">Cs</day>
-				<day type="fri">P</day>
-				<day type="sat">Szo</day>
-			</dayAbbr>
-			<week>
-				<minDays count="1"/>
-				<firstDay day="mon"/>
-			</week>
-			<am>DE</am>
-			<pm>DU</pm>
-			<eras>
-				<eraAbbr>
-					<era type="1">i.e.</era>
-					<era type="2">i.u.</era>
-				</eraAbbr>
-			</eras>
-			<dateFormats>
-				<default type="medium"/>
-				<dateFormatLength type="full">
-					<dateFormat >
-						<pattern>yyyy. MMMM d.</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="long">
-					<dateFormat >
-						<pattern>yyyy. MMMM d.</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="medium">
-					<dateFormat >
-						<pattern>yyyy.MM.dd.</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="short">
-					<dateFormat >
-						<pattern>yyyy.MM.dd.</pattern>
-					</dateFormat>
-				</dateFormatLength >
-			</dateFormats>
-			<timeFormats>
-				<default type="medium"/>
-				<timeFormatLength type="full">
-					<timeFormat >
-						<pattern>H:mm:ss z</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="long">
-					<timeFormat >
-						<pattern>H:mm:ss z</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="medium">
-					<timeFormat >
-						<pattern>H:mm:ss</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="short">
-					<timeFormat >
-						<pattern>H:mm</pattern>
-					</timeFormat>
-				</timeFormatLength >
-			</timeFormats>
-			<dateTimeFormats>
-				<dateTimeFormatLength >
-					<dateTimeFormat>
-						<pattern>{1} {0}</pattern>
-					</dateTimeFormat>
-				</dateTimeFormatLength >
-			</dateTimeFormats>
-		</calendar>
-	</calendars>
-</dates>
-<numbers>
-	<symbols>
-		<decimal>,</decimal>
-		<group> </group>
-		<list>;</list>
-		<percentSign>%</percentSign>
-		<nativeZeroDigit>0</nativeZeroDigit>
-		<patternDigit>#</patternDigit>
-		<plusSign>+</plusSign>
-		<minusSign>-</minusSign>
-		<exponential>E</exponential>
-		<perMille>‰</perMille>
-		<infinity>∞</infinity>
-		<nan>�</nan>
-	</symbols>
-	<currencies>
-		<currency type="HUF">
-			<displayName>HUF</displayName>
-			<symbol>Ft</symbol>
-		</currency>
-	</currencies>
-</numbers>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[a-z á é í ó ú ö ü ő ű {cs}{dz}{dzs}{gy}{ly}{ny}{sz}{ty}{zs}{ccs}{ddz}{ddzs}{ggy}{lly}{nny}{ssz}{tty}{zzs}]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Latn</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
+	<dates>
+		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">január</month>
+					<month type="2">február</month>
+					<month type="3">március</month>
+					<month type="4">április</month>
+					<month type="5">május</month>
+					<month type="6">június</month>
+					<month type="7">július</month>
+					<month type="8">augusztus</month>
+					<month type="9">szeptember</month>
+					<month type="10">október</month>
+					<month type="11">november</month>
+					<month type="12">december</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">jan.</month>
+					<month type="2">febr.</month>
+					<month type="3">márc.</month>
+					<month type="4">ápr.</month>
+					<month type="5">máj.</month>
+					<month type="6">jún.</month>
+					<month type="7">júl.</month>
+					<month type="8">aug.</month>
+					<month type="9">szept.</month>
+					<month type="10">okt.</month>
+					<month type="11">nov.</month>
+					<month type="12">dec.</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">vasárnap</day>
+					<day type="mon">hétfő</day>
+					<day type="tue">kedd</day>
+					<day type="wed">szerda</day>
+					<day type="thu">csütörtök</day>
+					<day type="fri">péntek</day>
+					<day type="sat">szombat</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">V</day>
+					<day type="mon">H</day>
+					<day type="tue">K</day>
+					<day type="wed">Sze</day>
+					<day type="thu">Cs</day>
+					<day type="fri">P</day>
+					<day type="sat">Szo</day>
+				</dayAbbr>
+				<week>
+					<minDays count="1"/>
+					<firstDay day="mon"/>
+				</week>
+				<am>DE</am>
+				<pm>DU</pm>
+				<eras>
+					<eraAbbr>
+						<era type="1">i.e.</era>
+						<era type="2">i.u.</era>
+					</eraAbbr>
+				</eras>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormatLength type="full">
+						<dateFormat >
+							<pattern>yyyy. MMMM d.</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="long">
+						<dateFormat >
+							<pattern>yyyy. MMMM d.</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="medium">
+						<dateFormat >
+							<pattern>yyyy.MM.dd.</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="short">
+						<dateFormat >
+							<pattern>yyyy.MM.dd.</pattern>
+						</dateFormat>
+					</dateFormatLength >
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>H:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>H:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>H:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>H:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group> </group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+		<currencies>
+			<currency type="HUF">
+				<displayName>HUF</displayName>
+				<symbol>Ft</symbol>
+			</currency>
+		</currencies>
+	</numbers>
 </ldml>

@@ -8,41 +8,149 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="tr" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
+			<language type="aa">Afar</language>
+			<language type="ab">Abazca</language>
+			<language type="af">Afrikaan Dili</language>
+			<language type="am">Amharik</language>
 			<language type="ar">Arapça</language>
+			<language type="ay">Aymara</language>
+			<language type="az">Azerice</language>
+			<language type="ba">Başkırt Dili</language>
+			<language type="be">Beyaz Rusça</language>
 			<language type="bg">Bulgarca</language>
+			<language type="bh">Bihari</language>
+			<language type="bi">Bislama</language>
+			<language type="bn">Bengal Dili</language>
+			<language type="bo">Tibetçe</language>
+			<language type="br">Breton Dili</language>
+			<language type="ca">Katalan Dili</language>
+			<language type="co">Korsika Dili</language>
 			<language type="cs">Çekçe</language>
+			<language type="cy">Gal Dili</language>
 			<language type="da">Danca</language>
 			<language type="de">Almanca</language>
+			<language type="dz">Bhutan Dili</language>
 			<language type="el">Yunanca</language>
 			<language type="en">İngilizce</language>
+			<language type="eo">Esperanto</language>
 			<language type="es">İspanyolca</language>
 			<language type="et">Estonya Dili</language>
+			<language type="eu">Bask Dili</language>
+			<language type="fa">Farsça</language>
 			<language type="fi">Fince</language>
+			<language type="fj">Fiji Dili</language>
+			<language type="fo">Faroe Dili</language>
 			<language type="fr">Fransızca</language>
+			<language type="fy">Frizye Dili</language>
+			<language type="ga">İrlanda Dili</language>
+			<language type="gd">İskoç Gal Dili</language>
+			<language type="gl">Galiçya Dili</language>
+			<language type="gn">Guarani</language>
+			<language type="gu">Gujarati</language>
+			<language type="ha">Hausa</language>
 			<language type="he">İbranice</language>
+			<language type="hi">Hint Dili</language>
 			<language type="hr">Hırvatça</language>
 			<language type="hu">Macarca</language>
+			<language type="hy">Ermenice</language>
+			<language type="ia">Interlingua</language>
+			<language type="id">Endonezya Dili</language>
+			<language type="ie">Interlingue</language>
+			<language type="ik">Inupiak</language>
+			<language type="is">İzlandaca</language>
 			<language type="it">İtalyanca</language>
+			<language type="iu">Inuktitut</language>
 			<language type="ja">Japonca</language>
+			<language type="jv">Java Dili</language>
+			<language type="ka">Gürcüce</language>
+			<language type="kk">Kazak Dili</language>
+			<language type="kl">Grönland Dili</language>
+			<language type="km">Kamboçya Dili</language>
+			<language type="kn">Kannada</language>
 			<language type="ko">Korece</language>
+			<language type="ks">Keşmirce</language>
+			<language type="ku">Kürtçe</language>
+			<language type="ky">Kırgızca</language>
+			<language type="la">Latince</language>
+			<language type="ln">Lingala</language>
+			<language type="lo">Laos Dili</language>
 			<language type="lt">Litvanya Dili</language>
 			<language type="lv">Letonya Dili</language>
-			<language type="nl">Felemenkçe</language>
+			<language type="mg">Malaga Dili</language>
+			<language type="mi">Maori</language>
+			<language type="mk">Makedonca</language>
+			<language type="ml">Malayalam</language>
+			<language type="mn">Moğol Dili</language>
+			<language type="mo">Moldavya Dili</language>
+			<language type="mr">Marathi</language>
+			<language type="ms">Malay</language>
+			<language type="mt">Malta Dili</language>
+			<language type="my">Birmanya Dili</language>
+			<language type="na">Nauru</language>
+			<language type="ne">Nepal Dili</language>
+			<language type="nl">Hollanda Dili</language>
 			<language type="no">Norveççe</language>
-			<language type="pl">Lehçe</language>
+			<language type="oc">Occitan</language>
+			<language type="om">Oromo (Afan)</language>
+			<language type="or">Oriya</language>
+			<language type="pa">Pencap Dili</language>
+			<language type="pl">Polonya Dili</language>
+			<language type="ps">Peştun Dili</language>
 			<language type="pt">Portekizce</language>
+			<language type="qu">Quechua</language>
+			<language type="rm">Rhaeto-Roman Dili</language>
+			<language type="rn">Kirundi</language>
 			<language type="ro">Romence</language>
 			<language type="ru">Rusça</language>
+			<language type="rw">Kinyarwanda</language>
+			<language type="sa">Sanskritçe</language>
+			<language type="sd">Sindhi</language>
+			<language type="sg">Sangho</language>
+			<language type="sh">Sırp-Hırvat Dili</language>
+			<language type="si">Sinhal Dili</language>
 			<language type="sk">Slovakça</language>
 			<language type="sl">Slovence</language>
-			<language type="sv">İsveçce</language>
+			<language type="sm">Samoa Dili</language>
+			<language type="sn">Shona</language>
+			<language type="so">Somali Dili</language>
+			<language type="sq">Arnavutça</language>
+			<language type="sr">Sırpça</language>
+			<language type="ss">Siswati</language>
+			<language type="st">Sesotho</language>
+			<language type="su">Sudan Dili</language>
+			<language type="sv">İsveççe</language>
+			<language type="sw">Swahili</language>
+			<language type="ta">Tamil</language>
+			<language type="te">Telugu</language>
+			<language type="tg">Tacik Dili</language>
+			<language type="th">Tay Dili</language>
+			<language type="ti">Tigrinya</language>
+			<language type="tk">Türkmence</language>
+			<language type="tl">Tagalog</language>
+			<language type="tn">Setswana</language>
+			<language type="to">Tonga</language>
 			<language type="tr">Türkçe</language>
+			<language type="ts">Tsonga</language>
+			<language type="tt">Tatarca</language>
+			<language type="tw">Twi</language>
+			<language type="ug">Uygurca</language>
+			<language type="uk">Ukraynaca</language>
+			<language type="ur">Urduca</language>
+			<language type="uz">Özbekçe</language>
+			<language type="vi">Vietnam Dili</language>
+			<language type="vo">Volapuk</language>
+			<language type="wo">Wolof</language>
+			<language type="xh">Xhosa</language>
+			<language type="yi">Yiddiş</language>
+			<language type="yo">Yoruba</language>
+			<language type="za">Zhuang</language>
 			<language type="zh">Çince</language>
+			<language type="zu">Zulu</language>
 		</languages>
 		<territories>
 			<territory type="AD">Andora</territory>
@@ -287,149 +395,155 @@
 			<territory type="ZM">Zambiya</territory>
 			<territory type="ZW">Zimbabwe</territory>
 		</territories>
-</localeDisplayNames>
-<characters>
-	<exemplarCharacters>[a-zâîûöüıçşğ]</exemplarCharacters>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:scripts>
-			<icu:script type="1">Latn</icu:script>
-		</icu:scripts>
-	</special>
-</characters>
-<dates>
-	<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
-	<calendars>
-		<calendar type="gregorian">
-			<monthNames>
-				<month type="1">Ocak</month>
-				<month type="2">Şubat</month>
-				<month type="3">Mart</month>
-				<month type="4">Nisan</month>
-				<month type="5">Mayıs</month>
-				<month type="6">Haziran</month>
-				<month type="7">Temmuz</month>
-				<month type="8">Ağustos</month>
-				<month type="9">Eylül</month>
-				<month type="10">Ekim</month>
-				<month type="11">Kasım</month>
-				<month type="12">Aralık</month>
-			</monthNames>
-			<monthAbbr>
-				<month type="1">Oca</month>
-				<month type="2">Şub</month>
-				<month type="3">Mar</month>
-				<month type="4">Nis</month>
-				<month type="5">May</month>
-				<month type="6">Haz</month>
-				<month type="7">Tem</month>
-				<month type="8">Ağu</month>
-				<month type="9">Eyl</month>
-				<month type="10">Eki</month>
-				<month type="11">Kas</month>
-				<month type="12">Ara</month>
-			</monthAbbr>
-			<dayNames>
-				<day type="sun">Pazar</day>
-				<day type="mon">Pazartesi</day>
-				<day type="tue">Salı</day>
-				<day type="wed">Çarşamba</day>
-				<day type="thu">Perşembe</day>
-				<day type="fri">Cuma</day>
-				<day type="sat">Cumartesi</day>
-			</dayNames>
-			<dayAbbr>
-				<day type="sun">Paz</day>
-				<day type="mon">Pzt</day>
-				<day type="tue">Sal</day>
-				<day type="wed">Çar</day>
-				<day type="thu">Per</day>
-				<day type="fri">Cum</day>
-				<day type="sat">Cmt</day>
-			</dayAbbr>
-			<week>
-				<minDays count="1"/>
-				<firstDay day="mon"/>
-			</week>
-			<dateFormats>
-				<default type="medium"/>
-				<dateFormatLength type="full">
-					<dateFormat >
-						<pattern>dd MMMM yyyy EEEE</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="long">
-					<dateFormat >
-						<pattern>dd MMMM yyyy EEEE</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="medium">
-					<dateFormat >
-						<pattern>dd.MMM.yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="short">
-					<dateFormat >
-						<pattern>dd.MM.yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-			</dateFormats>
-			<timeFormats>
-				<default type="medium"/>
-				<timeFormatLength type="full">
-					<timeFormat >
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="long">
-					<timeFormat >
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="medium">
-					<timeFormat >
-						<pattern>HH:mm:ss</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="short">
-					<timeFormat >
-						<pattern>HH:mm</pattern>
-					</timeFormat>
-				</timeFormatLength >
-			</timeFormats>
-			<dateTimeFormats>
-				<dateTimeFormatLength >
-					<dateTimeFormat>
-						<pattern>{1} {0}</pattern>
-					</dateTimeFormat>
-				</dateTimeFormatLength >
-			</dateTimeFormats>
-		</calendar>
-	</calendars>
-</dates>
-<numbers>
-	<symbols>
-		<decimal>,</decimal>
-		<group>.</group>
-		<list>;</list>
-		<percentSign>%</percentSign>
-		<nativeZeroDigit>0</nativeZeroDigit>
-		<patternDigit>#</patternDigit>
-		<plusSign>+</plusSign>
-		<minusSign>-</minusSign>
-		<exponential>E</exponential>
-		<perMille>‰</perMille>
-		<infinity>∞</infinity>
-		<nan>�</nan>
-	</symbols>
-	<currencies>
-		<currency type="ITL">
-			<displayName>ITL</displayName>
-			<symbol>ITL</symbol>
-		</currency>
-		<currency type="TRL">
-			<displayName>TRL</displayName>
-			<symbol>TL</symbol>
-		</currency>
-	</currencies>
-</numbers>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[a-zâûöüıçşğ]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Latn</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
+	<dates>
+		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">Ocak</month>
+					<month type="2">Şubat</month>
+					<month type="3">Mart</month>
+					<month type="4">Nisan</month>
+					<month type="5">Mayıs</month>
+					<month type="6">Haziran</month>
+					<month type="7">Temmuz</month>
+					<month type="8">Ağustos</month>
+					<month type="9">Eylül</month>
+					<month type="10">Ekim</month>
+					<month type="11">Kasım</month>
+					<month type="12">Aralık</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">Oca</month>
+					<month type="2">Şub</month>
+					<month type="3">Mar</month>
+					<month type="4">Nis</month>
+					<month type="5">May</month>
+					<month type="6">Haz</month>
+					<month type="7">Tem</month>
+					<month type="8">Ağu</month>
+					<month type="9">Eyl</month>
+					<month type="10">Eki</month>
+					<month type="11">Kas</month>
+					<month type="12">Ara</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">Pazar</day>
+					<day type="mon">Pazartesi</day>
+					<day type="tue">Salı</day>
+					<day type="wed">Çarşamba</day>
+					<day type="thu">Perşembe</day>
+					<day type="fri">Cuma</day>
+					<day type="sat">Cumartesi</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">Paz</day>
+					<day type="mon">Pzt</day>
+					<day type="tue">Sal</day>
+					<day type="wed">Çar</day>
+					<day type="thu">Per</day>
+					<day type="fri">Cum</day>
+					<day type="sat">Cmt</day>
+				</dayAbbr>
+				<week>
+					<minDays count="1"/>
+					<firstDay day="mon"/>
+				</week>
+				<eras>
+					<eraAbbr>
+						<era type="1">MÖ</era>
+						<era type="2">MS</era>
+					</eraAbbr>
+				</eras>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormatLength type="full">
+						<dateFormat >
+							<pattern>dd MMMM yyyy EEEE</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="long">
+						<dateFormat >
+							<pattern>dd MMMM yyyy EEEE</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="medium">
+						<dateFormat >
+							<pattern>dd.MMM.yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="short">
+						<dateFormat >
+							<pattern>dd.MM.yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group>.</group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+		<currencies>
+			<currency type="ITL">
+				<displayName>ITL</displayName>
+				<symbol>ITL</symbol>
+			</currency>
+			<currency type="TRL">
+				<displayName>TRL</displayName>
+				<symbol>TL</symbol>
+			</currency>
+		</currencies>
+	</numbers>
 </ldml>

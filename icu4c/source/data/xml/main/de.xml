@@ -8,22 +8,24 @@
 <ldml>
 	<identity>
 		<version number="3.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="de" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
+			<language type="aa">Afar</language>
 			<language type="ab">Abchasisch</language>
 			<language type="af">Afrikaans</language>
 			<language type="am">Amharisch</language>
 			<language type="ar">Arabisch</language>
 			<language type="as">Assamesisch</language>
-			<language type="ay">Aimara</language>
+			<language type="ay">Aymara</language>
 			<language type="az">Aserbaidschanisch</language>
 			<language type="ba">Baschkirisch</language>
 			<language type="be">Weißrussisch</language>
 			<language type="bg">Bulgarisch</language>
 			<language type="bh">Biharisch</language>
+			<language type="bi">Bislama</language>
 			<language type="bn">Bengalisch</language>
 			<language type="bo">Tibetisch</language>
 			<language type="br">Bretonisch</language>
@@ -36,6 +38,7 @@
 			<language type="dz">Bhutanisch</language>
 			<language type="el">Griechisch</language>
 			<language type="en">Englisch</language>
+			<language type="eo">Esperanto</language>
 			<language type="es">Spanisch</language>
 			<language type="et">Estnisch</language>
 			<language type="eu">Baskisch</language>
@@ -48,32 +51,46 @@
 			<language type="ga">Irisch</language>
 			<language type="gd">Schottisch-Gälisch</language>
 			<language type="gl">Galizisch</language>
+			<language type="gn">Guarani</language>
+			<language type="gu">Gujarati</language>
+			<language type="gv">Manx</language>
+			<language type="ha">Hausa</language>
 			<language type="haw">Hawaiianisch</language>
 			<language type="he">Hebräisch</language>
+			<language type="hi">Hindi</language>
 			<language type="hr">Kroatisch</language>
 			<language type="hu">Ungarisch</language>
 			<language type="hy">Armenisch</language>
+			<language type="ia">Interlingua</language>
 			<language type="id">Indonesisch</language>
+			<language type="ie">Interlingue</language>
+			<language type="ik">Inupiak</language>
 			<language type="is">Isländisch</language>
 			<language type="it">Italienisch</language>
+			<language type="iu">Inukitut</language>
 			<language type="ja">Japanisch</language>
-			<language type="jv">Javanesisch</language>
+			<language type="jv">Javanisch</language>
 			<language type="ka">Georgisch</language>
 			<language type="kk">Kasachisch</language>
 			<language type="kl">Grönländisch</language>
 			<language type="km">Kambodschanisch</language>
+			<language type="kn">Kannada</language>
 			<language type="ko">Koreanisch</language>
 			<language type="ks">Kaschmirisch</language>
 			<language type="ku">Kurdisch</language>
 			<language type="ky">Kirgisisch</language>
 			<language type="la">Latein</language>
+			<language type="ln">Lingala</language>
 			<language type="lo">Laotisch</language>
 			<language type="lt">Litauisch</language>
 			<language type="lv">Lettisch</language>
 			<language type="mg">Madagassisch</language>
+			<language type="mi">Maori</language>
 			<language type="mk">Mazedonisch</language>
+			<language type="ml">Malayalam</language>
 			<language type="mn">Mongolisch</language>
 			<language type="mo">Moldauisch</language>
+			<language type="mr">Marathi</language>
 			<language type="ms">Malaiisch</language>
 			<language type="mt">Maltesisch</language>
 			<language type="my">Burmesisch</language>
@@ -84,21 +101,28 @@
 			<language type="nn">Norwegisch Nynorsk</language>
 			<language type="no">Norwegisch</language>
 			<language type="oc">Okzitanisch</language>
+			<language type="om">Oromo</language>
 			<language type="or">Orija</language>
 			<language type="pa">Pandschabisch</language>
 			<language type="pl">Polnisch</language>
 			<language type="ps">Afghanisch (Paschtu)</language>
 			<language type="pt">Portugiesisch</language>
+			<language type="qu">Quechua</language>
 			<language type="rm">Rätoromanisch</language>
+			<language type="rn">Kirundi</language>
 			<language type="ro">Rumänisch</language>
 			<language type="ru">Russisch</language>
 			<language type="rw">Ruandisch</language>
+			<language type="sa">Sanskrit</language>
+			<language type="sd">Sindhi</language>
 			<language type="sg">Sango</language>
 			<language type="sh">Serbo-Kroatisch</language>
 			<language type="si">Singhalesisch</language>
 			<language type="sk">Slowakisch</language>
 			<language type="sl">Slowenisch</language>
 			<language type="sm">Samoanisch</language>
+			<language type="sn">Shona</language>
+			<language type="so">Somali</language>
 			<language type="sq">Albanisch</language>
 			<language type="sr">Serbisch</language>
 			<language type="ss">Swazi</language>
@@ -107,20 +131,32 @@
 			<language type="sv">Schwedisch</language>
 			<language type="sw">Suaheli</language>
 			<language type="ta">Tamilisch</language>
+			<language type="te">Telugu</language>
 			<language type="tg">Tadschikisch</language>
+			<language type="th">Thai</language>
 			<language type="ti">Tigrinja</language>
 			<language type="tk">Turkmenisch</language>
-			<language type="tn">Tsuana</language>
+			<language type="tl">Tagalog</language>
+			<language type="tn">Setswana</language>
 			<language type="to">Tongaisch</language>
 			<language type="tr">Türkisch</language>
+			<language type="ts">Tsonga</language>
 			<language type="tt">Tatarisch</language>
+			<language type="tw">Twi</language>
+			<language type="ug">Uigur</language>
 			<language type="uk">Ukrainisch</language>
+			<language type="ur">Urdu</language>
 			<language type="uz">Usbekisch</language>
 			<language type="vi">Vietnamesisch</language>
+			<language type="vo">Volapük</language>
+			<language type="wo">Wolof</language>
+			<language type="xh">Xhosa</language>
 			<language type="yi">Jiddisch</language>
 			<language type="yo">Joruba</language>
-			<language type="za">Zapotekisch</language>
+			<language type="za">Zhuang</language>
+			<language type="zap">Zapotekisch</language>
 			<language type="zh">Chinesisch</language>
+			<language type="zu">Zulu</language>
 		</languages>
 		<scripts>
 			<script type="Arab">Arabisch</script>
@@ -234,7 +270,7 @@
 			<territory type="EC">Ecuador</territory>
 			<territory type="EE">Estland</territory>
 			<territory type="EG">Ägypten</territory>
-			<territory type="EH">Western Sahara</territory>
+			<territory type="EH">Westsahara</territory>
 			<territory type="ER">Eritrea</territory>
 			<territory type="ES">Spanien</territory>
 			<territory type="ET">Äthiopien</territory>
@@ -383,7 +419,7 @@
 			<territory type="TH">Thailand</territory>
 			<territory type="TJ">Tadschikistan</territory>
 			<territory type="TK">Tokelau</territory>
-			<territory type="TL">Timor-Leste</territory>
+			<territory type="TL">Osttimor</territory>
 			<territory type="TM">Turkmenistan</territory>
 			<territory type="TN">Tunesien</territory>
 			<territory type="TO">Tonga</territory>
@@ -415,9 +451,7 @@
 			<territory type="ZW">Simbabwe</territory>
 		</territories>
 		<variants>
-			<variant type="EURO">Euro</variant>
 			<variant type="Fallback">en</variant>
-			<variant type="NY">Nynorsk</variant>
 			<variant type="POSIX">Posix</variant>
 			<variant type="REVISED">Revidiert</variant>
 		</variants>
@@ -433,7 +467,7 @@
 			<type type="hebrew" key="calendar">Hebräischer Kalender</type>
 			<type type="islamic" key="calendar">Islamischer Kalender</type>
 			<type type="japanese" key="calendar">Japanischer Kalender</type>
-			<type type="direct" key="collation">Direkt Sortierregeln</type>
+			<type type="direct" key="collation">Direkte Sortierregeln</type>
 			<type type="phonebook" key="collation">Telefonbuch-Sortierregeln</type>
 			<type type="traditional" key="collation">Traditionelle Sortierregeln</type>
 		</types>
@@ -564,14 +598,12 @@
 			</calendar>
 		</calendars>
 		<timeZoneNames>
-			<zone type="Berlin">
+			<zone type="Europe/Berlin">
 				<long>
-					<generic>Mitteleuropäische Zeit</generic>
-					<standard>Mitteleuropäische Zeit</standard>
-					<daylight>Mitteleuropäische Sommerzeit</daylight>
+				<standard>Mitteleuropäische Zeit</standard>
+				<daylight>Mitteleuropäische Sommerzeit</daylight>
 				</long>
 				<short>
-					<generic>Europe/Berlin</generic>
 					<standard>MEZ</standard>
 					<daylight>MESZ</daylight>
 				</short>
@@ -1337,24 +1369,6 @@
 			</currency>
 		</currencies>
 	</numbers>
-	<collations version="3.1.1">
-		<collation type="PHONEBOOK" >
-			<rules>
-				<reset>ae</reset>
-				<t>ä</t>
-				<reset>AE</reset>
-				<t>Ä</t>
-				<reset>oe</reset>
-				<t>ö</t>
-				<reset>OE</reset>
-				<t>Ö</t>
-				<reset>ue</reset>
-				<t>ü</t>
-				<reset>UE</reset>
-			</rules>
-			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
-		</collation  >
-	</collations >
 	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
 		<icu:ruleBasedNumberFormats>
 			<icu:ruleBasedNumberFormat type="spellout">

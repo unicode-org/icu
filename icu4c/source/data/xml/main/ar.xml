@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="ar" /> 
 	</identity>
 	<localeDisplayNames>
@@ -252,248 +252,248 @@
 			<territory type="ZM">زامبيا</territory>
 			<territory type="ZW">زيمبابوي</territory>
 		</territories>
-</localeDisplayNames>
-<layout>
-	<orientation lines="top-to-bottom" characters="right-to-left" />
-</layout>
-<characters>
-	<exemplarCharacters>[ء-غـ-ٕ٠-٬‌‍‏‎]</exemplarCharacters>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:scripts>
-			<icu:script type="1">Arab</icu:script>
-		</icu:scripts>
-	</special>
-</characters>
-<dates>
-	<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
-	<calendars>
-		<calendar type="gregorian">
-			<monthNames>
-				<month type="1">يناير</month>
-				<month type="2">فبراير</month>
-				<month type="3">مارس</month>
-				<month type="4">أبريل</month>
-				<month type="5">مايو</month>
-				<month type="6">يونيو</month>
-				<month type="7">يوليو</month>
-				<month type="8">أغسطس</month>
-				<month type="9">سبتمبر</month>
-				<month type="10">أكتوبر</month>
-				<month type="11">نوفمبر</month>
-				<month type="12">ديسمبر</month>
-			</monthNames>
-			<monthAbbr>
-				<month type="1">يناير</month>
-				<month type="2">فبراير</month>
-				<month type="3">مارس</month>
-				<month type="4">أبريل</month>
-				<month type="5">مايو</month>
-				<month type="6">يونيو</month>
-				<month type="7">يوليو</month>
-				<month type="8">أغسطس</month>
-				<month type="9">سبتمبر</month>
-				<month type="10">أكتوبر</month>
-				<month type="11">نوفمبر</month>
-				<month type="12">ديسمبر</month>
-			</monthAbbr>
-			<dayNames>
-				<day type="sun">الأحد</day>
-				<day type="mon">الاثنين</day>
-				<day type="tue">الثلاثاء</day>
-				<day type="wed">الأربعاء</day>
-				<day type="thu">الخميس</day>
-				<day type="fri">الجمعة</day>
-				<day type="sat">السبت</day>
-			</dayNames>
-			<dayAbbr>
-				<day type="sun">ح</day>
-				<day type="mon">ن</day>
-				<day type="tue">ث</day>
-				<day type="wed">ر</day>
-				<day type="thu">خ</day>
-				<day type="fri">ج</day>
-				<day type="sat">س</day>
-			</dayAbbr>
-			<week>
-				<minDays count="1"/>
-				<firstDay day="sat"/>
-			</week>
-			<am>ص</am>
-			<pm>م</pm>
-			<eras>
-				<eraAbbr>
-					<era type="1">ق.م</era>
-					<era type="2">م</era>
-				</eraAbbr>
-			</eras>
-			<dateFormats>
-				<default type="medium"/>
-				<dateFormatLength type="full">
-					<dateFormat >
-						<pattern>EEEE, d MMMM, yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="long">
-					<dateFormat >
-						<pattern>d MMMM, yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="medium">
-					<dateFormat >
-						<pattern>dd/MM/yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="short">
-					<dateFormat >
-						<pattern>d/M/yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-			</dateFormats>
-			<timeFormats>
-				<default type="medium"/>
-				<timeFormatLength type="full">
-					<timeFormat >
-						<pattern>z h:mm:ss a</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="long">
-					<timeFormat >
-						<pattern>h:mm:ss a</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="medium">
-					<timeFormat >
-						<pattern>h:mm:ss a</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="short">
-					<timeFormat >
-						<pattern>h:mm a</pattern>
-					</timeFormat>
-				</timeFormatLength >
-			</timeFormats>
-			<dateTimeFormats>
-				<dateTimeFormatLength >
-					<dateTimeFormat>
-						<pattern>{1} {0}</pattern>
-					</dateTimeFormat>
-				</dateTimeFormatLength >
-			</dateTimeFormats>
-		</calendar>
-	</calendars>
-</dates>
-<numbers>
-	<symbols>
-		<decimal>٫</decimal>
-		<group>٬</group>
-		<list>;</list>
-		<percentSign>٪</percentSign>
-		<nativeZeroDigit>٠</nativeZeroDigit>
-		<patternDigit>#</patternDigit>
-		<plusSign>+</plusSign>
-		<minusSign>-</minusSign>
-		<exponential>E</exponential>
-		<perMille>‰</perMille>
-		<infinity>∞</infinity>
-		<nan>�</nan>
-	</symbols>
-	<decimalFormats>
-		<decimalFormatLength >
-			<decimalFormat >
-				<pattern>#,##0.###;#,##0.###-</pattern>
-			</decimalFormat>
-		</decimalFormatLength >
-	</decimalFormats>
-	<scientificFormats>
-		<scientificFormatLength >
-			<scientificFormat >
-				<pattern>#E0</pattern>
-			</scientificFormat>
-		</scientificFormatLength >
-	</scientificFormats>
-	<percentFormats>
-		<percentFormatLength >
-			<percentFormat >
-				<pattern>#,##0%</pattern>
-			</percentFormat>
-		</percentFormatLength >
-	</percentFormats>
-	<currencyFormats>
-		<currencyFormatLength >
-			<currencyFormat >
-				<pattern>¤ #,##0.00;¤ #,##0.00-</pattern>
-			</currencyFormat>
-		</currencyFormatLength >
-	</currencyFormats>
-	<currencies>
-		<currency type="AED">
-			<displayName>AED</displayName>
-			<symbol>د.إ.‏</symbol>
-		</currency>
-		<currency type="BHD">
-			<displayName>BHD</displayName>
-			<symbol>د.ب.‏</symbol>
-		</currency>
-		<currency type="DZD">
-			<displayName>DZD</displayName>
-			<symbol>د.ج.‏</symbol>
-		</currency>
-		<currency type="EGP">
-			<displayName>EGP</displayName>
-			<symbol>ج.م.‏</symbol>
-		</currency>
-		<currency type="IQD">
-			<displayName>IQD</displayName>
-			<symbol>د.ع.‏</symbol>
-		</currency>
-		<currency type="JOD">
-			<displayName>JOD</displayName>
-			<symbol>د.أ.‏</symbol>
-		</currency>
-		<currency type="KWD">
-			<displayName>KWD</displayName>
-			<symbol>د.ك.‏</symbol>
-		</currency>
-		<currency type="LBP">
-			<displayName>LBP</displayName>
-			<symbol>ل.ل.‏</symbol>
-		</currency>
-		<currency type="LYD">
-			<displayName>LYD</displayName>
-			<symbol>د.ل.‏</symbol>
-		</currency>
-		<currency type="MAD">
-			<displayName>MAD</displayName>
-			<symbol>د.م.‏</symbol>
-		</currency>
-		<currency type="OMR">
-			<displayName>OMR</displayName>
-			<symbol>ر.ع.‏</symbol>
-		</currency>
-		<currency type="QAR">
-			<displayName>QAR</displayName>
-			<symbol>ر.ق.‏</symbol>
-		</currency>
-		<currency type="SAR">
-			<displayName>SAR</displayName>
-			<symbol>ر.س.‏</symbol>
-		</currency>
-		<currency type="SDP">
-			<displayName>SDP</displayName>
-			<symbol>ج.س.‏</symbol>
-		</currency>
-		<currency type="SYP">
-			<displayName>SYP</displayName>
-			<symbol>ل.س.‏</symbol>
-		</currency>
-		<currency type="TND">
-			<displayName>TND</displayName>
-			<symbol>د.ت.‏</symbol>
-		</currency>
-		<currency type="YER">
-			<displayName>YER</displayName>
-			<symbol>ر.ي.‏</symbol>
-		</currency>
-	</currencies>
-</numbers>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="right-to-left" />
+	</layout>
+	<characters>
+		<exemplarCharacters>[ء-غـ-ٕ٠-٬‌‍‏‎]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Arab</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
+	<dates>
+		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">يناير</month>
+					<month type="2">فبراير</month>
+					<month type="3">مارس</month>
+					<month type="4">أبريل</month>
+					<month type="5">مايو</month>
+					<month type="6">يونيو</month>
+					<month type="7">يوليو</month>
+					<month type="8">أغسطس</month>
+					<month type="9">سبتمبر</month>
+					<month type="10">أكتوبر</month>
+					<month type="11">نوفمبر</month>
+					<month type="12">ديسمبر</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">يناير</month>
+					<month type="2">فبراير</month>
+					<month type="3">مارس</month>
+					<month type="4">أبريل</month>
+					<month type="5">مايو</month>
+					<month type="6">يونيو</month>
+					<month type="7">يوليو</month>
+					<month type="8">أغسطس</month>
+					<month type="9">سبتمبر</month>
+					<month type="10">أكتوبر</month>
+					<month type="11">نوفمبر</month>
+					<month type="12">ديسمبر</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">الأحد</day>
+					<day type="mon">الاثنين</day>
+					<day type="tue">الثلاثاء</day>
+					<day type="wed">الأربعاء</day>
+					<day type="thu">الخميس</day>
+					<day type="fri">الجمعة</day>
+					<day type="sat">السبت</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">ح</day>
+					<day type="mon">ن</day>
+					<day type="tue">ث</day>
+					<day type="wed">ر</day>
+					<day type="thu">خ</day>
+					<day type="fri">ج</day>
+					<day type="sat">س</day>
+				</dayAbbr>
+				<week>
+					<minDays count="1"/>
+					<firstDay day="sat"/>
+				</week>
+				<am>ص</am>
+				<pm>م</pm>
+				<eras>
+					<eraAbbr>
+						<era type="1">ق.م</era>
+						<era type="2">م</era>
+					</eraAbbr>
+				</eras>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormatLength type="full">
+						<dateFormat >
+							<pattern>EEEE, d MMMM, yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="long">
+						<dateFormat >
+							<pattern>d MMMM, yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="medium">
+						<dateFormat >
+							<pattern>dd/MM/yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="short">
+						<dateFormat >
+							<pattern>d/M/yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>z h:mm:ss a</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>h:mm:ss a</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>h:mm:ss a</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>h:mm a</pattern>
+						</timeFormat>
+					</timeFormatLength >
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<symbols>
+			<decimal>٫</decimal>
+			<group>٬</group>
+			<list>;</list>
+			<percentSign>٪</percentSign>
+			<nativeZeroDigit>٠</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+		<decimalFormats>
+			<decimalFormatLength >
+				<decimalFormat >
+					<pattern>#,##0.###;#,##0.###-</pattern>
+				</decimalFormat>
+			</decimalFormatLength >
+		</decimalFormats>
+		<scientificFormats>
+			<scientificFormatLength >
+				<scientificFormat >
+					<pattern>#E0</pattern>
+				</scientificFormat>
+			</scientificFormatLength >
+		</scientificFormats>
+		<percentFormats>
+			<percentFormatLength >
+				<percentFormat >
+					<pattern>#,##0%</pattern>
+				</percentFormat>
+			</percentFormatLength >
+		</percentFormats>
+		<currencyFormats>
+			<currencyFormatLength >
+				<currencyFormat >
+					<pattern>¤ #,##0.00;¤ #,##0.00-</pattern>
+				</currencyFormat>
+			</currencyFormatLength >
+		</currencyFormats>
+		<currencies>
+			<currency type="AED">
+				<displayName>AED</displayName>
+				<symbol>د.إ.‏</symbol>
+			</currency>
+			<currency type="BHD">
+				<displayName>BHD</displayName>
+				<symbol>د.ب.‏</symbol>
+			</currency>
+			<currency type="DZD">
+				<displayName>DZD</displayName>
+				<symbol>د.ج.‏</symbol>
+			</currency>
+			<currency type="EGP">
+				<displayName>EGP</displayName>
+				<symbol>ج.م.‏</symbol>
+			</currency>
+			<currency type="IQD">
+				<displayName>IQD</displayName>
+				<symbol>د.ع.‏</symbol>
+			</currency>
+			<currency type="JOD">
+				<displayName>JOD</displayName>
+				<symbol>د.أ.‏</symbol>
+			</currency>
+			<currency type="KWD">
+				<displayName>KWD</displayName>
+				<symbol>د.ك.‏</symbol>
+			</currency>
+			<currency type="LBP">
+				<displayName>LBP</displayName>
+				<symbol>ل.ل.‏</symbol>
+			</currency>
+			<currency type="LYD">
+				<displayName>LYD</displayName>
+				<symbol>د.ل.‏</symbol>
+			</currency>
+			<currency type="MAD">
+				<displayName>MAD</displayName>
+				<symbol>د.م.‏</symbol>
+			</currency>
+			<currency type="OMR">
+				<displayName>OMR</displayName>
+				<symbol>ر.ع.‏</symbol>
+			</currency>
+			<currency type="QAR">
+				<displayName>QAR</displayName>
+				<symbol>ر.ق.‏</symbol>
+			</currency>
+			<currency type="SAR">
+				<displayName>SAR</displayName>
+				<symbol>ر.س.‏</symbol>
+			</currency>
+			<currency type="SDP">
+				<displayName>SDP</displayName>
+				<symbol>ج.س.‏</symbol>
+			</currency>
+			<currency type="SYP">
+				<displayName>SYP</displayName>
+				<symbol>ل.س.‏</symbol>
+			</currency>
+			<currency type="TND">
+				<displayName>TND</displayName>
+				<symbol>د.ت.‏</symbol>
+			</currency>
+			<currency type="YER">
+				<displayName>YER</displayName>
+				<symbol>ر.ي.‏</symbol>
+			</currency>
+		</currencies>
+	</numbers>
 </ldml>

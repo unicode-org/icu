@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="pt" /> 
 	</identity>
 	<localeDisplayNames>
@@ -404,6 +404,12 @@
 					<day type="fri">sex</day>
 					<day type="sat">sáb</day>
 				</dayAbbr>
+				<eras>
+					<eraAbbr>
+						<era type="1">a.C.</era>
+						<era type="2">d.C.</era>
+					</eraAbbr>
+				</eras>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

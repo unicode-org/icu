@@ -8,77 +8,77 @@
 <ldml>
 	<identity>
 		<version number="4.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="af" /> 
 	</identity>
-<characters>
-	<exemplarCharacters>[a-z á é è â ê î ô û ë ï ö]</exemplarCharacters>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:scripts>
-			<icu:script type="1">Latn</icu:script>
-		</icu:scripts>
-	</special>
-</characters>
-<dates>
-	<calendars>
-		<calendar type="gregorian">
-			<monthNames>
-				<month type="1">Januarie</month>
-				<month type="2">Februarie</month>
-				<month type="3">Maart</month>
-				<month type="4">April</month>
-				<month type="5">Mei</month>
-				<month type="6">Junie</month>
-				<month type="7">Julie</month>
-				<month type="8">Augustus</month>
-				<month type="9">September</month>
-				<month type="10">Oktober</month>
-				<month type="11">November</month>
-				<month type="12">Desember</month>
-			</monthNames>
-			<monthAbbr>
-				<month type="1">Jan</month>
-				<month type="2">Feb</month>
-				<month type="3">Mar</month>
-				<month type="4">Apr</month>
-				<month type="5">Mei</month>
-				<month type="6">Jun</month>
-				<month type="7">Jul</month>
-				<month type="8">Aug</month>
-				<month type="9">Sep</month>
-				<month type="10">Okt</month>
-				<month type="11">Nov</month>
-				<month type="12">Des</month>
-			</monthAbbr>
-			<dayNames>
-				<day type="sun">Sondag</day>
-				<day type="mon">Maandag</day>
-				<day type="tue">Dinsdag</day>
-				<day type="wed">Woensdag</day>
-				<day type="thu">Donderdag</day>
-				<day type="fri">Vrydag</day>
-				<day type="sat">Saterdag</day>
-			</dayNames>
-			<dayAbbr>
-				<day type="sun">So</day>
-				<day type="mon">Ma</day>
-				<day type="tue">Di</day>
-				<day type="wed">Wo</day>
-				<day type="thu">Do</day>
-				<day type="fri">Vr</day>
-				<day type="sat">Sa</day>
-			</dayAbbr>
-			<am>VM</am>
-			<pm>NM</pm>
-		</calendar>
-	</calendars>
-</dates>
-<numbers>
-	<currencies>
-		<currency type="ZAR">
-			<displayName>ZAR</displayName>
-			<symbol>R</symbol>
-		</currency>
-	</currencies>
-</numbers>
+	<characters>
+		<exemplarCharacters>[a-z á é è â ê î ô û ë ï ö ŉ]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Latn</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">Januarie</month>
+					<month type="2">Februarie</month>
+					<month type="3">Maart</month>
+					<month type="4">April</month>
+					<month type="5">Mei</month>
+					<month type="6">Junie</month>
+					<month type="7">Julie</month>
+					<month type="8">Augustus</month>
+					<month type="9">September</month>
+					<month type="10">Oktober</month>
+					<month type="11">November</month>
+					<month type="12">Desember</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">Jan</month>
+					<month type="2">Feb</month>
+					<month type="3">Mar</month>
+					<month type="4">Apr</month>
+					<month type="5">Mei</month>
+					<month type="6">Jun</month>
+					<month type="7">Jul</month>
+					<month type="8">Aug</month>
+					<month type="9">Sep</month>
+					<month type="10">Okt</month>
+					<month type="11">Nov</month>
+					<month type="12">Des</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">Sondag</day>
+					<day type="mon">Maandag</day>
+					<day type="tue">Dinsdag</day>
+					<day type="wed">Woensdag</day>
+					<day type="thu">Donderdag</day>
+					<day type="fri">Vrydag</day>
+					<day type="sat">Saterdag</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">So</day>
+					<day type="mon">Ma</day>
+					<day type="tue">Di</day>
+					<day type="wed">Wo</day>
+					<day type="thu">Do</day>
+					<day type="fri">Vr</day>
+					<day type="sat">Sa</day>
+				</dayAbbr>
+				<am>VM</am>
+				<pm>NM</pm>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<currencies>
+			<currency type="ZAR">
+				<displayName>ZAR</displayName>
+				<symbol>R</symbol>
+			</currency>
+		</currencies>
+	</numbers>
 </ldml>

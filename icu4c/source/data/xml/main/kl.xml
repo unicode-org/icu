@@ -8,89 +8,89 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="kl" /> 
 	</identity>
-<characters>
-	<exemplarCharacters>[a-z á é í ú â ê î ô û æ å ø ã ĩ ũ ĸ]</exemplarCharacters>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:scripts>
-			<icu:script type="1">Latn</icu:script>
-		</icu:scripts>
-	</special>
-</characters>
-<dates>
-	<calendars>
-		<calendar type="gregorian">
-			<monthNames>
-				<month type="1">januari</month>
-				<month type="2">februari</month>
-				<month type="3">martsi</month>
-				<month type="4">aprili</month>
-				<month type="5">maji</month>
-				<month type="6">juni</month>
-				<month type="7">juli</month>
-				<month type="8">augustusi</month>
-				<month type="9">septemberi</month>
-				<month type="10">oktoberi</month>
-				<month type="11">novemberi</month>
-				<month type="12">decemberi</month>
-			</monthNames>
-			<monthAbbr>
-				<month type="1">jan</month>
-				<month type="2">feb</month>
-				<month type="3">mar</month>
-				<month type="4">apr</month>
-				<month type="5">maj</month>
-				<month type="6">jun</month>
-				<month type="7">jul</month>
-				<month type="8">aug</month>
-				<month type="9">sep</month>
-				<month type="10">okt</month>
-				<month type="11">nov</month>
-				<month type="12">dec</month>
-			</monthAbbr>
-			<dayNames>
-				<day type="sun">sabaat</day>
-				<day type="mon">ataasinngorneq</day>
-				<day type="tue">marlunngorneq</day>
-				<day type="wed">pingasunngorneq</day>
-				<day type="thu">sisamanngorneq</day>
-				<day type="fri">tallimanngorneq</day>
-				<day type="sat">arfininngorneq</day>
-			</dayNames>
-			<dayAbbr>
-				<day type="sun">sab</day>
-				<day type="mon">ata</day>
-				<day type="tue">mar</day>
-				<day type="wed">pin</day>
-				<day type="thu">sis</day>
-				<day type="fri">tal</day>
-				<day type="sat">arf</day>
-			</dayAbbr>
-		</calendar>
-	</calendars>
-</dates>
-<numbers>
-	<symbols>
-		<decimal>,</decimal>
-		<group>.</group>
-		<list>;</list>
-		<percentSign>%</percentSign>
-		<nativeZeroDigit>0</nativeZeroDigit>
-		<patternDigit>#</patternDigit>
-		<plusSign>+</plusSign>
-		<minusSign>-</minusSign>
-		<exponential>E</exponential>
-		<perMille>‰</perMille>
-		<infinity>∞</infinity>
-		<nan>�</nan>
-	</symbols>
-	<currencies>
-		<currency type="DKK">
-			<displayName>DKK</displayName>
-			<symbol>kr</symbol>
-		</currency>
-	</currencies>
-</numbers>
+	<characters>
+		<exemplarCharacters>[a-z á é í ú â ê î ô û æ å ø ã ĩ ũ ĸ]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Latn</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">januari</month>
+					<month type="2">februari</month>
+					<month type="3">martsi</month>
+					<month type="4">aprili</month>
+					<month type="5">maji</month>
+					<month type="6">juni</month>
+					<month type="7">juli</month>
+					<month type="8">augustusi</month>
+					<month type="9">septemberi</month>
+					<month type="10">oktoberi</month>
+					<month type="11">novemberi</month>
+					<month type="12">decemberi</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">jan</month>
+					<month type="2">feb</month>
+					<month type="3">mar</month>
+					<month type="4">apr</month>
+					<month type="5">maj</month>
+					<month type="6">jun</month>
+					<month type="7">jul</month>
+					<month type="8">aug</month>
+					<month type="9">sep</month>
+					<month type="10">okt</month>
+					<month type="11">nov</month>
+					<month type="12">dec</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">sabaat</day>
+					<day type="mon">ataasinngorneq</day>
+					<day type="tue">marlunngorneq</day>
+					<day type="wed">pingasunngorneq</day>
+					<day type="thu">sisamanngorneq</day>
+					<day type="fri">tallimanngorneq</day>
+					<day type="sat">arfininngorneq</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">sab</day>
+					<day type="mon">ata</day>
+					<day type="tue">mar</day>
+					<day type="wed">pin</day>
+					<day type="thu">sis</day>
+					<day type="fri">tal</day>
+					<day type="sat">arf</day>
+				</dayAbbr>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group>.</group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+		<currencies>
+			<currency type="DKK">
+				<displayName>DKK</displayName>
+				<symbol>kr</symbol>
+			</currency>
+		</currencies>
+	</numbers>
 </ldml>

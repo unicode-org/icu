@@ -8,41 +8,150 @@
 <ldml>
 	<identity>
 		<version number="3.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="cs" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
-			<language type="ar">arapski</language>
-			<language type="bg">bugarski</language>
-			<language type="cs">češki</language>
-			<language type="da">danski</language>
-			<language type="de">njemački</language>
-			<language type="el">grčki</language>
-			<language type="en">engleski</language>
-			<language type="es">španjolski</language>
-			<language type="et">estonijski</language>
-			<language type="fi">finski</language>
-			<language type="fr">francuski</language>
-			<language type="he">hebrejski</language>
-			<language type="hr">hrvatski</language>
-			<language type="hu">mađarski</language>
-			<language type="it">talijanski</language>
-			<language type="ja">japanski</language>
-			<language type="ko">korejski</language>
-			<language type="lt">litvanski</language>
-			<language type="lv">latvijski</language>
-			<language type="nl">nizozemski</language>
-			<language type="no">norveškin</language>
-			<language type="pl">poljski</language>
-			<language type="pt">portugalski</language>
-			<language type="ro">rumunjski</language>
-			<language type="ru">ruski</language>
-			<language type="sk">slovački</language>
-			<language type="sl">slovenski</language>
-			<language type="sv">švedski</language>
-			<language type="tr">turski</language>
-			<language type="zh">kineski</language>
+			<language type="aa">Afarština</language>
+			<language type="ab">Abcházština</language>
+			<language type="af">Afrikánština</language>
+			<language type="am">Amharština</language>
+			<language type="ar">Arabština</language>
+			<language type="as">Assaméština</language>
+			<language type="ay">Aymárština</language>
+			<language type="az">Azerbajdžánština</language>
+			<language type="ba">Baskirština</language>
+			<language type="be">Běloruština</language>
+			<language type="bg">Bulharština</language>
+			<language type="bh">Biharština</language>
+			<language type="bi">Bislámština</language>
+			<language type="bn">Bengálština</language>
+			<language type="bo">Tibetština</language>
+			<language type="br">Bretaňština</language>
+			<language type="ca">Katalánština</language>
+			<language type="co">Korsičtina</language>
+			<language type="cs">Čeština</language>
+			<language type="cy">Velština</language>
+			<language type="da">Dánština</language>
+			<language type="de">Němčina</language>
+			<language type="dz">Bhútánština</language>
+			<language type="el">Řečtina</language>
+			<language type="en">Angličtina</language>
+			<language type="eo">Esperanto</language>
+			<language type="es">Španělština</language>
+			<language type="et">Estonština</language>
+			<language type="eu">Baskičtina</language>
+			<language type="fa">Perština</language>
+			<language type="fi">Finština</language>
+			<language type="fj">Fidži</language>
+			<language type="fo">Faerština</language>
+			<language type="fr">Francouzština</language>
+			<language type="fy">Fríština</language>
+			<language type="ga">Irština</language>
+			<language type="gd">Skotská galština</language>
+			<language type="gl">Haličština</language>
+			<language type="gn">Guaranština</language>
+			<language type="gu">Gujaratština</language>
+			<language type="ha">Hausa</language>
+			<language type="he">Hebrejština</language>
+			<language type="hi">Hindština</language>
+			<language type="hr">Chorvatština</language>
+			<language type="hu">Maďarština</language>
+			<language type="hy">Arménština</language>
+			<language type="ia">Interlingua</language>
+			<language type="id">Indonéština</language>
+			<language type="ie">Interlingue</language>
+			<language type="ik">Inupiakština</language>
+			<language type="is">Islandština</language>
+			<language type="it">Italština</language>
+			<language type="iu">Inuktitutština</language>
+			<language type="ja">Japonština</language>
+			<language type="jv">Javánština</language>
+			<language type="ka">Gruzínština</language>
+			<language type="kk">Kazachština</language>
+			<language type="kl">Grónština</language>
+			<language type="km">Kambodžština</language>
+			<language type="kn">Kannadština</language>
+			<language type="ko">Korejština</language>
+			<language type="ks">Kašmírština</language>
+			<language type="ku">Kurdština</language>
+			<language type="ky">Kirgizština</language>
+			<language type="la">Latina</language>
+			<language type="ln">Lingalština</language>
+			<language type="lo">Laoština</language>
+			<language type="lt">Litevština</language>
+			<language type="lv">Lotyština</language>
+			<language type="mg">Malgaština</language>
+			<language type="mi">Maorština</language>
+			<language type="mk">Makedonština</language>
+			<language type="ml">Malabarština</language>
+			<language type="mn">Mongolština</language>
+			<language type="mo">Moldavština</language>
+			<language type="mr">Marathi</language>
+			<language type="ms">Malajština</language>
+			<language type="mt">Maltština</language>
+			<language type="my">Barmština</language>
+			<language type="na">Nauru</language>
+			<language type="ne">Nepálština</language>
+			<language type="nl">Holandština</language>
+			<language type="no">Norština</language>
+			<language type="oc">Occitan</language>
+			<language type="om">Oromo (Afan)</language>
+			<language type="or">Oriya</language>
+			<language type="pa">Paňdžábština</language>
+			<language type="pl">Polština</language>
+			<language type="ps">Pashto (Pushto)</language>
+			<language type="pt">Portugalština</language>
+			<language type="qu">Kečuánština</language>
+			<language type="rm">Rétorománština</language>
+			<language type="rn">Kirundi</language>
+			<language type="ro">Rumunština</language>
+			<language type="ru">Ruština</language>
+			<language type="rw">Kinyarwandština</language>
+			<language type="sa">Sanskrt</language>
+			<language type="sd">Sindhi</language>
+			<language type="sg">Sangho</language>
+			<language type="sh">Srbochorvatština</language>
+			<language type="si">Sinhálština</language>
+			<language type="sk">Slovenština</language>
+			<language type="sl">Slovinština</language>
+			<language type="sm">Samoyština</language>
+			<language type="sn">Shona</language>
+			<language type="so">Somálština</language>
+			<language type="sq">Albánština</language>
+			<language type="sr">Srbština</language>
+			<language type="ss">Siswatština</language>
+			<language type="st">Sesotho</language>
+			<language type="su">Sundanština</language>
+			<language type="sv">Švédština</language>
+			<language type="sw">Svahilština</language>
+			<language type="ta">Tamilština</language>
+			<language type="te">Telugština</language>
+			<language type="tg">Tádžičtina</language>
+			<language type="th">Thajština</language>
+			<language type="ti">Tigrinijština</language>
+			<language type="tk">Turkmenština</language>
+			<language type="tl">Tagalog</language>
+			<language type="tn">Setswanština</language>
+			<language type="to">Tonga</language>
+			<language type="tr">Turečtina</language>
+			<language type="ts">Tsonga</language>
+			<language type="tt">Tatarština</language>
+			<language type="tw">Twi</language>
+			<language type="ug">Uighurština</language>
+			<language type="uk">Ukrajinština</language>
+			<language type="ur">Urdština</language>
+			<language type="uz">Uzbečtina</language>
+			<language type="vi">Vietnamština</language>
+			<language type="vo">Volapuk</language>
+			<language type="wo">Wolof</language>
+			<language type="xh">Xhosa</language>
+			<language type="yi">Jidiš</language>
+			<language type="yo">Yoruba</language>
+			<language type="za">Zhuang</language>
+			<language type="zh">Čínština</language>
+			<language type="zu">Zulu</language>
 		</languages>
 		<territories>
 			<territory type="AD">Andorra</territory>
@@ -287,149 +396,153 @@
 			<territory type="ZM">Zambie</territory>
 			<territory type="ZW">Zimbabwe</territory>
 		</territories>
-</localeDisplayNames>
-<characters>
-	<exemplarCharacters>[a-z ý á é í ó ú ě ů č ď ň ř š ť ž]</exemplarCharacters>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:scripts>
-			<icu:script type="1">Latn</icu:script>
-		</icu:scripts>
-	</special>
-</characters>
-<dates>
-	<localizedPatternChars>GuMtkHmsSEDFwWahKzUe</localizedPatternChars>
-	<calendars>
-		<calendar type="gregorian">
-			<monthNames>
-				<month type="1">leden</month>
-				<month type="2">únor</month>
-				<month type="3">březen</month>
-				<month type="4">duben</month>
-				<month type="5">květen</month>
-				<month type="6">červen</month>
-				<month type="7">červenec</month>
-				<month type="8">srpen</month>
-				<month type="9">září</month>
-				<month type="10">říjen</month>
-				<month type="11">listopad</month>
-				<month type="12">prosinec</month>
-			</monthNames>
-			<monthAbbr>
-				<month type="1">I</month>
-				<month type="2">II</month>
-				<month type="3">III</month>
-				<month type="4">IV</month>
-				<month type="5">V</month>
-				<month type="6">VI</month>
-				<month type="7">VII</month>
-				<month type="8">VIII</month>
-				<month type="9">IX</month>
-				<month type="10">X</month>
-				<month type="11">XI</month>
-				<month type="12">XII</month>
-			</monthAbbr>
-			<dayNames>
-				<day type="sun">neděle</day>
-				<day type="mon">pondělí</day>
-				<day type="tue">úterý</day>
-				<day type="wed">středa</day>
-				<day type="thu">čtvrtek</day>
-				<day type="fri">pátek</day>
-				<day type="sat">sobota</day>
-			</dayNames>
-			<dayAbbr>
-				<day type="sun">ne</day>
-				<day type="mon">po</day>
-				<day type="tue">út</day>
-				<day type="wed">st</day>
-				<day type="thu">čt</day>
-				<day type="fri">pá</day>
-				<day type="sat">so</day>
-			</dayAbbr>
-			<am>dop.</am>
-			<pm>odp.</pm>
-			<eras>
-				<eraAbbr>
-					<era type="1">př.Kr.</era>
-					<era type="2">po Kr.</era>
-				</eraAbbr>
-			</eras>
-			<dateFormats>
-				<default type="medium"/>
-				<dateFormatLength type="full">
-					<dateFormat >
-						<pattern>EEEE, d. MMMM yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="long">
-					<dateFormat >
-						<pattern>d. MMMM yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="medium">
-					<dateFormat >
-						<pattern>d.M.yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="short">
-					<dateFormat >
-						<pattern>d.M.yy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-			</dateFormats>
-			<timeFormats>
-				<default type="medium"/>
-				<timeFormatLength type="full">
-					<timeFormat >
-						<pattern>H:mm:ss z</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="long">
-					<timeFormat >
-						<pattern>H:mm:ss z</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="medium">
-					<timeFormat >
-						<pattern>H:mm:ss</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="short">
-					<timeFormat >
-						<pattern>H:mm</pattern>
-					</timeFormat>
-				</timeFormatLength >
-			</timeFormats>
-			<dateTimeFormats>
-				<dateTimeFormatLength >
-					<dateTimeFormat>
-						<pattern>{1} {0}</pattern>
-					</dateTimeFormat>
-				</dateTimeFormatLength >
-			</dateTimeFormats>
-		</calendar>
-	</calendars>
-</dates>
-<numbers>
-	<symbols>
-		<decimal>,</decimal>
-		<group> </group>
-		<list>;</list>
-		<percentSign>%</percentSign>
-		<nativeZeroDigit>0</nativeZeroDigit>
-		<patternDigit>#</patternDigit>
-		<plusSign>+</plusSign>
-		<minusSign>-</minusSign>
-		<exponential>E</exponential>
-		<perMille>‰</perMille>
-		<infinity>∞</infinity>
-		<nan>�</nan>
-	</symbols>
-	<currencies>
-		<currency type="CZK">
-			<displayName>CZK</displayName>
-			<symbol>Kč</symbol>
-		</currency>
-	</currencies>
-</numbers>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[a-z ý á é í ó ú ě ů č ď ň ř š ť ž]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Latn</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
+	<dates>
+		<localizedPatternChars>GuMtkHmsSEDFwWahKzUe</localizedPatternChars>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">leden</month>
+					<month type="2">únor</month>
+					<month type="3">březen</month>
+					<month type="4">duben</month>
+					<month type="5">květen</month>
+					<month type="6">červen</month>
+					<month type="7">červenec</month>
+					<month type="8">srpen</month>
+					<month type="9">září</month>
+					<month type="10">říjen</month>
+					<month type="11">listopad</month>
+					<month type="12">prosinec</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">I</month>
+					<month type="2">II</month>
+					<month type="3">III</month>
+					<month type="4">IV</month>
+					<month type="5">V</month>
+					<month type="6">VI</month>
+					<month type="7">VII</month>
+					<month type="8">VIII</month>
+					<month type="9">IX</month>
+					<month type="10">X</month>
+					<month type="11">XI</month>
+					<month type="12">XII</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">neděle</day>
+					<day type="mon">pondělí</day>
+					<day type="tue">úterý</day>
+					<day type="wed">středa</day>
+					<day type="thu">čtvrtek</day>
+					<day type="fri">pátek</day>
+					<day type="sat">sobota</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">ne</day>
+					<day type="mon">po</day>
+					<day type="tue">út</day>
+					<day type="wed">st</day>
+					<day type="thu">čt</day>
+					<day type="fri">pá</day>
+					<day type="sat">so</day>
+				</dayAbbr>
+				<week>
+					<minDays count="1"/>
+					<firstDay day="mon"/>
+				</week>
+				<am>dop.</am>
+				<pm>odp.</pm>
+				<eras>
+					<eraAbbr>
+						<era type="1">př.Kr.</era>
+						<era type="2">po Kr.</era>
+					</eraAbbr>
+				</eras>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormatLength type="full">
+						<dateFormat >
+							<pattern>EEEE, d. MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="long">
+						<dateFormat >
+							<pattern>d. MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="medium">
+						<dateFormat >
+							<pattern>d.M.yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="short">
+						<dateFormat >
+							<pattern>d.M.yy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>H:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>H:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>H:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>H:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group> </group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+		<currencies>
+			<currency type="CZK">
+				<displayName>CZK</displayName>
+				<symbol>Kč</symbol>
+			</currency>
+		</currencies>
+	</numbers>
 </ldml>

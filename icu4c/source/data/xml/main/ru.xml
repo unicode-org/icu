@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="ru" /> 
 	</identity>
 	<localeDisplayNames>
@@ -256,7 +256,7 @@
 			<territory type="IN">Индия</territory>
 			<territory type="IO">Британские Территории в Индийском Океане</territory>
 			<territory type="IQ">Ирак</territory>
-			<territory type="IR">Исламская Республика Иран</territory>
+			<territory type="IR">Иран</territory>
 			<territory type="IS">Исландия</territory>
 			<territory type="IT">Италия</territory>
 			<territory type="JM">Ямайка</territory>
@@ -268,12 +268,12 @@
 			<territory type="KI">Кирибати</territory>
 			<territory type="KM">Коморские Острова</territory>
 			<territory type="KN">Сент-Киттс и Невис</territory>
-			<territory type="KP">Корея, Северная</territory>
-			<territory type="KR">Корея, Южная</territory>
+			<territory type="KP">Северная Корея</territory>
+			<territory type="KR">Южная Корея</territory>
 			<territory type="KW">Кувейт</territory>
 			<territory type="KY">Каймановы Острова</territory>
 			<territory type="KZ">Казахстан</territory>
-			<territory type="LA">Латинская Америка</territory>
+			<territory type="LA">Лаос</territory>
 			<territory type="LB">Ливан</territory>
 			<territory type="LC">Сент-Люсия</territory>
 			<territory type="LI">Лихтенштейн</territory>
@@ -283,7 +283,7 @@
 			<territory type="LT">Литва</territory>
 			<territory type="LU">Люксембург</territory>
 			<territory type="LV">Латвия</territory>
-			<territory type="LY">Ливийская Арабская Джамахирия</territory>
+			<territory type="LY">Ливия</territory>
 			<territory type="MA">Марокко</territory>
 			<territory type="MC">Монако</territory>
 			<territory type="MD">Молдова</territory>
@@ -376,7 +376,7 @@
 			<territory type="UA">Украина</territory>
 			<territory type="UG">Уганда</territory>
 			<territory type="UM">Внешние малые острова (США)</territory>
-			<territory type="US">США</territory>
+			<territory type="US">Соединенные Штаты</territory>
 			<territory type="UY">Уругвай</territory>
 			<territory type="UZ">Узбекистан</territory>
 			<territory type="VA">Государство-город Ватикан</territory>
@@ -395,146 +395,146 @@
 			<territory type="ZM">Замбия</territory>
 			<territory type="ZW">Зимбабве</territory>
 		</territories>
-</localeDisplayNames>
-<characters>
-	<exemplarCharacters>[а-я ё і ѣ ѳ ѵ]</exemplarCharacters>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[а-я ё і ѣ ѳ ѵ]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Cyrl</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
+	<dates>
+		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">Январь</month>
+					<month type="2">Февраль</month>
+					<month type="3">Март</month>
+					<month type="4">Апрель</month>
+					<month type="5">Май</month>
+					<month type="6">Июнь</month>
+					<month type="7">Июль</month>
+					<month type="8">Август</month>
+					<month type="9">Сентябрь</month>
+					<month type="10">Октябрь</month>
+					<month type="11">Ноябрь</month>
+					<month type="12">Декабрь</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">янв</month>
+					<month type="2">фев</month>
+					<month type="3">мар</month>
+					<month type="4">апр</month>
+					<month type="5">май</month>
+					<month type="6">июн</month>
+					<month type="7">июл</month>
+					<month type="8">авг</month>
+					<month type="9">сен</month>
+					<month type="10">окт</month>
+					<month type="11">ноя</month>
+					<month type="12">дек</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">воскресенье</day>
+					<day type="mon">понедельник</day>
+					<day type="tue">вторник</day>
+					<day type="wed">среда</day>
+					<day type="thu">четверг</day>
+					<day type="fri">пятница</day>
+					<day type="sat">суббота</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">Вс</day>
+					<day type="mon">Пн</day>
+					<day type="tue">Вт</day>
+					<day type="wed">Ср</day>
+					<day type="thu">Чт</day>
+					<day type="fri">Пт</day>
+					<day type="sat">Сб</day>
+				</dayAbbr>
+				<week>
+					<minDays count="1"/>
+					<firstDay day="mon"/>
+				</week>
+				<eras>
+					<eraAbbr>
+						<era type="1">до н.э.</era>
+						<era type="2">н.э.</era>
+					</eraAbbr>
+				</eras>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormatLength type="full">
+						<dateFormat >
+							<pattern>d MMMM yyyy 'г.'</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="long">
+						<dateFormat >
+							<pattern>d MMMM yyyy 'г.'</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="medium">
+						<dateFormat >
+							<pattern>dd.MM.yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="short">
+						<dateFormat >
+							<pattern>dd.MM.yy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>H:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>H:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>H:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>H:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<currencies>
+			<currency type="RUR">
+				<displayName>RUR</displayName>
+				<symbol>р.</symbol>
+			</currency>
+			<currency type="UAH">
+				<displayName>UAH</displayName>
+				<symbol>грн.</symbol>
+			</currency>
+		</currencies>
+	</numbers>
 	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:scripts>
-			<icu:script type="1">Cyrl</icu:script>
-		</icu:scripts>
-	</special>
-</characters>
-<dates>
-	<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
-	<calendars>
-		<calendar type="gregorian">
-			<monthNames>
-				<month type="1">Январь</month>
-				<month type="2">Февраль</month>
-				<month type="3">Март</month>
-				<month type="4">Апрель</month>
-				<month type="5">Май</month>
-				<month type="6">Июнь</month>
-				<month type="7">Июль</month>
-				<month type="8">Август</month>
-				<month type="9">Сентябрь</month>
-				<month type="10">Октябрь</month>
-				<month type="11">Ноябрь</month>
-				<month type="12">Декабрь</month>
-			</monthNames>
-			<monthAbbr>
-				<month type="1">янв</month>
-				<month type="2">фев</month>
-				<month type="3">мар</month>
-				<month type="4">апр</month>
-				<month type="5">май</month>
-				<month type="6">июн</month>
-				<month type="7">июл</month>
-				<month type="8">авг</month>
-				<month type="9">сен</month>
-				<month type="10">окт</month>
-				<month type="11">ноя</month>
-				<month type="12">дек</month>
-			</monthAbbr>
-			<dayNames>
-				<day type="sun">воскресенье</day>
-				<day type="mon">понедельник</day>
-				<day type="tue">вторник</day>
-				<day type="wed">среда</day>
-				<day type="thu">четверг</day>
-				<day type="fri">пятница</day>
-				<day type="sat">суббота</day>
-			</dayNames>
-			<dayAbbr>
-				<day type="sun">Вс</day>
-				<day type="mon">Пн</day>
-				<day type="tue">Вт</day>
-				<day type="wed">Ср</day>
-				<day type="thu">Чт</day>
-				<day type="fri">Пт</day>
-				<day type="sat">Сб</day>
-			</dayAbbr>
-			<week>
-				<minDays count="1"/>
-				<firstDay day="mon"/>
-			</week>
-			<eras>
-				<eraAbbr>
-					<era type="1">до н.э.</era>
-					<era type="2">н.э.</era>
-				</eraAbbr>
-			</eras>
-			<dateFormats>
-				<default type="medium"/>
-				<dateFormatLength type="full">
-					<dateFormat >
-						<pattern>d MMMM yyyy 'г.'</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="long">
-					<dateFormat >
-						<pattern>d MMMM yyyy 'г.'</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="medium">
-					<dateFormat >
-						<pattern>dd.MM.yyyy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="short">
-					<dateFormat >
-						<pattern>dd.MM.yy</pattern>
-					</dateFormat>
-				</dateFormatLength >
-			</dateFormats>
-			<timeFormats>
-				<default type="medium"/>
-				<timeFormatLength type="full">
-					<timeFormat >
-						<pattern>H:mm:ss z</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="long">
-					<timeFormat >
-						<pattern>H:mm:ss z</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="medium">
-					<timeFormat >
-						<pattern>H:mm:ss</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="short">
-					<timeFormat >
-						<pattern>H:mm</pattern>
-					</timeFormat>
-				</timeFormatLength >
-			</timeFormats>
-			<dateTimeFormats>
-				<dateTimeFormatLength >
-					<dateTimeFormat>
-						<pattern>{1} {0}</pattern>
-					</dateTimeFormat>
-				</dateTimeFormatLength >
-			</dateTimeFormats>
-		</calendar>
-	</calendars>
-</dates>
-<numbers>
-	<currencies>
-		<currency type="RUR">
-			<displayName>RUR</displayName>
-			<symbol>р.</symbol>
-		</currency>
-		<currency type="UAH">
-			<displayName>UAH</displayName>
-			<symbol>грн.</symbol>
-		</currency>
-	</currencies>
-</numbers>
-<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-	<icu:ruleBasedNumberFormats>
-		<icu:ruleBasedNumberFormat type="spellout">
+		<icu:ruleBasedNumberFormats>
+			<icu:ruleBasedNumberFormat type="spellout">
 ноль; один; два; три; четыре; пят; шест; семь; восемь; девят;
 10: десят; одиннадцать;
 двеннадцать; тринадцать; четырнадцать;
@@ -554,7 +554,7 @@
 1,000,000: миллион[ &gt;&gt;];
 2,000,000: &lt;&lt; миллион[ &gt;&gt;];
 1,000,000,000: =#,##0=;
-		</icu:ruleBasedNumberFormat>
-	</icu:ruleBasedNumberFormats>
-</special>
+			</icu:ruleBasedNumberFormat>
+		</icu:ruleBasedNumberFormats>
+	</special>
 </ldml>

@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-12-03" />
+		<generation date="2003-12-17" />
 		<language type="lv" /> 
 	</identity>
 	<localeDisplayNames>
@@ -287,151 +287,151 @@
 			<territory type="ZM">Zambija</territory>
 			<territory type="ZW">Zimbabve</territory>
 		</territories>
-</localeDisplayNames>
-<characters>
-	<exemplarCharacters>[a-z ā ē ī ō ū ģ ķ ļ ņ ŗ č š ž]</exemplarCharacters>
-	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
-		<icu:scripts>
-			<icu:script type="1">Latn</icu:script>
-		</icu:scripts>
-	</special>
-</characters>
-<dates>
-	<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
-	<calendars>
-		<calendar type="gregorian">
-			<monthNames>
-				<month type="1">janvāris</month>
-				<month type="2">februāris</month>
-				<month type="3">marts</month>
-				<month type="4">aprīlis</month>
-				<month type="5">maijs</month>
-				<month type="6">jūnijs</month>
-				<month type="7">jūlijs</month>
-				<month type="8">augusts</month>
-				<month type="9">septembris</month>
-				<month type="10">oktobris</month>
-				<month type="11">novembris</month>
-				<month type="12">decembris</month>
-			</monthNames>
-			<monthAbbr>
-				<month type="1">Jan</month>
-				<month type="2">Feb</month>
-				<month type="3">Mar</month>
-				<month type="4">Apr</month>
-				<month type="5">Maijs</month>
-				<month type="6">Jūn</month>
-				<month type="7">Jūl</month>
-				<month type="8">Aug</month>
-				<month type="9">Sep</month>
-				<month type="10">Okt</month>
-				<month type="11">Nov</month>
-				<month type="12">Dec</month>
-			</monthAbbr>
-			<dayNames>
-				<day type="sun">svētdiena</day>
-				<day type="mon">pirmdiena</day>
-				<day type="tue">otrdiena</day>
-				<day type="wed">trešdiena</day>
-				<day type="thu">ceturtdiena</day>
-				<day type="fri">piektdiena</day>
-				<day type="sat">sestdiena</day>
-			</dayNames>
-			<dayAbbr>
-				<day type="sun">Sv</day>
-				<day type="mon">P</day>
-				<day type="tue">O</day>
-				<day type="wed">T</day>
-				<day type="thu">C</day>
-				<day type="fri">Pk</day>
-				<day type="sat">S</day>
-			</dayAbbr>
-			<week>
-				<minDays count="1"/>
-				<firstDay day="mon"/>
-			</week>
-			<eras>
-				<eraAbbr>
-					<era type="1">pmē</era>
-					<era type="2">mē</era>
-				</eraAbbr>
-			</eras>
-			<dateFormats>
-				<default type="medium"/>
-				<dateFormatLength type="full">
-					<dateFormat >
-						<pattern>EEEE, yyyy'. gada 'd. MMMM</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="long">
-					<dateFormat >
-						<pattern>yyyy'. gada 'd. MMMM</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="medium">
-					<dateFormat >
-						<pattern>yyyy.d.M</pattern>
-					</dateFormat>
-				</dateFormatLength >
-				<dateFormatLength type="short">
-					<dateFormat >
-						<pattern>yy.d.M</pattern>
-					</dateFormat>
-				</dateFormatLength >
-			</dateFormats>
-			<timeFormats>
-				<default type="medium"/>
-				<timeFormatLength type="full">
-					<timeFormat >
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="long">
-					<timeFormat >
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="medium">
-					<timeFormat >
-						<pattern>HH:mm:ss</pattern>
-					</timeFormat>
-				</timeFormatLength >
-				<timeFormatLength type="short">
-					<timeFormat >
-						<pattern>HH:mm</pattern>
-					</timeFormat>
-				</timeFormatLength >
-			</timeFormats>
-			<dateTimeFormats>
-				<dateTimeFormatLength >
-					<dateTimeFormat>
-						<pattern>{1} {0}</pattern>
-					</dateTimeFormat>
-				</dateTimeFormatLength >
-			</dateTimeFormats>
-		</calendar>
-	</calendars>
-</dates>
-<numbers>
-	<symbols>
-		<decimal>,</decimal>
-		<group> </group>
-		<list>;</list>
-		<percentSign>%</percentSign>
-		<nativeZeroDigit>0</nativeZeroDigit>
-		<patternDigit>#</patternDigit>
-		<plusSign>+</plusSign>
-		<minusSign>-</minusSign>
-		<exponential>E</exponential>
-		<perMille>‰</perMille>
-		<infinity>∞</infinity>
-		<nan>�</nan>
-	</symbols>
-	<currencies>
-		<currency type="LVL">
-			<displayName>LVL</displayName>
-			<symbol>Ls</symbol>
-		</currency>
-	</currencies>
-</numbers>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[a-z ā ē ī ō ū ģ ķ ļ ņ ŗ č š ž]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Latn</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
+	<dates>
+		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
+		<calendars>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">janvāris</month>
+					<month type="2">februāris</month>
+					<month type="3">marts</month>
+					<month type="4">aprīlis</month>
+					<month type="5">maijs</month>
+					<month type="6">jūnijs</month>
+					<month type="7">jūlijs</month>
+					<month type="8">augusts</month>
+					<month type="9">septembris</month>
+					<month type="10">oktobris</month>
+					<month type="11">novembris</month>
+					<month type="12">decembris</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">Jan</month>
+					<month type="2">Feb</month>
+					<month type="3">Mar</month>
+					<month type="4">Apr</month>
+					<month type="5">Mai</month>
+					<month type="6">Jūn</month>
+					<month type="7">Jūl</month>
+					<month type="8">Aug</month>
+					<month type="9">Sep</month>
+					<month type="10">Okt</month>
+					<month type="11">Nov</month>
+					<month type="12">Dec</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">svētdiena</day>
+					<day type="mon">pirmdiena</day>
+					<day type="tue">otrdiena</day>
+					<day type="wed">trešdiena</day>
+					<day type="thu">ceturtdiena</day>
+					<day type="fri">piektdiena</day>
+					<day type="sat">sestdiena</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">Sv</day>
+					<day type="mon">P</day>
+					<day type="tue">O</day>
+					<day type="wed">T</day>
+					<day type="thu">C</day>
+					<day type="fri">Pk</day>
+					<day type="sat">S</day>
+				</dayAbbr>
+				<week>
+					<minDays count="1"/>
+					<firstDay day="mon"/>
+				</week>
+				<eras>
+					<eraAbbr>
+						<era type="1">pmē</era>
+						<era type="2">mē</era>
+					</eraAbbr>
+				</eras>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormatLength type="full">
+						<dateFormat >
+							<pattern>EEEE, yyyy'. gada 'd. MMMM</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="long">
+						<dateFormat >
+							<pattern>yyyy'. gada 'd. MMMM</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="medium">
+						<dateFormat >
+							<pattern>yyyy.d.M</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="short">
+						<dateFormat >
+							<pattern>yy.d.M</pattern>
+						</dateFormat>
+					</dateFormatLength >
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group> </group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+		<currencies>
+			<currency type="LVL">
+				<displayName>LVL</displayName>
+				<symbol>Ls</symbol>
+			</currency>
+		</currencies>
+	</numbers>
 </ldml>
