@@ -19,6 +19,7 @@
 *   02/19/97    aliu        Converted from java.
 *   04/01/97    aliu        Added support for centuries.
 *    07/23/98    stephen        JDK 1.2 sync
+*   11/15/99    weiv        Added support for week of year/day of week formatting
 ********************************************************************************
 */
 
@@ -143,6 +144,9 @@ public:
                             // HOUR0_FIELD is used for the zero-based 12-hour clock.
                             // For example, 11:30 PM + 1 hour results in 00:30 AM.
         kTimezoneField,      // TIMEZONE field alignment.
+        kYearWOYField,   // Corrected year for week representation
+        kDOWLocalField, // localized day of week
+
         
         
     /**

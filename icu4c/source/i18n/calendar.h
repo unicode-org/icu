@@ -20,7 +20,9 @@
 *   05/01/97    aliu        Made equals(), before(), after() arguments const.
 *   05/20/97    aliu        Replaced fAreFieldsSet with fAreFieldsInSync and
 *                           fAreAllFieldsSet.
-*    07/27/98    stephen        Sync up with JDK 1.2
+*   07/27/98    stephen     Sync up with JDK 1.2
+*   11/15/99    weiv        added YEAR_WOY and DOW_LOCAL
+*                           to EDateFields
 ********************************************************************************
 */
 
@@ -168,6 +170,9 @@ public:
         MILLISECOND,          // Example: 0..999
         ZONE_OFFSET,          // Example: -12*U_MILLIS_PER_HOUR..12*U_MILLIS_PER_HOUR
         DST_OFFSET,           // Example: 0 or U_MILLIS_PER_HOUR
+// here will go names for 'Y' and 'e'
+        YEAR_WOY,  // 'Y' Example: 1..big number
+        DOW_LOCAL, // 'e' Example: 1..7
         FIELD_COUNT,
 
         DAY_OF_MONTH = DATE   // Synonyms
