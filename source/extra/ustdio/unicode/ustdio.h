@@ -50,7 +50,7 @@ typedef struct UFILE UFILE;
  * is NULL, in which case the system default codepage will be used.
  * @return A new UFILE, or 0 if an error occurred.
  */
-U_CAPI UFILE*
+U_CAPI UFILE* U_EXPORT2
 u_fopen(const char    *filename,
     const char    *perm,
     const char    *locale,
@@ -68,7 +68,7 @@ u_fopen(const char    *filename,
  * is NULL, in which case the system default codepage will be used.
  * @return A new UFILE, or 0 if an error occurred.
  */
-U_CAPI UFILE*
+U_CAPI UFILE* U_EXPORT2
 u_finit(FILE        *f,
     const char    *locale,
     const char    *codepage);
@@ -77,7 +77,7 @@ u_finit(FILE        *f,
  * Close a UFILE.
  * @param file The UFILE to close.
  */
-U_CAPI void
+U_CAPI void U_EXPORT2
 u_fclose(UFILE *file);
 
 /**
@@ -85,7 +85,7 @@ u_fclose(UFILE *file);
  * @param f The UFILE
  * @return A FILE*, owned by the UFILE.  The FILE <EM>must not</EM> be closed.
  */
-U_CAPI FILE*
+U_CAPI FILE* U_EXPORT2
 u_fgetfile(UFILE *f);
 
 /**
@@ -95,7 +95,7 @@ u_fgetfile(UFILE *f);
  * @param file The UFILE to set.
  * @return The locale whose conventions are used to format and parse output.
  */
-U_CAPI const char*
+U_CAPI const char* U_EXPORT2
 u_fgetlocale(UFILE *file);
 
 /**
@@ -105,7 +105,7 @@ u_fgetlocale(UFILE *file);
  * @param file The UFILE to query.
  * @return 0 if successful, otherwise a negative number.
  */
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 u_fsetlocale(const char        *locale,
          UFILE        *file);
 
@@ -117,7 +117,7 @@ u_fsetlocale(const char        *locale,
  * @return The codepage in which data is written to and read from the UFILE,
  * or 0 if an error occurred.
  */
-U_CAPI const char*
+U_CAPI const char* U_EXPORT2
 u_fgetcodepage(UFILE *file);
 
 /**
@@ -131,7 +131,7 @@ u_fgetcodepage(UFILE *file);
  * @param file The UFILE to set.
  * @return 0 if successful, otherwise a negative number.
  */
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 u_fsetcodepage(const char    *codepage,
            UFILE        *file);
 
@@ -141,7 +141,7 @@ u_fsetcodepage(const char    *codepage,
  * @param file The UFILE to set.
  * @return alias to the converter
  */
-U_CAPI UConverter *u_fgetConverter(UFILE *f);
+U_CAPI UConverter U_EXPORT2 *u_fgetConverter(UFILE *f);
 
 /* Output functions */
 
@@ -152,7 +152,7 @@ U_CAPI UConverter *u_fgetConverter(UFILE *f);
  * interpret the variable arguments received and format the data.
  * @return The number of Unicode characters written to <TT>f</TT>.
  */
-U_CAPI int32_t 
+U_CAPI int32_t U_EXPORT2
 u_fprintf(    UFILE        *f,
         const char    *patternSpecification,
         ... );
@@ -168,7 +168,7 @@ u_fprintf(    UFILE        *f,
  * @return The number of Unicode characters written to <TT>f</TT>.
  * @see u_fprintf
  */
-U_CAPI int32_t 
+U_CAPI int32_t U_EXPORT2
 u_vfprintf(    UFILE        *f,
         const char    *patternSpecification,
         va_list        ap);
@@ -180,7 +180,7 @@ u_vfprintf(    UFILE        *f,
  * interpret the variable arguments received and format the data.
  * @return The number of Unicode characters written to <TT>f</TT>.
  */
-U_CAPI int32_t 
+U_CAPI int32_t U_EXPORT2
 u_fprintf_u(    UFILE        *f,
         const UChar    *patternSpecification,
         ... );
@@ -196,7 +196,7 @@ u_fprintf_u(    UFILE        *f,
  * @return The number of Unicode characters written to <TT>f</TT>.
  * @see u_fprintf_u
  */
-U_CAPI int32_t 
+U_CAPI int32_t U_EXPORT2
 u_vfprintf_u(    UFILE        *f,
         const UChar    *patternSpecification,
         va_list        ap);
@@ -209,7 +209,7 @@ u_vfprintf_u(    UFILE        *f,
  * @param f The UFILE to which to write.
  * @return A non-negative number if successful, EOF otherwise.
  */
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 u_fputs(const UChar    *s,
     UFILE        *f);
 
@@ -219,7 +219,7 @@ u_fputs(const UChar    *s,
  * @param f The UFILE to which to write.
  * @return The character written if successful, EOF otherwise.
  */
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 u_fputc(UChar        uc,
     UFILE        *f);
 
@@ -232,7 +232,7 @@ u_fputc(UChar        uc,
  * @param f The UFILE to which to write.
  * @return The number of Unicode characters written.
  */
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 u_file_write(const UChar     *chars, 
          int32_t        count, 
          UFILE         *f);
@@ -248,7 +248,7 @@ u_file_write(const UChar     *chars,
  * @return The number of items successfully converted and assigned, or EOF
  * if an error occurred.
  */
-U_CAPI int32_t 
+U_CAPI int32_t U_EXPORT2
 u_fscanf(    UFILE        *f,
         const char     *patternSpecification,
         ... );
@@ -265,7 +265,7 @@ u_fscanf(    UFILE        *f,
  * if an error occurred.
  * @see u_fscanf
  */
-U_CAPI int32_t 
+U_CAPI int32_t U_EXPORT2
 u_vfscanf(    UFILE        *f,
         const char     *patternSpecification,
         va_list        ap);
@@ -278,7 +278,7 @@ u_vfscanf(    UFILE        *f,
  * @return The number of items successfully converted and assigned, or EOF
  * if an error occurred.
  */
-U_CAPI int32_t 
+U_CAPI int32_t U_EXPORT2
 u_fscanf_u(    UFILE        *f,
         const UChar     *patternSpecification,
         ... );
@@ -295,7 +295,7 @@ u_fscanf_u(    UFILE        *f,
  * if an error occurred.
  * @see u_fscanf_u
  */
-U_CAPI int32_t 
+U_CAPI int32_t U_EXPORT2
 u_vfscanf_u(    UFILE        *f,
         const UChar     *patternSpecification,
         va_list        ap);
@@ -309,7 +309,7 @@ u_vfscanf_u(    UFILE        *f,
  * reached. A NULL character (U+0000) will be appended to <TT>s</TT>.
  * @return A pointer to <TT>s</TT>, or 0 if no characters were available.
  */
-U_CAPI UChar*
+U_CAPI UChar* U_EXPORT2
 u_fgets(UFILE        *f,
     int32_t        n,
     UChar        *s);
@@ -319,7 +319,7 @@ u_fgets(UFILE        *f,
  * @param f The UFILE from which to read.
  * @return The UChar value read, or U+FFFF if no character was available.
  */
-U_CAPI UChar
+U_CAPI UChar U_EXPORT2
 u_fgetc(UFILE        *f);
 
 /**
@@ -330,7 +330,7 @@ u_fgetc(UFILE        *f);
  * @param f The UFILE to receive <TT>c</TT>.
  * @return The UChar value put back if successful, U+FFFF otherwise.
  */
-U_CAPI UChar
+U_CAPI UChar U_EXPORT2
 u_fungetc(UChar        c,
       UFILE        *f);
 
@@ -343,7 +343,7 @@ u_fungetc(UChar        c,
  * @param f The UFILE from which to read.
  * @return The number of Unicode characters read.
  */
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 u_file_read(UChar        *chars, 
         int32_t        count, 
         UFILE         *f);
