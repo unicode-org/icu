@@ -602,7 +602,7 @@ UChar Normalizer::prevCompose()
 
 void Normalizer::bubbleAppend(UnicodeString& target, UChar ch, uint32_t cclass) {
     UTextOffset i;
-    for (i = target.length() - 1; i > 0; --i) {
+    for (i = target.length() - 1; i >= 0; --i) {
         uint32_t iClass = getComposeClass(target[i]);
 
         if (iClass == 1 || iClass <= cclass) {      // 1 means combining class 0
