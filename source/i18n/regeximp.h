@@ -19,7 +19,7 @@ U_NAMESPACE_BEGIN
 //
 //#define REGEX_SCAN_DEBUG
 #define REGEX_DUMP_DEBUG
-//#define REGEX_RUN_DEBUG
+#define REGEX_RUN_DEBUG
 //  End of #defines inteded to be directly set.
 
 #ifdef REGEX_SCAN_DEBUG
