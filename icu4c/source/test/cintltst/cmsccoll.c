@@ -654,10 +654,16 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
     src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
     *first = *second = 0;
 
-    while ((current = ucol_tok_parseNextToken(&src, &strength,
-                      &chOffset, &chLen, &exOffset, &exLen,
-                      &prefixOffset, &prefixLen,
-                      &specs, startOfRules,&parseError, status)) != NULL) {
+    while ((current = ucol_tok_parseNextToken(&src, startOfRules,&parseError, status)) != NULL) {
+      strength = src.parsedToken.strength;
+      chOffset = src.parsedToken.charsOffset;
+      chLen = src.parsedToken.charsLen;
+      exOffset = src.parsedToken.extensionOffset;
+      exLen = src.parsedToken.extensionLen;
+      prefixOffset = src.parsedToken.prefixOffset;
+      prefixLen = src.parsedToken.prefixLen;
+      specs = src.parsedToken.flags;
+
       startOfRules = FALSE;
       varT = (UBool)((specs & UCOL_TOK_VARIABLE_TOP) != 0);
       top_ = (UBool)((specs & UCOL_TOK_TOP) != 0);
@@ -1010,10 +1016,16 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, const char *refName,
     src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
     *first = *second = 0;
 
-    while ((current = ucol_tok_parseNextToken(&src, &strength,
-                      &chOffset, &chLen, &exOffset, &exLen,
-                      &prefixOffset, &prefixLen,
-                      &specs, startOfRules, &parseError,status)) != NULL) {
+    while ((current = ucol_tok_parseNextToken(&src, startOfRules, &parseError,status)) != NULL) {
+      strength = src.parsedToken.strength;
+      chOffset = src.parsedToken.charsOffset;
+      chLen = src.parsedToken.charsLen;
+      exOffset = src.parsedToken.extensionOffset;
+      exLen = src.parsedToken.extensionLen;
+      prefixOffset = src.parsedToken.prefixOffset;
+      prefixLen = src.parsedToken.prefixLen;
+      specs = src.parsedToken.flags;
+
       startOfRules = FALSE;
       varT = (UBool)((specs & UCOL_TOK_VARIABLE_TOP) != 0);
       top_ = (UBool)((specs & UCOL_TOK_TOP) != 0);
@@ -1097,10 +1109,16 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
     src.extraCurrent = src.end;
     src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
 
-    while ((current = ucol_tok_parseNextToken(&src, &strength,
-                      &chOffset, &chLen, &exOffset, &exLen,
-                      &prefixOffset, &prefixLen,
-                      &specs, startOfRules, &parseError,status)) != NULL) {
+    while ((current = ucol_tok_parseNextToken(&src, startOfRules, &parseError,status)) != NULL) {
+      strength = src.parsedToken.strength;
+      chOffset = src.parsedToken.charsOffset;
+      chLen = src.parsedToken.charsLen;
+      exOffset = src.parsedToken.extensionOffset;
+      exLen = src.parsedToken.extensionLen;
+      prefixOffset = src.parsedToken.prefixOffset;
+      prefixLen = src.parsedToken.prefixLen;
+      specs = src.parsedToken.flags;
+
       startOfRules = FALSE;
       varT = (UBool)((specs & UCOL_TOK_VARIABLE_TOP) != 0);
       top_ = (UBool)((specs & UCOL_TOK_TOP) != 0);
@@ -2804,12 +2822,18 @@ static void TestVariableTopSetting() {
     src.source = src.current = rulesCopy;
     src.end = rulesCopy+rulesLen;
     src.extraCurrent = src.end;
-    src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
+    src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE; 
 
-    while ((current = ucol_tok_parseNextToken(&src, &strength,
-                      &chOffset, &chLen, &exOffset, &exLen,
-                      &prefixOffset, &prefixLen,
-                      &specs, startOfRules, &parseError,&status)) != NULL) {
+    while ((current = ucol_tok_parseNextToken(&src, startOfRules, &parseError,&status)) != NULL) {
+      strength = src.parsedToken.strength;
+      chOffset = src.parsedToken.charsOffset;
+      chLen = src.parsedToken.charsLen;
+      exOffset = src.parsedToken.extensionOffset;
+      exLen = src.parsedToken.extensionLen;
+      prefixOffset = src.parsedToken.prefixOffset;
+      prefixLen = src.parsedToken.prefixLen;
+      specs = src.parsedToken.flags;
+
       startOfRules = FALSE;
       if(0) {
         log_verbose("%04X %d ", *(rulesCopy+chOffset), chLen);
@@ -3192,10 +3216,9 @@ static void TestStrCollIdenticalPrefix() {
   };
   genericRulesTestWithResult(rule, test, sizeof(test)/sizeof(test[0]), UCOL_EQUAL);
 }
-
-#if 0
-/* This tests also fails*/
-static void TestBeforePrefixFailure() {
+/* Contractions should have all their canonically equivalent */
+/* strings included */
+static void TestContractionClosure() {
   static struct {
     const char *rules;
     const char *data[50];
@@ -3205,6 +3228,25 @@ static void TestBeforePrefixFailure() {
       { "b", "\\u00e4\\u00e4", "a\\u0308a\\u0308", "\\u00e4a\\u0308", "a\\u0308\\u00e4" }, 5},
     {   "&b<\\u00C5",
       { "b", "\\u00C5", "A\\u030A", "\\u212B" }, 4},
+  };
+  uint32_t i;
+
+
+  for(i = 0; i<(sizeof(tests)/sizeof(tests[0])); i++) {
+    genericRulesStarter(tests[i].rules, tests[i].data, tests[i].len);
+  }
+}
+
+/* This tests also fails*/
+static void TestBeforePrefixFailure() {
+  static struct {
+    const char *rules;
+    const char *data[50];
+    const uint32_t len;
+  } tests[] = {  
+    { "&g <<< a"
+      "&[before 3]\\uff41 <<< x",
+      {"x", "\\uff41"}, 2 },
     {   "&\\u30A7=\\u30A7=\\u3047=\\uff6a"
         "&\\u30A8=\\u30A8=\\u3048=\\uff74"
         "&[before 3]\\u30a7<<<\\u30a9", 
@@ -3272,7 +3314,7 @@ static void TestBeforePrefixFailure() {
   }
 #endif
 }
-#endif
+
 static void TestPrefixCompose() {
   const char* rule1 = 
         "&\\u30a7<<<\\u30ab|\\u30fc=\\u30ac|\\u30fc";
@@ -3406,7 +3448,9 @@ static void TestMergeSortKeys() {
 
 void addMiscCollTest(TestNode** root)
 {
-    /*addTest(root, &TestBeforePrefixFailure, "tscoll/cmsccoll/TestBeforePrefixFailure");*/
+
+    addTest(root, &TestBeforePrefixFailure, "tscoll/cmsccoll/TestBeforePrefixFailure");
+    /*addTest(root, &TestContractionClosure, "tscoll/cmsccoll/TestContractionClosure");*/
     addTest(root, &TestMergeSortKeys, "tscoll/cmsccoll/TestMergeSortKeys");
     addTest(root, &TestPrefixCompose, "tscoll/cmsccoll/TestPrefixCompose");
     addTest(root, &TestStrCollIdenticalPrefix, "tscoll/cmsccoll/TestStrCollIdenticalPrefix");
