@@ -31,7 +31,8 @@ U_NAMESPACE_BEGIN
 static uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *element, uint32_t existingCE, UErrorCode *status);
 
 U_CDECL_BEGIN
-static int32_t prefixLookupHash(const UHashTok e) {
+static int32_t U_CALLCONV
+prefixLookupHash(const UHashTok e) {
   UCAElements *element = (UCAElements *)e.pointer;
   UChar buf[256];
   UHashTok key;
@@ -43,7 +44,8 @@ static int32_t prefixLookupHash(const UHashTok e) {
   return uhash_hashUChars(key);
 }
 
-static int8_t prefixLookupComp(const UHashTok e1, const UHashTok e2) {
+static int8_t U_CALLCONV
+prefixLookupComp(const UHashTok e1, const UHashTok e2) {
   UCAElements *element1 = (UCAElements *)e1.pointer;
   UCAElements *element2 = (UCAElements *)e2.pointer;
 
@@ -65,10 +67,6 @@ static int8_t prefixLookupComp(const UHashTok e1, const UHashTok e2) {
   //element2->cPoints[element2->cSize] = 0;
 
   return uhash_compareUChars(key1, key2);
-}
-
-static void prefixLookupDeleter(void *element) {
-  uprv_free(element);
 }
 U_CDECL_END
 
@@ -124,7 +122,7 @@ tempUCATable * uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts
   uprv_memset(t->expansions, 0, sizeof(ExpansionTable));
   t->mapping = ucmpe32_open(UCOL_SPECIAL_FLAG | (initTag<<24), UCOL_SPECIAL_FLAG | (SURROGATE_TAG<<24), status);
   t->prefixLookup = uhash_open(prefixLookupHash, prefixLookupComp, status);
-  uhash_setValueDeleter(t->prefixLookup, prefixLookupDeleter);
+  uhash_setValueDeleter(t->prefixLookup, uhash_freeBlock);
 
   t->contractions = uprv_cnttab_open(t->mapping, status);
 

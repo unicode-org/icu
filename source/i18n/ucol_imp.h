@@ -609,7 +609,7 @@ typedef struct {
   uint32_t conts;
 } InverseTableHeader;
 
-typedef int32_t
+typedef int32_t U_CALLCONV
 SortKeyGenerator(const    UCollator    *coll,
         const    UChar        *source,
         int32_t        sourceLength,

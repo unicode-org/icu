@@ -24,7 +24,8 @@
 #include "cmemory.h"
 #include "ucol_tok.h"
 
-static
+U_CDECL_BEGIN
+static U_CALLCONV
 int32_t uhash_hashTokens(const UHashTok k) {
   int32_t hash = 0;
   //uint32_t key = (uint32_t)k.integer;
@@ -46,7 +47,7 @@ int32_t uhash_hashTokens(const UHashTok k) {
   return hash;
 }
 
-static
+static U_CALLCONV
 UBool uhash_compareTokens(const UHashTok key1, const UHashTok key2) {
     //uint32_t p1 = (uint32_t) key1.integer;
     //uint32_t p2 = (uint32_t) key2.integer;
@@ -80,12 +81,7 @@ UBool uhash_compareTokens(const UHashTok key1, const UHashTok key2) {
       return FALSE;
     }
 }
-
-static
-void deleteToken(void *token) {
-    UColToken *tok = (UColToken *)token;
-    uprv_free(tok);
-}
+U_CDECL_END
 
 void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint32_t rulesLength, UCollator *UCA, UErrorCode *status) {
   uint32_t nSize = 0;
@@ -115,7 +111,7 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
   if(U_FAILURE(*status)) {
     return;
   }
-  uhash_setValueDeleter(src->tailored, deleteToken);
+  uhash_setValueDeleter(src->tailored, uhash_freeBlock);
 
   src->opts = (UColOptionSet *)uprv_malloc(sizeof(UColOptionSet));
 
