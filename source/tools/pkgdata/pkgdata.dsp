@@ -53,7 +53,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 icuin.lib icuuc.lib icutu.lib /nologo /subsystem:console /machine:I386 /libpath:"../../../lib/release" /libpath:"../toolutil/release" /libpath:"..\toolutil\Release" /libpath:"..\..\..\lib"
+# ADD LINK32 icuuc.lib icutu.lib /nologo /subsystem:console /machine:I386 /libpath:"../../../lib/release" /libpath:"../toolutil/release" /libpath:"..\toolutil\Release" /libpath:"..\..\..\lib"
 # Begin Custom Build
 TargetPath=.\Release\pkgdata.exe
 InputPath=.\Release\pkgdata.exe
@@ -88,7 +88,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 icuind.lib icuucd.lib icutud.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"../../../lib/debug" /libpath:"../toolutil/debug" /libpath:"..\toolutil\Debug" /libpath:"..\..\..\lib"
+# ADD LINK32 icuucd.lib icutud.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"../../../lib/debug" /libpath:"../toolutil/debug" /libpath:"..\toolutil\Debug" /libpath:"..\..\..\lib"
 # Begin Custom Build
 TargetPath=.\Debug\pkgdata.exe
 InputPath=.\Debug\pkgdata.exe
@@ -123,7 +123,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:IX86 /machine:IA64
-# ADD LINK32 icuin.lib icuuc.lib icutu.lib /nologo /subsystem:console /machine:IX86 /libpath:"../../../lib/release" /libpath:"../toolutil/release" /libpath:"..\toolutil\Release" /libpath:"..\..\..\lib" /machine:IA64
+# ADD LINK32 icuuc.lib icutu.lib /nologo /subsystem:console /machine:IX86 /libpath:"../../../lib/release" /libpath:"../toolutil/release" /libpath:"..\toolutil\Release" /libpath:"..\..\..\lib" /machine:IA64
 # Begin Custom Build
 TargetPath=.\Release\pkgdata.exe
 InputPath=.\Release\pkgdata.exe
@@ -158,7 +158,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:IX86 /pdbtype:sept /machine:IA64
-# ADD LINK32 icuind.lib icuucd.lib icutud.lib /nologo /subsystem:console /incremental:no /debug /machine:IX86 /pdbtype:sept /libpath:"../../../lib/debug" /libpath:"../toolutil/debug" /libpath:"..\toolutil\Debug" /libpath:"..\..\..\lib" /machine:IA64
+# ADD LINK32 icuucd.lib icutud.lib /nologo /subsystem:console /incremental:no /debug /machine:IX86 /pdbtype:sept /libpath:"../../../lib/debug" /libpath:"../toolutil/debug" /libpath:"..\toolutil\Debug" /libpath:"..\..\..\lib" /machine:IA64
 # Begin Custom Build
 TargetPath=.\Debug\pkgdata.exe
 InputPath=.\Debug\pkgdata.exe

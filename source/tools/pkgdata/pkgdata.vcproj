@@ -45,7 +45,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="icuind.lib icuucd.lib icutud.lib"
+				AdditionalDependencies="icuucd.lib icutud.lib"
 				OutputFile=".\Debug/pkgdata.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
@@ -104,7 +104,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				AdditionalDependencies="icuin.lib icuuc.lib icutu.lib"
+				AdditionalDependencies="icuuc.lib icutu.lib"
 				OutputFile=".\Release/pkgdata.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
