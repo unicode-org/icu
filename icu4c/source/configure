@@ -3236,6 +3236,7 @@ if test x"$mapped" != x; then
     if test x"$datapackaging" != x -a x"$mapped" != x"$datapackaging"; then
 	{ echo "configure: error: conflicting values used for --with-data-packaging and deprecated --enable-mapped" 1>&2; exit 1; }
     fi
+    datapackaging=$mapped
 fi
 
 if test x"$datapackaging" = x -o x"$datapackaging" = xauto; then
