@@ -609,38 +609,41 @@ public final class Utility {
             buffer.append("        \"");
             int count = 11;
             while (i<s.length() && count<80) {
-            char c = s.charAt(i++);
-            if (c < '\u0020' || c == '"' || c == '\\') {
-		if (c == '\n') {
-		    buffer.append("\\n");
-		} else if (c == '\t') {
-		    buffer.append("\\t");
-		} else if (c == '\r') {
-		    buffer.append("\\r");
-		} else {
-		    // Represent control characters, backslash and double quote
-		    // using octal notation; otherwise the string we form
-		    // won't compile, since Unicode escape sequences are
-		    // processed before tokenization.
-		    buffer.append('\\');
-		    buffer.append(HEX_DIGIT[(c & 0700) >> 6]); // HEX_DIGIT works for octal
-		    buffer.append(HEX_DIGIT[(c & 0070) >> 3]);
-		    buffer.append(HEX_DIGIT[(c & 0007)]);
-		    count += 4;
-		}
-            }
-            else if (c <= '\u007E') {
-                buffer.append(c);
-                count += 1;
-            }
-            else {
-                buffer.append("\\u");
-                buffer.append(HEX_DIGIT[(c & 0xF000) >> 12]);
-                buffer.append(HEX_DIGIT[(c & 0x0F00) >> 8]);
-                buffer.append(HEX_DIGIT[(c & 0x00F0) >> 4]);
-                buffer.append(HEX_DIGIT[(c & 0x000F)]);
-                count += 6;
-            }
+                char c = s.charAt(i++);
+                if (c < '\u0020' || c == '"' || c == '\\') {
+                    if (c == '\n') {
+                        buffer.append("\\n");
+                        count += 2;
+                    } else if (c == '\t') {
+                        buffer.append("\\t");
+                        count += 2;
+                    } else if (c == '\r') {
+                        buffer.append("\\r");
+                        count += 2;
+                    } else {
+                        // Represent control characters, backslash and double quote
+                        // using octal notation; otherwise the string we form
+                        // won't compile, since Unicode escape sequences are
+                        // processed before tokenization.
+                        buffer.append('\\');
+                        buffer.append(HEX_DIGIT[(c & 0700) >> 6]); // HEX_DIGIT works for octal
+                        buffer.append(HEX_DIGIT[(c & 0070) >> 3]);
+                        buffer.append(HEX_DIGIT[(c & 0007)]);
+                        count += 4;
+                    }
+                }
+                else if (c <= '\u007E') {
+                    buffer.append(c);
+                    count += 1;
+                }
+                else {
+                    buffer.append("\\u");
+                    buffer.append(HEX_DIGIT[(c & 0xF000) >> 12]);
+                    buffer.append(HEX_DIGIT[(c & 0x0F00) >> 8]);
+                    buffer.append(HEX_DIGIT[(c & 0x00F0) >> 4]);
+                    buffer.append(HEX_DIGIT[(c & 0x000F)]);
+                    count += 6;
+                }
             }
             buffer.append('"');
         }
@@ -660,22 +663,22 @@ public final class Utility {
         for (int i=0; i<s.length();) {
             char c = s.charAt(i++);
             if (c < '\u0020' || c == '"' || c == '\\') {
-		if (c == '\n') {
-		    buffer.append("\\n");
-		} else if (c == '\t') {
-		    buffer.append("\\t");
-		} else if (c == '\r') {
-		    buffer.append("\\r");
-		} else {
-		    // Represent control characters, backslash and double quote
-		    // using octal notation; otherwise the string we form
-		    // won't compile, since Unicode escape sequences are
-		    // processed before tokenization.
-		    buffer.append('\\');
-		    buffer.append(HEX_DIGIT[(c & 0700) >> 6]); // HEX_DIGIT works for octal
-		    buffer.append(HEX_DIGIT[(c & 0070) >> 3]);
-		    buffer.append(HEX_DIGIT[(c & 0007)]);
-		}
+                if (c == '\n') {
+                    buffer.append("\\n");
+                } else if (c == '\t') {
+                    buffer.append("\\t");
+                } else if (c == '\r') {
+                    buffer.append("\\r");
+                } else {
+                    // Represent control characters, backslash and double quote
+                    // using octal notation; otherwise the string we form
+                    // won't compile, since Unicode escape sequences are
+                    // processed before tokenization.
+                    buffer.append('\\');
+                    buffer.append(HEX_DIGIT[(c & 0700) >> 6]); // HEX_DIGIT works for octal
+                    buffer.append(HEX_DIGIT[(c & 0070) >> 3]);
+                    buffer.append(HEX_DIGIT[(c & 0007)]);
+                }
             }
             else if (c <= '\u007E') {
                 buffer.append(c);

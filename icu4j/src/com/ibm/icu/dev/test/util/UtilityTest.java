@@ -43,33 +43,29 @@ public class UtilityTest extends TestFmwk {
             // cause a newline to be inserted
             "testing space , quotations \"",
             "testing weird supplementary characters \ud800\udc00",
-            "testing control characters \u0001 and line breaking \n are we done yet?"
+            "testing control characters \u0001 and line breaking!! \n are we done yet?"
         };
         String result[] = {
             "        \"the quick brown fox jumps over the lazy dog\"",
             "        \"testing space , quotations \\042\"",
             "        \"testing weird supplementary characters \\uD800\\uDC00\"",
-            "        \"testing control characters \\001 and line breaking \\012 are we done ye\"+"
+            "        \"testing control characters \\001 and line breaking!! \\n are we done ye\"+"
                      + Utility.LINE_SEPARATOR + "        \"t?\""
         };
         String result1[] = {
             "\"the quick brown fox jumps over the lazy dog\"",
             "\"testing space , quotations \\042\"",
             "\"testing weird supplementary characters \\uD800\\uDC00\"",
-            "\"testing control characters \\001 and line breaking \\012 are we done yet?\""
+            "\"testing control characters \\001 and line breaking!! \\n are we done yet?\""
         };
         
         for (int i = 0; i < data.length; i ++) {
-            if (!result[i].equals(Utility.formatForSource(data[i]))) {
-                errln("Fail: Utility.formatForSource(\""
-                      + Utility.unescape(data[i]) + "expected to be " + result[i]);
-            }
+            assertEquals("formatForSource(\"" + data[i] + "\")",
+                         result[i], Utility.formatForSource(data[i]));
         }
         for (int i = 0; i < data.length; i ++) {
-            if (!result1[i].equals(Utility.format1ForSource (data[i]))) {
-                errln("Fail: Utility.formatForSource(\""
-                      + Utility.unescape(data[i]) + "expected to be " + result1[i]);
-            }
+            assertEquals("format1ForSource(\"" + data[i] + "\")",
+                         result1[i], Utility.format1ForSource(data[i]));
         }
     }
     
