@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Attic/ByteTrie.java,v $ 
-* $Date: 2001/03/28 00:01:52 $ 
-* $Revision: 1.2 $
+* $Date: 2001/08/22 23:41:28 $ 
+* $Revision: 1.3 $
 *
 ******************************************************************************
 */
@@ -43,7 +43,7 @@ import com.ibm.text.UCharacter;
 *   int thirdindex = index2[secondindex] + ch & LAST_FOUR_BITS_MASK;<br>    
 *   f(ch) = value[thirdindex];<br>
 * </p>
-* @version            $Revision: 1.2 $
+* @version            $Revision: 1.3 $
 * @author             Syn Wee Quek
 */
 public final class ByteTrie
@@ -159,8 +159,6 @@ public final class ByteTrie
   */
   private void build(byte array[])
   {
-    int ch = 0;
-    
     int stage2[] = new int[COUNT_CODEPOINT_FIRST_17_BIT_];
     byte stage3[] = new byte[UCharacter.MAX_VALUE >> 1];
     int size = TrieBuilder.build(array, 0, array.length, COUNT_4_BIT_, stage2, 
