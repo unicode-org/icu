@@ -5,15 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/TokenTransition.java,v $ 
- * $Date: 2002/02/16 03:05:32 $ 
- * $Revision: 1.2 $
+ * $Date: 2003/09/10 23:36:08 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.tool.localeconverter;
 
-import java.io.*;
-import java.util.*;
 
 public class TokenTransition extends ComplexTransition {
     public static final TokenTransition GLOBAL = new TokenTransition(SUCCESS);

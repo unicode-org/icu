@@ -5,16 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/PosixCollationBuilder.java,v $ 
- * $Date: 2002/02/16 03:05:30 $ 
- * $Revision: 1.2 $
+ * $Date: 2003/09/10 23:36:08 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
  
 package com.ibm.icu.dev.tool.localeconverter;
-import com.ibm.icu.lang.*;
-import com.ibm.icu.text.*;
-import java.io.*;
 import java.util.*;
 
 class PosixCollationBuilder {
@@ -61,11 +58,13 @@ class PosixCollationBuilder {
                 }
             }
         }
+ 
        //HexToUnicodeTransliterator myTranslit = new HexToUnicodeTransliterator("<U###0>");
         public void addWeight(String symbol) {
          //   ReplaceableString tSymbol = new ReplaceableString(symbol);
            // myTranslit.transliterate(tSymbol);
                 //limit the size of a single weight
+            symbol = unescape(symbol);    
             if (symbol.length() > MAX_COMPOSITION) {
                 System.err.println("WARNING: Weights of composition greater than "+MAX_COMPOSITION+" were truncated.");
                 symbol = symbol.substring(0, MAX_COMPOSITION);
@@ -254,11 +253,60 @@ class PosixCollationBuilder {
         } while (result != mappedSource);
         return result;
     }
-    
+    /**
+     * unescape a string in the format <U####>
+     */
+    public static String unescape(String src){
+        StringBuffer result = new StringBuffer();
+        int maxDig = 4;
+        if(src == null){
+            return src;
+        }
+        int srcLen= src.length();
+        for(int i=0; i<srcLen;i++){
+            char c = src.charAt(i);
+            if(c == '<'){
+               if(srcLen > i+1){
+                   char c2 = src.charAt(++i);
+                   if(c2 == 'U' && (i+maxDig+1)< srcLen){
+                        i++;
+                        if( src.charAt(i+maxDig)== '>'){
+                            String subStr = src.substring(i,i+maxDig);
+                            try{
+                                Integer val = Integer.valueOf(subStr,16);
+                                result.append((char) val.intValue());
+                                
+                            }catch(NumberFormatException ex){
+                                result.append(c);
+                                result.append(c2);
+                                result.append(subStr);
+                            }
+                            i += maxDig;
+                            continue;
+                        }else{
+                            result.append(c);
+                            result.append(c2);
+                            result.append(src.charAt(i));
+                            System.err.println("WARNING: The escape sequence is not terminated at " + i +" in string: " + src);
+                            continue;
+                        }
+
+                   }else{
+                        result.append(c);
+                        result.append(c2);
+                        continue;
+                   }
+               }
+            }
+            result.append(c);
+        }
+        return result.toString();
+    }
     public int ordinalityOf(String symbol) {
 //        HexToUnicodeTransliterator newTranslit = new HexToUnicodeTransliterator();
 //        ReplaceableString tSymbol = new ReplaceableString(symbol);
 //        newTranslit.transliterate(tSymbol);
+        symbol = unescape(symbol);
         CollationRule w = (CollationRule)rules.get(symbol);
         if (w != null) {
             return w.charNumber;
@@ -280,6 +328,7 @@ class PosixCollationBuilder {
     public void addRule(String symbol) {
   //      ReplaceableString tSymbol = new ReplaceableString(symbol);
    //     myTranslit.transliterate(tSymbol);
+        symbol = unescape(symbol);
         if (symbol.length() > 1) {
             System.err.println("WARNING: Undefined element '"+symbol+"'.  collating-symbol generated.");
             symbol = defineWeightSymbol(symbol);
@@ -316,16 +365,19 @@ class PosixCollationBuilder {
                     public int compare(final Object i, final Object j) {
                         final CollationRule o1 = (CollationRule)i;
                         final CollationRule o2 = (CollationRule)j;
-                        final boolean w1 = o1.isWeightSymbol() != null;
-                        final boolean w2 = o2.isWeightSymbol() != null;
-                            //sort weights first
-                        if (w1 && !w2) {
-                            return -1;
-                        } else if (!w1 && w2) {
-                            return 1;
-                        } else {
-                            return o1.compare(o2);
+                        if(o1 !=null && o2 != null){
+                            final boolean w1 = o1.isWeightSymbol() != null;
+                            final boolean w2 = o2.isWeightSymbol() != null;
+                                //sort weights first
+                            if (w1 && !w2) {
+                                return -1;
+                            } else if (!w1 && w2) {
+                                return 1;
+                            } else {
+                                return o1.compare(o2);
+                            }
                         }
+                        return -1;
                     }
                 }
             );

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/ConvertAllJavaLocales.java,v $
- * $Date: 2003/08/14 22:10:25 $
- * $Revision: 1.4 $
+ * $Date: 2003/09/10 23:36:09 $
+ * $Revision: 1.5 $
  *
  *******************************************************************************
  */
@@ -43,7 +43,6 @@ locale
 
 
 */
-import java.lang.reflect.*;
 /*
  *******************************************************************************
  * Copyright (C) 2002-2004, International Business Machines Corporation and    *
@@ -51,8 +50,8 @@ import java.lang.reflect.*;
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/ConvertAllJavaLocales.java,v $ 
- * $Date: 2003/08/14 22:10:25 $ 
- * $Revision: 1.4 $
+ * $Date: 2003/09/10 23:36:09 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */

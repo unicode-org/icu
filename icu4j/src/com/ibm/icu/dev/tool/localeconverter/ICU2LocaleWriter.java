@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/ICU2LocaleWriter.java,v $ 
- * $Date: 2003/08/14 22:13:23 $ 
- * $Revision: 1.4 $
+ * $Date: 2003/09/10 23:36:09 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -63,7 +63,7 @@ public class ICU2LocaleWriter extends LocaleWriter {
                 println(" { ");
                 for (int i = 0; i < items.length; i++) {
                     if(items[i]!=null){
-                        printString(items[i].toString());
+                        printRuleString(items[i].toString());
                         if (items[i].comment != null) {
                             tabTo(30);
                             print("//");

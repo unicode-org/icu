@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/ICULocaleWriter.java,v $ 
- * $Date: 2003/08/14 22:10:25 $ 
- * $Revision: 1.4 $
+ * $Date: 2003/09/10 23:36:08 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -128,7 +128,7 @@ public class ICULocaleWriter extends LocaleWriter {
     protected void close() {
         outdent();
         println("}");
-        super.closeFileHandle();
+       // super.closeFileHandle();
     }
 
     protected String getStringJoiningCharacter() {

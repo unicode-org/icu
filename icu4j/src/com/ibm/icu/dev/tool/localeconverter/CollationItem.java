@@ -5,15 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/CollationItem.java,v $ 
- * $Date: 2003/08/14 22:13:23 $ 
- * $Revision: 1.3 $
+ * $Date: 2003/09/10 23:36:09 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.tool.localeconverter;
 
-import java.io.*;
-import java.util.*;
 
 /**
  * A CollationItem represents a single entry in a collation sequence.
@@ -51,8 +49,8 @@ public class CollationItem {
     public CollationItem(int op, String item, String expansion) {
         this.op = Math.abs(op);
         if (this.op > TERTIARY) this.op = TERTIARY;
-        this.item = cleanString(item);
-        this.expansion = cleanString(expansion);
+        this.item = cleanString(PosixCollationBuilder.unescape(item));
+        this.expansion = cleanString(PosixCollationBuilder.unescape(expansion));
     }
     
     public void setComment(String comment) {
@@ -60,7 +58,6 @@ public class CollationItem {
     }
     
     public String toString() {
-        String itemString = item;
         if (expansion.length() == 0) {
             return ""+OP_CHARS[op]+item;
         } else {

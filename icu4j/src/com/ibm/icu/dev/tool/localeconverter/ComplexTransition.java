@@ -5,15 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/ComplexTransition.java,v $ 
- * $Date: 2002/02/16 03:05:26 $ 
- * $Revision: 1.2 $
+ * $Date: 2003/09/10 23:36:09 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.tool.localeconverter;
 
 import java.io.*;
-import java.util.*;
 
 /**
  * A ComplexTransition is conceptually a single transition that
@@ -39,7 +38,7 @@ public abstract class ComplexTransition implements Lex.Transition {
         parser.setStates(getStates());
         parser.setInput(input);
         try {
-            int s = parser.nextToken();
+            parser.nextToken();
             handleSuccess(parser, buffer);
             return success;
         } catch (IOException e) {

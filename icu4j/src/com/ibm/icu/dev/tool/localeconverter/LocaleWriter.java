@@ -5,16 +5,18 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/LocaleWriter.java,v $ 
- * $Date: 2003/08/14 22:13:23 $ 
- * $Revision: 1.5 $
+ * $Date: 2003/09/10 23:36:09 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.tool.localeconverter;
-import com.ibm.icu.lang.*;
-import com.ibm.icu.text.*;
+
 import java.io.*;
 import java.util.*;
+
+import com.ibm.icu.impl.UCharacterProperty;
+
 /**
  * A LocaleWriter takes locale data in standard form and
  * writes it to standard output in a form suitable for
@@ -36,17 +38,15 @@ public abstract class LocaleWriter {
     private int lineLength;
     protected PrintStream out;
     protected PrintStream err;
-    public static final HexToUnicodeTransliterator huTranslit = new HexToUnicodeTransliterator("<U###0>");
-    public static final UnicodeToHexTransliterator uhTranslit = new UnicodeToHexTransliterator("\\\\u0000");
-    final File outFile = new File(  "cnvLoc.txt");
-    FileOutputStream outFileStream;
-    BufferedWriter outBufWrite;
-    PrintWriter myOut;
+    //final File outFile = new File(  "cnvLoc.txt");
+    //FileOutputStream outFileStream;
+    //BufferedWriter outBufWrite;
+    //PrintWriter myOut;
     
     public LocaleWriter(PrintStream out) {
         this.out = out;
         this.err = out;
-        try{
+    /*    try{
             outFile.canWrite();
             outFileStream = new FileOutputStream(outFile);
             outBufWrite = new BufferedWriter(new OutputStreamWriter(outFileStream,"UTF8"));                    
@@ -54,11 +54,13 @@ public abstract class LocaleWriter {
         catch(java.io.IOException e){
             System.out.println("Encoding unsupported");
             return;
-        }  
+        }
+    */  
     }
     public LocaleWriter(PrintStream out, PrintStream err) {
         this.out = out;
         this.err = err;
+        /*
         try{
             outFile.canWrite();
             outFileStream = new FileOutputStream(outFile);
@@ -67,7 +69,8 @@ public abstract class LocaleWriter {
         catch(java.io.IOException e){
             System.out.println("Encoding unsupported");
             return;
-        }  
+        }
+        */  
     }
 
     public void write(Locale locale, Hashtable localeData) {
@@ -87,6 +90,7 @@ public abstract class LocaleWriter {
        
         close();
     }
+    /*
     public void closeFileHandle(){
          try{
             outBufWrite.close();
@@ -95,7 +99,7 @@ public abstract class LocaleWriter {
             out.println("could not close the output file");
         }
     }
-        
+    */    
     protected void write(String tag, Object o) {
         if (o instanceof String) {
             write(tag, (String)o);
@@ -151,38 +155,31 @@ public abstract class LocaleWriter {
             }
         }
     }
+    /*
     protected void writeToFile(String str){
-        ReplaceableString tempStr = new ReplaceableString();
-        tempStr.replace(0,tempStr.length(),str);
-        
-        //huTranslit.transliterate(tempStr);
-        //uhTranslit.transliterate(tempStr);
-         try{
-                outBufWrite.write(tempStr.toString());
-         }
-         catch(java.io.IOException e){
-                out.println("Could not write to file");
-         }
+                
+        try{
+               outBufWrite.write(prependEsc(str));
+        }
+        catch(java.io.IOException e){
+               out.println("Could not write to file");
+        }
     }
-    
+    */
     protected void print(String val) {
         if (needsIndent) {
             out.print(indentString);
-            writeToFile(indentString);
+            //writeToFile(indentString);
             lineLength += indentString.length();
             needsIndent = false;
         }
-        ReplaceableString tempStr = new ReplaceableString();
-        tempStr.replace(0,tempStr.length(),val);      
-        huTranslit.transliterate(tempStr);
-        String tval = tempStr.toString();
-        if(tval.length()< val.length()){
-           // uhTranslit.transliterate(tempStr);
-            tval=prependEsc(tempStr.toString());
+        String tval = PosixCollationBuilder.unescape(val);
+        if(tval.length() < val.length()){
+            tval=prependEsc(tval);
         }
         if (tval != null) {
-            out.print(tval);
-            writeToFile(tval);
+            out.print(prependEsc(tval));
+            //writeToFile(tval);
             int len = 0;
             for (int i = 0; i < EOL_CHARS.length; i++) {
                 len = Math.max(len, tval.lastIndexOf(EOL_CHARS[i]));
@@ -198,9 +195,13 @@ public abstract class LocaleWriter {
         StringBuffer myStr =  new StringBuffer();
         for(int i=0;i<str.length();i++){
             char ch = str.charAt(i);
-            if(ch > 0x007f){
-                myStr.append("\\u");
-                myStr.append(toHexString(ch,16,4));
+            if(ch > 0x007f || ch < 0x0020){
+                if(ch!=0x0009){
+                    myStr.append("\\u");
+                    myStr.append(toHexString(ch,16,4));
+                }else{
+                    myStr.append(ch);
+                }
             }
             else{
                 myStr.append(ch);
@@ -244,7 +245,7 @@ public abstract class LocaleWriter {
     protected void println(String val) {
         print(val);
         out.println();
-        writeToFile("\n");
+        //writeToFile("\n");
         lineLength = 0;
         needsIndent = true;
     }
@@ -264,6 +265,64 @@ public abstract class LocaleWriter {
                         lineBuffer.setLength(0);
                         lineBuffer.append("\"");
                 }*/
+            }
+            
+            lineBuffer.append("\"");
+            print(lineBuffer.toString());
+            outdent();
+        } else {
+            print("\"\"");
+        }
+    }
+    private boolean isSpecialChar(char ch){
+                 
+        if(((((ch) <= 0x002F) && ((ch) >= 0x0020)) || 
+          (((ch) <= 0x003F) && ((ch) >= 0x003A)) || 
+          (((ch) <= 0x0060) && ((ch) >= 0x005B)) || 
+          (((ch) <= 0x007E) && ((ch) >= 0x007D)) || 
+          (ch) == 0x007B)){
+            return true;
+          }
+          return false;
+    }
+    protected void printRuleString(String src){
+     String val = PosixCollationBuilder.unescape(src);
+     if (val != null) {
+            indent();
+            lineBuffer.setLength(0);
+            lineBuffer.append("\"");
+            final int size = val.length();
+            for (int i = 0; i < size; i++) {
+                char ch = val.charAt(i);
+                if(ch=='\\'){ //escape char
+                    if(((i+1) < val.length())){
+                        char c2 = val.charAt(i+1);
+                        if(isSpecialChar(c2)){
+                            // escape the escape and escape the 
+                            // special char
+                            append('\\');
+                            append('\\');
+                            append('\\');
+                            append(c2);
+                        }else{
+                            // write the sequence
+                            append('\\');
+                            append(c2);
+                        }
+                    }else{
+                       // double escape the escape sequence
+                       append('\\');
+                       append('\\');
+                    }
+                    i++;
+                }else{
+                    if(UCharacterProperty.isRuleWhiteSpace(ch)){
+                        append('\\');
+                    }
+                    
+                    append(ch);
+                }
+ 
             }
             
             lineBuffer.append("\"");

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/ConvertJavaLocale.java,v $ 
- * $Date: 2003/08/14 22:10:25 $ 
- * $Revision: 1.4 $
+ * $Date: 2003/09/10 23:36:09 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -101,7 +101,6 @@ public class ConvertJavaLocale {
             String localeName = null;
             String packagename = null;
             for (int i = 0; i < args.length; i++) {
-                final String thisArg = args[i];
                 if(args[i].equalsIgnoreCase("-package")){
                    i++;
                    packagename = args[i];
