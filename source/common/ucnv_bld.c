@@ -319,6 +319,7 @@ parseConverterOptions(const char *inName,
     while((c=*inName)!=0 && c!=UCNV_OPTION_SEP_CHAR) {
         if (++len>=UCNV_MAX_CONVERTER_NAME_LENGTH) {
             *err = U_BUFFER_OVERFLOW_ERROR;
+            *cnvName=0;
             return;
         }
         *cnvName++=c;
@@ -368,7 +369,10 @@ parseConverterOptions(const char *inName,
                 /* ignore any other options until we define some */
                 do {
                     c=*inName++;
-                } while(c!=0 && c!=UCNV_OPTION_SEP_CHAR);
+                    if(c==0) {
+                        return;
+                    }
+                } while(c!=UCNV_OPTION_SEP_CHAR);
             }
         }
     }
@@ -405,7 +409,11 @@ ucnv_createConverter (const char *converterName, UErrorCode * err)
         /* the default converter name is already canonical */
     } else {
         /* separate the converter name from the options */
-        parseConverterOptions(converterName, cnvName, locale, &options, &internalErrorCode);
+        parseConverterOptions(converterName, cnvName, locale, &options, err);
+        if (U_FAILURE(*err)) {
+            /* Very bad name used. */
+            return NULL;
+        }
 
         /* get the canonical converter name */
         realName = ucnv_io_getConverterName(cnvName, &internalErrorCode);

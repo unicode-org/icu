@@ -33,6 +33,7 @@ static UConverterToUCallback otherCharAction(UConverterToUCallback MIA);
 
 static void TestCCSID(void);
 static void TestJ932(void);
+static void TestJ1968(void);
 
 void addTestConvert(TestNode** root);
 
@@ -42,7 +43,8 @@ void addTestConvert(TestNode** root)
     addTest(root, &TestAlias,   "tsconv/ccapitst/TestAlias"); 
     addTest(root, &TestConvertSafeClone,   "tsconv/ccapitst/TestConvertSafeClone"); 
     addTest(root, &TestCCSID,   "tsconv/ccapitst/TestCCSID"); 
-    addTest(root, &TestJ932,   "tsconv/ccapitst/TestJ932"); 
+    addTest(root, &TestJ932,   "tsconv/ccapitst/TestJ932");
+    addTest(root, &TestJ1968,   "tsconv/ccapitst/TestJ1968");
 }
 
 static void TestConvert() 
@@ -1433,60 +1435,100 @@ static void bug2()
  */
 static void bug3()
 {
-   static char char_in[CHUNK_SIZE*4];
-   static char target[5];
-   UErrorCode err = U_ZERO_ERROR;
-   int32_t size;
+    static char char_in[CHUNK_SIZE*4];
+    static char target[5];
+    UErrorCode err = U_ZERO_ERROR;
+    int32_t size;
 
-   /*
-    * first get the buggy size from bug2 then
-    * compare it to buggy size with an expansion
-    */
-   uprv_memset(char_in, 0x61, sizeof(char_in)); /* US-ASCII 'a' */
+    /*
+     * first get the buggy size from bug2 then
+     * compare it to buggy size with an expansion
+     */
+    uprv_memset(char_in, 0x61, sizeof(char_in)); /* US-ASCII 'a' */
 
-   /* do the conversion */
-   size = ucnv_convert("lmbcs",     /* out */
-                       "us-ascii",  /* in */
-                       target,
-                       sizeof(target),
-                       char_in,
-                       sizeof(char_in),
-                       &err);
+    /* do the conversion */
+    size = ucnv_convert("lmbcs",     /* out */
+                        "us-ascii",  /* in */
+                        target,
+                        sizeof(target),
+                        char_in,
+                        sizeof(char_in),
+                        &err);
 
-   if ( size != sizeof(char_in) ) {
-      /*
-       * bug2: size is 0x2805 (CHUNK_SIZE*2+5 - maybe 5 is the size of the overflow buffer
-       * in the converter?), should be CHUNK_SIZE*4
-       *
-       * Markus 2001-05-18: 5 is the size of our target[] here, ucnv_convert() did not reset targetSize...
-       */
-      log_err("error j932 bug 2/3a: expected preflighting size 0x%04x, got 0x%04x\n", sizeof(char_in), size);
-   }
+    if ( size != sizeof(char_in) ) {
+        /*
+         * bug2: size is 0x2805 (CHUNK_SIZE*2+5 - maybe 5 is the size of the overflow buffer
+         * in the converter?), should be CHUNK_SIZE*4
+         *
+         * Markus 2001-05-18: 5 is the size of our target[] here, ucnv_convert() did not reset targetSize...
+         */
+        log_err("error j932 bug 2/3a: expected preflighting size 0x%04x, got 0x%04x\n", sizeof(char_in), size);
+    }
 
-   /*
-    * now do the conversion with expansion
-    * ascii 0x08 expands to 0x0F 0x28 in lmbcs
-    */
-   uprv_memset(char_in, 8, sizeof(char_in));
-   err = U_ZERO_ERROR;
+    /*
+     * now do the conversion with expansion
+     * ascii 0x08 expands to 0x0F 0x28 in lmbcs
+     */
+    uprv_memset(char_in, 8, sizeof(char_in));
+    err = U_ZERO_ERROR;
 
-   /* do the conversion */
-   size = ucnv_convert("lmbcs", /* out */
-                       "us-ascii",  /* in */
-                       target,
-                       sizeof(target),
-                       char_in,
-                       sizeof(char_in),
-                       &err);
+    /* do the conversion */
+    size = ucnv_convert("lmbcs", /* out */
+                        "us-ascii",  /* in */
+                        target,
+                        sizeof(target),
+                        char_in,
+                        sizeof(char_in),
+                        &err);
 
-   /* expect 2X expansion */
-   if ( size != sizeof(char_in) * 2 ) {
-      /*
-       * bug3:
-       * bug2 would lead us to expect 0x2805, but it isn't that either, it is 0x3c05:
-       */
-      log_err("error j932 bug 3b: expected 0x%04x, got 0x%04x\n", sizeof(char_in) * 2, size);
-   }
+    /* expect 2X expansion */
+    if ( size != sizeof(char_in) * 2 ) {
+        /*
+         * bug3:
+         * bug2 would lead us to expect 0x2805, but it isn't that either, it is 0x3c05:
+         */
+        log_err("error j932 bug 3b: expected 0x%04x, got 0x%04x\n", sizeof(char_in) * 2, size);
+    }
+}
+
+static void TestJ1968(void) {
+    UErrorCode err = U_ZERO_ERROR;
+    UConverter *cnv;
+    char myConvName[] = "My really really really really really really really really really really really"
+                          " really really really really really really really really long converter name";
+
+    cnv = ucnv_open(myConvName, &err);
+    if (cnv || err != U_BUFFER_OVERFLOW_ERROR) {
+        log_err("1) Didn't get U_BUFFER_OVERFLOW_ERROR as expected %s\n", u_errorName(err));
+    }
+
+    err = U_ZERO_ERROR;
+    myConvName[UCNV_MAX_CONVERTER_NAME_LENGTH] = ',';
+    cnv = ucnv_open(myConvName, &err);
+    if (cnv || err != U_BUFFER_OVERFLOW_ERROR) {
+        log_err("2) Didn't get U_BUFFER_OVERFLOW_ERROR as expected %s\n", u_errorName(err));
+    }
+
+    err = U_ZERO_ERROR;
+    myConvName[UCNV_MAX_CONVERTER_NAME_LENGTH-1] = ',';
+    cnv = ucnv_open(myConvName, &err);
+    if (cnv || err != U_FILE_ACCESS_ERROR) {
+        log_err("3) Didn't get U_FILE_ACCESS_ERROR as expected %s\n", u_errorName(err));
+    }
+
+    err = U_ZERO_ERROR;
+    myConvName[UCNV_MAX_CONVERTER_NAME_LENGTH] = 0;
+    cnv = ucnv_open(myConvName, &err);
+    if (cnv || err != U_FILE_ACCESS_ERROR) {
+        log_err("4) Didn't get U_FILE_ACCESS_ERROR as expected %s\n", u_errorName(err));
+    }
+
+    err = U_ZERO_ERROR;
+    myConvName[UCNV_MAX_CONVERTER_NAME_LENGTH-1] = 0;
+    cnv = ucnv_open(myConvName, &err);
+    if (cnv || U_SUCCESS(err)) {
+        log_err("Shouldn't be able to open %s\n", myConvName);
+    }
 }
 
 
