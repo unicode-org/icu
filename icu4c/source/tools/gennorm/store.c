@@ -68,18 +68,24 @@ static uint16_t indexes[_NORM_INDEX_TOP]={ 0 };
 
 /* tool memory helper ------------------------------------------------------- */
 
-/* ---*** PORATABILITY WARNING! ***---
-On some 64-bit compilers the array field must be 64-bit aligned when you plan
-to access the data. You can write the data, but you may not be able
-to read the data back out. In general, custom memory management is discouraged.
-
-An alternate solution to this is to either use the standard malloc, or to specify
-that array is a union of several large basic C types.
-*/
+/*
+ * UToolMemory is used for generic, custom memory management.
+ * It is allocated with enough space for count*size bytes starting
+ * at array.
+ * The array is declared with a union of large data types so
+ * that its base address is aligned for any types.
+ * If size is a multiple of a data type size, then such items
+ * can be safely allocated inside the array, at offsets that
+ * are themselves multiples of size.
+ */
 typedef struct UToolMemory {
     char name[64];
     uint32_t count, size, index;
-    double array[1];
+    union {
+        uint32_t u;
+        double d;
+        void *p;
+    } array[1];
 } UToolMemory;
 
 static UToolMemory *
