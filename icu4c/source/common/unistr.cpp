@@ -849,26 +849,12 @@ UnicodeString::doIndexOf(UChar32 c,
   // c<0xd800 handled by inline function indexOf(UChar32 c, start, length)
   if(c<=0xdfff) {
     // surrogate code point
-    int32_t index;
-
-    while(length>0) {
-      index=doIndexOf((UChar)c, start, length);
-      if(index<0) {
-        return index;
-      }
-      if(
-        UTF_IS_SURROGATE_FIRST(c) ?
-          ((index+1)<fLength && UTF_IS_TRAIL(fArray[index+1])) :
-          (index>0 && UTF_IS_LEAD(fArray[index-1]))
-      ) {
-        // matched surrogate, not a surrogate code point, continue searching
-        length-=(index+1)-start;
-        start=index+1;
-      } else {
-        return index;
-      }
+    const UChar *t = uprv_strFindSurrogate(fArray + start, length, (UChar)c);
+    if(t != 0) {
+      return t - fArray;
+    } else {
+      return -1;
     }
-    return -1;
   } else if(c<=0xffff) {
     // non-surrogate BMP code point
     return doIndexOf((UChar)c, start, length);
@@ -969,25 +955,12 @@ UnicodeString::doLastIndexOf(UChar32 c,
   // c<0xd800 handled by inline function lastIndexOf(UChar32 c, start, length)
   if(c<=0xdfff) {
     // surrogate code point
-    int32_t index;
-
-    while(length>0) {
-      index=doLastIndexOf((UChar)c, start, length);
-      if(index<0) {
-        return index;
-      }
-      if(
-        UTF_IS_SURROGATE_FIRST(c) ?
-          ((index+1)<fLength && UTF_IS_TRAIL(fArray[index+1])) :
-          (index>0 && UTF_IS_LEAD(fArray[index-1]))
-      ) {
-        // matched surrogate, not a surrogate code point, continue searching
-        length=index-start;
-      } else {
-        return index;
-      }
+    const UChar *t = uprv_strFindLastSurrogate(fArray + start, length, (UChar)c);
+    if(t != 0) {
+      return t - fArray;
+    } else {
+      return -1;
     }
-    return -1;
   } else if(c<=0xffff) {
     // non-surrogate BMP code point
     return doLastIndexOf((UChar)c, start, length);
