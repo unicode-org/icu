@@ -75,7 +75,7 @@ class TestHangulFilter : public UnicodeFilter {
     virtual UnicodeFilter* clone() const {
         return new TestHangulFilter(*this);
     }
-    virtual UBool contains(UChar c) const {
+    virtual UBool contains(UChar32 c) const {
        if(c == 0xae4c )
           return FALSE;
        else

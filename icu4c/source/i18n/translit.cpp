@@ -281,10 +281,20 @@ void Transliterator::transliterate(Replaceable& text,
  */
 void Transliterator::transliterate(Replaceable& text,
                                    UTransPosition& index,
-                                   UChar insertion,
+                                   UChar32 insertion,
                                    UErrorCode& status) const {
     UnicodeString str(insertion);
-    _transliterate(text, index, &str, status);
+    if (UTF_IS_LEAD(insertion)) {
+        // Oops, the caller passed us a single lead surrogate.  In
+        // general, we don't support this, but we'll do the caller a
+        // favor in the special case of LEAD followed by TRAIL
+        // insertion.  Anything else won't work.
+        text.handleReplaceBetween(index.limit, index.limit, str);
+        ++index.limit;
+        ++index.contextLimit;
+    } else {
+        _transliterate(text, index, &str, status);
+    }
 }
 
 /**
@@ -351,8 +361,18 @@ void Transliterator::_transliterate(Replaceable& text,
 
     filteredTransliterate(text, index, TRUE);
 
-    index.contextStart = uprv_max(index.start - getMaximumContextLength(),
-                           originalStart);
+    // The purpose of the code below is to keep the context small
+    // while doing incremental transliteration.  When part of the left
+    // context (between contextStart and start) is no longer needed,
+    // we try to advance contextStart past that portion.  We use the
+    // maximum context length to do so.
+    int32_t newCS = index.start;
+    int32_t n = getMaximumContextLength();
+    while (newCS > originalStart && n-- > 0) {
+        --newCS;
+        newCS -= UTF_CHAR_LENGTH(text.char32At(newCS)) - 1;
+    }
+    index.contextStart = uprv_max(newCS, originalStart);
 }
 
 /**

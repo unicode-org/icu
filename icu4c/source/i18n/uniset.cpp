@@ -543,17 +543,6 @@ UBool UnicodeSet::contains(UChar32 c) const {
 }
 
 /**
- * Implement UnicodeFilter:
- * Returns <tt>true</tt> if this set contains the specified char.
- *
- * @return <tt>true</tt> if this set contains the specified char.
- * @draft
- */
-UBool UnicodeSet::contains(UChar c) const {
-    return contains((UChar32) c);
-}
-
-/**
  * Returns <tt>true</tt> if this set contains any character whose low byte
  * is the given value.  This is used by <tt>RuleBasedTransliterator</tt> for
  * indexing.
@@ -579,6 +568,24 @@ UBool UnicodeSet::containsIndexValue(uint8_t v) const {
         }
     }
     return FALSE;
+}
+
+/**
+ * Implementation of UnicodeMatcher::matches().
+ */
+UMatchDegree UnicodeSet::matches(const Replaceable& text,
+                                 int32_t& offset,
+                                 int32_t limit,
+                                 UBool incremental) const {
+    if (offset == limit) {
+        if (contains(TransliterationRule::ETHER)) {
+            return incremental ? U_PARTIAL_MATCH : U_MATCH;
+        } else {
+            return U_MISMATCH;
+        }
+    } else {
+        return UnicodeFilter::matches(text, offset, limit, incremental);
+    }
 }
 
 /**
@@ -895,7 +902,8 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
     UBool invert = FALSE;
     clear();
 
-    int32_t lastChar = -1; // This is either a char (0..FFFF) or -1
+    const UChar32 NONE = (UChar32) -1;
+    UChar32 lastChar = NONE; // This is either a char (0..10FFFF) or NONE
     UChar lastOp = 0;
 
     /* This loop iterates over the characters in the pattern.  We start at
@@ -916,8 +924,9 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
     // mode 1: '[' seen; if next is '^' or ':' then special
     // mode 2: '[' '^'? seen; parse pattern and close with ']'
     // mode 3: '[:' seen; parse category and close with ':]'
+    // mode 4: Pattern closed cleanly
     int8_t mode = 0;
-    int32_t openPos = 0; // offset to opening '['
+    int32_t colonPos = 0; // Expected pos of ':' in '[:'
     int32_t i = pos.getIndex();
     int32_t limit = pattern.length();
     UnicodeSet nestedAux;
@@ -930,7 +939,8 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
     const UnicodeString* varValueBuffer = NULL;
     int32_t ivarValueBuffer = 0;
     int32_t anchor = 0;
-    for (; i<limit; i+=((varValueBuffer==NULL)?1:0)) {
+    UChar32 c;
+    while (i<limit) {
         /* If the next element is a single character, c will be set to it,
          * and nestedSet will be null.  In this case isLiteral indicates
          * whether the character should assume special meaning if it has
@@ -941,23 +951,25 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
          */
         nestedSet = NULL;
         UBool isLiteral = FALSE;
-        UChar c;
         if (varValueBuffer != NULL) {
             if (ivarValueBuffer < varValueBuffer->length()) {
-                c = varValueBuffer->charAt(ivarValueBuffer++);
+                c = varValueBuffer->char32At(ivarValueBuffer);
+                ivarValueBuffer += UTF_CHAR_LENGTH(c);
                 nestedSet = symbols->lookupSet(c); // may be NULL
                 nestedPatDone = FALSE;
             } else {
                 varValueBuffer = NULL;
-                c = pattern.charAt(i);
+                c = pattern.char32At(i);
+                i += UTF_CHAR_LENGTH(c);
             }
         } else {
-            c = pattern.charAt(i);
+            c = pattern.char32At(i);
+            i += UTF_CHAR_LENGTH(c);
         }
 
         // Ignore whitespace.  This is not Unicode whitespace, but Java
         // whitespace, a subset of Unicode whitespace.
-        if (Unicode::isWhitespace(c)) {
+        if (u_isspace(c)) {
             continue;
         }
 
@@ -971,7 +983,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
         case 0:
             if (c == SET_OPEN) {
                 mode = 1; // Next look for '^' or ':'
-                openPos = i;
+                colonPos = i; // Expect ':' at next offset
                 continue;
             } else {
                 // throw new IllegalArgumentException("Missing opening '['");
@@ -986,9 +998,10 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
                 newPat.append(c);
                 continue; // Back to top to fetch next character
             case COLON:
-                if (i == openPos+1) {
-                    // '[:' cannot have whitespace in it
-                    --i;
+                // '[:' cannot have whitespace in it.  'i' has already
+                // been advanced.
+                if (i-1 == colonPos) {
+                    --i; // Backup to the '['
                     c = SET_OPEN;
                     mode = 3;
                     // Fall through and parse category using the same
@@ -1018,15 +1031,13 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
              * interpret '\\uxxxx' Unicode escapes here (as literals).
              */
             if (c == BACKSLASH) {
-                ++i; // Advance past '\\'
                 UChar32 escaped = pattern.unescapeAt(i);
                 if (escaped == (UChar32) -1) {
                     status = U_ILLEGAL_ARGUMENT_ERROR;
                     return;
                 }
                 isLiteral = TRUE;
-                --i; // Move i back to last parsed character
-                c = (UChar) escaped;
+                c = escaped;
             }
 
             /* Parse variable references.  These are treated as literals.  If a
@@ -1036,7 +1047,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
              * Set variables are only looked up if varCharToSet is not null.
              */
             else if (symbols != NULL && !isLiteral && c == SymbolTable::SYMBOL_REF) {
-                pos.setIndex(++i);
+                pos.setIndex(i);
                 UnicodeString name = symbols->parseReference(pattern, pos, limit);
                 if (name.length() != 0) {
                     varValueBuffer = symbols->lookup(name);
@@ -1052,7 +1063,6 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
                     // Got a null; this means we have an isolated $.
                     // Tentatively assume this is an anchor.
                     anchor = 1;
-                    --i; // Back up so loop increment works properly
                 }
                 continue; // Back to the top to get varValueBuffer[0]
             }
@@ -1069,9 +1079,8 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
                 nestedPatStart = newPat.length();
 
                 // Handle "[:...:]", representing a character category
-                UChar d = charAfter(pattern, i);
-                if (d == COLON) {
-                    i += 2;
+                if (i < pattern.length() && pattern.charAt(i) == COLON) {
+                    ++i;
                     int32_t j = pattern.indexOf(CATEGORY_CLOSE, i);
                     if (j < 0) {
                         // throw new IllegalArgumentException("Missing \":]\"");
@@ -1086,7 +1095,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
                     if (U_FAILURE(status)) {
                         return;
                     }
-                    i = j+1; // Make i point to ']' in ":]"
+                    i = j+2; // Advance i past ":]"
 
                     // Use a rebuilt pattern.  If we are top level,
                     // then there is already a SET_OPEN in newPat, and
@@ -1105,11 +1114,13 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
                         // loop.  This is one of 2 ways we leave this
                         // loop if the pattern is well-formed.
                         *this = *nestedSet;
+                        mode = 4;
                         break;
                     }
                 } else {
                     // Recurse to get the pairs for this nested set.
-                    pos.setIndex(i);
+                    // Backup i to '['.
+                    pos.setIndex(--i);
                     switch (lastOp) {
                     case HYPHEN:
                     case INTERSECTION:
@@ -1122,7 +1133,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
                     if (U_FAILURE(status)) {
                         return;
                     }
-                    i = pos.getIndex() - 1; // - 1 to point at ']'
+                    i = pos.getIndex();
                 }
             }
         }
@@ -1136,7 +1147,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
          * ']' have special meanings.
          */
         if (nestedSet != NULL) {
-            if (lastChar >= 0) {
+            if (lastChar != NONE) {
                 if (lastOp != 0) {
                     // throw new IllegalArgumentException("Illegal rhs for " + lastChar + lastOp);
                     status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -1154,7 +1165,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
                 } else {
                     _appendToPat(newPat, lastChar, FALSE);
                 }
-                lastChar = -1;
+                lastChar = NONE;
             }
             switch (lastOp) {
             case HYPHEN:
@@ -1193,9 +1204,11 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
                 newPat.append((UChar)SymbolTable::SYMBOL_REF);
                 add(TransliterationRule::ETHER);
             }
+            mode = 4;
             break;
         } else if (lastOp == 0 && !isLiteral && (c == HYPHEN || c == INTERSECTION)) {
-            lastOp = c;
+            // assert(c <= 0xFFFF);
+            lastOp = (UChar) c;
         } else if (lastOp == HYPHEN) {
             if (lastChar >= c) {
                 // Don't allow redundant (a-a) or empty (b-a) ranges;
@@ -1210,14 +1223,14 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
             newPat.append(HYPHEN);
             _appendToPat(newPat, c, FALSE);
             lastOp = 0;
-            lastChar = -1;
+            lastChar = NONE;
         } else if (lastOp != 0) {
             // We have <set>&<char> or <char>&<char>
             // throw new IllegalArgumentException("Unquoted " + lastOp);
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         } else {
-            if (lastChar >= 0) {
+            if (lastChar != NONE) {
                 // We have <char><char>
                 add(lastChar, lastChar);
                 _appendToPat(newPat, lastChar, FALSE);
@@ -1226,7 +1239,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
         }
     }
 
-    if (lastChar >= 0) {
+    if (lastChar != NONE) {
         add(lastChar, lastChar);
         _appendToPat(newPat, lastChar, FALSE);
     }
@@ -1252,19 +1265,13 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
         complement();
     }
 
-    /**
-     * i indexes the last character we parsed or is pattern.length().  In
-     * the latter case, we have run off the end without finding a closing
-     * ']'.  Otherwise, we know i < pattern.length(), and we set the
-     * ParsePosition to the next character to be parsed.
-     */
-    if (i == limit) {
+    if (mode != 4) {
         // throw new IllegalArgumentException("Missing ']'");
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
 
-    pos.setIndex(i+1);
+    pos.setIndex(i);
 
     // Use the rebuilt pattern (newPat) only if necessary.  Prefer the
     // generated pattern.
@@ -1392,14 +1399,6 @@ const UnicodeSet& UnicodeSet::getCategorySet(int8_t cat) {
 //----------------------------------------------------------------
 // Implementation: Utility methods
 //----------------------------------------------------------------
-
-/**
- * Returns the character after the given position, or '\uFFFE' if
- * there is none.
- */
-UChar UnicodeSet::charAfter(const UnicodeString& str, int32_t i) {
-    return ((++i) < str.length()) ? str.charAt(i) : (UChar)0xFFFE;
-}
 
 void UnicodeSet::ensureCapacity(int32_t newLen) {
     if (newLen <= capacity) return;

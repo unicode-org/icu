@@ -314,14 +314,20 @@ IntlTest::prettify(const UnicodeString &source,
     target.remove();
     target += "\"";
 
-    for (i = 0; i < source.length(); i += 1)
+    for (i = 0; i < source.length(); )
     {
-        UChar ch = source[i];
+        UChar32 ch = source.char32At(i);
+        i += UTF_CHAR_LENGTH(ch);
 
         if (ch < 0x09 || (ch > 0x0A && ch < 0x20)|| ch > 0x7E)
         {
-            target += "\\u";
-            appendHex(ch, 4, target);
+            if (ch <= 0xFFFF) {
+                target += "\\u";
+                appendHex(ch, 4, target);
+            } else {
+                target += "\\U";
+                appendHex(ch, 8, target);
+            }
         }
         else
         {
@@ -343,9 +349,10 @@ IntlTest::prettify(const UnicodeString &source, UBool parseBackslash)
     target.remove();
     target += "\"";
 
-    for (i = 0; i < source.length(); i += 1)
+    for (i = 0; i < source.length();)
     {
-        UChar ch = source[i];
+        UChar32 ch = source.char32At(i);
+        i += UTF_CHAR_LENGTH(ch);
 
         if (ch < 0x09 || (ch > 0x0A && ch < 0x20)|| ch > 0x7E)
         {
@@ -365,8 +372,13 @@ IntlTest::prettify(const UnicodeString &source, UBool parseBackslash)
                     target.truncate(target.length() - 1);
                 }
             }
-            target += "\\u";
-            appendHex(ch, 4, target);
+            if (ch <= 0xFFFF) {
+                target += "\\u";
+                appendHex(ch, 4, target);
+            } else {
+                target += "\\U";
+                appendHex(ch, 8, target);
+            }
         }
         else
         {

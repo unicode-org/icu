@@ -52,7 +52,9 @@ TransliterationRule::TransliterationRule(const UnicodeString& input,
                                          int32_t cursorPosition, int32_t cursorOffset,
                                          int32_t* adoptedSegs,
                                          UBool anchorStart, UBool anchorEnd,
-                                         UErrorCode& status) {
+                                         const TransliterationRuleData& theData,
+                                         UErrorCode& status) :
+    data(theData) {
     init(input, anteContextPos, postContextPos,
          outputStr, cursorPosition, cursorOffset, adoptedSegs,
          anchorStart, anchorEnd, status);
@@ -79,7 +81,9 @@ TransliterationRule::TransliterationRule(const UnicodeString& input,
                                          int32_t anteContextPos, int32_t postContextPos,
                                          const UnicodeString& outputStr,
                                          int32_t cursorPosition,
-                                         UErrorCode& status) {
+                                         const TransliterationRuleData& theData,
+                                         UErrorCode& status) :
+    data(theData) {
     init(input, anteContextPos, postContextPos,
          outputStr, cursorPosition, 0, NULL, FALSE, FALSE, status);
 }
@@ -92,7 +96,9 @@ TransliterationRule::TransliterationRule(TransliterationRule& other) :
     output(other.output),
     anteContextLength(other.anteContextLength),
     keyLength(other.keyLength),
-    cursorPos(other.cursorPos) {
+    cursorPos(other.cursorPos),
+    flags(other.flags),
+    data(other.data) {
 
     segments = 0;
     if (other.segments != 0) {
@@ -153,32 +159,27 @@ void TransliterationRule::init(const UnicodeString& input,
     // We don't validate the segments array.  The caller must
     // guarantee that the segments are well-formed.
     this->segments = adoptedSegs;
+    // Find the position of the first segment index that is after the
+    // anteContext (in the key).  Note that this may be a start or a
+    // limit index.
+    firstKeySeg = -1;
+    if (segments != 0) {
+        do {
+            ++firstKeySeg;
+        } while (segments[firstKeySeg] >= 0 &&
+                 segments[firstKeySeg] < anteContextLength);
+        if (segments[firstKeySeg] < 0) {
+            firstKeySeg = -1;
+        }
+    }
 
-    // Implement anchors by inserting an ETHER character on the
-    // left or right.  If on the left, then the indices must be
-    // incremented.  If on the right, no index change is
-    // necessary.
-    if (anchorStart || anchorEnd) {
-        pattern.truncate(0);
-        if (anchorStart) {
-            pattern.append(ETHER);
-            ++anteContextLength;
-            // Adjust segment offsets
-            if (segments != 0) {
-                int32_t *p = segments;
-                // The end marker is a -1.
-                while (*p != -1) {
-                    ++(*p);
-                    ++p;
-                }
-            }
-        }
-        pattern.append(input);
-        if (anchorEnd) {
-            pattern.append(ETHER);
-        }
-    } else {
-        pattern = input;
+    pattern = input;
+    flags = 0;
+    if (anchorStart) {
+        flags |= ANCHOR_START;
+    }
+    if (anchorEnd) {
+        flags |= ANCHOR_END;
     }
 }
 
@@ -197,10 +198,14 @@ int32_t TransliterationRule::getCursorPos(void) const {
 /**
  * Return the preceding context length.  This method is needed to
  * support the <code>Transliterator</code> method
- * <code>getMaximumContextLength()</code>.
+ * <code>getMaximumContextLength()</code>.  Internally, this is
+ * implemented as the anteContextLength, optionally plus one if
+ * there is a start anchor.  The one character anchor gap is
+ * needed to make repeated incremental transliteration with
+ * anchors work.
  */
-int32_t TransliterationRule::getAnteContextLength(void) const {
-    return anteContextLength;
+int32_t TransliterationRule::getContextLength(void) const {
+    return anteContextLength + ((flags & ANCHOR_START) ? 1 : 0);
 }
 
 /**
@@ -209,79 +214,14 @@ int32_t TransliterationRule::getAnteContextLength(void) const {
  * unless the first character of the key is a set.  If it's a
  * set, or otherwise can match multiple keys, the index value is -1.
  */
-int16_t TransliterationRule::getIndexValue(const TransliterationRuleData& data) const {
+int16_t TransliterationRule::getIndexValue() const {
     if (anteContextLength == pattern.length()) {
         // A pattern with just ante context {such as foo)>bar} can
         // match any key.
         return -1;
     }
-    UChar c = pattern.charAt(anteContextLength);
+    UChar32 c = pattern.char32At(anteContextLength);
     return (int16_t)(data.lookupSet(c) == NULL ? (c & 0xFF) : -1);
-}
-
-/**
- * Do a replacement of the input pattern with the output text in
- * the given string, at the given offset.  This method assumes
- * that a match has already been found in the given text at the
- * given position.
- * @param text the text containing the substring to be replaced
- * @param offset the offset into the text at which the pattern
- * matches.  This is the offset to the point after the ante
- * context, if any, and before the match string and any post
- * context.
- * @param data the RuleBasedTransliterator.Data object specifying
- * context for this transliterator.
- * @return the change in the length of the text
- */
-int32_t TransliterationRule::replace(Replaceable& text, int32_t offset,
-                                     const TransliterationRuleData& data) const {
-    if (segments == NULL) {
-        text.handleReplaceBetween(offset, offset + keyLength, output);
-        return output.length() - keyLength;
-    } else {
-        /* When there are segments to be copied, use the Replaceable.copy()
-         * API in order to retain out-of-band data.  Copy everything to the
-         * point after the key, then delete the key.  That is, copy things
-         * into offset + keyLength, then replace offset .. offset +
-         * keyLength with the empty string.
-         *
-         * Minimize the number of calls to Replaceable.replace() and
-         * Replaceable.copy().
-         */
-        int32_t textStart = offset - anteContextLength;
-        int32_t dest = offset + keyLength; // copy new text to here
-        UnicodeString buf;
-        for (int32_t i=0; i<output.length(); ++i) {
-            UChar c = output.charAt(i);
-            int32_t b = data.lookupSegmentReference(c);
-            if (b < 0) {
-                // Accumulate straight (non-segment) text.
-                buf.append(c);
-            } else {
-                // Insert any accumulated straight text.
-                if (buf.length() > 0) {
-                    text.handleReplaceBetween(dest, dest, buf);
-                    dest += buf.length();
-                    buf.remove();
-                }
-                // Copy segment with out-of-band data
-                b *= 2;
-                text.copy(textStart + segments[b],
-                          textStart + segments[b+1], dest);
-                dest += segments[b+1] - segments[b];
-            }
-
-        }
-        // Insert any accumulated straight text.
-        if (buf.length() > 0) {
-            text.handleReplaceBetween(dest, dest, buf);
-            dest += buf.length();
-        }
-        // Delete the key
-        buf.remove();
-        text.handleReplaceBetween(offset, offset + keyLength, buf);
-        return dest - (offset + keyLength) - keyLength;
-    }
 }
 
 /**
@@ -294,14 +234,13 @@ int32_t TransliterationRule::replace(Replaceable& text, int32_t offset,
  * value.  If the rule contains only ante context, as in foo)>bar,
  * then it will match any key.
  */
-UBool TransliterationRule::matchesIndexValue(uint8_t v,
-                                   const TransliterationRuleData& data) const {
+UBool TransliterationRule::matchesIndexValue(uint8_t v) const {
     if (anteContextLength == pattern.length()) {
         // A pattern with just ante context {such as foo)>bar} can
         // match any key.
         return TRUE;
     }
-    UChar c = pattern.charAt(anteContextLength);
+    UChar32 c = pattern.char32At(anteContextLength);
     const UnicodeSet* set = data.lookupSet(c);
     return set == NULL ? (uint8_t(c) == v) : set->containsIndexValue(v);
 }
@@ -328,6 +267,22 @@ UBool TransliterationRule::masks(const TransliterationRule& r2) const {
      * of) the corresponding characters of r2.  The superset
      * operation should be performed to check for UnicodeSet
      * masking.
+     *
+     * Anchors:  Two patterns that differ only in anchors only
+     * mask one another if they are exactly equal, and r2 has
+     * all the anchors r1 has (optionally, plus some).  Here Y
+     * means the row masks the column, N means it doesn't.
+     *
+     *         ab   ^ab    ab$  ^ab$
+     *   ab    Y     Y     Y     Y
+     *  ^ab    N     Y     N     Y
+     *   ab$   N     N     Y     Y
+     *  ^ab$   N     N     N     Y
+     *
+     * Post context: {a}b masks ab, but not vice versa, since {a}b
+     * matches everything ab matches, and {a}b matches {|a|}b but ab
+     * does not.  Pre context is different (a{b} does not align with
+     * ab).
      */
 
     /* LIMITATION of the current mask algorithm: Some rule
@@ -340,126 +295,242 @@ UBool TransliterationRule::masks(const TransliterationRule& r2) const {
     int32_t left2 = r2.anteContextLength;
     int32_t right = len - left;
     int32_t right2 = r2.pattern.length() - left2;
-    return left <= left2 && right <= right2 &&
+
+    // TODO Clean this up -- some logic might be combinable with the
+    // next statement.
+
+    // Test for anchor masking
+    if (left == left2 && right == right2 &&
+        keyLength <= r2.keyLength &&
+        0 == r2.pattern.compare(0, len, pattern)) {
+        // The following boolean logic implements the table above
+        return (flags == r2.flags) ||
+            (!(flags & ANCHOR_START) && !(flags & ANCHOR_END)) ||
+            ((r2.flags & ANCHOR_START) && (r2.flags & ANCHOR_END));
+    }
+
+    return left <= left2 &&
+        (right < right2 ||
+         (right == right2 && keyLength <= r2.keyLength)) &&
         0 == r2.pattern.compare(left2 - left, len, pattern);
 }
 
 /**
- * Return true if this rule matches the given text.
- * @param text the text, both translated and untranslated
- * @param start the beginning index, inclusive; <code>0 <= start
- * <= limit</code>.
- * @param limit the ending index, exclusive; <code>start <= limit
- * <= text.length()</code>.
- * @param cursor position at which to translate next, representing offset
- * into text.  This value must be between <code>start</code> and
- * <code>limit</code>.
+ * Attempt a match and replacement at the given position.  Return
+ * the degree of match between this rule and the given text.  The
+ * degree of match may be mismatch, a partial match, or a full
+ * match.  A mismatch means at least one character of the text
+ * does not match the context or key.  A partial match means some
+ * context and key characters match, but the text is not long
+ * enough to match all of them.  A full match means all context
+ * and key characters match.
+ * 
+ * If a full match is obtained, perform a replacement, update pos,
+ * and return U_MATCH.  Otherwise both text and pos are unchanged.
+ * 
+ * @param text the text
+ * @param pos the position indices
+ * @param incremental if TRUE, test for partial matches that may
+ * be completed by additional text inserted at pos.limit.
+ * @return one of <code>U_MISMATCH</code>,
+ * <code>U_PARTIAL_MATCH</code>, or <code>U_MATCH</code>.  If
+ * incremental is FALSE then U_PARTIAL_MATCH will not be returned.
  */
-UBool TransliterationRule::matches(const Replaceable& text,
-                                   const UTransPosition& pos,
-                                   const TransliterationRuleData& data) const {
-    // Match anteContext, key, and postContext
-    int32_t cursor = pos.start - anteContextLength;
-    // Quick length check; this is a performance win for long rules.
-    // Widen by one (on both sides) to allow anchor matching.
-    if (cursor < (pos.contextStart - 1) ||
-        (cursor + pattern.length()) > (pos.contextLimit + 1)) {
-        return FALSE;
-    }
-    for (int32_t i=0; i<pattern.length(); ++i, ++cursor) {
-        if (!charMatches(pattern.charAt(i), text, cursor, pos,
-                         data)) {
-            return FALSE;
-        }
-    }
-    return TRUE;
-}
+UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
+                                                  UTransPosition& pos,
+                                                  UBool incremental) const {
+    // Matching and replacing are done in one method because the
+    // replacement operation needs information obtained during the
+    // match.  Another way to do this is to have the match method
+    // create a match result struct with relevant offsets, and to pass
+    // this into the replace method.
 
-/**
- * Return the degree of match between this rule and the given text.  The
- * degree of match may be mismatch, a partial match, or a full match.  A
- * mismatch means at least one character of the text does not match the
- * context or key.  A partial match means some context and key characters
- * match, but the text is not long enough to match all of them.  A full
- * match means all context and key characters match.
- * @param text the text, both translated and untranslated
- * @param start the beginning index, inclusive; <code>0 <= start
- * <= limit</code>.
- * @param limit the ending index, exclusive; <code>start <= limit
- * <= text.length()</code>.
- * @param cursor position at which to translate next, representing offset
- * into text.  This value must be between <code>start</code> and
- * <code>limit</code>.
- * @return one of <code>MISMATCH</code>, <code>PARTIAL_MATCH</code>, or
- * <code>FULL_MATCH</code>.
- * @see #MISMATCH
- * @see #PARTIAL_MATCH
- * @see #FULL_MATCH
- */
-int32_t TransliterationRule::getMatchDegree(const Replaceable& text,
-                                            const UTransPosition& pos,
-                                            const TransliterationRuleData& data) const {
-    int len = getRegionMatchLength(text, pos, data);
-    return len < anteContextLength ? MISMATCH :
-        (len < pattern.length() ? PARTIAL_MATCH : FULL_MATCH);
-}
+    // ============================ MATCH ===========================
 
-/**
- * Return the number of characters of the text that match this rule.  If
- * there is a mismatch, return -1.  If the text is not long enough to match
- * any characters, return 0.
- * @param text the text, both translated and untranslated
- * @param start the beginning index, inclusive; <code>0 <= start
- * <= limit</code>.
- * @param limit the ending index, exclusive; <code>start <= limit
- * <= text.length()</code>.
- * @param cursor position at which to translate next, representing offset
- * into text.  This value must be between <code>start</code> and
- * <code>limit</code>.
- * @param data a dictionary of variables mapping <code>Character</code>
- * to <code>UnicodeSet</code>
- * @return -1 if there is a mismatch, 0 if the text is not long enough to
- * match any characters, otherwise the number of characters of text that
- * match this rule.
- */
-int32_t TransliterationRule::getRegionMatchLength(const Replaceable& text,
-                                          const UTransPosition& pos,
-                                          const TransliterationRuleData& data) const {
-    int32_t cursor = pos.start - anteContextLength;
-    // Quick length check; this is a performance win for long rules.
-    // Widen by one to allow anchor matching.
-    if (cursor < (pos.contextStart - 1)) {
-        return -1;
-    }
+    // Record the positions of segments.  We assume the following:
+    // - The maximum number of segments is 9.
+    // - The segment indices occur in ascending order.  That is,
+    //   segment 1 start <= segment 1 limit <= sement 2 start...
+    // - The segments have been validated such that there are no
+    //   references to nonexistent segments.
+    // - The end of the segment array is marked by a start of -1.
+    // Currently, the parser enforces all of these constraints.
+    // In the future, the first two constraints may be lifted,
+    // in which case this method will have to be modified.
+
+    int32_t segPos[18];
+    int32_t iSeg = firstKeySeg - 1;
+    int32_t nextSegPos = (iSeg >= 0) ? segments[iSeg] : -1;
+
+    // ------------------------ Ante Context ------------------------
+
+    // A mismatch in the ante context, or with the start anchor,
+    // is an outright U_MISMATCH regardless of whether we are
+    // incremental or not.
+    int32_t cursor = pos.start - 1;
     int32_t i;
-    for (i=0; i<pattern.length() && cursor<pos.contextLimit; ++i, ++cursor) {
-        if (!charMatches(pattern.charAt(i), text, cursor, pos,
-                         data)) {
-            return -1;
+    for (i=anteContextLength-1; i>=0; --i) {
+        while (i == nextSegPos) {
+            segPos[iSeg] = cursor;
+            nextSegPos == (--iSeg >= 0) ? segments[iSeg] : -1;
+        }
+        UChar keyChar = pattern.charAt(i);
+        const UnicodeSet* set = data.lookupSet(keyChar);
+        if (set == 0) {
+            if (cursor >= pos.contextStart &&
+                keyChar == text.charAt(cursor)) {
+                --cursor;
+            } else {
+                return U_MISMATCH;
+            }
+        } else {
+            // Subtract 1 from contextStart to make it a reverse limit
+            if (set->matches(text, cursor, pos.contextStart-1, FALSE)
+                != U_MATCH) {
+                return U_MISMATCH;
+            }
         }
     }
-    return i;
-}
 
-/**
- * Return true if the given key matches the given text.  This method
- * accounts for the fact that the key character may represent a character
- * set.  Note that the key and text characters may not be interchanged
- * without altering the results.
- * @param keyChar a character in the match key
- * @param textChar a character in the text being transliterated
- * @param data a dictionary of variables mapping <code>Character</code>
- * to <code>UnicodeSet</code>
- */
-UBool TransliterationRule::charMatches(UChar keyChar, const Replaceable& text,
-                                       int32_t index,
-                                       const UTransPosition& pos,
-                                       const TransliterationRuleData& data) const {
-    const UnicodeSet* set = 0;
-    UChar textChar = (index >= pos.contextStart && index < pos.contextLimit)
-            ? text.charAt(index) : ETHER;
-    return ((set = data.lookupSet(keyChar)) == 0) ?
-            keyChar == textChar : set->contains(textChar);
+    // ------------------------ Start Anchor ------------------------
+
+    if ((flags & ANCHOR_START) && cursor != (pos.contextStart-1)) {
+        return U_MISMATCH;
+    }
+
+    // -------------------- Key and Post Context --------------------
+
+    iSeg = firstKeySeg;
+    nextSegPos = (iSeg >= 0) ? segments[iSeg] : -1;
+
+    i = 0;
+    cursor = pos.start;
+    int32_t keyLimit = 0;
+    while (i < (pattern.length() - anteContextLength)) {
+        if (incremental && cursor == pos.contextLimit) {
+            // We've reached the context limit without a mismatch and
+            // without completing our match.
+            return U_PARTIAL_MATCH;
+        }
+        if (cursor == pos.limit && i < keyLength) {
+            // We're still in the pattern key but we're entering the
+            // post context.
+            return U_MISMATCH;
+        }
+        while (i == nextSegPos) {
+            segPos[iSeg] = cursor;
+            nextSegPos = segments[++iSeg];
+        }
+        if (i == keyLength) {
+            keyLimit = cursor;
+        }
+        UChar keyChar = pattern.charAt(anteContextLength + i++);
+        const UnicodeSet* set = data.lookupSet(keyChar);
+        if (set == 0) {
+            // Don't need the cursor < pos.contextLimit check if
+            // incremental is TRUE (because it's done above); do need
+            // it otherwise.
+            if (cursor < pos.contextLimit &&
+                keyChar == text.charAt(cursor)) {
+                ++cursor;
+            } else {
+                return U_MISMATCH;
+            }
+        } else {
+            UMatchDegree m =
+                set->matches(text, cursor, pos.contextLimit, incremental);
+            if (m != U_MATCH) {
+                return m;
+            }
+        }
+    }
+    while (i == nextSegPos) {
+        segPos[iSeg] = cursor;
+        nextSegPos = segments[++iSeg];
+    }
+	if (i == keyLength) {
+		keyLimit = cursor;
+	}
+
+    // ------------------------- Stop Anchor ------------------------
+
+    if ((flags & ANCHOR_END) != 0) {
+        if (cursor != pos.contextLimit) {
+            return U_MISMATCH;
+        }
+        if (incremental) {
+            return U_PARTIAL_MATCH;
+        }
+    }
+
+    // =========================== REPLACE ==========================
+
+    // We have a full match.  The key is between pos.start and
+    // keyLimit.  Segment indices have been recorded in segPos[].
+    // Perform a replacement.
+
+    int32_t lenDelta = 0;
+
+    if (segments == NULL) {
+        text.handleReplaceBetween(pos.start, keyLimit, output);
+        lenDelta = output.length() - (keyLimit - pos.start);
+        pos.start += cursorPos;
+    } else {
+        /* When there are segments to be copied, use the Replaceable.copy()
+         * API in order to retain out-of-band data.  Copy everything to the
+         * point after the key, then delete the key.  That is, copy things
+         * into offset + keyLength, then replace offset .. offset +
+         * keyLength with the empty string.
+         *
+         * Minimize the number of calls to Replaceable.replace() and
+         * Replaceable.copy().
+         */
+        int32_t dest = keyLimit; // copy new text to here
+        UnicodeString buf;
+        for (i=0; i<output.length(); ) {
+            if (i == cursorPos) {
+                // Record the position of the cursor
+                cursor = dest;
+            }
+            UChar32 c = output.char32At(i);
+            int32_t b = data.lookupSegmentReference(c);
+            if (b < 0) {
+                // Accumulate straight (non-segment) text.
+                buf.append(c);
+            } else {
+                // Insert any accumulated straight text.
+                if (buf.length() > 0) {
+                    text.handleReplaceBetween(dest, dest, buf);
+                    dest += buf.length();
+                    buf.remove();
+                }
+                // Copy segment with out-of-band data
+                b *= 2;
+                text.copy(segPos[b], segPos[b+1], dest);
+                dest += segPos[b+1] - segPos[b];
+            }
+            i += UTF_CHAR_LENGTH(c);
+        }
+        // Insert any accumulated straight text.
+        if (buf.length() > 0) {
+            text.handleReplaceBetween(dest, dest, buf);
+            dest += buf.length();
+        }
+        if (i == cursorPos) {
+            // Record the position of the cursor
+            cursor = dest;
+        }
+        // Delete the key
+        buf.remove();
+        text.handleReplaceBetween(pos.start, keyLimit, buf);
+        lenDelta = dest - keyLimit - (keyLimit - pos.start);
+        pos.start = cursor - (keyLimit - pos.start);
+    }
+    
+    pos.limit += lenDelta;
+    pos.contextLimit += lenDelta;
+    
+    return U_MATCH;
 }
 
 /**
@@ -570,7 +641,6 @@ void TransliterationRule::_appendToRule(UnicodeString& rule,
  * given string.
  */
 UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
-                                           const TransliterationRuleData& data,
                                            UBool escapeUnprintable) const {
     int32_t i;
 
@@ -674,3 +744,5 @@ UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
 
     return rule;
 }
+
+//eof

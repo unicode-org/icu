@@ -75,7 +75,7 @@ public:
 
     virtual const UnicodeString* lookup(const UnicodeString& s) const;
 
-    virtual const UnicodeSet* lookupSet(UChar ch) const;
+    virtual const UnicodeSet* lookupSet(UChar32 ch) const;
 
     virtual UnicodeString parseReference(const UnicodeString& text,
                                          ParsePosition& pos, int32_t limit) const;
@@ -95,7 +95,7 @@ const UnicodeString* ParseData::lookup(const UnicodeString& name) const {
 /**
  * Implement SymbolTable API.
  */
-const UnicodeSet* ParseData::lookupSet(UChar ch) const {
+const UnicodeSet* ParseData::lookupSet(UChar32 ch) const {
     // Note that we cannot use data.lookupSet() because the
     // set array has not been constructed yet.
     const UnicodeSet* set = NULL;
@@ -682,7 +682,7 @@ void TransliteratorParser::parseRules(UnicodeString& idBlockResult,
 
     // Index the rules
     if (U_SUCCESS(status)) {
-        data->ruleSet.freeze(*data, status);
+        data->ruleSet.freeze(status);
         if (idSplitPointResult < 0) {
             idSplitPointResult = idBlockResult.length();
         }
@@ -849,6 +849,7 @@ int32_t TransliteratorParser::parseRule(int32_t pos, int32_t limit) {
                                  right->text, right->cursor, right->cursorOffset,
                                  left->createSegments(),
                                  left->anchorStart, left->anchorEnd,
+                                 *data,
                                  status), status);
 
     return pos;
