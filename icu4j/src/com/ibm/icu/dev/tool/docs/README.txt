@@ -13,8 +13,8 @@ generate a file listing information about the public API, including
 the ICU4J status (draft, stable, deprecated, obsolete).  It excludes
 private API, API marked @internal.  The file is written as text, so it
 is human-readable, but it is a bit verbose.  To save space, the file
-can be zip'd (NOTE: to become gzip'd), which will reduce the size by
-about a factor of 10.
+can be zip'd or gzip'd (using flags passed to the tool), which will
+reduce the size by about a factor of 10.
 
 GatherAPIData requires javadoc and is currently based on sun jdk
 1.4.2.  JavaDoc is internal (I believe) so you need a reference jvm
@@ -56,6 +56,11 @@ ReportAPI can generate either plain text or html reports.  Since it
 only requires the data files and does not rely on JavaDoc, it is more
 straightforward to invoke.
 
+ReportAPI uses the file extension to determine how to uncompress the
+api data files.  It expects '.zip' for files that have been compressed
+using zip, and '.gz' for files that have been compressed using gzip.
+The GatherAPIData utility automatically appends these extensions when
+compression is used.
 
 API Data Files
 
