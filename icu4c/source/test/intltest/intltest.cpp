@@ -1023,13 +1023,6 @@ main(int argc, char* argv[])
     // If user didn't set ICU_DATA, attempt to generate one.
     IntlTest::setICU_DATA();
 
-    /* ### TODO: remove when the new normalization implementation is finished */
-    if(argc>1 && argv[1][0]=='N') {
-        unorm_setNewImplementation((UBool)(argv[1][1]=='+'));
-        ++argv;
-        --argc;
-    }
-
     for (int i = 1; i < argc; ++i) {
         if (argv[i][0] == '-') {
             const char* str = argv[i] + 1;
