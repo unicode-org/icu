@@ -173,7 +173,7 @@ Grego::previousMonthLength(int y, int m) {
 inline void Grego::dayToFields(double day, int32_t& year, int32_t& month,
                                int32_t& dom, int32_t& dow) {
   int32_t doy_unused;
-  return dayToFields(day,year,month,dom,dow,doy_unused);
+  dayToFields(day,year,month,dom,dow,doy_unused);
 }
 
 // Useful millisecond constants
