@@ -21,6 +21,7 @@
 #include "capitst.h"
 #include "unicode/ustring.h"
 #include "unicode/ures.h"
+#include "cmemory.h"
 
 
 U_CAPI const UChar * U_EXPORT2 ucol_getDefaultRulesArray(uint32_t *size);
@@ -94,6 +95,8 @@ void TestGetDefaultRules(){
         log_err("Error: ucol_getDefaultRulesArray() failed\n");
     }
 
+    uprv_free(binColData);
+    ures_close(binColl);
     ures_close(res);
     ucol_close(coll);
   

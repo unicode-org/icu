@@ -16,6 +16,7 @@
 
 #include "cstring.h"
 #include "cintltst.h"
+#include "cmemory.h"
 
 static void TestAPI(void);
 
@@ -86,6 +87,7 @@ void TestAPI(void)
     if(uprv_strcmp(temp, "strdup") !=0 ){
         log_err("FAIL: uprv_strdup() failed. Expected: \"strdup\", Got: %s\n", temp);
     }
+    uprv_free((char *)temp);
   
     uprv_strcpy(src, "this is lower case");
     if(T_CString_strnicmp(src, "THIS", 4 ) != 0){

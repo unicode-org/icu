@@ -24,6 +24,8 @@
 #include "unicode/ucnv.h"
 #include "unicode/ures.h"
 
+U_CAPI void U_EXPORT2 ucnv_orphanAllConverters();
+
 static char* _testDirectory=NULL;
 int main ( int argc, const char **argv )
 {
@@ -78,6 +80,14 @@ int main ( int argc, const char **argv )
     cleanUpTestTree(root);
     cleanUpDataTable();
     ctst_freeAll();
+
+#if 0
+    /* To check for leaks */
+
+    ucnv_flushCache();
+    ucnv_orphanAllConverters(); /* nuke the hashtable.. so that any still-open cnvs are leaked */
+        /* above function must be enabled in ucnv_bld.c */
+#endif
 
     return nerrors ? 1 : 0;
 }

@@ -302,6 +302,8 @@ void JamoToHangTransliteratorTest::expectTranslit(const JamoHangulTransliterator
     equal.handleTransliterate(rsource2, index, TRUE);
     expectAux(t.getID() + "=OPERATOR:handleTransliterator(increment=TRUE) "+ message, source + "-->" + rsource2, rsource2==expectedResult, expectedResult);
 
+    delete clone;
+
 }
 void JamoToHangTransliteratorTest::expect(const JamoHangulTransliterator& t,
                                         const UnicodeString& message,
