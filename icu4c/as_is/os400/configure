@@ -4014,6 +4014,7 @@ trap 'del -f `echo "README icudefs.mk \
                 tools/gentest/Makefile \
 		tools/gennorm/Makefile \
 		tools/genprops/Makefile \
+		tools/genpname/Makefile \
 		tools/genbrk/Makefile \
 		tools/dumpce/Makefile \
 		test/Makefile test/testdata/Makefile test/intltest/Makefile \
@@ -4203,6 +4204,7 @@ CONFIG_FILES=\${CONFIG_FILES-"README icudefs.mk \
                 tools/gentest/Makefile \
 		tools/gennorm/Makefile \
 		tools/genprops/Makefile \
+		tools/genpname/Makefile \
 		tools/genbrk/Makefile \
 		tools/dumpce/Makefile \
 		test/Makefile test/testdata/Makefile test/intltest/Makefile \
