@@ -73,7 +73,7 @@ Transliterator* TransliteratorIDParser::SingleID::createInstance() {
     }
     if (t != NULL) {
         if (filter.length() != 0) {
-            UErrorCode ec;
+            UErrorCode ec = U_ZERO_ERROR;
             UnicodeSet *set = new UnicodeSet(filter, ec);
             if (U_FAILURE(ec)) {
                 delete set;
