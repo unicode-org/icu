@@ -170,6 +170,10 @@ SOURCE=.\CanonData.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\CanonShaping.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\ClassDefinitionTables.cpp
 # End Source File
 # Begin Source File
