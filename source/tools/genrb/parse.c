@@ -616,6 +616,7 @@ realParseTable(struct SResource *table, char *tag, uint32_t startline, UErrorCod
     enum   ETokenType  token;
     char               subtag[1024];
     uint32_t           line;
+    UBool              readToken = FALSE;
 
     /* '{' . (name resource)* '}' */
     for (;;)
@@ -624,6 +625,9 @@ realParseTable(struct SResource *table, char *tag, uint32_t startline, UErrorCod
 
         if (token == TOK_CLOSE_BRACE)
         {
+            if (!readToken) {
+                warning(startline, "Encountered empty table");
+            }
             return table;
         }
 
@@ -670,6 +674,7 @@ realParseTable(struct SResource *table, char *tag, uint32_t startline, UErrorCod
             table_close(table, status);
             return NULL;
         }
+        readToken = TRUE;
     }
 
     /* not reached */
@@ -684,7 +689,7 @@ parseTable(char *tag, uint32_t startline, UErrorCode *status)
 
     if (tag != NULL && uprv_strcmp(tag, "CollationElements") == 0)
     {
-    return parseCollationElements(tag, startline, status);
+        return parseCollationElements(tag, startline, status);
     }
 
     result = table_open(bundle, tag, status);
@@ -704,6 +709,7 @@ parseArray(char *tag, uint32_t startline, UErrorCode *status)
     struct SResource  *member = NULL;
     struct UString    *tokenValue;
     enum   ETokenType  token;
+    UBool              readToken = FALSE;
 
     result = array_open(bundle, tag, status);
 
@@ -721,6 +727,9 @@ parseArray(char *tag, uint32_t startline, UErrorCode *status)
         if (token == TOK_CLOSE_BRACE)
         {
             getToken(NULL, NULL, status);
+            if (!readToken) {
+                warning(startline, "Encountered empty array");
+            }
             break;
         }
 
@@ -770,6 +779,7 @@ parseArray(char *tag, uint32_t startline, UErrorCode *status)
             array_close(result, status);
             return NULL;
         }
+        readToken = TRUE;
     }
 
     return result;
@@ -782,6 +792,7 @@ parseIntVector(char *tag, uint32_t startline, UErrorCode *status)
     enum   ETokenType  token;
     char              *string;
     int32_t            value;
+    UBool              readToken = FALSE;
 
     result = intvector_open(bundle, tag, status);
 
@@ -800,6 +811,9 @@ parseIntVector(char *tag, uint32_t startline, UErrorCode *status)
         {
             /* it's the end, consume the close brace */
             getToken(NULL, NULL, status);
+            if (!readToken) {
+                warning(startline, "Encountered empty int vector");
+            }
             return result;
         }
 
@@ -830,6 +844,7 @@ parseIntVector(char *tag, uint32_t startline, UErrorCode *status)
         {
             getToken(NULL, NULL, status);
         }
+        readToken = TRUE;
     }
 
     /* not reached */
@@ -848,6 +863,7 @@ parseBinary(char *tag, uint32_t startline, UErrorCode *status)
     uint32_t          count;
     uint32_t          i;
     uint32_t          line;
+    UBool             readToken = FALSE;
 
     string = getInvariantString(&line, status);
 
@@ -865,7 +881,6 @@ parseBinary(char *tag, uint32_t startline, UErrorCode *status)
     }
 
     count = uprv_strlen(string);
-    /* AHHH!  Can't have count == 0 */
     if (count > 0)
     {
         value = uprv_malloc(sizeof(uint8_t) * count);
@@ -891,6 +906,7 @@ parseBinary(char *tag, uint32_t startline, UErrorCode *status)
     }
     else {
         result = bin_open(bundle, tag, 0, NULL, status);
+        warning(startline, "Encountered empty binary tag");
     }
 
     uprv_free(string);
@@ -918,6 +934,10 @@ parseInteger(char *tag, uint32_t startline, UErrorCode *status)
     {
         uprv_free(string);
         return NULL;
+    }
+
+    if (uprv_strlen(string) <= 0) {
+        warning(startline, "Encountered empty integer. Default value is 0.");
     }
 
     value  = uprv_strtol(string, NULL, 10);
