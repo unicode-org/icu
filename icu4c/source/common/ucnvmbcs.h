@@ -19,6 +19,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/ucnv.h"
+#include "ucnv_bld.h"
 
 /* MBCS converter data and state -------------------------------------------- */
 
@@ -153,12 +154,6 @@ typedef struct {
              flags,
              reserved;
 } _MBCSHeader;
-
-/** Forward declaration to enable the following function declarations. */
-struct UConverterSharedData;
-
-/** Forward declaration to enable the following function declarations. */
-typedef struct UConverterSharedData UConverterSharedData;
 
 /**
  * This is a simple version of _MBCSGetNextUChar() that is used
