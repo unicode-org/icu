@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/BasicTest.java,v $ 
- * $Date: 2002/06/20 01:16:23 $ 
- * $Revision: 1.11 $
+ * $Date: 2002/07/16 00:21:50 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -17,7 +17,6 @@ import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.impl.*;
 import com.ibm.icu.impl.Utility;
-import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.Random;
 
@@ -112,9 +111,9 @@ public class BasicTest extends TestFmwk {
                 throws Exception{
         // Make sure that the static composition methods work
         logln("Canonical composition...");
-        staticTest(Normalizer.NFC,        0, hangulCanon,  2);
+        staticTest(Normalizer.NFC, hangulCanon,  2);
         logln("Compatibility composition...");
-        staticTest(Normalizer.NFKC, 0, hangulCompat, 2);
+        staticTest(Normalizer.NFKC, hangulCompat, 2);
         // Now try iterative composition....
         logln("Iterative composition...");
         Normalizer norm = new Normalizer("", Normalizer.NFC);
@@ -132,9 +131,9 @@ public class BasicTest extends TestFmwk {
     public void TestHangulDecomp() throws Exception{
         // Make sure that the static decomposition methods work
         logln("Canonical decomposition...");
-        staticTest(Normalizer.NFD,        0, hangulCanon,  1);
+        staticTest(Normalizer.NFD, hangulCanon,  1);
         logln("Compatibility decomposition...");
-        staticTest(Normalizer.NFKD, 0, hangulCompat, 1);
+        staticTest(Normalizer.NFKD, hangulCompat, 1);
         
          // Now the iterative decomposition methods...
         logln("Iterative decomposition...");
@@ -153,25 +152,25 @@ public class BasicTest extends TestFmwk {
     public void TestDecomp() throws Exception{
         Normalizer norm = new Normalizer("", Normalizer.NFD);
         iterateTest(norm, canonTests, 1);
-        staticTest(Normalizer.NFD, 0, canonTests, 1);
+        staticTest(Normalizer.NFD, canonTests, 1);
     }
 
     public void TestCompatDecomp() throws Exception{
         Normalizer norm = new Normalizer("", Normalizer.NFKD);
         iterateTest(norm, compatTests, 1);
-        staticTest(Normalizer.NFKD, 0, compatTests, 1);
+        staticTest(Normalizer.NFKD,compatTests, 1);
     }
 
     public void TestCanonCompose() throws Exception{
         Normalizer norm = new Normalizer("", Normalizer.NFC);
         iterateTest(norm, canonTests, 2);
-        staticTest(Normalizer.NFC, 0, canonTests, 2);
+        staticTest(Normalizer.NFC, canonTests, 2);
     }
 
     public void TestCompatCompose() throws Exception{
         Normalizer norm = new Normalizer("", Normalizer.NFKC);
         iterateTest(norm, compatTests, 2);
-        staticTest(Normalizer.NFKC, 0, compatTests, 2);
+        staticTest(Normalizer.NFKC,compatTests, 2);
     }
 
     public void TestExplodingBase() throws Exception{
@@ -190,11 +189,11 @@ public class BasicTest extends TestFmwk {
             { "\u1e9b",        "s\u0307",        "\u1e61"      },
         };
 
-        staticTest(Normalizer.NFD,           0, canon,  1);
-        staticTest(Normalizer.NFC,          0, canon,  2);
+        staticTest(Normalizer.NFD, canon,  1);
+        staticTest(Normalizer.NFC, canon,  2);
 
-        staticTest(Normalizer.NFKD,    0, compat, 1);
-        staticTest(Normalizer.NFKC,   0, compat, 2);
+        staticTest(Normalizer.NFKD, compat, 1);
+        staticTest(Normalizer.NFKC, compat, 2);
 
     }
 
@@ -211,10 +210,10 @@ public class BasicTest extends TestFmwk {
             { "\u0fb2\u0f71\u0f80", "\u0fb2\u0f71\u0f80", "\u0fb2\u0f71\u0f80" }
         };
 
-        staticTest(Normalizer.NFD,           0, decomp, 1);
-        staticTest(Normalizer.NFKD,    0, decomp, 2);
-        staticTest(Normalizer.NFC,          0, compose, 1);
-        staticTest(Normalizer.NFKC,   0, compose, 2);
+        staticTest(Normalizer.NFD, decomp, 1);
+        staticTest(Normalizer.NFKD,decomp, 2);
+        staticTest(Normalizer.NFC, compose, 1);
+        staticTest(Normalizer.NFKC,compose, 2);
     }
 
     /**
@@ -641,7 +640,7 @@ public class BasicTest extends TestFmwk {
         }
     }
 
-    private void staticTest (Normalizer.Mode mode, int options, 
+    private void staticTest (Normalizer.Mode mode,
                              String[][] tests, int outCol) throws Exception{
         for (int i = 0; i < tests.length; i++)
         {
@@ -1302,7 +1301,6 @@ public class BasicTest extends TestFmwk {
 	    char[] nfd = new char[100];
 	    int normStart = 0;
 	    int nfdsize = 0;
-        int srcStart = 0;
 	    while (size != 19) {
 	      data[size] = datachar[rand.nextInt(RAND_MAX)*50/RAND_MAX];
 	      logln("0x"+data[size]);
@@ -1536,7 +1534,7 @@ public class BasicTest extends TestFmwk {
         for(i=0; i<count; ++i) {
             s[i]=Utility.unescape(strings[i]);
         }
-        UTF16.StringComparator comp = new UTF16.StringComparator();
+        StringComparator comp = new StringComparator();
         // test them each with each other
         
         i = 15;
@@ -1565,6 +1563,135 @@ public class BasicTest extends TestFmwk {
                 
             }
         }
+    }
+    
+    
+    /**
+    * Compare strings using Unicode code point order, instead of UTF-16 code 
+    * unit order.
+    */
+    public static final class StringComparator implements java.util.Comparator 
+    {
+        /**
+        * Standard String compare. Only one small section is different, marked in 
+        * the code.
+        */
+        public int compare(Object a, Object b) 
+        {
+            if (a == b) {
+                return 0;
+            }
+            if (a == null) {
+                return -1;
+            }
+            if (b == null) {
+                return 1;
+            }
+                  
+            String sa = (String) a;
+            String sb = (String) b;
+            int lena = sa.length();
+            int lenb = sb.length();
+            int len = lena;
+            if (len > lenb) {
+                len = lenb;
+            }
+                
+            for (int i = 0; i < len; ++i) 
+            {
+                char ca = sa.charAt(i);
+                char cb = sb.charAt(i);
+                if (ca == cb) {
+                    continue; // skip remap if equal
+                }
+                        
+                // start of only different section
+                // if either code unit is below 0xd800, i.e., below the 
+                // surrogate range, then nothing needs to be done
+
+                // if both are >=0xd800 then special code adjusts code unit 
+                // values so that all BMP code points (including single 
+                // surrogate code points) sort below supplementary ones
+
+                // this is necessary because surrogates are not at the end of 
+                // the code unit range
+                if (ca >= UTF16.LEAD_SURROGATE_MIN_VALUE 
+                    && cb >= UTF16.LEAD_SURROGATE_MIN_VALUE) {
+                    // subtract 0x2800 from BMP code points to make them 
+                    // smaller than supplementary ones
+                    if ((ca <= UTF16.LEAD_SURROGATE_MAX_VALUE && (i + 1) < lena 
+                        && UTF16.isTrailSurrogate(sa.charAt(i + 1))) 
+                        || (UTF16.isTrailSurrogate(ca) && i > 0 
+                            && UTF16.isLeadSurrogate(sa.charAt(i - 1)))) {
+                        // part of a surrogate pair, leave >=d800
+                    } 
+                    else {
+                        // BMP code point - may be surrogate code point - make 
+                        // <d800
+                        ca -= 0x2800;
+                    }
+
+                    if ((cb <= UTF16.LEAD_SURROGATE_MAX_VALUE && (i + 1) < lenb 
+                        && UTF16.isTrailSurrogate(sb.charAt(i + 1))) 
+                        || (UTF16.isTrailSurrogate(cb) && i > 0 
+                            && UTF16.isLeadSurrogate(sb.charAt(i - 1)))) {
+                        // part of a surrogate pair, leave >=d800
+                    } 
+                    else {
+                        // BMP code point - may be surrogate code point - make 
+                        // < d800
+                        cb -= 0x2800;
+                    }
+                }
+
+                // end of only different section
+                        
+                if (ca < cb) {
+                    return -1;
+                }
+                  
+                return 1; // wasn't equal, so return 1
+            }
+              
+            if (lena < lenb) {
+                return -1;
+            }
+                
+            if (lena > lenb) {
+                return 1;
+            }
+                    
+            return 0;
+        }
+        
+        public int caseCompare(Object a, Object b, int options){
+            if (a == b) {
+                return 0;
+            }
+            if (a == null) {
+                return -1;
+            }
+            if (b == null) {
+                return 1;
+            }
+            String sa = (String) a;
+            String sb = (String) b;
+            int la = sa.length();
+            int lb = sb.length();
+            if( sa != sb ){
+                int result = NormalizerImpl.cmpEquivFold(sa,sb,
+                                         options|Normalizer.COMPARE_IGNORE_CASE);
+                if(result!=0) {
+                  return (int)((byte)(result >> 24 | 1));
+                }
+
+            }else{
+                if(la != lb){
+                    return (int)((byte)((la-lb) >> 24 | 1));
+                }
+            }
+            return 0;
+        } 
     }
     
 	public void TestCompare() {
@@ -1602,7 +1729,7 @@ public class BasicTest extends TestFmwk {
 	    for(i=0; i<count; ++i) {
 	        s[i]=Utility.unescape(strings[i]);
 	    }
-	    UTF16.StringComparator comp = new UTF16.StringComparator();
+	    StringComparator comp = new StringComparator();
 	    // test them each with each other
 	    for(i=0; i<count; ++i) {
 	        for(j=i; j<count; ++j) {
@@ -1630,7 +1757,7 @@ public class BasicTest extends TestFmwk {
     
     // verify that case-folding does not un-FCD strings
 	int countFoldFCDExceptions(int foldingOptions) {
-	    String s, fold, d;
+	    String s, d;
 	    int c;
 	    int count;
 	    int/*unsigned*/ cc, trailCC, foldCC, foldTrailCC;
