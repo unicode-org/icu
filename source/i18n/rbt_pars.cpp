@@ -182,7 +182,8 @@ UBool ParseData::isMatcher(UChar32 ch) {
     // set array has not been constructed yet.
     int32_t i = ch - data->variablesBase;
     if (i >= 0 && i < variablesVector->size()) {
-        return ((UnicodeFunctor*) variablesVector->elementAt(i))->toMatcher() != NULL;
+        UnicodeFunctor *f = (UnicodeFunctor*) variablesVector->elementAt(i);
+		return f != NULL && f->toMatcher() != NULL;
     }
     return TRUE;
 }
@@ -196,7 +197,8 @@ UBool ParseData::isReplacer(UChar32 ch) {
     // set array has not been constructed yet.
     int i = ch - data->variablesBase;
     if (i >= 0 && i < variablesVector->size()) {
-        return ((UnicodeFunctor*) variablesVector->elementAt(i))->toReplacer() != NULL;
+        UnicodeFunctor *f = (UnicodeFunctor*) variablesVector->elementAt(i);
+		return f != NULL && f->toReplacer() != NULL;
     }
     return TRUE;
 }
