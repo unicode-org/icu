@@ -212,6 +212,19 @@ protected:
      * here would be to declare and empty-implement a protected or public one.
     UObject &UObject::operator=(const UObject &);
      */
+
+// Future implementation for RTTI that support subtyping. [alan]
+// 
+//  public:
+//     /**
+//      * @internal
+//      */
+//     static UClassID getStaticClassID();
+// 
+//     /**
+//      * @internal
+//      */
+//     UBool instanceOf(UClassID type) const;
 };
 
 /**
@@ -228,6 +241,38 @@ protected:
     } \
     UClassID myClass::getDynamicClassID() const \
     { return myClass::getStaticClassID(); }
+
+// Future implementation for RTTI that support subtyping. [alan]
+// 
+// /**
+//  * This macro adds ICU RTTI to an ICU abstract class implementation.
+//  * This macro should be invoked in *.cpp files.  The corresponding
+//  * header should declare getStaticClassID.
+//  *
+//  * @param myClass The name of the class that needs RTTI defined.
+//  * @param myParent The name of the myClass's parent.
+//  * @internal
+//  */
+// #define UOBJECT_DEFINE_ABSTRACT_RTTI_IMPLEMENTATION(myClass, myParent) \
+//     UClassID myClass::getStaticClassID() { \
+//       static const UClassID CLASS = (UClassID)myParent::getStaticClassID(); \
+//       return (UClassID)&CLASS; \
+//     }
+// 
+// /**
+//  * This macro adds ICU RTTI to an ICU concrete class implementation.
+//  * This macro should be invoked in *.cpp files.  The corresponding
+//  * header should declare getDynamicClassID and getStaticClassID.
+//  *
+//  * @param myClass The name of the class that needs RTTI defined.
+//  * @param myParent The name of the myClass's parent.
+//  * @internal
+//  */
+// #define UOBJECT_DEFINE_RTTI_IMPLEMENTATION(myClass, myParent) \
+//     UOBJECT_DEFINE_ABSTRACT_RTTI_IMPLEMENTATION(myClass, myParent) \
+//     UClassID myClass::getDynamicClassID() const { \
+//       return myClass::getStaticClassID(); \
+//     }
 
 
 
