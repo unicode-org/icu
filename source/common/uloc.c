@@ -465,31 +465,31 @@ int32_t uloc_getName(const char* localeID,
 
 const char* uloc_getISO3Language(const char* localeID) 
 {
-  int16_t idx;
+  int16_t offset;
   char lang[TEMPBUFSIZE];
   UErrorCode err = U_ZERO_ERROR;
   
   if (localeID == NULL)    localeID = uloc_getDefault();
   uloc_getLanguage(localeID, lang, TEMPBUFSIZE, &err);
   if (U_FAILURE(err)) return "";
-  idx = _findIndex(_languages, sizeof(_languages),lang);
-  if (idx < 0) return "";
-  return &(_languages3[idx * 4]);
+  offset = _findIndex(_languages, sizeof(_languages),lang);
+  if (offset < 0) return "";
+  return &(_languages3[offset * 4]);
 }
 
 const char* uloc_getISO3Country(const char* localeID) 
 {
-  int16_t idx;
+  int16_t offset;
   char cntry[TEMPBUFSIZE];
   UErrorCode err = U_ZERO_ERROR;
   
   if (localeID == NULL)    localeID = uloc_getDefault();
   uloc_getCountry(localeID, cntry, TEMPBUFSIZE, &err);
   if (U_FAILURE(err)) return "";
-  idx = _findIndex(_countries, sizeof(_countries), cntry);
-  if (idx < 0) return "";
+  offset = _findIndex(_countries, sizeof(_countries), cntry);
+  if (offset < 0) return "";
 
-  return &(_countries3[idx * 4]);
+  return &(_countries3[offset * 4]);
 }
 
 uint32_t uloc_getLCID(const char* localeID) 
@@ -1016,13 +1016,13 @@ int32_t uloc_getDisplayName(const char* locale,
 U_CAPI UnicodeString** T_ResourceBundle_listInstalledLocales(const char* path, int32_t* numInstalledLocales);
 
 const char*
-uloc_getAvailable(int32_t idx) 
+uloc_getAvailable(int32_t offset) 
 {
   
   if (_installedLocales == NULL) _lazyEvaluate_installedLocales();
   
-  if (idx > _installedLocalesCount) return NULL;
-  else  return _installedLocales[idx];
+  if (offset > _installedLocalesCount) return NULL;
+  else  return _installedLocales[offset];
   
 }
 

@@ -237,17 +237,17 @@ ucnv_io_getAliases(const char *alias, const char **aliases, UErrorCode *pErrorCo
 }
 
 U_CFUNC const char *
-ucnv_io_getAlias(const char *alias, uint16_t idx, UErrorCode *pErrorCode) {
+ucnv_io_getAlias(const char *alias, uint16_t n, UErrorCode *pErrorCode) {
     if(haveAliasData(pErrorCode) && isAlias(alias, pErrorCode)) {
         const uint16_t *p=findAlias(alias);
         if(p!=NULL) {
             uint16_t count=*(p+1);
-            if(idx<count) {
+            if(n<count) {
                 const char *aliases=(const char *)aliasTable+*p;
-                while(idx>0) {
+                while(n>0) {
                     /* skip a name, first the canonical converter name */
                     aliases+=uprv_strlen(aliases)+1;
-                    --idx;
+                    --n;
                 }
                 return aliases;
             }
@@ -265,11 +265,11 @@ ucnv_io_countAvailableConverters(UErrorCode *pErrorCode) {
 }
 
 U_CFUNC const char *
-ucnv_io_getAvailableConverter(uint16_t idx, UErrorCode *pErrorCode) {
+ucnv_io_getAvailableConverter(uint16_t n, UErrorCode *pErrorCode) {
     if(haveAliasData(pErrorCode)) {
         const uint16_t *p=aliasTable+1+2*(*aliasTable);
-        if(idx<*p) {
-            return (const char *)aliasTable+p[1+2*idx];
+        if(n<*p) {
+            return (const char *)aliasTable+p[1+2*n];
         }
     }
     return NULL;
@@ -297,9 +297,9 @@ ucnv_io_countAvailableAliases(UErrorCode *pErrorCode) {
 }
 
 U_CFUNC const char *
-ucnv_io_getAvailableAlias(uint16_t idx, UErrorCode *pErrorCode) {
-    if(haveAliasData(pErrorCode) && idx<*aliasTable) {
-        return (const char *)aliasTable+*(aliasTable+1+idx);
+ucnv_io_getAvailableAlias(uint16_t n, UErrorCode *pErrorCode) {
+    if(haveAliasData(pErrorCode) && n<*aliasTable) {
+        return (const char *)aliasTable+*(aliasTable+1+n);
     }
     return NULL;
 }

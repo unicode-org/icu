@@ -59,7 +59,7 @@ U_CAPI  bool_t U_EXPORT2 isBogus(const CompactByteArray* array);
 
 
 U_CAPI  void U_EXPORT2 ucmp8_set(CompactByteArray* array,
-                 UChar idx,
+                 UChar character,
                  int8_t value);
 
 U_CAPI  void U_EXPORT2 ucmp8_setRange(CompactByteArray* array, 

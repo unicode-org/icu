@@ -131,7 +131,7 @@ U_CAPI int32_t  U_EXPORT2 uprv_digitsAfterDecimal(double x);
  */
 U_CAPI void     U_EXPORT2 uprv_tzset(void);
 U_CAPI int32_t  U_EXPORT2 uprv_timezone(void);
-U_CAPI char*    U_EXPORT2 uprv_tzname(int idx);
+U_CAPI char*    U_EXPORT2 uprv_tzname(int n);
 
 /**
  * Get UTC (GMT) time measured in seconds since 0:00 on 1/1/70. 
