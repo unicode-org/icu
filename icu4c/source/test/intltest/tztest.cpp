@@ -380,9 +380,30 @@ TimeZoneTest::TestGetAvailableIDs913()
     }
     *buf += " };";
     logln(*buf);
+
+    /* Confirm that the following zones can be retrieved: The first
+     * zone, the last zone, and one in-between.  This tests the binary
+     * search through the system zone data.
+     */
+    for (i=0; i<3; ++i) {
+        int32_t which = (i==0)?0:((i==1)?(s_length/2):(s_length-1));
+        TimeZone *z = TimeZone::createTimeZone(*s[which]);
+        if (z == 0) {
+            errln(UnicodeString("FAIL: createTimeZone(") +
+                  *s[which] + ") -> 0");
+        } else if (z->getID(str) != *s[which]) {
+            errln(UnicodeString("FAIL: createTimeZone(") +
+                  *s[which] + ") -> zone " + str);
+        } else {
+            logln(UnicodeString("OK: createTimeZone(") +
+                  *s[which] + ") succeeded");
+        }
+        delete z;
+    }
+    delete [] s;
+
     buf->truncate(0);
     *buf += "TimeZone.getAvailableIDs(GMT+02:00) = { ";
-    delete [] s;
 
     s = TimeZone::createAvailableIDs(+ 2 * 60 * 60 * 1000, s_length);
     for (i = 0; i < s_length;++i) {
@@ -411,6 +432,7 @@ TimeZoneTest::TestGetAvailableIDs913()
 
     delete buf;
     delete [] s;
+
  /*
 #if defined(WIN32) && defined(_DEBUG) && CHECK_HEAP
     }
@@ -431,6 +453,22 @@ TimeZoneTest::TestGetAvailableIDs913()
 
 
     /**
+     * This test is problematic. It should really just confirm that
+     * the list of compatibility zone IDs exist and are somewhat
+     * meaningful (that is, they aren't all aliases of GMT). It goes a
+     * bit further -- it hard-codes expectations about zone behavior,
+     * when in fact zones are redefined quite frequently. ICU's build
+     * process means that it is easy to update ICU to contain the
+     * latest Olson zone data, but if a zone tested here changes, then
+     * this test will fail.  I have updated the test for 1999j data,
+     * but further updates will probably be required. Note that some
+     * of the concerts listed below no longer apply -- in particular,
+     * we do NOT overwrite real UNIX zones with 3-letter IDs. There
+     * are two points of overlap as of 1999j: MET and EET. These are
+     * both real UNIX zones, so we just use the official
+     * definition. This test has been updated to reflect this.
+     * 12/3/99 aliu
+     *
      * [srl - from java - 7/5/1998]
      * @bug 4130885
      * Certain short zone IDs, used since 1.1.x, are incorrect.
@@ -492,7 +530,7 @@ void TimeZoneTest::TestShortZoneIDs()
      // Create a small struct to hold the array
      struct
      {
-          char      id[20];
+          char      id[4];
           int32_t   offset;
           bool_t    daylight;
      }
@@ -509,7 +547,7 @@ void TimeZoneTest::TestShortZoneIDs()
         "EST", -300, TRUE,
         "PRT", -240, FALSE,
         "CNT", -210, TRUE,
-        "AGT", -180, FALSE,
+        "AGT", -180, TRUE, // updated 12/3/99 aliu
         "BET", -180, TRUE,
         // "CAT", -60, FALSE, // Wrong:
         // As of bug 4130885, fix CAT (Central Africa)
@@ -520,15 +558,15 @@ void TimeZoneTest::TestShortZoneIDs()
         "ART", 120, TRUE,
         "EET", 120, TRUE,
         "EAT", 180, FALSE,
-        "MET", 210, TRUE,
-        "NET", 240, FALSE,
+        "MET", 60, TRUE, // updated 12/3/99 aliu
+        "NET", 240, TRUE, // updated 12/3/99 aliu
         "PLT", 300, FALSE,
         "IST", 330, FALSE,
         "BST", 360, FALSE,
         "VST", 420, FALSE,
-        "CTT", 480, FALSE,
+        "CTT", 480, TRUE, // updated 12/3/99 aliu
         "JST", 540, FALSE,
-        "ACT", 570, FALSE,
+        "ACT", 570, TRUE, // updated 12/3/99 aliu
         "AET", 600, TRUE,
         "SST", 660, FALSE,
         // "NST", 720, FALSE,
@@ -538,44 +576,39 @@ void TimeZoneTest::TestShortZoneIDs()
      };
 
 
-     for(i=0;kReferenceList[i].id[0];i++)
-     {
+     for(i=0;kReferenceList[i].id[0];i++) {
           UnicodeString itsID(kReferenceList[i].id);
-
-
+          bool_t ok = TRUE;
           // Check existence.
-
           TimeZone *tz = TimeZone::createTimeZone(itsID);
-
-          if(!tz)
-          {
+          if (!tz) {
               errln("FAIL: Time Zone " + itsID + " does not exist!");
               continue;
           }
 
-
           // Check daylight usage.
-
           bool_t usesDaylight = tz->useDaylightTime();
-
-          if(usesDaylight != kReferenceList[i].daylight)
-          {
-              errln("FAIL: Time Zone " + itsID + " 's daylight is " + (usesDaylight?"TRUE":"FALSE") +
-                    " but it should be " + ((kReferenceList[i].daylight)?"TRUE":"FALSE"));
+          if (usesDaylight != kReferenceList[i].daylight) {
+              errln("FAIL: Time Zone " + itsID + " use daylight is " +
+                    (usesDaylight?"TRUE":"FALSE") +
+                    " but it should be " +
+                    ((kReferenceList[i].daylight)?"TRUE":"FALSE"));
+              ok = FALSE;
           }
-
 
           // Check offset
-
           int32_t offsetInMinutes = tz->getRawOffset()/60000;
-
-          if(offsetInMinutes != kReferenceList[i].offset)
-          {
-              errln("FAIL: Time Zone " + itsID + " 's offset is " + offsetInMinutes +
+          if (offsetInMinutes != kReferenceList[i].offset) {
+              errln("FAIL: Time Zone " + itsID + " raw offset is " +
+                    offsetInMinutes +
                     " but it should be " + kReferenceList[i].offset);
+              ok = FALSE;
           }
 
-          logln(" Time Zone " + itsID + " is OK. ");
+          if (ok) {
+              logln("OK: " + itsID +
+                    " useDaylightTime() & getRawOffset() as expected");
+          }
           delete tz;
      }
 
@@ -583,75 +616,44 @@ void TimeZoneTest::TestShortZoneIDs()
      // OK now test compat
      logln("Testing for compatibility zones");
 
-     const char* compatibilityMap[] =
-    {
-        // UTC is Universal Time, Coordinated.  Synonym for GMT.
-        /*GMT+0*/ "UTC", "GMT",
-        // ECT is the ID for European Central Time time zone.
-        /*GMT+1*/ "ECT", "Europe/Paris",
-        // EET is the ID for Eastern European Time time zone.
-        /*GMT+2*/ "EET", "Europe/Istanbul",
-        // ART is the ID for (Arabic) Egypt Standard Time timezone.
-        /*GMT+2*/ "ART", "Africa/Cairo",
-        // CAT is the ID for Central African Time time zone.
-        /*GMT+2*/ "CAT", "Africa/Johannesburg",
-        // EAT is the ID for Eastern African Time time zone.
-        /*GMT+3*/ "EAT", "Asia/Riyadh",
-        // MET is the ID for Middle East Time time zone.
-        /*GMT+0330*/ "MET", "Asia/Tehran",
-        // NET is the ID for Near East Time time zone.
-        /*GMT+4*/ "NET", "Asia/Yerevan",
-        // PLT is the ID for Pakistan Lahore Time time zone.
-        /*GMT+5*/ "PLT", "Asia/Karachi",
-        // IST is the ID for India Standard Time time zone.
-        /*GMT+0550*/ "IST", "Asia/Calcutta",
-        // BST is the ID for Bangladesh Standard Time time zone.
-        /*GMT+6*/ "BST", "Asia/Dacca",
-        // VST is the ID for Vietnam Standard Time time zone.
-        /*GMT+7*/ "VST", "Asia/Bangkok",
-        // CTT is the ID for China Taiwan Time time zone.
-        /*GMT+8*/ "CTT", "Asia/Shanghai",
-        // JST is the ID for Japan Standard Time time zone.
-        /*GMT+9*/ "JST", "Asia/Tokyo",
-        // ACT is the ID for Australia Central Time time zone.
-        /*GMT+0930*/ "ACT", "Australia/Darwin",
-        // AET is the ID for Australia Eastern Time time zone.
-        /*GMT+10*/ "AET", "Australia/Sydney",
-        // SST is the ID for Solomon Standard Time time zone.
-        /*GMT+11*/ "SST", "Pacific/Guadalcanal",
-        // NST is the ID for New Zealand Standard Time time zone.
-        /*GMT+12*/ "NST", "Pacific/Auckland",
-        // MIT is the ID for Midway Islands Time time zone.
-        /*GMT-11*/ "MIT", "Pacific/Apia",
-        // HST is the ID for Hawaii Standard Time time zone.
-        /*GMT-10*/ "HST", "Pacific/Honolulu",
-        // AST is the ID for Alaska Standard Time time zone.
-        /*GMT-9*/ "AST", "America/Anchorage",
-        // PST is the ID for Pacific Standard Time time zone.
-        /*GMT-8*/ "PST", "America/Los_Angeles",
-        // PNT is the ID for Phoenix Standard Time time zone.
-        /*GMT-7*/ "PNT", "America/Phoenix",
-        // MST is the ID for Mountain Standard Time time zone.
-        /*GMT-7*/ "MST", "America/Denver",
-        // CST is the ID for Central Standard Time time zone.
-        /*GMT-6*/ "CST", "America/Chicago",
-        // EST is the ID for Eastern Standard Time time zone.
-        /*GMT-5*/ "EST", "America/New_York",
-        // IET is the ID for Indiana Eastern Standard Time time zone.
-        /*GMT-5*/ "IET", "America/Indianapolis",
-        // PRT is the ID for Puerto Rico and US Virgin Islands Time time zone.
-        /*GMT-4*/ "PRT", "America/Caracas",
-        // CNT is the ID for Canada Newfoundland Time time zone.
-        /*GMT-0330*/ "CNT", "America/St_Johns",
-        // AGT is the ID for Argentina Standard Time time zone.
-        /*GMT-3*/ "AGT", "America/Buenos_Aires",
-        // BET is the ID for Brazil Eastern Time time zone.
-        /*GMT-3*/ "BET", "America/Sao_Paulo",
-         "\0","\0","\0",
+     const char* compatibilityMap[] = {
+        // This list is copied from tz.alias.  If tz.alias
+        // changes, this list must be updated.  Current as of 12/3/99
+        "ACT", "Australia/Darwin",
+        "AET", "Australia/Sydney",
+        "AGT", "America/Buenos_Aires",
+        "ART", "Africa/Cairo",
+        "AST", "America/Anchorage",
+        "BET", "America/Sao_Paulo",
+        "BST", "Asia/Dacca",
+        "CAT", "Africa/Harare",
+        "CNT", "America/St_Johns",
+        "CST", "America/Chicago",
+        "CTT", "Asia/Shanghai",
+        "EAT", "Africa/Addis_Ababa",
+        "ECT", "Europe/Paris",
+        // EET Europe/Istanbul # EET is a standard UNIX zone
+        "EST", "America/New_York",
+        "HST", "Pacific/Honolulu",
+        "IET", "America/Indianapolis",
+        "IST", "Asia/Calcutta",
+        "JST", "Asia/Tokyo",
+        // MET Asia/Tehran # MET is a standard UNIX zone
+        "MIT", "Pacific/Apia",
+        "MST", "America/Denver",
+        "NET", "Asia/Yerevan",
+        "NST", "Pacific/Auckland",
+        "PLT", "Asia/Karachi",
+        "PNT", "America/Phoenix",
+        "PRT", "America/Puerto_Rico",
+        "PST", "America/Los_Angeles",
+        "SST", "Pacific/Guadalcanal",
+        "UTC", "Etc/GMT",
+        "VST", "Asia/Saigon",
+         "","","",
     };
 
-    for(i=0;*compatibilityMap[i];i+=2)
-    {
+    for (i=0;*compatibilityMap[i];i+=2) {
         UnicodeString itsID;
 
         const char *zone1 = compatibilityMap[i];
@@ -660,58 +662,29 @@ void TimeZoneTest::TestShortZoneIDs()
         TimeZone *tz1 = TimeZone::createTimeZone(zone1);
         TimeZone *tz2 = TimeZone::createTimeZone(zone2);
 
-        // ok what did we get?
-
-        // test #1
-        {
-            UnicodeString id(zone1);
-
-            if(!tz1)
-            {
-                errln("FAIL: Could not find left hand zone " + id);
-            }
-            else
-            {
-                tz1->getID(itsID);
-                int ioffset = tz1->getRawOffset()/60000;
-                UnicodeString offset;
-                formatMinutes(ioffset, offset);
-                logln(id + " -> " + itsID + " GMT" + offset + " (left hand)");
-            }
+        if (!tz1) {
+            errln(UnicodeString("FAIL: Could not find short ID zone ") + zone1);
+        }
+        if (!tz2) {
+            errln(UnicodeString("FAIL: Could not find long ID zone ") + zone2);
         }
 
-        // test #2
-        {
-            UnicodeString id(zone2);
+        if (tz1 && tz2) {
+            // make NAME same so comparison will only look at the rest
+            tz2->setID(tz1->getID(itsID));
 
-            if(!tz2)
-            {
-                errln("FAIL: Could not find right hand zone " + id + " (right hand)");
-            }
-            else
-            {
-                tz2->getID(itsID);
-                int ioffset = tz2->getRawOffset()/60000;
-                UnicodeString offset;
-                formatMinutes(ioffset, offset);
-                logln(id + " -> " + itsID + " GMT" + offset +" (right hand)");
-            }
-        }
-
-        if(tz1&&tz2)
-        {
-            tz2->setID(tz1->getID(itsID)); // make the NAME the same so that comparison will only look at the rest of it.
-
-            if(*tz1 != *tz2)
-            {
-                errln(" FAIL: time zones " + UnicodeString(zone1) + " and " + UnicodeString(zone2) + " do NOT match.");
+            if (*tz1 != *tz2) {
+                errln("FAIL: " + UnicodeString(zone1) +
+                      " != " + UnicodeString(zone2));
+            } else {
+                logln("OK: " + UnicodeString(zone1) +
+                      " == " + UnicodeString(zone2));
             }
         }
 
         delete tz1;
         delete tz2;
     }
-
 }
 
 /**

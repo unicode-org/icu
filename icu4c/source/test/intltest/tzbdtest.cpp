@@ -379,16 +379,24 @@ TimeZoneBoundaryTest::findBoundariesStepwise(int32_t year, UDate interval, TimeZ
 // -------------------------------------
 
 /**
+ * This test is problematic. It makes assumptions about the behavior
+ * of specific zones. Since ICU's zone table is based on the Olson
+ * zones (the UNIX zones), and those change from time to time, this
+ * test can fail after a zone table update. If that happens, the
+ * selected zones need to be updated to have the behavior
+ * expected. That is, they should have DST, not have DST, and have DST
+ * -- other than that this test isn't picky. 12/3/99 aliu
+ *
  * Test the behavior of SimpleTimeZone at the transition into and out of DST.
  * Use a stepwise march to find boundaries.
- */ 
+ */
 void
 TimeZoneBoundaryTest::TestStepwise()
 {
     TimeZone *zone =  TimeZone::createTimeZone("EST");
     findBoundariesStepwise(1997, ONE_DAY, zone, 2);
     delete zone;
-    zone = TimeZone::createTimeZone("ACT");
+    zone = TimeZone::createTimeZone("UTC"); // updated 12/3/99 aliu
     findBoundariesStepwise(1997, ONE_DAY, zone, 0);
     delete zone;
     zone = TimeZone::createTimeZone("Australia/Adelaide");
