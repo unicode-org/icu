@@ -423,6 +423,18 @@ u_charType(UChar32 c) {
     return (int8_t)GET_CATEGORY(props);
 }
 
+/* Gets the Unicode character's general category, as per the UCD.*/
+U_CAPI int8_t U_EXPORT2
+u_charUCDType(UChar32 c) {
+    if (IS_ISO_8_CONTROL(c)) {
+        return U_CONTROL_CHAR;
+    } else {
+        uint32_t props;
+        GET_PROPS(c, props);
+        return (int8_t)GET_CATEGORY(props);
+    }
+}
+
 /* Enumerate all code points with their general categories. */
 struct _EnumTypeCallback {
     UCharEnumTypeRange *enumRange;
