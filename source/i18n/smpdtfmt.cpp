@@ -24,6 +24,8 @@
 *                             Removed subParseLong
 *                             Removed chk
 *  02/22/99     stephen     Removed character literals for EBCDIC safety
+*   10/14/99    aliu        Updated 2-digit year parsing so that only "00" thru
+*                           "99" are recognized. {j28 4182066}
 ********************************************************************************
 */
 
@@ -1117,12 +1119,15 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     case kEraField:
         return matchString(text, start, Calendar::ERA, fSymbols->fEras, fSymbols->fErasCount);
     case kYearField:
-        // If there are 4 or more YEAR pattern characters, this indicates
+        // If there are 3 or more YEAR pattern characters, this indicates
         // that the year value is to be treated literally, without any
         // two-digit year adjustments (e.g., from "01" to 2001).  Otherwise
         // we made adjustments to place the 2-digit year in the proper
-        // century -- unless the given year itself is more than two characters.
-        if (count <= 2 && (pos.getIndex() - start) <= 2)
+        // century, for parsed strings from "00" to "99".  Any other string
+        // is treated literally:  "2250", "-1", "1", "002".
+        if (count <= 2 && (pos.getIndex() - start) == 2
+            && Unicode::isDigit(text.charAt(start))
+            && Unicode::isDigit(text.charAt(start+1)))
         {
             // Assume for example that the defaultCenturyStart is 6/18/1903.
             // This means that two-digit years will be forced into the range
