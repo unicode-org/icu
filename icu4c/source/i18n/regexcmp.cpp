@@ -504,13 +504,23 @@ UBool RegexCompile::doParseActions(EParseAction action)
         //   Compile to a
         //      - NOP, which later may be replaced by a save-state if the
         //         parenthesized group gets a * quantifier, followed by
-        //      - START_CAPTURE
+        //      - START_CAPTURE  n    where n is stack frame offset to the capture group variables.
         //      - NOP, which may later be replaced by a save-state if there
         //             is an '|' alternation within the parens.
+        //
+        //    Each capture group gets three slots in the save stack frame:
+        //         0:   Capture Group start position (in input string being matched.)
+        //         1:   Capture Group end   positino.
+        //         2:   Start of Match-in-progress.
+        //    The first two locations are for a completed capture group, and are
+        //     referred to by back references and the like.
+        //    The third location stores the capture start position when an START_CAPTURE is
+        //      encountered.  This will be promoted to a completed capture when (and if) the corresponding
+        //      END_CAPure is encountered.
         {
             fRXPat->fCompiledPat->addElement(URX_BUILD(URX_NOP, 0), *fStatus);
-            int32_t  varsLoc    = fRXPat->fFrameSize;    // Reserve two slots in match stack frame.
-            fRXPat->fFrameSize += 2;
+            int32_t  varsLoc    = fRXPat->fFrameSize;    // Reserve three slots in match stack frame.
+            fRXPat->fFrameSize += 3;
             int32_t  cop        = URX_BUILD(URX_START_CAPTURE, varsLoc);
             fRXPat->fCompiledPat->addElement(cop, *fStatus);
             fRXPat->fCompiledPat->addElement(URX_BUILD(URX_NOP, 0), *fStatus);
@@ -701,7 +711,7 @@ UBool RegexCompile::doParseActions(EParseAction action)
         // Compiles to
         //       1.   STATE_SAVE   3
         //       2.      body of stuff being iterated over
-        //       3.   JMP  0
+        //       3.   JMP  1
         //       4.   ...
         //
         {
@@ -918,12 +928,108 @@ UBool RegexCompile::doParseActions(EParseAction action)
         error(U_REGEX_UNIMPLEMENTED);
         break;
 
-    case doPossesiveStar:
     case doPossesivePlus:
-    case doPossesiveOpt:
-        //  TODO:  implement
-        error(U_REGEX_UNIMPLEMENTED);
+        // Possessive ++ quantifier.
+        // Compiles to
+        //       1.   STO_SP
+        //       2.      body of stuff being iterated over
+        //       3.   STATE_SAVE 5
+        //       4.   JMP        2
+        //       5.   LD_SP
+        //       6.   ...
+        //
+        //  Note:  TODO:  This is pretty inefficient.  A mass of saved state is built up
+        //                then unconditionally discarded.  Perhaps introduce a new opcode
+        //
+        {
+            // Emit the STO_SP
+            int32_t   topLoc = blockTopLoc(TRUE);
+            int32_t   stoLoc = fRXPat->fDataSize;
+            fRXPat->fDataSize++;       // Reserve the data location for storing save stack ptr.
+            int32_t   op     = URX_BUILD(URX_STO_SP, stoLoc);
+            fRXPat->fCompiledPat->setElementAt(op, topLoc);
+
+            // Emit the STATE_SAVE
+            op = URX_BUILD(URX_STATE_SAVE, fRXPat->fCompiledPat->size()+2);
+            fRXPat->fCompiledPat->addElement(op, *fStatus);
+            
+            // Emit the JMP
+            op = URX_BUILD(URX_JMP, topLoc+1);
+            fRXPat->fCompiledPat->addElement(op, *fStatus);
+
+            // Emit the LD_SP
+            op = URX_BUILD(URX_LD_SP, stoLoc);
+            fRXPat->fCompiledPat->addElement(op, *fStatus);
+        }
         break;
+
+    case doPossesiveStar:
+        // Possessive *+ quantifier.
+        // Compiles to
+        //       1.   STO_SP       loc
+        //       2.   STATE_SAVE   5
+        //       3.      body of stuff being iterated over
+        //       4.   JMP          2
+        //       5.   LD_SP        loc
+        //       6    ...
+        //
+        {
+            // Reserve two slots at the top of the block.
+            int32_t   topLoc = blockTopLoc(TRUE);
+            insertOp(topLoc);
+
+            // emit   STO_SP     loc
+            int32_t   stoLoc = fRXPat->fDataSize;
+            fRXPat->fDataSize++;       // Reserve the data location for storing save stack ptr.
+            int32_t   op     = URX_BUILD(URX_STO_SP, stoLoc);
+            fRXPat->fCompiledPat->setElementAt(op, topLoc);
+
+            // Emit the SAVE_STATE   5
+            int32_t L7 = fRXPat->fCompiledPat->size()+1;
+            op = URX_BUILD(URX_STATE_SAVE, L7);
+            fRXPat->fCompiledPat->setElementAt(op, topLoc+1);
+
+            // Append the JMP operation. 
+            op = URX_BUILD(URX_JMP, topLoc+1);
+            fRXPat->fCompiledPat->addElement(op, *fStatus);
+
+            // Emit the LD_SP       loc
+            op = URX_BUILD(URX_LD_SP, stoLoc);
+            fRXPat->fCompiledPat->addElement(op, *fStatus);
+        }
+        break;
+
+    case doPossesiveOpt:
+        // Possessive  ?+ quantifier.
+        //  Compiles to
+        //     1. STO_SP      loc
+        //     2. SAVE_STATE  5
+        //     3.    body of optional block
+        //     4. LD_SP       loc
+        //     5. ...
+        //
+        {
+            // Reserve two slots at the top of the block.
+            int32_t   topLoc = blockTopLoc(TRUE);
+            insertOp(topLoc);
+
+            // Emit the STO_SP
+            int32_t   stoLoc = fRXPat->fDataSize;
+            fRXPat->fDataSize++;       // Reserve the data location for storing save stack ptr.
+            int32_t   op     = URX_BUILD(URX_STO_SP, stoLoc);
+            fRXPat->fCompiledPat->setElementAt(op, topLoc);
+
+            // Emit the SAVE_STATE
+            int32_t   continueLoc = fRXPat->fCompiledPat->size()+1;
+            op = URX_BUILD(URX_STATE_SAVE, continueLoc);
+            fRXPat->fCompiledPat->setElementAt(op, topLoc+1);
+
+            // Emit the LD_SP
+            op = URX_BUILD(URX_LD_SP, stoLoc);
+            fRXPat->fCompiledPat->addElement(op, *fStatus);
+        }
+        break;
+
 
     case doMatchMode:   //  (?i)    and similar
         // TODO:  implement
@@ -1236,8 +1342,8 @@ void  RegexCompile::handleCloseParen() {
         {
             int32_t   captureOp = fRXPat->fCompiledPat->elementAti(fMatchOpenParen+1);
             U_ASSERT(URX_TYPE(captureOp) == URX_START_CAPTURE);
-            int32_t   framVarLocation = URX_VAL(captureOp);
-            int32_t   endCaptureOp = URX_BUILD(URX_END_CAPTURE, framVarLocation+1);
+            int32_t   frameVarLocation = URX_VAL(captureOp);
+            int32_t   endCaptureOp = URX_BUILD(URX_END_CAPTURE, frameVarLocation);
             fRXPat->fCompiledPat->addElement(endCaptureOp, *fStatus);
         }
         break;

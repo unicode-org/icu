@@ -25,6 +25,7 @@
 #include "regeximp.h"
 
 #include "stdio.h"
+#include "malloc.h"
 
 U_NAMESPACE_BEGIN
 
@@ -41,7 +42,7 @@ RegexMatcher::RegexMatcher(const RegexPattern *pat)  {
     UErrorCode  status = U_ZERO_ERROR;
     fStack             = new UVector32(status);   // TODO:  do something with status.
     fData              = fSmallData;
-    if (pat->fDataSize > sizeof(fSmallData)/sizeof(fSmallData[0])) {
+    if (pat->fDataSize > sizeof(fSmallData)/sizeof(int32_t)) {
         fData = (int32_t *)uprv_malloc(pat->fDataSize * sizeof(int32_t));      // TODO:  null check
     }
         
@@ -206,15 +207,7 @@ int32_t RegexMatcher::end(int group, UErrorCode &err) const {
         int32_t groupOffset = fPattern->fGroupMap->elementAti(group-1);
         U_ASSERT(groupOffset < fPattern->fFrameSize);
         U_ASSERT(groupOffset >= 0);
-
-        // Note:  When the match engine backs out of a capture group, it sets the
-        //        group's start position to -1.  The end position is left with junk.
-        //        So, before returning an end position, we must first check that
-        //        the start position indicates that the group matched something.
-        int32_t s = fFrame->fExtra[groupOffset];
-        if (s  != -1) {
-            e = fFrame->fExtra[groupOffset + 1];
-        }
+        e = fFrame->fExtra[groupOffset + 1];
     }
     return e;
 }
@@ -584,7 +577,6 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
         }
         printf("\n");
         printf("\n");
-        printf("               PatLoc  inputIdx  char\n");
     }
     #endif
 
@@ -613,11 +605,16 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
     //  One iteration of the loop per pattern operation performed.
     //
     for (;;) {
+#if 0
+        if (_heapchk() != _HEAPOK) {
+            fprintf(stderr, "Heap Trouble\n");
+        }
+#endif
         op      = pat[fp->fPatIdx];
         opType  = URX_TYPE(op);
         opValue = URX_VAL(op);
         #ifdef REGEX_RUN_DEBUG
-            printf("inputIdx=%d   inputChar=%c   sp=%d  ", fp->fInputIdx,
+            printf("inputIdx=%d   inputChar=%c   sp=%3d  ", fp->fInputIdx,
                 fInput->char32At(fp->fInputIdx), (int32_t *)fp-fStack->getBuffer());
             fPattern->dumpOp(fp->fPatIdx);
         #endif
@@ -690,16 +687,23 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
             isMatch = TRUE;
             goto  breakFromLoop;
 
+        // Start and End Capture stack frame variables are layout out like this:
+            //  fp->fExtra[opValue]  - The start of a completed capture group
+            //             opValue+1 - The end   of a completed capture group
+            //             opValue+2 - the start of a capture group that end
+            //                          has not yet been reached (and might not ever be).
         case URX_START_CAPTURE:
             U_ASSERT(opValue >= 0 && opValue < frameSize-3);
-            fp->fExtra[opValue] = fp->fInputIdx;
+            fp->fExtra[opValue+2] = fp->fInputIdx;
             break;
 
 
         case URX_END_CAPTURE:
-            U_ASSERT(opValue > 0 && opValue < frameSize-2);
-            U_ASSERT(fp->fExtra[opValue-1] >= 0);    // Start pos for this group must be set.
-            fp->fExtra[opValue] = fp->fInputIdx;
+            U_ASSERT(opValue >= 0 && opValue < frameSize-3);
+            U_ASSERT(fp->fExtra[opValue+2] >= 0);    // Start pos for this group must be set.
+            fp->fExtra[opValue]   = fp->fExtra[opValue+2];   // Tentative start becomes real.
+            fp->fExtra[opValue+1] = fp->fInputIdx;           // End position
+            U_ASSERT(fp->fExtra[opValue] <= fp->fExtra[opValue+1]);
             break;
 
 
@@ -1054,12 +1058,15 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
                 U_ASSERT(opValue >= 0 && opValue < fPattern->fDataSize);
                 int32_t newStackSize = fData[opValue];
                 U_ASSERT(newStackSize <= fStack->size());
-                REStackFrame *newFP = (REStackFrame *)(fStack->getBuffer() + newStackSize - frameSize);
+                int32_t *newFP = fStack->getBuffer() + newStackSize - frameSize;
+                if (newFP == (int32_t *)fp) {
+                    break;
+                }
                 int32_t i;
                 for (i=0; i<frameSize; i++) {
-                    newFP[i] = fp[i];
+                    newFP[i] = ((int32_t *)fp)[i];
                 }
-                fp = newFP;
+                fp = (REStackFrame *)newFP;
                 fStack->setSize(newStackSize);
             }
             break;
