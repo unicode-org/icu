@@ -35,6 +35,7 @@ static UConverterFromUCallback otherUnicodeAction(UConverterFromUCallback MIA);
 static UConverterToUCallback otherCharAction(UConverterToUCallback MIA);
 
 static void TestCCSID(void);
+static void TestJ932(void);
 
 void addTestConvert(TestNode** root)
 {
@@ -42,6 +43,7 @@ void addTestConvert(TestNode** root)
     addTest(root, &TestAlias,   "tsconv/ccapitst/TestAlias"); 
     addTest(root, &TestConvertSafeClone,   "tsconv/ccapitst/TestConvertSafeClone"); 
     addTest(root, &TestCCSID,   "tsconv/ccapitst/TestCCSID"); 
+    addTest(root, &TestJ932,   "tsconv/ccapitst/TestJ932"); 
 }
 
 static void TestConvert() 
@@ -1230,4 +1232,167 @@ static void TestCCSID() {
 
         ucnv_close(cnv);
     }
+}
+
+/* jitterbug 932: ucnv_convert() bugs --------------------------------------- */
+
+/* CHUNK_SIZE defined in common\ucnv.c: */
+#define CHUNK_SIZE 5*1024
+
+static void bug1(void);
+static void bug2(void);
+static void bug3(void);
+
+static void
+TestJ932(void)
+{
+   bug1(); /* Unicode intermediate buffer straddle bug */
+   bug2(); /* pre-flighting size incorrect caused by simple overflow */
+   bug3(); /* pre-flighting size incorrect caused by expansion overflow */
+}
+
+/*
+ * jitterbug 932: test chunking boundary conditions in
+
+    int32_t  ucnv_convert(const char *toConverterName,
+                          const char *fromConverterName,
+                          char *target,
+                          int32_t targetSize,
+                          const char *source,
+                          int32_t sourceSize,
+                          UErrorCode * err)
+
+ * See discussions on the icu mailing list in
+ * 2001-April with the subject "converter 'flush' question".
+ *
+ * Bug report and test code provided by Edward J. Batutis.
+ */
+void bug1()
+{
+   static char char_in[CHUNK_SIZE+32];
+   static char char_out[CHUNK_SIZE*2];
+
+   /* GB 18030 equivalent of U+10000 is 90308130 */
+   static const char test_seq[]={ (char)0x90, 0x30, (char)0x81, 0x30 };
+
+   UErrorCode err = U_ZERO_ERROR;
+   int32_t i, test_seq_len = sizeof(test_seq);
+
+   /*
+    * causes straddle bug in Unicode intermediate buffer by sliding the test sequence forward
+    * until the straddle bug appears. I didn't want to hard-code everything so this test could
+    * be expanded - however this is the only type of straddle bug I can think of at the moment -
+    * a high surrogate in the last position of the Unicode intermediate buffer. Apparently no
+    * other Unicode sequences cause a bug since combining sequences are not supported by the
+    * converters.
+    */
+
+   for (i = test_seq_len; i >= 0; i--) {
+      /* put character sequence into input buffer */
+      uprv_memset(char_in, 0x61, sizeof(char_in)); /* GB 18030 'a' */
+      uprv_memcpy(char_in + (CHUNK_SIZE - i), test_seq, test_seq_len);
+
+      /* do the conversion */
+      ucnv_convert("us-ascii", /* out */
+                   "gb18030",  /* in */
+                   char_out,
+                   sizeof(char_out),
+                   char_in,
+                   sizeof(char_in),
+                   &err);
+
+      /* bug1: */
+      if (err == U_TRUNCATED_CHAR_FOUND) {
+         /* this happens when surrogate pair straddles the intermediate buffer in
+          * T_UConverter_fromCodepageToCodepage */
+         log_err("error j932 bug 1: expected success, got U_TRUNCATED_CHAR_FOUND\n");
+      }
+   }
+}
+
+/* bug2: pre-flighting loop bug: simple overflow causes bug */
+void bug2()
+{
+   /* US-ASCII "1234567890" */
+   static const char source[]={ 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39 };
+   static char target[5];
+
+   UErrorCode err = U_ZERO_ERROR;
+   int32_t size;
+
+   /* do the conversion */
+   size = ucnv_convert("iso-8859-1", /* out */
+                       "us-ascii",  /* in */
+                       target,
+                       sizeof(target),
+                       source,
+                       strlen(source),
+                       &err);
+
+   if ( size != 10 ) {
+      /* bug2: size is 5, should be 10 */
+      log_err("error j932 bug 2: got preflighting size %d instead of 10\n", size);
+   }
+}
+
+/*
+ * bug3: when the characters expand going from source to target codepage
+ *       you get bug3 in addition to bug2
+ */
+void bug3()
+{
+   static char char_in[CHUNK_SIZE*4];
+   static char target[5];
+   UErrorCode err = U_ZERO_ERROR;
+   int32_t size;
+
+   /*
+    * first get the buggy size from bug2 then
+    * compare it to buggy size with an expansion
+    */
+   uprv_memset(char_in, 0x61, sizeof(char_in)); /* US-ASCII 'a' */
+
+   /* do the conversion */
+   size = ucnv_convert("lmbcs",     /* out */
+                       "us-ascii",  /* in */
+                       target,
+                       sizeof(target),
+                       char_in,
+                       sizeof(char_in),
+                       &err);
+
+   if ( size != sizeof(char_in) ) {
+      /*
+       * bug2: size is 0x2805 (CHUNK_SIZE*2+5 - maybe 5 is the size of the overflow buffer
+       * in the converter?), should be CHUNK_SIZE*4
+       *
+       * Markus 2001-05-18: 5 is the size of our target[] here, ucnv_convert() did not reset targetSize...
+       */
+      log_err("error j932 bug 2/3a: expected preflighting size 0x%04x, got 0x%04x\n", sizeof(char_in), size);
+   }
+
+   /*
+    * now do the conversion with expansion
+    * ascii 0x08 expands to 0x0F 0x28 in lmbcs
+    */
+   uprv_memset(char_in, 8, sizeof(char_in));
+   err = U_ZERO_ERROR;
+
+   /* do the conversion */
+   size = ucnv_convert("lmbcs", /* out */
+                       "us-ascii",  /* in */
+                       target,
+                       sizeof(target),
+                       char_in,
+                       sizeof(char_in),
+                       &err);
+
+   /* expect 2X expansion */
+   if ( size != sizeof(char_in) * 2 ) {
+      /*
+       * bug3:
+       * bug2 would lead us to expect 0x2805, but it isn't that either, it is 0x3c05:
+       */
+      log_err("error j932 bug 3b: expected 0x%04x, got 0x%04x\n", sizeof(char_in) * 2, size);
+   }
 }
