@@ -282,10 +282,10 @@ Unicode::digit(UChar ch, int8_t radix) {
     if (radix >= MIN_RADIX && radix <= MAX_RADIX) {
         value = (int8_t) u_charDigitValue(ch);
         if (value < 0) {
-            if (ch >= (UChar)'A' && ch <= (UChar)'Z') {
-                value = ch - ((UChar)'A' - 10);
-            } else if (ch >= (UChar)'a' && ch <= (UChar)'z') {
-                value = ch - ((UChar)'a' - 10);
+            if (ch >= 0x0041/*A*/ && ch <= 0x005A/*Z*/) {
+                value = ch - (0x0041/*A*/ - 10);
+            } else if (ch >= 0x0061/*a*/ && ch <= 0x007A/*z*/) {
+                value = ch - (0x0061/*a*/ - 10);
             }
         }
     }
@@ -298,7 +298,7 @@ Unicode::forDigit(int32_t digit, int8_t radix) {
         (digit < 0) || (digit >= radix)) {
         return (UChar)0;
     }
-    return (UChar)(((digit < 10) ? (UChar)'0' : ((UChar)'a' - 10))
+    return (UChar)(((digit < 10) ? 0x0030/*0*/ : (0x0061/*a*/ - 10))
                    + digit);
 }
 
