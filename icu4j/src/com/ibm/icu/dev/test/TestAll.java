@@ -35,7 +35,8 @@ public class TestAll extends TestGroup {
                   "com.ibm.icu.dev.test.iterator.TestUCharacterIterator", // not a group
                   "com.ibm.icu.dev.test.bigdec.DiagBigDecimal", // not a group
                   "com.ibm.icu.dev.test.impl.TestAll",
-                  "com.ibm.icu.dev.test.stringprep.TestAll"
+                  "com.ibm.icu.dev.test.stringprep.TestAll",
+                  "com.ibm.icu.dev.test.timescale.TestAll"
               },
               "All tests in ICU");
     }
