@@ -2485,7 +2485,7 @@ ja {
         HUF { "HUF", "\u30D5\u30A9\u30FC\u30EA\u30F3\u30C8" } // Forint
         IDR { "IDR", "\u30EB\u30D4\u30A2" } // Rupiah
         ILS { "ILS", "\u30A4\u30B9\u30E9\u30A8\u30EB\u65B0\u30B7\u30A7\u30B1\u30EB" } // New Israeli Sheqel
-        INR { "INR", "\u30A4\u30F3\u30C9 \u30EB\u30D4\u30FC" } // Indian Rupee
+        INR { "=0#Rs.|1#Re.|1<Rs.", "\u30A4\u30F3\u30C9 \u30EB\u30D4\u30FC" } // Indian Rupee
         IQD { "IQD", "\u30A4\u30E9\u30AF \u30C7\u30A3\u30FC\u30CA\u30FC\u30EB" } // Iraqi Dinar
         IRR { "IRR", "\u30A4\u30E9\u30F3 \u30EA\u30A2\u30EB" } // Iranian Rial
         ISK { "ISK", "\u30A2\u30A4\u30B9\u30E9\u30F3\u30C9 \u30AF\u30ED\u30FC\u30CA" } // Iceland Krona

@@ -568,7 +568,7 @@ fr {
         IDR { "IDR", "rupiah" } // Rupiah
         IEP { "IEP", "livre irlandaise" } // Irish Pound
         ILS { "ILS", "sh\u00E9kel" } // New Israeli Sheqel
-        INR { "INR", "roupie indienne" } // Indian Rupee
+        INR { "=0#Rs.|1#Re.|1<Rs.", "roupie indienne" } // Indian Rupee
         IQD { "IQD", "dinar irakien" } // Iraqi Dinar
         IRR { "IRR", "rial iranien" } // Iranian Rial
         ISK { "ISK", "couronne islandaise" } // Iceland Krona

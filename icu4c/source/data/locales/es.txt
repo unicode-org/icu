@@ -412,7 +412,7 @@ es {
         IDR { "IDR", "Rupia Indonesia" }
         IEP { "IEP", "Libra Irlandesa" }
         ILS { "ILS", "Scheckel Israel\u00ED" }
-        INR { "INR", "Rupia India" }
+        INR { "=0#Rs.|1#Re.|1<Rs.", "Rupia India" }
         IQD { "IQD", "Dinar Iraqu\u00ED" }
         IRR { "IRR", "Rial Iran\u00ED" }
         ISK { "ISK", "Corona Islandesa" }
