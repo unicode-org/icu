@@ -27,22 +27,10 @@
 
 /* ISO-2022 ----------------------------------------------------------------- */
 
-void T_UConverter_fromUnicode_UTF8 (UConverter * converter,
-				    char **target,
-				    const char *targetLimit,
-				    const UChar ** source,
-				    const UChar * sourceLimit,
-				    int32_t* offsets,
-				    UBool flush,
+void T_UConverter_fromUnicode_UTF8 (UConverterFromUnicodeArgs * args,
 				    UErrorCode * err);
 
-void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverter * converter,
-				    char **target,
-				    const char *targetLimit,
-				    const UChar ** source,
-				    const UChar * sourceLimit,
-				    int32_t* offsets,
-				    UBool flush,
+void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeArgs * converter,
 				    UErrorCode * err);
 
 #define ESC_2022 0x1B /*ESC*/
@@ -164,52 +152,25 @@ _ISO2022Reset(UConverter *converter) {
     }
 }
 
-static void T_UConverter_fromUnicode_ISO_2022(UConverter* _this,
-                                       char** target,
-                                       const char* targetLimit,
-                                       const UChar** source,
-                                       const UChar* sourceLimit,
-                                       int32_t *offsets,
-                                       UBool flush,
+static void T_UConverter_fromUnicode_ISO_2022(UConverterFromUnicodeArgs *args,
                                        UErrorCode* err)
 {
-  char const* targetStart = *target;
-  T_UConverter_fromUnicode_UTF8(_this,
-                                target,
-                                targetLimit,
-                                source,
-                                sourceLimit,
-                                NULL,
-                                flush,
-                                err);
+  T_UConverter_fromUnicode_UTF8(args, err);
 }
 
 
-static void T_UConverter_fromUnicode_ISO_2022_OFFSETS_LOGIC(UConverter* _this,
-                                                     char** target,
-                                                     const char* targetLimit,
-                                                     const UChar** source,
-                                                     const UChar* sourceLimit,
-                                                     int32_t *offsets,
-                                                     UBool flush,
-                                                     UErrorCode* err)
+static void T_UConverter_fromUnicode_ISO_2022_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args,
+                                                                    UErrorCode* err)
 {
 
-  char const* targetStart = *target;
-  T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC(_this,
-                                              target,
-                                              targetLimit,
-                                              source,
-                                              sourceLimit,
-                                              offsets,
-                                              flush,
-                                              err);
+  char const* targetStart = args->target;
+  T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC(args, err);
   {
-    int32_t len = *target - targetStart;
+    int32_t len = args->target - targetStart;
     int32_t i;
     /* uprv_memmove(offsets+3, offsets, len);   MEMMOVE SEEMS BROKEN --srl */
     
-    for(i=len-1;i>=0;i--)       offsets[i] = offsets[i];
+    for(i=len-1;i>=0;i--)       args->offsets[i] = args->offsets[i];
     
   }
 }
@@ -290,7 +251,7 @@ void changeState_2022(UConverter* _this,
 /* Needed explicit cast for key on MVS to make compiler happy - JJD */
       value = getKey_2022(**source,(int32_t *) &key, &offset);
 #ifdef Debug
-      printf("Post Stage: char = %x, key = %d, value =%d\n", **source, key, value);
+      printf("Post Stage: char = %x, key = %d, value =%d\n", *source, key, value);
       fflush(stdout);
 #endif /*Debug*/
       switch (value)
@@ -476,22 +437,17 @@ const char* getEndOfBuffer_2022(const char* source,
                   
   
 
-static void T_UConverter_toUnicode_ISO_2022(UConverter* _this,
-                                     UChar** target,
-                                     const UChar* targetLimit,
-                                     const char** source,
-                                     const char* sourceLimit,
-                                     int32_t *offsets,
-                                     UBool flush,
+static void T_UConverter_toUnicode_ISO_2022(UConverterToUnicodeArgs *args,
                                      UErrorCode* err)
 {
   int32_t base = 0;
-  const char* mySourceLimit;
+  const char *mySourceLimit;
   char const* sourceStart;
+  UConverter *saveThis;
   
   /*Arguments Check*/
   if (U_FAILURE(*err)) return;
-  if ((_this == NULL) || (targetLimit < *target) || (sourceLimit < *source))
+  if ((args->converter == NULL) || (args->targetLimit < args->target) || (args->sourceLimit < args->source))
     {
       *err = U_ILLEGAL_ARGUMENT_ERROR;
       return;
@@ -499,73 +455,69 @@ static void T_UConverter_toUnicode_ISO_2022(UConverter* _this,
   
   for (;;)
     {
-
-       mySourceLimit =  getEndOfBuffer_2022(*source, sourceLimit, flush); 
+      mySourceLimit =  getEndOfBuffer_2022(args->source, args->sourceLimit, args->flush); 
       
 
       /*Find the end of the buffer e.g : Next Escape Seq | end of Buffer*/
-      if (_this->mode == UCNV_SO) /*Already doing some conversion*/
+      if (args->converter->mode == UCNV_SO) /*Already doing some conversion*/
         {
-          const UChar* myTargetStart = *target;
+          const UChar* myTargetStart = args->target;
 #ifdef Debug
-          printf("source %X\n mySourceLimit %X\n sourceLimit %X\n", *source, mySourceLimit, sourceLimit); 
+          printf("source %X\n sourceLimit %X\n mySourceLimit %X\n", args->source, args->sourceLimit, mySourceLimit); 
 #endif /*Debug*/
-          
-          ucnv_toUnicode(((UConverterDataISO2022*)(_this->extraInfo))->currentConverter,
-                         target,
-                         targetLimit,
-                         source,
-                         mySourceLimit,
-                         NULL,
-                         flush,
-                         err);
-
-          
+          saveThis = args->converter;
+          args->offsets = NULL;
+          args->converter = ((UConverterDataISO2022*)(args->converter->extraInfo))->currentConverter;
+          ucnv_toUnicode(args->converter,
+              &args->target,
+              args->targetLimit,
+              &args->source,
+              mySourceLimit,
+              args->offsets,
+              args->flush,
+              err);
 #ifdef Debug      
           puts("---------------------------> CONVERTED");
-          printf("source %X\n mySourceLimit %X\n sourceLimit %X\n", *source, mySourceLimit, sourceLimit); 
+          printf("source %X\n sourceLimit %X\n mySourceLimit %X\n", args->source, args->sourceLimit, mySourceLimit); 
           printf("err =%d", *err);
 #endif /*Debug*/
+          args->converter = saveThis;
         }
       /*-Done with buffer with entire buffer
         -Error while converting
       */
         
-      if (U_FAILURE(*err) || (*source == sourceLimit)) return;
+      if (U_FAILURE(*err) || (args->source == args->sourceLimit)) return;
 #ifdef Debug            
       puts("Got Here!");
       fflush(stdout);
 #endif /*Debug*/
-      sourceStart = *source;
-      changeState_2022(_this,
-                       source, 
-                       sourceLimit,
-                       flush,
+      sourceStart = args->source;
+      changeState_2022(args->converter,
+                       &(args->source), 
+                       args->sourceLimit,
+                       args->flush,
                        err);
-      (*source)++;
+     /* args->source = sourceStart; */
+      (args->source)++;
 
     }
   
   return;
 }
 
-static void T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverter* _this,
-                                                   UChar** target,
-                                                   const UChar* targetLimit,
-                                                   const char** source,
-                                                   const char* sourceLimit,
-                                                   int32_t *offsets,
-                                                   UBool flush,
-                                                   UErrorCode* err)
+static void T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverterToUnicodeArgs* args,
+                                                          UErrorCode* err)
 {
   int32_t myOffset=0;
   int32_t base = 0;
   const char* mySourceLimit;
   char const* sourceStart;
-  
+  UConverter* _this = NULL;
+
   /*Arguments Check*/
   if (U_FAILURE(*err)) return;
-  if ((_this == NULL) || (targetLimit < *target) || (sourceLimit < *source))
+  if ((args->converter == NULL) || (args->targetLimit < args->target) || (args->sourceLimit < args->source))
     {
       *err = U_ILLEGAL_ARGUMENT_ERROR;
       return;
@@ -573,36 +525,37 @@ static void T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverter* _this,
   
   for (;;)
     {
-
-      mySourceLimit =  getEndOfBuffer_2022(*source, sourceLimit, flush); 
+      mySourceLimit =  getEndOfBuffer_2022(args->source, args->sourceLimit, args->flush); 
       /*Find the end of the buffer e.g : Next Escape Seq | end of Buffer*/
 
-      if (_this->mode == UCNV_SO) /*Already doing some conversion*/
+      if (args->converter->mode == UCNV_SO) /*Already doing some conversion*/
         {
-          const UChar* myTargetStart = *target;
+          const UChar* myTargetStart = args->target;
 #ifdef Debug
-          printf("source %X\n mySourceLimit %X\n sourceLimit %X\n", *source, mySourceLimit, sourceLimit); 
+          printf("source %X\n mySourceLimit %X\n sourceLimit %X\n", args->source, mySourceLimit, args->sourceLimit); 
 #endif /*Debug*/
-          
-          ucnv_toUnicode(((UConverterDataISO2022*)(_this->extraInfo))->currentConverter,
-                         target,
-                         targetLimit,
-                         source,
-                         mySourceLimit,
-                         offsets,
-                         flush,
-                         err);
-          
+          _this = args->converter;
+          args->converter = ((UConverterDataISO2022*)(_this->extraInfo))->currentConverter;
+          ucnv_toUnicode(args->converter, 
+              &(args->target),
+              args->targetLimit,
+              &(args->source),
+              mySourceLimit,
+              args->offsets,
+              args->flush,
+              err);
+
+          args->converter = _this;
             {
-              int32_t lim =  *target - myTargetStart;
+              int32_t lim =  args->target - myTargetStart;
               int32_t i = 0;
-              for (i=base; i < lim;i++)    offsets[i] += myOffset;
+              for (i=base; i < lim;i++)    args->offsets[i] += myOffset;
               base += lim;
             }
           
 #ifdef Debug      
           puts("---------------------------> CONVERTED");
-          printf("source %X\n mySourceLimit %X\n sourceLimit %X\n", *source, mySourceLimit, sourceLimit); 
+          printf("source %X\n sourceLimit %X\n mySourceLimit %X\n", args->source, args->sourceLimit, mySourceLimit); 
           printf("err =%d", *err);
 #endif /*Debug*/
         }
@@ -611,33 +564,31 @@ static void T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverter* _this,
         -Error while converting
       */
         
-      if (U_FAILURE(*err) || (*source == sourceLimit)) return;
+      if (U_FAILURE(*err) || (args->source == args->sourceLimit)) return;
 #ifdef Debug            
       puts("Got Here!");
       fflush(stdout);
 #endif /*Debug*/
-      sourceStart = *source;
-      changeState_2022(_this,
-                       source, 
-                       sourceLimit,
-                       flush,
+      sourceStart = args->source;
+      changeState_2022(args->converter,
+                       &(args->source), 
+                       args->sourceLimit,
+                       args->flush,
                        err);
-       (*source)++;
-       myOffset += *source - sourceStart;
+       (args->source)++;
+       myOffset += args->source - sourceStart;
 
     }
   
   return;
 }
 
-static UChar32 T_UConverter_getNextUChar_ISO_2022(UConverter* converter,
-                                     const char** source,
-                                     const char* sourceLimit,
+static UChar32 T_UConverter_getNextUChar_ISO_2022(UConverterToUnicodeArgs* args,
                                      UErrorCode* err)
 {
   const char* mySourceLimit;
   /*Arguments Check*/
-  if  (sourceLimit < *source)
+  if  (args->sourceLimit < args->source)
     {
       *err = U_ILLEGAL_ARGUMENT_ERROR;
       return 0xFFFD;
@@ -645,13 +596,13 @@ static UChar32 T_UConverter_getNextUChar_ISO_2022(UConverter* converter,
   
   for (;;)
     {
-      mySourceLimit =  getEndOfBuffer_2022(*source, sourceLimit, TRUE); 
+      mySourceLimit =  getEndOfBuffer_2022(args->source, args->sourceLimit, TRUE); 
       /*Find the end of the buffer e.g : Next Escape Seq | end of Buffer*/
-      if (converter->mode == UCNV_SO) /*Already doing some conversion*/
+      if (args->converter->mode == UCNV_SO) /*Already doing some conversion*/
         {
           
-          return ucnv_getNextUChar(((UConverterDataISO2022*)(converter->extraInfo))->currentConverter,
-                                   source,
+          return ucnv_getNextUChar(((UConverterDataISO2022*)(args->converter->extraInfo))->currentConverter,
+                                   &(args->source),
                                    mySourceLimit,
                                    err);
           
@@ -662,12 +613,12 @@ static UChar32 T_UConverter_getNextUChar_ISO_2022(UConverter* converter,
       */
       
 
-      changeState_2022(converter,
-                       source, 
-                       sourceLimit,
+      changeState_2022(args->converter,
+                       &(args->source), 
+                       args->sourceLimit,
                        TRUE,
                        err);
-      (*source)++;
+      args->source++;
     }
   
   return 0xFFFD;
@@ -715,41 +666,33 @@ _DBCSLoad(UConverterSharedData *sharedData, const uint8_t *raw, UErrorCode *pErr
 U_CFUNC void
 _DBCSUnload(UConverterSharedData *sharedData);
 
-void T_UConverter_toUnicode_EBCDIC_STATEFUL (UConverter * _this,
-                                             UChar ** target,
-                                             const UChar * targetLimit,
-                                             const char **source,
-                                             const char *sourceLimit,
-                                             int32_t *offsets,
-                                             UBool flush,
+void T_UConverter_toUnicode_EBCDIC_STATEFUL (UConverterToUnicodeArgs *args,
                                              UErrorCode * err)
 {
-  const char *mySource = *source;
-  UChar *myTarget = *target;
+  char *mySource = (char *) args->source;
+  UChar *myTarget = args->target;
   int32_t mySourceIndex = 0;
   int32_t myTargetIndex = 0;
-  int32_t targetLength = targetLimit - myTarget;
-  int32_t sourceLength = sourceLimit - mySource;
+  int32_t targetLength = args->targetLimit - args->target;
+  int32_t sourceLength = args->sourceLimit - args->source;
   CompactShortArray *myToUnicode = NULL;
   UChar targetUniChar = 0x0000;
   UChar mySourceChar = 0x0000;
-  int32_t myMode = _this->mode;
-  UConverterToUnicodeArgs args;
+  int32_t myMode = args->converter->mode;
 
-
-  myToUnicode = &_this->sharedData->table->dbcs.toUnicode;
+  myToUnicode = &(args->converter->sharedData->table->dbcs.toUnicode);
     while (mySourceIndex < sourceLength)
     {
       if (myTargetIndex < targetLength)
         {
           /*gets the corresponding UniChar */
-          mySourceChar = (unsigned char) (mySource[mySourceIndex++]);
+          mySourceChar = (unsigned char) (args->source[mySourceIndex++]);
           if (mySourceChar == UCNV_SI) myMode = UCNV_SI;
           else if (mySourceChar == UCNV_SO) myMode = UCNV_SO;
          else if ((myMode == UCNV_SO) &&
-              (_this->toUnicodeStatus == 0x00))
+              (args->converter->toUnicodeStatus == 0x00))
             {
-              _this->toUnicodeStatus = (unsigned char) mySourceChar;
+              args->converter->toUnicodeStatus = (unsigned char) mySourceChar;
             }
           else
             {
@@ -757,10 +700,10 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL (UConverter * _this,
                *by concatenating the previous char with the current
                *one
                */
-              if (_this->toUnicodeStatus != 0x00)
+              if (args->converter->toUnicodeStatus != 0x00)
                 {
-                  mySourceChar |= (UChar) (_this->toUnicodeStatus << 8);
-                  _this->toUnicodeStatus = 0x00;
+                  mySourceChar |= (UChar) (args->converter->toUnicodeStatus << 8);
+                  args->converter->toUnicodeStatus = 0x00;
                 }
               else mySourceChar &= 0x00FF;
 
@@ -771,41 +714,42 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL (UConverter * _this,
               if (targetUniChar != missingUCharMarker)
                 {
                   /*writes the UniChar to the output stream */
-                  myTarget[myTargetIndex++] = targetUniChar;
+                  args->target[myTargetIndex++] = targetUniChar;
                 }
+
               else
                 {
+                  const char* saveSource = args->source;
+                  UChar* saveTarget = args->target;
+                  int32_t *saveOffsets = args->offsets;
+
                   *err = U_INVALID_CHAR_FOUND;
                   if (mySourceChar > 0xff)
                     {
-                      _this->invalidCharLength = 2;
-                      _this->invalidCharBuffer[0] = (char) (mySourceChar >> 8);
-                      _this->invalidCharBuffer[1] = (char) mySourceChar;
+                      args->converter->invalidCharLength = 2;
+                      args->converter->invalidCharBuffer[0] = (char) (mySourceChar >> 8);
+                      args->converter->invalidCharBuffer[1] = (char) mySourceChar;
                     }
                   else
                     {
-                      _this->invalidCharLength = 1;
-                      _this->invalidCharBuffer[0] = (char) mySourceChar;
+                      args->converter->invalidCharLength = 1;
+                      args->converter->invalidCharBuffer[0] = (char) mySourceChar;
                     }
-                  _this->mode = myMode;
-                  args.converter = _this;
-                  args.target = myTarget + myTargetIndex;
-                  args.targetLimit = targetLimit;
-                  args.source = mySource + mySourceIndex;
-                  args.sourceLimit = sourceLimit;
-                  args.flush = flush;
-                  args.offsets = offsets;
-                  args.size = sizeof(args);
-
-                  ToU_CALLBACK_MACRO(_this->toUContext,
+                  args->converter->mode = myMode;
+                  args->target += myTargetIndex;
+                  args->source += mySourceIndex;
+                  ToU_CALLBACK_MACRO(args->converter->toUContext,
                                      args,
-                                     args.source,
+                                     args->source,
                                      1, 
                                      UCNV_UNASSIGNED,
                                      err);
 
+                  args->source = saveSource;
+                  args->target = saveTarget;
+                  args->offsets = saveOffsets;
                   if (U_FAILURE (*err))  break;
-                  _this->invalidCharLength = 0;
+                  args->converter->invalidCharLength = 0;
                 }
             }
         }
@@ -819,60 +763,53 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL (UConverter * _this,
   /*If at the end of conversion we are still carrying state information
    *flush is TRUE, we can deduce that the input stream is truncated
    */
-    if (_this->toUnicodeStatus
+    if (args->converter->toUnicodeStatus
         && (mySourceIndex == sourceLength)
-        && (flush == TRUE))
+        && (args->flush == TRUE))
       {
         if (U_SUCCESS(*err)) 
           {
             *err = U_TRUNCATED_CHAR_FOUND;
-            _this->toUnicodeStatus = 0x00;
+            args->converter->toUnicodeStatus = 0x00;
           }
       }
 
-  *target += myTargetIndex;
-  *source += mySourceIndex;
-  _this->mode = myMode;
+  args->target += myTargetIndex;
+  args->source += mySourceIndex;
+  args->converter->mode = myMode;
 
   return;
 }
 
-void T_UConverter_toUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
-                                                           UChar ** target,
-                                                           const UChar * targetLimit,
-                                                           const char **source,
-                                                           const char *sourceLimit,
-                                                           int32_t *offsets,
-                                                           UBool flush,
+void T_UConverter_toUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverterToUnicodeArgs * args,
                                                            UErrorCode * err)
 {
-  const char *mySource = *source;
-  UChar *myTarget = *target;
+  char *mySource = (char *) args->source;
+  UChar *myTarget = args->target;
   int32_t mySourceIndex = 0;
   int32_t myTargetIndex = 0;
-  int32_t targetLength = targetLimit - myTarget;
-  int32_t sourceLength = sourceLimit - mySource;
+  int32_t targetLength = args->targetLimit - args->target;
+  int32_t sourceLength = args->sourceLimit - args->source;
   CompactShortArray *myToUnicode = NULL;
   UChar targetUniChar = 0x0000;
   UChar mySourceChar = 0x0000;
-  int32_t myMode = _this->mode;
-  int32_t* originalOffsets = offsets;
-  UConverterToUnicodeArgs args;
+  int32_t myMode = args->converter->mode;
+  int32_t* originalOffsets = args->offsets;
 
-  myToUnicode = &_this->sharedData->table->dbcs.toUnicode;
+  myToUnicode = &args->converter->sharedData->table->dbcs.toUnicode;
 
     while (mySourceIndex < sourceLength)
     {
       if (myTargetIndex < targetLength)
         {
           /*gets the corresponding UniChar */
-          mySourceChar = (unsigned char) (mySource[mySourceIndex++]);
+          mySourceChar = (unsigned char) (args->source[mySourceIndex++]);
           if (mySourceChar == UCNV_SI) myMode = UCNV_SI;
           else if (mySourceChar == UCNV_SO) myMode = UCNV_SO;
           else if ((myMode == UCNV_SO) &&
-                   (_this->toUnicodeStatus == 0x00))
+                   (args->converter->toUnicodeStatus == 0x00))
             {
-              _this->toUnicodeStatus = (unsigned char) mySourceChar;
+              args->converter->toUnicodeStatus = (unsigned char) mySourceChar;
             }
           else
             {
@@ -880,10 +817,10 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
                *by concatenating the previous char with the current
                *one
                */
-              if (_this->toUnicodeStatus != 0x00)
+              if (args->converter->toUnicodeStatus != 0x00)
                 {
-                  mySourceChar |= (UChar) (_this->toUnicodeStatus << 8);
-                  _this->toUnicodeStatus = 0x00;
+                  mySourceChar |= (UChar) (args->converter->toUnicodeStatus << 8);
+                  args->converter->toUnicodeStatus = 0x00;
                 }
               else mySourceChar &= 0x00FF;
 
@@ -896,49 +833,49 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
                   /*writes the UniChar to the output stream */
                   {
                         if(myMode == UCNV_SO)
-                         offsets[myTargetIndex] = mySourceIndex-2; /* double byte */
+                         args->offsets[myTargetIndex] = mySourceIndex-2; /* double byte */
                         else
-                         offsets[myTargetIndex] = mySourceIndex-1; /* single byte */
+                         args->offsets[myTargetIndex] = mySourceIndex-1; /* single byte */
                   }
-                  myTarget[myTargetIndex++] = targetUniChar;
+                  args->target[myTargetIndex++] = targetUniChar;
                 }
               else
                 {
-                  int32_t currentOffset = offsets[myTargetIndex-1] + 2;/* Because mySourceIndex was already incremented */
+                  int32_t currentOffset = args->offsets[myTargetIndex-1] + 2;/* Because mySourceIndex was already incremented */
                   int32_t My_i = myTargetIndex;
+                  const char* saveSource = args->source;
+                  UChar* saveTarget = args->target;
+                  int32_t *saveOffsets = args->offsets;
                   
                   *err = U_INVALID_CHAR_FOUND;
                   if (mySourceChar > 0xFF)
                     {
-                      _this->invalidCharLength = 2;
-                      _this->invalidCharBuffer[0] = (char) (mySourceChar >> 8);
-                      _this->invalidCharBuffer[1] = (char) mySourceChar;
+                      args->converter->invalidCharLength = 2;
+                      args->converter->invalidCharBuffer[0] = (char) (mySourceChar >> 8);
+                      args->converter->invalidCharBuffer[1] = (char) mySourceChar;
                     }
                   else
                     {
-                      _this->invalidCharLength = 1;
-                      _this->invalidCharBuffer[0] = (char) mySourceChar;
+                      args->converter->invalidCharLength = 1;
+                      args->converter->invalidCharBuffer[0] = (char) mySourceChar;
                     }
-                  _this->mode = myMode;
+                  args->converter->mode = myMode;
 
-                  args.converter = _this;
-                  args.target = myTarget + myTargetIndex;
-                  args.targetLimit = targetLimit;
-                  args.source = mySource + mySourceIndex;
-                  args.sourceLimit = sourceLimit;
-                  args.flush = flush;
-                  args.offsets = offsets?offsets+myTargetIndex:0;
-                  args.size = sizeof(args);
+                  args->target = args->target + myTargetIndex;
+                  args->source = args->source + mySourceIndex;
+                  args->offsets = args->offsets?args->offsets+myTargetIndex:0;
                   /* call back handles the offset array */
-                  ToU_CALLBACK_OFFSETS_LOGIC_MACRO(_this->toUContext,
+                  ToU_CALLBACK_OFFSETS_LOGIC_MACRO(args->converter->toUContext,
                                      args,
-                                     args.source,
+                                     args->source,
                                      1, 
                                      UCNV_UNASSIGNED,
                                      err);                  
                   
+                  args->source = saveSource;
+                  args->target = saveTarget;
                   if (U_FAILURE (*err))   break;
-                  _this->invalidCharLength = 0;
+                  args->converter->invalidCharLength = 0;
                 }
             }
         }
@@ -952,55 +889,48 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
   /*If at the end of conversion we are still carrying state information
    *flush is TRUE, we can deduce that the input stream is truncated
    */
-    if (_this->toUnicodeStatus
+    if (args->converter->toUnicodeStatus
         && (mySourceIndex == sourceLength)
-        && (flush == TRUE))
+        && (args->flush == TRUE))
       {
         if (U_SUCCESS(*err)) 
           {
             *err = U_TRUNCATED_CHAR_FOUND;
-            _this->toUnicodeStatus = 0x00;
+            args->converter->toUnicodeStatus = 0x00;
           }
       }
 
-  *target += myTargetIndex;
-  *source += mySourceIndex;
-  _this->mode = myMode;
+  args->target += myTargetIndex;
+  args->source += mySourceIndex;
+  args->converter->mode = myMode;
 
   return;
 }
 
-void T_UConverter_fromUnicode_EBCDIC_STATEFUL (UConverter * _this,
-                                               char **target,
-                                               const char *targetLimit,
-                                               const UChar ** source,
-                                               const UChar * sourceLimit,
-                                               int32_t *offsets,
-                                               UBool flush,
+void T_UConverter_fromUnicode_EBCDIC_STATEFUL (UConverterFromUnicodeArgs * args,
                                                UErrorCode * err)
 
 {
-  const UChar *mySource = *source;
-  char *myTarget = *target;
+  const UChar *mySource = args->source;
+  unsigned char *myTarget = (unsigned char *) args->target;
   int32_t mySourceIndex = 0;
   int32_t myTargetIndex = 0;
-  int32_t targetLength = targetLimit - myTarget;
-  int32_t sourceLength = sourceLimit - mySource;
+  int32_t targetLength = args->targetLimit - args->target;
+  int32_t sourceLength = args->sourceLimit - args->source;
   CompactShortArray *myFromUnicode = NULL;
   UChar targetUniChar = 0x0000;
   int8_t targetUniCharByteNum = 0;
   UChar mySourceChar = 0x0000;
-  UBool isTargetUCharDBCS = (UBool)_this->fromUnicodeStatus;
+  UBool isTargetUCharDBCS = (UBool)args->converter->fromUnicodeStatus;
   UBool oldIsTargetUCharDBCS = isTargetUCharDBCS;
-  UConverterFromUnicodeArgs args;
 
-  myFromUnicode = &_this->sharedData->table->dbcs.fromUnicode;
+  myFromUnicode = &args->converter->sharedData->table->dbcs.fromUnicode;
   /*writing the char to the output stream */
   while (mySourceIndex < sourceLength)
     {
       if (myTargetIndex < targetLength)
         {
-          mySourceChar = (UChar) mySource[mySourceIndex++];
+          mySourceChar = (UChar) args->source[mySourceIndex++];
           targetUniChar = (UChar) ucmp16_getu (myFromUnicode, mySourceChar);
           oldIsTargetUCharDBCS = isTargetUCharDBCS;
           isTargetUCharDBCS = (targetUniChar>0x00FF);
@@ -1009,22 +939,22 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL (UConverter * _this,
             {
               if (oldIsTargetUCharDBCS != isTargetUCharDBCS)
                 {
-                  if (isTargetUCharDBCS) myTarget[myTargetIndex++] = UCNV_SO;
-                  else myTarget[myTargetIndex++] = UCNV_SI;
+                  if (isTargetUCharDBCS) args->target[myTargetIndex++] = UCNV_SO;
+                  else args->target[myTargetIndex++] = UCNV_SI;
                   
                   
                   if ((!isTargetUCharDBCS)&&(myTargetIndex+1 >= targetLength))
                     {
-                      _this->charErrorBuffer[0] = (char) targetUniChar;
-                      _this->charErrorBufferLength = 1;
+                      args->converter->charErrorBuffer[0] = (char) targetUniChar;
+                      args->converter->charErrorBufferLength = 1;
                       *err = U_INDEX_OUTOFBOUNDS_ERROR;
                       break;
                     }
                   else if (myTargetIndex+1 >= targetLength)
                     {
-                      _this->charErrorBuffer[0] = (char) (targetUniChar >> 8);
-                      _this->charErrorBuffer[1] = (char) targetUniChar & 0x00FF;
-                      _this->charErrorBufferLength = 2;
+                      args->converter->charErrorBuffer[0] = (char) (targetUniChar >> 8);
+                      args->converter->charErrorBuffer[1] = (char) targetUniChar & 0x00FF;
+                      args->converter->charErrorBufferLength = 2;
                       *err = U_INDEX_OUTOFBOUNDS_ERROR;
                       break;
                     }
@@ -1033,19 +963,19 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL (UConverter * _this,
               
               if (!isTargetUCharDBCS)
                 {
-                  myTarget[myTargetIndex++] = (char) targetUniChar;
+                  args->target[myTargetIndex++] = (char) targetUniChar;
                 }
               else
                 {
-                  myTarget[myTargetIndex++] = (char) (targetUniChar >> 8);
+                  args->target[myTargetIndex++] = (char) (targetUniChar >> 8);
                   if (myTargetIndex < targetLength)
                     {
-                      myTarget[myTargetIndex++] = (char) targetUniChar;
+                      args->target[myTargetIndex++] = (char) targetUniChar;
                     }
                   else
                     {
-                      _this->charErrorBuffer[0] = (char) targetUniChar;
-                      _this->charErrorBufferLength = 1;
+                      args->converter->charErrorBuffer[0] = (char) targetUniChar;
+                      args->converter->charErrorBufferLength = 1;
                       *err = U_INDEX_OUTOFBOUNDS_ERROR;
                       break;
                     }
@@ -1053,30 +983,30 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL (UConverter * _this,
             }
           else
             {
+              const UChar* saveSource = args->source;
+              char* saveTarget = args->target;
+              int32_t *saveOffsets = args->offsets;
+
               isTargetUCharDBCS = oldIsTargetUCharDBCS;
               *err = U_INVALID_CHAR_FOUND;
-              _this->invalidUCharBuffer[0] = (UChar) mySourceChar;
-              _this->invalidUCharLength = 1;
+              args->converter->invalidUCharBuffer[0] = (UChar) mySourceChar;
+              args->converter->invalidUCharLength = 1;
 
-              _this->fromUnicodeStatus = (int32_t)isTargetUCharDBCS;
-              args.converter = _this;
-              args.target = myTarget + myTargetIndex;
-              args.targetLimit = targetLimit;
-              args.source =  mySource + mySourceIndex;
-              args.sourceLimit = sourceLimit;
-              args.flush = flush;
-              args.offsets = offsets;
-              args.size = sizeof(args);
-              /* HSYS: to do: more smarts */
-              FromU_CALLBACK_MACRO(args.converter->fromUContext,
+              args->converter->fromUnicodeStatus = (int32_t)isTargetUCharDBCS;
+              args->target += myTargetIndex;
+              args->source += mySourceIndex;
+              FromU_CALLBACK_MACRO(args->converter->fromUContext,
                                  args,
-                                 args.source,
+                                 args->source,
                                  1,
-                                 (UChar32) (*args.source),
+                                 (UChar32) *(args->source),
                                  UCNV_UNASSIGNED,
                                  err);
+              args->source = saveSource;
+              args->target = saveTarget;
+              args->offsets = saveOffsets;
               if (U_FAILURE (*err)) break;
-              _this->invalidUCharLength = 0;
+              args->converter->invalidUCharLength = 0;
             }
         }
       else
@@ -1088,46 +1018,39 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL (UConverter * _this,
     }
 
 
-  *target += myTargetIndex;
-  *source += mySourceIndex;
+  args->target += myTargetIndex;
+  args->source += mySourceIndex;
   
-  _this->fromUnicodeStatus = (int32_t)isTargetUCharDBCS;
+  args->converter->fromUnicodeStatus = (int32_t)isTargetUCharDBCS;
 
   return;
 }
 
-void T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
-                                                             char **target,
-                                                             const char *targetLimit,
-                                                             const UChar ** source,
-                                                             const UChar * sourceLimit,
-                                                             int32_t *offsets,
-                                                             UBool flush,
+void T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
                                                              UErrorCode * err)
 
 {
-  const UChar *mySource = *source;
-  char *myTarget = *target;
+  const UChar *mySource = args->source;
+  unsigned char *myTarget = (unsigned char *) args->target;
   int32_t mySourceIndex = 0;
   int32_t myTargetIndex = 0;
-  int32_t targetLength = targetLimit - myTarget;
-  int32_t sourceLength = sourceLimit - mySource;
+  int32_t targetLength = args->targetLimit - args->target;
+  int32_t sourceLength = args->sourceLimit - args->source;
   CompactShortArray *myFromUnicode = NULL;
   UChar targetUniChar = 0x0000;
   int8_t targetUniCharByteNum = 0;
   UChar mySourceChar = 0x0000;
-  UBool isTargetUCharDBCS = (UBool)_this->fromUnicodeStatus;
+  UBool isTargetUCharDBCS = (UBool)args->converter->fromUnicodeStatus;
   UBool oldIsTargetUCharDBCS = isTargetUCharDBCS;
-  int32_t* originalOffsets = offsets;
-  UConverterFromUnicodeArgs args;
+  int32_t* originalOffsets = args->offsets;
   
-  myFromUnicode = &_this->sharedData->table->dbcs.fromUnicode;
+  myFromUnicode = &args->converter->sharedData->table->dbcs.fromUnicode;
   /*writing the char to the output stream */
   while (mySourceIndex < sourceLength)
     {
       if (myTargetIndex < targetLength)
         {
-          mySourceChar = (UChar) mySource[mySourceIndex++];
+          mySourceChar = (UChar) args->source[mySourceIndex++];
           targetUniChar = (UChar) ucmp16_getu (myFromUnicode, mySourceChar);
           oldIsTargetUCharDBCS = isTargetUCharDBCS;
           isTargetUCharDBCS = (targetUniChar>0x00FF);
@@ -1136,46 +1059,46 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
             {
               if (oldIsTargetUCharDBCS != isTargetUCharDBCS)
                 {
-                  offsets[myTargetIndex] = mySourceIndex-1;
-                  if (isTargetUCharDBCS) myTarget[myTargetIndex++] = UCNV_SO;
-                  else myTarget[myTargetIndex++] = UCNV_SI;
+                  args->offsets[myTargetIndex] = mySourceIndex-1;
+                  if (isTargetUCharDBCS) args->target[myTargetIndex++] = UCNV_SO;
+                  else args->target[myTargetIndex++] = UCNV_SI;
                   
                   
                   if ((!isTargetUCharDBCS)&&(myTargetIndex+1 >= targetLength))
                     {
-                      _this->charErrorBuffer[0] = (char) targetUniChar;
-                      _this->charErrorBufferLength = 1;
+                      args->converter->charErrorBuffer[0] = (char) targetUniChar;
+                      args->converter->charErrorBufferLength = 1;
                       *err = U_INDEX_OUTOFBOUNDS_ERROR;
                       break;
                     }
                   else if (myTargetIndex+1 >= targetLength)
                     {
-                      _this->charErrorBuffer[0] = (char) (targetUniChar >> 8);
-                      _this->charErrorBuffer[1] = (char) targetUniChar & 0x00FF;
-                      _this->charErrorBufferLength = 2;
+                      args->converter->charErrorBuffer[0] = (char) (targetUniChar >> 8);
+                      args->converter->charErrorBuffer[1] = (char) targetUniChar & 0x00FF;
+                      args->converter->charErrorBufferLength = 2;
                       *err = U_INDEX_OUTOFBOUNDS_ERROR;
                       break;
                     }
                 }
               
               if (!isTargetUCharDBCS)
-                {
-                   offsets[myTargetIndex] = mySourceIndex-1;
-                  myTarget[myTargetIndex++] = (char) targetUniChar;
-                }
+              {
+                  args->offsets[myTargetIndex] = mySourceIndex-1;
+                  args->target[myTargetIndex++] = (char) targetUniChar;
+              }
               else
-                {
-                   offsets[myTargetIndex] = mySourceIndex-1;
-                  myTarget[myTargetIndex++] = (char) (targetUniChar >> 8);
+              {
+                  args->offsets[myTargetIndex] = mySourceIndex-1;
+                  args->target[myTargetIndex++] = (char) (targetUniChar >> 8);
                   if (myTargetIndex < targetLength)
                     {
-                       offsets[myTargetIndex] = mySourceIndex-1;
-                      myTarget[myTargetIndex++] = (char) targetUniChar;
+                      args->offsets[myTargetIndex] = mySourceIndex-1;
+                      args->target[myTargetIndex++] = (char) targetUniChar;
                     }
                   else
                     {
-                      _this->charErrorBuffer[0] = (char) targetUniChar;
-                      _this->charErrorBufferLength = 1;
+                      args->converter->charErrorBuffer[0] = (char) targetUniChar;
+                      args->converter->charErrorBufferLength = 1;
                       *err = U_INDEX_OUTOFBOUNDS_ERROR;
                       break;
                     }
@@ -1183,32 +1106,33 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
             }
           else
             {
-              int32_t currentOffset = offsets[myTargetIndex-1]+1;
+              int32_t currentOffset = args->offsets[myTargetIndex-1]+1;
               int32_t My_i = myTargetIndex;
+              char * saveTarget = args->target;
+              const UChar* saveSource = args->source;
+              int32_t *saveOffsets = args->offsets;
+
               *err = U_INVALID_CHAR_FOUND;
-              _this->invalidUCharBuffer[0] = (UChar) mySourceChar;
-              _this->invalidUCharLength = 1;
+              args->converter->invalidUCharBuffer[0] = (UChar) mySourceChar;
+              args->converter->invalidUCharLength = 1;
 
               /* Breaks out of the loop since behaviour was set to stop */
-              _this->fromUnicodeStatus = (int32_t)isTargetUCharDBCS;
-              args.converter = _this;
-              args.target = myTarget + myTargetIndex;
-              args.targetLimit = targetLimit;
-              args.source = mySource + mySourceIndex;
-              args.sourceLimit = sourceLimit;
-              args.flush = flush;
-              args.offsets = offsets?offsets+myTargetIndex:0;
-              args.size = sizeof(args);
-              FromU_CALLBACK_OFFSETS_LOGIC_MACRO(args.converter->fromUContext,
+              args->converter->fromUnicodeStatus = (int32_t)isTargetUCharDBCS;
+              args->target += myTargetIndex;
+              args->source += mySourceIndex;
+              args->offsets = args->offsets?args->offsets+myTargetIndex:0;
+              FromU_CALLBACK_OFFSETS_LOGIC_MACRO(args->converter->fromUContext,
                                      args,
-                                     args.source,
+                                     args->source,
                                      1,
-                                     (UChar32) (*args.source),
+                                     (UChar32) (*args->source),
                                      UCNV_UNASSIGNED,
                                      err);
-              
+              args->source = saveSource;
+              args->target = saveTarget;
+              args->offsets = saveOffsets;
               if (U_FAILURE (*err))     break;
-              _this->invalidUCharLength = 0;
+              args->converter->invalidUCharLength = 0;
             }
         }
       else
@@ -1220,26 +1144,23 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
     }
 
 
-  *target += myTargetIndex;
-  *source += mySourceIndex;;
+  args->target += myTargetIndex;
+  args->source += mySourceIndex;;
   
-  _this->fromUnicodeStatus = (int32_t)isTargetUCharDBCS;
+  args->converter->fromUnicodeStatus = (int32_t)isTargetUCharDBCS;
 
   return;
 }
 
-UChar32 T_UConverter_getNextUChar_EBCDIC_STATEFUL(UConverter* converter,
-                                                const char** source,
-                                                const char* sourceLimit,
+UChar32 T_UConverter_getNextUChar_EBCDIC_STATEFUL(UConverterToUnicodeArgs* args,
                                                 UErrorCode* err)
 {
   UChar myUChar;
-  char const *sourceInitial = *source;
-  UConverterToUnicodeArgs args;
+  char const *sourceInitial = args->source;
   /*safe keeps a ptr to the beginning in case we need to step back*/
   
   /*Input boundary check*/
-  if ((*source)+1 > sourceLimit) 
+  if (args->source+1 > args->sourceLimit) 
     {
       *err = U_INDEX_OUTOFBOUNDS_ERROR;
       return 0xFFFD;
@@ -1247,65 +1168,61 @@ UChar32 T_UConverter_getNextUChar_EBCDIC_STATEFUL(UConverter* converter,
   
   /*Checks to see if with have SI/SO shifters
    if we do we change the mode appropriately and we consume the byte*/
-  if ((**source == UCNV_SI) || (**source == UCNV_SO)) 
+  if ((*(args->source) == UCNV_SI) || (*(args->source) == UCNV_SO)) 
     {
-      converter->mode = **source;
-      (*source)++;
+      args->converter->mode = *(args->source);
+      args->source++;
       
       /*Rechecks boundary after consuming the shift sequence*/
-      if ((*source)+1 > sourceLimit) 
+      if (args->source+1 > args->sourceLimit) 
         {
           *err = U_INDEX_OUTOFBOUNDS_ERROR;
           return 0xFFFD;
         }
     }
   
-  if (converter->mode == UCNV_SI)
+  if (args->converter->mode == UCNV_SI)
     {
       /*Not lead byte: we update the source ptr and get the codepoint*/
-      myUChar = ucmp16_getu( (&converter->sharedData->table->dbcs.toUnicode),
-                            (UChar)(**source));
-      (*source)++;
+      myUChar = ucmp16_getu( (&(args->converter->sharedData->table->dbcs.toUnicode)),
+                            (UChar)(*(args->source)));
+      args->source++;
     }
   else
     {
       /*Lead byte: we Build the codepoint and get the corresponding character
        * and update the source ptr*/
-      if ((*source + 2) > sourceLimit) 
+      if ((args->source + 2) > args->sourceLimit) 
         {
           *err = U_TRUNCATED_CHAR_FOUND;
           return 0xFFFD;
         }
 
-      myUChar = ucmp16_getu( (&converter->sharedData->table->dbcs.toUnicode),
-                            ((UChar)((**source)) << 8) |((uint8_t)*((*source)+1)));
+      myUChar = ucmp16_getu( (&(args->converter->sharedData->table->dbcs.toUnicode)),
+                            ((UChar)((*(args->source))) << 8) |((uint8_t)*(args->source+1)));
 
-      (*source) += 2;
+      args->source += 2;
     }
   
   if (myUChar != 0xFFFD) return myUChar;
   else
     {      
       /*rewinds source*/
-      const char* sourceFinal = *source;
+      /* HSYS: Check logic here */
+      const char* sourceFinal = args->source;
       UChar* myUCharPtr = &myUChar;
       
       *err = U_INVALID_CHAR_FOUND;
-      *source = sourceInitial;
+      args->source = sourceInitial;
       
       /*It's is very likely that the ErrorFunctor will write to the
        *internal buffers */
-      args.converter = converter;
-      args.target = myUCharPtr;
-      args.targetLimit = myUCharPtr + 1;
-      args.source = sourceFinal;
-      args.sourceLimit = sourceLimit;
-      args.flush = TRUE;
-      args.offsets = NULL;  
-      args.size = sizeof(args);
+      args->target = myUCharPtr;
+      args->targetLimit = myUCharPtr + 1;
+      args->source = sourceFinal;
 
-      converter->fromCharErrorBehaviour(converter->toUContext,
-                                    &args,
+      args->converter->fromCharErrorBehaviour(args->converter->toUContext,
+                                    args,
                                     sourceFinal,
                                     1,
                                     UCNV_UNASSIGNED,

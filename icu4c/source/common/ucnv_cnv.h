@@ -67,76 +67,82 @@ U_CDECL_BEGIN
 #define missingUCharMarker 0xFFFD
 
 #define FromU_CALLBACK_MACRO(context, args, codeUnits, length, codePoint, reason, err) \
-              if (args.converter->fromUCharErrorBehaviour == (UConverterFromUCallback) UCNV_FROM_U_CALLBACK_STOP) break;\
+              if (args->converter->fromUCharErrorBehaviour == (UConverterFromUCallback) UCNV_FROM_U_CALLBACK_STOP) break;\
               else \
                 { \
                   /*copies current values for the ErrorFunctor to update */ \
                   /*Calls the ErrorFunctor */ \
-                  args.converter->fromUCharErrorBehaviour ( context, \
-                                                  &args, \
+                  args->converter->fromUCharErrorBehaviour ( context, \
+                                                  args, \
                                                   codeUnits, \
                                                   length, \
                                                   codePoint, \
                                                   reason, \
                                                   err); \
-                 myTargetIndex = args.target - (char*)myTarget; \
-                 mySourceIndex = args.source - mySource; \
+                 myTargetIndex = args->target - (char*)myTarget; \
+                 mySourceIndex = args->source - mySource; \
                 }
-
+/*
+*/
 #define ToU_CALLBACK_MACRO(context, args, codePoints, length, reason, err) \
-              if (args.converter->fromCharErrorBehaviour == (UConverterToUCallback) UCNV_TO_U_CALLBACK_STOP) break; \
+              if (args->converter->fromCharErrorBehaviour == (UConverterToUCallback) UCNV_TO_U_CALLBACK_STOP) break; \
               else \
                 { \
                   /*Calls the ErrorFunctor */ \
-                  args.converter->fromCharErrorBehaviour ( \
+                  args->converter->fromCharErrorBehaviour ( \
                                                  context, \
-                                                 &args, \
+                                                 args, \
                                                  codePoints, \
                                                  length, \
                                                  reason, \
                                                  err); \
-                 myTargetIndex = args.target - myTarget; \
-                 mySourceIndex = args.source - (const char*)mySource; \
+                 myTargetIndex = args->target - myTarget; \
+                 mySourceIndex = args->source - (const char*)mySource; \
                 }
-
+/*
+*/
 #define FromU_CALLBACK_OFFSETS_LOGIC_MACRO(context, args, codeUnits, length, codePoint, reason, err) \
-              if (args.converter->fromUCharErrorBehaviour == (UConverterFromUCallback) UCNV_FROM_U_CALLBACK_STOP) break;\
+              if (args->converter->fromUCharErrorBehaviour == (UConverterFromUCallback) UCNV_FROM_U_CALLBACK_STOP) break;\
               else \
                 { \
                  int32_t My_i = myTargetIndex; \
                   /*copies current values for the ErrorFunctor to update */ \
                   /*Calls the ErrorFunctor */ \
-                  args.converter->fromUCharErrorBehaviour ( \
+                  args->converter->fromUCharErrorBehaviour ( \
                                                  context, \
-                                                 &args, \
+                                                 args, \
                                                  codeUnits, \
                                                  length, \
                                                  codePoint, \
                                                  reason, \
                                                  err); \
                   /*Update the local Indexes so that the conversion can restart at the right points */ \
-                 myTargetIndex = args.target - (char*)myTarget; \
-                 mySourceIndex = args.source - mySource; \
-                  for (;My_i < myTargetIndex;My_i++) offsets[My_i] += currentOffset  ;    \
+                 myTargetIndex = args->target - (char*)myTarget; \
+                 mySourceIndex = args->source - mySource; \
+                 args->offsets = saveOffsets; \
+                  for (;My_i < myTargetIndex;My_i++) args->offsets[My_i] += currentOffset  ;    \
                 }
-
+/*
+*/
 #define ToU_CALLBACK_OFFSETS_LOGIC_MACRO(context, args, codePoints, length, reason, err) \
-              if (args.converter->fromCharErrorBehaviour == (UConverterToUCallback) UCNV_TO_U_CALLBACK_STOP) break; \
+              if (args->converter->fromCharErrorBehaviour == (UConverterToUCallback) UCNV_TO_U_CALLBACK_STOP) break; \
               else \
                 { \
-                      args.converter->fromCharErrorBehaviour ( \
+                      args->converter->fromCharErrorBehaviour ( \
                                                  context, \
-                                                 &args, \
+                                                 args, \
                                                  codePoints, \
                                                  length, \
                                                  reason, \
                                                  err); \
                   /*Update the local Indexes so that the conversion can restart at the right points */ \
-                 myTargetIndex = args.target - myTarget; \
-                 mySourceIndex = args.source - (const char*)mySource; \
-                  for (;My_i < myTargetIndex;My_i++) {offsets[My_i] += currentOffset  ;   } \
+                 myTargetIndex = args->target - myTarget; \
+                 mySourceIndex = args->source - (const char*)mySource; \
+                 args->offsets = saveOffsets; \
+                  for (;My_i < myTargetIndex;My_i++) {args->offsets[My_i] += currentOffset  ;   } \
                 }
-
+/*
+*/
 
 typedef void (*UConverterLoad) (UConverterSharedData *sharedData, const uint8_t *raw, UErrorCode *pErrorCode);
 typedef void (*UConverterUnload) (UConverterSharedData *sharedData);
@@ -146,28 +152,11 @@ typedef void (*UConverterClose) (UConverter *cnv);
 
 typedef void (*UConverterReset) (UConverter *cnv);
 
-typedef void (*T_ToUnicodeFunction) (UConverter *,
-				     UChar **,
-				     const UChar *,
-				     const char **,
-				     const char *,
-				     int32_t* offsets,
-				     UBool,
-				     UErrorCode *);
+typedef void (*T_ToUnicodeFunction) (UConverterToUnicodeArgs *, UErrorCode *);
 
-typedef void (*T_FromUnicodeFunction) (UConverter *,
-				       char **,
-				       const char *,
-				       const UChar **,
-				       const UChar *,
-				       int32_t* offsets,
-				       UBool,
-				       UErrorCode *);
+typedef void (*T_FromUnicodeFunction) (UConverterFromUnicodeArgs *, UErrorCode *);
 
-typedef UChar32 (*T_GetNextUCharFunction) (UConverter *,
-					 const char **,
-					 const char *,
-					 UErrorCode *);
+typedef UChar32 (*T_GetNextUCharFunction) (UConverterToUnicodeArgs *, UErrorCode *);
 
 typedef void (*UConverterGetStarters)(const UConverter* converter,
 				     UBool starters[256],
