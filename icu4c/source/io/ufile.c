@@ -221,8 +221,8 @@ u_fgetlocale(    UFILE        *file)
 }
 
 U_CAPI int32_t U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
-u_fsetlocale(const char        *locale,
-             UFILE        *file)
+u_fsetlocale(UFILE      *file,
+             const char *locale)
 {
     u_locbund_close(&file->str.fBundle);
 
