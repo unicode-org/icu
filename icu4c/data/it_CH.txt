@@ -50,11 +50,11 @@ it_CH {
     localPatternChars { "GuMtkHmsSEDFwWahKz" }
     zoneStrings { 
         {
-                "Africa/Casablanca",
-                "GMT",
-                "GMT",
-                "GMT",
-                "GMT",
+                "Europe/Zurich",
+                "CET",
+                "CET",
+                "CET",
+                "CET",
         }
     }
 }

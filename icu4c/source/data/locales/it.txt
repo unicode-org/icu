@@ -19,16 +19,22 @@ it {
             "4",
     }
     DateTimePatterns { 
-            "H.mm.ss z",
-            "H.mm.ss z",
-            "H.mm.ss",
-            "H.mm",
+            "HH:mm:ss z",
+            "HH:mm:ss z",
+            "HH:mm:ss",
+            "HH:mm",
             "EEEE d MMMM yyyy",
-            "d MMMM yyyy",
-            "d-MMM-yy",
+            "dd MMMM yyyy",
+            "dd/MMM/yy",
             "dd/MM/yy",
             "{1} {0}",
     }
+    
+    AmPmMarkers { 
+            "m.",
+            "p.",
+    }
+    
     DayAbbreviations { 
             "dom",
             "lun",
@@ -48,8 +54,8 @@ it {
             "sabato",
     }
     Eras { 
-            "BC",
-            "dopo Cristo",
+            "aC",
+            "dC",
     }
     Languages { 
         it { "italiano" }
@@ -103,11 +109,11 @@ it {
     localPatternChars { "GyMdkHmsSEDFwWahKz" }
     zoneStrings { 
         {
-                "Africa/Casablanca",
-                "GMT",
-                "GMT",
-                "GMT",
-                "GMT",
+                "Europe/Rome",
+                "CET",
+                "CET",
+                "CET",
+                "CET",
         }
     }
 }
