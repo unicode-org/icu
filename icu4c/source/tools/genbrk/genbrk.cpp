@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2002-2003, International Business Machines
+*   Copyright (C) 2002-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -306,7 +306,7 @@ int  main(int argc, char **argv) {
     RuleBasedBreakIterator *bi = new RuleBasedBreakIterator(ruleSourceS, parseError, status);
     if (U_FAILURE(status)) {
         fprintf(stderr, "createRuleBasedBreakIterator: ICU Error \"%s\"  at line %d, column %d\n",
-                u_errorName(status), parseError.line, parseError.offset);
+                u_errorName(status), (int)parseError.line, (int)parseError.offset);
         exit(status);
     };
 

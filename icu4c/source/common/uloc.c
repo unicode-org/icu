@@ -840,7 +840,6 @@ _canonicalize(const char* localeID,
               UErrorCode* err) {
     int32_t i, j, len, fieldCount=0, scriptSize=0, variantSize=0, nameCapacity;
     char localeBuffer[ULOC_FULLNAME_CAPACITY];
-    const char* original = localeID;
     const char* keywordAssign = NULL;
     const char* separatorIndicator = NULL;
     const char* addKeyword = NULL;

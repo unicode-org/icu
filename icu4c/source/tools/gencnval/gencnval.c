@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2003, International Business Machines
+*   Copyright (C) 1999-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -134,7 +134,7 @@ static uint16_t aliasListsSize = 0;
 /* Were the standard tags declared before the aliases. */
 static UBool standardTagsUsed = FALSE;
 static UBool verbose = FALSE;
-static int32_t lineNum = 1;
+static int lineNum = 1;
 
 /* prototypes --------------------------------------------------------------- */
 
