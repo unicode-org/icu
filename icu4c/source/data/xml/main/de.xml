@@ -3,7 +3,7 @@
 <ldml>
 	<identity>
 		<version number="3.0"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="de" /> 
 	</identity>
 	<localeDisplayNames>
@@ -498,69 +498,77 @@
 		<localizedPatternChars>GjMtkHmsSEDFwWahKzJeugAZ</localizedPatternChars>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">Jan</month>
-					<month type="2">Feb</month>
-					<month type="3">Mrz</month>
-					<month type="4">Apr</month>
-					<month type="5">Mai</month>
-					<month type="6">Jun</month>
-					<month type="7">Jul</month>
-					<month type="8">Aug</month>
-					<month type="9">Sep</month>
-					<month type="10">Okt</month>
-					<month type="11">Nov</month>
-					<month type="12">Dez</month>
-				</monthNames>
-				<monthNames context="format" width="narrow">
-					<month type="1">J</month>
-					<month type="2">F</month>
-					<month type="3">M</month>
-					<month type="4">A</month>
-					<month type="5">M</month>
-					<month type="6">J</month>
-					<month type="7">J</month>
-					<month type="8">A</month>
-					<month type="9">S</month>
-					<month type="10">O</month>
-					<month type="11">N</month>
-					<month type="12">D</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">Januar</month>
-					<month type="2">Februar</month>
-					<month type="3">März</month>
-					<month type="4">April</month>
-					<month type="5">Mai</month>
-					<month type="6">Juni</month>
-					<month type="7">Juli</month>
-					<month type="8">August</month>
-					<month type="9">September</month>
-					<month type="10">Oktober</month>
-					<month type="11">November</month>
-					<month type="12">Dezember</month>
-				</monthNames>
-				<dayNames context="format" width="abbreviated" >
-					<day type="sun">So</day>
-					<day type="mon">Mo</day>
-					<day type="tue">Di</day>
-					<day type="wed">Mi</day>
-					<day type="thu">Do</day>
-					<day type="fri">Fr</day>
-					<day type="sat">Sa</day>
-				</dayNames>
-				<dayNames context="format" width="narrow" >
-					<day type="sun">SMDMDFS</day>
-				</dayNames>
-				<dayNames context="format" width="wide" >
-					<day type="sun">Sonntag</day>
-					<day type="mon">Montag</day>
-					<day type="tue">Dienstag</day>
-					<day type="wed">Mittwoch</day>
-					<day type="thu">Donnerstag</day>
-					<day type="fri">Freitag</day>
-					<day type="sat">Samstag</day>
-				</dayNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">Jan</month>
+							<month type="2">Feb</month>
+							<month type="3">Mrz</month>
+							<month type="4">Apr</month>
+							<month type="5">Mai</month>
+							<month type="6">Jun</month>
+							<month type="7">Jul</month>
+							<month type="8">Aug</month>
+							<month type="9">Sep</month>
+							<month type="10">Okt</month>
+							<month type="11">Nov</month>
+							<month type="12">Dez</month>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">J</month>
+							<month type="2">F</month>
+							<month type="3">M</month>
+							<month type="4">A</month>
+							<month type="5">M</month>
+							<month type="6">J</month>
+							<month type="7">J</month>
+							<month type="8">A</month>
+							<month type="9">S</month>
+							<month type="10">O</month>
+							<month type="11">N</month>
+							<month type="12">D</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Januar</month>
+							<month type="2">Februar</month>
+							<month type="3">März</month>
+							<month type="4">April</month>
+							<month type="5">Mai</month>
+							<month type="6">Juni</month>
+							<month type="7">Juli</month>
+							<month type="8">August</month>
+							<month type="9">September</month>
+							<month type="10">Oktober</month>
+							<month type="11">November</month>
+							<month type="12">Dezember</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">So</day>
+							<day type="mon">Mo</day>
+							<day type="tue">Di</day>
+							<day type="wed">Mi</day>
+							<day type="thu">Do</day>
+							<day type="fri">Fr</day>
+							<day type="sat">Sa</day>
+						</dayWidth>
+						<dayWidth type="narrow">
+							<day type="sun">SMDMDFS</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">Sonntag</day>
+							<day type="mon">Montag</day>
+							<day type="tue">Dienstag</day>
+							<day type="wed">Mittwoch</day>
+							<day type="thu">Donnerstag</day>
+							<day type="fri">Freitag</day>
+							<day type="sat">Samstag</day>
+						</dayWidth>
+					</dayContext>
+				</days>
 				<am>vorm.</am>
 				<pm>nachm.</pm>
 				<dateFormats>

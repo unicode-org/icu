@@ -3,7 +3,7 @@
 <ldml>
 	<identity>
 		<version number="4.0"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="ca" /> 
 	</identity>
 	<localeDisplayNames>
@@ -355,52 +355,60 @@
 		<localizedPatternChars>GuMtkHmsSEDFwWahKzUeygAZ</localizedPatternChars>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">gen.</month>
-					<month type="2">feb.</month>
-					<month type="3">març</month>
-					<month type="4">abr.</month>
-					<month type="5">maig</month>
-					<month type="6">juny</month>
-					<month type="7">jul.</month>
-					<month type="8">ag.</month>
-					<month type="9">set.</month>
-					<month type="10">oct.</month>
-					<month type="11">nov.</month>
-					<month type="12">des.</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">gener</month>
-					<month type="2">febrer</month>
-					<month type="3">març</month>
-					<month type="4">abril</month>
-					<month type="5">maig</month>
-					<month type="6">juny</month>
-					<month type="7">juliol</month>
-					<month type="8">agost</month>
-					<month type="9">setembre</month>
-					<month type="10">octubre</month>
-					<month type="11">novembre</month>
-					<month type="12">desembre</month>
-				</monthNames>
-				<dayNames context="format" width="abbreviated" >
-					<day type="sun">dg.</day>
-					<day type="mon">dl.</day>
-					<day type="tue">dt.</day>
-					<day type="wed">dc.</day>
-					<day type="thu">dj.</day>
-					<day type="fri">dv.</day>
-					<day type="sat">ds.</day>
-				</dayNames>
-				<dayNames context="format" width="wide" >
-					<day type="sun">diumenge</day>
-					<day type="mon">dilluns</day>
-					<day type="tue">dimarts</day>
-					<day type="wed">dimecres</day>
-					<day type="thu">dijous</day>
-					<day type="fri">divendres</day>
-					<day type="sat">dissabte</day>
-				</dayNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">gen.</month>
+							<month type="2">feb.</month>
+							<month type="3">març</month>
+							<month type="4">abr.</month>
+							<month type="5">maig</month>
+							<month type="6">juny</month>
+							<month type="7">jul.</month>
+							<month type="8">ag.</month>
+							<month type="9">set.</month>
+							<month type="10">oct.</month>
+							<month type="11">nov.</month>
+							<month type="12">des.</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">gener</month>
+							<month type="2">febrer</month>
+							<month type="3">març</month>
+							<month type="4">abril</month>
+							<month type="5">maig</month>
+							<month type="6">juny</month>
+							<month type="7">juliol</month>
+							<month type="8">agost</month>
+							<month type="9">setembre</month>
+							<month type="10">octubre</month>
+							<month type="11">novembre</month>
+							<month type="12">desembre</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">dg.</day>
+							<day type="mon">dl.</day>
+							<day type="tue">dt.</day>
+							<day type="wed">dc.</day>
+							<day type="thu">dj.</day>
+							<day type="fri">dv.</day>
+							<day type="sat">ds.</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">diumenge</day>
+							<day type="mon">dilluns</day>
+							<day type="tue">dimarts</day>
+							<day type="wed">dimecres</day>
+							<day type="thu">dijous</day>
+							<day type="fri">divendres</day>
+							<day type="sat">dissabte</day>
+						</dayWidth>
+					</dayContext>
+				</days>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

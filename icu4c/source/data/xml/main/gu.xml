@@ -3,7 +3,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="gu" /> 
 	</identity>
 	<localeDisplayNames>
@@ -29,20 +29,24 @@
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">જાન્યુ</month>
-					<month type="2">ફેબ્રુ</month>
-					<month type="3">માર્ચ</month>
-					<month type="4">એપ્રિલ</month>
-					<month type="5">મે</month>
-					<month type="6">જૂન</month>
-					<month type="7">જુલાઈ</month>
-					<month type="8">ઑગસ્ટ</month>
-					<month type="9">સપ્ટે</month>
-					<month type="10">ઑક્ટો</month>
-					<month type="11">નવે</month>
-					<month type="12">ડિસે</month>
-				</monthNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">જાન્યુ</month>
+							<month type="2">ફેબ્રુ</month>
+							<month type="3">માર્ચ</month>
+							<month type="4">એપ્રિલ</month>
+							<month type="5">મે</month>
+							<month type="6">જૂન</month>
+							<month type="7">જુલાઈ</month>
+							<month type="8">ઑગસ્ટ</month>
+							<month type="9">સપ્ટે</month>
+							<month type="10">ઑક્ટો</month>
+							<month type="11">નવે</month>
+							<month type="12">ડિસે</month>
+						</monthWidth>
+					</monthContext>
+				</months>
 			</calendar>
 		</calendars>
 	</dates>

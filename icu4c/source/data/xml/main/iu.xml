@@ -3,7 +3,7 @@
 <ldml draft="true">
 	<identity>
 		<version number="x0.1"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="iu" /> 
 	</identity>
 	<localeDisplayNames>
@@ -17,52 +17,60 @@
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">ᔭᓐᓄᐊᓕ</month>
-					<month type="2">ᕕᕝᕗᐊᓕ</month>
-					<month type="3">ᒫᑦᓯ</month>
-					<month type="4">ᐊᐃᑉᐳᓗ</month>
-					<month type="5">ᒪᐃ</month>
-					<month type="6">ᔫᓂ</month>
-					<month type="7">ᔪᓚᐃ</month>
-					<month type="8">ᐊᐅᒡᒍᓯ</month>
-					<month type="9">ᓰᑦᑏᕝᕙ</month>
-					<month type="10">ᐆᑦᑑᕝᕙ</month>
-					<month type="11">ᓅᕙᐃᕝᕙ</month>
-					<month type="12">ᑏᓰᕝᕙ</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">ᔭᓐᓄᐊᓕ</month>
-					<month type="2">ᕕᕝᕗᐊᓕ</month>
-					<month type="3">ᒫᑦᓯ</month>
-					<month type="4">ᐊᐃᑉᐳᓗ</month>
-					<month type="5">ᒪᐃ</month>
-					<month type="6">ᔫᓂ</month>
-					<month type="7">ᔪᓚᐃ</month>
-					<month type="8">ᐊᐅᒡᒍᓯ</month>
-					<month type="9">ᓰᑦᑏᕝᕙ</month>
-					<month type="10">ᐆᑦᑑᕝᕙ</month>
-					<month type="11">ᓅᕙᐃᕝᕙ</month>
-					<month type="12">ᑏᓰᕝᕙ</month>
-				</monthNames>
-				<dayNames context="format" width="abbreviated" >
-					<day type="sun">ᓈᑦᓰᖑᔭ</day>
-					<day type="mon">ᓇᒡᒐᔾᔭᐅ</day>
-					<day type="tue">ᓇᒡᒐᔾᔭᐅᓕᖅᑭ</day>
-					<day type="wed">ᐱᖓᑦᓯᖅ</day>
-					<day type="thu">ᓯᑕᒻᒥᖅ</day>
-					<day type="fri">ᑕᓪᓕᕐᒥᖅ</day>
-					<day type="sat">ᓈᑦᓰᖑᔭᓕᖅᕿ</day>
-				</dayNames>
-				<dayNames context="format" width="wide" >
-					<day type="sun">ᓈᑦᓰᖑᔭ</day>
-					<day type="mon">ᓇᒡᒐᔾᔭᐅ</day>
-					<day type="tue">ᓇᒡᒐᔾᔭᐅᓕᖅᑭ</day>
-					<day type="wed">ᐱᖓᑦᓯᖅ</day>
-					<day type="thu">ᓯᑕᒻᒥᖅ</day>
-					<day type="fri">ᑕᓪᓕᕐᒥᖅ</day>
-					<day type="sat">ᓈᑦᓰᖑᔭᓕᖅᕿ</day>
-				</dayNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">ᔭᓐᓄᐊᓕ</month>
+							<month type="2">ᕕᕝᕗᐊᓕ</month>
+							<month type="3">ᒫᑦᓯ</month>
+							<month type="4">ᐊᐃᑉᐳᓗ</month>
+							<month type="5">ᒪᐃ</month>
+							<month type="6">ᔫᓂ</month>
+							<month type="7">ᔪᓚᐃ</month>
+							<month type="8">ᐊᐅᒡᒍᓯ</month>
+							<month type="9">ᓰᑦᑏᕝᕙ</month>
+							<month type="10">ᐆᑦᑑᕝᕙ</month>
+							<month type="11">ᓅᕙᐃᕝᕙ</month>
+							<month type="12">ᑏᓰᕝᕙ</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">ᔭᓐᓄᐊᓕ</month>
+							<month type="2">ᕕᕝᕗᐊᓕ</month>
+							<month type="3">ᒫᑦᓯ</month>
+							<month type="4">ᐊᐃᑉᐳᓗ</month>
+							<month type="5">ᒪᐃ</month>
+							<month type="6">ᔫᓂ</month>
+							<month type="7">ᔪᓚᐃ</month>
+							<month type="8">ᐊᐅᒡᒍᓯ</month>
+							<month type="9">ᓰᑦᑏᕝᕙ</month>
+							<month type="10">ᐆᑦᑑᕝᕙ</month>
+							<month type="11">ᓅᕙᐃᕝᕙ</month>
+							<month type="12">ᑏᓰᕝᕙ</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">ᓈᑦᓰᖑᔭ</day>
+							<day type="mon">ᓇᒡᒐᔾᔭᐅ</day>
+							<day type="tue">ᓇᒡᒐᔾᔭᐅᓕᖅᑭ</day>
+							<day type="wed">ᐱᖓᑦᓯᖅ</day>
+							<day type="thu">ᓯᑕᒻᒥᖅ</day>
+							<day type="fri">ᑕᓪᓕᕐᒥᖅ</day>
+							<day type="sat">ᓈᑦᓰᖑᔭᓕᖅᕿ</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">ᓈᑦᓰᖑᔭ</day>
+							<day type="mon">ᓇᒡᒐᔾᔭᐅ</day>
+							<day type="tue">ᓇᒡᒐᔾᔭᐅᓕᖅᑭ</day>
+							<day type="wed">ᐱᖓᑦᓯᖅ</day>
+							<day type="thu">ᓯᑕᒻᒥᖅ</day>
+							<day type="fri">ᑕᓪᓕᕐᒥᖅ</day>
+							<day type="sat">ᓈᑦᓰᖑᔭᓕᖅᕿ</day>
+						</dayWidth>
+					</dayContext>
+				</days>
 			</calendar>
 		</calendars>
 	</dates>

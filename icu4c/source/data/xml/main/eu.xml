@@ -3,7 +3,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="eu" /> 
 	</identity>
 	<localeDisplayNames>
@@ -128,52 +128,60 @@
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">urt</month>
-					<month type="2">ots</month>
-					<month type="3">mar</month>
-					<month type="4">api</month>
-					<month type="5">mai</month>
-					<month type="6">eka</month>
-					<month type="7">uzt</month>
-					<month type="8">abu</month>
-					<month type="9">ira</month>
-					<month type="10">urr</month>
-					<month type="11">aza</month>
-					<month type="12">abe</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">urtarrila</month>
-					<month type="2">otsaila</month>
-					<month type="3">martxoa</month>
-					<month type="4">apirila</month>
-					<month type="5">maiatza</month>
-					<month type="6">ekaina</month>
-					<month type="7">uztaila</month>
-					<month type="8">abuztua</month>
-					<month type="9">iraila</month>
-					<month type="10">urria</month>
-					<month type="11">azaroa</month>
-					<month type="12">abendua</month>
-				</monthNames>
-				<dayNames context="format" width="abbreviated" >
-					<day type="sun">ig</day>
-					<day type="mon">al</day>
-					<day type="tue">as</day>
-					<day type="wed">az</day>
-					<day type="thu">og</day>
-					<day type="fri">or</day>
-					<day type="sat">lr</day>
-				</dayNames>
-				<dayNames context="format" width="wide" >
-					<day type="sun">igandea</day>
-					<day type="mon">astelehena</day>
-					<day type="tue">asteartea</day>
-					<day type="wed">asteazkena</day>
-					<day type="thu">osteguna</day>
-					<day type="fri">ostirala</day>
-					<day type="sat">larunbata</day>
-				</dayNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">urt</month>
+							<month type="2">ots</month>
+							<month type="3">mar</month>
+							<month type="4">api</month>
+							<month type="5">mai</month>
+							<month type="6">eka</month>
+							<month type="7">uzt</month>
+							<month type="8">abu</month>
+							<month type="9">ira</month>
+							<month type="10">urr</month>
+							<month type="11">aza</month>
+							<month type="12">abe</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">urtarrila</month>
+							<month type="2">otsaila</month>
+							<month type="3">martxoa</month>
+							<month type="4">apirila</month>
+							<month type="5">maiatza</month>
+							<month type="6">ekaina</month>
+							<month type="7">uztaila</month>
+							<month type="8">abuztua</month>
+							<month type="9">iraila</month>
+							<month type="10">urria</month>
+							<month type="11">azaroa</month>
+							<month type="12">abendua</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">ig</day>
+							<day type="mon">al</day>
+							<day type="tue">as</day>
+							<day type="wed">az</day>
+							<day type="thu">og</day>
+							<day type="fri">or</day>
+							<day type="sat">lr</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">igandea</day>
+							<day type="mon">astelehena</day>
+							<day type="tue">asteartea</day>
+							<day type="wed">asteazkena</day>
+							<day type="thu">osteguna</day>
+							<day type="fri">ostirala</day>
+							<day type="sat">larunbata</day>
+						</dayWidth>
+					</dayContext>
+				</days>
 			</calendar>
 		</calendars>
 	</dates>

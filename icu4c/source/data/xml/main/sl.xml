@@ -3,7 +3,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="sl" /> 
 	</identity>
 	<localeDisplayNames>
@@ -290,52 +290,60 @@
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">jan</month>
-					<month type="2">feb</month>
-					<month type="3">mar</month>
-					<month type="4">apr</month>
-					<month type="5">maj</month>
-					<month type="6">jun</month>
-					<month type="7">jul</month>
-					<month type="8">avg</month>
-					<month type="9">sep</month>
-					<month type="10">okt</month>
-					<month type="11">nov</month>
-					<month type="12">dec</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">januar</month>
-					<month type="2">februar</month>
-					<month type="3">marec</month>
-					<month type="4">april</month>
-					<month type="5">maj</month>
-					<month type="6">junij</month>
-					<month type="7">julij</month>
-					<month type="8">avgust</month>
-					<month type="9">september</month>
-					<month type="10">oktober</month>
-					<month type="11">november</month>
-					<month type="12">december</month>
-				</monthNames>
-				<dayNames context="format" width="abbreviated" >
-					<day type="sun">ned</day>
-					<day type="mon">pon</day>
-					<day type="tue">tor</day>
-					<day type="wed">sre</day>
-					<day type="thu">čet</day>
-					<day type="fri">pet</day>
-					<day type="sat">sob</day>
-				</dayNames>
-				<dayNames context="format" width="wide" >
-					<day type="sun">nedelja</day>
-					<day type="mon">ponedeljek</day>
-					<day type="tue">torek</day>
-					<day type="wed">sreda</day>
-					<day type="thu">četrtek</day>
-					<day type="fri">petek</day>
-					<day type="sat">sobota</day>
-				</dayNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">jan</month>
+							<month type="2">feb</month>
+							<month type="3">mar</month>
+							<month type="4">apr</month>
+							<month type="5">maj</month>
+							<month type="6">jun</month>
+							<month type="7">jul</month>
+							<month type="8">avg</month>
+							<month type="9">sep</month>
+							<month type="10">okt</month>
+							<month type="11">nov</month>
+							<month type="12">dec</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">januar</month>
+							<month type="2">februar</month>
+							<month type="3">marec</month>
+							<month type="4">april</month>
+							<month type="5">maj</month>
+							<month type="6">junij</month>
+							<month type="7">julij</month>
+							<month type="8">avgust</month>
+							<month type="9">september</month>
+							<month type="10">oktober</month>
+							<month type="11">november</month>
+							<month type="12">december</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">ned</day>
+							<day type="mon">pon</day>
+							<day type="tue">tor</day>
+							<day type="wed">sre</day>
+							<day type="thu">čet</day>
+							<day type="fri">pet</day>
+							<day type="sat">sob</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">nedelja</day>
+							<day type="mon">ponedeljek</day>
+							<day type="tue">torek</day>
+							<day type="wed">sreda</day>
+							<day type="thu">četrtek</day>
+							<day type="fri">petek</day>
+							<day type="sat">sobota</day>
+						</dayWidth>
+					</dayContext>
+				</days>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

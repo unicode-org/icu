@@ -3,7 +3,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="sv" /> 
 	</identity>
 	<localeDisplayNames>
@@ -663,64 +663,72 @@
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">jan</month>
-					<month type="2">feb</month>
-					<month type="3">mar</month>
-					<month type="4">apr</month>
-					<month type="5">maj</month>
-					<month type="6">jun</month>
-					<month type="7">jul</month>
-					<month type="8">aug</month>
-					<month type="9">sep</month>
-					<month type="10">okt</month>
-					<month type="11">nov</month>
-					<month type="12">dec</month>
-				</monthNames>
-				<monthNames context="format" width="narrow">
-					<month type="1">JFMAMJJASOND</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">januari</month>
-					<month type="2">februari</month>
-					<month type="3">mars</month>
-					<month type="4">april</month>
-					<month type="5">maj</month>
-					<month type="6">juni</month>
-					<month type="7">juli</month>
-					<month type="8">augusti</month>
-					<month type="9">september</month>
-					<month type="10">oktober</month>
-					<month type="11">november</month>
-					<month type="12">december</month>
-				</monthNames>
-				<dayNames context="format" width="abbreviated" >
-					<day type="sun">sö</day>
-					<day type="mon">må</day>
-					<day type="tue">ti</day>
-					<day type="wed">on</day>
-					<day type="thu">to</day>
-					<day type="fri">fr</day>
-					<day type="sat">lö</day>
-				</dayNames>
-				<dayNames context="format" width="narrow" >
-					<day type="sun">S</day>
-					<day type="mon">M</day>
-					<day type="tue">T</day>
-					<day type="wed">O</day>
-					<day type="thu">T</day>
-					<day type="fri">F</day>
-					<day type="sat">L</day>
-				</dayNames>
-				<dayNames context="format" width="wide" >
-					<day type="sun">söndag</day>
-					<day type="mon">måndag</day>
-					<day type="tue">tisdag</day>
-					<day type="wed">onsdag</day>
-					<day type="thu">torsdag</day>
-					<day type="fri">fredag</day>
-					<day type="sat">lördag</day>
-				</dayNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">jan</month>
+							<month type="2">feb</month>
+							<month type="3">mar</month>
+							<month type="4">apr</month>
+							<month type="5">maj</month>
+							<month type="6">jun</month>
+							<month type="7">jul</month>
+							<month type="8">aug</month>
+							<month type="9">sep</month>
+							<month type="10">okt</month>
+							<month type="11">nov</month>
+							<month type="12">dec</month>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">JFMAMJJASOND</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">januari</month>
+							<month type="2">februari</month>
+							<month type="3">mars</month>
+							<month type="4">april</month>
+							<month type="5">maj</month>
+							<month type="6">juni</month>
+							<month type="7">juli</month>
+							<month type="8">augusti</month>
+							<month type="9">september</month>
+							<month type="10">oktober</month>
+							<month type="11">november</month>
+							<month type="12">december</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">sö</day>
+							<day type="mon">må</day>
+							<day type="tue">ti</day>
+							<day type="wed">on</day>
+							<day type="thu">to</day>
+							<day type="fri">fr</day>
+							<day type="sat">lö</day>
+						</dayWidth>
+						<dayWidth type="narrow">
+							<day type="sun">S</day>
+							<day type="mon">M</day>
+							<day type="tue">T</day>
+							<day type="wed">O</day>
+							<day type="thu">T</day>
+							<day type="fri">F</day>
+							<day type="sat">L</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">söndag</day>
+							<day type="mon">måndag</day>
+							<day type="tue">tisdag</day>
+							<day type="wed">onsdag</day>
+							<day type="thu">torsdag</day>
+							<day type="fri">fredag</day>
+							<day type="sat">lördag</day>
+						</dayWidth>
+					</dayContext>
+				</days>
 				<am>fm</am>
 				<pm>em</pm>
 				<dateFormats>

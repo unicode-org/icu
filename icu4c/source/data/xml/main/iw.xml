@@ -3,7 +3,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="iw" /> 
 	</identity>
 	<localeDisplayNames>
@@ -288,112 +288,128 @@
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
 		<calendars>
 			<calendar type="arabic">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">מוחרם</month>
-					<month type="2">ספר</month>
-					<month type="3">רביע אל-אוואל</month>
-					<month type="4">רביע אל-תני</month>
-					<month type="5">ג'ומדה אל-אוואל</month>
-					<month type="6">ג'ומדה אל-תני</month>
-					<month type="7">רג'אב</month>
-					<month type="8">שעבאן</month>
-					<month type="9">ראמדן</month>
-					<month type="10">שוואל</month>
-					<month type="11">זו אל-QI'DAH</month>
-					<month type="12">זו אל-חיג'ה</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">מוחרם</month>
-					<month type="2">ספר</month>
-					<month type="3">רביע אל-אוואל</month>
-					<month type="4">רביע אל-תני</month>
-					<month type="5">ג'ומדה אל-אוואל</month>
-					<month type="6">ג'ומדה אל-תני</month>
-					<month type="7">רג'אב</month>
-					<month type="8">שעבאן</month>
-					<month type="9">ראמדן</month>
-					<month type="10">שוואל</month>
-					<month type="11">זו אל-QI'DAH</month>
-					<month type="12">זו אל-חיג'ה</month>
-				</monthNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">מוחרם</month>
+							<month type="2">ספר</month>
+							<month type="3">רביע אל-אוואל</month>
+							<month type="4">רביע אל-תני</month>
+							<month type="5">ג'ומדה אל-אוואל</month>
+							<month type="6">ג'ומדה אל-תני</month>
+							<month type="7">רג'אב</month>
+							<month type="8">שעבאן</month>
+							<month type="9">ראמדן</month>
+							<month type="10">שוואל</month>
+							<month type="11">זו אל-QI'DAH</month>
+							<month type="12">זו אל-חיג'ה</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">מוחרם</month>
+							<month type="2">ספר</month>
+							<month type="3">רביע אל-אוואל</month>
+							<month type="4">רביע אל-תני</month>
+							<month type="5">ג'ומדה אל-אוואל</month>
+							<month type="6">ג'ומדה אל-תני</month>
+							<month type="7">רג'אב</month>
+							<month type="8">שעבאן</month>
+							<month type="9">ראמדן</month>
+							<month type="10">שוואל</month>
+							<month type="11">זו אל-QI'DAH</month>
+							<month type="12">זו אל-חיג'ה</month>
+						</monthWidth>
+					</monthContext>
+				</months>
 			</calendar>
 			<calendar type="arabic-civil">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">מוחרם</month>
-					<month type="2">ספר</month>
-					<month type="3">רביע אל-אוואל</month>
-					<month type="4">רביע אל-תני</month>
-					<month type="5">ג'ומדה אל-אוואל</month>
-					<month type="6">ג'ומדה אל-תני</month>
-					<month type="7">רג'אב</month>
-					<month type="8">שעבאן</month>
-					<month type="9">ראמדן</month>
-					<month type="10">שוואל</month>
-					<month type="11">זו אל-QI'DAH</month>
-					<month type="12">זו אל-חיג'ה</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">מוחרם</month>
-					<month type="2">ספר</month>
-					<month type="3">רביע אל-אוואל</month>
-					<month type="4">רביע אל-תני</month>
-					<month type="5">ג'ומדה אל-אוואל</month>
-					<month type="6">ג'ומדה אל-תני</month>
-					<month type="7">רג'אב</month>
-					<month type="8">שעבאן</month>
-					<month type="9">ראמדן</month>
-					<month type="10">שוואל</month>
-					<month type="11">זו אל-QI'DAH</month>
-					<month type="12">זו אל-חיג'ה</month>
-				</monthNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">מוחרם</month>
+							<month type="2">ספר</month>
+							<month type="3">רביע אל-אוואל</month>
+							<month type="4">רביע אל-תני</month>
+							<month type="5">ג'ומדה אל-אוואל</month>
+							<month type="6">ג'ומדה אל-תני</month>
+							<month type="7">רג'אב</month>
+							<month type="8">שעבאן</month>
+							<month type="9">ראמדן</month>
+							<month type="10">שוואל</month>
+							<month type="11">זו אל-QI'DAH</month>
+							<month type="12">זו אל-חיג'ה</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">מוחרם</month>
+							<month type="2">ספר</month>
+							<month type="3">רביע אל-אוואל</month>
+							<month type="4">רביע אל-תני</month>
+							<month type="5">ג'ומדה אל-אוואל</month>
+							<month type="6">ג'ומדה אל-תני</month>
+							<month type="7">רג'אב</month>
+							<month type="8">שעבאן</month>
+							<month type="9">ראמדן</month>
+							<month type="10">שוואל</month>
+							<month type="11">זו אל-QI'DAH</month>
+							<month type="12">זו אל-חיג'ה</month>
+						</monthWidth>
+					</monthContext>
+				</months>
 			</calendar>
 			<calendar type="gregorian">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">ינו</month>
-					<month type="2">פבר</month>
-					<month type="3">מרץ</month>
-					<month type="4">אפר</month>
-					<month type="5">מאי</month>
-					<month type="6">יונ</month>
-					<month type="7">יול</month>
-					<month type="8">אוג</month>
-					<month type="9">ספט</month>
-					<month type="10">אוק</month>
-					<month type="11">נוב</month>
-					<month type="12">דצמ</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">ינואר</month>
-					<month type="2">פברואר</month>
-					<month type="3">מרץ</month>
-					<month type="4">אפריל</month>
-					<month type="5">מאי</month>
-					<month type="6">יוני</month>
-					<month type="7">יולי</month>
-					<month type="8">אוגוסט</month>
-					<month type="9">ספטמבר</month>
-					<month type="10">אוקטובר</month>
-					<month type="11">נובמבר</month>
-					<month type="12">דצמבר</month>
-				</monthNames>
-				<dayNames context="format" width="abbreviated" >
-					<day type="sun">א</day>
-					<day type="mon">ב</day>
-					<day type="tue">ג</day>
-					<day type="wed">ד</day>
-					<day type="thu">ה</day>
-					<day type="fri">ו</day>
-					<day type="sat">ש</day>
-				</dayNames>
-				<dayNames context="format" width="wide" >
-					<day type="sun">יום ראשון</day>
-					<day type="mon">יום שני</day>
-					<day type="tue">יום שלישי</day>
-					<day type="wed">יום רביעי</day>
-					<day type="thu">יום חמישי</day>
-					<day type="fri">יום שישי</day>
-					<day type="sat">שבת</day>
-				</dayNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">ינו</month>
+							<month type="2">פבר</month>
+							<month type="3">מרץ</month>
+							<month type="4">אפר</month>
+							<month type="5">מאי</month>
+							<month type="6">יונ</month>
+							<month type="7">יול</month>
+							<month type="8">אוג</month>
+							<month type="9">ספט</month>
+							<month type="10">אוק</month>
+							<month type="11">נוב</month>
+							<month type="12">דצמ</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">ינואר</month>
+							<month type="2">פברואר</month>
+							<month type="3">מרץ</month>
+							<month type="4">אפריל</month>
+							<month type="5">מאי</month>
+							<month type="6">יוני</month>
+							<month type="7">יולי</month>
+							<month type="8">אוגוסט</month>
+							<month type="9">ספטמבר</month>
+							<month type="10">אוקטובר</month>
+							<month type="11">נובמבר</month>
+							<month type="12">דצמבר</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">א</day>
+							<day type="mon">ב</day>
+							<day type="tue">ג</day>
+							<day type="wed">ד</day>
+							<day type="thu">ה</day>
+							<day type="fri">ו</day>
+							<day type="sat">ש</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">יום ראשון</day>
+							<day type="mon">יום שני</day>
+							<day type="tue">יום שלישי</day>
+							<day type="wed">יום רביעי</day>
+							<day type="thu">יום חמישי</day>
+							<day type="fri">יום שישי</day>
+							<day type="sat">שבת</day>
+						</dayWidth>
+					</dayContext>
+				</days>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">
@@ -449,36 +465,40 @@
 				</dateTimeFormats>
 			</calendar>
 			<calendar type="hebrew">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">תשרי</month>
-					<month type="2">חשון</month>
-					<month type="3">כסלו</month>
-					<month type="4">טבת</month>
-					<month type="5">שבט</month>
-					<month type="6">אדר ראשון</month>
-					<month type="7">אדר שני</month>
-					<month type="8">ניסן</month>
-					<month type="9">אייר</month>
-					<month type="10">סיון</month>
-					<month type="11">תמוז</month>
-					<month type="12">אב</month>
-					<month type="13">אלול</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">תשרי</month>
-					<month type="2">חשון</month>
-					<month type="3">כסלו</month>
-					<month type="4">טבת</month>
-					<month type="5">שבט</month>
-					<month type="6">אדר ראשון</month>
-					<month type="7">אדר שני</month>
-					<month type="8">ניסן</month>
-					<month type="9">אייר</month>
-					<month type="10">סיון</month>
-					<month type="11">תמוז</month>
-					<month type="12">אב</month>
-					<month type="13">אלול</month>
-				</monthNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">תשרי</month>
+							<month type="2">חשון</month>
+							<month type="3">כסלו</month>
+							<month type="4">טבת</month>
+							<month type="5">שבט</month>
+							<month type="6">אדר ראשון</month>
+							<month type="7">אדר שני</month>
+							<month type="8">ניסן</month>
+							<month type="9">אייר</month>
+							<month type="10">סיון</month>
+							<month type="11">תמוז</month>
+							<month type="12">אב</month>
+							<month type="13">אלול</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">תשרי</month>
+							<month type="2">חשון</month>
+							<month type="3">כסלו</month>
+							<month type="4">טבת</month>
+							<month type="5">שבט</month>
+							<month type="6">אדר ראשון</month>
+							<month type="7">אדר שני</month>
+							<month type="8">ניסן</month>
+							<month type="9">אייר</month>
+							<month type="10">סיון</month>
+							<month type="11">תמוז</month>
+							<month type="12">אב</month>
+							<month type="13">אלול</month>
+						</monthWidth>
+					</monthContext>
+				</months>
 			</calendar>
 		</calendars>
 	</dates>

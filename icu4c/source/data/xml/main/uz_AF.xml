@@ -3,7 +3,7 @@
 <ldml draft="true">
 	<identity>
 		<version number="x0.1"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="uz" /> 
 		<territory type="AF" /> 
 	</identity>
@@ -23,52 +23,60 @@
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">جنو</month>
-					<month type="2">فبر</month>
-					<month type="3">مار</month>
-					<month type="4">اپر</month>
-					<month type="5">مـی</month>
-					<month type="6">جون</month>
-					<month type="7">جول</month>
-					<month type="8">اگس</month>
-					<month type="9">سپت</month>
-					<month type="10">اکت</month>
-					<month type="11">نوم</month>
-					<month type="12">دسم</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">جنوری</month>
-					<month type="2">فبروری</month>
-					<month type="3">مارچ</month>
-					<month type="4">اپریل</month>
-					<month type="5">می</month>
-					<month type="6">جون</month>
-					<month type="7">جولای</month>
-					<month type="8">اگست</month>
-					<month type="9">سپتمبر</month>
-					<month type="10">اکتوبر</month>
-					<month type="11">نومبر</month>
-					<month type="12">دسمبر</month>
-				</monthNames>
-				<dayNames context="format" width="abbreviated" >
-					<day type="sun">ی.</day>
-					<day type="mon">د.</day>
-					<day type="tue">س.</day>
-					<day type="wed">چ.</day>
-					<day type="thu">پ.</day>
-					<day type="fri">ج.</day>
-					<day type="sat">ش.</day>
-				</dayNames>
-				<dayNames context="format" width="wide" >
-					<day type="sun">یکشنبه</day>
-					<day type="mon">دوشنبه</day>
-					<day type="tue">سه‌شنبه</day>
-					<day type="wed">چهارشنبه</day>
-					<day type="thu">پنجشنبه</day>
-					<day type="fri">جمعه</day>
-					<day type="sat">شنبه</day>
-				</dayNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">جنو</month>
+							<month type="2">فبر</month>
+							<month type="3">مار</month>
+							<month type="4">اپر</month>
+							<month type="5">مـی</month>
+							<month type="6">جون</month>
+							<month type="7">جول</month>
+							<month type="8">اگس</month>
+							<month type="9">سپت</month>
+							<month type="10">اکت</month>
+							<month type="11">نوم</month>
+							<month type="12">دسم</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">جنوری</month>
+							<month type="2">فبروری</month>
+							<month type="3">مارچ</month>
+							<month type="4">اپریل</month>
+							<month type="5">می</month>
+							<month type="6">جون</month>
+							<month type="7">جولای</month>
+							<month type="8">اگست</month>
+							<month type="9">سپتمبر</month>
+							<month type="10">اکتوبر</month>
+							<month type="11">نومبر</month>
+							<month type="12">دسمبر</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">ی.</day>
+							<day type="mon">د.</day>
+							<day type="tue">س.</day>
+							<day type="wed">چ.</day>
+							<day type="thu">پ.</day>
+							<day type="fri">ج.</day>
+							<day type="sat">ش.</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">یکشنبه</day>
+							<day type="mon">دوشنبه</day>
+							<day type="tue">سه‌شنبه</day>
+							<day type="wed">چهارشنبه</day>
+							<day type="thu">پنجشنبه</day>
+							<day type="fri">جمعه</day>
+							<day type="sat">شنبه</day>
+						</dayWidth>
+					</dayContext>
+				</days>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

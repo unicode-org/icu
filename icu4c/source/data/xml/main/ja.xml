@@ -3,7 +3,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="ja" /> 
 	</identity>
 	<localeDisplayNames>
@@ -526,47 +526,55 @@
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames context="format" width="wide">
-					<month type="1">1月</month>
-					<month type="2">2月</month>
-					<month type="3">3月</month>
-					<month type="4">4月</month>
-					<month type="5">5月</month>
-					<month type="6">6月</month>
-					<month type="7">7月</month>
-					<month type="8">8月</month>
-					<month type="9">9月</month>
-					<month type="10">10月</month>
-					<month type="11">11月</month>
-					<month type="12">12月</month>
-				</monthNames>
-				<dayNames context="format" width="abbreviated" >
-					<day type="sun">日</day>
-					<day type="mon">月</day>
-					<day type="tue">火</day>
-					<day type="wed">水</day>
-					<day type="thu">木</day>
-					<day type="fri">金</day>
-					<day type="sat">土</day>
-				</dayNames>
-				<dayNames context="format" width="narrow" >
-					<day type="sun">日</day>
-					<day type="mon">月</day>
-					<day type="tue">火</day>
-					<day type="wed">水</day>
-					<day type="thu">木</day>
-					<day type="fri">金</day>
-					<day type="sat">土</day>
-				</dayNames>
-				<dayNames context="format" width="wide" >
-					<day type="sun">日曜日</day>
-					<day type="mon">月曜日</day>
-					<day type="tue">火曜日</day>
-					<day type="wed">水曜日</day>
-					<day type="thu">木曜日</day>
-					<day type="fri">金曜日</day>
-					<day type="sat">土曜日</day>
-				</dayNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="wide">
+							<month type="1">1月</month>
+							<month type="2">2月</month>
+							<month type="3">3月</month>
+							<month type="4">4月</month>
+							<month type="5">5月</month>
+							<month type="6">6月</month>
+							<month type="7">7月</month>
+							<month type="8">8月</month>
+							<month type="9">9月</month>
+							<month type="10">10月</month>
+							<month type="11">11月</month>
+							<month type="12">12月</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">日</day>
+							<day type="mon">月</day>
+							<day type="tue">火</day>
+							<day type="wed">水</day>
+							<day type="thu">木</day>
+							<day type="fri">金</day>
+							<day type="sat">土</day>
+						</dayWidth>
+						<dayWidth type="narrow">
+							<day type="sun">日</day>
+							<day type="mon">月</day>
+							<day type="tue">火</day>
+							<day type="wed">水</day>
+							<day type="thu">木</day>
+							<day type="fri">金</day>
+							<day type="sat">土</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">日曜日</day>
+							<day type="mon">月曜日</day>
+							<day type="tue">火曜日</day>
+							<day type="wed">水曜日</day>
+							<day type="thu">木曜日</day>
+							<day type="fri">金曜日</day>
+							<day type="sat">土曜日</day>
+						</dayWidth>
+					</dayContext>
+				</days>
 				<am>午前</am>
 				<pm>午後</pm>
 				<dateFormats>

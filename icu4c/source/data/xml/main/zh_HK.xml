@@ -3,7 +3,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="zh" /> 
 		<territory type="HK" /> 
 	</identity>
@@ -380,29 +380,37 @@
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">1月</month>
-					<month type="2">2月</month>
-					<month type="3">3月</month>
-					<month type="4">4月</month>
-					<month type="5">5月</month>
-					<month type="6">6月</month>
-					<month type="7">7月</month>
-					<month type="8">8月</month>
-					<month type="9">9月</month>
-					<month type="10">10月</month>
-					<month type="11">11月</month>
-					<month type="12">12月</month>
-				</monthNames>
-				<dayNames context="format" width="abbreviated" >
-					<day type="sun">日</day>
-					<day type="mon">一</day>
-					<day type="tue">二</day>
-					<day type="wed">三</day>
-					<day type="thu">四</day>
-					<day type="fri">五</day>
-					<day type="sat">六</day>
-				</dayNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">1月</month>
+							<month type="2">2月</month>
+							<month type="3">3月</month>
+							<month type="4">4月</month>
+							<month type="5">5月</month>
+							<month type="6">6月</month>
+							<month type="7">7月</month>
+							<month type="8">8月</month>
+							<month type="9">9月</month>
+							<month type="10">10月</month>
+							<month type="11">11月</month>
+							<month type="12">12月</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">日</day>
+							<day type="mon">一</day>
+							<day type="tue">二</day>
+							<day type="wed">三</day>
+							<day type="thu">四</day>
+							<day type="fri">五</day>
+							<day type="sat">六</day>
+						</dayWidth>
+					</dayContext>
+				</days>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

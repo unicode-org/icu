@@ -3,7 +3,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="pl" /> 
 	</identity>
 	<localeDisplayNames>
@@ -289,52 +289,60 @@
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">sty</month>
-					<month type="2">lut</month>
-					<month type="3">mar</month>
-					<month type="4">kwi</month>
-					<month type="5">maj</month>
-					<month type="6">cze</month>
-					<month type="7">lip</month>
-					<month type="8">sie</month>
-					<month type="9">wrz</month>
-					<month type="10">paź</month>
-					<month type="11">lis</month>
-					<month type="12">gru</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">styczeń</month>
-					<month type="2">luty</month>
-					<month type="3">marzec</month>
-					<month type="4">kwiecień</month>
-					<month type="5">maj</month>
-					<month type="6">czerwiec</month>
-					<month type="7">lipiec</month>
-					<month type="8">sierpień</month>
-					<month type="9">wrzesień</month>
-					<month type="10">październik</month>
-					<month type="11">listopad</month>
-					<month type="12">grudzień</month>
-				</monthNames>
-				<dayNames context="format" width="abbreviated" >
-					<day type="sun">N</day>
-					<day type="mon">Pn</day>
-					<day type="tue">Wt</day>
-					<day type="wed">Śr</day>
-					<day type="thu">Cz</day>
-					<day type="fri">Pt</day>
-					<day type="sat">So</day>
-				</dayNames>
-				<dayNames context="format" width="wide" >
-					<day type="sun">niedziela</day>
-					<day type="mon">poniedziałek</day>
-					<day type="tue">wtorek</day>
-					<day type="wed">środa</day>
-					<day type="thu">czwartek</day>
-					<day type="fri">piątek</day>
-					<day type="sat">sobota</day>
-				</dayNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">sty</month>
+							<month type="2">lut</month>
+							<month type="3">mar</month>
+							<month type="4">kwi</month>
+							<month type="5">maj</month>
+							<month type="6">cze</month>
+							<month type="7">lip</month>
+							<month type="8">sie</month>
+							<month type="9">wrz</month>
+							<month type="10">paź</month>
+							<month type="11">lis</month>
+							<month type="12">gru</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">styczeń</month>
+							<month type="2">luty</month>
+							<month type="3">marzec</month>
+							<month type="4">kwiecień</month>
+							<month type="5">maj</month>
+							<month type="6">czerwiec</month>
+							<month type="7">lipiec</month>
+							<month type="8">sierpień</month>
+							<month type="9">wrzesień</month>
+							<month type="10">październik</month>
+							<month type="11">listopad</month>
+							<month type="12">grudzień</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">N</day>
+							<day type="mon">Pn</day>
+							<day type="tue">Wt</day>
+							<day type="wed">Śr</day>
+							<day type="thu">Cz</day>
+							<day type="fri">Pt</day>
+							<day type="sat">So</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">niedziela</day>
+							<day type="mon">poniedziałek</day>
+							<day type="tue">wtorek</day>
+							<day type="wed">środa</day>
+							<day type="thu">czwartek</day>
+							<day type="fri">piątek</day>
+							<day type="sat">sobota</day>
+						</dayWidth>
+					</dayContext>
+				</days>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">

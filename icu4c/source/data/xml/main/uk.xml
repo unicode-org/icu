@@ -3,7 +3,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="uk" /> 
 	</identity>
 	<localeDisplayNames>
@@ -252,24 +252,28 @@
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<dayNames context="format" width="abbreviated" >
-					<day type="sun">Нд</day>
-					<day type="mon">Пн</day>
-					<day type="tue">Вт</day>
-					<day type="wed">Ср</day>
-					<day type="thu">Чт</day>
-					<day type="fri">Пт</day>
-					<day type="sat">Сб</day>
-				</dayNames>
-				<dayNames context="format" width="wide" >
-					<day type="sun">Неділя</day>
-					<day type="mon">Понеділок</day>
-					<day type="tue">Вівторок</day>
-					<day type="wed">Середа</day>
-					<day type="thu">Четвер</day>
-					<day type="fri">П'ятниця</day>
-					<day type="sat">Субота</day>
-				</dayNames>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">Нд</day>
+							<day type="mon">Пн</day>
+							<day type="tue">Вт</day>
+							<day type="wed">Ср</day>
+							<day type="thu">Чт</day>
+							<day type="fri">Пт</day>
+							<day type="sat">Сб</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">Неділя</day>
+							<day type="mon">Понеділок</day>
+							<day type="tue">Вівторок</day>
+							<day type="wed">Середа</day>
+							<day type="thu">Четвер</day>
+							<day type="fri">П'ятниця</day>
+							<day type="sat">Субота</day>
+						</dayWidth>
+					</dayContext>
+				</days>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">
