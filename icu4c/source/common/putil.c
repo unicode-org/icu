@@ -709,68 +709,6 @@ uprv_digitsAfterDecimal(double x)
 */
 
 /**
- * Auxiliary Windows time zone function.  Attempts to open the given
- * Windows time zone ID as a registry key.  Returns ERROR_SUCCESS if
- * successful.  Caller must close the registry key.  Handles
- * variations in the resource layout in different flavors of Windows.
- *
- * @param hkey output parameter to receive opened registry key
- * @param winid Windows zone ID, e.g., "Pacific", without the
- * " Standard Time" suffix (if any).  Special case "Mexico Standard Time 2"
- * allowed.
- * @param winType Windows flavor (WIN_9X_ME_TYPE, etc.)
- * @return ERROR_SUCCESS upon success
- */
-static LONG openTZRegKey(HKEY *hkey, const char* winid, int winType) {
-    LONG result;
-    char subKeyName[96];
-    char* name;
-    int i;
-
-    uprv_strcpy(subKeyName, TZ_REGKEY[(winType == WIN_9X_ME_TYPE) ? 0 : 1]);
-    name = &subKeyName[strlen(subKeyName)];
-    uprv_strcat(subKeyName, winid);
-    if (winType != WIN_9X_ME_TYPE) {
-        /* Don't modify "Mexico Standard Time 2", which does not occur
-           on WIN_9X_ME_TYPE.  Also, if the type is WIN_NT_TYPE, then
-           in practice this means the GMT key is not followed by
-           " Standard Time", so don't append in that case. */
-        int isMexico2 = (winid[uprv_strlen(winid)- 1] == '2');
-        if (!isMexico2 &&
-            !(winType == WIN_NT_TYPE && uprv_strcmp(winid, "GMT") == 0)) {
-            uprv_strcat(subKeyName, STANDARD_TIME_REGKEY);
-        }
-    }
-    result = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
-                          subKeyName,
-                          0,
-                          KEY_QUERY_VALUE,
-                          hkey);
-
-    if (result != ERROR_SUCCESS) {
-        /* If the primary lookup fails, try to remap the Windows zone
-           ID, according to the remapping table. */
-        for (i=0; ZONE_REMAP[i].winid; ++i) {
-            if (uprv_strcmp(winid, ZONE_REMAP[i].winid) == 0) {
-                uprv_strcpy(name, ZONE_REMAP[i].altwinid + 1);
-                if (*(ZONE_REMAP[i].altwinid) == '+' &&
-                    winType != WIN_9X_ME_TYPE) {
-                    uprv_strcat(subKeyName, STANDARD_TIME_REGKEY);                
-                }
-                result = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
-                                      subKeyName,
-                                      0,
-                                      KEY_QUERY_VALUE,
-                                      hkey);
-                break;
-            }
-        }
-    }
-
-    return result;
-}
-
-/**
  * Layout of the binary registry data under the "TZI" key.
  */
 typedef struct {
@@ -991,6 +929,68 @@ enum {
     WIN_NT_TYPE = 1,
     WIN_2K_XP_TYPE = 2
 };
+
+/**
+ * Auxiliary Windows time zone function.  Attempts to open the given
+ * Windows time zone ID as a registry key.  Returns ERROR_SUCCESS if
+ * successful.  Caller must close the registry key.  Handles
+ * variations in the resource layout in different flavors of Windows.
+ *
+ * @param hkey output parameter to receive opened registry key
+ * @param winid Windows zone ID, e.g., "Pacific", without the
+ * " Standard Time" suffix (if any).  Special case "Mexico Standard Time 2"
+ * allowed.
+ * @param winType Windows flavor (WIN_9X_ME_TYPE, etc.)
+ * @return ERROR_SUCCESS upon success
+ */
+static LONG openTZRegKey(HKEY *hkey, const char* winid, int winType) {
+    LONG result;
+    char subKeyName[96];
+    char* name;
+    int i;
+
+    uprv_strcpy(subKeyName, TZ_REGKEY[(winType == WIN_9X_ME_TYPE) ? 0 : 1]);
+    name = &subKeyName[strlen(subKeyName)];
+    uprv_strcat(subKeyName, winid);
+    if (winType != WIN_9X_ME_TYPE) {
+        /* Don't modify "Mexico Standard Time 2", which does not occur
+           on WIN_9X_ME_TYPE.  Also, if the type is WIN_NT_TYPE, then
+           in practice this means the GMT key is not followed by
+           " Standard Time", so don't append in that case. */
+        int isMexico2 = (winid[uprv_strlen(winid)- 1] == '2');
+        if (!isMexico2 &&
+            !(winType == WIN_NT_TYPE && uprv_strcmp(winid, "GMT") == 0)) {
+            uprv_strcat(subKeyName, STANDARD_TIME_REGKEY);
+        }
+    }
+    result = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
+                          subKeyName,
+                          0,
+                          KEY_QUERY_VALUE,
+                          hkey);
+
+    if (result != ERROR_SUCCESS) {
+        /* If the primary lookup fails, try to remap the Windows zone
+           ID, according to the remapping table. */
+        for (i=0; ZONE_REMAP[i].winid; ++i) {
+            if (uprv_strcmp(winid, ZONE_REMAP[i].winid) == 0) {
+                uprv_strcpy(name, ZONE_REMAP[i].altwinid + 1);
+                if (*(ZONE_REMAP[i].altwinid) == '+' &&
+                    winType != WIN_9X_ME_TYPE) {
+                    uprv_strcat(subKeyName, STANDARD_TIME_REGKEY);                
+                }
+                result = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
+                                      subKeyName,
+                                      0,
+                                      KEY_QUERY_VALUE,
+                                      hkey);
+                break;
+            }
+        }
+    }
+
+    return result;
+}
 
 /**
  * Main Windows time zone detection function.  Returns the Windows
