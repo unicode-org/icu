@@ -480,6 +480,16 @@
 				RelativePath=".\cpputils.h">
 			</File>
 			<File
+				RelativePath=".\unicode\docmain.h">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\filestrm.c">
 			</File>
 			<File
