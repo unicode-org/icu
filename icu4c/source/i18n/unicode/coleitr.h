@@ -306,8 +306,6 @@ private:
 
     friend  class   RuleBasedCollator;
 
-// This is just temporary, for prototyping.
-  friend int32_t ucol_getNextCE(const UCollator *coll, collIterate *source, UErrorCode *status);
 
     static  const   int32_t         UNMAPPEDCHARVALUE;
 

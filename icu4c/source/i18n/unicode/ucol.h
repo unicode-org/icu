@@ -112,13 +112,13 @@ typedef struct collIterate collIterate;
 struct incrementalContext;
 typedef struct incrementalContext incrementalContext;
 
-struct UCollatorNew;
-typedef struct UCollatorNew UCollatorNew;
+struct UCollator;
+typedef struct UCollator UCollator;
 
  /** A collator.
  *  For usage in C programs.
  */
-typedef void* UCollator;
+typedef void* UCollatorNew;
 
     /**
      * UCOL_LESS is returned if source string is compared to be less than target
@@ -200,7 +200,7 @@ typedef enum {
      * For example, "ä" == "ä".
      *
      * UCollationStrength is also used to determine the strength of sort keys 
-     * generated from UCollator objects
+     * generated from UCollatorOld objects
      **/
 /** Possible collation strengths  - all under UColAttributeValue*/
 typedef UColAttributeValue UCollationStrength;
@@ -221,25 +221,22 @@ typedef enum {
 }  UColRuleOption ;
 
 /**
- * Open a UCollator for comparing strings.
- * The UCollator may be used in calls to \Ref{ucol_strcoll}.
+ * Open a UCollatorOld for comparing strings.
+ * The UCollatorOld may be used in calls to \Ref{ucol_strcoll}.
  * @param loc The locale containing the comparison conventions.
  * @param status A pointer to an UErrorCode to receive any errors
  * @return A pointer to a UCollator, or 0 if an error occurred.
  * @see ucol_openRules
  * @stable
  */
+
 U_CAPI UCollator*
 ucol_open(    const    char         *loc,
         UErrorCode      *status);
 
-U_CAPI UCollatorNew*
-ucol_openNew(    const    char         *loc,
-        UErrorCode      *status);
-
 /**
- * Open a UCollator for comparing strings.
- * The UCollator may be used in calls to \Ref{ucol_strcoll}.
+ * Open a UCollatorOld for comparing strings.
+ * The UCollatorOld may be used in calls to \Ref{ucol_strcoll}.
  * @param rules A string describing the collation rules.
  * @param rulesLength The length of rules, or -1 if null-terminated.
  * @param mode The normalization mode; one of UCOL_NO_NORMALIZATION,
@@ -261,21 +258,18 @@ ucol_openRules(    const    UChar        *rules,
 
 /** 
  * Close a UCollator.
- * Once closed, a UCollator should not be used.
- * @param coll The UCollator to close.
+ * Once closed, a UCollatorOld should not be used.
+ * @param coll The UCollatorOld to close.
  * @stable
  */
 U_CAPI void
 ucol_close(UCollator *coll);
 
-U_CAPI void
-ucol_closeNew(UCollatorNew *coll);
-
 /**
  * Compare two strings.
  * The strings will be compared using the normalization mode and options
  * specified in \Ref{ucol_open} or \Ref{ucol_openRules}
- * @param coll The UCollator containing the comparison rules.
+ * @param coll The UCollatorOld containing the comparison rules.
  * @param source The source string.
  * @param sourceLength The length of source, or -1 if null-terminated.
  * @param target The target string.
@@ -287,6 +281,7 @@ ucol_closeNew(UCollatorNew *coll);
  * @see ucol_equal
  * @stable
  */
+
 U_CAPI UCollationResult
 ucol_strcoll(    const    UCollator    *coll,
         const    UChar        *source,
@@ -295,29 +290,9 @@ ucol_strcoll(    const    UCollator    *coll,
         int32_t            targetLength);
 
 /**
- * DO NOT USE THIS API!!! It is the old implementation of ucol_strcoll
- * and is used only for testing purposes.
- * @internal DO NOT USE!!! Will be removed by 1.8 release.
- */
-U_CAPI UCollationResult
-ucol_strcollEx(    const    UCollator    *coll,
-        const    UChar        *source,
-        int32_t            sourceLength,
-        const    UChar        *target,
-        int32_t            targetLength);
-
-/* new version */
-U_CAPI UCollationResult
-ucol_strcollNew(    const    UCollatorNew    *coll,
-        const    UChar        *source,
-        int32_t            sourceLength,
-        const    UChar        *target,
-        int32_t            targetLength);
-
-/**
  * Determine if one string is greater than another.
  * This function is equivalent to \Ref{ucol_strcoll} == UCOL_GREATER
- * @param coll The UCollator containing the comparison rules.
+ * @param coll The UCollatorOld containing the comparison rules.
  * @param source The source string.
  * @param sourceLength The length of source, or -1 if null-terminated.
  * @param target The target string.
@@ -338,7 +313,7 @@ ucol_greater(    const    UCollator    *coll,
 /**
  * Determine if one string is greater than or equal to another.
  * This function is equivalent to \Ref{ucol_strcoll} != UCOL_LESS
- * @param coll The UCollator containing the comparison rules.
+ * @param coll The UCollatorOld containing the comparison rules.
  * @param source The source string.
  * @param sourceLength The length of source, or -1 if null-terminated.
  * @param target The target string.
@@ -359,7 +334,7 @@ ucol_greaterOrEqual(    const    UCollator    *coll,
 /**
  * Compare two strings for equality.
  * This function is equivalent to \Ref{ucol_strcoll} == UCOL_EQUAL
- * @param coll The UCollator containing the comparison rules.
+ * @param coll The UCollatorOld containing the comparison rules.
  * @param source The source string.
  * @param sourceLength The length of source, or -1 if null-terminated.
  * @param target The target string.
@@ -380,7 +355,7 @@ ucol_equal(    const    UCollator    *coll,
 /**
  * Get the collation strength used in a UCollator.
  * The strength influences how strings are compared.
- * @param coll The UCollator to query.
+ * @param coll The UCollatorOld to query.
  * @return The collation strength; one of UCOL_PRIMARY, UCOL_SECONDARY,
  * UCOL_TERTIARY, UCOL_IDENTICAL, UCOL_DEFAULT_STRENGTH
  * @see ucol_setStrength
@@ -397,7 +372,7 @@ ucol_getStrength(const UCollator *coll);
  * .       UCollationResult result;
  * .       UChar *source, *target;
  * .       UErrorCode status = U_ZERO_ERROR;
- * .       UCollator *myCollation = ucol_open("en_US", status);
+ * .       UCollatorOld *myCollation = ucol_open("en_US", status);
  * .       if (U_FAILURE(&status)) return;
  * .       ucol_setStrength(myCollation, UCOL_PRIMARY);
  * .       u_uastrcpy(source, "abc");
@@ -406,7 +381,7 @@ ucol_getStrength(const UCollator *coll);
  * .       // tertiary differences will be ignored
  * .       result = ucol_strcoll(myCollation, source, u_strlen(source), target, u_strlen(target));
  * </pre>
- * @param coll The UCollator to set.
+ * @param coll The UCollatorOld to set.
  * @param strength The desired collation strength; one of UCOL_PRIMARY, 
  * UCOL_SECONDARY, UCOL_TERTIARY, UCOL_IDENTICAL, UCOL_DEFAULT_STRENGTH
  * @see ucol_getStrength
@@ -419,7 +394,7 @@ ucol_setStrength(    UCollator            *coll,
 /**
  * Get the normalization mode used in a UCollator.
  * The normalization mode influences how strings are compared.
- * @param coll The UCollator to query.
+ * @param coll The UCollatorOld to query.
  * @return The normalization mode; one of UCOL_NO_NORMALIZATION, 
  * UCOL_CAN_DECOMP, UCOL_COMPAT_DECOMP, UCOL_CAN_DECOMP_COMPAT_COMP,
  * UCOL_COMPAT_DECOMP_CAN_COMP, UCOL_DEFAULT_NORMALIZATION
@@ -432,7 +407,7 @@ ucol_getNormalization(const UCollator* coll);
 /**
  * Set the normalization mode used in a UCollator.
  * The normalization mode influences how strings are compared.
- * @param coll The UCollator to set.
+ * @param coll The UCollatorOld to set.
  * @param mode The desired normalization mode; one of UCOL_NO_NORMALIZATION,
  * UCOL_CAN_DECOMP, UCOL_COMPAT_DECOMP, UCOL_CAN_DECOMP_COMPAT_COMP, 
  * UCOL_COMPAT_DECOMP_CAN_COMP, UCOL_DEFAULT_NORMALIZATION
@@ -488,7 +463,7 @@ ucol_countAvailable(void);
 /**
  * Get the collation rules from a UCollator.
  * The rules will follow the rule syntax.
- * @param coll The UCollator to query.
+ * @param coll The UCollatorOld to query.
  * @param length 
  * @return The collation rules.
  * @stable
@@ -500,7 +475,7 @@ ucol_getRules(    const    UCollator    *coll,
 /**
  * Get a sort key for a string from a UCollator.
  * Sort keys may be compared using <TT>strcmp</TT>.
- * @param coll The UCollator containing the collation rules.
+ * @param coll The UCollatorOld containing the collation rules.
  * @param source The string to transform.
  * @param sourecLength The length of source, or -1 if null-terminated.
  * @param result A pointer to a buffer to receive the attribute.
@@ -512,42 +487,9 @@ ucol_getRules(    const    UCollator    *coll,
 U_CAPI int32_t
 ucol_getSortKey(const    UCollator    *coll,
         const    UChar        *source,
-        int32_t            sourceLength,
-        uint8_t            *result,
-        int32_t            resultLength);
-
-/**
- * DO NOT USE THIS API!!! It is the old implementation of ucol_getSortKey
- * and is used only for testing purposes.
- * @internal DO NOT USE!!! Will be removed by 1.8 release.
- */
-U_CAPI int32_t
-ucol_getSortKeyEx(const    UCollator    *coll,
-        const    UChar        *source,
         int32_t        sourceLength,
         uint8_t        *result,
         int32_t        resultLength);
-
-/* New version */
-U_CAPI int32_t
-ucol_getSortKeyNew(const    UCollatorNew    *coll,
-        const    UChar        *source,
-        int32_t        sourceLength,
-        uint8_t        *result,
-        int32_t        resultLength);
-
-/**
- * Generate a hash code for a collation key.
- * A hash code is a 32-bit value suitable for use as a key in a hashtable.
- * @param key The collation key.
- * @param keyLength The length of key.
- * @return A hash code for key.
- * @see ucol_getSortKey
- * @deprecated ?  why is hashCode useful for C users?
- */
-U_CAPI int32_t
-ucol_keyHashCode(    const    uint8_t*    key, 
-            int32_t        length);
 
 
 /** The UCollationElements struct.
@@ -581,7 +523,7 @@ typedef struct UCollationElements UCollationElements;
  * .      UChar *s;
  * .      t_int32 order, primaryOrder;
  * .      UCollationElements *c;
- * .      UCollator *coll;
+ * .      UCollatorOld *coll;
  * .      UErrorCode success = U_ZERO_ERROR;
  * .      s=(UChar*)malloc(sizeof(UChar) * (strlen("This is a test")+1) );
  * .      u_uastrcpy(s, "This is a test");
@@ -633,6 +575,13 @@ ucol_openElements(    const    UCollator       *coll,
  *
  */
 #define UCOL_NULLORDER        0xFFFFFFFF
+
+/**
+ * get a hash code for a key... Not very useful!
+ * @deprecated
+ */
+U_CAPI int32_t
+ucol_keyHashCode(const uint8_t* key, int32_t length);
 
 /**
  * Close a UCollationElements.
@@ -757,8 +706,6 @@ ucol_getVersion(const UCollator* coll, UVersionInfo info);
  */
 U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttributeValue value, UErrorCode *status);
 
-U_CAPI void ucol_setAttributeNew(UCollatorNew *coll, UColAttribute attr, UColAttributeValue value, UErrorCode *status);
-
 /**
  * Universal attribute getter
  * @param coll collator which attributes are to be changed
@@ -768,8 +715,6 @@ U_CAPI void ucol_setAttributeNew(UCollatorNew *coll, UColAttribute attr, UColAtt
  * @draft API 1.7 freeze
  */
 U_CAPI UColAttributeValue ucol_getAttribute(const UCollator *coll, UColAttribute attr, UErrorCode *status);
-
-U_CAPI UColAttributeValue ucol_getAttributeNew(const UCollatorNew *coll, UColAttribute attr, UErrorCode *status);
 
 /**
  * Thread safe cloning operation

@@ -46,8 +46,6 @@ class VectorOfPToExpandTable;
 class RuleBasedCollator;
 class CollationElementIterator;
 
-// This is just temporary, for prototyping.
-typedef void *  UCollator;
 
 //=============================================================================
 
@@ -130,39 +128,6 @@ private:
      */
     friend class RuleBasedCollator;
     friend class CollationElementIterator;
-
-// This is just temporary, for prototyping.
-    friend int32_t ucol_getNextCE(const UCollator *coll, collIterate *source, UErrorCode *status);
-    friend int32_t ucol_getIncrementalCE(const UCollator *coll, incrementalContext *source, UErrorCode *status); 
-    friend int32_t getComplicatedCE(const UCollator *coll, collIterate *source, UErrorCode *status);
-/*
-  friend int32_t ucol_getSortKey(const    UCollator    *coll, const    UChar        *source,
-        int32_t        sourceLength, uint8_t        *result, int32_t        resultLength);
-*/
-  friend int32_t ucol_calcSortKey(const    UCollator    *coll,
-        const    UChar        *source,
-        int32_t        sourceLength,
-        uint8_t        **result,
-        int32_t        resultLength,
-        UBool allocatePrimary);
-  friend UCollationResult ucol_strcoll(    const    UCollator    *coll,
-        const    UChar        *source,
-        int32_t            sourceLength,
-        const    UChar        *target,
-        int32_t            targetLength);
-/*
-  friend UCollationResult ucol_strcollEx(    const    UCollator    *coll,
-        const    UChar        *source,
-        int32_t            sourceLength,
-        const    UChar        *target,
-        int32_t            targetLength);
-*/
-  friend int32_t ucol_getSortKeySize(const UCollator *coll, 
-        collIterate *s, 
-        int32_t currentSize, 
-        UColAttributeValue strength, 
-        int32_t len);
-
 
     UBool                      isFrenchSec;
     int16_t                     maxSecOrder;
