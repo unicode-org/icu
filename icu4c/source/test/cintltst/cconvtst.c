@@ -23,11 +23,12 @@
 void addTestConvert(TestNode**);
 void addTestNewConvert(TestNode**);
 void addTestConvertErrorCallBack(TestNode** root);
+void addTestEuroRegression(TestNode** root);
 
 void addConvert(TestNode** root)
 {    
     addTestConvert(root);
 	addTestNewConvert(root);
 	addTestConvertErrorCallBack(root);
-	
+    addTestEuroRegression(root);
 }
