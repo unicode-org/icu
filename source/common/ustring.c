@@ -81,13 +81,40 @@ u_strstr(const UChar *s, const UChar *substring) {
 
 U_CAPI UChar * U_EXPORT2
 u_strchr32(const UChar *s, UChar32 c) {
-  if(!UTF_NEED_MULTIPLE_UCHAR(c)) {
+  if(c < 0xd800) {
+    /* non-surrogate BMP code point */
+    return u_strchr(s, (UChar)c);
+  } else if(c <= 0xdfff) {
+    /* surrogate code point */
+    UChar *t;
+
+    for(;;) {
+      t = u_strchr(s, (UChar)c);
+      if(t == NULL) {
+        return NULL;
+      }
+      if(
+        UTF_IS_SURROGATE_FIRST(*t) ?
+          UTF_IS_TRAIL(*(t+1)) :
+          (s<t && UTF_IS_LEAD(*(t-1)))
+      ) {
+        /* matched surrogate, not a surrogate code point, continue searching */
+        s = t + 1;
+      } else {
+        return t;
+      }
+    }
+    return NULL;
+  } else if(c <= 0xffff) {
+    /* non-surrogate BMP code point */
     return u_strchr(s, (UChar)c);
   } else {
-    UChar buffer[UTF_MAX_CHAR_LENGTH + 1];
-    UTextOffset i = 0;
-    UTF_APPEND_CHAR_UNSAFE(buffer, i, c);
-    buffer[i] = 0;
+    /* supplementary code point, search for string */
+    UChar buffer[3];
+
+    buffer[0] = UTF16_LEAD(c);
+    buffer[1] = UTF16_TRAIL(c);
+    buffer[2] = 0;
     return u_strstr(s, buffer);
   }
 }

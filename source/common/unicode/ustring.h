@@ -144,6 +144,19 @@ u_strstr(const UChar *s, const UChar *substring);
 /**
  * Find the first occurence of a specified code point in a string.
  *
+ * This function finds code points, which differs for BMP code points
+ * from u_strchr() only for surrogates:
+ * While u_strchr() finds any surrogate code units in a string,
+ * u_strchr32() finds only unmatched surrogate code points,
+ * i.e., only those that do not combine with an adjacent surrogate
+ * to form a supplementary code point.
+ * For example, in a string "\ud800\udc00" u_strchr()
+ * will find code units U+d800 at 0 and U+dc00 at 1,
+ * but u_strchr32() will find neither because they
+ * combine to the code point U+10000.
+ * Either function will find U+d800 in "a\ud800b".
+ * This behavior ensures that UTF_GET_CHAR(u_strchr32(c))==c.
+ *
  * @param s The string to search.
  * @param c The code point (0..0x10ffff) to find.
  * @return A pointer to the first occurrence of <TT>c</TT> in <TT>s</TT>,
