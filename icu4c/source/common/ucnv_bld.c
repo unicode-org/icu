@@ -193,6 +193,8 @@ ucnv_copyPlatformString(char *platformString, UConverterPlatform pltfrm)
     case UCNV_IBM:
         uprv_strcpy(platformString, "ibm-");
         return 4;
+    case UCNV_UNKNOWN:
+        break;
     };
 
     /* default to empty string */
