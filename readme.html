@@ -31,7 +31,7 @@
     <h1>International Components for Unicode<br>
      ICU 2.1 ReadMe</h1>
 
-    <p>Version: 2002-May-13<br>
+    <p>Version: 2002-May-31<br>
      Copyright &copy; 1997-2002 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -125,7 +125,7 @@
     internationalization capabilities of Java to a level similar to ICU. The
     ICU C/C++ project is also called ICU4C when a distinction is necessary.</p>
 
-    <h2><a name="#GettingStarted" href="#GettingStarted">Getting
+    <h2><a name="GettingStarted" href="#GettingStarted">Getting
     started</a></h2>
 
     <p>This document describes how to build and install ICU on your machine.
@@ -881,7 +881,7 @@
       "#HowToInstallICU">note</a> below).</li>
     </ol>
 
-    <p><a name="#HowToConfigureICU"><strong>Configuring ICU NOTE:</strong></a>
+    <p><a name="HowToConfigureICU"><strong>Configuring ICU NOTE:</strong></a>
     Type "./runConfigureICU --help" for help on how to run it and a list of
     supported platforms. You may also want to type "./configure --help" to
     print the available configure options that you may want to give
@@ -892,7 +892,7 @@
     create 32-bit libraries, and --srcdir to do out of source builds (build the
     libraries in the current location).</p>
 
-    <p><a name="#HowToTestWithoutGmake"><strong>Running The Tests From The
+    <p><a name="HowToTestWithoutGmake"><strong>Running The Tests From The
     Command Line NOTE:</strong></a> You may have to set certain variables if
     you with to run test programs individually, that is apart from "make
     check". The <strong>TZ</strong> environment variable needs to be set to
@@ -904,7 +904,7 @@
     acceptable). You do not need to set <strong>ICU_DATA</strong> if the
     complete data library is in your library path.</p>
 
-    <p><a name="#HowToInstallICU"><strong>Installing ICU NOTE:</strong></a> If
+    <p><a name="HowToInstallICU"><strong>Installing ICU NOTE:</strong></a> If
     you are using the "gmake install" command, using the "--prefix" option on
     configure or runConfigureICU will install ICU to the specified
     location.</p>
@@ -1109,7 +1109,7 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
             <br>
           </li>
           <!--li>Add QCXXN, to your build process library list. This results in
-                                                                                                                                                                                                                                                the resolution of CRTCPPMOD used by the icc compiler</li-->
+                                                                                                                                                                                                                                                                                        the resolution of CRTCPPMOD used by the icc compiler</li-->
 
           <li>
             In order to get the tests to run correctly, the QUTCOFFSET needs to
