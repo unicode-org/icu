@@ -775,7 +775,7 @@ CLEANUP:
     if(b1!=b1Stack){
         uprv_free(b1);
     }
-    if(b1!=b1Stack && b2!=b2Stack){
+    if(b2!=b1Stack && b2!=b2Stack && b1!=b2){
         uprv_free(b2);
     }
     return u_terminateUChars(dest, destCapacity, b2Len, status);
