@@ -301,9 +301,9 @@ umtx_atomic_inc(int32_t *p)
             pthread_mutex_init((pthread_mutex_t*)&gIncDecMutex, pthread_mutexattr_default);
 # else
             pthread_mutex_init((pthread_mutex_t*)&gIncDecMutex, NULL);
+# endif
             gIncDecMutexInitialized = TRUE;
         }
-# endif
         umtx_unlock(NULL);
     }
    
@@ -331,22 +331,15 @@ umtx_atomic_dec(int32_t *p)
 #else 
    
 /* No recognized platform.  */
-#warning  No atomic increment and decrement defined for this platform.
-
-U_CAPI int32_t U_EXPORT2
-umtx_atomic_inc(int32_t *p) {
-    return ++(*p);
-}
-
-U_CAPI int32_t U_EXPORT2
-umtx_atomic_dec(int32_t *p) {
-    return --(*p);
-}
+#error  No atomic increment and decrement defined for this platform. \
+        Either use the --disable-threads configure option, or define those functions in this file.
 
 #endif   /* Platform selection for atomic_inc and dec. */
 
 
-#else  /* (ICU_USE_THREADS == 1) */
+#else  /* (ICU_USE_THREADS == 0) */
+
+/* Threads disabled here */
 
 U_CAPI int32_t U_EXPORT2
 umtx_atomic_inc(int32_t *p) {
