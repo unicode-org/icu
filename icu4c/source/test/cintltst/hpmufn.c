@@ -182,16 +182,16 @@ static void TestHeapFunctions() {
         log_err("Heap functions are not being called from ICU.\n");
     }
     ures_close(rb);
-    u_getUnicodeVersion(unicodeVersion);
-    if (gBlockCount == 0 || unicodeVersion[0] <= 0) {
-        log_err("Heap functions are not being called from ICU or Unicode version is wrong.\n");
-    }
 
     /* Cleanup should put the heap back to its default implementation. */
     u_cleanup();
     utrace_setFunctions(traceContext, traceEntryFunc, traceExitFunc, traceDataFunc);
     utrace_setLevel(traceLevel);
     u_setDataDirectory(icuDataDir);
+    u_getUnicodeVersion(unicodeVersion);
+    if (unicodeVersion[0] <= 0) {
+        log_err("Properties doesn't reinitialize without u_init.\n");
+    }
     status = U_ZERO_ERROR;
     u_init(&status);
     TEST_STATUS(status, U_ZERO_ERROR);
