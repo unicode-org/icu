@@ -541,7 +541,7 @@ public:
      * dispCountry to "Etats-Unis".
      * @param displayLocale      Specifies the locale to be used to display the name.  In other
      *                      words, if the locale's country code is "US", passing
-     *                      Locale::getFrench() for displayLocale would result in "États-Unis", while
+     *                      Locale::getFrench() for displayLocale would result in "&#x00C9;tats-Unis", while
      *                      passing Locale::getGerman() for displayLocale would result in
      *                      "Vereinigte Staaten".
      * @param dispCountry   Receives the country's display name.
@@ -589,8 +589,8 @@ public:
      * in the locale specfied by "displayLocale".  This function uses getDisplayLanguage(),
      * getDisplayCountry(), and getDisplayVariant() to do its work, and outputs the display
      * name in the format "language (country[,variant])".  For example, if displayLocale is
-     * fr_FR, then en_US's display name would be "Anglais (États-Unis)", and no_NO_NY's
-     * display name would be "norvégien (Norvège,NY)".
+     * fr_FR, then en_US's display name would be "Anglais (&#x00C9;tats-Unis)", and no_NO_NY's
+     * display name would be "norv&#x00E9;gien (Norvège,NY)".
      * @param displayLocale  Specifies the locale to be used to display the name.
      * @param name      Receives the locale's display name.
      * @return          A reference to "name".
