@@ -441,11 +441,14 @@ unum_getAttribute(const UNumberFormat*          fmt,
     case UNUM_FORMAT_WIDTH:
         return df->getFormatWidth();
         
-        /** The position at which padding will take place. */
     case UNUM_PADDING_POSITION:
         return df->getPadPosition();
         
+    case UNUM_SECONDARY_GROUPING_SIZE:
+        return df->getSecondaryGroupingSize();
+        
     default:
+        /* enums out of sync? unsupported enum? */
         break;
     }
   } else {
