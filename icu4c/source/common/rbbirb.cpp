@@ -1,7 +1,7 @@
 //
 //  file:  rbbirb.cpp
 //
-//  Copyright (C) 2002-2004, International Business Machines Corporation and others.
+//  Copyright (C) 2002-2005, International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains the RBBIRuleBuilder class implementation.  This is the main class for

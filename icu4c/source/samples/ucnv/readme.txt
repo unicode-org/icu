@@ -1,4 +1,4 @@
-Copyright (C) 2002-2003, International Business Machines
+Copyright (C) 2002-2005, International Business Machines
 Corporation and others.  All Rights Reserved.
 
 convsamp: a sample program which demonstrates using ICU conversion

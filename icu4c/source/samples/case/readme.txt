@@ -1,4 +1,4 @@
-Copyright (c) 2003, International Business Machines Corporation and others. All Rights Reserved.
+Copyright (c) 2003-2005, International Business Machines Corporation and others. All Rights Reserved.
 case: case mapping
 
 This sample demonstrates

@@ -1,6 +1,7 @@
 /*
 *******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 1996-2005, International Business Machines Corporation
+* and others. All Rights Reserved.
 *******************************************************************************
 *
 *   file name:  umsg.h

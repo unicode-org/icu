@@ -1,12 +1,12 @@
-/********************************************************************
+/****************************************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2004, International Business Machines Corporation and
+ * Copyright (c) 1997-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  * Modification History:
  *
  *   Date          Name        Description
  *   05/22/2000    Madhu       Added tests for testing new API for utf16 support and more
- **********************************************************************/
+ ****************************************************************************************/
 
 #include <string.h>
 #include "unicode/chariter.h"
