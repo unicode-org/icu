@@ -119,7 +119,7 @@ class UnicodeConverter;     // unicode/convert.h
  * If necessary, the user needs to take care of such boundaries by testing for the code unit
  * values or by using functions like
  * UnicodeString::getChar32Start() and UnicodeString::getChar32Limit()
- * (or, in C, the equivalent macros UTF_SET_CHAR_START() and UTF_SET_CHAR_LIMIT(), see utf.h).</p>
+ * (or, in C, the equivalent macros U16_SET_CP_START() and U16_SET_CP_LIMIT(), see utf.h).</p>
  *
  * <p>UnicodeString uses several storage methods.
  * String contents can be stored inside the UnicodeString object itself,
@@ -1263,6 +1263,7 @@ public:
    * to the first surrogate.
    * @param offset a valid offset into one code point of the text
    * @return offset of the first code unit of the same code point
+   * @see U16_SET_CP_START
    * @draft ICU 2.0
    */
   inline int32_t getChar32Start(int32_t offset) const;
@@ -1273,6 +1274,7 @@ public:
    * was meant to look like UTF_SET_CHAR_START,
    * but since most code point-related function names in C++ APIs
    * contain a "32", this caused confusion.
+   * Note that UTF_SET_CHAR_START got renamed to U16_SET_CP_START in ICU 2.4.
    *
    * Adjust a random-access offset so that
    * it points to the beginning of a Unicode character.
@@ -1302,6 +1304,7 @@ public:
    * behind the second surrogate (i.e., to the first surrogate).
    * @param offset a valid offset after any code unit of a code point of the text
    * @return offset of the first code unit after the same code point
+   * @see U16_SET_CP_LIMIT
    * @draft ICU 2.0
    */
   inline int32_t getChar32Limit(int32_t offset) const;
@@ -1312,6 +1315,7 @@ public:
    * was meant to look like UTF_SET_CHAR_LIMIT,
    * but since most code point-related function names in C++ APIs
    * contain a "32", this caused confusion.
+   * Note that UTF_SET_CHAR_LIMIT got renamed to U16_SET_CP_LIMIT in ICU 2.4.
    *
    * Adjust a random-access offset so that
    * it points behind a Unicode character.
@@ -3043,13 +3047,7 @@ private:
 
   // constants
   enum {
-#if UTF_SIZE==8
-    US_STACKBUF_SIZE=14, // Size of stack buffer for small strings
-#elif UTF_SIZE==16
     US_STACKBUF_SIZE=7, // Size of stack buffer for small strings
-#else // UTF_SIZE==32
-    US_STACKBUF_SIZE=3, // Size of stack buffer for small strings
-#endif
     kInvalidUChar=0xffff, // invalid UChar index
     kGrowSize=128, // grow size for this buffer
     kInvalidHashCode=0, // invalid hash code
@@ -3093,9 +3091,6 @@ private:
   int32_t   fCapacity;      // sizeof fArray
   UChar     *fArray;        // the Unicode data
   uint16_t  fFlags;         // bit flags: see constants above
-#if UTF_SIZE==32
-  uint16_t  fPadding;       // padding to align the fStackBuffer for UTF-32
-#endif
   UChar     fStackBuffer [ US_STACKBUF_SIZE ]; // buffer for small strings
 
   /**
@@ -3612,9 +3607,10 @@ inline UnicodeString&
 UnicodeString::replace(int32_t start, 
                int32_t length, 
                UChar32 srcChar) {
-  UChar buffer[UTF_MAX_CHAR_LENGTH];
+  UChar buffer[U16_MAX_LENGTH];
   int32_t count = 0;
-  UTF_APPEND_CHAR_UNSAFE(buffer, count, srcChar);
+  UBool isError = FALSE;
+  U16_APPEND(buffer, count, U16_MAX_LENGTH, srcChar, isError);
   return doReplace(start, length, buffer, 0, count);
 }
 
@@ -3709,7 +3705,7 @@ UnicodeString::char32At(int32_t offset) const
 {
   if((uint32_t)offset < (uint32_t)fLength) {
     UChar32 c;
-    UTF_GET_CHAR(fArray, 0, offset, fLength, c);
+    U16_GET(fArray, 0, offset, fLength, c);
     return c;
   } else {
     return kInvalidUChar;
@@ -3719,7 +3715,7 @@ UnicodeString::char32At(int32_t offset) const
 inline int32_t
 UnicodeString::getChar32Start(int32_t offset) const {
   if((uint32_t)offset < (uint32_t)fLength) {
-    UTF_SET_CHAR_START(fArray, 0, offset);
+    U16_SET_CP_START(fArray, 0, offset);
     return offset;
   } else {
     return 0;
@@ -3729,7 +3725,7 @@ UnicodeString::getChar32Start(int32_t offset) const {
 inline int32_t
 UnicodeString::getChar32Limit(int32_t offset) const {
   if((uint32_t)offset < (uint32_t)fLength) {
-    UTF_SET_CHAR_LIMIT(fArray, 0, offset, fLength);
+    U16_SET_CP_LIMIT(fArray, 0, offset, fLength);
     return offset;
   } else {
     return fLength;
@@ -3843,9 +3839,10 @@ UnicodeString::operator+= (UChar ch)
 
 inline UnicodeString& 
 UnicodeString::operator+= (UChar32 ch) {
-  UChar buffer[UTF_MAX_CHAR_LENGTH];
+  UChar buffer[U16_MAX_LENGTH];
   int32_t length = 0;
-  UTF_APPEND_CHAR_UNSAFE(buffer, length, ch);
+  UBool isError = FALSE;
+  U16_APPEND(buffer, length, U16_MAX_LENGTH, ch, isError);
   return doReplace(fLength, 0, buffer, 0, length);
 }
 
@@ -3880,9 +3877,10 @@ UnicodeString::append(UChar srcChar)
 
 inline UnicodeString& 
 UnicodeString::append(UChar32 srcChar) {
-  UChar buffer[UTF_MAX_CHAR_LENGTH];
+  UChar buffer[U16_MAX_LENGTH];
   int32_t length = 0;
-  UTF_APPEND_CHAR_UNSAFE(buffer, length, srcChar);
+  UBool isError = FALSE;
+  U16_APPEND(buffer, length, U16_MAX_LENGTH, srcChar, isError);
   return doReplace(fLength, 0, buffer, 0, length);
 }
 
