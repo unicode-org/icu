@@ -134,7 +134,7 @@ U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_SKIP (
 /**
  * Functor Substitute the ILLEGAL SEQUENCE with the current substitution string assiciated with _this,
  * in the event target buffer is too small, it will store the extra info in the UConverter, and err
- * will be set to U_INDEX_OUTOFBOUNDS_ERROR. The next time T_UConverter_fromUnicode is called, it will
+ * will be set to U_BUFFER_OVERFLOW_ERROR. The next time T_UConverter_fromUnicode is called, it will
  * store the left over data in target, before transcoding the "source Stream"
  * @stable
  */
@@ -154,7 +154,7 @@ U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_SUBSTITUTE (
  * characters {u,%}[A-F][0-9], it will substitute  the illegal sequence with the substitution characters
  * (it will behave like the above functor).
  * in the event target buffer is too small, it will store the extra info in the UConverter, and err
- * will be set to U_INDEX_OUTOFBOUNDS_ERROR. The next time T_UConverter_fromUnicode is called, it will
+ * will be set to U_BUFFER_OVERFLOW_ERROR. The next time T_UConverter_fromUnicode is called, it will
  * store the left over data in target, before transcoding the "source Stream"
  * @stable
  */
@@ -184,7 +184,7 @@ U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_SKIP (
 /**
  * Functor Substitute the ILLEGAL SEQUENCE with the current substitution string assiciated with _this,
  * in the event target buffer is too small, it will store the extra info in the UConverter, and err
- * will be set to U_INDEX_OUTOFBOUNDS_ERROR. The next time T_UConverter_fromUnicode is called, it will
+ * will be set to U_BUFFER_OVERFLOW_ERROR. The next time T_UConverter_fromUnicode is called, it will
  * store the left over data in target, before transcoding the "source Stream"
  * @stable
  */
@@ -200,7 +200,7 @@ U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_SUBSTITUTE (
  * Functor Substitute the ILLEGAL SEQUENCE with a sequence escaped codepoints corresponding to the
  * ILLEGAL SEQUENCE (format  %XNN, e.g. "%XFF%X0A%XC8%X03").
  * in the event target buffer is too small, it will store the extra info in the UConverter, and err
- * will be set to U_INDEX_OUTOFBOUNDS_ERROR. The next time T_UConverter_fromUnicode is called, it will
+ * will be set to U_BUFFER_OVERFLOW_ERROR. The next time T_UConverter_fromUnicode is called, it will
  * store the left over data in target, before transcoding the "source Stream"
  * @stable
  */
