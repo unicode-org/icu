@@ -354,9 +354,17 @@ LocaleKeyFactory::updateVisibleIDs(Hashtable& result, UErrorCode& status) const 
 
 UnicodeString& 
 LocaleKeyFactory::getDisplayName(const UnicodeString& id, const Locale& locale, UnicodeString& result) const {
-  Locale loc;
-  LocaleUtility::initLocaleFromName(id, loc);
-  return loc.getDisplayName(locale, result);
+  if ((_coverage & 0x1) == 0) {
+	UErrorCode status = U_ZERO_ERROR;
+	  const Hashtable* ids = getSupportedIDs(status);
+	  if (ids && (ids->get(id) != NULL)) {
+			Locale loc;
+			LocaleUtility::initLocaleFromName(id, loc);
+			return loc.getDisplayName(locale, result);
+	  }
+  }
+  result.setToBogus();
+  return result;
 }
 
 UObject* 
@@ -516,8 +524,8 @@ ICULocaleService::ICULocaleService()
 {
 }
 
-ICULocaleService::ICULocaleService(const UnicodeString& name)
-  : ICUService(name)
+ICULocaleService::ICULocaleService(const UnicodeString& dname)
+  : ICUService(dname)
   , fallbackLocale(Locale::getDefault()) 
   , llock(0)
 {
@@ -634,7 +642,7 @@ ICULocaleService::registerInstance(UObject* objToAdopt, const UnicodeString& loc
 }
 #endif
 
-class ServiceEnumeration : public StringEnumeration {
+class ServiceEnumeration : public UMemory, public StringEnumeration {
 private:
   const ICULocaleService* _service;
   int32_t _timestamp;
@@ -750,6 +758,7 @@ public:
       _service->getVisibleIDs(_ids, status);
     }
   }
+
 };
 
 StringEnumeration*
