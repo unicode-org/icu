@@ -266,7 +266,7 @@ void MessageFormatRegressionTest::Test4052223()
     UnicodeString str("There is one apple growing on the peach tree.");
     
     int32_t count = 0;
-    Formattable *objs = fmt->parse(str, pos, count);
+    fmt->parse(str, pos, count);
 
     logln(UnicodeString("unparsable string , should fail at ") + pos.getErrorIndex());
     if (pos.getErrorIndex() == -1)
