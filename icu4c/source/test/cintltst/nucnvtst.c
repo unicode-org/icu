@@ -4017,24 +4017,24 @@ TestJIS(){
 
         /* JIS7 Encoding */
         const uint8_t expectedISO2022JIS7[] ={
-                0x1b, 0x28, 0x49,
+                0x0e,
                 0x41, 0x42,
-                0x1b, 0x24, 0x42,
+                0x0f, 0x1b, 0x24, 0x42,
                 0x25, 0x6c, 0x25, 0x6d,
                 0x25, 0x6e, 0x25, 0x6F,
-                0x1b, 0x28, 0x49,
+                0x0e,
                 0x53, 0x54,
                 0x55, 0x56,
                 0x57, 0x58
 
         };
         int32_t fmISO2022JIS7Offs[] ={
-            0,0,0,
+            0,
             0,1,
-            2,2,2,
+            2,2,2,2,
             2,2,3,3,
             4,4,5,5,
-            6,6,6,
+            6,
             6,7,
             8,9,
             10,11
@@ -4043,7 +4043,6 @@ TestJIS(){
 
         /* JIS8 Encoding */
         const uint8_t expectedISO2022JIS8[] ={
-                0x1b, 0x28, 0x4A,
                 0xC1, 0xC2,
                 0x1b, 0x24, 0x42,
                 0x25, 0x6c, 0x25, 0x6d,
@@ -4055,7 +4054,6 @@ TestJIS(){
 
         };
         int32_t fmISO2022JIS8Offs[] ={
-            0,0,0,
             0,1,
             2,2,2,
             2,2,3,3,
