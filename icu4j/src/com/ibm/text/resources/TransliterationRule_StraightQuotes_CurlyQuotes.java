@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/TransliterationRule_StraightQuotes_CurlyQuotes.java,v $ 
- * $Date: 2000/03/10 04:07:31 $ 
- * $Revision: 1.2 $
+ * $Date: 2000/04/21 21:17:08 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -22,74 +22,74 @@ public class TransliterationRule_StraightQuotes_CurlyQuotes extends ListResource
         return new Object[][] {
             {   "Rule",
                 // Rewritten using character codes [LIU]
-                "white=[[:Zs:][:Zl:][:Zp:]];"
-                + "black=[^{white}];"
-                + "open=[:Ps:];"
-                + "dquote=\";"
+                "$white=[[:Zs:][:Zl:][:Zp:]];"
+                + "$black=[^$white];"
+                + "$open=[:Ps:];"
+                + "$dquote=\";"
 
-                + "lAng=\u3008;"
-                + "ldAng=\u300A;"
-                + "lBrk='[';"
-                + "lBrc='{';"
+                + "$lAng=\u3008;"
+                + "$ldAng=\u300A;"
+                + "$lBrk='[';"
+                + "$lBrc='{';"
 
-                + "lquote=\u2018;"
-                + "rquote=\u2019;"
-                + "ldquote=\u201C;"
-                + "rdquote=\u201D;"
+                + "$lquote=\u2018;"
+                + "$rquote=\u2019;"
+                + "$ldquote=\u201C;"
+                + "$rdquote=\u201D;"
 
-                + "ldguill=\u00AB;"
-                + "rdguill=\u00BB;"
-                + "lguill=\u2039;"
-                + "rguill=\u203A;"
+                + "$ldguill=\u00AB;"
+                + "$rdguill=\u00BB;"
+                + "$lguill=\u2039;"
+                + "$rguill=\u203A;"
 
-                + "mdash=\u2014;"
+                + "$mdash=\u2014;"
 
                 //#######################################
                 // Conversions from input
                 //#######################################
 
                 // join single quotes
-                + "{lquote}''>{ldquote};"
-                + "{lquote}{lquote}>{ldquote};"
-                + "{rquote}''>{rdquote};"
-                + "{rquote}{rquote}>{rdquote};"
+                + "$lquote''>$ldquote;"
+                + "$lquote$lquote>$ldquote;"
+                + "$rquote''>$rdquote;"
+                + "$rquote$rquote>$rdquote;"
 
                 //smart single quotes
-                + "{white})''>{lquote};"
-                + "{open})''>{lquote};"
-                + "{black})''>{rquote};"
-                + "''>{lquote};"
+                + "$white{''>$lquote;"
+                + "$open{''>$lquote;"
+                + "$black{''>$rquote;"
+                + "''>$lquote;"
 
                 //smart doubles
-                + "{white}){dquote}>{ldquote};"
-                + "{open}){dquote}>{ldquote};"
-                + "{black}){dquote}>{rdquote};"
-                + "{dquote}>{ldquote};"
+                + "$white{$dquote>$ldquote;"
+                + "$open{$dquote>$ldquote;"
+                + "$black{$dquote>$rdquote;"
+                + "$dquote>$ldquote;"
 
                 // join single guillemets
-                + "{rguill}{rguill}>{rdguill};"
-                + "'>>'>{rdguill};"
-                + "{lguill}{lguill}>{ldguill};"
-                + "'<<'>{ldguill};"
+                + "$rguill$rguill>$rdguill;"
+                + "'>>'>$rdguill;"
+                + "$lguill$lguill>$ldguill;"
+                + "'<<'>$ldguill;"
 
                 // prevent double spaces
-                + "\\ )\\ >;"
+                + "\\ {\\ >;"
 
                 // join hyphens into dash
-                + "-->{mdash};"
+                + "-->$mdash;"
 
                 //#######################################
                 // Conversions back to input
                 //#######################################
 
                 //smart quotes
-                + "''<{lquote};"
-                + "''<{rquote};"
-                + "{dquote}<{ldquote};"
-                + "{dquote}<{rdquote};"
+                + "''<$lquote;"
+                + "''<$rquote;"
+                + "$dquote<$ldquote;"
+                + "$dquote<$rdquote;"
 
                 //hyphens
-                + "--<{mdash};"
+                + "--<$mdash;"
             }
         };
     }

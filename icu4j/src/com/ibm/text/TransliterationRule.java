@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/TransliterationRule.java,v $ 
- * $Date: 2000/04/19 16:34:18 $ 
- * $Revision: 1.16 $
+ * $Date: 2000/04/21 21:16:40 $ 
+ * $Revision: 1.17 $
  *
  *****************************************************************************************
  */
@@ -44,54 +44,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.16 $ $Date: 2000/04/19 16:34:18 $
- *
- * $Log: TransliterationRule.java,v $
- * Revision 1.16  2000/04/19 16:34:18  alan
- * Add segment support.
- *
- * Revision 1.15  2000/04/12 20:17:45  alan
- * Delegate replace operation to rule object
- *
- * Revision 1.14  2000/03/10 04:07:24  johnf
- * Copyright update
- *
- * Revision 1.13  2000/02/10 07:36:25  johnf
- * fixed imports for com.ibm.util.Utility
- *
- * Revision 1.12  2000/02/03 18:11:19  Alan
- * Use array rather than hashtable for char-to-set map
- *
- * Revision 1.11  2000/01/27 18:59:19  Alan
- * Use Position rather than int[] and move all subclass overrides to one method (handleTransliterate)
- *
- * Revision 1.10  2000/01/18 20:36:17  Alan
- * Make UnicodeSet inherit from UnicodeFilter
- *
- * Revision 1.9  2000/01/18 02:38:55  Alan
- * Fix filtering bug.
- *
- * Revision 1.8  2000/01/13 23:53:23  Alan
- * Fix bugs found during ICU port
- *
- * Revision 1.7  2000/01/11 04:12:06  Alan
- * Cleanup, embellish comments
- *
- * Revision 1.6  2000/01/11 02:25:03  Alan
- * Rewrite UnicodeSet and RBT parsers for better performance and new syntax
- *
- * Revision 1.5  2000/01/04 21:43:57  Alan
- * Add rule indexing, and move masking check to TransliterationRuleSet.
- *
- * Revision 1.4  1999/12/22 01:40:54  Alan
- * Consolidate rule pattern anteContext, key, and postContext into one string.
- *
- * Revision 1.3  1999/12/22 01:05:54  Alan
- * Improve masking checking; turn it off by default, for better performance
- *
- * Revision 1.2  1999/12/21 23:58:44  Alan
- * Detect a>x masking a>y
- *
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.17 $ $Date: 2000/04/21 21:16:40 $
  */
 class TransliterationRule {
     /**
@@ -538,3 +491,54 @@ class TransliterationRule {
              keyChar == textChar : set.contains(textChar));
     }
 }
+
+/**
+ * $Log: TransliterationRule.java,v $
+ * Revision 1.17  2000/04/21 21:16:40  alan
+ * Modify rule syntax
+ *
+ * Revision 1.16  2000/04/19 16:34:18  alan
+ * Add segment support.
+ *
+ * Revision 1.15  2000/04/12 20:17:45  alan
+ * Delegate replace operation to rule object
+ *
+ * Revision 1.14  2000/03/10 04:07:24  johnf
+ * Copyright update
+ *
+ * Revision 1.13  2000/02/10 07:36:25  johnf
+ * fixed imports for com.ibm.util.Utility
+ *
+ * Revision 1.12  2000/02/03 18:11:19  Alan
+ * Use array rather than hashtable for char-to-set map
+ *
+ * Revision 1.11  2000/01/27 18:59:19  Alan
+ * Use Position rather than int[] and move all subclass overrides to one method (handleTransliterate)
+ *
+ * Revision 1.10  2000/01/18 20:36:17  Alan
+ * Make UnicodeSet inherit from UnicodeFilter
+ *
+ * Revision 1.9  2000/01/18 02:38:55  Alan
+ * Fix filtering bug.
+ *
+ * Revision 1.8  2000/01/13 23:53:23  Alan
+ * Fix bugs found during ICU port
+ *
+ * Revision 1.7  2000/01/11 04:12:06  Alan
+ * Cleanup, embellish comments
+ *
+ * Revision 1.6  2000/01/11 02:25:03  Alan
+ * Rewrite UnicodeSet and RBT parsers for better performance and new syntax
+ *
+ * Revision 1.5  2000/01/04 21:43:57  Alan
+ * Add rule indexing, and move masking check to TransliterationRuleSet.
+ *
+ * Revision 1.4  1999/12/22 01:40:54  Alan
+ * Consolidate rule pattern anteContext, key, and postContext into one string.
+ *
+ * Revision 1.3  1999/12/22 01:05:54  Alan
+ * Improve masking checking; turn it off by default, for better performance
+ *
+ * Revision 1.2  1999/12/21 23:58:44  Alan
+ * Detect a>x masking a>y
+ */
