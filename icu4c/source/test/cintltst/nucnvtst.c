@@ -231,13 +231,13 @@ UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_t *expe
     realSourceEnd = source + sourceLen;
 
     if ( gOutBufferSize != realBufferSize )
-      checkOffsets = FALSE;
+        checkOffsets = FALSE;
  
     if( gInBufferSize != NEW_MAX_BUFFER )
-      checkOffsets = FALSE;
+        checkOffsets = FALSE;
 
     do
-      {
+    {
         end = nct_min(targ + gOutBufferSize, realBufferEnd);
         sourceLimit = nct_min(src + gInBufferSize, realSourceEnd);
 
@@ -261,37 +261,37 @@ UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_t *expe
                   checkOffsets ? offs : NULL,
                   doFlush, /* flush if we're at the end of the input data */
                   &status);
-      } while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (U_SUCCESS(status) && sourceLimit < realSourceEnd) );
+    } while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (U_SUCCESS(status) && sourceLimit < realSourceEnd) );
         
     if(U_FAILURE(status))
-      {
+    {
         log_err("Problem doing fromUnicode to %s, errcode %s %s\n", codepage, myErrorName(status), gNuConvTestName);
         return FALSE;
-      }
+    }
 
     log_verbose("\nConversion done [%d uchars in -> %d chars out]. \nResult :",
         sourceLen, targ-junkout);
     if(VERBOSITY)
     {
-        uint8_t junk[9999];
-        uint8_t offset_str[9999];
+        char junk[9999];
+        char offset_str[9999];
         uint8_t *p;
 
         junk[0] = 0;
         offset_str[0] = 0;
         for(p = junkout;p<targ;p++)
         {
-            sprintf((char *)junk + strlen(junk), "0x%02x, ", (0xFF & *p));
-            sprintf((char *)offset_str + strlen(offset_str), "0x%02x, ", 0xFF & junokout[p-junkout]);
+            sprintf(junk + strlen(junk), "0x%02x, ", (int)(0xFF & *p));
+            sprintf(offset_str + strlen(offset_str), "0x%02x, ", (int)(0xFF & junokout[p-junkout]));
         }
 
-        log_verbose((char *)junk);
+        log_verbose(junk);
         printSeq((const uint8_t *)expect, expectLen);
         if ( checkOffsets )
-          {
+        {
             log_verbose("\nOffsets:");
-            log_verbose((const char *)offset_str);
-          }
+            log_verbose(offset_str);
+        }
         log_verbose("\n");
     }
     ucnv_close(conv);
@@ -1815,10 +1815,9 @@ TestLMBCS() {
 
 void TestJitterbug255()
 {
-    const uint8_t testBytes[] = { 0x95, 0xcf, 0x8a, 
-                               0xb7, 0x0d, 0x0a, 0x00 };
+    const uint8_t testBytes[] = { 0x95, 0xcf, 0x8a, 0xb7, 0x0d, 0x0a, 0x00 };
     const uint8_t *testBuffer = testBytes;
-    const uint8_t *testEnd = (const uint8_t *)(testBytes+(strlen(testBytes)+1));
+    const uint8_t *testEnd = testBytes + sizeof(testBytes);
     UErrorCode status = U_ZERO_ERROR;
     UChar32 result;
     UConverter *cnv = 0;
