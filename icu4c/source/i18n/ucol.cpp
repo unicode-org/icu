@@ -5047,19 +5047,20 @@ enum {
     UCOL_PSK_NULL = 7,
     UCOL_PSK_LIMIT
 };
+
 enum {
-    UCOL_PSK_USED_ELEMENTS_SHIFT = 0,
-    UCOL_PSK_USED_ELEMENTS_MASK = 0xFF,
-    UCOL_PSK_LEVEL_SHIFT = 8,
+    UCOL_PSK_LEVEL_SHIFT = 0,
     UCOL_PSK_LEVEL_MASK = 7,
-    UCOL_PSK_BYTE_COUNT_SHIFT = 11,
+    UCOL_PSK_BYTE_COUNT_SHIFT = 3,
     UCOL_PSK_BYTE_COUNT_MASK = 1,
-    UCOL_PSK_WAS_SHIFTED_SHIFT = 12,
+    UCOL_PSK_WAS_SHIFTED_SHIFT = 4,
     UCOL_PSK_WAS_SHIFTED_MASK = 1,
-    UCOL_PSK_ITER_SKIP_SHIFT = 13,
-    UCOL_PSK_ITER_SKIP_MASK = 0xFFF,
-    UCOL_PSK_USED_FRENCH_SHIFT = 25,
-    UCOL_PSK_USED_FRENCH_MASK = 0xF
+    UCOL_PSK_USED_FRENCH_SHIFT = 5,
+    UCOL_PSK_USED_FRENCH_MASK = 3,
+    UCOL_PSK_USED_ELEMENTS_SHIFT = 7,
+    UCOL_PSK_USED_ELEMENTS_MASK = 0x3FF,
+    UCOL_PSK_ITER_SKIP_SHIFT = 17,
+    UCOL_PSK_ITER_SKIP_MASK = 0x7FFF,
 };
 
 
@@ -5797,10 +5798,14 @@ saveState:
     }
     // save the number of CEs we have already processed
     if(level < UCOL_PSK_IDENTICAL) {
-      U_ASSERT((consumedExpansionCEs & UCOL_PSK_USED_ELEMENTS_MASK) == consumedExpansionCEs);
+      if((consumedExpansionCEs & UCOL_PSK_USED_ELEMENTS_MASK) != consumedExpansionCEs) {
+        *status = U_BUFFER_OVERFLOW_ERROR;
+      }
       state[1] = (consumedExpansionCEs & UCOL_PSK_USED_ELEMENTS_MASK) << UCOL_PSK_USED_ELEMENTS_SHIFT;
     } else {
-      U_ASSERT((bocsuBytesUsed & UCOL_PSK_USED_ELEMENTS_MASK) == bocsuBytesUsed);
+      if((bocsuBytesUsed & UCOL_PSK_USED_ELEMENTS_MASK) != bocsuBytesUsed) {
+        *status = U_BUFFER_OVERFLOW_ERROR;
+      }
       state[1] = (bocsuBytesUsed & UCOL_PSK_USED_ELEMENTS_MASK) << UCOL_PSK_USED_ELEMENTS_SHIFT;
     }
     state[1] |= ((level & UCOL_PSK_LEVEL_MASK) << UCOL_PSK_LEVEL_SHIFT); // Next we put in the level of comparison
@@ -5808,10 +5813,14 @@ saveState:
     if(wasShifted) {
       state[1] |= 1 << UCOL_PSK_WAS_SHIFTED_SHIFT;
     }
-    U_ASSERT((iterSkips & UCOL_PSK_ITER_SKIP_MASK) == iterSkips);
+    if((iterSkips & UCOL_PSK_ITER_SKIP_MASK) != iterSkips) {
+      *status = U_BUFFER_OVERFLOW_ERROR;
+    }
     state[1] |= ((iterSkips & UCOL_PSK_ITER_SKIP_MASK) << UCOL_PSK_ITER_SKIP_SHIFT);
 
-    U_ASSERT((usedFrench & UCOL_PSK_USED_FRENCH_MASK) == usedFrench);
+    if((usedFrench & UCOL_PSK_USED_FRENCH_MASK) != usedFrench) {
+      *status = U_BUFFER_OVERFLOW_ERROR;
+    }
     state[1] |= ((usedFrench & UCOL_PSK_USED_FRENCH_MASK) << UCOL_PSK_USED_FRENCH_SHIFT);
 
 
