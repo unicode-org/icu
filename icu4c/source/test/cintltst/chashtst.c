@@ -55,6 +55,11 @@ void addHashtableTest(TestNode** root) {
  *********************************************************************/
 
 void TestBasic(void) {
+    const char one[4] =   {0x6F, 0x6E, 0x65, 0}; /* "one" */
+    const char one2[4] =  {0x6F, 0x6E, 0x65, 0}; /* Get around compiler optimizations */
+    const char two[4] =   {0x74, 0x77, 0x6F, 0}; /* "two" */
+    const char three[6] = {0x74, 0x68, 0x72, 0x65, 0x65, 0}; /* "three" */
+    const char omega[6] = {0x6F, 0x6D, 0x65, 0x67, 0x61, 0}; /* "omega" */
     UErrorCode status = U_ZERO_ERROR;
     UHashtable *hash;
 
@@ -70,30 +75,32 @@ void TestBasic(void) {
     }
     log_verbose("Ok: uhash_open returned 0x%08X\n", hash);
 
-    _put(hash, "one", 1, 0);
-    _put(hash, "omega", 24, 0);
-    _put(hash, "two", 2, 0);
-    _put(hash, "three", 3, 0);
-    _put(hash, "one", -1, 1);
-    _put(hash, "two", -2, 2);
-    _put(hash, "omega", 48, 24);
-    _put(hash, "one", 100, -1);
-    _get(hash, "three", 3);
-    _remove(hash, "two", -2);
-    _get(hash, "two", 0);
-    _get(hash, "one", 100);
-    _put(hash, "two", 200, 0);
-    _get(hash, "omega", 48);
-    _get(hash, "two", 200);
+    _put(hash, one, 1, 0);
+    _put(hash, omega, 24, 0);
+    _put(hash, two, 2, 0);
+    _put(hash, three, 3, 0);
+    _put(hash, one, -1, 1);
+    _put(hash, two, -2, 2);
+    _put(hash, omega, 48, 24);
+    _put(hash, one, 100, -1);
+    _get(hash, three, 3);
+    _remove(hash, two, -2);
+    _get(hash, two, 0);
+    _get(hash, one, 100);
+    _put(hash, two, 200, 0);
+    _get(hash, omega, 48);
+    _get(hash, two, 200);
 
-    if(uhash_compareChars((void*)"one", (void*)"three") == TRUE ||
-        uhash_compareChars((void*)"one", (void*)"one") != TRUE ||
-        uhash_compareChars((void*)"one", NULL) == TRUE  )  {
+    if(uhash_compareChars((void*)one, (void*)three) == TRUE ||
+        uhash_compareChars((void*)one, (void*)one2) != TRUE ||
+        uhash_compareChars((void*)one, (void*)one) != TRUE ||
+        uhash_compareChars((void*)one, NULL) == TRUE  )  {
         log_err("FAIL: compareChars failed\n");
     }
-    if(uhash_compareIChars((void*)"one", (void*)"three") == TRUE ||
-        uhash_compareIChars((void*)"one", (void*)"one") != TRUE ||
-        uhash_compareIChars((void*)"one", NULL) == TRUE  )  {
+    if(uhash_compareIChars((void*)one, (void*)three) == TRUE ||
+        uhash_compareIChars((void*)one, (void*)one) != TRUE ||
+        uhash_compareIChars((void*)one, (void*)one2) != TRUE ||
+        uhash_compareIChars((void*)one, NULL) == TRUE  )  {
         log_err("FAIL: compareIChars failed\n");
     }
      
@@ -104,13 +111,16 @@ void TestOtherAPI(void){
     
     UErrorCode status = U_ZERO_ERROR;
     UHashtable *hash;
-    UChar key[10];
 
     /* Use the correct type when cast to void * */
-    const UChar one[4] = {'o', 'n', 'e', '\0'};
-    const UChar one2[4] = {'o', 'n', 'e', '\0'};/* Get around compiler optimizations */
-    const UChar two[4] = {'t', 'w', 'o', '\0'};
-    
+    const UChar one[4]   = {0x006F, 0x006E, 0x0065, 0}; /* L"one" */
+    const UChar one2[4]  = {0x006F, 0x006E, 0x0065, 0}; /* Get around compiler optimizations */
+    const UChar two[4]   = {0x0074, 0x0077, 0x006F, 0}; /* L"two" */
+    const UChar two2[4]  = {0x0074, 0x0077, 0x006F, 0}; /* L"two" */
+    const UChar three[6] = {0x0074, 0x0068, 0x0072, 0x0065, 0x0065, 0}; /* L"three" */
+    const UChar four[6]  = {0x0066, 0x006F, 0x0075, 0x0072, 0}; /* L"four" */
+    const UChar five[6]  = {0x0066, 0x0069, 0x0076, 0x0065, 0}; /* L"five" */
+    const UChar five2[6] = {0x0066, 0x0069, 0x0076, 0x0065, 0}; /* L"five" */
 
     hash = uhash_open(uhash_hashUChars, uhash_compareUChars,  &status);
     if (U_FAILURE(status)) {
@@ -124,42 +134,46 @@ void TestOtherAPI(void){
     }
     log_verbose("Ok: uhash_open returned 0x%08X\n", hash);
 
-    uhash_put(hash, (void*)u_uastrcpy(key, "one"), (void*)1, &status);
+    uhash_put(hash, (void*)one, (void*)1, &status);
     if(uhash_count(hash) != 1){
          log_err("FAIL: uhas_count() failed. Expected: 1, Got: %d\n", uhash_count(hash));
      }
-    uhash_put(hash, (void*)u_uastrcpy(key, "two"), (void*)2, &status);
-    uhash_put(hash, (void*)u_uastrcpy(key, "three"), (void*)3, &status);
-    uhash_put(hash, (void*)u_uastrcpy(key, "four"), (void*)4, &status);
-    uhash_put(hash, (void*)u_uastrcpy(key, "five"), (void*)5, &status);
+    uhash_put(hash, (void*)two, (void*)2, &status);
+    uhash_put(hash, (void*)three, (void*)3, &status);
+    uhash_put(hash, (void*)four, (void*)4, &status);
+    uhash_put(hash, (void*)five, (void*)5, &status);
     
     if(uhash_count(hash) != 5){
         log_err("FAIL: uhas_count() failed. Expected: 5, Got: %d\n", uhash_count(hash));
     }
     
-    if((int32_t)uhash_get(hash, (void*)u_uastrcpy(key, "two")) != 2){
+    if((int32_t)uhash_get(hash, (void*)two2) != 2){
         log_err("FAIL: uhash_get failed\n");
     }
     
-    if((int32_t)uhash_remove(hash, (void*)u_uastrcpy(key, "five")) != 5){
+    if((int32_t)uhash_remove(hash, (void*)five2) != 5){
         log_err("FAIL: uhash_remove() failed\n");
     }
     if(uhash_count(hash) != 4){
         log_err("FAIL: uhas_count() failed. Expected: 4, Got: %d\n", uhash_count(hash));
     }
 
-    uhash_put(hash, (void*)u_uastrcpy(key, "one"), NULL, &status);
+    uhash_put(hash, (void*)one, NULL, &status);
     if(uhash_count(hash) != 3){
         log_err("FAIL: uhash_put() with value=NULL didn't remove the key value pair\n");
     }
     status=U_ILLEGAL_ARGUMENT_ERROR;
-    uhash_put(hash, (void*)u_uastrcpy(key, "one"), (void*)1, &status);
+    uhash_put(hash, (void*)one, (void*)1, &status);
     if(uhash_count(hash) != 3){
-        log_err("FAIL: uhash_put() with value=NULL should fail when status != U_ZERO_ERROR \n");
+        log_err("FAIL: uhash_put() with value!=NULL should fail when status != U_ZERO_ERROR \n");
     }
     
     status=U_ZERO_ERROR;
-    uhash_put(hash, (void*)u_uastrcpy(key, "one"), (void*)1, &status);
+    uhash_put(hash, (void*)one, (void*)1, &status);
+    if(uhash_count(hash) != 4){
+        log_err("FAIL: uhash_put() with value!=NULL didn't replace the key value pair\n");
+    }
+
     if(uhash_compareUChars((void*)one, (void*)two) == TRUE ||
         uhash_compareUChars((void*)one, (void*)one) != TRUE ||
         uhash_compareUChars((void*)one, (void*)one2) != TRUE ||
@@ -213,9 +227,9 @@ int32_t hashChars(const void* key) {
 }
 
 UBool isEqualChars(const void* key1, const void* key2) {
-    return (key1 != NULL) &&
+    return (UBool)((key1 != NULL) &&
         (key2 != NULL) &&
-        (uprv_strcmp(key1, key2) == 0);
+        (uprv_strcmp(key1, key2) == 0));
 }
 
 /**********************************************************************
