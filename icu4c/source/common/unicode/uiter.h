@@ -395,6 +395,31 @@ uiter_previous32(UCharIterator *iter);
 U_CAPI void U_EXPORT2
 uiter_setString(UCharIterator *iter, const UChar *s, int32_t length);
 
+/**
+ * Set up a UCharIterator to iterate over a UTF-8 string.
+ *
+ * Sets the UCharIterator function pointers for iteration over the UTF-8 string s
+ * with UTF-8 iteration boundaries 0 and length.
+ * The implementation counts the UTF-16 index on the fly and
+ * lazily evaluates the UTF-16 length of the text.
+ * The start field is used as the UTF-8 offset, the limit field as the UTF-8 length.
+ * When the reservedField is not 0, then it contains a supplementary code point
+ * and the UTF-16 index is between the two corresponding surrogates.
+ * At that point, the UTF-8 index is behind that code point.
+ *
+ * The UTF-8 string pointer s is set into UCharIterator.context without copying
+ * or reallocating the string contents.
+ *
+ * @param iter UCharIterator structure to be set for iteration
+ * @param s UTF-8 string to iterate over
+ * @param length Length of s in bytes, or -1 if NUL-terminated
+ *
+ * @see UCharIterator
+ * @draft ICU 2.6
+ */
+U_CAPI void U_EXPORT2
+uiter_setUTF8(UCharIterator *iter, const char *s, int32_t length);
+
 #ifdef XP_CPLUSPLUS
 
 /**
