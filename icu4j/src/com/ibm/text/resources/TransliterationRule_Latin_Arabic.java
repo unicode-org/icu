@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/TransliterationRule_Latin_Arabic.java,v $ 
- * $Date: 2000/07/05 23:07:58 $ 
- * $Revision: 1.6 $
+ * $Date: 2000/07/05 23:43:32 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -88,7 +88,7 @@ public class TransliterationRule_Latin_Arabic extends ListResourceBundle {
               // to dd'dd. - liu
               "$dhal {dh} <> dh {$shadda};"+
               "$dad  {dd} <> dd {$shadda};"+
-              "$dal {''d} <>  d {$shadda};"+
+              "$dal {''d} [^dh] <> d {$shadda};"+ // Avoid d'dd or d'dh
 
               // [This should be removed, but it's good for demos]
               "Arabic>"+
