@@ -559,7 +559,7 @@ public:
      * @draft
      */
     virtual void transliterate(Replaceable& text, UTransPosition& index,
-                               UChar insertion,
+                               UChar32 insertion,
                                UErrorCode& status) const;
 
     /**
