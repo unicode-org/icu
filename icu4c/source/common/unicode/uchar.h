@@ -233,7 +233,9 @@ enum UProperty {
     /** Enumerated property Canonical_Combining_Class.
         Same as u_getCombiningClass, returns 8-bit numeric values. @draft ICU 2.2 */
     UCHAR_CANONICAL_COMBINING_CLASS,
-    /* UCHAR_DECOMPOSITION_TYPE, -- ### later ICU release */
+    /** Enumerated property Decomposition_Type.
+        Returns UDecompositionType values. @draft ICU 2.2 */
+    UCHAR_DECOMPOSITION_TYPE,
     /** Enumerated property East_Asian_Width.
         See http://www.unicode.org/reports/tr11/
         Returns UEastAsianWidth values. @draft ICU 2.2 */
@@ -241,9 +243,15 @@ enum UProperty {
     /** Enumerated property General_Category.
         Same as u_charType, returns UCharCategory values. @draft ICU 2.2 */
     UCHAR_GENERAL_CATEGORY,
-    /* UCHAR_JOINING_GROUP, -- ### later ICU release */
-    /* UCHAR_JOINING_TYPE, -- ### later ICU release */
-    /* UCHAR_LINE_BREAK, -- ### later ICU release */
+    /** Enumerated property Joining_Group.
+        Returns UJoiningGroup values. @draft ICU 2.2 */
+    UCHAR_JOINING_GROUP,
+    /** Enumerated property Joining_Type.
+        Returns UJoiningType values. @draft ICU 2.2 */
+    UCHAR_JOINING_TYPE,
+    /** Enumerated property Line_Break.
+        Returns ULineBreak values. @draft ICU 2.2 */
+    UCHAR_LINE_BREAK,
     /** Enumerated property Numeric_Type.
         Returns UNumericType values. @draft ICU 2.2 */
     UCHAR_NUMERIC_TYPE,
@@ -1035,6 +1043,154 @@ enum UCharNameChoice {
 
 /** @stable */
 typedef enum UCharNameChoice UCharNameChoice;
+
+/**
+ * Decomposition Type constants.
+ *
+ * @see UCHAR_DECOMPOSITION_TYPE
+ * @draft ICU 2.2
+ */
+enum UDecompositionType {
+    U_DT_NONE,
+    U_DT_CANONICAL,
+    U_DT_COMPAT,
+    U_DT_CIRCLE,
+    U_DT_FINAL,
+    U_DT_FONT,
+    U_DT_FRACTION,
+    U_DT_INITIAL,
+    U_DT_ISOLATED,
+    U_DT_MEDIAL,
+    U_DT_NARROW,
+    U_DT_NOBREAK,
+    U_DT_SMALL,
+    U_DT_SQUARE,
+    U_DT_SUB,
+    U_DT_SUPER,
+    U_DT_VERTICAL,
+    U_DT_WIDE,
+    U_DT_COUNT /* 18 */
+};
+typedef enum UDecompositionType UDecompositionType;
+
+/**
+ * Joining Type constants.
+ *
+ * @see UCHAR_JOINING_TYPE
+ * @draft ICU 2.2
+ */
+enum UJoiningType {
+    U_JT_NON_JOINING,
+    U_JT_JOIN_CAUSING,
+    U_JT_DUAL_JOINING,
+    U_JT_LEFT_JOINING,
+    U_JT_RIGHT_JOINING,
+    U_JT_TRANSPARENT,
+    U_JT_COUNT /* 6 */
+};
+typedef enum UJoiningType UJoiningType;
+
+/**
+ * Joining Group constants.
+ *
+ * @see UCHAR_JOINING_GROUP
+ * @draft ICU 2.2
+ */
+enum UJoiningGroup {
+    U_JG_NO_JOINING_GROUP,
+    U_JG_AIN,
+    U_JG_ALAPH,
+    U_JG_ALEF,
+    U_JG_BEH,
+    U_JG_BETH,
+    U_JG_DAL,
+    U_JG_DALATH_RISH,
+    U_JG_E,
+    U_JG_FEH,
+    U_JG_FINAL_SEMKATH,
+    U_JG_GAF,
+    U_JG_GAMAL,
+    U_JG_HAH,
+    U_JG_HAMZA_ON_HEH_GOAL,
+    U_JG_HE,
+    U_JG_HEH,
+    U_JG_HEH_GOAL,
+    U_JG_HETH,
+    U_JG_KAF,
+    U_JG_KAPH,
+    U_JG_KNOTTED_HEH,
+    U_JG_LAM,
+    U_JG_LAMADH,
+    U_JG_MEEM,
+    U_JG_MIM,
+    U_JG_NOON,
+    U_JG_NUN,
+    U_JG_PE,
+    U_JG_QAF,
+    U_JG_QAPH,
+    U_JG_REH,
+    U_JG_REVERSED_PE,
+    U_JG_SAD,
+    U_JG_SADHE,
+    U_JG_SEEN,
+    U_JG_SEMKATH,
+    U_JG_SHIN,
+    U_JG_SWASH_KAF,
+    U_JG_SYRIAC_WAW,
+    U_JG_TAH,
+    U_JG_TAW,
+    U_JG_TEH_MARBUTA,
+    U_JG_TETH,
+    U_JG_WAW,
+    U_JG_YEH,
+    U_JG_YEH_BARREE,
+    U_JG_YEH_WITH_TAIL,
+    U_JG_YUDH,
+    U_JG_YUDH_HE,
+    U_JG_ZAIN,
+    U_JG_COUNT /* 51 */
+};
+typedef enum UJoiningGroup UJoiningGroup;
+
+/**
+ * Line Break constants.
+ *
+ * @see UCHAR_LINE_BREAK
+ * @draft ICU 2.2
+ */
+enum ULineBreak {
+    U_LB_UNKNOWN,
+    U_LB_AMBIGUOUS,
+    U_LB_ALPHABETIC,
+    U_LB_BREAK_BOTH,
+    U_LB_BREAK_AFTER,
+    U_LB_BREAK_BEFORE,
+    U_LB_MANDATORY_BREAK,
+    U_LB_CONTINGENT_BREAK,
+    U_LB_CLOSE_PUNCTUATION,
+    U_LB_COMBINING_MARK,
+    U_LB_CARRIAGE_RETURN,
+    U_LB_EXCLAMATION,
+    U_LB_GLUE,
+    U_LB_HYPHEN,
+    U_LB_IDEOGRAPHIC,
+    U_LB_INSEPERABLE,
+    U_LB_INFIX_NUMERIC,
+    U_LB_LINE_FEED,
+    U_LB_NONSTARTER,
+    U_LB_NUMERIC,
+    U_LB_OPEN_PUNCTUATION,
+    U_LB_POSTFIX_NUMERIC,
+    U_LB_PREFIX_NUMERIC,
+    U_LB_QUOTATION,
+    U_LB_COMPLEX_CONTEXT,
+    U_LB_SURROGATE,
+    U_LB_SPACE,
+    U_LB_BREAK_SYMBOLS,
+    U_LB_ZWSPACE,
+    U_LB_COUNT /* 29 */
+};
+typedef enum ULineBreak ULineBreak;
 
 /**
  * Numeric Type constants.

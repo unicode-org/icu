@@ -30,7 +30,10 @@ enum {
     UPROPS_ADDITIONAL_VECTORS_INDEX,
     UPROPS_ADDITIONAL_VECTORS_COLUMNS_INDEX,
 
-    UPROPS_RESERVED_INDEX,
+    UPROPS_RESERVED_INDEX, /* 6 */
+
+    /* maximum values for block and script codes, bits used as in vector word 0 */
+    UPROPS_MAX_VALUES_INDEX=10,
 
     UPROPS_INDEX_COUNT=16
 };
@@ -73,13 +76,14 @@ enum {
 };
 
 /* number of properties vector words */
-#define UPROPS_VECTOR_WORDS     2
+#define UPROPS_VECTOR_WORDS     3
 
 /*
  * Properties in vector word 0
  * Bits
  * 31..24   DerivedAge version major/minor one nibble each
- * 23..18   reserved
+ * 23       reserved
+ * 22..18   Line Break
  * 17..15   East Asian Width
  * 14.. 7   UBlockCode
  *  6.. 0   UScriptCode
@@ -89,8 +93,11 @@ enum {
 #define UPROPS_AGE_MASK         0xff000000
 #define UPROPS_AGE_SHIFT        24
 
-#define UPROPS_EA_WIDTH_MASK    0x00038000
-#define UPROPS_EA_WIDTH_SHIFT   15
+#define UPROPS_LB_MASK          0x007C0000
+#define UPROPS_LB_SHIFT         18
+
+#define UPROPS_EA_MASK          0x00038000
+#define UPROPS_EA_SHIFT         15
 
 #define UPROPS_BLOCK_MASK       0x00007f80
 #define UPROPS_BLOCK_SHIFT      7
@@ -142,6 +149,21 @@ enum {
     UPROPS_BINARY_1_TOP
 };
 
+/*
+ * Properties in vector word 2
+ * Bits
+ * 13..11   Joining Type
+ * 10.. 5   Joining Group
+ *  4.. 0   Decomposition Type
+ */
+#define UPROPS_JT_MASK          0x00003800
+#define UPROPS_JT_SHIFT         11
+
+#define UPROPS_JG_MASK          0x000007e0
+#define UPROPS_JG_SHIFT         5
+
+#define UPROPS_DT_MASK          0x0000001f
+
 /**
  * Get a properties vector word for a code point.
  * Implemented in uchar.c for uprops.c.
@@ -150,6 +172,13 @@ enum {
  */
 U_CFUNC uint32_t
 u_getUnicodeProperties(UChar32 c, int32_t column);
+
+/**
+ * Get the the maximum values for some enum/int properties.
+ * @internal
+ */
+U_CFUNC int32_t
+uprv_getMaxValues();
 
 /**
  * Unicode property names and property value names are compared
