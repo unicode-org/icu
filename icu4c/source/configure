@@ -2965,8 +2965,7 @@ case "${host}" in
 	*-*-irix*)      platform=IRIX ;;
 	*-*-os390*)	platform=OS390 ;;
 	*-*-os400*)	platform=OS400 ;;
-	*-apple-rhapsody*)	platform=U_RHAPSODY ;;
-	*-apple-darwin*)	platform=U_DARWIN ;;
+	*-apple-darwin*|*-apple-rhapsody*)	platform=U_DARWIN ;;
 	*) 		platform=U_UNKNOWN_PLATFORM ;;
 esac
 
