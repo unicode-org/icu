@@ -66,7 +66,7 @@ main(int argc, char* argv[]) {
     /* read command line options */
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
 
-    if(options[4].doesOccur)
+    if( (options[4].doesOccur) && uprv_strcmp(options[4].value, "icudata")) /* be consistent with gencmn! */
     {
       uprv_strcpy(symPrefix, options[4].value);
       uprv_strcat(symPrefix, "_");
