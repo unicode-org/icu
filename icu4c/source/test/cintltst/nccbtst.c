@@ -888,7 +888,7 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
                 UCNV_TO_U_CALLBACK_SKIP, from_isciiOffs , NULL, 0))
             log_err("iscii->u with skip did not match.\n");
 
-        if(/* broken for icu 1.6 and 1.6.0.1, do not test */uprv_strcmp("1.7", U_ICU_VERSION) != 0 && !testConvertToUnicode(sampleTxtLMBCS, sizeof(sampleTxtLMBCS),
+        if(!testConvertToUnicode(sampleTxtLMBCS, sizeof(sampleTxtLMBCS),
                 LMBCSToUnicode, sizeof(LMBCSToUnicode)/sizeof(LMBCSToUnicode[0]),"LMBCS-1",
                 UCNV_TO_U_CALLBACK_SKIP, fromLMBCS , NULL, 0))
             log_err("LMBCS->u with skip did not match.\n");
@@ -2397,7 +2397,7 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
     }
 
 
-    log_verbose("Testing toUnicode with UCNV_FROM_U_CALLBACK_ESCAPE \n");
+    log_verbose("Testing toUnicode with UCNV_TO_U_CALLBACK_ESCAPE \n");
     /*to Unicode*/
     {
         static const uint8_t sampleTxtToU[]= { 0x00, 0x9f, 0xaf, 
@@ -2523,7 +2523,30 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
         static const int32_t fromLMBCS[] = {0, 
             3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
             6, };
-       
+
+        /*UTF8*/
+        static const uint8_t sampleTxtUTF8[]={
+            0x20, 0x64, 0x50, 
+            0xC2, 0x7E, /* truncated char */
+            0x20,
+            0xE0, 0xB5, 0x7E, /* truncated char */
+            0x40,
+        };
+        static const UChar UTF8ToUnicode[]={
+            0x0020, 0x0064, 0x0050,
+            0x0025, 0x0058, 0x0043, 0x0032, 0x007E,  /* \xC2~ */
+            0x0020,
+            0x0025, 0x0058, 0x0045, 0x0030, 0x0025, 0x0058, 0x0042, 0x0035, 0x007E,
+            0x0040
+        };
+        static const int32_t fromUTF8[] = {
+            0, 1, 2,
+            3, 3, 3, 3, 4,
+            5,
+            6, 6, 6, 6, 6, 6, 6, 6, 8,
+            9
+        };
+
         
         if(!testConvertToUnicode(sampleTxtToU, sizeof(sampleTxtToU),
                  IBM_943toUnicode, sizeof(IBM_943toUnicode)/sizeof(IBM_943toUnicode[0]),"ibm-943",
@@ -2607,11 +2630,14 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
                  isciitoUnicode, sizeof(isciitoUnicode)/sizeof(isciitoUnicode[0]),"ISCII,version=0",
                 UCNV_TO_U_CALLBACK_ESCAPE, from_isciiOffs, NULL, 0))
             log_err("ISCII ->u with substitute with value did not match.\n");
-        /*got to confirm this*/
-        if(/* broken for icu 1.6.0.1, do not test */uprv_strcmp("1.7", U_ICU_VERSION) != 0 && !testConvertToUnicode(sampleTxtLMBCS, sizeof(sampleTxtLMBCS),
+        if(!testConvertToUnicode(sampleTxtLMBCS, sizeof(sampleTxtLMBCS),
                 LMBCSToUnicode, sizeof(LMBCSToUnicode)/sizeof(LMBCSToUnicode[0]),"LMBCS",
                 UCNV_TO_U_CALLBACK_ESCAPE, fromLMBCS, NULL, 0))
             log_err("LMBCS->u with substitute with value did not match.\n"); 
+        if(!testConvertToUnicode(sampleTxtUTF8, sizeof(sampleTxtUTF8),
+                UTF8ToUnicode, sizeof(UTF8ToUnicode)/sizeof(UTF8ToUnicode[0]),"UTF-8",
+                UCNV_TO_U_CALLBACK_ESCAPE, fromUTF8, NULL, 0))
+            log_err("UTF8->u with UCNV_TO_U_CALLBACK_ESCAPE with value did not match.\n"); 
     }
 }
 
