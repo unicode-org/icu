@@ -867,6 +867,7 @@ UBool putil_cleanup(void)
 {
     if (gDataDirectory) {
         uprv_free(gDataDirectory);
+        gDataDirectory = NULL;
     }
     return TRUE;
 }

@@ -32,12 +32,10 @@
 
 #include "unicode/locid.h"
 #include "unicode/uloc.h"
-#include "unicode/resbund.h"
-#include "uresimp.h"
 #include "mutex.h"
-#include "unicode/unicode.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "ucln_cmn.h"
 
 /*Character separating the posix id fields*/
 // '_'
@@ -473,7 +471,7 @@ Locale::createFromName (const char *name)
         /* for some reason */
         if(namelen > buflen) {
             buflen = namelen+1;
-            heap = (char*)uprv_malloc(buflen);
+            heap = new char[buflen];
             buf = heap;
         }
 
@@ -482,7 +480,7 @@ Locale::createFromName (const char *name)
         Locale l(buf);
         if(heap != NULL)
         {
-            free(heap);
+            delete heap;
         }
         return l;
     }
@@ -686,29 +684,29 @@ Locale::getDisplayName( const   Locale&     inLocale,
     return result;
 }
 
+UBool
+locale_cleanup(void)
+{
+    if (availableLocaleList) {
+        delete []availableLocaleList;
+        availableLocaleList = NULL;
+    }
+    availableLocaleListCount = 0;
+    return TRUE;
+}
+
 const Locale*
 Locale::getAvailableLocales(int32_t& count) 
 {
     // for now, there is a hardcoded list, so just walk through that list and set it up.
     if (availableLocaleList == 0) {
-        UErrorCode status = U_ZERO_ERROR;
-        ResourceBundle index(UnicodeString(""), Locale(kIndexLocaleName), status);
-        ResourceBundle locales = index.get(kIndexTag, status);
+        int32_t locCount = uloc_countAvailable();
+        Locale *newLocaleList = new Locale[locCount];
 
-        char name[96];
-        locales.resetIterator();
+        count = locCount;
 
-        count = locales.getSize();
-
-        Locale *newLocaleList = new Locale[count];
-
-        int32_t i = 0;
-        UnicodeString temp;
-        while(locales.hasNext()) {
-            temp = locales.getNextString(status);
-            temp.extract(0, temp.length(), name);
-            name[temp.length()] = '\0';
-            newLocaleList[i++].setFromPOSIXID(name);
+        while(--locCount >= 0) {
+            newLocaleList[locCount].setFromPOSIXID(uloc_getAvailable(locCount));
         }
 
         Mutex mutex;
