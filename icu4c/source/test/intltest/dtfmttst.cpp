@@ -981,7 +981,7 @@ void DateFormatTest::TestDateFormatCalendar() {
     str.truncate(0);
     full->format(when, str);
     // Thursday, April 5, 2001 5:45:00 PM PDT 986517900000
-    if (when == 986517900000) {
+    if (when == 986517900000.0) {
         logln("Ok: Parsed result: " + str);
     } else {
         errln("FAIL: Parsed result: " + str + ", exp 4/5/2001 5:45 PM");
