@@ -1234,10 +1234,14 @@ void NumberFormatTest::TestSymbolsWithBadLocale(void) {
     if (strcmp(mySymbols.getLocale().getName(), locBad.getName()) != 0) {
         errln("DecimalFormatSymbols does not have the right locale.");
     }
-    DecimalFormatSymbols::ENumberFormatSymbol symbolEnum;
-    int *symbolEnumPtr = (int*)(&symbolEnum);
-    for (symbolEnum = DecimalFormatSymbols::kDecimalSeparatorSymbol; symbolEnum < DecimalFormatSymbols::kFormatSymbolCount; (*symbolEnumPtr)++) {
-        if (mySymbols.getSymbol(symbolEnum).length() == 0 && symbolEnum != DecimalFormatSymbols::kGroupingSeparatorSymbol) {
+    int symbolEnum = (int)DecimalFormatSymbols::kDecimalSeparatorSymbol;
+    for (; symbolEnum < (int)DecimalFormatSymbols::kFormatSymbolCount; symbolEnum++) {
+        logln(UnicodeString("DecimalFormatSymbols[") + symbolEnum + UnicodeString("] = ")
+            + prettify(mySymbols.getSymbol((DecimalFormatSymbols::ENumberFormatSymbol)symbolEnum)));
+
+        if (mySymbols.getSymbol((DecimalFormatSymbols::ENumberFormatSymbol)symbolEnum).length() == 0
+            && symbolEnum != (int)DecimalFormatSymbols::kGroupingSeparatorSymbol)
+        {
             errln("DecimalFormatSymbols has an empty string at index %d.", symbolEnum);
         }
     }
