@@ -169,11 +169,12 @@ static int32_t ures_flushCache()
     /*if shared data hasn't even been lazy evaluated yet
     * return 0
     */
+    umtx_lock(&resbMutex);
     if (cache == NULL)
+        umtx_unlock(&resbMutex);
         return 0;
 
     /*creates an enumeration to iterate through every element in the table */
-    umtx_lock(&resbMutex);
     while ((e = uhash_nextElement(cache, &pos)) != NULL)
     {
         resB = (UResourceDataEntry *) e->value.pointer;

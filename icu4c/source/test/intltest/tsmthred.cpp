@@ -137,17 +137,16 @@ void MultithreadTest::runIndexedTest( int32_t index, UBool exec,
 #   define NOIME
 #   define NOMCX
 #include <windows.h>
+#include <process.h>
 
 struct Win32ThreadImplementation
 {
-    HANDLE fHandle;
-    DWORD fThreadID;
+    unsigned long fHandle;
 };
 
-extern "C" unsigned long _stdcall SimpleThreadProc(void *arg)
+extern "C" void __cdecl SimpleThreadProc(void *arg)
 {
     ((SimpleThread*)arg)->run();
-    return 0;
 }
 
 SimpleThread::SimpleThread()
@@ -155,7 +154,6 @@ SimpleThread::SimpleThread()
 {
     Win32ThreadImplementation *imp = new Win32ThreadImplementation;
     imp->fHandle = 0;
-    imp->fThreadID = 0;
 
     fImplementation = imp;
 }
@@ -168,16 +166,22 @@ SimpleThread::~SimpleThread()
 int32_t SimpleThread::start()
 {
     Win32ThreadImplementation *imp = (Win32ThreadImplementation*)fImplementation;
-
-    if(imp->fHandle != NULL)
-        return 0;
-
-    imp->fHandle = CreateThread(NULL,0,SimpleThreadProc,(void*)this,0,&imp->fThreadID);
-    if(imp->fHandle == NULL) {
-      return -1;
-    } else {
-      return 0;
+    if(imp->fHandle != NULL) {
+        // The thread appears to have already been started.
+        //   This is probably an error on the part of our caller.
+        return -1;
     }
+
+    imp->fHandle = _beginthread( SimpleThreadProc, 0 /*stack size*/ , (void *)this );
+    if (imp->fHandle == -1) {
+        // An error occured
+        int err = errno;
+        if (err == 0) {
+            err = -1;
+        }
+        return err;
+    }
+    return 0;
 }
 
 void SimpleThread::sleep(int32_t millis)
@@ -365,7 +369,9 @@ void MultithreadTest::TestThreads()
     logln("->" + UnicodeString(threadTestChars) + "<- Firing off threads.. ");
     for(i=0;i<THREADTEST_NRTHREADS;i++)
     {
-        threads[i]->start();
+        if (threads[i]->start() != 0) {
+            errln("Error starting thread %d", i);
+        }
         SimpleThread::sleep(200);
         logln(" Subthread started.");
     }
@@ -473,8 +479,10 @@ void MultithreadTest::TestMutex()
 
     TestMutexThread1  thread1;
     TestMutexThread2  thread2(thread1);
-    thread2.start();
-    thread1.start();
+    if (thread2.start() != 0  || 
+        thread1.start() != 0 ) {
+        errln("Error starting threads.");
+    }
 
     for(int32_t patience = 12; patience > 0;patience--)
     {
@@ -822,8 +830,13 @@ void MultithreadTest::TestThreadedIntl()
     FormatThreadTest tests[kFormatThreadThreads];
  
     logln(UnicodeString("Spawning: ") + kFormatThreadThreads + " threads * " + kFormatThreadIterations + " iterations each.");
-    for(int32_t j = 0; j < kFormatThreadThreads; j++)
-        tests[j].start();
+    for(int32_t j = 0; j < kFormatThreadThreads; j++) {
+        int32_t threadStatus = tests[j].start();
+        if (threadStatus != 0) {
+            errln("System Error %d starting thread number %d.", threadStatus, j);
+            return;
+        }
+    }
 
     for(int32_t patience = kFormatThreadPatience;patience > 0; patience --)
     {
