@@ -74,6 +74,9 @@ static void TestCoverageMBCS(void);
 
 void addTestNewConvert(TestNode** root);
 
+/* open a converter, using test data if it begins with '@' */
+static UConverter *my_ucnv_open(const char *cnv, UErrorCode *err);
+
 
 #define NEW_MAX_BUFFER 999
 
@@ -82,6 +85,15 @@ static int32_t  gOutBufferSize = NEW_MAX_BUFFER;
 static char     gNuConvTestName[1024];
 
 #define nct_min(x,y)  ((x<y) ? x : y)
+
+static UConverter *my_ucnv_open(const char *cnv, UErrorCode *err)
+{
+  if(cnv && cnv[0] == '@') {
+    return ucnv_openPackage("testdata", cnv+1, err);
+  } else {
+    return ucnv_open(cnv, err);
+  }
+}
 
 static void printSeq(const unsigned char* a, int len)
 {
@@ -279,7 +291,8 @@ static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_
 
     log_verbose("\n=========  %s\n", gNuConvTestName);
 
-    conv = ucnv_open(codepage, &status);
+    conv = my_ucnv_open(codepage, &status);
+    
     if(U_FAILURE(status))
     {
         log_err("Couldn't open converter %s\n",codepage);
@@ -446,7 +459,8 @@ static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *
 
     log_verbose("\n=========  %s\n", gNuConvTestName);
 
-    conv = ucnv_open(codepage, &status);
+    conv = my_ucnv_open(codepage, &status);
+
     if(U_FAILURE(status))
     {
         log_err("Couldn't open converter %s\n",gNuConvTestName);
@@ -1046,6 +1060,8 @@ static void TestCoverageMBCS(){
     int len = 0;
     char* index=NULL;
     directory = loadTestData(&status);
+
+#if 0
     len = strlen(directory);
     tdpath = (char*) uprv_malloc(sizeof(char) * (len * 2));
     uprv_strcpy(saveDirectory,u_getDataDirectory());
@@ -1058,6 +1074,7 @@ static void TestCoverageMBCS(){
     }
     u_setDataDirectory(tdpath);
     log_verbose("ICU data directory is set to: %s \n" ,tdpath);
+#endif
 
     /*some more test to increase the code coverage in MBCS.  Create an test converter from test1.ucm
       which is test file for MBCS conversion with single-byte codepage data.*/
@@ -1074,12 +1091,12 @@ static void TestCoverageMBCS(){
 
         /*from Unicode*/
         if(!testConvertFromU(unicodeInput, sizeof(unicodeInput)/sizeof(unicodeInput[0]),
-                expectedtest1, sizeof(expectedtest1), "test1", totest1Offs,FALSE ))
+                expectedtest1, sizeof(expectedtest1), "@test1", totest1Offs,FALSE ))
             log_err("u-> test1(MBCS conversion with single-byte) did not match.\n");
 
         /*to Unicode*/
         if(!testConvertToU(test1input, sizeof(test1input),
-               expectedUnicode, sizeof(expectedUnicode)/sizeof(expectedUnicode[0]), "test1", fromtest1Offs ,FALSE))
+               expectedUnicode, sizeof(expectedUnicode)/sizeof(expectedUnicode[0]), "@test1", fromtest1Offs ,FALSE))
             log_err("test1(MBCS conversion with single-byte) -> u  did not match.\n");
 
     }
@@ -1099,12 +1116,12 @@ static void TestCoverageMBCS(){
 
         /*from Unicode*/
         if(!testConvertFromU(unicodeInput, sizeof(unicodeInput)/sizeof(unicodeInput[0]),
-                expectedtest3, sizeof(expectedtest3), "test3", totest3Offs,FALSE ))
+                expectedtest3, sizeof(expectedtest3), "@test3", totest3Offs,FALSE ))
             log_err("u-> test3(MBCS conversion with three-byte) did not match.\n");
 
         /*to Unicode*/
         if(!testConvertToU(test3input, sizeof(test3input),
-               expectedUnicode, sizeof(expectedUnicode)/sizeof(expectedUnicode[0]), "test3", fromtest3Offs ,FALSE))
+               expectedUnicode, sizeof(expectedUnicode)/sizeof(expectedUnicode[0]), "@test3", fromtest3Offs ,FALSE))
             log_err("test3(MBCS conversion with three-byte) -> u  did not match.\n");
 
     }
@@ -1124,20 +1141,22 @@ static void TestCoverageMBCS(){
 
         /*from Unicode*/
         if(!testConvertFromU(unicodeInput, sizeof(unicodeInput)/sizeof(unicodeInput[0]),
-                expectedtest4, sizeof(expectedtest4), "test4", totest4Offs,FALSE ))
+                expectedtest4, sizeof(expectedtest4), "@test4", totest4Offs,FALSE ))
             log_err("u-> test4(MBCS conversion with four-byte) did not match.\n");
 
         /*to Unicode*/
         if(!testConvertToU(test4input, sizeof(test4input),
-               expectedUnicode, sizeof(expectedUnicode)/sizeof(expectedUnicode[0]), "test4", fromtest4Offs,FALSE ))
+               expectedUnicode, sizeof(expectedUnicode)/sizeof(expectedUnicode[0]), "@test4", fromtest4Offs,FALSE ))
             log_err("test4(MBCS conversion with four-byte) -> u  did not match.\n");
 
     }
+#if 0
     uprv_free(tdpath);
     /* restore the original data directory */
     log_verbose("Setting the data directory to %s \n", saveDirectory);
     u_setDataDirectory(saveDirectory);
     uprv_free(saveDirectory);
+#endif
 
 }
 
@@ -1145,7 +1164,8 @@ static void TestConverterType(const char *convName, UConverterType convType) {
     UConverter* myConverter;
     UErrorCode err = U_ZERO_ERROR;
 
-    myConverter = ucnv_open(convName, &err);
+    myConverter = my_ucnv_open(convName, &err);
+
     if (U_FAILURE(err)) {
         log_err("Failed to create an %s converter\n", convName);
         return;
@@ -2639,7 +2659,7 @@ static int TestJitterbug930(const char* enc){
     int32_t* offsets = off;
     int numOffWritten=0;
     UBool flush = 0;
-    converter = ucnv_open(enc, &err); /* "",&err);*/
+    converter = my_ucnv_open(enc, &err);
     
     in[0] = 0x41;     /* 0x4E00;*/
     in[1] = 0x4E01;
@@ -3011,7 +3031,7 @@ static void TestConv(const uint16_t in[],int len, const char* conv, const char* 
     UConverter *cnv;
     int32_t* offsets = (int32_t*) malloc(uBufSize * sizeof(int32_t) );
     int32_t* myOff= offsets;
-    cnv=ucnv_open(conv, &errorCode);
+    cnv=my_ucnv_open(conv, &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("Unable to open a %s converter: %s\n", conv, u_errorName(errorCode));
         return;

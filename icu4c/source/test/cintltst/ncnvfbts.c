@@ -32,6 +32,16 @@ static int32_t  gInBufferSize = 0;
 static int32_t  gOutBufferSize = 0;
 static char     gNuConvTestName[1024];
 
+static UConverter *my_ucnv_open(const char *cnv, UErrorCode *err)
+{
+  if(cnv && cnv[0] == '@') {
+    return ucnv_openPackage("testdata", cnv+1, err);
+  } else {
+    return ucnv_open(cnv, err);
+  }
+}
+
+
 static void printSeq(const unsigned char* a, int len)
 {
     int i=0;
@@ -146,7 +156,7 @@ static UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const u
     log_verbose("\nTesting========= %s  FROM \n  inputbuffer= %d   outputbuffer= %d\n", codepage, gInBufferSize, 
             gOutBufferSize);
 
-    conv = ucnv_open(codepage, &status);
+    conv = my_ucnv_open(codepage, &status);
     if(U_FAILURE(status))
     {
         log_err("Couldn't open converter %s\n",codepage);
@@ -310,7 +320,7 @@ static UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const U
 
     log_verbose("\n=========  %s\n", gNuConvTestName);
 
-    conv = ucnv_open(codepage, &status);
+    conv = my_ucnv_open(codepage, &status);
     if(U_FAILURE(status))
     {
         log_err("Couldn't open converter %s\n",gNuConvTestName);
@@ -642,12 +652,12 @@ static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize )
 
         /*from Unicode*/
         if(!testConvertFromUnicode(unicodeInput, sizeof(unicodeInput)/sizeof(unicodeInput[0]),
-                expectedtest1, sizeof(expectedtest1), "test1", TRUE, totest1Offs ))
+                expectedtest1, sizeof(expectedtest1), "@test1", TRUE, totest1Offs ))
             log_err("u-> test1(MBCS conversion with single-byte) did not match.\n");
         
         /*to Unicode*/
         if(!testConvertToUnicode(test1input, sizeof(test1input),
-               expectedUnicode, sizeof(expectedUnicode)/sizeof(expectedUnicode[0]), "test1", TRUE, fromtest1Offs ))
+               expectedUnicode, sizeof(expectedUnicode)/sizeof(expectedUnicode[0]), "@test1", TRUE, fromtest1Offs ))
             log_err("test1(MBCS conversion with single-byte) -> u  did not match.\n");
 
     }
@@ -669,12 +679,12 @@ static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize )
 
         /*from Unicode*/
         if(!testConvertFromUnicode(unicodeInput, sizeof(unicodeInput)/sizeof(unicodeInput[0]),
-                expectedtest3, sizeof(expectedtest3), "test3", TRUE, totest3Offs ))
+                expectedtest3, sizeof(expectedtest3), "@test3", TRUE, totest3Offs ))
             log_err("u-> test3(MBCS conversion with three-byte) did not match.\n");
         
         /*to Unicode*/
         if(!testConvertToUnicode(test3input, sizeof(test3input),
-               expectedUnicode, sizeof(expectedUnicode)/sizeof(expectedUnicode[0]), "test3", TRUE, fromtest3Offs ))
+               expectedUnicode, sizeof(expectedUnicode)/sizeof(expectedUnicode[0]), "@test3", TRUE, fromtest3Offs ))
             log_err("test3(MBCS conversion with three-byte) -> u  did not match.\n"); 
 
     }
@@ -704,12 +714,12 @@ static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize )
 
         /*from Unicode*/
         if(!testConvertFromUnicode(unicodeInput, sizeof(unicodeInput)/sizeof(unicodeInput[0]),
-                expectedtest4, sizeof(expectedtest4), "test4", TRUE, totest4Offs ))
+                expectedtest4, sizeof(expectedtest4), "@test4", TRUE, totest4Offs ))
             log_err("u-> test4(MBCS conversion with four-byte) did not match.\n");
         
         /*to Unicode*/
         if(!testConvertToUnicode(test4input, sizeof(test4input),
-               expectedUnicode, sizeof(expectedUnicode)/sizeof(expectedUnicode[0]), "test4", TRUE, fromtest4Offs ))
+               expectedUnicode, sizeof(expectedUnicode)/sizeof(expectedUnicode[0]), "@test4", TRUE, fromtest4Offs ))
             log_err("test4(MBCS conversion with four-byte) -> u  did not match.\n"); 
 
     }
