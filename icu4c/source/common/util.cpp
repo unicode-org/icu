@@ -340,8 +340,6 @@ int32_t ICU_Utility::parsePattern(const UnicodeString& pat,
     return -1; // text ended before end of pat
 }
 
-static const UChar ZERO_X[] = {48, 120, 0}; // "0x"
-
 /**
  * Parse an integer at pos, either of the form \d+ or of the form
  * 0x[0-9A-Fa-f]+ or 0[0-7]+, that is, in standard decimal, hex,
@@ -356,13 +354,16 @@ int32_t ICU_Utility::parseInteger(const UnicodeString& rule, int32_t& pos, int32
     int32_t p = pos;
     int8_t radix = 10;
 
-    if (0 == rule.caseCompare(p, 2, ZERO_X, U_FOLD_CASE_DEFAULT)) {
-        p += 2;
-        radix = 16;
-    } else if (p < limit && rule.charAt(p) == 48 /*0*/) {
-        p++;
-        count = 1;
-        radix = 8;
+    if (p < limit && rule.charAt(p) == 48 /*0*/) {
+        if (p+1 < limit && (rule.charAt(p+1) == 0x78 /*x*/ || rule.charAt(p+1) == 0x58 /*X*/)) {
+            p += 2;
+            radix = 16;
+        }
+        else {
+            p++;
+            count = 1;
+            radix = 8;
+        }
     }
 
     while (p < limit) {
