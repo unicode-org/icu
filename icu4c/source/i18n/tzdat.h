@@ -5,6 +5,7 @@
 **********************************************************************
 *   Date        Name        Description
 *   11/24/99    aliu        Creation.
+*   12/13/1999  srl         Padded OffsetIndex to 4 byte values
 **********************************************************************
 */
 
@@ -128,10 +129,11 @@ struct DSTZone {
  * those in the array starting at &zoneNumber.
  */
 struct OffsetIndex {
-    uint16_t  nextEntryDelta;
     int32_t   gmtOffset;  // in ms
+    uint16_t  nextEntryDelta;
     uint16_t  defaultZone; // a zone number from 0..TZHeader.count-1
     uint16_t  count;
+    uint16_t  padding;    // to make the next field 32-bit aligned
     uint16_t  zoneNumber; // There are actually 'count' uint16_t's here
 };
 
