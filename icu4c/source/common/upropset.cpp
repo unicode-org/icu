@@ -16,6 +16,7 @@
 #include "ucln.h"
 #include "charstr.h"
 #include "uprops.h"
+#include "uassert.h"
 
 
 static UMTX PROPSET_MUTEX = NULL;
@@ -75,7 +76,7 @@ static const int32_t ASCII = -2; // [\u0000-\u007F]
 // FFFFD;<Plane 15 Private Use, Last>;Co;0;L;;;;;N;;;;;
 // 100000;<Plane 16 Private Use, First>;Co;0;L;;;;;N;;;;;
 // 10FFFD;<Plane 16 Private Use, Last>;Co;0;L;;;;;N;;;;;
-// 
+//
 // >Large Blocks of Unassigned: (from DerivedGeneralCategory)
 // 1044E..1CFFF  ; Cn # [52146]
 // 1D800..1FFFF  ; Cn # [10240]
@@ -342,6 +343,10 @@ static UBool _combiningClassFilter(UChar32 c, void* context) {
 UnicodeSet* UnicodePropertySet::createCombiningClassSet(const UnicodeString& valueName,
                                                         UErrorCode &status)
 {
+    init(status);
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
     CharString cvalueName(valueName);
     UnicodeSet* set = new UnicodeSet();
     char* end;
@@ -371,6 +376,10 @@ static UBool _bidiClassFilter(UChar32 c, void* context) {
 UnicodeSet* UnicodePropertySet::createBidiClassSet(const UnicodeString& valueName,
                                                    UErrorCode &status)
 {
+    init(status);
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
     int32_t valueCode = BIDI_CLASS_MAP->geti(valueName) - MAPVAL;
     if (valueCode < 0) {
         return NULL;
@@ -392,6 +401,10 @@ UnicodeSet* UnicodePropertySet::createBidiClassSet(const UnicodeString& valueNam
 UnicodeSet* UnicodePropertySet::createCategorySet(const UnicodeString& valueName,
                                                   UErrorCode &status)
 {
+    init(status);
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
     int32_t valueCode = CATEGORY_MAP->geti(valueName);
     if (valueCode == 0) {
         return NULL;
@@ -437,7 +450,7 @@ UnicodeSet* UnicodePropertySet::createScriptSet(const UnicodeString& valueName,
         // Syntax error; unknown short name
         return NULL;
     }
-    return new UnicodeSet(getScriptSet(script[0], status));
+    return new UnicodeSet(*getScriptSet(script[0], status));
 }
 
 static UBool _binaryPropertyFilter(UChar32 c, void* context) {
@@ -458,7 +471,7 @@ UnicodeSet* UnicodePropertySet::createBinaryPropertySet(const UnicodeString& nam
         return NULL;
     }
 
-    UnicodeSet* set = new UnicodeSet(); 
+    UnicodeSet* set = new UnicodeSet();
     if (set == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
@@ -521,17 +534,21 @@ static UBool _scriptFilter(UChar32 c, void* context) {
  *
  * Callers MUST NOT MODIFY the returned set.
  */
-const UnicodeSet& UnicodePropertySet::getScriptSet(UScriptCode script,
+const UnicodeSet* UnicodePropertySet::getScriptSet(UScriptCode script,
                                                    UErrorCode &status)
 {
+    init(status);
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+
     if (SCRIPT_CACHE[script].isEmpty()) {
-        umtx_lock(&PROPSET_MUTEX);
+        Mutex mutex(&PROPSET_MUTEX);  
         if (SCRIPT_CACHE[script].isEmpty()) {
             initSetFromFilter(SCRIPT_CACHE[script], _scriptFilter, &script, status);
         }
-        umtx_unlock(&PROPSET_MUTEX);
     }
-    return SCRIPT_CACHE[script];
+    return &SCRIPT_CACHE[script];
 }
 
 /**
@@ -601,17 +618,20 @@ void UnicodePropertySet::initSetFromFilter(UnicodeSet& set, Filter filter,
     // those properties.  Scanning code points is slow.
 
     init(status);
+    if (U_FAILURE(status)) {
+        return;
+    }
 
     set.clear();
 
     int32_t startHasProperty = -1;
     int limitRange = INCLUSIONS->getRangeCount();
-    
+
     for (int j=0; j<limitRange; ++j) {
         // get current range
         UChar32 start = INCLUSIONS->getRangeStart(j);
         UChar32 end = INCLUSIONS->getRangeEnd(j);
-        
+
         // for all the code points in the range, process
         for (UChar32 ch = start; ch <= end; ++ch) {
             // only add to the unicodeset on inflection points --
@@ -669,55 +689,49 @@ void UnicodePropertySet::addValue(Hashtable* map,
 }
 
 void UnicodePropertySet::init(UErrorCode &status) {
+    // init() initializes several static variables.
+    //   SCRIPT_CACHE is the one that flags whether inialization is done.
+    if (SCRIPT_CACHE != NULL || U_FAILURE(status)) {
+        return;
+    }
+
+    Mutex mutex(&PROPSET_MUTEX);  
     if (SCRIPT_CACHE != NULL) {
         return;
     }
 
-    umtx_lock(NULL);
-    if (PROPSET_MUTEX == NULL) {
-        umtx_init(&PROPSET_MUTEX);
-    }
-    umtx_unlock(NULL);
+    static int recursionCount;
+    recursionCount++;
+    U_ASSERT(recursionCount == 1);
 
-    umtx_lock(&PROPSET_MUTEX);
-    if (SCRIPT_CACHE == NULL) {
-        SCRIPT_CACHE = new UnicodeSet[(size_t)USCRIPT_CODE_LIMIT];
-        CATEGORY_CACHE = new UnicodeSet[32]; // 32 is guaranteed by the Unicode standard
-        INCLUSIONS = new UnicodeSet(INCLUSIONS_PATTERN, status); // This may call us again!
-    }
-    umtx_unlock(&PROPSET_MUTEX);
+    UnicodeSet *tSCRIPT_CACHE = new UnicodeSet[(size_t)USCRIPT_CODE_LIMIT];
+    CATEGORY_CACHE = new UnicodeSet[32];  // 32 is guaranteed by the Unicode standard
+    INCLUSIONS = new UnicodeSet(INCLUSIONS_PATTERN, status); // This may call us again!
+    NAME_MAP = new Hashtable(TRUE);
+    CATEGORY_MAP = new Hashtable(TRUE);
+    COMBINING_CLASS_MAP = new Hashtable(TRUE);
+    BIDI_CLASS_MAP = new Hashtable(TRUE);
+    BINARY_PROPERTY_MAP = new Hashtable(TRUE);
+    BOOLEAN_VALUE_MAP = new Hashtable(TRUE);
 
-    if (!SCRIPT_CACHE || !CATEGORY_CACHE || !INCLUSIONS)
+    if (!tSCRIPT_CACHE || !CATEGORY_CACHE || !INCLUSIONS || !NAME_MAP || 
+        !CATEGORY_MAP || !COMBINING_CLASS_MAP || !BINARY_PROPERTY_MAP || !BOOLEAN_VALUE_MAP)
     {
+        delete tSCRIPT_CACHE;
+        delete CATEGORY_CACHE;
+        delete INCLUSIONS;
+        delete NAME_MAP;
+        delete CATEGORY_MAP;
+        delete COMBINING_CLASS_MAP;
+        delete BINARY_PROPERTY_MAP;
+        delete BOOLEAN_VALUE_MAP;
+        tSCRIPT_CACHE = CATEGORY_CACHE = INCLUSIONS = NULL;
+        NAME_MAP = CATEGORY_MAP = COMBINING_CLASS_MAP = NULL;
+        BINARY_PROPERTY_MAP = BOOLEAN_VALUE_MAP = NULL;
+        recursionCount--;
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-
-    UBool didInit = FALSE;
-    umtx_lock(&PROPSET_MUTEX);
-    if (NAME_MAP == NULL) {
-        NAME_MAP = new Hashtable(TRUE);
-        CATEGORY_MAP = new Hashtable(TRUE);
-        COMBINING_CLASS_MAP = new Hashtable(TRUE);
-        BIDI_CLASS_MAP = new Hashtable(TRUE);
-        BINARY_PROPERTY_MAP = new Hashtable(TRUE);
-        BOOLEAN_VALUE_MAP = new Hashtable(TRUE);
-        didInit = TRUE;
-    }
-    umtx_unlock(&PROPSET_MUTEX);
-    if (!didInit) {
-        /* TODO: Can we really return here? Is it safe? Should we wait? */
-        return;
-    }
-
-    if (!NAME_MAP || !CATEGORY_MAP || !COMBINING_CLASS_MAP || !BINARY_PROPERTY_MAP
-        || !BOOLEAN_VALUE_MAP)
-    {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-
-    umtx_lock(&PROPSET_MUTEX); /* unlock at the end of the function */
 
     u_enumCharTypes(_enumCategoryRange, 0);
 
@@ -905,18 +919,18 @@ void UnicodePropertySet::init(UErrorCode &status) {
     ADDVALUE(BIDI_CLASS_MAP, "EN", "EUROPEANNUMBER", MAPVAL + U_EUROPEAN_NUMBER);
     ADDVALUE(BIDI_CLASS_MAP, "ES", "EUROPEANSEPARATOR", MAPVAL + U_EUROPEAN_NUMBER_SEPARATOR);
     ADDVALUE(BIDI_CLASS_MAP, "ET", "EUROPEANTERMINATOR", MAPVAL + U_EUROPEAN_NUMBER_TERMINATOR);
-    ADDVALUE(BIDI_CLASS_MAP, "L", "LEFTTORIGHT", MAPVAL + U_LEFT_TO_RIGHT); 
+    ADDVALUE(BIDI_CLASS_MAP, "L", "LEFTTORIGHT", MAPVAL + U_LEFT_TO_RIGHT);
     ADDVALUE(BIDI_CLASS_MAP, "LRE", "LEFTTORIGHTEMBEDDING", MAPVAL + U_LEFT_TO_RIGHT_EMBEDDING);
     ADDVALUE(BIDI_CLASS_MAP, "LRO", "LEFTTORIGHTOVERRIDE", MAPVAL + U_LEFT_TO_RIGHT_OVERRIDE);
     ADDVALUE(BIDI_CLASS_MAP, "NSM", "NONSPACINGMARK", MAPVAL + U_DIR_NON_SPACING_MARK);
-    ADDVALUE(BIDI_CLASS_MAP, "ON", "OTHERNEUTRAL", MAPVAL + U_OTHER_NEUTRAL); 
+    ADDVALUE(BIDI_CLASS_MAP, "ON", "OTHERNEUTRAL", MAPVAL + U_OTHER_NEUTRAL);
     ADDVALUE(BIDI_CLASS_MAP, "PDF", "POPDIRECTIONALFORMAT", MAPVAL + U_POP_DIRECTIONAL_FORMAT);
-    ADDVALUE(BIDI_CLASS_MAP, "R", "RIGHTTOLEFT", MAPVAL + U_RIGHT_TO_LEFT); 
+    ADDVALUE(BIDI_CLASS_MAP, "R", "RIGHTTOLEFT", MAPVAL + U_RIGHT_TO_LEFT);
     ADDVALUE(BIDI_CLASS_MAP, "RLE", "RIGHTTOLEFTEMBEDDING", MAPVAL + U_RIGHT_TO_LEFT_EMBEDDING);
     ADDVALUE(BIDI_CLASS_MAP, "RLO", "RIGHTTOLEFTOVERRIDE", MAPVAL + U_RIGHT_TO_LEFT_OVERRIDE);
     ADDVALUE(BIDI_CLASS_MAP, "S", "SEGMENTSEPARATOR", MAPVAL + U_SEGMENT_SEPARATOR);
     ADDVALUE(BIDI_CLASS_MAP, "WS", "WHITESPACENEUTRAL", MAPVAL + U_WHITE_SPACE_NEUTRAL);
-    
+
     //------------------------------------------------------------
     // Binary Properties MAP.  Names taken from PropertyAliases.txt.
     // The following are not supported:
@@ -971,7 +985,8 @@ void UnicodePropertySet::init(UErrorCode &status) {
     ADDVALUE(BINARY_PROPERTY_MAP, "XIDC", "XIDCONTINUE", MAPVAL + UCHAR_XID_CONTINUE);
     ADDVALUE(BINARY_PROPERTY_MAP, "XIDS", "XIDSTART", MAPVAL + UCHAR_XID_START);
 
-    umtx_unlock(&PROPSET_MUTEX);
+    SCRIPT_CACHE = tSCRIPT_CACHE;
+    recursionCount--;
 }
 
 U_NAMESPACE_END
