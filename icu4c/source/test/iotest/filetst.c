@@ -1151,7 +1151,7 @@ static void Test_u_vfprintf(const char *expectedResult, const char *format, ...)
     int32_t count;
     UFILE *myFile;
 
-    myFile = u_fopen(STANDARD_TEST_FILE, "w", "en_US_POSIX", "UTF-8");
+    myFile = u_fopen(STANDARD_TEST_FILE, "w", NULL, "UTF-8");
     if (!myFile) {
         log_err("Test file can't be opened\n");
         return;
@@ -1164,7 +1164,7 @@ static void Test_u_vfprintf(const char *expectedResult, const char *format, ...)
     u_fclose(myFile);
 
 
-    myFile = u_fopen(STANDARD_TEST_FILE, "r", NULL, NULL);
+    myFile = u_fopen(STANDARD_TEST_FILE, "r", NULL, "UTF-8");
     if (!myFile) {
         log_err("Test file can't be opened\n");
         return;
