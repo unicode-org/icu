@@ -515,8 +515,6 @@ static void TestDisplayNames()
     UChar buffer[100];
     UErrorCode errorCode=U_ZERO_ERROR;
     int32_t length;
-    UChar temp[500];
-    int32_t maxresultsize=uloc_getDisplayVariant("no_NO_NY", "en_US", temp, 500, &errorCode);
     log_verbose("Testing getDisplayName for different locales\n");
 
     log_verbose("  In locale = en_US...\n");
