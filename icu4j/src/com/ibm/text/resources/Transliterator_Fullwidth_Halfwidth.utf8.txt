@@ -255,6 +255,7 @@
 ￡<>'£'; #  from FULLWIDTH POUND SIGN
 ￢<>'¬'; #  from FULLWIDTH NOT SIGN
 ￣<>' '̄; #  from FULLWIDTH MACRON
+'　'<>' '; # ideographic space (place this after MACRON)
 ￤<>'¦'; #  from FULLWIDTH BROKEN BAR
 ￥<>'¥'; #  from FULLWIDTH YEN SIGN
 ￦<>₩; #  from FULLWIDTH WON SIGN
