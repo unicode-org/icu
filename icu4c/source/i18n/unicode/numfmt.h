@@ -671,10 +671,11 @@ private:
     static const int32_t fgMaxIntegerDigits;
     static const int32_t fgMinIntegerDigits;
 
-private:
-
+protected:
     char validLocale[50];
     char actualLocale[50];
+
+private:
 
     enum EStyles {
         kNumberStyle,
