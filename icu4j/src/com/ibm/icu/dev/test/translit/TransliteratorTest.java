@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $ 
- * $Date: 2001/05/23 19:44:12 $ 
- * $Revision: 1.35 $
+ * $Date: 2001/05/23 21:06:55 $ 
+ * $Revision: 1.36 $
  *
  *****************************************************************************************
  */
@@ -781,14 +781,17 @@ public class TransliteratorTest extends TestFmwk {
      */
     public void TestCaseMap() {
         Transliterator toUpper =
-            Transliterator.getInstance("Lower-Upper[^xyz]");
+            Transliterator.getInstance("Lower-Upper[^xyzXYZ]");
         Transliterator toLower = toUpper.getInverse();
-        toLower.setFilter(new UnicodeSet("[^XYZ]"));
+        Transliterator toTitle =
+            Transliterator.getInstance("TitleCase[^xyzXYZ]");
         
         expect(toUpper, "The quick brown fox jumped over the lazy dogs.",
                "THE QUICK BROWN FOx JUMPED OVER THE LAzy DOGS.");
         expect(toLower, "The quIck brown fOX jUMPED OVER THE LAzY dogs.",
                "the quick brown foX jumped over the lazY dogs.");
+        expect(toTitle, "the quick brown foX jumped over the laZy dogs.",
+               "The Quick Brown FoX Jumped Over The LaZy Dogs.");
     }
 
     //======================================================================
