@@ -29,38 +29,6 @@ struct FromShortString {
 };
 */
 
-static inline 
-void syntaxError(const UChar* rules, 
-                 int32_t pos,
-                 int32_t rulesLen,
-                 UParseError* parseError) {
-#if 0
-    parseError->offset = pos;
-    parseError->line = 0 ; /* we are not using line numbers */
-    
-    // for pre-context
-    int32_t start = (pos <=U_PARSE_CONTEXT_LEN)? 0 : (pos - (U_PARSE_CONTEXT_LEN-1));
-    int32_t stop  = pos;
-    
-    u_memcpy(parseError->preContext,rules+start,stop-start);
-    //null terminate the buffer
-    parseError->preContext[stop-start] = 0;
-    
-    //for post-context
-    start = pos+1;
-    stop  = ((pos+U_PARSE_CONTEXT_LEN)<= rulesLen )? (pos+(U_PARSE_CONTEXT_LEN-1)) : 
-                                                            rulesLen;
-
-    if(start < stop) {
-      u_memcpy(parseError->postContext,rules+start,stop-start);
-      //null terminate the buffer
-      parseError->postContext[stop-start]= 0;
-    } else {
-      parseError->postContext[0] = 0;
-    }
-#endif
-}
-
 
 enum OptionsList {
     UCOL_SIT_LANGUAGE = 0,
@@ -88,6 +56,8 @@ struct CollatorSpec {
     char locElements[locElementCount][locElementLen];
     char locale[512];
     UColAttributeValue options[UCOL_ATTRIBUTE_COUNT];
+    uint32_t variableTopValue;
+    UChar variableTopString[locElementLen];
 };
 
 
@@ -137,13 +107,17 @@ _processLocaleElement(CollatorSpec *spec, uint32_t value, const char* string,
     // skip the underscore at the end
     return ++string;                          
 }
+U_CDECL_END
 
+U_CDECL_BEGIN
 static const char* U_CALLCONV
 _processRFC3166Locale(CollatorSpec *spec, uint32_t value1, const char* string, 
                       UErrorCode *status) {
-    return NULL;                          
+    return string;                          
 }
+U_CDECL_END
 
+U_CDECL_BEGIN
 static const char* U_CALLCONV
 _processCollatorOption(CollatorSpec *spec, uint32_t option, const char* string, 
                        UErrorCode *status) {
@@ -161,10 +135,37 @@ _processCollatorOption(CollatorSpec *spec, uint32_t option, const char* string,
     *status = U_ILLEGAL_ARGUMENT_ERROR;
     return string;
 }
+U_CDECL_END
 
 
+static UChar 
+readHexCodeUnit(const char **string, UErrorCode *status) {
+    UChar result = 0;
+    int32_t value = 0;
+    char c;
+    int32_t noDigits = 0;
+    while((c = **string) != 0 && noDigits < 4) {
+        if( c >= '0' && c <= '9') {
+            value = c - '0';
+        } else if ( c >= 'a' && c <= 'f') {
+            value = c - 'a' + 10;
+        } else if ( c >= 'A' && c <= 'F') {
+            value = c - 'A' + 10;
+        } else {
+            *status = U_ILLEGAL_ARGUMENT_ERROR;
+            return 0;
+        }
+        result = (result << 4) | value;
+        (*string)++;
+    }
+    
+}
+
+U_CDECL_BEGIN
 static const char* U_CALLCONV
 _processVariableTop(CollatorSpec *spec, uint32_t value1, const char* string, UErrorCode *status) {
+    // get four digits
+    return string;
 }
 U_CDECL_END
 
@@ -221,6 +222,8 @@ void ucol_sit_initCollatorSpecs(CollatorSpec *spec) {
  * http://oss.software.ibm.com/icu/userguide/Collate_Concepts.html#Naming_Collators
  * The call to this function is equivalent to a call to ucol_open, followed by a 
  * series of calls to ucol_setAttribute and ucol_setVariableTop.
+ * Attributes are overriden by the subsequent attributes. So, for "S2_S3", final
+ * strength will be 3. 3066bis locale overrides individual locale parts. 
  * @param definition A short string containing a locale and a set of attributes. 
  *                   Attributes not explicitly mentioned are left at the default
  *                   state for a locale.
@@ -318,6 +321,46 @@ ucol_openFromShortString( const char *definition,
     UTRACE_EXIT_PTR_STATUS(result, *status);
     return result;
 }
+
+U_CAPI int32_t U_EXPORT2
+ucol_getShortDefinitionString(const UCollator *coll,
+                              const char *locale,
+                              char *buffer,
+                              int32_t capacity,
+                              UErrorCode *status)
+{
+    if(U_FAILURE(*status)) return 0;
+    CollatorSpec s;
+    ucol_sit_initCollatorSpecs(&s);
+
+    if(locale) {
+        uprv_strcpy(s.locale, locale);
+        uloc_getCountry(locale, s.locElements[0], locElementLen, status);
+        uloc_getScript(locale, s.locElements[1], locElementLen, status);
+        uloc_getVariant(locale, s.locElements[2], locElementLen, status);
+        uloc_getKeywordValue(locale, "collation", s.locElements[3], locElementLen, status);
+    }
+
+    int32_t i = 0;
+    for(i = 0; i < UCOL_ATTRIBUTE_COUNT; i++) {
+        s.options[i] = ucol_getAttribute(coll, (UColAttribute)i, status);
+    }
+    s.variableTopValue = ucol_getVariableTop(coll, status);
+
+    return 0;
+}
+
+U_CAPI int32_t U_EXPORT2
+ucol_normalizeShortDefinitionString(const char *source,
+                                    char *destination,
+                                    int32_t capacity,
+                                    UParseError *parseError,
+                                    UErrorCode *status)
+{
+    return 0;
+}
+
+
 
 U_CDECL_BEGIN
 static UBool U_CALLCONV
