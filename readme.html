@@ -31,9 +31,9 @@
     <h1>International Components for Unicode<br>
      ReadMe</h1>
 
-    <p>Version: 2001-Aug-02<br>
+    <p>Version: 2001-Nov-14<br>
      Copyright &copy; 1995-2001 International Business Machines Corporation and
-    others. All Rights Reserved.</p>
+     others. All Rights Reserved.</p>
     <hr>
 
     <h2 class="TOC">Table of Contents</h2>
@@ -1031,7 +1031,7 @@
     <p>The steps are:</p>
 
     <ol>
-      <li>Decompress the icuXXXX.tar (or icuXXXX.tgz) file and use pax.</li>
+      <li>Decompress the icuXXXX.tar (or icuXXXX.tgz) file. For example, <tt>gunzip -d &lt; icuXXXX.tgz | tar xvf -</tt></li>
 
       <li>Change directory to the "icu/source".</li>
 
@@ -1048,9 +1048,30 @@
 
       </li>
 
-      <li>Optionally, type "gmake check" to verify the test suite.</li>
+      <li>Optionally, type "gmake check" to verify the test suite.
+      <ul>
+      <li><b>Note:</b> You may have to set certain variables if you with 
+      to run test programs individually, that is apart from  "make check". 
+      The <strong>TZ</strong> environment variable needs to be set to
+      <strong>PST8PDT</strong>.  Also, the
+      environment variable <strong>ICU_DATA</strong> must be set to 
+      the full pathname of the data directory, 
+      to indicate where the locale data files and
+      conversion mapping tables are.  The trailing "/" is required after
+      the directory name (e.g. "$Root/source/data/" will work, but the value
+      "$Root/source/data" is not acceptable).<P>
+      When running samples or other applications, ICU_DATA only needs to be
+      set if the data is not installed (such as via 'make install') into the
+      default location.
+
+      </ul>
+      
+       </li>
 
       <li>Type "gmake install" to install.</li>
+
+
+
     </ol>
 
     <p>Some platforms use package management tools to control the installation
