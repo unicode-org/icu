@@ -407,7 +407,7 @@ caseFoldingLineFn(void *context,
 
     /* get the status of this mapping */
     caseFoldings[caseFoldingCount].status=status=*u_skipWhitespace(fields[1][0]);
-    if(status!='L' && status!='E' && status!='C' && status!='S' && status!='F' && status!='I') {
+    if(status!='L' && status!='E' && status!='C' && status!='S' && status!='F' && status!='I' && status!='T') {
         fprintf(stderr, "genprops: unrecognized status field in CaseFolding.txt at %s\n", fields[0][0]);
         *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
@@ -452,7 +452,14 @@ caseFoldingLineFn(void *context,
             uprv_memcpy(caseFoldings[caseFoldingCount-1].full, caseFoldings[caseFoldingCount].full, 32*U_SIZEOF_UCHAR);
             return;
         }
-    } else if(status=='I') {
+    } else if(status=='I' || status=='T') {
+        /* check if there was a default mapping for this code point before (remove it) */
+        while(caseFoldingCount>0 &&
+              caseFoldings[caseFoldingCount-1].code==caseFoldings[caseFoldingCount].code
+        ) {
+            prevCode=0;
+            --caseFoldingCount;
+        }
         /* store only a marker for special handling for cases like dotless i */
         caseFoldings[caseFoldingCount].simple=0;
         caseFoldings[caseFoldingCount].full[0]=0;
