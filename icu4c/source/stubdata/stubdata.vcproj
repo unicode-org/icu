@@ -44,6 +44,7 @@
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				ProgramDatabaseFile=".\Release/icudt32.pdb"
+				ResourceOnlyDLL="TRUE"
 				ImportLibrary="..\..\lib\icudt.lib"/>
 			<Tool
 				Name="VCMIDLTool"
@@ -109,6 +110,7 @@
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				ProgramDatabaseFile=".\Debug/icudt32.pdb"
+				ResourceOnlyDLL="TRUE"
 				ImportLibrary="..\..\lib\icudt.lib"/>
 			<Tool
 				Name="VCMIDLTool"
