@@ -577,6 +577,13 @@ ICULocaleService::get(const Locale& locale, int32_t kind, Locale* actualReturn, 
   return result;
 }
 
+URegistryKey
+ICULocaleService::registerInstance(UObject* objToAdopt, const UnicodeString
+& locale, UBool visible, UErrorCode& status)
+{
+    return ICUService::registerInstance(objToAdopt, locale, visible, status);
+}
+
 URegistryKey 
 ICULocaleService::registerInstance(UObject* objToAdopt, const Locale& locale, UErrorCode& status) 
 {
