@@ -74,6 +74,8 @@ fCases(NULL)
   }
   fCases = ures_getByKey(data, "Cases", NULL, &intStatus);
   fCasesSize = ures_getSize(fCases);
+
+  ures_close(info);
 }
 
 
