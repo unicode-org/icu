@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2001/02/28 21:13:33 $ 
-* $Revision: 1.29 $
+* $Date: 2001/03/01 22:44:51 $ 
+* $Revision: 1.30 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -94,7 +94,7 @@
   <target name ="coreData" depends="init">
     <copy todir="${build.dir}/com/ibm/text/resources">
       <fileset dir="${src.dir}/com/ibm/text/resources"
-               includes="Transliterator_*.utf8.txt"/>
+               includes="Transliterator_*.txt"/>
     </copy>
     <copy todir="${build.dir}/com/ibm/text">
       <fileset dir="${src.dir}/com/ibm/text"
