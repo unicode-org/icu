@@ -2306,7 +2306,7 @@ void NumberFormatRegressionTest::Test4243108(void) {
  * NumberFormat objects.
  */
 void NumberFormatRegressionTest::TestJ691(void) {
-    UErrorCode status;
+    UErrorCode status = U_ZERO_ERROR;
 	Locale loc("fr", "CH");
 	
 	// set up the input date string & expected output
@@ -2315,15 +2315,28 @@ void NumberFormatRegressionTest::TestJ691(void) {
 
 	// create a Calendar for this locale
 	Calendar *cal = Calendar::createInstance(loc, status);
+    if (U_FAILURE(status)) {
+        errln("FAIL: Calendar::createInstance() returned " + (UnicodeString)u_errorName(status));
+        return;
+    }
 
 	// create a NumberFormat for this locale
 	NumberFormat *nf = NumberFormat::createInstance(loc, status);
+    if (U_FAILURE(status)) {
+        errln("FAIL: NumberFormat::createInstance() returned " + (UnicodeString)u_errorName(status));
+        return;
+    }
 
     // *** Here's the key: We don't want to have to do THIS:
     // nf->setParseIntegerOnly(TRUE);
 	
 	// create the DateFormat
 	DateFormat *df = DateFormat::createDateInstance(DateFormat::kShort, loc);
+    if (U_FAILURE(status)) {
+        errln("FAIL: DateFormat::createInstance() returned " + (UnicodeString)u_errorName(status));
+        return;
+    }
+
 	df->adoptCalendar(cal);
 	df->adoptNumberFormat(nf);
 
