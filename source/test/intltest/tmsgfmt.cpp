@@ -332,9 +332,9 @@ void TestMessageFormat::sample()
     }
     UnicodeString abc("abc");
     UnicodeString def("def");
-    Formattable testArgs[] = { abc, def };
+    Formattable testArgs1[] = { abc, def };
     FieldPosition fieldpos(0);
-    it_out << form->toPattern(buffer1) << "; " << form->format(testArgs, 2, buffer2, fieldpos, success) << endl;
+    it_out << form->toPattern(buffer1) << "; " << form->format(testArgs1, 2, buffer2, fieldpos, success) << endl;
     delete form;
 }
 
