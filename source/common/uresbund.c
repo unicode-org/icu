@@ -1872,7 +1872,7 @@ ures_getVersionNumber(const UResourceBundle*   resourceBundle)
         int32_t len;
 
         const UChar* minor_version = ures_getStringByKey(resourceBundle, kVersionTag, &minor_len, &status);
-    
+        
         /* Determine the length of of the final version string.  This is */
         /* the length of the major part + the length of the separator */
         /* (==1) + the length of the minor part (+ 1 for the zero byte at */
@@ -1885,13 +1885,13 @@ ures_getVersionNumber(const UResourceBundle*   resourceBundle)
 
 
         ((UResourceBundle *)resourceBundle)->fVersion = (char *)uprv_malloc(1 + len); 
-    
+       
         if(minor_len > 0) {
             u_UCharsToChars(minor_version, resourceBundle->fVersion , minor_len);
             resourceBundle->fVersion[len] =  '\0';
         }
         else {
-          uprv_strcat(resourceBundle->fVersion, kDefaultMinorVersion);
+          uprv_strcpy(resourceBundle->fVersion, kDefaultMinorVersion);
         }
     }
 
