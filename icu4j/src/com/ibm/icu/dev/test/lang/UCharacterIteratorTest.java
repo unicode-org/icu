@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/Attic/UCharacterIteratorTest.java,v $ 
-* $Date: 2002/06/20 01:16:00 $ 
-* $Revision: 1.2 $
+* $Date: 2003/05/24 01:39:09 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -15,7 +15,6 @@ package com.ibm.icu.dev.test.lang;
 
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.UnicodeCharacterIterator;
 import com.ibm.icu.text.UTF16;
 
 /**
@@ -39,6 +38,7 @@ public final class UCharacterIteratorTest extends TestFmwk
   	/**
   	* Testing cloning
   	*/
+    /*
   	public void TestClone()
   	{
      	 UnicodeCharacterIterator iterator = new UnicodeCharacterIterator("testing");
@@ -51,10 +51,12 @@ public final class UCharacterIteratorTest extends TestFmwk
      	 	}
      	 }
   	}
+    *
   	
   	/**
   	 * Testing iteration
   	 */
+    /*
   	public void TestIteration()
   	{
   		UnicodeCharacterIterator iterator  = new UnicodeCharacterIterator(
@@ -113,7 +115,7 @@ public final class UCharacterIteratorTest extends TestFmwk
   			}
   		}
   	}
-    
+    */
     public static void main(String[] arg)
     {
         try
