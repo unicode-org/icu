@@ -19,7 +19,7 @@ static const UChar DIGITS[] = {
 };
 
 UnicodeString& Utility::appendNumber(UnicodeString& result, int32_t n,
-                                     int32_t radix) {
+                                     int32_t radix, int32_t minDigits) {
     if (radix < 2 || radix > 36) {
         // Bogus radix
         return result.append((UChar)63/*?*/);
@@ -35,8 +35,12 @@ UnicodeString& Utility::appendNumber(UnicodeString& result, int32_t n,
     while (nn >= radix) {
         nn /= radix;
         r *= radix;
+        --minDigits;
     }
     // Now generate the digits
+    while (--minDigits > 0) {
+        result.append(DIGITS[0]);
+    }
     while (r > 0) {
         int32_t digit = n / r;
         result.append(DIGITS[digit]);
