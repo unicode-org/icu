@@ -664,7 +664,7 @@ public:
                              uint8_t*result, int32_t resultLength) const = 0;
 
 #ifdef ICU_NORMALIZER_USE_DEPRECATES
-  // start deprecated APIs
+  // start obsolete APIs
   /**
   * Get the decomposition mode of the Collator object.
   * @return the decomposition mode
@@ -751,9 +751,8 @@ protected:
   * mode is left to the child class.
   * @param collationStrength collation strength
   * @param decompositionMode 
-  * @deprecated ICU 2.4. This constructor is not used anywhere. Child classes should 
-  *             implement their own constructor to handle the strength and
-  *             normalization mode
+  * @deprecated ICU 2.4. Subclasses should use the default constructor
+  * instead and handle the strength and normalization mode themselves.
   */
   Collator(UCollationStrength collationStrength, 
            UNormalizationMode decompositionMode);
