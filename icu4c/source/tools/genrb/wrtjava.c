@@ -80,10 +80,10 @@ static FileStream* out=NULL;
 static struct SRBRoot* srBundle ;
 static const char* outDir = NULL;
 
-static void write_tabs(FileStream* out){
+static void write_tabs(FileStream* os){
     int i=0;
     for(;i<=tabCount;i++){
-        T_FileStream_write(out,"    ",4);
+        T_FileStream_write(os,"    ",4);
     }
 }
 static const char* enc ="";
@@ -107,7 +107,7 @@ itostr(char * buffer, int32_t i, uint32_t radix, int32_t pad)
     
     do{
         digit = (int)(i % radix);
-        buffer[length++]=(digit<=9?(0x0030+digit):(0x0030+digit+7));
+        buffer[length++]=(char)(digit<=9?(0x0030+digit):(0x0030+digit+7));
         i=i/radix;
     } while(i);
 
@@ -211,7 +211,7 @@ uCharsToChars( char* target,int32_t targetLen, UChar* source, int32_t sourceLen,
             }
             j++;            
         }else{
-            if(enc =="" || source[i]==0x0000){
+            if(*enc =='\0' || source[i]==0x0000){
                 uprv_strcpy(str,"\\u");
                 itostr(str+2,source[i],16,4);
                 if(j+6<targetLen){
@@ -238,7 +238,6 @@ uCharsToChars( char* target,int32_t targetLen, UChar* source, int32_t sourceLen,
 
 static uint32_t 
 strrch(const char* source,uint32_t sourceLen,char find){
-    const char* tSource = source  ;
     const char* tSourceEnd =source + (sourceLen-1);
     while(tSourceEnd>= source){
         if(*tSourceEnd==find){
@@ -266,7 +265,6 @@ str_write_java( uint16_t* src, int32_t srcLen, UErrorCode *status){
     if(retVal+(tabCount*4) > 70  ){
         uint32_t len = 0;
         char* current = buf;
-        char* str =NULL;
         uint32_t add;
         uint32_t index;
         while(len < retVal){
@@ -309,7 +307,6 @@ string_write_java(struct SResource *res,UErrorCode *status) {
     str_write_java(res->u.fString.fChars,res->u.fString.fLength,status);
      if(uprv_strcmp(srBundle->fKeys+res->fKey,"Rule")==0){
         UChar* buf = (UChar*) uprv_malloc(sizeof(UChar)*res->u.fString.fLength);
-        int32_t bufLen =0;
         uprv_memcpy(buf,res->u.fString.fChars,res->u.fString.fLength);      
         uprv_free(buf);
      }
@@ -319,12 +316,12 @@ static void
 array_write_java( struct SResource *res, UErrorCode *status) {
 
     uint32_t  i         = 0;
-    char* arr ="new String[] { \n";
+    const char* arr ="new String[] { \n";
     struct SResource *current = NULL;
     struct SResource *first =NULL;
     UBool decrementTabs = FALSE;
     UBool allStrings    = TRUE;
-    UBool isTable       = TRUE;
+    
     if (U_FAILURE(*status)) {
         return;
     }
@@ -343,7 +340,7 @@ array_write_java( struct SResource *res, UErrorCode *status) {
 
         current = res->u.fArray.fFirst;
         if(allStrings==FALSE){
-            char* object = "new Object[]{\n";
+            const char* object = "new Object[]{\n";
             write_tabs(out);
             T_FileStream_write(out, object,uprv_strlen(object));
             tabCount++;
@@ -380,9 +377,9 @@ array_write_java( struct SResource *res, UErrorCode *status) {
 static void 
 intvector_write_java( struct SResource *res, UErrorCode *status) {
     uint32_t i = 0;
-    char* intArr = "new Integer[] {\n";
-    char* intC   = "new Integer(";
-    char* stringArr = "new String[]{\n"; 
+    const char* intArr = "new Integer[] {\n";
+    const char* intC   = "new Integer(";
+    const char* stringArr = "new String[]{\n"; 
     char buf[100];
     int len =0;
     buf[0]=0;
@@ -418,8 +415,7 @@ intvector_write_java( struct SResource *res, UErrorCode *status) {
 
 static void 
 int_write_java(struct SResource *res,UErrorCode *status) {
-    uint32_t i = 0;
-    char* intC   =  "new Integer(";
+    const char* intC   =  "new Integer(";
     char buf[100];
     int len =0;
     buf[0]=0;
@@ -435,14 +431,11 @@ int_write_java(struct SResource *res,UErrorCode *status) {
 
 static void 
 bin_write_java( struct SResource *res, UErrorCode *status) {
-    char* arr ="new Object[][]{\n";
-    char* type = "COMPRESSED_BINARY, ";
-    uint32_t i =0;
-    int len =0,count=1;
+    const char* arr ="new Object[][]{\n";
+    const char* type = "COMPRESSED_BINARY, ";
     char* ext;
     int32_t srcLen=res->u.fBinaryValue.fLength;
-    /*char buffer[16];*/
-  
+ 
     if(srcLen>0 ){
         uint16_t* target=NULL;
         uint16_t* saveTarget = NULL;
@@ -632,12 +625,10 @@ static UBool start = TRUE;
 static void 
 table_write_java(struct SResource *res, UErrorCode *status) {
     uint32_t  i         = 0;
-    char* key =NULL;
     UBool allStrings =TRUE;
     struct SResource *current = NULL;
     struct SResource *save = NULL;
-    char* obj = "new Object[][]{\n";
-    UBool embeddedTables = FALSE;
+    const char* obj = "new Object[][]{\n";
 
     if (U_FAILURE(*status)) {
         return ;
@@ -734,8 +725,6 @@ res_write_java(struct SResource *res,UErrorCode *status) {
 void 
 bundle_write_java(struct SRBRoot *bundle, const char *outputDir,const char* outputEnc, char *writtenFilename, int writtenFilenameLen, UErrorCode *status) {
 
-    UNewDataMemory *mem        = NULL;
-    uint32_t        usedOffset = 0;
     char fileName[256] = {'\0'};
     char className[256]={'\0'};
     char constructor[1000] = { 0 };    
@@ -785,7 +774,7 @@ bundle_write_java(struct SRBRoot *bundle, const char *outputDir,const char* outp
         T_FileStream_write(out,constructor,uprv_strlen(constructor));
     }
 
-    if(outputEnc && outputEnc!=""){
+    if(outputEnc && *outputEnc!='\0'){
         /* store the output encoding */
         enc = outputEnc;
         conv=ucnv_open(enc,status);
