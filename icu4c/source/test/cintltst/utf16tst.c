@@ -366,13 +366,13 @@ void TestFwdBack(){
     offunsafe=0;
     offsafe=0;
     for(i=0; i<sizeof(Nvalue)/sizeof(Nvalue[0])-2; i++){  /*didn't want it to fail(we assume 0<i<length)*/
-        UTF_FWD_N_UNSAFE(input, offunsafe, Nvalue[i]);
+        UTF16_FWD_N_UNSAFE(input, offunsafe, Nvalue[i]);
         if(offunsafe != fwd_N_unsafe[i]){
             log_err("ERROR: Forward_N_unsafe offset expected:%d, Got:%d\n", fwd_N_unsafe[i], offunsafe);
         }
     }
     for(i=0; i<sizeof(Nvalue)/sizeof(Nvalue[0]); i++){
-        UTF_FWD_N_SAFE(input, offsafe, sizeof(input)/U_SIZEOF_UCHAR, Nvalue[i]);
+        UTF16_FWD_N_SAFE(input, offsafe, sizeof(input)/U_SIZEOF_UCHAR, Nvalue[i]);
         if(offsafe != fwd_N_safe[i]){
             log_err("ERROR: Forward_N_safe offset expected:%d, Got:%d\n", fwd_N_safe[i], offsafe);
         }
@@ -381,13 +381,13 @@ void TestFwdBack(){
     offunsafe=sizeof(input)/U_SIZEOF_UCHAR;
     offsafe=sizeof(input)/U_SIZEOF_UCHAR;
     for(i=0; i<sizeof(Nvalue)/sizeof(Nvalue[0])-2; i++){
-        UTF_BACK_N_UNSAFE(input, offunsafe, Nvalue[i]);
+        UTF16_BACK_N_UNSAFE(input, offunsafe, Nvalue[i]);
         if(offunsafe != back_N_unsafe[i]){
             log_err("ERROR: backward_N_unsafe offset expected:%d, Got:%d\n", back_N_unsafe[i], offunsafe);
         }
     }
     for(i=0; i<sizeof(Nvalue)/sizeof(Nvalue[0]); i++){
-        UTF_BACK_N_SAFE(input, 0, offsafe, Nvalue[i]);
+        UTF16_BACK_N_SAFE(input, 0, offsafe, Nvalue[i]);
         if(offsafe != back_N_safe[i]){
             log_err("ERROR: backward_N_safe offset expected:%d, Got:%d\n", back_N_safe[i], offsafe);
         }
