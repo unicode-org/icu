@@ -64,6 +64,7 @@ void NormalizerConformanceTest::TestConformance(void) {
     char backupPath[256];
     FileStream *input = NULL;
     UChar32 c;
+    UErrorCode   err = U_ZERO_ERROR;
 
     /* Look inside ICU_DATA first */
     strcpy(newPath, u_getDataDirectory());
@@ -75,8 +76,8 @@ void NormalizerConformanceTest::TestConformance(void) {
     #if defined (U_TOPSRCDIR)
         strcpy(backupPath, U_TOPSRCDIR  U_FILE_SEP_STRING "data");
     #else
-        strcpy(backupPath, u_getDataDirectory());
-        strcat(backupPath, ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "data");
+        strcpy(backupPath, loadTestData(err));
+        strcat(backupPath, U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "data");
     #endif
     strcat(backupPath, U_FILE_SEP_STRING "unidata" U_FILE_SEP_STRING TEST_SUITE_FILE);
 
