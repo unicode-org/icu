@@ -319,8 +319,11 @@ static void TestRegexCAPI(void) {
      *  matches()
      */
     {
-        UChar  text1[50];
-        UBool  result;
+        UChar   text1[50];
+        UBool   result;
+        int     len;
+        UChar   nullString[] = {0,0,0};
+
         u_uastrncpy(text1, "abcccde",  sizeof(text1)/2);
         status = U_ZERO_ERROR;
         u_uastrncpy(pat, "abc*d", sizeof(pat)/2);
@@ -344,6 +347,21 @@ static void TestRegexCAPI(void) {
         TEST_ASSERT_SUCCESS(status);
         uregex_close(re);
 
+        status = U_ZERO_ERROR;
+        re = uregex_openC(".?", 0, NULL, &status);
+        uregex_setText(re, text1, -1, &status);
+        len = u_strlen(text1);
+        result = uregex_matches(re, len, &status);
+        TEST_ASSERT(result == TRUE);
+        TEST_ASSERT_SUCCESS(status);
+
+        status = U_ZERO_ERROR;
+        uregex_setText(re, nullString, -1, &status);
+        TEST_ASSERT_SUCCESS(status);
+        result = uregex_matches(re, 0, &status);
+        TEST_ASSERT(result == TRUE);
+        TEST_ASSERT_SUCCESS(status);
+        uregex_close(re);
     }
 
 
