@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterSurrogateTest.java,v $
-* $Date: 2004/03/11 07:22:55 $
-* $Revision: 1.1 $
+* $Date: 2004/03/13 04:07:22 $
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -14,7 +14,6 @@
 package com.ibm.icu.dev.test.lang;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UTF16;
 
