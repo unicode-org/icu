@@ -22,13 +22,11 @@ U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(LowercaseTransliterator)
 
-static const char CURR_ID[] = "Any-Lower";
-
 /**
  * Constructs a transliterator.
  */
 LowercaseTransliterator::LowercaseTransliterator(const Locale& theLoc) : 
-    Transliterator(UnicodeString(CURR_ID, ""), 0),
+    Transliterator(UNICODE_STRING("Any-Lower", 9), 0),
     loc(theLoc) , buffer(0)
 {
     buffer = (UChar *)uprv_malloc(u_getMaxCaseExpansion()*sizeof(buffer[0]));
