@@ -613,6 +613,46 @@ public:
     static StringEnumeration* getAvailableLocales(void);
 
     /**
+     * Create a string enumerator of all keywords that are relevant to
+     * collation. At this point, the only recognized keyword for this
+     * service is "collation".
+     * @param status input-output error code
+     * @return a string enumeration over locale strings. The caller is
+     * responsible for closing the result.
+     * @draft ICU 3.0
+     */
+    static StringEnumeration* getKeywords(UErrorCode& status);
+
+    /**
+     * Given a keyword, create a string enumeration of all possible values
+     * for that keyword.
+     * @param keyword a particular keyword as enumerated by
+     * ucol_getKeywords. If any other keyword is passed in, status is set
+     * to U_ILLEGAL_ARGUMENT_ERROR.
+     * @param status input-output error code
+     * @return a string enumeration over collation keyword values, or NULL
+     * upon error. The caller is responsible for deleting the result.
+     * @draft ICU 3.0
+     */
+    static StringEnumeration* getKeywordValues(const char *keyword, UErrorCode& status);
+    
+    /**
+     * Return a functionally equivalent collation locale for the given
+     * requested locale.
+     * @param locale the requested locale
+     * @param isAvailable reference to a fillin parameter that
+     * indicates whether the requested locale was 'available' to the
+     * collation service. A locale is defined as 'available' if it
+     * physically exists within the collation locale data.
+     * @param status reference to input-output error code
+     * @return the functionally equivalent collation locale, or the root
+     * locale upon error.
+     * @draft ICU 3.0
+     */
+    static Locale getFunctionalEquivalent(const Locale& locale, UBool& isAvailable,
+                                          UErrorCode& status);
+
+    /**
      * Register a new Collator.  The collator will be adopted.
      * @param toAdopt the Collator instance to be adopted
      * @param locale the locale with which the collator will be associated
