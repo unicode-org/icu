@@ -1,0 +1,26 @@
+// *******************************************************************************
+// *
+// *   Copyright (C) 2001-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+kk_KZ {
+    LocaleID{ "043F"}
+    Version{ "x0.1" }
+    CurrencyElements { 
+            "\u0442\u04A3\u0433.",
+            "KZT",
+            ",",
+    }
+    NumberPatterns { 
+            "#,##0.###;-#,##0.###",
+            "#,##0.00 \u00A4;-\u00A4 #,##0.00",
+            "#,##0%",
+    }
+    DateTimeElements{
+  	"0",
+  	"1"
+    }
+
+}

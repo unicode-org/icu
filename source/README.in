@@ -1,0 +1,10 @@
+The ICU data files moved!
+
+ICU data, which are architecture and/or platform dependent, were moved to
+
+	@thelibdir@/@PACKAGE@/@VERSION@
+
+This move happened post ICU 1.6. The rationale for the move is to be able
+to share @thedatadir@ across machines with different architectures, as
+it is supposed to be the case.
+
