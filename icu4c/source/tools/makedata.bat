@@ -1,4 +1,4 @@
-rem @echo off
+@echo off
 rem makedata.bat
 rem batch file for Windows for creating the ICU data files
 rem parameter:
@@ -7,7 +7,9 @@ rem %1 path where the icu folder resides
 if "%1"=="" goto :error
 
 if "%ICU_DATA%"=="" set ICU_DATA=%1\icu\data\
-set toolversion=Debug
+
+rem toolversion: Debug or Release
+set toolversion=Release
 
 rem create conversion tables
 cd makeconv
