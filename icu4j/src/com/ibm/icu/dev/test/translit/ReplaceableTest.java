@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/ReplaceableTest.java,v $
- * $Date: 2002/11/14 00:05:40 $
- * $Revision: 1.12 $
+ * $Date: 2002/11/14 01:43:43 $
+ * $Revision: 1.13 $
  *
  *******************************************************************************
  */
@@ -52,7 +52,8 @@ public class ReplaceableTest extends TestFmwk {
         Transliterator t;
         if (transliteratorName.startsWith("*")) {
         	transliteratorName = transliteratorName.substring(1);
-        	t = new RuleBasedTransliterator("test", transliteratorName);
+        	t = Transliterator.createFromRules("test", transliteratorName,
+                                               Transliterator.FORWARD);
         } else {
         	t = Transliterator.getInstance(transliteratorName);
         }
