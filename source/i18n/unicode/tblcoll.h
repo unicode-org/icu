@@ -750,6 +750,8 @@ public:
   */
   const UCollator * getUCollator();
 
+  virtual void setLocales(const Locale& requestedLocale, const Locale& validLocale);
+
 private:
   /**
   * Converts C's UCollationResult to EComparisonResult

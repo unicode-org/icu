@@ -56,6 +56,18 @@
 
 U_NAMESPACE_BEGIN
 
+class StringEnumeration;
+
+/**
+ * @draft ICU 2.6
+ */
+typedef const void* URegistryKey;
+
+/**
+ * @draft ICU2.6
+ */
+class CollatorFactory;
+
 /**
 * @stable ICU 2.0
 */
@@ -523,6 +535,45 @@ public:
   static const Locale* getAvailableLocales(int32_t& count);
 
   /**
+   * Register a new Collator.  The collator will be adopted.
+   * @param toAdopt the Collator instance to be adopted
+   * @param locale the locale with which the collator will be associated
+   * @param status the in/out status code, no special meanings are assigned
+   * @return a registry key that can be used to unregister this collator
+   * @draft ICU 2.6
+   */
+  static URegistryKey registerInstance(Collator* toAdopt, const Locale& locale, UErrorCode& status);
+
+  /**
+   * Register a new CollatorFactory.  The factory will be adopted.
+   * @param toAdopt the CollatorFactory instance to be adopted
+   * @param status the in/out status code, no special meanings are assigned
+   * @return a registry key that can be used to unregister this collator
+   * @draft ICU 2.6
+   */
+  static URegistryKey registerFactory(CollatorFactory* toAdopt, UErrorCode& status);
+
+  /**
+   * Unregister a previously-registered Collator or CollatorFactory
+   * using the key returned from the register call.  Key becomes
+   * invalid after a successful call and should not be used again.
+   * The object corresponding to the key will be deleted.
+   * @param key the registry key returned by a previous call to registerInstance
+   * @param status the in/out status code, no special meanings are assigned
+   * @return TRUE if the collator for the key was successfully unregistered
+   * @draft ICU 2.6 
+   */
+  static UBool unregister(URegistryKey key, UErrorCode& status);
+
+  /**
+   * Return a StringEnumeration over the locales available at the time of the call, 
+   * including registered locales.
+   * @return a StringEnumeration over the locales available at the time of the call
+   * @draft ICU 2.6
+   */
+  static StringEnumeration* getAvailableLocales(void);
+
+  /**
   * Gets the version information for a Collator. 
   * @param info the version # information, the result will be filled in
   * @stable ICU 2.0
@@ -766,6 +817,9 @@ protected:
   
   // Collator protected methods -----------------------------------------
 
+
+  virtual void setLocales(const Locale& requestedLocale, const Locale& validLocale);
+
 private:
   /**
    * Assignment operator. Private for now.
@@ -773,8 +827,12 @@ private:
    */
   Collator& operator=(const Collator& other);
 
+  friend class CFactory;
+  friend class ICUCollatorFactory;
+  friend class ICUCollatorService;
+  static Collator* makeInstance(const Locale& desiredLocale, 
+                                UErrorCode& status);
 
- 
   // Collator private data members ---------------------------------------
 
   /*
@@ -784,6 +842,48 @@ private:
   */
     /* This is useless information */
 /*  static const UVersionInfo fVersion;*/
+};
+
+/**
+ * A factory used with registerFactory to register multiple collators and provide
+ * display names for them.  If standard locale display names are sufficient, 
+ * Collator instances may be registered instead.
+ *
+ * @draft ICU 2.6
+ */
+class U_I18N_API CollatorFactory : public UObject {
+public:
+
+    /**
+     * Return true if this factory will be visible.  Default is true.
+     * If not visible, the locales supported by this factory will not
+     * be listed by getAvailableLocales.
+     */
+    virtual UBool visible(void) const;
+
+    /**
+     * Return a collator of the appropriate type.  If the locale
+     * is not supported, return null.
+     */
+    virtual Collator* createCollator(const Locale& loc) = 0;
+
+    /**
+     * Return the name of the collator for the objectLocale, localized for the displayLocale.
+     * If objectLocale is not visible or not defined by the factory, return null.
+     * @param objectLocale the locale identifying the collator
+     * @param displayLocale the locale for which the display name of the collator should be localized
+     * @return the display name
+     * @draft ICU 2.6
+     */
+    virtual  UnicodeString& getDisplayName(const Locale& objectLocale, 
+                                           const Locale& displayLocale,
+                                           UnicodeString& result);
+    
+    /**
+     * Return the locale names directly supported by this factory.  The number of names
+     * is returned in count;
+     */
+    virtual const UnicodeString * const getSupportedIDs(int32_t &count, UErrorCode& status) const = 0;
 };
 
 // Collator inline methods -----------------------------------------------
