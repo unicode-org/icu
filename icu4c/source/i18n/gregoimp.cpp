@@ -118,7 +118,7 @@ void CalendarData::initData(const char *locale, const char *type, UErrorCode& st
   fFillin = ures_getByKey(fOtherFillin, U_CALENDAR_KEY, fFillin, &status);
 
   if((type != NULL) && 
-     (*type != NULL) && 
+     (*type != '\0') && 
      (uprv_strcmp(type, U_GREGORIAN_KEY))) {
     fBundle = ures_getByKeyWithFallback(fFillin, type, NULL, &status);
     fFallback = ures_getByKeyWithFallback(fFillin, U_GREGORIAN_KEY, NULL, &status);
