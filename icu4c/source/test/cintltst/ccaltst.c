@@ -18,6 +18,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include <malloc.h>
+
 #include "unicode/uloc.h"
 #include "unicode/ucal.h"
 #include "unicode/udat.h"
