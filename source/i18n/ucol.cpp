@@ -1360,11 +1360,12 @@ ucol_initUCA(UErrorCode *status) {
                     result = NULL;
                     newUCA = NULL;
                 }
+                umtx_unlock(NULL);
+
                 if (fcdTrieIndex == NULL) {
                     fcdTrieIndex = unorm_getFCDTrie(status);
                     ucln_i18n_registerCleanup();
                 }
-                umtx_unlock(NULL);
 
                 if(newUCA != NULL) {
                     udata_close(result);
