@@ -841,6 +841,7 @@ public final class CollationElementIterator
     private void updateInternalState()
     {
         m_isCodePointHiragana_ = false;
+        m_buffer_.delete(0, m_buffer_.length());
         m_bufferOffset_ = -1; 
         m_CEBufferOffset_ = 0;
         m_CEBufferSize_ = 0; 

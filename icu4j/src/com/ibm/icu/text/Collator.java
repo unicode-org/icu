@@ -5,14 +5,15 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $ 
-* $Date: 2002/08/01 21:09:16 $ 
-* $Revision: 1.10 $
+* $Date: 2002/08/07 20:54:56 $ 
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
 package com.ibm.icu.text;
 
 import java.util.Locale;
+import java.util.Comparator;
 
 /**
 * <p>Collator performs locale-sensitive string comparison. A concrete
@@ -114,7 +115,7 @@ import java.util.Locale;
 * @since release 2.2, April 18 2002
 * @draft 2.2 
 */
-public abstract class Collator
+public abstract class Collator implements Comparator, Cloneable
 {     
     // public data members ---------------------------------------------------
         
@@ -360,6 +361,35 @@ public abstract class Collator
         return m_decomposition_;
     }
     
+    /**
+     * <p>
+     * Compares the source text String to the target text String according to 
+     * this Collator's rules, strength and decomposition mode.
+     * Returns an integer less than, 
+     * equal to or greater than zero depending on whether the source String is 
+     * less than, equal to or greater than the target String. See the Collator
+     * class description for an example of use.
+     * </p>
+     * @param source the source String.
+     * @param target the target String.
+     * @return Returns an integer value. Value is less than zero if source is 
+     *         less than target, value is zero if source and target are equal, 
+     *         value is greater than zero if source is greater than target.
+     * @see CollationKey
+     * @see #getCollationKey
+     * @exception NullPointerException thrown if either arguments is null.
+     *            IllegalArgumentException thrown if either source or target is
+     *            not of the class String.
+     * @draft 2.2
+     */
+    public int compare(Object source, Object target)
+    {
+        if (!(source instanceof String) || !(target instanceof String)) {
+            throw new IllegalArgumentException("Arguments have to be of type String");
+        }
+        return compare((String)source, (String)target);
+    }
+    
     // public other methods -------------------------------------------------
 
     /**
@@ -395,7 +425,7 @@ public abstract class Collator
      * @return 32 bit unique hash code
      */
     public abstract int hashCode();
-    
+
     /**
      * <p>
      * Compares the source text String to the target text String according to 

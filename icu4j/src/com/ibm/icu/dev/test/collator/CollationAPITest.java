@@ -103,21 +103,33 @@ public class CollationAPITest extends TestFmwk {
         String test2 = "abcda";
         logln("Use tertiary comparison level testing ....");
         
+        Object obj1 = test1;
+        Object obj2 = test2;
+        doAssert((col.compare(obj1, obj2) > 0), "Result should be \"Abcda\" != \"abcda\"");
         doAssert((!col.equals(test1, test2) ), "Result should be \"Abcda\" != \"abcda\"");
         doAssert((col.compare(test1, test2) > 0 ), "Result should be \"Abcda\" >>> \"abcda\"");
     
         col.setStrength(Collator.SECONDARY);
         logln("Use secondary comparison level testing ....");
                     
+        doAssert((col.compare(obj1, obj2) == 0), "Result should be \"Abcda\" == \"abcda\"");
         doAssert((col.equals(test1, test2) ), "Result should be \"Abcda\" == \"abcda\"");
         doAssert((col.compare(test1, test2) == 0), "Result should be \"Abcda\" == \"abcda\"");
     
         col.setStrength(Collator.PRIMARY);
         logln("Use primary comparison level testing ....");
         
+        doAssert((col.compare(obj1, obj2) == 0 ), "Result should be \"Abcda\" == \"abcda\"");
         doAssert((col.equals(test1, test2) ), "Result should be \"Abcda\" == \"abcda\"");
         doAssert((col.compare(test1, test2) == 0 ), "Result should be \"Abcda\" == \"abcda\"");
         logln("The compare tests end.");
+        
+        Integer die = new Integer(1);
+        try {
+            col.compare(die, test1);
+            errln("Non-Strings should fail col.compare(Object, Object)");
+        } catch (Exception e) {
+        }
     }
     
     /**
@@ -557,6 +569,41 @@ public class CollationAPITest extends TestFmwk {
         String rules = coll.getRules();
         if (rules != null && rules.length() != 0) {
             errln("English tailored rules failed");
+        }
+    }
+    
+    public void TestSafeClone() {
+        String test1 = "abCda";
+        String test2 = "abcda";
+        
+        // one default collator & two complex ones 
+        RuleBasedCollator someCollators[] = {
+            (RuleBasedCollator)Collator.getInstance(Locale.ENGLISH),
+            (RuleBasedCollator)Collator.getInstance(Locale.KOREA),
+            (RuleBasedCollator)Collator.getInstance(Locale.JAPAN)
+        };
+        RuleBasedCollator someClonedCollators[] = new RuleBasedCollator[3];
+        
+        // change orig & clone & make sure they are independent 
+    
+        for (int index = 0; index < someCollators.length; index ++)
+        {
+            try {
+                someClonedCollators[index] 
+                            = (RuleBasedCollator)someCollators[index].clone();
+            } catch (CloneNotSupportedException e) {
+                errln("Error cloning collator");
+            }
+    
+            someClonedCollators[index].setStrength(Collator.TERTIARY);
+            someCollators[index].setStrength(Collator.PRIMARY);
+            someClonedCollators[index].setCaseLevel(false);
+            someCollators[index].setCaseLevel(false);
+            
+            doAssert(someClonedCollators[index].compare(test1, test2) > 0, 
+                     "Result should be \"abCda\" >>> \"abcda\" ");
+            doAssert(someCollators[index].compare(test1, test2) == 0, 
+                     "Result should be \"abCda\" == \"abcda\" ");
         }
     }
 }
