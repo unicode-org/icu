@@ -58,8 +58,15 @@ class SimpleDateFormat;
  * they feel easy to remember. Or they can change the representative cities
  * originally picked by default to using their favorite ones.
  * <P>
- * New DateFormatSymbols sub-classes may be added to support SimpleDateFormat
- * for date-time formatting for additional locales.
+ * DateFormatSymbols are not expected to be subclassed. Data for a calendar is
+ * loaded out of resource bundles.  The 'type' parameter indicates the type of
+ * calendar, for example, "gregorian" or "japanese".  If the type is not gregorian
+ * (or NULL, or an empty string) then the type is appended to the resource name,
+ * for example,  'Eras_japanese' instead of 'Eras'.   If the resource 'Eras_japanese' did
+ * not exist (even in root), then this class will fall back to just 'Eras', that is,
+ * Gregorian data.  Therefore, the calendar implementor MUST ensure that the root
+ * locale at least contains any resources that are to be particularized for the
+ * calendar type.
  */
 class U_I18N_API DateFormatSymbols : public UObject {
 public:
@@ -71,7 +78,7 @@ public:
      * data for the default locale, it will return a last-resort object
      * based on hard-coded strings.
      *
-     * @param status    Output param set to success of failure.  Failure
+     * @param status    Status code.  Failure
      *                  results if the resources for the default cannot be
      *                  found or cannot be loaded
      * @stable ICU 2.0
@@ -83,7 +90,7 @@ public:
      * resources for the given locale, in the default calendar (Gregorian).
      *
      * @param locale    Locale to load format data from.
-     * @param status    Output param set to success of failure.  Failure
+     * @param status    Status code.  Failure
      *                  results if the resources for the locale cannot be
      *                  found or cannot be loaded
      * @stable ICU 2.0
@@ -102,10 +109,10 @@ public:
      * @param type      Type of calendar (as returned by Calendar::getType). 
      *                  Will be used to access the correct set of strings.
      *                  (NULL or empty string defaults to "gregorian".)
-     * @param status    Output param set to success of failure.  Failure
+     * @param status    Status code.  Failure
      *                  results if the resources for the default cannot be
      *                  found or cannot be loaded
-     * @draft ICU 2.6
+     * @internal
      */
     DateFormatSymbols(const char *type, UErrorCode& status);
 
@@ -117,10 +124,10 @@ public:
      * @param type      Type of calendar (as returned by Calendar::getType). 
      *                  Will be used to access the correct set of strings.
      *                  (NULL or empty string defaults to "gregorian".)
-     * @param status    Output param set to success of failure.  Failure
+     * @param status    Status code.  Failure
      *                  results if the resources for the locale cannot be
      *                  found or cannot be loaded
-     * @draft ICU 2.6
+     * @internal
      */
     DateFormatSymbols(const Locale& locale,
                       const char *type,
@@ -422,7 +429,7 @@ private:
      * @param status Error Status
      * @internal
      */
-    ResourceBundle
+    static ResourceBundle
       getData(ResourceBundle &rb, const char *tag, const char *type, UErrorCode& status);
 
 

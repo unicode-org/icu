@@ -77,13 +77,9 @@ const char      SimpleDateFormat::fgClassID = 0; // Value is irrelevant
 
 /**
  * This value of defaultCenturyStart indicates that the system default is to be
- * used.
+ * used.  To be removed in 2.8
  */
 const UDate     SimpleDateFormat::fgSystemDefaultCentury        = DBL_MIN;
-const int32_t   SimpleDateFormat::fgSystemDefaultCenturyYear    = -1;
-
-UDate           SimpleDateFormat::fgSystemDefaultCenturyStart       = DBL_MIN;
-int32_t         SimpleDateFormat::fgSystemDefaultCenturyStartYear   = -1;
 
 static const UChar QUOTE = 0x27; // Single quote
 
@@ -97,11 +93,10 @@ SimpleDateFormat::~SimpleDateFormat()
 //----------------------------------------------------------------------
 
 SimpleDateFormat::SimpleDateFormat(UErrorCode& status)
-  :   fSymbols(NULL),fLocale(Locale::getDefault()),
-      fDefaultCenturyStart(fgSystemDefaultCentury),
-      fDefaultCenturyStartYear(fgSystemDefaultCenturyYear)
+  :   fSymbols(NULL),fLocale(Locale::getDefault())
 {
     construct(kShort, (EStyle) (kShort + kDateOffset), fLocale, status);
+    initializeDefaultCentury();
 }
 
 //----------------------------------------------------------------------
@@ -110,12 +105,11 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
                                    UErrorCode &status)
 :   fPattern(pattern),
     fSymbols(NULL),
-    fLocale(Locale::getDefault()),
-    fDefaultCenturyStart(fgSystemDefaultCentury),
-    fDefaultCenturyStartYear(fgSystemDefaultCenturyYear)
+    fLocale(Locale::getDefault())
 {
     initializeSymbols(fLocale, initializeCalendar(NULL,fLocale,status), status);
     initialize(fLocale, status);
+    initializeDefaultCentury();
 }
 
 //----------------------------------------------------------------------
@@ -124,12 +118,11 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
                                    const Locale& locale,
                                    UErrorCode& status)
 :   fPattern(pattern),
-    fLocale(locale),
-    fDefaultCenturyStart(fgSystemDefaultCentury),
-    fDefaultCenturyStartYear(fgSystemDefaultCenturyYear)
+    fLocale(locale)
 {
     initializeSymbols(fLocale, initializeCalendar(NULL,fLocale,status), status);
     initialize(fLocale, status);
+    initializeDefaultCentury();
 }
 
 //----------------------------------------------------------------------
@@ -139,12 +132,11 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
                                    UErrorCode& status)
 :   fPattern(pattern),
     fSymbols(symbolsToAdopt),
-    fLocale(Locale::getDefault()),
-    fDefaultCenturyStart(fgSystemDefaultCentury),
-    fDefaultCenturyStartYear(fgSystemDefaultCenturyYear)
+    fLocale(Locale::getDefault())
 {
     initializeCalendar(NULL,fLocale,status);
     initialize(fLocale, status);
+    initializeDefaultCentury();
 }
 
 //----------------------------------------------------------------------
@@ -154,12 +146,11 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
                                    UErrorCode& status)
 :   fPattern(pattern),
     fSymbols(new DateFormatSymbols(symbols)),
-    fDefaultCenturyStart(fgSystemDefaultCentury),
-    fDefaultCenturyStartYear(fgSystemDefaultCenturyYear),
     fLocale(Locale::getDefault())
 {
     initializeCalendar(NULL, fLocale, status);
     initialize(fLocale, status);
+    initializeDefaultCentury();
 }
 
 //----------------------------------------------------------------------
@@ -170,11 +161,10 @@ SimpleDateFormat::SimpleDateFormat(EStyle timeStyle,
                                    const Locale& locale,
                                    UErrorCode& status)
 :   fSymbols(NULL),
-    fDefaultCenturyStart(fgSystemDefaultCentury),
-    fDefaultCenturyStartYear(fgSystemDefaultCenturyYear),
     fLocale(locale)
 {
     construct(timeStyle, dateStyle, fLocale, status);
+    initializeDefaultCentury();
 }
 
 //----------------------------------------------------------------------
@@ -188,9 +178,7 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
                                    UErrorCode& status)
 :   fPattern(fgDefaultPattern),
     fSymbols(NULL),
-    fLocale(locale),
-    fDefaultCenturyStart(fgSystemDefaultCentury),
-    fDefaultCenturyStartYear(fgSystemDefaultCenturyYear)
+    fLocale(locale)
 {
     if (U_FAILURE(status)) return;
     initializeSymbols(fLocale, initializeCalendar(NULL, fLocale, status),status);
@@ -208,15 +196,14 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
     }
 
     initialize(fLocale, status);
+    initializeDefaultCentury();
 }
 
 //----------------------------------------------------------------------
 
 SimpleDateFormat::SimpleDateFormat(const SimpleDateFormat& other)
 :   DateFormat(other),
-    fSymbols(NULL),
-    fDefaultCenturyStart(fgSystemDefaultCentury),
-    fDefaultCenturyStartYear(fgSystemDefaultCenturyYear)
+    fSymbols(NULL)
 {
     *this = other;
 }
@@ -235,6 +222,7 @@ SimpleDateFormat& SimpleDateFormat::operator=(const SimpleDateFormat& other)
 
     fDefaultCenturyStart         = other.fDefaultCenturyStart;
     fDefaultCenturyStartYear     = other.fDefaultCenturyStartYear;
+    fHaveDefaultCentury          = other.fHaveDefaultCentury;
 
     fPattern = other.fPattern;
 
@@ -262,6 +250,7 @@ SimpleDateFormat::operator==(const Format& other) const
                 fSymbols             != NULL && // Check for pathological object
                 that->fSymbols         != NULL && // Check for pathological object
                 *fSymbols             == *that->fSymbols &&
+                    fHaveDefaultCentury == that->fHaveDefaultCentury &&
                 fDefaultCenturyStart == that->fDefaultCenturyStart);
     }
     return FALSE;
@@ -278,12 +267,16 @@ void SimpleDateFormat::construct(EStyle timeStyle,
 
     if (U_FAILURE(status)) return;
 
-    // load up the DateTimePatters resource from the appropriate locale (throw
+    // load up the DateTimePatterns resource from the appropriate locale (throw
     // an error if for some weird reason the resource is malformed)
 
     ResourceBundle resources((char *)0, locale, status);
 
-    ResourceBundle dateTimePatterns = resources.get(fgDateTimePatternsTag, status);
+    // We will need the calendar to know what type of symbols to load.
+    initializeCalendar(NULL, locale, status);
+
+    // use Date Format Symbols' helper function to do the actual load.
+    ResourceBundle dateTimePatterns = DateFormatSymbols::getData(resources, fgDateTimePatternsTag, fCalendar?fCalendar->getType():NULL,  status);
     if (U_FAILURE(status)) return;
 
     if (dateTimePatterns.getSize() <= kDateTime)
@@ -292,8 +285,8 @@ void SimpleDateFormat::construct(EStyle timeStyle,
         return;
     }
 
-    initializeSymbols(locale, initializeCalendar(NULL, locale, status), status);
     // create a symbols object from the locale
+    initializeSymbols(locale,fCalendar, status);
     if (U_FAILURE(status)) return;
     /* test for NULL */
     if (fSymbols == 0) {
@@ -401,8 +394,6 @@ SimpleDateFormat::initialize(const Locale& locale,
             ((DecimalFormat*)fNumberFormat)->setDecimalSeparatorAlwaysShown(FALSE);
         fNumberFormat->setParseIntegerOnly(TRUE);
         fNumberFormat->setMinimumFractionDigits(0); // To prevent "Jan 1.00, 1997.00"
-
-        initializeDefaultCentury();
     }
     else if (U_SUCCESS(status))
     {
@@ -415,12 +406,14 @@ SimpleDateFormat::initialize(const Locale& locale,
  */
 void SimpleDateFormat::initializeDefaultCentury() 
 {
-    fDefaultCenturyStart        = internalGetDefaultCenturyStart();
-    fDefaultCenturyStartYear    = internalGetDefaultCenturyStartYear();
-
-    UErrorCode status = U_ZERO_ERROR;
-    fCalendar->setTime(fDefaultCenturyStart, status);
-    // {sfb} throw away error
+  fHaveDefaultCentury = fCalendar->haveDefaultCentury();
+  if(fHaveDefaultCentury) {
+    fDefaultCenturyStart = fCalendar->defaultCenturyStart();
+    fDefaultCenturyStartYear = fCalendar->defaultCenturyStartYear();
+  } else {
+    fDefaultCenturyStart = DBL_MIN;
+    fDefaultCenturyStartYear = -1;
+  }
 }
 
 /* Define one-century window into which to disambiguate dates using
@@ -433,6 +426,7 @@ void SimpleDateFormat::parseAmbiguousDatesAsAfter(UDate startDate, UErrorCode& s
         
     fCalendar->setTime(startDate, status);
     if(U_SUCCESS(status)) {
+        fHaveDefaultCentury = TRUE;
         fDefaultCenturyStart = startDate;
         fDefaultCenturyStartYear = fCalendar->get(UCAL_YEAR, status);
     }
@@ -589,6 +583,8 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
             zeroPaddingNumber(appendTo, value, 4, maxIntCount);
         else 
             zeroPaddingNumber(appendTo, value, 2, 2);
+
+        // SRL TODO:  add 'y', unpadded value
         break;
 
     // for "MMMM", write out the whole month name, for "MMM", write out the month
@@ -952,10 +948,10 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
         Calendar *copy = cal.clone();
         UDate parsedDate = copy->getTime(status);
         // {sfb} check internalGetDefaultCenturyStart
-        if (parsedDate < internalGetDefaultCenturyStart())
+        if (fHaveDefaultCentury && (parsedDate < fDefaultCenturyStart))
         {
             // We can't use add here because that does a complete() first.
-            cal.set(UCAL_YEAR, internalGetDefaultCenturyStartYear() + 100);
+            cal.set(UCAL_YEAR, fDefaultCenturyStartYear + 100);
         }
         delete copy;
     }
@@ -1137,18 +1133,21 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             // other fields specify a date before 6/18, or 1903 if they specify a
             // date afterwards.  As a result, 03 is an ambiguous year.  All other
             // two-digit years are unambiguous.
-            int32_t ambiguousTwoDigitYear = fDefaultCenturyStartYear % 100;
-            ambiguousYear[0] = (value == ambiguousTwoDigitYear);
-            value += (fDefaultCenturyStartYear/100)*100 +
+          if(fHaveDefaultCentury) { // check if this formatter even has a pivot year
+              int32_t ambiguousTwoDigitYear = fDefaultCenturyStartYear % 100;
+              ambiguousYear[0] = (value == ambiguousTwoDigitYear);
+              value += (fDefaultCenturyStartYear/100)*100 +
                 (value < ambiguousTwoDigitYear ? 100 : 0);
+            }
         }
         cal.set(UCAL_YEAR, value);
         return pos.getIndex();
     case kYearWOYField:
-        // Comment is the same as for kYearFiels - look above
+        // Comment is the same as for kYearFields - look above
         if (count <= 2 && (pos.getIndex() - start) == 2
             && u_isdigit(text.charAt(start))
-            && u_isdigit(text.charAt(start+1)))
+            && u_isdigit(text.charAt(start+1))
+            && fHaveDefaultCentury )
         {
             int32_t ambiguousTwoDigitYear = fDefaultCenturyStartYear % 100;
             ambiguousYear[0] = (value == ambiguousTwoDigitYear);
@@ -1527,56 +1526,6 @@ SimpleDateFormat::setDateFormatSymbols(const DateFormatSymbols& newFormatSymbols
 
 //----------------------------------------------------------------------
 
-UDate
-SimpleDateFormat::internalGetDefaultCenturyStart() const
-{
-    // lazy-evaluate systemDefaultCenturyStart
-    if (fgSystemDefaultCenturyStart == fgSystemDefaultCentury)
-        initializeSystemDefaultCentury();
-
-    // use defaultCenturyStart unless it's the flag value;
-    // then use systemDefaultCenturyStart
-    return (fDefaultCenturyStart == fgSystemDefaultCentury) ?
-        fgSystemDefaultCenturyStart : fDefaultCenturyStart;
-}
-
-int32_t
-SimpleDateFormat::internalGetDefaultCenturyStartYear() const
-{
-    // lazy-evaluate systemDefaultCenturyStartYear
-    if (fgSystemDefaultCenturyStart == fgSystemDefaultCentury)
-        initializeSystemDefaultCentury();
-
-    // use defaultCenturyStart unless it's the flag value;
-    // then use systemDefaultCenturyStartYear
-    //return (fDefaultCenturyStart == fgSystemDefaultCentury) ?
-    return (fDefaultCenturyStartYear == fgSystemDefaultCenturyYear) ?
-        fgSystemDefaultCenturyStartYear : fDefaultCenturyStartYear;
-}
-
-void
-SimpleDateFormat::initializeSystemDefaultCentury()
-{
-    // initialize systemDefaultCentury and systemDefaultCenturyYear based
-    // on the current time.  They'll be set to 80 years before
-    // the current time.
-    // No point in locking as it should be idempotent.
-    if (fgSystemDefaultCenturyStart == fgSystemDefaultCentury)
-    {
-        UErrorCode status = U_ZERO_ERROR;
-        Calendar *calendar = Calendar::createInstance(status);
-        if (calendar != NULL && U_SUCCESS(status))
-        {
-            calendar->setTime(Calendar::getNow(), status);
-            calendar->add(UCAL_YEAR, -80, status);
-            fgSystemDefaultCenturyStart = calendar->getTime(status);
-            fgSystemDefaultCenturyStartYear = calendar->get(UCAL_YEAR, status);
-            delete calendar;
-        }
-        // We have no recourse upon failure unless we want to propagate the failure
-        // out.
-    }
-}
 
 void SimpleDateFormat::adoptCalendar(Calendar* calendarToAdopt)
 {
@@ -1584,7 +1533,8 @@ void SimpleDateFormat::adoptCalendar(Calendar* calendarToAdopt)
   DateFormat::adoptCalendar(calendarToAdopt);
   delete fSymbols; 
   fSymbols=NULL;
-  initializeSymbols(fLocale, fCalendar, status);
+  initializeSymbols(fLocale, fCalendar, status);  // we need new symbols
+  initializeDefaultCentury();  // we need a new century (possibly)
 }
 
 

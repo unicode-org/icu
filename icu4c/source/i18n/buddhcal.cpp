@@ -27,6 +27,8 @@ static const int32_t kMaxEra = 0; // only 1 era
 
 static const int32_t kBuddhistEraStart = -543;  // 544 BC (Gregorian)
 
+static const int32_t kGregorianEpoch = 1970; 
+
 BuddhistCalendar::BuddhistCalendar(const Locale& aLocale, UErrorCode& success)
   :   GregorianCalendar(aLocale, success)
 {
@@ -108,15 +110,15 @@ int32_t BuddhistCalendar::internalGetEra() const
 }
 
 int32_t
-BuddhistCalendar::getGregorianYear(UErrorCode &status) 
+BuddhistCalendar::getGregorianYear(UErrorCode &status)  const
 {
-  int32_t year = (fStamp[UCAL_YEAR] != kUnset) ? internalGet(UCAL_YEAR) : 1970+kBuddhistEraStart;
+  int32_t year = (fStamp[UCAL_YEAR] != kUnset) ? internalGet(UCAL_YEAR) : kGregorianEpoch+kBuddhistEraStart;
   int32_t era = BE;
   if (fStamp[UCAL_ERA] != kUnset) {
     era = internalGet(UCAL_ERA);
     if (era != BE) {
       status = U_ILLEGAL_ARGUMENT_ERROR;
-      return 1970 + kBuddhistEraStart;
+      return kGregorianEpoch + kBuddhistEraStart;
     }
   }
   return year + kBuddhistEraStart;
@@ -144,6 +146,10 @@ void BuddhistCalendar::timeToFields(UDate theTime, UBool quick, UErrorCode& stat
   internalSet(UCAL_YEAR, year);
 }
 
+UBool BuddhistCalendar::haveDefaultCentury() const
+{
+  return FALSE;
+}
 
 
 U_NAMESPACE_END

@@ -38,10 +38,12 @@
 */
 
 #include "unicode/utypes.h"
+#include <float.h>
 
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/gregocal.h"
+#include "unicode/smpdtfmt.h"  /* for the public field (!) SimpleDateFormat::fgSystemDefaultCentury */
 
 // *****************************************************************************
 // class GregorianCalendar
@@ -780,7 +782,7 @@ GregorianCalendar::getEpochDay(UErrorCode& status)
 // -------------------------------------
 
 int32_t
-GregorianCalendar::getGregorianYear(UErrorCode &status) 
+GregorianCalendar::getGregorianYear(UErrorCode &status) const 
 {
     int32_t year = (fStamp[UCAL_YEAR] != kUnset) ? internalGet(UCAL_YEAR) : kEpochYear;
     int32_t era = AD;
@@ -1171,7 +1173,7 @@ GregorianCalendar::computeJulianDay(UBool isGregorian, int32_t year)
     // predominates.  This set of computations must be done BEFORE
     // using the year, since the year value may be adjusted here.
     UBool useMonth = FALSE;
-    int32_t month = 0;
+    int32_t month = 0; // SRL getDefaultMonth ?
     if (bestStamp != kUnset &&
         (bestStamp == monthStamp ||
          bestStamp == domStamp ||
@@ -1180,7 +1182,7 @@ GregorianCalendar::computeJulianDay(UBool isGregorian, int32_t year)
         useMonth = TRUE;
 
         // We have the month specified. Make it 0-based for the algorithm.
-        month = (monthStamp != kUnset) ? internalGet(UCAL_MONTH) - UCAL_JANUARY : 0;
+        month = (monthStamp != kUnset) ? internalGet(UCAL_MONTH) - UCAL_JANUARY : getDefaultMonthInYear();
 
         // If the month is out of range, adjust it into range
         if (month < 0 || month > 11) {
@@ -1205,7 +1207,7 @@ GregorianCalendar::computeJulianDay(UBool isGregorian, int32_t year)
         if (bestStamp == domStamp ||
             bestStamp == monthStamp) {
 
-            date = (domStamp != kUnset) ? internalGet(UCAL_DATE) : 1;
+          date = (domStamp != kUnset) ? internalGet(UCAL_DATE) : getDefaultDayInMonth(month);
         }
         else { // assert(bestStamp == womStamp || bestStamp == dowimStamp)
             // Compute from day of week plus week number or from the day of
@@ -1267,8 +1269,13 @@ GregorianCalendar::computeJulianDay(UBool isGregorian, int32_t year)
         UBool doCutoverAdjustment = TRUE;
 
         if (bestStamp == kUnset) {
-            doy = 1; // Advance to January 1
-            doCutoverAdjustment = FALSE;
+          //doy = 1;
+          // For Gregorian the following will always be  1:     kNumDays[UCAL_JANUARY] + 1
+          int32_t defMonth = getDefaultMonthInYear();  // 0 for gregorian
+          int32_t defDay = getDefaultDayInMonth(month); // 1 for gregorian
+          
+          doy = defDay + (isLeap ? kLeapNumDays[defMonth] : kNumDays[defMonth]); 
+          doCutoverAdjustment = FALSE;
         }
         else if (bestStamp == doyStamp) {
             doy = internalGet(UCAL_DAY_OF_YEAR);
@@ -2074,6 +2081,82 @@ GregorianCalendar::getType() const {
 
   return "gregorian";
 }
+
+// ------ Default Century functions moved here from SimpleDateFormat
+
+// uncomment in 2.8
+//const UDate     GregorianCalendar::fgSystemDefaultCentury        = DBL_MIN;
+const int32_t   GregorianCalendar::fgSystemDefaultCenturyYear    = -1;
+
+UDate           GregorianCalendar::fgSystemDefaultCenturyStart       = DBL_MIN;
+int32_t         GregorianCalendar::fgSystemDefaultCenturyStartYear   = -1;
+
+
+UBool GregorianCalendar::haveDefaultCentury() const
+{
+  return TRUE;
+}
+
+UDate GregorianCalendar::defaultCenturyStart() const
+{
+  return internalGetDefaultCenturyStart();
+}
+
+int32_t GregorianCalendar::defaultCenturyStartYear() const
+{
+  return internalGetDefaultCenturyStartYear();
+}
+
+UDate
+GregorianCalendar::internalGetDefaultCenturyStart() const
+{
+  // lazy-evaluate systemDefaultCenturyStart
+  if (fgSystemDefaultCenturyStart == SimpleDateFormat::fgSystemDefaultCentury)
+    initializeSystemDefaultCentury();
+  
+  // use defaultCenturyStart unless it's the flag value;
+  // then use systemDefaultCenturyStart
+  
+  return fgSystemDefaultCenturyStart;
+}
+
+int32_t
+GregorianCalendar::internalGetDefaultCenturyStartYear() const
+{
+    // lazy-evaluate systemDefaultCenturyStartYear
+  if (fgSystemDefaultCenturyStart == SimpleDateFormat::fgSystemDefaultCentury)
+        initializeSystemDefaultCentury();
+
+    // use defaultCenturyStart unless it's the flag value;
+    // then use systemDefaultCenturyStartYear
+
+    return    fgSystemDefaultCenturyStartYear;
+}
+
+void
+GregorianCalendar::initializeSystemDefaultCentury()
+{
+  // initialize systemDefaultCentury and systemDefaultCenturyYear based
+  // on the current time.  They'll be set to 80 years before
+  // the current time.
+  // No point in locking as it should be idempotent.
+  if (fgSystemDefaultCenturyStart == SimpleDateFormat::fgSystemDefaultCentury)
+  {
+    UErrorCode status = U_ZERO_ERROR;
+    Calendar *calendar = new GregorianCalendar(status);
+    if (calendar != NULL && U_SUCCESS(status))
+    {
+      calendar->setTime(Calendar::getNow(), status);
+      calendar->add(UCAL_YEAR, -80, status);
+      fgSystemDefaultCenturyStart = calendar->getTime(status);
+      fgSystemDefaultCenturyStartYear = calendar->get(UCAL_YEAR, status);
+      delete calendar;
+    }
+    // We have no recourse upon failure unless we want to propagate the failure
+    // out.
+  }
+}
+
 
 U_NAMESPACE_END
 

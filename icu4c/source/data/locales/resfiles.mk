@@ -76,7 +76,7 @@ hy.txt hy_AM.txt hy_AM_REVISED.txt\
 id.txt id_ID.txt\
 is.txt is_IS.txt\
 it.txt it_CH.txt it_IT.txt it_IT_PREEURO.txt\
-ja.txt ja_JP.txt\
+ja.txt ja_JP.txt ja_JP_TRADITIONAL.txt\
 kl.txt kl_GL.txt\
 ko.txt ko_KR.txt\
 kok.txt kok_IN.txt\
