@@ -33,8 +33,6 @@ class Locale;               // unicode/locid.h
 class UCharReference;
 class UnicodeConverter;     // unicode/convert.h
 class StringCharacterIterator;
-class SearchIterator;
-class StringSearch;
 class BreakIterator;        // unicode/brkiter.h
 
 /* The <iostream> include has been moved to unicode/ustream.h */
@@ -2923,9 +2921,7 @@ private:
   friend class UnicodeConverter;
 
   friend class StringCharacterIterator;
-  friend class SearchIterator;
-  friend class StringSearch;
-  friend class StringThreadTest;
+  friend class StringTest;
 
   /*
    * The following are all the class fields that are stored
