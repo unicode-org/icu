@@ -169,8 +169,7 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
                                           &isChoiceFormat, &len, &ec);
     if (U_SUCCESS(ec)) {
         fSymbols[kIntlCurrencySymbol] = curriso;
-        fSymbols[kCurrencySymbol] = isChoiceFormat ? curriso
-            : UnicodeString(currname, len);
+        fSymbols[kCurrencySymbol] = UnicodeString(isChoiceFormat? curriso: currname);
     } else {
         fSymbols[kCurrencySymbol] = (UChar)0xa4; // 'OX' currency symbol
         (fSymbols[kIntlCurrencySymbol] = (UChar)0x58).append((UChar)0x58).append((UChar)0x58); // "XXX"
