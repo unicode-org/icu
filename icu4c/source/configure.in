@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.81 2000/10/16 18:06:22 rviswanadha Exp $
+dnl $Id: configure.in,v 1.82 2000/10/16 18:31:29 yves Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -56,6 +56,7 @@ AC_CHECK_STRICT_COMPILE
 dnl Determine the host system and Makefile fragment
 AC_CANONICAL_HOST
 
+SOL64=no
 case "${host}" in
 *-*-solaris*)
 	if test "$ac_cv_prog_gcc" = no; then
@@ -69,7 +70,10 @@ case "${host}" in
 			SOL64=no
 		fi
 	fi ;;
-*)	SOL64=no ;;
+alpha*-*-linux-gnu)
+	CFLAGS="${CFLAGS} -mieee -O2"
+	CXXFLAGS="${CXXFLAGS} -mieee -O2"
+	;;
 esac
 
 ICU_CHECK_MH_FRAG
@@ -661,10 +665,6 @@ dnl END special
 
 dnl Now that we're done using CPPFLAGS etc. for tests, we can change it
 dnl for build.
-
-case "${host}" in
-	alpha*-*-linux-gnu) CPPFLAGS="${CPPFLAGS} -mieee -O2";;
-esac
 
 if test $ICU_USE_THREADS -ne 0
 then
