@@ -24,6 +24,10 @@
 <icu:state>                   
 <icu:state>                   41-fe.p
 
+# build an extension-only (delta) .cnv file
+# requires the base .cnv file at runtime
+<icu:base>                    "ibm-1390_P110-2003"
+
 CHARMAP
 <U00A0> \xD6\x41 |0
 <U00A1> \xD6\x42 |0
