@@ -72,6 +72,20 @@ public class UnicodeSetTest extends TestFmwk {
         s.clear(); 
         s.add('a', 'b');
         expectToPattern(s, "[ab]", null);
+        
+        // Cover applyPattern, applyPropertyAlias
+        s.clear();
+        s.applyPattern("[ab ]", true);
+        expectToPattern(s, "[ab]", new String[] {"a", NOT, "ab"});
+        s.clear();
+        s.applyPattern("[ab ]", false);
+        expectToPattern(s, "[\\\u0020ab]", new String[] {"a", "\u0020", NOT, "ab"});
+        
+        s.clear();
+        s.applyPropertyAlias("nv", "0.5");
+        expectToPattern(s, "[\\u00BD\\u0F2A]", null);
+        s.clear();
+        s.applyPropertyAlias("gc", "Lu");
     }
 
     static String[] OTHER_TOPATTERN_TESTS = {
@@ -569,6 +583,40 @@ public class UnicodeSetTest extends TestFmwk {
         if (set.hashCode() == exp.hashCode()) {
             errln("FAIL: hashCode() equal");
         }
+
+        {
+            //Cover addAll(Collection) and addAllTo(Collection)  
+            //  Seems that there is a bug in addAll(Collection) operation
+            //    Ram also add a similar test to UtilityTest.java
+            logln("Testing addAll(Collection) ... ");  
+            String[] array = {"a", "b", "c", "de"};
+            List list = Arrays.asList(array);
+            Set aset = new HashSet(list);
+            logln(" *** The source set's size is: " + aset.size());
+            
+            set.clear();
+            set.addAll(aset);
+            if (set.size() != aset.size()) {
+                errln("FAIL: After addAll, the UnicodeSet size expected " + aset.size() +
+                       ", " + set.size() + " seen instead!");
+            } else {
+                logln("OK: After addAll, the UnicodeSet size got " + set.size());
+            }
+            
+            List list2 = new ArrayList();
+            set.addAllTo(list2);
+            
+            //verify the result
+            log(" *** The elements are: ");
+            String s = set.toPattern(true);
+            logln(s);
+            Iterator myiter = list2.iterator();
+            while(myiter.hasNext()) {
+                log(myiter.next().toString() + "  ");
+            }
+            logln("");  // a new line
+        }
+
     }
     
     public void TestStrings() {
@@ -1185,6 +1233,16 @@ public class UnicodeSetTest extends TestFmwk {
                 errln("Failed, got " + us + ", expected " + us2);
             } else {
                 logln("Ok, got " + us);
+            }
+            
+            //cover Unicode(String,ParsePosition,SymbolTable,int)
+            ParsePosition inpos = new ParsePosition(0);
+            UnicodeSet inSet = new UnicodeSet(inpat, inpos, sym, UnicodeSet.IGNORE_SPACE);
+            UnicodeSet expSet = new UnicodeSet(exppat);
+            if (!inSet.equals(expSet)) {
+                errln("FAIL: Failed, got " + inSet + ", expected " + expSet);
+            } else {
+                logln("OK: got " + inSet);
             }
         }
     }

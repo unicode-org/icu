@@ -11,6 +11,8 @@ import com.ibm.icu.lang.UScript;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.dev.test.TestFmwk;
 
+import java.util.Locale;
+
 public class TestUScript extends TestFmwk {
 
     /**
@@ -116,6 +118,32 @@ public class TestUScript extends TestFmwk {
             }
         }
         reportDataErrors(numErrors);
+        
+        //cover UScript.getCode(Locale)
+        Locale[] testLocales = new Locale[] {
+            Locale.JAPANESE,
+            Locale.KOREA,
+            Locale.CHINESE,
+            Locale.TAIWAN };
+        logln("Testing UScript.getCode(Locale) ...");
+        numErrors = 0;
+        for(int i=0; i<testNames.length;i++){
+            logln("  Testing locale: " + testLocales[i].getDisplayName());
+            int[] code = UScript.getCode(testLocales[i]);
+            int[] expt = (int[]) expected[i];
+            if(code!=null){
+                for(int j =0; j< code.length;j++){
+                    if(code[j]!=expt[j]){
+                        numErrors++;
+                        logln("  Error getting script code Got: " +code[j] + " Expected: " +expt[j] +" for name "+testNames[i]);
+                    }
+                }
+            }else{
+                numErrors++;
+                logln("  Error getting script code for name "+testNames[i]);
+            }
+        }
+        reportDataErrors(numErrors);                 
     }
 
     public void TestGetCode(){
