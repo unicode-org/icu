@@ -503,16 +503,16 @@ uhash_removeElement(UHashtable *hash, const UHashElement* e);
  * @param i The given integer
  * @return a UHashTok for an integer.
  */
-U_CAPI UHashTok U_EXPORT2 
-uhash_toki(int32_t i);
+/*U_CAPI UHashTok U_EXPORT2 
+uhash_toki(int32_t i);*/
 
 /**
  * Return a UHashTok for a pointer.
  * @param p The given pointer
  * @return a UHashTok for a pointer.
  */
-U_CAPI UHashTok U_EXPORT2 
-uhash_tokp(void* p);
+/*U_CAPI UHashTok U_EXPORT2 
+uhash_tokp(void* p);*/
 
 /********************************************************************
  * UChar* and char* Support Functions

@@ -426,22 +426,22 @@ uhash_removeElement(UHashtable *hash, const UHashElement* e) {
 /**
  * Return a UHashTok for an integer.
  */
-U_CAPI UHashTok U_EXPORT2
+/*U_CAPI UHashTok U_EXPORT2
 uhash_toki(int32_t i) {
     UHashTok tok;
     tok.integer = i;
     return tok;
-}
+}*/
 
 /**
  * Return a UHashTok for a pointer.
  */
-U_CAPI UHashTok U_EXPORT2
+/*U_CAPI UHashTok U_EXPORT2
 uhash_tokp(void* p) {
     UHashTok tok;
     tok.pointer = p;
     return tok;
-}
+}*/
 
 /********************************************************************
  * PUBLIC Key Hash Functions
