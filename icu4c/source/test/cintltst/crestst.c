@@ -466,7 +466,7 @@ static void TestFallback()
     status = U_ZERO_ERROR;
     
     /* OK first one. This should be a Default value. */
-    junk = ures_getStringByKey(fr_FR, "%%EURO", &resultLen, &status);
+    junk = ures_getStringByKey(fr_FR, "%%PREEURO", &resultLen, &status);
     if(status != U_USING_DEFAULT_ERROR)
     {
         log_err("Expected U_USING_DEFAULT_ERROR when trying to get %%EURO from fr_FR, got %s\n", 
