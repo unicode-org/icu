@@ -953,9 +953,8 @@ Transliterator* Transliterator::parseID(const UnicodeString& ID,
     skipSpaces(ID, limit);
     sawDelimiter = (limit < ID.length() && ID.charAt(limit) == ID_DELIM);
     if (sawDelimiter) {
-        ++limit;
-    }
-    skipSpaces(ID, limit);
+        skipSpaces(ID, ++limit);
+   }
 
     if (!create) {
         // TODO Improve performance by scanning the UnicodeSet pattern

@@ -597,7 +597,7 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
                 int32_t r = u_charDigitValue(c);
                 if (r >= 1 && r <= 9) {
                     ++pos;
-                    for (;;) {
+                    while (pos < limit) {
                         c = rule.charAt(pos);
                         int32_t d = u_charDigitValue(c);
                         if (d < 0) {

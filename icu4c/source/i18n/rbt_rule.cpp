@@ -26,17 +26,17 @@ static const UChar BACKSLASH  = 0x005C; // '\'
 #define MAX_STATIC_SEGS 20
 
 // Macros for accessing the array of integers encoding the position of
-// the segments.  See rbt_pars.cpp::Segments for more details.
 // SEGMENTS_COUNT number of segments, n (half the number of parens)
 // SEGMENTS_LEN   length of the segments array (number of elements)
-// SEGMENTS_POS   position of parenthesis i, where i=0..2n-1
+// SEGMENTS_POS   position in 'pattern' of parenthesis i, where i=0..2n-1
 // SEGMENTS_NUM   index into segments to access POS of $1.open,
 //                $1.close, $2.open, $2.close,.., $n.open, $n.close
+//                Relative to FIRST_SEG_POS_INDEX.  Ranges from 0..2n-1.
 #define FIRST_SEG_POS_INDEX 2
 #define SEGMENTS_COUNT(x) x[0]
 #define SEGMENTS_LEN(x) (SEGMENTS_COUNT(x)*4+4)
 #define SEGMENTS_POS(x,i) x[FIRST_SEG_POS_INDEX+i]
-#define SEGMENTS_NUM(x,i) x[x[1]+i]
+#define SEGMENTS_NUM(x,i) (x[x[1]+i]-FIRST_SEG_POS_INDEX)
 
 /**
  * Construct a new rule with the given input, output text, and other
@@ -126,6 +126,7 @@ TransliterationRule::TransliterationRule(const UnicodeString& input,
                segments[firstKeySeg] < anteContextLength) {
             ++firstKeySeg;
         }
+        firstKeySeg -= FIRST_SEG_POS_INDEX; // make relative to FSPI
     }
 
     pattern = input;
@@ -341,13 +342,23 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
     // Record the actual positions, in the text, of the segments.
 	// These are recorded in the order that they occur in the pattern.
 
+    // segPos[] is an array of 2*SEGMENTS_COUNT elements.  It
+    // records the position in 'text' of each segment boundary, in
+    // the order that they occur in 'pattern'.
     int32_t _segPos[2*MAX_STATIC_SEGS];
     int32_t *segPos = _segPos;
     if (segments != 0 && SEGMENTS_COUNT(segments) > MAX_STATIC_SEGS) {
         segPos = new int32_t[2*SEGMENTS_COUNT(segments)];
     }
+    // iSeg is an index into segments[] that accesses the first
+    // array.  As such it ranges from 0 to SEGMENTS_COUNT*2 - 1.
+    // When indexing into segments[] FIRST_SEG_POS_INDEX must be
+    // added to it: segments[FIRST_SEG_POS_INDEX + iSeg].
     int32_t iSeg = firstKeySeg - 1;
-    int32_t nextSegPos = (iSeg >= 0) ? segments[iSeg] : -1;
+    // nextSegPos is an offset in 'pattern'.  When the cursor is
+    // equal to nextSegPos, we are at a segment boundary, and we
+    // record the position in the real text in segPos[].
+    int32_t nextSegPos = (iSeg >= 0) ? segments[FIRST_SEG_POS_INDEX+iSeg] : -1;
 
     UMatchDegree m;
     int32_t lenDelta, keyLimit;
@@ -357,49 +368,49 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
     // A mismatch in the ante context, or with the start anchor,
     // is an outright U_MISMATCH regardless of whether we are
     // incremental or not.
-    int32_t cursor;
+    int32_t oText; // offset into 'text'
     int32_t newStart = 0;
-    int32_t minCursor;
-    int32_t i;
+    int32_t minOText;
+    int32_t oPattern; // offset into 'pattern'
 
-    // Backup cursor by one
-    cursor = posBefore(text, pos.start);
+    // Backup oText by one
+    oText = posBefore(text, pos.start);
 
-    for (i=anteContextLength-1; i>=0; --i) {
-        UChar keyChar = pattern.charAt(i);
+    for (oPattern=anteContextLength-1; oPattern>=0; --oPattern) {
+        UChar keyChar = pattern.charAt(oPattern);
         const UnicodeMatcher* matcher = data->lookup(keyChar);
         if (matcher == 0) {
-            if (cursor >= pos.contextStart &&
-                keyChar == text.charAt(cursor)) {
-                --cursor;
+            if (oText >= pos.contextStart &&
+                keyChar == text.charAt(oText)) {
+                --oText;
             } else {
                 m = U_MISMATCH;
                 goto exit;
             }
         } else {
             // Subtract 1 from contextStart to make it a reverse limit
-            if (matcher->matches(text, cursor, pos.contextStart-1, FALSE)
+            if (matcher->matches(text, oText, pos.contextStart-1, FALSE)
                 != U_MATCH) {
                 m = U_MISMATCH;
                 goto exit;
             }
         }
-        while (nextSegPos == i) {
-            segPos[iSeg] = cursor;
-            if (cursor >= 0) {
-                segPos[iSeg] += UTF_CHAR_LENGTH(text.char32At(cursor));
+        while (nextSegPos == oPattern) {
+            segPos[iSeg] = oText;
+            if (oText >= 0) {
+                segPos[iSeg] += UTF_CHAR_LENGTH(text.char32At(oText));
             } else {
                 ++segPos[iSeg];
             }
-            nextSegPos = (--iSeg >= FIRST_SEG_POS_INDEX) ? segments[iSeg] : -1;
+            nextSegPos = (--iSeg >= FIRST_SEG_POS_INDEX) ? segments[FIRST_SEG_POS_INDEX+iSeg] : -1;
         }
     }
 
-    minCursor = posAfter(text, cursor);
+    minOText = posAfter(text, oText);
 
     // ------------------------ Start Anchor ------------------------
 
-    if ((flags & ANCHOR_START) && cursor != posBefore(text, pos.contextStart)) {
+    if ((flags & ANCHOR_START) && oText != posBefore(text, pos.contextStart)) {
         m = U_MISMATCH;
         goto exit;
     }
@@ -407,63 +418,63 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
     // -------------------- Key and Post Context --------------------
 
     iSeg = firstKeySeg;
-    nextSegPos = (iSeg >= FIRST_SEG_POS_INDEX) ? (segments[iSeg] - anteContextLength) : -1;
+    nextSegPos = (iSeg >= 0) ? (segments[FIRST_SEG_POS_INDEX+iSeg] - anteContextLength) : -1;
 
-    i = 0;
-    cursor = pos.start;
+    oPattern = 0;
+    oText = pos.start;
     keyLimit = 0;
-    while (i < (pattern.length() - anteContextLength)) {
-        if (incremental && cursor == pos.contextLimit) {
+    while (oPattern < (pattern.length() - anteContextLength)) {
+        if (incremental && oText == pos.contextLimit) {
             // We've reached the context limit without a mismatch and
             // without completing our match.
             m = U_PARTIAL_MATCH;
             goto exit;
         }
-        if (cursor == pos.limit && i < keyLength) {
+        if (oText == pos.limit && oPattern < keyLength) {
             // We're still in the pattern key but we're entering the
             // post context.
             m = U_MISMATCH;
             goto exit;
         }
-        while (i == nextSegPos) {
-            segPos[iSeg] = cursor;
-            nextSegPos = segments[++iSeg] - anteContextLength;
+        while (oPattern == nextSegPos) {
+            segPos[iSeg] = oText;
+            nextSegPos = segments[FIRST_SEG_POS_INDEX+(++iSeg)] - anteContextLength;
         }
-        if (i == keyLength) {
-            keyLimit = cursor;
+        if (oPattern == keyLength) {
+            keyLimit = oText;
         }
-        UChar keyChar = pattern.charAt(anteContextLength + i++);
+        UChar keyChar = pattern.charAt(anteContextLength + oPattern++);
         const UnicodeMatcher* matcher = data->lookup(keyChar);
         if (matcher == 0) {
-            // Don't need the cursor < pos.contextLimit check if
+            // Don't need the oText < pos.contextLimit check if
             // incremental is TRUE (because it's done above); do need
             // it otherwise.
-            if (cursor < pos.contextLimit &&
-                keyChar == text.charAt(cursor)) {
-                ++cursor;
+            if (oText < pos.contextLimit &&
+                keyChar == text.charAt(oText)) {
+                ++oText;
             } else {
                 m = U_MISMATCH;
                 goto exit;
             }
         } else {
-            m = matcher->matches(text, cursor, pos.contextLimit, incremental);
+            m = matcher->matches(text, oText, pos.contextLimit, incremental);
             if (m != U_MATCH) {
                 goto exit;
             }
         }
     }
-    while (i == nextSegPos) {
-        segPos[iSeg] = cursor;
-        nextSegPos = segments[++iSeg] - anteContextLength;
+    while (oPattern == nextSegPos) {
+        segPos[iSeg] = oText;
+        nextSegPos = segments[FIRST_SEG_POS_INDEX+(++iSeg)] - anteContextLength;
     }
-	if (i == keyLength) {
-		keyLimit = cursor;
+	if (oPattern == keyLength) {
+		keyLimit = oText;
 	}
 
     // ------------------------- Stop Anchor ------------------------
 
     if ((flags & ANCHOR_END) != 0) {
-        if (cursor != pos.contextLimit) {
+        if (oText != pos.contextLimit) {
             return U_MISMATCH;
         }
         if (incremental) {
@@ -508,12 +519,13 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
          */
         int32_t dest = keyLimit; // copy new text to here
         UnicodeString buf;
-        for (i=0; i<output.length(); ) {
-            if (i == cursorPos) {
+        int oOutput; // offset into 'output'
+        for (oOutput=0; oOutput<output.length(); ) {
+            if (oOutput == cursorPos) {
                 // Record the position of the cursor
                 newStart = dest - (keyLimit - pos.start);
             }
-            UChar32 c = output.char32At(i);
+            UChar32 c = output.char32At(oOutput);
             int32_t b = data->lookupSegmentReference(c);
             if (b < 0) {
                 // Accumulate straight (non-segment) text.
@@ -532,14 +544,14 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
                 text.copy(start, limit, dest);
                 dest += limit - start;
             }
-            i += UTF_CHAR_LENGTH(c);
+            oOutput += UTF_CHAR_LENGTH(c);
         }
         // Insert any accumulated straight text.
         if (buf.length() > 0) {
             text.handleReplaceBetween(dest, dest, buf);
             dest += buf.length();
         }
-        if (i == cursorPos) {
+        if (oOutput == cursorPos) {
             // Record the position of the cursor
             newStart = dest - (keyLimit - pos.start);
         }
@@ -559,11 +571,11 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
         }
     }
     
-    cursor += lenDelta;
+    oText += lenDelta;
     pos.limit += lenDelta;
     pos.contextLimit += lenDelta;
-    // Restrict new value of start to [minCursor, min(cursor, pos.limit)].
-    pos.start = uprv_max(minCursor, uprv_min(uprv_min(cursor, pos.limit), newStart));
+    // Restrict new value of start to [minOText, min(oText, pos.limit)].
+    pos.start = uprv_max(minOText, uprv_min(uprv_min(oText, pos.limit), newStart));
     m = U_MATCH;
     
   exit:
@@ -691,6 +703,7 @@ UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
                                            UBool escapeUnprintable) const {
     int32_t i;
 
+    // iseg indexes into segments[] directly (not offset from FSPI)
     int32_t iseg = FIRST_SEG_POS_INDEX-1;
     int32_t nextSeg = -1;
     // Build an array of booleans specifying open vs. close paren
@@ -701,8 +714,8 @@ UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
             isOpen = new UBool[2*SEGMENTS_COUNT(segments)];
         }
         for (i=0; i<2*SEGMENTS_COUNT(segments); i+=2) {
-            isOpen[SEGMENTS_NUM(segments,i)  -FIRST_SEG_POS_INDEX] = TRUE;
-            isOpen[SEGMENTS_NUM(segments,i+1)-FIRST_SEG_POS_INDEX] = FALSE;
+            isOpen[SEGMENTS_NUM(segments,i)  ] = TRUE;
+            isOpen[SEGMENTS_NUM(segments,i+1)] = FALSE;
         }
         nextSeg = segments[++iseg];
     }
