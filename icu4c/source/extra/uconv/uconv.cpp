@@ -38,7 +38,7 @@
 #include <fcntl.h>
 #endif
 
-#ifdef UCONVMSG_STATIC
+#ifdef UCONVMSG_LINK
 /* below from the README */
 #include "unicode/utypes.h"
 #include "unicode/udata.h"
@@ -66,7 +66,7 @@ static void initMsg(const char *pname) {
         ps = 1;
 
         /* Set up our static data - if any */
-#ifdef UCONVMSG_STATIC
+#ifdef UCONVMSG_LINK
         udata_setAppData(UCONVMSG, (const void*) uconvmsg_dat, &err);
         if (U_FAILURE(err)) {
           fprintf(stderr, "%s: warning, problem installing our static resource bundle data uconvmsg: %s - trying anyways.\n",
