@@ -43,7 +43,7 @@ class CharString {
  public:
     CharString(const UnicodeString& str);
     ~CharString();
-    operator char*() { return ptr; }
+    operator const char*() { return ptr; }
  private:
     char buf[128];
     char* ptr;
@@ -72,6 +72,7 @@ TransliteratorAlias::TransliteratorAlias(const UnicodeString& theAliasID) :
     ID(),
     aliasID(theAliasID),
     trans(0),
+    compoundFilter(0),
     idSplitPoint(-1) {
 }
 
@@ -83,8 +84,8 @@ TransliteratorAlias::TransliteratorAlias(const UnicodeString& theID,
     ID(theID),
     aliasID(idBlock),
     trans(adopted),
-    idSplitPoint(theIDSplitPoint),
-    compoundFilter(cpdFilter) {
+    compoundFilter(cpdFilter),
+    idSplitPoint(theIDSplitPoint) {
 }
 
 TransliteratorAlias::~TransliteratorAlias() {
@@ -168,10 +169,9 @@ Spec::Spec(const UnicodeString& theSpec) : top(theSpec) {
 
     // Canonicalize script name -or- do locale->script mapping
     status = U_ZERO_ERROR;
-    CharString spc(top);
     const int32_t capacity = 10;
     UScriptCode script[capacity]={USCRIPT_INVALID_CODE};
-    int32_t num = uscript_getCode(spc,script,capacity, &status);
+    int32_t num = uscript_getCode(topch,script,capacity, &status);
     if (num > 0 && script[0] != USCRIPT_INVALID_CODE) {
         scriptName = UnicodeString(uscript_getName(script[0]), "");
     }
@@ -181,7 +181,7 @@ Spec::Spec(const UnicodeString& theSpec) : top(theSpec) {
     if (res != 0) {
         // Canonicalize locale name
         status = U_ZERO_ERROR;
-        uloc_getName(spc, buf, sizeof(buf), &status);
+        uloc_getName(topch, buf, sizeof(buf), &status);
         if (U_SUCCESS(status) && status != U_STRING_NOT_TERMINATED_WARNING) {
             top = UnicodeString(buf, "");
         }
@@ -589,7 +589,7 @@ void TransliteratorRegistry::registerEntry(const UnicodeString& source,
     UnicodeString ID;
     UnicodeString s(source);
     if (s.length() == 0) {
-        s = "Any";
+        s = ANY;
     }
     STVtoID(source, target, variant, ID);
     registerEntry(ID, s, target, variant, adopted, visible);
