@@ -70,7 +70,8 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(UDataMemory* image)
  * and which iterates over the same text, as the one passed in.
  */
 RuleBasedBreakIterator::RuleBasedBreakIterator(const RuleBasedBreakIterator& that)
-: text(that.text->clone()),
+: BreakIterator(), // The copy constructor is private :(
+  text(that.text->clone()),
   tables(that.tables)
 {
     tables->addReference();
