@@ -60,6 +60,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(25,TestNameMap);
         TESTCASE(26,TestLiberalizedID);
         TESTCASE(27,TestCreateInstance);
+        TESTCASE(28,TestNormalizationTransliterator);
         default: name = ""; break;
     }
 }
@@ -1130,4 +1131,102 @@ void TransliteratorTest::TestCreateInstance(){
         errln(UnicodeString("Test for Jitterbug 912 Transliterator::createInstance(id,UTRANS_REVERSE) failed"));
     }
 }
-/*static UChar toHexString(int32_t i) { return (UChar)(i + (i < 10 ? ZERO : (UPPER_A - 10))); }*/
+
+/**
+ * Test the normalization transliterator.
+ */
+void TransliteratorTest::TestNormalizationTransliterator() {
+    // THE FOLLOWING TWO TABLES ARE COPIED FROM com.ibm.test.normalizer.BasicTest
+    // PLEASE KEEP THEM IN SYNC WITH BasicTest.
+    const char* CANON[] = {
+        // Input               Decomposed            Composed
+        "cat",                "cat",                "cat"               ,
+        "\\u00e0ardvark",      "a\\u0300ardvark",     "\\u00e0ardvark"    ,
+                                                                        
+        "\\u1e0a",             "D\\u0307",            "\\u1e0a"            , // D-dot_above
+        "D\\u0307",            "D\\u0307",            "\\u1e0a"            , // D dot_above
+                                                                        
+        "\\u1e0c\\u0307",       "D\\u0323\\u0307",      "\\u1e0c\\u0307"      , // D-dot_below dot_above
+        "\\u1e0a\\u0323",       "D\\u0323\\u0307",      "\\u1e0c\\u0307"      , // D-dot_above dot_below
+        "D\\u0307\\u0323",      "D\\u0323\\u0307",      "\\u1e0c\\u0307"      , // D dot_below dot_above
+                                                                        
+        "\\u1e10\\u0307\\u0323", "D\\u0327\\u0323\\u0307","\\u1e10\\u0323\\u0307", // D dot_below cedilla dot_above
+        "D\\u0307\\u0328\\u0323","D\\u0328\\u0323\\u0307","\\u1e0c\\u0328\\u0307", // D dot_above ogonek dot_below
+                                                                        
+        "\\u1E14",             "E\\u0304\\u0300",      "\\u1E14"            , // E-macron-grave
+        "\\u0112\\u0300",       "E\\u0304\\u0300",      "\\u1E14"            , // E-macron + grave
+        "\\u00c8\\u0304",       "E\\u0300\\u0304",      "\\u00c8\\u0304"      , // E-grave + macron
+                                                                        
+        "\\u212b",             "A\\u030a",            "\\u00c5"            , // angstrom_sign
+        "\\u00c5",             "A\\u030a",            "\\u00c5"            , // A-ring
+                                                                        
+        "\\u00fdffin",         "y\\u0301ffin",        "\\u00fdffin"        ,	//updated with 3.0
+        "\\u00fd\\uFB03n",      "y\\u0301\\uFB03n",     "\\u00fd\\uFB03n"     ,	//updated with 3.0
+                                                                        
+        "Henry IV",           "Henry IV",           "Henry IV"          ,
+        "Henry \\u2163",       "Henry \\u2163",       "Henry \\u2163"      ,
+                                                                        
+        "\\u30AC",             "\\u30AB\\u3099",       "\\u30AC"            , // ga (Katakana)
+        "\\u30AB\\u3099",       "\\u30AB\\u3099",       "\\u30AC"            , // ka + ten
+        "\\uFF76\\uFF9E",       "\\uFF76\\uFF9E",       "\\uFF76\\uFF9E"      , // hw_ka + hw_ten
+        "\\u30AB\\uFF9E",       "\\u30AB\\uFF9E",       "\\u30AB\\uFF9E"      , // ka + hw_ten
+        "\\uFF76\\u3099",       "\\uFF76\\u3099",       "\\uFF76\\u3099"      , // hw_ka + ten
+                                                                        
+        "A\\u0300\\u0316",      "A\\u0316\\u0300",      "\\u00C0\\u0316"      ,
+        0 // end
+    };                                                
+
+    const char* COMPAT[] = {                        
+        // Input               Decomposed            Composed
+        "\\uFB4f",             "\\u05D0\\u05DC",       "\\u05D0\\u05DC"     , // Alef-Lamed vs. Alef, Lamed
+                                                                        
+        "\\u00fdffin",         "y\\u0301ffin",        "\\u00fdffin"        ,	//updated for 3.0
+        "\\u00fd\\uFB03n",      "y\\u0301ffin",        "\\u00fdffin"        , // ffi ligature -> f + f + i
+                                                                        
+        "Henry IV",           "Henry IV",           "Henry IV"          ,
+        "Henry \\u2163",       "Henry IV",           "Henry IV"          ,
+                                                                        
+        "\\u30AC",             "\\u30AB\\u3099",       "\\u30AC"            , // ga (Katakana)
+        "\\u30AB\\u3099",       "\\u30AB\\u3099",       "\\u30AC"            , // ka + ten
+                                                                        
+        "\\uFF76\\u3099",       "\\u30AB\\u3099",       "\\u30AC"            , // hw_ka + ten
+        0 // end
+    };
+
+    int32_t i;
+    Transliterator* NFD = Transliterator::createInstance("NFD");
+    Transliterator* NFC = Transliterator::createInstance("NFC");
+    if (!NFD || !NFC) {
+        errln("FAIL: createInstance failed");
+        delete NFD;
+        delete NFC;
+        return;
+    }
+    for (i=0; CANON[i]; i+=3) {
+        UnicodeString in = CharsToUnicodeString(CANON[i]);
+        UnicodeString expd = CharsToUnicodeString(CANON[i+1]);
+        UnicodeString expc = CharsToUnicodeString(CANON[i+2]);
+        expect(*NFD, in, expd);
+        expect(*NFC, in, expc);
+    }
+    delete NFD;
+    delete NFC;
+
+    Transliterator* NFKD = Transliterator::createInstance("NFKD");
+    Transliterator* NFKC = Transliterator::createInstance("NFKC");
+    if (!NFKD || !NFKC) {
+        errln("FAIL: createInstance failed");
+        delete NFKD;
+        delete NFKC;
+        return;
+    }
+    for (i=0; COMPAT[i]; i+=3) {
+        UnicodeString in = CharsToUnicodeString(COMPAT[i]);
+        UnicodeString expkd = CharsToUnicodeString(COMPAT[i+1]);
+        UnicodeString expkc = CharsToUnicodeString(COMPAT[i+2]);
+        expect(*NFKD, in, expkd);
+        expect(*NFKC, in, expkc);
+    }
+    delete NFKD;
+    delete NFKC;
+}

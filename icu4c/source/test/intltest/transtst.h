@@ -157,6 +157,8 @@ class TransliteratorTest : public IntlTest {
      */
     void TestCreateInstance(void);
 
+    void TestNormalizationTransliterator(void);
+
     //======================================================================
     // Support methods
     //======================================================================
