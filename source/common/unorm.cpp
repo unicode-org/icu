@@ -3256,16 +3256,17 @@ unorm_concatenate(const UChar *left, int32_t leftLength,
                                 pErrorCode);
     leftBoundary=iter.index;
     if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+        *pErrorCode=U_ZERO_ERROR;
         if(!u_growBufferFromStatic(stackBuffer, &buffer, &bufferCapacity, 2*bufferLength, 0)) {
             *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+            /* dont need to cleanup here since 
+             * u_growBufferFromStatic frees buffer if(buffer!=stackBuffer)
+             */
             return 0;
         }
 
         /* just copy from the left string: we know the boundary already */
         uprv_memcpy(buffer, left+leftBoundary, bufferLength*U_SIZEOF_UCHAR);
-    }
-    if(U_FAILURE(*pErrorCode)) {
-        return 0;
     }
 
     /*
@@ -3280,17 +3281,19 @@ unorm_concatenate(const UChar *left, int32_t leftLength,
                              FALSE, NULL,
                              pErrorCode);
     if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+        *pErrorCode=U_ZERO_ERROR;
         if(!u_growBufferFromStatic(stackBuffer, &buffer, &bufferCapacity, bufferLength+rightBoundary, 0)) {
             *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+            /* dont need to cleanup here since 
+             * u_growBufferFromStatic frees buffer if(buffer!=stackBuffer)
+             */
             return 0;
         }
 
         /* just copy from the right string: we know the boundary already */
         uprv_memcpy(buffer+bufferLength, right, rightBoundary*U_SIZEOF_UCHAR);
     }
-    if(U_FAILURE(*pErrorCode)) {
-        return 0;
-    }
+
     bufferLength+=rightBoundary;
 
     /* copy left[0..leftBoundary[ to dest */
@@ -3311,7 +3314,10 @@ unorm_concatenate(const UChar *left, int32_t leftLength,
                                             mode, (UBool)((options&(UNORM_IGNORE_HANGUL|1))!=0),
                                             pErrorCode);
     }
-
+    /*
+     * only errorCode that is expected is a U_BUFFER_OVERFLOW_ERROR
+     * so we dont check for the error code here..just let it pass through
+     */
     /* concatenate right[rightBoundary..rightLength[ to dest */
     right+=rightBoundary;
     rightLength-=rightBoundary;
