@@ -538,7 +538,7 @@ fi
 
 PACKAGE="icu"
 
-VERSION="1.3.1"
+VERSION="1.4.0"
 
 UNICODE_VERSION="3.0.0"
 
