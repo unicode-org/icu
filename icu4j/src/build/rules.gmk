@@ -15,7 +15,7 @@ CLASSLIST= classes.list
 # {$(SRCDIR)/$(PKGPATH)}.java{$(CLASSDIR)/$(PKGPATH)}.class:
 #	@echo $(?) >> $(CLASSLIST)
 
-{$(SRCDIR)/$(PKGPATH)}.class : {$(CLASSDIR)/$(PKGPATH)}.java:
+{$(SRCDIR)/$(PKGPATH)}.class : {$(SRCDIR)/$(PKGPATH)}%.class :{$(CLASSDIR)/$(PKGPATH)}%.java:
 	@echo $(?) >> $(CLASSLIST)
 
 
