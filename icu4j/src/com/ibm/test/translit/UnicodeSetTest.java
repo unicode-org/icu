@@ -1,3 +1,15 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/UnicodeSetTest.java,v $ 
+ * $Date: 2000/03/10 03:47:47 $ 
+ * $Revision: 1.6 $
+ *
+ *****************************************************************************************
+ */
 package com.ibm.test.translit;
 import com.ibm.text.*;
 import com.ibm.test.*;

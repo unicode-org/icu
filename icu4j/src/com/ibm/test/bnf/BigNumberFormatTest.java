@@ -1,3 +1,15 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/bnf/Attic/BigNumberFormatTest.java,v $ 
+ * $Date: 2000/03/10 03:47:44 $ 
+ * $Revision: 1.4 $
+ *
+ *****************************************************************************************
+ */
 package com.ibm.test.bnf;
 
 import com.ibm.test.*;
