@@ -133,11 +133,11 @@ $(TARGET): $(OBJECTS)
 	$(LINK) -o $@ $^ $(LIBS)
 
 # Rule to build a compiled cnv file
-$(top_builddir)/data/test%.cnv : $(top_srcdir)/test/testdata/test%.ucm
+$(top_builddir)/data/test%.cnv : $(top_srcdir)/test/testdata/test%.ucm $(TARGET)
 	@echo $(ECHO_N) "$< -> $(ECHO_C)"
 	@./makeconv -d $(top_builddir)/data $<
 
-$(top_builddir)/data/%.cnv : $(top_srcdir)/../data/%.ucm
+$(top_builddir)/data/%.cnv : $(top_srcdir)/../data/%.ucm $(TARGET)
 	@echo $(ECHO_N) "$< -> $(ECHO_C)"
 	@./makeconv -d $(top_builddir)/data $<
 
