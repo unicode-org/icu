@@ -53,11 +53,11 @@ const static UChar testTargetCases[][MAX_TOKEN_LEN] = {
 
 const static UCollationResult results[] = {
     UCOL_LESS,
+    UCOL_EQUAL, /*UCOL_LESS*/   /* Katakanas and Hiraganas are equal on tertiary level(ICU 2.0)*/
     UCOL_LESS,
+    UCOL_GREATER, /*UCOL_LESS*/ /* Prolonged sound mark sorts BEFORE equivalent vowel (ICU 2.0)*/
     UCOL_LESS,
-    UCOL_LESS,
-    UCOL_LESS,
-    UCOL_GREATER                                        /*  6 */
+    UCOL_LESS, /*UCOL_GREATER*/ /* Prolonged sound mark sorts BEFORE equivalent vowel (ICU 2.0)*//*  6 */
 };
 
 const static UChar testBaseCases[][MAX_TOKEN_LEN] = {
@@ -93,10 +93,10 @@ const static UChar testChooonKigooCases[][MAX_TOKEN_LEN] = {
   /*1*/ {0x30AB, 0x30FC, 0x30A2, 0x0000},
   /*2*/ {0x30AB, 0x30A4, 0x3042, 0x0000},
   /*3*/ {0x30AB, 0x30A4, 0x30A2, 0x0000},
+  /*6*/ {0x30AD, 0x30FC, 0x3042, 0x0000}, /* Prolonged sound mark sorts BEFORE equivalent vowel (ICU 2.0)*/
+  /*7*/ {0x30AD, 0x30FC, 0x30A2, 0x0000}, /* Prolonged sound mark sorts BEFORE equivalent vowel (ICU 2.0)*/
   /*4*/ {0x30AD, 0x30A4, 0x3042, 0x0000},
   /*5*/ {0x30AD, 0x30A4, 0x30A2, 0x0000},
-  /*6*/ {0x30AD, 0x30FC, 0x3042, 0x0000},
-  /*7*/ {0x30AD, 0x30FC, 0x30A2, 0x0000}
 };
 
 void addKannaCollTest(TestNode** root)

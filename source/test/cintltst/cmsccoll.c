@@ -632,11 +632,14 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
   uint8_t specs = 0;
   UBool startOfRules = TRUE;
   UBool lastReset = FALSE;
+  UBool before = FALSE;
   UColTokenParser src;
   UColOptionSet opts;
 
   UChar first[256];
   UChar second[256];
+  UChar tempB[256];
+  uint32_t tempLen;
   UChar *rulesCopy = NULL;
   UParseError parseError;
   src.opts = &opts;
@@ -666,6 +669,27 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
         first[firstLen+exLen] = 0;
       }
 
+      if(lastReset == TRUE && prefixLen != 0) {
+        u_strncpy(first+prefixLen, first, firstLen);
+        u_strncpy(first, rulesCopy+prefixOffset, prefixLen); 
+        first[firstLen+prefixLen] = 0;
+        firstLen = firstLen+prefixLen;
+      }
+
+      if(before == TRUE) { /* swap first and second */
+        u_strcpy(tempB, first);
+        u_strcpy(first, second);
+        u_strcpy(second, tempB);
+
+        tempLen = firstLen;
+        firstLen = chLen;
+        chLen = tempLen;
+
+        tempLen = firstEx;
+        firstEx = exLen;
+        exLen = tempLen;
+      }
+
       lastReset = FALSE;
 
       switch(strength){
@@ -682,14 +706,20 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
           testTertiary(coll,first,second);
           break;
       case UCOL_TOK_RESET:
+        lastReset = TRUE;
+        before = (UBool)((specs & UCOL_TOK_BEFORE) != 0);
+        break;
       default:
           break;
       }
 
-      firstLen = chLen;
-      firstEx = exLen;
-      u_strcpy(first, second);
-
+      if(before == TRUE && strength != UCOL_TOK_RESET) { /* first and second were swapped */
+        before = FALSE; 
+      } else {
+        firstLen = chLen;
+        firstEx = exLen;
+        u_strcpy(first, second);
+      }
     }
     uprv_free(rulesCopy);
   }
@@ -1218,6 +1248,10 @@ static void TestCollations( ) {
   for(i = 0; i<noOfLoc; i++) {
     status = U_ZERO_ERROR;
     locName = uloc_getAvailable(i);
+    if(uprv_strcmp("ja", locName) == 0) {
+      log_verbose("Don't know how to test prefixes\n");
+      continue;
+    }
     if(hasCollationElements(locName)) {
         nameSize = uloc_getDisplayName(locName, NULL, name, 256, &status);
         for(j = 0; j<nameSize; j++) {
@@ -1250,6 +1284,10 @@ static void RamsRulesTest( ) {
     status = U_ZERO_ERROR;
     locName = uloc_getAvailable(i);
     if(hasCollationElements(locName)) {
+      if (uprv_strcmp("ja", locName)==0) {
+        log_verbose("Don't know how to test Japanese because of prefixes\n");
+        continue;
+      }
       log_verbose("Testing locale %s\n", locName);
       coll = ucol_open(locName, &status);
       if(U_SUCCESS(status)) {
@@ -1579,16 +1617,15 @@ static void TestComposeDecompose(void) {
             log_verbose("\nTesting locale %s (%s)\n", locName, cName);
 
             coll = ucol_open(locName, &status);
+            ucol_setStrength(coll, UCOL_IDENTICAL);
 
             for(u=0; u<noCases; u++) {
               if(!ucol_equal(coll, t[u]->NFC, -1, t[u]->NFD, -1)) {
                 log_err("Failure: codePoint %04X fails TestComposeDecompose for locale %s\n", t[u]->u, cName);
-                /*doTest(coll, t[u]->NFC, t[u]->NFD, UCOL_EQUAL);*/
+                doTest(coll, t[u]->NFC, t[u]->NFD, UCOL_EQUAL);
               }
             }
-
             ucol_close(coll);
-
         }
     }
     for(u = 0; u <= noCases; u++) {
@@ -3113,9 +3150,9 @@ static void TestNewJapanese() {
     "tt8",
     "\\u30b7\\u30e3\\u30fc\\u30ec",
   };
-  genericLocaleStarter("ja_JP_JIS", test1, sizeof(test1)/sizeof(test1[0]));
-  genericLocaleStarter("ja_JP_JIS", test2, sizeof(test2)/sizeof(test2[0]));
-  /*genericLocaleStarter("ja_JP_JIS", test3, sizeof(test3)/sizeof(test3[0]));*/
+  genericLocaleStarter("ja", test1, sizeof(test1)/sizeof(test1[0]));
+  genericLocaleStarter("ja", test2, sizeof(test2)/sizeof(test2[0]));
+  /*genericLocaleStarter("ja", test3, sizeof(test3)/sizeof(test3[0]));*/
 
 }
 
