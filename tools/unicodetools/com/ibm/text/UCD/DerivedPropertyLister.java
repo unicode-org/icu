@@ -1,3 +1,16 @@
+/**
+*******************************************************************************
+* Copyright (C) 1996-2001, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DerivedPropertyLister.java,v $
+* $Date: 2001/08/31 00:30:17 $
+* $Revision: 1.2 $
+*
+*******************************************************************************
+*/
+
 package com.ibm.text.UCD;
 import java.io.*;
 import java.util.*;
@@ -6,52 +19,52 @@ import com.ibm.text.utility.*;
 
 final class DerivedPropertyLister extends PropertyLister {
     static final boolean BRIDGE = false;
-    
+
     static int enum = 0;
     static final int
         PropMath = 0,
         PropAlphabetic = 1,
         PropLowercase = 2,
         PropUppercase = 3,
-        
+
         ID_Start = 4,
         ID_Continue_NO_Cf = 5,
-        
+
         Mod_ID_Start = 6,
         Mod_ID_Continue_NO_Cf = 7,
-        
+
         Missing_Uppercase = 8,
         Missing_Lowercase = 9,
         Missing_Mixedcase = 10,
-        
+
         FC_NFKC_Closure = 11,
-        
+
         FullCompExclusion = 12,
         FullCompInclusion = 13,
-        
+
         QuickNFD = 14,
         QuickNFC = 15,
         QuickNFKD = 16,
         QuickNFKC = 17,
-        
+
         ExpandsOnNFD = 18,
         ExpandsOnNFC = 19,
         ExpandsOnNFKD = 20,
         ExpandsOnNFKC = 21,
-        
+
         GenNFD = 22,
         GenNFC = 23,
         GenNFKD = 24,
         GenNFKC = 25,
-                
+
         LIMIT = 26;
    ;
-    
+
     private int propMask;
     private Normalizer[] nf = new Normalizer[4];
     private Normalizer nfd, nfc, nfkd, nfkc;
     int width;
-    
+
     public DerivedPropertyLister(UCD ucd, int propMask, PrintStream output) {
         this.propMask = propMask;
         this.output = output;
@@ -60,7 +73,7 @@ final class DerivedPropertyLister extends PropertyLister {
         nfc = nf[1] = new Normalizer(Normalizer.NFC);
         nfkd = nf[2] = new Normalizer(Normalizer.NFKD);
         nfkc = nf[3] = new Normalizer(Normalizer.NFKC);
-        
+
         width = super.minPropertyWidth();
         switch (propMask) {
           case GenNFD: case GenNFC: case GenNFKD: case GenNFKC:
@@ -75,7 +88,7 @@ final class DerivedPropertyLister extends PropertyLister {
             break;
         }
     }
-    
+
     public String headerString() {
         String result = "# Derived Property: ";
         switch (propMask) {
@@ -88,31 +101,31 @@ final class DerivedPropertyLister extends PropertyLister {
           case GenNFD: case GenNFC: case GenNFKD: case GenNFKC:
             result += NAME[propMask-GenNFD] + "\r\n#   Generated according to UAX #15."
             + "\r\n#   Normalized forms, where different from the characters themselves."
-            + ((propMask == 5 || propMask == 3) 
+            + ((propMask == 5 || propMask == 3)
               ? ""
               : "\r\n#   HANGUL SYLLABLES are algorithmically decomposed, and not listed explicitly.")
             + "\r\n#   WARNING: Normalization of STRINGS must use the algorithm in UAX #15 because characters may interact."
             + "\r\n#            It is NOT sufficient to replace characters one-by-one with these results!";
             break;
-          case ID_Start: result += 
+          case ID_Start: result +=
             "ID_Start"
             + "\r\n#  Characters that can start an identifier."
             + "\r\n#  Generated from Lu+Ll+Lt+Lm+Lo+Nl";
             break;
-          case ID_Continue_NO_Cf: result += 
+          case ID_Continue_NO_Cf: result +=
             "ID_Continue"
             + "\r\n#  Characters that can continue an identifier."
             + "\r\n#  Generated from: ID_Start + Mn+Mc+Nd+Pc"
             + "\r\n#  NOTE: Cf characters should be filtered out.";
             break;
-          case Mod_ID_Start: result += 
+          case Mod_ID_Start: result +=
             "XID_Start"
             + "\r\n#  ID_Start modified for closure under NFKx"
             + "\r\n#  Modified as described in UAX #15"
             + "\r\n#  NOTE: Does NOT remove the non-NFKx characters."
             + "\r\n#        Merely ensures that if isIdentifer(string) then isIdentifier(NFKx(string))";
             break;
-          case Mod_ID_Continue_NO_Cf: result += 
+          case Mod_ID_Continue_NO_Cf: result +=
             "XID_Continue"
             + "\r\n#  Mod_ID_Continue modified for closure under NFKx"
             + "\r\n#  Modified as described in UAX #15"
@@ -124,7 +137,7 @@ final class DerivedPropertyLister extends PropertyLister {
             result += "Math"
              + "\r\n#  Generated from: Sm + Other_Math";
             break;
-          case PropAlphabetic: 
+          case PropAlphabetic:
             result += "Alphabetic"
             + "\r\n#  Generated from: Lu+Ll+Lt+Lm+Lo+Nl + Other_Alphabetic";
             break;
@@ -201,17 +214,17 @@ final class DerivedPropertyLister extends PropertyLister {
           default: return "Unimplemented!!";
         }
     }
-    
+
     //public String optionalComment(int cp) {
     //    return super.optionalComment(cp) + " [" + ucdData.getCodeAndName(computedValue) + "]";
     //}
-    
-    
+
+
     public int minPropertyWidth() {
         return width;
     }
-    
-    
+
+
     static final String[] NAME = {"NFD", "NFC", "NFKD", "NFKC"};
     /*
     public String optionalComment(int cp) {
@@ -229,8 +242,8 @@ final class DerivedPropertyLister extends PropertyLister {
         }
     }
     */
-    
-        
+
+
     public byte status(int cp) {
         if (!ucdData.isAssigned(cp)) return EXCLUDE;
         //if (cp == 0xFFFF) {
@@ -240,13 +253,13 @@ final class DerivedPropertyLister extends PropertyLister {
         //if (cp == 0x0385) {
         //    System.out.println(Utility.hex(firstRealCp));
         //}
-        
+
         String cps;
         byte xCat;
-        
+
         switch (propMask) {
           default: return EXCLUDE;
-            
+
           case ExpandsOnNFD: case ExpandsOnNFC: case ExpandsOnNFKD: case ExpandsOnNFKC:
             if (ucdData.getDecompositionType(cp) == NONE) return EXCLUDE;
             cps = UTF32.valueOf32(cp);
@@ -307,17 +320,17 @@ final class DerivedPropertyLister extends PropertyLister {
             return EXCLUDE;
           case FullCompExclusion:
             /*
-(3) Singleton Decompositions: characters that  can be derived from the UnicodeData file by 
+(3) Singleton Decompositions: characters that  can be derived from the UnicodeData file by
 including all characters whose canonical decomposition consists of a single character.
 (4) Non-Starter Decompositions: characters that  can be derived from the UnicodeData
 file by including all characters whose canonical decomposition consists of a sequence
 of characters, the first of which has a non-zero combining class.
-*/          
+*/
             {
                 if (!ucdData.isRepresented(cp)) return EXCLUDE;
                 byte dtype = ucdData.getDecompositionType(cp);
                 if (dtype != CANONICAL) return EXCLUDE;
-                
+
                 if (isCompEx(cp)) return INCLUDE;
                 return EXCLUDE;
             }
@@ -326,13 +339,13 @@ of characters, the first of which has a non-zero combining class.
                 if (!ucdData.isRepresented(cp)) return EXCLUDE;
                 byte dtype = ucdData.getDecompositionType(cp);
                 if (dtype != CANONICAL) return EXCLUDE;
-                
+
                 if (isCompEx(cp)) return EXCLUDE;
                 return INCLUDE;
             }
           case FC_NFKC_Closure:
             if (!ucdData.isRepresented(cp)) return EXCLUDE;
-          
+
           /*
             b = Normalize(Fold(a));
             c = Normalize(Fold(b));
@@ -353,7 +366,7 @@ of characters, the first of which has a non-zero combining class.
                 }
                 return BREAK;
             }
-            
+
          case QuickNFD: case QuickNFC: case QuickNFKD: case QuickNFKC:
             lastValue = currentValue;
             Normalizer nfx = nf[propMask - QuickNFD];
@@ -364,8 +377,8 @@ of characters, the first of which has a non-zero combining class.
             if (currentValue != lastValue) return BREAK;
             return INCLUDE;
         }
-        
-        
+
+
         // handle script stuff
         /*
         if (firstRealCp == -1) return INCLUDE;
@@ -373,12 +386,12 @@ of characters, the first of which has a non-zero combining class.
         if (cat == cat2) return INCLUDE;
         int mc = UCD.mainCategoryMask(cat);
         if (LETTER_MASK == mc && mc == UCD.mainCategoryMask(cat2)) return INCLUDE;
-        
+
         return BREAK;
         */
         return INCLUDE;
     }
-    
+
     static Map computedValue = new HashMap();
     static String getComputedValue(int cp) {
         return (String) computedValue.get(new Integer(cp));
@@ -388,8 +401,8 @@ of characters, the first of which has a non-zero combining class.
     }
     static String lastValue = "";
     static String currentValue = "";
-    
-    boolean isCompEx(int cp) {     
+
+    boolean isCompEx(int cp) {
         if (ucdData.getBinaryProperty(cp, CompositionExclusion)) return true;
         String decomp = ucdData.getDecompositionMapping(cp);
         if (UTF32.length32(decomp) == 1) return true;
@@ -397,17 +410,17 @@ of characters, the first of which has a non-zero combining class.
         if (ucdData.getCombiningClass(first) != 0) return true;
         return false;
     }
-    
+
     StringBuffer foldBuffer = new StringBuffer();
-    
+
     String fold(int cp) {
         return ucdData.getCase(cp, FULL, FOLD);
     }
-    
+
     String fold(String s) {
         return ucdData.getCase(s, FULL, FOLD);
     }
-    
+
     byte getDecompCat(int cp) {
         byte cat = ucdData.getCategory(cp);
         if (cat == Lu
@@ -416,7 +429,7 @@ of characters, the first of which has a non-zero combining class.
             || ucdData.getBinaryProperty(cp, Other_Lowercase)) return Ll;
         if (cat == Lt || cat == Lo || cat == Lm || cat == Nl) return cat;
         if (!nf[2].normalizationDiffers(cp)) return Lo;
-        
+
         String norm = nf[2].normalize(cp);
         int cp2;
         boolean gotUpper = false;
@@ -437,4 +450,4 @@ of characters, the first of which has a non-zero combining class.
         return cat;
     }
 }
-    
+

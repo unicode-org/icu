@@ -1,3 +1,16 @@
+/**
+*******************************************************************************
+* Copyright (C) 1996-2001, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/TestData.java,v $
+* $Date: 2001/08/31 00:30:17 $
+* $Revision: 1.2 $
+*
+*******************************************************************************
+*/
+
 package com.ibm.text.UCD;
 
 import java.util.*;
@@ -8,31 +21,31 @@ import java.text.SimpleDateFormat;
 import com.ibm.text.utility.*;
 
 public class TestData implements UCD_Types {
-    
+
     public static void main (String[] args) throws IOException {
         System.out.println("START");
         ucd = UCD.make();
         System.out.println("Loaded UCD " + ucd.getVersion() + " " + (new Date(ucd.getDate())));
-        
+
         checkHoffman("\u05B8\u05B9\u05B1\u0591\u05C3\u05B0\u05AC\u059F");
         checkHoffman("\u0592\u05B7\u05BC\u05A5\u05B0\u05C0\u05C4\u05AD");
-        
+
         int mask = 0;
-        
+
         if (false) {
-            
+
         generateVerticalSlice(BIDI_CLASS, BIDI_CLASS+NEXT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
             "DerivedBidiClass-3.1.1d1.txt");
-        
-        
+
+
         mask = Utility.setBits(0, DerivedPropertyLister.FC_NFKC_Closure, DerivedPropertyLister.ExpandsOnNFKC);
-        mask = Utility.clearBit(mask, DerivedPropertyLister.FullCompInclusion);       
+        mask = Utility.clearBit(mask, DerivedPropertyLister.FullCompInclusion);
         generateDerived(mask, HEADER_DERIVED, "DerivedNormalizationProperties-3.1.0d1.txt");
 
         generateVerticalSlice(EAST_ASIAN_WIDTH, EAST_ASIAN_WIDTH+NEXT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
             "DerivedEastAsianWidth-3.1.0d1.txt");
-       
-        generateVerticalSlice(CATEGORY, CATEGORY+NEXT_ENUM, KEEP_SPECIAL, HEADER_DERIVED, 
+
+        generateVerticalSlice(CATEGORY, CATEGORY+NEXT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
             "DerivedGeneralCategory-3.1.0d1.txt");
         generateVerticalSlice(COMBINING_CLASS, COMBINING_CLASS+NEXT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
             "DerivedCombiningClass-3.1.0d1.txt");
@@ -53,41 +66,41 @@ public class TestData implements UCD_Types {
 
         mask = Utility.setBits(0, DerivedPropertyLister.PropMath, DerivedPropertyLister.Mod_ID_Continue_NO_Cf);
         generateDerived(mask, HEADER_DERIVED, "DerivedCoreProperties-3.1.0d1.txt");
-                
+
         generateVerticalSlice(LINE_BREAK, LINE_BREAK+NEXT_ENUM, KEEP_SPECIAL, HEADER_DERIVED,
             "DerivedLineBreak-3.1.0d1.txt");
-            
+
         generateVerticalSlice(SCRIPT+1, SCRIPT + NEXT_ENUM, KEEP_SPECIAL, HEADER_SCRIPTS, "Scripts-3.1.0d4.txt");
-        
+
         generateVerticalSlice(BINARY_PROPERTIES + White_space, BINARY_PROPERTIES + Noncharacter_Code_Point + 1,
                 KEEP_SPECIAL, HEADER_EXTEND, "PropList-3.1.0d5.txt");
-                
-                
+
+
             writeNormalizerTestSuite("NormalizationTest-3.1.0d1.txt");
 
         }
-        
 
-        
-        
-            //generateDerived(Utility.setBits(0, DerivedPropertyLister.PropMath, DerivedPropertyLister.Mod_ID_Continue_NO_Cf), 
+
+
+
+            //generateDerived(Utility.setBits(0, DerivedPropertyLister.PropMath, DerivedPropertyLister.Mod_ID_Continue_NO_Cf),
             //    HEADER_DERIVED, "DerivedPropData2-3.1.0d1.txt");
         //generateVerticalSlice(SCRIPT, SCRIPT+1, KEEP_SPECIAL, "ScriptCommon-3.1.0d1.txt");
         //listStrings("LowerCase-3.1.0d1.txt", 0,0);
         //generateVerticalSlice(0, LIMIT_ENUM, SKIP_SPECIAL, PROPLIST1, "DerivedPropData1-3.1.0d1.txt");
-        
+
         // AGE stuff
         //UCD ucd = UCD.make();
         //System.out.println(ucd.getAgeID(0x61));
         //System.out.println(ucd.getAgeID(0x2FA1D));
-        
-        
+
+
         //generateCompExclusions();
         System.out.println("END");
     }
-    
+
    static Normalizer nfkc = new Normalizer(Normalizer.NFKC);
-        
+
     public static void checkHoffman(String test) {
         String result = nfkc.normalize(test);
         System.out.println(Utility.hex(test) + " => " + Utility.hex(result));
@@ -96,7 +109,7 @@ public class TestData implements UCD_Types {
         System.out.println();
         show(result, 0);
     }
-    
+
     public static void show(String s, int indent) {
         int cp;
         for (int i = 0; i < s.length(); i += UTF32.count16(cp)) {
@@ -110,16 +123,16 @@ public class TestData implements UCD_Types {
             }
         }
     }
-    
-    
+
+
     static DateFormat myDateFormat = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss.S' GMT'");
-    
+
     static {
         myDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
     }
-    
+
     //Remove "d1" from DerivedJoiningGroup-3.1.0d1.txt type names
-    
+
     public static String fixFile(String s) {
         int len = s.length();
         if (!s.endsWith(".txt")) return s;
@@ -129,9 +142,9 @@ public class TestData implements UCD_Types {
         System.out.println("Fixing File Name");
         return s.substring(0,len-6) + s.substring(len-4);
     }
-    
+
     static final int HEADER_EXTEND = 0, HEADER_DERIVED = 1, HEADER_SCRIPTS = 2;
-    
+
     public static void doHeader(String fileName, PrintStream output, int headerChoice) {
         output.println("# " + fixFile(fileName));
         output.println("#");
@@ -152,7 +165,7 @@ public class TestData implements UCD_Types {
         output.println("# ================================================");
         output.println();
     }
-   
+
     public static void generateDerived (int bitMask, int headerChoice, String fileName) throws IOException {
         ucd = UCD.make("310");
         PrintStream output = new PrintStream(new FileOutputStream(GEN_DIR + fileName));
@@ -167,13 +180,13 @@ public class TestData implements UCD_Types {
         }
         output.close();
     }
-    
+
     /*
     public static void listStrings(String file, int type, int subtype) throws IOException {
         ucd = UCD.make("310");
         UCD ucd30 = UCD.make("300");
         PrintStream output = new PrintStream(new FileOutputStream(GEN_DIR + file));
-        
+
         for (int i = 0; i < 0x10FFFF; ++i) {
             if ((i & 0xFFF) == 0) System.out.println("# " + i);
             if (!ucd.isRepresented(i)) continue;
@@ -188,17 +201,17 @@ public class TestData implements UCD_Types {
         output.close();
     }
     */
-    
+
     public static void generateCompExclusions() throws IOException {
         PrintStream output = new PrintStream(new FileOutputStream(GEN_DIR + "CompositionExclusionsDelta.txt"));
         new CompLister(output).print();
         output.close();
     }
-    
+
     static class CompLister extends PropertyLister {
         UCD oldUCD;
         int oldLength = 0;
-        
+
         public CompLister(PrintStream output) {
             this.output = output;
             ucdData = UCD.make("310");
@@ -209,7 +222,7 @@ public class TestData implements UCD_Types {
             return UTF32.length32(ucdData.getDecompositionMapping(cp)) + "";
         }
         public byte status(int cp) {
-            if (ucdData.getDecompositionType(cp) == CANONICAL 
+            if (ucdData.getDecompositionType(cp) == CANONICAL
               && oldUCD.getDecompositionType(cp) != CANONICAL) {
                 int temp = oldLength;
                 oldLength = UTF32.length32(ucdData.getDecompositionMapping(cp));
@@ -219,11 +232,11 @@ public class TestData implements UCD_Types {
             return EXCLUDE;
         }
     }
-    
+
     static final byte KEEP_SPECIAL = 0, SKIP_SPECIAL = 1;
-    
+
     public static void generateVerticalSlice(int startEnum, int endEnum, byte skipSpecial, int headerChoice, String file) throws IOException {
-        
+
         //System.out.println(ucd.toString(0x1E0A));
         /*
         System.out.println(ucd.getData(0xFFFF));
@@ -234,14 +247,14 @@ public class TestData implements UCD_Types {
         if (true) return;
         String test2 = ucd.getName(0x2A6D6);
         //*/
-        
-        
+
+
         PrintStream output = new PrintStream(new FileOutputStream(GEN_DIR + file));
         doHeader(file, output, headerChoice);
         int last = -1;
         for (int i = startEnum; i < endEnum; ++i) {
             if (!MyPropertyLister.isUnifiedBinaryPropertyDefined(ucd, i)) continue;
-            if (i == DECOMPOSITION_TYPE || i == NUMERIC_TYPE 
+            if (i == DECOMPOSITION_TYPE || i == NUMERIC_TYPE
                 || i == (CATEGORY | UNUSED_CATEGORY)
                 || i == (BINARY_PROPERTIES | Non_break)
                 || i == (JOINING_TYPE | JT_U)
@@ -265,7 +278,7 @@ public class TestData implements UCD_Types {
                 output.println();
             }
             System.out.print(".");
-            new MyPropertyLister(ucd, i, output).print();        
+            new MyPropertyLister(ucd, i, output).print();
         }
         if (endEnum == LIMIT_ENUM) {
             output.println();
@@ -275,7 +288,7 @@ public class TestData implements UCD_Types {
             output.println();
             System.out.println();
             System.out.println("@NUMERIC VALUES");
-            
+
             Set floatSet = new TreeSet();
             for (int i = 0; i < 0x10FFFF; ++i) {
                 float nv = ucd.getNumericValue(i);
@@ -292,13 +305,13 @@ public class TestData implements UCD_Types {
         output.close();
         System.out.println();
     }
-    
+
     static UCD ucd;
 
     static public Normalizer formC, formD, formKC, formKD;
-    
+
     static public void writeNormalizerTestSuite(String fileName) throws IOException {
-        
+
         PrintWriter log = new PrintWriter(
             new BufferedWriter(
             new OutputStreamWriter(
@@ -309,7 +322,7 @@ public class TestData implements UCD_Types {
 	    formD = new Normalizer(Normalizer.NFD);
 	    formKC = new Normalizer(Normalizer.NFKC);
 	    formKD = new Normalizer(Normalizer.NFKD);
-	    
+
         log.println("# " + fixFile(fileName));
         log.println("#");
         log.println("# Normalization Test Suite");
@@ -341,24 +354,24 @@ public class TestData implements UCD_Types {
         log.println("#    implementations:");
         log.println("#");
         log.println("#      X == NFC(X) == NFD(X) == NFKC(X) == NFKD(X)");
-        
+
         System.out.println("Writing Part 1");
 
         log.println("#");
         log.println("@Part0 # Specific cases");
         log.println("#");
-        
+
         for (int j = 0; j < testSuiteCases.length; ++j) {
             writeLine(testSuiteCases[j], log, false);
         }
-        
+
         System.out.println("Writing Part 2");
-        
+
         log.println("#");
         log.println("@Part1 # Character by character test");
         log.println("# All characters not explicitly occurring in c1 of Part 1 have identical NFC, D, KC, KD forms.");
         log.println("#");
-        
+
         for (int ch = 0; ch < 0x10FFFF; ++ch) {
             Utility.dot(ch);
             if (!ucd.isAssigned(ch)) continue;
@@ -367,7 +380,7 @@ public class TestData implements UCD_Types {
             writeLine(cc,log, true);
         }
         Utility.fixDot();
-        
+
         System.out.println("Finding Examples");
 
         String[] example = new String[256];
@@ -379,7 +392,7 @@ public class TestData implements UCD_Types {
             int cc = ucd.getCombiningClass(ch);
             if (example[cc] == null) example[cc] = UTF32.valueOf32(ch);
         }
-        
+
         Utility.fixDot();
         System.out.println("Writing Part 3");
 
@@ -393,9 +406,9 @@ public class TestData implements UCD_Types {
             if (ucd.isPUA(ch)) continue;
             short c = ucd.getCombiningClass(ch);
             if (c == 0) continue;
-            
+
             // add character with higher class, same class, lower class
-            
+
             String sample = "";
             for (int i = c+1; i < example.length; ++i) {
                 if (example[i] == null) continue;
@@ -408,7 +421,7 @@ public class TestData implements UCD_Types {
                 sample += example[i];
                 break;
             }
-            
+
             writeLine("a" + sample + UTF32.valueOf32(ch) + "b", log, false);
             writeLine("a" + UTF32.valueOf32(ch) + sample + "b", log, false);
         }
@@ -417,7 +430,7 @@ public class TestData implements UCD_Types {
         log.println("# END OF FILE");
         log.close();
     }
-    
+
     static void writeLine(String cc, PrintWriter log, boolean check) {
         String c = formC.normalize(cc);
         String d = formD.normalize(cc);
@@ -427,13 +440,13 @@ public class TestData implements UCD_Types {
         log.println(
             Utility.hex(cc," ") + ";" + Utility.hex(c," ") + ";" + Utility.hex(d," ") + ";"
             + Utility.hex(kc," ") + ";" + Utility.hex(kd," ")
-            + "; # (" 
+            + "; # ("
             + comma(cc) + "; " + comma(c) + "; " + comma(d) + "; " + comma(kc) + "; " + comma(kd) + "; "
             + ") " + ucd.getName(cc));
     }
-    
+
     static StringBuffer commaResult = new StringBuffer();
-    
+
     // not recursive!!!
     static final String comma(String s) {
         commaResult.setLength(0);
@@ -445,7 +458,7 @@ public class TestData implements UCD_Types {
         }
         return commaResult.toString();
     }
-    
+
     static final String[] testSuiteCases = {
         "\u1E0A",
         "\u1E0C",

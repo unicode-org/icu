@@ -1,3 +1,16 @@
+/**
+*******************************************************************************
+* Copyright (C) 1996-2001, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateCaseFolding.java,v $
+* $Date: 2001/08/31 00:30:17 $
+* $Revision: 1.2 $
+*
+*******************************************************************************
+*/
+
 package com.ibm.text.UCD;
 
 import java.util.*;
@@ -8,19 +21,19 @@ import com.ibm.text.utility.*;
 public class GenerateCaseFolding implements UCD_Types {
     public static boolean DEBUG = false;
     public static UCD ucd = UCD.make("310");
-    
+
     public static void main(String[] args) throws java.io.IOException {
         makeCaseFold();
         //getAge();
     }
-    
+
     public static void makeCaseFold() throws java.io.IOException {
         System.out.println("Making Full Data");
         Map fullData = getCaseFolding(true);
         System.out.println("Making Simple Data");
         Map simpleData = getCaseFolding(false);
         // write the data
-        
+
         System.out.println("Writing");
         PrintWriter out = new PrintWriter(
             new BufferedWriter(
@@ -48,30 +61,30 @@ public class GenerateCaseFolding implements UCD_Types {
         }
         out.close();
     }
-    
+
     static void drawLine(PrintWriter out, int ch, String type, String result) {
-        out.println(Utility.hex(ch) 
-            + "; " + type + 
-            "; " + Utility.hex(result, " ") +  
+        out.println(Utility.hex(ch)
+            + "; " + type +
+            "; " + Utility.hex(result, " ") +
             "; # " + ucd.getName(ch));
     }
-    
-    
+
+
     static Map getCaseFolding(boolean full) throws java.io.IOException {
         Map data = new TreeMap();
         Map repChar = new TreeMap();
         //String option = "";
-        
+
         // get the equivalence classes
-        
+
         for (int ch = 0; ch < 0x10FFFF; ++ch) {
             if ((ch & 0x3FF) == 0) System.out.println(Utility.hex(ch));
             if (!ucd.isRepresented(ch)) continue;
             getClosure(ch, data, full);
         }
-        
+
         // get the representative characters
-        
+
         Iterator it = data.keySet().iterator();
         while (it.hasNext()) {
             String s = (String) it.next();
@@ -93,7 +106,7 @@ public class GenerateCaseFolding implements UCD_Types {
             }
             if (rep == null) System.err.println("No representative for: " + toString(set));
             else if (repGood < 128) {
-                System.err.println("Non-optimal!!: " 
+                System.err.println("Non-optimal!!: "
                     + ucd.getName(rep) + ", " + toString(set,true));
             }
             it2 = set.iterator();
@@ -104,7 +117,7 @@ public class GenerateCaseFolding implements UCD_Types {
         }
         return repChar;
     }
-    
+
     static int goodness(String s, boolean full) {
         if (s == null) return 0;
         int result = s.length();
@@ -113,7 +126,7 @@ public class GenerateCaseFolding implements UCD_Types {
         return result;
     }
 
-    
+
     static Normalizer NFC = new Normalizer(Normalizer.NFC);
     /*
     static HashSet temp = new HashSet();
@@ -135,12 +148,12 @@ public class GenerateCaseFolding implements UCD_Types {
         }
     }
     */
-        
+
             /*
-            String 
+            String
             String lower1 = ucd.getLowercase(ch);
             String lower2 = ucd.toLowercase(ch,option);
-            
+
             char ch2 = ucd.getLowercase(ucd.getUppercase(ch).charAt(0)).charAt(0);
             //String lower1 = String.valueOf(ucd.getLowercase(ch));
             //String lower = ucd.toLowercase(ch2,option);
@@ -148,9 +161,9 @@ public class GenerateCaseFolding implements UCD_Types {
             String lowerUpper = ucd.toLowercase(upper,option);
             //String title = ucd.toTitlecase(ch2,option);
             //String lowerTitle = ucd.toLowercase(upper,option);
-            
-            if (ch != ch2 || lowerUpper.length() != 1 || ch != lowerUpper.charAt(0)) { // 
-                output.println(Utility.hex(ch) 
+
+            if (ch != ch2 || lowerUpper.length() != 1 || ch != lowerUpper.charAt(0)) { //
+                output.println(Utility.hex(ch)
                     + "; " + (lowerUpper.equals(lower1) ? "L" : lowerUpper.equals(lower2) ? "S" : "E")
                     + "; " + Utility.hex(lowerUpper," ")
                     + ";\t#" + ucd.getName(ch)
@@ -163,7 +176,7 @@ public class GenerateCaseFolding implements UCD_Types {
                 //}
             }
             */
-        
+
     static void getClosure(int ch, Map data, boolean full) {
         String charStr = UTF32.valueOf32(ch);
         String lowerStr = lower(charStr, full);
@@ -171,17 +184,17 @@ public class GenerateCaseFolding implements UCD_Types {
         String upperStr = upper(charStr, full);
         if (charStr.equals(lowerStr) && charStr.equals(upperStr) && charStr.equals(titleStr)) return;
         if (DEBUG) System.err.println("Closure for " + Utility.hex(ch));
-        
+
         // make new set
         Set set = new TreeSet();
         set.add(charStr);
         data.put(charStr, set);
-        
+
         // add cases to get started
         add(set, lowerStr, data);
         add(set, upperStr, data);
         add(set, titleStr, data);
-        
+
         // close it
         main:
         while (true) {
@@ -197,15 +210,15 @@ public class GenerateCaseFolding implements UCD_Types {
             break;
         }
     }
-    
+
     static String lower(String s, boolean full) {
         String result = lower2(s,full);
         return result.replace('\u03C2', '\u03C3'); // HACK for lower
     }
-    
+
     // These functions are no longer necessary, since UCD is parameterized,
     // but it's not worth changing
-    
+
     static String lower2(String s, boolean full) {
         if (!full) {
             if (s.length() != 1) return s;
@@ -213,7 +226,7 @@ public class GenerateCaseFolding implements UCD_Types {
         }
         return ucd.getCase(s, FULL, LOWER);
     }
-    
+
     static String upper(String s, boolean full) {
         if (!full) {
             if (s.length() != 1) return s;
@@ -221,7 +234,7 @@ public class GenerateCaseFolding implements UCD_Types {
         }
         return ucd.getCase(s, SIMPLE, UPPER);
     }
-    
+
     static String title(String s, boolean full) {
         if (!full) {
             if (s.length() != 1) return s;
@@ -229,7 +242,7 @@ public class GenerateCaseFolding implements UCD_Types {
         }
         return ucd.getCase(s, SIMPLE, TITLE);
     }
-    
+
     static boolean add(Set set, String s, Map data) {
         if (set.contains(s)) return false;
         set.add(s);
@@ -246,7 +259,7 @@ public class GenerateCaseFolding implements UCD_Types {
         if (DEBUG) System.err.println("done adding: " + toString(set));
         return true;
     }
-    
+
     static String toString(Set set) {
         String result = "{";
         Iterator it2 = set.iterator();
@@ -259,7 +272,7 @@ public class GenerateCaseFolding implements UCD_Types {
         }
         return result + "}";
     }
-    
+
     static String toString(Set set, boolean t) {
         String result = "{";
         Iterator it2 = set.iterator();
@@ -272,7 +285,7 @@ public class GenerateCaseFolding implements UCD_Types {
         }
         return result + "}";
     }
-    
+
     static final void getAge() throws IOException {
         PrintStream log = new PrintStream(
             new BufferedOutputStream (
@@ -298,37 +311,37 @@ public class GenerateCaseFolding implements UCD_Types {
 	        UnicodeSet u21 = fromFile(BASE_DIR + "UnicodeData\\Versions\\UnicodeData-2.1.txt", false);
 	        UnicodeSet u30 = fromFile(BASE_DIR + "UnicodeData\\Versions\\UnicodeData-3.0.txt", false);
 	        UnicodeSet u31 = fromFile(BASE_DIR + "UnicodeData\\Versions\\UnicodeData-3.1.txt", false);
-	        
+
             log.println();
-            log.println("# Code points assigned in Unicode 1.1 (minus Hangul Syllables): " 
+            log.println("# Code points assigned in Unicode 1.1 (minus Hangul Syllables): "
                 + n.format(u11.count()));
             log.println();
             u11.print(log, false, false, "1.1");
-            
+
             UnicodeSet u20m = new UnicodeSet(u20).remove(u11);
             log.println();
-            log.println("# Code points assigned in Unicode 2.0 (minus Unicode 1.1): " 
+            log.println("# Code points assigned in Unicode 2.0 (minus Unicode 1.1): "
                 + n.format(u20m.count()));
             log.println();
             u20m.print(log, false, false, "2.0");
 
             UnicodeSet u21m = new UnicodeSet(u21).remove(u20);
             log.println();
-            log.println("# Code points assigned in Unicode 2.1 (minus Unicode 2.0): " 
+            log.println("# Code points assigned in Unicode 2.1 (minus Unicode 2.0): "
                 + n.format(u21m.count()));
             log.println();
             u21m.print(log, false, false, "2.1");
 
             UnicodeSet u30m = new UnicodeSet(u30).remove(u21);
             log.println();
-            log.println("# Code points assigned in Unicode 3.0 (minus Unicode 2.1): " 
+            log.println("# Code points assigned in Unicode 3.0 (minus Unicode 2.1): "
                 + n.format(u30m.count()));
             log.println();
             u30m.print(log, false, false, "3.0");
 
             UnicodeSet u31m = new UnicodeSet(u31).remove(u30);
             log.println();
-            log.println("# Code points assigned in Unicode 3.1 (minus Unicode 3.0): " 
+            log.println("# Code points assigned in Unicode 3.1 (minus Unicode 3.0): "
                 + n.format(u31m.count()));
             log.println();
             u31m.print(log, false, false, "3.1");
@@ -336,7 +349,7 @@ public class GenerateCaseFolding implements UCD_Types {
         } finally {
             if (log != null) log.close();
         }
-        
+
     }
-    
+
 }

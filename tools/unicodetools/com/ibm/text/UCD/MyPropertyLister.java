@@ -1,21 +1,34 @@
+/**
+*******************************************************************************
+* Copyright (C) 1996-2001, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/MyPropertyLister.java,v $
+* $Date: 2001/08/31 00:30:17 $
+* $Revision: 1.2 $
+*
+*******************************************************************************
+*/
+
 package com.ibm.text.UCD;
 import java.io.*;
 
 import com.ibm.text.utility.*;
 
 final class MyPropertyLister extends PropertyLister {
-    
+
     static final boolean BRIDGE = false;
-    
+
     private int propMask;
-        
+
     public MyPropertyLister(UCD ucd, int propMask, PrintStream output) {
         this.propMask = propMask;
         this.output = output;
         this.ucdData = ucd;
         if (propMask < COMBINING_CLASS) usePropertyComment = false; // skip gen cat
     }
-    
+
     static String getCombiningName (int propMask) {
         String s = "";
         switch (propMask & 0xFF) {
@@ -46,7 +59,7 @@ final class MyPropertyLister extends PropertyLister {
         }
         return s;
     }
-    
+
     public String headerString() {
         int main = (propMask & 0xFF00);
         if (main == COMBINING_CLASS) {
@@ -63,18 +76,18 @@ final class MyPropertyLister extends PropertyLister {
             return "# " + shortID + (shortID.equals(longID) ? "" : "\t(" + longID + ")");
         }
     }
-        
+
     public String propertyName(int cp) {
         return getUnifiedBinaryPropertyID(propMask);
     }
-    
+
     public String optionalComment(int cp) {
         if (propMask < COMBINING_CLASS) return ""; // skip gen cat
         int cat = ucdData.getCategory(cp);
         if (cat == Lt || cat == Ll || cat == Lu) return "L&";
         return ucdData.getCategoryID(cp);
     }
-    
+
     /*
     public String optionalName(int cp) {
         if ((propMask & 0xFF00) == DECOMPOSITION_TYPE) {
@@ -84,7 +97,7 @@ final class MyPropertyLister extends PropertyLister {
         }
     }
     */
-        
+
     public byte status(int cp) {
         //if (cp == 0xFFFF) {
         //    System.out.println("# " + Utility.hex(cp));
@@ -93,7 +106,7 @@ final class MyPropertyLister extends PropertyLister {
         //if (cp == 0x0385) {
         //    System.out.println(Utility.hex(firstRealCp));
         //}
-        
+
         if (cat == Cn
             && propMask != (BINARY_PROPERTIES | Noncharacter_Code_Point)
             && propMask != (BINARY_PROPERTIES | Reserved_Cf_Code_Point)
@@ -101,7 +114,7 @@ final class MyPropertyLister extends PropertyLister {
             if (BRIDGE) return CONTINUE;
             else return EXCLUDE;
         }
-        
+
         boolean inSet = getUnifiedBinaryProperty(cp, propMask);
         /*
         if (cp >= 0x1D400 && cp <= 0x1D7C9 && cat != Cn) {
@@ -119,7 +132,7 @@ final class MyPropertyLister extends PropertyLister {
         if (!inSet) return EXCLUDE;
         return INCLUDE;
     }
-    
+
     /**
      * @return unified property number
      */
@@ -141,12 +154,12 @@ final class MyPropertyLister extends PropertyLister {
           case AGE>>8: return propMask < LIMIT_AGE;
           default: return false;
         }
-    }    
-    
+    }
+
     public boolean getUnifiedBinaryProperty(int cp, int propMask) {
         return getUnifiedBinaryProperty(ucdData, cp, propMask);
     }
-        
+
     static public boolean getUnifiedBinaryProperty(UCD ucd, int cp, int propMask) {
         int enum = propMask >> 8;
         propMask &= 0xFF;
@@ -177,21 +190,21 @@ final class MyPropertyLister extends PropertyLister {
             return ucd.getAge(cp) == propMask;
         }
         throw new ChainException("Illegal property Number {0}", new Object[]{new Integer(propMask)});
-    }    
-    
+    }
+
     static final int SHORT = -1, NORMAL = 0, LONG = 1, BOTH = 2;
-    
+
     public String getUnifiedBinaryPropertyID(int unifiedPropMask) {
         return getUnifiedBinaryPropertyID(ucdData, unifiedPropMask, NORMAL);
     }
-    
+
     public static String getUnifiedBinaryPropertyID(UCD ucd, int unifiedPropMask) {
         String longOne = getUnifiedBinaryPropertyID(ucd, unifiedPropMask, LONG);
         String shortOne = getUnifiedBinaryPropertyID(ucd, unifiedPropMask, SHORT);
         if (longOne.equals(shortOne)) return longOne;
         return shortOne + "(" + longOne + ")";
     }
-    
+
     public static String getFullUnifiedBinaryPropertyID(UCD ucd, int unifiedPropMask, int style) {
         String pre = "";
         if ((unifiedPropMask & 0xFF00) != BINARY_PROPERTIES) {
@@ -205,7 +218,7 @@ final class MyPropertyLister extends PropertyLister {
         if (shortOne.length() == 0) shortOne = "xx";
         String longOne = getUnifiedBinaryPropertyID(ucd, unifiedPropMask, LONG);
         if (longOne.length() == 0) longOne = "none";
-        
+
         String post;
         if (style < LONG) post = shortOne;
         else if (style == LONG || shortOne.equals(longOne)) post = longOne;
@@ -215,10 +228,10 @@ final class MyPropertyLister extends PropertyLister {
             pre = post + "=";
             post = "T";
         }
-        
+
         return pre + post;
     }
-    
+
     public static String getUnifiedBinaryPropertyID(UCD ucd, int unifiedPropMask, int style) {
         int enum = unifiedPropMask >> 8;
         byte propMask = (byte)unifiedPropMask;
@@ -264,7 +277,7 @@ final class MyPropertyLister extends PropertyLister {
             return ucd.getAgeID_fromIndex(propMask);
         }
         throw new ChainException("Illegal property Number {0}", new Object[]{new Integer(propMask)});
-    }    
-    
+    }
+
 }
-    
+

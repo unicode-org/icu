@@ -1,3 +1,16 @@
+/**
+*******************************************************************************
+* Copyright (C) 1996-2001, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Normalizer.java,v $
+* $Date: 2001/08/31 00:30:17 $
+* $Revision: 1.2 $
+*
+*******************************************************************************
+*/
+
 package com.ibm.text.UCD;
 
 import java.util.*;
@@ -16,13 +29,13 @@ import com.ibm.text.utility.*;
  * in connection with or arising out of the use of the information here.
  * @author Mark Davis
  */
- 
+
 public final class Normalizer implements UCD_Types {
-    public static final String copyright = 
+    public static final String copyright =
       "Copyright (C) 2000, IBM Corp. and others. All Rights Reserved.";
-      
+
     public static boolean SHOW_PROGRESS = false;
-      
+
     /**
      * Create a normalizer for a given form.
      */
@@ -31,41 +44,41 @@ public final class Normalizer implements UCD_Types {
         this.compatibility = (form & COMPATIBILITY_MASK) != 0;
         this.data = getData(unicodeVersion);
     }
-    
+
     /**
      * Create a normalizer for a given form.
      */
     public Normalizer(byte form) {
         this(form,"");
     }
-    
+
     /**
     * Masks for the form selector
     */
-    public static final byte 
+    public static final byte
         COMPATIBILITY_MASK = 1,
         COMPOSITION_MASK = 2;
-        
+
     /**
     * Normalization Form Selector
     */
-    public static final byte 
-        NFD = 0 , 
+    public static final byte
+        NFD = 0 ,
         NFKD = COMPATIBILITY_MASK,
         NFC = COMPOSITION_MASK,
         NFKC = (byte)(COMPATIBILITY_MASK + COMPOSITION_MASK);
-    
+
     /**
-    * Normalizes text according to the chosen form, 
+    * Normalizes text according to the chosen form,
     * replacing contents of the target buffer.
     * @param   source      the original text, unnormalized
     * @param   target      the resulting normalized text
     */
     public StringBuffer normalize(String source, StringBuffer target) {
-        
+
         // First decompose the source into target,
         // then compose if the form requires.
-        
+
         if (source.length() != 0) {
             internalDecompose(source, target);
             if (composition) {
@@ -83,7 +96,7 @@ public final class Normalizer implements UCD_Types {
     public String normalize(String source) {
         return normalize(source, new StringBuffer()).toString();
     }
-    
+
     /**
     * Normalizes text according to the chosen form
     * @param   source      the original text, unnormalized
@@ -92,18 +105,18 @@ public final class Normalizer implements UCD_Types {
     public String normalize(int cp) {
         return normalize(UTF16.valueOf(cp));
     }
-    
+
     /**
     */
     private StringBuffer hasDecompositionBuffer = new StringBuffer();
-    
+
     public boolean hasDecomposition(int cp) {
         hasDecompositionBuffer.setLength(0);
         normalize(UTF16.valueOf(cp), hasDecompositionBuffer);
         if (hasDecompositionBuffer.length() != 1) return true;
         return cp != hasDecompositionBuffer.charAt(0);
     }
-    
+
     /**
      * Does a quick check to see if the string is in the current form. Checks canonical order and
      * isAllowed().
@@ -112,7 +125,7 @@ public final class Normalizer implements UCD_Types {
      */
      /*
     public static final int NO = 0, YES = 1, MAYBE = -1;
-     
+
     public int quickCheck(String source) {
         short lastCanonicalClass = 0;
         int result = YES;
@@ -128,7 +141,7 @@ public final class Normalizer implements UCD_Types {
         }
         return result;
     }
-    
+
     /**
      * Find whether the given character is allowed in the current form.
      * @return YES, NO, MAYBE
@@ -153,7 +166,7 @@ public final class Normalizer implements UCD_Types {
         }
         return YES;
     }
-    
+
     /**
     * Utility: Gets the combining class of a character from the
     * Unicode Character Database. Only a byte is needed, but since they are signed in Java
@@ -161,13 +174,13 @@ public final class Normalizer implements UCD_Types {
     * @param   ch      the source character
     * @return          value from 0 to 255
     */
-     
+
     public short getCanonicalClass(char ch) {
         return data.getCanonicalClass(ch);
     }
-    
+
     /**
-    * Utility: Checks whether there is a recursive decomposition of a character from the 
+    * Utility: Checks whether there is a recursive decomposition of a character from the
     * Unicode Character Database. It is compatibility or canonical according to the particular
     * normalizer.
     * @param   ch      the source character
@@ -175,11 +188,11 @@ public final class Normalizer implements UCD_Types {
     public boolean normalizationDiffers(int ch) {
         return data.normalizationDiffers(ch, composition, compatibility);
     }
-    
+
     /**
-    * Utility: Gets recursive decomposition of a character from the 
+    * Utility: Gets recursive decomposition of a character from the
     * Unicode Character Database.
-    * @param   compatibility    If false selects the recursive 
+    * @param   compatibility    If false selects the recursive
     *                  canonical decomposition, otherwise selects
     *                  the recursive compatibility AND canonical decomposition.
     * @param   ch      the source character
@@ -188,7 +201,7 @@ public final class Normalizer implements UCD_Types {
     public void getRecursiveDecomposition(char ch, StringBuffer buffer) {
         data.getRecursiveDecomposition(ch, buffer, compatibility);
     }
-        
+
     /**
     * Utility: Gets composition mapping.
     * @return IntEnumeration with the pair -> value mapping, where the
@@ -199,18 +212,18 @@ public final class Normalizer implements UCD_Types {
     public IntHashtable.IntEnumeration getComposition() {
         return data.getComposition();
     }
-    
+
     */
-    
+
     public boolean isTrailing(int cp) {
         return this.composition ? data.isTrailing(cp) : false;
     }
-    
-    
+
+
     // ======================================
     //                  PRIVATES
     // ======================================
-    
+
     /**
      * The current form.
      */
@@ -221,7 +234,7 @@ public final class Normalizer implements UCD_Types {
     * Decomposes text, either canonical or compatibility,
     * replacing contents of the target buffer.
     * @param   form        the normalization form. If COMPATIBILITY_MASK
-    *                      bit is on in this byte, then selects the recursive 
+    *                      bit is on in this byte, then selects the recursive
     *                      compatibility decomposition, otherwise selects
     *                      the recursive canonical decomposition.
     * @param   source      the original text, unnormalized
@@ -234,20 +247,20 @@ public final class Normalizer implements UCD_Types {
             buffer.setLength(0);
             ch32 = UTF16.charAt(source, i);
             data.getRecursiveDecomposition(ch32, buffer, compatibility);
-            
+
             // add all of the characters in the decomposition.
             // (may be just the original character, if there was
             // no decomposition mapping)
-            
+
             int ch;
             for (int j = 0; j < buffer.length(); j += UTF16.getCharCount(ch)) {
                 ch = UTF16Plus.charAt(buffer, j);
                 int chClass = data.getCanonicalClass(ch);
                 int k = target.length(); // insertion point
                 if (chClass != 0) {
-                    
+
                     // bubble-sort combining marks as necessary
-                    
+
                     int ch2;
                     for (; k > 0; k -= UTF16.getCharCount(ch2)) {
                         ch2 = UTF16Plus.charAt(target, k-1);
@@ -273,9 +286,9 @@ public final class Normalizer implements UCD_Types {
         int lastClass = data.getCanonicalClass(starterCh);
         if (lastClass != 0) lastClass = 256; // fix for strings staring with a combining mark
         int oldLen = target.length();
-        
+
         // Loop on the decomposed characters, combining where possible
-        
+
         int ch;
         for (int decompPos = compPos; decompPos < target.length(); decompPos += UTF16.getCharCount(ch)) {
             ch = UTF16Plus.charAt(target, decompPos);
@@ -317,7 +330,7 @@ public final class Normalizer implements UCD_Types {
         private BitSet canonicalRecompose = new BitSet();
         private BitSet compatibilityRecompose = new BitSet();
         static final int NOT_COMPOSITE = 0xFFFF;
-        
+
         Stub(String version) {
             ucd = UCD.make(version);
             for (int i = 0; i < 0x10FFFF; ++i) {
@@ -336,23 +349,23 @@ public final class Normalizer implements UCD_Types {
                         }
                         int a = UTF16.charAt(s, 0);
                         if (ucd.getCombiningClass(a) != 0) continue;
-                        
+
                         int b = UTF16.charAt(s, UTF16.getCharCount(a));
                         isSecond.set(b);
-                        
+
                         // have a recomposition, so set the bit
                         canonicalRecompose.set(i);
-                        
-                        // set the compatibility recomposition bit 
+
+                        // set the compatibility recomposition bit
                         // ONLY if the component characters
                         // don't compatibility decompose
                         if (ucd.getDecompositionType(a) <= CANONICAL
                          && ucd.getDecompositionType(b) <= CANONICAL) {
                             compatibilityRecompose.set(i);
                          }
-                        
+
                         long key = (((long)a)<<32) | b;
-                        
+
                         /*if (i == '\u1E0A' || key == 0x004400000307) {
                             System.out.println(Utility.hex(s));
                             System.out.println(Utility.hex(i));
@@ -392,15 +405,15 @@ Problem: differs: true, call: false U+1FDE GREEK DASIA AND OXIA
 Problem: differs: true, call: false U+1FDF GREEK DASIA AND PERISPOMENI
 Problem: differs: true, call: false U+1FED GREEK DIALYTIKA AND VARIA
 */
-        
+
         short getCanonicalClass(int cp) {
             return ucd.getCombiningClass(cp);
         }
-        
+
         boolean isTrailing(int cp) {
             return isSecond.get(cp);
         }
-        
+
         boolean normalizationDiffers(int cp, boolean composition, boolean compatibility) {
             byte dt = ucd.getDecompositionType(cp);
             if (!composition) {
@@ -413,7 +426,7 @@ Problem: differs: true, call: false U+1FED GREEK DIALYTIKA AND VARIA
                 else return dt == CANONICAL && !canonicalRecompose.get(cp);
             }
         }
-        
+
         public void getRecursiveDecomposition(int cp, StringBuffer buffer, boolean compatibility) {
             byte dt = ucd.getDecompositionType(cp);
             // we know we decompose all CANONICAL, plus > CANONICAL if compatibility is TRUE.
@@ -427,7 +440,7 @@ Problem: differs: true, call: false U+1FED GREEK DIALYTIKA AND VARIA
                 UTF16.append(buffer, cp);
             }
         }
-        
+
         int getPairwiseComposition(int starterCh, int ch) {
             int hangulPoss = UCD.composeHangul(starterCh, ch);
             if (hangulPoss != 0xFFFF) return hangulPoss;
@@ -435,17 +448,17 @@ Problem: differs: true, call: false U+1FED GREEK DIALYTIKA AND VARIA
             if (obj == null) return 0xFFFF;
             return ((Integer)obj).intValue();
         }
-        
+
     }
-    
+
     /**
     * Contains normalization data from the Unicode Character Database.
-    * use false for the minimal set, true for the real set.  
+    * use false for the minimal set, true for the real set.
     */
     private Stub data;
-    
+
     private static HashMap versionCache = new HashMap();
-    
+
     private static Stub getData (String version) {
         if (version.length() == 0) version = UCD.latestVersion;
         Stub result = (Stub)versionCache.get(version);
@@ -455,7 +468,7 @@ Problem: differs: true, call: false U+1FED GREEK DIALYTIKA AND VARIA
         }
         return result;
     }
-    
+
     /**
     * Just accessible for testing.
     */
@@ -463,7 +476,7 @@ Problem: differs: true, call: false U+1FED GREEK DIALYTIKA AND VARIA
     boolean isExcluded (char ch) {
         return data.isExcluded(ch);
     }
-   
+
     /**
     * Just accessible for testing.
     */
