@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $
- * $Date: 2003/02/05 22:30:55 $
- * $Revision: 1.39 $
+ * $Date: 2003/02/05 22:44:34 $
+ * $Revision: 1.40 $
  *
  *****************************************************************************************
  */
@@ -400,9 +400,9 @@ public class TestFmwk extends AbstractTestLog {
                     prompt = true;
                 } else if (arg.equals("-list") || arg.equals("-l")) {
                     params.listlevel = 1;
-                } else if (arg.equals("-listAll") || arg.equals("-la")) {
+                } else if (arg.equals("-listall") || arg.equals("-la")) {
                     params.listlevel = 2;
-                } else if (arg.equals("-listExaustive") || arg.equals("-le")) {
+                } else if (arg.equals("-listexaustive") || arg.equals("-le")) {
                     params.listlevel = 3;
                 } else if (arg.equals("-nothrow") || arg.equals("-n")) {
                     params.nothrow = true;
