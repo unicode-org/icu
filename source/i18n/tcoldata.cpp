@@ -203,7 +203,7 @@ void TableCollationData::streamIn(UMemoryStream* is)
             }
 			int32_t len = 0;
 			const uint8_t *map = uprv_mstrm_getCurrentBuffer(is, &len);
-			UErrorCode status;
+			UErrorCode status = U_ZERO_ERROR;
 			ucmp32_initFromData(mapping, &map, &status);
 			uprv_mstrm_jump(is, map);
             // ucmp32_streamMemIn(mapping, is);
