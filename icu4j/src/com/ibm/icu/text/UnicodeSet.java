@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2003/02/18 00:51:30 $
- * $Revision: 1.91 $
+ * $Date: 2003/02/18 20:12:17 $
+ * $Revision: 1.92 $
  *
  *****************************************************************************************
  */
@@ -372,7 +372,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public UnicodeSet(String pattern, boolean ignoreWhitespace) {
-        this(pattern, IGNORE_SPACE);
+        this(pattern, ignoreWhitespace ? IGNORE_SPACE : 0);
     }
 
     /**
@@ -494,7 +494,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public UnicodeSet applyPattern(String pattern, boolean ignoreWhitespace) {
-        return applyPattern(pattern, IGNORE_SPACE);
+        return applyPattern(pattern, ignoreWhitespace ? IGNORE_SPACE : 0);
     }
 
     /**
