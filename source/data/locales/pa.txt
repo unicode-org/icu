@@ -83,7 +83,7 @@ pa {
         "+",
     }
     Currencies {
-        INR { "\u0930\u0941", "INR" }
+        INR { "\u0A30\u0A41.", "\u0a30\u0a41\u0a2a\u0a3f\u0a2f" }
     }
     NumberPatterns {
         "##,##,##0.###;-##,##,##0.###",
