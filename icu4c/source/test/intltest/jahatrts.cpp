@@ -18,6 +18,7 @@
 #include "unicode/translit.h"
 #include "unicode/jamohang.h"
 #include "unicode/unifilt.h"
+#include "unicode/unicode.h"
 #include "intltest.h"
 #include <stdio.h>
 #include <string.h>

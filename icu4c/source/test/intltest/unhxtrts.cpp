@@ -18,6 +18,7 @@
 #include "unicode/translit.h"
 #include "unicode/unitohex.h"
 #include "unicode/unifilt.h"
+#include "unicode/unicode.h"
 #include "intltest.h"
 /*converts a Unicodestring to integer*/
 static int32_t getInt(UnicodeString str)

@@ -18,6 +18,7 @@
 #include "unicode/translit.h"
 #include "unicode/hextouni.h"
 #include "unicode/unifilt.h"
+#include "unicode/unicode.h"
 #include "intltest.h"
 #include "cmemory.h"
 #include <string.h>

@@ -18,6 +18,7 @@
 #include "unicode/translit.h"
 #include "unicode/hangjamo.h"
 #include "unicode/unifilt.h"
+#include "unicode/unicode.h"
 #include "intltest.h"
 #include "cmemory.h"
 #include <stdio.h>

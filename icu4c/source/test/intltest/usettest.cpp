@@ -11,6 +11,7 @@
 #include "unicode/utypes.h"
 #include "usettest.h"
 #include "unicode/uniset.h"
+#include "unicode/unicode.h"
 
 UnicodeString operator+(const UnicodeString& left, const UnicodeSet& set) {
     UnicodeString pat;
