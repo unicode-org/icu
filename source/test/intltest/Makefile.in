@@ -40,7 +40,7 @@ tzregts.o tztest.o ucdtest.o usettest.o ustrtest.o strcase.o transtst.o strtest.
 itrbbi.o rbbiapts.o rbbitst.o ittrans.o transapi.o cpdtrtst.o \
 testutil.o transrt.o trnserr.o normconf.o sfwdchit.o \
 jamotest.o srchtest.o reptest.o regextst.o \
-itrbnf.o itrbnfrt.o ucaconf.o icusvtst.o \
+itrbnf.o itrbnfrt.o itrbnfp.o ucaconf.o icusvtst.o \
 uobjtest.o idnaref.o nptrans.o punyref.o testidn.o testidna.o incaltst.o \
 calcasts.o v32test.o textfile.o tokiter.o
 
