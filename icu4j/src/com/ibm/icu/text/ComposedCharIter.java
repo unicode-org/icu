@@ -136,18 +136,18 @@ public final class ComposedCharIter {
         int c=curChar+1;
         for(;;){
            if(c < 0xFFFF){
-	           bufLen = NormalizerImpl.getDecomposition(c,compat,
+               bufLen = NormalizerImpl.getDecomposition(c,compat,
                                                         decompBuf,0,
-	                                                    decompBuf.length);
-	           if(bufLen>0){
+                                                        decompBuf.length);
+               if(bufLen>0){
                     // the curChar can be decomposed... so it is a composed char
-	                // cache the result     
+                    // cache the result     
                     break;
-	           }
-	           c++;
+               }
+               c++;
            }else{
-	           c=Normalizer.DONE;
-	           break;
+               c=Normalizer.DONE;
+               break;
            }
         }
         nextChar=c;  

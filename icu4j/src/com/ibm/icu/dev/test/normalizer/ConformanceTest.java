@@ -32,13 +32,13 @@ public class ConformanceTest extends TestFmwk {
         normalizer = new Normalizer("", Normalizer.NFC, 0);
     }
     // more interesting conformance test cases, not in the unicode.org NormalizationTest.txt
-	static  String[] moreCases ={
-	    // Markus 2001aug30
-	    "0061 0332 0308;00E4 0332;0061 0332 0308;00E4 0332;0061 0332 0308; # Markus 0",
-	
-	    // Markus 2001oct26 - test edge case for iteration: U+0f73.cc==0 but decomposition.lead.cc==129
-	    "0061 0301 0F73;00E1 0F71 0F72;0061 0F71 0F72 0301;00E1 0F71 0F72;0061 0F71 0F72 0301; # Markus 1"
-	};
+    static  String[] moreCases ={
+        // Markus 2001aug30
+        "0061 0332 0308;00E4 0332;0061 0332 0308;00E4 0332;0061 0332 0308; # Markus 0",
+    
+        // Markus 2001oct26 - test edge case for iteration: U+0f73.cc==0 but decomposition.lead.cc==129
+        "0061 0301 0F73;00E1 0F71 0F72;0061 0F71 0F72 0301;00E1 0F71 0F72;0061 0F71 0F72 0301; # Markus 1"
+    };
 
     /**
      * Test the conformance of Normalizer to
@@ -46,10 +46,10 @@ public class ConformanceTest extends TestFmwk {
      * This file must be located at the path specified as TEST_SUITE_FILE.
      */
     public void TestConformance() throws Exception{
-    	runConformance("unicode/NormalizationTest.txt",0);
+        runConformance("unicode/NormalizationTest.txt",0);
     }
     public void TestConformance_3_2() throws Exception{
-    	runConformance("unicode/NormalizationTest-3.2.0.txt",Normalizer.UNICODE_3_2);
+        runConformance("unicode/NormalizationTest-3.2.0.txt",Normalizer.UNICODE_3_2);
     }
     
     public void runConformance(String fileName, int options) throws Exception{
@@ -67,12 +67,12 @@ public class ConformanceTest extends TestFmwk {
                 line = input.readLine();
                 if (line == null) {
                     //read the extra test cases
-	                if(count > moreCases.length) {
-		                count = 0;
-		            } else if(count == moreCases.length) {
-		                // all done
-		                break;
-		            }
+                    if(count > moreCases.length) {
+                        count = 0;
+                    } else if(count == moreCases.length) {
+                        // all done
+                        break;
+                    }
                     line = moreCases[count++];
                 }
                 if (line.length() == 0) continue;
@@ -87,17 +87,17 @@ public class ConformanceTest extends TestFmwk {
                 hexsplit(line, ';', fields, buf);
                 
                 // Remove a single code point from the "other" UnicodeSet
-		        if(fields[0].length()==UTF16.moveCodePointOffset(fields[0],0, 1)) {
-		            c=UTF16.charAt(fields[0],0); 
-		            if(0xac20<=c && c<=0xd73f) {
-		                // not an exhaustive test run: skip most Hangul syllables
-		                if(c==0xac20) {
-		                    other.remove(0xac20, 0xd73f);
-		                }
-		                continue;
-		            }
-		            other.remove(c);
-		        }
+                if(fields[0].length()==UTF16.moveCodePointOffset(fields[0],0, 1)) {
+                    c=UTF16.charAt(fields[0],0); 
+                    if(0xac20<=c && c<=0xd73f) {
+                        // not an exhaustive test run: skip most Hangul syllables
+                        if(c==0xac20) {
+                            other.remove(0xac20, 0xd73f);
+                        }
+                        continue;
+                    }
+                    other.remove(c);
+                }
                 if (checkConformance(fields, line,options)) {
                     ++passCount;
                 } else {
@@ -222,23 +222,23 @@ public class ConformanceTest extends TestFmwk {
         compare(field[0],field[1]);
         compare(field[0],field[2]);
          // test quick checks
-	    if(Normalizer.NO == Normalizer.quickCheck(field[1], Normalizer.NFC,options)) {
-	        errln("Normalizer error: quickCheck(NFC(s), Normalizer.NFC) is Normalizer.NO");
-	        pass = false;
-	    }
-	    if(Normalizer.NO == Normalizer.quickCheck(field[2], Normalizer.NFD,options)) {
-	        errln("Normalizer error: quickCheck(NFD(s), Normalizer.NFD) is Normalizer.NO");
-	        pass = false;
-	    }
-	    if(Normalizer.NO == Normalizer.quickCheck(field[3], Normalizer.NFKC,options)) {
-	        errln("Normalizer error: quickCheck(NFKC(s), Normalizer.NFKC) is Normalizer.NO");
-	        pass = false;
-	    }
-	    if(Normalizer.NO == Normalizer.quickCheck(field[4], Normalizer.NFKD,options)) {
-	        errln("Normalizer error: quickCheck(NFKD(s), Normalizer.NFKD) is Normalizer.NO");
-	        pass = false;
-	    }
-	
+        if(Normalizer.NO == Normalizer.quickCheck(field[1], Normalizer.NFC,options)) {
+            errln("Normalizer error: quickCheck(NFC(s), Normalizer.NFC) is Normalizer.NO");
+            pass = false;
+        }
+        if(Normalizer.NO == Normalizer.quickCheck(field[2], Normalizer.NFD,options)) {
+            errln("Normalizer error: quickCheck(NFD(s), Normalizer.NFD) is Normalizer.NO");
+            pass = false;
+        }
+        if(Normalizer.NO == Normalizer.quickCheck(field[3], Normalizer.NFKC,options)) {
+            errln("Normalizer error: quickCheck(NFKC(s), Normalizer.NFKC) is Normalizer.NO");
+            pass = false;
+        }
+        if(Normalizer.NO == Normalizer.quickCheck(field[4], Normalizer.NFKD,options)) {
+            errln("Normalizer error: quickCheck(NFKD(s), Normalizer.NFKD) is Normalizer.NO");
+            pass = false;
+        }
+    
         if(!Normalizer.isNormalized(field[1], Normalizer.NFC, options)) {
             errln("Normalizer error: isNormalized(NFC(s), Normalizer.NFC) is false");
             pass = false;
@@ -255,7 +255,7 @@ public class ConformanceTest extends TestFmwk {
             errln("Normalizer error: isNormalized(s, Normalizer.NFKC) is TRUE");
             pass = false;
         }
-	    // test api that takes a char[]
+        // test api that takes a char[]
         if(!Normalizer.isNormalized(field[1].toCharArray(),0,field[1].length(), Normalizer.NFC,options)) {
             errln("Normalizer error: isNormalized(NFC(s), Normalizer.NFC) is false");
             pass = false;
@@ -265,12 +265,12 @@ public class ConformanceTest extends TestFmwk {
             errln("Normalizer error: isNormalized(NFC(s), Normalizer.NFC) is false");
             pass = false;
         }
-	    // test FCD quick check and "makeFCD"
+        // test FCD quick check and "makeFCD"
         fcd=Normalizer.normalize(field[0], Normalizer.FCD);
-	    if(Normalizer.NO == Normalizer.quickCheck(fcd, Normalizer.FCD,options)) {
-	        errln("Normalizer error: quickCheck(FCD(s), Normalizer.FCD) is Normalizer.NO");
-	        pass = false;
-	    }
+        if(Normalizer.NO == Normalizer.quickCheck(fcd, Normalizer.FCD,options)) {
+            errln("Normalizer error: quickCheck(FCD(s), Normalizer.FCD) is Normalizer.NO");
+            pass = false;
+        }
         // check FCD return length
         {
             char[] fcd2 = new char[ fcd.length() * 2 ];
@@ -284,15 +284,15 @@ public class ConformanceTest extends TestFmwk {
             errln("Normalizer error: quickCheck(FCD(s), Normalizer.FCD) is Normalizer.NO");
             pass = false;
         }
-	    if(Normalizer.NO == Normalizer.quickCheck(field[2], Normalizer.FCD, options)) {
-	        errln("Normalizer error: quickCheck(NFD(s), Normalizer.FCD) is Normalizer.NO");
-	        pass = false;
-	    }
+        if(Normalizer.NO == Normalizer.quickCheck(field[2], Normalizer.FCD, options)) {
+            errln("Normalizer error: quickCheck(NFD(s), Normalizer.FCD) is Normalizer.NO");
+            pass = false;
+        }
 
-	    if(Normalizer.NO == Normalizer.quickCheck(field[4], Normalizer.FCD, options)) {
-	        errln("Normalizer error: quickCheck(NFKD(s), Normalizer.FCD) is Normalizer.NO");
-	        pass = false;
-	    }
+        if(Normalizer.NO == Normalizer.quickCheck(field[4], Normalizer.FCD, options)) {
+            errln("Normalizer error: quickCheck(NFKD(s), Normalizer.FCD) is Normalizer.NO");
+            pass = false;
+        }
         
         out = iterativeNorm(new StringCharacterIterator(field[0]), Normalizer.FCD, buf, +1,options);
         out = iterativeNorm(new StringCharacterIterator(field[0]), Normalizer.FCD, buf, -1,options);
@@ -304,31 +304,31 @@ public class ConformanceTest extends TestFmwk {
         out = iterativeNorm(new StringCharacterIterator(field[4]), Normalizer.FCD, buf, -1,options);
         
         out=Normalizer.normalize(fcd, Normalizer.NFD);
-	    if(!out.equals(field[2])) {
-	        errln("Normalizer error: NFD(FCD(s))!=NFD(s)");
-	        pass = false;
-	    }    
+        if(!out.equals(field[2])) {
+            errln("Normalizer error: NFD(FCD(s))!=NFD(s)");
+            pass = false;
+        }    
         if (!pass) {
             errln("FAIL: " + line);
         }     
         if(field[0]!=field[2]) {
-        	// two strings that are canonically equivalent must test
-        	// equal under a canonical caseless match
-        	// see UAX #21 Case Mappings and Jitterbug 2021 and
-        	// Unicode Technical Committee meeting consensus 92-C31
-        	int rc;
-        	if((rc = Normalizer.compare(field[0], field[2], (options<<Normalizer.COMPARE_NORM_OPTIONS_SHIFT)|Normalizer.COMPARE_IGNORE_CASE))!=0){
+            // two strings that are canonically equivalent must test
+            // equal under a canonical caseless match
+            // see UAX #21 Case Mappings and Jitterbug 2021 and
+            // Unicode Technical Committee meeting consensus 92-C31
+            int rc;
+            if((rc = Normalizer.compare(field[0], field[2], (options<<Normalizer.COMPARE_NORM_OPTIONS_SHIFT)|Normalizer.COMPARE_IGNORE_CASE))!=0){
                errln("Normalizer.compare(original, NFD, case-insensitive) returned "+rc+" instead of 0 for equal");
                pass=false;
-        	}
+            }
         }
         
         return pass;
     }
-	// two strings that are canonically equivalent must test
-	// equal under a canonical caseless match
-	// see UAX #21 Case Mappings and Jitterbug 2021 and
-	// Unicode Technical Committee meeting consensus 92-C31
+    // two strings that are canonically equivalent must test
+    // equal under a canonical caseless match
+    // see UAX #21 Case Mappings and Jitterbug 2021 and
+    // Unicode Technical Committee meeting consensus 92-C31
     private void compare(String s1, String s2){
         if(s1.length()==1 && s2.length()==1){
             if(Normalizer.compare(UTF16.charAt(s1,0),UTF16.charAt(s2,0),Normalizer.COMPARE_IGNORE_CASE)!=0){
@@ -368,7 +368,7 @@ public class ConformanceTest extends TestFmwk {
         normalizer.setMode(mode);
         buf.setLength(0);
         normalizer.setOption(-1, false);      // reset all options
-    	normalizer.setOption(options, true);  // set desired options
+        normalizer.setOption(options, true);  // set desired options
 
         int ch;
         if (dir > 0) {
@@ -397,7 +397,7 @@ public class ConformanceTest extends TestFmwk {
         normalizer.setMode(mode);
         buf.setLength(0);
         normalizer.setOption(-1, false);      // reset all options
-    	normalizer.setOption(options, true);  // set desired options
+        normalizer.setOption(options, true);  // set desired options
 
         int ch;
         if (dir > 0) {

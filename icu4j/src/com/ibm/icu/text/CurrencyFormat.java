@@ -37,25 +37,25 @@ class CurrencyFormat extends MeasureFormat {
         fmt = NumberFormat.getCurrencyInstance(locale.toLocale());
     }
 
-	/**
+    /**
      * Override Format.format().
-	 * @see java.text.Format#format(java.lang.Object, java.lang.StringBuffer, java.text.FieldPosition)
-	 */
-	public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
-		try {
+     * @see java.text.Format#format(java.lang.Object, java.lang.StringBuffer, java.text.FieldPosition)
+     */
+    public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
+        try {
             CurrencyAmount currency = (CurrencyAmount) obj;
             fmt.setCurrency(currency.getCurrency());
             return fmt.format(currency.getNumber(), toAppendTo, pos);
         } catch (ClassCastException e) {
             throw new IllegalArgumentException("Invalid type: " + obj.getClass().getName());
         }
-	}
+    }
 
-	/**
+    /**
      * Override Format.parseObject().
-	 * @see java.text.Format#parseObject(java.lang.String, java.text.ParsePosition)
-	 */
-	public Object parseObject(String source, ParsePosition pos) {
+     * @see java.text.Format#parseObject(java.lang.String, java.text.ParsePosition)
+     */
+    public Object parseObject(String source, ParsePosition pos) {
         return fmt.parseCurrency(source, pos);
-	}
+    }
 }

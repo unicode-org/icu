@@ -129,13 +129,13 @@ public class IntTrie extends Trie
         }
         int offset = m_dataManipulate_.getFoldingOffset(leadvalue);
         if (offset > 0) {
-	        return m_data_[getRawOffset(offset,
- 	                                    (char)(trail & SURROGATE_MASK_))];
+            return m_data_[getRawOffset(offset,
+                                         (char)(trail & SURROGATE_MASK_))];
         }
         return m_initialValue_;
     }
     
-	/**
+    /**
      * <p>Gets the latin 1 fast path value.</p>
      * <p>Note this only works if latin 1 characters have their own linear 
      * array.</p>
@@ -144,7 +144,7 @@ public class IntTrie extends Trie
      */
     public final int getLatin1LinearValue(char ch) 
     {
-    	return m_data_[INDEX_STAGE_3_MASK_ + 1 + ch];
+        return m_data_[INDEX_STAGE_3_MASK_ + 1 + ch];
     }
 
     /**

@@ -40,9 +40,9 @@ import com.ibm.icu.text.BreakIterator;
 
 public final class UCharacterProperty implements Trie.DataManipulate
 {
-	// public data members -----------------------------------------------
-	
-	/**
+    // public data members -----------------------------------------------
+    
+    /**
     * Trie data
     */
     public CharTrie m_trie_;    
@@ -352,23 +352,23 @@ public final class UCharacterProperty implements Trie.DataManipulate
         // For simplicity in usage, and because the frequency of pairs is low,
         // look both directions.
                   
-	        if (single <= UTF16.LEAD_SURROGATE_MAX_VALUE) {
-	            char trail = m_case_[index + 1];
-	            if (UTF16.LEAD_SURROGATE_MIN_VALUE <= trail && 
-		            trail <= UTF16.TRAIL_SURROGATE_MAX_VALUE) {
-	                return getRawSupplementary(single, trail);
-	            }
-	        } 
-	        else 
-	        { 
-	            char lead = m_case_[index - 1];
-	            if (UTF16.LEAD_SURROGATE_MIN_VALUE <= lead && 
-		            lead <= UTF16.LEAD_SURROGATE_MAX_VALUE) {
-	                return getRawSupplementary(lead, single);
-	            }
-	        }
-	    }
-	    return single;
+            if (single <= UTF16.LEAD_SURROGATE_MAX_VALUE) {
+                char trail = m_case_[index + 1];
+                if (UTF16.LEAD_SURROGATE_MIN_VALUE <= trail && 
+                    trail <= UTF16.TRAIL_SURROGATE_MAX_VALUE) {
+                    return getRawSupplementary(single, trail);
+                }
+            } 
+            else 
+            { 
+                char lead = m_case_[index - 1];
+                if (UTF16.LEAD_SURROGATE_MIN_VALUE <= lead && 
+                    lead <= UTF16.LEAD_SURROGATE_MAX_VALUE) {
+                    return getRawSupplementary(lead, single);
+                }
+            }
+        }
+        return single;
     }
     
     /**
@@ -382,9 +382,9 @@ public final class UCharacterProperty implements Trie.DataManipulate
         // first 2 chars are for the simple mappings
         index += 2;
         while (count > 0) {
-        	str.append(m_case_[index]);
-        	index ++;
-        	count --;
+            str.append(m_case_[index]);
+            index ++;
+            count --;
         }
     }
     
@@ -395,14 +395,14 @@ public final class UCharacterProperty implements Trie.DataManipulate
     */
     public void getUpperCase(int index, StringBuffer buffer)
     {
-    	int count = m_case_[index];
+        int count = m_case_[index];
         // last 5 bits of the first char in m_case_ gives the position of the 
         // alternate uppercase characters
         index += (count & LAST_5_BIT_MASK_) + 1;
         count = (count >> SHIFT_5_) & LAST_5_BIT_MASK_;
                 
         for (int j = 0; j < count; j ++) {
-        	buffer.append(m_case_[index + j]);
+            buffer.append(m_case_[index + j]);
         }
     }
     
@@ -421,7 +421,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
         count = (count >> SHIFT_10_) & LAST_5_BIT_MASK_;
                 
         for (int j = 0; j < count; j ++) {
-        	buffer.append(m_case_[index + j]);
+            buffer.append(m_case_[index + j]);
         }
     }
       
@@ -437,7 +437,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
         // lowercase characters
         index ++;
         for (int j = 0; j < count; j ++) {
-        	buffer.append(m_case_[index + j]);
+            buffer.append(m_case_[index + j]);
         }
     }
     
@@ -449,17 +449,17 @@ public final class UCharacterProperty implements Trie.DataManipulate
      * @param column
      * @return unicode properties
      */ 
-   	public int getAdditional(int codepoint, int column) { 
+       public int getAdditional(int codepoint, int column) { 
         if (column == -1) {
             return getProperty(codepoint);
         }
-   		if (column < 0 || column >= m_additionalColumnsCount_) { 
+           if (column < 0 || column >= m_additionalColumnsCount_) { 
            return 0; 
        } 
        return m_additionalVectors_[
                      m_additionalTrie_.getCodePointValue(codepoint) + column]; 
-   	} 
-   	
+       } 
+       
     static final int MY_MASK = UCharacterProperty.TYPE_MASK
         & ((1<<UCharacterCategory.UPPERCASE_LETTER) |
             (1<<UCharacterCategory.LOWERCASE_LETTER) | 
@@ -468,7 +468,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
             (1<<UCharacterCategory.OTHER_LETTER));
 
 
-   	/**
+       /**
      * <p>Get the "age" of the code point.</p>
      * <p>The "age" is the Unicode version when the code point was first
      * designated (as a non-character or for Private Use) or assigned a 
@@ -483,8 +483,8 @@ public final class UCharacterProperty implements Trie.DataManipulate
      */
     public VersionInfo getAge(int codepoint) 
     {
-    	int version = getAdditional(codepoint, 0) >> AGE_SHIFT_;
-    	return VersionInfo.getInstance(
+        int version = getAdditional(codepoint, 0) >> AGE_SHIFT_;
+        return VersionInfo.getInstance(
                            (version >> FIRST_NIBBLE_SHIFT_) & LAST_NIBBLE_MASK_,
                            version & LAST_NIBBLE_MASK_, 0, 0);
     }
@@ -493,8 +493,8 @@ public final class UCharacterProperty implements Trie.DataManipulate
        int column; 
        long mask; 
        public BinaryProperties(int column,long mask){
-       		this.column = column;
-       		this.mask  = mask;
+               this.column = column;
+               this.mask  = mask;
        }
    } 
    BinaryProperties[] binProps={ 
@@ -548,37 +548,37 @@ public final class UCharacterProperty implements Trie.DataManipulate
    }; 
 
 
-	/**
-	 * <p>Check a binary Unicode property for a code point.</p> 
-	 * <p>Unicode, especially in version 3.2, defines many more properties 
-	 * than the original set in UnicodeData.txt.</p>
-	 * <p>This API is intended to reflect Unicode properties as defined in 
-	 * the Unicode Character Database (UCD) and Unicode Technical Reports 
-	 * (UTR).</p>
-	 * <p>For details about the properties see 
-	 * <a href=http://www.unicode.org/>http://www.unicode.org/</a>.</p>
-	 * <p>For names of Unicode properties see the UCD file 
-	 * PropertyAliases.txt.</p>
-	 * <p>This API does not check the validity of the codepoint.</p>
-	 * <p>Important: If ICU is built with UCD files from Unicode versions 
-	 * below 3.2, then properties marked with "new" are not or 
-	 * not fully available.</p>
-	 * @param codepoint Code point to test.
-	 * @param property selector constant from com.ibm.icu.lang.UProperty, 
-	 *        identifies which binary property to check.
-	 * @return true or false according to the binary Unicode property value 
-	 *         for ch. Also false if property is out of bounds or if the 
-	 *         Unicode version does not have data for the property at all, or 
-	 *         not for this code point.
-	 * @see com.ibm.icu.lang.UProperty
-	 * @draft ICU 2.1
-	 */
+    /**
+     * <p>Check a binary Unicode property for a code point.</p> 
+     * <p>Unicode, especially in version 3.2, defines many more properties 
+     * than the original set in UnicodeData.txt.</p>
+     * <p>This API is intended to reflect Unicode properties as defined in 
+     * the Unicode Character Database (UCD) and Unicode Technical Reports 
+     * (UTR).</p>
+     * <p>For details about the properties see 
+     * <a href=http://www.unicode.org/>http://www.unicode.org/</a>.</p>
+     * <p>For names of Unicode properties see the UCD file 
+     * PropertyAliases.txt.</p>
+     * <p>This API does not check the validity of the codepoint.</p>
+     * <p>Important: If ICU is built with UCD files from Unicode versions 
+     * below 3.2, then properties marked with "new" are not or 
+     * not fully available.</p>
+     * @param codepoint Code point to test.
+     * @param property selector constant from com.ibm.icu.lang.UProperty, 
+     *        identifies which binary property to check.
+     * @return true or false according to the binary Unicode property value 
+     *         for ch. Also false if property is out of bounds or if the 
+     *         Unicode version does not have data for the property at all, or 
+     *         not for this code point.
+     * @see com.ibm.icu.lang.UProperty
+     * @draft ICU 2.1
+     */
 
-	public boolean hasBinaryProperty(int codepoint, int property) 
-	{
-		 if(property <UProperty.BINARY_START || UProperty.BINARY_LIMIT<=property) {
-	        // not a known binary property 
-	        return false;
+    public boolean hasBinaryProperty(int codepoint, int property) 
+    {
+         if(property <UProperty.BINARY_START || UProperty.BINARY_LIMIT<=property) {
+            // not a known binary property 
+            return false;
         } else {
             long mask=binProps[property].mask;
             if(mask!=0) {
@@ -603,11 +603,11 @@ public final class UCharacterProperty implements Trie.DataManipulate
                     break;
                 }
             }
-	    }
+        }
         return false;
-	}
-	
-	/**
+    }
+    
+    /**
     * Forms a supplementary code point from the argument character<br>
     * Note this is for internal use hence no checks for the validity of the
     * surrogate characters are done
@@ -626,15 +626,15 @@ public final class UCharacterProperty implements Trie.DataManipulate
     */    
     public static UCharacterProperty getInstance() throws RuntimeException
     {
-    	if (INSTANCE_ == null) {
-    		try {
-    			INSTANCE_ = new UCharacterProperty();
-    		}
-        	catch (Exception e) {
-            	throw new RuntimeException(e.getMessage());
-        	}
-    	}
-    	return INSTANCE_;
+        if (INSTANCE_ == null) {
+            try {
+                INSTANCE_ = new UCharacterProperty();
+            }
+            catch (Exception e) {
+                throw new RuntimeException(e.getMessage());
+            }
+        }
+        return INSTANCE_;
     }
         
     /**
@@ -650,10 +650,10 @@ public final class UCharacterProperty implements Trie.DataManipulate
                                    UCharacterIterator uchariter,
                                    StringBuffer buffer)
     {
-    	int exception = getException(index, 
+        int exception = getException(index, 
                                      UCharacterProperty.EXC_SPECIAL_CASING_);
         if (exception < 0) {
-        	int offset = uchariter.getIndex();
+            int offset = uchariter.getIndex();
             // fill u and i with the case mapping result string
             // use hardcoded conditions and mappings
             // Test for conditional mappings first
@@ -763,7 +763,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
                 }
             } 
             
-			if (ch == 0x130) {
+            if (ch == 0x130) {
                 // decomposed I+dot above becomes i (see handling of 
                 // U+0049 for turkish) and removes the dot above
                 // # Preserve canonical equivalence for I with dot. Turkic is 
@@ -789,7 +789,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
                 return 1;
             } 
             
-			// no known conditional special case mapping, use a normal mapping
+            // no known conditional special case mapping, use a normal mapping
             if (hasExceptionValue(index, UCharacterProperty.EXC_LOWERCASE_)) {
                 int oldlength = buffer.length();
                 UTF16.append(buffer, getException(index, 
@@ -797,8 +797,8 @@ public final class UCharacterProperty implements Trie.DataManipulate
                 return buffer.length() - oldlength;                            
             }
             
-			UTF16.append(buffer, ch);
-			return UTF16.getCharCount(ch);
+            UTF16.append(buffer, ch);
+            return UTF16.getCharCount(ch);
         }
         else {
             // get the special case mapping string from the data file
@@ -821,7 +821,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
                                    UCharacterIterator uchariter, 
                                    StringBuffer buffer)
     {
-    	int props = getProperty(ch);
+        int props = getProperty(ch);
         if ((props & EXCEPTION_MASK) == 0) {
             int type = props & TYPE_MASK;
             if (type == UCharacterCategory.UPPERCASE_LETTER ||
@@ -842,9 +842,9 @@ public final class UCharacterProperty implements Trie.DataManipulate
         }
         UTF16.append(buffer, ch);
         return UTF16.getCharCount(ch);
-	}
+    }
 
-	/**
+    /**
      * Gets the lower case map of the argument codepoint
      * @param locale locale which the lowercase is looked for
      * @param ch codepoint whose lower case is to be matched
@@ -877,13 +877,13 @@ public final class UCharacterProperty implements Trie.DataManipulate
             }
         }
         if (ch < UTF16.SUPPLEMENTARY_MIN_VALUE) {
-        	buffer[0] = (char)ch;
-        	return 1;
+            buffer[0] = (char)ch;
+            return 1;
         }
         buffer[0] = UTF16.getLeadSurrogate(ch);
         buffer[1] = UTF16.getTrailSurrogate(ch);
         return 2;
-	}
+    }
     
     /**
      * Gets the lower case mappings of the substring from index start to the
@@ -901,14 +901,14 @@ public final class UCharacterProperty implements Trie.DataManipulate
         int                strIndex  = start;
         
         while (strIndex < limit) { 
-        	ucharIter.setIndex(strIndex);
-	        int ch = ucharIter.currentCodePoint();
-	        
-	        toLowerCase(locale, ch, ucharIter, result);
-	        strIndex ++;
-	        if (ch >= UTF16.SUPPLEMENTARY_MIN_VALUE) {
-	        	strIndex ++;
-	        }
+            ucharIter.setIndex(strIndex);
+            int ch = ucharIter.currentCodePoint();
+            
+            toLowerCase(locale, ch, ucharIter, result);
+            strIndex ++;
+            if (ch >= UTF16.SUPPLEMENTARY_MIN_VALUE) {
+                strIndex ++;
+            }
         }
     }
     
@@ -966,7 +966,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
            else {
                if (hasExceptionValue(index, 
                                      UCharacterProperty.EXC_UPPERCASE_)) {
-	               ch = getException(index, UCharacterProperty.EXC_UPPERCASE_); 
+                   ch = getException(index, UCharacterProperty.EXC_UPPERCASE_); 
                }
            }
            
@@ -974,14 +974,14 @@ public final class UCharacterProperty implements Trie.DataManipulate
            return UTF16.getCharCount(ch);
         }
         
-		// get the special case mapping string from the data file
+        // get the special case mapping string from the data file
         index = exception & LAST_CHAR_MASK_;
         int oldlength = buffer.length();
         if (upperflag) {
-	        getUpperCase(index, buffer);
+            getUpperCase(index, buffer);
         }
         else {
-          	getTitleCase(index, buffer);
+              getTitleCase(index, buffer);
         }
         return buffer.length() - oldlength;
     }
@@ -995,15 +995,15 @@ public final class UCharacterProperty implements Trie.DataManipulate
      * @param buffer buffer to store result map
      * @return size of uppercased codepoint in UTF16 format
      */
-	public int toUpperOrTitleCase(Locale locale, int ch, 
-	                              UCharacterIterator uchariter, 
-	                              boolean upperflag, StringBuffer buffer) 
+    public int toUpperOrTitleCase(Locale locale, int ch, 
+                                  UCharacterIterator uchariter, 
+                                  boolean upperflag, StringBuffer buffer) 
     {
         int props = getProperty(ch);
         if ((props & EXCEPTION_MASK) == 0) {
             int type = props & TYPE_MASK;
             if (type == UCharacterCategory.LOWERCASE_LETTER) {
-            	ch -= UCharacterProperty.getSignedValue(props);
+                ch -= UCharacterProperty.getSignedValue(props);
             }
         } else {
             int index = UCharacterProperty.getExceptionIndex(props);
@@ -1017,7 +1017,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
                 ch = getException(index, UCharacterProperty.EXC_TITLECASE_);
             }
             else {
-             	if (hasExceptionValue(index, 
+                 if (hasExceptionValue(index, 
                                       UCharacterProperty.EXC_UPPERCASE_)) {
                     ch = getException(index, 
                                       UCharacterProperty.EXC_UPPERCASE_);
@@ -1037,21 +1037,21 @@ public final class UCharacterProperty implements Trie.DataManipulate
      * @param buffer buffer to store result map
      * @return size of uppercased codepoint in UTF16 format
      */
-	public int toUpperOrTitleCase(Locale locale, int ch, 
-	                              UCharacterIterator uchariter, 
-	                              boolean upperflag, char buffer[]) 
+    public int toUpperOrTitleCase(Locale locale, int ch, 
+                                  UCharacterIterator uchariter, 
+                                  boolean upperflag, char buffer[]) 
     {
         int props = getProperty(ch);
         if ((props & EXCEPTION_MASK) == 0) {
             int type = props & TYPE_MASK;
             if (type == UCharacterCategory.LOWERCASE_LETTER) {
-            	ch -= UCharacterProperty.getSignedValue(props);
+                ch -= UCharacterProperty.getSignedValue(props);
             }
         } else {
             int index = UCharacterProperty.getExceptionIndex(props);
             if (hasExceptionValue(index, 
                                   UCharacterProperty.EXC_SPECIAL_CASING_)) {
-               	StringBuffer strbuffer = new StringBuffer(1);
+                   StringBuffer strbuffer = new StringBuffer(1);
                 int result = getSpecialUpperOrTitleCase(locale, index, ch, 
                                                         uchariter, upperflag, 
                                                         strbuffer);
@@ -1063,7 +1063,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
                 ch = getException(index, UCharacterProperty.EXC_TITLECASE_);
             }
             else {
-             	if (hasExceptionValue(index, 
+                 if (hasExceptionValue(index, 
                                       UCharacterProperty.EXC_UPPERCASE_)) {
                     ch = getException(index, 
                                       UCharacterProperty.EXC_UPPERCASE_);
@@ -1071,8 +1071,8 @@ public final class UCharacterProperty implements Trie.DataManipulate
             }
         }
         if (ch < UTF16.SUPPLEMENTARY_MIN_VALUE) {
-        	buffer[0] = (char)ch;
-        	return 1;
+            buffer[0] = (char)ch;
+            return 1;
         }
         buffer[0] = UTF16.getLeadSurrogate(ch);
         buffer[1] = UTF16.getTrailSurrogate(ch);
@@ -1093,14 +1093,14 @@ public final class UCharacterProperty implements Trie.DataManipulate
         StringBuffer       result    = new StringBuffer(limit - start);
         
         while (strIndex < limit) { 
-        	ucharIter.setIndex(strIndex);
-	        int ch = ucharIter.currentCodePoint();
-	        
-	        toUpperOrTitleCase(locale, ch, ucharIter, true, result);
-	        strIndex ++;
-	        if (ch >= UTF16.SUPPLEMENTARY_MIN_VALUE) {
-	        	strIndex ++;
-	        }
+            ucharIter.setIndex(strIndex);
+            int ch = ucharIter.currentCodePoint();
+            
+            toUpperOrTitleCase(locale, ch, ucharIter, true, result);
+            strIndex ++;
+            if (ch >= UTF16.SUPPLEMENTARY_MIN_VALUE) {
+                strIndex ++;
+            }
         }
         return result.toString();
     }
@@ -1122,32 +1122,32 @@ public final class UCharacterProperty implements Trie.DataManipulate
     *        the character should be title cased.
     * @return lowercase version of the argument string
     */
- 	public String toTitleCase(Locale locale, String str, 
- 	                          BreakIterator breakiter)
- 	{
- 		UCharacterIterator ucharIter = UCharacterIterator.getInstance(str);
-		int                length    = str.length();
+     public String toTitleCase(Locale locale, String str, 
+                               BreakIterator breakiter)
+     {
+         UCharacterIterator ucharIter = UCharacterIterator.getInstance(str);
+        int                length    = str.length();
         StringBuffer       result    = new StringBuffer();
         
         breakiter.setText(str);
         
         int                index     = breakiter.first();
-       	// titlecasing loop
-	    while (index != BreakIterator.DONE && index < length) {
-	    	// titlecase the character at the found index
-	        int ch = UTF16.charAt(str, index);
-	        ucharIter.setIndex(index);
-	        index += UTF16.getCharCount(ch);
-        	toUpperOrTitleCase(locale, ch, ucharIter, false, result);
-        	int next = breakiter.next();
-        	if (index != BreakIterator.DONE && index < next) {
-	        	// lowercase [prev..index]
-        		toLowerCase(locale, str, index, next, result);
+           // titlecasing loop
+        while (index != BreakIterator.DONE && index < length) {
+            // titlecase the character at the found index
+            int ch = UTF16.charAt(str, index);
+            ucharIter.setIndex(index);
+            index += UTF16.getCharCount(ch);
+            toUpperOrTitleCase(locale, ch, ucharIter, false, result);
+            int next = breakiter.next();
+            if (index != BreakIterator.DONE && index < next) {
+                // lowercase [prev..index]
+                toLowerCase(locale, str, index, next, result);
             }
             index = next;
         }
         return result.toString();
- 	}
+     }
 
     /**
      * <p>
@@ -1301,10 +1301,10 @@ public final class UCharacterProperty implements Trie.DataManipulate
      * Maximum values for script, bits used as in vector word
      * 0
      */
- 	int m_maxJTGValue_;   
+     int m_maxJTGValue_;   
     // private variables -------------------------------------------------
     
-  	/**
+      /**
      * UnicodeData.txt property object
      */
     private static UCharacterProperty INSTANCE_ = null;   
@@ -1372,40 +1372,40 @@ public final class UCharacterProperty implements Trie.DataManipulate
     private static final int UNSIGNED_VALUE_MASK_AFTER_SHIFT_ = 0x7FF;
     
     /**
-	 * Shift to get reserved value
-	 */
-	private static final int RESERVED_SHIFT_ = 15;
-	
-	/**
-	 * 
-	 */
-	private static final int BIDI_SHIFT_ = 6;
-	/**
-	 * 
-	 */
-	private static final int MIRROR_SHIFT_ = BIDI_SHIFT_ + 5;
-	
-	/**
-	 * 
-	 */
-	private static final int NUMERIC_TYPE_SHIFT = 12;
-	/**
-	 * 
-	 */
-	private static final int CASE_SENSITIVE_SHIFT_= NUMERIC_TYPE_SHIFT+3;
-	/**
-	 * Bit indicating exception
-	 */
-  	private static final int EXCEPTION_BIT = 1 << 5;
-  	
-  	/** 
-  	 * Bit to get the actual property value
-  	 */
+     * Shift to get reserved value
+     */
+    private static final int RESERVED_SHIFT_ = 15;
+    
+    /**
+     * 
+     */
+    private static final int BIDI_SHIFT_ = 6;
+    /**
+     * 
+     */
+    private static final int MIRROR_SHIFT_ = BIDI_SHIFT_ + 5;
+    
+    /**
+     * 
+     */
+    private static final int NUMERIC_TYPE_SHIFT = 12;
+    /**
+     * 
+     */
+    private static final int CASE_SENSITIVE_SHIFT_= NUMERIC_TYPE_SHIFT+3;
+    /**
+     * Bit indicating exception
+     */
+      private static final int EXCEPTION_BIT = 1 << 5;
+      
+      /** 
+       * Bit to get the actual property value
+       */
     private static final int VALUE_BITS_ = 0x10000 - VALUE_SHIFT_;
 
-	/**
-	 * Minimum value of a property
-	 */
+    /**
+     * Minimum value of a property
+     */
     private static final int MIN_VALUE_ = -(1 << (VALUE_BITS_ - 1));
     
     /**
@@ -1442,8 +1442,8 @@ public final class UCharacterProperty implements Trie.DataManipulate
     /**
     * Shift value for lead surrogate to form a supplementary character.
     */
-	private static final int LEAD_SURROGATE_SHIFT_ = 10;
-	/** 
+    private static final int LEAD_SURROGATE_SHIFT_ = 10;
+    /** 
     * Offset to add to combined surrogate pair to avoid msking.
     */
     private static final int SURROGATE_OFFSET_ = 
@@ -1543,22 +1543,22 @@ public final class UCharacterProperty implements Trie.DataManipulate
     */
     private static final int SHIFT_16_ = 16;
    
-   	// additional properties ----------------------------------------------
-   	 
-   	/**
-   	 * Additional properties used in internal trie data
-   	 */
-   	/*
-	 * Properties in vector word 1
-	 * Each bit encodes one binary property.
-	 * The following constants represent the bit number, use 1<<UPROPS_XYZ.
-	 * UPROPS_BINARY_1_TOP<=32!
-	 *
-	 * Keep this list of property enums in sync with
-	 * propListNames[] in icu/source/tools/genprops/props2.c!
-	 *
-	 * ICU 2.6/uprops format version 3.2 stores full properties instead of "Other_".
-	 */
+       // additional properties ----------------------------------------------
+        
+       /**
+        * Additional properties used in internal trie data
+        */
+       /*
+     * Properties in vector word 1
+     * Each bit encodes one binary property.
+     * The following constants represent the bit number, use 1<<UPROPS_XYZ.
+     * UPROPS_BINARY_1_TOP<=32!
+     *
+     * Keep this list of property enums in sync with
+     * propListNames[] in icu/source/tools/genprops/props2.c!
+     *
+     * ICU 2.6/uprops format version 3.2 stores full properties instead of "Other_".
+     */
     private static final int WHITE_SPACE_PROPERTY_ = 0;
     private static final int BIDI_CONTROL_PROPERTY_ = 1;
     private static final int JOIN_CONTROL_PROPERTY_ = 2;
@@ -1588,7 +1588,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
     private static final int LOGICAL_ORDER_EXCEPTION_PROPERTY_ = 26;
     private static final int XID_START_PROPERTY_ = 27;
     private static final int XID_CONTINUE_PROPERTY_ = 28;
-    private static final int ID_START_PROPERTY_	= 29;
+    private static final int ID_START_PROPERTY_    = 29;
     private static final int ID_CONTINUE_PROPERTY_ = 30;
     private static final int GRAPHEME_BASE_PROPERTY_ = 31;
     private static final int BINARY_1_TOP_PROPERTY_ = 32;
@@ -1619,7 +1619,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
     private UCharacterProperty() throws IOException
     {
         // jar access
-		InputStream is = ICUData.getRequiredStream(DATA_FILE_NAME_);
+        InputStream is = ICUData.getRequiredStream(DATA_FILE_NAME_);
         BufferedInputStream b = new BufferedInputStream(is, DATA_BUFFER_SIZE_);
         UCharacterPropertyReader reader = new UCharacterPropertyReader(b);
         reader.read(this);
@@ -1628,7 +1628,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
         m_trie_.putIndexData(this);
     }
                                      
-	// private methods -------------------------------------------------------
+    // private methods -------------------------------------------------------
     
     /*
      * This section contains helper functions that check for conditions
@@ -1714,10 +1714,10 @@ public final class UCharacterProperty implements Trie.DataManipulate
     private boolean isPrecededBySoftDotted(
                                 UCharacterIterator uchariter, int offset) 
     {
-    	uchariter.setIndex(offset);
-    	
-    	int ch = uchariter.previousCodePoint();
-    	
+        uchariter.setIndex(offset);
+        
+        int ch = uchariter.previousCodePoint();
+        
         while (ch != UCharacterIterator.DONE) {
             if (isSoftDotted(ch)) {
                 return true; // preceded by TYPE_i
@@ -1746,12 +1746,12 @@ public final class UCharacterProperty implements Trie.DataManipulate
     */
     private boolean isCFINAL(UCharacterIterator uchariter, int offset) 
     {
-    	// iterator should have been determined to be not null by caller
+        // iterator should have been determined to be not null by caller
         uchariter.setIndex(offset);
-    	uchariter.nextCodePoint(); // rid of current codepoint
+        uchariter.nextCodePoint(); // rid of current codepoint
         int ch = uchariter.nextCodePoint(); // start checking
-    	
-    	while (ch != UCharacterIterator.DONE) {
+        
+        while (ch != UCharacterIterator.DONE) {
             int cat = getProperty(ch) & TYPE_MASK;
             if (isCased(ch, cat)) {
                 return false; // followed by cased letter
@@ -1776,9 +1776,9 @@ public final class UCharacterProperty implements Trie.DataManipulate
     private boolean isNotCINITIAL(UCharacterIterator uchariter, 
                                          int offset) 
     {
-    	uchariter.setIndex(offset);
-    	int ch = uchariter.previousCodePoint();
-    	
+        uchariter.setIndex(offset);
+        int ch = uchariter.previousCodePoint();
+        
         while (ch != UCharacterIterator.DONE) {
             int cat = getProperty(ch) & TYPE_MASK;
             if (isCased(ch, cat)) {
@@ -1787,7 +1787,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
             if (!isCaseIgnorable(ch, cat)) {
                 return false; // not ignorable
             }
-			ch = uchariter.previousCodePoint();
+            ch = uchariter.previousCodePoint();
         }
 
         return false; 
@@ -2000,33 +2000,33 @@ public final class UCharacterProperty implements Trie.DataManipulate
      */
     private boolean compareAdditionalType(int property, int type) 
     {
-    	return (property & (1 << type)) != 0;
+        return (property & (1 << type)) != 0;
     }
 
     
-	private static final int TAB     = 0x0009;
-	private static final int LF      = 0x000a;
-	private static final int FF      = 0x000c;
-	private static final int CR      = 0x000d;
-	private static final int U_A     = 0x0041;
-	private static final int U_Z     = 0x005a;
-	private static final int U_a     = 0x0061;
-	private static final int U_z     = 0x007a;
-	private static final int DEL     = 0x007f;
-	private static final int NL      = 0x0085;
-	private static final int NBSP    = 0x00a0;
-	private static final int CGJ     = 0x034f;
-	private static final int FIGURESP= 0x2007;
-	private static final int HAIRSP  = 0x200a;
-	private static final int ZWNJ    = 0x200c;
-	private static final int ZWJ     = 0x200d;
-	private static final int RLM     = 0x200f;
-	private static final int NNBSP   = 0x202f;
-	private static final int WJ      = 0x2060;
-	private static final int INHSWAP = 0x206a;
-	private static final int NOMDIG  = 0x206f;
-	private static final int ZWNBSP  = 0xfeff;
-	
+    private static final int TAB     = 0x0009;
+    private static final int LF      = 0x000a;
+    private static final int FF      = 0x000c;
+    private static final int CR      = 0x000d;
+    private static final int U_A     = 0x0041;
+    private static final int U_Z     = 0x005a;
+    private static final int U_a     = 0x0061;
+    private static final int U_z     = 0x007a;
+    private static final int DEL     = 0x007f;
+    private static final int NL      = 0x0085;
+    private static final int NBSP    = 0x00a0;
+    private static final int CGJ     = 0x034f;
+    private static final int FIGURESP= 0x2007;
+    private static final int HAIRSP  = 0x200a;
+    private static final int ZWNJ    = 0x200c;
+    private static final int ZWJ     = 0x200d;
+    private static final int RLM     = 0x200f;
+    private static final int NNBSP   = 0x202f;
+    private static final int WJ      = 0x2060;
+    private static final int INHSWAP = 0x206a;
+    private static final int NOMDIG  = 0x206f;
+    private static final int ZWNBSP  = 0xfeff;
+    
     public UnicodeSet addPropertyStarts(UnicodeSet set) {
         int c;
        
@@ -2034,7 +2034,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
         //utrie_enum(&normTrie, NULL, _enumPropertyStartsRange, set);
         TrieIterator propsIter = new TrieIterator(m_trie_);
         RangeValueIterator.Element propsResult = new RangeValueIterator.Element();
-      	while(propsIter.next(propsResult)){
+          while(propsIter.next(propsResult)){
             set.add(propsResult.start);
         }
         //utrie_enum(&propsVectorsTrie, NULL, _enumPropertyStartsRange, set);
@@ -2047,117 +2047,117 @@ public final class UCharacterProperty implements Trie.DataManipulate
         
         /* add code points with hardcoded properties, plus the ones following them */
 
-    	/* add for IS_THAT_CONTROL_SPACE() */
-	    set.add(TAB); /* range TAB..CR */
-	    set.add(CR+1);
-	    set.add(0x1c);
-	    set.add(0x1f+1);
-	    set.add(NL);
-	    set.add(NL+1);
-	
-	    /* add for u_isIDIgnorable() what was not added above */
-	    set.add(DEL); /* range DEL..NBSP-1, NBSP added below */
-	    set.add(HAIRSP);
-	    set.add(RLM+1);
-	    set.add(INHSWAP);
-	    set.add(NOMDIG+1);
-	    set.add(ZWNBSP);
-	    set.add(ZWNBSP+1);
-	
-	    /* add no-break spaces for u_isWhitespace() what was not added above */
-	    set.add(NBSP);
-	    set.add(NBSP+1);
-	    set.add(FIGURESP);
-	    set.add(FIGURESP+1);
-	    set.add(NNBSP);
-	    set.add(NNBSP+1);
-	
-	    /* add for u_charDigitValue() */
-	    set.add(0x3007);
-	    set.add(0x3008);
-	    set.add(0x4e00);
-	    set.add(0x4e01);
-	    set.add(0x4e8c);
-	    set.add(0x4e8d);
-	    set.add(0x4e09);
-	    set.add(0x4e0a);
-	    set.add(0x56db);
-	    set.add(0x56dc);
-	    set.add(0x4e94);
-	    set.add(0x4e95);
-	    set.add(0x516d);
-	    set.add(0x516e);
-	    set.add(0x4e03);
-	    set.add(0x4e04);
-	    set.add(0x516b);
-	    set.add(0x516c);
-	    set.add(0x4e5d);
-	    set.add(0x4e5e);
-	
-	    /* add for u_digit() */
-	    set.add(U_a);
-	    set.add(U_z+1);
-	    set.add(U_A);
-	    set.add(U_Z+1);
-	
-	    /* add for UCHAR_DEFAULT_IGNORABLE_CODE_POINT what was not added above */
-	    set.add(WJ); /* range WJ..NOMDIG */
-	    set.add(0xfff0);
-	    set.add(0xfffb+1);
-	    set.add(0xe0000);
-	    set.add(0xe0fff+1);
-	
-	    /* add for UCHAR_GRAPHEME_BASE and others */
-	    set.add(CGJ);
-	    set.add(CGJ+1);
-	
-	    /* add for UCHAR_JOINING_TYPE */
-	    set.add(ZWNJ); /* range ZWNJ..ZWJ */
-	    set.add(ZWJ+1);
-	
-	    /* add Jamo type boundaries for UCHAR_HANGUL_SYLLABLE_TYPE */
-	    set.add(0x1100);
-	    int value= UCharacter.HangulSyllableType.LEADING_JAMO;
-	    int value2;
-	    for(c=0x115a; c<=0x115f; ++c) {
-	        value2= UCharacter.getIntPropertyValue(c, UProperty.HANGUL_SYLLABLE_TYPE);
-	        if(value!=value2) {
-	            value=value2;
-	            set.add(c);
-	        }
-	    }
-	
-	    set.add(0x1160);
-	    value=UCharacter.HangulSyllableType.VOWEL_JAMO;
-	    for(c=0x11a3; c<=0x11a7; ++c) {
-	        value2=UCharacter.getIntPropertyValue(c, UProperty.HANGUL_SYLLABLE_TYPE);
-	        if(value!=value2) {
-	            value=value2;
-	            set.add(c);
-	        }
-	    }
-	
-	    set.add(0x11a8);
-	    value=UCharacter.HangulSyllableType.TRAILING_JAMO;
-	    for(c=0x11fa; c<=0x11ff; ++c) {
-	        value2=UCharacter.getIntPropertyValue(c, UProperty.HANGUL_SYLLABLE_TYPE);
-	        if(value!=value2) {
-	            value=value2;
-	            set.add(c);
-	        }
-	    }
-	
-	
-	    /*
-	     * Omit code points for u_charCellWidth() because
-	     * - it is deprecated and not a real Unicode property
-	     * - they are probably already set from the trie enumeration
-	     */
-	
-	    /*
-	     * Omit code points with hardcoded specialcasing properties
-	     * because we do not build property UnicodeSets for them right now.
-	     */      
+        /* add for IS_THAT_CONTROL_SPACE() */
+        set.add(TAB); /* range TAB..CR */
+        set.add(CR+1);
+        set.add(0x1c);
+        set.add(0x1f+1);
+        set.add(NL);
+        set.add(NL+1);
+    
+        /* add for u_isIDIgnorable() what was not added above */
+        set.add(DEL); /* range DEL..NBSP-1, NBSP added below */
+        set.add(HAIRSP);
+        set.add(RLM+1);
+        set.add(INHSWAP);
+        set.add(NOMDIG+1);
+        set.add(ZWNBSP);
+        set.add(ZWNBSP+1);
+    
+        /* add no-break spaces for u_isWhitespace() what was not added above */
+        set.add(NBSP);
+        set.add(NBSP+1);
+        set.add(FIGURESP);
+        set.add(FIGURESP+1);
+        set.add(NNBSP);
+        set.add(NNBSP+1);
+    
+        /* add for u_charDigitValue() */
+        set.add(0x3007);
+        set.add(0x3008);
+        set.add(0x4e00);
+        set.add(0x4e01);
+        set.add(0x4e8c);
+        set.add(0x4e8d);
+        set.add(0x4e09);
+        set.add(0x4e0a);
+        set.add(0x56db);
+        set.add(0x56dc);
+        set.add(0x4e94);
+        set.add(0x4e95);
+        set.add(0x516d);
+        set.add(0x516e);
+        set.add(0x4e03);
+        set.add(0x4e04);
+        set.add(0x516b);
+        set.add(0x516c);
+        set.add(0x4e5d);
+        set.add(0x4e5e);
+    
+        /* add for u_digit() */
+        set.add(U_a);
+        set.add(U_z+1);
+        set.add(U_A);
+        set.add(U_Z+1);
+    
+        /* add for UCHAR_DEFAULT_IGNORABLE_CODE_POINT what was not added above */
+        set.add(WJ); /* range WJ..NOMDIG */
+        set.add(0xfff0);
+        set.add(0xfffb+1);
+        set.add(0xe0000);
+        set.add(0xe0fff+1);
+    
+        /* add for UCHAR_GRAPHEME_BASE and others */
+        set.add(CGJ);
+        set.add(CGJ+1);
+    
+        /* add for UCHAR_JOINING_TYPE */
+        set.add(ZWNJ); /* range ZWNJ..ZWJ */
+        set.add(ZWJ+1);
+    
+        /* add Jamo type boundaries for UCHAR_HANGUL_SYLLABLE_TYPE */
+        set.add(0x1100);
+        int value= UCharacter.HangulSyllableType.LEADING_JAMO;
+        int value2;
+        for(c=0x115a; c<=0x115f; ++c) {
+            value2= UCharacter.getIntPropertyValue(c, UProperty.HANGUL_SYLLABLE_TYPE);
+            if(value!=value2) {
+                value=value2;
+                set.add(c);
+            }
+        }
+    
+        set.add(0x1160);
+        value=UCharacter.HangulSyllableType.VOWEL_JAMO;
+        for(c=0x11a3; c<=0x11a7; ++c) {
+            value2=UCharacter.getIntPropertyValue(c, UProperty.HANGUL_SYLLABLE_TYPE);
+            if(value!=value2) {
+                value=value2;
+                set.add(c);
+            }
+        }
+    
+        set.add(0x11a8);
+        value=UCharacter.HangulSyllableType.TRAILING_JAMO;
+        for(c=0x11fa; c<=0x11ff; ++c) {
+            value2=UCharacter.getIntPropertyValue(c, UProperty.HANGUL_SYLLABLE_TYPE);
+            if(value!=value2) {
+                value=value2;
+                set.add(c);
+            }
+        }
+    
+    
+        /*
+         * Omit code points for u_charCellWidth() because
+         * - it is deprecated and not a real Unicode property
+         * - they are probably already set from the trie enumeration
+         */
+    
+        /*
+         * Omit code points with hardcoded specialcasing properties
+         * because we do not build property UnicodeSets for them right now.
+         */      
         return set; // for chaining
     }
 /*----------------------------------------------------------------

@@ -23,7 +23,7 @@ public class BigNumberFormatTest extends TestFmwk {
     public static void main(String[] args) throws Exception {
         new BigNumberFormatTest().run(args);
     }
-    	
+        
     public void TestExponent() {
         DecimalFormatSymbols US = new DecimalFormatSymbols(Locale.US);
         DecimalFormat fmt1 = new DecimalFormat("0.###E0", US);

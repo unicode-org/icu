@@ -13,37 +13,37 @@ public class ScriptIDModuleWriter extends ScriptModuleWriter
         super(scriptData, languageData);
     }
 
-	public void writeScriptHeader(String fileName)
-	{
-	    int minScript = scriptData.getMinValue();
-	    int maxScript = scriptData.getMaxValue();
-	    
-	    openFile(fileName);
-	    writeHeader("__LESCRIPTS_H", includeFiles);
-	    output.println(scriptPreamble);
-	    
-	    for (int script = minScript; script <= maxScript; script += 1) {
-	        output.print("    ");
-	        output.print(scriptData.getTag(script));
-	        output.print("ScriptCode = ");
-	        
-	        if (script < 10) {
-	            output.print(" ");
-	        }
-	        
-	        output.print(script);
-	        output.println(",");
-	    }
-	    
-	    output.println();
-	    output.print("    scriptCodeCount = ");
-	    output.println(maxScript - minScript + 1);
-	    
-	    output.println(postamble);
+    public void writeScriptHeader(String fileName)
+    {
+        int minScript = scriptData.getMinValue();
+        int maxScript = scriptData.getMaxValue();
+        
+        openFile(fileName);
+        writeHeader("__LESCRIPTS_H", includeFiles);
+        output.println(scriptPreamble);
+        
+        for (int script = minScript; script <= maxScript; script += 1) {
+            output.print("    ");
+            output.print(scriptData.getTag(script));
+            output.print("ScriptCode = ");
+            
+            if (script < 10) {
+                output.print(" ");
+            }
+            
+            output.print(script);
+            output.println(",");
+        }
+        
+        output.println();
+        output.print("    scriptCodeCount = ");
+        output.println(maxScript - minScript + 1);
+        
+        output.println(postamble);
         
         writeTrailer();
-	    closeFile();
-	}
+        closeFile();
+    }
     
     public void writeLanguageHeader(String fileName)
     {

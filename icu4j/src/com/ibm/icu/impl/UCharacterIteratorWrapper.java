@@ -32,7 +32,7 @@ public class UCharacterIteratorWrapper implements CharacterIterator{
      * @see #getBeginIndex()
      */
     public char first(){
-    	//UCharacterIterator always iterates from 0 to length
+        //UCharacterIterator always iterates from 0 to length
         iterator.setToStart();
         return (char)iterator.current();
     }
@@ -102,7 +102,7 @@ public class UCharacterIteratorWrapper implements CharacterIterator{
      * @return the index at which the text begins.
      */
     public int getBeginIndex(){
-    	//UCharacterIterator always starts from 0
+        //UCharacterIterator always starts from 0
         return 0;
     }
 

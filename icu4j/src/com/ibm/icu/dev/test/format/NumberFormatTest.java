@@ -884,35 +884,35 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
 
             public void run() {
-		if (inc) {
-		    while (num < 10000) {
-			buf.append(fmt.format(num) + "\n");
-			num += 3.14159;
-		    }
-		} else {
-		    while (num > 0) {
-			buf.append(fmt.format(num) + "\n");
-			num -= 3.14159;
-		    }
-		}
-	    }
+        if (inc) {
+            while (num < 10000) {
+            buf.append(fmt.format(num) + "\n");
+            num += 3.14159;
+            }
+        } else {
+            while (num > 0) {
+            buf.append(fmt.format(num) + "\n");
+            num -= 3.14159;
+            }
+        }
+        }
 
-	    String result() {
-		return buf.toString();
-	    }
-	}
+        String result() {
+        return buf.toString();
+        }
+    }
 
         DecimalFormat fmt = new DecimalFormat("0.####");
         FormatTask[] tasks = new FormatTask[8];
         for (int i = 0; i < tasks.length; ++i) {
-	    tasks[i] = new FormatTask(fmt, i);
-	}
+        tasks[i] = new FormatTask(fmt, i);
+    }
 
-	TestUtil.runUntilDone(tasks);
+    TestUtil.runUntilDone(tasks);
 
         for (int i = 2; i < tasks.length; i++) {
-	    String str1 = tasks[i].result();
-	    String str2 = tasks[i-2].result();
+        String str1 = tasks[i].result();
+        String str2 = tasks[i-2].result();
             if (!str1.equals(str2)) {
                 System.out.println("mismatch at " + i);
                 System.out.println(str1);
@@ -1035,15 +1035,15 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                     break;
                 case 1:
                     // loc= <locale>
-                	loc = LocaleUtility.getLocaleFromName(tokens.next());
+                    loc = LocaleUtility.getLocaleFromName(tokens.next());
                     break;
                 case 2: // f:
                 case 3: // fp:
                 case 4: // rt:
                 case 5: // p:
-                	tok = tokens.next();
+                    tok = tokens.next();
                     if (!tok.equals("-")) {
-                    	pat = tok;
+                        pat = tok;
                         try {
                             fmt = new DecimalFormat(pat, new DecimalFormatSymbols(loc));
                         } catch (IllegalArgumentException iae) {

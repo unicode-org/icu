@@ -1255,7 +1255,7 @@ public class DecimalFormat extends NumberFormat {
             count = useSigDig ? Integer.MAX_VALUE : getMaximumFractionDigits();
             if (useSigDig && (sigCount == maxSigDig ||
                               (sigCount >= minSigDig && digitIndex == digitList.count))) {
-            	count = 0;   
+                count = 0;   
             }
             for (i=0; i < count; ++i) {
                 // Here is where we escape from the loop.  We escape
@@ -1458,10 +1458,10 @@ public class DecimalFormat extends NumberFormat {
             // Handle integral values
             if (mult == 1 && digitList.isIntegral()) {
                 // hack quick long
-		if (digitList.decimalAt < 12) { // quick check for long
-		    long l = 0;
-		    if (digitList.count > 0) {
-			int nx = 0;
+        if (digitList.decimalAt < 12) { // quick check for long
+            long l = 0;
+            if (digitList.count > 0) {
+            int nx = 0;
                         while (nx < digitList.count) {
                             l = l * 10 + (char)digitList.digits[nx++] - '0';
                         }
@@ -1473,11 +1473,11 @@ public class DecimalFormat extends NumberFormat {
                         }
                     }
                     n = new Long(l);
-		} else {
+        } else {
                     BigInteger big = digitList.getBigInteger(status[STATUS_POSITIVE]);
                     n = (big.bitLength() < 64) ?
                         (Number) new Long(big.longValue()) : (Number) big;
-		}
+        }
             }
 
             // Handle non-integral values

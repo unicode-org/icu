@@ -1185,7 +1185,7 @@ public final class UCharacterName
     */
     private UCharacterName() throws IOException
     {
-		InputStream is = ICUData.getRequiredStream(NAME_FILE_NAME_);
+        InputStream is = ICUData.getRequiredStream(NAME_FILE_NAME_);
         BufferedInputStream b = new BufferedInputStream(is, NAME_BUFFER_SIZE_);
         UCharacterNameReader reader = new UCharacterNameReader(b);
         reader.read(this);

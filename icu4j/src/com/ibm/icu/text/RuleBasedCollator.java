@@ -1632,11 +1632,11 @@ public final class RuleBasedCollator extends Collator
         if (rb != null) {
             try {
                 // Use keywords, if supplied for lookup
-            	String collkey = locale.getKeywordValue("collation");
-			  	if(collkey == null) {
-			  		collkey = rb.getStringWithFallback("collations/default");
-			    }
-			           
+                String collkey = locale.getKeywordValue("collation");
+                  if(collkey == null) {
+                      collkey = rb.getStringWithFallback("collations/default");
+                }
+                       
                 // collations/default will always give a string back
                 // keyword for the real collation data
                 // if "collations/collkey" will return null if collkey == null 
@@ -1653,12 +1653,12 @@ public final class RuleBasedCollator extends Collator
                     //     m_rules_ = (String)rules[1][1];
                         byte map[] = buf.array();
                         CollatorReader.initRBC(this, map);
-						/*
+                        /*
                         BufferedInputStream input =
                                                  new BufferedInputStream(
                                                     new ByteArrayInputStream(map));
                         /*
-						CollatorReader reader = new CollatorReader(input, false);
+                        CollatorReader reader = new CollatorReader(input, false);
                         if (map.length > MIN_BINARY_DATA_SIZE_) {
                             reader.read(this, null);
                         }
@@ -4422,30 +4422,30 @@ public final class RuleBasedCollator extends Collator
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public VersionInfo getVersion() {
-    	/* RunTime version  */
-    	int rtVersion = VersionInfo.UCOL_RUNTIME_VERSION.getMajor();
-    	/* Builder version*/
-    	int bdVersion = m_version_.getMajor();
+        /* RunTime version  */
+        int rtVersion = VersionInfo.UCOL_RUNTIME_VERSION.getMajor();
+        /* Builder version*/
+        int bdVersion = m_version_.getMajor();
 
-    	/* Charset Version. Need to get the version from cnv files
-    	 * makeconv should populate cnv files with version and
-    	 * an api has to be provided in ucnv.h to obtain this version
-    	 */
-    	int csVersion = 0;
+        /* Charset Version. Need to get the version from cnv files
+         * makeconv should populate cnv files with version and
+         * an api has to be provided in ucnv.h to obtain this version
+         */
+        int csVersion = 0;
 
-    	/* combine the version info */
-    	int cmbVersion = ((rtVersion<<11) | (bdVersion<<6) | (csVersion)) & 0xFFFF;
-    	
-    	/* Tailoring rules */
-    	return VersionInfo.getInstance(cmbVersion>>8, 
-    			cmbVersion & 0xFF, 
-				m_version_.getMinor(), 
-				UCA_.m_UCA_version_.getMajor());
+        /* combine the version info */
+        int cmbVersion = ((rtVersion<<11) | (bdVersion<<6) | (csVersion)) & 0xFFFF;
+        
+        /* Tailoring rules */
+        return VersionInfo.getInstance(cmbVersion>>8, 
+                cmbVersion & 0xFF, 
+                m_version_.getMinor(), 
+                UCA_.m_UCA_version_.getMajor());
 
-//    	versionInfo[0] = (uint8_t)(cmbVersion>>8);
-//    	versionInfo[1] = (uint8_t)cmbVersion;
-//    	versionInfo[2] = coll->image->version[1];
-//    	versionInfo[3] = coll->UCA->image->UCAVersion[0];
+//        versionInfo[0] = (uint8_t)(cmbVersion>>8);
+//        versionInfo[1] = (uint8_t)cmbVersion;
+//        versionInfo[2] = coll->image->version[1];
+//        versionInfo[3] = coll->UCA->image->UCAVersion[0];
     }
     
     /** Get the UCA version of this collator object.
@@ -4454,6 +4454,6 @@ public final class RuleBasedCollator extends Collator
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public VersionInfo getUCAVersion() {
-    	return UCA_.m_UCA_version_;
+        return UCA_.m_UCA_version_;
     }
 }

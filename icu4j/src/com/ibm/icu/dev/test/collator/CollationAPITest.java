@@ -841,12 +841,12 @@ public class CollationAPITest extends TestFmwk {
                 return 0;
             }
             public VersionInfo getVersion()
-			{
-            	return VersionInfo.getInstance(0);
+            {
+                return VersionInfo.getInstance(0);
             }
             public VersionInfo getUCAVersion()
-			{
-            	return VersionInfo.getInstance(0);
+            {
+                return VersionInfo.getInstance(0);
             }
         }
  

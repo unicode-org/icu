@@ -136,77 +136,77 @@ public class SimpleBITest extends TestFmwk{
         new SimpleBITest().run(args);
     }
     
-	protected boolean validate() {
-		// TODO: remove when english.dict gets fixed
-		return false;
-	}
+    protected boolean validate() {
+        // TODO: remove when english.dict gets fixed
+        return false;
+    }
 
-	private BreakIterator createTestIterator(int kind) {
-		final String bname = "com.ibm.icu.dev.test.rbbi.BreakIteratorRules_en_US_TEST";
+    private BreakIterator createTestIterator(int kind) {
+        final String bname = "com.ibm.icu.dev.test.rbbi.BreakIteratorRules_en_US_TEST";
 
-		BreakIterator iter = null;
+        BreakIterator iter = null;
 
-		ListResourceBundle bundle = null;
-		try {
-			Class cls = Class.forName(bname);
-			bundle = (ListResourceBundle)cls.newInstance();
-		}
-		catch (Exception e) {
-			///CLOVER:OFF
-			errln("could not create bundle: " + bname + "exception: " + e.getMessage());
-			///CLOVER:ON
-			return null;
-		}
-		
-		final String[] kindNames = {
-			"Character", "Word", "Line", "Sentence"
-		};
-		String rulesName = kindNames[kind] + "BreakRules";
-		String dictionaryName = kindNames[kind] + "BreakDictionary";
-		
-		String[] classNames = bundle.getStringArray("BreakIteratorClasses");
-		String rules = bundle.getString(rulesName);
-		if (classNames[kind].equals("RuleBasedBreakIterator")) {
-			iter = new RuleBasedBreakIterator(rules);
-		}
-		else if (classNames[kind].equals("DictionaryBasedBreakIterator")) {
-			try {
-				String dictionaryPath = bundle.getString(dictionaryName);
-				InputStream dictionary = bundle.getClass().getResourceAsStream(dictionaryPath);
-				System.out.println("looking for " + dictionaryPath + " from " + bundle.getClass() + " returned " + dictionary);
-				iter = new DictionaryBasedBreakIterator(rules, dictionary);
-			}
-			catch(IOException e) {
-				e.printStackTrace();
-				errln(e.getMessage());
-				System.out.println(e); // debug
-			}
-			catch(MissingResourceException e) {
-				errln(e.getMessage());
-				System.out.println(e); // debug
-			}
-		}
-		if (iter == null) {
-			errln("could not create iterator");
-		}
-		
-		return iter;
-	}
-	
+        ListResourceBundle bundle = null;
+        try {
+            Class cls = Class.forName(bname);
+            bundle = (ListResourceBundle)cls.newInstance();
+        }
+        catch (Exception e) {
+            ///CLOVER:OFF
+            errln("could not create bundle: " + bname + "exception: " + e.getMessage());
+            ///CLOVER:ON
+            return null;
+        }
+        
+        final String[] kindNames = {
+            "Character", "Word", "Line", "Sentence"
+        };
+        String rulesName = kindNames[kind] + "BreakRules";
+        String dictionaryName = kindNames[kind] + "BreakDictionary";
+        
+        String[] classNames = bundle.getStringArray("BreakIteratorClasses");
+        String rules = bundle.getString(rulesName);
+        if (classNames[kind].equals("RuleBasedBreakIterator")) {
+            iter = new RuleBasedBreakIterator(rules);
+        }
+        else if (classNames[kind].equals("DictionaryBasedBreakIterator")) {
+            try {
+                String dictionaryPath = bundle.getString(dictionaryName);
+                InputStream dictionary = bundle.getClass().getResourceAsStream(dictionaryPath);
+                System.out.println("looking for " + dictionaryPath + " from " + bundle.getClass() + " returned " + dictionary);
+                iter = new DictionaryBasedBreakIterator(rules, dictionary);
+            }
+            catch(IOException e) {
+                e.printStackTrace();
+                errln(e.getMessage());
+                System.out.println(e); // debug
+            }
+            catch(MissingResourceException e) {
+                errln(e.getMessage());
+                System.out.println(e); // debug
+            }
+        }
+        if (iter == null) {
+            errln("could not create iterator");
+        }
+        
+        return iter;
+    }
+    
     public void testWordBreak() throws Exception {
-    	BreakIterator wordBreak = createTestIterator(BreakIterator.KIND_WORD);
+        BreakIterator wordBreak = createTestIterator(BreakIterator.KIND_WORD);
         int breaks = doTest(wordBreak);
         logln(String.valueOf(breaks));
     }
 
     public void testLineBreak() throws Exception {
-		BreakIterator lineBreak = createTestIterator(BreakIterator.KIND_LINE);
+        BreakIterator lineBreak = createTestIterator(BreakIterator.KIND_LINE);
         int breaks = doTest(lineBreak);
         logln(String.valueOf(breaks));
     }
 
     public void testSentenceBreak() throws Exception {
-		BreakIterator sentenceBreak = createTestIterator(BreakIterator.KIND_SENTENCE);
+        BreakIterator sentenceBreak = createTestIterator(BreakIterator.KIND_SENTENCE);
         int breaks = doTest(sentenceBreak);
         logln(String.valueOf(breaks));
     }

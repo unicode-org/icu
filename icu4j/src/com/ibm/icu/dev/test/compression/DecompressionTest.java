@@ -10,9 +10,9 @@ import com.ibm.icu.text.UnicodeDecompressor;
 import com.ibm.icu.dev.test.TestFmwk;
 
 public class DecompressionTest extends TestFmwk {
-	public static void main(String[] args) throws Exception {
-		new DecompressionTest().run(args);
-	}
+    public static void main(String[] args) throws Exception {
+        new DecompressionTest().run(args);
+    }
 
     /** Print out a segment of a character array, if in verbose mode */
     private void log(char [] chars, int start, int count) {
@@ -86,9 +86,9 @@ public class DecompressionTest extends TestFmwk {
         
         result = decompressTest(segment1, segment2);
         if(! result.equals("Booth, S.")) {
-        	errln("Decompression test failed");
-        	return;
-		}
+            errln("Decompression test failed");
+            return;
+        }
 
         // compressed segment breaking on a quote unicode sequence
         /*                   B     o     o     t     SQU        */
@@ -100,9 +100,9 @@ public class DecompressionTest extends TestFmwk {
 
         result = decompressTest(segment3, segment4);
         if(! result.equals("Booth, S.")) {
-        	errln("Decompression test failed");
-        	return;
-		}
+            errln("Decompression test failed");
+            return;
+        }
 
 
         // compressed segment breaking on a quote unicode sequence
@@ -115,9 +115,9 @@ public class DecompressionTest extends TestFmwk {
 
         result = decompressTest(segment5, segment6);
         if(! result.equals("B")) {
-        	errln("Decompression test failed");
-        	return;
-		}
+            errln("Decompression test failed");
+            return;
+        }
     }
 
 };

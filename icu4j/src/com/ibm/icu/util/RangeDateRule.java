@@ -85,10 +85,10 @@ public class RangeDateRule implements DateRule {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public Date firstBetween(Date start, Date end) {
-    	if (end == null) {
-    		return firstAfter(start);
-    	}
-    	
+        if (end == null) {
+            return firstAfter(start);
+        }
+        
         // Find the range that I should look at
         int index = startIndex(start);
         Date result = null;

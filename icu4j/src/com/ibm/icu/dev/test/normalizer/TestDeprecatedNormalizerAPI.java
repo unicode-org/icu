@@ -16,10 +16,10 @@ import com.ibm.icu.text.StringCharacterIterator;
 
 public class TestDeprecatedNormalizerAPI extends TestFmwk
 {
- 	
+     
     public static void main(String[] args) throws Exception
     {
-    	String[] tempArgs = new String[args.length];
+        String[] tempArgs = new String[args.length];
         int count = 0;
 
         // Allow the test to be pointed at a specific version of the Unicode database

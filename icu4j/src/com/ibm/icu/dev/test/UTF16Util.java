@@ -17,13 +17,13 @@ package com.ibm.icu.dev.test;
 public class UTF16Util {
     static final int suppOffset = (0xd800 << 10) + 0xdc00 - 0x10000;
 
-	/**
-	 * Method nextCodePoint. Returns the next code point
+    /**
+     * Method nextCodePoint. Returns the next code point
      * in a string. 
-	 * @param s String in question
-	 * @param i index from which we want a code point
-	 * @return int codepoint at index i
-	 */
+     * @param s String in question
+     * @param i index from which we want a code point
+     * @return int codepoint at index i
+     */
     public static final int nextCodePoint(String s, int i) {
         int ch = s.charAt(i);
         if (0xd800 <= ch && ch <= 0xdbff && ++i < s.length()) {
@@ -35,13 +35,13 @@ public class UTF16Util {
         return ch;
     }
 
-	/**
-	 * Method prevCodePoint. Gets the code point preceding
+    /**
+     * Method prevCodePoint. Gets the code point preceding
      * index i (predecrement). 
-	 * @param s String in question
-	 * @param i index in string
-	 * @return int codepoint at index --i
-	 */
+     * @param s String in question
+     * @param i index in string
+     * @return int codepoint at index --i
+     */
     public static final int prevCodePoint(String s, int i) {
         int ch = s.charAt(--i);
         if (0xdc00 <= ch && ch <= 0xdfff && --i >= 0) {
@@ -53,13 +53,13 @@ public class UTF16Util {
         return ch;
     }
 
-	/**
+    /**
      * Method nextCodePoint. Returns the next code point
      * in a string. 
      * @param s StringBuffer in question
      * @param i index from which we want a code point
      * @return int codepoint at index i
-	 */
+     */
     public static final int nextCodePoint(StringBuffer s, int i) {
         int ch = s.charAt(i);
         if (0xd800 <= ch && ch <= 0xdbff && ++i < s.length()) {
@@ -89,22 +89,22 @@ public class UTF16Util {
         return ch;
     }
 
-	/**
-	 * Method codePointLength. Returns the length 
+    /**
+     * Method codePointLength. Returns the length 
      * in UTF-16 code units of a given code point
-	 * @param c code point in question
-	 * @return int length in UTF-16 code units. Can be 1 or 2
-	 */
+     * @param c code point in question
+     * @return int length in UTF-16 code units. Can be 1 or 2
+     */
     public static final int codePointLength(int c) {
         return c <= 0xffff ? 1 : 2;
     }
 
-	/**
-	 * Method appendCodePoint. Appends a code point
+    /**
+     * Method appendCodePoint. Appends a code point
      * to a StringBuffer
-	 * @param buffer StringBuffer in question
-	 * @param ch code point to append
-	 */
+     * @param buffer StringBuffer in question
+     * @param ch code point to append
+     */
     public static final void appendCodePoint(StringBuffer buffer, int ch) {
         if (ch <= 0xffff) {
             buffer.append((char)ch);
@@ -114,13 +114,13 @@ public class UTF16Util {
         }
     }
 
-	/**
-	 * Method insertCodePoint. Inserts a code point in
+    /**
+     * Method insertCodePoint. Inserts a code point in
      * a StringBuffer
-	 * @param buffer StringBuffer in question
-	 * @param i index at which we want code point to be inserted
-	 * @param ch code point to be inserted
-	 */
+     * @param buffer StringBuffer in question
+     * @param i index at which we want code point to be inserted
+     * @param ch code point to be inserted
+     */
     public static final void insertCodePoint(StringBuffer buffer, int i, int ch) {
         if (ch <= 0xffff) {
             buffer.insert(i, (char)ch);
@@ -129,14 +129,14 @@ public class UTF16Util {
         }
     }
     
-	/**
-	 * Method setCodePointAt. Changes a code point at a
+    /**
+     * Method setCodePointAt. Changes a code point at a
      * given index. Can change the length of the string.
-	 * @param buffer StringBuffer in question
-	 * @param i index at which we want to change the contents
-	 * @param ch replacement code point
-	 * @return int difference in resulting StringBuffer length
-	 */
+     * @param buffer StringBuffer in question
+     * @param i index at which we want to change the contents
+     * @param ch replacement code point
+     * @return int difference in resulting StringBuffer length
+     */
     public static final int setCodePointAt(StringBuffer buffer, int i, int ch) {
         int cp = nextCodePoint(buffer, i);
         
@@ -158,12 +158,12 @@ public class UTF16Util {
         }
     }
 
-	/**
-	 * Method countCodePoint. Counts the UTF-32 code points
+    /**
+     * Method countCodePoint. Counts the UTF-32 code points
      * in a UTF-16 encoded string.
-	 * @param source String in question.
-	 * @return int number of code points in this string
-	 */
+     * @param source String in question.
+     * @return int number of code points in this string
+     */
     public static final int countCodePoint(String source) 
     {         
         int result = 0;

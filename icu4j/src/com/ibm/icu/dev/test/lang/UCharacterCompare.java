@@ -35,7 +35,7 @@ public final class UCharacterCompare
   */
   public static void main(String arg[])
   {
-  	System.out.println("Starting character compare");
+      System.out.println("Starting character compare");
     try
     {
       FileWriter f;
@@ -48,7 +48,7 @@ public final class UCharacterCompare
       p.println("method name               ucharacter character");
       for (char i = Character.MIN_VALUE; i < Character.MAX_VALUE; i ++)
       {
-      	System.out.println("character \\u" + Integer.toHexString(i));
+          System.out.println("character \\u" + Integer.toHexString(i));
         if (UCharacter.isDefined(i) != Character.isDefined(i))
           trackDifference(p, i, "isDefined()", "" + UCharacter.isDefined(i), 
                           "" + Character.isDefined(i));
@@ -177,31 +177,31 @@ public final class UCharacterCompare
     if (uchartype == UCharacterCategory.COMBINING_SPACING_MARK && 
         jchartype == Character.COMBINING_SPACING_MARK)
       return true;
-	  if (uchartype == UCharacterCategory.DECIMAL_DIGIT_NUMBER && 
+      if (uchartype == UCharacterCategory.DECIMAL_DIGIT_NUMBER && 
         jchartype == Character.DECIMAL_DIGIT_NUMBER)
       return true;
-	  if (uchartype == UCharacterCategory.LETTER_NUMBER && 
+      if (uchartype == UCharacterCategory.LETTER_NUMBER && 
         jchartype == Character.LETTER_NUMBER)
       return true;
-	  if (uchartype == UCharacterCategory.OTHER_NUMBER && 
+      if (uchartype == UCharacterCategory.OTHER_NUMBER && 
         jchartype == Character.OTHER_NUMBER)
       return true;
-	  if (uchartype == UCharacterCategory.SPACE_SEPARATOR && 
+      if (uchartype == UCharacterCategory.SPACE_SEPARATOR && 
         jchartype == Character.SPACE_SEPARATOR)
       return true;
-	  if (uchartype == UCharacterCategory.LINE_SEPARATOR && 
+      if (uchartype == UCharacterCategory.LINE_SEPARATOR && 
         jchartype == Character.LINE_SEPARATOR)
       return true;
-	  if (uchartype == UCharacterCategory.PARAGRAPH_SEPARATOR && 
+      if (uchartype == UCharacterCategory.PARAGRAPH_SEPARATOR && 
         jchartype == Character.PARAGRAPH_SEPARATOR)
       return true;
-	  if (uchartype == UCharacterCategory.CONTROL && 
+      if (uchartype == UCharacterCategory.CONTROL && 
         jchartype == Character.CONTROL)
       return true;
     if (uchartype == UCharacterCategory.FORMAT && 
         jchartype == Character.FORMAT)
       return true;
-	  if (uchartype == UCharacterCategory.PRIVATE_USE && 
+      if (uchartype == UCharacterCategory.PRIVATE_USE && 
         jchartype == Character.PRIVATE_USE)
       return true;
     if (uchartype == UCharacterCategory.SURROGATE && 
@@ -210,10 +210,10 @@ public final class UCharacterCompare
     if (uchartype == UCharacterCategory.DASH_PUNCTUATION && 
         jchartype == Character.DASH_PUNCTUATION)
       return true;
-	  if (uchartype == UCharacterCategory.START_PUNCTUATION && 
+      if (uchartype == UCharacterCategory.START_PUNCTUATION && 
         jchartype == Character.START_PUNCTUATION)
       return true;
-	  if (uchartype == UCharacterCategory.END_PUNCTUATION && 
+      if (uchartype == UCharacterCategory.END_PUNCTUATION && 
         jchartype == Character.END_PUNCTUATION)
       return true;
     if (uchartype == UCharacterCategory.CONNECTOR_PUNCTUATION && 
@@ -222,88 +222,88 @@ public final class UCharacterCompare
     if (uchartype == UCharacterCategory.OTHER_PUNCTUATION && 
         jchartype == Character.OTHER_PUNCTUATION)
       return true;
-	  if (uchartype == UCharacterCategory.MATH_SYMBOL && 
+      if (uchartype == UCharacterCategory.MATH_SYMBOL && 
         jchartype == Character.MATH_SYMBOL)
       return true;
-	  if (uchartype == UCharacterCategory.CURRENCY_SYMBOL && 
+      if (uchartype == UCharacterCategory.CURRENCY_SYMBOL && 
         jchartype == Character.CURRENCY_SYMBOL)
       return true;
-	  if (uchartype == UCharacterCategory.MODIFIER_SYMBOL && 
+      if (uchartype == UCharacterCategory.MODIFIER_SYMBOL && 
         jchartype == Character.MODIFIER_SYMBOL)
       return true;
-	  if (uchartype == UCharacterCategory.OTHER_SYMBOL && 
+      if (uchartype == UCharacterCategory.OTHER_SYMBOL && 
         jchartype == Character.OTHER_SYMBOL)
       return true;
-	  if (uchartype == UCharacterCategory.INITIAL_PUNCTUATION && 
+      if (uchartype == UCharacterCategory.INITIAL_PUNCTUATION && 
         jchartype == Character.START_PUNCTUATION)
       return true;
     if (uchartype == UCharacterCategory.FINAL_PUNCTUATION && 
         jchartype == Character.END_PUNCTUATION)
       return true;
-	  /*if (uchartype == UCharacterCategory.GENERAL_OTHER_TYPES && 
+      /*if (uchartype == UCharacterCategory.GENERAL_OTHER_TYPES && 
         jchartype == Character.GENERAL_OTHER_TYPES)
       return true;*/
     return false;
-	}
-	
-	/**
-	* Difference writing to file
-	* @param f file outputstream
-	* @param ch code point
-	* @param method for testing
-	* @param ucharval UCharacter value after running method
-	* @param charval Character value after running method
-	* @exception thrown when error occur in writing to file
-	*/
-	private static void trackDifference(PrintWriter f, int ch, String method,
-	                                    String ucharval, String charval)
-	  throws Exception
-	{
-	  if (m_hashtable_.containsKey(method))
-	  {
-	    Integer value = (Integer)m_hashtable_.get(method);
-	    m_hashtable_.put(method, new Integer(value.intValue() + 1));
-	  }
-	  else
-	    m_hashtable_.put(method, new Integer(1));
-	  
-	  String temp = Integer.toHexString(ch);
-	  StringBuffer s = new StringBuffer(temp);
-	  for (int i = 0; i < 6 - temp.length(); i ++)
-	    s.append(' ');
-	  temp = UCharacter.getExtendedName(ch);
-	  if (temp == null)
-	    temp = " ";
-	  s.append(temp);
-	  for (int i = 0; i < 73 - temp.length(); i ++)
-	    s.append(' ');
-	  
-	  s.append(method);
-	  for (int i = 0; i < 27 - method.length(); i ++)
-	    s.append(' ');
-	  s.append(ucharval);
-	  for (int i = 0; i < 11 - ucharval.length(); i ++)
-	    s.append(' ');
-	  s.append(charval);
-	  f.println(s.toString());
-	}
-	
-	/**
-	* Does up a summary of the differences
-	* @param f file outputstream
-	*/
-	private static void summary(PrintWriter f)
-	{
-	  f.println("==================================================");
-	  f.println("Summary of differences");
-	  for (Enumeration e = m_hashtable_.keys() ; e.hasMoreElements() ;) 
-	  {
-	    StringBuffer method = new StringBuffer((String)e.nextElement());
-	    int count = ((Integer)m_hashtable_.get(method.toString())).intValue();
-	    for (int i = 30 - method.length(); i > 0; i --)
-	      method.append(' ');
+    }
+    
+    /**
+    * Difference writing to file
+    * @param f file outputstream
+    * @param ch code point
+    * @param method for testing
+    * @param ucharval UCharacter value after running method
+    * @param charval Character value after running method
+    * @exception thrown when error occur in writing to file
+    */
+    private static void trackDifference(PrintWriter f, int ch, String method,
+                                        String ucharval, String charval)
+      throws Exception
+    {
+      if (m_hashtable_.containsKey(method))
+      {
+        Integer value = (Integer)m_hashtable_.get(method);
+        m_hashtable_.put(method, new Integer(value.intValue() + 1));
+      }
+      else
+        m_hashtable_.put(method, new Integer(1));
+      
+      String temp = Integer.toHexString(ch);
+      StringBuffer s = new StringBuffer(temp);
+      for (int i = 0; i < 6 - temp.length(); i ++)
+        s.append(' ');
+      temp = UCharacter.getExtendedName(ch);
+      if (temp == null)
+        temp = " ";
+      s.append(temp);
+      for (int i = 0; i < 73 - temp.length(); i ++)
+        s.append(' ');
+      
+      s.append(method);
+      for (int i = 0; i < 27 - method.length(); i ++)
+        s.append(' ');
+      s.append(ucharval);
+      for (int i = 0; i < 11 - ucharval.length(); i ++)
+        s.append(' ');
+      s.append(charval);
+      f.println(s.toString());
+    }
+    
+    /**
+    * Does up a summary of the differences
+    * @param f file outputstream
+    */
+    private static void summary(PrintWriter f)
+    {
+      f.println("==================================================");
+      f.println("Summary of differences");
+      for (Enumeration e = m_hashtable_.keys() ; e.hasMoreElements() ;) 
+      {
+        StringBuffer method = new StringBuffer((String)e.nextElement());
+        int count = ((Integer)m_hashtable_.get(method.toString())).intValue();
+        for (int i = 30 - method.length(); i > 0; i --)
+          method.append(' ');
       f.println(method + "  " + count);
     }
-	}
+    }
 }
 

@@ -270,20 +270,20 @@ public class TrieIterator implements RangeValueIterator
                 m_currentCodepoint_ = m_nextCodepoint_;
                 return;
             }
-    		// we have cleared one block
-    		m_nextIndex_ ++;
-    		m_nextTrailIndexOffset_ ++;
-    		if (!checkTrailBlock(currentBlock, currentValue)) {
-    			setResult(element, m_currentCodepoint_, m_nextCodepoint_, 
-    			          currentValue);
+            // we have cleared one block
+            m_nextIndex_ ++;
+            m_nextTrailIndexOffset_ ++;
+            if (!checkTrailBlock(currentBlock, currentValue)) {
+                setResult(element, m_currentCodepoint_, m_nextCodepoint_, 
+                          currentValue);
                 m_currentCodepoint_ = m_nextCodepoint_;
                 return;
-    		}
+            }
         }
         int nextLead  = UTF16.getLeadSurrogate(m_nextCodepoint_);
-		// enumerate supplementary code points
+        // enumerate supplementary code points
         while (nextLead < TRAIL_SURROGATE_MIN_VALUE_) {
-		    // lead surrogate access
+            // lead surrogate access
             int leadBlock = 
                    m_trie_.m_index_[nextLead >> Trie.INDEX_STAGE_1_SHIFT_] << 
                                                    Trie.INDEX_STAGE_2_SHIFT_;
@@ -361,7 +361,7 @@ public class TrieIterator implements RangeValueIterator
     */
     private final boolean checkBlockDetail(int currentValue)
     {
-	    while (m_nextBlockIndex_ < DATA_BLOCK_LENGTH_) {
+        while (m_nextBlockIndex_ < DATA_BLOCK_LENGTH_) {
             m_nextValue_ = extract(m_trie_.getValue(m_nextBlock_ + 
                                                     m_nextBlockIndex_));
             if (m_nextValue_ != currentValue) {
@@ -393,7 +393,7 @@ public class TrieIterator implements RangeValueIterator
             (m_nextCodepoint_ - m_currentCodepoint_) >= DATA_BLOCK_LENGTH_) {
             // the block is the same as the previous one, filled with 
             // currentValue
-			m_nextCodepoint_ += DATA_BLOCK_LENGTH_;
+            m_nextCodepoint_ += DATA_BLOCK_LENGTH_;
         }
         else if (m_nextBlock_ == 0) {
             // this is the all-initial-value block
@@ -427,10 +427,10 @@ public class TrieIterator implements RangeValueIterator
     private final boolean checkTrailBlock(int currentBlock,
                                           int currentValue)
     {
-	    // enumerate code points for this lead surrogate
+        // enumerate code points for this lead surrogate
         while (m_nextTrailIndexOffset_ < TRAIL_SURROGATE_INDEX_BLOCK_LENGTH_) 
         {
-		    // if we ever reach here, we are at the start of a new block
+            // if we ever reach here, we are at the start of a new block
             m_nextBlockIndex_ = 0;
             // copy of most of the body of the BMP loop
             if (!checkBlock(currentBlock, currentValue)) {
@@ -442,36 +442,36 @@ public class TrieIterator implements RangeValueIterator
         return true;
     }
     
-	/**
-	* Checks if we are beginning at the start of a initial block.
-	* If we are then the rest of the codepoints in this initial block
-	* has the same values.
-	* We increment m_nextCodepoint_ and relevant data members if so.
-	* This is used only in for the supplementary codepoints because
-	* the offset to the trail indexes could be 0.
-	* @return true if we are at the start of a initial block.
-	*/
-	private final boolean checkNullNextTrailIndex()
-	{
-		if (m_nextIndex_ <= 0) {
-		    m_nextCodepoint_ += TRAIL_SURROGATE_COUNT_ - 1;
-			int nextLead  = UTF16.getLeadSurrogate(m_nextCodepoint_);
-			int leadBlock = 
+    /**
+    * Checks if we are beginning at the start of a initial block.
+    * If we are then the rest of the codepoints in this initial block
+    * has the same values.
+    * We increment m_nextCodepoint_ and relevant data members if so.
+    * This is used only in for the supplementary codepoints because
+    * the offset to the trail indexes could be 0.
+    * @return true if we are at the start of a initial block.
+    */
+    private final boolean checkNullNextTrailIndex()
+    {
+        if (m_nextIndex_ <= 0) {
+            m_nextCodepoint_ += TRAIL_SURROGATE_COUNT_ - 1;
+            int nextLead  = UTF16.getLeadSurrogate(m_nextCodepoint_);
+            int leadBlock = 
                    m_trie_.m_index_[nextLead >> Trie.INDEX_STAGE_1_SHIFT_] << 
                                                    Trie.INDEX_STAGE_2_SHIFT_;
             if (m_trie_.m_dataManipulate_ == null) {
                 throw new NullPointerException(
                             "The field DataManipulate in this Trie is null");
             }
-			m_nextIndex_ = m_trie_.m_dataManipulate_.getFoldingOffset(
+            m_nextIndex_ = m_trie_.m_dataManipulate_.getFoldingOffset(
                                m_trie_.getValue(leadBlock + 
                                    (nextLead & Trie.INDEX_STAGE_3_MASK_)));
-			m_nextIndex_ --;
-			m_nextBlockIndex_ =  DATA_BLOCK_LENGTH_;
-			return true;
-	    }
-		return false;
-	}
+            m_nextIndex_ --;
+            m_nextBlockIndex_ =  DATA_BLOCK_LENGTH_;
+            return true;
+        }
+        return false;
+    }
 
     // private data members --------------------------------------------
 
@@ -487,27 +487,27 @@ public class TrieIterator implements RangeValueIterator
     /**
     * Trail surrogate minimum value
     */
-	private static final int TRAIL_SURROGATE_MIN_VALUE_ = 0xDC00;
-	/**
+    private static final int TRAIL_SURROGATE_MIN_VALUE_ = 0xDC00;
+    /**
     * Trail surrogate maximum value
     */
-	private static final int TRAIL_SURROGATE_MAX_VALUE_ = 0xDFFF;
-	/**
-	* Number of trail surrogate
-	*/
-	private static final int TRAIL_SURROGATE_COUNT_ = 0x400;
+    private static final int TRAIL_SURROGATE_MAX_VALUE_ = 0xDFFF;
     /**
-	* Number of stage 1 indexes for supplementary calculations that maps to
-	* each lead surrogate character.
-	* See second pass into getRawOffset for the trail surrogate character.
-	* 10 for significant number of bits for trail surrogates, 5 for what we
-	* discard during shifting.
-	*/
-	private static final int TRAIL_SURROGATE_INDEX_BLOCK_LENGTH_ =
-	                                1 << (10 - Trie.INDEX_STAGE_1_SHIFT_);
-	/**
-	* Number of data values in a stage 2 (data array) block.
-	*/
+    * Number of trail surrogate
+    */
+    private static final int TRAIL_SURROGATE_COUNT_ = 0x400;
+    /**
+    * Number of stage 1 indexes for supplementary calculations that maps to
+    * each lead surrogate character.
+    * See second pass into getRawOffset for the trail surrogate character.
+    * 10 for significant number of bits for trail surrogates, 5 for what we
+    * discard during shifting.
+    */
+    private static final int TRAIL_SURROGATE_INDEX_BLOCK_LENGTH_ =
+                                    1 << (10 - Trie.INDEX_STAGE_1_SHIFT_);
+    /**
+    * Number of data values in a stage 2 (data array) block.
+    */
     private static final int DATA_BLOCK_LENGTH_ = 
                                               1 << Trie.INDEX_STAGE_1_SHIFT_;
     /**

@@ -40,7 +40,7 @@ public class DateFormatRoundTripTest extends com.ibm.icu.dev.test.TestFmwk {
     public void TestDateFormatRoundTrip() {
         dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss.SSS zzz yyyy G");
         getFieldCal = Calendar.getInstance();
-	ran = createRandom(); // use test framework's random seed
+    ran = createRandom(); // use test framework's random seed
 
         final Locale[] avail = DateFormat.getAvailableLocales();
         int locCount = avail.length;

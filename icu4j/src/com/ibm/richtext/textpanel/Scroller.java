@@ -137,8 +137,8 @@ final class Scroller implements AdjustmentListener
             scrollbar.setMinimum(minimum);
             scrollbar.setMaximum(maximum);
             scrollbar.setVisibleAmount(visible);
-	    // workaround setBlockIncrement warnings for increments < 1
-	    scrollbar.setBlockIncrement(Math.max(1, visible - DEFAULT_UNIT_INC));
+        // workaround setBlockIncrement warnings for increments < 1
+        scrollbar.setBlockIncrement(Math.max(1, visible - DEFAULT_UNIT_INC));
         }
     }
 

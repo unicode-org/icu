@@ -61,7 +61,7 @@ public class TestFmwk extends AbstractTestLog {
     // use this instead of new random so we get a consistent seed 
     // for our tests
     protected Random createRandom() {
-	return new Random(params.seed);
+    return new Random(params.seed);
     }
 
     /**
@@ -331,7 +331,7 @@ public class TestFmwk extends AbstractTestLog {
                     
                     String msg = "Uncaught exception " + getStackTrace(e);
                     
-		    if (params.nothrow) {
+            if (params.nothrow) {
                         errln(msg);
                     } else {
                         e.getTargetException().printStackTrace(System.out);
@@ -553,7 +553,7 @@ public class TestFmwk extends AbstractTestLog {
             }
         }
         catch (Exception e) {
-	    e.printStackTrace();
+        e.printStackTrace();
             System.out.println(e.getMessage());
             System.out.println("encountered exception, exiting");
         }
@@ -1068,10 +1068,10 @@ public class TestFmwk extends AbstractTestLog {
             return inDocMode() && (listlevel == 2 || (indentLevel == 1 && listlevel > 0));
         }
 
-	// return 0, -1, or 1
-	// 1: run this test
-	// 0: might run this test, no positive include or exclude on this group
-	// -1: exclude this test
+    // return 0, -1, or 1
+    // 1: run this test
+    // 0: might run this test, no positive include or exclude on this group
+    // -1: exclude this test
         public int filter(String testName) {
             int result = 0;
             if (filter == null) {
@@ -1158,8 +1158,8 @@ public class TestFmwk extends AbstractTestLog {
             if (inDocMode()) {
                 if (!warnings) {
                     if (stack != null) {
-			stack.flush();
-		    }
+            stack.flush();
+            }
                     log.println(" *** Target not found or not valid.");
                     log.flush();
                     needLineFeed = false;

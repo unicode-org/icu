@@ -143,8 +143,8 @@ public class CharTrie extends Trie
     */
     public final char getSurrogateValue(char lead, char trail)
     {
-    	int offset = getSurrogateOffset(lead, trail);
-    	if (offset > 0) {
+        int offset = getSurrogateOffset(lead, trail);
+        if (offset > 0) {
             return m_data_[offset];
         }
         return m_initialValue_;
@@ -168,7 +168,7 @@ public class CharTrie extends Trie
         }
         int offset = m_dataManipulate_.getFoldingOffset(leadvalue);
         if (offset > 0) {
-	        return m_data_[getRawOffset(offset, 
+            return m_data_[getRawOffset(offset, 
                                         (char)(trail & SURROGATE_MASK_))];
         }
         return m_initialValue_;
@@ -183,7 +183,7 @@ public class CharTrie extends Trie
      */
     public final char getLatin1LinearValue(char ch) 
     {
-    	return m_data_[INDEX_STAGE_3_MASK_ + 1 + m_dataOffset_ + ch];
+        return m_data_[INDEX_STAGE_3_MASK_ + 1 + m_dataOffset_ + ch];
     }
     
     /**

@@ -446,7 +446,7 @@ public class Currency extends MeasureUnit implements Serializable {
             }
         }
         
-    	pos.setIndex(start + max);
+        pos.setIndex(start + max);
         return iso;
     }
 

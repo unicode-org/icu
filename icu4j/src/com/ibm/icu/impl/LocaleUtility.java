@@ -82,25 +82,25 @@ public class LocaleUtility {
      * variant.  Our canonical form is 'lower_UPPER_UPPER'.  
      */
     public static String canonicalLocaleString(String id) {
-	if (id != null) {
-	    int x = id.indexOf("_");
-	    if (x == -1) {
-		id = id.toLowerCase(Locale.ENGLISH);
-	    } else {
-		StringBuffer buf = new StringBuffer();
-		buf.append(id.substring(0, x).toLowerCase(Locale.ENGLISH));
-		buf.append(id.substring(x).toUpperCase(Locale.ENGLISH));
-		    
-		int len = buf.length();
-		int n = len;
-		while (--n >= 0 && buf.charAt(n) == '_') {};
-		if (++n != len) {
-		    buf.delete(n, len);
-		}
-		id = buf.toString();
-	    }
-	}
-	return id;
+    if (id != null) {
+        int x = id.indexOf("_");
+        if (x == -1) {
+        id = id.toLowerCase(Locale.ENGLISH);
+        } else {
+        StringBuffer buf = new StringBuffer();
+        buf.append(id.substring(0, x).toLowerCase(Locale.ENGLISH));
+        buf.append(id.substring(x).toUpperCase(Locale.ENGLISH));
+            
+        int len = buf.length();
+        int n = len;
+        while (--n >= 0 && buf.charAt(n) == '_') {};
+        if (++n != len) {
+            buf.delete(n, len);
+        }
+        id = buf.toString();
+        }
+    }
+    return id;
     }
 
     /**

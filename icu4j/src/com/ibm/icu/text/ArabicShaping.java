@@ -731,7 +731,7 @@ public final class ArabicShaping {
     private int calculateSize(char[] source,
                               int sourceStart,
                               int sourceLength) {
-	
+    
         int destSize = sourceLength;
 
         switch (options & LETTERS_MASK) {
@@ -778,7 +778,7 @@ public final class ArabicShaping {
     private int removeLamAlefSpaces(char[] dest, 
                                     int start,
                                     int length) {
-	
+    
         int lenOptions = options & LENGTH_MASK;
         if (!isLogical) {
             switch (lenOptions) {
@@ -1034,7 +1034,7 @@ public final class ArabicShaping {
                         dest[i] != '\u064D' &&
                         !((nextLink & ALEFTYPE) == ALEFTYPE && 
                           (lastLink & LAMTYPE) == LAMTYPE)) {
-		
+        
                         shape = 1;
                     } else {
                         shape = 0;
@@ -1116,7 +1116,7 @@ public final class ArabicShaping {
         if (destSize == 0) {
             if (((options & LETTERS_MASK) != LETTERS_NOOP) &&
                 ((options & LENGTH_MASK) == LENGTH_GROW_SHRINK)) {
-	
+    
                 return calculateSize(source, sourceStart, sourceLength);
             } else {
                 return sourceLength; // by definition

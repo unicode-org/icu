@@ -631,12 +631,12 @@ final class DigitList {
 
         // Eliminate digits beyond maximum digits to be displayed.
         // Round up if appropriate.
-	// {dlf} Some callers depend on passing '0' to round to mean 'don't round', but
-	// rather than pass that information explicitly, we rely on some magic with maximumDigits
-	// and decimalAt.  Unfortunately, this is no good, because there are cases where maximumDigits
-	// is zero and we do want to round, e.g. BigDecimal values -1 < x < 1.  So since round
-	// changed to perform rounding when the argument is 0, we now force the argument
-	// to -1 in the situations where it matters.
+    // {dlf} Some callers depend on passing '0' to round to mean 'don't round', but
+    // rather than pass that information explicitly, we rely on some magic with maximumDigits
+    // and decimalAt.  Unfortunately, this is no good, because there are cases where maximumDigits
+    // is zero and we do want to round, e.g. BigDecimal values -1 < x < 1.  So since round
+    // changed to perform rounding when the argument is 0, we now force the argument
+    // to -1 in the situations where it matters.
         round(fixedPoint ? (maximumDigits + decimalAt) : maximumDigits == 0 ? -1 : maximumDigits);
     }
 

@@ -914,26 +914,26 @@ public class UnicodeSetTest extends TestFmwk {
             "[ab\uDC00cd]", // JB#2906: isolated trail in middle
             "abcd\uDC00",
             "ef\uD800\\U00010000",
-			
-			"[:^lccc=0:]", // Lead canonical class
-			"\u0300\u0301",
-			"abcd\u00c0\u00c5",
+            
+            "[:^lccc=0:]", // Lead canonical class
+            "\u0300\u0301",
+            "abcd\u00c0\u00c5",
 
-			"[:^tccc=0:]", // Trail canonical class
-			"\u0300\u0301\u00c0\u00c5",
-			"abcd",
+            "[:^tccc=0:]", // Trail canonical class
+            "\u0300\u0301\u00c0\u00c5",
+            "abcd",
 
-			"[[:^lccc=0:][:^tccc=0:]]", // Lead and trail canonical class
-			"\u0300\u0301\u00c0\u00c5",
-			"abcd",
+            "[[:^lccc=0:][:^tccc=0:]]", // Lead and trail canonical class
+            "\u0300\u0301\u00c0\u00c5",
+            "abcd",
 
-			"[[:^lccc=0:]-[:^tccc=0:]]", // Stuff that starts with an accent but ends with a base (none right now)
-			"",
-			"abcd\u0300\u0301\u00c0\u00c5",
-			
-			"[[:ccc=0:]-[:lccc=0:]-[:tccc=0:]]", // Weirdos. Complete canonical class is zero, but both lead and trail are not
-			"\u0F73\u0F75\u0F81",
-			"abcd\u0300\u0301\u00c0\u00c5",
+            "[[:^lccc=0:]-[:^tccc=0:]]", // Stuff that starts with an accent but ends with a base (none right now)
+            "",
+            "abcd\u0300\u0301\u00c0\u00c5",
+            
+            "[[:ccc=0:]-[:lccc=0:]-[:tccc=0:]]", // Weirdos. Complete canonical class is zero, but both lead and trail are not
+            "\u0F73\u0F75\u0F81",
+            "abcd\u0300\u0301\u00c0\u00c5",
         };
 
         for (int i=0; i<DATA.length; i+=3) {  
@@ -988,8 +988,8 @@ public class UnicodeSetTest extends TestFmwk {
             logln("Testing " + i + ", " + bitsToSet(i));
             _testComplement(i);
             
-        	// AS LONG AS WE ARE HERE, check roundtrip
-        	checkRoundTrip(bitsToSet(i));
+            // AS LONG AS WE ARE HERE, check roundtrip
+            checkRoundTrip(bitsToSet(i));
             
             for (char j = 0; j < limit; ++j) {
                 _testAdd(i,j);
@@ -1495,26 +1495,26 @@ public class UnicodeSetTest extends TestFmwk {
     }
     
     UnicodeSet copyWithIterator(UnicodeSet s, boolean withRange) {
-    	UnicodeSet t = new UnicodeSet();
-    	UnicodeSetIterator it = new UnicodeSetIterator(s);
-    	if (withRange) {
-    		while (it.nextRange()) {
-    			if (it.codepoint == UnicodeSetIterator.IS_STRING) {
-    				t.add(it.string);
-    			} else {
-    				t.add(it.codepoint, it.codepointEnd);
-    			}
-    		}
-    	} else {
-    		while (it.next()) {
-    			if (it.codepoint == UnicodeSetIterator.IS_STRING) {
-    				t.add(it.string);
-    			} else {
-    				t.add(it.codepoint);
-    			}
-    		}
-    	}
-    	return t;
+        UnicodeSet t = new UnicodeSet();
+        UnicodeSetIterator it = new UnicodeSetIterator(s);
+        if (withRange) {
+            while (it.nextRange()) {
+                if (it.codepoint == UnicodeSetIterator.IS_STRING) {
+                    t.add(it.string);
+                } else {
+                    t.add(it.codepoint, it.codepointEnd);
+                }
+            }
+        } else {
+            while (it.next()) {
+                if (it.codepoint == UnicodeSetIterator.IS_STRING) {
+                    t.add(it.string);
+                } else {
+                    t.add(it.codepoint);
+                }
+            }
+        }
+        return t;
     }
     
     boolean checkEqual(UnicodeSet s, UnicodeSet t, String message) {
@@ -1523,11 +1523,11 @@ public class UnicodeSetTest extends TestFmwk {
               + "; source = " + s.toPattern(true)
               + "; result = " + t.toPattern(true)
               );
-        	return false;
+            return false;
         }
         return true;
     }
-    		
+            
     
     /**
      * Expect the given set to contain the characters in charsIn and

@@ -43,7 +43,7 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
         new NumberRegression().run(args);
     }
 
-	private static final char EURO = '\u20ac';
+    private static final char EURO = '\u20ac';
 
     /**
      * NumberFormat.equals comparing with null should always return false.
@@ -434,7 +434,7 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
         DecimalFormat df = (DecimalFormat) NumberFormat.getCurrencyInstance(de);
         DecimalFormatSymbols sym = df.getDecimalFormatSymbols();
         sym.setMonetaryDecimalSeparator('$');
-	df.setDecimalFormatSymbols(sym);
+    df.setDecimalFormatSymbols(sym);
         char decSep = sym.getDecimalSeparator();
         char monSep = sym.getMonetaryDecimalSeparator();
         //char zero = sym.getZeroDigit(); //The variable is never used
@@ -605,7 +605,7 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
     }
     /**
      * Data rounding errors for Italian locale number formats
-	 * Note- with the Euro, there is no need for currency rounding anymore
+     * Note- with the Euro, there is no need for currency rounding anymore
      */
     public void Test4071859 () {
         NumberFormat formatter;
@@ -1362,8 +1362,8 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
         
         NumberFormat nf = NumberFormat.getInstance(Locale.US);
 
-	// Set special values we are going to search for in the output byte stream
-	// These are all legal values.
+    // Set special values we are going to search for in the output byte stream
+    // These are all legal values.
         nf.setMinimumIntegerDigits(0x111); // Keep under 309
         nf.setMaximumIntegerDigits(0x112); // Keep under 309
         nf.setMinimumFractionDigits(0x113); // Keep under 340
@@ -1375,23 +1375,23 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
         
         byte[] bytes = baos.toByteArray();
 
-	// Scan for locations of min/max int/fract values in the byte array.
-	// At the moment (ICU4J 2.1), there is only one instance of each target pair
+    // Scan for locations of min/max int/fract values in the byte array.
+    // At the moment (ICU4J 2.1), there is only one instance of each target pair
         // in the byte stream, so assume first match is it.  Note this is not entirely
-	// failsafe, and needs to be checked if we change the package or structure of
-	// this class.
-	// Current positions are 890, 880, 886, 876
-	int[] offsets = new int[4];
-	for (int i = 0; i < bytes.length - 1; ++i) {
-	    if (bytes[i] == 0x01) { // high byte
-		for (int j = 0; j < offsets.length; ++j) {
-		    if ((offsets[j] == 0) && (bytes[i+1] == (0x11 + j))) { // low byte
-			offsets[j] = i;
-			break;
-		    }
-		}
-	    }
-	}
+    // failsafe, and needs to be checked if we change the package or structure of
+    // this class.
+    // Current positions are 890, 880, 886, 876
+    int[] offsets = new int[4];
+    for (int i = 0; i < bytes.length - 1; ++i) {
+        if (bytes[i] == 0x01) { // high byte
+        for (int j = 0; j < offsets.length; ++j) {
+            if ((offsets[j] == 0) && (bytes[i+1] == (0x11 + j))) { // low byte
+            offsets[j] = i;
+            break;
+            }
+        }
+        }
+    }
 
         {
             ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
@@ -1405,11 +1405,11 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
 
-	// Change the values in the byte stream so that min > max.
-	// Numberformat should catch this and throw an exception.
-	for (int i = 0; i < offsets.length; ++i) {
-	    bytes[offsets[i]] = (byte)(4 - i);
-	}
+    // Change the values in the byte stream so that min > max.
+    // Numberformat should catch this and throw an exception.
+    for (int i = 0; i < offsets.length; ++i) {
+        bytes[offsets[i]] = (byte)(4 - i);
+    }
 
         {
             ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
@@ -1422,12 +1422,12 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
 
-	// Set values so they are too high, but min <= max
-	// Format should pass the min<= max test, and DecimalFormat should reset to current maximum
-	// (for compatibility with versions streamed out before the maximums were imposed).
-	for (int i = 0; i < offsets.length; ++i) {
-	    bytes[offsets[i]] = 4;
-	}
+    // Set values so they are too high, but min <= max
+    // Format should pass the min<= max test, and DecimalFormat should reset to current maximum
+    // (for compatibility with versions streamed out before the maximums were imposed).
+    for (int i = 0; i < offsets.length; ++i) {
+        bytes[offsets[i]] = 4;
+    }
 
         {
             ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
@@ -1436,10 +1436,10 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
             if ((format.getMaximumIntegerDigits() != 309) 
                 || format.getMaximumFractionDigits() != 340) {
                 errln("FAIL: Deserialized bogus NumberFormat with values out of range," +
-					  " intMin: " + format.getMinimumIntegerDigits() +
-					  " intMax: " + format.getMaximumIntegerDigits() +
-					  " fracMin: " + format.getMinimumFractionDigits() +
-					  " fracMax: " + format.getMaximumFractionDigits());
+                      " intMin: " + format.getMinimumIntegerDigits() +
+                      " intMax: " + format.getMaximumIntegerDigits() +
+                      " fracMin: " + format.getMinimumFractionDigits() +
+                      " fracMax: " + format.getMaximumFractionDigits());
             } else {
                 logln("Ok: Digit count out of range");
             }
@@ -1749,13 +1749,13 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
         float f = 0.0099f;
 
         NumberFormat nf = new DecimalFormat("0.##", new DecimalFormatSymbols(Locale.US));
-	nf.setMinimumFractionDigits(2);
-	
-	String result = nf.format(f);
-	
-	if (!result.equals("0.01")) {
-	    errln("FAIL: input: " + f + ", expected: 0.01, got: " + result);
-	}
+    nf.setMinimumFractionDigits(2);
+    
+    String result = nf.format(f);
+    
+    if (!result.equals("0.01")) {
+        errln("FAIL: input: " + f + ", expected: 0.01, got: " + result);
+    }
     }
     
     /**

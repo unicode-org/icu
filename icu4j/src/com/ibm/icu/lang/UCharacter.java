@@ -103,46 +103,46 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         
         /** 
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock NO_BLOCK 
-	    = new UnicodeBlock("NO_BLOCK", 0);
+        = new UnicodeBlock("NO_BLOCK", 0);
 
         /** 
          * @stable ICU 2.4
          */
         public static final UnicodeBlock BASIC_LATIN 
-	    = new UnicodeBlock("BASIC_LATIN", 1);
+        = new UnicodeBlock("BASIC_LATIN", 1);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock LATIN_1_SUPPLEMENT 
-	    = new UnicodeBlock("LATIN_1_SUPPLEMENT", 2);
+        = new UnicodeBlock("LATIN_1_SUPPLEMENT", 2);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock LATIN_EXTENDED_A
-	    = new UnicodeBlock("LATIN_EXTENDED_A", 3);
+        = new UnicodeBlock("LATIN_EXTENDED_A", 3);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock LATIN_EXTENDED_B 
-	    = new UnicodeBlock("LATIN_EXTENDED_B", 4);
+        = new UnicodeBlock("LATIN_EXTENDED_B", 4);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock IPA_EXTENSIONS 
-	    = new UnicodeBlock("IPA_EXTENSIONS", 5);
+        = new UnicodeBlock("IPA_EXTENSIONS", 5);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock SPACING_MODIFIER_LETTERS 
-	    = new UnicodeBlock("SPACING_MODIFIER_LETTERS", 6);
+        = new UnicodeBlock("SPACING_MODIFIER_LETTERS", 6);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock COMBINING_DIACRITICAL_MARKS 
-	    = new UnicodeBlock("COMBINING_DIACRITICAL_MARKS", 7);
+        = new UnicodeBlock("COMBINING_DIACRITICAL_MARKS", 7);
         /**
          * Unicode 3.2 renames this block to "Greek and Coptic".
          * @stable ICU 2.4
@@ -152,52 +152,52 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock CYRILLIC 
-	    = new UnicodeBlock("CYRILLIC", 9);
+        = new UnicodeBlock("CYRILLIC", 9);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock ARMENIAN 
-	    = new UnicodeBlock("ARMENIAN", 10);
+        = new UnicodeBlock("ARMENIAN", 10);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock HEBREW 
-	    = new UnicodeBlock("HEBREW", 11);  
+        = new UnicodeBlock("HEBREW", 11);  
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock ARABIC
-	    = new UnicodeBlock("ARABIC", 12);
+        = new UnicodeBlock("ARABIC", 12);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock SYRIAC 
-	    = new UnicodeBlock("SYRIAC", 13);
+        = new UnicodeBlock("SYRIAC", 13);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock THAANA 
-	    = new UnicodeBlock("THAANA", 14);
+        = new UnicodeBlock("THAANA", 14);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock DEVANAGARI 
-	    = new UnicodeBlock("DEVANAGARI", 15);
+        = new UnicodeBlock("DEVANAGARI", 15);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock BENGALI 
-	    = new UnicodeBlock("BENGALI", 16);
+        = new UnicodeBlock("BENGALI", 16);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock GURMUKHI 
-	    = new UnicodeBlock("GURMUKHI", 17);
+        = new UnicodeBlock("GURMUKHI", 17);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock GUJARATI 
-	    = new UnicodeBlock("GUJARATI", 18);
+        = new UnicodeBlock("GUJARATI", 18);
         /** 
          * @stable ICU 2.4 
          */
@@ -210,22 +210,22 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock TELUGU 
-	    = new UnicodeBlock("TELUGU", 21);
+        = new UnicodeBlock("TELUGU", 21);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock KANNADA 
-	    = new UnicodeBlock("KANNADA", 22);
+        = new UnicodeBlock("KANNADA", 22);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock MALAYALAM 
-	    = new UnicodeBlock("MALAYALAM", 23);
+        = new UnicodeBlock("MALAYALAM", 23);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock SINHALA 
-	    = new UnicodeBlock("SINHALA", 24);
+        = new UnicodeBlock("SINHALA", 24);
         /** 
          * @stable ICU 2.4 
          */
@@ -238,37 +238,37 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock TIBETAN 
-	    = new UnicodeBlock("TIBETAN", 27);
+        = new UnicodeBlock("TIBETAN", 27);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock MYANMAR 
-	    = new UnicodeBlock("MYANMAR", 28);
+        = new UnicodeBlock("MYANMAR", 28);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock GEORGIAN 
-	    = new UnicodeBlock("GEORGIAN", 29);
+        = new UnicodeBlock("GEORGIAN", 29);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock HANGUL_JAMO 
-	    = new UnicodeBlock("HANGUL_JAMO", 30);
+        = new UnicodeBlock("HANGUL_JAMO", 30);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock ETHIOPIC 
-	    = new UnicodeBlock("ETHIOPIC", 31);
+        = new UnicodeBlock("ETHIOPIC", 31);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock CHEROKEE 
-	    = new UnicodeBlock("CHEROKEE", 32);
+        = new UnicodeBlock("CHEROKEE", 32);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS 
-	    = new UnicodeBlock("UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS", 33);
+        = new UnicodeBlock("UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS", 33);
         /** 
          * @stable ICU 2.4 
          */
@@ -285,209 +285,209 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock MONGOLIAN 
-	    = new UnicodeBlock("MONGOLIAN", 37);
+        = new UnicodeBlock("MONGOLIAN", 37);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock LATIN_EXTENDED_ADDITIONAL 
-	    = new UnicodeBlock("LATIN_EXTENDED_ADDITIONAL", 38);
+        = new UnicodeBlock("LATIN_EXTENDED_ADDITIONAL", 38);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock GREEK_EXTENDED 
-	    = new UnicodeBlock("GREEK_EXTENDED", 39);
+        = new UnicodeBlock("GREEK_EXTENDED", 39);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock GENERAL_PUNCTUATION 
-	    = new UnicodeBlock("GENERAL_PUNCTUATION", 40);
+        = new UnicodeBlock("GENERAL_PUNCTUATION", 40);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock SUPERSCRIPTS_AND_SUBSCRIPTS 
-	    = new UnicodeBlock("SUPERSCRIPTS_AND_SUBSCRIPTS", 41);
+        = new UnicodeBlock("SUPERSCRIPTS_AND_SUBSCRIPTS", 41);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock CURRENCY_SYMBOLS 
-	    = new UnicodeBlock("CURRENCY_SYMBOLS", 42);
+        = new UnicodeBlock("CURRENCY_SYMBOLS", 42);
         /**
          * Unicode 3.2 renames this block to "Combining Diacritical Marks for 
          * Symbols".
          * @stable ICU 2.4
          */
         public static final UnicodeBlock COMBINING_MARKS_FOR_SYMBOLS 
-	    = new UnicodeBlock("COMBINING_MARKS_FOR_SYMBOLS", 43);
+        = new UnicodeBlock("COMBINING_MARKS_FOR_SYMBOLS", 43);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock LETTERLIKE_SYMBOLS 
-	    = new UnicodeBlock("LETTERLIKE_SYMBOLS", 44);
+        = new UnicodeBlock("LETTERLIKE_SYMBOLS", 44);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock NUMBER_FORMS 
-	    = new UnicodeBlock("NUMBER_FORMS", 45);
+        = new UnicodeBlock("NUMBER_FORMS", 45);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock ARROWS 
-	    = new UnicodeBlock("ARROWS", 46);
+        = new UnicodeBlock("ARROWS", 46);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock MATHEMATICAL_OPERATORS 
-	    = new UnicodeBlock("MATHEMATICAL_OPERATORS", 47);
+        = new UnicodeBlock("MATHEMATICAL_OPERATORS", 47);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock MISCELLANEOUS_TECHNICAL 
-	    = new UnicodeBlock("MISCELLANEOUS_TECHNICAL", 48);
+        = new UnicodeBlock("MISCELLANEOUS_TECHNICAL", 48);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock CONTROL_PICTURES 
-	    = new UnicodeBlock("CONTROL_PICTURES", 49);
+        = new UnicodeBlock("CONTROL_PICTURES", 49);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock OPTICAL_CHARACTER_RECOGNITION 
-	    = new UnicodeBlock("OPTICAL_CHARACTER_RECOGNITION", 50);
+        = new UnicodeBlock("OPTICAL_CHARACTER_RECOGNITION", 50);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock ENCLOSED_ALPHANUMERICS 
-	    = new UnicodeBlock("ENCLOSED_ALPHANUMERICS", 51);
+        = new UnicodeBlock("ENCLOSED_ALPHANUMERICS", 51);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock BOX_DRAWING 
-	    = new UnicodeBlock("BOX_DRAWING", 52);
+        = new UnicodeBlock("BOX_DRAWING", 52);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock BLOCK_ELEMENTS 
-	    = new UnicodeBlock("BLOCK_ELEMENTS", 53);
+        = new UnicodeBlock("BLOCK_ELEMENTS", 53);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock GEOMETRIC_SHAPES 
-	    = new UnicodeBlock("GEOMETRIC_SHAPES", 54);
+        = new UnicodeBlock("GEOMETRIC_SHAPES", 54);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock MISCELLANEOUS_SYMBOLS 
-	    = new UnicodeBlock("MISCELLANEOUS_SYMBOLS", 55);
+        = new UnicodeBlock("MISCELLANEOUS_SYMBOLS", 55);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock DINGBATS 
-	    = new UnicodeBlock("DINGBATS", 56);
+        = new UnicodeBlock("DINGBATS", 56);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock BRAILLE_PATTERNS 
-	    = new UnicodeBlock("BRAILLE_PATTERNS", 57);
+        = new UnicodeBlock("BRAILLE_PATTERNS", 57);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock CJK_RADICALS_SUPPLEMENT 
-	    = new UnicodeBlock("CJK_RADICALS_SUPPLEMENT", 58);
+        = new UnicodeBlock("CJK_RADICALS_SUPPLEMENT", 58);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock KANGXI_RADICALS 
-	    = new UnicodeBlock("KANGXI_RADICALS", 59);
+        = new UnicodeBlock("KANGXI_RADICALS", 59);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock IDEOGRAPHIC_DESCRIPTION_CHARACTERS 
-	    = new UnicodeBlock("IDEOGRAPHIC_DESCRIPTION_CHARACTERS", 60);
+        = new UnicodeBlock("IDEOGRAPHIC_DESCRIPTION_CHARACTERS", 60);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock CJK_SYMBOLS_AND_PUNCTUATION 
-	    = new UnicodeBlock("CJK_SYMBOLS_AND_PUNCTUATION", 61);
+        = new UnicodeBlock("CJK_SYMBOLS_AND_PUNCTUATION", 61);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock HIRAGANA 
-	    = new UnicodeBlock("HIRAGANA", 62);
+        = new UnicodeBlock("HIRAGANA", 62);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock KATAKANA 
-	    = new UnicodeBlock("KATAKANA", 63);
+        = new UnicodeBlock("KATAKANA", 63);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock BOPOMOFO 
-	    = new UnicodeBlock("BOPOMOFO", 64);
+        = new UnicodeBlock("BOPOMOFO", 64);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock HANGUL_COMPATIBILITY_JAMO 
-	    = new UnicodeBlock("HANGUL_COMPATIBILITY_JAMO", 65);
+        = new UnicodeBlock("HANGUL_COMPATIBILITY_JAMO", 65);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock KANBUN 
-	    = new UnicodeBlock("KANBUN", 66);
+        = new UnicodeBlock("KANBUN", 66);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock BOPOMOFO_EXTENDED 
-	    = new UnicodeBlock("BOPOMOFO_EXTENDED", 67);
+        = new UnicodeBlock("BOPOMOFO_EXTENDED", 67);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock ENCLOSED_CJK_LETTERS_AND_MONTHS 
-	    = new UnicodeBlock("ENCLOSED_CJK_LETTERS_AND_MONTHS", 68);
+        = new UnicodeBlock("ENCLOSED_CJK_LETTERS_AND_MONTHS", 68);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock CJK_COMPATIBILITY 
-	    = new UnicodeBlock("CJK_COMPATIBILITY", 69);
+        = new UnicodeBlock("CJK_COMPATIBILITY", 69);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A 
-	    = new UnicodeBlock("CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A", 70);
+        = new UnicodeBlock("CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A", 70);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock CJK_UNIFIED_IDEOGRAPHS 
-	    = new UnicodeBlock("CJK_UNIFIED_IDEOGRAPHS", 71);
+        = new UnicodeBlock("CJK_UNIFIED_IDEOGRAPHS", 71);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock YI_SYLLABLES 
-	    = new UnicodeBlock("YI_SYLLABLES", 72);
+        = new UnicodeBlock("YI_SYLLABLES", 72);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock YI_RADICALS 
-	    = new UnicodeBlock("YI_RADICALS", 73);
+        = new UnicodeBlock("YI_RADICALS", 73);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock HANGUL_SYLLABLES 
-	    = new UnicodeBlock("HANGUL_SYLLABLES", 74);
+        = new UnicodeBlock("HANGUL_SYLLABLES", 74);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock HIGH_SURROGATES 
-	    = new UnicodeBlock("HIGH_SURROGATES", 75);
+        = new UnicodeBlock("HIGH_SURROGATES", 75);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock HIGH_PRIVATE_USE_SURROGATES 
-	    = new UnicodeBlock("HIGH_PRIVATE_USE_SURROGATES", 76);
+        = new UnicodeBlock("HIGH_PRIVATE_USE_SURROGATES", 76);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock LOW_SURROGATES 
-	    = new UnicodeBlock("LOW_SURROGATES", 77);
+        = new UnicodeBlock("LOW_SURROGATES", 77);
         /**
          * Same as public static final int PRIVATE_USE.
          * Until Unicode 3.1.1; the corresponding block name was "Private Use";
@@ -497,7 +497,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @stable ICU 2.4
          */
         public static final UnicodeBlock PRIVATE_USE_AREA 
-	    = new UnicodeBlock("PRIVATE_USE_AREA",  78);
+        = new UnicodeBlock("PRIVATE_USE_AREA",  78);
         /**
          * Same as public static final int PRIVATE_USE_AREA.
          * Until Unicode 3.1.1; the corresponding block name was "Private Use";
@@ -511,82 +511,82 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock CJK_COMPATIBILITY_IDEOGRAPHS 
-	    = new UnicodeBlock("CJK_COMPATIBILITY_IDEOGRAPHS", 79);
+        = new UnicodeBlock("CJK_COMPATIBILITY_IDEOGRAPHS", 79);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock ALPHABETIC_PRESENTATION_FORMS 
-	    = new UnicodeBlock("ALPHABETIC_PRESENTATION_FORMS", 80);
+        = new UnicodeBlock("ALPHABETIC_PRESENTATION_FORMS", 80);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock ARABIC_PRESENTATION_FORMS_A 
-	    = new UnicodeBlock("ARABIC_PRESENTATION_FORMS_A", 81);
+        = new UnicodeBlock("ARABIC_PRESENTATION_FORMS_A", 81);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock COMBINING_HALF_MARKS 
-	    = new UnicodeBlock("COMBINING_HALF_MARKS", 82);
+        = new UnicodeBlock("COMBINING_HALF_MARKS", 82);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock CJK_COMPATIBILITY_FORMS 
-	    = new UnicodeBlock("CJK_COMPATIBILITY_FORMS", 83);
+        = new UnicodeBlock("CJK_COMPATIBILITY_FORMS", 83);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock SMALL_FORM_VARIANTS 
-	    = new UnicodeBlock("SMALL_FORM_VARIANTS", 84);
+        = new UnicodeBlock("SMALL_FORM_VARIANTS", 84);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock ARABIC_PRESENTATION_FORMS_B 
-	    = new UnicodeBlock("ARABIC_PRESENTATION_FORMS_B", 85);
+        = new UnicodeBlock("ARABIC_PRESENTATION_FORMS_B", 85);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock SPECIALS 
-	    = new UnicodeBlock("SPECIALS", 86);
+        = new UnicodeBlock("SPECIALS", 86);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock HALFWIDTH_AND_FULLWIDTH_FORMS 
-	    = new UnicodeBlock("HALFWIDTH_AND_FULLWIDTH_FORMS", 87);
+        = new UnicodeBlock("HALFWIDTH_AND_FULLWIDTH_FORMS", 87);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock OLD_ITALIC 
-	    = new UnicodeBlock("OLD_ITALIC", 88);
+        = new UnicodeBlock("OLD_ITALIC", 88);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock GOTHIC 
-	    = new UnicodeBlock("GOTHIC", 89);
+        = new UnicodeBlock("GOTHIC", 89);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock DESERET 
-	    = new UnicodeBlock("DESERET", 90);
+        = new UnicodeBlock("DESERET", 90);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock BYZANTINE_MUSICAL_SYMBOLS 
-	    = new UnicodeBlock("BYZANTINE_MUSICAL_SYMBOLS", 91);
+        = new UnicodeBlock("BYZANTINE_MUSICAL_SYMBOLS", 91);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock MUSICAL_SYMBOLS 
-	    = new UnicodeBlock("MUSICAL_SYMBOLS", 92);
+        = new UnicodeBlock("MUSICAL_SYMBOLS", 92);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock MATHEMATICAL_ALPHANUMERIC_SYMBOLS 
-	    = new UnicodeBlock("MATHEMATICAL_ALPHANUMERIC_SYMBOLS", 93);
+        = new UnicodeBlock("MATHEMATICAL_ALPHANUMERIC_SYMBOLS", 93);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B  
-	    = new UnicodeBlock("CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B", 94);
+        = new UnicodeBlock("CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B", 94);
         /** 
          * @stable ICU 2.4 
          */
@@ -605,24 +605,24 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock CYRILLIC_SUPPLEMENTARY 
-	    = new UnicodeBlock("CYRILLIC_SUPPLEMENTARY", 97);
+        = new UnicodeBlock("CYRILLIC_SUPPLEMENTARY", 97);
         /** 
          * Unicode 4.0.1 renames the "Cyrillic Supplementary" block to "Cyrillic Supplement".
          * @draft ICU 3.0
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock CYRILLIC_SUPPLEMENT 
-	    = new UnicodeBlock("CYRILLIC_SUPPLEMENT", 97);
+        = new UnicodeBlock("CYRILLIC_SUPPLEMENT", 97);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock TAGALOG 
-	    = new UnicodeBlock("TAGALOG", 98);
+        = new UnicodeBlock("TAGALOG", 98);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock HANUNOO 
-	    = new UnicodeBlock("HANUNOO", 99);
+        = new UnicodeBlock("HANUNOO", 99);
         /** 
          * @stable ICU 2.4 
          */
@@ -631,152 +631,152 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock TAGBANWA 
-	    = new UnicodeBlock("TAGBANWA", 101);
+        = new UnicodeBlock("TAGBANWA", 101);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock MISCELLANEOUS_MATHEMATICAL_SYMBOLS_A 
-	    = new UnicodeBlock("MISCELLANEOUS_MATHEMATICAL_SYMBOLS_A", 102);
+        = new UnicodeBlock("MISCELLANEOUS_MATHEMATICAL_SYMBOLS_A", 102);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock SUPPLEMENTAL_ARROWS_A 
-	    = new UnicodeBlock("SUPPLEMENTAL_ARROWS_A", 103);
+        = new UnicodeBlock("SUPPLEMENTAL_ARROWS_A", 103);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock SUPPLEMENTAL_ARROWS_B 
-	    = new UnicodeBlock("SUPPLEMENTAL_ARROWS_B", 104);
+        = new UnicodeBlock("SUPPLEMENTAL_ARROWS_B", 104);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock MISCELLANEOUS_MATHEMATICAL_SYMBOLS_B 
-	    = new UnicodeBlock("MISCELLANEOUS_MATHEMATICAL_SYMBOLS_B", 105);
+        = new UnicodeBlock("MISCELLANEOUS_MATHEMATICAL_SYMBOLS_B", 105);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock SUPPLEMENTAL_MATHEMATICAL_OPERATORS 
-	    = new UnicodeBlock("SUPPLEMENTAL_MATHEMATICAL_OPERATORS", 106);
+        = new UnicodeBlock("SUPPLEMENTAL_MATHEMATICAL_OPERATORS", 106);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock KATAKANA_PHONETIC_EXTENSIONS 
-	    = new UnicodeBlock("KATAKANA_PHONETIC_EXTENSIONS", 107);
+        = new UnicodeBlock("KATAKANA_PHONETIC_EXTENSIONS", 107);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock VARIATION_SELECTORS 
-	    = new UnicodeBlock("VARIATION_SELECTORS", 108);
+        = new UnicodeBlock("VARIATION_SELECTORS", 108);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock SUPPLEMENTARY_PRIVATE_USE_AREA_A 
-	    = new UnicodeBlock("SUPPLEMENTARY_PRIVATE_USE_AREA_A", 109);
+        = new UnicodeBlock("SUPPLEMENTARY_PRIVATE_USE_AREA_A", 109);
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock SUPPLEMENTARY_PRIVATE_USE_AREA_B 
-	    = new UnicodeBlock("SUPPLEMENTARY_PRIVATE_USE_AREA_B", 110);
+        = new UnicodeBlock("SUPPLEMENTARY_PRIVATE_USE_AREA_B", 110);
    
         /** 
          * @draft ICU 2.6 
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock LIMBU 
-	    = new UnicodeBlock("LIMBU", 111);
+        = new UnicodeBlock("LIMBU", 111);
         /** 
          * @draft ICU 2.6 
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock TAI_LE 
-	    = new UnicodeBlock("TAI LE", 112);
+        = new UnicodeBlock("TAI LE", 112);
         /** 
          * @draft ICU 2.6 
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock KHMER_SYMBOLS 
-	    = new UnicodeBlock("KHMER SYMBOLS", 113);
+        = new UnicodeBlock("KHMER SYMBOLS", 113);
 
         /** 
          * @draft ICU 2.6 
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock PHONETIC_EXTENSIONS 
-	    = new UnicodeBlock("PHONETIC EXTENSIONS", 114);
+        = new UnicodeBlock("PHONETIC EXTENSIONS", 114);
 
         /** 
          * @draft ICU 2.6 
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock MISCELLANEOUS_SYMBOLS_AND_ARROWS 
-	    = new UnicodeBlock("MISCELLANEOUS_SYMBOLS_AND_ARROWS", 115);
+        = new UnicodeBlock("MISCELLANEOUS_SYMBOLS_AND_ARROWS", 115);
         /** 
          * @draft ICU 2.6 
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock YIJING_HEXAGRAM_SYMBOLS 
-	    = new UnicodeBlock("YIJING_HEXAGRAM_SYMBOLS", 116);
+        = new UnicodeBlock("YIJING_HEXAGRAM_SYMBOLS", 116);
         /** 
          * @draft ICU 2.6 
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock LINEAR_B_SYLLABARY 
-	    = new UnicodeBlock("LINEAR_B_SYLLABARY", 117);
+        = new UnicodeBlock("LINEAR_B_SYLLABARY", 117);
         /** 
          * @draft ICU 2.6 
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock LINEAR_B_IDEOGRAMS 
-	    = new UnicodeBlock("LINEAR_B_IDEOGRAMS", 118);
+        = new UnicodeBlock("LINEAR_B_IDEOGRAMS", 118);
         /** 
          * @draft ICU 2.6 
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock AEGEAN_NUMBERS 
-	    = new UnicodeBlock("AEGEAN_NUMBERS", 119);                                               
+        = new UnicodeBlock("AEGEAN_NUMBERS", 119);                                               
         /** 
          * @draft ICU 2.6 
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock UGARITIC 
-	    = new UnicodeBlock("UGARITIC", 120);
+        = new UnicodeBlock("UGARITIC", 120);
         /** 
          * @draft ICU 2.6 
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock SHAVIAN 
-	    = new UnicodeBlock("SHAVIAN", 121);
+        = new UnicodeBlock("SHAVIAN", 121);
         /** 
          * @draft ICU 2.6 
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock OSMANYA 
-	    = new UnicodeBlock("OSMANYA", 122);
+        = new UnicodeBlock("OSMANYA", 122);
         /** 
          * @draft ICU 2.6 
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock CYPRIOT_SYLLABARY 
-	    = new UnicodeBlock("CYPRIOT_SYLLABARY", 123);
+        = new UnicodeBlock("CYPRIOT_SYLLABARY", 123);
         /** 
          * @draft ICU 2.6 
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock TAI_XUAN_JING_SYMBOLS 
-	    = new UnicodeBlock("TAI_XUAN_JING_SYMBOLS", 124);
+        = new UnicodeBlock("TAI_XUAN_JING_SYMBOLS", 124);
         
         /** 
          * @draft ICU 2.6 
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock VARIATION_SELECTORS_SUPPLEMENT 
-	    = new UnicodeBlock("VARIATION_SELECTORS_SUPPLEMENT", 125);                                      
+        = new UnicodeBlock("VARIATION_SELECTORS_SUPPLEMENT", 125);                                      
 
         /** 
          * @stable ICU 2.4 
          */
         public static final UnicodeBlock INVALID_CODE 
-	    = new UnicodeBlock("INVALID_CODE", -1);
+        = new UnicodeBlock("INVALID_CODE", -1);
            
         // block id corresponding to icu4c -----------------------------------
            
@@ -1197,7 +1197,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /** 
          * Unicode 4.0.1 renames the "Cyrillic Supplementary" block to "Cyrillic Supplement".
          * @draft ICU 3.0
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
 
         public static final int CYRILLIC_SUPPLEMENT_ID = 97;
@@ -1254,81 +1254,81 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          */
         public static final int SUPPLEMENTARY_PRIVATE_USE_AREA_B_ID = 110;
         
-	/** 
-	 * @draft ICU 2.6 
-	 * @deprecated This is a draft API and might change in a future release of ICU.
-	 */
-	public static final int LIMBU_ID = 111; /*[1900]*/
-	/**
-	 * @draft ICU 2.6 
-	 * @deprecated This is a draft API and might change in a future release of ICU.
-	 */
-	public static final int TAI_LE_ID = 112; /*[1950]*/
-	/** 
-	 * @draft ICU 2.6 
-	 * @deprecated This is a draft API and might change in a future release of ICU.
-	 */
-	public static final int KHMER_SYMBOLS_ID = 113; /*[19E0]*/
-	/** 
-	 * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
-	 */
-	public static final int PHONETIC_EXTENSIONS_ID = 114; /*[1D00]*/
-	/** 
-	 * @draft ICU 2.6 
-	 * @deprecated This is a draft API and might change in a future release of ICU.
-	 */
-	public static final int MISCELLANEOUS_SYMBOLS_AND_ARROWS_ID = 115; /*[2B00]*/
-	/**
-	 * @draft ICU 2.6 
-	 * @deprecated This is a draft API and might change in a future release of ICU.
-	 */
-	public static final int YIJING_HEXAGRAM_SYMBOLS_ID = 116; /*[4DC0]*/
-	/** 
-	 * @draft ICU 2.6 
-	 * @deprecated This is a draft API and might change in a future release of ICU.
-	 */
-	public static final int LINEAR_B_SYLLABARY_ID = 117; /*[10000]*/
-	/**
-	 *  @draft ICU 2.6 
-	 * @deprecated This is a draft API and might change in a future release of ICU.
-	 */
-	public static final int LINEAR_B_IDEOGRAMS_ID = 118; /*[10080]*/
-	/** 
-	 * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
-	 */
-	public static final int AEGEAN_NUMBERS_ID = 119; /*[10100]*/
-	/**
-	 * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
-	 */
-	public static final int UGARITIC_ID = 120; /*[10380]*/
-	/**
-	 * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
-	 */
-	public static final int SHAVIAN_ID = 121; /*[10450]*/
-	/**
-	 * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
-	 */
-	public static final int OSMANYA_ID = 122; /*[10480]*/
-	/**
-	 * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
-	 */
-	public static final int CYPRIOT_SYLLABARY_ID = 123; /*[10800]*/
-	/**
-	 * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
-	 */
-	public static final int TAI_XUAN_JING_SYMBOLS_ID = 124; /*[1D300]*/
-	/**
-	 * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
-	 */
-	public static final int VARIATION_SELECTORS_SUPPLEMENT_ID = 125; /*[E0100]*/
+    /** 
+     * @draft ICU 2.6 
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int LIMBU_ID = 111; /*[1900]*/
+    /**
+     * @draft ICU 2.6 
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int TAI_LE_ID = 112; /*[1950]*/
+    /** 
+     * @draft ICU 2.6 
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int KHMER_SYMBOLS_ID = 113; /*[19E0]*/
+    /** 
+     * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int PHONETIC_EXTENSIONS_ID = 114; /*[1D00]*/
+    /** 
+     * @draft ICU 2.6 
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int MISCELLANEOUS_SYMBOLS_AND_ARROWS_ID = 115; /*[2B00]*/
+    /**
+     * @draft ICU 2.6 
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int YIJING_HEXAGRAM_SYMBOLS_ID = 116; /*[4DC0]*/
+    /** 
+     * @draft ICU 2.6 
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int LINEAR_B_SYLLABARY_ID = 117; /*[10000]*/
+    /**
+     *  @draft ICU 2.6 
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int LINEAR_B_IDEOGRAMS_ID = 118; /*[10080]*/
+    /** 
+     * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int AEGEAN_NUMBERS_ID = 119; /*[10100]*/
+    /**
+     * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int UGARITIC_ID = 120; /*[10380]*/
+    /**
+     * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int SHAVIAN_ID = 121; /*[10450]*/
+    /**
+     * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int OSMANYA_ID = 122; /*[10480]*/
+    /**
+     * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int CYPRIOT_SYLLABARY_ID = 123; /*[10800]*/
+    /**
+     * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int TAI_XUAN_JING_SYMBOLS_ID = 124; /*[1D300]*/
+    /**
+     * @draft ICU 2.6
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int VARIATION_SELECTORS_SUPPLEMENT_ID = 125; /*[E0100]*/
         /** 
          * @stable ICU 2.4 
          */
@@ -1367,7 +1367,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             }
 
             return UnicodeBlock.getInstance((PROPERTY_.getAdditional(ch, 0)
-					     & BLOCK_MASK_) >> BLOCK_SHIFT_);
+                         & BLOCK_MASK_) >> BLOCK_SHIFT_);
         }
 
         /**
@@ -1394,7 +1394,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @return the UnicodeBlock with that name
          * @throws IllegalArgumentException if the blockName could not be matched
          * @draft ICU 3.0
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final UnicodeBlock forName(String blockName) {
             Map m = null;
@@ -1407,7 +1407,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                     UnicodeBlock b = BLOCKS_[i];
                     String name = getPropertyValueName(UProperty.BLOCK, b.getID(), UProperty.NameChoice.LONG);
                     m.put(name.toUpperCase(), b);
-		    m.put(name.replace('_',' ').toUpperCase(), b);
+            m.put(name.replace('_',' ').toUpperCase(), b);
                     m.put(b.toString().toUpperCase(), b);
                 }
                 mref = new SoftReference(m);
@@ -1437,69 +1437,69 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * Array of UnicodeBlocks, for easy access in getInstance(int)
          */
         private final static UnicodeBlock BLOCKS_[] = {
-	    NO_BLOCK, BASIC_LATIN, 
-	    LATIN_1_SUPPLEMENT, LATIN_EXTENDED_A, 
-	    LATIN_EXTENDED_B, IPA_EXTENSIONS, 
-	    SPACING_MODIFIER_LETTERS, COMBINING_DIACRITICAL_MARKS,
-	    GREEK, CYRILLIC,
-	    ARMENIAN, HEBREW,
-	    ARABIC, SYRIAC, 
-	    THAANA, DEVANAGARI, 
-	    BENGALI, GURMUKHI, 
-	    GUJARATI, ORIYA, 
-	    TAMIL, TELUGU, 
-	    KANNADA, MALAYALAM, 
-	    SINHALA, THAI, 
-	    LAO, TIBETAN, 
-	    MYANMAR, GEORGIAN, 
-	    HANGUL_JAMO, ETHIOPIC, 
-	    CHEROKEE, UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS,
-	    OGHAM, RUNIC, 
-	    KHMER, MONGOLIAN, 
-	    LATIN_EXTENDED_ADDITIONAL, GREEK_EXTENDED, 
-	    GENERAL_PUNCTUATION, SUPERSCRIPTS_AND_SUBSCRIPTS,
-	    CURRENCY_SYMBOLS, COMBINING_MARKS_FOR_SYMBOLS, 
-	    LETTERLIKE_SYMBOLS, NUMBER_FORMS, 
-	    ARROWS, MATHEMATICAL_OPERATORS, 
-	    MISCELLANEOUS_TECHNICAL, CONTROL_PICTURES,
-	    OPTICAL_CHARACTER_RECOGNITION, ENCLOSED_ALPHANUMERICS,
-	    BOX_DRAWING, BLOCK_ELEMENTS,
-	    GEOMETRIC_SHAPES, MISCELLANEOUS_SYMBOLS,
-	    DINGBATS, BRAILLE_PATTERNS,
-	    CJK_RADICALS_SUPPLEMENT, KANGXI_RADICALS,
-	    IDEOGRAPHIC_DESCRIPTION_CHARACTERS, CJK_SYMBOLS_AND_PUNCTUATION,
-	    HIRAGANA, KATAKANA, 
-	    BOPOMOFO, HANGUL_COMPATIBILITY_JAMO,
-	    KANBUN, BOPOMOFO_EXTENDED, 
-	    ENCLOSED_CJK_LETTERS_AND_MONTHS, CJK_COMPATIBILITY,
-	    CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A, CJK_UNIFIED_IDEOGRAPHS,
-	    YI_SYLLABLES, YI_RADICALS, 
-	    HANGUL_SYLLABLES, HIGH_SURROGATES,
-	    HIGH_PRIVATE_USE_SURROGATES, LOW_SURROGATES,
-	    PRIVATE_USE_AREA, CJK_COMPATIBILITY_IDEOGRAPHS,
-	    ALPHABETIC_PRESENTATION_FORMS, ARABIC_PRESENTATION_FORMS_A,
-	    COMBINING_HALF_MARKS, CJK_COMPATIBILITY_FORMS,
-	    SMALL_FORM_VARIANTS, ARABIC_PRESENTATION_FORMS_B,
-	    SPECIALS, HALFWIDTH_AND_FULLWIDTH_FORMS,
-	    OLD_ITALIC, GOTHIC, 
-	    DESERET, BYZANTINE_MUSICAL_SYMBOLS,
-	    MUSICAL_SYMBOLS, MATHEMATICAL_ALPHANUMERIC_SYMBOLS,
-	    CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B, 
-	    CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT, 
-	    TAGS, CYRILLIC_SUPPLEMENT,
-	    TAGALOG, HANUNOO, 
-	    BUHID, TAGBANWA, 
-	    MISCELLANEOUS_MATHEMATICAL_SYMBOLS_A, SUPPLEMENTAL_ARROWS_A,
-	    SUPPLEMENTAL_ARROWS_B, MISCELLANEOUS_MATHEMATICAL_SYMBOLS_B,
-	    SUPPLEMENTAL_MATHEMATICAL_OPERATORS, 
-	    KATAKANA_PHONETIC_EXTENSIONS,
-	    VARIATION_SELECTORS, SUPPLEMENTARY_PRIVATE_USE_AREA_A,
-	    SUPPLEMENTARY_PRIVATE_USE_AREA_B,
-	    LIMBU, TAI_LE, KHMER_SYMBOLS, PHONETIC_EXTENSIONS,
-	    MISCELLANEOUS_SYMBOLS_AND_ARROWS, YIJING_HEXAGRAM_SYMBOLS,
-	    LINEAR_B_SYLLABARY, LINEAR_B_IDEOGRAMS, AEGEAN_NUMBERS,
-	    UGARITIC, SHAVIAN, OSMANYA, CYPRIOT_SYLLABARY,
-	    TAI_XUAN_JING_SYMBOLS, VARIATION_SELECTORS_SUPPLEMENT                                      
+        NO_BLOCK, BASIC_LATIN, 
+        LATIN_1_SUPPLEMENT, LATIN_EXTENDED_A, 
+        LATIN_EXTENDED_B, IPA_EXTENSIONS, 
+        SPACING_MODIFIER_LETTERS, COMBINING_DIACRITICAL_MARKS,
+        GREEK, CYRILLIC,
+        ARMENIAN, HEBREW,
+        ARABIC, SYRIAC, 
+        THAANA, DEVANAGARI, 
+        BENGALI, GURMUKHI, 
+        GUJARATI, ORIYA, 
+        TAMIL, TELUGU, 
+        KANNADA, MALAYALAM, 
+        SINHALA, THAI, 
+        LAO, TIBETAN, 
+        MYANMAR, GEORGIAN, 
+        HANGUL_JAMO, ETHIOPIC, 
+        CHEROKEE, UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS,
+        OGHAM, RUNIC, 
+        KHMER, MONGOLIAN, 
+        LATIN_EXTENDED_ADDITIONAL, GREEK_EXTENDED, 
+        GENERAL_PUNCTUATION, SUPERSCRIPTS_AND_SUBSCRIPTS,
+        CURRENCY_SYMBOLS, COMBINING_MARKS_FOR_SYMBOLS, 
+        LETTERLIKE_SYMBOLS, NUMBER_FORMS, 
+        ARROWS, MATHEMATICAL_OPERATORS, 
+        MISCELLANEOUS_TECHNICAL, CONTROL_PICTURES,
+        OPTICAL_CHARACTER_RECOGNITION, ENCLOSED_ALPHANUMERICS,
+        BOX_DRAWING, BLOCK_ELEMENTS,
+        GEOMETRIC_SHAPES, MISCELLANEOUS_SYMBOLS,
+        DINGBATS, BRAILLE_PATTERNS,
+        CJK_RADICALS_SUPPLEMENT, KANGXI_RADICALS,
+        IDEOGRAPHIC_DESCRIPTION_CHARACTERS, CJK_SYMBOLS_AND_PUNCTUATION,
+        HIRAGANA, KATAKANA, 
+        BOPOMOFO, HANGUL_COMPATIBILITY_JAMO,
+        KANBUN, BOPOMOFO_EXTENDED, 
+        ENCLOSED_CJK_LETTERS_AND_MONTHS, CJK_COMPATIBILITY,
+        CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A, CJK_UNIFIED_IDEOGRAPHS,
+        YI_SYLLABLES, YI_RADICALS, 
+        HANGUL_SYLLABLES, HIGH_SURROGATES,
+        HIGH_PRIVATE_USE_SURROGATES, LOW_SURROGATES,
+        PRIVATE_USE_AREA, CJK_COMPATIBILITY_IDEOGRAPHS,
+        ALPHABETIC_PRESENTATION_FORMS, ARABIC_PRESENTATION_FORMS_A,
+        COMBINING_HALF_MARKS, CJK_COMPATIBILITY_FORMS,
+        SMALL_FORM_VARIANTS, ARABIC_PRESENTATION_FORMS_B,
+        SPECIALS, HALFWIDTH_AND_FULLWIDTH_FORMS,
+        OLD_ITALIC, GOTHIC, 
+        DESERET, BYZANTINE_MUSICAL_SYMBOLS,
+        MUSICAL_SYMBOLS, MATHEMATICAL_ALPHANUMERIC_SYMBOLS,
+        CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B, 
+        CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT, 
+        TAGS, CYRILLIC_SUPPLEMENT,
+        TAGALOG, HANUNOO, 
+        BUHID, TAGBANWA, 
+        MISCELLANEOUS_MATHEMATICAL_SYMBOLS_A, SUPPLEMENTAL_ARROWS_A,
+        SUPPLEMENTAL_ARROWS_B, MISCELLANEOUS_MATHEMATICAL_SYMBOLS_B,
+        SUPPLEMENTAL_MATHEMATICAL_OPERATORS, 
+        KATAKANA_PHONETIC_EXTENSIONS,
+        VARIATION_SELECTORS, SUPPLEMENTARY_PRIVATE_USE_AREA_A,
+        SUPPLEMENTARY_PRIVATE_USE_AREA_B,
+        LIMBU, TAI_LE, KHMER_SYMBOLS, PHONETIC_EXTENSIONS,
+        MISCELLANEOUS_SYMBOLS_AND_ARROWS, YIJING_HEXAGRAM_SYMBOLS,
+        LINEAR_B_SYLLABARY, LINEAR_B_IDEOGRAMS, AEGEAN_NUMBERS,
+        UGARITIC, SHAVIAN, OSMANYA, CYPRIOT_SYLLABARY,
+        TAI_XUAN_JING_SYMBOLS, VARIATION_SELECTORS_SUPPLEMENT                                      
         };
 
         static {
@@ -1900,17 +1900,17 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final int ZAIN = 50;
         /** 
          * @draft ICU 2.6 
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int FE = 51;        
         /** 
          * @draft ICU 2.6 
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int KHAPH = 52;
         /**
          *  @draft ICU 2.6 
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int ZHAIN =53;   
         /**
@@ -1994,7 +1994,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /**
          * Renamed from the misspelled "inseperable" in Unicode 4.0.1.
          * @draft ICU 3.0
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int INSEPARABLE = 15;
         /**
@@ -2052,13 +2052,13 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         
         /**
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int NEXT_LINE = 29;       /*[NL]*/ /* from here on: new in Unicode 4/ICU 2.6 */
         
         /**
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public static final int  WORD_JOINER = 30;      /*[WJ]*/
         
@@ -2102,45 +2102,45 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      *
      * @see UProperty#HANGUL_SYLLABLE_TYPE
      * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static interface HangulSyllableType 
     {
-	/**
+    /**
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
-	public static final int NOT_APPLICABLE      = 0;   /*[NA]*/ /*See note !!*/
-	/**
+    public static final int NOT_APPLICABLE      = 0;   /*[NA]*/ /*See note !!*/
+    /**
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
-	public static final int LEADING_JAMO        = 1;   /*[L]*/
-	/**
+    public static final int LEADING_JAMO        = 1;   /*[L]*/
+    /**
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
-	public static final int VOWEL_JAMO          = 2;   /*[V]*/
-	/**
+    public static final int VOWEL_JAMO          = 2;   /*[V]*/
+    /**
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
-	public static final int TRAILING_JAMO       = 3;   /*[T]*/
-	/**
+    public static final int TRAILING_JAMO       = 3;   /*[T]*/
+    /**
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
-	public static final int LV_SYLLABLE         = 4;   /*[LV]*/
-	/**
+    public static final int LV_SYLLABLE         = 4;   /*[LV]*/
+    /**
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
-	public static final int LVT_SYLLABLE        = 5;   /*[LVT]*/
-	/**
+    public static final int LVT_SYLLABLE        = 5;   /*[LVT]*/
+    /**
          * @draft ICU 2.6
-	 * @deprecated This is a draft API and might change in a future release of ICU.
+     * @deprecated This is a draft API and might change in a future release of ICU.
          */
-	public static final int COUNT                       = 6;
+    public static final int COUNT                       = 6;
     }
 
     // public data members -----------------------------------------------
@@ -2165,7 +2165,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @stable ICU 2.1
      */
     public static final int SUPPLEMENTARY_MIN_VALUE = 
-	UTF16.SUPPLEMENTARY_MIN_VALUE;
+    UTF16.SUPPLEMENTARY_MIN_VALUE;
       
     /**
      * Unicode value used when translating into Unicode encoding form and there 
@@ -2216,7 +2216,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
         // if props == 0, it will just fall through and return -1
         if (isNotExceptionIndicator(props)) {
-	    // not contained in exception data
+        // not contained in exception data
             // getSignedValue is just shifting so we can check for the sign
             // first
             // Optimization
@@ -2230,10 +2230,10 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
         else {
             int index = UCharacterProperty.getExceptionIndex(props);
-	    if (PROPERTY_.hasExceptionValue(index, 
-					    UCharacterProperty.EXC_NUMERIC_VALUE_)) {
+        if (PROPERTY_.hasExceptionValue(index, 
+                        UCharacterProperty.EXC_NUMERIC_VALUE_)) {
                 int result = PROPERTY_.getException(index, 
-						    UCharacterProperty.EXC_NUMERIC_VALUE_);
+                            UCharacterProperty.EXC_NUMERIC_VALUE_);
                 if (result >= 0) {
                     return result;
                 }  
@@ -2296,11 +2296,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             
         int index = UCharacterProperty.getExceptionIndex(props);
         if (!PROPERTY_.hasExceptionValue(index, 
-					 UCharacterProperty.EXC_DENOMINATOR_VALUE_) && 
+                     UCharacterProperty.EXC_DENOMINATOR_VALUE_) && 
             PROPERTY_.hasExceptionValue(index, 
-					UCharacterProperty.EXC_NUMERIC_VALUE_)) {
+                    UCharacterProperty.EXC_NUMERIC_VALUE_)) {
             return PROPERTY_.getException(index, 
-					  UCharacterProperty.EXC_NUMERIC_VALUE_);
+                      UCharacterProperty.EXC_NUMERIC_VALUE_);
         }
         
         int europeannumeric = getEuropeanDigit(ch);
@@ -2341,9 +2341,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 boolean dex = false;
                 double numerator = 0;
                 if (PROPERTY_.hasExceptionValue(index, 
-						UCharacterProperty.EXC_NUMERIC_VALUE_)) {
+                        UCharacterProperty.EXC_NUMERIC_VALUE_)) {
                     int num = PROPERTY_.getException(index, 
-						     UCharacterProperty.EXC_NUMERIC_VALUE_);
+                             UCharacterProperty.EXC_NUMERIC_VALUE_);
                     // There are special values for huge numbers that are 
                     // powers of ten. genprops/store.c documents:
                     // if numericValue = 0x7fffff00 + x then 
@@ -2360,9 +2360,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 }
                 double denominator = 0;
                 if (PROPERTY_.hasExceptionValue(index, 
-						UCharacterProperty.EXC_DENOMINATOR_VALUE_)) {
+                        UCharacterProperty.EXC_DENOMINATOR_VALUE_)) {
                     denominator = PROPERTY_.getException(index, 
-							 UCharacterProperty.EXC_DENOMINATOR_VALUE_);
+                             UCharacterProperty.EXC_DENOMINATOR_VALUE_);
                     // faster path not in c
                     if (numerator != 0) {
                         return numerator / denominator;
@@ -2464,11 +2464,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     {
         // if props == 0, it will just fall through and return false
         return ((1 << getType(ch)) 
-		& ((1 << UCharacterCategory.UPPERCASE_LETTER) 
-		   | (1 << UCharacterCategory.LOWERCASE_LETTER)
-		   | (1 << UCharacterCategory.TITLECASE_LETTER)
-		   | (1 << UCharacterCategory.MODIFIER_LETTER)
-		   | (1 << UCharacterCategory.OTHER_LETTER))) != 0;
+        & ((1 << UCharacterCategory.UPPERCASE_LETTER) 
+           | (1 << UCharacterCategory.LOWERCASE_LETTER)
+           | (1 << UCharacterCategory.TITLECASE_LETTER)
+           | (1 << UCharacterCategory.MODIFIER_LETTER)
+           | (1 << UCharacterCategory.OTHER_LETTER))) != 0;
     }
                 
     /**
@@ -2482,12 +2482,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static boolean isLetterOrDigit(int ch)
     {
         return ((1 << getType(ch)) 
-		& ((1 << UCharacterCategory.UPPERCASE_LETTER) 
-		   | (1 << UCharacterCategory.LOWERCASE_LETTER)
-		   | (1 << UCharacterCategory.TITLECASE_LETTER)
-		   | (1 << UCharacterCategory.MODIFIER_LETTER)
-		   | (1 << UCharacterCategory.OTHER_LETTER)
-		   | (1 << UCharacterCategory.DECIMAL_DIGIT_NUMBER))) != 0;
+        & ((1 << UCharacterCategory.UPPERCASE_LETTER) 
+           | (1 << UCharacterCategory.LOWERCASE_LETTER)
+           | (1 << UCharacterCategory.TITLECASE_LETTER)
+           | (1 << UCharacterCategory.MODIFIER_LETTER)
+           | (1 << UCharacterCategory.OTHER_LETTER)
+           | (1 << UCharacterCategory.DECIMAL_DIGIT_NUMBER))) != 0;
     }
         
     /**
@@ -2543,11 +2543,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 ((1 << UCharacterCategory.SPACE_SEPARATOR)
                  | (1 << UCharacterCategory.LINE_SEPARATOR)
                  | (1 << UCharacterCategory.PARAGRAPH_SEPARATOR))) != 0 
-	    && (ch != NO_BREAK_SPACE_) && (ch != NARROW_NO_BREAK_SPACE_) 
-	    && (ch != ZERO_WIDTH_NO_BREAK_SPACE_)
-	    // TAB VT LF FF CR FS GS RS US NL are all control characters
-	    // that are white spaces.
-	    || (ch >= 0x9 && ch <= 0xd) || (ch >= 0x1c && ch <= 0x1f);
+        && (ch != NO_BREAK_SPACE_) && (ch != NARROW_NO_BREAK_SPACE_) 
+        && (ch != ZERO_WIDTH_NO_BREAK_SPACE_)
+        // TAB VT LF FF CR FS GS RS US NL are all control characters
+        // that are white spaces.
+        || (ch >= 0x9 && ch <= 0xd) || (ch >= 0x1c && ch <= 0x1f);
     }
        
     /**
@@ -2562,9 +2562,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     {
         // if props == 0, it will just fall through and return false
         return ((1 << getType(ch)) & ((1 << UCharacterCategory.SPACE_SEPARATOR) 
-				      | (1 << UCharacterCategory.LINE_SEPARATOR)
-				      | (1 << UCharacterCategory.PARAGRAPH_SEPARATOR)))
-	    != 0;
+                      | (1 << UCharacterCategory.LINE_SEPARATOR)
+                      | (1 << UCharacterCategory.PARAGRAPH_SEPARATOR)))
+        != 0;
     }
                                     
     /**
@@ -2618,17 +2618,17 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         // if props == 0, it will just fall through and return false
         // cat == format
         return ((1 << getType(ch)) 
-		& ((1 << UCharacterCategory.UPPERCASE_LETTER) 
-		   | (1 << UCharacterCategory.LOWERCASE_LETTER)
-		   | (1 << UCharacterCategory.TITLECASE_LETTER)
-		   | (1 << UCharacterCategory.MODIFIER_LETTER)
-		   | (1 << UCharacterCategory.OTHER_LETTER)
-		   | (1 << UCharacterCategory.LETTER_NUMBER) 
-		   | (1 << UCharacterCategory.CONNECTOR_PUNCTUATION)
-		   | (1 << UCharacterCategory.DECIMAL_DIGIT_NUMBER)
-		   | (1 << UCharacterCategory.COMBINING_SPACING_MARK)
-		   | (1 << UCharacterCategory.NON_SPACING_MARK))) != 0
-	    || isIdentifierIgnorable(ch);
+        & ((1 << UCharacterCategory.UPPERCASE_LETTER) 
+           | (1 << UCharacterCategory.LOWERCASE_LETTER)
+           | (1 << UCharacterCategory.TITLECASE_LETTER)
+           | (1 << UCharacterCategory.MODIFIER_LETTER)
+           | (1 << UCharacterCategory.OTHER_LETTER)
+           | (1 << UCharacterCategory.LETTER_NUMBER) 
+           | (1 << UCharacterCategory.CONNECTOR_PUNCTUATION)
+           | (1 << UCharacterCategory.DECIMAL_DIGIT_NUMBER)
+           | (1 << UCharacterCategory.COMBINING_SPACING_MARK)
+           | (1 << UCharacterCategory.NON_SPACING_MARK))) != 0
+        || isIdentifierIgnorable(ch);
     }
                        
     /**
@@ -2656,12 +2656,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /*int cat = getType(ch);*/
         // if props == 0, it will just fall through and return false
         return ((1 << getType(ch)) 
-		& ((1 << UCharacterCategory.UPPERCASE_LETTER) 
-		   | (1 << UCharacterCategory.LOWERCASE_LETTER)
-		   | (1 << UCharacterCategory.TITLECASE_LETTER)
-		   | (1 << UCharacterCategory.MODIFIER_LETTER)
-		   | (1 << UCharacterCategory.OTHER_LETTER)
-		   | (1 << UCharacterCategory.LETTER_NUMBER))) != 0;
+        & ((1 << UCharacterCategory.UPPERCASE_LETTER) 
+           | (1 << UCharacterCategory.LOWERCASE_LETTER)
+           | (1 << UCharacterCategory.TITLECASE_LETTER)
+           | (1 << UCharacterCategory.MODIFIER_LETTER)
+           | (1 << UCharacterCategory.OTHER_LETTER)
+           | (1 << UCharacterCategory.LETTER_NUMBER))) != 0;
     }
 
     /**
@@ -2682,9 +2682,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         // see java.lang.Character.isIdentifierIgnorable() on range of 
         // ignorable characters.
         if (ch <= 0x9f) {
-	    return isISOControl(ch) 
-		&& !((ch >= 0x9 && ch <= 0xd) 
-		     || (ch >= 0x1c && ch <= 0x1f));
+        return isISOControl(ch) 
+        && !((ch >= 0x9 && ch <= 0xd) 
+             || (ch >= 0x1c && ch <= 0x1f));
         } 
         return getType(ch) == UCharacterCategory.FORMAT;
     }
@@ -2743,14 +2743,14 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             }
         } 
         else 
-	    {
-		int index = UCharacterProperty.getExceptionIndex(props);
-		if (PROPERTY_.hasExceptionValue(index, 
-						UCharacterProperty.EXC_LOWERCASE_)) {
-		    return PROPERTY_.getException(index, 
-						  UCharacterProperty.EXC_LOWERCASE_); 
-		}
-	    }
+        {
+        int index = UCharacterProperty.getExceptionIndex(props);
+        if (PROPERTY_.hasExceptionValue(index, 
+                        UCharacterProperty.EXC_LOWERCASE_)) {
+            return PROPERTY_.getException(index, 
+                          UCharacterProperty.EXC_LOWERCASE_); 
+        }
+        }
         return ch;
     }
 
@@ -2815,16 +2815,16 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         else {
             int index = UCharacterProperty.getExceptionIndex(props);
             if (PROPERTY_.hasExceptionValue(index, 
-					    UCharacterProperty.EXC_TITLECASE_)) {
+                        UCharacterProperty.EXC_TITLECASE_)) {
                 return PROPERTY_.getException(index,
-					      UCharacterProperty.EXC_TITLECASE_);
+                          UCharacterProperty.EXC_TITLECASE_);
             }
             else {
                 // here, titlecase is same as uppercase
                 if (PROPERTY_.hasExceptionValue(index, 
-						UCharacterProperty.EXC_UPPERCASE_)) {
+                        UCharacterProperty.EXC_UPPERCASE_)) {
                     return PROPERTY_.getException(index, 
-						  UCharacterProperty.EXC_UPPERCASE_); 
+                          UCharacterProperty.EXC_UPPERCASE_); 
                 }
             }
         }
@@ -2858,14 +2858,14 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             }
         }
         else 
-	    {
-		int index = UCharacterProperty.getExceptionIndex(props);
-		if (PROPERTY_.hasExceptionValue(index, 
-						UCharacterProperty.EXC_UPPERCASE_)) {
-		    return PROPERTY_.getException(index, 
-						  UCharacterProperty.EXC_UPPERCASE_); 
-		}
-	    }
+        {
+        int index = UCharacterProperty.getExceptionIndex(props);
+        if (PROPERTY_.hasExceptionValue(index, 
+                        UCharacterProperty.EXC_UPPERCASE_)) {
+            return PROPERTY_.getException(index, 
+                          UCharacterProperty.EXC_UPPERCASE_); 
+        }
+        }
         return ch; // no mapping - return c itself
     }
        
@@ -2910,11 +2910,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         int cat = getType(ch);
         // if props == 0, it will just fall through and return false
         return (cat != UCharacterCategory.UNASSIGNED && 
-		cat != UCharacterCategory.CONTROL && 
-		cat != UCharacterCategory.FORMAT &&
-		cat != UCharacterCategory.PRIVATE_USE &&
-		cat != UCharacterCategory.SURROGATE &&
-		cat != UCharacterCategory.GENERAL_OTHER_TYPES);
+        cat != UCharacterCategory.CONTROL && 
+        cat != UCharacterCategory.FORMAT &&
+        cat != UCharacterCategory.PRIVATE_USE &&
+        cat != UCharacterCategory.SURROGATE &&
+        cat != UCharacterCategory.GENERAL_OTHER_TYPES);
     }
 
     /**
@@ -2971,7 +2971,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     {
         // when ch is out of bounds getProperty == 0
         return (PROPERTY_.getProperty(ch) & UCharacterProperty.MIRROR_MASK) 
-	    != 0;
+        != 0;
     }
 
     /**
@@ -2999,13 +2999,13 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 return ch + UCharacterProperty.getSignedValue(props);
             }
             else 
-		{
-		    int index = UCharacterProperty.getExceptionIndex(props);
-		    if (PROPERTY_.hasExceptionValue(index, 
-						    UCharacterProperty.EXC_MIRROR_MAPPING_)) 
-			return PROPERTY_.getException(index, 
-						      UCharacterProperty.EXC_MIRROR_MAPPING_);   
-		}
+        {
+            int index = UCharacterProperty.getExceptionIndex(props);
+            if (PROPERTY_.hasExceptionValue(index, 
+                            UCharacterProperty.EXC_MIRROR_MAPPING_)) 
+            return PROPERTY_.getException(index, 
+                              UCharacterProperty.EXC_MIRROR_MAPPING_);   
+        }
         }
         return ch;
     }
@@ -3019,7 +3019,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static int getCombiningClass(int ch)
     {
         if (ch < MIN_VALUE || ch > MAX_VALUE) {
-	    throw new IllegalArgumentException("Codepoint out of bounds");
+        throw new IllegalArgumentException("Codepoint out of bounds");
         }
         return NormalizerImpl.getCombiningClass(ch);
     }
@@ -3071,15 +3071,15 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         int size = str.length();
         int codepoint;
         for (int i = 0; i < size; i ++)
-	    {
-		codepoint = UTF16.charAt(str, i);
-		if (!isLegal(codepoint)) {
-		    return false;
-		}
-		if (isSupplementary(codepoint)) {
-		    i ++;
-		}
-	    }
+        {
+        codepoint = UTF16.charAt(str, i);
+        if (!isLegal(codepoint)) {
+            return false;
+        }
+        if (isSupplementary(codepoint)) {
+            i ++;
+        }
+        }
         return true;
     }
 
@@ -3218,7 +3218,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             throw new RuntimeException("Could not load unames.icu");
         }
         return NAME_.getCharFromName(
-				     UCharacterNameChoice.UNICODE_CHAR_NAME, name);
+                     UCharacterNameChoice.UNICODE_CHAR_NAME, name);
     }
       
     /**
@@ -3237,7 +3237,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             throw new RuntimeException("Could not load unames.icu");
         }
         return NAME_.getCharFromName(
-				     UCharacterNameChoice.UNICODE_10_CHAR_NAME, name);
+                     UCharacterNameChoice.UNICODE_10_CHAR_NAME, name);
     }
     
     /**
@@ -3265,7 +3265,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             throw new RuntimeException("Could not load unames.icu");
         }
         return NAME_.getCharFromName(
-				     UCharacterNameChoice.EXTENDED_CHAR_NAME, name);
+                     UCharacterNameChoice.EXTENDED_CHAR_NAME, name);
     }
 
     /**
@@ -3386,9 +3386,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     {
         if (property == UProperty.CANONICAL_COMBINING_CLASS 
             && value >= UCharacter.getIntPropertyMinValue(
-							  UProperty.CANONICAL_COMBINING_CLASS)
+                              UProperty.CANONICAL_COMBINING_CLASS)
             && value <= UCharacter.getIntPropertyMaxValue(
-							  UProperty.CANONICAL_COMBINING_CLASS)
+                              UProperty.CANONICAL_COMBINING_CLASS)
             && nameChoice >= 0 && nameChoice < UProperty.NameChoice.COUNT) {
             // this is hard coded for the valid cc
             // because PropertyValueAliases.txt does not contain all of them
@@ -3451,9 +3451,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static int getCodePoint(char lead, char trail) 
     {
         if (lead >= UTF16.LEAD_SURROGATE_MIN_VALUE && 
-	    lead <= UTF16.LEAD_SURROGATE_MAX_VALUE &&
+        lead <= UTF16.LEAD_SURROGATE_MAX_VALUE &&
             trail >= UTF16.TRAIL_SURROGATE_MIN_VALUE && 
-	    trail <= UTF16.TRAIL_SURROGATE_MAX_VALUE) {
+        trail <= UTF16.TRAIL_SURROGATE_MAX_VALUE) {
             return UCharacterProperty.getRawSupplementary(lead, trail);
         }
         throw new IllegalArgumentException("Illegal surrogate characters");
@@ -3533,7 +3533,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static String toUpperCase(Locale locale, String str)
     {
         if (locale == null) {
-	    locale = Locale.getDefault();
+        locale = Locale.getDefault();
         }
         return PROPERTY_.toUpperCase(locale, str, 0, str.length());
     }
@@ -3551,7 +3551,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         int length = str.length();
         StringBuffer result = new StringBuffer(length);
         if (locale == null) {
-	    locale = Locale.getDefault();
+        locale = Locale.getDefault();
         }
         PROPERTY_.toLowerCase(locale, str, 0, length, result);
         return result.toString();
@@ -3580,9 +3580,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                                      BreakIterator breakiter)
     {
         if (breakiter == null) {
-	    if (locale == null) {
-		locale = Locale.getDefault();
-	    }
+        if (locale == null) {
+        locale = Locale.getDefault();
+        }
             breakiter = BreakIterator.getWordInstance(locale);
         }
         return PROPERTY_.toTitleCase(locale, str, breakiter);
@@ -3654,12 +3654,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         else {
             int index = UCharacterProperty.getExceptionIndex(props);
             if (PROPERTY_.hasExceptionValue(index, 
-					    UCharacterProperty.EXC_CASE_FOLDING_)) {
+                        UCharacterProperty.EXC_CASE_FOLDING_)) {
                 int exception = PROPERTY_.getException(index, 
-						       UCharacterProperty.EXC_CASE_FOLDING_);
+                               UCharacterProperty.EXC_CASE_FOLDING_);
                 if (exception != 0) {
                     int foldedcasech = 
-			PROPERTY_.getFoldCase(exception & LAST_CHAR_MASK_);
+            PROPERTY_.getFoldCase(exception & LAST_CHAR_MASK_);
                     if (foldedcasech != 0){
                         return foldedcasech;
                     }
@@ -3692,10 +3692,10 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 }                                  
             }
             if (PROPERTY_.hasExceptionValue(index, 
-					    UCharacterProperty.EXC_LOWERCASE_)) {  
+                        UCharacterProperty.EXC_LOWERCASE_)) {  
                 // not else! - allow to fall through from above
                 return PROPERTY_.getException(index, 
-					      UCharacterProperty.EXC_LOWERCASE_);
+                          UCharacterProperty.EXC_LOWERCASE_);
             }
         }
             
@@ -3741,12 +3741,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             else {
                 int index = UCharacterProperty.getExceptionIndex(props);
                 if (PROPERTY_.hasExceptionValue(index, 
-						UCharacterProperty.EXC_CASE_FOLDING_)) {
+                        UCharacterProperty.EXC_CASE_FOLDING_)) {
                     int exception = PROPERTY_.getException(index, 
-							   UCharacterProperty.EXC_CASE_FOLDING_);                             
+                               UCharacterProperty.EXC_CASE_FOLDING_);                             
                     if (exception != 0) {
                         PROPERTY_.getFoldCase(exception & LAST_CHAR_MASK_, 
-					      exception >> SHIFT_24_, result);
+                          exception >> SHIFT_24_, result);
                     } 
                     else {
                         // special case folding mappings, hardcoded
@@ -3761,13 +3761,13 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                             if (ch == 0x49) {
                                 // 0049; C; 0069; # LATIN CAPITAL LETTER I
                                 result.append(
-					      UCharacterProperty.LATIN_SMALL_LETTER_I_);
+                          UCharacterProperty.LATIN_SMALL_LETTER_I_);
                             }
                             else if (ch == 0x130) {
                                 // 0130; F; 0069 0307; 
                                 // # LATIN CAPITAL LETTER I WITH DOT ABOVE
                                 result.append(
-					      UCharacterProperty.LATIN_SMALL_LETTER_I_);
+                          UCharacterProperty.LATIN_SMALL_LETTER_I_);
                                 result.append((char)0x307);
                             }
                         }
@@ -3781,7 +3781,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                                 // 0130; T; 0069; 
                                 // # LATIN CAPITAL LETTER I WITH DOT ABOVE
                                 result.append(
-					      UCharacterProperty.LATIN_SMALL_LETTER_I_);
+                          UCharacterProperty.LATIN_SMALL_LETTER_I_);
                             }
                         }
                     }
@@ -3790,9 +3790,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 } 
                 else {
                     if (PROPERTY_.hasExceptionValue(index, 
-						    UCharacterProperty.EXC_LOWERCASE_)) {
+                            UCharacterProperty.EXC_LOWERCASE_)) {
                         ch = PROPERTY_.getException(index, 
-						    UCharacterProperty.EXC_LOWERCASE_);
+                            UCharacterProperty.EXC_LOWERCASE_);
                     }
                 }
                 
@@ -3869,12 +3869,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         else {
             int index = UCharacterProperty.getExceptionIndex(props);
             if (PROPERTY_.hasExceptionValue(index, 
-					    UCharacterProperty.EXC_CASE_FOLDING_)) {
+                        UCharacterProperty.EXC_CASE_FOLDING_)) {
                 int exception = PROPERTY_.getException(index, 
-						       UCharacterProperty.EXC_CASE_FOLDING_);
+                               UCharacterProperty.EXC_CASE_FOLDING_);
                 if (exception != 0) {
                     int foldedcasech = 
-			PROPERTY_.getFoldCase(exception & LAST_CHAR_MASK_);
+            PROPERTY_.getFoldCase(exception & LAST_CHAR_MASK_);
                     if (foldedcasech != 0){
                         return foldedcasech;
                     }
@@ -3907,10 +3907,10 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 }                                  
             }
             if (PROPERTY_.hasExceptionValue(index, 
-					    UCharacterProperty.EXC_LOWERCASE_)) {  
+                        UCharacterProperty.EXC_LOWERCASE_)) {  
                 // not else! - allow to fall through from above
                 return PROPERTY_.getException(index, 
-					      UCharacterProperty.EXC_LOWERCASE_);
+                          UCharacterProperty.EXC_LOWERCASE_);
             }
         }
             
@@ -3954,12 +3954,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             else {
                 int index = UCharacterProperty.getExceptionIndex(props);
                 if (PROPERTY_.hasExceptionValue(index, 
-						UCharacterProperty.EXC_CASE_FOLDING_)) {
+                        UCharacterProperty.EXC_CASE_FOLDING_)) {
                     int exception = PROPERTY_.getException(index, 
-							   UCharacterProperty.EXC_CASE_FOLDING_);                             
+                               UCharacterProperty.EXC_CASE_FOLDING_);                             
                     if (exception != 0) {
                         PROPERTY_.getFoldCase(exception & LAST_CHAR_MASK_, 
-					      exception >> SHIFT_24_, result);
+                          exception >> SHIFT_24_, result);
                     } 
                     else {
                         // special case folding mappings, hardcoded
@@ -3974,13 +3974,13 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                             if (ch == 0x49) {
                                 // 0049; C; 0069; # LATIN CAPITAL LETTER I
                                 result.append(
-					      UCharacterProperty.LATIN_SMALL_LETTER_I_);
+                          UCharacterProperty.LATIN_SMALL_LETTER_I_);
                             }
                             else if (ch == 0x130) {
                                 // 0130; F; 0069 0307; 
                                 // # LATIN CAPITAL LETTER I WITH DOT ABOVE
                                 result.append(
-					      UCharacterProperty.LATIN_SMALL_LETTER_I_);
+                          UCharacterProperty.LATIN_SMALL_LETTER_I_);
                                 result.append((char)0x307);
                             }
                         }
@@ -3994,7 +3994,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                                 // 0130; T; 0069; 
                                 // # LATIN CAPITAL LETTER I WITH DOT ABOVE
                                 result.append(
-					      UCharacterProperty.LATIN_SMALL_LETTER_I_);
+                          UCharacterProperty.LATIN_SMALL_LETTER_I_);
                             }
                         }
                     }
@@ -4003,9 +4003,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 } 
                 else {
                     if (PROPERTY_.hasExceptionValue(index, 
-						    UCharacterProperty.EXC_LOWERCASE_)) {
+                            UCharacterProperty.EXC_LOWERCASE_)) {
                         ch = PROPERTY_.getException(index, 
-						    UCharacterProperty.EXC_LOWERCASE_);
+                            UCharacterProperty.EXC_LOWERCASE_);
                     }
                 }
                 
@@ -4032,51 +4032,51 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static int getHanNumericValue(int ch)
     {
         switch(ch)
-	    {
-	    case IDEOGRAPHIC_NUMBER_ZERO_ :
-	    case CJK_IDEOGRAPH_COMPLEX_ZERO_ :
-		return 0; // Han Zero
-	    case CJK_IDEOGRAPH_FIRST_ :
-	    case CJK_IDEOGRAPH_COMPLEX_ONE_ :
-		return 1; // Han One
-	    case CJK_IDEOGRAPH_SECOND_ :
-	    case CJK_IDEOGRAPH_COMPLEX_TWO_ :
-		return 2; // Han Two
-	    case CJK_IDEOGRAPH_THIRD_ :
-	    case CJK_IDEOGRAPH_COMPLEX_THREE_ :
-		return 3; // Han Three
-	    case CJK_IDEOGRAPH_FOURTH_ :
-	    case CJK_IDEOGRAPH_COMPLEX_FOUR_ :
-		return 4; // Han Four
-	    case CJK_IDEOGRAPH_FIFTH_ :
-	    case CJK_IDEOGRAPH_COMPLEX_FIVE_ :
-		return 5; // Han Five
-	    case CJK_IDEOGRAPH_SIXTH_ :
-	    case CJK_IDEOGRAPH_COMPLEX_SIX_ :
-		return 6; // Han Six
-	    case CJK_IDEOGRAPH_SEVENTH_ :
-	    case CJK_IDEOGRAPH_COMPLEX_SEVEN_ :
-		return 7; // Han Seven
-	    case CJK_IDEOGRAPH_EIGHTH_ : 
-	    case CJK_IDEOGRAPH_COMPLEX_EIGHT_ :
-		return 8; // Han Eight
-	    case CJK_IDEOGRAPH_NINETH_ :
-	    case CJK_IDEOGRAPH_COMPLEX_NINE_ :
-		return 9; // Han Nine
-	    case CJK_IDEOGRAPH_TEN_ :
-	    case CJK_IDEOGRAPH_COMPLEX_TEN_ :
-		return 10;
-	    case CJK_IDEOGRAPH_HUNDRED_ :
-	    case CJK_IDEOGRAPH_COMPLEX_HUNDRED_ :
-		return 100;
-	    case CJK_IDEOGRAPH_THOUSAND_ :
-	    case CJK_IDEOGRAPH_COMPLEX_THOUSAND_ :
-		return 1000;
-	    case CJK_IDEOGRAPH_TEN_THOUSAND_ :
-		return 10000;
-	    case CJK_IDEOGRAPH_HUNDRED_MILLION_ :
-		return 100000000;
-	    }
+        {
+        case IDEOGRAPHIC_NUMBER_ZERO_ :
+        case CJK_IDEOGRAPH_COMPLEX_ZERO_ :
+        return 0; // Han Zero
+        case CJK_IDEOGRAPH_FIRST_ :
+        case CJK_IDEOGRAPH_COMPLEX_ONE_ :
+        return 1; // Han One
+        case CJK_IDEOGRAPH_SECOND_ :
+        case CJK_IDEOGRAPH_COMPLEX_TWO_ :
+        return 2; // Han Two
+        case CJK_IDEOGRAPH_THIRD_ :
+        case CJK_IDEOGRAPH_COMPLEX_THREE_ :
+        return 3; // Han Three
+        case CJK_IDEOGRAPH_FOURTH_ :
+        case CJK_IDEOGRAPH_COMPLEX_FOUR_ :
+        return 4; // Han Four
+        case CJK_IDEOGRAPH_FIFTH_ :
+        case CJK_IDEOGRAPH_COMPLEX_FIVE_ :
+        return 5; // Han Five
+        case CJK_IDEOGRAPH_SIXTH_ :
+        case CJK_IDEOGRAPH_COMPLEX_SIX_ :
+        return 6; // Han Six
+        case CJK_IDEOGRAPH_SEVENTH_ :
+        case CJK_IDEOGRAPH_COMPLEX_SEVEN_ :
+        return 7; // Han Seven
+        case CJK_IDEOGRAPH_EIGHTH_ : 
+        case CJK_IDEOGRAPH_COMPLEX_EIGHT_ :
+        return 8; // Han Eight
+        case CJK_IDEOGRAPH_NINETH_ :
+        case CJK_IDEOGRAPH_COMPLEX_NINE_ :
+        return 9; // Han Nine
+        case CJK_IDEOGRAPH_TEN_ :
+        case CJK_IDEOGRAPH_COMPLEX_TEN_ :
+        return 10;
+        case CJK_IDEOGRAPH_HUNDRED_ :
+        case CJK_IDEOGRAPH_COMPLEX_HUNDRED_ :
+        return 100;
+        case CJK_IDEOGRAPH_THOUSAND_ :
+        case CJK_IDEOGRAPH_COMPLEX_THOUSAND_ :
+        return 1000;
+        case CJK_IDEOGRAPH_TEN_THOUSAND_ :
+        return 10000;
+        case CJK_IDEOGRAPH_HUNDRED_MILLION_ :
+        return 100000000;
+        }
         return -1; // no value
     }
     
@@ -4129,7 +4129,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             throw new RuntimeException("Could not load unames.icu");
         }
         return new UCharacterNameIterator(NAME_,
-					  UCharacterNameChoice.UNICODE_CHAR_NAME);
+                      UCharacterNameChoice.UNICODE_CHAR_NAME);
     }
     
     /**
@@ -4157,7 +4157,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             throw new RuntimeException("Could not load unames.icu");
         }
         return new UCharacterNameIterator(NAME_,
-					  UCharacterNameChoice.UNICODE_10_CHAR_NAME);
+                      UCharacterNameChoice.UNICODE_10_CHAR_NAME);
     }
     
     /**
@@ -4185,7 +4185,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             throw new RuntimeException("Could not load unames.icu");
         }
         return new UCharacterNameIterator(NAME_,
-					  UCharacterNameChoice.EXTENDED_CHAR_NAME);
+                      UCharacterNameChoice.EXTENDED_CHAR_NAME);
     }
     
     /**
@@ -4203,7 +4203,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static VersionInfo getAge(int ch) 
     {
         if (ch < MIN_VALUE || ch > MAX_VALUE) {
-	    throw new IllegalArgumentException("Codepoint out of bounds");
+        throw new IllegalArgumentException("Codepoint out of bounds");
         }
         return PROPERTY_.getAge(ch);
     }
@@ -4235,8 +4235,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static boolean hasBinaryProperty(int ch, int property) 
     {
-	if (ch < MIN_VALUE || ch > MAX_VALUE) {
-	    throw new IllegalArgumentException("Codepoint out of bounds");
+    if (ch < MIN_VALUE || ch > MAX_VALUE) {
+        throw new IllegalArgumentException("Codepoint out of bounds");
         }
         return PROPERTY_.hasBinaryProperty(ch, property);
     }
@@ -4250,7 +4250,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static boolean isUAlphabetic(int ch)
     {
-	return hasBinaryProperty(ch, UProperty.ALPHABETIC);
+    return hasBinaryProperty(ch, UProperty.ALPHABETIC);
     }
 
     /**
@@ -4262,7 +4262,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static boolean isULowercase(int ch) 
     {
-	return hasBinaryProperty(ch, UProperty.LOWERCASE);
+    return hasBinaryProperty(ch, UProperty.LOWERCASE);
     }
 
     /**
@@ -4274,7 +4274,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static boolean isUUppercase(int ch) 
     {
-	return hasBinaryProperty(ch, UProperty.UPPERCASE);
+    return hasBinaryProperty(ch, UProperty.UPPERCASE);
     }
 
     /**
@@ -4287,7 +4287,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static boolean isUWhiteSpace(int ch) 
     {
-	return hasBinaryProperty(ch, UProperty.WHITE_SPACE);
+    return hasBinaryProperty(ch, UProperty.WHITE_SPACE);
     }
 
 
@@ -4352,15 +4352,15 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 return getCombiningClass(ch);
             case UProperty.DECOMPOSITION_TYPE:
                 return PROPERTY_.getAdditional(ch, 2) 
-		    & DECOMPOSITION_TYPE_MASK_;
+            & DECOMPOSITION_TYPE_MASK_;
             case UProperty.EAST_ASIAN_WIDTH:
                 return (PROPERTY_.getAdditional(ch, 0)
-			& EAST_ASIAN_MASK_) >> EAST_ASIAN_SHIFT_;
+            & EAST_ASIAN_MASK_) >> EAST_ASIAN_SHIFT_;
             case UProperty.GENERAL_CATEGORY:
                 return getType(ch);
             case UProperty.JOINING_GROUP:
                 return (PROPERTY_.getAdditional(ch, 2) 
-			& JOINING_GROUP_MASK_) >> JOINING_GROUP_SHIFT_;
+            & JOINING_GROUP_MASK_) >> JOINING_GROUP_SHIFT_;
             case UProperty.JOINING_TYPE:
                 return (int)(PROPERTY_.getAdditional(ch, 2)& JOINING_TYPE_MASK_)>> JOINING_TYPE_SHIFT_;
                 // ArabicShaping.txt:
@@ -4369,17 +4369,17 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 // Characters of joining type T can [be] derived by the following formula:
                 //   T = Mn + Cf - ZWNJ - ZWJ
                 /*
-		  result = (PROPERTY_.getAdditional(ch, 2) 
-		  & JOINING_TYPE_MASK_) >> JOINING_TYPE_SHIFT_;
-		  if (result == 0 && ch != ZERO_WIDTH_NON_JOINER_ 
-		  && ch != ZERO_WIDTH_JOINER_) {
-		  int t = getType(ch);
-		  if (t == UCharacterCategory.NON_SPACING_MARK
-		  || t == UCharacterCategory.FORMAT) {
-		  result = JoiningType.TRANSPARENT;
-		  }
-		  }
-		  return result;
+          result = (PROPERTY_.getAdditional(ch, 2) 
+          & JOINING_TYPE_MASK_) >> JOINING_TYPE_SHIFT_;
+          if (result == 0 && ch != ZERO_WIDTH_NON_JOINER_ 
+          && ch != ZERO_WIDTH_JOINER_) {
+          int t = getType(ch);
+          if (t == UCharacterCategory.NON_SPACING_MARK
+          || t == UCharacterCategory.FORMAT) {
+          result = JoiningType.TRANSPARENT;
+          }
+          }
+          return result;
                 */
             case UProperty.LINE_BREAK:
                 return (int)(PROPERTY_.getAdditional(ch, 0)& LINE_BREAK_MASK_)>>LINE_BREAK_SHIFT_;
@@ -4393,51 +4393,51 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                  * F0000..FFFFD;XX # <Plane 15 Private Use, First>..<Plane 15 Private Use, Last>
                  * 100000..10FFFD;XX # <Plane 16 Private Use, First>..<Plane 16 Private Use, Last>
                  */
-		/*
-		  result = (PROPERTY_.getAdditional(ch, 0) 
-		  & LINE_BREAK_MASK_) >> LINE_BREAK_SHIFT_;
-		  if (result == 0) {
-		  int t = getType(ch);
-		  if (t != UCharacterCategory.UNASSIGNED 
-		  && t != UCharacterCategory.PRIVATE_USE) {
-		  result = LineBreak.ALPHABETIC;
-		  }
-		  }
-		  return result;
+        /*
+          result = (PROPERTY_.getAdditional(ch, 0) 
+          & LINE_BREAK_MASK_) >> LINE_BREAK_SHIFT_;
+          if (result == 0) {
+          int t = getType(ch);
+          if (t != UCharacterCategory.UNASSIGNED 
+          && t != UCharacterCategory.PRIVATE_USE) {
+          result = LineBreak.ALPHABETIC;
+          }
+          }
+          return result;
                 */
             case UProperty.NUMERIC_TYPE:
                 return getNumericType(PROPERTY_.getProperty(ch));
             case UProperty.SCRIPT:
                 return UScript.getScript(ch);
             case UProperty.HANGUL_SYLLABLE_TYPE:
-		/* purely algorithmic; hardcode known characters, check for assigned new ones */ 
-		if(ch<NormalizerImpl.JAMO_L_BASE) { 
-		    /* NA */ 
-		} else if(ch<=0x11ff) { 
-		    /* Jamo range */ 
-		    if(ch<=0x115f) { 
-			/* Jamo L range, HANGUL CHOSEONG ... */ 
-			if(ch==0x115f || ch<=0x1159 || getType(ch)==UCharacterCategory.OTHER_LETTER) { 
-			    return HangulSyllableType.LEADING_JAMO; 
-			} 
-		    } else if(ch<=0x11a7) { 
-			/* Jamo V range, HANGUL JUNGSEONG ... */ 
-			if(ch<=0x11a2 || getType(ch)==UCharacterCategory.OTHER_LETTER) { 
-			    return HangulSyllableType.VOWEL_JAMO; 
-			} 
-		    } else { 
-			/* Jamo T range */ 
-			if(ch<=0x11f9 || getType(ch)==UCharacterCategory.OTHER_LETTER) { 
-			    return HangulSyllableType.TRAILING_JAMO; 
-			} 
-		    } 
-		} else if((ch-=NormalizerImpl.HANGUL_BASE)<0) { 
-		    /* NA */ 
-		} else if(ch<NormalizerImpl.HANGUL_COUNT) { 
-		    /* Hangul syllable */ 
-		    return ch%NormalizerImpl.JAMO_T_COUNT==0 ? HangulSyllableType.LV_SYLLABLE : HangulSyllableType.LVT_SYLLABLE; 
-		} 
-		return 0; /* NA */ 
+        /* purely algorithmic; hardcode known characters, check for assigned new ones */ 
+        if(ch<NormalizerImpl.JAMO_L_BASE) { 
+            /* NA */ 
+        } else if(ch<=0x11ff) { 
+            /* Jamo range */ 
+            if(ch<=0x115f) { 
+            /* Jamo L range, HANGUL CHOSEONG ... */ 
+            if(ch==0x115f || ch<=0x1159 || getType(ch)==UCharacterCategory.OTHER_LETTER) { 
+                return HangulSyllableType.LEADING_JAMO; 
+            } 
+            } else if(ch<=0x11a7) { 
+            /* Jamo V range, HANGUL JUNGSEONG ... */ 
+            if(ch<=0x11a2 || getType(ch)==UCharacterCategory.OTHER_LETTER) { 
+                return HangulSyllableType.VOWEL_JAMO; 
+            } 
+            } else { 
+            /* Jamo T range */ 
+            if(ch<=0x11f9 || getType(ch)==UCharacterCategory.OTHER_LETTER) { 
+                return HangulSyllableType.TRAILING_JAMO; 
+            } 
+            } 
+        } else if((ch-=NormalizerImpl.HANGUL_BASE)<0) { 
+            /* NA */ 
+        } else if(ch<NormalizerImpl.HANGUL_COUNT) { 
+            /* Hangul syllable */ 
+            return ch%NormalizerImpl.JAMO_T_COUNT==0 ? HangulSyllableType.LV_SYLLABLE : HangulSyllableType.LVT_SYLLABLE; 
+        } 
+        return 0; /* NA */ 
 
             case UProperty.NFD_QUICK_CHECK:
             case UProperty.NFKD_QUICK_CHECK:
@@ -4450,7 +4450,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 return NormalizerImpl.getFCD16(ch)&0xff;
             default:
                
-		return 0; /* undefined */
+        return 0; /* undefined */
             }
         } else if (type == UProperty.GENERAL_CATEGORY_MASK) {
             return UCharacterProperty.getMask(getType(ch));
@@ -4480,7 +4480,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     {
 
         return 0; // undefined; and: all other properties have a minimum value 
-	// of 0
+    // of 0
     }
 
     
@@ -4526,13 +4526,13 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 return UCharacterDirection.CHAR_DIRECTION_COUNT - 1;
             case UProperty.BLOCK:
                 max = (PROPERTY_.getMaxValues(0)
-		       & BLOCK_MASK_) >> BLOCK_SHIFT_;
+               & BLOCK_MASK_) >> BLOCK_SHIFT_;
                 return (max!=0) ? max : UnicodeBlock.COUNT - 1;
             case UProperty.CANONICAL_COMBINING_CLASS:
             case UProperty.LEAD_CANONICAL_COMBINING_CLASS:
             case UProperty.TRAIL_CANONICAL_COMBINING_CLASS:
                 return 0xff; // TODO do we need to be more precise, 
-		// getting the actual maximum?
+        // getting the actual maximum?
             case UProperty.DECOMPOSITION_TYPE:
                 max=PROPERTY_.getMaxValues(2) & DECOMPOSITION_TYPE_MASK_;
                 return (max!=0) ? max : DecompositionType.COUNT - 1;
@@ -4542,8 +4542,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             case UProperty.GENERAL_CATEGORY:
                 return UCharacterCategory.CHAR_CATEGORY_COUNT - 1;
             case UProperty.JOINING_GROUP:
-		max=(PROPERTY_.getMaxValues(2) & JOINING_GROUP_MASK_) >> JOINING_GROUP_SHIFT_;
-		return (max!=0) ? max : JoiningGroup.COUNT - 1;
+        max=(PROPERTY_.getMaxValues(2) & JOINING_GROUP_MASK_) >> JOINING_GROUP_SHIFT_;
+        return (max!=0) ? max : JoiningGroup.COUNT - 1;
             case UProperty.JOINING_TYPE:
                 max=(PROPERTY_.getMaxValues(2) & JOINING_TYPE_MASK_) >> JOINING_TYPE_SHIFT_;
                 return (max!=0) ? max :  JoiningType.COUNT - 1;
@@ -4556,7 +4556,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 max = PROPERTY_.getMaxValues(0) & SCRIPT_MASK_;   
                 return (max!= 0)? max :  UScript.CODE_LIMIT - 1;
             case UProperty.HANGUL_SYLLABLE_TYPE:
-		return HangulSyllableType.COUNT-1;
+        return HangulSyllableType.COUNT-1;
             case UProperty.NFD_QUICK_CHECK:
             case UProperty.NFKD_QUICK_CHECK:
                 return 1; // YES -- these are never "maybe", only "no" or "yes"
@@ -4795,9 +4795,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int codePointAt(char[] text, int index, int limit) {
-	if (index >= limit || limit > text.length) {
-	    throw new IndexOutOfBoundsException();
-	}
+    if (index >= limit || limit > text.length) {
+        throw new IndexOutOfBoundsException();
+    }
         char c1 = text[index++];
         if (isHighSurrogate(c1)) {
             if (index < limit) {
@@ -4868,9 +4868,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static final int codePointBefore(char[] text, int index, int limit) {
-	if (index <= limit || limit < 0) {
-	    throw new IndexOutOfBoundsException();
-	}
+    if (index <= limit || limit < 0) {
+        throw new IndexOutOfBoundsException();
+    }
         char c2 = text[--index];
         if (isLowSurrogate(c2)) {
             if (index > limit) {
@@ -4962,24 +4962,24 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static int codePointCount(CharSequence text, int start, int limit) {
-	if (start < 0 || limit < start || limit > text.length()) {
-	    throw new IndexOutOfBoundsException("start (" + start +
-						") or limit (" + limit +
-						") invalid or out of range 0, " + text.length());
-	}
+    if (start < 0 || limit < start || limit > text.length()) {
+        throw new IndexOutOfBoundsException("start (" + start +
+                        ") or limit (" + limit +
+                        ") invalid or out of range 0, " + text.length());
+    }
 
-	int len = limit - start;
-	while (limit > start) {
-	    char ch = text.charAt(--limit);
-	    while (ch >= MIN_LOW_SURROGATE && ch <= MAX_LOW_SURROGATE && limit > start) {
-		ch = text.charAt(--limit);
-		if (ch >= MIN_HIGH_SURROGATE && ch <= MAX_HIGH_SURROGATE) {
-		    --len;
-		    break;
-		}
-	    }
-	}
-	return len;
+    int len = limit - start;
+    while (limit > start) {
+        char ch = text.charAt(--limit);
+        while (ch >= MIN_LOW_SURROGATE && ch <= MAX_LOW_SURROGATE && limit > start) {
+        ch = text.charAt(--limit);
+        if (ch >= MIN_HIGH_SURROGATE && ch <= MAX_HIGH_SURROGATE) {
+            --len;
+            break;
+        }
+        }
+    }
+    return len;
     }
 
     /**
@@ -4992,24 +4992,24 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static int codePointCount(char[] text, int start, int limit) {
-	if (start < 0 || limit < start || limit > text.length) {
-	    throw new IndexOutOfBoundsException("start (" + start +
-						") or limit (" + limit +
-						") invalid or out of range 0, " + text.length);
-	}
+    if (start < 0 || limit < start || limit > text.length) {
+        throw new IndexOutOfBoundsException("start (" + start +
+                        ") or limit (" + limit +
+                        ") invalid or out of range 0, " + text.length);
+    }
 
-	int len = limit - start;
-	while (limit > start) {
-	    char ch = text[--limit];
-	    while (ch >= MIN_LOW_SURROGATE && ch <= MAX_LOW_SURROGATE && limit > start) {
-		ch = text[--limit];
-		if (ch >= MIN_HIGH_SURROGATE && ch <= MAX_HIGH_SURROGATE) {
-		    --len;
-		    break;
-		}
-	    }
-	}
-	return len;
+    int len = limit - start;
+    while (limit > start) {
+        char ch = text[--limit];
+        while (ch >= MIN_LOW_SURROGATE && ch <= MAX_LOW_SURROGATE && limit > start) {
+        ch = text[--limit];
+        if (ch >= MIN_HIGH_SURROGATE && ch <= MAX_HIGH_SURROGATE) {
+            --len;
+            break;
+        }
+        }
+    }
+    return len;
     }
 
     /**
@@ -5022,39 +5022,39 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static int offsetByCodePoints(CharSequence text, int index, int codePointOffset) {
-	if (index < 0 || index > text.length()) {
-	    throw new IndexOutOfBoundsException("index ( " + index +
-						") out of range 0, " + text.length());
-	}
+    if (index < 0 || index > text.length()) {
+        throw new IndexOutOfBoundsException("index ( " + index +
+                        ") out of range 0, " + text.length());
+    }
 
-	if (codePointOffset < 0) {
-	    while (++codePointOffset <= 0) {
-		char ch = text.charAt(--index);
-		while (ch >= MIN_LOW_SURROGATE && ch <= MAX_LOW_SURROGATE && index > 0) {
-		    ch = text.charAt(--index);
-		    if (ch < MIN_HIGH_SURROGATE || ch > MAX_HIGH_SURROGATE) {
-			if (++codePointOffset > 0) {
-			    return index+1;
-			}
-		    }
-		}
-	    }
-	} else {
-	    int limit = text.length();
-	    while (--codePointOffset >= 0) {
-		char ch = text.charAt(index++);
-		while (ch >= MIN_HIGH_SURROGATE && ch <= MAX_HIGH_SURROGATE && index < limit) {
-		    ch = text.charAt(index++);
-		    if (ch < MIN_LOW_SURROGATE || ch > MAX_LOW_SURROGATE) {
-			if (--codePointOffset < 0) {
-			    return index-1;
-			}
-		    }
-		}
-	    }
-	}
+    if (codePointOffset < 0) {
+        while (++codePointOffset <= 0) {
+        char ch = text.charAt(--index);
+        while (ch >= MIN_LOW_SURROGATE && ch <= MAX_LOW_SURROGATE && index > 0) {
+            ch = text.charAt(--index);
+            if (ch < MIN_HIGH_SURROGATE || ch > MAX_HIGH_SURROGATE) {
+            if (++codePointOffset > 0) {
+                return index+1;
+            }
+            }
+        }
+        }
+    } else {
+        int limit = text.length();
+        while (--codePointOffset >= 0) {
+        char ch = text.charAt(index++);
+        while (ch >= MIN_HIGH_SURROGATE && ch <= MAX_HIGH_SURROGATE && index < limit) {
+            ch = text.charAt(index++);
+            if (ch < MIN_LOW_SURROGATE || ch > MAX_LOW_SURROGATE) {
+            if (--codePointOffset < 0) {
+                return index-1;
+            }
+            }
+        }
+        }
+    }
 
-	return index;
+    return index;
     }
 
     /**
@@ -5069,51 +5069,51 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static int offsetByCodePoints(char[] text, int start, int count, int index, int codePointOffset) {
-	int limit = start + count;
-	if (start < 0 || limit < start || limit > text.length || index < start || index > limit) {
-	    throw new IndexOutOfBoundsException("index ( " + index +
-						") out of range " + start +
-						", " + limit +
-						" in array 0, " + text.length);
-	}
+    int limit = start + count;
+    if (start < 0 || limit < start || limit > text.length || index < start || index > limit) {
+        throw new IndexOutOfBoundsException("index ( " + index +
+                        ") out of range " + start +
+                        ", " + limit +
+                        " in array 0, " + text.length);
+    }
 
-	if (codePointOffset < 0) {
-	    while (++codePointOffset <= 0) {
-		char ch = text[--index];
-		if (index < start) {
-		    throw new IndexOutOfBoundsException("index ( " + index +
-							") < start (" + start +
-							")");
-		}
-		while (ch >= MIN_LOW_SURROGATE && ch <= MAX_LOW_SURROGATE && index > start) {
-		    ch = text[--index];
-		    if (ch < MIN_HIGH_SURROGATE || ch > MAX_HIGH_SURROGATE) {
-			if (++codePointOffset > 0) {
-			    return index+1;
-			}
-		    }
-		}
-	    }
-	} else {
-	    while (--codePointOffset >= 0) {
-		char ch = text[index++];
-		if (index > limit) {
-		    throw new IndexOutOfBoundsException("index ( " + index +
-							") > limit (" + limit +
-							")");
-		}
-		while (ch >= MIN_HIGH_SURROGATE && ch <= MAX_HIGH_SURROGATE && index < limit) {
-		    ch = text[index++];
-		    if (ch < MIN_LOW_SURROGATE || ch > MAX_LOW_SURROGATE) {
-			if (--codePointOffset < 0) {
-			    return index-1;
-			}
-		    }
-		}
-	    }
-	}
+    if (codePointOffset < 0) {
+        while (++codePointOffset <= 0) {
+        char ch = text[--index];
+        if (index < start) {
+            throw new IndexOutOfBoundsException("index ( " + index +
+                            ") < start (" + start +
+                            ")");
+        }
+        while (ch >= MIN_LOW_SURROGATE && ch <= MAX_LOW_SURROGATE && index > start) {
+            ch = text[--index];
+            if (ch < MIN_HIGH_SURROGATE || ch > MAX_HIGH_SURROGATE) {
+            if (++codePointOffset > 0) {
+                return index+1;
+            }
+            }
+        }
+        }
+    } else {
+        while (--codePointOffset >= 0) {
+        char ch = text[index++];
+        if (index > limit) {
+            throw new IndexOutOfBoundsException("index ( " + index +
+                            ") > limit (" + limit +
+                            ")");
+        }
+        while (ch >= MIN_HIGH_SURROGATE && ch <= MAX_HIGH_SURROGATE && index < limit) {
+            ch = text[index++];
+            if (ch < MIN_LOW_SURROGATE || ch > MAX_LOW_SURROGATE) {
+            if (--codePointOffset < 0) {
+                return index-1;
+            }
+            }
+        }
+        }
+    }
 
-	return index;
+    return index;
     }
 
     // protected data members --------------------------------------------
@@ -5132,17 +5132,17 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     static
     {
         try
-	    {
-		PNAMES_ = new UPropertyAliases();
-		NAME_ = UCharacterName.getInstance();
-	    }
+        {
+        PNAMES_ = new UPropertyAliases();
+        NAME_ = UCharacterName.getInstance();
+        }
         catch (Exception e)
-	    {
-		e.printStackTrace();
-		//throw new RuntimeException(e.getMessage());
-		// DONOT throw an exception
-		// we might be building ICU modularly wothout names.icu and pnames.icu
-	    }
+        {
+        e.printStackTrace();
+        //throw new RuntimeException(e.getMessage());
+        // DONOT throw an exception
+        // we might be building ICU modularly wothout names.icu and pnames.icu
+        }
     }
         
     // private variables -------------------------------------------------
@@ -5163,18 +5163,18 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     static
     {
         try
-	    {
-		PROPERTY_ = UCharacterProperty.getInstance();
-		PROPERTY_TRIE_INDEX_ = PROPERTY_.m_trieIndex_;
-		PROPERTY_TRIE_DATA_ = PROPERTY_.m_trieData_;
-		PROPERTY_DATA_ = PROPERTY_.m_property_;
-		PROPERTY_INITIAL_VALUE_ 
-		    = PROPERTY_DATA_[PROPERTY_.m_trieInitialValue_];
-	    }
+        {
+        PROPERTY_ = UCharacterProperty.getInstance();
+        PROPERTY_TRIE_INDEX_ = PROPERTY_.m_trieIndex_;
+        PROPERTY_TRIE_DATA_ = PROPERTY_.m_trieData_;
+        PROPERTY_DATA_ = PROPERTY_.m_property_;
+        PROPERTY_INITIAL_VALUE_ 
+            = PROPERTY_DATA_[PROPERTY_.m_trieInitialValue_];
+        }
         catch (Exception e)
-	    {
-		throw new RuntimeException(e.getMessage());
-	    }
+        {
+        throw new RuntimeException(e.getMessage());
+        }
     }
     
     /**
@@ -5456,7 +5456,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */     
     private static boolean isNotExceptionIndicator(int props)
     {
-	return (props & UCharacterProperty.EXCEPTION_MASK) == 0;
+    return (props & UCharacterProperty.EXCEPTION_MASK) == 0;
     }
          
     /**
@@ -5480,9 +5480,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             // BMP codepoint
             try { // using try for < 0 ch is faster than using an if statement
                 return PROPERTY_DATA_[
-				      PROPERTY_TRIE_DATA_[
-							  (PROPERTY_TRIE_INDEX_[ch >> 5] << 2) 
-							  + (ch & 0x1f)]];
+                      PROPERTY_TRIE_DATA_[
+                              (PROPERTY_TRIE_INDEX_[ch >> 5] << 2) 
+                              + (ch & 0x1f)]];
             } catch (ArrayIndexOutOfBoundsException e) {
                 return PROPERTY_INITIAL_VALUE_;
             }
@@ -5490,17 +5490,17 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         if (ch <= UTF16.LEAD_SURROGATE_MAX_VALUE) {
             // surrogate 
             return PROPERTY_DATA_[
-				  PROPERTY_TRIE_DATA_[
-						      (PROPERTY_TRIE_INDEX_[(0x2800 >> 5) + (ch >> 5)] << 2) 
-						      + (ch & 0x1f)]];
+                  PROPERTY_TRIE_DATA_[
+                              (PROPERTY_TRIE_INDEX_[(0x2800 >> 5) + (ch >> 5)] << 2) 
+                              + (ch & 0x1f)]];
         }
         // for optimization
         if (ch <= UTF16.CODEPOINT_MAX_VALUE) {
             // look at the construction of supplementary characters
             // trail forms the ends of it.
             return PROPERTY_DATA_[PROPERTY_.m_trie_.getSurrogateValue(
-								      UTF16.getLeadSurrogate(ch), 
-								      (char)(ch & 0x3ff))];
+                                      UTF16.getLeadSurrogate(ch), 
+                                      (char)(ch & 0x3ff))];
         }
         // return m_dataOffset_ if there is an error, in this case we return 
         // the default value: m_initialValue_

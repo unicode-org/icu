@@ -269,17 +269,17 @@ public class CollationDummyTest extends TestFmwk {
     */
     public void TestSurrogates() 
     {
-    	String rules = "&z<'\ud800\udc00'<'\ud800\udc0a\u0308'<A";
+        String rules = "&z<'\ud800\udc00'<'\ud800\udc0a\u0308'<A";
         String source[] = {"z",
-        	               "\uD800\uDC00",
-        	               "\ud800\udc0a\u0308",
-        	               "\ud800\udc02"    
+                           "\uD800\uDC00",
+                           "\ud800\udc0a\u0308",
+                           "\ud800\udc02"    
         };
         
         String target[] = {"\uD800\uDC00",
-        	               "\ud800\udc0a\u0308",
-        	               "A",
-        	               "\ud800\udc03"    
+                           "\ud800\udc0a\u0308",
+                           "A",
+                           "\ud800\udc03"    
         };
     
         // this test is to verify the supplementary sort key order in the english 

@@ -84,7 +84,7 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
      */
     public Object clone()
     {
-    	RuleBasedBreakIterator_New result = (RuleBasedBreakIterator_New) super.clone();
+        RuleBasedBreakIterator_New result = (RuleBasedBreakIterator_New) super.clone();
         if (fText != null) {
             fText = (CharacterIterator)fText.clone();   
         }
@@ -171,7 +171,7 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
      * @return The offset of the beginning of the text.
      * @stable ICU 2.0
      */
-	public int first() {
+    public int first() {
         fLastRuleStatusIndex  = 0;
         fLastStatusIndexValid = true;
         if (fText == null) {
@@ -179,7 +179,7 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
         }
         fText.first();
         return fText.getIndex();
-	}
+    }
     
     
     /**
@@ -188,7 +188,7 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
      * @return The text's past-the-end offset.
      * @stable ICU 2.0
      */
-	public int last() {
+    public int last() {
         if (fText == null) {
             fLastRuleStatusIndex  = 0;
             fLastStatusIndexValid = true;
@@ -206,7 +206,7 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
         int pos = fText.getEndIndex();
         fText.setIndex(pos);
         return pos;
-	}
+    }
     
     
     /**
@@ -219,7 +219,7 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
      * the current one.
      * @stable ICU 2.0
      */
-	public int next(int n) {
+    public int next(int n) {
         int result = current();
         while (n > 0) {
             result = handleNext(fRData.fFTable);
@@ -230,7 +230,7 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
             ++n;
         }
         return result;
-	}
+    }
     
     
     /**
@@ -238,9 +238,9 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
      * @return The position of the first boundary after this one.
      * @stable ICU 2.0
      */
-	public int next() {
+    public int next() {
         return handleNext(fRData.fFTable);
-	}
+    }
     
     
     /**
@@ -248,7 +248,7 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
      * @return The position of the last boundary position preceding this one.
      * @stable ICU 2.0
      */
-	public int previous() {
+    public int previous() {
         // if we're already sitting at the beginning of the text, return DONE
         if (fText == null || current() == fText.getBeginIndex()) {
             fLastRuleStatusIndex  = 0;
@@ -302,7 +302,7 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
         fLastRuleStatusIndex  = lastTag;       // for use by getRuleStatus()
         fLastStatusIndexValid = breakTagValid;
         return lastResult;
-	}
+    }
     /**
      * Sets the iterator to refer to the first boundary position following
      * the specified position.
@@ -310,7 +310,7 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
      * @return The position of the first break after the current position.
      * @stable ICU 2.0
      */
-	public int following(int offset) {
+    public int following(int offset) {
         // if the offset passed in is already past the end of the text,
         // just return DONE; if it's before the beginning, return the
         // text's starting offset
@@ -390,7 +390,7 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
         }
 
         return result;
-	}
+    }
     /**
      * Sets the iterator to refer to the last boundary position before the
      * specified position.
@@ -518,7 +518,7 @@ public boolean isBoundary(int offset) {
  */
 public int current() {
     return (fText != null) ? fText.getIndex() : BreakIterator.DONE;
-	}
+    }
 
 
 
@@ -625,9 +625,9 @@ public int getRuleStatusVec(int[] fillInArray) {
  * @return An iterator over the text being analyzed.
  * @stable ICU 2.0
  */
-	public CharacterIterator getText() {
-		return fText;
-	}
+    public CharacterIterator getText() {
+        return fText;
+    }
 
 
     /**
@@ -636,10 +636,10 @@ public int getRuleStatusVec(int[] fillInArray) {
      * @param newText An iterator over the text to analyze.
      * @stable ICU 2.0
      */
-	public void setText(CharacterIterator newText) {
+    public void setText(CharacterIterator newText) {
         fText = newText;
         this.first();
-	}
+    }
     
     // 23 bit Char value returned from when an iterator has run out of range.
     //     Positive value so fast case (not end, not surrogate) can be checked
@@ -690,22 +690,22 @@ public int getRuleStatusVec(int[] fillInArray) {
     //        from there, but the ci.getIndex() will be wrong, and needs
     //        adjustment.
     private static int CINextTrail32(CharacterIterator ci, int lead) {
-    	int retVal = lead;
-    	if (lead <= UTF16.LEAD_SURROGATE_MAX_VALUE) {
-    		char  cTrail = ci.next();
-    		if (UTF16.isTrailSurrogate(cTrail)) {
-    			retVal = ((lead  - UTF16.LEAD_SURROGATE_MIN_VALUE) << 10) +
-				            (cTrail - UTF16.TRAIL_SURROGATE_MIN_VALUE) +
-						    UTF16.SUPPLEMENTARY_MIN_VALUE;
-    		} else {
-    			ci.previous();
+        int retVal = lead;
+        if (lead <= UTF16.LEAD_SURROGATE_MAX_VALUE) {
+            char  cTrail = ci.next();
+            if (UTF16.isTrailSurrogate(cTrail)) {
+                retVal = ((lead  - UTF16.LEAD_SURROGATE_MIN_VALUE) << 10) +
+                            (cTrail - UTF16.TRAIL_SURROGATE_MIN_VALUE) +
+                            UTF16.SUPPLEMENTARY_MIN_VALUE;
+            } else {
+                ci.previous();
             }
-    	} else {
-    		if (lead == CharacterIterator.DONE && ci.getIndex() >= ci.getEndIndex()) {
-    			retVal = CI_DONE32;
-    		}
-    	}
-    	return retVal;
+        } else {
+            if (lead == CharacterIterator.DONE && ci.getIndex() >= ci.getEndIndex()) {
+                retVal = CI_DONE32;
+            }
+        }
+        return retVal;
     }
        
     private static int CIPrevious32(CharacterIterator ci) {
@@ -741,7 +741,7 @@ public int getRuleStatusVec(int[] fillInArray) {
             if (UTF16.isTrailSurrogate((char)trail)) {
                 retVal = ((lead  - UTF16.LEAD_SURROGATE_MIN_VALUE) << 10) +
                          (trail - UTF16.TRAIL_SURROGATE_MIN_VALUE) +
-						 UTF16.SUPPLEMENTARY_MIN_VALUE;
+                         UTF16.SUPPLEMENTARY_MIN_VALUE;
             }
          } else {
             if (lead == CharacterIterator.DONE) {
@@ -790,11 +790,11 @@ public int getRuleStatusVec(int[] fillInArray) {
         short             category;
         int               c               = fText.current();
         if (c >= UTF16.LEAD_SURROGATE_MIN_VALUE) {
-        	c = CINextTrail32(fText, c);
-        	if (c == CI_DONE32) {
-        		fLastRuleStatusIndex = 0;
-        		return BreakIterator.DONE;
-        	}
+            c = CINextTrail32(fText, c);
+            if (c == CI_DONE32) {
+                fLastRuleStatusIndex = 0;
+                return BreakIterator.DONE;
+            }
         }
         int               row             = fRData.getRowIndex(state); 
         int               lookaheadStatus = 0;

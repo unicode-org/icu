@@ -851,8 +851,8 @@ public abstract class DateFormat extends UFormat {
         try {
             return new SimpleDateFormat(timeStyle, dateStyle, loc);
         } catch (MissingResourceException e) {
-        	///CLOVER:OFF
-        	// coverage requires separate run with no data, so skip
+            ///CLOVER:OFF
+            // coverage requires separate run with no data, so skip
             return new SimpleDateFormat("M/d/yy h:mm a");
             ///CLOVER:ON
         }

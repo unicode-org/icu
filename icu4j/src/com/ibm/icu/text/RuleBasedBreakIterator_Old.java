@@ -7,7 +7,7 @@
 
 
 /*
- * @(#)RuleBasedBreakIterator.java	1.3 99/04/07
+ * @(#)RuleBasedBreakIterator.java    1.3 99/04/07
  *
  */
 
@@ -461,135 +461,135 @@ public void debugDumpTables() {
      * @internal
      */
 public void writeTablesToFile(FileOutputStream file, boolean littleEndian) throws IOException {
-	// NOTE: The format being written here is designed to be compatible with
-	// the ICU udata interfaces and may not be useful for much else
-	DataOutputStream out = new DataOutputStream(file);
-	
-//	--- write the file header ---
-	byte[] comment = "Copyright (C) 1999, International Business Machines Corp. and others. All Rights Reserved.".getBytes("US-ASCII");
-//	write the size of the header (rounded up to the next 16-byte boundary)
-	short headerSize = (short)(comment.length + 1 // length of comment
-			+ 24); // size of static header data
-	short realHeaderSize = (short)(headerSize + ((headerSize % 16 == 0) ? 0 : 16 - (headerSize % 16)));
-	writeSwappedShort(realHeaderSize, out, littleEndian);
-//	write magic byte values
-	out.write(0xda);
-	out.write(0x27);
-//	write size of core header data
-	writeSwappedShort((short)20, out, littleEndian);
-//	write reserved bytes
-	writeSwappedShort((short)0, out, littleEndian);
-	
-//	write flag indicating whether we're big-endian
-	if (littleEndian) {
-		out.write(0);
-	} else {
-		out.write(1);
-	}
-	
-//	write character set family code (0 means ASCII)
-	out.write(0);
-//	write size of UChar in this file
-	out.write(2);
-//	write reserved byte
-	out.write(0);
-//	write data format identifier (this is an array of bytes in ICU, so the value is NOT swapped!)
-	out.writeInt(0x42524b53);   // ("BRKS")
-//	write file format version number (NOT swapped!)
-	out.writeInt(0);
-//	write data version number (NOT swapped!)
-	out.writeInt(0);
-//	write copyright notice
-	out.write(comment);
-	out.write(0);
-//	fill in padding bytes
-	while (headerSize < realHeaderSize) {
-		out.write(0);
-		++headerSize;
-	}
-	
-//	--- write index to the file ---
-//	write the number of columns in the state table
-	writeSwappedInt(numCategories, out, littleEndian);
-	int fileEnd = 36;
-//	write the location in the file of the BreakIterator description string
-	writeSwappedInt(fileEnd, out, littleEndian);
-	fileEnd += (description.length() + 1) * 2;
-	fileEnd += (fileEnd % 4 == 0) ? 0 : 4 - (fileEnd % 4);
-//	write the location of the character category table's index
-	writeSwappedInt(fileEnd, out, littleEndian);
-	fileEnd += charCategoryTable.getIndexArray().length * 2;
-	fileEnd += (fileEnd % 4 == 0) ? 0 : 4 - (fileEnd % 4);
-//	write the location of the character category table's values array
-	writeSwappedInt(fileEnd, out, littleEndian);
-	fileEnd += charCategoryTable.getValueArray().length;
-	fileEnd += (fileEnd % 4 == 0) ? 0 : 4 - (fileEnd % 4);
-//	write the location of the forward state table
-	writeSwappedInt(fileEnd, out, littleEndian);
-	fileEnd += stateTable.length * 2;
-	fileEnd += (fileEnd % 4 == 0) ? 0 : 4 - (fileEnd % 4);
-//	write the location of the backward state table
-	writeSwappedInt(fileEnd, out, littleEndian);
-	fileEnd += backwardsStateTable.length * 2;
-	fileEnd += (fileEnd % 4 == 0) ? 0 : 4 - (fileEnd % 4);
-//	write the location of the endStates flags
-	writeSwappedInt(fileEnd, out, littleEndian);
-	fileEnd += endStates.length;
-	fileEnd += (fileEnd % 4 == 0) ? 0 : 4 - (fileEnd % 4);
-//	write the location of the lookaheadStates flags
-	writeSwappedInt(fileEnd, out, littleEndian);
-	fileEnd += lookaheadStates.length;
-	fileEnd += (fileEnd % 4 == 0) ? 0 : 4 - (fileEnd % 4);
-//	write the length of the file
-	writeSwappedInt(fileEnd, out, littleEndian);
-	
-//	--- write the actual data ---
-//	write description string
-	for (int i = 0; i < description.length(); i++)
-		writeSwappedShort((short)description.charAt(i), out, littleEndian);
-	out.writeShort(0);
-	if ((description.length() + 1) % 2 == 1)
-		out.writeShort(0);
-//	write character category table
-	char[] temp1 = charCategoryTable.getIndexArray();
-	for (int i = 0; i < temp1.length; i++)
-		writeSwappedShort((short)temp1[i], out, littleEndian);
-	if (temp1.length % 2 == 1)
-		out.writeShort(0);
-	byte[] temp2 = charCategoryTable.getValueArray();
-	out.write(temp2);
-	switch (temp2.length % 4) {
-		case 1: out.write(0);
-		case 2: out.write(0);
-		case 3: out.write(0);
-		default: break;
-	}
-//	write the state transition tables
-	for (int i = 0; i < stateTable.length; i++)
-		writeSwappedShort(stateTable[i], out, littleEndian);
-	if (stateTable.length % 2 == 1)
-		out.writeShort(0);
-	for (int i = 0; i < backwardsStateTable.length; i++)
-		writeSwappedShort(backwardsStateTable[i], out, littleEndian);
-	if (backwardsStateTable.length % 2 == 1)
-		out.writeShort(0);
-//	write the flag arrays
-	for (int i = 0; i < endStates.length; i++)
-		out.writeBoolean(endStates[i]);
-	switch (endStates.length % 4) {
-		case 1: out.write(0);
-		case 2: out.write(0);
-		case 3: out.write(0);
-		default: break;
-	}
-	for (int i = 0; i < lookaheadStates.length; i++)
-		out.writeBoolean(lookaheadStates[i]);
-	switch (lookaheadStates.length % 4) {
-		case 1: out.write(0);
-		case 2: out.write(0);
-		case 3: out.write(0);
-		default: break;
-	}
+    // NOTE: The format being written here is designed to be compatible with
+    // the ICU udata interfaces and may not be useful for much else
+    DataOutputStream out = new DataOutputStream(file);
+    
+//    --- write the file header ---
+    byte[] comment = "Copyright (C) 1999, International Business Machines Corp. and others. All Rights Reserved.".getBytes("US-ASCII");
+//    write the size of the header (rounded up to the next 16-byte boundary)
+    short headerSize = (short)(comment.length + 1 // length of comment
+            + 24); // size of static header data
+    short realHeaderSize = (short)(headerSize + ((headerSize % 16 == 0) ? 0 : 16 - (headerSize % 16)));
+    writeSwappedShort(realHeaderSize, out, littleEndian);
+//    write magic byte values
+    out.write(0xda);
+    out.write(0x27);
+//    write size of core header data
+    writeSwappedShort((short)20, out, littleEndian);
+//    write reserved bytes
+    writeSwappedShort((short)0, out, littleEndian);
+    
+//    write flag indicating whether we're big-endian
+    if (littleEndian) {
+        out.write(0);
+    } else {
+        out.write(1);
+    }
+    
+//    write character set family code (0 means ASCII)
+    out.write(0);
+//    write size of UChar in this file
+    out.write(2);
+//    write reserved byte
+    out.write(0);
+//    write data format identifier (this is an array of bytes in ICU, so the value is NOT swapped!)
+    out.writeInt(0x42524b53);   // ("BRKS")
+//    write file format version number (NOT swapped!)
+    out.writeInt(0);
+//    write data version number (NOT swapped!)
+    out.writeInt(0);
+//    write copyright notice
+    out.write(comment);
+    out.write(0);
+//    fill in padding bytes
+    while (headerSize < realHeaderSize) {
+        out.write(0);
+        ++headerSize;
+    }
+    
+//    --- write index to the file ---
+//    write the number of columns in the state table
+    writeSwappedInt(numCategories, out, littleEndian);
+    int fileEnd = 36;
+//    write the location in the file of the BreakIterator description string
+    writeSwappedInt(fileEnd, out, littleEndian);
+    fileEnd += (description.length() + 1) * 2;
+    fileEnd += (fileEnd % 4 == 0) ? 0 : 4 - (fileEnd % 4);
+//    write the location of the character category table's index
+    writeSwappedInt(fileEnd, out, littleEndian);
+    fileEnd += charCategoryTable.getIndexArray().length * 2;
+    fileEnd += (fileEnd % 4 == 0) ? 0 : 4 - (fileEnd % 4);
+//    write the location of the character category table's values array
+    writeSwappedInt(fileEnd, out, littleEndian);
+    fileEnd += charCategoryTable.getValueArray().length;
+    fileEnd += (fileEnd % 4 == 0) ? 0 : 4 - (fileEnd % 4);
+//    write the location of the forward state table
+    writeSwappedInt(fileEnd, out, littleEndian);
+    fileEnd += stateTable.length * 2;
+    fileEnd += (fileEnd % 4 == 0) ? 0 : 4 - (fileEnd % 4);
+//    write the location of the backward state table
+    writeSwappedInt(fileEnd, out, littleEndian);
+    fileEnd += backwardsStateTable.length * 2;
+    fileEnd += (fileEnd % 4 == 0) ? 0 : 4 - (fileEnd % 4);
+//    write the location of the endStates flags
+    writeSwappedInt(fileEnd, out, littleEndian);
+    fileEnd += endStates.length;
+    fileEnd += (fileEnd % 4 == 0) ? 0 : 4 - (fileEnd % 4);
+//    write the location of the lookaheadStates flags
+    writeSwappedInt(fileEnd, out, littleEndian);
+    fileEnd += lookaheadStates.length;
+    fileEnd += (fileEnd % 4 == 0) ? 0 : 4 - (fileEnd % 4);
+//    write the length of the file
+    writeSwappedInt(fileEnd, out, littleEndian);
+    
+//    --- write the actual data ---
+//    write description string
+    for (int i = 0; i < description.length(); i++)
+        writeSwappedShort((short)description.charAt(i), out, littleEndian);
+    out.writeShort(0);
+    if ((description.length() + 1) % 2 == 1)
+        out.writeShort(0);
+//    write character category table
+    char[] temp1 = charCategoryTable.getIndexArray();
+    for (int i = 0; i < temp1.length; i++)
+        writeSwappedShort((short)temp1[i], out, littleEndian);
+    if (temp1.length % 2 == 1)
+        out.writeShort(0);
+    byte[] temp2 = charCategoryTable.getValueArray();
+    out.write(temp2);
+    switch (temp2.length % 4) {
+        case 1: out.write(0);
+        case 2: out.write(0);
+        case 3: out.write(0);
+        default: break;
+    }
+//    write the state transition tables
+    for (int i = 0; i < stateTable.length; i++)
+        writeSwappedShort(stateTable[i], out, littleEndian);
+    if (stateTable.length % 2 == 1)
+        out.writeShort(0);
+    for (int i = 0; i < backwardsStateTable.length; i++)
+        writeSwappedShort(backwardsStateTable[i], out, littleEndian);
+    if (backwardsStateTable.length % 2 == 1)
+        out.writeShort(0);
+//    write the flag arrays
+    for (int i = 0; i < endStates.length; i++)
+        out.writeBoolean(endStates[i]);
+    switch (endStates.length % 4) {
+        case 1: out.write(0);
+        case 2: out.write(0);
+        case 3: out.write(0);
+        default: break;
+    }
+    for (int i = 0; i < lookaheadStates.length; i++)
+        out.writeBoolean(lookaheadStates[i]);
+    switch (lookaheadStates.length % 4) {
+        case 1: out.write(0);
+        case 2: out.write(0);
+        case 3: out.write(0);
+        default: break;
+    }
 }
 
 /**
@@ -840,7 +840,7 @@ throws IOException {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public int  getRuleStatus() {
-    	return 0;
+        return 0;
     }
 
 
@@ -858,10 +858,10 @@ throws IOException {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
      public int getRuleStatusVec(int[] fillInArray) {
-     	if (fillInArray != null && fillInArray.length >= 1) {
-     		fillInArray[0] = 0;
-     	}
-     	return 1;
+         if (fillInArray != null && fillInArray.length >= 1) {
+             fillInArray[0] = 0;
+         }
+         return 1;
      }
 
 
@@ -3071,7 +3071,7 @@ System.out.println();
                     Utility.escape(context.substring(position)));
         }
 
-	///CLOVER:OFF
+    ///CLOVER:OFF
         /**
          * @internal
          */

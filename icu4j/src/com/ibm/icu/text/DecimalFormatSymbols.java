@@ -438,7 +438,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
             return (DecimalFormatSymbols) super.clone();
             // other fields are bit-copied
         } catch (CloneNotSupportedException e) {
-        	///CLOVER:OFF
+            ///CLOVER:OFF
             throw new InternalError();
             ///CLOVER:ON
         }
@@ -506,7 +506,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
         ULocale uloc = r.getULocale();
         setLocale(uloc, uloc);
 
-	// {dlf} clean up below now that we have our own resource data
+    // {dlf} clean up below now that we have our own resource data
         decimalSeparator = numberElements[0].charAt(0);
         groupingSeparator = numberElements[1].charAt(0);
         // Temporary hack to support old JDK 1.1 resources
@@ -527,10 +527,10 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
 //            numberElements[9] : "\u221e";
 //        NaN = numberElements.length >= 11 ?
 //            numberElements[10] : "\ufffd";
-		exponentSeparator = numberElements[7];
-		perMill = numberElements[8].charAt(0);
-		infinity = numberElements[9];
-		NaN = numberElements[10];
+        exponentSeparator = numberElements[7];
+        perMill = numberElements[8].charAt(0);
+        infinity = numberElements[9];
+        NaN = numberElements[10];
         
         // TODO Temporarily hard code; retrieve from resource later
         plusSign  = DecimalFormat.PATTERN_PLUS_SIGN;
@@ -560,7 +560,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
         // If there is a currency decimal, use it.
 //        monetarySeparator =
 //            numberElements[numberElements.length >= 12 ? 11 : 0].charAt(0);
-		monetarySeparator = numberElements[11].charAt(0);
+        monetarySeparator = numberElements[11].charAt(0);
     }
 
     /**

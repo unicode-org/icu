@@ -179,7 +179,7 @@ final class UCharacterNameReader implements ICUBinary.Authenticate
         byte type      = m_dataInputStream_.readByte();
         byte variant   = m_dataInputStream_.readByte();
         if (!result.setInfo(rangestart, rangeend, type, variant)) {
-        	return null;
+            return null;
         }
                          
         int size = m_dataInputStream_.readChar();

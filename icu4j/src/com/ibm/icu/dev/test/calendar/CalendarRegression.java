@@ -214,10 +214,10 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
     */
 
     public void Test4059654() {
-	// work around bug for jdk1.4 on solaris 2.6, which uses funky timezone names
-	// jdk1.4.1 will drop support for 2.6 so we should be ok when it comes out
-	java.util.TimeZone javazone = java.util.TimeZone.getTimeZone("GMT");
-	TimeZone icuzone = TimeZone.getTimeZone("GMT");
+    // work around bug for jdk1.4 on solaris 2.6, which uses funky timezone names
+    // jdk1.4.1 will drop support for 2.6 so we should be ok when it comes out
+    java.util.TimeZone javazone = java.util.TimeZone.getTimeZone("GMT");
+    TimeZone icuzone = TimeZone.getTimeZone("GMT");
 
         GregorianCalendar gc = new GregorianCalendar(icuzone);
         
@@ -319,10 +319,10 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
     }
 
     public void Test4071385() {
-	// work around bug for jdk1.4 on solaris 2.6, which uses funky timezone names
-	// jdk1.4.1 will drop support for 2.6 so we should be ok when it comes out
-	java.util.TimeZone javazone = java.util.TimeZone.getTimeZone("GMT");
-	TimeZone icuzone = TimeZone.getTimeZone("GMT");
+    // work around bug for jdk1.4 on solaris 2.6, which uses funky timezone names
+    // jdk1.4.1 will drop support for 2.6 so we should be ok when it comes out
+    java.util.TimeZone javazone = java.util.TimeZone.getTimeZone("GMT");
+    TimeZone icuzone = TimeZone.getTimeZone("GMT");
 
         Calendar cal = Calendar.getInstance(icuzone);
         java.util.Calendar tempcal = java.util.Calendar.getInstance(javazone);
@@ -1612,18 +1612,18 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
      */
     public void Test4288792() throws Exception 
     {
-	TimeZone savedTZ = TimeZone.getDefault();
-	TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
-	GregorianCalendar cal = new GregorianCalendar();
+    TimeZone savedTZ = TimeZone.getDefault();
+    TimeZone.setDefault(TimeZone.getTimeZone("GMT"));
+    GregorianCalendar cal = new GregorianCalendar();
         
-	for (int i = 1900; i < 2100; i++) {
-	    for (int j1 = 1; j1 <= 7; j1++) {
-		// Loop for MinimalDaysInFirstWeek: 1..7
-		for (int j = Calendar.SUNDAY; j <= Calendar.SATURDAY; j++) {
-		    // Loop for FirstDayOfWeek: SUNDAY..SATURDAY
-		    cal.clear();
-		    cal.setMinimalDaysInFirstWeek(j1);
-		    cal.setFirstDayOfWeek(j);
+    for (int i = 1900; i < 2100; i++) {
+        for (int j1 = 1; j1 <= 7; j1++) {
+        // Loop for MinimalDaysInFirstWeek: 1..7
+        for (int j = Calendar.SUNDAY; j <= Calendar.SATURDAY; j++) {
+            // Loop for FirstDayOfWeek: SUNDAY..SATURDAY
+            cal.clear();
+            cal.setMinimalDaysInFirstWeek(j1);
+            cal.setFirstDayOfWeek(j);
                     // Set the calendar to the first day of the last week
                     // of the year.  This may overlap some of the start of
                     // the next year; that is, the last week of 1999 may
@@ -1632,31 +1632,31 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
                     // get(WEEK_OF_YEAR).  The result should be the same
                     // for the whole week.  Note that a bug in
                     // getActualMaximum() will break this test.
-		    cal.set(Calendar.YEAR, i);
-		    int maxWeek = cal.getActualMaximum(Calendar.WEEK_OF_YEAR);
-		    cal.set(Calendar.WEEK_OF_YEAR, maxWeek);
-		    cal.set(Calendar.DAY_OF_WEEK, j);
-		    for (int k = 1; k < 7; k++) {
-			cal.add(Calendar.DATE, 1);
-			int WOY = cal.get(Calendar.WEEK_OF_YEAR);
-			if (WOY != maxWeek) {
-			    errln(cal.getTime() + ",got=" + WOY
-				  + ",expected=" + maxWeek 
-				  + ",min=" + j1 + ",first=" + j);
-			}
-		    }
+            cal.set(Calendar.YEAR, i);
+            int maxWeek = cal.getActualMaximum(Calendar.WEEK_OF_YEAR);
+            cal.set(Calendar.WEEK_OF_YEAR, maxWeek);
+            cal.set(Calendar.DAY_OF_WEEK, j);
+            for (int k = 1; k < 7; k++) {
+            cal.add(Calendar.DATE, 1);
+            int WOY = cal.get(Calendar.WEEK_OF_YEAR);
+            if (WOY != maxWeek) {
+                errln(cal.getTime() + ",got=" + WOY
+                  + ",expected=" + maxWeek 
+                  + ",min=" + j1 + ",first=" + j);
+            }
+            }
                     // Now advance the calendar one more day.  This should
                     // put it at the first day of week 1 of the next year.
-		    cal.add(Calendar.DATE, 1);
-		    int WOY = cal.get(Calendar.WEEK_OF_YEAR);
-		    if (WOY != 1) {
-			errln(cal.getTime() + ",got=" + WOY 
-			      + ",expected=1,min=" + j1 + ",first" + j);
-		    }
-		}
-	    }
-	}
-	TimeZone.setDefault(savedTZ);
+            cal.add(Calendar.DATE, 1);
+            int WOY = cal.get(Calendar.WEEK_OF_YEAR);
+            if (WOY != 1) {
+            errln(cal.getTime() + ",got=" + WOY 
+                  + ",expected=1,min=" + j1 + ",first" + j);
+            }
+        }
+        }
+    }
+    TimeZone.setDefault(savedTZ);
     }
 
     /**

@@ -101,17 +101,17 @@ public class IntlTestDecimalFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
             errln("ERROR: get/set MinusSign failed");
         }
 
-		char plusSign = en.getPlusSign();
-		fr.setPlusSign(plusSign);
-		if(fr.getPlusSign() != en.getPlusSign()) {
-			errln("ERROR: get/set PlusSign failed");
-		}
+        char plusSign = en.getPlusSign();
+        fr.setPlusSign(plusSign);
+        if(fr.getPlusSign() != en.getPlusSign()) {
+            errln("ERROR: get/set PlusSign failed");
+        }
 
-		char padEscape = en.getPadEscape();
-		fr.setPadEscape(padEscape);
-		if(fr.getPadEscape() != en.getPadEscape()) {
-			errln("ERROR: get/set PadEscape failed");
-		}
+        char padEscape = en.getPadEscape();
+        fr.setPadEscape(padEscape);
+        if(fr.getPadEscape() != en.getPadEscape()) {
+            errln("ERROR: get/set PadEscape failed");
+        }
 
         String exponential = en.getExponentSeparator();
         fr.setExponentSeparator(exponential);
@@ -129,10 +129,10 @@ public class IntlTestDecimalFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
     }
     
     public void testCoverage() {
-    	DecimalFormatSymbols df = new DecimalFormatSymbols();
-    	DecimalFormatSymbols df2 = (DecimalFormatSymbols)df.clone();
-    	if (!df.equals(df2) || df.hashCode() != df2.hashCode()) {
-    		errln("decimal format symbols clone, equals, or hashCode failed");    		
-    	}
+        DecimalFormatSymbols df = new DecimalFormatSymbols();
+        DecimalFormatSymbols df2 = (DecimalFormatSymbols)df.clone();
+        if (!df.equals(df2) || df.hashCode() != df2.hashCode()) {
+            errln("decimal format symbols clone, equals, or hashCode failed");            
+        }
     }
 }

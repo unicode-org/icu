@@ -17,9 +17,9 @@ import java.text.ParseException;
  * @summary Round trip test of Transliterator
  */
 public class ReplaceableTest extends TestFmwk {
-	
-	public static final boolean LATER_THAN_2_1 = true;
-	
+    
+    public static final boolean LATER_THAN_2_1 = true;
+    
     public static void main(String[] args) throws Exception {
         new ReplaceableTest().run(args);
     }
@@ -34,7 +34,7 @@ public class ReplaceableTest extends TestFmwk {
         check("*(x) > A $1 B", "wxy", "11223");
         check("*(x)(y) > A $2 B $1 C $2 D", "wxyz", "113322334");
         check("*(x)(y)(z) > A $3 B $2 C $1 D", "wxyzu", "114433225");
-	// Disabled for 2.4.  TODO Revisit in 2.6 or later.
+    // Disabled for 2.4.  TODO Revisit in 2.6 or later.
         //check("*x > a", "xyz", "223"); // expect "123"?
         //check("*x > a", "wxy", "113"); // expect "123"?
         //check("*x > a", "\uFFFFxy", "_33"); // expect "_23"?
@@ -47,11 +47,11 @@ public class ReplaceableTest extends TestFmwk {
         
         Transliterator t;
         if (transliteratorName.startsWith("*")) {
-        	transliteratorName = transliteratorName.substring(1);
-        	t = Transliterator.createFromRules("test", transliteratorName,
+            transliteratorName = transliteratorName.substring(1);
+            t = Transliterator.createFromRules("test", transliteratorName,
                                                Transliterator.FORWARD);
         } else {
-        	t = Transliterator.getInstance(transliteratorName);
+            t = Transliterator.getInstance(transliteratorName);
         }
         t.transliterate(tr);
         String newStyles = tr.getStyles();
@@ -178,7 +178,7 @@ public class ReplaceableTest extends TestFmwk {
         }
         
         public boolean hasMetaData() {
-        	return true;
+            return true;
         }
 
         static final boolean DEBUG = false;

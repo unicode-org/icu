@@ -221,9 +221,9 @@ public class HebrewTest extends CalendarTest {
      */
     public void TestTimeFields() {
         HebrewCalendar calendar = new HebrewCalendar(5761, 0, 11, 12, 28, 15);
-		calendar.set(Calendar.YEAR, 5717);
-		calendar.set(Calendar.MONTH, 2);
-		calendar.set(Calendar.DAY_OF_MONTH, 23);
+        calendar.set(Calendar.YEAR, 5717);
+        calendar.set(Calendar.MONTH, 2);
+        calendar.set(Calendar.DAY_OF_MONTH, 23);
         if (calendar.get(Calendar.HOUR_OF_DAY) != 12) {
             errln("Fail: HebrewCalendar HOUR_OF_DAY = " + calendar.get(Calendar.HOUR_OF_DAY));
         }
@@ -357,54 +357,54 @@ public class HebrewTest extends CalendarTest {
     }
     
     public void TestCoverage() {
-    	{
-    	    // new HebrewCalendar(TimeZone)
-    	    HebrewCalendar cal = new HebrewCalendar(TimeZone.getDefault());
-    	    if(cal == null){
+        {
+            // new HebrewCalendar(TimeZone)
+            HebrewCalendar cal = new HebrewCalendar(TimeZone.getDefault());
+            if(cal == null){
                 errln("could not create HebrewCalendar with TimeZone");
-    	    }
+            }
         }
     
-    	{
-    	    // new HebrewCalendar(Locale)
-    	    HebrewCalendar cal = new HebrewCalendar(Locale.getDefault());
+        {
+            // new HebrewCalendar(Locale)
+            HebrewCalendar cal = new HebrewCalendar(Locale.getDefault());
             if(cal == null){
                 errln("could not create HebrewCalendar with locale");
             }
         }
     
-    	{
-    	    // new HebrewCalendar(Date)
-    	    HebrewCalendar cal = new HebrewCalendar(new Date());
+        {
+            // new HebrewCalendar(Date)
+            HebrewCalendar cal = new HebrewCalendar(new Date());
             if(cal == null){
                 errln("could not create HebrewCalendar with date");
             }
-    	}
+        }
     
-    	{
-    	    // data
-    	    HebrewCalendar cal = new HebrewCalendar(2800, HebrewCalendar.SHEVAT, 1);
-    	    Date time = cal.getTime();
+        {
+            // data
+            HebrewCalendar cal = new HebrewCalendar(2800, HebrewCalendar.SHEVAT, 1);
+            Date time = cal.getTime();
     
-    	    String[] calendarLocales = {
-    		"iw_IL"
-    	    };
+            String[] calendarLocales = {
+            "iw_IL"
+            };
     
-    	    String[] formatLocales = {
-    		"en", "fi", "fr", "hu", "iw", "nl"
-    	    };
-    	    for (int i = 0; i < calendarLocales.length; ++i) {
-        		String calLocName = calendarLocales[i];
-        		Locale calLocale = LocaleUtility.getLocaleFromName(calLocName);
-        		cal = new HebrewCalendar(calLocale);
+            String[] formatLocales = {
+            "en", "fi", "fr", "hu", "iw", "nl"
+            };
+            for (int i = 0; i < calendarLocales.length; ++i) {
+                String calLocName = calendarLocales[i];
+                Locale calLocale = LocaleUtility.getLocaleFromName(calLocName);
+                cal = new HebrewCalendar(calLocale);
         
-        		for (int j = 0; j < formatLocales.length; ++j) {
-        		    String locName = formatLocales[j];
-        		    Locale formatLocale = LocaleUtility.getLocaleFromName(locName);
-        		    DateFormat format = DateFormat.getDateTimeInstance(cal, DateFormat.FULL, DateFormat.FULL, formatLocale);
-        		    logln(calLocName + "/" + locName + " --> " + format.format(time));
-        		}
-    	    }
-    	}
+                for (int j = 0; j < formatLocales.length; ++j) {
+                    String locName = formatLocales[j];
+                    Locale formatLocale = LocaleUtility.getLocaleFromName(locName);
+                    DateFormat format = DateFormat.getDateTimeInstance(cal, DateFormat.FULL, DateFormat.FULL, formatLocale);
+                    logln(calLocName + "/" + locName + " --> " + format.format(time));
+                }
+            }
+        }
     }
 };

@@ -520,17 +520,17 @@ public class ChineseTest extends CalendarTest {
 //        }
 //    }
 
-	public void TestCoverage() {
-		ChineseCalendar cal = new ChineseCalendar();
-		ChineseDateFormat fmt = (ChineseDateFormat)DateFormat.getInstance(cal);
-		fmt.applyPattern("llyyll");
-		Date time = getDate(2100, Calendar.JANUARY, 1);
-		String str = fmt.format(time);
-		try {
-			Date e = fmt.parse(str);
-			logln("chinese calendar time: " + time + " result: " + str + " --> " + e);
-		} catch (java.text.ParseException ex) {
-			logln(ex.getMessage()); // chinese calendar can't parse this, no error for now
-		}
-	}
+    public void TestCoverage() {
+        ChineseCalendar cal = new ChineseCalendar();
+        ChineseDateFormat fmt = (ChineseDateFormat)DateFormat.getInstance(cal);
+        fmt.applyPattern("llyyll");
+        Date time = getDate(2100, Calendar.JANUARY, 1);
+        String str = fmt.format(time);
+        try {
+            Date e = fmt.parse(str);
+            logln("chinese calendar time: " + time + " result: " + str + " --> " + e);
+        } catch (java.text.ParseException ex) {
+            logln(ex.getMessage()); // chinese calendar can't parse this, no error for now
+        }
+    }
 }

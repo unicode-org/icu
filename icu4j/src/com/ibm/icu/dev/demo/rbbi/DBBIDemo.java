@@ -23,7 +23,7 @@ public class DBBIDemo extends DemoApplet
 {
     public static void main(String argv[]) {
         Locale.setDefault(new Locale("en", "US", "DEMO"));
-		new DBBIDemo().showDemo();
+        new DBBIDemo().showDemo();
     }
 
     public Frame createDemoFrame(DemoApplet applet) {
@@ -243,36 +243,36 @@ text.setWrapStyleWord(true);
         enableEvents(KeyEvent.KEY_PRESSED);
         enableEvents(KeyEvent.KEY_RELEASED);
 
-	text.addKeyListener(new KeyAdapter() {
-		public void keyPressed(KeyEvent e) {
-		    if (e.isControlDown()) {
-			int kc = e.getKeyCode();
-			switch (e.getKeyCode()) {
-			case KeyEvent.VK_N:
-			case KeyEvent.VK_RIGHT:
-			    handleForward();
-			    break;
-			case KeyEvent.VK_P:
-			case KeyEvent.VK_LEFT:
-			    handleBackward();
-			    break;
-			default:
-			    break;
-			}
-			e.consume();
-		    }
-		}
-		public void keyReleased(KeyEvent e) {
-		    if (e.isControlDown()) {
-			e.consume();
-		    }
-		}
-		public void keyTyped(KeyEvent e) {
-		    if (e.isControlDown()) {
-			e.consume();
-		    }
-		}
-	    });
+    text.addKeyListener(new KeyAdapter() {
+        public void keyPressed(KeyEvent e) {
+            if (e.isControlDown()) {
+            int kc = e.getKeyCode();
+            switch (e.getKeyCode()) {
+            case KeyEvent.VK_N:
+            case KeyEvent.VK_RIGHT:
+                handleForward();
+                break;
+            case KeyEvent.VK_P:
+            case KeyEvent.VK_LEFT:
+                handleBackward();
+                break;
+            default:
+                break;
+            }
+            e.consume();
+            }
+        }
+        public void keyReleased(KeyEvent e) {
+            if (e.isControlDown()) {
+            e.consume();
+            }
+        }
+        public void keyTyped(KeyEvent e) {
+            if (e.isControlDown()) {
+            e.consume();
+            }
+        }
+        });
 
         // (new Thread(this)).start();
     }

@@ -266,9 +266,9 @@ public class RoundTripTest extends TestFmwk {
         long start = System.currentTimeMillis();
         new Test("Latin-Thai")
           .test("[a-zA-Z\u0142\u1ECD\u00E6\u0131\u0268\u02CC]",
-				"[\u0E01-\u0E3A\u0E40-\u0E5B]", 
-				"[a-zA-Z\u0142\u1ECD\u00E6\u0131\u0268\u02B9\u02CC]",
-				null, this, new LegalThai());
+                "[\u0E01-\u0E3A\u0E40-\u0E5B]", 
+                "[a-zA-Z\u0142\u1ECD\u00E6\u0131\u0268\u02B9\u02CC]",
+                null, this, new LegalThai());
         showElapsed(start, "TestThai");
     }
 
@@ -997,12 +997,12 @@ public class RoundTripTest extends TestFmwk {
             test(sourceRange, targetRange, sourceRange, roundtripExclusions, log, legalSource);
         }
 
-		/**
-		 * Will test 
-		 * that everything in sourceRange maps to targetRange,
-		 * that everything in targetRange maps to backtoSourceRange
-		 * that everything roundtrips from target -> source -> target, except roundtripExceptions
-		 */
+        /**
+         * Will test 
+         * that everything in sourceRange maps to targetRange,
+         * that everything in targetRange maps to backtoSourceRange
+         * that everything roundtrips from target -> source -> target, except roundtripExceptions
+         */
         public void test(String sourceRange, String targetRange, String backtoSourceRange,
           String roundtripExclusions, RoundTripTest log, Legal legalSource)
           throws java.io.IOException, java.text.ParseException {
@@ -1039,7 +1039,7 @@ public class RoundTripTest extends TestFmwk {
 
             // note: check that every transliterator transliterates the null string correctly!
 
-	    // {dlf} reorganize so can run test in protected security environment
+        // {dlf} reorganize so can run test in protected security environment
 //              String logFileName = "test_" + transliteratorID.replace('/', '_') + ".html";
 
 //              File lf = new File(logFileName);
@@ -1048,7 +1048,7 @@ public class RoundTripTest extends TestFmwk {
 //              out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
 //                        new FileOutputStream(logFileName), "UTF8"), 4*1024));
 
-	    ByteArrayOutputStream bast = new ByteArrayOutputStream();
+        ByteArrayOutputStream bast = new ByteArrayOutputStream();
             out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
                       bast, "UTF8"), 4*1024));
             //out.write('\uFFEF');    // BOM
@@ -1066,22 +1066,22 @@ public class RoundTripTest extends TestFmwk {
             out.close();
 
             if (errorCount > 0) {
-		try {
-		    String logFileName = "test_" + transliteratorID.replace('/', '_') + ".html";
-		    File lf = new File(logFileName);
-		    log.logln("Creating log file " + lf.getAbsoluteFile());
-		    FileOutputStream fos = new FileOutputStream(lf);
-		    fos.write(bast.toByteArray());
-		    fos.close();
-		    log.errln(transliteratorID + " errors: "
-			      + errorCount + (errorCount > errorLimit ? " (at least!)" : "")
-			      + ", see " + lf.getAbsoluteFile());
-		}
-		catch (SecurityException e) {
-		    log.errln(transliteratorID + " errors: "
-			      + errorCount + (errorCount > errorLimit ? " (at least!)" : "")
-			      + ", no log provided due to protected test domain");
-		}
+        try {
+            String logFileName = "test_" + transliteratorID.replace('/', '_') + ".html";
+            File lf = new File(logFileName);
+            log.logln("Creating log file " + lf.getAbsoluteFile());
+            FileOutputStream fos = new FileOutputStream(lf);
+            fos.write(bast.toByteArray());
+            fos.close();
+            log.errln(transliteratorID + " errors: "
+                  + errorCount + (errorCount > errorLimit ? " (at least!)" : "")
+                  + ", see " + lf.getAbsoluteFile());
+        }
+        catch (SecurityException e) {
+            log.errln(transliteratorID + " errors: "
+                  + errorCount + (errorCount > errorLimit ? " (at least!)" : "")
+                  + ", no log provided due to protected test domain");
+        }
             } else {
                 log.logln(transliteratorID + " ok");
 //                  new File(logFileName).delete();
@@ -1107,7 +1107,7 @@ public class RoundTripTest extends TestFmwk {
             AbbreviatedUnicodeSetIterator usi2 = new AbbreviatedUnicodeSetIterator();
 
             log.logln("Checking that at least one irrevant characters is not NFC'ed");
-			out.println("<h3>Checking that at least one irrevant characters is not NFC'ed</h3>");
+            out.println("<h3>Checking that at least one irrevant characters is not NFC'ed</h3>");
 
             String irrelevants = "\u2000\u2001\u2126\u212A\u212B\u2329"; // string is from NFC_NO in the UCD
 
@@ -1146,12 +1146,12 @@ public class RoundTripTest extends TestFmwk {
                     throw e;
                 }
 
-			   out.println("<h3>Roundtrip Exclusions: " + new UnicodeSet(roundtripExclusions) + "</h3>");
-			   out.flush();
+               out.println("<h3>Roundtrip Exclusions: " + new UnicodeSet(roundtripExclusions) + "</h3>");
+               out.flush();
 
-			  log.logln("Checking that source -> target -> source");
-			  out.println("<h3>Checking that source -> target -> source</h3>");
-			  
+              log.logln("Checking that source -> target -> source");
+              out.println("<h3>Checking that source -> target -> source</h3>");
+              
               usi.reset(sourceRange);
                 while (usi.next()) {
                     int c = usi.codepoint;
@@ -1164,8 +1164,8 @@ public class RoundTripTest extends TestFmwk {
                     }
                 }
 
-				log.logln("Checking that target -> source -> target");
-				out.println("<h3>Checking that target -> source -> target</h3>");
+                log.logln("Checking that target -> source -> target");
+                out.println("<h3>Checking that target -> source -> target</h3>");
                usi.reset(targetRange);
                 while (usi.next()) {
                     int c = usi.codepoint;
@@ -1181,7 +1181,7 @@ public class RoundTripTest extends TestFmwk {
 
 
             log.logln("Checking that source characters convert to target - Singles");
-			out.println("<h3>Checking that source characters convert to target - Singles</h3>");
+            out.println("<h3>Checking that source characters convert to target - Singles</h3>");
 
             UnicodeSet failSourceTarg = new UnicodeSet();
 
@@ -1214,7 +1214,7 @@ public class RoundTripTest extends TestFmwk {
             }
 
             log.logln("Checking that source characters convert to target - Doubles");
-			out.println("<h3>Checking that source characters convert to target - Doubles</h3>");
+            out.println("<h3>Checking that source characters convert to target - Doubles</h3>");
 
             /*
             for (char c = 0; c < 0xFFFF; ++c) {
@@ -1265,7 +1265,7 @@ public class RoundTripTest extends TestFmwk {
             }
 
             log.logln("Checking that target characters convert to source and back - Singles");
-			out.println("<h3>Checking that target characters convert to source and back - Singles</h3>");
+            out.println("<h3>Checking that target characters convert to source and back - Singles</h3>");
 
             UnicodeSet failTargSource = new UnicodeSet();
             UnicodeSet failRound = new UnicodeSet();
@@ -1295,7 +1295,7 @@ public class RoundTripTest extends TestFmwk {
                     String targD = Normalizer.normalize(targ, Normalizer.NFD);
                     if (!toSource.containsAll(targD)
                             || badCharacters.containsSome(targD)) {
-								/*UnicodeSet temp = */new UnicodeSet().addAll(targD);
+                                /*UnicodeSet temp = */new UnicodeSet().addAll(targD);
                         logWrongScript("Target-Source", cs, targ, toSource, badCharacters);
                         failTargSource.add(cs);
                         continue;
@@ -1315,7 +1315,7 @@ public class RoundTripTest extends TestFmwk {
             }
 
             log.logln("Checking that target characters convert to source and back - Doubles");
-			out.println("<h3>Checking that target characters convert to source and back - Doubles</h3>");
+            out.println("<h3>Checking that target characters convert to source and back - Doubles</h3>");
             int count = 0;
 
             UnicodeSet targetRangeMinusFailures = new UnicodeSet(targetRange);
@@ -1380,30 +1380,30 @@ public class RoundTripTest extends TestFmwk {
             log.logln("");
         }
 
-		final String info(String s) {
-			StringBuffer result = new StringBuffer();
-			result.append("\u200E").append(s).append("\u200E (").append(TestUtility.hex(s)).append("/");
-			if (false) { // append age, as a check
-				int cp = 0;	
-				for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
-					cp = UTF16.charAt(s, i);
-					if (i > 0) result.append(", ");
-					result.append(UCharacter.getAge(cp));
-				}
-			}
-			result.append(")");
-			return result.toString();
-		}
+        final String info(String s) {
+            StringBuffer result = new StringBuffer();
+            result.append("\u200E").append(s).append("\u200E (").append(TestUtility.hex(s)).append("/");
+            if (false) { // append age, as a check
+                int cp = 0;    
+                for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
+                    cp = UTF16.charAt(s, i);
+                    if (i > 0) result.append(", ");
+                    result.append(UCharacter.getAge(cp));
+                }
+            }
+            result.append(")");
+            return result.toString();
+        }
 
         final void logWrongScript(String label, String from, String to, 
           UnicodeSet shouldContainAll, UnicodeSet shouldNotContainAny) {
             if (++errorCount > errorLimit) {
                 throw new TestTruncated("Test truncated; too many failures");
             }
-			String toD = Normalizer.normalize(to, Normalizer.NFD);
-			UnicodeSet temp = new UnicodeSet().addAll(toD);
-			UnicodeSet bad = new UnicodeSet(shouldNotContainAny).retainAll(temp)
-				.addAll(new UnicodeSet(temp).removeAll(shouldContainAll));
+            String toD = Normalizer.normalize(to, Normalizer.NFD);
+            UnicodeSet temp = new UnicodeSet().addAll(toD);
+            UnicodeSet bad = new UnicodeSet(shouldNotContainAny).retainAll(temp)
+                .addAll(new UnicodeSet(temp).removeAll(shouldContainAll));
 
             out.println("<br>Fail " + label + ": " +
                         info(from) + " => " + info(to) + " " + bad

@@ -125,9 +125,9 @@ import java.text.CharacterIterator;
  */
 public abstract class SearchIterator 
 {
-	
-	// public data members -------------------------------------------------
-	
+    
+    // public data members -------------------------------------------------
+    
     /**
      * DONE is returned by previous() and next() after all valid matches have 
      * been returned, and by first() and last() if there are no matches at all.
@@ -163,32 +163,32 @@ public abstract class SearchIterator
         m_reset_ = false;
         matchLength = 0;
     }
-	
-	/**
-	 * <p>
+    
+    /**
+     * <p>
      * Determines whether overlapping matches are returned. See the class 
      * documentation for more information about overlapping matches.
      * </p>
-	 * <p>
+     * <p>
      * The default setting of this property is false
      * </p>
-	 * @param allowOverlap flag indicator if overlapping matches are allowed
+     * @param allowOverlap flag indicator if overlapping matches are allowed
      * @see #isOverlapping
-	 * @stable ICU 2.8
-	 */
-	public void setOverlapping(boolean allowOverlap)
-	{
-		m_isOverlap_ = allowOverlap;
-	}
-	
-	/**
+     * @stable ICU 2.8
+     */
+    public void setOverlapping(boolean allowOverlap)
+    {
+        m_isOverlap_ = allowOverlap;
+    }
+    
+    /**
      * Set the BreakIterator that is used to restrict the points at which 
      * matches are detected.
      * Using <tt>null</tt> as the parameter is legal; it means that break 
      * detection should not be attempted.
      * See class documentation for more information.
      * @param breakiter A BreakIterator that will be used to restrict the 
-     * 					points at which matches are detected.
+     *                     points at which matches are detected.
      * @see #getBreakIterator
      * @see BreakIterator
      * @stable ICU 2.0
@@ -197,23 +197,23 @@ public abstract class SearchIterator
     {
         breakIterator = breakiter;
         if (breakIterator != null) {
-        	breakIterator.setText(targetText);
+            breakIterator.setText(targetText);
         }
     }
     
     /**
      * Set the target text to be searched. Text iteration will then begin at 
- 	 * the start of the text string. This method is useful if you want to 
+      * the start of the text string. This method is useful if you want to 
      * reuse an iterator to search within a different body of text.
-	 * @param text new text iterator to look for match, 
-	 * @exception IllegalArgumentException thrown when text is null or has
-	 * 			  0 length
-	 * @see #getTarget
-	 * @stable ICU 2.4
-	 */
-	public void setTarget(CharacterIterator text)
-	{
-		if (text == null || text.getEndIndex() == text.getIndex()) {
+     * @param text new text iterator to look for match, 
+     * @exception IllegalArgumentException thrown when text is null or has
+     *               0 length
+     * @see #getTarget
+     * @stable ICU 2.4
+     */
+    public void setTarget(CharacterIterator text)
+    {
+        if (text == null || text.getEndIndex() == text.getIndex()) {
             throw new IllegalArgumentException("Illegal null or empty text");
         }
         
@@ -223,27 +223,27 @@ public abstract class SearchIterator
         m_reset_ = true;
         m_isForwardSearching_ = true;
         if (breakIterator != null) {
-        	breakIterator.setText(targetText);
+            breakIterator.setText(targetText);
         }
-	}
+    }
 
-	// public getters ----------------------------------------------------
-	
-	/**
+    // public getters ----------------------------------------------------
+    
+    /**
      * <p>
      * Returns the index of the most recent match in the target text.
-	 * This call returns a valid result only after a successful call to 
-	 * {@link #first}, {@link #next}, {@link #previous}, or {@link #last}.
-	 * Just after construction, or after a searching method returns 
-	 * <tt>DONE</tt>, this method will return <tt>DONE</tt>.
+     * This call returns a valid result only after a successful call to 
+     * {@link #first}, {@link #next}, {@link #previous}, or {@link #last}.
+     * Just after construction, or after a searching method returns 
+     * <tt>DONE</tt>, this method will return <tt>DONE</tt>.
      * </p>
-	 * <p>
+     * <p>
      * Use <tt>getMatchLength</tt> to get the length of the matched text.
      * <tt>getMatchedText</tt> will return the subtext in the searched 
      * target text from index getMatchStart() with length getMatchLength(). 
      * </p>
-	 * @return index to a substring within the text string that is being 
-	 *         searched.
+     * @return index to a substring within the text string that is being 
+     *         searched.
      * @see #getMatchLength
      * @see #getMatchedText
      * @see #first
@@ -251,14 +251,14 @@ public abstract class SearchIterator
      * @see #previous
      * @see #last
      * @see #DONE
-	 * @stable ICU 2.8
-	 */
-	public int getMatchStart()
-	{
+     * @stable ICU 2.8
+     */
+    public int getMatchStart()
+    {
         return m_lastMatchStart_;
-	}
+    }
 
-	/**
+    /**
      * Return the index in the target text at which the iterator is currently
      * positioned. 
      * If the iteration has gone past the end of the target text, or past 
@@ -347,33 +347,33 @@ public abstract class SearchIterator
     {
         if (matchLength > 0) {
             int limit = m_lastMatchStart_ + matchLength;
-    		StringBuffer result = new StringBuffer(matchLength);
-    		result.append(targetText.current());
-    		targetText.next();
-    		while (targetText.getIndex() < limit) {
-    			result.append(targetText.current());
-    			targetText.next();
-    		}
+            StringBuffer result = new StringBuffer(matchLength);
+            result.append(targetText.current());
+            targetText.next();
+            while (targetText.getIndex() < limit) {
+                result.append(targetText.current());
+                targetText.next();
+            }
             targetText.setIndex(m_lastMatchStart_);
-    		return result.toString();
-    	}
+            return result.toString();
+        }
         return null;
     }
 
-	// miscellaneous public methods -----------------------------------------
-		
-	/**
+    // miscellaneous public methods -----------------------------------------
+        
+    /**
      * Search <b>forwards</b> in the target text for the next valid match,
      * starting the search from the current iterator position. The iterator is 
-	 * adjusted so that its current index, as returned by {@link #getIndex},
-	 * is the starting position of the match if one was found. If a match is 
+     * adjusted so that its current index, as returned by {@link #getIndex},
+     * is the starting position of the match if one was found. If a match is 
      * found, the index of the match is returned, otherwise <tt>DONE</tt> is
      * returned.  If overlapping mode is set, the beginning of the found match
      * can be before the end of the current match, if any.
-	 * @return The starting index of the next forward match after the current 
+     * @return The starting index of the next forward match after the current 
      *         iterator position, or 
-	 *         <tt>DONE</tt> if there are no more matches.
-	 * @see #getMatchStart
+     *         <tt>DONE</tt> if there are no more matches.
+     * @see #getMatchStart
      * @see #getMatchLength
      * @see #getMatchedText
      * @see #following
@@ -386,36 +386,36 @@ public abstract class SearchIterator
      */
     public int next()
     {
-    	int start = targetText.getIndex();
-    	if (m_setOffset_ != DONE) {
-	    	start = m_setOffset_;	
-	    	m_setOffset_ = DONE;	
-	    }
-	    if (m_isForwardSearching_) {
-	    	if (!m_reset_ && 
-	        	start + matchLength >= targetText.getEndIndex()) {
-	            // not enough characters to match
+        int start = targetText.getIndex();
+        if (m_setOffset_ != DONE) {
+            start = m_setOffset_;    
+            m_setOffset_ = DONE;    
+        }
+        if (m_isForwardSearching_) {
+            if (!m_reset_ && 
+                start + matchLength >= targetText.getEndIndex()) {
+                // not enough characters to match
                 matchLength = 0;
                 targetText.setIndex(targetText.getEndIndex());
                 m_lastMatchStart_ = DONE;
-	            return DONE; 
-	        }
-	        m_reset_ = false;
-	    }
-	    else {
-	        // switching direction. 
-	        // if matchedIndex == USEARCH_DONE, it means that either a 
-	        // setIndex has been called or that previous ran off the text
-	        // string. the iterator would have been set to offset 0 if a 
-	        // match is not found.
-	        m_isForwardSearching_ = true;
-	        if (start != DONE) {
-	            // there's no need to set the collation element iterator
-	            // the next call to next will set the offset.
-	            return start;
-	        }
-	    }
-	    
+                return DONE; 
+            }
+            m_reset_ = false;
+        }
+        else {
+            // switching direction. 
+            // if matchedIndex == USEARCH_DONE, it means that either a 
+            // setIndex has been called or that previous ran off the text
+            // string. the iterator would have been set to offset 0 if a 
+            // match is not found.
+            m_isForwardSearching_ = true;
+            if (start != DONE) {
+                // there's no need to set the collation element iterator
+                // the next call to next will set the offset.
+                return start;
+            }
+        }
+        
         if (start == DONE) {
             start = targetText.getBeginIndex();
         }
@@ -428,7 +428,7 @@ public abstract class SearchIterator
                 start += matchLength;
             }
         }
-	    m_lastMatchStart_ = handleNext(start);
+        m_lastMatchStart_ = handleNext(start);
         return m_lastMatchStart_;
     }
 
@@ -456,12 +456,12 @@ public abstract class SearchIterator
      */
     public int previous()
     {
-    	int start = targetText.getIndex();
-    	if (m_setOffset_ != DONE) {
-	    	start = m_setOffset_;	
-	    	m_setOffset_ = DONE;	
-	    }
-    	if (m_reset_) {
+        int start = targetText.getIndex();
+        if (m_setOffset_ != DONE) {
+            start = m_setOffset_;    
+            m_setOffset_ = DONE;    
+        }
+        if (m_reset_) {
             m_isForwardSearching_ = false;
             m_reset_ = false;
             start = targetText.getEndIndex();
@@ -479,7 +479,7 @@ public abstract class SearchIterator
             }
         }
         else {
-        	if (start == targetText.getBeginIndex()) {
+            if (start == targetText.getBeginIndex()) {
                 // not enough characters to match
                 matchLength = 0;
                 targetText.setIndex(targetText.getBeginIndex());
@@ -505,34 +505,34 @@ public abstract class SearchIterator
     }
     
     /** 
-	 * <p>
+     * <p>
      * Resets the search iteration. All properties will be reset to their
      * default values.
      * </p>
-	 * <p>
+     * <p>
      * If a forward iteration is initiated, the next search will begin at the
      * start of the target text. Otherwise, if a backwards iteration is initiated,
      * the next search will begin at the end of the target text.
      * </p>
-	 * @stable ICU 2.8
-	 */
-	public void reset()
-	{
-		// reset is setting the attributes that are already in string search
+     * @stable ICU 2.8
+     */
+    public void reset()
+    {
+        // reset is setting the attributes that are already in string search
         matchLength = 0;
         setIndex(targetText.getBeginIndex());
         m_isOverlap_ = false;
         m_isForwardSearching_ = true;
         m_reset_ = true;
         m_setOffset_ = DONE;
-	}
-	
-	/**
+    }
+    
+    /**
      * Return the index of the first <b>forward</b> match in the target text. 
      * This method sets the iteration to begin at the start of the 
      * target text and searches forward from there.
      * @return The index of the first forward match, or <code>DONE</code> 
-     * 		   if there are no matches.
+     *            if there are no matches.
      * @see #getMatchStart
      * @see #getMatchLength
      * @see #getMatchedText
@@ -571,8 +571,8 @@ public abstract class SearchIterator
      */
     public final int following(int position) 
     {
-    	m_isForwardSearching_ = true;
-    	// position checked in usearch_setOffset
+        m_isForwardSearching_ = true;
+        // position checked in usearch_setOffset
         setIndex(position);
         return next();
     }
@@ -659,7 +659,7 @@ public abstract class SearchIterator
     
     // protected constructor ----------------------------------------------
     
-	/**
+    /**
      * Protected constructor for use by subclasses.
      * Initializes the iterator with the argument target text for searching 
      * and sets the BreakIterator.
@@ -681,12 +681,12 @@ public abstract class SearchIterator
                                    "Illegal argument target. " +
                                    " Argument can not be null or of length 0");
         }
-    	targetText = target;
-    	breakIterator = breaker;
-    	if (breakIterator != null) {
-    		breakIterator.setText(target);
-    	}
-    	matchLength = 0;
+        targetText = target;
+        breakIterator = breaker;
+        if (breakIterator != null) {
+            breakIterator.setText(target);
+        }
+        matchLength = 0;
         m_lastMatchStart_ = DONE;
         m_isOverlap_ = false;
         m_isForwardSearching_ = true;
@@ -698,62 +698,62 @@ public abstract class SearchIterator
 
    
     /**
-	 * Sets the length of the most recent match in the target text. 
-	 * Subclasses' handleNext() and handlePrevious() methods should call this 
+     * Sets the length of the most recent match in the target text. 
+     * Subclasses' handleNext() and handlePrevious() methods should call this 
      * after they find a match in the target text.    
-	 * @param length new length to set
+     * @param length new length to set
      * @see #handleNext
      * @see #handlePrevious
      * @stable ICU 2.0
-	 */
+     */
     protected void setMatchLength(int length)
     {
-    	matchLength = length;
+        matchLength = length;
     }
 
-	/**
-	 * <p>
+    /**
+     * <p>
      * Abstract method that subclasses override to provide the mechanism 
-	 * for finding the next <b>forwards</b> match in the target text. This 
+     * for finding the next <b>forwards</b> match in the target text. This 
      * allows different subclasses to provide different search algorithms.
      * </p> 
-	 * <p>
+     * <p>
      * If a match is found, this function must call setMatchLength(int) to
      * set the length of the result match.
      * The iterator is adjusted so that its current index, as returned by 
      * {@link #getIndex}, is the starting position of the match if one was 
      * found. If a match is not found, <tt>DONE</tt> will be returned.
      * </p> 
-	 * @param start index in the target text at which the forwards search 
+     * @param start index in the target text at which the forwards search 
      *        should begin.
-	 * @return the starting index of the next forwards match if found, DONE 
+     * @return the starting index of the next forwards match if found, DONE 
      *         otherwise
-	 * @see #setMatchLength(int)
+     * @see #setMatchLength(int)
      * @see #handlePrevious(int)
      * @see #DONE
      * @stable ICU 2.0
-	 */
+     */
     protected abstract int handleNext(int start);
     
     /**
-	 * <p>
+     * <p>
      * Abstract method which subclasses override to provide the mechanism 
-	 * for finding the next <b>backwards</b> match in the target text. 
+     * for finding the next <b>backwards</b> match in the target text. 
      * This allows different 
-	 * subclasses to provide different search algorithms. 
+     * subclasses to provide different search algorithms. 
      * </p> 
-	 * <p>
+     * <p>
      * If a match is found, this function must call setMatchLength(int) to
      * set the length of the result match.
      * The iterator is adjusted so that its current index, as returned by 
      * {@link #getIndex}, is the starting position of the match if one was 
      * found. If a match is not found, <tt>DONE</tt> will be returned.
      * </p> 
-	 * @param startAt index in the target text at which the backwards search 
+     * @param startAt index in the target text at which the backwards search 
      *        should begin.
-	 * @return the starting index of the next backwards match if found, 
+     * @return the starting index of the next backwards match if found, 
      *         DONE otherwise
-	 * @see #setMatchLength(int)
+     * @see #setMatchLength(int)
      * @see #handleNext(int)
      * @see #DONE
      * @stable ICU 2.0

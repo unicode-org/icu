@@ -11,10 +11,10 @@ import java.util.ListResourceBundle;
 import com.ibm.icu.impl.ICUData;
 
 public class BreakIteratorRules_th extends ListResourceBundle {
-	private static final String DATA_NAME = "data/th.brk";
+    private static final String DATA_NAME = "data/th.brk";
 
     public Object[][] getContents() {
-		final boolean exists = ICUData.exists(DATA_NAME);
+        final boolean exists = ICUData.exists(DATA_NAME);
 
         // if dictionary wasn't found, then this resource bundle doesn't have
         // much to contribute...

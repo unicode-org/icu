@@ -58,49 +58,49 @@ final class Punycode {
     }
 
     /**
-	 * basicToDigit[] contains the numeric value of a basic code
-	 * point (for use in representing integers) in the range 0 to
-	 * BASE-1, or -1 if b is does not represent a value.
-	 */
-	static final int[]	basicToDigit= new int[]{
-	    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-	    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-	
-	    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-	    26, 27, 28, 29, 30, 31, 32, 33, 34, 35, -1, -1, -1, -1, -1, -1,
-	
-	    -1,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
-	    15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -1, -1, -1, -1,
-	
-	    -1,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
-	    15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -1, -1, -1, -1,
-	
-	    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-	    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-	
-	    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-	    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-	
-	    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-	    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-	
-	    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-	    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
-	};
+     * basicToDigit[] contains the numeric value of a basic code
+     * point (for use in representing integers) in the range 0 to
+     * BASE-1, or -1 if b is does not represent a value.
+     */
+    static final int[]    basicToDigit= new int[]{
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        26, 27, 28, 29, 30, 31, 32, 33, 34, 35, -1, -1, -1, -1, -1, -1,
+    
+        -1,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
+        15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -1, -1, -1, -1,
+    
+        -1,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
+        15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -1, -1, -1, -1,
+    
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+    };
 
     ///CLOVER:OFF
-	private static char asciiCaseMap(char b, boolean uppercase) {
-	    if(uppercase) {
-	        if(SMALL_A<=b && b<=SMALL_Z) {
-	            b-=(SMALL_A-CAPITAL_A);
-	        }
-	    } else {
-	        if(CAPITAL_A<=b && b<=CAPITAL_Z) {
-	            b+=(SMALL_A-CAPITAL_A);
-	        }
-	    }
-	    return b;
-	}	
+    private static char asciiCaseMap(char b, boolean uppercase) {
+        if(uppercase) {
+            if(SMALL_A<=b && b<=SMALL_Z) {
+                b-=(SMALL_A-CAPITAL_A);
+            }
+        } else {
+            if(CAPITAL_A<=b && b<=CAPITAL_Z) {
+                b+=(SMALL_A-CAPITAL_A);
+            }
+        }
+        return b;
+    }    
     ///CLOVER:ON
     /**
      * digitToBasic() returns the basic code point whose value
@@ -132,7 +132,7 @@ final class Punycode {
      * @throws ParseException
      */
     public static StringBuffer encode(StringBuffer src, boolean[] caseFlags) throws StringPrepParseException{
-		
+        
         int[] cpBuffer = new int[MAX_CP_COUNT];
         int n, delta, handledCPCount, basicLength, destLength, bias, j, m, q, k, t, srcCPCount;
         char c, c2;

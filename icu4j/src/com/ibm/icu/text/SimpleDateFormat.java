@@ -354,37 +354,37 @@ public class SimpleDateFormat extends DateFormat {
     
     /* Package-private, called by DateFormat factory methods */
     SimpleDateFormat(int timeStyle, int dateStyle, Locale loc) {
-	// try a high level cache first!
+    // try a high level cache first!
 
-	Map map = null;
-	String key = null;
-	if (CACHE) {
-	    // age test is so we don't have to compute the century start all the time... once a day is enough.
-	    long time = System.currentTimeMillis();
-	    if (((time - cacheAge) < 1000*60*60*24L) && highCacheRef != null) {
-		map = (Map)highCacheRef.get();
-	    }
-	    if (map == null) {
-		map = new HashMap(3);
-		highCacheRef = new SoftReference(map);
-		cacheAge = time;
-	    }
-	    key = loc.toString() + timeStyle + dateStyle;
-	    SimpleDateFormat target = (SimpleDateFormat)map.get(key);
-	    if (target != null) { // kindof skanky
-//  		if ("en_US22".equals(key))
-//  		    System.out.println("\nfound key: " + key + " pat: " + target.pattern +
-//  				       " cal: " + target.calendar + " fmt: " + target.numberFormat);
-		this.pattern = target.pattern;
-		this.formatData = target.formatData;
-  		this.defaultCenturyStart = target.defaultCenturyStart;
-  		this.defaultCenturyStartYear = target.defaultCenturyStartYear;
-		this.calendar = (Calendar)target.calendar.clone();
-		this.calendar.setTimeZone(TimeZone.getDefault()); // might have changed since cached
-		this.numberFormat = (NumberFormat)target.numberFormat.clone();
-		return;
-	    }
-	}
+    Map map = null;
+    String key = null;
+    if (CACHE) {
+        // age test is so we don't have to compute the century start all the time... once a day is enough.
+        long time = System.currentTimeMillis();
+        if (((time - cacheAge) < 1000*60*60*24L) && highCacheRef != null) {
+        map = (Map)highCacheRef.get();
+        }
+        if (map == null) {
+        map = new HashMap(3);
+        highCacheRef = new SoftReference(map);
+        cacheAge = time;
+        }
+        key = loc.toString() + timeStyle + dateStyle;
+        SimpleDateFormat target = (SimpleDateFormat)map.get(key);
+        if (target != null) { // kindof skanky
+//          if ("en_US22".equals(key))
+//              System.out.println("\nfound key: " + key + " pat: " + target.pattern +
+//                         " cal: " + target.calendar + " fmt: " + target.numberFormat);
+        this.pattern = target.pattern;
+        this.formatData = target.formatData;
+          this.defaultCenturyStart = target.defaultCenturyStart;
+          this.defaultCenturyStartYear = target.defaultCenturyStartYear;
+        this.calendar = (Calendar)target.calendar.clone();
+        this.calendar.setTimeZone(TimeZone.getDefault()); // might have changed since cached
+        this.numberFormat = (NumberFormat)target.numberFormat.clone();
+        return;
+        }
+    }
   
         /* try the cache first */
         String[] dateTimePatterns = (String[]) cachedLocaleData.get(loc);
@@ -416,12 +416,12 @@ public class SimpleDateFormat extends DateFormat {
 
         initialize(loc);
 
-	if (CACHE) {
-//  	    if ("en_US22".equals(key))
-//  		System.out.println("\nregister key: " + key + " pat: " + this.pattern +
-//  				   " cal: " + this.calendar + " fmt: " + this.numberFormat);
-	    map.put(key, this.clone()); // ok if we stomp existing target due to threading
-	}
+    if (CACHE) {
+//          if ("en_US22".equals(key))
+//          System.out.println("\nregister key: " + key + " pat: " + this.pattern +
+//                     " cal: " + this.calendar + " fmt: " + this.numberFormat);
+        map.put(key, this.clone()); // ok if we stomp existing target due to threading
+    }
     }
 
     /* Initialize calendar and numberFormat fields */
@@ -1187,8 +1187,8 @@ public class SimpleDateFormat extends DateFormat {
         if (zoneIndex != -1) {
             j = matchZoneString(text, start, zoneIndex);
             if (j > 0) {
-        	tz = TimeZone.getTimeZone(formatData.zoneStrings[zoneIndex][0]);
-        	i = zoneIndex;
+            tz = TimeZone.getTimeZone(formatData.zoneStrings[zoneIndex][0]);
+            i = zoneIndex;
             }
         }
     
@@ -1196,21 +1196,21 @@ public class SimpleDateFormat extends DateFormat {
             zoneIndex = 
                 formatData.getZoneIndex (TimeZone.getDefault().getID());
             if (zoneIndex != -1) {
-        	j = matchZoneString(text, start, zoneIndex);
-        	if (j > 0) {
+            j = matchZoneString(text, start, zoneIndex);
+            if (j > 0) {
                     tz = TimeZone.getTimeZone(formatData.zoneStrings[zoneIndex][0]);
                     i = zoneIndex;
-        	}
+            }
             }
         }       
 
         if (tz == null) {
             for (i = 0; i < formatData.zoneStrings.length; i++) {
                 j = matchZoneString(text, start, i);
-        	if (j > 0) {
+            if (j > 0) {
                     tz = TimeZone.getTimeZone(formatData.zoneStrings[i][0]);
                     break;
-        	}
+            }
             }
         }
     
@@ -1218,7 +1218,7 @@ public class SimpleDateFormat extends DateFormat {
             cal.set(Calendar.ZONE_OFFSET, tz.getRawOffset());
             int savings = 0;
             if (j >= 3) {
-        	savings = tz.getDSTSavings();
+            savings = tz.getDSTSavings();
             }
             cal.set(Calendar.DST_OFFSET, savings);
             return (start + formatData.zoneStrings[i][j].length());
@@ -1440,8 +1440,8 @@ public class SimpleDateFormat extends DateFormat {
                         return -start;
                     }
                     if( pos.getIndex() < text.length() &&
-                    	text.charAt(pos.getIndex()) == ':' ) {
-                    		
+                        text.charAt(pos.getIndex()) == ':' ) {
+                            
                         // This is the hours:minutes case
                         offset = tzNumber.intValue() * 60;
                         pos.setIndex(pos.getIndex() + 1);

@@ -364,7 +364,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             copyMembers(this, other);
             return other;
         } catch (CloneNotSupportedException e) {
-        	///CLOVER:OFF
+            ///CLOVER:OFF
             throw new InternalError();
             ///CLOVER:ON
         }
@@ -688,8 +688,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             result = ICULocaleData.getResourceBundle(bundleName, locale);
         }
         catch (MissingResourceException e) {
-        	///CLOVER:OFF
-        	// coverage requires test without data, so skip
+            ///CLOVER:OFF
+            // coverage requires test without data, so skip
             //if (!(cal instanceof GregorianCalendar)) {
             if (!(GregorianCalendar.class.isAssignableFrom(calendarClass))) {
                 // Ok for symbols to be missing for a Gregorian calendar, but

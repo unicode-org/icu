@@ -163,8 +163,8 @@ public class CheckTags {
         } else if (option.equals("-brief")) {
             return 1;
         } else if (option.equals("-short")) {
-	    return 1;
-	}
+        return 1;
+    }
         return 0;
     }
 
@@ -179,8 +179,8 @@ public class CheckTags {
             } else if (opt.equals("-brief")) {
                 this.brief = true;
             } else if (opt.equals("-short")) {
-		this.isShort = true;
-	    }
+        this.isShort = true;
+        }
         }
     }
 
@@ -274,18 +274,18 @@ public class CheckTags {
 
             boolean isClass = doc.isClass() || doc.isInterface();
             String header;
-	    if (!isShort || isClass) {
-		header = "--- ";
-	    } else {
-		header = "";
-	    }
-	    header += (isClass ? doc.qualifiedName() : doc.name());
+        if (!isShort || isClass) {
+        header = "--- ";
+        } else {
+        header = "";
+        }
+        header += (isClass ? doc.qualifiedName() : doc.name());
             if (doc instanceof ExecutableMemberDoc) {
                 header += ((ExecutableMemberDoc)doc).flatSignature();
             }
-	    if (!isShort || isClass) {
-		header += " ---";
-	    }
+        if (!isShort || isClass) {
+        header += " ---";
+        }
             stack.push(header, isClass);
             if (log) {
                 logln();
@@ -304,8 +304,8 @@ public class CheckTags {
     void doTags(ProgramElementDoc doc) {
         Tag[] tags = doc.tags();
         boolean foundRequiredTag = false;
-	boolean foundDraftTag = false;
-	boolean foundDeprecatedTag = false;
+    boolean foundDraftTag = false;
+    boolean foundDeprecatedTag = false;
 
         for (int i = 0; i < tags.length; ++i) {
             Tag tag = tags[i];
@@ -323,24 +323,24 @@ public class CheckTags {
                 break;
 
             case DRAFT:
-	      foundRequiredTag = true;
-	      foundDraftTag = true;
+          foundRequiredTag = true;
+          foundDraftTag = true;
               if (tag.text().indexOf("ICU 2.4") != -1) {
                 tagErr(tag);
                 break;
               }
-	      if (tag.text().indexOf("ICU") != 0) {
-		  tagErr(tag);
-		  break;
-	      }
-	      break;
+          if (tag.text().indexOf("ICU") != 0) {
+          tagErr(tag);
+          break;
+          }
+          break;
 
             case DEPRECATED:
-		foundDeprecatedTag = true;
+        foundDeprecatedTag = true;
                 if (tag.text().indexOf("ICU") == 0) {
-		    foundRequiredTag = true;
-		}
-		break;
+            foundRequiredTag = true;
+        }
+        break;
 
             case OBSOLETE:
                 if (tag.text().indexOf("ICU") != 0) {
@@ -385,8 +385,8 @@ public class CheckTags {
         if (!foundRequiredTag) {
             errln("missing required tag [" + /*doc.position() +*/ "]");
         }
-	if (foundDraftTag && !foundDeprecatedTag) {
-	    errln("draft tag missing deprecated");
-	}
+    if (foundDraftTag && !foundDeprecatedTag) {
+        errln("draft tag missing deprecated");
+    }
     }
 }

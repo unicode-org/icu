@@ -36,22 +36,22 @@ public class RBBIPerf extends PerfTest {
         }
 
         try {
-        	dataFileName = args[0];
-        	StringBuffer  testFileBuf = new StringBuffer();
-        	InputStream is = new FileInputStream(dataFileName);
-        	InputStreamReader isr = new InputStreamReader(is, "UTF-8");           
-        	int c;
-        	for (;;) {
-        		c = isr.read();
-        		if (c < 0) {
-        			break;
-        		}
-        		UTF16.append(testFileBuf, c);
-        	}
-        	testString = testFileBuf.toString();
+            dataFileName = args[0];
+            StringBuffer  testFileBuf = new StringBuffer();
+            InputStream is = new FileInputStream(dataFileName);
+            InputStreamReader isr = new InputStreamReader(is, "UTF-8");           
+            int c;
+            for (;;) {
+                c = isr.read();
+                if (c < 0) {
+                    break;
+                }
+                UTF16.append(testFileBuf, c);
+            }
+            testString = testFileBuf.toString();
         }
         catch (IOException e) {
-        	throw new RuntimeException(e.toString());   
+            throw new RuntimeException(e.toString());   
         }
         
         if (args.length >= 2) {
@@ -66,7 +66,7 @@ public class RBBIPerf extends PerfTest {
             }
         }
         if (bi!=null ) {
-        	bi.setText(testString);
+            bi.setText(testString);
         }
         if (jdkbi != null) {
             jdkbi.setText(testString);   
@@ -79,41 +79,41 @@ public class RBBIPerf extends PerfTest {
     PerfTest.Function testRBBINext() {
         return new PerfTest.Function() {
             
-        	public void call() {
-        		int n;
-        		if (bi != null) {
-        			n = bi.first();
-        			for (; n != BreakIterator.DONE; n=bi.next()) {
-        			}   
-        		} else {
-        			n = jdkbi.first();
-        			for (; n != BreakIterator.DONE; n=jdkbi.next()) {
-        			}   
-        		}
-        	}
+            public void call() {
+                int n;
+                if (bi != null) {
+                    n = bi.first();
+                    for (; n != BreakIterator.DONE; n=bi.next()) {
+                    }   
+                } else {
+                    n = jdkbi.first();
+                    for (; n != BreakIterator.DONE; n=jdkbi.next()) {
+                    }   
+                }
+            }
         
-        	
-        	public long getOperationsPerIteration() {
-        		int n;
-        		int count = 0;
-        		if (bi != null) {
-        			for (n=bi.first(); n != BreakIterator.DONE; n=bi.next()) {
-        				count++;
-        			}
-        		} else {      			
-        			for (n=jdkbi.first(); n != BreakIterator.DONE; n=jdkbi.next()) {
-        				count++;
-        			}
-        		}
-        		return count;
-        	}
+            
+            public long getOperationsPerIteration() {
+                int n;
+                int count = 0;
+                if (bi != null) {
+                    for (n=bi.first(); n != BreakIterator.DONE; n=bi.next()) {
+                        count++;
+                    }
+                } else {                  
+                    for (n=jdkbi.first(); n != BreakIterator.DONE; n=jdkbi.next()) {
+                        count++;
+                    }
+                }
+                return count;
+            }
         };
     }
     
     
     PerfTest.Function testRBBIPrevious() {
-    	return new PerfTest.Function() {
-    		
+        return new PerfTest.Function() {
+            
             public void call() {
                 bi.first();
                 int n=0;

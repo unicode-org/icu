@@ -12,16 +12,16 @@ import java.util.Random;
 import com.ibm.icu.dev.test.TestFmwk;
 
 public class ExhaustiveTest extends TestFmwk {
-	public static void main(String args[]) throws Exception {
-		new ExhaustiveTest().run(args);
-	}
+    public static void main(String args[]) throws Exception {
+        new ExhaustiveTest().run(args);
+    }
 
     /** Test simple compress/decompress API, returning # of errors */
-	public void testSimple() throws Exception {
+    public void testSimple() throws Exception {
         for(int i = 0; i < fTestCases.length; i++) {
             simpleTest(fTestCases[i]);
         }
-	}
+    }
     private void simpleTest(String s) throws Exception {
         byte [] compressed = UnicodeCompressor.compress(s);
         String res = UnicodeDecompressor.decompress(compressed);

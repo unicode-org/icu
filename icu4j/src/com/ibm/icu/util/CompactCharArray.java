@@ -104,7 +104,7 @@ public final class CompactCharArray implements Cloneable {
      * @internal
      */
     public CompactCharArray(String indexArray,
-			    String valueArray)
+                String valueArray)
     {
         this( Utility.RLEStringToCharArray(indexArray),
               Utility.RLEStringToCharArray(valueArray));
@@ -118,9 +118,9 @@ public final class CompactCharArray implements Cloneable {
      */
     public char elementAt(char index)
     {
-	int ix = (indices[index >> BLOCKSHIFT] & 0xFFFF)
-	    + (index & BLOCKMASK);
-	return ix >= values.length ? defaultValue : values[ix];
+    int ix = (indices[index >> BLOCKSHIFT] & 0xFFFF)
+        + (index & BLOCKMASK);
+    return ix >= values.length ? defaultValue : values[ix];
     }
 
     /**

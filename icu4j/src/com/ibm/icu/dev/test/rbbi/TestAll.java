@@ -25,7 +25,7 @@ public class TestAll extends TestGroup {
                   "BreakIteratorTest",
                   "RBBITest",
                   "RBBIAPITest",
-		          "BreakIteratorRegTest",
+                  "BreakIteratorRegTest",
                   "RBBITestExtended",
                   "RBBITestMonkey"
               },

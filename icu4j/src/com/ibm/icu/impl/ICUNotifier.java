@@ -41,29 +41,29 @@ public abstract class ICUNotifier {
      * silently ignored.  
      */
     public void addListener(EventListener l) {
-	if (l == null) {
-	    throw new NullPointerException();
-	}
+    if (l == null) {
+        throw new NullPointerException();
+    }
 
-	if (acceptsListener(l)) {
-	    synchronized (notifyLock) {
-		if (listeners == null) {
-		    listeners = new ArrayList(5);
-		} else {
-		    // identity equality check
-		    Iterator iter = listeners.iterator();
-		    while (iter.hasNext()) {
-			if (iter.next() == l) {
-			    return;
-			}
-		    }
-		}
+    if (acceptsListener(l)) {
+        synchronized (notifyLock) {
+        if (listeners == null) {
+            listeners = new ArrayList(5);
+        } else {
+            // identity equality check
+            Iterator iter = listeners.iterator();
+            while (iter.hasNext()) {
+            if (iter.next() == l) {
+                return;
+            }
+            }
+        }
 
-		listeners.add(l);
-	    }
-	} else {
-	    throw new InternalError("Listener invalid for this notifier.");
-	}
+        listeners.add(l);
+        }
+    } else {
+        throw new InternalError("Listener invalid for this notifier.");
+    }
     }
 
     /**
@@ -72,24 +72,24 @@ public abstract class ICUNotifier {
      * not registered will be silently ignored.
      */
     public void removeListener(EventListener l) {
-	if (l == null) {
-	    throw new NullPointerException();
-	}
-	synchronized (notifyLock) {
-	    if (listeners != null) {
-		// identity equality check
-		Iterator iter = listeners.iterator();
-		while (iter.hasNext()) {
-		    if (iter.next() == l) {
-			iter.remove();
-			if (listeners.size() == 0) {
-			    listeners = null;
-			}
-			return;
-		    }
-		}
-	    }
-	}
+    if (l == null) {
+        throw new NullPointerException();
+    }
+    synchronized (notifyLock) {
+        if (listeners != null) {
+        // identity equality check
+        Iterator iter = listeners.iterator();
+        while (iter.hasNext()) {
+            if (iter.next() == l) {
+            iter.remove();
+            if (listeners.size() == 0) {
+                listeners = null;
+            }
+            return;
+            }
+        }
+        }
+    }
     }
 
     /**
@@ -98,64 +98,64 @@ public abstract class ICUNotifier {
      * is called on each listener from the notification thread.
      */
     public void notifyChanged() {
-	if (listeners != null) {
-	    synchronized (notifyLock) {
-		if (listeners != null) {
-		    if (notifyThread == null) {
-			notifyThread = new NotifyThread(this);
-			notifyThread.setDaemon(true);
-			notifyThread.start();
-		    }
-		    notifyThread.queue(listeners.toArray());
-		}
-	    }
-	}
+    if (listeners != null) {
+        synchronized (notifyLock) {
+        if (listeners != null) {
+            if (notifyThread == null) {
+            notifyThread = new NotifyThread(this);
+            notifyThread.setDaemon(true);
+            notifyThread.start();
+            }
+            notifyThread.queue(listeners.toArray());
+        }
+        }
+    }
     }
 
     /**
      * The notification thread.
      */
     private static class NotifyThread extends Thread {
-	private final ICUNotifier notifier;
-	private final List queue = new LinkedList();
+    private final ICUNotifier notifier;
+    private final List queue = new LinkedList();
 
-	NotifyThread(ICUNotifier notifier) {
-	    this.notifier = notifier;
-	}
+    NotifyThread(ICUNotifier notifier) {
+        this.notifier = notifier;
+    }
 
-	/**
-	 * Queue the notification on the thread.
-	 */
-	public void queue(Object[] list) {
-	    synchronized (this) {
-		queue.add(list);
-		notify();
-	    }
-	}
+    /**
+     * Queue the notification on the thread.
+     */
+    public void queue(Object[] list) {
+        synchronized (this) {
+        queue.add(list);
+        notify();
+        }
+    }
 
-	/**
-	 * Wait for a notification to be queued, then notify all
-	 * listeners listed in the notification.
-	 */
-	public void run() {
-	    Object[] list;
-	    while (true) {
-		try {
-		    synchronized (this) {
-			while (queue.isEmpty()) {
-			    wait();
-			}
-			list = (Object[])queue.remove(0);
-		    }
+    /**
+     * Wait for a notification to be queued, then notify all
+     * listeners listed in the notification.
+     */
+    public void run() {
+        Object[] list;
+        while (true) {
+        try {
+            synchronized (this) {
+            while (queue.isEmpty()) {
+                wait();
+            }
+            list = (Object[])queue.remove(0);
+            }
 
-		    for (int i = 0; i < list.length; ++i) {
-			notifier.notifyListener((EventListener)list[i]);
-		    }
-		}
-		catch (InterruptedException e) {
-		}
-	    }
-	}
+            for (int i = 0; i < list.length; ++i) {
+            notifier.notifyListener((EventListener)list[i]);
+            }
+        }
+        catch (InterruptedException e) {
+        }
+        }
+    }
     }
 
     /**

@@ -18,35 +18,35 @@ import com.ibm.icu.impl.Utility;
 public final class ICUListResourceBundleTest extends TestFmwk 
 {
     public static void main(String args[]) throws Exception {
-		ICUListResourceBundleTest test = new ICUListResourceBundleTest();
-	    test.run(args);
+        ICUListResourceBundleTest test = new ICUListResourceBundleTest();
+        test.run(args);
 
     }
 
     public void TestReferences() {
-		ResourceBundle rb = ICULocaleData.getLocaleElements("th");
-		logln("got rb:" + rb);
-	
-		byte[] binaryData = null;//(byte[])rb.getObject("%%CollationBin");
-		Object colElem = rb.getObject("collations");
+        ResourceBundle rb = ICULocaleData.getLocaleElements("th");
+        logln("got rb:" + rb);
+    
+        byte[] binaryData = null;//(byte[])rb.getObject("%%CollationBin");
+        Object colElem = rb.getObject("collations");
         if(colElem instanceof Object[][]){
             Object[][] colElemArr = (Object[][])colElem;
             if(((String)colElemArr[0][0]).equals("%%CollationBin")){   
-	           binaryData = (byte[]) colElemArr[0][1];
+               binaryData = (byte[]) colElemArr[0][1];
             }
         }else{
             errln("Did not get the expected object");
         }
         logln("got binaryData: " + binaryData + " length: " + (binaryData == null ? 0 : binaryData.length));
-		Object[] stringArrayData = (Object[])rb.getObject("collations");
-		//String[] collationData = new String[] {
-		 //   (String)stringArrayData[0],
-		 //   (String)stringArrayData[0]
-		//};
-		logln("got stringData: " + stringArrayData + " length: " + stringArrayData.length);
-		logln("got stringDataElement: " + stringArrayData[0] + " length: " + stringArrayData.length);
-		//System.out.println("got sdee: " + collationData[0]);
-		//	System.out.println("char data length: " + stringArrayData.length());
+        Object[] stringArrayData = (Object[])rb.getObject("collations");
+        //String[] collationData = new String[] {
+         //   (String)stringArrayData[0],
+         //   (String)stringArrayData[0]
+        //};
+        logln("got stringData: " + stringArrayData + " length: " + stringArrayData.length);
+        logln("got stringDataElement: " + stringArrayData[0] + " length: " + stringArrayData.length);
+        //System.out.println("got sdee: " + collationData[0]);
+        //    System.out.println("char data length: " + stringArrayData.length());
     }
    
    String simpleAlias   = "Open";
@@ -277,8 +277,8 @@ public final class ICUListResourceBundleTest extends TestFmwk
     
     public void TestCircularAliases(){
         try{
-	        ResourceBundle rb = ICULocaleData.getResourceBundle("com.ibm.icu.dev.data","TestDataElements","testcircularalias");
-	       /* Object o =*/ rb.getObject("aaa");
+            ResourceBundle rb = ICULocaleData.getResourceBundle("com.ibm.icu.dev.data","TestDataElements","testcircularalias");
+           /* Object o =*/ rb.getObject("aaa");
         }catch(java.util.MissingResourceException e){
             if(e.toString().indexOf("ircular")==-1){
                 errln("Did not get the expected Exception for circular aliases");

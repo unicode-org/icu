@@ -42,9 +42,9 @@ public final class TrieTest extends TestFmwk
     {
         TrieTest test = new TrieTest();
         try {
-	        test.run(arg);
+            test.run(arg);
         } catch (Exception e) {
-        	test.errln("Error testing trietest");
+            test.errln("Error testing trietest");
         }
     }
     
@@ -484,36 +484,36 @@ public final class TrieTest extends TestFmwk
     
     public void TestCharValues()
     {
-    	CharTrie trie = null;
-    	try {
-		 	trie = UCharacterProperty.getInstance().m_trie_;
-    	} catch (Exception e) {
-    		errln("Error creating ucharacter trie");
-    	}
-    	
-    	for (int i = 0; i < 0xFFFF; i ++) {
+        CharTrie trie = null;
+        try {
+             trie = UCharacterProperty.getInstance().m_trie_;
+        } catch (Exception e) {
+            errln("Error creating ucharacter trie");
+        }
+        
+        for (int i = 0; i < 0xFFFF; i ++) {
             if (i < 0xFF 
                 && trie.getBMPValue((char)i) 
                     != trie.getLatin1LinearValue((char)i)) {
                 errln("For latin 1 codepoint, getBMPValue should be the same " +
                        "as getLatin1LinearValue");
             }
-    		if (trie.getBMPValue((char)i) != trie.getCodePointValue(i)) {
-    			errln("For BMP codepoint, getBMPValue should be the same " +
-    			       "as getCodepointValue");
-    		}
-    	}
-    	for (int i = 0x10000; i < 0x10ffff; i ++) {
-    		char lead = UTF16.getLeadSurrogate(i);
-    		char trail = UTF16.getTrailSurrogate(i);
-    		char value = trie.getCodePointValue(i);
-    		if (value != trie.getSurrogateValue(lead, trail) ||
-    		    value != trie.getTrailValue(trie.getLeadValue(lead), 
-    		                                trail)) {
-    		    errln("For Non-BMP codepoints, getSurrogateValue should be "
-    		          + "the same s getCodepointValue and getTrailValue");
-    		}		
-    	}
+            if (trie.getBMPValue((char)i) != trie.getCodePointValue(i)) {
+                errln("For BMP codepoint, getBMPValue should be the same " +
+                       "as getCodepointValue");
+            }
+        }
+        for (int i = 0x10000; i < 0x10ffff; i ++) {
+            char lead = UTF16.getLeadSurrogate(i);
+            char trail = UTF16.getTrailSurrogate(i);
+            char value = trie.getCodePointValue(i);
+            if (value != trie.getSurrogateValue(lead, trail) ||
+                value != trie.getTrailValue(trie.getLeadValue(lead), 
+                                            trail)) {
+                errln("For Non-BMP codepoints, getSurrogateValue should be "
+                      + "the same s getCodepointValue and getTrailValue");
+            }        
+        }
     }
 }
 

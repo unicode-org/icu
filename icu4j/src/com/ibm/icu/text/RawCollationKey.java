@@ -116,16 +116,16 @@ public final class RawCollationKey extends ByteArrayWrapper
      */
     public int compareTo(RawCollationKey target) 
     {
-	for (int i = 0;; ++i) {
-	    int l = bytes[i]&0xff;
-	    int r = target.bytes[i]&0xff;
-	    if (l < r) {
-		return -1;
-	    } else if (l > r) {
-		return 1;
-	    } else if (l == 0) {
-		return 0;
-	    }
-	}
+    for (int i = 0;; ++i) {
+        int l = bytes[i]&0xff;
+        int r = target.bytes[i]&0xff;
+        if (l < r) {
+        return -1;
+        } else if (l > r) {
+        return 1;
+        } else if (l == 0) {
+        return 0;
+        }
+    }
     }
 }

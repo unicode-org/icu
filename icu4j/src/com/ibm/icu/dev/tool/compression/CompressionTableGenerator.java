@@ -93,18 +93,18 @@ class CompressionTableGenerator
     static void printOffsetTable()
     {
         int     i           = 0;
-	int []	offsetTable = new int [ BLOCKSIZE + 1 ];
+    int []    offsetTable = new int [ BLOCKSIZE + 1 ];
 
         // 0x00 is reserved
 
         // half blocks from U+0080 to U+3380
         for( i = 0x01; i < 0x68; i++ )
             offsetTable[i] = i * 0x80;
-	
+    
         // half blocks from U+E000 to U+FF80
         for( i = 0x68; i < 0xA8; i++ )
             offsetTable[i] = (i * 0x80) + 0xAC00;
-	
+    
         // 0xA8..0xF8 is reserved
  
         offsetTable[ LATININDEX ] = 0x00C0;
@@ -116,10 +116,10 @@ class CompressionTableGenerator
         offsetTable[ HALFWIDTHKATAKANAINDEX ] = 0xFF60;
 
         // dump the generated table
-	System.out.println("static int [] sOffsetTable = {");
+    System.out.println("static int [] sOffsetTable = {");
         for(i = 0; i < offsetTable.length - 1; i++)
             System.out.print("0x" + Integer.toHexString(offsetTable[i])
-			     + ", ");
+                 + ", ");
         for(i = offsetTable.length - 1; i < offsetTable.length; i++)
             System.out.print("0x" + Integer.toHexString(offsetTable[i]));
         System.out.println();
@@ -134,34 +134,34 @@ class CompressionTableGenerator
     static void printSingleTagTable()
     {
         int        i              = 0;
-	boolean [] singleTagTable = new boolean  [ BLOCKSIZE + 1 ];
+    boolean [] singleTagTable = new boolean  [ BLOCKSIZE + 1 ];
 
         for( i = 0x00; i <= BLOCKSIZE; i++ ) {
             switch( i ) {
-		
-	    case SQUOTEU:  case SCHANGEU: 
-	    case SDEFINEX: case SRESERVED:
-	    case SQUOTE0:  case SQUOTE1:  
-	    case SQUOTE2:  case SQUOTE3:
-	    case SQUOTE4:  case SQUOTE5:  
-	    case SQUOTE6:  case SQUOTE7:
-	    case SCHANGE0: case SCHANGE1: 
-	    case SCHANGE2: case SCHANGE3:
-	    case SCHANGE4: case SCHANGE5: 
-	    case SCHANGE6: case SCHANGE7:
-	    case SDEFINE0: case SDEFINE1: 
-	    case SDEFINE2: case SDEFINE3:
-	    case SDEFINE4: case SDEFINE5: 
-	    case SDEFINE6: case SDEFINE7:
-		singleTagTable[i] = true;
+        
+        case SQUOTEU:  case SCHANGEU: 
+        case SDEFINEX: case SRESERVED:
+        case SQUOTE0:  case SQUOTE1:  
+        case SQUOTE2:  case SQUOTE3:
+        case SQUOTE4:  case SQUOTE5:  
+        case SQUOTE6:  case SQUOTE7:
+        case SCHANGE0: case SCHANGE1: 
+        case SCHANGE2: case SCHANGE3:
+        case SCHANGE4: case SCHANGE5: 
+        case SCHANGE6: case SCHANGE7:
+        case SDEFINE0: case SDEFINE1: 
+        case SDEFINE2: case SDEFINE3:
+        case SDEFINE4: case SDEFINE5: 
+        case SDEFINE6: case SDEFINE7:
+        singleTagTable[i] = true;
                 break;
-		
-	    default:
-		singleTagTable[i] = false;
+        
+        default:
+        singleTagTable[i] = false;
                 break;
             }
         }
-	
+    
         // dump the generated table
         System.out.println("private static boolean [] sSingleTagTable = {");
         for(i = 0; i < singleTagTable.length - 1; i++)
@@ -181,29 +181,29 @@ class CompressionTableGenerator
     static void printUnicodeTagTable()
     {
         int        i               = 0;
-	boolean [] unicodeTagTable = new boolean  [ BLOCKSIZE + 1 ];
+    boolean [] unicodeTagTable = new boolean  [ BLOCKSIZE + 1 ];
 
         for( i = 0x00; i <= BLOCKSIZE; i++ ) {
             switch( i ) {
-	    case UQUOTEU:  case UDEFINEX: 
-	    case URESERVED:
-	    case UCHANGE0: case UCHANGE1: 
-	    case UCHANGE2: case UCHANGE3:
-	    case UCHANGE4: case UCHANGE5: 
-	    case UCHANGE6: case UCHANGE7:
-	    case UDEFINE0: case UDEFINE1: 
-	    case UDEFINE2: case UDEFINE3:
-	    case UDEFINE4: case UDEFINE5: 
-	    case UDEFINE6: case UDEFINE7:
-		unicodeTagTable[i] = true;
+        case UQUOTEU:  case UDEFINEX: 
+        case URESERVED:
+        case UCHANGE0: case UCHANGE1: 
+        case UCHANGE2: case UCHANGE3:
+        case UCHANGE4: case UCHANGE5: 
+        case UCHANGE6: case UCHANGE7:
+        case UDEFINE0: case UDEFINE1: 
+        case UDEFINE2: case UDEFINE3:
+        case UDEFINE4: case UDEFINE5: 
+        case UDEFINE6: case UDEFINE7:
+        unicodeTagTable[i] = true;
                 break;
-		
-	    default:
-		unicodeTagTable[i] = false;
+        
+        default:
+        unicodeTagTable[i] = false;
                 break;
             }
         }
-	
+    
         // dump the generated table
         System.out.println("private static boolean [] sUnicodeTagTable = {");
         for(i = 0; i < unicodeTagTable.length - 1; i++)

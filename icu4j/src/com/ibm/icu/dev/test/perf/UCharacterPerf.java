@@ -22,18 +22,18 @@ public final class UCharacterPerf extends PerfTest
 {
     // public methods ------------------------------------------------------
     
-	public static void main(String[] args) throws Exception
+    public static void main(String[] args) throws Exception
     {   
         new UCharacterPerf().run(args);
-	    // new UCharacterPerf().TestPerformance();
-	}
+        // new UCharacterPerf().TestPerformance();
+    }
     
     protected void setup(String[] args) {
         // We only take one argument, the pattern
         MIN_ = Character.MIN_VALUE;
         MAX_ = Character.MAX_VALUE;
         if (args.length >= 1) {
-        	MIN_ = Integer.parseInt(args[0], 16);
+            MIN_ = Integer.parseInt(args[0], 16);
         }
         if (args.length >= 2) {
             MAX_ = Integer.parseInt(args[1], 16);

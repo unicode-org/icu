@@ -21,11 +21,11 @@ import com.ibm.icu.impl.UCharacterProperty;
 */
 final class CollationRuleParser
 {     
-	// public data members ---------------------------------------------------
-	
-	// package private constructors ------------------------------------------
-	
-	/**
+    // public data members ---------------------------------------------------
+    
+    // package private constructors ------------------------------------------
+    
+    /**
      * <p>RuleBasedCollator constructor that takes the rules. 
      * Please see RuleBasedCollator class description for more details on the 
      * collation rule syntax.</p>
@@ -50,63 +50,63 @@ final class CollationRuleParser
         m_resultLength_ = 0;
         // call assembleTokenList() manually, so that we can 
         // init a parser and manually parse tokens
-		//assembleTokenList();
+        //assembleTokenList();
     }
     
-	// package private inner classes -----------------------------------------
+    // package private inner classes -----------------------------------------
     
     /**
      * Collation options set
      */
     static class OptionSet 
     {
-	    // package private constructor ---------------------------------------
-	    
-	    /**
-	     * Initializes the option set with the argument collators
-	     * @param collator option to use
-	     */
-	    OptionSet(RuleBasedCollator collator) 
-	    {
-		    m_variableTopValue_ = collator.m_variableTopValue_;
-		    m_isFrenchCollation_ = collator.isFrenchCollation();
-		    m_isAlternateHandlingShifted_ 
-		                           = collator.isAlternateHandlingShifted();
-		    m_caseFirst_ = collator.m_caseFirst_;
-		    m_isCaseLevel_ = collator.isCaseLevel();
-		    m_decomposition_ = collator.getDecomposition();
-		    m_strength_ = collator.getStrength();
-		    m_isHiragana4_ = collator.m_isHiragana4_;
-	    }
-	    
-	    // package private data members --------------------------------------
-	    
-	    int m_variableTopValue_;
-	    boolean m_isFrenchCollation_;
-	    /** 
-	     * Attribute for handling variable elements
-	     */
-	    boolean m_isAlternateHandlingShifted_; 
-	    /** 
-	     * who goes first, lower case or uppercase 
-	     */
-	    int m_caseFirst_;         
-	    /** 
-	     * do we have an extra case level 
-	     */
-	    boolean m_isCaseLevel_;         
-	    /** 
-	     * attribute for normalization 
-	     */
-	    int m_decomposition_; 
-	    /** 
-	     * attribute for strength
-	     */
-	    int m_strength_;          
-	    /** 
-	     * attribute for special Hiragana 
-	     */
-	    boolean m_isHiragana4_;         
+        // package private constructor ---------------------------------------
+        
+        /**
+         * Initializes the option set with the argument collators
+         * @param collator option to use
+         */
+        OptionSet(RuleBasedCollator collator) 
+        {
+            m_variableTopValue_ = collator.m_variableTopValue_;
+            m_isFrenchCollation_ = collator.isFrenchCollation();
+            m_isAlternateHandlingShifted_ 
+                                   = collator.isAlternateHandlingShifted();
+            m_caseFirst_ = collator.m_caseFirst_;
+            m_isCaseLevel_ = collator.isCaseLevel();
+            m_decomposition_ = collator.getDecomposition();
+            m_strength_ = collator.getStrength();
+            m_isHiragana4_ = collator.m_isHiragana4_;
+        }
+        
+        // package private data members --------------------------------------
+        
+        int m_variableTopValue_;
+        boolean m_isFrenchCollation_;
+        /** 
+         * Attribute for handling variable elements
+         */
+        boolean m_isAlternateHandlingShifted_; 
+        /** 
+         * who goes first, lower case or uppercase 
+         */
+        int m_caseFirst_;         
+        /** 
+         * do we have an extra case level 
+         */
+        boolean m_isCaseLevel_;         
+        /** 
+         * attribute for normalization 
+         */
+        int m_decomposition_; 
+        /** 
+         * attribute for strength
+         */
+        int m_strength_;          
+        /** 
+         * attribute for special Hiragana 
+         */
+        boolean m_isHiragana4_;         
     };
     
     /**
@@ -178,60 +178,60 @@ final class CollationRuleParser
        public int hashCode()
        {
            int result = 0;
-	       int len = (m_source_ & 0xFF000000) >>> 24;
-	       int inc = ((len - 32) / 32) + 1;
-	        
-	       int start = m_source_ & 0x00FFFFFF;
-	       int limit = start + len;    
-	
-	       while (start < limit) {
-	           result = (result * 37) + m_rules_.charAt(start);
-	           start += inc;
-	       }
-	       return result;
-	   }
-	
-	   /**
-	    * Equals calculation
-	    * @param target object to compare
-	    * @return true if target is the same as this object
-	    */
-	   public boolean equals(Object target)
-	   {
-	       if (target == this) {
-	           return true;
-	       }
-	       if (target instanceof Token) {
-	           Token t = (Token)target;
-			   int sstart = m_source_ & 0x00FFFFFF;
-			   int tstart = t.m_source_ & 0x00FFFFFF;
-			   int slimit = (m_source_ & 0xFF000000) >> 24;
-			   int tlimit = (m_source_ & 0xFF000000) >> 24;
-			   
-			   int end = sstart + slimit - 1;
-			
-			   if (m_source_ == 0 || t.m_source_ == 0) {
-			       return false;
-			   }
-			   if (slimit != tlimit) {
-			       return false;
-			   }
-			   if (m_source_ == t.m_source_) {
-			       return true;
-			   }
+           int len = (m_source_ & 0xFF000000) >>> 24;
+           int inc = ((len - 32) / 32) + 1;
+            
+           int start = m_source_ & 0x00FFFFFF;
+           int limit = start + len;    
+    
+           while (start < limit) {
+               result = (result * 37) + m_rules_.charAt(start);
+               start += inc;
+           }
+           return result;
+       }
+    
+       /**
+        * Equals calculation
+        * @param target object to compare
+        * @return true if target is the same as this object
+        */
+       public boolean equals(Object target)
+       {
+           if (target == this) {
+               return true;
+           }
+           if (target instanceof Token) {
+               Token t = (Token)target;
+               int sstart = m_source_ & 0x00FFFFFF;
+               int tstart = t.m_source_ & 0x00FFFFFF;
+               int slimit = (m_source_ & 0xFF000000) >> 24;
+               int tlimit = (m_source_ & 0xFF000000) >> 24;
                
-			   while (sstart < end 
-			          && m_rules_.charAt(sstart) == t.m_rules_.charAt(tstart)) 
-	           {
-	               ++ sstart;
-	               ++ tstart;
-	           }
-			   if (m_rules_.charAt(sstart) == t.m_rules_.charAt(tstart)) {
-			       return true;
-			   }
-	       }    
-	       return false;
-	    }
+               int end = sstart + slimit - 1;
+            
+               if (m_source_ == 0 || t.m_source_ == 0) {
+                   return false;
+               }
+               if (slimit != tlimit) {
+                   return false;
+               }
+               if (m_source_ == t.m_source_) {
+                   return true;
+               }
+               
+               while (sstart < end 
+                      && m_rules_.charAt(sstart) == t.m_rules_.charAt(tstart)) 
+               {
+                   ++ sstart;
+                   ++ tstart;
+               }
+               if (m_rules_.charAt(sstart) == t.m_rules_.charAt(tstart)) {
+                   return true;
+               }
+           }    
+           return false;
+        }
     };
     
     // package private data member -------------------------------------------
@@ -344,10 +344,10 @@ final class CollationRuleParser
         
         // package private data members --------------------------------------
         
-	    int m_startCE_;
-	    int m_startContCE_;
-	    int m_limitCE_;
-	    int m_limitContCE_;
+        int m_startCE_;
+        int m_startContCE_;
+        int m_limitCE_;
+        int m_limitContCE_;
     };
 
     /**
@@ -355,21 +355,21 @@ final class CollationRuleParser
      */
     private static class TokenOption
     {
-    	// package private constructor ---------------------------------------
-    	
-    	TokenOption(String name, int attribute, String suboptions[],
-    	            int suboptionattributevalue[]) 
-    	{
-    		m_name_ = name;
-    		m_attribute_ = attribute;
-        	m_subOptions_ = suboptions;
-        	m_subOptionAttributeValues_ = suboptionattributevalue;		
-    	}
-    	
-    	// package private data member ---------------------------------------
-    	
-    	private String m_name_;
-    	private int m_attribute_;
+        // package private constructor ---------------------------------------
+        
+        TokenOption(String name, int attribute, String suboptions[],
+                    int suboptionattributevalue[]) 
+        {
+            m_name_ = name;
+            m_attribute_ = attribute;
+            m_subOptions_ = suboptions;
+            m_subOptionAttributeValues_ = suboptionattributevalue;        
+        }
+        
+        // package private data member ---------------------------------------
+        
+        private String m_name_;
+        private int m_attribute_;
         private String m_subOptions_[];
         private int m_subOptionAttributeValues_[];
     };
@@ -477,11 +477,11 @@ final class CollationRuleParser
      * [last secondary ignorable] largest CE for secondary ignorable 
      * [last tertiary ignorable] largest CE for tertiary ignorable 
      * [top] guaranteed to be above all implicit CEs, for now and in the future (in 1.8) 
-	 */
-	private static final TokenOption RULES_OPTIONS_[];
-	
-	static 
-	{
+     */
+    private static final TokenOption RULES_OPTIONS_[];
+    
+    static 
+    {
         INDIRECT_BOUNDARIES_ = new IndirectBoundaries[15];
         // UCOL_RESET_TOP_VALUE
         INDIRECT_BOUNDARIES_[0] = new IndirectBoundaries(
@@ -547,21 +547,21 @@ final class CollationRuleParser
         INDIRECT_BOUNDARIES_[14].m_limitCE_ 
                  = RuleBasedCollator.UCA_CONSTANTS_.PRIMARY_SPECIAL_MIN_ << 24; 
 
-		RULES_OPTIONS_ = new TokenOption[19];
-		String option[] = {"non-ignorable", "shifted"};
-		int value[] = {RuleBasedCollator.AttributeValue.NON_IGNORABLE_, 
-	                   RuleBasedCollator.AttributeValue.SHIFTED_};
-	    RULES_OPTIONS_[0] = new TokenOption("alternate", 
-	                          RuleBasedCollator.Attribute.ALTERNATE_HANDLING_, 
-	                          option, value);
+        RULES_OPTIONS_ = new TokenOption[19];
+        String option[] = {"non-ignorable", "shifted"};
+        int value[] = {RuleBasedCollator.AttributeValue.NON_IGNORABLE_, 
+                       RuleBasedCollator.AttributeValue.SHIFTED_};
+        RULES_OPTIONS_[0] = new TokenOption("alternate", 
+                              RuleBasedCollator.Attribute.ALTERNATE_HANDLING_, 
+                              option, value);
         option = new String[1];
         option[0] = "2";
         value = new int[1];
         value[0] = RuleBasedCollator.AttributeValue.ON_;
         RULES_OPTIONS_[1] = new TokenOption("backwards", 
-	                             RuleBasedCollator.Attribute.FRENCH_COLLATION_,
+                                 RuleBasedCollator.Attribute.FRENCH_COLLATION_,
                                  option, value);
-	    String offonoption[] = new String[2];
+        String offonoption[] = new String[2];
         offonoption[0] = "off"; 
         offonoption[1] = "on";
         int offonvalue[] = new int[2];
@@ -570,7 +570,7 @@ final class CollationRuleParser
         RULES_OPTIONS_[2] = new TokenOption("caseLevel", 
                                        RuleBasedCollator.Attribute.CASE_LEVEL_,
                                        offonoption, offonvalue);
-	    option = new String[3];
+        option = new String[3];
         option[0] = "lower"; 
         option[1] = "upper";
         option[2] = "off";
@@ -583,10 +583,10 @@ final class CollationRuleParser
                                        option, value);
         RULES_OPTIONS_[4] = new TokenOption("normalization", 
                                RuleBasedCollator.Attribute.NORMALIZATION_MODE_,
-        	                   offonoption, offonvalue);
-	    RULES_OPTIONS_[5] = new TokenOption("hiraganaQ", 
-	                     RuleBasedCollator.Attribute.HIRAGANA_QUATERNARY_MODE_,
-	    	             offonoption, offonvalue);
+                               offonoption, offonvalue);
+        RULES_OPTIONS_[5] = new TokenOption("hiraganaQ", 
+                         RuleBasedCollator.Attribute.HIRAGANA_QUATERNARY_MODE_,
+                         offonoption, offonvalue);
         option = new String[5];
         option[0] = "1"; 
         option[1] = "2";
@@ -599,14 +599,14 @@ final class CollationRuleParser
         value[2] = RuleBasedCollator.AttributeValue.TERTIARY_;
         value[3] = RuleBasedCollator.AttributeValue.QUATERNARY_;
         value[4] = RuleBasedCollator.AttributeValue.IDENTICAL_;
-	    RULES_OPTIONS_[6] = new TokenOption("strength",
+        RULES_OPTIONS_[6] = new TokenOption("strength",
                                          RuleBasedCollator.Attribute.STRENGTH_, 
                                          option, value);
         RULES_OPTIONS_[7] = new TokenOption("variable top", 
-	                              RuleBasedCollator.Attribute.LIMIT_, 
+                                  RuleBasedCollator.Attribute.LIMIT_, 
                                   null, null);
-	    RULES_OPTIONS_[8] = new TokenOption("rearrange", 
-	                              RuleBasedCollator.Attribute.LIMIT_, 
+        RULES_OPTIONS_[8] = new TokenOption("rearrange", 
+                                  RuleBasedCollator.Attribute.LIMIT_, 
                                   null, null);
         option = new String[3];
         option[0] = "1";
@@ -616,10 +616,10 @@ final class CollationRuleParser
         value[0] = RuleBasedCollator.AttributeValue.PRIMARY_;
         value[1] = RuleBasedCollator.AttributeValue.SECONDARY_;
         value[2] = RuleBasedCollator.AttributeValue.TERTIARY_;
-	    RULES_OPTIONS_[9] = new TokenOption("before", 
+        RULES_OPTIONS_[9] = new TokenOption("before", 
                                   RuleBasedCollator.Attribute.LIMIT_, 
                                   option, value);
-	    RULES_OPTIONS_[10] = new TokenOption("top", 
+        RULES_OPTIONS_[10] = new TokenOption("top", 
                                   RuleBasedCollator.Attribute.LIMIT_, 
                                   null, null);
         String firstlastoption[] = new String[7];
@@ -634,31 +634,31 @@ final class CollationRuleParser
         int firstlastvalue[] = new int[7];
         Arrays.fill(firstlastvalue, RuleBasedCollator.AttributeValue.PRIMARY_);
 
-	    RULES_OPTIONS_[11] = new TokenOption("first", 
+        RULES_OPTIONS_[11] = new TokenOption("first", 
                                   RuleBasedCollator.Attribute.LIMIT_, 
-	    	                      firstlastoption, firstlastvalue);
+                                  firstlastoption, firstlastvalue);
         RULES_OPTIONS_[12] = new TokenOption("last", 
                                   RuleBasedCollator.Attribute.LIMIT_, 
-	    	                      firstlastoption, firstlastvalue);
+                                  firstlastoption, firstlastvalue);
         RULES_OPTIONS_[13] = new TokenOption("optimize", 
                                   RuleBasedCollator.Attribute.LIMIT_, 
                                   null, null);
         RULES_OPTIONS_[14] = new TokenOption("suppressContractions", 
                                   RuleBasedCollator.Attribute.LIMIT_, 
                                   null, null);                                  
-	    RULES_OPTIONS_[15] = new TokenOption("undefined", 
-	                              RuleBasedCollator.Attribute.LIMIT_, 
+        RULES_OPTIONS_[15] = new TokenOption("undefined", 
+                                  RuleBasedCollator.Attribute.LIMIT_, 
                                   null, null);
-	    RULES_OPTIONS_[16] = new TokenOption("scriptOrder", 
-	                              RuleBasedCollator.Attribute.LIMIT_, 
+        RULES_OPTIONS_[16] = new TokenOption("scriptOrder", 
+                                  RuleBasedCollator.Attribute.LIMIT_, 
                                   null, null);
-	    RULES_OPTIONS_[17] = new TokenOption("charsetname", 
-	                              RuleBasedCollator.Attribute.LIMIT_, 
+        RULES_OPTIONS_[17] = new TokenOption("charsetname", 
+                                  RuleBasedCollator.Attribute.LIMIT_, 
                                   null, null);
-	    RULES_OPTIONS_[18] = new TokenOption("charset", 
-	                              RuleBasedCollator.Attribute.LIMIT_, 
+        RULES_OPTIONS_[18] = new TokenOption("charset", 
+                                  RuleBasedCollator.Attribute.LIMIT_, 
                                   null, null);
-	};
+    };
     
     /**
      * Utility data members
@@ -677,21 +677,21 @@ final class CollationRuleParser
      */
     int assembleTokenList() throws ParseException
     {
-		Token lastToken = null;
-	    m_parsedToken_.m_strength_ = TOKEN_UNSET_; 
+        Token lastToken = null;
+        m_parsedToken_.m_strength_ = TOKEN_UNSET_; 
         int sourcelimit = m_source_.length();
         int expandNext = 0;
-		
+        
         while (m_current_ < sourcelimit) {
             m_parsedToken_.m_prefixOffset_ = 0;
-		    if (parseNextToken(lastToken == null) < 0) {
+            if (parseNextToken(lastToken == null) < 0) {
                 // we have reached the end
                 continue;
             }
-		    char specs = m_parsedToken_.m_flags_;
-		    boolean variableTop = ((specs & TOKEN_VARIABLE_TOP_MASK_) != 0);
-		    boolean top = ((specs & TOKEN_TOP_MASK_) != 0);
-		    int lastStrength = TOKEN_UNSET_;
+            char specs = m_parsedToken_.m_flags_;
+            boolean variableTop = ((specs & TOKEN_VARIABLE_TOP_MASK_) != 0);
+            boolean top = ((specs & TOKEN_TOP_MASK_) != 0);
+            int lastStrength = TOKEN_UNSET_;
             if (lastToken != null) {
                 lastStrength = lastToken.m_strength_;
             }
@@ -702,58 +702,58 @@ final class CollationRuleParser
             // sourcetoken
             Token sourceToken = (Token)m_hashTable_.get(m_utilToken_);
             if (m_parsedToken_.m_strength_ != TOKEN_RESET_) {
-		        if (lastToken == null) { 
-		        	// this means that rules haven't started properly
-		            throwParseException(m_source_.toString(), 0);
-		        }
+                if (lastToken == null) { 
+                    // this means that rules haven't started properly
+                    throwParseException(m_source_.toString(), 0);
+                }
                 //  6 Otherwise (when relation != reset)
                 if (sourceToken == null) {
                     // If sourceToken is null, create new one
-		            sourceToken = new Token();
-     		        sourceToken.m_rules_ = m_source_;
-		            sourceToken.m_source_ = m_parsedToken_.m_charsLen_ << 24 
-		                                   | m_parsedToken_.m_charsOffset_;
-		            sourceToken.m_prefix_ = m_parsedToken_.m_prefixLen_ << 24 
-		                                   | m_parsedToken_.m_prefixOffset_;
-		            // TODO: this should also handle reverse
-		            sourceToken.m_polarity_ = TOKEN_POLARITY_POSITIVE_; 
-    		        sourceToken.m_next_ = null;
- 		            sourceToken.m_previous_ = null;
-		            sourceToken.m_CELength_ = 0;
-		            sourceToken.m_expCELength_ = 0;
-		            m_hashTable_.put(sourceToken, sourceToken);
-		        } 
-		        else {
-		            // we could have fished out a reset here
-		            if (sourceToken.m_strength_ != TOKEN_RESET_ 
-		                && lastToken != sourceToken) {
-		                // otherwise remove sourceToken from where it was.
-		                if (sourceToken.m_next_ != null) {
-		                    if (sourceToken.m_next_.m_strength_ 
-		                                           > sourceToken.m_strength_) {
-		                        sourceToken.m_next_.m_strength_ 
-		                                           = sourceToken.m_strength_;
-		                    }
-		                    sourceToken.m_next_.m_previous_ 
-		                                            = sourceToken.m_previous_;
-		                } 
-		                else {
-		                    sourceToken.m_listHeader_.m_last_ 
-		                                            = sourceToken.m_previous_;
-		                }
-		                if (sourceToken.m_previous_ != null) {
-		                    sourceToken.m_previous_.m_next_ 
-		                                                = sourceToken.m_next_;
-		                } 
-		                else {
-		                    sourceToken.m_listHeader_.m_first_ 
-		                                                = sourceToken.m_next_;
-		                }
-		                sourceToken.m_next_ = null;
-		                sourceToken.m_previous_ = null;
-		            }
-		        }
-        		sourceToken.m_strength_ = m_parsedToken_.m_strength_;
+                    sourceToken = new Token();
+                     sourceToken.m_rules_ = m_source_;
+                    sourceToken.m_source_ = m_parsedToken_.m_charsLen_ << 24 
+                                           | m_parsedToken_.m_charsOffset_;
+                    sourceToken.m_prefix_ = m_parsedToken_.m_prefixLen_ << 24 
+                                           | m_parsedToken_.m_prefixOffset_;
+                    // TODO: this should also handle reverse
+                    sourceToken.m_polarity_ = TOKEN_POLARITY_POSITIVE_; 
+                    sourceToken.m_next_ = null;
+                     sourceToken.m_previous_ = null;
+                    sourceToken.m_CELength_ = 0;
+                    sourceToken.m_expCELength_ = 0;
+                    m_hashTable_.put(sourceToken, sourceToken);
+                } 
+                else {
+                    // we could have fished out a reset here
+                    if (sourceToken.m_strength_ != TOKEN_RESET_ 
+                        && lastToken != sourceToken) {
+                        // otherwise remove sourceToken from where it was.
+                        if (sourceToken.m_next_ != null) {
+                            if (sourceToken.m_next_.m_strength_ 
+                                                   > sourceToken.m_strength_) {
+                                sourceToken.m_next_.m_strength_ 
+                                                   = sourceToken.m_strength_;
+                            }
+                            sourceToken.m_next_.m_previous_ 
+                                                    = sourceToken.m_previous_;
+                        } 
+                        else {
+                            sourceToken.m_listHeader_.m_last_ 
+                                                    = sourceToken.m_previous_;
+                        }
+                        if (sourceToken.m_previous_ != null) {
+                            sourceToken.m_previous_.m_next_ 
+                                                        = sourceToken.m_next_;
+                        } 
+                        else {
+                            sourceToken.m_listHeader_.m_first_ 
+                                                        = sourceToken.m_next_;
+                        }
+                        sourceToken.m_next_ = null;
+                        sourceToken.m_previous_ = null;
+                    }
+                }
+                sourceToken.m_strength_ = m_parsedToken_.m_strength_;
                 sourceToken.m_listHeader_ = lastToken.m_listHeader_;
                 
                 // 1.  Find the strongest strength in each list, and set 
@@ -761,39 +761,39 @@ final class CollationRuleParser
                 if (lastStrength == TOKEN_RESET_
                     || sourceToken.m_listHeader_.m_first_ == null) {
                     // If LAST is a reset insert sourceToken in the list.
-			        if (sourceToken.m_listHeader_.m_first_ == null) {
-			            sourceToken.m_listHeader_.m_first_ = sourceToken;
-			            sourceToken.m_listHeader_.m_last_ = sourceToken;
-			        } 
-			        else { // we need to find a place for us
-			               // and we'll get in front of the same strength
-			            if (sourceToken.m_listHeader_.m_first_.m_strength_ 
-			                                     <= sourceToken.m_strength_) {
-			                sourceToken.m_next_ 
-			                              = sourceToken.m_listHeader_.m_first_;
-			                sourceToken.m_next_.m_previous_ = sourceToken;
-			                sourceToken.m_listHeader_.m_first_ = sourceToken;
-			                sourceToken.m_previous_ = null;
-			            } 
-			            else {
-			                lastToken = sourceToken.m_listHeader_.m_first_;
-			                while (lastToken.m_next_ != null 
-			                       && lastToken.m_next_.m_strength_ 
-			                                     > sourceToken.m_strength_) {
-			                    lastToken = lastToken.m_next_;
-			                }
-			                if (lastToken.m_next_ != null) {
-			                    lastToken.m_next_.m_previous_ = sourceToken;
-			                } 
-			                else {
-			                    sourceToken.m_listHeader_.m_last_ 
-			                                                   = sourceToken;
-			                }
-			                sourceToken.m_previous_ = lastToken;
-			                sourceToken.m_next_ = lastToken.m_next_;
-			                lastToken.m_next_ = sourceToken;
-			            }
-			        }
+                    if (sourceToken.m_listHeader_.m_first_ == null) {
+                        sourceToken.m_listHeader_.m_first_ = sourceToken;
+                        sourceToken.m_listHeader_.m_last_ = sourceToken;
+                    } 
+                    else { // we need to find a place for us
+                           // and we'll get in front of the same strength
+                        if (sourceToken.m_listHeader_.m_first_.m_strength_ 
+                                                 <= sourceToken.m_strength_) {
+                            sourceToken.m_next_ 
+                                          = sourceToken.m_listHeader_.m_first_;
+                            sourceToken.m_next_.m_previous_ = sourceToken;
+                            sourceToken.m_listHeader_.m_first_ = sourceToken;
+                            sourceToken.m_previous_ = null;
+                        } 
+                        else {
+                            lastToken = sourceToken.m_listHeader_.m_first_;
+                            while (lastToken.m_next_ != null 
+                                   && lastToken.m_next_.m_strength_ 
+                                                 > sourceToken.m_strength_) {
+                                lastToken = lastToken.m_next_;
+                            }
+                            if (lastToken.m_next_ != null) {
+                                lastToken.m_next_.m_previous_ = sourceToken;
+                            } 
+                            else {
+                                sourceToken.m_listHeader_.m_last_ 
+                                                               = sourceToken;
+                            }
+                            sourceToken.m_previous_ = lastToken;
+                            sourceToken.m_next_ = lastToken.m_next_;
+                            lastToken.m_next_ = sourceToken;
+                        }
+                    }
                 } 
                 else {
                     // Otherwise (when LAST is not a reset) 
@@ -802,47 +802,47 @@ final class CollationRuleParser
                     // when inserting after or before, search to the next 
                     // position with the same strength in that direction. 
                     // (This is called postpone insertion).        
-			        if (sourceToken != lastToken) { 
-			            if (lastToken.m_polarity_ == sourceToken.m_polarity_) {
-			                while (lastToken.m_next_ != null 
-			                       && lastToken.m_next_.m_strength_ 
-			                                       > sourceToken.m_strength_) {
-			                    lastToken = lastToken.m_next_;
-			                }
-			                sourceToken.m_previous_ = lastToken;
-			                if (lastToken.m_next_ != null) {
-			                    lastToken.m_next_.m_previous_ = sourceToken;
-			                } 
-			                else {
-			                    sourceToken.m_listHeader_.m_last_ = sourceToken;
-			                }
-			                sourceToken.m_next_ = lastToken.m_next_;
-			                lastToken.m_next_ = sourceToken;
-			            } 
-			            else {
-			                while (lastToken.m_previous_ != null 
-			                       && lastToken.m_previous_.m_strength_ 
-		                                        > sourceToken.m_strength_) {
-			                    lastToken = lastToken.m_previous_;
-			                }
-			                sourceToken.m_next_ = lastToken;
-			                if (lastToken.m_previous_ != null) {
-			                    lastToken.m_previous_.m_next_ = sourceToken;
-			                } 
-			                else {
-			                    sourceToken.m_listHeader_.m_first_ 
-			                                                     = sourceToken;
-			                }
-			                sourceToken.m_previous_ = lastToken.m_previous_;
-			                lastToken.m_previous_ = sourceToken;
-			            }
-			        } 
-			        else { // repeated one thing twice in rules, stay with the 
-			        	   // stronger strength 
-			            if (lastStrength < sourceToken.m_strength_) {
-			                sourceToken.m_strength_ = lastStrength;
-			            }
-			        }
+                    if (sourceToken != lastToken) { 
+                        if (lastToken.m_polarity_ == sourceToken.m_polarity_) {
+                            while (lastToken.m_next_ != null 
+                                   && lastToken.m_next_.m_strength_ 
+                                                   > sourceToken.m_strength_) {
+                                lastToken = lastToken.m_next_;
+                            }
+                            sourceToken.m_previous_ = lastToken;
+                            if (lastToken.m_next_ != null) {
+                                lastToken.m_next_.m_previous_ = sourceToken;
+                            } 
+                            else {
+                                sourceToken.m_listHeader_.m_last_ = sourceToken;
+                            }
+                            sourceToken.m_next_ = lastToken.m_next_;
+                            lastToken.m_next_ = sourceToken;
+                        } 
+                        else {
+                            while (lastToken.m_previous_ != null 
+                                   && lastToken.m_previous_.m_strength_ 
+                                                > sourceToken.m_strength_) {
+                                lastToken = lastToken.m_previous_;
+                            }
+                            sourceToken.m_next_ = lastToken;
+                            if (lastToken.m_previous_ != null) {
+                                lastToken.m_previous_.m_next_ = sourceToken;
+                            } 
+                            else {
+                                sourceToken.m_listHeader_.m_first_ 
+                                                                 = sourceToken;
+                            }
+                            sourceToken.m_previous_ = lastToken.m_previous_;
+                            lastToken.m_previous_ = sourceToken;
+                        }
+                    } 
+                    else { // repeated one thing twice in rules, stay with the 
+                           // stronger strength 
+                        if (lastStrength < sourceToken.m_strength_) {
+                            sourceToken.m_strength_ = lastStrength;
+                        }
+                    }
                 }
                 // if the token was a variable top, we're gonna put it in 
                 if (variableTop == true && m_variableTop_ == null) {
@@ -857,33 +857,33 @@ final class CollationRuleParser
                sourceToken.m_expansion_ = m_parsedToken_.m_extensionLen_ << 24 
                                           | m_parsedToken_.m_extensionOffset_;
                if (expandNext != 0) {
-		           if (sourceToken.m_strength_ == RuleBasedCollator.PRIMARY) { 
-		               // primary strength kills off the implicit expansion 
-		               expandNext = 0;
-		           } 
-		           else if (sourceToken.m_expansion_ == 0) { 
-		               // if there is no expansion, implicit is just added to 
-		               // the token 
-		               sourceToken.m_expansion_ = expandNext;
-		           } 
-		           else { 
-		               // there is both explicit and implicit expansion. 
-		               // We need to make a combination
-		               int start = expandNext & 0xFFFFFF;
+                   if (sourceToken.m_strength_ == RuleBasedCollator.PRIMARY) { 
+                       // primary strength kills off the implicit expansion 
+                       expandNext = 0;
+                   } 
+                   else if (sourceToken.m_expansion_ == 0) { 
+                       // if there is no expansion, implicit is just added to 
+                       // the token 
+                       sourceToken.m_expansion_ = expandNext;
+                   } 
+                   else { 
+                       // there is both explicit and implicit expansion. 
+                       // We need to make a combination
+                       int start = expandNext & 0xFFFFFF;
                        int size = expandNext >>> 24;
                        if (size > 0) {
-		                  m_source_.append(m_source_.substring(start,
+                          m_source_.append(m_source_.substring(start,
                                                                start + size));
                        }
-   		               start = m_parsedToken_.m_extensionOffset_;
-		               m_source_.append(m_source_.substring(start, 
-		                              start + m_parsedToken_.m_extensionLen_));
-		               sourceToken.m_expansion_ = (size 
-		                               + m_parsedToken_.m_extensionLen_) << 24 
-		                               | m_extraCurrent_;
-		               m_extraCurrent_ += size + m_parsedToken_.m_extensionLen_;
-		           }
-		        }
+                          start = m_parsedToken_.m_extensionOffset_;
+                       m_source_.append(m_source_.substring(start, 
+                                      start + m_parsedToken_.m_extensionLen_));
+                       sourceToken.m_expansion_ = (size 
+                                       + m_parsedToken_.m_extensionLen_) << 24 
+                                       | m_extraCurrent_;
+                       m_extraCurrent_ += size + m_parsedToken_.m_extensionLen_;
+                   }
+                }
                // if the previous token was a reset before, the strength of this
                // token must match the strength of before. Otherwise we have an
                // undefined situation.
@@ -892,70 +892,70 @@ final class CollationRuleParser
                if((lastToken.m_flags_ & TOKEN_BEFORE_) != 0) {
                    int beforeStrength = (lastToken.m_flags_ & TOKEN_BEFORE_) - 1;
                    if(beforeStrength != sourceToken.m_strength_) {
-                   	   throwParseException(m_source_.toString(), m_current_);
+                          throwParseException(m_source_.toString(), m_current_);
                    }
                }
                
             } 
             else {
-	            if (lastToken != null && lastStrength == TOKEN_RESET_) {
-	                // if the previous token was also a reset, this means that 
-	                // we have two consecutive resets and we want to remove the 
-	                // previous one if empty
-	                if (m_listHeader_[m_resultLength_ - 1].m_first_ == null) {
-	                    m_resultLength_ --;
-	                }
-	            }
-	            if (sourceToken == null) { 
-	                // this is a reset, but it might still be somewhere in the 
-	                // tailoring, in shorter form
-	                int searchCharsLen = m_parsedToken_.m_charsLen_;
-	                while (searchCharsLen > 1 && sourceToken == null) {
-	                    searchCharsLen --;
-	                    // key = searchCharsLen << 24 | charsOffset;
-			            m_utilToken_.m_source_ = searchCharsLen << 24 
-			                                 | m_parsedToken_.m_charsOffset_;
-			            m_utilToken_.m_rules_ = m_source_;
-			            sourceToken = (Token)m_hashTable_.get(m_utilToken_);
-			        }
-			        if (sourceToken != null) {
-			            expandNext = (m_parsedToken_.m_charsLen_ 
-			                                          - searchCharsLen) << 24 
-			                            | (m_parsedToken_.m_charsOffset_ 
-			                               + searchCharsLen);
-			        }
-			    }
-		        if ((specs & TOKEN_BEFORE_) != 0) {
+                if (lastToken != null && lastStrength == TOKEN_RESET_) {
+                    // if the previous token was also a reset, this means that 
+                    // we have two consecutive resets and we want to remove the 
+                    // previous one if empty
+                    if (m_listHeader_[m_resultLength_ - 1].m_first_ == null) {
+                        m_resultLength_ --;
+                    }
+                }
+                if (sourceToken == null) { 
+                    // this is a reset, but it might still be somewhere in the 
+                    // tailoring, in shorter form
+                    int searchCharsLen = m_parsedToken_.m_charsLen_;
+                    while (searchCharsLen > 1 && sourceToken == null) {
+                        searchCharsLen --;
+                        // key = searchCharsLen << 24 | charsOffset;
+                        m_utilToken_.m_source_ = searchCharsLen << 24 
+                                             | m_parsedToken_.m_charsOffset_;
+                        m_utilToken_.m_rules_ = m_source_;
+                        sourceToken = (Token)m_hashTable_.get(m_utilToken_);
+                    }
+                    if (sourceToken != null) {
+                        expandNext = (m_parsedToken_.m_charsLen_ 
+                                                      - searchCharsLen) << 24 
+                                        | (m_parsedToken_.m_charsOffset_ 
+                                           + searchCharsLen);
+                    }
+                }
+                if ((specs & TOKEN_BEFORE_) != 0) {
                     if (top == false) { 
-    		            // we're doing before & there is no indirection
-    	                int strength = (specs & TOKEN_BEFORE_) - 1;
-    	                if (sourceToken != null 
-    	                    && sourceToken.m_strength_ != TOKEN_RESET_) { 
-    	                    // this is a before that is already ordered in the UCA 
-    	                    // - so we need to get the previous with good strength
-    			            while (sourceToken.m_strength_ > strength 
-    			                   && sourceToken.m_previous_ != null) {
-    			                sourceToken = sourceToken.m_previous_;
-    			            }
-    			            // here, either we hit the strength or NULL
-    			            if (sourceToken.m_strength_ == strength) {
-    			                if (sourceToken.m_previous_ != null) {
-    			                    sourceToken = sourceToken.m_previous_;
-    			                } 
-    			                else { // start of list
-    			                    sourceToken 
-    			                         = sourceToken.m_listHeader_.m_reset_;
-    			                }              
-    			            } 
-    			            else { // we hit NULL, we should be doing the else part 
-    			                sourceToken 
+                        // we're doing before & there is no indirection
+                        int strength = (specs & TOKEN_BEFORE_) - 1;
+                        if (sourceToken != null 
+                            && sourceToken.m_strength_ != TOKEN_RESET_) { 
+                            // this is a before that is already ordered in the UCA 
+                            // - so we need to get the previous with good strength
+                            while (sourceToken.m_strength_ > strength 
+                                   && sourceToken.m_previous_ != null) {
+                                sourceToken = sourceToken.m_previous_;
+                            }
+                            // here, either we hit the strength or NULL
+                            if (sourceToken.m_strength_ == strength) {
+                                if (sourceToken.m_previous_ != null) {
+                                    sourceToken = sourceToken.m_previous_;
+                                } 
+                                else { // start of list
+                                    sourceToken 
                                          = sourceToken.m_listHeader_.m_reset_;
-    			                sourceToken = getVirginBefore(sourceToken, 
-    			                                              strength);
-    			            }
-    			        } 
-    			        else {
-    			            sourceToken 
+                                }              
+                            } 
+                            else { // we hit NULL, we should be doing the else part 
+                                sourceToken 
+                                         = sourceToken.m_listHeader_.m_reset_;
+                                sourceToken = getVirginBefore(sourceToken, 
+                                                              strength);
+                            }
+                        } 
+                        else {
+                            sourceToken 
                                       = getVirginBefore(sourceToken, strength);
                         } 
                     }
@@ -976,17 +976,17 @@ final class CollationRuleParser
                                m_parsedToken_.m_indirectIndex_].m_startContCE_;
                         int ce[] = new int[2]; 
                         if((baseCE >>> 24 >= RuleBasedCollator.UCA_CONSTANTS_.PRIMARY_IMPLICIT_MIN_) 
-						&& (baseCE >>> 24 <=  RuleBasedCollator.UCA_CONSTANTS_.PRIMARY_IMPLICIT_MAX_)) { /* implicits - */
-                        	int primary = baseCE & RuleBasedCollator.CE_PRIMARY_MASK_ | (baseContCE & RuleBasedCollator.CE_PRIMARY_MASK_) >> 16;
-                        	int raw = RuleBasedCollator.impCEGen_.getRawFromImplicit(primary);
-                        	int primaryCE = RuleBasedCollator.impCEGen_.getImplicitFromRaw(raw-1);
-                        	ce[0] = primaryCE & RuleBasedCollator.CE_PRIMARY_MASK_ | 0x0505;
-                        	ce[1] = (primaryCE << 16) & RuleBasedCollator.CE_PRIMARY_MASK_ | RuleBasedCollator.CE_CONTINUATION_MARKER_;
+                        && (baseCE >>> 24 <=  RuleBasedCollator.UCA_CONSTANTS_.PRIMARY_IMPLICIT_MAX_)) { /* implicits - */
+                            int primary = baseCE & RuleBasedCollator.CE_PRIMARY_MASK_ | (baseContCE & RuleBasedCollator.CE_PRIMARY_MASK_) >> 16;
+                            int raw = RuleBasedCollator.impCEGen_.getRawFromImplicit(primary);
+                            int primaryCE = RuleBasedCollator.impCEGen_.getImplicitFromRaw(raw-1);
+                            ce[0] = primaryCE & RuleBasedCollator.CE_PRIMARY_MASK_ | 0x0505;
+                            ce[1] = (primaryCE << 16) & RuleBasedCollator.CE_PRIMARY_MASK_ | RuleBasedCollator.CE_CONTINUATION_MARKER_;
                         } else {
-                        	CollationParsedRuleBuilder.InverseUCA invuca
-								= CollationParsedRuleBuilder.INVERSE_UCA_;
-                        	invuca.getInversePrevCE(baseCE, baseContCE, strength, 
-                        			ce);
+                            CollationParsedRuleBuilder.InverseUCA invuca
+                                = CollationParsedRuleBuilder.INVERSE_UCA_;
+                            invuca.getInversePrevCE(baseCE, baseContCE, strength, 
+                                    ce);
                         }
                         m_listHeader_[m_resultLength_].m_baseCE_ = ce[0];
                         m_listHeader_[m_resultLength_].m_baseContCE_ = ce[1];
@@ -995,90 +995,90 @@ final class CollationRuleParser
                         
                         sourceToken = new Token();
                         expandNext = initAReset(0, sourceToken);    
-    			    }
-			    }
-	            // 5 If the relation is a reset: 
-	            // If sourceToken is null 
-	            // Create new list, create new sourceToken, make the baseCE 
-	            // from source, put the sourceToken in ListHeader of the new 
-	            // list
-	            if (sourceToken == null) {
-                    if (m_listHeader_[m_resultLength_] == null) {
-	            	    m_listHeader_[m_resultLength_] = new TokenListHeader();
                     }
-	                // 3 Consider each item: relation, source, and expansion: 
-	                // e.g. ...< x / y ... 
-	                // First convert all expansions into normal form. 
-	                // Examples: 
-	                // If "xy" doesn't occur earlier in the list or in the UCA, 
-	                // convert &xy * c * d * ... into &x * c/y * d * ... 
-	                // Note: reset values can never have expansions, although 
-	                // they can cause the very next item to have one. They may 
-	                // be contractions, if they are found earlier in the list. 
-			        if (top == false) {
-			            CollationElementIterator coleiter 
+                }
+                // 5 If the relation is a reset: 
+                // If sourceToken is null 
+                // Create new list, create new sourceToken, make the baseCE 
+                // from source, put the sourceToken in ListHeader of the new 
+                // list
+                if (sourceToken == null) {
+                    if (m_listHeader_[m_resultLength_] == null) {
+                        m_listHeader_[m_resultLength_] = new TokenListHeader();
+                    }
+                    // 3 Consider each item: relation, source, and expansion: 
+                    // e.g. ...< x / y ... 
+                    // First convert all expansions into normal form. 
+                    // Examples: 
+                    // If "xy" doesn't occur earlier in the list or in the UCA, 
+                    // convert &xy * c * d * ... into &x * c/y * d * ... 
+                    // Note: reset values can never have expansions, although 
+                    // they can cause the very next item to have one. They may 
+                    // be contractions, if they are found earlier in the list. 
+                    if (top == false) {
+                        CollationElementIterator coleiter 
                         = RuleBasedCollator.UCA_.getCollationElementIterator(
-                        	m_source_.substring(m_parsedToken_.m_charsOffset_, 
-                                            	m_parsedToken_.m_charsOffset_ 
-                                            	+ m_parsedToken_.m_charsLen_));
-			
-			            int CE = coleiter.next();
-			            // offset to the character in the full rule string
-			            int expand = coleiter.getOffset() 
-			                         + m_parsedToken_.m_charsOffset_;
-			            int SecondCE = coleiter.next();
-			            
-			            m_listHeader_[m_resultLength_].m_baseCE_ 
-			                                                 = CE & 0xFFFFFF3F;
-			            if (RuleBasedCollator.isContinuation(SecondCE)) {
-			                m_listHeader_[m_resultLength_].m_baseContCE_ 
-			                                                        = SecondCE;
-			            } 
-			            else {
-			                m_listHeader_[m_resultLength_].m_baseContCE_ = 0;
-			            }
-			            m_listHeader_[m_resultLength_].m_nextCE_ = 0;
-			            m_listHeader_[m_resultLength_].m_nextContCE_ = 0;
-			            m_listHeader_[m_resultLength_].m_previousCE_ = 0;
-			            m_listHeader_[m_resultLength_].m_previousContCE_ = 0;
-			            m_listHeader_[m_resultLength_].m_indirect_ = false;
-			            sourceToken = new Token();
-			            expandNext = initAReset(expand, sourceToken);
-			        } 
-			        else { // top == TRUE
-			            top = false;
-			            m_listHeader_[m_resultLength_].m_previousCE_ = 0;
-			            m_listHeader_[m_resultLength_].m_previousContCE_ = 0;
-			            m_listHeader_[m_resultLength_].m_indirect_ = true;
-			            IndirectBoundaries ib = INDIRECT_BOUNDARIES_[
+                            m_source_.substring(m_parsedToken_.m_charsOffset_, 
+                                                m_parsedToken_.m_charsOffset_ 
+                                                + m_parsedToken_.m_charsLen_));
+            
+                        int CE = coleiter.next();
+                        // offset to the character in the full rule string
+                        int expand = coleiter.getOffset() 
+                                     + m_parsedToken_.m_charsOffset_;
+                        int SecondCE = coleiter.next();
+                        
+                        m_listHeader_[m_resultLength_].m_baseCE_ 
+                                                             = CE & 0xFFFFFF3F;
+                        if (RuleBasedCollator.isContinuation(SecondCE)) {
+                            m_listHeader_[m_resultLength_].m_baseContCE_ 
+                                                                    = SecondCE;
+                        } 
+                        else {
+                            m_listHeader_[m_resultLength_].m_baseContCE_ = 0;
+                        }
+                        m_listHeader_[m_resultLength_].m_nextCE_ = 0;
+                        m_listHeader_[m_resultLength_].m_nextContCE_ = 0;
+                        m_listHeader_[m_resultLength_].m_previousCE_ = 0;
+                        m_listHeader_[m_resultLength_].m_previousContCE_ = 0;
+                        m_listHeader_[m_resultLength_].m_indirect_ = false;
+                        sourceToken = new Token();
+                        expandNext = initAReset(expand, sourceToken);
+                    } 
+                    else { // top == TRUE
+                        top = false;
+                        m_listHeader_[m_resultLength_].m_previousCE_ = 0;
+                        m_listHeader_[m_resultLength_].m_previousContCE_ = 0;
+                        m_listHeader_[m_resultLength_].m_indirect_ = true;
+                        IndirectBoundaries ib = INDIRECT_BOUNDARIES_[
                                               m_parsedToken_.m_indirectIndex_];
-			            m_listHeader_[m_resultLength_].m_baseCE_ 
-			                                                   = ib.m_startCE_;
-			            m_listHeader_[m_resultLength_].m_baseContCE_ 
-		                                                   = ib.m_startContCE_;
-			            m_listHeader_[m_resultLength_].m_nextCE_ 
-			                                                   = ib.m_limitCE_;
-			            m_listHeader_[m_resultLength_].m_nextContCE_ 
-			                                               = ib.m_limitContCE_;
-			            sourceToken = new Token();
-			            expandNext = initAReset(0, sourceToken);
-	                }
-		        } 
-		        else { // reset to something already in rules
-		            top = false;
-		        }
-		    }
-		    // 7 After all this, set LAST to point to sourceToken, and goto 
-		    // step 3.
-		    lastToken = sourceToken;
-		}
-		  
-		if (m_resultLength_ > 0 
+                        m_listHeader_[m_resultLength_].m_baseCE_ 
+                                                               = ib.m_startCE_;
+                        m_listHeader_[m_resultLength_].m_baseContCE_ 
+                                                           = ib.m_startContCE_;
+                        m_listHeader_[m_resultLength_].m_nextCE_ 
+                                                               = ib.m_limitCE_;
+                        m_listHeader_[m_resultLength_].m_nextContCE_ 
+                                                           = ib.m_limitContCE_;
+                        sourceToken = new Token();
+                        expandNext = initAReset(0, sourceToken);
+                    }
+                } 
+                else { // reset to something already in rules
+                    top = false;
+                }
+            }
+            // 7 After all this, set LAST to point to sourceToken, and goto 
+            // step 3.
+            lastToken = sourceToken;
+        }
+          
+        if (m_resultLength_ > 0 
             && m_listHeader_[m_resultLength_ - 1].m_first_ == null) {
-		    m_resultLength_ --;
-		}
-		return m_resultLength_;
-	}
+            m_resultLength_ --;
+        }
+        return m_resultLength_;
+    }
      
     /**
      * Formats and throws a ParseException
@@ -1135,120 +1135,120 @@ final class CollationRuleParser
      */
     private int parseNextToken(boolean startofrules) throws ParseException
     { 
-	    // parsing part
-	    boolean variabletop = false;
-	    boolean top = false;
-	    boolean inchars = true;
-	    boolean inquote = false;
-	    boolean wasinquote = false;
-	    byte before = 0;
-	    boolean isescaped = false;
-	    int /*newcharslen = 0,*/ newextensionlen = 0;
-	    int /*charsoffset = 0,*/ extensionoffset = 0;
-	    int newstrength = TOKEN_UNSET_; 
-	
+        // parsing part
+        boolean variabletop = false;
+        boolean top = false;
+        boolean inchars = true;
+        boolean inquote = false;
+        boolean wasinquote = false;
+        byte before = 0;
+        boolean isescaped = false;
+        int /*newcharslen = 0,*/ newextensionlen = 0;
+        int /*charsoffset = 0,*/ extensionoffset = 0;
+        int newstrength = TOKEN_UNSET_; 
+    
         m_parsedToken_.m_charsLen_ = 0;
-	    m_parsedToken_.m_charsOffset_ = 0;
+        m_parsedToken_.m_charsOffset_ = 0;
         m_parsedToken_.m_prefixOffset_ = 0; 
         m_parsedToken_.m_prefixLen_ = 0;
-	    m_parsedToken_.m_indirectIndex_ = 0;
-	
-	    int limit = m_rules_.length();
-	    while (m_current_ < limit) {
-	        char ch = m_source_.charAt(m_current_);
-	        if (inquote) {
-		        if (ch == 0x0027) { // '\''
-		            inquote = false;
-		        } 
+        m_parsedToken_.m_indirectIndex_ = 0;
+    
+        int limit = m_rules_.length();
+        while (m_current_ < limit) {
+            char ch = m_source_.charAt(m_current_);
+            if (inquote) {
+                if (ch == 0x0027) { // '\''
+                    inquote = false;
+                } 
                 else {
-		            if ((m_parsedToken_.m_charsLen_ == 0) || inchars) {
-		                 if (m_parsedToken_.m_charsLen_ == 0) {
-		                     m_parsedToken_.m_charsOffset_ = m_extraCurrent_;
-		                 }
-		                 m_parsedToken_.m_charsLen_ ++;
-		            } 
+                    if ((m_parsedToken_.m_charsLen_ == 0) || inchars) {
+                         if (m_parsedToken_.m_charsLen_ == 0) {
+                             m_parsedToken_.m_charsOffset_ = m_extraCurrent_;
+                         }
+                         m_parsedToken_.m_charsLen_ ++;
+                    } 
                     else {
-		                if (newextensionlen == 0) {
-		                    extensionoffset = m_extraCurrent_;
-		                }
-		                newextensionlen ++;
-		            }
-		        }
-	        }
+                        if (newextensionlen == 0) {
+                            extensionoffset = m_extraCurrent_;
+                        }
+                        newextensionlen ++;
+                    }
+                }
+            }
             else if (isescaped) {
-	            isescaped = false;
-	            if (newstrength == TOKEN_UNSET_) {
-	                throwParseException(m_rules_, m_current_);
-	            }
-	            if (ch != 0 && m_current_ != limit) {
-	                if (inchars) {
-	                    if (m_parsedToken_.m_charsLen_ == 0) {
-	                        m_parsedToken_.m_charsOffset_ = m_current_;
-	                    }
-	                    m_parsedToken_.m_charsLen_ ++;
-	                } 
+                isescaped = false;
+                if (newstrength == TOKEN_UNSET_) {
+                    throwParseException(m_rules_, m_current_);
+                }
+                if (ch != 0 && m_current_ != limit) {
+                    if (inchars) {
+                        if (m_parsedToken_.m_charsLen_ == 0) {
+                            m_parsedToken_.m_charsOffset_ = m_current_;
+                        }
+                        m_parsedToken_.m_charsLen_ ++;
+                    } 
                     else {
-	                    if (newextensionlen == 0) {
-	                        extensionoffset = m_current_;
-	                    }
-	                    newextensionlen ++;
-	                }
-	            }
-	        }
+                        if (newextensionlen == 0) {
+                            extensionoffset = m_current_;
+                        }
+                        newextensionlen ++;
+                    }
+                }
+            }
             else {
                 if (!UCharacterProperty.isRuleWhiteSpace(ch)) {
                     // Sets the strength for this entry
-	                switch (ch) {
-	                case 0x003D : // '='
-	                    if (newstrength != TOKEN_UNSET_) {
-	                        return doEndParseNextToken(newstrength, 
+                    switch (ch) {
+                    case 0x003D : // '='
+                        if (newstrength != TOKEN_UNSET_) {
+                            return doEndParseNextToken(newstrength, 
                                                        top, 
                                                        extensionoffset,
                                                        newextensionlen, 
                                                        variabletop, before);
-	                    }
-	                    // if we start with strength, we'll reset to top
-	                    if (startofrules == true) {
+                        }
+                        // if we start with strength, we'll reset to top
+                        if (startofrules == true) {
                             m_parsedToken_.m_indirectIndex_ = 5;
                             top = doSetTop();
-	                        return doEndParseNextToken(TOKEN_RESET_, 
+                            return doEndParseNextToken(TOKEN_RESET_, 
                                                        top, 
                                                        extensionoffset, 
                                                        newextensionlen, 
                                                        variabletop, before);
-	                    }
-	                    newstrength = Collator.IDENTICAL;
-	                    break;
-	                case 0x002C : // ','
-	                    if (newstrength != TOKEN_UNSET_) {
-	                        return doEndParseNextToken(newstrength, 
+                        }
+                        newstrength = Collator.IDENTICAL;
+                        break;
+                    case 0x002C : // ','
+                        if (newstrength != TOKEN_UNSET_) {
+                            return doEndParseNextToken(newstrength, 
                                                        top, 
                                                        extensionoffset, 
                                                        newextensionlen, 
                                                        variabletop, before);
-	                    }
-	                    // if we start with strength, we'll reset to top
-	                    if (startofrules == true) {
+                        }
+                        // if we start with strength, we'll reset to top
+                        if (startofrules == true) {
                             m_parsedToken_.m_indirectIndex_ = 5;
                             top = doSetTop();
-	                        return doEndParseNextToken(TOKEN_RESET_, 
+                            return doEndParseNextToken(TOKEN_RESET_, 
                                                        top, 
                                                        extensionoffset, 
                                                        newextensionlen, 
                                                        variabletop, before);
-	                    }
-	                    newstrength = Collator.TERTIARY;
-	                    break;
-	                case 0x003B : // ';'
-	                    if (newstrength != TOKEN_UNSET_) {
-	                        return doEndParseNextToken(newstrength, 
+                        }
+                        newstrength = Collator.TERTIARY;
+                        break;
+                    case 0x003B : // ';'
+                        if (newstrength != TOKEN_UNSET_) {
+                            return doEndParseNextToken(newstrength, 
                                                        top, 
                                                        extensionoffset, 
                                                        newextensionlen, 
                                                        variabletop, before);   
-	                    }
-	                    // if we start with strength, we'll reset to top
-	                    if (startofrules == true) {
+                        }
+                        // if we start with strength, we'll reset to top
+                        if (startofrules == true) {
                             m_parsedToken_.m_indirectIndex_ = 5;
                             top = doSetTop();
                             return doEndParseNextToken(TOKEN_RESET_, 
@@ -1256,19 +1256,19 @@ final class CollationRuleParser
                                                        extensionoffset, 
                                                        newextensionlen, 
                                                        variabletop, before);
-	                    }
-	                    newstrength = Collator.SECONDARY;
-	                    break;
-	                case 0x003C : // '<'
-	                    if (newstrength != TOKEN_UNSET_) {
-	                        return doEndParseNextToken(newstrength, 
+                        }
+                        newstrength = Collator.SECONDARY;
+                        break;
+                    case 0x003C : // '<'
+                        if (newstrength != TOKEN_UNSET_) {
+                            return doEndParseNextToken(newstrength, 
                                                        top, 
                                                        extensionoffset, 
                                                        newextensionlen, 
                                                        variabletop, before);
-	                    }
-	                    // if we start with strength, we'll reset to top
-		                if (startofrules == true) {
+                        }
+                        // if we start with strength, we'll reset to top
+                        if (startofrules == true) {
                             m_parsedToken_.m_indirectIndex_ = 5;
                             top = doSetTop();
                             return doEndParseNextToken(TOKEN_RESET_, 
@@ -1276,41 +1276,41 @@ final class CollationRuleParser
                                                        extensionoffset, 
                                                        newextensionlen, 
                                                        variabletop, before);
-		                }
-		                // before this, do a scan to verify whether this is 
-		                // another strength
-		                if (m_source_.charAt(m_current_ + 1) == 0x003C) {
-		                    m_current_ ++;
-		                    if (m_source_.charAt(m_current_ + 1) == 0x003C) {
-		                        m_current_ ++; // three in a row!
-		                        newstrength = Collator.TERTIARY;
-		                    } 
-		                    else { // two in a row 
-		                        newstrength = Collator.SECONDARY;
-		                    }
-		                } 
-		                else { // just one 
-		                    newstrength = Collator.PRIMARY;
-		                }
-		                break;
-		            case 0x0026 : // '&'
-		                if (newstrength != TOKEN_UNSET_) {
-		                    return doEndParseNextToken(newstrength, 
+                        }
+                        // before this, do a scan to verify whether this is 
+                        // another strength
+                        if (m_source_.charAt(m_current_ + 1) == 0x003C) {
+                            m_current_ ++;
+                            if (m_source_.charAt(m_current_ + 1) == 0x003C) {
+                                m_current_ ++; // three in a row!
+                                newstrength = Collator.TERTIARY;
+                            } 
+                            else { // two in a row 
+                                newstrength = Collator.SECONDARY;
+                            }
+                        } 
+                        else { // just one 
+                            newstrength = Collator.PRIMARY;
+                        }
+                        break;
+                    case 0x0026 : // '&'
+                        if (newstrength != TOKEN_UNSET_) {
+                            return doEndParseNextToken(newstrength, 
                                                        top, 
                                                        extensionoffset, 
                                                        newextensionlen, 
                                                        variabletop, before);
-		                }
-		                newstrength = TOKEN_RESET_; // PatternEntry::RESET = 0
-		                break;
-		            case 0x005b : // '['
-		                // options - read an option, analyze it
-		                m_optionEnd_ = m_rules_.indexOf(0x005d, m_current_);
-		                if (m_optionEnd_ != -1) { // ']'
-		                    byte result = readAndSetOption();
-		                    m_current_ = m_optionEnd_;
-		                    if ((result & TOKEN_TOP_MASK_) != 0) {
-		                        if (newstrength == TOKEN_RESET_) { 
+                        }
+                        newstrength = TOKEN_RESET_; // PatternEntry::RESET = 0
+                        break;
+                    case 0x005b : // '['
+                        // options - read an option, analyze it
+                        m_optionEnd_ = m_rules_.indexOf(0x005d, m_current_);
+                        if (m_optionEnd_ != -1) { // ']'
+                            byte result = readAndSetOption();
+                            m_current_ = m_optionEnd_;
+                            if ((result & TOKEN_TOP_MASK_) != 0) {
+                                if (newstrength == TOKEN_RESET_) { 
                                     top = doSetTop();
                                     if (before != 0) { 
                                         // This is a combination of before and 
@@ -1321,175 +1321,175 @@ final class CollationRuleParser
                                         m_extraCurrent_ += 2; 
                                         m_parsedToken_.m_charsLen_ += 2;
                                     } 
-		                            m_current_ ++;
-		                            return doEndParseNextToken(newstrength, 
-		                                               true, 
+                                    m_current_ ++;
+                                    return doEndParseNextToken(newstrength, 
+                                                       true, 
                                                        extensionoffset, 
                                                        newextensionlen, 
                                                        variabletop, before);
-		                        } 
-		                        else {
-		                            throwParseException(m_rules_, m_current_);
-		                        }
-		                    } 
-		                    else if ((result & TOKEN_VARIABLE_TOP_MASK_) != 0) {
-		                        if (newstrength != TOKEN_RESET_ 
-		                            && newstrength != TOKEN_UNSET_) {
-		                            variabletop = true;
-		                            m_parsedToken_.m_charsOffset_ 
+                                } 
+                                else {
+                                    throwParseException(m_rules_, m_current_);
+                                }
+                            } 
+                            else if ((result & TOKEN_VARIABLE_TOP_MASK_) != 0) {
+                                if (newstrength != TOKEN_RESET_ 
+                                    && newstrength != TOKEN_UNSET_) {
+                                    variabletop = true;
+                                    m_parsedToken_.m_charsOffset_ 
                                                              = m_extraCurrent_;
-		                            m_source_.append((char)0xFFFF);
-		                            m_extraCurrent_ ++;
-		                            m_current_ ++;
+                                    m_source_.append((char)0xFFFF);
+                                    m_extraCurrent_ ++;
+                                    m_current_ ++;
                                     m_parsedToken_.m_charsLen_ = 1;
-		                            return doEndParseNextToken(newstrength, 
-		                                               top, 
+                                    return doEndParseNextToken(newstrength, 
+                                                       top, 
                                                        extensionoffset, 
                                                        newextensionlen, 
                                                        variabletop, before);
-		                        } 
-		                        else {
-		                            throwParseException(m_rules_, m_current_);
-		                        }
-		                    } 
-		                    else if ((result & TOKEN_BEFORE_) != 0){
-		                        if (newstrength == TOKEN_RESET_) {
-		                            before = (byte)(result & TOKEN_BEFORE_);
-		                        } 
-		                        else {
-		                            throwParseException(m_rules_, m_current_);		
-		                        }
-		                    }  
-		                }
-		                break;
-		            case 0x002F : // '/'
-		                wasinquote = false; // if we were copying source 
-		                                    // characters, we want to stop now
-		                inchars = false; // we're now processing expansion 
-		                break;
-		            case 0x005C : // back slash for escaped chars
-		                isescaped = true;
-		                break;
-		            // found a quote, we're gonna start copying
-		            case 0x0027 : //'\''
-		                if (newstrength == TOKEN_UNSET_) { 
-		                    // quote is illegal until we have a strength
-		                    throwParseException(m_rules_, m_current_);
+                                } 
+                                else {
+                                    throwParseException(m_rules_, m_current_);
+                                }
+                            } 
+                            else if ((result & TOKEN_BEFORE_) != 0){
+                                if (newstrength == TOKEN_RESET_) {
+                                    before = (byte)(result & TOKEN_BEFORE_);
+                                } 
+                                else {
+                                    throwParseException(m_rules_, m_current_);        
+                                }
+                            }  
                         }
-		                inquote = true;
-		                if (inchars) { // we're doing characters 
-		                    if (wasinquote == false) {
-		                        m_parsedToken_.m_charsOffset_ = m_extraCurrent_;
-		                    }
-		                    if (m_parsedToken_.m_charsLen_ != 0) {
-		                    	m_source_.append(m_source_.substring(
+                        break;
+                    case 0x002F : // '/'
+                        wasinquote = false; // if we were copying source 
+                                            // characters, we want to stop now
+                        inchars = false; // we're now processing expansion 
+                        break;
+                    case 0x005C : // back slash for escaped chars
+                        isescaped = true;
+                        break;
+                    // found a quote, we're gonna start copying
+                    case 0x0027 : //'\''
+                        if (newstrength == TOKEN_UNSET_) { 
+                            // quote is illegal until we have a strength
+                            throwParseException(m_rules_, m_current_);
+                        }
+                        inquote = true;
+                        if (inchars) { // we're doing characters 
+                            if (wasinquote == false) {
+                                m_parsedToken_.m_charsOffset_ = m_extraCurrent_;
+                            }
+                            if (m_parsedToken_.m_charsLen_ != 0) {
+                                m_source_.append(m_source_.substring(
                                        m_current_ - m_parsedToken_.m_charsLen_, 
                                        m_current_));
-		                        m_extraCurrent_ += m_parsedToken_.m_charsLen_;
-		                    }
-		                    m_parsedToken_.m_charsLen_ ++;
-		                } 
-		                else { // we're doing an expansion
-		                    if (wasinquote == false) {
-		                        extensionoffset = m_extraCurrent_;
-		                    }
-		                    if (newextensionlen != 0) {
-		                        m_source_.append(m_source_.substring(
-		                                           m_current_ - newextensionlen,
-		                                           m_current_));
-		                        m_extraCurrent_ += newextensionlen;
-		                    }
-		                    newextensionlen ++;
-		                }
-		                wasinquote = true;
-		                m_current_ ++;
-		                ch = m_source_.charAt(m_current_); 
-		                if (ch == 0x0027) { // copy the double quote
-		                    m_source_.append(ch);
-		                    m_extraCurrent_ ++;
-		                    inquote = false;
-		                }
-		                break;
-		            // '@' is french only if the strength is not currently set
-		            // if it is, it's just a regular character in collation  
-		            case 0x0040 : // '@'
-		                if (newstrength == TOKEN_UNSET_) {
-		                    m_options_.m_isFrenchCollation_ = true;
-		                break;
-		            }
-		            case 0x007C : //|
-		                // this means we have actually been reading prefix part 
-		                // we want to store read characters to the prefix part 
-		                // and continue reading the characters (proper way 
-		                // would be to restart reading the chars, but in that 
-		                // case we would have to complicate the token hasher, 
-		                // which I do not intend to play with. Instead, we will 
-		                // do prefixes when prefixes are due (before adding the 
-		                // elements).
-		                m_parsedToken_.m_prefixOffset_ 
+                                m_extraCurrent_ += m_parsedToken_.m_charsLen_;
+                            }
+                            m_parsedToken_.m_charsLen_ ++;
+                        } 
+                        else { // we're doing an expansion
+                            if (wasinquote == false) {
+                                extensionoffset = m_extraCurrent_;
+                            }
+                            if (newextensionlen != 0) {
+                                m_source_.append(m_source_.substring(
+                                                   m_current_ - newextensionlen,
+                                                   m_current_));
+                                m_extraCurrent_ += newextensionlen;
+                            }
+                            newextensionlen ++;
+                        }
+                        wasinquote = true;
+                        m_current_ ++;
+                        ch = m_source_.charAt(m_current_); 
+                        if (ch == 0x0027) { // copy the double quote
+                            m_source_.append(ch);
+                            m_extraCurrent_ ++;
+                            inquote = false;
+                        }
+                        break;
+                    // '@' is french only if the strength is not currently set
+                    // if it is, it's just a regular character in collation  
+                    case 0x0040 : // '@'
+                        if (newstrength == TOKEN_UNSET_) {
+                            m_options_.m_isFrenchCollation_ = true;
+                        break;
+                    }
+                    case 0x007C : //|
+                        // this means we have actually been reading prefix part 
+                        // we want to store read characters to the prefix part 
+                        // and continue reading the characters (proper way 
+                        // would be to restart reading the chars, but in that 
+                        // case we would have to complicate the token hasher, 
+                        // which I do not intend to play with. Instead, we will 
+                        // do prefixes when prefixes are due (before adding the 
+                        // elements).
+                        m_parsedToken_.m_prefixOffset_ 
                                                 = m_parsedToken_.m_charsOffset_;
-		                m_parsedToken_.m_prefixLen_ 
+                        m_parsedToken_.m_prefixLen_ 
                                                 = m_parsedToken_.m_charsLen_;
                         if (inchars) { // we're doing characters
-		                    if (wasinquote == false) {
-		                        m_parsedToken_.m_charsOffset_ = m_extraCurrent_;
-		                    }
-		                    if (m_parsedToken_.m_charsLen_ != 0) {
+                            if (wasinquote == false) {
+                                m_parsedToken_.m_charsOffset_ = m_extraCurrent_;
+                            }
+                            if (m_parsedToken_.m_charsLen_ != 0) {
                                 String prefix = m_source_.substring(
                                        m_current_ - m_parsedToken_.m_charsLen_, 
                                        m_current_);
-		                    	m_source_.append(prefix);
-		                        m_extraCurrent_ += m_parsedToken_.m_charsLen_;
-		                    }
-		                    m_parsedToken_.m_charsLen_ ++;
-		                }
-		                wasinquote = true;
+                                m_source_.append(prefix);
+                                m_extraCurrent_ += m_parsedToken_.m_charsLen_;
+                            }
+                            m_parsedToken_.m_charsLen_ ++;
+                        }
+                        wasinquote = true;
                         do {
                             m_current_ ++;
                             ch = m_source_.charAt(m_current_); 
                             // skip whitespace between '|' and the character
                         } while (UCharacterProperty.isRuleWhiteSpace(ch));
-		                break;
+                        break;
                     case 0x0021: // '!' // ignoring java set thai reordering
                         break;
-	                default :
-	                    if (newstrength == TOKEN_UNSET_) {
-	                        throwParseException(m_rules_, m_current_);
-	                    }
-	                    if (isSpecialChar(ch) && (inquote == false)) {
-	                        throwParseException(m_rules_, m_current_);
-	                    }
-	                    if (ch == 0x0000 && m_current_ + 1 == limit) {
-	                        break;
-	                    }
-	                    if (inchars) {
-	                        if (m_parsedToken_.m_charsLen_ == 0) {
-	                            m_parsedToken_.m_charsOffset_ = m_current_;
-	                        }
-	                        m_parsedToken_.m_charsLen_++;
-	                    } 
-	                    else {
-	                        if (newextensionlen == 0) {
-	                            extensionoffset = m_current_;
-	                        }
-	                        newextensionlen ++;
-	                    }	
-	                    break;
-	                }
-	            }   
+                    default :
+                        if (newstrength == TOKEN_UNSET_) {
+                            throwParseException(m_rules_, m_current_);
+                        }
+                        if (isSpecialChar(ch) && (inquote == false)) {
+                            throwParseException(m_rules_, m_current_);
+                        }
+                        if (ch == 0x0000 && m_current_ + 1 == limit) {
+                            break;
+                        }
+                        if (inchars) {
+                            if (m_parsedToken_.m_charsLen_ == 0) {
+                                m_parsedToken_.m_charsOffset_ = m_current_;
+                            }
+                            m_parsedToken_.m_charsLen_++;
+                        } 
+                        else {
+                            if (newextensionlen == 0) {
+                                extensionoffset = m_current_;
+                            }
+                            newextensionlen ++;
+                        }    
+                        break;
+                    }
+                }   
             }
-	        if (wasinquote) {
-	            if (ch != 0x27) {
-	              	m_source_.append(ch);
-	                m_extraCurrent_ ++;
-	            }
-	        }   
-	        m_current_ ++;
-	    }  
-	    return doEndParseNextToken(newstrength, top, 
+            if (wasinquote) {
+                if (ch != 0x27) {
+                      m_source_.append(ch);
+                    m_extraCurrent_ ++;
+                }
+            }   
+            m_current_ ++;
+        }  
+        return doEndParseNextToken(newstrength, top, 
                                    extensionoffset, newextensionlen, 
                                    variabletop, before);
-	}
+    }
 
     /**
      * End the next parse token
@@ -1506,18 +1506,18 @@ final class CollationRuleParser
             return -1;
         }
         if (m_parsedToken_.m_charsLen_ == 0 && top == false) {
-		    throwParseException(m_rules_, m_current_); 
-		}
-		
-		m_parsedToken_.m_strength_ = newstrength; 
-		//m_parsedToken_.m_charsOffset_ = charsoffset;
-		//m_parsedToken_.m_charsLen_ = newcharslen;
-		m_parsedToken_.m_extensionOffset_ = extensionoffset;
-	    m_parsedToken_.m_extensionLen_ = newextensionlen;
-		m_parsedToken_.m_flags_ = (char)
-		                          ((variabletop ? TOKEN_VARIABLE_TOP_MASK_ : 0)
+            throwParseException(m_rules_, m_current_); 
+        }
+        
+        m_parsedToken_.m_strength_ = newstrength; 
+        //m_parsedToken_.m_charsOffset_ = charsoffset;
+        //m_parsedToken_.m_charsLen_ = newcharslen;
+        m_parsedToken_.m_extensionOffset_ = extensionoffset;
+        m_parsedToken_.m_extensionLen_ = newextensionlen;
+        m_parsedToken_.m_flags_ = (char)
+                                  ((variabletop ? TOKEN_VARIABLE_TOP_MASK_ : 0)
                                   | (top ? TOKEN_TOP_MASK_ : 0) | before);
-		return m_current_;
+        return m_current_;
     }
     
     /**
@@ -1530,95 +1530,95 @@ final class CollationRuleParser
     private Token getVirginBefore(Token sourcetoken, int strength) 
                                                           throws ParseException
     {
-	    // this is a virgin before - we need to fish the anchor from the UCA
-	    if (sourcetoken != null) {
+        // this is a virgin before - we need to fish the anchor from the UCA
+        if (sourcetoken != null) {
             int offset = sourcetoken.m_source_ & 0xFFFFFF;
             m_UCAColEIter_.setText(m_source_.substring(offset, offset + 1));
-	    } 
-	    else {
+        } 
+        else {
             m_UCAColEIter_.setText(
                              m_source_.substring(m_parsedToken_.m_charsOffset_, 
                              m_parsedToken_.m_charsOffset_ + 1));
-	    }
-	      	
-	    int basece = m_UCAColEIter_.next() & 0xFFFFFF3F;
-	    int basecontce = m_UCAColEIter_.next();
-	    if (basecontce == CollationElementIterator.NULLORDER) {
-	        basecontce = 0;
-	    }
-	    
-	    int ch = 0;
+        }
+              
+        int basece = m_UCAColEIter_.next() & 0xFFFFFF3F;
+        int basecontce = m_UCAColEIter_.next();
+        if (basecontce == CollationElementIterator.NULLORDER) {
+            basecontce = 0;
+        }
+        
+        int ch = 0;
 
 
-	    if((basece >>> 24 >= RuleBasedCollator.UCA_CONSTANTS_.PRIMARY_IMPLICIT_MIN_) 
-	    		&& (basece >>> 24 <=  RuleBasedCollator.UCA_CONSTANTS_.PRIMARY_IMPLICIT_MAX_)) { /* implicits - */
-	    	
-	    	int primary = basece & RuleBasedCollator.CE_PRIMARY_MASK_ | (basecontce & RuleBasedCollator.CE_PRIMARY_MASK_) >> 16;
-	    	int raw = RuleBasedCollator.impCEGen_.getRawFromImplicit(primary);
-	    	ch = RuleBasedCollator.impCEGen_.getCodePointFromRaw(raw-1);
-	    	int primaryCE = RuleBasedCollator.impCEGen_.getImplicitFromRaw(raw-1);
-	    	m_utilCEBuffer_[0] = primaryCE & RuleBasedCollator.CE_PRIMARY_MASK_ | 0x0505;
-	    	m_utilCEBuffer_[1] = (primaryCE << 16) & RuleBasedCollator.CE_PRIMARY_MASK_ | RuleBasedCollator.CE_CONTINUATION_MARKER_;
+        if((basece >>> 24 >= RuleBasedCollator.UCA_CONSTANTS_.PRIMARY_IMPLICIT_MIN_) 
+                && (basece >>> 24 <=  RuleBasedCollator.UCA_CONSTANTS_.PRIMARY_IMPLICIT_MAX_)) { /* implicits - */
+            
+            int primary = basece & RuleBasedCollator.CE_PRIMARY_MASK_ | (basecontce & RuleBasedCollator.CE_PRIMARY_MASK_) >> 16;
+            int raw = RuleBasedCollator.impCEGen_.getRawFromImplicit(primary);
+            ch = RuleBasedCollator.impCEGen_.getCodePointFromRaw(raw-1);
+            int primaryCE = RuleBasedCollator.impCEGen_.getImplicitFromRaw(raw-1);
+            m_utilCEBuffer_[0] = primaryCE & RuleBasedCollator.CE_PRIMARY_MASK_ | 0x0505;
+            m_utilCEBuffer_[1] = (primaryCE << 16) & RuleBasedCollator.CE_PRIMARY_MASK_ | RuleBasedCollator.CE_CONTINUATION_MARKER_;
 
-	    	m_parsedToken_.m_charsOffset_ = m_extraCurrent_;
-	    	m_source_.append('\uFFFE');
-	    	m_source_.append((char)ch);
-	    	m_extraCurrent_ += 2;
-	    	m_parsedToken_.m_charsLen_++;
+            m_parsedToken_.m_charsOffset_ = m_extraCurrent_;
+            m_source_.append('\uFFFE');
+            m_source_.append((char)ch);
+            m_extraCurrent_ += 2;
+            m_parsedToken_.m_charsLen_++;
 
-	    	m_utilToken_.m_source_ = (m_parsedToken_.m_charsLen_ << 24) 
-			| m_parsedToken_.m_charsOffset_;
-	    	m_utilToken_.m_rules_ = m_source_;
-	    	sourcetoken = (Token)m_hashTable_.get(m_utilToken_);
-	    	
-	    	if(sourcetoken == null) {
-	    		m_listHeader_[m_resultLength_] = new TokenListHeader();
-	    		m_listHeader_[m_resultLength_].m_baseCE_ 
-					= m_utilCEBuffer_[0] & 0xFFFFFF3F;
-	    		if (RuleBasedCollator.isContinuation(m_utilCEBuffer_[1])) {
-	    			m_listHeader_[m_resultLength_].m_baseContCE_ 
-					= m_utilCEBuffer_[1];
-	    		} 
-	    		else {
-	    			m_listHeader_[m_resultLength_].m_baseContCE_ = 0;
-	    		}
-	    		m_listHeader_[m_resultLength_].m_nextCE_ = 0;
-	    		m_listHeader_[m_resultLength_].m_nextContCE_ = 0;
-	    		m_listHeader_[m_resultLength_].m_previousCE_ = 0;
-	    		m_listHeader_[m_resultLength_].m_previousContCE_ = 0;
-	    		m_listHeader_[m_resultLength_].m_indirect_ = false;
+            m_utilToken_.m_source_ = (m_parsedToken_.m_charsLen_ << 24) 
+            | m_parsedToken_.m_charsOffset_;
+            m_utilToken_.m_rules_ = m_source_;
+            sourcetoken = (Token)m_hashTable_.get(m_utilToken_);
+            
+            if(sourcetoken == null) {
+                m_listHeader_[m_resultLength_] = new TokenListHeader();
+                m_listHeader_[m_resultLength_].m_baseCE_ 
+                    = m_utilCEBuffer_[0] & 0xFFFFFF3F;
+                if (RuleBasedCollator.isContinuation(m_utilCEBuffer_[1])) {
+                    m_listHeader_[m_resultLength_].m_baseContCE_ 
+                    = m_utilCEBuffer_[1];
+                } 
+                else {
+                    m_listHeader_[m_resultLength_].m_baseContCE_ = 0;
+                }
+                m_listHeader_[m_resultLength_].m_nextCE_ = 0;
+                m_listHeader_[m_resultLength_].m_nextContCE_ = 0;
+                m_listHeader_[m_resultLength_].m_previousCE_ = 0;
+                m_listHeader_[m_resultLength_].m_previousContCE_ = 0;
+                m_listHeader_[m_resultLength_].m_indirect_ = false;
 
-	    		sourcetoken = new Token();
-	    		initAReset(-1, sourcetoken);   
-	    	}
+                sourcetoken = new Token();
+                initAReset(-1, sourcetoken);   
+            }
 
-	    } else {
-	    	
-		    // first ce and second ce m_utilCEBuffer_
-		    int invpos = CollationParsedRuleBuilder.INVERSE_UCA_.getInversePrevCE(
-	                                                     basece, basecontce, 
-	                                                     strength, m_utilCEBuffer_);
-		    // we got the previous CE. Now we need to see if the difference between
-		    // the two CEs is really of the requested strength.
-		    // if it's a bigger difference (we asked for secondary and got primary), we 
-		    // need to modify the CE.
-		    if(CollationParsedRuleBuilder.INVERSE_UCA_.getCEStrengthDifference(basece, basecontce, m_utilCEBuffer_[0], m_utilCEBuffer_[1]) < strength) {
-		    	// adjust the strength
-		    	// now we are in the situation where our baseCE should actually be modified in 
-		    	// order to get the CE in the right position.
-		    	if(strength == Collator.SECONDARY) {
-		    		m_utilCEBuffer_[0] = basece - 0x0200;
-		    	} else { // strength == UCOL_TERTIARY
-		    		m_utilCEBuffer_[0] = basece - 0x02;
-		    	}
-		    	if(RuleBasedCollator.isContinuation(basecontce)) {
-		    		if(strength == Collator.SECONDARY) {
-		    			m_utilCEBuffer_[1] = basecontce - 0x0200;
-		    		} else { // strength == UCOL_TERTIARY
-		    			m_utilCEBuffer_[1] = basecontce - 0x02;
-		    		}
-		    	}
-		    }
+        } else {
+            
+            // first ce and second ce m_utilCEBuffer_
+            int invpos = CollationParsedRuleBuilder.INVERSE_UCA_.getInversePrevCE(
+                                                         basece, basecontce, 
+                                                         strength, m_utilCEBuffer_);
+            // we got the previous CE. Now we need to see if the difference between
+            // the two CEs is really of the requested strength.
+            // if it's a bigger difference (we asked for secondary and got primary), we 
+            // need to modify the CE.
+            if(CollationParsedRuleBuilder.INVERSE_UCA_.getCEStrengthDifference(basece, basecontce, m_utilCEBuffer_[0], m_utilCEBuffer_[1]) < strength) {
+                // adjust the strength
+                // now we are in the situation where our baseCE should actually be modified in 
+                // order to get the CE in the right position.
+                if(strength == Collator.SECONDARY) {
+                    m_utilCEBuffer_[0] = basece - 0x0200;
+                } else { // strength == UCOL_TERTIARY
+                    m_utilCEBuffer_[0] = basece - 0x02;
+                }
+                if(RuleBasedCollator.isContinuation(basecontce)) {
+                    if(strength == Collator.SECONDARY) {
+                        m_utilCEBuffer_[1] = basecontce - 0x0200;
+                    } else { // strength == UCOL_TERTIARY
+                        m_utilCEBuffer_[1] = basecontce - 0x02;
+                    }
+                }
+            }
             
 /*            
             // the code below relies on getting a code point from the inverse table, in order to be
@@ -1628,84 +1628,84 @@ final class CollationRuleParser
             // Also, in case when there is no equivalent strength before an element, we have to actually
             // construct one. For example, &[before 2]a << x won't result in x << a, because the element 
             // before a is a primary difference. 
-		    ch = CollationParsedRuleBuilder.INVERSE_UCA_.m_table_[3 * invpos 
-	                                                                  + 2];
-	        if ((ch &  INVERSE_SIZE_MASK_) != 0) {
-		        int offset = ch & INVERSE_OFFSET_MASK_;
-		        ch = CollationParsedRuleBuilder.INVERSE_UCA_.m_continuations_[
-	                                                                       offset];
-		    }      
-		    m_source_.append((char)ch);
-		    m_extraCurrent_ ++;
-		    m_parsedToken_.m_charsOffset_ = m_extraCurrent_ - 1;
-		    m_parsedToken_.m_charsLen_ = 1;
-		
-		    // We got an UCA before. However, this might have been tailored.
-		    // example:
-		    // &\u30ca = \u306a
-		    // &[before 3]\u306a<<<\u306a|\u309d
-		  
-		    m_utilToken_.m_source_ = (m_parsedToken_.m_charsLen_ << 24) 
-		                                         | m_parsedToken_.m_charsOffset_;
-		    m_utilToken_.m_rules_ = m_source_;
-		    sourcetoken = (Token)m_hashTable_.get(m_utilToken_);
-*/		  
+            ch = CollationParsedRuleBuilder.INVERSE_UCA_.m_table_[3 * invpos 
+                                                                      + 2];
+            if ((ch &  INVERSE_SIZE_MASK_) != 0) {
+                int offset = ch & INVERSE_OFFSET_MASK_;
+                ch = CollationParsedRuleBuilder.INVERSE_UCA_.m_continuations_[
+                                                                           offset];
+            }      
+            m_source_.append((char)ch);
+            m_extraCurrent_ ++;
+            m_parsedToken_.m_charsOffset_ = m_extraCurrent_ - 1;
+            m_parsedToken_.m_charsLen_ = 1;
+        
+            // We got an UCA before. However, this might have been tailored.
+            // example:
+            // &\u30ca = \u306a
+            // &[before 3]\u306a<<<\u306a|\u309d
+          
+            m_utilToken_.m_source_ = (m_parsedToken_.m_charsLen_ << 24) 
+                                                 | m_parsedToken_.m_charsOffset_;
+            m_utilToken_.m_rules_ = m_source_;
+            sourcetoken = (Token)m_hashTable_.get(m_utilToken_);
+*/          
 
-		    // here is how it should be. The situation such as &[before 1]a < x, should be 
-		    // resolved exactly as if we wrote &a > x. 
-		    // therefore, I don't really care if the UCA value before a has been changed.
-		    // However, I do care if the strength between my element and the previous element
-		    // is bigger then I wanted. So, if CE < baseCE and I wanted &[before 2], then i'll 
-		    // have to construct the base CE.
+            // here is how it should be. The situation such as &[before 1]a < x, should be 
+            // resolved exactly as if we wrote &a > x. 
+            // therefore, I don't really care if the UCA value before a has been changed.
+            // However, I do care if the strength between my element and the previous element
+            // is bigger then I wanted. So, if CE < baseCE and I wanted &[before 2], then i'll 
+            // have to construct the base CE.
             
-		    // if we found a tailored thing, we have to use the UCA value and 
-		    // construct a new reset token with constructed name
-		    //if (sourcetoken != null && sourcetoken.m_strength_ != TOKEN_RESET_) {
-		        // character to which we want to anchor is already tailored. 
-		        // We need to construct a new token which will be the anchor point
-	            //m_source_.setCharAt(m_extraCurrent_ - 1, '\uFFFE');
-		        //m_source_.append(ch);
-		        //m_extraCurrent_ ++;
-		        //m_parsedToken_.m_charsLen_ ++;
+            // if we found a tailored thing, we have to use the UCA value and 
+            // construct a new reset token with constructed name
+            //if (sourcetoken != null && sourcetoken.m_strength_ != TOKEN_RESET_) {
+                // character to which we want to anchor is already tailored. 
+                // We need to construct a new token which will be the anchor point
+                //m_source_.setCharAt(m_extraCurrent_ - 1, '\uFFFE');
+                //m_source_.append(ch);
+                //m_extraCurrent_ ++;
+                //m_parsedToken_.m_charsLen_ ++;
                 // grab before
                 m_parsedToken_.m_charsOffset_ -= 10;
                 m_parsedToken_.m_charsLen_ += 10;
-	            m_listHeader_[m_resultLength_] = new TokenListHeader();
-		        m_listHeader_[m_resultLength_].m_baseCE_ 
-	                                             = m_utilCEBuffer_[0] & 0xFFFFFF3F;
-		        if (RuleBasedCollator.isContinuation(m_utilCEBuffer_[1])) {
-		            m_listHeader_[m_resultLength_].m_baseContCE_ 
-	                                                          = m_utilCEBuffer_[1];
-		        } 
-		        else {
-		            m_listHeader_[m_resultLength_].m_baseContCE_ = 0;
-		        }
-		        m_listHeader_[m_resultLength_].m_nextCE_ = 0;
-		        m_listHeader_[m_resultLength_].m_nextContCE_ = 0;
-		        m_listHeader_[m_resultLength_].m_previousCE_ = 0;
-		        m_listHeader_[m_resultLength_].m_previousContCE_ = 0;
-		        m_listHeader_[m_resultLength_].m_indirect_ = false;
-		        sourcetoken = new Token();
-		        initAReset(-1, sourcetoken);   
-		    //}
-	    }
-	    return sourcetoken;
-	}
-	
-	/**
-	 * Processing Description.
-	 * 1. Build a m_listHeader_. Each list has a header, which contains two lists 
-	 * (positive and negative), a reset token, a baseCE, nextCE, and 
-	 * previousCE. The lists and reset may be null. 
-	 * 2. As you process, you keep a LAST pointer that points to the last token 
-	 * you handled. 
-	 * @param expand string offset, -1 for null strings
-	 * @param targetToken token to update
-	 * @return expandnext offset
-	 * @throws ParseException thrown when rules syntax failed
-	 */
-	private int initAReset(int expand, Token targetToken) throws ParseException
-	{
+                m_listHeader_[m_resultLength_] = new TokenListHeader();
+                m_listHeader_[m_resultLength_].m_baseCE_ 
+                                                 = m_utilCEBuffer_[0] & 0xFFFFFF3F;
+                if (RuleBasedCollator.isContinuation(m_utilCEBuffer_[1])) {
+                    m_listHeader_[m_resultLength_].m_baseContCE_ 
+                                                              = m_utilCEBuffer_[1];
+                } 
+                else {
+                    m_listHeader_[m_resultLength_].m_baseContCE_ = 0;
+                }
+                m_listHeader_[m_resultLength_].m_nextCE_ = 0;
+                m_listHeader_[m_resultLength_].m_nextContCE_ = 0;
+                m_listHeader_[m_resultLength_].m_previousCE_ = 0;
+                m_listHeader_[m_resultLength_].m_previousContCE_ = 0;
+                m_listHeader_[m_resultLength_].m_indirect_ = false;
+                sourcetoken = new Token();
+                initAReset(-1, sourcetoken);   
+            //}
+        }
+        return sourcetoken;
+    }
+    
+    /**
+     * Processing Description.
+     * 1. Build a m_listHeader_. Each list has a header, which contains two lists 
+     * (positive and negative), a reset token, a baseCE, nextCE, and 
+     * previousCE. The lists and reset may be null. 
+     * 2. As you process, you keep a LAST pointer that points to the last token 
+     * you handled. 
+     * @param expand string offset, -1 for null strings
+     * @param targetToken token to update
+     * @return expandnext offset
+     * @throws ParseException thrown when rules syntax failed
+     */
+    private int initAReset(int expand, Token targetToken) throws ParseException
+    {
         if (m_resultLength_ == m_listHeader_.length - 1) {
             // Unfortunately, this won't work, as we store addresses of lhs in 
             // token
@@ -1713,73 +1713,73 @@ final class CollationRuleParser
             System.arraycopy(m_listHeader_, 0, temp, 0, m_resultLength_ + 1);
             m_listHeader_ = temp;
         }
-	    // do the reset thing
-	    targetToken.m_rules_ = m_source_;
-	    targetToken.m_source_ = m_parsedToken_.m_charsLen_ << 24 
-	                            | m_parsedToken_.m_charsOffset_;
-	    targetToken.m_expansion_ = m_parsedToken_.m_extensionLen_ << 24 
-	                               | m_parsedToken_.m_extensionOffset_;
-	    // keep the flags around so that we know about before
-	    targetToken.m_flags_ = m_parsedToken_.m_flags_;
-	    
-	    if (m_parsedToken_.m_prefixOffset_ != 0) {
-	        throwParseException(m_rules_, m_parsedToken_.m_charsOffset_ - 1);
-	    } 
-	    
+        // do the reset thing
+        targetToken.m_rules_ = m_source_;
+        targetToken.m_source_ = m_parsedToken_.m_charsLen_ << 24 
+                                | m_parsedToken_.m_charsOffset_;
+        targetToken.m_expansion_ = m_parsedToken_.m_extensionLen_ << 24 
+                                   | m_parsedToken_.m_extensionOffset_;
+        // keep the flags around so that we know about before
+        targetToken.m_flags_ = m_parsedToken_.m_flags_;
+        
+        if (m_parsedToken_.m_prefixOffset_ != 0) {
+            throwParseException(m_rules_, m_parsedToken_.m_charsOffset_ - 1);
+        } 
+        
         targetToken.m_prefix_ = 0;
-	    // TODO: this should also handle reverse
-	    targetToken.m_polarity_ = TOKEN_POLARITY_POSITIVE_; 
-	    targetToken.m_strength_ = TOKEN_RESET_;
-	    targetToken.m_next_ = null;
-	    targetToken.m_previous_ = null;
-	    targetToken.m_CELength_ = 0;
-	    targetToken.m_expCELength_ = 0;
-	    targetToken.m_listHeader_ = m_listHeader_[m_resultLength_];
-	    m_listHeader_[m_resultLength_].m_first_ = null;
-	    m_listHeader_[m_resultLength_].m_last_ = null;
-	    m_listHeader_[m_resultLength_].m_first_ = null;
-	    m_listHeader_[m_resultLength_].m_last_ = null;
-	    m_listHeader_[m_resultLength_].m_reset_ = targetToken;
-	
-	    /* 3 Consider each item: relation, source, and expansion: 
-	     * e.g. ...< x / y ... 
-	     * First convert all expansions into normal form. Examples: 
-	     * If "xy" doesn't occur earlier in the list or in the UCA, convert 
-	     * &xy * c * d * ... into &x * c/y * d * ... 
-	     * Note: reset values can never have expansions, although they can 
-	     * cause the very next item to have one. They may be contractions, if 
-	     * they are found earlier in the list. 
-	     */
-	    int result = 0;
-	    if (expand > 0) {
-	        // check to see if there is an expansion
-	        if (m_parsedToken_.m_charsLen_ > 1) {
-	            targetToken.m_source_ = ((expand 
-	                                      - m_parsedToken_.m_charsOffset_ ) 
-	                                      << 24) 
-	                                      | m_parsedToken_.m_charsOffset_;
-	            result = ((m_parsedToken_.m_charsLen_ 
-	                           + m_parsedToken_.m_charsOffset_ - expand) << 24) 
-	                           | expand;
-	        }
-	    }   
-	
-	    m_resultLength_ ++;
-	    m_hashTable_.put(targetToken, targetToken);
-	    return result;
-	}
-	
-	/**
-	 * Checks if an character is special
-	 * @param ch character to test
-	 * @return true if the character is special
-	 */
-	private static final boolean isSpecialChar(char ch)
-	{
+        // TODO: this should also handle reverse
+        targetToken.m_polarity_ = TOKEN_POLARITY_POSITIVE_; 
+        targetToken.m_strength_ = TOKEN_RESET_;
+        targetToken.m_next_ = null;
+        targetToken.m_previous_ = null;
+        targetToken.m_CELength_ = 0;
+        targetToken.m_expCELength_ = 0;
+        targetToken.m_listHeader_ = m_listHeader_[m_resultLength_];
+        m_listHeader_[m_resultLength_].m_first_ = null;
+        m_listHeader_[m_resultLength_].m_last_ = null;
+        m_listHeader_[m_resultLength_].m_first_ = null;
+        m_listHeader_[m_resultLength_].m_last_ = null;
+        m_listHeader_[m_resultLength_].m_reset_ = targetToken;
+    
+        /* 3 Consider each item: relation, source, and expansion: 
+         * e.g. ...< x / y ... 
+         * First convert all expansions into normal form. Examples: 
+         * If "xy" doesn't occur earlier in the list or in the UCA, convert 
+         * &xy * c * d * ... into &x * c/y * d * ... 
+         * Note: reset values can never have expansions, although they can 
+         * cause the very next item to have one. They may be contractions, if 
+         * they are found earlier in the list. 
+         */
+        int result = 0;
+        if (expand > 0) {
+            // check to see if there is an expansion
+            if (m_parsedToken_.m_charsLen_ > 1) {
+                targetToken.m_source_ = ((expand 
+                                          - m_parsedToken_.m_charsOffset_ ) 
+                                          << 24) 
+                                          | m_parsedToken_.m_charsOffset_;
+                result = ((m_parsedToken_.m_charsLen_ 
+                               + m_parsedToken_.m_charsOffset_ - expand) << 24) 
+                               | expand;
+            }
+        }   
+    
+        m_resultLength_ ++;
+        m_hashTable_.put(targetToken, targetToken);
+        return result;
+    }
+    
+    /**
+     * Checks if an character is special
+     * @param ch character to test
+     * @return true if the character is special
+     */
+    private static final boolean isSpecialChar(char ch)
+    {
         return (ch <= 0x002F && ch >= 0x0020) || (ch <= 0x003F && ch >= 0x003A) 
                || (ch <= 0x0060 && ch >= 0x005B) 
                || (ch <= 0x007E && ch >= 0x007D) || ch == 0x007B;
-	}
+    }
     
     private
     UnicodeSet readAndSetUnicodeSet(String source, int start) throws ParseException 
@@ -1813,7 +1813,7 @@ final class CollationRuleParser
      */
     private int m_optionarg_ = 0;
 
-	private int readOption(String rules, int start, int optionend) 
+    private int readOption(String rules, int start, int optionend) 
     {
         m_optionarg_ = 0;
         int i = 0;
@@ -1840,49 +1840,49 @@ final class CollationRuleParser
         }
         return i;
     }
-	/**
-	 * Reads and set collation options
-	 * @param optionend offset to the end of the option in rules
-	 * @return TOKEN_SUCCESS if option is set correct, 0 otherwise
+    /**
+     * Reads and set collation options
+     * @param optionend offset to the end of the option in rules
+     * @return TOKEN_SUCCESS if option is set correct, 0 otherwise
      * @exception ParseException thrown when options in rules are wrong
-	 */
-	private byte readAndSetOption() throws ParseException
-	{
-		int start = m_current_ + 1; // skip opening '['
-	    int i = readOption(m_rules_, start, m_optionEnd_);
+     */
+    private byte readAndSetOption() throws ParseException
+    {
+        int start = m_current_ + 1; // skip opening '['
+        int i = readOption(m_rules_, start, m_optionEnd_);
         
         int optionarg = m_optionarg_;
-	
-	    if (i < 0) {
-	        throwParseException(m_rules_, start);
-	    }
-	
-	    if (i < 7) {
+    
+        if (i < 0) {
+            throwParseException(m_rules_, start);
+        }
+    
+        if (i < 7) {
             if (optionarg != 0) {
-	            for (int j = 0; j < RULES_OPTIONS_[i].m_subOptions_.length; 
+                for (int j = 0; j < RULES_OPTIONS_[i].m_subOptions_.length; 
                                                                         j ++) {
                      String subname = RULES_OPTIONS_[i].m_subOptions_[j];
                      int size = optionarg + subname.length();
                      if (m_rules_.length() > size 
                          && subname.equalsIgnoreCase(m_rules_.substring(
                                                            optionarg, size))) {
-	                     setOptions(m_options_, RULES_OPTIONS_[i].m_attribute_, 
+                         setOptions(m_options_, RULES_OPTIONS_[i].m_attribute_, 
                              RULES_OPTIONS_[i].m_subOptionAttributeValues_[j]);
-	                     return TOKEN_SUCCESS_MASK_;
+                         return TOKEN_SUCCESS_MASK_;
                      }
-	            }
-	        }
-	        throwParseException(m_rules_, optionarg);
-	    } 
+                }
+            }
+            throwParseException(m_rules_, optionarg);
+        } 
         else if (i == 7) { // variable top
-	        return TOKEN_SUCCESS_MASK_ | TOKEN_VARIABLE_TOP_MASK_;
-	    } 
+            return TOKEN_SUCCESS_MASK_ | TOKEN_VARIABLE_TOP_MASK_;
+        } 
         else if (i == 8) { // rearange
-	        return TOKEN_SUCCESS_MASK_;
-	    } 
+            return TOKEN_SUCCESS_MASK_;
+        } 
         else if (i == 9) { // before
-	        if (optionarg != 0) {
-	            for (int j = 0; j < RULES_OPTIONS_[i].m_subOptions_.length; 
+            if (optionarg != 0) {
+                for (int j = 0; j < RULES_OPTIONS_[i].m_subOptions_.length; 
                                                                         j ++) {
                      String subname = RULES_OPTIONS_[i].m_subOptions_[j];
                      int size = optionarg + subname.length();
@@ -1890,33 +1890,33 @@ final class CollationRuleParser
                          && subname.equalsIgnoreCase(
                                                m_rules_.substring(optionarg, 
                                               optionarg + subname.length()))) {
-	                     return (byte)(TOKEN_SUCCESS_MASK_ 
+                         return (byte)(TOKEN_SUCCESS_MASK_ 
                             | RULES_OPTIONS_[i].m_subOptionAttributeValues_[j] 
                             + 1);
                      }
-	            }
-	        }
-	        throwParseException(m_rules_, optionarg);
-	    } 
+                }
+            }
+            throwParseException(m_rules_, optionarg);
+        } 
         else if (i == 10) {  // top, we are going to have an array with 
             // structures of limit CEs index to this array will be 
             // src->parsedToken.indirectIndex
-	        m_parsedToken_.m_indirectIndex_ = 0;
-	        return TOKEN_SUCCESS_MASK_ | TOKEN_TOP_MASK_;
-	    } 
+            m_parsedToken_.m_indirectIndex_ = 0;
+            return TOKEN_SUCCESS_MASK_ | TOKEN_TOP_MASK_;
+        } 
         else if (i < 13) { // first, last 
-	        for (int j = 0; j < RULES_OPTIONS_[i].m_subOptions_.length; j ++) {     
-	            String subname = RULES_OPTIONS_[i].m_subOptions_[j];
+            for (int j = 0; j < RULES_OPTIONS_[i].m_subOptions_.length; j ++) {     
+                String subname = RULES_OPTIONS_[i].m_subOptions_[j];
                 int size = optionarg + subname.length();
                 if (m_rules_.length() > size 
                     && subname.equalsIgnoreCase(m_rules_.substring(optionarg, 
                                                                    size))) {
-	                m_parsedToken_.m_indirectIndex_ = (char)(i - 10 + (j << 1));         
-	                return TOKEN_SUCCESS_MASK_ | TOKEN_TOP_MASK_;
-	            }
-	        }	        
+                    m_parsedToken_.m_indirectIndex_ = (char)(i - 10 + (j << 1));         
+                    return TOKEN_SUCCESS_MASK_ | TOKEN_TOP_MASK_;
+                }
+            }            
             throwParseException(m_rules_, optionarg);
-	    } 
+        } 
         else if(i == 13 || i == 14) { // copy and remove are handled before normalization
             // we need to move end here
             int noOpenBraces = 1;
@@ -1933,10 +1933,10 @@ final class CollationRuleParser
             return TOKEN_SUCCESS_MASK_; 
         }
         else {
-	        throwParseException(m_rules_, optionarg);
-	    }
+            throwParseException(m_rules_, optionarg);
+        }
         return TOKEN_SUCCESS_MASK_; // we will never reach here.
-	}
+    }
 
     /**
      * Set collation option
@@ -1946,43 +1946,43 @@ final class CollationRuleParser
      */
     private void setOptions(OptionSet optionset, int attribute, int value) 
     {
-	    switch (attribute) {
-	        case RuleBasedCollator.Attribute.HIRAGANA_QUATERNARY_MODE_ :
-	            optionset.m_isHiragana4_ 
+        switch (attribute) {
+            case RuleBasedCollator.Attribute.HIRAGANA_QUATERNARY_MODE_ :
+                optionset.m_isHiragana4_ 
                             = (value == RuleBasedCollator.AttributeValue.ON_);
-	            break;
-	        case RuleBasedCollator.Attribute.FRENCH_COLLATION_ :
-	            optionset.m_isFrenchCollation_ 
+                break;
+            case RuleBasedCollator.Attribute.FRENCH_COLLATION_ :
+                optionset.m_isFrenchCollation_ 
                              = (value == RuleBasedCollator.AttributeValue.ON_);
-	            break;
-	        case RuleBasedCollator.Attribute.ALTERNATE_HANDLING_ :
-	            optionset.m_isAlternateHandlingShifted_ 
+                break;
+            case RuleBasedCollator.Attribute.ALTERNATE_HANDLING_ :
+                optionset.m_isAlternateHandlingShifted_ 
                              = (value 
                                 == RuleBasedCollator.AttributeValue.SHIFTED_);
-	            break;
-	        case RuleBasedCollator.Attribute.CASE_FIRST_ :
-	            optionset.m_caseFirst_ = value;
-	            break;
-	        case RuleBasedCollator.Attribute.CASE_LEVEL_ :
-	            optionset.m_isCaseLevel_ 
+                break;
+            case RuleBasedCollator.Attribute.CASE_FIRST_ :
+                optionset.m_caseFirst_ = value;
+                break;
+            case RuleBasedCollator.Attribute.CASE_LEVEL_ :
+                optionset.m_isCaseLevel_ 
                              = (value == RuleBasedCollator.AttributeValue.ON_);
-	            break;
-	        case RuleBasedCollator.Attribute.NORMALIZATION_MODE_ :
+                break;
+            case RuleBasedCollator.Attribute.NORMALIZATION_MODE_ :
                 if (value == RuleBasedCollator.AttributeValue.ON_) {
                     value = Collator.CANONICAL_DECOMPOSITION;
                 }
-	            optionset.m_decomposition_ = value;
-	            break;
-	        case RuleBasedCollator.Attribute.STRENGTH_ :
-	            optionset.m_strength_ = value;
-	            break;
-	        default :
-	            break;
-	    }
-  	}
-  	
+                optionset.m_decomposition_ = value;
+                break;
+            case RuleBasedCollator.Attribute.STRENGTH_ :
+                optionset.m_strength_ = value;
+                break;
+            default :
+                break;
+        }
+      }
+      
     UnicodeSet getTailoredSet() throws ParseException
-    {	
+    {    
         boolean startOfRules = true;
         UnicodeSet tailored = new UnicodeSet();
         String pattern;
@@ -2001,13 +2001,13 @@ final class CollationRuleParser
         startOfRules = false;
         // The idea is to tokenize the rule set. For each non-reset token,
         // we add all the canonicaly equivalent FCD sequences 
-            if(m_parsedToken_.m_strength_ != TOKEN_RESET_) {		    	
+            if(m_parsedToken_.m_strength_ != TOKEN_RESET_) {                
                 it.setSource(m_source_.substring(
-                  	m_parsedToken_.m_charsOffset_, 
-                  	m_parsedToken_.m_charsOffset_+m_parsedToken_.m_charsLen_));
+                      m_parsedToken_.m_charsOffset_, 
+                      m_parsedToken_.m_charsOffset_+m_parsedToken_.m_charsLen_));
                 pattern = it.next();
                 while(pattern != null) {
-                  	if(Normalizer.quickCheck(pattern, Normalizer.FCD,0) != Normalizer.NO) {
+                      if(Normalizer.quickCheck(pattern, Normalizer.FCD,0) != Normalizer.NO) {
                         tailored.add(pattern);
                     }
                     pattern = it.next();

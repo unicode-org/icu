@@ -62,7 +62,7 @@ class UppercaseTransliterator extends Transliterator {
         int oldLen;
         
         while (textPos < limit) {
-        	original.setIndex(textPos);
+            original.setIndex(textPos);
             cp = original.currentCodePoint();
             oldLen = UTF16.getCharCount(cp);
             int newLen = m_charppty_.toUpperOrTitleCase(loc, cp, original, true, buffer);
@@ -81,9 +81,9 @@ class UppercaseTransliterator extends Transliterator {
     }
     
     private char buffer[] = new char[UCharacterProperty.MAX_CASE_MAP_SIZE];
-	/**
-	 * Character property database
-	 */
-	private static final UCharacterProperty m_charppty_ = 
-										UCharacterProperty.getInstance();
+    /**
+     * Character property database
+     */
+    private static final UCharacterProperty m_charppty_ = 
+                                        UCharacterProperty.getInstance();
 }

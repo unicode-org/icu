@@ -71,87 +71,87 @@ public class DumbTextComponent extends Canvas
 
     // public boolean isFocusTraversable() { return true; }
 
-	public void addActionListener(ActionListener l) {
+    public void addActionListener(ActionListener l) {
         selectionListener = AWTEventMulticaster.add(selectionListener, l);
-	}
+    }
 
-	public void removeActionListener(ActionListener l) {
+    public void removeActionListener(ActionListener l) {
         selectionListener = AWTEventMulticaster.remove(selectionListener, l);
-	}
+    }
 
-	public void addTextListener(TextListener l) {
+    public void addTextListener(TextListener l) {
         textListener = AWTEventMulticaster.add(textListener, l);
-	}
+    }
 
-	public void removeTextListener(TextListener l) {
+    public void removeTextListener(TextListener l) {
         textListener = AWTEventMulticaster.remove(textListener, l);
-	}
+    }
 
     private transient boolean pressed;
 
-	public void mousePressed(MouseEvent e) {
-	    if (DEBUG) System.out.println("mousePressed");
-	    if (pressed) {
-	        select(e,false);
-	    } else {
+    public void mousePressed(MouseEvent e) {
+        if (DEBUG) System.out.println("mousePressed");
+        if (pressed) {
+            select(e,false);
+        } else {
             doubleClick = e.getClickCount() > 1;
             requestFocus();
             select(e, true);
-    	    pressed = true;
-	    }
-	}
+            pressed = true;
+        }
+    }
 
-	public void mouseDragged(MouseEvent e) {
-	    if (DEBUG) System.out.println("mouseDragged");
-	    select(e, false);
-	}
+    public void mouseDragged(MouseEvent e) {
+        if (DEBUG) System.out.println("mouseDragged");
+        select(e, false);
+    }
 
-	public void mouseReleased(MouseEvent e) {
-	    if (DEBUG) System.out.println("mouseReleased");
-	    pressed = false;
-	}
+    public void mouseReleased(MouseEvent e) {
+        if (DEBUG) System.out.println("mouseReleased");
+        pressed = false;
+    }
 
-	public void mouseEntered(MouseEvent e) {
-	    //if (pressed) select(e, false);
-	}
+    public void mouseEntered(MouseEvent e) {
+        //if (pressed) select(e, false);
+    }
 
-	public void mouseExited(MouseEvent e){
-	    //if (pressed) select(e, false);
-	}
+    public void mouseExited(MouseEvent e){
+        //if (pressed) select(e, false);
+    }
 
-	public void mouseClicked(MouseEvent e) {}
-	public void mouseMoved(MouseEvent e) {}
+    public void mouseClicked(MouseEvent e) {}
+    public void mouseMoved(MouseEvent e) {}
 
 
     public void focusGained(FocusEvent e) {
-	    if (DEBUG) System.out.println("focusGained");
-	    focus = true;
-	    valid = false;
-	    repaint(16);
-	}
-	public void focusLost(FocusEvent e) {
-	    if (DEBUG) System.out.println("focusLost");
-	    focus = false;
-	    valid = false;
-	    repaint(16);
-	}
+        if (DEBUG) System.out.println("focusGained");
+        focus = true;
+        valid = false;
+        repaint(16);
+    }
+    public void focusLost(FocusEvent e) {
+        if (DEBUG) System.out.println("focusLost");
+        focus = false;
+        valid = false;
+        repaint(16);
+    }
 
     public void select(MouseEvent e, boolean first) {
         setKeyStart(-1);
-	    point2Offset(e.getPoint(), tempSelection);
+        point2Offset(e.getPoint(), tempSelection);
         if (first) {
             if ((e.getModifiers() & InputEvent.SHIFT_MASK) == 0) {
                 tempSelection.anchor = tempSelection.caret;
             }
-	    }
-	    // fix words
-	    if (doubleClick) {
-	        tempSelection.expand(wordBreaker);
-	    }
-	    select(tempSelection);
+        }
+        // fix words
+        if (doubleClick) {
+            tempSelection.expand(wordBreaker);
+        }
+        select(tempSelection);
     }
     
-	public void keyPressed(KeyEvent e) {
+    public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
         if (DEBUG) System.out.println("keyPressed "
           + hex((char)code) + ", " + hex((char)e.getModifiers()));
@@ -286,13 +286,13 @@ public class DumbTextComponent extends Canvas
         return off;
     }
       
-	public void keyReleased(KeyEvent e) {
+    public void keyReleased(KeyEvent e) {
         int code = e.getKeyCode();
         if (DEBUG) System.out.println("keyReleased "
           + hex((char)code) + ", " + hex((char)e.getModifiers()));
     }
 
-	public void keyTyped(KeyEvent e) {
+    public void keyTyped(KeyEvent e) {
         char ch = e.getKeyChar();
         if (DEBUG) System.out.println("keyTyped "
           + hex((char)ch) + ", " + hex((char)e.getModifiers()));
@@ -352,7 +352,7 @@ public class DumbTextComponent extends Canvas
     }
     
     protected void validateKeyStart() {
-    	if (activeStart > selection.getStart()) {
+        if (activeStart > selection.getStart()) {
             activeStart = selection.getStart();
             repaint(10);
         }

@@ -356,8 +356,8 @@ public class TimeZoneTest extends TestFmwk
         // Now be smart -- check to see if zh resource is even present.
         // If not, we expect the en fallback behavior.
 
-		// in icu4j 2.1 we know we have the zh_CN locale data, though it's incomplete
-//	/"DateFormatZoneData", 
+        // in icu4j 2.1 we know we have the zh_CN locale data, though it's incomplete
+//    /"DateFormatZoneData", 
         UResourceBundle enRB = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,Locale.ENGLISH);
         UResourceBundle mtRB = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, mt_MT);
         boolean noZH = enRB == mtRB;
@@ -368,10 +368,10 @@ public class TimeZoneTest extends TestFmwk
                 errln("Fail: Expected Pacific Standard Time for PST in mt_MT but got ");
         }
         else if(!name.equals("Pacific Standard Time") &&
-			!name.equals("GMT-08:00") &&
-			!name.equals("GMT-8:00") &&
-			!name.equals("GMT-0800") &&
-			!name.equals("GMT-800")) {
+            !name.equals("GMT-08:00") &&
+            !name.equals("GMT-8:00") &&
+            !name.equals("GMT-0800") &&
+            !name.equals("GMT-800")) {
 
             errln("Fail: Expected GMT-08:00 or something similar");
             errln("************************************************************");
@@ -818,41 +818,41 @@ public class TimeZoneTest extends TestFmwk
     }
 
     public void TestFractionalDST() {
-	String tzName = "Australia/Lord_Howe"; // 30 min offset
-	java.util.TimeZone tz_java = java.util.TimeZone.getTimeZone(tzName);
-	int dst_java = 0;
-	try {
-	    // hack so test compiles and runs in both JDK 1.3 and JDK 1.4
-	    final Object[] args = new Object[0];
-	    final Class[] argtypes = new Class[0];
-	    java.lang.reflect.Method m = tz_java.getClass().getMethod("getDSTSavings", argtypes); 
-	    dst_java = ((Integer) m.invoke(tz_java, args)).intValue();
-	    if (dst_java <= 0 || dst_java >= 3600000) { // didn't get the fractional time zone we wanted
-		errln("didn't get fractional time zone!");
-	    }
-	} catch (NoSuchMethodException e) {
-	    // see JDKTimeZone for the reason for this code
-	    dst_java = 3600000;
-	} catch (IllegalAccessException e) {
-	    // see JDKTimeZone for the reason for this code
-	    errln(e.getMessage());
-	    dst_java = 3600000;
-	} catch (InvocationTargetException e) {
-	    // see JDKTimeZone for the reason for this code
-	    errln(e.getMessage());
-	    dst_java = 3600000;
-	}
-	
-	com.ibm.icu.util.TimeZone tz_icu = com.ibm.icu.util.TimeZone.getTimeZone(tzName);
-	int dst_icu = tz_icu.getDSTSavings();
+    String tzName = "Australia/Lord_Howe"; // 30 min offset
+    java.util.TimeZone tz_java = java.util.TimeZone.getTimeZone(tzName);
+    int dst_java = 0;
+    try {
+        // hack so test compiles and runs in both JDK 1.3 and JDK 1.4
+        final Object[] args = new Object[0];
+        final Class[] argtypes = new Class[0];
+        java.lang.reflect.Method m = tz_java.getClass().getMethod("getDSTSavings", argtypes); 
+        dst_java = ((Integer) m.invoke(tz_java, args)).intValue();
+        if (dst_java <= 0 || dst_java >= 3600000) { // didn't get the fractional time zone we wanted
+        errln("didn't get fractional time zone!");
+        }
+    } catch (NoSuchMethodException e) {
+        // see JDKTimeZone for the reason for this code
+        dst_java = 3600000;
+    } catch (IllegalAccessException e) {
+        // see JDKTimeZone for the reason for this code
+        errln(e.getMessage());
+        dst_java = 3600000;
+    } catch (InvocationTargetException e) {
+        // see JDKTimeZone for the reason for this code
+        errln(e.getMessage());
+        dst_java = 3600000;
+    }
+    
+    com.ibm.icu.util.TimeZone tz_icu = com.ibm.icu.util.TimeZone.getTimeZone(tzName);
+    int dst_icu = tz_icu.getDSTSavings();
 
-	if (dst_java != dst_icu) {
-	    errln("java reports dst savings of " + dst_java +
-		  " but icu reports " + dst_icu + 
-		  " for tz " + tz_icu.getID());
-	} else {
-	    logln("both java and icu report dst savings of " + dst_java + " for tz " + tz_icu.getID());
-	}
+    if (dst_java != dst_icu) {
+        errln("java reports dst savings of " + dst_java +
+          " but icu reports " + dst_icu + 
+          " for tz " + tz_icu.getID());
+    } else {
+        logln("both java and icu report dst savings of " + dst_java + " for tz " + tz_icu.getID());
+    }
     }
 
     public void TestGetOffsetDate() {
@@ -860,18 +860,18 @@ public class TimeZoneTest extends TestFmwk
         cal.set(1997, Calendar.JANUARY, 30);
         long date = cal.getTimeInMillis();
 
-	TimeZone tz_icu = TimeZone.getTimeZone("America/Los_Angeles");
-	int offset = tz_icu.getOffset(date);
-	if (offset != -28800000) {
-	    errln("expected offset -28800000, got: " + offset);
-	}
+    TimeZone tz_icu = TimeZone.getTimeZone("America/Los_Angeles");
+    int offset = tz_icu.getOffset(date);
+    if (offset != -28800000) {
+        errln("expected offset -28800000, got: " + offset);
+    }
 
-	cal.set(1997, Calendar.JULY, 30);
-	date = cal.getTimeInMillis();
-	offset = tz_icu.getOffset(date);
-	if (offset != -25200000) {
-	    errln("expected offset -25200000, got: " + offset);
-	}
+    cal.set(1997, Calendar.JULY, 30);
+    date = cal.getTimeInMillis();
+    offset = tz_icu.getOffset(date);
+    if (offset != -25200000) {
+        errln("expected offset -25200000, got: " + offset);
+    }
     }
 }
 

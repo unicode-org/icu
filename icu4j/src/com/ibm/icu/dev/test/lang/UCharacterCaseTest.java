@@ -695,31 +695,31 @@ public final class UCharacterCaseTest extends TestFmwk
 
     private static final String LOWER_BEFORE_ =
                       "\u0061\u0042\u0049\u03a3\u00df\u03a3\u002f\ud93f\udfff";
-	private static final String LOWER_ROOT_ =
-	                  "\u0061\u0062\u0069\u03c3\u00df\u03c2\u002f\ud93f\udfff";
-	private static final String LOWER_TURKISH_ = 
-	                  "\u0061\u0062\u0131\u03c3\u00df\u03c2\u002f\ud93f\udfff";
+    private static final String LOWER_ROOT_ =
+                      "\u0061\u0062\u0069\u03c3\u00df\u03c2\u002f\ud93f\udfff";
+    private static final String LOWER_TURKISH_ = 
+                      "\u0061\u0062\u0131\u03c3\u00df\u03c2\u002f\ud93f\udfff";
 
-	/**
-	 * each item is an array with input string, result string, locale
-	 */
-	private static final String TITLE_DATA_[] = {
-		"\u0061\u0042\u0020\u0069\u03c2\u0020\u00df\u03c3\u002f\ufb03\ud93f\udfff",
-		"\u0041\u0042\u0020\u0049\u03a3\u0020\u0053\u0073\u03a3\u002f\u0046\u0066\u0069\ud93f\udfff",
-		
-		"\u0061\u0042\u0020\u0069\u03c2\u0020\u00df\u03c3\u002f\ufb03\ud93f\udfff",
-		"\u0041\u0062\u0020\u0049\u03c2\u0020\u0053\u0073\u03c3\u002f\u0046\u0066\u0069\ud93f\udfff",
-		
-		" tHe QUIcK bRoWn", " The Quick Brown",
-		
-		"\u01c4\u01c5\u01c6\u01c7\u01c8\u01c9\u01ca\u01cb\u01cc", 
-		"\u01c5\u01c5\u01c5\u01c8\u01c8\u01c8\u01cb\u01cb\u01cb", // UBRK_CHARACTER
-		
-    	"\u01c9ubav ljubav", "\u01c8ubav Ljubav", // Lj vs. L+j
-    	
-    	"'oH dOn'T tItLeCaSe AfTeR lEtTeR+'",  "'Oh Don't Titlecase After Letter+'"
+    /**
+     * each item is an array with input string, result string, locale
+     */
+    private static final String TITLE_DATA_[] = {
+        "\u0061\u0042\u0020\u0069\u03c2\u0020\u00df\u03c3\u002f\ufb03\ud93f\udfff",
+        "\u0041\u0042\u0020\u0049\u03a3\u0020\u0053\u0073\u03a3\u002f\u0046\u0066\u0069\ud93f\udfff",
+        
+        "\u0061\u0042\u0020\u0069\u03c2\u0020\u00df\u03c3\u002f\ufb03\ud93f\udfff",
+        "\u0041\u0062\u0020\u0049\u03c2\u0020\u0053\u0073\u03c3\u002f\u0046\u0066\u0069\ud93f\udfff",
+        
+        " tHe QUIcK bRoWn", " The Quick Brown",
+        
+        "\u01c4\u01c5\u01c6\u01c7\u01c8\u01c9\u01ca\u01cb\u01cc", 
+        "\u01c5\u01c5\u01c5\u01c8\u01c8\u01c8\u01cb\u01cb\u01cb", // UBRK_CHARACTER
+        
+        "\u01c9ubav ljubav", "\u01c8ubav Ljubav", // Lj vs. L+j
+        
+        "'oH dOn'T tItLeCaSe AfTeR lEtTeR+'",  "'Oh Don't Titlecase After Letter+'"
 
-	};
+    };
 
 
     /**

@@ -41,21 +41,21 @@ import java.util.*;
  * @stable ICU 2.0
  */
 public class UnicodeSetIterator {
-	
+    
     /**
      * Value of <tt>codepoint</tt> if the iterator points to a string.
      * If <tt>codepoint == IS_STRING</tt>, then examine
      * <tt>string</tt> for the current iteration result.
      * @stable ICU 2.0
      */
-	public static int IS_STRING = -1;
-	
-	/**
+    public static int IS_STRING = -1;
+    
+    /**
      * Current code point, or the special value <tt>IS_STRING</tt>, if
      * the iterator points to a string.
      * @stable ICU 2.0
      */
-	public int codepoint;
+    public int codepoint;
 
     /**
      * When iterating over ranges using <tt>nextRange()</tt>,
@@ -66,7 +66,7 @@ public class UnicodeSetIterator {
      * <tt>codepointEnd</tt> is undefined.
      * @stable ICU 2.0
      */
-	public int codepointEnd;
+    public int codepointEnd;
 
     /**
      * If <tt>codepoint == IS_STRING</tt>, then <tt>string</tt> points
@@ -74,7 +74,7 @@ public class UnicodeSetIterator {
      * value of <tt>string</tt> is undefined.
      * @stable ICU 2.0
      */
-	public String string;
+    public String string;
 
     /**
      * Create an iterator over the given set.
@@ -116,13 +116,13 @@ public class UnicodeSetIterator {
      */
     public boolean next() {
         if (nextElement <= endElement) {
-        	codepoint = codepointEnd = nextElement++;
+            codepoint = codepointEnd = nextElement++;
             return true;
         }
         if (range < endRange) {
-        	loadRange(++range);
-        	codepoint = codepointEnd = nextElement++;
-        	return true;
+            loadRange(++range);
+            codepoint = codepointEnd = nextElement++;
+            return true;
         }
         
         // stringIterator == null iff there are no string elements remaining
@@ -156,17 +156,17 @@ public class UnicodeSetIterator {
      */
     public boolean nextRange() {
         if (nextElement <= endElement) {
-        	codepointEnd = endElement;
-        	codepoint = nextElement;
-        	nextElement = endElement+1;
+            codepointEnd = endElement;
+            codepoint = nextElement;
+            nextElement = endElement+1;
             return true;
         }
         if (range < endRange) {
             loadRange(++range);
-        	codepointEnd = endElement;
-        	codepoint = nextElement;
-        	nextElement = endElement+1;
-        	return true;
+            codepointEnd = endElement;
+            codepoint = nextElement;
+            nextElement = endElement+1;
+            return true;
         }
         
         // stringIterator == null iff there are no string elements remaining
@@ -204,8 +204,8 @@ public class UnicodeSetIterator {
         }
         stringIterator = null;
         if (set.strings != null) {
-        	stringIterator = set.strings.iterator();
-        	if (!stringIterator.hasNext()) stringIterator = null;
+            stringIterator = set.strings.iterator();
+            if (!stringIterator.hasNext()) stringIterator = null;
         }
     }
     

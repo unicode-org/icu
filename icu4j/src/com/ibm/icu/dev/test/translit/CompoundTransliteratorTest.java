@@ -201,25 +201,25 @@ public class CompoundTransliteratorTest extends TestFmwk {
     */
     private static String[] split(String s, char divider) {
       
-	// see how many there are
+    // see how many there are
         int count = 1;
-	for (int i = 0; i < s.length(); ++i) {
-	   if (s.charAt(i) == divider) ++count;
-	}
-	    
-	// make an array with them
-	String[] result = new String[count];
-	int last = 0;
-	int current = 0;
-	int i;
-	for (i = 0; i < s.length(); ++i) {
-	    if (s.charAt(i) == divider) {
-	        result[current++] = s.substring(last,i);
-	        last = i+1;
-	    }
-	}
-	result[current++] = s.substring(last,i);
-	return result;
+    for (int i = 0; i < s.length(); ++i) {
+       if (s.charAt(i) == divider) ++count;
+    }
+        
+    // make an array with them
+    String[] result = new String[count];
+    int last = 0;
+    int current = 0;
+    int i;
+    for (i = 0; i < s.length(); ++i) {
+        if (s.charAt(i) == divider) {
+            result[current++] = s.substring(last,i);
+            last = i+1;
+        }
+    }
+    result[current++] = s.substring(last,i);
+    return result;
     }
 
     private void expect(Transliterator t, String source, String expectedResult) {

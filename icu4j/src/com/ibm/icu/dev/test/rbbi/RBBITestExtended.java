@@ -31,14 +31,14 @@ import java.util.Locale;
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
 public class RBBITestExtended extends TestFmwk {
-	public static void main(String[] args)throws Exception {
+    public static void main(String[] args)throws Exception {
         new RBBITestExtended().run(args);
-	}
+    }
 
-	
-	
-	public RBBITestExtended() { 
-	}
+    
+    
+    public RBBITestExtended() { 
+    }
 
 
 
@@ -288,16 +288,16 @@ public void TestExtended() {
                 charIdxAr[0] = charIdx;
                 cp = Utility.unescapeAt(testString, charIdxAr);
                 if (cp != -1) {
-                	// Escape sequence was recognized.  Insert the char
-                	//   into the test data.
-                	charIdx = charIdxAr[0];
-                	UTF16.append(tp.dataToBreak, cp);
-                	for (i=tp.dataToBreak.length()-1; i>=0 && tp.srcLine[i]==0; i--) {
-                		tp.srcLine[i] = lineNum;
-                		tp.srcCol[i]  = column;
-                	}
-                	
-                	break;
+                    // Escape sequence was recognized.  Insert the char
+                    //   into the test data.
+                    charIdx = charIdxAr[0];
+                    UTF16.append(tp.dataToBreak, cp);
+                    for (i=tp.dataToBreak.length()-1; i>=0 && tp.srcLine[i]==0; i--) {
+                        tp.srcLine[i] = lineNum;
+                        tp.srcCol[i]  = column;
+                    }
+                    
+                    break;
                 }
 
 

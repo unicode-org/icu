@@ -27,17 +27,17 @@ public class TimeZoneRegression extends TestFmwk {
 
     public void Test4052967() {
         logln("*** CHECK TIMEZONE AGAINST HOST OS SETTING ***");
-	String id = TimeZone.getDefault().getID();
-	try {
-	    // user.timezone is a protected system property
-	    logln("user.timezone: " + System.getProperty("user.timezone", "<not set>"));
-	    logln("TimeZone.getDefault().getID(): " + id);
-	    logln(new Date().toString());
-	    logln("*** THE RESULTS OF THIS TEST MUST BE VERIFIED MANUALLY ***");
-	}
-	catch (SecurityException e) {
-	    warnln("security exception: " + e.toString());
-	}
+    String id = TimeZone.getDefault().getID();
+    try {
+        // user.timezone is a protected system property
+        logln("user.timezone: " + System.getProperty("user.timezone", "<not set>"));
+        logln("TimeZone.getDefault().getID(): " + id);
+        logln(new Date().toString());
+        logln("*** THE RESULTS OF THIS TEST MUST BE VERIFIED MANUALLY ***");
+    }
+    catch (SecurityException e) {
+        warnln("security exception: " + e.toString());
+    }
     }
 
     public void Test4073209() {
@@ -277,18 +277,18 @@ public class TimeZoneRegression extends TestFmwk {
      * When you fix these two problems, the test passes, as expected.
      */
     public void Test4126678() {
-	// Note: this test depends on the PST time zone.
-	TimeZone initialZone = TimeZone.getDefault();
+    // Note: this test depends on the PST time zone.
+    TimeZone initialZone = TimeZone.getDefault();
         Calendar cal = Calendar.getInstance();
         TimeZone tz = TimeZone.getTimeZone("PST");
-	TimeZone.setDefault(tz);
+    TimeZone.setDefault(tz);
         cal.setTimeZone(tz);
 
         java.util.Calendar tempcal = java.util.Calendar.getInstance();
         tempcal.clear();
         tempcal.set(1998, Calendar.APRIL, 5, 10, 0);
         Date dt = tempcal.getTime();
-	// the dt value is local time in PST.
+    // the dt value is local time in PST.
         if (!tz.inDaylightTime(dt))
             errln("We're not in Daylight Savings Time and we should be.\n");
 
@@ -309,9 +309,9 @@ public class TimeZoneRegression extends TestFmwk {
         if (offset == raw_offset)
             errln("Offsets should not match when in DST");
 
-	// restore the initial time zone so that this test case
-	// doesn't affect the others.
-	TimeZone.setDefault(initialZone);
+    // restore the initial time zone so that this test case
+    // doesn't affect the others.
+    TimeZone.setDefault(initialZone);
     }
     
     /**
@@ -674,7 +674,7 @@ public class TimeZoneRegression extends TestFmwk {
         SimpleDateFormat fmt = new SimpleDateFormat("z", Locale.US);
         final int ONE_HOUR = 60*60*1000;
         final float H = (float) ONE_HOUR;
-	TimeZone initialZone = TimeZone.getDefault();
+    TimeZone initialZone = TimeZone.getDefault();
         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd yyyy HH:mm z"); 
 
         SimpleTimeZone asuncion = new SimpleTimeZone(-4*ONE_HOUR, "America/Asuncion" /*PY%sT*/,
@@ -756,9 +756,9 @@ public class TimeZoneRegression extends TestFmwk {
             }
         }
 
-	// restore the initial time zone so that this test case
-	// doesn't affect the others.
-	TimeZone.setDefault(initialZone);
+    // restore the initial time zone so that this test case
+    // doesn't affect the others.
+    TimeZone.setDefault(initialZone);
     }
 
     /**
@@ -919,22 +919,22 @@ public class TimeZoneRegression extends TestFmwk {
      * of 2/29/1996 (leap day).
      */
     public void Test4208960 () {
-	TimeZone tz = TimeZone.getTimeZone("PST");
-	try {
-	    /*int offset =*/ tz.getOffset(GregorianCalendar.AD, 1996, Calendar.FEBRUARY, 29, 
-				      Calendar.THURSDAY, 0);
+    TimeZone tz = TimeZone.getTimeZone("PST");
+    try {
+        /*int offset =*/ tz.getOffset(GregorianCalendar.AD, 1996, Calendar.FEBRUARY, 29, 
+                      Calendar.THURSDAY, 0);
         //offset = 0;
-	} catch (IllegalArgumentException e) {
-	    errln("FAILED: to get TimeZone.getOffset(2/29/96)");
-	}
-	try {
-	    /*int offset =*/ tz.getOffset(GregorianCalendar.AD, 1997, Calendar.FEBRUARY, 29, 
-				      Calendar.THURSDAY, 0);
-	    //offset = 0;
-	    errln("FAILED: TimeZone.getOffset(2/29/97) expected to throw Exception.");
-	} catch (IllegalArgumentException e) {
-	    logln("got IllegalArgumentException");
-	}
+    } catch (IllegalArgumentException e) {
+        errln("FAILED: to get TimeZone.getOffset(2/29/96)");
+    }
+    try {
+        /*int offset =*/ tz.getOffset(GregorianCalendar.AD, 1997, Calendar.FEBRUARY, 29, 
+                      Calendar.THURSDAY, 0);
+        //offset = 0;
+        errln("FAILED: TimeZone.getOffset(2/29/97) expected to throw Exception.");
+    } catch (IllegalArgumentException e) {
+        logln("got IllegalArgumentException");
+    }
     }
 
     /**

@@ -568,7 +568,7 @@ public class CalendarAstronomer {
         
         if (sunLongitude == INVALID) {
             double[] result = getSunLongitude(getJulianDay());
-			sunLongitude = result[0];
+            sunLongitude = result[0];
             meanAnomalySun = result[1];
         }
         return sunLongitude;
@@ -860,8 +860,8 @@ public class CalendarAstronomer {
 //        // where 15 degrees corresponds to one hour.  Since LST really is an angle,
 //        // it's convenient to use one unit---degrees---throughout.
 //
-//        // 	COMPUTING THE SUN'S POSITION
-//        // 	----------------------------
+//        //     COMPUTING THE SUN'S POSITION
+//        //     ----------------------------
 //        // 
 //        // To be able to compute the Sun's rise/set times, you need to be able to
 //        // compute the Sun's position at any time.  First compute the "day
@@ -904,7 +904,7 @@ public class CalendarAstronomer {
 //        // 
 //        //                   sin(slon) * cos(oblecl)
 //        //     tan(sRA)  =  -------------------------
-//        // 			cos(slon)
+//        //             cos(slon)
 //        // 
 //        //     sin(sDec) =  sin(oblecl) * sin(slon)
 //        // 
@@ -916,8 +916,8 @@ public class CalendarAstronomer {
 //        double sin_sDec = Math.sin(oblecl*DEG_RAD) * Math.sin(slon*DEG_RAD);
 //        double sDec = Math.asin(sin_sDec)*RAD_DEG;
 //
-//        // 	COMPUTING RISE AND SET TIMES
-//        // 	----------------------------
+//        //     COMPUTING RISE AND SET TIMES
+//        //     ----------------------------
 //        // 
 //        // To compute when an object rises or sets, you must compute when it
 //        // passes the meridian and the HA of rise/set.  Then the rise time is
@@ -944,7 +944,7 @@ public class CalendarAstronomer {
 //        // where h0 is the altitude selected to represent rise/set.  For a purely
 //        // mathematical horizon, set h0 = 0 and simplify to:
 //        // 
-//        // 	cos(HA0)  =  - tan(lat) * tan(Dec)
+//        //     cos(HA0)  =  - tan(lat) * tan(Dec)
 //        // 
 //        // If you want to account for refraction on the atmosphere, set h0 = -35/60
 //        // degrees (-35 arc minutes), and if you want to compute the rise/set times

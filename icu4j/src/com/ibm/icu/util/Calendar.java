@@ -1602,18 +1602,18 @@ public abstract class Calendar implements Serializable, Cloneable {
             factory = (CalendarFactory)getFactoryMap().get(factoryName);
         }
 
-		Locale[] actualReturn = new Locale[1];
-		if (factory == null && service != null) {
+        Locale[] actualReturn = new Locale[1];
+        if (factory == null && service != null) {
             factory = (CalendarFactory)service.get(locale, actualReturn);
         }
 
         if (factory == null) {
             return new GregorianCalendar(zone, locale);
         } else {
-        	Calendar result = factory.create(zone, locale);
+            Calendar result = factory.create(zone, locale);
 
             // TODO: get the actual/valid locale properly
-        	ULocale uloc = new ULocale(actualReturn[0]);
+            ULocale uloc = new ULocale(actualReturn[0]);
             result.setLocale(uloc, uloc);
 
             return result;

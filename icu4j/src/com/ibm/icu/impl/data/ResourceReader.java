@@ -162,7 +162,7 @@ public class ResourceReader {
      * returned by readLine() or readLineSkippingComments().
      */
     public String describePosition() {
-    	return resourceName + ':' + lineNo;
+        return resourceName + ':' + lineNo;
     }
     
     /**
@@ -193,7 +193,7 @@ public class ResourceReader {
         if (lineNo == 0) {
             return;
         }
-		InputStream is = ICUData.getStream(root, resourceName);
+        InputStream is = ICUData.getStream(root, resourceName);
         if (is == null) {
             throw new IllegalArgumentException("Can't open " + resourceName);
         }

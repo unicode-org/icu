@@ -56,9 +56,9 @@ public final class ICUResourceBundleTest extends TestFmwk {
     public void TestJB3879(){
         // this tests tests loading of root bundle when a resource bundle 
         // for the default locale is requested 
-    	ICUResourceBundle bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", ULocale.getDefault());
+        ICUResourceBundle bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", ULocale.getDefault());
         if(bundle==null){
-        	errln("could not create the resource bundle");
+            errln("could not create the resource bundle");
         }
     }
     public void TestOpen(){
@@ -606,19 +606,19 @@ public final class ICUResourceBundleTest extends TestFmwk {
             if(DEFAULT_NAME.equals(kwVals[n])) {
                 errln("getKeywordValues for collation returned 'default' in the list.");
             } else if(STANDARD_NAME.equals(kwVals[n])) {
-            	if(foundStandard == false) {
-            		foundStandard = true;
-            		logln("found 'standard'");
-            	} else {
-            		errln("Error - 'standard' is in the keyword list twice!");
-            	}
+                if(foundStandard == false) {
+                    foundStandard = true;
+                    logln("found 'standard'");
+                } else {
+                    errln("Error - 'standard' is in the keyword list twice!");
+                }
             }
         }
         
         if(foundStandard == false) {
-        	errln("Error - 'standard' was not in the collation tree as a keyword.");
+            errln("Error - 'standard' was not in the collation tree as a keyword.");
         } else {
-        	logln("'standard' was found as a collation keyword.");
+            logln("'standard' was found as a collation keyword.");
         }
     }
     

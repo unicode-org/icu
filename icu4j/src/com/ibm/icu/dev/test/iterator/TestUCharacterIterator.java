@@ -52,14 +52,14 @@ public class TestUCharacterIterator extends TestFmwk{
     public void getText(UCharacterIterator iterator, String result){
         /* test getText */
         char[] buf= new char[1];
-		for(;;){
-		    try{
-		        iterator.getText(buf);
-		        break;
-		    }catch(IndexOutOfBoundsException e){
-		        buf = new char[iterator.getLength()];
-		    }
-		}
+        for(;;){
+            try{
+                iterator.getText(buf);
+                break;
+            }catch(IndexOutOfBoundsException e){
+                buf = new char[iterator.getLength()];
+            }
+        }
         if(result.compareTo(new String(buf,0,iterator.getLength()))!=0){
             errln("getText failed for iterator");
         }
@@ -142,86 +142,86 @@ public class TestUCharacterIterator extends TestFmwk{
     }
     
     //Tests for new API for utf-16 support 
-	public void TestIterationUChar32() {
-	    String text="\u0061\u0062\ud841\udc02\u20ac\ud7ff\ud842\udc06\ud801\udc00\u0061";
-	    int c;
-	    int i;
-	    {
-	        UCharacterIterator iter = UCharacterIterator.getInstance(text);
-	
-	        String iterText = iter.getText();
-	        if (!iterText.equals(text))
-	          errln("iter.getText() failed");
-	        
+    public void TestIterationUChar32() {
+        String text="\u0061\u0062\ud841\udc02\u20ac\ud7ff\ud842\udc06\ud801\udc00\u0061";
+        int c;
+        int i;
+        {
+            UCharacterIterator iter = UCharacterIterator.getInstance(text);
+    
+            String iterText = iter.getText();
+            if (!iterText.equals(text))
+              errln("iter.getText() failed");
+            
             iter.setIndex(1);
-	        if (iter.currentCodePoint() != UTF16.charAt(text,1))
-	            errln("Iterator didn't start out in the right place.");
-	
-	        iter.setToStart();
-	        c=iter.currentCodePoint();
+            if (iter.currentCodePoint() != UTF16.charAt(text,1))
+                errln("Iterator didn't start out in the right place.");
+    
+            iter.setToStart();
+            c=iter.currentCodePoint();
             i=0;
-	        i=iter.moveCodePointIndex(1);
-	        c=iter.currentCodePoint();
-	        if(c != UTF16.charAt(text,1) || i!=1)
-	            errln("moveCodePointIndex(1) didn't work correctly expected "+ hex(c) +" got "+hex(UTF16.charAt(text,1)) + " i= " + i);
-	
-	        i=iter.moveCodePointIndex(2);
-	        c=iter.currentCodePoint();
-	        if(c != UTF16.charAt(text,4) || i!=4)
-	            errln("moveCodePointIndex(2) didn't work correctly expected "+ hex(c) +" got "+hex(UTF16.charAt(text,4)) + " i= " + i);
+            i=iter.moveCodePointIndex(1);
+            c=iter.currentCodePoint();
+            if(c != UTF16.charAt(text,1) || i!=1)
+                errln("moveCodePointIndex(1) didn't work correctly expected "+ hex(c) +" got "+hex(UTF16.charAt(text,1)) + " i= " + i);
+    
+            i=iter.moveCodePointIndex(2);
+            c=iter.currentCodePoint();
+            if(c != UTF16.charAt(text,4) || i!=4)
+                errln("moveCodePointIndex(2) didn't work correctly expected "+ hex(c) +" got "+hex(UTF16.charAt(text,4)) + " i= " + i);
                 
-	        i=iter.moveCodePointIndex(-2);
-	        c=iter.currentCodePoint();
-	        if(c != UTF16.charAt(text,1) || i!=1)
+            i=iter.moveCodePointIndex(-2);
+            c=iter.currentCodePoint();
+            if(c != UTF16.charAt(text,1) || i!=1)
                  errln("moveCodePointIndex(-2) didn't work correctly expected "+ hex(c) +" got "+hex(UTF16.charAt(text,1)) + " i= " + i);
 
-	        iter.setToLimit();
-	        i=iter.moveCodePointIndex(-2);
-	        c=iter.currentCodePoint();
-	        if(c != UTF16.charAt(text,(text.length()-3)) || i!=(text.length()-3))
+            iter.setToLimit();
+            i=iter.moveCodePointIndex(-2);
+            c=iter.currentCodePoint();
+            if(c != UTF16.charAt(text,(text.length()-3)) || i!=(text.length()-3))
                 errln("moveCodePointIndex(-2) didn't work correctly expected "+ hex(c) +" got "+hex(UTF16.charAt(text,(text.length()-3)) ) + " i= " + i);
-	        
-	        iter.setToStart();
-	        c = iter.currentCodePoint();
-	        i = 0;
-	
-	        //testing first32PostInc, nextCodePointPostInc, setTostart
-	        i = 0;
-	        iter.setToStart();
-	        c =iter.next();
-            if(c != UTF16.charAt(text,i))
-	            errln("first32PostInc failed.  Expected->"+hex(UTF16.charAt(text,i))+" Got-> "+hex(c));
-	        if(iter.getIndex() != UTF16.getCharCount(c) + i)
-	            errln("getIndex() after first32PostInc() failed");
-	
-	        iter.setToStart();
-	        i=0;
-	        if (iter.getIndex() != 0)
-	            errln("setToStart failed");
-	       
-	        logln("Testing forward iteration...");
-	        do {
-	            if (c != UCharacterIterator.DONE)
-	                c = iter.nextCodePoint();
-	
-	            if(c != UTF16.charAt(text,i))
-	                errln("Character mismatch at position "+i+", iterator has "+hex(c)+", string has "+hex(UTF16.charAt(text,i)));
+            
+            iter.setToStart();
+            c = iter.currentCodePoint();
+            i = 0;
     
-	            i+=UTF16.getCharCount(c);
-	            if(iter.getIndex() != i)
-	                errln("getIndex() aftr nextCodePointPostInc() isn't working right");
+            //testing first32PostInc, nextCodePointPostInc, setTostart
+            i = 0;
+            iter.setToStart();
+            c =iter.next();
+            if(c != UTF16.charAt(text,i))
+                errln("first32PostInc failed.  Expected->"+hex(UTF16.charAt(text,i))+" Got-> "+hex(c));
+            if(iter.getIndex() != UTF16.getCharCount(c) + i)
+                errln("getIndex() after first32PostInc() failed");
+    
+            iter.setToStart();
+            i=0;
+            if (iter.getIndex() != 0)
+                errln("setToStart failed");
+           
+            logln("Testing forward iteration...");
+            do {
+                if (c != UCharacterIterator.DONE)
+                    c = iter.nextCodePoint();
+    
+                if(c != UTF16.charAt(text,i))
+                    errln("Character mismatch at position "+i+", iterator has "+hex(c)+", string has "+hex(UTF16.charAt(text,i)));
+    
+                i+=UTF16.getCharCount(c);
+                if(iter.getIndex() != i)
+                    errln("getIndex() aftr nextCodePointPostInc() isn't working right");
                 c = iter.currentCodePoint();                   
                 if( c!=UCharacterIterator.DONE && c != UTF16.charAt(text,i))
                     errln("current() after nextCodePointPostInc() isn't working right");
 
-	        } while (c!=UCharacterIterator.DONE);
-	        c=iter.nextCodePoint();
-	        if(c!= UCharacterIterator.DONE)
-	            errln("nextCodePointPostInc() didn't return DONE at the beginning");
-	
-	
-	    }
-	}  
+            } while (c!=UCharacterIterator.DONE);
+            c=iter.nextCodePoint();
+            if(c!= UCharacterIterator.DONE)
+                errln("nextCodePointPostInc() didn't return DONE at the beginning");
+    
+    
+        }
+    }  
     
     class UCharIterator {
     
@@ -298,18 +298,18 @@ public class TestUCharacterIterator extends TestFmwk{
         }
         /* Test clone()  && moveIndex()*/
         try{
-	        UCharacterIterator clone1 = (UCharacterIterator)iter1.clone();
-	        UCharacterIterator clone2 = (UCharacterIterator)iter2.clone();
-	        UCharacterIterator clone3 = (UCharacterIterator)iter3.clone();
-	        if(clone1.moveIndex(3)!=iter1.moveIndex(3)){
-	            errln("moveIndex for iter1 failed");
-	        }
-	        if(clone2.moveIndex(3)!=iter2.moveIndex(3)){
-	            errln("moveIndex for iter2 failed");
-	        }
-	        if(clone3.moveIndex(3)!=iter3.moveIndex(3)){
-	            errln("moveIndex for iter1 failed");
-	        }
+            UCharacterIterator clone1 = (UCharacterIterator)iter1.clone();
+            UCharacterIterator clone2 = (UCharacterIterator)iter2.clone();
+            UCharacterIterator clone3 = (UCharacterIterator)iter3.clone();
+            if(clone1.moveIndex(3)!=iter1.moveIndex(3)){
+                errln("moveIndex for iter1 failed");
+            }
+            if(clone2.moveIndex(3)!=iter2.moveIndex(3)){
+                errln("moveIndex for iter2 failed");
+            }
+            if(clone3.moveIndex(3)!=iter3.moveIndex(3)){
+                errln("moveIndex for iter1 failed");
+            }
         }catch (Exception e){
             errln("could not clone the iterator");
         }
@@ -469,15 +469,15 @@ public class TestUCharacterIterator extends TestFmwk{
         // this should never go into a infinite loop
         // if it does then we have a problem
         while((ch=iter.previousCodePoint())!=UCharacterIterator.DONE){
-	        if(ch!=0xDc00){
-	            errln("iter.previousCodePoint() failed");
-	        }
+            if(ch!=0xDc00){
+                errln("iter.previousCodePoint() failed");
+            }
         }
         iter.setIndex(5);
         while((ch=iter.nextCodePoint()) !=UCharacterIterator.DONE){
-	        if(ch!= 0xDC03){
-	            errln("iter.nextCodePoint() failed");
-	        } 
+            if(ch!= 0xDC03){
+                errln("iter.nextCodePoint() failed");
+            } 
         }      
     }
         

@@ -69,11 +69,11 @@ public class ReplaceableUCharacterIterator extends UCharacterIterator {
      * @return copy of this iterator
      */
     public Object clone(){
-		try {
-		  return super.clone();
-		} catch (CloneNotSupportedException e) {
-		    return null; // never invoked
-		}
+        try {
+          return super.clone();
+        } catch (CloneNotSupportedException e) {
+            return null; // never invoked
+        }
     }
     
     /**
@@ -181,7 +181,7 @@ public class ReplaceableUCharacterIterator extends UCharacterIterator {
     }
     
     public int getText(char[] fillIn, int offset){
-    	int length = replaceable.length();
+        int length = replaceable.length();
         if(offset < 0 || offset + length > fillIn.length){
             throw new IndexOutOfBoundsException(Integer.toString(length));
         }
