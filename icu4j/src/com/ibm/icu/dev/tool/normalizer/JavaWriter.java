@@ -101,6 +101,7 @@ class JavaWriter extends SourceWriter {
         +" */\n"
         +"\n"
         +"package com.ibm.text;\n"
+        +"import com.ibm.util.*;\n"
         + "// This class is MACHINE GENERATED.  Run NormalizerBuilder to regenerate.\n"
         +"\n";
 }

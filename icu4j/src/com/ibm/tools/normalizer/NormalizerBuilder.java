@@ -77,7 +77,7 @@ public final class NormalizerBuilder
             }
         }
         if (uinfo == null) {
-            uinfo = new UInfo();
+            uinfo = new UInfo("../src/data/unicode/UnicodeData.txt");
         }
 
         boolean canonicalOnly = true;
