@@ -223,6 +223,8 @@ void RegexTest::regex_find(const UnicodeString &pattern,
     UVector             groupEnds(status);
     UBool               isMatch;
     UBool               failed         = FALSE;
+    int                 numFinds;
+    int                 i;
 
     //
     //  Compile the caller's pattern
@@ -260,6 +262,20 @@ void RegexTest::regex_find(const UnicodeString &pattern,
     }
 
     //
+    // Number of times find() should be called on the test string, default to 1
+    //
+    numFinds = 1;
+    for (i=2; i<=9; i++) {
+        if (flags.indexOf((UChar)(0x30 + i)) >= 0) {   // digit flag
+            if (numFinds != 1) {
+                errln("Line %d: more than one digit flag.  Scanning %d.", line, i);
+                goto cleanupAndReturn;
+            }
+            numFinds = i;
+        }
+    }
+
+    //
     //  Find the tags in the input data, remove them, and record the group boundary
     //    positions.
     //
@@ -293,7 +309,9 @@ void RegexTest::regex_find(const UnicodeString &pattern,
         matcher->setTrace(TRUE);
     }
 
-    isMatch = matcher->find();
+    for (i=0; i<numFinds; i++) {
+        isMatch = matcher->find();
+    }
     matcher->setTrace(FALSE);
 
     //
@@ -319,7 +337,6 @@ void RegexTest::regex_find(const UnicodeString &pattern,
         goto cleanupAndReturn;   
     }
     
-    int i;
     for (i=0; i<=matcher->groupCount(); i++) {
         int32_t  expectedStart = (i >= groupStarts.size()? -1 : groupStarts.elementAti(i));
         if (matcher->start(i, status) != expectedStart) {
@@ -1367,9 +1384,9 @@ void RegexTest::Extended() {
     //
     UnicodeString testString(FALSE, testData, len);
 
-    RegexMatcher    quotedStuffMat("\\s*([\\'\\\"/])(.+?)\\1", 0, status);
+    RegexMatcher    quotedStuffMat("\\s*([\\'\\\"/])(.*?)\\1", 0, status);
     RegexMatcher    commentMat    ("\\s*(#.*)?$", 0, status); 
-    RegexMatcher    flagsMat      ("\\s*([ixsmdtGv]*)([:letter:]*)", 0, status);
+    RegexMatcher    flagsMat      ("\\s*([ixsmdtGv2-9]*)([:letter:]*)", 0, status);
 
     RegexMatcher    lineMat("(.*?)\\r?\\n", testString, 0, status);
     UnicodeString   testPattern;   // The pattern for test from the test file.

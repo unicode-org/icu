@@ -317,6 +317,7 @@ UBool RegexMatcher::find() {
         // Previous match had zero length.  Move start position up one position
         //  to avoid sending find() into a loop on zero-length matches.
         if (startPos == fInput->length()) {
+            fMatch = FALSE;
             return FALSE;
         }
         startPos = fInput->moveIndex32(startPos, 1);
@@ -324,6 +325,7 @@ UBool RegexMatcher::find() {
     int32_t inputLen = fInput->length();
     int32_t testLen  = inputLen - fPattern->fMinMatchLen;
     if (startPos > testLen) {
+        fMatch = FALSE;
         return FALSE;
     }
 
@@ -357,6 +359,7 @@ UBool RegexMatcher::find() {
         // Matches are only possible at the start of the input string
         //   (pattern begins with ^ or \A)
         if (startPos > 0) {
+            fMatch = FALSE;
             return FALSE;
         }
         MatchAt(startPos, fDeferredStatus);
@@ -384,6 +387,7 @@ UBool RegexMatcher::find() {
                     }
                 }
                 if (pos >= testLen) {
+                    fMatch = FALSE;
                     return FALSE;
                 }
             }
@@ -409,6 +413,7 @@ UBool RegexMatcher::find() {
                     }
                 }
                 if (pos >= testLen) {
+                    fMatch = FALSE;
                     return FALSE;
                 }
             }
@@ -432,8 +437,10 @@ UBool RegexMatcher::find() {
             for (;;) {
                 UChar32 c = inputBuf[startPos-1];
                 if (((c & 0x7f) <= 0x29) &&     // First quickly bypass as many chars as possible
-                    (c == 0x0a ||  c==0x0c || c==0x85 ||c==0x2028 || c==0x2029 || 
-                    c == 0x0d && startPos+1 < inputLen && inputBuf[startPos+1] != 0x0a)) {
+                    (c == 0x0a ||  c==0x0c || c==0x85 ||c==0x2028 || c==0x2029 )) {
+                    if (c == 0x0d && startPos < inputLen && inputBuf[startPos] == 0x0a) {
+                        startPos++;
+                    }
                     MatchAt(startPos, fDeferredStatus);
                     if (U_FAILURE(fDeferredStatus)) {
                         return FALSE;
@@ -443,6 +450,7 @@ UBool RegexMatcher::find() {
                     }
                 }
                 if (startPos >= testLen) {
+                    fMatch = FALSE;
                     return FALSE;
                 }
                 U16_NEXT(inputBuf, startPos, inputLen, c);  // like c = inputBuf[startPos++];
@@ -1204,7 +1212,11 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
             if (fp->fInputIdx == inputLen-1) {
                 UChar32 c = fInput->char32At(fp->fInputIdx);
                 if (c == 0x0a || c==0x0d || c==0x0c || c==0x85 ||c==0x2028 || c==0x2029) {
-                    break;                         // At new-line at end of input. Success
+                    // If not in the middle of a CR/LF sequence
+                    if ( !(c==0x0a && fp->fInputIdx>0 && inputBuf[fp->fInputIdx-1]==0x0d)) {
+                        break;
+                        // At new-line at end of input. Success
+                    }
                 }
             }
 
@@ -1225,12 +1237,16 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
                      // We really are at the end of input.  Success.
                      break;
                  }
-                 // If we are positioned just before a new-line , succeed.
+                 // If we are positioned just before a new-line, succeed.
                  // It makes no difference where the new-line is within the input.
                  UChar32 c = inputBuf[fp->fInputIdx];
                  if (c == 0x0a || c==0x0d || c==0x0c || c==0x85 ||c==0x2028 || c==0x2029) {
-                     break;                         // At new-line at end of input. Success
+                     // At a line end, except for the odd chance of  being in the middle of a CR/LF sequence
+                     if ( !(c==0x0a && fp->fInputIdx>0 && inputBuf[fp->fInputIdx-1]==0x0d)) {
+                        break;                         // At new-line at end of input. Success
+                     }
                  }
+                 
                  // not at a new line.  Fail.
                  fp = (REStackFrame *)fStack->popFrame(frameSize);
              }
