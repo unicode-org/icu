@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/NumberFormat.java,v $ 
- * $Date: 2000/06/01 01:21:34 $ 
- * $Revision: 1.8 $
+ * $Date: 2001/05/22 20:13:26 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -24,6 +24,7 @@ import java.math.BigInteger;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import com.ibm.util.OverlayBundle;
 
 /**
  * <code>NumberFormat</code> is the abstract base class for all number
@@ -141,7 +142,7 @@ import java.io.ObjectOutputStream;
  *
  * see          DecimalFormat
  * see          java.text.ChoiceFormat
- * @version      $Revision: 1.8 $
+ * @version      $Revision: 1.9 $
  * @author       Mark Davis
  * @author       Helena Shih
  * @author       Alan Liu
@@ -611,20 +612,20 @@ public abstract class NumberFormat extends Format{
             // return NumberFormat.getBaseStringArray("NumberPatterns")[SCIENTIFICSTYLE];
         }
         // TEMPORARY: Use rounding for Swiss currency
-        if (choice == CURRENCYSTYLE &&
-            forLocale.getCountry().equals("CH")) {
-            return "'Fr. '#,##0.05;'Fr.-'#,##0.05";
-        }
+        //if (choice == CURRENCYSTYLE &&
+        //    forLocale.getCountry().equals("CH")) {
+        //    return "'Fr. '#,##0.05;'Fr.-'#,##0.05";
+        //}
         // TEMPORARY: Special case IN number format
-        if (choice == NUMBERSTYLE &&
-            forLocale.getCountry().equals("IN")) {
-            return "#,##,##0.###";
-        }
+        //if (choice == NUMBERSTYLE &&
+        //    forLocale.getCountry().equals("IN")) {
+        //    return "#,##,##0.###";
+        //}
         // Try the cache first
         String[] numberPatterns = (String[]) cachedLocaleData.get(forLocale);
         if (numberPatterns == null) {
-            ResourceBundle resource = ResourceBundle.getBundle
-                (RESOURCE_BASE, forLocale);
+            OverlayBundle resource = new OverlayBundle(new String[]
+                { "com.ibm.text.resources.LocaleElements", RESOURCE_BASE }, forLocale);
             numberPatterns = resource.getStringArray("NumberPatterns");
             // Update the cache
             cachedLocaleData.put(forLocale, numberPatterns); 
