@@ -174,7 +174,7 @@ U_CAPI char* U_EXPORT2 u_austrcpy(char *s1,
  * parameters.
  * The string parameter must be a C string literal.
  * The length of the string, not including the terminating
- * <code>NUL</code> must be specified as a constant.
+ * <code>NUL</code>, must be specified as a constant.
  * The U_STRING_DECL macro should be invoked exactly once for one
  * such string variable before it is used.
  *
@@ -195,10 +195,10 @@ U_CAPI char* U_EXPORT2 u_austrcpy(char *s1,
  * </pre>
  */
 #if U_SIZEOF_WCHAR_T==U_SIZEOF_UCHAR && U_CHARSET_FAMILY==U_ASCII_FAMILY
-#   define U_STRING_DECL(var, cs, length) static const UChar var[(length)+1]={ (UChar *)L ## cs }
+#   define U_STRING_DECL(var, cs, length) static const UChar var[(length)+1]={ (const UChar *)L ## cs }
 #   define U_STRING_INIT(var, cs, length)
 #elif U_SIZEOF_UCHAR==1 && U_CHARSET_FAMILY==U_ASCII_FAMILY
-#   define U_STRING_DECL(var, cs, length) static const UChar var[(length)+1]={ (UChar *)cs }
+#   define U_STRING_DECL(var, cs, length) static const UChar var[(length)+1]={ (const UChar *)cs }
 #   define U_STRING_INIT(var, cs, length)
 #else
 #   define U_STRING_DECL(var, cs, length) static const UChar var[(length)+1]
