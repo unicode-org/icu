@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2001/10/18 04:21:05 $
- * $Revision: 1.41 $
+ * $Date: 2001/10/25 22:33:19 $
+ * $Revision: 1.42 $
  *
  *****************************************************************************************
  */
@@ -220,7 +220,7 @@ import com.ibm.util.Utility;
  * added in the future.
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.41 $ $Date: 2001/10/18 04:21:05 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.42 $ $Date: 2001/10/25 22:33:19 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -693,7 +693,7 @@ public class UnicodeSet extends UnicodeFilter {
      * value.  This is used by <tt>RuleBasedTransliterator</tt> for
      * indexing.
      */
-    public boolean matchesIndexValue(byte v) {
+    public boolean matchesIndexValue(int v) {
         /* The index value v, in the range [0,255], is contained in this set if
          * it is contained in any pair of this set.  Pairs either have the high
          * bytes equal, or unequal.  If the high bytes are equal, then we have

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/StringMatcher.java,v $ 
- * $Date: 2001/10/04 18:24:15 $ 
- * $Revision: 1.1 $
+ * $Date: 2001/10/25 22:32:02 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -122,7 +122,7 @@ class StringMatcher implements UnicodeMatcher {
     /**
      * Implement UnicodeMatcher
      */
-    public boolean matchesIndexValue(byte v) {
+    public boolean matchesIndexValue(int v) {
         if (pattern.length() == 0) {
             return true;
         }

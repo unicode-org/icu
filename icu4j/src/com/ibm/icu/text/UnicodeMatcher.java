@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeMatcher.java,v $ 
- * $Date: 2001/09/27 20:49:53 $ 
- * $Revision: 1.1 $
+ * $Date: 2001/10/25 22:33:19 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -109,8 +109,12 @@ public interface UnicodeMatcher {
      * & 0xFF == v, at offset, in the forward direction (with limit >
      * offset).  This is used by <tt>RuleBasedTransliterator</tt> for
      * indexing.
+     *
+     * <p>Note:  This API uses an int even though the value will be
+     * restricted to 8 bits in order to avoid complications with
+     * signedness (bytes convert to ints in the range -128..127).
      */
-    public abstract boolean matchesIndexValue(byte v);
+    public abstract boolean matchesIndexValue(int v);
 }
 
 //eof

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/TransliterationRuleSet.java,v $
- * $Date: 2001/09/26 18:17:42 $
- * $Revision: 1.13 $
+ * $Date: 2001/10/25 22:33:19 $
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -27,45 +27,7 @@ import java.util.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.13 $ $Date: 2001/09/26 18:17:42 $
- *
- * $Log: TransliterationRuleSet.java,v $
- * Revision 1.13  2001/09/26 18:17:42  alan
- * jitterbug 67: delete obsolete code
- *
- * Revision 1.12  2001/09/26 18:00:06  alan
- * jitterbug 67: sync parser with icu4c, allow unlimited, nested segments
- *
- * Revision 1.11  2001/09/19 17:43:38  alan
- * jitterbug 60: initial implementation of toRules()
- *
- * Revision 1.10  2000/06/29 21:59:23  alan4j
- * Fix handling of Transliterator.Position fields
- *
- * Revision 1.9  2000/03/10 04:07:24  johnf
- * Copyright update
- *
- * Revision 1.8  2000/02/03 18:11:19  Alan
- * Use array rather than hashtable for char-to-set map
- *
- * Revision 1.7  2000/01/27 18:59:19  Alan
- * Use Position rather than int[] and move all subclass overrides to one method (handleTransliterate)
- *
- * Revision 1.6  2000/01/18 20:36:17  Alan
- * Make UnicodeSet inherit from UnicodeFilter
- *
- * Revision 1.5  2000/01/04 21:43:57  Alan
- * Add rule indexing, and move masking check to TransliterationRuleSet.
- *
- * Revision 1.4  1999/12/22 01:40:54  Alan
- * Consolidate rule pattern anteContext, key, and postContext into one string.
- *
- * Revision 1.3  1999/12/22 01:05:54  Alan
- * Improve masking checking; turn it off by default, for better performance
- *
- * Revision 1.2  1999/12/22 00:01:36  Alan
- * Detect a>x masking a>y
- *
+ * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.14 $ $Date: 2001/10/25 22:33:19 $
  */
 class TransliterationRuleSet {
     /**
@@ -177,7 +139,7 @@ class TransliterationRuleSet {
                     // matchesIndexValue check.  In practice this happens
                     // rarely, so we seldom tread this code path.
                     TransliterationRule r = (TransliterationRule) ruleVector.elementAt(j);
-                    if (r.matchesIndexValue((byte) x)) {
+                    if (r.matchesIndexValue(x)) {
                         v.addElement(r);
                     }
                 }
@@ -271,3 +233,44 @@ class TransliterationRuleSet {
         return ruleSource.toString();
     }
 }
+
+/* $Log: TransliterationRuleSet.java,v $
+ * Revision 1.14  2001/10/25 22:33:19  alan
+ * jitterbug 73: use int for index values to avoid signedness problems
+ *
+ * Revision 1.13  2001/09/26 18:17:42  alan
+ * jitterbug 67: delete obsolete code
+ *
+ * Revision 1.12  2001/09/26 18:00:06  alan
+ * jitterbug 67: sync parser with icu4c, allow unlimited, nested segments
+ *
+ * Revision 1.11  2001/09/19 17:43:38  alan
+ * jitterbug 60: initial implementation of toRules()
+ *
+ * Revision 1.10  2000/06/29 21:59:23  alan4j
+ * Fix handling of Transliterator.Position fields
+ *
+ * Revision 1.9  2000/03/10 04:07:24  johnf
+ * Copyright update
+ *
+ * Revision 1.8  2000/02/03 18:11:19  Alan
+ * Use array rather than hashtable for char-to-set map
+ *
+ * Revision 1.7  2000/01/27 18:59:19  Alan
+ * Use Position rather than int[] and move all subclass overrides to one method (handleTransliterate)
+ *
+ * Revision 1.6  2000/01/18 20:36:17  Alan
+ * Make UnicodeSet inherit from UnicodeFilter
+ *
+ * Revision 1.5  2000/01/04 21:43:57  Alan
+ * Add rule indexing, and move masking check to TransliterationRuleSet.
+ *
+ * Revision 1.4  1999/12/22 01:40:54  Alan
+ * Consolidate rule pattern anteContext, key, and postContext into one string.
+ *
+ * Revision 1.3  1999/12/22 01:05:54  Alan
+ * Improve masking checking; turn it off by default, for better performance
+ *
+ * Revision 1.2  1999/12/22 00:01:36  Alan
+ * Detect a>x masking a>y
+ */

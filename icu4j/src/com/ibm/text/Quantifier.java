@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Quantifier.java,v $ 
- * $Date: 2001/10/17 19:17:06 $ 
- * $Revision: 1.2 $
+ * $Date: 2001/10/25 22:32:02 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -118,7 +118,7 @@ class Quantifier implements UnicodeMatcher {
     /**
      * Implement UnicodeMatcher API
      */
-    public boolean matchesIndexValue(byte v) {
+    public boolean matchesIndexValue(int v) {
         return (minCount == 0) || matcher.matchesIndexValue(v);
     }
 }
