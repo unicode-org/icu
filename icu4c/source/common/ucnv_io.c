@@ -1215,120 +1215,115 @@ ucnv_swapAliases(const UDataSwapper *ds,
             return 0;
         }
 
-        /*
-         * ### TODO optimize
-         * After some testing, add a test
-         * if(inCharset==outCharset) {
-         *     only swap 16-bit units, do not sort;
-            -- swap all 16-bit values --
+        if(ds->inCharset==ds->outCharset) {
+            /* no need to sort, just swap all 16-bit values together */
             ds->swapArray16(ds,
                             inTable+offsets[converterListIndex],
                             2*(int32_t)(offsets[stringTableIndex]-offsets[converterListIndex]),
                             outTable+offsets[converterListIndex],
                             pErrorCode);
-         * } else { sort/copy/swap/permutate as below; }
-         */
-
-        /* allocate the temporary table for sorting */
-        count=toc[aliasListIndex];
-
-        tempTable.chars=(const char *)(outTable+offsets[stringTableIndex]); /* sort by outCharset */
-
-        if(count<=STACK_ROW_CAPACITY) {
-            tempTable.rows=rows;
-            tempTable.resort=resort;
         } else {
-            tempTable.rows=(Row *)uprv_malloc(count*sizeof(Row)+count*2);
-            if(tempTable.rows==NULL) {
-                udata_printError(ds, "ucnv_swapAliases(): unable to allocate memory for sorting tables (max length: %u)\n",
-                                 count);
-                *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+            /* allocate the temporary table for sorting */
+            count=toc[aliasListIndex];
+
+            tempTable.chars=(const char *)(outTable+offsets[stringTableIndex]); /* sort by outCharset */
+
+            if(count<=STACK_ROW_CAPACITY) {
+                tempTable.rows=rows;
+                tempTable.resort=resort;
+            } else {
+                tempTable.rows=(Row *)uprv_malloc(count*sizeof(Row)+count*2);
+                if(tempTable.rows==NULL) {
+                    udata_printError(ds, "ucnv_swapAliases(): unable to allocate memory for sorting tables (max length: %u)\n",
+                                     count);
+                    *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+                    return 0;
+                }
+                tempTable.resort=(uint16_t *)(tempTable.rows+count);
+            }
+
+            if(ds->outCharset==U_ASCII_FAMILY) {
+                tempTable.stripForCompare=ucnv_io_stripASCIIForCompare;
+            } else /* U_EBCDIC_FAMILY */ {
+                tempTable.stripForCompare=ucnv_io_stripEBCDICForCompare;
+            }
+
+            /*
+             * Sort unique aliases+mapped names.
+             *
+             * We need to sort the list again by outCharset strings because they
+             * sort differently for different charset families.
+             * First we set up a temporary table with the string indexes and
+             * sorting indexes and sort that.
+             * Then we permutate and copy/swap the actual values.
+             */
+            p=inTable+offsets[aliasListIndex];
+            q=outTable+offsets[aliasListIndex];
+
+            p2=inTable+offsets[untaggedConvArrayIndex];
+            q2=outTable+offsets[untaggedConvArrayIndex];
+
+            for(i=0; i<count; ++i) {
+                tempTable.rows[i].strIndex=ds->readUInt16(p[i]);
+                tempTable.rows[i].sortIndex=(uint16_t)i;
+            }
+
+            uprv_sortArray(tempTable.rows, (int32_t)count, sizeof(Row),
+                           io_compareRows, &tempTable,
+                           FALSE, pErrorCode);
+
+            if(U_SUCCESS(*pErrorCode)) {
+                /* copy/swap/permutate items */
+                if(p!=q) {
+                    for(i=0; i<count; ++i) {
+                        oldIndex=tempTable.rows[i].sortIndex;
+                        ds->swapArray16(ds, p+oldIndex, 2, q+i, pErrorCode);
+                        ds->swapArray16(ds, p2+oldIndex, 2, q2+i, pErrorCode);
+                    }
+                } else {
+                    /*
+                     * If we swap in-place, then the permutation must use another
+                     * temporary array (tempTable.resort)
+                     * before the results are copied to the outBundle.
+                     */
+                    uint16_t *r=tempTable.resort;
+
+                    for(i=0; i<count; ++i) {
+                        oldIndex=tempTable.rows[i].sortIndex;
+                        ds->swapArray16(ds, p+oldIndex, 2, r+i, pErrorCode);
+                    }
+                    uprv_memcpy(q, r, 2*count);
+
+                    for(i=0; i<count; ++i) {
+                        oldIndex=tempTable.rows[i].sortIndex;
+                        ds->swapArray16(ds, p2+oldIndex, 2, r+i, pErrorCode);
+                    }
+                    uprv_memcpy(q2, r, 2*count);
+                }
+            }
+
+            if(tempTable.rows!=rows) {
+                uprv_free(tempTable.rows);
+            }
+
+            if(U_FAILURE(*pErrorCode)) {
+                udata_printError(ds, "ucnv_swapAliases().uprv_sortArray(%u items) failed - %s\n",
+                                 count, u_errorName(*pErrorCode));
                 return 0;
             }
-            tempTable.resort=(uint16_t *)(tempTable.rows+count);
+
+            /* swap remaining 16-bit values */
+            ds->swapArray16(ds,
+                            inTable+offsets[converterListIndex],
+                            2*(int32_t)(offsets[aliasListIndex]-offsets[converterListIndex]),
+                            outTable+offsets[converterListIndex],
+                            pErrorCode);
+            ds->swapArray16(ds,
+                            inTable+offsets[taggedAliasArrayIndex],
+                            2*(int32_t)(offsets[stringTableIndex]-offsets[taggedAliasArrayIndex]),
+                            outTable+offsets[taggedAliasArrayIndex],
+                            pErrorCode);
         }
-
-        if(ds->outCharset==U_ASCII_FAMILY) {
-            tempTable.stripForCompare=ucnv_io_stripASCIIForCompare;
-        } else /* U_EBCDIC_FAMILY */ {
-            tempTable.stripForCompare=ucnv_io_stripEBCDICForCompare;
-        }
-
-        /*
-         * Sort unique aliases+mapped names.
-         *
-         * We need to sort the list again by outCharset strings because they
-         * sort differently for different charset families.
-         * First we set up a temporary table with the string indexes and
-         * sorting indexes and sort that.
-         * Then we permutate and copy/swap the actual values.
-         */
-        p=inTable+offsets[aliasListIndex];
-        q=outTable+offsets[aliasListIndex];
-
-        p2=inTable+offsets[untaggedConvArrayIndex];
-        q2=outTable+offsets[untaggedConvArrayIndex];
-
-        for(i=0; i<count; ++i) {
-            tempTable.rows[i].strIndex=ds->readUInt16(p[i]);
-            tempTable.rows[i].sortIndex=(uint16_t)i;
-        }
-
-        uprv_sortArray(tempTable.rows, (int32_t)count, sizeof(Row),
-                       io_compareRows, &tempTable,
-                       FALSE, pErrorCode);
-
-        if(U_SUCCESS(*pErrorCode)) {
-            /* copy/swap/permutate items */
-            if(p!=q) {
-                for(i=0; i<count; ++i) {
-                    oldIndex=tempTable.rows[i].sortIndex;
-                    ds->swapArray16(ds, p+oldIndex, 2, q+i, pErrorCode);
-                    ds->swapArray16(ds, p2+oldIndex, 2, q2+i, pErrorCode);
-                }
-            } else {
-                /*
-                 * If we swap in-place, then the permutation must use another
-                 * temporary array (tempTable.resort)
-                 * before the results are copied to the outBundle.
-                 */
-                uint16_t *r=tempTable.resort;
-
-                for(i=0; i<count; ++i) {
-                    oldIndex=tempTable.rows[i].sortIndex;
-                    ds->swapArray16(ds, p+oldIndex, 2, r+i, pErrorCode);
-                }
-                uprv_memcpy(q, r, 2*count);
-
-                for(i=0; i<count; ++i) {
-                    oldIndex=tempTable.rows[i].sortIndex;
-                    ds->swapArray16(ds, p2+oldIndex, 2, r+i, pErrorCode);
-                }
-                uprv_memcpy(q2, r, 2*count);
-            }
-        }
-
-        if(tempTable.rows!=rows) {
-            uprv_free(tempTable.rows);
-        }
-
-        if(U_FAILURE(*pErrorCode)) {
-            udata_printError(ds, "ucnv_swapAliases().uprv_sortArray(%u items) failed - %s\n",
-                             count, u_errorName(*pErrorCode));
-            return 0;
-        }
-
-        /* swap remaining 16-bit values */
-        ds->swapArray16(ds,
-                        inTable+offsets[converterListIndex],
-                        2*(int32_t)(offsets[aliasListIndex]-offsets[converterListIndex]),
-                        outTable+offsets[converterListIndex],
-                        pErrorCode);
-        ds->swapArray16(ds,
-                        inTable+offsets[taggedAliasArrayIndex],
-                        2*(int32_t)(offsets[stringTableIndex]-offsets[taggedAliasArrayIndex]),
-                        outTable+offsets[taggedAliasArrayIndex],
-                        pErrorCode);
     }
 
     return headerSize+2*(int32_t)topOffset;
