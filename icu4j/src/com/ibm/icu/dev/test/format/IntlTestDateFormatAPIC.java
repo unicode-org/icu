@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/IntlTestDateFormatAPIC.java,v $ 
- * $Date: 2003/05/14 19:03:16 $ 
- * $Revision: 1.3 $
+ * $Date: 2003/05/24 01:47:30 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -108,7 +108,7 @@ public class IntlTestDateFormatAPIC extends com.ibm.icu.dev.test.TestFmwk {
             try {
                 obj = fmt.parse(str);
                 if(obj==null){
-                    errln("FAIL: The format object could parse the string : "+str);
+                    errln("FAIL: The format object could not parse the string : "+str);
                 }
             } catch (java.text.ParseException pe) {
                 System.out.println(pe);
