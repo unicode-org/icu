@@ -107,9 +107,9 @@ void currTest()
             ucol_getSortKey(c, target, u_strlen(target), sortKey2, sortklen+1);
     
             res = memcmp(sortKey1, sortKey2, sortklen);
-            if (res < 0) keyResult = -1;
-            else if (res > 0) keyResult = 1;
-            else keyResult = 0;
+            if (res < 0) keyResult = (UCollationResult)-1;
+            else if (res > 0) keyResult = (UCollationResult)1;
+            else keyResult = (UCollationResult)0;
             
             reportCResult(source, target, sortKey1, sortKey2,
                           compareResult, keyResult, expectedResult);

@@ -172,33 +172,6 @@ void TestConvert()
         "ko_KR"
     };
 
- /*   UChar CodePagesFlakySequence[NUM_CODEPAGE][20] =
-    {
-        {(UChar)0xAC10,
-         (UChar)0xAC11,
-         (UChar)0xAC12,
-         (UChar)0xAC13,
-         (UChar)0xAC14,
-         (UChar)0xAC15,
-         (UChar)0xAC16,
-         (UChar)0xAC17,
-         (UChar)0xd7a4, /*Offensive Codepoint*/
-/*         (UChar)0xAC14,
-         (UChar)0xAC15}
-    };
-    
-    char CodePagesFlakyCharSequence[NUM_CODEPAGE][20] =
-    {
-        {   (char)0xB0, (char)0xA8,
-            (char)0xB0, (char)0xA9,
-            (char)0xB0, (char)0xAA,
-            (char)0xB0, (char)0xAB,
-            (char)0xb0, (char)0xff,/*Offensive Codepoint*/
-/*            (char)0xB0, (char)0xAC,
-            (char)0xB0, (char)0xAD
-        }
-    };*/
-
     UConverterFromUCallback oldFromUAction = NULL;
     UConverterToUCallback oldToUAction = NULL;
     void* oldFromUContext = NULL;

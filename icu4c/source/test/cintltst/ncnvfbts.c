@@ -220,7 +220,7 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const uint8_t 
         }
 
         log_verbose(junk);
-        printSeq(expect, expectLen);
+        printSeq((const unsigned char*)expect, expectLen);
         if ( checkOffsets )
         {
             log_verbose("\nOffsets:");
@@ -235,8 +235,8 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const uint8_t 
     {
         log_err("Expected %d chars out, got %d %s\n", expectLen, targ-junkout, gNuConvTestName);
         log_verbose("Expected %d chars out, got %d %s\n", expectLen, targ-junkout, gNuConvTestName);
-        printSeqErr(junkout, targ-junkout);
-        printSeqErr(expect, expectLen);
+        printSeqErr((const unsigned char*)junkout, targ-junkout);
+        printSeqErr((const unsigned char*)expect, expectLen);
         return FALSE;
     }
 
@@ -246,7 +246,7 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const uint8_t 
         if(memcmp(junokout,expectOffsets,(targ-junkout) * sizeof(int32_t) )){
             log_err("\ndid not get the expected offsets while %s \n", gNuConvTestName);
             log_err("Got  : ");
-            printSeqErr(junkout, targ-junkout);
+            printSeqErr((const unsigned char*)junkout, targ-junkout);
             for(p=junkout;p<targ;p++)
                 log_err("%d, ", junokout[p-junkout]); 
             log_err("\nExpected: ");
@@ -265,8 +265,8 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const uint8_t 
     {
         log_err("String does not match. %s\n", gNuConvTestName);
         log_verbose("String does not match. %s\n", gNuConvTestName);
-        printSeqErr(junkout, expectLen);
-        printSeqErr(expect, expectLen);
+        printSeqErr((const unsigned char*)junkout, expectLen);
+        printSeqErr((const unsigned char*)expect, expectLen);
         return FALSE;
     }
 }
