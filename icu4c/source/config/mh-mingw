@@ -122,7 +122,7 @@ LDLIBRARYPATH_ENVVAR = PATH
 GENCCODE_ASSEMBLY=-a gcc-cygwin
 
 # These are needed to allow the pkgdata GNU make files to work
-CPPFLAGS +=-DU_MAKE=\"$(MAKE)\"
+PKGDATA_DEFS = -DU_MAKE=\"$(MAKE)\"
 
 ## End Cygwin/MinGW specific setup
 
