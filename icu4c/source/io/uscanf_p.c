@@ -1172,7 +1172,7 @@ static const u_scanf_info g_u_scanf_infos[USCANF_NUM_FMT_HANDLERS] = {
 U_CFUNC int32_t
 u_scanf_parse(UFILE     *f,
             const UChar *patternSpecification,
-            va_list     *ap)
+            va_list     ap)
 {
     const UChar     *alias;
     int32_t         count, converted, temp;
@@ -1227,11 +1227,11 @@ u_scanf_parse(UFILE     *f,
                     case ufmt_pointer:
                     case ufmt_float:
                     case ufmt_double:
-                        args.ptrValue = va_arg(*ap, void*);
+                        args.ptrValue = va_arg(ap, void*);
                         break;
 
                     case ufmt_count:
-                        args.int64Value = va_arg(*ap, int);
+                        args.int64Value = va_arg(ap, int);
                         /* set the spec's width to the # of items converted */
                         spec.fInfo.fWidth = converted;
                         break;
