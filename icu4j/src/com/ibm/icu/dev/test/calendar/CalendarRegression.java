@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/CalendarRegression.java,v $
- * $Date: 2002/10/02 20:20:26 $
- * $Revision: 1.13 $
+ * $Date: 2002/11/20 19:48:10 $
+ * $Revision: 1.14 $
  *
  *******************************************************************************
  */
@@ -1839,6 +1839,7 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
     }
 
     public void TestRegistration() {
+        /*
         Set names = Calendar.getCalendarFactoryNames();
 
         TimeZone tz = TimeZone.getDefault();
@@ -1879,6 +1880,7 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
         cal = Calendar.getInstance(tz, loc, "Gregorian");
         fmt = cal.getDateTimeFormat(DateFormat.LONG, DateFormat.LONG, loc);
         logln("Date: " + fmt.format(cal.getTime()));
+        */
     }
 }
 

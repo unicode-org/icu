@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberFormatTest.java,v $ 
- * $Date: 2002/10/04 19:41:01 $ 
- * $Revision: 1.8 $
+ * $Date: 2002/11/20 19:48:09 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -245,6 +245,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
      * Test the Currency registration-related API.
      */
     public void TestCurrencyRegistration() {
+        /* dlf
         // available locales
         Locale[] locales = Currency.getAvailableLocales();
         logln("available locales");
@@ -283,6 +284,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         if (!us2.equals(us0)) {
             errln("after unregister US didn't get original currency back: " + us2 + " != " + us0);
         }
+        */
     }
 
     /**
