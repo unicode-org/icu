@@ -14,7 +14,7 @@ CollationElements {
         "V, w, W " }
 	}
     Countries {
-        NO { "Norge" }
+        NO { "Noreg" }
     }
     DateTimeElements {
 	"2",
@@ -32,6 +32,8 @@ CollationElements {
 	"{1} {0}",
     }
     Languages {
+        nb { "bokm\u00E5l" }
+        nn { "nynorsk" }
         no { "norsk" }
     }
     LocaleString { "no" }
