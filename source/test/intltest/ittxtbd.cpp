@@ -764,7 +764,7 @@ thaiLineSelection->addElement(CharsToUnicodeString("\\u0e2b\\u0e19\\u0e49\\u0e32
         thaiLineSelection->addElement(CharsToUnicodeString("\\u0e19\\u0e31\\u0e49\\u0e19"));
 
 	    BreakIterator* e = BreakIterator::createLineInstance(
-                                                Locale(UnicodeString("th", (char*)0)), status); 
+                                                Locale("th"), status); 
         if (U_FAILURE(status))
         {
             errln("Failed to create the BreakIterator for default locale in TestThaiLineBreak.\n");
@@ -831,7 +831,7 @@ thaiLineSelection->addElement(CharsToUnicodeString("(\\u0e1b\\u0e23\\u0e30\\u0e4
         thaiLineSelection->addElement(CharsToUnicodeString("(\"\\u0e2e\\u0e32\\u0e23\\u0e4c\\u0e14\\u0e14\\u0e34\\u0e2a\\u0e01\\u0e4c\")."));
 
 	    BreakIterator* e = BreakIterator::createLineInstance(
-                                                Locale(UnicodeString("th", (char*)0)), status); 
+                                                Locale("th"), status); 
         if (U_FAILURE(status))
         {
             errln("Failed to create the BreakIterator for default locale in TestMixedThaiLineBreak.\n");
@@ -861,7 +861,7 @@ void IntlTestTextBoundary::TestMaiyamok()
         thaiLineSelection->addElement(CharsToUnicodeString("\\u0e43\\u0e2b\\u0e21\\u0e48"));
 
 	    BreakIterator* e = BreakIterator::createLineInstance(
-                                                Locale(UnicodeString("th", (char*)0)), status); 
+                                                Locale("th"), status); 
 			
         if (U_FAILURE(status))
         {

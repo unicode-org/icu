@@ -165,8 +165,7 @@ void IntlTestNumberFormatAPI::testAPI(char *par)
     const Locale *locales = NumberFormat::getAvailableLocales(count);
     logln((UnicodeString) "Got " + count + " locales" );
     for(int32_t i = 0; i < count; i++) {
-        UnicodeString name;
-        name = locales[i].getName(name);
+        UnicodeString name(locales[i].getName(),"");
         logln(name);
     }
 

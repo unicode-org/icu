@@ -206,7 +206,7 @@ void DateFormatRegressionTest::Test4056591(void)
     UErrorCode status = U_ZERO_ERROR;
 
     //try {
-        SimpleDateFormat *fmt = new SimpleDateFormat("yyMMdd", Locale::US, status);
+        SimpleDateFormat *fmt = new SimpleDateFormat(UnicodeString("yyMMdd"), Locale::US, status);
         failure(status, "new SimpleDateFormat");
         UDate start = date(1809-1900, Calendar::DECEMBER, 25);
         fmt->set2DigitYearStart(start, status);
@@ -262,7 +262,7 @@ void DateFormatRegressionTest::Test4059917(void)
     SimpleDateFormat *fmt;
     UnicodeString myDate;
 
-    fmt = new SimpleDateFormat( "yyyy/MM/dd", status );
+    fmt = new SimpleDateFormat( UnicodeString("yyyy/MM/dd"), status );
     failure(status, "new SimpleDateFormat");
     myDate = "1997/01/01";
     aux917( fmt, myDate );
@@ -270,7 +270,7 @@ void DateFormatRegressionTest::Test4059917(void)
     delete fmt;
     fmt = NULL;
     
-    fmt = new SimpleDateFormat( "yyyyMMdd", status );
+    fmt = new SimpleDateFormat( UnicodeString("yyyyMMdd"), status );
     failure(status, "new SimpleDateFormat");
     myDate = "19970101";
     aux917( fmt, myDate );
@@ -318,7 +318,7 @@ void DateFormatRegressionTest::Test4060212(void)
     logln( "dateString= " + dateString );
     logln("Using yyyy-DDD.hh:mm:ss");
     UErrorCode status = U_ZERO_ERROR;
-    SimpleDateFormat *formatter = new SimpleDateFormat("yyyy-DDD.hh:mm:ss", status);
+    SimpleDateFormat *formatter = new SimpleDateFormat(UnicodeString("yyyy-DDD.hh:mm:ss"), status);
     failure(status, "new SimpleDateFormat");
     ParsePosition pos(0);
     UDate myDate = formatter->parse( dateString, pos );
@@ -339,7 +339,7 @@ void DateFormatRegressionTest::Test4060212(void)
     logln("Using yyyy-ddd.hh:mm:ss");
     delete formatter;
     formatter = NULL;
-    formatter = new SimpleDateFormat("yyyy-ddd.hh:mm:ss", status);
+    formatter = new SimpleDateFormat(UnicodeString("yyyy-ddd.hh:mm:ss"), status);
     failure(status, "new SimpleDateFormat");
     pos.setIndex(0);
     myDate = formatter->parse( dateString, pos );
@@ -363,7 +363,7 @@ void DateFormatRegressionTest::Test4061287(void)
 {
     UErrorCode status = U_ZERO_ERROR;
     
-    SimpleDateFormat *df = new SimpleDateFormat("dd/MM/yyyy", status);
+    SimpleDateFormat *df = new SimpleDateFormat(UnicodeString("dd/MM/yyyy"), status);
     failure(status, "new SimpleDateFormat");
     //try {
     logln(UnicodeString("") + df->parse("35/01/1971", status));  
@@ -641,7 +641,7 @@ void DateFormatRegressionTest::Test4100302(void)
 void DateFormatRegressionTest::Test4101483(void) 
 {
     UErrorCode status = U_ZERO_ERROR;
-    SimpleDateFormat *sdf = new SimpleDateFormat("z", Locale::US, status);
+    SimpleDateFormat *sdf = new SimpleDateFormat(UnicodeString("z"), Locale::US, status);
     failure(status, "new SimpleDateFormat");
     FieldPosition fp(DateFormat::TIMEZONE_FIELD);
     //Date d = date(9234567890L);
@@ -674,7 +674,7 @@ void DateFormatRegressionTest::Test4103340(void)
     // choose a date that is the FIRST of some month 
     // and some arbitrary time 
     UDate d = date(97, 3, 1, 1, 1, 1); 
-    SimpleDateFormat *df = new SimpleDateFormat("MMMM", Locale::US, status); 
+    SimpleDateFormat *df = new SimpleDateFormat(UnicodeString("MMMM"), Locale::US, status); 
     failure(status, "new SimpleDateFormat");
 
     UnicodeString s;
@@ -703,7 +703,7 @@ void DateFormatRegressionTest::Test4103341(void)
     // {sfb} changed from setDefault to adoptDefault
     TimeZone::adoptDefault(TimeZone::createTimeZone("CST"));
     UErrorCode status = U_ZERO_ERROR;
-    SimpleDateFormat *simple = new SimpleDateFormat("MM/dd/yyyy HH:mm", status);
+    SimpleDateFormat *simple = new SimpleDateFormat(UnicodeString("MM/dd/yyyy HH:mm"), status);
     failure(status, "new SimpleDateFormat");
     TimeZone *temp = TimeZone::createDefault();
     if(simple->getTimeZone() != *temp)
@@ -814,11 +814,11 @@ void DateFormatRegressionTest::Test4106807(void)
     
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat *sdfs [] = {
-        new SimpleDateFormat("yyyyMMddHHmmss", status),
-        new SimpleDateFormat("yyyyMMddHHmmss'Z'", status),
-        new SimpleDateFormat("yyyyMMddHHmmss''", status),
-        new SimpleDateFormat("yyyyMMddHHmmss'a''a'", status),
-        new SimpleDateFormat("yyyyMMddHHmmss %", status)
+        new SimpleDateFormat(UnicodeString("yyyyMMddHHmmss"), status),
+        new SimpleDateFormat(UnicodeString("yyyyMMddHHmmss'Z'"), status),
+        new SimpleDateFormat(UnicodeString("yyyyMMddHHmmss''"), status),
+        new SimpleDateFormat(UnicodeString("yyyyMMddHHmmss'a''a'"), status),
+        new SimpleDateFormat(UnicodeString("yyyyMMddHHmmss %"), status)
     };
     failure(status, "new SimpleDateFormat");
     
@@ -959,7 +959,7 @@ void DateFormatRegressionTest::Test4151706(void)
 {
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat *fmt =
-        new SimpleDateFormat("EEEE, dd-MMM-yy HH:mm:ss z", Locale::US, status);
+        new SimpleDateFormat(UnicodeString("EEEE, dd-MMM-yy HH:mm:ss z"), Locale::US, status);
     failure(status, "new SimpleDateFormat");
     //try {
         UDate d = fmt->parse("Thursday, 31-Dec-98 23:00:00 GMT", status);
