@@ -653,7 +653,13 @@ parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
                 data = ucol_cloneRuleData(coll, &len, &intStatus);
 
                 /* tailoring rules version */
-                coll->dataInfo.dataVersion[1] = version[0];
+                /* This is wrong! */
+                /*coll->dataInfo.dataVersion[1] = version[0];*/
+                /* Copy tailoring version. Builder version already */
+                /* set in ucol_openRules */
+                ((UCATableHeader *)data)->version[1] = version[0];
+                ((UCATableHeader *)data)->version[2] = version[1];
+                ((UCATableHeader *)data)->version[3] = version[2];
 
                 if (U_SUCCESS(intStatus) && data != NULL)
                 {
