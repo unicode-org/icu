@@ -45,13 +45,13 @@ enum {
     _IDNA_MAP_TO_NOTHING = 0x7FF
 };
 
-
+#if defined(XP_CPLUSPLUS)
 static inline 
-void syntaxError(const UChar* rules, 
+void uprv_syntaxError(const UChar* rules, 
                  int32_t pos,
                  int32_t rulesLen,
-                 UParseError* parseError) {
-
+                 UParseError* parseError)
+{
     if(parseError == NULL){
         return;
     }
@@ -83,7 +83,7 @@ void syntaxError(const UChar* rules,
     parseError->postContext[stop-start]= 0;
     
 }
-
+#endif
 
 /* error codes for prototyping 
 #define U_IDNA_ERROR_START                      U_ERROR_LIMIT

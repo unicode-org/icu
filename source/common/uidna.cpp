@@ -207,13 +207,13 @@ uidna_toASCII(const UChar* src, int32_t srcLength,
             /* populate the parseError struct */
             if(srcIsLDH==FALSE){
                 // failPos is always set the index of failure
-                syntaxError(b1,failPos, b1Len,parseError);
+                uprv_syntaxError(b1,failPos, b1Len,parseError);
             }else if(b1[0] == HYPHEN){
                 // fail position is 0 
-                syntaxError(b1,0,b1Len,parseError);
+                uprv_syntaxError(b1,0,b1Len,parseError);
             }else{
                 // the last index in the source is always length-1
-                syntaxError(b1, (b1Len>0) ? b1Len-1 : b1Len, b1Len,parseError);
+                uprv_syntaxError(b1, (b1Len>0) ? b1Len-1 : b1Len, b1Len,parseError);
             }
 
             goto CLEANUP;
@@ -274,7 +274,7 @@ uidna_toASCII(const UChar* src, int32_t srcLength,
         }else{
             *status = U_IDNA_ACE_PREFIX_ERROR; 
             //position of failure is 0
-            syntaxError(b1,0,b1Len,parseError);
+            uprv_syntaxError(b1,0,b1Len,parseError);
             goto CLEANUP;
         }
     }
