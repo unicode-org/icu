@@ -81,10 +81,12 @@ icu4c/source/test/testdata/importtest.bin -text
 icu4c/source/test/testdata/uni-text.txt -text
 icu4j/src/com/ibm/demo/rbbi/english.dict -text
 icu4j/src/com/ibm/icu/dev/data/holidays_jp.ucs -text
+icu4j/src/com/ibm/icu/dev/data/unicode/Draft-TestSuite.txt -text
 icu4j/src/com/ibm/icu/impl/data/thai_dict -text
 icu4j/src/com/ibm/test/rbbi/english.dict -text
 icu4j/src/com/ibm/text/resources/thai_dict -text
 icu4j/src/data/holidays_jp.ucs -text
+icu4j/src/data/unicode/Draft-TestSuite.txt -text
 
 # The following file types are stored in Git-LFS.
 *.jar filter=lfs diff=lfs merge=lfs -text
