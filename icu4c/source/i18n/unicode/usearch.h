@@ -242,7 +242,7 @@ U_CAPI UStringSearch * U_EXPORT2 usearch_openFromCollator(
 * @param searchiter data struct to clean up
 * @stable ICU 2.4
 */
-U_CAPI void U_EXPORT2 usearch_close(UStringSearch *strsrch);
+U_CAPI void U_EXPORT2 usearch_close(UStringSearch *searchiter);
 
 /* get and set methods -------------------------------------------------- */
 
