@@ -17,13 +17,14 @@
 */
 
 #include "unicode/utypes.h"
+#include "unicode/ucnv.h"
+#include "unicode/ucnv_err.h"
+#include "unicode/ucnv_cb.h"
+#include "unicode/ustring.h"
 #include "cmemory.h"
 #include "ucmp16.h"
-#include "unicode/ucnv_err.h"
 #include "ucnv_bld.h"
-#include "unicode/ucnv.h"
 #include "ucnv_cnv.h"
-#include "unicode/ustring.h"
 #include "cstring.h"
 
 
@@ -347,10 +348,10 @@ U_CFUNC void T_UConverter_fromUnicode_EBCDIC_STATEFUL (UConverterFromUnicodeArgs
           mySourceChar = (UChar) args->source[mySourceIndex++];
           targetUniChar = (UChar) ucmp16_getu (myFromUnicode, mySourceChar);
           oldIsTargetUCharDBCS = isTargetUCharDBCS;
-          isTargetUCharDBCS = (UBool)(targetUniChar>0x00FF);
           
           if (targetUniChar != missingCharMarker)
             {
+              isTargetUCharDBCS = (UBool)(targetUniChar>0x00FF);
               if (oldIsTargetUCharDBCS != isTargetUCharDBCS)
                 {
                   if (isTargetUCharDBCS) args->target[myTargetIndex++] = UCNV_SO;
@@ -465,10 +466,10 @@ U_CFUNC void T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverterF
           mySourceChar = (UChar) args->source[mySourceIndex++];
           targetUniChar = (UChar) ucmp16_getu (myFromUnicode, mySourceChar);
           oldIsTargetUCharDBCS = isTargetUCharDBCS;
-          isTargetUCharDBCS =(UBool) (targetUniChar>0x00FF);
           
           if (targetUniChar != missingCharMarker)
             {
+              isTargetUCharDBCS =(UBool) (targetUniChar>0x00FF);
               if (oldIsTargetUCharDBCS != isTargetUCharDBCS)
                 {
                   args->offsets[myTargetIndex] = mySourceIndex-1;
@@ -653,6 +654,36 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_EBCDIC_STATEFUL(UConverterToUnicodeArg
     }
 } 
 
+U_CFUNC void
+_EBCDIC_STATEFUL_WriteSub(UConverterFromUnicodeArgs *pArgs, int32_t offsetIndex, UErrorCode *pErrorCode) {
+    UConverter *cnv = pArgs->converter;
+    char *p;
+    char buffer[4];
+
+    p = buffer;
+
+    /* fromUnicodeStatus contains UBool "in DBCS mode" */
+    if(cnv->subCharLen == 1) {
+        if(cnv->fromUnicodeStatus) {
+            /* DBCS mode and SBCS sub char: change to SBCS */
+            cnv->fromUnicodeStatus = FALSE;
+            *p++ = UCNV_SI;
+        }
+        *p++ = cnv->subChar[0];
+    } else {
+        if(!cnv->fromUnicodeStatus) {
+            /* SBCS mode and DBCS sub char: change to DBCS */
+            cnv->fromUnicodeStatus = TRUE;
+            *p++ = UCNV_SO;
+        }
+        *p++ = cnv->subChar[0];
+        *p++ = cnv->subChar[1];
+    }
+    ucnv_cbFromUWriteBytes(pArgs,
+                           buffer, (int32_t)(p - buffer),
+                           offsetIndex, pErrorCode);
+}
+
 static const UConverterImpl _EBCDICStatefulImpl={
     UCNV_EBCDIC_STATEFUL,
 
@@ -670,7 +701,8 @@ static const UConverterImpl _EBCDICStatefulImpl={
     T_UConverter_getNextUChar_EBCDIC_STATEFUL,
 
     NULL,
-    NULL
+    NULL,
+    _EBCDIC_STATEFUL_WriteSub
 };
 
 /* Static data is in tools/makeconv/ucnvstat.c for data-based
