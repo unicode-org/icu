@@ -1,5 +1,5 @@
 #
-# @(#)$RCSfile: GNUmakefile,v $ $Revision: 1.1 $ $Date: 2000/02/16 23:39:56 $
+# @(#)$RCSfile: GNUmakefile,v $ $Revision: 1.2 $ $Date: 2000/02/28 01:10:40 $
 #
 
 TOPDIR=		../../../..
@@ -9,9 +9,7 @@ include $(TOPDIR)/src/build/defs.gmk
 
 SUBDIRS= resources components
 
-FILES_java=	$(TARGDIR)/ChineseDateFormat.java	\
-			$(TARGDIR)/ChineseDateSymbols.java	\
-			$(TARGDIR)/DateFormatSymbols.java	\
+FILES_java=	$(TARGDIR)/DateFormatSymbols.java	\
 			$(TARGDIR)/StringSearch.java		\
 			$(TARGDIR)/SearchIterator.java		\
 			$(TARGDIR)/SimpleDateFormat.java	\
