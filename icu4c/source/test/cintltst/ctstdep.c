@@ -21,7 +21,6 @@
  */
 
 #include "unicode/unum.h"
-#include "unicode/ucol.h"
 #include "unicode/udat.h"
 #include "unicode/ustring.h"
 #include "unicode/utrans.h"
@@ -32,9 +31,6 @@
 #include <stdio.h>
 
 
-#ifdef U_USE_DEPRECATED_UCOL_API
-static void TestDeprecatedCollationAPI(void);
-#endif
 #ifdef U_USE_DEPRECATED_FORMAT_API
 static void TestDeprecatedNumFmtAPI(void);
 static void TestDeprecatedDateFmtAPI(void);
@@ -42,40 +38,11 @@ static void TestDeprecatedUErrorCode(void);
 static void TestDeprecatedUCharScript(void);
 #endif
 
-const static char cnt1[][10] = {
-  "AA",
-  "AC",
-  "AZ",
-  "AQ",
-  "AB",
-  "ABZ",
-  "ABQ",
-  "Z",
-  "ABC",
-  "Q",
-  "B"
-};
-
-const static char cnt2[][10] = {
-  "DA",
-  "DAD",
-  "DAZ",
-  "MAR",
-  "Z",
-  "DAVIS",
-  "MARK",
-  "DAV",
-  "DAVI"
-}; 
-
 void addTestDeprecatedAPI(TestNode** root);
 
 void 
 addTestDeprecatedAPI(TestNode** root)
 {
-#ifdef U_USE_DEPRECATED_UCOL_API
-    addTest(root, &TestDeprecatedCollationAPI, "ctstdep/TestDeprecatedCollationAPI");
-#endif
 #ifdef U_USE_DEPRECATED_FORMAT_API
     addTest(root, &TestDeprecatedNumFmtAPI,   "ctstdep/TestDeprecatedNumFmtAPI");
     addTest(root, &TestDeprecatedDateFmtAPI,  "ctstdep/TestDeprecatedDateFmtAPI");
@@ -83,71 +50,6 @@ addTestDeprecatedAPI(TestNode** root)
     addTest(root, &TestDeprecatedUCharScript, "ctstdep/TestDeprecatedUCharScript");
 #endif
 }
-
-#ifdef U_USE_DEPRECATED_UCOL_API
-/*
- *TODO: The ucol_openRules method which does not take UParseError as one of its params
- * has been deprecated in 2.0 release.Please remove this API by 10/1/2002
- */
-static void 
-TestDeprecatedCollationAPI(void)
-{
-  UErrorCode status = U_ZERO_ERROR;
-  UChar temp[90];
-  UChar t1[90];
-  UChar t2[90];
-
-  UCollator *coll =  NULL;
-  uint32_t i = 0, j = 0;
-  uint32_t size = 0;
-  
-  u_uastrcpy(temp, " & Z < ABC < Q < B");
-
-  coll = ucol_openRules(temp, u_strlen(temp), UCOL_OFF, UCOL_DEFAULT_STRENGTH, &status);
-
-  if(U_SUCCESS(status)) {
-    size = sizeof(cnt1)/sizeof(cnt1[0]);
-    for(i = 0; i < size-1; i++) {
-      for(j = i+1; j < size; j++) {
-        UCollationElements *iter;
-        u_uastrcpy(t1, cnt1[i]);
-        u_uastrcpy(t2, cnt1[j]);
-        iter = ucol_openElements(coll, t2, u_strlen(t2), &status);
-        if (U_FAILURE(status)) {
-          log_err("Creation of iterator failed\n");
-          break;
-        }
-        ucol_closeElements(iter);
-      }
-    }
-  } 
-
-  ucol_close(coll);
-
-
-  u_uastrcpy(temp, " & Z < DAVIS < MARK <DAV");
-  coll = ucol_openRules(temp, u_strlen(temp), UCOL_OFF, UCOL_DEFAULT_STRENGTH, &status);
-
-  if(U_SUCCESS(status)) {
-    size = sizeof(cnt2)/sizeof(cnt2[0]);
-    for(i = 0; i < size-1; i++) {
-      for(j = i+1; j < size; j++) {
-        UCollationElements *iter;
-        u_uastrcpy(t1, cnt2[i]);
-        u_uastrcpy(t2, cnt2[j]);
-        iter = ucol_openElements(coll, t2, u_strlen(t2), &status);
-        if (U_FAILURE(status)) {
-          log_err("Creation of iterator failed\n");
-          break;
-        }
-        ucol_closeElements(iter);
-      }
-    }
-  } 
-
-  ucol_close(coll);
-}
-#endif
 
 #ifdef U_USE_DEPRECATED_FORMAT_API
 /*

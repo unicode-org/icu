@@ -32,10 +32,6 @@
 #include "creststn.h"
 #include "unicode/ctest.h"
 
-#ifdef ICU_URES_USE_DEPRECATES
-static void TestConstruction2(void);
-#endif
-
 static int32_t pass;
 static int32_t fail;
 
@@ -186,9 +182,6 @@ void addNEWResourceBundleTest(TestNode** root)
     addTest(root, &TestResourceLevelAliasing, "tsutil/creststn/TestResourceLevelAliasing");
     addTest(root, &TestDirectAccess,          "tsutil/creststn/TestDirectAccess"); 
 
-#ifdef ICU_URES_USE_DEPRECATES
-    addTest(root, &TestConstruction2,         "tsutil/creststn/TestConstruction2");
-#endif
 }
 
 
@@ -1224,59 +1217,6 @@ static void TestConstruction1()
     ures_close(test2);
 
 }
-
-#ifdef ICU_URES_USE_DEPRECATES
-static void TestConstruction2()
-{
-
-    UChar temp[7];
-    UResourceBundle *test4 = 0;
-    const UChar*   result4;
-    UErrorCode   err = U_ZERO_ERROR;
-    const char*    locale="te_IN";
-    wchar_t widedirectory[256];
-    const char *testdatapath;
-    int32_t len=0;
-    char verboseOutput[256];
-
-    testdatapath= loadTestData(&err);
-    mbstowcs(widedirectory, testdatapath, 256);
-
-    log_verbose("Testing ures_openW().......\n");
-
-    test4=ures_openW(widedirectory, locale, &err);
-    if(U_FAILURE(err)){
-        log_err("Error in the construction using ures_openW():  %s\n", myErrorName(err));
-        return;
-    }
-
-    result4=ures_getStringByKey(test4, "string_in_Root_te_te_IN", &len, &err);
-    if (U_FAILURE(err) || len==0) {
-        log_err("Something threw an error in TestConstruction()  %s\n", myErrorName(err));
-        return;
-    }
-
-    log_verbose("for string_in_Root_te_te_IN, te_IN.txt had  %s\n", u_austrcpy(verboseOutput, result4));
-    u_uastrcpy(temp, "TE_IN");
-
-    if(u_strcmp(result4, temp)!=0)
-    {
-
-        log_err("Construction test failed for ures_openW();\n");
-        if(!VERBOSITY)
-            log_info("(run verbose for more information)\n");
-
-        log_verbose("\nGot->");
-        printUChars((UChar*)result4);
-        log_verbose(" Want->");
-        printUChars(temp);
-        log_verbose("\n");
-    }
-
-
-    ures_close(test4);
-}
-#endif
 
 /*****************************************************************************/
 /*****************************************************************************/
