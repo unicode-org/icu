@@ -37,13 +37,13 @@ typedef struct {
 typedef struct {
     UChar uchars[128];
     UChar *cPoints;
-    int32_t cSize;          /* Number of characters in sequence - for contraction */
-    int32_t noOfCEs;        /* Number of collation elements                       */
+    uint32_t cSize;          /* Number of characters in sequence - for contraction */
+    uint32_t noOfCEs;        /* Number of collation elements                       */
     uint32_t CEs[128];      /* These are collation elements - there could be more than one - in case of expansion */
     uint32_t mapCE;         /* This is the value element maps in original table   */
-    int32_t sizePrim[128];
-    int32_t sizeSec[128];
-    int32_t sizeTer[128];
+    uint32_t sizePrim[128];
+    uint32_t sizeSec[128];
+    uint32_t sizeTer[128];
     UBool variableTop;
     UBool caseBit;
     UBool isThai;
@@ -73,7 +73,7 @@ U_CAPI UCATableHeader U_EXPORT2 *uprv_uca_assembleTable(tempUCATable *t, UErrorC
 
 uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *element, uint32_t existingCE, UBool forward, UErrorCode *status);
 int32_t uprv_uca_addExpansion(ExpansionTable *expansions, uint32_t value, UErrorCode *status);
-void uprv_uca_reverseElement(ExpansionTable *expansions, UCAElements *el);
+void uprv_uca_reverseElement(UCAElements *el);
 
 #define paddedsize(something) ((something)+((((something)%4)!=0)?(4-(something)%4):0))
 

@@ -168,7 +168,7 @@ void ucol_uprv_tok_setOptionInImage(UCATableHeader *image, UColAttribute attrib,
 
 #define UTOK_OPTION_COUNT 12
 
-static didInit = FALSE;
+static UBool didInit = FALSE;
 /* we can be strict, or we can be lenient */
 /* I'd surely be lenient with the option arguments */
 /* maybe even with options */
@@ -236,7 +236,6 @@ ucolTokOption rulesOptions[UTOK_OPTION_COUNT] = {
 UBool ucol_uprv_tok_readAndSetOption(UCATableHeader *image, const UChar* start, const UChar *end, UBool *variableTop, UBool *top, UErrorCode *status) {
   uint32_t i = 0;
   int32_t j=0;
-  int32_t onOff = 0;
   UBool foundOption = FALSE;
   const UChar *optionArg = NULL;
   if(!didInit) {
