@@ -21,132 +21,132 @@
  * This API provides functions for performing performance measurement
  * There are 3 main usage scenarios.
  * i) Loop until a threshold time is reached:
- *	  Example:
+ *    Example:
  *    <code>
- *		typedef Params Params;
- *		struct Params{
- *			UChar* target;
- *			int32_t targetLen;
- *			const UChar* source;
- *			int32_t sourceLen;
- *			UNormalizationMode mode;
- *		}
- *		void NormFn( void* param){
- *			Params* parameters = ( Params*) param;
- *			UErrorCode error = U_ZERO_ERROR;
- *			unorm_normalize(parameters->source, parameters->sourceLen, parameters->mode, 0, parameters->target, parameters->targetLen, &error);
- *			if(U_FAILURE(error)){
- *				printf("Normalization failed\n");
- *			}
- *		}
+ *      typedef Params Params;
+ *      struct Params{
+ *          UChar* target;
+ *          int32_t targetLen;
+ *          const UChar* source;
+ *          int32_t sourceLen;
+ *          UNormalizationMode mode;
+ *      }
+ *      void NormFn( void* param){
+ *          Params* parameters = ( Params*) param;
+ *          UErrorCode error = U_ZERO_ERROR;
+ *          unorm_normalize(parameters->source, parameters->sourceLen, parameters->mode, 0, parameters->target, parameters->targetLen, &error);
+ *          if(U_FAILURE(error)){
+ *              printf("Normalization failed\n");
+ *          }
+ *      }
  *  
- *		int main(){
- *			// time the normalization function 
- *			double timeTaken = 0;
- *			Params param;
- *			param.source  // set up the source buffer 
- *			param.target   // set up the target buffer
- *			.... so on ...
- *			UTimer timer;
+ *      int main(){
+ *          // time the normalization function 
+ *          double timeTaken = 0;
+ *          Params param;
+ *          param.source  // set up the source buffer 
+ *          param.target   // set up the target buffer
+ *          .... so on ...
+ *          UTimer timer;
  *          // time the loop for 10 seconds at least and find out the loop count and time taken
- *			timeTaken = utimer_loopUntilDone((double)10,(void*) param, NormFn, &loopCount);
- *		}
- *	   </code>
+ *          timeTaken = utimer_loopUntilDone((double)10,(void*) param, NormFn, &loopCount);
+ *      }
+ *     </code>
  *
  * ii) Measure the time taken
  *     Example:
  *     <code>
- *			double perfNormalization(NormFn fn,const char* mode,Line* fileLines,int32_t loopCount){
- *				int  line;
- *				int  loops;
- *				UErrorCode error = U_ZERO_ERROR;
- *				UChar* dest=NULL;
- *				int32_t destCapacity=0;
- *				int len =-1;
- *				double elapsedTime = 0; 
- *				int retVal=0;
+ *          double perfNormalization(NormFn fn,const char* mode,Line* fileLines,int32_t loopCount){
+ *              int  line;
+ *              int  loops;
+ *              UErrorCode error = U_ZERO_ERROR;
+ *              UChar* dest=NULL;
+ *              int32_t destCapacity=0;
+ *              int len =-1;
+ *              double elapsedTime = 0; 
+ *              int retVal=0;
  *
- *				UChar arr[5000];
- *				dest=arr;
- *				destCapacity = 5000;
- *				UTimer start;
+ *              UChar arr[5000];
+ *              dest=arr;
+ *              destCapacity = 5000;
+ *              UTimer start;
  *
- *				// Initialize cache and ensure the data is loaded.
- *				// This loop checks for errors in Normalization. Once we pass the initialization
- *				// without errors we can safelly assume that there are no errors while timing the 
- *				// funtion
- *				for (loops=0; loops<10; loops++) {
- *					for (line=0; line < gNumFileLines; line++) {
- *						if (opt_uselen) {
- *							len = fileLines[line].len;
- *						}
+ *              // Initialize cache and ensure the data is loaded.
+ *              // This loop checks for errors in Normalization. Once we pass the initialization
+ *              // without errors we can safelly assume that there are no errors while timing the 
+ *              // funtion
+ *              for (loops=0; loops<10; loops++) {
+ *                  for (line=0; line < gNumFileLines; line++) {
+ *                      if (opt_uselen) {
+ *                          len = fileLines[line].len;
+ *                      }
  *
- *						retVal= fn(fileLines[line].name,len,dest,destCapacity,&error);
- *			#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
- *						if(retVal==0 ){
- *							fprintf(stderr,"Normalization of string in Windows API failed for mode %s. ErrorNo: %i at line number %i\n",mode,GetLastError(),line);
- *							return 0;
- *						}
- *			#endif
- *						if(U_FAILURE(error)){
- *							fprintf(stderr,"Normalization of string in ICU API failed for mode %s. Error: %s at line number %i\n",mode,u_errorName(error),line);
- *							return 0;
- *						}
+ *                      retVal= fn(fileLines[line].name,len,dest,destCapacity,&error);
+ *          #if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+ *                      if(retVal==0 ){
+ *                          fprintf(stderr,"Normalization of string in Windows API failed for mode %s. ErrorNo: %i at line number %i\n",mode,GetLastError(),line);
+ *                          return 0;
+ *                      }
+ *          #endif
+ *                      if(U_FAILURE(error)){
+ *                          fprintf(stderr,"Normalization of string in ICU API failed for mode %s. Error: %s at line number %i\n",mode,u_errorName(error),line);
+ *                          return 0;
+ *                      }
  *            
- *					}
- *				}
+ *                  }
+ *              }
  *
- *				//compute the time
+ *              //compute the time
  *
- *				utimer_getTime(&start);
- *				for (loops=0; loops<loopCount; loops++) {
- *					for (line=0; line < gNumFileLines; line++) {
- *						if (opt_uselen) {
- *							len = fileLines[line].len;
- *						}
+ *              utimer_getTime(&start);
+ *              for (loops=0; loops<loopCount; loops++) {
+ *                  for (line=0; line < gNumFileLines; line++) {
+ *                      if (opt_uselen) {
+ *                          len = fileLines[line].len;
+ *                      }
  *
- *						retVal= fn(fileLines[line].name,len,dest,destCapacity,&error);
+ *                      retVal= fn(fileLines[line].name,len,dest,destCapacity,&error);
  *           
- *					}
- *				}
+ *                  }
+ *              }
  *
- *				return utimer_getElapsedSeconds(&start);
- *			}
+ *              return utimer_getElapsedSeconds(&start);
+ *          }
  *      </code>
  *
  * iii) Let a higher level function do the calculation of confidence levels etc.
  *     Example:
  *     <code>
- *		 void perf(UTimer* timer, UChar* source, int32_t sourceLen, UChar* target, int32_t targetLen, int32_t loopCount,UNormalizationMode mode, UErrorCode* error){
- *				int32_t loops;
- *				for (loops=0; loops<loopCount; loops++) {
- *					unorm_normalize(source,sourceLen,target, targetLen,mode,error);
- *				}
- *				utimer_getTime(timer);
- *		 }
- *		 void main(const char* argsc, int argv){
- *			// read the file and setup the data
- *			// set up options
- *			UTimer start,timer1, timer2, timer3, timer4;
- *			double NFDTimeTaken, NFCTimeTaken, FCDTimeTaken;
- *			switch(opt){
- *				case 0:
- *					utimer_getTime(start);
- *					perf(timer1, source,sourceLen, target, targetLen,loopCount,UNORM_NFD,&error);
- *					NFDTimeTaken = utimer_getDeltaSeconds(start,timer1);
- *				case 1:
- *					timer_getTime(start);
- *					perf(timer2,source,sourceLen,target,targetLen,loopCount,UNORM_NFC,&error);
- *					NFCTimeTaken = utimer_getDeltaSeconds(start,timer2);
- *					perf(timer3, source, sourceLen, target,targetLen, loopCount, UNORM_FCD,&error);
- *				// ........so on .............			
- *			 }
- *			// calculate confidence levels etc and print			
+ *       void perf(UTimer* timer, UChar* source, int32_t sourceLen, UChar* target, int32_t targetLen, int32_t loopCount,UNormalizationMode mode, UErrorCode* error){
+ *              int32_t loops;
+ *              for (loops=0; loops<loopCount; loops++) {
+ *                  unorm_normalize(source,sourceLen,target, targetLen,mode,error);
+ *              }
+ *              utimer_getTime(timer);
+ *       }
+ *       void main(const char* argsc, int argv){
+ *          // read the file and setup the data
+ *          // set up options
+ *          UTimer start,timer1, timer2, timer3, timer4;
+ *          double NFDTimeTaken, NFCTimeTaken, FCDTimeTaken;
+ *          switch(opt){
+ *              case 0:
+ *                  utimer_getTime(start);
+ *                  perf(timer1, source,sourceLen, target, targetLen,loopCount,UNORM_NFD,&error);
+ *                  NFDTimeTaken = utimer_getDeltaSeconds(start,timer1);
+ *              case 1:
+ *                  timer_getTime(start);
+ *                  perf(timer2,source,sourceLen,target,targetLen,loopCount,UNORM_NFC,&error);
+ *                  NFCTimeTaken = utimer_getDeltaSeconds(start,timer2);
+ *                  perf(timer3, source, sourceLen, target,targetLen, loopCount, UNORM_FCD,&error);
+ *              // ........so on .............          
+ *           }
+ *          // calculate confidence levels etc and print            
  *
- *		 }
+ *       }
  *           
  *     </code>
- *		
+ *      
  */
 
 typedef struct UTimer UTimer;
@@ -166,9 +166,9 @@ typedef void FuntionToBeTimed(void* param);
         return QueryPerformanceFrequency(&timer->placeHolder);
     }
     U_INLINE void uprv_start(UTimer* timer)
-	{
-		QueryPerformanceCounter(&timer->start);
-	}
+    {
+        QueryPerformanceCounter(&timer->start);
+    }
     U_INLINE double uprv_delta(UTimer* timer1, UTimer* timer2){
         return ((double)(timer2->start.QuadPart - timer1->start.QuadPart))/((double)timer1->placeHolder.QuadPart);
     }
@@ -180,7 +180,7 @@ typedef void FuntionToBeTimed(void* param);
 
     struct UTimer{
         struct timeval start;
-        struct timezone placeHolder;
+        struct timeval placeHolder;
     };
     
     U_INLINE int32_t uprv_initFrequency(UTimer* timer)
@@ -189,14 +189,14 @@ typedef void FuntionToBeTimed(void* param);
     }
     U_INLINE void uprv_start(UTimer* timer)
     {
-	gettimeofday(&timer->start, 0);
+        gettimeofday(&timer->start, 0);
     }
     U_INLINE double uprv_delta(UTimer* timer1, UTimer* timer2){
         double t1, t2;
 
-		t1 =  (double)timer1->start.tv_sec + (double)timer1->start.tv_usec/(1000*1000);
-		t2 =  (double)timer2->start.tv_sec + (double)timer2->start.tv_usec/(1000*1000);
-		return (t2-t1);
+        t1 =  (double)timer1->start.tv_sec + (double)timer1->start.tv_usec/(1000*1000);
+        t2 =  (double)timer2->start.tv_sec + (double)timer2->start.tv_usec/(1000*1000);
+        return (t2-t1);
     }
     U_INLINE UBool uprv_compareFrequency(UTimer* timer1, UTimer* timer2){
         return TRUE;
@@ -225,7 +225,7 @@ utimer_getTime(UTimer* timer){
 U_CAPI U_INLINE double U_EXPORT2
 utimer_getDeltaSeconds(UTimer* timer1, UTimer* timer2){
     if(uprv_compareFrequency(timer1,timer2)){
-   	    return uprv_delta(timer1,timer2);
+        return uprv_delta(timer1,timer2);
     }
     /* got error return -1 */
     return -1;
@@ -249,8 +249,8 @@ utimer_getElapsedSeconds(UTimer* timer){
  * taken and number of iterations of the loop
  * @param thresholTimeVal 
  * @param loopCount output param to recieve the number of iterations
- * @param fn	The funtion to be executed
- * @param param	Parameters to be passed to the fn
+ * @param fn    The funtion to be executed
+ * @param param Parameters to be passed to the fn
  * @return the time elapsed in seconds
  */
 U_CAPI U_INLINE double U_EXPORT2
