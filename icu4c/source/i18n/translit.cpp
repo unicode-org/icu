@@ -892,6 +892,8 @@ Transliterator* Transliterator::createInstance(const UnicodeString& ID,
     }
 
     UnicodeSet* globalFilter;
+    // TODO add code for parseError...currently unused, but
+    // later may be used by parsing code...
     if (!TransliteratorIDParser::parseCompoundID(ID, dir, canonID, list, globalFilter)) {
         status = U_INVALID_ID;
         return NULL;
@@ -909,7 +911,7 @@ Transliterator* Transliterator::createInstance(const UnicodeString& ID,
         t = (Transliterator*) list.elementAt(0);
         break;
     default:
-        t = new CompoundTransliterator(list, status);
+        t = new CompoundTransliterator(list, parseError, status);
         if (U_FAILURE(status)) {
             delete t;
             return NULL;

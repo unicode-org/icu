@@ -82,10 +82,13 @@ CompoundTransliterator::CompoundTransliterator(const UnicodeString& id,
  * ID.
  */
 CompoundTransliterator::CompoundTransliterator(UVector& list,
+                                               UParseError& /*parseError*/,
                                                UErrorCode& status) :
     Transliterator(EMPTY, NULL),
     trans(0), compoundRBTIndex(-1)
 {
+    // TODO add code for parseError...currently unused, but
+    // later may be used by parsing code...
     init(list, UTRANS_FORWARD, FALSE, status);
     // assume caller will fixup ID
 }
