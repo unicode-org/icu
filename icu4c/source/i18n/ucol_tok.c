@@ -483,6 +483,10 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
           }
 
           ch = *(++(src->current)); /*pattern[++index]; */
+          if(ch == 0x0027) {
+            *src->extraCurrent++ = ch;
+            inQuote = FALSE;
+          }
           break;
 
         /* '@' is french only if the strength is not currently set */
@@ -523,7 +527,7 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
     }
 
     if(wasInQuote) {
-      if(ch != 0x27 || newCharsLen == 1) {
+      if(ch != 0x27) {
         *src->extraCurrent++ = ch;
       }
       if(src->extraCurrent == src->extraEnd) {
