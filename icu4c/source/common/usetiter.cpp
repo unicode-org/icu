@@ -4,8 +4,8 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/common/usetiter.cpp,v $ 
-* $Date: 2002/05/29 18:33:33 $ 
-* $Revision: 1.1 $
+* $Date: 2002/06/01 06:36:02 $ 
+* $Revision: 1.2 $
 **********************************************************************
 */
 #include "unicode/usetiter.h"
@@ -19,8 +19,8 @@ U_NAMESPACE_BEGIN
  * Create an iterator
  * @param set set to iterate over
  */
-UnicodeSetIterator::UnicodeSetIterator(const UnicodeSet& set) {
-    reset(set);
+UnicodeSetIterator::UnicodeSetIterator(const UnicodeSet& uSet) {
+    reset(uSet);
 }
 
 /**
@@ -96,8 +96,8 @@ UBool UnicodeSetIterator::nextRange() {
 /**
  *@param set the set to iterate over. This allows reuse of the iterator.
  */
-void UnicodeSetIterator::reset(const UnicodeSet& set) {
-    this->set = &set;
+void UnicodeSetIterator::reset(const UnicodeSet& uSet) {
+    this->set = &uSet;
     reset();
 }
 
@@ -122,9 +122,9 @@ void UnicodeSetIterator::reset() {
     nextString = 0;
 }
 
-void UnicodeSetIterator::loadRange(int32_t range) {
-    nextElement = set->getRangeStart(range);
-    endElement = set->getRangeEnd(range);
+void UnicodeSetIterator::loadRange(int32_t iRange) {
+    nextElement = set->getRangeStart(iRange);
+    endElement = set->getRangeEnd(iRange);
 }
 
 U_NAMESPACE_END

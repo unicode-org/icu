@@ -13,19 +13,19 @@
 ResBundTestDataDriver::ResBundTestDataDriver(const char* testName, UErrorCode &status)
 : TestDataDriver(testName),
   fTestBundle(NULL),
-  fParsing(NULL),
   fPurpose(NULL),
+  fParsing(NULL),
   fModuleSettings(NULL),
-  fCurrentTest(NULL),
   fTestData(NULL),
+  fCurrentTest(NULL),
   fTestSettings(NULL),
   fCurrentSettings(NULL),
   fTestCases(NULL),
   fCurrentCase(NULL),
+  fDataTestValid(TRUE),
   tdpath(NULL)
 {
   fNumberOfTests = 0;
-  fDataTestValid = TRUE;
   fTestBundle = getTestBundle(testName);
   if(fDataTestValid) {
     fPurpose = ures_getByKey(fTestBundle, "TestPurpose", NULL, &status);
@@ -234,7 +234,8 @@ ResBundTestDataDriver::loadTestData(UErrorCode& err){
             if(U_FAILURE(err)){
                 err = U_FILE_ACCESS_ERROR;
                 errln("construction of NULL did not succeed  :  %s \n", u_errorName(err));
-                return "";
+                strcpy(tdpath, "");
+                return tdpath;
             }
             ures_close(test);
             return tdpath;
