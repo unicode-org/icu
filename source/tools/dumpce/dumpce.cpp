@@ -868,21 +868,21 @@ void outputScriptElem(ScriptElement &element, int compare, UBool expansion)
 
     fprintf(OUTPUT_, "]'>");
     
-    int32_t    length;
     UErrorCode error = U_ZERO_ERROR;
-    char       utf8[128];
-    u_strToUTF8(utf8, 128, &length, element.ch, element.count, &error);
+    char       utf8[64];
+    UChar      nfc[32];
+    int32_t    length = unorm_normalize(element.ch, element.count, UNORM_NFC, 0, nfc, 
+                                        32, &error);
+    if (U_FAILURE(error)) {
+        fprintf(stdout, "Error normalizing contractions to NFC\n");
+    }
+    u_strToUTF8(utf8, 64, &length, nfc, length, &error);
     if (U_FAILURE(error)) {
         fprintf(stdout, "Error converting UChar to utf8\n");
         return;
     }
     
-    if (element.tailored) {
-        fprintf(OUTPUT_, "<font class='r'>%s</font><br>", utf8);
-    }
-    else {
-        fprintf(OUTPUT_, "%s<br>", utf8);
-    }
+    fprintf(OUTPUT_, "%s<br>", utf8);
     fprintf(OUTPUT_, "<tt>");
     outputUChar(element.ch, element.count);
     fprintf(OUTPUT_, "</tt></td><td class='n'>");
@@ -898,7 +898,13 @@ void outputScriptElem(ScriptElement &element, int compare, UBool expansion)
             fprintf(stdout, "Error getting character name\n");
             return;
         }
-        fprintf(OUTPUT_, "%s\n", str);
+        if (element.tailored) {
+            fprintf(OUTPUT_, "<b>");
+        }
+        fprintf(OUTPUT_, "%s", str);
+        if (element.tailored) {
+            fprintf(OUTPUT_, " *</b>");
+        }
         if (i < element.count) {
             fprintf(OUTPUT_, "<br>\n");
         }
@@ -1226,7 +1232,7 @@ void serializeScripts(UScriptCode script[], int scriptcount)
         return;
     }
 
-    outputScriptElem(scriptelem[0], 0, hasExpansions(coleiter));
+    outputScriptElem(scriptelem[0], 1, hasExpansions(coleiter));
     for (int i = 0; i < count - 1; i ++) {
         ucol_setText(coleiter, scriptelem[i + 1].ch, scriptelem[i + 1].count,
                      &error);
@@ -1272,7 +1278,20 @@ void outputHTMLHeader(const char *locale, UScriptCode script[],
     fprintf(OUTPUT_, "--!>\n");
 
     fprintf(OUTPUT_, "\n<h2>%s</h2>\n", locale);
-    fprintf(stdout, "Locale: %s\n", locale);
+    
+    UChar      displayname[64];
+    UErrorCode error = U_ZERO_ERROR;
+    int32_t size = uloc_getDisplayName(locale, NULL, displayname, 64, &error);
+    char       utf8displayname[128];
+    if (U_FAILURE(error)) {
+        utf8displayname[0] = 0;
+    }
+    else {
+        int32_t utf8size = 0;
+        u_strToUTF8(utf8displayname, 128, &utf8size, displayname, size, &error);
+    }
+    fprintf(OUTPUT_, "<a href=http://oss.software.ibm.com/cvs/icu/~checkout~/icu/data/%s.txt>%s</a><br>\n", locale, utf8displayname);
+    fprintf(stdout, "%s\n", locale);
     fprintf(OUTPUT_, "<ul>\n");
     for (int i = 0; i < scriptcount; i ++) {
         fprintf(OUTPUT_, "<li> %s\n", uscript_getName(script[i]));
@@ -1298,7 +1317,7 @@ void outputListHTMLHeader(FILE *file)
     fprintf(file, "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n");
     fprintf(file, "<meta http-equiv=\"Content-Language\" content=\"en-us\">\n");
     fprintf(file, "<title>Collation Charts</title>\n");
-    fprintf(OUTPUT_, "<base target=\"main\">\n");
+    fprintf(file, "<base target=\"main\">\n");
     fprintf(file, "</head>\n");
     fprintf(file, "<body>\n");
     fprintf(file, "<h2 align=center>Collation Charts</h2>\n");
@@ -1330,8 +1349,9 @@ void serializeScripts() {
 
     const char    *locale;
           int32_t  localelist = 0;
+          int32_t  localesize;
         
-    localelist = ucol_countAvailable() - 1;
+    localesize = ucol_countAvailable() - 1;
     locale      = ucol_getAvailable(localelist);
 
     strcat(filename, "list.html");
@@ -1386,8 +1406,8 @@ void serializeScripts() {
         ucol_close(COLLATOR_);
 
         filename[dirlength] = 0;
-        localelist --;
-        if (localelist < 0) {
+        localelist ++;
+        if (localelist == localesize) {
             break;
         }
         locale = ucol_getAvailable(localelist);
@@ -1432,7 +1452,7 @@ int main(int argc, char *argv[]) {
                         "    UNormalizationMode mode to be used.\n"
                         "--scripts\n" 
                         "    Codepoints from all scripts are sorted and serialized.\n");
-        fprintf(stdout, "Example: dumpce --serialize --locale af --destdir /temp --attribute UCOL_STRENGTH=UCOL_DEFAULT_STRENGTH,4=17");
+        fprintf(stdout, "Example: dumpce --serialize --locale af --destdir /temp --attribute UCOL_STRENGTH=UCOL_DEFAULT_STRENGTH,4=17\n\n");
         return argc < 0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
