@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationRuleParser.java,v $ 
-* $Date: 2002/10/29 22:55:41 $ 
-* $Revision: 1.9 $
+* $Date: 2002/11/21 23:48:37 $ 
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -1665,7 +1665,7 @@ final class CollationRuleParser
     private
     UnicodeSet readAndSetUnicodeSet(String source, int start) throws ParseException 
     {
-      while(source.charAt(start) != 0x005b) { /* advance while we find the first '[' */
+      while(source.charAt(start) != '[') { /* advance while we find the first '[' */
         start++;
       }
       // now we need to get a balanced set of '[]'. The problem is that a set can have 
@@ -1673,9 +1673,9 @@ final class CollationRuleParser
       int noOpenBraces = 1;
       int current = 1; // skip the opening brace
       while(start+current < source.length() && noOpenBraces != 0) {
-        if(source.charAt(start+current) == 0x005b) {
+        if(source.charAt(start+current) == '[') {
           noOpenBraces++;
-        } else if(source.charAt(start+current) == 0x005D) { // closing brace
+        } else if(source.charAt(start+current) == ']') { // closing brace
           noOpenBraces--;
         }
         current++;
@@ -1803,15 +1803,15 @@ final class CollationRuleParser
             int noOpenBraces = 1;
             m_current_++; // skip opening brace
             while(m_current_ < m_source_.length() && noOpenBraces != 0) {
-                if(m_source_.charAt(m_current_) == 0x005b) {
+                if(m_source_.charAt(m_current_) == '[') {
                   noOpenBraces++;
-                } else if(m_source_.charAt(m_current_) == 0x005D) { // closing brace
+                } else if(m_source_.charAt(m_current_) == ']') { // closing brace
                   noOpenBraces--;
                 }
                 m_current_++;
             }
             m_optionEnd_ = m_current_-1;
-            return TOKEN_SUCCESS_MASK_; // we will never reach here.
+            return TOKEN_SUCCESS_MASK_; 
         }
         else {
 	        throwParseException(m_rules_, optionarg);
