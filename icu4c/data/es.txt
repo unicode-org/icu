@@ -6,6 +6,7 @@
 // *******************************************************************************
 
 es {
+    Version { "1.0" }
     CollationElements { 
         Version { "1.0" }
         Override { "FALSE" }
@@ -14,21 +15,59 @@ es {
     Countries { 
         AR { "Argentina" }
         BO { "Bolivia" }
+        BE { "B\u00E9lgica" }
+        BR { "Brasil" }
+        CA { "Canad\u00E1" }
+        CH { "Suiza" }
         CL { "Chile" }
         CO { "Colombia" }
         CR { "Costa Rica" }
+        DE { "Alemania" }
+        DK { "Dinamarca" }
         DO { "Rep\u00FAblica Dominicana" }
+        DZ { "Argelia" }
         EC { "Ecuador" }
+        EG { "Egipto" }
         ES { "Espa\u00F1a" }
+        FI { "Finlandia" }
+        FR { "Francia" }
+        GB { "Reino Unido" }
+        GL { "Groenlanida" }
+        GR { "Grecia" }
         GT { "Guatemala" }
         HN { "Honduras" }
+        HU { "Hungr\u00EDa" }
+        IE { "Irelanda" }
+        IT { "Italia" }
+        IQ { "Irak" }
+        IR { "Ir\u00E1n" }
+        JP { "Jap\u00F3n" }
+        JO { "Jordania" }
+        KE { "Kenia" }
+        KP { "Corea del Norte" }
+        KR { "Corea del Sur" }
+        LB { "L\u00EDbano" }
+        MA { "Marruecos" }
         MX { "M\u00E9xico" }
         NI { "Nicaragua" }
+        NO { "Noruega" }
+        NZ { "Nueva Zelanda" }
         PA { "Panam\u00E1" }
         PE { "Per\u00FA" }
+        PH { "Islas Filipinas" }
+        PL { "Polonia" }
         PR { "Puerto Rico" }
         PY { "Paraguay" }
+        RU { "Rusia" }
+        SD { "Sud\u00E1n" }
+        SE { "Suecia" }
+        SG { "Singapur" }
         SV { "El Salvador" }
+        SY { "Siria" }
+        TH { "Tailandia" }
+        TN { "T\u00FAnez" }
+        TR { "Turqu\u00EDa" }
+        TW { "Taiw\u00E1n" }
         UY { "Uruguay" }
         US { "Estados Unidos" }
         VE { "Venezuela" }
@@ -67,12 +106,14 @@ es {
             "s\u00E1bado",
     }
     Eras { 
-            "AC",
-            "AD",
+            "a.C.",  // Said to be a.C. for antes de Cristo
+            "d.C.",  // Said to be d.C. for despu\u00E9s de Cristo
     }
     Languages { 
         ar { "ar\u00E1bigo" }
+        bg { "b\u00FAlgaro" }
         cs { "checo" }
+        da { "dan\u00E1s" }
         de { "alam\u00E1n" }
         el { "griego" }
         en { "ingl\u00E9s" }
@@ -82,6 +123,7 @@ es {
         fi { "finland\u00E9s" }
         he { "hebreo" }
         hr { "croata" }
+        hu { "h\u00FAngaro" }
         it { "italiano" }
         ja { "japon\u00E9s" }
         ko { "coreano" }
@@ -91,11 +133,14 @@ es {
         pt { "portugu\u00E9s" }
         ru { "ruso" }
         sk { "eslovaco" }
+        sq { "alban\u00E9s" }
         sr { "servio" }
         sv { "sueco" }
         th { "tailand\u00E9s" }
+        tr { "turco" }
         vi { "vietnam\u00E9s" }
         zh { "chino" }
+        zu { "zul\u00FA" }
     }
     LocaleID { "0a" }
     LocaleString { "es" }
