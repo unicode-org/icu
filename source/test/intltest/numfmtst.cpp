@@ -55,7 +55,7 @@ NumberFormatTest::TestPatterns(void)
     if (U_FAILURE(status)) { errln("FAIL: Could not construct DecimalFormatSymbols"); return; }
 
     const char* pat[]    = { "#.#", "#.", ".#", "#" };
-    int32_t pat_length = sizeof(pat) / sizeof(pat[0]);
+    int32_t pat_length = (int32_t)(sizeof(pat) / sizeof(pat[0]));
     const char* newpat[] = { "#0.#", "#0.", "#.0", "#" };
     const char* num[]    = { "0",   "0.", ".0", "0" };
     for (int32_t i=0; i<pat_length; ++i)
@@ -88,7 +88,7 @@ NumberFormatTest::TestExponential(void)
     DecimalFormatSymbols sym(Locale::US, status);
     if (U_FAILURE(status)) { errln("FAIL: Bad status returned by DecimalFormatSymbols ct"); return; }
     const char* pat[] = { "0.####E0", "00.000E00", "##0.######E000", "0.###E0;[0.###E0]"  };
-    int32_t pat_length = sizeof(pat) / sizeof(pat[0]);
+    int32_t pat_length = (int32_t)(sizeof(pat) / sizeof(pat[0]));
 
 // The following #if statements allow this test to be built and run on
 // platforms that do not have standard IEEE numerics.  For example,
@@ -100,7 +100,7 @@ NumberFormatTest::TestExponential(void)
 
 #if DBL_MAX_10_EXP > 300
     double val[] = { 0.01234, 123456789, 1.23e300, -3.141592653e-271 };
-    int32_t val_length = sizeof(val) / sizeof(val[0]);
+    int32_t val_length = (int32_t)(sizeof(val) / sizeof(val[0]));
     const char* valFormat[] =
     {
         // 0.####E0
@@ -150,7 +150,7 @@ NumberFormatTest::TestExponential(void)
 #endif
 
     int32_t lval[] = { 0, -1, 1, 123456789 };
-    int32_t lval_length = sizeof(lval) / sizeof(lval[0]);
+    int32_t lval_length = (int32_t)(sizeof(lval) / sizeof(lval[0]));
     const char* lvalFormat[] =
     {
         // 0.####E0
@@ -586,7 +586,7 @@ void NumberFormatTest::TestScientific(void) {
     // Test pattern round-trip
     const char* PAT[] = { "#E0", "0.####E0", "00.000E00", "##0.####E000",
                           "0.###E0;[0.###E0]" };
-    int32_t PAT_length = sizeof(PAT) / sizeof(PAT[0]);
+    int32_t PAT_length = (int32_t)(sizeof(PAT) / sizeof(PAT[0]));
     int32_t DIGITS[] = {
         // min int, max int, min frac, max frac
         0, 1, 0, 0, // "#E0"
