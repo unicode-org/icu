@@ -32,7 +32,7 @@
      <abbr title="International Components for Unicode">ICU</abbr> 2.6
     ReadMe</h1>
 
-    <p>Version: 2003-Jun-02<br>
+    <p>Version: 2003-Jun-04<br>
      Copyright &copy; 1997-2003 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -237,17 +237,51 @@
     <p>ICU code libraries can be made smaller by removing functionality. See <a
     href="#MakeICUSmaller">How to Make ICU Smaller</a>.</p>
 
-    <h3>Support for Unicode 3.2</h3>
+    <h3>Support for Unicode 4.0</h3>
 
     <p>Unicode properties and algorithms have been upgraded to <a href=
-    "http://www.unicode.org/unicode/standard/versions/enumeratedversions.html#Unicode_3_2_0">
-    Unicode 3.2</a>, which includes the addition of more than 1000 new encoded
+    "http://www.unicode.org/versions/Unicode4.0.0/">
+    Unicode 4.0</a>, which includes the addition of 1226 new encoded
     characters. The UCA (<a href="http://www.unicode.org/reports/tr10/">Unicode
-    Collation Algorithm</a>) table is updated to the current version 3.1.1,
-    with Unicode 3.2-based canonical closure. All Unicode properties (except
-    for those in Unihan.txt) are now <a href=
-    "http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/ucd_icu.html">
+    Collation Algorithm</a>) table
+    is still at version 3.1.1, with Unicode 4-based canonical closure,
+    because UCA 4 is not available yet.
+    All Unicode properties (except for those in Unihan.txt) are now <a href=
+    "http://oss.software.ibm.com/icu/userguide/properties.html">
     available via direct APIs, and most via UnicodeSet</a>.</p>
+
+    <p>Note that a Unicode update includes changes in algorithms.
+    For example, the default iterator for finding titlecasing positions has
+    changed from the titlecasing iterator to the word break iterator
+    according to the Unicode Standard.</p>
+
+    <p><a href="http://www.unicode.org/reports/tr15/#Corrigenda">Unicode 4 fixes 5 normalization bugs</a>,
+    which changes the decomposition and canonical equivalence of 5 characters.
+    ICU 2.6 normalization uses Unicode 4 data, therefore contains these bug fixes.</p>
+
+    <h3>Currency formatting</h3>
+
+    <p>Formatting of currency values has been improved in ICU 2.6 by allowing
+    the specification of any currency with any language-specific formatter.
+    The currency itself can be chosen independently of the display language,
+    but an appropriately localized string will be displayed for the currency
+    symbol. The display symbol data is not fully fleshed out.
+    See the API references for ucurr.h and NumberFormat.
+    <code>icu/source/samples/numfmt/</code> is updated to illustrate this
+    feature.</p>
+
+    <h3>XML resource bundles</h3>
+
+    <p>The ICU team had developed a custom XML format that matched
+    the capabilities of the binary data structure of ICU .res files.
+    This format was not known to be used and not optimal for
+    translation/localization.
+    ICU 2.6 supports the standard XLIFF format for product localization by
+    providing tools to convert between .xlf and ICU .txt files.
+    See the User Guide
+    <a href="http://oss.software.ibm.com/icu/userguide/localizing.html">Localizing with ICU</a>
+    chapter for details.
+    The previous, ICU-specific XML format has been withdrawn.</p>
 
     <h3>Flexible data loading</h3>
 
