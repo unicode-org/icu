@@ -1149,6 +1149,21 @@ TestJitterbug1098(){
     }
 }
 
+/*  These tests do cleanup and reinitialize ICU in the course of their operation.
+ *    The ICU data directory must be preserved across these operations.
+ *    Here is a helper function to assist with that.
+ */
+static char *safeGetICUDataDirectory() {
+    const char *dataDir = u_getDataDirectory();  /* Returned string vanashes with u_cleanup */
+    char *retStr = NULL;
+    if (dataDir != NULL) {
+        retStr = (char *)malloc(strlen(dataDir)+1);
+        strcpy(retStr, dataDir);
+    }
+    return retStr;
+}
+
+
 static void
 TestFCDCrash(void) {
     static char *test[] = {
@@ -1156,6 +1171,7 @@ TestFCDCrash(void) {
     "Grossist"
     };
 
+    char *icuDataDir = safeGetICUDataDirectory();
     UErrorCode status = U_ZERO_ERROR;
     UCollator *coll = ucol_open("es", &status);
     if(U_FAILURE(status)) {
@@ -1165,6 +1181,7 @@ TestFCDCrash(void) {
     ucol_close(coll);
     coll = NULL;
     u_cleanup();
+    u_setDataDirectory(icuDataDir);
     coll = ucol_open("de_DE", &status);
     if(U_FAILURE(status)) {
         log_err("Couldn't open collator\n");
@@ -1173,6 +1190,7 @@ TestFCDCrash(void) {
     ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
     genericOrderingTest(coll, test, 2);
     ucol_close(coll);
+    free(icuDataDir);
 
 }
 
