@@ -100,7 +100,7 @@
  * @stable ICU 2.4
  */
 #define U16_GET_SUPPLEMENTARY(lead, trail) \
-    (((lead)<<10UL)+(trail)-U16_SURROGATE_OFFSET)
+    (((UChar32)(lead)<<10UL)+(UChar32)(trail)-U16_SURROGATE_OFFSET)
 
 
 /**

@@ -19,7 +19,6 @@
 #if !UCONFIG_NO_CONVERSION && !UCONFIG_NO_LEGACY_CONVERSION
 
 #include "cmemory.h"
-#include "unicode/ucnv_err.h"
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_cb.h"
 #include "unicode/uset.h"

@@ -715,12 +715,12 @@ public:
      * Implement UnicodeMatcher::matches()
      * @stable ICU 2.4
      */
-    UMatchDegree matches(const Replaceable& text,
+    virtual UMatchDegree matches(const Replaceable& text,
                          int32_t& offset,
                          int32_t limit,
                          UBool incremental);
 
- private:
+private:
     /**
      * Returns the longest match for s in text at the given position.
      * If limit > start then match forward from start+1 to limit
@@ -757,7 +757,7 @@ public:
      */
     int32_t findCodePoint(UChar32 c) const;
 
- public:
+public:
 
     /**
      * Implementation of UnicodeMatcher API.  Union the set of all
@@ -766,7 +766,7 @@ public:
      * @param toUnionTo the set into which to union the source characters
      * @stable ICU 2.4
      */
-    void addMatchSetTo(UnicodeSet& toUnionTo) const;
+    virtual void addMatchSetTo(UnicodeSet& toUnionTo) const;
 
     /**
      * Returns the index of the given character within this set, where
