@@ -354,6 +354,10 @@ u_getIntPropertyValue(UChar32 c, UProperty which) {
         case UCHAR_NFC_QUICK_CHECK:
         case UCHAR_NFKC_QUICK_CHECK:
             return (int32_t)unorm_getQuickCheck(c, (UNormalizationMode)(which-UCHAR_NFD_QUICK_CHECK)+UNORM_NFD);
+        case UCHAR_LEAD_CANONICAL_COMBINING_CLASS:
+            return unorm_getFCD16FromCodePoint(c)>>8;
+        case UCHAR_TRAIL_CANONICAL_COMBINING_CLASS:
+            return unorm_getFCD16FromCodePoint(c)&0xff;
         default:
             return 0; /* undefined */
         }
@@ -387,6 +391,8 @@ u_getIntPropertyMaxValue(UProperty which) {
             max=(uprv_getMaxValues(0)&UPROPS_BLOCK_MASK)>>UPROPS_BLOCK_SHIFT;
             return max!=0 ? max : (int32_t)UBLOCK_COUNT-1;
         case UCHAR_CANONICAL_COMBINING_CLASS:
+        case UCHAR_LEAD_CANONICAL_COMBINING_CLASS:
+        case UCHAR_TRAIL_CANONICAL_COMBINING_CLASS:
             return 0xff; /* TODO do we need to be more precise, getting the actual maximum? */
         case UCHAR_DECOMPOSITION_TYPE:
             max=uprv_getMaxValues(2)&UPROPS_DT_MASK;

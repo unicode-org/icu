@@ -266,6 +266,14 @@ unorm_cmpEquivFold(const UChar *s1, int32_t length1,
 #if !UCONFIG_NO_NORMALIZATION
 
 /**
+ * Internal API to get the 16-bit FCD value (lccc + tccc) for c,
+ * for u_getIntPropertyValue().
+ * @internal
+ */
+U_CAPI uint16_t U_EXPORT2
+unorm_getFCD16FromCodePoint(UChar32 c);
+
+/**
  * Internal API, used by collation code.
  * Get access to the internal FCD trie table to be able to perform
  * incremental, per-code unit, FCD checks in collation.

@@ -351,6 +351,20 @@ typedef enum UProperty {
     /** Enumerated property NFKC_Quick_Check.
         Returns UNormalizationCheckResult values. @draft ICU 3.0 */
     UCHAR_NFKC_QUICK_CHECK,
+    /** Enumerated property Lead_Canonical_Combining_Class.
+        ICU-specific property for the ccc of the first code point
+        of the decomposition, or lccc(c)=ccc(NFD(c)[0]).
+        Useful for checking for canonically ordered text;
+        see UNORM_FCD and http://www.unicode.org/notes/tn5/#FCD .
+        Returns 8-bit numeric values like UCHAR_CANONICAL_COMBINING_CLASS. @draft ICU 3.0 */
+    UCHAR_LEAD_CANONICAL_COMBINING_CLASS,
+    /** Enumerated property Trail_Canonical_Combining_Class.
+        ICU-specific property for the ccc of the last code point
+        of the decomposition, or tccc(c)=ccc(NFD(c)[last]).
+        Useful for checking for canonically ordered text;
+        see UNORM_FCD and http://www.unicode.org/notes/tn5/#FCD .
+        Returns 8-bit numeric values like UCHAR_CANONICAL_COMBINING_CLASS. @draft ICU 3.0 */
+    UCHAR_TRAIL_CANONICAL_COMBINING_CLASS,
     /** One more than the last constant for enumerated/integer Unicode properties. @stable ICU 2.2 */
     UCHAR_INT_LIMIT,
 

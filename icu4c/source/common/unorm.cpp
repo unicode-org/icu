@@ -1189,6 +1189,20 @@ unorm_getQuickCheck(UChar32 c, UNormalizationMode mode) {
     }
 }
 
+U_CAPI uint16_t U_EXPORT2
+unorm_getFCD16FromCodePoint(UChar32 c) {
+    UErrorCode errorCode;
+    uint16_t fcd;
+
+    errorCode=U_ZERO_ERROR;
+    if(!_haveData(errorCode)) {
+        return 0;
+    }
+
+    UTRIE_GET16(&fcdTrie, c, fcd);
+    return fcd;
+}
+
 /* reorder UTF-16 in-place -------------------------------------------------- */
 
 /*

@@ -1388,18 +1388,20 @@ TestFCNFKCClosure(void) {
 static void
 TestQuickCheckPerCP() {
     UErrorCode errorCode;
-    UChar32 c;
-    UChar s[U16_MAX_LENGTH];
-    int32_t length;
+    UChar32 c, lead, trail;
+    UChar s[U16_MAX_LENGTH], nfd[16];
+    int32_t length, lccc1, lccc2, tccc1, tccc2;
     UNormalizationCheckResult qc1, qc2;
 
     if(
         u_getIntPropertyMaxValue(UCHAR_NFD_QUICK_CHECK)!=(int32_t)UNORM_YES ||
         u_getIntPropertyMaxValue(UCHAR_NFKD_QUICK_CHECK)!=(int32_t)UNORM_YES ||
         u_getIntPropertyMaxValue(UCHAR_NFC_QUICK_CHECK)!=(int32_t)UNORM_MAYBE ||
-        u_getIntPropertyMaxValue(UCHAR_NFKC_QUICK_CHECK)!=(int32_t)UNORM_MAYBE
+        u_getIntPropertyMaxValue(UCHAR_NFKC_QUICK_CHECK)!=(int32_t)UNORM_MAYBE ||
+        u_getIntPropertyMaxValue(UCHAR_LEAD_CANONICAL_COMBINING_CLASS)!=u_getIntPropertyMaxValue(UCHAR_CANONICAL_COMBINING_CLASS) ||
+        u_getIntPropertyMaxValue(UCHAR_TRAIL_CANONICAL_COMBINING_CLASS)!=u_getIntPropertyMaxValue(UCHAR_CANONICAL_COMBINING_CLASS)
     ) {
-        log_err("wrong result from one of the u_getIntPropertyMaxValue(UCHAR_NF*_QUICK_CHECK)\n");
+        log_err("wrong result from one of the u_getIntPropertyMaxValue(UCHAR_NF*_QUICK_CHECK) or UCHAR_*_CANONICAL_COMBINING_CLASS\n");
     }
 
     /*
@@ -1434,6 +1436,24 @@ TestQuickCheckPerCP() {
         qc2=unorm_quickCheck(s, length, UNORM_NFKD, &errorCode);
         if(qc1!=qc2) {
             log_err("u_getIntPropertyValue(NFKD)=%d != %d=unorm_quickCheck(NFKD) for U+%04x\n", qc1, qc2, c);
+        }
+
+        length=unorm_normalize(s, length, UNORM_NFD, 0, nfd, LENGTHOF(nfd), &errorCode);
+        U16_GET(nfd, 0, 0, length, lead);
+        U16_GET(nfd, 0, length-1, length, trail);
+
+        lccc1=u_getIntPropertyValue(c, UCHAR_LEAD_CANONICAL_COMBINING_CLASS);
+        lccc2=u_getCombiningClass(lead);
+        tccc1=u_getIntPropertyValue(c, UCHAR_TRAIL_CANONICAL_COMBINING_CLASS);
+        tccc2=u_getCombiningClass(trail);
+
+        if(lccc1!=lccc2) {
+            log_err("u_getIntPropertyValue(lccc)=%d != %d=u_getCombiningClass(lead) for U+%04x\n",
+                    lccc1, lccc2, c);
+        }
+        if(tccc1!=tccc2) {
+            log_err("u_getIntPropertyValue(tccc)=%d != %d=u_getCombiningClass(trail) for U+%04x\n",
+                    tccc1, tccc2, c);
         }
 
         /* skip some code points */
