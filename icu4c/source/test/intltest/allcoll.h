@@ -13,6 +13,10 @@
 #ifndef _ALLCOLL
 #define _ALLCOLL
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "unicode/tblcoll.h"
 #include "tscoll.h"
 
@@ -53,4 +57,7 @@ private:
 
     void doTestVariant(const UnicodeString source, const UnicodeString target, Collator::EComparisonResult result);
 };
+
+#endif /* #if !UCONFIG_NO_COLLATION */
+
 #endif

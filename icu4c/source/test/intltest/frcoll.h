@@ -12,6 +12,10 @@
 #ifndef _FRCOLL
 #define _FRCOLL
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "tscoll.h"
 
 class CollationFrenchTest: public IntlTestCollator {
@@ -45,5 +49,7 @@ private:
 
     Collator *myCollation;
 };
+
+#endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif

@@ -3,6 +3,11 @@
  * Copyright (c) 1997-2001, International Business Machines Corporation and
  * others. All Rights Reserved. 
  ********************************************************************/
+
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #ifndef _COLL
 #include "unicode/coll.h"
 #endif
@@ -83,4 +88,4 @@ void LotusCollationKoreanTest::runIndexedTest( int32_t index, UBool exec, const 
     }
 }
 
-
+#endif /* #if !UCONFIG_NO_COLLATION */

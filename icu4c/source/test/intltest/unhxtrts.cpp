@@ -11,6 +11,10 @@
 *   03/15/2000   Madhu        Creation.
 ************************************************************************/
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #include "ittrans.h"
 #include "unhxtrts.h"
 #include "unicode/utypes.h"
@@ -506,4 +510,4 @@ void UniToHexTransliteratorTest::expectAux(const UnicodeString& tag,
     }
 }
 
-
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */

@@ -8,6 +8,10 @@
 #ifndef __TimeZoneTest__
 #define __TimeZoneTest__
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/simpletz.h" 
 #include "caltztst.h"
 
@@ -76,5 +80,7 @@ private:
     // internal functions
     static UnicodeString& formatMinutes(int32_t min, UnicodeString& rv);
 };
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
  
 #endif // __TimeZoneTest__

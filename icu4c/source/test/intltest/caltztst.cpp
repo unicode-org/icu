@@ -13,6 +13,10 @@
 ********************************************************************************
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "caltztst.h"
 #include "unicode/smpdtfmt.h"
 #include "mutex.h"
@@ -211,5 +215,7 @@ void CalendarTimeZoneTest::cleanup()
     delete fgCalendar;
     fgCalendar   = 0;
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof

@@ -11,6 +11,10 @@
 #ifndef UNITOHEXTRTST_H
 #define UNITOHEXTRTST_H
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 #define ICU_UNICODETOHEXTRANSLITERATOR_USE_DEPRECATES 1
 
 
@@ -65,8 +69,6 @@ public:
 
 };
 
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */
+
 #endif
-
-
-
-

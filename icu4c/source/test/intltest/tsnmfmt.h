@@ -10,6 +10,10 @@
 
 #include <stdlib.h>
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/numfmt.h"
 #include "unicode/fmtable.h"
 #include "unicode/locid.h"
@@ -82,5 +86,7 @@ public:
     }
 
 };
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif

@@ -6,6 +6,9 @@
  ********************************************************************/
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "sdtfmtts.h"
 
 #include "unicode/smpdtfmt.h"
@@ -213,3 +216,5 @@ void IntlTestSimpleDateFormatAPI::testAPI(/*char *par*/)
 
     delete test;
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

@@ -4,6 +4,10 @@
 * All Rights Reserved.
 ****************************************************************************/
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "srchtest.h"
 #include "../cintltst/usrchdat.c"
 #include "unicode/stsearch.h"
@@ -25,7 +29,8 @@
 
 // public contructors and destructors --------------------------------------
 
-StringSearchTest::StringSearchTest() 
+StringSearchTest::StringSearchTest() :
+    m_en_wordbreaker_(NULL), m_en_characterbreaker_(NULL)
 {
     UErrorCode    status = U_ZERO_ERROR;
     
@@ -50,10 +55,12 @@ StringSearchTest::StringSearchTest()
 
     m_es_ = new RuleBasedCollator(rules, status); 
         
+#if !UCONFIG_NO_BREAK_ITERATION
     m_en_wordbreaker_      = BreakIterator::createWordInstance(
                                                     Locale::getEnglish(), status);
     m_en_characterbreaker_ = BreakIterator::createCharacterInstance(
                                                     Locale::getEnglish(), status);
+#endif
 }
 
 StringSearchTest::~StringSearchTest() 
@@ -62,8 +69,10 @@ StringSearchTest::~StringSearchTest()
     delete m_fr_fr_;
     delete m_de_;
     delete m_es_;
+#if !UCONFIG_NO_BREAK_ITERATION
     delete m_en_wordbreaker_;
     delete m_en_characterbreaker_;
+#endif
 }
 
 // public methods ----------------------------------------------------------
@@ -85,7 +94,13 @@ void StringSearchTest::runIndexedTest(int32_t index, UBool exec,
         CASE(2, TestBasic)
         CASE(3, TestNormExact)
         CASE(4, TestStrength)
+#if UCONFIG_NO_BREAK_ITERATION
+    case 5:
+        name = "TestBreakIterator";
+        break;
+#else
         CASE(5, TestBreakIterator)
+#endif
         CASE(6, TestVariable)
         CASE(7, TestOverlap)
         CASE(8, TestCollator)
@@ -103,7 +118,13 @@ void StringSearchTest::runIndexedTest(int32_t index, UBool exec,
         CASE(20, TestCanonical)
         CASE(21, TestNormCanonical)
         CASE(22, TestStrengthCanonical)
+#if UCONFIG_NO_BREAK_ITERATION
+    case 23:
+        name = "TestBreakIteratorCanonical";
+        break;
+#else
         CASE(23, TestBreakIteratorCanonical)
+#endif
         CASE(24, TestVariableCanonical)
         CASE(25, TestOverlapCanonical)
         CASE(26, TestCollatorCanonical)
@@ -141,6 +162,9 @@ RuleBasedCollator * StringSearchTest::getCollator(const char *collator)
  
 BreakIterator * StringSearchTest::getBreakIterator(const char *breaker)
 {
+#if UCONFIG_NO_BREAK_ITERATION
+    return NULL;
+#else
     if (breaker == NULL) {
         return NULL;
     }
@@ -150,6 +174,7 @@ BreakIterator * StringSearchTest::getBreakIterator(const char *breaker)
     else {
         return m_en_characterbreaker_;
     }
+#endif
 }
 
 char * StringSearchTest::toCharString(const UnicodeString &text)
@@ -315,9 +340,11 @@ UBool StringSearchTest::assertEqual(const SearchData *search)
     UnicodeString  pattern;
     pattern.setTo(temp);
 
+#if !UCONFIG_NO_BREAK_ITERATION
     if (breaker != NULL) {
         breaker->setText(text);
     }
+#endif
     collator->setStrength(getECollationStrength(search->strength));
     strsrch = new StringSearch(pattern, text, (RuleBasedCollator *)collator, 
                                breaker, status);
@@ -351,9 +378,11 @@ UBool StringSearchTest::assertCanonicalEqual(const SearchData *search)
     UnicodeString  pattern;
     pattern.setTo(temp);
 
+#if !UCONFIG_NO_BREAK_ITERATION
     if (breaker != NULL) {
         breaker->setText(text);
     }
+#endif
     collator->setStrength(getECollationStrength(search->strength));
     strsrch = new StringSearch(pattern, text, (RuleBasedCollator *)collator, 
                                breaker, status);
@@ -390,9 +419,11 @@ UBool StringSearchTest::assertEqualWithAttribute(const SearchData *search,
     UnicodeString  pattern;
     pattern.setTo(temp);
 
+#if !UCONFIG_NO_BREAK_ITERATION
     if (breaker != NULL) {
         breaker->setText(text);
     }
+#endif
     collator->setStrength(getECollationStrength(search->strength));
     strsrch = new StringSearch(pattern, text, (RuleBasedCollator *)collator, 
                                breaker, status);
@@ -660,6 +691,8 @@ void StringSearchTest::TestStrength()
     }
 }
  
+#if !UCONFIG_NO_BREAK_ITERATION
+
 void StringSearchTest::TestBreakIterator()
 {
     UChar temp[128];
@@ -751,6 +784,8 @@ void StringSearchTest::TestBreakIterator()
          count ++;
     }
 }
+
+#endif
     
 void StringSearchTest::TestVariable()
 {
@@ -1507,6 +1542,8 @@ void StringSearchTest::TestStrengthCanonical()
     }
 }
     
+#if !UCONFIG_NO_BREAK_ITERATION
+
 void StringSearchTest::TestBreakIteratorCanonical()
 {
     UErrorCode status = U_ZERO_ERROR;
@@ -1572,6 +1609,8 @@ void StringSearchTest::TestBreakIteratorCanonical()
          count ++;
     }
 }
+
+#endif
     
 void StringSearchTest::TestVariableCanonical()
 {
@@ -2108,5 +2147,4 @@ void StringSearchTest::TestSearchIterator()
     }
 }
 
-
-
+#endif /* #if !UCONFIG_NO_COLLATION */

@@ -15,6 +15,14 @@
 #ifndef _CANITTST
 #define _CANITTST
 
+#include "unicode/utypes.h"
+
+U_NAMESPACE_BEGIN
+
+class Transliterator;
+
+U_NAMESPACE_END
+
 #include "unicode/normlzr.h"
 #include "unicode/translit.h"
 #include "intltest.h"

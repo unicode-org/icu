@@ -14,6 +14,10 @@
 #ifndef _ENCOLL
 #define _ENCOLL
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "tscoll.h"
 
 class CollationEnglishTest: public IntlTestCollator {
@@ -47,4 +51,7 @@ private:
 
     Collator *myCollation;
 };
+
+#endif /* #if !UCONFIG_NO_COLLATION */
+
 #endif

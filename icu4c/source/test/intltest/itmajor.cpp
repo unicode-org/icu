@@ -58,11 +58,13 @@ void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, const char* &nam
                 break;
 
         case 2: name = "collate";
+#if !UCONFIG_NO_COLLATION
                 if (exec) {
                     logln("TestSuite Collator---"); logln();
                     IntlTestCollator test;
                     callTest( test, par );
                 }
+#endif
                 break;
 
         case 3: name = "unused";
@@ -70,53 +72,63 @@ void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, const char* &nam
                 break;
 
         case 4: name = "format";
+#if !UCONFIG_NO_FORMATTING
                 if (exec) {
                     logln("TestSuite Format---"); logln();
                     IntlTestFormat test;
                     callTest( test, par );
                 }
+#endif
                 break;
 
         case 5: name = "translit";
+#if !UCONFIG_NO_TRANSLITERATION
                 if (exec) {
                     logln("TestSuite Transliterator---"); logln();
                     IntlTestTransliterator test;
                     callTest( test, par );
                 }
+#endif
                 break;
 
         case 6: name = "rbbi";
+#if !UCONFIG_NO_BREAK_ITERATION
                 if (exec) {
                     logln("TestSuite RuleBasedBreakIterator---"); logln();
                     IntlTestRBBI test;
                     callTest( test, par );
                 }
+#endif
                 break;
         case 7: name = "rbnf";
+#if !UCONFIG_NO_FORMATTING
                 if (exec) {
                     logln("TestSuite RuleBasedNumberFormat----"); logln();
                     IntlTestRBNF test;
                     callTest(test, par);
                 }
+#endif
                 break;
         case 8: name = "rbnfrt";
+#if !UCONFIG_NO_FORMATTING
                 if (exec) {
                     logln("TestSuite RuleBasedNumberFormat RT----"); logln();
                     RbnfRoundTripTest test;
                     callTest(test, par);
                 }
+#endif
                 break;
 
-/* Only the C API is exists */
-#ifdef ICU_UNICODECONVERTER_USE_DEPRECATES
         case 9: name = "convert";
+/* Only the C API exists */
+#ifdef ICU_UNICODECONVERTER_USE_DEPRECATES
                 if (exec) {
                     logln("TestSuite Convert---"); logln();
                     IntlTestConvert test;
                     callTest( test, par );
                 }
-                break;
 #endif /* ICU_UNICODECONVERTER_USE_DEPRECATES */
+                break;
 
         default: name = ""; break;
     }

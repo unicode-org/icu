@@ -5,6 +5,9 @@
  ********************************************************************/
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "dcfmapts.h"
 
 #include "unicode/decimfmt.h"
@@ -376,3 +379,5 @@ void IntlTestDecimalFormatAPI::verify(const UnicodeString& message, const Unicod
             errln((UnicodeString)"ERROR: Round() failed:  " + message + got + (UnicodeString)"  Expected : " + expectedStr);
         }
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

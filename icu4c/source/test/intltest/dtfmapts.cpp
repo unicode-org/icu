@@ -4,8 +4,10 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
-
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "dtfmapts.h"
 
 #include "unicode/datefmt.h"
@@ -324,3 +326,5 @@ IntlTestDateFormatAPI::TestNameHiding(void) {
         fmt.format(dateObj, str, fpos, status);
     }
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

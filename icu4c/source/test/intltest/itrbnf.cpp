@@ -4,6 +4,11 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
+
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "itrbnf.h"
 
 #include "unicode/umachine.h"
@@ -138,6 +143,7 @@ IntlTestRBNF::TestAPI() {
     }
   }
 
+#if !UCONFIG_NO_COLLATION
   // test ruleset names
   {
     logln("Testing getNumberOfRuleSetNames, getRuleSetName and format using rule set names");
@@ -198,6 +204,7 @@ IntlTestRBNF::TestAPI() {
     }   
     status = U_ZERO_ERROR;
   }
+#endif
 
   // clean up
   logln("Cleaning up");
@@ -958,6 +965,7 @@ IntlTestRBNF::TestEnglishSpellout()
 
         doTest(formatter, testData, TRUE);
 
+#if !UCONFIG_NO_COLLATION
         formatter->setLenient(TRUE);
         static const char* lpTestData[][2] = {
             { "fifty-7", "57" },
@@ -969,6 +977,7 @@ IntlTestRBNF::TestEnglishSpellout()
             { NULL, NULL}
         };
         doLenientParseTest(formatter, lpTestData);
+#endif
     }
     delete formatter;
 }
@@ -1036,12 +1045,14 @@ IntlTestRBNF::TestDurations()
         
         doTest(formatter, testData, TRUE);
         
+#if !UCONFIG_NO_COLLATION
         formatter->setLenient(TRUE);
         static const char* lpTestData[][2] = {
             { "2-51-33", "10,293" },
             { NULL, NULL}
         };
         doLenientParseTest(formatter, lpTestData);
+#endif
     }
     delete formatter;
 }
@@ -1128,6 +1139,7 @@ IntlTestRBNF::TestFrenchSpellout()
         
         doTest(formatter, testData, TRUE);
         
+#if !UCONFIG_NO_COLLATION
         formatter->setLenient(TRUE);
         static const char* lpTestData[][2] = {
             { "trente-un", "31" },
@@ -1135,6 +1147,7 @@ IntlTestRBNF::TestFrenchSpellout()
             { NULL, NULL}
         };
         doLenientParseTest(formatter, lpTestData);
+#endif
     }
     delete formatter;
 }
@@ -1256,12 +1269,14 @@ IntlTestRBNF::TestGermanSpellout()
         
         doTest(formatter, testData, TRUE);
         
+#if !UCONFIG_NO_COLLATION
         formatter->setLenient(TRUE);
         static const char* lpTestData[][2] = {
             { "ein Tausend sechs Hundert fuenfunddreissig", "1,635" },
             { NULL, NULL}
         };
         doLenientParseTest(formatter, lpTestData);
+#endif
     }
     delete formatter;
 }
@@ -1509,3 +1524,5 @@ IntlTestRBNF::TestRBNFDisabled() {
 
 /* U_HAVE_RBNF */
 #endif
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

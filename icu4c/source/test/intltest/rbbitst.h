@@ -13,6 +13,9 @@
 #ifndef RBBITEST_H
 #define RBBITEST_H
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_BREAK_ITERATION
 
 #include "intltest.h"
 #include "unicode/brkiter.h"
@@ -160,5 +163,6 @@ private:
 
 };
 
+#endif /* #if !UCONFIG_NO_BREAK_ITERATION */
 
 #endif

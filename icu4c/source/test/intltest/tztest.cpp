@@ -4,6 +4,10 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/timezone.h"
 #include "unicode/simpletz.h"
 #include "unicode/calendar.h"
@@ -1028,3 +1032,5 @@ void TimeZoneTest::TestCountries() {
     //  delete[] s;  // TODO:  bad API
     uprv_free(s);
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

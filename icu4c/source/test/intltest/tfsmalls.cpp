@@ -5,8 +5,9 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
-
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
 
 #include "intltest.h"
 #include "tfsmalls.h"
@@ -314,3 +315,5 @@ void TestFormatSmallClasses::runIndexedTest( int32_t index, UBool exec, const ch
         default: name = ""; break; //needed to end loop
     }
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

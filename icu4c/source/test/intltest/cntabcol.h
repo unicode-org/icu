@@ -8,6 +8,10 @@
 #ifndef CONTRACTIONTABLETEST_H
 #define CONTRACTIONTABLETEST_H
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "tscoll.h"
 #include "ucol_cnt.h"
 #include "utrie.h"
@@ -31,4 +35,7 @@ private:
     UNewTrie *testMapping;
     UErrorCode status;
 };
+
+#endif /* #if !UCONFIG_NO_COLLATION */
+
 #endif

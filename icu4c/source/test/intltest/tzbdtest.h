@@ -8,6 +8,9 @@
 #define __TimeZoneBoundaryTest__
  
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/timezone.h"
 #include "unicode/simpletz.h"
 #include "caltztst.h"
@@ -89,5 +92,7 @@ private:
     static const UDate PST_1997_END;
     static const UDate INTERVAL;
 };
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
  
 #endif // __TimeZoneBoundaryTest__

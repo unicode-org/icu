@@ -31,7 +31,12 @@ StringCaseTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     if (exec) logln("TestSuite StringCaseTest: ");
     switch (index) {
         case 0: name = "TestCaseConversion"; if (exec) TestCaseConversion(); break;
-        case 1: name = "TestTitleCasing"; if(exec) TestTitleCasing(); break;
+        case 1:
+            name = "TestTitleCasing";
+#if !UCONFIG_NO_BREAK_ITERATION
+            if(exec) TestTitleCasing();
+#endif
+            break;
 
         default: name = ""; break; //needed to end loop
     }
@@ -308,6 +313,8 @@ StringCaseTest::TestCaseConversion()
     }
 }
 
+#if !UCONFIG_NO_BREAK_ITERATION
+
 void
 StringCaseTest::TestTitleCasing() {
   UErrorCode status = U_ZERO_ERROR;
@@ -421,3 +428,4 @@ StringCaseTest::TestTitleCasing() {
     ures_close(casing);
 #endif
 }
+#endif

@@ -5,8 +5,9 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
-
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
 
 #include "intltest.h"
 #include "tchcfmt.h"
@@ -819,3 +820,5 @@ void TestChoiceFormat::TestPatterns(void) {
     _testPattern("0.0#a|2.0#b|1.0#c", FALSE,
                  0, 0, 0, 0, 0, 0);
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

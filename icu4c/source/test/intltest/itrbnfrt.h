@@ -8,9 +8,11 @@
 #ifndef ITRBNFRT_H
 #define ITRBNFRT_H
 
-#include "intltest.h"
-
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
+#include "intltest.h"
 #include "unicode/rbnf.h"
 
 class RbnfRoundTripTest : public IntlTest {
@@ -90,6 +92,8 @@ class RbnfRoundTripTest : public IntlTest {
   /* U_HAVE_RBNF */
 #endif
 };
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 // endif ITRBNFRT_H
 #endif

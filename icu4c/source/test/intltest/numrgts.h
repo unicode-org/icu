@@ -7,6 +7,10 @@
 #ifndef _NUMBERFORMATREGRESSIONTEST_
 #define _NUMBERFORMATREGRESSIONTEST_
  
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/unistr.h"
 #include "unicode/numfmt.h"
 #include "unicode/decimfmt.h"
@@ -152,6 +156,8 @@ public:
     virtual void applyPattern(const UnicodeString&, UParseError&, UErrorCode&){
     }
 };
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif // _NUMBERFORMATREGRESSIONTEST_
 //eof

@@ -4,6 +4,10 @@
  * others. All Rights Reserved.
  ********************************************************************/
  
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "numrgts.h"
 
 #include <float.h> // DBL_MIN, DBL_MAX
@@ -2355,3 +2359,4 @@ void NumberFormatRegressionTest::TestJ691(void) {
     delete df;
 }
 
+#endif /* #if !UCONFIG_NO_FORMATTING */

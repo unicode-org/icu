@@ -51,10 +51,12 @@ public:
      * test that mutexes work 
      **/
     void TestMutex(void);
+#if !UCONFIG_NO_FORMATTING
     /**
      * test that intl functions work in a multithreaded context
      **/
     void TestThreadedIntl(void);
+#endif
 };
 
 #endif

@@ -7,6 +7,10 @@
 #ifndef _CALENDARREGRESSIONTEST_
 #define _CALENDARREGRESSIONTEST_
  
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/calendar.h"
 #include "unicode/gregocal.h"
 #include "intltest.h"
@@ -78,6 +82,7 @@ protected:
     UBool failure(UErrorCode status, const char* msg);
 };
 
+#endif /* #if !UCONFIG_NO_FORMATTING */
  
 #endif // _CALENDARREGRESSIONTEST_
 //eof

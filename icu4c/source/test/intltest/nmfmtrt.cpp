@@ -4,6 +4,10 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "nmfmtrt.h"
 
 #include "unicode/dcfmtsym.h"
@@ -320,3 +324,5 @@ NumberFormatRoundTripTest::escape(UnicodeString& s)
     }
     return s;
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

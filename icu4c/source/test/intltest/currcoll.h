@@ -12,6 +12,10 @@
 #ifndef _CURRCOLL
 #define _CURRCOLL
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "unicode/coleitr.h"
 #include "tscoll.h"
 
@@ -29,5 +33,7 @@ public:
 
     void currencyTest(/*char *par*/);
 };
+
+#endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif

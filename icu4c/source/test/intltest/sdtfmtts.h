@@ -7,6 +7,9 @@
 #ifndef _INTLTESTSIMPLEDATEFORMATAPI
 #define _INTLTESTSIMPLEDATEFORMATAPI
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
 
 #include "intltest.h"
 
@@ -22,5 +25,7 @@ private:
      **/
     void testAPI(/* char* par */);
 };
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif

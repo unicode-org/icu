@@ -13,6 +13,9 @@
 #ifndef RBBIAPITEST_H
 #define RBBIAPITEST_H
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_BREAK_ITERATION
 
 #include "intltest.h"
 #include "unicode/rbbi.h"
@@ -87,8 +90,6 @@ public:
 
 };
 
+#endif /* #if !UCONFIG_NO_BREAK_ITERATION */
+
 #endif
-
-
-
-

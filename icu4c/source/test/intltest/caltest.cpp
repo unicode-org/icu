@@ -4,7 +4,10 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
- 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "caltest.h"
 #include "unicode/gregocal.h"
 #include "unicode/smpdtfmt.h"
@@ -1679,5 +1682,7 @@ void CalendarTest::TestWOY(void) {
 }
 
 #undef CHECK
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof

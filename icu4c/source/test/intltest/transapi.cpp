@@ -8,6 +8,10 @@
 *   1/03/2000   Madhu        Creation.
 ************************************************************************/
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_TRANSLITERATION
+
 /* These APIs are becoming private */
 #define ICU_NULLTRANSLITERATOR_USE_DEPRECATES 1
 #define ICU_RULEBASEDTRANSLITERATOR_USE_DEPRECATES 1
@@ -852,6 +856,4 @@ void TransliteratorAPITest::doTest(const UnicodeString& message, const UnicodeSt
         errln((UnicodeString)"FAIL:" + message + " failed  Got-->" + prettify(result)+ ", Expected--> " + prettify(expected) );
 }
 
-
-
-
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */

@@ -7,6 +7,10 @@
 #ifndef _INTLTESTDECIMALFORMATSYMBOLS
 #define _INTLTESTDECIMALFORMATSYMBOLS
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/unistr.h"
 #include "unicode/dcfmtsym.h"
 #include "intltest.h"
@@ -25,5 +29,7 @@ private:
      /** helper functions**/
     void Verify(double value, const UnicodeString& pattern, DecimalFormatSymbols sym, const UnicodeString& expected);
 };
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif

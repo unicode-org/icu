@@ -8,6 +8,10 @@
 #ifndef _CALTZTST
 #define _CALTZTST
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/unistr.h"
 #include "unicode/calendar.h"
 #include "unicode/datefmt.h"
@@ -53,6 +57,8 @@ protected:
      Calendar*                 getCalendar(void);
     static void                releaseCalendar(Calendar *c);
 };
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif //_CALTZTST
 //eof
