@@ -778,6 +778,7 @@ struct UCollator {
     UBool freeOnClose;
     UBool freeOptionsOnClose;
     UBool freeRulesOnClose;
+    UBool freeImageOnClose;
 
     UBool latinOneUse;
     UBool latinOneRegenTable;
