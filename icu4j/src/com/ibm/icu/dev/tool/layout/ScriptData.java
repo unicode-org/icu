@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/ScriptData.java,v $
- * $Date: 2003/01/14 19:05:23 $
- * $Revision: 1.1 $
+ * $Date: 2003/04/15 01:23:49 $
+ * $Revision: 1.2 $
  *
  *******************************************************************************
  */
@@ -160,6 +160,20 @@ public class ScriptData
         }
         
         return "zyyx";
+    }
+    
+    public String getScriptTagLabel(int scriptCode)
+    {
+        return getScriptTag(scriptCode);
+    }
+    
+    public String makeScriptTag(int scriptCode)
+    {
+        if (scriptCode >= fMinScript && scriptCode <= fMaxScript) {
+            return TagUtilities.makeTag(fScriptTags[scriptCode - fMinScript]);
+        } else {
+            return "0x00000000";
+        }
     }
     
     public String getScriptName(int scriptCode)

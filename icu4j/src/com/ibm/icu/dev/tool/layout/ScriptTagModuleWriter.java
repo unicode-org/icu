@@ -5,14 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/ScriptTagModuleWriter.java,v $
- * $Date: 2003/01/14 19:05:23 $
- * $Revision: 1.1 $
+ * $Date: 2003/04/15 01:23:49 $
+ * $Revision: 1.2 $
  *
  *******************************************************************************
  */
 package com.ibm.icu.dev.tool.layout;
-
-import com.ibm.icu.impl.Utility;
 
 public class ScriptTagModuleWriter extends ModuleWriter
 {
@@ -29,32 +27,43 @@ public class ScriptTagModuleWriter extends ModuleWriter
         return result;
     }
     
-    public ScriptTagModuleWriter(ScriptData theScriptData)
+    public ScriptTagModuleWriter(ScriptData theScriptData, LanguageData theLanguageData)
     {
-        super(theScriptData);
+        super(theScriptData, theLanguageData);
     }
     
     public void writeHeaderFile(String fileName)
     {
-        int minScript = scriptData.getMinScript();
-        int maxScript = scriptData.getMaxScript();
+        int min = scriptData.getMinScript();
+        int max = scriptData.getMaxScript();
         
         openFile(fileName);
         writeHeader();
         output.println(hPreamble);
         
-        for (int script = minScript; script <= maxScript; script += 1) {
-            String tag = scriptData.getScriptTag(script);
-            
+        for (int script = min; script <= max; script += 1) {
             output.print("const LETag ");
-            output.print(tag);
-            output.print("ScriptTag = 0x");
-            output.print(Utility.hex(scriptTag(tag), 8));
-            output.print("; /* '");
-            output.print(tag);
-            output.print("' (");
+            output.print(scriptData.getScriptTagLabel(script));
+            output.print("ScriptTag = ");
+            output.print(scriptData.makeScriptTag(script));
+            output.print("; /* ");
             output.print(scriptData.getScriptName(script));
-            output.println(") */");
+            output.println(" */");
+        }
+        
+        output.println(hScriptPostamble);
+        
+        min = languageData.getMinLanguage();
+        max = languageData.getMaxLanguage();
+        
+        for (int language = min; language <= max; language += 1) {
+            output.print("const LETag ");
+            output.print(languageData.getLanguageTagLabel(language));
+            output.print("LanguageTag = ");
+            output.print(languageData.makeLanguageTag(language));
+            output.print("; /* ");
+            output.print(languageData.getLanguageName(language));
+            output.println(" */");
         }
         
         output.println(hPostamble);
@@ -63,24 +72,43 @@ public class ScriptTagModuleWriter extends ModuleWriter
     
     public void writeCPPFile(String fileName)
     {
-        int minScript = scriptData.getMinScript();
-        int maxScript = scriptData.getMaxScript();
+        int min = scriptData.getMinScript();
+        int max = scriptData.getMaxScript();
         
         openFile(fileName);
         writeHeader();
         output.println(cppPreamble);
         
-        for (int script = minScript; script <= maxScript; script += 1) {
+        for (int script = min; script <= max; script += 1) {
             String tag = scriptData.getScriptTag(script);
             
             output.print("    ");
             output.print(tag);
             output.print("ScriptTag");
-            output.print((script == maxScript? " " : ","));
+            output.print((script == max? " " : ","));
             output.print(" /* '");
             output.print(tag);
             output.print("' (");
             output.print(scriptData.getScriptName(script));
+            output.println(") */");
+        }
+        
+        output.println(cppScriptPostamble);
+        
+        min = languageData.getMinLanguage();
+        max = languageData.getMaxLanguage();
+        
+        for (int language = min; language <= max; language += 1) {
+            String tag = languageData.getLanguageTag(language);
+            
+            output.print("    ");
+            output.print(languageData.getLanguageTagLabel(language));
+            output.print("LanguageTag");
+            output.print((language == max? " " : ","));
+            output.print(" /* '");
+            output.print(languageData.getLanguageTag(language));
+            output.print("' (");
+            output.print(languageData.getLanguageName(language));
             output.println(") */");
         }
         
@@ -93,7 +121,7 @@ public class ScriptTagModuleWriter extends ModuleWriter
         writeHeaderFile(fileName + ".h");
         writeCPPFile(fileName + ".cpp");
     }
-    
+
     private static final String hPreamble = 
     "#ifndef __SCRIPTANDLANGUAGES_H\n" + 
     "#define __SCRIPTANDLANGUAGES_H\n" +
@@ -104,15 +132,17 @@ public class ScriptTagModuleWriter extends ModuleWriter
     " */\n" +
     "\n" +
     "#include \"LETypes.h\"\n" +
-    "#include \"LEScripts.h\"\n" +
     "\n" +
     "U_NAMESPACE_BEGIN\n";
     
-    private static final String hPostamble =
+    private static final String hScriptPostamble =
     "\n" +
     "const LETag nullScriptTag = 0x00000000; /* ''     (NULL) */\n" +
+    "\n";
+    
+    private static final String hPostamble =
     "\n" +
-    "const LETag noLangSysTag  = 0x00000000; /* ''     (NONE) */\n" +
+    "const LETag nullLanguageTag  = 0x00000000; /* ''     (NONE) */\n" +
     "\n" +
     "U_NAMESPACE_END\n" +
     "#endif";
@@ -125,6 +155,11 @@ public class ScriptTagModuleWriter extends ModuleWriter
     "U_NAMESPACE_BEGIN\n" +
     "\n" +
     "const LETag OpenTypeLayoutEngine::scriptTags[] = {";
+    
+    private static final String cppScriptPostamble =
+    "};\n" +
+    "\n" +
+    "const LETag OpenTypeLayoutEngine::languageTags[] = {";
     
     private static final String cppPostamble =
     "};\n" +

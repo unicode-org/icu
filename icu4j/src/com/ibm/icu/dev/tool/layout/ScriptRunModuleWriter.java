@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/ScriptRunModuleWriter.java,v $
- * $Date: 2003/01/14 19:05:23 $
- * $Revision: 1.1 $
+ * $Date: 2003/04/15 01:23:49 $
+ * $Revision: 1.2 $
  *
  *******************************************************************************
  */
@@ -19,7 +19,7 @@ public class ScriptRunModuleWriter extends ModuleWriter
 {
     public ScriptRunModuleWriter(ScriptData theScriptData)
     {
-        super(theScriptData);
+        super(theScriptData, null);
     }
     
     public void writeScriptRuns(String fileName)
