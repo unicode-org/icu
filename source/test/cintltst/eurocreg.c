@@ -84,62 +84,65 @@ UBool isEuroAware(const UConverter*);
 
 void TestEuroRegression()
 {
-  int32_t i=0;
-  
-  do 
+    int32_t i=0;
+
+    do 
     {
-      UErrorCode err = U_ZERO_ERROR;
-      UConverter* myConv =  ucnv_open(convertersToCheck[i], &err);
-      if (U_FAILURE(err)&&convertersToCheck[i][0]) log_err("%s  \tMISSING [%s]\n", convertersToCheck[i], u_errorName(err));
-      else 
-	{
-	  if (isEuroAware(myConv)) log_verbose("%s  \tsupports euro\n", convertersToCheck[i]);
-	  else log_err("%s  \tDOES NOT support euro\n", convertersToCheck[i]);
-	  ucnv_close(myConv);
-	}
+        UErrorCode err = U_ZERO_ERROR;
+        UConverter* myConv =  ucnv_open(convertersToCheck[i], &err);
+        if (U_FAILURE(err)&&convertersToCheck[i][0])
+            log_err("%s  \tMISSING [%s]\n", convertersToCheck[i], u_errorName(err));
+        else 
+        {
+            if (isEuroAware(myConv))
+                log_verbose("%s  \tsupports euro\n", convertersToCheck[i]);
+            else
+                log_err("%s  \tDOES NOT support euro\n", convertersToCheck[i]);
+            ucnv_close(myConv);
+        }
     } while (convertersToCheck[++i][0]);
 }
 
 UBool isEuroAware(const UConverter* myConv)
 {
-  static const UChar euroString[2] = { 0x20AC, 0x0000 };
-  char target[2];
-  UChar euroBack[2];
-  int32_t targetSize, euroBackSize;
-  UErrorCode err = U_ZERO_ERROR;
-  /*const char* myName =   ucnv_getName(myConv, &err);*/
+    static const UChar euroString[2] = { 0x20AC, 0x0000 };
+    char target[2];
+    UChar euroBack[2];
+    int32_t targetSize, euroBackSize;
+    UErrorCode err = U_ZERO_ERROR;
+    /*const char* myName =   ucnv_getName(myConv, &err);*/
 
-  targetSize = ucnv_fromUChars(myConv,
-	  target,
-			       2,
-			       euroString,
-                   -1,
-			       &err);
-  if (U_FAILURE(err))
+    targetSize = ucnv_fromUChars(myConv,
+            target,
+            2,
+            euroString,
+            -1,
+            &err);
+    if (U_FAILURE(err))
     {
       log_err("Failure Occured in ucnv_fromUChars euro roundtrip test\n");
       return FALSE;
     }
-  euroBackSize = ucnv_toUChars(myConv,
-			       euroBack,
-			       2,
-			       target,
-			       targetSize,
-			       &err);
-  if (U_FAILURE(err))
+    euroBackSize = ucnv_toUChars(myConv,
+            euroBack,
+            2,
+            target,
+            targetSize,
+            &err);
+    if (U_FAILURE(err))
     {
-      log_err("Failure Occured in ucnv_toUChars euro roundtrip test\n");
-      return FALSE;
+        log_err("Failure Occured in ucnv_toUChars euro roundtrip test\n");
+        return FALSE;
     }
-  if (u_strcmp(euroString, euroBack)) 
+    if (u_strcmp(euroString, euroBack)) 
     {
-      /*      log_err("%s FAILED Euro rountrip\n", myName);*/
-      return FALSE;
+        /*      log_err("%s FAILED Euro rountrip\n", myName);*/
+        return FALSE;
     }
-  else 
+    else 
     {
-      /*      log_verbose("%s PASSED Euro rountrip\n", myName);*/
-      return TRUE;
+        /*      log_verbose("%s PASSED Euro rountrip\n", myName);*/
+        return TRUE;
     }
-		
+
 }

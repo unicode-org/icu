@@ -35,7 +35,7 @@ void addDateForTest(TestNode** root)
     addTest(root, &TestSymbols, "tsformat/cdattst/TestSymbols");
 }
 /* Testing the DateFormat API */
-void TestDateFormat()
+static void TestDateFormat()
 {
     UDateFormat *def, *fr, *it, *de, *def1, *fr_pat;
     UDateFormat *copy;
@@ -308,7 +308,7 @@ void TestDateFormat()
 }
 
 /*Testing udat_getSymbols() and udat_setSymbols() and udat_countSymbols()*/
-void TestSymbols()
+static void TestSymbols()
 {
     UDateFormat *def, *fr;
     UErrorCode status = U_ZERO_ERROR;
@@ -523,7 +523,7 @@ free(pattern);
 }
 
 /*INTERNAL FUNCTIONS USED*/
-void VerifygetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, int32_t index, const char* expected)
+static void VerifygetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, int32_t index, const char* expected)
 {
     UChar *pattern=NULL;
     UErrorCode status = U_ZERO_ERROR;
@@ -558,7 +558,7 @@ void VerifygetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, int32_t i
     free(pattern);
 }
 
-void VerifysetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, int32_t index, const char* expected)
+static void VerifysetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, int32_t index, const char* expected)
 {
     UChar *result=NULL;
     UChar *value=NULL;
@@ -600,7 +600,7 @@ void VerifysetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, int32_t i
 }
 
 
-void VerifygetsetSymbols(UDateFormat* from, UDateFormat* to, UDateFormatSymbolType type, int32_t index)
+static void VerifygetsetSymbols(UDateFormat* from, UDateFormat* to, UDateFormatSymbolType type, int32_t index)
 {
     UChar *result=NULL;
     UChar *value=NULL;
@@ -654,8 +654,7 @@ void VerifygetsetSymbols(UDateFormat* from, UDateFormat* to, UDateFormatSymbolTy
 }
 
 
-
-UChar* myNumformat(const UNumberFormat* numfor, double d)
+static UChar* myNumformat(const UNumberFormat* numfor, double d)
 {
     UChar *result2=NULL;
     int32_t resultlength, resultlengthneeded;

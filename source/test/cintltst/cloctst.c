@@ -139,7 +139,7 @@ void addLocaleTest(TestNode** root)
         
 
 /* testing uloc(), uloc_getName(), uloc_getLanguage(), uloc_getVariant(), uloc_getCountry() */
-void TestBasicGetters() {
+static void TestBasicGetters() {
     int32_t i;
     int32_t cap;
     UErrorCode status = U_ZERO_ERROR;
@@ -216,8 +216,9 @@ void TestBasicGetters() {
     }
 
 }
+
 /* testing uloc_getISO3Language(), uloc_getISO3Country(),  */
-void TestSimpleResourceInfo() {
+static void TestSimpleResourceInfo() {
 
     int32_t i;
     char* testLocale = 0;
@@ -261,7 +262,8 @@ void TestSimpleResourceInfo() {
  free(expected);
  free(testLocale);
 }
-void TestDisplayNames() 
+
+static void TestDisplayNames() 
 {
   /* sfb 990721 
      Can't just save a pointer to the default locale.  
@@ -303,7 +305,7 @@ void TestDisplayNames()
     log_verbose("  In locale = gr_EL..\n");
     doTestDisplayNames("el_GR", DLANG_EL, FALSE);
 
-   uloc_setDefault("fr_FR", &err);
+    uloc_setDefault("fr_FR", &err);
     if (U_FAILURE(err)) {
         log_err("Locale::setDefault returned error code  %s\n", myErrorName(err));
         return;
@@ -334,7 +336,7 @@ void TestDisplayNames()
 
 
 /* test for uloc_getAvialable()  and uloc_countAvilable()*/
-void TestGetAvailableLocales()
+static void TestGetAvailableLocales()
 {
 
     const char *locList;
@@ -361,7 +363,7 @@ void TestGetAvailableLocales()
 }
 
 /* test for u_getDataDirectory, u_setDataDirectory, uloc_getISO3Language */
-void TestDataDirectory()
+static void TestDataDirectory()
 {
 
     char            oldDirectory[80];
@@ -405,7 +407,7 @@ void TestDataDirectory()
 
 /*=========================================================== */
 
-void doTestDisplayNames(const char* inLocale,
+static void doTestDisplayNames(const char* inLocale,
                                     int32_t compareIndex,
                                     int32_t defaultIsFrench)
 {
@@ -614,8 +616,9 @@ void doTestDisplayNames(const char* inLocale,
     }
     free(testLocale);
 }
+
 /* test for uloc_getISOLanguages, uloc_getISOCountries */
-void TestISOFunctions()
+static void TestISOFunctions()
 {
 
 
@@ -669,7 +672,7 @@ static UChar greekDisplayName[] = { 0x03b5, 0x03bb, 0x03bb, 0x03b7, 0x03bd, 0x03
     0x03ac, 0x20, 0x28, 0x0395, 0x03bb, 0x03bb, 0x03ac, 0x03b4, 0x03b1, 0x29, 0 };
 
 
-void setUpDataTable()
+static void setUpDataTable()
 {
     int32_t i,j;
     dataTable = (UChar***)(calloc(sizeof(UChar**),23));
@@ -688,10 +691,11 @@ void setUpDataTable()
     u_strncpy(dataTable[DNAME_EL][GREEKS],greekDisplayName,17);
 
 }
+
 /**
  * @bug 4011756 4011380
  */
-void TestISO3Fallback() 
+static void TestISO3Fallback() 
 {
     const char* test="xx_YY";
 
@@ -713,7 +717,7 @@ void TestISO3Fallback()
 /**
  * @bug 4118587
  */
-void TestSimpleDisplayNames() 
+static void TestSimpleDisplayNames() 
 {
   /*
      This test is different from TestDisplayNames because TestDisplayNames checks
@@ -751,7 +755,7 @@ void TestSimpleDisplayNames()
 /**
  * @bug 4118595
  */
-void TestUninstalledISO3Names() 
+static void TestUninstalledISO3Names() 
 {
   /* This test checks to make sure getISO3Language and getISO3Country work right
      even for locales that are not installed. */
@@ -784,7 +788,7 @@ void TestUninstalledISO3Names()
 }
 
 
-void TestVariantParsing()
+static void TestVariantParsing()
 {
     const char* en_US_custom="en_US_De Anza_Cupertino_California_United States_Earth";
     const char* dispName="English (United States, DE ANZA_CUPERTINO_CALIFORNIA_UNITED STATES_EARTH)";

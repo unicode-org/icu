@@ -29,30 +29,30 @@ static void printUSeq(const UChar* a, int len);
 static void TestNextUChar(UConverter* cnv, const char* source, const char* limit, const uint32_t results[], const char* message);
 static void TestNextUCharError(UConverter* cnv, const char* source, const char* limit, UErrorCode expected, const char* message);
 
-void TestNewConvertWithBufferSizes(int32_t osize, int32_t isize) ;
-void TestConverterTypesAndStarters(void);
-void TestAmbiguous(void);
-void TestUTF8(void);
-void TestUTF16BE(void);
-void TestUTF16LE(void);
-void TestLATIN1(void);
-void TestSBCS(void);
-void TestDBCS(void);
-void TestMBCS(void);
-void TestISO_2022(void);
-void TestISO_2022_JP(void);
-void TestISO_2022_JP_1(void);
-void TestISO_2022_JP_2(void);
-void TestISO_2022_KR(void);
-void TestISO_2022_CN(void);
-void TestISO_2022_CN_EXT(void);
-void TestHZ(void);
-void TestISO_2022_JP_Next(void);
-void TestEBCDIC_STATEFUL(void);
-void TestGB18030(void);
-void TestLMBCS(void);
-void TestJitterbug255(void);
-void TestEBCDICUS4XML(void);
+static void TestNewConvertWithBufferSizes(int32_t osize, int32_t isize) ;
+static void TestConverterTypesAndStarters(void);
+static void TestAmbiguous(void);
+static void TestUTF8(void);
+static void TestUTF16BE(void);
+static void TestUTF16LE(void);
+static void TestLATIN1(void);
+static void TestSBCS(void);
+static void TestDBCS(void);
+static void TestMBCS(void);
+static void TestISO_2022(void);
+static void TestISO_2022_JP(void);
+static void TestISO_2022_JP_1(void);
+static void TestISO_2022_JP_2(void);
+static void TestISO_2022_KR(void);
+static void TestISO_2022_CN(void);
+static void TestISO_2022_CN_EXT(void);
+static void TestHZ(void);
+static void TestISO_2022_JP_Next(void);
+static void TestEBCDIC_STATEFUL(void);
+static void TestGB18030(void);
+static void TestLMBCS(void);
+static void TestJitterbug255(void);
+static void TestEBCDICUS4XML(void);
 
 #define NEW_MAX_BUFFER 999
 
@@ -62,14 +62,16 @@ static char     gNuConvTestName[1024];
 
 #define nct_min(x,y)  ((x<y) ? x : y)
 
-void printSeq(const unsigned char* a, int len)
+static void printSeq(const unsigned char* a, int len)
 {
     int i=0;
     log_verbose("{");
-    while (i<len) log_verbose("0x%02x ", a[i++]);
+    while (i<len)
+        log_verbose("0x%02x ", a[i++]);
     log_verbose("}\n");
 }
-void printUSeq(const UChar* a, int len)
+
+static void printUSeq(const UChar* a, int len)
 {
     int i=0;
     log_verbose("{U+");
@@ -77,21 +79,25 @@ void printUSeq(const UChar* a, int len)
     log_verbose("}\n");
 }
 
-void printSeqErr(const unsigned char* a, int len)
+static void printSeqErr(const unsigned char* a, int len)
 {
     int i=0;
     fprintf(stderr, "{");
-    while (i<len)  fprintf(stderr, "0x%02x ", a[i++]);
+    while (i<len)
+        fprintf(stderr, "0x%02x ", a[i++]);
     fprintf(stderr, "}\n");
 }
+
 void printUSeqErr(const UChar* a, int len)
 {
     int i=0;
     fprintf(stderr, "{U+");
-    while (i<len) fprintf(stderr, "0x%04x ", a[i++]);
+    while (i<len)
+        fprintf(stderr, "0x%04x ", a[i++]);
     fprintf(stderr,"}\n");
 }
-void 
+
+static void 
 TestNextUChar(UConverter* cnv, const char* source, const char* limit, const uint32_t results[], const char* message)
 {
      const char* s0;
@@ -114,7 +120,8 @@ TestNextUChar(UConverter* cnv, const char* source, const char* limit, const uint
         r+=2;
     }
 }
-void 
+
+static void 
 TestNextUCharError(UConverter* cnv, const char* source, const char* limit, UErrorCode expected, const char* message)
 {
      const char* s=(char*)source;
@@ -129,7 +136,8 @@ TestNextUCharError(UConverter* cnv, const char* source, const char* limit, UErro
      }
      
 }   
-void TestInBufSizes(void)
+
+static void TestInBufSizes(void)
 {
   TestNewConvertWithBufferSizes(NEW_MAX_BUFFER,1);
 #if 1
@@ -144,7 +152,7 @@ void TestInBufSizes(void)
 #endif
 }
 
-void TestOutBufSizes(void)
+static void TestOutBufSizes(void)
 {
 #if 1
   TestNewConvertWithBufferSizes(NEW_MAX_BUFFER,NEW_MAX_BUFFER);
@@ -193,7 +201,7 @@ void addTestNewConvert(TestNode** root)
    This convenience function lets us make the error messages actually useful.
 */
 
-void setNuConvTestName(const char *codepage, const char *direction)
+static void setNuConvTestName(const char *codepage, const char *direction)
 {
   sprintf(gNuConvTestName, "[Testing %s %s Unicode, InputBufSiz=%d, OutputBufSiz=%d]",
       codepage,
@@ -202,7 +210,7 @@ void setNuConvTestName(const char *codepage, const char *direction)
       gOutBufferSize);
 }
 
-UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_t *expect, int expectLen, 
+static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_t *expect, int expectLen, 
                 const char *codepage, int32_t *expectOffsets)
 {
     UErrorCode status = U_ZERO_ERROR;
@@ -360,7 +368,7 @@ UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_t *expe
     }
 }
 
-UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *expect, int expectlen, 
+static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *expect, int expectlen, 
                const char *codepage, int32_t *expectOffsets)
 {
     UErrorCode status = U_ZERO_ERROR;
@@ -517,7 +525,7 @@ UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *expect,
 }
 
 
-void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize ) 
+static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize ) 
 {
 /** test chars #1 */
     /*  1 2 3  1Han 2Han 3Han .  */
@@ -874,7 +882,7 @@ void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
 }  
      
 
-void TestConverterTypesAndStarters()
+static void TestConverterTypesAndStarters()
 {
     UConverter* myConverter[3];
     UErrorCode err = U_ZERO_ERROR;
@@ -958,7 +966,8 @@ void TestConverterTypesAndStarters()
     ucnv_close(myConverter[1]);
     ucnv_close(myConverter[2]);
 }
-void TestAmbiguous()
+
+static void TestAmbiguous()
 {
     UErrorCode status = U_ZERO_ERROR;
     UConverter *ascii_cnv = 0, *sjis_cnv = 0;
@@ -1037,7 +1046,7 @@ void TestAmbiguous()
 }
   
 void
-TestUTF8() {
+static TestUTF8() {
     /* test input */
     static const uint8_t in[]={
         0x61,
@@ -1071,8 +1080,9 @@ TestUTF8() {
     TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit < source");
     ucnv_close(cnv);
 }
+
 void
-TestUTF16BE() {
+static TestUTF16BE() {
     /* test input */
     static const uint8_t in[]={
         0x00, 0x61, 
@@ -1118,7 +1128,8 @@ TestUTF16BE() {
     }
     ucnv_close(cnv);
 }
-void
+
+static void
 TestUTF16LE() {
     /* test input */
     static const uint8_t in[]={
@@ -1162,7 +1173,8 @@ TestUTF16LE() {
    
     ucnv_close(cnv);
 }
-void
+
+static void
 TestLATIN1() {
     /* test input */
     static const uint8_t in[]={ 
@@ -1200,7 +1212,7 @@ TestLATIN1() {
     ucnv_close(cnv);
 }
 
-void
+static void
 TestSBCS() {
     /* test input */
     static const uint8_t in[]={ 0x61, 0xc0, 0x80, 0xe0, 0xf0, 0xf4};
@@ -1235,7 +1247,7 @@ TestSBCS() {
     ucnv_close(cnv);
 }
 
-void
+static void
 TestDBCS() {
     /* test input */
     static const uint8_t in[]={
@@ -1280,7 +1292,8 @@ TestDBCS() {
     }
     ucnv_close(cnv);
 }
-void
+
+static void
 TestMBCS() {
     /* test input */
     static const uint8_t in[]={
@@ -1330,7 +1343,8 @@ TestMBCS() {
     ucnv_close(cnv);
 
 }
-void
+
+static void
 TestISO_2022() {
     /* test input */
     static const uint8_t in[]={
@@ -1383,12 +1397,12 @@ TestISO_2022() {
     }
     ucnv_close(cnv);
 }
-void
+
+static void
 TestISO_2022_JP_Next() {
-        
-   
 }
-void
+
+static void
 TestSmallTargetBuffer(const uint16_t* source, const UChar* sourceLimit,UConverter* cnv, char* cnvName){
     const UChar* uSource;
     const UChar* uSourceLimit;
@@ -1457,7 +1471,8 @@ TestSmallTargetBuffer(const uint16_t* source, const UChar* sourceLimit,UConverte
     free(uBuf);
     free(cBuf);
 }
-void TestSmallSourceBuffer(const uint16_t* source, const UChar* sourceLimit,UConverter* cnv, char* cnvName){
+
+static void TestSmallSourceBuffer(const uint16_t* source, const UChar* sourceLimit,UConverter* cnv, char* cnvName){
     const UChar* uSource;
     const UChar* uSourceLimit;
     const char* cSource;
@@ -1528,7 +1543,7 @@ void TestSmallSourceBuffer(const uint16_t* source, const UChar* sourceLimit,UCon
     free(cBuf);
 }
 
-void 
+static void 
 TestGetNextUChar2022(UConverter* cnv, const char* source, const char* limit, 
                      const uint16_t results[], const char* message){     
      const char* s0;
@@ -1550,7 +1565,7 @@ TestGetNextUChar2022(UConverter* cnv, const char* source, const char* limit,
     }
 }
 
-void
+static void
 TestHZ() {
     /* test input */
     static const uint16_t in[]={
@@ -1628,7 +1643,7 @@ TestHZ() {
     free(cBuf);
 }
 
-void
+static void
 TestISO_2022_JP() {
     /* test input */
     static const uint16_t in[]={  
@@ -1711,7 +1726,7 @@ TestISO_2022_JP() {
     free(offsets);
 }
 
-void
+static void
 TestISO_2022_JP_1() {
     /* test input */
     static const uint16_t in[]={
@@ -1794,7 +1809,7 @@ TestISO_2022_JP_1() {
     free(cBuf);
 }
 
-void
+static void
 TestISO_2022_JP_2() {
     /* test input */
     static const uint16_t in[]={
@@ -1878,7 +1893,7 @@ TestISO_2022_JP_2() {
     free(offsets);
 }
 
-void
+static void
 TestISO_2022_KR() {
     /* test input */
     static const uint16_t in[]={
@@ -1947,7 +1962,8 @@ TestISO_2022_KR() {
     free(cBuf);
     free(offsets);
 }
-void
+
+static void
 TestISO_2022_CN_EXT() {
     /* test input */
     static const uint16_t in[]={
@@ -2034,7 +2050,7 @@ TestISO_2022_CN_EXT() {
     free(offsets);
 }
 
-void
+static void
 TestISO_2022_CN() {
     /* test input */
     static const uint16_t in[]={
@@ -2119,7 +2135,8 @@ TestISO_2022_CN() {
     free(cBuf);
     free(offsets);
 }
-void
+
+static void
 TestEBCDIC_STATEFUL() {
     /* test input */
     static const uint8_t in[]={
@@ -2186,7 +2203,7 @@ TestEBCDIC_STATEFUL() {
 
 }
 
-void
+static void
 TestGB18030() {
     /* test input */
         static const UChar u2[]={
@@ -2237,7 +2254,7 @@ TestGB18030() {
 #endif
     };
 
-    const char *source=(const char *)in,*limit=(const char *)in+sizeof(in);
+/*    const char *source=(const char *)in,*limit=(const char *)in+sizeof(in); */
     UErrorCode errorCode=U_ZERO_ERROR;
     UConverter *cnv=ucnv_open("gb18030", &errorCode);
     if(U_FAILURE(errorCode)) {
@@ -2248,7 +2265,7 @@ TestGB18030() {
     ucnv_close(cnv);
 }
 
-void
+static void
 TestLMBCS() {
     /* LMBCS-1 string */
     static const uint8_t pszLMBCS[]={
@@ -2807,7 +2824,7 @@ TestLMBCS() {
 }
 
 
-void TestJitterbug255()
+static void TestJitterbug255()
 {
     const uint8_t testBytes[] = { 0x95, 0xcf, 0x8a, 0xb7, 0x0d, 0x0a, 0x00 };
     const uint8_t *testBuffer = testBytes;
@@ -2833,7 +2850,7 @@ void TestJitterbug255()
     ucnv_close(cnv);
 }
 
-void TestEBCDICUS4XML()
+static void TestEBCDICUS4XML()
 {
     UChar unicodes_x[] = {0x0000, 0x0000, 0x0000, 0x0000};
     const UChar toUnicodeMaps_x[] = {0x000A, 0x000A, 0x000D, 0x0000};

@@ -40,7 +40,7 @@ void addCalTest(TestNode** root)
 
 }
 
-void TestCalendar()
+static void TestCalendar()
 {
     UCalendar *caldef = 0, *caldef2 = 0, *calfr = 0, *calit = 0;
     int32_t count, count2, offset,i;
@@ -267,7 +267,7 @@ void TestCalendar()
 /* "GMT" */
 static const UChar fgGMTID [] = { 0x0047, 0x004d, 0x0054, 0x0000 };
 
-void TestGetSetDateAPI()
+static void TestGetSetDateAPI()
 {
     UCalendar *caldef = 0, *caldef2 = 0;
     UChar *tzID =0;
@@ -431,7 +431,7 @@ void TestGetSetDateAPI()
 /**
  * Confirm the functioning of the calendar field related functions.
  */
-void TestFieldGetSet()
+static void TestFieldGetSet()
 {
     UCalendar *cal = 0;
     UChar *tzID = 0;
@@ -575,8 +575,8 @@ void TestFieldGetSet()
 /**
  * Execute adding and rolling in Calendar extensively,
  */
-void TestAddRollExtensive()
-{    
+static void TestAddRollExtensive()
+{
     UCalendar *cal = 0;
     int32_t i,limit;
     UChar* tzID = 0;
@@ -736,7 +736,7 @@ void TestAddRollExtensive()
 
 /*------------------------------------------------------ */
 /*Testing the Limits for various Fields of Calendar*/
-void TestGetLimits()
+static void TestGetLimits()
 {
     UCalendar *cal = 0;
     int32_t min, max, gr_min, le_max, ac_min, ac_max, val;
@@ -834,7 +834,7 @@ void TestGetLimits()
  * Test that the days of the week progress properly when add is called repeatedly
  * for increments of 24 days.
  */
-void TestDOWProgression()
+static void TestDOWProgression()
 {
     int32_t initialDOW, DOW, newDOW, expectedDOW;
     UCalendar *cal = 0;
@@ -899,7 +899,7 @@ void TestDOWProgression()
 /**
  * Confirm that the offset between local time and GMT behaves as expected.
  */
-void TestGMTvsLocal()
+static void TestGMTvsLocal()
 {
     log_verbose("\nTesting the offset between the GMT and local time\n");
     testZones(1999, 1, 1, 12, 0, 0);
@@ -909,7 +909,7 @@ void TestGMTvsLocal()
  
 /* ------------------------------------- */
  
-void testZones(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn, int32_t sc)
+static void testZones(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn, int32_t sc)
 {
     int32_t offset,utc, expected;
     UCalendar *gmtcal = 0, *cal = 0;
@@ -986,7 +986,7 @@ void testZones(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn, int32
 /*------------------------------------------------------------------------------------------- */
  
 /* ------------------------------------- */
-void checkDateTime(UCalendar* c, 
+static void checkDateTime(UCalendar* c, 
                         int32_t y, int32_t m, int32_t d, 
                         int32_t hr, int32_t min, int32_t sec, 
                         int32_t ms, UCalendarDateFields field)
@@ -1022,8 +1022,7 @@ void checkDateTime(UCalendar* c,
 }
  
 /* ------------------------------------- */
-void checkDate(UCalendar* c, int32_t y, int32_t m, int32_t d)
-
+static void checkDate(UCalendar* c, int32_t y, int32_t m, int32_t d)
 {
     UErrorCode status = U_ZERO_ERROR;
     if (ucal_get(c,UCAL_YEAR, &status) != y ||
@@ -1050,7 +1049,7 @@ void checkDate(UCalendar* c, int32_t y, int32_t m, int32_t d)
  
 /* ------------------------------------- */
  
-void verify1(const char* msg, UCalendar* c, UDateFormat* dat, int32_t year, int32_t month, int32_t day)
+static void verify1(const char* msg, UCalendar* c, UDateFormat* dat, int32_t year, int32_t month, int32_t day)
 {
     UDate d1;
     UErrorCode status = U_ZERO_ERROR;
@@ -1084,8 +1083,8 @@ void verify1(const char* msg, UCalendar* c, UDateFormat* dat, int32_t year, int3
 }
  
 /* ------------------------------------ */
-void verify2(const char* msg, UCalendar* c, UDateFormat* dat, int32_t year, int32_t month, int32_t day, 
-                                                                int32_t hour, int32_t min, int32_t sec, int32_t am_pm)
+static void verify2(const char* msg, UCalendar* c, UDateFormat* dat, int32_t year, int32_t month, int32_t day, 
+                                                                     int32_t hour, int32_t min, int32_t sec, int32_t am_pm)
 {
     UDate d1;
     char str[3];

@@ -8,7 +8,7 @@
 * File CUTILTST.C
 *
 * Modification History:
-*        Name                     Description            
+*        Name                     Description
 *     Madhu Katragadda               Creation
 *********************************************************************************
 */
@@ -28,7 +28,7 @@ void addUtility(TestNode** root)
     addLocaleTest(root);
     addUnicodeTest(root);
     addResourceBundleTest(root);
-	addNEWResourceBundleTest(root);
+    addNEWResourceBundleTest(root);
     addSCSUTest(root);
     addHashtableTest(root);
     addCStringTest(root);

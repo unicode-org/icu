@@ -18,12 +18,12 @@
 
 #define TEST(x) addTest(root, &x, "utrans/" # x)
 
-void TestAPI();
-void TestSimpleRules();
-void TestFilter();
-void TestOpenInverse();
-void TestClone();
-void TestRegisterUnregister();
+static void TestAPI();
+static void TestSimpleRules();
+static void TestFilter();
+static void TestOpenInverse();
+static void TestClone();
+static void TestRegisterUnregister();
 
 static void _expectRules(const char*, const char*, const char*);
 static void _expect(const UTransliterator* trans, const char* cfrom, const char* cto);
@@ -38,7 +38,7 @@ addUTransTest(TestNode** root) {
     TEST(TestRegisterUnregister);
 }
 
-void TestAPI() {
+static void TestAPI() {
     enum { BUF_CAP = 128 };
     char buf[BUF_CAP], buf2[BUF_CAP];
     UErrorCode status = U_ZERO_ERROR;
@@ -78,7 +78,7 @@ void TestAPI() {
     utrans_close(trans);
 }
 
-void TestOpenInverse(){
+static void TestOpenInverse(){
     UErrorCode status=U_ZERO_ERROR;
     UTransliterator* t1=NULL;
     UTransliterator* inverse1=NULL;
@@ -106,11 +106,11 @@ void TestOpenInverse(){
          };
      
     for(i=0; i<sizeof(TransID)/sizeof(TransID[0]); i=i+2){
-		t1=utrans_open(TransID[i], UTRANS_FORWARD, &status);
-		if(t1 == NULL || U_FAILURE(status)){
+        t1=utrans_open(TransID[i], UTRANS_FORWARD, &status);
+        if(t1 == NULL || U_FAILURE(status)){
             log_err("FAIL: in instantiation for id=%s\n", TransID[i]);
-			continue;
-		}
+            continue;
+        }
         inverse1=utrans_openInverse(t1, &status);
         if(U_FAILURE(status)){
             log_err("FAIL: utrans_openInverse() failed for id=%s. Error=%s\n", TransID[i], myErrorName(status));
@@ -121,11 +121,11 @@ void TestOpenInverse(){
             log_err("FAIL :openInverse() for %s returned %s instead of %s\n", TransID[i], buf1, TransID[i+1]);
         }
         utrans_close(t1);
-		utrans_close(inverse1);
+        utrans_close(inverse1);
    }
 }
 
-void TestClone(){
+static void TestClone(){
     UErrorCode status=U_ZERO_ERROR;
     UTransliterator* t1=NULL;
     UTransliterator* t2=NULL;
@@ -134,20 +134,20 @@ void TestClone(){
     enum { BUF_CAP = 128 };
     char buf1[BUF_CAP], buf2[BUF_CAP], buf3[BUF_CAP];
    
-	t1=utrans_open("Latin-Devanagari", UTRANS_FORWARD, &status);
+    t1=utrans_open("Latin-Devanagari", UTRANS_FORWARD, &status);
     if(U_FAILURE(status)){
         log_err("FAIL: construction\n");
         return;
     }
-	t2=utrans_open("Latin-Hebrew", UTRANS_FORWARD, &status);
-	if(U_FAILURE(status)){
+    t2=utrans_open("Latin-Hebrew", UTRANS_FORWARD, &status);
+    if(U_FAILURE(status)){
         log_err("FAIL: construction\n");
         utrans_close(t1);
         return;
     }
 
-	t3=utrans_clone(t1, &status);
-	t4=utrans_clone(t2, &status);
+    t3=utrans_clone(t1, &status);
+    t4=utrans_clone(t2, &status);
 
     utrans_getID(t1, buf1, BUF_CAP);
     utrans_getID(t2, buf2, BUF_CAP);
@@ -172,7 +172,7 @@ void TestClone(){
 
 }
 
-void TestRegisterUnregister(){
+static void TestRegisterUnregister(){
     UErrorCode status=U_ZERO_ERROR;
     UTransliterator* t1=NULL;
     UTransliterator* rules=NULL;
@@ -229,7 +229,7 @@ void TestRegisterUnregister(){
     utrans_close(inverse1);
 }
 
-void TestSimpleRules() {
+static void TestSimpleRules() {
     /* Test rules */
     /* Example: rules 1. ab>x|y
      *                2. yc>z
@@ -275,7 +275,7 @@ void TestSimpleRules() {
                  "abcdefgABCDEFGU", "&bcd&fg!^**!^*&");
 }
 
-void TestFilter() {
+static void TestFilter() {
     UErrorCode status = U_ZERO_ERROR;
     UChar filt[128];
     UChar buf[128];
@@ -339,7 +339,7 @@ void TestFilter() {
     utrans_close(hex);
 }
 
-void _expectRules(const char* crules,
+static void _expectRules(const char* crules,
                   const char* cfrom,
                   const char* cto) {
     /* u_uastrcpy has no capacity param for the buffer -- so just
@@ -366,7 +366,7 @@ void _expectRules(const char* crules,
     utrans_close(trans);
 }
 
-void _expect(const UTransliterator* trans,
+static void _expect(const UTransliterator* trans,
              const char* cfrom,
              const char* cto) {
     /* u_uastrcpy has no capacity param for the buffer -- so just

@@ -384,13 +384,13 @@ void TestSortKey()
 
     if(ucol_getNormalization(col) != UCOL_DEFAULT_NORMALIZATION)
       {
-	log_err("ERROR: default collation did not have UCOL_DEFAULT_NORMALIZATION !\n");
+        log_err("ERROR: default collation did not have UCOL_DEFAULT_NORMALIZATION !\n");
       }
 
 
     if(ucol_getStrength(col) != UCOL_DEFAULT_STRENGTH)
       {
-	log_err("ERROR: default collation did not have UCOL_DEFAULT_STRENGTH !\n");
+        log_err("ERROR: default collation did not have UCOL_DEFAULT_STRENGTH !\n");
       }
 
     test1=(UChar*)malloc(sizeof(UChar) * 6);
@@ -442,10 +442,10 @@ void TestSortKey()
       strcpy(junk3, " abcda[3] ");
 
       for(i=0;i<sortklen;i++)
-	{
-	  sprintf(junk2+strlen(junk2), "%02X ",(int)( 0xFF & sortk2[i]));
-	  sprintf(junk3+strlen(junk3), "%02X ",(int)( 0xFF & sortk3[i]));
-	}
+        {
+          sprintf(junk2+strlen(junk2), "%02X ",(int)( 0xFF & sortk2[i]));
+          sprintf(junk3+strlen(junk3), "%02X ",(int)( 0xFF & sortk3[i]));
+        }
       
       log_verbose("%s\n", junk2);
       log_verbose("%s\n", junk3);

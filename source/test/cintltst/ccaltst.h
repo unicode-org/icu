@@ -51,24 +51,24 @@
     /**
      * test subroutine used by TestGMTvsLocal()
      */
-    void testZones(int32_t, int32_t, int32_t, int32_t, int32_t, int32_t);
+    static void testZones(int32_t, int32_t, int32_t, int32_t, int32_t, int32_t);
 
 /*Internal functions used*/
     /**
      * test subroutines used by TestAddRollExtensive()
      **/
-    void checkDate(UCalendar* c, int32_t y, int32_t m, int32_t d);
+    static void checkDate(UCalendar* c, int32_t y, int32_t m, int32_t d);
 
-    void checkDateTime(UCalendar* c, int32_t y, int32_t m, int32_t d, 
+    static void checkDateTime(UCalendar* c, int32_t y, int32_t m, int32_t d, 
                             int32_t hr, int32_t min, int32_t sec, int32_t ms, 
                                                     UCalendarDateFields field);
 
     /**
      * test subroutines used by TestGetSetDateAPI and TestFieldGetSet
      **/
-    void verify1(const char* msg, UCalendar* c, UDateFormat* dat, int32_t year, int32_t month, int32_t day);
+    static void verify1(const char* msg, UCalendar* c, UDateFormat* dat, int32_t year, int32_t month, int32_t day);
 
-    void verify2(const char* msg, UCalendar* c, UDateFormat* dat, int32_t year, int32_t month, int32_t day,
+    static void verify2(const char* msg, UCalendar* c, UDateFormat* dat, int32_t year, int32_t month, int32_t day,
                                                                 int32_t hour, int32_t min, int32_t sec, int32_t am_pm);
 
 

@@ -189,7 +189,7 @@ void addDanishCollTest(TestNode** root)
 
     
 
-void doTest(UCollator* myCollation, const UChar source[], const UChar target[], UCollationResult result)
+static void doTest(UCollator* myCollation, const UChar source[], const UChar target[], UCollationResult result)
 {
     int32_t sortklen1, sortklen2, sortklenmax, sortklenmin;
     int32_t temp;
@@ -220,7 +220,7 @@ void doTest(UCollator* myCollation, const UChar source[], const UChar target[], 
     free(sortKey2);
 }
 
-void TestTertiary( )
+static void TestTertiary( )
 {
     
     int32_t i,j;
@@ -247,12 +247,11 @@ void TestTertiary( )
             doTest(myCollation, testNTList[i], testNTList[j], UCOL_LESS);
         }
     }
-ucol_close(myCollation);
+    ucol_close(myCollation);
 }
 
-void TestPrimary()
+static void TestPrimary()
 {
-    
     int32_t i;
     UErrorCode status = U_ZERO_ERROR;
     myCollation = ucol_open("da_DK", &status);
@@ -264,6 +263,6 @@ void TestPrimary()
     {
         doTest(myCollation, testSourceCases[i], testTargetCases[i], results[i]);
     }
-  ucol_close(myCollation);  
+    ucol_close(myCollation);  
 }
 

@@ -413,7 +413,7 @@ void addAllCollTest(TestNode** root)
     addTest(root, &TestJB581, "tscoll/callcoll/TestJB581");      
 }
 
-void doTest(UCollator* myCollation, const UChar source[], const UChar target[], UCollationResult result)
+static void doTest(UCollator* myCollation, const UChar source[], const UChar target[], UCollationResult result)
 {
     int32_t sortklen1, sortklen2, sortklenmax, sortklenmin;
     int32_t temp;
@@ -444,7 +444,7 @@ void doTest(UCollator* myCollation, const UChar source[], const UChar target[], 
     free(sortKey2);
 }
 
-void TestTertiary()
+static void TestTertiary()
 {
     int32_t len,i;
     UChar *rules, *newRules;
@@ -473,7 +473,7 @@ void TestTertiary()
     myCollation = 0;
 }
 
-void TestPrimary( )
+static void TestPrimary( )
 {
     int32_t len,i;
     UChar *rules, *newRules;
@@ -505,7 +505,7 @@ void TestPrimary( )
     myCollation = 0;
 }
 
-void TestSecondary()
+static void TestSecondary()
 {
     int32_t i;
     int32_t len;
@@ -535,7 +535,8 @@ void TestSecondary()
     ucol_close(myCollation);
     myCollation = 0;
 }
-void TestIdentical()
+
+static void TestIdentical()
 {
     int32_t i;
     int32_t len;
@@ -564,7 +565,8 @@ void TestIdentical()
     ucol_close(myCollation);
     myCollation = 0;
 }
-void TestExtra()
+
+static void TestExtra()
 {
     int32_t i, j;
     int32_t len;
@@ -600,18 +602,18 @@ void TestExtra()
     myCollation = 0;
 }
 
-void TestJB581(void)
+static void TestJB581(void)
 {
-    UChar 		dispName	[100]; 
-    int32_t 	bufferLen 	= 0;
-    UChar 		source		[100];
-    UChar 		target		[100];
-    UCollationResult result 	= UCOL_EQUAL;
-    uint8_t 		sourceKeyArray	[100];
-    uint8_t 		targetKeyArray	[100]; 
-    int32_t 	sourceKeyOut 	= 0, 
-		    targetKeyOut 	= 0;
-    UCollator	*myCollator	= 0;
+    UChar       dispName    [100]; 
+    int32_t     bufferLen   = 0;
+    UChar       source      [100];
+    UChar       target      [100];
+    UCollationResult result     = UCOL_EQUAL;
+    uint8_t     sourceKeyArray  [100];
+    uint8_t     targetKeyArray  [100]; 
+    int32_t     sourceKeyOut    = 0, 
+                targetKeyOut    = 0;
+    UCollator   *myCollator = 0;
     UErrorCode status = U_ZERO_ERROR;
 
     u_uastrcpy(source, "This is a test.");
