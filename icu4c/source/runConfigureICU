@@ -189,8 +189,8 @@ case $platform in
     SOLARISGCC)
         THE_OS=SOLARIS
         THE_COMP="the GNU C++"
-        CXXFLAGS=-I/usr/local/include/g++; export CXXFLAGS
-        LDFLAGS=-R/usr/local/lib; export LDFLAGS
+        CXXFLAGS="$CXXFLAGS -I/usr/local/include/g++"; export CXXFLAGS
+        LDFLAGS="$LDFLAGS -R/usr/local/lib"; export LDFLAGS
         RELEASE_CXXFLAGS=-O
         RELEASE_CFLAGS=-O3
         ;;
