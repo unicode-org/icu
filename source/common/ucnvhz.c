@@ -262,62 +262,22 @@ UConverter_toUnicode_HZ_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
             }
             else if(targetUniChar>=0xfffe){
 SAVE_STATE:
-                {
-                   const char *saveSource = args->source;
-                    UChar *saveTarget = args->target; 
-                    int32_t *saveOffsets = args->offsets;
-                    
-                    UConverterCallbackReason reason;
-                    int32_t currentOffset ;
-                    int32_t saveIndex = (int32_t)(myTarget - args->target);
-
-                    args->converter->invalidCharLength=0;
-                   
-                    if(targetUniChar == 0xfffe){
-                        reason = UCNV_UNASSIGNED;
-                        *err = U_INVALID_CHAR_FOUND;
-                    }
-                    else{
-                        reason = UCNV_ILLEGAL;
-                        *err = U_ILLEGAL_CHAR_FOUND;
-                    }
-                    if(myData->isStateDBCS){
-
-                        args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char)(tempBuf[0]-0x80);
-                        args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char)(tempBuf[1]-0x80);
-                        currentOffset= (int32_t)(mySource - args->source -2);
-                    
-                    }
-                    else{
-                        args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char)mySourceChar;
-                        currentOffset= (int32_t)(mySource - args->source -1);
-                    }
-                    args->offsets = args->offsets?args->offsets+(myTarget - args->target):0;
-                    args->target = myTarget;
-                    args->source = mySource;
-                    myTarget = saveTarget;
-                    args->converter->fromCharErrorBehaviour ( 
-                         args->converter->toUContext, 
-                         args, 
-                         args->converter->invalidCharBuffer, 
-                         args->converter->invalidCharLength, 
-                         reason, 
-                         err); 
-
-                    if(args->offsets){
-                        args->offsets = saveOffsets; 
-
-                        for (;saveIndex < (args->target - myTarget);saveIndex++) {
-                          args->offsets[saveIndex] += currentOffset;
-                        } 
-                    }
-                    args->source  = saveSource;
-                    myTarget = args->target;
-                    args->target  = saveTarget;
-                    args->offsets = saveOffsets;
-                    if(U_FAILURE(*err))
-                        break;
+                if(targetUniChar == 0xfffe){
+                    *err = U_INVALID_CHAR_FOUND;
                 }
+                else{
+                    *err = U_ILLEGAL_CHAR_FOUND;
+                }
+                if(myData->isStateDBCS){
+                    args->converter->toUBytes[0] = (uint8_t)(tempBuf[0]-0x80);
+                    args->converter->toUBytes[1] = (uint8_t)(tempBuf[1]-0x80);
+                    args->converter->toULength=2;
+                }
+                else{
+                    args->converter->toUBytes[0] = (uint8_t)mySourceChar;
+                    args->converter->toULength=1;
+                }
+                break;
             }
         }
         else{

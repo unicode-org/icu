@@ -359,52 +359,51 @@ _UTF16OEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
 #   define _UTF16LEFromUnicodeWithOffsets   _UTF16PEFromUnicodeWithOffsets
 #endif
 
-static UChar32 T_UConverter_getNextUChar_UTF16_BE(UConverterToUnicodeArgs* args,
-                                                   UErrorCode* err)
-{
-    UChar32 myUChar;
-    uint16_t first;
-    /*Checks boundaries and set appropriate error codes*/
-    if (args->source+2 > args->sourceLimit) 
-    {
-        if (args->source >= args->sourceLimit)
-        {
-            /*Either caller has reached the end of the byte stream*/
-            *err = U_INDEX_OUTOFBOUNDS_ERROR;
-        }
-        else
-        {
-            /* a character was cut in half*/
-            *err = U_TRUNCATED_CHAR_FOUND;
-        }
+static UChar32
+_UTF16BEGetNextUChar(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
+    const uint8_t *s, *sourceLimit;
+    UChar32 c;
+
+    s=(const uint8_t *)pArgs->source;
+    sourceLimit=(const uint8_t *)pArgs->sourceLimit;
+
+    if(s>=sourceLimit) {
+        /* no input */
+        *err=U_INDEX_OUTOFBOUNDS_ERROR;
         return 0xffff;
     }
 
-    /*Gets the corresponding codepoint*/
-    first = (uint16_t)(((uint16_t)(*(args->source)) << 8) |((uint8_t)*((args->source)+1)));
-    myUChar = first;
-    args->source += 2;
+    if(s+2>sourceLimit) {
+        /* only one byte: truncated UChar */
+        pArgs->converter->toUBytes[0]=*s++;
+        pArgs->converter->toULength=1;
+        pArgs->source=(const char *)s;
+        *err = U_TRUNCATED_CHAR_FOUND;
+        return 0xffff;
+    }
 
-    if(UTF_IS_FIRST_SURROGATE(first)) {
-        uint16_t second;
+    /* get one UChar */
+    c=((UChar32)*s<<8)|s[1];
+    s+=2;
 
-        if (args->source+2 > args->sourceLimit) {
-            *err = U_TRUNCATED_CHAR_FOUND;
-            return 0xffff;
-        }
+    /*
+     * check for surrogate pairs
+     * surrogate code points are not currently considered an error
+     * TODO see Jitterbug 1838
+     */
+    if(U16_IS_LEAD(c) && s+2<=sourceLimit) {
+        UChar trail;
 
-        /* get the second surrogate and assemble the code point */
-        second = (uint16_t)(((uint16_t)(*(args->source)) << 8) |((uint8_t)*(args->source+1)));
-
-        /* ignore unmatched surrogates and just deliver the first one in such a case */
-        if(UTF_IS_SECOND_SURROGATE(second)) {
-            /* matched pair, get pair value */
-            myUChar = UTF16_GET_PAIR_VALUE(first, second);
-            args->source += 2;
+        /* get a second UChar and see if it is a trail surrogate */
+        trail=((UChar)*s<<8)|s[1];
+        if(U16_IS_TRAIL(trail)) {
+            c=U16_GET_SUPPLEMENTARY(c, trail);
+            s+=2;
         }
     }
 
-    return myUChar;
+    pArgs->source=(const char *)s;
+    return c;
 } 
 
 static const UConverterImpl _UTF16BEImpl={
@@ -421,7 +420,7 @@ static const UConverterImpl _UTF16BEImpl={
     _UTF16BEToUnicodeWithOffsets,
     _UTF16BEFromUnicodeWithOffsets,
     _UTF16BEFromUnicodeWithOffsets,
-    T_UConverter_getNextUChar_UTF16_BE,
+    _UTF16BEGetNextUChar,
 
     NULL,
     NULL,
@@ -450,57 +449,51 @@ const UConverterSharedData _UTF16BEData={
 
 /* UTF-16LE ----------------------------------------------------------------- */
 
-static UChar32 T_UConverter_getNextUChar_UTF16_LE(UConverterToUnicodeArgs* args,
-                                                   UErrorCode* err)
-{
-    UChar32 myUChar;
-    uint16_t first;
-    /*Checks boundaries and set appropriate error codes*/
-    if (args->source+2 > args->sourceLimit) 
-    {
-        if (args->source >= args->sourceLimit)
-        {
-            /*Either caller has reached the end of the byte stream*/
-            *err = U_INDEX_OUTOFBOUNDS_ERROR;
-        }
-        else
-        {
-            /* a character was cut in half*/
-            *err = U_TRUNCATED_CHAR_FOUND;
-        }
+static UChar32
+_UTF16LEGetNextUChar(UConverterToUnicodeArgs *pArgs, UErrorCode *err) {
+    const uint8_t *s, *sourceLimit;
+    UChar32 c;
 
+    s=(const uint8_t *)pArgs->source;
+    sourceLimit=(const uint8_t *)pArgs->sourceLimit;
+
+    if(s>=sourceLimit) {
+        /* no input */
+        *err=U_INDEX_OUTOFBOUNDS_ERROR;
         return 0xffff;
     }
 
-    /*Gets the corresponding codepoint*/
-    first = (uint16_t)(((uint16_t)*((args->source)+1) << 8) | ((uint8_t)(*(args->source))));
-    myUChar=first;
-    /*updates the source*/
-    args->source += 2;  
+    if(s+2>sourceLimit) {
+        /* only one byte: truncated UChar */
+        pArgs->converter->toUBytes[0]=*s++;
+        pArgs->converter->toULength=1;
+        pArgs->source=(const char *)s;
+        *err = U_TRUNCATED_CHAR_FOUND;
+        return 0xffff;
+    }
 
-    if (UTF_IS_FIRST_SURROGATE(first))
-    {
-        uint16_t second;
+    /* get one UChar */
+    c=((UChar32)s[1]<<8)|*s;
+    s+=2;
 
-        if (args->source+2 > args->sourceLimit)
-        {
-           *err = U_TRUNCATED_CHAR_FOUND;
-            return 0xffff;
-        }
+    /*
+     * check for surrogate pairs
+     * surrogate code points are not currently considered an error
+     * TODO see Jitterbug 1838
+     */
+    if(U16_IS_LEAD(c) && s+2<=sourceLimit) {
+        UChar trail;
 
-        /* get the second surrogate and assemble the code point */
-        second = (uint16_t)(((uint16_t)*(args->source+1) << 8) |((uint8_t)(*(args->source))));
-
-        /* ignore unmatched surrogates and just deliver the first one in such a case */
-        if(UTF_IS_SECOND_SURROGATE(second))
-        {
-            /* matched pair, get pair value */
-            myUChar = UTF16_GET_PAIR_VALUE(first, second);
-            args->source += 2;
+        /* get a second UChar and see if it is a trail surrogate */
+        trail=((UChar)s[1]<<8)|*s;
+        if(U16_IS_TRAIL(trail)) {
+            c=U16_GET_SUPPLEMENTARY(c, trail);
+            s+=2;
         }
     }
 
-    return myUChar;
+    pArgs->source=(const char *)s;
+    return c;
 } 
 
 static const UConverterImpl _UTF16LEImpl={
@@ -517,7 +510,7 @@ static const UConverterImpl _UTF16LEImpl={
     _UTF16LEToUnicodeWithOffsets,
     _UTF16LEFromUnicodeWithOffsets,
     _UTF16LEFromUnicodeWithOffsets,
-    T_UConverter_getNextUChar_UTF16_LE,
+    _UTF16LEGetNextUChar,
 
     NULL,
     NULL,
@@ -725,9 +718,9 @@ _UTF16GetNextUChar(UConverterToUnicodeArgs *pArgs,
                    UErrorCode *pErrorCode) {
     switch(pArgs->converter->mode) {
     case 8:
-        return T_UConverter_getNextUChar_UTF16_BE(pArgs, pErrorCode);
+        return _UTF16BEGetNextUChar(pArgs, pErrorCode);
     case 9:
-        return T_UConverter_getNextUChar_UTF16_LE(pArgs, pErrorCode);
+        return _UTF16LEGetNextUChar(pArgs, pErrorCode);
     default:
         return UCNV_GET_NEXT_UCHAR_USE_TO_U;
     }

@@ -482,10 +482,10 @@ _ASCIIToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     }
 
     if(c>0x7f) {
-        /* callback(illegal); copy the current bytes to invalidCharBuffer */
+        /* callback(illegal); copy the current bytes to toUBytes[] */
         UConverter *cnv=pArgs->converter;
-        cnv->invalidCharBuffer[0]=c;
-        cnv->invalidCharLength=1;
+        cnv->toUBytes[0]=c;
+        cnv->toULength=1;
         *pErrorCode=U_ILLEGAL_CHAR_FOUND;
     } else if(source<sourceLimit && target>=pArgs->targetLimit) {
         /* target is full */
@@ -511,62 +511,25 @@ _ASCIIToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
 static UChar32
 _ASCIIGetNextUChar(UConverterToUnicodeArgs *pArgs,
                    UErrorCode *pErrorCode) {
-    UChar buffer[UTF_MAX_CHAR_LENGTH];
     const uint8_t *source;
     uint8_t b;
 
-    /* set up the local pointers */
     source=(const uint8_t *)pArgs->source;
-
-    /* conversion loop */
-    while(source<(const uint8_t *)pArgs->sourceLimit) {
+    if(source<(const uint8_t *)pArgs->sourceLimit) {
         b=*source++;
         pArgs->source=(const char *)source;
         if(b<=0x7f) {
             return b;
         } else {
-            /* call the callback function with all the preparations and post-processing */
             UConverter *cnv=pArgs->converter;
-
-            /* callback(illegal) */
+            cnv->toUBytes[0]=b;
+            cnv->toULength=1;
             *pErrorCode=U_ILLEGAL_CHAR_FOUND;
-
-            /* update the arguments structure */
-            pArgs->target=buffer;
-            pArgs->targetLimit=buffer+UTF_MAX_CHAR_LENGTH;
-
-            /* copy the current byte to invalidCharBuffer */
-            cnv->invalidCharBuffer[0]=(char)b;
-            cnv->invalidCharLength=1;
-
-            /* call the callback function */
-            cnv->fromCharErrorBehaviour(cnv->toUContext, pArgs, cnv->invalidCharBuffer, 1, UCNV_ILLEGAL, pErrorCode);
-
-            /* update the source pointer */
-            source=(const uint8_t *)pArgs->source;
-
-            /*
-             * return the first character if the callback wrote some
-             * we do not need to goto finish because the converter state is already set
-             */
-            if(U_SUCCESS(*pErrorCode)) {
-                int32_t length=pArgs->target-buffer;
-                if(length>0) {
-                    return ucnv_getUChar32KeepOverflow(cnv, buffer, length);
-                }
-                /* else (callback did not write anything) continue */
-            } else if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
-                *pErrorCode=U_ZERO_ERROR;
-                return ucnv_getUChar32KeepOverflow(cnv, buffer, UTF_MAX_CHAR_LENGTH);
-            } else {
-                /* break on error */
-                /* ### what if a callback set an error but _also_ generated output?! */
-                return 0xffff;
-            }
+            return 0xffff;
         }
     }
 
-    /* no output because of empty input or only skipping callbacks */
+    /* no output because of empty input */
     *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
     return 0xffff;
 }
