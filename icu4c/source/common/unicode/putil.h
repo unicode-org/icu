@@ -70,9 +70,6 @@ U_CAPI void     U_EXPORT2 uprv_longBitsFromDouble(double d, int32_t *hi, uint32_
 #   define uprv_isNegative(number) (*((signed char *)&(number)+sizeof(number)-1)<0)
 #endif
 
-/* Conversion from a digit to the character with radix base from 2-19 */
-#define T_CString_itosOffset(a) ((a)<=9?('0'+(a)):('A'+(a)-10))
-
 /*
  * Return the floor of the log base 10 of a given double.
  * This method compensates for inaccuracies which arise naturally when
