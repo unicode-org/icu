@@ -194,7 +194,7 @@ public:
      * @param value     value of the format sybmol
      * @stable ICU 2.0
      */
-    void setSymbol(ENumberFormatSymbol symbol, UnicodeString value);
+    void setSymbol(ENumberFormatSymbol symbol, const UnicodeString &value);
 
     /**
      * Returns the locale for which this object was constructed.
@@ -324,9 +324,8 @@ DecimalFormatSymbols::getConstSymbol(ENumberFormatSymbol symbol) const {
 
 // -------------------------------------
 
-/* TODO: This should use "const UnicodeString &value" */
 inline void
-DecimalFormatSymbols::setSymbol(ENumberFormatSymbol symbol, UnicodeString value) {
+DecimalFormatSymbols::setSymbol(ENumberFormatSymbol symbol, const UnicodeString &value) {
     if(symbol<kFormatSymbolCount) {
         fSymbols[symbol]=value;
     }
