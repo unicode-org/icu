@@ -2630,7 +2630,7 @@ static void TestDisplayKeywords(void)
         UEnumeration* keywordEnum = uloc_openKeywords(testCases[i].localeID, &status);
         for(keywordCount = uenum_count(keywordEnum, &status); keywordCount > 0 ; keywordCount--){
               if(U_FAILURE(status)){
-                  log_err("ulog_getKeywords failed for locale id: %s with error : %s \n", testCases[i].localeID, u_errorName(status)); 
+                  log_err("uloc_getKeywords failed for locale id: %s with error : %s \n", testCases[i].localeID, u_errorName(status)); 
                   break;
               }
               /* the uenum_next returns NUL terminated string */
@@ -2708,7 +2708,7 @@ static void TestDisplayKeywordValues(void){
         UEnumeration* keywordEnum = uloc_openKeywords(testCases[i].localeID, &status);
         for(keywordCount = uenum_count(keywordEnum, &status); keywordCount > 0 ; keywordCount--){
               if(U_FAILURE(status)){
-                  log_err("ulog_getKeywords failed for locale id: %s in display locale: % with error : %s \n", testCases[i].localeID, testCases[i].displayLocale, u_errorName(status)); 
+                  log_err("uloc_getKeywords failed for locale id: %s in display locale: % with error : %s \n", testCases[i].localeID, testCases[i].displayLocale, u_errorName(status)); 
                   break;
               }
               /* the uenum_next returns NUL terminated string */
@@ -2757,7 +2757,7 @@ static void TestDisplayKeywordValues(void){
               UChar *displayKeywordValue = NULL;
               int32_t displayKeywordValueLen = 0;
               if(U_FAILURE(status)){
-                  log_err("ulog_getKeywords failed for locale id: %s in display locale: % with error : %s \n", localeID, displayLocale, u_errorName(status)); 
+                  log_err("uloc_getKeywords failed for locale id: %s in display locale: % with error : %s \n", localeID, displayLocale, u_errorName(status)); 
                   break;
               }
               /* the uenum_next returns NUL terminated string */
@@ -2785,6 +2785,23 @@ static void TestDisplayKeywordValues(void){
         }
         uenum_close(keywordEnum);
     
+    }
+    {
+        /* Test non existent keywords */
+        UErrorCode status = U_ZERO_ERROR;
+        const char* keyword =NULL;
+        int32_t keywordLen = 0;
+        int32_t keywordCount = 0;
+        const char* localeID = "es";
+        const char* displayLocale = "de";
+        UChar *displayKeywordValue = NULL;
+        int32_t displayKeywordValueLen = 0;
+        
+        /* fetch the displayKeywordValue */
+        displayKeywordValueLen = uloc_getDisplayKeywordValue(localeID, "calendar", displayLocale, displayKeywordValue, displayKeywordValueLen, &status);
+        if(U_FAILURE(status)) {
+          log_err("uloc_getDisplaykeywordValue returned %d should be 0 \n", displayKeywordValueLen);
+        }
     }
 }
 													
