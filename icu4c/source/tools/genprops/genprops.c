@@ -259,6 +259,7 @@ mirrorLineFn(void *context,
              char *fields[][2], int32_t fieldCount,
              UErrorCode *pErrorCode) {
     char *end;
+    static uint32_t prevCode=0;
 
     mirrorMappings[mirrorCount][0]=(uint32_t)uprv_strtoul(fields[0][0], &end, 16);
     if(end<=fields[0][0] || end!=fields[0][1]) {
@@ -273,6 +274,15 @@ mirrorLineFn(void *context,
         *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
+
+    /* check that the code points (mirrorMappings[mirrorCount][0]) are in ascending order */
+    if(mirrorMappings[mirrorCount][0]<=prevCode && mirrorMappings[mirrorCount][0]>0) {
+        fprintf(stderr, "genprops: error - BidiMirroring entries out of order, U+%04lx after U+%04lx\n",
+                mirrorMappings[mirrorCount][0], prevCode);
+        *pErrorCode=U_PARSE_ERROR;
+        exit(U_PARSE_ERROR);
+    }
+    prevCode=mirrorMappings[mirrorCount][0];
 
     if(++mirrorCount==MAX_MIRROR_COUNT) {
         fprintf(stderr, "genprops: too many mirror mappings\n");
@@ -396,6 +406,7 @@ caseFoldingLineFn(void *context,
                   char *fields[][2], int32_t fieldCount,
                   UErrorCode *pErrorCode) {
     char *end;
+    static uint32_t prevCode=0;
     int32_t count;
     char status;
 
@@ -460,6 +471,15 @@ caseFoldingLineFn(void *context,
         caseFoldings[caseFoldingCount].full[0]=0;
     }
 
+    /* check that the code points (caseFoldings[caseFoldingCount].code) are in ascending order */
+    if(caseFoldings[caseFoldingCount].code<=prevCode && caseFoldings[caseFoldingCount].code>0) {
+        fprintf(stderr, "genprops: error - CaseFolding entries out of order, U+%04lx after U+%04lx\n",
+                caseFoldings[caseFoldingCount].code, prevCode);
+        *pErrorCode=U_PARSE_ERROR;
+        exit(U_PARSE_ERROR);
+    }
+    prevCode=caseFoldings[caseFoldingCount].code;
+
     if(++caseFoldingCount==MAX_CASE_FOLDING_COUNT) {
         fprintf(stderr, "genprops: too many case folding mappings\n");
         *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
@@ -522,15 +542,15 @@ static struct {
     char name[80];
 } unicodeAreas[32];
 
-static int32_t unicodeAreaIndex=0;
+static int32_t unicodeAreaIndex=0, mirrorIndex=0, specialCasingIndex=0, caseFoldingIndex=0;
 
 static void
 unicodeDataLineFn(void *context,
                   char *fields[][2], int32_t fieldCount,
                   UErrorCode *pErrorCode) {
-    static int32_t mirrorIndex=0, specialCasingIndex=0, caseFoldingIndex=0;
     Props p;
     char *end;
+    static uint32_t prevCode=0;
     uint32_t value;
     int i;
 
@@ -771,8 +791,24 @@ unicodeDataLineFn(void *context,
         }
     }
 
+    /* check for non-character code points */
+    if((p.code&0xfffe)==0xfffe || (uint32_t)(p.code-0xfdd0)<0x20) {
+        fprintf(stderr, "genprops: error - properties for non-character code point U+%04lx\n",
+                p.code);
+        *pErrorCode=U_PARSE_ERROR;
+        exit(U_PARSE_ERROR);
+    }
+
+    /* check that the code points (p.code) are in ascending order */
+    if(p.code<=prevCode && p.code>0) {
+        fprintf(stderr, "genprops: error - UnicodeData entries out of order, U+%04lx after U+%04lx\n",
+                p.code, prevCode);
+        *pErrorCode=U_PARSE_ERROR;
+        exit(U_PARSE_ERROR);
+    }
+    prevCode=p.code;
+
     /* properties for a single code point */
-    /* ### TODO: check that the code points (p.code) are in ascending order */
     addProps(p.code, value);
 }
 
@@ -837,6 +873,23 @@ parseDB(const char *filename, UErrorCode *pErrorCode) {
     }
 
     repeatAreaProps();
+
+    /* are all sub-properties consumed? */
+    if(mirrorIndex<mirrorCount) {
+        fprintf(stderr, "genprops: error - some code points in BidiMirroring.txt are missing from UnicodeData.txt\n");
+        *pErrorCode=U_PARSE_ERROR;
+        exit(U_PARSE_ERROR);
+    }
+    if(specialCasingIndex<specialCasingCount) {
+        fprintf(stderr, "genprops: error - some code points in SpecialCasing.txt are missing from UnicodeData.txt\n");
+        *pErrorCode=U_PARSE_ERROR;
+        exit(U_PARSE_ERROR);
+    }
+    if(caseFoldingIndex<caseFoldingCount) {
+        fprintf(stderr, "genprops: error - some code points in CaseFolding.txt are missing from UnicodeData.txt\n");
+        *pErrorCode=U_PARSE_ERROR;
+        exit(U_PARSE_ERROR);
+    }
 }
 
 /*
