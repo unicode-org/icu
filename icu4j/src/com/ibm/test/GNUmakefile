@@ -1,5 +1,5 @@
 #
-# @(#)$RCSfile: GNUmakefile,v $ $Revision: 1.3 $ $Date: 2000/02/26 22:01:20 $
+# @(#)$RCSfile: GNUmakefile,v $ $Revision: 1.4 $ $Date: 2000/03/01 17:31:30 $
 #
 
 TOPDIR=	../../../..
@@ -7,7 +7,7 @@ PACKAGE=	com.ibm.test
 
 include $(TOPDIR)/src/build/defs.gmk
 
-SUBDIRS=	rbnf normalizer RuleBasedBreakIterator compression bnf translit search topleveltest
+SUBDIRS=	rbnf normalizer RuleBasedBreakIterator compression bnf translit search calendar topleveltest
 
 FILES_java=	$(TARGDIR)/TestFmwk.java			\
 
