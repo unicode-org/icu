@@ -15,6 +15,7 @@
 #if !UCONFIG_NO_TRANSLITERATION
 
 #include "unicode/translit.h"
+#include "unicode/uniset.h"
 
 U_NAMESPACE_BEGIN
 
@@ -81,6 +82,10 @@ public:
     virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
                                      UBool isIncremental) const;
 
+    /**
+     * Set of characters which occur in Unicode character names.
+     */
+    UnicodeSet legal;
 };
 
 U_NAMESPACE_END

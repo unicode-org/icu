@@ -26,6 +26,7 @@
 #include "cintltst.h"
 #include "uparse.h"
 #include "uprops.h"
+#include "uset_imp.h"
 #include "usc_impl.h"
 #include "unormimp.h"
 #include "cucdapi.h"
@@ -1644,7 +1645,16 @@ TestCharNames() {
          * it includes all the characters in lowercased names of
          * general categories, for the full possible set of extended names.
          */
-        uprv_getCharNameCharacters(set);
+        {
+            USetAdder sa={
+                NULL,
+                uset_add,
+                uset_addRange,
+                uset_addString
+            };
+            sa.set=set;
+            uprv_getCharNameCharacters(&sa);
+        }
 
         /* build set the dumb (but sure-fire) way */
         for (i=0; i<256; ++i) {
