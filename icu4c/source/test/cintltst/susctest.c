@@ -136,7 +136,7 @@ unescape(const char *s)
       value *= 16;
       value += digitvalue(*s++);
 
-      *alias++ = value;
+      *alias++ = (UChar)value;
     }
     else
       *alias++ = *s++;
