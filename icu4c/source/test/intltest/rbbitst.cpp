@@ -546,6 +546,34 @@ void RBBITest::TestThaiWordBreak() {
 }
 
 
+void RBBITest::TestBug3818() {
+    UErrorCode  status = U_ZERO_ERROR;
+
+    // Four Thai words...
+    static const UChar thaiWordData[] = {  0x0E43,0x0E2B,0x0E0D,0x0E48, 0x0E43,0x0E2B,0x0E0D,0x0E48, 
+                                           0x0E43,0x0E2B,0x0E0D,0x0E48, 0x0E43,0x0E2B,0x0E0D,0x0E48, 0 }; 
+    UnicodeString  thaiStr(thaiWordData);
+
+    RuleBasedBreakIterator* bi = 
+        (RuleBasedBreakIterator *)BreakIterator::createWordInstance(Locale("th"), status);
+    if (U_FAILURE(status) || bi == NULL) {
+        errln("Fail at file %s, line %d, status = %s", __FILE__, __LINE__, u_errorName(status));
+        return;
+    }
+    bi->setText(thaiStr);
+
+    int32_t  startOfSecondWord = bi->following(1);
+    if (startOfSecondWord != 4) {
+        errln("Fail at file %s, line %d expected start of word at 4, got %d",
+            __FILE__, __LINE__, startOfSecondWord);
+    }
+    startOfSecondWord = bi->following(0);
+    if (startOfSecondWord != 4) {
+        errln("Fail at file %s, line %d expected start of word at 4, got %d",
+            __FILE__, __LINE__, startOfSecondWord);
+    }
+}
+
 //---------------------------------------------
 // runIndexedTest
 //---------------------------------------------
@@ -584,13 +612,13 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
         case 11: name = "TestMaiyamok";
              if(exec) TestMaiyamok();                          break;
         case 12: name = "TestWordBreaks";
-             if(exec) TestWordBreaks();                   break;
+             if(exec) TestWordBreaks();                        break;
         case 13: name = "TestWordBoundary";
-             if(exec) TestWordBoundary();                 break;
+             if(exec) TestWordBoundary();                      break;
         case 14: name = "TestLineBreaks";
-             if(exec) TestLineBreaks();                   break;
+             if(exec) TestLineBreaks();                        break;
         case 15: name = "TestSentBreaks";
-             if(exec) TestSentBreaks();                 break;
+             if(exec) TestSentBreaks();                        break;
         case 16: name = "TestExtended";
              if(exec) TestExtended();                          break;
         case 17: name = "TestMonkey";
@@ -601,7 +629,10 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
                logln("skipping TestMonkey (UCONFIG_NO_REGULAR_EXPRESSIONS)");
  #endif
              }
-             break;
+                                                               break;
+        case 18: name = "TestBug3818";
+            if(exec) TestBug3818();                            break;
+
         default: name = ""; break; //needed to end loop
     }
 }
