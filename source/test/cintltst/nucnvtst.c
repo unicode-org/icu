@@ -33,8 +33,10 @@ static void TestAmbiguous(void);
 static void TestSignatureDetection(void);
 static void TestUTF7(void);
 static void TestUTF8(void);
+static void TestUTF16(void);
 static void TestUTF16BE(void);
 static void TestUTF16LE(void);
+static void TestUTF32(void);
 static void TestUTF32BE(void);
 static void TestUTF32LE(void);
 static void TestLATIN1(void);
@@ -193,8 +195,10 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestSignatureDetection, "tsconv/nucnvtst/TestSignatureDetection");
    addTest(root, &TestUTF7, "tsconv/nucnvtst/TestUTF7");
    addTest(root, &TestUTF8, "tsconv/nucnvtst/TestUTF8");
+   addTest(root, &TestUTF16, "tsconv/nucnvtst/TestUTF16");
    addTest(root, &TestUTF16BE, "tsconv/nucnvtst/TestUTF16BE");
    addTest(root, &TestUTF16LE, "tsconv/nucnvtst/TestUTF16LE");
+   addTest(root, &TestUTF32, "tsconv/nucnvtst/TestUTF32");
    addTest(root, &TestUTF32BE, "tsconv/nucnvtst/TestUTF32BE");
    addTest(root, &TestUTF32LE, "tsconv/nucnvtst/TestUTF32LE");
    addTest(root, &TestLATIN1, "tsconv/nucnvtst/TestLATIN1");
@@ -1670,6 +1674,65 @@ static TestUTF8() {
 }
 
 void
+static TestUTF16() {
+    /* test input */
+    static const uint8_t in1[]={
+        0xfe, 0xff, 0x4e, 0x00, 0xfe, 0xff
+    };
+    static const uint8_t in2[]={
+        0xff, 0xfe, 0x4e, 0x00, 0xfe, 0xff
+    };
+    static const uint8_t in3[]={
+        0xfe, 0xfe, 0x4e, 0x00, 0xfe, 0xff, 0xd8, 0x40, 0xdc, 0x01
+    };
+
+    /* expected test results */
+    static const uint32_t results1[]={
+        /* number of bytes read, code point */
+        4, 0x4e00,
+        2, 0xfeff
+    };
+    static const uint32_t results2[]={
+        /* number of bytes read, code point */
+        4, 0x004e,
+        2, 0xfffe
+    };
+    static const uint32_t results3[]={
+        /* number of bytes read, code point */
+        2, 0xfefe,
+        2, 0x4e00,
+        2, 0xfeff,
+        4, 0x20001
+    };
+
+    const char *source, *limit;
+
+    UErrorCode errorCode=U_ZERO_ERROR;
+    UConverter *cnv=ucnv_open("UTF-16", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("Unable to open a UTF-16 converter: %s\n", u_errorName(errorCode));
+        return;
+    }
+
+    source=(const char *)in1, limit=(const char *)in1+sizeof(in1);
+    TestNextUChar(cnv, source, limit, results1, "UTF-16");
+
+    source=(const char *)in2, limit=(const char *)in2+sizeof(in2);
+    ucnv_resetToUnicode(cnv);
+    TestNextUChar(cnv, source, limit, results2, "UTF-16");
+
+    source=(const char *)in3, limit=(const char *)in3+sizeof(in3);
+    ucnv_resetToUnicode(cnv);
+    TestNextUChar(cnv, source, limit, results3, "UTF-16");
+
+    /* Test the condition when source >= sourceLimit */
+    ucnv_resetToUnicode(cnv);
+    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit <= source");
+
+    ucnv_close(cnv);
+}
+
+void
 static TestUTF16BE() {
     /* test input */
     static const uint8_t in[]={
@@ -1756,6 +1819,65 @@ TestUTF16LE() {
         static const uint8_t source2[]={0x01, 0xd8};
         TestNextUCharError(cnv, (const char*)source2, (const char*)source2+sizeof(source2), U_TRUNCATED_CHAR_FOUND, "an truncated surrogate character");
     }
+
+    ucnv_close(cnv);
+}
+
+void
+static TestUTF32() {
+    /* test input */
+    static const uint8_t in1[]={
+        0x00, 0x00, 0xfe, 0xff,   0x00, 0x10, 0x0f, 0x00,   0x00, 0x00, 0xfe, 0xff
+    };
+    static const uint8_t in2[]={
+        0xff, 0xfe, 0x00, 0x00,   0x00, 0x10, 0x0f, 0x00,   0xfe, 0xff, 0x00, 0x00
+    };
+    static const uint8_t in3[]={
+        0x00, 0x00, 0xfe, 0xfe,   0x00, 0x10, 0x0f, 0x00,   0x00, 0x00, 0xd8, 0x40,   0x00, 0x00, 0xdc, 0x01
+    };
+
+    /* expected test results */
+    static const uint32_t results1[]={
+        /* number of bytes read, code point */
+        8, 0x100f00,
+        4, 0xfeff
+    };
+    static const uint32_t results2[]={
+        /* number of bytes read, code point */
+        8, 0x0f1000,
+        4, 0xfffe
+    };
+    static const uint32_t results3[]={
+        /* number of bytes read, code point */
+        4, 0xfefe,
+        4, 0x100f00,
+        4, 0xd840,
+        4, 0xdc01
+    };
+
+    const char *source, *limit;
+
+    UErrorCode errorCode=U_ZERO_ERROR;
+    UConverter *cnv=ucnv_open("UTF-32", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("Unable to open a UTF-32 converter: %s\n", u_errorName(errorCode));
+        return;
+    }
+
+    source=(const char *)in1, limit=(const char *)in1+sizeof(in1);
+    TestNextUChar(cnv, source, limit, results1, "UTF-32");
+
+    source=(const char *)in2, limit=(const char *)in2+sizeof(in2);
+    ucnv_resetToUnicode(cnv);
+    TestNextUChar(cnv, source, limit, results2, "UTF-32");
+
+    source=(const char *)in3, limit=(const char *)in3+sizeof(in3);
+    ucnv_resetToUnicode(cnv);
+    TestNextUChar(cnv, source, limit, results3, "UTF-32");
+
+    /* Test the condition when source >= sourceLimit */
+    ucnv_resetToUnicode(cnv);
+    TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit <= source");
 
     ucnv_close(cnv);
 }
