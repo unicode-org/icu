@@ -443,7 +443,7 @@ uhash_compareUChars(const void *key1, const void *key2) {
         ++p1;
         ++p2;
     }
-    return (*p1 == *p2);
+    return (UBool)(*p1 == *p2);
 }
 
 U_CAPI UBool
@@ -460,7 +460,7 @@ uhash_compareChars(const void *key1, const void *key2) {
         ++p1;
         ++p2;
     }
-    return (*p1 == *p2);
+    return (UBool)(*p1 == *p2);
 }
 
 U_CAPI UBool
@@ -477,7 +477,7 @@ uhash_compareIChars(const void *key1, const void *key2) {
         ++p1;
         ++p2;
     }
-    return (*p1 == *p2);
+    return (UBool)(*p1 == *p2);
 }
 
 /********************************************************************
@@ -491,7 +491,7 @@ uhash_hashLong(const void *key) {
 
 U_CAPI UBool
 uhash_compareLong(const void *key1, const void *key2) {
-    return key1 == key2;
+    return (UBool)(key1 == key2);
 }
 
 /********************************************************************

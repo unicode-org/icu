@@ -384,7 +384,7 @@ enum { UNESCAPE_MAP_LENGTH = sizeof(UNESCAPE_MAP) / sizeof(UNESCAPE_MAP[0]) };
 /* Convert one octal digit to a numeric value 0..7, or -1 on failure */
 static int8_t _digit8(UChar c) {
     if (c >= 0x0030 && c <= 0x0037) {
-        return c - 0x0030;
+        return (int8_t)(c - 0x0030);
     }
     return -1;
 }
@@ -392,13 +392,13 @@ static int8_t _digit8(UChar c) {
 /* Convert one hex digit to a numeric value 0..F, or -1 on failure */
 static int8_t _digit16(UChar c) {
     if (c >= 0x0030 && c <= 0x0039) {
-        return c - 0x0030;
+        return (int8_t)(c - 0x0030);
     }
     if (c >= 0x0041 && c <= 0x0046) {
-        return c - (0x0041 - 10);
+        return (int8_t)(c - (0x0041 - 10));
     }
     if (c >= 0x0061 && c <= 0x0066) {
-        return c - (0x0061 - 10);
+        return (int8_t)(c - (0x0061 - 10));
     }
     return -1;
 }
@@ -456,7 +456,7 @@ u_unescapeAt(UNESCAPE_CHAR_AT charAt,
     if (minDig != 0) {
         while (*offset < length && n < maxDig) {
             c = charAt(*offset, context);
-            dig = (bitsPerDigit == 3) ? _digit8(c) : _digit16(c);
+            dig = (int8_t)((bitsPerDigit == 3) ? _digit8(c) : _digit16(c));
             if (dig < 0) {
                 break;
             }
