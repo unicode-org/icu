@@ -11,7 +11,7 @@
  *   PropertyAliases.txt
  *   PropertyValueAliases.txt
  *
- * Date: Fri Jan  7 09:20:59 2005
+ * Date: Mon Feb 21 14:33:28 2005
  * Unicode version: 4.1.0
  * Script: preparse.pl
  */
@@ -895,12 +895,12 @@ int32_t NAME_GROUP[] = {
     0, -79,             /* 290: "", "Buhid" */
     0, -80,             /* 292: "", "Byzantine_Musical_Symbols" */
     0, -108,            /* 294: "", "Cherokee" */
-    0, -83,             /* 296: "", "CJK_Basic_Strokes" */
-    0, -84,             /* 298: "", "CJK_Compatibility" */
-    0, -85,             /* 300: "", "CJK_Compatibility_Forms" */
-    0, -86,             /* 302: "", "CJK_Compatibility_Ideographs" */
-    0, -87,             /* 304: "", "CJK_Compatibility_Ideographs_Supplement" */
-    0, -88,             /* 306: "", "CJK_Radicals_Supplement" */
+    0, -84,             /* 296: "", "CJK_Compatibility" */
+    0, -85,             /* 298: "", "CJK_Compatibility_Forms" */
+    0, -86,             /* 300: "", "CJK_Compatibility_Ideographs" */
+    0, -87,             /* 302: "", "CJK_Compatibility_Ideographs_Supplement" */
+    0, -88,             /* 304: "", "CJK_Radicals_Supplement" */
+    0, -83,             /* 306: "", "CJK_Basic_Strokes" */
     0, -89,             /* 308: "", "CJK_Symbols_and_Punctuation" */
     0, -90,             /* 310: "", "CJK_Unified_Ideographs" */
     0, -91,             /* 312: "", "CJK_Unified_Ideographs_Extension_A" */
@@ -1401,12 +1401,12 @@ const Alias VALUES_blk[] = {
     Alias((int32_t) UBLOCK_BUHID, 290),
     Alias((int32_t) UBLOCK_BYZANTINE_MUSICAL_SYMBOLS, 292),
     Alias((int32_t) UBLOCK_CHEROKEE, 294),
-    Alias((int32_t) UBLOCK_CJK_BASIC_STROKES, 296),
-    Alias((int32_t) UBLOCK_CJK_COMPATIBILITY, 298),
-    Alias((int32_t) UBLOCK_CJK_COMPATIBILITY_FORMS, 300),
-    Alias((int32_t) UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS, 302),
-    Alias((int32_t) UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT, 304),
-    Alias((int32_t) UBLOCK_CJK_RADICALS_SUPPLEMENT, 306),
+    Alias((int32_t) UBLOCK_CJK_COMPATIBILITY, 296),
+    Alias((int32_t) UBLOCK_CJK_COMPATIBILITY_FORMS, 298),
+    Alias((int32_t) UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS, 300),
+    Alias((int32_t) UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT, 302),
+    Alias((int32_t) UBLOCK_CJK_RADICALS_SUPPLEMENT, 304),
+    Alias((int32_t) UBLOCK_CJK_STROKES, 306),
     Alias((int32_t) UBLOCK_CJK_SYMBOLS_AND_PUNCTUATION, 308),
     Alias((int32_t) UBLOCK_CJK_UNIFIED_IDEOGRAPHS, 310),
     Alias((int32_t) UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A, 312),
@@ -1517,7 +1517,7 @@ const Alias VALUES_blk[] = {
     Alias((int32_t) UBLOCK_THAANA, 523),
     Alias((int32_t) UBLOCK_THAI, 525),
     Alias((int32_t) UBLOCK_TIBETAN, 527),
-    Alias((int32_t) UBLOCK_Tifinagh, 529),
+    Alias((int32_t) UBLOCK_TIFINAGH, 529),
     Alias((int32_t) UBLOCK_UGARITIC, 531),
     Alias((int32_t) UBLOCK_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS, 533),
     Alias((int32_t) UBLOCK_VARIATION_SELECTORS, 535),

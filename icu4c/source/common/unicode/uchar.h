@@ -1155,7 +1155,7 @@ enum UBlockCode {
     /** @draft ICU 3.4 */
     UBLOCK_BUGINESE = 129, /*[1A00]*/
     /** @draft ICU 3.4 */
-    UBLOCK_CJK_BASIC_STROKES = 130, /*[31C0]*/
+    UBLOCK_CJK_STROKES = 130, /*[31C0]*/
     /** @draft ICU 3.4 */
     UBLOCK_COMBINING_DIACRITICAL_MARKS_SUPPLEMENT = 131, /*[1DC0]*/
     /** @draft ICU 3.4 */
@@ -1183,7 +1183,7 @@ enum UBlockCode {
     /** @draft ICU 3.4 */
     UBLOCK_SYLOTI_NAGRI = 143, /*[A800]*/
     /** @draft ICU 3.4 */
-    UBLOCK_Tifinagh = 144, /*[2D30]*/
+    UBLOCK_TIFINAGH = 144, /*[2D30]*/
     /** @draft ICU 3.4 */
     UBLOCK_VERTICAL_FORMS = 145, /*[FE10]*/
 
