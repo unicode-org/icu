@@ -508,7 +508,7 @@ public:
 // -------------------------------------
 
 static ICULocaleService* 
-getService(void)
+getNumberFormatService(void)
 {
     UBool needInit;
     {
@@ -555,7 +555,7 @@ NumberFormat::createInstance(const Locale& loc, EStyles kind, UErrorCode& status
 URegistryKey 
 NumberFormat::registerFactory(NumberFormatFactory* toAdopt, UErrorCode& status)
 {
-  ICULocaleService *service = getService();
+  ICULocaleService *service = getNumberFormatService();
   if (service) {
     return service->registerFactory(new NFFactory(toAdopt), status);
   }
@@ -584,7 +584,7 @@ NumberFormat::unregister(URegistryKey key, UErrorCode& status)
 StringEnumeration* 
 NumberFormat::getAvailableLocales(void)
 {
-  ICULocaleService *service = getService();
+  ICULocaleService *service = getNumberFormatService();
   if (service) {
     return service->getAvailableLocales();
   }

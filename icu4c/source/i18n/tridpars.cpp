@@ -301,7 +301,7 @@ static void U_CALLCONV _deleteSingleID(void* obj) {
     delete (TransliteratorIDParser::SingleID*) obj;
 }
 
-static void U_CALLCONV _deleteTransliterator(void* obj) {
+static void U_CALLCONV _deleteTransliteratorTrIDPars(void* obj) {
     delete (Transliterator*) obj;
 }
 U_CDECL_END
@@ -458,7 +458,7 @@ int32_t TransliteratorIDParser::instantiateList(UVector& list,
     if (U_FAILURE(ec)) {
         goto RETURN;
     }
-    tlist.setDeleter(_deleteTransliterator);
+    tlist.setDeleter(_deleteTransliteratorTrIDPars);
 
     Transliterator* t;
     int32_t i;
@@ -512,7 +512,7 @@ int32_t TransliteratorIDParser::instantiateList(UVector& list,
     list.removeAllElements();
 
     if (U_SUCCESS(ec)) {
-        list.setDeleter(_deleteTransliterator);
+        list.setDeleter(_deleteTransliteratorTrIDPars);
 
         while (tlist.size() > 0) {
             t = (Transliterator*) tlist.orphanElementAt(0);
