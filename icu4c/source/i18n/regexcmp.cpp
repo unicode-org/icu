@@ -1677,8 +1677,7 @@ int32_t   RegexCompile::blockTopLoc(UBool reserveLoc) {
         // The item just processed is a parenthesized block.
         theLoc = fMatchOpenParen;   // A slot is already reserved for us.
         U_ASSERT(theLoc > 0);
-        uint32_t  opAtTheLoc = fRXPat->fCompiledPat->elementAti(theLoc);
-        U_ASSERT(URX_TYPE(opAtTheLoc) == URX_NOP);
+        U_ASSERT(URX_TYPE(((uint32_t)fRXPat->fCompiledPat->elementAti(theLoc))) == URX_NOP);
     }
     else {
         // Item just compiled is a single thing, a ".", or a single char, or a set reference.
@@ -1687,7 +1686,7 @@ int32_t   RegexCompile::blockTopLoc(UBool reserveLoc) {
         fixLiterals(TRUE);  // If last item was a string, separate the last char.
         theLoc = fRXPat->fCompiledPat->size()-1;
         if (reserveLoc) {
-            int32_t opAtTheLoc = fRXPat->fCompiledPat->elementAti(theLoc);
+            /*int32_t opAtTheLoc = fRXPat->fCompiledPat->elementAti(theLoc);*/
             int32_t  nop = URX_BUILD(URX_NOP, 0);
             fRXPat->fCompiledPat->insertElementAt(nop, theLoc, *fStatus);
         }
