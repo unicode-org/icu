@@ -1112,6 +1112,7 @@ root {
     // NOTE: This is not true locale data; it exists only in ROOT
     // Last update: Tue Apr  8 16:57:42 2003
     CurrencyMap {
+        _EURO { "EUR" } // : Euro
         AE { "AED" } // UNITED ARAB EMIRATES: UAE Dirham
         AF { "AFN" } // AFGHANISTAN: Afghani
         AG { "XCD" } // ANTIGUA AND BARBUDA: East Caribbean Dollar
@@ -1189,7 +1190,6 @@ root {
         FR_PREEURO { "FRF" }
         GA { "XAF" } // GABON: CFA Franc BEAC
         GB { "GBP" } // UNITED KINGDOM: Pound Sterling
-        GB_EURO { "EUR" } // : Euro
         GD { "XCD" } // GRENADA: East Caribbean Dollar
         GE { "GEL" } // GEORGIA: Lari
         GF { "EUR" } // FRENCH GUIANA: Euro

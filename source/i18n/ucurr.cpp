@@ -57,6 +57,13 @@ static const char VAR_EURO[] = "EURO";
 // Variant delimiter
 static const char VAR_DELIM[] = "_";
 
+// Variant for legacy euro mapping in CurrencyMap
+static const char VAR_DELIM_EURO[] = "_EURO";
+
+#define VARIANT_IS_EMPTY    0
+#define VARIANT_IS_EURO     0x1
+#define VARIANT_IS_PREEURO  0x2
+
 // Tag for localized display names (symbols) of currencies
 static const char CURRENCIES[] = "Currencies";
 
@@ -222,21 +229,30 @@ struct CReg : public UMemory {
 
 // -------------------------------------
 
-static void
+/**
+ * @see VARIANT_IS_EURO
+ * @see VARIANT_IS_PREEURO
+ */
+static uint32_t
 idForLocale(const char* locale, char* buffer, int capacity, UErrorCode* ec)
 {
+    uint32_t variantType = 0;
     // !!! this is internal only, assumes buffer is not null and capacity is sufficient
     // Extract the country name and variant name.  We only
     // recognize two variant names, EURO and PREEURO.
     char variant[ULOC_FULLNAME_CAPACITY];
     uloc_getCountry(locale, buffer, capacity, ec);
     uloc_getVariant(locale, variant, sizeof(variant), ec);
-    if (0 == uprv_strcmp(variant, VAR_PRE_EURO) ||
-        0 == uprv_strcmp(variant, VAR_EURO))
-    {
-        uprv_strcat(buffer, VAR_DELIM);
-        uprv_strcat(buffer, variant);
+    if (variant[0] != 0) {
+        variantType = (0 == uprv_strcmp(variant, VAR_EURO))
+                   | ((0 == uprv_strcmp(variant, VAR_PRE_EURO)) << 1);
+        if (variantType)
+        {
+            uprv_strcat(buffer, VAR_DELIM);
+            uprv_strcat(buffer, variant);
+        }
     }
+    return variantType;
 }
 
 // -------------------------------------
@@ -268,8 +284,10 @@ ucurr_unregister(UCurrRegistryKey key, UErrorCode* status)
 U_CAPI const UChar* U_EXPORT2
 ucurr_forLocale(const char* locale, UErrorCode* ec) {
     if (ec != NULL && U_SUCCESS(*ec)) {
+        UErrorCode localStatus = U_ZERO_ERROR;
         char id[ULOC_FULLNAME_CAPACITY];
-        idForLocale(locale, id, sizeof(id), ec);
+        uint32_t variantType = idForLocale(locale, id, sizeof(id), ec);
+
         if (U_FAILURE(*ec)) {
             return NULL;
         }
@@ -280,10 +298,28 @@ ucurr_forLocale(const char* locale, UErrorCode* ec) {
         }
         
         // Look up the CurrencyMap element in the root bundle.
-        UResourceBundle* rb = ures_open(NULL, "", ec);
-        UResourceBundle* cm = ures_getByKey(rb, CURRENCY_MAP, NULL, ec);
-        int32_t len;
-        const UChar* s = ures_getStringByKey(cm, id, &len, ec);
+        UResourceBundle* rb = ures_open(NULL, "", &localStatus);
+        UResourceBundle* cm = ures_getByKey(rb, CURRENCY_MAP, NULL, &localStatus);
+        const UChar* s = ures_getStringByKey(cm, id, NULL, &localStatus);
+
+        if ((s == NULL || U_FAILURE(localStatus)) && variantType != VARIANT_IS_EMPTY
+            && (id[0] != 0))
+        {
+            // We don't know about it.  Check to see if we support the variant.
+            if (variantType & VARIANT_IS_EURO) {
+                s = ures_getStringByKey(cm, VAR_DELIM_EURO, NULL, ec);
+            }
+            else {
+                uloc_getParent(locale, id, sizeof(id), ec);
+                *ec = U_USING_FALLBACK_WARNING;
+                s = ucurr_forLocale(id, ec);
+            }
+        }
+        else if (*ec == U_ZERO_ERROR || localStatus != U_ZERO_ERROR) {
+            // There is nothing to fallback to. Report the failure/warning if possible.
+            *ec = localStatus;
+        }
+
         ures_close(cm);
         ures_close(rb);
         
