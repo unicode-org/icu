@@ -250,13 +250,21 @@ void HangToJamoTransliteratorTest::expectTranslit(const HangulJamoTransliterator
 												const UnicodeString& expectedResult){
     
 
-	UTransPosition index={start, limit, cursor, limit};
+	UTransPosition index;
+    index.contextStart=start;
+    index.contextLimit = limit;
+    index.start = cursor;
+    index.limit = limit;
    	UnicodeString rsource(source);
 	t.handleTransliterate(rsource, index, FALSE);
 	expectAux(t.getID() + ":handleTransliterator(increment=FALSE) " + message, source + "-->" + rsource, rsource==expectedResult, expectedResult);
     
 	UnicodeString rsource2(source);
-	UTransPosition _index={start, limit, cursor, limit};
+	UTransPosition _index;
+    _index.contextStart= start;
+    _index.contextLimit = limit;
+    _index.start = cursor;
+    _index.limit = limit;
     uprv_memcpy(&index, &_index, sizeof(index));
 	t.handleTransliterate(rsource2, index, TRUE);
 	expectAux(t.getID() + ":handleTransliterator(increment=TRUE) " + message, source + "-->" + rsource2, rsource2==expectedResult, expectedResult);
@@ -318,7 +326,11 @@ void HangToJamoTransliteratorTest::expect(const HangulJamoTransliterator& t,
 	// Test handleTransliterate (incremental) transliteration -- 
     rsource.remove();
 	rsource.append(source);
-    UTransPosition index={0,source.length(),0,source.length()};
+    UTransPosition index;
+    index.contextStart =0;
+    index.contextLimit=source.length();
+    index.start=0;
+    index.limit=source.length();
 	t.handleTransliterate(rsource, index, TRUE);
 	expectAux(t.getID() + ":handleTransliterate " + message, source + "->" + rsource, rsource==expectedResult, expectedResult);
 
