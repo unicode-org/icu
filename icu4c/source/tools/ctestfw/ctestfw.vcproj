@@ -143,22 +143,6 @@
 			Filter="h;hpp;hxx;hm;inl">
 			<File
 				RelativePath=".\unicode\ctest.h">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy    $(InputPath)    ..\..\..\include\unicode
-"
-						Outputs="..\..\..\include\unicode\ctest.h"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy    $(InputPath)    ..\..\..\include\unicode
-"
-						Outputs="..\..\..\include\unicode\ctest.h"/>
-				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
