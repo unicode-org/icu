@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Latin_Katakana.txt
-// Date: Thu Oct 25 22:17:22 2001
+// Date: Mon Nov 19 12:15:36 2001
 //--------------------------------------------------------------------
 
 // Latin_Katakana
@@ -18,12 +18,14 @@ translit_Latin_Katakana {
 // Corporation and others. All Rights Reserved.
 //--------------------------------------------------------------------
 // $Source: /xsrl/Nsvn/icu/icu/data/Attic/translit_Latin_Katakana.txt,v $
-// $Date: 2001/10/26 05:41:16 $
-// $Revision: 1.1 $
+// $Date: 2001/11/19 22:23:36 $
+// $Revision: 1.2 $
 //--------------------------------------------------------------------
 
-"::NFD (NFC) ;"
-":: [:Latin:] Lower ();"
+//:: [\u0020-\u00FF [:Latin:][:Mark:]] ;   # note: a global filter is more efficient, but MUST include all source chars
+":: NFKD (NFC);"  // use NFKD to get the fullwidth latin characters
+":: Lower ();"    // whenever transliterating from cased to uncased script, include this
+// :: NFD () ;   # this would catch the odd cases where a lowercase is not in NFD, but none are important for Japanese
 
 // Uses modified Hepburn. Small changes to make  unambiguous.
 
@@ -75,6 +77,7 @@ translit_Latin_Katakana {
 // Variables
 
 "$vowel = [aeiou] ;"
+"$consonant = [bcdfghjklmnpqrstvwxyz] ;"
 "$macron = \u0304 ;"
 
 // Variables used for doubled-consonants with tsu
@@ -400,6 +403,30 @@ translit_Latin_Katakana {
 "'~ye' > ェ ;"
 "'~yo' <> ョ ;"
 
+// iteration marks
+// TODO: make more accurate
+
+"j $1 < sh (y* $vowel) {ヽ$voice ;"
+"dj $1 < ch (y* $vowel) {ヽ$voice ;"
+"dz $1 < ts (y* $vowel) {ヽ$voice ;"
+
+"g $1 < k (y* $vowel) {ヽ$voice ;"
+"z $1 < s (y* $vowel) {ヽ$voice ;"
+"d $1 < t (y* $vowel) {ヽ$voice ;"
+"h $1 < b (y* $vowel) {ヽ$voice ;"
+"v $1 < w (y* $vowel) {ヽ$voice ;"
+
+"sh $1 < sh (y* $vowel) {ヽ$voice ;"
+"j $1 < j (y* $vowel) {ヽ$voice ;"
+"ch $1 < ch (y* $vowel) {ヽ$voice ;"
+"dj $1 < dj(y* $vowel) {ヽ$voice ;"
+"ts $1 < ts (y* $vowel) {ヽ$voice ;"
+"dz $1 < dz (y* $vowel) {ヽ$voice ;"
+
+"$1 < ($consonant y* $vowel) {ヽ$voice? ;"
+"$1 < (.) {ヽ $voice? ;" // otherwise repeat last character
+ "< ヽ $voice? ;" // delete if no characters found
+
 // h- rule: lengthens vowel if not followed by a vowel
 
 "[aeiou] } h > ー ;"
@@ -448,6 +475,12 @@ translit_Latin_Katakana {
 "j  > ジ;"
 "w > ウ;"
 
+"ß > | ss ;"
+"æ > | e ;"
+"ð > | d ;"
+"ø > | u ;"
+"þ > | th ;"
+
 // simple substitutions using backup
 
 "c > | k ;"
@@ -462,8 +495,12 @@ translit_Latin_Katakana {
 
 "'~' > ;" // delete stray tildes between letters
 "[:Katakana:] { '' } [:Latin:] > ;" // delete stray quotes between letters
+"[\u02BE[:Nonspacing Mark:]-[\u3099-\u309C]] > ;" // delete any non-spacing marks that we didn't use
 
-":: NFC (NFD) ;"
+":: NFC (NFKD) ;"  // use NFKD to get the halfwidth katakana characters
+
+// note: a global filter is more efficient, but MUST include all source chars!!
+// :: ([\\u0000-\u007E \u3001\u3002 \u3099-\u309C \u30A1-\u30FC \uFF61-\uFF9F [:Katakana:]]);
 
 // eof
   }

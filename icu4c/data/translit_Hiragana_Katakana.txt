@@ -5,8 +5,8 @@
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
-// Source: ../../text/resources/Transliterator_Hiragana_Katakana.utf8.txt
-// Date: Thu Oct 25 22:17:21 2001
+// Source: ../../text/resources/Transliterator_Hiragana_Katakana.txt
+// Date: Mon Nov 19 12:15:36 2001
 //--------------------------------------------------------------------
 
 // Hiragana_Katakana
@@ -20,7 +20,7 @@ translit_Hiragana_Katakana {
 // Date: Tue Jan 23 2001
 //--------------------------------------------------------------------
 
-// Hiragana-Katana
+// Hiragana-Katakana
 
 // This is largely a one-to-one mapping, but it has a
 // few kinks:
@@ -211,6 +211,10 @@ translit_Hiragana_Katakana {
 "う < $xu {ー};"
 "え < $xe {ー};"
 "お < $xo {ー};"
+
+// Note: both of these don't work yet, causing different bugs
+":: ([[:Katakana:]\u30FC\uFF70] NFKC);"
+// :: (NFKC) ;
 
 // eof
   }
