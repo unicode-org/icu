@@ -1029,9 +1029,9 @@ TestSBCS() {
     static const uint8_t input1[]={ 0xA1 };
     const char* illegalsource=(const char*)input1;
     TestNextUCharError(cnv, illegalsource, illegalsource+sizeof(illegalsource), U_INVALID_CHAR_FOUND, "source has a illegal characte");
-    ucnv_close(cnv);
     }
    */
+    ucnv_close(cnv);
 }
 
 void
@@ -1364,6 +1364,9 @@ TestLMBCS() {
       if (get_subchars[0] != new_subchars[0]){
            log_err("Unexpected value of sub chars\n");
       }
+      ucnv_close(cnv1);
+      ucnv_close(cnv2);
+
     }
 
     /* LMBCS to Unicode - offsets */

@@ -420,6 +420,7 @@ void TestGetSetDateAPI()
     
     /*close caldef and datdef*/
     ucal_close(caldef);
+    ucal_close(caldef2);
     udat_close(datdef);
     free(tzID);
 

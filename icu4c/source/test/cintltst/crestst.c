@@ -378,12 +378,21 @@ UBool testTag(const char* frag,
         {
       if (is_in[j])
         {
+          if(base != NULL) {
+              free(base);
+              base = NULL;
+          }
+
           base=(UChar*)malloc(sizeof(UChar)*(strlen(NAME[j]) + 1));
           u_uastrcpy(base,NAME[j]);
 
           break;
             }
       else {
+          if(base != NULL) {
+              free(base);
+              base = NULL;
+          }
         base = (UChar*) malloc(sizeof(UChar) * 1);
         *base = 0x0000;
       }
@@ -585,9 +594,9 @@ UBool testTag(const char* frag,
         }
       
       free(expected_string);
-      free(base);
       ures_close(theBundle);
     }
+      free(base);
   return pass;
 }
 

@@ -186,7 +186,7 @@ void TestSampleMessageFormat()
     {
       status=U_ZERO_ERROR;
       resultlength=resultLengthOut+1;
-      result=(UChar*)malloc(sizeof(UChar) * resultlength);
+      result=(UChar*)realloc(result, sizeof(UChar) * resultlength);
       u_formatMessage( "en_US", pattern, u_strlen(pattern), result, resultlength, &status, str, 500.00);
     }
   if(U_FAILURE(status)){
@@ -200,6 +200,7 @@ void TestSampleMessageFormat()
   }
 
   free(result);
+  free(str);
     
 
     
@@ -284,8 +285,12 @@ void TestSampleFormatAndParse()
             austrdup(myDateFormat(def1,d)), austrdup(myDateFormat(def1,d1)) );
         }
 
+    udat_close(def1);
+    ucal_close(cal);
+
     free(result);
     free(str);
+    free(tzID);
     
 }
 /* test message format with a choice option */

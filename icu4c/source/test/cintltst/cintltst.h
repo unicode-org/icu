@@ -54,6 +54,10 @@ U_CFUNC void ctest_setTestDirectory(const char* newDir);
  
 U_CFUNC char *austrdup(const UChar* unichars);
 
+U_CFUNC void *ctst_malloc(size_t size);
+U_CFUNC void ctst_freeAll();
+
+
 
 /**
  * function used to specify the error

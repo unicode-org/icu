@@ -16,6 +16,7 @@
 /*The main root for C API tests*/
 
 #include "cintltst.h"
+#include "cucdtst.h"
 #include <stdio.h>
 #include <string.h>
 #include "unicode/uchar.h"
@@ -73,7 +74,9 @@ int main ( int argc, const char **argv )
     root = NULL;
     addAllTests(&root);
     processArgs(root, argc, argv);
-
+    cleanUpTestTree(root);
+    cleanUpDataTable();
+    ctst_freeAll();
     return 0;
 }
 
@@ -160,7 +163,8 @@ char *austrdup(const UChar* unichars)
     char *newString;
 
     length    = u_strlen ( unichars );
-    newString = (char*)malloc  ( sizeof( char ) * 4 * ( length + 1 ) );
+    /*newString = (char*)malloc  ( sizeof( char ) * 4 * ( length + 1 ) );*/ /* this leaks for now */
+    newString = (char*)ctst_malloc  ( sizeof( char ) * 4 * ( length + 1 ) ); /* this shouldn't */
  
     if ( newString == NULL )
         return NULL;
@@ -168,4 +172,35 @@ char *austrdup(const UChar* unichars)
     u_austrcpy ( newString, unichars );
 
     return newString;
+}
+
+#define CTST_MAX_ALLOC 10000
+static void * ctst_allocated_stuff[CTST_MAX_ALLOC];
+static int ctst_allocated = 0;
+static ctst_free = 0;
+
+void *ctst_malloc(size_t size) {
+    ctst_allocated ++;
+    if(ctst_allocated == CTST_MAX_ALLOC) {
+        ctst_allocated = 0;
+        ctst_free = 1;
+    }
+    if(ctst_free == 1) {
+        free(ctst_allocated_stuff[ctst_allocated]);
+    }
+    ctst_allocated_stuff[ctst_allocated] = malloc(size);
+    return ctst_allocated_stuff[ctst_allocated];
+}
+
+void ctst_freeAll() {
+    int i;
+    if(ctst_free == 0) {
+        for(i=0; i<ctst_allocated; i++) {
+            free(ctst_allocated_stuff[i]);
+        }
+    } else {
+        for(i=0; i<CTST_MAX_ALLOC; i++) {
+            free(ctst_allocated_stuff[i]);
+        }
+    }
 }

@@ -545,5 +545,6 @@ free(temp1);
     /*unum_close(spellout_def);*/
     unum_close(pattern);
     unum_close(cur_frpattern);
+    unum_close(myclone);
     
 }

@@ -462,12 +462,20 @@ UBool testTag(const char* frag,
         {
       if (is_in[j])
         {
+          if(base != NULL) {
+              free(base);
+              base = NULL;
+          }
           base=(UChar*)malloc(sizeof(UChar)*(strlen(NAME[j]) + 1));
           u_uastrcpy(base,NAME[j]);
 
           break;
             }
       else {
+          if(base != NULL) {
+              free(base);
+              base = NULL;
+          }
         base = (UChar*) malloc(sizeof(UChar) * 1);
         *base = 0x0000;
       }
@@ -540,7 +548,8 @@ UBool testTag(const char* frag,
       }
       else {
             CONFIRM_INT_EQ(count,kERROR_COUNT);
-			CONFIRM_INT_EQ((int32_t)(unsigned long)array,(int32_t)0);
+            CONFIRM_ErrorCode(status, U_MISSING_RESOURCE_ERROR);
+			/*CONFIRM_INT_EQ((int32_t)(unsigned long)array,(int32_t)0);*/
             count = 0;
       }
        
@@ -629,6 +638,7 @@ UBool testTag(const char* frag,
                            }
 					}
 				} 
+                ures_close(tableRow);
 			}
 		}else{
 			CONFIRM_INT_EQ(row_count,kERROR_COUNT);
@@ -657,6 +667,7 @@ UBool testTag(const char* frag,
 				       string=t;
 					}
 				}
+                ures_close(tableRow);
 		   }
 		   expected_status = (row >= 0 && row < row_count && col >= 0 && col < column_count) ?
                                   expected_resource_status: U_MISSING_RESOURCE_ERROR;
@@ -673,8 +684,9 @@ UBool testTag(const char* frag,
                 u_strcpy(expected_string,kERROR);
 		   }
            CONFIRM_EQ(string,expected_string);
-				   
+	   
         }
+
 
       /*--------------taggedArray----------------------------------------------- */
       strcpy(tag,"tagged_array_");
@@ -710,7 +722,7 @@ UBool testTag(const char* frag,
 				}else{
 					record_fail();
 				}
-			 	
+			 	ures_close(tagelement);
 			}
 		}else{
 			tag_count=0;
@@ -756,14 +768,19 @@ UBool testTag(const char* frag,
 					   count++;
 				   }
 				}
+                ures_close(tagelement);
 			}
 		}
       	CONFIRM_INT_EQ(count, tag_count);		
        
       free(expected_string);
-      free(base);
       ures_close(theBundle);
     }
+        ures_close(array);
+        ures_close(array2d);
+        ures_close(tags);
+        ures_close(arrayItem1);
+      free(base);
   return pass;
 }
 
