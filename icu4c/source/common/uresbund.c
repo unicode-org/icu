@@ -546,6 +546,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
             /* first, open the bundle with real data */
             UResourceBundle *mainRes = ures_openDirect(path, locale, status); 
             UResourceBundle *result = NULL;
+            const char* temp = NULL;
 
             if(keyPath == NULL) {
               /* no key path. This means that we are going to 
@@ -557,7 +558,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
                */
               const char* aKey = parent->fResPath;
               if(aKey) {
-                r = res_findResource(&(mainRes->fResData), mainRes->fRes, &aKey);
+                r = res_findResource(&(mainRes->fResData), mainRes->fRes, &aKey, &temp);
               } else {
                 r = mainRes->fRes;
               }
@@ -566,7 +567,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
                * current key, if there is a key associated
                */
                 aKey = key;
-                r = res_findResource(&(mainRes->fResData), r, &aKey);
+                r = res_findResource(&(mainRes->fResData), r, &aKey, &temp);
               } else if(index != -1) {
               /* if there is no key, but there is an index, try to get by the index */
               /* here we have either a table or an array, so get the element */
@@ -592,7 +593,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
                */
               result = mainRes;
               while(*keyPath) {
-                r = res_findResource(&(result->fResData), result->fRes, (const char**)&keyPath);
+                r = res_findResource(&(result->fResData), result->fRes, (const char**)&keyPath, &temp);
                 if(r == RES_BOGUS) {
                   *status = U_MISSING_RESOURCE_ERROR;
                   result = resB;
@@ -1089,6 +1090,7 @@ ures_findSubResource(const UResourceBundle *resB, const char* path, UResourceBun
   Resource res = RES_BOGUS;
   UResourceBundle *result = fillIn;
   const char *pathToResource = path;
+  const char *key;
 
   if(status == NULL || U_FAILURE(*status)) {
     return result;
@@ -1096,10 +1098,10 @@ ures_findSubResource(const UResourceBundle *resB, const char* path, UResourceBun
 
   /* here we do looping and circular alias checking */
 
-  res = res_findResource(&(resB->fResData), resB->fRes, &pathToResource); 
+  res = res_findResource(&(resB->fResData), resB->fRes, &pathToResource, &key); 
 
   if(res != RES_BOGUS) {
-    result = init_resb_result(&(resB->fResData), res, path, -1, resB->fData, resB, 0, fillIn, status);
+    result = init_resb_result(&(resB->fResData), res, key, -1, resB->fData, resB, 0, fillIn, status);
   } else {
     *status = U_MISSING_RESOURCE_ERROR;
   }

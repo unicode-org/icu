@@ -1810,23 +1810,38 @@ static void TestResourceLevelAliasing(void) {
 static void TestDirectAccess(void) {
   UErrorCode status = U_ZERO_ERROR;
   UResourceBundle *t = NULL, *t2 = NULL;
+  const char* key = NULL;
 
   t = ures_findResource("en/zoneStrings/3/2", t, &status);
   if(U_FAILURE(status)) {
     log_err("Couldn't access indexed resource, error %s\n", u_errorName(status));
     status = U_ZERO_ERROR;
+  } else {
+    key = ures_getKey(t);
+    if(key != NULL) {
+      log_err("Got a strange key, expected NULL, got %s\n", key);
+    }
   }
-
   t = ures_findResource("en/zoneStrings/3", t, &status);
   if(U_FAILURE(status)) {
     log_err("Couldn't access indexed resource, error %s\n", u_errorName(status));
     status = U_ZERO_ERROR;
+  } else {
+    key = ures_getKey(t);
+    if(key != NULL) {
+      log_err("Got a strange key, expected NULL, got %s\n", key);
+    }
   }
 
   t = ures_findResource("sh/CollationElements/Sequence", t, &status);
   if(U_FAILURE(status)) {
     log_err("Couldn't access keyed resource, error %s\n", u_errorName(status));
     status = U_ZERO_ERROR;
+  } else {
+    key = ures_getKey(t);
+    if(strcmp(key, "Sequence")!=0) {
+      log_err("Got a strange key, expected 'Sequence', got %s\n", key);
+    }
   }
 
   t2 = ures_open(NULL, "sh", &status);
@@ -1839,6 +1854,11 @@ static void TestDirectAccess(void) {
   if(U_FAILURE(status)) {
     log_err("Couldn't access keyed resource, error %s\n", u_errorName(status));
     status = U_ZERO_ERROR;
+  } else {
+    key = ures_getKey(t);
+    if(strcmp(key, "Sequence")!=0) {
+      log_err("Got a strange key, expected 'Sequence', got %s\n", key);
+    }
   }
 
   ures_close(t);
