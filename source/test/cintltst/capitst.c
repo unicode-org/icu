@@ -120,7 +120,7 @@ void addCollAPITest(TestNode** root)
     addTest(root, &TestAttribute, "tscoll/capitst/TestAttribute");
     addTest(root, &TestGetTailoredSet, "tscoll/capitst/TestGetTailoredSet");
     addTest(root, &TestMergeSortKeys, "tscoll/capitst/TestMergeSortKeys");
-
+    addTest(root, &TestShortString, "tscoll/capitst/TestShortString");
 }
 
 void TestGetSetAttr(void) {
@@ -1719,5 +1719,115 @@ void TestMergeSortKeys(void) {
      log_data_err("Couldn't open collator");
    }
 }
- 
+static void TestShortString(void) 
+{
+    struct {
+        const char *input;
+        const char *expectedOutput;
+        const char *locale;
+        UErrorCode expectedStatus;
+        int32_t    expectedOffset;
+        uint32_t   expectedIdentifier;
+    } testCases[] = {
+        {"LDE_RDE_KPHONEBOOK_T0041_ZLATN","B2600_KPHONEBOOK_LDE", "de@collation=phonebook", U_USING_FALLBACK_WARNING, 0, 0 },
+        {"LEN_RUS_NO_AS_S4","AS_LEN_NO_S4", NULL, U_USING_FALLBACK_WARNING, 0, 0 },
+        {"LDE_VPHONEBOOK_EO_SI","EO_KPHONEBOOK_LDE_SI", "de@collation=phonebook", U_ZERO_ERROR, 0, 0 },
+        {"LDE_Kphonebook","KPHONEBOOK_LDE", "de@collation=phonebook", U_ZERO_ERROR, 0, 0 },
+        {"Xqde_DE@collation=phonebookq_S3_EX","KPHONEBOOK_LDE", "de@collation=phonebook", U_USING_FALLBACK_WARNING, 0, 0 },
+        {"LFR_FO", "LFR", NULL, U_ZERO_ERROR, 0, 0 },
+        {"SO_LX_AS", "", NULL, U_ILLEGAL_ARGUMENT_ERROR, 9, 0 },
+        {"S3_ASS_MMM", "", NULL, U_ILLEGAL_ARGUMENT_ERROR, 5, 0 }
+    };
+
+    int32_t i = 0, j = 0;
+    UCollator *coll = NULL, *fromID = NULL, *fromNormalized = NULL;
+    UParseError parseError;
+    UErrorCode status = U_ZERO_ERROR;
+    char fromShortBuffer[256], fromIDBuffer[256], fromIDRoundtrip[256], normalizedBuffer[256], fromNormalizedBuffer[256];
+    /*char buffer[256];*/
+    int32_t len = 0;
+    uint32_t identifier = 0, idFromSS = 0;
+    UBool available = FALSE;
+    const char* locale = NULL;
+
+
+    for(i = 0; i < sizeof(testCases)/sizeof(testCases[0]); i++) {
+        status = U_ZERO_ERROR;
+        if(testCases[i].locale) {
+            locale = testCases[i].locale;
+        } else {
+            locale = NULL;
+        }
+
+        coll = ucol_openFromShortString(testCases[i].input, FALSE, &parseError, &status);
+        if(status != testCases[i].expectedStatus) {
+            log_err("Got status '%s' that is different from expected '%s' for '%s'\n", 
+                u_errorName(status), u_errorName(testCases[i].expectedStatus), testCases[i].input);
+        }
+       
+        if(U_SUCCESS(status)) {
+            ucol_getShortDefinitionString(coll, locale, fromShortBuffer, 256, &status);
+
+            if(strcmp(fromShortBuffer, testCases[i].expectedOutput)) {
+                log_err("Got short string '%s' from the collator. Expected '%s' for input '%s'\n",
+                    fromShortBuffer, testCases[i].expectedOutput, testCases[i].input);
+            }
+
+            ucol_normalizeShortDefinitionString(testCases[i].input, normalizedBuffer, 256, &parseError, &status);
+            fromNormalized = ucol_openFromShortString(normalizedBuffer, FALSE, &parseError, &status);
+            ucol_getShortDefinitionString(fromNormalized, locale, fromNormalizedBuffer, 256, &status);
+
+            if(strcmp(fromShortBuffer, fromNormalizedBuffer)) {
+                log_err("Strings obtained from collators instantiated by short string ('%s') and from normalized string ('%s') differ\n", 
+                    fromShortBuffer, fromNormalizedBuffer);
+            }
+
+
+            if(!ucol_equals(coll, fromNormalized)) {
+                log_err("Collator from short string ('%s') differs from one obtained through a normalized version ('%s')\n", 
+                    testCases[i].input, normalizedBuffer);
+            }
+
+            /* test identifiers */
+            identifier = ucol_collatorToIdentifier(coll, locale, &status);
+            if(identifier < 0xC0000000) {
+                ucol_identifierToShortString(identifier, fromIDBuffer, 256, FALSE, &status);
+                fromID = ucol_openFromIdentifier(identifier, FALSE, &status);
+                if(!ucol_equals(coll, fromID)) {
+                    log_err("Collator from short string ('%s') differs from one obtained through an identifier ('%s')\n", 
+                        testCases[i].input, fromIDBuffer);
+                }
+                ucol_close(fromID);
+            }
+
+            /* round-trip short string - identifier */
+            for(j = 1; j < 2; j++) {
+                idFromSS = ucol_shortStringToIdentifier(testCases[i].input, (UBool)j, &status);
+                ucol_identifierToShortString(idFromSS, fromIDBuffer, 256, (UBool)j, &status);
+                identifier = ucol_shortStringToIdentifier(fromIDBuffer, (UBool)j, &status);
+                ucol_identifierToShortString(identifier, fromIDRoundtrip, 256, (UBool)j, &status);
+
+                if(idFromSS != identifier) {
+                    log_err("FD = %i, id didn't round trip. %08X vs %08X (%s)\n", 
+                        j, idFromSS, identifier, testCases[i]);
+                }
+                if(strcmp(fromIDBuffer, fromIDRoundtrip)) {
+                    log_err("FD = %i, SS didn't round trip. %s vs %s (%s)\n", 
+                        j, fromIDBuffer, fromIDRoundtrip, testCases[i]);
+                }
+            }
+
+            ucol_close(fromNormalized);
+            ucol_close(coll);
+
+        } else {
+            if(parseError.offset != testCases[i].expectedOffset) {
+                log_err("Got parse error offset %i, but expected %i instead for '%s'\n",
+                    parseError.offset, testCases[i].expectedOffset, testCases[i].input);
+            }
+        }
+    }
+
+}
+
 #endif /* #if !UCONFIG_NO_COLLATION */
