@@ -5,12 +5,14 @@
 ************************************************************************
 */
 
-#include "normconf.h"
-#include "unicode/normlzr.h"
+#include <stdio.h>
+#include "unicode/utypes.h"
 #include "unicode/unicode.h"
+#include "unicode/normlzr.h"
+#include "unicode/uniset.h"
 #include "cstring.h"
-#include "unicode/putil.h"
 #include "filestrm.h"
+#include "normconf.h"
 
 #define ARRAY_LENGTH(array) (sizeof(array) / sizeof(array[0]))
 
@@ -34,7 +36,7 @@ void NormalizerConformanceTest::runIndexedTest(int32_t index, UBool exec, const 
 #define FIELD_COUNT 5
 
 NormalizerConformanceTest::NormalizerConformanceTest() :
-    normalizer(UnicodeString("", ""), Normalizer::COMPOSE) {}
+    normalizer(UnicodeString(), UNORM_NFC) {}
 
 NormalizerConformanceTest::~NormalizerConformanceTest() {}
 
@@ -78,6 +80,8 @@ void NormalizerConformanceTest::TestConformance(void) {
       }
     }
 
+    // UnicodeSet for all code points that are not mentioned in NormalizationTest.txt
+    UnicodeSet other(0, 0x10ffff);
 
     for (int32_t count = 1;;++count) {
         if (T_FileStream_eof(input)) {
@@ -103,6 +107,12 @@ void NormalizerConformanceTest::TestConformance(void) {
             errln((UnicodeString)"Unable to parse line " + count);
             break; // Syntax error
         }
+
+        // Remove a single code point from the "other" UnicodeSet
+        if(fields[0].length()==fields[0].moveIndex32(0, 1)) {
+            other.remove(fields[0].char32At(0));
+        }
+
         if (checkConformance(fields, UnicodeString(lineBuf, ""))) {
             ++passCount;
         } else {
@@ -115,26 +125,43 @@ void NormalizerConformanceTest::TestConformance(void) {
 
     T_FileStream_close(input);
 
+    /*
+     * Test that all characters that are not mentioned
+     * as single code points in column 1
+     * do not change under any normalization.
+     */
+    UChar32 c;
+
+    // remove U+ffff because that is the end-of-iteration sentinel value
+    other.remove(0xffff);
+
+    for(c=0; c<=0x10ffff; ++c) {
+        if(c==0x30000) {
+            c=0xe0000;
+        }
+        if(!other.contains(c)) {
+            continue;
+        }
+
+        fields[0]=fields[1]=fields[2]=fields[3]=fields[4].setTo(c);
+        sprintf(lineBuf, "not mentioned code point U+%04lx", c);
+
+        if (checkConformance(fields, UnicodeString(lineBuf, ""))) {
+            ++passCount;
+        } else {
+            ++failCount;
+        }
+        if ((count % 1000) == 0) {
+            logln((UnicodeString)"Line " + count);
+        }
+    }
+
     if (failCount != 0) {
         errln((UnicodeString)"Total: " + failCount + " lines failed, " +
               passCount + " lines passed");
     } else {
         logln((UnicodeString)"Total: " + passCount + " lines passed");
     }
-
-    /*
-     * ### TODO: test that all assigned characters that are not mentioned
-     * as single code points in column 1
-     * do not change under any normalization.
-     * I.e., keep a list (UnicodeSet?) of all single code points in c1,
-     * then test that for all in (assigned-list) it is
-     * c1==NFC(c1)==NFD(c1)==NFKC(c1)==NFKD(c1)==FCD(c1)
-     *
-     * ### TODO: test FCD
-     * Idea: since FCD is not a normalization form with guaranteed results,
-     * test that quickCheck(NF*D(c1), isFCD)==TRUE and that quickCheck(FCD(NF*D(c1)), isNF*D)==TRUE.
-     * Also test special, controlled cases.
-     */
 }
 
 /**
@@ -156,40 +183,80 @@ UBool NormalizerConformanceTest::checkConformance(const UnicodeString* field,
                                                   const UnicodeString& line) {
     UBool pass = TRUE;
     UErrorCode status = U_ZERO_ERROR;
-    UnicodeString out;
+    UnicodeString out, fcd;
     int32_t fieldNum;
 
     for (int32_t i=0; i<FIELD_COUNT; ++i) {
         fieldNum = i+1;
         if (i<3) {
-            Normalizer::normalize(field[i], Normalizer::COMPOSE, 0, out, status);
+            Normalizer::normalize(field[i], UNORM_NFC, 0, out, status);
             pass &= assertEqual("C", field[i], out, field[1], "c2!=C(c", fieldNum);
-            iterativeNorm(field[i], Normalizer::COMPOSE, out, +1);
+            iterativeNorm(field[i], UNORM_NFC, out, +1);
             pass &= assertEqual("C(+1)", field[i], out, field[1], "c2!=C(c", fieldNum);
-            iterativeNorm(field[i], Normalizer::COMPOSE, out, -1);
+            iterativeNorm(field[i], UNORM_NFC, out, -1);
             pass &= assertEqual("C(-1)", field[i], out, field[1], "c2!=C(c", fieldNum);
 
-            Normalizer::normalize(field[i], Normalizer::DECOMP, 0, out, status);
+            Normalizer::normalize(field[i], UNORM_NFD, 0, out, status);
             pass &= assertEqual("D", field[i], out, field[2], "c3!=D(c", fieldNum);
-            iterativeNorm(field[i], Normalizer::DECOMP, out, +1);
+            iterativeNorm(field[i], UNORM_NFD, out, +1);
             pass &= assertEqual("D(+1)", field[i], out, field[2], "c3!=D(c", fieldNum);
-            iterativeNorm(field[i], Normalizer::DECOMP, out, -1);
+            iterativeNorm(field[i], UNORM_NFD, out, -1);
             pass &= assertEqual("D(-1)", field[i], out, field[2], "c3!=D(c", fieldNum);
         }
-        Normalizer::normalize(field[i], Normalizer::COMPOSE_COMPAT, 0, out, status);
+        Normalizer::normalize(field[i], UNORM_NFKC, 0, out, status);
         pass &= assertEqual("KC", field[i], out, field[3], "c4!=KC(c", fieldNum);
-        iterativeNorm(field[i], Normalizer::COMPOSE_COMPAT, out, +1);
+        iterativeNorm(field[i], UNORM_NFKC, out, +1);
         pass &= assertEqual("KC(+1)", field[i], out, field[3], "c4!=KC(c", fieldNum);
-        iterativeNorm(field[i], Normalizer::COMPOSE_COMPAT, out, -1);
+        iterativeNorm(field[i], UNORM_NFKC, out, -1);
         pass &= assertEqual("KC(-1)", field[i], out, field[3], "c4!=KC(c", fieldNum);
 
-        Normalizer::normalize(field[i], Normalizer::DECOMP_COMPAT, 0, out, status);
+        Normalizer::normalize(field[i], UNORM_NFKD, 0, out, status);
         pass &= assertEqual("KD", field[i], out, field[4], "c5!=KD(c", fieldNum);
-        iterativeNorm(field[i], Normalizer::DECOMP_COMPAT, out, +1);
+        iterativeNorm(field[i], UNORM_NFKD, out, +1);
         pass &= assertEqual("KD(+1)", field[i], out, field[4], "c5!=KD(c", fieldNum);
-        iterativeNorm(field[i], Normalizer::DECOMP_COMPAT, out, -1);
+        iterativeNorm(field[i], UNORM_NFKD, out, -1);
         pass &= assertEqual("KD(-1)", field[i], out, field[4], "c5!=KD(c", fieldNum);
     }
+
+    // test quick checks
+    if(UNORM_NO == Normalizer::quickCheck(field[1], UNORM_NFC, status)) {
+        errln("Normalizer error: quickCheck(NFC(s), UNORM_NFC) is UNORM_NO");
+        pass = UNORM_NO;
+    }
+    if(UNORM_NO == Normalizer::quickCheck(field[2], UNORM_NFD, status)) {
+        errln("Normalizer error: quickCheck(NFD(s), UNORM_NFD) is UNORM_NO");
+        pass = UNORM_NO;
+    }
+    if(UNORM_NO == Normalizer::quickCheck(field[3], UNORM_NFKC, status)) {
+        errln("Normalizer error: quickCheck(NFKC(s), UNORM_NFKC) is UNORM_NO");
+        pass = UNORM_NO;
+    }
+    if(UNORM_NO == Normalizer::quickCheck(field[4], UNORM_NFKD, status)) {
+        errln("Normalizer error: quickCheck(NFKD(s), UNORM_NFKD) is UNORM_NO");
+        pass = FALSE;
+    }
+
+    // test FCD quick check and "makeFCD"
+    Normalizer::normalize(field[0], UNORM_FCD, 0, fcd, status);
+    if(UNORM_NO == Normalizer::quickCheck(fcd, UNORM_FCD, status)) {
+        errln("Normalizer error: quickCheck(FCD(s), UNORM_FCD) is UNORM_NO");
+        pass = FALSE;
+    }
+    if(UNORM_NO == Normalizer::quickCheck(field[2], UNORM_FCD, status)) {
+        errln("Normalizer error: quickCheck(NFD(s), UNORM_FCD) is UNORM_NO");
+        pass = FALSE;
+    }
+    if(UNORM_NO == Normalizer::quickCheck(field[4], UNORM_FCD, status)) {
+        errln("Normalizer error: quickCheck(NFKD(s), UNORM_FCD) is UNORM_NO");
+        pass = FALSE;
+    }
+
+    Normalizer::normalize(fcd, UNORM_NFD, 0, out, status);
+    if(out != field[2]) {
+        errln("Normalizer error: NFD(FCD(s))!=NFD(s)");
+        pass = FALSE;
+    }
+
     if (U_FAILURE(status)) {
         errln("Normalizer::normalize returned error status");
         return FALSE;
@@ -205,7 +272,7 @@ UBool NormalizerConformanceTest::checkConformance(const UnicodeString* field,
  * @param dir either +1 or -1
  */
 void NormalizerConformanceTest::iterativeNorm(const UnicodeString& str,
-                                              Normalizer::EMode mode,
+                                              UNormalizationMode mode,
                                               UnicodeString& result,
                                               int8_t dir) {
     UErrorCode status = U_ZERO_ERROR;
