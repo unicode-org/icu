@@ -98,7 +98,7 @@ static UOption options[]={
 };
 
 extern int
-main(int argc, char *argv[]) {
+main(int argc, const char *argv[]) {
     char line[512];
     const char *path;
     FileStream *in;
