@@ -384,7 +384,9 @@ unum_setAttribute(    UNumberFormat*          fmt,
   case UNUM_PADDING_POSITION:
       ((DecimalFormat*)fmt)->setPadPosition((DecimalFormat::EPadPosition)newValue);
     break;
-  
+  case UNUM_SECONDARY_GROUPING_SIZE:
+      ((DecimalFormat*)fmt)->setSecondaryGroupingSize(newValue);
+    break;
   }
 }
 
@@ -643,3 +645,20 @@ unum_setSymbol(UNumberFormat *fmt,
         length>=0 ? UnicodeString(value, length) : UnicodeString(value));
   ((DecimalFormat *)fmt)->setDecimalFormatSymbols(symbols);
 }
+
+U_CAPI void
+unum_applyPattern(            UNumberFormat     *format,
+                    UBool          localized,
+                    const   UChar           *pattern,
+                    int32_t         patternLength)
+{
+  int32_t len = (patternLength == -1 ? u_strlen(pattern) : patternLength);
+  const UnicodeString pat((UChar*)pattern, len, len);
+  UErrorCode status = U_ZERO_ERROR;
+
+  if(localized)
+    ((DecimalFormat*)format)->applyLocalizedPattern(pat, status);
+  else
+    ((DecimalFormat*)format)->applyPattern(pat, status);
+}
+

@@ -40,6 +40,7 @@ static void TestCurrency(void);
 /* Test getDoubleAttribute and getDoubleAttribute */
 static void TestDoubleAttribute(void);
 
+static void TestSecondaryGrouping(void);
 
 /*Internal functions used*/
 static void roundingTest(UNumberFormat*, double,  int32_t, const char*);

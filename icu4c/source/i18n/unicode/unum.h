@@ -287,6 +287,21 @@ unum_parseDouble(    const   UNumberFormat*  fmt,
             UErrorCode      *status);
 
 /**
+* Set the pattern used by an UNumberFormat.
+* The pattern should follow the pattern syntax rules.
+* @param fmt The formatter to set.
+* @param localized TRUE if the pattern is localized, FALSE otherwise.
+* @param pattern The new pattern
+* @param patternLength The length of pattern, or -1 if null-terminated.
+* @see unum_toPattern
+* @draft
+*/
+U_CAPI void
+unum_applyPattern(          UNumberFormat  *format,
+                            UBool          localized,
+                    const   UChar          *pattern,
+                            int32_t         patternLength);
+/**
 * Get a locale for which number formatting patterns are available.
 * A UNumberFormat in a locale returned by this function will perform the correct
 * formatting and parsing for the locale.
@@ -340,7 +355,9 @@ enum UNumberFormatAttribute {
   /** The width to which the output of <code>format()</code> is padded. */
   UNUM_FORMAT_WIDTH,
   /** The position at which padding will take place. */
-  UNUM_PADDING_POSITION
+  UNUM_PADDING_POSITION,
+  /** Secondary grouping size */
+  UNUM_SECONDARY_GROUPING_SIZE
 };
 typedef enum UNumberFormatAttribute UNumberFormatAttribute;
 
@@ -362,7 +379,7 @@ typedef enum {
 * @param attr The attribute to query; one of UNUM_PARSE_INT_ONLY, UNUM_GROUPING_USED, 
 * UNUM_DECIMAL_ALWAYS_SHOWN, UNUM_MAX_INTEGER_DIGITS, UNUM_MIN_INTEGER_DIGITS, UNUM_INTEGER_DIGITS,
 * UNUM_MAX_FRACTION_DIGITS, UNUM_MIN_FRACTION_DIGITS, UNUM_FRACTION_DIGITS, UNUM_MULTIPLIER, 
-* UNUM_GROUPING_SIZE, UNUM_ROUNDING_MODE, UNUM_FORMAT_WIDTH, UNUM_PADDING_POSITION.
+* UNUM_GROUPING_SIZE, UNUM_ROUNDING_MODE, UNUM_FORMAT_WIDTH, UNUM_PADDING_POSITION, UNUM_SECONDARY_GROUPING_SIZE.
 * @return The value of attr.
 * @see unum_setAttribute
 * @see unum_getDoubleAttribute
@@ -382,7 +399,7 @@ unum_getAttribute(const UNumberFormat*          fmt,
 * @param attr The attribute to set; one of UNUM_PARSE_INT_ONLY, UNUM_GROUPING_USED, 
 * UNUM_DECIMAL_ALWAYS_SHOWN, UNUM_MAX_INTEGER_DIGITS, UNUM_MIN_INTEGER_DIGITS, UNUM_INTEGER_DIGITS,
 * UNUM_MAX_FRACTION_DIGITS, UNUM_MIN_FRACTION_DIGITS, UNUM_FRACTION_DIGITS, UNUM_MULTIPLIER, 
-* UNUM_GROUPING_SIZE, UNUM_ROUNDING_MODE, UNUM_FORMAT_WIDTH, UNUM_PADDING_POSITION.
+* UNUM_GROUPING_SIZE, UNUM_ROUNDING_MODE, UNUM_FORMAT_WIDTH, UNUM_PADDING_POSITION, UNUM_SECONDARY_GROUPING_SIZE.
 * @param newValue The new value of attr.
 * @see unum_getAttribute
 * @see unum_getDoubleAttribute
