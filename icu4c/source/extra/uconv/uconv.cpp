@@ -26,6 +26,7 @@
 #include <unicode/translit.h>
 
 #include "cmemory.h"
+#include "cstring.h"
 
 #include "unicode/uwmsg.h"
 
@@ -424,12 +425,21 @@ static UBool convertFile(const char *pname,
     // Create transliterator as needed.
 
     if (translit != NULL && *translit) {
+        UParseError parse;
 	UnicodeString str(translit);
-	t = Transliterator::createInstance(str, UTRANS_FORWARD, err);
+
+        /* Create from rules or by ID as needed. */
+
+        if (uprv_strchr(translit, ':') || uprv_strchr(translit, '>') || uprv_strchr(translit, '<') || uprv_strchr(translit, '>')) {
+	    t = Transliterator::createFromRules("Uconv", str, UTRANS_FORWARD, parse, err);
+        } else {
+            t = Transliterator::createInstance(translit, UTRANS_FORWARD, err);
+        }
+
 	if (U_FAILURE(err)) {
 	    str.append((UChar32) 0);
 	    initMsg(pname);
-	    u_wmsg("cantOpenTranslit", str.getBuffer(),
+	    u_wmsg("cantCreateTranslit", str.getBuffer(),
 		   u_wmsg_errorName(err));
 	    if (t) {
 		delete t;
