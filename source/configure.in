@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.140 2001/11/28 04:10:53 grhoten-oss Exp $
+dnl $Id: configure.in,v 1.141 2001/11/29 00:29:20 grhoten-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -68,7 +68,7 @@ AC_CHECK_PROG(AUTOCONF, autoconf, autoconf, true)
 AC_CHECK_PROG(STRIP, strip, strip, true)
 
 dnl Check for the platform make
-AC_PATH_PROGS(U_MAKE, gmake, make)
+AC_PATH_PROGS(U_MAKE, gmake gnumake, make)
 AC_SUBST(U_MAKE)
 
 dnl Check for doxygen to generate documentation
@@ -88,11 +88,20 @@ AC_ARG_ENABLE(64bit-libs,
     [ENABLE_64BIT_LIBS=yes]
 )
 AC_CACHE_CHECK([for 64-bit executable support], ac_cv_64bit_ok,
-    [ if test "$ENABLE_64BIT_LIBS" != no; then
+    [ if test "$ENABLE_64BIT_LIBS" = no; then
+        case "${host}" in
+        *-*-hpux*)
+            case "${CXX}" in
+            *CC)
+                CPPFLAGS="${CPPFLAGS} +DAportable"
+                ;;
+            esac;;
+        esac
+    else
         case "${host}" in
         *-*-solaris*)
-            SOL64=`$CXX -xarch=v9 && $CC -xarch=v9 2>&1 |grep -v usage:`
-            SPARCV9=`isainfo -n | grep sparcv9`
+            SOL64=`$CXX -xarch=v9 && $CC -xarch=v9 2>&1 | grep -v usage:`
+            SPARCV9=`isainfo -n 2>&1 | grep sparcv9`
             if test -z "$SOL64" && test -n "$SPARCV9"; then
                 CPPFLAGS="${CPPFLAGS} -xtarget=ultra -xarch=v9"
                 ENABLE_64BIT_LIBS=yes
@@ -105,6 +114,9 @@ AC_CACHE_CHECK([for 64-bit executable support], ac_cv_64bit_ok,
 #            AC_TRY_RUN(int main(void) {return 0;},
 #                ENABLE_64BIT_LIBS=yes, ENABLE_64BIT_LIBS=no, ENABLE_64BIT_LIBS=no)
 #            ;;
+        *-*-hpux*)
+            ENABLE_64BIT_LIBS=unknown
+            ;;
         *)  
             ENABLE_64BIT_LIBS=no
             ;;
@@ -113,11 +125,9 @@ AC_CACHE_CHECK([for 64-bit executable support], ac_cv_64bit_ok,
     ac_cv_64bit_ok="${ENABLE_64BIT_LIBS}"
     ]
 )
-if test "$ENABLE_64BIT_LIBS" = no; then
-    CPPFLAGS="${OLD_CPPFLAGS}"
-else
-    ENABLE_64BIT_LIBS="${ac_cv_64bit_ok}"
-fi
+# Don't reset the CPPFLAGS here because of HP/UX
+# Individual tests that fail should reset it to OLD_CPPFLAGS.
+ENABLE_64BIT_LIBS="${ac_cv_64bit_ok}"
 AC_SUBST(ENABLE_64BIT_LIBS)
 
 ICU_CHECK_MH_FRAG
@@ -209,8 +219,7 @@ AC_SUBST(ENABLE_RPATH)
 dnl set up U_INLINE.  
 dnl Copy the definition of AC_C_INLINE, with slight mods.
 dnl
-AC_MSG_CHECKING([for definition of U_INLINE])
-AC_CACHE_CHECK([for inline], ac_cv_c_inline,
+AC_CACHE_CHECK([for definition of U_INLINE for C], ac_cv_c_inline,
 [ac_cv_c_inline=no
 for ac_kw in inline __inline__ __inline; do
   AC_TRY_COMPILE(, [} $ac_kw foo() {], [ac_cv_c_inline=$ac_kw; break])
@@ -336,12 +345,11 @@ AC_CACHE_VAL(ac_cv_func_mmap_ok,
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-void uprv_mapFile(void) {
-    mmap((void *)0, 0, PROT_READ, 0, 0, 0);
-}
     >>,
     changequote([, ])dnl
-    [uprv_mapFile();], ac_cv_func_mmap_ok=yes, ac_cv_func_mmap_ok=no)] )
+    [mmap((void *)0, 0, PROT_READ, 0, 0, 0);],
+    ac_cv_func_mmap_ok=yes,
+    ac_cv_func_mmap_ok=no)] )
 AC_MSG_RESULT($ac_cv_func_mmap_ok)
 if test $ac_cv_func_mmap_ok = yes
 then
@@ -368,19 +376,19 @@ AC_SUBST(U_HAVE_INTTYPES_H)
 AC_ARG_WITH(iostream,
 	[  --with-iostream=version specify the version of iostream to use (none, old, std, auto) [default=auto]],
 	[case "${withval}" in
-                none) streams=none ;;
+		none) streams=none ;;
 		old) streams=198506 ;;
 		std) streams=199711 ;;
-                auto) streams= ;;
+		auto) streams= ;;
 		*) AC_MSG_ERROR(bad value ${withval} for --with-iostream) ;;
 		esac], 
         [streams=])
 
+U_IOSTREAM_SOURCE=0
 if test x$streams != xnone
 then
     AC_LANG_SAVE
     AC_LANG_CPLUSPLUS
-    U_IOSTREAM_SOURCE=0
     AC_CHECK_HEADER(iostream)
     if test $ac_cv_header_iostream = yes
     then
