@@ -696,8 +696,11 @@ void TestStringFunctions()
     temp[3] = 0xFB;
 
     u_uastrncpy(temp, "abcabcabc", 3);
-    if(u_strcmp(uchars, temp) != 0)
+    if(u_strncmp(uchars, temp, 3) != 0)
         log_err("There is an error in u_uastrncpy() Expected %s Got %s\n", austrdup(uchars), austrdup(temp));
+    }
+    if(temp[3] != 0xFB) {
+      log_err("u_austrncpy wrote past it's bounds. Expected undisturbed byte at 3\n");
     }
    
     
