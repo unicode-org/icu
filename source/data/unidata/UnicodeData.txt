@@ -3645,25 +3645,15 @@
 1366;ETHIOPIC PREFACE COLON;Po;0;L;;;;;N;;;;;
 1367;ETHIOPIC QUESTION MARK;Po;0;L;;;;;N;;;;;
 1368;ETHIOPIC PARAGRAPH SEPARATOR;Po;0;L;;;;;N;;;;;
-
-# The original version 4.0.1 of UnicodeData.txt file contains a bug.
-# According to resolved Public Review Issue #26
-# (http://www.unicode.org/review/resolved-pri.html),
-# the Ethiopic digits should be changed from decimal digits to other digits.
-# The original file only changed the numeric type but not the general category.
-# The file for ICU 3.0 is fixed by changing Nd->No according to PRI #26.
-# This ensures that [:Nd:]=[:Numeric_Type=Decimal:]
-
-1369;ETHIOPIC DIGIT ONE;No;0;L;;;1;1;N;;;;;
-136A;ETHIOPIC DIGIT TWO;No;0;L;;;2;2;N;;;;;
-136B;ETHIOPIC DIGIT THREE;No;0;L;;;3;3;N;;;;;
-136C;ETHIOPIC DIGIT FOUR;No;0;L;;;4;4;N;;;;;
-136D;ETHIOPIC DIGIT FIVE;No;0;L;;;5;5;N;;;;;
-136E;ETHIOPIC DIGIT SIX;No;0;L;;;6;6;N;;;;;
-136F;ETHIOPIC DIGIT SEVEN;No;0;L;;;7;7;N;;;;;
-1370;ETHIOPIC DIGIT EIGHT;No;0;L;;;8;8;N;;;;;
-1371;ETHIOPIC DIGIT NINE;No;0;L;;;9;9;N;;;;;
-
+1369;ETHIOPIC DIGIT ONE;Nd;0;L;;;1;1;N;;;;;
+136A;ETHIOPIC DIGIT TWO;Nd;0;L;;;2;2;N;;;;;
+136B;ETHIOPIC DIGIT THREE;Nd;0;L;;;3;3;N;;;;;
+136C;ETHIOPIC DIGIT FOUR;Nd;0;L;;;4;4;N;;;;;
+136D;ETHIOPIC DIGIT FIVE;Nd;0;L;;;5;5;N;;;;;
+136E;ETHIOPIC DIGIT SIX;Nd;0;L;;;6;6;N;;;;;
+136F;ETHIOPIC DIGIT SEVEN;Nd;0;L;;;7;7;N;;;;;
+1370;ETHIOPIC DIGIT EIGHT;Nd;0;L;;;8;8;N;;;;;
+1371;ETHIOPIC DIGIT NINE;Nd;0;L;;;9;9;N;;;;;
 1372;ETHIOPIC NUMBER TEN;No;0;L;;;;10;N;;;;;
 1373;ETHIOPIC NUMBER TWENTY;No;0;L;;;;20;N;;;;;
 1374;ETHIOPIC NUMBER THIRTY;No;0;L;;;;30;N;;;;;
