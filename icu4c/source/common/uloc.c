@@ -1226,7 +1226,7 @@ int32_t uloc_countAvailable()
     return _installedLocalesCount;
 }
 
-UBool ucln_uloc(void) {
+UBool uloc_cleanup(void) {
     char ** temp;
     int32_t localeCount;
     int32_t i;
