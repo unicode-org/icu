@@ -1,19 +1,17 @@
 /*
- *******************************************************************************
- * Copyright (C) 1996-2000, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecompData.java,v $ 
- * $Date: 2000/03/10 04:07:20 $ 
- * $Revision: 1.3 $
- *
- *****************************************************************************************
- */
+************************************************************************
+*   Copyright (c) 1997-2000, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+************************************************************************
+* > THIS FILE WAS MACHINE GENERATED <
+* >       DO NOT EDIT BY HAND       <
+* >      RUN TOOL TO REGENERATE     <
+* Tool: com.ibm.text.Normalizer
+* Creation date: Wed Jul 12 09:38:25 PDT 2000
+*/
+
 package com.ibm.text;
 import com.ibm.util.*;
-// This class is MACHINE GENERATED.  Run NormalizerBuilder to regenerate.
-
 
 class DecompData {
     static final int MAX_CANONICAL = 21754;
