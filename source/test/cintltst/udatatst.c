@@ -34,6 +34,8 @@ static void TestErrorConditions(void);
 static void TestAppData(void);
 static void TestICUDataName(void);
 
+void addUDataTest(TestNode** root);
+
 void
 addUDataTest(TestNode** root)
 {
@@ -661,75 +663,75 @@ static void TestAppData()
 
 static void TestICUDataName()
 {
-	UVersionInfo icuVersion;
-	char expectDataName[20];
-	unsigned int expectLen = 8;
+    UVersionInfo icuVersion;
+    char expectDataName[20];
+    unsigned int expectLen = 8;
 
-	char typeChar  = '?';
+    char typeChar  = '?';
 
-	/* Print out the version # we have .. */
-	log_verbose("utypes.h says U_ICUDATA_NAME = %s\n", U_ICUDATA_NAME);
+    /* Print out the version # we have .. */
+    log_verbose("utypes.h says U_ICUDATA_NAME = %s\n", U_ICUDATA_NAME);
 
-	/* Build up the version # we expect to get */
-	u_getVersion(icuVersion);
+    /* Build up the version # we expect to get */
+    u_getVersion(icuVersion);
 
-	switch(U_CHARSET_FAMILY)
-	{
-	case U_ASCII_FAMILY:
-		  switch(U_IS_BIG_ENDIAN)
-		  {
-		  case 1:
-				typeChar = 'b';
-				break;
-		  case 0:
-			    typeChar = 'l';
-				break;
-		  default:
-				log_err("Expected 1 or 0 for U_IS_BIG_ENDIAN, got %d!\n", (int)U_IS_BIG_ENDIAN);
-				/* return; */
-		  }
-		  break;
-	case U_EBCDIC_FAMILY:
-		typeChar = 'e';
-		break;
-	}
+    switch(U_CHARSET_FAMILY)
+    {
+    case U_ASCII_FAMILY:
+          switch(U_IS_BIG_ENDIAN)
+          {
+          case 1:
+                typeChar = 'b';
+                break;
+          case 0:
+                typeChar = 'l';
+                break;
+          default:
+                log_err("Expected 1 or 0 for U_IS_BIG_ENDIAN, got %d!\n", (int)U_IS_BIG_ENDIAN);
+                /* return; */
+          }
+          break;
+    case U_EBCDIC_FAMILY:
+        typeChar = 'e';
+        break;
+    }
 
-	sprintf(expectDataName, "%s%d%d%c",
-				"icudt",
-				(int)icuVersion[0],
-				(int)icuVersion[1],
-				typeChar);
+    sprintf(expectDataName, "%s%d%d%c",
+                "icudt",
+                (int)icuVersion[0],
+                (int)icuVersion[1],
+                typeChar);
 
-	log_verbose("Expected: %s\n", expectDataName);
-	if(uprv_strlen(expectDataName) != expectLen)
-	{
-		log_err("*Expected* length is wrong (test err?), should be %d is %d\n",
-			expectLen, uprv_strlen(expectDataName));	
-	}
+    log_verbose("Expected: %s\n", expectDataName);
+    if(uprv_strlen(expectDataName) != expectLen)
+    {
+        log_err("*Expected* length is wrong (test err?), should be %d is %d\n",
+            expectLen, uprv_strlen(expectDataName));
+    }
 
-	if(uprv_strlen(U_ICUDATA_NAME) != expectLen)
-	{
-		log_err("U_ICUDATA_NAME length should be %d is %d\n",
-			expectLen, uprv_strlen(U_ICUDATA_NAME));
-	}
-	
-	if(uprv_strcmp(U_ICUDATA_NAME, expectDataName))
-	{
-		log_err("U_ICUDATA_NAME should be %s but is %s\n",
-				expectDataName, U_ICUDATA_NAME);
-	}
+    if(uprv_strlen(U_ICUDATA_NAME) != expectLen)
+    {
+        log_err("U_ICUDATA_NAME length should be %d is %d\n",
+            expectLen, uprv_strlen(U_ICUDATA_NAME));
+    }
+    
+    if(uprv_strcmp(U_ICUDATA_NAME, expectDataName))
+    {
+        log_err("U_ICUDATA_NAME should be %s but is %s\n",
+                expectDataName, U_ICUDATA_NAME);
+    }
 
         /* ICUDATA_NAME comes from the build system on *nix */
 #ifdef ICUDATA_NAME
-        if(uprv_strcmp(U_ICUDATA_NAME, ICUDATA_NAME))
-        {
-	  log_err("ICUDATA_NAME  and U_ICUDATA_NAME don't match: "
-		  "ICUDATA_NAME=%s, U_ICUDATA_NAME=%s.  Check configure.in, icudefs.mk.in, utypes.h...\n",  ICUDATA_NAME, U_ICUDATA_NAME);
-	}
-	else
-	{
-	  log_verbose("ICUDATA_NAME=%s (from icudefs.mk), U_ICUDATA_NAME=%s (from utypes.h)\n", ICUDATA_NAME, U_ICUDATA_NAME);
-	}
+    if(uprv_strcmp(U_ICUDATA_NAME, ICUDATA_NAME))
+    {
+        log_err("ICUDATA_NAME  and U_ICUDATA_NAME don't match: "
+            "ICUDATA_NAME=%s, U_ICUDATA_NAME=%s.  Check configure.in, icudefs.mk.in, utypes.h...\n",  ICUDATA_NAME, U_ICUDATA_NAME);
+    }
+    else
+    {
+        log_verbose("ICUDATA_NAME=%s (from icudefs.mk), U_ICUDATA_NAME=%s (from utypes.h)\n", ICUDATA_NAME, U_ICUDATA_NAME);
+    }
 #endif
 
 }
