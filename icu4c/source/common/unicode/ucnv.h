@@ -23,20 +23,20 @@
  * <h2>Character Conversion C API</h2>
  *
  * <p>This API is used to convert codepage or character encoded data to and
- * from UTF-16. You can open a converter with {@link ucnv_open()}. With that
+ * from UTF-16. You can open a converter with {@link ucnv_open() }. With that
  * converter, you can get its properties, set options, convert your data and
  * close the converter.</p>
  *
  * <p>Since many software programs recogize different converter names for
  * different types of converters, there are other functions in this API to
- * iterate over the converter aliases. The functions {@link ucnv_getAvailableName()},
- * {@link ucnv_getAlias()} and {@link ucnv_getStandardName()} are some of the
+ * iterate over the converter aliases. The functions {@link ucnv_getAvailableName() },
+ * {@link ucnv_getAlias() } and {@link ucnv_getStandardName() } are some of the
  * more frequently used alias functions to get this information.</p>
  *
  * <p>When a converter encounters an illegal, irregular, invalid or unmappable character
  * its default behavior is to use a substitution character to replace the
- * bad byte sequence. This behavior can be changed by using {@link ucnv_getFromUCallBack()}
- * or {@link ucnv_getToUCallBack()} on the converter. The header ucnv_err.h defines
+ * bad byte sequence. This behavior can be changed by using {@link ucnv_getFromUCallBack() }
+ * or {@link ucnv_getToUCallBack() } on the converter. The header ucnv_err.h defines
  * many other callback actions that can be used instead of a character substitution.</p>
  *
  * <p>More information about this API can be found in our 
