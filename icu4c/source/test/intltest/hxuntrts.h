@@ -11,7 +11,6 @@
 #ifndef HEXTOUNITRTST_H
 #define HEXTOUNITRTST_H
 
-#include "unicode/utypes.h"
 #include "unicode/translit.h"
 #include "unicode/hextouni.h"
 #include "intltest.h"

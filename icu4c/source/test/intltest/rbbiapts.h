@@ -14,7 +14,6 @@
 #define RBBIAPITEST_H
 
 
-#include "unicode/utypes.h"
 #include "intltest.h"
 #include "unicode/rbbi.h"
 

@@ -136,7 +136,7 @@ void CollationThaiTest::TestDictionary(void) {
         ++wordCount;
         if (wordCount <= 8) {
             UnicodeString str;
-            logln((UnicodeString)"Word " + wordCount + ": " + prettify(word, str));
+            logln((UnicodeString)"Word " + wordCount + ": " + IntlTest::prettify(word, str));
         }
 
         if (lastWord.length() > 0) {
@@ -149,9 +149,9 @@ void CollationThaiTest::TestDictionary(void) {
                     UnicodeString msg =
                         UnicodeString("--------------------------------------------\n")
                         + line
-                        + " compare(" + prettify(lastWord, str);
+                        + " compare(" + IntlTest::prettify(lastWord, str);
                     msg += UnicodeString(", ")
-                        + prettify(word, str) + ") returned " + result
+                        + IntlTest::prettify(word, str) + ") returned " + result
                         + ", expected -1\n";
                     UErrorCode status = U_ZERO_ERROR;
                     CollationKey k1, k2;
@@ -265,8 +265,8 @@ void CollationThaiTest::compareArray(const Collator& c, const char* tests[],
         {
             UnicodeString t1, t2;
             errln(UnicodeString("") +
-                  i/3 + ": compare(" + prettify(s1, t1)
-                  + " , " + prettify(s2, t2)
+                  i/3 + ": compare(" + IntlTest::prettify(s1, t1)
+                  + " , " + IntlTest::prettify(s2, t2)
                   + ") got " + result + "; expected " + expect);
 
             CollationKey k1, k2;
@@ -294,8 +294,8 @@ void CollationThaiTest::compareArray(const Collator& c, const char* tests[],
             if (sign(result) != sign(expect)) {
                 UnicodeString t1, t2;
                 errln(UnicodeString("") +
-                      i/3 + ": key(" + prettify(s1, t1)
-                      + ").compareTo(key(" + prettify(s2, t2)
+                      i/3 + ": key(" + IntlTest::prettify(s1, t1)
+                      + ").compareTo(key(" + IntlTest::prettify(s2, t2)
                       + ")) got " + result + "; expected " + expect);
                 
                 errln((UnicodeString)"  " + prettify(k1, t1) + " vs. " + prettify(k2, t2));

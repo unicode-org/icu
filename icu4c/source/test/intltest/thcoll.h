@@ -8,12 +8,12 @@
 **********************************************************************
 */
 
-#include "intltest.h"
+#ifndef COLLATIONTHAITEST_H
+#define COLLATIONTHAITEST_H
 
-class Collator;
-class UnicodeString;
+#include "tscoll.h"
 
-class CollationThaiTest : public IntlTest {
+class CollationThaiTest : public IntlTestCollator {
     Collator* coll; // Thai collator
 
 public:
@@ -53,3 +53,5 @@ private:
     UnicodeString& parseChars(UnicodeString& result,
                               const char* chars);
 };
+
+#endif

@@ -10,7 +10,6 @@
  */
 
 
-#include "unicode/utypes.h"
 #include "intltest.h"
 
 

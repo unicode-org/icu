@@ -7,7 +7,6 @@
 #ifndef __CalendarTest__
 #define __CalendarTest__
  
-#include "unicode/utypes.h"
 #include "caltztst.h"
 #include "unicode/calendar.h"
 

@@ -8,7 +8,6 @@
 #define _INTLTESTSIMPLEDATEFORMATAPI
 
 
-#include "unicode/utypes.h"
 #include "intltest.h"
 
 /**

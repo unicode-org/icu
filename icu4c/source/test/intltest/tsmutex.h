@@ -3,13 +3,13 @@
  * Copyright (c) 1997-2001, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
-#ifndef _INTLTEST
-#include "intltest.h"
-#endif
 
-#ifndef _MUTEX
+
+#ifndef MUTEXTEST_H
+#define MUTEXTEST_H
+
+#include "intltest.h"
 #include "mutex.h"
-#endif
 
 /**
  * Tests Mutex and MutexImplementation functionality using
@@ -35,5 +35,5 @@ public:
 private:
 };
 
-
+#endif
 

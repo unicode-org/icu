@@ -16,6 +16,7 @@
 #include <string.h>
 #include <assert.h>
 #include <stdarg.h>
+#include <stdlib.h>
 
 #include "unicode/unistr.h"
 #include "unicode/ures.h"
@@ -169,79 +170,6 @@ UnicodeString operator+(const UnicodeString& left, float num)
 
 //------------------
 
-// used for collation result reporting, defined here for convenience
-// (maybe moved later)
-void
-IntlTest::reportCResult( UnicodeString &source, UnicodeString &target,
-             CollationKey &sourceKey, CollationKey &targetKey,
-             Collator::EComparisonResult compareResult,
-             Collator::EComparisonResult keyResult,
-                                Collator::EComparisonResult incResult,
-                         Collator::EComparisonResult expectedResult )
-{
-    if (expectedResult < -1 || expectedResult > 1)
-    {
-        errln("***** invalid call to reportCResult ****");
-        return;
-    }
-
-    UBool ok1 = (compareResult == expectedResult);
-    UBool ok2 = (keyResult == expectedResult);
-    UBool ok3 = (incResult == expectedResult);
-
-
-    if (ok1 && ok2 && ok3 && !verbose) {
-        // Keep non-verbose, passing tests fast
-        return;
-    } else {
-        UnicodeString msg1(ok1 ? "Ok: compare(" : "FAIL: compare(");
-        UnicodeString msg2(", "), msg3(") returned "), msg4("; expected ");
-        UnicodeString prettySource, prettyTarget, sExpect, sResult;
-
-        prettify(source, prettySource);
-        prettify(target, prettyTarget);
-        appendCompareResult(compareResult, sResult);
-        appendCompareResult(expectedResult, sExpect);
-
-        if (ok1) {
-            logln(msg1 + prettySource + msg2 + prettyTarget + msg3 + sResult);
-        } else {
-            errln(msg1 + prettySource + msg2 + prettyTarget + msg3 + sResult + msg4 + sExpect);
-        }
-
-        msg1 = UnicodeString(ok2 ? "Ok: key(" : "FAIL: key(");
-        msg2 = ").compareTo(key(";
-        msg3 = ")) returned ";
-
-        appendCompareResult(keyResult, sResult);
-
-        if (ok2) {
-            logln(msg1 + prettySource + msg2 + prettyTarget + msg3 + sResult);
-        } else {
-            errln(msg1 + prettySource + msg2 + prettyTarget + msg3 + sResult + msg4 + sExpect);
-
-            msg1 = "  ";
-            msg2 = " vs. ";
-
-            prettify(sourceKey, prettySource);
-            prettify(targetKey, prettyTarget);
-
-            errln(msg1 + prettySource + msg2 + prettyTarget);
-        }
-        msg1 = UnicodeString (ok3 ? "Ok: incCompare(" : "FAIL: incCompare(");
-        msg2 = ", ";
-        msg3 = ") returned ";
-
-        appendCompareResult(incResult, sResult);
-
-        if (ok3) {
-            logln(msg1 + prettySource + msg2 + prettyTarget + msg3 + sResult);
-        } else {
-            errln(msg1 + prettySource + msg2 + prettyTarget + msg3 + sResult + msg4 + sExpect);
-        }
-    }
-}
-
 // Append a hex string to the target
 UnicodeString&
 IntlTest::appendHex(uint32_t number,
@@ -275,32 +203,6 @@ IntlTest::appendHex(uint32_t number,
     default:
         target += "**";
     }
-    return target;
-}
-
-UnicodeString&
-IntlTest::appendCompareResult(Collator::EComparisonResult result,
-                  UnicodeString& target)
-{
-    if (result == Collator::LESS)
-    {
-        target += "LESS";
-    }
-    else if (result == Collator::EQUAL)
-    {
-        target += "EQUAL";
-    }
-    else if (result == Collator::GREATER)
-    {
-        target += "GREATER";
-    }
-    else
-    {
-        UnicodeString huh = "?";
-
-        target += (huh + (int32_t)result);
-    }
-
     return target;
 }
 
@@ -387,26 +289,6 @@ IntlTest::prettify(const UnicodeString &source, UBool parseBackslash)
     }
 
     target += "\"";
-
-    return target;
-}
-
-// Produce a printable representation of a CollationKey
-UnicodeString &IntlTest::prettify(const CollationKey &source, UnicodeString &target)
-{
-    int32_t i, byteCount;
-    const uint8_t *bytes = source.getByteArray(byteCount);
-
-    target.remove();
-    target += "[";
-
-    for (i = 0; i < byteCount; i += 1)
-    {
-        appendHex(bytes[i], 2, target);
-        target += " ";
-    }
-
-    target += "]";
 
     return target;
 }
@@ -878,29 +760,35 @@ void IntlTest::errln( const UnicodeString &message )
 /* convenience functions that include sprintf formatting */
 void IntlTest::log(const char *fmt, ...)
 {
-    char buffer[300];
+    char buffer[512];
     va_list ap;
 
     va_start(ap, fmt);
+    /* sprintf it just to make sure that the information is valid */
     vsprintf(buffer, fmt, ap);
     va_end(ap);
-    log(UnicodeString(buffer, ""));
+    if( verbose ) {
+        log(UnicodeString(buffer, ""));
+    }
 }
 
 void IntlTest::logln(const char *fmt, ...)
 {
-    char buffer[300];
+    char buffer[512];
     va_list ap;
 
     va_start(ap, fmt);
+    /* sprintf it just to make sure that the information is valid */
     vsprintf(buffer, fmt, ap);
     va_end(ap);
-    logln(UnicodeString(buffer, ""));
+    if( verbose ) {
+        logln(UnicodeString(buffer, ""));
+    }
 }
 
 void IntlTest::err(const char *fmt, ...)
 {
-    char buffer[300];
+    char buffer[512];
     va_list ap;
 
     va_start(ap, fmt);
@@ -911,7 +799,7 @@ void IntlTest::err(const char *fmt, ...)
 
 void IntlTest::errln(const char *fmt, ...)
 {
-    char buffer[300];
+    char buffer[512];
     va_list ap;
 
     va_start(ap, fmt);

@@ -7,7 +7,6 @@
 #ifndef _MESSAGEFORMATREGRESSIONTEST_
 #define _MESSAGEFORMATREGRESSIONTEST_
  
-#include "unicode/utypes.h"
 #include "intltest.h"
 
 /** 

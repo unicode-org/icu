@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "unicode/rep.h"
+#include "unicode/locid.h"
 
 int32_t getInt(UnicodeString str)
 {

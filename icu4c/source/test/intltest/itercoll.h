@@ -12,31 +12,11 @@
 #ifndef _ITERCOLL
 #define _ITERCOLL
 
-#ifndef _UTYPES
-#include "unicode/utypes.h"
-#endif
-
-#ifndef _COLL
-#include "unicode/coll.h"
-#endif
-
-#ifndef _TBLCOLL
 #include "unicode/tblcoll.h"
-#endif
-
-#ifndef _COLEITR
 #include "unicode/coleitr.h"
-#endif
+#include "tscoll.h"
 
-#ifndef _INTLTEST
-#include "intltest.h"
-#endif
-
-#ifndef _UNISTR
-#include "unicode/unistr.h"
-#endif
-
-class CollationIteratorTest: public IntlTest
+class CollationIteratorTest: public IntlTestCollator
 {
 public:
 

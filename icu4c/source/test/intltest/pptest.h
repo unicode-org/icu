@@ -7,7 +7,6 @@
 #ifndef _PARSEPOSITIONIONTEST_
 #define _PARSEPOSITIONIONTEST_
  
-#include "unicode/utypes.h"
 #include "intltest.h"
 
 

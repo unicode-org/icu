@@ -8,7 +8,6 @@
 #ifndef _PUTILTEST_
 #define _PUTILTEST_
 
-#include "unicode/utypes.h"
 #include "intltest.h"
 
 /** 

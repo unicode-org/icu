@@ -7,7 +7,6 @@
 #ifndef _STRSRCH_H
 #define _STRSRCH_H
 
-#include "unicode/utypes.h"
 #include "unicode/tblcoll.h"
 #include "unicode/brkiter.h"
 #include "intltest.h"

@@ -11,7 +11,6 @@
 #ifndef HANGTOJAMOTRTST_H
 #define HANGTOJAMOTRTST_H
 
-#include "unicode/utypes.h"
 #include "unicode/translit.h"
 #include "unicode/hangjamo.h"
 #include "intltest.h"

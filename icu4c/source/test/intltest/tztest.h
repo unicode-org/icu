@@ -8,7 +8,6 @@
 #ifndef __TimeZoneTest__
 #define __TimeZoneTest__
  
-#include "unicode/utypes.h"
 #include "caltztst.h"
 class SimpleTimeZone;
 

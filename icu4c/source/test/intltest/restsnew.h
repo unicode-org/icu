@@ -4,6 +4,9 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#ifndef NEW_RESOURCEBUNDLETEST_H
+#define NEW_RESOURCEBUNDLETEST_H
+
 #include "intltest.h"
 
 /**
@@ -50,3 +53,4 @@ private:
     IntlTest& OUT;
 };
 
+#endif

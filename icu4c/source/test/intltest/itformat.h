@@ -12,7 +12,6 @@
 #define _INTLTESTFORMAT
 
 
-#include "unicode/utypes.h"
 #include "intltest.h"
 
 
