@@ -198,8 +198,23 @@ public abstract class UResourceBundle extends ResourceBundle{
      */
     public abstract ULocale getULocale(); 
     
+    /**
+     * Gets the localeID
+     * @return The string representation of the localeID
+     * @draft ICU 3.0
+     */
     protected abstract String getLocaleID();
+    /**
+     * Gets the base name of the resource bundle
+     * @return The string representation of the base name
+     * @draft ICU 3.0
+     */
     protected abstract String getBaseName();
+    /**
+     * Gets the parent bundle
+     * @return The parent bundle
+     * @draft ICU 3.0
+     */
     protected abstract UResourceBundle getParent();
     
     
