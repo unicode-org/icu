@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TextComponent.java,v $ $Revision: 1.2 $ $Date: 2000/04/22 17:10:10 $
+ * @(#)$RCSfile: TextComponent.java,v $ $Revision: 1.3 $ $Date: 2001/03/07 02:39:01 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -764,7 +764,12 @@ class TextComponent extends FakeComponent
                                 TextOffset selEnd,
                                 Color hiliteColor) {
 
-            g.clearRect(drawRect.x, drawRect.y, drawRect.width, drawRect.height);
+            Color oldColor = g.getColor();
+            g.setColor(fHost.getHost().getBackground());
+            g.fillRect(drawRect.x, drawRect.y, drawRect.width, drawRect.height);
+            g.setColor(oldColor);
+
+            //            g.clearRect(drawRect.x, drawRect.y, drawRect.width, drawRect.height);
 
             if (selectionVisible) {
                 fFormatter.draw(g, drawRect, fOrigin, selStart, selEnd, hiliteColor);
