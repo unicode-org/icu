@@ -335,7 +335,7 @@ void bundle_write(struct SRBRoot *bundle, const char *outputDir, const char *out
                if(outputPkg != NULL)
                {
                    uprv_strcpy(writtenFilename+off, outputPkg);
-                   off += uprv_strlen(outputPkg);
+                   off += (int32_t)uprv_strlen(outputPkg);
                    writtenFilename[off] = '_';
                    ++off;
                }
@@ -434,7 +434,7 @@ struct SResource* res_open(const struct UString* comment, UErrorCode* status){
         return NULL;
     }
     uprv_memset(res, 0, sizeof(struct SResource));
-    
+
     res->fComment = NULL;
     if(comment != NULL){
         res->fComment = (struct UString *) uprv_malloc(sizeof(struct UString));
@@ -453,7 +453,7 @@ struct SResource* table_open(struct SRBRoot *bundle, char *tag,  const struct US
     struct SResource *res = res_open(comment, status);
 
     res->fKey  = bundle_addtag(bundle, tag, status);
- 
+
     if (U_FAILURE(*status)) {
         uprv_free(res->fComment);
         uprv_free(res);
@@ -478,7 +478,7 @@ struct SResource* table_open(struct SRBRoot *bundle, char *tag,  const struct US
 }
 
 struct SResource* array_open(struct SRBRoot *bundle, char *tag, const struct UString* comment, UErrorCode *status) {
-    
+
     struct SResource *res = res_open(comment, status);
 
     if (U_FAILURE(*status)) {
@@ -642,7 +642,7 @@ struct SResource *bin_open(struct SRBRoot *bundle, const char *tag, uint32_t len
         uprv_free(res);
         return NULL;
     }
-    
+
     res->fNext = NULL;
 
     res->u.fBinaryValue.fLength = length;
@@ -692,7 +692,7 @@ struct SRBRoot *bundle_open(const struct UString* comment, UErrorCode *status) {
     bundle->fKeysCapacity = KEY_SPACE_SIZE;
 
     if(comment != NULL){
-            
+
     }
 
     if (bundle->fKeys == NULL) {

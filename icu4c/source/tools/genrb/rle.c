@@ -90,22 +90,22 @@ encodeRunByte(uint16_t* buffer,uint16_t* bufLimit, uint8_t value, int32_t length
 }
 
 #define APPEND( buffer, bufLimit, value, num, status){  \
-    if(buffer<bufLimit){								\
-        *buffer++=(value);								\
-    }else{												\
-        *status = U_BUFFER_OVERFLOW_ERROR;				\
-    }													\
-    num++;												\
+    if(buffer<bufLimit){					\
+        *buffer++=(value);					\
+    }else{									\
+        *status = U_BUFFER_OVERFLOW_ERROR;	\
+    }										\
+    num++;									\
 }
 
 /**
  * Encode a run, possibly a degenerate run (of < 4 values).
  * @param length The length of the run; must be > 0 && <= 0xFFFF.
  */
-static uint16_t* 
+static uint16_t*
 encodeRunShort(uint16_t* buffer,uint16_t* bufLimit, uint16_t value, int32_t length,UErrorCode* status) {
     int32_t num=0;
-	if (length < 4) {
+    if (length < 4) {
         int j=0;
         for (; j<length; ++j) {
             if (value == (int32_t) ESCAPE){
@@ -144,10 +144,10 @@ encodeRunShort(uint16_t* buffer,uint16_t* bufLimit, uint16_t value, int32_t leng
  * The ESCAPE value is chosen so as not to collide with commonly
  * seen values.
  */
-int32_t 
+int32_t
 usArrayToRLEString(const uint16_t* src,int32_t srcLen,uint16_t* buffer, int32_t bufLen,UErrorCode* status) {
     uint16_t* bufLimit =  buffer+bufLen;
-	uint16_t* saveBuffer = buffer;
+    uint16_t* saveBuffer = buffer;
     if(buffer < bufLimit){
         *buffer++ =  (uint16_t)(srcLen>>16);
         if(buffer<bufLimit){
@@ -173,7 +173,7 @@ usArrayToRLEString(const uint16_t* src,int32_t srcLen,uint16_t* buffer, int32_t 
     }else{
         *status = U_BUFFER_OVERFLOW_ERROR;
     }
-    return (buffer - saveBuffer);
+    return (int32_t)(buffer - saveBuffer);
 }
 
 /**
@@ -252,7 +252,7 @@ rleStringToUCharArray(uint16_t* src, int32_t srcLen, uint16_t* target, int32_t t
         return 2;
     }
     length = (((int32_t) src[0]) << 16) | ((int32_t) src[1]);
-    
+
     if(target == NULL){
         return length;
     }
@@ -284,7 +284,7 @@ rleStringToUCharArray(uint16_t* src, int32_t srcLen, uint16_t* target, int32_t t
     if (ai != length){
         *status = U_INTERNAL_PROGRAM_ERROR;
     }
-        
+
     return length;
 }
 
@@ -313,7 +313,7 @@ rleStringToByteArray(uint16_t* src, int32_t srcLen, uint8_t* target, int32_t tgt
         return 2;
     }
     length = (((int32_t) src[0]) << 16) | ((int32_t) src[1]);
-    
+
     if(target == NULL){
         return length;
     }
@@ -321,7 +321,7 @@ rleStringToByteArray(uint16_t* src, int32_t srcLen, uint8_t* target, int32_t tgt
         *status = U_BUFFER_OVERFLOW_ERROR;
         return length;
     }
-        
+
     for (; ai<tgtLen; ) {
        /* This part of the loop places the next byte into the local
         * variable 'b' each time through the loop.  It keeps the
@@ -393,7 +393,7 @@ rleStringToByteArray(uint16_t* src, int32_t srcLen, uint8_t* target, int32_t tgt
         return 0;
     }
 
-        
+
     if (i != srcLen){
         /*("Excess data in RLE byte array string");*/
         *status = U_INTERNAL_PROGRAM_ERROR;
