@@ -429,7 +429,7 @@ private:
      *@deprecated Remove after Aug 2002
      */
     void constructForLocale(const wchar_t* path, const Locale& locale, UErrorCode& error);
-    Locale                      fRealLocale;
+    Locale *locName;
 };
 
 U_NAMESPACE_END
