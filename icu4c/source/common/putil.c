@@ -851,7 +851,8 @@ getLibraryPath(char *path, int size) {
             return length;
         }
 #   elif defined(HPUX)
-        shl_descriptor *p=NULL;
+     {
+        struct shl_descriptor *p=NULL;
         char *s;
         int i=1, rc, length=0;
 
@@ -865,11 +866,11 @@ getLibraryPath(char *path, int size) {
 
             s=icu_strstr(p->filename, U_COMMON_LIBNAME);
             if(s!=NULL) {
-                if(s>p->l_name) {
+                if(s>p->filename) {
                     /* copy the path, without the basename and the last separator */
-                    length=(s-p->l_name)-1;
+                    length=(s-p->filename)-1;
                     if(0<length && length<size) {
-                        icu_memcpy(path, p->l_name, length);
+                        icu_memcpy(path, p->filename, length);
                         path[length]=0;
                     } else {
                         length=0;
@@ -880,6 +881,7 @@ getLibraryPath(char *path, int size) {
             ++i;
         }
         return length;
+     }
 #   elif defined(TANDEM)
 #   elif defined(POSIX)
 #   endif
