@@ -146,7 +146,7 @@ getExtName(uint32_t code, char *buffer, uint16_t bufferLength);
 
 #define U_CHAR_EXTENDED_CATEGORY_COUNT (U_CHAR_CATEGORY_COUNT + 3)
 
-static const char *
+static const char * const
 charCatNames[U_CHAR_EXTENDED_CATEGORY_COUNT];
 
 static uint8_t
@@ -1301,7 +1301,7 @@ static uint8_t getCharCat(UChar32 cp) {
     return cat;
 }
 
-static const char *charCatNames[U_CHAR_EXTENDED_CATEGORY_COUNT] = {
+static const char * const charCatNames[U_CHAR_EXTENDED_CATEGORY_COUNT] = {
     "unassigned",
     "uppercase letter",
     "lowercase letter",
