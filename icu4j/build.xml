@@ -1,7 +1,7 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 1997-2003, International Business Machines Corporation and    *
+* Copyright (C) 1997-2004, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -457,14 +457,26 @@
      -->
     <target name="copyICUData" depends="init">
 	<unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
-	    <patternset includes="/**/unorm.icu;/**/uprops.icu;/**/unames.icu;/**/pnames.icu"/>
+	    
+	    <patternset>
+                <!-- arrgh, includes attributes of patternset does not work here in ant 1.5.3 -->
+	        <include name="**/unorm.icu"/>
+	        <include name="**/uprops.icu"/>
+	        <include name="**/unames.icu"/>
+	        <include name="**/pnames.icu"/>
+	    </patternset>
 	</unjar>
     </target>
 
     <target name="copyICUPropsData" depends="init">
 	<unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}">
             <!-- For basic support names data is not needed -->
-	    <patternset includes="/**/unorm.icu;/**/uprops.icu;/**/pnames.icu"/>
+	    <patternset>
+                <!-- arrgh, includes attributes of patternset does not work here in ant 1.5.3 -->
+	        <include name="**/unorm.icu"/>
+	        <include name="**/uprops.icu"/>
+	        <include name="**/pnames.icu"/>
+	    </patternset>
 	</unjar>
     </target>
 
