@@ -183,9 +183,21 @@ public:
     * @return Returns Collator::LESS if sourceKey &lt; targetKey,
     * Collator::GREATER if sourceKey > targetKey and Collator::EQUAL
     * otherwise.
-    * @stable ICU 2.0
+    * @deprecated ICU 2.6 use the overload with error code
     */
     Collator::EComparisonResult compareTo(const CollationKey& target) const;
+
+    /**
+    * Convenience method which does a string(bit-wise) comparison of the
+    * two collation keys.
+    * @param target target collation key to be compared with
+    * @param status error code
+    * @return Returns UCOL_LESS if sourceKey &lt; targetKey,
+    * UCOL_GREATER if sourceKey > targetKey and UCOL_EQUAL
+    * otherwise.
+    * @draft ICU 2.6
+    */
+    UCollationResult compareTo(const CollationKey& target, UErrorCode &status) const;
 
     /**
     * Creates an integer that is unique to the collation key.  NOTE: this

@@ -679,6 +679,11 @@ Calendar::getFirstDayOfWeek() const
     return (Calendar::EDaysOfWeek)fFirstDayOfWeek;
 }
 
+UCalendarDaysOfWeek
+Calendar::getFirstDayOfWeek(UErrorCode &status) const
+{
+    return fFirstDayOfWeek;
+}
 // -------------------------------------
 
 void

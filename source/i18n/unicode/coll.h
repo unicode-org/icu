@@ -338,27 +338,61 @@ public:
   * @return Returns a byte value. GREATER if source is greater
   * than target; EQUAL if source is equal to target; LESS if source is less
   * than target
-  * @stable ICU 2.0
+  * @deprecated ICU 2.6 use the overload with UErrorCode &
   **/
   virtual EComparisonResult compare(const UnicodeString& source, 
                                     const UnicodeString& target) const = 0;
+
+  /**
+  * The comparison function compares the character data stored in two
+  * different strings. Returns information about whether a string is less 
+  * than, greater than or equal to another string.
+  * @param source the source string to be compared with.
+  * @param target the string that is to be compared with the source string.
+  * @param status possible error code
+  * @return Returns an enum value. UCOL_GREATER if source is greater
+  * than target; UCOL_EQUAL if source is equal to target; UCOL_LESS if source is less
+  * than target
+  * @draft ICU 2.6
+  **/
+  virtual UCollationResult compare(const UnicodeString& source, 
+                                    const UnicodeString& target,
+                                    UErrorCode &status) const = 0;
 
   /**
   * Does the same thing as compare but limits the comparison to a specified 
   * length
   * @param source the source string to be compared with.
   * @param target the string that is to be compared with the source string.
-  * @param length the length the comparison is limitted to
+  * @param length the length the comparison is limited to
   * @return Returns a byte value. GREATER if source (up to the specified 
   *         length) is greater than target; EQUAL if source (up to specified 
   *         length) is equal to target; LESS if source (up to the specified 
   *         length) is less  than target.   
-  * @stable ICU 2.0
+  * @deprecated ICU 2.6 use the overload with UErrorCode &
   */
   virtual EComparisonResult compare(const UnicodeString& source,
                                     const UnicodeString& target,
                                     int32_t length) const = 0;
     
+  /**
+  * Does the same thing as compare but limits the comparison to a specified 
+  * length
+  * @param source the source string to be compared with.
+  * @param target the string that is to be compared with the source string.
+  * @param length the length the comparison is limited to
+  * @param status possible error code
+  * @return Returns an enum value. UCOL_GREATER if source (up to the specified 
+  *         length) is greater than target; UCOL_EQUAL if source (up to specified 
+  *         length) is equal to target; UCOL_LESS if source (up to the specified 
+  *         length) is less  than target.   
+  * @draft ICU 2.6
+  */
+  virtual UCollationResult compare(const UnicodeString& source,
+                                    const UnicodeString& target,
+                                    int32_t length,
+                                    UErrorCode &status) const = 0;
+
   /**
   * The comparison function compares the character data stored in two
   * different string arrays. Returns information about whether a string array 
@@ -372,12 +406,31 @@ public:
   * @return Returns a byte value. GREATER if source is greater than target; 
   *         EQUAL if source is equal to target; LESS if source is less than 
   *         target
-  * @stable ICU 2.0
+  * @deprecated ICU 2.6 use the overload with UErrorCode &
   */
   virtual EComparisonResult compare(const UChar* source, int32_t sourceLength,
                                     const UChar* target, int32_t targetLength) 
                                     const = 0;
 
+  /**
+  * The comparison function compares the character data stored in two
+  * different string arrays. Returns information about whether a string array 
+  * is less than, greater than or equal to another string array.
+  * @param source the source string array to be compared with.
+  * @param sourceLength the length of the source string array.  If this value
+  *        is equal to -1, the string array is null-terminated.
+  * @param target the string that is to be compared with the source string.
+  * @param targetLength the length of the target string array.  If this value
+  *        is equal to -1, the string array is null-terminated.
+  * @param status possible error code
+  * @return Returns an enum value. UCOL_GREATER if source is greater
+  * than target; UCOL_EQUAL if source is equal to target; UCOL_LESS if source is less
+  * than target
+  * @draft ICU 2.6
+  */
+  virtual UCollationResult compare(const UChar* source, int32_t sourceLength,
+                                    const UChar* target, int32_t targetLength,
+                                    UErrorCode &status) const = 0;
   /** 
   * Transforms the string into a series of characters that can be compared
   * with CollationKey::compareTo. It is not possible to restore the original
@@ -477,7 +530,7 @@ public:
   * are ignored.
   * @return the current comparison level.
   * @see Collator#setStrength
-  * @stable ICU 2.0
+  * @deprecated ICU 2.6 Use getAttribute(UCOL_STRENGTH...) instead
   */
   virtual ECollationStrength getStrength(void) const = 0;
   
@@ -499,7 +552,7 @@ public:
   * </pre>
   * @see Collator#getStrength
   * @param newStrength the new comparison level.
-  * @stable ICU 2.0
+  * @deprecated ICU 2.6 Use setAttribute(UCOL_STRENGTH...) instead
   */
   virtual void setStrength(ECollationStrength newStrength) = 0;
 

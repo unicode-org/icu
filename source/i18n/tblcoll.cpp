@@ -301,7 +301,17 @@ Collator::EComparisonResult RuleBasedCollator::compare(
                                                const UnicodeString& target,
                                                int32_t length) const
 {
-  return compare(source.getBuffer(), uprv_min(length,source.length()), target.getBuffer(), uprv_min(length,target.length()));
+  UErrorCode status = U_ZERO_ERROR;
+  return getEComparisonResult(compare(source.getBuffer(), uprv_min(length,source.length()), target.getBuffer(), uprv_min(length,target.length()), status));
+}
+
+UCollationResult RuleBasedCollator::compare(
+                                               const UnicodeString& source,
+                                               const UnicodeString& target,
+                                               int32_t length, 
+                                               UErrorCode &status) const
+{
+  return compare(source.getBuffer(), uprv_min(length,source.length()), target.getBuffer(), uprv_min(length,target.length()), status);
 }
 
 Collator::EComparisonResult RuleBasedCollator::compare(const UChar* source,
@@ -314,6 +324,15 @@ Collator::EComparisonResult RuleBasedCollator::compare(const UChar* source,
                                                      target, targetLength));
 }
 
+UCollationResult RuleBasedCollator::compare(const UChar* source,
+                                                       int32_t sourceLength,
+                                                       const UChar* target,
+                                                       int32_t targetLength, 
+                                                       UErrorCode &status) const
+{
+  return  ucol_strcoll(ucollator, source, sourceLength, target, targetLength);
+}
+
 /**
 * Compare two strings using this collator
 */
@@ -321,7 +340,17 @@ Collator::EComparisonResult RuleBasedCollator::compare(
                                              const UnicodeString& source,
                                              const UnicodeString& target) const
 {
-  return compare(source.getBuffer(), source.length(), target.getBuffer(), target.length());
+  return getEComparisonResult(ucol_strcoll(ucollator, source.getBuffer(), source.length(), 
+                                                      target.getBuffer(), target.length()));
+}
+
+UCollationResult RuleBasedCollator::compare(
+                                             const UnicodeString& source,
+                                             const UnicodeString& target, 
+                                             UErrorCode &status) const
+{
+  return ucol_strcoll(ucollator, source.getBuffer(), source.length(), 
+                                 target.getBuffer(), target.length());
 }
 
 /**
