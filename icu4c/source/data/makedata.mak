@@ -118,10 +118,10 @@ ALL_RES = $(RB_FILES) $(TRANSLIT_FILES)
 RB_SOURCE_DIR = $(GENRB_SOURCE:$=$)
 
 # This target should build all the data files
-ALL : GODATA  test.dat  "$(DLL_OUTPUT)\testdata.dll" "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" $(DLL_OUTPUT)\test1.cnv $(DLL_OUTPUT)\test3.cnv $(DLL_OUTPUT)\test4.cnv GOBACK #$(U_ICUDATA_NAME).dat
+ALL : GODATA  test.dat  "$(DLL_OUTPUT)\testdata.dll" "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" $(TESTDATA)\test1.cnv $(TESTDATA)\test3.cnv $(TESTDATA)\test4.cnv GOBACK #$(U_ICUDATA_NAME).dat
 	@echo All targets are up to date
 
-BRK_FILES = "$(ICUDATA)\sent.brk" "$(ICUDATA)\char.brk" "$(ICUDATA)\line.brk" "$(ICUDATA)\word.brk" "$(ICUDATA)\line_th.brk" "$(ICUDATA)\word_th.brk"
+BRK_FILES = "$(ICUDBLD)\sent.brk" "$(ICUDBLD)\char.brk" "$(ICUDBLD)\line.brk" "$(ICUDBLD)\word.brk" "$(ICUDBLD)\line_th.brk" "$(ICUDBLD)\word_th.brk"
 
 #invoke pkgdata
 "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" :  $(CNV_FILES) $(BRK_FILES) uprops.dat unames.dat cnvalias.dat tz.dat ucadata.dat invuca.dat $(ALL_RES) 
@@ -161,23 +161,23 @@ test.dat :
 	@set ICU_DATA=$(ICUDBLD)
 	@"$(ICUTOOLS)\gentest\$(CFG)\gentest"
 
-"$(ICUDATA)\sent.brk" : "$(ICUDATA)\sentLE.brk"
-    copy "$(ICUDATA)\sentLE.brk" "$(ICUDATA)\sent.brk"
+"$(ICUDBLD)\sent.brk" : "$(ICUDATA)\sentLE.brk"
+    copy "$(ICUDATA)\sentLE.brk" "$(ICUDBLD)\sent.brk"
 
-"$(ICUDATA)\char.brk" : "$(ICUDATA)\charLE.brk"
-    copy "$(ICUDATA)\charLE.brk" "$(ICUDATA)\char.brk"
+"$(ICUDBLD)\char.brk" : "$(ICUDATA)\charLE.brk"
+    copy "$(ICUDATA)\charLE.brk" "$(ICUDBLD)\char.brk"
 
-"$(ICUDATA)\line.brk" : "$(ICUDATA)\lineLE.brk"
-    copy "$(ICUDATA)\lineLE.brk" "$(ICUDATA)\line.brk"
+"$(ICUDBLD)\line.brk" : "$(ICUDATA)\lineLE.brk"
+    copy "$(ICUDATA)\lineLE.brk" "$(ICUDBLD)\line.brk"
 
-"$(ICUDATA)\word.brk" : "$(ICUDATA)\wordLE.brk"
-    copy "$(ICUDATA)\wordLE.brk" "$(ICUDATA)\word.brk"
+"$(ICUDBLD)\word.brk" : "$(ICUDATA)\wordLE.brk"
+    copy "$(ICUDATA)\wordLE.brk" "$(ICUDBLD)\word.brk"
 
-"$(ICUDATA)\line_th.brk" : "$(ICUDATA)\line_thLE.brk"
-    copy "$(ICUDATA)\line_thLE.brk" "$(ICUDATA)\line_th.brk"
+"$(ICUDBLD)\line_th.brk" : "$(ICUDATA)\line_thLE.brk"
+    copy "$(ICUDATA)\line_thLE.brk" "$(ICUDBLD)\line_th.brk"
 
-"$(ICUDATA)\word_th.brk" : "$(ICUDATA)\word_thLE.brk"
-    copy "$(ICUDATA)\word_thLE.brk" "$(ICUDATA)\word_th.brk"
+"$(ICUDBLD)\word_th.brk" : "$(ICUDATA)\word_thLE.brk"
+    copy "$(ICUDATA)\word_thLE.brk" "$(ICUDBLD)\word_th.brk"
 
 # utility to send us to the right dir
 GODATA :
@@ -209,10 +209,10 @@ CLEAN :
 	-@erase "word_th.brk"
 	-@erase "test*.*"
 	-@erase "base*.*"
+	@cd "$(TESTDATA)"
+	-@erase "*.res"
+	-@erase "*.cnv"
 	@cd "$(ICUTOOLS)"
-
-#	@cd $(TEST)
-#	-@erase "*.res"
 
 $(TESTDATA)\root.res:$(TESTDATA)\root.txt
         @echo Making Special Test Resource Bundle files
@@ -246,19 +246,19 @@ $(TESTDATA)\testtypes.res:$(TESTDATA)\testtypes.txt
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $<
 
 # Targets for test converter data
-$(DLL_OUTPUT)\test1.cnv: "$(TESTDATA)\test1.ucm"
+$(TESTDATA)\test1.cnv: "$(TESTDATA)\test1.ucm"
 	@cd "$(ICUDATA)"
-	@set ICU_DATA=$(DLL_OUTPUT)
+	@set ICU_DATA=$(TESTDATA)
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $**
 
-$(DLL_OUTPUT)\test3.cnv: "$(TESTDATA)\test3.ucm"
+$(TESTDATA)\test3.cnv: "$(TESTDATA)\test3.ucm"
 	@cd "$(ICUDATA)"
-	@set ICU_DATA=$(DLL_OUTPUT)
+	@set ICU_DATA=$(TESTDATA)
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $**
 
-$(DLL_OUTPUT)\test4.cnv: "$(TESTDATA)\test4.ucm"
+$(TESTDATA)\test4.cnv: "$(TESTDATA)\test4.ucm"
 	@cd "$(ICUDATA)"
-	@set ICU_DATA=$(DLL_OUTPUT)
+	@set ICU_DATA=$(TESTDATA)
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $**
 
 # Targets for unames.dat
