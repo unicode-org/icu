@@ -69,7 +69,7 @@ T_CString_toLowerCase(char* str);
 U_CAPI char* U_EXPORT2
 T_CString_toUpperCase(char* str);
 
-U_CAPI void U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 T_CString_integerToString(char *buffer, int32_t n, int32_t radix);
 
 U_CAPI int32_t U_EXPORT2
