@@ -515,6 +515,7 @@ static void TestBreakIteratorRules() {
     }
 
     freeToUCharStrings(&freeHook);
+    ubrk_close(bi);
 }
 
 static void TestBreakIteratorRuleError() {
