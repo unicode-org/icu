@@ -402,7 +402,7 @@ static void printCString(FILE *out, UConverter *converter, const char *str, int3
 
     do {
         UErrorCode err = U_ZERO_ERROR;
-        UChar *bufp = buf, *bufend = buf + sizeof(buf) - 1 ;
+        UChar *bufp = buf, *bufend = buf + (sizeof(buf)/sizeof(buf[0])) - 1 ;
 
         ucnv_toUnicode(defaultConverter, &bufp, bufend, &str, strEnd, 0, 0, &err);
         *bufp = 0;
