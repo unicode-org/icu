@@ -293,7 +293,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, UTextOffset length,
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return;
     } else if(pBiDi==NULL || text==NULL ||
-              (UBIDI_MAX_EXPLICIT_LEVEL<paraLevel) && !IS_DEFAULT_LEVEL(paraLevel) ||
+              ((UBIDI_MAX_EXPLICIT_LEVEL<paraLevel) && !IS_DEFAULT_LEVEL(paraLevel)) ||
               length<-1
     ) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
@@ -792,7 +792,7 @@ checkExplicitLevels(UBiDi *pBiDi, UErrorCode *pErrorCode) {
 static UBiDiDirection
 directionFromFlags(Flags flags) {
     /* if the text contains AN and neutrals, then some neutrals may become RTL */
-    if(!(flags&MASK_RTL || flags&DIRPROP_FLAG(AN) && flags&MASK_POSSIBLE_N)) {
+    if(!(flags&MASK_RTL || ((flags&DIRPROP_FLAG(AN)) && (flags&MASK_POSSIBLE_N)))) {
         return UBIDI_LTR;
     } else if(!(flags&MASK_LTR)) {
         return UBIDI_RTL;
@@ -964,7 +964,7 @@ resolveImplicitLevels(UBiDi *pBiDi,
                 historyOfEN|=EN_AFTER_W4;
             } else if(prevDirProp==AN &&                    /* previous was AN */
                       (nextDirProp==AN ||                   /* next is AN */
-                       nextDirProp==EN && lastStrong==AL)   /* or (W2) will make it one */
+                      (nextDirProp==EN && lastStrong==AL))  /* or (W2) will make it one */
             ) {
                 /* (W4) */
                 dirProp=AN;
@@ -987,8 +987,8 @@ resolveImplicitLevels(UBiDi *pBiDi,
             }
 
             /* now process the sequence of ET like a single ET */
-            if( historyOfEN&PREV_EN_AFTER_W4 ||     /* previous was EN before (W5) */
-                nextDirProp==EN && lastStrong!=AL   /* next is EN and (W2) won't make it AN */
+            if((historyOfEN&PREV_EN_AFTER_W4) ||     /* previous was EN before (W5) */
+                (nextDirProp==EN && lastStrong!=AL)   /* next is EN and (W2) won't make it AN */
             ) {
                 /* (W5) */
                 if(lastStrong!=L) {
