@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollatorReader.java,v $ 
-* $Date: 2002/07/30 02:38:12 $ 
-* $Revision: 1.5 $
+* $Date: 2002/08/01 19:50:34 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -45,7 +45,7 @@ final class CollatorReader
     protected CollatorReader(InputStream inputStream) throws IOException
     {
         ICUBinary.readHeader(inputStream, DATA_FORMAT_ID_, 
-                             DATA_FORMAT_VERSION_, UNICODE_VERSION_);
+                             DATA_FORMAT_VERSION_);
         m_dataInputStream_ = new DataInputStream(inputStream);
     }
     
@@ -61,7 +61,7 @@ final class CollatorReader
     {
     	if (readICUHeader) {
         	ICUBinary.readHeader(inputStream, DATA_FORMAT_ID_, 
-            		                 DATA_FORMAT_VERSION_, UNICODE_VERSION_);
+            		                 DATA_FORMAT_VERSION_);
     	}
         m_dataInputStream_ = new DataInputStream(inputStream);
     }
@@ -345,7 +345,7 @@ final class CollatorReader
                                                       throws IOException
     {
         ICUBinary.readHeader(inputStream, INVERSE_UCA_DATA_FORMAT_ID_, 
-                             DATA_FORMAT_VERSION_, UNICODE_VERSION_);
+                             DATA_FORMAT_VERSION_);
         CollationParsedRuleBuilder.InverseUCA result = 
                                   new CollationParsedRuleBuilder.InverseUCA();
         DataInputStream input = new DataInputStream(inputStream);        
@@ -385,8 +385,6 @@ final class CollatorReader
                                    {(byte)0x2, (byte)0x0, (byte)0x0, (byte)0x0};
     private static final byte DATA_FORMAT_ID_[] = {(byte)0x55, (byte)0x43,  
                                                     (byte)0x6f, (byte)0x6c};
-    private static final byte UNICODE_VERSION_[] = {(byte)0x3, (byte)0x0, 
-                                                    (byte)0x0, (byte)0x0};
     /**
     * Inverse UCA file format version and id that this class understands.
     * No guarantees are made if a older version is used
