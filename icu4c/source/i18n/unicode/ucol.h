@@ -153,10 +153,12 @@ typedef enum {
   UCOL_TERTIARY = 2,
   /** Default collation strength */
   UCOL_DEFAULT_STRENGTH = UCOL_TERTIARY,
+  UCOL_CE_STRENGTH_LIMIT,
   /** Quaternary collation strength */
   UCOL_QUATERNARY=3,
   /** Identical collation strength */
   UCOL_IDENTICAL=15,
+  UCOL_STRENGTH_LIMIT,
 
   /* for UCOL_FRENCH_COLLATION, UCOL_CASE_LEVEL & UCOL_DECOMPOSITION_MODE*/
   UCOL_OFF = 16,
