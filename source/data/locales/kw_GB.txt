@@ -22,10 +22,10 @@ kw_GB {
         "HH:mm:ss",
         "HH:mm:ss",
         "HH:mm",
-        "EEEE dd MMMM yyyy",
-        "dd MMMM yyyy",
-        "MMM dd,yy",
-        "dd/MM/yy",
+        "EEEE d MMMM yyyy",
+        "d MMMM yyyy",
+        "d MMM yyyy",
+        "dd/MM/yyyy",
         "{1} {0}",
     }
     NumberPatterns {
