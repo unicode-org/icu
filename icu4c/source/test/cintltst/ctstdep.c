@@ -67,6 +67,8 @@ const static char cnt2[][10] = {
   "DAVI"
 }; 
 
+void addTestDeprecatedAPI(TestNode** root);
+
 void 
 addTestDeprecatedAPI(TestNode** root)
 {
@@ -208,13 +210,12 @@ TestDeprecatedNumFmtAPI(void)
     }
 
     {
-      UNumberFormat *currencyFmt;
-      UChar *str=NULL, *res=NULL;
-      int32_t lneed, i;
-      UFieldPosition pos;
-      UErrorCode status = U_ZERO_ERROR;
       const char* locale[]={"fr_CA", "de_DE_PREEURO", "fr_FR_PREEURO"};
       const char* result[]={"1,50 $", "1,50 DM", "1,50 F"};
+      UNumberFormat *currencyFmt;
+      UChar *res=NULL;
+      UFieldPosition pos;
+      status = U_ZERO_ERROR;
       log_verbose("\nTesting the number format with different currency patterns\n");
       for(i=0; i < 3; i++)
         {
@@ -472,38 +473,43 @@ TestDeprecatedUCharScript(void)
         /** */
         U_NO_SCRIPT
     };
-
+    if (UBLOCK_BASIC_LATIN != scriptArray[0]) {
+        log_err("UBLOCK_BASIC_LATIN != U_BASIC_LATIN");
+    }
 }
 
 static void
 TestDeprecatedUErrorCode(void){
     const UErrorCode code[]= {
-        U_ERROR_INFO_START,        
-        U_USING_FALLBACK_ERROR,    
-        U_USING_DEFAULT_ERROR,     
-        U_SAFECLONE_ALLOCATED_ERROR, 
-        U_ERROR_INFO_LIMIT,       
-        U_ZERO_ERROR,              
-        U_ILLEGAL_ARGUMENT_ERROR,  
-        U_MISSING_RESOURCE_ERROR,  
-        U_INVALID_FORMAT_ERROR,    
-        U_FILE_ACCESS_ERROR,       
-        U_INTERNAL_PROGRAM_ERROR,  
-        U_MESSAGE_PARSE_ERROR,     
-        U_MEMORY_ALLOCATION_ERROR, 
-        U_INDEX_OUTOFBOUNDS_ERROR, 
-        U_PARSE_ERROR,             
-        U_INVALID_CHAR_FOUND,      
-        U_TRUNCATED_CHAR_FOUND,    
-        U_ILLEGAL_CHAR_FOUND,      
-        U_INVALID_TABLE_FORMAT,    
-        U_INVALID_TABLE_FILE,      
-        U_BUFFER_OVERFLOW_ERROR,   
-        U_UNSUPPORTED_ERROR,       
-        U_RESOURCE_TYPE_MISMATCH,  
-        U_ILLEGAL_ESCAPE_SEQUENCE, 
+        U_ERROR_INFO_START,
+        U_USING_FALLBACK_ERROR,
+        U_USING_DEFAULT_ERROR,
+        U_SAFECLONE_ALLOCATED_ERROR,
+        U_ERROR_INFO_LIMIT,
+        U_ZERO_ERROR,
+        U_ILLEGAL_ARGUMENT_ERROR,
+        U_MISSING_RESOURCE_ERROR,
+        U_INVALID_FORMAT_ERROR,
+        U_FILE_ACCESS_ERROR,
+        U_INTERNAL_PROGRAM_ERROR,
+        U_MESSAGE_PARSE_ERROR,
+        U_MEMORY_ALLOCATION_ERROR,
+        U_INDEX_OUTOFBOUNDS_ERROR,
+        U_PARSE_ERROR,
+        U_INVALID_CHAR_FOUND,
+        U_TRUNCATED_CHAR_FOUND,
+        U_ILLEGAL_CHAR_FOUND,
+        U_INVALID_TABLE_FORMAT,
+        U_INVALID_TABLE_FILE,
+        U_BUFFER_OVERFLOW_ERROR,
+        U_UNSUPPORTED_ERROR,
+        U_RESOURCE_TYPE_MISMATCH,
+        U_ILLEGAL_ESCAPE_SEQUENCE,
         U_UNSUPPORTED_ESCAPE_SEQUENCE,
-        U_NO_SPACE_AVAILABLE,      
-        U_ERROR_LIMIT,             
+        U_NO_SPACE_AVAILABLE,
+        U_ERROR_LIMIT,
     };
+    if (U_USING_FALLBACK_WARNING != code[1]) {
+        log_err("U_USING_FALLBACK_WARNING != U_USING_FALLBACK_ERROR");
+    }
 }
