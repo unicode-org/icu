@@ -265,7 +265,7 @@ UnicodeString::UnicodeString(UChar *buff,
     fCapacity = US_STACKBUF_SIZE;
     fArray = fStackBuffer;
     fFlags = kShortString;
-  } else if(buff == 0 || buffLength < -1 || buffLength > buffCapacity) {
+  } else if(buffLength < -1 || buffLength > buffCapacity) {
     setToBogus();
   } else if(buffLength == -1) {
     // fLength = u_strlen(buff); but do not look beyond buffCapacity
