@@ -145,7 +145,9 @@ public:
     ResourceBundle(const ResourceBundle &original);
 
     /**
-     * Constructor from a C UResourceBundle.
+     * Constructor from a C UResourceBundle. The resource bundle is
+     * copied and not adopted. ures_close will still need to be used on the
+     * original resource bundle.
      *
      * @param res A pointer to the C resource bundle.
      * @param status A UErrorCode value.
