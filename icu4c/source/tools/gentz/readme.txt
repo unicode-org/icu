@@ -55,9 +55,7 @@ IDS
 All *system* zone IDs must consist only of characters in the invariant
 set.  See utypes.h for an explanation of what this means.  If an ID is
 encountered that contains a non-invariant character, tz.pl complains.
-Non-system zones may try to use non-invariant characters, but they
-shouldn't because of possible collisions with system IDs when the
-invariant char converter is used (see TimeZone class for details).
+Non-system zones may use non-invariant characters.
 
 
 Etc/GMT...
