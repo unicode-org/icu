@@ -268,9 +268,10 @@ udata_setCommonData(const void *data, UErrorCode *err);
  * data and allows you to force the it to come out of a user-specified
  * pointer.
  * 
- * The format of this data is that of the icu common data file, 'icudata.dat'
- * Read in or memory map the whole file and then pass the address to the start of the
- * data to this function.
+ * The format of this data is that of the icu common data file, like 'icudata.dat'
+ * The application must read in or otherwise construct an image of the data and then
+ * pass the address of it to this function.
+ * 
  *
  * Warning:  setAppData will fail with a U_USING_DEFAULT_ERROR error if
  *           data with the specifed path that has already been opened, or
@@ -287,6 +288,20 @@ udata_setCommonData(const void *data, UErrorCode *err);
  */
 U_CAPI void U_EXPORT2
 udata_setAppData(const char *path, const void *data, UErrorCode *err);
+
+/**
+ * Clean-up function for allocated memory and any other resources owned
+ *  by udata.  Deletes all such items.  Everything is returned to its initial
+ *  state.
+ *
+ *  This function is called by <fill in the name>.  Applicataions normally
+ *  have no reason to call it directly.
+ *
+ *  @draft
+ */
+U_CAPI void U_EXPORT2
+udata_cleanup();
+
 
 U_CDECL_END
 
