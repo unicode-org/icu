@@ -211,6 +211,9 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
 #endif
         CASE(22, TestSetIsBogus)
         CASE(23, TestParallelAPIValues)
+        CASE(24, TestKeywordVariants)
+        CASE(25, TestKeywordVariantParsing)
+
         // keep the last index in sync with the condition in default:
 
         default:
@@ -1470,3 +1473,96 @@ LocaleTest::TestSetIsBogus() {
   }
 }
 
+
+void 
+LocaleTest::TestKeywordVariants(void) {
+  struct {
+    const char *localeID;
+    const char *expectedLocaleID;
+    const char *expectedKeywords[10];
+    int32_t numKeywords;
+    UErrorCode expectedStatus;
+  } testCases[] = {
+    { "de_DE@  currency = euro; C o ll A t i o n   = Phonebook   ; C alen dar = budhist   ", 
+      "de_DE@c alen dar=budhist;c o ll a t i o n=Phonebook;currency=euro", 
+    { "c alen dar", "c o ll a t i o n", "currency"},
+      3,
+      U_ZERO_ERROR
+    },
+    { "de_DE@euro", "de_DE_EURO", {""}, 0, U_ZERO_ERROR}, // In C++, locale name gets canonicalized first. 
+    // therefore, getKeywords will not encounter the POSIX variant
+    /*{ "de_DE@euro;collation=phonebook", "", "", U_INVALID_FORMAT_ERROR}*/
+  };
+  UErrorCode status = U_ZERO_ERROR;
+
+  int32_t i = 0, j = 0;
+  const char *result = NULL;
+  StringEnumeration *keywords;
+  int32_t keyCount = 0;
+  const char *keyword = NULL;
+  int32_t keywordLen = 0;
+
+  for(i = 0; i < sizeof(testCases)/sizeof(testCases[0]); i++) {
+    status = U_ZERO_ERROR;
+    Locale l(testCases[i].localeID);
+    keywords = l.getKeywords(status);
+
+    if(status != testCases[i].expectedStatus) {
+      err("Expected to get status %s. Got %s instead\n", 
+        u_errorName(testCases[i].expectedStatus), u_errorName(status));
+    }
+    status = U_ZERO_ERROR;
+    if(keywords) {
+      if((keyCount = keywords->count(status)) != testCases[i].numKeywords) {
+        err("Expected to get %i keywords, got %i\n", testCases[i].numKeywords, keyCount);
+      }
+      if(keyCount) {
+        j = 0;
+        while(keyword = keywords->next(&keywordLen, status)) {
+          if(strcmp(keyword, testCases[i].expectedKeywords[j]) != 0) {
+            err("Expected to get keyword value %s, got %s\n", testCases[i].expectedKeywords[j], keyword);
+          }
+          j++;
+        }
+      }
+      delete keywords;
+    }
+    result = l.getName();
+    if(uprv_strcmp(testCases[i].expectedLocaleID, result) != 0) {
+      err("Expected to get \"%s\" from \"%s\". Got \"%s\" instead\n",
+        testCases[i].expectedLocaleID, testCases[i].localeID, result);
+    }
+
+  }
+
+}
+
+void 
+LocaleTest::TestKeywordVariantParsing(void) {
+  struct {
+    const char *localeID;
+    const char *keyword;
+    const char *expectedValue;
+  } testCases[] = {
+    { "de_DE@  C o ll A t i o n   = Phonebook   ", "c o ll a t i o n", "Phonebook" },
+    { "de_DE", "collation", ""},
+    { "de_DE@collation= PHONEBOOK", "collation", "PHONEBOOK" },
+    { "de_DE@ currency = euro   ; CoLLaTion   = PHONEBOOk   ", "collatiON", "PHONEBOOk" },
+  };
+
+  UErrorCode status = U_ZERO_ERROR;
+
+  int32_t i = 0;
+  int32_t resultLen = 0;
+  char buffer[256];
+
+  for(i = 0; i < sizeof(testCases)/sizeof(testCases[0]); i++) {
+    *buffer = 0;
+    Locale l(testCases[i].localeID);
+    resultLen = l.getKeywordValue(testCases[i].keyword, buffer, 256, status);
+    if(uprv_strcmp(testCases[i].expectedValue, buffer) != 0) {
+      err("Expected to extract \"%s\" from \"%s\" for keyword \"%s\". Got \"%s\" instead\n",
+        testCases[i].expectedValue, testCases[i].localeID, testCases[i].keyword, buffer);
+    }
+  }
+}
