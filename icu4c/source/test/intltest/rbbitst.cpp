@@ -1223,7 +1223,7 @@ void RBBITest::executeTest(TestParams *t) {
 
 void RBBITest::TestExtended() {
     UErrorCode      status  = U_ZERO_ERROR;
-    Locale          locale   = Locale::getDefault();
+    Locale          locale("");
 
     UnicodeString       rules;
     TestParams          tp;
