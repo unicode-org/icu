@@ -4,14 +4,15 @@
  * others. All Rights Reserved.
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/IBMCalendarTest.java,v $ 
- * $Date: 2003/05/14 19:02:51 $ 
- * $Revision: 1.18 $
+ * $Date: 2003/05/19 15:25:16 $ 
+ * $Revision: 1.19 $
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
 
 import java.util.Date;
 import java.util.Locale;
+import java.text.ParseException;
 
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.DateFormat;
@@ -465,6 +466,147 @@ public class IBMCalendarTest extends CalendarTest {
                           dateFormat.format(cal.getTime()));
                 }
             }
+        }
+    }
+
+    public void TestJB1684() {
+        class TestData {
+            int year;
+            int month;
+            int date;
+            int womyear;
+            int wommon;
+            int wom;
+            int dow;
+            String data;
+            String normalized;
+
+            public TestData(int year, int month, int date,
+                            int womyear, int wommon, int wom, int dow,
+                            String data, String normalized) {
+                this.year = year;
+                this.month = month-1;
+                this.date = date;
+                this.womyear = womyear;
+                this.wommon = wommon-1;
+                this.wom = wom;
+                this.dow = dow;
+                this.data = data; // year, month, week of month, day
+                this.normalized = data;
+                if (normalized != null) this.normalized = normalized;
+            }
+        };
+
+        //      July 2001            August 2001           January 2002    
+        // Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa  Su Mo Tu We Th Fr Sa
+        //  1  2  3  4  5  6  7            1  2  3  4         1  2  3  4  5
+        //  8  9 10 11 12 13 14   5  6  7  8  9 10 11   6  7  8  9 10 11 12
+        // 15 16 17 18 19 20 21  12 13 14 15 16 17 18  13 14 15 16 17 18 19
+        // 22 23 24 25 26 27 28  19 20 21 22 23 24 25  20 21 22 23 24 25 26
+        // 29 30 31              26 27 28 29 30 31     27 28 29 30 31      
+        TestData[] tests = {
+            new TestData(2001, 8,  6,  2001,8,2,Calendar.MONDAY,    "2001 08 02 Mon", null),
+            new TestData(2001, 8,  7,  2001,8,2,Calendar.TUESDAY,   "2001 08 02 Tue", null),
+            new TestData(2001, 8,  5,/*12,*/ 2001,8,2,Calendar.SUNDAY,    "2001 08 02 Sun", null),
+            new TestData(2001, 8,6, /*7,  30,*/ 2001,7,6,Calendar.MONDAY,    "2001 07 06 Mon", "2001 08 02 Mon"),
+            new TestData(2001, 8,7, /*7,  31,*/ 2001,7,6,Calendar.TUESDAY,   "2001 07 06 Tue", "2001 08 02 Tue"),
+            new TestData(2001, 8,  5,  2001,7,6,Calendar.SUNDAY,    "2001 07 06 Sun", "2001 08 02 Sun"),
+            new TestData(2001, 7,  30, 2001,8,1,Calendar.MONDAY,    "2001 08 01 Mon", "2001 07 05 Mon"),
+            new TestData(2001, 7,  31, 2001,8,1,Calendar.TUESDAY,   "2001 08 01 Tue", "2001 07 05 Tue"),
+            new TestData(2001, 7,29, /*8,  5,*/  2001,8,1,Calendar.SUNDAY,    "2001 08 01 Sun", "2001 07 05 Sun"),
+            new TestData(2001, 12, 31, 2001,12,6,Calendar.MONDAY,   "2001 12 06 Mon", null),
+            new TestData(2002, 1,  1,  2002,1,1,Calendar.TUESDAY,   "2002 01 01 Tue", null),
+            new TestData(2002, 1,  2,  2002,1,1,Calendar.WEDNESDAY, "2002 01 01 Wed", null),
+            new TestData(2002, 1,  3,  2002,1,1,Calendar.THURSDAY,  "2002 01 01 Thu", null),
+            new TestData(2002, 1,  4,  2002,1,1,Calendar.FRIDAY,    "2002 01 01 Fri", null),
+            new TestData(2002, 1,  5,  2002,1,1,Calendar.SATURDAY,  "2002 01 01 Sat", null),
+            new TestData(2001,12,30, /*2002, 1,  6,*/  2002,1,1,Calendar.SUNDAY,    "2002 01 01 Sun", "2001 12 06 Sun"),
+        };
+
+        int pass = 0, error = 0, warning = 0;
+
+        final String pattern = "yyyy MM WW EEE";
+        GregorianCalendar cal = new GregorianCalendar();
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+        sdf.setCalendar(cal);
+
+        cal.setFirstDayOfWeek(Calendar.SUNDAY);
+        cal.setMinimalDaysInFirstWeek(1);
+
+        for (int i = 0; i < tests.length; ++i) {
+            TestData test = tests[i];
+            log("\n-----\nTesting round trip of " + test.year +
+                  " " + (test.month + 1) +
+                  " " + test.date +
+                  " (written as) " + test.data);
+
+            cal.clear();
+            cal.set(test.year, test.month, test.date);
+            Date ms = cal.getTime();
+
+            cal.clear();
+            cal.set(Calendar.YEAR, test.womyear);
+            cal.set(Calendar.MONTH, test.wommon);
+            cal.set(Calendar.WEEK_OF_MONTH, test.wom);
+            cal.set(Calendar.DAY_OF_WEEK, test.dow);
+            Date ms2 = cal.getTime();
+
+            if (!ms2.equals(ms)) {
+                log("\nError: GregorianCalendar.DOM gave " + ms +
+                    "\n       GregorianCalendar.WOM gave " + ms2);
+                error++;
+            } else {
+                pass++;
+            }
+
+            ms2 = null;
+            try {
+                ms2 = sdf.parse(test.data);
+            }
+            catch (ParseException e) {
+                errln("parse exception: " + e);
+            }
+
+            if (!ms2.equals(ms)) {
+                log("\nError: GregorianCalendar gave      " + ms +
+                    "\n       SimpleDateFormat.parse gave " + ms2);
+                error++;
+            } else {
+                pass++;
+            }
+
+            String result = sdf.format(ms);
+            if (!result.equals(test.normalized)) {
+                log("\nWarning: format of '" + test.data + "' gave" +
+                    "\n                   '" + result + "'" +
+                    "\n          expected '" + test.normalized + "'");
+                warning++;
+            } else {
+                pass++;
+            }
+
+            Date ms3 = null;
+            try {
+                ms3 = sdf.parse(result);
+            }
+            catch (ParseException e) {
+                errln("parse exception 2: " + e);
+            }
+
+            if (!ms3.equals(ms)) {
+                error++;
+                log("\nError: Re-parse of '" + result + "' gave time of " +
+                    "\n        " + ms3 +
+                    "\n    not " + ms);
+            } else {
+                pass++;
+            }
+        }
+        String info = "\nPassed: " + pass + ", Warnings: " + warning + ", Errors: " + error;
+        if (error > 0) {
+            errln(info);
+        } else {
+            logln(info);
         }
     }
 
