@@ -5176,72 +5176,79 @@ createTables()
 {
     CompactByteArray* newTables;
     if (tables == 0) {
-      newTables = ucmp8_openAdopt((uint16_t*)indicies, (int8_t*)values, offsetCount);    
-      umtx_lock(NULL);
-      if (tables != 0) {
-    ucmp8_close(newTables);
-      }
-      else {
-    tables = newTables;
-      }
+        newTables = ucmp8_openAdopt((uint16_t*)indicies, (int8_t*)values, offsetCount);    
+        if (newTables != 0) {
+            umtx_lock(NULL);
+            if (tables == 0) {
+                tables = newTables;
+                newTables = 0;
+            }
+            umtx_unlock(NULL);
+            if (newTables != 0) {
+                ucmp8_close(newTables);
+            }
+        }
     }
 
 #ifndef TESTING_CODE_COVERAGE
     if (tables) tablesCreated = TRUE;
 #endif
-    umtx_unlock(NULL);
 }
 
 void
 createUlTables()
 {
-  CompactShortArray* newTables;
-  if (ulTables == 0) 
+    CompactShortArray* newTables;
+    if (ulTables == 0) 
     {
-      newTables = ucmp16_openAdopt((uint16_t*)caseIndex,
-                   (int16_t*)caseValues,
-                   caseCount,
-                   0);
-      umtx_lock(NULL);
-
-      if (ulTables != 0)
-    {
-      ucmp16_close(newTables);
-    }
-      else 
-    {
-      ulTables = newTables;
+        newTables = ucmp16_openAdopt((uint16_t*)caseIndex,
+                                     (int16_t*)caseValues,
+                                     caseCount,
+                                     0);
+        if (newTables != 0) {
+            umtx_lock(NULL);
+            if (ulTables == 0)
+            {
+                ulTables = newTables;
+                newTables = 0;
+            }
+            umtx_unlock(NULL);
+            if (newTables != 0) {
+                ucmp16_close(newTables);
+            }
         }
     }
 #ifndef TESTING_CODE_COVERAGE
     if (ulTables) ulTablesCreated = TRUE;
 #endif
-    umtx_unlock(NULL);
 }
 
 
 void
 createDirTables()
 {
-  CompactByteArray* newTables;
-  if (dirTables == 0)
+    CompactByteArray* newTables;
+    if (dirTables == 0)
     {
-      newTables = ucmp8_openAdopt((uint16_t*)fCharDirIndices,
-                  (int8_t*)fCharDirValues,
-                  fCharDirCount);
-      umtx_lock(NULL);
-      if (dirTables != 0) 
-    {
-      ucmp8_close(newTables);
-    }
-      else {
-    dirTables = newTables;
-      }
+        newTables = ucmp8_openAdopt((uint16_t*)fCharDirIndices,
+                                    (int8_t*)fCharDirValues,
+                                    fCharDirCount);
+        if (newTables != 0) {
+            umtx_lock(NULL);
+            if (dirTables == 0) 
+            {
+                dirTables = newTables;
+                newTables = 0;
+            }
+            umtx_unlock(NULL);
+            if (newTables != 0) {
+                ucmp8_close(newTables);
+            }
+        }
     }
 #ifndef TESTING_CODE_COVERAGE
-  if (dirTables) dirTablesCreated = TRUE;
+    if (dirTables) dirTablesCreated = TRUE;
 #endif
-  umtx_unlock(NULL);
 }
 
 const char* u_getVersion()
