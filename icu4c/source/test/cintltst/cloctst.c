@@ -1648,6 +1648,10 @@ TestLocaleStructure(void) {
             continue;
         }
 */
+    if (locCount <= 1) {
+        log_err("At least root needs to be installed\n");
+    }
+
     root = ures_openDirect(NULL, "root", &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("Can't open root\n");
@@ -1678,7 +1682,7 @@ TestLocaleStructure(void) {
                 uloc_getAvailable(locIndex));
         }
         else if (ures_getStringByKey(currentLocale, "Version", NULL, &errorCode)[0] == (UChar)(0x78)) {
-            log_err("The locale %s is experimental! It shouldn't be listed as an installed locale.\n",
+            log_verbose("WARNING: The locale %s is experimental! It shouldn't be listed as an installed locale.\n",
                 uloc_getAvailable(locIndex));
         }
         TestKeyInRootRecursive(root, currentLocale, uloc_getAvailable(locIndex));
