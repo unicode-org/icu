@@ -176,12 +176,12 @@ void ConvertTest::TestConvert()
     if (U_FAILURE(err)) 
     {
         errln("Error getting Available names!");
-        exit(0);
+        return;
     }
     logln("Number of available Codepages:\t" + testLong1);
     while (testLong1--) logln((UnicodeString)"\t\t[" + available_conv[testLong1] + (UnicodeString)"]");
 
-     
+    ucnv_flushCache();
 
     someConverters[0] = new UnicodeConverterCPP("ibm-949",err);
     if (U_FAILURE(err)) errln ((UnicodeString)"FAILURE! " + myErrorName(err));
@@ -261,7 +261,7 @@ void ConvertTest::TestConvert()
         if (!ucs_file_in) 
         {
             errln("Couldn't open the Unicode file...");
-            exit(0);
+            return;
         }
 
         /*Creates a converter*/
@@ -271,7 +271,7 @@ void ConvertTest::TestConvert()
         if (!myConverter)   
         {
             errln("Error Creating the converter from " + (UnicodeString)CodePagesToTest[codepage_index] + " codepage.\nMake sure you have ran the uconvdef tool to create " + (UnicodeString)CodePagesToTest[codepage_index] + ".cnv in the locales directory"); 
-            exit(0);
+            return;
         }
 
     
@@ -390,7 +390,7 @@ void ConvertTest::TestConvert()
         if (BOM!=0xFEFF && BOM!=0xFFFE) 
           {
             errln("File Missing BOM...Bailing!");
-            exit(0);
+            return;
           }
 
         
