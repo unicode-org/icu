@@ -19,8 +19,8 @@ U_NAMESPACE_BEGIN
 RuleCharacterIterator::RuleCharacterIterator(const UnicodeString& theText, const SymbolTable* theSym,
                       ParsePosition& thePos) :
     text(theText),
-    sym(theSym),
     pos(thePos),
+    sym(theSym),
     buf(0)
 {}
 
@@ -128,7 +128,7 @@ UChar32 RuleCharacterIterator::_current() const {
         return buf->char32At(bufPos);
     } else {
         int i = pos.getIndex();
-        return (i < text.length()) ? text.char32At(i) : DONE;
+        return (i < text.length()) ? text.char32At(i) : (UChar32)DONE;
     }
 }
 

@@ -46,7 +46,7 @@ inline CharString::CharString(const UnicodeString& str, const char *codepage) {
     ptr = buf;
     len = str.extract(0, 0x7FFFFFFF, buf ,sizeof(buf)-1, codepage);
     buf[sizeof(buf)-1] = 0;  // extract does not add null if it thinks there is no space for it.
-    if (len >= sizeof(buf)-1) {
+    if (len >= (int32_t)(sizeof(buf)-1)) {
         ptr = (char *)uprv_malloc(len+1);
         str.extract(0, 0x7FFFFFFF, ptr, len+1, codepage);
     }

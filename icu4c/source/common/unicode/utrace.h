@@ -61,7 +61,7 @@ utrace_setLevel(int32_t traceLevel);
  * @draft ICU 2.8
  */
 U_CAPI int32_t U_EXPORT2
-utrace_getLevel();
+utrace_getLevel(void);
 
 /* Trace function pointers types  ----------------------------- */
 

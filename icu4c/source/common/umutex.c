@@ -102,7 +102,9 @@ static UMTX              gIncDecMutex      = NULL;
 
 
 /* Detect Recursive locking of the global mutex.  For debugging only. */
+#if defined(WIN32) && defined(_DEBUG) && (ICU_USE_THREADS==1)
 static int32_t gRecursionCount = 0;       
+#endif
 
 
 /*
