@@ -729,13 +729,13 @@ CalendarRegressionTest::test4031502()
     void CalendarRegressionTest::test4103271() 
     {
         UErrorCode status = U_ZERO_ERROR;
-        SimpleDateFormat *sdf = new SimpleDateFormat(status); 
+        SimpleDateFormat sdf(status); 
         int32_t numYears=40, startYear=1997, numDays=15; 
-        UnicodeString output, testDesc; 
+        UnicodeString output, testDesc, str, str2; 
         GregorianCalendar *testCal = (GregorianCalendar*)Calendar::createInstance(status); 
         testCal->clear();
-        sdf->adoptCalendar(testCal); 
-        sdf->applyPattern("d MMM yyyy"); 
+        sdf.adoptCalendar(testCal); 
+        sdf.applyPattern("d MMM yyyy"); 
         bool_t fail = FALSE;
         for (int32_t firstDay=1; firstDay<=2; firstDay++) { 
             for (int32_t minDays=1; minDays<=7; minDays++) { 
@@ -757,7 +757,7 @@ CalendarRegressionTest::test4031502()
                             //calWOY = String.valueOf(actWOY);
                             UnicodeString temp;
                             FieldPosition pos(FieldPosition::DONT_CARE);
-                            output = testDesc + " - " + sdf->format(d,temp,pos) + "\t"; 
+                            output = testDesc + " - " + sdf.format(d,temp,pos) + "\t"; 
                             output = output + "\t" + actWOY; 
                             logln(output); 
                             fail = TRUE;
@@ -783,7 +783,9 @@ CalendarRegressionTest::test4031502()
             testCal->set(1997, Calendar::DECEMBER, 21);
             for (int32_t i=0; i<21; ++i) {
                 int32_t woy = testCal->get(Calendar::WEEK_OF_YEAR,status);
-                log(UnicodeString("") + testCal->getTime(status) + UnicodeString(" ") + woy);
+                str.remove();
+                log(UnicodeString("") + sdf.format(testCal->getTime(status), str) +
+                    UnicodeString(" ") + woy);
                 if (woy != DATA[j + 1 + i]) {
                     log(" ERROR");
                     fail = TRUE;
@@ -798,7 +800,9 @@ CalendarRegressionTest::test4031502()
                 testCal->set(Calendar::WEEK_OF_YEAR, DATA[j+1+i]);
                 testCal->set(Calendar::DAY_OF_WEEK, (i%7) + Calendar::SUNDAY);
                 if (testCal->getTime(status) != save) {
-                    logln(UnicodeString("  Parse failed: ") + testCal->getTime(status));
+                    str.remove();
+                    logln(UnicodeString("  Parse failed: ") +
+                          sdf.format(testCal->getTime(status), str));
                     fail= TRUE;
                 }
 
@@ -836,9 +840,11 @@ CalendarRegressionTest::test4031502()
             testCal->set(Calendar::WEEK_OF_YEAR, woy);
             testCal->set(Calendar::DAY_OF_WEEK, dow);
             UDate got = testCal->getTime(status);
+            str.remove();
+            str2.remove();
             log(UnicodeString("") + y + "-W" + woy +
-                             "-DOW" + dow + " expect:" + exp +
-                             " got:" + got);
+                             "-DOW" + dow + " expect:" + sdf.format(exp, str) +
+                             " got:" + sdf.format(got, str2));
             if (got != exp) {
                 log("  FAIL");
                 fail = TRUE;
@@ -882,11 +888,14 @@ CalendarRegressionTest::test4031502()
             else 
                 testCal->roll(Calendar::WEEK_OF_YEAR, amount,status);
             UDate got = testCal->getTime(status);
-            log((ADDROLL_bool[i]? UnicodeString("add(WOY,"):UnicodeString("roll(WOY,")) +
-                             amount + ") " + before + " => " +
-                             got);
+            str.remove();
+            str2.remove();
+            log((ADDROLL_bool[i/2]? UnicodeString("add(WOY,"):UnicodeString("roll(WOY,")) +
+                             amount + ") " + sdf.format(before, str) + " => " +
+                             sdf.format(got, str2));
             if (after != got) {
-                logln(UnicodeString("  exp:") + after + "  FAIL");
+                str.remove();
+                logln(UnicodeString("  exp:") + sdf.format(after, str) + "  FAIL");
                 fail = TRUE;
             }
             else logln(" ok");
@@ -897,11 +906,14 @@ CalendarRegressionTest::test4031502()
             else 
                 testCal->roll(Calendar::WEEK_OF_YEAR, -amount,status);
             got = testCal->getTime(status);
-            log((ADDROLL_bool[i]?UnicodeString("add(WOY,"):UnicodeString("roll(WOY,")) +
-                             (-amount) + ") " + after + " => " +
-                             got);
+            str.remove();
+            str2.remove();
+            log((ADDROLL_bool[i/2]?UnicodeString("add(WOY,"):UnicodeString("roll(WOY,")) +
+                             (-amount) + ") " + sdf.format(after, str) + " => " +
+                             sdf.format(got, str2));
             if (before != got) {
-                logln(UnicodeString("  exp:") + before + "  FAIL");
+                str.remove();
+                logln(UnicodeString("  exp:") + sdf.format(before, str) + "  FAIL");
                 fail = TRUE;
             }
             else logln(" ok");
@@ -909,8 +921,6 @@ CalendarRegressionTest::test4031502()
 
         if (fail) 
             errln("Fail: Week of year misbehaving");
-
-    delete sdf;
     } 
 
     /**
