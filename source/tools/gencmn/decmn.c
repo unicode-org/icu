@@ -68,7 +68,7 @@ copyFile(FILE *in, int32_t offset, int32_t size, const char *dir, const char *na
         *p++ = U_FILE_SEP_CHAR;
     }
     uprv_strcpy(p, name);
- 
+
     out=fopen(path, "wb");
     if(out==NULL) {
         fprintf(stderr, "%s: unable to open output file \"%s\"\n", pname, path);
@@ -133,8 +133,8 @@ main(int argc, char *argv[]) {
     options[2].value = ".";
 
     argc = u_parseArgs(argc, argv, sizeof(options) / sizeof(*options), options);
-    ishelp = options[0].doesOccur;
-    if ((ishelp || options[1].doesOccur) || argc != 2) {
+    ishelp = options[0].doesOccur || options[1].doesOccur;
+    if (ishelp || argc != 2) {
         fprintf(stderr,
                 "%csage: %s [ -h, -?, --help ] [ -n ] [ -C, --comment ] [ -d, --destdir destination ] archive\n", ishelp ? 'U' : 'u', pname);
         if (ishelp) {
