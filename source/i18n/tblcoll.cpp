@@ -665,6 +665,20 @@ RuleBasedCollator::RuleBasedCollator(const Locale& desiredLocale,
   return;
 }
 
+void 
+RuleBasedCollator::setUCollator(const char *locale,
+                                UErrorCode &status)
+{
+  if (U_FAILURE(status))
+    return;
+  if (ucollator && dataIsOwned)
+    ucol_close(ucollator);
+  ucollator = ucol_open_internal(locale, &status);
+  dataIsOwned = TRUE;
+  isWriteThroughAlias = FALSE;
+}
+
+
 void
 RuleBasedCollator::checkOwned() {
 	if (!(dataIsOwned || isWriteThroughAlias)) {

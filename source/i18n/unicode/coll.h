@@ -934,7 +934,7 @@ public:
      * Return the locale names directly supported by this factory.  The number of names
      * is returned in count;
      */
-    virtual const UnicodeString * const getSupportedIDs(int32_t &count, UErrorCode& status) = 0;
+    virtual const UnicodeString * getSupportedIDs(int32_t &count, UErrorCode& status) = 0;
 };
 
 // Collator inline methods -----------------------------------------------

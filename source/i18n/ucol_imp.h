@@ -815,6 +815,9 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
 U_CFUNC
 void ucol_setOptionsFromHeader(UCollator* result, UColOptionSet * opts, UErrorCode *status);
 
+U_CFUNC
+UCollator* ucol_open_internal(const char* loc, UErrorCode* status);
+
 #if 0
 U_CFUNC
 void ucol_putOptionsToHeader(UCollator* result, UColOptionSet * opts, UErrorCode *status);
