@@ -42,16 +42,16 @@ Depends: libicu${major} (>= ${Source-Version}), make
 Recommends: icu-locales
 Description: International Components for Unicode (non locale data)
  ICU is a C++ and C library that provides robust and full-featured Unicode
- and locale support. The library provides calendar support, character
- set conversions, language-sensitive collation, date and time
- formatting, support for more than 140 locales, message catalogs and
- resources, message formatting, normalization, number and currency
+ and locale support. The library provides calendar support, conversions
+ for more than 230 character sets, language-sensitive collation, date
+ and time formatting, support for more than 140 locales, message catalogs
+ and resources, message formatting, normalization, number and currency
  formatting, time zones support, transliteration, word, line and
- sentence breaking, etc.... 
+ sentence breaking, etc. 
  .
- This package contains the Unicode data, converters and aliases data,
- and timezone data. It also contains the tools needed to manipulate
- these data.
+ This package contains the Unicode character database and derived
+ properties, along with converters and time zones data.
+ It also contains the tools needed to manipulate these data.
 
 Package: icu-locales
 Section: libs
