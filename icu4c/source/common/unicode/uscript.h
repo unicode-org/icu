@@ -74,13 +74,14 @@ typedef enum UScriptCode {
       USCRIPT_TAGBANWA     = 45,  /* Tagb */
 
       /* New scripts in Unicode 4 @draft ICU 2.6 */
-      USCRIPT_CYPRIOT      = 46,  /* Cprt */
-      USCRIPT_LIMBU        = 47,  /* Limb */
-      USCRIPT_LINEAR_B     = 48,  /* Linb */
-      USCRIPT_OSMANYA      = 49,  /* Osma */
-      USCRIPT_SHAVIAN      = 50,  /* Shaw */
-      USCRIPT_TAI_LE       = 51,  /* Tale */
-      USCRIPT_UGARITIC     = 52,  /* Ugar */
+      USCRIPT_BRAILLE,            /* Brai */
+      USCRIPT_CYPRIOT,            /* Cprt */
+      USCRIPT_LIMBU,              /* Limb */
+      USCRIPT_LINEAR_B,           /* Linb */
+      USCRIPT_OSMANYA,            /* Osma */
+      USCRIPT_SHAVIAN,            /* Shaw */
+      USCRIPT_TAI_LE,             /* Tale */
+      USCRIPT_UGARITIC,           /* Ugar */
 
       USCRIPT_CODE_LIMIT
 } UScriptCode;
