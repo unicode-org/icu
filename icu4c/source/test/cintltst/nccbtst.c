@@ -2725,8 +2725,8 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const uint8_t 
     conv = ucnv_open(codepage, &status);
     if(U_FAILURE(status))
     {
-        log_err("Couldn't open converter %s\n",codepage);
-        return FALSE;
+        log_data_err("Couldn't open converter %s\n",codepage);
+        return TRUE;
     }
 
     log_verbose("Converter opened..\n");
@@ -2905,8 +2905,8 @@ UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const UChar *e
     conv = ucnv_open(codepage, &status);
     if(U_FAILURE(status))
     {
-        log_err("Couldn't open converter %s\n",gNuConvTestName);
-        return FALSE;
+        log_data_err("Couldn't open converter %s\n",gNuConvTestName);
+        return TRUE;
     }
 
     log_verbose("Converter opened..\n");
@@ -3084,8 +3084,8 @@ UBool testConvertFromUnicodeWithContext(const UChar *source, int sourceLen,  con
     conv = ucnv_open(codepage, &status);
     if(U_FAILURE(status))
     {
-        log_err("Couldn't open converter %s\n",codepage);
-        return FALSE;
+        log_data_err("Couldn't open converter %s\n",codepage);
+        return TRUE; /* Because the err has already been logged. */
     }
 
     log_verbose("Converter opened..\n");
@@ -3263,8 +3263,8 @@ UBool testConvertToUnicodeWithContext( const uint8_t *source, int sourcelen, con
     conv = ucnv_open(codepage, &status);
     if(U_FAILURE(status))
     {
-        log_err("Couldn't open converter %s\n",gNuConvTestName);
-        return FALSE;
+        log_data_err("Couldn't open converter %s\n",gNuConvTestName);
+        return TRUE;
     }
 
     log_verbose("Converter opened..\n");

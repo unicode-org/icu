@@ -727,7 +727,7 @@ static void TestGetNextErrorBehaviour(){
     UChar32 c=0;
     UConverter *cnv=ucnv_open("ibm-1159", &err);
     if(U_FAILURE(err)) {
-        log_err("Unable to open a SBCS(ibm-1159) converter: %s\n", u_errorName(err));
+        log_data_err("Unable to open a SBCS(ibm-1159) converter: %s\n", u_errorName(err));
         return;
     }
     c=ucnv_getNextUChar(cnv, &source, source + INPUT_SIZE, &err);
@@ -925,8 +925,8 @@ static UBool convertFromU( const UChar *source, int sourceLen,  const uint8_t *e
     conv = ucnv_open(codepage, &status);
     if(U_FAILURE(status))
     {
-        log_err("Couldn't open converter %s\n",codepage);    
-        return FALSE;
+        log_data_err("Couldn't open converter %s\n",codepage);    
+        return TRUE;
     }
     log_verbose("Converter %s opened..\n", ucnv_getName(conv, &status));
 
@@ -1016,8 +1016,8 @@ static UBool convertToU( const uint8_t *source, int sourceLen, const UChar *expe
     conv = ucnv_open(codepage, &status);
     if(U_FAILURE(status))
     {
-        log_err("Couldn't open converter %s\n",codepage);    
-        return FALSE;
+        log_data_err("Couldn't open converter %s\n",codepage);    
+        return TRUE;
     }
     log_verbose("Converter %s opened..\n", ucnv_getName(conv, &status));
 
@@ -1128,8 +1128,8 @@ static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_
     conv = ucnv_open(codepage, &status);
     if(U_FAILURE(status))
     {
-        log_err("Couldn't open converter %s\n",codepage);    
-        return FALSE;
+        log_data_err("Couldn't open converter %s\n",codepage);    
+        return TRUE;
     }
 
     log_verbose("Converter opened..\n");
@@ -1302,8 +1302,8 @@ static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *
     conv = ucnv_open(codepage, &status);
     if(U_FAILURE(status))
     {
-        log_err("Couldn't open converter %s\n",gNuConvTestName);
-        return FALSE;
+        log_data_err("Couldn't open converter %s\n",gNuConvTestName);
+        return TRUE;
     }
 
     log_verbose("Converter opened..\n");
@@ -1723,7 +1723,7 @@ doTestTruncated(const char *cnvName, const uint8_t *bytes, int32_t length) {
     errorCode=U_ZERO_ERROR;
     cnv=ucnv_open(cnvName, &errorCode);
     if(U_FAILURE(errorCode)) {
-        log_err("error TestTruncated: unable to open \"%s\" - %s\n", cnvName, u_errorName(errorCode));
+        log_data_err("error TestTruncated: unable to open \"%s\" - %s\n", cnvName, u_errorName(errorCode));
         return;
     }
 

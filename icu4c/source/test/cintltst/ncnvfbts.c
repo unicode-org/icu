@@ -159,8 +159,8 @@ static UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const u
     conv = my_ucnv_open(codepage, &status);
     if(U_FAILURE(status))
     {
-        log_err("Couldn't open converter %s\n",codepage);
-        return FALSE;
+        log_data_err("Couldn't open converter %s\n",codepage);
+        return TRUE;
     }
 
     log_verbose("Converter opened..\n");
@@ -323,8 +323,8 @@ static UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const U
     conv = my_ucnv_open(codepage, &status);
     if(U_FAILURE(status))
     {
-        log_err("Couldn't open converter %s\n",gNuConvTestName);
-        return FALSE;
+        log_data_err("Couldn't open converter %s\n",gNuConvTestName);
+        return TRUE; /* because it has been logged */
     }
 
     log_verbose("Converter opened..\n");
