@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedBreakIterator.java,v $ 
- * $Date: 2000/05/18 19:03:36 $ 
- * $Revision: 1.7 $
+ * $Date: 2000/07/20 17:03:33 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -240,7 +240,7 @@ import java.io.*;
  * &nbsp; For examples, see the resource data (which is annotated).</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.7 $ $Date: 2000/05/18 19:03:36 $
+ * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.8 $ $Date: 2000/07/20 17:03:33 $
  */
 public class RuleBasedBreakIterator extends BreakIterator {
 
@@ -961,6 +961,21 @@ visitedChars = 0;
         return backwardsStateTable[state * numCategories + category];
     }
 
+    /**
+     * This is a helper function for computing the intersection of
+     * two <code>UnicodeSet</code> objects.
+     * @param a, b the two <code>UnicodeSet</code>s to intersect
+     * @return a new <code>UnicodeSet</code> which is the intersection of a and b
+     */
+    private static UnicodeSet intersection(UnicodeSet a, UnicodeSet b)
+    {
+        UnicodeSet result = new UnicodeSet(a);
+            
+        result.retainAll(b);
+            
+        return result;
+    }
+
     //=======================================================================
     // RuleBasedBreakIterator.Builder
     //=======================================================================
@@ -1089,7 +1104,7 @@ visitedChars = 0;
             buildStateTable(tempRuleList);
             buildBackwardsStateTable(tempRuleList);
         }
-
+        
         /**
          * Thus function has three main purposes:
          * <ul><li>Perform general syntax checking on the description, so the rest of the
@@ -1514,36 +1529,36 @@ visitedChars = 0;
             Enumeration iter = expressions.elements();
             while (iter.hasMoreElements()) {
                 // initialize the working char set to the chars in the current expression
-                UnicodeSet e = new UnicodeSet((UnicodeSet)iter.nextElement());
+                UnicodeSet work = new UnicodeSet((UnicodeSet)iter.nextElement());
 
                 // for each category in the category list, do...
-                for (int j = categories.size() - 1; !e.isEmpty() && j > 0; j--) {
+                for (int j = categories.size() - 1; !work.isEmpty() && j > 0; j--) {
 
                     // if there's overlap between the current working set of chars
                     // and the current category...
-                    UnicodeSet that = (UnicodeSet)(categories.elementAt(j));
-                    UnicodeSet temp = new UnicodeSet(e);
-                    temp.retainAll(that);
-                    if (!temp.isEmpty()) {
+                    UnicodeSet cat = (UnicodeSet)(categories.elementAt(j));
+                    UnicodeSet overlap = intersection(work, cat);
+                    
+                    if (!overlap.isEmpty()) {
                         // if the current category is not a subset of the current
                         // working set of characters, then remove the overlapping
                         // characters from the current category and create a new
                         // category for them
-                        if (!temp.equals(that)) {
-                            that.removeAll(temp);
-                            categories.addElement(temp);
+                        if (!overlap.equals(cat)) {
+                            cat.removeAll(overlap);
+                            categories.addElement(overlap);
                         }
                         
                         // and always remove the overlapping characters from the current
                         // working set of characters
-                        e.removeAll(temp);
+                        work.removeAll(overlap);
                     }
                 }
 
                 // if there are still characters left in the working char set,
                 // add a new category containing them
-                if (!e.isEmpty()) {
-                    categories.addElement(e);
+                if (!work.isEmpty()) {
+                    categories.addElement(work);
                 }
             }
 
@@ -1569,14 +1584,15 @@ visitedChars = 0;
 
                 // for each category...
                 for (int j = 1; j < categories.size(); j++) {
-
+                    UnicodeSet cat = new UnicodeSet((UnicodeSet) categories.elementAt(j));
+                    
                     // if the current expression contains characters in that category...
-                    if (cs.containsAll((UnicodeSet)(categories.elementAt(j)))) {
+                    if (cs.containsAll(cat)) {
 
                         // then add the encoded category number to the String for this
                         // expression
                         cats.append((char)(0x100 + j));
-                        if (cs.equals((UnicodeSet)(categories.elementAt(j)))) {
+                        if (cs.equals(cat)) {
                             break;
                         }
                     }
@@ -1918,6 +1934,10 @@ System.out.println();
                             Vector temp = new Vector();
                             temp.addElement(new Integer(i));
                             updateStateTable(temp, pendingChars, (short)(lastState + 1));
+                        }
+                        
+                        while (currentState + 1 < tempStateTable.size()) {
+                            decisionPointList.addElement(new Integer(++currentState));
                         }
                     }
 
