@@ -1885,11 +1885,18 @@ getTrail:
                 break;
             case MBCS_OUTPUT_2_SISO:
                 /* 1/2-byte stateful with Shift-In/Shift-Out */
+                /*
+                 * Save the old state in the converter object
+                 * right here, then change the local prevLength state variable if necessary.
+                 * Then, if this character turns out to be unassigned or a fallback that
+                 * is not taken, the callback code must not save the new state in the converter
+                 * because the new state is for a character that is not output.
+                 * However, the callback must still restore the state from the converter
+                 * in case the callback function changed it for its output.
+                 */
+                cnv->fromUnicodeStatus=prevLength; /* save the old state */
                 value=MBCS_VALUE_2_FROM_STAGE_2(bytes, stage2Entry, c);
-                if(value==0 && c!=0) {
-                    /* unassigned (do not allow 0 result for assigned here), do not change state */
-                    length=0;
-                } else if(value<=0xff) {
+                if(value<=0xff) {
                     if(prevLength==1) {
                         length=1;
                     } else {
@@ -2110,7 +2117,13 @@ callback:
 
             /* set the converter state in UConverter to deal with the next character */
             cnv->fromUSurrogateLead=0;
-            cnv->fromUnicodeStatus=prevLength;
+            /*
+             * Do not save the prevLength SISO state because prevLength is set for
+             * the character that is now not output because it is unassigned or it is
+             * a fallback that is not taken.
+             * The above branch for MBCS_OUTPUT_2_SISO has saved the previous state already.
+             * See comments there.
+             */
 
             /* call the callback function */
             fromUCallback(cnv, cnv->fromUContext, pArgs, c, reason, pErrorCode);
