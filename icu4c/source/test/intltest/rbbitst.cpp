@@ -2553,12 +2553,14 @@ void RBBILineMonkey::rule67Adjust(int32_t pos, UChar32 *posChar, int32_t *nextPo
     //  advance over any CM class chars.  (Line Break CM class is different from
     //    grapheme cluster CM, so we need to do this even for HangulSyllables.
     //    Line Break may eat additional stuff as combining, beyond what graphem cluster did.
-    for (;;) {
-        *nextChar = fText->char32At(nPos);
-        if (!fCM->contains(*nextChar)) {
-            break;
+    if (!(fBK->contains(*posChar) || *posChar==0x0a || *posChar==0x0d || *posChar==0x85)) {
+        for (;;) {
+            *nextChar = fText->char32At(nPos);
+            if (!fCM->contains(*nextChar)) {
+                break;
+            }
+            nPos = fText->moveIndex32(nPos, 1);
         }
-        nPos = fText->moveIndex32(nPos, 1);
     }
     
     
@@ -2652,27 +2654,31 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
         }
 
         // LB 10    QU SP* x OP
-        UnicodeString  subStr10(*fText, prevPos);
-        fLB10Matcher->reset(subStr10);
-        status = U_ZERO_ERROR;
-        if (fLB10Matcher->lookingAt(status)) {  //   /QU CM* SP* (OP) CM*/;
-            // TODO:  Check status codes
-            pos      = prevPos + fLB10Matcher->start(1, status);
-            nextPos  = prevPos + fLB10Matcher->end(0, status);
-            thisChar = fText->char32At(pos);
-            continue;
+        if (prevPos >= 0) {
+            UnicodeString  subStr10(*fText, prevPos);
+            fLB10Matcher->reset(subStr10);
+            status = U_ZERO_ERROR;
+            if (fLB10Matcher->lookingAt(status)) {  //   /QU CM* SP* (OP) CM*/;
+                // TODO:  Check status codes
+                pos      = prevPos + fLB10Matcher->start(1, status);
+                nextPos  = prevPos + fLB10Matcher->end(0, status);
+                thisChar = fText->char32At(pos);
+                continue;
+            }
         }
 
         // LB 11   CL SP* x NS
-        UnicodeString  subStr11(*fText, prevPos);
-        fLB11Matcher->reset(subStr11);
-        status = U_ZERO_ERROR;
-        if (fLB11Matcher->lookingAt(status)) {  //   /QU CM* SP* (OP) CM*/;
-            // TODO:  Check status codes
-            pos      = prevPos + fLB11Matcher->start(1, status);
-            nextPos  = prevPos + fLB11Matcher->end(0, status);
-            thisChar = fText->char32At(pos);
-            continue;
+        if (prevPos >= 0) {
+            UnicodeString  subStr11(*fText, prevPos);
+            fLB11Matcher->reset(subStr11);
+            status = U_ZERO_ERROR;
+            if (fLB11Matcher->lookingAt(status)) {  //   /QU CM* SP* (OP) CM*/;
+                // TODO:  Check status codes
+                pos      = prevPos + fLB11Matcher->start(1, status);
+                nextPos  = prevPos + fLB11Matcher->end(0, status);
+                thisChar = fText->char32At(pos);
+                continue;
+            }
         }
 
         // LB 4  Don't break before spaces or zero-width space.
@@ -2984,8 +2990,7 @@ void RBBITest::TestMonkey(char *params) {
         RBBILineMonkey  m;
         BreakIterator  *bi = BreakIterator::createLineInstance(locale, status);
         if (params == NULL) {
-            // TODO:  Resolve rule ambiguities, unpin loop count.
-            loopCount = 2;
+            loopCount = 50;
         }
         RunMonkey(bi, m, "line", seed, loopCount);
         delete bi;
@@ -3041,8 +3046,8 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, char *name, uint
         }
     }
 
-    while (loopCount <= numIterations || numIterations == -1) {
-        if (numIterations == -1 && loopCount % 500 == 0) {
+    while (loopCount < numIterations || numIterations == -1) {
+        if (numIterations == -1 && loopCount % 10 == 0) {
             // If test is running in an infinite loop, display a periodic tic so
             //   we can tell that it is making progress.
             fprintf(stderr, ".");
