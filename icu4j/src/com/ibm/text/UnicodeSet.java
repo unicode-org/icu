@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UnicodeSet.java,v $ 
- * $Date: 2000/05/18 19:03:36 $ 
- * $Revision: 1.20 $
+ * $Date: 2000/05/23 16:49:40 $ 
+ * $Revision: 1.21 $
  *
  *****************************************************************************************
  */
@@ -241,7 +241,7 @@ import java.text.*;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.20 $ $Date: 2000/05/18 19:03:36 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.21 $ $Date: 2000/05/23 16:49:40 $
  */
 public class UnicodeSet implements UnicodeFilter {
     
@@ -1005,7 +1005,7 @@ public class UnicodeSet implements UnicodeFilter {
                                                            + name);
                     }
                     ivarValueBuffer = 0;
-                    i = pos.getIndex()-1; // Make i point at last char of var name
+                    i = pos.getIndex(); // Make i point PAST last char of var name
                     continue; // Back to the top to get varValueBuffer[0]
                 }
 
