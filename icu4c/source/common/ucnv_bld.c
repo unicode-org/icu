@@ -598,6 +598,8 @@ ucnv_flushCache ()
     }
     umtx_unlock (&cnvCacheMutex);
 
+    ucnv_io_flushAvailableConverterCache();
+
     return tableDeletedNum;
 }
 
