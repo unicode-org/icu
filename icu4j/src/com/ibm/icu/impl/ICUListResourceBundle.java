@@ -420,7 +420,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
         private Object resolveAliases(Object[][] o,String className, String key,Hashtable visited){
             int i =0;
             while(i<o.length){
-                o[i][1]=resolveAliases((Object)o[i][1],className,key,visited);
+                o[i][1]=resolveAliases(o[i][1],className,key,visited);
                 i++;
             }
             return o;
@@ -428,7 +428,7 @@ public class ICUListResourceBundle extends ListResourceBundle {
         private Object resolveAliases(Object[] o,String className, String key,Hashtable visited){
             int i =0;
             while(i<o.length){
-                o[i]=resolveAliases((Object)o[i],className,key,visited);
+                o[i]=resolveAliases(o[i],className,key,visited);
                 i++;
             }
             return o;
