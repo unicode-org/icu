@@ -4,9 +4,9 @@
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpICUrules.bat
+// Tool: dumpicurules.bat
 // Source: ../../text/resources/Transliterator_Latin_Katakana.txt
-// Date: Tue Nov 27 20:47:50 2001
+// Date: Fri Nov 30 13:01:42 2001
 //--------------------------------------------------------------------
 
 // Latin_Katakana
@@ -18,14 +18,16 @@ translit_Latin_Katakana {
 // Corporation and others. All Rights Reserved.
 //--------------------------------------------------------------------
 // $Source: /xsrl/Nsvn/icu/icu/data/Attic/translit_Latin_Katakana.txt,v $
-// $Date: 2001/11/28 06:04:32 $
-// $Revision: 1.4 $
+// $Date: 2001/11/30 21:24:16 $
+// $Revision: 1.5 $
 //--------------------------------------------------------------------
 
 // note: a global filter is more efficient, but MUST include all source chars
-":: [\\u0000-\u007E \u3001\u3002 \u3099-\u309C \u30A1-\u30FC \uFF61-\uFF9F [:Latin:][:Katakana:] [:nonspacing mark:]] ;"
+//:: [\\u0000-\u007E \u3001\u3002 \u3099-\u309C \u30A1-\u30FC \uFF61-\uFF9F [:Latin:][:Katakana:] [:nonspacing mark:]] ;
+// MINIMAL FILTER GENERATED FOR: Latin-Katakana
+":: [',.A-Za-z~\u00C0-\u00D6\u00D8-\u00F6\u00F8-\u010F\u0112-\u0125\u0128-\u0130\u0134-\u0137\u0139-\u013E\u0143-\u0148\u014C-\u0151\u0154-\u0165\u0168-\u017E\u01A0-\u01A1\u01AF-\u01B0\u01CD-\u01DC\u01DE-\u01E3\u01E6-\u01ED\u01F0\u01F4-\u01F5\u01F8-\u021B\u021E-\u021F\u0226-\u0233\u0304\u04E2-\u04E3\u04EE-\u04EF\u1E00-\u1E99\u1EA0-\u1EF9\u1FB1\u1FB9\u1FD1\u1FD9\u1FE1\u1FE9\u212A-\u212B] ;"
 
-":: NFKD (NFC);"  // use NFKD to get the fullwidth latin characters
+":: NFD (NFC);"  // use NFKD to get the fullwidth latin characters
 ":: Lower ();"    // whenever transliterating from cased to uncased script, include this
 // :: NFD () ;   # this would catch the odd cases where a lowercase is not in NFD, but none are important for Japanese
 
@@ -497,12 +499,14 @@ translit_Latin_Katakana {
 
 "'~' > ;" // delete stray tildes between letters
 "[:Katakana:] { '' } [:Latin:] > ;" // delete stray quotes between letters
-"[\u02BE[:Nonspacing Mark:]-[\u3099-\u309C]] > ;" // delete any non-spacing marks that we didn't use
+// [\u02BE[:Nonspacing Mark:]-[\u3099-\u309C]] > ; # delete any non-spacing marks that we didn't use
 
-":: NFC (NFKD) ;"  // use NFKD to get the halfwidth katakana characters
+":: NFC (NFD) ;"  // use NFKD to get the halfwidth katakana characters
 
 // note: a global filter is more efficient, but MUST include all source chars!!
-":: ([\\u0000-\u007E \u3001\u3002 \u3099-\u309C \u30A1-\u30FC \uFF61-\uFF9F [:Latin:][:Katakana:] [:nonspacing mark:]]);"
+//:: ([\\u0000-\u007E \u3001\u3002 \u3099-\u309C \u30A1-\u30FC \uFF61-\uFF9F [:Latin:][:Katakana:] [:nonspacing mark:]]);
+// MINIMAL FILTER GENERATED FOR: Latin-Katakana BACKWARD
+":: ( [~\u3001-\u3002\u30A1-\u30FA\u30FC-\u30FE] ) ;"
 
 // eof
   }

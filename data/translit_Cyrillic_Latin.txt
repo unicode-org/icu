@@ -4,9 +4,9 @@
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpICUrules.bat
+// Tool: dumpicurules.bat
 // Source: ../../text/resources/Transliterator_Cyrillic_Latin.txt
-// Date: Tue Nov 27 20:47:50 2001
+// Date: Fri Nov 30 13:01:41 2001
 //--------------------------------------------------------------------
 
 // Cyrillic_Latin
@@ -18,16 +18,17 @@ translit_Cyrillic_Latin {
 // Corporation and others. All Rights Reserved.
 //--------------------------------------------------------------------
 // $Source: /xsrl/Nsvn/icu/icu/data/Attic/translit_Cyrillic_Latin.txt,v $
-// $Date: 2001/11/28 06:04:31 $
-// $Revision: 1.4 $
+// $Date: 2001/11/30 21:24:15 $
+// $Revision: 1.5 $
 //--------------------------------------------------------------------
 // TODO: add remaining characters
 // Should add variants for Russian-English, Russian-German
 // Those can use this as a base, and then remap cases
 // like a $hat to ya or ja.
 
-":: [\\u0000-\u007E \u02B9 \u02BA [:Cyrillic:] [:Latin:] [:nonspacing mark:]] ;"
-
+// :: [\\u0000-\u007E \u02B9 \u02BA [:Cyrillic:] [:Latin:] [:nonspacing mark:]] ;
+// MINIMAL FILTER
+":: [\u0400-\u045F\u0490-\u0495\u0498-\u0499\u04C1-\u04C2\u04D0-\u04DF\u04E2-\u04E7\u04EC-\u04F5\u04F8-\u04F9] ;"
 ":: NFD (NFC) ;"
 
 "$modprime = \u02B9;"
@@ -318,6 +319,8 @@ translit_Cyrillic_Latin {
 
 ":: NFC (NFD) ;"
 // note: a global filter is more efficient, but MUST include all source chars!!
-":: ([\\u0000-\u007E \u02B9 \u02BA [:Cyrillic:] [:Latin:] [:nonspacing mark:]]);"
+// :: ([\\u0000-\u007E \u02B9 \u02BA [:Cyrillic:] [:Latin:] [:nonspacing mark:]]);
+// MINIMAL FILTER: Latin-Cyrillic
+":: ( [A-Za-z\u00C0-\u00CF\u00D1-\u00D6\u00D9-\u00DD\u00E0-\u00EF\u00F1-\u00F6\u00F9-\u00FD\u00FF-\u0125\u0128-\u0130\u0134-\u0137\u0139-\u013E\u0143-\u0148\u014C-\u0151\u0154-\u0165\u0168-\u017E\u018F\u01A0-\u01A1\u01AF-\u01B0\u01CD-\u01DC\u01DE-\u01E3\u01E6-\u01ED\u01F0\u01F4-\u01F5\u01F8-\u01FD\u0200-\u021B\u021E-\u021F\u0226-\u0233\u0259\u02B9-\u02BA\u0374\u1E00-\u1E99\u1EA0-\u1EF9\u212A-\u212B] ) ;"
   }
 }

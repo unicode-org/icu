@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpicurules.bat
 // Source: ../../text/resources/Transliterator_Latin_Jamo.txt
-// Date: Tue Nov 27 17:39:12 2001
+// Date: Fri Nov 30 13:01:42 2001
 //--------------------------------------------------------------------
 
 // Latin_Jamo
