@@ -1375,7 +1375,7 @@ TestSmallTargetBuffer(const uint16_t* source, const UChar* sourceLimit,UConverte
         cSourceLimit =cTarget;
         do{
             uTargetLimit=uTargetLimit+i;
-             ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,NULL,FALSE,&errorCode);
+            ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,NULL,FALSE,&errorCode);
             if(errorCode==U_BUFFER_OVERFLOW_ERROR){
                errorCode=U_ZERO_ERROR;
                 continue;
@@ -1545,7 +1545,7 @@ void
 TestISO_2022_JP() {
     /* test input */
     static const uint16_t in[]={  
-        0x3000, 0x3001, 0x3002, 0x0020, 0xFF0E, 0x30FB, 0xFF1A, 0xFF1B, 0x000D, 0x000A,
+        0x0041,/*0x00E9,*/0x3000, 0x3001, 0x3002, 0x0020, 0xFF0E, 0x30FB, 0xFF1A, 0xFF1B, 0x000D, 0x000A,
         0x0043, 0x0044, 0x0045, 0x0046, 0x0047, 0x0048, 0x0049, 0x004A, 0x000D, 0x000A, 
         0xFF1F, 0xFF01, 0x309B, 0x309C, 0x00B4, 0xFF40, 0x00A8, 0xFF3E, 0x000D, 0x000A,
         0x004B, 0x004C, 0x004D, 0x004E, 0x004F, 0x0050, 0x0051, 0x0052, 0x000D, 0x000A,
