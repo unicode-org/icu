@@ -5,29 +5,14 @@
  ********************************************************************/
 
 #include "cmemory.h"
-
-#ifndef _COLL
 #include "unicode/coll.h"
-#endif
-
-#ifndef _TBLCOLL
 #include "unicode/tblcoll.h"
-#endif
-
-#ifndef _UNISTR
 #include "unicode/unistr.h"
-#endif
-
-#ifndef _SORTKEY
 #include "unicode/sortkey.h"
-#endif
-
-#ifndef _ITERCOLL
 #include "itercoll.h"
-#endif
-
 #include "unicode/schriter.h"
 #include "unicode/chariter.h"
+
 #define ARRAY_LENGTH(array) (sizeof array / sizeof array[0])
 
 static UErrorCode status = U_ZERO_ERROR;
@@ -52,7 +37,6 @@ CollationIteratorTest::~CollationIteratorTest()
 void CollationIteratorTest::TestUnicodeChar()
 {
     CollationElementIterator *iter;
-    UErrorCode status = U_ZERO_ERROR;
     UChar codepoint;
     UnicodeString source;
     
@@ -273,40 +257,38 @@ void CollationIteratorTest::TestSetText(/* char* par */)
  */
 void CollationIteratorTest::TestMaxExpansion(/* char* par */)
 {
-  UErrorCode          status = U_ZERO_ERROR; 
+    UErrorCode          status = U_ZERO_ERROR; 
+    UnicodeString rule("&a < ab < c/aba < d < z < ch");
+    RuleBasedCollator  *coll   = new RuleBasedCollator(rule, status);
+    UChar               ch     = 0;
+    UnicodeString       str(ch);
 
-  UnicodeString rule("&a < ab < c/aba < d < z < ch");
-  RuleBasedCollator  *coll   = new RuleBasedCollator(rule, status);
-  UChar               ch     = 0;
-  UnicodeString       str(ch);
+    CollationElementIterator *iter   = coll->createCollationElementIterator(str);
 
-  CollationElementIterator *iter   = coll->createCollationElementIterator(str);
-  int                       count  = 1;
+    while (ch < 0xFFFF && U_SUCCESS(status)) {
+        int      count = 1;
+        uint32_t order;
+        ch ++;
+        UnicodeString str(ch);
+        iter->setText(str, status);
+        order = iter->previous(status);
 
-  while (ch < 0xFFFF && U_SUCCESS(status)) {
-    int      count = 1;
-    uint32_t order = 0;
-    ch ++;
-    UnicodeString str(ch);
-    iter->setText(str, status);
-    order = iter->previous(status);
+        /* thai management */
+        if (order == 0)
+            order = iter->previous(status);
 
-    /* thai management */
-    if (order == 0)
-      order = iter->previous(status);
+        while (U_SUCCESS(status) && iter->previous(status) != UCOL_NULLORDER) {
+            count ++; 
+        }
 
-    while (U_SUCCESS(status) && iter->previous(status) != UCOL_NULLORDER) {
-      count ++; 
+        if (U_FAILURE(status) && iter->getMaxExpansion(order) < count) {
+            errln("Failure at codepoint %d, maximum expansion count < %d\n",
+                ch, count);
+        }
     }
 
-    if (U_FAILURE(status) && iter->getMaxExpansion(order) < count) {
-      errln("Failure at codepoint %d, maximum expansion count < %d\n",
-                                                               ch, count);
-    }
-  }
-
-  delete iter;
-  delete coll;
+    delete iter;
+    delete coll;
 }
 
 /*
