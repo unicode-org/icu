@@ -3753,7 +3753,7 @@ unorm_compare(const UChar *s1, int32_t length1,
                              s1, length1,
                              FALSE, FALSE,
                              trailCC);
-            if(_len1<=sizeof(fcd1)/U_SIZEOF_UCHAR) {
+            if(_len1<=(int32_t)(sizeof(fcd1)/U_SIZEOF_UCHAR)) {
                 s1=fcd1;
             } else {
                 d1=(UChar *)uprv_malloc(_len1*U_SIZEOF_UCHAR);
@@ -3775,7 +3775,7 @@ unorm_compare(const UChar *s1, int32_t length1,
                              s2, length2,
                              FALSE, FALSE,
                              trailCC);
-            if(_len2<=sizeof(fcd2)/U_SIZEOF_UCHAR) {
+            if(_len2<=(int32_t)(sizeof(fcd2)/U_SIZEOF_UCHAR)) {
                 s2=fcd2;
             } else {
                 d2=(UChar *)uprv_malloc(_len2*U_SIZEOF_UCHAR);
