@@ -402,7 +402,7 @@ _internal_toUnicode(const UChar* src, int32_t srcLength,
             }
             srcLength++;
         }
-    }else{
+    }else if(srcLength > 0){
         for(int32_t j=0; j<srcLength; j++){
             if(src[j]> 0x7f){
                 srcIsASCII = FALSE;
@@ -414,6 +414,8 @@ _internal_toUnicode(const UChar* src, int32_t srcLength,
                 failPos = j;
             }
         }
+    }else{
+        return 0;
     }
 
     if(srcIsASCII == FALSE){
