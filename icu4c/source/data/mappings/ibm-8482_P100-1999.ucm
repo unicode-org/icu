@@ -1,29 +1,23 @@
-# *******************************************************************************
+# ***************************************************************************
 # *
-# *   Copyright (C) 1999-2000, International Business Machines
+# *   Copyright (C) 1995-2002, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # *
-# *******************************************************************************
+# ***************************************************************************
 #
-# File created on Mon Nov 13 08:50:45 2000
-#
-# File created by dtcocm version 3.00
+# File created by rptp2ucm (compiled on Dec  3 2002)
 # from source files 44B02122.RPMAP100 and 212244B0.TPMAP100
 #
-# Table Version : 1.01
-#
-<code_set_name>               "IBM-8482"
+<code_set_name>               "ibm-8482_P100-1999"
 <char_name_mask>              "AXXXX"
 <mb_cur_max>                  1
 <mb_cur_min>                  1
 <uconv_class>                 "SBCS"
 <subchar>                     \x3F
-#
+<icu:charsetFamily>           "EBCDIC"
+<icu:alias>                   "ibm-8482_STD"
+
 CHARMAP
-#
-#
-#ISO 10646      IBM-8482
-#_________      _________
 <U0000> \x00 |0
 <U0001> \x01 |0
 <U0002> \x02 |0
