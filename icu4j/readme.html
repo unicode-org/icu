@@ -52,43 +52,134 @@ h3.doc { background: #CCCCFF }
 
 <h3 class="doc"><a NAME="introduction"></a>Introduction to ICU4J</h3>
 
-<p>Today's global market demands programs that support a wide variety
-    of languages and national conventions.&nbsp; Customers prefer software
-    and web pages tailored to their needs, studies confirm that
-    this leads to increased sales.&nbsp;  Java provides a strong
-    foundation for global programs, and IBM and the ICU4J team played
-    a key role in providing globalization technology to Sun for use in
-    Java. </p>
-    <p>
-    But Java does not yet provide all the features that some products require.&nbsp; ICU4J is an add-on library that extends Java's globalization technology by providing the following tools:
+<p>The International Components for Unicode (ICU) library provides robust and
+full-featured Unicode services on a wide variety of platforms. ICU supports the
+most current version of the Unicode standard, including support for
+supplementary characters (needed for GB 18030 repertoire support).</p>
+
+<p>Java provides a strong foundation for global programs, and IBM and the
+ICU team played a key role in providing globalization technology to
+Java. But because of its long release schedule, Java cannot always keep
+up with evolving standards. The ICU team continues to extend Java's
+Unicode and internationalization support, focusing on improving performance,
+keeping current with the Unicode standard, and providing richer APIs, while
+remaining as compatible as possible with the original Java text and
+internationalization API design.</p>
+
+<p>ICU4J is an add-on to the regular JVM that provides:
+
+<ul>
+<li><a href=
+"http://oss.software.ibm.com/icu/userguide/Collate_Intro.html"><b>Collation</b></a>
+– rule-based, up-to-date Unicode Collation Algorithm (UCA) sorting order<br>
+&nbsp;&nbsp;&nbsp;&nbsp;For fast multilingual string comparison; faster and more complete than
+the JDK</li>
+
+<li><a href=
+"http://oss.software.ibm.com/icu/userguide/strings.html"><b>Supplementary
+Characters</b></a> – String manipulation and character properties<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Required for proper GB 18030 and JIS 213 repertoire support</li>
+
+<li><a href=
+"http://oss.software.ibm.com/icu/userguide/unicodeSet.html"><b>UnicodeSet</b></a>
+ – standard set operations optimized for sets of Unicode characters<br>
+&nbsp;&nbsp;&nbsp;&nbsp;UnicodeSets can be built from string patterns using any Unicode properties.</li>
+
+<li><a href=
+"http://oss.software.ibm.com/icu/userguide/Transform.html"><b>Transforms</b></a>
+ – a flexible mechanism for Unicode text conversions<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Including Full/Halfwidth conversions, Normalization, Case conversions, Hex
+conversions, and transliterations between scripts (50+ pairs)</li>
+
+<li><a href=
+"http://oss.software.ibm.com/icu/userguide/normalization.html"><b>Unicode
+Normalization</b></a> – NFC, NFD, NFKD, NFKC<br>
+&nbsp;&nbsp;&nbsp;&nbsp;For canonical text representations, needed for XML and the net</li>
+
+<li><a href=
+"http://oss.software.ibm.com/icu/userguide/dateCalendar.html"><b>International
+Calendars</b></a> – Arabic, Buddhist, Hebrew, and Japanese calendars<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Required for correct presentation of dates in certain countries</li>
+
+<li><a href=
+"http://oss.software.ibm.com/icu/userguide/formatNumbers.html"><b>Number Format
+Enhancements</b></a> – Scientific Notation, Spelled-out, etc.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Enhancements to the normal Java number formatting. The spell-out format is
+used for checks and similar documents</li>
+
+<li><a href=
+"http://oss.software.ibm.com/icu/userguide/boundaryAnalysis.html"><b>Enhanced
+Word-Break Detection</b></a> – Rule-based, supports Thai<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Required for correct support of Thai</li>
+
+<li><a href=
+"http://oss.software.ibm.com/icu/userguide/compression.html"><b>Unicode Text
+Compression</b></a> – Standard compression of Unicode text<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Suitable for large numbers of small fields, where LZW and similar schemes
+do not apply</li>
+</ul>
+
+<blockquote>
+<p><b>Note:</b> We continue to provide assistance to Sun, and in some
+cases, ICU4J support has been rolled into a later release of Java. For
+example, the Thai word-break is now in Java 1.4.  However, the most
+current and complete version is always found in ICU4J.</p>
+</blockquote>
+<!--
+<p><b>ICU4J is an add-on library that extends Java's globalization
+    technology.</b> Java provides a strong foundation for global
+    programs, but Java does not yet provide all the globalization
+    features that some products require.  IBM played a key role in
+    providing globalization technology to Sun for use in Java.  Over
+    the past seven years, the ICU team has continued to enhance and
+    extend this technology.  IBM makes this technology available
+    in Java through the ICU4J open-source project.</p>
+
+<p>ICU4J provides the following tools:
     <ul>
-    <li>
-    Unicode Normalization – NFC, NFD, NFKD, NFKC
-        <blockquote>Produces canonical text representations, needed for XML and the net.</blockquote>
-    <li>
-    International Calendars – Arabic, Buddhist, Hebrew, and Japanese<br>
-        <blockquote>Required for correct presentation of dates in some countries.</blockquote>
-    <li>
-    Number Format Enhancements – Scientific Notation, Spelled-out Numbers
-              <blockquote>Enhances standard Java number formatting. The spelled-out format is used
-for checks and similar documents.</blockquote>
-
-    <li>Enhanced word-break detection – Rule-based, supports Thai
-              <blockquote>Required for correct support of Thai.</blockquote>
-
-    <li>Unicode Text Compression – Standard compression of Unicode text
-              <blockquote>Suitable for large numbers of small fields, where LZW and similar schemes
-do not apply.</blockquote>
-    <li>Collation - Rule-based, up-to-date Unicode Collation Algorithm (UCA) sorting order
-        <blockquote>For fast multilingual string comparison</blockquote>
+    <li><b>Unicode Normalization</b> – NFC, NFD, NFKD, NFKC<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Produces canonical text representations, needed for XML and the net.
+    <li><b>International Calendars</b> – Arabic, Buddhist, Hebrew, and Japanese<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Required for correct presentation of dates in some countries.
+    <li><b>Number Format Enhancements</b> – Scientific Notation, Spelled-out Numbers<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Enhances standard Java number formatting. The spelled-out format is used
+for checks and similar documents.
+    <li><b>Enhanced word-break detection</b> – Rule-based, supports Thai<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Required for correct support of Thai.
+    <li><b>Unicode Text Compression</b> – Standard compression of Unicode text<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Suitable for large numbers of small fields, where LZW and similar schemes
+do not apply.
+    <li><b>Collation</b> – Rule-based, up-to-date Unicode Collation Algorithm (UCA) sorting order<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;For fast multilingual string comparison
+    <li><b>Transforms</b> – Rule-based transformations of unicode data<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Useful for analysis and transliteration
     </ul>
+        
 In some cases, the above support has been rolled into a later release of
-Java. For example, the Thai word-break is now in Java 1.4. However, if you
-are using Java 1.3, you can use the ICU4J package until you upgrade to 1.4.
-</p>
+Java. For example, the Thai word-break is now in Java 1.4. However, the most
+current and complete version of this support is always found in ICU4J.
+-->
 
   <h3 class="doc"><a NAME="news"></a>What Is New In This
   Release?</h3>
+
+  <ul>
+    <li><a href="#News_JDK1_3_Unsupported">JDK 1.3 no longer supported</a>
+    <li><a href="#News_TimeZone_IDs">TimeZone Identifiers</a>
+    <li><a href="#News_ULocale">RFC 3066 initial implementation</a> (<tt>ULocale</tt> class)
+    <li><a href="#News_Resource_Binary">Resource bundle implementation now uses ICU4C binary files</a>
+  </ul>
+
+  <p>A complete description of the API changes between version 3.0 and version 2.8 of ICU4J
+can be found <a href="APIChangeReport.html">here</a>.</p>
+  
+  <h4><a name="News_JDK1_3_Unsupported" id="News_JDK1_3_Unsupported">JDK 1.3 No Longer Supported</a></h4>
+
+  <p>For a few years now, ICU4J has taken pains to not require any of
+the new functionality introduced in JDK1.4.  Finally, though, the
+pains have become too great.  ICU4J now requires a JDK 1.4 or later JVM both
+to build and run.  ICU4J is no longer tested on 1.3 or earlier JVMs.  We apologize for
+any inconvenience this may cause our users.</p>
 
   <h4><a name="News_TimeZone_IDs" id="News_TimeZone_IDs">TimeZone
   Identifiers</a></h4>
@@ -190,6 +281,24 @@ are using Java 1.3, you can use the ICU4J package until you upgrade to 1.4.
   (America/Phoenix), PRT (America/Puerto_Rico), PST (America/Los_Angeles),
   SST (Pacific/Guadalcanal), VST (Asia/Saigon).
   </font></p>
+
+  <h4><a name="News_ULocale" id="News_ULocale">RFC 3066 Initial Implementation</a></h4>
+
+  <p>RFC 3066 defines a new format for Locale identifiers that
+incorporates information about the script as well as the language and
+region into the locale identifier.  ICU4J has enhanced the
+<tt>ULocale</tt> class to provide this information.  This is an
+initial implementation; not all ICU4J APIs that currently work with
+<tt>Locale</tt> have been enhanced to work with <tt>ULocale</tt>.  We
+anticipate a complete implementation in the next ICU4J release.</p>
+
+<h4><a name="News_Resource_Binary" id="News_Resource_Binary">Resource
+files now use ICU4C binary files</a></h4>
+
+<p>ICU4J has switched to a new resource bundle implementation in order to utilize
+the same binary data files used by ICU.  This will likely impact clients who 
+have extended or modified the resource data provided in ICU4J.  Most clients will
+see no change from this switchover.</p>
 
 <h3 class="doc"><a name=license></a>License Information</h3>
 <p>
@@ -317,14 +426,6 @@ drive and any directory on that drive that you chose to install icu4j into. </p>
   <tr>
     <th valign="baseline" align="right" bgcolor="#FFFFFF">license.html</th>
     <td valign="baseline" bgcolor="#FFFFFF">The X license, used by ICU4J</td>
-  </tr>
-  <tr>
-    <th valign="baseline" align="right" bgcolor="#FFFFFF">build.bat</th>
-    <td valign="baseline" bgcolor="#FFFFFF">A convenience bat file for building ICU4J with Ant on Windows</td>
-  </tr>
-  <tr>
-    <th valign="baseline" align="right" bgcolor="#FFFFFF">build.sh</th>
-    <td valign="baseline" bgcolor="#FFFFFF">A convenience sh file for building ICU4J with Ant on Unix</td>
   </tr>
   <tr>
     <th valign="baseline" align="right" bgcolor="#FFFFFF">build.xml</th>
@@ -605,15 +706,15 @@ Currently ICU4J can be divided into the following modules:
         <th align="left" valign="baseline"><b>Module Name</b></th>
         <th align="left" valign="baseline"><b>Ant Targets</b></th>
         <th align="left" valign="baseline"><b>Test Package Supported</b></th>
-        <th align="right" valign="baseline"><b>Size</b></th>
+        <th align="right" valign="baseline"><b>Size&#x2021;</b></th>
 </tr>
 <tr bgcolor="#FFFFFF">
 <td colspan="4">
-	<table>
+        <table>
     <tr>
-    	<td valign="baseline">Package*</td>
-    	<td valign="baseline">Main Classes&#x2020;
-    	</td>
+        <td valign="baseline">Package*</td>
+        <td valign="baseline">Main Classes&#x2020;
+        </td>
     </tr>
     </table>
 </td>
@@ -624,6 +725,7 @@ Currently ICU4J can be divided into the following modules:
 * com.ibm. should be prepended to the package names listed.
 <br>&#x2020; A bold class name core service APIs.  Only APIs 
 in these classes are fully supported.
+<br>&#x2021; Sizes are of the compressed jar file containing only this module.  Full size is 2,726&nbsp;K.
 </font>
 </b>
 </p>
@@ -633,27 +735,27 @@ in these classes are fully supported.
         <th align="left" valign="baseline">Normalizer</th>
         <td align="left" valign="baseline">normalizer, normalizerTests</td>
         <td align="left" valign="baseline">com.ibm.icu.dev.test.normalizer</td>
-        <td align="right" valign="baseline">355&nbsp;KB</td>
+        <td align="right" valign="baseline">427&nbsp;KB</td>
 </tr>
 <tr bgcolor="#FFFFFF">
 <td valign="top" colspan="4">
-	<table border="0" cellpadding="5">
+        <table border="0" cellpadding="5">
     <tr>
-    	<td valign="baseline">icu.lang:</td>
-    	<td valign="baseline">UCharacter, UCharacterCategory, UCharacterDirection, 
+        <td valign="baseline">icu.lang:</td>
+        <td valign="baseline">UCharacter, UCharacterCategory, UCharacterDirection, 
         UCharacterNameIterator, UCharacterTypeIterator, UProperty, UScript</td>
     </tr>
     <tr>
-    	<td valign="baseline">icu.text:</td>
-    	<td valign="baseline"><b>Normalizer</b>, Replaceable, ReplaceableString, <b>UCharacterIterator</b>,
+        <td valign="baseline">icu.text:</td>
+        <td valign="baseline"><b>Normalizer</b>, Replaceable, ReplaceableString, <b>UCharacterIterator</b>,
         <b>UForwardCharacterIterator</b>, UnicodeFilter, UnicodeMatcher, UnicodeSet,
         UnicodeSetIterator, UTF16</td>
     </tr>
     <tr>
-    	<td valign="baseline">icu.util:</td>
-    	<td valign="baseline">ValueIterator, VersionInfo</td>
+        <td valign="baseline">icu.util:</td>
+        <td valign="baseline">ValueIterator, VersionInfo</td>
     </tr>
-	</table>
+        </table>
 </td>
 </tr>
 
@@ -661,23 +763,23 @@ in these classes are fully supported.
         <th align="left" valign="baseline">Collator</th>
         <td align="left" valign="baseline">collator, collatorTests</td>
         <td align="left" valign="baseline">com.ibm.icu.dev.test.collator</td>
-        <td align="right" valign="baseline">1,716&nbsp;KB</td>
+        <td align="right" valign="baseline">2,118&nbsp;KB</td>
 </tr>
 <tr bgcolor="#FFFFFF">
 <td valign="top" colspan="4">
-	<table border="0" cellpadding="5">
+        <table border="0" cellpadding="5">
     <tr>
-    	<td valign="baseline">icu.lang:</td>
-    	<td valign="baseline">UCharacter, UCharacterCategory, UCharacterDirection, 
-    	UCharacterNameIterator, UCharacterTypeIterator, lang.UProperty, UScript
-    	</td>
+        <td valign="baseline">icu.lang:</td>
+        <td valign="baseline">UCharacter, UCharacterCategory, UCharacterDirection, 
+        UCharacterNameIterator, UCharacterTypeIterator, lang.UProperty, UScript
+        </td>
     </tr>
     <tr>
-    	<td valign="baseline">icu.text:</td>
-    	<td valign="baseline">BreakDictionary, BreakIterator, BreakIteratorFactory,
-    	CanonicalIterator, <b>CollationElementIterator</b>, <b>CollationKey</b>,
-    	<b>CollationParsedRuleBuilder</b>, <b>CollationRuleParser</b>, <b>Collator</b>,
-    	<b>CollatorReader</b>, DictionaryBasedBreakIterator, <b>Normalizer</b>,
+        <td valign="baseline">icu.text:</td>
+        <td valign="baseline">BreakDictionary, BreakIterator, BreakIteratorFactory,
+        CanonicalIterator, <b>CollationElementIterator</b>, <b>CollationKey</b>,
+        <b>CollationParsedRuleBuilder</b>, <b>CollationRuleParser</b>, <b>Collator</b>,
+        <b>CollatorReader</b>, DictionaryBasedBreakIterator, <b>Normalizer</b>,
         Replaceable, ReplaceableString, RuleBasedBreakIterator, <b>RuleBasedCollator</b>,
         <b>SearchIterator</b>, <b>StringSearch</b>, <b>UCharacterIterator</b>, 
         <b>UForwardCharacterIterator</b>, UnicodeFilter, UnicodeMatcher, UnicodeSet,
@@ -685,44 +787,44 @@ in these classes are fully supported.
         </td>
     </tr>
     <tr>
-    	<td valign="baseline">icu.util:</td>
-    	<td valign="baseline">ValueIterator, VersionInfo
+        <td valign="baseline">icu.util:</td>
+        <td valign="baseline">ValueIterator, VersionInfo
         </td>
     </tr>
-	</table>
+        </table>
 </td>
 </tr>
 <tr>
         <th align="left" valign="baseline">Calendar</th>
         <td align="left" valign="baseline">calendar, calendarTests</td>
         <td align="left" valign="baseline">com.ibm.icu.dev.test.calendar</td>
-        <td align="right" valign="baseline">1,160&nbsp;KB</td>
+        <td align="right" valign="baseline">2,135&nbsp;KB</td>
 </tr>
 <tr bgcolor="#FFFFFF">
 <td valign="top" colspan="4">
-	<table border="0" cellpadding="5">
+        <table border="0" cellpadding="5">
     <tr>
-    	<td valign="baseline">icu.lang:</td>
+        <td valign="baseline">icu.lang:</td>
         <td valign="baseline">UCharacter, UCharacterCategory, UCharacterDirection, UCharacterNameIterator,
         UCharacterTypeIterator, UProperty, UScript
         </td>
     </tr>
     <tr>
-    	<td valign="baseline">icu.math:</td>
+        <td valign="baseline">icu.math:</td>
         <td valign="baseline"><b>BigDecimal</b>
         </td>
     </tr>
     <tr>
-    	<td valign="baseline">icu.text:</td>
-    	<td valign="baseline">BreakIterator, <b>ChineseDateFormat</b>, <b>ChineseDateFormatSymbols</b>,
-	    <b>DateFormat</b>, <b>DateFormatSymbols</b>, <b>DecimalFormat</b>, <b>DecimalFormatSymbols</b>,
+        <td valign="baseline">icu.text:</td>
+        <td valign="baseline">BreakIterator, <b>ChineseDateFormat</b>, <b>ChineseDateFormatSymbols</b>,
+            <b>DateFormat</b>, <b>DateFormatSymbols</b>, <b>DecimalFormat</b>, <b>DecimalFormatSymbols</b>,
         Normalizer, NumberFormat, Replaceable, ReplaceableString, <b>SimpleDateFormat</b>, 
         <b>UCharacterIterator</b>, <b>UForwardCharacterIterator</b>, UnicodeFilter, UnicodeMatcher,
         UnicodeSet, UnicodeSetIterator, UTF16
         </td>
     </tr>
     <tr>
-    	<td valign="baseline">icu.util:</td>
+        <td valign="baseline">icu.util:</td>
         <td valign="baseline"><b>BuddhistCalendar</b>, <b>Calendar</b>, <b>CalendarAstronomer</b>, 
         <b>CalendarCache</b>, <b>CalendarFactory</b>, <b>ChineseCalendar</b>, <b>Currency</b>, 
         <b>DateRule</b>, <b>EasterHoliday</b>, <b>EasterRule</b>, <b>GregorianCalendar</b>, 
@@ -732,155 +834,155 @@ in these classes are fully supported.
         ValueIterator, VersionInfo
         </td>
     </tr>
-	</table>
+        </table>
 </td>
 </tr>
 <tr>
         <th align="left" valign="baseline">BreakIterator</th>
         <td align="left" valign="baseline">breakIterator, breakIteratorTests</td>
         <td align="left" valign="baseline">com.ibm.icu.dev.test.breakiterator</td>
-        <td align="right" valign="baseline">1,105&nbsp;KB</td>
+        <td align="right" valign="baseline">1,997&nbsp;KB</td>
 </tr>
 <tr bgcolor="#FFFFFF">
 <td valign="top" colspan="4">
-	<table border="0" cellpadding="5">
+        <table border="0" cellpadding="5">
     <tr>
-    	<td valign="baseline">icu.lang:</td>
+        <td valign="baseline">icu.lang:</td>
         <td valign="baseline">UCharacter, UCharacterCategory, UCharacterDirection,
         UCharacterNameIterator, UCharacterTypeIterator, UProperty, UScript
         </td>
     </tr>
     <tr>
-    	<td valign="baseline">icu.text:</td>
-    	<td valign="baseline"><b>BreakDictionary</b>, <b>BreakIterator</b>, <b>BreakIteratorFactory</b>, 
-    	<b>DictionaryBasedBreakIterator</b>, Normalizer, Replaceable, ReplaceableString,
-    	<b>text.RuleBasedBreakIterator</b>, UCharacterIterator, UForwardCharacterIterator,
-    	UnicodeFilter, UnicodeMatcher, UnicodeSet, UnicodeSetIterator, UTF16
+        <td valign="baseline">icu.text:</td>
+        <td valign="baseline"><b>BreakDictionary</b>, <b>BreakIterator</b>, <b>BreakIteratorFactory</b>, 
+        <b>DictionaryBasedBreakIterator</b>, Normalizer, Replaceable, ReplaceableString,
+        <b>text.RuleBasedBreakIterator</b>, UCharacterIterator, UForwardCharacterIterator,
+        UnicodeFilter, UnicodeMatcher, UnicodeSet, UnicodeSetIterator, UTF16
         </td>
     </tr>
     <tr>
-    	<td valign="baseline">icu.util:</td>
-    	<td valign="baseline">RangeValueIterator, ValueIterator, VersionInfo
+        <td valign="baseline">icu.util:</td>
+        <td valign="baseline">RangeValueIterator, ValueIterator, VersionInfo
         </td>
     </tr>
-	</table>
+        </table>
 </td>
 </tr>
 <tr>
         <th align="left" valign="baseline">Basic Properties</th>
         <td align="left" valign="baseline">propertiesBasic, propertiesTests</td>
         <td align="left" valign="baseline">com.ibm.icu.dev.test.lang</td>
-        <td align="left" valign="baseline">350&nbsp;KB</td>
+        <td align="left" valign="baseline">428&nbsp;KB</td>
 </tr>
 <tr bgcolor="#FFFFFF">
 <td valign="top" colspan="4">
-	<table border="0" cellpadding="5">
+        <table border="0" cellpadding="5">
     <tr>
-    	<td valign="baseline">icu.lang:</td>
+        <td valign="baseline">icu.lang:</td>
         <td valign="baseline"><b>UCharacter</b>, <b>UCharacterCategory</b>, <b>UCharacterDirection</b>, 
         <b>UCharacterNameIterator</b>, <b>UCharacterTypeIterator</b>, <b>UProperty</b>, <b>UScript</b>, 
         <b>UScriptRun</b>
         </td>
     </tr>
     <tr>
-    	<td valign="baseline">icu.text:</td>
-    	<td valign="baseline">BreakDictionary, BreakIterator, BreakIteratorFactory, DictionaryBasedBreakIterator,
-    	Normalizer, Replaceable, ReplaceableString, RuleBasedBreakIterator, SymbolTable, UCharacterIterator,
-    	UForwardCharacterIterator, UnicodeFilter, UnicodeMatcher, UnicodeSet, UnicodeSetIterator, <b>UTF16</b>
+        <td valign="baseline">icu.text:</td>
+        <td valign="baseline">BreakDictionary, BreakIterator, BreakIteratorFactory, DictionaryBasedBreakIterator,
+        Normalizer, Replaceable, ReplaceableString, RuleBasedBreakIterator, SymbolTable, UCharacterIterator,
+        UForwardCharacterIterator, UnicodeFilter, UnicodeMatcher, UnicodeSet, UnicodeSetIterator, <b>UTF16</b>
         </td>
     </tr>
     <tr>
-    	<td valign="baseline">icu.util:</td>
-    	<td valign="baseline">CompactByteArray, RangeValueIterator, ValueIterator, VersionInfo
+        <td valign="baseline">icu.util:</td>
+        <td valign="baseline">CompactByteArray, RangeValueIterator, ValueIterator, VersionInfo
         </td>
     </tr>
-	</table>
+        </table>
 </td>
 </tr>
 <tr>
         <th align="left" valign="baseline">Full Properties</th>
         <td align="left" valign="baseline">propertiesFull, propertiesTests</td>
         <td align="left" valign="baseline">com.ibm.icu.dev.test.lang</td>
-        <td align="right" valign="baseline">986&nbsp;KB</td>
+        <td align="right" valign="baseline">2,001&nbsp;KB</td>
 </tr>
 <tr bgcolor="#FFFFFF">
 <td valign="top" colspan="4">
-	<table border="0" cellpadding="5">
+        <table border="0" cellpadding="5">
     <tr>
-    	<td valign="baseline">icu.lang:</td>
+        <td valign="baseline">icu.lang:</td>
         <td valign="baseline"><b>UCharacter</b>, <b>UCharacterCategory</b>, <b>UCharacterDirection</b>, 
         <b>UCharacterNameIterator</b>, <b>UCharacterTypeIterator</b>, <b>UProperty</b>, <b>UScript</b>, 
         <b>UScriptRun</b>
         </td>
     </tr>
     <tr>
-    	<td valign="baseline">icu.text:</td>
-    	<td valign="baseline">BreakDictionary, BreakIterator, BreakIteratorFactory, DictionaryBasedBreakIterator,
-    	<b>Normalizer</b>, <b>Replaceable</b>, <b>ReplaceableString</b>, RuleBasedBreakIterator,
-    	<b>UCharacterIterator</b>, <b>UForwardCharacterIterator</b>, <b>UnicodeFilter</b>, <b>UnicodeMatcher</b>, 
-    	<b>UnicodeSet</b>, <b>UnicodeSetIterator</b>, <b>UTF16<b>
+        <td valign="baseline">icu.text:</td>
+        <td valign="baseline">BreakDictionary, BreakIterator, BreakIteratorFactory, DictionaryBasedBreakIterator,
+        <b>Normalizer</b>, <b>Replaceable</b>, <b>ReplaceableString</b>, RuleBasedBreakIterator,
+        <b>UCharacterIterator</b>, <b>UForwardCharacterIterator</b>, <b>UnicodeFilter</b>, <b>UnicodeMatcher</b>, 
+        <b>UnicodeSet</b>, <b>UnicodeSetIterator</b>, <b>UTF16<b>
         </td>
     </tr>
     <tr>
-    	<td valign="baseline">icu.util:</td>
-    	<td valign="baseline"><b>RangeValueIterator</b>, <b>ValueIterator</b>, <b>VersionInfo</b>
+        <td valign="baseline">icu.util:</td>
+        <td valign="baseline"><b>RangeValueIterator</b>, <b>ValueIterator</b>, <b>VersionInfo</b>
         </td>
     </tr>
-	</table>
+        </table>
 </td>
 </tr>
 <tr>
         <th align="left" valign="baseline">Formatting</th>
         <td align="left" valign="baseline">format, formatTests</td>
         <td align="left" valign="baseline">com.ibm.icu.dev.test.format</td>
-        <td align="right" valign="baseline">1,788&nbsp;KB</td>
+        <td align="right" valign="baseline">2,253&nbsp;KB</td>
 </tr>
 <tr bgcolor="#FFFFFF">
 <td valign="top" colspan="4">
-	<table border="0" cellpadding="5">
+        <table border="0" cellpadding="5">
     <tr>
-    	<td valign="baseline">icu.lang:</td>
+        <td valign="baseline">icu.lang:</td>
         <td valign="baseline">UCharacter, UCharacterCategory, UCharacterDirection, UCharacterNameIterator,
         UCharacterTypeIterator, UProperty, UScript
         </td>
     </tr>
     <tr>
-    	<td valign="baseline">icu.math:</td>
-    	<td valign="baseline"><b>math.BigDecimal</b>
+        <td valign="baseline">icu.math:</td>
+        <td valign="baseline"><b>math.BigDecimal</b>
         </td>
     </tr>
     <tr>
-    	<td valign="baseline">icu.text:</td>
-    	<td valign="baseline">BreakIterator, CanonicalIterator, ChineseDateFormat, ChineseDateFormatSymbols,
-    	CollationElementIterator, CollationKey, CollationParsedRuleBuilder, CollationRuleParser, Collator, 
-    	CollatorReader, <b>DateFormat</b>, <b>DateFormatSymbols</b>, <b>DecimalFormat</b>, <b>DecimalFormatSymbols</b>,
-    	Normalizer, <b>NumberFormat</b>, Replaceable, ReplaceableString, RuleBasedCollator, 
-    	<b>RuleBasedNumberFormat</b>, <b>SimpleDateFormat</b>, <b>UCharacterIterator</b>, 
-    	<b>UForwardCharacterIterator</b>, UnicodeFilter, UnicodeMatcher, UnicodeSet, UnicodeSetIterator, UTF16
+        <td valign="baseline">icu.text:</td>
+        <td valign="baseline">BreakIterator, CanonicalIterator, ChineseDateFormat, ChineseDateFormatSymbols,
+        CollationElementIterator, CollationKey, CollationParsedRuleBuilder, CollationRuleParser, Collator, 
+        CollatorReader, <b>DateFormat</b>, <b>DateFormatSymbols</b>, <b>DecimalFormat</b>, <b>DecimalFormatSymbols</b>,
+        Normalizer, <b>NumberFormat</b>, Replaceable, ReplaceableString, RuleBasedCollator, 
+        <b>RuleBasedNumberFormat</b>, <b>SimpleDateFormat</b>, <b>UCharacterIterator</b>, 
+        <b>UForwardCharacterIterator</b>, UnicodeFilter, UnicodeMatcher, UnicodeSet, UnicodeSetIterator, UTF16
         </td>
     </tr>
     <tr>
-    	<td valign="baseline">icu.util:</td>
-    	<td valign="baseline"><b>Calendar</b>, <b>CalendarAstronomer</b>, <b>CalendarCache</b>, <b>CalendarFactory</b>, 
-    	<b>ChineseCalendar</b>, <b>Currency</b>, <b>GregorianCalendar</b>, <b>RangeValueIterator</b>, 
-    	<b>SimpleTimeZone</b>, <b>SimpleTimeZoneAdapter</b>, <b>TimeZone</b>, <b>TimeZoneData</b>,
-		ValueIterator,VersionInfo
+        <td valign="baseline">icu.util:</td>
+        <td valign="baseline"><b>Calendar</b>, <b>CalendarAstronomer</b>, <b>CalendarCache</b>, <b>CalendarFactory</b>, 
+        <b>ChineseCalendar</b>, <b>Currency</b>, <b>GregorianCalendar</b>, <b>RangeValueIterator</b>, 
+        <b>SimpleTimeZone</b>, <b>SimpleTimeZoneAdapter</b>, <b>TimeZone</b>, <b>TimeZoneData</b>,
+                ValueIterator,VersionInfo
         </td>
     </tr>
-	</table>
+        </table>
 </td>
 </tr>
 <tr>
         <th align="left" valign="baseline">Transforms</th>
         <td align="left" valign="baseline">transliterator, transliteratorTests</td>
         <td align="left" valign="baseline">com.ibm.icu.dev.test.translit</td>
-        <td align="right" valign="baseline">1,364&nbsp;KB</td>
+        <td align="right" valign="baseline">2,243&nbsp;KB</td>
 </tr>
 <tr bgcolor="#FFFFFF">
 <td valign="top" colspan="4">
-	<table border="0" cellpadding="5">
+        <table border="0" cellpadding="5">
     <tr>
-    	<td valign="baseline">icu.lang:</td>
+        <td valign="baseline">icu.lang:</td>
         <td valign="baseline"><b>UCharacter</b>, <b>UCharacterCategory</b>, 
         <b>UCharacterDirection</b>, <b>UCharacterNameIterator</b>, 
         <b>UCharacterTypeIterator</b>, <b>UProperty</b>, <b>UScript</b>, 
@@ -888,7 +990,7 @@ in these classes are fully supported.
         </td>
     </tr>
     <tr>
-    	<td valign="baseline">icu.text:</td>
+        <td valign="baseline">icu.text:</td>
         <td valign="baseline"><b>AnyTransliterator</b>, <b>BreakDictionary</b>, 
         <b>BreakIterator</b>, <b>BreakIteratorFactory</b>, <b>BreakTransliterator</b>, 
         <b>DictionaryBasedBreakIterator</b>, <b>Normalizer</b>, <b>Replaceable</b>, 
@@ -898,12 +1000,12 @@ in these classes are fully supported.
         <td>
     </tr>
     <tr>
-    	<td valign="baseline">icu.util:</td>
+        <td valign="baseline">icu.util:</td>
         <td valign="baseline"><b>RangeValueIterator</b>, <b>ValueIterator</b>, 
         <b>VersionInfo</b>
         </td>
     </tr>
-	</table>
+        </table>
 </td>
 </tr>
 <!-- tr>
