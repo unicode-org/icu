@@ -362,7 +362,7 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
   
   for(l = o->fileListFiles; l; l = l->next) {
     if(o->verbose) {
-      fprintf(stderr, "# Reading %s..\n", l->str);
+      fprintf(stdout, "# Reading %s..\n", l->str);
     }
     
     /* TODO: stdin */
