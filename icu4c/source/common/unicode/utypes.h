@@ -484,18 +484,18 @@ typedef enum UErrorCode {
     /* 
      * the error code range 0x10200 0x102ff are reserved for Break Iterator related error
      */
-    U_BRK_ERROR_START=0x10200,
-    U_BRK_INTERNAL_ERROR,
-    U_BRK_HEX_DIGITS_EXPECTED,
-    U_BRK_SEMICOLON_EXPECTED,
-    U_BRK_RULE_SYNTAX,
-    U_BRK_UNCLOSED_SET,
-    U_BRK_ASSIGN_ERROR,
-    U_BRK_VARIABLE_REDFINITION,
-    U_BRK_MISMATCHED_PAREN,
-    U_BRK_NEW_LINE_IN_QUOTED_STRING,
-    U_BRK_UNDEFINED_VARIABLE,
-    U_BRK_ERROR_LIMIT,
+    U_BRK_ERROR_START=0x10200,             /**< Start of codes indicating Break Iterator failures */
+    U_BRK_INTERNAL_ERROR,                  /**< An internal error (bug) was detected.             */
+    U_BRK_HEX_DIGITS_EXPECTED,             /**< Hex digits expected as part of a escaped char in a rule. */
+    U_BRK_SEMICOLON_EXPECTED,              /**< Missing ';' at the end of a RBBI rule.            */
+    U_BRK_RULE_SYNTAX,                     /**< Syntax error in RBBI rule.                        */
+    U_BRK_UNCLOSED_SET,                    /**< UnicodeSet witing an RBBI rule missing a closing ']'.  */
+    U_BRK_ASSIGN_ERROR,                    /**< Syntax error in RBBI rule assignment statement.   */
+    U_BRK_VARIABLE_REDFINITION,            /**< RBBI rule $Variable redefined.                    */
+    U_BRK_MISMATCHED_PAREN,                /**< Mis-matched parentheses in an RBBI rule.          */
+    U_BRK_NEW_LINE_IN_QUOTED_STRING,       /**< Missing closing quote in an RBBI rule.            */
+    U_BRK_UNDEFINED_VARIABLE,              /**< Use of an undefined $Variable in an RBBI rule.    */
+    U_BRK_ERROR_LIMIT,                     /**< This must always be the last value to indicate the limit for UErrorCode (last error code +1) */
 
     /*
      * The error codes in the range 0x10300-0x103ff are reserved for regular expression related errrs
