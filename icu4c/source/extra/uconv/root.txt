@@ -1,6 +1,6 @@
 ﻿// -*- Coding: utf-8; -*-  [all uconv resource files]
 // Copyright (c) 2000 IBM, Inc. and Others.
-// $Revision: 1.14 $
+// $Revision: 1.15 $
 //
 // Root translation file for uconv messages.
 // So you want to translate this file??? Great!
@@ -40,7 +40,7 @@ root
           "          --canon                       print list in cnvrtrs.txt(5) format\n"
 	  "          -x transliterator             run everything through transliterator\n" 
 	  "          -c                            omit invalid characters from the output\n"
-	  "          -i                            ignore invalid sequences from the input\n"
+	  "          -i                            ignore invalid sequences in the input\n"
 	  "          -f, --from-code code          set the original encoding\n"
 	  "          -t, --to-code code            set the destination encoding\n" 
 }
