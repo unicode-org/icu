@@ -143,7 +143,7 @@ ucnv_getUChar32KeepOverflow(UConverter *cnv, const UChar *buffer, int32_t length
 
     /* get the first code point in the buffer */
     i=0;
-    UTF_NEXT_CHAR_SAFE_LENIENT(buffer, i, length, c);
+    UTF_NEXT_CHAR_SAFE(buffer, i, length, c, FALSE);
     if(i<length) {
         /* there are UChars left in the buffer that need to go into the overflow buffer */
         UChar *overflow=cnv->UCharErrorBuffer;
