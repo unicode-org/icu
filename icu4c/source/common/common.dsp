@@ -287,6 +287,10 @@ SOURCE=.\ubidiln.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\ubidiwrt.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\uchar.c
 # End Source File
 # Begin Source File
