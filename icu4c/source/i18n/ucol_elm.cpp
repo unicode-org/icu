@@ -1114,7 +1114,11 @@ getFoldedValue(UNewTrie *trie, UChar32 start, int32_t offset)
       tag = getCETag(value);
       if(inBlockZero == TRUE) {
           start+=UTRIE_DATA_BLOCK_LENGTH;
-      } else if(value!=0 && tag != IMPLICIT_TAG && tag != NOT_FOUND_TAG) {
+      } else if(!(isSpecial(value) && (tag == IMPLICIT_TAG || tag == NOT_FOUND_TAG))) {
+        /* These are values that are starting in either UCA (IMPLICIT_TAG) or in the 
+         * tailorings (NOT_FOUND_TAG). Presence of these tags means that there is 
+         * nothing in this position and that it should be skipped.
+         */
 #ifdef UCOL_DEBUG
         static int32_t count = 1;
         fprintf(stdout, "%i, Folded %08X, value %08X\n", count++, start, value);
@@ -1329,6 +1333,112 @@ uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
     /*const uint8_t *mapPosition = (uint8_t*)myData+myData->mappingPosition;*/
     /*uprv_mstrm_close(ms);*/
     return myData;
+}
+
+
+struct enumStruct {
+  tempUCATable *t;
+  UCollator *tempColl;
+  UCollationElements* colEl;
+  UErrorCode *status;
+};
+#include <stdio.h>
+U_CDECL_BEGIN
+static UBool U_CALLCONV
+_enumCategoryRangeClosureCategory(const void *context, UChar32 start, UChar32 limit, UCharCategory type) {
+
+  UErrorCode *status = ((enumStruct *)context)->status;
+  tempUCATable *t = ((enumStruct *)context)->t;
+  UCollator *tempColl = ((enumStruct *)context)->tempColl;
+  UCollationElements* colEl = ((enumStruct *)context)->colEl;
+  UCAElements el;
+  UChar decomp[256] = { 0 };
+  uint32_t noOfDec = 0;
+
+  UChar32 u32 = 0;
+  UChar comp[2];
+  uint32_t len = 0;
+
+  if (type > 0) { // if the range is assigned - we might ommit more categories later
+    for(u32 = start; u32 < limit; u32++) {
+      len = 0;
+      UTF_APPEND_CHAR_UNSAFE(comp, len, u32);
+      if((noOfDec = unorm_normalize(comp, len, UNORM_NFD, 0, decomp, 256, status)) > 1
+        || (noOfDec == 1 && *decomp != (UChar)u32))
+      {
+        if(ucol_strcoll(tempColl, comp, len, decomp, noOfDec) != UCOL_EQUAL) {
+          el.cPoints = decomp;
+          el.cSize = noOfDec;
+          el.noOfCEs = 0;
+          el.prefix = el.prefixChars;
+          el.prefixSize = 0;
+
+          UCAElements *prefix=(UCAElements *)uhash_get(t->prefixLookup, &el);
+          if(prefix == NULL) {
+            el.cPoints = comp;
+            el.cSize = len;
+            el.prefix = el.prefixChars;
+            el.prefixSize = 0;
+            el.noOfCEs = 0;
+            ucol_setText(colEl, decomp, noOfDec, status);
+            while((el.CEs[el.noOfCEs] = ucol_next(colEl, status)) != UCOL_NULLORDER) {
+              el.noOfCEs++;
+            }
+          } else {
+            el.cPoints = comp;
+            el.cSize = len;
+            el.prefix = el.prefixChars;
+            el.prefixSize = 0;
+            el.noOfCEs = 1;
+            el.CEs[0] = prefix->mapCE;
+            // This character uses a prefix. We have to add it 
+            // to the unsafe table, as it decomposed form is already
+            // in. In Japanese, this happens for \u309e & \u30fe
+            // Since unsafeCPSet is static in ucol_elm, we are going
+            // to wrap it up in the uprv_uca_unsafeCPAddCCNZ function
+          }
+          uprv_uca_addAnElement(t, &el, status);
+        }
+      }
+    }
+  }
+  return TRUE;
+}
+U_CDECL_END
+
+U_CAPI void U_EXPORT2
+uprv_uca_canonicalClosure(tempUCATable *t, UErrorCode *status) 
+{
+  if(U_SUCCESS(*status)) {
+    UCollator *tempColl = NULL;
+    if(U_SUCCESS(*status)) {
+      tempUCATable *tempTable = uprv_uca_cloneTempTable(t, status);
+
+      UCATableHeader *tempData = uprv_uca_assembleTable(tempTable, status);
+      tempColl = ucol_initCollator(tempData, 0, status);
+
+      if(U_SUCCESS(*status)) {
+        tempColl->rb = NULL;
+        tempColl->binary = NULL;
+        tempColl->requestedLocale = NULL;
+        tempColl->hasRealData = TRUE;
+      }
+      uprv_uca_closeTempTable(tempTable);    
+    }
+
+    /* produce canonical closure */
+    UCollationElements* colEl = ucol_openElements(tempColl, NULL, 0, status);
+
+    enumStruct context;
+    context.t = t;
+    context.tempColl = tempColl;
+    context.colEl = colEl;
+    context.status = status;
+    u_enumCharTypes(_enumCategoryRangeClosureCategory, &context);
+
+    ucol_closeElements(colEl);
+    ucol_close(tempColl);
+  }
 }
 
 U_NAMESPACE_END

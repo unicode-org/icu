@@ -93,6 +93,9 @@ U_CAPI tempUCATable * U_EXPORT2 uprv_uca_cloneTempTable(tempUCATable *t, UErrorC
 U_CAPI void U_EXPORT2 uprv_uca_closeTempTable(tempUCATable *t);
 U_CAPI uint32_t U_EXPORT2 uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status);
 U_CAPI UCATableHeader * U_EXPORT2 uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status);
+U_CAPI void U_EXPORT2
+uprv_uca_canonicalClosure(tempUCATable *t, UErrorCode *status);
+
 
 #define paddedsize(something) ((something)+((((something)%4)!=0)?(4-(something)%4):0))
 #define headersize (paddedsize(sizeof(UCATableHeader))+paddedsize(sizeof(UColOptionSet)))
