@@ -1133,8 +1133,9 @@ static void TestCEs() {
 
     uprv_strcpy(pDir, getenv("ICU_DATA"));
     pDir += uprv_strlen(pDir);
-    if (*(pDir - 1) != U_FILE_SEP_CHAR) {
-        *(pDir - 1)= U_FILE_SEP_CHAR;
+    if (*pDir != U_FILE_SEP_CHAR) {
+        *pDir = U_FILE_SEP_CHAR;
+        pDir ++;
     }
 
     /* dirty : because some platforms might not return the full path */
