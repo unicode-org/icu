@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/VerifyUCD.java,v $
-* $Date: 2002/06/22 01:21:09 $
-* $Revision: 1.17 $
+* $Date: 2002/07/30 09:56:40 $
+* $Revision: 1.18 $
 *
 *******************************************************************************
 */
@@ -551,7 +551,7 @@ can help you narrow these down.
     static void generateXML() throws IOException {
         Default.setUCD();
         String filename = "UCD.xml";
-        PrintWriter log = Utility.openPrintWriter(filename);
+        PrintWriter log = Utility.openPrintWriter(filename, Utility.LATIN1_UNIX);
 
          //log.println('\uFEFF');
         log.println("<ucd>");
@@ -580,14 +580,14 @@ can help you narrow these down.
         
         String ttest = Default.ucd.getCase(test, FULL, TITLE);
         
-        PrintWriter titleTest = Utility.openPrintWriter("TestTitle.txt");
+        PrintWriter titleTest = Utility.openPrintWriter("TestTitle.txt", Utility.LATIN1_UNIX);
         titleTest.println(test);
         titleTest.println(ttest);
         titleTest.close();
         
         System.out.println(Default.ucd.getCase("ABC,DE'F G\u0308H", FULL, TITLE));
         String fileName = "CaseDifferences.txt";
-        PrintWriter log = Utility.openPrintWriter(fileName);
+        PrintWriter log = Utility.openPrintWriter(fileName, Utility.LATIN1_UNIX);
 
         for (int cp = 0; cp <= 0x10FFFF; ++cp) {
             Utility.dot(cp);
@@ -648,7 +648,7 @@ can help you narrow these down.
         
         
         String fileName = "CaseNormalizationDifferences.txt";
-        PrintWriter log = Utility.openPrintWriter(fileName);
+        PrintWriter log = Utility.openPrintWriter(fileName, Utility.LATIN1_UNIX);
 
         log.println("Differences between case(normalize(cp)) and normalize(case(cp))");
         log.println("u, l, t - upper, lower, title");
@@ -1069,7 +1069,7 @@ can help you narrow these down.
         System.out.println("Writing IDNCheck.txt");
         
         
-        PrintWriter log = Utility.openPrintWriter("IDNCheck.txt");
+        PrintWriter log = Utility.openPrintWriter("IDNCheck.txt", Utility.LATIN1_UNIX);
         log.println("IDN Check");
         log.println("Total Errors: " + errorCount);
        
@@ -1124,7 +1124,7 @@ can help you narrow these down.
     public static void genIDN() throws IOException {
         PrintWriter out = new PrintWriter(System.out);
         Default.setUCD();
-        PrintWriter log = Utility.openPrintWriter("IDN-tables.txt");
+        PrintWriter log = Utility.openPrintWriter("IDN-tables.txt", Utility.LATIN1_UNIX);
         
         /*UnicodeSet y = UnifiedBinaryProperty.make(CATEGORY + FORMAT).getSet();
         UnicodeSet x = new UnicodeSet(0xE0001,0xE007F).retainAll(y);
@@ -1906,7 +1906,7 @@ E0020-E007F; [TAGGING CHARACTERS]
             }
         }
         
-        PrintWriter log = Utility.openPrintWriter("CheckScriptsLog.txt");
+        PrintWriter log = Utility.openPrintWriter("CheckScriptsLog.txt", Utility.LATIN1_UNIX);
         
         Iterator it = m.keySet().iterator();
         while (it.hasNext()) {

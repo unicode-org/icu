@@ -1,6 +1,10 @@
 package com.ibm.text.UCD;
 import com.ibm.text.utility.*;
 import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
+
 
 public final class Default implements UCD_Types {
     
@@ -24,6 +28,15 @@ public final class Default implements UCD_Types {
         nfkd = nf[NFKD] = new Normalizer(Normalizer.NFKD, ucdVersion);
         nfkc = nf[NFKC] = new Normalizer(Normalizer.NFKC, ucdVersion);
         System.out.println("Loaded UCD" + ucd.getVersion() + " " + (new Date(ucd.getDate())));
+    }
+    
+    static DateFormat myDateFormat = new SimpleDateFormat("yyyy-MM-dd','HH:mm:ss' GMT'");
+    static {
+        myDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+    }
+    
+    public static String getDate() {
+        return myDateFormat.format(new Date());
     }
 
 }

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2002/07/21 08:43:39 $
-* $Revision: 1.22 $
+* $Date: 2002/07/30 09:56:41 $
+* $Revision: 1.23 $
 *
 *******************************************************************************
 */
@@ -531,14 +531,22 @@ public final class Utility {    // COMMON UTILITIES
         "1.1.0",
     };
 
-    public static PrintWriter openPrintWriter(String filename) throws IOException {
-        return openPrintWriter(filename, true, true);
+    /*public static PrintWriter openPrintWriter(String filename) throws IOException {
+        return openPrintWriter(filename, LATIN1_UNIX);
     }
+    */
+    
+    static final byte WINDOWS_MASK = 1, UTF8_MASK = 2;
+    public static final byte 
+        LATIN1_UNIX = 0,
+        LATIN1_WINDOWS = WINDOWS_MASK, 
+        UTF8_UNIX = UTF8_MASK, 
+        UTF8_WINDOWS = UTF8_MASK | WINDOWS_MASK;
     
     // Normally use false, false.
     // But for UCD files use true, true
     // Or if they are UTF8, use true, false
-    public static PrintWriter openPrintWriter(String filename, boolean removeCR, boolean latin1) throws IOException {
+    public static PrintWriter openPrintWriter(String filename, byte options) throws IOException {
         File file = new File(getOutputName(filename));
         System.out.println("Creating File: " + file);
         File parent = new File(file.getParent());
@@ -548,7 +556,7 @@ public final class Utility {    // COMMON UTILITIES
                     new UTF8StreamWriter(
                         new FileOutputStream(file),
                         32*1024,
-                        removeCR, latin1));
+                        (options & WINDOWS_MASK) == 0, (options & UTF8_MASK) == 0));
     }
     
     public static String getOutputName(String filename) {
@@ -606,12 +614,21 @@ public final class Utility {    // COMMON UTILITIES
     }
     
     public static void addToSet(Map m, Object key, Object value) {
-        Set set = (Set) m.get(key);
+        Collection set = (Collection) m.get(key);
         if (set == null) {
             set = new TreeSet();
             m.put(key, set);
         }
         set.add(value);
+    }
+        
+    public static void addToList(Map m, Object key, Object value, boolean unique) {
+        Collection set = (Collection) m.get(key);
+        if (set == null) {
+            set = new ArrayList();
+            m.put(key, set);
+        }
+        if (!unique || !set.contains(value)) set.add(value);
     }
         
     public static String readDataLine(BufferedReader br) throws IOException {
@@ -724,7 +741,7 @@ public final class Utility {    // COMMON UTILITIES
     }
     
     public static void copyTextFile(String filename, boolean utf8, String newName, String[] replacementList) throws IOException {
-        PrintWriter out = Utility.openPrintWriter(newName, false, false);
+        PrintWriter out = Utility.openPrintWriter(newName, UTF8_WINDOWS);
         appendFile(filename, utf8, out, replacementList);
         out.close();
     }
@@ -834,10 +851,12 @@ public final class Utility {    // COMMON UTILITIES
         return "Showing Stack with fake " + sw.getBuffer().toString();
     }
     
+    static PrintWriter showSetNamesPw;
+    
     public static void showSetNames(String prefix, UnicodeSet set, boolean separateLines, UCD ucd) {
-        PrintWriter temp = new PrintWriter(System.out);
-        showSetNames(temp, prefix, set, separateLines, false, ucd);
-        temp.close();
+        if (showSetNamesPw == null) showSetNamesPw = new PrintWriter(System.out);
+        showSetNames(showSetNamesPw, prefix, set, separateLines, false, ucd);
+        showSetNamesPw.flush();
     }
     
     public static void showSetNames(PrintWriter pw, String prefix, UnicodeSet set, boolean separateLines, boolean IDN, UCD ucd) {

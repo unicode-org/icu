@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2002/07/14 22:04:49 $
-* $Revision: 1.18 $
+* $Date: 2002/07/30 09:56:41 $
+* $Revision: 1.19 $
 *
 *******************************************************************************
 */
@@ -59,7 +59,7 @@ public final class Main implements UCD_Types {
             } else if (arg.equalsIgnoreCase("build")) ConvertUCD.main(new String[]{Default.ucdVersion});
             else if (arg.equalsIgnoreCase("version")) Default.setUCD(args[++i]);
             else if (arg.equalsIgnoreCase("statistics")) VerifyUCD.statistics();
-            else if (arg.equalsIgnoreCase("testskippable")) NFSkippable.main(null);
+            else if (arg.equalsIgnoreCase("NFSkippable")) NFSkippable.main(null);
             else if (arg.equalsIgnoreCase("diffIgnorable")) VerifyUCD.diffIgnorable();
             else if (arg.equalsIgnoreCase("generateXML")) VerifyUCD.generateXML();
             else if (arg.equalsIgnoreCase("checkSpeed")) VerifyUCD.checkSpeed();
@@ -77,7 +77,12 @@ public final class Main implements UCD_Types {
             else if (arg.equalsIgnoreCase("Buildnames")) BuildNames.main(null);
             else if (arg.equalsIgnoreCase("TestNormalization")) TestNormalization.main(null);
             
+            
+            else if (arg.equalsIgnoreCase("linebreaktest")) GenerateLineBreakTest.main(null);
 
+            else if (arg.equalsIgnoreCase("genSplit")) GenerateData.genSplit();
+            else if (arg.equalsIgnoreCase("iana")) IANANames.testSensitivity();
+            
             else if (arg.equalsIgnoreCase("testDerivedProperties")) DerivedProperty.test();
             else if (arg.equalsIgnoreCase("checkCase")) VerifyUCD.checkCase();
             else if (arg.equalsIgnoreCase("checkCase3")) VerifyUCD.checkCase3();

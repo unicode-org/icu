@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/BuildNames.java,v $
-* $Date: 2002/06/13 21:14:05 $
-* $Revision: 1.6 $
+* $Date: 2002/07/30 09:56:41 $
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -142,7 +142,7 @@ public class BuildNames implements UCD_Types {
 
         String fname = "ShortNames.txt";
         System.out.println("Writing " + fname);
-        PrintWriter log = Utility.openPrintWriter(fname, false, true);
+        PrintWriter log = Utility.openPrintWriter(fname, Utility.LATIN1_WINDOWS);
         
         System.out.println("Gathering data");
         //Counter counter = new Counter();

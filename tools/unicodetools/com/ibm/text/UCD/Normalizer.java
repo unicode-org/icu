@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Normalizer.java,v $
-* $Date: 2002/06/24 15:25:10 $
-* $Revision: 1.12 $
+* $Date: 2002/07/30 09:56:41 $
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */
@@ -271,7 +271,7 @@ public final class Normalizer implements UCD_Types {
         }
         for (int i = UCD.LBase; i < UCD.TLimit; ++i) {
             if (leading != null && UCD.isLeadingJamo(i)) leading.set(i); // set all initial Jamo (that form syllables)
-            if (trailing != null && UCD.isTrailingJamo(i)) trailing.set(i); // set all final Jamo (that form syllables)
+            if (trailing != null && UCD.isNonLeadJamo(i)) trailing.set(i); // set all final Jamo (that form syllables)
         }
         if (leading != null) {
             for (int i = UCD.SBase; i < UCD.SLimit; ++i) {
@@ -407,7 +407,7 @@ public final class Normalizer implements UCD_Types {
             for (int i = 0; i < 0x10FFFF; ++i) {
                 if (!ucd.isAssigned(i)) continue;
                 if (ucd.isPUA(i)) continue;
-                if (ucd.isTrailingJamo(i)) isSecond.set(i);
+                if (ucd.isNonLeadJamo(i)) isSecond.set(i);
                 if (ucd.isLeadingJamoComposition(i)) isFirst.set(i);
                 byte dt = ucd.getDecompositionType(i);
                 if (dt != CANONICAL) continue;

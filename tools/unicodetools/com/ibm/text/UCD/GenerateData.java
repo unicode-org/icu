@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2002/07/14 22:04:49 $
-* $Revision: 1.21 $
+* $Date: 2002/07/30 09:56:41 $
+* $Revision: 1.22 $
 *
 *******************************************************************************
 */
@@ -15,8 +15,6 @@ package com.ibm.text.UCD;
 
 import java.util.*;
 import java.io.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 import com.ibm.text.utility.*;
 import com.ibm.icu.text.UTF16;
@@ -28,6 +26,49 @@ public class GenerateData implements UCD_Types {
     static final boolean DEBUG = false;
     
     static final String HORIZONTAL_LINE = "# ================================================";
+    
+    static final void genSplit () {
+        Default.setUCD();
+        UnicodeSet split = new UnicodeSet();
+        UnicodeSet reordrant = new UnicodeSet(
+            "[\u093F\u09BF\u09c7\u09c8\u0abf\u0abf\u0b47\u0bc6\u0bc7\u0bc8"
+            + "\u0d46\u0d47\u0d48\u0dd9\u0dda\u0ddb\u1031\u17be\u17c1\u17c2\u17c3]");
+        UnicodeSet subjoined = new UnicodeSet();
+        for (int i = 0; i <= 0x10FFFF; ++i) {
+            if (!Default.ucd.isAssigned(i)) continue;
+            Utility.dot(i);
+            int cat = Default.ucd.getCategory(i);
+            if (cat != Mc && cat != Mn && cat != Me) continue;
+            if (Default.ucd.getName(i).indexOf("SUBJOINED") >= 0) {
+                System.out.print('*');
+                subjoined.add(i);
+                continue;
+            }
+            String decomp = Default.nfd.normalize(i);
+            //int count = countTypes(decomp, Mc);
+            if (UTF16.countCodePoint(decomp) > 1) split.add(i);
+        }
+        Utility.fixDot();
+        System.out.println("Split: " + split.size());
+        Utility.showSetNames("", split, false, Default.ucd);
+        
+        System.out.println("Reordrant: " + reordrant.size());
+        Utility.showSetNames("", reordrant, false, Default.ucd);
+        
+        System.out.println("Subjoined: " + subjoined.size());
+        Utility.showSetNames("", subjoined, false, Default.ucd);
+    }
+    
+    static int countTypes(String s, int filter) {
+        int count = 0;
+        int cp;
+        for (int i = 0; i < s.length(); i+= UTF16.getCharCount(cp)) {
+            cp = UTF16.charAt(s, i);
+            int cat = Default.ucd.getCategory(i);
+            if (cat == filter) count++;
+        }
+        return count;
+    }
 
     //static UnifiedBinaryProperty ubp
         
@@ -54,12 +95,6 @@ public class GenerateData implements UCD_Types {
         }
     }
 
-
-    static DateFormat myDateFormat = new SimpleDateFormat("yyyy-MM-dd','HH:mm:ss' GMT'");
-
-    static {
-        myDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-    }
 
     //Remove "d1" from DerivedJoiningGroup-3.1.0d1.txt type names
 
@@ -108,7 +143,7 @@ public class GenerateData implements UCD_Types {
         Default.setUCD();
         String newFile = directory + fileName + getFileSuffix(true);
         System.out.println("New File: " + newFile);
-        PrintWriter output = Utility.openPrintWriter(newFile);
+        PrintWriter output = Utility.openPrintWriter(newFile, Utility.LATIN1_UNIX);
         String mostRecent = generateBat(directory, fileName, getFileSuffix(true));
         System.out.println("Most recent: " + mostRecent);
         
@@ -156,7 +191,7 @@ public class GenerateData implements UCD_Types {
     public static void generateCompExclusions() throws IOException {
         Default.setUCD();
         String newFile = "DerivedData/CompositionExclusions" + getFileSuffix(true);
-        PrintWriter output = Utility.openPrintWriter(newFile);
+        PrintWriter output = Utility.openPrintWriter(newFile, Utility.LATIN1_UNIX);
         String mostRecent = generateBat("DerivedData/", "CompositionExclusions", getFileSuffix(true));
         
         output.println("# CompositionExclusions" + getFileSuffix(false));
@@ -217,7 +252,7 @@ public class GenerateData implements UCD_Types {
     }
     
     static String generateDateLine() {
-        return "# Date: " + myDateFormat.format(new Date()) + " [MD]";
+        return "# Date: " + Default.getDate() + " [MD]";
     }
 
     static class CompLister extends PropertyLister {
@@ -332,7 +367,7 @@ public class GenerateData implements UCD_Types {
 
         Utility.fixDot();
         System.out.println("Set Size: " + map.size());
-        PrintWriter output = Utility.openPrintWriter("Partition" + getFileSuffix(true));
+        PrintWriter output = Utility.openPrintWriter("Partition" + getFileSuffix(true), Utility.LATIN1_UNIX);
         
         Iterator it = map.keySet().iterator();
         while (it.hasNext()) {
@@ -351,7 +386,7 @@ public class GenerateData implements UCD_Types {
     public static void listDifferences() throws IOException {
 
         Default.setUCD();
-        PrintWriter output = Utility.openPrintWriter("PropertyDifferences" + getFileSuffix(true));
+        PrintWriter output = Utility.openPrintWriter("PropertyDifferences" + getFileSuffix(true), Utility.LATIN1_UNIX);
         output.println("# Listing of relationships among properties, suitable for analysis by spreadsheet");
         output.println("# Generated for " + Default.ucd.getVersion());
         output.println(generateDateLine());
@@ -610,7 +645,7 @@ public class GenerateData implements UCD_Types {
         
         String filename = "PropertyAliases";
         String newFile = "DerivedData/" + filename + getFileSuffix(true);
-        PrintWriter log = Utility.openPrintWriter(newFile);
+        PrintWriter log = Utility.openPrintWriter(newFile, Utility.LATIN1_UNIX);
         String mostRecent = generateBat("DerivedData/", filename, getFileSuffix(true));
         
         log.println("# " + filename + getFileSuffix(false));
@@ -626,7 +661,7 @@ public class GenerateData implements UCD_Types {
         
         filename = "PropertyValueAliases";
         newFile = "DerivedData/" + filename + getFileSuffix(true);
-        log = Utility.openPrintWriter(newFile);
+        log = Utility.openPrintWriter(newFile, Utility.LATIN1_UNIX);
         mostRecent = generateBat("DerivedData/", filename, getFileSuffix(true));
         
         log.println("# " + filename + getFileSuffix(false));
@@ -642,7 +677,7 @@ public class GenerateData implements UCD_Types {
         
         filename = "PropertyAliasSummary";
         newFile = "OtherData/" + filename + getFileSuffix(true);
-        log = Utility.openPrintWriter(newFile);
+        log = Utility.openPrintWriter(newFile, Utility.LATIN1_UNIX);
         mostRecent = generateBat("OtherData/", filename, getFileSuffix(true));
         log.println();
         log.println(HORIZONTAL_LINE);
@@ -793,7 +828,7 @@ public class GenerateData implements UCD_Types {
     }
     
     public static void generateBatAux(String batName, String oldName, String newName) throws IOException {
-        PrintWriter output = Utility.openPrintWriter(batName + ".bat");
+        PrintWriter output = Utility.openPrintWriter(batName + ".bat", Utility.LATIN1_UNIX);
         newName = Utility.getOutputName(newName);
         System.out.println("Writing BAT to compare " + oldName + " and " + newName);
         
@@ -812,7 +847,7 @@ public class GenerateData implements UCD_Types {
 
         Default.setUCD();
         String newFile = directory + file + getFileSuffix(true);
-        PrintWriter output = Utility.openPrintWriter(newFile);
+        PrintWriter output = Utility.openPrintWriter(newFile, Utility.LATIN1_UNIX);
         String mostRecent = generateBat(directory, file, getFileSuffix(true));
         
         doHeader(file + getFileSuffix(false), output, headerChoice);
@@ -881,7 +916,7 @@ public class GenerateData implements UCD_Types {
     static public void writeNormalizerTestSuite(String directory, String fileName) throws IOException {
         Default.setUCD();
         String newFile = directory + fileName + getFileSuffix(true);
-        PrintWriter log = Utility.openPrintWriter(newFile, true, false);
+        PrintWriter log = Utility.openPrintWriter(newFile, Utility.UTF8_UNIX);
         String mostRecent = generateBat(directory, fileName, getFileSuffix(true));
 
         String[] example = new String[256];
@@ -1082,7 +1117,7 @@ public class GenerateData implements UCD_Types {
     
         Default.setUCD();
         String newFile = directory + filename + getFileSuffix(true);
-        PrintWriter log = Utility.openPrintWriter(newFile);
+        PrintWriter log = Utility.openPrintWriter(newFile, Utility.LATIN1_UNIX);
         String mostRecent = generateBat(directory, filename, getFileSuffix(true));
         DiffPropertyLister dpl;
         UnicodeSet cummulative = new UnicodeSet();
@@ -1164,7 +1199,7 @@ public class GenerateData implements UCD_Types {
     static final void generateAge(String directory, String filename) throws IOException {
         Default.setUCD();
         String newFile = directory + filename + getFileSuffix(true);
-        PrintWriter log = Utility.openPrintWriter(newFile);
+        PrintWriter log = Utility.openPrintWriter(newFile, Utility.LATIN1_UNIX);
         String mostRecent = generateBat(directory, filename, getFileSuffix(true));
         try {
             log.println("# " + filename + getFileSuffix(false));
@@ -1259,7 +1294,7 @@ public class GenerateData implements UCD_Types {
     
     public static void listCombiningAccents() throws IOException {
         Default.setUCD();
-        PrintWriter log = Utility.openPrintWriter("ListAccents" + getFileSuffix(true));
+        PrintWriter log = Utility.openPrintWriter("ListAccents" + getFileSuffix(true), Utility.LATIN1_UNIX);
         Set set = new TreeSet();
         Set set2 = new TreeSet();
         
@@ -1296,7 +1331,7 @@ public class GenerateData implements UCD_Types {
     
     public static void listGreekVowels() throws IOException {
         Default.setUCD();
-        PrintWriter log = Utility.openPrintWriter("ListGreekVowels" + getFileSuffix(true));
+        PrintWriter log = Utility.openPrintWriter("ListGreekVowels" + getFileSuffix(true), Utility.LATIN1_UNIX);
         Set set = new TreeSet();
         Set set2 = new TreeSet();
         

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateHanTransliterator.java,v $
-* $Date: 2002/07/21 08:43:39 $
-* $Revision: 1.7 $
+* $Date: 2002/07/30 09:56:41 $
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -42,7 +42,7 @@ public final class GenerateHanTransliterator implements UCD_Types {
     
     public static void readUnihan() throws java.io.IOException {
 
-        log = Utility.openPrintWriter("Unihan_log.html", false, false);
+        log = Utility.openPrintWriter("Unihan_log.html", Utility.UTF8_WINDOWS);
         log.println("<body>");
 
         BufferedReader in = Utility.openUnicodeFile("Unihan", Default.ucdVersion, true, true); 
@@ -241,6 +241,8 @@ public final class GenerateHanTransliterator implements UCD_Types {
     
     static final int CHINESE = 2, JAPANESE = 1, DEFINITION = 0;
     
+    static final boolean DO_SIMPLE = true;
+    
     public static void main(int typeIn) {
     	type = typeIn;
     	Default.setUCD();
@@ -269,13 +271,20 @@ public final class GenerateHanTransliterator implements UCD_Types {
                 default: throw new IllegalArgumentException("Unexpected option: must be 0..2");
             }
                 
-            log = Utility.openPrintWriter("Transliterate_log.txt", false, false);
-            err = Utility.openPrintWriter("Transliterate_err.txt", false, false);
+            err = Utility.openPrintWriter("Transliterate_err.txt", Utility.UTF8_WINDOWS);
+            log = Utility.openPrintWriter("Transliterate_log.txt", Utility.UTF8_WINDOWS);
             log.print('\uFEFF');
             
-            readUnihanData(key);
+            log.println();
+            log.println("@*DICT Data");
+            log.println();
             readCDICTDefinitions(type);
             
+            log.println();
+            log.println("@Unihan Data");
+            log.println();
+            readUnihanData(key);
+
             if (false) {
                 readCDICT();
                 compareUnihanWithCEDICT();
@@ -283,7 +292,7 @@ public final class GenerateHanTransliterator implements UCD_Types {
             
             readFrequencyData(type);
             
-            out = Utility.openPrintWriter(filename, false, false);
+            out = Utility.openPrintWriter(filename, Utility.UTF8_WINDOWS);
             out.println("# Start RAW data for converting CJK characters");
             /*
             out.println("# Note: adds space between them and letters.");
@@ -366,21 +375,24 @@ public final class GenerateHanTransliterator implements UCD_Types {
             Set doReverse = new HashSet();
             Set gotIt = new HashSet();
             
-            it = backSet.iterator();
-            while (it.hasNext()) {
-                Pair p = (Pair) it.next();
-                p = (Pair) p.second;
-                
-                String keyChar = (String) p.first; 
-                String def = (String) p.second;
-                if (!gotIt.contains(def)) {
-                    if (unihanNonSingular) {
-                        out.println(quoteNonLetters.transliterate(keyChar) + " < " + quoteNonLetters.transliterate(def) + ";");
-                    } else {
-                        doReverse.add(keyChar);
+            if (!DO_SIMPLE) {
+                it = backSet.iterator();
+                while (it.hasNext()) {
+                    Pair p = (Pair) it.next();
+                    p = (Pair) p.second;
+                    
+                    String keyChar = (String) p.first; 
+                    String def = (String) p.second;
+                    if (!gotIt.contains(def)) {
+                        if (unihanNonSingular) {
+                            out.println(quoteNonLetters.transliterate(keyChar)
+                                + " < " + quoteNonLetters.transliterate(def) + ";");
+                        } else {
+                            doReverse.add(keyChar);
+                        }
                     }
+                    gotIt.add(def);
                 }
-                gotIt.add(def);
             }
             
            
@@ -391,10 +403,10 @@ public final class GenerateHanTransliterator implements UCD_Types {
                 
                 String keyChar = (String) p.first; 
                 String def = (String) p.second;
-                String rel = doReverse.contains(keyChar) ? " <> " : " > ";
+                String rel = !DO_SIMPLE && doReverse.contains(keyChar) ? "<>" : ">";
                 
                 out.println(quoteNonLetters.transliterate(keyChar) + rel
-                    + quoteNonLetters.transliterate(def) + ";");
+                    + quoteNonLetters.transliterate(def) + "|\\ ;");
                     //if (TESTING) System.out.println("# " + code + " > " + definition);
             }
             
@@ -412,6 +424,24 @@ public final class GenerateHanTransliterator implements UCD_Types {
             
             System.out.println("Total: " + totalCount);
             System.out.println("Defined Count: " + count);
+            
+            log.println();
+            log.println("@Duplicates");
+            log.println();
+            it = duplicates.keySet().iterator();
+            while (it.hasNext()) {
+                String word = (String) it.next();
+                log.print(hex.transliterate(word) + "\t" + word + "\t");
+                Collection dups = (Collection) duplicates.get(word);
+                Iterator it2 = dups.iterator();
+                boolean gotFirst = false;
+                while (it2.hasNext()) {
+                    if (!gotFirst) gotFirst = true;
+                    else log.print(", ");
+                    log.print(it2.next());
+                }
+                log.println();
+            }
             
         } catch (Exception e) {
             System.out.println("Exception: " + e);
@@ -506,6 +536,10 @@ public final class GenerateHanTransliterator implements UCD_Types {
             int overallRank = 0;
             it = combinedRank.iterator();
             
+            log.println();
+            log.println("@Frequency data: Rank of Character");
+            log.println();
+            
             while(it.hasNext()) {
                 Pair p = (Pair) it.next();
                 log.println(p.first + ", " + p.second);
@@ -516,7 +550,9 @@ public final class GenerateHanTransliterator implements UCD_Types {
                 }
             }
 
-            log.println("@character to rank");
+            log.println();
+            log.println("@Frequency data: Character to Rank");
+            log.println();
             
             // get full order
             it = rankList.iterator();
@@ -871,8 +907,9 @@ public final class GenerateHanTransliterator implements UCD_Types {
     }
     
     static void addCheck2(String word, String definition, String line) {
-        definition = Default.nfc.normalize(definition) + " ";
+        definition = Default.nfc.normalize(definition);
         word = Default.nfc.normalize(word);
+        if (DO_SIMPLE && UTF16.countCodePoint(word) > 1) return;
         
         if (pua.containsSome(word) ) {
             Utility.fixDot();
@@ -881,7 +918,13 @@ public final class GenerateHanTransliterator implements UCD_Types {
             Utility.fixDot();
             System.out.println("Only numbers on: " + line);
         } else {
-            unihanMap.put(word, definition);
+            Object alreadyThere = unihanMap.get(word);
+            if (alreadyThere == null) {
+                unihanMap.put(word, definition);
+            } else if (!definition.equals(alreadyThere)) {
+                Utility.addToList(duplicates, word, alreadyThere, true);
+                Utility.addToList(duplicates, word, definition, true);
+            }
         }
         if (UTF16.countCodePoint(word) > 1) unihanNonSingular = true;
     }
@@ -1025,19 +1068,28 @@ public final class GenerateHanTransliterator implements UCD_Types {
         if (end > end2) end = end2;
   
         // IF CHINESE or JAPANESE, stop at first space!!!
+        rawDefinition = rawDefinition.substring(start,end);
         
-        if (type != DEFINITION) {
-            end2 = rawDefinition.indexOf(" ", start);
-            if (end2 < 0) end2 = rawDefinition.length();
-            if (end > end2) end = end2;
+        if (type == DEFINITION) {
+            storeDef2(out, cp, rawDefinition, line);
+        } else {
+            if (rawDefinition.indexOf(' ') < 0) storeDef2(out, cp, rawDefinition, line);
+            else {
+                String [] pieces = Utility.split(rawDefinition, ' ');
+                for (int i = 0; i < pieces.length; ++i) {
+                    storeDef2(out, cp, pieces[i], line);
+                }
+            }
         }
-        
-        String definition = rawDefinition.substring(start,end);
+    }
+    
+    static void storeDef2(PrintWriter out, int cp, String definition, String line) {
         if (type == CHINESE) {
             // since data are messed up, terminate after first digit
             int end3 = findInString(definition, "12345")+1;
             if (end3 == 0) {
-                log.println("Bad pinyin data: " + rawDefinition);
+                log.println("Bad pinyin data: " + hex.transliterate(UTF16.valueOf(cp))
+                    + "\t" + UTF16.valueOf(cp) + "\t" + definition);
                 end3 = definition.length();
             }
             definition = definition.substring(0, end3);
@@ -1045,9 +1097,9 @@ public final class GenerateHanTransliterator implements UCD_Types {
             definition = convertPinyin.transliterate(definition);
         }
         if (type == DEFINITION) {
-            definition = removeMatched(definition,'(', ')', rawDefinition);
-            definition = removeMatched(definition,'[', ']', rawDefinition);
-            definition = fixDefinition(definition, rawDefinition);
+            definition = removeMatched(definition,'(', ')', line);
+            definition = removeMatched(definition,'[', ']', line);
+            definition = fixDefinition(definition, line);
         }
         definition = definition.trim();
         definition = Default.ucd.getCase(definition, FULL, LOWER);
@@ -1056,7 +1108,7 @@ public final class GenerateHanTransliterator implements UCD_Types {
             Utility.fixDot();
             System.out.println("Zero value for " + Default.ucd.getCode(cp) + " on: " + hex.transliterate(line));
         } else {
-            addCheck(UTF16.valueOf(cp), definition, rawDefinition);
+            addCheck(UTF16.valueOf(cp), definition, line);
         }
         /*
         String key = (String) unihanMap.get(definition);
@@ -1103,6 +1155,8 @@ public final class GenerateHanTransliterator implements UCD_Types {
     }
         
     static Map unihanMap = new HashMap();
+    static Map duplicates = new TreeMap();
+    
     static boolean unihanNonSingular = false;
     
     static StringBuffer handlePinyinTemp = new StringBuffer();

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Types.java,v $
-* $Date: 2002/06/15 02:47:13 $
-* $Revision: 1.13 $
+* $Date: 2002/07/30 09:56:40 $
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -229,10 +229,12 @@ public interface UCD_Types {
 
     // line break
     public static final byte
-        LBXX = 0, LBOP = 1, LBCL = 2, LBQU = 3, LBGL = 4, LBNS = 5, LBEX = 6, LBSY = 7,
-        LBIS = 8, LBPR = 9, LBPO = 10, LBNU = 11, LBAL = 12, LBID = 13, LBIN = 14, LBHY = 15,
-        LBCM = 16, LBBB = 17, LBBA = 18, LBSP = 19, LBBK = 20, LBCR = 21, LBLF = 22, LBCB = 23,
-        LBSA = 24, LBAI = 25, LBB2 = 26, LBSG = 27, LBZW = 28, LIMIT_LINE_BREAK = 29;
+        LB_XX = 0, LB_OP = 1, LB_CL = 2, LB_QU = 3, LB_GL = 4, LB_NS = 5, LB_EX = 6, LB_SY = 7,
+        LB_IS = 8, LB_PR = 9, LB_PO = 10, LB_NU = 11, LB_AL = 12, LB_ID = 13, LB_IN = 14, LB_HY = 15,
+        LB_CM = 16, LB_BB = 17, LB_BA = 18, LB_SP = 19, LB_BK = 20, LB_CR = 21, LB_LF = 22, LB_CB = 23,
+        LB_SA = 24, LB_AI = 25, LB_B2 = 26, LB_SG = 27, LB_ZW = 28,
+        LIMIT_LINE_BREAK = 29,
+        LB_LIMIT = LIMIT_LINE_BREAK;
 
     // east asian width
     public static final byte

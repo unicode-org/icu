@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateThaiBreaks.java,v $
-* $Date: 2002/04/23 22:50:15 $
-* $Revision: 1.1 $
+* $Date: 2002/07/30 09:56:41 $
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -81,7 +81,7 @@ public class GenerateThaiBreaks {
         System.out.println("initials size: " + initials.size());
         System.out.println("finals size: " + finals.size());
         
-        out = Utility.openPrintWriter("ThaiData.txt", false, false);
+        out = Utility.openPrintWriter("ThaiData.txt", Utility.UTF8_WINDOWS);
         out.write('\uFEFF');
         out.println("Only Initials");
         Utility.print(out, initials, ", ", new MyBreaker());
