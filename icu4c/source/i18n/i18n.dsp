@@ -2059,6 +2059,41 @@ InputPath=.\unicode\unum.h
 !ENDIF 
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\utmscale.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\utmscale.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\utmscale.h
+
+"..\..\include\unicode\utmscale.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\utmscale.h
+
+"..\..\include\unicode\utmscale.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+!ENDIF 
+
+# End Source File
 # End Group
 # Begin Group "misc"
 
