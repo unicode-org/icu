@@ -22,7 +22,6 @@
       caption {font-weight: bold; text-align: left}
       div.indent {margin-left: 2em}
       ul.TOC {list-style-type: none}
-      code {margin-left: 2em; border-style: groove; padding: 1em; display: block; background-color: #EEEEEE}
       samp {margin-left: 2em; border-style: groove; padding: 1em; display: block; background-color: #EEEEEE}
 </style>
   </head>
@@ -31,12 +30,10 @@
     <h1>International Components for Unicode<br>
     ICU 2.0 ReadMe</h1>
 
-    <p>Version: 2001-Nov-15<br>
+    <p>Version: 2001-Nov-16<br>
      Copyright &copy; 1995-2001 International Business Machines Corporation and
      others. All Rights Reserved.</p>
     <hr>
-
-    <p><b><font color="#FF0000">Markus 2001-nov-15 not finished...</font></b></p>
 
     <h2 class="TOC">Table of Contents</h2>
 
@@ -50,12 +47,9 @@
 
       </li>
 
-      <li><a href="#HowDown">How to Download the Source Code</a></li>
+      <li><a href="#Download">How to Download the Source Code</a></li>
 
-      <li><a href="#WhatContain">What the International Components for Unicode
-      Contain</a></li>
-
-      <li><a href="#PlatformDependencies">Platform Dependencies</a></li>
+      <li><a href="#SourceCode">ICU Source Code Organization</a></li>
 
       <li>
         <a href="#HowToBuild">How to Build And Install ICU</a>
@@ -88,11 +82,8 @@
         </ul>
       </li>
 
-      <li><a href="#UsageInformation">Getting More Information About
-      ICU</a></li>
+      <li><a href="#PlatformDependencies">Platform Dependencies</a></li>
 
-      <li><a href="#SubmittingComments">Submitting Comments, Requesting
-      Features and Reporting Bugs</a></li>
     </ul>
     <hr>
 
@@ -166,7 +157,7 @@
       </tr>
 
       <tr>
-        <td>Download ICU</td>
+        <td>Download ICU Releases</td>
         <td><a href="http://oss.software.ibm.com/icu/download/">
         http://oss.software.ibm.com/icu/download/</a></td>
       </tr>
@@ -225,6 +216,51 @@
     <p>For more on this topic see the <a href="http://www.ibm.com/developerworks/unicode/library/u-euro/">developerWorks
     article &quot;Are you really ready for the Euro?&quot;</a>.</p>
 
+    <h3>API changes</h3>
+
+    <p>Functions that take C-style string input arguments with const UChar *src
+    and int32_t srcLength now consistently treat srcLength==-1 to mean that the
+    input string is NUL-terminated and get srcLength=u_strlen(src).</p>
+
+    <p>Functions that take C-style string output arguments with UChar *dest and
+    int32_t destCapacity now handle NUL-termination of the output string
+    consistently. If the output length is equal to destCapacity, then dest is
+    filled with the output string and a warning code is set. For details about
+    string handling see the <a href="http://oss.software.ibm.com/icu/userguide/strings.html">User's
+    Guide Strings chapter</a>.</p>
+
+    <p>Some APIs have been <i>deprecated </i>for a long time (more than a year)
+    and have been removed now.<br>
+    Some other APIs have been marked as <i>deprecated </i>because they are
+    replaced by improved APIs; the newly deprecated APIs will be available for
+    another year. In particular, the C++ classes UnicodeConverter, Unicode, and
+    BiDi are deprecated in favor of the equally powerful C APIs.<br>
+    A few <i>draft </i>APIs have changed, especially for transliteration.</p>
+
+    <p>APIs that take a rules or pattern string (for collation, transliteration,
+    message formats, etc.) now also take a <code> UParseError</code> structure that is filled
+    with useful debugging information when a rule syntax error is detected. This
+    makes it easier in large rules to find problems. As a result, the signatures
+    of some functions have changed. The old signatures will be available for
+    about a year by #defining a constant. See affected header files for details.</p>
+
+    <p>The C++ Normalizer class had a partially broken model for iterative
+    normalization; this is redone in a more consistent way. See the <a href="http://oss.software.ibm.com/icu/apiref/class_Normalizer.html">Normalizer
+    API documentation</a> for details.</p>
+
+    <h3>Memory and resource cleanup</h3>
+
+    <p>ICU is carefully tested for memory leaks. Some memory is held in internal
+    caches that do not normally get released during normal operation. These are
+    not leaks because ICU continues to use them as necessary.</p>
+
+    <p>For testing purposes (for memory leaks) and for a small number of
+    applications it can be useful to close all the memory that is allocated for
+    a library. ICU 2.0 supports this with a new function <code><a href="http://oss.software.ibm.com/icu/apiref/uclean_h.html">u_cleanup()</a></code>
+    that may be called after an application has released all ICU objects. <code>u_cleanup()</code>
+    will then release all of ICU's internal memory. The ICU libraries can then
+    even be unloaded cleanly without shutting down the process.</p>
+
     <h3>ICU versioning - C++ namespaces</h3>
 
     <p>Beginning with ICU 2.0, multiple releases of ICU can be used in the same
@@ -242,47 +278,36 @@
     <p>For details see the <a href="http://oss.software.ibm.com/icu/userguide/design.html">User's
     Guide Design Chapter</a>.</p>
 
-    <h3>API changes</h3>
-
-    <p>The C++ Normalizer class had a partially broken model for iterative
-    normalization; this is redone in a more consistent way. See the <a href="http://oss.software.ibm.com/icu/apiref/normlzr_h.html">Normalizer
-    API documentation</a> for details.</p>
-
-    <p>APIs that take a rules or pattern string (for collation, transliteration,
-    message formats, etc.) now also take a UParseError structure that is filled
-    with useful debugging information when a rule syntax error is detected. This
-    makes it easier in large rules to find problems. As a result, the signatures
-    of some functions have changed. The old signatures will be available for
-    about a year by #defining a constant. See affected header files for details.</p>
-
-    <p>Functions that take C-style string input arguments with const UChar *src
-    and int32_t srcLength now consistently treat srcLength==-1 to mean that the
-    input string is NUL-terminated and get srcLength=u_strlen(src).</p>
-
-    <p>Functions that take C-style string output arguments with UChar *dest and
-    int32_t destCapacity now handle NUL-termination of the output string
-    consistently. If the output length is equal to destCapacity, then dest is
-    filled with the output string and a warning code is set. For details about
-    string handling see the <a href="http://oss.software.ibm.com/icu/userguide/strings.html">User's
-    Guide Strings chapter</a>.</p>
-
-    <p><b><font color="#FF0000">More... Markus 2001-nov-15 not finished...</font></b></p>
-
-    <p>&nbsp;</p>
-
     <h3>Collation improvements</h3>
 
     <p>The performance of Japanese Katakana collation is improved, and the
     Japanese collation is changed for conformance with the JIS X 4061 standard.</p>
 
-    <h3>String search and Rule-based number formatting ported from ICU4J</h3>
+    <h3>License Change (for ICU 1.8.1 and up)</h3>
 
-    <p>Boyer-Moore-style, collation-based string search and formatting numbers
-    in spelled-out format are now available in ICU4C.</p>
+    <p>The ICU projects (ICU4C and ICU4J) have changed their licenses from the
+    IPL (IBM Public License) to the X license. The X license is a non-viral and
+    recommended free software license that is compatible with the GNU GPL
+    license. This is effective starting with release 1.8.1 of ICU4C and release
+    1.3.1 of ICU4J. All previous ICU releases will continue to utilize the IPL.
+    New ICU releases will adopt the X license. The users of previous releases
+    of ICU will need to accept the terms and conditions of the X license in
+    order to adopt the new ICU releases.</p>
 
-    <p>&nbsp;</p>
+    <p>The main effect of the change is to provide GPL compatibility. The X
+    license is listed as GPL compatible, see the gnu page at <a href=
+    "http://www.gnu.org/philosophy/license-list.html#GPLCompatibleLicenses">
+    http://www.gnu.org/philosophy/license-list.html#GPLCompatibleLicenses</a>.</p>
 
-    <p>&nbsp;</p>
+    <p>The text of the X license is available at <a href=
+    "http://www.x.org/terms.htm">http://www.x.org/terms.htm</a>. The IBM
+    version contains the essential text of the license, omitting the X-specific
+    trademarks and copyright notices.</p>
+
+    <p>For more details please see the <a href=
+    "http://oss.software.ibm.com/icu/press.html">press announcement</a> and the
+    <a href="http://oss.software.ibm.com/icu/project_faq.html#license">Project
+    FAQ</a>.</p>
 
     <h3>Transliterator improvements</h3>
 
@@ -474,35 +499,11 @@
       supported.</li>
     </ul>
 
-    <h3>License Change (for ICU 1.8.1 and up)</h3>
+    <hr>
 
-    <p>The ICU projects (ICU4C and ICU4J) have changed their licenses from the
-    IPL (IBM Public License) to the X license. The X license is a non-viral and
-    recommended free software license that is compatible with the GNU GPL
-    license. This is effective starting with release 1.8.1 of ICU4C and release
-    1.3.1 of ICU4J. All previous ICU releases will continue to utilize the IPL.
-    New ICU releases will adopt the X license. The users of previous releases
-    of ICU will need to accept the terms and conditions of the X license in
-    order to adopt the new ICU releases.</p>
+    <h2><a name="Download" href="#Download">How to Download the Source Code</a></h2>
 
-    <p>The main effect of the change is to provide GPL compatibility. The X
-    license is listed as GPL compatible, see the gnu page at <a href=
-    "http://www.gnu.org/philosophy/license-list.html#GPLCompatibleLicenses">
-    http://www.gnu.org/philosophy/license-list.html#GPLCompatibleLicenses</a>.</p>
-
-    <p>The text of the X license is available at <a href=
-    "http://www.x.org/terms.htm">http://www.x.org/terms.htm</a>. The IBM
-    version contains the essential text of the license, omitting the X-specific
-    trademarks and copyright notices.</p>
-
-    <p>For more details please see the <a href=
-    "http://oss.software.ibm.com/icu/press.html">press announcement</a> and the
-    <a href="http://oss.software.ibm.com/icu/project_faq.html#license">Project
-    FAQ</a>.</p>
-
-    <h2><a name="HowDown">How to Download the Source Code</a></h2>
-
-    <p>There are two ways to download the ICU releases,</p>
+    <p>There are two ways to download ICU releases:</p>
 
     <ul>
       <li><strong>Official Release Snapshot:</strong><br>
@@ -514,7 +515,9 @@
       "http://oss.software.ibm.com/icu/download/">
       http://oss.software.ibm.com/icu/download/</a>.<br>
        The packaged snapshots are named <strong>icu-nnnn.zip</strong> or <strong>
-      icu-nnnn.tgz</strong>, where nnnn is the version number.<br>
+      icu-nnnn.tgz</strong>, where nnnn is the version number. The .zip file is
+        used for Windows platforms, while the .tgz file is preferred on most
+        other platforms.<br>
        Please unzip this file. It will reconstruct the source directory,
       including anonymous CVS control directories (see below).</li>
 
@@ -524,61 +527,12 @@
         for ICU, you should probably be working with the latest version of the
         ICU source code. You will need to check the code out of our CVS
         repository to ensure that you have the most recent version of all of
-        the files. There are several ways to do this:
-
-        <ul>
-          <li>WebCVS:<br>
-           If you want to browse the code and only make occasional downloads,
-          you may want to use WebCVS. It provides a convenient, web-based
-          interface for browsing and downloading the latest version of the ICU
-          source code and documentation. You can also view each file's revision
-          history, display the differences between individual revisions,
-          determine which revisions were part of which official release, and so
-          on.</li>
-
-          <li>
-            WinCVS:<br>
-             If you will be doing serious work on ICU, you should probably
-            install a CVS client on your own machine so that you can do batch
-            operations without going through the WebCVS interface. On Windows,
-            we suggest the WinCVS client. The following is the example
-            instruction on how to download ICU via WinCVS:
-
-            <ol>
-              <li>Install the WinCVS client, which you can download from
-              <a href="http://www.wincvs.org/WinCVS">http://www.wincvs.org/</a>.</li>
-
-              <li>In the WinCVS preferences, specify your CVSRoot to be
-              ":pserver:anoncvs@oss.software.ibm.com:/usr/cvs/icu"<br>
-               with the password "anoncvs". To enter the CVSRoot value, select
-              "Preferences" from the "Cvs Admin" pull-down menu. Authentication
-              should be set to "'passwd' file on the cvs server".</li>
-
-              <li>To "extract" the most recent version of ICU, select "Checkout
-              module" from the "Cvs Admin" menu. Specify "icu" for the module
-              name.</li>
-            </ol>
-          </li>
-
-          <li>CVS command line:<br>
-           You can also check out the repository anonymously on UNIX using the
-          following commands, after first setting your CVSROOT to point to the
-          ICU repository:<br>
-          <br>
-           <i>export
-          CVSROOT=:pserver:anoncvs@oss.software.ibm.com:/usr/cvs/icu<br>
-           cvs login CVS password: anoncvs<br>
-           cvs checkout icu<br>
-           cvs logout</i></li>
-        </ul>
+        the files. See our <a href="http://oss.software.ibm.com/icu/develop/cvs.html">CVS
+        page</a> for details.
       </li>
     </ul>
 
-    <p>For more details on how to download ICU directly from the web site,
-    please also see <a href="http://oss.software.ibm.com/icu/download/">
-    http:/oss.software.ibm.com/icu/download/</a></p>
-
-    <h2><a name="WhatContain">ICU Source Code Organization</a></h2>
+    <h2><a name="SourceCode" href="#SourceCode">ICU Source Code Organization</a></h2>
     <p>In the descriptions below, <strong><i>&lt;ICU></i></strong> is the full path name
     of the icu directory - the top level directory from the distribution archives
     - in your file system.</p>
@@ -597,7 +551,7 @@
       <tr>
         <td>license.html</td>
 
-        <td>Contains IBM's public license</td>
+        <td>Contains the text of the ICU license</td>
       </tr>
     </table>
 
@@ -743,124 +697,9 @@
     </table>
     <!-- end of ICU structure ==================================== -->
 
-    <h2><a name="PlatformDependencies">Platform Dependencies</a></h2>
+    <h2><a name="HowToBuild" href="#HowToBuild">How To Build And Install ICU</a></h2>
 
-    <p>The platform dependencies have been mostly isolated into the following
-    files in the common library. This information can be useful if you are
-    porting ICU to a new platform.</p>
-
-    <ul>
-      <li>
-        <strong>unicode/platform.h.in</strong> (autoconf'ed platforms)<br>
-         <strong>unicode/p<i>XXXX</i>.h</strong> (others: pwin32.h, pmacos.h,
-        ..): Platform-dependent typedefs and defines:<br>
-        <br>
-
-
-        <ul>
-          <li>XP_CPLUSPLUS for C++ only.</li>
-
-          <li>TRUE and FALSE, UBool, int8_t, int16_t etc.</li>
-
-          <li>U_EXPORT and U_IMPORT for specifying dynamic library import and
-          export</li>
-        </ul>
-        <br>
-      </li>
-
-      <li>
-        <strong>unicode/putil.h, putil.c</strong>: platform-dependent
-        implementations of various functions that are platform dependent:<br>
-        <br>
-
-
-        <ul>
-          <li>uprv_isNaN, uprv_isInfinite, uprv_getNaN and uprv_getInfinity for
-          handling special floating point values.</li>
-
-          <li>uprv_tzset, uprv_timezone, uprv_tzname and time for getting
-          platform specific time and timezone information.</li>
-
-          <li>u_getDataDirectory for getting the default data directory.</li>
-
-          <li>uprv_getDefaultLocaleID for getting the default locale
-          setting.</li>
-
-          <li>uprv_getDefaultCodepage for getting the default codepage
-          encoding.</li>
-        </ul>
-        <br>
-      </li>
-
-      <li>
-        <strong>umutex.h, umutex.c</strong>: Code for doing synchronization in
-        multithreaded applications. If you wish to use International Components
-        for Unicode in a multithreaded application, you must provide a
-        synchronization primitive that the classes can use to protect their
-        global data against simultaneous modifications. See Users' guide for
-        more information.<br>
-        <br>
-
-
-        <ul>
-          <li>We supply sample implementations for WinNT, Win95, Win98,
-          Sun/Solaris, RedHat/Linux, HP-UX and for AIX on an RS/6000.</li>
-        </ul>
-        <br>
-      </li>
-
-      <li>
-        <strong>umapfile.h, umapfile.c</strong>: functions for mapping
-        or otherwise reading or loading files into memory.  All access
-        by ICU to data from files makes use of these functions.
-        <br> <br>
-      </li>
-
-      <li>For the Intltest test suite, intltest.cpp in
-      "icu/source/test/intltest/" contains the method pathnameInContext, which
-      must also be adapted to any new platform.</li>
-
-      <li>Using platform specific #ifdef macros are highly discouraged outside
-      of the scope of these files. When the source code gets updated in the
-      future, these #ifdef's can cause testing problems for your platform.</li>
-    </ul>
-
-    <p>It is possible to build each library individually. They must be built in
-    the following order:<br>
-    </p>
-
-    <ol>
-      <li>stubdata</li>
-
-      <li>common</li>
-
-      <li>i18n</li>
-
-      <li>toolutil</li>
-
-      <li>makeconv</li>
-
-      <li>genrb</li>
-
-      <li>gentz</li>
-
-      <li>genccode</li>
-
-      <li>gennames</li>
-
-      <li>genuca</li>
-
-      <li>gennorm</li>
-
-      <li>makedata (a project on Windows, or source/data/Makefile on Unix)</li>
-
-      <li>ctestfw, intltest and cintltst, if you want to run the test
-      suite.</li>
-    </ol>
-
-    <h2><a name="HowToBuild">How To Build And Install ICU</a></h2>
-
-    <h3><a name="HowToBuildSupported">Supported Platforms</a></h3>
+    <h3><a name="HowToBuildSupported" href="#HowToBuildSupported">Supported Platforms</a></h3>
 
     <table border="1" cellpadding="3" summary="">
       <caption>
@@ -887,7 +726,7 @@
       <tr>
         <td>Red Hat Linux 6.1</td>
 
-        <td>gcc 2.91.66</td>
+        <td>gcc 2.95.2</td>
 
         <td>Reference platform</td>
       </tr>
@@ -965,7 +804,7 @@
       </tr>
 
       <tr>
-        <td>AS/400 (zSeries) V5R1</td>
+        <td>AS/400 (iSeries) V5R1</td>
 
         <td>iCC</td>
 
@@ -1029,10 +868,11 @@
 
       <dt><i>Rarely tested</i></dt>
 
-      <dd>ICU may not work on these platforms</dd>
+      <dd>ICU has been ported to these platforms but may not have been tested
+        there recently</dd>
     </dl>
 
-    <h3><a name="HowToBuildWindows">How To Build And Install On
+    <h3><a name="HowToBuildWindows" href="#HowToBuildWindows">How To Build And Install On
     Windows</a></h3>
 
     <p>Building International Components for Unicode requires:</p>
@@ -1131,7 +971,7 @@
     "makedata" project will be run automatically to convert the locale data
     files from text format into icudata.dll.</p>
 
-    <h3><a name="HowToBuildUnix">How To Build And Install On Unix</a></h3>
+    <h3><a name="HowToBuildUnix" href="#HowToBuildUnix">How To Build And Install On Unix</a></h3>
 
     <p>Building International Components for Unicode on Unix requires:</p>
 
@@ -1194,7 +1034,7 @@
     the packaging scripts or related files are not up to date with the contents
     of ICU at this time, so use them with caution.)</p>
 
-    <h3><a name="HowToBuildOS390">OS/390 (zSeries) Platform</a></h3>
+    <h3><a name="HowToBuildOS390" href="#HowToBuildOS390">OS/390 (zSeries) Platform</a></h3>
 
     <p>If you are building on the OS/390 UNIX System Services platform, it is
     important that you understand a few details:</p>
@@ -1287,7 +1127,7 @@
       correct.</li>
     </ul>
 
-    <h4><a name="HowToBuildOS390Batch">OS/390 Batch (PDS) support</a></h4>
+    <h4>OS/390 Batch (PDS) support</h4>
 
     <p>By default, ICU builds its libraries into the HFS. However, there is a
     390-specific switch to build some libraries into PDS files. The switch is
@@ -1344,7 +1184,7 @@ Secondary cylinders : 3
 Data set name type  : PDS</samp>
 </pre>
 
-    <h3><a name="HowToBuildOS400">OS/400 (iSeries) Platform</a></h3>
+    <h3><a name="HowToBuildOS400" href="#HowToBuildOS400">OS/400 (iSeries) Platform</a></h3>
 
     <p>ICU Reference Release 1.8.1 contains partial support for the 400
     platform, but additional work by the user is currently needed to get it to
@@ -1459,15 +1299,15 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
       </li>
     </ul>
 
-    <h2><a name="ImportantNotes">Important Notes About Using ICU</a></h2>
+    <h2><a name="ImportantNotes" href="#ImportantNotes">Important Notes About Using ICU</a></h2>
 
-    <h3><a name="ImportantNotesWindows">Windows Platform</a></h3>
+    <h3><a name="ImportantNotesWindows" href="#ImportantNotesWindows">Windows Platform</a></h3>
 
     <p>If you are building on the Win32 platform, it is important that you
     understand a few of the following build details.</p>
 
-    <h4><a name="ImportantNotesWindowsDLL">DLL directories and the PATH
-    setting</a></h4>
+    <h4>DLL directories and the PATH
+    setting</h4>
 
     <p>As delivered, the International Components for Unicode build as several
     DLLs which are placed in the "<i>&lt;ICU></i>\bin" directory.  You must add this
@@ -1506,8 +1346,8 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
     guidelines on the usage of dlls, or search for the phrase "dll hell"
     on <a href="http://msdn.microsoft.com/">msdn.microsoft.com</a>.</p>
 
-    <h4><a name="ImportantNotesWindowsLink">Linking with Runtime
-    libraries</a></h4>
+    <h4>Linking with Runtime
+    libraries</h4>
 
     <p>All the DLLs link with the C runtime library "Debug Multithreaded DLL"
     or "Multithreaded DLL." (This is changed through the Project Settings
@@ -1517,25 +1357,50 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
     do this, you will get random memory errors when you run the executable.<br>
     </p>
 
-    <h3><a name="ImportantNotesUnix">Unix Type Platform</a></h3>
+    <h3><a name="ImportantNotesUnix" href="#ImportantNotesUnix">Unix Type Platform</a></h3>
 
     <p>If you are building on a Unix platform, it is important that you add the
     location of your ICU libraries (including the data library) to your
     LD_LIBRARY_PATH environment variable. The ICU libraries may not link or
     load properly without doing this.</p>
 
-    <h3><a name="ImportantNotesDefaultCP">Using the default codepage</a></h3>
+    <h3><a name="ImportantNotesDefaultCP" href="#ImportantNotesDefaultCP">Using the default codepage</a></h3>
 
-    <p>Starting in ICU 2.0, when the default codepage cannot be opened, a
-    fallback default codepage will be used.  On most platforms, this will be
-    US-ASCII. For os/390 (z/OS), ibm-1047-s390 is the default fallback
-    codepage. For as/400 (iSeries), ibm-37 is the default fallback codepage.
+    <p>ICU has code to determine the default codepage of the system or process.
+    This default codepage can be used to convert <code>char *</code> strings to
+    and from Unicode.</p>
+
+    <p>Depending on system design, setup and APIs, it may not always be possible
+    to find a default codepage that fully works as expected. For example,</p>
+
+    <ul>
+      <li>On Windows there are three encodings in use at the same time. Unicode
+        (UTF-16) is always used inside of Windows, while for <code>char *</code>
+        encodings there are two classes, called &quot;ANSI&quot; and
+        &quot;OEM&quot; codepages. ICU will use the ANSI codepage. Note that the
+        OEM codepage is used by default for console window output.</li>
+      <li>On some Unix-type systems, non-standard names are used for encodings,
+        or non-standard encodings are used altogether. Although ICU supports 200
+        encodings in its standard build and many more aliases for them, it will
+        not be able to recognize such non-standard names.</li>
+      <li>Some systems do not have a notion of a system or process codepage, and
+        may not have APIs for that.</li>
+    </ul>
+    <p>If you have means of detecting a default codepage name that are more
+    appropriate for your application, then you should set that name with <code>ucnv_setDefaultName()</code>
+    as the first ICU function call. This makes sure that the internally cached
+    default converter will be instantiated from your preferred name.</p>
+
+    <p>Starting in ICU 2.0, when a converter for the default codepage cannot be opened, a
+    fallback default codepage name and converter will be used.  On most platforms, this will be
+    US-ASCII. For OS/390 (z/OS), ibm-1047-s390 is the default fallback
+    codepage. For AS/400 (iSeries), ibm-37 is the default fallback codepage.
     This default fallback codepage is used when the operating system is using
     a non-standard name for a default codepage, or the converter was not
     packaged with ICU. The feature allows ICU to run in unusual
     computing environments without completely failing.</p>
 
-    <h3><a name="ImportantNotesDeprecatedAPI">Methods for enabling deprecated
+    <h3><a name="ImportantNotesDeprecatedAPI" href="#ImportantNotesDeprecatedAPI">Methods for enabling deprecated
     APIs</a></h3>
 
     <h4>C</h4>
@@ -1545,7 +1410,7 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
     including the ICU header files. For example, to enable deprecated C APIs
     for formatting.</p>
 <pre>
-<code>#ifndef U_USE_DEPRECATED_FORMAT_API
+<samp>#ifndef U_USE_DEPRECATED_FORMAT_API
 #  define U_USE_DEPRECATED_FORMAT_API 1
 #endif
 
@@ -1570,16 +1435,131 @@ int main(){
     if(U_FAILURE(status)){
         .... /* handle the error */
     }
-}</code>
+}</samp>
 </pre>
 
     <h4>C++</h4>
 
-    <p>Deprecated C++ APIs cannot be enbaled without recompiling ICU libraries.
+    <p>Deprecated C++ APIs cannot be enabled without recompiling ICU libraries.
     Every service has a specific symbol that should be defined to enable the
     deprecated API of that service. For example: To enable deprecated APIs in
-    Transliteration service U_USE_DEPRECATED_TRANSLITERATOR_API symbol should
+    Transliteration service, the U_USE_DEPRECATED_TRANSLITERATOR_API symbol should
     be defined before compiling ICU.</p>
+
+    <h2><a name="PlatformDependencies" href="#PlatformDependencies">Platform Dependencies</a></h2>
+
+    <p>The platform dependencies have been mostly isolated into the following
+    files in the common library. This information can be useful if you are
+    porting ICU to a new platform.</p>
+
+    <ul>
+      <li>
+        <strong>unicode/platform.h.in</strong> (autoconf'ed platforms)<br>
+         <strong>unicode/p<i>XXXX</i>.h</strong> (others: pwin32.h, pmacos.h,
+        ..): Platform-dependent typedefs and defines:<br>
+        <br>
+
+
+        <ul>
+          <li>XP_CPLUSPLUS for C++ only.</li>
+
+          <li>TRUE and FALSE, UBool, int8_t, int16_t etc.</li>
+
+          <li>U_EXPORT and U_IMPORT for specifying dynamic library import and
+          export</li>
+        </ul>
+        <br>
+      </li>
+
+      <li>
+        <strong>unicode/putil.h, putil.c</strong>: platform-dependent
+        implementations of various functions that are platform dependent:<br>
+        <br>
+
+
+        <ul>
+          <li>uprv_isNaN, uprv_isInfinite, uprv_getNaN and uprv_getInfinity for
+          handling special floating point values.</li>
+
+          <li>uprv_tzset, uprv_timezone, uprv_tzname and time for getting
+          platform specific time and timezone information.</li>
+
+          <li>u_getDataDirectory for getting the default data directory.</li>
+
+          <li>uprv_getDefaultLocaleID for getting the default locale
+          setting.</li>
+
+          <li>uprv_getDefaultCodepage for getting the default codepage
+          encoding.</li>
+        </ul>
+        <br>
+      </li>
+
+      <li>
+        <strong>umutex.h, umutex.c</strong>: Code for doing synchronization in
+        multithreaded applications. If you wish to use International Components
+        for Unicode in a multithreaded application, you must provide a
+        synchronization primitive that the classes can use to protect their
+        global data against simultaneous modifications. See Users' guide for
+        more information.<br>
+        <br>
+
+
+        <ul>
+          <li>We supply sample implementations for WinNT, Win95, Win98,
+          Sun/Solaris, RedHat/Linux, HP-UX and for AIX on an RS/6000.</li>
+        </ul>
+        <br>
+      </li>
+
+      <li>
+        <strong>umapfile.h, umapfile.c</strong>: functions for mapping
+        or otherwise reading or loading files into memory.  All access
+        by ICU to data from files makes use of these functions.
+        <br> <br>
+      </li>
+
+      <li>For the Intltest test suite, intltest.cpp in
+      "icu/source/test/intltest/" contains the method pathnameInContext, which
+      must also be adapted to any new platform.</li>
+
+      <li>Using platform specific #ifdef macros are highly discouraged outside
+      of the scope of these files. When the source code gets updated in the
+      future, these #ifdef's can cause testing problems for your platform.</li>
+    </ul>
+
+    <p>It is possible to build each library individually. They must be built in
+    the following order:<br>
+    </p>
+
+    <ol>
+      <li>stubdata</li>
+
+      <li>common</li>
+
+      <li>i18n</li>
+
+      <li>toolutil</li>
+
+      <li>makeconv</li>
+
+      <li>genrb</li>
+
+      <li>gentz</li>
+
+      <li>genccode</li>
+
+      <li>gennames</li>
+
+      <li>genuca</li>
+
+      <li>gennorm</li>
+
+      <li>makedata (a project on Windows, or source/data/Makefile on Unix)</li>
+
+      <li>ctestfw, intltest and cintltst, if you want to run the test
+      suite.</li>
+    </ol>
 
     <hr>
 
