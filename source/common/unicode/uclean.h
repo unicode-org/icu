@@ -114,7 +114,7 @@ typedef void *UMTX;
   *  @param status  Error status.  Report errors back to ICU by setting this variable
   *                 with an error code.
   */
-typedef void U_CALLCONV UMtxInit   (const void *context, UMTX  *mutex, UErrorCode* pError);
+typedef void U_CALLCONV UMtxInitFn (const void *context, UMTX  *mutex, UErrorCode* status);
 
 
 /**
@@ -126,7 +126,7 @@ typedef void U_CALLCONV UMtxInit   (const void *context, UMTX  *mutex, UErrorCod
   *  @draft ICU 2.8
   *  @system
   */
-typedef void U_CALLCONV UMtxFunc   (const void *context, UMTX  *mutex);
+typedef void U_CALLCONV UMtxFn   (const void *context, UMTX  *mutex);
 
 
 /**
@@ -147,7 +147,7 @@ typedef void U_CALLCONV UMtxFunc   (const void *context, UMTX  *mutex);
   *  @system
   */  
 U_CAPI void U_EXPORT2 
-u_setMutexFunctions(const void *context, UMtxInit *i, UMtxFunc *d, UMtxFunc *l, UMtxFunc *u,
+u_setMutexFunctions(const void *context, UMtxInitFn *init, UMtxFn *destroy, UMtxFn *lock, UMtxFn *unlock,
                     UErrorCode *status);
 
 
@@ -159,7 +159,7 @@ u_setMutexFunctions(const void *context, UMtxInit *i, UMtxFunc *d, UMtxFunc *l, 
   *  @draft ICU 2.8
   *  @system
   */
-typedef int32_t U_CALLCONV UMtxAtomicF (const void *context, int32_t *p);
+typedef int32_t U_CALLCONV UMtxAtomicFn(const void *context, int32_t *p);
 
 /**
  *  Set the functions that ICU will use for atomic increment and decrement of int32_t values.
@@ -177,7 +177,7 @@ typedef int32_t U_CALLCONV UMtxAtomicF (const void *context, int32_t *p);
  *  @system
  */  
 U_CAPI void U_EXPORT2 
-u_setAtomicIncDecFunctions(const void *context, UMtxAtomicF *inc, UMtxAtomicF *dec,
+u_setAtomicIncDecFunctions(const void *context, UMtxAtomicFn *inc, UMtxAtomicFn *dec,
                     UErrorCode *status);
 
 
@@ -190,7 +190,7 @@ u_setAtomicIncDecFunctions(const void *context, UMtxAtomicF *inc, UMtxAtomicF *d
   *  @draft ICU 2.8
   *  @system
   */
-typedef void *U_CALLCONV UMemAlloc  (const void *context, size_t size);
+typedef void *U_CALLCONV UMemAllocFn(const void *context, size_t size);
 /**
   *  Pointer type for a user supplied memory re-allocation function.
   *  @param context user supplied value, obtained from from u_setMemoryFunctions().
@@ -199,7 +199,7 @@ typedef void *U_CALLCONV UMemAlloc  (const void *context, size_t size);
   *  @draft ICU 2.8
   *  @system
   */
-typedef void *U_CALLCONV UMemRealloc(const void *context, void *mem, size_t size);
+typedef void *U_CALLCONV UMemReallocFn(const void *context, void *mem, size_t size);
 /**
   *  Pointer type for a user supplied memory free  function.  Behavior should be
   *  similar the standard C library free().
@@ -210,7 +210,7 @@ typedef void *U_CALLCONV UMemRealloc(const void *context, void *mem, size_t size
   *  @draft ICU 2.8
   *  @system
   */
-typedef void  U_CALLCONV UMemFree   (const void *context, void *mem);
+typedef void  U_CALLCONV UMemFreeFn (const void *context, void *mem);
 
 /**
  *  Set the functions that ICU will use for memory allocation.
@@ -229,7 +229,7 @@ typedef void  U_CALLCONV UMemFree   (const void *context, void *mem);
  *  @system
  */  
 U_CAPI void U_EXPORT2 
-u_setMemoryFunctions(const void *context, UMemAlloc *a, UMemRealloc *r, UMemFree *f, 
+u_setMemoryFunctions(const void *context, UMemAllocFn *a, UMemReallocFn *r, UMemFreeFn *f, 
                     UErrorCode *status);
 
 #endif

@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include "unicode/utypes.h"
 #include "unicode/udata.h"
+#include "unicode/uclean.h"
 #include "ucol_imp.h"
 #include "genuca.h"
 #include "uoptions.h"
@@ -970,6 +971,15 @@ int main(int argc, char* argv[]) {
     char *basename = NULL;
     const char *copyright = NULL;
     uprv_memset(&UCAVersion, 0, 4);
+
+    /* Initialize ICU */
+    u_init(&status);
+    if (U_FAILURE(status)) {
+        fprintf(stderr, "%s: can not initialize ICU.  status = %s\n",
+            argv[0], u_errorName(status));
+        exit(1);
+    }
+    status = U_ZERO_ERROR;
 
     U_MAIN_INIT_ARGS(argc, argv);
 

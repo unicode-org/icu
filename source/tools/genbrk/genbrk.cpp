@@ -116,6 +116,15 @@ int  main(int argc, char **argv) {
     char *outFullFileName;
     int32_t outFullFileNameLen;
 
+    /* Initialize ICU */
+    u_init(&status);
+    if (U_FAILURE(status)) {
+        fprintf(stderr, "%s: can not initialize ICU.  status = %s\n",
+            argv[0], u_errorName(status));
+        exit(1);
+    }
+    status = U_ZERO_ERROR;
+
     //
     // Pick up and check the command line arguments,
     //    using the standard ICU tool utils option handling.

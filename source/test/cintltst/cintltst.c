@@ -70,6 +70,10 @@ int main(int argc, const char* const argv[])
     UResourceBundle *rb;
     UConverter *cnv;
 
+#ifdef XP_MAC_CONSOLE
+        argc = ccommand((char***)&argv);
+#endif
+
     /* Checkargs */
     for(i=1;i<argc;i++) {
         if(!strcmp(argv[i],"-w")) {
@@ -83,41 +87,30 @@ int main(int argc, const char* const argv[])
 #ifdef CTST_LEAK_CHECK
         ctst_init();
 #endif
-        /* try opening the data from dll instead of the dat file */
-        cnv = ucnv_open(TRY_CNV_1, &errorCode);
-        if(cnv != 0) {
-            /* ok */
-            ucnv_close(cnv);
-        } else {
+        /* Initialize ICU */
+        u_init(&errorCode);
+        if (U_FAILURE(errorCode)) {
+
             fprintf(stderr,
-                    "#### WARNING! The converter for " TRY_CNV_1 " cannot be loaded from data dll/so."
-                    "Proceeding to load data from dat file.\n");
+                    "#### WARNING! u_init() failed with status = \"%s\".\n"
+                    "Trying again with additional data locations...\n", u_errorName(errorCode));
             errorCode = U_ZERO_ERROR;
-
             ctest_setICU_DATA();
-        }
-
-        /* If no ICU_DATA environment was set, try to fake up one. */
-        /* fprintf(stderr, "u_getDataDirectory() = %s\n", u_getDataDirectory()); */
-
-#ifdef XP_MAC_CONSOLE
-        argc = ccommand((char***)&argv);
-#endif
-
-        cnv  = ucnv_open(NULL, &errorCode);
-        if(cnv != NULL) {
-            /* ok */
-            ucnv_close(cnv);
-        } else {
-            fprintf(stderr,
-                "*** %s! The default converter cannot be opened.\n"
-                "*** Check the ICU_DATA environment variable and \n"
-                "*** check that the data files are present.\n", warnOrErr);
-            if(warnOnMissingData == 0) {
-                fprintf(stderr, "*** Exitting.  Use the '-w' option if data files were\n*** purposely removed, to continue test anyway.\n");
-                return 1;
+            u_init(&errorCode);
+            if (U_FAILURE(errorCode)) {
+                fprintf(stderr,
+                    "*** %s! ICU Can not be initialized.\n"
+                    "*** Check the ICU_DATA environment variable and \n"
+                    "*** check that the data files are present.\n", warnOrErr, u_errorName(errorCode));
+                if(warnOnMissingData == 0) {
+                    fprintf(stderr, "*** Exiting.  Use the '-w' option if data files were\n*** purposely removed, to continue test anyway.\n");
+                    u_cleanup();
+                    return 1;
+                }
             }
         }
+
+
 
         /* try more data */
         cnv = ucnv_open(TRY_CNV_2, &errorCode);
@@ -131,6 +124,7 @@ int main(int argc, const char* const argv[])
                     "*** check that the data files are present.\n", warnOrErr);
             if(warnOnMissingData == 0) {
                 fprintf(stderr, "*** Exitting.  Use the '-w' option if data files were\n*** purposely removed, to continue test anyway.\n");
+                u_cleanup();
                 return 1;
             }
         }
@@ -146,6 +140,7 @@ int main(int argc, const char* const argv[])
                     "*** check that the data files are present.\n", warnOrErr);
             if(warnOnMissingData == 0) {
                 fprintf(stderr, "*** Exitting.  Use the '-w' option if data files were\n*** purposely removed, to continue test anyway.\n");
+                u_cleanup();
                 return 1;
             }
         }

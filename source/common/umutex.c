@@ -70,11 +70,11 @@ static int32_t gRecursionCount = 0;
  *  directly using the system (Posix or Windows) APIs.
  *    (declarations are in uclean.h)
  */
-static UMtxInit    *pMutexInit    = NULL;
-static UMtxFunc    *pMutexDestroy = NULL;
-static UMtxFunc    *pMutexLock    = NULL;
-static UMtxFunc    *pMutexUnlock  = NULL;
-static const void  *gMutexContext = NULL;
+static UMtxInitFn    *pMutexInitFn    = NULL;
+static UMtxFn        *pMutexDestroyFn = NULL;
+static UMtxFn        *pMutexLockFn    = NULL;
+static UMtxFn        *pMutexUnlockFn  = NULL;
+static const void    *gMutexContext = NULL;
 
 
 
@@ -97,8 +97,8 @@ umtx_lock(UMTX *mutex)
                               *   still do the lazy init to try to avoid a crash  */
     }
 
-    if (pMutexLock != NULL) {
-        (*pMutexLock)(gMutexContext, mutex);
+    if (pMutexLockFn != NULL) {
+        (*pMutexLockFn)(gMutexContext, mutex);
     } else {
 
 #if (ICU_USE_THREADS == 1)
@@ -144,8 +144,8 @@ umtx_unlock(UMTX* mutex)
     }
 #endif
 
-    if (pMutexUnlock) {
-        (*pMutexUnlock)(gMutexContext, mutex);
+    if (pMutexUnlockFn) {
+        (*pMutexUnlockFn)(gMutexContext, mutex);
     } else {
 #if (ICU_USE_THREADS==1)
 #if defined (WIN32)
@@ -163,9 +163,9 @@ umtx_unlock(UMTX* mutex)
  *   umtx_raw_init    Do the platform specific mutex allocation and initialization
  */
 static void umtx_raw_init(UMTX *mutex) {
-    if (pMutexInit != NULL) {
+    if (pMutexInitFn != NULL) {
         UErrorCode status = U_ZERO_ERROR;
-        (*pMutexInit)(gMutexContext, mutex, &status);
+        (*pMutexInitFn)(gMutexContext, mutex, &status);
         if (U_FAILURE(status)) {
             /* TODO:  how should errors here be handled? */
             return;
@@ -271,8 +271,8 @@ umtx_destroy(UMTX *mutex) {
         return;
     }
     
-    if (pMutexDestroy != NULL) {
-        (*pMutexDestroy)(gMutexContext, mutex);
+    if (pMutexDestroyFn != NULL) {
+        (*pMutexDestroyFn)(gMutexContext, mutex);
     } else {
 #if (ICU_USE_THREADS == 1)
 #if defined (WIN32)
@@ -297,7 +297,7 @@ umtx_destroy(UMTX *mutex) {
 
 
 U_CAPI void U_EXPORT2 
-u_setMutexFunctions(const void *context, UMtxInit *i, UMtxFunc *d, UMtxFunc *l, UMtxFunc *u,
+u_setMutexFunctions(const void *context, UMtxInitFn *i, UMtxFn *d, UMtxFn *l, UMtxFn *u,
                     UErrorCode *status) {
     if (U_FAILURE(*status)) {
         return;
@@ -315,22 +315,13 @@ u_setMutexFunctions(const void *context, UMtxInit *i, UMtxFunc *d, UMtxFunc *l, 
         return;
     }
 
-    /* Destroy the mutexes that C++ static initialization creates */
-    u_ICUStaticUnInitFunc();
-
     /* Swap in the mutex function pointers.  */
-    pMutexInit    = i;
-    pMutexDestroy = d;
-    pMutexLock    = l;
-    pMutexUnlock  = u;
-    gMutexContext = context;
+    pMutexInitFn    = i;
+    pMutexDestroyFn = d;
+    pMutexLockFn    = l;
+    pMutexUnlockFn  = u;
+    gMutexContext   = context;
 
-    /*
-     * Re-do the equivalent of ICU's static initialization,
-     *   which will recreate the default, resource bundle and converter mutexes.
-     *   TODO:  remove this when remove all ICU static init.
-     */
-    u_ICUStaticInitFunc();
 }
 
 
@@ -344,16 +335,16 @@ u_setMutexFunctions(const void *context, UMtxInit *i, UMtxFunc *d, UMtxFunc *l, 
  *----------------------------------------------------------------*/
 
 /* Pointers to user-supplied inc/dec functions.  Null if not funcs have been set.  */
-static UMtxAtomicF  *pIncF = NULL;
-static UMtxAtomicF  *pDecF = NULL;
+static UMtxAtomicFn  *pIncFn = NULL;
+static UMtxAtomicFn  *pDecFn = NULL;
 static void *gIncDecContext;
 
 
 U_CAPI int32_t U_EXPORT2
 umtx_atomic_inc(int32_t *p)  {
     int32_t retVal;
-    if (pIncF) {
-        retVal = (*pIncF)(gIncDecContext, p);
+    if (pIncFn) {
+        retVal = (*pIncFn)(gIncDecContext, p);
     } else {
         #if defined (WIN32) && ICU_USE_THREADS == 1
             retVal = InterlockedIncrement(p);
@@ -373,8 +364,8 @@ umtx_atomic_inc(int32_t *p)  {
 U_CAPI int32_t U_EXPORT2
 umtx_atomic_dec(int32_t *p) {
     int32_t retVal;
-    if (pDecF) {
-        retVal = (*pDecF)(gIncDecContext, p);
+    if (pDecFn) {
+        retVal = (*pDecFn)(gIncDecContext, p);
     } else {
         #if defined (WIN32) && ICU_USE_THREADS == 1
             retVal = InterlockedDecrement(p);
@@ -398,7 +389,7 @@ umtx_atomic_dec(int32_t *p) {
 
 
 U_CAPI void U_EXPORT2
-u_setAtomicIncDecFunctions(const void *context, UMtxAtomicF *ip, UMtxAtomicF *dp,
+u_setAtomicIncDecFunctions(const void *context, UMtxAtomicFn *ip, UMtxAtomicFn *dp,
                                 UErrorCode *status) {
     int32_t   testInt;
     if (U_FAILURE(*status)) {
@@ -415,8 +406,8 @@ u_setAtomicIncDecFunctions(const void *context, UMtxAtomicF *ip, UMtxAtomicF *dp
         return;
     }
 
-    pIncF = ip;
-    pDecF = dp;
+    pIncFn = ip;
+    pDecFn = dp;
 
     testInt = 0;
     U_ASSERT(umtx_atomic_inc(&testInt) == 1);     /* Sanity Check.    Do the functions work at all? */
@@ -434,14 +425,14 @@ u_setAtomicIncDecFunctions(const void *context, UMtxAtomicF *ip, UMtxAtomicF *dp
  */
 U_CFUNC UBool umtx_cleanup(void) {
     umtx_destroy(NULL);
-    pMutexInit    = NULL;
-    pMutexDestroy = NULL;
-    pMutexLock    = NULL;
-    pMutexUnlock  = NULL;
-    gMutexContext = NULL;
+    pMutexInitFn    = NULL;
+    pMutexDestroyFn = NULL;
+    pMutexLockFn    = NULL;
+    pMutexUnlockFn  = NULL;
+    gMutexContext   = NULL;
 
-    pIncF         = NULL;
-    pDecF         = NULL;
+    pIncFn         = NULL;
+    pDecFn         = NULL;
 
     return TRUE;
 }
