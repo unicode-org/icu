@@ -54,8 +54,9 @@ supplied
 file, or from its standard output. It packages all the files from
 the list that are not bigger than
 .I maxsize
-bytes. Files that exceed this limit are quietly ignored, even in
-verbose mode.
+bytes, except if
+.I maxsize
+is 0, which indicates that there is no size limit on files.
 .SH OPTIONS
 .TP
 .BR "\-h\fP, \fB\-?\fP, \fB\-\-help"
