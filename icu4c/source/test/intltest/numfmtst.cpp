@@ -66,6 +66,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
 		CASE(24,TestInt64);
 
         CASE(25,TestPerMill);
+        CASE(26,TestIllegalPatterns);
 
         default: name = ""; break;
     }
@@ -1026,13 +1027,13 @@ void NumberFormatTest::TestPad(void) {
            int32_t(0), "^^^^0", status);
     expect2(new DecimalFormat("*^##.##", US, status),
            -1.3, "^-1.3", status);
-    expect2(new DecimalFormat("##0.0####E0*_ g-m/s^2", US, status),
+    expect2(new DecimalFormat("##0.0####E0*_ 'g-m/s^2'", US, status),
            int32_t(0), "0.0E0______ g-m/s^2", status);
-    expect(new DecimalFormat("##0.0####E0*_ g-m/s^2", US, status),
+    expect(new DecimalFormat("##0.0####E0*_ 'g-m/s^2'", US, status),
            1.0/3, "333.333E-3_ g-m/s^2", status);
-    expect2(new DecimalFormat("##0.0####*_ g-m/s^2", US, status),
+    expect2(new DecimalFormat("##0.0####*_ 'g-m/s^2'", US, status),
            int32_t(0), "0.0______ g-m/s^2", status);
-    expect(new DecimalFormat("##0.0####*_ g-m/s^2", US, status),
+    expect(new DecimalFormat("##0.0####*_ 'g-m/s^2'", US, status),
            1.0/3, "0.33333__ g-m/s^2", status);
 
     // Test padding before a sign
@@ -1218,16 +1219,16 @@ void NumberFormatTest::TestSurrogateSupport(void) {
     expect2(new DecimalFormat("##.##", custom, status),
            -1.3, " minus 1decimal3", status);
     status = U_ZERO_ERROR;
-    expect2(new DecimalFormat("##0.0####E0 g'-'m/s^2", custom, status),
+    expect2(new DecimalFormat("##0.0####E0 'g-m/s^2'", custom, status),
            int32_t(0), "0decimal0exponent0 g-m/s^2", status);
     status = U_ZERO_ERROR;
-    expect(new DecimalFormat("##0.0####E0 g'-'m/s^2", custom, status),
+    expect(new DecimalFormat("##0.0####E0 'g-m/s^2'", custom, status),
            1.0/3, "333decimal333exponent minus 3 g-m/s^2", status);
     status = U_ZERO_ERROR;
-    expect2(new DecimalFormat("##0.0#### g'-'m/s^2", custom, status),
+    expect2(new DecimalFormat("##0.0#### 'g-m/s^2'", custom, status),
            int32_t(0), "0decimal0 g-m/s^2", status);
     status = U_ZERO_ERROR;
-    expect(new DecimalFormat("##0.0#### g'-'m/s^2", custom, status),
+    expect(new DecimalFormat("##0.0#### 'g-m/s^2'", custom, status),
            1.0/3, "0decimal33333 g-m/s^2", status);
 
     UnicodeString zero((UChar32)0x10000);
@@ -1488,6 +1489,36 @@ void NumberFormatTest::TestPerMill() {
     str.truncate(0);
     assertEquals("0.4857 x ###.###m",
                  "485.7m", fmt2.format(0.4857, str));
+}
+
+/**
+ * Generic test for patterns that should be legal/illegal.
+ */
+void NumberFormatTest::TestIllegalPatterns() {
+    // Test cases:
+    // Prefix with "-:" for illegal patterns
+    // Prefix with "+:" for legal patterns
+    const char* DATA[] = {
+        // Unquoted special characters in the suffix are illegal
+        "-:000.000|###",
+        "+:000.000'|###'",
+        0
+    };
+    for (int32_t i=0; DATA[i]; ++i) {
+        const char* pat=DATA[i];
+        UBool valid = (*pat) == '+';
+        pat += 2;
+        UErrorCode ec = U_ZERO_ERROR;
+        DecimalFormat fmt(pat, ec); // locale doesn't matter here
+        if (U_SUCCESS(ec) == valid) {
+            logln("Ok: pattern \"%s\": %s",
+                  pat, u_errorName(ec));
+        } else {
+            errln("FAIL: pattern \"%s\" should have %s; got %s",
+                  pat, (valid?"succeeded":"failed"),
+                  u_errorName(ec));
+        }
+    }
 }
 
 //----------------------------------------------------------------------

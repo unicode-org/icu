@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberFormatTest.java,v $ 
- * $Date: 2004/02/12 01:10:19 $ 
- * $Revision: 1.22 $
+ * $Date: 2004/02/20 19:40:31 $ 
+ * $Revision: 1.23 $
  *
  *****************************************************************************************
  */
@@ -336,7 +336,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         double aNumber = 0l;
         try {
             aNumber = format.parse(arg).doubleValue();
-        } catch (java.text.ParseException e) {
+        } catch (ParseException e) {
             System.out.println(e);
         }
         logln("parse(" + arg + ") = " + aNumber);
@@ -573,16 +573,16 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         expect2(new DecimalFormat("*^##.##", US), 0, "^^^^0");
         expect2(new DecimalFormat("*^##.##", US), -1.3, "^-1.3");
         expect2(
-            new DecimalFormat("##0.0####E0*_ g-m/s^2", US), 
+            new DecimalFormat("##0.0####E0*_ 'g-m/s^2'", US), 
             0, 
             "0.0E0______ g-m/s^2"); 
         expect(
-            new DecimalFormat("##0.0####E0*_ g-m/s^2", US), 
+            new DecimalFormat("##0.0####E0*_ 'g-m/s^2'", US), 
             1.0 / 3, 
             "333.333E-3_ g-m/s^2"); 
-        expect2(new DecimalFormat("##0.0####*_ g-m/s^2", US), 0, "0.0______ g-m/s^2");
+        expect2(new DecimalFormat("##0.0####*_ 'g-m/s^2'", US), 0, "0.0______ g-m/s^2");
         expect(
-            new DecimalFormat("##0.0####*_ g-m/s^2", US), 
+            new DecimalFormat("##0.0####*_ 'g-m/s^2'", US), 
             1.0 / 3, 
             "0.33333__ g-m/s^2"); 
     
@@ -941,6 +941,36 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                      "485.7m", fmt2.format(0.4857));
     }
 
+    public void TestIllegalPatterns() {
+        // Test cases:
+        // Prefix with "-:" for illegal patterns
+        // Prefix with "+:" for legal patterns
+        String DATA[] = {
+            // Unquoted special characters in the suffix are illegal
+            "-:000.000|###",
+            "+:000.000'|###'",
+        };
+        for (int i=0; i<DATA.length; ++i) {
+            String pat=DATA[i];
+            boolean valid = pat.charAt(0) == '+';
+            pat = pat.substring(2);
+            IllegalArgumentException e = null;
+            try {
+                // locale doesn't matter here
+                new DecimalFormat(pat);
+            } catch (IllegalArgumentException e1) {
+                e = e1;
+            }
+            String msg = (e==null) ? "success" : e.getMessage();
+            if ((e==null) == valid) {
+                logln("Ok: pattern \"" + pat + "\": " + msg);
+            } else {
+                errln("FAIL: pattern \"" + pat + "\" should have " +
+                      (valid?"succeeded":"failed") + "; got " + msg);
+            }
+        }
+    }
+
     //------------------------------------------------------------------
     // Support methods
     //------------------------------------------------------------------
@@ -984,7 +1014,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                         errln("FAIL \"" + exp + "\" => " + n2 +
                               " => \"" + saw2 + '"');
                     }
-                } catch (java.text.ParseException e) {
+                } catch (ParseException e) {
                     errln(e.getMessage());
                     return;
                 }
@@ -1016,7 +1046,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         Number num = null;
         try {
             num = (Number) fmt.parse(str);
-        } catch (java.text.ParseException e) {
+        } catch (ParseException e) {
             errln(e.getMessage());
             return;
         }

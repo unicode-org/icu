@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/BigNumberFormatTest.java,v $ 
- * $Date: 2003/06/03 18:49:29 $ 
- * $Revision: 1.16 $
+ * $Date: 2004/02/20 19:40:16 $ 
+ * $Revision: 1.17 $
  *
  *****************************************************************************************
  */
@@ -264,12 +264,12 @@ public class BigNumberFormatTest extends TestFmwk {
                               new Double(-1.3), "^-1.3",
                             }
                );
-        expect(new DecimalFormat("##0.0####E0*_ g-m/s^2", US),
+        expect(new DecimalFormat("##0.0####E0*_ 'g-m/s^2'", US),
                new Object[] { new Long(0),       "0.0E0______ g-m/s^2",
                               new Double(1.0/3), "333.333E-3_ g-m/s^2",
                             }
                );
-        expect(new DecimalFormat("##0.0####*_ g-m/s^2", US),
+        expect(new DecimalFormat("##0.0####*_ 'g-m/s^2'", US),
                new Object[] { new Long(0),       "0.0______ g-m/s^2",
                               new Double(1.0/3), "0.33333__ g-m/s^2",
                             }
