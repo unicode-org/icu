@@ -43,7 +43,8 @@ copyFile(FILE *in, int32_t offset, int32_t size, const char *name) {
     int32_t length;
 
     if(0!=fseek(in, offset, SEEK_SET)) {
-        fprintf(stderr, "error: cannot seek to position %ld for file \"%s\"\n", offset, name);
+        fprintf(stderr, "error: cannot seek to position %ld for file \"%s\"\n",
+            (long)offset, name);
         return 4;
     }
     out=fopen(name, "wb");
@@ -164,9 +165,9 @@ main(int argc, const char *argv[]) {
     base=buffer+baseOffset;
     p=(int32_t *)base;
     count=*p++;
-    printf("files[%ld]\n", count);
+    printf("files[%ld]\n", (long)count);
     for(i=0; i<count; ++i) {
-        printf("file[%ld]=%s\n", i, base+*p);
+        printf("file[%ld]=%s\n", (long)i, base+*p);
         p+=2;
     }
     puts("endfiles");
