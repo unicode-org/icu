@@ -21,10 +21,10 @@ nn{
         4,
     }
     DateTimePatterns {
-        "'kl. 'HH.mm:ss z",
-        "HH:mm:ss z",
-        "HH:mm:ss",
-        "HH:mm",
+        "'kl. 'HH.mm.ss z",
+        "HH.mm.ss z",
+        "HH.mm.ss",
+        "HH.mm",
         "EEEE d. MMMM yyyy",
         "d. MMMM yyyy",
         "d. MMM yyyy",
@@ -37,18 +37,18 @@ nn{
         no { "Norsk" }
     }
     MonthAbbreviations {
-        "jan",
-        "feb",
-        "mar",
-        "apr",
-        "mai",
-        "jun",
-        "jul",
-        "aug",
-        "sep",
-        "okt",
-        "nov",
-        "des",
+        "jan.",
+        "feb.",
+        "mar.",
+        "apr.",
+        "mai.",
+        "jun.",
+        "jul.",
+        "aug.",
+        "sep.",
+        "okt.",
+        "nov.",
+        "des.",
     }
     MonthNames {
         "januar",
@@ -94,13 +94,13 @@ nn{
         }
     }
     DayAbbreviations {
-        "su",
-        "m\u00E5",
-        "ty",
-        "on",
-        "to",
-        "fr",
-        "lau",
+        "su.",
+        "m\u00E5.",
+        "ty.",
+        "on.",
+        "to.",
+        "fr.",
+        "la.",
     }
     DayNames {
         "sundag",

@@ -253,10 +253,10 @@ nb {
         4,
     }
     DateTimePatterns {
-        "'kl. 'HH.mm:ss z",
-        "HH:mm:ss z",
-        "HH:mm:ss",
-        "HH:mm",
+        "'kl. 'HH.mm.ss z",
+        "HH.mm.ss z",
+        "HH.mm.ss",
+        "HH.mm",
         "EEEE d. MMMM yyyy",
         "d. MMMM yyyy",
         "d. MMM yyyy",
@@ -264,13 +264,13 @@ nb {
         "{1} {0}",
     }
     DayAbbreviations {
-        "s\u00F8",
-        "ma",
-        "ti",
-        "on",
-        "to",
-        "fr",
-        "l\u00F8",
+        "s\u00F8.",
+        "ma.",
+        "ti.",
+        "on.",
+        "to.",
+        "fr.",
+        "l\u00F8.",
     }
     DayNames {
         "s\u00F8ndag",
@@ -318,18 +318,18 @@ nb {
         //zh_tw { "Kinesisk (tradisjonell)" }
     }
     MonthAbbreviations {
-        "jan",
-        "feb",
-        "mar",
-        "apr",
-        "mai",
-        "jun",
-        "jul",
-        "aug",
-        "sep",
-        "okt",
-        "nov",
-        "des",
+        "jan.",
+        "feb.",
+        "mar.",
+        "apr.",
+        "mai.",
+        "jun.",
+        "jul.",
+        "aug.",
+        "sep.",
+        "okt.",
+        "nov.",
+        "des.",
     }
     MonthNames {
         "januar",
