@@ -17,6 +17,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
+#include "unicode/uiter.h"
 #include "unicode/ustring.h"
 #include "unicode/putil.h"
 #include "unicode/ucnv.h"
@@ -822,9 +823,111 @@ uprv_strCompare(const UChar *s1, int32_t length1,
         }
     }
 
-    /* now c1 and c2 are in UTF-32-compatible order */
+    /* now c1 and c2 are in the requested (code unit or code point) order */
     return (int32_t)c1-(int32_t)c2;
 }
+
+/*
+ * Compare two strings as presented by UCharIterators.
+ * Use code unit or code point order.
+ * When the function returns, it is undefined where the iterators
+ * have stopped.
+ */
+U_CAPI int32_t U_EXPORT2
+u_strCompareIter(UCharIterator *iter1, UCharIterator *iter2, UBool codePointOrder) {
+    UChar32 c1, c2;
+
+    /* argument checking */
+    if(iter1==NULL || iter2==NULL) {
+        return 0; /* bad arguments */
+    }
+    if(iter1==iter2) {
+        return 0; /* identical iterators */
+    }
+
+    /* reset iterators to start? */
+    iter1->move(iter1, 0, UITER_START);
+    iter2->move(iter2, 0, UITER_START);
+
+    /* compare identical prefixes - they do not need to be fixed up */
+    for(;;) {
+        c1=iter1->next(iter1);
+        c2=iter2->next(iter2);
+        if(c1!=c2) {
+            break;
+        }
+        if(c1==-1) {
+            return 0;
+        }
+    }
+
+    /* if both values are in or above the surrogate range, fix them up */
+    if(c1>=0xd800 && c2>=0xd800 && codePointOrder) {
+        /* subtract 0x2800 from BMP code points to make them smaller than supplementary ones */
+        if(
+            (c1<=0xdbff && UTF_IS_TRAIL(iter1->current(iter1))) ||
+            (UTF_IS_TRAIL(c1) && (iter1->previous(iter1), UTF_IS_LEAD(iter1->previous(iter1))))
+        ) {
+            /* part of a surrogate pair, leave >=d800 */
+        } else {
+            /* BMP code point - may be surrogate code point - make <d800 */
+            c1-=0x2800;
+        }
+
+        if(
+            (c2<=0xdbff && UTF_IS_TRAIL(iter2->current(iter2))) ||
+            (UTF_IS_TRAIL(c2) && (iter2->previous(iter2), UTF_IS_LEAD(iter2->previous(iter2))))
+        ) {
+            /* part of a surrogate pair, leave >=d800 */
+        } else {
+            /* BMP code point - may be surrogate code point - make <d800 */
+            c2-=0x2800;
+        }
+    }
+
+    /* now c1 and c2 are in the requested (code unit or code point) order */
+    return (int32_t)c1-(int32_t)c2;
+}
+
+#if 0
+/*
+ * u_strCompareIter() does not leave the iterators _on_ the different units.
+ * This is possible but would cost a few extra indirect function calls to back
+ * up if the last unit (c1 or c2 respectively) was >=0.
+ *
+ * Consistently leaving them _behind_ the different units is not an option
+ * because the current "unit" is the end of the string if that is reached,
+ * and in such a case the iterator does not move.
+ * For example, when comparing "ab" with "abc", both iterators rest _on_ the end
+ * of their strings. Calling previous() on each does not move them to where
+ * the comparison fails.
+ *
+ * So the simplest semantics is to not define where the iterators end up.
+ *
+ * The following fragment is part of what would need to be done for backing up.
+ */
+void fragment {
+        /* iff a surrogate is part of a surrogate pair, leave >=d800 */
+        if(c1<=0xdbff) {
+            if(!UTF_IS_TRAIL(iter1->current(iter1))) {
+                /* lead surrogate code point - make <d800 */
+                c1-=0x2800;
+            }
+        } else if(c1<=0xdfff) {
+            int32_t index=iter1->getIndex(iter1, UITER_CURRENT);
+            iter1->previous(iter1); /* ==c1 */
+            if(!UTF_IS_LEAD(iter1->previous(iter1))) {
+                /* trail surrogate code point - make <d800 */
+                c1-=0x2800;
+            }
+            /* go back to behind where the difference is */
+            iter1->move(iter1, index, UITER_ZERO);
+        } else /* 0xe000<=c1<=0xffff */ {
+            /* BMP code point - make <d800 */
+            c1-=0x2800;
+        }
+}
+#endif
 
 U_CAPI int32_t U_EXPORT2
 u_strCompare(const UChar *s1, int32_t length1,
