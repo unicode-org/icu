@@ -18,7 +18,8 @@ const char* TitlecaseTransliterator::_ID = "Any-Title";
 
 TitlecaseTransliterator::TitlecaseTransliterator(UnicodeFilter* adoptedFilter) :
     Transliterator(_ID, adoptedFilter) {
-    setMaximumContextLength(1);
+    // Need to look back 2 characters in the case of "can't"
+    setMaximumContextLength(2);
 }
 
 /**
@@ -63,12 +64,23 @@ void TitlecaseTransliterator::handleTransliterate(
     // don't filter characters in the range contextStart..start-1
     // (the left context).
 
+    // NOTE: This method contains some special case code to handle
+    // apostrophes between alpha characters.  We want to have
+    // "can't" => "Can't" (not "Can'T").  This may be incorrect
+    // for some locales, e.g., "l'arbre" => "L'Arbre" (?).
+    // TODO: Revisit this.
+
     // Determine if there is a preceding letter character in the
     // left context (if there is any left context).
     UBool wasLastCharALetter = FALSE;
     if (offsets.start > offsets.contextStart) {
-        wasLastCharALetter =
-            u_isalpha(text.charAt(offsets.start - 1));
+        UChar c = text.charAt(offsets.start - 1);
+        // Handle the case "Can'|t", where the | marks the context
+        // boundary.  We only handle a single apostrophe.
+        if (c == 0x0027 /*'*/ && (offsets.start-2) >= offsets.contextStart) {
+            c = text.charAt(offsets.start - 2);
+        }
+        wasLastCharALetter = u_isalpha(c);
     }
 
     // The buffer used to batch up changes to be made
@@ -116,6 +128,9 @@ void TitlecaseTransliterator::handleTransliterate(
                 buffer.append(newChar);
             }
             wasLastCharALetter = TRUE;
+        } else if (c == 0x0027 /*'*/ && wasLastCharALetter) {
+            // Ignore a single embedded apostrophe, so that "can't" =>
+            // "Can't", not "Can'T".
         } else {
             wasLastCharALetter = FALSE;
         }
