@@ -203,6 +203,7 @@ pkgdatadir = $(datadir)/$(PACKAGE)$(ICULIBSUFFIX)/$(VERSION)
 pkglibdir = $(libdir)/$(PACKAGE)$(ICULIBSUFFIX)/$(VERSION)
 
 # The basename of the ICU data file (i.e. icudt21b )
+ICUDATA_CHAR = @ICUDATA_CHAR@
 ICUDATA_NAME = icudt@LIB_VERSION_MAJOR@@ICUDATA_CHAR@
 
 # Defaults for pkgdata's mode and directories
