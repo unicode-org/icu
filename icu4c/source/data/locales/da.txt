@@ -116,7 +116,7 @@ da {
         IE { "Irland" }
         //IL { "Israel" }
         IN { "Indien" }
-        //IO { "British Indian Ocean Territory" }
+        IO { "Det Britiske Territorium i Det Indiske Ocean" }
         IQ { "Irak" }
         //IR { "Den Islamiske Republik Iran" }
         IS { "Island" }
@@ -220,7 +220,7 @@ da {
         //SZ { "Swaziland" }
         //TC { "Turks and Caicos Islands" }
         TD { "Tchad" }
-        //TF { "French Southern Territories" }
+        TF { "Franske Besiddelser i Det Sydlige Indiske Ocean" }
         //TG { "Togo" }
         //TH { "Thailand" }
         TJ { "Tadsjikistan" }
@@ -236,7 +236,7 @@ da {
         //TZ { "Tanzania" }
         //UA { "Ukraine" }
         //UG { "Uganda" }
-        //UM { "U.S. Minor Outlying Islands" }
+        UM { "De Mindre Amerikanske Overs\u00f8iske \u00d8er" }
         US { "USA" } // This is a bad translation!
         //UY { "Uruguay" }
         UZ { "Usbekistan" }
@@ -299,9 +299,10 @@ da {
     }
     Languages {
         Fallback{ "en"}
+        am { "Amharisk" }
         ar { "Arabisk" }
         az { "Aserbajdsjan" }
-        ba { "Baskisk" }
+		be { "Hviderussisk" }
         bg { "Bulgarsk" }
         bn { "Bengalsk" }
         ca { "Katalansk" }
@@ -313,34 +314,51 @@ da {
         en { "Engelsk" }
         es { "Spansk" }
         et { "Estisk" }
+        eu { "Baskisk" }
+        fa { "Persisk" }
         fi { "Finsk" }
+        fo { "F\u00e6r\u00f8sk" }
         fr { "Fransk" }
+        ga { "Irsk" }
+        gl { "Galicisk" }
+        gu { "Gujaratisk" }
+        haw { "Hawaii" }
         he { "Hebraisk" }
         hr { "Kroatisk" }
         hu { "Ungarsk" }
+        hy { "Armensk" }
         id { "Indonesisk" }
+        is { "Islandsk" }
         it { "Italiensk" }
         ja { "Japansk" }
         ka { "Georgisk" }
         kk { "Kasakhisk" }
         ko { "Koreansk" }
+        kw { "Cornisk" }
         ku { "Kurdisk" }
         lt { "Litauisk" }
         lv { "Lettisk" }
         mk { "Makedonsk" }
+        mr { "Marathisk" }
+        mt { "Maltesisk" }
         nl { "Hollandsk" }
         no { "Norsk" }
         pl { "Polsk" }
         pt { "Portugisisk" }
         ro { "Rum\u00E6nsk" }
         ru { "Russisk" }
+        sh { "Serbokroatisk" }
         sk { "Slovakisk" }
         sl { "Slovensk" }
+        so { "Somalisk" }
         sq { "Albansk" }
         sr { "Serbisk" }
         sv { "Svensk" }
+        ta { "Tamilsk" }
+        th { "Thailandsk" }
         tr { "Tyrkisk" }
         uk { "Ukrainsk" }
+        vi { "Vietnamesisk" }
         zh { "Kinesisk" }
         //zh_cn { "Kinesisk (Forkortet)" }
         //zh_tw { "Kinesisk (Uforkortet)" }
