@@ -19,6 +19,7 @@
 #include "unicode/parseerr.h"
 #include "hash.h"
 #include "unicode/unicode.h"
+#include "unicode/putil.h"
 
 // Operators
 #define VARIABLE_DEF_OP ((UChar)0x003D) /*=*/

@@ -26,6 +26,7 @@
 #include "ustr.h"
 #include "reslist.h"
 #include "unicode/ustring.h"
+#include "unicode/putil.h"
 
 U_CAPI const UChar * U_EXPORT2 ucol_getDefaultRulesArray(uint32_t *size);
 

@@ -16,6 +16,7 @@
  */
    
 #include <stdio.h>
+#include "unicode/putil.h"
 #include "ucmp16.h"
 #include "ucmp8.h"
 #include "ucnv_io.h"
