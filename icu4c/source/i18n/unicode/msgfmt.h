@@ -1,5 +1,5 @@
 /*
-* Copyright (C) {1997-2001}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) {1997-2003}, International Business Machines Corporation and others. All Rights Reserved.
 ********************************************************************************
 *
 * File MSGFMT.H
@@ -13,9 +13,6 @@
 *   08/19/2002  srl         Removing Javaisms
 ********************************************************************************
 */
-// *****************************************************************************
-// This file was generated from the java source file MessageFormat.java
-// *****************************************************************************
 
 #ifndef MSGFMT_H
 #define MSGFMT_H
@@ -280,7 +277,7 @@ public:
      */
     MessageFormat(const UnicodeString& pattern,
                   const Locale& newLocale,
-                        UErrorCode& success);
+                        UErrorCode& status);
     /**
      * Constructs a new MessageFormat using the given pattern and locale.
      * @param pattern   Pattern used to construct object.
@@ -294,7 +291,7 @@ public:
     MessageFormat(const UnicodeString& pattern,
                   const Locale& newLocale,
                   UParseError& parseError,
-                  UErrorCode& success);
+                  UErrorCode& status);
     /**
      * Constructs a new MessageFormat from an existing one.
      * @stable ICU 2.0
@@ -469,7 +466,7 @@ public:
      * using the given pattern.
      *
      * @param pattern   The pattern.
-     * @param source    An array of objects to be formatted.
+     * @param arguments An array of objects to be formatted.
      * @param count     The number of elements of 'source'.
      * @param appendTo  Output parameter to receive result.
      *                  Result is appended to existing contents.
