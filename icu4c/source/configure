@@ -4061,7 +4061,7 @@ case "${host}" in
 	*-*-os400*)	platform=OS400
 			ICUDATA_CHAR="e" ;;
 	*-apple-darwin*|*-apple-rhapsody*)	platform=U_DARWIN ;;
-	*-*-cygwin*)	platform=U_CYGWIN ;;
+	*-*-cygwin*|*-*-mingw*)	platform=U_CYGWIN ;;
 	*) 		platform=U_UNKNOWN_PLATFORM ;;
 esac
 
@@ -4095,7 +4095,8 @@ case "${host}" in
 			  tools/gencmn/gencmn tools/gencmn/decmn \
 			  tools/gencnval/gencnval tools/gennorm/gennorm \
 			  tools/gennames/gennames tools/gentest/gentest \
-			  tools/pkgdata/pkgdata tools/genprops/genprops
+			  tools/pkgdata/pkgdata tools/genprops/genprops \
+			  tools/pkgdata/pkgdata tools/genidna/genidna
 			do
 			  if test -f $file.c; then
 			    mv $file.c $file.cpp
@@ -4264,11 +4265,13 @@ trap 'rm -fr `echo "README icudefs.mk \
 		tools/genprops/Makefile \
 		tools/genpname/Makefile \
 		tools/genbrk/Makefile \
+		tools/genidna/Makefile \
 		tools/dumpce/Makefile \
 		test/Makefile test/testdata/Makefile test/intltest/Makefile \
                 test/cintltst/Makefile test/iotest/Makefile \
 		test/ieeetest/Makefile \
 		test/collperf/Makefile \
+		test/normperf/Makefile \
 		test/thaitest/Makefile \
 		test/letest/Makefile \
 		test/threadtest/Makefile \
@@ -4457,11 +4460,13 @@ CONFIG_FILES=\${CONFIG_FILES-"README icudefs.mk \
 		tools/genprops/Makefile \
 		tools/genpname/Makefile \
 		tools/genbrk/Makefile \
+		tools/genidna/Makefile \
 		tools/dumpce/Makefile \
 		test/Makefile test/testdata/Makefile test/intltest/Makefile \
                 test/cintltst/Makefile test/iotest/Makefile \
 		test/ieeetest/Makefile \
 		test/collperf/Makefile \
+		test/normperf/Makefile \
 		test/thaitest/Makefile \
 		test/letest/Makefile \
 		test/threadtest/Makefile \
