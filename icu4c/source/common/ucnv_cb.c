@@ -33,8 +33,9 @@ void ucnv_cbFromUWriteBytes (UConverterFromUnicodeArgs *args,
                        int32_t offsetIndex,
                        UErrorCode * err)
 {
-  uint32_t togo, toerr;
-  uint32_t i;
+  int32_t togo;
+  int8_t toerr;
+  int32_t i;
 
   if((args->targetLimit - args->target) >= length) /* If the buffer fits.. */
   {
@@ -55,7 +56,7 @@ void ucnv_cbFromUWriteBytes (UConverterFromUnicodeArgs *args,
     uprv_memcpy(args->target, source, togo);
     args->target += togo;
     
-    if(args->offsets) 
+    if(args->offsets)
     {
       for(i=0;i<togo;i++)
       {
@@ -65,7 +66,7 @@ void ucnv_cbFromUWriteBytes (UConverterFromUnicodeArgs *args,
 
     /* Now, copy the remainder into the errbuff */
     source += togo;
-    toerr = length - togo;
+    toerr = (int8_t)(length - togo);
     
     uprv_memcpy(args->converter->charErrorBuffer + 
                 args->converter->charErrorBufferLength, 
@@ -102,7 +103,7 @@ void ucnv_cbFromUWriteUChars(UConverterFromUnicodeArgs *args,
   {
     return;
   }
-  
+
   oldTarget = args->target;
 
   ucnv_fromUnicode(args->converter,
@@ -113,7 +114,7 @@ void ucnv_cbFromUWriteUChars(UConverterFromUnicodeArgs *args,
                    NULL, /* no offsets */
                    FALSE, /* no flush */
                    err);
-  
+
   if(args->offsets) 
   {
     while (args->target != oldTarget)  /* if it moved at all.. */
@@ -141,10 +142,10 @@ void ucnv_cbFromUWriteUChars(UConverterFromUnicodeArgs *args,
     errBuffLen  = args->converter->charErrorBufferLength;
 
     /* start the new target at the first free slot in the errbuff.. */
-    newTarget = args->converter->charErrorBuffer + errBuffLen;
+    newTarget = (char *)(args->converter->charErrorBuffer + errBuffLen);
       
-    newTargetLimit = args->converter->charErrorBuffer +
-      sizeof(args->converter->charErrorBuffer);
+    newTargetLimit = (char *)(args->converter->charErrorBuffer +
+      sizeof(args->converter->charErrorBuffer));
 
     if(newTarget >= newTargetLimit) 
     {
@@ -171,8 +172,8 @@ void ucnv_cbFromUWriteUChars(UConverterFromUnicodeArgs *args,
     /* We can go ahead and overwrite the  length here. We know just how
        to recalculate it. */
 
-    args->converter->charErrorBufferLength  = 
-      newTarget - (char*)args->converter->charErrorBuffer;
+    args->converter->charErrorBufferLength = (int8_t)(
+      newTarget - (char*)args->converter->charErrorBuffer);
 
     if((newTarget >= newTargetLimit) || (err2 == U_INDEX_OUTOFBOUNDS_ERROR))
     {
@@ -246,8 +247,9 @@ void ucnv_cbToUWriteUChars (UConverterToUnicodeArgs *args,
                             int32_t offsetIndex,
                             UErrorCode * err)
 {
-  uint32_t togo, toerr;
-  uint32_t i;
+  int32_t togo;
+  int8_t toerr;
+  int32_t i;
   
   if(U_FAILURE(*err))
   {
@@ -284,7 +286,7 @@ void ucnv_cbToUWriteUChars (UConverterToUnicodeArgs *args,
 
     /* Now, copy the remainder into the errbuff */
     source += togo;
-    toerr = length - togo;
+    toerr = (int8_t)(length - togo);
     
     uprv_memcpy(args->converter->UCharErrorBuffer + 
                 args->converter->UCharErrorBufferLength, 
