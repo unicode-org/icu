@@ -41,12 +41,11 @@ RESDIR=.  #$(ICUP)\..\icuapps\uconv\$(RESNAME)
 RESFILES=resfiles.mk
 ICUDATA=$(ICUP)\data
 
-DLL_OUTPUT=$(ICUP)\source\data
+DLL_OUTPUT=.\$(CFG)
 
 ICD=$(ICUDATA)^\
 DATA_PATH=$(ICUP)\data^\
-TEST=..\source\test\testdata^\
-ICUTOOLS=$(ICUP)\source\tools
+ICUTOOLS=$(ICUP)\bin
 
 # We have to prepare params for pkgdata - to help it find the tools
 !IF "$(CFG)" == "Debug" || "$(CFG)" == "debug"
@@ -83,10 +82,12 @@ ALL : GODATA  "$(DLL_OUTPUT)\$(RESNAME).dll" GOBACK #$(RESNAME).dat
 #invoke pkgdata
 "$(DLL_OUTPUT)\$(RESNAME).dll" :  $(RB_FILES) $(RESFILES)
 	@echo Building $(RESNAME)
- 	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -v -m dll -c -p $(RESNAME) -O "$(PKGOPT)" -d "$(DLL_OUTPUT)" -s "$(RESDIR)" <<pkgdatain.txt
+	@"$(ICUTOOLS)\pkgdata" -v -m dll -c -p $(RESNAME) -O "$(PKGOPT)" -d "$(DLL_OUTPUT)" -s "$(RESDIR)" <<pkgdatain.txt
 $(RB_FILES:.res =.res
 )
 <<KEEP
+	@echo Copying "$(DLL_OUTPUT)\$(RESNAME).dll to $(ICUP)\bin
+	@copy "$(DLL_OUTPUT)\$(RESNAME).dll" $(ICUP)\bin
 
 # utility to send us to the right dir
 GODATA :
@@ -101,27 +102,16 @@ CLEAN :
 	@cd "$(RESDIR)"
 	-@erase "*.cnv"
 	-@erase "*.res"
-	-@erase "$(TRANS)*.res"
-	-@erase "uprops*.*"
-	-@erase "unames*.*"
 	-@erase "cnvalias*.*"
-	-@erase "tz*.*"
-	-@erase "ibm*_cnv.c"
-	-@erase "*_brk.c"
 	-@erase "icudata.*"
 	-@erase "*.obj"
-	-@erase "test*.*"
 	-@erase "base*.*"
-	@cd $(TEST)
-	-@erase "*.res"
 	@cd "$(ICUTOOLS)"
 
 # Inference rule for creating resource bundles
 .txt.res:
 	@echo Making Resource Bundle files
-	"$(ICUTOOLS)\genrb\$(CFG)\genrb" -s$(@D) -d$(@D) $(?F)
+	"$(ICUTOOLS)\genrb" -s$(@D) -d$(@D) $(?F)
 
 
-
-$(RESSRC) : {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe
-
+$(RESSRC) : {"$(ICUTOOLS)"}genrb.exe

@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /O2 /I "..\..\icu\include" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
+# ADD CPP /nologo /W3 /GX /O2 /I "..\..\icu\include" /I "..\..\common" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -56,8 +56,8 @@ InputPath=.\Release\uconv.exe
 InputName=uconv
 SOURCE="$(InputPath)"
 
-"..\..\icu\bin\$(InputName)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\..\icu\bin
+"..\..\..\..\icu\bin\$(InputName)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\..\..\..\icu\bin
 
 # End Custom Build
 
@@ -75,7 +75,7 @@ SOURCE="$(InputPath)"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "..\..\icu\include" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
+# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "..\..\icu\include" /I "..\..\common" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -86,10 +86,11 @@ LINK32=link.exe
 # ADD LINK32 icuuc.lib icuin.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept /libpath:"..\..\icu\lib"
 # Begin Custom Build
 InputPath=.\Debug\uconv.exe
+InputName=uconv
 SOURCE="$(InputPath)"
 
-"..\..\icu\bin\$(InputPath)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\..\icu\bin
+"..\..\..\..\icu\bin\$(InputName)" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\..\..\..\icu\bin
 
 # End Custom Build
 
@@ -136,6 +137,16 @@ SOURCE=.\makedata.mak
 
 !IF  "$(CFG)" == "uconv - Win32 Release"
 
+# Begin Custom Build
+ProjDir=.
+InputPath=.\makedata.mak
+InputName=makedata
+
+"$(ProjDir)\..\..\..\..\icu\bin\uconvmsg.dll" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	nmake /nologo /f $(InputName).mak icup=$(ProjDir)\..\..\..\..\icu CFG=Release
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "uconv - Win32 Debug"
 
 # Begin Custom Build
@@ -143,8 +154,8 @@ ProjDir=.
 InputPath=.\makedata.mak
 InputName=makedata
 
-"$(ProjDir)\..\..\icu\data\uconvmsg.dll" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	nmake /f $(InputName).mak icup=$(ProjDir)\..\..\icu CFG=Debug
+"$(ProjDir)\..\..\..\..\icu\bin\uconvmsg.dll" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	nmake /nologo /f $(InputName).mak icup=$(ProjDir)\..\..\..\..\icu CFG=Debug
 
 # End Custom Build
 
