@@ -515,11 +515,15 @@ public:
     /**
      * Queries if the given date is in daylight savings time in
      * this time zone.
+     * This method is wasteful since it creates a new GregorianCalendar and
+     * deletes it each time it is called. This is a deprecated method
+     * and provided only for Java compatibility.
+     *
      * @param date the given UDate.
      * @param status Output param filled in with success/error code.
      * @return true if the given date is in daylight savings time,
      * false, otherwise.
-     * @deprecated Remove after 2000-dec-31. Use useDaylightTime() instead.
+     * @deprecated since ICU 2.4. Use Calendar::inDaylightTime() instead.
      */
     virtual UBool inDaylightTime(UDate date, UErrorCode& status) const = 0;
 
