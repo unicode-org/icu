@@ -1176,7 +1176,7 @@ inline UColToken *getVirginBefore(UColTokenParser *src, UColToken *sourceToken, 
   uint32_t expandNext = 0;
   UColToken key;
 
-  if(baseCE >= (consts->UCA_PRIMARY_IMPLICIT_MIN<<24) && baseCE <= (consts->UCA_PRIMARY_IMPLICIT_MAX<<24) ) { /* implicits - */ 
+  if((baseCE & 0xFF000000) >= (consts->UCA_PRIMARY_IMPLICIT_MIN<<24) && (baseCE & 0xFF000000) <= (consts->UCA_PRIMARY_IMPLICIT_MAX<<24) ) { /* implicits - */ 
       uint32_t primary = baseCE & UCOL_PRIMARYMASK | (baseContCE & UCOL_PRIMARYMASK) >> 16;
       uint32_t raw = uprv_uca_getRawFromImplicit(primary);
       ch = uprv_uca_getCodePointFromRaw(raw-1);
@@ -1540,8 +1540,17 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
             uint32_t baseContCE = ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE;//&0xFFFFFF3F;
             uint32_t CE = UCOL_NOT_FOUND, SecondCE = UCOL_NOT_FOUND;
 
-            /*int32_t invPos = ucol_inv_getPrevCE(baseCE, baseContCE, &CE, &SecondCE, strength);*/
-            ucol_inv_getPrevCE(src, baseCE, baseContCE, &CE, &SecondCE, strength);
+            UCAConstants *consts = (UCAConstants *)((uint8_t *)src->UCA->image + src->UCA->image->UCAConsts);
+            if((baseCE & 0xFF000000) >= (consts->UCA_PRIMARY_IMPLICIT_MIN<<24) && (baseCE & 0xFF000000) <= (consts->UCA_PRIMARY_IMPLICIT_MAX<<24) ) { /* implicits - */ 
+              uint32_t primary = baseCE & UCOL_PRIMARYMASK | (baseContCE & UCOL_PRIMARYMASK) >> 16;
+              uint32_t raw = uprv_uca_getRawFromImplicit(primary);
+              uint32_t primaryCE = uprv_uca_getImplicitFromRaw(raw-1);
+              CE = primaryCE & UCOL_PRIMARYMASK | 0x0505;
+              SecondCE = (primaryCE << 16) & UCOL_PRIMARYMASK | UCOL_CONTINUATION_MARKER;
+            } else {
+                /*int32_t invPos = ucol_inv_getPrevCE(baseCE, baseContCE, &CE, &SecondCE, strength);*/
+                ucol_inv_getPrevCE(src, baseCE, baseContCE, &CE, &SecondCE, strength);
+            }
 
             ListList[src->resultLen].baseCE = CE;
             ListList[src->resultLen].baseContCE = SecondCE;
