@@ -59,6 +59,8 @@
 #define _Pi     FLAG(U_INITIAL_PUNCTUATION)
 #define _Pf     FLAG(U_FINAL_PUNCTUATION)
 
+#define CGJ     0x34f
+
 /* API functions ------------------------------------------------------------ */
 
 U_CAPI void U_EXPORT2
@@ -102,11 +104,13 @@ ublock_getCode(UChar32 c) {
 
 U_CAPI UBool U_EXPORT2
 u_hasBinaryProperty(UChar32 c, UProperty which) {
+    uint32_t props;
+
     /* c is range-checked in the functions that are called from here */
     switch(which) {
     case UCHAR_ALPHABETIC:
-        /* Lu+Ll+Lt+Lm+Lo+Other_Alphabetic */
-        return (FLAG(u_charType(c))&(_Lu|_Ll|_Lt|_Lm|_Lo))!=0 ||
+        /* Lu+Ll+Lt+Lm+Lo+Nl+Other_Alphabetic */
+        return (FLAG(u_charType(c))&(_Lu|_Ll|_Lt|_Lm|_Lo|_Nl))!=0 ||
                 (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_OTHER_ALPHABETIC))!=0;
     case UCHAR_ASCII_HEX_DIGIT:
         return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_ASCII_HEX_DIGIT))!=0;
@@ -117,11 +121,18 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
     case UCHAR_DASH:
         return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_DASH))!=0;
     case UCHAR_DEFAULT_IGNORABLE_CODE_POINT:
-        /* Cf+Cc+Cs+Other_Default_Ignorable_Code_Point-White_Space */
-        return (FLAG(u_charType(c))&(_Cf|_Cc|_Cs))!=0 ||
-                ((u_getUnicodeProperties(c, 1)&
-                    (FLAG(UPROPS_OTHER_DEFAULT_IGNORABLE_CODE_POINT)|FLAG(UPROPS_WHITE_SPACE)))==
-                FLAG(UPROPS_OTHER_DEFAULT_IGNORABLE_CODE_POINT));
+        /* <2060..206F, FFF0..FFFB, E0000..E0FFF>+Other_Default_Ignorable_Code_Point+(Cf+Cc+Cs-White_Space) */
+        if( (0x2060<=c && c<=0x206f) ||
+            (0xfff0<=c && c<=0xfffb) ||
+            (0xe0000<=c && c<=0xe0fff)
+        ) {
+            return TRUE;
+        }
+
+        props=u_getUnicodeProperties(c, 1);
+        return (props&FLAG(UPROPS_OTHER_DEFAULT_IGNORABLE_CODE_POINT))!=0 ||
+                    ((props&FLAG(UPROPS_WHITE_SPACE))==0 &&
+                    (FLAG(u_charType(c))&(_Cf|_Cc|_Cs))!=0);
     case UCHAR_DEPRECATED:
         return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_DEPRECATED))!=0;
     case UCHAR_DIACRITIC:
@@ -132,21 +143,26 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
         return unorm_internalIsFullCompositionExclusion(c);
     case UCHAR_GRAPHEME_BASE:
         /*
-         * [0..10FFFF]-Cc-Cf-Cs-Co-Cn-Zl-Zp-Grapheme_Link-Grapheme_Extend ==
-         * [0..10FFFF]-Cc-Cf-Cs-Co-Cn-Zl-Zp-Grapheme_Link-(Me+Mn+Mc+Other_Grapheme_Extend) ==
-         * [0..10FFFF]-Cc-Cf-Cs-Co-Cn-Zl-Zp-Me-Mn-Mc-Grapheme_Link-Other_Grapheme_Extend
+         * [0..10FFFF]-Cc-Cf-Cs-Co-Cn-Zl-Zp-Grapheme_Link-Grapheme_Extend-CGJ ==
+         * [0..10FFFF]-Cc-Cf-Cs-Co-Cn-Zl-Zp-Grapheme_Link-(Me+Mn+Mc+Other_Grapheme_Extend)-CGJ ==
+         * [0..10FFFF]-Cc-Cf-Cs-Co-Cn-Zl-Zp-Me-Mn-Mc-Grapheme_Link-Other_Grapheme_Extend-CGJ
          *
          * u_charType(c out of range) returns Cn so we need not check for the range
          */
-        return (FLAG(u_charType(c))&(_Cc|_Cf|_Cs|_Co|_Cn|_Zl|_Zp|_Me|_Mn|_Mc))==0 &&
+        return c!=CGJ &&
+                (FLAG(u_charType(c))&(_Cc|_Cf|_Cs|_Co|_Cn|_Zl|_Zp|_Me|_Mn|_Mc))==0 &&
                 ((u_getUnicodeProperties(c, 1)&
                     (FLAG(UPROPS_GRAPHEME_LINK)|FLAG(UPROPS_OTHER_GRAPHEME_EXTEND)))==0);
     case UCHAR_GRAPHEME_EXTEND:
-        /* Me+Mn+Mc+Other_Grapheme_Extend-Grapheme_Link */
-        return (FLAG(u_charType(c))&(_Me|_Mn|_Mc))!=0 ||
-                ((u_getUnicodeProperties(c, 1)&
-                    (FLAG(UPROPS_OTHER_GRAPHEME_EXTEND)|FLAG(UPROPS_GRAPHEME_LINK)))==
-                FLAG(UPROPS_OTHER_GRAPHEME_EXTEND));
+        /* Me+Mn+Mc+Other_Grapheme_Extend-Grapheme_Link-CGJ */
+        if(c==CGJ) {
+            return FALSE; /* fastest check first */
+        }
+
+        props=u_getUnicodeProperties(c, 1);
+        return (props&FLAG(UPROPS_GRAPHEME_LINK))==0 &&
+                    ((props&FLAG(UPROPS_OTHER_GRAPHEME_EXTEND))!=0 ||
+                    (FLAG(u_charType(c))&(_Me|_Mn|_Mc))!=0);
     case UCHAR_GRAPHEME_LINK:
         return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_GRAPHEME_LINK))!=0;
     case UCHAR_HEX_DIGIT:
