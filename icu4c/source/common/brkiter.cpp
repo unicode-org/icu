@@ -444,6 +444,11 @@ BreakIterator::getAvailableLocales(void)
 BreakIterator* 
 BreakIterator::makeInstance(const Locale& loc, int32_t kind, UErrorCode& status)
 {
+
+	if (U_FAILURE(status)) {
+		return NULL;
+	}
+
     BreakIterator *result = NULL;
     switch (kind) {
     case UBRK_CHARACTER: 
@@ -462,11 +467,13 @@ BreakIterator::makeInstance(const Locale& loc, int32_t kind, UErrorCode& status)
         result = BreakIterator::makeTitleInstance(loc, status);
         break;
     default:
-        if (U_SUCCESS(status)) {   
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-        }
-        return NULL;
+        status = U_ILLEGAL_ARGUMENT_ERROR;
     }
+
+	if (U_FAILURE(status)) {
+		return NULL;
+	}
+
     // this is more of a placeholder. All the break iterators have the same actual locale: root
     // except the Thai one
     ResourceBundle res(NULL, loc, status);
