@@ -107,6 +107,7 @@ void TestDecomp()
     myCollation = ucol_open("en_US", &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
+        return;
     }
     resLen=0;
     log_verbose("Testing unorm_normalize with  Decomp canonical\n");
@@ -140,6 +141,7 @@ void TestCompatDecomp()
     myCollation = ucol_open("en_US", &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
+        return;
     }
     resLen=0;
     log_verbose("Testing unorm_normalize with  Decomp compat\n");
@@ -173,6 +175,7 @@ void TestCanonDecompCompose()
     myCollation = ucol_open("en_US", &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
+        return;
     }
     resLen=0;
     log_verbose("Testing unorm_normalize with Decomp can compose compat\n");
@@ -206,6 +209,7 @@ void TestCompatDecompCompose()
     myCollation = ucol_open("en_US", &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
+        return;
     }
     resLen=0;
     log_verbose("Testing unorm_normalize with compat decomp compose can\n");
