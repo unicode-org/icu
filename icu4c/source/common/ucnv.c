@@ -751,7 +751,7 @@ int32_t   ucnv_fromUChars (const UConverter * converter,
     {
       ucnv_fromUnicode (&myConverter,
 			&myTarget,
-			target + targetSize,
+			myTarget_limit,
 			&mySource,
 			mySource_limit,
 			NULL,
