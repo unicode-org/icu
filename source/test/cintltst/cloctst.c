@@ -56,13 +56,13 @@ static const char* rawData2[23][5] = {
     {   "English (United States)", "French (France)", "Croatian (Croatia)", "Greek (Greece)", "Norwegian (Norway, Nynorsk)" },
 
     /* display langage (French) */
-    {   "anglais",  "fran\\u00E7ais",   "", "grec",    "norv\\u00E9gien" },
+    {   "anglais",  "fran\\u00E7ais",   "croate", "grec",    "norv\\u00E9gien" },
     /* display country (French) */
-    {   "\\u00C9tats-Unis",    "France",   "",  "Gr\\u00E8ce",   "Norv\\u00E8ge"    },
+    {   "\\u00C9tats-Unis",    "France",   "Croatie",  "Gr\\u00E8ce",   "Norv\\u00E8ge"    },
     /* display variant (French) */
     {   "",     "",     "",     "",     "Nynorsk"    },
     /* display name (French) */
-    {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "", "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, Nynorsk)" },
+    {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "croate (Croatie)", "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, Nynorsk)" },
 
     /* display langage (Croatian) */
     {   "",  "", "hrvatski", "",    "" },

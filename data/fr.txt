@@ -12,25 +12,72 @@ fr {
 		Sequence { "@" }
 	}
     Countries { 
-        FR { "France" }
-        US { "\u00C9tats-Unis" }
-        DK { "Danemark" }
-        DE { "Allemagne" }
+        AR { "Argentine" }
         AT { "Autriche" }
-        GR { "Gr\u00E8ce" }
+        AU { "Australie" }
+        BE { "Belgique" }
+        BM { "Bermudes" }
+        BR { "Br\u00E9zil" }
+        CA { "Canada" }
+        CH { "Suisse" }
+        CL { "Chili" }
+        CN { "Chine" }
+        CO { "Colombie" }
+        CU { "Cuba" }
+        CY { "Chypre" }
+        CZ { "R\u00E9publique Tch\u00e8que" }
+        DE { "Allemagne" }
+        DK { "Danemark" }
+        DO { "R\u00E9publique Dominicaine" } 
+        DZ { "Alg\u00E9rie" }
         ES { "Espagne" }
         FI { "Finlande" }
+        FR { "France" }
+        GB { "Royaume Uni" }
+        GR { "Gr\u00E8ce" }
+        HR { "Croatie" }
+        ID { "Indon\u00E9sie" }
+        IE { "Irlande" }
+        IL { "Isra\u00EBl" }
         IT { "Italie" }
-        CH { "Suisse" }
-        BE { "Belgique" }
-        CA { "Canada" }
         JP { "Japon" }
+        MT { "Malte" }
+        MX { "Mexique" }
         NL { "Pays-Bas" }
         NO { "Norv\u00E8ge" }
+        NZ { "Nouvelle-Z\u00E9lande" }
         PT { "Portugal" }
+        RU { "Russie" }
         SE { "Su\u00E8de" }
         TR { "Turquie" }
+        US { "\u00C9tats-Unis" }
+        VE { "Venezuela" }
+        YU { "Yougoslavie" }
+        ZA { "Afrique du Sud" }
     }
+
+    Languages { 
+    root  { "racine" }
+        cs { "tch\u00e8que" }
+        da { "danois" }
+        de { "allemand" }
+        el { "grec" }
+        en { "anglais" }
+        es { "espagnol" }
+        fi { "finnois" }
+        fr { "fran\u00E7ais" }
+        hr { "croate" }
+        it { "italien" }
+        ja { "japonais" }
+        nl { "hollandais" } // ne'erlandais ?
+        no { "norv\u00E9gien" }
+        pt { "portugais" }
+        ru { "russe" }
+        sv { "su\u00E9dois" }
+        tr { "turc" }
+        zh { "chinois" }
+    }
+
     DateTimeElements { 
             "2",
             "1",
@@ -64,25 +111,11 @@ fr {
             "vendredi",
             "samedi",
     }
+
+
     Eras { 
             "av. J.-C.",
             "ap. J.-C.",
-    }
-    Languages { 
-        fr { "fran\u00E7ais" }
-        en { "anglais" }
-        de { "allemand" }
-        da { "danois" }
-        es { "espagnol" }
-        el { "grec" }
-        fi { "finnois" }
-        it { "italien" }
-        ja { "japonais" }
-        nl { "hollandais" }
-        no { "norv\u00E9gien" }
-        pt { "portugais" }
-        sv { "su\u00E9dois" }
-        tr { "turc" }
     }
     LocaleID { "0c" }
     LocaleString { "fr" }
@@ -144,5 +177,13 @@ fr {
                 "GMT",
                 "GMT",
         }
+
+// http://www.elections.ca/gen_info/backgrounders/ec90815_f.html
     }
 }
+
+
+
+
+
+

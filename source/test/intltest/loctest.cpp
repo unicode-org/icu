@@ -44,14 +44,14 @@ const char* rawData[27][7] = {
         //{   "English (United States)", "French (France)", "Croatian (Croatia)", "Greek (Greece)", "Norwegian (Norway,NY)", "Italian", "xx (YY)" },
 
         // display langage (French)
-        {   "anglais",  "fran\\u00E7ais",   "", "grec",    "norv\\u00E9gien",    "italien", "xx" },
+        {   "anglais",  "fran\\u00E7ais",   "croate", "grec",    "norv\\u00E9gien",    "italien", "xx" },
         // display country (French)
-        {   "\\u00C9tats-Unis",    "France",   "",  "Gr\\u00E8ce",   "Norv\\u00E8ge", "",     "YY" },
+        {   "\\u00C9tats-Unis",    "France",   "Croatie",  "Gr\\u00E8ce",   "Norv\\u00E8ge", "",     "YY" },
         // display variant (French)
         {   "",     "",     "",     "",     "Nynorsk",     "",     "" },
         // display name (French)
-        //{   "anglais (États-Unis)", "français (France)", "", "grec (Grèce)", "norvégien (Norvège,Nynorsk)", "italien", "xx (YY)" },
-        {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "", "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, Nynorsk)", "italien", "xx (YY)" },
+        //{   "anglais (États-Unis)", "français (France)", "croate (Croatie)", "grec (Grèce)", "norvégien (Norvège,Nynorsk)", "italien", "xx (YY)" },
+        {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "croate (Croatie)", "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, Nynorsk)", "italien", "xx (YY)" }, // STILL not right
 
         // display langage (Croatian)
         {   "",  "", "hrvatski", "",    "", "", "xx" },
@@ -635,7 +635,7 @@ void LocaleTest::doTestDisplayNames(Locale& inLocale,
             expectedLang = dataTable[DLANG_EN][i];
 
         expectedCtry = dataTable[compareIndex + 1][i];
-        if (expectedCtry.length() == 0 && defaultIsFrench)
+        if ((expectedCtry.length() == 0) && defaultIsFrench)
             expectedCtry = dataTable[DCTRY_FR][i];
         if (expectedCtry.length() == 0)
             expectedCtry = dataTable[DCTRY_EN][i];
@@ -653,13 +653,13 @@ void LocaleTest::doTestDisplayNames(Locale& inLocale,
             expectedName = dataTable[DNAME_EN][i];
 
         if (testLang != expectedLang)
-            errln("Display language mismatch: " + testLang + " versus " + expectedLang);
+            errln("Display language (" + UnicodeString(inLocale.getName()) + ") mismatch: " + testLang + " versus " + expectedLang);
         if (testCtry != expectedCtry)
-            errln("Display country mismatch: " + testCtry + " versus " + expectedCtry);
+            errln("Display country (" + UnicodeString(inLocale.getName()) + ") mismatch: " + testCtry + " versus " + expectedCtry + (defaultIsFrench?UnicodeString("French"):UnicodeString("_")) );
         if (testVar != expectedVar)
-            errln("Display variant mismatch: " + testVar + " versus " + expectedVar);
+            errln("Display variant (" + UnicodeString(inLocale.getName()) + ") mismatch: " + testVar + " versus " + expectedVar);
         if (testName != expectedName)
-            errln("Display name mismatch: " + testName + " versus " + expectedName);
+            errln("Display name (" + UnicodeString(inLocale.getName()) + ") mismatch: " + testName + " versus " + expectedName);
     }
 }
 
@@ -1017,13 +1017,13 @@ LocaleTest::TestAtypicalLocales()
                                      "Dominican Republic",
                                      "Belgium" };
     UnicodeString frenchDisplayNames []= { "allemand (Canada)",
-                                    "japonais (South Africa)",
-                                    "Russian (Mexico)",
+                                    "japonais (Afrique du Sud)",
+                                    "russe (Mexique)",
                                      "anglais (France)",
                                      "espagnol (Allemagne)",
-                                    "Croatia",
+                                    "Croatie",
                                     CharsToUnicodeString("Su\\u00E8de"),
-                                    "Dominican Republic",
+                                    CharsToUnicodeString("R\\u00E9publique Dominicaine"),
                                     "Belgique" };
     UnicodeString rus("Russian (M");
     rus += (UChar32)0x00e9;
