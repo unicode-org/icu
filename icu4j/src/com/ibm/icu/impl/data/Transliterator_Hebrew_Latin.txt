@@ -1,10 +1,6 @@
-???#--------------------------------------------------------------------
+﻿#--------------------------------------------------------------------
 # Copyright (c) 1999-2004, International Business Machines
 # Corporation and others. All Rights Reserved.
-#--------------------------------------------------------------------
-# $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Hebrew_Latin.txt,v $
-# $Date: 2004/05/21 01:01:51 $
-# $Revision: 1.6 $
 #--------------------------------------------------------------------
 
 # Transliteration table for Hebrew
@@ -27,74 +23,74 @@
 # For more information, see"
 #   http://oss.software.ibm.com/icu/userguide/Transliteration.html
 
-:: [[:Hebrew:] [\u05B0-\u05B9\u05BB-\u05BC\u05C1-\u05C2\u2135-\u2138??\u05BF] - [\u05BD]] ;
+:: [[:Hebrew:] [\u05B0-\u05B9\u05BB-\u05BC\u05C1-\u05C2\u2135-\u2138̄\u05BF] - [\u05BD]] ;
 :: nfkd (nfc) ;
 $letterAfter = [:M:]* [:L:] ;
 
 # move longer items here to avoid masking
 
-?? <> h?? ;
-?? <> z?? } $letterAfter;
-?? <> z?? ;
-?? <> s?? ;
-?? <> t?? ;
+ח <> ẖ ;
+צ <> ẕ } $letterAfter;
+ץ <> ẕ ;
+ש <> ş ;
+ת <> ţ ;
 
-?? <> ?? ;
-?? <> b ;
-?? <> g ;
-?? <> d ;
-?? <> h ;
-?? <> w ;
-?? <> z ;
-?? <> t ;
-?? <> y ;
-?? <> k } $letterAfter;
-?? <> k ;
-?? <> l ;
-?? <> m } $letterAfter;
-?? <> m ; 
-?? <> n  } $letterAfter;
-?? <> n ;
-?? <> s ;
-?? <> ?? ;
-?? <> p } $letterAfter;
-?? <> p ;
-?? <> q ;
-?? <> r ;
+א <> ʼ ;
+ב <> b ;
+ג <> g ;
+ד <> d ;
+ה <> h ;
+ו <> w ;
+ז <> z ;
+ט <> t ;
+י <> y ;
+כ <> k } $letterAfter;
+ך <> k ;
+ל <> l ;
+מ <> m } $letterAfter;
+ם <> m ; 
+נ <> n  } $letterAfter;
+ן <> n ;
+ס <> s ;
+ע <> ʻ ;
+פ <> p } $letterAfter;
+ף <> p ;
+ק <> q ;
+ר <> r ;
 
- ?? > |  ????; # HEBREW LIGATURE YIDDISH DOUBLE VAV
- ?? > | ????; # HEBREW LIGATURE YIDDISH VAV YOD
- ?? > | ???? ; # HEBREW LIGATURE YIDDISH DOUBLE YOD
+ װ > |  וו; # HEBREW LIGATURE YIDDISH DOUBLE VAV
+ ױ > | וי; # HEBREW LIGATURE YIDDISH VAV YOD
+ ײ > | יי ; # HEBREW LIGATURE YIDDISH DOUBLE YOD
 
 
-?? <> ?? ; # dagesh just goes to overdot for now
-?? <> ?? ; # shin dot -> sh
-?? <> ?? ; # sin dot -> s
+ּ <> ̇ ; # dagesh just goes to overdot for now
+ׁ <> ̌ ; # shin dot -> sh
+ׂ <> ̂ ; # sin dot -> s
 
 # points
-?? <> a?? ;
-?? <> a?? ;
-?? <> e?? ;
-?? <> e?? ;
-?? <> e?? ;
-?? <> i ;
-?? <> o?? ;
-?? <> u ;
+ֲ <> à ;
+ָ <> á ;
+ֱ <> è ;
+ֵ <> é ;
+ְ <> ê ;
+ִ <> i ;
+ֹ <> ò ;
+ֻ <> u ;
 
-?? <> a ;
-?? <> e ;
-?? <> o ;
+ַ <> a ;
+ֶ <> e ;
+ֳ <> o ;
 
-\u05BF <>   ?? ;
+\u05BF <>   ̄ ;
 
 # fallbacks
-?? < c ;
-?? < f } $letterAfter;
-?? < f ;
-?? < j ;
-?? < v ;
-???? < x ;
+ק < c ;
+פ < f } $letterAfter;
+ף < f ;
+ז < j ;
+ו < v ;
+כס < x ;
 
 :: (lower);
 :: nfc (nfd) ;
-:: ([[:Latin:] [\u02BB-\u02BC\u0300-\u0302\u0307\u030C\u0327\u0331\u0340-\u0341    ?? ]]);
+:: ([[:Latin:] [\u02BB-\u02BC\u0300-\u0302\u0307\u030C\u0327\u0331\u0340-\u0341    ̄ ]]);
