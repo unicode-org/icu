@@ -1689,6 +1689,8 @@ DecimalFormat::adoptDecimalFormatSymbols(DecimalFormatSymbols* symbolsToAdopt)
         delete fSymbols;
 
     fSymbols = symbolsToAdopt;
+    setCurrencyForSymbols();
+    expandAffixes();
 }
 //------------------------------------------------------------------------------
 // Setting the symbols is equlivalent to adopting a newly created localized
@@ -1698,8 +1700,6 @@ void
 DecimalFormat::setDecimalFormatSymbols(const DecimalFormatSymbols& symbols)
 {
     adoptDecimalFormatSymbols(new DecimalFormatSymbols(symbols));
-    setCurrencyForSymbols();
-    expandAffixes();
 }
  
 /**

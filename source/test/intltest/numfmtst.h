@@ -96,6 +96,8 @@ class NumberFormatTest: public CalendarTimeZoneTest {
 
     void TestSymbolsWithBadLocale(void);
 
+    void TestAdoptDecimalFormatSymbols(void);
+
  private:
 
     static UBool equalValue(const Formattable& a, const Formattable& b);
