@@ -200,7 +200,7 @@ struct RBBISetTableEl {
 #define RBBIDebugPrintf printf
 #define RBBIDebugPuts puts
 #else
-inline void RBBIDebugPrintf(...) {}
+#undef RBBIDebugPrintf 
 #define RBBIDebugPuts(arg)
 #endif
 
