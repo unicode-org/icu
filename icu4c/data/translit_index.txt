@@ -70,6 +70,9 @@ translit_index {
 { "Latin-Greek", "file", "translit_Greek_Latin", "REVERSE" },
 { "Greek-Latin", "file", "translit_Greek_Latin", "FORWARD" },
 
+{ "Latin-Greek/UNGEGN", "alias", "Latin-el/UNGEGN", "" },
+{ "Greek-Latin/UNGEGN", "alias", "el-Latin/UNGEGN", "" },
+
 { "LowerLatin-Jamo", "internal", "translit_Latin_Jamo", "FORWARD" },
 { "Latin-Jamo", "alias", "Any-Lower;LowerLatin-Jamo", "" },
 { "Jamo-Latin", "file", "translit_Latin_Jamo", "REVERSE" },
