@@ -34,9 +34,9 @@ static const UDataInfo dataInfo={
     sizeof(UChar),
     0,
 
-    0x52, 0x65, 0x73, 0x42,     /* dataFormat="resb" */
-    1, 0, 0, 0,                 /* formatVersion */
-    1, 4, 0, 0                  /* dataVersion take a look at version inside parsed resb*/
+    {0x52, 0x65, 0x73, 0x42},     /* dataFormat="resb" */
+    {1, 0, 0, 0},                 /* formatVersion */
+    {1, 4, 0, 0}                  /* dataVersion take a look at version inside parsed resb*/
 };
 
 static uint8_t calcPadding(uint32_t size) {
