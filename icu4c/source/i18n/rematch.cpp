@@ -496,7 +496,7 @@ UBool RegexMatcher::find(int32_t start, UErrorCode &status) {
         return FALSE;
     }
     int32_t inputLen = fInput->length();
-    if (start < 0 || start >= inputLen) {
+    if (start < 0 || start > inputLen) {
         status = U_INDEX_OUTOFBOUNDS_ERROR;
         return FALSE;
     }
@@ -583,7 +583,7 @@ UBool RegexMatcher::lookingAt(int32_t start, UErrorCode &status) {
         status = fDeferredStatus;
         return FALSE;
     }
-    if (start < 0 || start >= fInput->length()) {
+    if (start < 0 || start > fInput->length()) {
         status = U_INDEX_OUTOFBOUNDS_ERROR;
         return FALSE;
     }
@@ -622,7 +622,7 @@ UBool RegexMatcher::matches(int32_t start, UErrorCode &status) {
         status = fDeferredStatus;
         return FALSE;
     }
-    if (start < 0 || start >= fInput->length()) {
+    if (start < 0 || start > fInput->length()) {
         status = U_INDEX_OUTOFBOUNDS_ERROR;
         return FALSE;
     }
