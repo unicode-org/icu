@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/TransliterationRule_Latin_Kana.java,v $ 
- * $Date: 2000/04/22 00:04:25 $ 
- * $Revision: 1.4 $
+ * $Date: 2000/04/26 21:22:25 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -24,7 +24,7 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
             // Uppercase Latin to katakana
 
             { "Rule", ""
-                //# $Revision: 1.4 $
+                //# $Revision: 1.5 $
                 // Transliteration rules for Japanese Hiragana and Katakana to
                 // romaji
                 // lower case roman generates hiragana.
@@ -360,15 +360,10 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 // KATAKANA
                 //#######################################
 
-                + "VA>$VA;"
-                + "VI>$VI;"
-                + "VE>$VE;"
-                + "VO>$VO;"
-
-                + "VA<$VA;"
-                + "VI<$VI;"
-                + "VE<$VE;"
-                + "VO<$VO;"
+                + "VA<>$VA;"
+                + "VI<>$VI;"
+                + "VE<>$VE;"
+                + "VO<>$VO;"
 
                 //#######################################
                 // KATAKANA SHARED
@@ -637,7 +632,7 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 + "KO<$KO;"
 
                 + "JA<$ZI$YA2;"
-                + "JI<$ZI$I2;"
+                + "JI'~I'<$ZI$I2;" // LIU
                 + "JU<$ZI$YU2;"
                 + "JE<$ZI$E2;"
                 + "JO<$ZI$YO2;"
@@ -650,7 +645,7 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 + "ZO<$ZO;"
 
                 + "SHA<$SI$YA2;"
-                + "SHI<$SI$I2;"
+                + "SHI'~I'<$SI$I2;" // LIU
                 + "SHU<$SI$YU2;"
                 + "SHE<$SI$E2;"
                 + "SHO<$SI$YO2;"
@@ -663,7 +658,7 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 + "SO<$SO;"
 
                 + "DJA<$DI$YA2;"
-                + "DJI<$DI$I2;"
+                + "DJI'~I'<$DI$I2;" // LIU
                 + "DJU<$DI$YU2;"
                 + "DJE<$DI$E2;"
                 + "DJO<$DI$YO2;"
@@ -678,7 +673,7 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 + "DO<$DO;"
 
                 + "CHA<$TI$YA2;"
-                + "CHI<$TI$I2;"
+                + "CHI'~I'<$TI$I2;" // LIU
                 + "CHU<$TI$YU2;"
                 + "CHE<$TI$E2;"
                 + "CHO<$TI$YO2;"
@@ -776,10 +771,10 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 + "WO<$WO;"
                 //+ "WU<$WU;"
 
-                + "VA<$VU$A2;"
-                + "VI<$VU$I2;"
-                + "VE<$VU$E2;"
-                + "VO<$VU$O2;"
+                + "'V~A'<$VU$A2;" // LIU
+                + "'V~I'<$VU$I2;" // LIU
+                + "'V~E'<$VU$E2;" // LIU
+                + "'V~O'<$VU$O2;" // LIU
                 + "VU<$VU;"
                 
                 // DOUBLED LETTERS
@@ -1114,7 +1109,7 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 + "ko<$ko;"
 
                 + "ja<$zi$ya2;"
-                + "ji<$zi$i2;"
+                + "ji'~i'<$zi$i2;" // LIU
                 + "ju<$zi$yu2;"
                 + "je<$zi$e2;"
                 + "jo<$zi$yo2;"
@@ -1127,7 +1122,7 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 + "zo<$zo;"
 
                 + "sha<$si$ya2;"
-                + "shi<$si$i2;"
+                + "shi'~i'<$si$i2;" // LIU
                 + "shu<$si$yu2;"
                 + "she<$si$e2;"
                 + "sho<$si$yo2;"
@@ -1140,7 +1135,7 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 + "so<$so;"
 
                 + "dja<$di$ya2;"
-                + "dji<$di$i2;"
+                + "dji'~i'<$di$i2;" // LIU
                 + "dju<$di$yu2;"
                 + "dje<$di$e2;"
                 + "djo<$di$yo2;"
@@ -1155,7 +1150,7 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 + "do<$do;"
 
                 + "cha<$ti$ya2;"
-                + "chi<$ti$i2;"
+                + "chi'~i'<$ti$i2;" // LIU
                 + "chu<$ti$yu2;"
                 + "che<$ti$e2;"
                 + "cho<$ti$yo2;"
