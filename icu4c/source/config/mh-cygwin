@@ -46,10 +46,6 @@ SO = dll
 STATIC_O = ao
 LIBICU = cyg$(ICUPREFIX)
 
-ifeq ($(ENABLE_SHARED),YES)
-SO_TARGET_VERSION_SUFFIX = $(SO_TARGET_VERSION_MAJOR)
-endif
-
 # Change the stubnames so that poorly working FAT disks and installation programs can work.
 # This is also for backwards compatibility.
 DATA_STUBNAME = dt
@@ -83,7 +79,7 @@ I18N_STUBNAME = in
 ## we only use the version major number.
 #FINAL_SO_TARGET=$(basename $(SO_TARGET))$(SO_TARGET_VERSION).$(SO)
 FINAL_SO_TARGET=$(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR).$(SO)
-MIDDLE_SO_TARGET=$(SO_TARGET)
+MIDDLE_SO_TARGET=$(FINAL_SO_TARGET)
 
 ## Versioned libraries rules
 #%$(SO_TARGET_VERSION_MAJOR).$(SO): %$(SO_TARGET_VERSION).$(SO)
