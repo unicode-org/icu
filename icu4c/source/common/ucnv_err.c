@@ -24,7 +24,6 @@
 
 #define VALUE_STRING_LENGTH 32
 /*Magic # 32 = 4(number of char in value string) * 8(max number of bytes per char for any converter) */
-#define CODEPOINT_STRING_LENGTH 7
 #define UNICODE_PERCENT_SIGN_CODEPOINT 0x0025
 #define UNICODE_U_CODEPOINT 0x0055
 #define UNICODE_X_CODEPOINT 0x0058
@@ -216,7 +215,6 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
 
   UChar valueString[VALUE_STRING_LENGTH];
   int32_t valueStringLength = 0;
-  UChar codepoint[CODEPOINT_STRING_LENGTH];
   int32_t i = 0;
   /*Makes a bitwise copy of the converter passwd in */
   UConverter myConverter = *(fromArgs->converter);
@@ -259,14 +257,12 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
    * how do we represent a code point > 0xffff? It should be one single escape, not
    * two for a surrogate pair!
    */
-  codepoint[0] = (UChar) UNICODE_PERCENT_SIGN_CODEPOINT;	/* adding % */
-  codepoint[1] = (UChar) UNICODE_U_CODEPOINT;	/* adding U */
-
   while (i < length)
     {
-      itou (codepoint + 2, codeUnits[i++], 16, 4);
-      uprv_memcpy (valueString + valueStringLength, codepoint, sizeof (UChar) * 6);
-      valueStringLength += CODEPOINT_STRING_LENGTH - 1;
+      valueString[valueStringLength++] = (UChar) UNICODE_PERCENT_SIGN_CODEPOINT;	/* adding % */
+      valueString[valueStringLength++] = (UChar) UNICODE_U_CODEPOINT;	/* adding U */
+      itou (valueString + valueStringLength, codeUnits[i++], 16, 4);
+      valueStringLength += 4;
     }
 
   myValueSource = valueString;
@@ -276,7 +272,7 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
 		    &myTargetAlias,
 		    myTargetAlias + VALUE_STRING_LENGTH,
 		    &myValueSource,
-		    myValueSource + CODEPOINT_STRING_LENGTH - 1,
+		    myValueSource + valueStringLength,
 		    NULL,
 		    TRUE,
 		    &err2);
