@@ -89,7 +89,7 @@ DigitList::operator=(const DigitList& other)
         fDecimalAt = other.fDecimalAt;
         fCount = other.fCount;
         fIsPositive = other.fIsPositive;
-        strncpy(fDigits, other.fDigits, MAX_DIGITS);
+        strncpy(fDigits, other.fDigits, fCount);
     }
     return *this;
 }
