@@ -1330,7 +1330,7 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
                             helper = init_resb_result(&(dataEntry->fData), res, inKey, -1, dataEntry, resB, 0, helper, status);
                             dataEntry = helper->fData;
                         }
-                    } while(uprv_strlen(myPath));
+                    } while(*myPath); /* Continue until the whole path is consumed */
                 }
             }
             /*const ResourceData *rd = getFallbackData(resB, &key, &realData, &res, status);*/
