@@ -43,9 +43,9 @@ void addAllTests(TestNode** root)
     addUtility(root);
     addConvert(root);
     addUCharTransformTest(root);
+    addStandardNamesTest(root);
     addCompactArrayTest(root);
     addFormatTest(root);
-    addStandardNamesTest(root);
     addBreakIter(root);
     addCollTest(root);
     addComplexTest(root);
