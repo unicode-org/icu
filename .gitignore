@@ -212,6 +212,14 @@ icu4c/source/tools/gennames/Makefile
 icu4c/source/tools/gennames/Release
 icu4c/source/tools/gennames/gennames
 icu4c/source/tools/gennames/tmp
+icu4c/source/tools/gennorm/*.d
+icu4c/source/tools/gennorm/*.pdb
+icu4c/source/tools/gennorm/*.plg
+icu4c/source/tools/gennorm/Debug
+icu4c/source/tools/gennorm/Makefile
+icu4c/source/tools/gennorm/Release
+icu4c/source/tools/gennorm/gennorm
+icu4c/source/tools/gennorm/tmp
 icu4c/source/tools/genprops/*.d
 icu4c/source/tools/genprops/*.pdb
 icu4c/source/tools/genprops/Debug

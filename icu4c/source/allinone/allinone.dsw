@@ -74,6 +74,18 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name decmn
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name genfchk
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name gennorm
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name genqchk
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name genuca
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -96,16 +108,10 @@ Package=<4>
     Project_Dep_Name i18n
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name makeconv
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name gencol
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name genrb
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name gentest
+    Project_Dep_Name toolutil
     End Project Dependency
 }}}
 
@@ -265,6 +271,21 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name toolutil
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "gennorm"=..\tools\gennorm\gennorm.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name common
     End Project Dependency
 }}}
 
@@ -432,28 +453,7 @@ Package=<4>
     Project_Dep_Name i18n
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name makeconv
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name gencol
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name genrb
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name genccode
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name gencmn
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name gencnval
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name gennames
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name gentz
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name toolutil
@@ -547,6 +547,15 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name genqchk
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name gennorm
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name i18n
     End Project Dependency
 }}}
 

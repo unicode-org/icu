@@ -53,7 +53,7 @@ all-local: thaidict.brk build-local
 ##### Define all the data files. the build rule that depends on them is below.
 
 ## DAT files - Misc. data files.
-DAT_FILES=qchk.dat fchk.dat uprops.dat unames.dat cnvalias.dat tz.dat ucadata.dat invuca.dat
+DAT_FILES=qchk.dat fchk.dat uprops.dat unames.dat unorm.dat cnvalias.dat tz.dat ucadata.dat invuca.dat
 TEST_DAT_FILES=$(TESTOBJDATADIR)/test.dat
 
 ## BRK files
@@ -150,6 +150,11 @@ uprops.dat: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/Mirror.txt $(TOO
 	@echo Creating uprops.dat
 	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genprops/genprops -s $(UNICODEDATADIR) -d . -u $(UNICODE_VERSION)
 
+# unorm.dat
+unorm.dat: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/DerivedNormalizationProperties.txt $(UNICODEDATADIR)/Mirror.txt $(TOOLDIR)/gennorm/gennorm
+	@echo Creating unorm.dat
+	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/gennorm/gennorm -s $(UNICODEDATADIR) -d . -u $(UNICODE_VERSION)
+
 # ucadata.dat
 ucadata.dat: $(UNICODEDATADIR)/FractionalUCA.txt $(TOOLDIR)/genuca/genuca
 	@echo Creating ucadata.dat and invuca.dat
@@ -205,7 +210,7 @@ endif
 $(TESTOBJDATADIR)/%.res: $(TESTSRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb
 	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genrb/genrb -s $(TESTSRCDATADIR) -d $(TESTOBJDATADIR) $(<F)
 
-%.res: $(SRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb ucadata.dat uprops.dat
+%.res: $(SRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb ucadata.dat uprops.dat unorm.dat
 	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genrb/genrb -s $(SRCDATADIR) -d . $(<F)
 
 
@@ -219,7 +224,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 ###########
 ########### 390 support
 UCMFILES390=ebcdic-xml-us.ucm ibm-37-s390.ucm ibm-1047-s390.ucm ibm-4909.ucm
-ALLFILES390=qchk.dat fchk.dat uprops.dat cnvalias.dat $(UCMFILES390:.ucm=.cnv)
+ALLFILES390=qchk.dat fchk.dat uprops.dat unorm.dat cnvalias.dat $(UCMFILES390:.ucm=.cnv)
 
 icudata390.lst:  $(SRCLISTDEPS)
 	@echo Generating $@ list of 390 data files
