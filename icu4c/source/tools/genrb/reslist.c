@@ -18,6 +18,7 @@
 #include "reslist.h"
 #include "unewdata.h"
 #include "unicode/ures.h"
+#include "error.h"
 
 #define BIN_ALIGNMENT 16
 
@@ -676,6 +677,10 @@ void table_add(struct SResource *table, struct SResource *res, UErrorCode *statu
             res->fNext = current;
             return;
         } else { /* Key already exists! ERROR! */
+            char msg[100]={ "duplicate key '" };
+            uprv_strcat(msg, (list->fRoot->fKeys)+(current->fKey));
+            uprv_strcat(msg, "' in table");
+            setErrorText(msg);
             *status = U_UNSUPPORTED_ERROR;
             return;
         }
