@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  **************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/LocaleElements_el.java,v $ 
- * $Date: 2001/11/21 00:51:58 $ 
- * $Revision: 1.5 $
+ * $Date: 2001/11/28 02:03:39 $ 
+ * $Revision: 1.6 $
  **************************************************************************
  */
 
@@ -92,9 +92,9 @@ public class LocaleElements_el extends ListResourceBundle {
 
 "# at begining or end of word, convert mp to b\n"+
 
-"[^[:L:][:M:]] } \u03bc\u03c0 > b ; "+
+"[^[:L:][:M:]] { \u03bc\u03c0 > b ; "+
 "\u03bc\u03c0 } [^[:L:][:M:]] > b ; "+
-"[^[:L:][:M:]] } [\u039c\u03bc][\u03a0\u03c0] > B ; "+
+"[^[:L:][:M:]] { [\u039c\u03bc][\u03a0\u03c0] > B ; "+
 "[\u039c\u03bc][\u03a0\u03c0] } [^[:L:][:M:]] > B ;"+
 
 "\u03bc\u03c0 < b ; "+
