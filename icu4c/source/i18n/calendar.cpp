@@ -611,7 +611,7 @@ Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& succ
     }
     return NULL;
   }
-  
+
   if(u->getDynamicClassID() == UnicodeString::getStaticClassID()) {
     // It's a unicode string telling us what type of calendar to load ("gregorian", etc)
     char tmp[200];
@@ -630,12 +630,15 @@ Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& succ
 #endif
 
     // Create a Locale over this string
-    Locale l(tmp);
+    Locale l(tmp), actualLoc2;
 
     delete u;
     u = NULL;
     
-    c = (Calendar*)getService()->get(l, LocaleKey::KIND_ANY, &actualLoc, success);
+    // Don't overwrite actualLoc, since the actual loc from this call
+    // may be something like "@calendar=gregorian" -- TODO investigate
+    // further...
+    c = (Calendar*)getService()->get(l, LocaleKey::KIND_ANY, &actualLoc2, success);
 
     if(U_FAILURE(success) || !c) {
       delete zone;
@@ -668,6 +671,7 @@ Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& succ
   // Now, reset calendar to default state:
   c->adoptTimeZone(zone); //  Set the correct time zone
   c->setTimeInMillis(getNow(), success); // let the new calendar have the current time.
+  
   // pull up actual locale from registration
   U_LOCALE_BASED(locBased, *c);
   locBased.setLocaleIDs(0, actualLoc.getName());
