@@ -67,7 +67,7 @@ public final class NFSkippable extends UnicodeProperty {
         if (!ucd.isAssigned(cp)) return true;
         
         if (DEBUG) cause = "\t\tnf differs";
-        if (nf.normalizationDiffers(cp)) return false;
+        if (!nf.isNormalized(cp)) return false;
         
         if (DEBUG) cause = "\t\tnon-zero cc";
         if (ucd.getCombiningClass(cp) != 0) return false;
@@ -87,7 +87,7 @@ public final class NFSkippable extends UnicodeProperty {
         // "displaced", so we don't have to test further
         
         if (DEBUG) cause = "\t\tno decomp";
-        if (!nfd.normalizationDiffers(cp)) return true;
+        if (nfd.isNormalized(cp)) return true;
         
         // OPTIMIZATION -- careful
         // Hangul syllables are skippable IFF they are isLeadingJamoComposition
@@ -265,7 +265,7 @@ public final class NFSkippable extends UnicodeProperty {
                     byte cat = skipper.ucd.getCategory(cp);
                     if (cat == PRIVATE_USE || cat == SURROGATE) continue;
                     if (skipper.ucd.getCombiningClass(cp) != 0) continue;
-                    if (skipper.nf.normalizationDiffers(cp)) continue;
+                    if (!skipper.nf.isNormalized(cp)) continue;
                     if ((cp < 0xAC00 || cp > 0xAE00)
                         && cp != skipper.ucd.mapToRepresentative(cp, false)) continue;
                 }

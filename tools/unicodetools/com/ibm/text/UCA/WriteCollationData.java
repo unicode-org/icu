@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2002/05/29 23:18:15 $ 
-* $Revision: 1.12 $
+* $Date: 2002/05/31 01:41:03 $ 
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */
@@ -190,7 +190,7 @@ public class WriteCollationData implements UCD_Types {
         for (char c = 0; c < 0xFFFF; ++c) {
             if ((c & 0xFFF) == 0) System.err.println(Utility.hex(c));
             if (0xAC00 <= c && c <= 0xD7A3) continue;
-            if (normKD.normalizationDiffers(c)) {
+            if (!normKD.isNormalized(c)) {
                 ++count;
                 String decomp = normKD.normalize(c);
                 datasize += decomp.length();
@@ -218,7 +218,7 @@ public class WriteCollationData implements UCD_Types {
         for (char c = 0; c < 0xFFFF; ++c) {
             if ((c & 0xFFF) == 0) System.err.println(Utility.hex(c));
             if (0xAC00 <= c && c <= 0xD7A3) continue;
-            if (normD.normalizationDiffers(c)) {
+            if (!normD.isNormalized(c)) {
                 ++count;
                 String decomp = normD.normalize(c);
                 datasize += decomp.length();
@@ -408,7 +408,7 @@ public class WriteCollationData implements UCD_Types {
         }
         log.println("<tr><th>Code</td><th>Sort Key</th><th>Decomposed Sort Key</th><th>Name</th></tr>");
         for (char ch = 0; ch < 0xFFFF; ++ch) {
-            if (!nfkd.normalizationDiffers(ch)) continue;
+            if (nfkd.isNormalized(ch)) continue;
             if (ch > 0xAC00 && ch < 0xD7A3) continue; // skip most of Hangul
             String sortKey = collator.getSortKey(String.valueOf(ch), UCA.NON_IGNORABLE, decomposition);
             String decompSortKey = collator.getSortKey(nfkd.normalize(ch), UCA.NON_IGNORABLE, decomposition);
@@ -1148,6 +1148,9 @@ public class WriteCollationData implements UCD_Types {
         }
     }
     
+    static Normalizer nfdNew = new Normalizer(Normalizer.NFD, "");
+    static Normalizer nfkdNew = new Normalizer(Normalizer.NFKD, "");
+    
     static void writeRules (byte option) throws IOException {
         
         //testTransitivity();
@@ -1155,6 +1158,7 @@ public class WriteCollationData implements UCD_Types {
         
         int[] ces = new int[50];
         Normalizer nfd = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
+        Normalizer nfkd = new Normalizer(Normalizer.NFKD, UNICODE_VERSION);
         
         if (false) {
         int len2 = collator.getCEs("\u2474", true, ces);
@@ -1173,29 +1177,64 @@ public class WriteCollationData implements UCD_Types {
         UCA.UCAContents cc = collator.getContents(UCA.FIXED_CE, 
             SKIP_CANONICAL_DECOMPOSIBLES ? nfd : null);
         int[] lenArray = new int[1];
+        
+        Set alreadyDone = new HashSet();
+        PrintWriter log2 = Utility.openPrintWriter("UCARules-log.txt", false, false);
 
         while (true) {
             String s = cc.next(ces, lenArray);
             if (s == null) break;
             int len = lenArray[0];
+            
+            if (s.equals("\uD800")) {
+            	System.out.println("Check: " + CEList.toString(ces, len));
+            }
+            
+            log2.println(s + "\t" + CEList.toString(ces, len) + "\t" + ucd.getCodeAndName(s));
+            
+            addToBackMap(backMap, ces, len, s, false);
 
-            if (len == 1) backMap.put(new Integer(ces[0]), s);
             String key = String.valueOf((char)(ces[0]>>>16))
                 + String.valueOf((char)(ces[0] & 0xFFFF))
                 + collator.getSortKey(s, UCA.NON_IGNORABLE) + '\u0000' + UCA.codePointOrder(s);
+                
             ordered.put(key, s);
+            alreadyDone.add(s);
+            
             Object result = ordered.get(key);
             if (result == null) {
                 System.out.println("BAD SORT: " + Utility.hex(key) + ", " + Utility.hex(s));
             }
         }
+        
+        System.out.println("Adding Kanji");
+        for (int i = 0; i < 0x10FFFF; ++i) {
+        	if (!ucd.isAllocated(i)) continue;
+        	if (nfkd.isNormalized(i)) continue;
+        	Utility.dot(i);
+        	String decomp = nfkd.normalize(i);
+        	int cp;
+        	for (int j = 0; j < decomp.length(); j += UTF16.getCharCount(cp)) {
+        		cp = UTF16.charAt(decomp, j);
+        		String s = UTF16.valueOf(cp);
+        		if (alreadyDone.contains(s)) continue;
 
+        		alreadyDone.add(s);
+        		int len = collator.getCEs(s, true, ces);
+        		
+            	log2.println(s+ "\t" + CEList.toString(ces, len)
+            		+ "\t" + ucd.getCodeAndName(s) + " from " + ucd.getCodeAndName(i));
+            		
+            	addToBackMap(backMap, ces, len, s, false);
+        	}
+        }
+        
         System.out.println("Writing");
         
         String filename = "UCA_Rules.txt";
         if (option == WITH_NAMES) filename = "UCA_Rules_With_Names.txt";
         else if (option == IN_XML) filename = "UCA_Rules.xml";
-        log = Utility.openPrintWriter(filename);
+        log = Utility.openPrintWriter(filename, false, false);
         
         if (option == IN_XML) log.println("<uca>");
         else log.write('\uFEFF'); // BOM
@@ -1351,60 +1390,35 @@ public class WriteCollationData implements UCD_Types {
             
             // get relation
             
-            int relation = 3;
             
             /*if (chr.charAt(0) == 0xFFFB) {
                 System.out.println("DEBUG");
             }*/
             
-            if (collator.getPrimary(ce) != collator.getPrimary(lastCE)) {
-                relation = 0;
-            } else if (collator.getSecondary(ce) != collator.getSecondary(lastCE)) {
-                relation = 1;
-            } else if (collator.getTertiary(ce) != collator.getTertiary(lastCE)) {
-                relation = 2;
-            } else if (len > lastLen) {
-                relation = 2; // HACK
-            } else {
-                int minLen = len < lastLen ? len : lastLen;
-                for (int kk = 1; kk < minLen; ++kk) {
-                    int lc = lastCes[kk];
-                    int c = ces[kk];
-                    if (collator.getPrimary(c) != collator.getPrimary(lc)
-                      || collator.getSecondary(c) != collator.getSecondary(lc)) {
-                        relation = 3;   // reset relation on FIRST char, since differ anyway
-                        break;
-                      } else if (collator.getTertiary(c) > collator.getTertiary(lc)) {
-                        relation = 2;   // reset to tertiary (but later ce's might override!)
-                    }
-                }
-            }
+            
+            int relation = getStrengthDifference(ces, len, lastCes, lastLen);
 
-            /*if (chr.equals("\u2474")) {
+            if (chr.equals("\u2F00")) {
                 System.out.println(UCA.ceToString(ces, len));
-            }*/
+            }
+            
+            // There are double-CEs, so we have to know what the length of the first bit is.
+            
+    		int expansionStart = 1;
+    		if (UCA.isImplicitCE(ces[0])) {
+    			expansionStart = 2; // move up if first is double-ce
+    		}
             
             // check expansions
             
             String expansion = "";
-            if (len > 1) {
-                int tert0 = ces[0] & 0xFF;
-                boolean isCompat = tert0 != 2 && tert0 != 8;
-                for (int i = 1; i < len; ++i) {
-                    int probe = ces[i];
-                    String s = getFromBackMap(backMap, probe);
-                    if (s == null) {
-                        int meHack = UCA.makeKey(0x1795,0x0020,0x0004);
-                        if (probe == meHack) {
-                            s = "\u3081";
-                        } else {
-                            System.out.println("No back map for " + collator.ceToString(ces[i])
-                                + ": " + ucd.getCodeAndName(chr));
-                            s = "[" + Utility.hex(ces[i]) + "]";
-                        }
-                    }
-                    expansion += s;
-                }
+            if (len > expansionStart) {
+                //int tert0 = ces[0] & 0xFF;
+                //boolean isCompat = tert0 != 2 && tert0 != 8;
+                log2.println("Exp: " + ucd.getCodeAndName(chr) + ", " + CEList.toString(ces, len) + ", start: " + expansionStart);
+                int[] rel = {relation};
+                expansion = getFromBackMap(backMap, ces, expansionStart, len, chr, rel);
+                relation = rel[0];
             }
             
             // print results
@@ -1429,28 +1443,268 @@ public class WriteCollationData implements UCD_Types {
             } else {
                 if (reset.length() != 0) log.println(reset);
                 log.print(RELATION_NAMES[relation] + " " + quoteOperand(chr));
-                if (len > 1) log.print(" / " + quoteOperand(expansion));
+                if (expansion.length() > 0) log.print(" / " + quoteOperand(expansion));
                 if (option == WITH_NAMES) {
                     log.print("\t# " 
                         + collator.ceToString(ces, len) + " " 
                         + ucd.getCodeAndName(chr));
-                    if (len > 1) log.print(" / " + Utility.hex(expansion));
+                    if (expansion.length() > 0) log.print(" / " + Utility.hex(expansion));
                 }
                 log.println();
             }
         }
         // log.println("& [top]"); // RESET
         if (option == IN_XML) log.println("</uca>");
+        log2.close();
         log.close();
         Utility.fixDot();
     }
+    
+    static long getPrimary(int[] ces) {
+    	if (UCA.isImplicitCE(ces[0])) {
+    		return (UCA.getPrimary(ces[0]) << 16) + UCA.getPrimary(ces[1]);
+    	} else {
+    		return UCA.getPrimary(ces[0]);
+    	}
+    }
+    
+    static long getSecondary(int[] ces) {
+    	if (UCA.isImplicitCE(ces[0])) {
+    		return (UCA.getSecondary(ces[0]) << 16) + UCA.getSecondary(ces[1]);
+    	} else {
+    		return UCA.getSecondary(ces[0]);
+    	}
+    }
+    
+    static long getTertiary(int[] ces) {
+    	if (UCA.isImplicitCE(ces[0])) {
+    		return (UCA.getTertiary(ces[0]) << 16) + UCA.getTertiary(ces[1]);
+    	} else {
+    		return UCA.getTertiary(ces[0]);
+    	}
+    }
+    
+	static int getStrengthDifference(int[] ces, int len, int[] lastCes, int lastLen) {
+		
+        int relation = 3;
+        if (getPrimary(ces) != getPrimary(lastCes)) {
+            relation = 0;
+        } else if (getSecondary(ces) != getSecondary(lastCes)) {
+            relation = 1;
+        } else if (getTertiary(ces) != getTertiary(lastCes)) {
+            relation = 2;
+        } else if (len > lastLen) {
+            relation = 2; // HACK
+        } else {
+            int minLen = len < lastLen ? len : lastLen;
+			int start = UCA.isImplicitCE(ces[0]) ? 2 : 1;
+            for (int kk = start; kk < minLen; ++kk) {
+                int lc = lastCes[kk];
+                int c = ces[kk];
+                if (collator.getPrimary(c) != collator.getPrimary(lc)
+                    || collator.getSecondary(c) != collator.getSecondary(lc)) {
+                    relation = 3;   // reset relation on FIRST char, since differ anyway
+                    break;
+                    } else if (collator.getTertiary(c) > collator.getTertiary(lc)) {
+                    relation = 2;   // reset to tertiary (but later ce's might override!)
+                }
+            }
+        }
+        return relation;
+    }
+    
     
     // static final String[] RELATION_NAMES = {" <", "   <<", "     <<<", "         ="};
     static final String[] RELATION_NAMES = {" <\t", "  <<\t", "   <<<\t", "    =\t"};
     static final String[] XML_RELATION_NAMES = {"o1", "o2", "o3", "o4"};
     
-    static final String getFromBackMap(Map backMap, int probe) {
-        String s = (String)backMap.get(new Integer(probe));
+    static class ArrayWrapper {
+    	int[] array;
+    	int start;
+    	int limit;
+    	
+    	/*public ArrayWrapper(int[] contents) {
+    		set(contents, 0, contents.length);
+    	}
+    	*/
+    	
+    	public ArrayWrapper(int[] contents, int start, int limit) {
+    		set(contents, start, limit);
+    	}
+    	
+    	private void set(int[] contents, int start, int limit) {
+    		array = contents;
+    		this.start = start;
+    		this.limit = limit;
+		}
+    	
+    	public boolean equals(Object other) {
+    		ArrayWrapper that = (ArrayWrapper) other;
+    		if (that.limit - that.start != limit - start) return false;
+    		for (int i = start; i < limit; ++i) {
+    			if (array[i] != that.array[i - start + that.start]) return false;
+    		}
+    		return true;
+    	}
+    	
+    	public int hashCode() {
+    		int result = limit - start;
+    		for (int i = start; i < limit; ++i) {
+    			result = result * 37 + array[i];
+    		}
+    		return result;
+    	}
+    }
+    
+    static int testCase[] = {
+    	//collator.makeKey(0xFF40, 0x0020, 0x0002),
+    	collator.makeKey(0x0255, 0x0020, 0x000E),
+    };
+    
+    static String testString = "\u33C2\u002E";
+    
+    static boolean contains(int[] array, int start, int limit, int key) {
+    	for (int i = start; i < limit; ++i) {
+    		if (array[i] == key) return true;
+    	}
+    	return false;
+    }
+    
+    static final void addToBackMap(Map backMap, int[] ces, int len, String s, boolean show) {
+    	if (show || contains(testCase, 0, testCase.length, ces[0]) || testString.indexOf(s) > 0) {
+    		System.out.println("Test case: " + Utility.hex(s) + ", " + CEList.toString(ces, len));
+    	}
+		backMap.put(new ArrayWrapper((int[])(ces.clone()), 0, len), s);
+    }
+    
+    static int[] ignorableList = {
+    	UCA.makeKey(0x0000, 0x0153, 0x0002),
+    	UCA.makeKey(0x0000, 0x0154, 0x0002),
+    	UCA.makeKey(0x0000, 0x0155, 0x0002),
+    	UCA.makeKey(0x0000, 0x0156, 0x0002),
+    	UCA.makeKey(0x0000, 0x0157, 0x0002),
+    	UCA.makeKey(0x0000, 0x0158, 0x0002),
+    	UCA.makeKey(0x0000, 0x0159, 0x0002),
+    	UCA.makeKey(0x0000, 0x015A, 0x0002),
+    	UCA.makeKey(0x0000, 0x015B, 0x0002),
+    	UCA.makeKey(0x0000, 0x015C, 0x0002),
+    	UCA.makeKey(0x0000, 0x015D, 0x0002),
+    	UCA.makeKey(0x0000, 0x015E, 0x0002),
+    	UCA.makeKey(0x0000, 0x015F, 0x0002),
+    	UCA.makeKey(0x0000, 0x0160, 0x0002),
+    	UCA.makeKey(0x0000, 0x0161, 0x0002),
+    	UCA.makeKey(0x0000, 0x0162, 0x0002),
+    	UCA.makeKey(0x0000, 0x0163, 0x0002),
+    	UCA.makeKey(0x0000, 0x0164, 0x0002),
+    	UCA.makeKey(0x0000, 0x0165, 0x0002),
+    	UCA.makeKey(0x0000, 0x0166, 0x0002),
+    	UCA.makeKey(0x0000, 0x0167, 0x0002),
+    	UCA.makeKey(0x0000, 0x0168, 0x0002),
+    	UCA.makeKey(0x0000, 0x0169, 0x0002),
+    	UCA.makeKey(0x0000, 0x016A, 0x0002),
+    	UCA.makeKey(0x0000, 0x016B, 0x0002),
+    	UCA.makeKey(0x0000, 0x016C, 0x0002),
+    	UCA.makeKey(0x0000, 0x016D, 0x0002),
+    	UCA.makeKey(0x0000, 0x016E, 0x0002),
+    	UCA.makeKey(0x0000, 0x016F, 0x0002),
+    	UCA.makeKey(0x0000, 0x0170, 0x0002),
+    };
+    
+    static final String getFromBackMap(Map backMap, int[] originalces, int expansionStart, int len, String chr, int[] rel) {
+    	int[] ces = (int[])(originalces.clone());
+    	
+    	String expansion = "";
+    	
+    	// process ces to neutralize tertiary
+    	
+    	for (int i = expansionStart; i < len; ++i) {
+    		int probe = ces[i];
+        	char primary = collator.getPrimary(probe);
+        	char secondary = collator.getSecondary(probe);
+        	char tertiary = collator.getTertiary(probe);
+    		
+            int tert = tertiary;
+            switch (tert) {
+            case 8: case 9: case 0xA: case 0xB: case 0xC: case 0x1D:
+                tert = 8;
+                break;
+            case 0xD: case 0x10: case 0x11: case 0x12: case 0x13: case 0x1C:
+                tert = 0xE;
+                break;
+            default:
+                tert = 2;
+                break;
+            }
+            ces[i] = collator.makeKey(primary, secondary, tert);
+    	}
+    	
+        for (int i = expansionStart; i < len;) {
+        	int limit;
+        	String s = null;
+        	for (limit = len; limit > i; --limit) {
+        		ArrayWrapper wrapper = new ArrayWrapper(ces, i, limit);
+        		s = (String)backMap.get(wrapper);
+            	if (s != null) break;
+            }
+            if (s == null) {
+            	do {
+            		if (contains(ignorableList, 0, ignorableList.length, ces[i])) {
+            			s = "";
+            			if (rel[0] > 1) rel[0] = 1; // HACK
+            			break;
+            		}
+            		
+            		// Try stomping the value to different tertiaries
+            		
+    				int probe = ces[i];
+        			char primary = collator.getPrimary(probe);
+        			char secondary = collator.getSecondary(probe);
+	        		
+            		ces[i] = collator.makeKey(primary, secondary, 2);
+        			ArrayWrapper wrapper = new ArrayWrapper(ces, i, i+1);
+        			s = (String)backMap.get(wrapper);
+        			if (s != null) break;
+            
+            		ces[i] = collator.makeKey(primary, secondary,0xE);
+        			wrapper = new ArrayWrapper(ces, i, i+1);
+        			s = (String)backMap.get(wrapper);
+        			if (s != null) break;
+
+					/*
+                	int meHack = UCA.makeKey(0x1795,0x0020,0x0004);
+                	if (ces[i] == meHack) {
+                    	s = "\u3081";
+                    	break;
+                    }
+                    */
+                    
+                    // we failed completely. Print error message, and bail
+                    
+                    System.out.println("No back map for " + collator.ceToString(ces[i])
+                        + " from " + CEList.toString(ces, len));
+                    System.out.println("\t" + ucd.getCodeAndName(chr)
+                        + " => " + ucd.getCodeAndName(nfkdNew.normalize(chr))
+                    );
+                    s = "[" + Utility.hex(ces[i]) + "]";
+        	    } while (false); // exactly one time, just for breaking
+            	limit = i + 1;
+            }
+            expansion += s;
+            i = limit;
+        }
+        return expansion;
+    }
+    
+    /*
+
+    static final String getFromBackMap(Map backMap, int[] ces, int index, int limit) {
+    	ArrayWrapper wrapper = new ArrayWrapper(ces, index, limit);
+    	
+    	int probe = ces[index];
+    	wrapperContents[0] = probe;
+        String s = (String)backMap.get(wrapper);
+        
+        outputLen[0] = 1;
         if (s != null) return s;
         
         char primary = collator.getPrimary(probe);
@@ -1473,25 +1727,31 @@ public class WriteCollationData implements UCD_Types {
                 break;
             }
             probe = collator.makeKey(primary, secondary, tert);
-            s = (String)backMap.get(new Integer(probe));
+            wrapperContents[0] = probe;
+            s = (String)backMap.get(wrapper);
             if (s != null) return s;
                 
             probe = collator.makeKey(primary, secondary, collator.NEUTRAL_TERTIARY);
-            s = (String)backMap.get(new Integer(probe));
+            wrapperContents[0] = probe;
+            s = (String)backMap.get(wrapper);
         }
         if (s != null) return s;
         
         if (primary != 0 && secondary != collator.NEUTRAL_SECONDARY) {
-            String first = getFromBackMap(backMap, 
-                collator.makeKey(primary, collator.NEUTRAL_SECONDARY, tertiary));
-            String second = getFromBackMap(backMap, 
-                collator.makeKey(0, secondary, collator.NEUTRAL_TERTIARY));
+        	int[] dummyArray = new int[1];
+        	dummyArray[0] = collator.makeKey(primary, collator.NEUTRAL_SECONDARY, tertiary);
+            String first = getFromBackMap(backMap, dummyArray, 0, outputLen);
+            
+            dummyArray[0] = collator.makeKey(0, secondary, collator.NEUTRAL_TERTIARY);
+            String second = getFromBackMap(backMap, dummyArray, 0, outputLen);
+            
             if (first != null && second != null) {
                 s = first + second;
             }
         }
         return s;
     }
+    */
     
     static final String[] RELATION = {
         "<", " << ", "  <<<  ", "    =    ", "    =    ", "    =    ", "  >>>  ", " >> ", ">"

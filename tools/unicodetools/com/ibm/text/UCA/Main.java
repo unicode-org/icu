@@ -5,18 +5,20 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/Main.java,v $ 
-* $Date: 2002/05/29 23:18:15 $ 
-* $Revision: 1.2 $
+* $Date: 2002/05/31 01:41:03 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
 
 package com.ibm.text.UCA;
 import com.ibm.text.UCD.*;
+import com.ibm.text.utility.*;
 
 
 public class Main {
 	static final String UCDVersion = "";
+	static final String[] ICU_FILES = {"FractionalUCA", "writeconformance", "writeconformanceshifted", "WriteRules"};
 	
 	public static void main(String args[]) throws Exception {
 		
@@ -36,7 +38,10 @@ public class Main {
         
         for (int i = 0; i < args.length; ++i) {
             String arg = args[i];
-            if      (arg.equalsIgnoreCase("WriteRulesWithNames")) WriteCollationData.writeRules(WriteCollationData.WITH_NAMES);
+            System.out.println("OPTION: " + arg);
+            
+            if		(arg.equalsIgnoreCase("ICU")) args = Utility.append(args, ICU_FILES);
+			else if (arg.equalsIgnoreCase("WriteRulesWithNames")) WriteCollationData.writeRules(WriteCollationData.WITH_NAMES);
             else if (arg.equalsIgnoreCase("GenOverlap")) GenOverlap.test(WriteCollationData.collator);
             else if (arg.equalsIgnoreCase("validateUCA")) GenOverlap.validateUCA(WriteCollationData.collator);
             else if (arg.equalsIgnoreCase("writeNonspacingDifference")) WriteCollationData.writeNonspacingDifference();

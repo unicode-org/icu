@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateCaseFolding.java,v $
-* $Date: 2002/04/23 01:59:14 $
-* $Revision: 1.9 $
+* $Date: 2002/05/31 01:41:04 $
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -416,7 +416,7 @@ public class GenerateCaseFolding implements UCD_Types {
     
     static boolean specialNormalizationDiffers(int ch) {
         if (ch == 0x00DF) return true;                  // es-zed
-        return Default.nfkd.normalizationDiffers(ch);
+        return !Default.nfkd.isNormalized(ch);
     }
     
     static String specialNormalization(String s) {

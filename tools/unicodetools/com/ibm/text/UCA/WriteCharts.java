@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCharts.java,v $ 
-* $Date: 2002/05/29 02:01:00 $ 
-* $Revision: 1.8 $
+* $Date: 2002/05/31 01:41:03 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -29,7 +29,7 @@ public class WriteCharts implements UCD_Types {
     	Default.setUCD();
     	for (int i = 0xE000; i < 0x10000; ++i) {
     		if (!Default.ucd.isRepresented(i)) continue;
-    		if (Default.nfkc.normalizationDiffers(i)) continue;
+    		if (!Default.nfkc.isNormalized(i)) continue;
     		System.out.println(Default.ucd.getCodeAndName(i));
     	}
     }
@@ -205,7 +205,7 @@ public class WriteCharts implements UCD_Types {
         	byte cat = Default.ucd.getCategory(i);
         	if (cat == Cs || cat == Co) continue;
         	
-        	if (!Default.nfkd.normalizationDiffers(i)) continue;
+        	if (Default.nfkd.isNormalized(i)) continue;
         	String decomp = Default.nfkd.normalize(i);
         	
         	byte script = getBestScript(decomp);
