@@ -15,7 +15,12 @@ import java.util.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.1 $ $Date: 1999/12/20 18:29:21 $
+ * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.2 $ $Date: 1999/12/22 00:01:36 $
+ *
+ * $Log: TransliterationRuleSet.java,v $
+ * Revision 1.2  1999/12/22 00:01:36  Alan
+ * Detect a>x masking a>y
+ *
  */
 class TransliterationRuleSet {
     /* Note: There was an old implementation that indexed by first letter of
@@ -76,8 +81,8 @@ class TransliterationRuleSet {
         for (int i=0; i<rules.size(); ++i) {
             TransliterationRule r = (TransliterationRule) rules.elementAt(i);
             if (r.masks(rule)) {
-                throw new IllegalArgumentException("Rule " + rule +
-                                                   " must precede " + r);
+                throw new IllegalArgumentException("Rule " + r +
+                                                   " masks " + rule);
             }
         }
 
