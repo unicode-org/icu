@@ -62,7 +62,7 @@ static const int8_t bytesFromUTF8[256] = {
   3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 0, 0
 };
 
-//static const unsigned char firstByteMark[7] = {0x00, 0x00, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC};
+/* static const unsigned char firstByteMark[7] = {0x00, 0x00, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC};*/
 
 #define INVALID_UTF8_TAIL(utf8) (((utf8) & 0xC0) != 0x80)
 #define VALID_UTF8_TAIL(utf8) (((utf8) & 0xC0) == 0x80)
@@ -83,11 +83,10 @@ UBool T_UConverter_toUnicode_InvalidChar_Callback(UConverterToUnicodeArgs * args
         *err = U_ILLEGAL_CHAR_FOUND;
     }
 
-    /*  */
+    /* Make the toUBytes invalid */
     uprv_memcpy(converter->invalidCharBuffer,
                 converter->toUBytes,
                 converter->invalidCharLength);
-    /* prepare for new character */
 
     /* Call the ErrorFunction */
     args->converter->fromCharErrorBehaviour(converter->toUContext,
@@ -100,9 +99,8 @@ UBool T_UConverter_toUnicode_InvalidChar_Callback(UConverterToUnicodeArgs * args
     /* restore the state in case the callback changed it */
     converter->toUnicodeStatus = 0;
     converter->toULength = 0;
-    converter->mode = 0;
 
-    return U_FAILURE(*err);
+    return (UBool)U_FAILURE(*err);
 }
 
 UBool T_UConverter_toUnicode_InvalidChar_OffsetCallback(UConverterToUnicodeArgs * args,
@@ -127,10 +125,6 @@ U_CFUNC void T_UConverter_toUnicode_UTF8 (UConverterToUnicodeArgs * args,
     const unsigned char *mySource = (unsigned char *) args->source;
     UChar *myTarget = args->target;
     UConverter *converter = args->converter;
-//    int32_t mySourceIndex = 0;
-//    int32_t myTargetIndex = 0;
-//    int32_t targetLength = args->targetLimit - myTarget;
-//    int32_t sourceLength = args->sourceLimit - (char *) mySource;
     const unsigned char *sourceLimit = (unsigned char *) args->sourceLimit;
     const UChar *targetLimit = args->targetLimit;
     UBool invalidTailChar = FALSE;
@@ -171,7 +165,6 @@ U_CFUNC void T_UConverter_toUnicode_UTF8 (UConverterToUnicodeArgs * args,
             else
             {
                 /* store the first char */
-
                 converter->toUBytes[0] = (char)ch;
                 inBytes = bytesFromUTF8[ch]; /* lookup current sequence length */
                 i = 1;
@@ -209,16 +202,20 @@ morebytes:
                     }
                 }
 
+                /* Remove the acummulated high bits */
                 ch -= offsetsFromUTF8[inBytes];
 
                 if (i == inBytes && ch <= MAXIMUM_UTF16)
-                {   /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
+                {
+                    /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
                     if (ch <= MAXIMUM_UCS2) 
-                    {   /* fits in 16 bits */
+                    {
+                        /* fits in 16 bits */
                         *(myTarget++) = (UChar) ch;
                     }
                     else
                     {
+                        /* write out the surrogates */
                         ch -= HALF_BASE;
                         *(myTarget++) = (UChar) ((ch >> HALF_SHIFT) + SURROGATE_HIGH_START);
                         ch = (ch & HALF_MASK) + SURROGATE_LOW_START;
@@ -231,6 +228,7 @@ morebytes:
                             /* Put in overflow buffer (not handled here) */
                             converter->UCharErrorBuffer[0] = (UChar) ch;
                             converter->UCharErrorBufferLength = 1;
+                            *err = U_INDEX_OUTOFBOUNDS_ERROR;
                             break;
                         }
                     }
@@ -242,6 +240,7 @@ morebytes:
                     converter->invalidCharLength = (int8_t)i;
                     if (T_UConverter_toUnicode_InvalidChar_Callback(args, err))
                     {
+                        /* Stop if the error wasn't handled */
                         break;
                     }
                     converter->invalidCharLength = 0;
@@ -249,6 +248,7 @@ morebytes:
                     myTarget = args->target;
                     if (invalidTailChar)
                     {
+                        /* Treat the tail as ASCII*/
                         if (myTarget < targetLimit)
                         {
                             *(myTarget++) = (UChar) ch2;
@@ -257,8 +257,9 @@ morebytes:
                         else
                         {
                             /* Put in overflow buffer (not handled here) */
-                            converter->UCharErrorBuffer[0] = (UChar) ch;
+                            converter->UCharErrorBuffer[0] = (UChar) ch2;
                             converter->UCharErrorBufferLength = 1;
+                            *err = U_INDEX_OUTOFBOUNDS_ERROR;
                             break;
                         }
                     }
@@ -266,8 +267,8 @@ morebytes:
             }
         }
         else
-        /* End of target buffer */
         {
+            /* End of target buffer */
             *err = U_INDEX_OUTOFBOUNDS_ERROR;
             break;
         }
@@ -286,10 +287,6 @@ U_CFUNC void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC (UConverterToUnicodeArgs 
     int32_t *myOffsets = args->offsets;
     int32_t offsetNum = 0;
     UConverter *converter = args->converter;
-//    int32_t mySourceIndex = 0;
-//    int32_t myTargetIndex = 0;
-//    int32_t targetLength = args->targetLimit - myTarget;
-//    int32_t sourceLength = args->sourceLimit - (char *) mySource;
     const unsigned char *sourceLimit = (unsigned char *) args->sourceLimit;
     const UChar *targetLimit = args->targetLimit;
     UBool invalidTailChar = FALSE;
@@ -318,10 +315,10 @@ U_CFUNC void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC (UConverterToUnicodeArgs 
         if (myTarget < targetLimit)
         {
             ch = *(mySource++);
-            *(myOffsets++) = offsetNum++;
             if (ch < 0x80)        /* Simple case */
             {
                 *(myTarget++) = (UChar) ch;
+                *(myOffsets++) = offsetNum++;
             }
             else
             {
@@ -351,7 +348,7 @@ morebytes:
                             if (U_SUCCESS(*err)) 
                             {
                                 *err = U_TRUNCATED_CHAR_FOUND;
-                                converter->toUnicodeStatus = 0x00;
+                                converter->toUnicodeStatus = 0;
                             }
                         }
                         else
@@ -363,16 +360,22 @@ morebytes:
                     }
                 }
 
+                /* Remove the acummulated high bits */
                 ch -= offsetsFromUTF8[inBytes];
 
                 if (i == inBytes && ch <= MAXIMUM_UTF16)
                 {
-                    if (ch <= MAXIMUM_UCS2)
+                    /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
+                    if (ch <= MAXIMUM_UCS2) 
                     {
+                        /* fits in 16 bits */
                         *(myTarget++) = (UChar) ch;
+                        *(myOffsets++) = offsetNum;
                     }
                     else
                     {
+                        /* write out the surrogates */
+                        *(myOffsets++) = offsetNum;
                         ch -= HALF_BASE;
                         *(myTarget++) = (UChar) ((ch >> HALF_SHIFT) + SURROGATE_HIGH_START);
                         ch = (ch & HALF_MASK) + SURROGATE_LOW_START;
@@ -388,10 +391,12 @@ morebytes:
                             *err = U_INDEX_OUTOFBOUNDS_ERROR;
                         }
                     }
-                    offsetNum += i - 1;
+                    offsetNum += i;
                 }
                 else
                 {
+                    UBool useOffset;
+
                     args->source = (const char *) mySource;
                     args->target = myTarget;
                     args->offsets = myOffsets;
@@ -399,31 +404,40 @@ morebytes:
                     if (T_UConverter_toUnicode_InvalidChar_OffsetCallback(args,
                      offsetNum, err))
                     {
+                        /* Stop if the error wasn't handled */
                         break;
                     }
+
                     converter->invalidCharLength = 0;
                     mySource = (unsigned char *) args->source;
                     myTarget = args->target;
+
+                    useOffset = (myOffsets != args->offsets);
                     myOffsets = args->offsets;
+                    offsetNum += i;
+
                     if (invalidTailChar)
                     {
+                        /* Treat the tail as ASCII*/
                         if (myTarget < targetLimit)
                         {
                             *(myTarget++) = (UChar) ch2;
-                            *(myOffsets++) = (offsetNum += i - 1);
+                            *myOffsets = offsetNum++;
+                            if (useOffset)
+                            {
+                                /* Increment when the target was consumed */
+                                myOffsets++;
+                            }
                             invalidTailChar = FALSE;
                         }
                         else
                         {
                             /* Put in overflow buffer (not handled here) */
-                            converter->UCharErrorBuffer[0] = (UChar) ch;
+                            converter->UCharErrorBuffer[0] = (UChar) ch2;
                             converter->UCharErrorBufferLength = 1;
+                            *err = U_INDEX_OUTOFBOUNDS_ERROR;
                             break;
                         }
-                    }
-                    else
-                    {
-                        offsetNum += i - 1;
                     }
                 }
             }
