@@ -34,10 +34,12 @@
 class Hashtable;
 class TableCollationData;
 
-// Tell the VC++ compiler not to warn about DLL interface
+/* Tell the VC++ compiler not to warn about DLL interface */
+/*
 #ifdef _WIN32
 #pragma warning( disable : 4251 )
 #endif
+*/
 
 //-------------------------------------------------------------------------------
 /**
