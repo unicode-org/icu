@@ -273,11 +273,11 @@ void addTestNewConvert(TestNode** root)
 
 static void setNuConvTestName(const char *codepage, const char *direction)
 {
-  sprintf(gNuConvTestName, "[Testing %s %s Unicode, InputBufSiz=%d, OutputBufSiz=%d]",
-      codepage,
-      direction,
-      gInBufferSize,
-      gOutBufferSize);
+    sprintf(gNuConvTestName, "[Testing %s %s Unicode, InputBufSiz=%d, OutputBufSiz=%d]",
+        codepage,
+        direction,
+        (int)gInBufferSize,
+        (int)gOutBufferSize);
 }
 
 typedef enum 

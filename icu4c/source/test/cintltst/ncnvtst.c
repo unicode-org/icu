@@ -14,6 +14,7 @@
 */
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "unicode/uloc.h"
 #include "unicode/ucnv.h"
 #include "unicode/utypes.h"
@@ -50,11 +51,11 @@ static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *
 
 static void setNuConvTestName(const char *codepage, const char *direction)
 {
-  sprintf(gNuConvTestName, "[Testing %s %s Unicode, InputBufSiz=%d, OutputBufSiz=%d]",
-      codepage,
-      direction,
-      gInBufferSize,
-      gOutBufferSize);
+    sprintf(gNuConvTestName, "[Testing %s %s Unicode, InputBufSiz=%d, OutputBufSiz=%d]",
+        codepage,
+        direction,
+        (int)gInBufferSize,
+        (int)gOutBufferSize);
 }
 
 
@@ -893,9 +894,9 @@ static UBool convertFromU( const UChar *source, int sourceLen,  const uint8_t *e
 
     if(memcmp(buffer, expect, expectLen)){
         log_err("String does not match. FROM Unicode to codePage%s\n", codepage);
-        printf("\nGot:");
+        log_info("\nGot:");
         printSeqErr((const unsigned char *)buffer, expectLen);
-        printf("\nExpected:");
+        log_info("\nExpected:");
         printSeqErr((const unsigned char *)expect, expectLen);
         return FALSE;
     }
@@ -907,13 +908,13 @@ static UBool convertFromU( const UChar *source, int sourceLen,  const uint8_t *e
         log_verbose("comparing %d offsets..\n", targ-buffer);
         if(memcmp(offsetBuffer,expectOffsets,(targ-buffer) * sizeof(int32_t) )){
             log_err("did not get the expected offsets. for FROM Unicode to %s\n", codepage);
-            printf("\nGot  : ");
+            log_info("\nGot  : ");
             printSeqErr((const unsigned char*)buffer, targ-buffer);
             for(p=buffer;p<targ;p++)
-                printf("%d, ", offsetBuffer[p-buffer]); 
-            printf("\nExpected: ");
+                log_info("%d, ", offsetBuffer[p-buffer]); 
+            log_info("\nExpected: ");
             for(i=0; i< (targ-buffer); i++)
-                printf("%d,", expectOffsets[i]);
+                log_info("%d,", expectOffsets[i]);
         }
     }
 
@@ -987,26 +988,26 @@ static UBool convertToU( const uint8_t *source, int sourceLen, const UChar *expe
         if(memcmp(offsetBuffer, expectOffsets, (targ-buffer) * sizeof(int32_t))){
 
             log_err("did not get the expected offsets from %s To UNICODE\n", codepage);
-            printf("\nGot : ");
+            log_info("\nGot : ");
             for(p=buffer;p<targ;p++)
-                printf("%d, ", offsetBuffer[p-buffer]); 
-            printf("\nExpected: ");
+                log_info("%d, ", offsetBuffer[p-buffer]); 
+            log_info("\nExpected: ");
             for(i=0; i<(targ-buffer); i++)
-                printf("%d, ", expectOffsets[i]);
-            printf("\nGot result:");
+                log_info("%d, ", expectOffsets[i]);
+            log_info("\nGot result:");
             for(i=0; i<(targ-buffer); i++)
-                printf("0x%04X,", buffer[i]);
-            printf("\nFrom Input:");
+                log_info("0x%04X,", buffer[i]);
+            log_info("\nFrom Input:");
             for(i=0; i<(src-source); i++)
-                printf("0x%02X,", (unsigned char)source[i]);
-            puts("\n");
+                log_info("0x%02X,", (unsigned char)source[i]);
+            log_info("\n");
         }
     }
     if(memcmp(buffer, expect, expectLen*2)){
         log_err("String does not match. from codePage %s TO Unicode\n", codepage);
-        printf("\nGot:");
+        log_info("\nGot:");
         printUSeqErr(buffer, expectLen);
-        printf("\nExpected:");
+        log_info("\nExpected:");
         printUSeqErr(expect, expectLen);
         return FALSE;
     }
@@ -1149,9 +1150,9 @@ static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_
     {
         log_err("Expected %d chars out, got %d %s\n", expectLen, targ-junkout, gNuConvTestName);
         log_verbose("Expected %d chars out, got %d %s\n", expectLen, targ-junkout, gNuConvTestName);
-        printf("\nGot:");
+        log_info("\nGot:");
         printSeqErr((const unsigned char*)junkout, targ-junkout);
-        printf("\nExpected:");
+        log_info("\nExpected:");
         printSeqErr((const unsigned char*)expect, expectLen);
         return FALSE;
     }
@@ -1181,9 +1182,9 @@ static UBool testConvertFromU( const UChar *source, int sourceLen,  const uint8_
     {
         log_err("String does not match. %s\n", gNuConvTestName);
         printUSeqErr(source, sourceLen);
-        printf("\nGot:");
+        log_info("\nGot:");
         printSeqErr((const unsigned char *)junkout, expectLen);
-        printf("\nExpected:");
+        log_info("\nExpected:");
         printSeqErr((const unsigned char *)expect, expectLen);
 
         return FALSE;
@@ -1351,9 +1352,9 @@ static UBool testConvertToU( const uint8_t *source, int sourcelen, const UChar *
     {
         log_err("String does not match. %s\n", gNuConvTestName);
         log_verbose("String does not match. %s\n", gNuConvTestName);
-        printf("\nGot:");
+        log_info("\nGot:");
         printUSeq(junkout, expectlen);
-        printf("\nExpected:");
+        log_info("\nExpected:");
         printUSeq(expect, expectlen); 
         return FALSE;
     }

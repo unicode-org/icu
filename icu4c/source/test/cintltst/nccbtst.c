@@ -73,8 +73,8 @@ static void setNuConvTestName(const char *codepage, const char *direction)
     sprintf(gNuConvTestName, "[testing %s %s Unicode, InputBufSiz=%d, OutputBufSiz=%d]",
             codepage,
             direction,
-            gInBufferSize,
-            gOutBufferSize);
+            (int)gInBufferSize,
+            (int)gOutBufferSize);
 }
 
 
