@@ -321,7 +321,7 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
                 if( ! hasEra && getField(d[0], UCAL_ERA) == GregorianCalendar::BC)
                     maxSmatch = 2;
                 // Starts in DST, no year in pattern
-                else if(in0=fmt->getTimeZone().inDaylightTime(d[0], status) && ! failure(status, "gettingDaylightTime") &&
+                else if((in0=fmt->getTimeZone().inDaylightTime(d[0], status)) && ! failure(status, "gettingDaylightTime") &&
                          pat.indexOf(UnicodeString("yyyy")) == -1)
                     maxSmatch = 2;
                 // If we start not in DST, but transition into DST
