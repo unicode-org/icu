@@ -1835,6 +1835,15 @@ public final class CollationElementIterator
                 }
                 break;
             }
+            
+            if (collator.m_contractionCE_[entryoffset] != CE_NOT_FOUND_
+                && !wasIgnorable) {
+                // there are further contractions to be performed, so we store
+                // the so-far completed ce, so that if we fail in the next
+                // round we just return this one.
+                entryce = collator.m_contractionCE_[entryoffset];
+                backupInternalState(m_utilSpecialBackUp_);
+            }
 
             // get the discontiguos maximum combining class
             byte maxCC = (byte)(collator.m_contractionIndex_[offset] & 0xFF);
@@ -1941,6 +1950,7 @@ public final class CollationElementIterator
             }
 
             // ccontinue looping to check for the remaining contraction.
+            /***
             if (collator.m_contractionCE_[entryoffset] != CE_NOT_FOUND_) {
                 // there are further contractions to be performed, so we store
                 // the so-far completed ce, so that if we fail in the next
@@ -1954,6 +1964,7 @@ public final class CollationElementIterator
                     m_utilSpecialBackUp_.m_offset_ --;
                 }
             }
+            ***/
         }
         return ce;
     }

@@ -1876,4 +1876,30 @@ public class CollationMiscTest extends TestFmwk{
             }
         }
     }
+    
+    public void Test3249()
+    {
+        String rule = "&x < a &z < a";
+        try {
+            RuleBasedCollator coll = new RuleBasedCollator(rule);
+        } catch (Exception e) {
+            errln("Error creating RuleBasedCollator with " + rule + " failed");
+        }
+    }
+    
+    public void TestTibetanConformance() 
+    {  
+        String test[] = {"\u0FB2\u0591\u0F71\u0061", "\u0FB2\u0F71\u0061"};
+        try {
+            Collator coll = Collator.getInstance();
+            coll.setDecomposition(Collator.CANONICAL_DECOMPOSITION);
+            if (coll.compare(test[0], test[1]) != 0) {
+                errln("Tibetan comparison error");
+            }
+            CollationTest.doTest(this, (RuleBasedCollator)coll, 
+                                 test[0], test[1], 0);
+        } catch (Exception e) {
+            errln("Error creating UCA collator");
+        }
+    }
 }
