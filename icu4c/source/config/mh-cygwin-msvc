@@ -3,7 +3,7 @@
 ## Copyright (c) 2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-cygwin-msvc,v 1.4 2003/03/21 01:12:29 grhoten-oss Exp $
+## $Id: mh-cygwin-msvc,v 1.5 2003/04/10 17:42:20 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	:
@@ -110,9 +110,8 @@ MIDDLE_SO_TARGET=$(SO_TARGET)
 
 ## Versioned import library names.
 IMPORT_LIB = $(LIBICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX)$(IMPORT_LIB_EXT)
-IMPORT_STUBDATA_LIB = $(IMPORT_LIB)
-FINAL_IMPORT_LIB = $(LIBICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)$(IMPORT_LIB_EXT)
-FINAL_IMPORT_STUBDATA_LIB = $(FINAL_IMPORT_LIB)
+MIDDLE_IMPORT_LIB = $(LIBICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)$(IMPORT_LIB_EXT)
+FINAL_IMPORT_LIB := $(MIDDLE_IMPORT_LIB)
 
 ## Versioned libraries rules
 #%$(SO_TARGET_VERSION_MAJOR).$(SO): %$(SO_TARGET_VERSION).$(SO)
