@@ -20,5 +20,6 @@
 
 static void TestConvert(void);
 static void TestAlias(void);
+static void TestConvertSafeClone(void);
 
 #endif
