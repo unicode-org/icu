@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/tools/normalizer/Attic/CPPWriter.java,v $ 
- * $Date: 2000/08/11 17:31:41 $ 
- * $Revision: 1.4 $
+ * $Date: 2000/09/19 17:04:47 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -81,12 +81,18 @@ class CPPWriter extends SourceWriter {
         write(valueName, array.getValueArray());
 
         header.println("");
+        header.println("    static CompactShortArray _" + name + ";");
+        header.println("");
         header.println("    static const CompactShortArray* " + name + ";");
 
         source.println("");
+        source.println("CompactShortArray " +
+                       className + "::_" + name + ";");
+        source.println("");
         source.println("const CompactShortArray* " +
                        className + "::" + name + " = ");
-        source.println("    ucmp16_openAdoptWithBlockShift((uint16_t*)" + indexName + ",");
+        source.println("    ucmp16_initAliasWithBlockShift(&" + className + "::_" + name + ",");
+        source.println("                                   (uint16_t*)" + indexName + ",");
         source.println("                                   (int16_t*)" + valueName + ",");
         source.println("                                   " +
                        array.getValueArray().length + ", " +
@@ -104,12 +110,18 @@ class CPPWriter extends SourceWriter {
         write(valueName, array.getValueArray());
 
         header.println("");
+        header.println("    static CompactByteArray _" + name + ";");
+        header.println("");
         header.println("    static const CompactByteArray* " + name + ";");
 
         source.println("");
+        source.println("CompactByteArray " +
+                       className + "::_" + name + ";");
+        source.println("");
         source.println("const CompactByteArray* " +
                        className + "::" + name + " = ");
-        source.println("    ucmp8_openAdopt((uint16_t*)" + indexName + ",");
+        source.println("    ucmp8_initAlias(&" + className + "::_" + name + ",");
+        source.println("                    (uint16_t*)" + indexName + ",");
         source.println("                    (int8_t*)" + valueName + ",");
         source.println("                    " + array.getValueArray().length + ");");
     }
