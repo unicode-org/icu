@@ -172,11 +172,7 @@ stringIteratorPrevious(UCharIterator *iter) {
 
 static uint32_t U_CALLCONV
 stringIteratorGetState(const UCharIterator *iter) {
-    if(iter==NULL) {
-        return 0xffffffff; /* invalid */
-    } else {
-        return (uint32_t)iter->index;
-    }
+    return (uint32_t)iter->index;
 }
 
 static void U_CALLCONV
@@ -432,11 +428,7 @@ characterIteratorPrevious(UCharIterator *iter) {
 
 static uint32_t U_CALLCONV
 characterIteratorGetState(const UCharIterator *iter) {
-    if(iter==NULL || iter->context==NULL) {
-        return 0xffffffff; /* invalid */
-    } else {
-        return ((CharacterIterator *)(iter->context))->getIndex();
-    }
+    return ((CharacterIterator *)(iter->context))->getIndex();
 }
 
 static void U_CALLCONV
@@ -701,9 +693,22 @@ utf8IteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origin)
         break;
     case UITER_LIMIT:
     case UITER_LENGTH:
-        pos=utf8IteratorGetIndex(iter, UITER_LENGTH)+delta;
-        havePos=TRUE;
-        /* even if the UTF-16 index was unknown, we know it now: iter->index>=0 here */
+        if(iter->length>=0) {
+            pos=iter->length+delta;
+            havePos=TRUE;
+        } else {
+            /* pin to the end, avoid counting the length */
+            iter->index=-1;
+            iter->start=iter->limit;
+            iter->reservedField=0;
+            if(delta>=0) {
+                return UITER_UNKNOWN_INDEX;
+            } else {
+                /* the current UTF-16 index is unknown, use only delta */
+                pos=0;
+                havePos=FALSE;
+            }
+        }
         break;
     default:
         return -1;  /* Error */
@@ -743,7 +748,7 @@ utf8IteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origin)
     } else {
         /* move relative to unknown UTF-16 index */
         if(delta==0) {
-            return UITER_MOVE_UNKNOWN_INDEX; /* nothing to do */
+            return UITER_UNKNOWN_INDEX; /* nothing to do */
         } else if(-delta>=iter->start) {
             /* moving backwards by more UChars than there are UTF-8 bytes, pin to 0 */
             iter->index=iter->start=iter->reservedField=0;
@@ -753,7 +758,7 @@ utf8IteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origin)
             iter->index=iter->length; /* may or may not be <0 (unknown) */
             iter->start=iter->limit;
             iter->reservedField=0;
-            return iter->index>=0 ? iter->index : UITER_MOVE_UNKNOWN_INDEX;
+            return iter->index>=0 ? iter->index : UITER_UNKNOWN_INDEX;
         }
     }
 
@@ -828,7 +833,7 @@ utf8IteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origin)
             return iter->index=i; /* reached the beginning */
         } else {
             /* we still don't know the UTF-16 index */
-            return UITER_MOVE_UNKNOWN_INDEX;
+            return UITER_UNKNOWN_INDEX;
         }
     }
 }
@@ -940,15 +945,11 @@ utf8IteratorPrevious(UCharIterator *iter) {
 
 static uint32_t U_CALLCONV
 utf8IteratorGetState(const UCharIterator *iter) {
-    if(iter==NULL) {
-        return 1; /* invalid */
-    } else {
-        uint32_t state=(uint32_t)(iter->start<<1);
-        if(iter->reservedField!=0) {
-            state|=1;
-        }
-        return state;
+    uint32_t state=(uint32_t)(iter->start<<1);
+    if(iter->reservedField!=0) {
+        state|=1;
     }
+    return state;
 }
 
 static void U_CALLCONV
@@ -957,6 +958,8 @@ utf8IteratorSetState(UCharIterator *iter, uint32_t state, UErrorCode *pErrorCode
         /* do nothing */
     } else if(iter==NULL) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+    } else if(state==utf8IteratorGetState(iter)) {
+        /* setting to the current state: no-op */
     } else {
         int32_t index=(int32_t)(state>>1); /* UTF-8 index */
         state&=1; /* 1 if in surrogate pair, must be index>=4 */
@@ -1086,7 +1089,7 @@ uiter_previous32(UCharIterator *iter) {
 U_CAPI uint32_t U_EXPORT2
 uiter_getState(const UCharIterator *iter) {
     if(iter==NULL || iter->getState==NULL) {
-        return 0xffffffff;
+        return UITER_NO_STATE;
     } else {
         return iter->getState(iter);
     }
