@@ -212,11 +212,10 @@ u_UCharsToChars(const UChar *us, char *cs, UTextOffset length);
 /**
  * Gets the ICU release version.  The version array stores the version information
  * for ICU.  For example, release "1.3.31.2" is then represented as 0x01031F02.
- * @param versionArray the version # 
- * @return the size of the version array 
+ * @param versionArray the version # information
  */
 
-U_CAPI int32_t U_EXPORT2
-u_getVersion(uint8_t* versionArray);
+U_CAPI void U_EXPORT2
+u_getVersion(UVersionInfo* versionArray);
 
 #endif

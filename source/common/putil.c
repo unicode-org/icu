@@ -1465,30 +1465,29 @@ u_UCharsToChars(const UChar *us, char *cs, UTextOffset length) {
     }
 }
 
-U_CAPI int32_t U_EXPORT2
-u_getVersion(uint8_t* versionArray)
+U_CAPI void U_EXPORT2
+u_getVersion(UVersionInfo* versionArray)
 {
     int32_t len = uprv_strlen(U_ICU_VERSION), i = 0, part = 0;
     char verString[U_MAX_VERSION_STRING], *begin;
     
     if (versionArray == 0) 
     {
-        return U_MAX_VERSION_LEN;
+        return;
     }
     begin = &(verString[0]);
     uprv_strcpy(verString, U_ICU_VERSION);
-    uprv_memset(versionArray, 0, U_MAX_VERSION_LEN); 
+    uprv_memset(versionArray->versions, 0, U_MAX_VERSION_LEN); 
     do {
         if (verString[i] == U_VERSION_DELIMITER)
         {
             verString[i] = 0;
-            versionArray[part++] = (uint8_t)T_CString_stringToInteger(begin, 16);
+            versionArray->versions[part++] = (uint8_t)T_CString_stringToInteger(begin, 16);
             begin = &(verString[i+1]);
         }
     }
     while (i++ < len);
-    versionArray[part++] = (uint8_t)T_CString_stringToInteger(begin, 16);
-    return U_MAX_VERSION_LEN;
+    versionArray->versions[part++] = (uint8_t)T_CString_stringToInteger(begin, 16);
 }
 
 /* u_errorName() ------------------------------------------------------------ */

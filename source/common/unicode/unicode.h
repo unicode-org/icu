@@ -805,7 +805,7 @@ public:
 	 * Retrieves the Unicode Standard Version number that is used
 	 * @return the Unicode Standard Version Number.
 	 */
-	static int32_t   getVersion(uint8_t *versionArray);
+	static void   getUnicodeVersion(UVersionInfo *info);
 
 protected:
     // These constructors, destructor, and assignment operator must
