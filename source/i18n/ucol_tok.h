@@ -29,9 +29,6 @@
 #define UCOL_TOK_POLARITY_NEGATIVE 0
 #define UCOL_TOK_POLARITY_POSITIVE 1
 
-#define UCOL_RESET_TOP_VALUE 0x9F000303
-#define UCOL_NEXT_TOP_VALUE  0xD0000303
-
 /* this is space for the extra strings that need to be unquoted */
 /* during the parsing of the rules */
 #define UCOL_TOK_EXTRA_RULE_SPACE_SIZE 1024
