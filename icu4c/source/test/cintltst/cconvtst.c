@@ -21,6 +21,8 @@ void addTestEuroRegression(TestNode** root);
 void addTestConverterFallBack(TestNode** root);
 void addExtraTests(TestNode** root);
 
+void addConvert(TestNode** root);
+
 void addConvert(TestNode** root)
 {    
     addTestConvert(root);

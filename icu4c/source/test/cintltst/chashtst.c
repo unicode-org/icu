@@ -39,6 +39,8 @@ static void _remove(UHashtable* hash,
              const char* key,
              int32_t expectedValue);
 
+void addHashtableTest(TestNode** root);
+
 /**********************************************************************
  * FW Registration
  *********************************************************************/

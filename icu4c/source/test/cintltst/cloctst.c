@@ -120,6 +120,7 @@ enum {
     DNAME_EL = 22
 };
 
+void addLocaleTest(TestNode** root);
 
 void addLocaleTest(TestNode** root)
 {
