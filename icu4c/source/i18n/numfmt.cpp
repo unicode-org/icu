@@ -866,10 +866,11 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
                 int32_t bufCap = 20;
                 const char* locName = desiredLocale.getName();
                 bufCap = uloc_getKeywordValue(locName, "currency", buf, bufCap, &status);
-                if(bufCap > 0){
+                if(U_SUCCESS(status) && bufCap > 0) {
+                    /* An explicit currency was requested */
                     ResourceBundle currencies(resource.getWithFallback("Currencies", status));
                     ResourceBundle currency(currencies.getWithFallback(buf,status));
-                    if(currency.getSize()>2){
+                    if(U_SUCCESS(status) && currency.getSize()>2){
                         ResourceBundle elements = currency.get(2, status);
                         UnicodeString currPattern = elements.getStringEx((int32_t)0, status);
                         UnicodeString decimalSep = elements.getStringEx((int32_t)1, status);
@@ -880,6 +881,7 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
                             pattern = currPattern;
                         }
                     }
+                    /* else An explicit currency was requested and is unknown or locale data is malformed. */
                 }
             }
             if (U_FAILURE(status)) {

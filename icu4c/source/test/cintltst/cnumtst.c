@@ -42,6 +42,7 @@ void addNumForTest(TestNode** root)
     TESTCASE(TestSignificantDigits);
     TESTCASE(TestNumberFormatPadding);
     TESTCASE(TestInt64Format);
+    TESTCASE(TestNonExistentCurrency);
     TESTCASE(TestRBNFFormat);
 }
 
@@ -1160,6 +1161,17 @@ static void test_fmt(UNumberFormat* fmt, UBool isDecimal) {
         if (isDecimal ? U_FAILURE(status) : (status != U_UNSUPPORTED_ERROR)) {
             log_err("unexpected error setting symbol: '%s'\n", u_errorName(status));
         }
+    }
+}
+
+static void TestNonExistentCurrency() {
+    UNumberFormat *format;
+    UErrorCode status = U_ZERO_ERROR;
+
+    /* Get a non-existent currency and make sure it fails correctly */
+    format = unum_open(UNUM_CURRENCY, NULL, 0, "th_TH@currency=QQQ", NULL, &status);
+    if (format != NULL || status != U_MISSING_RESOURCE_ERROR) {
+        log_err("unum_open did not return expected result for non-existent requested currency: '%s'\n", u_errorName(status));
     }
 }
 
