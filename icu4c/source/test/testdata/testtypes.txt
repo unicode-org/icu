@@ -14,7 +14,7 @@ testtypes
     binarytest:bin { 000102030405060708090a0b0c0d0e } // Binary 15 bytes long 
     onehundredtwentythree:int { 123 } //
     one:int { 1 } // number one
-    importtest:import { "importtest.txt" }
+    importtest:import { "importtest.bin" }
     // integerarray:intarray { 1, 2, 3, 4, 5, 6, 7 } // This will be done in the future
 }
 
