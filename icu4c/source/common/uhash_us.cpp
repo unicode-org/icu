@@ -20,14 +20,14 @@
  ********************************************************************/
 
 U_CAPI int32_t
-uhash_hashUnicodeString(const UHashKey key) {
+uhash_hashUnicodeString(const UHashTok key) {
     U_NAMESPACE_USE
     const UnicodeString *str = (const UnicodeString*) key.pointer;
     return (str == NULL) ? 0 : str->hashCode();
 }
 
 U_CAPI int32_t
-uhash_hashCaselessUnicodeString(const UHashKey key) {
+uhash_hashCaselessUnicodeString(const UHashTok key) {
     U_NAMESPACE_USE
     const UnicodeString *str = (const UnicodeString*) key.pointer;
     if (str == NULL) {
@@ -46,7 +46,7 @@ uhash_deleteUnicodeString(void *obj) {
 }
 
 U_CAPI UBool
-uhash_compareUnicodeString(const UHashKey key1, const UHashKey key2) {
+uhash_compareUnicodeString(const UHashTok key1, const UHashTok key2) {
     U_NAMESPACE_USE
     const UnicodeString *str1 = (const UnicodeString*) key1.pointer;
     const UnicodeString *str2 = (const UnicodeString*) key2.pointer;
@@ -60,7 +60,7 @@ uhash_compareUnicodeString(const UHashKey key1, const UHashKey key2) {
 }
 
 U_CAPI UBool
-uhash_compareCaselessUnicodeString(const UHashKey key1, const UHashKey key2) {
+uhash_compareCaselessUnicodeString(const UHashTok key1, const UHashTok key2) {
     U_NAMESPACE_USE
     const UnicodeString *str1 = (const UnicodeString*) key1.pointer;
     const UnicodeString *str2 = (const UnicodeString*) key2.pointer;

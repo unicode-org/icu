@@ -22,9 +22,9 @@
 static void TestBasic(void);
 static void TestOtherAPI(void);
 
-static int32_t hashChars(const UHashKey key);
+static int32_t hashChars(const UHashTok key);
 
-static UBool isEqualChars(const UHashKey key1, const UHashKey key2);
+static UBool isEqualChars(const UHashTok key1, const UHashTok key2);
 
 static void _put(UHashtable* hash,
                  const char* key,
@@ -42,12 +42,12 @@ static void _remove(UHashtable* hash,
 void addHashtableTest(TestNode** root);
 
 /**********************************************************************
- * UHashKey wrapper functions
+ * UHashTok wrapper functions
  *********************************************************************/
 
 static UBool
 _compareChars(void* a, void* b) {
-    UHashKey s, t;
+    UHashTok s, t;
     s.pointer = a;
     t.pointer = b;
     return uhash_compareChars(s, t);
@@ -55,7 +55,7 @@ _compareChars(void* a, void* b) {
 
 static UBool
 _compareIChars(void* a, void* b) {
-    UHashKey s, t;
+    UHashTok s, t;
     s.pointer = a;
     t.pointer = b;
     return uhash_compareIChars(s, t);
@@ -63,7 +63,7 @@ _compareIChars(void* a, void* b) {
 
 static UBool
 _compareUChars(void* a, void* b) {
-    UHashKey s, t;
+    UHashTok s, t;
     s.pointer = a;
     t.pointer = b;
     return uhash_compareUChars(s, t);
@@ -71,7 +71,7 @@ _compareUChars(void* a, void* b) {
 
 static UBool
 _compareLong(int32_t a, int32_t b) {
-    UHashKey s, t;
+    UHashTok s, t;
     s.integer = a;
     t.integer = b;
     return uhash_compareLong(s, t);
@@ -227,9 +227,9 @@ static void TestOtherAPI(void){
 
     uhash_setKeyComparator(hash, uhash_compareLong);
     uhash_setKeyHasher(hash, uhash_hashLong);
-    uhash_puti(hash, 1001, (void*)1, &status);
-    uhash_puti(hash, 1002, (void*)2, &status);
-    uhash_puti(hash, 1003, (void*)3, &status);
+    uhash_iput(hash, 1001, (void*)1, &status);
+    uhash_iput(hash, 1002, (void*)2, &status);
+    uhash_iput(hash, 1003, (void*)3, &status);
     if(_compareLong(1001, 1002) == TRUE ||
         _compareLong(1001, 1001) != TRUE ||
         _compareLong(1001, 0) == TRUE  )  {
@@ -238,16 +238,16 @@ static void TestOtherAPI(void){
     /*set the resize policy to just GROW and SHRINK*/
          /*how to test this??*/
     uhash_setResizePolicy(hash, U_GROW_AND_SHRINK);
-    uhash_puti(hash, 1004, (void*)4, &status);
-    uhash_puti(hash, 1005, (void*)5, &status);
-    uhash_puti(hash, 1006, (void*)6, &status);
+    uhash_iput(hash, 1004, (void*)4, &status);
+    uhash_iput(hash, 1005, (void*)5, &status);
+    uhash_iput(hash, 1006, (void*)6, &status);
     if(uhash_count(hash) != 6){
         log_err("FAIL: uhash_count() failed. Expected: 6, Got: %d\n", uhash_count(hash));
     }
-    if((int32_t)uhash_removei(hash, 1004) != 4){
+    if((int32_t)uhash_iremove(hash, 1004) != 4){
         log_err("FAIL: uhash_remove failed\n");
     }
-    if((int32_t)uhash_removei(hash, 1004) != 0){
+    if((int32_t)uhash_iremove(hash, 1004) != 0){
         log_err("FAIL: uhash_remove failed\n");
     }
     uhash_close(hash);
@@ -261,11 +261,11 @@ static void TestOtherAPI(void){
  * This hash function is designed to collide a lot to test key equality
  * resolution.  It only uses the first char.
  */
-static int32_t hashChars(const UHashKey key) {
+static int32_t hashChars(const UHashTok key) {
     return *(const char*) key.pointer;
 }
 
-static UBool isEqualChars(const UHashKey key1, const UHashKey key2) {
+static UBool isEqualChars(const UHashTok key1, const UHashTok key2) {
     return (UBool)((key1.pointer != NULL) &&
         (key2.pointer != NULL) &&
         (uprv_strcmp((const char*)key1.pointer, (const char*)key2.pointer) == 0));

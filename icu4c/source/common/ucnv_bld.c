@@ -560,7 +560,7 @@ ucnv_flushCache ()
     umtx_lock (NULL);
     while ((e = uhash_nextElement (SHARED_DATA_HASHTABLE, &pos)) != NULL)
     {
-        mySharedData = (UConverterSharedData *) e->value;
+        mySharedData = (UConverterSharedData *) e->value.pointer;
         /*deletes only if reference counter == 0 */
         if (mySharedData->referenceCounter == 0)
         {
