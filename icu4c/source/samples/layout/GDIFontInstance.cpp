@@ -87,7 +87,7 @@ void GDISurface::drawGlyphs(const LEFontInstance *font, const LEGlyphID *glyphs,
         }
 
         ExtTextOut(fHdc, x + (le_int32) xOffset, y + (le_int32) yOffset - font->getAscent(), ETO_CLIPPED | ETO_GLYPH_INDEX, &clip,
-            &ttGlyphs[dyStart], dyEnd - dyStart, (INT *) dx);
+            &ttGlyphs[dyStart], dyEnd - dyStart, (INT *) &dx[dyStart]);
 
         dyStart = dyEnd;
     }
