@@ -2,7 +2,7 @@
 #******************************************************************************
 #   Copyright (C) 1999, International Business Machines
 #   Corporation and others.  All Rights Reserved.
-# $Revision: 1.15 $
+# $Revision: 1.16 $
 #******************************************************************************
 # This Makefile is designed to be included into projects which make use
 # of the ICU.
@@ -85,7 +85,7 @@ platform = @platform@
 
 ld_rpath_suf = @ld_rpath_suf@
 
-include $(pkgdatadir)/config/@platform_make_fragment_name@
+include $(pkgdatadir)/$(VERSION)/config/@platform_make_fragment_name@
 
 DEFAULT_MODE = @DATA_PACKAGING_MODE@
 
