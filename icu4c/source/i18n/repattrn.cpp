@@ -452,10 +452,14 @@ void   RegexPattern::dumpOp(int32_t index) const {
     case URX_NOP:
     case URX_DOTANY:
     case URX_FAIL:
+    case URX_CARET:
+    case URX_DOLLAR:
     case URX_BACKSLASH_A:
     case URX_BACKSLASH_G:
     case URX_BACKSLASH_X:
     case URX_END:
+    case URX_DOLLAR_M:
+    case URX_CARET_M:
         // Types with no operand field of interest.
         break;
         
@@ -468,8 +472,6 @@ void   RegexPattern::dumpOp(int32_t index) const {
     case URX_BACKSLASH_D:
     case URX_BACKSLASH_W:
     case URX_BACKSLASH_Z:
-    case URX_CARET:
-    case URX_DOLLAR:
     case URX_STRING_LEN:
     case URX_CTR_INIT:
     case URX_CTR_INIT_NG:
@@ -485,6 +487,7 @@ void   RegexPattern::dumpOp(int32_t index) const {
     case URX_JMPX:
     case URX_LA_START:
     case URX_LA_END:
+    case URX_BACKREF_I:
         // types with an integer operand field.
         REGEX_DUMP_DEBUG_PRINTF("%d", val);
         break;

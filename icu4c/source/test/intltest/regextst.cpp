@@ -1228,10 +1228,6 @@ void RegexTest::Errors() {
     REGEX_ERR(")))))))", 1, 1, U_REGEX_MISMATCHED_PAREN);
     REGEX_ERR("(((((((", 1, 7, U_REGEX_MISMATCHED_PAREN);
 
-    // Flag settings not yet implemented
-    REGEX_ERR("(?i:stuff*)", 1, 3, U_REGEX_UNIMPLEMENTED);
-    REGEX_ERR("(?-si) stuff", 1, 3, U_REGEX_UNIMPLEMENTED);
-
     // Look-ahead, Look-behind
     REGEX_ERR("abc(?<=xyz).*", 1, 7, U_REGEX_UNIMPLEMENTED);   // look-behind
     REGEX_ERR("abc(?<!xyz).*", 1, 7, U_REGEX_UNIMPLEMENTED);   // negated look-behind
@@ -1666,10 +1662,16 @@ void RegexTest::PerlTests() {
             }
 
             else if (perlExpr.startsWith("\\")) {    // \Escape.  Take following char as a literal.
+                                                     //           or as an escaped sequence (e.g. \n)
                 if (perlExpr.length() > 1) {
                     perlExpr.remove(0, 1);  // Remove the '\', but only if not last char.
                 }
-                resultString.append(perlExpr.charAt(0));
+                UChar c = perlExpr.charAt(0);
+                switch (c) {
+                case 'n':   c = '\n'; break;
+                // add any other escape sequences that show up in the test expected results.
+                }
+                resultString.append(c); 
                 perlExpr.remove(0, 1);
             }
 
@@ -1693,6 +1695,8 @@ void RegexTest::PerlTests() {
         UnicodeString expectedS(fields[4]);
         expectedS.findAndReplace(nulnulSrc, nulnul);
         expectedS.findAndReplace(ffffSrc,   ffff);
+        expectedS.findAndReplace("\\n", "\n");
+
 
         if (expectedS.compare(resultString) != 0) {
             errln("Line %d: Incorrect perl expression results.  Expected \"%s\"; got \"%s\"",

@@ -24,6 +24,7 @@ U_NAMESPACE_BEGIN
 enum Regex_PatternParseAction {
     doCloseParen,
     doProperty,
+    doBeginMatchMode,
     doOrOperator,
     doOpenCaptureParen,
     doBadOpenParenType,
@@ -53,11 +54,13 @@ enum Regex_PatternParseAction {
     doBackslashA,
     doBackslashB,
     doNGPlus,
+    doSetMatchMode,
     doPatFinish,
     doBackslashD,
     doPossesiveOpt,
     doEscapeError,
     doBackslashG,
+    doMatchModeParen,
     doOpt,
     doInterval,
     doLiteralChar,
@@ -136,11 +139,11 @@ static const struct RegexTableEl gRuleParseStateTable[] = {
     , {doOpenLookAheadNeg, 33 /* ! */, 2, 20, TRUE}     //  32 
     , {doNOP, 60 /* < */, 43,0,  TRUE}     //  33 
     , {doNOP, 35 /* # */, 46, 2, TRUE}     //  34 
-    , {doMatchMode, 105 /* i */, 49,0,  TRUE}     //  35 
-    , {doMatchMode, 120 /* x */, 49,0,  TRUE}     //  36 
-    , {doMatchMode, 115 /* s */, 49,0,  TRUE}     //  37 
-    , {doMatchMode, 109 /* m */, 49,0,  TRUE}     //  38 
-    , {doMatchMode, 45 /* - */, 49,0,  TRUE}     //  39 
+    , {doBeginMatchMode, 105 /* i */, 49,0,  FALSE}     //  35 
+    , {doBeginMatchMode, 109 /* m */, 49,0,  FALSE}     //  36 
+    , {doBeginMatchMode, 115 /* s */, 49,0,  FALSE}     //  37 
+    , {doBeginMatchMode, 120 /* x */, 49,0,  FALSE}     //  38 
+    , {doBeginMatchMode, 45 /* - */, 49,0,  FALSE}     //  39 
     , {doConditionalExpr, 40 /* ( */, 101,0,  TRUE}     //  40 
     , {doPerlInline, 123 /* { */, 101,0,  TRUE}     //  41 
     , {doBadOpenParenType, 255, 101,0,  FALSE}     //  42 
@@ -151,12 +154,12 @@ static const struct RegexTableEl gRuleParseStateTable[] = {
     , {doMismatchedParenErr, 253, 101,0,  FALSE}     //  47 
     , {doNOP, 255, 46,0,  TRUE}     //  48 
     , {doMatchMode, 105 /* i */, 49,0,  TRUE}     //  49      paren-flag
-    , {doMatchMode, 115 /* s */, 49,0,  TRUE}     //  50 
-    , {doMatchMode, 109 /* m */, 49,0,  TRUE}     //  51 
+    , {doMatchMode, 109 /* m */, 49,0,  TRUE}     //  50 
+    , {doMatchMode, 115 /* s */, 49,0,  TRUE}     //  51 
     , {doMatchMode, 120 /* x */, 49,0,  TRUE}     //  52 
     , {doMatchMode, 45 /* - */, 49,0,  TRUE}     //  53 
-    , {doNOP, 41 /* ) */, 2,0,  TRUE}     //  54 
-    , {doOpenNonCaptureParen, 58 /* : */, 2, 14, TRUE}     //  55 
+    , {doSetMatchMode, 41 /* ) */, 2,0,  TRUE}     //  54 
+    , {doMatchModeParen, 58 /* : */, 2, 14, TRUE}     //  55 
     , {doNOP, 255, 101,0,  FALSE}     //  56 
     , {doNGStar, 63 /* ? */, 20,0,  TRUE}     //  57      quant-star
     , {doPossesiveStar, 43 /* + */, 20,0,  TRUE}     //  58 
