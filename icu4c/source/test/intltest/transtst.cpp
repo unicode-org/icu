@@ -196,13 +196,28 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
  * instantiates everything as well.
  */
 void TransliteratorTest::TestInstantiation() {
+    UErrorCode ec = U_ZERO_ERROR;
+    StringEnumeration* avail = Transliterator::getAvailableIDs(ec);
+    assertSuccess("getAvailableIDs()", ec);
+    assertTrue("getAvailableIDs()!=NULL", avail!=NULL);
     int32_t n = Transliterator::countAvailableIDs();
+    assertTrue("getAvailableIDs().count()==countAvailableIDs()",
+               avail->count(ec) == n);
+    assertSuccess("count()", ec);
     UnicodeString name;
     for (int32_t i=0; i<n; ++i) {
-        UnicodeString id = Transliterator::getAvailableID(i);
+        const UnicodeString& id = *avail->snext(ec);
+        assertSuccess("snext()", ec);
+        assertTrue("snext()!=NULL", (&id)!=NULL);
+        UnicodeString id2 = Transliterator::getAvailableID(i);
         if (id.length() < 1) {
             errln(UnicodeString("FAIL: getAvailableID(") +
                   i + ") returned empty string");
+            continue;
+        }
+        if (id != id2) {
+            errln(UnicodeString("FAIL: getAvailableID(") +
+                  i + ") != getAvailableIDs().snext()");
             continue;
         }
         UParseError parseError;
@@ -249,6 +264,9 @@ void TransliteratorTest::TestInstantiation() {
             delete t;
         }
     }
+    assertTrue("snext()==NULL", avail->snext(ec)==NULL);
+    assertSuccess("snext()", ec);
+    delete avail;
 
     // Now test the failure path
     UParseError parseError;
