@@ -55,6 +55,9 @@
 /* Determines the endianness of the platform */
 #define U_IS_BIG_ENDIAN 1
 
+/* 1 or 0 to enable or disable threads.  If undefined, default is: enable threads. */
+#define ICU_USE_THREADS 1
+
 /*===========================================================================*/
 /* Generic data types                                                        */
 /*===========================================================================*/
@@ -116,11 +119,12 @@ as/400 machines.
 /*===========================================================================*/
 
 #define U_CHARSET_FAMILY 1
-#define U_SIZEOF_WCHAR_T 2
 
 /*===========================================================================*/
-/* Do we have wcscpy and other similar functions                             */
+/* Information about wchar support                                           */
 /*===========================================================================*/
+
+#define U_SIZEOF_WCHAR_T 2
 
 #define U_HAVE_WCSCPY    1
 
