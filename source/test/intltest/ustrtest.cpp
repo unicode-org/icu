@@ -11,6 +11,7 @@
 #include "unicode/locid.h"
 #include "unicode/ucnv.h"
 #include "cmemory.h"
+#include "charstr.h"
 
 #if 0
 #include "unicode/ustream.h"
@@ -55,6 +56,7 @@ void UnicodeStringTest::runIndexedTest( int32_t index, UBool exec, const char* &
         case 13: name = "TestUnescape"; if (exec) TestUnescape(); break;
         case 14: name = "TestCountChar32"; if (exec) TestCountChar32(); break;
         case 15: name = "TestStringEnumeration"; if (exec) TestStringEnumeration(); break;
+        case 16: name = "TestCharString"; if (exec) TestCharString(); break;
 
         default: name = ""; break; //needed to end loop
     }
@@ -1626,3 +1628,14 @@ UnicodeStringTest::TestStringEnumeration() {
         errln("StringEnumeration.clone()!=NULL");
     }
 }
+
+void
+UnicodeStringTest::TestCharString() {
+    static const char originalCStr[] =
+        "This is a large string that is meant to over flow the internal buffer of CharString. At the time of writing this test, the internal buffer is 128 bytes.";
+    CharString chStr(originalCStr);
+    if (strcmp(originalCStr, chStr) != 0) {
+        errln("CharString doesn't work with large strings.");
+    }
+}
+
