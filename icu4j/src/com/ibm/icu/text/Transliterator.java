@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2001/09/28 20:32:11 $
- * $Revision: 1.41 $
+ * $Date: 2001/09/28 20:32:39 $
+ * $Revision: 1.42 $
  *
  *****************************************************************************************
  */
@@ -241,7 +241,7 @@ import com.ibm.util.CaseInsensitiveString;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.41 $ $Date: 2001/09/28 20:32:11 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.42 $ $Date: 2001/09/28 20:32:39 $
  */
 public abstract class Transliterator {
     /**
@@ -1711,11 +1711,6 @@ public abstract class Transliterator {
         }
 
         // Register non-rule-based transliterators
-        registerClass(HangulJamoTransliterator._ID,
-                      HangulJamoTransliterator.class, null);
-        registerClass(JamoHangulTransliterator._ID,
-                      JamoHangulTransliterator.class, null);
-
         registerClass(HexToUnicodeTransliterator._ID,
                       HexToUnicodeTransliterator.class, null);
         registerClass(UnicodeToHexTransliterator._ID,
