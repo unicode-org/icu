@@ -1,0 +1,45 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2003, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+// * Tigre language locale for Eritrea.
+// * Contributed by Daniel Yacob <yacob@geez.org>, Ge'ez Frontier Foundation
+// * Tigre terms are provided by Mussie Bekit with coordination by the
+// * Shimagale Team <http://www.shimagle.com/>.
+
+tig_ER{ 
+    Version{ "x0.1" }
+    DateTimePatterns { 
+        "h:mm:ss a",
+        "h:mm:ss a",
+        "h:mm:ss a",
+        "h:mm a",
+        "EEEE\u1361 dd MMMM \u12EE\u121D yyyy G",
+        "dd MMMM yyyy",
+        "dd-MMM-yyyy",
+        "dd/MM/yy",
+        "{1} {0}",
+    }
+    // Measurement { "Metric" }
+//    NumberElements {
+//        ".",
+//        ",",
+//        ";",
+//        "%",
+//        "0",
+//        "#",
+//        "-",
+//        "E",
+//        "\u2030",
+//        "\u221E",
+//        "\uFFFD",
+//    }
+    NumberPatterns {
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;-\u00A4#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+}
