@@ -19,6 +19,11 @@
 *   12/09/1999  weiv    Added multiple file handling
 */
 
+#ifdef WIN32
+#include <windows.h>
+#include <time.h>
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "unicode/utypes.h"
@@ -36,7 +41,10 @@ static void
 writeCCode(const char *filename, const char *destdir);
 
 static void
-getOutFilename(const char *inFilename, const char *destdir, char *outFilename, char *entryName);
+writeObjectCode(const char *filename, const char *destdir);
+
+static void
+getOutFilename(const char *inFilename, const char *destdir, char *outFilename, char *entryName, const char *newSuffix);
 
 static void
 write8(FileStream *out, uint8_t byte);
@@ -46,7 +54,8 @@ write8(FileStream *out, uint8_t byte);
 static UOption options[]={
     UOPTION_HELP_H,
     UOPTION_HELP_QUESTION_MARK,
-    UOPTION_DESTDIR
+    UOPTION_DESTDIR,
+    UOPTION_DEF("object", 'o', UOPT_NO_ARG)
 };
 
 extern int
@@ -67,13 +76,24 @@ main(int argc, const char *argv[]) {
             "\tcreate a .c file with a byte array that contains the input file's data\n"
             "\toptions:\n"
             "\t\t-h or -? or --help  this usage text\n"
-            "\t\t-d or --destdir     destination directory, followed by the path\n",
+            "\t\t-d or --destdir     destination directory, followed by the path\n"
+            "\t\t-o or --object      write a .obj file instead of .c\n",
             argv[0]);
     } else {
-        while (--argc) {
-            fprintf(stdout, "Generating C code for %s\n", getLongPathname(argv[argc]));
+        const char *message, *filename;
+        void (*writeCode)(const char *filename, const char *destdir);
+        if(options[3].doesOccur) {
+            message="Generating object code for %s\n";
+            writeCode=&writeObjectCode;
+        } else {
+            message="Generating C code for %s\n";
+            writeCode=&writeCCode;
+        }
+        while(--argc) {
+            filename=getLongPathname(argv[argc]);
+            fprintf(stdout, message, filename);
             column=0xffff;
-            writeCCode(getLongPathname(argv[argc]), options[2].value);
+            writeCode(filename, options[2].value);
         }
     }
 
@@ -92,29 +112,29 @@ writeCCode(const char *filename, const char *destdir) {
         exit(U_FILE_ACCESS_ERROR);
     }
 
-    getOutFilename(filename, destdir, buffer, entry);
+    getOutFilename(filename, destdir, buffer, entry, ".c");
     out=T_FileStream_open(buffer, "w");
     if(out==NULL) {
         fprintf(stderr, "genccode: unable to open output file %s\n", buffer);
         exit(U_FILE_ACCESS_ERROR);
     }
 
-    T_FileStream_writeLine(out, "#include \"unicode/utypes.h\"\nU_CAPI const struct U_EXPORT2 {\n    double bogus;\n    uint8_t bytes ");
-
-    T_FileStream_writeLine(out, "[");
-    sprintf(buffer, "%d",  T_FileStream_size(in) );
-    T_FileStream_writeLine(out, buffer);
-    T_FileStream_writeLine(out, "]; \n} ");
-    for(i=0;i<strlen(entry);i++)
-      {
-	if(entry[i]=='-')
-        {
-	  entry[i]='_';
+    /* turn dashes in the entry name into underscores */
+    length=uprv_strlen(entry);
+    for(i=0; i<length; ++i) {
+        if(entry[i]=='-') {
+            entry[i]='_';
         }
-      }
+    }
 
-    T_FileStream_writeLine(out, entry); 
-    T_FileStream_writeLine(out,"={ 0, {\n");
+    sprintf(buffer,
+        "#include \"unicode/utypes.h\"\n"
+        "U_CAPI const struct {\n"
+        "    double bogus;\n"
+        "    uint8_t bytes[%ld]; \n"
+        "} U_EXPORT2 %s={ 0, {\n",
+        T_FileStream_size(in), entry);
+    T_FileStream_writeLine(out, buffer);
 
     for(;;) {
         length=T_FileStream_read(in, buffer, sizeof(buffer));
@@ -143,7 +163,126 @@ writeCCode(const char *filename, const char *destdir) {
 }
 
 static void
-getOutFilename(const char *inFilename, const char *destdir, char *outFilename, char *entryName) {
+writeObjectCode(const char *filename, const char *destdir) {
+#ifdef WIN32
+    char buffer[4096], entry[40];
+    struct {
+        IMAGE_FILE_HEADER fileHeader;
+        IMAGE_SECTION_HEADER sections[2];
+        char linkerOptions[100];
+    } objHeader;
+    IMAGE_SYMBOL symbols[1];
+    struct {
+        DWORD sizeofLongNames;
+        char longNames[100];
+    } symbolNames;
+    FileStream *in, *out;
+    size_t i, entryLength, length, size;
+
+    in=T_FileStream_open(filename, "rb");
+    if(in==NULL) {
+        fprintf(stderr, "genccode: unable to open input file %s\n", filename);
+        exit(U_FILE_ACCESS_ERROR);
+    }
+
+    /* entry have a leading '_' */
+    entry[0]='_';
+    getOutFilename(filename, destdir, buffer, entry+1, ".obj");
+
+    /* turn dashes in the entry name into underscores */
+    entryLength=uprv_strlen(entry);
+    for(i=0; i<entryLength; ++i) {
+        if(entry[i]=='-') {
+            entry[i]='_';
+        }
+    }
+
+    /* open the output file */
+    out=T_FileStream_open(buffer, "wb");
+    if(out==NULL) {
+        fprintf(stderr, "genccode: unable to open output file %s\n", buffer);
+        exit(U_FILE_ACCESS_ERROR);
+    }
+
+    /* populate the .obj headers */
+    uprv_memset(&objHeader, 0, sizeof(objHeader));
+    uprv_memset(&symbols, 0, sizeof(symbols));
+    uprv_memset(&symbolNames, 0, sizeof(symbolNames));
+    size=T_FileStream_size(in);
+
+    /* write the linker export directive */
+    uprv_strcpy(objHeader.linkerOptions, "-export:");
+    length=8;
+    uprv_strcpy(objHeader.linkerOptions+length, entry);
+    length+=entryLength;
+    uprv_strcpy(objHeader.linkerOptions+length, ",data ");
+    length+=6;
+
+    /* set the file header */
+    objHeader.fileHeader.Machine=IMAGE_FILE_MACHINE_I386;
+    objHeader.fileHeader.NumberOfSections=2;
+    objHeader.fileHeader.TimeDateStamp=time(NULL);
+    objHeader.fileHeader.PointerToSymbolTable=IMAGE_SIZEOF_FILE_HEADER+2*IMAGE_SIZEOF_SECTION_HEADER+length+size; /* start of symbol table */
+    objHeader.fileHeader.NumberOfSymbols=1;
+
+    /* set the section for the linker options */
+    uprv_strncpy(objHeader.sections[0].Name, ".drectve", 8);
+    objHeader.sections[0].SizeOfRawData=length;
+    objHeader.sections[0].PointerToRawData=IMAGE_SIZEOF_FILE_HEADER+2*IMAGE_SIZEOF_SECTION_HEADER;
+    objHeader.sections[0].Characteristics=IMAGE_SCN_LNK_INFO|IMAGE_SCN_LNK_REMOVE|IMAGE_SCN_ALIGN_1BYTES;
+
+    /* set the data section */
+    uprv_strncpy(objHeader.sections[1].Name, ".rdata", 6);
+    objHeader.sections[1].SizeOfRawData=size;
+    objHeader.sections[1].PointerToRawData=IMAGE_SIZEOF_FILE_HEADER+2*IMAGE_SIZEOF_SECTION_HEADER+length;
+    objHeader.sections[1].Characteristics=IMAGE_SCN_CNT_INITIALIZED_DATA|IMAGE_SCN_ALIGN_16BYTES|IMAGE_SCN_MEM_READ;
+
+    /* set the symbol table */
+    if(entryLength<=8) {
+        uprv_strncpy(symbols[0].N.ShortName, entry, entryLength);
+        symbolNames.sizeofLongNames=4;
+    } else {
+        symbols[0].N.Name.Short=0;
+        symbols[0].N.Name.Long=4;
+        symbolNames.sizeofLongNames=4+entryLength+1;
+        uprv_strcpy(symbolNames.longNames, entry);
+    }
+    symbols[0].SectionNumber=2;
+    symbols[0].StorageClass=IMAGE_SYM_CLASS_EXTERNAL;
+
+    /* write the file header and the linker options section */
+    T_FileStream_write(out, &objHeader, objHeader.sections[1].PointerToRawData);
+
+    /* copy the data file into section 2 */
+    for(;;) {
+        length=T_FileStream_read(in, buffer, sizeof(buffer));
+        if(length==0) {
+            break;
+        }
+        T_FileStream_write(out, buffer, length);
+    }
+
+    /* write the symbol table */
+    T_FileStream_write(out, symbols, IMAGE_SIZEOF_SYMBOL);
+    T_FileStream_write(out, &symbolNames, symbolNames.sizeofLongNames);
+
+    if(T_FileStream_error(in)) {
+        fprintf(stderr, "genccode: file read error while generating from file %s\n", filename);
+        exit(U_FILE_ACCESS_ERROR);
+    }
+
+    if(T_FileStream_error(out)) {
+        fprintf(stderr, "genccode: file write error while generating from file %s\n", filename);
+        exit(U_FILE_ACCESS_ERROR);
+    }
+
+    T_FileStream_close(out);
+    T_FileStream_close(in);
+#endif
+}
+
+static void
+getOutFilename(const char *inFilename, const char *destdir, char *outFilename, char *entryName, const char *newSuffix) {
     const char *basename=findBasename(inFilename), *suffix=uprv_strrchr(basename, '.');
 
     /* copy path */
@@ -165,7 +304,7 @@ getOutFilename(const char *inFilename, const char *destdir, char *outFilename, c
         /* the filename does not have a suffix */
         uprv_strcpy(entryName, inFilename);
         uprv_strcpy(outFilename, inFilename);
-        uprv_strcat(outFilename, ".c");
+        uprv_strcat(outFilename, newSuffix);
     } else {
         /* copy basename */
         while(inFilename<suffix) {
@@ -184,9 +323,7 @@ getOutFilename(const char *inFilename, const char *destdir, char *outFilename, c
         *entryName=0;
 
         /* add ".c" */
-        *outFilename++='.';
-        *outFilename++='c';
-        *outFilename=0;
+        uprv_strcpy(outFilename, newSuffix);
     }
 }
 
