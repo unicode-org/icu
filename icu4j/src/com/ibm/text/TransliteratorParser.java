@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/TransliteratorParser.java,v $
-* $Date: 2001/10/30 18:04:09 $
-* $Revision: 1.8 $
+* $Date: 2001/11/09 00:51:53 $
+* $Revision: 1.9 $
 **********************************************************************
 */
 package com.ibm.text;
@@ -169,12 +169,12 @@ class TransliteratorParser {
         /**
          * Implement SymbolTable API.
          */
-        public UnicodeSet lookupSet(int ch) {
-            // Note that we cannot use data.lookupSet() because the
+        public UnicodeMatcher lookupMatcher(int ch) {
+            // Note that we cannot use data.lookup() because the
             // set array has not been constructed yet.
             int i = ch - data.variablesBase;
             if (i >= 0 && i < variablesVector.size()) {
-                return (UnicodeSet) variablesVector.elementAt(i);
+                return (UnicodeMatcher) variablesVector.elementAt(i);
             }
             return null;
         }
@@ -1091,7 +1091,8 @@ class TransliteratorParser {
             // - allow arbitrary cursor offsets and do runtime checking.
             //(right.cursorOffset > (left.text.length() - left.post)) ||
             //(-right.cursorOffset > left.ante) ||
-            right.anchorStart || right.anchorEnd) {
+            right.anchorStart || right.anchorEnd ||
+            !isValidOutput(right.text)) {
             syntaxError("Malformed rule", rule, start);
         }
 
@@ -1110,6 +1111,21 @@ class TransliteratorParser {
                                      data));
 
         return pos;
+    }
+
+    /**
+     * Return true if the given string looks like valid output, that is,
+     * does not contain quantifiers or other special input-only elements.
+     */
+    private boolean isValidOutput(String output) {
+        for (int i=0; i<output.length(); ++i) {
+            int c = UTF16.charAt(output, i);
+            i += UTF16.getCharCount(c);
+            if (parseData.lookupMatcher(c) != null) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

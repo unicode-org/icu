@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2001/11/09 00:11:01 $
- * $Revision: 1.64 $
+ * $Date: 2001/11/09 00:49:49 $
+ * $Revision: 1.65 $
  *
  *****************************************************************************************
  */
@@ -1956,6 +1956,21 @@ public class TransliteratorTest extends TestFmwk {
         }
         errln("FAIL: no syntax error");
     }
+
+    /**
+     * Make sure sets on output are disallowed.
+     */
+    public void TestOutputSet() {
+        String rule = "$set = [a-cm-n]; b > $set;";
+        Transliterator t = null;
+        try {
+            t = Transliterator.createFromRules("ID", rule, Transliterator.FORWARD);
+        } catch (IllegalArgumentException e) {
+            logln("Ok: " + e.getMessage());
+            return;
+        }
+        errln("FAIL: No syntax error");
+    }        
 
     //======================================================================
     // icu4j ONLY

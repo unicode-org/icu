@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2001/11/01 16:53:04 $
- * $Revision: 1.43 $
+ * $Date: 2001/11/09 00:51:54 $
+ * $Revision: 1.44 $
  *
  *****************************************************************************************
  */
@@ -220,7 +220,7 @@ import com.ibm.util.Utility;
  * added in the future.
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.43 $ $Date: 2001/11/01 16:53:04 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.44 $ $Date: 2001/11/09 00:51:54 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -1231,7 +1231,12 @@ public class UnicodeSet extends UnicodeFilter {
                 if (ivarValueBuffer < varValueBuffer.length) {
                     c = UTF16.charAt(varValueBuffer, 0, varValueBuffer.length, ivarValueBuffer);
                     ivarValueBuffer += UTF16.getCharCount(c);
-                    nestedSet = symbols.lookupSet(c); // may be NULL
+                    UnicodeMatcher m = symbols.lookupMatcher(c); // may be NULL
+                    try {
+                        nestedSet = (UnicodeSet) m;
+                    } catch (ClassCastException e) {
+                        throw new IllegalArgumentException("Syntax error");
+                    }
                     nestedPatDone = false;
                 } else {
                     varValueBuffer = null;
