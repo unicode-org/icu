@@ -440,7 +440,7 @@ const char* getEndOfBuffer_2022(const char* source,
                   
   
 
-static void T_UConverter_toUnicode_ISO_2022(UConverterToUnicodeArgs *args,
+U_CFUNC void T_UConverter_toUnicode_ISO_2022(UConverterToUnicodeArgs *args,
                                      UErrorCode* err)
 {
   int32_t base = 0;
@@ -509,7 +509,7 @@ static void T_UConverter_toUnicode_ISO_2022(UConverterToUnicodeArgs *args,
   return;
 }
 
-static void T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverterToUnicodeArgs* args,
+U_CFUNC void T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverterToUnicodeArgs* args,
                                                           UErrorCode* err)
 {
   int32_t myOffset=0;
@@ -669,7 +669,7 @@ _DBCSLoad(UConverterSharedData *sharedData, const uint8_t *raw, UErrorCode *pErr
 U_CFUNC void
 _DBCSUnload(UConverterSharedData *sharedData);
 
-void T_UConverter_toUnicode_EBCDIC_STATEFUL (UConverterToUnicodeArgs *args,
+U_CFUNC void T_UConverter_toUnicode_EBCDIC_STATEFUL (UConverterToUnicodeArgs *args,
                                              UErrorCode * err)
 {
   char *mySource = (char *) args->source;
@@ -795,7 +795,7 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL (UConverterToUnicodeArgs *args,
   return;
 }
 
-void T_UConverter_toUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverterToUnicodeArgs * args,
+U_CFUNC void T_UConverter_toUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverterToUnicodeArgs * args,
                                                            UErrorCode * err)
 {
   char *mySource = (char *) args->source;

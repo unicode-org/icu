@@ -25,7 +25,7 @@
 
 /* ISO 8859-1 --------------------------------------------------------------- */
 
-static void  T_UConverter_toUnicode_LATIN_1 (UConverterToUnicodeArgs * args,
+U_CFUNC void  T_UConverter_toUnicode_LATIN_1 (UConverterToUnicodeArgs * args,
                                       UErrorCode * err)
 {
   unsigned char *mySource = (unsigned char *)  args->source;

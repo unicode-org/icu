@@ -563,7 +563,7 @@ _LMBCSOpenWorker(UConverter*  _this,
                        ulmbcs_byte_t OptGroup
                        )
 {
-   UConverterDataLMBCS * extraInfo = uprv_malloc (sizeof (UConverterDataLMBCS));
+   UConverterDataLMBCS * extraInfo = (UConverterDataLMBCS*)uprv_malloc (sizeof (UConverterDataLMBCS));
    if(extraInfo != NULL)
     {
        ulmbcs_byte_t i;
