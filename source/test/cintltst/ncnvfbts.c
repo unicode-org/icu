@@ -439,7 +439,7 @@ static UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const U
 
 
 
-void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize ) 
+static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize ) 
 {
 
     UChar    SBCSText[] = 

@@ -973,7 +973,7 @@ static void TestConvert()
     free((void*)my_ucs_file_buffer);
 }
 
-void WriteToFile(const UChar *a, FILE *myfile)
+static void WriteToFile(const UChar *a, FILE *myfile)
 {
     uint32_t  size    = u_strlen(a);
     uint16_t  i       = 0;
@@ -988,7 +988,7 @@ void WriteToFile(const UChar *a, FILE *myfile)
     }
 }
 
-int32_t strCaseIcmp(const char* a1, const char * a2)
+static int32_t strCaseIcmp(const char* a1, const char * a2)
 {
     int32_t i=0, ret=0;
     while(a1[i]&&a2[i]) 
@@ -999,13 +999,13 @@ int32_t strCaseIcmp(const char* a1, const char * a2)
     return ret;
 }
 
-UConverterFromUCallback otherUnicodeAction(UConverterFromUCallback MIA)
+static UConverterFromUCallback otherUnicodeAction(UConverterFromUCallback MIA)
 {
     return (MIA==(UConverterFromUCallback)UCNV_FROM_U_CALLBACK_STOP)?(UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE:(UConverterFromUCallback)UCNV_FROM_U_CALLBACK_STOP;
 }
 
 
-UConverterToUCallback otherCharAction(UConverterToUCallback MIA)
+static UConverterToUCallback otherCharAction(UConverterToUCallback MIA)
 {
     return (MIA==(UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP)?(UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE:(UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP;
 }

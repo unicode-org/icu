@@ -38,7 +38,7 @@ addCompactArrayTest(TestNode** root)
  
 }
 
-void TestUCMP16API(){
+static void TestUCMP16API(){
      int16_t newValues[]={
         0x00, 0x01, 0x02, 0x03, 0x04, 
         0x05, 0x06, 0x07, 0x08, 0x09, 
@@ -183,7 +183,7 @@ void TestUCMP16API(){
 
 }
 
-void TestUCMP8API(){
+static void TestUCMP8API(){
     CompactByteArray* ucmp8Array=NULL;
     CompactByteArray* ucmp8Array1=NULL;
     CompactByteArray* ucmp8Array2=NULL;
@@ -277,7 +277,7 @@ void TestUCMP8API(){
     ucmp8_close(ucmp8Array2);
 }
 
-void TestUCMP32API(){
+static void TestUCMP32API(){
     CompactIntArray* ucmp32Array=NULL;
    
     int32_t i=0;
