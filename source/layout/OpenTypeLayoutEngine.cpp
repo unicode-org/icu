@@ -7,6 +7,9 @@
  */
 
 #include "LETypes.h"
+#include "LEScripts.h"
+#include "LELanguages.h"
+
 #include "LayoutEngine.h"
 #include "OpenTypeLayoutEngine.h"
 #include "ScriptAndLanguageTags.h"
@@ -26,8 +29,8 @@ OpenTypeLayoutEngine::OpenTypeLayoutEngine(const LEFontInstance *fontInstance, l
     : LayoutEngine(fontInstance, scriptCode, languageCode), fFeatureTags(NULL), fGSUBTable(gsubTable),
       fSubstitutionFilter(NULL), fFeatureOrder(NULL)
 {
-    static le_uint32 gdefTableTag = 0x47444546; // "GDEF"
-    static le_uint32 gposTableTag = 0x47504F53; // "GPOS"
+    static le_uint32 gdefTableTag = LE_MAKE_TAG('G', 'D', 'E', 'F');
+    static le_uint32 gposTableTag = LE_MAKE_TAG('G', 'P', 'O', 'S');
 
     fGDEFTable = (const GlyphDefinitionTableHeader *) getFontTable(gdefTableTag);
     fGPOSTable = (const GlyphPositioningTableHeader *) getFontTable(gposTableTag);
@@ -76,8 +79,11 @@ LETag OpenTypeLayoutEngine::getScriptTag(le_int32 scriptCode)
 
 LETag OpenTypeLayoutEngine::getLangSysTag(le_int32 languageCode)
 {
-    // FIXME: do this for real some day (soon?)
-    return 0xFFFFFFFF;
+    if (languageCode < 0 || languageCode >= languageCodeCount) {
+        return 0xFFFFFFFF;
+    }
+
+    return languageTags[languageCode];
 }
 
 void OpenTypeLayoutEngine::setScriptAndLanguageTags()

@@ -138,6 +138,11 @@ private:
     static const LETag scriptTags[];
 
     /**
+     * The array of language tags, indexed by language code.
+     */
+    static const LETag languageTags[];
+
+    /**
      * The address of this static class variable serves as this class's ID
      * for ICU "poor man's RTTI".
      */

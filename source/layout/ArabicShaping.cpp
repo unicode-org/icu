@@ -65,36 +65,36 @@ ArabicShaping::ShapeType ArabicShaping::getShapeType(LEUnicode c)
 }
 
 #if 0
-const LETag GlyphShaper::isolFeatureTag  = 0x69736F6C; // 'isol'
-const LETag GlyphShaper::initFeatureTag  = 0x696E6974; // 'init'
-const LETag GlyphShaper::mediFeatureTag  = 0x6D656469; // 'medi'
-const LETag GlyphShaper::finaFeatureTag  = 0x66696E61; // 'fina'
-const LETag GlyphShaper::ligaFeatureTag  = 0x6C696761; // 'liga'
-const LETag GlyphShaper::msetFeatureTag  = 0x6D736574; // 'mset'
-const LETag GlyphShaper::markFeatureTag  = 0x6D61726B; // 'mark'
+const LETag GlyphShaper::isolFeatureTag = LE_MAKE_TAG('i', 's', 'o', 'l');
+const LETag GlyphShaper::initFeatureTag = LE_MAKE_TAG('i', 'n', 'i', 't');
+const LETag GlyphShaper::mediFeatureTag = LE_MAKE_TAG('m', 'e', 'd', 'i');
+const LETag GlyphShaper::finaFeatureTag = LE_MAKE_TAG('f', 'i', 'n', 'a');
+const LETag GlyphShaper::ligaFeatureTag = LE_MAKE_TAG('l', 'i', 'g', 'a');
+const LETag GlyphShaper::msetFeatureTag = LE_MAKE_TAG('m', 's', 'e', 't');
+const LETag GlyphShaper::markFeatureTag = LE_MAKE_TAG('m', 'a', 'r', 'k');
 
 const LETag GlyphShaper::emptyTag        = 0x00000000; // ''
 #else
 
-const LETag isolFeatureTag  = 0x69736F6C; // 'isol'
-const LETag initFeatureTag  = 0x696E6974; // 'init'
-const LETag mediFeatureTag  = 0x6D656469; // 'medi'
-const LETag finaFeatureTag  = 0x66696E61; // 'fina'
-const LETag ligaFeatureTag  = 0x6C696761; // 'liga'
-const LETag msetFeatureTag  = 0x6D736574; // 'mset'
-const LETag markFeatureTag  = 0x6D61726B; // 'mark'
+const LETag isolFeatureTag = LE_MAKE_TAG('i', 's', 'o', 'l');
+const LETag initFeatureTag = LE_MAKE_TAG('i', 'n', 'i', 't');
+const LETag mediFeatureTag = LE_MAKE_TAG('m', 'e', 'd', 'i');
+const LETag finaFeatureTag = LE_MAKE_TAG('f', 'i', 'n', 'a');
+const LETag ligaFeatureTag = LE_MAKE_TAG('l', 'i', 'g', 'a');
+const LETag msetFeatureTag = LE_MAKE_TAG('m', 's', 'e', 't');
+const LETag markFeatureTag = LE_MAKE_TAG('m', 'a', 'r', 'k');
 
 const LETag emptyTag        = 0x00000000; // ''
 #endif
 
-const LETag ccmpFeatureTag = 0x63636D70; // 'ccmp'
-const LETag rligFeatureTag = 0x726C6967; // 'rlig'
-const LETag caltFeatureTag = 0x63616C74; // 'calt'
-const LETag dligFeatureTag = 0x646C6967; // 'dlig'
-const LETag cswhFeatureTag = 0x63737768; // 'cswh'
-const LETag cursFeatureTag = 0x63757273; // 'curs'
-const LETag kernFeatureTag = 0x6B65726E; // 'kern'
-const LETag mkmkFeatureTag = 0x6D6B6D6B; // 'mkmk'
+const LETag ccmpFeatureTag = LE_MAKE_TAG('c', 'c', 'm', 'p');
+const LETag rligFeatureTag = LE_MAKE_TAG('r', 'l', 'i', 'g');
+const LETag caltFeatureTag = LE_MAKE_TAG('c', 'a', 'l', 't');
+const LETag dligFeatureTag = LE_MAKE_TAG('d', 'l', 'i', 'g');
+const LETag cswhFeatureTag = LE_MAKE_TAG('c', 's', 'w', 'h');
+const LETag cursFeatureTag = LE_MAKE_TAG('c', 'u', 'r', 's');
+const LETag kernFeatureTag = LE_MAKE_TAG('k', 'e', 'r', 'n');
+const LETag mkmkFeatureTag = LE_MAKE_TAG('m', 'k', 'm', 'k');
 
 
 const LETag featureOrder[] = 

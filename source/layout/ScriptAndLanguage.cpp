@@ -13,10 +13,10 @@
 
 U_NAMESPACE_BEGIN
 
-const LangSysTable *ScriptTable::findLanguage(LETag languageTag) const
+const LangSysTable *ScriptTable::findLanguage(LETag languageTag, le_bool exactMatch) const
 {
     le_uint16 count = SWAPW(langSysCount);
-    Offset langSysTableOffset = defaultLangSysTableOffset;
+    Offset langSysTableOffset = exactMatch? 0 : SWAPW(defaultLangSysTableOffset);
 
     if (count > 0) {
         Offset foundOffset =
@@ -28,7 +28,7 @@ const LangSysTable *ScriptTable::findLanguage(LETag languageTag) const
     }
 
     if (langSysTableOffset != 0) {
-        return (const LangSysTable *) ((char *)this + SWAPW(langSysTableOffset));
+        return (const LangSysTable *) ((char *)this + langSysTableOffset);
     }
 
     return 0;
@@ -47,7 +47,7 @@ const ScriptTable *ScriptListTable::findScript(LETag scriptTag) const
     return 0;
 }
 
-const LangSysTable *ScriptListTable::findLanguage(LETag scriptTag, LETag languageTag) const
+const LangSysTable *ScriptListTable::findLanguage(LETag scriptTag, LETag languageTag, le_bool exactMatch) const
 {
     const ScriptTable *scriptTable = findScript(scriptTag);
 
@@ -55,7 +55,7 @@ const LangSysTable *ScriptListTable::findLanguage(LETag scriptTag, LETag languag
         return 0;
     }
 
-    return scriptTable->findLanguage(languageTag);
+    return scriptTable->findLanguage(languageTag, exactMatch);
 }
 
 U_NAMESPACE_END

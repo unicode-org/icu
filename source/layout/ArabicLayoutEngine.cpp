@@ -7,6 +7,7 @@
  */
 
 #include "LETypes.h"
+#include "LEScripts.h"
 #include "LEGlyphFilter.h"
 #include "LayoutEngine.h"
 #include "OpenTypeLayoutEngine.h"
@@ -54,13 +55,13 @@ ArabicOpenTypeLayoutEngine::ArabicOpenTypeLayoutEngine(const LEFontInstance *fon
                         const GlyphSubstitutionTableHeader *gsubTable)
     : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, gsubTable)
 {
-    fFeatureOrder = ArabicShaping::getFeatureOrder();
+    // fFeatureOrder = ArabicShaping::getFeatureOrder();
 }
 
 ArabicOpenTypeLayoutEngine::ArabicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode)
     : OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode)
 {
-    fFeatureOrder = ArabicShaping::getFeatureOrder();
+    // fFeatureOrder = ArabicShaping::getFeatureOrder();
 }
 
 ArabicOpenTypeLayoutEngine::~ArabicOpenTypeLayoutEngine()
