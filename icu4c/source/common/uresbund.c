@@ -744,6 +744,8 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
         }
         ures_setIsStackObject(resB, FALSE);
         resB->fResPath = NULL;
+        resB->fResPathLen = 0;
+        resB->fRequestedLocale = NULL;
     } else {
         if(resB->fData != NULL) {
             entryClose(resB->fData);
@@ -754,6 +756,8 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
         if(ures_isStackObject(resB) != FALSE) {
             ures_initStackObject(resB);
         }
+        ures_freeRequestedLocale(resB);
+        ures_freeResPath(resB);
     }
     resB->fData = realData;
     entryIncrease(resB->fData);
@@ -761,7 +765,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
     resB->fIsTopLevel = FALSE;
     resB->fIndex = -1;
     resB->fKey = key;
-    ures_freeResPath(resB);
+    resB->fParent = parent;
     if(parent->fResPath) {
       ures_appendResPath(resB, parent->fResPath, parent->fResPathLen);
     }
@@ -1417,6 +1421,44 @@ ures_getLocale(const UResourceBundle* resourceBundle, UErrorCode* status)
     }
 }
 
+U_CAPI const char* U_EXPORT2 
+ures_getLocaleByType(const UResourceBundle* resourceBundle, 
+                     ULocDataLocaleType type, 
+                     UErrorCode* status) {
+    if (status==NULL || U_FAILURE(*status)) {
+        return NULL;
+    }
+    if (!resourceBundle) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    } else {
+      const UResourceBundle *parent = NULL;
+      switch(type) {
+      case ULOC_ACTUAL_LOCALE:
+        return resourceBundle->fData->fName;
+        break;
+      case ULOC_VALID_LOCALE:
+        parent = resourceBundle;
+        while(parent->fParent) {
+          parent = parent->fParent;
+        }
+        return parent->fData->fName;
+        break;
+      case ULOC_REQUESTED_LOCALE:
+        parent = resourceBundle;
+        while(parent->fParent) {
+          parent = parent->fParent;
+        }
+        return parent->fRequestedLocale;
+        break;
+      default:
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+      }
+    }
+}
+
+
 /*
 U_CFUNC void ures_setResPath(UResourceBundle *resB, const char* toAdd) {
   if(resB->fResPath == NULL) {
@@ -1460,6 +1502,14 @@ U_CFUNC void ures_freeResPath(UResourceBundle *resB) {
   resB->fResPath = NULL;
   resB->fResPathLen = 0;
 }
+
+U_CFUNC void ures_freeRequestedLocale(UResourceBundle *resB) {
+  if (resB->fRequestedLocale && resB->fRequestedLocale != resB->fResBuf) {
+    uprv_free(resB->fRequestedLocale);
+  }
+  resB->fRequestedLocale = NULL;
+}
+
 
 U_CFUNC const char* ures_getName(const UResourceBundle* resB) {
   if(resB == NULL) {
@@ -1515,18 +1565,20 @@ ures_openFillIn(UResourceBundle *r, const char* path,
         r->fSize = res_countArrayItems(&(r->fResData), r->fRes);
         /*r->fParent = RES_BOGUS;*/
         /*r->fResPath = NULL;*/
+        r->fParent = NULL;
+
         ures_freeResPath(r);
-        /*
-        if(r->fData->fPath != NULL) {
-          ures_setResPath(r, r->fData->fPath);
-          ures_appendResPath(r, RES_PATH_PACKAGE_S);
-          ures_appendResPath(r, r->fData->fName);
+        ures_freeRequestedLocale(r);
+        if(uprv_strlen(localeID) >= RES_BUFSIZE) {
+          r->fRequestedLocale = uprv_malloc(uprv_strlen(localeID)+1);
         } else {
-          ures_setResPath(r, r->fData->fName);
+          r->fRequestedLocale = r->fResBuf;
         }
-        */
+
+        strcpy(r->fRequestedLocale, localeID);
     }
 }
+
 U_CAPI UResourceBundle*  U_EXPORT2
 ures_open(const char* path,
                     const char* localeID,
@@ -1542,7 +1594,7 @@ ures_open(const char* path,
     }
 
     /* first "canonicalize" the locale ID */
-    length = uloc_getName(localeID, canonLocaleID, sizeof(canonLocaleID), status);
+    length = uloc_getNameNoKeywords(localeID, canonLocaleID, sizeof(canonLocaleID), status);
     if(U_FAILURE(*status) || *status == U_STRING_NOT_TERMINATED_WARNING) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
@@ -1565,6 +1617,7 @@ ures_open(const char* path,
         uprv_free(r);
         return NULL;
     }
+    r->fParent = NULL;
 
     hasData = r->fData;
     while(hasData->fBogus != U_ZERO_ERROR) {
@@ -1586,6 +1639,19 @@ ures_open(const char* path,
     /*r->fParent = RES_BOGUS;*/
     r->fSize = res_countArrayItems(&(r->fResData), r->fRes);
     r->fResPath = NULL;
+    if(localeID) {
+      if(uprv_strlen(localeID) >= RES_BUFSIZE) {
+        r->fRequestedLocale = uprv_malloc(uprv_strlen(localeID)+1);
+      } else {
+        r->fRequestedLocale = r->fResBuf;
+      }
+
+      strcpy(r->fRequestedLocale, localeID);
+    } else {
+      r->fRequestedLocale = r->fResBuf;
+      r->fResBuf[0] = 0;
+    }
+
     /*
     if(r->fData->fPath != NULL) {
       ures_setResPath(r, r->fData->fPath);
@@ -1680,15 +1746,15 @@ ures_openDirect(const char* path, const char* localeID, UErrorCode* status) {
     /*r->fParent = RES_BOGUS;*/
     r->fSize = res_countArrayItems(&(r->fResData), r->fRes);
     r->fResPath = NULL;
-    /*
-    if(r->fData->fPath != NULL) {
-      ures_setResPath(r, r->fData->fPath);
-      ures_appendResPath(r, RES_PATH_PACKAGE_S);
-      ures_appendResPath(r, r->fData->fName);
+    r->fParent = NULL;
+
+    if(uprv_strlen(localeID) >= RES_BUFSIZE) {
+      r->fRequestedLocale = uprv_malloc(uprv_strlen(localeID)+1);
     } else {
-      ures_setResPath(r, r->fData->fName);
+      r->fRequestedLocale = r->fResBuf;
     }
-    */
+
+    strcpy(r->fRequestedLocale, localeID);
     return r;
 }
 
@@ -1754,6 +1820,7 @@ ures_close(UResourceBundle*    resB)
             uprv_free(resB->fVersion);
         }
         ures_freeResPath(resB);
+        ures_freeRequestedLocale(resB);
 
         if(ures_isStackObject(resB) == FALSE) {
             uprv_free(resB);
