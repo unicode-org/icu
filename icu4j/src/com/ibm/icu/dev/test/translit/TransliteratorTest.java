@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2002/03/15 19:07:02 $
- * $Revision: 1.98 $
+ * $Date: 2002/03/15 19:45:15 $
+ * $Revision: 1.99 $
  *
  *****************************************************************************************
  */
@@ -2478,7 +2478,11 @@ public class TransliteratorTest extends TestFmwk {
 
     public void TestMulticharStringSet() {
         String rule =
-            "[{aa}] > x; a > y; [b{bc}] > z; [{dd}] { e > q; e } [{ff}] > r;";
+            "       [{aa}]       > x;" +
+            "         a          > y;" +
+            "       [b{bc}]      > z;" +
+            "[{gd}] { e          > q;" +
+            "         e } [{fg}] > r;" ;
         
         Transliterator t = Transliterator.createFromRules("Test", rule, Transliterator.FORWARD);
         if (t == null) {
@@ -2486,8 +2490,8 @@ public class TransliteratorTest extends TestFmwk {
             return;
         }
         
-        expect(t, "a aa ab bc d dd de dde ddeff eff",
-                  "y x yz z d dd de ddq ddqff rff");
+        expect(t, "a aa ab bc d gd de gde gdefg ddefg",
+                  "y x yz z d gd de gdq gdqfg ddrfg");
     }
 
     //======================================================================
