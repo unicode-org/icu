@@ -1133,7 +1133,7 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
          }
       }
    }
-   if ((uniChar - 0xfffd) <= 2) /* 0xfffd<=uniChar<=0xffff, was: uniChar == missingUCharMarker */
+   if (((uint32_t)uniChar - 0xfffd) <= 2) /* 0xfffd<=uniChar<=0xffff, was: uniChar == missingUCharMarker */
    {
        /*It is very likely that the ErrorFunctor will write to the
        *internal buffers */
