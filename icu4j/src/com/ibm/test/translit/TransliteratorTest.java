@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $
- * $Date: 2001/11/28 01:12:29 $
- * $Revision: 1.79 $
+ * $Date: 2001/11/28 02:03:39 $
+ * $Revision: 1.80 $
  *
  *****************************************************************************************
  */
@@ -2161,13 +2161,25 @@ public class TransliteratorTest extends TestFmwk {
     static final String[][] registerRules = {
         {"Any-Dev1", "x > X; y > Y;"},
         {"Any-Dev2", "XY > Z"},
+        {"Greek-Latin/FAKE", 
+            "[^[:L:][:M:]] { \u03bc\u03c0 > b ; "+
+            "\u03bc\u03c0 } [^[:L:][:M:]] > b ; "+
+            "[^[:L:][:M:]] { [\u039c\u03bc][\u03a0\u03c0] > B ; "+
+            "[\u039c\u03bc][\u03a0\u03c0] } [^[:L:][:M:]] > B ;"
+            },
     };
     
     static final String DESERET_DEE = UTF16.valueOf(0x10414);
     static final String DESERET_dee = UTF16.valueOf(0x1043C);
     
     static final String[][] testCases = {
+        // mp -> b BUG
+        {"Greek-Latin/UNGEGN", "(\u03BC\u03C0)", "(b)"},
+        {"Greek-Latin/FAKE", "(\u03BC\u03C0)", "(b)"},
+        
+        // check for devanagari bug
         {"nfd;Dev1;Dev2;nfc", "xy", "Z"},
+
         // ff, i, dotless-i, I, dotted-I, LJLjlj deseret deeDEE
         {"Title", "ab'cD ffi\u0131I\u0130 \u01C7\u01C8\u01C9 " + DESERET_dee + DESERET_DEE, 
                   "Ab'cd Ffi\u0131ii \u01C8\u01C9\u01C9 " + DESERET_DEE + DESERET_dee}, 
@@ -2178,9 +2190,6 @@ public class TransliteratorTest extends TestFmwk {
                   "AB'CD FFIII\u0130 \u01C7\u01C7\u01C7 " + DESERET_DEE + DESERET_DEE},
         {"Lower", "ab'cD \uFB00i\u0131I\u0130 \u01C7\u01C8\u01C9 " + DESERET_dee + DESERET_DEE, 
                   "ab'cd \uFB00i\u0131ii \u01C9\u01C9\u01C9 " + DESERET_dee + DESERET_dee},
-        
-         // mp -> b BUG
-         {"Greek-Latin/UNGEGN", "(\u03BC\u03C0)", "(b)"},
         
          // FORMS OF S
         {"Greek-Latin/UNGEGN", "\u03C3 \u03C3\u03C2 \u03C2\u03C3", "s ss s\u0331s\u0331"},
