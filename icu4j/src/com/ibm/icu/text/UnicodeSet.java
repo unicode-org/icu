@@ -677,8 +677,9 @@ public class UnicodeSet extends UnicodeFilter {
     }
 
     /**
-     * Returns the number of elements in this set (its cardinality),
-     * <em>n</em>, where <code>0 <= </code><em>n</em><code> <= 0x110000</code>.
+     * Returns the number of elements in this set (its cardinality)
+     * Note than the elements of a set may include both individual
+     * codepoints and strings.
      *
      * @return the number of elements in this set (its cardinality).
      * @stable ICU 2.0
