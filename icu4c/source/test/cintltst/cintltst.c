@@ -229,9 +229,9 @@ void ctest_setICU_DATA() {
      */
 #if defined (U_SRCDATADIR) 
     {
-        static const char env_string = "ICU_DATA=" U_SRCDATADIR;
+        static const char* env_string = "ICU_DATA=" U_SRCDATADIR;
         putenv(env_string);
-        return
+        return;
     }
 #endif
 
