@@ -11,8 +11,10 @@
 #ifndef GREGOIMP_H
 #define GREGOIMP_H
 #include "unicode/utypes.h"
-
 #if !UCONFIG_NO_FORMATTING
+
+#include "unicode/ures.h"
+#include "unicode/resbund.h"
 
 U_NAMESPACE_BEGIN
 
@@ -220,6 +222,106 @@ inline int32_t Grego::gregorianShift(int32_t eyear) {
   return gregShift;
 }
 
+/**
+ * This class provides convenient access to the data needed for a calendar. 
+ * @internal ICU 3.0
+ */
+class U_I18N_API CalendarData : public UObject {
+ public: 
+  /**
+   * Construct a CalendarData from the given locale.
+   * @param loc locale to use - the 'calendar' keyword will be used, respecting the
+   * 'default' value in the resource bundle.
+   * @param status error code
+   */
+  //CalendarData(const Locale& loc, UErrorCode& status);
+
+  /**
+   * Construct a CalendarData from the given locale.
+   * @param loc locale to use. The 'calendar' keyword will be ignored.
+   * @param type calendar type. NULL indicates the gregorian calendar. 
+   * No default lookup is done.
+   * @param status error code
+   */
+  CalendarData(const Locale& loc, const char *type, UErrorCode& status);
+  
+  /**
+   * Load data for calendar. Note, this object owns the resources, do NOT call ures_close()!
+   *
+   * @param key Resource key to data
+   * @param status Error Status
+   * @internal
+   */
+  UResourceBundle* getByKey(const char *key, UErrorCode& status);
+
+  /**
+   * Load data for calendar. returns a ResourceBundle object
+   *
+   * @param key Resource key to data
+   * @param status Error Status
+   * @internal
+   */
+  ResourceBundle getBundleByKey(const char *key, UErrorCode& status);
+
+  /**
+   * Load data for calendar. Note, this object owns the resources, do NOT call ures_close()!
+   * There is an implicit key of 'format'
+   * data is located in:   "calendar/key/format/subKey"
+   * for example,  calendar/dayNames/format/abbreviated
+   *
+   * @param key Resource key to data
+   * @param subKey Resource key to data
+   * @param status Error Status
+   * @internal
+   */
+  UResourceBundle* getByKey2(const char *key, const char *subKey, UErrorCode& status);
+
+  /**
+   * Load data for calendar. Returns a ResourceBundle object
+   *
+   * @param key Resource key to data
+   * @param subKey Resource key to data
+   * @param status Error Status
+   * @internal
+   */
+  ResourceBundle getBundleByKey2(const char *key, const char *subKey, UErrorCode& status);
+
+  ~CalendarData();
+
+    /**
+     * Override Calendar Returns a unique class ID POLYMORPHICALLY. Pure virtual
+     * override. This method is to implement a simple version of RTTI, since not all C++
+     * compilers support genuine RTTI. Polymorphic operator==() and clone() methods call
+     * this method.
+     *
+     * @return   The class ID for this object. All objects of a given class have the
+     *           same class ID. Objects of other classes have different class IDs.
+     * @stable ICU 2.0
+     */
+    virtual UClassID getDynamicClassID(void) const;
+
+    /**
+     * Return the class ID for this class. This is useful only for comparing to a return
+     * value from getDynamicClassID(). For example:
+     *
+     *      Base* polymorphic_pointer = createPolymorphicObject();
+     *      if (polymorphic_pointer->getDynamicClassID() ==
+     *          Derived::getStaticClassID()) ...
+     *
+     * @return   The class ID for all objects of this class.
+     * @stable ICU 2.0
+     */
+    static UClassID getStaticClassID(void);
+
+ private:
+  void initData(const char *locale, const char *type, UErrorCode& status);
+   
+  UResourceBundle *fFillin;
+  UResourceBundle *fOtherFillin;
+  UResourceBundle *fBundle;
+  UResourceBundle *fFallback;
+  CalendarData(); // Not implemented.
+};
 
 U_NAMESPACE_END
 

@@ -40,6 +40,7 @@
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
 #include "uprops.h"
+#include "gregoimp.h" 
 #include "cstring.h"
 #include <float.h>
 
@@ -270,19 +271,13 @@ void SimpleDateFormat::construct(EStyle timeStyle,
                                  UErrorCode& status)
 {
     // called by several constructors to load pattern data from the resources
-
     if (U_FAILURE(status)) return;
-
-    // load up the DateTimePatterns resource from the appropriate locale (throw
-    // an error if for some weird reason the resource is malformed)
-
-    ResourceBundle resources((char *)0, locale, status);
 
     // We will need the calendar to know what type of symbols to load.
     initializeCalendar(NULL, locale, status);
 
-    // use Date Format Symbols' helper function to do the actual load.
-    ResourceBundle dateTimePatterns = DateFormatSymbols::getData(resources, gDateTimePatternsTag, fCalendar?fCalendar->getType():NULL,  status);
+    CalendarData calData(locale, fCalendar?fCalendar->getType():NULL, status);
+    ResourceBundle dateTimePatterns = calData.getBundleByKey(gDateTimePatternsTag, status);
     if (U_FAILURE(status)) return;
 
     if (dateTimePatterns.getSize() <= kDateTime)

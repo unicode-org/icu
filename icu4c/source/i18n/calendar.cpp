@@ -203,70 +203,37 @@ class DefaultCalendarFactory : public ICUResourceBundleFactory {
     
     // attempt keyword lookup
     char keyword[128];
-    if(loc.getKeywordValue("calendar", keyword, sizeof(keyword)-1, status)) {
+
+    if(!loc.getKeywordValue("calendar", keyword, sizeof(keyword)-1, status)) {
+      // fetch default calendar id
+      const char *defaultCal = NULL;
+      char funcEquiv[256];
+      char keywordVal[ULOC_KEYWORD_AND_VALUES_CAPACITY];
+      ures_getFunctionalEquivalent(funcEquiv, sizeof(funcEquiv)-1,
+                                   NULL, "calendar", "calendar",
+                                   loc.getName(), 
+                                   NULL, FALSE, &status);
+      uloc_getKeywordValue(funcEquiv, "calendar", keyword, 
+                           sizeof(keyword)-1, &status);
 #ifdef U_DEBUG_CALSVC
-      fprintf(stderr, "DefaultCalendar factory %p: looking up %s, keyword: %s\n", 
-              this, (const char*)loc.getName(), keyword);
+      fprintf(stderr, "  getFunctionalEquivalent calendar=%s [%s]\n", keyword, u_errorName(status));
 #endif
+    }
+#ifdef U_DEBUG_CALSVC
+    else { fprintf(stderr, "  explicit calendar=%s\n", keyword); }
+#endif
+
+
+    if(U_FAILURE(status)) {
+      return NULL; 
+    } else {
+      int i;
+      for(i=0;keyword[i];i++) {
+        keyword[i] = ::tolower(keyword[i]);
+      }
       UnicodeString *ret = new UnicodeString("@calendar=","");
       (*ret) += UnicodeString(keyword, "");
       return ret;
-    } else {
-#ifdef U_DEBUG_CALSVC
-      fprintf(stderr, "DefaultCalendar factory %p: looking up %s\n", 
-              this, (const char*)loc.getName());
-#endif
-      
-      
-      UErrorCode resStatus = U_ZERO_ERROR;
-      
-      UResourceBundle *rb = ures_open(NULL, (const char*)loc.getName(), &resStatus);
-      
-#ifdef U_DEBUG_CALSVC
-      fprintf(stderr, "... ures_open -> %s\n", u_errorName(resStatus));
-#endif
-      if(U_FAILURE(resStatus) || 
-         (resStatus == U_USING_DEFAULT_WARNING) || (resStatus==U_USING_FALLBACK_WARNING)) { //Don't want to handle fallback data.
-        ures_close(rb);
-        status = resStatus; // propagate err back to caller
-#ifdef U_DEBUG_CALSVC
-        fprintf(stderr, "... exitting (NULL)\n");
-#endif
-        
-        return NULL;
-      }
-      
-      UnicodeString myString = ures_getUnicodeStringByKey(rb, Calendar::kDefaultCalendar, &status);
-      myString = UnicodeString("@calendar=") + myString;
-      
-#ifdef U_DEBUG_CALSVC
-      int32_t len = 0;
-      UErrorCode debugStatus = U_ZERO_ERROR;
-      const UChar *defCal = ures_getStringByKey(rb, Calendar::kDefaultCalendar, &len,  &debugStatus);
-      fprintf(stderr, "... get string(%d) -> %s\n", len, u_errorName(debugStatus));
-#endif
-      
-      ures_close(rb);
-      
-      if(U_FAILURE(status)) {
-        return NULL;
-      }
-      
-      
-#ifdef U_DEBUG_CALSVC
-      {
-        char defCalStr[200] = "@calendar=";
-        int32_t prefixLen = uprv_strlen(defCalStr);
-        if(len > (199-prefixLen)) {
-          len = (199-prefixLen);
-        }
-        u_UCharsToChars(defCal, defCalStr+prefixLen, len);
-        defCalStr[len+prefixLen]=0;
-        fprintf(stderr, "DefaultCalendarFactory: looked up %s, got DefaultCalendar= %s\n",  (const char*)loc.getName(), defCalStr);
-      }
-#endif
-      
-      return myString.clone();
     }
   }
 };
@@ -416,7 +383,6 @@ static const int32_t kCalendarLimits[UCAL_FIELD_COUNT][4] = {
 
 // Resource bundle tags read by this class
 const char Calendar::kDateTimeElements[] = "DateTimeElements";
-const char Calendar::kDefaultCalendar[] = "DefaultCalendar";
 
 // Data flow in Calendar
 // ---------------------
@@ -2896,22 +2862,20 @@ Calendar::setWeekCountData(const Locale& desiredLocale, UErrorCode& status)
     fFirstDayOfWeek = UCAL_SUNDAY;
     fMinimalDaysInFirstWeek = 1;
 
-    UResourceBundle *resource = ures_open(NULL, desiredLocale.getName(), &status);
-
+    CalendarData calData(desiredLocale, "gregorian", status); // TODO: fixme
     // If the resource data doesn't seem to be present at all, then use last-resort
     // hard-coded data.
+    UResourceBundle *dateTimeElements = calData.getByKey(kDateTimeElements, status);
+
     if (U_FAILURE(status))
     {
         status = U_USING_FALLBACK_WARNING;
-        ures_close(resource);
         return;
     }
 
-    //dateTimeElements = resource.getStringArray(kDateTimeElements, count, status);
-    UResourceBundle *dateTimeElements = ures_getByKey(resource, kDateTimeElements, NULL, &status);  // TODO: should be per calendar?!
     U_LOCALE_BASED(locBased, *this);
-    locBased.setLocaleIDs(ures_getLocaleByType(resource, ULOC_VALID_LOCALE, &status),
-                          ures_getLocaleByType(resource, ULOC_ACTUAL_LOCALE, &status));
+    locBased.setLocaleIDs(ures_getLocaleByType(dateTimeElements, ULOC_VALID_LOCALE, &status),
+                          ures_getLocaleByType(dateTimeElements, ULOC_ACTUAL_LOCALE, &status));
     if (U_SUCCESS(status)) {
         int32_t arrLen;
         const int32_t *dateTimeElementsArr = ures_getIntVector(dateTimeElements, &arrLen, &status);
@@ -2927,9 +2891,8 @@ Calendar::setWeekCountData(const Locale& desiredLocale, UErrorCode& status)
             status = U_INVALID_FORMAT_ERROR;
         }
     }
-
-    ures_close(dateTimeElements);
-    ures_close(resource);
+    
+    // do NOT close dateTimeElements
 }
 
 /**

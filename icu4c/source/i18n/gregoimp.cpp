@@ -13,6 +13,8 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/ucal.h"
+#include "uresimp.h"
+#include "cstring.h"
 
 int32_t Math::floorDivide(int32_t numerator, int32_t denominator) {
     return (numerator >= 0) ?
@@ -86,6 +88,156 @@ void Grego::dayToFields(double day, int32_t& year, int32_t& month,
     dom = doy - DAYS_BEFORE[month + (isLeap ? 12 : 0)] + 1; // one-based DOM
     doy++; // one-based doy
 }
+
+/* ---- CalendarData ------ */
+
+#define U_CALENDAR_KEY "calendar"
+#define U_GREGORIAN_KEY "gregorian"
+#define U_FORMAT_KEY "format"
+#define U_DEFAULT_KEY "default"
+#define U_CALENDAR_DATA ((char*)0)
+
+
+#if defined( U_DEBUG_CALDATA)
+#include <stdio.h>
+#endif
+
+// CalendarData::CalendarData(const Locale& loc, UErrorCode& status) 
+//   : fFillin(NULL), fBundle(NULL), fFallback(NULL) {
+//   initData(loc.getBaseName(), (char*) "???", status);
+// }
+
+CalendarData::CalendarData(const Locale& loc, const char *type, UErrorCode& status)
+  : fFillin(NULL), fOtherFillin(NULL), fBundle(NULL), fFallback(NULL) {
+  initData(loc.getBaseName(), type, status);
+}
+
+void CalendarData::initData(const char *locale, const char *type, UErrorCode& status) {
+  UResourceBundle *tmp = NULL;
+  fOtherFillin = ures_open(U_CALENDAR_DATA, locale, &status);
+  fFillin = ures_getByKey(fOtherFillin, U_CALENDAR_KEY, fFillin, &status);
+
+  if((type != NULL) && 
+     (*type != NULL) && 
+     (uprv_strcmp(type, U_GREGORIAN_KEY))) {
+    fBundle = ures_getByKeyWithFallback(fFillin, type, NULL, &status);
+    fFallback = ures_getByKeyWithFallback(fFillin, U_GREGORIAN_KEY, NULL, &status);
+
+#if defined (U_DEBUG_CALDATA)
+    fprintf(stderr, "%p: CalendarData(%s, %s, %s) -> main(%p, %s)=%s, fallback(%p, %s)=%s\n", 
+            this, locale, type, u_errorName(status), fBundle, type, fBundle?ures_getLocale(fBundle, &status):"", 
+            fFallback, U_GREGORIAN_KEY, fFallback?ures_getLocale(fFallback, &status):"");
+#endif
+
+  } else {
+    fBundle = ures_getByKeyWithFallback(fFillin, U_GREGORIAN_KEY, NULL, &status);
+#if defined (U_DEBUG_CALDATA)
+    fprintf(stderr, "%p: CalendarData(%s, %s, %s) -> main(%p, %s)=%s, fallback = NULL\n",
+            this, locale, type, u_errorName(status), fBundle, U_GREGORIAN_KEY, fBundle?ures_getLocale(fBundle, &status):"" );
+#endif
+  }
+}
+
+CalendarData::~CalendarData() {
+  ures_close(fFillin);
+  ures_close(fBundle);
+  ures_close(fFallback);
+  ures_close(fOtherFillin);
+}
+
+UResourceBundle*
+CalendarData::getByKey(const char *key, UErrorCode& status) {
+  if(U_FAILURE(status)) {
+    return NULL;
+  }
+
+  if(fBundle) {
+    fFillin = ures_getByKeyWithFallback(fBundle, key, fFillin, &status);
+#if defined (U_DEBUG_CALDATA)
+    fprintf(stderr, "%p: get %s -> %s - from MAIN %s\n",this, key, u_errorName(status), ures_getLocale(fFillin, &status));
+#endif
+  }
+  if(fFallback && (status == U_MISSING_RESOURCE_ERROR)) {
+    status = U_ZERO_ERROR; // retry with fallback (gregorian)
+    fFillin = ures_getByKeyWithFallback(fFallback, key, fFillin, &status);
+#if defined (U_DEBUG_CALDATA)
+    fprintf(stderr, "%p: get %s -> %s - from FALLBACK %s\n",this, key, u_errorName(status), ures_getLocale(fFillin, &status));
+#endif
+  }
+  return fFillin;
+}
+
+ResourceBundle CalendarData::getBundleByKey(const char *key, UErrorCode &status) {
+  return ResourceBundle(getByKey(key,status), status);
+}
+
+UResourceBundle* CalendarData::getByKey2(const char *key, const char *subKey, UErrorCode& status) {
+  if(U_FAILURE(status)) {
+    return NULL;
+  }
+
+  if(fBundle) {
+#if defined (U_DEBUG_CALDATA)
+    fprintf(stderr, "%p: //\n");
+#endif
+    fFillin = ures_getByKeyWithFallback(fBundle, key, fFillin, &status);
+    fOtherFillin = ures_getByKeyWithFallback(fFillin, U_FORMAT_KEY, fOtherFillin, &status);
+    fFillin = ures_getByKeyWithFallback(fOtherFillin, subKey, fFillin, &status);
+#if defined (U_DEBUG_CALDATA)
+    fprintf(stderr, "%p: get %s/format/%s -> %s - from MAIN %s\n", this, key, subKey, u_errorName(status), ures_getLocale(fFillin, &status));
+#endif
+  }
+  if(fFallback && (status == U_MISSING_RESOURCE_ERROR)) {
+    status = U_ZERO_ERROR; // retry with fallback (gregorian)
+    fFillin = ures_getByKeyWithFallback(fFallback, key, fFillin, &status);
+    fOtherFillin = ures_getByKeyWithFallback(fFillin, U_FORMAT_KEY, fOtherFillin, &status);
+    fFillin = ures_getByKeyWithFallback(fOtherFillin, subKey, fFillin, &status);
+#if defined (U_DEBUG_CALDATA)
+    fprintf(stderr, "%p: get %s/format/%s -> %s - from FALLBACK %s\n",this, key, subKey, u_errorName(status), ures_getLocale(fFillin,&status));
+#endif
+  }
+
+//// handling of 'default' keyword on failure: Commented out for 3.0.
+//   if((status == U_MISSING_RESOURCE_ERROR) && 
+//      uprv_strcmp(subKey,U_DEFAULT_KEY)) { // avoid recursion
+// #if defined (U_DEBUG_CALDATA)
+//     fprintf(stderr, "%p: - attempting fallback -\n", this);
+//     fflush(stderr);
+// #endif
+//     UErrorCode subStatus = U_ZERO_ERROR;
+//     int32_t len;
+//     char kwBuf[128] = "";
+//     const UChar *kw;
+//     /* fFillin = */ getByKey2(key, U_DEFAULT_KEY, subStatus);
+//     kw = ures_getString(fFillin, &len, &subStatus);
+//     if(len>126) { // too big
+//       len = 0;
+//     }
+//     if(U_SUCCESS(subStatus) && (len>0)) {
+//       u_UCharsToChars(kw, kwBuf, len+1);
+//       if(*kwBuf && uprv_strcmp(kwBuf,subKey)) {
+// #if defined (U_DEBUG_CALDATA)
+//         fprintf(stderr, "%p: trying  %s/format/default -> \"%s\"\n",this, key, kwBuf);
+// #endif
+//         // now try again with the default
+//         status = U_ZERO_ERROR;
+//         /* fFillin = */ getByKey2(key, kwBuf, status);
+//       }
+// #if defined (U_DEBUG_CALDATA)
+//     } else {
+//       fprintf(stderr, "%p: could not load  %s/format/default  - fail out (%s)\n",this, key, kwBuf, u_errorName(status));
+// #endif
+//     }
+//   }
+
+  return fFillin;
+}
+
+ResourceBundle CalendarData::getBundleByKey2(const char *key, const char *subKey, UErrorCode& status) {
+  return ResourceBundle(getByKey2(key, subKey, status), status);
+}
+
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CalendarData);
 
 #endif
 //eof
