@@ -73,7 +73,7 @@ UnicodeString& _appendHex(uint32_t number,
         0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0
     };
     while (digits--) {
-        target += digitString[(number >> (digits*4)) & 0xF];        
+        target += digitString[(number >> (digits*4)) & 0xF];
     }
     return target;
 }
@@ -277,7 +277,7 @@ void TransliterationRuleSet::freeze(UParseError& parseError,UErrorCode& status) 
 
     /* Precompute the index values.  This saves a LOT of time.
      */
-    int16_t* indexValue = new int16_t[n];
+    int16_t* indexValue = (int16_t*) uprv_malloc( sizeof(int16_t) * n );
     for (j=0; j<n; ++j) {
         TransliterationRule* r = (TransliterationRule*) ruleVector->elementAt(j);
         indexValue[j] = r->getIndexValue();
@@ -301,7 +301,7 @@ void TransliterationRuleSet::freeze(UParseError& parseError,UErrorCode& status) 
             }
         }
     }
-    delete[] indexValue;
+    uprv_free(indexValue);
     index[256] = v.size();
 
     /* Freeze things into an array.

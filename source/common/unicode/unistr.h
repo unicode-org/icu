@@ -2825,7 +2825,7 @@ private:
   UBool allocate(int32_t capacity);
 
   // release the array if owned
-  inline void releaseArray();
+  void releaseArray(void);
 
   // Pin start and limit to acceptable values.
   inline void pinIndices(UTextOffset& start,
@@ -3812,13 +3812,6 @@ UnicodeString::getArrayStart() const
 inline int32_t 
 UnicodeString::getCapacity() const
 { return fCapacity; }
-
-inline void
-UnicodeString::releaseArray() {
-  if((fFlags & kRefCounted) && removeRef() == 0) {
-    delete [] ((int32_t *)fArray - 1);
-  }
-}
 
 inline int32_t
 UnicodeString::addRef()

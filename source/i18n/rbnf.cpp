@@ -69,7 +69,7 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(URBNFRuleSetTag tag, const Locale& 
     if (U_FAILURE(status)) {
         return;
     }
-    
+
     const char* fmt_tag = "";
     switch (tag) {
     case URBNF_SPELLOUT: fmt_tag = "SpelloutRules"; break;
@@ -77,7 +77,7 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(URBNFRuleSetTag tag, const Locale& 
     case URBNF_DURATION: fmt_tag = "DurationRules"; break;
     default: status = U_ILLEGAL_ARGUMENT_ERROR; return;
     }
-    
+
     UResourceBundle* nfrb = ures_open(NULL, locale.getName(), &status);
     int32_t len = 0;
     const UChar* description = ures_getStringByKey(nfrb, fmt_tag, &len, &status);
@@ -102,7 +102,7 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const RuleBasedNumberFormat& rhs)
     this->operator=(rhs);
 }
 
-RuleBasedNumberFormat& 
+RuleBasedNumberFormat&
 RuleBasedNumberFormat::operator=(const RuleBasedNumberFormat& rhs)
 {
     UErrorCode status = U_ZERO_ERROR;
@@ -120,30 +120,30 @@ RuleBasedNumberFormat::~RuleBasedNumberFormat()
     dispose();
 }
 
-Format* 
+Format*
 RuleBasedNumberFormat::clone(void) const
 {
     RuleBasedNumberFormat * result = NULL;
     UnicodeString rules = getRules();
     UErrorCode status = U_ZERO_ERROR;
-	UParseError perror;
-	result = new RuleBasedNumberFormat(rules, locale, perror, status);
-	if (U_FAILURE(status)) {
-		delete result;
-		result = NULL;
-	} else {
-		result->lenient = lenient;
-	}
+    UParseError perror;
+    result = new RuleBasedNumberFormat(rules, locale, perror, status);
+    if (U_FAILURE(status)) {
+        delete result;
+        result = NULL;
+    } else {
+        result->lenient = lenient;
+    }
     return result;
 }
 
-UBool 
+UBool
 RuleBasedNumberFormat::operator==(const Format& other) const
 {
     if (this == &other) {
         return TRUE;
     }
-    
+
     if (other.getDynamicClassID() == getStaticClassID()) {
         const RuleBasedNumberFormat& rhs = (const RuleBasedNumberFormat&)other;
         if (locale == rhs.locale &&
@@ -157,11 +157,11 @@ RuleBasedNumberFormat::operator==(const Format& other) const
             return *q == NULL && *p == NULL;
         }
     }
-    
+
     return FALSE;
 }
 
-UnicodeString 
+UnicodeString
 RuleBasedNumberFormat::getRules() const
 {
     UnicodeString result;
@@ -171,7 +171,7 @@ RuleBasedNumberFormat::getRules() const
     return result;
 }
 
-UnicodeString 
+UnicodeString
 RuleBasedNumberFormat::getRuleSetName(int32_t index) const
 {
     UnicodeString result;
@@ -188,7 +188,7 @@ RuleBasedNumberFormat::getRuleSetName(int32_t index) const
 }
 
 int32_t
-RuleBasedNumberFormat::getNumberOfRuleSetNames() const 
+RuleBasedNumberFormat::getNumberOfRuleSetNames() const
 {
     int32_t result = 0;
     for (NFRuleSet** p = ruleSets; *p; ++p) {
@@ -214,7 +214,7 @@ RuleBasedNumberFormat::findRuleSet(const UnicodeString& name, UErrorCode& status
     return NULL;
 }
 
-UnicodeString& 
+UnicodeString&
 RuleBasedNumberFormat::format(int32_t number,
                               UnicodeString& toAppendTo,
                               FieldPosition& pos) const
@@ -224,7 +224,7 @@ RuleBasedNumberFormat::format(int32_t number,
 }
 
 #if 0
-UnicodeString& 
+UnicodeString&
 RuleBasedNumberFormat::format(llong number,
                               UnicodeString& toAppendTo,
                               FieldPosition& pos) const
@@ -234,7 +234,7 @@ RuleBasedNumberFormat::format(llong number,
 }
 #endif
 
-UnicodeString& 
+UnicodeString&
 RuleBasedNumberFormat::format(double number,
                               UnicodeString& toAppendTo,
                               FieldPosition& pos) const
@@ -244,7 +244,7 @@ RuleBasedNumberFormat::format(double number,
 }
 
 
-UnicodeString& 
+UnicodeString&
 RuleBasedNumberFormat::format(int32_t number,
                               const UnicodeString& ruleSetName,
                               UnicodeString& toAppendTo,
@@ -267,7 +267,7 @@ RuleBasedNumberFormat::format(int32_t number,
 }
 
 #if 0
-UnicodeString& 
+UnicodeString&
 RuleBasedNumberFormat::format(llong number,
                               const UnicodeString& ruleSetName,
                               UnicodeString& toAppendTo,
@@ -290,16 +290,16 @@ RuleBasedNumberFormat::format(llong number,
 #endif
 
 // make linker happy
-UnicodeString& 
+UnicodeString&
 RuleBasedNumberFormat::format(const Formattable& obj,
                               UnicodeString& toAppendTo,
                               FieldPosition& pos,
-                              UErrorCode& status) const 
-{ 
+                              UErrorCode& status) const
+{
     return NumberFormat::format(obj, toAppendTo, pos, status);
 }
 
-UnicodeString& 
+UnicodeString&
 RuleBasedNumberFormat::format(double number,
                               const UnicodeString& ruleSetName,
                               UnicodeString& toAppendTo,
@@ -320,35 +320,35 @@ RuleBasedNumberFormat::format(double number,
     return toAppendTo;
 }
 
-void 
+void
 RuleBasedNumberFormat::parse(const UnicodeString& text,
                              Formattable& result,
                              ParsePosition& parsePosition) const
 {
     ParsePosition high_pp;
     Formattable high_result;
-    
+
     for (NFRuleSet** p = ruleSets; *p; ++p) {
         NFRuleSet *rp = *p;
         if (rp->isPublic()) {
             ParsePosition working_pp = parsePosition;
             Formattable working_result;
-            
+
             rp->parse(text, working_pp, kMaxDouble, working_result);
             if (working_pp.getIndex() > high_pp.getIndex()) {
                 high_pp = working_pp;
                 high_result = working_result;
-                
+
                 if (high_pp.getIndex() == text.length()) {
                     break;
                 }
             }
         }
     }
-    
-	if (high_pp.getIndex() > parsePosition.getIndex()) {
-		high_pp.setErrorIndex(-1);
-	}
+
+    if (high_pp.getIndex() > parsePosition.getIndex()) {
+        high_pp.setErrorIndex(-1);
+    }
     parsePosition = high_pp;
     result = high_result;
     if (result.getType() == Formattable::kDouble) {
@@ -369,27 +369,27 @@ RuleBasedNumberFormat::setLenient(UBool enabled)
     }
 }
 
-void 
+void
 RuleBasedNumberFormat::init(const UnicodeString& rules, UParseError& pErr, UErrorCode& status)
 {
     // TODO: implement UParseError
     if (U_FAILURE(status)) {
         return;
     }
-    
+
     UnicodeString description(rules);
     if (!description.length()) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    
+
     // start by stripping the trailing whitespace from all the rules
     // (this is all the whitespace follwing each semicolon in the
     // description).  This allows us to look for rule-set boundaries
     // by searching for ";%" without having to worry about whitespace
     // between the ; and the %
     stripWhitespace(description);
-    
+
     // check to see if there's a set of lenient-parse rules.  If there
     // is, pull them out into our temporary holding place for them,
     // and delete them from the description before the real desciption-
@@ -404,7 +404,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, UParseError& pErr, UErro
             // rules (there may be whitespace between the name and
             // the first token in the description)
             int lpEnd = description.indexOf(gSemiPercent, lp);
-            
+
             if (lpEnd == -1) {
                 lpEnd = description.length() - 1;
             }
@@ -412,16 +412,16 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, UParseError& pErr, UErro
             while (u_isWhitespace(description.charAt(lpStart))) {
                 ++lpStart;
             }
-            
+
             // copy out the lenient-parse rules and delete them
             // from the description
             lenientParseRules = new UnicodeString();
             lenientParseRules->setTo(description, lpStart, lpEnd - lpStart);
-            
+
             description.remove(lp, lpEnd + 1 - lp);
         }
     }
-    
+
     // pre-flight parsing the description and count the number of
     // rule sets (";%" marks the end of one rule set and the beginning
     // of the next)
@@ -431,13 +431,13 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, UParseError& pErr, UErro
         ++p;
     }
     ++numRuleSets;
-    
+
     // our rule list is an array of the appropriate size
     ruleSets = new NFRuleSet*[numRuleSets + 1];
     for (int i = 0; i <= numRuleSets; ++i) {
         ruleSets[i] = NULL;
     }
-    
+
     // divide up the descriptions into individual rule-set descriptions
     // and store them in a temporary array.  At each step, we also
     // new up a rule set, but all this does is initialize its name
@@ -446,7 +446,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, UParseError& pErr, UErro
     // because we have to know the names and locations of all the rule
     // sets before we can actually set everything up
     UnicodeString* ruleSetDescriptions = new UnicodeString[numRuleSets];
-    
+
     {
         int curRuleSet = 0;
         UTextOffset start = 0;
@@ -459,7 +459,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, UParseError& pErr, UErro
         ruleSetDescriptions[curRuleSet].setTo(description, start, description.length() - start);
         ruleSets[curRuleSet] = new NFRuleSet(ruleSetDescriptions, curRuleSet, status);
     }
-    
+
     // now we can take note of the formatter's default rule set, which
     // is the last public rule set in the description (it's the last
     // rather than the first so that a user can create a new formatter
@@ -477,7 +477,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, UParseError& pErr, UErro
             }
         }
     }
-    
+
     // finally, we can go back through the temporary descriptions
     // list and finish seting up the substructure (and we throw
     // away the temporary descriptions as we go)
@@ -486,16 +486,16 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, UParseError& pErr, UErro
             ruleSets[i]->parseRules(ruleSetDescriptions[i], this, status);
         }
     }
-    
+
     delete[] ruleSetDescriptions;
 }
 
 void
-RuleBasedNumberFormat::stripWhitespace(UnicodeString& description) 
+RuleBasedNumberFormat::stripWhitespace(UnicodeString& description)
 {
     // iterate through the characters...
     UnicodeString result;
-    
+
     int start = 0;
     while (start != -1 && start < description.length()) {
         // seek to the first non-whitespace character...
@@ -503,7 +503,7 @@ RuleBasedNumberFormat::stripWhitespace(UnicodeString& description)
             && u_isWhitespace(description.charAt(start))) {
             ++start;
         }
-        
+
         // locate the next semicolon in the text and copy the text from
         // our current position up to that semicolon into the result
         UTextOffset p = description.indexOf(gSemiColon, start);
@@ -517,7 +517,7 @@ RuleBasedNumberFormat::stripWhitespace(UnicodeString& description)
             result.append(description, start, p + 1 - start);
             start = p + 1;
         }
-        
+
         // when we get here, we've seeked off the end of the sring, and
         // we terminate the loop (we continue until *start* is -1 rather
         // than until *p* is -1, because otherwise we'd miss the last
@@ -526,12 +526,12 @@ RuleBasedNumberFormat::stripWhitespace(UnicodeString& description)
             start = -1;
         }
     }
-    
+
     description.setTo(result);
 }
 
 
-void 
+void
 RuleBasedNumberFormat::dispose()
 {
     if (ruleSets) {
@@ -541,15 +541,15 @@ RuleBasedNumberFormat::dispose()
         delete[] ruleSets;
         ruleSets = NULL;
     }
-    
-    delete collator; 
-	collator = NULL;
-    
-    delete decimalFormatSymbols; 
-	decimalFormatSymbols = NULL;
-    
-    delete lenientParseRules; 
-	lenientParseRules = NULL;
+
+    delete collator;
+    collator = NULL;
+
+    delete decimalFormatSymbols;
+    decimalFormatSymbols = NULL;
+
+    delete lenientParseRules;
+    lenientParseRules = NULL;
 }
 
 
@@ -572,18 +572,18 @@ RuleBasedNumberFormat::getCollator() const
         // then pull out that collator's rules, append any additional
         // rules specified in the description, and create a _new_
         // collator based on the combinaiton of those rules
-        
+
         UErrorCode status = U_ZERO_ERROR;
-        
+
         Collator* temp = Collator::createInstance(locale, status);
         if (U_SUCCESS(status) &&
             temp->getDynamicClassID() == RuleBasedCollator::getStaticClassID()) {
-            
+
             RuleBasedCollator* newCollator = (RuleBasedCollator*)temp;
             if (lenientParseRules) {
                 UnicodeString rules(newCollator->getRules());
                 rules.append(*lenientParseRules);
-                
+
                 newCollator = new RuleBasedCollator(rules, status);
             } else {
                 temp = NULL;
@@ -598,7 +598,7 @@ RuleBasedNumberFormat::getCollator() const
         }
         delete temp;
     }
-    
+
     // if lenient-parse mode is off, this will be null
     // (see setLenientParseMode())
     return collator;

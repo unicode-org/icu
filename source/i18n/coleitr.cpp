@@ -160,7 +160,7 @@ void CollationElementIterator::setText(const UnicodeString& source,
   if (U_FAILURE(status)) {
     return;
   }
-  	
+
   int32_t length = source.length();
   UChar *string = NULL;
   if (m_data_->isWritable && m_data_->iteratordata_.string != NULL) {

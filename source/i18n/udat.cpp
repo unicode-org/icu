@@ -125,7 +125,7 @@ udat_open(UDateFormatStyle  timeStyle,
         TimeZone *zone = 0;
         int32_t length = (tzIDLength == -1 ? u_strlen(tzID) : tzIDLength);
         zone = TimeZone::createTimeZone(UnicodeString((UChar*)tzID,
-						      length, length));
+                                      length, length));
         if(zone == 0) {
           *status = U_MEMORY_ALLOCATION_ERROR;
           delete fmt;

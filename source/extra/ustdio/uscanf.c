@@ -29,8 +29,7 @@
 #include "unicode/unum.h"
 #include "unicode/udat.h"
 
-#include <string.h>
-#include <stdlib.h>
+#include "cmemory.h"
 
 /* --- Prototypes ---------------------------- */
 
@@ -279,267 +278,267 @@ static const u_scanf_info g_u_scanf_infos[108] = {
 #define USCANF_BASE_FMT_HANDLERS 0x20
 
 int32_t 
-u_fscanf(    UFILE        *f,
-        const char    *patternSpecification,
-        ... )
+u_fscanf(UFILE        *f,
+         const char    *patternSpecification,
+         ... )
 {
-  va_list ap;
-  int32_t converted;
-  
-  va_start(ap, patternSpecification);
-  converted = u_vfscanf(f, patternSpecification, ap);
-  va_end(ap);
-  
-  return converted;
+    va_list ap;
+    int32_t converted;
+
+    va_start(ap, patternSpecification);
+    converted = u_vfscanf(f, patternSpecification, ap);
+    va_end(ap);
+
+    return converted;
 }
 
 int32_t 
-u_fscanf_u(    UFILE        *f,
-        const UChar    *patternSpecification,
-        ... )
+u_fscanf_u(UFILE        *f,
+           const UChar    *patternSpecification,
+           ... )
 {
-  va_list ap;
-  int32_t converted;
-  
-  va_start(ap, patternSpecification);
-  converted = u_vfscanf_u(f, patternSpecification, ap);
-  va_end(ap);
-  
-  return converted;
+    va_list ap;
+    int32_t converted;
+
+    va_start(ap, patternSpecification);
+    converted = u_vfscanf_u(f, patternSpecification, ap);
+    va_end(ap);
+
+    return converted;
 }
 
 U_CAPI int32_t  U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
-u_vfscanf(    UFILE        *f,
-        const char    *patternSpecification,
-        va_list        ap)
+u_vfscanf(UFILE        *f,
+          const char    *patternSpecification,
+          va_list        ap)
 {
-  int32_t converted;
-  UChar *pattern;
-  
-  /* convert from the default codepage to Unicode */
-  pattern = ufmt_defaultCPToUnicode(patternSpecification, 
-                    strlen(patternSpecification));
-  if(pattern == 0) {
-    return 0;
-  }
-  
-  /* do the work */
-  converted = u_vfscanf_u(f, pattern, ap);
+    int32_t converted;
+    UChar *pattern;
 
-  /* clean up */
-  free(pattern);
-  
-  return converted;
+    /* convert from the default codepage to Unicode */
+    pattern = ufmt_defaultCPToUnicode(patternSpecification,
+        strlen(patternSpecification));
+    if(pattern == 0) {
+        return 0;
+    }
+
+    /* do the work */
+    converted = u_vfscanf_u(f, pattern, ap);
+
+    /* clean up */
+    uprv_free(pattern);
+
+    return converted;
 }
 
 static int32_t
 u_scanf_skip_leading_ws(UFILE     *stream,
-            UChar     pad)
+                        UChar     pad)
 {
-  UChar     c;
-  int32_t    count = 0;
-  
-  /* skip all leading ws in the stream */
-  while( ((c = u_fgetc(stream)) != 0xFFFF) && (c == pad || ufmt_isws(c)) )
-    ++count;
-  
-  /* put the final character back on the stream */  
-  if(c != 0xFFFF)
-    u_fungetc(c, stream);
+    UChar     c;
+    int32_t    count = 0;
 
-  return count;
+    /* skip all leading ws in the stream */
+    while( ((c = u_fgetc(stream)) != 0xFFFF) && (c == pad || ufmt_isws(c)) )
+        ++count;
+
+    /* put the final character back on the stream */
+    if(c != 0xFFFF)
+        u_fungetc(c, stream);
+
+    return count;
 }
 
 int32_t 
 u_scanf_simple_percent_handler(UFILE            *stream,
-                   const u_scanf_spec_info     *info,
-                   ufmt_args             *args,
-                   const UChar        *fmt,
-                   int32_t            *consumed)
+                               const u_scanf_spec_info     *info,
+                               ufmt_args             *args,
+                               const UChar        *fmt,
+                               int32_t            *consumed)
 {
-  /* make sure the next character in the stream is a percent */
-  if(u_fgetc(stream) != 0x0025)
-    return -1;
-  else
-    return 0;
+    /* make sure the next character in the stream is a percent */
+    if(u_fgetc(stream) != 0x0025)
+        return -1;
+    else
+        return 0;
 }
 
 int32_t
 u_scanf_string_handler(UFILE             *stream,
-               const u_scanf_spec_info     *info,
-               ufmt_args             *args,
-               const UChar        *fmt,
-               int32_t            *consumed)
+                       const u_scanf_spec_info     *info,
+                       ufmt_args             *args,
+                       const UChar        *fmt,
+                       int32_t            *consumed)
 {
-  UChar     c;
-  int32_t     count;
-  const UChar     *source;
-  UConverter     *conv;
-  UErrorCode     status     = U_ZERO_ERROR;
-  char         *arg     = (char*)(args[0].ptrValue);
-  char         *alias     = arg;
-  char         *limit;
+    UChar     c;
+    int32_t     count;
+    const UChar     *source;
+    UConverter     *conv;
+    UErrorCode     status     = U_ZERO_ERROR;
+    char         *arg     = (char*)(args[0].ptrValue);
+    char         *alias     = arg;
+    char         *limit;
 
-  /* skip all ws in the stream */
-  u_scanf_skip_leading_ws(stream, info->fPadChar);
-  
-  /* get the string one character at a time, truncating to the width */
-  count = 0;
+    /* skip all ws in the stream */
+    u_scanf_skip_leading_ws(stream, info->fPadChar);
 
-  /* open the default converter */
-  conv = ucnv_open(ucnv_getDefaultName(), &status);
+    /* get the string one character at a time, truncating to the width */
+    count = 0;
 
-  if(U_FAILURE(status))
-    return -1;
+    /* open the default converter */
+    conv = ucnv_open(ucnv_getDefaultName(), &status);
 
-  /* since there is no real limit, just use a reasonable value */
-  limit = alias + 2048; /* TODO: Specify a real limit! */
-
-  while( ((c = u_fgetc(stream)) != 0xFFFF) && 
-     (c != info->fPadChar && ! ufmt_isws(c)) &&
-     (info->fWidth == -1 || count < info->fWidth) ) {
-    
-    /* put the character from the stream onto the target */
-    source = &c;
-
-    /* convert the character to the default codepage */
-    ucnv_fromUnicode(conv, &alias, limit, &source, source + 1,
-             NULL, TRUE, &status);
-    
     if(U_FAILURE(status))
-      return -1;
-    
-    /* increment the count */
-    ++count;
-  }
+        return -1;
 
-  /* put the final character we read back on the stream */  
-  if(c != 0xFFFF)
-    u_fungetc(c, stream);
-  
-  /* add the terminator */
-  *alias = 0x00;
+    /* since there is no real limit, just use a reasonable value */
+    limit = alias + 2048; /* TODO: Specify a real limit! */
 
-  /* clean up */
-  ucnv_close(conv);
+    while( ((c = u_fgetc(stream)) != 0xFFFF) &&
+        (c != info->fPadChar && ! ufmt_isws(c)) &&
+        (info->fWidth == -1 || count < info->fWidth) ) {
 
-  /* we converted 1 arg */
-  return 1;
+        /* put the character from the stream onto the target */
+        source = &c;
+
+        /* convert the character to the default codepage */
+        ucnv_fromUnicode(conv, &alias, limit, &source, source + 1,
+            NULL, TRUE, &status);
+
+        if(U_FAILURE(status))
+            return -1;
+
+        /* increment the count */
+        ++count;
+    }
+
+    /* put the final character we read back on the stream */
+    if(c != 0xFFFF)
+        u_fungetc(c, stream);
+
+    /* add the terminator */
+    *alias = 0x00;
+
+    /* clean up */
+    ucnv_close(conv);
+
+    /* we converted 1 arg */
+    return 1;
 }
 
 int32_t
 u_scanf_ustring_handler(UFILE             *stream,
-            const u_scanf_spec_info *info,
-            ufmt_args        *args,
-            const UChar        *fmt,
-            int32_t            *consumed)
+                        const u_scanf_spec_info *info,
+                        ufmt_args        *args,
+                        const UChar        *fmt,
+                        int32_t            *consumed)
 {
-  UChar     c;
-  int32_t     count;
-  UChar     *arg     = (UChar*)(args[0].ptrValue);
-  UChar     *alias     = arg;
-  
-  /* skip all ws in the stream */
-  u_scanf_skip_leading_ws(stream, info->fPadChar);
-  
-  /* get the string one character at a time, truncating to the width */
-  count = 0;
+    UChar     c;
+    int32_t     count;
+    UChar     *arg     = (UChar*)(args[0].ptrValue);
+    UChar     *alias     = arg;
 
-  while( ((c = u_fgetc(stream)) != 0xFFFF) && 
-     (c != info->fPadChar && ! ufmt_isws(c)) &&
-     (info->fWidth == -1 || count < info->fWidth) ) {
-    
-    /* put the character from the stream onto the target */
-    *alias++ = c;
-    
-    /* increment the count */
-    ++count;
-  }
+    /* skip all ws in the stream */
+    u_scanf_skip_leading_ws(stream, info->fPadChar);
 
-  /* put the final character we read back on the stream */  
-  if(c != 0xFFFF)
-    u_fungetc(c, stream);
-  
-  /* add the terminator */
-  *alias = 0x0000;
+    /* get the string one character at a time, truncating to the width */
+    count = 0;
 
-  /* we converted 1 arg */
-  return 1;
+    while( ((c = u_fgetc(stream)) != 0xFFFF) &&
+        (c != info->fPadChar && ! ufmt_isws(c)) &&
+        (info->fWidth == -1 || count < info->fWidth) ) {
+
+        /* put the character from the stream onto the target */
+        *alias++ = c;
+
+        /* increment the count */
+        ++count;
+    }
+
+    /* put the final character we read back on the stream */
+    if(c != 0xFFFF)
+        u_fungetc(c, stream);
+
+    /* add the terminator */
+    *alias = 0x0000;
+
+    /* we converted 1 arg */
+    return 1;
 }
 
 int32_t
 u_scanf_count_handler(UFILE             *stream,
-              const u_scanf_spec_info     *info,
-              ufmt_args        *args,
-              const UChar        *fmt,
-              int32_t            *consumed)
+                      const u_scanf_spec_info     *info,
+                      ufmt_args        *args,
+                      const UChar        *fmt,
+                      int32_t            *consumed)
 {
-  int *converted = (int*)(args[0].ptrValue);
-  
-  /* in the special case of count, the u_scanf_spec_info's width */
-  /* will contain the # of items converted thus far */
-  *converted = info->fWidth;
+    int *converted = (int*)(args[0].ptrValue);
 
-  /* we converted 0 args */
-  return 0;
+    /* in the special case of count, the u_scanf_spec_info's width */
+    /* will contain the # of items converted thus far */
+    *converted = info->fWidth;
+
+    /* we converted 0 args */
+    return 0;
 }
 
 int32_t
 u_scanf_integer_handler(UFILE             *stream,
-            const u_scanf_spec_info *info,
-            ufmt_args        *args,
-            const UChar        *fmt,
-            int32_t            *consumed)
+                        const u_scanf_spec_info *info,
+                        ufmt_args        *args,
+                        const UChar        *fmt,
+                        int32_t            *consumed)
 {
-  int32_t        len;
-  long            *num         = (long*) (args[0].ptrValue);
-  UNumberFormat        *format;
-  int32_t        parsePos     = 0;
-  UErrorCode         status         = U_ZERO_ERROR;
+    int32_t        len;
+    long            *num         = (long*) (args[0].ptrValue);
+    UNumberFormat        *format;
+    int32_t        parsePos     = 0;
+    UErrorCode         status         = U_ZERO_ERROR;
 
 
-  /* skip all ws in the stream */
-  u_scanf_skip_leading_ws(stream, info->fPadChar);
+    /* skip all ws in the stream */
+    u_scanf_skip_leading_ws(stream, info->fPadChar);
 
-  /* fill the stream's internal buffer */
-  ufile_fill_uchar_buffer(stream);
+    /* fill the stream's internal buffer */
+    ufile_fill_uchar_buffer(stream);
 
-  /* determine the size of the stream's buffer */
-  len = stream->fUCLimit - stream->fUCPos;
+    /* determine the size of the stream's buffer */
+    len = stream->fUCLimit - stream->fUCPos;
 
-  /* truncate to the width, if specified */
-  if(info->fWidth != -1)
-    len = ufmt_min(len, info->fWidth);
+    /* truncate to the width, if specified */
+    if(info->fWidth != -1)
+        len = ufmt_min(len, info->fWidth);
 
-  /* get the formatter */
-  format = u_locbund_getNumberFormat(stream->fBundle);
-  
-  /* handle error */
-  if(format == 0)
-    return 0;
-  
-  /* parse the number */
-  *num = unum_parse(format, stream->fUCPos, len, &parsePos, &status);
+    /* get the formatter */
+    format = u_locbund_getNumberFormat(stream->fBundle);
 
-  /* mask off any necessary bits */
-  if(info->fIsShort)
-    *num &= UINT16_MAX;
-  else if(! info->fIsLong || ! info->fIsLongLong)
-    *num &= UINT32_MAX;
+    /* handle error */
+    if(format == 0)
+        return 0;
 
-  /* update the stream's position to reflect consumed data */
-  stream->fUCPos += parsePos;
-  
-  /* we converted 1 arg */
-  return 1;
+    /* parse the number */
+    *num = unum_parse(format, stream->fUCPos, len, &parsePos, &status);
+
+    /* mask off any necessary bits */
+    if(info->fIsShort)
+        *num &= UINT16_MAX;
+    else if(! info->fIsLong || ! info->fIsLongLong)
+        *num &= UINT32_MAX;
+
+    /* update the stream's position to reflect consumed data */
+    stream->fUCPos += parsePos;
+
+    /* we converted 1 arg */
+    return 1;
 }
 
 int32_t
 u_scanf_uinteger_handler(UFILE             *stream,
-            const u_scanf_spec_info *info,
-            ufmt_args        *args,
-            const UChar        *fmt,
-            int32_t            *consumed)
+                         const u_scanf_spec_info *info,
+                         ufmt_args        *args,
+                         const UChar        *fmt,
+                         int32_t            *consumed)
 {
     ufmt_args uint_args;
     int32_t converted_args;
@@ -557,788 +556,788 @@ u_scanf_uinteger_handler(UFILE             *stream,
 
 int32_t
 u_scanf_double_handler(UFILE             *stream,
-               const u_scanf_spec_info     *info,
-               ufmt_args        *args,
-               const UChar        *fmt,
-               int32_t            *consumed)
+                       const u_scanf_spec_info     *info,
+                       ufmt_args        *args,
+                       const UChar        *fmt,
+                       int32_t            *consumed)
 {
-  int32_t        len;
-  double        *num         = (double*) (args[0].ptrValue);
-  UNumberFormat        *format;
-  int32_t        parsePos     = 0;
-  UErrorCode         status         = U_ZERO_ERROR;
+    int32_t        len;
+    double        *num         = (double*) (args[0].ptrValue);
+    UNumberFormat        *format;
+    int32_t        parsePos     = 0;
+    UErrorCode         status         = U_ZERO_ERROR;
 
 
-  /* skip all ws in the stream */
-  u_scanf_skip_leading_ws(stream, info->fPadChar);
+    /* skip all ws in the stream */
+    u_scanf_skip_leading_ws(stream, info->fPadChar);
 
-  /* fill the stream's internal buffer */
-  ufile_fill_uchar_buffer(stream);
+    /* fill the stream's internal buffer */
+    ufile_fill_uchar_buffer(stream);
 
-  /* determine the size of the stream's buffer */
-  len = stream->fUCLimit - stream->fUCPos;
+    /* determine the size of the stream's buffer */
+    len = stream->fUCLimit - stream->fUCPos;
 
-  /* truncate to the width, if specified */
-  if(info->fWidth != -1)
-    len = ufmt_min(len, info->fWidth);
+    /* truncate to the width, if specified */
+    if(info->fWidth != -1)
+        len = ufmt_min(len, info->fWidth);
 
-  /* get the formatter */
-  format = u_locbund_getNumberFormat(stream->fBundle);
-  
-  /* handle error */
-  if(format == 0)
-    return 0;
-  
-  /* parse the number */
-  *num = unum_parseDouble(format, stream->fUCPos, len, &parsePos, &status);
+    /* get the formatter */
+    format = u_locbund_getNumberFormat(stream->fBundle);
 
-  /* mask off any necessary bits */
-  /*  if(! info->fIsLong_double)
-      num &= DBL_MAX;*/
+    /* handle error */
+    if(format == 0)
+        return 0;
 
-  /* update the stream's position to reflect consumed data */
-  stream->fUCPos += parsePos;
-  
-  /* we converted 1 arg */
-  return 1;
+    /* parse the number */
+    *num = unum_parseDouble(format, stream->fUCPos, len, &parsePos, &status);
+
+    /* mask off any necessary bits */
+    /*  if(! info->fIsLong_double)
+    num &= DBL_MAX;*/
+
+    /* update the stream's position to reflect consumed data */
+    stream->fUCPos += parsePos;
+
+    /* we converted 1 arg */
+    return 1;
 }
 
 int32_t
 u_scanf_scientific_handler(UFILE             *stream,
-               const u_scanf_spec_info     *info,
-               ufmt_args           *args,
-               const UChar            *fmt,
-               int32_t            *consumed)
+                           const u_scanf_spec_info     *info,
+                           ufmt_args           *args,
+                           const UChar            *fmt,
+                           int32_t            *consumed)
 {
-  int32_t        len;
-  double        *num         = (double*) (args[0].ptrValue);
-  UNumberFormat        *format;
-  int32_t        parsePos     = 0;
-  UErrorCode         status         = U_ZERO_ERROR;
+    int32_t        len;
+    double        *num         = (double*) (args[0].ptrValue);
+    UNumberFormat        *format;
+    int32_t        parsePos     = 0;
+    UErrorCode         status         = U_ZERO_ERROR;
 
 
-  /* skip all ws in the stream */
-  u_scanf_skip_leading_ws(stream, info->fPadChar);
+    /* skip all ws in the stream */
+    u_scanf_skip_leading_ws(stream, info->fPadChar);
 
-  /* fill the stream's internal buffer */
-  ufile_fill_uchar_buffer(stream);
+    /* fill the stream's internal buffer */
+    ufile_fill_uchar_buffer(stream);
 
-  /* determine the size of the stream's buffer */
-  len = stream->fUCLimit - stream->fUCPos;
+    /* determine the size of the stream's buffer */
+    len = stream->fUCLimit - stream->fUCPos;
 
-  /* truncate to the width, if specified */
-  if(info->fWidth != -1)
-    len = ufmt_min(len, info->fWidth);
+    /* truncate to the width, if specified */
+    if(info->fWidth != -1)
+        len = ufmt_min(len, info->fWidth);
 
-  /* get the formatter */
-  format = u_locbund_getScientificFormat(stream->fBundle);
-  
-  /* handle error */
-  if(format == 0)
-    return 0;
-  
-  /* parse the number */
-  *num = unum_parseDouble(format, stream->fUCPos, len, &parsePos, &status);
+    /* get the formatter */
+    format = u_locbund_getScientificFormat(stream->fBundle);
 
-  /* mask off any necessary bits */
-  /*  if(! info->fIsLong_double)
-      num &= DBL_MAX;*/
+    /* handle error */
+    if(format == 0)
+        return 0;
 
-  /* update the stream's position to reflect consumed data */
-  stream->fUCPos += parsePos;
-  
-  /* we converted 1 arg */
-  return 1;
+    /* parse the number */
+    *num = unum_parseDouble(format, stream->fUCPos, len, &parsePos, &status);
+
+    /* mask off any necessary bits */
+    /*  if(! info->fIsLong_double)
+    num &= DBL_MAX;*/
+
+    /* update the stream's position to reflect consumed data */
+    stream->fUCPos += parsePos;
+
+    /* we converted 1 arg */
+    return 1;
 }
 
 int32_t
 u_scanf_scidbl_handler(UFILE             *stream,
-               const u_scanf_spec_info     *info,
-               ufmt_args        *args,
-               const UChar        *fmt,
-               int32_t            *consumed)
+                       const u_scanf_spec_info     *info,
+                       ufmt_args        *args,
+                       const UChar        *fmt,
+                       int32_t            *consumed)
 {
-  int32_t        len;
-  double        *num         = (double*) (args[0].ptrValue);
-  UNumberFormat *scientificFormat, *genericFormat;
-  /*int32_t       scientificResult, genericResult;*/
-  double        scientificResult, genericResult;
-  int32_t       scientificParsePos = 0, genericParsePos = 0;
-  UErrorCode    scientificStatus = U_ZERO_ERROR;
-  UErrorCode    genericStatus = U_ZERO_ERROR;
-  UBool         useScientific;
+    int32_t        len;
+    double        *num         = (double*) (args[0].ptrValue);
+    UNumberFormat *scientificFormat, *genericFormat;
+    /*int32_t       scientificResult, genericResult;*/
+    double        scientificResult, genericResult;
+    int32_t       scientificParsePos = 0, genericParsePos = 0;
+    UErrorCode    scientificStatus = U_ZERO_ERROR;
+    UErrorCode    genericStatus = U_ZERO_ERROR;
+    UBool         useScientific;
 
 
-  /* since we can't determine by scanning the characters whether */
-  /* a number was formatted in the 'f' or 'g' styles, parse the */
-  /* string with both formatters, and assume whichever one */
-  /* parsed the most is the correct formatter to use */
+    /* since we can't determine by scanning the characters whether */
+    /* a number was formatted in the 'f' or 'g' styles, parse the */
+    /* string with both formatters, and assume whichever one */
+    /* parsed the most is the correct formatter to use */
 
 
-  /* skip all ws in the stream */
-  u_scanf_skip_leading_ws(stream, info->fPadChar);
+    /* skip all ws in the stream */
+    u_scanf_skip_leading_ws(stream, info->fPadChar);
 
-  /* fill the stream's internal buffer */
-  ufile_fill_uchar_buffer(stream);
+    /* fill the stream's internal buffer */
+    ufile_fill_uchar_buffer(stream);
 
-  /* determine the size of the stream's buffer */
-  len = stream->fUCLimit - stream->fUCPos;
+    /* determine the size of the stream's buffer */
+    len = stream->fUCLimit - stream->fUCPos;
 
-  /* truncate to the width, if specified */
-  if(info->fWidth != -1)
-    len = ufmt_min(len, info->fWidth);
+    /* truncate to the width, if specified */
+    if(info->fWidth != -1)
+        len = ufmt_min(len, info->fWidth);
 
-  /* get the formatters */
-  scientificFormat = u_locbund_getScientificFormat(stream->fBundle);
-  genericFormat = u_locbund_getNumberFormat(stream->fBundle);
-  
-  /* handle error */
-  if(scientificFormat == 0 || genericFormat == 0)
-    return 0;
-  
-  /* parse the number using each format*/
+    /* get the formatters */
+    scientificFormat = u_locbund_getScientificFormat(stream->fBundle);
+    genericFormat = u_locbund_getNumberFormat(stream->fBundle);
 
-  scientificResult = unum_parseDouble(scientificFormat, stream->fUCPos, len,
-                      &scientificParsePos, &scientificStatus);
+    /* handle error */
+    if(scientificFormat == 0 || genericFormat == 0)
+        return 0;
 
-  genericResult = unum_parseDouble(genericFormat, stream->fUCPos, len,
-                   &genericParsePos, &genericStatus);
+    /* parse the number using each format*/
 
-  /* determine which parse made it farther */
-  useScientific = (UBool)(scientificParsePos > genericParsePos);
-  
-  /* stash the result in num */
-  *num = useScientific ? scientificResult : genericResult;
-  
-  /* mask off any necessary bits */
-  /*  if(! info->fIsLong_double)
-      num &= DBL_MAX;*/
+    scientificResult = unum_parseDouble(scientificFormat, stream->fUCPos, len,
+        &scientificParsePos, &scientificStatus);
 
-  /* update the stream's position to reflect consumed data */
-  stream->fUCPos += useScientific ? scientificParsePos : genericParsePos;
-  
-  /* we converted 1 arg */
-  return 1;
+    genericResult = unum_parseDouble(genericFormat, stream->fUCPos, len,
+        &genericParsePos, &genericStatus);
+
+    /* determine which parse made it farther */
+    useScientific = (UBool)(scientificParsePos > genericParsePos);
+
+    /* stash the result in num */
+    *num = useScientific ? scientificResult : genericResult;
+
+    /* mask off any necessary bits */
+    /*  if(! info->fIsLong_double)
+    num &= DBL_MAX;*/
+
+    /* update the stream's position to reflect consumed data */
+    stream->fUCPos += useScientific ? scientificParsePos : genericParsePos;
+
+    /* we converted 1 arg */
+    return 1;
 }
 
 int32_t
 u_scanf_currency_handler(UFILE                 *stream,
-             const u_scanf_spec_info     *info,
-             ufmt_args            *args,
-             const UChar            *fmt,
-             int32_t            *consumed)
+                         const u_scanf_spec_info     *info,
+                         ufmt_args            *args,
+                         const UChar            *fmt,
+                         int32_t            *consumed)
 {
-  int32_t        len;
-  double        *num         = (double*) (args[0].ptrValue);
-  UNumberFormat        *format;
-  int32_t        parsePos     = 0;
-  UErrorCode         status         = U_ZERO_ERROR;
+    int32_t        len;
+    double        *num         = (double*) (args[0].ptrValue);
+    UNumberFormat        *format;
+    int32_t        parsePos     = 0;
+    UErrorCode         status         = U_ZERO_ERROR;
 
 
-  /* skip all ws in the stream */
-  u_scanf_skip_leading_ws(stream, info->fPadChar);
+    /* skip all ws in the stream */
+    u_scanf_skip_leading_ws(stream, info->fPadChar);
 
-  /* fill the stream's internal buffer */
-  ufile_fill_uchar_buffer(stream);
+    /* fill the stream's internal buffer */
+    ufile_fill_uchar_buffer(stream);
 
-  /* determine the size of the stream's buffer */
-  len = stream->fUCLimit - stream->fUCPos;
+    /* determine the size of the stream's buffer */
+    len = stream->fUCLimit - stream->fUCPos;
 
-  /* truncate to the width, if specified */
-  if(info->fWidth != -1)
-    len = ufmt_min(len, info->fWidth);
+    /* truncate to the width, if specified */
+    if(info->fWidth != -1)
+        len = ufmt_min(len, info->fWidth);
 
-  /* get the formatter */
-  format = u_locbund_getCurrencyFormat(stream->fBundle);
-  
-  /* handle error */
-  if(format == 0)
-    return 0;
-  
-  /* parse the number */
-  *num = unum_parseDouble(format, stream->fUCPos, len, &parsePos, &status);
-  
-  /* mask off any necessary bits */
-  /*  if(! info->fIsLong_double)
-      num &= DBL_MAX;*/
+    /* get the formatter */
+    format = u_locbund_getCurrencyFormat(stream->fBundle);
 
-  /* update the stream's position to reflect consumed data */
-  stream->fUCPos += parsePos;
-  
-  /* we converted 1 arg */
-  return 1;
+    /* handle error */
+    if(format == 0)
+        return 0;
+
+    /* parse the number */
+    *num = unum_parseDouble(format, stream->fUCPos, len, &parsePos, &status);
+
+    /* mask off any necessary bits */
+    /*  if(! info->fIsLong_double)
+    num &= DBL_MAX;*/
+
+    /* update the stream's position to reflect consumed data */
+    stream->fUCPos += parsePos;
+
+    /* we converted 1 arg */
+    return 1;
 }
 
 int32_t
 u_scanf_percent_handler(UFILE             *stream,
-            const u_scanf_spec_info *info,
-            ufmt_args        *args,
-            const UChar        *fmt,
-            int32_t            *consumed)
+                        const u_scanf_spec_info *info,
+                        ufmt_args        *args,
+                        const UChar        *fmt,
+                        int32_t            *consumed)
 {
-  int32_t        len;
-  double        *num         = (double*) (args[0].ptrValue);
-  UNumberFormat        *format;
-  int32_t        parsePos     = 0;
-  UErrorCode         status         = U_ZERO_ERROR;
+    int32_t        len;
+    double        *num         = (double*) (args[0].ptrValue);
+    UNumberFormat        *format;
+    int32_t        parsePos     = 0;
+    UErrorCode         status         = U_ZERO_ERROR;
 
 
-  /* skip all ws in the stream */
-  u_scanf_skip_leading_ws(stream, info->fPadChar);
+    /* skip all ws in the stream */
+    u_scanf_skip_leading_ws(stream, info->fPadChar);
 
-  /* fill the stream's internal buffer */
-  ufile_fill_uchar_buffer(stream);
+    /* fill the stream's internal buffer */
+    ufile_fill_uchar_buffer(stream);
 
-  /* determine the size of the stream's buffer */
-  len = stream->fUCLimit - stream->fUCPos;
+    /* determine the size of the stream's buffer */
+    len = stream->fUCLimit - stream->fUCPos;
 
-  /* truncate to the width, if specified */
-  if(info->fWidth != -1)
-    len = ufmt_min(len, info->fWidth);
+    /* truncate to the width, if specified */
+    if(info->fWidth != -1)
+        len = ufmt_min(len, info->fWidth);
 
-  /* get the formatter */
-  format = u_locbund_getPercentFormat(stream->fBundle);
-  
-  /* handle error */
-  if(format == 0)
-    return 0;
-  
-  /* parse the number */
-  *num = unum_parseDouble(format, stream->fUCPos, len, &parsePos, &status);
+    /* get the formatter */
+    format = u_locbund_getPercentFormat(stream->fBundle);
 
-  /* mask off any necessary bits */
-  /*  if(! info->fIsLong_double)
-      num &= DBL_MAX;*/
+    /* handle error */
+    if(format == 0)
+        return 0;
 
-  /* update the stream's position to reflect consumed data */
-  stream->fUCPos += parsePos;
-  
-  /* we converted 1 arg */
-  return 1;
+    /* parse the number */
+    *num = unum_parseDouble(format, stream->fUCPos, len, &parsePos, &status);
+
+    /* mask off any necessary bits */
+    /*  if(! info->fIsLong_double)
+    num &= DBL_MAX;*/
+
+    /* update the stream's position to reflect consumed data */
+    stream->fUCPos += parsePos;
+
+    /* we converted 1 arg */
+    return 1;
 }
 
 int32_t
 u_scanf_date_handler(UFILE             *stream,
-             const u_scanf_spec_info     *info,
-             ufmt_args        *args,
-             const UChar        *fmt,
-             int32_t            *consumed)
+                     const u_scanf_spec_info     *info,
+                     ufmt_args        *args,
+                     const UChar        *fmt,
+                     int32_t            *consumed)
 {
-  int32_t        len;
-  UDate            *date         = (UDate*) (args[0].ptrValue);
-  UDateFormat        *format;
-  int32_t        parsePos     = 0;
-  UErrorCode         status         = U_ZERO_ERROR;
+    int32_t        len;
+    UDate            *date         = (UDate*) (args[0].ptrValue);
+    UDateFormat        *format;
+    int32_t        parsePos     = 0;
+    UErrorCode         status         = U_ZERO_ERROR;
 
 
-  /* skip all ws in the stream */
-  u_scanf_skip_leading_ws(stream, info->fPadChar);
+    /* skip all ws in the stream */
+    u_scanf_skip_leading_ws(stream, info->fPadChar);
 
-  /* fill the stream's internal buffer */
-  ufile_fill_uchar_buffer(stream);
+    /* fill the stream's internal buffer */
+    ufile_fill_uchar_buffer(stream);
 
-  /* determine the size of the stream's buffer */
-  len = stream->fUCLimit - stream->fUCPos;
+    /* determine the size of the stream's buffer */
+    len = stream->fUCLimit - stream->fUCPos;
 
-  /* truncate to the width, if specified */
-  if(info->fWidth != -1)
-    len = ufmt_min(len, info->fWidth);
+    /* truncate to the width, if specified */
+    if(info->fWidth != -1)
+        len = ufmt_min(len, info->fWidth);
 
-  /* get the formatter */
-  format = u_locbund_getDateFormat(stream->fBundle);
-  
-  /* handle error */
-  if(format == 0)
-    return 0;
-  
-  /* parse the number */
-  *date = udat_parse(format, stream->fUCPos, len, &parsePos, &status);
-  
-  /* update the stream's position to reflect consumed data */
-  stream->fUCPos += parsePos;
-  
-  /* we converted 1 arg */
-  return 1;
+    /* get the formatter */
+    format = u_locbund_getDateFormat(stream->fBundle);
+
+    /* handle error */
+    if(format == 0)
+        return 0;
+
+    /* parse the number */
+    *date = udat_parse(format, stream->fUCPos, len, &parsePos, &status);
+
+    /* update the stream's position to reflect consumed data */
+    stream->fUCPos += parsePos;
+
+    /* we converted 1 arg */
+    return 1;
 }
 
 int32_t
 u_scanf_time_handler(UFILE             *stream,
-             const u_scanf_spec_info     *info,
-             ufmt_args        *args,
-             const UChar        *fmt,
-             int32_t            *consumed)
+                     const u_scanf_spec_info     *info,
+                     ufmt_args        *args,
+                     const UChar        *fmt,
+                     int32_t            *consumed)
 {
-  int32_t        len;
-  UDate            *time         = (UDate*) (args[0].ptrValue);
-  UDateFormat        *format;
-  int32_t        parsePos     = 0;
-  UErrorCode         status         = U_ZERO_ERROR;
+    int32_t        len;
+    UDate            *time         = (UDate*) (args[0].ptrValue);
+    UDateFormat        *format;
+    int32_t        parsePos     = 0;
+    UErrorCode         status         = U_ZERO_ERROR;
 
 
-  /* skip all ws in the stream */
-  u_scanf_skip_leading_ws(stream, info->fPadChar);
+    /* skip all ws in the stream */
+    u_scanf_skip_leading_ws(stream, info->fPadChar);
 
-  /* fill the stream's internal buffer */
-  ufile_fill_uchar_buffer(stream);
+    /* fill the stream's internal buffer */
+    ufile_fill_uchar_buffer(stream);
 
-  /* determine the size of the stream's buffer */
-  len = stream->fUCLimit - stream->fUCPos;
+    /* determine the size of the stream's buffer */
+    len = stream->fUCLimit - stream->fUCPos;
 
-  /* truncate to the width, if specified */
-  if(info->fWidth != -1)
-    len = ufmt_min(len, info->fWidth);
+    /* truncate to the width, if specified */
+    if(info->fWidth != -1)
+        len = ufmt_min(len, info->fWidth);
 
-  /* get the formatter */
-  format = u_locbund_getTimeFormat(stream->fBundle);
-  
-  /* handle error */
-  if(format == 0)
-    return 0;
-  
-  /* parse the number */
-  *time = udat_parse(format, stream->fUCPos, len, &parsePos, &status);
-  
-  /* update the stream's position to reflect consumed data */
-  stream->fUCPos += parsePos;
-  
-  /* we converted 1 arg */
-  return 1;
+    /* get the formatter */
+    format = u_locbund_getTimeFormat(stream->fBundle);
+
+    /* handle error */
+    if(format == 0)
+        return 0;
+
+    /* parse the number */
+    *time = udat_parse(format, stream->fUCPos, len, &parsePos, &status);
+
+    /* update the stream's position to reflect consumed data */
+    stream->fUCPos += parsePos;
+
+    /* we converted 1 arg */
+    return 1;
 }
 
 int32_t
 u_scanf_char_handler(UFILE             *stream,
-             const u_scanf_spec_info     *info,
-             ufmt_args        *args,
-             const UChar        *fmt,
-             int32_t            *consumed)
+                     const u_scanf_spec_info     *info,
+                     ufmt_args        *args,
+                     const UChar        *fmt,
+                     int32_t            *consumed)
 {
-  UChar uc = 0;
-  char *result;
-  char *c = (char*)(args[0].ptrValue);
-  
-  /* skip all ws in the stream */
-  u_scanf_skip_leading_ws(stream, info->fPadChar);
-  
-  /* get the character from the stream, truncating to the width */
-  if(info->fWidth == -1 || info->fWidth > 1)
-    uc = u_fgetc(stream);
+    UChar uc = 0;
+    char *result;
+    char *c = (char*)(args[0].ptrValue);
 
-  /* handle EOF */
-  if(uc == 0xFFFF)
-    return -1;
+    /* skip all ws in the stream */
+    u_scanf_skip_leading_ws(stream, info->fPadChar);
 
-  /* convert the character to the default codepage */
-  result = ufmt_unicodeToDefaultCP(&uc, 1);
-  *c = result[0];
+    /* get the character from the stream, truncating to the width */
+    if(info->fWidth == -1 || info->fWidth > 1)
+        uc = u_fgetc(stream);
 
-  /* clean up */
-  free(result);
-  
-  /* we converted 1 arg */
-  return 1;
+    /* handle EOF */
+    if(uc == 0xFFFF)
+        return -1;
+
+    /* convert the character to the default codepage */
+    result = ufmt_unicodeToDefaultCP(&uc, 1);
+    *c = result[0];
+
+    /* clean up */
+    uprv_free(result);
+
+    /* we converted 1 arg */
+    return 1;
 }
 
 int32_t
 u_scanf_uchar_handler(UFILE             *stream,
-              const u_scanf_spec_info     *info,
-              ufmt_args        *args,
-              const UChar        *fmt,
-              int32_t            *consumed)
+                      const u_scanf_spec_info     *info,
+                      ufmt_args        *args,
+                      const UChar        *fmt,
+                      int32_t            *consumed)
 {
-  UChar *c = (UChar*)(args[0].ptrValue);
-  
-  /* skip all ws in the stream */
-  u_scanf_skip_leading_ws(stream, info->fPadChar);
-  
-  /* get the character from the stream, truncating to the width */
-  if(info->fWidth == -1 || info->fWidth > 1)
-    *c = u_fgetc(stream);
+    UChar *c = (UChar*)(args[0].ptrValue);
 
-  /* handle EOF */
-  if(*c == 0xFFFF)
-    return -1;
+    /* skip all ws in the stream */
+    u_scanf_skip_leading_ws(stream, info->fPadChar);
 
-  /* we converted 1 arg */
-  return 1;
+    /* get the character from the stream, truncating to the width */
+    if(info->fWidth == -1 || info->fWidth > 1)
+        *c = u_fgetc(stream);
+
+    /* handle EOF */
+    if(*c == 0xFFFF)
+        return -1;
+
+    /* we converted 1 arg */
+    return 1;
 }
 
 int32_t
 u_scanf_spellout_handler(UFILE                 *stream,
-             const u_scanf_spec_info     *info,
-             ufmt_args             *args,
-             const UChar            *fmt,
-             int32_t            *consumed)
+                         const u_scanf_spec_info     *info,
+                         ufmt_args             *args,
+                         const UChar            *fmt,
+                         int32_t            *consumed)
 {
-  int32_t        len;
-  double        *num         = (double*) (args[0].ptrValue);
-  UNumberFormat        *format;
-  int32_t        parsePos     = 0;
-  UErrorCode         status         = U_ZERO_ERROR;
+    int32_t        len;
+    double        *num         = (double*) (args[0].ptrValue);
+    UNumberFormat        *format;
+    int32_t        parsePos     = 0;
+    UErrorCode         status         = U_ZERO_ERROR;
 
 
-  /* skip all ws in the stream */
-  u_scanf_skip_leading_ws(stream, info->fPadChar);
+    /* skip all ws in the stream */
+    u_scanf_skip_leading_ws(stream, info->fPadChar);
 
-  /* fill the stream's internal buffer */
-  ufile_fill_uchar_buffer(stream);
+    /* fill the stream's internal buffer */
+    ufile_fill_uchar_buffer(stream);
 
-  /* determine the size of the stream's buffer */
-  len = stream->fUCLimit - stream->fUCPos;
+    /* determine the size of the stream's buffer */
+    len = stream->fUCLimit - stream->fUCPos;
 
-  /* truncate to the width, if specified */
-  if(info->fWidth != -1)
-    len = ufmt_min(len, info->fWidth);
+    /* truncate to the width, if specified */
+    if(info->fWidth != -1)
+        len = ufmt_min(len, info->fWidth);
 
-  /* get the formatter */
-  format = u_locbund_getSpelloutFormat(stream->fBundle);
-  
-  /* handle error */
-  if(format == 0)
-    return 0;
-  
-  /* parse the number */
-  *num = unum_parseDouble(format, stream->fUCPos, len, &parsePos, &status);
+    /* get the formatter */
+    format = u_locbund_getSpelloutFormat(stream->fBundle);
 
-  /* mask off any necessary bits */
-  /*  if(! info->fIsLong_double)
-      num &= DBL_MAX;*/
+    /* handle error */
+    if(format == 0)
+        return 0;
 
-  /* update the stream's position to reflect consumed data */
-  stream->fUCPos += parsePos;
-  
-  /* we converted 1 arg */
-  return 1;
+    /* parse the number */
+    *num = unum_parseDouble(format, stream->fUCPos, len, &parsePos, &status);
+
+    /* mask off any necessary bits */
+    /*  if(! info->fIsLong_double)
+    num &= DBL_MAX;*/
+
+    /* update the stream's position to reflect consumed data */
+    stream->fUCPos += parsePos;
+
+    /* we converted 1 arg */
+    return 1;
 }
 
 int32_t
 u_scanf_hex_handler(UFILE             *stream,
-            const u_scanf_spec_info     *info,
-            ufmt_args            *args,
-            const UChar            *fmt,
-            int32_t            *consumed)
+                    const u_scanf_spec_info     *info,
+                    ufmt_args            *args,
+                    const UChar            *fmt,
+                    int32_t            *consumed)
 {
-  int32_t        len;
-  long            *num         = (long*) (args[0].ptrValue);
+    int32_t        len;
+    long            *num         = (long*) (args[0].ptrValue);
 
 
-  /* skip all ws in the stream */
-  u_scanf_skip_leading_ws(stream, info->fPadChar);
+    /* skip all ws in the stream */
+    u_scanf_skip_leading_ws(stream, info->fPadChar);
 
-  /* fill the stream's internal buffer */
-  ufile_fill_uchar_buffer(stream);
+    /* fill the stream's internal buffer */
+    ufile_fill_uchar_buffer(stream);
 
-  /* determine the size of the stream's buffer */
-  len = stream->fUCLimit - stream->fUCPos;
+    /* determine the size of the stream's buffer */
+    len = stream->fUCLimit - stream->fUCPos;
 
-  /* truncate to the width, if specified */
-  if(info->fWidth != -1)
-    len = ufmt_min(len, info->fWidth);
+    /* truncate to the width, if specified */
+    if(info->fWidth != -1)
+        len = ufmt_min(len, info->fWidth);
 
-  /* check for alternate form */
-  if( *(stream->fUCPos) == 0x0030 && 
-      (*(stream->fUCPos + 1) == 0x0078 || *(stream->fUCPos + 1) == 0x0058) ) {
+    /* check for alternate form */
+    if( *(stream->fUCPos) == 0x0030 &&
+        (*(stream->fUCPos + 1) == 0x0078 || *(stream->fUCPos + 1) == 0x0058) ) {
 
-    /* skip the '0' and 'x' or 'X' if present */
-    stream->fUCPos += 2;
-    len -= 2;
-  }
+        /* skip the '0' and 'x' or 'X' if present */
+        stream->fUCPos += 2;
+        len -= 2;
+    }
 
-  /* parse the number */
-  *num = ufmt_utol(stream->fUCPos, &len, 16);
+    /* parse the number */
+    *num = ufmt_utol(stream->fUCPos, &len, 16);
 
-  /* update the stream's position to reflect consumed data */
-  stream->fUCPos += len;
+    /* update the stream's position to reflect consumed data */
+    stream->fUCPos += len;
 
-  /* mask off any necessary bits */
-  if(info->fIsShort)
-    *num &= UINT16_MAX;
-  else if(! info->fIsLong || ! info->fIsLongLong)
-    *num &= UINT32_MAX;
+    /* mask off any necessary bits */
+    if(info->fIsShort)
+        *num &= UINT16_MAX;
+    else if(! info->fIsLong || ! info->fIsLongLong)
+        *num &= UINT32_MAX;
 
-  /* we converted 1 arg */
-  return 1;
+    /* we converted 1 arg */
+    return 1;
 }
 
 int32_t
 u_scanf_octal_handler(UFILE             *stream,
-              const u_scanf_spec_info     *info,
-              ufmt_args         *args,
-              const UChar        *fmt,
-              int32_t            *consumed)
+                      const u_scanf_spec_info     *info,
+                      ufmt_args         *args,
+                      const UChar        *fmt,
+                      int32_t            *consumed)
 {
-  int32_t        len;
-  long            *num         = (long*) (args[0].ptrValue);
+    int32_t        len;
+    long            *num         = (long*) (args[0].ptrValue);
 
 
-  /* skip all ws in the stream */
-  u_scanf_skip_leading_ws(stream, info->fPadChar);
+    /* skip all ws in the stream */
+    u_scanf_skip_leading_ws(stream, info->fPadChar);
 
-  /* fill the stream's internal buffer */
-  ufile_fill_uchar_buffer(stream);
+    /* fill the stream's internal buffer */
+    ufile_fill_uchar_buffer(stream);
 
-  /* determine the size of the stream's buffer */
-  len = stream->fUCLimit - stream->fUCPos;
+    /* determine the size of the stream's buffer */
+    len = stream->fUCLimit - stream->fUCPos;
 
-  /* truncate to the width, if specified */
-  if(info->fWidth != -1)
-    len = ufmt_min(len, info->fWidth);
+    /* truncate to the width, if specified */
+    if(info->fWidth != -1)
+        len = ufmt_min(len, info->fWidth);
 
-  /* parse the number */
-  *num = ufmt_utol(stream->fUCPos, &len, 8);
+    /* parse the number */
+    *num = ufmt_utol(stream->fUCPos, &len, 8);
 
-  /* update the stream's position to reflect consumed data */
-  stream->fUCPos += len;
+    /* update the stream's position to reflect consumed data */
+    stream->fUCPos += len;
 
-  /* mask off any necessary bits */
-  if(info->fIsShort)
-    *num &= UINT16_MAX;
-  else if(! info->fIsLong || ! info->fIsLongLong)
-    *num &= UINT32_MAX;
+    /* mask off any necessary bits */
+    if(info->fIsShort)
+        *num &= UINT16_MAX;
+    else if(! info->fIsLong || ! info->fIsLongLong)
+        *num &= UINT32_MAX;
 
-  /* we converted 1 arg */
-  return 1;
+    /* we converted 1 arg */
+    return 1;
 }
 
 int32_t
 u_scanf_pointer_handler(UFILE             *stream,
-            const u_scanf_spec_info *info,
-            ufmt_args        *args,
-            const UChar        *fmt,
-            int32_t            *consumed)
+                        const u_scanf_spec_info *info,
+                        ufmt_args        *args,
+                        const UChar        *fmt,
+                        int32_t            *consumed)
 {
-  int32_t    len;
-  void        *p     = (void*)(args[0].ptrValue);
+    int32_t    len;
+    void        *p     = (void*)(args[0].ptrValue);
 
 
-  /* skip all ws in the stream */
-  u_scanf_skip_leading_ws(stream, info->fPadChar);
+    /* skip all ws in the stream */
+    u_scanf_skip_leading_ws(stream, info->fPadChar);
 
-  /* fill the stream's internal buffer */
-  ufile_fill_uchar_buffer(stream);
+    /* fill the stream's internal buffer */
+    ufile_fill_uchar_buffer(stream);
 
-  /* determine the size of the stream's buffer */
-  len = stream->fUCLimit - stream->fUCPos;
+    /* determine the size of the stream's buffer */
+    len = stream->fUCLimit - stream->fUCPos;
 
-  /* truncate to the width, if specified */
-  if(info->fWidth != -1)
-    len = ufmt_min(len, info->fWidth);
+    /* truncate to the width, if specified */
+    if(info->fWidth != -1)
+        len = ufmt_min(len, info->fWidth);
 
-  /* parse the pointer - cast to void** to assign to *p */
-  *(void**)p = (void*) ufmt_utol(stream->fUCPos, &len, 16);
+    /* parse the pointer - cast to void** to assign to *p */
+    *(void**)p = (void*) ufmt_utol(stream->fUCPos, &len, 16);
 
-  /* update the stream's position to reflect consumed data */
-  stream->fUCPos += len;
+    /* update the stream's position to reflect consumed data */
+    stream->fUCPos += len;
 
-  /* we converted 1 arg */
-  return 1;
+    /* we converted 1 arg */
+    return 1;
 }
 
 int32_t
 u_scanf_scanset_handler(UFILE             *stream,
-            const u_scanf_spec_info *info,
-            ufmt_args        *args,
-            const UChar        *fmt,
-            int32_t            *consumed)
+                        const u_scanf_spec_info *info,
+                        ufmt_args        *args,
+                        const UChar        *fmt,
+                        int32_t            *consumed)
 {
-  u_scanf_scanset    scanset;
-  int32_t        len;
-  UBool        success;
-  UChar            c;
-  const UChar         *source;
-  UConverter         *conv;
-  UErrorCode         status     = U_ZERO_ERROR;
-  char            *s     = (char*) (args[0].ptrValue);
-  char             *alias, *limit;
+    u_scanf_scanset    scanset;
+    int32_t        len;
+    UBool        success;
+    UChar            c;
+    const UChar         *source;
+    UConverter         *conv;
+    UErrorCode         status     = U_ZERO_ERROR;
+    char            *s     = (char*) (args[0].ptrValue);
+    char             *alias, *limit;
 
 
-  /* fill the stream's internal buffer */
-  ufile_fill_uchar_buffer(stream);
+    /* fill the stream's internal buffer */
+    ufile_fill_uchar_buffer(stream);
 
-  /* determine the size of the stream's buffer */
-  len = stream->fUCLimit - stream->fUCPos;
+    /* determine the size of the stream's buffer */
+    len = stream->fUCLimit - stream->fUCPos;
 
-  /* truncate to the width, if specified */
-  if(info->fWidth != -1)
-    len = ufmt_min(len, info->fWidth);
+    /* truncate to the width, if specified */
+    if(info->fWidth != -1)
+        len = ufmt_min(len, info->fWidth);
 
-  /* alias the target */
-  alias = s;
-  limit = alias + len;
+    /* alias the target */
+    alias = s;
+    limit = alias + len;
 
-  /* parse the scanset from the fmt string */
-  *consumed = u_strlen(fmt);
-  success = u_scanf_scanset_init(&scanset, fmt, consumed);
+    /* parse the scanset from the fmt string */
+    *consumed = u_strlen(fmt);
+    success = u_scanf_scanset_init(&scanset, fmt, consumed);
 
-  /* increment consumed by one to eat the final ']' */
-  ++(*consumed);
+    /* increment consumed by one to eat the final ']' */
+    ++(*consumed);
 
-  /* open the default converter */
-  conv = ucnv_open(ucnv_getDefaultName(), &status);
+    /* open the default converter */
+    conv = ucnv_open(ucnv_getDefaultName(), &status);
 
-  /* verify that the parse was successful and the converter opened */
-  if(! success || U_FAILURE(status))
-    return -1;
+    /* verify that the parse was successful and the converter opened */
+    if(! success || U_FAILURE(status))
+        return -1;
 
-  /* grab characters one at a time and make sure they are in the scanset */
-  while( (c = u_fgetc(stream)) != 0xFFFF && alias < limit) {
-    if(u_scanf_scanset_in(&scanset, c)) {
-      source = &c;
-      /* convert the character to the default codepage */
-      ucnv_fromUnicode(conv, &alias, limit, &source, source + 1,
-               NULL, TRUE, &status);
-      
-      if(U_FAILURE(status))
-    return -1;
+    /* grab characters one at a time and make sure they are in the scanset */
+    while( (c = u_fgetc(stream)) != 0xFFFF && alias < limit) {
+        if(u_scanf_scanset_in(&scanset, c)) {
+            source = &c;
+            /* convert the character to the default codepage */
+            ucnv_fromUnicode(conv, &alias, limit, &source, source + 1,
+                NULL, TRUE, &status);
+
+            if(U_FAILURE(status))
+                return -1;
+        }
+        /* if the character's not in the scanset, break out */
+        else {
+            break;
+        }
     }
-    /* if the character's not in the scanset, break out */
-    else {
-      break;
-    }
-  }
 
-  /* put the final character we read back on the stream */  
-  if(c != 0xFFFF)
-    u_fungetc(c, stream);
+    /* put the final character we read back on the stream */
+    if(c != 0xFFFF)
+        u_fungetc(c, stream);
 
-  /* if we didn't match at least 1 character, fail */
-  if(alias == s)
-    return -1;
-  /* otherwise, add the terminator */
-  else
-    *alias = 0x00;
+    /* if we didn't match at least 1 character, fail */
+    if(alias == s)
+        return -1;
+    /* otherwise, add the terminator */
+    else
+        *alias = 0x00;
 
-  /* clean up */
-  ucnv_close(conv);
+    /* clean up */
+    ucnv_close(conv);
 
-  /* we converted 1 arg */
-  return 1;
+    /* we converted 1 arg */
+    return 1;
 }
 
 
 #define UP_PERCENT 0x0025
 
 U_CAPI int32_t  U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
-u_vfscanf_u(    UFILE        *f,
-        const UChar    *patternSpecification,
-        va_list        ap)
+u_vfscanf_u(UFILE        *f,
+            const UChar    *patternSpecification,
+            va_list        ap)
 {
-  u_scanf_spec         spec;
-  const UChar         *alias;
-  int32_t         count, converted, temp;
-  uint16_t      handlerNum;
+    u_scanf_spec         spec;
+    const UChar         *alias;
+    int32_t         count, converted, temp;
+    uint16_t      handlerNum;
 
-  ufmt_args       args;  
+    ufmt_args       args;
 
-  ufmt_type_info    info;
-  u_scanf_handler handler;
+    ufmt_type_info    info;
+    u_scanf_handler handler;
 
-  /* alias the pattern */
-  alias = patternSpecification;
+    /* alias the pattern */
+    alias = patternSpecification;
 
-  /* haven't converted anything yet */
-  converted = 0;
+    /* haven't converted anything yet */
+    converted = 0;
 
-  /* iterate through the pattern */
-  for(;;) {
-    
-    /* match any characters up to the next '%' */
-    while(*alias != UP_PERCENT && *alias != 0x0000 && u_fgetc(f) == *alias) {
-      alias++;
-    }
+    /* iterate through the pattern */
+    for(;;) {
 
-    /* if we aren't at a '%', or if we're at end of string, break*/
-    if(*alias != UP_PERCENT || *alias == 0x0000)
-      break;
-
-    /* parse the specifier */
-    count = u_scanf_parse_spec(alias, &spec);
-
-    /* update the pointer in pattern */
-    alias += count;
-
-    /* skip the argument, if necessary */
-    if(spec.fSkipArg)
-      args.ptrValue = va_arg(ap, int*);
-
-    handlerNum = (uint16_t)(spec.fInfo.fSpec - USCANF_BASE_FMT_HANDLERS);
-    if (handlerNum < USCANF_NUM_FMT_HANDLERS) {
-      /* query the info function for argument information */
-      info = g_u_scanf_infos[ handlerNum ].info;
-      if(info > ufmt_simple_percent) { 
-          switch(info) {
-
-          case ufmt_count:
-            args.intValue = va_arg(ap, int);
-            /* set the spec's width to the # of items converted */
-            spec.fInfo.fWidth = converted;
-            break;
-
-          case ufmt_char:
-          case ufmt_uchar:
-          case ufmt_int:
-            args.ptrValue = va_arg(ap, int*);
-            break;
-
-          case ufmt_wchar:
-            args.ptrValue = va_arg(ap, wchar_t*);
-            break;
-
-          case ufmt_string:
-            args.ptrValue = va_arg(ap, char*);
-            break;
-
-          case ufmt_wstring:
-            args.ptrValue = va_arg(ap, wchar_t*);
-            break;
-
-          case ufmt_pointer:
-            args.ptrValue = va_arg(ap, void*);
-            break;
-
-          case ufmt_float:
-            args.ptrValue = va_arg(ap, float*);
-            break;
-
-          case ufmt_double:
-            args.ptrValue = va_arg(ap, double*);
-            break;
-
-          case ufmt_date:
-            args.ptrValue = va_arg(ap, UDate*);
-            break;
-
-          case ufmt_ustring:
-            args.ptrValue = va_arg(ap, UChar*);
-            break;
-
-          default:
-            break;  /* Should never get here */
-          }
+        /* match any characters up to the next '%' */
+        while(*alias != UP_PERCENT && *alias != 0x0000 && u_fgetc(f) == *alias) {
+            alias++;
         }
-        /* call the handler function */
-        handler = g_u_scanf_infos[ handlerNum ].handler;
-        if(handler != 0) {
 
-          /* reset count */
-          count = 0;
-
-          temp = (*handler)(f, &spec.fInfo, &args, alias, &count);
-
-          /* if the handler encountered an error condition, break */
-          if(temp == -1)
+        /* if we aren't at a '%', or if we're at end of string, break*/
+        if(*alias != UP_PERCENT || *alias == 0x0000)
             break;
 
-          /* add to the # of items converted */
-          converted += temp;
+        /* parse the specifier */
+        count = u_scanf_parse_spec(alias, &spec);
 
-          /* update the pointer in pattern */
-          alias += count;
+        /* update the pointer in pattern */
+        alias += count;
+
+        /* skip the argument, if necessary */
+        if(spec.fSkipArg)
+            args.ptrValue = va_arg(ap, int*);
+
+        handlerNum = (uint16_t)(spec.fInfo.fSpec - USCANF_BASE_FMT_HANDLERS);
+        if (handlerNum < USCANF_NUM_FMT_HANDLERS) {
+            /* query the info function for argument information */
+            info = g_u_scanf_infos[ handlerNum ].info;
+            if(info > ufmt_simple_percent) {
+                switch(info) {
+
+                case ufmt_count:
+                    args.intValue = va_arg(ap, int);
+                    /* set the spec's width to the # of items converted */
+                    spec.fInfo.fWidth = converted;
+                    break;
+
+                case ufmt_char:
+                case ufmt_uchar:
+                case ufmt_int:
+                    args.ptrValue = va_arg(ap, int*);
+                    break;
+
+                case ufmt_wchar:
+                    args.ptrValue = va_arg(ap, wchar_t*);
+                    break;
+
+                case ufmt_string:
+                    args.ptrValue = va_arg(ap, char*);
+                    break;
+
+                case ufmt_wstring:
+                    args.ptrValue = va_arg(ap, wchar_t*);
+                    break;
+
+                case ufmt_pointer:
+                    args.ptrValue = va_arg(ap, void*);
+                    break;
+
+                case ufmt_float:
+                    args.ptrValue = va_arg(ap, float*);
+                    break;
+
+                case ufmt_double:
+                    args.ptrValue = va_arg(ap, double*);
+                    break;
+
+                case ufmt_date:
+                    args.ptrValue = va_arg(ap, UDate*);
+                    break;
+
+                case ufmt_ustring:
+                    args.ptrValue = va_arg(ap, UChar*);
+                    break;
+
+                default:
+                    break;  /* Should never get here */
+                }
+            }
+            /* call the handler function */
+            handler = g_u_scanf_infos[ handlerNum ].handler;
+            if(handler != 0) {
+
+                /* reset count */
+                count = 0;
+
+                temp = (*handler)(f, &spec.fInfo, &args, alias, &count);
+
+                /* if the handler encountered an error condition, break */
+                if(temp == -1)
+                    break;
+
+                /* add to the # of items converted */
+                converted += temp;
+
+                /* update the pointer in pattern */
+                alias += count;
+            }
+            /* else do nothing */
         }
         /* else do nothing */
-    }
-    /* else do nothing */
 
-    /* just ignore unknown tags */
+        /* just ignore unknown tags */
 
   }
 

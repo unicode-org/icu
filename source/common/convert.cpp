@@ -35,7 +35,7 @@ UBool UnicodeConverter_cleanup()
 {
     if (availableConverterNames)
     {
-        delete []availableConverterNames;
+        uprv_free(availableConverterNames);
         availableConverterNames = NULL;
     }
     availableConverterNamesCount = 0;
@@ -429,7 +429,7 @@ UnicodeConverter::getAvailableNames(int32_t& num, UErrorCode& err)
     if (availableConverterNames==NULL) {
         int32_t count = ucnv_io_countAvailableConverters(&err);
         if (count > 0) {
-            const char **names = new const char *[count];
+            const char **names = (const char **) uprv_malloc( sizeof(const char*) * count );
             if (names != NULL) {
                 ucnv_io_fillAvailableConverters(names, &err);
 
@@ -444,7 +444,7 @@ UnicodeConverter::getAvailableNames(int32_t& num, UErrorCode& err)
 
                 /* if a different thread set it first, then delete the extra data */
                 if (names != 0) {
-                    delete [] names;
+                    uprv_free(names);
                 }
             } else {
                 num = 0;

@@ -76,7 +76,7 @@ ReplaceableGlue::ReplaceableGlue(UReplaceable *replaceable,
 }
 
 ReplaceableGlue::~ReplaceableGlue() {
-    delete[] buf;
+    uprv_free(buf);
 }
 
 int32_t ReplaceableGlue::getLength() const {
@@ -96,9 +96,9 @@ void ReplaceableGlue::handleReplaceBetween(UTextOffset start,
                           const UnicodeString& text) {
     int32_t len = text.length();
     if (buf == 0 || bufLen < len) {
-        delete[] buf;
+        uprv_free(buf);
         bufLen = len + BUF_PAD;
-        buf = new UChar[bufLen];
+        buf = (UChar*) uprv_malloc(sizeof(UChar) * bufLen);
     }
     text.extract(0, len, buf);
     (*func->replace)(rep, start, limit, buf, len);

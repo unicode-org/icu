@@ -304,7 +304,7 @@ UnicodeString::allocate(int32_t capacity) {
     // round up to a multiple of 16; then divide by 4 and allocate int32_t's
     // to be safely aligned for the refCount
     int32_t words = (int32_t)(((sizeof(int32_t) + capacity * U_SIZEOF_UCHAR + 15) & ~15) >> 2);
-    int32_t *array = new int32_t[words];
+    int32_t *array = (int32_t*) uprv_malloc( sizeof(int32_t) * words );
     if(array != 0) {
       // set initial refCount and point behind the refCount
       *array++ = 1;
@@ -330,6 +330,14 @@ UnicodeString::~UnicodeString()
 {
   releaseArray();
 }
+
+void
+UnicodeString::releaseArray() {
+  if((fFlags & kRefCounted) && removeRef() == 0) {
+    uprv_free((int32_t *)fArray - 1);
+  }
+}
+
 
 //========================================
 // Assignment
@@ -1221,7 +1229,7 @@ UnicodeString::caseMap(BreakIterator *titleIter,
     ubrk_close(cTitleIter);
   }
 
-  delete [] bufferToDelete;
+  uprv_free(bufferToDelete);
   if(U_FAILURE(errorCode)) {
     setToBogus();
   }
@@ -1312,7 +1320,7 @@ UnicodeString::doReplace(UTextOffset start,
 
   // delayed delete in case srcChars == fArray when we started, and
   // to keep oldArray alive for the above operations
-  delete [] bufferToDelete;
+  uprv_free(bufferToDelete);
 
   return *this;
 }
@@ -1332,10 +1340,10 @@ UnicodeString::handleReplaceBetween(UTextOffset start,
  */
 void 
 UnicodeString::copy(int32_t start, int32_t limit, int32_t dest) {
-    UChar* text = new UChar[limit - start];
+    UChar* text = (UChar*) uprv_malloc( sizeof(UChar) * (limit - start) );
     extractBetween(start, limit, text, 0);
     insert(dest, text, 0, limit - start);    
-    delete[] text;
+    uprv_free(text);
 }
 
 UnicodeString&
@@ -1847,7 +1855,7 @@ UnicodeString::cloneArrayIfNeeded(int32_t newCapacity,
         int32_t *pRefCount = ((int32_t *)array - 1);
         if(--*pRefCount == 0) {
           if(pBufferToDelete == 0) {
-            delete [] pRefCount;
+            uprv_free(pRefCount);
           } else {
             // the caller requested to delete it himself
             *pBufferToDelete = pRefCount;

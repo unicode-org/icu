@@ -43,7 +43,7 @@ struct ContractionTable {
 };
 
 struct CntTable {
-	ContractionTable **elements;
+    ContractionTable **elements;
     /*CompactEIntArray *mapping;*/
     UNewTrie *mapping;
     UChar *codePoints;

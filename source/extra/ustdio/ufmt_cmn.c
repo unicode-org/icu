@@ -18,7 +18,7 @@
 ******************************************************************************
 */
 
-#include <stdlib.h>
+#include "cmemory.h"
 #include "ufmt_cmn.h"
 #include "unicode/uchar.h"
 #include "unicode/ucnv.h"
@@ -136,7 +136,7 @@ ufmt_defaultCPToUnicode(const char *s,
     
     /* perform the conversion in one swoop */
     size = (len + 1) / ucnv_getMinCharSize(defConverter);
-    target = (UChar*) malloc(size * sizeof(UChar));
+    target = (UChar*) uprv_malloc(size * sizeof(UChar));
     if(target != 0) {
         
         alias = target;
@@ -167,7 +167,7 @@ ufmt_unicodeToDefaultCP(const UChar *s,
     
     /* perform the conversion in one swoop */
     target = (char*) 
-        malloc((len + 1) * ucnv_getMaxCharSize(defConverter) * sizeof(char));
+        uprv_malloc((len + 1) * ucnv_getMaxCharSize(defConverter) * sizeof(char));
     size = (len) * ucnv_getMaxCharSize(defConverter) * sizeof(char);
     if(target != 0) {
         

@@ -21,10 +21,10 @@ class NFRuleSet;
 
 /** Tags for the predefined rulesets. */
 enum URBNFRuleSetTag {
-	URBNF_SPELLOUT,
-	URBNF_ORDINAL,
-	URBNF_DURATION,
-	URBNF_COUNT
+    URBNF_SPELLOUT,
+    URBNF_ORDINAL,
+    URBNF_DURATION,
+    URBNF_COUNT
 };
 
 /**
@@ -507,7 +507,7 @@ public:
    * @draft ICU 2.0
    */
   RuleBasedNumberFormat(const UnicodeString& rules, const Locale& locale, 
-	  UParseError& perror, UErrorCode& status);
+                        UParseError& perror, UErrorCode& status);
 
   /**
    * Creates a RuleBasedNumberFormat from a predefined ruleset.  The selector
@@ -688,7 +688,7 @@ public:
    * @draft ICU 2.0
    */
   virtual void parse(const UnicodeString& text,
-			         Formattable& result,
+                     Formattable& result,
                      ParsePosition& parsePosition) const;
 
   
@@ -784,12 +784,13 @@ private:
 inline UnicodeString&
 RuleBasedNumberFormat::format(const Formattable& obj,
                               UnicodeString& result,
-                              UErrorCode& status) const {
+                              UErrorCode& status) const
+{
     // Don't use Format:: - use immediate base class only,
     // in case immediate base modifies behavior later.
-	// dlf - the above comment is bogus, if there were a reason to modify
-	// it, it would be virtual, and there's no reason because it is
-	// a one-line macro in NumberFormat anyway, just like this one.
+    // dlf - the above comment is bogus, if there were a reason to modify
+    // it, it would be virtual, and there's no reason because it is
+    // a one-line macro in NumberFormat anyway, just like this one.
     return NumberFormat::format(obj, result, status);
 }
 
@@ -806,18 +807,19 @@ RuleBasedNumberFormat::format(int32_t number, UnicodeString& output) const {
 }
 
 inline void
-RuleBasedNumberFormat::parse(const UnicodeString& text, Formattable& result, UErrorCode& status) const { 
-	NumberFormat::parse(text, result, status); 
+RuleBasedNumberFormat::parse(const UnicodeString& text, Formattable& result, UErrorCode& status) const
+{
+    NumberFormat::parse(text, result, status);
 }
 
 inline UBool 
 RuleBasedNumberFormat::isLenient(void) const { 
-	return lenient; 
+    return lenient; 
 }
 
 inline NFRuleSet* 
 RuleBasedNumberFormat::getDefaultRuleSet() const { 
-	return defaultRuleSet; 
+    return defaultRuleSet; 
 }
 
 U_NAMESPACE_END

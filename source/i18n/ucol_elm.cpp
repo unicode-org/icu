@@ -26,6 +26,7 @@
 #include "ucol_elm.h"
 #include "unicode/uchar.h"
 #include "unormimp.h"
+#include "cmemory.h"
 
 U_NAMESPACE_BEGIN
 
@@ -89,13 +90,13 @@ static int32_t uprv_uca_addExpansion(ExpansionTable *expansions, uint32_t value,
         return 0;
     }
     if(expansions->CEs == NULL) {
-        expansions->CEs = (uint32_t *)malloc(INIT_EXP_TABLE_SIZE*sizeof(uint32_t));
+        expansions->CEs = (uint32_t *)uprv_malloc(INIT_EXP_TABLE_SIZE*sizeof(uint32_t));
         expansions->size = INIT_EXP_TABLE_SIZE;
         expansions->position = 0;
     }
 
     if(expansions->position == expansions->size) {
-        uint32_t *newData = (uint32_t *)realloc(expansions->CEs, 2*expansions->size*sizeof(uint32_t));
+        uint32_t *newData = (uint32_t *)uprv_realloc(expansions->CEs, 2*expansions->size*sizeof(uint32_t));
         if(newData == NULL) {
 #ifdef UCOL_DEBUG
             fprintf(stderr, "out of memory for expansions\n");
@@ -1177,7 +1178,7 @@ uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
                                      paddedsize(UCOL_UNSAFECP_TABLE_SIZE));    /*  Contraction Ending chars */
 
 
-    dataStart = (uint8_t *)malloc(toAllocate);
+    dataStart = (uint8_t *)uprv_malloc(toAllocate);
 
     UCATableHeader *myData = (UCATableHeader *)dataStart;
     uprv_memcpy(myData, t->image, sizeof(UCATableHeader));
@@ -1200,7 +1201,7 @@ uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
     tableOffset += (uint32_t)(paddedsize(sizeof(UCATableHeader)));
 
     myData->options = tableOffset;
-    memcpy(dataStart+tableOffset, t->options, sizeof(UColOptionSet));
+    uprv_memcpy(dataStart+tableOffset, t->options, sizeof(UColOptionSet));
     tableOffset += (uint32_t)(paddedsize(sizeof(UColOptionSet)));
 
     /* copy expansions */
@@ -1299,7 +1300,7 @@ uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
         fprintf(stderr, "calculation screwup!!! Expected to write %i but wrote %i instead!!!\n", toAllocate, tableOffset);
 #endif
         *status = U_INTERNAL_PROGRAM_ERROR;
-        free(dataStart);
+        uprv_free(dataStart);
         return 0;
     }
 
