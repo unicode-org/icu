@@ -1,5 +1,5 @@
 #################
-# This file was generated RFC 3454 (http://www.ietf.org/rfc/rfc3454.txt) with 
+# This file was generated from RFC 3454 (http://www.ietf.org/rfc/rfc3454.txt)
 # Copyright (C) The Internet Society (2002).  All Rights Reserved. 
 ###################
 
