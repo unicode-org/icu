@@ -1066,21 +1066,7 @@ public:
      * to use.  It need not be null-terminated.
      * @draft ICU 2.2
      */
-    void setCurrency(const UChar* theCurrency);
-
-    /**
-     * Gets the currency used to display currency
-     * amounts.  This will be an empty string if a object is resurrected with a
-     * custom DecimalFormatSymbols object, or if the user sets a
-     * custom DecimalFormatSymbols object.  A custom
-     * DecimalFormatSymbols object has currency symbols that are not
-     * the standard ones for its locale.
-     * @return a 3-letter null-terminated ISO code indicating
-     * the currency in use, or a pointer to the empty string.
-
-     * @draft ICU 2.2
-     */
-    const UChar* getCurrency() const;
+    virtual void setCurrency(const UChar* theCurrency);
 
     /**
      * The resource tags we use to retrieve decimal format data from
@@ -1297,9 +1283,6 @@ private:
     UChar32                 fPad;
     int32_t                 fFormatWidth;
     EPadPosition            fPadPosition;
-
-    // ISO currency code
-    UChar                   currency[4];
 
     // Constants for characters used in programmatic (unlocalized) patterns.
     static const UChar    kPatternZeroDigit;

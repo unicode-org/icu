@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2003/04/21 22:55:46 $ 
- * $Revision: 1.28 $
+ * $Date: 2003/04/24 22:58:04 $ 
+ * $Revision: 1.29 $
  *
  *****************************************************************************************
  */
@@ -395,7 +395,7 @@ public class DecimalFormat extends NumberFormat {
         String pattern = getPattern(def, 0);
         // Always applyPattern after the symbols are set
         this.symbols = new DecimalFormatSymbols(def);
-        currency = Currency.getInstance(def);
+        setCurrency(Currency.getInstance(def));
         applyPattern(pattern, false);
     }
 
@@ -421,7 +421,7 @@ public class DecimalFormat extends NumberFormat {
         // Always applyPattern after the symbols are set
         Locale def = Locale.getDefault();
         this.symbols = new DecimalFormatSymbols(def);
-        currency = Currency.getInstance(def);
+        setCurrency(Currency.getInstance(def));
         applyPattern( pattern, false );
     }
 
@@ -1589,7 +1589,7 @@ public class DecimalFormat extends NumberFormat {
                     affixPat.charAt(i) == CURRENCY_SIGN;
                 if (intl) {
                     ++i;
-                    pos = match(text, pos, currency.getCurrencyCode());
+                    pos = match(text, pos, getCurrency().getCurrencyCode());
                 } else {
                     ParsePosition ppos = new ParsePosition(pos);
                     Number n = currencyChoice.parse(text, ppos);
@@ -1707,9 +1707,9 @@ public class DecimalFormat extends NumberFormat {
                 def.getCurrencySymbol()) &&
             symbols.getInternationalCurrencySymbol().equals(
                 def.getInternationalCurrencySymbol())) {
-            currency = Currency.getInstance(symbols.getLocale());
+            setCurrency(Currency.getInstance(symbols.getLocale()));
         } else {
-            currency = null;
+            setCurrency(null);
         }
     }
 
@@ -2414,6 +2414,7 @@ public class DecimalFormat extends NumberFormat {
                     ++i;
                 }
                 String s = null;
+                Currency currency = getCurrency();
                 if (currency != null) {
                     if (!intl) {
                         boolean isChoiceFormat[] = new boolean[1];
@@ -3276,32 +3277,22 @@ public class DecimalFormat extends NumberFormat {
         // locale, and adjust the decimal digits and rounding for the
         // given currency.
 
-        currency = theCurrency;
+        super.setCurrency(theCurrency);
 
         if (isCurrencyFormat) {
-            setRoundingIncrement(currency.getRoundingIncrement());
+            if (theCurrency != null) {
+                setRoundingIncrement(theCurrency.getRoundingIncrement());
+                
+                int d = theCurrency.getDefaultFractionDigits();
+                setMinimumFractionDigits(d);
+                setMaximumFractionDigits(d);
+            }
 
-            int d = currency.getDefaultFractionDigits();
-            setMinimumFractionDigits(d);
-            setMaximumFractionDigits(d);
 
             expandAffixes();
         }
     }
 
-    /**
-     * Gets the <tt>Currency</tt> object used to display currency
-     * amounts.  This will be null if a object is resurrected with a
-     * custom DecimalFormatSymbols object, or if the user sets a
-     * custom DecimalFormatSymbols object.  A custom
-     * DecimalFormatSymbols object has currency symbols that are not
-     * the standard ones for its locale.
-     * @draft ICU 2.2
-     */
-    public Currency getCurrency() {
-        return currency;
-    }
-    
     /**
      * Sets the maximum number of digits allowed in the fraction portion of a
      * number. This override limits the fraction digit count to 340.
@@ -3623,17 +3614,6 @@ public class DecimalFormat extends NumberFormat {
      * @since AlphaWorks NumberFormat
      */
     private int padPosition = PAD_BEFORE_PREFIX;
-
-    /**
-     * Currency object used to format currencies.  Only used if
-     * <tt>isCurrencyFormat</tt> is true.  In some cases this will be
-     * null: If a pre-2.2 object is resurrected with a custom
-     * DecimalFormatSymbols object, or if the user sets a custom DFS
-     * object.  A custom DFS object has currency symbols that are not
-     * the standard ones for its locale.
-     * @since ICU 2.2
-     */
-    private Currency currency;
 
     //----------------------------------------------------------------------
 

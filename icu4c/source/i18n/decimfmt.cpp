@@ -275,12 +275,7 @@ void DecimalFormat::setCurrencyForLocale(const char* locale, UErrorCode& ec) {
         UErrorCode ec2 = U_ZERO_ERROR;
         c = ucurr_forLocale(locale, &ec2);
     }
-    if (c == NULL) {
-        *currency = 0;
-    } else {
-        u_strncpy(currency, c, 3);
-        currency[3] = 0;
-    }
+    setCurrency(c);
 }
 
 //------------------------------------------------------------------------------
@@ -1556,7 +1551,7 @@ int32_t DecimalFormat::compareComplexAffix(const UnicodeString& affixPat,
                                            const UnicodeString& text,
                                            int32_t pos) const {
     U_ASSERT(fCurrencyChoice != NULL);
-    U_ASSERT(currency[0] != 0);
+    U_ASSERT(*getCurrency() != 0);
 
     for (int32_t i=0; i<affixPat.length() && pos >= 0; ) {
         UChar32 c = affixPat.char32At(i);
@@ -1575,7 +1570,7 @@ int32_t DecimalFormat::compareComplexAffix(const UnicodeString& affixPat,
                     affixPat.char32At(i) == kCurrencySign;
                 if (intl) {
                     ++i;
-                    pos = match(text, pos, currency);
+                    pos = match(text, pos, getCurrency());
                 } else {
                     ParsePosition ppos(pos);
                     Formattable result;
@@ -1713,7 +1708,7 @@ DecimalFormat::setCurrencyForSymbols() {
     ) {
         setCurrencyForLocale(fSymbols->getLocale().getName(), ec);
     } else {
-        currency[0] = 0; // Use DFS currency info
+        setCurrency(NULL); // Use DFS currency info
     }
 }
 
@@ -2231,6 +2226,7 @@ void DecimalFormat::expandAffix(const UnicodeString& pattern,
                 if (intl) {
                     ++i;
                 }
+                const UChar* currency = getCurrency();
                 if (currency[0] != 0) {
                     UErrorCode ec = U_ZERO_ERROR;
                     if(intl) {
@@ -3365,31 +3361,19 @@ void DecimalFormat::setCurrency(const UChar* theCurrency) {
     // locale, and adjust the decimal digits and rounding for the
     // given currency.
 
-    u_strncpy(currency, theCurrency, 3);
-    currency[3] = 0;
+    NumberFormat::setCurrency(theCurrency);
 
     if (fIsCurrencyFormat) {
-        setRoundingIncrement(ucurr_getRoundingIncrement(currency));
-
-        int32_t d = ucurr_getDefaultFractionDigits(currency);
-        setMinimumFractionDigits(d);
-        setMaximumFractionDigits(d);
+        if (theCurrency && *theCurrency) {
+            setRoundingIncrement(ucurr_getRoundingIncrement(theCurrency));
+            
+            int32_t d = ucurr_getDefaultFractionDigits(theCurrency);
+            setMinimumFractionDigits(d);
+            setMaximumFractionDigits(d);
+        }
 
         expandAffixes();
     }
-}
-
-/**
- * Gets the <tt>Currency</tt> object used to display currency
- * amounts.  This will be null if a object is resurrected with a
- * custom DecimalFormatSymbols object, or if the user sets a
- * custom DecimalFormatSymbols object.  A custom
- * DecimalFormatSymbols object has currency symbols that are not
- * the standard ones for its locale.
- * @since ICU 2.2
- */
-const UChar* DecimalFormat::getCurrency() const {
-    return currency;
 }
 
 U_NAMESPACE_END
