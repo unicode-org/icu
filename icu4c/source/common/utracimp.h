@@ -236,7 +236,7 @@ U_CDECL_END
  */
 #define UTRACE_DATA0(level, fmt) \
     if(UTRACE_LEVEL(level)) { \
-        utrace_data(utraceFnNumber, (level), (fmt)); \
+        utrace_data(utraceFnNumber & ~UTRACE_TRACED_ENTRY, (level), (fmt)); \
     }
 
 /**
@@ -249,7 +249,7 @@ U_CDECL_END
  */
 #define UTRACE_DATA1(level, fmt, a) \
     if(UTRACE_LEVEL(level)) { \
-        utrace_data(utraceFnNumber, (level), (fmt), (a)); \
+        utrace_data(utraceFnNumber & ~UTRACE_TRACED_ENTRY , (level), (fmt), (a)); \
     }
 
 /**
@@ -262,7 +262,7 @@ U_CDECL_END
  */
 #define UTRACE_DATA2(level, fmt, a, b) \
     if(UTRACE_LEVEL(level)) { \
-        utrace_data(utraceFnNumber, (level), (fmt), (a), (b)); \
+        utrace_data(utraceFnNumber & ~UTRACE_TRACED_ENTRY , (level), (fmt), (a), (b)); \
     }
 
 /**
@@ -275,7 +275,7 @@ U_CDECL_END
  */
 #define UTRACE_DATA3(level, fmt, a, b, c) \
     if(UTRACE_LEVEL(level)) { \
-        utrace_data(utraceFnNumber, (level), (fmt), (a), (b), (c)); \
+        utrace_data(utraceFnNumber & ~UTRACE_TRACED_ENTRY, (level), (fmt), (a), (b), (c)); \
     }
 
 /**
@@ -288,7 +288,7 @@ U_CDECL_END
  */
 #define UTRACE_DATA4(level, fmt, a, b, c, d) \
     if(UTRACE_LEVEL(level)) { \
-        utrace_data(utraceFnNumber, (level), (fmt), (a), (b), (c), (d)); \
+        utrace_data(utraceFnNumber & ~UTRACE_TRACED_ENTRY, (level), (fmt), (a), (b), (c), (d)); \
     }
 
 /**
@@ -301,7 +301,7 @@ U_CDECL_END
  */
 #define UTRACE_DATA5(level, fmt, a, b, c, d, e) \
     if(UTRACE_LEVEL(level)) { \
-        utrace_data(utraceFnNumber, (level), (fmt), (a), (b), (c), (d), (e)); \
+        utrace_data(utraceFnNumber & ~UTRACE_TRACED_ENTRY, (level), (fmt), (a), (b), (c), (d), (e)); \
     }
 
 /**
@@ -314,7 +314,7 @@ U_CDECL_END
  */
 #define UTRACE_DATA6(level, fmt, a, b, c, d, e, f) \
     if(UTRACE_LEVEL(level)) { \
-        utrace_data(utraceFnNumber, (level), (fmt), (a), (b), (c), (d), (e), (f)); \
+        utrace_data(utraceFnNumber & ~UTRACE_TRACED_ENTRY, (level), (fmt), (a), (b), (c), (d), (e), (f)); \
     }
 
 /**
@@ -327,7 +327,7 @@ U_CDECL_END
  */
 #define UTRACE_DATA7(level, fmt, a, b, c, d, e, f, g) \
     if(UTRACE_LEVEL(level)) { \
-        utrace_data(utraceFnNumber, (level), (fmt), (a), (b), (c), (d), (e), (f), (g)); \
+        utrace_data(utraceFnNumber & ~UTRACE_TRACED_ENTRY, (level), (fmt), (a), (b), (c), (d), (e), (f), (g)); \
     }
 
 /**
@@ -340,7 +340,7 @@ U_CDECL_END
  */
 #define UTRACE_DATA8(level, fmt, a, b, c, d, e, f, g, h) \
     if(UTRACE_LEVEL(level)) { \
-        utrace_data(utraceFnNumber, (level), (fmt), (a), (b), (c), (d), (e), (f), (g), (h)); \
+        utrace_data(utraceFnNumber & ~UTRACE_TRACED_ENTRY, (level), (fmt), (a), (b), (c), (d), (e), (f), (g), (h)); \
     }
 
 /**
@@ -353,7 +353,7 @@ U_CDECL_END
  */
 #define UTRACE_DATA9(level, fmt, a, b, c, d, e, f, g, h, i) \
     if(UTRACE_LEVEL(level)) { \
-        utrace_data(utraceFnNumber, (level), (fmt), (a), (b), (c), (d), (e), (f), (g), (h), (i)); \
+        utrace_data(utraceFnNumber & ~UTRACE_TRACED_ENTRY, (level), (fmt), (a), (b), (c), (d), (e), (f), (g), (h), (i)); \
     }
 
 #else
