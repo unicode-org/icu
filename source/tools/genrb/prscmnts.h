@@ -22,7 +22,7 @@
 enum UParseCommentsOption {
     UPC_TRANSLATE,
     UPC_NOTE,
-    UPC_LIMIT,
+    UPC_LIMIT
 };
 
 typedef enum UParseCommentsOption UParseCommentsOption;
