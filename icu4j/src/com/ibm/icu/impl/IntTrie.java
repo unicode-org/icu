@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/IntTrie.java,v $
-* $Date: 2002/02/16 03:05:37 $
-* $Revision: 1.2 $
+* $Date: 2002/02/28 23:30:28 $
+* $Revision: 1.3 $
 *
 ******************************************************************************
 */
@@ -17,7 +17,6 @@ import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import com.ibm.icu.text.UTF16;
-import com.ibm.icu.impl.Trie;
 
 /**
  * Trie implementation which stores data in int, 32 bits.

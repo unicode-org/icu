@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Trie.java,v $
-* $Date: 2002/02/16 03:05:37 $
-* $Revision: 1.2 $
+* $Date: 2002/02/28 23:30:28 $
+* $Revision: 1.3 $
 *
 ******************************************************************************
 */
@@ -26,7 +26,7 @@ import com.ibm.icu.lang.UCharacter;
  * to <b>retrieve the offsets to the actual data</b>.</p>
  * <p>Data will be the form of an array of basic types, char or int.</p>
  * <p>The actual data format will have to be specified by the user in the
- * inner static interface com.ibm.icu.util.Trie.DataManipulate.</p>
+ * inner static interface com.ibm.icu.impl.Trie.DataManipulate.</p>
  * <p>This trie implementation is optimized for getting offset while walking
  * forward through a UTF-16 string.
  * Therefore, the simplest and fastest access macros are the
@@ -39,13 +39,13 @@ import com.ibm.icu.lang.UCharacter;
  * to the fromOffsetTrail() methods.
  * To handle such supplementary codepoints, some offset information are kept
  * in the data.</p>
- * <p>Methods in com.ibm.icu.util.Trie.DataManipulate are called to retrieve that 
- * offset from the folded value for the lead surrogate unit.</p>
- * <p>For examples of use, see com.ibm.icu.util.CharTrie or 
- * com.ibm.icu.util.IntTrie.</p>
+ * <p>Methods in com.ibm.icu.impl.Trie.DataManipulate are called to retrieve 
+ * that offset from the folded value for the lead surrogate unit.</p>
+ * <p>For examples of use, see com.ibm.icu.impl.CharTrie or 
+ * com.ibm.icu.impl.IntTrie.</p>
  * @author synwee
- * @see com.ibm.icu.util.CharTrie
- * @see com.ibm.icu.util.IntTrie
+ * @see com.ibm.icu.impl.CharTrie
+ * @see com.ibm.icu.impl.IntTrie
  * @since release 2.1, Jan 01 2002
  */
 public abstract class Trie
@@ -53,17 +53,17 @@ public abstract class Trie
     // public class declaration ----------------------------------------
     
     /**
-    * Character data in com.ibm.icu.util.Trie have different user-specified format
+    * Character data in com.ibm.impl.Trie have different user-specified format
     * for different purposes.
     * This interface specifies methods to be implemented in order for
-    * com.ibm.icu.util.Trie, to surrogate offset information encapsulated within 
+    * com.ibm.impl.Trie, to surrogate offset information encapsulated within 
     * the data.
     * @draft 2.1
     */
     public static interface DataManipulate
     {
         /**
-        * Called by com.ibm.icu.util.Trie to extract from a lead surrogate's 
+        * Called by com.ibm.icu.impl.Trie to extract from a lead surrogate's 
         * data
         * the index array offset of the indexes for that lead surrogate.
         * @param value data value for a surrogate from the trie, including the
