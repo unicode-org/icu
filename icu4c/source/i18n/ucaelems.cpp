@@ -88,6 +88,9 @@ tempUCATable * uprv_uca_initTempTable(UCATableHeader *image, UErrorCode *status)
   uprv_memset(t->expansions, 0, sizeof(ExpansionTable));
   t->mapping = ucmp32_open(UCOL_NOT_FOUND);
   t->contractions = uprv_cnttab_open(t->mapping, status);
+  t->maxExpansions = (MaxExpansionTable *)uprv_malloc(
+                                                   sizeof(MaxExpansionTable));
+  t->maxExpansions->size = 0;
   return t;
 }
 
@@ -97,7 +100,138 @@ void uprv_uca_closeTempTable(tempUCATable *t) {
   uprv_cnttab_close(t->contractions);
   ucmp32_close(t->mapping);
 
+  uprv_free(t->maxExpansions->endExpansionCE);
+  uprv_free(t->maxExpansions->expansionCESize);
+  uprv_free(t->maxExpansions);
+
   uprv_free(t);
+}
+
+/**
+* Looks for the maximum length of all expansion sequences ending with the same
+* collation element. The size required for maxexpansion and maxsize is 
+* returned if the arrays are too small.
+* @param endexpansion the last expansion collation element to be added
+* @param expansionsize size of the expansion
+* @param maxexpansion data structure to store the maximum expansion data.
+* @param status error status
+* @returns size of the maxexpansion and maxsize used.
+*/
+int uprv_uca_setMaxExpansion(uint32_t           endexpansion,
+                             uint8_t            expansionsize,
+                             MaxExpansionTable *maxexpansion,
+                             UErrorCode        *status)
+{
+  if (maxexpansion->size == 0) {
+    maxexpansion->endExpansionCE = 
+               (uint32_t *)uprv_malloc(INIT_EXP_TABLE_SIZE * sizeof(int32_t));
+    *(maxexpansion->endExpansionCE) = 0;
+    maxexpansion->expansionCESize =
+               (uint8_t *)uprv_malloc(INIT_EXP_TABLE_SIZE * sizeof(uint8_t));
+    *(maxexpansion->expansionCESize) = 0;
+    maxexpansion->size     = INIT_EXP_TABLE_SIZE;
+    maxexpansion->position = 0;
+  }
+
+  if (maxexpansion->position == maxexpansion->size) {
+    uint32_t *neweece = (uint32_t *)uprv_realloc(maxexpansion->endExpansionCE, 
+                                    2 * maxexpansion->size * sizeof(int32_t));
+    uint8_t  *neweces = (uint8_t *)uprv_realloc(maxexpansion->expansionCESize, 
+                                    2 * maxexpansion->size * sizeof(uint8_t));
+    if (neweece == NULL || neweces == NULL) {
+      fprintf(stderr, "out of memory for maxExpansions\n");
+      *status = U_MEMORY_ALLOCATION_ERROR;
+      return -1;
+    }
+    maxexpansion->endExpansionCE  = neweece;
+    maxexpansion->expansionCESize = neweces;
+    maxexpansion->size *= 2;
+  }
+
+  uint32_t *pendexpansionce = maxexpansion->endExpansionCE;
+  uint8_t  *pexpansionsize  = maxexpansion->expansionCESize;
+  int      pos              = maxexpansion->position;
+
+  uint32_t *start = pendexpansionce;
+  uint32_t *limit = pendexpansionce + pos;
+
+  /* using binary search to determine if last expansion element is 
+     already in the array */
+  uint32_t *mid;                                                        
+  int       result = -1;
+  while (start < limit - 1) {                                                
+    mid = start + ((limit - start) >> 1);                                    
+    if (endexpansion <= *mid) {                                                   
+      limit = mid;                                                           
+    }                                                                        
+    else {                                                                   
+      start = mid;                                                           
+    }                                                                        
+  } 
+      
+  if (*start == endexpansion) {                                                     
+    result = start - pendexpansionce;  
+  }                                                                          
+  else                                                                       
+    if (*limit == endexpansion) {                                                     
+      result = limit - pendexpansionce;      
+    }                                            
+      
+  if (result > -1) {
+    /* found the ce in expansion, we'll just modify the size if it is 
+       smaller */
+    uint8_t *currentsize = pexpansionsize + result;
+    if (*currentsize < expansionsize) {
+      *currentsize = expansionsize;
+    }
+  }
+  else {
+    /* we'll need to squeeze the value into the array. 
+       initial implementation. */
+    /* shifting the subarray down by 1 */
+    int      shiftsize     = (pendexpansionce + pos) - start;
+    uint32_t *shiftpos     = start + 1;
+    uint8_t  *sizeshiftpos = pexpansionsize + (shiftpos - pendexpansionce);
+    
+    /* okay need to rearrange the array into sorted order */
+    if (shiftsize == 0 || *(pendexpansionce + pos) < endexpansion) {
+      *(pendexpansionce + pos + 1) = endexpansion;
+      *(pexpansionsize + pos + 1)  = expansionsize;
+    }
+    else {
+      uprv_memmove(shiftpos + 1, shiftpos, shiftsize * sizeof(int32_t));
+      uprv_memmove(sizeshiftpos + 1, sizeshiftpos, 
+                                                shiftsize * sizeof(uint8_t));
+      *shiftpos     = endexpansion;
+      *sizeshiftpos = expansionsize;
+    }
+    maxexpansion->position ++;
+
+    /* test */
+    int   temp;
+    UBool found = FALSE;
+    for (temp = 0; temp < maxexpansion->position; temp ++) {
+      if (pendexpansionce[temp] >= pendexpansionce[temp + 1]) {
+        fprintf(stderr, "expansions %d\n", temp);
+      }
+      if (pendexpansionce[temp] == endexpansion) {
+        found =TRUE;
+        if (pexpansionsize[temp] < expansionsize) {
+          fprintf(stderr, "expansions size %d\n", temp);
+        }
+      }
+    }
+    if (pendexpansionce[temp] == endexpansion) {
+        found =TRUE;
+        if (pexpansionsize[temp] < expansionsize) {
+          fprintf(stderr, "expansions size %d\n", temp);
+        }
+      }
+    if (!found)
+      fprintf(stderr, "expansion not found %d\n", temp);
+  }
+
+  return maxexpansion->position;
 }
 
 /* This adds a read element, while testing for existence */
@@ -123,6 +257,7 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
       element->mapCE = expansion;
     }
   } else {     
+    static int count = 0;
     expansion = UCOL_SPECIAL_FLAG | (EXPANSION_TAG<<UCOL_TAG_SHIFT) 
       | ((uprv_uca_addExpansion(expansions, element->CEs[0], status)+(paddedsize(sizeof(UCATableHeader))>>2))<<4)
       & 0xFFFFF0;
@@ -136,6 +271,10 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
       uprv_uca_addExpansion(expansions, 0, status);
     }
     element->mapCE = expansion;
+    uprv_uca_setMaxExpansion(element->CEs[element->noOfCEs - 1],
+                             (uint8_t)element->noOfCEs,
+                             t->maxExpansions,
+                             status);
   }
 
   CE = ucmp32_get(mapping, element->cPoints[0]);
@@ -236,6 +375,7 @@ UCATableHeader *uprv_uca_reassembleTable(tempUCATable *t, UCATableHeader *mD, UE
     CompactIntArray *mapping = t->mapping;
     ExpansionTable *expansions = t->expansions;
     CntTable *contractions = t->contractions; 
+    MaxExpansionTable *maxexpansion = t->maxExpansions;
 
     if(U_FAILURE(*status)) {
         return NULL;
@@ -259,7 +399,11 @@ UCATableHeader *uprv_uca_reassembleTable(tempUCATable *t, UCATableHeader *mD, UE
     uint32_t tableOffset = 0;
     uint8_t *dataStart;
 
-    uint32_t toAllocate = paddedsize(sizeof(UCATableHeader))+paddedsize(expansions->position*sizeof(uint32_t))+paddedsize(mappingSize)+paddedsize(contractionsSize*(sizeof(UChar)+sizeof(uint32_t))+paddedsize(0x100*sizeof(uint32_t)));
+    uint32_t toAllocate = paddedsize(sizeof(UCATableHeader))+paddedsize(expansions->position*sizeof(uint32_t))+paddedsize(mappingSize)+paddedsize(contractionsSize*(sizeof(UChar)+sizeof(uint32_t))+paddedsize(0x100*sizeof(uint32_t))  
+                                     /* maxexpansion array */
+                                     + paddedsize(maxexpansion->position * sizeof(uint32_t)) +
+                                     /* maxexpansion size array */
+                                     paddedsize(maxexpansion->position * sizeof(uint8_t)));
 
     if(mD == NULL) {
       dataStart = (uint8_t *)malloc(toAllocate);
@@ -308,6 +452,22 @@ UCATableHeader *uprv_uca_reassembleTable(tempUCATable *t, UCATableHeader *mD, UE
         tableOffset+=sizeof(uint32_t);
     }
 
+    /* copy max expansion table */
+    for (i = 0; i <= maxexpansion->position; i ++)
+      fprintf(stderr, "%d %d\n", maxexpansion->endExpansionCE[i],
+                                 maxexpansion->expansionCESize[i]);
+
+    myData->endExpansionCE      = tableOffset;
+    myData->endExpansionCECount = maxexpansion->position;
+    /* not copying the first element which is a dummy */
+    uprv_memcpy(dataStart + tableOffset, maxexpansion->endExpansionCE + 1, 
+                maxexpansion->position * sizeof(uint32_t));
+    tableOffset += paddedsize(maxexpansion->position * sizeof(uint32_t));
+    myData->expansionCESize = tableOffset;
+    uprv_memcpy(dataStart + tableOffset, maxexpansion->expansionCESize + 1, 
+                maxexpansion->position * sizeof(uint8_t));
+    tableOffset += paddedsize(maxexpansion->position * sizeof(uint8_t));
+
     if(tableOffset != toAllocate) {
         fprintf(stderr, "calculation screwup!!! Expected to write %i but wrote %i instead!!!\n", toAllocate, tableOffset);
         *status = U_INTERNAL_PROGRAM_ERROR;
@@ -335,4 +495,5 @@ UCATableHeader *uprv_uca_reassembleTable(tempUCATable *t, UCATableHeader *mD, UE
 UCATableHeader *uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
   return uprv_uca_reassembleTable(t, 0, status);
 }
+
 

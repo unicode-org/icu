@@ -6,6 +6,7 @@
 * Modification history
 * Date        Name      Comments
 * 02/16/2001  synwee    Added internal method getPrevSpecialCE 
+* 03/01/2001  synwee    Added maxexpansion functionality.
 */
 #include "ucolimp.h"
 #include "ucoltok.h"
@@ -1245,6 +1246,15 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
     /* get the version info form UCATableHeader and populate the Collator struct*/
     result->dataInfo.dataVersion[0] = result->image->version[0]; /* UCA Builder version*/
     result->dataInfo.dataVersion[1] = result->image->version[1]; /* UCA Tailoring rules version*/
+
+    /* max expansion tables */
+    result->endExpansionCE = (uint32_t*)((uint8_t*)result->image + 
+                                         result->image->endExpansionCE);
+    result->lastEndExpansionCE = result->endExpansionCE + 
+                                 result->image->endExpansionCECount - 1;
+    result->expansionCESize = (uint8_t*)result->image + 
+                                               result->image->expansionCESize;
+
     ucol_updateInternalState(result);
     return result;
 }
@@ -1582,6 +1592,18 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
     }
   }
   return order; /* return the CE */
+}
+
+/* 
+* This function tries to get a maximum expansion count from UCA, 
+* @param order last collation element to look for in expansion sequence
+* @param status error status
+*/
+uint8_t ucol_getMaxExpansionUCA(uint32_t order) 
+{
+  uint8_t result;
+  UCOL_GETCOLLATORMAXEXPANSION(UCA, order, result);
+  return result;
 }
 
 /* This function handles the special CEs like contractions, expansions, surrogates, Thai */
