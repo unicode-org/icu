@@ -134,7 +134,7 @@
  * For example, subtracting 5 days from the date <code>September 12, 1996</code>
  * results in <code>September 7, 1996</code>.
  *
- * @stable
+ * @stable ICU 2.0
  */
 
 /** A calendar.
@@ -144,7 +144,7 @@
 typedef void* UCalendar;
 
 /** Possible types of UCalendars 
- * @stable
+ * @stable ICU 2.0
  */
 enum UCalendarType {
   /** A traditional calendar for the locale */
@@ -157,7 +157,7 @@ enum UCalendarType {
 typedef enum UCalendarType UCalendarType;
 
 /** Possible fields in a UCalendar 
- * @stable
+ * @stable ICU 2.0
  */
 enum UCalendarDateFields {
   /** Era field */
@@ -210,7 +210,7 @@ typedef enum UCalendarDateFields UCalendarDateFields;
      * this. For instance, in US locale, first-day-of-week is set to 1, i.e., UCAL_SUNDAY.
      */
 /** Possible days of the week in a UCalendar 
- * @stable
+ * @stable ICU 2.0
  */
 enum UCalendarDaysOfWeek {
   /** Sunday */
@@ -233,7 +233,7 @@ enum UCalendarDaysOfWeek {
 typedef enum UCalendarDaysOfWeek UCalendarDaysOfWeek;
 
 /** Possible months in a UCalendar. Note: Calendar month is 0-based.
- * @stable
+ * @stable ICU 2.0
  */
 enum UCalendarMonths {
   /** January */
@@ -268,7 +268,7 @@ enum UCalendarMonths {
 typedef enum UCalendarMonths UCalendarMonths;
 
 /** Possible AM/PM values in a UCalendar 
- * @stable
+ * @stable ICU 2.0
  */
 enum UCalendarAMPMs {
     /** AM */
@@ -324,7 +324,7 @@ ucal_countAvailableTZIDs(int32_t rawOffset);
 * Get the current date and time.
 * The value returned is represented as milliseconds from the epoch.
 * @return The current date and time.
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI UDate U_EXPORT2 
 ucal_getNow(void);
@@ -339,7 +339,7 @@ ucal_getNow(void);
 * @param type The type of UCalendar to open.
 * @param status A pointer to an UErrorCode to receive any errors
 * @return A pointer to a UCalendar, or 0 if an error occurred.
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI UCalendar* U_EXPORT2 
 ucal_open(    const    UChar*          zoneID,
@@ -352,7 +352,7 @@ ucal_open(    const    UChar*          zoneID,
 * Close a UCalendar.
 * Once closed, a UCalendar may no longer be used.
 * @param cal The UCalendar to close.
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI void U_EXPORT2 
 ucal_close(UCalendar *cal);
@@ -364,7 +364,7 @@ ucal_close(UCalendar *cal);
 * @param zoneID The desired TimeZone ID.  If 0, use the default time zone.
 * @param len The length of zoneID, or -1 if null-terminated.
 * @param status A pointer to an UErrorCode to receive any errors.
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI void U_EXPORT2 
 ucal_setTimeZone(        UCalendar*      cal,
@@ -373,7 +373,7 @@ ucal_setTimeZone(        UCalendar*      cal,
                 UErrorCode     *status);
 
 /** Possible formats for a UCalendar's display name 
- * @stable
+ * @stable ICU 2.0
  */
 enum UCalendarDisplayNameType {
   /** Standard display name */
@@ -400,7 +400,7 @@ typedef enum UCalendarDisplayNameType UCalendarDisplayNameType;
 * @param resultLength The maximum size of result.
 * @param status       A pointer to an UErrorCode to receive any errors
 * @return             The total buffer size needed; if greater than resultLength, the output was truncated.
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2 
 ucal_getTimeZoneDisplayName(    const     UCalendar*                 cal,
@@ -416,7 +416,7 @@ ucal_getTimeZoneDisplayName(    const     UCalendar*                 cal,
 * @param cal The UCalendar to query.
 * @param status A pointer to an UErrorCode to receive any errors
 * @return TRUE if cal is currently in daylight savings time, FALSE otherwise
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI UBool U_EXPORT2 
 ucal_inDaylightTime(    const    UCalendar*      cal,
@@ -446,7 +446,7 @@ typedef enum UCalendarAttribute UCalendarAttribute;
 * or UCAL_MINIMAL_DAYS_IN_FIRST_WEEK
 * @return The value of attr.
 * @see ucal_setAttribute
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2 
 ucal_getAttribute(    const    UCalendar*              cal,
@@ -461,7 +461,7 @@ ucal_getAttribute(    const    UCalendar*              cal,
 * or UCAL_MINIMAL_DAYS_IN_FIRST_WEEK
 * @param newValue The new value of attr.
 * @see ucal_getAttribute
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI void U_EXPORT2 
 ucal_setAttribute(      UCalendar*              cal,
@@ -475,7 +475,7 @@ ucal_setAttribute(      UCalendar*              cal,
 * @param index The index of the desired locale.
 * @return A locale for which calendars are available, or 0 if none.
 * @see ucal_countAvailable
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI const char* U_EXPORT2 
 ucal_getAvailable(int32_t index);
@@ -486,7 +486,7 @@ ucal_getAvailable(int32_t index);
 * calls to \Ref{ucal_getAvailable}.
 * @return The number of locales for which calendars are available.
 * @see ucal_getAvailable
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2 
 ucal_countAvailable(void);
@@ -500,7 +500,7 @@ ucal_countAvailable(void);
 * @see ucal_setMillis
 * @see ucal_setDate
 * @see ucal_setDateTime
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI UDate U_EXPORT2 
 ucal_getMillis(    const    UCalendar*      cal,
@@ -515,7 +515,7 @@ ucal_getMillis(    const    UCalendar*      cal,
 * @see ucal_getMillis
 * @see ucal_setDate
 * @see ucal_setDateTime
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI void U_EXPORT2 
 ucal_setMillis(        UCalendar*      cal,
@@ -534,7 +534,7 @@ ucal_setMillis(        UCalendar*      cal,
 * @see ucal_getMillis
 * @see ucal_setMillis
 * @see ucal_setDateTime
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI void U_EXPORT2 
 ucal_setDate(        UCalendar*        cal,
@@ -558,7 +558,7 @@ ucal_setDate(        UCalendar*        cal,
 * @see ucal_getMillis
 * @see ucal_setMillis
 * @see ucal_setDate
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI void U_EXPORT2 
 ucal_setDateTime(    UCalendar*        cal,
@@ -577,7 +577,7 @@ ucal_setDateTime(    UCalendar*        cal,
  * @param cal1 The first of the UCalendars to compare.
  * @param cal2 The second of the UCalendars to compare.
  * @return TRUE if cal1 and cal2 are equivalent, FALSE otherwise.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UBool U_EXPORT2 
 ucal_equivalentTo(const UCalendar*      cal1,
@@ -596,7 +596,7 @@ ucal_equivalentTo(const UCalendar*      cal1,
 * to preserve the magnitude of the change.
 * @param status A pointer to an UErrorCode to receive any errors
 * @see ucal_roll
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI void U_EXPORT2 
 ucal_add(    UCalendar*            cal,
@@ -617,7 +617,7 @@ ucal_add(    UCalendar*            cal,
 * value.
 * @param status A pointer to an UErrorCode to receive any errors
 * @see ucal_add
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI void U_EXPORT2 
 ucal_roll(        UCalendar*        cal,
@@ -639,7 +639,7 @@ ucal_roll(        UCalendar*        cal,
 * @see ucal_isSet
 * @see ucal_clearField
 * @see ucal_clear
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2 
 ucal_get(    const    UCalendar*            cal,
@@ -659,7 +659,7 @@ ucal_get(    const    UCalendar*            cal,
 * @see ucal_isSet
 * @see ucal_clearField
 * @see ucal_clear
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI void U_EXPORT2 
 ucal_set(    UCalendar*            cal,
@@ -679,7 +679,7 @@ ucal_set(    UCalendar*            cal,
 * @see ucal_set
 * @see ucal_clearField
 * @see ucal_clear
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI UBool U_EXPORT2 
 ucal_isSet(    const    UCalendar*        cal,
@@ -697,7 +697,7 @@ ucal_isSet(    const    UCalendar*        cal,
 * @see ucal_set
 * @see ucal_isSet
 * @see ucal_clear
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI void U_EXPORT2 
 ucal_clearField(    UCalendar*        cal,
@@ -711,13 +711,13 @@ ucal_clearField(    UCalendar*        cal,
 * @see ucal_set
 * @see ucal_isSet
 * @see ucal_clearField
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI void U_EXPORT2 
 ucal_clear(UCalendar* calendar);
 
 /** Possible limit values for a UCalendar 
- * @stable
+ * @stable ICU 2.0
  */
 enum UCalendarLimitType {
   /** Minimum value */
@@ -749,7 +749,7 @@ typedef enum UCalendarLimitType UCalendarLimitType;
 * UCAL_LEAST_MAXIMUM, UCAL_ACTUAL_MINIMUM, UCAL_ACTUAL_MAXIMUM
 * @param status A pointer to an UErrorCode to receive any errors.
 * @return The requested value.
-* @stable
+* @stable ICU 2.0
 */
 U_CAPI int32_t U_EXPORT2 
 ucal_getLimit(    const    UCalendar*              cal,

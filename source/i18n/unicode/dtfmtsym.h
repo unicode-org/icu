@@ -74,7 +74,7 @@ public:
      * @param status    Output param set to success of failure.  Failure
      *                  results if the resources for the default cannot be
      *                  found or cannot be loaded
-     * @stable
+     * @stable ICU 2.0
      */
     DateFormatSymbols(UErrorCode& status);
 
@@ -86,27 +86,27 @@ public:
      * @param status    Output param set to success of failure.  Failure
      *                  results if the resources for the locale cannot be
      *                  found or cannot be loaded
-     * @stable
+     * @stable ICU 2.0
      */
     DateFormatSymbols(const Locale& locale,
                       UErrorCode& status);
 
     /**
      * Copy constructor.
-     * @stable
+     * @stable ICU 2.0
      */
     DateFormatSymbols(const DateFormatSymbols&);
 
     /**
      * Assignment operator.
-     * @stable
+     * @stable ICU 2.0
      */
     DateFormatSymbols& operator=(const DateFormatSymbols&);
 
     /**
      * Destructor. This is nonvirtual because this class is not designed to be
      * subclassed.
-     * @stable
+     * @stable ICU 2.0
      */
     ~DateFormatSymbols();
 
@@ -115,7 +115,7 @@ public:
      *
      * @param other    the DateFormatSymbols object to be compared with.
      * @return         true if other is semantically equal to this.
-     * @stable
+     * @stable ICU 2.0
      */
     UBool operator==(const DateFormatSymbols& other) const;
 
@@ -124,7 +124,7 @@ public:
      *
      * @param other    the DateFormatSymbols object to be compared with.
      * @return         true if other is semantically unequal to this.
-     * @stable
+     * @stable ICU 2.0
      */
     UBool operator!=(const DateFormatSymbols& other) const { return !operator==(other); }
 
@@ -133,7 +133,7 @@ public:
      *
      * @param count    Filled in with length of the array.
      * @return         the era strings.
-     * @stable
+     * @stable ICU 2.0
      */
     const UnicodeString* getEras(int32_t& count) const;
 
@@ -141,7 +141,7 @@ public:
      * Sets era strings. For example: "AD" and "BC".
      * @param eras  Array of era strings (DateFormatSymbols retains ownership.)
      * @param count Filled in with length of the array.
-     * @stable
+     * @stable ICU 2.0
      */
     void setEras(const UnicodeString* eras, int32_t count);
 
@@ -149,7 +149,7 @@ public:
      * Gets month strings. For example: "January", "February", etc.
      * @param count Filled in with length of the array.
      * @return the month strings. (DateFormatSymbols retains ownership.)
-     * @stable
+     * @stable ICU 2.0
      */
     const UnicodeString* getMonths(int32_t& count) const;
 
@@ -158,7 +158,7 @@ public:
      *
      * @param months    the new month strings. (not adopted; caller retains ownership)
      * @param count     Filled in with length of the array.
-     * @stable
+     * @stable ICU 2.0
      */
     void setMonths(const UnicodeString* months, int32_t count);
 
@@ -167,7 +167,7 @@ public:
      *
      * @param count Filled in with length of the array.
      * @return the short month strings. (DateFormatSymbols retains ownership.)
-     * @stable
+     * @stable ICU 2.0
      */
     const UnicodeString* getShortMonths(int32_t& count) const;
 
@@ -175,7 +175,7 @@ public:
      * Sets short month strings. For example: "Jan", "Feb", etc.
      * @param count        Filled in with length of the array.
      * @param shortMonths  the new short month strings. (not adopted; caller retains ownership)
-     * @stable
+     * @stable ICU 2.0
      */
     void setShortMonths(const UnicodeString* shortMonths, int32_t count);
 
@@ -183,7 +183,7 @@ public:
      * Gets weekday strings. For example: "Sunday", "Monday", etc.
      * @param count        Filled in with length of the array.
      * @return the weekday strings. (DateFormatSymbols retains ownership.)
-     * @stable
+     * @stable ICU 2.0
      */
     const UnicodeString* getWeekdays(int32_t& count) const;
 
@@ -191,7 +191,7 @@ public:
      * Sets weekday strings. For example: "Sunday", "Monday", etc.
      * @param weekdays     the new weekday strings. (not adopted; caller retains ownership)
      * @param count        Filled in with length of the array.
-     * @stable
+     * @stable ICU 2.0
      */
     void setWeekdays(const UnicodeString* weekdays, int32_t count);
 
@@ -199,7 +199,7 @@ public:
      * Gets short weekday strings. For example: "Sun", "Mon", etc.
      * @param count        Filled in with length of the array.
      * @return             the short weekday strings. (DateFormatSymbols retains ownership.)
-     * @stable
+     * @stable ICU 2.0
      */
     const UnicodeString* getShortWeekdays(int32_t& count) const;
 
@@ -207,7 +207,7 @@ public:
      * Sets short weekday strings. For example: "Sun", "Mon", etc.
      * @param shortWeekdays  the new short weekday strings. (not adopted; caller retains ownership)
      * @param count          Filled in with length of the array.
-     * @stable
+     * @stable ICU 2.0
      */
     void setShortWeekdays(const UnicodeString* shortWeekdays, int32_t count);
 
@@ -215,7 +215,7 @@ public:
      * Gets AM/PM strings. For example: "AM" and "PM".
      * @param count        Filled in with length of the array.
      * @return             the weekday strings. (DateFormatSymbols retains ownership.)
-     * @stable
+     * @stable ICU 2.0
      */
     const UnicodeString* getAmPmStrings(int32_t& count) const;
 
@@ -223,7 +223,7 @@ public:
      * Sets ampm strings. For example: "AM" and "PM".
      * @param ampms        the new ampm strings. (not adopted; caller retains ownership)
      * @param count        Filled in with length of the array.
-     * @stable
+     * @stable ICU 2.0
      */
     void setAmPmStrings(const UnicodeString* ampms, int32_t count);
 
@@ -232,7 +232,7 @@ public:
      * @param rowCount      Output param to receive number of rows.
      * @param columnCount   Output param to receive number of columns.
      * @return              The timezone strings as a 2-d array. (DateFormatSymbols retains ownership.)
-     * @stable
+     * @stable ICU 2.0
      */
     const UnicodeString** getZoneStrings(int32_t& rowCount, int32_t& columnCount) const;
 
@@ -241,7 +241,7 @@ public:
      * @param strings       The timezone strings as a 2-d array to be copied. (not adopted; caller retains ownership)
      * @param rowCount      The number of rows (count of first index).
      * @param columnCount   The number of columns (count of second index).
-     * @stable
+     * @stable ICU 2.0
      */
     void setZoneStrings(const UnicodeString* const* strings, int32_t rowCount, int32_t columnCount);
 
@@ -256,7 +256,7 @@ public:
     /**
      * Get the non-localized date-time pattern characters.
      * @return    the non-localized date-time pattern characters
-     * @stable
+     * @stable ICU 2.0
      */
     static const UChar *getPatternUChars(void);
 
@@ -264,7 +264,7 @@ public:
      * Gets localized date-time pattern characters. For example: 'u', 't', etc.
      * @param result    Output param which will receive the localized date-time pattern characters.
      * @return          A reference to 'result'.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString& getLocalPatternChars(UnicodeString& result) const;
 
@@ -272,7 +272,7 @@ public:
      * Sets localized date-time pattern characters. For example: 'u', 't', etc.
      * @param newLocalPatternChars the new localized date-time
      * pattern characters.
-     * @stable
+     * @stable ICU 2.0
      */
     void setLocalPatternChars(const UnicodeString& newLocalPatternChars);
 

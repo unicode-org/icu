@@ -204,7 +204,7 @@ public:
      * @param pattern   Pattern used to construct object.
      * @param status    Output param to receive success code.  If the
      *                  pattern cannot be parsed, set to failure code.
-     * @stable
+     * @stable ICU 2.0
      */
     MessageFormat(const UnicodeString& pattern,
                   UErrorCode &status);
@@ -215,7 +215,7 @@ public:
      * @param newLocale The locale to use for formatting dates and numbers.
      * @param status    Output param to receive success code.  If the
      *                  pattern cannot be parsed, set to failure code.
-     * @stable
+     * @stable ICU 2.0
      */
     MessageFormat(const UnicodeString& pattern,
                   const Locale& newLocale,
@@ -228,7 +228,7 @@ public:
      *                   of error if an error is encountered
      * @param success    Output param to receive success code.  If the
      *                  pattern cannot be parsed, set to failure code.
-     * @stable
+     * @stable ICU 2.0
      */
     MessageFormat(const UnicodeString& pattern,
                   const Locale& newLocale,
@@ -236,26 +236,26 @@ public:
                   UErrorCode& success);
     /**
      * Copy constructor.
-     * @stable
+     * @stable ICU 2.0
      */
     MessageFormat(const MessageFormat&);
 
     /**
      * Assignment operator.
-     * @stable
+     * @stable ICU 2.0
      */
     const MessageFormat& operator=(const MessageFormat&);
 
     /**
      * Destructor.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual ~MessageFormat();
 
     /**
      * Clone this Format object polymorphically. The caller owns the
      * result and should delete it when done.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual Format* clone(void) const;
 
@@ -264,7 +264,7 @@ public:
      * Objects of different subclasses are considered unequal.
      * @param other  the object to be compared with.
      * @return       true if the given Format objects are semantically equal.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UBool operator==(const Format& other) const;
 
@@ -272,7 +272,7 @@ public:
      * Sets the locale. This locale is used for fetching default number or date
      * format information.
      * @param theLocale    the new locale value to be set.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setLocale(const Locale& theLocale);
 
@@ -280,7 +280,7 @@ public:
      * Gets the locale. This locale is used for fetching default number or date
      * format information.
      * @return    the locale of the object.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual const Locale& getLocale(void) const;
 
@@ -291,7 +291,7 @@ public:
      * @param status    Output param set to success/failure code on
      *                  exit. If the pattern is invalid, this will be
      *                  set to a failure result.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void applyPattern(const UnicodeString& pattern,
                               UErrorCode& status);
@@ -314,7 +314,7 @@ public:
      * @param appendTo  Output parameter to receive the pattern.
      *                  Result is appended to existing contents.
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeString& toPattern(UnicodeString& appendTo) const;
 
@@ -326,7 +326,7 @@ public:
      * ownership is retained by the caller. If the count is over 
      * the maximum allowed (10), any additional items will be deleted.
      * 
-     * @stable
+     * @stable ICU 2.0
      * @param formatsToAdopt    the format to be adopted.
      * @param count             the size of the array.
      */
@@ -339,7 +339,7 @@ public:
      * If the count is over the maximum allowed (10), any additional
      *  items will be ignored.
      * 
-     * @stable
+     * @stable ICU 2.0
      * @param newFormats the new format to be set.
      * @param cnt        the size of the array.
      */
@@ -352,7 +352,7 @@ public:
      * The caller should not delete the Format object after this call.
      * If the number is over the number of formats already set,
      * the item will be deleted and ignored.
-     * @stable
+     * @stable ICU 2.0
      * @param formatNumber     index of the parameter.
      * @param formatToAdopt    the format to be adopted.
      */
@@ -365,14 +365,14 @@ public:
      * the item will be ignored.
      * @param variable         index of the parameter.
      * @param newFormat    the format to be set.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setFormat(int32_t variable, const Format& newFormat);
 
     /**
      * Gets formats that were set with setFormats.
      * See the class description about format numbering.
-     * @stable
+     * @stable ICU 2.0
      * @param count    the size of the array.
      */
     virtual const Format** getFormats(int32_t& count) const;
@@ -389,7 +389,7 @@ public:
      * @param ignore    No useful status is returned.
      * @param success   Output param set to success/failure code
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString& format(  const Formattable* source,
                             int32_t count,
@@ -407,7 +407,7 @@ public:
      *                  Result is appended to existing contents.
      * @param success   Output param set to success/failure code
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     static UnicodeString& format(   const UnicodeString& pattern,
                                     const Formattable* arguments,
@@ -428,7 +428,7 @@ public:
      *                  On output: the offsets of the alignment field.
      * @param status    Output param filled with success/failure status.
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeString& format(const Formattable& obj,
                                   UnicodeString& appendTo,
@@ -442,7 +442,7 @@ public:
      *                  Result is appended to existing contents.
      * @param status    Output param filled with success/failure status.
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString& format(const Formattable& obj,
                           UnicodeString& appendTo,
@@ -474,7 +474,7 @@ public:
      * @param source    String to be parsed.
      * @param status    On input, starting position for parse. On output,
      *                  final position after parse.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual Formattable* parse( const UnicodeString& source,
                                 ParsePosition& status,
@@ -487,7 +487,7 @@ public:
      * @param source    String to be parsed.
      * @param count     Output param to receive size of returned array.
      * @param status    Output param to receive success/error code.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual Formattable* parse( const UnicodeString& source,
                                 int32_t& count,
@@ -520,7 +520,7 @@ public:
      * @return          A newly created Formattable* object, or NULL
      *                  on failure.  The caller owns this and should
      *                  delete it when done.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void parseObject(const UnicodeString& source,
                              Formattable& result,
@@ -536,7 +536,7 @@ public:
      * @return          The class ID for this object. All objects of a
      *                  given class have the same class ID.  Objects of
      *                  other classes have different class IDs.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UClassID getDynamicClassID(void) const;
 
@@ -549,7 +549,7 @@ public:
      * .      Derived::getStaticClassID()) ...
      * </pre>
      * @return          The class ID for all objects of this class.
-     * @stable
+     * @stable ICU 2.0
      */
     static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
     

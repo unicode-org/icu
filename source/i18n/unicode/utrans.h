@@ -48,7 +48,7 @@
  * and close with utrans_close() when done.  Equivalent to the C++ class
  * Transliterator and its subclasses.
  * @see Transliterator
- * @stable
+ * @stable ICU 2.0
  */
 typedef void* UTransliterator;
 
@@ -58,7 +58,7 @@ typedef void* UTransliterator;
  * Specified when a transliterator is opened.  An "A-B" transliterator
  * transliterates A to B when operating in the forward direction, and
  * B to A when operating in the reverse direction.
- * @stable
+ * @stable ICU 2.0
  */
 typedef enum UTransDirection {
     
@@ -100,7 +100,7 @@ typedef enum UTransDirection {
  * of a surrogate pair.  If any index does split a surrogate pair,
  * results are unspecified.
  *
- * @stable
+ * @stable ICU 2.0
  */
 typedef struct UTransPosition {
 
@@ -165,7 +165,7 @@ typedef struct UTransPosition {
  * @param status a pointer to the UErrorCode
  * @return a transliterator pointer that may be passed to other
  * utrans_xxx() functions, or NULL if the open call fails.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UTransliterator* U_EXPORT2 
 utrans_open(const char* id,
@@ -188,7 +188,7 @@ utrans_open(const char* id,
  * @param status a pointer to the UErrorCode
  * @return a pointer to a newly-opened transliterator that is the
  * inverse of trans, or NULL if the open call fails.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UTransliterator* U_EXPORT2 
 utrans_openInverse(const UTransliterator* trans,
@@ -202,7 +202,7 @@ utrans_openInverse(const UTransliterator* trans,
  * @param status a pointer to the UErrorCode
  * @return a transliterator pointer that may be passed to other
  * utrans_xxx() functions, or NULL if the clone call fails.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UTransliterator* U_EXPORT2 
 utrans_clone(const UTransliterator* trans,
@@ -212,7 +212,7 @@ utrans_clone(const UTransliterator* trans,
  * Close a transliterator.  Any non-NULL pointer returned by
  * utrans_openXxx() or utrans_clone() should eventually be closed.
  * @param trans the transliterator to be closed.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2 
 utrans_close(UTransliterator* trans);
@@ -229,7 +229,7 @@ utrans_close(UTransliterator* trans);
  * NULL.
  * @return the actual length of the ID, not including
  * zero-termination.  This may be greater than bufCapacity.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2 
 utrans_getID(const UTransliterator* trans,
@@ -248,7 +248,7 @@ utrans_getID(const UTransliterator* trans,
  * @param adoptedTrans a transliterator, typically the result of
  * utrans_openRules(), to be registered with the system.
  * @param status a pointer to the UErrorCode
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2 
 utrans_register(UTransliterator* adoptedTrans,
@@ -260,7 +260,7 @@ utrans_register(UTransliterator* adoptedTrans,
  * utrans_open().  If the id is invalid then nothing is done.
  *
  * @param id a zero-terminated ID
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2 
 utrans_unregister(const char* id);
@@ -281,7 +281,7 @@ utrans_unregister(const char* id);
  * filterPattern is zero-terminated
  * @param status a pointer to the UErrorCode
  * @see UnicodeSet
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2 
 utrans_setFilter(UTransliterator* trans,
@@ -292,7 +292,7 @@ utrans_setFilter(UTransliterator* trans,
 /**
  * Return the number of system transliterators.
  * @return the number of system transliterators.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2 
 utrans_countAvailableIDs(void);
@@ -312,7 +312,7 @@ utrans_countAvailableIDs(void);
  * NULL.
  * @return the actual length of the index-th ID, not including
  * zero-termination.  This may be greater than bufCapacity.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2 
 utrans_getAvailableID(int32_t index,
@@ -344,7 +344,7 @@ utrans_getAvailableID(int32_t index,
  * </code><em>new-limit</em><code>)</code>, where <em>new-limit</em>
  * is the return value.
  * @param status a pointer to the UErrorCode
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2 
 utrans_trans(const UTransliterator* trans,
@@ -395,7 +395,7 @@ utrans_trans(const UTransliterator* trans,
  * @param pos a struct containing the start and limit indices of the
  * text to be read and the text to be transliterated
  * @param status a pointer to the UErrorCode
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2 
 utrans_transIncremental(const UTransliterator* trans,
@@ -433,7 +433,7 @@ utrans_transIncremental(const UTransliterator* trans,
  * </code><em>new-limit</em><code>)</code>, where <em>new-limit</em>
  * is the return value.
  * @param status a pointer to the UErrorCode
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2 
 utrans_transUChars(const UTransliterator* trans,
@@ -468,7 +468,7 @@ utrans_transUChars(const UTransliterator* trans,
  * text to be read and the text to be transliterated
  * @param status a pointer to the UErrorCode
  * @see utrans_transIncremental
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2 
 utrans_transIncrementalUChars(const UTransliterator* trans,

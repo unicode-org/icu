@@ -123,7 +123,7 @@ class Locale;
  * widthToAlignmentPoint) before drawing the text.  It also works
  * where there is no decimal, but possibly additional characters at
  * the end, e.g. with parentheses in negative numbers: "(12)" for -12.
- * @stable
+ * @stable ICU 2.0
  */
 class U_I18N_API NumberFormat : public Format {
 public:
@@ -134,7 +134,7 @@ public:
      * a formatted number should be returned.
      *
      * @see FieldPosition
-     * @stable
+     * @stable ICU 2.0
      */
     enum EAlignmentFields {
         kIntegerField,
@@ -144,7 +144,7 @@ public:
     /**
      * These constants are provided for backwards compatibility only,
      * and are deprecated.  Please use the C++ style constants defined above.
-     * @stable
+     * @stable ICU 2.0
      */
         INTEGER_FIELD        = kIntegerField,
         FRACTION_FIELD        = kFractionField
@@ -152,7 +152,7 @@ public:
 
     /**
      * Destructor.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual ~NumberFormat();
 
@@ -160,7 +160,7 @@ public:
      * Return true if the given Format objects are semantically equal.
      * Objects of different subclasses are considered unequal.
      * @return    true if the given Format objects are semantically equal.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UBool operator==(const Format& other) const;
 
@@ -177,7 +177,7 @@ public:
      *                  On output: the offsets of the alignment field.
      * @param status    Output param filled with success/failure status.
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeString& format(const Formattable& obj,
                                   UnicodeString& appendTo,
@@ -210,7 +210,7 @@ public:
      * @return          A newly created Formattable* object, or NULL
      *                  on failure.  The caller owns this and should
      *                  delete it when done.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void parseObject(const UnicodeString& source,
                              Formattable& result,
@@ -224,7 +224,7 @@ public:
      * @param appendTo  Output parameter to receive result.
      *                  Result is appended to existing contents.
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString& format(  double number,
                             UnicodeString& appendTo) const;
@@ -237,7 +237,7 @@ public:
      * @param appendTo  Output parameter to receive result.
      *                  Result is appended to existing contents.
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString& format(  int32_t number,
                             UnicodeString& appendTo) const;
@@ -252,7 +252,7 @@ public:
      * @param pos       On input: an alignment field, if desired.
      *                  On output: the offsets of the alignment field.
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeString& format(double number,
                                   UnicodeString& appendTo,
@@ -267,7 +267,7 @@ public:
      * @param pos       On input: an alignment field, if desired.
      *                  On output: the offsets of the alignment field.
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
     */
     virtual UnicodeString& format(int32_t number,
                                   UnicodeString& appendTo,
@@ -279,7 +279,7 @@ public:
      * @param appendTo  Output parameter to receive result.
      *                  Result is appended to existing contents.
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString& format(const Formattable& obj,
                           UnicodeString& appendTo,
@@ -304,7 +304,7 @@ public:
     *                       parse character. On parse failure, does not change.
     * @return               A Formattable object of numeric type.  The caller
     *                       owns this an must delete it.  NULL on failure.
-    * @stable
+    * @stable ICU 2.0
     */
     virtual void parse(const UnicodeString& text,
                        Formattable& result,
@@ -322,7 +322,7 @@ public:
      * @return              A Formattable object of numeric type.  The caller
      *                      owns this an must delete it.  NULL on failure.
      * @see                 NumberFormat::isParseIntegerOnly
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void parse( const UnicodeString& text,
                         Formattable& result,
@@ -337,7 +337,7 @@ public:
      * dependant and determined by sub-classes of NumberFormat.
      * @return    true if this format will parse numbers as integers
      *            only. 
-     * @stable
+     * @stable ICU 2.0
      */
     UBool isParseIntegerOnly(void) const;
 
@@ -346,7 +346,7 @@ public:
      * @param value    set True, this format will parse numbers as integers
      *                 only.
      * @see isParseIntegerOnly
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setParseIntegerOnly(UBool value);
 
@@ -356,7 +356,7 @@ public:
      * the other factory methods: getNumberInstance,
      * getCurrencyInstance or getPercentInstance.  Exactly which one
      * is locale dependant.
-     * @stable
+     * @stable ICU 2.0
      */
     static NumberFormat* createInstance(UErrorCode&);
 
@@ -366,49 +366,49 @@ public:
      * factory methods: getNumberInstance, getCurrencyInstance or
      * getPercentInstance.  Exactly which one is locale dependant.
      * @param inLocale    the given locale.
-     * @stable
+     * @stable ICU 2.0
      */
     static NumberFormat* createInstance(const Locale& inLocale,
                                         UErrorCode&);
 
     /**
      * Returns a currency format for the current default locale.
-     * @stable
+     * @stable ICU 2.0
      */
     static NumberFormat* createCurrencyInstance(UErrorCode&);
 
     /**
      * Returns a currency format for the specified locale.
      * @param inLocale    the given locale.
-     * @stable
+     * @stable ICU 2.0
      */
     static NumberFormat* createCurrencyInstance(const Locale& inLocale,
                                                 UErrorCode&);
 
     /**
      * Returns a percentage format for the current default locale.
-     * @stable
+     * @stable ICU 2.0
      */
     static NumberFormat* createPercentInstance(UErrorCode&);
 
     /**
      * Returns a percentage format for the specified locale.
      * @param inLocale    the given locale.
-     * @stable
+     * @stable ICU 2.0
      */
     static NumberFormat* createPercentInstance(const Locale& inLocale,
                                                UErrorCode&);
 
     /**
      * Returns a scientific format for the current default locale.
-     * @stable
+     * @stable ICU 2.0
      */
     static NumberFormat* createScientificInstance(UErrorCode&);
 
     /**
      * Returns a scientific format for the specified locale.
      * @param inLocale    the given locale.
-     * @stable
+     * @stable ICU 2.0
      */
     static NumberFormat* createScientificInstance(const Locale& inLocale,
                                                 UErrorCode&);
@@ -416,7 +416,7 @@ public:
     /**
      * Get the set of Locales for which NumberFormats are installed.
      * @param count    Output param to receive the size of the locales
-     * @stable
+     * @stable ICU 2.0
      */
     static const Locale* getAvailableLocales(int32_t& count);
 
@@ -427,7 +427,7 @@ public:
      * well as the size of each group is locale dependant and is
      * determined by sub-classes of NumberFormat.
      * @see setGroupingUsed
-     * @stable
+     * @stable ICU 2.0
      */
     UBool isGroupingUsed(void) const;
 
@@ -435,7 +435,7 @@ public:
      * Set whether or not grouping will be used in this format.
      * @param newValue    True, grouping will be used in this format. 
      * @see getGroupingUsed
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setGroupingUsed(UBool newValue);
 
@@ -445,7 +445,7 @@ public:
      * @return     the maximum number of digits allowed in the integer portion of a
      *             number.
      * @see setMaximumIntegerDigits
-     * @stable
+     * @stable ICU 2.0
      */
     int32_t getMaximumIntegerDigits(void) const;
 
@@ -459,7 +459,7 @@ public:
      * @param newValue    the new value for the maximum number of digits 
      *                    allowed in the integer portion of a number.
      * @see getMaximumIntegerDigits
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setMaximumIntegerDigits(int32_t newValue);
 
@@ -469,7 +469,7 @@ public:
      * @return    the minimum number of digits allowed in the integer portion of a
      *            number.
      * @see setMinimumIntegerDigits
-     * @stable
+     * @stable ICU 2.0
      */
     int32_t getMinimumIntegerDigits(void) const;
 
@@ -481,7 +481,7 @@ public:
      * the new value.
      * @param newValue    the new value to be set.
      * @see getMinimumIntegerDigits
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setMinimumIntegerDigits(int32_t newValue);
 
@@ -491,7 +491,7 @@ public:
      * @return    the maximum number of digits allowed in the fraction portion of a
      *            number.
      * @see setMaximumFractionDigits
-     * @stable
+     * @stable ICU 2.0
      */
     int32_t getMaximumFractionDigits(void) const;
 
@@ -503,7 +503,7 @@ public:
      * the new value.
      * @param newValue    the new value to be set.
      * @see getMaximumFractionDigits
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setMaximumFractionDigits(int32_t newValue);
 
@@ -513,7 +513,7 @@ public:
      * @return    the minimum number of digits allowed in the fraction portion of a
      *            number.
      * @see setMinimumFractionDigits
-     * @stable
+     * @stable ICU 2.0
      */
     int32_t getMinimumFractionDigits(void) const;
 
@@ -525,7 +525,7 @@ public:
      * the new value
      * @param newValue    the new value to be set.
      * @see getMinimumFractionDigits
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setMinimumFractionDigits(int32_t newValue);
 
@@ -540,7 +540,7 @@ public:
      * .       Derived::getStaticClassID()) ...
      * </pre>
      * @return The class ID for all objects of this class.
-     * @stable
+     * @stable ICU 2.0
      */
     static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
 
@@ -554,7 +554,7 @@ public:
      * @return The class ID for this object. All objects of a
      * given class have the same class ID.  Objects of
      * other classes have different class IDs.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); }
 
@@ -562,19 +562,19 @@ protected:
 
     /**
      * Default constructor for subclass use only.
-     * @stable
+     * @stable ICU 2.0
      */
     NumberFormat();
 
     /**
      * Copy constructor.
-     * @stable
+     * @stable ICU 2.0
      */
     NumberFormat(const NumberFormat&);
 
     /**
      * Assignment operator.
-     * @stable
+     * @stable ICU 2.0
      */
     NumberFormat& operator=(const NumberFormat&);
 
