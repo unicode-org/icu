@@ -39,9 +39,7 @@ UnicodeConverter::UnicodeConverter(const char* name, UErrorCode& err)
 UnicodeConverter::UnicodeConverter(const UnicodeString& name, UErrorCode& err)
 {
     char myName[UCNV_MAX_CONVERTER_NAME_LENGTH];
-    int i;
-    name.extract(0, i = name.length(), myName);
-    myName[i]='\0';
+    name.extract(myName, sizeof(myName), 0, err);
     myUnicodeConverter = ucnv_open(myName, &err);
 }
 
