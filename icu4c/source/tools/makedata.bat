@@ -12,7 +12,7 @@ rem toolversion: Debug or Release
 set toolversion=Release
 if not "%2"=="" set toolversion=%2
 
-nmake /f makedata.mak icup=%1 cfg=%2
+nmake /f makedata.mak icup=%1 cfg=%2 %3 %4
 
 goto :end
 
