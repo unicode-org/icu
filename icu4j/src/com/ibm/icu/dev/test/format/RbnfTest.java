@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/RbnfTest.java,v $ 
- * $Date: 2003/04/15 14:58:16 $ 
- * $Revision: 1.16 $
+ * $Date: 2003/05/23 17:04:47 $ 
+ * $Revision: 1.17 $
  *
  *****************************************************************************************
  */
@@ -496,8 +496,8 @@ public class RbnfTest extends TestFmwk {
             { "70", "septante" },
             { "71", "septante-et-un" },
             { "73", "septante-trois" },
-            { "80", "octante" },
-            { "88", "octante-huit" },
+            { "80", "huitante" },
+            { "88", "huitante-huit" },
             { "100", "cent" },
             { "106", "cent six" },
             { "127", "cent vingt-sept" },
