@@ -201,7 +201,7 @@ typedef unsigned int uint32_t;
 /* Character data types                                                      */
 /*===========================================================================*/
 
-#if defined(OS390) || defined(OS400)
+#if ((defined(OS390) && (!defined(__CHARSET_LIB) || !__CHARSET_LIB))) || defined(OS400)
 #   define U_CHARSET_FAMILY 1
 #endif
 
