@@ -22,9 +22,9 @@
 static void TestBasic(void);
 static void TestOtherAPI(void);
 
-static int32_t hashChars(const void* key);
+static int32_t hashChars(const UHashKey key);
 
-static UBool isEqualChars(const void* key1, const void* key2);
+static UBool isEqualChars(const UHashKey key1, const UHashKey key2);
 
 static void _put(UHashtable* hash,
                  const char* key,
@@ -40,6 +40,42 @@ static void _remove(UHashtable* hash,
              int32_t expectedValue);
 
 void addHashtableTest(TestNode** root);
+
+/**********************************************************************
+ * UHashKey wrapper functions
+ *********************************************************************/
+
+static UBool
+_compareChars(void* a, void* b) {
+    UHashKey s, t;
+    s.pointer = a;
+    t.pointer = b;
+    return uhash_compareChars(s, t);
+}
+
+static UBool
+_compareIChars(void* a, void* b) {
+    UHashKey s, t;
+    s.pointer = a;
+    t.pointer = b;
+    return uhash_compareIChars(s, t);
+}
+
+static UBool
+_compareUChars(void* a, void* b) {
+    UHashKey s, t;
+    s.pointer = a;
+    t.pointer = b;
+    return uhash_compareUChars(s, t);
+}
+
+static UBool
+_compareLong(int32_t a, int32_t b) {
+    UHashKey s, t;
+    s.integer = a;
+    t.integer = b;
+    return uhash_compareLong(s, t);
+}
 
 /**********************************************************************
  * FW Registration
@@ -93,16 +129,16 @@ static void TestBasic(void) {
     _get(hash, omega, 48);
     _get(hash, two, 200);
 
-    if(uhash_compareChars((void*)one, (void*)three) == TRUE ||
-        uhash_compareChars((void*)one, (void*)one2) != TRUE ||
-        uhash_compareChars((void*)one, (void*)one) != TRUE ||
-        uhash_compareChars((void*)one, NULL) == TRUE  )  {
+    if(_compareChars((void*)one, (void*)three) == TRUE ||
+        _compareChars((void*)one, (void*)one2) != TRUE ||
+        _compareChars((void*)one, (void*)one) != TRUE ||
+        _compareChars((void*)one, NULL) == TRUE  )  {
         log_err("FAIL: compareChars failed\n");
     }
-    if(uhash_compareIChars((void*)one, (void*)three) == TRUE ||
-        uhash_compareIChars((void*)one, (void*)one) != TRUE ||
-        uhash_compareIChars((void*)one, (void*)one2) != TRUE ||
-        uhash_compareIChars((void*)one, NULL) == TRUE  )  {
+    if(_compareIChars((void*)one, (void*)three) == TRUE ||
+        _compareIChars((void*)one, (void*)one) != TRUE ||
+        _compareIChars((void*)one, (void*)one2) != TRUE ||
+        _compareIChars((void*)one, NULL) == TRUE  )  {
         log_err("FAIL: compareIChars failed\n");
     }
      
@@ -177,10 +213,10 @@ static void TestOtherAPI(void){
         log_err("FAIL: uhash_put() with value!=NULL didn't replace the key value pair\n");
     }
 
-    if(uhash_compareUChars((void*)one, (void*)two) == TRUE ||
-        uhash_compareUChars((void*)one, (void*)one) != TRUE ||
-        uhash_compareUChars((void*)one, (void*)one2) != TRUE ||
-        uhash_compareUChars((void*)one, NULL) == TRUE  )  {
+    if(_compareUChars((void*)one, (void*)two) == TRUE ||
+        _compareUChars((void*)one, (void*)one) != TRUE ||
+        _compareUChars((void*)one, (void*)one2) != TRUE ||
+        _compareUChars((void*)one, NULL) == TRUE  )  {
         log_err("FAIL: compareUChars failed\n");
     }
    
@@ -191,27 +227,27 @@ static void TestOtherAPI(void){
 
     uhash_setKeyComparator(hash, uhash_compareLong);
     uhash_setKeyHasher(hash, uhash_hashLong);
-    uhash_put(hash, (void*)1001, (void*)1, &status);
-    uhash_put(hash, (void*)1002, (void*)2, &status);
-    uhash_put(hash, (void*)1003, (void*)3, &status);
-    if(uhash_compareLong((void*)1001, (void*)1002) == TRUE ||
-        uhash_compareLong((void*)1001, (void*)1001) != TRUE ||
-        uhash_compareLong((void*)1001, NULL) == TRUE  )  {
+    uhash_puti(hash, 1001, (void*)1, &status);
+    uhash_puti(hash, 1002, (void*)2, &status);
+    uhash_puti(hash, 1003, (void*)3, &status);
+    if(_compareLong(1001, 1002) == TRUE ||
+        _compareLong(1001, 1001) != TRUE ||
+        _compareLong(1001, 0) == TRUE  )  {
         log_err("FAIL: compareLong failed\n");
     }
     /*set the resize policy to just GROW and SHRINK*/
          /*how to test this??*/
     uhash_setResizePolicy(hash, U_GROW_AND_SHRINK);
-    uhash_put(hash, (void*)1004, (void*)4, &status);
-    uhash_put(hash, (void*)1005, (void*)5, &status);
-    uhash_put(hash, (void*)1006, (void*)6, &status);
+    uhash_puti(hash, 1004, (void*)4, &status);
+    uhash_puti(hash, 1005, (void*)5, &status);
+    uhash_puti(hash, 1006, (void*)6, &status);
     if(uhash_count(hash) != 6){
         log_err("FAIL: uhash_count() failed. Expected: 6, Got: %d\n", uhash_count(hash));
     }
-    if((int32_t)uhash_remove(hash, (void*)1004) != 4){
+    if((int32_t)uhash_removei(hash, 1004) != 4){
         log_err("FAIL: uhash_remove failed\n");
     }
-    if((int32_t)uhash_remove(hash, (void*)1004) != 0){
+    if((int32_t)uhash_removei(hash, 1004) != 0){
         log_err("FAIL: uhash_remove failed\n");
     }
     uhash_close(hash);
@@ -225,14 +261,14 @@ static void TestOtherAPI(void){
  * This hash function is designed to collide a lot to test key equality
  * resolution.  It only uses the first char.
  */
-static int32_t hashChars(const void* key) {
-    return *(const char*) key;
+static int32_t hashChars(const UHashKey key) {
+    return *(const char*) key.pointer;
 }
 
-static UBool isEqualChars(const void* key1, const void* key2) {
-    return (UBool)((key1 != NULL) &&
-        (key2 != NULL) &&
-        (uprv_strcmp((const char*)key1, (const char*)key2) == 0));
+static UBool isEqualChars(const UHashKey key1, const UHashKey key2) {
+    return (UBool)((key1.pointer != NULL) &&
+        (key2.pointer != NULL) &&
+        (uprv_strcmp((const char*)key1.pointer, (const char*)key2.pointer) == 0));
 }
 
 /**********************************************************************

@@ -62,6 +62,7 @@ class ResourceBundle;
 
 #ifdef ICU_RESBUND_USE_DEPRECATES
 struct UHashtable;
+union UHashKey;
 #endif
 
 /**
@@ -563,10 +564,10 @@ private:
                     UErrorCode&              status);
 
 private:
-    static void U_CALLCONV deleteValue(void* value);
     Locale                      fRealLocale;
 
 #ifdef ICU_RESBUND_USE_DEPRECATES
+    static void U_CALLCONV deleteValue(UHashKey value);
     UHashtable*                 fItemCache;
 #endif
 

@@ -650,7 +650,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
       key = newCharsLen << 24 | charsOffset;
 
       /*  4 Lookup each source in the CharsToToken map, and find a sourceToken */
-      sourceToken = (UColToken *)uhash_get(uchars2tokens, (void *)key);
+      sourceToken = (UColToken *)uhash_geti(uchars2tokens, (int32_t)key);
 
       if(newStrength != UCOL_TOK_RESET) {
         if(lastToken == NULL) { /* this means that rules haven't started properly */
@@ -670,7 +670,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
           sourceToken->previous = NULL;
           sourceToken->noOfCEs = 0;
           sourceToken->noOfExpCEs = 0;
-          uhash_put(uchars2tokens, (void *)sourceToken->source, sourceToken, status);
+          uhash_puti(uchars2tokens, (int32_t)sourceToken->source, sourceToken, status);
         } else {
           /* we could have fished out a reset here */
           if(sourceToken->strength != UCOL_TOK_RESET && lastToken != sourceToken) {
@@ -808,7 +808,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
           while(searchCharsLen > 1 && sourceToken == NULL) {
             searchCharsLen--;
             key = searchCharsLen << 24 | charsOffset;
-            sourceToken = (UColToken *)uhash_get(uchars2tokens, (void *)key);
+            sourceToken = (UColToken *)uhash_geti(uchars2tokens, (int32_t)key);
           }
           if(sourceToken != NULL) {
             expandNext = (newCharsLen - searchCharsLen) << 24 | (charsOffset + searchCharsLen);
@@ -920,7 +920,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
           ListList[src->resultLen].reset = sourceToken;
 
           src->resultLen++;
-          uhash_put(uchars2tokens, (void *)sourceToken->source, sourceToken, status);
+          uhash_puti(uchars2tokens, (int32_t)sourceToken->source, sourceToken, status);
         } else { /* reset to something already in rules */
           top = FALSE;
         }

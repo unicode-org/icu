@@ -50,6 +50,8 @@ public:
     
     void* remove(const UnicodeString& key);
 
+    const UHashElement* find(const UnicodeString& key) const;
+
     const UHashElement* nextElement(int32_t& pos) const;
 };
 
@@ -109,6 +111,10 @@ inline void* Hashtable::get(const UnicodeString& key) const {
 
 inline void* Hashtable::remove(const UnicodeString& key) {
     return uhash_remove(hash, &key);
+}
+
+inline const UHashElement* Hashtable::find(const UnicodeString& key) const {
+    return uhash_find(hash, &key);
 }
 
 inline const UHashElement* Hashtable::nextElement(int32_t& pos) const {

@@ -24,10 +24,10 @@
 const UChar *rulesToParse = 0;
 
 int32_t
-uhash_hashTokens(const void *k) {
+uhash_hashTokens(const UHashKey k) {
   int32_t hash = 0;
-  if (k != NULL) {
-      uint32_t key = (uint32_t)k;
+  uint32_t key = (uint32_t)k.integer;
+  if (key != 0) {
       int32_t len = (key & 0xFF000000)>>24;
       int32_t inc = ((len - 32) / 32) + 1;
 
@@ -42,9 +42,9 @@ uhash_hashTokens(const void *k) {
   return hash;
 }
 
-UBool uhash_compareTokens(const void *key1, const void *key2) {
-    uint32_t p1 = (uint32_t) key1;
-    uint32_t p2 = (uint32_t) key2;
+UBool uhash_compareTokens(const UHashKey key1, const UHashKey key2) {
+    uint32_t p1 = (uint32_t) key1.integer;
+    uint32_t p2 = (uint32_t) key2.integer;
     const UChar *s1 = (p1 & 0x00FFFFFF) + rulesToParse;
     const UChar *s2 = (p2 & 0x00FFFFFF) + rulesToParse;
     uint32_t s1L = ((p1 & 0xFF000000) >> 24);

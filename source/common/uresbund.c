@@ -37,18 +37,25 @@ static UBool isMutexInited = FALSE;
 static UMTX resbMutex = NULL;
 
 /* INTERNAL: hashes an entry  */
-static int32_t hashEntry(const void *parm) {
-    UResourceDataEntry *b = (UResourceDataEntry *)parm;
-    return uhash_hashChars(b->fName)+37*uhash_hashChars(b->fPath);
+static int32_t hashEntry(const UHashKey parm) {
+    UResourceDataEntry *b = (UResourceDataEntry *)parm.pointer;
+    UHashKey namekey, pathkey;
+    namekey.pointer = b->fName;
+    pathkey.pointer = b->fPath;
+    return uhash_hashChars(namekey)+37*uhash_hashChars(pathkey);
 }
 
 /* INTERNAL: compares two entries */
-static UBool compareEntries(const void *p1, const void *p2) {
-    UResourceDataEntry *b1 = (UResourceDataEntry *)p1;
-    UResourceDataEntry *b2 = (UResourceDataEntry *)p2;
-
-    return (UBool)(uhash_compareChars(b1->fName, b2->fName) & 
-        uhash_compareChars(b1->fPath, b2->fPath));
+static UBool compareEntries(const UHashKey p1, const UHashKey p2) {
+    UResourceDataEntry *b1 = (UResourceDataEntry *)p1.pointer;
+    UResourceDataEntry *b2 = (UResourceDataEntry *)p2.pointer;
+    UHashKey name1, name2, path1, path2;
+    name1.pointer = b1->fName;
+    name2.pointer = b2->fName;
+    path1.pointer = b1->fPath;
+    path2.pointer = b2->fPath;
+    return (UBool)(uhash_compareChars(name1, name2) & 
+        uhash_compareChars(path1, path2));
 }
 
 
@@ -177,7 +184,7 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
     char aliasName[100] = { 0 };
     int32_t aliasLen = 0;
     UBool isAlias = FALSE;
-
+    UHashKey hashkey;
 
     if(U_FAILURE(*status)) {
         return NULL;
@@ -202,7 +209,8 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
     find.fPath = (char *)myPath;
 
     /* calculate the hash value of the entry */
-    hashValue = hashEntry((const void *)&find);
+    hashkey.pointer = (void *)&find;
+    hashValue = hashEntry(hashkey);
 
     /* check to see if we already have this entry */
     r = (UResourceDataEntry *)uhash_get(cache, &find);
