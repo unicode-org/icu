@@ -4,9 +4,9 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $ 
- * $Date: 2001/10/17 20:09:44 $ 
- * $Revision: 1.8 $
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
+ * $Date: 2001/10/22 05:35:12 $
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -666,7 +666,7 @@ public final class Utility {
         int n = 0;
         int minDig = 0;
         int maxDig = 0;
-        int bitsPerDigit = 4; 
+        int bitsPerDigit = 4;
         int dig;
         int i;
 
@@ -738,9 +738,9 @@ public final class Utility {
                 break;
             }
         }
-        
+
         /* If no special forms are recognized, then consider
-         * the backslash to generically escape the next character. */        
+         * the backslash to generically escape the next character. */
         offset16[0] = offset;
         return c;
     }
@@ -834,10 +834,10 @@ public final class Utility {
         output.append(foo);
         return output;
     }
-    
+
     /**
-     * Convert a integer to size width hex uppercase digits. 
-     * E.g., hex('a', 4, str) => "0041".  
+     * Convert a integer to size width hex uppercase digits.
+     * E.g., hex('a', 4, str) => "0041".
      * Append the output to the given StringBuffer.
      * If width is too small to fit, nothing will be appended to output.
      */
@@ -851,7 +851,7 @@ public final class Utility {
     }
 
     /**
-     * Convert a integer to size width (minimum) hex uppercase digits. 
+     * Convert a integer to size width (minimum) hex uppercase digits.
      * E.g., hex('a', 4, str) => "0041".  If the integer requires more
      * than width digits, more will be used.
      */
@@ -915,5 +915,142 @@ public final class Utility {
             if (source.equals(target[i])) return i;
         }
         return -1;
+    }
+
+    /**
+     * Skip over a sequence of zero or more white space characters
+     * at pos.  Return the index of the first non-white-space character
+     * at or after pos, or str.length(), if there is none.
+     */
+    public static int skipWhitespace(String str, int pos) {
+        while (pos < str.length()) {
+            int c = UTF16.charAt(str, pos);
+            if (!UCharacter.isWhitespace(c)) {
+                break;
+            }
+            pos += UTF16.getCharCount(c);
+        }
+        return pos;
+    }
+
+    /**
+     * Parse a pattern string starting at offset pos.  Keywords are
+     * matched case-insensitively.  Spaces may be skipped and may be
+     * optional or required.  Integer values may be parsed, and if
+     * they are, they will be returned in the given array.  If
+     * successful, the offset of the next non-space character is
+     * returned.  On failure, -1 is returned.
+     * @param pattern must only contain lowercase characters, which
+     * will match their uppercase equivalents as well.  A space
+     * character matches one or more required spaces.  A '~' character
+     * matches zero or more optional spaces.  A '#' character matches
+     * an integer and stores it in parsedInts, which the caller must
+     * ensure has enough capacity.
+     * @param parsedInts array to receive parsed integers.  Caller
+     * must ensure that parsedInts.length is >= the number of '#'
+     * signs in 'pattern'.
+     * @return the position after the last character parsed, or -1 if
+     * the parse failed
+     */
+    public static int parsePattern(String rule, int pos, int limit,
+                                   String pattern, int[] parsedInts) {
+        // TODO Update this to handle surrogates
+        int[] p = new int[1];
+        int intCount = 0; // number of integers parsed
+        for (int i=0; i<pattern.length(); ++i) {
+            char cpat = pattern.charAt(i);
+            char c;
+            switch (cpat) {
+            case ' ':
+                if (pos >= limit) {
+                    return -1;
+                }
+                c = rule.charAt(pos++);
+                if (!UCharacter.isWhitespace(c)) {
+                    return -1;
+                }
+                // FALL THROUGH to skipWhitespace
+            case '~':
+                pos = skipWhitespace(rule, pos);
+                break;
+            case '#':
+                p[0] = pos;
+                parsedInts[intCount++] = parseInteger(rule, p, limit);
+                if (p[0] == pos) {
+                    // Syntax error; failed to parse integer
+                    return -1;
+                }
+                pos = p[0];
+                break;
+            default:
+                if (pos >= limit) {
+                    return -1;
+                }
+                c = (char) UCharacter.toLowerCase(rule.charAt(pos++));
+                if (c != cpat) {
+                    return -1;
+                }
+                break;
+            }
+        }
+        return pos;
+    }
+
+    /**
+     * Parse an integer at pos, either of the form \d+ or of the form
+     * 0x[0-9A-Fa-f]+ or 0[0-7]+, that is, in standard decimal, hex,
+     * or octal format.
+     * @param pos INPUT-OUTPUT parameter.  On input, the first
+     * character to parse.  On output, the character after the last
+     * parsed character.
+     */
+    public static int parseInteger(String rule, int[] pos, int limit) {
+        int count = 0;
+        int value = 0;
+        int p = pos[0];
+        int radix = 10;
+
+        if (rule.regionMatches(true, p, "0x", 0, 2)) {
+            p += 2;
+            radix = 16;
+        } else if (p < limit && rule.charAt(p) == '0') {
+            p++;
+            count = 1;
+            radix = 8;
+        }
+
+        while (p < limit) {
+            int d = UCharacter.digit(rule.charAt(p++), radix);
+            if (d < 0) {
+                --p;
+                break;
+            }
+            ++count;
+            int v = (value * radix) + d;
+            if (v <= value) {
+                // If there are too many input digits, at some point
+                // the value will go negative, e.g., if we have seen
+                // "0x8000000" already and there is another '0', when
+                // we parse the next 0 the value will go negative.
+                return 0;
+            }
+            value = v;
+        }
+        if (count > 0) {
+            pos[0] = p;
+        }
+        return value;
+    }
+
+    /**
+     * Trim whitespace from ends of a StringBuffer.
+     */
+    public static StringBuffer trim(StringBuffer b) {
+        // TODO update to handle surrogates
+        int i;
+        for (i=0; i<b.length() && Character.isWhitespace(b.charAt(i)); ++i) {}
+        b.delete(0, i);
+        for (i=b.length()-1; i>=0 && Character.isWhitespace(b.charAt(i)); --i) {}
+        return b.delete(i+1, b.length());
     }
 }
