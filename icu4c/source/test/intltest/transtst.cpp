@@ -15,6 +15,13 @@
 #include "unicode/cpdtrans.h"
 #include "unicode/dtfmtsym.h"
 
+// Define character constants thusly to be EBCDIC-friendly
+
+#define LEFT_BRACE ((UChar)0x007B) /*{*/
+#define PIPE       ((UChar)0x007C) /*|*/
+#define ZERO       ((UChar)0x0030) /*0*/
+#define UPPER_A    ((UChar)0x0041) /*A*/
+
 #define CASE(id,test) case id:                          \
                           name = #test;                 \
                           if (exec) {                   \
@@ -323,9 +330,9 @@ void TransliteratorTest::keyboardAux(const Transliterator& t,
         s.extractBetween(index.start, index.cursor, b);
         s.extractBetween(index.cursor, s.length(), c);
         log.append(a).
-            append('{').
+            append(LEFT_BRACE).
             append(b).
-            append('|').
+            append(PIPE).
             append(c);
         if (s == DATA[i+1] && U_SUCCESS(status)) {
             logln(log);
@@ -421,7 +428,7 @@ class TestFilter : public UnicodeFilter {
         return new TestFilter(*this);
     }
     virtual bool_t contains(UChar c) const {
-        return c != (UChar)'c';
+        return c != (UChar)0x0063 /*c*/;
     }
 };
 
@@ -596,7 +603,7 @@ void TransliteratorTest::expect(const Transliterator& t,
         UnicodeString left, right;
         rsource.extractBetween(0, index.cursor, left);
         rsource.extractBetween(index.cursor, rsource.length(), right);
-        log.append(left).append((UChar)'|').append(right);
+        log.append(left).append(PIPE).append(right);
     }
     
     // As a final step in keyboard transliteration, we must call
@@ -631,10 +638,11 @@ void TransliteratorTest::expectAux(const UnicodeString& tag,
     }
 }
 
-static UChar toHexString(int32_t i) { return i + (i < 10 ? '0' : ('A' - 10)); }
+static UChar toHexString(int32_t i) { return i + (i < 10 ? ZERO : (UPPER_A - 10)); }
 
 UnicodeString
 TransliteratorTest::escape(const UnicodeString& s) {
+    // Hmm...this only works for ASCII, I think...
     UnicodeString buf;
     for (int32_t i=0; i<s.length(); ++i)
     {
