@@ -225,9 +225,7 @@ public:
      * This method is to implement a simple version of RTTI, since not all
      * C++ compilers support genuine RTTI.  Polymorphic operator==() and
      * clone() methods call this method.
-     * <P>
      * Concrete subclasses of Format must implement getDynamicClassID()
-     * and also a static method and data member:
      *
      * @return          The class ID for this object. All objects of a
      *                  given class have the same class ID.  Objects of
