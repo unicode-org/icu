@@ -1,3 +1,9 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 2004, International Business Machines Corporation and         *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ */
 package com.ibm.icu.impl;
 
 import java.io.BufferedInputStream;
