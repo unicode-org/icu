@@ -296,7 +296,9 @@ Locale& Locale::init(const char* localeID)
     int k,l;
     UErrorCode err = U_ZERO_ERROR;
 
-    if (localeID == NULL) localeID = uloc_getDefault();
+    if (localeID == NULL)
+        localeID = uloc_getDefault();
+
     l = uloc_getLanguage(localeID, 
         this->language,
         ULOC_LANG_CAPACITY,
@@ -315,7 +317,9 @@ Locale& Locale::init(const char* localeID)
     {
         this->fullName = new char[j+1];
     }
-    else this->fullName = this->fullNameBuffer;
+    else {
+        this->fullName = this->fullNameBuffer;
+    }
 
     uprv_strcpy(this->fullName, localeID);
 
@@ -323,29 +327,33 @@ Locale& Locale::init(const char* localeID)
     -point to the zero terminator of fullName if there is none
     -point to the first character of the variant if ther is one
     */
-    if (k > 1)  
+    if (k > 1)
     {
-        if (this->fullName[l] == '\0') this->variant = this->fullName + l;
+        if (this->fullName[l] == '\0')
+        {
+            this->variant = this->fullName + l;
+        }
         else
-	{
-	  int32_t varLength;
-	  UErrorCode intErr = U_ZERO_ERROR;
-	  varLength = uloc_getVariant(this->fullName, NULL, 0,  &intErr);
-	  
-	  if(U_FAILURE(intErr) && (intErr != U_BUFFER_OVERFLOW_ERROR))
-          {
-	    this->variant = (char*)u_errorName(intErr);
-          } else if(varLength <= 0)
-	  {   /* bail  - point at teh null*/
-	    //	    this->variant = this->fullName + j;
-	    this->variant = "Len<=0";
-	  }
-	  else
-	  {
-	    /* variant is at the end. We just don't know where exactly it might be. */
-	    this->variant = this->fullName + j - varLength + 1 ;
-	  }
-	}
+        {
+            int32_t varLength;
+            UErrorCode intErr = U_ZERO_ERROR;
+            varLength = uloc_getVariant(this->fullName, NULL, 0,  &intErr);
+
+            if(U_FAILURE(intErr) && (intErr != U_BUFFER_OVERFLOW_ERROR))
+            {
+                this->variant = (char*)u_errorName(intErr);
+            }
+            else if(varLength <= 0)
+            {   /* bail  - point at the null*/
+                // this->variant = this->fullName + j;
+                this->variant = "Len<=0";
+            }
+            else
+            {
+                /* variant is at the end. We just don't know where exactly it might be. */
+                this->variant = this->fullName + j - varLength + 1 ;
+            }
+        }
     }
     else
         this->variant = this->fullName + l - 1;
@@ -355,48 +363,51 @@ Locale& Locale::init(const char* localeID)
 
 Locale& Locale::operator=(const Locale& other)
 {
-  uprv_strcpy(language, other.language);
-  uprv_strcpy(country, other.country);
-  if (other.fullName == other.fullNameBuffer)    fullName = fullNameBuffer;
-  else 
-  {
+    uprv_strcpy(language, other.language);
+    uprv_strcpy(country, other.country);
+    if (other.fullName == other.fullNameBuffer)
+    {
+        fullName = fullNameBuffer;
+    }
+    else 
+    {
     /*In case the assigner has some of its data on the heap
-     * we need to do the same*/
-    if (fullName != fullNameBuffer) delete []fullName;
-    fullName = new char[(uprv_strlen(other.fullName)+1)];
-  }
-  uprv_strcpy(fullName, other.fullName);
-  /*Make the variant point to the same offset as the assigner*/
-  variant = fullName + (other.variant - other.fullName) ;
+        * we need to do the same*/
+        if (fullName != fullNameBuffer) delete []fullName;
+        fullName = new char[(uprv_strlen(other.fullName)+1)];
+    }
+    uprv_strcpy(fullName, other.fullName);
+    /*Make the variant point to the same offset as the assigner*/
+    variant = fullName + (other.variant - other.fullName) ;
 
-  return *this;
+    return *this;
 }
 
 int32_t
 Locale::hashCode() const 
 {
-  UnicodeString fullNameUString(language, "");
-  return fullNameUString.append(UnicodeString(country, "")).append(UnicodeString(variant, "")).hashCode();
+    UnicodeString fullNameUString(language, "");
+    return fullNameUString.append(UnicodeString(country, "")).append(UnicodeString(variant, "")).hashCode();
 }
 
 
 Locale&
 Locale::getDefault() 
 {
-  return fgDefaultLocale;
+    return fgDefaultLocale;
 }
 
 
 void locale_set_default_internal(const char *id)
 {
-  Locale::getDefault().init(id);
+    Locale::getDefault().init(id);
 }
 
 /* sfb 07/21/99 */
 U_CFUNC void
 locale_set_default(const char *id)
 {
-  locale_set_default_internal(id);
+    locale_set_default_internal(id);
 }
 /* end */
 
@@ -409,7 +420,7 @@ Locale::setDefault( const   Locale&     newLocale,
         return;
 
     uloc_setDefault(newLocale.fullName, &status);
-    
+
     fgDefaultLocale = newLocale;
 }
 
