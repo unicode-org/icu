@@ -64,18 +64,6 @@ ArabicShaping::ShapeType ArabicShaping::getShapeType(LEUnicode c)
     return ST_NOSHAPE_NONE;
 }
 
-#if 0
-const LETag GlyphShaper::isolFeatureTag = LE_MAKE_TAG('i', 's', 'o', 'l');
-const LETag GlyphShaper::initFeatureTag = LE_MAKE_TAG('i', 'n', 'i', 't');
-const LETag GlyphShaper::mediFeatureTag = LE_MAKE_TAG('m', 'e', 'd', 'i');
-const LETag GlyphShaper::finaFeatureTag = LE_MAKE_TAG('f', 'i', 'n', 'a');
-const LETag GlyphShaper::ligaFeatureTag = LE_MAKE_TAG('l', 'i', 'g', 'a');
-const LETag GlyphShaper::msetFeatureTag = LE_MAKE_TAG('m', 's', 'e', 't');
-const LETag GlyphShaper::markFeatureTag = LE_MAKE_TAG('m', 'a', 'r', 'k');
-
-const LETag GlyphShaper::emptyTag        = 0x00000000; // ''
-#else
-
 const LETag isolFeatureTag = LE_MAKE_TAG('i', 's', 'o', 'l');
 const LETag initFeatureTag = LE_MAKE_TAG('i', 'n', 'i', 't');
 const LETag mediFeatureTag = LE_MAKE_TAG('m', 'e', 'd', 'i');
@@ -83,10 +71,6 @@ const LETag finaFeatureTag = LE_MAKE_TAG('f', 'i', 'n', 'a');
 const LETag ligaFeatureTag = LE_MAKE_TAG('l', 'i', 'g', 'a');
 const LETag msetFeatureTag = LE_MAKE_TAG('m', 's', 'e', 't');
 const LETag markFeatureTag = LE_MAKE_TAG('m', 'a', 'r', 'k');
-
-const LETag emptyTag        = 0x00000000; // ''
-#endif
-
 const LETag ccmpFeatureTag = LE_MAKE_TAG('c', 'c', 'm', 'p');
 const LETag rligFeatureTag = LE_MAKE_TAG('r', 'l', 'i', 'g');
 const LETag caltFeatureTag = LE_MAKE_TAG('c', 'a', 'l', 't');
@@ -96,6 +80,7 @@ const LETag cursFeatureTag = LE_MAKE_TAG('c', 'u', 'r', 's');
 const LETag kernFeatureTag = LE_MAKE_TAG('k', 'e', 'r', 'n');
 const LETag mkmkFeatureTag = LE_MAKE_TAG('m', 'k', 'm', 'k');
 
+const LETag emptyTag       = 0x00000000; // ''
 
 const LETag featureOrder[] = 
 {

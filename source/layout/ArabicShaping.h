@@ -80,18 +80,6 @@ public:
 private:
     const LETag **charTags;
 
-#if 0
-    static const LETag isolFeatureTag; // 'isol'
-    static const LETag initFeatureTag; // 'init'
-    static const LETag mediFeatureTag; // 'medi'
-    static const LETag finaFeatureTag; // 'fina'
-    static const LETag ligaFeatureTag; // 'liga'
-    static const LETag msetFeatureTag; // 'mset'
-    static const LETag markFeatureTag; // 'mark'
-
-    static const LETag emptyTag;
-#endif
-
     static const LETag tagArray[];
 
     GlyphShaper(const GlyphShaper &other); // forbid copying of this class

@@ -92,6 +92,9 @@ public:
 
     ~ParagraphLayout();
 
+    // Note: the following is #if 0'd out because there's no good
+    // way to implement it without either calling layoutEngineFactory()
+    // or duplicating the logic there...
 #if 0
     /**
      * Examine the given styled paragraph and determine if it contains any text which
@@ -102,17 +105,11 @@ public:
      *
      * @param count is the number of characters in the paragraph.
      *
-     * @param fonts is an array of the <code>LEFontInstance</code> objects associated
-     *        with each font run.
-     *
-     * @param fontRunLimits is an array of the run limits of each font run.
-     *
-     * @param fontRunCount is the number of font runs.
+     * @param fontRuns is a pointer to a <code>FontRuns</code> object representing the font runs.
      *
      * @return <code>true</code> if the paragraph contains complex text.
      */
-    static le_bool isComplex(const LEUnicode chars[], le_int32 count,
-                      const LEFontInstance *fonts[], const le_int32 fontRunLimits[], le_int32 fontRunCount);
+    static le_bool isComplex(const LEUnicode chars[], le_int32 count, const FontRuns *fontRuns);
 #else
     /**
      * Examine the given text and determine if it contains characters in any
