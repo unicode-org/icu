@@ -1,0 +1,276 @@
+<html>
+
+<head>
+<title>ICU - Formats and API for Binary Data Files</title>
+</head>
+
+<body>
+
+<h1>ICU - Formats and API for Binary Data Files</h1>
+
+<h2>Finding ICU data</h2>
+
+<p>ICU data, when stored in files, is loaded from the file system
+directory that is returned by <code>u_getDataDirectory()</code>.
+That directory is determined sequentially by
+<ul>
+    <li><code>getenv("ICU_DATA")</code> -
+        the contents of the ICU_DATA environment variable</li>
+    <li>on Windows, by the value named <code>"Path"</code> of the registry key
+        <code>HKEY_LOCAL_MACHINE "SOFTWARE\\ICU\\Unicode\\Data"</code></li>
+    <li>relative to the path where <code>icuuc.dll</code> or <code>libicu-uc.so</code> or similar
+        is loaded from: if it is loaded from <code>/some/path/lib/libicu-uc.so</code>, then
+        the path will be <code>/some/path/lib/../share/icu/1.3.1/</code>
+        where <code>"1.3.1"</code> is an example for the version of the ICU library that
+        is trying to locate the data directory;<br>
+        on Windows, if <code>icuuc.dll</code> is in <code>d:\some\path</code>, then
+        the path will be <code>d:\some\path\..\..\data\</code>.</li>
+    <li>relative to the path where <code>icuuc.dll</code> or <code>libicu-uc.so</code> or similar
+        is found by searching the <code>PATH</code> or <code>LIBPATH</code>
+        as appropriate; the relative path is determined as above</li>
+    <li>hardcoded to <code>(system drive)/share/icu/1.3.1/</code>;
+        on Windows, it will effectively be <code>(system drive)\data\</code>,
+        where <code>(system drive)</code> is empty or a path to the system drive, like
+        <code>"D:\"</code> on Windows or OS/2</li>
+</ul></p>
+
+
+<h2>Common data, single files, extensibility, and search sequence</h2>
+
+<p>ICU data consists of several hundred pieces of data like converter mapping tables,
+locale resource bundles, break iterator and collation rules and dictionaries, and so on.
+During the build process, they are compiled into binary, memory-mappable files with
+a general structure conforming to the recommendations below.</p>
+
+<p>For performance and ease of installation, all of these elements are then typically
+combined into one single, common data file with a Table of Contents listing all of its elements.
+This data file can be in one of four formats:
+<ol>
+    <li>A binary, memory-mappable file with the same general structure and a Table
+        of Contents with offsets to the data elements that are copied into this
+        common file.</li>
+    <li>A shared library (DLL) that contains one entry point with exactly the same
+        structure as the above file.</li>
+    <li>A shared library (DLL) that contains one entry point to a small structure
+        with a Table of contents with pointers to the other data elements that have
+        been linked into the same library. The pointers are resolved by the linker
+        and/or loader. Each data element may or may not also be exported with its
+        own entry point.</li>
+    <li>A shared library (DLL) that contains an entry point per data element but
+        no explicit Table of Contents data structure. Instead, the list of entry
+        points with the system API to get an address for an entry point serves
+        implicitly as the Table of Contents mechanism.</li>
+</ol></p>
+
+<p>Data is loaded using the <code>udata</code> API functions
+by first looking in the common data file. If no common file is loaded
+yet, then it is loaded as a shared library, then as a memory-mappable file.
+This allows to add separate data files that get loaded if no data element with the same
+name is found in the common file. The entire process of finding and loading a data
+element on most platforms amounts to the following:
+<ol>
+    <li>Load or use the common data file as follows:</li>
+    <ol>
+        <li>Use previously loaded, cached common data. This may have been set by
+            <code>udata_setCommonData()</code>.</li>
+        <li>Attempt to load the common data from a shared library (DLL);
+            locate the shared library first in the folder
+            <code>u_getDataDirectory()</code>, then without a folder specification.</li>
+        <li>Attempt to load the common data by memory-mapping a common data file
+            with a Table of Contents structure;
+            locate the file first in the folder
+            <code>u_getDataDirectory()</code>, then without a folder specification.</li>
+    </ol>
+    <li>If there is a common data file, then try to find the data element in its
+        Table of Contents according to the format of the common file.</li>
+    <li>If the data is not found in the common data, then attempt to load it directly
+        by memory-mapping it as a separate file;
+        locate the file first in the folder
+        <code>u_getDataDirectory()</code>, then without a folder specification.</li>
+</ol>
+This process ends as soon as the data is found.</p>
+
+<p>If the data is not ICU's data itself, but application data like application-specific
+resource bundles, then the process is almost the same, except for
+<ul>
+    <li>The path is specified in the <code>udata_open()</code> or
+        <code>udata_openChoice()</code> call; for ICU data,
+        this path is specified to <code>NULL</code>, which is internally replaced by
+        <code>u_getDataDirectory()</code>.</li>
+    <li>Currently, non-ICU common data files are not cached.
+        There is a <a href="http://oss.software.ibm.com/developerworks/opensource/icu/bugs?findid=398">jitterbug</a>
+        open for this restriction.
+        This is a performance issue, not one of functionality.</li>
+</ul></p>
+
+<p>For more details, see <code>icu/source/common/udata.h</code>.
+Note that the exact data finding depends on the implementation
+of this API and may differ by platform.
+See also <code>icu/source/common/udata.c</code> for implementation details.</p>
+
+
+<h2>Setting the ICU data pointer</h2>
+
+<p>An application that uses ICU may choose to find and load the ICU data itself
+and provide the ICU library with a pointer to it. This may be useful in very
+restricted environments, when <code>getenv()</code>, <code>LIBPATH</code> and many
+system services may be unavailable. It also makes it possible for an application
+to have installation settings only for itself, without special installation
+for ICU, since ICU would then not rely on its own settings and capabilities.<br>
+The common data can be in any of the formats with explicit Table of Contents described above;
+a shared library without a Table of Contents (with only entry-point-based lookup)
+cannot be used.
+For details, see in <code>udata.h</code> the function <code>udata_setCommonData()</code>.</p>
+
+
+<h2>Porting the ICU data loading to more platforms - help wanted</h2>
+
+<p>The data loading as described above is complete for Windows (Win32) and
+a number of POSIX-style platforms. On platforms that do not support dynamic loading
+of shared libraries (DLLs), only memory-mapping is used.<br>
+Note that shared libraries can be easier to find because of the system support for them,
+while memory-mappable files are more portable.</p>
+
+<p>Where memory-mapping is not available, ICU uses simple file access with
+<code>fopen()</code> and <code>fread()</code> etc. instead, which is much less efficient:<br>
+Loading a shared library or memory-mapping a file typically results in
+shared, demand-paged, virtually memory, while simple file access results in
+reading the entire file into each ICU-using process's memory.</p>
+
+<p>Similarly, the fastest way to build a shared library (DLL) is to build the
+common, memory-mappable file and to turn it into a .obj (.o) file directly
+to feed it into the linker. This is currently only done on Windows.</p>
+
+<p>For best performance, ICU needs to have efficient mechanisms for finding
+and loading its and its applications' data. Right now, this means that <em>we are
+looking for more implementations of the platform-specific functions</em> to
+load shared libraries and to memory-map files. At build time, it is also desirable
+to build .o files directly from raw data on more platforms.</p>
+
+
+<h2>Binary Data File Formats</h2>
+
+<p>Data files for ICU and for applications loading their data with ICU,
+should have a memory-mappable format. This means that the data should be
+layed out in the file in an immediately useful way, so that the code that uses
+the data does not need to parse it or copy it to allocated memory and
+build additional structures (like Hashtables).
+Here are some points to consider:</p>
+
+<ul>
+    <li>The data memory starts at an offset within the data file
+        that is divisible by (at least) <code>sizeof(double)</code>
+        (the largest scalar data type)
+        if you use <code>unewdata.h/.c</code>
+        to write the data.
+        To be exact, <code>unewdata</code> writes the data 16-aligned,
+        and it is 16-aligned in memory-mapped files. However, the process
+        of building shared libraries (DLLs) on non-Windows platforms
+        forced us to insert a <code>double</code> before the
+        binary data to get any alignment, thus only 8-aligning
+        (<code>sizeof(double)==8</code> on most machines) the data.
+        This is not an issue if the data is loaded from memory-mapped files
+        directly instead of from shared libraries (DLLs).</li>
+    <li>Write explicitly sized values: explicitly 32 bits with an
+        <code>int32_t</code>, not using an ambiguous <code>int</code>.</li>
+    <li>Align all values according to their data type size:
+        Align 16-bit integers on even offsets, 32-bit integers on
+        offsets divisible by 4, etc.</li>
+    <li>Align structures according to their largest field.</li>
+    <li>When writing structures directly, avoid implicit
+        field padding/alignment: if a field may not be aligned
+        within the structure according to its size, then
+        insert additional (reserved) fields to explicitly
+        size-align that field.</li>
+    <li>Avoid floating point values if possible. Their size and structure
+        may differ among platforms.</li>
+    <li>Avoid boolean (<code>bool_t</code>, <code>bool</code>) values
+        and use explictly sized integer values instead
+        because the size of the boolean type may vary.<br>
+        Note: the new (ICU 1.5) type definition of <code>UBool</code> is
+        portable. It is always defined to be an <code>int8_t</code>.</li>
+    <li>Write offsets to sub-structures at the beginning of the data
+        so that those sub-structures can be accessed directly without
+        parsing the data that precedes them.</li>
+    <li>If data needs to be read linearly, then precede it with its length
+        rather than (or in addition to) terminating it with a sentinel value.</li>
+    <li>When writing <code>char[]</code> strings, write only "invariant"
+        characters - avoid anything that is not common among all ASCII-
+        or EBCDIC-based encodings. This avoids incompatibilities and
+        real, heavyweight codepage conversions.
+        Even on the same platform, the default encoding may not always
+        be the same one, and every "non-invariant" character
+        may change.<br>
+        (The term "invariant characters" is from
+        <a href="http://www.unicode.org/unicode/reports/tr16/">
+        Unicode Technical Report 16 (UTF-EBCDIC)</a>.)<br>
+        At runtime, "invariant character" strings are efficiently converted
+        into Unicode using <code>u_charsToUChars()</code>.</li>
+</ul>
+
+
+<h2>Platform-dependency of Binary Data Files</h2>
+
+<p>Data files with formats as described above should be portable among
+machines with the same set of relevant properties:</p>
+
+<ul>
+    <li>Byte ordering: If the data contains values other than byte arrays.<br>
+        Example: <code>uint16_t</code>, <code>int32_t</code>.</li>
+    <li>Character set family: Some data files contain <code>char[]</code>.
+        Such strings should contain only "invariant characters", but
+        are even so only portable among machines with the same character set
+        family, i.e., they must share for example the ASCII or EBCDIC
+        graphic characters.</li>
+    <li>Unicode Character size: Some data files contain <code>UChar[]</code>.
+        In principle, Unicode characters are stored using UTF-8, UTF-16, or UTF-32.
+        Thus, Unicode strings are directly compatible if the code unit size is the same.
+        ICU uses only UTF-16 at this point.</li>
+</ul>
+
+<p>All of these properties can be verified by checking the
+<code>UDataInfo</code> structure of the data, which is done
+best in a <code>UDataMemoryIsAcceptable()</code> function passed into
+the <code>udata_openChoice()</code> API function.</p>
+
+<p>If a data file is loaded on a machine with different relevant properties
+than the machine where the data file was generated, then the using
+code could adapt by detecting the differences and reformatting the
+data on the fly or in a copy in memory.
+This would improve portability of the data files but significantly
+decrease performance.</p>
+
+<p>"Relevant" properties are those that affect the portability of the
+data in the particular file.</p>
+
+<p>For example, a flat (memory-mapped) binary data file
+that contains 16-bit and 32-bit integers and is
+created for a typical, big-endian Unix machine, can be used
+on an OS/390 system or any other big-endian machine.<br>
+If the file also contains <code>char[]</code> strings,
+then it can be easily shared among all big-endian <em>and</em>
+ASCII-based machines, but not with (e.g.) an OS/390.<br>
+OS/390 and OS/400 systems, however, could easily share such
+a data file <em>created</em> on either of <em>these</em> systems.</p>
+
+<p>To make sure that the relevant platform properties of
+the data file and the loading machine match, the
+<code>udata_openChoice()</code> API function should be used with a
+<code>UDataMemoryIsAcceptable()</code> function that checks for
+these properties.</p>
+
+<p>Some data file loading mechanisms prevent using data files generated on
+a different platform to begin with, especially data files packaged as DLLs
+(shared libraries).</p>
+
+
+<h2>Writing a binary data file</h2>
+
+<p>This is a raw draft.</p>
+
+<p>... Use <code>icu/source/tools/toolutil/unewdata.h|.c</code> to write data files,
+can include a copyright statement or other comment...See <code>icu/source/tools/gennames</code>...</p>
+
+</body>
+
+</html>
