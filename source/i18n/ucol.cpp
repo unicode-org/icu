@@ -319,27 +319,157 @@ ucol_openVersion(const char *loc,
 }
 
 int32_t ucol_getState(const UCollator *coll, UColStateEnum contents, 
-                      uint8_t *buffer, const int32_t buflen, 
+                      uint8_t *buffer, int32_t buflen, 
                       UErrorCode *status) {
+  int32_t len = 0;
+  int32_t size = 0;
+
+  UStateStruct *state = NULL;
+  UColStateStruct *colState = NULL;
+
   if(U_FAILURE(*status) || coll == NULL) {
     return -1;
   }
-  *status = U_UNSUPPORTED_ERROR;
-  return 0;
+
+  /* if there is no buffer, we'll preflight */
+  if(buffer == NULL) {
+    buflen = 0;
+  }
+
+  /* Main state structure */
+  size += sizeof(UStateStruct);
+  if(size < buflen) {
+    state = (UStateStruct *)buffer;
+    uprv_memset(state, 0, sizeof(UStateStruct));
+    state->sizeLo = (sizeof(UStateStruct)&0xFF);
+    state->sizeHi = ((sizeof(UStateStruct)>>8)&0xFF);
+
+    state->isBigEndian = U_IS_BIG_ENDIAN;
+    state->charsetFamily = U_CHARSET_FAMILY;
+
+    state->type = U_COLLATOR_STATE;
+
+    u_getVersion(state->icuVersion);
+  }
+
+  /* Collation state structure */
+  size += sizeof(UColStateStruct);
+  if(size < buflen) {
+    colState = (UColStateStruct *)(buffer+sizeof(UStateStruct));
+    uprv_memset(colState, 0, sizeof(UColStateStruct));
+    colState->sizeLo = sizeof(UColStateStruct)&0xFF;
+    colState->sizeHi = (sizeof(UColStateStruct)>>8)&0xFF;;
+    colState->containsTailoring = FALSE;
+    colState->containsUCA = FALSE;
+    ucol_getVersion(coll, colState->versionInfo);
+
+    colState->charsetName[0] = 0; // Not currently used
+
+    if(coll->rb != NULL) {
+      UResourceBundle *cr = ures_getByKey(coll->rb,"CollationElements",0,status);
+      uprv_strcpy((char *)colState->locale, ures_getLocale(cr, status));
+      ures_close(cr);
+    } else {
+      colState->locale[0] = 0; // This one is rule - based - possibly we need to issue a warning here!
+    }
+
+    uint32_t variableTopValue = coll->variableTopValue;
+    colState->alternateHandling = (uint32_t)coll->alternateHandling; 
+    colState->frenchCollation = (uint32_t)coll->frenchCollation;
+    colState->caseFirst = (uint32_t)coll->caseFirst;         
+    colState->caseLevel = (uint32_t)coll->caseLevel;         
+    colState->normalizationMode = (uint32_t)coll->normalizationMode; 
+    colState->strength = (uint32_t)coll->strength;
+  }
+
+  if(contents > UCOL_JUST_STATE) {
+    uint8_t *frozenCollator = ucol_cloneRuleData(coll, &len, status); 
+    if(size+len < buflen) {
+      colState->containsTailoring = TRUE;
+      uprv_memcpy(buffer+size, frozenCollator, len);
+    }
+    size += len;
+    uprv_free(frozenCollator);
+    if(contents == UCOL_INCLUDE_TAILORING_AND_UCA) {
+      frozenCollator = ucol_cloneRuleData(UCA, &len, status);
+      if(size+len < buflen) {
+        colState->containsUCA = TRUE;
+        uprv_memcpy(buffer+size, frozenCollator, len);
+      }
+      size += len;
+      uprv_free(frozenCollator);
+    }
+  }
+  if(size > buflen && buflen > 0 && U_SUCCESS(*status)) { 
+    /* want to signify that the buffer passed was smaller than needed */
+    *status = U_MEMORY_ALLOCATION_ERROR;
+  }
+  return size;
 }
 
 void ucol_checkState (const uint8_t *state, UErrorCode *status) {
+  uint32_t i = 0;
   if(U_FAILURE(*status) || state == NULL) {
     return;
+  }  
+  
+  UStateStruct *baseState = (UStateStruct *)state;
+
+  if(baseState->type != U_COLLATOR_STATE) {
+    *status = U_RESOURCE_TYPE_MISMATCH;
   }
-  *status = U_UNSUPPORTED_ERROR;
+
+  if(baseState->isBigEndian != U_IS_BIG_ENDIAN ||
+    baseState->charsetFamily != U_CHARSET_FAMILY) {
+    *status = U_UNSUPPORTED_ERROR;
+  }
+
+  UVersionInfo currentICU;
+  u_getVersion(currentICU);
+
+  if(memcmp(currentICU, baseState->icuVersion, sizeof(uint8_t)*4)) {
+    // We have the same version of ICU.
+    // Now, we need to check if we have the locale.
+    UColStateStruct *colState = (UColStateStruct *)(state+(((baseState->sizeHi)<<8) | baseState->sizeLo));
+    return;
+  } else { /* this is real fun here - decide what kind of fluff we need */
+
+  }
 }
 
 UCollator *ucol_openState(const uint8_t *state, UErrorCode *status) {
   if(U_FAILURE(*status) || state == NULL) {
     return NULL;
   }
-  *status = U_UNSUPPORTED_ERROR;
+  ucol_checkState(state, status);
+  UCollator *result = NULL;
+  UStateStruct *baseState = (UStateStruct *)state;
+  UColStateStruct *collState = (UColStateStruct *)(state + sizeof(UStateStruct));
+  // The code below assumes that the data is of correct endianess and charset.
+  // It has to be done after check state, if needed.
+  if(*status == U_ZERO_ERROR) { /* just init this collator and set the params */
+    if(*(collState->locale) != 0) {
+      result = ucol_open((char *)collState->locale, status);
+      if(U_SUCCESS(*status)) {
+        /* set the attributes and return */
+        ucol_restoreVariableTop(result, collState->variableTopValue, status);
+        ucol_setAttribute(result, UCOL_ALTERNATE_HANDLING, (UColAttributeValue)collState->alternateHandling, status);
+        ucol_setAttribute(result, UCOL_CASE_FIRST, (UColAttributeValue)collState->caseFirst, status);
+        ucol_setAttribute(result, UCOL_CASE_LEVEL, (UColAttributeValue)collState->caseLevel, status);
+        ucol_setAttribute(result, UCOL_FRENCH_COLLATION, (UColAttributeValue)collState->frenchCollation, status);
+        ucol_setAttribute(result, UCOL_NORMALIZATION_MODE, (UColAttributeValue)collState->normalizationMode, status);
+        ucol_setAttribute(result, UCOL_STRENGTH, (UColAttributeValue)collState->strength, status);
+        return result;
+      }
+    } else { // This can be done only if the tailoring is present...
+      // If the tailoring is absent, checkState will signal an error
+      // Unsupported for the moment
+      *status = U_UNSUPPORTED_ERROR;
+    }
+  } else if(U_SUCCESS(*status)) { /* do the fluffing */
+    *status = U_UNSUPPORTED_ERROR;
+  } 
+  // If we gotten so far, nothing will help us
   return NULL;
 }
 
@@ -467,7 +597,7 @@ ucol_openRules(    const    UChar                  *rules,
 /* This one is currently used by genrb & tests. After constructing from rules (tailoring),*/
 /* you should be able to get the binary chunk to write out...  Doesn't look very full now */
 U_CAPI uint8_t *
-ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status)
+ucol_cloneRuleData(const UCollator *coll, int32_t *length, UErrorCode *status)
 {
   uint8_t *result = NULL;
   if(U_FAILURE(*status)) {
