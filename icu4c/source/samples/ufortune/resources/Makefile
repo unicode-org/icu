@@ -38,7 +38,7 @@ RESTARGET=lib$(RESNAME).$(SO)
 
 # Resource files.  Add new ones for additional locales here.
 # keep in sync with the file RESLIST
-RESFILES=root.res es.res
+RESFILES=$(RESNAME)_root.res $(RESNAME)_es.res
 
 # list of resource bundles  - keep in sync with RESFILES
 RESLIST=res-file-list.txt
@@ -48,3 +48,7 @@ include ../../rules.mk
 
 # for installing the library
 install: res-install
+
+$(RESNAME)_es.res: es.txt
+	@echo "generating $@"
+	$(GENRB) $(GENRBOPT) -e latin-1 $^
