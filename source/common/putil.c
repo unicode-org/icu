@@ -1434,7 +1434,7 @@ mac_lc_rec mac_lc_recs[] = {
 
 #endif
 
-#if U_POSIX_LOCALE
+#if U_POSIX_LOCALE || defined(OS400)
 /* Return just the POSIX id, whatever happens to be in it */
 static const char *uprv_getPOSIXID()
 {
@@ -1444,11 +1444,14 @@ static const char *uprv_getPOSIXID()
   if (posixID == 0)
     posixID = setlocale(LC_ALL, NULL);
 
-  if ( (posixID==0) || 
-       (uprv_strcmp("C", posixID) == 0) ||
-       (uprv_strncmp("C ", posixID, 2) == 0) )
-  {  /* HPUX returns 'C C C C C C C' */
+  if (posixID==0)
+  {
     posixID = "en_US";
+  }
+  else if ((uprv_strcmp("C", posixID) == 0) ||
+           (uprv_strncmp("C ", posixID, 2) == 0))
+  {  /* HPUX returns 'C C C C C C C' */
+    posixID = "en_US_POSIX";
   }
   return posixID;
 }
