@@ -15,8 +15,8 @@
 ******************************************************************************
 */
 
-#ifndef _USSCANF_H
-#define _USSCANF_H
+#ifndef USSCANF_H
+#define USSCANF_H
 
 #include "unicode/utypes.h"
 
@@ -36,27 +36,8 @@ struct u_localized_string {
 };
 typedef struct u_localized_string u_localized_string;
 
-/**
- * A u_scanf handler function.  
- * A u_scanf handler is responsible for handling a single u_scanf 
- * format specification, for example 'd' or 's'.
- * @param stream The UFILE to which to write output.
- * @param info A pointer to a <TT>u_scanf_spec_info</TT> struct containing
- * information on the format specification.
- * @param args A pointer to the argument data
- * @param fmt A pointer to the first character in the format string
- * following the spec.
- * @param consumed On output, set to the number of characters consumed
- * in <TT>fmt</TT>.
- * @return The number of arguments converted and assigned, or -1 if an
- * error occurred.
- */
-typedef int32_t (*u_sscanf_handler) (u_localized_string    *input,
-                   const u_scanf_spec_info     *info,
-                   ufmt_args  *args,
-                   const UChar            *fmt,
-                   int32_t            *consumed);
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif
+
