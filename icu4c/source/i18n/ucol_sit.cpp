@@ -139,7 +139,7 @@ static const AttributeConversion conversions[12] = {
 
 static char 
 ucol_sit_attributeValueToLetter(UColAttributeValue value, UErrorCode *status) {
-    int32_t i = 0;
+    uint32_t i = 0;
     for(i = 0; i < sizeof(conversions)/sizeof(conversions[0]); i++) {
         if(conversions[i].value == value) {
             return conversions[i].letter;
@@ -151,7 +151,7 @@ ucol_sit_attributeValueToLetter(UColAttributeValue value, UErrorCode *status) {
 
 static UColAttributeValue 
 ucol_sit_letterToAttributeValue(char letter, UErrorCode *status) {
-    int32_t i = 0;
+    uint32_t i = 0;
     for(i = 0; i < sizeof(conversions)/sizeof(conversions[0]); i++) {
         if(conversions[i].letter == letter) {
             return conversions[i].value;
@@ -612,7 +612,7 @@ static uint32_t ucol_sit_putLocaleInIdentifier(uint32_t result, const char* loca
         baseName[internalBufferSize], localeBuffer[internalBufferSize];
     int32_t len = 0, keywordLen = 0,
         baseNameLen = 0, localeLen = 0;
-    int32_t i = 0;
+    uint32_t i = 0;
     UBool isAvailable = FALSE;
     if(locale) {
         len = uloc_canonicalize(locale, buffer, internalBufferSize, status);
@@ -669,7 +669,7 @@ ucol_collatorToIdentifier(const UCollator *coll,
                           UErrorCode *status) 
 {
     uint32_t result = 0;
-    int32_t i = 0, j = 0;
+    uint32_t i = 0, j = 0;
     UColAttributeValue attrValue = UCOL_DEFAULT;
 
     // if variable top is not default, we need to use strings
@@ -700,7 +700,7 @@ ucol_openFromIdentifier(uint32_t identifier,
                         UBool forceDefaults,
                         UErrorCode *status) 
 {
-    int32_t i = 0;
+    uint32_t i = 0;
     int32_t value = 0, keyword = 0;
     char locale[internalBufferSize];
 
@@ -791,7 +791,7 @@ ucol_shortStringToIdentifier(const char *definition,
     UParseError parseError;
     CollatorSpec s;
     uint32_t result = 0;
-    int32_t i = 0, j = 0;
+    uint32_t i = 0, j = 0;
     ucol_sit_initCollatorSpecs(&s);
 
     ucol_sit_readSpecs(&s, definition, &parseError, status);
