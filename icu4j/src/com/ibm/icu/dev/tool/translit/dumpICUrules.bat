@@ -13,13 +13,12 @@ goto endofperl
 #line 14
 
 # This perl script creates ICU transliterator data files, that live
-# in icu/data, from ICU4J Java transliterator data files, in
+# in icu/data, from ICU4J UTF8 transliterator data files, in
 # icu4j/src/com/ibm/text/resources.
 #
 # The transformation that is done is very minimal.  The script assumes
-# that the Java input files use only // comments (no /**/ comments)
-# and that they follow a rigid format.  Leading or trailing '+' (but not both)
-# concatenation operators are stripped from each line.
+# that the input files use only # comments
+# and that they follow a rigid format.
 #
 # The output files are named according to ICU conventions (see NAME_MAP
 # below) and created in the current directory.  They should be manually
@@ -27,7 +26,7 @@ goto endofperl
 # then be initiated, and the standard suite of ICU transliterator tests
 # should be run after that.
 #
-# Alan Liu 5/19/00
+# Alan Liu 5/19/00 2/27/01
 
 if (scalar @ARGV != 1) {
     usage();
@@ -41,7 +40,7 @@ sub usage {
     my $me = $0;
     $me =~ s|.+[/\\]||;
     print "Usage: $me <dir>\n";
-    print " where <dir> contains the TransliteratorRule_*.java\n";
+    print " where <dir> contains the Transliterator_*.utf8.txt\n";
     print " files.\n";
     print "e.g., $me F:/icu4j/src/com/ibm/text/resources\n";
     die;
@@ -78,7 +77,7 @@ foreach (split(/\n/, $NAME_MAP)) {
 # Header blocks of text written at start of ICU output files
 $HEADER1 = <<END;
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2000, International Business Machines
+// Copyright (c) 1999-2001, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
@@ -91,10 +90,10 @@ $TOOL = $0;
 
 # Iterate over all Java RBT resource files.  Process those with a mapping to
 # an ICU name.
-foreach (<$DIR/TransliterationRule_*.java>) {
+foreach (<$DIR/Transliterator_*.utf8.txt>) {
     next if (/~$/);
     my $id;
-    if (m|TransliterationRule_(.+)\.java$|) {
+    if (m|Transliterator_(.+)\.utf8\.txt$|) {
         $id = $1;
     } else { die; }
     $id =~ s/_/-/g;
@@ -108,7 +107,7 @@ foreach (<$DIR/TransliterationRule_*.java>) {
 # Process one file
 # Param: ID, e.g. Fullwidth-Halfwidth
 # Param: Java input file name, e.g.
-#  f:/icu4j/src/com/ibm/text/resources/TransliterationRule_Fullwidth_Halfwidth.java
+#  f:/icu4j/src/com/ibm/text/resources/Transliterator_Fullwidth_Halfwidth.utf8.txt
 # Param: ICU output file name, e.g. fullhalf
 sub file {
     my $id = shift;
@@ -122,6 +121,12 @@ sub file {
 
     # Write output file header
     open(OUT, ">$OUT") or die;
+    binmode OUT; # Must do this so we can write our UTF8 marker
+    
+    # Write UTF8 marker
+    print OUT pack("C3", 0xEF, 0xBB, 0xBF);
+    print OUT " // -*- Coding: utf-8; -*-\n";
+
     print OUT $HEADER1;
     print OUT "// Tool: $TOOL\n// Source: $IN\n";
     print OUT "// Date: ", scalar localtime, "\n";
@@ -132,82 +137,44 @@ sub file {
     print OUT "$out {\n";
     print OUT "  Rule {\n";
 
-    # Open input file and skip over everything before "Rule" RB key
     open(IN, $IN) or die;
+    binmode IN; # IN is a UTF8 file
+
+    # Process each line by changing # comments to // comments
+    # and taking other text and enclosing it in double quotes
     while (<IN>) {
-        last if (/\"Rule\"/);
-    }
-
-    # Process each line by deleting leading or trailing '+' (but not both)
-    # and by normalizing leading space.
-
-    # Recognize these kinds of lines:
-    #  "9>\u0669;"+ // optional comment
-    #  +"9>\u0669;" // optional comment
-    #  // comment
-    #  + "Zh>$ZH;" + "Zh<$ZH}$lower;"
-    #  "'account of%'>\u2100",  -- this occurs in a String[] resource
-    while (<IN>) {
-        last if (/^\s*\}/); # Any line starting with '}' ends the rule set
-
-        # NOTE: We have to handle a rule like this:
-        #   "a", "b", "c",
-        # that fails to terminate statements with separators.
-
-        # Trim leading and trailing space
-        s|^\s+||;
-        s|\s+$||;
-
         my $raw = $_;
+        
+        # Clean the eol junk up
+        s/[\x0D\x0A]+$//;
 
         # Transform escaped characters
         hideEscapes();
-        
-        # Process double-quoted strings
-        my $q;
-        for (;;) {
-            if (s|^\s*,\s*||) { # Trim leading ','
-                # Add separator between comma-separated rules
-                # if it isn't there already:
-                # "a>b", "c>d" -> "a>b;" "c>d"
-                print STDERR "Error: Can't parse \"$raw\"" unless ($q);
-                $q =~ s|\"$|;\"| unless ($q =~ m|;\"$|);
-            } else {
-                s|^\s*\+\s*||; # Trim leading '+'
-            }
-            if (s|^(\".*?\")||) {
-                $q .= ' ' if ($q);
-                $q .= $1;
-            } else {
-                last;
-            }
-        }
 
-        if (s|^\s*,\s*||) { # Trim final ','
-            print STDERR "Error: Can't parse \"$raw\"" unless ($q);
-            $q =~ s|\"$|;\"| unless ($q =~ m|;\"$|);            
+        if (/^(\s*)(\#.*)$/) {
+            # Comment-only line
+            my ($white, $cmt) = ($1, $2);
+            $cmt =~ s|\#|//|;
+            $_ = $white . $cmt;
+
+        } elsif (/^(\s*)(\S.*?)(\s*)(\#.*)?$/) {
+            # Rule line with optional comment
+            my ($white1, $rule, $white2, $cmt) = ($1, $2, $3, $4);
+            $cmt =~ s|\#|//| if ($cmt);
+            $_ = $white1 . '"' . $rule . '"' . $white2 . $cmt;
+
+        } elsif (!/\S/) {
+            # Blank line -- leave as-is
+
         } else {
-            s|^\s*\+\s*||; # Trim final '+'
-        }
-
-        # Remove and save trailing // comment
-        my $cmt;
-        if (s|^\s*(//.*)$||) {
-            $cmt = ' ' if ($q);
-            $cmt .= $1;
+            # Unparseable line
+            print STDERR "Error: Can't parse line: $raw";
         }
         
-        if (/\S/) {
-            chomp($raw);
-            print STDERR "Error: left over \"$_\" in \"$raw\"\n";
-        }
-
-        $_ = "    " . $q . $cmt . "\n";
-
         # Restore escaped characters
         restoreEscapes();
 
-        print OUT;
+        print OUT $_, "\n";
     }
 
     # Finish up
