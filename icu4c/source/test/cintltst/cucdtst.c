@@ -1800,18 +1800,15 @@ TestUScriptRunAPI()
        {"((((((((((abc))))))))))", USCRIPT_LATIN}
     };
     
-    /*static const*/ int32_t nTest1Runs = sizeof testData1 / sizeof testData1[0];
-    /*static const*/ int32_t nTest2Runs = sizeof testData2 / sizeof testData2[0];
-    
-    /*static const*/ struct {
+    static const struct {
       const RunTestData *testData;
       int32_t nRuns;
     } testDataEntries[] = {
-        {testData1, nTest1Runs},
-        {testData2, nTest2Runs}
+        {testData1, LENGTHOF(testData1)},
+        {testData2, LENGTHOF(testData2)}
     };
     
-    static const int32_t nTestEntries = sizeof testDataEntries / sizeof testDataEntries[0];
+    static const int32_t nTestEntries = LENGTHOF(testDataEntries);
     int32_t testEntry;
     
     for (testEntry = 0; testEntry < nTestEntries; testEntry += 1) {
