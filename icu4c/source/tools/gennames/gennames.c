@@ -381,7 +381,7 @@ lineFn(void *context,
     /* check for non-character code points */
     if((code&0xfffe)==0xfffe || (uint32_t)(code-0xfdd0)<0x20) {
         fprintf(stderr, "gennames: error - properties for non-character code point U+%04lx\n",
-                code);
+                (unsigned long)code);
         *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
@@ -389,7 +389,7 @@ lineFn(void *context,
     /* check that the code points (code) are in ascending order */
     if(code<=prevCode && code>0) {
         fprintf(stderr, "gennames: error - UnicodeData entries out of order, U+%04lx after U+%04lx\n",
-                code, prevCode);
+                (unsigned long)code, (unsigned long)prevCode);
         *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
