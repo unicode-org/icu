@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Names.java,v $
-* $Date: 2001/12/03 19:29:35 $
-* $Revision: 1.8 $
+* $Date: 2001/12/05 02:41:23 $
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -264,7 +264,11 @@ final class UCD_Names implements UCD_Types {
     "OLD-ITALIC",
     "GOTHIC",
     "DESERET",
-    "INHERITED",
+    "INHERITED",    // nonspacing marks
+    "TAGALOG",
+    "HANUNOO",
+    "BUHID",
+    "TAGBANWA",
   };
 
 	public static final String[] ABB_SCRIPT = {
@@ -310,6 +314,10 @@ final class UCD_Names implements UCD_Types {
     "Goth",
     "Dsrt",
     "Qaai",
+    "Taga",
+    "Hanu",
+    "Buhi",
+    "Tagb",
   };
 
 
@@ -521,16 +529,16 @@ final class UCD_Names implements UCD_Types {
     };
 
     static {
-        if (LIMIT_CATEGORY != GC.length) {
+        if (LIMIT_CATEGORY != GC.length || LIMIT_CATEGORY != LONG_GC.length) {
             System.err.println("!! ERROR !! UnicodeTypes and UInfo out of sync: category");
         }
         if (LIMIT_BIDI_CLASS != BC.length) {
             System.err.println("!! ERROR !! UnicodeTypes and UInfo out of sync: bidi");
         }
-        if (LIMIT_LINE_BREAK != LB.length) {
+        if (LIMIT_LINE_BREAK != LB.length || LIMIT_LINE_BREAK != LONG_LB.length) {
             System.err.println("!! ERROR !! UnicodeTypes and UInfo out of sync: linebreak");
         }
-        if (LIMIT_DECOMPOSITION_TYPE != DT.length) {
+        if (LIMIT_DECOMPOSITION_TYPE != DT.length || LIMIT_DECOMPOSITION_TYPE != SHORT_DT.length) {
             System.err.println("!! ERROR !! UnicodeTypes and UInfo out of sync: compat type");
         }
         if (MIRRORED_LIMIT != MIRRORED_TABLE.length) {

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DerivedPropertyLister.java,v $
-* $Date: 2001/09/19 23:33:16 $
-* $Revision: 1.5 $
+* $Date: 2001/12/05 02:41:23 $
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -22,17 +22,19 @@ final class DerivedPropertyLister extends PropertyLister {
 
     static int enum = 0;
 
-    private int propMask;
-    private DerivedProperty dprop;
+    //private int propMask;
+    //private DerivedProperty dprop;
+    private UnicodeProperty uprop;
     int width;
     boolean varies;
 
     public DerivedPropertyLister(UCD ucd, int propMask, PrintWriter output) {
-        this.propMask = propMask;
+        //this.propMask = propMask;
         this.output = output;
         this.ucdData = ucd;
-        this.dprop = new DerivedProperty(ucd);
-        varies = dprop.propertyVaries(propMask);
+        // this.dprop = new DerivedProperty(ucd);
+        uprop = DerivedProperty.make(propMask, ucd);
+        varies = uprop.valueVaries();
 
         width = super.minPropertyWidth();
         switch (propMask) {
@@ -50,11 +52,12 @@ final class DerivedPropertyLister extends PropertyLister {
     }
     
     public String headerString() {
-        return dprop.getHeader(propMask);
+        return uprop.getHeader();
     }
 
     public String propertyName(int cp) {
-        return dprop.getProperty(cp, propMask);
+        if (uprop.valueVaries()) return uprop.getValue(cp, LONG);
+        return uprop.getProperty(LONG);
     }
 
     //public String optionalComment(int cp) {
@@ -87,11 +90,11 @@ final class DerivedPropertyLister extends PropertyLister {
     String last;
 
     public byte status(int cp) {
-        if (!ucdData.isAssigned(cp) && propMask != DerivedProperty.DefaultIgnorable) return EXCLUDE;
+        if (!uprop.hasUnassigned() && !ucdData.isAssigned(cp)) return EXCLUDE;
         if (!varies) {
-            return dprop.hasProperty(cp, propMask) ? INCLUDE : EXCLUDE;
+            return uprop.hasValue(cp) ? INCLUDE : EXCLUDE;
         }
-        String prop = dprop.getProperty(cp, propMask);
+        String prop = uprop.getValue(cp);
         if (prop.length() == 0) return EXCLUDE;
         if (prop.equals(last)) return INCLUDE;
         last = prop;

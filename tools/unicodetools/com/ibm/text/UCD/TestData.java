@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/TestData.java,v $
-* $Date: 2001/10/25 20:33:46 $
-* $Revision: 1.5 $
+* $Date: 2001/12/05 02:41:23 $
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -172,7 +172,7 @@ public class TestData implements UCD_Types {
         doHeader(fileName, output, headerChoice);
         for (int i = 0; i < 32; ++i) {
             if ((bitMask & (1<<i)) == 0) continue;
-            if (i >= DerivedProperty.LIMIT) break;
+            if (i >= DERIVED_PROPERTY_LIMIT) break;
             System.out.print('.');
             output.println("# ================================================");
             output.println();
@@ -251,11 +251,12 @@ public class TestData implements UCD_Types {
 
         PrintWriter output = Utility.openPrintWriter(file);
         doHeader(file, output, headerChoice);
-        UnifiedBinaryProperty ubp = new UnifiedBinaryProperty(ucd);
         
         int last = -1;
         for (int i = startEnum; i < endEnum; ++i) {
-            if (!ubp.isDefined(i)) continue;
+            UnicodeProperty up = UnifiedBinaryProperty.make(i, ucd);
+            if (up == null) continue;
+            
             if (i == DECOMPOSITION_TYPE || i == NUMERIC_TYPE
                 || i == (CATEGORY | UNUSED_CATEGORY)
                 || i == (BINARY_PROPERTIES | Non_break)

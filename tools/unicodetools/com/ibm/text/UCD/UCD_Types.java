@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Types.java,v $
-* $Date: 2001/12/03 19:29:34 $
-* $Revision: 1.5 $
+* $Date: 2001/12/05 02:41:23 $
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -315,7 +315,11 @@ public interface UCD_Types {
         GOTHIC_SCRIPT = 39,
         DESERET_SCRIPT = 40,
         INHERITED_SCRIPT = 41,
-        LIMIT_SCRIPT = 42;
+        TAGALOG_SCRIPT = 42, 
+        HANUNOO_SCRIPT = 43,
+        BUHID_SCRIPT = 44,
+        TAGBANWA_SCRIPT = 45,
+        LIMIT_SCRIPT = 46;
 
   static final int
     UNKNOWN = 0,
@@ -458,6 +462,6 @@ public static byte
         NFKD_Skippable = 43,
         NFKC_Skippable = 44,
 
-        LIMIT = 41;
+        DERIVED_PROPERTY_LIMIT = 41;
     
 }

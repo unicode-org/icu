@@ -5,41 +5,92 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UnifiedBinaryProperty.java,v $
-* $Date: 2001/10/25 20:37:09 $
-* $Revision: 1.1 $
+* $Date: 2001/12/05 02:41:22 $
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
 
 package com.ibm.text.UCD;
 import java.io.*;
+import java.util.*;
 
 import com.ibm.text.utility.*;
 
-final class UnifiedBinaryProperty implements UCD_Types {
-    UCD ucd;
-    DerivedProperty dp;
+final class UnifiedBinaryProperty extends UnicodeProperty {
+    int majorProp;
+    int propValue;
+    // DerivedProperty dp;
     
-    UnifiedBinaryProperty(UCD ucdin) {
+    public static UnicodeProperty make(int propMask, UCD ucd) {
+        if ((propMask & 0xFF00) == DERIVED) {
+            return DerivedProperty.make(propMask & 0xFF, ucd);
+        }
+        if (!isDefined(propMask, ucd)) return null;
+        return getCached(propMask, ucd);
+    }
+    
+    static Map cache = new HashMap();
+    static UCD lastUCD = null;
+    static int lastPropMask = -1;
+    static UnifiedBinaryProperty lastValue = null;
+    static Clump probeClump = new Clump();
+    
+    static class Clump {
+        int prop;
+        UCD ucd;
+        public boolean equals(Object other) {
+            Clump that = (Clump) other;
+            return (that.prop != prop || !ucd.equals(that));
+        }
+    }
+    
+    private static UnifiedBinaryProperty getCached(int propMask, UCD ucd) {
+        if (ucd.equals(lastUCD) && propMask == lastPropMask) return lastValue;
+        probeClump.prop = propMask;
+        probeClump.ucd = ucd;
+        UnifiedBinaryProperty dp = (UnifiedBinaryProperty) cache.get(probeClump);
+        if (dp == null) {
+            dp = new UnifiedBinaryProperty(propMask, ucd);
+            cache.put(probeClump, dp);
+            probeClump = new Clump();
+        }
+        lastUCD = ucd;
+        lastValue = dp;
+        lastPropMask = propMask;
+        return dp;
+    }
+    
+    /////////////////////////////////
+    
+    private UnifiedBinaryProperty(int propMask, UCD ucdin) {
         ucd = ucdin;
-        dp = new DerivedProperty(ucd);
+        majorProp = propMask >> 8;
+        propValue = propMask & 0xFF;
+        header = UCD_Names.UNIFIED_PROPERTIES[majorProp];
+        name = UCD_Names.ABB_UNIFIED_PROPERTIES[majorProp];
+        shortName = UCD_Names.SHORT_UNIFIED_PROPERTIES[majorProp];
+        valueName = _getValue(LONG);
+        shortValueName = _getValue(SHORT);
+        defaultValueStyle = _getDefaultStyle();
+        System.out.println("Value = " + getValue(defaultValueStyle));
+        // System.out.println(majorProp + ", " + propValue + ", " + name);
+        // dp = new DerivedProperty(ucd);
     }
     
-    public String getPropertyName(int propMask, byte style) {
-        if (style < LONG) return UCD_Names.ABB_UNIFIED_PROPERTIES[propMask>>8];
-        else return UCD_Names.SHORT_UNIFIED_PROPERTIES[propMask>>8];
-    }
-    
+    /*
     public boolean isTest(int propMask) {
         int enum = propMask >> 8;
         propMask &= 0xFF;
         if (enum != (DERIVED>>8)) return false;
-        return dp.isTest(propMask);
+        return DerivedProperty.make(propMask, ucd).isTest();
     }
+    */
     
     /**
      * @return unified property number
      */
+     /*
     public boolean isDefined(int propMask) {
         int enum = propMask >> 8;
         propMask &= 0xFF;
@@ -58,48 +109,85 @@ final class UnifiedBinaryProperty implements UCD_Types {
           case BINARY_PROPERTIES>>8: return propMask < LIMIT_BINARY_PROPERTIES;
           case SCRIPT>>8: return propMask != UNUSED_SCRIPT && propMask < LIMIT_SCRIPT;
           case AGE>>8: return propMask < LIMIT_AGE;
-          case DERIVED>>8: return dp.isDefined(propMask);
+          case DERIVED>>8: 
+            UnicodeProperty up = DerivedProperty.make(propMask, ucd);
+            return (up != null);
           default: return false;
         }
     }
-
-    public boolean get(int cp, int propMask) {
-        int enum = propMask >> 8;
-        propMask &= 0xFF;
-        switch (enum) {
-          case CATEGORY>>8: if (propMask >= LIMIT_CATEGORY) break;
-            return ucd.getCategory(cp) == propMask;
-          case COMBINING_CLASS>>8: if (propMask >= LIMIT_COMBINING_CLASS) break;
-            return ucd.getCombiningClass(cp) == propMask;
-          case BIDI_CLASS>>8: if (propMask >= LIMIT_BIDI_CLASS) break;
-            return ucd.getBidiClass(cp) == propMask;
-          case DECOMPOSITION_TYPE>>8: if (propMask >= LIMIT_DECOMPOSITION_TYPE) break;
-            return ucd.getDecompositionType(cp) == propMask;
-          case NUMERIC_TYPE>>8: if (propMask >= LIMIT_NUMERIC_TYPE) break;
-            return ucd.getNumericType(cp) == propMask;
-          case EAST_ASIAN_WIDTH>>8: if (propMask >= LIMIT_EAST_ASIAN_WIDTH) break;
-            return ucd.getEastAsianWidth(cp) == propMask;
-          case LINE_BREAK>>8:  if (propMask >= LIMIT_LINE_BREAK) break;
-            return ucd.getLineBreak(cp) == propMask;
-          case JOINING_TYPE>>8: if (propMask >= LIMIT_JOINING_TYPE) break;
-            return ucd.getJoiningType(cp) == propMask;
-          case JOINING_GROUP>>8: if (propMask >= LIMIT_JOINING_GROUP) break;
-            return ucd.getJoiningGroup(cp) == propMask;
-          case BINARY_PROPERTIES>>8: if (propMask >= LIMIT_BINARY_PROPERTIES) break;
-            return ucd.getBinaryProperty(cp, propMask);
-          case SCRIPT>>8: if (propMask >= LIMIT_SCRIPT) break;
-            return ucd.getScript(cp) == propMask;
-          case AGE>>8: if (propMask >= LIMIT_AGE) break;
-            return ucd.getAge(cp) == propMask;
-          case DERIVED>>8: if (!dp.isDefined(propMask)) break;
-            return dp.hasProperty(cp, propMask);
+    */
+    
+    static private boolean isDefined(int propMask, UCD ucd) {
+        int majorProp = propMask >> 8;
+        int propValue = propMask & 0xFF;
+        switch (majorProp) {
+          case CATEGORY>>8: if (propValue >= LIMIT_CATEGORY) break;
+            if (propValue == UNUSED_CATEGORY) break;
+            return true;
+          case COMBINING_CLASS>>8: if (propValue >= LIMIT_COMBINING_CLASS) break;
+            return ucd.isCombiningClassUsed((byte)propValue);
+          case BIDI_CLASS>>8: if (propValue >= LIMIT_BIDI_CLASS) break;
+            if (propValue == BIDI_UNUSED) break;
+            return true;
+          case DECOMPOSITION_TYPE>>8: if (propValue >= LIMIT_DECOMPOSITION_TYPE) break;
+            return true;
+          case NUMERIC_TYPE>>8: if (propValue >= LIMIT_NUMERIC_TYPE) break;
+            return true;
+          case EAST_ASIAN_WIDTH>>8: if (propValue >= LIMIT_EAST_ASIAN_WIDTH) break;
+            return true;
+          case LINE_BREAK>>8:  if (propValue >= LIMIT_LINE_BREAK) break;
+            return true;
+          case JOINING_TYPE>>8: if (propValue >= LIMIT_JOINING_TYPE) break;
+            return true;
+          case JOINING_GROUP>>8: if (propValue >= LIMIT_JOINING_GROUP) break;
+            return true;
+          case BINARY_PROPERTIES>>8: if (propValue >= LIMIT_BINARY_PROPERTIES) break;
+            return true;
+          case SCRIPT>>8: if (propValue >= LIMIT_SCRIPT) break;
+            if (propValue == UNUSED_SCRIPT) break;
+            return true;
+          case AGE>>8: if (propValue >= LIMIT_AGE) break;
+            return true;
+            /*
+          case DERIVED>>8:
+            UnicodeProperty up = DerivedProperty.make(propValue, ucd);
+            if (up == null) break;
+            return up.hasValue(cp);
+            */
         }
-        throw new ChainException("Illegal property Number {0}", new Object[]{new Integer(propMask)});
+        return false;
+    }
+    
+    public boolean hasValue(int cp) {
+        try {
+            switch (majorProp) {
+            case CATEGORY>>8: return ucd.getCategory(cp) == propValue;
+            case COMBINING_CLASS>>8: return ucd.getCombiningClass(cp) == propValue;
+            case BIDI_CLASS>>8: return ucd.getBidiClass(cp) == propValue;
+            case DECOMPOSITION_TYPE>>8: return ucd.getDecompositionType(cp) == propValue;
+            case NUMERIC_TYPE>>8: return ucd.getNumericType(cp) == propValue;
+            case EAST_ASIAN_WIDTH>>8: return ucd.getEastAsianWidth(cp) == propValue;
+            case LINE_BREAK>>8: return ucd.getLineBreak(cp) == propValue;
+            case JOINING_TYPE>>8: return ucd.getJoiningType(cp) == propValue;
+            case JOINING_GROUP>>8: return ucd.getJoiningGroup(cp) == propValue;
+            case BINARY_PROPERTIES>>8: return ucd.getBinaryProperty(cp, propValue);
+            case SCRIPT>>8: return ucd.getScript(cp) == propValue;
+            case AGE>>8: return ucd.getAge(cp) == propValue;
+                /*
+            case DERIVED>>8:
+                UnicodeProperty up = DerivedProperty.make(propValue, ucd);
+                if (up == null) break;
+                return up.hasValue(cp);
+                */
+            }
+            throw new ChainException("Illegal property Number {0}, {1}", new Object[]{
+                    new Integer(majorProp), new Integer(propValue)});
+        } catch (RuntimeException e) {
+            throw new ChainException("Illegal property Number {0}, {1}", new Object[]{
+                 new Integer(majorProp), new Integer(propValue)}, e);
+        }
     }
 
-    public String getID(int unifiedPropMask) {
-        return getID(unifiedPropMask, NORMAL);
-    }
 /*
     public static String getID(UCD ucd, int unifiedPropMask) {
         String longOne = getID(ucd, unifiedPropMask, LONG);
@@ -108,18 +196,18 @@ final class UnifiedBinaryProperty implements UCD_Types {
         return shortOne + "(" + longOne + ")";
     }
 */
-    public String getFullID(int unifiedPropMask, byte style) {
+    public String getFullName(byte style) {
         String pre = "";
-        if ((unifiedPropMask & 0xFF00) != BINARY_PROPERTIES) {
-            String preShort = UCD_Names.ABB_UNIFIED_PROPERTIES[unifiedPropMask>>8] + "=";
-            String preLong = UCD_Names.SHORT_UNIFIED_PROPERTIES[unifiedPropMask>>8] + "=";
+        if ((majorProp) != BINARY_PROPERTIES>>8) {
+            String preShort = UCD_Names.ABB_UNIFIED_PROPERTIES[majorProp] + "=";
+            String preLong = UCD_Names.SHORT_UNIFIED_PROPERTIES[majorProp] + "=";
             if (style < LONG) pre = preShort;
             else if (style == LONG || preShort.equals(preLong)) pre = preLong;
             else pre = preShort + "(" + preLong + ")";
         }
-        String shortOne = getID(unifiedPropMask, SHORT);
+        String shortOne = getValue(SHORT);
         if (shortOne.length() == 0) shortOne = "xx";
-        String longOne = getID(unifiedPropMask, LONG);
+        String longOne = getValue(LONG);
         if (longOne.length() == 0) longOne = "none";
 
         String post;
@@ -135,46 +223,72 @@ final class UnifiedBinaryProperty implements UCD_Types {
         return pre + post;
     }
 
-    public String getID(int unifiedPropMask, byte style) {
-        int enum = unifiedPropMask >> 8;
-        byte propMask = (byte)unifiedPropMask;
-        switch (enum) {
-          case CATEGORY>>8: if (propMask >= LIMIT_CATEGORY) break;
-            if (style != LONG) return ucd.getCategoryID_fromIndex(propMask);
-            return UCD_Names.LONG_GC[propMask];
-          case COMBINING_CLASS>>8: if (propMask >= LIMIT_COMBINING_CLASS) break;
-            return UCD.getCombiningID_fromIndex((short)(unifiedPropMask & 0xFF), style);
-          case BIDI_CLASS>>8: if (propMask >= LIMIT_BIDI_CLASS) break;
-            if (style != LONG) return ucd.getBidiClassID_fromIndex(propMask);
-            return UCD_Names.LONG_BC[propMask];
-          case DECOMPOSITION_TYPE>>8: if (propMask >= LIMIT_DECOMPOSITION_TYPE) break;
-            if (style != SHORT) return ucd.getDecompositionTypeID_fromIndex(propMask);
-            return UCD_Names.SHORT_DT[propMask];
-          case NUMERIC_TYPE>>8: if (propMask >= LIMIT_NUMERIC_TYPE) break;
-            if (style != SHORT) return ucd.getNumericTypeID_fromIndex(propMask);
-            return UCD_Names.SHORT_NT[propMask];
-          case EAST_ASIAN_WIDTH>>8: if (propMask >= LIMIT_EAST_ASIAN_WIDTH) break;
-            if (style != LONG) return ucd.getEastAsianWidthID_fromIndex(propMask);
-            return UCD_Names.SHORT_EA[propMask];
-          case LINE_BREAK>>8:  if (propMask >= LIMIT_LINE_BREAK) break;
-            if (style != LONG) return ucd.getLineBreakID_fromIndex(propMask);
-            return UCD_Names.LONG_LB[propMask];
-          case JOINING_TYPE>>8: if (propMask >= LIMIT_JOINING_TYPE) break;
-            if (style != LONG) return ucd.getJoiningTypeID_fromIndex(propMask);
-            return UCD_Names.LONG_JOINING_TYPE[propMask];
-          case JOINING_GROUP>>8: if (propMask >= LIMIT_JOINING_GROUP) break;
-            return ucd.getJoiningGroupID_fromIndex(propMask);
-          case BINARY_PROPERTIES>>8: if (propMask >= LIMIT_BINARY_PROPERTIES) break;
-            if (style != SHORT) return ucd.getBinaryPropertiesID_fromIndex(propMask);
-            return UCD_Names.SHORT_BP[propMask];
-          case SCRIPT>>8: if (propMask >= LIMIT_SCRIPT) break;
-            if (style != SHORT) return ucd.getScriptID_fromIndex(propMask);
-            return UCD_Names.ABB_SCRIPT[propMask];
-          case AGE>>8: if (propMask >= LIMIT_AGE) break;
-            return ucd.getAgeID_fromIndex(propMask);
-          case DERIVED>>8: if (!dp.isDefined(propMask)) break;
-            return dp.getName(propMask, style);
+    public String _getValue(byte style) {
+        try {
+            switch (majorProp) {
+            case CATEGORY>>8: return ucd.getCategoryID_fromIndex((byte)propValue, style);
+            case COMBINING_CLASS>>8: return String.valueOf(propValue);
+            case BIDI_CLASS>>8: return ucd.getBidiClassID_fromIndex((byte)propValue, style);
+            case DECOMPOSITION_TYPE>>8: return ucd.getDecompositionTypeID_fromIndex((byte)propValue, style);
+            case NUMERIC_TYPE>>8: if (propValue >= LIMIT_NUMERIC_TYPE) break;
+                if (style != SHORT) return ucd.getNumericTypeID_fromIndex((byte)propValue);
+                return UCD_Names.SHORT_NT[propValue];
+            case EAST_ASIAN_WIDTH>>8: if (propValue >= LIMIT_EAST_ASIAN_WIDTH) break;
+                if (style != LONG) return ucd.getEastAsianWidthID_fromIndex((byte)propValue);
+                return UCD_Names.SHORT_EA[propValue];
+            case LINE_BREAK>>8:  if (propValue >= LIMIT_LINE_BREAK) break;
+                if (style != LONG) return ucd.getLineBreakID_fromIndex((byte)propValue);
+                return UCD_Names.LONG_LB[propValue];
+            case JOINING_TYPE>>8: if (propValue >= LIMIT_JOINING_TYPE) break;
+                if (style != LONG) return ucd.getJoiningTypeID_fromIndex((byte)propValue);
+                return UCD_Names.LONG_JOINING_TYPE[propValue];
+            case JOINING_GROUP>>8: if (propValue >= LIMIT_JOINING_GROUP) break;
+                return ucd.getJoiningGroupID_fromIndex((byte)propValue);
+            case BINARY_PROPERTIES>>8: if (propValue >= LIMIT_BINARY_PROPERTIES) break;
+                if (style != SHORT) return ucd.getBinaryPropertiesID_fromIndex((byte)propValue);
+                return UCD_Names.SHORT_BP[propValue];
+            case SCRIPT>>8: if (propValue >= LIMIT_SCRIPT) break;
+                if (style != SHORT) return ucd.getScriptID_fromIndex((byte)propValue);
+                return UCD_Names.ABB_SCRIPT[propValue];
+            case AGE>>8: if (propValue >= LIMIT_AGE) break;
+                return ucd.getAgeID_fromIndex((byte)propValue);
+                /*
+            case DERIVED>>8:
+                UnicodeProperty up = DerivedProperty.make(propValue, ucd);
+                if (up == null) break;
+                return up.getName(style);
+                */
+            }
+        } catch (RuntimeException e) {
+            throw new ChainException("Illegal property Number {0}, {1}", new Object[]{
+                 new Integer(majorProp), new Integer(propValue)}, e);
         }
-        throw new ChainException("Illegal property Number {0}", new Object[]{new Integer(propMask)});
+        throw new ChainException("Illegal property Number {0}, {1}", new Object[]{
+                new Integer(majorProp), new Integer(propValue)});
     }
+    
+    public byte _getDefaultStyle() {
+        try {
+            switch (majorProp) {
+            case CATEGORY>>8: return SHORT;
+            case COMBINING_CLASS>>8: return SHORT;
+            case BIDI_CLASS>>8: return SHORT;
+            case DECOMPOSITION_TYPE>>8: return LONG;
+            case NUMERIC_TYPE>>8: return LONG;
+            case EAST_ASIAN_WIDTH>>8: return SHORT;
+            case LINE_BREAK>>8:  return SHORT;
+            case JOINING_TYPE>>8: return SHORT;
+            case JOINING_GROUP>>8: return LONG;
+            case BINARY_PROPERTIES>>8: return LONG;
+            case SCRIPT>>8: return LONG;
+            case AGE>>8: return LONG;
+            }
+        } catch (RuntimeException e) {
+            throw new ChainException("Illegal property Number {0}, {1}", new Object[]{
+                 new Integer(majorProp), new Integer(propValue)}, e);
+        }
+        throw new ChainException("Illegal property Number {0}, {1}", new Object[]{
+                new Integer(majorProp), new Integer(propValue)});
+    }
+    
 }
