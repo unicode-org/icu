@@ -843,15 +843,15 @@ static void TestFilePrintCompatibility(void) {
     }
 
     /* Properly eat the newlines */
-    for (num = 0; num < u_strlen(NEW_LINE); num++) {
+    for (num = 0; num < (int32_t)strlen(C_NEW_LINE); num++) {
         fscanf(myCFile, "%c", &cVal);
-        if (cVal != NEW_LINE[num]) {
+        if (cVal != C_NEW_LINE[num]) {
             log_err("OS newline error\n");
         }
     }
-    for (num = 0; num < u_strlen(NEW_LINE); num++) {
+    for (num = 0; num < (int32_t)strlen(C_NEW_LINE); num++) {
         fscanf(myCFile, "%c", &cVal);
-        if (cVal != NEW_LINE[num]) {
+        if (cVal != C_NEW_LINE[num]) {
             log_err("ustdio newline error\n");
         }
     }
