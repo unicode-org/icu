@@ -184,11 +184,11 @@ static void TestTraceAPI() {
         test_format("a 16 bit val %h", 50, 0, "a 16 bit val 1234", __LINE__, 0x1234);
         test_format("a 32 bit val %d...", 50, 0, "a 32 bit val 6789abcd...", __LINE__, 0x6789abcd);
         test_format("a 64 bit val %l", 50, 0, "a 64 bit val 123456780abcdef0"
-            , __LINE__, 0x123456780abcdef0);
+            , __LINE__, INT64_C(0x123456780abcdef0));
         if (sizeof(ptr) == 4) {
             ptr = (void *)0xdeadbeef;
             test_format("a 32 bit ptr %p", 50, 0, "a 32 bit ptr deadbeef", __LINE__, ptr);
-        } else if (sizeof(void *) == 8) {
+        } else if (sizeof(ptr) == 8) {
             ptr = (void *)0x1000200030004000;
             test_format("a 64 bit ptr %p", 50, 0, "a 64 bit ptr 1000200030004000", __LINE__, ptr);
         } else {
