@@ -632,7 +632,7 @@ addProps(uint32_t c, uint32_t x) {
 
 extern void
 repeatProps(uint32_t first, uint32_t last, uint32_t x) {
-    utrie_setRange32(pTrie, (UChar32)first, (UChar32)(last+1), x, TRUE);
+    utrie_setRange32(pTrie, (UChar32)first, (UChar32)(last+1), x, FALSE);
 }
 
 /* compacting --------------------------------------------------------------- */
