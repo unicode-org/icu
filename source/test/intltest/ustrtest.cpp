@@ -36,6 +36,7 @@ void UnicodeStringTest::runIndexedTest( int32_t index, UBool exec, const char* &
         case 11: name = "TestReverse"; if (exec) TestReverse(); break;
         case 12: name = "TestMiscellaneous"; if (exec) TestMiscellaneous(); break;
         case 13: name = "TestStackAllocation"; if (exec) TestStackAllocation(); break;
+        case 14: name = "TestUnescape"; if (exec) TestUnescape(); break;
 
         default: name = ""; break; //needed to end loop
     }
@@ -783,5 +784,26 @@ UnicodeStringTest::TestStackAllocation()
     capTest = UnicodeString(5, (UChar32)0, 0);
     if(capTest.length() != 0) {
         errln("The UnicodeString capacity constructor does not work with a 0x10ff2a filler");
+    }
+}
+
+/**
+ * Test the unescape() function.
+ */
+void UnicodeStringTest::TestUnescape(void) {
+    UnicodeString IN("abc\\u4567 \\n\\r \\U00101234xyz");
+    UnicodeString OUT("abc");
+    OUT.append((UChar)0x4567);
+    OUT.append(" ");
+    OUT.append((UChar)0xA);
+    OUT.append((UChar)0xD);
+    OUT.append(" ");
+    OUT.append((UChar32)0x00101234);
+    OUT.append("xyz");
+    UnicodeString result = IN.unescape();
+    if (result != OUT) {
+        errln("FAIL: " + prettify(IN) + ".unescape() -> " +
+              prettify(result) + ", expected " +
+              prettify(OUT));
     }
 }
