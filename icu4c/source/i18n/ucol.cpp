@@ -85,23 +85,6 @@ isAcceptableUCA(void * /*context*/,
 }
 U_CDECL_END
 
-/* added for Han implicit CE */
-static const uint32_t IMPLICIT_HAN_START_ = 0x3400;
-static const uint32_t IMPLICIT_HAN_LIMIT_ = 0xA000;
-static const uint32_t IMPLICIT_SUPPLEMENTARY_COUNT_ = 0x100000;
-static const uint32_t IMPLICIT_BYTES_TO_AVOID_ = 3;
-static const uint32_t IMPLICIT_OTHER_COUNT_ = 256 - IMPLICIT_BYTES_TO_AVOID_;
-static const uint32_t IMPLICIT_LAST_COUNT_ = IMPLICIT_OTHER_COUNT_ / 2;
-static const uint32_t IMPLICIT_LAST_COUNT2_ =
-                       (IMPLICIT_SUPPLEMENTARY_COUNT_ - 1) /
-                       (IMPLICIT_OTHER_COUNT_ * IMPLICIT_OTHER_COUNT_) + 1;
-static const uint32_t IMPLICIT_HAN_SHIFT_ = IMPLICIT_LAST_COUNT_ *
-                              IMPLICIT_OTHER_COUNT_ - IMPLICIT_HAN_START_;
-static const uint32_t IMPLICIT_BOUNDARY_ = 2 * IMPLICIT_OTHER_COUNT_ *
-                                  IMPLICIT_LAST_COUNT_ + IMPLICIT_HAN_START_;
-static const uint32_t IMPLICIT_LAST2_MULTIPLIER_ = IMPLICIT_OTHER_COUNT_ /
-                                                        IMPLICIT_LAST_COUNT2_;
-
 static
 inline void  IInit_collIterate(const UCollator *collator, const UChar *sourceString,
                               int32_t sourceLen, collIterate *s) {
@@ -746,6 +729,206 @@ ucol_cleanup(void)
     return TRUE;
 }
 
+/* Following is a port of Mark's code for new treatment of implicits.
+ * It is positioned here, since ucol_initUCA need to initialize the 
+ * variables below according to the data in the fractional UCA.
+ */
+
+/*
+static boolean isFixedIdeograph(int cp) {
+    return (0x3400 <= cp && cp <= 0x4DB5 
+        || 0x4E00 <= cp && cp <= 0x9FA5 
+        || 0xF900 <= cp && cp <= 0xFA2D // compat: most of these decompose anyway
+        || 0x20000 <= cp && cp <= 0x2A6D6
+        || 0x2F800 <= cp && cp <= 0x2FA1D // compat: most of these decompose anyway
+        );
+}
+*/
+
+/*
+3400;<CJK Ideograph Extension A, First>;Lo;0;L;;;;;N;;;;;
+4DB5;<CJK Ideograph Extension A, Last>;Lo;0;L;;;;;N;;;;;
+4E00;<CJK Ideograph, First>;Lo;0;L;;;;;N;;;;;
+9FA5;<CJK Ideograph, Last>;Lo;0;L;;;;;N;;;;;
+20000;<CJK Ideograph Extension B, First>;Lo;0;L;;;;;N;;;;;
+2A6D6;<CJK Ideograph Extension B, Last>;Lo;0;L;;;;;N;;;;;
+2F800;CJK COMPATIBILITY IDEOGRAPH-2F800;Lo;0;L;4E3D;;;;N;;;;;
+...
+2FA1D;CJK COMPATIBILITY IDEOGRAPH-2FA1D;Lo;0;L;2A600;;;;N;;;;;
+*/
+    
+/*
+static int remapUCA_CompatibilityIdeographToCp(int cp) {
+    switch (cp) {    
+        case 0x9FA6: return 0xFA0E; // FA0E ; [.9FA6.0020.0002.FA0E] # CJK COMPATIBILITY IDEOGRAPH-FA0E
+        case 0x9FA7: return 0xFA0F; // FA0F ; [.9FA7.0020.0002.FA0F] # CJK COMPATIBILITY IDEOGRAPH-FA0F
+        case 0x9FA8: return 0xFA11; // FA11 ; [.9FA8.0020.0002.FA11] # CJK COMPATIBILITY IDEOGRAPH-FA11
+        case 0x9FA9: return 0xFA13; // FA13 ; [.9FA9.0020.0002.FA13] # CJK COMPATIBILITY IDEOGRAPH-FA13
+        case 0x9FAA: return 0xFA14; // FA14 ; [.9FAA.0020.0002.FA14] # CJK COMPATIBILITY IDEOGRAPH-FA14
+        case 0x9FAB: return 0xFA1F; // FA1F ; [.9FAB.0020.0002.FA1F] # CJK COMPATIBILITY IDEOGRAPH-FA1F
+        case 0x9FAC: return 0xFA21; // FA21 ; [.9FAC.0020.0002.FA21] # CJK COMPATIBILITY IDEOGRAPH-FA21
+        case 0x9FAD: return 0xFA23; // FA23 ; [.9FAD.0020.0002.FA23] # CJK COMPATIBILITY IDEOGRAPH-FA23
+        case 0x9FAE: return 0xFA24; // FA24 ; [.9FAE.0020.0002.FA24] # CJK COMPATIBILITY IDEOGRAPH-FA24
+        case 0x9FAF: return 0xFA27; // FA27 ; [.9FAF.0020.0002.FA27] # CJK COMPATIBILITY IDEOGRAPH-FA27
+        case 0x9FB0: return 0xFA28; // FA28 ; [.9FB0.0020.0002.FA28] # CJK COMPATIBILITY IDEOGRAPH-FA28
+        case 0x9FB1: return 0xFA29; // FA29 ; [.9FB1.0020.0002.FA29] # CJK COMPATIBILITY IDEOGRAPH-FA29
+    }
+    return cp;
+}
+*/
+    
+/**
+  * Function used to: 
+  * a) collapse the 2 different Han ranges from UCA into one (in the right order), and
+  * b) bump any non-CJK characters by 10FFFF.
+  * The relevant blocks are:
+  * A:	4E00..9FFF; CJK Unified Ideographs
+  *		F900..FAFF; CJK Compatibility Ideographs
+  * B:	3400..4DBF; CJK Unified Ideographs Extension A
+  *		20000..XX;	CJK Unified Ideographs Extension B (and others later on)
+  * As long as
+  *	no new B characters are allocated between 4E00 and FAFF, and
+  *	no new A characters are outside of this range,
+  * (very high probability) this simple code will work.
+  * The reordered blocks are:
+  * Block1 is CJK
+  * Block2 is CJK_COMPAT_USED
+  * Block3 is CJK_A
+  * Any other CJK gets its normal code point
+  * Any non-CJK gets +10FFFF
+  * When we reorder Block1, we make sure that it is at the very start,
+  * so that it will use a 3-byte form.
+  */
+
+// CONSTANTS
+static const uint32_t
+    NON_CJK_OFFSET = 0x110000,
+    BYTES_TO_AVOID = 3,
+    OTHER_COUNT = 256 - BYTES_TO_AVOID,
+    LAST_COUNT = OTHER_COUNT / 2,
+    LAST_COUNT2 = OTHER_COUNT / 21, // room for intervening, without expanding to 5 bytes
+    IMPLICIT_3BYTE_COUNT = 1;
+    
+// These depend on initUCA, and are initialized at that time
+static uint32_t 
+    IMPLICIT_BASE_BYTE = 0,
+    IMPLICIT_LIMIT_BYTE = 0, // leave room for 1 3-byte and 2 4-byte forms
+    
+    IMPLICIT_4BYTE_BOUNDARY = 0,
+    LAST_MULTIPLIER = 0,
+    LAST2_MULTIPLIER = 0,
+    IMPLICIT_BASE_3BYTE = 0,
+    IMPLICIT_BASE_4BYTE = 0;
+
+static const uint32_t
+    CJK_BASE = 0x4E00,
+    CJK_LIMIT = 0x9FFF+1,
+    CJK_COMPAT_USED_BASE = 0xFA0E,
+    CJK_COMPAT_USED_LIMIT = 0xFA2F+1,
+    CJK_A_BASE = 0x3400,
+    CJK_A_LIMIT = 0x4DBF+1,
+    CJK_B_BASE = 0x20000,
+    CJK_B_LIMIT = 0x2A6DF+1;
+
+static inline UChar32 swapCJK(UChar32 cp) {
+    	
+	if (cp >= CJK_BASE) {
+		if (cp < CJK_LIMIT)				return cp - CJK_BASE;
+			
+		if (cp < CJK_COMPAT_USED_BASE)	return cp + NON_CJK_OFFSET;
+    		
+		if (cp < CJK_COMPAT_USED_LIMIT)	return cp - CJK_COMPAT_USED_BASE
+												+ (CJK_LIMIT - CJK_BASE);
+		if (cp < CJK_B_BASE)				return cp + NON_CJK_OFFSET;
+    		
+		if (cp < CJK_B_LIMIT)			return cp; // non-BMP-CJK
+    		
+		return cp + NON_CJK_OFFSET;	// non-CJK
+	}
+	if (cp < CJK_A_BASE)					return cp + NON_CJK_OFFSET;
+		
+	if (cp < CJK_A_LIMIT)				return cp - CJK_A_BASE
+												+ (CJK_LIMIT - CJK_BASE) 
+												+ (CJK_COMPAT_USED_LIMIT - CJK_COMPAT_USED_BASE);
+    return cp + NON_CJK_OFFSET; // non-CJK
+}
+    
+
+// GET IMPLICIT PRIMARY WEIGHTS
+// Return value is left justified primary key
+
+static inline uint32_t getImplicitPrimary(UChar32 cp) {
+
+    //if (DEBUG) System.out.println("Incoming: " + Utility.hex(cp));
+    
+    cp = swapCJK(cp);
+    
+    //if (DEBUG) System.out.println("CJK swapped: " + Utility.hex(cp));
+    
+    // we now have a range of numbers from 0 to 21FFFF.
+      
+    // we must skip all 00, 01, 02 bytes, so most bytes have 253 values
+    // we must leave a gap of 01 between all values of the last byte, so the last byte has 126 values (3 byte case)
+    // we shift so that HAN all has the same first primary, for compression.
+    // for the 4 byte case, we make the gap as large as we can fit.
+    // Three byte forms are EC xx xx, ED xx xx, EE xx xx (with a gap of 1)
+    // Four byte forms (most supplementaries) are EF xx xx xx (with a gap of LAST2_MULTIPLIER == 14)
+    
+    int32_t last0 = cp - IMPLICIT_4BYTE_BOUNDARY;
+    if (last0 < 0) {
+        int32_t last1 = cp / LAST_COUNT;
+        last0 = cp % LAST_COUNT;
+        
+        int32_t last2 = last1 / OTHER_COUNT;
+        last1 %= OTHER_COUNT;
+        /*
+        if (DEBUG || last2 > 0xFF-BYTES_TO_AVOID) System.out.println("3B: " + Utility.hex(cp) + " => "
+            + Utility.hex(last2) + ", "
+            + Utility.hex(last1) + ", "
+            + Utility.hex(last0) + ", "
+        );
+        */
+        
+        return IMPLICIT_BASE_3BYTE + (last2 << 24) + (last1 << 16) + ((last0*LAST_MULTIPLIER) << 8);
+    } else {
+        int32_t last1 = last0 / LAST_COUNT2;
+        last0 %= LAST_COUNT2;
+        
+        int32_t last2 = last1 / OTHER_COUNT;
+        last1 %= OTHER_COUNT;
+        
+        int32_t last3 = last2 / OTHER_COUNT;
+        last2 %= OTHER_COUNT;
+
+        /*
+        if (DEBUG || last3 > 0xFF-BYTES_TO_AVOID) System.out.println("4B: " + Utility.hex(cp) + " => "
+            + Utility.hex(last3) + ", "
+            + Utility.hex(last2) + ", "
+            + Utility.hex(last1) + ", "
+            + Utility.hex(last0 * LAST2_MULTIPLIER) + ", "
+        );
+        */
+
+       return IMPLICIT_BASE_4BYTE + (last3 << 24) + (last2 << 16) + (last1 << 8) + (last0 * LAST2_MULTIPLIER);
+    }
+}
+
+/* this function is either called from initUCA or from genUCA before
+ * doing canonical closure for the UCA.
+ */
+U_CAPI void U_EXPORT2 
+uprv_uca_initImplicitConstants(uint32_t baseByte) 
+{
+  IMPLICIT_BASE_BYTE = baseByte;
+  IMPLICIT_LIMIT_BYTE = IMPLICIT_BASE_BYTE + 4; // leave room for 1 3-byte and 2 4-byte forms
+
+  IMPLICIT_4BYTE_BOUNDARY = IMPLICIT_3BYTE_COUNT * OTHER_COUNT * LAST_COUNT;
+  LAST_MULTIPLIER = OTHER_COUNT / LAST_COUNT;
+  LAST2_MULTIPLIER = OTHER_COUNT / LAST_COUNT2;
+  IMPLICIT_BASE_3BYTE = (IMPLICIT_BASE_BYTE << 24) + 0x030300;
+  IMPLICIT_BASE_4BYTE = ((IMPLICIT_BASE_BYTE + IMPLICIT_3BYTE_COUNT) << 24) + 0x030303;
+}
+    
 void ucol_initUCA(UErrorCode *status) {
     if(U_FAILURE(*status))
         return;
@@ -786,6 +969,9 @@ void ucol_initUCA(UErrorCode *status) {
                 else {
                     ucln_i18n_registerCleanup();
                 }
+                // Initalize variables for implicit generation
+                UCAConstants *consts = (UCAConstants *)((uint8_t *)UCA->image + UCA->image->UCAConsts);
+                uprv_uca_initImplicitConstants(consts->UCA_PRIMARY_IMPLICIT_MIN);
             }else{
                 udata_close(result);
                 uprv_free(newUCA);
@@ -1827,11 +2013,31 @@ uint32_t getDiscontiguous(const UCollator *coll, collIterate *source,
     return *(coll->contractionCEs + (constart - coll->contractionIndex));
 }
 
+#if 0
+/* added for Han implicit CE */
+static const uint32_t IMPLICIT_HAN_START_ = 0x3400;
+static const uint32_t IMPLICIT_HAN_LIMIT_ = 0xA000;
+static const uint32_t IMPLICIT_SUPPLEMENTARY_COUNT_ = 0x100000;
+static const uint32_t IMPLICIT_BYTES_TO_AVOID_ = 3;
+static const uint32_t IMPLICIT_OTHER_COUNT_ = 256 - IMPLICIT_BYTES_TO_AVOID_;
+static const uint32_t IMPLICIT_LAST_COUNT_ = IMPLICIT_OTHER_COUNT_ / 2;
+static const uint32_t IMPLICIT_LAST_COUNT2_ =
+                       (IMPLICIT_SUPPLEMENTARY_COUNT_ - 1) /
+                       (IMPLICIT_OTHER_COUNT_ * IMPLICIT_OTHER_COUNT_) + 1;
+static const uint32_t IMPLICIT_HAN_SHIFT_ = IMPLICIT_LAST_COUNT_ *
+                              IMPLICIT_OTHER_COUNT_ - IMPLICIT_HAN_START_;
+static const uint32_t IMPLICIT_BOUNDARY_ = 2 * IMPLICIT_OTHER_COUNT_ *
+                                  IMPLICIT_LAST_COUNT_ + IMPLICIT_HAN_START_;
+static const uint32_t IMPLICIT_LAST2_MULTIPLIER_ = IMPLICIT_OTHER_COUNT_ /
+                                                        IMPLICIT_LAST_COUNT2_;
+
+
 static
 inline uint32_t getImplicit(UChar32 cp, collIterate *collationSource, uint32_t hanFixup) {
   if ((cp & 0xFFFE) == 0xFFFE || (0xD800 <= cp && cp <= 0xDC00)) {
       return 0;  /* illegal code value, use completely ignoreable! */
   }
+
   /*
   we must skip all 00, 01, 02 bytes, so most bytes have 253 values
   we must leave a gap of 01 between all values of the last byte, so the last byte has 126 values (3 byte case)
@@ -1856,6 +2062,18 @@ inline uint32_t getImplicit(UChar32 cp, collIterate *collationSource, uint32_t h
       last1 %= IMPLICIT_OTHER_COUNT_;
       r = 0xEF030303 - hanFixup + (last2 << 16) + (last1 << 8) + (last0 * IMPLICIT_LAST2_MULTIPLIER_);
   } 
+  *(collationSource->CEpos++) = ((r & 0x0000FFFF)<<16) | 0x000000C0;
+  return (r & UCOL_PRIMARYMASK) | 0x00000505; // This was 'order'
+}
+#endif
+
+/* now uses Mark's getImplicitPrimary code */
+static
+inline uint32_t getImplicit(UChar32 cp, collIterate *collationSource) {
+  if ((cp & 0xFFFE) == 0xFFFE || (0xD800 <= cp && cp <= 0xDC00)) {
+      return 0;  /* illegal code value, use completely ignoreable! */
+  }
+  uint32_t r = getImplicitPrimary(cp);
   *(collationSource->CEpos++) = ((r & 0x0000FFFF)<<16) | 0x000000C0;
   return (r & UCOL_PRIMARYMASK) | 0x00000505; // This was 'order'
 }
@@ -2153,11 +2371,14 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
       return CE;
       }
     /* various implicits optimization */
+    // TODO: remove CJK_IMPLICIT_TAG completely - handled by the getImplicit
     case CJK_IMPLICIT_TAG:    /* 0x3400-0x4DB5, 0x4E00-0x9FA5, 0xF900-0xFA2D*/
-      return getImplicit(cp, source, 0x04000000);
+      //return getImplicit(cp, source, 0x04000000);
+      return getImplicit(cp, source);
     case IMPLICIT_TAG:        /* everything that is not defined otherwise */
       /* UCA is filled with these. Tailorings are NOT_FOUND */
-      return getImplicit(cp, source, 0);
+      //return getImplicit(cp, source, 0);
+      return getImplicit(cp, source);
     case TRAIL_SURROGATE_TAG: /* DC00-DFFF*/
       return 0; /* broken surrogate sequence */
     case LEAD_SURROGATE_TAG:  /* D800-DBFF*/
@@ -2166,12 +2387,16 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
         UTF_IS_SECOND_SURROGATE((nextChar=*source->pos))) {
         cp = ((((uint32_t)ch)<<10UL)+(nextChar)-(((uint32_t)0xd800<<10UL)+0xdc00-0x10000));
         source->pos++;
+#if 0
+        // CJKs handled in the getImplicit function. No need for fixup
         if((cp >= 0x20000 && cp <= 0x2a6d6) || 
            (cp >= 0x2F800 && cp <= 0x2FA1D)) { // this might be a CJK supplementary cp
           return getImplicit(cp, source, 0x04000000);
         } else { // or a regular one
           return getImplicit(cp, source, 0);
         }
+#endif
+        return getImplicit(cp, source);
       } else {
         return 0; /* completely ignorable */
       }
@@ -2203,14 +2428,17 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
         if (!source->coll->image->jamoSpecial) { // FAST PATH
 
           /**(source->CEpos++) = ucmpe32_get(UCA->mapping, V);*/
-          *(source->CEpos++) = UTRIE_GET32_FROM_LEAD(UCA->mapping, V);
+          /**(source->CEpos++) = UTRIE_GET32_FROM_LEAD(UCA->mapping, V);*/
+          *(source->CEpos++) = UTRIE_GET32_FROM_LEAD(coll->mapping, V);
           if (T != TBase) {
               /**(source->CEpos++) = ucmpe32_get(UCA->mapping, T);*/
-              *(source->CEpos++) = UTRIE_GET32_FROM_LEAD(UCA->mapping, T);
+              /**(source->CEpos++) = UTRIE_GET32_FROM_LEAD(UCA->mapping, T);*/
+              *(source->CEpos++) = UTRIE_GET32_FROM_LEAD(coll->mapping, T);
           }
 
           /*return ucmpe32_get(UCA->mapping, L);*/ // return first one
-          return UTRIE_GET32_FROM_LEAD(UCA->mapping, L);
+          /*return UTRIE_GET32_FROM_LEAD(UCA->mapping, L);*/
+          return UTRIE_GET32_FROM_LEAD(coll->mapping, L);
 
         } else { // Jamo is Special
           // Since Hanguls pass the FCD check, it is 
@@ -2456,6 +2684,7 @@ inline UChar getPrevNormalizedChar(collIterate *data)
     return ch;
 }
 
+#if 0
 static
 inline uint32_t getPrevImplicit(UChar32 cp, collIterate *collationSource, uint32_t hanFixup) {
       if ((cp & 0xFFFE) == 0xFFFE || (0xD800 <= cp && cp <= 0xDC00)) {
@@ -2490,12 +2719,28 @@ inline uint32_t getPrevImplicit(UChar32 cp, collIterate *collationSource, uint32
       collationSource->toReturn = collationSource->CEpos;
       return ((r & 0x0000FFFF)<<16) | 0x000000C0;
 }
+#endif
+
+
+/* now uses Mark's getImplicitPrimary code */
+static
+inline uint32_t getPrevImplicit(UChar32 cp, collIterate *collationSource) {
+      if ((cp & 0xFFFE) == 0xFFFE || (0xD800 <= cp && cp <= 0xDC00)) {
+          return 0;  /* illegal code value, use completely ignoreable! */
+      }
+
+      uint32_t r = getImplicitPrimary(cp);
+
+      *(collationSource->CEpos++) = (r & UCOL_PRIMARYMASK) | 0x00000505;
+      collationSource->toReturn = collationSource->CEpos;
+      return ((r & 0x0000FFFF)<<16) | 0x000000C0;
+}
 
 /**
-* This function handles the special CEs like contractions, expansions,
-* surrogates, Thai.
-* It is called by both getPrevCE
-*/
+ * This function handles the special CEs like contractions, expansions,
+ * surrogates, Thai.
+ * It is called by both getPrevCE
+ */
 uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                           collIterate *source,
                           UErrorCode *status)
@@ -2769,12 +3014,15 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
         if (!source->coll->image->jamoSpecial)
         {
           /**(source->CEpos ++) = ucmpe32_get(UCA->mapping, L);*/
-          *(source->CEpos++) = UTRIE_GET32_FROM_LEAD(UCA->mapping, L);
+          /**(source->CEpos++) = UTRIE_GET32_FROM_LEAD(UCA->mapping, L);*/
+          *(source->CEpos++) = UTRIE_GET32_FROM_LEAD(coll->mapping, L);
           /**(source->CEpos ++) = ucmpe32_get(UCA->mapping, V);*/
-          *(source->CEpos++) = UTRIE_GET32_FROM_LEAD(UCA->mapping, V);
+          /**(source->CEpos++) = UTRIE_GET32_FROM_LEAD(UCA->mapping, V);*/
+          *(source->CEpos++) = UTRIE_GET32_FROM_LEAD(coll->mapping, V);
           if (T != TBase)
             /**(source->CEpos ++) = ucmpe32_get(UCA->mapping, T);*/
-            *(source->CEpos++) = UTRIE_GET32_FROM_LEAD(UCA->mapping, T);
+            /**(source->CEpos++) = UTRIE_GET32_FROM_LEAD(UCA->mapping, T);*/
+            *(source->CEpos++) = UTRIE_GET32_FROM_LEAD(coll->mapping, T);
 
           source->toReturn = source->CEpos - 1;
           return *(source->toReturn);
@@ -2844,12 +3092,13 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
       } else {
         return 0; /* completely ignorable */
       }
-      return getPrevImplicit(cp, source, 0);
+      return getPrevImplicit(cp, source);
     }
+    // TODO: Remove CJK implicits as they are handled by the getImplicitPrimary function
     case CJK_IMPLICIT_TAG:    /* 0x3400-0x4DB5, 0x4E00-0x9FA5, 0xF900-0xFA2D*/
-      return getPrevImplicit(ch, source, 0x04000000);
+      return getPrevImplicit(ch, source);
     case IMPLICIT_TAG:        /* everything that is not defined otherwise */
-      return getPrevImplicit(ch, source, 0);
+      return getPrevImplicit(ch, source);
       /* UCA is filled with these. Tailorings are NOT_FOUND */
     /* not yet implemented */
     case CHARSET_TAG:  /* this tag always returns */
