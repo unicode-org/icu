@@ -91,7 +91,8 @@ RBBISetBuilder::~RBBISetBuilder()
 //
 //------------------------------------------------------------------------
 /* folding value: just store the offset (16 bits) if there is any non-0 entry */
-U_CAPI uint32_t U_EXPORT2
+U_CDECL_BEGIN
+static uint32_t U_CALLCONV
 getFoldedRBBIValue(UNewTrie *trie, UChar32 start, int32_t offset) {
     uint32_t value;
     UChar32 limit;
@@ -122,7 +123,7 @@ getFoldingRBBIOffset(uint32_t data) {
         return 0;
     }
 }
-
+U_CDECL_END
 
 
 
@@ -273,12 +274,12 @@ int32_t RBBISetBuilder::getTrieSize() {
 //
 //-----------------------------------------------------------------------------------
 void RBBISetBuilder::serializeTrie(uint8_t *where) {
-utrie_serialize(fTrie,
-                where,                   // Buffer
-                fTrieSize,               // Capacity
-                getFoldedRBBIValue,
-                TRUE,                    // Reduce to 16 bits
-                fStatus);
+    utrie_serialize(fTrie,
+                    where,                   // Buffer
+                    fTrieSize,               // Capacity
+                    getFoldedRBBIValue,
+                    TRUE,                    // Reduce to 16 bits
+                    fStatus);
 }
 
 //------------------------------------------------------------------------
