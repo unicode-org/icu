@@ -58,7 +58,14 @@ U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RuleBasedNumberFormat)
 
-class LocalizationInfo : public UObject {
+/*
+This is a utility class. It does not use ICU's RTTI.
+If ICU's RTTI is needed again, you can uncomment the RTTI code and derive from UObject.
+Please make sure that intltest passes on Windows in Release mode,
+since the string pooling per compilation unit will mess up how RTTI works.
+The RTTI code was also removed due to lack of code coverage.
+*/
+class LocalizationInfo : public UMemory {
 protected:
     virtual ~LocalizationInfo() {};
     uint32_t refcount;
@@ -90,11 +97,11 @@ public:
     virtual int32_t indexForLocale(const UChar* locale) const;
     virtual int32_t indexForRuleSet(const UChar* ruleset) const;
     
-    virtual UClassID getDynamicClassID() const = 0;
-    static UClassID getStaticClassID(void);
+//    virtual UClassID getDynamicClassID() const = 0;
+//    static UClassID getStaticClassID(void);
 };
 
-UOBJECT_DEFINE_ABSTRACT_RTTI_IMPLEMENTATION(LocalizationInfo)
+//UOBJECT_DEFINE_ABSTRACT_RTTI_IMPLEMENTATION(LocalizationInfo)
 
 // if both strings are NULL, this returns TRUE
 static UBool 
@@ -254,8 +261,8 @@ public:
     virtual const UChar* getLocaleName(int32_t index) const;
     virtual const UChar* getDisplayName(int32_t localeIndex, int32_t ruleIndex) const;
     
-    virtual UClassID getDynamicClassID() const;
-    static UClassID getStaticClassID(void);
+//    virtual UClassID getDynamicClassID() const;
+//    static UClassID getStaticClassID(void);
     
 private:
     void init(UErrorCode& status) const;
@@ -568,7 +575,7 @@ LocDataParser::parseError(const char* /*str*/) {
     }
 }
 
-UOBJECT_DEFINE_RTTI_IMPLEMENTATION(StringLocalizationInfo)
+//UOBJECT_DEFINE_RTTI_IMPLEMENTATION(StringLocalizationInfo)
 
 StringLocalizationInfo* 
 StringLocalizationInfo::create(const UnicodeString& info, UParseError& perror, UErrorCode& status) {
