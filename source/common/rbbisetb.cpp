@@ -347,6 +347,26 @@ int32_t  RBBISetBuilder::getNumCharCategories() {
 
 //------------------------------------------------------------------------
 //
+//   getFirstChar      Given a runtime RBBI character category, find
+//                     the first UChar32 that is in the set of chars 
+//                     in the category.
+//------------------------------------------------------------------------
+UChar32  RBBISetBuilder::getFirstChar(int32_t category) {
+    RangeDescriptor   *rlRange;
+    UChar32            retVal = (UChar32)-1;
+    for (rlRange = fRangeList; rlRange!=0; rlRange=rlRange->fNext) {
+        if (rlRange->fNum == category) {
+            retVal = rlRange->fStartChar;
+            break;
+        }
+    }
+    return retVal;
+}
+
+
+
+//------------------------------------------------------------------------
+//
 //   printRanges        A debugging function.
 //                      dump out all of the range definitions.
 //
