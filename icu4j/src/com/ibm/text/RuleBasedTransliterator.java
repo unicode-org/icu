@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/RuleBasedTransliterator.java,v $ 
- * $Date: 2000/04/21 22:16:29 $ 
- * $Revision: 1.22 $
+ * $Date: 2000/04/21 22:23:40 $ 
+ * $Revision: 1.23 $
  *
  *****************************************************************************************
  */
@@ -274,7 +274,7 @@ import com.ibm.util.Utility;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.22 $ $Date: 2000/04/21 22:16:29 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.23 $ $Date: 2000/04/21 22:23:40 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -542,15 +542,13 @@ public class RuleBasedTransliterator extends Transliterator {
             public String parseReference(String text, ParsePosition pos, int limit) {
                 int start = pos.getIndex();
                 int i = start;
-                if (i < limit) {
+                while (i < limit) {
                     char c = text.charAt(i);
-                    if (Character.isUnicodeIdentifierStart(c)) {
-                        ++i;
-                        while (i < limit &&
-                               Character.isUnicodeIdentifierPart(text.charAt(i))) {
-                            ++i;
-                        }
+                    if ((i==start && !Character.isUnicodeIdentifierStart(c)) ||
+                        !Character.isUnicodeIdentifierPart(c)) {
+                        break;
                     }
+                    ++i;
                 }
                 if (i == start) { // No valid name chars
                     throw new IllegalArgumentException("Illegal variable reference " +
@@ -1257,6 +1255,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.23  2000/04/21 22:23:40  alan
+ * Clean up parseReference. Previous log should read 'delegate', not 'delete'.
+ *
  * Revision 1.22  2000/04/21 22:16:29  alan
  * Delete variable name parsing to SymbolTable interface to consolidate parsing code.
  *
