@@ -598,29 +598,11 @@ void ucnv_fromUnicode (UConverter * _this,
        *target = args.target;
        return;
     } else {
-      /* all code points are of the same length */
-      int32_t targetSize = targetLimit - *target;
-      int32_t i, bytesPerChar = _this->sharedData->staticData->maxBytesPerChar;
+      /* there is no implementation that sets offsets, set them all to -1 */
+      int32_t i, targetSize = targetLimit - *target;
 
-      if(bytesPerChar == 1) {
-        for (i=0; i<targetSize; i++) {
-          args.offsets[i] = i;
-        }
-      } else if(bytesPerChar == 2) {
-        for (i=0; i<targetSize; i++) {
-          args.offsets[i] = i>>1;
-        }
-      } else {
-        int32_t j = 0, k = bytesPerChar;
-
-        for (i=0; i<targetSize; i++) {
-          /* offsets[i] = i/bytesPerChar; -- without division */
-          args.offsets[i] = j;
-          if(--k == 0) {
-            k = bytesPerChar;
-            ++j;
-          }
-        }
+      for (i=0; i<targetSize; i++) {
+        offsets[i] = -1;
       }
     }
   }
@@ -688,22 +670,11 @@ void   ucnv_toUnicode (UConverter * _this,
       *target = args.target;
       return;
     } else {
-      /* all code points are of the same length */
-      int32_t targetSize = targetLimit - *target;
-      int32_t i, bytesPerChar = _this->sharedData->staticData->maxBytesPerChar;
+      /* there is no implementation that sets offsets, set them all to -1 */
+      int32_t i, targetSize = targetLimit - *target;
 
-      if(bytesPerChar == 1) {
-        for (i=0; i<targetSize; i++) {
-          offsets[i] = i;
-        }
-      } else if(bytesPerChar == 2) {
-        for (i=0; i<targetSize; i++) {
-          offsets[i] = i<<1;
-        }
-      } else {
-        for (i=0; i<targetSize; i++) {
-          offsets[i] = i*bytesPerChar;
-        }
+      for (i=0; i<targetSize; i++) {
+        offsets[i] = -1;
       }
     }
   }
@@ -1155,10 +1126,7 @@ UConverterType ucnv_getType(const UConverter* converter)
 {
     int8_t type = converter->sharedData->staticData->conversionType;
     if(type == UCNV_MBCS) {
-        /* SBCS is replaced by MBCS, but here we cheat a little */
-        if(converter->sharedData->table->mbcs.countStates == 1) {
-            return (UConverterType)UCNV_SBCS;
-        }
+        return _MBCSGetType(converter);
     }
     return (UConverterType)type;
 }
