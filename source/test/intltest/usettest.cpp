@@ -219,15 +219,16 @@ UnicodeSetTest::TestCategories(void) {
 void
 UnicodeSetTest::TestCloneEqualHash(void) {
     UErrorCode status = U_ZERO_ERROR;
-    int8_t category=U_LOWERCASE_LETTER;
-    UnicodeSet *set1=new UnicodeSet(category, status); //  :Ll: Letter, lowercase
+    // set1 and set2 used to be built with the obsolete constructor taking
+    // UCharCategory values; replaced with pattern constructors
+    // markus 20030502
+    UnicodeSet *set1=new UnicodeSet("\\p{Lowercase Letter}", status); //  :Ll: Letter, lowercase
     UnicodeSet *set1a=new UnicodeSet("[:Ll:]", status); //  Letter, lowercase
     if (U_FAILURE(status)){
         errln((UnicodeString)"FAIL: Can't construst set with category->Ll");
         return;
     }
-    category=U_DECIMAL_DIGIT_NUMBER;
-    UnicodeSet *set2=new UnicodeSet(category, status);   //Number, Decimal digit
+    UnicodeSet *set2=new UnicodeSet("\\p{Decimal Number}", status);   //Number, Decimal digit
     UnicodeSet *set2a=new UnicodeSet("[:Nd:]", status);   //Number, Decimal digit
     if (U_FAILURE(status)){
         errln((UnicodeString)"FAIL: Can't construct set with category->Nd");
