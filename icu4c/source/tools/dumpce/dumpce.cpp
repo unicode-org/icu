@@ -887,7 +887,19 @@ void outputScriptElem(ScriptElement &element, int compare, UBool expansion)
     fprintf(OUTPUT_, "%s<br>", utf8);
     fprintf(OUTPUT_, "<tt>");
     outputUChar(element.ch, element.count);
-    fprintf(OUTPUT_, "</tt></td><td class='n'>");
+
+    if (compare == 0) {
+        fprintf(OUTPUT_, "</tt></td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>Q</td><td>");
+    }
+    else if (compare == -1) {
+        fprintf(OUTPUT_, "</tt></td><td>P</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>");
+    }
+    else if (compare == -2) {
+        fprintf(OUTPUT_, "</tt></td><td>&nbsp;</td><td>S</td><td>&nbsp;</td><td>&nbsp;</td><td>");
+    }
+    else if (compare == -3) {
+        fprintf(OUTPUT_, "</tt></td><td>&nbsp;</td><td>&nbsp;</td><td>T</td><td>&nbsp;</td><td>");
+    }
 
     i = 0;
     while (i < element.count) {
@@ -1022,14 +1034,12 @@ int getScriptElements(UScriptCode script[], int scriptcount,
           UColTokenParser  src;
           UColOptionSet    opts;
           UParseError      parseError;
-    
-    src.opts = &opts;
-      
+        
     src.source       = src.current = rule;
     src.end          = rule + rulelength;
     src.extraCurrent = src.end;
     src.extraEnd     = src.end + UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
-
+    src.opts         = &opts;
         
     while ((current = ucol_tok_parseNextToken(&src, &strength, &chOffset, 
                                               &chLen, &exOffset, &exLen,
@@ -1049,7 +1059,7 @@ int getScriptElements(UScriptCode script[], int scriptcount,
         rstart = FALSE;
     }
     if (U_FAILURE(error)) {
-        fprintf(stdout, "Error parsing rules\n");
+        fprintf(stdout, "Error parsing rules: %s\n", u_errorName(error));
     }
     if (rule != ucarules) {
        free(rule);
@@ -1360,7 +1370,7 @@ void outputHTMLHeader(const char *locale, UScriptCode script[],
     fprintf(OUTPUT_, "<p><a href=help.html>How to read the table</a><br>\n");
     fprintf(OUTPUT_, "<a href=http://www.jtcsv.com/cgi-bin/icu-bugs/ target=new>Submit a bug</a></p>\n");
     fprintf(OUTPUT_, "\n<table>\n");
-    fprintf(OUTPUT_, "\n<tr><th>Codepoint</th><th>Name</th></tr>\n");
+    fprintf(OUTPUT_, "\n<tr><th>Codepoint</th><th>P</th><th>S</th><th>T</th><th>Q</th><th>Name</th></tr>\n");
 }
 
 /**
