@@ -1632,6 +1632,7 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
       *status = U_MEMORY_ALLOCATION_ERROR;
       return;
   }
+  uprv_memset(src->source, 0, estimatedSize*sizeof(UChar));
   nSize = unorm_normalize(rules, rulesLength, UNORM_NFD, 0, src->source, estimatedSize, status);
   if(nSize > estimatedSize || *status == U_BUFFER_OVERFLOW_ERROR) {
     *status = U_ZERO_ERROR;
@@ -1676,6 +1677,7 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
       *status = U_MEMORY_ALLOCATION_ERROR;
       return;
   }
+  uprv_memset(src->opts, 0, sizeof(UColOptionSet));
 
   uprv_memcpy(src->opts, UCA->options, sizeof(UColOptionSet));
 
@@ -1688,6 +1690,7 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
       *status = U_MEMORY_ALLOCATION_ERROR;
       return;
   }
+  uprv_memset(src->lh, 0, src->listCapacity*sizeof(UColTokListHeader));
   src->resultLen = 0;
 
   UCAConstants *consts = (UCAConstants *)((uint8_t *)src->UCA->image + src->UCA->image->UCAConsts);

@@ -305,6 +305,7 @@ static InverseUCATableHeader *assembleInverseTable(UErrorCode *status)
   uint32_t i = 0;
 
   result = (InverseUCATableHeader *)uprv_malloc(headerByteSize + inverseTableByteSize + contsByteSize);
+  uprv_memset(result, 0, headerByteSize + inverseTableByteSize + contsByteSize);
   if(result != NULL) {
     result->byteSize = headerByteSize + inverseTableByteSize + contsByteSize;
 
@@ -750,6 +751,7 @@ write_uca_table(const char *filename,
 		fclose(data);
 		return 0;
 	}
+    uprv_memset(myD, 0, sizeof(UCATableHeader));
     UColOptionSet *opts = (UColOptionSet *)uprv_malloc(sizeof(UColOptionSet));
     /* test for NULL */
 	if(opts == NULL) {
@@ -758,7 +760,9 @@ write_uca_table(const char *filename,
 		fclose(data);
 		return 0;
 	}
+    uprv_memset(opts, 0, sizeof(UColOptionSet));
     UChar contractionCEs[256][3];
+    uprv_memset(contractionCEs, 0, 256*3*sizeof(UChar));
     uint32_t noOfContractions = 0;
     UCAConstants consts;
 #if 0
@@ -799,7 +803,7 @@ write_uca_table(const char *filename,
         return -1;
     }
 
-    memset(inverseTable, 0xDA, sizeof(int32_t)*3*0xFFFF);
+    uprv_memset(inverseTable, 0xDA, sizeof(int32_t)*3*0xFFFF);
 
     opts->variableTopValue = variableTopValue;
     opts->strength = UCOL_TERTIARY;
