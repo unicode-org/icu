@@ -231,13 +231,13 @@ UConverter_toUnicode_HZ_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                     tempBuf[1] = (char) (mySourceChar+0x80);
                     mySourceChar= (UChar)(((args->converter->toUnicodeStatus+0x80) << 8) | ((mySourceChar & 0x00ff)+0x80));
                     args->converter->toUnicodeStatus =0x00;
-                    targetUniChar = _MBCSSimpleGetNextUChar(myData->gbConverter->sharedData,
+                    targetUniChar = ucnv_MBCSSimpleGetNextUChar(myData->gbConverter->sharedData,
                         tempBuf, 2, args->converter->useFallback);
                 }
             }
             else{
                 if(args->converter->fromUnicodeStatus == 0x00){
-                    targetUniChar = _MBCSSimpleGetNextUChar(myData->gbConverter->sharedData,
+                    targetUniChar = ucnv_MBCSSimpleGetNextUChar(myData->gbConverter->sharedData,
                         mySource - 1, 1, args->converter->useFallback);
                 }
                 else{
@@ -327,7 +327,7 @@ UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
                 continue;
             }
             else{
-                length= _MBCSFromUChar32(myConverterData->gbConverter->sharedData,
+                length= ucnv_MBCSFromUChar32(myConverterData->gbConverter->sharedData,
                     mySourceChar,&targetUniChar,args->converter->useFallback);
 
             }

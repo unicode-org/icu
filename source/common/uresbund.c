@@ -229,10 +229,6 @@ UBool ures_cleanup(void)
     return (cache == NULL);
 }
 
-U_CFUNC void ures_init(UErrorCode *status) {
-    umtx_init(&resbMutex);
-}
-
 
 /** INTERNAL: sets the name (locale) of the resource bundle to given name */
 
@@ -412,6 +408,26 @@ static UResourceDataEntry *findFirstExisting(const char* path, char* name, UBool
     *hasChopped = chopLocale(name);
   }
   return r;
+}
+
+static void ures_setIsStackObject( UResourceBundle* resB, UBool state) {
+    if(state) {
+        resB->fMagic1 = 0;
+        resB->fMagic2 = 0;
+    } else {
+        resB->fMagic1 = MAGIC1;
+        resB->fMagic2 = MAGIC2;
+    }
+}
+
+static UBool ures_isStackObject(const UResourceBundle* resB) {
+  return((resB->fMagic1 == MAGIC1 && resB->fMagic2 == MAGIC2)?FALSE:TRUE);
+}
+
+
+U_CFUNC void ures_initStackObject(UResourceBundle* resB) {
+  uprv_memset(resB, 0, sizeof(UResourceBundle));
+  ures_setIsStackObject(resB, TRUE);
 }
 
 static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UErrorCode* status) {
@@ -1748,26 +1764,6 @@ ures_openDirect(const char* path, const char* localeID, UErrorCode* status) {
     r->fTopLevelData = r->fData;
 
     return r;
-}
-
-U_CFUNC void ures_setIsStackObject( UResourceBundle* resB, UBool state) {
-    if(state) {
-        resB->fMagic1 = 0;
-        resB->fMagic2 = 0;
-    } else {
-        resB->fMagic1 = MAGIC1;
-        resB->fMagic2 = MAGIC2;
-    }
-}
-
-U_CFUNC UBool ures_isStackObject(const UResourceBundle* resB) {
-  return((resB->fMagic1 == MAGIC1 && resB->fMagic2 == MAGIC2)?FALSE:TRUE);
-}
-
-
-U_CFUNC void ures_initStackObject(UResourceBundle* resB) {
-  uprv_memset(resB, 0, sizeof(UResourceBundle));
-  ures_setIsStackObject(resB, TRUE);
 }
 
 /**
