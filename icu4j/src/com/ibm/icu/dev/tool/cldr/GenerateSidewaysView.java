@@ -16,6 +16,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -58,9 +59,13 @@ import com.ibm.icu.util.UResourceBundle;
  * one element, where the file would otherwise be too large.
  * @author medavis
  */public class GenerateSidewaysView {
+    // debug flags
+    static final boolean DEBUG = false;
+    static final boolean DEBUG2 = false;
+    static final boolean DEBUG_SHOW_ADD = false;
+    static final boolean DEBUG_ELEMENT = true;
     
-    static boolean VALIDATING = false;
-    static final boolean SHOW_ADD = false;
+    static final boolean FIX_ZONE_ALIASES = true;
 
     private static final int 
         HELP1 = 0,
@@ -69,7 +74,8 @@ import com.ibm.icu.util.UResourceBundle;
         DESTDIR = 3,
         MATCH = 4,
         SKIP = 5,
-        TZADIR = 6;
+        TZADIR = 6,
+        NONVALIDATING = 7;
         
     private static final String NEWLINE = "\n";
 
@@ -81,7 +87,7 @@ import com.ibm.icu.util.UResourceBundle;
             UOption.create("match", 'm', UOption.REQUIRES_ARG).setDefault(".*"),
             UOption.create("skip", 'z', UOption.REQUIRES_ARG).setDefault("zh_(C|S|HK|M).*"),
             UOption.create("tzadir", 't', UOption.REQUIRES_ARG).setDefault("C:\\ICU4J\\icu4j\\src\\com\\ibm\\icu\\dev\\tool\\cldr\\"),
-
+            UOption.create("nonvalidating", 'n', UOption.NO_ARG),
     };
     private static String timeZoneAliasDir = null;
     
@@ -106,7 +112,7 @@ import com.ibm.icu.util.UResourceBundle;
                 log.println();
                 log.println("Processing " + contents[i]);
                 String baseName = contents[i].substring(0,contents[i].length()-4);
-                GenerateSidewaysView temp = getCLDR(baseName);
+                GenerateSidewaysView temp = getCLDR(baseName, !options[NONVALIDATING].doesOccur);
                 // if (baseName.equals("zh_TW")) baseName = "zh_Hant_TW";
                 // if (baseName.equals("root")) temp.addMissing();
 
@@ -120,6 +126,32 @@ import com.ibm.icu.util.UResourceBundle;
        }
     }
     
+    static Collator DEFAULT_COLLATION = null;
+    
+    static final Set IGNOREABLE =  new HashSet(Arrays.asList(new String[] {
+            "draft", 
+            //"references",
+            //"standard"
+    }));
+
+    static final Set IGNORELIST = new HashSet(Arrays.asList(new String[] {
+            "draft", "standard", "references", "validSubLocales"
+    }));
+
+    static final Set LEAFNODES = new HashSet(Arrays.asList(new String[] {
+                   "alias", "default", "firstDay", "mapping", "measurementSystem", 
+                   "minDays", "orientation", "settings", "weekendStart", "weekendEnd"
+   }));
+    
+    static Collator getDefaultCollation() {
+        if (DEFAULT_COLLATION != null) return DEFAULT_COLLATION;
+        RuleBasedCollator temp = (RuleBasedCollator) Collator.getInstance(ULocale.ENGLISH);
+        temp.setStrength(Collator.IDENTICAL);
+        temp.setNumericCollation(true);
+        DEFAULT_COLLATION = temp;
+        return temp;
+    }
+
     public static class TimeZoneAliases {        
     	static Map map = null;
         static void init() {
@@ -157,7 +189,7 @@ import com.ibm.icu.util.UResourceBundle;
         
     OrderedMap data = new OrderedMap();
     MyContentHandler DEFAULT_HANDLER = new MyContentHandler();
-    XMLReader xmlReader = createXMLReader(VALIDATING);
+    XMLReader xmlReader;
 
     /*SAXParser SAX;
     {
@@ -218,10 +250,10 @@ import com.ibm.icu.util.UResourceBundle;
 
     static Map cache = new HashMap();
     
-    static GenerateSidewaysView getCLDR(String s) throws SAXException, IOException {
+    static GenerateSidewaysView getCLDR(String s, boolean validating) throws SAXException, IOException {
         GenerateSidewaysView temp = (GenerateSidewaysView)cache.get(s);
         if (temp == null) {
-            temp = new GenerateSidewaysView(s);
+            temp = new GenerateSidewaysView(s, validating);
             cache.put(s,temp);
         }
         return temp;
@@ -230,14 +262,15 @@ import com.ibm.icu.util.UResourceBundle;
     String filename;
     GenerateSidewaysView parent = null;
         
-    private GenerateSidewaysView(String filename) throws SAXException, IOException {
+    private GenerateSidewaysView(String filename, boolean validating) throws SAXException, IOException {
+        this.filename = filename;
+        xmlReader = createXMLReader(validating);
         // make sure the parents are loaded into cache before we are
         String parentName = getParentFilename(filename);
         if (parentName != null) {
-            parent = getCLDR(parentName);
+            parent = getCLDR(parentName, validating);
         }
         //System.out.println("Creating " + filename);
-        this.filename = filename;
 
         xmlReader.setContentHandler(DEFAULT_HANDLER);
         xmlReader.setProperty("http://xml.org/sax/properties/lexical-handler",DEFAULT_HANDLER);
@@ -246,33 +279,47 @@ import com.ibm.icu.util.UResourceBundle;
         // walk through the map removing anything that is inherited from a parent.
         // changed so that we stop when the parent has an element
         if (parent != null) {
-            Set toRemove = new TreeSet();
+            Parent parentOut = new Parent();
+            Map toRemove = new TreeMap();
             for (Iterator it = data.iterator(); it.hasNext();) {
                 Object key = it.next();
                 if (((ElementChain)key).containsElement("identity")) continue;
-                Object value = data.get(key);
-                Object inheritedValue = getInheritedValue(key);
+                EndNode value = (EndNode) data.get(key);
+                Object inheritedValue = getInheritedValue(key, parentOut);
                 if (value.equals(inheritedValue)) {
                     // debugging: data.get(key);
                     //getInheritedValue(key);
                     //value.equals(inheritedValue);
-                    toRemove.add(key);
+                    toRemove.put(key, parentOut.parent);
                 }
             }
-            for (Iterator it = toRemove.iterator(); it.hasNext();) {
-                Object key = it.next();
-                Object value = data.get(key);
-                log.println("Removing " + ((ElementChain)key).toString(true, 0) + "\t" + value);
+            for (Iterator it = toRemove.keySet().iterator(); it.hasNext();) {
+                ElementChain key = (ElementChain)it.next();
+                EndNode value = (EndNode) data.get(key);
+                GenerateSidewaysView parent = (GenerateSidewaysView) toRemove.get(key);
+                EndNode parentValue = (EndNode) parent.data.get(key);
+                log.println("Removing " + key.toString(true, 0) + "\t" + value);
+                ElementChain parentKey = (ElementChain) parent.data.getKeyFor(key);
+                log.println("\tIn " + parent.filename + ":\t" + parentKey.toString(true, 0) + "\t"+ parentValue);
                 data.remove(key);
             }
         }
     }
     
-    private Object getInheritedValue(Object key) {
-        if (parent == null) return null;
-        Object value = parent.data.get(key);
-        if (value != null) return value;
-        return parent.getInheritedValue(key);
+    static class Parent {
+    	GenerateSidewaysView parent;
+    }
+    private Object getInheritedValue(Object key, Parent parentOut) {
+        if (parent == null) {
+            parentOut.parent = null;
+            return null;
+        }
+        EndNode value = (EndNode) parent.data.get(key);
+        if (value != null) {
+            parentOut.parent = parent;
+            return value;
+        }
+        return parent.getInheritedValue(key, parentOut);
     }
     
     /*
@@ -327,6 +374,8 @@ import com.ibm.icu.util.UResourceBundle;
 
     public void readFrom(String dir, String filename) throws SAXException, IOException {
         File f = new File(dir + filename + ".xml");
+        System.out.println("Parsing: " + f.getCanonicalPath());
+        log.println("Parsing: " + f.getCanonicalPath());
         xmlReader.parse(new InputSource(new FileInputStream(f)));
         //SAX.parse(f, DEFAULT_HANDLER);
     }
@@ -375,24 +424,16 @@ import com.ibm.icu.util.UResourceBundle;
                     }
                 }
             }
-            String value = (String) data.get(key);
-            key.getDifference(old, value, buffer);
+            EndNode value = (EndNode) data.get(key);
+            key.writeDifference(old, value, buffer);
             old = key;           
         }
-        empty.getDifference(old, "", buffer);
+        empty.writeDifference(old, null, buffer);
         writeElementComment(buffer,finalComment,0);
 
         return buffer.toString();
     }
     
-
-    public static final Set IGNOREABLE = 
-        new HashSet(Arrays.asList(new String[] {
-            "draft", 
-            //"references",
-            //"standard"
-        }));
-
 
     static class SimpleAttribute implements Comparable {
         String name;
@@ -412,7 +453,7 @@ import com.ibm.icu.util.UResourceBundle;
         public String toString() {return toString(true);}
         public String toString(boolean path) {
             if (path) {
-            	return "@" + name + "=\"" + BagFormatter.toHTML.transliterate(value) + "\"";
+            	return "[@" + name + "='" + BagFormatter.toHTML.transliterate(value) + "']";
             } else {
                 return " " + name + "=\"" + BagFormatter.toHTML.transliterate(value) + "\"";                
             }
@@ -425,14 +466,16 @@ import com.ibm.icu.util.UResourceBundle;
         }
     }
     
-    static final boolean FIX_ZONE_ALIASES = true;
     Set zoneIDs = new HashSet();
     
     class SimpleAttributes implements Comparable {
         Set contents = new TreeSet();
         
+        SimpleAttributes() {}
+        
         SimpleAttributes(SimpleAttributes other, String elementName) {
             contents.clear();
+            contents.addAll(other.contents);
         }
         
         SimpleAttributes(Attributes attributes, String elementName) {
@@ -480,11 +523,13 @@ import com.ibm.icu.util.UResourceBundle;
         }
         public int compareTo(Object o) {
             // IGNORE draft, source, reference
-            int result;
             SimpleAttributes that = (SimpleAttributes) o;
+            // quick check for common case
+            if (contents.size() == 0 && that.contents.size() == 0) return 0;
             // compare one at a time. Stop if one element is less than another.
             Iterator it = contents.iterator();
             Iterator it2 = that.contents.iterator();
+            int result;
             while (true) {
             	SimpleAttribute a = getSkipping(it);
                 SimpleAttribute a2 = getSkipping(it2);
@@ -536,19 +581,18 @@ import com.ibm.icu.util.UResourceBundle;
             }
             return null;
 		}
+
+		/**
+		 * @param attributes
+		 */
+		public void add(SimpleAttributes attributes) {
+			contents.addAll(attributes.contents);
+		}
     }
     
     static class TripleData {
-        
-        RuleBasedCollator col = (RuleBasedCollator)Collator.getInstance(ULocale.ENGLISH);
-        { col.setStrength(Collator.IDENTICAL);
-          col.setNumericCollation(true);
-        }
-        
-        Map elementToAttributeToValues = new TreeMap(col);
+        Map elementToAttributeToValues = new TreeMap(getDefaultCollation());
         Map bigguys = null;
-        Set IGNORELIST = new HashSet(Arrays.asList(new String[] {"draft", "alt", "standard", "references",
-                "validSubLocales"}));
         static final String ANYSTRING = "[any]";
         
         private void recordData(String element, String attribute, String value) {
@@ -557,12 +601,12 @@ import com.ibm.icu.util.UResourceBundle;
             // record for posterity
             Map elementToAttribute = (Map) elementToAttributeToValues.get(element);
             if (elementToAttribute == null) {
-                elementToAttribute = new TreeMap(col);
+                elementToAttribute = new TreeMap(getDefaultCollation());
                 elementToAttributeToValues.put(element, elementToAttribute);
             }
             Set valueSet = (Set) elementToAttribute.get(attribute);
             if (valueSet == null) {
-                valueSet = new TreeSet(col);
+                valueSet = new TreeSet(getDefaultCollation());
                 elementToAttribute.put(attribute, valueSet);
             }
             if (value != null) valueSet.add(value);
@@ -839,23 +883,30 @@ import com.ibm.icu.util.UResourceBundle;
 		public String getValue(String attributeName) {
 			return attributes.getValue(attributeName);
 		}
+        
 		Element(Element other) {
             //elementOrdering.add(elementName);
             this.elementName = other.elementName;
             this.attributes = new SimpleAttributes(other.attributes, elementName);
             this.comment = other.comment;
         }
-        public String toString() {return toString(true);}
+        
+        public String toString() {
+            //throw new IllegalArgumentException("Don't use2");
+            return toString(PATH);
+        }
+        /*
         public String toString(boolean path) {
             return toString(START_VALUE, path);
         }
-        static final int NO_VALUE = 0, START_VALUE = 1, END_VALUE = 2;
-        public String toString(int type, boolean path) {
-            String a = attributes.toString(path, elementName.equals("zone"));
+        */
+        static final int PATH = -1, NO_VALUE = 0, START_VALUE = 1, END_VALUE = 2;
+        public String toString(int type) {
+            String a = attributes.toString(type==PATH, elementName.equals("zone"));
             String result;
-            if (path) {
-                if (type == NO_VALUE) return elementName + a + "-NOVALUE";
-                if (type == END_VALUE) return "END-" + elementName + ">";
+            if (type==PATH) {
+                //if (type == NO_VALUE) return elementName + a + "-NOVALUE";
+                //if (type == END_VALUE) return "END-" + elementName + ">";
                 result = elementName + a;
             } else {
                 if (type == NO_VALUE) result = "<" + elementName + a + "/>";
@@ -872,6 +923,7 @@ import com.ibm.icu.util.UResourceBundle;
             return attributes.compareTo(that.attributes);
         }
         public boolean equals(Object o) {
+            if (!(o instanceof Element)) return false;
         	return compareTo(o) == 0;
         }
         /*
@@ -897,7 +949,7 @@ import com.ibm.icu.util.UResourceBundle;
             out.append("-->\r\n");
         }
     }
-    
+
     class ElementChain implements Comparable {
         List contexts;
         
@@ -951,14 +1003,18 @@ import com.ibm.icu.util.UResourceBundle;
             contexts.remove(last);
         }
         
-        public String toString() {return toString(true, 0);}
+        public String toString() {
+            //throw new IllegalArgumentException("Don't use");
+            return toString(true, 0);
+        }
+        
         public String toString(boolean path, int startLevel) {
             StringBuffer buffer = new StringBuffer();
             for (int i = startLevel; i < contexts.size(); ++i) {
                 //if (i != 0) buffer.append(' ');
                 Element e = (Element) contexts.get(i);
-                if (path) buffer.append("/" + e.toString(path));
-                else buffer.append(e.toString(path));
+                if (path) buffer.append("/" + e.toString(Element.PATH));
+                else buffer.append(e.toString(Element.START_VALUE));
             }
             return buffer.toString();
         }
@@ -976,13 +1032,16 @@ import com.ibm.icu.util.UResourceBundle;
         public int compareTo(Object o) {
             int result;
             ElementChain that = (ElementChain) o;
+            if (DEBUG_ELEMENT && containsElement("weekendEnd") && that.containsElement(("weekendEnd"))) {
+                result = 666;
+            }
             int minLen = Math.min(contexts.size(), that.contexts.size());
             for (int i = 0; i < minLen; ++i) {
                 if ((result = ((Element)contexts.get(i)).compareTo(that.contexts.get(i))) != 0) return result;
             }
             return compareInt(contexts.size(), that.contexts.size());
         }
-        public void getDifference(ElementChain former, String value, StringBuffer out) {
+        public void writeDifference(ElementChain former, EndNode value, StringBuffer out) {
             // find the identical stuff first!
             int csize = contexts.size();
             int fsize = former.contexts.size();
@@ -998,7 +1057,7 @@ import com.ibm.icu.util.UResourceBundle;
             // We don't do the very last one, however, since that was done with the value
             for (int j = fsize - 2; j >= common; --j) {
                 indent(j, out);
-                out.append(((Element)former.contexts.get(j)).toString(Element.END_VALUE, false));
+                out.append(((Element)former.contexts.get(j)).toString(Element.END_VALUE));
                 out.append(NEWLINE);
             }
             if (csize == 0) return; // we must be at the very end, bail.
@@ -1008,30 +1067,34 @@ import com.ibm.icu.util.UResourceBundle;
                 Element ee = ((Element)contexts.get(common));
                 writeElementComment(out, ee.comment, common);
                 indent(common, out);
-                out.append(ee.toString(Element.START_VALUE, false));
+                out.append(ee.toString(Element.START_VALUE));
                 out.append(NEWLINE);
             }
             // now write the very current element
             Element ee = ((Element)contexts.get(csize-1));
             writeElementComment(out, ee.comment, common);
             indent(common, out);
-            if (value.length() == 0) {                           
-                out.append(ee.toString(Element.NO_VALUE, false));
+            if (value == null || "".equals(value.string)) {                           
+                out.append(ee.toString(Element.NO_VALUE));
+            } else if (value.string == null) {
+                Element temp = new Element(ee); // clone for safety
+                temp.attributes.add(value.attributes);
+                out.append(temp.toString(Element.NO_VALUE));
             } else {
-                out.append(ee.toString(Element.START_VALUE, false));
-                out.append(BagFormatter.toHTML.transliterate(value));
-                out.append(ee.toString(Element.END_VALUE, false));
+                out.append(ee.toString(Element.START_VALUE));
+                out.append(value.toString(Element.NO_VALUE));
+                out.append(ee.toString(Element.END_VALUE));
             }
             out.append(NEWLINE);
         }
 
-		/**
-         * @param string
-         * @return
-         */
         public boolean containsElement(String string) {
             return getElement(string) != null;
         }
+
+		public Element getLast() {
+			return (Element) contexts.get(contexts.size()-1);
+		}
 
 		/**
 		 * @param comment
@@ -1185,6 +1248,16 @@ import com.ibm.icu.util.UResourceBundle;
             list.add(a);
         }
         /**
+		 * @param key
+		 * @return
+		 */
+		public Object getKeyFor(ElementChain key) {
+            for (int i = 0; i < list.size(); ++i) {
+            	if (list.get(i).equals(key)) return key;
+            }
+			return null;
+		}
+		/**
 		 * @param object
 		 */
 		public void remove(Object object) {
@@ -1224,9 +1297,28 @@ import com.ibm.icu.util.UResourceBundle;
     }
     
     ElementChain putData(ElementChain stack, String associatedData) {
-        if (SHOW_ADD) log.println("Adding: " + stack.toString(true,0) + "\t" + associatedData);
+        
+        //If the associated data is "" and we have a final element in LEAFNODE,
+        //then pull off the last element, and make it the associated data
+        
         ElementChain result = new ElementChain(stack);
-        data.put(result, associatedData);
+        EndNode value = new EndNode();
+        value.string = associatedData;
+        Element lastElement = result.getLast();
+        if (LEAFNODES.contains(lastElement.elementName)) {
+            if (associatedData.length() != 0) {
+                System.err.println("Leaf Node must be empty: " + lastElement + "\tData: " + associatedData);            	
+            }
+            value.attributes = lastElement.attributes;
+            lastElement.attributes = new SimpleAttributes();
+            value.string = null;
+        }
+        if (DEBUG_SHOW_ADD) System.out.println("Adding: " + result + "\t" + value);
+        EndNode alreadyThere = (EndNode) data.get(result);
+        if (alreadyThere != null) {
+        	System.err.println("Overriding: " + result + "\tOld Value: " + alreadyThere + ",\t New Value: " + value);
+        }
+        data.put(result, value);      
         return result;
     }
     
@@ -1234,25 +1326,72 @@ import com.ibm.icu.util.UResourceBundle;
     
     static SidewaysView sidewaysView = new SidewaysView();
     
+    static class EndNode {
+    	String string;
+        SimpleAttributes attributes;
+		public void set(Object associatedData) {
+			if (associatedData instanceof String) {
+				string = (String) associatedData;
+                attributes = null;
+            } else {
+            	attributes = (SimpleAttributes) associatedData;
+                string = null;
+            }			
+		}
+        public String toString() {
+        	return toString(Element.PATH);
+        }
+        public String toString(int type) {
+        	if (string != null) return BagFormatter.toHTML.transliterate(string);
+            return attributes.toString(); // TO FIX type==Element.PATH
+        }
+        /*
+        public static String showValue(Object value) {
+            if (value instanceof String) {
+                return BagFormatter.toHTML.transliterate((String)value);
+            }
+            return ((Element)value).toString();
+        }
+        */
+        
+
+    }
+    
+    static class EndNodeComparator implements Comparator {
+		public int compare(Object o1, Object o2) {
+            EndNode these = (EndNode) o1;
+                EndNode that = (EndNode) o2;
+                if (these.string != null) {
+                    if (that.string != null) {
+                        return getDefaultCollation().compare(these.string, that.string);
+                    }
+                    return -1;
+                } else if (that.attributes != null) {
+                    return these.attributes.compareTo(that.attributes);
+                }
+                return 1;
+            }       
+    }
+    
     static class SidewaysView {
-        Collator col = Collator.getInstance(ULocale.ENGLISH);
-        { col.setStrength(Collator.IDENTICAL); }
+        EndNodeComparator enc = new EndNodeComparator();
         Map contextCache = new TreeMap();
         Set fileNames = new TreeSet();
         Set allTypes = new TreeSet();
         void putData(OrderedMap data, String filename) {
             for (Iterator it = data.iterator(); it.hasNext();) {
                 ElementChain copy = (ElementChain) it.next();
-                String associatedData = (String) data.get(copy);
+                EndNode endNode = (EndNode)data.get(copy);
                 Map dataToFile = (Map)contextCache.get(copy);
                 if (dataToFile == null) {
-                    dataToFile = new TreeMap(col);
+                    dataToFile = new TreeMap(enc);
                     contextCache.put(copy, dataToFile);
                  }
-                Set files = (Set) dataToFile.get(associatedData);
+                //System.out.println(copy + "\t\t" + endNode);
+                Set files = (Set) dataToFile.get(endNode);
                 if (files == null) {
                     files = new TreeSet();
-                    dataToFile.put(associatedData, files);
+                    dataToFile.put(endNode, files);
                 }
                 files.add(filename);
             }
@@ -1311,21 +1450,21 @@ import com.ibm.icu.util.UResourceBundle;
                 // walk through once, and gather all the filenames
                 Set remainingFiles = new TreeSet(fileNames);
                 for (Iterator it2 = dataToFile.keySet().iterator(); it2.hasNext();) {
-                    String data = (String) it2.next();
+                    Object data = it2.next();
                     remainingFiles.removeAll((Set) dataToFile.get(data));
                 }
                 // hack for zh_Hant
                 if (!remainingFiles.contains("zh")) remainingFiles.remove("zh_Hant");
                 // now display
                 for (Iterator it2 = dataToFile.keySet().iterator(); it2.hasNext();) {
-                    String data = (String) it2.next();
+                    EndNode data = (EndNode) it2.next();
                     String dataStyle = "";
                     Set files = (Set) dataToFile.get(data);
                     if (files.contains("root")) {
                         files.addAll(remainingFiles);
                         dataStyle = " class='nodata'";
                     }
-                    out.print("<tr><th" + dataStyle + ">\"" + BagFormatter.toHTML.transliterate(data) + "\"</th><td>");
+                    out.print("<tr><th" + dataStyle + ">\"" + data + "\"</th><td>");
                     boolean first = true;
                     for (Iterator it3 = files.iterator(); it3.hasNext();) {
                         if (first) first = false;
@@ -1398,8 +1537,6 @@ import com.ibm.icu.util.UResourceBundle;
     }
     
     class MyContentHandler implements ContentHandler, LexicalHandler {
-        static final boolean DEBUG = false;
-        static final boolean DEBUG2 = false;
         
         ElementChain contextStack = new ElementChain();
         String lastChars = "";
@@ -1541,28 +1678,34 @@ import com.ibm.icu.util.UResourceBundle;
 		try { // Xerces
 			result =  XMLReaderFactory
 					.createXMLReader("org.apache.xerces.parsers.SAXParser");
+            result.setFeature("http://xml.org/sax/features/validation", validating);
 		} catch (SAXException e1) {
 			try { // Crimson
 				result =  XMLReaderFactory
 						.createXMLReader("org.apache.crimson.parser.XMLReaderImpl");
+                result.setFeature("http://xml.org/sax/features/validation", validating);
 			} catch (SAXException e2) {
 				try { // Ælfred
 					result =  XMLReaderFactory
 							.createXMLReader("gnu.xml.aelfred2.XmlReader");
+                    result.setFeature("http://xml.org/sax/features/validation", validating);
 				} catch (SAXException e3) {
 					try { // Piccolo
 						result =  XMLReaderFactory
 								.createXMLReader("com.bluecast.xml.Piccolo");
+                        result.setFeature("http://xml.org/sax/features/validation", validating);
 					} catch (SAXException e4) {
 						try { // Oracle
 							result =  XMLReaderFactory
 									.createXMLReader("oracle.xml.parser.v2.SAXParser");
+                            result.setFeature("http://xml.org/sax/features/validation", validating);
 						} catch (SAXException e5) {
 							try { // default
 								result =  XMLReaderFactory.createXMLReader();
+                                result.setFeature("http://xml.org/sax/features/validation", validating);
 							} catch (SAXException e6) {
 								throw new NoClassDefFoundError(
-										"No SAX parser is available");
+										"No SAX parser is available, or unable to set validation correctly");
 								// or whatever exception your method is  
 								// declared to throw
 							}
@@ -1570,11 +1713,6 @@ import com.ibm.icu.util.UResourceBundle;
 					}
 				}
 			}
-		}
-        try {
-			result.setFeature("http://xml.org/sax/features/validation", validating);
-		} catch (SAXException e) {
-			System.out.println("WARNING: Can't set parser validation to: " + validating);
 		}
         try {
 			result.setEntityResolver(new CachingEntityResolver());
