@@ -298,7 +298,6 @@ void ucmp8_expand(CompactByteArray* this_obj)
       this_obj->fArray = tempArray;
       this_obj->fCompact = FALSE;
       this_obj->fAlias = FALSE;
-      this_obj->fIAmOwned = FALSE;
 
     }
 }
