@@ -8,7 +8,6 @@
 **********************************************************************
 */
 
-#include <stdio.h>
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
 #include "unicode/uclean.h"
@@ -21,6 +20,8 @@
 #include "uprops.h"
 #include "propname.h"
 #include "uassert.h"
+
+#include <stdio.h>
 
 // TODO: Clean up and comment this code.
 
