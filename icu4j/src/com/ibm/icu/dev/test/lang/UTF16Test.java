@@ -5,13 +5,13 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UTF16Test.java,v $ 
-* $Date: 2002/02/19 04:10:24 $ 
-* $Revision: 1.12 $
+* $Date: 2002/02/22 03:43:32 $ 
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */
 
-package com.ibm.icu.dev.test.ucharacter;
+package com.ibm.icu.dev.test.lang;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.lang.UCharacter;

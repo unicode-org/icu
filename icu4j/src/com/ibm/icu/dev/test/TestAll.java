@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestAll.java,v $ 
- * $Date: 2002/02/19 04:10:24 $ 
- * $Revision: 1.21 $
+ * $Date: 2002/02/22 03:43:32 $ 
+ * $Revision: 1.22 $
  *
  *****************************************************************************************
  */
@@ -26,7 +26,7 @@ public class TestAll extends TestFmwk {
     }
 
     public void TestBigNumberFormat() throws Exception{
-        run(new com.ibm.icu.dev.test.bnf.BigNumberFormatTest());
+        run(new com.ibm.icu.dev.test.format.BigNumberFormatTest());
     }
     
     public void TestCompression() throws Exception{
@@ -46,8 +46,8 @@ public class TestAll extends TestFmwk {
 
     public void TestRuleBasedNumberFormat() throws Exception {
         run(new TestFmwk[] {
-            new com.ibm.icu.dev.test.rbnf.RbnfTest(),
-            new com.ibm.icu.dev.test.rbnf.RbnfRoundTripTest()
+            new com.ibm.icu.dev.test.format.RbnfTest(),
+            new com.ibm.icu.dev.test.format.RbnfRoundTripTest()
                 });
     }
 
@@ -80,7 +80,7 @@ public class TestAll extends TestFmwk {
     }
 	
     public void TestArabicShaping() throws Exception {
-        run(new com.ibm.icu.dev.test.text.ArabicShapingRegTest());
+        run(new com.ibm.icu.dev.test.shaping.ArabicShapingRegTest());
     }
 
     public void TestCalendar() throws Exception {
@@ -105,8 +105,8 @@ public class TestAll extends TestFmwk {
 
     public void TestCharacter() throws Exception {
         run(new TestFmwk[] {
-            new com.ibm.icu.dev.test.ucharacter.UCharacterTest(),
-            new com.ibm.icu.dev.test.ucharacter.UTF16Test()
+            new com.ibm.icu.dev.test.lang.UCharacterTest(),
+            new com.ibm.icu.dev.test.lang.UTF16Test()
                 });
     }
     
@@ -118,7 +118,7 @@ public class TestAll extends TestFmwk {
     
     public void TestUScript() throws Exception {
         run( new TestFmwk[] {
-            new com.ibm.icu.dev.test.text.TestUScript(),
+            new com.ibm.icu.dev.test.lang.TestUScript(),
         });
     }
     

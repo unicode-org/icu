@@ -13,6 +13,7 @@ import java.util.*;
 import java.io.UnsupportedEncodingException;
 import com.ibm.icu.impl.data.ResourceReader;
 import com.ibm.icu.util.CaseInsensitiveString;
+import com.ibm.icu.lang.UScript;
 
 class TransliteratorRegistry {
 

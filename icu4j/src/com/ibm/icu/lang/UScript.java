@@ -5,7 +5,7 @@
 *******************************************************************************
 */
 
-package com.ibm.icu.text;
+package com.ibm.icu.lang;
 
 import com.ibm.icu.impl.data.LocaleScript;
 import java.util.ResourceBundle;

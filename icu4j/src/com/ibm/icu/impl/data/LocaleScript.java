@@ -7,7 +7,7 @@
 package com.ibm.icu.impl.data;
 
 import java.util.ListResourceBundle; 
-import com.ibm.icu.text.UScript;
+import com.ibm.icu.lang.UScript;
 
 public class LocaleScript extends ListResourceBundle { 
 
