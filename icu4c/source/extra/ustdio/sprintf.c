@@ -237,7 +237,7 @@ static const u_sprintf_info g_u_sprintf_infos[108] = {
 
 static UChar gNullStr[] = {0x28, 0x6E, 0x75, 0x6C, 0x6C, 0x29, 0}; /* (null) */
 
-int32_t
+U_CAPI int32_t U_EXPORT2
 u_sprintf(UChar       *buffer,
           const char    *locale,
           const char    *patternSpecification,
@@ -253,7 +253,7 @@ u_sprintf(UChar       *buffer,
     return written;
 }
 
-int32_t
+U_CAPI int32_t U_EXPORT2
 u_sprintf_u(UChar     *buffer,
             const char     *locale,
             const UChar    *patternSpecification,
@@ -269,7 +269,7 @@ u_sprintf_u(UChar     *buffer,
     return written;
 }
 
-U_CAPI int32_t  U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
+U_CAPI int32_t U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_vsprintf(UChar       *buffer,
            const char     *locale,
            const char     *patternSpecification,
@@ -278,7 +278,7 @@ u_vsprintf(UChar       *buffer,
     return u_vsnprintf(buffer, INT32_MAX, locale, patternSpecification, ap);
 }
 
-int32_t
+U_CAPI int32_t U_EXPORT2
 u_snprintf(UChar       *buffer,
            int32_t         count,
            const char    *locale,
@@ -295,7 +295,7 @@ u_snprintf(UChar       *buffer,
     return written;
 }
 
-int32_t
+U_CAPI int32_t U_EXPORT2
 u_snprintf_u(UChar     *buffer,
              int32_t        count,
              const char     *locale,
@@ -337,6 +337,16 @@ u_vsnprintf(UChar       *buffer,
 
     return written;
 }
+
+U_CAPI int32_t U_EXPORT2 
+u_vsprintf_u(UChar       *buffer, 
+             const char  *locale, 
+             const UChar *patternSpecification, 
+             va_list     ap) 
+{ 
+    return u_vsnprintf_u(buffer, INT32_MAX, locale, patternSpecification, ap); 
+} 
+
 
 static UChar *
 u_strset(UChar *str, int32_t count, UChar c) {
