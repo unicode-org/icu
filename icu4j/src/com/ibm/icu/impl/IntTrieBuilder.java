@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/IntTrieBuilder.java,v $ 
-* $Date: 2002/08/30 23:19:11 $ 
-* $Revision: 1.2 $
+* $Date: 2002/10/31 01:09:18 $ 
+* $Revision: 1.3 $
 *
 ******************************************************************************
 */
@@ -31,7 +31,7 @@ import java.util.Arrays;
  *     <LI>Smaller memory footprint.
  * </UL>
  * This is a direct port from the ICU4C version
- * @version            $Revision: 1.2 $
+ * @version            $Revision: 1.3 $
  * @author             Syn Wee Quek
  */
 public class IntTrieBuilder extends TrieBuilder
@@ -101,7 +101,65 @@ public class IntTrieBuilder extends TrieBuilder
 	}
 
 	// public methods -------------------------------------------------------
-        
+     
+    /*public final void print()
+    {
+        int i = 0;
+        int oldvalue = m_index_[i];
+        int count = 0;
+        System.out.println("index length " + m_indexLength_ 
+                           + " --------------------------");
+        while (i < m_indexLength_) {
+            if (m_index_[i] != oldvalue) {
+                System.out.println("index has " + count + " counts of " 
+                                   + Integer.toHexString(oldvalue));
+                count = 0;
+                oldvalue = m_index_[i];
+            }
+            count ++;
+            i ++;
+        }
+        System.out.println("index has " + count + " counts of " 
+                           + Integer.toHexString(oldvalue));
+        i = 0;
+        oldvalue = m_data_[i];
+        count = 0;
+        System.out.println("data length " + m_dataLength_ 
+                           + " --------------------------");
+        while (i < m_dataLength_) {
+            if (m_data_[i] != oldvalue) {
+                if ((oldvalue & 0xf1000000) == 0xf1000000) {
+                    int temp = oldvalue & 0xffffff; 
+                    temp += 0x320;
+                    oldvalue = 0xf1000000 | temp;
+                }
+                if ((oldvalue & 0xf2000000) == 0xf2000000) {
+                    int temp = oldvalue & 0xffffff; 
+                    temp += 0x14a;
+                    oldvalue = 0xf2000000 | temp;
+                }
+                System.out.println("data has " + count + " counts of " 
+                                   + Integer.toHexString(oldvalue));
+                count = 0;
+                oldvalue = m_data_[i];
+            }
+            count ++;
+            i ++;
+        }
+        if ((oldvalue & 0xf1000000) == 0xf1000000) {
+            int temp = oldvalue & 0xffffff; 
+            temp += 0x320;
+            oldvalue = 0xf1000000 | temp;
+        }
+        if ((oldvalue & 0xf2000000) == 0xf2000000) {
+            int temp = oldvalue & 0xffffff; 
+            temp += 0x14a;
+            oldvalue = 0xf2000000 | temp;
+        }
+        System.out.println("data has " + count + " counts of " 
+                           + Integer.toHexString(oldvalue));
+    }
+    */   
     /**
      * Gets a 32 bit data from the table data
      * @param ch codepoint which data is to be retrieved
