@@ -453,7 +453,7 @@ void NumberFormatTest::TestSecondaryGrouping(void) {
     CHECK(status, "createInstance(hi_IN)");
 
     UnicodeString out;
-    int32_t l = 1876543210L;
+    int32_t l = (int32_t)1876543210L;
     g->format(l, out);
     delete g;
     // expect "1,87,65,43,210", but with Hindi digits

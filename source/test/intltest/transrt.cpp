@@ -134,7 +134,7 @@ RTTest::RTTest(const UnicodeString& transliteratorIDStr,
     this->transliteratorID = transliteratorIDStr;
     this->sourceScript = sourceScriptVal;
     this->targetScript = targetScriptVal;
-    errorLimit = 0x7FFFFFFFL;
+    errorLimit = (int32_t)0x7FFFFFFFL;
     errorCount = 0;
     pairLimit  = 0x10000;
 }
