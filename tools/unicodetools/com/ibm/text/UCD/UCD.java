@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2002/08/04 21:38:45 $
-* $Revision: 1.17 $
+* $Date: 2002/09/25 06:40:13 $
+* $Revision: 1.18 $
 *
 *******************************************************************************
 */
@@ -964,6 +964,9 @@ to guarantee identifier closure.
 
     public boolean hasComputableName(int codePoint) {
         if (codePoint >= 0xF900 && codePoint <= 0xFA2D) return true;
+        if (codePoint >= 0x2800 && codePoint <= 0x28FF) return true; 
+        if (codePoint >= 0x2F800 && codePoint <= 0x2FA1D) return true;
+        
         int rangeStart = mapToRepresentative(codePoint, major < 2);
         switch (rangeStart) {
           default:

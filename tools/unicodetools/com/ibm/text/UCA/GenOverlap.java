@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/GenOverlap.java,v $ 
-* $Date: 2002/05/31 01:41:03 $ 
-* $Revision: 1.9 $
+* $Date: 2002/09/25 06:40:13 $ 
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -164,8 +164,8 @@ public class GenOverlap implements UCD_Types {
     static boolean PROGRESS = false;
       
     static void fullCheck() throws IOException {
-        PrintWriter log = Utility.openPrintWriter("Overlap.html");
-        PrintWriter simpleList = Utility.openPrintWriter("Overlap.txt");
+        PrintWriter log = Utility.openPrintWriter("Overlap.html", Utility.UTF8_WINDOWS);
+        PrintWriter simpleList = Utility.openPrintWriter("Overlap.txt", Utility.UTF8_WINDOWS);
         
         Iterator it = completes.keySet().iterator();
         int counter = 0;
@@ -448,7 +448,7 @@ public class GenOverlap implements UCD_Types {
         newKeys.removeAll(joint);
         oldKeys.removeAll(joint);
         
-        PrintWriter log = Utility.openPrintWriter("UCA-old-vs-new" + (doMax ? "-MAX.txt" : ".txt"), false, false);
+        PrintWriter log = Utility.openPrintWriter("UCA-old-vs-new" + (doMax ? "-MAX.txt" : ".txt"), Utility.UTF8_WINDOWS);
         Iterator it = list.iterator();
         int last = -1;
         while (it.hasNext()) {
@@ -631,7 +631,7 @@ public class GenOverlap implements UCD_Types {
         
         System.out.println("Data Gathered");
 
-        PrintWriter log = Utility.openPrintWriter("checkstringsearchhash.html");
+        PrintWriter log = Utility.openPrintWriter("checkstringsearchhash.html", Utility.UTF8_WINDOWS);
         Utility.writeHtmlHeader(log, "Check Hash");
         log.println("<h1>Collisions</h1>");
         log.println("<p>Shows collisions among primary values when hashed to table size = " + tableLength + ".");
@@ -694,7 +694,7 @@ public class GenOverlap implements UCD_Types {
     }
     
     public static void listCyrillic(UCA collatorIn) throws IOException {
-        PrintWriter log = Utility.openPrintWriter("ListCyrillic.txt", false, false);
+        PrintWriter log = Utility.openPrintWriter("ListCyrillic.txt", Utility.UTF8_WINDOWS);
         Set set = new TreeSet(collatorIn);
         Set set2 = new TreeSet(collatorIn);
         ucd = UCD.make();

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2002/07/15 15:23:01 $ 
-* $Revision: 1.26 $
+* $Date: 2002/09/25 06:40:14 $ 
+* $Revision: 1.27 $
 *
 *******************************************************************************
 */
@@ -144,7 +144,7 @@ public class WriteCollationData implements UCD_Types, UCA_Types {
         BufferedReader in = Utility.openUnicodeFile("CaseFolding", UNICODE_VERSION, true, false);
         // new BufferedReader(new FileReader(DIR31 + "CaseFolding-3.d3.alpha.txt"), 64*1024);
         // log = new PrintWriter(new FileOutputStream("CaseFolding_data.js"));
-        log = Utility.openPrintWriter("CaseFolding_data.js", false, false);
+        log = Utility.openPrintWriter("CaseFolding_data.js", Utility.UTF8_WINDOWS);
         log.println("var CF = new Object();");
         int count = 0;
         while (true) {
@@ -189,7 +189,7 @@ public class WriteCollationData implements UCD_Types, UCA_Types {
         Normalizer normKD = new Normalizer(Normalizer.NFKD, UNICODE_VERSION);
         Normalizer normD = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
         //log = new PrintWriter(new FileOutputStream("Normalization_data.js"));
-        log = Utility.openPrintWriter("Normalization_data.js", false, false);
+        log = Utility.openPrintWriter("Normalization_data.js", Utility.LATIN1_WINDOWS);
         
         
         int count = 0;
@@ -318,7 +318,7 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
             }
         }
         
-        PrintWriter log = Utility.openPrintWriter(filename + (shortPrint ? "_SHORT" : "") + ".txt", true, true);
+        PrintWriter log = Utility.openPrintWriter(filename + (shortPrint ? "_SHORT" : "") + ".txt", Utility.UTF8_WINDOWS);
         //if (!shortPrint) log.write('\uFEFF');
         log.println("# UCA Version: " + collator.getDataVersion() + "/" + collator.getUCDVersion());
         log.println("# Generated:   " + getNormalDate());
@@ -702,7 +702,7 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
     }*/
     
     static void testCompatibilityCharacters() throws IOException {
-        log = Utility.openPrintWriter("UCA_CompatComparison.txt");
+        log = Utility.openPrintWriter("UCA_CompatComparison.txt", Utility.UTF8_WINDOWS);
         
         int[] kenCes = new int[50];
         int[] markCes = new int[50];
@@ -1196,7 +1196,7 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
                     "UTF8"),
                 32*1024));
                 */
-        PrintWriter diLog = Utility.openPrintWriter("UCA_Contractions.txt", false, false);
+        PrintWriter diLog = Utility.openPrintWriter("UCA_Contractions.txt", Utility.UTF8_WINDOWS);
                 
         diLog.write('\uFEFF');
 
@@ -1234,7 +1234,7 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
                     "UTF8"),
                 32*1024));
                 */
-        PrintWriter diLog = Utility.openPrintWriter("DisjointIgnorables.js", false, false);
+        PrintWriter diLog = Utility.openPrintWriter("DisjointIgnorables.js", Utility.LATIN1_WINDOWS);
                 
         diLog.write('\uFEFF');
 
@@ -1413,7 +1413,7 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
                     "UTF8"),
                 32*1024));
                 */
-        PrintWriter diLog = Utility.openPrintWriter("DisjointIgnorables2.js", false, false);
+        PrintWriter diLog = Utility.openPrintWriter("DisjointIgnorables2.js", Utility.LATIN1_WINDOWS);
                 
         diLog.write('\uFEFF');
 
@@ -1660,7 +1660,7 @@ U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
         int[] lenArray = new int[1];
         
         Set alreadyDone = new HashSet();
-        PrintWriter log2 = Utility.openPrintWriter("UCARules-log.txt", false, false);
+        PrintWriter log2 = Utility.openPrintWriter("UCARules-log.txt", Utility.LATIN1_WINDOWS);
 
         while (true) {
             String s = cc.next(ces, lenArray);
@@ -1784,7 +1784,7 @@ F900..FAFF; CJK Compatibility Ideographs
         if (shortPrint) filename += "_SHORT";
         if (option == IN_XML) filename += ".xml"; else filename += ".txt";
         
-        log = Utility.openPrintWriter(filename, false, false);
+        log = Utility.openPrintWriter(filename, Utility.LATIN1_WINDOWS);
         
         String[] commentText = {
         	"UCA Rules",
@@ -3951,7 +3951,7 @@ static int swapCJK(int i) {
         Default.setUCD();
     	
         //log = new PrintWriter(new FileOutputStream("CheckCollationValidity.html"));
-        log = Utility.openPrintWriter("CheckCollationValidity.html", false, false);
+        log = Utility.openPrintWriter("CheckCollationValidity.html", Utility.UTF8_WINDOWS);
         
         log.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
         log.println("<title>UCA Validity Log</title>");
@@ -4618,7 +4618,7 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
 
     static PrintWriter writeHead(int counter, int end, String title, String other, String version, boolean show) throws IOException {
 
-        PrintWriter out = Utility.openPrintWriter(title + pad(counter) + ".html");
+        PrintWriter out = Utility.openPrintWriter(title + pad(counter) + ".html", Utility.UTF8_WINDOWS);
         
         copyFile(out, "HTML-Part1.txt");
         /*
