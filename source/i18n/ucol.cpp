@@ -5055,6 +5055,14 @@ UBool isShiftedCE(uint32_t CE, uint32_t LVT, UBool *wasShifted) {
     return FALSE;
   }
 }
+static inline
+void terminatePSKLevel(int32_t level, int32_t maxLevel, int32_t &i, uint8_t *dest) {
+  if(level < maxLevel) {
+    dest[i++] = UCOL_LEVELTERMINATOR;
+  } else {
+    dest[i++] = 0;
+  }
+}
 
 /** enumeration of level identifiers for partial sort key generation */
 enum {
@@ -5187,6 +5195,23 @@ ucol_nextSortKeyPart(UCollator *coll,
     /** values that depend on the collator attributes */
     // strength of the collator. 
     int32_t strength = ucol_getAttribute(coll, UCOL_STRENGTH, status);
+    // maximal level of the partial sortkey. Need to take whether case level is done
+    int32_t maxLevel = 0;
+    if(strength < UCOL_TERTIARY) {
+      if(ucol_getAttribute(coll, UCOL_CASE_LEVEL, status) == UCOL_ON) {
+        maxLevel = UCOL_PSK_CASE;
+      } else {
+        maxLevel = strength;
+      }
+    } else {
+        if(strength == UCOL_TERTIARY) {
+          maxLevel = UCOL_PSK_TERTIARY;
+        } else if(strength == UCOL_QUATERNARY) {
+          maxLevel = UCOL_PSK_QUATERNARY;
+        } else { // identical
+          maxLevel = UCOL_IDENTICAL;
+        }
+    }
     // value for the quaternary level if Hiragana is encountered. Used for JIS X 4061 collation
     uint8_t UCOL_HIRAGANA_QUAD = 
       (ucol_getAttribute(coll, UCOL_HIRAGANA_QUATERNARY_MODE, status) == UCOL_ON)?0xFE:0xFF;
@@ -5351,7 +5376,8 @@ ucol_nextSortKeyPart(UCollator *coll,
           CE = ucol_IGetNextCE(coll, &s, status);
           if(CE==UCOL_NO_MORE_CES) {
               // Add the level separator
-              dest[i++] = UCOL_LEVELTERMINATOR; 
+              terminatePSKLevel(level, maxLevel, i, dest);
+              //dest[i++] = UCOL_LEVELTERMINATOR; 
               byteCountOrFrenchDone=0;
               // Restart the iteration an move to the
               // second level
@@ -5416,7 +5442,8 @@ ucol_nextSortKeyPart(UCollator *coll,
             CE = ucol_IGetNextCE(coll, &s, status);
             if(CE==UCOL_NO_MORE_CES) {
                 // Add the level separator
-                dest[i++] = UCOL_LEVELTERMINATOR; 
+                terminatePSKLevel(level, maxLevel, i, dest);
+                //dest[i++] = UCOL_LEVELTERMINATOR; 
                 byteCountOrFrenchDone=0;
                 // Restart the iteration an move to the
                 // second level
@@ -5467,7 +5494,8 @@ ucol_nextSortKeyPart(UCollator *coll,
             CE = ucol_IGetPrevCE(coll, &s, status);
             if(CE==UCOL_NO_MORE_CES) {
                 // Add the level separator
-                dest[i++] = UCOL_LEVELTERMINATOR; 
+                terminatePSKLevel(level, maxLevel, i, dest);
+                //dest[i++] = UCOL_LEVELTERMINATOR; 
                 byteCountOrFrenchDone=0;
                 // Restart the iteration an move to the next level
                 s.iterator->move(s.iterator, 0, UITER_START);
@@ -5546,7 +5574,8 @@ ucol_nextSortKeyPart(UCollator *coll,
             // to the next invocation
             if(i < count) {
               // Add the level separator
-              dest[i++] = UCOL_LEVELTERMINATOR; 
+              terminatePSKLevel(level, maxLevel, i, dest);
+              //dest[i++] = UCOL_LEVELTERMINATOR; 
               // Restart the iteration and move to the
               // next level
               s.iterator->move(s.iterator, 0, UITER_START);
@@ -5633,7 +5662,8 @@ ucol_nextSortKeyPart(UCollator *coll,
           CE = ucol_IGetNextCE(coll, &s, status);
           if(CE==UCOL_NO_MORE_CES) {
               // Add the level separator
-              dest[i++] = UCOL_LEVELTERMINATOR; 
+              terminatePSKLevel(level, maxLevel, i, dest);
+              //dest[i++] = UCOL_LEVELTERMINATOR; 
               byteCountOrFrenchDone=0;
               // Restart the iteration an move to the
               // second level
@@ -5695,7 +5725,8 @@ ucol_nextSortKeyPart(UCollator *coll,
           CE = ucol_IGetNextCE(coll, &s, status);
           if(CE==UCOL_NO_MORE_CES) {
               // Add the level separator
-              dest[i++] = UCOL_LEVELTERMINATOR; 
+              terminatePSKLevel(level, maxLevel, i, dest);
+              //dest[i++] = UCOL_LEVELTERMINATOR; 
               byteCountOrFrenchDone=0;
               // Restart the iteration an move to the
               // second level
@@ -5810,6 +5841,7 @@ ucol_nextSortKeyPart(UCollator *coll,
 
           // end condition for identical level
           if(second == U_SENTINEL) {
+            terminatePSKLevel(level, maxLevel, i, dest);
             level = UCOL_PSK_NULL;
             break;
           }
