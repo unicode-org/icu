@@ -1067,6 +1067,8 @@ U_CAPI UBool ures_isStackObject( UResourceBundle* resB, UErrorCode *status) {
 }
 
 
+#ifdef ICU_URES_USE_DEPRECATES
+
 U_CAPI const UChar* ures_get(    const UResourceBundle*    resB,
                 const char*              resourceTag,
                 UErrorCode*               status) 
@@ -1162,7 +1164,7 @@ U_CAPI const UChar* ures_getTaggedArrayItem(const UResourceBundle*   resB,
         return NULL;
     }
 }
-
+#endif
 /**
  *  API: Counts members. For arrays and tables, returns number of resources.
  *  For strings, returns 1.
