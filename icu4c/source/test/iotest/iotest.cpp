@@ -621,6 +621,48 @@ static void TestStringCompatibility() {
     }
 }
 
+#define Test_u_snprintf(limit, format, value, expectedSize, expectedStr) \
+    u_uastrcpy(testStr, "xxxxxxxxxxxxxx");\
+    size = u_snprintf(testStr, limit, "en_US_POSIX", format, value);\
+    u_austrcpy(cTestResult, testStr);\
+    if (size != expectedSize || strcmp(cTestResult, expectedStr) != 0) {\
+        log_err("Unexpected formatting. size=%d expectedSize=%d cTestResult=%s expectedStr=%s\n",\
+            size, expectedSize, cTestResult, expectedStr);\
+    }\
+    else {\
+        log_verbose("Got: %s", cTestResult);\
+    }\
+
+
+static void TestSnprintf() {
+    UChar testStr[256];
+    char cTestResult[256];
+    int32_t size;
+
+    Test_u_snprintf(0, "%d", 123, 0, "xxxxxxxxxxxxxx");
+    Test_u_snprintf(2, "%d", 123, 2, "12xxxxxxxxxxxx");
+    Test_u_snprintf(3, "%d", 123, 3, "123xxxxxxxxxxx");
+    Test_u_snprintf(4, "%d", 123, 3, "123");
+
+    Test_u_snprintf(0, "%s", "abcd", 0, "xxxxxxxxxxxxxx");
+    Test_u_snprintf(3, "%s", "abcd", 3, "abcxxxxxxxxxxx");
+    Test_u_snprintf(4, "%s", "abcd", 4, "abcdxxxxxxxxxx");
+    Test_u_snprintf(5, "%s", "abcd", 4, "abcd");
+
+    Test_u_snprintf(0, "%e", 12.34, 0, "xxxxxxxxxxxxxx");
+    Test_u_snprintf(1, "%e", 12.34, 1, "1xxxxxxxxxxxxx");
+    Test_u_snprintf(2, "%e", 12.34, 2, "1.xxxxxxxxxxxx");
+    Test_u_snprintf(3, "%e", 12.34, 3, "1.2xxxxxxxxxxx");
+    Test_u_snprintf(5, "%e", 12.34, 5, "1.234xxxxxxxxx");
+    Test_u_snprintf(6, "%e", 12.34, 6, "1.2340xxxxxxxx");
+    Test_u_snprintf(8, "%e", 12.34, 8, "1.234000xxxxxx");
+    Test_u_snprintf(9, "%e", 12.34, 9, "1.234000exxxxx");
+    Test_u_snprintf(10, "%e", 12.34, 10, "1.234000e+xxxx");
+    Test_u_snprintf(11, "%e", 12.34, 11, "1.234000e+0xxx");
+    Test_u_snprintf(13, "%e", 12.34, 13, "1.234000e+001x");
+    Test_u_snprintf(14, "%e", 12.34, 13, "1.234000e+001");
+}
+
 static void TestStream() {
 #if U_IOSTREAM_SOURCE >= 198506
     char testStreamBuf[512];
@@ -690,6 +732,7 @@ static void addAllTests(TestNode** root) {
     addTest(root, &TestFilePrintCompatibility, "fileapi/TestFilePrintCompatibility");
     addTest(root, &TestString, "strapi/TestString");
     addTest(root, &TestStringCompatibility, "strapi/TestStringCompatibility");
+    addTest(root, &TestSnprintf, "strapi/TestSnprintf");
     addTest(root, &TestStream, "iostream/TestStream");
 }
 
