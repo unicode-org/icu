@@ -170,8 +170,8 @@ $(top_builddir)/config/Makefile.inc: $(srcdir)/config/Makefile.inc.in  $(top_bui
 	cd $(top_builddir) \
 		&& CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-$(top_builddir)/config/icu-config: $(top_builddir)/Makefile $(top_builddir)/config/icu-config-top $(top_builddir)/config/Makefile.inc @platform_make_fragment@ $(top_srcdir)/config/make2sh.sed $(top_srcdir)/config/icu-config-bottom
-	cp $(top_builddir)/config/icu-config-top $@
+$(top_builddir)/config/icu-config: $(top_builddir)/Makefile $(top_srcdir)/config/icu-config-top $(top_srcdir)/config/icu-config-bottom $(top_builddir)/config/Makefile.inc @platform_make_fragment@ $(top_srcdir)/config/make2sh.sed
+	cp $(top_srcdir)/config/icu-config-top $@
 	@echo "# Following from @platform_make_fragment@" >> $@
 	sed -f $(top_srcdir)/config/make2sh.sed < $(top_builddir)/config/Makefile.inc | grep -v '#M#' | uniq >> $@
 	sed -f $(top_srcdir)/config/make2sh.sed < @platform_make_fragment@ | grep -v '#M#' | uniq >> $@
