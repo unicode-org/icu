@@ -775,7 +775,7 @@ void TestElemIter()
     testString1=(UChar*)malloc(sizeof(UChar) * 150);
     testString2=(UChar*)malloc(sizeof(UChar) * 150);
     u_uastrcpy(testString1, "XFILE What subset of all possible test cases has the highest probability of detecting the most errors?");
-    u_uastrcpy(testString2, "Xf ile What subset of all possible test cases has the lowest probability of detecting the least errors?");
+    u_uastrcpy(testString2, "Xf_ile What subset of all possible test cases has the lowest probability of detecting the least errors?");
     
     log_verbose("Constructors and comparison testing....\n");
     

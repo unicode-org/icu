@@ -513,7 +513,8 @@ static void TestPrimary( )
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator :%s\n", myErrorName(status));
     }
-    ucol_setNormalization(myCollation, UCOL_DEFAULT_NORMALIZATION);
+    /* problem in strcollinc for unfinshed contractions */
+    ucol_setAttribute(myCollation, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
     ucol_setStrength(myCollation, UCOL_PRIMARY);
     
     for (i = 17; i < 26 ; i++)
