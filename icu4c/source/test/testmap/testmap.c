@@ -13,12 +13,14 @@
 *******************************************************************************
 */
 
+#include "unicode/utypes.h"
 #include <stdio.h>
 #include <string.h>
 #include "unicode/udata.h"
 #include "unicode/ucnv.h"
+#include "unicode/platform.h"
 
-extern const uint8_t U_IMPORT icudata_dat[]; 
+extern const char U_ICUDATA_ENTRY_POINT [];
 
 int
 main(int argc,
@@ -28,6 +30,8 @@ main(int argc,
 
   int32_t month = -1, year = -1;
   UErrorCode status = U_ZERO_ERROR;
+  status = U_ZERO_ERROR;
+
 
   udata_setCommonData(NULL, &status);
   printf("setCommonData(NULL) -> %s [should fail]\n",  u_errorName(status));
@@ -38,8 +42,8 @@ main(int argc,
   }
 
   status = U_ZERO_ERROR;
-  udata_setCommonData(icudata_dat, &status);  
-  printf("setCommonData(%p) -> %s\n", icudata_dat, u_errorName(status));
+  udata_setCommonData(U_ICUDATA_ENTRY_POINT, &status);  
+  printf("setCommonData(%p) -> %s\n", U_ICUDATA_ENTRY_POINT, u_errorName(status));
   if(U_FAILURE(status))
   {
     printf("*** FAIL: should have returned U_ZERO_ERROR\n");
@@ -47,8 +51,8 @@ main(int argc,
   }
 
   status = U_ZERO_ERROR;
-  c = ucnv_open("shift_jis", &status);
-  printf("ucnv_open(shift_jis)-> %p, err = %s, name=%s\n", c, u_errorName(status), (!c)?"?":ucnv_getName(c,&status)  );
+  c = ucnv_open("iso-8859-7", &status);
+  printf("ucnv_open(iso-8859-7)-> %p, err = %s, name=%s\n", c, u_errorName(status), (!c)?"?":ucnv_getName(c,&status)  );
   if(status != U_ZERO_ERROR)
   {
     printf("\n*** FAIL: should have returned U_ZERO_ERROR;\n");
@@ -60,8 +64,8 @@ main(int argc,
   }
 
   status = U_ZERO_ERROR;
-  udata_setCommonData(icudata_dat, &status);
-  printf("setCommonData(%p) -> %s [should fail]\n", icudata_dat, u_errorName(status));
+  udata_setCommonData(U_ICUDATA_ENTRY_POINT, &status);
+  printf("setCommonData(%p) -> %s [should fail]\n", U_ICUDATA_ENTRY_POINT, u_errorName(status));
   if ( status != U_USING_DEFAULT_ERROR )
   {
     printf("\n*** FAIL: should have returned U_USING_DEFAULT_ERROR\n");
