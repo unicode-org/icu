@@ -9,6 +9,9 @@
 
 package com.ibm.icu.lang;
 
+import com.ibm.icu.impl.UCharacterIterator;
+import com.ibm.icu.impl.UForwardCharacterIterator;
+
 /**
  * <code>UScriptRun</code> is used to find runs of characters in
  * the same script, as defined in the <code>UScript</code> class.
@@ -29,11 +32,11 @@ package com.ibm.icu.lang;
 
  * Here is an example of how to iterate over script runs:
  * <pre>
- * void printScriptRuns(char []text)
+ * void printScriptRuns(char[] text)
  * {
  *     UScriptRun scriptRun = new UScriptRun(text);
  *
- *     while (scriptRun.next())) {
+ *     while (scriptRun.next()) {
  *         int start  = scriptRun.getScriptStart();
  *         int limit  = scriptRun.getScriptLimit();
  *         int script = scriptRun.getScriptCode();
@@ -115,11 +118,14 @@ public final class UScriptRun
     /**
      * Reset the iterator to the start of the text.
      */
-    public final void reset() {
-        scriptStart = charStart;
-        scriptLimit = charStart;
+    public final void reset()
+    {
+        scriptStart = textStart;
+        scriptLimit = textStart;
         scriptCode  = UScript.INVALID_CODE;
         parenSP     = -1;
+        
+        text.setToStart();
     }
 
     /**
@@ -136,16 +142,16 @@ public final class UScriptRun
     {
         int len = 0;
         
-        if (charArray != null) {
-            len = charArray.length;
+        if (text != null) {
+            len = text.getLength();
         }
         
         if (start < 0 || count < 0 || start > len - count) {
             throw new IllegalArgumentException();
         }
         
-        charStart = start;
-        charLimit = start + count;
+        textStart = start;
+        textLimit = start + count;
 
         reset();
     }
@@ -161,7 +167,11 @@ public final class UScriptRun
      */
     public final void reset(char[] chars, int start, int count)
     {
-        charArray = chars;
+        if (chars == null) {
+            chars = emptyCharArray;
+        }
+        
+        text = UCharacterIterator.getInstance(chars, start, start + count);
 
         reset(start, count);
     }
@@ -264,30 +274,16 @@ public final class UScriptRun
 		int startSP  = parenSP;  // used to find the first new open character
 
 		// if we've fallen off the end of the text, we're done
-		if (scriptLimit >= charLimit) {
+		if (scriptLimit >= textLimit) {
 			return false;
 		}
     
-		scriptCode = UScript.COMMON;
-
-		for (scriptStart = scriptLimit; scriptLimit < charLimit; scriptLimit += 1) {
-			int high = charArray[scriptLimit];
-			int ch   = high;
-
-			// if the character is a high surrogate and it's not the last one
-			// in the text, see if it's followed by a low surrogate
-			if (high >= 0xD800 && high <= 0xDBFF && scriptLimit < charLimit - 1)
-			{
-				int low = charArray[scriptLimit + 1];
-
-				// if it is followed by a low surrogate,
-				// consume it and form the full character
-				if (low >= 0xDC00 && low <= 0xDFFF) {
-					ch = (high - 0xD800) * 0x0400 + low - 0xDC00 + 0x10000;
-					scriptLimit += 1;
-				}
-			}
-
+		scriptCode  = UScript.COMMON;
+        scriptStart = scriptLimit;
+        
+        int ch;
+        
+        while ((ch = text.nextCodePoint()) != UForwardCharacterIterator.DONE) {
 			int sc = UScript.getScript(ch);
 			int pairIndex = getPairIndex(ch);
 
@@ -335,16 +331,15 @@ public final class UScriptRun
 					startSP -= 1;
 				}
 			} else {
-				// if the run broke on a surrogate pair,
-				// end it before the high surrogate
-				if (ch >= 0x10000) {
-					scriptLimit -= 1;
-				}
-
-				break;
+			    // We've just seen the first character of
+			    // the next run. Back over it so we'll see
+			    // it again the next time.
+			    text.previousCodePoint();
+			    break;
 			}
 		}
 
+        scriptLimit = textStart + text.getIndex();
 		return true;
 	}
 
@@ -376,11 +371,14 @@ public final class UScriptRun
 		    scriptCode = theScriptCode;
 		}
     };
+    
+    private char[] emptyCharArray = {};
 
-    private int  charStart;
-    private int  charLimit;
-    private char charArray[];
+    private UCharacterIterator text;
 
+    private int  textStart;
+    private int  textLimit;
+    
     private int  scriptStart;
     private int  scriptLimit;
     private int  scriptCode;
