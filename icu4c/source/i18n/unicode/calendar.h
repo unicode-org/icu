@@ -1981,7 +1981,6 @@ private:
      */
     void validateField(UCalendarDateFields field, int32_t min, int32_t max, UErrorCode& status);
 
-
  protected:
     /**
      * Convert a quasi Julian date to the day of the week. The Julian date used here is
@@ -1993,6 +1992,9 @@ private:
      * @internal
      */
     static uint8_t julianDayToDayOfWeek(double julian);
+
+    Locale validLocale;
+    Locale actualLocale;
 
  public:
     /** 
@@ -2064,6 +2066,22 @@ private:
      */
     virtual int32_t defaultCenturyStartYear() const = 0;
     
+    /** Get the locale for this calendar object. You can choose between valid and actual locale.
+     *  @param type type of the locale we're looking for (valid or actual) 
+     *  @param status error code for the operation
+     *  @return the locale
+     *  @draft ICU 2.8
+     */
+    virtual Locale getLocale(ULocDataLocaleType type, UErrorCode &status);
+
+    /** Get the locale for this calendar object. You can choose between valid and actual locale.
+     *  @param type type of the locale we're looking for (valid or actual) 
+     *  @param status error code for the operation
+     *  @return the locale
+     *  @internal
+     */
+    virtual const char* getLocaleInternal(ULocDataLocaleType type, UErrorCode &status);
+
 };
 
 // -------------------------------------

@@ -8,6 +8,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uenum.h"
+#include "unicode/uloc.h"
 
 #if !UCONFIG_NO_FORMATTING
 
@@ -909,6 +910,15 @@ ucal_getAvailableTZIDs(int32_t      rawOffset,
  */
 U_CAPI int32_t U_EXPORT2 
 ucal_countAvailableTZIDs(int32_t rawOffset);
+
+/** Get the locale for this calendar object. You can choose between valid and actual locale.
+ *  @param cal The calendar object
+ *  @param type type of the locale we're looking for (valid or actual) 
+ *  @param status error code for the operation
+ *  @return the locale name
+ */
+U_CAPI const char * U_EXPORT2
+ucal_getLocaleByType(const UCalendar *cal, ULocDataLocaleType type, UErrorCode* status);
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 

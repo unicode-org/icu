@@ -2905,6 +2905,39 @@ Calendar::updateTime(UErrorCode& status)
 }
 
 
+Locale 
+Calendar::getLocale(ULocDataLocaleType type, UErrorCode &status)
+{
+  switch(type) {
+  case ULOC_VALID_LOCALE:
+    return validLocale;
+    break;
+  case ULOC_ACTUAL_LOCALE:
+    return actualLocale;
+    break;
+  default:
+    status = U_UNSUPPORTED_ERROR;
+    return Locale("");
+    break;
+  }
+}
+
+const char* 
+Calendar::getLocaleInternal(ULocDataLocaleType type, UErrorCode &status)
+{
+  switch(type) {
+  case ULOC_VALID_LOCALE:
+    return validLocale.getName();
+    break;
+  case ULOC_ACTUAL_LOCALE:
+    return actualLocale.getName();;
+    break;
+  default:
+    status = U_UNSUPPORTED_ERROR;
+    return NULL;
+    break;
+  }
+}
 
 U_NAMESPACE_END
 
