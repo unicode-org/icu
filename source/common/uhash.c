@@ -78,6 +78,19 @@ static int32_t PRIMES[] = {
 
 #define PRIMES_LENGTH (sizeof(PRIMES) / sizeof(PRIMES[0]))
 
+/* These ratios are tuned to the PRIMES array such that a resize
+ * places the table back into the zone of non-resizing.  That is,
+ * after a call to _uhash_rehash(), a subsequent call to
+ * _uhash_rehash() should do nothing (should not churn).  This is only
+ * a potential problem with U_GROW_AND_SHRINK.
+ */
+static const float RESIZE_POLICY_RATIO_TABLE[6] = {
+    /* low, high water ratio */
+    0.0F, 0.5F, /* U_GROW: Grow on demand, do not shrink */
+    0.1F, 0.5F, /* U_GROW_AND_SHRINK: Grow and shrink on demand */
+    0.0F, 1.0F  /* U_FIXED: Never change size */
+};
+
 /*
   Invariants for hashcode values:
 
@@ -111,18 +124,18 @@ static int32_t PRIMES[] = {
 /* #define HASH_DEBUG */
 #ifdef HASH_DEBUG
 
-#include <stdio.h>
+  #include <stdio.h>
 
-#define assert(exp) (void)( (exp) || (_assert(#exp, __FILE__, __LINE__), 0) )
+  #define assert(exp) (void)( (exp) || (_assert(#exp, __FILE__, __LINE__), 0) )
 
-static void _assert(const char* exp, const char* file, int line) {
-    printf("ERROR: assert(%s) failed: %s, line %d\n",
-           exp, file, line);
-}
+  static void _assert(const char* exp, const char* file, int line) {
+      printf("ERROR: assert(%s) failed: %s, line %d\n",
+             exp, file, line);
+  }
 
 #else
 
-#define assert(exp)
+  #define assert(exp)
 
 #endif
 
@@ -130,21 +143,23 @@ static void _assert(const char* exp, const char* file, int line) {
  * PRIVATE Prototypes
  ********************************************************************/
 
-UHashtable* _uhash_create(UHashFunction keyHash, UKeyComparator keyComp,
-                          int32_t primeIndex, UErrorCode *status);
+static UHashtable* _uhash_create(UHashFunction keyHash, UKeyComparator keyComp,
+                                 int32_t primeIndex, UErrorCode *status);
 
-void _uhash_allocate(UHashtable *hash, int32_t primeIndex,
-                     UErrorCode *status);
+static void _uhash_allocate(UHashtable *hash, int32_t primeIndex,
+                            UErrorCode *status);
 
-void _uhash_rehash(UHashtable *hash);
+static void _uhash_rehash(UHashtable *hash);
 
-UHashElement* _uhash_find(const UHashtable *hash, const void* key,
-                          int32_t hashcode);
+static UHashElement* _uhash_find(const UHashtable *hash, const void* key,
+                                 int32_t hashcode);
 
-void* _uhash_internalRemoveElement(UHashtable *hash, UHashElement* e);
+static void* _uhash_internalRemoveElement(UHashtable *hash, UHashElement* e);
 
-void* _uhash_setElement(UHashtable* hash, UHashElement* e,
-                        int32_t hashcode, void* key, void* value);
+static void* _uhash_setElement(UHashtable* hash, UHashElement* e,
+                               int32_t hashcode, void* key, void* value);
+
+static void _uhash_internalSetResizePolicy(UHashtable *hash, enum UHashResizePolicy policy);
 
 /********************************************************************
  * PUBLIC API
@@ -174,12 +189,11 @@ uhash_openSize(UHashFunction keyHash, UKeyComparator keyComp,
 U_CAPI void
 uhash_close(UHashtable *hash) {
     assert(hash != NULL);
-
     if (hash->elements != NULL) {
         if (hash->keyDeleter != NULL || hash->valueDeleter != NULL) {
             int32_t pos=-1;
             UHashElement *e;
-            while ((e = uhash_nextElement(hash, &pos)) != NULL) {
+            while ((e = (UHashElement*) uhash_nextElement(hash, &pos)) != NULL) {
                 HASH_DELETE_KEY_VALUE(hash, e->key, e->value);
             }
         }
@@ -217,6 +231,14 @@ uhash_setValueDeleter(UHashtable *hash, UObjectDeleter fn) {
     return result;
 }
 
+U_CAPI void
+uhash_setResizePolicy(UHashtable *hash, enum UHashResizePolicy policy) {
+    _uhash_internalSetResizePolicy(hash, policy);
+    hash->lowWaterMark  = (int32_t)(hash->length * hash->lowWaterRatio);
+    hash->highWaterMark = (int32_t)(hash->length * hash->highWaterRatio);    
+    _uhash_rehash(hash);
+}
+
 U_CAPI int32_t
 uhash_count(const UHashtable *hash) {
     return hash->count;
@@ -244,6 +266,13 @@ uhash_put(UHashtable *hash,
 
     if (U_FAILURE(*status)) {
         goto err;
+    }
+    assert(hash != NULL);
+    if (value == NULL) {
+        /* Disallow storage of NULL values, since NULL is returned by
+         * get() to indicate an absent key.  Storing NULL == removing.
+         */
+        return uhash_remove(hash, key);
     }
     if (hash->count > hash->highWaterMark) {
         _uhash_rehash(hash);
@@ -307,12 +336,26 @@ uhash_remove(UHashtable *hash,
     return result;
 }
 
-U_CAPI UHashElement*
+U_CAPI void
+uhash_removeAll(UHashtable *hash) {
+    int32_t pos = -1;
+    const UHashElement *e;
+    assert(hash != NULL);
+    if (hash->count != 0) {
+        while ((e = uhash_nextElement(hash, &pos)) != NULL) {
+            uhash_removeElement(hash, e);
+        }
+    }
+    assert(hash->count == 0);
+}
+
+U_CAPI const UHashElement*
 uhash_nextElement(const UHashtable *hash, int32_t *pos) {
     /* Walk through the array until we find an element that is not
      * EMPTY and not DELETED.
      */
     int32_t i;
+    assert(hash != NULL);
     for (i = *pos + 1; i < hash->length; ++i) {
         if (!IS_EMPTY_OR_DELETED(hash->elements[i].hashcode)) {
             *pos = i;
@@ -325,10 +368,11 @@ uhash_nextElement(const UHashtable *hash, int32_t *pos) {
 }
 
 U_CAPI void*
-uhash_removeElement(UHashtable *hash, UHashElement* e) {
+uhash_removeElement(UHashtable *hash, const UHashElement* e) {
+    assert(hash != NULL);
     assert(e != NULL);
     if (!IS_EMPTY_OR_DELETED(e->hashcode)) {
-        return _uhash_internalRemoveElement(hash, e);
+        return _uhash_internalRemoveElement(hash, (UHashElement*) e);
     }
     return NULL;
 }
@@ -373,11 +417,6 @@ uhash_hashChars(const void *key) {
 U_CAPI int32_t
 uhash_hashIChars(const void *key) {
     STRING_HASH(uint8_t, uprv_strlen((char*)p), uprv_tolower(*p));
-}
-
-U_CAPI int32_t
-uhash_hashLong(const void *key) {
-    return (int32_t) key;
 }
 
 /********************************************************************
@@ -436,6 +475,20 @@ uhash_compareIChars(const void *key1, const void *key2) {
 }
 
 /********************************************************************
+ * PUBLIC int32_t Support Functions
+ ********************************************************************/
+
+U_CAPI int32_t
+uhash_hashLong(const void *key) {
+    return (int32_t) key;
+}
+
+U_CAPI bool_t
+uhash_compareLong(const void *key1, const void *key2) {
+    return key1 == key2;
+}
+
+/********************************************************************
  * PUBLIC Deleter Functions
  ********************************************************************/
 
@@ -448,13 +501,15 @@ uhash_freeBlock(void *obj) {
  * PRIVATE Implementation
  ********************************************************************/
 
-UHashtable*
+static UHashtable*
 _uhash_create(UHashFunction keyHash, UKeyComparator keyComp,
               int32_t primeIndex,
               UErrorCode *status) {
     UHashtable *result;
 
     if (U_FAILURE(*status)) return NULL;
+    assert(keyHash != NULL);
+    assert(keyComp != NULL);
 
     result = (UHashtable*) uprv_malloc(sizeof(UHashtable));
     if (result == NULL) {
@@ -462,13 +517,11 @@ _uhash_create(UHashFunction keyHash, UKeyComparator keyComp,
         return NULL;
     }
 
-    /* The high water ratio should match the PRIMES array */
-    result->highWaterRatio = 0.5F;
-    result->lowWaterRatio  = 0.0F;
     result->keyHasher      = keyHash;
     result->keyComparator  = keyComp;
     result->keyDeleter     = NULL;
     result->valueDeleter   = NULL;
+    _uhash_internalSetResizePolicy(result, U_GROW);
 
     _uhash_allocate(result, primeIndex, status);
 
@@ -489,7 +542,7 @@ _uhash_create(UHashFunction keyHash, UKeyComparator keyComp,
  *
  * Caller must ensure primeIndex is in range 0..PRIME_LENGTH-1.
  */
-void
+static void
 _uhash_allocate(UHashtable *hash,
                 int32_t primeIndex,
                 UErrorCode *status) {
@@ -533,7 +586,7 @@ _uhash_allocate(UHashtable *hash,
  * already at the low or high limit.  In any case, upon return the
  * arrays will be valid.
  */
-void
+static void
 _uhash_rehash(UHashtable *hash) {
 
     UHashElement *old = hash->elements;
@@ -604,9 +657,8 @@ _uhash_rehash(UHashtable *hash) {
  * The size of the table should be prime for this algorithm to work;
  * otherwise we are not guaranteed that the jump value (the secondary
  * hash) is relatively prime to the table length.
-
  */
-UHashElement*
+static UHashElement*
 _uhash_find(const UHashtable *hash, const void* key,
             int32_t hashcode) {
 
@@ -658,7 +710,7 @@ _uhash_find(const UHashtable *hash, const void* key,
     return &(hash->elements[index]);
 }
 
-void*
+static void*
 _uhash_setElement(UHashtable *hash, UHashElement* e,
                   int32_t hashcode, void* key, void* value) {
 
@@ -684,89 +736,18 @@ _uhash_setElement(UHashtable *hash, UHashElement* e,
 /**
  * Assumes that the given element is not empty or deleted.
  */
-void*
+static void*
 _uhash_internalRemoveElement(UHashtable *hash, UHashElement* e) {
     assert(!IS_EMPTY_OR_DELETED(e->hashcode));
     --hash->count;
     return _uhash_setElement(hash, e, HASH_DELETED, NULL, NULL);
 }
 
-
-
-
-
-
-
-
-
-
-
-/* BEGIN BACKWARD COMPATIBLITY */
-
-U_CAPI int32_t
-uhash_OLD_put(UHashtable *hash,
-              void *value,
-              UErrorCode *status) {
-    void *v;
-    UHashFunction fn = uhash_setKeyHasher(hash, uhash_hashLong);
-    int32_t hashcode = (fn)(value) & 0x7FFFFFFF;
-    uhash_put(hash, (void*) hashcode, value, status);
-    uhash_setKeyHasher(hash, fn);
-    v = uhash_OLD_get(hash, hashcode);
-    assert(v == value);
-    return hashcode;
+static void
+_uhash_internalSetResizePolicy(UHashtable *hash, enum UHashResizePolicy policy) {
+    assert(hash == 0);
+    assert(((int32_t)policy) >= 0);
+    assert(((int32_t)policy) < 3);
+    hash->lowWaterRatio  = RESIZE_POLICY_RATIO_TABLE[policy * 2];
+    hash->highWaterRatio = RESIZE_POLICY_RATIO_TABLE[policy * 2 + 1];
 }
-
-U_CAPI int32_t
-uhash_OLD_putKey(UHashtable *hash,
-                 int32_t hashcode,
-                 void *value,
-                 UErrorCode *status) {
-    void *v;
-    UHashFunction fn = uhash_setKeyHasher(hash, uhash_hashLong);
-    uhash_put(hash, (void*) hashcode, value, status);
-    uhash_setKeyHasher(hash, fn);
-    v = uhash_OLD_get(hash, hashcode);
-    assert(v == value);
-    return hashcode;
-}
-
-U_CAPI void*
-uhash_OLD_get(const UHashtable *hash,
-          int32_t hashcode) {
-    hashcode &= 0x7FFFFFFF;
-    return _uhash_find(hash, (void*) hashcode, hashcode)->value;
-}
-
-U_CAPI void*
-uhash_OLD_remove(UHashtable *hash,
-                 int32_t hashcode,
-                 UErrorCode *status) {
-    void *v;
-    UHashFunction fn = uhash_setKeyHasher(hash, uhash_hashLong);
-    void* result = uhash_remove(hash, (void*) hashcode);
-    uhash_setKeyHasher(hash, fn);
-    v = uhash_OLD_get(hash, hashcode);
-    assert(v == NULL);
-    return result;
-}
-
-U_CAPI void*
-uhash_OLD_nextElement(const UHashtable *hash,
-                      int32_t *pos) {
-    UHashElement *e = uhash_nextElement(hash, pos);
-    return (e == NULL) ? NULL : e->value;
-}
-
-U_CAPI int32_t
-uhash_OLD_hashUString(const void *parm)
-{
-    return uhash_hashUChars(parm) & 0x7FFFFFFF;
-}
-
-U_CAPI bool_t
-uhash_OLD_pointerComparator(const void* key1, const void* key2) {
-    return key1 == key2;
-}
-
-/* END BACKWARD COMPATIBLITY */

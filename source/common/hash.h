@@ -28,6 +28,12 @@ public:
     Hashtable(UErrorCode& status);
 
     /**
+     * Construct a hashtable, _disregarding any error_.  Use this constructor
+     * with caution.
+     */
+    Hashtable();
+
+    /**
      * Non-virtual destructor; make this virtual if Hashtable is subclassed
      * in the future.
      */
@@ -43,7 +49,7 @@ public:
     
     void* remove(const UnicodeString& key);
 
-    bool_t nextElement(const UnicodeString*& key, void*& value, int32_t& pos) const;
+    const UHashElement* nextElement(int32_t& pos) const;
 };
 
 /*********************************************************************
@@ -54,6 +60,15 @@ inline Hashtable::Hashtable(UErrorCode& status) : hash(0) {
     if (U_FAILURE(status)) {
         return;
     }
+    hash = uhash_open(uhash_hashUnicodeString,
+                      uhash_compareUnicodeString, &status);
+    if (U_SUCCESS(status)) {
+        uhash_setKeyDeleter(hash, uhash_deleteUnicodeString);
+    }
+}
+
+inline Hashtable::Hashtable() : hash(0) {
+    UErrorCode status = U_ZERO_ERROR;
     hash = uhash_open(uhash_hashUnicodeString,
                       uhash_compareUnicodeString, &status);
     if (U_SUCCESS(status)) {
@@ -88,15 +103,8 @@ inline void* Hashtable::remove(const UnicodeString& key) {
     return uhash_remove(hash, &key);
 }
 
-inline bool_t Hashtable::nextElement(const UnicodeString*& key, void*& value, int32_t& pos) const {
-    UHashElement *e = uhash_nextElement(hash, &pos);
-    if (e != 0) {
-        key = (const UnicodeString*) e->key;
-        value = e->value;
-        return TRUE;
-    } else {
-        return FALSE;
-    }
+inline const UHashElement* Hashtable::nextElement(int32_t& pos) const {
+    return uhash_nextElement(hash, &pos);
 }
 
 #endif
