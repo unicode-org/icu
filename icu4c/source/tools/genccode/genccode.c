@@ -33,8 +33,10 @@
 /* _M_IA64 should be defined in windows.h */
 #ifdef _M_IA64
 #   define ICU_OBJECT_MACHINE_TYPE IMAGE_FILE_MACHINE_IA64
+#   define ICU_ENTRY_OFFSET 0
 #else
 #   define ICU_OBJECT_MACHINE_TYPE IMAGE_FILE_MACHINE_I386
+#   define ICU_ENTRY_OFFSET 1
 #endif
 
 #endif
@@ -248,10 +250,10 @@ writeObjectCode(const char *filename, const char *destdir) {
 
     /* entry have a leading '_' */
     entry[0]='_';
-    getOutFilename(filename, destdir, buffer, entry+1, ".obj");
+    getOutFilename(filename, destdir, buffer, entry+ICU_ENTRY_OFFSET, ".obj");
 
     if(options[4].doesOccur) {
-        uprv_strcpy(entry+1, options[4].value);
+        uprv_strcpy(entry+ICU_ENTRY_OFFSET, options[4].value);
         uprv_strcat(entry, "_dat");
     }
     /* turn dashes in the entry name into underscores */
