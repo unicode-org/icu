@@ -201,34 +201,34 @@ typedef enum
 * ex : ESC$B is the sequence for JISX208
 *      a) First Iteration: char is ESC
 *          i) Get the value of ESC from normalize_esq_chars_2022[] with int value of ESC as index
-*	   int x = normalize_esq_chars_2022[27] which is equal to 1
+*	          int x = normalize_esq_chars_2022[27] which is equal to 1
 *         ii) Search for this value in escSeqStateTable_Key_2022[]
-*	   value of	x is stored at escSeqStateTable_Key_2022[0]
+*	          value of	x is stored at escSeqStateTable_Key_2022[0]
 *        iii) Save this index as offset
 *         iv) Get state of this sequence from escSeqStateTable_Value_2022[]
-*	   escSeqStateTable_Value_2022[offset], which is VALID_NON_TERMINAL_2022
+*	          escSeqStateTable_Value_2022[offset], which is VALID_NON_TERMINAL_2022
 *     b) Switch on this state and continue to next char
 *          i) Get the value of $ from normalize_esq_chars_2022[] with int value of $ as index
-*	   which is	normalize_esq_chars_2022[36] == 4
+*	          which is	normalize_esq_chars_2022[36] == 4
 *         ii) x is currently 1(from above) 
-*	    x<<=5 -- x is now 32
-*	    x+=normalize_esq_chars_2022[36]
-*	    now x is 36
+*	            x<<=5 -- x is now 32
+*	            x+=normalize_esq_chars_2022[36]
+*	            now x is 36
 *        iii) Search for this value in escSeqStateTable_Key_2022[]
-*	   value of	x is stored at escSeqStateTable_Key_2022[2], so offset is 2
+*	          value of	x is stored at escSeqStateTable_Key_2022[2], so offset is 2
 *         iv) Get state of this sequence from escSeqStateTable_Value_2022[]
-*	   escSeqStateTable_Value_2022[offset], which is VALID_NON_TERMINAL_2022
+*	          escSeqStateTable_Value_2022[offset], which is VALID_NON_TERMINAL_2022
 *     c) Switch on this state and continue to next char
-*        i) Get the value of B from normalize_esq_chars_2022[] with int value of B as index
-*         ii) x is currently 36 (from above) 
-*	    x<<=5 -- x is now 1152
-*	    x+=normalize_esq_chars_2022[66]
-*	    now x is 1161
-*        iii) Search for this value in escSeqStateTable_Key_2022[]
-*	   value of	x is stored at escSeqStateTable_Key_2022[21], so offset is 21
-*         iv) Get state of this sequence from escSeqStateTable_Value_2022[21]
-*	   escSeqStateTable_Value_2022[offset], which is VALID_TERMINAL_2022
-*          v) Get the converter name form escSeqStateTable_Result_2022[21] which is JISX208
+*        i)  Get the value of B from normalize_esq_chars_2022[] with int value of B as index
+*        ii) x is currently 36 (from above) 
+*	         x<<=5 -- x is now 1152
+*	         x+=normalize_esq_chars_2022[66]
+*	         now x is 1161
+*       iii) Search for this value in escSeqStateTable_Key_2022[]
+*	         value of	x is stored at escSeqStateTable_Key_2022[21], so offset is 21
+*        iv) Get state of this sequence from escSeqStateTable_Value_2022[21]
+*	         escSeqStateTable_Value_2022[offset], which is VALID_TERMINAL_2022
+*         v) Get the converter name form escSeqStateTable_Result_2022[21] which is JISX208
 */     
 
 
@@ -407,6 +407,9 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
             myConverterData->isShiftAppended=FALSE;
             myConverterData->isFirstBuffer = TRUE;
             myConverterData->isLocaleSpecified=TRUE;
+
+            /*set the substitution chars*/
+            ucnv_setSubstChars(cnv,"\x1b\x28\x42\x1A", 4, errorCode);
             
             /* set the function pointers to appropriate funtions */
             _ISO2022Impl.toUnicode		= UConverter_toUnicode_ISO_2022_JP;
@@ -447,6 +450,9 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
             myConverterData->fromUnicodeConverter  = ucnv_open("ibm-949",errorCode);
             myConverterData->isLocaleSpecified=TRUE;
             
+            /*set the substitution chars*/
+            ucnv_setSubstChars(cnv,"\x0F\x1A", 2, errorCode);
+            
             /* set the function pointers to appropriate funtions */
             _ISO2022Impl.toUnicode		= UConverter_toUnicode_ISO_2022_KR;
             _ISO2022Impl.toUnicodeWithOffsets   = UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC;
@@ -473,7 +479,8 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
             myConverterData->isEscapeAppended=FALSE;
             myConverterData->isShiftAppended=FALSE;
             myConverterData->isLocaleSpecified=TRUE;
-            
+            /*set the substitution chars*/
+            ucnv_setSubstChars(cnv,"\x0F\x1A", 2, errorCode);
             /* set the function pointers to appropriate funtions */
             _ISO2022Impl.toUnicode		        = UConverter_toUnicode_ISO_2022_CN;
             _ISO2022Impl.toUnicodeWithOffsets   = UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC;
@@ -1190,7 +1197,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args,
     CompactByteArray  *myFromUnicodeSBCSFallback = NULL;
     UChar32 targetUniChar = missingCharMarker;
     StateEnum currentState=ASCII;
-    Cnv2022Type myType;
+    Cnv2022Type myType =ASCII1;
     UChar32 mySourceChar = 0x0000;
     int iterCount = 0;
     const char *escSeq = NULL;
@@ -1206,6 +1213,9 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args,
         return;
     }
     initIterState = myConverterData->fromUnicodeCurrentState;
+    if(args->converter->fromUSurrogateLead!=0 && myTargetIndex < myTargetLength) {
+        goto getTrail;
+    }
     while(mySourceIndex <  mySourceLength){
         currentState = myConverterData->fromUnicodeCurrentState;
         myConverterData->fromUnicodeConverter = (myConverterData->fromUnicodeConverter == NULL) ?
@@ -1220,26 +1230,36 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args,
             myType= (Cnv2022Type) myConverterType[currentState];
             
             /* I am handling surrogates in the begining itself so that I donot have to go through 8 
-            * iterations on codepages that we support. 
+            * iterations on codepages that we support. Adapted from MBCS 
             */
-            if(args->converter->fromUSurrogateLead!=0 || UTF_IS_SURROGATE(mySourceChar)){
-                if(UTF_IS_SURROGATE_FIRST(mySourceChar)){  
-                    /* no more input */
-                    args->converter->fromUSurrogateLead = (UChar) mySourceChar;
-                    continue;
-                }
-                else if(UTF_IS_SECOND_SURROGATE(mySourceChar)){
-                    if(args->converter->fromUSurrogateLead !=0){
-                        mySourceChar = (UChar32) UTF16_GET_PAIR_VALUE(args->converter->fromUSurrogateLead,mySourceChar);
+            if(UTF_IS_SURROGATE(mySourceChar)) {
+                if(UTF_IS_SURROGATE_FIRST(mySourceChar)) {
+                    args->converter->fromUSurrogateLead=(UChar)mySourceChar;
+getTrail:
+                    /*look ahead to find the trail surrogate*/
+                    if(mySourceIndex <  mySourceLength) {
+                        /* test the following code unit */
+                        UChar trail=(UChar) args->source[mySourceIndex];
+                        if(UTF_IS_SECOND_SURROGATE(trail)) {
+                            ++mySourceIndex;
+                            mySourceChar=UTF16_GET_PAIR_VALUE(mySourceChar, trail);
+                            args->converter->fromUSurrogateLead=0x00;
+                            /* convert this surrogate code point */
+                            /* exit this condition tree */
+                        } else {
+                            /* this is an unmatched lead code unit (1st surrogate) */
+                            /* callback(illegal) */
+                            reason=UCNV_ILLEGAL;
+                            *err=U_ILLEGAL_CHAR_FOUND;
+                            goto CALLBACK;
+                        }
+                    } else {
+                        /* no more input */
                         break;
                     }
-                    else{
-                        reason=UCNV_ILLEGAL;
-                        *err=U_ILLEGAL_CHAR_FOUND;
-                        goto CALLBACK;
-                    }
-                }
-                else {
+                } else {
+                    /* this is an unmatched trail code unit (2nd surrogate) */
+                    /* callback(illegal) */
                     reason=UCNV_ILLEGAL;
                     *err=U_ILLEGAL_CHAR_FOUND;
                     goto CALLBACK;
@@ -1285,19 +1305,19 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args,
                     switch (myType){
                     
                         case SBCS:
+                            if( mySourceChar <0xffff) {
+                                myFromUnicodeSBCS =	&myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicode;
+                                myFromUnicodeSBCSFallback = &myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicodeFallback;
                     
-                            myFromUnicodeSBCS =	&myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicode;
-                            myFromUnicodeSBCSFallback = &myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicodeFallback;
+                                targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCS, mySourceChar);
                     
-                            targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCS, mySourceChar);
-                    
-                            if ((targetUniChar==0)&&(args->converter->useFallback == TRUE) &&
-                                (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
-                                targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCSFallback, mySourceChar);
+                                if ((targetUniChar==0)&&(args->converter->useFallback == TRUE) &&
+                                    (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
+                                    targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCSFallback, mySourceChar);
+                                }
+                                /* ucmp8_getU returns 0 for missing char so	explicitly set it missingCharMarker*/
+                                targetUniChar=(UChar)((targetUniChar==0) ? (UChar) missingCharMarker : targetUniChar);
                             }
-                            /* ucmp8_getU returns 0 for missing char so	explicitly set it missingCharMarker*/
-                            targetUniChar=(UChar)((targetUniChar==0) ? (UChar) missingCharMarker : targetUniChar);
-                
                             break;
                     
                         case DBCS:
@@ -1438,7 +1458,7 @@ CALLBACK:
                     myConverterData->isEscapeAppended = isEscapeAppended=FALSE;
                     args->source=saveSource;
                     args->target=saveTarget;
-                    
+                    args->converter->fromUSurrogateLead=0x00;
                     initIterState = myConverterData->fromUnicodeCurrentState;
                     isTargetUCharDBCS  = (UBool)(args->converter->fromUnicodeStatus);
                     args->converter->invalidUCharLength = 0;
@@ -1455,7 +1475,14 @@ CALLBACK:
         } 
         
     }/* end while(mySourceIndex<mySourceLength) */
-    
+
+    if (args->converter->fromUSurrogateLead !=0 && (mySourceIndex == mySourceLength) && args->flush){
+        if (U_SUCCESS(*err) ){
+            *err = U_TRUNCATED_CHAR_FOUND;
+            args->converter->toUnicodeStatus = 0x00;
+        }
+    }
+
     /*save the state and return */
     args->target += myTargetIndex;
     args->source += mySourceIndex;
@@ -1487,7 +1514,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnic
     CompactByteArray  *myFromUnicodeSBCSFallback = NULL;
     UChar32 targetUniChar = missingCharMarker;
     StateEnum currentState=ASCII;
-    Cnv2022Type myType;
+    Cnv2022Type myType=ASCII1;
     UChar32 mySourceChar = 0x0000;
     int iterCount = 0;
     int32_t currentOffset;
@@ -1504,6 +1531,9 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnic
         return;
     }
     initIterState = myConverterData->fromUnicodeCurrentState;
+    if(args->converter->fromUSurrogateLead!=0 && myTargetIndex < myTargetLength) {
+        goto getTrail;
+    }
     while(mySourceIndex <  mySourceLength){
         currentState = myConverterData->fromUnicodeCurrentState;
         myConverterData->fromUnicodeConverter = (myConverterData->fromUnicodeConverter == NULL) ?
@@ -1513,7 +1543,6 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnic
         
         if(myTargetIndex < myTargetLength){
 
-            
             mySourceChar = (UChar) args->source[mySourceIndex++];
             
             myType= (Cnv2022Type) myConverterType[currentState];
@@ -1521,24 +1550,34 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnic
             /* I am handling surrogates in the begining itself so that I donot have to go through 8 
             * iterations on codepages that we support. 
             */
-            if(args->converter->fromUSurrogateLead!=0 || UTF_IS_SURROGATE(mySourceChar)){
-                if(UTF_IS_SURROGATE_FIRST(mySourceChar)){  
-                    /* no more input */
-                    args->converter->fromUSurrogateLead = (UChar) mySourceChar;
-                    continue;
-                }
-                else if(UTF_IS_SECOND_SURROGATE(mySourceChar)){
-                    if(args->converter->fromUSurrogateLead !=0){
-                        mySourceChar = (UChar32) UTF16_GET_PAIR_VALUE(args->converter->fromUSurrogateLead,mySourceChar);
+            if(UTF_IS_SURROGATE(mySourceChar)) {
+                if(UTF_IS_SURROGATE_FIRST(mySourceChar)) {
+                    args->converter->fromUSurrogateLead=(UChar)mySourceChar;
+getTrail:
+                    /*look ahead to find the trail surrogate*/
+                    if(mySourceIndex <  mySourceLength) {
+                        /* test the following code unit */
+                        UChar trail=(UChar) args->source[mySourceIndex];
+                        if(UTF_IS_SECOND_SURROGATE(trail)) {
+                            ++mySourceIndex;
+                            mySourceChar=UTF16_GET_PAIR_VALUE(mySourceChar, trail);
+                            args->converter->fromUSurrogateLead=0x00;
+                            /* convert this surrogate code point */
+                            /* exit this condition tree */
+                        } else {
+                            /* this is an unmatched lead code unit (1st surrogate) */
+                            /* callback(illegal) */
+                            reason=UCNV_ILLEGAL;
+                            *err=U_ILLEGAL_CHAR_FOUND;
+                            goto CALLBACK;
+                        }
+                    } else {
+                        /* no more input */
                         break;
                     }
-                    else{
-                        reason=UCNV_ILLEGAL;
-                        *err=U_ILLEGAL_CHAR_FOUND;
-                        goto CALLBACK;
-                    }
-                }
-                else {
+                } else {
+                    /* this is an unmatched trail code unit (2nd surrogate) */
+                    /* callback(illegal) */
                     reason=UCNV_ILLEGAL;
                     *err=U_ILLEGAL_CHAR_FOUND;
                     goto CALLBACK;
@@ -1584,19 +1623,19 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnic
                     switch (myType){
                     
                         case SBCS:
+                            if(mySourceChar < 0xffff){
+                                myFromUnicodeSBCS =	&myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicode;
+                                myFromUnicodeSBCSFallback = &myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicodeFallback;
                     
-                            myFromUnicodeSBCS =	&myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicode;
-                            myFromUnicodeSBCSFallback = &myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicodeFallback;
+                                targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCS, mySourceChar);
                     
-                            targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCS, mySourceChar);
-                    
-                            if ((targetUniChar==0)&&(args->converter->useFallback == TRUE) &&
-                                (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
-                                targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCSFallback, mySourceChar);
+                                if ((targetUniChar==0)&&(args->converter->useFallback == TRUE) &&
+                                    (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
+                                    targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCSFallback, mySourceChar);
+                                }
+                                /* ucmp8_getU returns 0 for missing char so	explicitly set it missingCharMarker*/
+                                targetUniChar=(UChar)((targetUniChar==0) ? (UChar) missingCharMarker : targetUniChar);
                             }
-                            /* ucmp8_getU returns 0 for missing char so	explicitly set it missingCharMarker*/
-                            targetUniChar=(UChar)((targetUniChar==0) ? (UChar) missingCharMarker : targetUniChar);
-                
                             break;
                     
                         case DBCS:
@@ -1742,7 +1781,9 @@ CALLBACK:
                     args->offsets=saveOffsets;
                     initIterState = myConverterData->fromUnicodeCurrentState;
                     isTargetUCharDBCS  = (UBool)(args->converter->fromUnicodeStatus);
+                    myConverterData->isEscapeAppended = isEscapeAppended=FALSE;
                     args->converter->invalidUCharLength = 0;
+                    args->converter->fromUSurrogateLead=0x00;
                     if (U_FAILURE (*err)){
                         break;
                     }
@@ -1756,7 +1797,15 @@ CALLBACK:
         } 
         
     }/* end while(mySourceIndex<mySourceLength) */
-    
+    /*If at the end of conversion we are still carrying state information
+    *flush is TRUE, we can deduce that the input stream is truncated
+    */
+    if (args->converter->fromUSurrogateLead !=0 && (mySourceIndex == mySourceLength) && args->flush){
+        if (U_SUCCESS(*err)){
+            *err = U_TRUNCATED_CHAR_FOUND;
+            args->converter->toUnicodeStatus = 0x00;
+        }
+    }
     /*save the state and return */
     args->target += myTargetIndex;
     args->source += mySourceIndex;
@@ -2617,12 +2666,11 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR(UConverterFromUnicodeArgs* args,
     unsigned char *myTarget = (unsigned char *) args->target;
     int32_t mySourceIndex = 0;
     int32_t myTargetIndex = 0;
-    uint32_t targetValue=0;
     int32_t targetLength = args->targetLimit - args->target;
     int32_t sourceLength = args->sourceLimit - args->source;
     int32_t length=0;
     UChar32 targetUniChar = 0x0000;
-    UChar32 mySourceChar = 0x0000,c=0x0000;
+    UChar32 mySourceChar = 0x0000;
     UBool isTargetUCharDBCS = (UBool)args->converter->fromUnicodeStatus;
     UBool oldIsTargetUCharDBCS = isTargetUCharDBCS;
     UConverterDataISO2022 *myConverterData=(UConverterDataISO2022*)args->converter->extraInfo;
@@ -2630,41 +2678,54 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR(UConverterFromUnicodeArgs* args,
     
     isTargetUCharDBCS   = (UBool) args->converter->fromUnicodeStatus;
     
+    if(args->converter->fromUSurrogateLead!=0 && myTargetIndex < targetLength) {
+        goto getTrail;
+    }
     /*writing the char to the output stream */
     while (mySourceIndex < sourceLength){
         
         if (myTargetIndex < targetLength){
             
-            c=mySourceChar = (UChar) args->source[mySourceIndex++];
+            mySourceChar = (UChar) args->source[mySourceIndex++];
             
             /*Handle surrogates */
-            if(args->converter->fromUSurrogateLead!=0 || UTF_IS_SURROGATE(mySourceChar)){
-                if(UTF_IS_SURROGATE_FIRST(mySourceChar)){  
-                    /* no more input */
-                    args->converter->fromUSurrogateLead = (UChar) mySourceChar;
-                    continue;
-                }
-                else if(UTF_IS_SECOND_SURROGATE(mySourceChar)){
-                    if(args->converter->fromUSurrogateLead !=0){
-                        mySourceChar =(UChar32)	UTF16_GET_PAIR_VALUE(args->converter->fromUSurrogateLead,mySourceChar);
+            if(UTF_IS_SURROGATE(mySourceChar)) {
+                if(UTF_IS_SURROGATE_FIRST(mySourceChar)) {
+                    args->converter->fromUSurrogateLead=(UChar)mySourceChar;
+getTrail:
+                    /*look ahead to find the trail surrogate*/
+                    if(mySourceIndex <  sourceLength) {
+                        /* test the following code unit */
+                        UChar trail=(UChar) args->source[mySourceIndex];
+                        if(UTF_IS_SECOND_SURROGATE(trail)) {
+                            ++mySourceIndex;
+                            mySourceChar=UTF16_GET_PAIR_VALUE(mySourceChar, trail);
+                            isTargetUCharDBCS=TRUE;
+                            args->converter->fromUSurrogateLead=0x00;
+                            /* convert this surrogate code point */
+                            /* exit this condition tree */
+                        } else {
+                            /* this is an unmatched lead code unit (1st surrogate) */
+                            /* callback(illegal) */
+                            reason=UCNV_ILLEGAL;
+                            *err=U_ILLEGAL_CHAR_FOUND;
+                            goto CALLBACK;
+                        }
+                    } else {
+                        /* no more input */
                         break;
                     }
-                    else{
-                        reason=UCNV_ILLEGAL;
-                        *err=U_ILLEGAL_CHAR_FOUND;
-                        goto CALLBACK;
-                    }
-                }
-                else {
+                } else {
+                    /* this is an unmatched trail code unit (2nd surrogate) */
+                    /* callback(illegal) */
                     reason=UCNV_ILLEGAL;
                     *err=U_ILLEGAL_CHAR_FOUND;
                     goto CALLBACK;
                 }
             }
-            
             length= _MBCSFromUChar32(myConverterData->fromUnicodeConverter->sharedData,
-                mySourceChar,&targetValue,args->converter->useFallback);
-            targetUniChar = (UChar32) targetValue;
+                mySourceChar,&targetUniChar,args->converter->useFallback);
+           
             
             /* only DBCS or SBCS characters are expected*/
             if(length > 2 || length==0){
@@ -2684,14 +2745,15 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR(UConverterFromUnicodeArgs* args,
             
             if (targetUniChar != missingCharMarker){
                 
-                if (oldIsTargetUCharDBCS != isTargetUCharDBCS){
+                if (oldIsTargetUCharDBCS != isTargetUCharDBCS || !myConverterData->isShiftAppended){
                     
                     if (isTargetUCharDBCS) 
                         args->target[myTargetIndex++] = UCNV_SO;
                     else 
                         args->target[myTargetIndex++] = UCNV_SI;
-                    
-                    
+
+                    myConverterData->isShiftAppended=TRUE;
+
                     if ((!isTargetUCharDBCS)&&(myTargetIndex+1 >= targetLength)){
                         args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = (char) targetUniChar;
                         *err = U_BUFFER_OVERFLOW_ERROR;
@@ -2728,36 +2790,39 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR(UConverterFromUnicodeArgs* args,
             else{
                 
 CALLBACK:
-            {
-                const	UChar* saveSource = args->source;
-                char*	saveTarget = args->target;
-                int32_t *saveOffsets = args->offsets;
+                {
+                    const	UChar* saveSource = args->source;
+                    char*	saveTarget = args->target;
+                    int32_t *saveOffsets = args->offsets;
                 
-                isTargetUCharDBCS	= oldIsTargetUCharDBCS;
-                *err = U_INVALID_CHAR_FOUND;
-                args->converter->invalidUCharBuffer[0] = (UChar) mySourceChar;
-                args->converter->invalidUCharLength = 1;
+                    isTargetUCharDBCS	= oldIsTargetUCharDBCS;
+                    *err = U_INVALID_CHAR_FOUND;
+                    args->converter->invalidUCharBuffer[0] = (UChar) mySourceChar;
+                    args->converter->invalidUCharLength = 1;
                 
-                args->converter->fromUnicodeStatus = (int32_t)isTargetUCharDBCS;
-                args->target += myTargetIndex;
-                args->source += mySourceIndex;
-                FromU_CALLBACK_MACRO(args->converter->fromUContext,
-                    args,
-                    args->converter->invalidUCharBuffer,
-                    1,
-                    (UChar32) mySourceChar,
-                    UCNV_UNASSIGNED,
-                    err);
-                args->source = saveSource;
-                args->target = saveTarget;
-                args->offsets = saveOffsets;
-                isTargetUCharDBCS	 = (UBool) args->converter->fromUnicodeStatus;
-                args->converter->invalidUCharLength = 0;
-                if (U_FAILURE (*err)) 
-                    break;
+                    args->converter->fromUnicodeStatus = (int32_t)isTargetUCharDBCS;
+                    args->target += myTargetIndex;
+                    args->source += mySourceIndex;
+                    FromU_CALLBACK_MACRO(args->converter->fromUContext,
+                        args,
+                        args->converter->invalidUCharBuffer,
+                        1,
+                        (UChar32) mySourceChar,
+                        UCNV_UNASSIGNED,
+                        err);
+                    args->source = saveSource;
+                    args->target = saveTarget;
+                    args->offsets = saveOffsets;
+                    args->converter->invalidUCharLength = 0;
+                    isTargetUCharDBCS=(UBool)args->converter->fromUnicodeStatus;
+                    myConverterData->isShiftAppended =FALSE;
+                    args->converter->fromUSurrogateLead=0x00;
+                    if (U_FAILURE (*err)) 
+                        break;
                 
+                }
             }
-            }
+            targetUniChar=missingCharMarker;
         }
         else{
             *err = U_BUFFER_OVERFLOW_ERROR;
@@ -2765,7 +2830,16 @@ CALLBACK:
         }
         
     }
-    
+    /*If at the end of conversion we are still carrying state information
+    *flush is TRUE, we can deduce that the input stream is truncated
+    */
+    if (args->converter->fromUSurrogateLead !=0 && (mySourceIndex == sourceLength) && args->flush){
+        if (U_SUCCESS(*err)){
+            *err = U_TRUNCATED_CHAR_FOUND;
+            args->converter->toUnicodeStatus = 0x00;
+        }
+    }
+
     args->target += myTargetIndex;
     args->source += mySourceIndex;
     args->converter->fromUnicodeStatus = (int32_t)isTargetUCharDBCS;
@@ -2784,7 +2858,6 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnic
     int32_t sourceLength = args->sourceLimit - args->source;
     UChar32 targetUniChar = 0x0000;
     UChar32 mySourceChar = 0x0000;
-    uint32_t targetValue=0;
     UBool isTargetUCharDBCS = (UBool)args->converter->fromUnicodeStatus;
     UBool oldIsTargetUCharDBCS = isTargetUCharDBCS;
     UConverterDataISO2022 *myConverterData=(UConverterDataISO2022*)args->converter->extraInfo;
@@ -2792,7 +2865,9 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnic
     int32_t length =0;
     
     isTargetUCharDBCS   = (UBool) args->converter->fromUnicodeStatus;
-    
+    if(args->converter->fromUSurrogateLead!=0 && myTargetIndex <targetLength) {
+        goto getTrail;
+    }
     /*writing the char to the output stream */
     while (mySourceIndex < sourceLength){
         
@@ -2801,24 +2876,35 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnic
             mySourceChar = (UChar) args->source[mySourceIndex++];
             
             /*Handle surrogates */
-            if(args->converter->fromUSurrogateLead!=0 || UTF_IS_SURROGATE(mySourceChar)){
-                if(UTF_IS_SURROGATE_FIRST(mySourceChar)){  
-                    /* no more input */
-                    args->converter->fromUSurrogateLead =(UChar) mySourceChar;
-                    continue;
-                }
-                else if(UTF_IS_SECOND_SURROGATE(mySourceChar)){
-                    if(args->converter->fromUSurrogateLead !=0){
-                        mySourceChar = (UChar32) UTF16_GET_PAIR_VALUE(args->converter->fromUSurrogateLead,mySourceChar);
+              if(UTF_IS_SURROGATE(mySourceChar)) {
+                if(UTF_IS_SURROGATE_FIRST(mySourceChar)) {
+                    args->converter->fromUSurrogateLead=(UChar) mySourceChar;
+getTrail:
+                    /*look ahead to find the trail surrogate*/
+                    if(mySourceIndex <  sourceLength) {
+                        /* test the following code unit */
+                        UChar trail=(UChar) args->source[mySourceIndex];
+                        if(UTF_IS_SECOND_SURROGATE(trail)) {
+                            ++mySourceIndex;
+                            mySourceChar=UTF16_GET_PAIR_VALUE(mySourceChar, trail);
+                            isTargetUCharDBCS=TRUE;
+                            args->converter->fromUSurrogateLead=0x00;
+                            /* convert this surrogate code point */
+                            /* exit this condition tree */
+                        } else {
+                            /* this is an unmatched lead code unit (1st surrogate) */
+                            /* callback(illegal) */
+                            reason=UCNV_ILLEGAL;
+                            *err=U_ILLEGAL_CHAR_FOUND;
+                            goto CALLBACK;
+                        }
+                    } else {
+                        /* no more input */
                         break;
                     }
-                    else{
-                        reason=UCNV_ILLEGAL;
-                        *err=U_ILLEGAL_CHAR_FOUND;
-                        goto CALLBACK;
-                    }
-                }
-                else {
+                } else {
+                    /* this is an unmatched trail code unit (2nd surrogate) */
+                    /* callback(illegal) */
                     reason=UCNV_ILLEGAL;
                     *err=U_ILLEGAL_CHAR_FOUND;
                     goto CALLBACK;
@@ -2826,8 +2912,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnic
             }
             
             length= _MBCSFromUChar32(myConverterData->fromUnicodeConverter->sharedData,
-                mySourceChar,&targetValue,args->converter->useFallback);
-            targetUniChar = (UChar32) targetValue;
+                mySourceChar,&targetUniChar,args->converter->useFallback);
             
             /* only DBCS or SBCS characters are expected*/
             if(length > 2 || length==0){
@@ -2846,7 +2931,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnic
             isTargetUCharDBCS = (UBool)(targetUniChar>0x00FF);
             if (targetUniChar != missingCharMarker){
                 
-                if (oldIsTargetUCharDBCS != isTargetUCharDBCS){
+                if (oldIsTargetUCharDBCS != isTargetUCharDBCS || !myConverterData->isShiftAppended){
                     
                     args->offsets[myTargetIndex] = mySourceIndex-1;
 
@@ -2854,7 +2939,8 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnic
                         args->target[myTargetIndex++] = UCNV_SO;
                     else
                         args->target[myTargetIndex++] = UCNV_SI;
-                    
+
+                    myConverterData->isShiftAppended=TRUE;
                     if ((!isTargetUCharDBCS)&&(myTargetIndex+1 >= targetLength)){
                         
                         args->converter->charErrorBuffer[0]	= (char) targetUniChar;
@@ -2895,38 +2981,40 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnic
             }
             else{
 CALLBACK:	    
-            {
-                int32_t currentOffset = args->offsets[myTargetIndex-1]+1;
-                char * saveTarget = args->target;
-                const UChar* saveSource = args->source;
-                int32_t *saveOffsets = args->offsets;
-                *err = U_INVALID_CHAR_FOUND;
-                args->converter->invalidUCharBuffer[0] = (UChar) mySourceChar;
-                args->converter->invalidUCharLength = 1;
+                {
+                    int32_t currentOffset = args->offsets[myTargetIndex-1]+1;
+                    char * saveTarget = args->target;
+                    const UChar* saveSource = args->source;
+                    int32_t *saveOffsets = args->offsets;
+                    *err = U_INVALID_CHAR_FOUND;
+                    args->converter->invalidUCharBuffer[0] = (UChar) mySourceChar;
+                    args->converter->invalidUCharLength = 1;
                 
-                /* Breaks out of the loop since behaviour was set to stop */
-                args->converter->fromUnicodeStatus = (int32_t)isTargetUCharDBCS;
-                args->target +=	myTargetIndex;
-                args->source +=	mySourceIndex;
-                args->offsets =	args->offsets?args->offsets+myTargetIndex:0;
-                FromU_CALLBACK_OFFSETS_LOGIC_MACRO(args->converter->fromUContext,
-                    args,
-                    args->converter->invalidUCharBuffer,
-                    1,
-                    (UChar32)mySourceChar,
-                    UCNV_UNASSIGNED,
-                    err);
-                isTargetUCharDBCS  = (UBool)(args->converter->fromUnicodeStatus);
-                args->source = saveSource;
-                args->target = saveTarget;
-                args->offsets =	saveOffsets;
-                oldIsTargetUCharDBCS = TRUE;
-                args->converter->invalidUCharLength = 0;
-                if (U_FAILURE (*err))     
-                    break;
+                    /* Breaks out of the loop since behaviour was set to stop */
+                    args->converter->fromUnicodeStatus = (int32_t)isTargetUCharDBCS;
+                    args->target +=	myTargetIndex;
+                    args->source +=	mySourceIndex;
+                    args->offsets =	args->offsets?args->offsets+myTargetIndex:0;
+                    FromU_CALLBACK_OFFSETS_LOGIC_MACRO(args->converter->fromUContext,
+                        args,
+                        args->converter->invalidUCharBuffer,
+                        1,
+                        (UChar32)mySourceChar,
+                        UCNV_UNASSIGNED,
+                        err);
+                    isTargetUCharDBCS=(UBool)args->converter->fromUnicodeStatus;
+                    myConverterData->isShiftAppended =FALSE;
+                    args->source = saveSource;
+                    args->target = saveTarget;
+                    args->offsets =	saveOffsets;
+                    args->converter->invalidUCharLength = 0;
+                    args->converter->fromUSurrogateLead=0x00;
+                    if (U_FAILURE (*err))     
+                        break;
 
+                }
             }
-            }
+            targetUniChar=missingCharMarker;
         }
         else{
             
@@ -2936,7 +3024,16 @@ CALLBACK:
         
     }
     
-    
+    /*If at the end of conversion we are still carrying state information
+    *flush is TRUE, we can deduce that the input stream is truncated
+    */
+    if (args->converter->fromUSurrogateLead !=0 && (mySourceIndex == sourceLength) && args->flush){
+        if (U_SUCCESS(*err)){
+            *err = U_TRUNCATED_CHAR_FOUND;
+            args->converter->toUnicodeStatus = 0x00;
+        }
+    }
+
     args->target += myTargetIndex;
     args->source += mySourceIndex;
     
@@ -3433,7 +3530,7 @@ typedef enum  {
 } StateEnumCN;
 
 static Cnv2022Type myConverterTypeCN[4]={
-        SBCS,
+        ASCII1,
         DBCS,
         DBCS,
         MBCS
@@ -3478,7 +3575,9 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN(UConverterFromUnicodeArgs* args,
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
-    
+    if(args->converter->fromUSurrogateLead!=0 && myTargetIndex < myTargetLength) {
+        goto getTrail;
+    }
     while(mySourceIndex <  mySourceLength){
         currentState =(StateEnumCN) myConverterData->fromUnicodeCurrentState;
         myConverterData->fromUnicodeConverter = (myConverterData->fromUnicodeConverter == NULL) ?
@@ -3492,24 +3591,34 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN(UConverterFromUnicodeArgs* args,
             /* I am handling surrogates in the begining itself so that I donot have to go through 4
              * iterations on codepages that we support. 
              */
-            if(args->converter->fromUSurrogateLead!=0 || UTF_IS_SURROGATE(mySourceChar)){
-                if(UTF_IS_SURROGATE_FIRST(mySourceChar)){  
-                    /* no more input */
-                    args->converter->fromUSurrogateLead = (UChar) mySourceChar;
-                    continue;
-                }
-                else if(UTF_IS_SECOND_SURROGATE(mySourceChar)){
-                    if(args->converter->fromUSurrogateLead !=0){
-                        mySourceChar = (UChar32) UTF16_GET_PAIR_VALUE(args->converter->fromUSurrogateLead,mySourceChar);
+            if(UTF_IS_SURROGATE(mySourceChar)) {
+                if(UTF_IS_SURROGATE_FIRST(mySourceChar)) {
+                    args->converter->fromUSurrogateLead=(UChar)mySourceChar;
+getTrail:
+                    /*look ahead to find the trail surrogate*/
+                    if(mySourceIndex <  mySourceLength) {
+                        /* test the following code unit */
+                        UChar trail=(UChar) args->source[mySourceIndex];
+                        if(UTF_IS_SECOND_SURROGATE(trail)) {
+                            ++mySourceIndex;
+                            mySourceChar=UTF16_GET_PAIR_VALUE(mySourceChar, trail);
+                            args->converter->fromUSurrogateLead=0x00;
+                            /* convert this surrogate code point */
+                            /* exit this condition tree */
+                        } else {
+                            /* this is an unmatched lead code unit (1st surrogate) */
+                            /* callback(illegal) */
+                            reason=UCNV_ILLEGAL;
+                            *err=U_ILLEGAL_CHAR_FOUND;
+                            goto CALLBACK;
+                        }
+                    } else {
+                        /* no more input */
                         break;
                     }
-                    else{
-                        reason=UCNV_ILLEGAL;
-                        *err=U_ILLEGAL_CHAR_FOUND;
-                        goto CALLBACK;
-                    }
-                }
-                else {
+                } else {
+                    /* this is an unmatched trail code unit (2nd surrogate) */
+                    /* callback(illegal) */
                     reason=UCNV_ILLEGAL;
                     *err=U_ILLEGAL_CHAR_FOUND;
                     goto CALLBACK;
@@ -3535,7 +3644,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN(UConverterFromUnicodeArgs* args,
                     switch (myConverterTypeCN[currentState]){
                     
                         case SBCS:
-                            if(mySourceChar<0xff){
+                            if(mySourceChar<0xffff){
                                 myFromUnicodeSBCS =	&myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicode;
                                 myFromUnicodeSBCSFallback = &myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicodeFallback;
                         
@@ -3594,8 +3703,18 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN(UConverterFromUnicodeArgs* args,
                                     targetUniChar = missingCharMarker;
                             }
                             break;
-                    
+
+                        case ASCII1:
+                            if(mySourceChar < 0x7f){
+                                targetUniChar = mySourceChar;
+                            }
+                            else 
+                                targetUniChar = missingCharMarker;
+                            break;
+
                         case LATIN1:
+                            /*not expected*/
+                              break;
                     
                         default:
                             /*not expected */ 
@@ -3697,7 +3816,7 @@ CALLBACK:
                     myConverterData->isEscapeAppended = isEscapeAppended=FALSE;
                     args->source=saveSource;
                     args->target=saveTarget;
-                    
+                    args->converter->fromUSurrogateLead=0x00;
                     initIterState = myConverterData->fromUnicodeCurrentState;
 
                     if (U_FAILURE (*err)){
@@ -3714,7 +3833,16 @@ CALLBACK:
         
     }/* end while(mySourceIndex<mySourceLength) */
     
-    
+    /*If at the end of conversion we are still carrying state information
+    *flush is TRUE, we can deduce that the input stream is truncated
+    */
+    if (args->converter->fromUSurrogateLead !=0 && (mySourceIndex == mySourceLength) && args->flush){
+        if (U_SUCCESS(*err)){
+            *err = U_TRUNCATED_CHAR_FOUND;
+            args->converter->toUnicodeStatus = 0x00;
+        }
+    }
+
     /*save the state and return */
     args->target += myTargetIndex;
     args->source += mySourceIndex;
@@ -3761,7 +3889,9 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterFromUnic
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
-    
+    if(args->converter->fromUSurrogateLead!=0 && myTargetIndex < myTargetLength) {
+        goto getTrail;
+    }
     while(mySourceIndex <  mySourceLength){
         currentState =(StateEnumCN) myConverterData->fromUnicodeCurrentState;
         myConverterData->fromUnicodeConverter = (myConverterData->fromUnicodeConverter == NULL) ?
@@ -3775,24 +3905,34 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterFromUnic
             /* I am handling surrogates in the begining itself so that I donot have to go through 4
              * iterations on codepages that we support. 
              */
-            if(args->converter->fromUSurrogateLead!=0 || UTF_IS_SURROGATE(mySourceChar)){
-                if(UTF_IS_SURROGATE_FIRST(mySourceChar)){  
-                    /* no more input */
-                    args->converter->fromUSurrogateLead = (UChar) mySourceChar;
-                    continue;
-                }
-                else if(UTF_IS_SECOND_SURROGATE(mySourceChar)){
-                    if(args->converter->fromUSurrogateLead !=0){
-                        mySourceChar = (UChar32) UTF16_GET_PAIR_VALUE(args->converter->fromUSurrogateLead,mySourceChar);
+            if(UTF_IS_SURROGATE(mySourceChar)) {
+                if(UTF_IS_SURROGATE_FIRST(mySourceChar)) {
+                    args->converter->fromUSurrogateLead=(UChar)mySourceChar;
+getTrail:
+                    /*look ahead to find the trail surrogate*/
+                    if(mySourceIndex <  mySourceLength) {
+                        /* test the following code unit */
+                        UChar trail=(UChar) args->source[mySourceIndex];
+                        if(UTF_IS_SECOND_SURROGATE(trail)) {
+                            ++mySourceIndex;
+                            mySourceChar=UTF16_GET_PAIR_VALUE(mySourceChar, trail);
+                            args->converter->fromUSurrogateLead=0x00;
+                            /* convert this surrogate code point */
+                            /* exit this condition tree */
+                        } else {
+                            /* this is an unmatched lead code unit (1st surrogate) */
+                            /* callback(illegal) */
+                            reason=UCNV_ILLEGAL;
+                            *err=U_ILLEGAL_CHAR_FOUND;
+                            goto CALLBACK;
+                        }
+                    } else {
+                        /* no more input */
                         break;
                     }
-                    else{
-                        reason=UCNV_ILLEGAL;
-                        *err=U_ILLEGAL_CHAR_FOUND;
-                        goto CALLBACK;
-                    }
-                }
-                else {
+                } else {
+                    /* this is an unmatched trail code unit (2nd surrogate) */
+                    /* callback(illegal) */
                     reason=UCNV_ILLEGAL;
                     *err=U_ILLEGAL_CHAR_FOUND;
                     goto CALLBACK;
@@ -3818,7 +3958,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterFromUnic
                     switch (myConverterTypeCN[currentState]){
                     
                         case SBCS:
-                            if(mySourceChar<0xff){
+                            if(mySourceChar<0xffff){
                                 myFromUnicodeSBCS =	&myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicode;
                                 myFromUnicodeSBCSFallback = &myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicodeFallback;
                         
@@ -3877,9 +4017,18 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterFromUnic
                                     targetUniChar = missingCharMarker;
                             }
                             break;
-                    
+
+                        case ASCII1:
+                            if(mySourceChar < 0x7f){
+                                targetUniChar = mySourceChar;
+                            }
+                            else 
+                                targetUniChar = missingCharMarker;
+                            break;
+
                         case LATIN1:
-                    
+                            /*not expected*/
+                              break;
                         default:
                             /*not expected */ 
                             break;
@@ -3987,6 +4136,8 @@ CALLBACK:
                     args->target=saveTarget;
                     args->offsets=saveOffsets;
                     initIterState = myConverterData->fromUnicodeCurrentState;
+                    myConverterData->isEscapeAppended=isEscapeAppended=FALSE;
+                    args->converter->fromUSurrogateLead=0x00;
 
                     if (U_FAILURE (*err)){
                         break;
@@ -4000,7 +4151,16 @@ CALLBACK:
         }
         
     }/* end while(mySourceIndex<mySourceLength) */
-    
+    /*If at the end of conversion we are still carrying state information
+    *flush is TRUE, we can deduce that the input stream is truncated
+    */
+    if (args->converter->fromUSurrogateLead !=0 && (mySourceIndex == mySourceLength) && args->flush){
+        if (U_SUCCESS(*err)){
+            *err = U_TRUNCATED_CHAR_FOUND;
+            args->converter->toUnicodeStatus = 0x00;
+        }
+    }
+
     
     /*save the state and return */
     args->target += myTargetIndex;
@@ -4422,6 +4582,7 @@ SAVE_STATE:
                     args->target = saveTarget;
                     args->offsets = saveOffsets;
                     args->converter->invalidCharLength=0;
+
                     if(U_FAILURE(*err))
                         break;
 
@@ -4644,6 +4805,9 @@ SAVE_STATE:
                             currentOffset = mySource - args->source -1;
                     }
 
+                    /*reason = (targetUniChar == 0xfffe) ? UCNV_UNASSIGNED:UCNV_ILLEGAL;
+                    *err = (targetUniChar == 0xfffe) ? U_INVALID_CHAR_FOUND : U_ILLEGAL_CHAR_FOUND;*/
+
                     if(targetUniChar == 0xfffe){
                         reason = UCNV_UNASSIGNED;
                         *err = U_INVALID_CHAR_FOUND;
@@ -4668,6 +4832,10 @@ SAVE_STATE:
                     args->source  = saveSource;
                     args->target  = saveTarget;
                     args->offsets = saveOffsets;
+
+                    if(U_FAILURE(*err))
+                        break;
+
                 }
             }
         }
