@@ -42,7 +42,7 @@ public class CollationMiscTest extends TestFmwk {
     
     private static final boolean hasCollationElements(Locale locale)
     {
-        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,locale);
+        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_COLLATION_BASE_NAME,locale);
         if (rb != null) {
             try {
                 String collkey = rb.getStringWithFallback("collations/default"); 

@@ -786,8 +786,12 @@ public abstract class ICUResourceBundle extends UResourceBundle{
             return Collections.unmodifiableSet(set);
         }
         catch (MissingResourceException e) {
-            if (DEBUG) System.out.println("couldn't find index for bundleName: " + baseName);
-            Thread.dumpStack();
+            if (DEBUG){
+                System.out.println("couldn't find index for bundleName: " + baseName);
+                Thread.dumpStack();
+            }
+            //System.out.println("couldn't find index for bundleName: " + baseName);
+            //e.printStackTrace();
         }
         return Collections.EMPTY_SET;
     }
