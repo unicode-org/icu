@@ -1217,12 +1217,20 @@ SOURCE=.\unicode\uscript.h
 
 !IF  "$(CFG)" == "common - Win32 Release"
 
+# Begin Custom Build
+InputPath=.\unicode\uscript.h
+
+"..\..\include\unicode\uscript.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
 
 # Begin Custom Build
 InputPath=.\unicode\uscript.h
 
-"..\..\include\unicode\script.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+"..\..\include\unicode\uscript.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
