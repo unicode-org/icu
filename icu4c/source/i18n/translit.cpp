@@ -1694,8 +1694,14 @@ U_NAMESPACE_END
  */
 U_CFUNC UBool transliterator_cleanup(void) {
     TitlecaseTransliterator::cleanup();
-    delete registry;
-    registry = 0;
+    if (registry) {
+        delete registry;
+        registry = NULL;
+    }
+    if (specialInverses) {
+        delete specialInverses;
+        specialInverses = NULL;
+    }
     umtx_destroy(&registryMutex);
     return TRUE;
 }
