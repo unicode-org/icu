@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakTransliterator.java,v $
- * $Date: 2003/06/03 18:49:33 $
- * $Revision: 1.6 $
+ * $Date: 2004/02/20 00:16:20 $
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -29,7 +29,6 @@ final class BreakTransliterator extends Transliterator {
 
     public BreakTransliterator(String ID, UnicodeFilter filter, BreakIterator bi, String insertion) {
         super(ID, filter);
-        if (bi == null) bi = (BreakIterator) BreakIterator.getWordInstance(new Locale("th", "TH"));
         this.bi = bi;
         this.insertion = insertion;
     }
@@ -47,6 +46,9 @@ final class BreakTransliterator extends Transliterator {
     }
 
     public BreakIterator getBreakIterator() {
+        // Defer initialization of BreakIterator because it is slow,
+        // typically over 2000 ms.
+        if (bi == null) bi = (BreakIterator) BreakIterator.getWordInstance(new Locale("th", "TH"));
         return bi;
     }
 
@@ -67,6 +69,7 @@ final class BreakTransliterator extends Transliterator {
     protected void handleTransliterate(Replaceable text, Position pos, boolean incremental) {
         boundaryCount = 0;
         int boundary = 0;
+        getBreakIterator(); // Lazy-create it if necessary
         bi.setText(new ReplaceableCharacterIterator(text, pos.start, pos.limit, pos.start));
         // TODO: fix clumsy workaround used below.
         /*
