@@ -198,8 +198,8 @@ static void TestConvert()
         alias = ucnv_getAlias("utf-8", 0, &err);
         if(U_FAILURE(err)) {
             log_err("FAILURE! ucnv_getAlias(\"utf-8\", 0) -> %s\n", myErrorName(err));
-        } else if(uprv_strcmp("UTF8", alias) != 0) {
-            log_err("FAILURE! ucnv_getAlias(\"utf-8\", 0) -> %s instead of UTF8\n", alias);
+        } else if(uprv_strcmp("UTF-8", alias) != 0) {
+            log_err("FAILURE! ucnv_getAlias(\"utf-8\", 0) -> %s instead of UTF-8\n", alias);
         } else {
             uint16_t aliasNum;
             for(aliasNum = 0; aliasNum < count; ++aliasNum) {
@@ -967,7 +967,7 @@ static UConverterToUCallback otherCharAction(UConverterToUCallback MIA)
  * Test the converter alias API, specifically the fuzzy matching of
  * alias names and the alias table integrity.  Make sure each
  * converter has at least one alias (itself), and that its listed
- * aliases map back to itself.  Check some hard-coded UTF8 and
+ * aliases map back to itself.  Check some hard-coded UTF-8 and
  * ISO_2022 aliases to make sure they work.
  */
 static void TestAlias() {
@@ -975,14 +975,14 @@ static void TestAlias() {
     UErrorCode status = U_ZERO_ERROR;
 
     /* Predetermined aliases that we expect to map back to ISO_2022
-     * and UTF8.  UPDATE THIS DATA AS NECESSARY. */
+     * and UTF-8.  UPDATE THIS DATA AS NECESSARY. */
     const char* ISO_2022_NAMES[] = 
         {"ISO_2022", "iso-2022", "2022",
          "cp2022", "iso2022", "iso_2022"};
     int32_t ISO_2022_NAMES_LENGTH =
         sizeof(ISO_2022_NAMES) / sizeof(ISO_2022_NAMES[0]);
     const char *UTF8_NAMES[] =
-        { "UTF8", "utf-8", "utf8", "ibm-1208",
+        { "UTF-8", "utf-8", "utf8", "ibm-1208",
           "utf_8", "ibm1208", "cp1208" };
     int32_t UTF8_NAMES_LENGTH =
         sizeof(UTF8_NAMES) / sizeof(UTF8_NAMES[0]);
@@ -991,11 +991,11 @@ static void TestAlias() {
         const char *name;
         const char *alias;
     } CONVERTERS_NAMES[] = {
-        { "UTF32_BigEndian",        "utf-32be" },
-        { "UTF32_LittleEndian",     "utf-32le" },
-        { "UTF32_PlatformEndian",   "ISO-10646-UCS-4" },
-        { "UTF32_PlatformEndian",   "utf-32" },
-        { "UTF32_PlatformEndian",   "ucs-4" }
+        { "UTF-32BE", "UTF32_BigEndian" },
+        { "UTF-32LE", "UTF32_LittleEndian" },
+        { "UTF-32",   "ISO-10646-UCS-4" },
+        { "UTF-32",   "UTF32_PlatformEndian" },
+        { "UTF-32",   "ucs-4" }
     };
     int32_t CONVERTERS_NAMES_LENGTH = sizeof(CONVERTERS_NAMES) / sizeof(*CONVERTERS_NAMES);
 
@@ -1051,7 +1051,7 @@ static void TestAlias() {
     }
 
     /* Check a list of predetermined aliases that we expect to map
-     * back to ISO_2022 and UTF8. */
+     * back to ISO_2022 and UTF-8. */
     for (i=1; i<ISO_2022_NAMES_LENGTH; ++i) {
         const char* mapBack = ucnv_getAlias(ISO_2022_NAMES[i], 0, &status);
         if (0 != uprv_strcmp(mapBack, ISO_2022_NAMES[0])) {
@@ -1063,7 +1063,7 @@ static void TestAlias() {
     for (i=1; i<UTF8_NAMES_LENGTH; ++i) {
         const char* mapBack = ucnv_getAlias(UTF8_NAMES[i], 0, &status);
         if (0 != uprv_strcmp(mapBack, UTF8_NAMES[0])) {
-            log_err("FAIL: \"%s\" -> \"%s\", expect UTF8\n",
+            log_err("FAIL: \"%s\" -> \"%s\", expect UTF-8\n",
                     UTF8_NAMES[i], mapBack);
         }
     }
