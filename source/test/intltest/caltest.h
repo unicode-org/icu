@@ -181,6 +181,37 @@ public: // package
     // for other tests' use
     static UnicodeString fieldName(UCalendarDateFields f);
     static UnicodeString calToStr(const Calendar & cal);
+    
+    // List of non-installed locales with interesting calendars
+
+    /**
+     * @return the count of 'other' locales to test
+     */
+    static int32_t testLocaleCount();
+
+    /**
+     * @param i index of 'other' locale to return
+     * @return locale ID
+     */
+    static const char* testLocaleID(int32_t i);
+
+    /**
+     * Clone the specified calendar, and determine its earliest supported date
+     * by setting the extended year to the minimum value.
+     * @param cal Calendar (will be cloned)
+     * @param isGregorian output: returns 'TRUE' if the calendar's class is GregorianCalendar
+     * @param status error code 
+     */
+    static UDate minDateOfCalendar(const Calendar& cal, UBool &isGregorian, UErrorCode& status);
+
+    /**
+     * Construct a calendar of the specified locale, and determine its earliest supported date
+     * by setting the extended year to the minimum value.
+     * @param locale locale of calendar to check
+     * @param isGregorian output: returns 'TRUE' if the calendar's class is GregorianCalendar
+     * @param status error code 
+     */
+    static UDate minDateOfCalendar(const Locale& locale, UBool &isGregorian, UErrorCode& status);
 
   // internal - for other test use
  public:

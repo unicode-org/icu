@@ -1866,6 +1866,59 @@ void CalendarTest::TestJD()
 
 #undef CHECK
 
+// List of interesting locales
+const char *CalendarTest::testLocaleID(int32_t i)
+{
+  switch(i) {
+  case 0: return "nl_BE@currency=MTL;calendar=islamic";
+  case 1: return "th_TH_TRADITIONAL@calendar=gregorian";
+  case 2: return "ar_JO@calendar=islamic-civil";
+  case 3: return "fi_FI@calendar=islamic";
+  case 4: return "fr_CH@calendar=islamic-civil";
+  case 5: return "he_IL@calendar=islamic-civil";
+  case 6: return "hu_HU@calendar=buddhist";
+  case 7: return "hu_HU@calendar=islamic";
+  case 8: return "en_US@calendar=japanese";
+  default: return NULL;
+  }
+}
+
+int32_t CalendarTest::testLocaleCount()
+{
+  static int32_t gLocaleCount = -1;
+  if(gLocaleCount < 0) {
+    int32_t i;
+    for(i=0;testLocaleID(i) != NULL;i++) {
+      ;
+    }
+    gLocaleCount = i;
+  }
+  return gLocaleCount;
+}
+
+static UDate doMinDateOfCalendar(Calendar* adopt, UBool &isGregorian, UErrorCode& status) {
+  if(U_FAILURE(status)) return 0.0;
+  
+  adopt->clear();
+  adopt->set(UCAL_EXTENDED_YEAR, adopt->getActualMinimum(UCAL_EXTENDED_YEAR, status));
+  UDate ret = adopt->getTime(status);
+  isGregorian = (adopt->getDynamicClassID() == GregorianCalendar::getStaticClassID());
+  delete adopt;
+  return ret;
+}
+
+UDate CalendarTest::minDateOfCalendar(const Locale& locale, UBool &isGregorian, UErrorCode& status) {
+  if(U_FAILURE(status)) return 0.0;
+  return doMinDateOfCalendar(Calendar::createInstance(locale, status), isGregorian, status);
+}
+
+UDate CalendarTest::minDateOfCalendar(const Calendar& cal, UBool &isGregorian, UErrorCode& status) {
+  if(U_FAILURE(status)) return 0.0;
+  return doMinDateOfCalendar(cal.clone(), isGregorian, status);
+}
+
+
+
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof
