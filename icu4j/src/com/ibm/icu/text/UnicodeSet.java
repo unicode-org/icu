@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2001/09/24 19:57:18 $
- * $Revision: 1.34 $
+ * $Date: 2001/09/26 18:00:06 $
+ * $Revision: 1.35 $
  *
  *****************************************************************************************
  */
@@ -255,8 +255,8 @@ import com.ibm.util.Utility;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.34 $ $Date: 2001/09/24 19:57:18 $ */
-public class UnicodeSet implements UnicodeFilter {
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.35 $ $Date: 2001/09/26 18:00:06 $ */
+public class UnicodeSet extends UnicodeFilter {
 
     /* Implementation Notes.
      * NOTE: This conversion has been completed as of 2.0.
@@ -717,6 +717,53 @@ public class UnicodeSet implements UnicodeFilter {
     }
 
     /**
+     * Implementation of UnicodeMatcher API.  Returns <tt>true</tt> if
+     * this set contains any character whose low byte is the given
+     * value.  This is used by <tt>RuleBasedTransliterator</tt> for
+     * indexing.
+     */
+    public boolean matchesIndexValue(byte v) {
+        /* The index value v, in the range [0,255], is contained in this set if
+         * it is contained in any pair of this set.  Pairs either have the high
+         * bytes equal, or unequal.  If the high bytes are equal, then we have
+         * aaxx..aayy, where aa is the high byte.  Then v is contained if xx <=
+         * v <= yy.  If the high bytes are unequal we have aaxx..bbyy, bb>aa.
+         * Then v is contained if xx <= v || v <= yy.  (This is identical to the
+         * time zone month containment logic.)
+         */
+        for (int i=0; i<getRangeCount(); ++i) {
+            int low = getRangeStart(i);
+            int high = getRangeEnd(i);
+            if ((low & ~0xFF) == (high & ~0xFF)) {
+                if ((low & 0xFF) <= v && v <= (high & 0xFF)) {
+                    return true;
+                }
+            } else if ((low & 0xFF) <= v || v <= (high & 0xFF)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Implementation of UnicodeMatcher.matches().
+     */
+    public int matches(Replaceable text,
+                       int[] offset,
+                       int limit,
+                       boolean incremental) {
+        if (offset[0] == limit) {
+            if (contains(TransliterationRule.ETHER)) {
+                return incremental ? U_PARTIAL_MATCH : U_MATCH;
+            } else {
+                return U_MISMATCH;
+            }
+        } else {
+            return super.matches(text, offset, limit, incremental);
+        }
+    }
+
+    /**
      * Returns the index of the given character within this set, where
      * the set is ordered by ascending code point.  If the character
      * is not in this set, return -1.  The inverse of this method is
@@ -784,34 +831,6 @@ public class UnicodeSet implements UnicodeFilter {
             if (c < list[++i]) break;
         }
         return ((i & 1) != 0); // return true if odd
-    }
-
-    /**
-     * Returns <tt>true</tt> if this set contains any character whose low byte
-     * is the given value.  This is used by <tt>RuleBasedTransliterator</tt> for
-     * indexing.
-     */
-    public boolean containsIndexValue(int v) {
-        /* The index value v, in the range [0,255], is contained in this set if
-         * it is contained in any range of this set.  Ranges either have the high
-         * bytes equal, or unequal.  If the high bytes are equal, then we have
-         * aaxx..aayy, where aa is the high byte.  Then v is contained if xx <=
-         * v <= yy.  If the high bytes are unequal we have aaxx..bbyy, bb>aa.
-         * Then v is contained if xx <= v || v <= yy.  (This is identical to the
-         * time zone month containment logic.)
-         */
-        for (int i=0; i<getRangeCount(); ++i) {
-            int low = getRangeStart(i);
-            int high = getRangeEnd(i);
-            if ((low & ~0xFF) == (high & ~0xFF)) {
-                if ((low & 0xFF) <= v && v <= (high & 0xFF)) {
-                    return true;
-                }
-            } else if ((low & 0xFF) <= v || v <= (high & 0xFF)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**

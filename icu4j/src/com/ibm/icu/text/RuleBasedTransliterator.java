@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedTransliterator.java,v $ 
- * $Date: 2001/09/24 19:57:17 $ 
- * $Revision: 1.45 $
+ * $Date: 2001/09/26 18:00:06 $ 
+ * $Revision: 1.46 $
  *
  *****************************************************************************************
  */
@@ -279,15 +279,11 @@ import com.ibm.text.resources.ResourceReader;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  * 
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.45 $ $Date: 2001/09/24 19:57:17 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.46 $ $Date: 2001/09/26 18:00:06 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
     private Data data;
-
-    // Indicator for ID blocks
-    private static final String ID_TOKEN = "::";
-    private static final int ID_TOKEN_LEN = 2;
 
     private static final String COPYRIGHT =
         "\u00A9 IBM Corporation 1999. All rights reserved.";
@@ -327,7 +323,7 @@ public class RuleBasedTransliterator extends Transliterator {
     }
 
     static Data parse(String[] rules, int direction) {
-        return new Parser(rules, direction).getData();
+        return new TransliteratorParser(rules, direction).getData();
     }
 
     static Data parse(String rules, int direction) {
@@ -335,7 +331,7 @@ public class RuleBasedTransliterator extends Transliterator {
     }
 
     static Data parse(ResourceReader rules, int direction) {
-        return new Parser(rules, direction).getData();
+        return new TransliteratorParser(rules, direction).getData();
     }
 
     /**
@@ -356,7 +352,7 @@ public class RuleBasedTransliterator extends Transliterator {
                       int direction,
                       StringBuffer idBlockResult,
                       int[] idSplitPointResult) {
-        Parser parser = new Parser(new String[] { rules }, direction);
+        TransliteratorParser parser = new TransliteratorParser(new String[] { rules }, direction);
         idBlockResult.setLength(0);
         idBlockResult.append(parser.idBlock);
         idSplitPointResult[0] = parser.idSplitPoint;
@@ -398,37 +394,10 @@ public class RuleBasedTransliterator extends Transliterator {
             loopLimit = 0x7FFFFFFF;
         }
 
-        boolean partial[] = new boolean[1];
-        partial[0] = false;
-
-        while (index.start < index.limit && loopCount <= loopLimit) {
-            TransliterationRule r = incremental ?
-                data.ruleSet.findIncrementalMatch(text, index,
-                                                  data, partial, getFilter()) :
-                data.ruleSet.findMatch(text, index,
-                                       data, getFilter());
-            /* If we match a rule then apply it by replacing the key
-             * with the rule output and repositioning the cursor
-             * appropriately.  If we get a partial match, then we
-             * can't do anything without more text; return with the
-             * cursor at the current position.  If we get null, then
-             * there is no match at this position, and we can advance
-             * the cursor.
-             */
-            if (r == null) {
-                if (partial[0]) {
-                    break;
-                } else {
-                    ++index.start;
-                }
-            } else {
-                // Delegate replacement to TransliterationRule object
-                int lenDelta = r.replace(text, index.start, data);
-                index.limit += lenDelta;
-                index.contextLimit += lenDelta;
-                index.start += r.getCursorPos();
-                ++loopCount;
-            }
+        while (index.start < index.limit &&
+               loopCount <= loopLimit &&
+               data.ruleSet.transliterate(text, index, incremental)) {
+            ++loopCount;
         }
     }
 
@@ -450,10 +419,10 @@ public class RuleBasedTransliterator extends Transliterator {
          * this hash.  One or more of these chars may also correspond to a
          * UnicodeSet, in which case the character in the char[] in this hash is
          * a stand-in: it is an index for a secondary lookup in
-         * data.setVariables.  The stand-in also represents the UnicodeSet in
+         * data.variables.  The stand-in also represents the UnicodeSet in
          * the stored rules.
          */
-        private Hashtable variableNames;
+        Hashtable variableNames;
 
         /**
          * Map category variable (Character) to set (UnicodeSet).
@@ -462,31 +431,34 @@ public class RuleBasedTransliterator extends Transliterator {
          * The stand-in then serves as a key in this hash to lookup the
          * actual UnicodeSet object.  In addition, the stand-in is
          * stored in the rule text to represent the set of characters.
-         * setVariables[i] represents character (setVariablesBase + i).
+         * variables[i] represents character (variablesBase + i).
          */
-        private UnicodeSet[] setVariables;
+        UnicodeSet[] variables;
 
         /**
-         * The character that represents setVariables[0].  Characters
-         * setVariablesBase through setVariablesBase +
-         * setVariables.length - 1 represent UnicodeSet objects.
+         * The character that represents variables[0].  Characters
+         * variablesBase through variablesBase +
+         * variables.length - 1 represent UnicodeSet objects.
          */
-        private char setVariablesBase;
+        char variablesBase;
 
         /**
          * The character that represents segment 1.  Characters segmentBase
-         * through segmentBase + 8 represent segments 1 through 9.
+         * through segmentBase - segmentCount + 1 represent segments 1
+         * through segmentCount.  Segments work down while variables work up.
          */
-        private char segmentBase;
+        char segmentBase;
+
+        int segmentCount;
 
         /**
          * Return the UnicodeSet represented by the given character, or
          * null if none.
          */
-        public UnicodeSet lookupSet(char c) {
-            int i = c - setVariablesBase;
-            return (i >= 0 && i < setVariables.length)
-                ? setVariables[i] : null;
+        public UnicodeMatcher lookup(int standIn) {
+            int i = standIn - variablesBase;
+            return (i >= 0 && i < variables.length)
+                ? variables[i] : null;
         }
 
         /**
@@ -494,1073 +466,20 @@ public class RuleBasedTransliterator extends Transliterator {
          * character, or -1 if none.  Repeat: This is a zero-based return value,
          * 0..8, even though these are notated "$1".."$9".
          */
-        public int lookupSegmentReference(char c) {
-            int i = c - segmentBase;
-            return (i >= 0 && i < 9) ? i : -1;
+        public int lookupSegmentReference(int c) {
+            int i = segmentBase - c;
+            return (i >= 0 && i < segmentCount) ? i : -1;
+        }
+
+        /**
+         * Return the character used to stand for the given segment reference.
+         * The reference must be in the range 1..segmentCount.
+         */
+        char getSegmentStandin(int ref) {
+            return (char)(segmentBase - ref + 1);
         }
     }
 
-
-
-    private static class Parser {
-
-        private int direction;
-
-        private Data data;
-
-        // In a compound RBT, the index at which the RBT rules are
-        // inserted into the ID block.  Index 0 means before any IDs
-        // in the block.  Index idBlock.length() means after all IDs
-        // in the block.  Index is a string index.
-        int idSplitPoint;
-       
-        // The block of ::IDs, both at the top and at the bottom.
-        // Inserted into these may be additional rules at the
-        // idSplitPoint.
-        String idBlock;
-
-        // The number of rules parsed.  This tells us if there were
-        // any actual transliterator rules, or if there were just ::ID
-        // block IDs.
-        int ruleCount;
-
-        /**
-         * This class implements the SymbolTable interface.  It is used
-         * during parsing to give UnicodeSet access to variables that
-         * have been defined so far.  Note that it uses setVariablesVector,
-         * _not_ data.setVariables.
-         */
-        private class ParseData implements SymbolTable {
-            
-            /**
-             * Implement SymbolTable API.
-             */
-            public char[] lookup(String name) {
-                return (char[]) data.variableNames.get(name);
-            }
-
-            /**
-             * Implement SymbolTable API.
-             */
-            public UnicodeSet lookupSet(int ch) {
-                // Note that we cannot use data.lookupSet() because the
-                // set array has not been constructed yet.
-                int i = ch - data.setVariablesBase;
-                if (i >= 0 && i < setVariablesVector.size()) {
-                    return (UnicodeSet) setVariablesVector.elementAt(i);
-                }
-                return null;
-            }
-
-            /**
-             * Implement SymbolTable API.  Parse out a symbol reference
-             * name.
-             */
-            public String parseReference(String text, ParsePosition pos, int limit) {
-                int start = pos.getIndex();
-                int i = start;
-                while (i < limit) {
-                    char c = text.charAt(i);
-                    if ((i==start && !Character.isUnicodeIdentifierStart(c)) ||
-                        !Character.isUnicodeIdentifierPart(c)) {
-                        break;
-                    }
-                    ++i;
-                }
-                if (i == start) { // No valid name chars
-                    return null;
-                }
-                pos.setIndex(i);
-                return text.substring(start, i);
-            }
-        }
-
-        /**
-         * Temporary symbol table used during parsing.
-         */
-        private ParseData parseData;
-
-        /**
-         * Temporary vector of set variables.  When parsing is complete, this
-         * is copied into the array data.setVariables.  As with data.setVariables,
-         * element 0 corresponds to character data.setVariablesBase.
-         */
-        private Vector setVariablesVector;
-
-        /**
-         * The next available stand-in for variables.  This starts at some point in
-         * the private use area (discovered dynamically) and increments up toward
-         * <code>variableLimit</code>.  At any point during parsing, available
-         * variables are <code>variableNext..variableLimit-1</code>.
-         */
-        private char variableNext;
-
-        /**
-         * The last available stand-in for variables.  This is discovered
-         * dynamically.  At any point during parsing, available variables are
-         * <code>variableNext..variableLimit-1</code>.  During variable definition
-         * we use the special value variableLimit-1 as a placeholder.
-         */
-        private char variableLimit;
-
-        /**
-         * When we encounter an undefined variable, we do not immediately signal
-         * an error, in case we are defining this variable, e.g., "$a = [a-z];".
-         * Instead, we save the name of the undefined variable, and substitute
-         * in the placeholder char variableLimit - 1, and decrement
-         * variableLimit.
-         */
-        private String undefinedVariableName;
-
-        // Operators
-        private static final char VARIABLE_DEF_OP   = '=';
-        private static final char FORWARD_RULE_OP   = '>';
-        private static final char REVERSE_RULE_OP   = '<';
-        private static final char FWDREV_RULE_OP    = '~'; // internal rep of <> op
-
-        private static final String OPERATORS = "=><";
-
-        // Other special characters
-        private static final char QUOTE               = '\'';
-        private static final char ESCAPE              = '\\';
-        private static final char END_OF_RULE         = ';';
-        private static final char RULE_COMMENT_CHAR   = '#';
-
-        private static final char CONTEXT_ANTE        = '{'; // ante{key
-        private static final char CONTEXT_POST        = '}'; // key}post
-        private static final char SET_OPEN            = '[';
-        private static final char SET_CLOSE           = ']';
-        private static final char CURSOR_POS          = '|';
-        private static final char CURSOR_OFFSET       = '@';
-        private static final char ANCHOR_START        = '^';
-
-        // By definition, the ANCHOR_END special character is a
-        // trailing SymbolTable.SYMBOL_REF character.
-        // private static final char ANCHOR_END       = '$';
-
-        // Segments of the input string are delimited by "(" and ")".  In the
-        // output string these segments are referenced as "$1" through "$9".
-        private static final char SEGMENT_OPEN        = '(';
-        private static final char SEGMENT_CLOSE       = ')';
-
-        /**
-         * A private abstract class representing the interface to rule
-         * source code that is broken up into lines.  Handles the
-         * folding of lines terminated by a backslash.  This folding
-         * is limited; it does not account for comments, quotes, or
-         * escapes, so its use to be limited.
-         */
-        private abstract class RuleBody {
-
-            /**
-             * Retrieve the next line of the source, or return null if
-             * none.  Folds lines terminated by a backslash into the
-             * next line, without regard for comments, quotes, or
-             * escapes.
-             */
-            String nextLine() {
-                String s = handleNextLine();
-                if (s != null &&
-                    s.length() > 0 &&
-                    s.charAt(s.length() - 1) == '\\') {
-
-                    StringBuffer b = new StringBuffer(s);
-                    do {
-                        b.deleteCharAt(b.length()-1);
-                        s = handleNextLine();
-                        if (s == null) {
-                            break;
-                        }
-                        b.append(s);
-                    } while (s.length() > 0 &&
-                             s.charAt(s.length() - 1) == '\\');
-
-                    s = b.toString();
-                }
-                return s;
-            }
-
-            /**
-             * Reset to the first line of the source.
-             */
-            abstract void reset();
-
-            /**
-             * Subclass method to return the next line of the source.
-             */
-            abstract String handleNextLine();
-        };
-
-        /**
-         * RuleBody subclass for a String[] array.
-         */
-        private class RuleArray extends RuleBody {
-            String[] array;
-            int i;
-            public RuleArray(String[] array) { this.array = array; i = 0; }
-            public String handleNextLine() {
-                return (i < array.length) ? array[i++] : null;
-            }
-            public void reset() {
-                i = 0;
-            }
-        };
-
-        /**
-         * RuleBody subclass for a ResourceReader.
-         */
-        private class RuleReader extends RuleBody {
-            ResourceReader reader;
-            public RuleReader(ResourceReader reader) { this.reader = reader; }
-            public String handleNextLine() {
-                try {
-                    return reader.readLine();
-                } catch (java.io.IOException e) {}
-                return null;
-            }
-            public void reset() {
-                reader.reset();
-            }
-        };
-
-        /**
-         * @param rules list of rules, separated by semicolon characters
-         * @exception IllegalArgumentException if there is a syntax error in the
-         * rules
-         */
-        public Parser(String[] ruleArray, int direction) {
-            this.direction = direction;
-            data = new Data();
-            parseRules(new RuleArray(ruleArray));
-        }
-
-        /**
-         * @param rules resource reader for the rules
-         */
-        public Parser(ResourceReader rules, int direction) {
-            this.direction = direction;
-            data = new Data();
-            parseRules(new RuleReader(rules));
-        }
-
-        public Data getData() {
-            return data;
-        }
-
-        /**
-         * Parse an array of zero or more rules.  The strings in the array are
-         * treated as if they were concatenated together, with rule terminators
-         * inserted between array elements if not present already.
-         *
-         * Any previous rules are discarded.  Typically this method is called exactly
-         * once, during construction.
-         * @exception IllegalArgumentException if there is a syntax error in the
-         * rules
-         */
-        private void parseRules(RuleBody ruleArray) {
-            ruleCount = 0;
-
-            determineVariableRange(ruleArray);
-            setVariablesVector = new Vector();
-            parseData = new ParseData();
-
-            StringBuffer errors = null;
-            int errorCount = 0;
-
-            ruleArray.reset();
-
-            StringBuffer idBlockResult = new StringBuffer();
-            idSplitPoint = -1;
-            // The mode marks whether we are in the header ::id block, the
-            // rule block, or the footer ::id block.
-            // mode == 0: start: rule->1, ::id->0
-            // mode == 1: in rules: rule->1, ::id->2
-            // mode == 2: in footer rule block: rule->ERROR, ::id->2
-            int mode = 0;
-
-        main:
-            for (;;) {
-                String rule = ruleArray.nextLine();
-                if (rule == null) {
-                    break;
-                }
-                int pos = 0;
-                int limit = rule.length();
-                while (pos < limit) {
-                    char c = rule.charAt(pos++);
-                    if (Character.isWhitespace(c)) {
-                        // Ignore leading whitespace.  Note that this is not
-                        // Unicode spaces, but Java spaces -- a subset,
-                        // representing whitespace likely to be seen in code.
-                        continue;
-                    }
-                    // Skip lines starting with the comment character
-                    if (c == RULE_COMMENT_CHAR) {
-                        pos = rule.indexOf("\n", pos) + 1;
-                        if (pos == 0) {
-                            break; // No "\n" found; rest of rule is a commnet
-                        }
-                        continue; // Either fall out or restart with next line
-                    }
-                    // Often a rule file contains multiple errors.  It's
-                    // convenient to the rule author if these are all reported
-                    // at once.  We keep parsing rules even after a failure, up
-                    // to a specified limit, and report all errors at once.
-                    try {
-                        // We've found the start of a rule or ID.  c is its first
-                        // character, and pos points past c.
-                        --pos;
-                        // Look for an ID token.  Must have at least ID_TOKEN_LEN + 1
-                        // chars left.
-                        if ((pos + ID_TOKEN_LEN + 1) <= limit &&
-                            rule.regionMatches(pos, ID_TOKEN, 0, ID_TOKEN_LEN)) {
-                            pos += ID_TOKEN_LEN;
-                            c = rule.charAt(pos);
-                            while (UCharacter.isWhitespace(c) && pos < limit) {
-                                ++pos;
-                                c = rule.charAt(pos);
-                            }
-                            int[] p = new int[] { pos };
-                            boolean[] sawDelim = new boolean[1];
-                            StringBuffer regenID = new StringBuffer();
-                            Transliterator.parseID(rule, regenID, p, sawDelim, direction, false);
-                            if (p[0] == pos || !sawDelim[0]) {
-                                // Invalid ::id
-                                int i1 = pos + 2;
-                                while (i1 < rule.length() && rule.charAt(i1) != ';') {
-                                    ++i1;
-                                }
-                                throw new IllegalArgumentException("Invalid ::ID " +
-                                                                   rule.substring(pos, i1));
-                            } else {
-                                if (mode == 1) {
-                                    mode = 2;
-                                    idSplitPoint = idBlockResult.length();
-                                }
-                                String str = rule.substring(pos, p[0]);
-                                idBlockResult.append(str);
-                                if (!sawDelim[0]) {
-                                    idBlockResult.append(';');
-                                }
-                                pos = p[0];
-                            }
-                        } else {
-                            // Parse a rule
-                            pos = parseRule(rule, pos, limit);
-                            ++ruleCount;
-                            if (mode == 2) {
-                                // ::id in illegal position (because a rule
-                                // occurred after the ::id footer block)
-                                throw new IllegalArgumentException("::ID in illegal position");
-                            }
-                            mode = 1;
-                        }
-                    } catch (IllegalArgumentException e) {
-                        if (errorCount == 30) {
-                            errors.append("\nMore than 30 errors; further messages squelched");
-                            break main;
-                        }
-                        if (errors == null) {
-                            errors = new StringBuffer(e.getMessage());
-                        } else {
-                            errors.append("\n" + e.getMessage());
-                        }
-                        ++errorCount;
-                        pos = ruleEnd(rule, pos, limit) + 1; // +1 advances past ';'
-                    }
-                }
-            }
-
-            idBlock = idBlockResult.toString();
-
-            // Convert the set vector to an array
-            data.setVariables = new UnicodeSet[setVariablesVector.size()];
-            setVariablesVector.copyInto(data.setVariables);
-            setVariablesVector = null;
-            
-            // Index the rules
-            try {
-                data.ruleSet.freeze(data);
-            } catch (IllegalArgumentException e) {
-                if (errors == null) {
-                    errors = new StringBuffer(e.getMessage());
-                } else {
-                    errors.append("\n").append(e.getMessage());
-                }
-            }
-
-            if (errors != null) {
-                throw new IllegalArgumentException(errors.toString());
-            }
-        }
-
-        /**
-         * A class representing one side of a rule.  This class knows how to
-         * parse half of a rule.  It is tightly coupled to the method
-         * RuleBasedTransliterator.Parser.parseRule().
-         */
-        static class RuleHalf {
-
-            public String text;
-
-            public int cursor = -1; // position of cursor in text
-            public int ante = -1;   // position of ante context marker '{' in text
-            public int post = -1;   // position of post context marker '}' in text
-
-            // Record the position of the segment substrings and references.  A
-            // given side should have segments or segment references, but not
-            // both.
-            public Vector segments = null; // ref substring start,limits
-            public int maxRef = -1; // index of largest ref (1..9)
-
-            // Record the offset to the cursor either to the left or to the
-            // right of the key.  This is indicated by characters on the output
-            // side that allow the cursor to be positioned arbitrarily within
-            // the matching text.  For example, abc{def} > | @@@ xyz; changes
-            // def to xyz and moves the cursor to before abc.  Offset characters
-            // must be at the start or end, and they cannot move the cursor past
-            // the ante- or postcontext text.  Placeholders are only valid in
-            // output text.
-            public int cursorOffset = 0; // only nonzero on output side
-
-            public boolean anchorStart = false;
-            public boolean anchorEnd   = false;
-
-            /**
-             * Parse one side of a rule, stopping at either the limit,
-             * the END_OF_RULE character, or an operator.  Return
-             * the pos of the terminating character (or limit).
-             */
-            public int parse(String rule, int pos, int limit,
-                             RuleBasedTransliterator.Parser parser) {
-                int start = pos;
-                StringBuffer buf = new StringBuffer();
-                ParsePosition pp = null;
-                int cursorOffsetPos = 0; // Position of first CURSOR_OFFSET on _right_
-
-            main:
-                while (pos < limit) {
-                    char c = rule.charAt(pos++);
-                    if (Character.isWhitespace(c)) {
-                        // Ignore whitespace.  Note that this is not Unicode
-                        // spaces, but Java spaces -- a subset, representing
-                        // whitespace likely to be seen in code.
-                        continue;
-                    }
-                    if (OPERATORS.indexOf(c) >= 0) {
-                        --pos; // Backup to point to operator
-                        break main;
-                    }
-                    if (anchorEnd) {
-                        // Text after a presumed end anchor is a syntax err
-                        syntaxError("Syntax error: $", rule, start);
-                    }
-                    // Handle escapes
-                    if (c == ESCAPE) {
-                        if (pos == limit) {
-                            syntaxError("Trailing backslash", rule, start);
-                        }
-                        c = rule.charAt(pos++);
-                        if (c == 'u') {
-                            if ((pos+4) > limit) {
-                                syntaxError("Invalid \\u escape", rule, start);
-                            }
-                            c = '\u0000';
-                            for (int j=pos+4; pos<j;) {
-                                int digit = Character.digit(rule.charAt(pos++), 16);
-                                if (digit<0) {
-                                    syntaxError("Invalid \\u escape", rule, start);
-                                }
-                                c = (char) ((c << 4) | digit);
-                            }                            
-                        }
-                        buf.append(c);
-                        continue;
-                    }
-                    // Handle quoted matter
-                    if (c == QUOTE) {
-                        int iq = rule.indexOf(QUOTE, pos);
-                        if (iq == pos) {
-                            buf.append(c); // Parse [''] outside quotes as [']
-                            ++pos;
-                        } else {
-                            /* This loop picks up a segment of quoted text of the
-                             * form 'aaaa' each time through.  If this segment
-                             * hasn't really ended ('aaaa''bbbb') then it keeps
-                             * looping, each time adding on a new segment.  When it
-                             * reaches the final quote it breaks.
-                             */
-                            for (;;) {
-                                if (iq < 0) {
-                                    syntaxError("Unterminated quote", rule, start);
-                                }
-                                buf.append(rule.substring(pos, iq));
-                                pos = iq+1;
-                                if (pos < limit && rule.charAt(pos) == QUOTE) {
-                                // Parse [''] inside quotes as [']
-                                    iq = rule.indexOf(QUOTE, pos+1);
-                                // Continue looping
-                                } else {
-                                    break;
-                                }
-                            }
-                        }
-                        continue;
-                    }
-                    switch (c) {
-                    case ANCHOR_START:
-                        if (buf.length() == 0 && !anchorStart) {
-                            anchorStart = true;
-                        } else {
-                            syntaxError("Misplaced anchor start",
-                                        rule, start);
-                        }
-                        break;
-                    case SEGMENT_OPEN:
-                    case SEGMENT_CLOSE:
-                        // Handle segment definitions "(" and ")"
-                        // Parse "(", ")"
-                        if (segments == null) {
-                            segments = new Vector();
-                        }
-                        if ((c == SEGMENT_OPEN) !=
-                            (segments.size() % 2 == 0)) {
-                            syntaxError("Mismatched segment delimiters",
-                                        rule, start);
-                        }
-                        segments.addElement(new Integer(buf.length()));
-                        break;
-                    case END_OF_RULE:
-                        --pos; // Backup to point to END_OF_RULE
-                        break main;
-                    case SymbolTable.SYMBOL_REF:
-                        // Handle variable references and segment references "$1" .. "$9"
-                        {
-                            // A variable reference must be followed immediately
-                            // by a Unicode identifier start and zero or more
-                            // Unicode identifier part characters, or by a digit
-                            // 1..9 if it is a segment reference.
-                            if (pos == limit) {
-                                // A variable ref character at the end acts as
-                                // an anchor to the context limit, as in perl.
-                                anchorEnd = true;
-                                break;
-                            }
-                            // Parse "$1" "$2" .. "$9"
-                            c = rule.charAt(pos);
-                            int r = Character.digit(c, 10);
-                            if (r >= 1 && r <= 9) {
-                                if (r > maxRef) {
-                                    maxRef = r;
-                                }
-                                buf.append((char) (parser.data.segmentBase + r - 1));
-                                ++pos;
-                            } else {
-                                if (pp == null) { // Lazy create
-                                    pp = new ParsePosition(0);
-                                }
-                                pp.setIndex(pos);
-                                String name = parser.parseData.
-                                                parseReference(rule, pp, limit);
-                                if (name == null) {
-                                    // This means the '$' was not followed by a
-                                    // valid name.  Try to interpret it as an
-                                    // end anchor then.  If this also doesn't work
-                                    // (if we see a following character) then signal
-                                    // an error.
-                                    anchorEnd = true;
-                                    break;
-                                }
-                                pos = pp.getIndex();
-                                // If this is a variable definition statement,
-                                // then the LHS variable will be undefined.  In
-                                // that case appendVariableDef() will append the
-                                // special placeholder char variableLimit-1.
-                                parser.appendVariableDef(name, buf);
-                            }
-                        }
-                        break;
-                    case CONTEXT_ANTE:
-                        if (ante >= 0) {
-                            syntaxError("Multiple ante contexts", rule, start);
-                        }
-                        ante = buf.length();
-                        break;
-                    case CONTEXT_POST:
-                        if (post >= 0) {
-                            syntaxError("Multiple post contexts", rule, start);
-                        }
-                        post = buf.length();
-                        break;
-                    case SET_OPEN:
-                        if (pp == null) {
-                            pp = new ParsePosition(0);
-                        }
-                        pp.setIndex(pos-1); // Backup to opening '['
-                        buf.append(parser.parseSet(rule, pp));
-                        pos = pp.getIndex();
-                        break;
-                    case CURSOR_POS:
-                        if (cursor >= 0) {
-                            syntaxError("Multiple cursors", rule, start);
-                        }
-                        cursor = buf.length();
-                        break;
-                    case CURSOR_OFFSET:
-                        if (cursorOffset < 0) {
-                            if (buf.length() > 0) {
-                                syntaxError("Misplaced " + c, rule, start);
-                            }
-                            --cursorOffset;
-                        } else if (cursorOffset > 0) {
-                            if (buf.length() != cursorOffsetPos || cursor >= 0) {
-                                syntaxError("Misplaced " + c, rule, start);
-                            }
-                            ++cursorOffset;
-                        } else {
-                            if (cursor == 0 && buf.length() == 0) {
-                                cursorOffset = -1;
-                            } else if (cursor < 0) {
-                                cursorOffsetPos = buf.length();
-                                cursorOffset = 1;
-                            } else {
-                                syntaxError("Misplaced " + c, rule, start);
-                            }
-                        }
-                        break;
-                    // case SET_CLOSE:
-                    default:
-                        // Disallow unquoted characters other than [0-9A-Za-z]
-                        // in the printable ASCII range.  These characters are
-                        // reserved for possible future use.
-                        if (c >= 0x0021 && c <= 0x007E &&
-                            !((c >= '0' && c <= '9') ||
-                              (c >= 'A' && c <= 'Z') ||
-                              (c >= 'a' && c <= 'z'))) {
-                            syntaxError("Unquoted " + c, rule, start);
-                        }
-                        buf.append(c);
-                        break;
-                    }
-                }
-
-                if (cursorOffset > 0 && cursor != cursorOffsetPos) {
-                    syntaxError("Misplaced " + CURSOR_POS, rule, start);
-                }
-                text = buf.toString();
-                return pos;
-            }
-
-            /**
-             * Remove context.
-             */
-            void removeContext() {
-                text = text.substring(ante < 0 ? 0 : ante,
-                                      post < 0 ? text.length() : post);
-                ante = post = -1;
-                anchorStart = anchorEnd = false;
-            }
-
-            /**
-             * Create and return an int[] array of segments.
-             */
-            int[] getSegments() {
-                if (segments == null) {
-                    return null;
-                }
-                int[] result = new int[segments.size()];
-                for (int i=0; i<segments.size(); ++i) {
-                    result[i] = ((Number)segments.elementAt(i)).intValue();
-                }
-                return result;
-            }
-        }
-
-        /**
-         * MAIN PARSER.  Parse the next rule in the given rule string, starting
-         * at pos.  Return the index after the last character parsed.  Do not
-         * parse characters at or after limit.
-         *
-         * Important:  The character at pos must be a non-whitespace character
-         * that is not the comment character.
-         *
-         * This method handles quoting, escaping, and whitespace removal.  It
-         * parses the end-of-rule character.  It recognizes context and cursor
-         * indicators.  Once it does a lexical breakdown of the rule at pos, it
-         * creates a rule object and adds it to our rule list.
-         *
-         * This method is tightly coupled to the inner class RuleHalf.
-         */
-        private int parseRule(String rule, int pos, int limit) {
-            // Locate the left side, operator, and right side
-            int start = pos;
-            char operator = 0;
-
-            RuleHalf left  = new RuleHalf();
-            RuleHalf right = new RuleHalf();
-
-            undefinedVariableName = null;
-            pos = left.parse(rule, pos, limit, this);
-
-            if (pos == limit ||
-                OPERATORS.indexOf(operator = rule.charAt(pos++)) < 0) {
-                syntaxError("No operator", rule, start);
-            }
-
-            // Found an operator char.  Check for forward-reverse operator.
-            if (operator == REVERSE_RULE_OP &&
-                (pos < limit && rule.charAt(pos) == FORWARD_RULE_OP)) {
-                ++pos;
-                operator = FWDREV_RULE_OP;
-            }
-
-            pos = right.parse(rule, pos, limit, this);
-
-            if (pos < limit) {
-                if (rule.charAt(pos) == END_OF_RULE) {
-                    ++pos;
-                } else {
-                    // RuleHalf parser must have terminated at an operator
-                    syntaxError("Unquoted operator", rule, start);
-                }
-            }
-
-            if (operator == VARIABLE_DEF_OP) {
-                // LHS is the name.  RHS is a single character, either a literal
-                // or a set (already parsed).  If RHS is longer than one
-                // character, it is either a multi-character string, or multiple
-                // sets, or a mixture of chars and sets -- syntax error.
-
-                // We expect to see a single undefined variable (the one being
-                // defined).
-                if (undefinedVariableName == null) {
-                    syntaxError("Missing '$' or duplicate definition", rule, start);
-                }
-                if (left.text.length() != 1 || left.text.charAt(0) != variableLimit) {
-                    syntaxError("Malformed LHS", rule, start);
-                }
-                if (left.anchorStart || left.anchorEnd ||
-                    right.anchorStart || right.anchorEnd) {
-                    syntaxError("Malformed variable def", rule, start);
-                }
-                // We allow anything on the right, including an empty string.
-                int n = right.text.length();
-                char[] value = new char[n];
-                right.text.getChars(0, n, value, 0);
-                data.variableNames.put(undefinedVariableName, value);
-
-                ++variableLimit;
-                return pos;
-            }
-
-            // If this is not a variable definition rule, we shouldn't have
-            // any undefined variable names.
-            if (undefinedVariableName != null) {
-                syntaxError("Undefined variable $" + undefinedVariableName,
-                            rule, start);
-            }
-
-            // If the direction we want doesn't match the rule
-            // direction, do nothing.
-            if (operator != FWDREV_RULE_OP &&
-                ((direction == FORWARD) != (operator == FORWARD_RULE_OP))) {
-                return pos;
-            }
-
-            // Transform the rule into a forward rule by swapping the
-            // sides if necessary.
-            if (direction == REVERSE) {
-                RuleHalf temp = left;
-                left = right;
-                right = temp;
-            }
-
-            // Remove non-applicable elements in forward-reverse
-            // rules.  Bidirectional rules ignore elements that do not
-            // apply.
-            if (operator == FWDREV_RULE_OP) {
-                right.removeContext();
-                right.segments = null;
-                left.cursor = left.maxRef = -1;
-                left.cursorOffset = 0;
-            }
-
-            // Normalize context
-            if (left.ante < 0) {
-                left.ante = 0;
-            }
-            if (left.post < 0) {
-                left.post = left.text.length();
-            }
-
-            // Context is only allowed on the input side.  Cursors are only
-            // allowed on the output side.  Segment delimiters can only appear
-            // on the left, and references on the right.  Cursor offset
-            // cannot appear without an explicit cursor.  Cursor offset
-            // cannot place the cursor outside the limits of the context.
-            // Anchors are only allowed on the input side.
-            if (right.ante >= 0 || right.post >= 0 || left.cursor >= 0 ||
-                right.segments != null || left.maxRef >= 0 ||
-                (right.cursorOffset != 0 && right.cursor < 0) ||
-                (right.cursorOffset > (left.text.length() - left.post)) ||
-                (-right.cursorOffset > left.ante) ||
-                right.anchorStart || right.anchorEnd) {
-                syntaxError("Malformed rule", rule, start);
-            }
-
-            // Check integrity of segments and segment references.  Each
-            // segment's start must have a corresponding limit, and the
-            // references must not refer to segments that do not exist.
-            if (left.segments != null) {
-                int n = left.segments.size();
-                if (n % 2 != 0) {
-                    syntaxError("Odd length segments", rule, start);
-                }
-                n /= 2;
-                if (right.maxRef > n) {
-                    syntaxError("Undefined segment reference " + right.maxRef, rule, start);
-                }
-            }
-
-            data.ruleSet.addRule(new TransliterationRule(
-                                         left.text, left.ante, left.post,
-                                         right.text, right.cursor, right.cursorOffset,
-                                         left.getSegments(),
-                                         left.anchorStart, left.anchorEnd,
-                                         data));
-            
-            return pos;
-        }
-
-        /**
-         * Throw an exception indicating a syntax error.  Search the rule string
-         * for the probable end of the rule.  Of course, if the error is that
-         * the end of rule marker is missing, then the rule end will not be found.
-         * In any case the rule start will be correctly reported.
-         * @param msg error description
-         * @param rule pattern string
-         * @param start position of first character of current rule
-         */
-        static final void syntaxError(String msg, String rule, int start) {
-            int end = ruleEnd(rule, start, rule.length());
-            throw new IllegalArgumentException(msg + " in \"" +
-                                               Utility.escape(rule.substring(start, end)) + '"');
-        }
-
-        static final int ruleEnd(String rule, int start, int limit) {
-            int end = quotedIndexOf(rule, start, limit, ";");
-            if (end < 0) {
-                end = limit;
-            }
-            return end;
-        }
-
-        /**
-         * Parse a UnicodeSet out, store it, and return the stand-in character
-         * used to represent it.
-         */
-        private final char parseSet(String rule, ParsePosition pos) {
-            UnicodeSet set = new UnicodeSet(rule, pos, parseData);
-            if (variableNext >= variableLimit) {
-                throw new RuntimeException("Private use variables exhausted");
-            }
-            set.compact();
-            setVariablesVector.addElement(set);
-            return variableNext++;
-        }
-
-        /**
-         * Append the value of the given variable name to the given
-         * StringBuffer.
-         * @exception IllegalArgumentException if the name is unknown.
-         */
-        private void appendVariableDef(String name, StringBuffer buf) {
-            char[] ch = (char[]) data.variableNames.get(name);
-            if (ch == null) {
-                // We allow one undefined variable so that variable definition
-                // statements work.  For the first undefined variable we return
-                // the special placeholder variableLimit-1, and save the variable
-                // name.
-                if (undefinedVariableName == null) {
-                    undefinedVariableName = name;
-                    if (variableNext >= variableLimit) {
-                        throw new RuntimeException("Private use variables exhausted");
-                    }
-                    buf.append((char) --variableLimit);
-                } else {
-                    throw new IllegalArgumentException("Undefined variable $"
-                                                       + name);
-                }
-            } else {
-                buf.append(ch);
-            }
-        }
-
-        /**
-         * Determines what part of the private use region of Unicode we can use for
-         * variable stand-ins.  The correct way to do this is as follows: Parse each
-         * rule, and for forward and reverse rules, take the FROM expression, and
-         * make a hash of all characters used.  The TO expression should be ignored.
-         * When done, everything not in the hash is available for use.  In practice,
-         * this method may employ some other algorithm for improved speed.
-         */
-        private final void determineVariableRange(RuleBody ruleArray) {
-            // As an initial implementation, we just run through all the
-            // characters, ignoring any quoting.  This works since the quote
-            // mechanisms are outside the private use area.
-
-            Range r = new Range('\uE000', 0x1900); // Private use area
-            r = r.largestUnusedSubrange(ruleArray);
-            
-            if (r == null) {
-                throw new RuntimeException(
-                    "No private use characters available for variables");
-            }
-
-            // Allocate 9 characters for segment references 1 through 9
-            data.segmentBase = r.start;
-            data.setVariablesBase = variableNext = (char) (data.segmentBase + 9);
-            variableLimit = (char) (r.start + r.length);
-
-            if (variableNext >= variableLimit) {
-                throw new RuntimeException(
-                        "Too few private use characters available for variables");
-            }
-        }
-
-        /**
-         * Returns the index of the first character in a set, ignoring quoted text.
-         * For example, in the string "abc'hide'h", the 'h' in "hide" will not be
-         * found by a search for "h".  Unlike String.indexOf(), this method searches
-         * not for a single character, but for any character of the string
-         * <code>setOfChars</code>.
-         * @param text text to be searched
-         * @param start the beginning index, inclusive; <code>0 <= start
-         * <= limit</code>.
-         * @param limit the ending index, exclusive; <code>start <= limit
-         * <= text.length()</code>.
-         * @param setOfChars string with one or more distinct characters
-         * @return Offset of the first character in <code>setOfChars</code>
-         * found, or -1 if not found.
-         * @see #indexOf
-         */
-        private static int quotedIndexOf(String text, int start, int limit,
-                                         String setOfChars) {
-            for (int i=start; i<limit; ++i) {
-                char c = text.charAt(i);
-                if (c == ESCAPE) {
-                    ++i;
-                } else if (c == QUOTE) {
-                    while (++i < limit
-                           && text.charAt(i) != QUOTE) {}
-                } else if (setOfChars.indexOf(c) >= 0) {
-                    return i;
-                }
-            }
-            return -1;
-        }
-
-
-
-        /**
-         * A range of Unicode characters.  Support the operations of testing for
-         * inclusion (does this range contain this character?) and splitting.
-         * Splitting involves breaking a range into two smaller ranges around a
-         * character inside the original range.  The split character is not included
-         * in either range.  If the split character is at either extreme end of the
-         * range, one of the split products is an empty range.
-         *
-         * This class is used internally to determine the largest available private
-         * use character range for variable stand-ins.
-         */
-        private static class Range implements Cloneable {
-            char start;
-            int length;
-
-            Range(char start, int length) {
-                this.start = start;
-                this.length = length;
-            }
-
-            public Object clone() {
-                return new Range(start, length);
-            }
-
-            boolean contains(char c) {
-                return c >= start && (c - start) < length;
-            }
-
-            /**
-             * Assume that contains(c) is true.  Split this range into two new
-             * ranges around the character c.  Make this range one of the new ranges
-             * (modify it in place) and return the other new range.  The character
-             * itself is not included in either range.  If the split results in an
-             * empty range (that is, if c == start or c == start + length - 1) then
-             * return null.
-             */
-            Range split(char c) {
-                if (c == start) {
-                    ++start;
-                    --length;
-                    return null;
-                } else if (c - start == length - 1) {
-                    --length;
-                    return null;
-                } else {
-                    ++c;
-                    Range r = new Range(c, start + length - c);
-                    length = --c - start;
-                    return r;
-                }
-            }
-
-            /**
-             * Finds the largest unused subrange by the given string.  A
-             * subrange is unused by a string if the string contains no
-             * characters in that range.  If the given string contains no
-             * characters in this range, then this range itself is
-             * returned.
-             */
-            Range largestUnusedSubrange(RuleBody strings) {
-                Vector v = new Vector(1);
-                v.addElement(clone());
-
-                strings.reset();
-                for (;;) {
-                    String str = strings.nextLine();
-                    if (str == null) {
-                        break;
-                    }
-                    int n = str.length();
-                    for (int i=0; i<n; ++i) {
-                        char c = str.charAt(i);
-                        if (contains(c)) {
-                            for (int j=0; j<v.size(); ++j) {
-                                Range r = (Range) v.elementAt(j);
-                                if (r.contains(c)) {
-                                    r = r.split(c);
-                                    if (r != null) {
-                                        v.addElement(r);
-                                    }
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                Range bestRange = null;
-                for (int j=0; j<v.size(); ++j) {
-                    Range r = (Range) v.elementAt(j);
-                    if (bestRange == null || r.length > bestRange.length) {
-                        bestRange = r;
-                    }
-                }
-
-                return bestRange;
-            }
-        }
-    }
 
     /**
      * Return a representation of this transliterator as source rules.
@@ -1579,6 +498,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.46  2001/09/26 18:00:06  alan
+ * jitterbug 67: sync parser with icu4c, allow unlimited, nested segments
+ *
  * Revision 1.45  2001/09/24 19:57:17  alan
  * jitterbug 60: implement toPattern in UnicodeSet; update UnicodeFilter.contains to take an int; update UnicodeSet to support code points to U+10FFFF
  *

@@ -4,9 +4,9 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRuleSet.java,v $ 
- * $Date: 2001/09/19 17:43:38 $ 
- * $Revision: 1.11 $
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRuleSet.java,v $
+ * $Date: 2001/09/26 18:00:06 $
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -27,9 +27,12 @@ import java.util.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.11 $ $Date: 2001/09/19 17:43:38 $
+ * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.12 $ $Date: 2001/09/26 18:00:06 $
  *
  * $Log: TransliterationRuleSet.java,v $
+ * Revision 1.12  2001/09/26 18:00:06  alan
+ * jitterbug 67: sync parser with icu4c, allow unlimited, nested segments
+ *
  * Revision 1.11  2001/09/19 17:43:38  alan
  * jitterbug 60: initial implementation of toRules()
  *
@@ -120,6 +123,8 @@ class TransliterationRuleSet {
         if ((len = rule.getAnteContextLength()) > maxContextLength) {
             maxContextLength = len;
         }
+
+        rules = null;
     }
 
     /**
@@ -128,7 +133,7 @@ class TransliterationRuleSet {
      * addRule() can no longer be called.
      * @exception IllegalArgumentException if some rules are masked
      */
-    public void freeze(RuleBasedTransliterator.Data variables) {
+    public void freeze() {
         /* Construct the rule array and index table.  We reorder the
          * rules by sorting them into 256 bins.  Each bin contains all
          * rules matching the index value for that bin.  A rule
@@ -154,7 +159,7 @@ class TransliterationRuleSet {
         int[] indexValue = new int[n];
         for (int j=0; j<n; ++j) {
             TransliterationRule r = (TransliterationRule) ruleVector.elementAt(j);
-            indexValue[j] = r.getIndexValue(variables);
+            indexValue[j] = r.getIndexValue();
         }
         for (int x=0; x<256; ++x) {
             index[x] = v.size();
@@ -169,7 +174,7 @@ class TransliterationRuleSet {
                     // matchesIndexValue check.  In practice this happens
                     // rarely, so we seldom tread this code path.
                     TransliterationRule r = (TransliterationRule) ruleVector.elementAt(j);
-                    if (r.matchesIndexValue(x, variables)) {
+                    if (r.matchesIndexValue((byte) x)) {
                         v.addElement(r);
                     }
                 }
@@ -215,89 +220,120 @@ class TransliterationRuleSet {
     }
 
     /**
-     * Attempt to find a matching rule at the specified point in the text.
-     * @param text the text, both translated and untranslated
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= text.length()</code>.
-     * @param cursor position at which to translate next, representing offset
-     * into text.  This value must be between <code>start</code> and
-     * <code>limit</code>.
-     * @param variables a dictionary mapping variables to the sets they
-     * represent (maps <code>Character</code> to <code>UnicodeSet</code>)
-     * @param filter the filter.  Any character for which
-     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
-     * altered by this transliterator.  If <tt>filter</tt> is
-     * <tt>null</tt> then no filtering is applied.
-     * @return the matching rule, or null if none found.
+     * Transliterate the given text with the given UTransPosition
+     * indices.  Return TRUE if the transliteration should continue
+     * or FALSE if it should halt (because of a U_PARTIAL_MATCH match).
+     * Note that FALSE is only ever returned if isIncremental is TRUE.
+     * @param text the text to be transliterated
+     * @param pos the position indices, which will be updated
+     * @param incremental if TRUE, assume new text may be inserted
+     * at index.limit, and return FALSE if thre is a partial match.
+     * @return TRUE unless a U_PARTIAL_MATCH has been obtained,
+     * indicating that transliteration should stop until more text
+     * arrives.
      */
-    public TransliterationRule findMatch(Replaceable text,
-                                         Transliterator.Position pos,
-                                         RuleBasedTransliterator.Data variables,
-                                         UnicodeFilter filter) {
-        /* We only need to check our indexed bin of the rule table,
-         * based on the low byte of the first key character.
-         */
-        int x = text.charAt(pos.start) & 0xFF;
-        for (int i=index[x]; i<index[x+1]; ++i) {
-            if (rules[i].matches(text, pos, variables, filter)) {
-                return rules[i];
+    public boolean transliterate(Replaceable text,
+                                 Transliterator.Position pos,
+                                 boolean incremental) {
+        int indexByte = UTF16.charAt(text, pos.start) & 0xFF;
+        for (int i=index[indexByte]; i<index[indexByte+1]; ++i) {
+            int m = rules[i].matchAndReplace(text, pos, incremental);
+            switch (m) {
+            case UnicodeMatcher.U_MATCH:
+                return true;
+            case UnicodeMatcher.U_PARTIAL_MATCH:
+                return false;
+            default: /* Ram: added default to make GCC happy */
+                break;
             }
         }
-        return null;
+        // No match or partial match from any rule
+        pos.start += UTF16.getCharCount(UTF16.charAt(text, pos.start));
+        return true;
     }
 
-    /**
-     * Attempt to find a matching rule at the specified point in the text.
-     * Unlike <code>findMatch()</code>, this method does an incremental match.
-     * An incremental match requires that there be no partial matches that might
-     * pre-empt the full match that is found.  If there are partial matches,
-     * then null is returned.  A non-null result indicates that a full match has
-     * been found, and that it cannot be pre-empted by a partial match
-     * regardless of what additional text is added to the translation buffer.
-     * @param text the text, both translated and untranslated
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= text.length()</code>.
-     * @param cursor position at which to translate next, representing offset
-     * into text.  This value must be between <code>start</code> and
-     * <code>limit</code>.
-     * @param variables a dictionary mapping variables to the sets they
-     * represent (maps <code>Character</code> to <code>UnicodeSet</code>)
-     * @param partial output parameter.  <code>partial[0]</code> is set to
-     * true if a partial match is returned.
-     * @param filter the filter.  Any character for which
-     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
-     * altered by this transliterator.  If <tt>filter</tt> is
-     * <tt>null</tt> then no filtering is applied.
-     * @return the matching rule, or null if none found, or if the text buffer
-     * does not have enough text yet to unambiguously match a rule.
-     */
-    public TransliterationRule findIncrementalMatch(Replaceable text,
-                                                    Transliterator.Position pos,
-                                                    RuleBasedTransliterator.Data variables,
-                                                    boolean partial[],
-                                                    UnicodeFilter filter) {
-        /* We only need to check our indexed bin of the rule table,
-         * based on the low byte of the first key character.
-         */
-        partial[0] = false;
-        int x = text.charAt(pos.start) & 0xFF;
-        for (int i=index[x]; i<index[x+1]; ++i) {
-            int match = rules[i].getMatchDegree(text, pos,
-                                                variables, filter);
-            switch (match) {
-            case TransliterationRule.FULL_MATCH:
-                return rules[i];
-            case TransliterationRule.PARTIAL_MATCH:
-                partial[0] = true;
-                return null;
-            }
-        }
-        return null;
-    }
+//& /**
+//&  * Attempt to find a matching rule at the specified point in the text.
+//&  * @param text the text, both translated and untranslated
+//&  * @param start the beginning index, inclusive; <code>0 <= start
+//&  * <= limit</code>.
+//&  * @param limit the ending index, exclusive; <code>start <= limit
+//&  * <= text.length()</code>.
+//&  * @param cursor position at which to translate next, representing offset
+//&  * into text.  This value must be between <code>start</code> and
+//&  * <code>limit</code>.
+//&  * @param variables a dictionary mapping variables to the sets they
+//&  * represent (maps <code>Character</code> to <code>UnicodeSet</code>)
+//&  * @param filter the filter.  Any character for which
+//&  * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
+//&  * altered by this transliterator.  If <tt>filter</tt> is
+//&  * <tt>null</tt> then no filtering is applied.
+//&  * @return the matching rule, or null if none found.
+//&  */
+//& public TransliterationRule findMatch(Replaceable text,
+//&                                      Transliterator.Position pos,
+//&                                      UnicodeFilter filter) {
+//&     /* We only need to check our indexed bin of the rule table,
+//&      * based on the low byte of the first key character.
+//&      */
+//&     int x = text.charAt(pos.start) & 0xFF;
+//&     for (int i=index[x]; i<index[x+1]; ++i) {
+//&         if (rules[i].matches(text, pos, filter)) {
+//&             return rules[i];
+//&         }
+//&     }
+//&     return null;
+//& }
+
+//& /**
+//&  * Attempt to find a matching rule at the specified point in the text.
+//&  * Unlike <code>findMatch()</code>, this method does an incremental match.
+//&  * An incremental match requires that there be no partial matches that might
+//&  * pre-empt the full match that is found.  If there are partial matches,
+//&  * then null is returned.  A non-null result indicates that a full match has
+//&  * been found, and that it cannot be pre-empted by a partial match
+//&  * regardless of what additional text is added to the translation buffer.
+//&  * @param text the text, both translated and untranslated
+//&  * @param start the beginning index, inclusive; <code>0 <= start
+//&  * <= limit</code>.
+//&  * @param limit the ending index, exclusive; <code>start <= limit
+//&  * <= text.length()</code>.
+//&  * @param cursor position at which to translate next, representing offset
+//&  * into text.  This value must be between <code>start</code> and
+//&  * <code>limit</code>.
+//&  * @param variables a dictionary mapping variables to the sets they
+//&  * represent (maps <code>Character</code> to <code>UnicodeSet</code>)
+//&  * @param partial output parameter.  <code>partial[0]</code> is set to
+//&  * true if a partial match is returned.
+//&  * @param filter the filter.  Any character for which
+//&  * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
+//&  * altered by this transliterator.  If <tt>filter</tt> is
+//&  * <tt>null</tt> then no filtering is applied.
+//&  * @return the matching rule, or null if none found, or if the text buffer
+//&  * does not have enough text yet to unambiguously match a rule.
+//&  */
+//& public TransliterationRule findIncrementalMatch(Replaceable text,
+//&                                                 Transliterator.Position pos,
+//&                                                 boolean partial[],
+//&                                                 UnicodeFilter filter) {
+//&     /* We only need to check our indexed bin of the rule table,
+//&      * based on the low byte of the first key character.
+//&      */
+//&     partial[0] = false;
+//&     int x = text.charAt(pos.start) & 0xFF;
+//&     for (int i=index[x]; i<index[x+1]; ++i) {
+//&         int match = rules[i].getMatchDegree(text, pos,
+//&                                             filter);
+//&         switch (match) {
+//&         case TransliterationRule.FULL_MATCH:
+//&             return rules[i];
+//&         case TransliterationRule.PARTIAL_MATCH:
+//&             partial[0] = true;
+//&             return null;
+//&         }
+//&     }
+//&     return null;
+//& }
 
     /**
      * Create rule strings that represents this rule set.
