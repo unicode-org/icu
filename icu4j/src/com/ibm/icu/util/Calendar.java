@@ -2849,7 +2849,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     protected DateFormat handleGetDateFormat(String pattern, Locale locale) {
         DateFormatSymbols symbols = new DateFormatSymbols(this, locale);
-        return new SimpleDateFormat(pattern, symbols);
+        return new SimpleDateFormat(pattern, symbols, locale);
     }
 
     static private DateFormat formatHelper(Calendar cal, Locale loc,
@@ -2882,6 +2882,7 @@ public abstract class Calendar implements Serializable, Cloneable {
             } catch (MissingResourceException e) {
                 // No custom patterns
                 result = DateFormat.getDateTimeInstance(dateStyle, timeStyle, loc);
+
                 DateFormatSymbols symbols = new DateFormatSymbols(cal, loc);
                 ((SimpleDateFormat) result).setDateFormatSymbols(symbols); // aliu
             }

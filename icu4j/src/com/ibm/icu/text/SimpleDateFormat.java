@@ -313,14 +313,23 @@ public class SimpleDateFormat extends DateFormat {
 
     /**
      * Construct a SimpleDateFormat using the given pattern and
-     * locale-specific symbol data.
+     * locale-specific symbol data. 
+     * Warning: uses default locale for digits!
      * @stable ICU 2.0
      */
     public SimpleDateFormat(String pattern, DateFormatSymbols formatData)
     {
+        this(pattern, formatData, Locale.getDefault());
+    }
+
+    /**
+     * @internal ICU 3.2
+     */
+    public SimpleDateFormat(String pattern, DateFormatSymbols formatData, Locale loc)
+    {
         this.pattern = pattern;
         this.formatData = (DateFormatSymbols) formatData.clone();
-        initialize(Locale.getDefault());
+        initialize(loc);
     }
 
     /**
