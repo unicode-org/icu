@@ -54,53 +54,56 @@ converterData[UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES]={
     &_UTF7Data, &_Bocu1Data, &_UTF16Data, &_UTF32Data, &_CESU8Data
 };
 
-/* Please keep this in sorted order for getAlgorithmicTypeFromName */
+/* Please keep this in binary sorted order for getAlgorithmicTypeFromName.
+   Also the name should be in lower case and all spaces, dashes and underscores
+   removed
+*/
 static struct {
   const char *name;
   const UConverterType type;
 } const cnvNameType[] = {
-  { "BOCU-1", UCNV_BOCU1 },
-  { "CESU-8", UCNV_CESU8 },
-  { "HZ",UCNV_HZ },
-  { "ISCII", UCNV_ISCII },
-  { "ISO_2022", UCNV_ISO_2022 },
-  { "ISO-8859-1", UCNV_LATIN_1 },
-  { "LMBCS-1", UCNV_LMBCS_1 },
-  { "LMBCS-11",UCNV_LMBCS_11 },
-  { "LMBCS-16",UCNV_LMBCS_16 },
-  { "LMBCS-17",UCNV_LMBCS_17 },
-  { "LMBCS-18",UCNV_LMBCS_18 },
-  { "LMBCS-19",UCNV_LMBCS_19 },
-  { "LMBCS-2", UCNV_LMBCS_2 },
-  { "LMBCS-3", UCNV_LMBCS_3 },
-  { "LMBCS-4", UCNV_LMBCS_4 },
-  { "LMBCS-5", UCNV_LMBCS_5 },
-  { "LMBCS-6", UCNV_LMBCS_6 },
-  { "LMBCS-8", UCNV_LMBCS_8 },
-  { "SCSU", UCNV_SCSU },
-  { "US-ASCII", UCNV_US_ASCII },
-  { "UTF-16", UCNV_UTF16 },
-  { "UTF-16BE", UCNV_UTF16_BigEndian },
-  { "UTF-16LE", UCNV_UTF16_LittleEndian },
+  { "bocu1", UCNV_BOCU1 },
+  { "cesu8", UCNV_CESU8 },
+  { "hz",UCNV_HZ },
+  { "iscii", UCNV_ISCII },
+  { "iso2022", UCNV_ISO_2022 },
+  { "iso88591", UCNV_LATIN_1 },
+  { "lmbcs1", UCNV_LMBCS_1 },
+  { "lmbcs11",UCNV_LMBCS_11 },
+  { "lmbcs16",UCNV_LMBCS_16 },
+  { "lmbcs17",UCNV_LMBCS_17 },
+  { "lmbcs18",UCNV_LMBCS_18 },
+  { "lmbcs19",UCNV_LMBCS_19 },
+  { "lmbcs2", UCNV_LMBCS_2 },
+  { "lmbcs3", UCNV_LMBCS_3 },
+  { "lmbcs4", UCNV_LMBCS_4 },
+  { "lmbcs5", UCNV_LMBCS_5 },
+  { "lmbcs6", UCNV_LMBCS_6 },
+  { "lmbcs8", UCNV_LMBCS_8 },
+  { "scsu", UCNV_SCSU },
+  { "usascii", UCNV_US_ASCII },
+  { "utf16", UCNV_UTF16 },
+  { "utf16be", UCNV_UTF16_BigEndian },
+  { "utf16le", UCNV_UTF16_LittleEndian },
 #if U_IS_BIG_ENDIAN
-  { "UTF16_OppositeEndian", UCNV_UTF16_LittleEndian },
-  { "UTF16_PlatformEndian", UCNV_UTF16_BigEndian },
+  { "utf16oppositeendian", UCNV_UTF16_LittleEndian },
+  { "utf16platformendian", UCNV_UTF16_BigEndian },
 #else
-  { "UTF16_OppositeEndian", UCNV_UTF16_BigEndian},
-  { "UTF16_PlatformEndian", UCNV_UTF16_LittleEndian },
+  { "utf16oppositeendian", UCNV_UTF16_BigEndian},
+  { "utf16platformendian", UCNV_UTF16_LittleEndian },
 #endif
-  { "UTF-32", UCNV_UTF32 },
-  { "UTF-32BE", UCNV_UTF32_BigEndian },
-  { "UTF-32LE", UCNV_UTF32_LittleEndian },
+  { "utf32", UCNV_UTF32 },
+  { "utf32be", UCNV_UTF32_BigEndian },
+  { "utf32le", UCNV_UTF32_LittleEndian },
 #if U_IS_BIG_ENDIAN
-  { "UTF32_OppositeEndian", UCNV_UTF32_LittleEndian },
-  { "UTF32_PlatformEndian", UCNV_UTF32_BigEndian },
+  { "utf32oppositeendian", UCNV_UTF32_LittleEndian },
+  { "utf32platformendian", UCNV_UTF32_BigEndian },
 #else
-  { "UTF32_OppositeEndian", UCNV_UTF32_BigEndian },
-  { "UTF32_PlatformEndian", UCNV_UTF32_LittleEndian },
+  { "utf32oppositeendian", UCNV_UTF32_BigEndian },
+  { "utf32platformendian", UCNV_UTF32_LittleEndian },
 #endif
-  { "UTF-7", UCNV_UTF7 },
-  { "UTF-8", UCNV_UTF8 }
+  { "utf7", UCNV_UTF7 },
+  { "utf8", UCNV_UTF8 }
 };
 
 
@@ -211,6 +214,10 @@ getAlgorithmicTypeFromName(const char *realName)
     uint32_t mid, start, limit;
 	uint32_t lastMid;
     int result;
+    char strippedName[UCNV_MAX_CONVERTER_NAME_LENGTH];
+
+    /* Lower case and remove ignoreable characters. */
+    ucnv_io_stripForCompare(strippedName, realName);
 
     /* do a binary search for the alias */
     start = 0;
@@ -224,7 +231,7 @@ getAlgorithmicTypeFromName(const char *realName)
 			break;	/* We haven't moved, and it wasn't found. */
 		}
 		lastMid = mid;
-        result = ucnv_compareNames(realName, cnvNameType[mid].name);
+        result = uprv_strcmp(strippedName, cnvNameType[mid].name);
 
         if (result < 0) {
             limit = mid;
@@ -250,7 +257,7 @@ ucnv_shareConverterData(UConverterSharedData * data)
 
     if (SHARED_DATA_HASHTABLE == NULL)
     {
-        SHARED_DATA_HASHTABLE = uhash_openSize (uhash_hashIChars, uhash_compareIChars,
+        SHARED_DATA_HASHTABLE = uhash_openSize(uhash_hashChars, uhash_compareChars,
                             ucnv_io_countAvailableAliases(&err),
                             &err);
         if (U_FAILURE(err)) 
@@ -431,7 +438,7 @@ parseConverterOptions(const char *inName,
  * -Call AlgorithmicConverter initializer (Data=FALSE, Cached=TRUE)
  */
 UConverter *
-ucnv_createConverter (const char *converterName, UErrorCode * err)
+ucnv_createConverter(const char *converterName, UErrorCode * err)
 {
     char cnvName[UCNV_MAX_CONVERTER_NAME_LENGTH], locale[ULOC_FULLNAME_CAPACITY];
     const char *realName;
@@ -487,11 +494,11 @@ ucnv_createConverter (const char *converterName, UErrorCode * err)
         /*   to prevent other threads from modifying the cache during the   */
         /*   process.                                                       */
         umtx_lock(&cnvCacheMutex);
-        mySharedConverterData = ucnv_getSharedConverterData (realName);
+        mySharedConverterData = ucnv_getSharedConverterData(realName);
         if (mySharedConverterData == NULL)
         {
             /*Not cached, we need to stream it in from file */
-            mySharedConverterData = createConverterFromFile (NULL, realName, err);
+            mySharedConverterData = createConverterFromFile(NULL, realName, err);
             if (U_FAILURE (*err) || (mySharedConverterData == NULL))
             {
                 umtx_unlock(&cnvCacheMutex);
@@ -507,9 +514,9 @@ ucnv_createConverter (const char *converterName, UErrorCode * err)
         {
             /* The data for this converter was already in the cache.            */
             /* Update the reference counter on the shared data: one more client */
-            umtx_lock (NULL);
+            umtx_lock(NULL);
             mySharedConverterData->referenceCounter++;
-            umtx_unlock (NULL);
+            umtx_unlock(NULL);
         }
         umtx_unlock(&cnvCacheMutex);
     }
