@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/Main.java,v $ 
-* $Date: 2003/04/25 01:39:15 $ 
-* $Revision: 1.12 $
+* $Date: 2003/07/07 15:58:57 $ 
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */
@@ -79,7 +79,8 @@ public class Main {
             else if (arg.equalsIgnoreCase("javatest")) WriteCollationData.javatest();
             else if (arg.equalsIgnoreCase("short")) shortPrint = true;
             
-            else if (arg.equalsIgnoreCase("writeAllocation")) WriteCharts.writeAllocation();
+			else if (arg.equalsIgnoreCase("writeAllocation")) WriteCharts.writeAllocation();
+			else if (arg.equalsIgnoreCase("probe")) Probe.test();
             
             
             else {

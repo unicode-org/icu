@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/TestData.java,v $
-* $Date: 2003/05/02 21:46:33 $
-* $Revision: 1.10 $
+* $Date: 2003/07/07 15:58:57 $
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -17,12 +17,57 @@ import java.util.*;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.util.Currency;
+import java.math.BigDecimal;
+
+import java.util.regex.*;
 
 import com.ibm.icu.text.*;
 import com.ibm.text.utility.*;
 
 public class TestData implements UCD_Types {
 	public static void main (String[] args) throws IOException {
+        
+        Default.setUCD();
+        
+        UnicodeSet us = getSetForName("LATIN LETTER.*P");
+        Utility.showSetNames("",us,false,Default.ucd);
+        
+        us = getSetForName(".*VARIA(TION|NT).*");
+        Utility.showSetNames("",us,false,Default.ucd);
+       
+        if (true) return;
+        
+        /*showSet();
+        */
+        String x = "[[[:s:][:p:]&[:ascii:]] | [\\u2190-\\u2BFF] | "
+        + "[[:s:][:p:]"
+   //     + "&[:decompositiontype=none:]"
+   // + "- [:id_continue:]"
+        + "-[:sk:]"
+        + "]]";
+        PrintWriter pw = Utility.openPrintWriter("Syntax.txt", Utility.UTF8_WINDOWS);
+        showSet(pw, x, false);
+        showSet(pw, "[[\\u2000-\\u205F]-" + x + "]", true);
+        showSet(pw, "[[:whitespace:]&[:decompositiontype=none:]]", false);
+        pw.close();
+        
+        if (true) return;
+		
+		testFormatHack();
+		if (true) return;
+		testConvertToBDD();
+		if (true) return;
+		
+		System.out.println("Shift: " + SHIFT + ", Mask: " + Long.toHexString(MASK));
+		showNumber(-5);
+		showNumber(0);
+		showNumber(5);
+		showNumber(500);
+		showNumber(5000000);
+		if (true) return;
+		
 		String script = args[0];
 		PrintWriter log = Utility.openPrintWriter("TranslitSkeleton_" + script + ".txt", Utility.UTF8_WINDOWS);
 		try {
@@ -38,6 +83,305 @@ public class TestData implements UCD_Types {
 		} finally {
 			log.close();
 		}
+	}
+    
+    static private UnicodeSet getSetForName(String regexPattern) {
+        UnicodeSet result = new UnicodeSet();
+        Pattern p = Pattern.compile(regexPattern);
+        Matcher m = p.matcher("");
+        for (int i = 0; i < 0x10FFFF; ++i) {
+            Utility.dot(i);
+            if (!Default.ucd.isAssigned(i)) continue;
+            byte cat = Default.ucd.getCategory(i);
+            if (cat == PRIVATE_USE) continue;
+            m.reset(Default.ucd.getName(i));
+            if (m.matches()) {
+                result.add(i);
+            }
+        }
+        return result;
+    }
+
+    private static void showSet(PrintWriter pw, String x, boolean separateLines) {
+        pw.println("****************************");
+        System.out.println(x);
+        UnicodeSet ss = new UnicodeSet(x);
+        pw.println(x);
+        Utility.showSetNames(pw,"",ss,separateLines,false,Default.ucd);
+        pw.println("****************************");
+    }
+	
+	static int SHIFT = 6;
+	static int MASK = (1<<6) - 1;
+	static int OTHER = 0xFF & ~MASK;
+
+	static void showNumber(float x) {
+		System.out.println("Number: " + x);
+		//long bits = Double.doubleToLongBits(x);
+		long bits = (Float.floatToIntBits(x) + 0L) << 32;
+		System.out.println("IEEE: " + Long.toBinaryString(bits));
+		System.out.print("Broken: ");
+		long lastShift = 64-SHIFT;
+		for (long shift = 64-SHIFT; shift > 0; shift -= SHIFT) {
+			long temp = bits >>> shift;
+			temp &= MASK;
+			if (temp != 0) lastShift = shift;
+			temp |= OTHER;
+			String piece = Long.toBinaryString(temp);
+			System.out.print(" " + piece);
+		}
+		System.out.println();
+		System.out.print("Bytes: 1B");
+		for (long shift = 64-SHIFT; shift >= lastShift; shift -= SHIFT) {
+			long temp = bits >>> shift;
+			temp &= MASK;
+			temp |= OTHER;
+			if (shift == lastShift) {
+				temp &= ~0x80;
+			} 
+			String piece = Long.toHexString(temp).toUpperCase();
+			System.out.print(" " + piece);
+		}
+		System.out.println();
+	}
+	
+	static int findFirstNonZero(String digits) {
+		for (int i = 0; i < digits.length(); ++i) {
+			if (digits.charAt(i) != '0') return i;
+		}
+		return digits.length();
+	}
+	
+	static String remove(String s, int start, int limit) {
+		return s.substring(0, start) + s.substring(limit);
+	}
+	
+	static String hexByte(int i) {
+		String result = Integer.toHexString(i).toUpperCase();
+		if (result.length() == 1) result = '0' + result;
+		return result;
+	}
+	
+	// dumb implementation
+	static String convertToBCD(String digits) {
+		
+		// fix negatives, remove leading zeros, get decimal
+		
+		int[] pairs = new int[120];
+		boolean negative = false;
+		boolean removedNegative = false;
+		boolean removedDecimal = false;
+		int leadZeros = 0;
+		int trailZeros = 0;
+
+		if (digits.charAt(0) == '-') {
+			negative = true;
+			removedNegative = true;
+			digits = remove(digits, 0, 1);
+		}
+		while (digits.length() > 0 && digits.charAt(0) == '0') {
+			digits = remove(digits, 0, 1);
+			leadZeros++;
+		}
+		int decimalOffset = digits.indexOf('.');
+		if (decimalOffset < 0) {
+			decimalOffset = digits.length();
+		} else {
+			digits = digits = remove(digits, decimalOffset, decimalOffset+1);
+			removedDecimal = true;
+		}
+		
+		// remove trailing zeros
+		while (digits.length() > 0 && digits.charAt(digits.length() - 1) == '0') {
+			digits = remove(digits, digits.length() - 1, digits.length());
+			trailZeros++;
+		}
+		
+		// make the digits even (in non-fraction part)
+		if (((decimalOffset) & 1) != 0) {
+			digits = '0' + digits; // make even
+			++decimalOffset;
+			leadZeros--;
+		}
+		if (((digits.length()) & 1) != 0) {
+			digits = digits + '0'; // make even
+			trailZeros--;
+		}
+		
+		// handle 0
+		if (digits.length() == 0) {
+			negative = false;
+			digits = "00";
+			leadZeros -= 2;
+		} 
+		
+		// store exponent
+		int exp = decimalOffset/2;
+		if (!negative) exp |= 0x80;
+		else exp = (~exp) & 0x7F;
+		String result = hexByte(exp);
+		for (int i = 0; i < digits.length(); i += 2) {
+			int base100 = ((digits.charAt(i) - '0')*10 + (digits.charAt(i+1) - '0')) << 1;
+			if (i < digits.length() - 2) base100 |= 0x1; // mark all but last
+			if (negative) base100 = (~base100) & 0xFF;
+			result += "." + hexByte(base100);
+		}
+		
+		/**
+		// add a secondary weight
+		// assume we don't care about more than too many leads/trails
+		leadZeros += 2; // make non-negative; might have padded by 2, for 0
+		trailZeros += 2; // make non-negative; might have padded by 1
+		if (leadZeros > 7) leadZeros = 7;
+		if (trailZeros > 7) trailZeros = 7;
+		int secondary = (removedNegative ? 0 : 0x80) // only for zero
+						| (leadZeros << 4)
+						| (removedDecimal ? 0 : 0x08)
+						| (trailZeros);
+		result += ";" + hexByte(secondary);
+		*/
+		
+		return result;
+	}
+	
+	static int stamp = 0;
+	static void add(Map m, String s) {
+		add2(m, s);
+		add2(m, "0" + s);
+		if (s.indexOf('.') >= 0) {
+			add2(m, s + "0");
+			add2(m, "0" + s + "0");
+		} else {
+			add2(m, s + ".");
+			add2(m, "0" + s + ".");
+			add2(m, s + ".0");
+			add2(m, "0" + s + ".0");
+		}
+	}
+	
+	static void add2(Map m, String s) {
+		add3(m,s);
+		if (s.indexOf('-') < 0) add3(m, "-" + s);
+	}
+
+	private static void add3(Map m, String s) {
+		String base = convertToBCD(s);
+		base += "|" + Math.random() + stamp++; // just something for uniqueness
+		m.put(base, s);
+	}
+	
+	static boolean SHOW_ALL = true;
+	
+	static NumberFormat nf = NumberFormat.getNumberInstance(Locale.ENGLISH);
+	static {
+		nf.setGroupingUsed(false);
+	}
+	
+	static String cleanToString(double d) {
+		return nf.format(d);
+	}
+	
+	static void testConvertToBDD() {
+		System.out.println("Starting Test");
+		double[] testList = {0, 0.00000001, 0.001, 5, 10, 50, 100, 1000, 100000000};
+		Map m = new TreeMap();
+		
+		for (int i = 0; i < testList.length; ++i) {
+			double d = testList[i];
+			add(m, cleanToString(d));
+			add(m, cleanToString(d + 0.1));
+			add(m, cleanToString(d + 1));
+			add(m, cleanToString(d + 1.1));
+			if (d > 0.1) add(m, cleanToString(d - 0.1));
+			if (d > 1.0) add(m, cleanToString(d - 1.0));
+			if (d > 1.1) add(m, cleanToString(d - 1.1));
+		}
+		Iterator it = m.keySet().iterator();
+		String lastKey = "";
+		String lastValue = "";
+		boolean lastPrinted = false;
+		double lastNumber = Double.NEGATIVE_INFINITY;
+		int errorCount = 0;
+		while (it.hasNext()) {
+			String key = (String) it.next();
+			String value = (String) m.get(key);
+			key = key.substring(0, key.indexOf('|')); // remove stamp
+			double number = Double.parseDouble(value);
+			if (lastNumber > number) {
+				if (!lastPrinted) System.out.println("\t" + lastValue + "\t" + lastKey);
+				System.out.println("Fail:\t" + value + "\t" + key);
+				lastPrinted = true;
+				errorCount++;
+			} else if (SHOW_ALL) {
+				System.out.println("\t" + value + "\t" + key);
+				lastPrinted = true;
+			}
+			lastNumber = number;
+			lastKey = key;
+			lastValue = value;
+		}
+		System.out.println("Done Test, " + errorCount + " Errors");
+	}
+	
+	static void testFormatHack() {
+		String[] testCurrencies = {"USD","GBP","JPY","EUR"};
+		Locale[] testLocales = NumberFormat.getAvailableLocales();
+		for (int i = 0; i < testLocales.length; ++i) {
+			// since none of this should vary by country, we'll just do by language
+			if (!testLocales[i].getCountry().equals("")) continue;
+			System.out.println(testLocales[i].getDisplayName());
+			for (int j = 0; j < testCurrencies.length; ++j) {
+				NumberFormat nf = getCurrencyFormat(
+					Currency.getInstance(testCurrencies[j]), testLocales[i], true);
+				String newVersion = nf.format(1234.567);
+				System.out.print("\t" + newVersion);
+				nf = getCurrencyFormat(
+					Currency.getInstance(testCurrencies[j]), testLocales[i], false);
+				String oldVersion = nf.format(1234.567);
+				if (!oldVersion.equals(newVersion)) {
+					System.out.print(" (" + oldVersion + ")");
+				}
+			}
+			System.out.println();
+		}
+	}
+	
+	static NumberFormat getCurrencyFormat(Currency currency, Locale displayLocale, boolean ICU26) {
+		// code for ICU 2.6
+		if (ICU26) {
+			NumberFormat result = NumberFormat.getCurrencyInstance();
+			result.setCurrency(currency);
+			return result;
+		}
+
+		// ugly work-around for 2.4
+		DecimalFormat result = (DecimalFormat)NumberFormat.getCurrencyInstance(displayLocale);
+		HackCurrencyInfo hack = (HackCurrencyInfo)(hackData.get(currency.getCurrencyCode()));
+		result.setMinimumFractionDigits(hack.decimals);
+		result.setMaximumFractionDigits(hack.decimals);
+		result.setRoundingIncrement(hack.rounding);
+		DecimalFormatSymbols symbols = result.getDecimalFormatSymbols();
+		symbols.setCurrencySymbol(hack.symbol);
+		result.setDecimalFormatSymbols(symbols);
+		return result;
+	}
+	
+	static Map hackData = new HashMap();
+	static class HackCurrencyInfo {
+		int decimals;
+		double rounding;
+		String symbol;
+		HackCurrencyInfo(int decimals, double rounding, String symbol) {
+			this.decimals = decimals;
+			this.rounding = rounding;
+			this.symbol = symbol;
+		}
+	}
+	static {
+		hackData.put("USD", new HackCurrencyInfo(2, 0.01, "$"));
+		hackData.put("GBP", new HackCurrencyInfo(2, 0.01, "\u00a3"));
+		hackData.put("JPY", new HackCurrencyInfo(0, 1, "\u00a5"));
+		hackData.put("EUR", new HackCurrencyInfo(2, 0.01, "\u20AC"));
 	}
     /*
 

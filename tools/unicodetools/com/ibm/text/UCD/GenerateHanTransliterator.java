@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateHanTransliterator.java,v $
-* $Date: 2003/02/25 23:38:22 $
-* $Revision: 1.11 $
+* $Date: 2003/07/07 15:58:57 $
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -44,6 +44,10 @@ public final class GenerateHanTransliterator implements UCD_Types {
 
         log = Utility.openPrintWriter("Unihan_log.html", Utility.UTF8_WINDOWS);
         log.println("<body>");
+        log.println("<head>");
+        log.println("<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
+        log.println("<title>Unihan check</title>");
+        log.println("</head>");
 
         BufferedReader in = Utility.openUnicodeFile("Unihan", Default.ucdVersion, true, Utility.UTF8); 
         
@@ -244,6 +248,7 @@ public final class GenerateHanTransliterator implements UCD_Types {
     static final int CHINESE = 2, JAPANESE = 1, DEFINITION = 0;
     
     static final boolean DO_SIMPLE = true;
+    static final boolean SKIP_OVERRIDES = true;
     
     public static void main(int typeIn) {
     	type = typeIn;
@@ -277,16 +282,18 @@ public final class GenerateHanTransliterator implements UCD_Types {
             log = Utility.openPrintWriter("Transliterate_log.txt", Utility.UTF8_WINDOWS);
             log.print('\uFEFF');
             
-            log.println();
-            log.println("@*Override Data");
-            log.println();
-            readOverrides(type);
-
-            log.println();
-            log.println("@*DICT Data");
-            log.println();
-            readCDICTDefinitions(type);
-            
+            if (!SKIP_OVERRIDES) {
+                log.println();
+                log.println("@*Override Data");
+                log.println();
+                readOverrides(type);
+    
+                log.println();
+                log.println("@*DICT Data");
+                log.println();
+                readCDICTDefinitions(type);
+            }
+          
             log.println();
             log.println("@Unihan Data");
             log.println();
@@ -1151,7 +1158,8 @@ U+7878	·	nüè	#nuè
                         int cp = line.charAt(i);
                         int script = Default.ucd.getScript(cp);
                         if (script != HAN_SCRIPT) {
-                            if (script != HIRAGANA_SCRIPT && script != KATAKANA_SCRIPT) {
+                            if (script != HIRAGANA_SCRIPT && script != KATAKANA_SCRIPT 
+                                && cp != 0x30FB && cp != 0x30FC) {
                                 System.out.println("Huh: " + Default.ucd.getCodeAndName(cp));
                             }
                             continue;
@@ -1887,7 +1895,7 @@ Bad pinyin data: \u4E7F	?	LE
 
         if (definition.length() == 0) {
             Utility.fixDot();
-            System.out.println("Zero value for " + Default.ucd.getCode(cp) + " on: " + hex.transliterate(line));
+            err.println("Zero value for " + Default.ucd.getCode(cp) + " on: " + hex.transliterate(line));
         } else {
             addCheck(UTF16.valueOf(cp), definition, line);
         }

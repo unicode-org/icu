@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2003/05/02 21:46:33 $
-* $Revision: 1.33 $
+* $Date: 2003/07/07 15:58:56 $
+* $Revision: 1.34 $
 *
 *******************************************************************************
 */
@@ -643,6 +643,7 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
 
     private static final String[] searchPath = {
         "EXTRAS",
+        "4.0.1",
         "4.0.0",
         "3.2.0",
         "3.1.1",
