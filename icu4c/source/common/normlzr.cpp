@@ -6,21 +6,6 @@
  *************************************************************************
  */
 
-/*
-* Modification history
-* 
-* Date      Name      Description
-* 02/02/01  synwee    Added converters from EMode to UNormalizationMode, 
-*                     getUNormalizationMode and getNormalizerEMode,
-*                     useful in tbcoll and unorm.
-*                     Added quickcheck method and incorporated it into 
-*                     normalize()
-* 06/20/01+ Markus Scherer
-*                     total rewrite, implement all normalization in unorm.cpp
-*                     and turn Normalizer into a wrapper;
-*                     fix the very broken iteration API
-*/
-
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 #include "unicode/chariter.h"
@@ -33,9 +18,38 @@
 // Constructors and other boilerplate
 //-------------------------------------------------------------------------
 
+Normalizer::Normalizer(const UnicodeString& str, UNormalizationMode mode) :
+    fUMode(mode), fOptions(0),
+    text(new StringCharacterIterator(str)),
+    currentIndex(0), nextIndex(0),
+    buffer(), bufferPos(0)
+{
+    checkData();
+}
+
+Normalizer::Normalizer(const UChar *str, int32_t length, UNormalizationMode mode) :
+    fUMode(mode), fOptions(0),
+    text(new UCharCharacterIterator(str, length)),
+    currentIndex(0), nextIndex(0),
+    buffer(), bufferPos(0)
+{
+    checkData();
+}
+
+Normalizer::Normalizer(const CharacterIterator& iter, UNormalizationMode mode) :
+    fUMode(mode), fOptions(0),
+    text(iter.clone()),
+    currentIndex(0), nextIndex(0),
+    buffer(), bufferPos(0)
+{
+    checkData();
+}
+
+// deprecated constructors
+
 Normalizer::Normalizer(const UnicodeString& str, 
                        EMode mode) :
-    fMode(mode), fOptions(0),
+    fUMode(getUMode(mode)), fOptions(0),
     text(new StringCharacterIterator(str)),
     currentIndex(0), nextIndex(0),
     buffer(), bufferPos(0)
@@ -46,7 +60,7 @@ Normalizer::Normalizer(const UnicodeString& str,
 Normalizer::Normalizer(const UnicodeString& str, 
                        EMode mode, 
                        int32_t options) :
-    fMode(mode), fOptions(options),
+    fUMode(getUMode(mode)), fOptions(options),
     text(new StringCharacterIterator(str)),
     currentIndex(0), nextIndex(0),
     buffer(), bufferPos(0)
@@ -55,7 +69,7 @@ Normalizer::Normalizer(const UnicodeString& str,
 }
 
 Normalizer::Normalizer(const UChar *str, int32_t length, EMode mode) :
-    fMode(mode), fOptions(0),
+    fUMode(getUMode(mode)), fOptions(0),
     text(new UCharCharacterIterator(str, length)),
     currentIndex(0), nextIndex(0),
     buffer(), bufferPos(0)
@@ -65,7 +79,7 @@ Normalizer::Normalizer(const UChar *str, int32_t length, EMode mode) :
 
 Normalizer::Normalizer(const CharacterIterator& iter, 
                        EMode mode) :
-    fMode(mode), fOptions(0),
+    fUMode(getUMode(mode)), fOptions(0),
     text(iter.clone()),
     currentIndex(0), nextIndex(0),
     buffer(), bufferPos(0)
@@ -76,7 +90,7 @@ Normalizer::Normalizer(const CharacterIterator& iter,
 Normalizer::Normalizer(const CharacterIterator& iter, 
                        EMode mode, 
                        int32_t options) :
-    fMode(mode), fOptions(options),
+    fUMode(getUMode(mode)), fOptions(options),
     text(iter.clone()),
     currentIndex(0), nextIndex(0),
     buffer(), bufferPos(0)
@@ -85,7 +99,7 @@ Normalizer::Normalizer(const CharacterIterator& iter,
 }
 
 Normalizer::Normalizer(const Normalizer &copy) :
-    fMode(copy.fMode), fOptions(copy.fOptions),
+    fUMode(copy.fUMode), fOptions(copy.fOptions),
     text(copy.text->clone()),
     currentIndex(copy.nextIndex), nextIndex(copy.nextIndex),
     buffer(copy.buffer), bufferPos(copy.bufferPos)
@@ -124,14 +138,14 @@ Normalizer::clone() const
  */
 int32_t Normalizer::hashCode() const
 {
-    return text->hashCode() + fMode + fOptions + buffer.hashCode() + bufferPos + currentIndex + nextIndex;
+    return text->hashCode() + fUMode + fOptions + buffer.hashCode() + bufferPos + currentIndex + nextIndex;
 }
     
 UBool Normalizer::operator==(const Normalizer& that) const
 {
     return
         this==&that ||
-        fMode==that.fMode &&
+        fUMode==that.fUMode &&
         fOptions==that.fOptions &&
         *text==*(that.text) &&
         buffer==that.buffer &&
@@ -145,8 +159,7 @@ UBool Normalizer::operator==(const Normalizer& that) const
 
 void 
 Normalizer::normalize(const UnicodeString& source, 
-                      EMode mode, 
-                      int32_t options,
+                      UNormalizationMode mode, int32_t options,
                       UnicodeString& result, 
                       UErrorCode &status) {
     if(source.isBogus() || U_FAILURE(status)) {
@@ -156,7 +169,7 @@ Normalizer::normalize(const UnicodeString& source,
         result.cloneArrayIfNeeded(-1, source.length()+20, FALSE);
         result.fLength=unorm_internalNormalize(result.fArray, result.fCapacity,
                                                source.fArray, source.fLength,
-                                               getUNormalizationMode(mode, status), (options&IGNORE_HANGUL)!=0,
+                                               mode, (options&IGNORE_HANGUL)!=0,
                                                UnicodeString::growBuffer, &result,
                                                &status);
         if(U_FAILURE(status)) {
@@ -167,20 +180,19 @@ Normalizer::normalize(const UnicodeString& source,
 
 UNormalizationCheckResult
 Normalizer::quickCheck(const UnicodeString& source,
-                       Normalizer::EMode mode, 
+                       UNormalizationMode mode, 
                        UErrorCode &status) {
     if(U_FAILURE(status)) {
         return UNORM_MAYBE;
     }
 
     return unorm_quickCheck(source.fArray, source.length(), 
-                            getUNormalizationMode(mode, status), &status);
+                            mode, &status);
 }
 
 void
 Normalizer::compose(const UnicodeString& source, 
-                    UBool compat,
-                    int32_t options,
+                    UBool compat, int32_t options,
                     UnicodeString& result, 
                     UErrorCode &status) {
     if(source.isBogus() || U_FAILURE(status)) {
@@ -201,8 +213,7 @@ Normalizer::compose(const UnicodeString& source,
 
 void
 Normalizer::decompose(const UnicodeString& source, 
-                      UBool compat,
-                      int32_t options,
+                      UBool compat, int32_t options,
                       UnicodeString& result, 
                       UErrorCode &status) {
     if(source.isBogus() || U_FAILURE(status)) {
@@ -369,15 +380,15 @@ UTextOffset Normalizer::endIndex() const {
 //-------------------------------------------------------------------------
 
 void
-Normalizer::setMode(EMode newMode) 
+Normalizer::setMode(UNormalizationMode newMode) 
 {
-    fMode = newMode;
+    fUMode = newMode;
 }
 
-Normalizer::EMode 
-Normalizer::getMode() const
+UNormalizationMode
+Normalizer::getUMode() const
 {
-    return fMode;
+    return fUMode;
 }
 
 void
@@ -488,8 +499,7 @@ Normalizer::nextNormalize() {
     }
 
     buffer.fLength=unorm_nextNormalize(buffer.fArray, buffer.fCapacity, *text,
-                                       getUNormalizationMode(fMode, errorCode),
-                                       (fOptions&IGNORE_HANGUL)!=0,
+                                       fUMode, (fOptions&IGNORE_HANGUL)!=0,
                                        UnicodeString::growBuffer, &buffer,
                                        &errorCode);
     nextIndex=text->getIndex();
@@ -508,8 +518,7 @@ Normalizer::previousNormalize() {
     }
 
     buffer.fLength=unorm_previousNormalize(buffer.fArray, buffer.fCapacity, *text,
-                                           getUNormalizationMode(fMode, errorCode),
-                                           (fOptions&IGNORE_HANGUL)!=0,
+                                           fUMode, (fOptions&IGNORE_HANGUL)!=0,
                                            UnicodeString::growBuffer, &buffer,
                                            &errorCode);
     bufferPos=buffer.length();
