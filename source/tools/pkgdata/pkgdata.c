@@ -211,7 +211,7 @@ main(int argc, char* argv[]) {
         fprintf(stderr, "\n options:\n");
         for(i=0;i<(sizeof(options)/sizeof(options[0]));i++) {
             fprintf(stderr, "%-5s -%c %s%-10s  %s\n",
-                (i<2?"[REQ]":""),
+                (i<1?"[REQ]":""),
                 options[i].shortName,
                 options[i].longName ? "or --" : "     ",
                 options[i].longName ? options[i].longName : "",
