@@ -188,37 +188,28 @@
 #endif
 
 #if defined(U_INT64_T_UNAVAILABLE)
-#   ifndef INTMAX_MIN
-#       define INTMAX_MIN      INT32_MIN
-#   endif
-#   ifndef INTMAX_MAX
-#       define INTMAX_MAX      INT32_MAX
-#   endif
-#   ifndef UINTMAX_MAX
-#       define UINTMAX_MAX     UINT32_MAX
-#   endif
+# error int64_t is required for decimal format and rule-based number format.
 #else
-#   ifndef INT64_MIN
+# ifndef INT64_C
+/* note: may be wrong for 64 bit platforms - ensure your compiler provides INT64_C */
+#   define INT64_C(c) c ## LL
+# endif
+# ifndef UINT64_C
+/* note: may be wrong for 64 bit platforms - ensure your compiler provides INT64_C */
+#   define UINT64_C(c) c ## ULL
+# endif
+# ifndef U_INT64_MIN
 /** The smallest value a 64 bit signed integer can hold @stable ICU 2.0 */
-#       define INT64_MIN       ((int64_t)(-9223372036854775807-1))
-#   endif
-#   ifndef INT64_MAX
+#     define U_INT64_MIN       ((int64_t)(INT64_C(-9223372036854775807)-1))
+# endif
+# ifndef U_INT64_MAX
 /** The largest value a 64 bit signed integer can hold @stable ICU 2.0 */
-#       define INT64_MAX       ((int64_t)(9223372036854775807))
-#   endif
-#   ifndef UINT64_MAX
+#     define U_INT64_MAX       ((int64_t)(INT64_C(9223372036854775807)))
+# endif
+# ifndef U_UINT64_MAX
 /** The largest value a 64 bit unsigned integer can hold @stable ICU 2.0 */
-#       define UINT64_MAX      ((uint64_t)(18446744073709551615))
-#   endif
-#   ifndef INTMAX_MIN
-#       define INTMAX_MIN      INT64_MIN
-#   endif
-#   ifndef INTMAX_MAX
-#       define INTMAX_MAX      INT64_MAX
-#   endif
-#   ifndef UINTMAX_MAX
-#       define UINTMAX_MAX     UINT64_MAX
-#   endif
+#     define U_UINT64_MAX      ((uint64_t)(UINT64_C(18446744073709551615)))
+# endif
 #endif
 
 /*==========================================================================*/

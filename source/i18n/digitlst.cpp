@@ -49,7 +49,7 @@ static char gDecimal = 0;
 static const char LONG_MIN_REP[] = "2147483648";
 static const char I64_MIN_REP[] = "9223372036854775808";
 
-static const int64_t I64_MIN_VALUE = -9223372036854775807 - 1;
+static const int64_t I64_MIN_VALUE = U_INT64_MIN;
 
 enum {
     LONG_MIN_REP_LENGTH = sizeof(LONG_MIN_REP) - 1, //Ignore the NULL at the end
@@ -370,8 +370,8 @@ DigitList::fitsIntoInt64(UBool ignoreNegativeZero)
         return TRUE;
 
     // At this point we have fDecimalAt == fCount, and fCount == INT64_MIN_REP_LENGTH.
-    // The number will overflow if it is larger than INT64_MAX
-    // or smaller than INT64_MIN.
+    // The number will overflow if it is larger than U_INT64_MAX
+    // or smaller than U_INT64_MIN.
     for (int32_t i=0; i<fCount; ++i)
     {
         char dig = fDigits[i],
