@@ -42,7 +42,7 @@ char *header =
     "/*\n"
     " *******************************************************************************\n"
     " *\n"
-    " *   Copyright (C) 1999-2003, International Business Machines\n"
+    " *   Copyright (C) 1999-2004, International Business Machines\n"
     " *   Corporation and others.  All Rights Reserved.\n"
     " *\n"
     " *   WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT\n"
