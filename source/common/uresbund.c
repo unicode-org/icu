@@ -683,7 +683,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
                 /* if there is no key, but there is an index, try to get by the index */
                 /* here we have either a table or an array, so get the element */
                   if(RES_GET_TYPE(r) == URES_TABLE || RES_GET_TYPE(r) == URES_TABLE32) {
-                    r = res_getTableItemByIndex(&(mainRes->fResData), r, index, &aKey);
+                    r = res_getTableItemByIndex(&(mainRes->fResData), r, index, (const char **)&aKey);
                   } else { /* array */
                     r = res_getArrayItem(&(mainRes->fResData), r, index);
                   }
