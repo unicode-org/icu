@@ -671,6 +671,16 @@ public final class ULocale implements Serializable {
         localeID = getName(lscvToID(lang, script, country, variant));
     }
 
+    /**
+     * Create a ULocale from the id by first canonicalizing the id.
+     * @param nonCanonicalID the locale id to canonicalize
+     * @return the locale created from the canonical version of the ID.
+     * @draft IDU 3.0
+     */
+    public static ULocale createCanonical(String nonCanonicalID) {
+	return new ULocale(new IDParser(nonCanonicalID, true).getName(), null);
+    }
+
     private static String lscvToID(String lang, String script, String country, String variant) {
         StringBuffer buf = new StringBuffer();
      
@@ -1705,9 +1715,8 @@ public final class ULocale implements Serializable {
     }    
 
     /**
-     * Gets the canonical name for the specified locale.  The specified
-     * locale should not contain keywords, if it does they will be ignored.
-     *
+     * Gets the canonical name for the specified locale.  This is used to convert POSIX
+     * and other grandfathered IDs to standard ICU form.
      * @param localeID the locale id
      * @return the canonicalized id
      * @draft ICU 3.0
