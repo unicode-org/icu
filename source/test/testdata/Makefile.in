@@ -188,7 +188,7 @@ $(TESTOUTDIR)/$(TESTDT)nam.typ: $(TESTBUILDDIR)/$(TESTDT)te_IN.res
 
 testdata: build-dir $(ALL_TEST_FILES) $(UNPACKAGEDTESTDATA)
 
-$(ALL_TEST_FILES): build-dir
+$(ALL_TEST_FILES) $(TESTBUILDDIR)/testtable32.txt $(TESTBUILDDIR)/testdata.lst: build-dir
 
 packagetest: testdata pkgdata.inc $(TESTBUILDDIR)/testdata.lst 
 	$(PKGDATA_INVOKE) $(PKGDATA) -T $(TESTBUILDDIR) -d $(TESTOUTDIR) -s $(TESTBUILDDIR) -p $(TESTDATA) -m common $(TESTBUILDDIR)/testdata.lst
