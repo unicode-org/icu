@@ -106,6 +106,7 @@ offsetTOCLookupFn(const UDataMemory *pData,
         const char *base=(const char *)pData->toc;
         uint32_t start, limit, number, lastNumber;
         int32_t strResult;
+        const UDataOffsetTOCEntry *entry;
 
         /* perform a binary search for the data in the common data's table of contents */
 #if defined (UDATA_DEBUG_DUMP)
@@ -118,6 +119,7 @@ offsetTOCLookupFn(const UDataMemory *pData,
         start=0;
         limit=toc->count;         /* number of names in this table of contents */
         lastNumber=limit;
+        entry=toc->entry;
         if (limit == 0) {         /* Stub common data library used during build is empty. */
             return NULL;
         }
@@ -127,7 +129,7 @@ offsetTOCLookupFn(const UDataMemory *pData,
                 break;	/* We haven't moved, and it wasn't found. */
             }
             lastNumber = number;
-            strResult = uprv_strcmp(tocEntryName, &base[toc->entry[number].nameOffset]);
+            strResult = uprv_strcmp(tocEntryName, base+entry[number].nameOffset);
             if(strResult<0) {
                 limit=number;
             } else if (strResult>0) {
@@ -136,15 +138,15 @@ offsetTOCLookupFn(const UDataMemory *pData,
             else {
                 /* found it */
 #ifdef UDATA_DEBUG
-                /* fprintf(stderr, "Found: %p\n",(base+toc[2*start+1])); */
                 fprintf(stderr, "%s: Found.\n", tocEntryName);
 #endif
-                if((number+1)<toc->count) {
-                    *pLength=(int32_t)(toc->entry[number+1].dataOffset-toc->entry[number].dataOffset);
+                entry += number; /* Alias the entry to the current entry. */
+                if((number+1) < toc->count) {
+                    *pLength = (int32_t)(entry[1].dataOffset - entry->dataOffset);
                 } else {
-                    *pLength=-1;
+                    *pLength = -1;
                 }
-                return (const DataHeader *)&base[toc->entry[number].dataOffset];
+                return (const DataHeader *)(base+entry->dataOffset);
             }
         }
 #ifdef UDATA_DEBUG
