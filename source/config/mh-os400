@@ -37,7 +37,9 @@ FINAL_SO_TARGET = $(SO_TARGET)
 MIDDLE_SO_TARGET = 
 
 # this one is for icudefs.mk's use
+ifeq ($(ENABLE_SHARED),YES)
 SO_TARGET_VERSION_SUFFIX = $(SO_TARGET_VERSION_MAJOR)
+endif
 
 # this one is for the individual make files and linking
 ICULIBSUFFIX = $(SO_TARGET_VERSION_SUFFIX)
