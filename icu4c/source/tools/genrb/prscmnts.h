@@ -19,6 +19,8 @@
 #ifndef PRSCMNTS_H
 #define PRSCMNTS_H 1
 
+#if UCONFIG_NO_REGULAR_EXPRESSIONS==0 /* donot compile when no RegularExpressions are available */
+
 enum UParseCommentsOption {
     UPC_TRANSLATE,
     UPC_NOTE,
@@ -53,5 +55,8 @@ getAt(const UChar* source, int32_t srcLen,
 U_CFUNC int32_t
 getCount(const UChar* source, int32_t srcLen, 
          UParseCommentsOption option, UErrorCode *status);
+
+#endif /* UCONFIG_NO_REGULAR_EXPRESSIONS */
+
 #endif
 
