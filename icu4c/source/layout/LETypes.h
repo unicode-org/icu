@@ -380,7 +380,7 @@ enum LETableTags {
     LE_VHEA_TABLE_TAG = 0x76686561UL, /* 'vhea' */
     LE_VMTX_TABLE_TAG = 0x766D7478UL, /* 'vmtx' */
     LE_VORG_TABLE_TAG = 0x564F5247UL, /* 'VORG' */
-    LE_ZAPF_TABLE_TAG = 0x5A617066UL, /* 'Zapf' */
+    LE_ZAPF_TABLE_TAG = 0x5A617066UL  /* 'Zapf' */
 };
 
 /**
@@ -512,7 +512,7 @@ enum LEFeatureTags {
     LE_VKRN_FEATURE_TAG = 0x766B726EUL, /* 'vkrn' */
     LE_VPAL_FEATURE_TAG = 0x7670616CUL, /* 'vpal' */
     LE_VRT2_FEATURE_TAG = 0x76727432UL, /* 'vrt2' */
-    LE_ZERO_FEATURE_TAG = 0x7A65726FUL, /* 'zero' */
+    LE_ZERO_FEATURE_TAG = 0x7A65726FUL  /* 'zero' */
 };
 
 /**
