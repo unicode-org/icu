@@ -19,7 +19,7 @@ icu4c/source/common/Debug
 icu4c/source/common/Makefile
 icu4c/source/common/Release
 icu4c/source/common/icucfg.h
-icu4c/source/common/libicu-*.*
+icu4c/source/common/libicu*.*
 icu4c/source/common/unicode/platform.h
 icu4c/source/config.cache
 icu4c/source/config.log
@@ -41,7 +41,7 @@ icu4c/source/i18n/*.d
 icu4c/source/i18n/Debug
 icu4c/source/i18n/Makefile
 icu4c/source/i18n/Release
-icu4c/source/i18n/libicu-*.*
+icu4c/source/i18n/libicu*.*
 icu4c/source/samples/Makefile
 icu4c/source/samples/XMLConverter/*.d
 icu4c/source/samples/XMLConverter/*.pdb
@@ -188,6 +188,6 @@ icu4c/source/tools/toolutil/*.pdb
 icu4c/source/tools/toolutil/Debug
 icu4c/source/tools/toolutil/Makefile
 icu4c/source/tools/toolutil/Release
-icu4c/source/tools/toolutil/libicu-toolutil.*
+icu4c/source/tools/toolutil/libicu*
 icu4c/source/tools/toolutil/pkgdata
 icu4c/source/tools/toolutil/tmp

@@ -5,5 +5,5 @@ Makefile
 *.d
 *.pdb
 pkgdata
-libicu-toolutil.*
+libicu*
 
