@@ -692,18 +692,18 @@ public:
   void            getText(UnicodeString&  result);
 
   /**
-   * ICU "poor man's RTTI", returns a UClassID for the actual class.
-   * @return a UClassID for the actual class.
-   * @draft ICU 2.2
-   */
-  virtual inline UClassID getDynamicClassID() const;
-
-  /**
    * ICU "poor man's RTTI", returns a UClassID for this class.
    * @returns a UClassID for this class.
    * @draft ICU 2.2
    */
-  static inline UClassID getStaticClassID();
+  static UClassID getStaticClassID();
+
+  /**
+   * ICU "poor man's RTTI", returns a UClassID for the actual class.
+   * @return a UClassID for the actual class.
+   * @draft ICU 2.2
+   */
+  virtual UClassID getDynamicClassID() const;
 
 private:
   //-------------------------------------------------------------------------
@@ -739,24 +739,11 @@ private:
   UnicodeString       buffer;
   int32_t         bufferPos;
 
-  /**
-   * The address of this static class variable serves as this class's ID
-   * for ICU "poor man's RTTI".
-   */
-  static const char fgClassID;
 };
 
 //-------------------------------------------------------------------------
 // Inline implementations
 //-------------------------------------------------------------------------
-
-inline UClassID
-Normalizer::getStaticClassID()
-{ return (UClassID)&fgClassID; }
-
-inline UClassID
-Normalizer::getDynamicClassID() const
-{ return Normalizer::getStaticClassID(); }
 
 inline UBool
 Normalizer::operator!= (const Normalizer& other) const

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2001 IBM Corp. All rights reserved.
+*   Copyright (C) 1999-2003 IBM Corp. All rights reserved.
 **********************************************************************
 *   Date        Name        Description
 *   12/1/99    rgillam     Complete port from Java.
@@ -20,14 +20,14 @@
 
 U_NAMESPACE_BEGIN
 
-const char DictionaryBasedBreakIterator::fgClassID = 0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DictionaryBasedBreakIterator)
 
 
-//-------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //
 // constructors
 //
-//-------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 DictionaryBasedBreakIterator::DictionaryBasedBreakIterator() :
 RuleBasedBreakIterator() {
@@ -70,11 +70,11 @@ RuleBasedBreakIterator(other)
 
 
 
-//-------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //
 //   Destructor
 //
-//-------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 DictionaryBasedBreakIterator::~DictionaryBasedBreakIterator()
 {
     uprv_free(cachedBreakPositions);
@@ -82,12 +82,12 @@ DictionaryBasedBreakIterator::~DictionaryBasedBreakIterator()
     if (fTables != NULL) {fTables->removeReference();};
 }
 
-//-------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //
 //   Assignment operator.     Sets this iterator to have the same behavior,
 //                            and iterate over the same text, as the one passed in.
 //
-//-------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 DictionaryBasedBreakIterator&
 DictionaryBasedBreakIterator::operator=(const DictionaryBasedBreakIterator& that) {
     if (this == &that) {
@@ -103,12 +103,12 @@ DictionaryBasedBreakIterator::operator=(const DictionaryBasedBreakIterator& that
     return *this;
 }
 
-//-------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //
 //   Clone()    Returns a newly-constructed RuleBasedBreakIterator with the same
 //              behavior, and iterating over the same text, as this one.
 //
-//-------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 BreakIterator*
 DictionaryBasedBreakIterator::clone() const {
     return new DictionaryBasedBreakIterator(*this);
@@ -292,11 +292,11 @@ DictionaryBasedBreakIterator::reset()
 
 
 
-//-------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //
 //    init()    Common initialization routine, for use by constructors, etc.
 //
-//-------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void DictionaryBasedBreakIterator::init() {
     cachedBreakPositions    = NULL;
     fTables                 = NULL;
@@ -306,11 +306,11 @@ void DictionaryBasedBreakIterator::init() {
 }
 
 
-//-------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //
 //    BufferClone
 //
-//-------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 BreakIterator *  DictionaryBasedBreakIterator::createBufferClone(void *stackBuffer,
                                    int32_t &bufferSize,
                                    UErrorCode &status)

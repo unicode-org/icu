@@ -93,13 +93,6 @@ protected:
     static UBool        fTrace;
 
 
-
-private:
-    /**
-     * Class ID
-     */
-    static const char fgClassID;
-
 protected:
     //=======================================================================
     // constructors
@@ -360,7 +353,7 @@ public:
      *                  other classes have different class IDs.
      * @stable ICU 2.0
      */
-    inline virtual UClassID getDynamicClassID(void) const;
+    virtual UClassID getDynamicClassID(void) const;
 
     /**
      * Returns the class ID for this class.  This is useful only for
@@ -373,7 +366,7 @@ public:
      * @return          The class ID for all objects of this class.
      * @stable ICU 2.0
      */
-    inline static UClassID getStaticClassID(void);
+    static UClassID getStaticClassID(void);
 
     /*
      * Create a clone (copy) of this break iterator in memory provided
@@ -475,22 +468,14 @@ protected:
 
 };
 
-//----------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 //
 //   Inline Functions Definitions ...
 //
-//----------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 inline UBool RuleBasedBreakIterator::operator!=(const BreakIterator& that) const {
     return !operator==(that);
-}
-
-inline UClassID RuleBasedBreakIterator::getStaticClassID(void) {
-    return (UClassID)(&fgClassID);
-}
-
-inline UClassID RuleBasedBreakIterator::getDynamicClassID(void) const {
-    return RuleBasedBreakIterator::getStaticClassID();
 }
 
 U_NAMESPACE_END

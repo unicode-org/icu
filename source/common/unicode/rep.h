@@ -235,8 +235,6 @@ protected:
 
 inline Replaceable::Replaceable() {}
 
-inline Replaceable::~Replaceable() {}
-
 inline int32_t
 Replaceable::length() const {
     return getLength();

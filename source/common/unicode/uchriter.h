@@ -345,18 +345,18 @@ public:
   virtual void            getText(UnicodeString& result);
 
   /**
-   * Return a class ID for this object (not really public) 
-   * @return a class ID for this object.  
-   * @stable ICU 2.0
-   */
-  virtual UClassID         getDynamicClassID(void) const;
-
-  /**
    * Return a class ID for this class (not really public) 
    * @return a class ID for this class  
    * @stable ICU 2.0
    */
-  static inline UClassID   getStaticClassID(void);
+  static UClassID         getStaticClassID(void);
+
+  /**
+   * Return a class ID for this object (not really public) 
+   * @return a class ID for this object.  
+   * @stable ICU 2.0
+   */
+  virtual UClassID        getDynamicClassID(void) const;
 
 protected:
   /**
@@ -370,17 +370,7 @@ protected:
    */      
   const UChar*            text;
 
-private:
-  static const char       fgClassID;
 };
-
-inline UClassID
-UCharCharacterIterator::getStaticClassID(void) 
-{ return (UClassID)(&fgClassID); }
-
-inline UClassID
-UCharCharacterIterator::getDynamicClassID(void) const 
-{ return UCharCharacterIterator::getStaticClassID(); }
 
 U_NAMESPACE_END
 #endif

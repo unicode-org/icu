@@ -160,14 +160,14 @@ public:
      *
      * @draft ICU 2.2
      */
-    virtual inline ~UObject() {}
+    virtual ~UObject();
 
     /**
      * ICU4C "poor man's RTTI", returns a UClassID for the actual ICU class.
      *
      * @draft ICU 2.2
      */
-    virtual inline UClassID getDynamicClassID() const = 0;
+    virtual UClassID getDynamicClassID() const = 0;
 
 protected:
     // the following functions are protected to prevent instantiation and
@@ -213,6 +213,23 @@ protected:
     UObject &UObject::operator=(const UObject &);
      */
 };
+
+/**
+ * This is a simple macro to add ICU RTTI to an ICU object implementation.
+ * This does not go into the header. This should only be used in *.cpp files.
+ *
+ * @param myClass The name of the class that needs RTTI defined.
+ * @internal
+ */
+#define UOBJECT_DEFINE_RTTI_IMPLEMENTATION(myClass) \
+    UClassID myClass::getStaticClassID() { \
+        static const char classID = 0; \
+        return (UClassID)&classID; \
+    } \
+    UClassID myClass::getDynamicClassID() const \
+    { return myClass::getStaticClassID(); }
+
+
 
 U_NAMESPACE_END
 

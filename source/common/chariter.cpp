@@ -9,6 +9,9 @@
 
 U_NAMESPACE_BEGIN
 
+ForwardCharacterIterator::~ForwardCharacterIterator() {}
+
+
 CharacterIterator::CharacterIterator()
 : textLength(0), pos(0), begin(0), end(0) {
 }

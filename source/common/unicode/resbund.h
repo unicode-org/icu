@@ -416,14 +416,14 @@ public:
      *
      * @draft ICU 2.2
      */
-    virtual inline UClassID getDynamicClassID() const;
+    virtual UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @draft ICU 2.2
      */
-    static inline UClassID getStaticClassID();
+    static UClassID getStaticClassID();
 
 private:
     ResourceBundle(); // default constructor not implemented
@@ -432,20 +432,7 @@ private:
     void constructForLocale(const UnicodeString& path, const Locale& locale, UErrorCode& error);
     Locale *locName;
 
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
 };
-
-inline UClassID 
-ResourceBundle::getStaticClassID() 
-{ return (UClassID)&fgClassID; }
-
-inline UClassID 
-ResourceBundle::getDynamicClassID() const 
-{ return ResourceBundle::getStaticClassID(); }
 
 U_NAMESPACE_END
 #endif

@@ -71,7 +71,7 @@ public:
      * Destructor
      * @stable ICU 2.0
      */
-    ~ParsePosition() {}
+    virtual ~ParsePosition();
 
     /**
      * Assignment operator
@@ -126,18 +126,18 @@ public:
     int32_t getErrorIndex(void) const;
 
     /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 2.2
-     */
-    virtual inline UClassID getDynamicClassID() const;
-
-    /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @draft ICU 2.2
      */
-    static inline UClassID getStaticClassID();
+    static UClassID getStaticClassID();
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @draft ICU 2.2
+     */
+    virtual UClassID getDynamicClassID() const;
 
 private:
     /**
@@ -153,20 +153,7 @@ private:
      */
     int32_t errorIndex;
 
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
 };
-
-inline UClassID
-ParsePosition::getStaticClassID()
-{ return (UClassID)&fgClassID; }
-
-inline UClassID
-ParsePosition::getDynamicClassID() const
-{ return ParsePosition::getStaticClassID(); }
 
 inline ParsePosition&
 ParsePosition::operator=(const ParsePosition& copy)

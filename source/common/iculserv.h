@@ -157,13 +157,9 @@ class U_COMMON_API LocaleKey : public ICUServiceKey {
     /**
      * UObject boilerplate.
      */
-    static inline UClassID getStaticClassID() { 
-        return (UClassID)&fgClassID;
-    }
+    static UClassID getStaticClassID();
 
-    virtual UClassID getDynamicClassID() const {
-        return getStaticClassID();
-    }
+    virtual UClassID getDynamicClassID() const;
 
 #ifdef SERVICE_DEBUG
  public:
@@ -171,8 +167,6 @@ class U_COMMON_API LocaleKey : public ICUServiceKey {
     virtual UnicodeString& debugClass(UnicodeString& result) const;
 #endif
 
- private:
-    static const char fgClassID;
 };
 
 /*
@@ -274,17 +268,13 @@ protected:
      */
     virtual const Hashtable* getSupportedIDs(UErrorCode& status) const;
 
- public:
+public:
     /**
      * UObject boilerplate.
      */
-    static inline UClassID getStaticClassID() { 
-        return (UClassID)&fgClassID;
-    }
+    static UClassID getStaticClassID();
 
-    virtual UClassID getDynamicClassID() const {
-        return getStaticClassID();
-    }
+    virtual UClassID getDynamicClassID() const;
 
 #ifdef SERVICE_DEBUG
  public:
@@ -292,8 +282,6 @@ protected:
     virtual UnicodeString& debugClass(UnicodeString& result) const;
 #endif
 
- private:
-    static const char fgClassID;
 };
 
 /*
@@ -344,17 +332,13 @@ class U_COMMON_API SimpleLocaleKeyFactory : public LocaleKeyFactory {
  	virtual UBool isSupportedID(const UnicodeString& id, UErrorCode& status) const;
 
 
- public:
+public:
     /**
      * UObject boilerplate.
      */
-    static inline UClassID getStaticClassID() { 
-        return (UClassID)&fgClassID;
-    }
+    static UClassID getStaticClassID();
 
-    virtual UClassID getDynamicClassID() const {
-        return getStaticClassID();
-    }
+    virtual UClassID getDynamicClassID() const;
 
 #ifdef SERVICE_DEBUG
  public:
@@ -362,8 +346,6 @@ class U_COMMON_API SimpleLocaleKeyFactory : public LocaleKeyFactory {
     virtual UnicodeString& debugClass(UnicodeString& result) const;
 #endif
 
- private:
-    static const char fgClassID;
 };
 
 /*
@@ -406,17 +388,13 @@ protected:
      */
     virtual UObject* handleCreate(const Locale& loc, int32_t kind, const ICUService* service, UErrorCode& status) const;
 
- public:
+public:
     /**
      * UObject boilerplate.
      */
-    virtual UClassID getDynamicClassID() const {
-        return getStaticClassID();
-    }
+    static UClassID getStaticClassID();
+    virtual UClassID getDynamicClassID() const;
 
-    static UClassID getStaticClassID() { 
-        return (UClassID)&fgClassID;
-    }
 
 #ifdef SERVICE_DEBUG
  public:
@@ -424,8 +402,6 @@ protected:
     virtual UnicodeString& debugClass(UnicodeString& result) const;
 #endif
 
- private:
-    static const char fgClassID;
 };
 
 /*
