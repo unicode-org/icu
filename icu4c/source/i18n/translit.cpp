@@ -86,6 +86,9 @@ static UMTX registryMutex = 0;
  */
 static TransliteratorRegistry* registry = 0;
 
+// Empty string
+static const UChar EMPTY[] = {0}; //""
+
 U_NAMESPACE_BEGIN
 
 /**
@@ -401,7 +404,7 @@ void Transliterator::filteredTransliterate(Replaceable& text,
     // characters (which are ignored) and a subsequent run of
     // unfiltered characters (which are transliterated).  If, at any
     // point, we fail to consume our entire segment, we stop.
-    do {
+    for (;;) {
         // Narrow the range to be transliterated to the first segment
         // of unfiltered characters at or after index.start.
 
@@ -430,22 +433,101 @@ void Transliterator::filteredTransliterate(Replaceable& text,
 
         int32_t limit = index.limit;
 
-        // Delegate to subclass for actual transliteration.  If there
-        // is additional filtered text (if limit < globalLimit) then
-        // we pass in an incremental value of FALSE to force the subclass
-        // to complete the transliteration for this segment.
-        handleTransliterate(text, index,
-                            limit < globalLimit ? FALSE : incremental);
+        // Is this segment incremental?  If there is additional
+        // filtered text (if limit < globalLimit) then we pass in
+        // an incremental value of FALSE to force the subclass to
+        // complete the transliteration for this segment.
+        UBool isIncrementalSegment =
+            (limit < globalLimit ? FALSE : incremental);
         
+        // Implement rollback.  To understand the need for rollback,
+        // consider the following transliterator:
+        //
+        //  "t" is "a > A;"
+        //  "u" is "A > b;"
+        //  "v" is a compound of "t; NFD; u" with a filter [:Ll:]
+        //
+        // Now apply "c" to the input text "a".  The result is "b".  But if
+        // the transliteration is done incrementally, then the NFD holds
+        // things up after "t" has already transformed "a" to "A".  When
+        // finishTransliterate() is called, "A" is _not_ processed because
+        // it gets excluded by the [:Ll:] filter, and the end result is "A"
+        // -- incorrect.  The problem is that the filter is applied to a
+        // partially-transliterated result, when we only want it to apply to
+        // input text.  Although this example hinges on a compound
+        // transliterator containing NFD and a specific filter, it can
+        // actually happen with any transliterator which may do a partial
+        // transformation in incremental mode into characters outside its
+        // filter.
+        //
+        // There are two solutions.  The first is to add two new index
+        // values to the position structure, a filteredStart and a
+        // filteredLimit.  Then filteredTransliterate() can set and read
+        // these, and avoid filtering partially transliterated results.  A
+        // variant of this solution is to retain an internal state object
+        // with the filtered range that is indexed by the text pointer and
+        // the position object pointer, in analogy to strtok().  The third
+        // solution involves no change to the API and no internal state
+        // cache.  It is to roll back any partially transliterated results
+        // if (a) there is a filter, and (b) the transliteration is
+        // incremental.  This is the solution implemented here.
+        int32_t rollbackStart = 0;
+        int32_t rollbackCopy = 0;
+        if (isIncrementalSegment) {
+            // Make a rollback copy at the end of the string
+            rollbackStart = index.start;
+            rollbackCopy = text.length();
+            text.copy(rollbackStart, limit, rollbackCopy);
+        }
+        
+        // Delegate to subclass for actual transliteration.
+        handleTransliterate(text, index, isIncrementalSegment);
+        
+        int32_t delta = index.limit - limit; // change in length
+            
         // Adjust overall limit for insertions/deletions.  Don't need
         // to worry about contextLimit because handleTransliterate()
         // maintains that.
-        globalLimit += index.limit - limit;
+        globalLimit += delta;
 
-        // If we failed to complete transliterate this segment, then
-        // we are done.  If we did completely transliterate this
+        // If we failed to complete transliterate this segment,
+        // then we are done.  If rollback is required, then do so.
+        if (index.start != index.limit) {
+            if (isIncrementalSegment) {
+                // Replace [rollbackStart, limit) -- this is the
+                // original filtered segment -- with
+                // [rollbackCopy, text.length()), the rollback
+                // copy, then delete the rollback copy.
+                rollbackCopy += delta;
+                int32_t rollbackLen = text.length() - rollbackCopy;
+
+                // Delete the partially transliterated segment
+                rollbackCopy -= index.limit - rollbackStart;
+				text.handleReplaceBetween(rollbackStart, index.limit, EMPTY);
+
+                // Copy the rollback copy back
+                text.copy(rollbackCopy, text.length(), rollbackStart);
+                
+                // Delete the rollback copy
+                rollbackCopy += rollbackLen;
+                text.handleReplaceBetween(rollbackCopy, text.length(), EMPTY);
+                
+                // Restore indices
+                index.start = rollbackStart;
+                index.limit = limit;
+                index.contextLimit -= delta;
+                globalLimit -= delta;
+            }
+            break;
+        } else if (isIncrementalSegment) {
+            // We finished this segment; delete the rollback copy
+            rollbackCopy += delta;
+            text.handleReplaceBetween(rollbackCopy, text.length(), EMPTY);
+        }
+        
+        // If we did completely transliterate this
         // segment, then repeat with the next unfiltered segment.
-    } while (index.start == index.limit);
+    }
 
     // Start is valid where it is.  Limit needs to be put back where
     // it was, modulo adjustments for deletions/insertions.

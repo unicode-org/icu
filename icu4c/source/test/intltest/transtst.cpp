@@ -125,10 +125,11 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(43,TestEmptyContext);
         TESTCASE(44,TestCompoundFilterID);
         TESTCASE(45,TestPropertySet);
-        TESTCASE(46,TestDevanagariLatinRT);
-        TESTCASE(47,TestTeluguLatinRT);
-        TESTCASE(48,TestCompoundLatinRT);
-        TESTCASE(49,TestSanskritLatinRT);
+        TESTCASE(46,TestNewEngine);
+        TESTCASE(47,TestDevanagariLatinRT);
+        TESTCASE(48,TestTeluguLatinRT);
+        TESTCASE(49,TestCompoundLatinRT);
+        TESTCASE(50,TestSanskritLatinRT);
         default: name = ""; break;
     }
 }
@@ -1989,6 +1990,7 @@ void TransliteratorTest::TestCompoundInverseID() {
 
 /**
  * Test undefined variable.
+
  */
 void TransliteratorTest::TestUndefinedVariable() {
     UnicodeString rule = "$initial } a <> \\u1161;";
@@ -2074,6 +2076,72 @@ void TransliteratorTest::TestPropertySet() {
     expect("a>A; \\p{Lu}>x; \\p{ANY}>y;", "abcDEF", "Ayyxxx");
     expect("(.+)>'[' $1 ']';", " a stitch \n in time \r saves 9",
            "[ a stitch ]\n[ in time ]\r[ saves 9]");
+}
+
+/**
+ * Test various failure points of the new 2.0 engine.
+ */
+void TransliteratorTest::TestNewEngine() {
+    UParseError pe;
+    UErrorCode ec = U_ZERO_ERROR;
+    Transliterator *t = Transliterator::createInstance("Latin-Hiragana", UTRANS_FORWARD, pe, ec);
+    if (t == 0 || U_FAILURE(ec)) {
+        errln("FAIL: createInstance Latin-Hiragana");
+        return;
+    }
+    // Katakana should be untouched
+    expect(*t, CharsToUnicodeString("a\\u3042\\u30A2"),
+           CharsToUnicodeString("\\u3042\\u3042\\u30A2"));
+
+    delete t;
+
+    Transliterator *a =
+        Transliterator::createFromRules("a", "a > A;", UTRANS_FORWARD, pe, ec);
+    Transliterator *A =
+        Transliterator::createFromRules("A", "A > b;", UTRANS_FORWARD, pe, ec);
+    if (U_FAILURE(ec)) {
+        delete a;
+        delete A;
+        return;
+    }
+
+    Transliterator* array[3];
+    array[0] = a;
+    array[1] = Transliterator::createInstance("NFD", UTRANS_FORWARD, pe, ec);
+    array[2] = A;
+    if (U_FAILURE(ec)) {
+        errln("FAIL: createInstance NFD");
+        delete a;
+        delete A;
+        delete array[1];
+        return;
+    }
+
+    t = new CompoundTransliterator(array, 3, new UnicodeSet("[:Ll:]", ec));
+    if (U_FAILURE(ec)) {
+        errln("FAIL: UnicodeSet constructor");
+        delete a;
+        delete A;
+        delete array[1];
+        delete t;
+        return;
+    }
+
+    expect(*t, "aAaA", "bAbA");
+
+    expect("$smooth = x; $macron = q; [:^L:] { ([aeiouyAEIOUY] $macron?) } [^aeiouyAEIOUY$smooth$macron] > | $1 $smooth ;",
+           "a",
+           "ax");
+
+    UnicodeString gr = CharsToUnicodeString(
+        "$ddot = \\u0308 ;"
+        "$lcgvowel = [\\u03b1\\u03b5\\u03b7\\u03b9\\u03bf\\u03c5\\u03c9] ;"
+        "$rough = \\u0314 ;"
+        "($lcgvowel+ $ddot?) $rough > h | $1 ;"
+        "\\u03b1 <> a ;"
+        "$rough <> h ;");
+
+    expect(gr, CharsToUnicodeString("\\u03B1\\u0314"), "ha");
 }
 
 //======================================================================
