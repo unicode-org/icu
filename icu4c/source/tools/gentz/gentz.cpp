@@ -141,7 +141,12 @@ int main(int argc, char *argv[]) {
 const int32_t gentz::MAX_GMT_OFFSET = (int32_t)24*60*60; // seconds
 const char    gentz::COMMENT        = '#';
 const char    gentz::CR             = ((char)13);
+// OS390 uses x'15' NL new line for LF               
+#ifdef OS390                                         
+const char    gentz::LF             = ((char)21);    
+#else
 const char    gentz::LF             = ((char)10);
+#endif
 const char    gentz::MINUS          = '-';
 const char    gentz::SPACE          = ' ';
 const char    gentz::TAB            = ((char)9);
@@ -482,7 +487,7 @@ void gentz::parseDSTRule(char*& p, TZRule& rule) {
     if (*p++ != SEP) {
         die("Separator missing");
     }
-    switch (rule.mode) {
+    switch ((char)rule.mode) {
     case 'w':
         rule.mode = WALL_TIME;
         break;
