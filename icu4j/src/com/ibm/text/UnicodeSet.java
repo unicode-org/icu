@@ -229,7 +229,7 @@ import java.text.*;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.11 $ $Date: 2000/02/26 02:21:37 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.12 $ $Date: 2000/02/29 01:19:02 $
  */
 public class UnicodeSet implements UnicodeFilter {
     /**
@@ -820,7 +820,7 @@ public class UnicodeSet implements UnicodeFilter {
                 } else {
                     nestedPairs = ((UnicodeSet) obj).pairs.toString();
                 }
-                i = j+1; // Make i point to ']'
+                i = j; // Make i point at closing '}'
             }
 
             /* An opening bracket indicates the first bracket of a nested
