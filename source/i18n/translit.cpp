@@ -1475,22 +1475,6 @@ UChar Transliterator::filteredCharAt(const Replaceable& text, int32_t i) const {
         (localFilter->contains(c = text.charAt(i)) ? c : (UChar)0xFFFE);
 }
 
-/**
- * Comparison function for UVector.
- *
- * Do not make this a class static: This should remain a C function
- * for os/390 and Solaris Workshop [grhoten]
- */
-U_CDECL_BEGIN
-static UBool U_CALLCONV
-_compareCaselessUnicodeString(const void* a, const void* b) {
-    UHashKey s, t;
-    s.pointer = (void*) a;
-    t.pointer = (void*) b;
-    return uhash_compareCaselessUnicodeString(s, t);
-}
-U_CDECL_END
-
 void Transliterator::initializeCache(void) {
     // Lock first, check init boolean second
     Mutex lock(&cacheMutex);
@@ -1504,7 +1488,7 @@ void Transliterator::initializeCache(void) {
     // That way if the resource is absent, we will at least
     // have a valid cache object.
     cacheIDs.setDeleter(uhash_deleteUnicodeString);
-    cacheIDs.setComparer(_compareCaselessUnicodeString);
+    cacheIDs.setComparer(uhash_compareCaselessUnicodeString);
 
     /* The following code parses the index table located in
      * icu/data/translit_index.txt.  The index is an n x 4 table
