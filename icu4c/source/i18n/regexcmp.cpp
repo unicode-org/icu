@@ -399,8 +399,24 @@ UBool RegexCompile::doParseActions(EParseAction action)
          break;
 
     case doOpenNonCaptureParen:
-        // Open Paren.
-        break;
+        // Open non-caputuring (grouping only) Paren.
+        //   Compile to a 
+        //      - NOP, which later may be replaced by a save-state if the
+        //         parenthesized group gets a * quantifier, followed by
+        //      - NOP, which may later be replaced by a save-state if there
+        //             is an '|' alternation within the parens.
+        {
+            fRXPat->fCompiledPat->addElement(URX_BUILD(URX_NOP, 0), *fStatus);
+            fRXPat->fCompiledPat->addElement(URX_BUILD(URX_NOP, 0), *fStatus);
+
+            // On the Parentheses stack, start a new frame and add the postions
+            //   of the two NOPs.  
+            fParenStack.push(-1, *fStatus);                               // Begin a new frame.
+            fParenStack.push(fRXPat->fCompiledPat->size()-2, *fStatus);   // The first NOP
+            fParenStack.push(fRXPat->fCompiledPat->size()-1, *fStatus);   // The second NOP
+        }
+         break;
+
 
     case doOpenAtomicParen:
         // Open Paren.
@@ -473,6 +489,19 @@ UBool RegexCompile::doParseActions(EParseAction action)
         }
         break;
 
+    case doNGPlus:
+        //  Non-greedy '+?'  compiles to
+        //     1.   stuff to be repeated  (already built)
+        //     2.   state-save  1
+        //     3.   ...
+        {
+            int32_t topLoc      = blockTopLoc(FALSE);
+            int32_t saveStateOp = URX_BUILD(URX_STATE_SAVE, topLoc);
+            fRXPat->fCompiledPat->addElement(saveStateOp, *fStatus);
+        }
+        break;
+
+
     case doOpt:
         // Normal (greedy) ? quantifier.
         //  Compiles to
@@ -481,11 +510,20 @@ UBool RegexCompile::doParseActions(EParseAction action)
         //     3. ...
         // Insert the state save into the compiled pattern, and we're done.
         {
-            int32_t   saveStateLoc = blockTopLoc();      
+            int32_t   saveStateLoc = blockTopLoc(TRUE);      
             int32_t   saveStateOp  = URX_BUILD(URX_STATE_SAVE, fRXPat->fCompiledPat->size());
             fRXPat->fCompiledPat->setElementAt(saveStateOp, saveStateLoc);
         }
         break;
+
+    case doNGOpt:
+        // Non-greedy ?? quantifier
+        //   compiles to
+        //    1.  jmp   4
+        //    2.     body of optional stuff
+        //    3   jmp   5
+        //    4.  state save 2
+        //    5    ...
 
 
 
@@ -499,7 +537,7 @@ UBool RegexCompile::doParseActions(EParseAction action)
         //
         { 
             // location of item #1, the STATE_SAVE
-            int32_t   saveStateLoc = blockTopLoc();       
+            int32_t   saveStateLoc = blockTopLoc(TRUE);       
 
             // Locate the position in the compiled pattern where the match will continue
             //   after completing the *.   (4 in the comment above)
@@ -516,6 +554,23 @@ UBool RegexCompile::doParseActions(EParseAction action)
         }
         break;
 
+    case doNGStar:
+        // Non-greedy *? quantifier
+        // compiles to
+        //     1.   JMP    3
+        //     2.      body of stuff being iterated over
+        //     3.   STATE_SAVE  2
+        //     4    ...
+        {
+            int32_t     jmpLoc  = blockTopLoc(TRUE);                   // loc  1. 
+            int32_t     saveLoc = fRXPat->fCompiledPat->size();        // loc  3.
+            int32_t     jmpOp   = URX_BUILD(URX_JMP, saveLoc);
+            int32_t     stateSaveOp = URX_BUILD(URX_STATE_SAVE, jmpLoc+1);
+            fRXPat->fCompiledPat->setElementAt(jmpOp, jmpLoc);
+            fRXPat->fCompiledPat->addElement(stateSaveOp, *fStatus);
+        }
+        break;
+        
 
     case doStartString:
         // We've just scanned a single "normal" character from the pattern,
@@ -614,9 +669,40 @@ UBool RegexCompile::doParseActions(EParseAction action)
 
 
     case doBackslashA:
-        // Scanned a "\A".
         fRXPat->fCompiledPat->addElement(URX_BUILD(URX_BACKSLASH_A, 0), *fStatus);
         break;
+
+    case doBackslashB:
+        fRXPat->fCompiledPat->addElement(URX_BUILD(URX_BACKSLASH_B, 1), *fStatus);
+        break;
+
+    case doBackslashb:
+        fRXPat->fCompiledPat->addElement(URX_BUILD(URX_BACKSLASH_B, 0), *fStatus);
+        break;
+
+    case doBackslashG:
+        fRXPat->fCompiledPat->addElement(URX_BUILD(URX_BACKSLASH_G, 0), *fStatus);
+        break;        
+
+    case doBackslashW:
+        fRXPat->fCompiledPat->addElement(URX_BUILD(URX_BACKSLASH_W, 1), *fStatus);
+        break;        
+
+    case doBackslashw:
+        fRXPat->fCompiledPat->addElement(URX_BUILD(URX_BACKSLASH_W, 0), *fStatus);
+        break;        
+
+    case doBackslashX:
+        fRXPat->fCompiledPat->addElement(URX_BUILD(URX_BACKSLASH_X, 0), *fStatus);
+        break;        
+
+    case doBackslashZ:
+        fRXPat->fCompiledPat->addElement(URX_BUILD(URX_BACKSLASH_Z, 1), *fStatus);
+        break;        
+
+    case doBackslashz:
+        fRXPat->fCompiledPat->addElement(URX_BUILD(URX_BACKSLASH_Z, 0), *fStatus);
+        break;        
 
     case doExit:
         returnVal = FALSE;
@@ -674,8 +760,12 @@ UBool RegexCompile::doParseActions(EParseAction action)
 //                          is reserved for this purpose.  .* or similar don't
 //                          and a slot needs to be added.
 //
+//       parameter reserveLoc   :  TRUE - ensure that there is space to add an opcode
+//                                        at the returned location.
+//                                 FALSE - just return the address, reserve a location there.
+//
 //------------------------------------------------------------------------------
-int32_t   RegexCompile::blockTopLoc() {
+int32_t   RegexCompile::blockTopLoc(UBool reserveLoc) {
     int32_t   theLoc;
     if (fRXPat->fCompiledPat->size() == fMatchCloseParen)    
     {
@@ -690,11 +780,13 @@ int32_t   RegexCompile::blockTopLoc() {
         // No slot for STATE_SAVE was pre-reserved in the compiled code.
         // We need to make space now.
         theLoc = fRXPat->fCompiledPat->size()-1;
-        int32_t opAtTheLoc = fRXPat->fCompiledPat->elementAti(theLoc);
-        int32_t prevType = URX_TYPE(opAtTheLoc);
-        U_ASSERT(prevType==URX_ONECHAR || prevType==URX_SETREF || prevType==URX_DOTANY);
-        int32_t  nop = URX_BUILD(URX_NOP, 0);
-        fRXPat->fCompiledPat->insertElementAt(nop, theLoc, *fStatus);
+        if (reserveLoc) {
+            int32_t opAtTheLoc = fRXPat->fCompiledPat->elementAti(theLoc);
+            int32_t prevType = URX_TYPE(opAtTheLoc);
+            U_ASSERT(prevType==URX_ONECHAR || prevType==URX_SETREF || prevType==URX_DOTANY);
+            int32_t  nop = URX_BUILD(URX_NOP, 0);
+            fRXPat->fCompiledPat->insertElementAt(nop, theLoc, *fStatus);
+        }
     }
     return theLoc;
 }

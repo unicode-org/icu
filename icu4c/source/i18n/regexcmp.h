@@ -89,9 +89,10 @@ private:
     UChar32     peekCharLL();
     UnicodeSet  *scanSet();
     void        handleCloseParen();
-    int32_t     blockTopLoc();                       // Locate a position in the compiled pattern
+    int32_t     blockTopLoc(UBool reserve);          // Locate a position in the compiled pattern
                                                      //  at the top of the just completed block
-                                                     //  or operation.
+                                                     //  or operation, and optionally ensure that
+                                                     //  there is space to add an opcode there.
 
 
     UErrorCode                    *fStatus;

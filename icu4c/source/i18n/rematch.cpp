@@ -193,12 +193,15 @@ int32_t RegexMatcher::end(int group, UErrorCode &err) const {
         err = U_INDEX_OUTOFBOUNDS_ERROR;
         return 0;
     }
-    int32_t e = 0;
+    int32_t e = -1;
     if (group == 0) {
         e = fMatchEnd; 
     } else {
-        int32_t s = fCaptureEnds->elementAti(group);
-        // TODO:  what to do if no match on this specific group?
+        // Note:  When the match engine backs out of a capture group, it sets the
+        //        group's start position to -1.  The end position is left with junk.
+        //        So, before returning an end position, we must first check that
+        //        the start position indicates that the group matched something.
+        int32_t s = fCaptureStarts->elementAti(group);
         if (s  != -1) {
             e = fCaptureEnds->elementAti(group);
         }
@@ -457,10 +460,11 @@ void RegexMatcher::backTrack(int32_t &inputIdx, int32_t &patIdx)  {
     inputIdx = fBackTrackStack->popi();
     patIdx   = fBackTrackStack->popi();
     int i;
-    for (i=0; i<fPattern->fNumCaptureGroups; i++) {
-        if (fCaptureStarts->elementAti(i) >= inputIdx) {
-            fCaptureStarts->setElementAt(i, -1);
-        }
+    for (i=1; i<=fPattern->fNumCaptureGroups; i++) {
+        int32_t cge = fBackTrackStack->popi();
+        fCaptureEnds->setElementAt(cge, i);
+        int32_t cgs = fBackTrackStack->popi();
+        fCaptureStarts->setElementAt(cgs, i);
     }
 }
 
@@ -554,10 +558,17 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
 
 
         case URX_STATE_SAVE:
-            // When saving state for backtracking, the pattern position that a
-            //   backtrack should (eventually) continue at is "opValue".
-            fBackTrackStack->push(opValue,  status);
-            fBackTrackStack->push(inputIdx, status);
+            //   Save the state of all capture groups, the pattern continuation
+            //   postion and the input position.  
+            {
+                int i;
+                for (i=fPattern->fNumCaptureGroups; i>0; i--) {
+                    fBackTrackStack->push(fCaptureStarts->elementAt(i), status);
+                    fBackTrackStack->push(fCaptureEnds->elementAt(i), status);
+                }
+                fBackTrackStack->push(opValue,  status);   // pattern continuation position
+                fBackTrackStack->push(inputIdx, status);   // current input position
+            }
             break;
 
 
@@ -579,11 +590,43 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
             fCaptureEnds->setElementAt(inputIdx, opValue);
             break;
 
-        case URX_BACKSLASH_A:
+        case URX_BACKSLASH_A:          // Test for start of input
             if (inputIdx != 0) {
                 backTrack(inputIdx, patIdx);
             }
             break;
+
+        case URX_BACKSLASH_B:          // Test for word boundaries
+            if (FALSE) {
+                backTrack(inputIdx, patIdx);
+            }
+            break;
+
+
+        case URX_BACKSLASH_G:          // Test for position at end of previous match
+            if (FALSE) {
+                backTrack(inputIdx, patIdx);
+            }
+            break;
+
+        case URX_BACKSLASH_W:          // Match word chars   (TODO:  doesn't belong here?
+            if (FALSE) {
+                backTrack(inputIdx, patIdx);
+            }
+            break;
+
+        case URX_BACKSLASH_X:          // Match combining character sequence
+            if (FALSE) {
+                backTrack(inputIdx, patIdx);
+            }
+            break;
+
+        case URX_BACKSLASH_Z:          // Test for end of line
+            if (FALSE) {
+                backTrack(inputIdx, patIdx);
+            }
+            break;
+
 
 
         case URX_SETREF:
