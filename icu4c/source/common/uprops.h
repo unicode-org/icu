@@ -27,7 +27,10 @@ enum {
     UPROPS_EXCEPTIONS_TOP_INDEX,
     UPROPS_ADDITIONAL_TRIE_INDEX,
     UPROPS_ADDITIONAL_VECTORS_INDEX,
-    UPROPS_ADDITIONAL_VECTORS_TOP_INDEX
+    UPROPS_ADDITIONAL_VECTORS_COLUMNS_INDEX,
+    UPROPS_RESERVED_INDEX,
+
+    UPROPS_INDEX_COUNT=16
 };
 
 /* number of properties vector words */
@@ -42,5 +45,13 @@ enum {
 /* derived age: one nibble each for major and minor version numbers */
 #define UPROPS_AGE_MASK         0xff000000
 #define UPROPS_AGE_SHIFT        24
+
+/**
+ * Get a properties vector word for a code point.
+ * Implemented in uchar.c for uprops.c.
+ * @return 0 if no data or illegal argument
+ */
+U_CFUNC uint32_t
+u_getUnicodeProperties(UChar32 c, int32_t column);
 
 #endif
