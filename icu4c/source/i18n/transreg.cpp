@@ -172,7 +172,9 @@ Spec::Spec(const UnicodeString& theSpec) : top(theSpec) {
     const int32_t capacity = 10;
     UScriptCode script[capacity]={USCRIPT_INVALID_CODE};
     int32_t num = uscript_getCode(spc,script,capacity, &status);
-
+    if (num > 0 && script[0] != USCRIPT_INVALID_CODE) {
+        scriptName = UnicodeString(uscript_getName(script[0]), "");
+    }
 
     // Canonicalize top
     char buf[256];
