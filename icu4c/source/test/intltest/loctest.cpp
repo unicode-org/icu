@@ -261,6 +261,21 @@ void LocaleTest::TestBasicGetters() {
     // country codes that were longer than two letters.  The new version of Locale
     // doesn't support anything that isn't an officially recognized language or
     // country code, so we no longer support this feature.
+
+    Locale bogusLang("THISISABOGUSLANGUAGE"); // Jitterbug 2864: language code too long
+    if(!bogusLang.isBogus()) {
+        errln("Locale(\"THISISABOGUSLANGUAGE\").isBogus()==FALSE");
+    }
+
+    bogusLang=Locale("eo");
+    if( bogusLang.isBogus() ||
+        strcmp(bogusLang.getLanguage(), "eo")!=0 ||
+        *bogusLang.getCountry()!=0 ||
+        *bogusLang.getVariant()!=0 ||
+        strcmp(bogusLang.getName(), "eo")!=0
+    ) {
+        errln("assignment to bogus Locale does not unbogus it or sets bad data");
+    }
 }
 
 void LocaleTest::TestParallelAPIValues() {
