@@ -5,14 +5,13 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/caniter.cpp,v $ 
- * $Date: 2002/02/13 19:23:59 $ 
- * $Revision: 1.1 $
+ * $Date: 2002/02/27 21:47:04 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
 
-#include <stdio.h>
-
+#include "hash.h"
 #include "unicode/caniter.h"
 
 /**
@@ -49,6 +48,9 @@ Results for: {LATIN CAPITAL LETTER A WITH RING ABOVE}{LATIN SMALL LETTER D}{COMB
  *@draft
  */
 
+//#include <stdio.h>
+
+
 //CanonicalIterator::SAFE_START = NULL;
 //CanonicalIterator::AT_START = NULL;
 
@@ -56,13 +58,7 @@ static UnicodeSet *SAFE_START = NULL; // = new UnicodeSet();
 //private static CharMap AT_START = new CharMap();
 static Hashtable *AT_START = NULL;
 
-    // WARNING, NORMALIZER doesn't have supplementaries yet;
-    // Change FFFF to 10FFFF in C, and in Java when normalizer is upgraded.
-//static UChar32 LAST_UNICODE = 0x10FFFF;
-// JUST FOR DEVELOPMENT/PORTING - need to do the whole range. There is nothing
-// odd with the whole range. The only trick is that 'small' set is much faster
-static UChar32 LAST_UNICODE = 0x10FFFF;
-
+#if 0
 static UBool PROGRESS = FALSE;
 
 #include "unicode/translit.h"
@@ -83,6 +79,7 @@ static const UnicodeString &Tr(const UnicodeString &source) {
   NAME->transliterate(result);
   return result;
 }
+#endif
 
 // public
 
@@ -122,7 +119,6 @@ void CanonicalIterator::cleanPieces() {
     current = NULL;
   }
 }
-
 
 /**
  *@return gets the source: NOTE: it is the NFD form of source
@@ -181,13 +177,16 @@ void CanonicalIterator::setSource(UnicodeString newSource, UErrorCode status) {
     
     cleanPieces();
 
-    // find the segments
-    //List list = new ArrayList();
     UnicodeString *list = new UnicodeString[source.length()];
     int32_t list_length = 0;
     UChar32 cp = 0;
     int32_t start = 0;
     int32_t i = 1;
+    // find the segments
+    // This code iterates through the source string and 
+    // extracts segments that end up on a codepoint that
+    // doesn't start any decompositions. (Analysis is done
+    // on the NFD form - see above).
     for (; i < source.length(); i += UTF16_CHAR_LENGTH(cp)) {
         cp = source.char32At(i);
         if (SAFE_START->contains(cp)) {
@@ -208,8 +207,10 @@ void CanonicalIterator::setSource(UnicodeString newSource, UErrorCode status) {
     for (i = 0; i < current_length; i++) {
       current[i] = 0;
     }
+    // for each segment, get all the combinations that can produce 
+    // it after NFD normalization
     for (i = 0; i < pieces_length; ++i) {
-        if (PROGRESS) printf("SEGMENT\n");
+        //if (PROGRESS) printf("SEGMENT\n");
         pieces[i] = getEquivalents(list[i], pieces_lengths[i], status);
     }
 
@@ -222,11 +223,10 @@ void CanonicalIterator::setSource(UnicodeString newSource, UErrorCode status) {
  * @param source the string to find permutations for
  * @return the results in a set.
  */
-Hashtable *CanonicalIterator::permute(UnicodeString &source) {
+Hashtable *CanonicalIterator::permute(UnicodeString &source, UErrorCode status) {
     //if (PROGRESS) printf("Permute: %s\n", UToS(Tr(source)));
-  UErrorCode status = U_ZERO_ERROR;
     int32_t i = 0;
-    //Set result = new TreeSet();
+
     Hashtable *result = new Hashtable(FALSE, status);
     result->setValueDeleter(uhash_deleteUnicodeString);
     
@@ -236,8 +236,8 @@ Hashtable *CanonicalIterator::permute(UnicodeString &source) {
     //if (source.length() <= 2 && UTF16_CHAR_LENGTH(source.char32At(0)) <= 1) {
     if (source.length() < 2 || (source.length() == 2 && UTF16_CHAR_LENGTH(source.char32At(0)) > 1)) {
       UnicodeString *toPut = new UnicodeString(source);
-        result->put(source, toPut, status); //add(source);
-        return result;
+      result->put(source, toPut, status); 
+      return result;
     }
     
     // otherwise iterate through the string, and recursively permute all the other characters
@@ -250,7 +250,7 @@ Hashtable *CanonicalIterator::permute(UnicodeString &source) {
         
         // see what the permutations of the characters before and after this one are
         //Hashtable *subpermute = permute(source.substring(0,i) + source.substring(i + UTF16.getCharCount(cp)));
-        Hashtable *subpermute = permute(subPermuteString.replace(i, UTF16_CHAR_LENGTH(cp), NULL, 0));
+        Hashtable *subpermute = permute(subPermuteString.replace(i, UTF16_CHAR_LENGTH(cp), NULL, 0), status);
         // The upper replace is destructive. The question is do we have to make a copy, or we don't care about the contents 
         // of source at this point.
         
@@ -261,7 +261,7 @@ Hashtable *CanonicalIterator::permute(UnicodeString &source) {
           UnicodeString *chStr = new UnicodeString(cp);
             chStr->append(*permRes); //*((UnicodeString *)(ne->value.pointer));
             //if (PROGRESS) printf("  Piece: %s\n", UToS(*chStr));
-            result->put(*chStr, chStr, status); //add(piece);
+            result->put(*chStr, chStr, status);
             ne = subpermute->nextElement(el);
         }
         delete subpermute;
@@ -269,11 +269,10 @@ Hashtable *CanonicalIterator::permute(UnicodeString &source) {
     return result;
 }
 
-// FOR TESTING
-#include <stdio.h>
 static UBool U_CALLCONV
 _enumCategoryRangeSAFE_STARTsetup(const void *context, UChar32 start, UChar32 limit, UCharCategory type) {
   int32_t cc = 0;
+  // TODO: use a switch that will automatically add all the unassigned, lead surrogates, tail surrogates and privates
   //fprintf(stdout, "SAFE_START:%08X - %08X, %i\n", start, limit, type);
   if(type > 0) {
     for(; start < limit; start++) {
@@ -329,63 +328,21 @@ _enumCategoryRangeAT_STARTsetup(const void *context, UChar32 start, UChar32 limi
 void CanonicalIterator::initStaticData(UErrorCode status) {
   if(SAFE_START == NULL && AT_START == NULL) {
     SAFE_START = new UnicodeSet();
-    AT_START = new Hashtable(FALSE, status);
     // TODO: have value deleter for UnicodeSets
+    AT_START = new Hashtable(FALSE, status);
 
     UChar32 cp = 0;
-    if (PROGRESS) printf("Getting Safe Start");
+    //if (PROGRESS) printf("Getting Safe Start");
+
     // TODO: use u_enumCharType() instead
     // the fastest with current, public apis is to 
     // enumerate with u_enumCharType() for all categories !=0 and then 
     // getCombiningClass(start..limit-1) that cuts it down by a factor of about 11...
-
     u_enumCharTypes(_enumCategoryRangeSAFE_STARTsetup, 0);
-    //for (cp = 0; cp <= LAST_UNICODE; ++cp) {
-        //if (PROGRESS & (cp & 0x7FF) == 0) System.out.print('.');
-        //cc = getClass(cp);
-        //cc = Unicode::getCombiningClass(cp);
-        //if (cc == 0) SAFE_START->add(cp);
-        // will fix to be really safe below
-    //}
-    if (PROGRESS) printf("\n");
   
-    if (PROGRESS) printf("Getting Containment\n");
+    //if (PROGRESS) printf("Getting Containment\n");
     u_enumCharTypes(_enumCategoryRangeAT_STARTsetup, &status);
-#if 0
-    for (cp = 0; cp <= LAST_UNICODE; ++cp) {
-        //if (PROGRESS & (cp & 0x7FF) == 0) System.out.print('.');
-        // TODO: For efficiency, need extra function plus overloads
-        // Normalizer.normalizationDiffers(String source,...)
-        // Normalizer.normalizationDiffers(int char32,...)
-        // Normalizer.normalize(char32,...);
-        //String istr = UTF16.valueOf(cp);
-        //String decomp = Normalizer.normalize(istr, Normalizer.DECOMP, 0);
-        UnicodeString istr(cp);
-        UnicodeString decomp;
-        Normalizer::normalize(istr, UNORM_NFD, 0, decomp, status);
-        if (decomp==istr) continue;
-      
-        // add each character in the decomposition to canBeIn      
-        UChar32 component = 0;
-        int32_t i = 0;
-        for (i = 0; i < decomp.length(); i += UTF16_CHAR_LENGTH(component)) {
-            component = decomp.char32At(i);
-            if (i == 0) {
-              UnicodeSet *isIn = (UnicodeSet *)AT_START->get(component);
-              if(isIn == NULL) {
-                isIn = new UnicodeSet();
-              }
-              isIn->add(cp);
-              AT_START->put(component, isIn, status);
-            } else if (getClass(component) == 0) {
-                SAFE_START->remove(component);
-            }
-        }
-    }
-#endif
-    if (PROGRESS) printf("\n");
   }
-
 }
 
 /**
@@ -423,7 +380,7 @@ UnicodeString* CanonicalIterator::getEquivalents(UnicodeString segment, int32_t 
     while (ne != NULL) {
         //String item = (String) it.next();
         UnicodeString item = *((UnicodeString *)(ne->value.pointer));
-        Hashtable *permutations = permute(item);
+        Hashtable *permutations = permute(item, status);
         const UHashElement *ne2 = NULL;
         int32_t el2 = -1;
         //Iterator it2 = permutations.iterator();
@@ -437,11 +394,11 @@ UnicodeString* CanonicalIterator::getEquivalents(UnicodeString segment, int32_t 
 
             // TODO: check if operator == is semanticaly the same as attempt.equals(segment)
             if (attempt==segment) {
-                if (PROGRESS) printf("Adding Permutation: %s\n", UToS(Tr(*possible)));
-              // TODO: use the hashtable just to catch duplicates - store strings directly (somehow).
+                //if (PROGRESS) printf("Adding Permutation: %s\n", UToS(Tr(*possible)));
+                // TODO: use the hashtable just to catch duplicates - store strings directly (somehow).
                 result->put(*possible, possible, status); //add(possible);
             } else {
-                if (PROGRESS) printf("-Skipping Permutation: %s\n", UToS(Tr(*possible)));
+                //if (PROGRESS) printf("-Skipping Permutation: %s\n", UToS(Tr(*possible)));
             }
 
           ne2 = permutations->nextElement(el2);
@@ -472,9 +429,12 @@ Hashtable *CanonicalIterator::getEquivalents2(UnicodeString segment, UErrorCode 
     //Set result = new TreeSet();
     Hashtable *result = new Hashtable(FALSE, status);
     result->setValueDeleter(uhash_deleteUnicodeString);
-    if (PROGRESS) printf("Adding: %s\n", UToS(Tr(segment)));
+
+    //if (PROGRESS) printf("Adding: %s\n", UToS(Tr(segment)));
+
     //result.add(segment);
     result->put(segment, new UnicodeString(segment), status);
+
     //StringBuffer workingBuffer = new StringBuffer();
     UnicodeString workingBuffer;
 
@@ -514,7 +474,9 @@ Hashtable *CanonicalIterator::getEquivalents2(UnicodeString segment, UErrorCode 
                 //result.add(prefix + item);
                 *prefix += item;
                 result->put(*prefix, prefix, status);
-                if (PROGRESS) printf("Adding: %s\n", UToS(Tr(*prefix)));
+
+                //if (PROGRESS) printf("Adding: %s\n", UToS(Tr(*prefix)));
+
                 ne = remainder->nextElement(el);
             }
 
@@ -530,8 +492,8 @@ Hashtable *CanonicalIterator::getEquivalents2(UnicodeString segment, UErrorCode 
  * If so, take the remainder, and return the equivalents 
  */
 const Hashtable *CanonicalIterator::extract(UChar32 comp, UnicodeString segment, int32_t segmentPos, UnicodeString buffer, UErrorCode status) {
-    if (PROGRESS) printf(" extract: %s, ", UToS(Tr(UnicodeString(comp))));
-    if (PROGRESS) printf("%s, %i\n", UToS(Tr(segment)), segmentPos);
+    //if (PROGRESS) printf(" extract: %s, ", UToS(Tr(UnicodeString(comp))));
+    //if (PROGRESS) printf("%s, %i\n", UToS(Tr(segment)), segmentPos);
 
     //String decomp = Normalizer.normalize(UTF16.valueOf(comp), Normalizer.DECOMP, 0);
     UnicodeString decomp;
@@ -550,7 +512,9 @@ const Hashtable *CanonicalIterator::extract(UChar32 comp, UnicodeString segment,
     for (i = segmentPos; i < segment.length(); i += UTF16_CHAR_LENGTH(cp)) {
         cp = segment.char32At(i);
         if (cp == decompCp) { // if equal, eat another cp from decomp
-            if (PROGRESS) printf("  matches: %s\n", UToS(Tr(UnicodeString(cp))));
+
+            //if (PROGRESS) printf("  matches: %s\n", UToS(Tr(UnicodeString(cp))));
+
             if (decompPos == decomp.length()) { // done, have all decomp characters!
                 //buffer.append(segment.substring(i + UTF16.getCharCount(cp))); // add remaining segment chars
               buffer.append(segment, i+UTF16_CHAR_LENGTH(cp), segment.length()-i-UTF16_CHAR_LENGTH(cp));
@@ -561,7 +525,8 @@ const Hashtable *CanonicalIterator::extract(UChar32 comp, UnicodeString segment,
             decompPos += UTF16_CHAR_LENGTH(decompCp);
             //decompClass = getClass(decompCp);
         } else {
-            if (PROGRESS) printf("  buffer: %s\n", UToS(Tr(UnicodeString(cp))));
+            //if (PROGRESS) printf("  buffer: %s\n", UToS(Tr(UnicodeString(cp))));
+
             // brute force approach
 
           
@@ -582,7 +547,9 @@ const Hashtable *CanonicalIterator::extract(UChar32 comp, UnicodeString segment,
         }
     }
     if (!ok) return NULL; // we failed, characters left over
-    if (PROGRESS) printf("Matches\n");
+
+    //if (PROGRESS) printf("Matches\n");
+
     if (buffer.length() == 0) {
       Hashtable *result = new Hashtable(FALSE, status);
       result->setValueDeleter(uhash_deleteUnicodeString);
