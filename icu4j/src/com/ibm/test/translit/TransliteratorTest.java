@@ -1,3 +1,5 @@
+package test.translit;
+import test.IntlTest;
 import com.ibm.text.*;
 import java.text.*;
 import java.util.*;
@@ -81,7 +83,7 @@ public class TransliteratorTest extends IntlTest {
          * [exz]|d   no match, copy d to transliterated buffer
          * [exzd]|   done
          */
-        expect("ab>x|y\n" +
+        expect("ab>x|y;" +
                "yc>z",
                "eabcd", "exzd");
 
@@ -97,22 +99,22 @@ public class TransliteratorTest extends IntlTest {
          * [xyq|cw]    Rule 4
          * [xyqn]|     Done
          */
-        expect("ab>x|yzacw\n" +
-               "za>q\n" +
-               "qc>r\n" +
+        expect("ab>x|yzacw;" +
+               "za>q;" +
+               "qc>r;" +
                "cw>n",
                "ab", "xyqn");
 
         /* Test categories
          */
         Transliterator t = new RuleBasedTransliterator("<ID>",
-                                                       "dummy=\uE100\n" +
-                                                       "vowel=[aeiouAEIOU]\n" +
-                                                       "lu=[:Lu:]\n" +
-                                                       "{vowel}[{lu}>!\n" +
-                                                       "{vowel}>&\n" +
-                                                       "!]{lu}>^\n" +
-                                                       "{lu}>*\n" +
+                                                       "dummy=\uE100;" +
+                                                       "vowel=[aeiouAEIOU];" +
+                                                       "lu=[:Lu:];" +
+                                                       "{vowel}[{lu}>!;" +
+                                                       "{vowel}>&;" +
+                                                       "!]{lu}>^;" +
+                                                       "{lu}>*;" +
                                                        "a>ERROR");
         expect(t, "abcdefgABCDEFGU", "&bcd&fg!^**!^*&");
     }
@@ -148,21 +150,21 @@ public class TransliteratorTest extends IntlTest {
      */
     public void TestRuleBasedInverse() {
         String RULES =
-            "abc>zyx\n" +
-            "ab>yz\n" +
-            "bc>zx\n" +
-            "ca>xy\n" +
-            "a>x\n" +
-            "b>y\n" +
-            "c>z\n" +
+            "abc>zyx;" +
+            "ab>yz;" +
+            "bc>zx;" +
+            "ca>xy;" +
+            "a>x;" +
+            "b>y;" +
+            "c>z;" +
 
-            "abc<zyx\n" +
-            "ab<yz\n" +
-            "bc<zx\n" +
-            "ca<xy\n" +
-            "a<x\n" +
-            "b<y\n" +
-            "c<z\n" +
+            "abc<zyx;" +
+            "ab<yz;" +
+            "bc<zx;" +
+            "ca<xy;" +
+            "a<x;" +
+            "b<y;" +
+            "c<z;" +
 
             "";
 
@@ -189,10 +191,10 @@ public class TransliteratorTest extends IntlTest {
      */
     public void TestKeyboard() {
         Transliterator t = new RuleBasedTransliterator("<ID>", 
-                                                       "psch>Y\n"
-                                                       +"ps>y\n"
-                                                       +"ch>x\n"
-                                                       +"a>A\n");
+                                                       "psch>Y;"
+                                                       +"ps>y;"
+                                                       +"ch>x;"
+                                                       +"a>A;");
         String DATA[] = {
             // insertion, buffer
             "a", "A",
@@ -212,10 +214,10 @@ public class TransliteratorTest extends IntlTest {
      */
     public void TestKeyboard2() {
         Transliterator t = new RuleBasedTransliterator("<ID>", 
-                                                       "ych>Y\n"
-                                                       +"ps>|y\n"
-                                                       +"ch>x\n"
-                                                       +"a>A\n");
+                                                       "ych>Y;"
+                                                       +"ps>|y;"
+                                                       +"ch>x;"
+                                                       +"a>A;");
         String DATA[] = {
             // insertion, buffer
             "a", "A",
@@ -241,8 +243,8 @@ public class TransliteratorTest extends IntlTest {
         // transliteration we want t>y then yh>z if t, then h are
         // typed.
         String RULES =
-            "t>|y\n" +
-            "yh>z\n" +
+            "t>|y;" +
+            "yh>z;" +
             "";
 
         String[] DATA = {
