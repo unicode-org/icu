@@ -459,30 +459,31 @@ void IntlCalendarTest::TestJapaneseFormat() {
 
 void IntlCalendarTest::simpleTest(const Locale& loc, const UnicodeString& expect, UDate expectDate, UErrorCode& status)
 {
-  UnicodeString tmp;
-  UDate         d;
-  DateFormat *fmt0 = DateFormat::createDateTimeInstance(DateFormat::kFull, DateFormat::kFull);
+    UnicodeString tmp;
+    UDate         d;
+    DateFormat *fmt0 = DateFormat::createDateTimeInstance(DateFormat::kFull, DateFormat::kFull);
 
-  logln("Try format/parse of " + (UnicodeString)loc.getName());
-  DateFormat *fmt2 = DateFormat::createDateInstance(DateFormat::kFull, loc);
-  if(fmt2) { 
-    fmt2->format(expectDate, tmp);
-    logln(escape(tmp) + " ( in locale " + loc.getName() + ")");
-    if(tmp != expect) {
-      errln(UnicodeString("Failed to format " ) + loc.getName() + " expected " + escape(expect) + " got " + escape(tmp) );
+    logln("Try format/parse of " + (UnicodeString)loc.getName());
+    DateFormat *fmt2 = DateFormat::createDateInstance(DateFormat::kFull, loc);
+    if(fmt2) { 
+        fmt2->format(expectDate, tmp);
+        logln(escape(tmp) + " ( in locale " + loc.getName() + ")");
+        if(tmp != expect) {
+            errln(UnicodeString("Failed to format " ) + loc.getName() + " expected " + escape(expect) + " got " + escape(tmp) );
+        }
+
+        d = fmt2->parse(expect,status);
+        CHECK(status, "Error occured parsing " + UnicodeString(loc.getName()));
+        if(d != expectDate) {
+            fmt2->format(d,tmp);
+            errln(UnicodeString("Failed to parse " ) + escape(expect) + ", " + loc.getName() + " expect " + (double)expectDate + " got " + (double)d  + " " + escape(tmp));
+            logln( "wanted " + escape(fmt0->format(expectDate,tmp.remove())) + " but got " + escape(fmt0->format(d,tmp.remove())));
+        }
+        delete fmt2;
+    } else {
+        errln((UnicodeString)"Can't create " + loc.getName() + " date instance");
     }
-    
-    d = fmt2->parse(expect,status);
-    CHECK(status, "Error occured parsing " + UnicodeString(loc.getName()));
-    if(d != expectDate) {
-      fmt2->format(d,tmp);
-      errln(UnicodeString("Failed to parse " ) + escape(expect) + ", " + loc.getName() + " expect " + (double)expectDate + " got " + (double)d  + " " + escape(tmp));
-      logln( "wanted " + escape(fmt0->format(expectDate,tmp.remove())) + " but got " + escape(fmt0->format(d,tmp.remove())));
-    }
-    delete fmt2;
-  } else {
-    errln((UnicodeString)"Can't create " + loc.getName() + " date instance");
-  }
+    delete fmt0;
 }
 
 #undef CHECK
