@@ -640,6 +640,74 @@ u_countChar32(const UChar *s, int32_t length) {
     return count;
 }
 
+U_CAPI UBool U_EXPORT2
+u_strHasMoreChar32Than(const UChar *s, int32_t length, int32_t number) {
+
+    if(number<0) {
+        return TRUE;
+    }
+    if(s==NULL || length<-1) {
+        return FALSE;
+    }
+
+    if(length==-1) {
+        /* s is NUL-terminated */
+        UChar c;
+
+        /* count code points until they exceed */
+        for(;;) {
+            if((c=*s++)==0) {
+                return FALSE;
+            }
+            if(number==0) {
+                return TRUE;
+            }
+            if(U16_IS_LEAD(c) && U16_IS_TRAIL(*s)) {
+                ++s;
+            }
+            --number;
+        }
+    } else {
+        /* length>=0 known */
+        const UChar *limit;
+        int32_t maxSupplementary;
+
+        /* s contains at least (length+1)/2 code points: <=2 UChars per cp */
+        if(((length+1)/2)>number) {
+            return TRUE;
+        }
+
+        /* check if s does not even contain enough UChars */
+        maxSupplementary=length-number;
+        if(maxSupplementary<=0) {
+            return FALSE;
+        }
+        /* there are maxSupplementary=length-number more UChars than asked-for code points */
+
+        /*
+         * count code points until they exceed and also check that there are
+         * no more than maxSupplementary supplementary code points (UChar pairs)
+         */
+        limit=s+length;
+        for(;;) {
+            if(s==limit) {
+                return FALSE;
+            }
+            if(number==0) {
+                return TRUE;
+            }
+            if(U16_IS_LEAD(*s++) && s!=limit && U16_IS_TRAIL(*s)) {
+                ++s;
+                if(--maxSupplementary<=0) {
+                    /* too many pairs - too few code points */
+                    return FALSE;
+                }
+            }
+            --number;
+        }
+    }
+}
+
 U_CAPI UChar * U_EXPORT2
 u_memcpy(UChar *dest, const UChar *src, int32_t count) {
     return (UChar *)uprv_memcpy(dest, src, count*U_SIZEOF_UCHAR);
