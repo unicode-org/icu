@@ -190,6 +190,7 @@ static const UConverterImpl _Latin1Impl={
     NULL,
     T_UConverter_getNextUChar_LATIN_1,
 
+    NULL,
     NULL
 };
 

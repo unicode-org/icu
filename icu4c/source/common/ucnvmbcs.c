@@ -2013,7 +2013,8 @@ static const UConverterImpl _MBCSImpl={
     _MBCSFromUnicodeWithOffsets,
     _MBCSGetNextUChar,
 
-    _MBCSGetStarters
+    _MBCSGetStarters,
+    NULL
 };
 
 
