@@ -77,7 +77,7 @@ distclean : distclean-local
 dist: dist-local
 check: all check-local
 
-all-local: $(TARGET) $(RES_FILES) $(TRANSLIT_RES) $(TEST_FILES)
+all-local: $(TARGET) $(RES_FILES) $(TRANSLIT_RES) $(TEST_FILES) icupkg.inc
 
 install-local: all-local
 	$(mkinstalldirs) $(DESTDIR)$(sbindir)
@@ -90,13 +90,17 @@ clean-local:
 	$(RMV) $(TARGET) $(OBJECTS)
 
 distclean-local: clean-local
-	$(RMV) Makefile $(DEPS) $(RES_FILES) $(TEST_FILES)
+	$(RMV) Makefile $(DEPS) $(RES_FILES) $(TEST_FILES) icupkg.inc
 
 check-local: all-local
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+icupkg.inc: $(srcdir)/icupkg.inc.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+	&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 $(TARGET) : $(OBJECTS)
 	$(LINK.c) -o $@ $^ $(LIBS) 
