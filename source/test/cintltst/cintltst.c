@@ -47,6 +47,20 @@ static char* _testDataPath=NULL;
  */
 void ctest_setICU_DATA(void);
 
+static UBool gMutexInitialized = TRUE;
+
+static TestMutex(void) {
+    if (gMutexInitialized) {
+        log_err("*** Failure! The global mutex was not initialized.\n"
+                "*** Make sure the right linker was used.\n");
+    }
+}
+
+void addSetup(TestNode** root)
+{
+    addTest(root, &TestMutex,    "setup/TestMutex");
+}
+
 int main(int argc, const char* const argv[])
 {
     int nerrors = 0;
@@ -58,11 +72,8 @@ int main(int argc, const char* const argv[])
     UConverter *cnv;
 
     /* This must be tested before using anything! */
-    if (!umtx_isInitialized(NULL)) {
-        fprintf(stderr,
-                "*** Failure! The global mutex was not initialized.\n"
-                "*** Make sure the right linker was used.\n");
-        return 1;
+    if (umtx_isInitialized(NULL)) {
+        gMutexInitialized = FALSE;
     }
 
     while (REPEAT_TESTS > 0) {
