@@ -15,7 +15,7 @@ include $(top_builddir)/icudefs.mk
 subdir = tools/ctestfw
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(DEPS) $(ALL_TARGETS)
+CLEANFILES = *~ $(DEPS) $(IMPORT_LIB) $(MIDDLE_IMPORT_LIB) $(FINAL_IMPORT_LIB)
 
 ## Target information
 
@@ -83,7 +83,7 @@ dist-local:
 
 clean-local:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
-	$(RMV)  $(OBJECTS) $(STATIC_OBJECTS) $(ALL_TARGETS)
+	$(RMV) $(OBJECTS) $(STATIC_OBJECTS) $(ALL_TARGETS)
 
 distclean-local: clean-local
 	$(RMV) Makefile
