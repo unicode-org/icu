@@ -417,6 +417,7 @@ fr {
         ab { "abkhaze" }
         ae { "avestique" }
         af { "afrikaans" }
+        an { "aragonais" }
         am { "amharique" }
         ar { "arabe" }
         as { "assamais" }

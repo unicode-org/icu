@@ -660,6 +660,7 @@ root {
         ace { "ace" }
         ach { "ach" }
         ada { "ada" }
+        ady { "ady" }
         ae  { "ae"  }
         af  { "af"  }
         afa { "afa" }
@@ -669,6 +670,7 @@ root {
         ale { "ale" }
         alg { "alg" }
         am  { "am"  }
+        an  { "an"  }
         ang { "ang" }
         apa { "apa" }
         ar  { "ar"  }
@@ -740,8 +742,10 @@ root {
         cpf { "cpf" }
         cpp { "cpp" }
         cr  { "cr"  }
+        crh { "crh" }
         crp { "crp" }
         cs  { "cs"  }
+        csb { "csb" }
         cu  { "cu"  }
         cus { "cus" }
         cv  { "cv"  }
@@ -757,6 +761,7 @@ root {
         din { "din" }
         doi { "doi" }
         dra { "dra" }
+        dsb { "dsb" }
         dua { "dua" }
         dum { "dum" }
         dv  { "dv"  }
@@ -798,7 +803,6 @@ root {
         gez { "gez" }
         gil { "gil" }
         gl  { "gl"  }
-        gla { "gla" }
         gmh { "gmh" }
         gn  { "gn"  }
         goh { "goh" }
@@ -810,8 +814,8 @@ root {
         gu  { "gu"  }
         gv  { "gv"  }
         gwi { "gwi" }
-        hai { "hai" }
         ha  { "ha"  }
+        hai { "hai" }
         haw { "haw" }
         he  { "he"  }
         hi  { "hi"  }
@@ -821,6 +825,7 @@ root {
         hmn { "hmn" }
         ho  { "ho"  }
         hr  { "hr"  }
+        hsb { "hsb" }
         ht  { "ht"  }
         hu  { "hu"  }
         hup { "hup" }
@@ -846,6 +851,7 @@ root {
         iu  { "iu"  }
         //iw  { "iw"  }
         ja  { "ja"  }
+        jbo { "jbo" }
         jpr { "jpr" }
         jrb { "jrb" }
         jv  { "jv"  }
@@ -873,6 +879,7 @@ root {
         kos { "kos" }
         kpe { "kpe" }
         kr  { "kr"  }
+        krc { "krc" }
         kro { "kro" }
         kru { "kru" }
         ks  { "ks"  }
@@ -889,9 +896,7 @@ root {
         lb  { "lb"  }
         lez { "lez" }
         lg  { "lg"  }
-        lin { "lin" }
         li  { "li"  }
-        lit { "lit" }
         ln  { "ln"  }
         lo  { "lo"  }
         lol { "lol" }
@@ -911,6 +916,7 @@ root {
         man { "man" }
         map { "map" }
         mas { "mas" }
+        mdf { "mdf" }
         mdr { "mdr" }
         men { "men" }
         mg  { "mg"  }
@@ -939,6 +945,7 @@ root {
         mwr { "mwr" }
         my  { "my"  }
         myn { "myn" }
+        myv { "myv" }
         na  { "na"  }
         nah { "nah" }
         nai { "nai" }
@@ -955,6 +962,7 @@ root {
         nl  { "nl"  }
         nn  { "nn"  }
         no  { "no"  }
+        nog { "nog" }
         non { "non" }
         nr  { "nr"  }
         nso { "nso" }
@@ -1019,7 +1027,7 @@ root {
         sg  { "sg"  }
         sga { "sga" }
         sgn { "sgn" }
-        sh  { "sh"  }
+        sh  { "sh"  } // This is deprecated. This will be removed once we can use scripts in locale IDs.
         shn { "shn" }
         si  { "si"  }
         sid { "sid" }
@@ -1060,8 +1068,8 @@ root {
         tet { "tet" }
         tg  { "tg"  }
         th  { "th"  }
-        tig { "tig" }
         ti  { "ti"  }
+        tig { "tig" }
         tiv { "tiv" }
         tk  { "tk"  }
         tkl { "tkl" }
@@ -1069,8 +1077,8 @@ root {
         tli { "tli" }
         tmh { "tmh" }
         tn  { "tn"  }
-        tog { "tog" }
         to  { "to"  }
+        tog { "tog" }
         tpi { "tpi" }
         tr  { "tr"  }
         ts  { "ts"  }
@@ -1078,12 +1086,12 @@ root {
         tt  { "tt"  }
         tum { "tum" }
         tup { "tup" }
-        tur { "tur" }
         tut { "tut" }
         tvl { "tvl" }
         tw  { "tw"  }
         ty  { "ty"  }
         tyv { "tyv" }
+        udm { "udm" }
         ug  { "ug"  }
         uga { "uga" }
         uk  { "uk"  }
@@ -1103,6 +1111,7 @@ root {
         was { "was" }
         wen { "wen" }
         wo  { "wo"  }
+        xal { "xal" }
         xh  { "xh"  }
         yao { "yao" }
         yap { "yap" }

@@ -165,7 +165,6 @@ mt {
         gem	{ "Ġermaniku (Oħra)" }	// Germanic (Other)
         gil	{ "Gilbertjan" }	// Gilbertese
         gl	{ "Gallegjan" }	// Gallegan
-        gla	{ "Galliku (Skoċċiż)" }	// Gaelic (Scots)
         gmh	{ "Ġermaniku, Medjevali Pulit (ca. 1050-1500)" }	// German, Middle High (ca.1050-1500)
         gn	{ "Gwarani" }	// Guarani
         goh	{ "Ġermaniku, Antik Pulit (ca. 750-1050)" }	// German, Old High (ca.750-1050)
@@ -247,8 +246,6 @@ mt {
         //lam	{ "Lamba" }	// Lamba
         lb	{ "Letżburgiż" }	// Letzeburgesch
         lez	{ "Leżgjan" }	// Lezghian
-        lin	{ "Lingaljan" }	// Lingala
-        lit	{ "Litwanjan" }	// Lithuanian
         ln	{ "Lingaljan" }	// Lingala
         //lo	{ "Lao" }	// Lao
         //lol	{ "Mongo" }	// Mongo
@@ -424,7 +421,6 @@ mt {
         tsi	{ "Zimxjan" }	// Tsimshian
         //tt	{ "Tatar" }	// Tatar
         //tum	{ "Tumbuka" }	// Tumbuka
-        tur	{ "Tork" }	// Turkish
         tut	{ "Altajk (Oħra)" }	// Altaic (Other)
         //tvl	{ "Tuvalu" }	// Tuvalu
         //tw	{ "Twi" }	// Twi
