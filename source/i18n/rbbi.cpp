@@ -8,8 +8,8 @@
 **********************************************************************
 */
 
-#include "rbbi.h"
-#include "schriter.h"
+#include "unicode/rbbi.h"
+#include "unicode/schriter.h"
 
 /**
  * A token used as a character-category value to identify ignore characters
