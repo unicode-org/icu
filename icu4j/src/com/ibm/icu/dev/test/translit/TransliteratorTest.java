@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2001/11/09 00:49:49 $
- * $Revision: 1.65 $
+ * $Date: 2001/11/12 18:22:53 $
+ * $Revision: 1.66 $
  *
  *****************************************************************************************
  */
@@ -1971,6 +1971,22 @@ public class TransliteratorTest extends TestFmwk {
         }
         errln("FAIL: No syntax error");
     }        
+
+    /**
+     * Test the use variable range pragma, making sure that use of
+     * variable range characters is detected and flagged as an error.
+     */
+    public void TestVariableRange() {
+        String rule = "use variable range 0x70 0x72; a > A; b > B; q > Q;";
+        try {
+            Transliterator t =
+                Transliterator.createFromRules("ID", rule, Transliterator.FORWARD);
+        } catch (IllegalArgumentException e) {
+            logln("Ok: " + e.getMessage());
+            return;
+        }
+        errln("FAIL: No syntax error");
+    }
 
     //======================================================================
     // icu4j ONLY
