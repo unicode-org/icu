@@ -402,6 +402,7 @@ static UResourceDataEntry *findFirstExisting(const char* path, char* name, UBool
 
 static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UErrorCode* status) {
     UErrorCode intStatus = U_ZERO_ERROR;
+    UErrorCode parentStatus = U_ZERO_ERROR;
     UResourceDataEntry *r = NULL;
     UResourceDataEntry *t1 = NULL;
     UResourceDataEntry *t2 = NULL;
@@ -429,7 +430,7 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
         hasRealData = TRUE;
         while (hasChopped && !isRoot && t1->fParent == NULL) {
             /* insert regular parents */
-            t2 = init_entry(name, r->fPath, status);
+            t2 = init_entry(name, r->fPath, &parentStatus);
             t1->fParent = t2;
             t1 = t2;
             hasChopped = chopLocale(name);
@@ -449,7 +450,7 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
             isDefault = TRUE;
             while (hasChopped && t1->fParent == NULL) {
                 /* insert chopped defaults */
-                t2 = init_entry(name, r->fPath, status);
+                t2 = init_entry(name, r->fPath, &parentStatus);
                 t1->fParent = t2;
                 t1 = t2;
                 hasChopped = chopLocale(name);
@@ -471,7 +472,7 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
         }
       } else if(!isRoot && uprv_strcmp(t1->fName, kRootLocaleName) != 0 && t1->fParent == NULL) {
           /* insert root locale */
-          t2 = init_entry(kRootLocaleName, r->fPath, status);
+          t2 = init_entry(kRootLocaleName, r->fPath, &parentStatus);
           if(!hasRealData) {
             r->fBogus = U_USING_DEFAULT_WARNING;
           }
@@ -489,10 +490,15 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
     umtx_unlock(&resbMutex);
 
     if(U_SUCCESS(*status)) {
-      if(intStatus != U_ZERO_ERROR) {
-        *status = intStatus;  
+      if(U_SUCCESS(parentStatus)) {
+        if(intStatus != U_ZERO_ERROR) {
+          *status = intStatus;  
+        }
+        return r;
+      } else {
+        *status = parentStatus;
+        return NULL;
       }
-      return r;
     } else {
       return NULL;
     }
