@@ -45,16 +45,18 @@ ucol_openElements(const UCollator  *coll,
 {
   UCollationElements *result;
 
-  if (U_FAILURE(*status))
+  if (U_FAILURE(*status)) {
     return NULL;
+  }
 
   result = (UCollationElements *)uprv_malloc(sizeof(UCollationElements));
 
   result->collator_ = coll;
   
   /* gets the correct length of the null-terminated string */
-  if (textLength == -1)
+  if (textLength == -1) {
     textLength = u_strlen(text);
+  }
 
   result->length_ = textLength;
   result->reset_   = TRUE;
@@ -67,10 +69,13 @@ U_CAPI void
 ucol_closeElements(UCollationElements *elems)
 {
   collIterate *ci = &elems->iteratordata_;
-  if (ci->writableBuffer != ci->stackWritableBuffer)
+  if (ci->writableBuffer != ci->stackWritableBuffer) {
     uprv_free(ci->writableBuffer);
+  }
   if (elems->iteratordata_.isWritable && elems->iteratordata_.string != NULL)
+  {
     uprv_free(elems->iteratordata_.string);
+  }
   uprv_free(elems);
 }
 
@@ -84,8 +89,7 @@ ucol_reset(UCollationElements *elems)
   ci->CEpos       = ci->toReturn = ci->CEs;
   
   ci->isThai      = TRUE;
-  if (ci->stackWritableBuffer != ci->writableBuffer)
-  {
+  if (ci->stackWritableBuffer != ci->writableBuffer) {
     uprv_free(ci->writableBuffer);
     ci->writableBuffer = ci->stackWritableBuffer;
   }
@@ -96,14 +100,15 @@ ucol_next(UCollationElements *elems,
           UErrorCode         *status)
 {
   int32_t result;
-  if (U_FAILURE(*status)) 
+  if (U_FAILURE(*status)) {
     return UCOL_NULLORDER;
+  }
 
   elems->reset_ = FALSE;
   
   UCOL_GETNEXTCE(result, elems->collator_, elems->iteratordata_, status);
 
-  /* testing
+#ifdef UCOL_DEBUG
   if ((elems->iteratordata_).CEpos > (elems->iteratordata_).toReturn) 
     {                       
       result = *((elems->iteratordata_).toReturn++);                                      
@@ -130,10 +135,11 @@ ucol_next(UCollationElements *elems,
       } 
       else
         (result) = UCOL_NO_MORE_CES;
-  */
+#endif
   
-  if (result == UCOL_NO_MORE_CES)
+  if (result == UCOL_NO_MORE_CES) {
     result = UCOL_NULLORDER;
+  }
   return result;
 }
 
@@ -141,8 +147,9 @@ U_CAPI int32_t
 ucol_previous(UCollationElements *elems,
               UErrorCode         *status)
 {
-  if(U_FAILURE(*status)) 
+  if(U_FAILURE(*status)) {
     return UCOL_NULLORDER;
+  }
   else
   {
     int32_t result;
@@ -156,8 +163,7 @@ ucol_previous(UCollationElements *elems,
     UCOL_GETPREVCE(result, elems->collator_, elems->iteratordata_, 
                    elems->length_, status);
 
-    /* synwee : to be removed, only for testing 
-    
+#ifdef UCOL_DEBUG
     const UCollator   *coll  = elems->collator_;
           collIterate *data  = &(elems->iteratordata_);
           int32_t     length = elems->length_;
@@ -191,10 +197,11 @@ ucol_previous(UCollationElements *elems,
         }                                                                      
       }                                                                        
     } 
-    */
+#endif
     
-    if (result == UCOL_NO_MORE_CES)
+    if (result == UCOL_NO_MORE_CES) {
       result = UCOL_NULLORDER;
+    }
 
     return result;
   }
@@ -215,17 +222,22 @@ ucol_setText(      UCollationElements *elems,
                    int32_t            textLength,
                    UErrorCode         *status)
 {
-  if (U_FAILURE(*status)) 
+  if (U_FAILURE(*status)) {
     return;
+  }
   
   /* gets the correct length of the null-terminated string */
-  if (textLength == -1)
+  if (textLength == -1) {
     textLength = u_strlen(text);
+  }
 
   elems->length_ = textLength;
 
   if (elems->iteratordata_.isWritable && elems->iteratordata_.string != NULL)
+  {
     uprv_free(elems->iteratordata_.string);
+  }
+
   init_collIterate(text, textLength, &elems->iteratordata_, FALSE);
 
   elems->reset_   = TRUE;
@@ -235,8 +247,9 @@ U_CAPI UTextOffset
 ucol_getOffset(const UCollationElements *elems)
 {
   const collIterate *ci = &(elems->iteratordata_);
-  if (ci->isThai == TRUE)
+  if (ci->isThai == TRUE) {
     return ci->pos - ci->string;
+  }
 
   return ci->pos - ci->writableBuffer;
 }
@@ -246,8 +259,9 @@ ucol_setOffset(UCollationElements    *elems,
                UTextOffset           offset,
                UErrorCode            *status)
 {
-  if (U_FAILURE(*status)) 
+  if (U_FAILURE(*status)) {
     return;
+  }
 
   collIterate *ci = &(elems->iteratordata_);
   ci->pos         = ci->string + offset;
