@@ -6,13 +6,14 @@
 // *******************************************************************************
 
 en_IN {
+    Version{"1.0"}
     AmPmMarkers { 
             "AM",
             "PM",
     }
     CurrencyElements { 
             "\u20a8",
-            "INR ",
+            "INR",
             ".",
     }
     DateTimePatterns { 
