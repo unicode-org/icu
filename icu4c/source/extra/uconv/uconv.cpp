@@ -67,7 +67,7 @@ static void initMsg(const char *pname) {
 
         /* Set up our static data - if any */
 #ifdef UCONVMSG_STATIC
-        udata_setAppData( "uconvmsg", (const void*) uconvmsg_dat, &err);
+        udata_setAppData(UCONVMSG, (const void*) uconvmsg_dat, &err);
         if (U_FAILURE(err)) {
           fprintf(stderr, "%s: warning, problem installing our static resource bundle data uconvmsg: %s - trying anyways.\n",
                   pname, u_errorName(err));
@@ -75,11 +75,13 @@ static void initMsg(const char *pname) {
         }
 #endif
 
-
         /* Get messages. */
         gBundle = u_wmsg_setPath(UCONVMSG, &err);
         if (U_FAILURE(err)) {
-            fprintf(stderr, "%s: warning err %s on first open\n", pname, u_errorName(err));
+            fprintf(stderr,
+                    "%s: warning: couldn't open bundle %s: %s\n",
+                    pname, UCONVMSG, u_errorName(err));
+ 
             err = U_ZERO_ERROR;
             /* that was try #1, try again with a path */
             strcpy(dataPath, u_getDataDirectory());
@@ -88,8 +90,9 @@ static void initMsg(const char *pname) {
             gBundle = u_wmsg_setPath(dataPath, &err);
             if (U_FAILURE(err)) {
                 fprintf(stderr,
-                    "%s: warning: couldn't open resource bundle %s: %s\n",
+                    "%s: warning: couldn't open bundle %s: %s\n",
                     pname, dataPath, u_errorName(err));
+				fprintf(stderr, "%s: warning: messages will not be displayed\n", pname);
             }
         }
     }
@@ -203,7 +206,7 @@ static int printConverters(const char *pname, const char *lookfor,
     num = ucnv_countAvailable();
     if (num <= 0) {
         initMsg(pname);
-        u_wmsg("cantGetNames");
+        u_wmsg(stderr, "cantGetNames");
         return -1;
     }
     if (lookfor) {
@@ -213,7 +216,7 @@ static int printConverters(const char *pname, const char *lookfor,
     num_stds = ucnv_countStandards();
     stds = (const char **) uprv_malloc(num_stds * sizeof(*stds));
     if (!stds) {
-        u_wmsg("cantGetTag", u_wmsg_errorName(U_MEMORY_ALLOCATION_ERROR));
+        u_wmsg(stderr, "cantGetTag", u_wmsg_errorName(U_MEMORY_ALLOCATION_ERROR));
         return -1;
     } else {
         uint16_t s;
@@ -221,7 +224,7 @@ static int printConverters(const char *pname, const char *lookfor,
         for (s = 0; s < num_stds; ++s) {
             stds[s] = ucnv_getStandard(s, &err);
             if (U_FAILURE(err)) {
-                u_wmsg("cantGetTag", u_wmsg_errorName(err));
+                u_wmsg(stderr, "cantGetTag", u_wmsg_errorName(err));
                 return -1;
             }
         }
@@ -249,7 +252,7 @@ static int printConverters(const char *pname, const char *lookfor,
 
             UnicodeString str(name, strlen(name) + 1);
             putchar('\t');
-            u_wmsg("cantGetAliases", str.getBuffer(),
+            u_wmsg(stderr, "cantGetAliases", str.getBuffer(),
                 u_wmsg_errorName(err));
             return -1;
         } else {
@@ -263,7 +266,7 @@ static int printConverters(const char *pname, const char *lookfor,
                 if (U_FAILURE(err)) {
                     UnicodeString str(name, strlen(name) + 1);
                     putchar('\t');
-                    u_wmsg("cantGetAliases", str.getBuffer(),
+                    u_wmsg(stderr, "cantGetAliases", str.getBuffer(),
                         u_wmsg_errorName(err));
                     return -1;
                 }
@@ -382,7 +385,7 @@ static int printTransliterators(int canon)
 
 static inline int32_t dataOffset(const int32_t * fromoffsets,
     int32_t whereto, const int32_t * tooffsets) {
-    return fromoffsets[tooffsets[whereto]];
+    return whereto >= 0 ? fromoffsets[tooffsets[whereto]] : 0;
 }
 
 // Convert a file from one encoding to another
@@ -427,9 +430,11 @@ static UBool convertFile(const char *pname,
         infile = fopen(infilestr, "rb");
         if (infile == 0) {
             UnicodeString str1(infilestr, "");
+			str1.append((UChar32) 0);
             UnicodeString str2(strerror(errno), "");
+			str2.append((UChar32) 0);
             initMsg(pname);
-            u_wmsg("cantOpenInputF", str1.getBuffer(), str2.getBuffer());
+            u_wmsg(stderr, "cantOpenInputF", str1.getBuffer(), str2.getBuffer());
             return FALSE;
         }
     } else {
@@ -437,7 +442,8 @@ static UBool convertFile(const char *pname,
         infile = stdin;
 #ifdef WIN32
         if (setmode(fileno(stdin), O_BINARY) == -1) {
-            perror("Cannot set stdin to binary mode");
+			initMsg(pname);
+			u_wmsg(stderr, "cantSetInBinMode");
             return FALSE;
         }
 #endif
@@ -464,20 +470,20 @@ static UBool convertFile(const char *pname,
         }
 
         if (U_FAILURE(err)) {
+		    str.append((UChar32) 0);
+			initMsg(pname);
+
             if (parse.line >= 0) {
-                UChar buf[20];
-                pestr.append(", line ");
-                uprv_itou(buf, parse.line, 10, 0);
-                pestr.append(buf);
-                pestr.append(", offset ");
-                uprv_itou(buf, parse.offset, 10, 0);
-                pestr.append(buf);
-            }
-            str.append((UChar32) 0);
-            pestr.append((UChar32) 0);
-            initMsg(pname);
-            u_wmsg("cantCreateTranslit", str.getBuffer(),
-                u_wmsg_errorName(err), pestr.getBuffer());
+                UChar linebuf[20], offsetbuf[20];
+                uprv_itou(linebuf, parse.line, 10, 0);
+                uprv_itou(offsetbuf, parse.offset, 10, 0);
+                u_wmsg(stderr, "cantCreateTranslitParseErr", str.getBuffer(),
+                    u_wmsg_errorName(err), linebuf, offsetbuf);
+            } else {
+                u_wmsg(stderr, "cantCreateTranslit", str.getBuffer(),
+                    u_wmsg_errorName(err));
+			}
+
             if (t) {
                 delete t;
                 t = 0;
@@ -494,14 +500,14 @@ static UBool convertFile(const char *pname,
     if (U_FAILURE(err)) {
         UnicodeString str(fromcpage, strlen(fromcpage) + 1);
         initMsg(pname);
-        u_wmsg("cantOpenFromCodeset", str.getBuffer(),
+        u_wmsg(stderr, "cantOpenFromCodeset", str.getBuffer(),
             u_wmsg_errorName(err));
         goto error_exit;
     }
     ucnv_setToUCallBack(convfrom, toucallback, touctxt, 0, 0, &err);
     if (U_FAILURE(err)) {
         initMsg(pname);
-        u_wmsg("cantSetCallback", u_wmsg_errorName(err));
+        u_wmsg(stderr, "cantSetCallback", u_wmsg_errorName(err));
         goto error_exit;
     }
 
@@ -509,14 +515,14 @@ static UBool convertFile(const char *pname,
     if (U_FAILURE(err)) {
         UnicodeString str(tocpage, strlen(tocpage) + 1);
         initMsg(pname);
-        u_wmsg("cantOpenToCodeset", str.getBuffer(),
+        u_wmsg(stderr, "cantOpenToCodeset", str.getBuffer(),
             u_wmsg_errorName(err));
         goto error_exit;
     }
     ucnv_setFromUCallBack(convto, fromucallback, fromuctxt, 0, 0, &err);
     if (U_FAILURE(err)) {
         initMsg(pname);
-        u_wmsg("cantSetCallback", u_wmsg_errorName(err));
+        u_wmsg(stderr, "cantSetCallback", u_wmsg_errorName(err));
         goto error_exit;
     }
     ucnv_setFallback(convto, fallback);
@@ -543,7 +549,7 @@ static UBool convertFile(const char *pname,
             UnicodeString str(strerror(errno));
             str.append((UChar32) 0);
             initMsg(pname);
-            u_wmsg("cantRead", str.getBuffer());
+            u_wmsg(stderr, "cantRead", str.getBuffer());
             goto error_exit;
         }
 
@@ -571,7 +577,7 @@ static UBool convertFile(const char *pname,
             sprintf(pos, "%u", infoffset - 1);
             UnicodeString str(pos, strlen(pos) + 1);
             initMsg(pname);
-            u_wmsg("problemCvtToU", str.getBuffer(), u_wmsg_errorName(err));
+            u_wmsg(stderr, "problemCvtToU", str.getBuffer(), u_wmsg_errorName(err));
             willexit = 1;
         }
 
@@ -583,7 +589,7 @@ static UBool convertFile(const char *pname,
             sprintf(pos, "%u", infoffset);
             UnicodeString str(pos, strlen(pos) + 1);
             initMsg(pname);
-            u_wmsg("premEndInput", str.getBuffer());
+            u_wmsg(stderr, "premEndInput", str.getBuffer());
             willexit = 1;
         }
 
@@ -627,7 +633,7 @@ static UBool convertFile(const char *pname,
                 char pos[32];
 
                 uint32_t erroffset =
-                    dataOffset(fromoffsets, bufp - buf, tooffsets);
+                    dataOffset(fromoffsets, bufp - buf - 1, tooffsets);
                 int32_t ferroffset = infoffset - (unibufp - unibufu) + erroffset;
 
                 if ((int32_t) ferroffset < 0) {
@@ -639,7 +645,7 @@ static UBool convertFile(const char *pname,
                 sprintf(pos, "%u", ferroffset);
                 UnicodeString str(pos, strlen(pos) + 1);
                 initMsg(pname);
-                u_wmsg(errtag, str.getBuffer(),
+                u_wmsg(stderr, errtag, str.getBuffer(),
                        u_wmsg_errorName(err));
                 willexit = 1;
             }
@@ -651,7 +657,7 @@ static UBool convertFile(const char *pname,
                 sprintf(pos, "%u", infoffset);
                 UnicodeString str(pos, strlen(pos) + 1);
                 initMsg(pname);
-                u_wmsg("premEnd", str.getBuffer());
+                u_wmsg(stderr, "premEnd", str.getBuffer());
                 willexit = 1;
             }
 
@@ -663,7 +669,7 @@ static UBool convertFile(const char *pname,
             if (wr != rd) {
                 UnicodeString str(strerror(errno), "");
                 initMsg(pname);
-                u_wmsg("cantWrite", str.getBuffer());
+                u_wmsg(stderr, "cantWrite", str.getBuffer());
                 willexit = 1;
             }
 
@@ -705,6 +711,8 @@ static void usage(const char *pname, int ecode) {
     const UChar *msg;
     int32_t msgLen;
     UErrorCode err = U_ZERO_ERROR;
+	FILE *fp = ecode ? stderr : stdout;
+    int res;
 
     initMsg(pname);
     msg =
@@ -713,19 +721,21 @@ static void usage(const char *pname, int ecode) {
     UnicodeString upname(pname, strlen(pname) + 1);
     UnicodeString mname(msg, msgLen + 1);
 
-    u_wmsg("usage", mname.getBuffer(), upname.getBuffer());
+    res = u_wmsg(fp, "usage", mname.getBuffer(), upname.getBuffer());
     if (!ecode) {
-        fputc('\n', stderr);
-        u_wmsg("help");
+        if (!res) {
+			fputc('\n', fp);
+		}
+        if (!u_wmsg(fp, "help")) {
+            /* Now dump callbacks and finish. */
 
-        /* Now dump callbacks and finish. */
-
-        int i, count =
-            sizeof(transcode_callbacks) / sizeof(*transcode_callbacks);
-        for (i = 0; i < count; ++i) {
-            fprintf(stderr, " %s", transcode_callbacks[i].name);
-        }
-        fputc('\n', stderr);
+            int i, count =
+                sizeof(transcode_callbacks) / sizeof(*transcode_callbacks);
+            for (i = 0; i < count; ++i) {
+                fprintf(fp, " %s", transcode_callbacks[i].name);
+			}
+            fputc('\n', fp);
+		}
     }
 
     exit(ecode);
@@ -806,7 +816,7 @@ int main(int argc, char **argv)
                     initMsg(pname);
                     UnicodeString str(*iter);
                     initMsg(pname);
-                    u_wmsg("badBlockSize", str.getBuffer());
+                    u_wmsg(stderr, "badBlockSize", str.getBuffer());
                     return 3;
                 }
             } else {
@@ -834,7 +844,7 @@ int main(int argc, char **argv)
                 if (U_FAILURE(e) || !printName) {
                     UnicodeString str(*iter);
                     initMsg(pname);
-                    u_wmsg("noSuchCodeset", str.getBuffer());
+                    u_wmsg(stderr, "noSuchCodeset", str.getBuffer());
                     return 2;
                 }
             } else
@@ -862,7 +872,7 @@ int main(int argc, char **argv)
                 } else {
                     UnicodeString str(*iter);
                     initMsg(pname);
-                    u_wmsg("unknownCallback", str.getBuffer());
+                    u_wmsg(stderr, "unknownCallback", str.getBuffer());
                     return 4;
                 }
             } else {
@@ -878,7 +888,7 @@ int main(int argc, char **argv)
                 } else {
                     UnicodeString str(*iter);
                     initMsg(pname);
-                    u_wmsg("unknownCallback", str.getBuffer());
+                    u_wmsg(stderr, "unknownCallback", str.getBuffer());
                     return 4;
                 }
             } else {
@@ -898,7 +908,7 @@ int main(int argc, char **argv)
                 } else {
                     UnicodeString str(*iter);
                     initMsg(pname);
-                    u_wmsg("unknownCallback", str.getBuffer());
+                    u_wmsg(stderr, "unknownCallback", str.getBuffer());
                     return 4;
                 }
             } else {
@@ -943,7 +953,7 @@ int main(int argc, char **argv)
             UnicodeString str1(outfilestr, "");
             UnicodeString str2(strerror(errno), "");
             initMsg(pname);
-            u_wmsg("cantCreateOutputF",
+            u_wmsg(stderr, "cantCreateOutputF",
                 str1.getBuffer(), str2.getBuffer());
             return 1;
         }
@@ -952,7 +962,7 @@ int main(int argc, char **argv)
         outfile = stdout;
 #ifdef WIN32
         if (setmode(fileno(outfile), O_BINARY) == -1) {
-            perror("Cannot set output file to binary mode");
+            u_wmsg(stderr, "cantSetOutBinMode");
             exit(-1);
         }
 #endif
