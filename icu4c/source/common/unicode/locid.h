@@ -681,12 +681,12 @@ private:
 #ifdef ICU_LOCID_USE_DEPRECATES
     static Locale fgDefaultLocale;
 #else
-    friend LocaleProxy;
+    friend struct LocaleProxy;
 #endif
 
     static const Locale &getLocale(int locid);
 
-    friend  void locale_set_default_internal(const char *);
+    friend static void locale_set_default_internal(const char *);
 };
 
 inline UBool
