@@ -15,6 +15,7 @@
 *   11/06/98    stephen     Modified per code review.
 *   03/12/99    stephen     Modified for new C API.
 *   07/19/99    stephen     Minor doc update.
+*   02/01/01    george      Added sprintf & sscanf with all of its variants
 *******************************************************************************
 */
 
@@ -26,6 +27,24 @@
 
 #include "unicode/utypes.h"
 #include "unicode/ucnv.h"
+
+/*
+ The following is a small list as to what is currently wrong/suggestions for
+ ustdio.
+
+ * The const char* format specification should use unescape
+ * %D and %T printf uses the current timezone, but the scanf version uses GMT.
+ * %p should be deprecated. Pointers are 2-16 bytes big and scanf should
+    really read them.
+ * The format specification should use int32_t and ICU variants instead of
+    compiler dependent int.
+ * We should consider using Microsoft's wprintf and wscanf format
+    specification.
+ * + in printf format specification is incomplete.
+ * e and g should lowercase the scientific notation.
+ * E and F should uppercase the scientific notation.
+ * More testing is needed.
+*/
 
 
 #define U_EOF 0xFFFF
@@ -51,6 +70,7 @@ typedef struct UFILE UFILE;
  * read using the default codepage for <TT>locale</TT>, unless <TT>locale</TT>
  * is NULL, in which case the system default codepage will be used.
  * @return A new UFILE, or 0 if an error occurred.
+ * @draft
  */
 U_CAPI UFILE* U_EXPORT2
 u_fopen(const char    *filename,
@@ -69,6 +89,7 @@ u_fopen(const char    *filename,
  * read using the default codepage for <TT>locale</TT>, unless <TT>locale</TT>
  * is NULL, in which case the system default codepage will be used.
  * @return A new UFILE, or 0 if an error occurred.
+ * @draft
  */
 U_CAPI UFILE* U_EXPORT2
 u_finit(FILE        *f,
@@ -78,6 +99,7 @@ u_finit(FILE        *f,
 /**
  * Close a UFILE.
  * @param file The UFILE to close.
+ * @draft
  */
 U_CAPI void U_EXPORT2
 u_fclose(UFILE *file);
@@ -86,6 +108,7 @@ u_fclose(UFILE *file);
  * Get the FILE* associated with a UFILE.
  * @param f The UFILE
  * @return A FILE*, owned by the UFILE.  The FILE <EM>must not</EM> be closed.
+ * @draft
  */
 U_CAPI FILE* U_EXPORT2
 u_fgetfile(UFILE *f);
@@ -96,6 +119,7 @@ u_fgetfile(UFILE *f);
  * or <TT>u_fopen</TT>.
  * @param file The UFILE to set.
  * @return The locale whose conventions are used to format and parse output.
+ * @draft
  */
 U_CAPI const char* U_EXPORT2
 u_fgetlocale(UFILE *file);
@@ -106,6 +130,7 @@ u_fgetlocale(UFILE *file);
  * and parse output.
  * @param file The UFILE to query.
  * @return 0 if successful, otherwise a negative number.
+ * @draft
  */
 U_CAPI int32_t U_EXPORT2
 u_fsetlocale(const char        *locale,
@@ -118,6 +143,7 @@ u_fsetlocale(const char        *locale,
  * @param file The UFILE to query.
  * @return The codepage in which data is written to and read from the UFILE,
  * or 0 if an error occurred.
+ * @draft
  */
 U_CAPI const char* U_EXPORT2
 u_fgetcodepage(UFILE *file);
@@ -132,6 +158,7 @@ u_fgetcodepage(UFILE *file);
  * locale will be used.
  * @param file The UFILE to set.
  * @return 0 if successful, otherwise a negative number.
+ * @draft
  */
 U_CAPI int32_t U_EXPORT2
 u_fsetcodepage(const char    *codepage,
@@ -142,6 +169,7 @@ u_fsetcodepage(const char    *codepage,
  * Returns an alias to the converter being used for this file.
  * @param file The UFILE to set.
  * @return alias to the converter
+ * @draft
  */
 U_CAPI UConverter U_EXPORT2 *u_fgetConverter(UFILE *f);
 
@@ -153,6 +181,7 @@ U_CAPI UConverter U_EXPORT2 *u_fgetConverter(UFILE *f);
  * @param patternSpecification A pattern specifying how <TT>u_fprintf</TT> will
  * interpret the variable arguments received and format the data.
  * @return The number of Unicode characters written to <TT>f</TT>.
+ * @draft
  */
 U_CAPI int32_t U_EXPORT2
 u_fprintf(    UFILE        *f,
@@ -169,6 +198,7 @@ u_fprintf(    UFILE        *f,
  * @param ap The argument list to use.
  * @return The number of Unicode characters written to <TT>f</TT>.
  * @see u_fprintf
+ * @draft
  */
 U_CAPI int32_t U_EXPORT2
 u_vfprintf(    UFILE        *f,
@@ -181,6 +211,7 @@ u_vfprintf(    UFILE        *f,
  * @param patternSpecification A pattern specifying how <TT>u_fprintf</TT> will
  * interpret the variable arguments received and format the data.
  * @return The number of Unicode characters written to <TT>f</TT>.
+ * @draft
  */
 U_CAPI int32_t U_EXPORT2
 u_fprintf_u(    UFILE        *f,
@@ -197,6 +228,7 @@ u_fprintf_u(    UFILE        *f,
  * @param ap The argument list to use.
  * @return The number of Unicode characters written to <TT>f</TT>.
  * @see u_fprintf_u
+ * @draft
  */
 U_CAPI int32_t U_EXPORT2
 u_vfprintf_u(    UFILE        *f,
@@ -210,6 +242,7 @@ u_vfprintf_u(    UFILE        *f,
  * @param s The UChar* to write.
  * @param f The UFILE to which to write.
  * @return A non-negative number if successful, EOF otherwise.
+ * @draft
  */
 U_CAPI int32_t U_EXPORT2
 u_fputs(const UChar    *s,
@@ -220,6 +253,7 @@ u_fputs(const UChar    *s,
  * @param uc The UChar to write.
  * @param f The UFILE to which to write.
  * @return The character written if successful, EOF otherwise.
+ * @draft
  */
 U_CAPI int32_t U_EXPORT2
 u_fputc(UChar        uc,
@@ -233,6 +267,7 @@ u_fputc(UChar        uc,
  * @param count The number of Unicode characters to write
  * @param f The UFILE to which to write.
  * @return The number of Unicode characters written.
+ * @draft
  */
 U_CAPI int32_t U_EXPORT2
 u_file_write(const UChar     *chars, 
@@ -249,6 +284,7 @@ u_file_write(const UChar     *chars,
  * interpret the variable arguments received and parse the data.
  * @return The number of items successfully converted and assigned, or EOF
  * if an error occurred.
+ * @draft
  */
 U_CAPI int32_t U_EXPORT2
 u_fscanf(    UFILE        *f,
@@ -266,6 +302,7 @@ u_fscanf(    UFILE        *f,
  * @return The number of items successfully converted and assigned, or EOF
  * if an error occurred.
  * @see u_fscanf
+ * @draft
  */
 U_CAPI int32_t U_EXPORT2
 u_vfscanf(    UFILE        *f,
@@ -279,6 +316,7 @@ u_vfscanf(    UFILE        *f,
  * interpret the variable arguments received and parse the data.
  * @return The number of items successfully converted and assigned, or EOF
  * if an error occurred.
+ * @draft
  */
 U_CAPI int32_t U_EXPORT2
 u_fscanf_u(    UFILE        *f,
@@ -296,6 +334,7 @@ u_fscanf_u(    UFILE        *f,
  * @return The number of items successfully converted and assigned, or EOF
  * if an error occurred.
  * @see u_fscanf_u
+ * @draft
  */
 U_CAPI int32_t U_EXPORT2
 u_vfscanf_u(    UFILE        *f,
@@ -310,6 +349,7 @@ u_vfscanf_u(    UFILE        *f,
  * stored successively in <TT>s</TT> until a newline or EOF is
  * reached. A NULL character (U+0000) will be appended to <TT>s</TT>.
  * @return A pointer to <TT>s</TT>, or 0 if no characters were available.
+ * @draft
  */
 U_CAPI UChar* U_EXPORT2
 u_fgets(UFILE        *f,
@@ -320,6 +360,7 @@ u_fgets(UFILE        *f,
  * Read a UChar from a UFILE.
  * @param f The UFILE from which to read.
  * @return The UChar value read, or U+FFFF if no character was available.
+ * @draft
  */
 U_CAPI UChar U_EXPORT2
 u_fgetc(UFILE        *f);
@@ -336,6 +377,7 @@ u_fgetc(UFILE        *f);
  * available, or U+FFFFFFFF if an ill-formed escape sequence was
  * encountered.
  * @see u_unescape()
+ * @draft
  */
 U_CAPI UChar32 U_EXPORT2
 u_fgetcx(UFILE        *f);
@@ -347,6 +389,7 @@ u_fgetcx(UFILE        *f);
  * @param c The UChar to put back on the stream.
  * @param f The UFILE to receive <TT>c</TT>.
  * @return The UChar value put back if successful, U+FFFF otherwise.
+ * @draft
  */
 U_CAPI UChar U_EXPORT2
 u_fungetc(UChar        c,
@@ -360,15 +403,294 @@ u_fungetc(UChar        c,
  * @param count The number of Unicode characters to read.
  * @param f The UFILE from which to read.
  * @return The number of Unicode characters read.
+ * @draft
  */
 U_CAPI int32_t U_EXPORT2
 u_file_read(UChar        *chars, 
         int32_t        count, 
         UFILE         *f);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Output string functions */
+
+
+/**
+ * Write formatted data to a Unicode string.
+ *
+ * @param buffer The Unicode String to which to write.
+ * @param locale The locale to use for formatting the numbers, dates and other
+ * locale specific information.
+ * @param patternSpecification A pattern specifying how <TT>u_sprintf</TT> will
+ * interpret the variable arguments received and format the data.
+ * @return The number of Unicode code units written to <TT>buffer</TT>. This
+ * does not include the terminating null character.
+ * @draft
+ */
+U_CAPI int32_t U_EXPORT2
+u_sprintf(UChar       *buffer,
+        const char    *locale,
+        const char    *patternSpecification,
+        ... );
+
+/**
+ * Write formatted data to a Unicode string. When the number of code units
+ * required to store the data exceeds <TT>count</TT>, then <TT>count</TT> code
+ * units of data are stored in <TT>buffer</TT> and a negative value is
+ * returned. When the number of code units required to store the data equals
+ * <TT>count</TT>, the string is not null terminated and <TT>count</TT> is
+ * returned.
+ *
+ * @param buffer The Unicode String to which to write.
+ * @param count The number of code units to read.
+ * @param locale The locale to use for formatting the numbers, dates and other
+ * locale specific information.
+ * @param patternSpecification A pattern specifying how <TT>u_sprintf</TT> will
+ * interpret the variable arguments received and format the data.
+ * @return The number of Unicode code units written to <TT>buffer</TT>. This
+ * does not include the terminating null character.
+ * @draft
+ */
+U_CAPI int32_t U_EXPORT2
+u_snprintf(UChar      *buffer,
+        int32_t       count,
+        const char    *locale,
+        const char    *patternSpecification,
+        ... );
+
+/**
+ * Write formatted data to a Unicode string.
+ * This is identical to <TT>u_sprintf</TT>, except that it will
+ * <EM>not</EM> call <TT>va_start/TT> and <TT>va_end</TT>.
+ *
+ * @param buffer The Unicode string to which to write.
+ * @param locale The locale to use for formatting the numbers, dates and other
+ * locale specific information.
+ * @param patternSpecification A pattern specifying how <TT>u_sprintf</TT> will
+ * interpret the variable arguments received and format the data.
+ * @param ap The argument list to use.
+ * @return The number of Unicode characters written to <TT>buffer</TT>.
+ * @see u_sprintf
+ * @draft
+ */
+U_CAPI int32_t U_EXPORT2
+u_vsprintf(UChar      *buffer,
+        const char    *locale,
+        const char    *patternSpecification,
+        va_list        ap);
+
+/**
+ * Write formatted data to a Unicode string.
+ * This is identical to <TT>u_snprintf</TT>, except that it will
+ * <EM>not</EM> call <TT>va_start/TT> and <TT>va_end</TT>.<br><br>
+ * When the number of code units required to store the data exceeds
+ * <TT>count</TT>, then <TT>count</TT> code units of data are stored in
+ * <TT>buffer</TT> and a negative value is returned. When the number of code
+ * units required to store the data equals <TT>count</TT>, the string is not
+ * null terminated and <TT>count</TT> is returned.
+ *
+ * @param buffer The Unicode string to which to write.
+ * @param count The number of code units to read.
+ * @param locale The locale to use for formatting the numbers, dates and other
+ * locale specific information.
+ * @param patternSpecification A pattern specifying how <TT>u_sprintf</TT> will
+ * interpret the variable arguments received and format the data.
+ * @param ap The argument list to use.
+ * @return The number of Unicode characters written to <TT>buffer</TT>.
+ * @see u_sprintf
+ * @draft
+ */
+U_CAPI int32_t U_EXPORT2
+u_vsnprintf(UChar     *buffer,
+        int32_t       count,
+        const char    *locale,
+        const char    *patternSpecification,
+        va_list        ap);
+
+/**
+ * Write formatted data to a Unicode string.
+ *
+ * @param buffer The Unicode string to which to write.
+ * @param locale The locale to use for formatting the numbers, dates and other
+ * locale specific information.
+ * @param patternSpecification A pattern specifying how <TT>u_sprintf</TT> will
+ * interpret the variable arguments received and format the data.
+ * @return The number of Unicode characters written to <TT>buffer</TT>.
+ * @draft
+ */
+U_CAPI int32_t U_EXPORT2
+u_sprintf_u(UChar      *buffer,
+        const UChar    *locale,
+        const UChar    *patternSpecification,
+        ... );
+
+/**
+ * Write formatted data to a Unicode string. When the number of code units
+ * required to store the data exceeds <TT>count</TT>, then <TT>count</TT> code
+ * units of data are stored in <TT>buffer</TT> and a negative value is
+ * returned. When the number of code units required to store the data equals
+ * <TT>count</TT>, the string is not null terminated and <TT>count</TT> is
+ * returned.
+ *
+ * @param buffer The Unicode string to which to write.
+ * @param count The number of code units to read.
+ * @param locale The locale to use for formatting the numbers, dates and other
+ * locale specific information.
+ * @param patternSpecification A pattern specifying how <TT>u_sprintf</TT> will
+ * interpret the variable arguments received and format the data.
+ * @return The number of Unicode characters written to <TT>buffer</TT>.
+ * @draft
+ */
+U_CAPI int32_t U_EXPORT2
+u_snprintf_u(UChar      *buffer,
+        int32_t       count,
+        const UChar    *locale,
+        const UChar    *patternSpecification,
+        ... );
+
+/**
+ * Write formatted data to a Unicode string.
+ * This is identical to <TT>u_sprintf_u</TT>, except that it will
+ * <EM>not</EM> call <TT>va_start/TT> and <TT>va_end</TT>.
+ *
+ * @param buffer The Unicode string to which to write.
+ * @param count The number of code units to read.
+ * @param locale The locale to use for formatting the numbers, dates and other
+ * locale specific information.
+ * @param patternSpecification A pattern specifying how <TT>u_sprintf</TT> will
+ * interpret the variable arguments received and format the data.
+ * @param ap The argument list to use.
+ * @return The number of Unicode characters written to <TT>f</TT>.
+ * @see u_sprintf_u
+ * @draft
+ */
+U_CAPI int32_t U_EXPORT2
+u_vsprintf_u(UChar     *buffer,
+        const UChar    *locale,
+        const UChar    *patternSpecification,
+        va_list        ap);
+
+/**
+ * Write formatted data to a Unicode string.
+ * This is identical to <TT>u_snprintf_u</TT>, except that it will
+ * <EM>not</EM> call <TT>va_start/TT> and <TT>va_end</TT>.
+ * When the number of code units required to store the data exceeds
+ * <TT>count</TT>, then <TT>count</TT> code units of data are stored in
+ * <TT>buffer</TT> and a negative value is returned. When the number of code
+ * units required to store the data equals <TT>count</TT>, the string is not
+ * null terminated and <TT>count</TT> is returned.
+ *
+ * @param buffer The Unicode string to which to write.
+ * @param locale The locale to use for formatting the numbers, dates and other
+ * locale specific information.
+ * @param patternSpecification A pattern specifying how <TT>u_sprintf</TT> will
+ * interpret the variable arguments received and format the data.
+ * @param ap The argument list to use.
+ * @return The number of Unicode characters written to <TT>f</TT>.
+ * @see u_sprintf_u
+ * @draft
+ */
+U_CAPI int32_t U_EXPORT2
+u_vsnprintf_u(UChar     *buffer,
+        int32_t       count,
+        const UChar    *locale,
+        const UChar    *patternSpecification,
+        va_list        ap);
+
+/* Input string functions */
+
+/**
+ * Read formatted data from a Unicode string.
+ *
+ * @param buffer The Unicode string from which to read.
+ * @param locale The locale to use for parsing the numbers, dates and other
+ * locale specific information.
+ * @param patternSpecification A pattern specifying how <TT>u_sscanf</TT> will
+ * interpret the variable arguments received and parse the data.
+ * @return The number of items successfully converted and assigned, or EOF
+ * if an error occurred.
+ * @draft
+ */
+U_CAPI int32_t U_EXPORT2
+u_sscanf(UChar         *buffer,
+        const char    *locale,
+        const char     *patternSpecification,
+        ... );
+
+/**
+ * Read formatted data from a Unicode string.
+ * This is identical to <TT>u_sscanf</TT>, except that it will
+ * <EM>not</EM> call <TT>va_start/TT> and <TT>va_end</TT>.
+ *
+ * @param buffer The Unicode string from which to read.
+ * @param locale The locale to use for parsing the numbers, dates and other
+ * locale specific information.
+ * @param patternSpecification A pattern specifying how <TT>u_sscanf</TT> will
+ * interpret the variable arguments received and parse the data.
+ * @param ap The argument list to use.
+ * @return The number of items successfully converted and assigned, or EOF
+ * if an error occurred.
+ * @see u_sscanf
+ * @draft
+ */
+U_CAPI int32_t U_EXPORT2
+u_vsscanf(UChar        *buffer,
+        const char    *locale,
+        const char     *patternSpecification,
+        va_list        ap);
+
+/**
+ * Read formatted data from a Unicode string.
+ *
+ * @param buffer The Unicode string from which to read.
+ * @param locale The locale to use for parsing the numbers, dates and other
+ * locale specific information.
+ * @param patternSpecification A pattern specifying how <TT>u_sscanf</TT> will
+ * interpret the variable arguments received and parse the data.
+ * @return The number of items successfully converted and assigned, or EOF
+ * if an error occurred.
+ * @draft
+ */
+U_CAPI int32_t U_EXPORT2
+u_sscanf_u(UChar        *buffer,
+        const UChar     *locale,
+        const UChar     *patternSpecification,
+        ... );
+
+/**
+ * Read formatted data from a Unicode string.
+ * This is identical to <TT>u_sscanf_u</TT>, except that it will
+ * <EM>not</EM> call <TT>va_start/TT> and <TT>va_end</TT>.
+ *
+ * @param buffer The UFILE from which to read.
+ * @param locale The locale to use for parsing the numbers, dates and other
+ * locale specific information.
+ * @param patternSpecification A pattern specifying how <TT>u_sscanf</TT> will
+ * interpret the variable arguments received and parse the data.
+ * @param ap The argument list to use.
+ * @return The number of items successfully converted and assigned, or EOF
+ * if an error occurred.
+ * @see u_sscanf_u
+ * @draft
+ */
+U_CAPI int32_t U_EXPORT2
+u_vsscanf_u(UChar       *buffer,
+        const UChar     *locale,
+        const UChar     *patternSpecification,
+        va_list         ap);
+
+
 #endif
-
-
-
 
 
