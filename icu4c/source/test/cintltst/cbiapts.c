@@ -604,20 +604,23 @@ static void TestBreakIteratorStatusVec() {
     TEST_ASSET_SUCCESS(status);
     TEST_ASSERT(bi != NULL);
 
-    pos = ubrk_next(bi);
-    TEST_ASSERT(pos == 1);
+    /* The TEST_ASSERT above should change too... */
+    if (bi != NULL) {
+        pos = ubrk_next(bi);
+        TEST_ASSERT(pos == 1);
 
-    memset(vals, -1, sizeof(vals));
-    numVals = ubrk_getRuleStatusVec(bi, vals, 10, &status);
-    TEST_ASSET_SUCCESS(status);
-    TEST_ASSERT(numVals == 2);
-    TEST_ASSERT(vals[0] == 100);
-    TEST_ASSERT(vals[1] == 300);
-    TEST_ASSERT(vals[2] == -1);
+        memset(vals, -1, sizeof(vals));
+        numVals = ubrk_getRuleStatusVec(bi, vals, 10, &status);
+        TEST_ASSET_SUCCESS(status);
+        TEST_ASSERT(numVals == 2);
+        TEST_ASSERT(vals[0] == 100);
+        TEST_ASSERT(vals[1] == 300);
+        TEST_ASSERT(vals[2] == -1);
 
-    numVals = ubrk_getRuleStatusVec(bi, vals, 0, &status);
-    TEST_ASSERT(status == U_BUFFER_OVERFLOW_ERROR);
-    TEST_ASSERT(numVals == 2);
+        numVals = ubrk_getRuleStatusVec(bi, vals, 0, &status);
+        TEST_ASSERT(status == U_BUFFER_OVERFLOW_ERROR);
+        TEST_ASSERT(numVals == 2);
+    }
 
     ubrk_close(bi);
 }
