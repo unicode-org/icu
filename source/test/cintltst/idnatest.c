@@ -549,20 +549,7 @@ testCompareWithSrc(const UChar* s1, int32_t s1Len,
     }
 }
 
-static UChar* 
-u_strcatChars(UChar     *dst, 
-              const char     *src)
-{
-    UChar *anchor = dst;            /* save a pointer to start of dst */
 
-    while(*dst != 0) {              /* To end of first string          */
-        ++dst;
-    }
-    while((*(dst++) = (UChar)*(src++)) != 0) {     /* copy string 2 over              */
-    }
-
-    return anchor;
-}
 static void 
 TestCompare(){
     int32_t i;
@@ -577,7 +564,8 @@ TestCompare(){
           uni0[MAX_DEST_SIZE]={0},
           uni1[MAX_DEST_SIZE]={0},
           ascii0[MAX_DEST_SIZE]={0},
-          ascii1[MAX_DEST_SIZE]={0};
+          ascii1[MAX_DEST_SIZE]={0},
+          temp[MAX_DEST_SIZE] ={0};
 
 
     u_strcat(uni0,unicodeIn[0]);
@@ -586,22 +574,33 @@ TestCompare(){
     u_strcat(uni1,unicodeIn[1]);
     u_strcat(uni1,com);
 
-    u_strcatChars(ascii0,asciiIn[0]);
+    u_charsToUChars(asciiIn[0], temp, strlen(asciiIn[0]));
+    u_strcat(ascii0,temp);
     u_strcat(ascii0,com);
+    
+    memset(temp, 0, U_SIZEOF_UCHAR * MAX_DEST_SIZE);
 
-    u_strcatChars(ascii1,asciiIn[1]);
+    u_charsToUChars(asciiIn[1], temp, strlen(asciiIn[1]));
+    u_strcat(ascii1,temp);
     u_strcat(ascii1,com);
-    u_strcat(source, buf);
+    
+    /* prepend www. */
+    u_strcat(source, www);
+
     for(i=0;i< (int32_t)(sizeof(unicodeIn)/sizeof(unicodeIn[0])); i++){
         UChar* src;
         int32_t srcLen;
+        
+        memset(buf+4, 0, (MAX_DEST_SIZE-4) * U_SIZEOF_UCHAR);
+        
         u_charsToUChars(asciiIn[i],buf+4, strlen(asciiIn[i]));
         u_strcat(buf,com);
+        
 
         /* for every entry in unicodeIn array
            prepend www. and append .com*/
         source[4]=0;
-        u_strcat(source,unicodeIn[i]);
+        u_strncat(source,unicodeIn[i], u_strlen(unicodeIn[i]));
         u_strcat(source,com);
 
         /* a) compare it with itself*/
@@ -611,7 +610,7 @@ TestCompare(){
         testCompareWithSrc(src,srcLen,src,srcLen,testName, func, TRUE);
         
         /* b) compare it with asciiIn equivalent */
-        /*testCompareWithSrc(src,srcLen,buf,u_strlen(buf),testName, func,TRUE);*/
+        testCompareWithSrc(src,srcLen,buf,u_strlen(buf),testName, func,TRUE);
         
         /* c) compare it with unicodeIn not equivalent*/
         if(i==0){
