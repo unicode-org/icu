@@ -1,5 +1,5 @@
 #
-# @(#)$RCSfile: makefile,v $ $Revision: 1.1 $ $Date: 2000/02/10 07:30:38 $
+# @(#)$RCSfile: makefile,v $ $Revision: 1.2 $ $Date: 2000/02/15 18:19:29 $
 # 
 
 TOPDIR=		..
@@ -28,6 +28,10 @@ javadoc: FORCE
 		-bottom "<font size=-1>Copyright &copy; 1998-2000 IBM Corporation.</font>" \
 	    com/ibm/text/*.java com/ibm/util/*.java
 
+
+# tests: 
+
+# demos:
 
 complete: classes javadoc
 
