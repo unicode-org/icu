@@ -1,4 +1,4 @@
-/*  
+/* 
 **********************************************************************
 *   Copyright (C) 2000, International Business Machines
 *   Corporation and others.  All Rights Reserved.
@@ -25,18 +25,12 @@
 
 /* ISO 8859-1 --------------------------------------------------------------- */
 
-static void  T_UConverter_toUnicode_LATIN_1 (UConverter * _this,
-                                      UChar ** target,
-                                      const UChar * targetLimit,
-                                      const char **source,
-                                      const char *sourceLimit,
-                                      int32_t *offsets,
-                                      UBool flush,
+static void  T_UConverter_toUnicode_LATIN_1 (UConverterToUnicodeArgs * args,
                                       UErrorCode * err)
 {
-  unsigned char *mySource = (unsigned char *) *source;
-  UChar *myTarget = *target;
-  int32_t sourceLength = sourceLimit - (char *) mySource;
+  unsigned char *mySource = (unsigned char *)  args->source;
+  UChar *myTarget = args->target;
+  int32_t sourceLength = args->sourceLimit - (char *) mySource;
   int32_t readLen = 0;
   int32_t i = 0;
 
@@ -46,45 +40,37 @@ static void  T_UConverter_toUnicode_LATIN_1 (UConverter * _this,
    *in case we don't have enough buffer space
    *we set the error flag accordingly
    */
-  if ((targetLimit - *target) < sourceLength)
+  if ((args->targetLimit - args->target) < sourceLength)
     {
-      readLen = targetLimit - *target;
+      readLen = args->targetLimit - args->target;
       *err = U_INDEX_OUTOFBOUNDS_ERROR;
     }
   else
     {
-      readLen = sourceLimit - (char *) mySource;
+      readLen = args->sourceLimit - (char *) mySource;
     }
 
   for (i = 0; i < readLen; i++) myTarget[i] = (UChar) mySource[i];
 
-  *target += i;
-  *source += i;
+  args->target += i;
+  args->source += i;
   return;
 }
 
-static void   T_UConverter_fromUnicode_LATIN_1 (UConverter * _this,
-                                         char **target,
-                                         const char *targetLimit,
-                                         const UChar ** source,
-                                         const UChar * sourceLimit,
-                                         int32_t *offsets,
-                                         UBool flush,
+static void   T_UConverter_fromUnicode_LATIN_1 (UConverterFromUnicodeArgs * args,
                                          UErrorCode * err)
 {
-  const UChar *mySource = *source;
-  unsigned char *myTarget = (unsigned char *) *target;
+  const UChar *mySource = args->source;
+  unsigned char *myTarget = (unsigned char *) args->target;
   int32_t mySourceIndex = 0;
   int32_t myTargetIndex = 0;
-  int32_t targetLength = targetLimit - (char *) myTarget;
-  int32_t sourceLength = sourceLimit - mySource;
-  UConverterFromUnicodeArgs args;
+  int32_t targetLength = args->targetLimit - (char *) myTarget;
+  int32_t sourceLength = args->sourceLimit - mySource;
   UConverterCallbackReason reason;
 
   /*writing the char to the output stream */
   while (mySourceIndex < sourceLength)
     {
-
       if (myTargetIndex < targetLength)
         {
           if (mySource[mySourceIndex] < 0x0100)
@@ -96,16 +82,16 @@ static void   T_UConverter_fromUnicode_LATIN_1 (UConverter * _this,
             {
               *err = U_INVALID_CHAR_FOUND;
               reason = UCNV_UNASSIGNED;
-              _this->invalidUCharBuffer[0] = (UChar)mySource[mySourceIndex];
-              _this->invalidUCharLength = 1;
+              args->converter->invalidUCharBuffer[0] = (UChar)mySource[mySourceIndex];
+              args->converter->invalidUCharLength = 1;
               if (UTF_IS_LEAD(mySource[mySourceIndex++]))
               {
                   if (mySourceIndex < sourceLength)
                   {
                       if (UTF_IS_TRAIL(mySource[mySourceIndex]))
                       {
-                          _this->invalidUCharBuffer[1] = (UChar)mySource[mySourceIndex];
-                          _this->invalidUCharLength++;
+                          args->converter->invalidUCharBuffer[1] = (UChar)mySource[mySourceIndex];
+                          args->converter->invalidUCharLength++;
                           mySourceIndex++;
                       }
                       else 
@@ -113,42 +99,47 @@ static void   T_UConverter_fromUnicode_LATIN_1 (UConverter * _this,
                           reason = UCNV_ILLEGAL;
                       }                          
                   }
-                  else if (flush == TRUE)
+                  else if (args->flush == TRUE)
                   {
                       reason = UCNV_ILLEGAL;
                       *err = U_TRUNCATED_CHAR_FOUND;
                   } 
                   else 
                   {
-                      _this->fromUSurrogateLead = _this->invalidUCharBuffer[0];
+                      args->converter->fromUSurrogateLead = args->converter->invalidUCharBuffer[0];
                       /* do not call the callback */
                   }
               }
-              if (_this->fromUSurrogateLead == 0) 
+              if (args->converter->fromUSurrogateLead == 0) 
               {
                   int32_t currentOffset = myTargetIndex;
+                  const UChar *saveSource = args->source;
+                  char *saveTarget = args->target;
+                  int32_t *saveOffset = args->offsets;
+                  
     /* Needed explicit cast for myTarget on MVS to make compiler happy - JJD */
-                  args.converter = _this;
-                  args.target = (char*)myTarget + myTargetIndex;;
-                  args.targetLimit = targetLimit;
-                  args.source = mySource + mySourceIndex;
-                  args.sourceLimit = sourceLimit;
-                  args.flush = flush;
-                  args.offsets = offsets;
-                  args.size = sizeof(args);
+                  
+                  args->target = (char*)myTarget + myTargetIndex;;
+                  args->source = mySource + mySourceIndex;                  
 
-                  FromU_CALLBACK_MACRO(args.converter->fromUContext,
+                  FromU_CALLBACK_MACRO(args->converter->fromUContext,
                                      args,
-                                     _this->invalidUCharBuffer,
-                                     _this->invalidUCharLength,
-                                     (UChar32) (_this->invalidUCharLength == 2 ? 
-                                         UTF16_GET_PAIR_VALUE(_this->invalidUCharBuffer[0], 
-                                                              _this->invalidUCharBuffer[2]) 
-                                                : _this->invalidUCharBuffer[0]),
+                                     args->converter->invalidUCharBuffer,
+                                     args->converter->invalidUCharLength,
+                                     (UChar32) (args->converter->invalidUCharLength == 2 ? 
+                                         UTF16_GET_PAIR_VALUE(args->converter->invalidUCharBuffer[0], 
+                                                              args->converter->invalidUCharBuffer[2]) 
+                                                : args->converter->invalidUCharBuffer[0]),
                                      reason,
                                      err);
-                  if (U_FAILURE (*err)) break;
-                  _this->invalidUCharLength = 0;
+                  args->source = saveSource;
+                  args->target = saveTarget;
+                  args->offsets = saveOffset;
+                  if (U_FAILURE (*err)) 
+                  {
+                      break;
+                  }
+                  args->converter->invalidUCharLength = 0;
               }
             }
         }
@@ -159,16 +150,14 @@ static void   T_UConverter_fromUnicode_LATIN_1 (UConverter * _this,
         }
     }
 
-  *target += myTargetIndex;
-  *source += mySourceIndex;;
+  args->target += myTargetIndex;
+  args->source += mySourceIndex;;
 
   return;
 }
 
-static UChar32 T_UConverter_getNextUChar_LATIN_1(UConverter* converter,
-                                                  const char** source,
-                                                  const char* sourceLimit,
-                                                  UErrorCode* err)
+static UChar32 T_UConverter_getNextUChar_LATIN_1(UConverterToUnicodeArgs* args,
+                                                UErrorCode* err)
 {
   
   /* Empties the internal buffers if need be
@@ -176,14 +165,14 @@ static UChar32 T_UConverter_getNextUChar_LATIN_1(UConverter* converter,
    * (LATIN_1 is a subset of Unicode)
    */
   
-  if ((*source)+1 > sourceLimit) 
+  if (args->source+1 > args->sourceLimit) 
     {
       *err = U_INDEX_OUTOFBOUNDS_ERROR;
       return 0xFFFD;
     }
 
   /* make sure that we zero-extend, not sign-extend, the byte */
-  return  (UChar)(uint8_t)*((*source)++);
+  return  (UChar)(uint8_t)*(args->source++);
 }
 
 static const UConverterImpl _Latin1Impl={

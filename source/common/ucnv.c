@@ -444,6 +444,7 @@ void   ucnv_fromUnicode (UConverter * _this,
 			 UBool flush,
 			 UErrorCode * err)
 {
+  UConverterFromUnicodeArgs args;
   /*
    * Check parameters in for all conversions
    */
@@ -473,16 +474,19 @@ void   ucnv_fromUnicode (UConverter * _this,
       if (U_FAILURE (*err)) return;
     }
 
+  args.converter = _this;
+  args.flush = flush;
+  args.offsets = offsets;
+  args.source = *source;
+  args.sourceLimit = sourceLimit;
+  args.target = *target;
+  args.targetLimit = targetLimit;
+  args.size = sizeof(args);
   if (offsets) {
     if (_this->sharedData->impl->fromUnicodeWithOffsets != NULL) {
-	   _this->sharedData->impl->fromUnicodeWithOffsets(_this,
-								   target,
-								   targetLimit,
-								   source,
-								   sourceLimit,
-								   offsets,
-								   flush,
-								   err);
+	   _this->sharedData->impl->fromUnicodeWithOffsets(&args, err);
+       *source = args.source;
+       *target = args.target;
        return;
     } else {
       /* all code points are of the same length */
@@ -491,18 +495,18 @@ void   ucnv_fromUnicode (UConverter * _this,
 
       if(bytesPerChar == 1) {
         for (i=0; i<targetSize; i++) {
-          offsets[i] = i;
+          args.offsets[i] = i;
         }
       } else if(bytesPerChar == 2) {
         for (i=0; i<targetSize; i++) {
-          offsets[i] = i>>1;
+          args.offsets[i] = i>>1;
         }
       } else {
         int32_t j = 0, k = bytesPerChar;
 
         for (i=0; i<targetSize; i++) {
           /* offsets[i] = i/bytesPerChar; -- without division */
-          offsets[i] = j;
+          args.offsets[i] = j;
           if(--k == 0) {
             k = bytesPerChar;
             ++j;
@@ -513,15 +517,9 @@ void   ucnv_fromUnicode (UConverter * _this,
   }
 
   /*calls the specific conversion routines */
-  _this->sharedData->impl->fromUnicode(_this,
-					   target,
-					   targetLimit,
-					   source,
-					   sourceLimit,
-					   offsets,
-					   flush,
-					   err);
-  
+  _this->sharedData->impl->fromUnicode(&args, err);
+  *source = args.source;
+  *target = args.target;
   return;
 }
 
@@ -536,6 +534,7 @@ void   ucnv_toUnicode (UConverter * _this,
 		       UBool flush,
 		       UErrorCode * err)
 {
+  UConverterToUnicodeArgs args;
   /*
    * Check parameters in for all conversions
    */
@@ -565,16 +564,19 @@ void   ucnv_toUnicode (UConverter * _this,
 	return;
     }
 
+  args.converter = _this;
+  args.flush = flush;
+  args.offsets = offsets;
+  args.source = (char *) *source;
+  args.sourceLimit = sourceLimit;
+  args.target =  *target;
+  args.targetLimit = targetLimit;
+  args.size = sizeof(args);
   if (offsets) {
     if (_this->sharedData->impl->toUnicodeWithOffsets != NULL) {
-	  _this->sharedData->impl->toUnicodeWithOffsets(_this,
-								target,
-								targetLimit,
-								source,
-								sourceLimit,
-								offsets,
-								flush,
-								err);
+	  _this->sharedData->impl->toUnicodeWithOffsets(&args, err);
+      *source = args.source;
+      *target = args.target;
 	  return;
     } else {
       /* all code points are of the same length */
@@ -598,16 +600,10 @@ void   ucnv_toUnicode (UConverter * _this,
   }
 
   /*calls the specific conversion routines */
-  _this->sharedData->impl->toUnicode(_this,
-					  target,
-					  targetLimit,
-					  source,
-					  sourceLimit,
-					  offsets,
-					  flush,
-					  err);
+  _this->sharedData->impl->toUnicode(&args, err); 
   
-  
+  *source = args.source;
+  *target = args.target;
   return;
 }
 
@@ -618,13 +614,12 @@ int32_t   ucnv_fromUChars (const UConverter * converter,
                int32_t sourceSize,
 			   UErrorCode * err)
 {
-  const UChar *mySource = source;
   const UChar *mySource_limit;
   int32_t mySourceLength = sourceSize;
   UConverter myConverter;
-  char *myTarget = target;
   char *myTarget_limit;
   int32_t targetCapacity = 0;
+  UConverterFromUnicodeArgs args;
 
   if (U_FAILURE (*err))
     return 0;
@@ -655,7 +650,7 @@ int32_t   ucnv_fromUChars (const UConverter * converter,
       return 0;
     }
 
-  mySource_limit = mySource + mySourceLength;
+  mySource_limit = source + mySourceLength;
   myTarget_limit = target + targetSize;
 
   /* Pin the limit to U_MAX_PTR.  NULL check is for AS/400. */
@@ -663,17 +658,20 @@ int32_t   ucnv_fromUChars (const UConverter * converter,
     myTarget_limit = (char *)U_MAX_PTR;
   }
 
+  args.converter = &myConverter;
+  args.flush = TRUE;
+  args.offsets = NULL;
+  args.source = source;
+  args.sourceLimit = mySource_limit;
+  args.target = target;
+  args.targetLimit = myTarget_limit;
+  args.size = sizeof(args);
   if (targetSize > 0)
     {
-      ucnv_fromUnicode (&myConverter,
-			&myTarget,
-			myTarget_limit,
-			&mySource,
-			mySource_limit,
-			NULL,
-			TRUE,
-			err);
-      targetCapacity = myTarget - target;
+      /*calls the specific conversion routines */
+      args.converter->sharedData->impl->fromUnicode(&args, err); 
+  
+      targetCapacity = args.target - target;
     }
 
   /*Updates targetCapacity to contain the number of bytes written to target */
@@ -689,7 +687,6 @@ int32_t   ucnv_fromUChars (const UConverter * converter,
   if (*err == U_INDEX_OUTOFBOUNDS_ERROR)
     {
       char target2[CHUNK_SIZE];
-      char *target2_alias = target2;
       const char *target2_limit = target2 + CHUNK_SIZE;
 
       /*We use a stack allocated buffer around which we loop
@@ -699,19 +696,12 @@ int32_t   ucnv_fromUChars (const UConverter * converter,
       while (*err == U_INDEX_OUTOFBOUNDS_ERROR)
 	{
 	  *err = U_ZERO_ERROR;
-	  target2_alias = target2;
-	  ucnv_fromUnicode (&myConverter,
-			    &target2_alias,
-			    target2_limit,
-			    &mySource,
-			    mySource_limit,
-			    NULL,
-			    TRUE,
-			    err);
+      args.target = target2;
+      args.targetLimit = target2_limit;
+      args.converter->sharedData->impl->fromUnicode(&args, err); 
 
-	  /*updates the output parameter to contain the number of char required */
-	  targetCapacity += (target2_alias - target2) + 1;
-	}
+      /*updates the output parameter to contain the number of char required */
+      targetCapacity += (args.target - target2) + 1;	}
       /*We will set the erro code to U_BUFFER_OVERFLOW_ERROR only if
        *nothing graver happened in the previous loop*/
       (targetCapacity)--;
@@ -729,12 +719,11 @@ int32_t ucnv_toUChars (const UConverter * converter,
 		       int32_t sourceSize,
 		       UErrorCode * err)
 {
-  const char *mySource = source;
   const char *mySource_limit = source + sourceSize;
   UConverter myConverter;
-  UChar *myTarget = target;
   UChar *myTarget_limit;
   int32_t targetCapacity;
+  UConverterToUnicodeArgs args;
 
   if (U_FAILURE (*err))
     return 0;
@@ -766,6 +755,13 @@ int32_t ucnv_toUChars (const UConverter * converter,
   /*Removes all state info on the UConverter */
   ucnv_reset (&myConverter);
 
+  args.converter = &myConverter;
+  args.flush = TRUE;
+  args.offsets = NULL;
+  args.source = source;
+  args.sourceLimit = mySource_limit;
+  args.target = target;
+  args.size = sizeof(args);
   if (targetSize > 0)
   {
       myTarget_limit = target + targetSize - 1;
@@ -777,24 +773,18 @@ int32_t ucnv_toUChars (const UConverter * converter,
 
       /*Not in pure pre-flight mode */
 
-      ucnv_toUnicode (&myConverter,
-		      &myTarget,
-		      myTarget_limit,	  /*Save a spot for the Null terminator */
-		      &mySource,
-		      mySource_limit,
-		      NULL,
-		      TRUE,
-		      err);
+      args.targetLimit = myTarget_limit;
+      args.converter->sharedData->impl->toUnicode(&args, err); 
 
       /*Null terminates the string */
-      *(myTarget) = 0x0000;
+      *(args.target) = 0x0000;
     }
 
 
   /*Rigs targetCapacity to have at least one cell for zero termination */
   /*Updates targetCapacity to contain the number of bytes written to target */
   targetCapacity = 1;
-  targetCapacity += myTarget - target;
+  targetCapacity += args.target - target;
   if (targetSize == 0)
     {
       *err = U_INDEX_OUTOFBOUNDS_ERROR;
@@ -807,7 +797,6 @@ int32_t ucnv_toUChars (const UConverter * converter,
   if (*err == U_INDEX_OUTOFBOUNDS_ERROR)
     {
       UChar target2[CHUNK_SIZE];
-      UChar *target2_alias = target2;
       const UChar *target2_limit = target2 + CHUNK_SIZE;
 
       /*We use a stack allocated buffer around which we loop
@@ -816,18 +805,12 @@ int32_t ucnv_toUChars (const UConverter * converter,
       while (*err == U_INDEX_OUTOFBOUNDS_ERROR)
 	{
 	  *err = U_ZERO_ERROR;
-	  target2_alias = target2;
-	  ucnv_toUnicode (&myConverter,
-			  &target2_alias,
-			  target2_limit,
-			  &mySource,
-			  mySource_limit,
-			  NULL,
-			  TRUE,
-			  err);
+      args.target = target2;
+      args.targetLimit = target2_limit;
+      args.converter->sharedData->impl->toUnicode(&args, err); 
 
 	  /*updates the output parameter to contain the number of char required */
-	  targetCapacity += target2_alias - target2 + 1;
+	  targetCapacity += args.target - target2 + 1;
 	}
       (targetCapacity)--;	/*adjust for last one */
       if (U_SUCCESS (*err))
@@ -842,6 +825,9 @@ UChar32 ucnv_getNextUChar (UConverter * converter,
 			 const char *sourceLimit,
 			 UErrorCode * err)
 {
+  UConverterToUnicodeArgs args;
+  UChar32 ch;
+
   /* In case internal data had been stored
    * we return the first UChar32 in the internal buffer,
    * and update the internal state accordingly
@@ -864,10 +850,18 @@ UChar32 ucnv_getNextUChar (UConverter * converter,
     }
   /*calls the specific conversion routines */
   /*as dictated in a code review, avoids a switch statement */
-  return converter->sharedData->impl->getNextUChar(converter,
-										  source,
-										  sourceLimit,
+  args.converter = converter;
+  args.flush = TRUE;
+  args.offsets = NULL;
+  args.source = *source;
+  args.sourceLimit = sourceLimit;
+  args.target = NULL;
+  args.targetLimit = NULL;
+  args.size = sizeof(args);
+  ch = converter->sharedData->impl->getNextUChar(&args,
 										  err);
+  *source = args.source;
+  return ch;
 }
 
 
