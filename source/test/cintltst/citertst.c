@@ -1,5 +1,5 @@
 /********************************************************************
- * COPYRIGHT: 
+ * COPYRIGHT:
  * Copyright (c) 1997-2001, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
@@ -8,7 +8,7 @@
 * File CITERTST.C
 *
 * Modification History:
-* Date      Name               Description            
+* Date      Name               Description
 *           Madhu Katragadda   Ported for C API
 * 02/19/01  synwee             Modified test case for new collation iterator
 *********************************************************************************/
@@ -35,7 +35,7 @@ void addCollIterTest(TestNode** root)
     addTest(root, &TestSetText, "tscoll/citertst/TestSetText");
     addTest(root, &TestMaxExpansion, "tscoll/citertst/TestMaxExpansion");
     addTest(root, &TestUnicodeChar, "tscoll/citertst/TestUnicodeChar");
-    addTest(root, &TestNormalizedUnicodeChar, 
+    addTest(root, &TestNormalizedUnicodeChar,
                                 "tscoll/citertst/TestNormalizedUnicodeChar");
     addTest(root, &TestBug672, "tscoll/citertst/TestBug672");
     addTest(root, &TestSmallBuffer, "tscoll/citertst/TestSmallBuffer");
@@ -62,18 +62,18 @@ static void TestBug672() {
         UCollationElements *titer = ucol_openElements(coll, text, -1,
                                                      &status);
         if (U_FAILURE(status)) {
-            log_err("ERROR: in creation of either the collator or the collation iterator :%s\n", 
+            log_err("ERROR: in creation of either the collator or the collation iterator :%s\n",
                     myErrorName(status));
             return;
         }
-        
+
         log_verbose("locale tested %s\n", LOCALES[i]);
 
-        while (ucol_next(pitr, &status) != UCOL_NULLORDER && 
+        while (ucol_next(pitr, &status) != UCOL_NULLORDER &&
                U_SUCCESS(status)) {
         }
         if (U_FAILURE(status)) {
-            log_err("ERROR: reversing collation iterator :%s\n", 
+            log_err("ERROR: reversing collation iterator :%s\n",
                     myErrorName(status));
             return;
         }
@@ -81,13 +81,13 @@ static void TestBug672() {
 
         ucol_setOffset(titer, u_strlen(pattern), &status);
         if (U_FAILURE(status)) {
-            log_err("ERROR: setting offset in collator :%s\n", 
+            log_err("ERROR: setting offset in collator :%s\n",
                     myErrorName(status));
             return;
         }
         result[i][0] = ucol_getOffset(titer);
         log_verbose("Text iterator set to offset %d\n", result[i][0]);
-        
+
         /* Use previous() */
         ucol_previous(titer, &status);
         result[i][1] = ucol_getOffset(titer);
@@ -97,7 +97,7 @@ static void TestBug672() {
         log_verbose("Adding one to current offset...\n");
         ucol_setOffset(titer, ucol_getOffset(titer) + 1, &status);
         if (U_FAILURE(status)) {
-            log_err("ERROR: setting offset in collator :%s\n", 
+            log_err("ERROR: setting offset in collator :%s\n",
                     myErrorName(status));
             return;
         }
@@ -127,12 +127,12 @@ static void TestUnicodeChar()
 
     UChar *test;
     en_us = ucol_open("en_US", &status);
-    
+
     for (codepoint = 1; codepoint < 0xFFFE;)
     {
       test = source;
 
-      while (codepoint % 0xFF != 0) 
+      while (codepoint % 0xFF != 0)
       {
         if (u_isdefined(codepoint))
           *(test ++) = codepoint;
@@ -141,14 +141,14 @@ static void TestUnicodeChar()
 
       if (u_isdefined(codepoint))
         *(test ++) = codepoint;
-      
+
       if (codepoint != 0xFFFF)
         codepoint ++;
 
-      *test = 0;  
+      *test = 0;
       iter=ucol_openElements(en_us, source, u_strlen(source), &status);
       if(U_FAILURE(status)){
-          log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n", 
+          log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n",
               myErrorName(status));
             ucol_close(en_us);
           return;
@@ -181,7 +181,7 @@ static void TestNormalizedUnicodeChar()
     {
       test = source;
 
-      while (codepoint % 0xFF != 0) 
+      while (codepoint % 0xFF != 0)
       {
         if (u_isdefined(codepoint))
           *(test ++) = codepoint;
@@ -190,19 +190,19 @@ static void TestNormalizedUnicodeChar()
 
       if (u_isdefined(codepoint))
         *(test ++) = codepoint;
-      
+
       if (codepoint != 0xFFFF)
         codepoint ++;
 
-      *test = 0;  
+      *test = 0;
       iter=ucol_openElements(th_th, source, u_strlen(source), &status);
       if(U_FAILURE(status)){
-          log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n", 
+          log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n",
               myErrorName(status));
             ucol_close(th_th);
           return;
       }
-      
+
       backAndForth(iter);
       ucol_closeElements(iter);
     }
@@ -214,7 +214,7 @@ static void TestNormalizedUnicodeChar()
  * Test for CollationElementIterator.previous()
  *
  * @bug 4108758 - Make sure it works with contracting characters
- * 
+ *
  */
 static void TestPrevious()
 {
@@ -224,7 +224,7 @@ static void TestPrevious()
     UCollator *c1, *c2, *c3;
     UCollationElements *iter;
     UErrorCode status = U_ZERO_ERROR;
-    
+
     test1=(UChar*)malloc(sizeof(UChar) * 50);
     test2=(UChar*)malloc(sizeof(UChar) * 50);
     u_uastrcpy(test1, "What subset of all possible test cases?");
@@ -233,7 +233,7 @@ static void TestPrevious()
 
     iter=ucol_openElements(coll, test1, u_strlen(test1), &status);
     if(U_FAILURE(status)){
-        log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n", 
+        log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n",
             myErrorName(status));
         ucol_close(coll);
         return;
@@ -252,7 +252,7 @@ static void TestPrevious()
 
     if (c1 == NULL || U_FAILURE(status))
     {
-        log_err("Couldn't create a RuleBasedCollator with a contracting sequence\n %s\n", 
+        log_err("Couldn't create a RuleBasedCollator with a contracting sequence\n %s\n",
             myErrorName(status));
         return;
     }
@@ -260,7 +260,7 @@ static void TestPrevious()
     u_uastrcpy(source, "abchdcba");
     iter=ucol_openElements(c1, source, u_strlen(source), &status);
     if(U_FAILURE(status)){
-        log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n", 
+        log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n",
             myErrorName(status));
         return;
     }
@@ -274,15 +274,15 @@ static void TestPrevious()
     c2 = ucol_openRules(rule, u_strlen(rule), UCOL_NO_NORMALIZATION, UCOL_DEFAULT_STRENGTH,  &status);
     if (c2 == NULL || U_FAILURE(status))
     {
-        log_err("Couldn't create a RuleBasedCollator with a contracting sequence.\n %s\n", 
+        log_err("Couldn't create a RuleBasedCollator with a contracting sequence.\n %s\n",
             myErrorName(status));
         return;
     }
-    source=(UChar*)malloc(sizeof(UChar) * 5);    
+    source=(UChar*)malloc(sizeof(UChar) * 5);
     u_uastrcpy(source, "abcd");
     iter=ucol_openElements(c2, source, u_strlen(source), &status);
     if(U_FAILURE(status)){
-        log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n", 
+        log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n",
             myErrorName(status));
         return;
     }
@@ -295,15 +295,15 @@ static void TestPrevious()
     c3 = ucol_openRules(rule, u_strlen(rule), UCOL_DEFAULT_NORMALIZATION,  UCOL_DEFAULT_STRENGTH, &status);
     if (c3 == NULL || U_FAILURE(status))
     {
-        log_err("Couldn't create a RuleBasedCollator with a contracting sequence.\n %s\n", 
+        log_err("Couldn't create a RuleBasedCollator with a contracting sequence.\n %s\n",
             myErrorName(status));
         return;
     }
-    source=(UChar*)malloc(sizeof(UChar) * 10);    
+    source=(UChar*)malloc(sizeof(UChar) * 10);
     u_uastrcpy(source, "abcdbchdc");
     iter=ucol_openElements(c3, source, u_strlen(source), &status);
     if(U_FAILURE(status)){
-        log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n", 
+        log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n",
             myErrorName(status));
         return;
     }
@@ -325,7 +325,7 @@ static void TestPrevious()
 
     iter=ucol_openElements(coll, source, u_strlen(source), &status);
     if(U_FAILURE(status)){
-        log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n", 
+        log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n",
             myErrorName(status));
         return;
     }
@@ -344,7 +344,7 @@ static void TestPrevious()
 
     iter=ucol_openElements(coll, source, u_strlen(source), &status);
     if(U_FAILURE(status)){
-        log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n", 
+        log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n",
             myErrorName(status));
         return;
     }
@@ -361,7 +361,7 @@ static void TestPrevious()
  * Test for getOffset() and setOffset()
  */
 static void TestOffset()
-{    
+{
     UErrorCode status= U_ZERO_ERROR;
     UCollator *en_us=NULL;
     UCollationElements *iter, *pristine;
@@ -376,7 +376,7 @@ static void TestOffset()
     log_verbose("Testing getOffset and setOffset for CollationElements\n");
     iter=ucol_openElements(en_us, test1, u_strlen(test1), &status);
     if(U_FAILURE(status)){
-        log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n", 
+        log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n",
             myErrorName(status));
     ucol_close(en_us);
         return;
@@ -389,14 +389,14 @@ static void TestOffset()
 
     if (offset != u_strlen(test1))
     {
-        log_err("offset at end != length %d vs %d\n", offset, 
+        log_err("offset at end != length %d vs %d\n", offset,
             u_strlen(test1) );
     }
 
     /* Now set the offset back to the beginning and see if it works */
     pristine=ucol_openElements(en_us, test1, u_strlen(test1), &status);
     if(U_FAILURE(status)){
-        log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n", 
+        log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n",
             myErrorName(status));
     ucol_close(en_us);
         return;
@@ -438,19 +438,19 @@ static void TestSetText()
     log_verbose("testing setText for Collation elements\n");
     iter1=ucol_openElements(en_us, test1, u_strlen(test1), &status);
     if(U_FAILURE(status)){
-        log_err("ERROR: in creation of collation element iterator1 using ucol_openElements()\n %s\n", 
+        log_err("ERROR: in creation of collation element iterator1 using ucol_openElements()\n %s\n",
             myErrorName(status));
     ucol_close(en_us);
         return;
     }
     iter2=ucol_openElements(en_us, test2, u_strlen(test2), &status);
     if(U_FAILURE(status)){
-        log_err("ERROR: in creation of collation element iterator2 using ucol_openElements()\n %s\n", 
+        log_err("ERROR: in creation of collation element iterator2 using ucol_openElements()\n %s\n",
             myErrorName(status));
     ucol_close(en_us);
         return;
     }
-   
+
     /* Run through the second iterator just to exercise it */
     c = ucol_next(iter2, &status);
     i = 0;
@@ -479,7 +479,7 @@ static void TestSetText()
     {
         assertEqual(iter1, iter2);
     }
-    
+
     ucol_closeElements(iter2);
     ucol_closeElements(iter1);
     ucol_close(en_us);
@@ -497,12 +497,12 @@ static void backAndForth(UCollationElements *iter)
     int32_t orderLength = 0;
     int32_t *orders;
     orders= getOrders(iter, &orderLength);
-    
-    
+
+
     /* Now go through it backwards and make sure we get the same values */
     index = orderLength;
     ucol_reset(iter);
-    
+
     /* synwee : changed */
     while ((o = ucol_previous(iter, &status)) != UCOL_NULLORDER)
     {
@@ -548,7 +548,7 @@ static void backAndForth(UCollationElements *iter)
         log_verbose("\n");
     }
 
-    free(orders);    
+    free(orders);
 }
 
 /** @bug 4108762
@@ -556,39 +556,39 @@ static void backAndForth(UCollationElements *iter)
  */
 static void TestMaxExpansion()
 {
-    UErrorCode          status = U_ZERO_ERROR; 
+    UErrorCode          status = U_ZERO_ERROR;
     UCollator          *coll   ;/*= ucol_open("en_US", &status);*/
     UChar               ch     = 0;
     UCollationElements *iter   ;/*= ucol_openElements(coll, &ch, 1, &status);*/
-    
+
     UChar rule[256];
     u_uastrcpy(rule, "&a < ab < c/aba < d < z < ch");
-    coll = ucol_openRules(rule, u_strlen(rule), UCOL_DEFAULT_NORMALIZATION,  
+    coll = ucol_openRules(rule, u_strlen(rule), UCOL_DEFAULT_NORMALIZATION,
         UCOL_DEFAULT_STRENGTH, &status);
     iter = ucol_openElements(coll, &ch, 1, &status);
-    
+
     while (ch < 0xFFFF && U_SUCCESS(status)) {
         int      count = 1;
         uint32_t order;
         ch++;
         ucol_setText(iter, &ch, 1, &status);
         order = ucol_previous(iter, &status);
-        
+
         /* thai management */
         if (order == 0)
             order = ucol_previous(iter, &status);
-        
-        while (U_SUCCESS(status) && 
+
+        while (U_SUCCESS(status) &&
             ucol_previous(iter, &status) != UCOL_NULLORDER) {
-            count ++; 
+            count ++;
         }
-        
+
         if (U_FAILURE(status) && ucol_getMaxExpansion(iter, order) < count) {
             log_err("Failure at codepoint %d, maximum expansion count < %d\n",
                 ch, count);
         }
     }
-    
+
     ucol_closeElements(iter);
     ucol_close(coll);
 }
@@ -618,7 +618,7 @@ static int32_t* getOrders(UCollationElements *iter, int32_t *orderLength)
             memcpy(temp, orders, size * sizeof(int32_t));
             free(orders);
             orders = temp;
-            
+
         }
 
         orders[size++] = order;
@@ -667,19 +667,19 @@ static void assertEqual(UCollationElements *i1, UCollationElements *i2)
     while (c1 != UCOL_NULLORDER);
 }
 
-/** 
+/**
  * Testing iterators with extremely small buffers
  */
 static void TestSmallBuffer()
 {
-    UErrorCode          status = U_ZERO_ERROR; 
+    UErrorCode          status = U_ZERO_ERROR;
     UCollator          *coll;
     UCollationElements *iter;
     int                 count = 0;
     uint32_t           *orders;
-    
+
     UChar str[500];
-    /* 
+    /*
     creating a long string of decomposable characters,
     since by default the writable buffer is of size 256
     */
@@ -695,7 +695,7 @@ static void TestSmallBuffer()
     coll = ucol_open("th_TH", &status);
     iter = ucol_openElements(coll, str, 500, &status);
 
-    /* 
+    /*
     this will rearrange the string data to 250 characters of 0x300 first then
     250 characters of 0x031A
     */
@@ -713,7 +713,7 @@ static void TestSmallBuffer()
             break;
         }
     }
-    
+
     free(orders);
     ucol_closeElements(iter);
     ucol_close(coll);
