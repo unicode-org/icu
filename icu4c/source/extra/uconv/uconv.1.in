@@ -279,14 +279,7 @@ are the hexadecimal values of the Unicode codepoint.
 .TP
 .B escape-xml
 Same as
-.BR escape-xml-dec .
-.TP
-.B escape-xml-dec
-Replace the missing characters with a string of the format
-.BR &#x\fInnnn\fP; ,
-where
-.I nnnn
-is the decimal value of the Unicode codepoint.
+.BR escape-xml-hex .
 .TP
 .B escape-xml-hex
 Replace the missing characters with a string of the format
@@ -294,6 +287,13 @@ Replace the missing characters with a string of the format
 where
 .I hhhh
 is the hexadecimal value of the Unicode codepoint.
+.TP
+.B escape-xml-dec
+Replace the missing characters with a string of the format
+.BR &#x\fInnnn\fP; ,
+where
+.I nnnn
+is the decimal value of the Unicode codepoint.
 .TP
 .B escape-unicode
 Replace the missing characters with a string of the format
