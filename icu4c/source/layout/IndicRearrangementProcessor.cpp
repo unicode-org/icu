@@ -162,7 +162,7 @@ void IndicRearrangementProcessor::doRearrangementAction(LEGlyphID *glyphs, le_in
         id = charIndices[lastGlyph];
         x = lastGlyph - 2;
 
-        while (x >= lastGlyph) {
+        while (x >= firstGlyph) {
             glyphs[x + 2] = glyphs[x];
             charIndices[x + 2] = charIndices[x];
             x -= 1;
@@ -182,7 +182,7 @@ void IndicRearrangementProcessor::doRearrangementAction(LEGlyphID *glyphs, le_in
         id = charIndices[lastGlyph];
         x = lastGlyph - 2;
 
-        while (x >= lastGlyph) {
+        while (x >= firstGlyph) {
             glyphs[x + 2] = glyphs[x];
             charIndices[x + 2] = charIndices[x];
             x -= 1;
