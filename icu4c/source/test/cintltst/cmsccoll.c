@@ -2945,12 +2945,6 @@ static void TestNewJapanese() {
 /*"zz", "za"*/ };
 
   static const char *test[] = {
-/*
-"\\u30D3\\u30E5\\u30FC\\u30A2\\u30FC",
-"\\u30D3\\u30E5\\u30A6\\u30A2\\u30FC",
-"\\u3074\\u3085\\u30FC\\u3042\\u30FC",
-*/
-
       "\\u30b7\\u30e3\\u30fc\\u30ec",
       "\\u30b7\\u30e3\\u30a4",
       "\\u30b7\\u30e4\\u30a3",
@@ -2986,11 +2980,9 @@ static void TestNewJapanese() {
       "\\u30d2\\u30e5\\u30a6",
       "\\u30d2\\u30e6\\u30a6",
       "\\u30d4\\u30e5\\u30a6\\u30a2",
-      /* It appears that we have a bug in the test contents. Awaiting confirmation from Maedera-san */
-      /*"\\u3074\\u3085\\u30fc\\u3042\\u30fc",*/ /* This one is moved two lines below, as semi-voiced should go after voiced */
+      "\\u3073\\u3085\\u30fc\\u3042\\u30fc", 
       "\\u30d3\\u30e5\\u30fc\\u30a2\\u30fc",
       "\\u30d3\\u30e5\\u30a6\\u30a2\\u30fc",
-      "\\u3074\\u3085\\u30fc\\u3042\\u30fc",     /* The semi-voiced example is moved here */
       "\\u3072\\u3085\\u3093",
       "\\u3074\\u3085\\u3093",
       "\\u3075\\u30fc\\u308a",
@@ -3029,13 +3021,6 @@ static void TestNewJapanese() {
       "\\u3077\\u309d",
       "\\u30d7\\u30fd",
       "\\u3077\\u3075",
-
-/*
-"\\u3042\\u30fc",
-"\\u3042\\u3041",
-"\\u3042\\u309d",
-"\\u3042\\u3042",
-*/
   };
 
 /*
