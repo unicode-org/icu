@@ -1023,6 +1023,11 @@ UBool RegexCompile::doParseActions(EParseAction action)
         //       3.   JMP_SAV      2
         //       4.   ...
         //
+        // Or, if the body is a simple [Set] or single char literal,
+        //       1.   LOOP_SR_I    set number
+        //       2.   LOOP_C       stack location
+        //       ...
+        //
         // Or, if the body can match a zero-length string, to inhibit infinite loops,
         //       1.   STATE_SAVE   6
         //       2.   STO_INP_LOC  data-loc
@@ -1032,9 +1037,26 @@ UBool RegexCompile::doParseActions(EParseAction action)
         //       6.   ...
         {
             // location of item #1, the STATE_SAVE
-            int32_t   saveStateLoc = blockTopLoc(TRUE);
+            int32_t   topLoc = blockTopLoc(FALSE);
             int32_t   dataLoc = -1;
 
+            // Check for simple [set]*, which get special optimized code.
+            if (topLoc == fRXPat->fCompiledPat->size() - 1) {
+                int32_t repeatedOp = fRXPat->fCompiledPat->elementAti(topLoc);
+                if (URX_TYPE(repeatedOp) == URX_SETREF) {
+                    int32_t loopOpI = URX_BUILD(URX_LOOP_SR_I, URX_VAL(repeatedOp));
+                    fRXPat->fCompiledPat->setElementAt(loopOpI, topLoc);
+                    dataLoc = fRXPat->fFrameSize;
+                    fRXPat->fFrameSize++;
+                    int32_t loopOpC = URX_BUILD(URX_LOOP_C, dataLoc);
+                    fRXPat->fCompiledPat->addElement(loopOpC, *fStatus);
+                    break;
+                }
+            }
+
+            // Check for minimum match lenght of zero, which requires
+            //    extra loop-breaking code.
+            int32_t   saveStateLoc = blockTopLoc(TRUE);
             if (minMatchLength(saveStateLoc, fRXPat->fCompiledPat->size()-1) == 0) {
                 insertOp(saveStateLoc);
                 dataLoc =  fRXPat->fFrameSize;
@@ -1128,7 +1150,9 @@ UBool RegexCompile::doParseActions(EParseAction action)
 
     case doInterval:
         // Finished scanning a normal {lower,upper} interval.  Generate the code for it.
-        compileInterval(URX_CTR_INIT, URX_CTR_LOOP);
+        if (compileInlineInterval() == FALSE) {
+            compileInterval(URX_CTR_INIT, URX_CTR_LOOP);
+        }
         break;
 
     case doPossesiveInterval:
@@ -2119,6 +2143,61 @@ void        RegexCompile::compileInterval(int32_t InitOp,  int32_t LoopOp)
 
 
 
+UBool RegexCompile::compileInlineInterval() {
+    if (fIntervalUpper > 10 || fIntervalUpper < fIntervalLow) {
+        // Too big to inline.  Fail, which will cause looping code to be generated.
+        //   (Upper < Lower picks up unbounded upper and errors, both.)
+        return FALSE;
+    }
+
+    int32_t   topOfBlock = blockTopLoc(FALSE);
+    if (fIntervalUpper == 0) {
+        // Pathological case.  Attempt no matches, as if the block doesn't exist.
+        fRXPat->fCompiledPat->setSize(topOfBlock);
+        return TRUE;
+    }
+
+    if (topOfBlock != fRXPat->fCompiledPat->size()-1 && fIntervalUpper != 1) {
+        // The thing being repeated is not a single op, but some
+        //   more complex block.  Do it as a loop, not inlines.
+        //   Note that things "repeated" a max of once are handled as inline, because
+        //     the one copy of the code already generated is just fine.
+        return FALSE;
+    }
+
+    // Pick up the opcode that is to be repeated
+    //
+    int32_t op = fRXPat->fCompiledPat->elementAti(topOfBlock);
+
+    // Compute the pattern location where the inline sequence 
+    //   will end, and set up the state save op that will be needed.
+    //   
+    int32_t endOfSequenceLoc = fRXPat->fCompiledPat->size()-1
+                                + fIntervalUpper + (fIntervalUpper-fIntervalLow);
+    int32_t saveOp = URX_BUILD(URX_STATE_SAVE, endOfSequenceLoc);
+    if (fIntervalLow == 0) {
+        insertOp(topOfBlock);
+        fRXPat->fCompiledPat->setElementAt(saveOp, topOfBlock);
+    }
+
+
+
+    //  Loop, emitting the op for the thing being repeated each time.
+    //    Loop starts at 1 because one instance of the op already exists in the pattern,
+    //    it was put there when it was originally encountered.
+    int32_t i;
+    for (i=1; i<fIntervalUpper; i++ ) {
+        if (i == fIntervalLow) {
+            fRXPat->fCompiledPat->addElement(saveOp, *fStatus);
+        }
+        if (i > fIntervalLow) {
+            fRXPat->fCompiledPat->addElement(saveOp, *fStatus);
+        }
+        fRXPat->fCompiledPat->addElement(op, *fStatus);
+    }
+    return TRUE;
+}
+
 
 
 //----------------------------------------------------------------------------------------
@@ -2451,6 +2530,12 @@ void   RegexCompile::matchStartType() {
             atStart = FALSE;
             break;
             
+        case URX_LOOP_SR_I:
+        case URX_LOOP_C:
+            // More loop ops.  These state-save to themselves.
+            //   don't change the minimum match
+            atStart = FALSE;
+            break;
             
 
         case URX_LA_START:
@@ -2735,6 +2820,11 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
             //  The jump is conditional, backwards only.
             break;
             
+        case URX_LOOP_SR_I:
+        case URX_LOOP_C:
+            // More loop ops.  These state-save to themselves.
+            //   don't change the minimum match
+            break;
             
 
         case URX_LA_START:
@@ -2966,8 +3056,9 @@ int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
         case URX_CTR_INIT_NG:
         case URX_CTR_LOOP:
         case URX_CTR_LOOP_NG:
+        case URX_LOOP_SR_I:
+        case URX_LOOP_C:
             // For anything to do with loops, make the match length unbounded.
-            //  TODO, possibly later, special case short loops like {0,1}.
             //   Note:  INIT instructions are multi-word.  Can ignore because
             //          INT32_MAX length will stop the per-instruction loop.
             currentLen = INT32_MAX;
@@ -3129,6 +3220,8 @@ void RegexCompile::stripNOPs() {
         case URX_LB_END:
         case URX_LBN_CONT:
         case URX_LBN_END:
+        case URX_LOOP_SR_I:
+        case URX_LOOP_C:
             // These instructions are unaltered by the relocation.
             fRXPat->fCompiledPat->setElementAt(op, dst);
             dst++;
@@ -3207,6 +3300,8 @@ void RegexCompile::OptEndingLoop() {
         case URX_LD_SP:
         case URX_END_CAPTURE:
         case URX_START_CAPTURE:
+        case URX_LOOP_SR_I:
+        case URX_LOOP_C:
             // These ops do a state save.
             // Can not do the optimization.
             return;
