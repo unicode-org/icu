@@ -300,9 +300,7 @@ void Transliterator::transliterate(Replaceable& text,
  */
 void Transliterator::finishTransliteration(Replaceable& text,
                                            UTransPosition& index) const {
-    int32_t limit = transliterate(text, index.start, index.limit);
-    index.contextLimit += limit - index.limit;
-    index.start = index.limit = limit;
+    handleTransliterate(text, index, false);
 }
 
 /**
