@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2002, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -14,8 +14,8 @@
  **/
 class UnicodeStringTest: public IntlTest {
 public:
-    UnicodeStringTest();
-    virtual ~UnicodeStringTest();
+    UnicodeStringTest() {}
+    virtual ~UnicodeStringTest() {}
     
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
 
@@ -37,10 +37,6 @@ public:
     void TestRemoveReplace(void);
     /**
      * Test language specific case conversions
-     **/
-    void TestCaseConversion(void);
-    /**
-     * Test methods indexOf and lastIndexOf
      **/
     void TestSearching(void);
     /**
@@ -75,6 +71,17 @@ public:
      * Test the unescape() function.
      */
     void TestUnescape(void);
+};
+
+class StringCaseTest: public IntlTest {
+public:
+    StringCaseTest() {}
+    virtual ~StringCaseTest() {}
+    
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=0);
+
+    void TestCaseConversion();
+    void TestTitleCasing();
 };
 
 #endif
