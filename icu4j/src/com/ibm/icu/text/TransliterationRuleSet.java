@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRuleSet.java,v $
- * $Date: 2001/10/26 22:48:41 $
- * $Revision: 1.15 $
+ * $Date: 2001/11/05 18:55:54 $
+ * $Revision: 1.16 $
  *
  *****************************************************************************************
  */
@@ -27,7 +27,7 @@ import java.util.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.15 $ $Date: 2001/10/26 22:48:41 $
+ * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.16 $ $Date: 2001/11/05 18:55:54 $
  */
 class TransliterationRuleSet {
     /**
@@ -278,20 +278,34 @@ class TransliterationRuleSet {
         int i;
         int count = index[256];
         StringBuffer ruleSource = new StringBuffer();
+        boolean first = true;
         for (i=0; i<count; ++i) {
-            if (i != 0) {
-                ruleSource.append('\n');
+            boolean seen = false;
+            for (int j=i-1; j>=0; --j) {
+                if (rules[i] == rules[j]) {
+                    seen = true;
+                    break;
+                }
             }
-            ruleSource.append(rules[i].toRule(escapeUnprintable));
+            if (!seen) {
+                if (!first) {
+                    ruleSource.append('\n');
+                }
+                first = false;
+                ruleSource.append(rules[i].toRule(escapeUnprintable));
+            }
         }
         return ruleSource.toString();
     }
 }
 
 /* $Log: TransliterationRuleSet.java,v $
- * Revision 1.15  2001/10/26 22:48:41  alan
- * jitterbug 68: add DEBUG support to dump rule-based match progression
+ * Revision 1.16  2001/11/05 18:55:54  alan
+ * jitterbug 60: elide duplicate rules in toRules()
  *
+/* Revision 1.15  2001/10/26 22:48:41  alan
+/* jitterbug 68: add DEBUG support to dump rule-based match progression
+/*
  * Revision 1.14  2001/10/25 22:33:19  alan
  * jitterbug 73: use int for index values to avoid signedness problems
  *
