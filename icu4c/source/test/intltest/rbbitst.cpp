@@ -48,8 +48,8 @@ public:
 
     BITestData(UErrorCode &status);
     void             addDataChunk(const char *data, int32_t tag, int32_t lineNum, UErrorCode status);
-    void             checkResults(char *heading, RBBITest *test);
-    void             err(char *heading, RBBITest *test, int32_t expectedIdx, int32_t actualIdx);
+    void             checkResults(const char *heading, RBBITest *test);
+    void             err(const char *heading, RBBITest *test, int32_t expectedIdx, int32_t actualIdx);
     void             clearResults();
 };
 
@@ -86,7 +86,7 @@ void BITestData::addDataChunk(const char *data, int32_t tag, int32_t lineNum, UE
 //
 //  checkResults.   Compare the actual and expected break positions, report any differences.
 //
-void BITestData::checkResults(char *heading, RBBITest *test) {
+void BITestData::checkResults(const char *heading, RBBITest *test) {
     int32_t   expectedIndex = 0;
     int32_t   actualIndex = 0;
 
@@ -137,7 +137,7 @@ void BITestData::checkResults(char *heading, RBBITest *test) {
 //  err   -  An error was found.  Report it, along with information about where the
 //                                incorrectly broken test data appeared in the source file.
 //
-void    BITestData::err(char *heading, RBBITest *test, int32_t expectedIdx, int32_t actualIdx) 
+void    BITestData::err(const char *heading, RBBITest *test, int32_t expectedIdx, int32_t actualIdx) 
 {
     int32_t   expected = fExpectedBreakPositions.elementAti(expectedIdx);
     int32_t   actual   = fActualBreakPositions.elementAti(actualIdx);

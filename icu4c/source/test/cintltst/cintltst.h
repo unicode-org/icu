@@ -31,7 +31,7 @@ U_CFUNC void addAllTests(TestNode** root);
 /**
  * Return the path to the icu/source/data/out  directory 
  */
-U_CFUNC const char* ctest_dataOutDir();
+U_CFUNC const char* ctest_dataOutDir(void);
 
 /**
  *complete a relative path to a full pathname, and convert to platform-specific syntax. 
@@ -53,7 +53,7 @@ U_CFUNC void ctest_pathnameInContext(char* fullname, int32_t maxsize, const char
 U_CFUNC char *austrdup(const UChar* unichars);
 U_CFUNC char *aescstrdup(const UChar* unichars, int32_t length);
 U_CFUNC void *ctst_malloc(size_t size);
-U_CFUNC void ctst_freeAll();
+U_CFUNC void ctst_freeAll(void);
 
 U_CFUNC const char* loadTestData(UErrorCode* err);
 

@@ -4,8 +4,8 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/test/cintltst/usettest.c,v $ 
-* $Date: 2002/06/05 00:01:09 $ 
-* $Revision: 1.2 $
+* $Date: 2002/07/25 18:32:03 $ 
+* $Revision: 1.3 $
 **********************************************************************
 */
 #include "unicode/uset.h"
@@ -205,8 +205,8 @@ static void expectItems(const USet* set,
     int32_t itemCount = uset_getItemCount(set);
     int32_t itemIndex = 0;
     UChar32 start = 1, end = 0;
-    int32_t itemLen;
-            
+    int32_t itemLen = 0;
+
     ec = U_ZERO_ERROR;
     uset_toPattern(set, ustr, sizeof(ustr), TRUE, &ec);
     if (U_FAILURE(ec)) {
