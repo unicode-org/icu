@@ -601,7 +601,7 @@ void uprv_uca_getMaxExpansionJamo(CompactIntArray   *mapping,
   const uint32_t TBASE  = 0x11A7;
   const uint32_t VCOUNT = 21;
   const uint32_t TCOUNT = 28;
-
+  
   uint32_t v = VBASE + VCOUNT - 1;
   uint32_t t = TBASE + TCOUNT - 1;
   uint32_t ce;
@@ -610,11 +610,13 @@ void uprv_uca_getMaxExpansionJamo(CompactIntArray   *mapping,
       /* gets the max expansion in all unicode characters */
       int     count   = maxexpansion->position;
       uint8_t maxsize = 0;
+
       while (count >= 0) {
           uint8_t size = maxexpansion->expansionCESize[count];
           if (size > maxsize) {
               maxsize = size;
           }
+          count --;
       }
 
       while (v >= VBASE)
