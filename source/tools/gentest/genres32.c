@@ -81,7 +81,7 @@ genres32(const char *prog, const char *path) {
              * every 10th entry contains a string with
              * the entry index as its code point
              */
-            fprintf(out, "%s{\"\\u%04x\"}\n", key, i);
+            fprintf(out, "%s{\"\\U%08x\"}\n", key, i);
         } else {
             /* other entries contain their index as an integer */
             fprintf(out, "%s:int{%d}\n", key, i);
