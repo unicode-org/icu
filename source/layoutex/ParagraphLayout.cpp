@@ -300,7 +300,7 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
     // width array, and swap it into logical order. Then fill in the char-to-glyph map
     // from this. (charToGlyph[glyphToChar[i]] = i)
     fGlyphWidths    = LE_NEW_ARRAY(float, fGlyphCount);
-    fGlyphToCharMap = LE_NEW_ARRAY(le_int32, fGlyphCount);
+    fGlyphToCharMap = LE_NEW_ARRAY(le_int32, fGlyphCount + 1);
     fCharToGlyphMap = LE_NEW_ARRAY(le_int32, fCharCount + 1);
 
     for (runStart = 0, run = 0; run < fStyleRunCount; run += 1) {
@@ -571,7 +571,8 @@ void ParagraphLayout::computeScripts()
 
     uscript_closeRun(sr);
 
-    fScriptRuns = scriptRuns;
+    fScriptRuns    = scriptRuns;
+    fClientScripts = false;
 }
 
 void ParagraphLayout::computeLocales()
