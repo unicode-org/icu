@@ -1,8 +1,7 @@
 package com.ibm.test.translit;
-import test.IntlTest;
 import com.ibm.text.*;
 import com.ibm.test.*;
-import com.ibm.Utility;
+import com.ibm.util.Utility;
 import java.text.*;
 import java.util.*;
 

@@ -1,5 +1,4 @@
 package com.ibm.test.translit;
-import test.IntlTest;
 import com.ibm.text.*;
 import com.ibm.test.*;
 import java.text.*;
