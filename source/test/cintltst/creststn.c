@@ -621,6 +621,10 @@ static void TestNewTypes() {
                         if(strLen != len ){
                             log_err("Did not get the expected len for riwords. Expected: %i , Got: %i\n", len ,strLen);
                         }
+                        /* test string termination */
+                        if(u_strlen(str) != strLen || str[strLen]!= 0 ){
+                            log_err("testinclude not null terminated!\n");
+                        }
                         if(u_strncmp(str, buffer,strLen)!=0){
                             log_err("Did not get the expected string from riwords. Include functionality failed for genrb.\n");
                         }
@@ -1265,6 +1269,9 @@ static void TestGetVersion(){
     int i=0, j = 0;
     int locCount = uloc_countAvailable();
     const char *locName = "root";
+    const UChar* rules =NULL;
+    int32_t len = 0;
+    
     log_verbose("The ures_getVersion tests begin : \n");
 
     for(j = -1; j < locCount; j++) {
@@ -1277,6 +1284,11 @@ static void TestGetVersion(){
             log_err("Resource bundle creation for locale %s failed.: %s\n", locName, myErrorName(status));
             ures_close(resB);
             return;
+        }
+        /* test NUL termination of UCARules */
+        rules = ures_getStringByKey(resB,"%%UCARULES",&len, &status);
+        if(u_strlen(rules) != len){
+            log_err("UCARules string not nul terminated! \n");
         }
         ures_getVersion(resB, versionArray);
         for (i=0; i<4; ++i) {
