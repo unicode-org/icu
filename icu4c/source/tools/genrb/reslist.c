@@ -19,7 +19,7 @@
 #include "reslist.h"
 #include "unewdata.h"
 #include "unicode/ures.h"
-#include "error.h"
+#include "errmsg.h"
 
 #define BIN_ALIGNMENT 16
 

@@ -20,6 +20,21 @@
 
 #include "unicode/utypes.h"
 
+#define U_APPEND_CHAR32(c,target,len) {                         \
+    if (c <= 0xffff)                                            \
+    {                                                           \
+        *(target)++ = (UChar) c;                                \
+        len=1;                                                  \
+    }                                                           \
+    else                                                        \
+    {                                                           \
+        c -= 0x0010000;                                         \
+        *(target)++ = (UChar) (0xd800 + (UChar) (c >> 10));     \
+        *(target)++ = (UChar) (0xdc00 + (UChar) (c & 0x3ff));   \
+        len=2;                                                  \
+    }                                                           \
+}
+
 /* A C representation of a string "object" (to avoid realloc all the time) */
 struct UString {
   UChar *fChars;
