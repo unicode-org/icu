@@ -1551,3 +1551,4 @@ LocaleTest::TestSetIsBogus() {
     errln("After resetting bogus, didn't return FALSE");
   }
 }
+
