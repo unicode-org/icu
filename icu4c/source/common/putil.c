@@ -126,14 +126,20 @@
 
 /* We return QNAN rather than SNAN*/
 #define SIGN 0x80000000U
-
 #if defined(__GNUC__) && __GNUC__ == 3
+#define USE_64BIT_DOUBLE_OPTIMIZATION 1
+#else
+#define USE_64BIT_DOUBLE_OPTIMIZATION 0
+#endif
+
+#if USE_64BIT_DOUBLE_OPTIMIZATION
 /* gcc 3.2 has an optimization bug */
 static const int64_t gNan64 = 0x7FF8000000000000L;
 static const int64_t gInf64 = 0x7FF0000000000000L;
 static const double * const fgNan = (const double *)(&gNan64);
 static const double * const fgInf = (const double *)(&gInf64);
 #else
+
 #if IEEE_754
 #define NAN_TOP ((int16_t)0x7FF8)
 #define INF_TOP ((int16_t)0x7FF0)
@@ -145,11 +151,13 @@ static const double * const fgInf = (const double *)(&gInf64);
 /* statics */
 static UBool fgNaNInitialized = FALSE;
 static UBool fgInfInitialized = FALSE;
-static double *fgNan;
-static double *fgInf;
+static double gNan;
+static double gInf;
+static double * const fgNan = &gNan;
+static double * const fgInf = &gInf;
 #endif
 
-/* prototypess */
+/* prototypes */
 static char* u_topNBytesOfDouble(double* d, int n);
 static char* u_bottomNBytesOfDouble(double* d, int n);
 
@@ -224,7 +232,7 @@ U_CAPI UBool U_EXPORT2
 uprv_isNaN(double number)
 {
 #if IEEE_754
-#if defined(__GNUC__) && __GNUC__ == 3
+#if USE_64BIT_DOUBLE_OPTIMIZATION
     /* gcc 3.2 has an optimization bug */
     /* Infinity is 0x7FF0000000000000U. Anything greater than that is a NaN */
     return (UBool)(((*((int64_t *)&number)) & INT64_MAX) > gInf64);
@@ -275,7 +283,7 @@ U_CAPI UBool U_EXPORT2
 uprv_isInfinite(double number)
 {
 #if IEEE_754
-#if defined(__GNUC__) && __GNUC__ == 3
+#if USE_64BIT_DOUBLE_OPTIMIZATION
     /* gcc 3.2 has an optimization bug */
     return (UBool)(((*((int64_t *)&number)) & INT64_MAX) == gInf64);
 #else
@@ -345,18 +353,16 @@ U_CAPI double U_EXPORT2
 uprv_getNaN()
 {
 #if IEEE_754 || defined(OS390)
-#if defined(U_INT64_T_UNAVAILABLE)
-    if( !fgNaNInitialized) {
-        umtx_lock(NULL);
-        if( ! fgNaNInitialized) {
-            int i;
-            int8_t* p = (int8_t*)fgNan;
-            for(i = 0; i < sizeof(double); ++i)
-                *p++ = 0;
-            *(int16_t*)u_topNBytesOfDouble(fgNan, sizeof(NAN_TOP)) = NAN_TOP;
-            fgNaNInitialized = TRUE;
-        }
-        umtx_unlock(NULL);
+#if !USE_64BIT_DOUBLE_OPTIMIZATION
+    if (!fgNaNInitialized) {
+        /* This variable is always initialized with the same value,
+        so a mutex isn't needed. */
+        int i;
+        int8_t* p = (int8_t*)fgNan;
+        for(i = 0; i < sizeof(double); ++i)
+            *p++ = 0;
+        *(int16_t*)u_topNBytesOfDouble(fgNan, sizeof(NAN_TOP)) = NAN_TOP;
+        fgNaNInitialized = TRUE;
     }
 #endif
     return *fgNan;
@@ -372,19 +378,17 @@ U_CAPI double U_EXPORT2
 uprv_getInfinity()
 {
 #if IEEE_754 || defined(OS390)
-#if defined(U_INT64_T_UNAVAILABLE)
+#if !USE_64BIT_DOUBLE_OPTIMIZATION
     if (!fgInfInitialized)
     {
-        umtx_lock(NULL);
-        if (!fgInfInitialized) {
-            int i;
-            int8_t* p = (int8_t*)fgInf;
-            for(i = 0; i < sizeof(double); ++i)
-                *p++ = 0;
-            *(int16_t*)u_topNBytesOfDouble(fgInf, sizeof(INF_TOP)) = INF_TOP;
-            fgInfInitialized = TRUE;
-        }
-        umtx_unlock(NULL);
+        /* This variable is always initialized with the same value,
+        so a mutex isn't needed. */
+        int i;
+        int8_t* p = (int8_t*)fgInf;
+        for(i = 0; i < sizeof(double); ++i)
+            *p++ = 0;
+        *(int16_t*)u_topNBytesOfDouble(fgInf, sizeof(INF_TOP)) = INF_TOP;
+        fgInfInitialized = TRUE;
     }
 #endif
     return *fgInf;
