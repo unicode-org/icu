@@ -1,9 +1,9 @@
 #!/bin/perl -w
-#  ********************************************************************
-#  * COPYRIGHT:
-#  * Copyright (c) 2002, International Business Machines Corporation and
-#  * others. All Rights Reserved.
-#  ********************************************************************
+#*******************************************************************
+# COPYRIGHT:
+# Copyright (c) 2002-2003, International Business Machines Corporation and
+# others. All Rights Reserved.
+#*******************************************************************
 
 # This script reads in UCD files PropertyAliases.txt and
 # PropertyValueAliases.txt and correlates them with ICU enums
@@ -37,6 +37,13 @@
 # present in the UCD but present in ICU.  This file resides in the
 # same directory as this script.  Its contents are merged into those
 # of PropertyAliases.txt as if the two files were appended.
+#
+# NOTE: The following names are handled specially.  See script below
+# for details.
+#
+#   T/True
+#   F/False
+#   No_Block
 #
 # Author: Alan Liu
 # Created: October 14 2002
@@ -73,6 +80,30 @@ my %PROP_TYPE = (Binary => "_bp",
                  Double => "_dp",
                  Enumerated => "_ep",
                  Bitmask => "_mp");
+#----------------------------------------------------------------------
+
+# Properties that are unsupported in ICU
+my %UNSUPPORTED = (Composition_Exclusion => 1,
+                   Decomposition_Mapping => 1,
+                   Expands_On_NFC => 1,
+                   Expands_On_NFD => 1,
+                   Expands_On_NFKC => 1,
+                   Expands_On_NFKD => 1,
+                   FC_NFKC_Closure => 1,
+                   Hangul_Syllable_Type => 1,
+                   ID_Start_Exceptions => 1,
+                   NFC_Quick_Check => 1,
+                   NFD_Quick_Check => 1,
+                   NFKC_Quick_Check => 1,
+                   NFKD_Quick_Check => 1,
+                   Special_Case_Condition => 1,
+                   );
+
+# Short names of properties that weren't seen in uchar.h.  If the
+# properties weren't seen, don't complain about the property values
+# missing.
+my %MISSING_FROM_UCHAR;
+
 #----------------------------------------------------------------------
 
 # Emitted class names
@@ -140,7 +171,9 @@ sub isIgnoredProperty {
 }
 
 # 'qc' is a pseudo-property matching any quick-check property
-# see PropertyValueAliases.txt file comments
+# see PropertyValueAliases.txt file comments.  'binprop' is
+# a synthetic binary value alias "True"/"False", not present
+# in PropertyValueAliases.txt.
 sub isPseudoProperty {
     $_[0] eq 'qc' ||
         $_[0] eq 'binprop';
@@ -473,13 +506,17 @@ sub check_PropertyValueAliases {
 
 #----------------------------------------------------------------------
 # Merge blocks data into uchar.h enum data.  In the 'blk' subhash all
-# code point values, as returned from read_uhash, are replaced by
+# code point values, as returned from read_uchar, are replaced by
 # block names, as read from Blocks.txt and returned by read_Blocks.
 # The match must be 1-to-1.  If there is any failure of 1-to-1
-# mapping, an error is signalled.  Upon return, the read_Blocks hash
+# mapping, an error is signaled.  Upon return, the read_Blocks hash
 # is emptied of all contents, except for those that failed to match.
 #
-# @param a hash ref from read_uhash.
+# The mapping in the 'blk' subhash, after this function returns, is
+# from uchar.h enum name, e.g. "UBLOCK_BASIC_LATIN", to Blocks.h
+# pseudo-name, e.g. "Basic Latin".
+#
+# @param a hash ref from read_uchar.
 # @param a hash ref from read_Blocks.
 sub merge_Blocks {
     my ($h, $b) = @_;
@@ -489,10 +526,11 @@ sub merge_Blocks {
     my $blk = $h->{'blk'};
     for my $enum (keys %$blk) {
         my $cp = $blk->{$enum};
-        die "Error: No block found at $cp in Blocks.txt"
-            unless (exists $b->{$cp});
-        # Convert code point to name:
-        $blk->{$enum} = '|' . $b->{$cp}; # no short names for blocks
+        if ($cp && !exists $b->{$cp}) {
+            die "Error: No block found at $cp in Blocks.txt";
+        }
+        # Convert code point to pseudo-name:
+        $blk->{$enum} = $b->{$cp};
         delete $b->{$cp};
     }
     my $err = '';
@@ -512,7 +550,7 @@ sub merge_Blocks {
 # Unmatched names in PropertyAliases are listed as a warning but do
 # NOT cause the script to die.
 #
-# @param a hash ref from read_uhash.
+# @param a hash ref from read_uchar.
 # @param a hash ref from read_PropertyAliases.
 # @param a hash mapping long names to property family (e.g., 'binary')
 sub merge_PropertyAliases {
@@ -535,10 +573,25 @@ sub merge_PropertyAliases {
     }
     my @err;
     for my $name (keys %$pa) {
-        push @err, "Warning: No enum for " . $fam->{$name} . " property $name in uchar.h"
-            unless isIgnoredProperty($name);
+        $MISSING_FROM_UCHAR{$pa->{$name}} = 1;
+        if (exists $UNSUPPORTED{$name}) {
+            push @err, "Info: No enum for " . $fam->{$name} . " property $name in uchar.h";
+        } elsif (!isIgnoredProperty($name)) {
+            push @err, "Warning: No enum for " . $fam->{$name} . " property $name in uchar.h";
+        }
     }
     print join("\n", sort @err), "\n" if (@err);
+}
+
+#----------------------------------------------------------------------
+# Return 1 if two names match ignoring whitespace, '-', and '_'.
+# Used to match names in Blocks.txt with those in PropertyValueAliases.txt
+# as of Unicode 4.0.
+sub matchesLoosely {
+    my ($a, $b) = @_;
+    $a =~ s/[\s\-_]//g;
+    $b =~ s/[\s\-_]//g;
+    $a =~ /^$b$/i;
 }
 
 #----------------------------------------------------------------------
@@ -548,16 +601,15 @@ sub merge_PropertyAliases {
 # with a string of the form "<short>|<long>".  The short or long name
 # may be missing.
 #
-# @param a hash ref from read_uhash.
+# @param a hash ref from read_uchar.
 # @param a hash ref from read_PropertyValueAliases.
 sub merge_PropertyValueAliases {
     my ($h, $va) = @_;
 
     my %gcCount;
     for my $prop (keys %$h) {
-        # blk handled in merge_Blocks
         # _bp, _ep handled in merge_PropertyAliases
-        next if ($prop eq 'blk' || $prop =~ /^_/);
+        next if ($prop =~ /^_/);
 
         # Special case: gcm
         my $prop2 = ($prop eq 'gcm') ? 'gc' : $prop;
@@ -584,6 +636,21 @@ sub merge_PropertyValueAliases {
                     # & case-insensitive reverse match
                     if ($a =~ /^$name$/i ||
                         $pva->{$a} =~ /^$name$/i) {
+                        $n = $a;
+                        last;
+                    }
+                }
+            }
+
+            # For blocks, do a loose match from Blocks.txt pseudo-name
+            # to PropertyValueAliases long name.
+            if (!$n && $prop eq 'blk') {
+                for my $a (keys %$pva) {
+                    # The block is only going to match the long name,
+                    # but we check both for completeness.  As of Unicode
+                    # 4.0, blocks do not have short names.
+                    if (matchesLoosely($name, $pva->{$a}) ||
+                        matchesLoosely($name, $a)) {
                         $n = $a;
                         last;
                     }
@@ -619,8 +686,9 @@ sub merge_PropertyValueAliases {
     }
     delete $va->{'ccc'};
 
-    # Merge synthetic binary property values in manually
-    die "Error: No synthetic binary properties"
+    # Merge synthetic binary property values in manually.
+    # These are the "True" and "False" value aliases.
+    die "Error: No True/False value aliases"
         unless exists $va->{'binprop'};
     for my $bp (keys %{$va->{'binprop'}}) {
         $h->{'binprop'}->{$bp} = $va->{'binprop'}->{$bp};
@@ -637,7 +705,8 @@ sub merge_PropertyValueAliases {
                 my $n = $gcCount{$subkey};
                 next if ($n >= 1 && $n <= 2);
             }
-            $err .= "Warning: Enum for value $prop:$subkey not found in uchar.h\n";
+            $err .= "Warning: Enum for value $prop:$subkey not found in uchar.h\n"
+                unless exists $MISSING_FROM_UCHAR{$prop};
         }
     }
     print $err if ($err);
@@ -777,10 +846,23 @@ sub read_PropertyValueAliases {
 # range start to the block name.  The special key '_version' will map
 # to the Unicode version of the file.
 #
+# As of Unicode 4.0, the names in the Blocks.txt are no longer the
+# proper names.  The proper names are now listed in PropertyValueAliases.
+# They are similar but not identical.  Furthermore, 4.0 introduces
+# a new block name, No_Block, which is listed only in PropertyValueAliases
+# and not in Blocks.txt.  As a result, we handle blocks as follows:
+#
+# 1. Read Blocks.txt to map code point range start to quasi-block name.
+# 2. Add to Blocks.txt a synthetic No Block code point & name:
+#    X -> No Block
+# 3. Map quasi-names from Blocks.txt (including No Block) to actual
+#    names from PropertyValueAliases.  This occurs in
+#    merge_PropertyValueAliases.
+#
 # @param a filename for Blocks.txt
 #
 # @return a ref to a hash.  Keys are code points, as text, e.g.,
-# "1720".  Values are block names, e.g., "Hanunoo".
+# "1720".  Values are pseudo-block names, e.g., "Hanunoo".
 sub read_Blocks {
 
     my $filename = shift; 
@@ -815,6 +897,9 @@ sub read_Blocks {
     }
 
     $in->close();
+
+    # Add pseudo-name for No Block
+    $hash->{'none'} = 'No Block';
 
     $hash;
 }
