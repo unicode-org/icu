@@ -789,7 +789,7 @@ int32_t uprv_ucol_decompose (UChar curChar, UChar *result) {
 
 uint32_t ucol_getDynamicCEs(UColTokenParser *src, tempUCATable *t, UChar *decomp, uint32_t noOfDec, uint32_t *result, uint32_t resultSize, UErrorCode *status) {
   uint32_t j = 0, i = 0;
-  uint32_t CE = 0;
+  uint32_t CE = 0, firstFound = UCOL_NOT_FOUND;
   uint32_t resLen = 0;
   collIterate colIt;
   UBool lastNotFound = FALSE;
@@ -799,13 +799,19 @@ uint32_t ucol_getDynamicCEs(UColTokenParser *src, tempUCATable *t, UChar *decomp
     CE = ucmp32_get(t->mapping, decomp[j]);
     if(CE == UCOL_NOT_FOUND || lastNotFound) { /* get it from the UCA */
       lastNotFound = FALSE;
-      init_collIterate(src->UCA, decomp+j, 1, &colIt, TRUE);
-      while(CE != UCOL_NO_MORE_CES) {
-        CE = ucol_getNextCE(src->UCA, &colIt, status);
-        if(CE != UCOL_NO_MORE_CES) {
-          result[resLen++] = CE;
+      if(firstFound == UCOL_NOT_FOUND) {
+        init_collIterate(src->UCA, decomp+j, 1, &colIt, TRUE);
+        while(CE != UCOL_NO_MORE_CES) {
+          CE = ucol_getNextCE(src->UCA, &colIt, status);
+          if(CE != UCOL_NO_MORE_CES) {
+            result[resLen++] = CE;
+          }
         }
-      }     
+      } else { /* there was some stuff found in contraction */
+        result[resLen++] = firstFound;
+        continue;
+      }
+
     } else if(CE < UCOL_NOT_FOUND) { /*normal CE */
       result[resLen++] = CE;
     } else { /* special CE, contraction, expansion or Thai */
@@ -815,7 +821,7 @@ uint32_t ucol_getDynamicCEs(UColTokenParser *src, tempUCATable *t, UChar *decomp
             uint32_t *CEOffset = t->expansions->CEs+(getExpansionOffset(CE) - (paddedsize(sizeof(UCATableHeader))>>2)); /* find the offset to expansion table */
             uint32_t size = getExpansionCount(CE);
             if(size != 0) { /* if there are less than 16 elements in expansion, we don't terminate */
-              for(i = 1; i<size; i++) {
+              for(i = 0; i<size; i++) {
                  result[resLen++] = *CEOffset++;
               }
             } else { /* else, we do */
@@ -843,7 +849,19 @@ uint32_t ucol_getDynamicCEs(UColTokenParser *src, tempUCATable *t, UChar *decomp
               j--;
               break;
             } else if(CE > UCOL_NOT_FOUND) {
-              continue;
+              if((tag = getCETag(CE)) == CONTRACTION_TAG) { 
+              /* this is tricky - we're not closed, so for Japanese, */
+              /*  we want to record the first success */
+              /* i.e. 0x30D0 decomposes to 0x30CF 0x3099 */
+              /* 0x30CF is contraction in table */
+              /* there are no 0x30CF 0x3099 in table, but there are   */
+              /* longer contractions. If we don't note that we're already */
+              /* had something, we'll return not found and pick the wrong */
+              /* guys from UCA. I think getComplicatedCE needs to be checked */
+              /* for this type of error */
+                firstFound = ctb->CEs[0];
+              }
+                continue;
             } else {
               result[resLen++] = CE;
               break;

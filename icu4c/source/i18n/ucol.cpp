@@ -869,6 +869,7 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
 /* It is called by both getNextCE and getNextUCA                                         */
 uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, UErrorCode *status) {
   uint32_t i = 0; /* general counter */
+  uint32_t firstFound = UCOL_NOT_FOUND;
   //uint32_t CE = *source->CEpos;
   for (;;) {
     const uint32_t *CEOffset = NULL;
@@ -937,14 +938,30 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
           UCharOffset++;
         }
         if(schar != tchar) { /* we didn't find the correct codepoint. We can use either the first or the last CE */
-          if(tchar != 0xFFFF) {
-            UCharOffset = ContractionStart; /* We're not at the end, bailed out in the middle. Better use starting CE */
-          }
+          UCharOffset = ContractionStart; /* We're not at the end, bailed out in the middle. Better use starting CE */
           source->pos--; /* Spit out the last char of the string, wasn't tasty enough */
         } 
         CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
+#if 0
+        /* old code, with problem */
         if(!isContraction(CE)) {
           break;  
+        }
+#endif
+        /* there is a bug here which will make us look bad if we have multiple level contraction */
+        /* that fails after level 1 */
+        if(CE == UCOL_NOT_FOUND) {
+          if(firstFound != UCOL_NOT_FOUND) {
+            CE = firstFound;
+            firstFound = UCOL_NOT_FOUND;
+            break;
+          }
+        } else if(isContraction(CE)) { /* fix for the bug. Other places need to be checked */
+        /* this is contraction, and we will continue. However, we can fail along the */
+        /* the road, which means that we have part of contraction correct */
+          firstFound = *(coll->contractionCEs + (ContractionStart - coll->contractionIndex));
+        } else {
+          break;
         }
       }
       break;
