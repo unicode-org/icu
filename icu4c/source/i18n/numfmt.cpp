@@ -439,7 +439,7 @@ NumberFormat::createInstance(const Locale& desiredLocale,
     // resource data in place.
     //const UnicodeString& pattern = style < patternCount ?
     //    numberPatterns[style] : fgLastResortNumberPatterns[style];
-    const UnicodeString& pattern = style < numberPatterns.getSize()?
+    const UnicodeString pattern = style < numberPatterns.getSize()?
         numberPatterns.getStringEx(style, status) : fgLastResortNumberPatterns[style];
 
     // Loads the decimal symbols of the desired locale.
