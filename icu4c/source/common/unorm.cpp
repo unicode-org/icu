@@ -173,8 +173,6 @@ static int8_t haveNormData=0;
 static int32_t indexes[_NORM_INDEX_TOP]={ 0 };
 static UTrie normTrie={ 0,0,0,0,0,0,0 }, fcdTrie={ 0,0,0,0,0,0,0 }, auxTrie={ 0,0,0,0,0,0,0 };
 
-static uint8_t *gFCDBlock=NULL;
-
 /*
  * pointers into the memory-mapped unorm.icu
  */
@@ -200,9 +198,6 @@ unorm_cleanup() {
     if(normData!=NULL) {
         udata_close(normData);
         normData=NULL;
-
-        uprv_free(gFCDBlock);
-        gFCDBlock=NULL;
     }
     dataErrorCode=U_ZERO_ERROR;
     haveNormData=0;
@@ -266,98 +261,7 @@ _enumPropertyStartsRange(const void *context, UChar32 start, UChar32 /*limit*/, 
     return TRUE;
 }
 
-struct EnumNormFCDContext {
-    UNewTrie *newFCD;
-    const uint16_t *eData;
-    UBool ok;
-};
-
-static UBool U_CALLCONV
-_enumNormFCD(const void *context, UChar32 start, UChar32 limit, uint32_t norm32) {
-    uint32_t fcd;
-
-    fcd=0;
-
-    if((norm32&_NORM_QC_NFD) && isNorm32Regular(norm32)) {
-        /* get the lead/trail cc from the decomposition data */
-        const uint16_t *nfd=
-            ((EnumNormFCDContext *)context)->eData+
-            (norm32>>_NORM_EXTRA_SHIFT);
-        if(*nfd&_NORM_DECOMP_FLAG_LENGTH_HAS_CC) {
-            fcd=nfd[1];
-        }
-    } else {
-        fcd=norm32&_NORM_CC_MASK;
-        if(fcd!=0) {
-            /* use the code point cc value for both lead and trail cc's */
-            fcd|=fcd>>_NORM_CC_SHIFT; /* assume that the cc is in bits 15..8 */
-        }
-    }
-
-    if(fcd!=0) {
-        if(!utrie_setRange32(((EnumNormFCDContext *)context)->newFCD, start, limit, fcd, TRUE)) {
-            return ((EnumNormFCDContext *)context)->ok=FALSE;
-        }
-    }
-
-    return TRUE;
-}
-
 U_CDECL_END
-
-/* make the FCD trie on the fly if it was not stored in the data file */
-static uint8_t *
-makeFCDTrie(UTrie &nTrie, const uint16_t *eData, int32_t &fcdLength, UErrorCode &errorCode) {
-    UNewTrie *newFCD;
-    uint8_t *fcdBlock;
-
-    fcdLength=0;
-
-    if(U_FAILURE(errorCode)) {
-        return NULL;
-    }
-
-    newFCD=utrie_open(NULL, NULL, 20000, 0, 0, TRUE);
-    if(newFCD==NULL) {
-        errorCode=U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
-    }
-
-    /*
-     * enumerate the just-loaded normalization main data trie,
-     * compute the FCD value for each range,
-     * and store it in newFCD
-     */
-    EnumNormFCDContext context={ newFCD, eData, TRUE };
-    utrie_enum(&nTrie, NULL, _enumNormFCD, &context);
-    if(!context.ok) {
-        errorCode=U_BUFFER_OVERFLOW_ERROR;
-        utrie_close(newFCD);
-        return NULL;
-    }
-
-    fcdLength=utrie_serialize(newFCD, NULL, 0, NULL, TRUE, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        utrie_close(newFCD);
-        return NULL;
-    }
-
-    fcdBlock=(uint8_t *)uprv_malloc(fcdLength);
-    if(fcdBlock==NULL) {
-        errorCode=U_MEMORY_ALLOCATION_ERROR;
-        utrie_close(newFCD);
-        return NULL;
-    }
-
-    fcdLength=utrie_serialize(newFCD, fcdBlock, fcdLength, NULL, TRUE, &errorCode);
-    utrie_close(newFCD);
-    if(U_FAILURE(errorCode)) {
-        uprv_free(fcdBlock);
-        return NULL;
-    }
-
-    return fcdBlock;
-}
 
 static int8_t
 loadNormData(UErrorCode &errorCode) {
@@ -380,7 +284,6 @@ loadNormData(UErrorCode &errorCode) {
     if(haveNormData==0) {
         UTrie _normTrie={ 0,0,0,0,0,0,0 }, _fcdTrie={ 0,0,0,0,0,0,0 }, _auxTrie={ 0,0,0,0,0,0,0 };
         UDataMemory *data;
-        uint8_t *fcdBlock=NULL;
 
         const int32_t *p=NULL;
         const uint8_t *pb;
@@ -404,13 +307,6 @@ loadNormData(UErrorCode &errorCode) {
         pb+=p[_NORM_INDEX_TRIE_SIZE]+p[_NORM_INDEX_UCHAR_COUNT]*2+p[_NORM_INDEX_COMBINE_DATA_COUNT]*2;
         if(p[_NORM_INDEX_FCD_TRIE_SIZE]!=0) {
             utrie_unserialize(&_fcdTrie, pb, p[_NORM_INDEX_FCD_TRIE_SIZE], &errorCode);
-        } else {
-            /* the FCD trie was not stored, create one on the fly */
-            int32_t fcdLength;
-            fcdBlock=makeFCDTrie(_normTrie,
-                                 (uint16_t *)((uint8_t *)(p+_NORM_INDEX_TOP)+p[_NORM_INDEX_TRIE_SIZE]),
-                                 fcdLength, errorCode);
-            utrie_unserialize(&_fcdTrie, fcdBlock, fcdLength, &errorCode);
         }
         pb+=p[_NORM_INDEX_FCD_TRIE_SIZE];
 
@@ -430,9 +326,6 @@ loadNormData(UErrorCode &errorCode) {
         if(normData==NULL) {
             normData=data;
             data=NULL;
-
-            gFCDBlock=fcdBlock;
-            fcdBlock=NULL;
 
             uprv_memcpy(&indexes, p, sizeof(indexes));
             uprv_memcpy(&normTrie, &_normTrie, sizeof(UTrie));
@@ -459,7 +352,6 @@ loadNormData(UErrorCode &errorCode) {
         /* if a different thread set it first, then close the extra data */
         if(data!=NULL) {
             udata_close(data); /* NULL if it was set correctly */
-            uprv_free(fcdBlock);
         }
     }
 
@@ -539,6 +431,38 @@ static inline const uint16_t *
 _getExtraData(uint32_t norm32) {
     return extraData+(norm32>>_NORM_EXTRA_SHIFT);
 }
+
+#if 0
+/*
+ * It is possible to get the FCD data from the main trie if unorm.icu
+ * was built without the FCD trie, although it is slower.
+ * This is not implemented because it is hard to test, and because it seems
+ * unusual to want to use FCD and not build the data file for it.
+ *
+ * Untested sample code:
+ */
+static inline uint16_t
+_getFCD16FromNormData(UChar32 c) {
+    uint32_t norm32, fcd;
+
+    norm32=_getNorm32(c);
+    if((norm32&_NORM_QC_NFD) && isNorm32Regular(norm32)) {
+        /* get the lead/trail cc from the decomposition data */
+        const uint16_t *nfd=_getExtraData(norm32);
+        if(*nfd&_NORM_DECOMP_FLAG_LENGTH_HAS_CC) {
+            fcd=nfd[1];
+        }
+    } else {
+        fcd=norm32&_NORM_CC_MASK;
+        if(fcd!=0) {
+            /* use the code point cc value for both lead and trail cc's */
+            fcd|=fcd>>_NORM_CC_SHIFT; /* assume that the cc is in bits 15..8 */
+        }
+    }
+
+    return (uint16_t)fcd;
+}
+#endif
 
 /* normalization exclusion sets --------------------------------------------- */
 
@@ -1193,8 +1117,12 @@ unorm_isNFSkippable(UChar32 c, UNormalizationMode mode) {
         break;
     case UNORM_FCD:
         /* FCD: skippable if lead cc==0 and trail cc<=1 */
-        UTRIE_GET16(&fcdTrie, c, fcd);
-        return fcd<=1;
+        if(fcdTrie.index!=NULL) {
+            UTRIE_GET16(&fcdTrie, c, fcd);
+            return fcd<=1;
+        } else {
+            return FALSE;
+        }
     default:
         return FALSE;
     }
@@ -1242,7 +1170,9 @@ unorm_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode) {
 
     /* add the start code point of each same-value range of each trie */
     utrie_enum(&normTrie, NULL, _enumPropertyStartsRange, sa);
-    utrie_enum(&fcdTrie, NULL, _enumPropertyStartsRange, sa);
+    if(fcdTrie.index!=NULL) {
+        utrie_enum(&fcdTrie, NULL, _enumPropertyStartsRange, sa);
+    }
     if(auxTrie.index!=NULL) {
         utrie_enum(&auxTrie, NULL, _enumPropertyStartsRange, sa);
     }
@@ -1287,7 +1217,7 @@ unorm_getFCD16FromCodePoint(UChar32 c) {
     uint16_t fcd;
 
     errorCode=U_ZERO_ERROR;
-    if(!_haveData(errorCode)) {
+    if(!_haveData(errorCode) || fcdTrie.index==NULL) {
         return 0;
     }
 
@@ -3110,6 +3040,10 @@ _quickCheck(const UChar *src,
         options=_NORM_OPTIONS_COMPAT;
         break;
     case UNORM_FCD:
+        if(fcdTrie.index==NULL) {
+            *pErrorCode=U_UNSUPPORTED_ERROR;
+            return UNORM_MAYBE;
+        }
         return unorm_checkFCD(src, srcLength, nx) ? UNORM_YES : UNORM_NO;
     default:
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
@@ -3322,6 +3256,10 @@ unorm_internalNormalizeWithNX(UChar *dest, int32_t destCapacity,
                             options|_NORM_OPTIONS_COMPAT, nx, pErrorCode);
         break;
     case UNORM_FCD:
+        if(fcdTrie.index==NULL) {
+            *pErrorCode=U_UNSUPPORTED_ERROR;
+            return 0;
+        }
         return unorm_makeFCD(dest, destCapacity,
                              src, srcLength,
                              nx,
@@ -3587,8 +3525,13 @@ unorm_previous(UCharIterator *src,
     }
 
     switch(mode) {
-    case UNORM_NFD:
     case UNORM_FCD:
+        if(fcdTrie.index==NULL) {
+            *pErrorCode=U_UNSUPPORTED_ERROR;
+            return 0;
+        }
+        /* fall through to NFD */
+    case UNORM_NFD:
         isPreviousBoundary=_isPrevNFDSafe;
         minC=_NORM_MIN_WITH_LEAD_CC;
         mask=_NORM_CC_MASK|_NORM_QC_NFD;
@@ -3835,8 +3778,13 @@ unorm_next(UCharIterator *src,
     }
 
     switch(mode) {
-    case UNORM_NFD:
     case UNORM_FCD:
+        if(fcdTrie.index==NULL) {
+            *pErrorCode=U_UNSUPPORTED_ERROR;
+            return 0;
+        }
+        /* fall through to NFD */
+    case UNORM_NFD:
         isNextBoundary=_isNextNFDSafe;
         minC=_NORM_MIN_WITH_LEAD_CC;
         mask=_NORM_CC_MASK|_NORM_QC_NFD;
