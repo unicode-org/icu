@@ -1,4 +1,16 @@
 * text=auto !eol
+icu4c/data/charBE.brk -text
+icu4c/data/charLE.brk -text
+icu4c/data/lineBE.brk -text
+icu4c/data/lineLE.brk -text
+icu4c/data/line_thBE.brk -text
+icu4c/data/line_thLE.brk -text
+icu4c/data/sentBE.brk -text
+icu4c/data/sentLE.brk -text
+icu4c/data/wordBE.brk -text
+icu4c/data/wordLE.brk -text
+icu4c/data/word_thBE.brk -text
+icu4c/data/word_thLE.brk -text
 icu4c/docs/BreakIterator.html svneol=native#text/html
 icu4c/docs/BreakIteratorGrafik.gif svneol=native#unset
 icu4c/docs/Collate.html svneol=native#text/html
@@ -21,6 +33,18 @@ icu4c/docs/udata.html svneol=native#text/html
 icu4c/docs/utilCL.html svneol=native#text/html
 icu4c/license.html svneol=native#text/html
 icu4c/readme.html svneol=native#text/html
+icu4c/source/data/brkitr/charBE.brk -text
+icu4c/source/data/brkitr/charLE.brk -text
+icu4c/source/data/brkitr/lineBE.brk -text
+icu4c/source/data/brkitr/lineLE.brk -text
+icu4c/source/data/brkitr/line_thBE.brk -text
+icu4c/source/data/brkitr/line_thLE.brk -text
+icu4c/source/data/brkitr/sentBE.brk -text
+icu4c/source/data/brkitr/sentLE.brk -text
+icu4c/source/data/brkitr/wordBE.brk -text
+icu4c/source/data/brkitr/wordLE.brk -text
+icu4c/source/data/brkitr/word_thBE.brk -text
+icu4c/source/data/brkitr/word_thLE.brk -text
 icu4c/source/samples/XMLConverter/samples/a-ebc-ascii.xml svneol=native#text/xml
 icu4c/source/samples/XMLConverter/samples/a-eucjp-ascii.xml svneol=native#text/xml
 icu4c/source/samples/XMLConverter/samples/a-utf8.xml svneol=native#text/xml
