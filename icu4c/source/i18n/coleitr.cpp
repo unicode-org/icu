@@ -27,6 +27,9 @@
 #include "tables.h"
 #include "normlzr.h"
 #include "unicode.h"
+#include "tcoldata.h"
+#include "ucmp32.h"
+
 
 int32_t const CollationElementIterator::NULLORDER = 0xffffffff;
 int32_t const CollationElementIterator::UNMAPPEDCHARVALUE = 0x7fff0000;
@@ -333,7 +336,9 @@ CollationElementIterator::next(UErrorCode& status)
     }
     
     // Ask the collator for this character's ordering.
-    int32_t value = orderAlias->getUnicodeOrder(ch);
+    /* Used to be RuleBasedCollator.getUnicodeOrder().  It 
+       can't be inlined in tblcoll.h file unfortunately. */
+    int32_t value = ucmp32_get(orderAlias->data->mapping, ch);
 
     if (value == RuleBasedCollator::UNMAPPED)
     {
@@ -399,8 +404,9 @@ CollationElementIterator::previous(UErrorCode& status)
     {
         return NULLORDER;
     }
-
-    int32_t value = orderAlias->getUnicodeOrder(ch);
+    /* Used to be RuleBasedCollator.getUnicodeOrder().  It 
+       can't be inlined in tblcoll.h file unfortunately. */
+    int32_t value = ucmp32_get(orderAlias->data->mapping, ch);
 
     if (value == RuleBasedCollator::UNMAPPED)
     {

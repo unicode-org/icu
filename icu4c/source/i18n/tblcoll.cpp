@@ -136,13 +136,6 @@ char  RuleBasedCollator::fgClassID = 0; // Value is irrelevant       // class id
 
 //================ Some inline definitions of implementation functions........ ========
 
-// Get the character order in the mapping table
-inline int32_t
-RuleBasedCollator::getUnicodeOrder(UChar ch) const
-{
-    return ucmp32_get(data->mapping, ch);
-}
-
 inline int32_t
 RuleBasedCollator::strengthOrder(int32_t value) const
 {
@@ -211,7 +204,7 @@ RuleBasedCollator::getStrengthOrder(NormalizerIterator* cursor,
         return CollationElementIterator::NULLORDER;
     }
     // Ask the collator for this character's ordering.
-    int32_t value = getUnicodeOrder(ch);
+    int32_t value = ucmp32_get(data->mapping, ch);
 
     if (value == UNMAPPED)
     {
