@@ -130,6 +130,20 @@ u_fstropen(UChar *stringBuf,
     result->str.fBuffer = stringBuf;
     result->str.fPos    = stringBuf;
     result->str.fLimit  = stringBuf+capacity;
+
+#if !UCONFIG_NO_FORMATTING
+    /* if locale is 0, use the default */
+    if(locale == 0) {
+        locale = uloc_getDefault();
+    }
+
+    if(u_locbund_init(&result->str.fBundle, locale) == 0) {
+        /* DO NOT FCLOSE HERE! */
+        uprv_free(result);
+        return 0;
+    }
+#endif
+
     return result;
 }
 
