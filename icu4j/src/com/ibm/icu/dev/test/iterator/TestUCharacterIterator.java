@@ -3,7 +3,10 @@ package com.ibm.icu.dev.test.iterator;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.UCharacterIterator;
 import com.ibm.icu.text.UTF16;
-import com.ibm.icu.impl.Utility;
+import com.ibm.icu.text.StringCharacterIterator;
+import com.ibm.icu.text.ReplaceableString;
+import java.text.CharacterIterator;
+
 
 /**
  * @author ram
@@ -240,15 +243,24 @@ public class TestUCharacterIterator extends TestFmwk{
         private int[] s;
         private int length, i;
     };
-    /*
-    public void TestPreviousNext() {
-        // src and expect strings
-        char src[]={
-            UTF16.getLeadSurrogate(0x2f999), UTF16.getTrailSurrogate(0x2f999),
-            UTF16.getLeadSurrogate(0x1d15f), UTF16.getTrailSurrogate(0x1d15f),
-            0xc4,
-            0x1ed0
-        };
+    // src and expect strings
+    private final char src[]={
+        UTF16.getLeadSurrogate(0x2f999), UTF16.getTrailSurrogate(0x2f999),
+        UTF16.getLeadSurrogate(0x1d15f), UTF16.getTrailSurrogate(0x1d15f),
+        0xc4,
+        0x1ed0
+    };
+    public void TestPreviousNext(){
+        // iterators
+        UCharacterIterator iter1 = UCharacterIterator.getInstance(new ReplaceableString(new String(src)));
+        UCharacterIterator iter2 = UCharacterIterator.getInstance(src/*char array*/);
+        UCharacterIterator iter3 = UCharacterIterator.getInstance(new StringCharacterIterator(new String(src)));
+        previousNext(iter1);
+        previousNext(iter2);
+        previousNext(iter3);
+    }
+    public void previousNext(UCharacterIterator iter) {
+
         int expect[]={
             0x2f999,
             0x1d15f,
@@ -262,7 +274,7 @@ public class TestUCharacterIterator extends TestFmwk{
             1,1,
             2,
             3,
-            3
+            4 //needed 
         };
     
         // initial indexes into the src and expect strings
@@ -276,8 +288,7 @@ public class TestUCharacterIterator extends TestFmwk{
         // not const so that we can terminate it below for the error message
         String moves="0+0+0--0-0-+++0--+++++++0--------";
     
-        // iterators
-        UCharacterIterator iter = UCharacterIterator.getInstance(new String(src));
+        
         UCharIterator iter32 = new UCharIterator(expect, expect.length, 
                                                      EXPECT_MIDDLE);
     
@@ -322,9 +333,54 @@ public class TestUCharacterIterator extends TestFmwk{
                 break;
             }
         }
-    }*/
+    }
     
-
+    public void TestUCharacterIteratorWrapper(){
+        String source ="asdfasdfjoiuyoiuy2341235679886765";
+        UCharacterIterator it = UCharacterIterator.getInstance(source);
+        CharacterIterator wrap_ci = it.getCharacterIterator();
+        CharacterIterator ci = new StringCharacterIterator(source);
+        wrap_ci.setIndex(10);
+        ci.setIndex(10);
+        String moves="0+0+0--0-0-+++0--+++++++0--------++++0000----0-";
+        int c1, c2;
+        char m;
+        int movesIndex =0;
+        
+        while(movesIndex<moves.length()) {
+            m=moves.charAt(movesIndex++);
+            if(m=='-') {
+                c1=wrap_ci.previous();
+                c2=ci.previous();
+            } else if(m=='0') {
+                c1=wrap_ci.current();
+                c2=ci.current();
+            } else  {// m=='+' 
+                c1=wrap_ci.next();
+                c2=ci.next();
+            }
+    
+            // compare results
+            if(c1!=c2) {
+                // copy the moves until the current (m) move, and terminate
+                String history = moves.substring(0,movesIndex);
+                errln("error: mismatch in Normalizer iteration at "+history+": "
+                      +"got c1= " + hex(c1) +" != expected c2= "+ hex(c2));
+                break;
+            }
+    
+            // compare indexes
+            if(wrap_ci.getIndex()!=ci.getIndex()) {
+                // copy the moves until the current (m) move, and terminate
+                String history = moves.substring(0,movesIndex);
+                errln("error: index mismatch in Normalizer iteration at "
+                      +history+ " : "+ "Normalizer index " +wrap_ci.getIndex()
+                      +" expected "+ ci.getIndex());
+                break;
+            }
+        }
+        
+    }
     // private data members ---------------------------------------------
     
     private static final String ITERATION_STRING_ =
