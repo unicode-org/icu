@@ -42,6 +42,9 @@ RESFILES=resfiles.mk
 ICUDATA=$(ICUP)\data
 
 DLL_OUTPUT=.\$(CFG)
+# set the following to 'static' or 'dll' depending
+PKGMODE=static
+
 
 ICD=$(ICUDATA)^\
 DATA_PATH=$(ICUP)\data^\
@@ -76,18 +79,23 @@ PATH = $(PATH);$(ICUP)\bin
 RB_FILES = $(RESSRC:.txt=.res)
 
 # This target should build all the data files
-ALL : GODATA  "$(DLL_OUTPUT)\$(RESNAME).dll" GOBACK #$(RESNAME).dat
-	@echo All targets are up to date
+!IF "$(PKGMODE)" == "dll"
+OUTPUT = "$(DLL_OUTPUT)\$(RESNAME).dll"
+!ELSE
+OUTPUT = "$(DLL_OUTPUT)\$(RESNAME).lib"
+!ENDIF
 
-#invoke pkgdata
-"$(DLL_OUTPUT)\$(RESNAME).dll" :  $(RB_FILES) $(RESFILES)
-	@echo Building $(RESNAME)
-	@"$(ICUTOOLS)\pkgdata" -v -m dll -c -p $(RESNAME) -O "$(PKGOPT)" -d "$(DLL_OUTPUT)" -s "$(RESDIR)" <<pkgdatain.txt
+ALL : GODATA  $(OUTPUT) GOBACK #$(RESNAME).dat
+	@echo All targets are up to date (mode $(PKGMODE))
+
+
+# invoke pkgdata - static
+"$(DLL_OUTPUT)\$(RESNAME).lib" :  $(RB_FILES) $(RESFILES)
+	@echo Building $(RESNAME).lib
+	@"$(ICUTOOLS)\pkgdata" -v -m static -c -p $(RESNAME) -O "$(PKGOPT)" -d "$(DLL_OUTPUT)" -s "$(RESDIR)" <<pkgdatain.txt
 $(RB_FILES:.res =.res
 )
 <<KEEP
-	@echo Copying "$(DLL_OUTPUT)\$(RESNAME).dll to $(ICUP)\bin
-	@copy "$(DLL_OUTPUT)\$(RESNAME).dll" $(ICUP)\bin
 
 # utility to send us to the right dir
 GODATA :
@@ -101,7 +109,7 @@ GOBACK :
 CLEAN :
 	@cd "$(RESDIR)"
 	-@erase "*.cnv"
-	-@erase "*.res"
+	-@erase "*.res"f
 	-@erase "cnvalias*.*"
 	-@erase "icudata.*"
 	-@erase "*.obj"
