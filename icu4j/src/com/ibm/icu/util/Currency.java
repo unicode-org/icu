@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Currency.java,v $
- * $Date: 2002/10/04 19:41:02 $
- * $Revision: 1.8 $
+ * $Date: 2002/11/16 03:46:35 $
+ * $Revision: 1.9 $
  *
  *******************************************************************************
  */
@@ -52,6 +52,8 @@ public class Currency implements Serializable {
      */
     private String isoCode;
 
+    // begin registry stuff 
+
     private static ICULocaleService service;
 
     private static ICULocaleService getService() {
@@ -95,16 +97,18 @@ public class Currency implements Serializable {
     /**
      * Registers a new currency for the provided locale.  The returned object
      * is a key that can be used to unregister this currency object.
+     * @prototype
      */
-    public static Object register(Currency currency, Locale locale) {
+    /* public */ static Object register(Currency currency, Locale locale) {
         return getService().registerObject(currency, locale);
     }
 
     /**
      * Unregister the currency associated with this key (obtained from
      * registerInstance).
+     * @prototype
      */
-    public static boolean unregister(Object registryKey) {
+    /* public */ static boolean unregister(Object registryKey) {
         return getService().unregisterFactory((Factory)registryKey);
     }
 
@@ -113,8 +117,14 @@ public class Currency implements Serializable {
      * is defined.
      */
     public static Locale[] getAvailableLocales() {
-        return getService().getAvailableLocales();
+        if (service == null) {
+            return ICULocaleData.getAvailableLocales();
+        } else {
+            return service.getAvailableLocales();
+        }
     }
+
+    // end registry stuff
 
     /**
      * Return a hashcode for this currency.
