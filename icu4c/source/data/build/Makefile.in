@@ -64,8 +64,9 @@ BRK_FILES=char.brk line.brk line_th.brk sent.brk word.brk word_th.brk
 
 ## UCM files 
 include $(SRCDATADIR)/ucmfiles.mk
+-include $(SRCDATADIR)/ucmebcdic.mk
 -include $(SRCDATADIR)/ucmlocal.mk
-ALL_UCM_SOURCE= $(UCM_SOURCE) $(UCM_SOURCE_LOCAL)
+ALL_UCM_SOURCE= $(UCM_SOURCE) $(UCM_SOURCE_EBCDIC) $(UCM_SOURCE_LOCAL)
 UCM_FILES = $(ALL_UCM_SOURCE:%=$(SRCDATADIR)/%)
 CNV_FILES = $(ALL_UCM_SOURCE:%.ucm=%.cnv)
 
