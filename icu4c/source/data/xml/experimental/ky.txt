@@ -7,8 +7,17 @@
 
 ky{
     Version{ "x0.1" }
-    Languages {
-        ky { "\u041A\u044B\u0440\u0433\u044B\u0437" }
+    CollationElements {
+        Version { "1.0" }
+        Sequence { 
+            "[normalization on]"
+        }
+    }
+    Countries {
+        KG { "\u041A\u044B\u0440\u0433\u044B\u0437\u0441\u0442\u0430\u043D" }
+    }
+    Currencies {
+        KGS { "\u0441\u043E\u043C", "KGS" }
     }
     DayNames{
         "\u0416\u0435\u043A\u0448\u0435\u043C\u0431\u0438",
@@ -19,7 +28,6 @@ ky{
         "\u0416\u0443\u043C\u0430",
         "\u0418\u0448\u0435\u043C\u0431\u0438"
     }
-
     DayAbbreviations{
         "\u0416\u0448",
         "\u0414\u0448",
@@ -29,22 +37,11 @@ ky{
         "\u0416\u043C",
         "\u0418\u0448"
     }
-
-    MonthNames{
-        "\u042F\u043D\u0432\u0430\u0440\u044C",
-        "\u0424\u0435\u0432\u0440\u0430\u043B\u044C",
-        "\u041C\u0430\u0440\u0442",
-        "\u0410\u043F\u0440\u0435\u043B\u044C",
-        "\u041C\u0430\u0439",
-        "\u0418\u044E\u043D\u044C",
-        "\u0418\u044E\u043B\u044C",
-        "\u0410\u0432\u0433\u0443\u0441\u0442",
-        "\u0421\u0435\u043D\u0442\u044F\u0431\u0440\u044C",
-        "\u041E\u043A\u0442\u044F\u0431\u0440\u044C",
-        "\u041D\u043E\u044F\u0431\u0440\u044C",
-        "\u0414\u0435\u043A\u0430\u0431\u0440\u044C",
+    ExemplarCharacters { "[\u0430-\u044f \u0456 \u0454 \u0457 \u0491]" }
+    LocaleScript:array{ "Cyrl" }
+    Languages {
+        ky { "\u041A\u044B\u0440\u0433\u044B\u0437" }
     }
-
     MonthAbbreviations{
         "\u042F\u043D\u0432",
         "\u0424\u0435\u0432",
@@ -59,7 +56,20 @@ ky{
         "\u041D\u043E\u044F",
         "\u0414\u0435\u043A",
     }
-
+    MonthNames{
+        "\u042F\u043D\u0432\u0430\u0440\u044C",
+        "\u0424\u0435\u0432\u0440\u0430\u043B\u044C",
+        "\u041C\u0430\u0440\u0442",
+        "\u0410\u043F\u0440\u0435\u043B\u044C",
+        "\u041C\u0430\u0439",
+        "\u0418\u044E\u043D\u044C",
+        "\u0418\u044E\u043B\u044C",
+        "\u0410\u0432\u0433\u0443\u0441\u0442",
+        "\u0421\u0435\u043D\u0442\u044F\u0431\u0440\u044C",
+        "\u041E\u043A\u0442\u044F\u0431\u0440\u044C",
+        "\u041D\u043E\u044F\u0431\u0440\u044C",
+        "\u0414\u0435\u043A\u0430\u0431\u0440\u044C",
+    }
     NumberElements{
         ",",
         "\u00A0",
@@ -74,16 +84,5 @@ ky{
         "\ufffd",
         "-",
         "+",
-    }
-    Currencies {
-        KGS { "\u0441\u043E\u043C", "KGS" }
-    }
-    LocaleScript:array{ "Cyrl" }
-    ExemplarCharacters { "[\u0430-\u044f \u0456 \u0454 \u0457 \u0491]" }
-    CollationElements {
-        Version { "1.0" }
-        Sequence { 
-            "[normalization on]"
-        }
     }
 }
