@@ -24,7 +24,7 @@
 
 root
 {
-// uconv errors
+  // uconv errors
 
   lcUsageWord { "usage" }
   ucUsageWord { "Usage" }
@@ -55,9 +55,9 @@ root
 	      "Callbacks:"
   }
 
-  cantGetNames   { "Couldn''t get available converter names.\n" } // 0: err 
+  cantGetNames   { "Couldn''t get available converter names.\n" } // 0: err
   cantGetTag   { "Couldn''t get standard tag name: {0}.\n" } // 0: err
-
+  
   noSuchCodeset  { "Couldn''t find encoding: {0}.\n" } // 0: name of the encoding
   noFromCodeset  { "No original encoding set (use -f).\n" }
   noToCodeset    {  "No destination encoding set (use -t).\n" }
@@ -67,7 +67,7 @@ root
   cantSetInBinMode { "Couldn't set standard input to binary mode." }
   cantSetOutBinMode { "Couldn't set standard output to binary mode." }
 
-  cantOpenFromCodeset { "Couldn''t open converter for original encoding {0}: {1}.\n" }  // 0:set, 1: err
+  cantOpenFromCodeset { "Couldn''t open converter for original encoding {0}: {1}.\n" } // 0:set, 1: err
   cantOpenToCodeset { "Couldn''t open converteur for destination encoding {0}: {1}.\n" } // 0: set, 1: err
 
   cantCreateTranslit { "Couldn''t create transliteration \"{0}\": {1}.\n" } // 0: set, 1: err
@@ -83,12 +83,12 @@ root
   cantWrite       { "The converted text couldn't be written: {0}.\n" } // 0: OS error string
   cantRead        { "Error reading from input file: {0}.\n" } // 0: OS error string
 
-  premEnd         { "Premature end of Unicode to destination encoding conversion at position {0}.\n" }
-  premEndInput    { "Premature end of input when converting from original encoding to Unicode at position {0}.\n" }
+  premEnd         { "Premature end of Unicode to destination encoding conversion at position {0}.\n" } // 0: position
+  premEndInput    { "Premature end of input when converting from original encoding to Unicode at position {0}.\n" } // 0: position
 
   problemCvtToU   { "Conversion to Unicode from codepage failed at position {0}: {1}.\n" } // 0: position, 1: err
-  problemCvtFromU { "Conversion from Unicode to codepage failed at position {0}: {1}.\n"} // 0: err, 1: pos
-  problemCvtFromUOut { "Conversion from Unicode to codepage failed at position {0} in output: {1}.\n"} // 0: err, 1: pos
+  problemCvtFromU { "Conversion from Unicode to codepage failed at position {0}: {1}.\n"} // 0: position, 1: err
+  problemCvtFromUOut { "Conversion from Unicode to codepage failed at position {0} in output: {1}.\n"} // 0: position, 1: err
 
 // ICU errors - used by u_wmsg_errorName()
 
