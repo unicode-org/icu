@@ -16,9 +16,9 @@
 ICU_DEFAULT_PREFIX=~/icu
 
 ifeq ($(strip $(ICU_PREFIX)),)
-  ICU_INC=$(ICU_DEFAULT_PREFIX)/share/icu/Makefile.inc
+  ICU_INC=$(ICU_DEFAULT_PREFIX)/lib/icu/Makefile.inc
 else
-  ICU_INC=$(ICU_PREFIX)/share/icu/Makefile.inc
+  ICU_INC=$(ICU_PREFIX)/lib/icu/Makefile.inc
 endif
 ICUPATH=
 
