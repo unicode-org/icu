@@ -2,8 +2,6 @@
 ## Solaris-specific setup using Sun's workshop compilers
 ## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
-##
-## $Id: mh-solaris,v 1.37 2004/03/26 22:33:12 grhoten-oss Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -KPIC

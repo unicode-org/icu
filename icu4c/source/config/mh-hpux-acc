@@ -2,8 +2,6 @@
 ## HP/UX-specific setup using aCC
 ## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
-##
-## $Id: mh-hpux-acc,v 1.38 2004/03/26 22:33:12 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	:

@@ -2,8 +2,6 @@
 ## HP/UX-specific setup using CC
 ## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
-##
-## $Id: mh-hpux-cc,v 1.34 2004/03/26 22:33:12 grhoten-oss Exp $
 
 
 ## This causes source/tools/pkgdata generated makefiles  to create and link
