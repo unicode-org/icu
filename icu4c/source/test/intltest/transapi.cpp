@@ -771,7 +771,7 @@ void TransliteratorAPITest::keyboardAux(Transliterator *t, UnicodeString DATA[],
     for (int32_t i=begin; i<end; i=i+5) {
         UnicodeString log;
         if (DATA[i+0] != "") {
-             log = s + " + " + DATA[0] + " -> ";
+             log = s + " + " + DATA[i] + " -> ";
              index.contextStart=getInt(DATA[i+2]);
              index.contextLimit=index.limit=getInt(DATA[i+3]);
              index.start=getInt(DATA[i+4]);
@@ -792,15 +792,21 @@ void TransliteratorAPITest::keyboardAux(Transliterator *t, UnicodeString DATA[],
 
 void TransliteratorAPITest::displayOutput(const UnicodeString& got, const UnicodeString& expected, UnicodeString& log, UTransPosition& index){
  // Show the start index '{' and the cursor '|'
-    UnicodeString a, b, c;
+    UnicodeString a, b, c, d, e;
     got.extractBetween(0, index.contextStart, a);
     got.extractBetween(index.contextStart, index.start, b);
-    got.extractBetween(index.start, got.length(), c);
+    got.extractBetween(index.start, index.limit, c);
+    got.extractBetween(index.limit, index.contextLimit, d);
+    got.extractBetween(index.contextLimit, got.length(), e);
     log.append(a).
         append((UChar)0x7b/*{*/).
         append(b).
         append((UChar)0x7c/*|*/).
-        append(c);
+        append(c).
+        append((UChar)0x7c).
+        append(d).
+        append((UChar)0x7d/*}*/).
+        append(e);
     if (got == expected) 
         logln("OK:" + prettify(log));
     else 
