@@ -516,7 +516,11 @@ TimeZone::initDefault()
 
     TimeZone* default_zone = NULL;
 
-    default_zone = createSystemTimeZone(hostID);
+    /* Make sure that the string is NULL terminated to prevent BoundsChecker/Purify warnings. */
+    UnicodeString hostStrID(hostID, -1, US_INV);
+    hostStrID.append((UChar)0);
+    hostStrID.truncate(hostStrID.length()-1);
+    default_zone = createSystemTimeZone(hostStrID);
 
 #if 0
     // NOTE: As of ICU 2.8, we no longer have an offsets table, since
