@@ -1,161 +1,91 @@
-## Makefile for udata example
-
-## Copyright (c) 2000, International Business Machines Corporation and
-## others. All Rights Reserved.
+# Copyright (c) 2000 IBM, Inc. and others
+# udata sample code $Revision: 1.2 $
 
 
-## Shell to use
-SHELL = /bin/sh
-VERSION = 1.6
-UNICODE_VERSION = 3.0.0
+# Usage:
+#  - configure and build ICU [see the docs] .. use "--prefix=" something
+#     (I  used --prefix=/home/srl/III )
+# 
+#  - do 'make install' of icu 
+#
+#  - change ICU_DEFAULT_PREFIX line to point to the $(prefix) that 
+#    was used (will look for $(prefix)/share/icu/Makefile.inc )
+#      OR 
+#   set the variable ICU_PREFIX to point at $(prefix)
+#  
+#  - change ICU_DEFAULT_PATH line to point to the 'icu' directory
+#    containing source, data, config, etc.. 
+#      OR 
+#   set the variable ICU_PATH to point at that path
+#  
+#  - do 'make' in this directory
 
-ICUDATADIR=/home/weiv/dev/icu_linux/source/../data/
+ICU_DEFAULT_PREFIX=/home/srl/II
+ICU_DEFAULT_PATH=~/icu
 
-## Install directory information
-top_builddir=/usr/home/weiv/dev/icu_linux/source
-srcdir = /usr/home/weiv/dev/icu_linux/source
-top_srcdir = /usr/home/weiv/dev/icu_linux/source
-prefix = /usr/local
-exec_prefix = ${prefix}
-
-pkgdatadir = $(datadir)/icu
-pkglibdir = $(libdir)/icu
-pkgincludedir = $(includedir)/icu
-
-## Compiler/tools information
-CC = gcc
-CXX = g++
-
-## Platform-specific setup
-
-## -*-makefile-*-
-## Linux-specific setup
-## Copyright (c) 1999-2000, International Business Machines Corporation and
-## others. All Rights Reserved.
-
-## Commands to generate dependency files
-GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
-GEN_DEPS.cc=	$(CXX) -E -MM $(DEFS) $(CPPFLAGS)
-
-## Commands to compile
-COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
-COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
-
-## Commands to link
-LINK.c=		$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
-LINK.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
-
-## Commands to make a shared library
-SHLIB.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -shared
-SHLIB.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -shared
-
-## Compiler switch to embed a runtime search path
-LD_RPATH=	
-LD_RPATH_PRE=	-Wl,-rpath,
-
-###  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
-## Prefix for the ICU library names
-LIBICU = libicu-
-## Shared object suffix
-SO=		so
-
-## Link commands to link to ICU libs
-LIBICU-UC= 	-L$(top_builddir)/common -licu-uc
-LIBICU-I18N= 	-L$(top_builddir)/i18n -licu-i18n
-LIBCTESTFW= 	-L$(top_builddir)/tools/ctestfw -lctestfw
-LIBICU-TOOLUTIL=-L$(top_builddir)/tools/toolutil -licu-toolutil
-LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio
-
-## Compilation rules
-%.o : $(srcdir)/%.c
-	$(COMPILE.c) -o $@ $<
-
-%.o : $(srcdir)/%.cpp
-	$(COMPILE.cc) -o $@ $<
-
-../data/%.o : ../data/%.c
-	$(COMPILE.c) -o $@ $<
-
-## Dependency rules
-%.d : $(srcdir)/%.c
-	@echo "Generating dependency information for $<"
-	@$(SHELL) -ec '$(GEN_DEPS.c) $< \
-		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
-		[ -s $@ ] || rm -f $@'
-
-%.d : $(srcdir)/%.cpp
-	@echo "Generating dependency information for $<"
-	@$(SHELL) -ec '$(GEN_DEPS.cc) $< \
-		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
-		[ -s $@ ] || rm -f $@'
-
-
-## Build directory information
-subdir = tools/gentest
-
-## Extra files to remove for 'make clean'
-CLEANFILES = *~
-
-## Target information
-TARGET = writer
-
-DEFS = -DHAVE_CONFIG_H
-CPPFLAGS =  -I. -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
-CFLAGS = -g -O2
-CXXFLAGS = -g -O2
-LDFLAGS =  \
-$(LD_RPATH)$(LD_RPATH_PRE)$(top_builddir)/common $(LD_RPATH_PRE)$(top_builddir)/tools/toolutil $(LD_RPATH_PRE)$(libdir)
-LIBS = $(LIBICU-UC)  -ldl -lpthread -lm    $(LIBICU-TOOLUTIL)
-
-OBJECTS = writer.o reader.o
-
-DEPS = $(OBJECTS:.o=.d)
-
-## Clear suffix list
-.SUFFIXES :
-
-## List of standard targets
-all: all-local
-
-all-local: $(TARGET) build-data
-
-build-data: $(ICUDATADIR)/test.dat
-
-# we set the ICU_DATA directory here so that test.dat ends up in 
-# icu/data rather than PREFIX/share/icu/VERSION/
-$(ICUDATADIR)/test.dat: $(TARGET)
-	ICU_DATA=$(ICUDATADIR) ./$(TARGET) 
-
-#writer : $(OBJECTS)
-#	$(LINK.cc) -o $@ $^ $(LIBS) 
-
-#reader : $(OBJECTS)
-#	$(LINK.cc) -o $@ $^ $(LIBS) 
-
-$(TARGET) : $(OBJECTS)
-	$(LINK.cc) -o $@ $^ $(LIBS) 
-
-ifeq (,$(MAKECMDGOALS))
--include $(DEPS)
+ifeq ($(strip $(ICU_PREFIX)),)
+  ICU_INC=$(ICU_DEFAULT_PREFIX)/share/icu/Makefile.inc
 else
-ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
+  ICU_INC=$(ICU_PREFIX)/share/icu/Makefile.inc
+endif
+
+
+ifeq ($(strip $(ICU_PATH)),)
+  ICU_PATH=$(ICU_DEFAULT_PATH)
+endif
+
+include $(ICU_INC)
+
+# Name of your target
+TARGET1=reader
+TARGET2=writer
+
+# All object files (C or C++)
+OBJECTS1=reader.o
+OBJECTS2=writer.o
+OBJECTS=$(OBJECTS1) $(OBJECTS2)
+
+CLEANFILES=*~ $(TARGET).out
+
+DEPS=$(OBJECTS:.o=.d)
+
+all: $(ICU_PATH)/source/tools/toolutil/uoptions.h $(TARGET1) $(TARGET2)
+
+$(ICU_PATH)/source/tools/toolutil/uoptions.h:
+	@echo "Please read the directions at the top of this file (Makefile)"
+	@echo "Can't open $@ - check ICU_PATH"
+	@false
+
+# Only the writer needs these, actually.
+CPPFLAGS += -I$(ICU_PATH)/source/tools/toolutil
+LDFLAGS += -L$(ICU_PATH)/source/tools/toolutil -licu-toolutil
+
+
+.PHONY: all clean distclean check report
+
+distclean clean:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
+	-$(RMV) $(OBJECTS) $(TARGET1) $(TARGET2)
+	-$(RMV) $(DEPS)
+
+# Can change this to LINK.c if it is a C only program
+# Can add more libraries here. 
+$(TARGET1): $(OBJECTS1)
+	$(LINK.cc) -o $@ $^ $(ICULIBS)
+
+$(TARGET2): $(OBJECTS2)
+	$(LINK.cc) -o $@ $^ $(ICULIBS)
+
+# Make check: simply runs the sample, logged to a file
+check: $(TARGET1) $(TARGET2)
+	$(TARGET1) | tee $(TARGET1).out
+	$(TARGET2) | tee $(TARGET2).out
+
+$(ICU_INC):
+	@echo "Please read the directions at the top of this file (Makefile)"
+	@echo "Can't open $(ICU_INC)"
+	@false
+
+ifneq ($(MAKECMDGOALS),distclean)
 -include $(DEPS)
 endif
-endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
