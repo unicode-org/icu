@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.105 2001/05/08 17:29:51 emader Exp $
+dnl $Id: configure.in,v 1.106 2001/05/25 18:00:38 rviswanadha Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -81,10 +81,10 @@ case "${host}" in
 			SOL64=no
 		fi
 	fi ;;
-alpha*-*-linux-gnu)
-	CFLAGS="${CFLAGS} -mieee -O2"
-	CXXFLAGS="${CXXFLAGS} -mieee -O2"
-	;;
+#alpha*-*-linux-gnu)
+#	CFLAGS="${CFLAGS} -mieee -O2"
+#	CXXFLAGS="${CXXFLAGS} -mieee -O2"
+#	;;
 esac
 
 ICU_CHECK_MH_FRAG
