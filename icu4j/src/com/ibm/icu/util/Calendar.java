@@ -620,7 +620,7 @@ import java.util.ResourceBundle;
  * @see          GregorianCalendar
  * @see          TimeZone
  * @see          DateFormat
- * @version      $Revision: 1.28 $ $Date: 2002/08/01 20:27:22 $
+ * @version      $Revision: 1.29 $ $Date: 2002/08/08 01:45:21 $
  * @author Mark Davis, David Goldsmith, Chen-Lieh Huang, Alan Liu, Laura Werner
  * @since JDK1.1
  */
@@ -4421,8 +4421,9 @@ public abstract class Calendar implements Serializable, Cloneable {
             remainder[0] = numerator % denominator;
             return numerator / denominator;
         }
-        remainder[0] = denominator + (numerator % denominator);
-        return ((numerator + 1) / denominator) - 1;
+	int quotient = ((numerator + 1) / denominator) - 1;
+        remainder[0] = numerator - (quotient * denominator);
+        return quotient;
     }
 
     /**
