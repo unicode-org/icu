@@ -138,34 +138,32 @@ class CollationKey;
  * @author      Helena Shih
  */
 
-class U_I18N_API Collator 
-{
-public : 
-  
+class U_I18N_API Collator {
+public:
   /**
-     * Base letter represents a primary difference.  Set comparison
-     * level to PRIMARY to ignore secondary and tertiary differences.
-     * Use this to set the strength of a Collator object.
-     * Example of primary difference, "abc" &lt; "abd"
-     * 
-     * Diacritical differences on the same base letter represent a secondary
-     * difference.  Set comparison level to SECONDARY to ignore tertiary
-     * differences. Use this to set the strength of a Collator object.
-     * Example of secondary difference, "ä" >> "a".
-     *
-     * Uppercase and lowercase versions of the same character represents a
-     * tertiary difference.  Set comparison level to TERTIARY to include
-     * all comparison differences. Use this to set the strength of a Collator
-     * object.
-     * Example of tertiary difference, "abc" &lt;&lt;&lt; "ABC".
-     *
-     * Two characters are considered "identical" when they have the same
-     * unicode spellings.
-     * For example, "ä" == "ä".
-     *
-     * ECollationStrength is also used to determine the strength of sort keys 
-     * generated from Collator objects.
-     */
+   * Base letter represents a primary difference.  Set comparison
+   * level to PRIMARY to ignore secondary and tertiary differences.
+   * Use this to set the strength of a Collator object.
+   * Example of primary difference, "abc" &lt; "abd"
+   * 
+   * Diacritical differences on the same base letter represent a secondary
+   * difference.  Set comparison level to SECONDARY to ignore tertiary
+   * differences. Use this to set the strength of a Collator object.
+   * Example of secondary difference, "ä" >> "a".
+   *
+   * Uppercase and lowercase versions of the same character represents a
+   * tertiary difference.  Set comparison level to TERTIARY to include
+   * all comparison differences. Use this to set the strength of a Collator
+   * object.
+   * Example of tertiary difference, "abc" &lt;&lt;&lt; "ABC".
+   *
+   * Two characters are considered "identical" when they have the same
+   * unicode spellings.
+   * For example, "ä" == "ä".
+   *
+   * ECollationStrength is also used to determine the strength of sort keys 
+   * generated from Collator objects.
+   */
   enum ECollationStrength {
     PRIMARY = 0,
     SECONDARY = 1, 

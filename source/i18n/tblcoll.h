@@ -318,7 +318,7 @@ class RuleBasedCollatorStreamer;
  */
 class U_I18N_API RuleBasedCollator : public Collator 
 {
-public : 
+public: 
 
   // constructor/destructor
   /**
@@ -327,9 +327,9 @@ public :
    * description for more details on the collation rule syntax.
    * @see Locale
    * @param rules the collation rules to build the collation table from.
-     */
-  RuleBasedCollator(  const   UnicodeString&  rules,
-              UErrorCode&      status);
+   */
+	RuleBasedCollator(const UnicodeString& rules,
+			UErrorCode& status);
 
   RuleBasedCollator(  const   UnicodeString&  rules,
               ECollationStrength collationStrength,
@@ -344,86 +344,86 @@ public :
               Normalizer::EMode  decompositionMode,
               UErrorCode&      status);
 
-  /** Destructor
-     */
-  virtual                         ~RuleBasedCollator();
+  /** Destructor.
+   */
+	virtual ~RuleBasedCollator();
 
 
-  /** Copy constructor
-     */
-  RuleBasedCollator(const RuleBasedCollator& other);
+  /** Copy constructor.
+   */
+	RuleBasedCollator(const RuleBasedCollator& other);
 
   /**
-     * Assignment operator.
-     */
-  RuleBasedCollator&      operator=(const RuleBasedCollator& other);
+   * Assignment operator.
+   */
+	RuleBasedCollator& operator=(const RuleBasedCollator& other);
     
   /**
-     * Returns true if "other" is the same as "this".
-     */
+   * Returns true if "other" is the same as "this".
+   */
   virtual bool_t                  operator==(const Collator& other) const;
 
   /**
-     * Returns true if "other" is not the same as "this".
-     */
+   * Returns true if "other" is not the same as "this".
+   */
   virtual bool_t                  operator!=(const Collator& other) const;
 
   /**
-     * Makes a deep copy of the object.  The caller owns the returned object.
-     * @return the cloned object.
-     */
+   * Makes a deep copy of the object.  The caller owns the returned object.
+   * @return the cloned object.
+   */
   virtual Collator*               clone(void) const;
 
   /**
-     * Creates a collation element iterator for the source string.  The 
-     * caller of this method is responsible for the memory management of 
-     * the return pointer.
-     * @param source the string over which the CollationElementIterator will iterate.
-     * @return the collation element iterator of the source string using this as
-     * the based collator.
-     */
-  virtual CollationElementIterator*       createCollationElementIterator(const UnicodeString& source) const;
+   * Creates a collation element iterator for the source string.  The 
+   * caller of this method is responsible for the memory management of 
+   * the return pointer.
+   * @param source the string over which the CollationElementIterator will iterate.
+   * @return the collation element iterator of the source string using this as
+   * the based collator.
+   */
+	virtual CollationElementIterator* createCollationElementIterator(const UnicodeString& source) const;
 
   /**
-     * Creates a collation element iterator for the source.  The 
-     * caller of this method is responsible for the memory management of 
-     * the returned pointer.
-     * @param source the CharacterIterator which produces the characters over which the
-     * CollationElementItgerator will iterate.
-     * @return the collation element iterator of the source using this as
-     * the based collator.
-     */
+   * Creates a collation element iterator for the source.  The 
+   * caller of this method is responsible for the memory management of 
+   * the returned pointer.
+   * @param source the CharacterIterator which produces the characters over which the
+   * CollationElementItgerator will iterate.
+   * @return the collation element iterator of the source using this as
+   * the based collator.
+   */
   virtual CollationElementIterator*       createCollationElementIterator(const CharacterIterator& source) const;
 
   /**
-     * Compares a range of character data stored in two different strings
-     * based on the collation rules.  Returns
-     * information about whether a string is less than, greater than or
-     * equal to another string in a language.
-     * This can be overriden in a subclass.
-     * @param source the source string.
-     * @param target the target string to be compared with the source stirng.
-     * @return the comparison result.  GREATER if the source string is greater
-     * than the target string, LESS if the source is less than the target.  Otherwise,
-     * returns EQUAL.
-     */
+   * Compares a range of character data stored in two different strings
+   * based on the collation rules.  Returns
+   * information about whether a string is less than, greater than or
+   * equal to another string in a language.
+   * This can be overriden in a subclass.
+   * @param source the source string.
+   * @param target the target string to be compared with the source stirng.
+   * @return the comparison result.  GREATER if the source string is greater
+   * than the target string, LESS if the source is less than the target.  Otherwise,
+   * returns EQUAL.
+   */
   virtual     EComparisonResult   compare(    const   UnicodeString&  source, 
                           const   UnicodeString&  target) const;
         
         
   /**
-     * Compares a range of character data stored in two different strings
-     * based on the collation rules up to the specified length.  Returns
-     * information about whether a string is less than, greater than or
-     * equal to another string in a language.
-     * This can be overriden in a subclass.
-     * @param source the source string.
-     * @param target the target string to be compared with the source string.
-     * @param length compares up to the specified length
-     * @return the comparison result.  GREATER if the source string is greater
-     * than the target string, LESS if the source is less than the target.  Otherwise,
-     * returns EQUAL.
-     */ 
+   * Compares a range of character data stored in two different strings
+   * based on the collation rules up to the specified length.  Returns
+   * information about whether a string is less than, greater than or
+   * equal to another string in a language.
+   * This can be overriden in a subclass.
+   * @param source the source string.
+   * @param target the target string to be compared with the source string.
+   * @param length compares up to the specified length
+   * @return the comparison result.  GREATER if the source string is greater
+   * than the target string, LESS if the source is less than the target.  Otherwise,
+   * returns EQUAL.
+   */ 
   virtual     EComparisonResult   compare(    const   UnicodeString&  source, 
                           const   UnicodeString&  target,
                           int32_t length) const;
@@ -442,57 +442,57 @@ public :
                               CollationKey&   key,
                               UErrorCode&  status) const;
   /**
-     * Generates the hash code for the rule-based collation object.
-     * @return the hash code.
-     */
+   * Generates the hash code for the rule-based collation object.
+   * @return the hash code.
+   */
   virtual     int32_t             hashCode(void) const;
 
   /**
-     * Gets the table-based rules for the collation object.
-     * @return returns the collation rules that the table collation object
-     * was created from.
-     */
+   * Gets the table-based rules for the collation object.
+   * @return returns the collation rules that the table collation object
+   * was created from.
+   */
   const       UnicodeString&      getRules(void) const;
 
   /**
-     *  Return the maximum length of any expansion sequences that end
-     *  with the specified comparison order.
-     * 
-     *  @param order a collation order returned by previous or next.
-     *  @return the maximum length of any expansion seuences ending
-     *          with the specified order.
-     * 
-     *  @see CollationElementIterator#getMaxExpansion
-     */
-  int32_t                getMaxExpansion(int32_t order) const;
+   *  Return the maximum length of any expansion sequences that end
+   *  with the specified comparison order.
+   * 
+   *  @param order a collation order returned by previous or next.
+   *  @return the maximum length of any expansion seuences ending
+   *          with the specified order.
+   * 
+   *  @see CollationElementIterator#getMaxExpansion
+   */
+	int32_t getMaxExpansion(int32_t order) const;
 
   /**
-     * Returns a unique class ID POLYMORPHICALLY.  Pure virtual override.
-     * This method is to implement a simple version of RTTI, since not all
-     * C++ compilers support genuine RTTI.  Polymorphic operator==() and
-     * clone() methods call this method.
-     *
-     * @return          The class ID for this object. All objects of a
-     *                  given class have the same class ID.  Objects of
-     *                  other classes have different class IDs.
-     */
+   * Returns a unique class ID POLYMORPHICALLY.  Pure virtual override.
+   * This method is to implement a simple version of RTTI, since not all
+   * C++ compilers support genuine RTTI.  Polymorphic operator==() and
+   * clone() methods call this method.
+   *
+   * @return          The class ID for this object. All objects of a
+   *                  given class have the same class ID.  Objects of
+   *                  other classes have different class IDs.
+   */
   virtual UClassID getDynamicClassID(void) const
     { return RuleBasedCollator::getStaticClassID(); }
 
 
   /**
-     * Returns the class ID for this class.  This is useful only for
-     * comparing to a return value from getDynamicClassID().  For example:
-     *
-     *      Base* polymorphic_pointer = createPolymorphicObject();
-     *      if (polymorphic_pointer->getDynamicClassID() ==
-     *          Derived::getStaticClassID()) ...
-     *
-     * @return          The class ID for all objects of this class.
-     */
+   * Returns the class ID for this class.  This is useful only for
+   * comparing to a return value from getDynamicClassID().  For example:
+   *
+   *      Base* polymorphic_pointer = createPolymorphicObject();
+   *      if (polymorphic_pointer->getDynamicClassID() ==
+   *          Derived::getStaticClassID()) ...
+   *
+   * @return          The class ID for all objects of this class.
+   */
   static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
 
-  /*****************************************************************************
+ /*****************************************************************************
  * PRIVATE
  *****************************************************************************/
 private:
@@ -512,96 +512,96 @@ private:
 
 
   /** Default constructor
-     */
+   */
   RuleBasedCollator();
 
   /**
-     * Create a new entry in the expansion table that contains the orderings
-     * for the given characers.  If anOrder is valid, it is added to the
-     * beginning of the expanded list of orders.
-     */
+   * Create a new entry in the expansion table that contains the orderings
+   * for the given characers.  If anOrder is valid, it is added to the
+   * beginning of the expanded list of orders.
+   */
   int32_t                addExpansion(int32_t anOrder,
                              const UnicodeString &expandChars);
   /**
-     * Create a table-based collation object with the given rules.
-     * @see RuleBasedCollator#RuleBasedCollator
-     * @exception FormatException If the rules format is incorrect.
-     */
+   * Create a table-based collation object with the given rules.
+   * @see RuleBasedCollator#RuleBasedCollator
+   * @exception FormatException If the rules format is incorrect.
+   */
   void                build(  const   UnicodeString&  rules,
                   UErrorCode&      success);
 
   /** Add expanding entries for pre-composed unicode characters so that this
-     * collator can be used reasonably well with decomposition turned off.
-     */
+   * collator can be used reasonably well with decomposition turned off.
+   */
   void                addComposedChars(void);
 
   /**
-     * Look up for unmapped values in the expanded character table.
-     */
+   * Look up for unmapped values in the expanded character table.
+   */
   void                commit(void);
   /**
-     * Increment of the last order based on the collation strength.
-     * @param s the collation strength.
-     * @param lastOrder the last collation order.
-     * @return the new collation order.
-     */
+   * Increment of the last order based on the collation strength.
+   * @param s the collation strength.
+   * @param lastOrder the last collation order.
+   * @return the new collation order.
+   */
   int32_t             increment(  Collator::ECollationStrength    s, 
                   int32_t                         lastOrder);
   /**
-     * Adds a character and its designated order into the collation table.
-     * @param ch the Unicode character,
-     * @param anOrder the order.
-     * @param status the error code status.
-     */
+   * Adds a character and its designated order into the collation table.
+   * @param ch the Unicode character,
+   * @param anOrder the order.
+   * @param status the error code status.
+   */
   void                addOrder(   UChar        ch, 
                   int32_t        anOrder, 
                   UErrorCode&  status);
   /**
-     * Adds the expanding string into the collation table, for example, a-umlaut in German.
-     * @param groupChars the contracting characters.
-     * @param expChars the expanding characters.
-     * @param anOrder the order.
-     * @param status the error code status.
-     */
+   * Adds the expanding string into the collation table, for example, a-umlaut in German.
+   * @param groupChars the contracting characters.
+   * @param expChars the expanding characters.
+   * @param anOrder the order.
+   * @param status the error code status.
+   */
   void                addExpandOrder(const    UnicodeString&          groupChars, 
                      const    UnicodeString&          expChars, 
                      int32_t                            anOrder,
                      UErrorCode&                       status);
   /**
-     * Adds the contracting string into the collation table, for example, ch in Spanish.
-     * @param groupChars the contracting characters.
-     * @param anOrder the order.
-     * @param status the error code status.
-     */
+   * Adds the contracting string into the collation table, for example, ch in Spanish.
+   * @param groupChars the contracting characters.
+   * @param anOrder the order.
+   * @param status the error code status.
+   */
   void                addContractOrder(const  UnicodeString&          groupChars, 
                        int32_t                        anOrder,
                        UErrorCode&                     status);
   /**
-     * Adds the contracting string into the collation table, for example, ch in Spanish.
-     * @param groupChars the contracting characters.
-     * @param anOrder the order.
-     * @param fwd TRUE if this is for the forward direction
-     * @param status the error code status.
-     */
+   * Adds the contracting string into the collation table, for example, ch in Spanish.
+   * @param groupChars the contracting characters.
+   * @param anOrder the order.
+   * @param fwd TRUE if this is for the forward direction
+   * @param status the error code status.
+   */
   void                addContractOrder(const  UnicodeString&          groupChars, 
                        int32_t                        anOrder,
                        bool_t                            fwd,
                        UErrorCode&                     status);
   /**
-     * If the given string has been specified as a contracting string
-     * in this collation table, return its ordering, otherwise return UNMAPPED.
-     * @param groupChars the string
-     * @return the order of the contracted character, or UNMAPPED if
-     * there isn't one.
-     */
+   * If the given string has been specified as a contracting string
+   * in this collation table, return its ordering, otherwise return UNMAPPED.
+   * @param groupChars the string
+   * @return the order of the contracted character, or UNMAPPED if
+   * there isn't one.
+   */
   int32_t                getContractOrder(const    UnicodeString            &groupChars) const;
   /**
-     *  Gets the entry of list of the contracting string in the collation
-     *  table.
-     *  @param ch the starting character of the contracting string
-     *  @return the entry of contracting element which starts with the specified
-     *  character in the list of contracting elements.
-     */
+   *  Gets the entry of list of the contracting string in the collation
+   *  table.
+   *  @param ch the starting character of the contracting string
+   *  @return the entry of contracting element which starts with the specified
+   *  character in the list of contracting elements.
+   */
   VectorOfPToContractElement* 
   getContractValues(UChar     ch) const;
   /**
@@ -610,7 +610,7 @@ private:
    *  @param index the index of the contract character list
    *  @return the entry of the contracting element of the specified index in the
    *  list.
-     */
+   */
   VectorOfPToContractElement* 
   getContractValues(int32_t     index) const;
   /**
@@ -619,76 +619,76 @@ private:
    *  @param order the order of the expanding string value list
    *  @return the entry of the expanding-char element of the specified index in 
    *  the list.
-     */
+   */
   VectorOfInt*        getExpandValueList(int32_t     order) const;
   /**
-     *  Gets the comarison order of a character from the collation table.
-     *  @param ch the Unicode character
-     *  @return the comparison order of a character.
-     */
+   *  Gets the comarison order of a character from the collation table.
+   *  @param ch the Unicode character
+   *  @return the comparison order of a character.
+   */
   int32_t             getUnicodeOrder(UChar     ch) const;
 
   /**
-     *  Gets the comarison order of a character from the collation table.
-     *  @param ch the Unicode character
-     *  @return the comparison order of a character.
-     */
+   *  Gets the comarison order of a character from the collation table.
+   *  @param ch the Unicode character
+   *  @return the comparison order of a character.
+   */
   int32_t                getCharOrder(UChar ch) const;
 
   /**
-     *  Gets the comarison order of a character from the collation table.
-     *  @param list the contracting element table.
-     *  @param name the contracting char string.
-     *  @return the comparison order of the contracting character.
-     */
+   *  Gets the comarison order of a character from the collation table.
+   *  @param list the contracting element table.
+   *  @param name the contracting char string.
+   *  @return the comparison order of the contracting character.
+   */
   static        int32_t             getEntry(   VectorOfPToContractElement*     list, 
                         const   UnicodeString&          name,
                         bool_t                    fwd);
 
   /**
-     * Flattens the given object persistently to a file.  The file name
-     * argument should be a path name that can be passed directly to the
-     * underlying OS.  Once a RuleBasedCollator has been written to a file,
-     * it can be resurrected by calling the RuleBasedCollator(const char*)
-     * constructor, which operates very quickly.
-     * @param fileName the output file name.
-     * @return TRUE if writing to the file was successful, FALSE otherwise.
-     */
+   * Flattens the given object persistently to a file.  The file name
+   * argument should be a path name that can be passed directly to the
+   * underlying OS.  Once a RuleBasedCollator has been written to a file,
+   * it can be resurrected by calling the RuleBasedCollator(const char*)
+   * constructor, which operates very quickly.
+   * @param fileName the output file name.
+   * @return TRUE if writing to the file was successful, FALSE otherwise.
+   */
   bool_t              writeToFile(const char* fileName) const; // True on success
 
   /**
-     * Add this table collation to the cache.  This involves adding the
-     * enclosed TableCollationData to the cache, and then marking our
-     * pointer as "not owned" by setting dataIsOwned to false.
-     * @param key the unique that represents this collation data object.
-     */
+   * Add this table collation to the cache.  This involves adding the
+   * enclosed TableCollationData to the cache, and then marking our
+   * pointer as "not owned" by setting dataIsOwned to false.
+   * @param key the unique that represents this collation data object.
+   */
   void                addToCache(         const UnicodeString& key);
 
   /**
-     * RuleBasedCollator constructor.  This constructor takes a locale.  The only
-     * caller of this class should be Collator::createInstance().  If createInstance()
-     * happens to know that the requested locale's collation is implemented as
-     * a RuleBasedCollator, it can then call this constructor.  OTHERWISE IT SHOULDN'T,
-     * since this constructor ALWAYS RETURNS A VALID COLLATION TABLE.  It does this
-     * by falling back to defaults.
-     */
+   * RuleBasedCollator constructor.  This constructor takes a locale.  The only
+   * caller of this class should be Collator::createInstance().  If createInstance()
+   * happens to know that the requested locale's collation is implemented as
+   * a RuleBasedCollator, it can then call this constructor.  OTHERWISE IT SHOULDN'T,
+   * since this constructor ALWAYS RETURNS A VALID COLLATION TABLE.  It does this
+   * by falling back to defaults.
+   */
   RuleBasedCollator(      const Locale& desiredLocale,
               UErrorCode& status);
   /**
-     * Internal constructFromXyx() methods.  These methods do object construction
-     * from various sources.  They act like assignment operators; whatever used
-     * to be in this object is discarded.  <P>FROM RULES.  This constructor turns
-     * around and calls build().  <P>FROM CACHE.  This constructor tries to get the
-     * requested cached TableCollationData object, and wrap us around it.  <P>FROM FILE.
-     * There are two constructors named constructFromFile().  One takes a const char*:
-     * this is a path name to be passed directly to the host OS, where a flattened
-     * table collation (produced by writeToFile()) resides.  The other method takes
-     * a Locale, and a UnicodeString locale file name.  The distinction is this:
-     * the Locale is the locale we are seeking.  The file name is the name of the
-     * data file (either binary, as produced by writeToFile(), or ASCII, as read
-     * by ResourceBundle).  Within the file, if it is found, the method will look
-     * for the given Locale.
-     */
+   * Internal constructFromXyx() methods.  These methods do object construction
+   * from various sources.  They act like assignment operators; whatever used
+   * to be in this object is discarded.  <P>FROM RULES.  This constructor turns
+   * around and calls build().  <P>FROM CACHE.  This constructor tries to get the
+   * requested cached TableCollationData object, and wrap us around it.  <P>FROM FILE.
+   * There are two constructors named constructFromFile().  One takes a const char*:
+   * this is a path name to be passed directly to the host OS, where a flattened
+   * table collation (produced by writeToFile()) resides.  The other method takes
+   * a Locale, and a UnicodeString locale file name.  The distinction is this:
+   * the Locale is the locale we are seeking.  The file name is the name of the
+   * data file (either binary, as produced by writeToFile(), or ASCII, as read
+   * by ResourceBundle).  Within the file, if it is found, the method will look
+   * for the given Locale.
+   */
   void                constructFromRules( const UnicodeString& rules,
                       UErrorCode& status);
   void                constructFromFile(  const Locale&           locale,
@@ -703,21 +703,21 @@ private:
   //--------------------------------------------------------------------------
   // Internal Static Utility Methods
   /**
-     * Creates the path name with given information.
-     * @param prefix the prefix of the file name.
-     * @param name the actual file name.
-     * @param suffix the suffix of the file name.
-     * @return the generated file name.
-     */
+   * Creates the path name with given information.
+   * @param prefix the prefix of the file name.
+   * @param name the actual file name.
+   * @param suffix the suffix of the file name.
+   * @return the generated file name.
+   */
   static  char*               createPathName( const UnicodeString&    prefix,
                           const UnicodeString&    name,
                           const UnicodeString&    suffix);
 
   /**
-     * Chops off the last portion of the locale name.  For example, from "en_US_CA"
-     * to "en_US" and "en_US" to "en".
-     * @param localeName the locale name.
-     */
+   * Chops off the last portion of the locale name.  For example, from "en_US_CA"
+   * to "en_US" and "en_US" to "en".
+   * @param localeName the locale name.
+   */
   static  void                chopLocale(UnicodeString&   localeName);
 
   //--------------------------------------------------------------------------

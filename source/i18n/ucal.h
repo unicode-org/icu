@@ -16,7 +16,7 @@
 
 #include "utypes.h"
 /**
- * @name UCalendar C API
+ * @name Calendar C API
  *
  * UCalendar C API is used  for converting between a <code>UDate</code> object
  * and a set of integer fields such as <code>UCAL_YEAR</code>, <code>UCAL_MONTH</code>, 

@@ -91,7 +91,7 @@ class VectorOfPToContractElement;
  */
 class U_I18N_API CollationElementIterator
 {
-public :     
+public:     
     /**
      * NULLORDER indicates the iterator has consumed the last element.
      */

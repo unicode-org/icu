@@ -38,9 +38,9 @@
 #define BIDI_SAMPLE_CODE
 
 /**
- * @name BiDi algorithm for ICU
+ * @name BIDI algorithm for ICU
  *
- * <h2>BiDi algorithm for ICU</h2>
+ * <h2>BIDI algorithm for ICU</h2>
  *
  * This is an implementation of the Unicode Bidirectional algorithm.
  * The algorithm is defined in the
@@ -61,7 +61,7 @@
  * Some of the API functions provide access to <quote>runs</quote>.
  * Such a <quote>run</quote> is defined as a sequence of characters
  * that are at the same embedding level
- * after performing the BiDi algorithm.<p>
+ * after performing the BIDI algorithm.<p>
  *
  * @author Markus W. Scherer
  * @version 1.0
@@ -661,7 +661,7 @@ U_CAPI void U_EXPORT2
 ubidi_invertMap(const UTextOffset *srcMap, UTextOffset *destMap, UTextOffset length);
 
 /**
- * @name Sample code for the ICU BiDi API
+ * @name Sample code for the ICU BIDI API
  *
  * <h2>Rendering a paragraph with the ICU BiDi API</h2>
  *
