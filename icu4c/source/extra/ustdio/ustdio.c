@@ -630,14 +630,16 @@ u_fungetc(UChar32        ch,
     }
     else {
         /* otherwise, put the character back */
-        /* TODO: Maybe we shouldn't be writing to the buffer and just verify the contents */
+        /* Remember, read them back on in the reverse order. */
         if (U_IS_LEAD(ch)) {
-            /* Remember, put them back on in the reverse order. */
-            *--(str->fPos) = U16_TRAIL(ch);
-            *--(str->fPos) = U16_LEAD(ch);
+            if (*--(str->fPos) != U16_TRAIL(ch)
+                || *--(str->fPos) != U16_LEAD(ch))
+            {
+                ch = U_EOF;
+            }
         }
-        else {
-            *--(str->fPos) = (UChar)ch;
+        else if (*--(str->fPos) != ch) {
+            ch = U_EOF;
         }
     }
     return ch;
