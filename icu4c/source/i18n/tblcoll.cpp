@@ -77,6 +77,8 @@
 
 #include "unicode/ustring.h"
 
+#include "cmemory.h"
+
 
 class RuleBasedCollatorStreamer
 {

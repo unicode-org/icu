@@ -47,6 +47,7 @@
 #include "unicode/resbund.h"
 #include "mutex.h"
 #include "unicode/normlzr.h"
+#include "cmemory.h"
 
 //-----------------------------------------------------------------------------
 const UVersionInfo Collator::fVersion = {1, 0, 0, 0};
