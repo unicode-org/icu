@@ -90,15 +90,19 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
+pkgdata.inc: $(srcdir)/pkgdata.inc.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
 $(TARGET) : $(OBJECTS)
 	$(LINK.cc) -o $@ $^ $(LIBS)
 
 resfiles: $(RESFILES) package-resfiles
 
-package-resfiles: $(RESDIR)/$(RESDIR).lst
-	$(INVOKE) $(top_builddir)/tools/pkgdata/pkgdata -p $(RESDIR) -O $(top_builddir)/tools/pkgdata/icupkg.inc -m common -d uconvmsg -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
+package-resfiles: $(RESDIR)/$(RESDIR).lst pkgdata.inc
+	$(INVOKE) $(top_builddir)/tools/pkgdata/pkgdata -p $(RESDIR) -O pkgdata.inc -m common -d uconvmsg -T $(RESDIR) $(RESDIR)/$(RESDIR).lst
 
-$(RESDIR)/$(RESDIR).lst: Makefile $(srcdir)/resfiles.mk
+$(RESDIR)/$(RESDIR).lst: Makefile pkgdata.inc $(srcdir)/resfiles.mk
 	@$(MKINSTALLDIRS) $(RESDIR)
 	@-$(RMV) $@
 	@for file in $(RESFILES); do \
