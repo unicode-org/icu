@@ -47,21 +47,7 @@ static char* _testDataPath=NULL;
  */
 void ctest_setICU_DATA(void);
 
-static UBool gMutexInitialized = FALSE;
 
-static void TestMutex(void) {
-    if (!gMutexInitialized) {
-        log_verbose("*** Failure! The global mutex was not initialized.\n"
-                "*** Make sure the right linker was used.\n");
-    }
-}
-
-U_CFUNC void addSetup(TestNode** root);
-
-void addSetup(TestNode** root)
-{
-    addTest(root, &TestMutex,    "setup/TestMutex");
-}
 
 #if UCONFIG_NO_LEGACY_CONVERSION
 #   define TRY_CNV_1 "iso-8859-1"
@@ -83,9 +69,6 @@ int main(int argc, const char* const argv[])
     UErrorCode errorCode = U_ZERO_ERROR;
     UResourceBundle *rb;
     UConverter *cnv;
-
-    /* This must be tested before using anything! */
-    gMutexInitialized = umtx_isInitialized(NULL);
 
     /* Checkargs */
     for(i=1;i<argc;i++) {
@@ -183,17 +166,6 @@ int main(int argc, const char* const argv[])
 
         u_cleanup(); /* nuke the hashtable.. so that any still-open cnvs are leaked */
 #endif
-    }
-
-    if (!gMutexInitialized) {
-        fprintf(stderr,
-            "#### WARNING!\n"
-            "  The global mutex was not initialized during C++ static initialization.\n"
-            "  You must explicitly initialize ICU by calling u_init() before using ICU\n"
-            "  in multiple threads. If you are using ICU in a single threaded application,\n"
-            "  use of u_init() is recommended, but it is not required.\n"
-            "#### WARNING!\n"
-            );
     }
 
     return nerrors ? 1 : 0;

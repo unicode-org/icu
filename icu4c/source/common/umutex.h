@@ -66,28 +66,23 @@ U_CAPI void U_EXPORT2 umtx_unlock ( UMTX* mutex );
 
 /* Initialize a mutex. Use it this way:
    umtx_init( &aMutex ); 
- * ICU Mutexes, aside from the global mutex, must be explicitly initialized
- * before use.
+ * ICU Mutexes must be explicitly initialized before use.
+ * Initialization of an already initialized mutex has no effect, and is safe to do.
+ * Initialization of mutexes (other than the global mutex) is thread safe.  Two
+ *   threads can concurrently attempt to init the same mutex without causing problems.
  * @param mutex The given mutex to be initialized
  */
 U_CAPI void U_EXPORT2 umtx_init   ( UMTX* mutex );
 
 /* Destroy a mutex. This will free the resources of a mutex.
-   Use it this way:
-   umtx_destroy( &aMutex ); 
- * @param mutex The given mutex to be destroyed
+ * Use it this way:
+ *   umtx_destroy( &aMutex ); 
+ * Destroying an already destroyed mutex has no effect, and causes no problems.
+ * This function is not thread safe.  Two threads must not attempt to concurrently
+ *   destroy the same mutex.
+ * @param mutex The given mutex to be destroyed.
  */
 U_CAPI void U_EXPORT2 umtx_destroy( UMTX *mutex );
-
-/* Test whether an ICU mutex is initialized. 
- * This function is intended for use from test programs only,
- * there should be no need for it from normal code.
- * If there is any question about whether a mutex has been initialized,
- *  simply initialize it again with umtx_init(), which will have
- *  no effect if the mutex is already initialized.
- * @param mutex The given mutex to be tested
-*/
-U_CAPI UBool U_EXPORT2 umtx_isInitialized( UMTX *mutex );
 
 
 

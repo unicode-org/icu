@@ -396,14 +396,6 @@ SOURCE=.\tsmthred.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\tsmutex.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\tsmutex.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\tsputil.cpp
 # End Source File
 # Begin Source File

@@ -25,7 +25,7 @@
 static const int32_t zeroMem[] = {0, 0, 0, 0, 0, 0};
 
 /* Function Pointers for user-supplied heap functions  */
-static void         *pContext;
+static const void   *pContext;
 static UMemAlloc    *pAlloc;
 static UMemRealloc  *pRealloc;
 static UMemFree     *pFree;
@@ -81,7 +81,7 @@ uprv_free(void *buffer) {
 }
 
 U_CAPI void U_EXPORT2
-u_setMemoryFunctions(void *context, UMemAlloc *a, UMemRealloc *r, UMemFree *f,  UErrorCode *status)
+u_setMemoryFunctions(const void *context, UMemAlloc *a, UMemRealloc *r, UMemFree *f,  UErrorCode *status)
 {
     if (U_FAILURE(*status)) {
         return;

@@ -89,7 +89,7 @@ u_cleanup(void)
      * time. The global mutex is being destroyed so that heap and
      * resource checkers don't complain. [grhoten]
      */
-    umtx_destroy(NULL);
+    umtx_cleanup();
     cmemory_cleanup();       /* undo any heap functions set by u_setMemoryFunctions(). */
 }
 
@@ -163,6 +163,9 @@ U_CFUNC UBool u_ICUStaticInitFunc()
  *
  *     Do NOT call cmemory_cleanup().  We don't want to cancel the effect of
  *     any u_setHeapFunctions().
+ *
+ *     Similarly, do not call umtx_cleanup(); we need to keep any user-set
+ *     mutex callback functions.
  */
 U_CFUNC void u_ICUStaticUnInitFunc() {
     ucnv_cleanup();
