@@ -20,10 +20,9 @@
 #define LOCCACHE_H
 
 #include "locbund.h"
-#include "uhash.h"
 
 /* The global LocaleCacheInfo cache */
-extern UHashtable *gLocaleCache;
+extern struct UHashtable *gLocaleCache;
 
 ULocaleBundle*
 u_loccache_get(const char *loc);

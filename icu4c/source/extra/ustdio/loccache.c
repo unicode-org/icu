@@ -18,19 +18,12 @@
 */
 
 #include "loccache.h"
-
+#include "uhash.h"
 #include "unicode/uloc.h"
 #include "umutex.h"
 
 /* The global cache */
 UHashtable     *gLocaleCache         = 0;
-
-/* my custom hashing function */
-int32_t
-u_locbund_hash(const void *parm)
-{
-  return uhash_hashString(((ULocaleBundle*)parm)->fLocale);
-}
 
 ULocaleBundle*
 u_loccache_get(const char *loc)
@@ -40,14 +33,13 @@ u_loccache_get(const char *loc)
   /*Mutex     *lock;*/
   UHashtable     *tempCache;
   int32_t     locCount;
-  int32_t     hashKey;
   UErrorCode     status = U_ZERO_ERROR;
 
   /* Create the cache, if needed */
   if(gLocaleCache == 0) {
     locCount = uloc_countAvailable();
     
-    tempCache = uhash_openSize((UHashFunction)u_locbund_hash, locCount, &status);
+    tempCache = uhash_openSize(uhash_hashChars, uhash_compareChars, locCount, &status);
     if(U_FAILURE(status)) return 0;
     
     /* Lock the cache */
@@ -69,8 +61,7 @@ u_loccache_get(const char *loc)
   /* since we know the cache will be empty.  But, it simplifies */
   /* the code a great deal. */
   
-  hashKey = uhash_hashString(loc);
-  result = uhash_get(gLocaleCache, hashKey);
+  result = uhash_get(gLocaleCache, loc);
 
   /* If the bundle wasn't found, create it and add it to the cache */
   if(result == 0) {
@@ -81,10 +72,10 @@ u_loccache_get(const char *loc)
     umtx_lock(0);
     
     /* Make sure the cache didn't change while we were locking it */
-    result = uhash_get(gLocaleCache, hashKey);
+    result = uhash_get(gLocaleCache, loc);
     if(result == 0) {
       result = tempBundle;
-      uhash_put(gLocaleCache, result, &status);
+      uhash_put(gLocaleCache, tempBundle->fLocale, tempBundle, &status);
     }
     else
       u_locbund_delete(tempBundle);
