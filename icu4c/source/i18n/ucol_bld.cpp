@@ -291,13 +291,13 @@ U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t* lows, uint32_
   } 
 
   if(strength == UCOL_SECONDARY) { /* similar as simple */
-    if(low > UCOL_COMMON_BOT2<<24 && low < UCOL_COMMON_TOP2<<24) {
+    if(low >= UCOL_COMMON_BOT2<<24 && low < UCOL_COMMON_TOP2<<24) {
       low = UCOL_COMMON_TOP2<<24;
     }
     if(high > UCOL_COMMON_BOT2<<24 && high < UCOL_COMMON_TOP2<<24) {
       high = UCOL_COMMON_TOP2<<24;
     } 
-    if(low <= UCOL_COMMON_BOT2<<24) {
+    if(low < UCOL_COMMON_BOT2<<24) {
       g->noOfRanges = ucol_allocWeights(UCOL_COMMON_TOP2<<24, high, count, g->ranges);
       g->current = UCOL_COMMON_BOT2;
       return g->current;

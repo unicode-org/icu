@@ -9,6 +9,9 @@
 #define UCOL_RESET_TOP_VALUE 0x9F000303
 #define UCOL_NEXT_TOP_VALUE  0xD0000303
 
+/* this is space for the extra strings that need to be unquoted */
+/* during the parsing of the rules */
+#define UCOL_TOK_EXTRA_RULE_SPACE_SIZE 1024
 typedef struct UColToken UColToken;
 
 typedef struct  {
@@ -53,9 +56,12 @@ struct UColToken {
 };
 
 typedef struct {
-  const UChar *source;
-  const UChar *end;
-  const UChar *current;
+  UChar *source;
+  UChar *end;
+  UChar *current;
+  UChar *sourceCurrent;
+  UChar *extraCurrent;
+  UChar *extraEnd;
   const InverseTableHeader *invUCA;
   const UCollator *UCA;
   UCATableHeader *image;
