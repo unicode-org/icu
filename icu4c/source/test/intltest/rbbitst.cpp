@@ -572,6 +572,7 @@ void RBBITest::TestBug3818() {
         errln("Fail at file %s, line %d expected start of word at 4, got %d",
             __FILE__, __LINE__, startOfSecondWord);
     }
+    delete bi;
 }
 
 //---------------------------------------------
