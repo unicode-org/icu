@@ -868,7 +868,7 @@ inline UBool checkIdentical(const UStringSearch *strsrch, int32_t start,
     if (decomplength != unorm_decompose(NULL, -1, strsrch->pattern.text, 
                                         strsrch->pattern.textLength, FALSE, 
                                         FALSE, &status)) {
-        return false;
+        return FALSE;
     }
     decomplength ++;
     UChar *text    = (UChar *)uprv_malloc(decomplength * sizeof(UChar));
@@ -1179,7 +1179,7 @@ inline UChar * addToUCharArray(      UChar      *destination,
 * pattern in string search data
 * @param strsrch string search data
 * @param coleiter collation element iterator
-* @return TRUE if a match if found, false otherwise
+* @return TRUE if a match if found, FALSE otherwise
 */
 static
 inline UBool checkCollationMatch(const UStringSearch      *strsrch, 
