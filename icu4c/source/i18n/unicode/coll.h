@@ -636,21 +636,6 @@ public:
   */
   virtual Collator* safeClone(void) = 0;
 
-
-  /**
-  * String compare that uses user supplied character iteration.
-  * The idea is to prevent users from having to convert the whole string into 
-  * UChar's before comparing since sometimes strings differ on first couple of 
-  * characters.
-  * @param coll Collator to be used for comparing
-  * @param source pointer to function for iterating over the first string
-  * @param target pointer to function for iterating over the second string
-  * @return The result of comparing the strings; one of UCOL_EQUAL,
-  *         UCOL_GREATER, UCOL_LESS
-  */
-  virtual EComparisonResult compare(ForwardCharacterIterator &source,
-								                   ForwardCharacterIterator &target) = 0;
-
   /**
   * Get the sort key as an array of bytes from an UnicodeString.
   * Sort key byte arrays are zero-terminated and can be compared using 
