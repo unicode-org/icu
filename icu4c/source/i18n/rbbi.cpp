@@ -560,3 +560,91 @@ RuleBasedBreakIterator::reset()
     // Base-class version of this function is a no-op.
     // Subclasses may override with their own reset behavior.
 }
+
+
+// internal type for BufferClone 
+struct bufferCloneStructUChar
+{
+    RuleBasedBreakIterator bi;
+    UCharCharacterIterator text;
+};
+
+struct bufferCloneStructString
+{
+    RuleBasedBreakIterator bi;
+    StringCharacterIterator text;
+};
+
+BreakIterator *  RuleBasedBreakIterator::createBufferClone(void *stackBuffer,
+                                   int32_t &BufferSize,
+                                   UErrorCode &status)
+{
+    RuleBasedBreakIterator * localIterator;
+    int32_t bufferSizeNeeded; 
+    UBool IterIsUChar;
+    UBool IterIsString;
+
+    if (U_FAILURE(status)){
+        return 0;
+    }
+    if (!this){
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    if (text == NULL)
+    {
+        bufferSizeNeeded = sizeof(RuleBasedBreakIterator);
+        IterIsString = IterIsUChar = FALSE;
+    }
+    else if (text->getDynamicClassID() == StringCharacterIterator::getStaticClassID()) 
+    {
+        bufferSizeNeeded = sizeof(struct bufferCloneStructString);
+        IterIsString = TRUE;
+        IterIsUChar = FALSE;
+    } 
+    else if (text->getDynamicClassID() == UCharCharacterIterator::getStaticClassID()) 
+    {
+        bufferSizeNeeded = sizeof(struct bufferCloneStructUChar);
+        IterIsString = FALSE;
+        IterIsUChar = TRUE;
+    }
+    else
+    {
+        // code has changed - time to make a real CharacterIterator::CreateBufferClone()
+    }
+	if (BufferSize == 0){ /* 'preflighting' request - set needed size into *pBufferSize */
+		BufferSize = bufferSizeNeeded;
+		return 0;
+    }
+    if (BufferSize < bufferSizeNeeded || !stackBuffer)
+    {
+		/* allocate one here...*/
+		localIterator = new RuleBasedBreakIterator(*this);
+		status = U_SAFECLONE_ALLOCATED_ERROR;
+	} else if (IterIsUChar) {
+		struct bufferCloneStructUChar * localClone 
+                = (struct bufferCloneStructUChar  *)stackBuffer;
+        localIterator = &localClone->bi;
+        memcpy(localIterator, this, sizeof(RuleBasedBreakIterator));
+        memcpy(&localClone->text, text, sizeof(UCharCharacterIterator));
+        localClone->text = *(UCharCharacterIterator*)text;
+	    localIterator->text = &localClone->text;
+        localIterator->fBufferClone = TRUE;
+    } else if (IterIsString) {
+        struct bufferCloneStructString * localClone 
+                = (struct bufferCloneStructString  *)stackBuffer;
+        localIterator = &localClone->bi;
+        memcpy(localIterator, this, sizeof(RuleBasedBreakIterator));
+        memcpy(&localClone->text, text, sizeof(StringCharacterIterator));
+        localClone->text = *(StringCharacterIterator*)text;
+	    localIterator->text = &localClone->text;
+        localIterator->fBufferClone = TRUE;
+    } else {
+        RuleBasedBreakIterator * localClone 
+                = (RuleBasedBreakIterator *)stackBuffer;
+        localIterator = localClone;
+        memcpy(localIterator, this, sizeof(RuleBasedBreakIterator));
+        localIterator->fBufferClone = TRUE;
+    }
+	return localIterator;    
+}

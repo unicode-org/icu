@@ -449,11 +449,33 @@ public:
     static UnicodeString& getDisplayName(const Locale& objectLocale,
                                          UnicodeString& name);
 
+	/**
+     * Thread safe client-buffer-based cloning operation
+     *    Do NOT call delete on a safeclone, since 'new' is not used to create it.
+     * @param stackBuffer user allocated space for the new clone. If NULL new memory will be allocated. 
+	   If buffer is not large enough, new memory will be allocated.
+	 * @param BufferSize reference to size of allocated space. 
+	   If BufferSize == 0, a sufficient size for use in cloning will 
+	   be returned ('pre-flighting')
+	   If BufferSize is not enough for a stack-based safe clone, 
+       new memory will be allocated.
+     * @param status to indicate whether the operation went on smoothly or there were errors
+        An informational status value, U_SAFECLONE_ALLOCATED_ERROR, is used if any allocations were 
+        necessary.
+     * @return pointer to the new clone
+     *  
+     * @draft API 1.8 freeze
+     */
 
+    virtual BreakIterator *  createBufferClone(void *stackBuffer,
+                                               int32_t &BufferSize,
+                                               UErrorCode &status) = 0;
+    inline UBool isBufferClone(void);
 
+    
 protected:
     BreakIterator();
-
+    UBool fBufferClone;
 private:
     /**
      * The copy constructor and assignment operator have no real implementation.
@@ -463,5 +485,11 @@ private:
     BreakIterator (const BreakIterator&) {}
 };
 
+inline UBool BreakIterator::isBufferClone()
+{
+    return fBufferClone;
+}
+
 #endif // _BRKITER
 //eof
+ 

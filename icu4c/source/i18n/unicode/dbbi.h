@@ -183,6 +183,11 @@ protected:
      */
     virtual void reset(void);
 
+	virtual BreakIterator *  createBufferClone(void *stackBuffer,
+                                               int32_t &BufferSize,
+                                               UErrorCode &status);
+
+
 private:
     /**
      * This is the function that actually implements the dictionary-based
