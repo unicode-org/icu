@@ -69,8 +69,6 @@ void LotusCollationKoreanTest::doTest( UnicodeString source, UnicodeString targe
 
 void LotusCollationKoreanTest::TestTertiary(/* char* par */)
 {
-    UErrorCode status;
-   
     int32_t i = 0;
 	myCollation->setStrength(Collator::TERTIARY);
 	
