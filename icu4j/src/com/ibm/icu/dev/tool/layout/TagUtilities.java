@@ -6,7 +6,7 @@
  *
  * Created on Apr 14, 2003
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/TagUtilities.java,v $ $Date: 2003/04/15 01:23:49 $ $Revision: 1.1 $
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/TagUtilities.java,v $ $Date: 2003/04/15 20:15:53 $ $Revision: 1.2 $
  * 
  *******************************************************************************
  */
@@ -47,7 +47,7 @@ public class TagUtilities
     public static String tagLabel(String tag)
     {
         if (tag == null || tag.length() == 0) {
-            return "default";
+            return "null";
         } else {
             return tag.toLowerCase();
         }

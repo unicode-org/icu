@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/ModuleWriter.java,v $
- * $Date: 2003/04/15 01:23:49 $
- * $Revision: 1.2 $
+ * $Date: 2003/04/15 20:15:53 $
+ * $Revision: 1.3 $
  *
  *******************************************************************************
  */
@@ -71,7 +71,9 @@ public class ModuleWriter
     " * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS\n" +
     " * YOU REALLY KNOW WHAT YOU'RE DOING.\n" +
     " *\n" +
-    " * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/ModuleWriter.java,v $ $Date: 2003/04/15 01:23:49 $ $Revision: 1.2 $\n" +
+    " * $Source" + "$\n" +
+    " * $Date" + "$\n" +
+    " * $Revision" + "$\n" +
     " */\n" +
     "\n";
 }

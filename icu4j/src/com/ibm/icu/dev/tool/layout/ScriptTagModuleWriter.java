@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/ScriptTagModuleWriter.java,v $
- * $Date: 2003/04/15 01:23:49 $
- * $Revision: 1.2 $
+ * $Date: 2003/04/15 20:15:53 $
+ * $Revision: 1.3 $
  *
  *******************************************************************************
  */
@@ -142,7 +142,6 @@ public class ScriptTagModuleWriter extends ModuleWriter
     
     private static final String hPostamble =
     "\n" +
-    "const LETag nullLanguageTag  = 0x00000000; /* ''     (NONE) */\n" +
     "\n" +
     "U_NAMESPACE_END\n" +
     "#endif";
