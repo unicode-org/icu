@@ -297,6 +297,8 @@ RuleBasedBreakIterator::setText(const UnicodeString& newText) {
  */
 int32_t RuleBasedBreakIterator::first(void) {
     reset();
+    fLastBreakTag      = 0;
+    fLastBreakTagValid = TRUE;
     if (fText == NULL)
         return BreakIterator::DONE;
 

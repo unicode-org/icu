@@ -68,6 +68,10 @@ public:
      **/
    void TestQuoteGrouping();
 
+    /**
+     *  Tests word break status returns.
+     */
+    void TestWordStatus();
 
     /**
      *Internal subroutines
@@ -77,7 +81,6 @@ public:
 
     /*Internal subroutine used for comparision of expected and acquired results */
     void doTest(UnicodeString& testString, int32_t start, int32_t gotoffset, int32_t expectedOffset, const char* expected);
-
 
 
 };
