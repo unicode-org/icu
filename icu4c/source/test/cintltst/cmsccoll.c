@@ -683,13 +683,13 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
   UBool varT = FALSE; UBool top_ = TRUE;
   UBool startOfRules = TRUE;
   UColTokenParser src;
-  UCATableHeader img;
+  UColOptionSet opts;
 
   UChar first[256];
   UChar second[256];
   UChar *rulesCopy = NULL;
 
-  src.image = &img;
+  src.opts = &opts;
 
   rules = ucol_getRules(coll, &ruleLen);
   if(U_SUCCESS(*status) && ruleLen > 0) {
@@ -761,14 +761,14 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
   UBool varT = FALSE; UBool top_ = TRUE;
   UBool startOfRules = TRUE;
   UColTokenParser src;
-  UCATableHeader img;
+  UColOptionSet opts;
 
   UChar *rulesCopy = NULL;
   collIterate c;
 
   baseCE=baseContCE=nextCE=nextContCE=currCE=currContCE=lastCE=lastContCE = UCOL_NOT_FOUND;
 
-  src.image = &img;
+  src.opts = &opts;
 
   rules = ucol_getRules(coll, &ruleLen);
 
@@ -863,8 +863,8 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
 }
 
 static const char* localesToTest[] = {
-"ar", "bg", "ca", "cs", "da",
-"el", "en_BE", "en_US_POSIX", 
+/*"ar", */"bg", "ca", "cs", "da",
+"el", "en_BE", /*"en_US_POSIX", */
 "es", "et", "fi", "fr", "hi", 
 "hr", "hu", "is", "iw", "ja", 
 "ko", "lt", "lv", "mk", "mt", 

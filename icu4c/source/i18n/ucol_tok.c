@@ -140,25 +140,25 @@ int32_t ucol_uprv_tok_isOnorOf(const UChar* onoff) {
   return 0;
 }
 
-void ucol_uprv_tok_setOptionInImage(UCATableHeader *image, UColAttribute attrib, UColAttributeValue value) {
+void ucol_uprv_tok_setOptionInImage(UColOptionSet *opts, UColAttribute attrib, UColAttributeValue value) {
   switch(attrib) {
   case UCOL_FRENCH_COLLATION:
-    image->frenchCollation = value;
+    opts->frenchCollation = value;
     break;
   case UCOL_ALTERNATE_HANDLING:
-    image->alternateHandling = value;
+    opts->alternateHandling = value;
     break;
   case UCOL_CASE_FIRST:
-    image->caseFirst = value;
+    opts->caseFirst = value;
     break;
   case UCOL_CASE_LEVEL:
-    image->caseLevel = value;
+    opts->caseLevel = value;
     break;
   case UCOL_NORMALIZATION_MODE:
-    image->normalizationMode = value;
+    opts->normalizationMode = value;
     break;
   case UCOL_STRENGTH:
-    image->strength = value;
+    opts->strength = value;
     break;
   case UCOL_ATTRIBUTE_COUNT:
   default:
@@ -233,7 +233,7 @@ ucolTokOption rulesOptions[UTOK_OPTION_COUNT] = {
  {option_11,  7, NULL, 0, UCOL_ATTRIBUTE_COUNT}  /*"charset"        */     
 };
 
-UBool ucol_uprv_tok_readAndSetOption(UCATableHeader *image, const UChar* start, const UChar *end, UBool *variableTop, UBool *top, UErrorCode *status) {
+UBool ucol_uprv_tok_readAndSetOption(UColOptionSet *opts, const UChar* start, const UChar *end, UBool *variableTop, UBool *top, UErrorCode *status) {
   uint32_t i = 0;
   int32_t j=0;
   UBool foundOption = FALSE;
@@ -287,7 +287,7 @@ UBool ucol_uprv_tok_readAndSetOption(UCATableHeader *image, const UChar* start, 
     if(optionArg) {
       for(j = 0; j<rulesOptions[i].subSize; j++) {
         if(u_strncmp(optionArg, rulesOptions[i].subopts[j].subName, rulesOptions[i].subopts[j].subLen) == 0) {
-          ucol_uprv_tok_setOptionInImage(image, rulesOptions[i].attr, rulesOptions[i].subopts[j].attrVal);
+          ucol_uprv_tok_setOptionInImage(opts, rulesOptions[i].attr, rulesOptions[i].subopts[j].attrVal);
           return TRUE;
         }
       }
@@ -429,7 +429,7 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
         case 0x005b/*'['*/:
           /* options - read an option, analyze it */
           if((optionEnd = u_strchr(src->current, 0x005d /*']'*/)) != NULL) {
-            ucol_uprv_tok_readAndSetOption(src->image, src->current, optionEnd, &variableTop, &top, status);
+            ucol_uprv_tok_readAndSetOption(src->opts, src->current, optionEnd, &variableTop, &top, status);
             src->current = optionEnd;
             if(top == TRUE) {
               if(newStrength == UCOL_TOK_RESET) { 
@@ -492,7 +492,7 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
         /* if it is, it's just a regular character in collation rules */
         case 0x0040/*'@'*/:
           if (newStrength == UCOL_TOK_UNSET) {
-            src->image->frenchCollation = UCOL_ON;
+            src->opts->frenchCollation = UCOL_ON;
             break;
           }
 
@@ -586,8 +586,6 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
 
   ListList = src->lh;
 
-  src->image->variableTopValue = 0;
-
   while(src->current < src->end) {
   
   parseEnd = ucol_tok_parseNextToken(src, 
@@ -603,9 +601,9 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
       UColToken key;
 
       /* if we had a variable top, we're gonna put it in */
-      if(variableTop == TRUE && src->image->variableTopValue == 0) {
+      if(variableTop == TRUE && src->opts->variableTopValue == src->UCA->options->variableTopValue) {
         variableTop = FALSE;
-        src->image->variableTopValue = *(src->source + charsOffset);
+        src->opts->variableTopValue = *(src->source + charsOffset);
       }
 
       key.source = newCharsLen << 24 | charsOffset;
