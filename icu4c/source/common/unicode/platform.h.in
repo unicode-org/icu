@@ -183,7 +183,10 @@ typedef unsigned short uint16_t;
 /* Code alignment and C function inlining                                    */
 /*===========================================================================*/
 
-#define U_INLINE
+#ifndef U_INLINE
+#define U_INLINE @U_INLINE@
+#endif
+
 #define U_ALIGN_CODE(n) 
 
 /*===========================================================================*/
