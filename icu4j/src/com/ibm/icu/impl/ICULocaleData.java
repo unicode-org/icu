@@ -264,7 +264,7 @@ public class ICULocaleData {
                 if(k==j && j!=-1){
                     
                     String locName = name.substring(j+1,name.length());
-                    String defaultName = Locale.getDefault().toString();
+                    String defaultName = ULocale.getDefault().toString();
                     
                     if(!locName.equals(rootLocale.toString()) &&
                        defaultName.indexOf(locName)==-1){
