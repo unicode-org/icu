@@ -35,7 +35,10 @@ void addCollIterTest(TestNode** root)
     addTest(root, &TestSetText, "tscoll/citertst/TestSetText");
     addTest(root, &TestMaxExpansion, "tscoll/citertst/TestMaxExpansion");
     addTest(root, &TestUnicodeChar, "tscoll/citertst/TestUnicodeChar");
+    addTest(root, &TestNormalizedUnicodeChar, 
+                                "tscoll/citertst/TestNormalizedUnicodeChar");
     addTest(root, &TestBug672, "tscoll/citertst/TestBug672");
+    addTest(root, &TestSmallBuffer, "tscoll/citertst/TestSmallBuffer");
 }
 
 // The locales we support
@@ -124,7 +127,7 @@ static void TestUnicodeChar()
 
     UChar *test;
     en_us = ucol_open("en_US", &status);
-
+    
     for (codepoint = 1; codepoint < 0xFFFE;)
     {
       test = source;
@@ -156,6 +159,55 @@ static void TestUnicodeChar()
     }
 
     ucol_close(en_us);
+}
+
+/**
+ * Test for CollationElementIterator previous and next for the whole set of
+ * unicode characters with normalization on.
+ */
+static void TestNormalizedUnicodeChar()
+{
+    UChar source[0x100];
+    UCollator *th_th;
+    UCollationElements *iter;
+    UErrorCode status = U_ZERO_ERROR;
+    UChar codepoint;
+
+    UChar *test;
+    /* thai should have normalization on */
+    th_th = ucol_open("th_TH", &status);
+
+    for (codepoint = 1; codepoint < 0xFFFE;)
+    {
+      test = source;
+
+      while (codepoint % 0xFF != 0) 
+      {
+        if (u_isdefined(codepoint))
+          *(test ++) = codepoint;
+        codepoint ++;
+      }
+
+      if (u_isdefined(codepoint))
+        *(test ++) = codepoint;
+      
+      if (codepoint != 0xFFFF)
+        codepoint ++;
+
+      *test = 0;  
+      iter=ucol_openElements(th_th, source, u_strlen(source), &status);
+      if(U_FAILURE(status)){
+          log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n", 
+              myErrorName(status));
+            ucol_close(th_th);
+          return;
+      }
+      
+      backAndForth(iter);
+      ucol_closeElements(iter);
+    }
+
+    ucol_close(th_th);
 }
 
 /**
@@ -466,13 +518,10 @@ static void backAndForth(UCollationElements *iter)
           if (o != orders[index])
           {
             log_err("Mismatch at index : %d\n", index);
-            break;
+            return;
           }
         }
       }
-
-      if (index == 0x96)
-          log_verbose("test");
     }
 
     while (index != 0 && orders[index - 1] == 0) {
@@ -488,11 +537,13 @@ static void backAndForth(UCollationElements *iter)
         while ((o = ucol_next(iter, &status)) != UCOL_NULLORDER)
         {
             log_err("Error at %d\n", o);
+            break;
         }
         log_err("\nprev: ");
         while ((o = ucol_previous(iter, &status)) != UCOL_NULLORDER)
         {
             log_err("Error at %d\n", o);
+            break;
         }
         log_verbose("\n");
     }
@@ -616,4 +667,54 @@ static void assertEqual(UCollationElements *i1, UCollationElements *i2)
     while (c1 != UCOL_NULLORDER);
 }
 
+/** 
+ * Testing iterators with extremely small buffers
+ */
+static void TestSmallBuffer()
+{
+    UErrorCode          status = U_ZERO_ERROR; 
+    UCollator          *coll;
+    UCollationElements *iter;
+    int                 count = 0;
+    uint32_t           *orders;
+    
+    UChar str[500];
+    /* 
+    creating a long string of decomposable characters,
+    since by default the writable buffer is of size 256
+    */
+    while (count < 500) {
+        if ((count & 1) == 0) {
+            str[count ++] = 0x300;
+        }
+        else {
+            str[count ++] = 0x31A;
+        }
+    }
 
+    coll = ucol_open("th_TH", &status);
+    iter = ucol_openElements(coll, str, 500, &status);
+
+    /* 
+    this will rearrange the string data to 250 characters of 0x300 first then
+    250 characters of 0x031A
+    */
+    orders = getOrders(iter, &count);
+
+    if (count != 500) {
+        log_err("Error decomposition does not give the right sized collation elements\n");
+    }
+
+    while (count != 0) {
+        /* UCA collation element for 0x0F76 */
+        if ((count > 250 && orders[-- count] != 0xC003) ||
+            (count <= 250 && orders[-- count] != 0x8803)) {
+            log_err("Error decomposition does not give the right collation element at %d count\n", count);
+            break;
+        }
+    }
+    
+    free(orders);
+    ucol_closeElements(iter);
+    ucol_close(coll);
+}
