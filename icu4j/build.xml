@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2001/01/10 22:12:35 $ 
-* $Revision: 1.24 $
+* $Date: 2001/01/11 21:06:07 $ 
+* $Revision: 1.25 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -39,7 +39,7 @@
 
   <target name="all" depends="core,tests,tools,demos,jar,ucharacterjar,docs"/>
   
-  <target name="core" depends="init">
+  <target name="core" depends="init,ucharacterData">
     <mkdir dir="${build.dir}"/>
     <copy file="${src.dir}/com/ibm/text/resources/thai_dict"
            todir="${build.dir}/com/ibm/text/resources/"/>
@@ -104,17 +104,14 @@
          basedir="${build.dir}"/>
   </target>
 
-  <target name ="ucharacterPropertyData" depends="init">
-    <copy file="${src.dir}/com/ibm/icu/text/uprops.dat"
-    	   todir="${build.dir}/com/ibm/icu/text/"/>
+  <target name ="ucharacterData" depends="init">
+    <copy todir="${build.dir}/com/ibm/icu/text">
+      <fileset dir="${src.dir}/com/ibm/icu/text"
+               includes="unames.dat,uprops.dat"/>
+    </copy>
   </target>
 
-  <target name ="ucharacterNameData" depends="init">
-    <copy file="${src.dir}/com/ibm/icu/text/unames.dat"
-    	   todir="${build.dir}/com/ibm/icu/text/"/>
-  </target>
-
-  <target name="ucharacterjar" depends="core,ucharacterPropertyData,ucharacterNameData">
+  <target name="ucharacterjar" depends="core">
     <jar jarfile="${ucharacter.jar.file}"
          includes="com/ibm/icu/text/*.class,com/ibm/icu/text/*.dat"
          basedir="${build.dir}"/>
