@@ -2175,13 +2175,13 @@
         shiftJIS[]={
             0x88, 0xea, 0x83, 0x40, 0xa1, 0x84, 0x40
         },
-        errorTarget[]={
+	  /*errorTarget[]={*/
             /*
              * expected output when converting shiftJIS[] from UTF-8 to Shift-JIS:
              * SUB, SUB, 0x40, SUB, SUB, 0x40
              */
-            0x81, 0xa1, 0x81, 0xa1, 0x40, 0x81, 0xa1, 0x81, 0xa1, 0x40
-        },
+	  /* 0x81, 0xa1, 0x81, 0xa1, 0x40, 0x81, 0xa1, 0x81, 0xa1, 0x40*/
+	  /*},*/
         utf16[]={
             0xfe, 0xff /* BOM only, no text */
         },
@@ -2563,3 +2563,6 @@
             testSwap(tests[i].name, tests[i].swap);
         }
     }
+
+
+
