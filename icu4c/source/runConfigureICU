@@ -274,7 +274,7 @@ fi
 
 echo Running ./configure "$@" for $THE_OS using $THE_COMP compiler
 echo
-./configure "$@"
+$configure "$@"
 echo
 echo If the result of the above commands looks okay to you, go to the directory
 echo source in the ICU distribution to build ICU. Please remember that ICU needs
