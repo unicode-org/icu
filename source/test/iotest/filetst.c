@@ -524,7 +524,7 @@ static void TestfgetsLineCount(void) {
     int32_t repetitions;
     int32_t nlRepetitions;
 
-    if (myFile == NULL) {
+    if (stdFile == NULL) {
         log_err("Can't write test file.\n");
         return;
     }
