@@ -572,16 +572,16 @@ Transliterator* Transliterator::createInstance(const UnicodeString& ID,
                 ID.extractBetween(i+1, ID.length(), facadeID);
                 ID.extractBetween(0, i, right);
                 facadeID.append(ID_SEP).append(right);
-                t = _createInstance(facadeID, alias, parseError);
             }
         } else {
-            t = _createInstance(ID, alias, parseError);
             facadeID = ID;
         }
+        t = _createInstance(facadeID, alias, parseError);
+
         if (alias.length() > 0) { // assert(t==0)
             t = createInstance(alias);
             if (t != 0) {
-                t->setID(ID);
+                t->setID(facadeID);
             }
         }
     }
