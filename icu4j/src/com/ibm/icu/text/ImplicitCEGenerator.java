@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/ImplicitCEGenerator.java,v $
- * $Date: 2004/01/22 06:39:58 $
- * $Revision: 1.1 $
+ * $Date: 2004/01/28 02:05:51 $
+ * $Revision: 1.2 $
  *
  *******************************************************************************
  */
@@ -191,7 +191,7 @@ public class ImplicitCEGenerator {
      */
     public ImplicitCEGenerator(int minPrimary, int maxPrimary) {
         // 13 is the largest 4-byte gap we can use without getting 2 four-byte forms.
-        this(minPrimary, maxPrimary, 0x03, 0xFE, 1, 1);
+        this(minPrimary, maxPrimary, 0x04, 0xFE, 1, 1);
     }
     
     /**

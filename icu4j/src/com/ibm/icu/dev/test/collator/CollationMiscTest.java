@@ -135,37 +135,37 @@ public class CollationMiscTest extends TestFmwk{
             // have a  code point associated to it anymore  
             // "&[before 3][last primary ignorable]<<<k",
             // - all befores here amount to zero       
-//            "&[before 1][first tertiary ignorable]<<<a",
-//            "&[before 1][last tertiary ignorable]<<<a",  
-//            "&[before 1][first secondary ignorable]<<<a",
-//            "&[before 1][last secondary ignorable]<<<a", 
-//            // 'normal' befores  
-//            "&[before 1][first primary ignorable]<<<c<<<b &[first primary ignorable]<a",
-//            // we don't have a code point that corresponds to the last primary 
-//            // ignorable 
-//            "&[before 2][last primary ignorable]<<<c<<<b &[last primary ignorable]<a",
-//            "&[before 1][first variable]<<<c<<<b &[first variable]<a",
-//            "&[last variable]<a &[before 1][last variable]<<<c<<<b ",
-//            "&[first regular]<a &[before 1][first regular]<b", 
-//            "&[before 1][last regular]<b &[last regular]<a",
-//            "&[before 1][first implicit]<b &[first implicit]<a",
+            "&[before 1][first tertiary ignorable]<<<a",
+            "&[before 1][last tertiary ignorable]<<<a",  
+            "&[before 1][first secondary ignorable]<<<a",
+            "&[before 1][last secondary ignorable]<<<a", 
+            // 'normal' befores  
+            "&[before 1][first primary ignorable]<<<c<<<b &[first primary ignorable]<a",
+            // we don't have a code point that corresponds to the last primary 
+            // ignorable 
+            "&[before 2][last primary ignorable]<<<c<<<b &[last primary ignorable]<a",
+            "&[before 1][first variable]<<<c<<<b &[first variable]<a",
+            "&[last variable]<a &[before 1][last variable]<<<c<<<b ",
+            "&[first regular]<a &[before 1][first regular]<b", 
+            "&[before 1][last regular]<b &[last regular]<a",
+            "&[before 1][first implicit]<b &[first implicit]<a",
             "&[before 1][last implicit]<b &[last implicit]<a", 
             "&[last variable]<z&[last primary ignorable]<x&[last secondary ignorable]<<y&[last tertiary ignorable]<<<w&[top]<u",
           };
         String[][] data = {
                 // {"k", "\u20e3"},
-//                {"\\u0000", "a"}, // you cannot go before first tertiary ignorable 
-//                {"\\u0000", "a"}, // you cannot go before last tertiary ignorable 
-//                {"\\u0000", "a"}, // you cannot go before first secondary ignorable
-//                {"\\u0000", "a"}, // you cannot go before first secondary ignorable
-//                {"c", "b", "\\u0332", "a"},
-//                {"\\u0332", "\\u20e3", "c", "b", "a"},
-//                {"c", "b", "\\u0009", "a", "\\u000a"},
-//                {"c", "b", "\\uD800\\uDD33", "a", "\\u02d0"},
-//                {"b", "\\u02d0", "a", "\\u02d1"},
-//                {"b", "\\ud800\\udf9d", "a", "\\u4e00"},
-//                {"b", "\\u4e00", "a", "\\u4e01"},
-                {"b", "\\U0010FFFC", "a"},
+                {"\\u0000", "a"}, // you cannot go before first tertiary ignorable 
+                {"\\u0000", "a"}, // you cannot go before last tertiary ignorable 
+                {"\\u0000", "a"}, // you cannot go before first secondary ignorable
+                {"\\u0000", "a"}, // you cannot go before first secondary ignorable
+                {"c", "b", "\\u0332", "a"},
+                {"\\u0332", "\\u20e3", "c", "b", "a"},
+                {"c", "b", "\\u0009", "a", "\\u000a"},
+                {"c", "b", "\\uD800\\uDD33", "a", "\\u02d0"},
+                {"b", "\\u02d0", "a", "\\u02d1"},
+                {"b", "\\ud800\\udf9d", "a", "\\u4e00"},
+                {"b", "\\u4e00", "a", "\\u4e01"},
+                {"b", "\\U0010FFFD", "a"},
                 {"\ufffb",  "w", "y", "\u20e3", "x", "\u137c", "z", "u"},
         };
         
@@ -1114,8 +1114,9 @@ public class CollationMiscTest extends TestFmwk{
 
     public void TestRedundantRules() {
         String[] rules = {
-            "& a <<< b <<< c << d <<< e& [before 1] e <<< x",
-            "& a < b <<< c << d <<< e& [before 1] e <<< x",
+        	//"& a <<< b <<< c << d <<< e& [before 1] e <<< x",
+        	"& b <<< c <<< d << e <<< f& [before 1] f <<< x",
+        	"& a < b <<< c << d <<< e& [before 1] e <<< x",
             "& a < b < c < d& [before 1] c < m",
             "& a < b <<< c << d <<< e& [before 3] e <<< x",
             "& a < b <<< c << d <<< e& [before 2] e <<< x",
@@ -1131,8 +1132,9 @@ public class CollationMiscTest extends TestFmwk{
         };
         
         String[] expectedRules = {
-            "&\u2089<<<x",
-            "& a <<< x < b <<< c << d <<< e",
+            //"&\u2089<<<x",
+            "&\u0252<<<x",
+			"& a <<< x < b <<< c << d <<< e",
             "& a < b < m < c < d",
             "& a < b <<< c << d <<< x <<< e",
             "& a < b <<< c <<< x << d <<< e",
@@ -1148,8 +1150,9 @@ public class CollationMiscTest extends TestFmwk{
         };
         
         String[][] testdata = {
-            {"\u2089", "x"},
-            {"a", "x", "b", "c", "d", "e"},
+//            {"\u2089", "x"},
+            {"\u0252", "x"},
+        	{"a", "x", "b", "c", "d", "e"},
             {"a", "b", "m", "c", "d"},
             {"a", "b", "c", "d", "x", "e"},
             {"a", "b", "c", "x", "d", "e"},
