@@ -17,10 +17,10 @@ ja {
    // }
     Types{
         collation{
-            traditional { "\u5E74\u53F7" }
+            traditional { "\u65E7\u5F0F" }
         }
         calendar{
-            traditional { "\u5E74\u53F7" }
+            japanese { "\u548C\u66A6" }
         }
     }
     Variants{
