@@ -127,7 +127,8 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
     /* test for NULL */
     if (fArgumentNumbers == 0) {
         success = U_MEMORY_ALLOCATION_ERROR;
-        delete fOffsets;
+        uprv_free(fOffsets);
+        fOffsets = NULL;
         return;
     }
     for (int32_t i = 0; i < fCount; i++) {
@@ -156,7 +157,8 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
     /* test for NULL */
     if (fArgumentNumbers == 0) {
         success = U_MEMORY_ALLOCATION_ERROR;
-        delete fOffsets;
+        uprv_free(fOffsets);
+        fOffsets = NULL;
         return;
     }
     for (int32_t i = 0; i < fCount; i++) {
@@ -186,7 +188,8 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
     /* test for NULL */
     if (fArgumentNumbers == 0) {
         success = U_MEMORY_ALLOCATION_ERROR;
-        delete fOffsets;
+        uprv_free(fOffsets);
+        fOffsets = NULL;
         return;
     }
     for (int32_t i = 0; i < fCount; i++) {

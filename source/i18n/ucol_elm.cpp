@@ -137,7 +137,7 @@ uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollat
   /* test for NULL */
   if (maxet == NULL) {
       *status = U_MEMORY_ALLOCATION_ERROR;
-      delete t;
+      uprv_free(t);
       return NULL;
   }
   MaxJamoExpansionTable *maxjet = (MaxJamoExpansionTable *)uprv_malloc(
@@ -145,8 +145,8 @@ uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollat
   /* test for NULL */
   if (maxjet == NULL) {
       *status = U_MEMORY_ALLOCATION_ERROR;
-      delete t;
-      delete maxet;
+      uprv_free(t);
+      uprv_free(maxet);
       return NULL;
   }
   t->image = image;
@@ -157,9 +157,9 @@ uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollat
   /* test for NULL */
   if (t->expansions == NULL) {
       *status = U_MEMORY_ALLOCATION_ERROR;
-      delete t;
-      delete maxet;
-      delete maxjet;
+      uprv_free(t);
+      uprv_free(maxet);
+      uprv_free(maxjet);
       return NULL;
   }
   uprv_memset(t->expansions, 0, sizeof(ExpansionTable));
@@ -189,7 +189,7 @@ uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollat
     /* test for NULL */
     if (maxet->expansionCESize == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
-        delete maxet->endExpansionCE;
+        uprv_free(maxet->endExpansionCE);
         return NULL;
     }
     /* initialized value */
@@ -222,7 +222,7 @@ uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollat
   /* test for NULL */
   if (t->contrEndCP == NULL) {
       *status = U_MEMORY_ALLOCATION_ERROR;
-      delete t->unsafeCP;
+      uprv_free(t->unsafeCP);
       return NULL;
   }
   uprv_memset(t->unsafeCP, 0, UCOL_UNSAFECP_TABLE_SIZE);

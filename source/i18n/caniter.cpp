@@ -276,7 +276,7 @@ void CanonicalIterator::setSource(const UnicodeString &newSource, UErrorCode &st
         delete[] list;
         uprv_free(pieces);
         pieces = NULL;
-        delete pieces_lengths;
+        uprv_free(pieces_lengths);
         return;
     }
     for (i = 0; i < current_length; i++) {

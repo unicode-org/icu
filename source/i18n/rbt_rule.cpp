@@ -168,7 +168,7 @@ TransliterationRule::TransliterationRule(TransliterationRule& other) :
     segments = NULL;
     segmentsCount = 0;
     if (other.segmentsCount > 0) {
-        segments = new UnicodeFunctor*[other.segmentsCount];
+        segments = (UnicodeFunctor **)uprv_malloc(other.segmentsCount * sizeof(UnicodeFunctor *));
         uprv_memcpy(segments, other.segments, other.segmentsCount*sizeof(segments[0]));
     }
 
@@ -185,7 +185,7 @@ TransliterationRule::TransliterationRule(TransliterationRule& other) :
 }
 
 TransliterationRule::~TransliterationRule() {
-    delete[] segments;
+    uprv_free(segments);
     delete anteContext;
     delete key;
     delete postContext;

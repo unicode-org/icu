@@ -480,7 +480,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, UParseError& pErr, UErro
     ++numRuleSets;
 
     // our rule list is an array of the appropriate size
-    ruleSets = new NFRuleSet*[numRuleSets + 1];
+    ruleSets = (NFRuleSet **)uprv_malloc((numRuleSets + 1) * sizeof(NFRuleSet *));
     /* test for NULL */
     if (ruleSets == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
@@ -595,7 +595,7 @@ RuleBasedNumberFormat::dispose()
         for (NFRuleSet** p = ruleSets; *p; ++p) {
             delete *p;
         }
-        delete[] ruleSets;
+        uprv_free(ruleSets);
         ruleSets = NULL;
     }
 

@@ -30,6 +30,7 @@
 #include "tridpars.h"
 #include "uvector.h"
 #include "util.h"
+#include "cmemory.h"
 
 // Operators
 #define VARIABLE_DEF_OP ((UChar)0x003D) /*=*/
@@ -1052,7 +1053,12 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
 
     // Convert the set vector to an array
     data->variablesLength = variablesVector->size();
-    data->variables = data->variablesLength == 0 ? 0 : new UnicodeFunctor*[data->variablesLength];
+    if(data->variablesLength == 0) {
+        data->variables = 0;
+    } else {
+        data->variables = (UnicodeFunctor **)uprv_malloc(data->variablesLength * sizeof(UnicodeFunctor *));
+    }
+
     // orphanElement removes the given element and shifts all other
     // elements down.  For performance (and code clarity) we work from
     // the end back to index 0.
@@ -1365,7 +1371,7 @@ int32_t TransliteratorParser::parseRule(const UnicodeString& rule, int32_t pos, 
     // Flatten segment objects vector to an array
     UnicodeFunctor** segmentsArray = NULL;
     if (segmentObjects->size() > 0) {
-        segmentsArray = new UnicodeFunctor*[segmentObjects->size()];
+        segmentsArray = (UnicodeFunctor **)uprv_malloc(segmentObjects->size() * sizeof(UnicodeFunctor *));
         segmentObjects->toArray((void**) segmentsArray);
     }
 

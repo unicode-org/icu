@@ -152,7 +152,7 @@ public:
      * Mountain Standard Time year-round, even in the summer.
      * <P>
      * The caller owns the list that is returned, but does not own the strings contained
-     * in that list.  Delete the array, but DON'T delete the elements in the array.
+     * in that list.  Delete the array with free() (not operator delete), but DON'T delete the elements in the array.
      *
      * @param rawOffset  An offset from GMT in milliseconds.
      * @param numIDs     Receives the number of items in the array that is returned.
@@ -170,7 +170,7 @@ public:
      * "UTC"); these may also be retrieved, as a group.
      *
      * <P>The caller owns the list that is returned, but does not own
-     * the strings contained in that list.  Delete the array, but
+     * the strings contained in that list.  Delete the array with free() (not operator delete), but
      * <b>DON'T</b> delete the elements in the array.
      *
      * @param country The ISO 3166 two-letter country code, or NULL to
@@ -188,7 +188,7 @@ public:
     /**
      * Returns a list of all time zone IDs supported by the TimeZone class (i.e., all
      * IDs that it's legal to pass to createTimeZone()).  The caller owns the list that
-     * is returned, but does not own the strings contained in that list.  Delete the array,
+     * is returned, but does not own the strings contained in that list.  Delete the array with free() (not operator delete),
      * but DON'T delete the elements in the array.
      *
      * @param numIDs  Receives the number of zone IDs returned.
