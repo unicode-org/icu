@@ -3,10 +3,11 @@
 # Corporation and others.  All Rights Reserved.
 #--------------------------------------------------------------------
 
-# Latin-Jamo
+# note: a global filter is more efficient, but MUST include all source chars
+:: [\u0000-\u00FF [:Latin:]] ;
 
-:: [:Latin:] NFKD ();
-:: [:Latin:] Lower ();
+:: NFKD (NFC);
+:: Lower ();
 
 # Transliteration from Latin characters to Korean script is done in
 # two steps: Latin to Jamo, then Jamo to Hangul.  The Jamo-Hangul
@@ -510,6 +511,9 @@
 # since these may also occur in text.
 
   < $IEUNG;
-:: ([[:Hangul:]&[\uFF00-\uFFFF]] NFKD);
+:: NFC (NFKD);
+
+# note: a global filter is more efficient, but MUST include all source chars!!
+:: ([:Hangul:]);
 
 # eof
