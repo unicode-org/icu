@@ -91,6 +91,10 @@ SOURCE=.\cmaps.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\FontTableCache.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\gendata.cpp
 # End Source File
 # Begin Source File
@@ -104,6 +108,10 @@ SOURCE=.\PortableFontInstance.cpp
 # Begin Source File
 
 SOURCE=.\cmaps.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\FontTableCache.h
 # End Source File
 # Begin Source File
 

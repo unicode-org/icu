@@ -54,7 +54,7 @@ public:
  *
  * @draft ICU 2.2
  */
-class LEFontInstance /* not : public UObject because this is an interface/mixin class */ {
+class U_LAYOUT_API LEFontInstance /* not : public UObject because this is an interface/mixin class */ {
 public:
 
     /**
@@ -64,6 +64,37 @@ public:
      * @draft ICU 2.2
      */
     virtual inline ~LEFontInstance() {};
+
+    /**
+     * This method is provided so that clients can tell if
+     * a given LEFontInstance is an instance of a composite
+     * font.
+     * 
+     * @return <code>true</code> if the instance represents a composite font, <code>false</code> otherwise.
+     *
+     * @see LECompositeFont?
+     *
+     * @draft ICU 2.6
+     */
+    virtual le_bool isComposite() const;
+
+    /**
+     * Get a sub-font for a run of text from a composite font. This method examines the
+     * given text, finding a run of text which can all be rendered
+     * using the same sub-font. Subclassers should try to keep all the text in a single
+     * sub-font if they can.
+     *
+     * @param chars  - the array of unicode characters
+     * @param offset - a pointer to the starting offset in the text. This will be
+     *                 set to the limit offset of the run on exit.
+     * @param count  - the number of characters in the array. Can be used as a hint for selecting a sub-font.
+     * @param script - the script of the characters.
+     *
+     * @return an <code>LEFontInstance</code> for the sub font which can render the characters.
+     *
+     * @draft ICU 2.6
+     */
+    virtual const LEFontInstance *getSubFont(const LEUnicode chars[], le_int32 *offset, le_int32 count, le_int32 script) const;
 
     //
     // Font file access
@@ -90,9 +121,9 @@ public:
      *
      * @return true if the font can render ch.
      *
-     * @draft ICU 2.2
+     * @draft ICU 2.6
      */
-    virtual le_bool canDisplay(LEUnicode32 ch) const = 0;
+    virtual le_bool canDisplay(LEUnicode32 ch) const;
 
     /**
      * This method returns the number of design units in
@@ -105,7 +136,7 @@ public:
     virtual le_int32 getUnitsPerEM() const = 0;
 
     /**
-     * This method maps an array of charcter codes to an array of glyph
+     * This method maps an array of character codes to an array of glyph
      * indices, using the font's character to glyph map.
      *
      * @param chars - the character array
@@ -117,16 +148,29 @@ public:
      *
      * @see LECharMapper
      *
+     * @draft ICU 2.6
+     */
+    virtual void mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, const LECharMapper *mapper, LEGlyphID glyphs[]) const;
+
+    /**
+     * This method maps a single character to a glyph index, using the
+     * font's charcter to glyph map. The default implementation of this
+     * method calls the mapper, and then calls <code>mapCharToGlyph(mappedCh)</code>.
+     *
+     * @param ch - the character
+     * @param mapper - the character mapper
+     *
+     * @return the glyph index
+     *
      * @draft ICU 2.2
      */
-    virtual void mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, const LECharMapper *mapper, LEGlyphID glyphs[]) const = 0;
+    virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch, const LECharMapper *mapper) const;
 
     /**
      * This method maps a single character to a glyph index, using the
      * font's charcter to glyph map.
      *
      * @param ch - the character
-     * @param mapper - the character mapper
      *
      * @return the glyph index
      *
@@ -134,7 +178,7 @@ public:
      *
      * @draft ICU 2.2
      */
-    virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch, const LECharMapper *mapper) const = 0;
+    virtual LEGlyphID mapCharToGlyph(LEUnicode32 ch) const = 0;
 
     /**
      * This method gets a name from the font. (e.g. the family name) The encoding
@@ -149,7 +193,7 @@ public:
      *
      * @draft ICU 2.2
      */
-    virtual le_int32 getName(le_uint16 platformID, le_uint16 scriptID, le_uint16 languageID, le_uint16 nameID, LEUnicode *name) const = 0;
+    virtual le_int32 getName(le_uint16 platformID, le_uint16 scriptID, le_uint16 languageID, le_uint16 nameID, LEUnicode *name) const;
 
     //
     // Metrics
@@ -207,9 +251,9 @@ public:
      *
      * @return points in the X direction
      *
-     * @draft ICU 2.2
+     * @draft ICU 2.6
      */
-    virtual float xUnitsToPoints(float xUnits) const = 0;
+    virtual float xUnitsToPoints(float xUnits) const;
 
     /**
      * This method converts font design units in the
@@ -219,9 +263,9 @@ public:
      *
      * @return points in the Y direction
      *
-     * @draft ICU 2.2
+     * @draft ICU 2.6
      */
-    virtual float yUnitsToPoints(float yUunits) const = 0;
+    virtual float yUnitsToPoints(float yUnits) const;
 
     /**
      * This method converts font design units to points.
@@ -229,9 +273,9 @@ public:
      * @param units - X and Y design units
      * @param points - set to X and Y points
      *
-     * @draft ICU 2.2
+     * @draft ICU 2.6
      */
-    virtual void unitsToPoints(LEPoint &units, LEPoint &points) const = 0;
+    virtual void unitsToPoints(LEPoint &units, LEPoint &points) const;
 
     /**
      * This method converts pixels in the
@@ -241,9 +285,9 @@ public:
      *
      * @return font design units in the X direction
      *
-     * @draft ICU 2.2
+     * @draft ICU 2.6
      */
-    virtual float xPixelsToUnits(float xPixels) const = 0;
+    virtual float xPixelsToUnits(float xPixels) const;
 
     /**
      * This method converts pixels in the
@@ -255,7 +299,7 @@ public:
      *
      * @draft ICU 2.2
      */
-    virtual float yPixelsToUnits(float yPixels) const = 0;
+    virtual float yPixelsToUnits(float yPixels) const;
 
     /**
      * This method converts pixels to font design units.
@@ -263,21 +307,51 @@ public:
      * @param pixels - X and Y pixel
      * @param units - set to X and Y font design units
      *
-     * @draft ICU 2.2
+     * @draft ICU 2.6
      */
-    virtual void pixelsToUnits(LEPoint &pixels, LEPoint &units) const = 0;
+    virtual void pixelsToUnits(LEPoint &pixels, LEPoint &units) const;
+
+    /**
+     * Get the X scale factor from the font's transform. The default
+     * implementation of <code>transformFunits()</code> will call this method.
+     *
+     * @return the X scale factor.
+     *
+     *
+     * @see transformFunits
+     *
+     * @draft ICU 2.6
+     */
+    virtual float getScaleFactorX() const = 0;
+
+    /**
+     * Get the Y scale factor from the font's transform. The default
+     * implementation of <code>transformFunits()</code> will call this method.
+     *
+     * @return the Yscale factor.
+     *
+     * @see transformFunits
+     *
+     * @draft ICU 2.6
+     */
+    virtual float getScaleFactorY() const = 0;
 
     /**
      * This method transforms an X, Y point in font design units to a
-     * pixel coordinate, applying the font's transform.
+     * pixel coordinate, applying the font's transform. The default
+     * implementation of this method calls <code>getScaleFactorX()</code>
+     * and <code>getScaleFactorY()</code>.
      *
      * @param xFunits - the X coordinate in font design units
      * @param yFunits - the Y coordinate in font design units
      * @param pixels - the tranformed co-ordinate in pixels
      *
-     * @draft ICU 2.2
+     * @see getScaleFactorX
+     * @see getScaleFactorY
+     *
+     * @draft ICU 2.6
      */
-    virtual void transformFunits(float xFunits, float yFunits, LEPoint &pixels) const = 0;
+    virtual void transformFunits(float xFunits, float yFunits, LEPoint &pixels) const;
 
     /**
      * This is a convenience method used to convert
@@ -289,10 +363,7 @@ public:
      *
      * @draft ICU 2.2
      */
-    static float fixedToFloat(le_int32 fixed)
-    {
-        return (float) (fixed / 65536.0);
-    };
+    static float fixedToFloat(le_int32 fixed);
 
     /**
      * This is a convenience method used to convert
@@ -304,11 +375,130 @@ public:
      *
      * @draft ICU 2.2
      */
-    static le_int32 floatToFixed(float theFloat)
-    {
-        return (le_int32) (theFloat * 65536.0);
-    };
+    static le_int32 floatToFixed(float theFloat);
+
+    //
+    // These methods won't ever be called by the LayoutEngine,
+    // but are useful for cleints of <code>LEFontInstance</code> who
+    // need to render text.
+    //
+
+    /**
+     * Get the font's ascent.
+     *
+     * @return the font's ascent, in points.
+     *
+     * @draft ICU 2.6
+     */
+    virtual le_int32 getAscent() const = 0;
+
+    /**
+     * Get the font's descent.
+     *
+     * @return the font's descent, in points.
+     *
+     * @draft ICU 2.6
+     */
+    virtual le_int32 getDescent() const = 0;
+
+    /**
+     * Get the font's leading.
+     *
+     * @return the font's leading, in points.
+     *
+     * @draft ICU 2.6
+     */
+    virtual le_int32 getLeading() const = 0;
+
+    /**
+     * Get the line height required to display text in
+     * this font. The value returned is just the sum of
+     * the ascent, descent, and leading.
+     *
+     * @return the line height, in points
+     *
+     * @draft ICU 2.6
+     */
+    virtual le_int32 getLineHeight() const;
 };
+
+inline le_bool LEFontInstance::isComposite() const
+{
+    return false;
+}
+
+inline const LEFontInstance *LEFontInstance::getSubFont(const LEUnicode chars[], le_int32 *offset, le_int32 count, le_int32 script) const
+{
+    *offset += count;
+    return this;
+}
+
+inline le_bool LEFontInstance::canDisplay(LEUnicode32 ch) const
+{
+    return mapCharToGlyph(ch) != 0;
+}
+
+inline le_int32 LEFontInstance::getName(le_uint16 platformID, le_uint16 scriptID, le_uint16 languageID, le_uint16 nameID, LEUnicode *name) const
+{
+    if (name != NULL) {
+        *name = 0;
+    }
+
+    return 0;
+}
+
+inline float LEFontInstance::xUnitsToPoints(float xUnits) const
+{
+    return (xUnits * getXPixelsPerEm()) / (float) getUnitsPerEM();
+}
+
+inline float LEFontInstance::yUnitsToPoints(float yUnits) const
+{
+    return (yUnits * getYPixelsPerEm()) / (float) getUnitsPerEM();
+}
+
+inline void LEFontInstance::unitsToPoints(LEPoint &units, LEPoint &points) const
+{
+    points.fX = xUnitsToPoints(units.fX);
+    points.fY = yUnitsToPoints(units.fY);
+}
+
+inline float LEFontInstance::xPixelsToUnits(float xPixels) const
+{
+    return (xPixels * getUnitsPerEM()) / (float) getXPixelsPerEm();
+}
+
+inline float LEFontInstance::yPixelsToUnits(float yPixels) const
+{
+    return (yPixels * getUnitsPerEM()) / (float) getYPixelsPerEm();
+}
+
+inline void LEFontInstance::pixelsToUnits(LEPoint &pixels, LEPoint &units) const
+{
+    units.fX = xPixelsToUnits(pixels.fX);
+    units.fY = yPixelsToUnits(pixels.fY);
+}
+
+inline void LEFontInstance::transformFunits(float xFunits, float yFunits, LEPoint &pixels) const
+{
+    pixels.fX = xUnitsToPoints(xFunits) * getScaleFactorX();
+    pixels.fY = yUnitsToPoints(yFunits) * getScaleFactorY();
+}
+
+inline float LEFontInstance::fixedToFloat(le_int32 fixed)
+{
+    return (float) (fixed / 65536.0);
+}
+
+inline le_int32 LEFontInstance::floatToFixed(float theFloat)
+{
+    return (le_int32) (theFloat * 65536.0);
+}
+
+inline le_int32 LEFontInstance::getLineHeight() const
+{
+    return getAscent() + getDescent() + getLeading();
+}
 
 U_NAMESPACE_END
 #endif
