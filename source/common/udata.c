@@ -287,7 +287,8 @@ static UDataMemory *udata_cacheDataItem(const char *path, UDataMemory *item, UEr
     umtx_lock(NULL);
     oldValue = uhash_get(htable, path);
     if (oldValue != NULL) {
-        subErr = U_USING_DEFAULT_WARNING; }
+        subErr = U_USING_DEFAULT_WARNING;
+    }
     else {
         uhash_put(
             htable,
@@ -1220,7 +1221,7 @@ udata_openChoice(const char *path, const char *type, const char *name,
                  UDataMemoryIsAcceptable *isAcceptable, void *context,
                  UErrorCode *pErrorCode) {
 #ifdef UDATA_DEBUG
-  fprintf(stderr, "udata_openChoice(): Opening: %s . %s\n", name, type);fflush(stderr);
+    fprintf(stderr, "udata_openChoice(): Opening: %s . %s\n", name, type);fflush(stderr);
 #endif
 
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
