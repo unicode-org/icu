@@ -47,7 +47,7 @@ DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
 
 # Data packaging options are set at configure time with --with-data-packaging.
 CPPFLAGS += -I. -I$(srcdir) $(LIBCPPFLAGS) @DATA_PACKAGING_CPPFLAGS@
-DEFS += -DU_LIBICUDATA_NAME=\"$(ICUDATA_NAME)\"
+DEFS += -DU_LIBICUDATA_NAME=\"$(ICUDATA_NAME)\" -DU_COMMON_IMPLEMENTATION
 
 # $(LIBICUDT) is either stub data or the real DLL common data.
 LIBS = $(LIBICUDT) $(DEFAULT_LIBS)

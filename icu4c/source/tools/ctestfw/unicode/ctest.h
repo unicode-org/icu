@@ -11,9 +11,10 @@
 #ifndef CTEST_H
 #define CTEST_H
 
+#include "unicode/utypes.h"
 
 /*Deals with imports and exports of the dynamic library*/
-#ifdef _WIN32
+#if defined(_WIN32) || defined(U_CYGWIN)
     #define T_CTEST_EXPORT __declspec(dllexport)
     #define T_CTEST_IMPORT __declspec(dllimport)
 #else
