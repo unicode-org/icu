@@ -52,7 +52,7 @@ typedef enum {
     UCNV_UTF16_LittleEndian = 6,
     UCNV_EBCDIC_STATEFUL = 7,
     UCNV_ISO_2022 = 8,
-    
+
     UCNV_LMBCS_1 = 9,
     UCNV_LMBCS_2, 
     UCNV_LMBCS_3,		
@@ -65,7 +65,8 @@ typedef enum {
     UCNV_LMBCS_17,
     UCNV_LMBCS_18,
     UCNV_LMBCS_19,
-    UCNV_LMBCS_LAST = UCNV_LMBCS_19,
+    UCNV_HZ,
+    UCNV_LMBCS_LAST = UCNV_HZ,
 
     /* Number of converter types for which we have conversion routines. */
     UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES = UCNV_LMBCS_LAST+1
