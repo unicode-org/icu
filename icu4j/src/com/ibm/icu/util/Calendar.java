@@ -1969,7 +1969,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      * be set to the same time.
      *
      * @param other the Calendar to be compared with this Calendar
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     public boolean isEquivalentTo(Calendar other) {
         return this.getClass() == other.getClass() &&
