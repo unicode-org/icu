@@ -161,7 +161,7 @@ void Test4056591()
 
     
     u_uastrcpy(pat, "yyMMdd");
-    def = udat_open(UDAT_IGNORE,UDAT_IGNORE,NULL, NULL, 0,pat, u_strlen(pat), &status);
+    def = udat_open(UDAT_IGNORE,UDAT_IGNORE,NULL, tzID, -1, pat, u_strlen(pat), &status);
     if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using u_openPattern(): %s\n", myErrorName(status));
@@ -203,11 +203,14 @@ void Test4059917()
     UChar *myDate;
     UErrorCode status = U_ZERO_ERROR;
     UChar *pattern;
+    UChar tzID[4];
+
     log_verbose("Testing apply pattern and to pattern regressively\n");
+    u_uastrcpy(tzID, "PST");
     pattern=(UChar*)malloc(sizeof(UChar) * 11);
     u_uastrcpy(pattern, "yyyy/MM/dd");
     log_verbose("%s\n", austrdup(pattern) );
-    def = udat_open(UDAT_IGNORE,UDAT_IGNORE,NULL,NULL,0,pattern, u_strlen(pattern),&status);
+    def = udat_open(UDAT_IGNORE,UDAT_IGNORE,NULL,tzID,-1,pattern, u_strlen(pattern),&status);
     if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using openPattern: %s\n", myErrorName(status));
@@ -236,11 +239,11 @@ void Test4059917()
 
 void aux917( UDateFormat *fmt, UChar* str) 
 {    
-   int32_t resultlength, resultlengthneeded;
-   UErrorCode status = U_ZERO_ERROR;
-   UChar* formatted=NULL;
-   UChar *pat=NULL;
-   UDate d1=1000000000.0;
+    int32_t resultlength, resultlengthneeded;
+    UErrorCode status = U_ZERO_ERROR;
+    UChar* formatted=NULL;
+    UChar *pat=NULL;
+    UDate d1=1000000000.0;
    
     resultlength=0;
     resultlengthneeded=udat_toPattern(fmt, TRUE, NULL, resultlength, &status);
