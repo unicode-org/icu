@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2004/02/06 21:54:06 $
-* $Revision: 1.88 $
+* $Date: 2004/02/19 00:30:53 $
+* $Revision: 1.89 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -184,12 +184,13 @@
             sourcepath="${src.dir}"
             destdir="${doc.dir}"
             nodeprecatedlist="true"
-        windowtitle="icu4j"
-        doctitle="icu4j"
-        encoding="iso-8859-1"
-        docencoding="iso-8859-1"
-        bottom="&lt;font size=-1>Copyright (c) 2002 IBM Corporation and others.&lt;/font>"
-        additionalparam="${doc.params}"
+            windowtitle="icu4j"
+            doctitle="icu4j"
+            encoding="iso-8859-1"
+            docencoding="iso-8859-1"
+            bottom="&lt;font size=-1>Copyright (c) 2002 IBM Corporation and others.&lt;/font>"
+            additionalparam="${doc.params}"
+            link="http://java.sun.com/j2se/1.4/docs/api"
         />
     </target>
 
