@@ -198,7 +198,7 @@ import java.text.MessageFormat;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.2 $ $Date: 1999/12/20 19:02:27 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.3 $ $Date: 1999/12/20 20:48:06 $
  */
 public abstract class Transliterator {
     /**
@@ -285,7 +285,14 @@ public abstract class Transliterator {
      * transliterator.  The ID is appended to this to form the key.
      * The resource bundle value should be a String.
      */
-    private static final String RB_DISPLAY_NAME_PREFIX = "T:";
+    private static final String RB_DISPLAY_NAME_PREFIX = "%Translit%%";
+
+    /**
+     * Prefix for resource bundle key for the display name for a
+     * transliterator SCRIPT.  The ID is appended to this to form the key.
+     * The resource bundle value should be a String.
+     */
+    private static final String RB_SCRIPT_DISPLAY_NAME_PREFIX = "%Translit%";
 
     /**
      * Resource bundle key for display name pattern.
@@ -616,8 +623,8 @@ public abstract class Transliterator {
      * display to the user in the default locale.  See {@link
      * #getDisplayName(Locale)} for details.
      */
-    public final String getDisplayName() {
-        return getDisplayName(Locale.getDefault());
+    public final static String getDisplayName(String ID) {
+        return getDisplayName(ID, Locale.getDefault());
     }
 
     /**
@@ -638,10 +645,12 @@ public abstract class Transliterator {
      * localized.
      * @see java.text.MessageFormat
      */
-    public String getDisplayName(Locale inLocale) {
+    public static String getDisplayName(String ID, Locale inLocale) {
         ResourceBundle bundle = ResourceBundle.getBundle(
             RB_LOCALE_ELEMENTS, inLocale);
 
+        // Use display name for the entire transliterator, if it
+        // exists.
         try {
             return bundle.getString(RB_DISPLAY_NAME_PREFIX + ID);
         } catch (MissingResourceException e) {}
@@ -657,6 +666,15 @@ public abstract class Transliterator {
                 ? new Object[] { new Integer(1), ID }
                 : new Object[] { new Integer(2), ID.substring(0, i),
                                  ID.substring(i+1) };
+
+            // Use display names for the scripts, if they exist
+            for (int j=1; j<=((i<0)?1:2); ++j) {
+                try {
+                    args[j] = bundle.getString(RB_SCRIPT_DISPLAY_NAME_PREFIX +
+                                               (String) args[j]);
+                } catch (MissingResourceException e) {}
+            }
+
             // Format it using the pattern in the resource
             return format.format(args);
         } catch (MissingResourceException e2) {}

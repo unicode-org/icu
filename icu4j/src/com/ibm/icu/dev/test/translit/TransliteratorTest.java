@@ -73,6 +73,14 @@ public class TransliteratorTest extends IntlTest {
         logln("Elapsed time: " + ms + " ms");
     }
 
+    public void TestDisplayName() {
+        String ID;
+        for (Enumeration e = Transliterator.getAvailableIDs(); e.hasMoreElements(); ) {
+            ID = (String) e.nextElement();
+            logln(ID + " -> " + Transliterator.getDisplayName(ID));
+        }
+    }
+
     public void TestSimpleRules() {
         /* Example: rules 1. ab>x|y
          *                2. yc>z
