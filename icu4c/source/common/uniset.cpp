@@ -15,10 +15,13 @@
 #include "symtable.h"
 #include "cmemory.h"
 #include "uhash.h"
-#include "upropset.h"
 #include "util.h"
 #include "uvector.h"
 #include "uprops.h"
+#include "charstr.h"
+#include "ustrfmt.h"
+#include "mutex.h"
+#include "uassert.h"
 
 // HIGH_VALUE > all valid values. 110000 for codepoints
 #define UNICODESET_HIGH 0x0110000
@@ -45,6 +48,21 @@
 #define LOWER_U         ((UChar)0x0075) /*u*/
 #define OPEN_BRACE      ((UChar)123)    /*{*/
 #define CLOSE_BRACE     ((UChar)125)    /*}*/
+#define UPPER_P         ((UChar)0x0050) /*P*/
+#define UPPER_N         ((UChar)78)     /*N*/
+#define EQUALS          ((UChar)0x003D) /*=*/
+
+static const UChar POSIX_OPEN[]  = { 91,58,0 };  // "[:"
+static const UChar POSIX_CLOSE[] = { 58,93,0 };  // ":]"
+static const UChar PERL_OPEN[]   = { 92,112,0 }; // "\\p"
+static const UChar PERL_CLOSE[]  = { 125,0 };    // "}"
+static const UChar NAME_OPEN[]   = { 92,78,0 };  // "\\N"
+
+// Special property set IDs
+static const char* ANY   = "ANY";   // [\u0000-\U0010FFFF]
+static const char* ASCII = "ASCII"; // [\u0000-\u007F]
+
+static const char* NAME_PROP = "na"; // Unicode name property alias
 
 // TEMPORARY: Remove when deprecated category code constructor is removed.
 static const UChar CATEGORY_NAMES[] = {
@@ -103,6 +121,8 @@ const UChar32 UnicodeSet::MIN_VALUE = UNICODESET_LOW;
 const UChar32 UnicodeSet::MAX_VALUE = UNICODESET_HIGH - 1;
 
 const char UnicodeSet::fgClassID = 0;
+
+static UnicodeSet* INCLUSIONS = NULL; // cached uprv_getInclusions()
 
 //----------------------------------------------------------------
 // Debugging
@@ -441,7 +461,7 @@ UnicodeSet& UnicodeSet::applyPattern(const UnicodeString& pattern,
 UBool UnicodeSet::resemblesPattern(const UnicodeString& pattern, int32_t pos) {
     return ((pos+1) < pattern.length() &&
             pattern.charAt(pos) == (UChar)91/*[*/) ||
-        UnicodePropertySet::resemblesPattern(pattern, pos);
+        resemblesPropertyPattern(pattern, pos);
 }
 
 /**
@@ -1137,7 +1157,7 @@ UnicodeSet& UnicodeSet::add(UChar32 c) {
     else if (i > 0 && c == list[i-1]) {
         // c is after end of prior range
         list[i-1]++;
-        // no need to chcek for collapse here
+        // no need to check for collapse here
     }
 
     else {
@@ -1827,7 +1847,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
         // Parse the opening '[' and optional following '^'
         switch (mode) {
         case 0:
-            if (UnicodePropertySet::resemblesPattern(pattern, i-1)) {
+            if (resemblesPropertyPattern(pattern, i-1)) {
                 mode = 3;
                 break; // Fall through
             } else if (c == SET_OPEN) {
@@ -1864,23 +1884,15 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
             /**
              * Handle property set patterns.
              */
-            if (UnicodePropertySet::resemblesPattern(pattern, i-1)) {
+            if (resemblesPropertyPattern(pattern, i-1)) {
                 ParsePosition pp(i-1);
-                UnicodeSet *s = UnicodePropertySet::createFromPattern(pattern, pp, status);
-                if (s == NULL) {
-                    // assert(pp.getIndex() == i-1);
+                nestedAux.applyPropertyPattern(pattern, pp, status);
+                if (U_FAILURE(status)) {
+                    U_ASSERT(pp.getIndex() == i-1);
                     //throw new IllegalArgumentException("Invalid property pattern " +
                     //                                   pattern.substring(i-1));
-                    status = U_INVALID_PROPERTY_PATTERN;
                     return;
                 }
-                // TODO This is very inefficient.  We create a new UnicodeSet,
-                // then do an assignment, then delete it.  Clean this up in
-                // the future so that either (1) we just use the new set
-                // directly, and delete it when we're done, or (2) even better,
-                // UnicodePropertySet takes an existing set.
-                nestedAux = *s;
-                delete s;
                 nestedSet = &nestedAux;
                 nestedPatStart = newPat.length();
                 nestedPatDone = TRUE; // we're going to do it just below
@@ -2469,5 +2481,387 @@ void UnicodeSet::retain(const UChar32* other, int32_t otherLen, int8_t polarity)
     pat.truncate(0);
 }
 
-U_NAMESPACE_END
+//----------------------------------------------------------------
+// Property set implementation
+//----------------------------------------------------------------
 
+static UBool numericValueFilter(UChar32 ch, void* context) {
+    return u_getNumericValue(ch) == *(double*)context;
+}
+
+static UBool generalCategoryFilter(UChar32 ch, void* context) {
+    int32_t value = *(int32_t*)context;
+    return (U_GET_GC_MASK((UChar32) ch) & value) != 0;
+}
+
+typedef struct {
+    UProperty prop;
+    int32_t value;
+} IntPropertyContext;
+
+static UBool intPropertyFilter(UChar32 ch, void* context) {
+    IntPropertyContext* c = (IntPropertyContext*)context;
+    return u_getIntPropertyValue((UChar32) ch, c->prop) == c->value;
+}
+
+
+/**
+ * Generic filter-based scanning code.
+ *
+ * TODO: Replace this code with something that examines the underlying
+ * UCharacter data structures so we can iterate over internally-stored
+ * ranges of characters that have a given property.
+ */
+void UnicodeSet::applyFilter(UnicodeSet::Filter filter,
+                             void* context,
+                             UErrorCode &status) {
+    // Walk through all Unicode characters, noting the start
+    // and end of each range for which filter.contain(c) is
+    // true.  Add each range to a set.
+    //
+    // To improve performance, use the INCLUSIONS set, which
+    // encodes information about character ranges that are known
+    // to have identical properties, such as the CJK Ideographs
+    // from U+4E00 to U+9FA5.  INCLUSIONS contains all characters
+    // except the first characters of such ranges.
+    //
+    // TODO Where possible, instead of scanning over code points,
+    // use internal property data to initialize UnicodeSets for
+    // those properties.  Scanning code points is slow.
+    if (U_FAILURE(status)) return;
+
+    const UnicodeSet* inclusions = getInclusions();
+    if (inclusions == NULL) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
+    clear();
+
+    int32_t startHasProperty = -1;
+    int limitRange = INCLUSIONS->getRangeCount();
+
+    for (int j=0; j<limitRange; ++j) {
+        // get current range
+        UChar32 start = INCLUSIONS->getRangeStart(j);
+        UChar32 end = INCLUSIONS->getRangeEnd(j);
+
+        // for all the code points in the range, process
+        for (UChar32 ch = start; ch <= end; ++ch) {
+            // only add to the unicodeset on inflection points --
+            // where the hasProperty value changes to false
+            if ((*filter)((UChar32) ch, context)) {
+                if (startHasProperty < 0) {
+                    startHasProperty = ch;
+                }
+            } else if (startHasProperty >= 0) {
+                add((UChar32)startHasProperty, (UChar32)ch-1);
+                startHasProperty = -1;
+            }
+        }
+    }
+    if (startHasProperty >= 0) {
+        add((UChar32)startHasProperty, (UChar32)0x10FFFF);
+    }
+}
+
+UBool mungeCharName(char* dst, const char* src, int32_t dstCapacity) {
+    /* Note: we use ' ' in compiler code page */
+    int32_t j = 0;
+    char ch;
+    --dstCapacity; /* make room for term. zero */
+    while ((ch = *src++) != 0) {
+        if (ch == ' ' && (j==0 || (j>0 && dst[j-1]==' '))) {
+            continue;
+        }
+        if (j >= dstCapacity) return FALSE;
+        dst[j++] = ch;
+    }
+    if (j > 0 && dst[j-1] == ' ') --j;
+    dst[j] = 0;
+    return TRUE;
+}
+
+//----------------------------------------------------------------
+// Property set API
+//----------------------------------------------------------------
+
+#define FAIL(ec) {ec=U_ILLEGAL_ARGUMENT_ERROR; return *this;}
+
+UnicodeSet&
+UnicodeSet::applyIntPropertyValue(UProperty prop, int32_t value, UErrorCode& ec) {
+    if (U_FAILURE(ec)) return *this;
+
+    if (prop == UCHAR_GENERAL_CATEGORY) {
+        applyFilter(generalCategoryFilter, &value, ec);
+    } else {
+        IntPropertyContext c = {prop, value};
+        applyFilter(intPropertyFilter, &c, ec);
+    }
+    return *this;
+}
+
+UnicodeSet&
+UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
+                               const UnicodeString& value,
+                               UErrorCode& ec) {
+    if (U_FAILURE(ec)) return *this;
+
+    UProperty p;
+    int32_t v;
+    CharString pname(prop);
+    CharString vname(value);
+    UBool mustNotBeEmpty = FALSE;
+
+    if (value.length() > 0) {
+        p = u_getPropertyEnum(pname);
+        if (p == UCHAR_INVALID_CODE) FAIL(ec);
+
+        if ((p >= UCHAR_BINARY_START && p < UCHAR_BINARY_LIMIT) ||
+            (p >= UCHAR_INT_START && p < UCHAR_INT_LIMIT)) {
+            v = u_getPropertyValueEnum(p, vname);
+            if (v == UCHAR_INVALID_CODE) {
+                // Handle numeric CCC
+                if (p == UCHAR_CANONICAL_COMBINING_CLASS) {
+                    char* end;
+                    double value = uprv_strtod(vname, &end);
+                    v = (int32_t) value;
+                    if (v != value || v < 0 || *end != 0) {
+                        // non-integral or negative value, or trailing junk
+                        FAIL(ec);
+                    }
+                    // If the resultant set is empty then the numeric value
+                    // was invalid.
+                    mustNotBeEmpty = TRUE;
+                } else {
+                    FAIL(ec);
+                }
+            }
+        }
+
+        else {
+
+            switch (p) {
+            case UCHAR_NUMERIC_VALUE:
+                {
+                    char* end;
+                    double value = uprv_strtod(vname, &end);
+                    if (*end != 0) {
+                        FAIL(ec);
+                    }
+                    applyFilter(numericValueFilter, &value, ec);
+                    return *this;
+                }
+                break;
+            case UCHAR_NAME:
+            case UCHAR_UNICODE_1_NAME:
+                {
+                    // Must munge name, since u_charFromName() does not do
+                    // 'loose' matching.
+                    char buf[128]; // it suffices that this be > uprv_getMaxCharNameLength
+                    if (!mungeCharName(buf, vname, sizeof(buf))) FAIL(ec);
+                    UCharNameChoice choice = (p == UCHAR_NAME) ?
+                        U_EXTENDED_CHAR_NAME : U_UNICODE_10_CHAR_NAME;
+                    UChar32 ch = u_charFromName(choice, buf, &ec);
+                    if (U_SUCCESS(ec)) {
+                        clear();
+                        add(ch);
+                        return *this;
+                    } else {
+                        FAIL(ec);
+                    }
+                }
+                break;
+            }
+
+            // p is a non-binary, non-enumerated property that we
+            // don't support (yet).
+            FAIL(ec);
+        }
+    }
+
+    else {
+        // value is empty.  Interpret as General Category, Script, or
+        // Binary property.
+        p = UCHAR_GENERAL_CATEGORY;
+        v = u_getPropertyValueEnum(p, pname);
+        if (v == UCHAR_INVALID_CODE) {
+            p = UCHAR_SCRIPT;
+            v = u_getPropertyValueEnum(p, pname);
+            if (v == UCHAR_INVALID_CODE) {
+                p = u_getPropertyEnum(pname);
+                if (p >= UCHAR_BINARY_START && p < UCHAR_BINARY_LIMIT) {
+                    v = 1;
+                } else if (0 == uprv_comparePropertyNames(ANY, pname)) {
+                    set(MIN_VALUE, MAX_VALUE);
+                    return *this;
+                } else if (0 == uprv_comparePropertyNames(ASCII, pname)) {
+                    set(0, 0x7F);
+                    return *this;
+                } else {
+                    FAIL(ec);
+                }
+            }
+        }
+    }
+    
+    applyIntPropertyValue(p, v, ec);
+
+    if (U_SUCCESS(ec) && (mustNotBeEmpty && isEmpty())) {
+        // mustNotBeEmpty is set to true if an empty set indicates
+        // invalid input.
+        ec = U_ILLEGAL_ARGUMENT_ERROR;
+    }
+
+    return *this;
+}
+
+//----------------------------------------------------------------
+// Property set patterns
+//----------------------------------------------------------------
+
+/**
+ * Return true if the given position, in the given pattern, appears
+ * to be the start of a property set pattern.
+ */
+UBool UnicodeSet::resemblesPropertyPattern(const UnicodeString& pattern,
+                                           int32_t pos) {
+    // Patterns are at least 5 characters long
+    if ((pos+5) > pattern.length()) {
+        return FALSE;
+    }
+
+    // Look for an opening [:, [:^, \p, or \P
+    return (0 == pattern.compare(pos, 2, POSIX_OPEN)) ||
+        (0 == pattern.caseCompare(pos, 2, PERL_OPEN, U_FOLD_CASE_DEFAULT)) ||
+        (0 == pattern.compare(pos, 2, NAME_OPEN));
+}
+
+/**
+ * Parse the given property pattern at the given parse position.
+ */
+UnicodeSet& UnicodeSet::applyPropertyPattern(const UnicodeString& pattern,
+                                             ParsePosition& ppos,
+                                             UErrorCode &ec) {
+    int32_t pos = ppos.getIndex();
+
+    UBool posix = FALSE; // true for [:pat:], false for \p{pat} \P{pat} \N{pat}
+    UBool isName = FALSE; // true for \N{pat}, o/w false
+    UBool invert = FALSE;
+
+    if (U_FAILURE(ec)) return *this;
+
+    // Minimum length is 5 characters, e.g. \p{L}
+    if ((pos+5) > pattern.length()) {
+        FAIL(ec);
+    }
+
+    // On entry, ppos should point to one of the following locations:
+    // Look for an opening [:, [:^, \p, or \P
+    if (0 == pattern.compare(pos, 2, POSIX_OPEN)) {
+        posix = TRUE;
+        pos += 2;
+        pos = ICU_Utility::skipWhitespace(pattern, pos);
+        if (pos < pattern.length() && pattern.charAt(pos) == COMPLEMENT) {
+            ++pos;
+            invert = TRUE;
+        }
+    } else if (0 == pattern.caseCompare(pos, 2, PERL_OPEN, U_FOLD_CASE_DEFAULT) ||
+               0 == pattern.compare(pos, 2, NAME_OPEN)) {
+        UChar c = pattern.charAt(pos+1);
+        invert = (c == UPPER_P);
+        isName = (c == UPPER_N);
+        pos += 2;
+        pos = ICU_Utility::skipWhitespace(pattern, pos);
+        if (pos == pattern.length() || pattern.charAt(pos++) != OPEN_BRACE) {
+            // Syntax error; "\p" or "\P" not followed by "{"
+            FAIL(ec);
+        }
+    } else {
+        // Open delimiter not seen
+        FAIL(ec);
+    }
+
+    // Look for the matching close delimiter, either :] or }
+    int32_t close = pattern.indexOf(posix ? POSIX_CLOSE : PERL_CLOSE, pos);
+    if (close < 0) {
+        // Syntax error; close delimiter missing
+        FAIL(ec);
+    }
+
+    // Look for an '=' sign.  If this is present, we will parse a
+    // medium \p{gc=Cf} or long \p{GeneralCategory=Format}
+    // pattern.
+    int32_t equals = pattern.indexOf(EQUALS, pos);
+    UnicodeString propName, valueName;
+    if (equals >= 0 && equals < close && !isName) {
+        // Equals seen; parse medium/long pattern
+        pattern.extractBetween(pos, equals, propName);
+        pattern.extractBetween(equals+1, close, valueName);
+    }
+
+    else {
+        // Handle case where no '=' is seen, and \N{}
+        pattern.extractBetween(pos, close, propName);
+            
+        // Handle \N{name}
+        if (isName) {
+            // This is a little inefficient since it means we have to
+            // parse NAME_PROP back to UCHAR_NAME even though we already
+            // know it's UCHAR_NAME.  If we refactor the API to
+            // support args of (UProperty, char*) then we can remove
+            // NAME_PROP and make this a little more efficient.
+            valueName = propName;
+            propName = NAME_PROP;
+        }
+    }
+
+    applyPropertyAlias(propName, valueName, ec);
+
+    if (U_SUCCESS(ec)) {
+        if (invert) {
+            complement();
+        }
+            
+        // Move to the limit position after the close delimiter if the
+        // parse succeeded.
+        ppos.setIndex(close + (posix ? 2 : 1));
+    }
+
+    return *this;
+}
+
+//----------------------------------------------------------------
+// Inclusions list
+//----------------------------------------------------------------
+
+const UnicodeSet* UnicodeSet::getInclusions() {
+    if (INCLUSIONS == NULL) {
+        umtx_lock(NULL);
+        if (INCLUSIONS == NULL) {
+            static int recursionCount;
+            recursionCount++;
+            U_ASSERT(recursionCount == 1);
+            INCLUSIONS = new UnicodeSet();
+            if (INCLUSIONS != NULL) {
+                uprv_getInclusions((USet*) INCLUSIONS);
+            }
+            recursionCount--;
+        }
+        umtx_unlock(NULL);
+    }
+    return INCLUSIONS;
+}
+
+/**
+ * Cleanup function for UnicodeSet
+ */
+U_CFUNC UBool uset_cleanup(void) {
+    if (INCLUSIONS != NULL) {
+        delete INCLUSIONS;
+        INCLUSIONS = NULL;
+    }
+    return TRUE;
+}
+
+U_NAMESPACE_END
