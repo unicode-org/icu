@@ -69,7 +69,7 @@ NumberFormatTest::TestPatterns(void)
             errln((UnicodeString)"FAIL: Pattern " + pat[i] + " should transmute to " + newpat[i] +
                   "; " + newp + " seen instead");
 
-        UnicodeString s; (*(NumberFormat*)&fmt).format(T_INT32(0), s);
+        UnicodeString s; (*(NumberFormat*)&fmt).format((int32_t)0, s);
         if (!(s == num[i]))
         {
             errln((UnicodeString)"FAIL: Pattern " + pat[i] + " should format zero as " + num[i] +
@@ -257,7 +257,7 @@ NumberFormatTest::TestQuotes(void)
     pat = new UnicodeString("a'fo''o'b#");
     DecimalFormat *fmt = new DecimalFormat(*pat, *sym, status);
     UnicodeString s; 
-    ((NumberFormat*)fmt)->format(T_INT32(123), s);
+    ((NumberFormat*)fmt)->format((int32_t)123, s);
     logln((UnicodeString)"Pattern \"" + *pat + "\"");
     logln((UnicodeString)" Format 123 -> " + escape(s));
     if (!(s=="afo'ob123")) 
@@ -269,7 +269,7 @@ NumberFormatTest::TestQuotes(void)
 
     pat = new UnicodeString("a''b#");
     fmt = new DecimalFormat(*pat, *sym, status);
-    ((NumberFormat*)fmt)->format(T_INT32(123), s);
+    ((NumberFormat*)fmt)->format((int32_t)123, s);
     logln((UnicodeString)"Pattern \"" + *pat + "\"");
     logln((UnicodeString)" Format 123 -> " + escape(s));
     if (!(s=="a'b123")) 
