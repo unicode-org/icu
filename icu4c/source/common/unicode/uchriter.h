@@ -23,6 +23,7 @@ U_NAMESPACE_BEGIN
  * compare equal).
  * @see CharacterIterator
  * @see ForwardCharacterIterator
+ * @stable
  */
 class U_COMMON_API UCharCharacterIterator : public CharacterIterator {
 public:
@@ -112,7 +113,7 @@ public:
    * Sets the iterator to refer to the first code unit in its
    * iteration range, and returns that code unit.
    * This can be used to begin an iteration with next().
-   * @draft
+   * @stable
    */
   virtual UChar         first(void);
 
@@ -121,7 +122,7 @@ public:
    * iteration range, returns that code unit, and moves the position
    * to the second code unit. This is an alternative to setToStart()
    * for forward iteration with nextPostInc().
-   * @draft
+   * @stable
    */
   virtual UChar         firstPostInc(void);
 
@@ -131,7 +132,7 @@ public:
    * This can be used to begin an iteration with next32().
    * Note that an iteration with next32PostInc(), beginning with,
    * e.g., setToStart() or firstPostInc(), is more efficient.
-   * @draft
+   * @stable
    */
   virtual UChar32       first32(void);
 
@@ -140,7 +141,7 @@ public:
    * iteration range, returns that code point, and moves the position
    * to the second code point. This is an alternative to setToStart()
    * for forward iteration with next32PostInc().
-   * @draft
+   * @stable
    */
   virtual UChar32       first32PostInc(void);
 
@@ -148,7 +149,7 @@ public:
    * Sets the iterator to refer to the last code unit in its
    * iteration range, and returns that code unit.
    * This can be used to begin an iteration with previous().
-   * @draft
+   * @stable
    */
   virtual UChar         last(void);
 
@@ -156,7 +157,7 @@ public:
    * Sets the iterator to refer to the last code point in its
    * iteration range, and returns that code unit.
    * This can be used to begin an iteration with previous32().
-   * @draft
+   * @stable
    */
   virtual UChar32       last32(void);
 
@@ -164,7 +165,7 @@ public:
    * Sets the iterator to refer to the "position"-th code unit
    * in the text-storage object the iterator refers to, and
    * returns that code unit.  
-   * @draft
+   * @stable
    */
   virtual UChar         setIndex(UTextOffset position);
 
@@ -175,19 +176,19 @@ public:
    * returns that code point.
    * The current position is adjusted to the beginning of the code point
    * (its first code unit).
-   * @draft
+   * @stable
    */
   virtual UChar32       setIndex32(UTextOffset position);
 
   /**
    * Returns the code unit the iterator currently refers to.  
-   * @draft
+   * @stable
    */
   virtual UChar         current(void) const;
 
   /**
    * Returns the code point the iterator currently refers to.  
-   * @draft
+   * @stable
    */
   virtual UChar32       current32(void) const;
 
@@ -195,7 +196,7 @@ public:
    * Advances to the next code unit in the iteration range (toward
    * endIndex()), and returns that code unit.  If there are no more
    * code units to return, returns DONE.  
-   * @draft
+   * @stable
    */
   virtual UChar         next(void);
 
@@ -204,7 +205,7 @@ public:
    * in the iteration range
    * (toward endIndex()).  If there are
    * no more code units to return, returns DONE.
-   * @draft
+   * @stable
    */
   virtual UChar         nextPostInc(void);
         
@@ -215,7 +216,7 @@ public:
    * Note that iteration with "pre-increment" semantics is less
    * efficient than iteration with "post-increment" semantics
    * that is provided by next32PostInc().
-   * @draft
+   * @stable
    */
   virtual UChar32       next32(void);
 
@@ -224,7 +225,7 @@ public:
    * in the iteration range
    * (toward endIndex()).  If there are
    * no more code points to return, returns DONE.
-   * @draft
+   * @stable
    */
   virtual UChar32       next32PostInc(void);
         
@@ -233,6 +234,7 @@ public:
    * at or after the current position in the iteration range.
    * This is used with nextPostInc() or next32PostInc() in forward
    * iteration.
+   * @stable
    */
   virtual UBool        hasNext();
 
@@ -240,7 +242,7 @@ public:
    * Advances to the previous code unit in the iteration rance (toward
    * startIndex()), and returns that code unit.  If there are no more
    * code units to return, returns DONE.  
-   * @draft
+   * @stable
    */
   virtual UChar         previous(void);
 
@@ -248,7 +250,7 @@ public:
    * Advances to the previous code point in the iteration rance (toward
    * startIndex()), and returns that code point.  If there are no more
    * code points to return, returns DONE.  
-   * @draft
+   * @stable
    */
   virtual UChar32       previous32(void);
 
@@ -257,6 +259,7 @@ public:
    * before the current position in the iteration range.
    * This is used with previous() or previous32() in backward
    * iteration.
+   * @stable
    */
   virtual UBool        hasPrevious();
 
@@ -266,6 +269,7 @@ public:
    * The movement is expressed in numbers of code units forward
    * or backward by specifying a positive or negative delta.
    * @return the new position
+   * @stable
    */
   virtual UTextOffset      move(int32_t delta, EOrigin origin);
 
@@ -275,12 +279,13 @@ public:
    * The movement is expressed in numbers of code points forward
    * or backward by specifying a positive or negative delta.
    * @return the new position
+   * @stable
    */
   virtual UTextOffset      move32(int32_t delta, EOrigin origin);
 
   /**
    * Sets the iterator to iterate over a new range of text
-   * @draft
+   * @stable
    */
   void setText(const UChar* newText, int32_t newTextLength);
   

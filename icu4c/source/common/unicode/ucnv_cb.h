@@ -77,9 +77,8 @@
  * be returned to the user, because it means that not all data could be written into the target buffer, and some is 
  * in the converter error buffer.
  * @see ucnv_cbFromUWriteSub
- * @draft
+ * @stable
  */
-
 U_CAPI void U_EXPORT2
 ucnv_cbFromUWriteBytes (UConverterFromUnicodeArgs *args,
                         const char* source,
@@ -98,9 +97,8 @@ ucnv_cbFromUWriteBytes (UConverterFromUnicodeArgs *args,
  * be returned to the user, because it means that not all data could be written into the target buffer, and some is 
  * in the converter error buffer.
  * @see ucnv_cbFromUWriteBytes
- * @draft
+ * @stable
  */
-
 U_CAPI void U_EXPORT2 
 ucnv_cbFromUWriteSub (UConverterFromUnicodeArgs *args,
                       int32_t offsetIndex,
@@ -116,7 +114,7 @@ ucnv_cbFromUWriteSub (UConverterFromUnicodeArgs *args,
  * @param offsetIndex the relative offset index from callback which will be set
  * @param err error status <TT>U_BUFFER_OVERFLOW</TT>
  * @see ucnv_cbToUWriteSub
- * @draft
+ * @stable
  */
 U_CAPI void U_EXPORT2 ucnv_cbFromUWriteUChars(UConverterFromUnicodeArgs *args,
                              const UChar** source,
@@ -135,9 +133,8 @@ U_CAPI void U_EXPORT2 ucnv_cbFromUWriteUChars(UConverterFromUnicodeArgs *args,
  * @param offsetIndex the relative offset index which will be written.
  * @param err error status <TT>U_BUFFER_OVERFLOW</TT>
  * @see ucnv_cbToUWriteSub
- * @draft
+ * @stable
  */
-
 U_CAPI void U_EXPORT2 ucnv_cbToUWriteUChars (UConverterToUnicodeArgs *args,
                                              const UChar* source,
                                              int32_t length,
@@ -152,12 +149,9 @@ U_CAPI void U_EXPORT2 ucnv_cbToUWriteUChars (UConverterToUnicodeArgs *args,
  * @param offsetIndex the relative offset index from callback.
  * @param err error status <TT>U_BUFFER_OVERFLOW</TT>
  * @see ucnv_cbToUWriteUChars
- * @draft
+ * @stable
  */
-
 U_CAPI void U_EXPORT2 ucnv_cbToUWriteSub (UConverterToUnicodeArgs *args,
                        int32_t offsetIndex,
                        UErrorCode * err);
 #endif
-
-
