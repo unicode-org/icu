@@ -332,8 +332,7 @@ class TransliteratorRegistry {
      * target => (UVector: variant)) The UVector of variants is never
      * empty.  For a source-target with no variant, the special
      * variant NO_VARIANT (the empty string) is stored in slot zero of
-     * the UVector.  This NO_VARIANT variant is invisible to
-     * countAvailableVariants() and getAvailableVariant().
+     * the UVector.
      */
     Hashtable specDAG;
     
