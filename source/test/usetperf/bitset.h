@@ -3,8 +3,6 @@
 * Copyright (c) 2002, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
-* $Source: /xsrl/Nsvn/icu/icu/source/test/usetperf/Attic/bitset.h,v $ 
-**********************************************************************
 * 2002-09-20 aliu Created.
 */
 #ifndef __BITSET_H__
