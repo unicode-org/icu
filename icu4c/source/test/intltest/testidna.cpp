@@ -1630,10 +1630,11 @@ const char* failures[] ={
 void TestIDNA::TestIDNAMonkeyTest(){
     UnicodeString source;
     UErrorCode status = U_ZERO_ERROR;
+    int i;
 
     getInstance(status);    // Init prep
     
-    for(int i=0; i<loopCount; i++){
+    for(i=0; i<loopCount; i++){
         source.truncate(0);
         getTestSource(source);
         source.append((UChar)0x0000);
@@ -1644,7 +1645,7 @@ void TestIDNA::TestIDNAMonkeyTest(){
     }
     
     /* for debugging */
-    for (int i=0; i<(sizeof(failures)/sizeof(failures[0])); i++){
+    for (i=0; i<(int)(sizeof(failures)/sizeof(failures[0])); i++){
         source.truncate(0);
         source.append( failures[i] );
         source = source.unescape();
