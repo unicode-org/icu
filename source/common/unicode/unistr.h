@@ -966,12 +966,21 @@ public:
 
   /**
    * Assignment operator.  Replace the characters in this UnicodeString
-   * with the character <TT>ch</TT>.
-   * @param ch the character to replace
+   * with the code unit <TT>ch</TT>.
+   * @param ch the code unit to replace
    * @return a reference to this
    * @draft
    */
   inline UnicodeString& operator= (UChar ch);
+
+  /**
+   * Assignment operator.  Replace the characters in this UnicodeString
+   * with the code point <TT>ch</TT>.
+   * @param ch the code point to replace
+   * @return a reference to this
+   * @draft
+   */
+  inline UnicodeString& operator= (UChar32 ch);
 
   /**
    * Set the text in the UnicodeString object to the characters
@@ -1012,14 +1021,24 @@ public:
                int32_t srcLength);
 
   /**
-   * Set the characters in the UnicodeString object to the character 
+   * Set the characters in the UnicodeString object to the code unit
    * <TT>srcChar</TT>.
-   * @param srcChar the character which becomes the UnicodeString's character 
+   * @param srcChar the code unit which becomes the UnicodeString's character 
    * content
    * @return a reference to this
    * @draft
    */
   UnicodeString& setTo(UChar srcChar);
+
+  /**
+   * Set the characters in the UnicodeString object to the code point
+   * <TT>srcChar</TT>.
+   * @param srcChar the code point which becomes the UnicodeString's character 
+   * content
+   * @return a reference to this
+   * @draft
+   */
+  UnicodeString& setTo(UChar32 srcChar);
 
   /**
    * Aliasing setTo() function, analogous to the readonly-aliasing UChar* constructor.
@@ -1242,15 +1261,26 @@ public:
             int32_t srcLength);
 
   /**
-   * Insert the character <TT>srcChar</TT> into the UnicodeString object at 
+   * Insert the code unit <TT>srcChar</TT> into the UnicodeString object at 
    * offset <TT>start</TT>.
    * @param start the offset at which the insertion occurs
-   * @param srcChar the character to insert
+   * @param srcChar the code unit to insert
    * @return a reference to this
    * @draft
    */
   inline UnicodeString& insert(UTextOffset start, 
             UChar srcChar);
+
+  /**
+   * Insert the code point <TT>srcChar</TT> into the UnicodeString object at 
+   * offset <TT>start</TT>.
+   * @param start the offset at which the insertion occurs
+   * @param srcChar the code point to insert
+   * @return a reference to this
+   * @draft
+   */
+  inline UnicodeString& insert(UTextOffset start, 
+            UChar32 srcChar);
 
 
   /* Replace operations */
@@ -1336,18 +1366,33 @@ public:
 
   /**
    * Replace the characters in the range 
-   * [<TT>start</TT>, <TT>start + length</TT>) with the character
+   * [<TT>start</TT>, <TT>start + length</TT>) with the code unit
    * <TT>srcChar</TT>.
    * @param start the offset at which the replace operation begins
    * @param length the number of characters to replace.  The character at
    * <TT>start + length</TT> is not modified.
-   * @param srcChar the new character
+   * @param srcChar the new code unit
    * @return a reference to this
    * @draft
    */
   inline UnicodeString& replace(UTextOffset start, 
              int32_t length, 
              UChar srcChar);
+
+  /**
+   * Replace the characters in the range 
+   * [<TT>start</TT>, <TT>start + length</TT>) with the code point
+   * <TT>srcChar</TT>.
+   * @param start the offset at which the replace operation begins
+   * @param length the number of characters to replace.  The character at
+   * <TT>start + length</TT> is not modified.
+   * @param srcChar the new code point
+   * @return a reference to this
+   * @draft
+   */
+  inline UnicodeString& replace(UTextOffset start, 
+             int32_t length, 
+             UChar32 srcChar);
 
   /**
    * Replace the characters in the range [<TT>start</TT>, <TT>limit</TT>) 
@@ -2380,6 +2425,16 @@ UnicodeString::replace(UTextOffset start,
                UChar srcChar)
 { return doReplace(start, length, &srcChar, 0, 1); }
 
+inline UnicodeString&
+UnicodeString::replace(UTextOffset start, 
+               int32_t length, 
+               UChar32 srcChar) {
+  UChar buffer[UTF_MAX_CHAR_LENGTH];
+  int32_t count = 0;
+  UTF_APPEND_CHAR_UNSAFE(buffer, count, srcChar);
+  return doReplace(start, length, buffer, 0, count);
+}
+
 inline UnicodeString& 
 UnicodeString::replaceBetween(UTextOffset start, 
                   UTextOffset limit, 
@@ -2516,6 +2571,10 @@ UnicodeString::operator= (UChar ch)
 { return doReplace(0, fLength, &ch, 0, 1); }
 
 inline UnicodeString& 
+UnicodeString::operator= (UChar32 ch) 
+{ return replace(0, fLength, ch); }
+
+inline UnicodeString& 
 UnicodeString::setTo(const UnicodeString& srcText, 
              UTextOffset srcStart, 
              int32_t srcLength)
@@ -2533,6 +2592,10 @@ UnicodeString::setTo(const UChar *srcChars,
 inline UnicodeString& 
 UnicodeString::setTo(UChar srcChar)
 { return doReplace(0, fLength, &srcChar, 0, 1); }
+
+inline UnicodeString& 
+UnicodeString::setTo(UChar32 srcChar)
+{ return replace(0, fLength, srcChar); }
 
 inline UnicodeString& 
 UnicodeString::operator+= (UChar ch)
@@ -2612,6 +2675,11 @@ inline UnicodeString&
 UnicodeString::insert(UTextOffset start, 
               UChar srcChar)
 { return doReplace(start, 0, &srcChar, 0, 1); }
+
+inline UnicodeString& 
+UnicodeString::insert(UTextOffset start, 
+              UChar32 srcChar)
+{ return replace(start, 0, srcChar); }
 
 
 inline UnicodeString& 
