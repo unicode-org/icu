@@ -1040,6 +1040,9 @@ static const struct {
     /* ICU's root */
     "root",                     "res", ures_swap,
 
+    /* ICU 2.6 resource bundle - data format 1.0, without indexes[] */
+    "*icu26_testtypes",         "res", ures_swap,
+
 #if !UCONFIG_NO_COLLATION
     /* standalone collation data files */
     "ucadata",                  "icu", ucol_swap,
@@ -1102,6 +1105,9 @@ TestSwapCase(UDataMemory *pData, const char *name,
 
     UErrorCode errorCode;
 
+    UBool inEndian, oppositeEndian;
+    uint8_t inCharset, oppositeCharset;
+
     inData=udata_getMemory(pData);
 
     /*
@@ -1126,9 +1132,25 @@ TestSwapCase(UDataMemory *pData, const char *name,
                 name, u_errorName(errorCode));
         return;
     }
-    ds->printError=printError;
 
-    /* we assume that the input data has the current platform's endianness and charset family */
+    inEndian=ds->inIsBigEndian;
+    inCharset=ds->inCharset;
+
+    oppositeEndian=!inEndian;
+    oppositeCharset= inCharset==U_ASCII_FAMILY ? U_EBCDIC_FAMILY : U_ASCII_FAMILY;
+
+    /* make this test work with data files that are built for a different platform */
+    if(inEndian!=U_IS_BIG_ENDIAN || inCharset!=U_CHARSET_FAMILY) {
+        udata_closeSwapper(ds);
+        ds=udata_openSwapper(inEndian, inCharset, oppositeEndian, inCharset, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            log_err("udata_openSwapper(%s->!isBig+same charset) failed - %s\n",
+                    name, u_errorName(errorCode));
+            return;
+        }
+    }
+
+    ds->printError=printError;
 
     /* preflight the length */
     length=swapFn(ds, inHeader, -1, NULL, &errorCode);
@@ -1164,8 +1186,8 @@ TestSwapCase(UDataMemory *pData, const char *name,
     }
 
     /* next swap to opposite charset family */
-    ds=udata_openSwapper(!U_IS_BIG_ENDIAN, U_CHARSET_FAMILY,
-                         !U_IS_BIG_ENDIAN, U_CHARSET_FAMILY==U_ASCII_FAMILY ? U_EBCDIC_FAMILY : U_ASCII_FAMILY,
+    ds=udata_openSwapper(oppositeEndian, inCharset,
+                         oppositeEndian, oppositeCharset,
                          &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("udata_openSwapper(%s->!isBig+other charset) failed - %s\n",
@@ -1191,8 +1213,8 @@ TestSwapCase(UDataMemory *pData, const char *name,
     }
 
     /* finally swap to original platform values */
-    ds=udata_openSwapper(!U_IS_BIG_ENDIAN, U_CHARSET_FAMILY==U_ASCII_FAMILY ? U_EBCDIC_FAMILY : U_ASCII_FAMILY,
-                         U_IS_BIG_ENDIAN, U_CHARSET_FAMILY,
+    ds=udata_openSwapper(oppositeEndian, oppositeCharset,
+                         inEndian, inCharset,
                          &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("udata_openSwapper(%s->back to original) failed - %s\n",
