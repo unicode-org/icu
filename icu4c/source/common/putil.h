@@ -158,7 +158,7 @@ U_CAPI const char*  U_EXPORT2 icu_getDefaultLocaleID(void);
  */
 U_CAPI double           U_EXPORT2 icu_nextDouble(double d, bool_t positive);
 
-/*
+/**
  * Filesystem file and path separator characters.
  * Example: '/' and ':' on Unix, '\\' and ';' on Windows.
  */
@@ -178,5 +178,42 @@ U_CAPI double           U_EXPORT2 icu_nextDouble(double d, bool_t positive);
 #   define U_FILE_SEP_STRING "/"
 #   define U_PATH_SEP_STRING ":"
 #endif
+
+/**
+ * Convert char characters to UChar characters.
+ * This utility function is useful only for "invariant characters"
+ * that are encoded in the platform default encoding.
+ * They are a small, constant subset of the encoding and include
+ * just the latin letters, digits, and some punctuation.
+ * For details, see utypes.h .
+ *
+ * @param cs Input string, points to <code>length</code>
+ *           character bytes from a subset of the platform encoding.
+ * @param us Output string, points to memory for <code>length</code>
+ *           Unicode characters.
+ * @param length The number of characters to convert; this may
+ *               include the terminating <code>NUL</code>.
+ */
+U_CAPI void U_EXPORT2
+u_charsToUChars(const char *cs, UChar *us, UTextOffset length);
+
+/**
+ * Convert UChar characters to char characters.
+ * This utility function is useful only for "invariant characters"
+ * that can be encoded in the platform default encoding.
+ * They are a small, constant subset of the encoding and include
+ * just the latin letters, digits, and some punctuation.
+ * For details, see utypes.h .
+ *
+ * @param us Input string, points to <code>length</code>
+ *           Unicode characters that can be encoded with the
+ *           codepage-invariant subset of the platform encoding.
+ * @param cs Output string, points to memory for <code>length</code>
+ *           character bytes.
+ * @param length The number of characters to convert; this may
+ *               include the terminating <code>NUL</code>.
+ */
+U_CAPI void U_EXPORT2
+u_UCharsToChars(const UChar *us, char *cs, UTextOffset length);
 
 #endif
