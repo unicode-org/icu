@@ -1085,8 +1085,8 @@ static const char* localesToTest[] = {
 "hr", "hu", "is", "iw", "ja", 
 "ko", "lt", "lv", "mk", "mt", 
 "nb", "nn", "nn_NO", "pl", "ro", 
-"ru", /*"sh",*/ "sk", "sl", "sq", /* sh test is turned off until we do closure in contractions */
-"sr", "sv", "th", "tr", /*"uk", */
+"ru", "sh", "sk", "sl", "sq",
+"sr", "sv", "th", "tr", "uk", 
 "vi", "zh", "zh_TW"
 };
 
@@ -1102,6 +1102,28 @@ static const char* rulesToTest[] = {
     "<'?';Qum<3<4<5<c,C<f,F<m,M<o,O<p,P<q,Q<r,R<u,U"  /*"<'?'<3<4<5<a,A<f,F<m,M<o,O<p,P<q,Q<r,R<u,U & '?';Qum"*/
 };
 
+static UBool hasCollationElements(const char *locName) {
+
+  UErrorCode status = U_ZERO_ERROR;
+  UResourceBundle *ColEl = NULL;
+
+  UResourceBundle *loc = ures_open(NULL, locName, &status);;
+
+  if(U_SUCCESS(status)) {
+    status = U_ZERO_ERROR;
+    ColEl = ures_getByKey(loc, "CollationElements", ColEl, &status);
+    if(status == U_ZERO_ERROR) { /* do the test - there are real elements */
+      ures_close(ColEl);
+      ures_close(loc);
+      return TRUE;
+    }
+    ures_close(ColEl);
+    ures_close(loc);
+  }
+  return FALSE;
+}
+
+
 static void testCollations( ) {
   int32_t noOfLoc = uloc_countAvailable();
   int32_t i = 0;
@@ -1109,47 +1131,52 @@ static void testCollations( ) {
   UErrorCode status = U_ZERO_ERROR;
 
   const char *locName = NULL;
-  UResourceBundle *loc = NULL;
-  UResourceBundle *ColEl = NULL;
   UCollator *coll = NULL;
   UCollator *UCA = ucol_open("", &status);
   UColAttributeValue oldStrength = ucol_getAttribute(UCA, UCOL_STRENGTH, &status);
   ucol_setAttribute(UCA, UCOL_STRENGTH, UCOL_QUATERNARY, &status);
 
-
   for(i = 0; i<noOfLoc; i++) {
     status = U_ZERO_ERROR;
     locName = uloc_getAvailable(i);
-    loc = ures_open(NULL, locName, &status);
-    if(U_SUCCESS(status)) {
-      status = U_ZERO_ERROR;
-      ColEl = ures_getByKey(loc, "CollationElements", ColEl, &status);
-      if(status == U_ZERO_ERROR) { /* do the test - there are real elements */
+    if(hasCollationElements(locName)) {
         log_verbose("\nTesting locale %s\n", locName);
         coll = ucol_open(locName, &status);
         testAgainstUCA(coll, UCA, &status);
         ucol_close(coll);
-      } 
-
-      ures_close(loc);
     }
-
   }
-  ures_close(ColEl);
   ucol_setAttribute(UCA, UCOL_STRENGTH, oldStrength, &status);
   ucol_close(UCA);
 }
 
 static void RamsRulesTest( ) {
   UErrorCode status = U_ZERO_ERROR;
-  uint32_t i = 0;
+  int32_t i = 0;
   UCollator *coll = NULL;
   UCollator *UCA = ucol_open("", &status);
   UChar rule[2048];
   uint32_t ruleLen;
+  int32_t noOfLoc = uloc_countAvailable();
+  const char *locName = NULL;
 
   log_verbose("RamsRulesTest\n");
 
+  for(i = 0; i<noOfLoc; i++) {
+    status = U_ZERO_ERROR;
+    locName = uloc_getAvailable(i);
+    if(hasCollationElements(locName)) {
+      log_verbose("Testing locale %s\n", locName);
+      coll = ucol_open(locName, &status);
+      if(U_SUCCESS(status)) {
+        testCollator(coll, &status);
+        testCEs(coll, &status);
+        ucol_close(coll);
+      }
+    }
+  }
+
+/*
   for(i = 0; i<sizeof(localesToTest)/sizeof(localesToTest[0]); i++) {
     coll = ucol_open(localesToTest[i], &status);
     log_verbose("Testing locale: %s\n", localesToTest[i]);
@@ -1159,6 +1186,7 @@ static void RamsRulesTest( ) {
       ucol_close(coll);
     }
   }
+*/
 
   for(i = 0; i<sizeof(rulesToTest)/sizeof(rulesToTest[0]); i++) {
     log_verbose("Testing rule: %s\n", rulesToTest[i]);
