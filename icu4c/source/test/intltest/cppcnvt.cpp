@@ -170,7 +170,7 @@ void ConvertTest::TestConvert()
         return;
     }
 
-    someConverters[3] = new UnicodeConverter("ibm-834", err);
+    someConverters[3] = new UnicodeConverter("ibm-1383", err);
     if (U_FAILURE(err)) {
         errln ((UnicodeString)"FAILURE d! " + myErrorName(err));
         return;
