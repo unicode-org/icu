@@ -18,6 +18,7 @@ de {
     // vorm. -> vormittags -> in the morning
     // nachm. -> nachmittags -> in the afternoon
     Version{ "1.0" }
+    "%%PHONEBOOK" { "Telefonbuch-Sortierregeln" }
     AmPmMarkers {
             "vorm.",
             "nachm.",
@@ -393,7 +394,9 @@ de {
         mo { "Moldawisch" }
         mn { "Mongolisch" }
         na { "Nauruisch" }
+        nb { "Norwegisch Bokm\u00e5l" }    
         ne { "Nepalesisch" }
+        nn { "Norwegisch Nynorsk" }
         no { "Norwegisch" }
         // ? oc { "Occitan" }
         // ? or { "Oriya" }
