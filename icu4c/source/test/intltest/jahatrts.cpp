@@ -205,7 +205,7 @@ void JamoToHangTransliteratorTest::TestTransliterate2(){
 }
 void JamoToHangTransliteratorTest::TestTransliterate(){
 	UnicodeString Data[]={
-	//	source, index.start, index.limit, index.cursor, expectedResult, expectedResult using Filter(TestJamoFilter)
+	//	source, index.contextStart, index.contextLimit, index.start, expectedResult, expectedResult using Filter(TestJamoFilter)
 		CharsToUnicodeString("\\u1100\\u1101\\u1102"), "1", "3", "1", CharsToUnicodeString("\\u1100\\uAE4C\\uB098"), CharsToUnicodeString("\\u1100\\u1101\\uB098"),		
 		CharsToUnicodeString("\\u1167\\u1101"), "0", "1", "0",  CharsToUnicodeString("\\uc5ec\\u1101"), CharsToUnicodeString("\\uc5ec\\u1101"),
 		CharsToUnicodeString("\\u1167\\u1101"), "0", "2", "0",  CharsToUnicodeString("\\uc5ec\\uae4c"), CharsToUnicodeString("\\uc5ec\\u1101"),
