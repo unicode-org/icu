@@ -766,10 +766,12 @@ uloc_getVariant(const char* localeID,
             localeID = scriptID;
         }
         /* Skip the Country */
-        _getCountry(localeID+1, NULL, 0, &localeID);
-        if(_isIDSeparator(*localeID)) {
-            haveVariant=TRUE;
-            i=_getVariant(localeID+1, *localeID, variant, variantCapacity);
+        if (_isIDSeparator(*localeID)) {
+            _getCountry(localeID+1, NULL, 0, &localeID);
+            if(_isIDSeparator(*localeID)) {
+                haveVariant=TRUE;
+                i=_getVariant(localeID+1, *localeID, variant, variantCapacity);
+            }
         }
     }
 
