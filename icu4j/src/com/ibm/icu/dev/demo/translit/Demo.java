@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/translit/Demo.java,v $ 
- * $Date: 2002/06/13 17:33:09 $ 
- * $Revision: 1.17 $
+ * $Date: 2002/06/13 18:30:29 $ 
+ * $Revision: 1.18 $
  *
  *****************************************************************************************
  */
@@ -29,7 +29,7 @@ import java.io.*;
  * <p>Copyright (c) IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Demo.java,v $ $Revision: 1.17 $ $Date: 2002/06/13 17:33:09 $
+ * @version $RCSfile: Demo.java,v $ $Revision: 1.18 $ $Date: 2002/06/13 18:30:29 $
  */
 public class Demo extends Frame {
 
@@ -451,7 +451,7 @@ public class Demo extends Frame {
     
     static {
     	
-    	AnyTransliterator.ScriptRunIterator.registerAnyToScript();
+    	// AnyTransliterator.ScriptRunIterator.registerAnyToScript();
     	
     	if (false) {
     	AnyTransliterator at = new AnyTransliterator("Greek", null);
