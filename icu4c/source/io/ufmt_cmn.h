@@ -40,11 +40,11 @@ typedef enum ufmt_type_info {
     ufmt_float,      /* float */
     ufmt_double,     /* double */
     ufmt_uchar,      /* int, cast to UChar */
-    ufmt_ustring,    /* UChar* */
+    ufmt_ustring     /* UChar* */
     /*ufmt_wchar,*/      /* wchar_t */
     /*ufmt_wstring,*/    /* wchar_t* */
     /*ufmt_date,*/       /* Date */
-    ufmt_last
+    /*ufmt_last*/
 } ufmt_type_info;
 
 /**
