@@ -117,7 +117,9 @@ public class SearchTest extends TestFmwk {
         new SearchData("\u0325\u0300A\u0325\u0300", "\u0325A\u0325", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {5}),
         new SearchData("a\u0300\u0325b\u0300\u0325c \u0325b\u0300 \u0300b\u0325", "\u0300b\u0325", null, Collator.TERTIARY, null,
             new int[] {1, 12, -1}, new int[] {5, 3}),
-        new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[]{0})
+        new SearchData("\u00c4\u0323", "A\u0323\u0308", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {2}),
+        new SearchData("\u0308\u0323", "\u0323\u0308", null, Collator.TERTIARY, null, new int[] {0, -1}, new int[] {2}),
+        new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
     };
 
     SearchData COLLATOR[] = {
