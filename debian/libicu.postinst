@@ -22,9 +22,14 @@ set -e
 #     installation fails and the `postinst' is called with `abort-upgrade',
 #     `abort-remove' or `abort-deconfigure'.
 
+# Call ldconfig in a way that makes lintian happy.
+
+if [ "$1" = "configure" ]; then ldconfig; fi
+
+# And now do the rest of the configuration
+
 case "$1" in
     configure)
-	ldconfig
 
 	# Adjust the current ICU link in /usr/lib/icu
 
