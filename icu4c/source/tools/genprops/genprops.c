@@ -67,6 +67,20 @@ parseDB(const char *filename, UErrorCode *pErrorCode);
 
 /* -------------------------------------------------------------------------- */
 
+
+enum
+{
+    HELP_H,
+    HELP_QUESTION_MARK,
+    VERBOSE,
+    COPYRIGHT,
+    DESTDIR,
+    SOURCEDIR,
+    UNICODE_VERSION,
+    ICUDATADIR
+};
+
+/* Keep these values in sync with the above enums */
 static UOption options[]={
     UOPTION_HELP_H,
     UOPTION_HELP_QUESTION_MARK,
@@ -74,7 +88,8 @@ static UOption options[]={
     UOPTION_COPYRIGHT,
     UOPTION_DESTDIR,
     UOPTION_SOURCEDIR,
-    { "unicode", NULL, NULL, NULL, 'u', UOPT_REQUIRES_ARG, 0 }
+    { "unicode", NULL, NULL, NULL, 'u', UOPT_REQUIRES_ARG, 0 },
+    UOPTION_ICUDATADIR
 };
 
 extern int
@@ -87,9 +102,10 @@ main(int argc, char* argv[]) {
     U_MAIN_INIT_ARGS(argc, argv);
 
     /* preset then read command line options */
-    options[4].value=u_getDataDirectory();
-    options[5].value="";
-    options[6].value="";
+    options[DESTDIR].value=u_getDataDirectory();
+    options[SOURCEDIR].value="";
+    options[UNICODE_VERSION].value="";
+    options[ICUDATADIR].value=u_getDataDirectory();
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
 
     /* error handling, printing usage message */
@@ -98,7 +114,7 @@ main(int argc, char* argv[]) {
             "error in command line argument \"%s\"\n",
             argv[-argc]);
     }
-    if(argc<0 || options[0].doesOccur || options[1].doesOccur) {
+    if(argc<0 || options[HELP_H].doesOccur || options[HELP_QUESTION_MARK].doesOccur) {
         /*
          * Broken into chucks because the C89 standard says the minimum
          * required supported string length is 509 bytes.
@@ -119,18 +135,20 @@ main(int argc, char* argv[]) {
         fprintf(stderr,
             "\t-d or --destdir     destination directory, followed by the path\n"
             "\t-s or --sourcedir   source directory, followed by the path\n"
+            "\t-i or --icudatadir  directory for locating any needed intermediate data files,\n"
+            "\t                    followed by path, defaults to %s\n"
             "\tsuffix              suffix that is to be appended with a '-'\n"
             "\t                    to the source file basenames before opening;\n"
-            "\t                    'genprops new' will read UnicodeData-new.txt etc.\n");
+            "\t                    'genprops new' will read UnicodeData-new.txt etc.\n",
+            u_getDataDirectory());
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
-
     /* get the options values */
-    beVerbose=options[2].doesOccur;
-    haveCopyright=options[3].doesOccur;
-    srcDir=options[5].value;
-    destDir=options[4].value;
+    beVerbose=options[VERBOSE].doesOccur;
+    haveCopyright=options[COPYRIGHT].doesOccur;
+    srcDir=options[SOURCEDIR].value;
+    destDir=options[DESTDIR].value;
 
     if(argc>=2) {
         suffix=argv[1];
@@ -138,10 +156,14 @@ main(int argc, char* argv[]) {
         suffix=NULL;
     }
 
-    if(options[6].doesOccur) {
-        setUnicodeVersion(options[6].value);
+    if(options[UNICODE_VERSION].doesOccur) {
+        setUnicodeVersion(options[UNICODE_VERSION].value);
     }
     /* else use the default dataVersion in store.c */
+
+    if (options[ICUDATADIR].doesOccur) {
+        u_setDataDirectory(options[ICUDATADIR].value);
+    }
 
     /* prepare the filename beginning with the source dir */
     uprv_strcpy(filename, srcDir);
