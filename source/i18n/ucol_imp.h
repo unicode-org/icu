@@ -430,7 +430,7 @@ enum {
 
 /* These values come from the UCA */
 #define UCOL_COMMON_BOT2 UCOL_BYTE_COMMON
-#define UCOL_COMMON_TOP2 0x86
+#define UCOL_COMMON_TOP2 0x86u
 #define UCOL_TOTAL2 (UCOL_COMMON_TOP2-UCOL_COMMON_BOT2-1) 
 
 #define UCOL_FLAG_BIT_MASK_CASE_SW_OFF 0x80

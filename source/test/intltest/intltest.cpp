@@ -407,7 +407,9 @@ void IntlTest::setICU_DATA() {
         u_setDataDirectory(env_string);
         return;
     }
-#endif
+
+#else
+    /* Use #else so we don't get compiler warnings due to the return above.
 
     /* On Windows, the file name obtained from __FILE__ includes a full path.
      *             This file is "wherever\icu\source\test\cintltst\cintltst.c"
@@ -439,6 +441,7 @@ void IntlTest::setICU_DATA() {
             return;
         }
     }
+#endif
 
     /* No location for the data dir was identifiable.
      *   Add other fallbacks for the test data location here if the need arises
@@ -487,29 +490,33 @@ void it_err( UnicodeString message )
 
 void it_errln( UnicodeString message )
 {
-    if (IntlTest::gTest) IntlTest::gTest->errln( message );
+    if (IntlTest::gTest)
+        IntlTest::gTest->errln( message );
 }
 
 IntlTest& operator<<(IntlTest& test, const UnicodeString&   string)
 {
-    if (&test == NULL)
-        return *((IntlTest*) NULL);
+/* NULL shouldn't happen */
+//    if (&test == NULL)
+//        return *((IntlTest*) NULL);
     test.log( string );
     return test;
 }
 
 IntlTest& operator<<(IntlTest& test, const char*    string)
 {
-    if (&test == NULL)
-        return *((IntlTest*) NULL);
+/* NULL shouldn't happen */
+//    if (&test == NULL)
+//        return *((IntlTest*) NULL);
     test.log( string );
     return test;
 }
 
 IntlTest& operator<<(IntlTest& test, const int32_t num)
 {
-    if (&test == NULL)
-        return *((IntlTest*) NULL);
+/* NULL shouldn't happen */
+//    if (&test == NULL)
+//        return *((IntlTest*) NULL);
     char convert[20];
     sprintf(convert, "%li", (long)num);
     test.log(convert);
