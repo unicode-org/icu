@@ -226,7 +226,7 @@ inline int32_t ucol_inv_getNext(UColTokListHeader *lh, uint32_t strength) {
   return iCE;
 }
 
-U_CFUNC void ucol_inv_getGapPositions(/*UColTokenParser *src,*/ UColTokListHeader *lh, UErrorCode *status) {
+U_CFUNC void ucol_inv_getGapPositions(UColTokenParser *src, UColTokListHeader *lh, UErrorCode *status) {
   /* reset all the gaps */
   int32_t i = 0;
   uint32_t *CETable = (uint32_t *)((uint8_t *)invUCA+invUCA->table);
@@ -251,7 +251,10 @@ U_CFUNC void ucol_inv_getGapPositions(/*UColTokenParser *src,*/ UColTokListHeade
     lh->pos[i] = -1;
   }
 
-  if(lh->baseCE >= PRIMARY_IMPLICIT_MIN && lh->baseCE < PRIMARY_IMPLICIT_MAX ) { /* implicits - */ 
+  UCAConstants *consts = (UCAConstants *)((uint8_t *)src->UCA->image + src->UCA->image->UCAConsts);
+
+  if(lh->baseCE >= (consts->UCA_PRIMARY_IMPLICIT_MIN<<24) && lh->baseCE < (consts->UCA_PRIMARY_IMPLICIT_MAX<<24) ) { /* implicits - */ 
+  //if(lh->baseCE >= PRIMARY_IMPLICIT_MIN && lh->baseCE < PRIMARY_IMPLICIT_MAX ) { /* implicits - */ 
     lh->pos[0] = 0;
     t1 = lh->baseCE;
     t2 = lh->baseContCE;
@@ -488,7 +491,7 @@ U_CFUNC void ucol_doCE(uint32_t *CEparts, UColToken *tok) {
 #endif
 }
 
-U_CFUNC void ucol_initBuffers(/*UColTokenParser *src,*/ UColTokListHeader *lh, UErrorCode *status) {
+U_CFUNC void ucol_initBuffers(UColTokenParser *src, UColTokListHeader *lh, UErrorCode *status) {
 
   ucolCEGenerator Gens[UCOL_CE_STRENGTH_LIMIT];
   uint32_t CEparts[UCOL_CE_STRENGTH_LIMIT];
@@ -498,9 +501,11 @@ U_CFUNC void ucol_initBuffers(/*UColTokenParser *src,*/ UColTokListHeader *lh, U
   UColToken *tok = lh->last;
   uint32_t t[UCOL_STRENGTH_LIMIT];
 
-  for(i=0; i<UCOL_STRENGTH_LIMIT; i++) {
-    t[i] = 0;
-  }
+  uprv_memset(t, 0, UCOL_STRENGTH_LIMIT*sizeof(uint32_t));
+
+  //for(i=0; i<UCOL_STRENGTH_LIMIT; i++) {
+  //  t[i] = 0;
+  //}
 
   tok->toInsert = 1;
   t[tok->strength] = 1;
@@ -519,7 +524,7 @@ U_CFUNC void ucol_initBuffers(/*UColTokenParser *src,*/ UColTokListHeader *lh, U
   } 
 
   tok->toInsert = t[tok->strength];
-  ucol_inv_getGapPositions(lh, status);
+  ucol_inv_getGapPositions(src, lh, status);
 
 #if UCOL_DEBUG
   fprintf(stderr, "BaseCE: %08X %08X\n", lh->baseCE, lh->baseContCE);
@@ -870,77 +875,6 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
   }
 }
 
-struct enumStruct {
-  tempUCATable *t;
-  UCollator *tempColl;
-  UCollationElements* colEl;
-  UErrorCode *status;
-};
-
-U_CDECL_BEGIN
-static UBool U_CALLCONV
-_enumCategoryRangeClosureCategory(const void *context, UChar32 start, UChar32 limit, UCharCategory type) {
-
-  UErrorCode *status = ((enumStruct *)context)->status;
-  tempUCATable *t = ((enumStruct *)context)->t;
-  UCollator *tempColl = ((enumStruct *)context)->tempColl;
-  UCollationElements* colEl = ((enumStruct *)context)->colEl;
-  UCAElements el;
-  UChar decomp[256] = { 0 };
-  uint32_t noOfDec = 0;
-
-  UChar32 u32 = 0;
-  UChar comp[2];
-  uint32_t len = 0;
-
-  if (type > 0) { // if the range is assigned - we might ommit more categories later
-    for(u32 = start; u32 < limit; u32++) {
-      len = 0;
-      UTF_APPEND_CHAR_UNSAFE(comp, len, u32);
-      if((noOfDec = unorm_normalize(comp, len, UNORM_NFD, 0, decomp, 256, status)) > 1
-        || (noOfDec == 1 && *decomp != (UChar)u32))
-      {
-        if(ucol_strcoll(tempColl, comp, len, decomp, noOfDec) != UCOL_EQUAL) {
-          el.cPoints = decomp;
-          el.cSize = noOfDec;
-          el.noOfCEs = 0;
-          el.prefix = el.prefixChars;
-          el.prefixSize = 0;
-
-          UCAElements *prefix=(UCAElements *)uhash_get(t->prefixLookup, &el);
-          if(prefix == NULL) {
-            el.cPoints = comp;
-            el.cSize = len;
-            el.prefix = el.prefixChars;
-            el.prefixSize = 0;
-            el.noOfCEs = 0;
-            ucol_setText(colEl, decomp, noOfDec, status);
-            while((el.CEs[el.noOfCEs] = ucol_next(colEl, status)) != UCOL_NULLORDER) {
-              el.noOfCEs++;
-            }
-          } else {
-            el.cPoints = comp;
-            el.cSize = len;
-            el.prefix = el.prefixChars;
-            el.prefixSize = 0;
-            el.noOfCEs = 1;
-            el.CEs[0] = prefix->mapCE;
-            // This character uses a prefix. We have to add it 
-            // to the unsafe table, as it decomposed form is already
-            // in. In Japanese, this happens for \u309e & \u30fe
-            // Since unsafeCPSet is static in ucol_elm, we are going
-            // to wrap it up in the uprv_uca_unsafeCPAddCCNZ function
-          }
-          uprv_uca_addAnElement(t, &el, status);
-        }
-      }
-    }
-  }
-  return TRUE;
-}
-U_CDECL_END
-
-  
 UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *status) {
   uint32_t i = 0;
   if(U_FAILURE(*status)) {
@@ -993,7 +927,7 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     /* We stuff the initial value in the buffers, and increase the appropriate buffer */
     /* According to strength                                                          */
     if(U_SUCCESS(*status)) {
-      ucol_initBuffers(&src->lh[i], status);
+      ucol_initBuffers(src, &src->lh[i], status);
     }
     if(U_FAILURE(*status)) {
       return NULL;
@@ -1076,7 +1010,8 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     /* copy contractions from the UCA - this is felt mostly for cyrillic*/
 
     uint32_t tailoredCE = UCOL_NOT_FOUND;
-    UChar *conts = (UChar *)((uint8_t *)src->UCA->image + src->UCA->image->contractionUCACombos);
+    UChar *conts = (UChar *)((uint8_t *)src->UCA->image + src->UCA->image->UCAConsts+sizeof(UCAConstants));
+    //UChar *conts = (UChar *)((uint8_t *)src->UCA->image + src->UCA->image->contractionUCACombos);
     UCollationElements *ucaEl = ucol_openElements(src->UCA, NULL, 0, status);
     while(*conts != 0) {
       /*tailoredCE = ucmpe32_get(t->mapping, *conts);*/
@@ -1113,36 +1048,11 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
       conts+=3;
     }
     ucol_closeElements(ucaEl);
-
-    UCollator *tempColl = NULL;
-    if(U_SUCCESS(*status)) {
-      tempUCATable *tempTable = uprv_uca_cloneTempTable(t, status);
-
-      UCATableHeader *tempData = uprv_uca_assembleTable(tempTable, status);
-      tempColl = ucol_initCollator(tempData, 0, status);
-
-      if(U_SUCCESS(*status)) {
-        tempColl->rb = NULL;
-        tempColl->binary = NULL;
-        tempColl->requestedLocale = NULL;
-        tempColl->hasRealData = TRUE;
-      }
-      uprv_uca_closeTempTable(tempTable);    
-    }
-
-    /* produce canonical closure */
-    UCollationElements* colEl = ucol_openElements(tempColl, NULL, 0, status);
-
-    enumStruct context;
-    context.t = t;
-    context.tempColl = tempColl;
-    context.colEl = colEl;
-    context.status = status;
-    u_enumCharTypes(_enumCategoryRangeClosureCategory, &context);
-
-    ucol_closeElements(colEl);
-    ucol_close(tempColl);
   }
+
+  // canonical closure
+  uprv_uca_canonicalClosure(t, status);
+
 
     /* still need to produce compatibility closure */
 
