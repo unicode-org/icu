@@ -3301,6 +3301,14 @@ InputPath=.\unicode\uchriter.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\uinvchar.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\uinvchar.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\uiter.cpp
 # End Source File
 # Begin Source File

@@ -20,6 +20,7 @@
 #include "unicode/ustring.h"
 #include "unicode/ucnv.h"
 #include "unicode/ures.h"
+#include "uinvchar.h"
 #include "ustr_cnv.h"
 
 U_CAPI UResourceBundle * U_EXPORT2

@@ -28,6 +28,7 @@
 #include "ucnv_io.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "uinvchar.h"
 #include "filestrm.h"
 #include "unicode/uclean.h"
 #include "unewdata.h"
