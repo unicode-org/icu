@@ -131,14 +131,18 @@ ALL_RES_SOURCE= $(GENRB_SOURCE) $(TRANSLIT_SOURCE) $(RESOURCE_SRC) $(GENRB_SOURC
 
 UCM_FILES = $(ALL_UCM_SOURCE:%=$(SRCDATADIR)/%)
 CNV_FILES = $(ALL_UCM_SOURCE:%.ucm=$(OBJDATADIR)/%.cnv)
+CNV_FILESL = $(ALL_UCM_SOURCE:%.ucm=%.cnv)
 
 RES_SRC_FILES = $(ALL_RES_SOURCE:%=$(SRCDATADIR)/%)
 RES_FILES = $(ALL_RES_SOURCE:%.txt=$(OBJDATADIR)/%.res)
+RES_FILESL = $(ALL_RES_SOURCE:%.txt=%.res)
 
 DATAFILESC=$(CNV_FILES)
 DATAFILESR=$(RES_FILES)
 
-DATAFILES=$(DATAFILESD) $(DATAFILESC) $(DATAFILESB) $(DATAFILESR)
+DATAFILES=$(DATAFILESD) $(CNV_FILES) $(DATAFILESB) $(RES_FILES)
+DATAFILESL=$(DAT_FILES) $(CNV_FILESL) $(BRK_FILES) $(RES_FILESL)
+
 
 ## Files to remove for 'make clean'
 CLEANFILES = *~ $(BRK_FILES)
@@ -153,7 +157,9 @@ dist-local:
 
 clean-local: clean-pkgdata
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
-	$(RMV) $(SRCDATAFILES) $(DATAFILES) icupkg.inc
+	$(RMV) $(SRCDATAFILES)
+	$(RMV) $(DATAFILES)
+	$(RMV) icupkg.inc
 	-@if [ -f $(TMPDATADIR)/icudata_dll.mak ]; then \
 		(cd pkgdata ; $(INVOKE) ./pkgdata -T $(TMPDATADIR) -m dll -p icudata -O $(DATABUILDDIR)/icupkg.inc $(TMPDATADIR)/icudata.lst -d $(DATABUILDDIR) --clean ) \
 	fi
@@ -170,8 +176,8 @@ $(TMPDATADIR)/icudata.lst: Makefile $(srcdir)/Makefile.in $(srcdir)/genrb/genrbf
 	@echo Generating $@ list of data files
 	@$(MKINSTALLDIRS) $(TMPDATADIR)
 	@-$(RMV) $(TMPDATADIR)/icudata.lst
-	@for file in $(DATAFILES); do \
-	  echo $$file >> $(TMPDATADIR)/icudata.lst; \
+	@for file in $(DATAFILESL); do \
+	  echo $(OBJDATADIR)/$$file >> $(TMPDATADIR)/icudata.lst; \
 	done;
 
 $(TMPDATADIR)/testdata.lst: Makefile
