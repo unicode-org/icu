@@ -8,7 +8,7 @@
 #
 #	12/10/1999	weiv	Created
 
-U_ICUDATA_NAME=icudt17l
+U_ICUDATA_NAME=icudt18l
 
 #If no config, we default to debug
 !IF "$(CFG)" == ""
