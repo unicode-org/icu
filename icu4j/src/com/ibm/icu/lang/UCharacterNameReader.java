@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/Attic/UCharacterNameReader.java,v $ 
-* $Date: 2002/02/08 01:12:11 $ 
-* $Revision: 1.1 $
+* $Date: 2002/02/08 23:22:40 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -16,7 +16,7 @@ import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.Arrays;
-import com.ibm.util.Utility;
+import com.ibm.icu.internal.ICUBinary;
 
 /**
 * <p>Internal reader class for ICU data file uname.dat containing 
@@ -48,8 +48,8 @@ final class UCharacterNameReader
     protected UCharacterNameReader(InputStream inputStream) 
                                                         throws IOException
     {
-        Utility.readICUDataHeader(inputStream, DATA_FORMAT_ID_, 
-                                  DATA_FORMAT_VERSION_, UNICODE_VERSION_);
+        ICUBinary.readHeader(inputStream, DATA_FORMAT_ID_, 
+                             DATA_FORMAT_VERSION_, UNICODE_VERSION_);
         m_dataInputStream_ = new DataInputStream(inputStream);
     }
   
