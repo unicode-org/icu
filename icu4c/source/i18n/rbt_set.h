@@ -23,29 +23,33 @@ class UnicodeString;
  */
 class TransliterationRuleSet {
     /**
-     * Vector of rules, in the order added.  This is only used while the rule
-     * set is getting built.  After that, freeze() reorders and indexes the
-     * rules into rules[].  However, the vector is kept until destruction.
+     * Vector of rules, in the order added.  This is used while the
+     * rule set is getting built.  After that, freeze() reorders and
+     * indexes the rules into rules[].  Any given rule is stored once
+     * in ruleVector, and one or more times in rules[].  ruleVector
+     * owns and deletes the rules.
      */
     UVector* ruleVector;
 
     /**
-     * Length of the longest preceding context
-     */
-    int32_t maxContextLength;
-
-    /**
-     * Sorted and indexed table of rules.  This is created by freeze() from
-     * the rules in ruleVector.
+     * Sorted and indexed table of rules.  This is created by freeze()
+     * from the rules in ruleVector.  It contains alias pointers to
+     * the rules in ruleVector.  It is zero before freeze() is called
+     * and non-zero thereafter.
      */
     TransliterationRule** rules;
 
     /**
      * Index table.  For text having a first character c, compute x = c&0xFF.
      * Now use rules[index[x]..index[x+1]-1].  This index table is created by
-     * freeze().
+     * freeze().  Before freeze() is called it contains garbage.
      */
     int32_t index[257];
+
+    /**
+     * Length of the longest preceding context
+     */
+    int32_t maxContextLength;
 
 public:
 
@@ -80,6 +84,8 @@ public:
      * Add a rule to this set.  Rules are added in order, and order is
      * significant.  The last call to this method must be followed by
      * a call to <code>freeze()</code> before the rule set is used.
+     * This method must <em>not</em> be called after freeze() has been
+     * called.
      *
      * @param adoptedRule the rule to add
      */
