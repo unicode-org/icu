@@ -992,7 +992,7 @@ static void TestConstruction1()
     uprv_strcat(testdatapath, "testdata");
     log_verbose("Testing ures_open()......\n");
 
-    empty = ures_open(testdatapath, "empty", &status);
+    empty = ures_open(testdatapath, "testempty", &status);
     if(empty == NULL || U_FAILURE(status)) {
         log_err("opening empty failed!\n");
     }
@@ -1145,7 +1145,7 @@ static UBool testTag(const char* frag,
 
     for (i=0; i<bundles_count; ++i)
     {
-        strcpy(action,"construction for");
+        strcpy(action,"construction for ");
         strcat(action, param[i].name);
 
 
