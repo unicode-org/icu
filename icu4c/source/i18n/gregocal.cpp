@@ -606,78 +606,26 @@ GregorianCalendar::yearLength() const
  * @see Calendar#complete
  */
 void
-GregorianCalendar::computeFields(UErrorCode& status)
-{
-    if (U_FAILURE(status)) 
+GregorianCalendar::computeFields(UErrorCode& ec) {
+    if (U_FAILURE(ec)) {
         return;
-
-    int32_t rawOffset = getTimeZone().getRawOffset();
-    double localMillis = internalGetTime() + rawOffset;
-
-    /* Check for very extreme values -- millis near Long.MIN_VALUE or
-     * Long.MAX_VALUE.  For these values, adding the zone offset can push
-     * the millis past MAX_VALUE to MIN_VALUE, or vice versa.  This produces
-     * the undesirable effect that the time can wrap around at the ends,
-     * yielding, for example, a UDate(Long.MAX_VALUE) with a big BC year
-     * (should be AD).  Handle this by pinning such values to Long.MIN_VALUE
-     * or Long.MAX_VALUE. - liu 8/11/98 bug 4149677 */
-    
-    /* {sfb} 9/04/98 
-     * Since in C++ we use doubles instead of longs for dates, there is
-     * an inherent loss of range in the calendar (because in Java you have all 64
-     * bits to store data, while in C++ you have only 52 bits of mantissa.
-     * So, I will pin to these (2^52 - 1) values instead */
-    
-    if(internalGetTime() > 0 && localMillis < 0 && rawOffset > 0) {
-        localMillis = LATEST_SUPPORTED_MILLIS;
-    } 
-    else if(internalGetTime() < 0 && localMillis > 0 && rawOffset < 0) {
-        localMillis = EARLIEST_SUPPORTED_MILLIS;
     }
 
-    // Time to fields takes the wall millis (Standard or DST).
-    timeToFields(localMillis, FALSE, status);
+    // Compute local wall millis
+    double millis = internalGetTime();
+    int32_t rawOffset, dstOffset;
+    getTimeZone().getOffset(millis, FALSE, rawOffset, dstOffset, ec);
+    millis += rawOffset + dstOffset;
 
-    uint8_t era         = (uint8_t) internalGetEra();
-    int32_t year         = internalGet(UCAL_YEAR);
-    int32_t month         = internalGet(UCAL_MONTH);
-    int32_t date         = internalGet(UCAL_DATE);
-    uint8_t dayOfWeek     = (uint8_t) internalGet(UCAL_DAY_OF_WEEK);
+    // Convert local wall millis to local wall fields.
+    timeToFields(millis, FALSE, ec);
 
-    double days = uprv_floor(localMillis / kOneDay);
-    int32_t millisInDay = (int32_t) (localMillis - (days * kOneDay));
-    U_ASSERT(millisInDay >= 0);
+    // Compute time-of-day fields
+    double days = uprv_floor(millis / kOneDay);
+    int32_t millisInDay = (int32_t) (millis - (days * kOneDay));
 
-        // Call getOffset() to get the TimeZone offset.  The millisInDay value must
-        // be standard local millis.
-        int32_t gregoYear = getGregorianYear(status);
-    int32_t dstOffset = getTimeZone().getOffset((gregoYear>0?AD:BC), getGregorianYear(status), month, date, dayOfWeek, millisInDay,
-                                            monthLength(month), status) - rawOffset;
-        if(U_FAILURE(status))
-            return;
-
-        // Adjust our millisInDay for DST, if necessary.
-        millisInDay += dstOffset;
-
-        // If DST has pushed us into the next day, we must call timeToFields() again.
-        // This happens in DST between 12:00 am and 1:00 am every day.  The call to
-        // timeToFields() will give the wrong day, since the Standard time is in the
-        // previous day.
-        if (millisInDay >= U_MILLIS_PER_DAY) {
-            UDate dstMillis = localMillis + dstOffset;
-            millisInDay -= U_MILLIS_PER_DAY;
-            // As above, check for and pin extreme values
-            if(localMillis > 0 && dstMillis < 0 && dstOffset > 0) {
-                dstMillis = LATEST_SUPPORTED_MILLIS;
-            } 
-            else if(localMillis < 0 && dstMillis > 0 && dstOffset < 0) {
-                dstMillis = EARLIEST_SUPPORTED_MILLIS;
-            }
-            timeToFields(dstMillis, FALSE, status);
-        }
-
-    // Fill in all time-related fields based on millisInDay.  Call internalSet()
-    // so as not to perturb flags.
+    // Fill in all time-related fields based on millisInDay.  Call
+    // internalSet() so as not to perturb flags.
     internalSet(UCAL_MILLISECOND, millisInDay % 1000);
     millisInDay /= 1000;
     internalSet(UCAL_SECOND, millisInDay % 60);
@@ -888,75 +836,35 @@ GregorianCalendar::computeTime(UErrorCode& status)
     millisInDay *= 1000;
     millisInDay += internalGet(UCAL_MILLISECOND); // now have millis
 
-        // Compute the time zone offset and DST offset.  There are two potential
-        // ambiguities here.  We'll assume a 2:00 am (wall time) switchover time
-        // for discussion purposes here.
-        // 1. The transition into DST.  Here, a designated time of 2:00 am - 2:59 am
-        //    can be in standard or in DST depending.  However, 2:00 am is an invalid
-        //    representation (the representation jumps from 1:59:59 am Std to 3:00:00 am DST).
-        //    We assume standard time.
-        // 2. The transition out of DST.  Here, a designated time of 1:00 am - 1:59 am
-        //    can be in standard or DST.  Both are valid representations (the rep
-        //    jumps from 1:59:59 DST to 1:00:00 Std).
-        //    Again, we assume standard time.
-        // We use the TimeZone object, unless the user has explicitly set the ZONE_OFFSET
-        // or DST_OFFSET fields; then we use those fields.
-    const TimeZone& zone = getTimeZone();
-    int32_t zoneOffset = (fStamp[UCAL_ZONE_OFFSET] >= kMinimumUserStamp)
-        /*isSet(ZONE_OFFSET) && userSetZoneOffset*/ ?
-        internalGet(UCAL_ZONE_OFFSET) : zone.getRawOffset();
-
-    // Now add date and millisInDay together, to make millis contain local wall
-    // millis, with no zone or DST adjustments
+    // Compute local wall millis
     millis += millisInDay;
 
-    int32_t dstOffset = 0;
-    if (fStamp[UCAL_ZONE_OFFSET] >= kMinimumUserStamp
-        /*isSet(DST_OFFSET) && userSetDSTOffset*/)
+    // Compute the time zone offset and DST offset.  There are two
+    // potential ambiguities here.  We'll assume a 2:00 am (wall time)
+    // switchover time for discussion purposes here.
+    // 1. The transition into DST.  Here, a designated time of 2:00 am
+    //    - 2:59 am can be in standard or in DST depending.  However,
+    //    2:00 am is an invalid representation (the representation
+    //    jumps from 1:59:59 am Std to 3:00:00 am DST).  We assume
+    //    standard time.
+    // 2. The transition out of DST.  Here, a designated time of 1:00 am
+    //    - 1:59 am can be in standard or DST.  Both are valid
+    //    representations (the rep jumps from 1:59:59 DST to 1:00:00
+    //    Std).  Again, we assume standard time.
+
+    // We use the TimeZone object, unless the user has explicitly set
+    // the ZONE_OFFSET field; this signals us to use the fields for
+    // raw and DST offset.
+    int32_t rawOffset, dstOffset;
+    if (fStamp[UCAL_ZONE_OFFSET] >= kMinimumUserStamp) {
+        rawOffset = internalGet(UCAL_ZONE_OFFSET);
         dstOffset = internalGet(UCAL_DST_OFFSET);
-    else {
-        /* Normalize the millisInDay to 0..ONE_DAY-1.  If the millis is out
-         * of range, then we must call timeToFields() to recompute our
-         * fields. */
-        int32_t normalizedMillisInDay;
-        floorDivide(millis, (int32_t)kOneDay, normalizedMillisInDay);
-
-        // We need to have the month, the day, and the day of the week.
-        // Calling timeToFields will compute the MONTH and DATE fields.
-        // If we're lenient then we need to call timeToFields() to
-        // normalize the year, month, and date numbers.
-        uint8_t dow;
-        if (isLenient() || fStamp[UCAL_MONTH] == kUnset || fStamp[UCAL_DATE] == kUnset
-                || millisInDay != normalizedMillisInDay) {
-            timeToFields(millis, TRUE, status); // Use wall time; true == do quick computation
-            dow = (uint8_t) internalGet(UCAL_DAY_OF_WEEK); // DOW is computed by timeToFields
-        }
-        else {
-            // It's tempting to try to use DAY_OF_WEEK here, if it
-            // is set, but we CAN'T.  Even if it's set, it might have
-            // been set wrong by the user.  We should rely only on
-            // the Julian day number, which has been computed correctly
-            // using the disambiguation algorithm above. [LIU]
-            dow = julianDayToDayOfWeek(julianDay);
-        }
-
-        dstOffset = zone.getOffset((uint8_t)era,
-                                   internalGet(UCAL_YEAR),
-                                   internalGet(UCAL_MONTH),
-                                   internalGet(UCAL_DATE),
-                                   dow,
-                                   normalizedMillisInDay, // local wall time
-                                   monthLength(internalGet(UCAL_MONTH)),
-                                   status) -
-            zoneOffset;
-        // Note: Because we pass in wall millisInDay, rather than
-        // standard millisInDay, we interpret "1:00 am" on the day
-        // of cessation of DST as "1:00 am Std" (assuming the time
-        // of cessation is 2:00 am).
+    } else {
+        getTimeZone().getOffset(millis, TRUE, rawOffset, dstOffset, status);
     }
 
-    // Store our final computed GMT time, with timezone adjustments.
-    internalSetTime(millis - zoneOffset - dstOffset);
+    // Convert local wall millis to GMT millis
+    internalSetTime(millis - rawOffset - dstOffset);
 }
 
 // -------------------------------------
