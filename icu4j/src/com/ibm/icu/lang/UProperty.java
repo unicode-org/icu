@@ -6,8 +6,8 @@
 *
 * $Source: 
 *      /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterCategory.java $ 
-* $Date: 2002/10/03 23:42:02 $ 
-* $Revision: 1.4 $
+* $Date: 2002/11/06 19:48:58 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -324,4 +324,147 @@ public interface UProperty
      * @draft ICU 2.4 
      */
     public static final int INT_LIMIT = 0x100B;
+
+    /**
+     * First constant for double Unicode properties.
+     * @draft ICU 2.4
+     */
+    public static final int DOUBLE_START = 0x2000;
+    /**
+     * Double property Numeric_Value.
+     * Corresponds to UCharacter.getUnicodeNumericValue(int).
+     * @draft ICU 2.4
+     */
+    public static final int NUMERIC_VALUE = DOUBLE_START;
+    /**
+     * One more than the last constant for double Unicode properties.
+     * @draft ICU 2.4
+     */
+    public static final int DOUBLE_LIMIT = 0x2001;
+
+    /**
+     * First constant for string Unicode properties.
+     * @draft ICU 2.4
+     */
+    public static final int STRING_START = 0x3000;
+    /**
+     * String property Age.
+     * Corresponds to UCharacter.getAge(int).
+     * @draft ICU 2.4
+     */
+    public static final int AGE = STRING_START;
+    /**
+     * String property Bidi_Mirroring_Glyph.
+     * Corresponds to UCharacter.getMirror(int).
+     * @draft ICU 2.4
+     */
+    public static final int BIDI_MIRRORING_GLYPH = 0x3001;
+    /**
+     * String property Case_Folding.
+     * Corresponds to UCharacter.foldCase(String, boolean).
+     * @draft ICU 2.4
+     */
+    public static final int CASE_FOLDING = 0x3002;
+    /**
+     * String property ISO_Comment.
+     * Corresponds to UCharacter.getISOComment(int).
+     * @draft ICU 2.4
+     */
+    public static final int ISO_COMMENT = 0x3003;
+    /**
+     * String property Lowercase_Mapping.
+     * Corresponds to UCharacter.toLowerCase(String).
+     * @draft ICU 2.4
+     */
+    public static final int LOWERCASE_MAPPING = 0x3004;
+    /**
+     * String property Name.
+     * Corresponds to UCharacter.getName(int).
+     * @draft ICU 2.4
+     */
+    public static final int NAME = 0x3005;
+    /**
+     * String property Simple_Case_Folding.
+     * Corresponds to UCharacter.foldCase(int, boolean).
+     * @draft ICU 2.4
+     */
+    public static final int SIMPLE_CASE_FOLDING = 0x3006;
+    /**
+     * String property Simple_Lowercase_Mapping.
+     * Corresponds to UCharacter.toLowerCase(int).
+     * @draft ICU 2.4
+     */
+    public static final int SIMPLE_LOWERCASE_MAPPING = 0x3007;
+    /**
+     * String property Simple_Titlecase_Mapping.
+     * Corresponds to UCharacter.toTitleCase(int).
+     * @draft ICU 2.4
+     */
+    public static final int SIMPLE_TITLECASE_MAPPING = 0x3008;
+    /**
+     * String property Simple_Uppercase_Mapping.
+     * Corresponds to UCharacter.toUpperCase(int).
+     * @draft ICU 2.4
+     */
+    public static final int SIMPLE_UPPERCASE_MAPPING = 0x3009;
+    /**
+     * String property Titlecase_Mapping.
+     * Corresponds to UCharacter.toTitleCase(String).
+     * @draft ICU 2.4
+     */
+    public static final int TITLECASE_MAPPING = 0x300A;
+    /**
+     * String property Unicode_1_Name.
+     * Corresponds to UCharacter.getName1_0(int).
+     * @draft ICU 2.4
+     */
+    public static final int UNICODE_1_NAME = 0x300B;
+    /**
+     * String property Uppercase_Mapping.
+     * Corresponds to UCharacter.toUpperCase(String).
+     * @draft ICU 2.4
+     */
+    public static final int UPPERCASE_MAPPING = 0x300C;
+    /**
+     * One more than the last constant for string Unicode properties.
+     * @draft ICU 2.4
+     */
+    public static final int STRING_LIMIT = 0x300D;
+
+    /**
+     * Selector constants for UCharacter.getPropertyName() and
+     * UCharacter.getPropertyValueName().  These selectors are used to
+     * choose which name is returned for a given property or value.
+     * All properties and values have a long name.  Most have a short
+     * name, but some do not.  Unicode allows for additional names,
+     * beyond the long and short name, which would be indicated by
+     * LONG + i, where i=1, 2,...
+     *
+     * @see UCharacter#getPropertyName
+     * @see UCharacter#getPropertyValueName
+     * @since ICU 2.4
+     */
+    public interface NameChoice {
+        /**
+         * Selector for the abbreviated name of a property or value.
+         * Most properties and values have a short name; those that do
+         * not return null.
+         * @since ICU 2.4
+         */
+        static final int SHORT = 0;
+
+        /**
+         * Selector for the long name of a property or value.  All
+         * properties and values have a long name.
+         * @since ICU 2.4
+         */
+        static final int LONG = 1;
+
+        /**
+         * The number of predefined property name choices.  Individual
+         * properties or values may have more than COUNT aliases.
+         * @since ICU 2.4
+         */
+        static final int COUNT = 2;
+    }
 }
