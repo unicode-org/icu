@@ -928,7 +928,7 @@ public final class NormalizerImpl {
                                                             int options,
                                                             boolean allowMaybe,
                                                             UnicodeSet nx){
-        
+
         int ccOrQCMask;
         long norm32;
         char c, c2;
@@ -1002,7 +1002,7 @@ public final class NormalizerImpl {
                     decompQCMask=(qcMask<<2)&0xf; // decomposition quick check mask 
     
                     // find the previous starter 
-                    
+
                     // set prevStarter to the beginning of the current character 
                     prevStarter=srcStart-1; 
                     if(UTF16.isTrailSurrogate(src[prevStarter])) {
@@ -1010,6 +1010,7 @@ public final class NormalizerImpl {
                         // in "maybe"
                         --prevStarter; 
                     }
+
                     prevStarter=findPreviousStarter(src, start, prevStarter,
                                                     ccOrQCMask, decompQCMask,
                                                     (char)minNoMaybe);
@@ -1026,7 +1027,7 @@ public final class NormalizerImpl {
                     buffer = composePart(args,prevStarter,src,srcStart,srcLimit,options,nx);
     
                     // compare the normalized version with the original 
-                    if(0!=strCompare(buffer,0,args.length,src,prevStarter,(srcStart-prevStarter), false)) {
+                    if(0!=strCompare(buffer,0,args.length,src,prevStarter,srcStart, false)) {
                         result=Normalizer.NO; // normalization differs 
                         break;
                     }
