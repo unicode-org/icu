@@ -180,14 +180,11 @@ void TestConstruction1()
   const char*      locale="te_IN";
   char testdatapath[256];
 
-  directory= ctest_getTestDirectory();
+  directory= u_getDataDirectory();
   uprv_strcpy(testdatapath, directory);
   uprv_strcat(testdatapath, "testdata");
   log_verbose("Testing ures_open()......\n");
-/*
-  test1=ures_open("c:\\icu\\icu\\source\\test\\testdata\\testdata", NULL, &err);
-  test2=ures_open("c:\\icu\\icu\\source\\test\\testdata\\testdata", locale, &err);
-*/
+
   test1=ures_open(testdatapath, NULL, &err);
   test2=ures_open(testdatapath, locale, &err);
 
@@ -232,11 +229,10 @@ void TestConstruction2()
   wchar_t widedirectory[256];
   char testdatapath[256];
 
-  directory= ctest_getTestDirectory();
+  directory= u_getDataDirectory();
   uprv_strcpy(testdatapath, directory);
   uprv_strcat(testdatapath, "testdata");
   mbstowcs(widedirectory, testdatapath, 256);
-  /*mbstowcs(widedirectory, "c:\\icu\\icu\\source\\test\\testdata\\testdata", 256);*/
 
   log_verbose("Testing ures_openW().......\n");
 
@@ -315,7 +311,7 @@ UBool testTag(const char* frag,
     int32_t index = 0;
     char testdatapath[256];
 
-    const char*    directory =  ctest_getTestDirectory();
+    const char *directory= u_getDataDirectory();
 
     uprv_strcpy(testdatapath, directory);
     uprv_strcat(testdatapath, "testdata");
