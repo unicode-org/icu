@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2001/10/17 19:17:59 $ 
- * $Revision: 1.14 $
+ * $Date: 2001/11/03 03:28:48 $ 
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -245,7 +245,24 @@ public class UnicodeSetTest extends TestFmwk {
             errln("FAIL: bitsToSet(setToBits(c)) = " + c + ", expect " + exp);
         }
     }
+    
+   /**
+    * Test the [:Latin:] syntax.
+    */
+    public void TestScriptSet() {
+        UnicodeSet set = new UnicodeSet("[:Latin:]");
 
+        expectContainment(set, "aA", CharsToUnicodeString("\\u0391\\u03B1"));
+
+        UnicodeSet set2 = new UnicodeSet("[:Greek:]");
+        expectContainment(set2, CharsToUnicodeString("\\u0391\\u03B1"), "aA");
+        
+        /* Jitterbug 1423 */
+        UnicodeSet set3 = new UnicodeSet("[[:Common:][:Inherited:]]");
+        expectContainment(set3, CharsToUnicodeString("\\U00003099\\U0001D169\\u0000"), "aA");
+
+    }
+    
     /**
      * Test the [:Latin:] syntax.
      */
@@ -449,9 +466,10 @@ public class UnicodeSetTest extends TestFmwk {
         StringBuffer bad = new StringBuffer();
         if (charsIn != null) {
             for (int i=0; i<charsIn.length(); ++i) {
-                char c = charsIn.charAt(i);
+                int c = UTF16.charAt(charsIn,i);
+                if(c>0xffff) i++;
                 if (!set.contains(c)) {
-                    bad.append(c);
+                    UTF16.append(bad,c);
                 }
             }
             if (bad.length() > 0) {
@@ -500,5 +518,8 @@ public class UnicodeSetTest extends TestFmwk {
                   Utility.escape(expectedPairs) + "\", got \"" +
                   Utility.escape(getPairs(set)) + "\"");
         }
+    }
+    static final String CharsToUnicodeString(String s) {
+        return Utility.unescape(s);
     }
 }
