@@ -406,8 +406,8 @@ void LayoutEngine::reset()
     
 LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, LEErrorCode &success)
 {
-    static le_uint32 gsubTableTag = LE_GSUB_TABLE_TAG;
-    static le_uint32 mortTableTag = LE_MORT_TABLE_TAG;
+    static const le_uint32 gsubTableTag = LE_GSUB_TABLE_TAG;
+    static const le_uint32 mortTableTag = LE_MORT_TABLE_TAG;
 
     if (LE_FAILURE(success)) {
         return NULL;

@@ -42,8 +42,8 @@ OpenTypeLayoutEngine::OpenTypeLayoutEngine(const LEFontInstance *fontInstance, l
     : LayoutEngine(fontInstance, scriptCode, languageCode), fFeatureList(defaultFeatures), fFeatureOrder(NULL),
       fGSUBTable(gsubTable), fGDEFTable(NULL), fGPOSTable(NULL), fSubstitutionFilter(NULL)
 {
-    static le_uint32 gdefTableTag = LE_GDEF_TABLE_TAG;
-    static le_uint32 gposTableTag = LE_GPOS_TABLE_TAG;
+    static const le_uint32 gdefTableTag = LE_GDEF_TABLE_TAG;
+    static const le_uint32 gposTableTag = LE_GPOS_TABLE_TAG;
     const GlyphPositioningTableHeader *gposTable = (const GlyphPositioningTableHeader *) getFontTable(gposTableTag);
 
     setScriptAndLanguageTags();
