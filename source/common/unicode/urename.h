@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2002, International Business Machines
+*   Copyright (C) 2002-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *
@@ -47,7 +47,6 @@
 #define T_FileStream_readLine T_FileStream_readLine_2_6
 #define T_FileStream_remove T_FileStream_remove_2_6
 #define T_FileStream_rewind T_FileStream_rewind_2_6
-#define T_FileStream_setError T_FileStream_setError_2_6
 #define T_FileStream_size T_FileStream_size_2_6
 #define T_FileStream_stderr T_FileStream_stderr_2_6
 #define T_FileStream_stdin T_FileStream_stdin_2_6
@@ -113,13 +112,10 @@
 #define _UTF32LEData _UTF32LEData_2_6
 #define _UTF7Data _UTF7Data_2_6
 #define _UTF8Data _UTF8Data_2_6
-#define __divdi3 __divdi3_2_6
-#define __moddi3 __moddi3_2_6
-#define __pure_virtual __pure_virtual_2_6
-#define _fini _fini_2_6
-#define _init _init_2_6
 #define breakiterator_cleanup breakiterator_cleanup_2_6
 #define cacheDeleter cacheDeleter_2_6
+#define collator_cleanup collator_cleanup_2_6
+#define currency_cleanup currency_cleanup_2_6
 #define deleteStringPair deleteStringPair_2_6
 #define deleteUObject deleteUObject_2_6
 #define gLocaleCache gLocaleCache_2_6
@@ -148,8 +144,10 @@
 #define u_UCharsToChars u_UCharsToChars_2_6
 #define u_austrcpy u_austrcpy_2_6
 #define u_austrncpy u_austrncpy_2_6
+#define u_catclose u_catclose_2_6
+#define u_catgets u_catgets_2_6
+#define u_catopen u_catopen_2_6
 #define u_charAge u_charAge_2_6
-#define u_charCellWidth u_charCellWidth_2_6
 #define u_charDigitValue u_charDigitValue_2_6
 #define u_charDirection u_charDirection_2_6
 #define u_charFromName u_charFromName_2_6
@@ -209,6 +207,7 @@
 #define u_getVersion u_getVersion_2_6
 #define u_growBufferFromStatic u_growBufferFromStatic_2_6
 #define u_hasBinaryProperty u_hasBinaryProperty_2_6
+#define u_init u_init_2_6
 #define u_internalFoldCase u_internalFoldCase_2_6
 #define u_internalStrFoldCase u_internalStrFoldCase_2_6
 #define u_internalStrToLower u_internalStrToLower_2_6
@@ -220,8 +219,10 @@
 #define u_isIDIgnorable u_isIDIgnorable_2_6
 #define u_isIDPart u_isIDPart_2_6
 #define u_isIDStart u_isIDStart_2_6
+#define u_isISOControl u_isISOControl_2_6
 #define u_isJavaIDPart u_isJavaIDPart_2_6
 #define u_isJavaIDStart u_isJavaIDStart_2_6
+#define u_isJavaSpaceChar u_isJavaSpaceChar_2_6
 #define u_isMirrored u_isMirrored_2_6
 #define u_isUAlphabetic u_isUAlphabetic_2_6
 #define u_isULowercase u_isULowercase_2_6
@@ -231,14 +232,18 @@
 #define u_isalnum u_isalnum_2_6
 #define u_isalpha u_isalpha_2_6
 #define u_isbase u_isbase_2_6
+#define u_isblank u_isblank_2_6
 #define u_iscntrl u_iscntrl_2_6
 #define u_isdefined u_isdefined_2_6
 #define u_isdigit u_isdigit_2_6
+#define u_isgraph u_isgraph_2_6
 #define u_islower u_islower_2_6
 #define u_isprint u_isprint_2_6
+#define u_ispunct u_ispunct_2_6
 #define u_isspace u_isspace_2_6
 #define u_istitle u_istitle_2_6
 #define u_isupper u_isupper_2_6
+#define u_isxdigit u_isxdigit_2_6
 #define u_lengthOfIdenticalLevelRun u_lengthOfIdenticalLevelRun_2_6
 #define u_locbund_clone u_locbund_clone_2_6
 #define u_locbund_delete u_locbund_delete_2_6
@@ -362,11 +367,13 @@
 #define u_strFindFirst u_strFindFirst_2_6
 #define u_strFindLast u_strFindLast_2_6
 #define u_strFoldCase u_strFoldCase_2_6
+#define u_strFromPunycode u_strFromPunycode_2_6
 #define u_strFromUTF32 u_strFromUTF32_2_6
 #define u_strFromUTF8 u_strFromUTF8_2_6
 #define u_strFromWCS u_strFromWCS_2_6
 #define u_strHasMoreChar32Than u_strHasMoreChar32Than_2_6
 #define u_strToLower u_strToLower_2_6
+#define u_strToPunycode u_strToPunycode_2_6
 #define u_strToTitle u_strToTitle_2_6
 #define u_strToUTF32 u_strToUTF32_2_6
 #define u_strToUTF8 u_strToUTF8_2_6
@@ -422,6 +429,7 @@
 #define u_vsscanf_u u_vsscanf_u_2_6
 #define u_writeDiff u_writeDiff_2_6
 #define u_writeIdenticalLevelRun u_writeIdenticalLevelRun_2_6
+#define u_writeIdenticalLevelRunTwoChars u_writeIdenticalLevelRunTwoChars_2_6
 #define ubidi_close ubidi_close_2_6
 #define ubidi_countRuns ubidi_countRuns_2_6
 #define ubidi_getDirection ubidi_getDirection_2_6
@@ -477,6 +485,8 @@
 #define ucal_getAttribute ucal_getAttribute_2_6
 #define ucal_getAvailable ucal_getAvailable_2_6
 #define ucal_getAvailableTZIDs ucal_getAvailableTZIDs_2_6
+#define ucal_getDSTSavings ucal_getDSTSavings_2_6
+#define ucal_getDefaultTimeZone ucal_getDefaultTimeZone_2_6
 #define ucal_getLimit ucal_getLimit_2_6
 #define ucal_getMillis ucal_getMillis_2_6
 #define ucal_getNow ucal_getNow_2_6
@@ -484,12 +494,14 @@
 #define ucal_inDaylightTime ucal_inDaylightTime_2_6
 #define ucal_isSet ucal_isSet_2_6
 #define ucal_open ucal_open_2_6
-#define ucal_openTimeZoneEnumeration ucal_openTimeZoneEnumeration_2_6
+#define ucal_openCountryTimeZones ucal_openCountryTimeZones_2_6
+#define ucal_openTimeZones ucal_openTimeZones_2_6
 #define ucal_roll ucal_roll_2_6
 #define ucal_set ucal_set_2_6
 #define ucal_setAttribute ucal_setAttribute_2_6
 #define ucal_setDate ucal_setDate_2_6
 #define ucal_setDateTime ucal_setDateTime_2_6
+#define ucal_setDefaultTimeZone ucal_setDefaultTimeZone_2_6
 #define ucal_setMillis ucal_setMillis_2_6
 #define ucal_setTimeZone ucal_setTimeZone_2_6
 #define uchar_addPropertyStarts uchar_addPropertyStarts_2_6
@@ -526,19 +538,21 @@
 #define ucnv_close ucnv_close_2_6
 #define ucnv_compareNames ucnv_compareNames_2_6
 #define ucnv_convert ucnv_convert_2_6
+#define ucnv_convertEx ucnv_convertEx_2_6
 #define ucnv_copyPlatformString ucnv_copyPlatformString_2_6
 #define ucnv_countAliases ucnv_countAliases_2_6
 #define ucnv_countAvailable ucnv_countAvailable_2_6
 #define ucnv_countStandards ucnv_countStandards_2_6
+#define ucnv_createAlgorithmicConverter ucnv_createAlgorithmicConverter_2_6
 #define ucnv_createConverter ucnv_createConverter_2_6
 #define ucnv_createConverterFromPackage ucnv_createConverterFromPackage_2_6
 #define ucnv_createConverterFromSharedData ucnv_createConverterFromSharedData_2_6
-#define ucnv_deleteSharedConverterData ucnv_deleteSharedConverterData_2_6
 #define ucnv_detectUnicodeSignature ucnv_detectUnicodeSignature_2_6
 #define ucnv_fixFileSeparator ucnv_fixFileSeparator_2_6
 #define ucnv_flushCache ucnv_flushCache_2_6
 #define ucnv_flushInternalCharBuffer ucnv_flushInternalCharBuffer_2_6
 #define ucnv_flushInternalUnicodeBuffer ucnv_flushInternalUnicodeBuffer_2_6
+#define ucnv_fromAlgorithmic ucnv_fromAlgorithmic_2_6
 #define ucnv_fromUChars ucnv_fromUChars_2_6
 #define ucnv_fromUnicode ucnv_fromUnicode_2_6
 #define ucnv_getAlias ucnv_getAlias_2_6
@@ -546,6 +560,7 @@
 #define ucnv_getAvailableName ucnv_getAvailableName_2_6
 #define ucnv_getCCSID ucnv_getCCSID_2_6
 #define ucnv_getCanonicalName ucnv_getCanonicalName_2_6
+#define ucnv_getCompleteUnicodeSet ucnv_getCompleteUnicodeSet_2_6
 #define ucnv_getDefaultName ucnv_getDefaultName_2_6
 #define ucnv_getDisplayName ucnv_getDisplayName_2_6
 #define ucnv_getFromUCallBack ucnv_getFromUCallBack_2_6
@@ -556,8 +571,8 @@
 #define ucnv_getName ucnv_getName_2_6
 #define ucnv_getNextUChar ucnv_getNextUChar_2_6
 #define ucnv_getNextUCharFromToUImpl ucnv_getNextUCharFromToUImpl_2_6
+#define ucnv_getNonSurrogateUnicodeSet ucnv_getNonSurrogateUnicodeSet_2_6
 #define ucnv_getPlatform ucnv_getPlatform_2_6
-#define ucnv_getSharedConverterData ucnv_getSharedConverterData_2_6
 #define ucnv_getStandard ucnv_getStandard_2_6
 #define ucnv_getStandardName ucnv_getStandardName_2_6
 #define ucnv_getStarters ucnv_getStarters_2_6
@@ -565,6 +580,8 @@
 #define ucnv_getToUCallBack ucnv_getToUCallBack_2_6
 #define ucnv_getType ucnv_getType_2_6
 #define ucnv_getUChar32KeepOverflow ucnv_getUChar32KeepOverflow_2_6
+#define ucnv_getUnicodeSet ucnv_getUnicodeSet_2_6
+#define ucnv_incrementRefCount ucnv_incrementRefCount_2_6
 #define ucnv_io_cleanup ucnv_io_cleanup_2_6
 #define ucnv_io_countAliases ucnv_io_countAliases_2_6
 #define ucnv_io_countAvailableAliases ucnv_io_countAvailableAliases_2_6
@@ -594,9 +611,10 @@
 #define ucnv_setFromUCallBack ucnv_setFromUCallBack_2_6
 #define ucnv_setSubstChars ucnv_setSubstChars_2_6
 #define ucnv_setToUCallBack ucnv_setToUCallBack_2_6
-#define ucnv_shareConverterData ucnv_shareConverterData_2_6
+#define ucnv_toAlgorithmic ucnv_toAlgorithmic_2_6
 #define ucnv_toUChars ucnv_toUChars_2_6
 #define ucnv_toUnicode ucnv_toUnicode_2_6
+#define ucnv_unloadSharedDataIfReady ucnv_unloadSharedDataIfReady_2_6
 #define ucnv_updateCallbackOffsets ucnv_updateCallbackOffsets_2_6
 #define ucnv_usesFallback ucnv_usesFallback_2_6
 #define ucol_allocWeights ucol_allocWeights_2_6
@@ -612,6 +630,7 @@
 #define ucol_createElements ucol_createElements_2_6
 #define ucol_doCE ucol_doCE_2_6
 #define ucol_equal ucol_equal_2_6
+#define ucol_equals ucol_equals_2_6
 #define ucol_getAttribute ucol_getAttribute_2_6
 #define ucol_getAvailable ucol_getAvailable_2_6
 #define ucol_getBound ucol_getBound_2_6
@@ -647,25 +666,31 @@
 #define ucol_keyHashCode ucol_keyHashCode_2_6
 #define ucol_mergeSortkeys ucol_mergeSortkeys_2_6
 #define ucol_next ucol_next_2_6
+#define ucol_nextSortKeyPart ucol_nextSortKeyPart_2_6
 #define ucol_nextWeight ucol_nextWeight_2_6
 #define ucol_open ucol_open_2_6
 #define ucol_openElements ucol_openElements_2_6
 #define ucol_openRules ucol_openRules_2_6
+#define ucol_open_internal ucol_open_internal_2_6
 #define ucol_previous ucol_previous_2_6
+#define ucol_primaryOrder ucol_primaryOrder_2_6
 #define ucol_prv_getSpecialCE ucol_prv_getSpecialCE_2_6
 #define ucol_prv_getSpecialPrevCE ucol_prv_getSpecialPrevCE_2_6
 #define ucol_reset ucol_reset_2_6
 #define ucol_restoreVariableTop ucol_restoreVariableTop_2_6
 #define ucol_safeClone ucol_safeClone_2_6
+#define ucol_secondaryOrder ucol_secondaryOrder_2_6
 #define ucol_setAttribute ucol_setAttribute_2_6
 #define ucol_setOffset ucol_setOffset_2_6
 #define ucol_setOptionsFromHeader ucol_setOptionsFromHeader_2_6
+#define ucol_setReqValidLocales ucol_setReqValidLocales_2_6
 #define ucol_setStrength ucol_setStrength_2_6
 #define ucol_setText ucol_setText_2_6
 #define ucol_setVariableTop ucol_setVariableTop_2_6
 #define ucol_sortKeyToString ucol_sortKeyToString_2_6
 #define ucol_strcoll ucol_strcoll_2_6
 #define ucol_strcollIter ucol_strcollIter_2_6
+#define ucol_tertiaryOrder ucol_tertiaryOrder_2_6
 #define ucol_tok_assembleTokenList ucol_tok_assembleTokenList_2_6
 #define ucol_tok_closeTokenList ucol_tok_closeTokenList_2_6
 #define ucol_tok_getNextArgument ucol_tok_getNextArgument_2_6
@@ -674,8 +699,10 @@
 #define ucol_updateInternalState ucol_updateInternalState_2_6
 #define ucurr_forLocale ucurr_forLocale_2_6
 #define ucurr_getDefaultFractionDigits ucurr_getDefaultFractionDigits_2_6
+#define ucurr_getName ucurr_getName_2_6
 #define ucurr_getRoundingIncrement ucurr_getRoundingIncrement_2_6
-#define ucurr_getSymbol ucurr_getSymbol_2_6
+#define ucurr_register ucurr_register_2_6
+#define ucurr_unregister ucurr_unregister_2_6
 #define udat_applyPattern udat_applyPattern_2_6
 #define udat_clone udat_clone_2_6
 #define udat_close udat_close_2_6
@@ -764,6 +791,11 @@
 #define uhash_setValueDeleter uhash_setValueDeleter_2_6
 #define uhash_toki uhash_toki_2_6
 #define uhash_tokp uhash_tokp_2_6
+#define uidna_IDNToASCII uidna_IDNToASCII_2_6
+#define uidna_IDNToUnicode uidna_IDNToUnicode_2_6
+#define uidna_compare uidna_compare_2_6
+#define uidna_toASCII uidna_toASCII_2_6
+#define uidna_toUnicode uidna_toUnicode_2_6
 #define uiter_current32 uiter_current32_2_6
 #define uiter_getState uiter_getState_2_6
 #define uiter_next32 uiter_next32_2_6
@@ -814,6 +846,7 @@
 #define unames_cleanup unames_cleanup_2_6
 #define unorm_addPropertyStarts unorm_addPropertyStarts_2_6
 #define unorm_cleanup unorm_cleanup_2_6
+#define unorm_closeIter unorm_closeIter_2_6
 #define unorm_cmpEquivFold unorm_cmpEquivFold_2_6
 #define unorm_compare unorm_compare_2_6
 #define unorm_compose unorm_compose_2_6
@@ -828,10 +861,14 @@
 #define unorm_isCanonSafeStart unorm_isCanonSafeStart_2_6
 #define unorm_isNFSkippable unorm_isNFSkippable_2_6
 #define unorm_isNormalized unorm_isNormalized_2_6
+#define unorm_isNormalizedWithOptions unorm_isNormalizedWithOptions_2_6
 #define unorm_next unorm_next_2_6
 #define unorm_normalize unorm_normalize_2_6
+#define unorm_openIter unorm_openIter_2_6
 #define unorm_previous unorm_previous_2_6
 #define unorm_quickCheck unorm_quickCheck_2_6
+#define unorm_quickCheckWithOptions unorm_quickCheckWithOptions_2_6
+#define unorm_setIter unorm_setIter_2_6
 #define unum_applyPattern unum_applyPattern_2_6
 #define unum_clone unum_clone_2_6
 #define unum_close unum_close_2_6
@@ -1014,6 +1051,7 @@
 #define usearch_setPattern usearch_setPattern_2_6
 #define usearch_setText usearch_setText_2_6
 #define uset_add uset_add_2_6
+#define uset_addAll uset_addAll_2_6
 #define uset_addRange uset_addRange_2_6
 #define uset_addString uset_addString_2_6
 #define uset_cleanup uset_cleanup_2_6
@@ -1031,6 +1069,7 @@
 #define uset_isEmpty uset_isEmpty_2_6
 #define uset_open uset_open_2_6
 #define uset_openPattern uset_openPattern_2_6
+#define uset_openPatternOptions uset_openPatternOptions_2_6
 #define uset_remove uset_remove_2_6
 #define uset_removeRange uset_removeRange_2_6
 #define uset_removeString uset_removeString_2_6
@@ -1039,7 +1078,7 @@
 #define uset_setSerializedToOne uset_setSerializedToOne_2_6
 #define uset_size uset_size_2_6
 #define uset_toPattern uset_toPattern_2_6
-#define ustring_cleanup ustring_cleanup_2_6
+#define ustrprep_cleanup ustrprep_cleanup_2_6
 #define utf8_appendCharSafeBody utf8_appendCharSafeBody_2_6
 #define utf8_back1SafeBody utf8_back1SafeBody_2_6
 #define utf8_countTrailBytes utf8_countTrailBytes_2_6
@@ -1080,10 +1119,13 @@
 #define AnyTransliterator AnyTransliterator_2_6
 #define ArabicOpenTypeLayoutEngine ArabicOpenTypeLayoutEngine_2_6
 #define ArabicShaping ArabicShaping_2_6
+#define BasicCalendarFactory BasicCalendarFactory_2_6
 #define BinarySearchLookupTable BinarySearchLookupTable_2_6
 #define BreakDictionary BreakDictionary_2_6
 #define BreakIterator BreakIterator_2_6
+#define CFactory CFactory_2_6
 #define Calendar Calendar_2_6
+#define CalendarService CalendarService_2_6
 #define CanonicalIterator CanonicalIterator_2_6
 #define ChainingContextualSubstitutionFormat1Subtable ChainingContextualSubstitutionFormat1Subtable_2_6
 #define ChainingContextualSubstitutionFormat2Subtable ChainingContextualSubstitutionFormat2Subtable_2_6
@@ -1099,6 +1141,7 @@
 #define CollationElementIterator CollationElementIterator_2_6
 #define CollationKey CollationKey_2_6
 #define Collator Collator_2_6
+#define CollatorFactory CollatorFactory_2_6
 #define CompoundTransliterator CompoundTransliterator_2_6
 #define ContextualGlyphSubstitutionProcessor ContextualGlyphSubstitutionProcessor_2_6
 #define ContextualSubstitutionBase ContextualSubstitutionBase_2_6
@@ -1114,6 +1157,7 @@
 #define DateFormatSymbols DateFormatSymbols_2_6
 #define DecimalFormat DecimalFormat_2_6
 #define DecimalFormatSymbols DecimalFormatSymbols_2_6
+#define DefaultCalendarFactory DefaultCalendarFactory_2_6
 #define DefaultCharMapper DefaultCharMapper_2_6
 #define DeviceTable DeviceTable_2_6
 #define DictionaryBasedBreakIterator DictionaryBasedBreakIterator_2_6
@@ -1125,6 +1169,7 @@
 #define ExtensionSubtable ExtensionSubtable_2_6
 #define FeatureListTable FeatureListTable_2_6
 #define FieldPosition FieldPosition_2_6
+#define FontRuns FontRuns_2_6
 #define Format Format_2_6
 #define Format1AnchorTable Format1AnchorTable_2_6
 #define Format2AnchorTable Format2AnchorTable_2_6
@@ -1143,13 +1188,18 @@
 #define GlyphSubstitutionLookupProcessor GlyphSubstitutionLookupProcessor_2_6
 #define GlyphSubstitutionTableHeader GlyphSubstitutionTableHeader_2_6
 #define GregorianCalendar GregorianCalendar_2_6
+#define HanOpenTypeLayoutEngine HanOpenTypeLayoutEngine_2_6
 #define HebrewShaping HebrewShaping_2_6
 #define HexToUnicodeTransliterator HexToUnicodeTransliterator_2_6
 #define ICUBreakIteratorFactory ICUBreakIteratorFactory_2_6
 #define ICUBreakIteratorService ICUBreakIteratorService_2_6
+#define ICUCollatorFactory ICUCollatorFactory_2_6
+#define ICUCollatorService ICUCollatorService_2_6
 #define ICULayoutEngine ICULayoutEngine_2_6
 #define ICULocaleService ICULocaleService_2_6
 #define ICUNotifier ICUNotifier_2_6
+#define ICUNumberFormatFactory ICUNumberFormatFactory_2_6
+#define ICUNumberFormatService ICUNumberFormatService_2_6
 #define ICUResourceBundleFactory ICUResourceBundleFactory_2_6
 #define ICUService ICUService_2_6
 #define ICUServiceFactory ICUServiceFactory_2_6
@@ -1161,6 +1211,7 @@
 #define IndicReordering IndicReordering_2_6
 #define IntegralPartSubstitution IntegralPartSubstitution_2_6
 #define LECharMapper LECharMapper_2_6
+#define LEFontInstance LEFontInstance_2_6
 #define LEGlyphFilter LEGlyphFilter_2_6
 #define LayoutEngine LayoutEngine_2_6
 #define LigatureSubstitutionProcessor LigatureSubstitutionProcessor_2_6
@@ -1168,6 +1219,7 @@
 #define Locale Locale_2_6
 #define LocaleKey LocaleKey_2_6
 #define LocaleKeyFactory LocaleKeyFactory_2_6
+#define LocaleRuns LocaleRuns_2_6
 #define LocaleUtility LocaleUtility_2_6
 #define LookupListTable LookupListTable_2_6
 #define LookupProcessor LookupProcessor_2_6
@@ -1180,14 +1232,17 @@
 #define MarkToLigaturePositioningSubtable MarkToLigaturePositioningSubtable_2_6
 #define MarkToMarkPositioningSubtable MarkToMarkPositioningSubtable_2_6
 #define MessageFormat MessageFormat_2_6
+#define MessageFormatAdapter MessageFormatAdapter_2_6
 #define ModulusSubstitution ModulusSubstitution_2_6
 #define MorphSubtableHeader MorphSubtableHeader_2_6
 #define MorphTableHeader MorphTableHeader_2_6
 #define MultipleSubstitutionSubtable MultipleSubstitutionSubtable_2_6
 #define MultiplierSubstitution MultiplierSubstitution_2_6
+#define NFFactory NFFactory_2_6
 #define NFRule NFRule_2_6
 #define NFRuleSet NFRuleSet_2_6
 #define NFSubstitution NFSubstitution_2_6
+#define NamePrep NamePrep_2_6
 #define NameUnicodeTransliterator NameUnicodeTransliterator_2_6
 #define NonContextualGlyphSubstitutionProcessor NonContextualGlyphSubstitutionProcessor_2_6
 #define NormalizationTransliterator NormalizationTransliterator_2_6
@@ -1196,12 +1251,14 @@
 #define NullSubstitution NullSubstitution_2_6
 #define NullTransliterator NullTransliterator_2_6
 #define NumberFormat NumberFormat_2_6
+#define NumberFormatFactory NumberFormatFactory_2_6
 #define NumeratorSubstitution NumeratorSubstitution_2_6
 #define OpenTypeLayoutEngine OpenTypeLayoutEngine_2_6
 #define OpenTypeUtilities OpenTypeUtilities_2_6
 #define PairPositioningFormat1Subtable PairPositioningFormat1Subtable_2_6
 #define PairPositioningFormat2Subtable PairPositioningFormat2Subtable_2_6
 #define PairPositioningSubtable PairPositioningSubtable_2_6
+#define ParagraphLayout ParagraphLayout_2_6
 #define ParseData ParseData_2_6
 #define ParsePosition ParsePosition_2_6
 #define PropertyAliases PropertyAliases_2_6
@@ -1219,6 +1276,7 @@
 #define RegexCompile RegexCompile_2_6
 #define RegexMatcher RegexMatcher_2_6
 #define RegexPattern RegexPattern_2_6
+#define RegexStaticSets RegexStaticSets_2_6
 #define RemoveTransliterator RemoveTransliterator_2_6
 #define Replaceable Replaceable_2_6
 #define ReplaceableGlue ReplaceableGlue_2_6
@@ -1228,6 +1286,7 @@
 #define RuleBasedNumberFormat RuleBasedNumberFormat_2_6
 #define RuleBasedTransliterator RuleBasedTransliterator_2_6
 #define RuleHalf RuleHalf_2_6
+#define RunArray RunArray_2_6
 #define SameValueSubstitution SameValueSubstitution_2_6
 #define ScriptListTable ScriptListTable_2_6
 #define ScriptRunIterator ScriptRunIterator_2_6
@@ -1242,6 +1301,7 @@
 #define SimpleDateFormat SimpleDateFormat_2_6
 #define SimpleFactory SimpleFactory_2_6
 #define SimpleLocaleKeyFactory SimpleLocaleKeyFactory_2_6
+#define SimpleNumberFormatFactory SimpleNumberFormatFactory_2_6
 #define SimpleTimeZone SimpleTimeZone_2_6
 #define SinglePositioningFormat1Subtable SinglePositioningFormat1Subtable_2_6
 #define SinglePositioningFormat2Subtable SinglePositioningFormat2Subtable_2_6
@@ -1256,8 +1316,10 @@
 #define StringEnumeration StringEnumeration_2_6
 #define StringMatcher StringMatcher_2_6
 #define StringPair StringPair_2_6
+#define StringPrep StringPrep_2_6
 #define StringReplacer StringReplacer_2_6
 #define StringSearch StringSearch_2_6
+#define StyleRuns StyleRuns_2_6
 #define SubstitutionLookup SubstitutionLookup_2_6
 #define SubtableProcessor SubtableProcessor_2_6
 #define SymbolTable SymbolTable_2_6
@@ -1297,7 +1359,9 @@
 #define UnicodeString UnicodeString_2_6
 #define UnicodeToHexTransliterator UnicodeToHexTransliterator_2_6
 #define UppercaseTransliterator UppercaseTransliterator_2_6
+#define Utilities Utilities_2_6
 #define ValueRecord ValueRecord_2_6
+#define ValueRuns ValueRuns_2_6
 #define _UF _UF_2_6
 #define locale_set_default_internal locale_set_default_internal_2_6
 #define uprv_cnttab_cloneContraction uprv_cnttab_cloneContraction_2_6
