@@ -621,6 +621,9 @@ static void TestConvert()
         log_verbose("\n---Testing ucnv_getSubstChars...\n");
         ii=4;
         ucnv_getSubstChars(myConverter, myptr, &ii, &err);
+        if (ii <= 0) {
+            log_err("ucnv_getSubstChars returned a negative number %d\n", ii);
+        }
 
         for(x=0;x<ii;x++) 
             rest = (uint16_t)(((unsigned char)rest << 8) + (unsigned char)myptr[x]);
