@@ -51,7 +51,7 @@
  * @author Alan Liu
  * @internal
  */
-class U_I18N_API CalendarAstronomer {
+class U_I18N_API CalendarAstronomer : public UMemory {
 public:
   // some classes
 
@@ -74,7 +74,7 @@ public:
    * @internal
    * @deprecated ICU 2.4. This class may be removed or modified.
    */
-  class U_I18N_API Ecliptic {
+  class U_I18N_API Ecliptic : public UMemory {
   public:
     /**
      * Constructs an Ecliptic coordinate object.
@@ -141,7 +141,7 @@ public:
    * @internal
    * @deprecated ICU 2.4. This class may be removed or modified.
    */
-  class U_I18N_API Equatorial {
+  class U_I18N_API Equatorial : public UMemory {
   public:
     /**
      * Constructs an Equatorial coordinate object.
@@ -215,7 +215,7 @@ public:
    * @internal
    * @deprecated ICU 2.4. This class may be removed or modified.
    */
-  class U_I18N_API Horizon {
+  class U_I18N_API Horizon : public UMemory {
   public:
     /**
      * Constructs a Horizon coordinate object.
@@ -446,8 +446,11 @@ public:
    */
   CalendarAstronomer(double longitude, double latitude);
 
+  /**
+   * Destructor
+   * @internal
+   */
   ~CalendarAstronomer();
-    
     
   //-------------------------------------------------------------------------
   // Time and date getters and setters
@@ -681,7 +684,7 @@ public:
   Equatorial* getSunPosition();
     
 public:
-  class U_I18N_API SolarLongitude {
+  class U_I18N_API SolarLongitude : public UMemory {
   public: 
     SolarLongitude(double l)
       :  value(l) { }
@@ -1080,7 +1083,7 @@ public:
    */
   double getMoonPhase();
     
-  class U_I18N_API MoonAge {
+  class U_I18N_API MoonAge : public UMemory {
   public: 
     MoonAge(double l)
       :  value(l) { }
@@ -1145,7 +1148,7 @@ public:
   //-------------------------------------------------------------------------
 
   // private
-  class U_I18N_API AngleFunc {
+  class U_I18N_API AngleFunc : public UMemory {
   public:
     virtual double eval(CalendarAstronomer&) = 0;
   };
@@ -1154,7 +1157,7 @@ public:
   UDate timeOfAngle(AngleFunc& func, double desired,
                     double periodDays, double epsilon, UBool next);
     
-  class U_I18N_API CoordFunc {
+  class U_I18N_API CoordFunc : public UMemory {
   public:
     virtual Equatorial* eval(CalendarAstronomer&) = 0;
   };
