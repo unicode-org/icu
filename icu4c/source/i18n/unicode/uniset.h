@@ -275,7 +275,7 @@ class U_I18N_API UnicodeSet : public UnicodeFilter {
      * Delimiter string used in patterns to close a category reference:
      * ":]".  Example: "[:Lu:]".
      */
-    static const UnicodeString CATEGORY_CLOSE;
+    static const UChar CATEGORY_CLOSE[];
 
     // More special characters...
     static const UChar SET_OPEN;
