@@ -173,7 +173,7 @@ final class DigitList {
 //              stringRep.append('0');
 //          }
 //          return new BigInteger(stringRep.toString());
-        int len = decimalAt ? count ? decimalAt : count;
+        int len = decimalAt > count ? decimalAt : count;
         if (!isPositive) {
             len += 1;
         }
