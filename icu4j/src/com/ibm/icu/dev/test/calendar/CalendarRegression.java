@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/CalendarRegression.java,v $
- * $Date: 2003/10/09 02:50:07 $
- * $Revision: 1.19 $
+ * $Date: 2003/10/16 00:49:57 $
+ * $Revision: 1.20 $
  *
  *******************************************************************************
  */
@@ -1801,7 +1801,7 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
             Locale loc = Locale.US;
             TimeZone.setDefault(TimeZone.getTimeZone("America/Los_Angeles"));
             java.util.Calendar tempcal = java.util.Calendar.getInstance();
-            tempcal.set(2001 + 1900, Calendar.APRIL, 5, 17, 43, 53);
+            tempcal.set(2001, Calendar.APRIL, 5, 17, 43, 53);
             Date date = tempcal.getTime();
             Calendar cal = Calendar.getInstance(loc);
             Object[] DATA = {
@@ -1815,7 +1815,7 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
 
                 DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.SHORT, loc),
                 "DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.SHORT, loc)",
-                "Friday, April 5, 3901 5:43 PM",
+                "Thursday, April 5, 2001 5:43 PM",
 
                 DateFormat.getDateInstance(cal, DateFormat.SHORT, loc),
                 "DateFormat.getDateInstance(cal, DateFormat.SHORT, loc)",
@@ -1827,15 +1827,15 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
 
                 DateFormat.getDateTimeInstance(cal, DateFormat.FULL, DateFormat.SHORT, loc),
                 "DateFormat.getDateTimeInstance(cal, DateFormat.FULL, DateFormat.SHORT, loc)",
-                "Friday, April 5, 3901 5:43 PM",
+                "Thursday, April 5, 2001 5:43 PM",
             
                 cal.getDateTimeFormat(DateFormat.SHORT, DateFormat.FULL, loc),
                 "cal.getDateTimeFormat(DateFormat.SHORT, DateFormat.FULL, loc)",
-                "4/5/01 5:43:53 PM PST",
+                "4/5/01 5:43:53 PM PDT",
 
                 cal.getDateTimeFormat(DateFormat.FULL, DateFormat.SHORT, loc),
                 "cal.getDateTimeFormat(DateFormat.FULL, DateFormat.SHORT, loc)",
-                "Friday, April 5, 3901 5:43 PM",
+                "Thursday, April 5, 2001 5:43 PM",
             };
             for (int i=0; i<DATA.length; i+=3) {
                 DateFormat df = (DateFormat) DATA[i];
