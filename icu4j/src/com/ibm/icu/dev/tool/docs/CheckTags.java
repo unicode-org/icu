@@ -16,13 +16,15 @@
  * @stable ICU X.X.X
  * @internal
  * @since  (don't use)
+ * @obsolete ICU X.X.X
  * @deprecated to be removed in ICU X.X. [Use ...]
  *
  * flags names of classes and their members that have no tags or incorrect syntax.
  *
  * Requires JDK 1.4 or later
  * 
- * Run from directory containing CheckTags.class as follows:
+ * Use build.xml 'checktags' ant target, or
+ * run from directory containing CheckTags.class as follows:
  * javadoc -classpath ${JAVA_HOME}/lib/tools.jar -doclet CheckTags -sourcepath ${ICU4J_src} [packagenames]
  */
 
@@ -329,6 +331,10 @@ public class CheckTags {
                 tagErr(tag);
                 break;
               }
+	      if (tag.text().indexOf("ICU 2.6") != -1) {
+		  tagErr(tag);
+		  break;
+	      }
           if (tag.text().indexOf("ICU") != 0) {
           tagErr(tag);
           break;
