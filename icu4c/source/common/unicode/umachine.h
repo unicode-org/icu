@@ -62,7 +62,7 @@
 #   define U_CDECL_BEGIN extern "C" {
 #   define U_CDECL_END   }
 #else
-#   define U_CFUNC
+#   define U_CFUNC extern
 #   define U_CDECL_BEGIN
 #   define U_CDECL_END
 #endif
