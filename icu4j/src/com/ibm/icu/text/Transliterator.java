@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2002/12/03 21:01:34 $
- * $Revision: 1.84 $
+ * $Date: 2002/12/04 00:03:28 $
+ * $Revision: 1.85 $
  *
  *****************************************************************************************
  */
@@ -1791,6 +1791,10 @@ public abstract class Transliterator {
      * @stable
      */
     public static interface Factory {
+        /**
+         * Return a transliterator for the given ID.
+         * @stable
+         */
         Transliterator getInstance(String ID);
     }
 }
