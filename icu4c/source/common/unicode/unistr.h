@@ -38,6 +38,12 @@ class  StringThreadTest;
 #define U_COMPARE_CODE_POINT_ORDER  0x8000
 #endif
 
+#ifndef USTRING_H
+/* see ustring.h */
+U_CAPI int32_t U_EXPORT2
+u_strlen(const UChar *s);
+#endif
+
 U_NAMESPACE_BEGIN
 
 class Locale;               // unicode/locid.h
@@ -3009,6 +3015,7 @@ private:
   UnicodeString &copyFrom(const UnicodeString &src, UBool fastCopy=FALSE);
 
   // Pin start and limit to acceptable values.
+  inline void pinIndex(int32_t& start) const;
   inline void pinIndices(int32_t& start,
                          int32_t& length) const;
 
@@ -3069,7 +3076,6 @@ private:
   void addRef(void);
   int32_t removeRef(void);
   int32_t refCount(void) const;
-  int32_t setRefCount(int32_t count);
 
   // constants
   enum {
@@ -3131,11 +3137,18 @@ U_NAMESPACE_END
 //========================================
 // Array copying
 //========================================
-// Copy an array of UnicodeString OBJECTS (not pointers).
+/**
+ * Copy an array of UnicodeString OBJECTS (not pointers).
+ * @internal
+ */
 inline void 
 uprv_arrayCopy(const U_NAMESPACE_QUALIFIER UnicodeString *src, U_NAMESPACE_QUALIFIER UnicodeString *dst, int32_t count)
 { while(count-- > 0) *dst++ = *src++; }
 
+/**
+ * Copy an array of UnicodeString OBJECTS (not pointers).
+ * @internal
+ */
 inline void 
 uprv_arrayCopy(const U_NAMESPACE_QUALIFIER UnicodeString *src, int32_t srcStart, 
         U_NAMESPACE_QUALIFIER UnicodeString *dst, int32_t dstStart, int32_t count)
@@ -3390,8 +3403,10 @@ UnicodeString::indexOf(const UnicodeString& text) const
 
 inline int32_t 
 UnicodeString::indexOf(const UnicodeString& text,
-               int32_t start) const
-{ return indexOf(text, 0, text.fLength, start, fLength - start); }
+               int32_t start) const {
+  pinIndex(start);
+  return indexOf(text, 0, text.fLength, start, fLength - start);
+}
 
 inline int32_t 
 UnicodeString::indexOf(const UnicodeString& text,
@@ -3418,8 +3433,10 @@ UnicodeString::indexOf(const UnicodeString& srcText,
 inline int32_t 
 UnicodeString::indexOf(const UChar *srcChars,
                int32_t srcLength,
-               int32_t start) const
-{ return indexOf(srcChars, 0, srcLength, start, fLength - start); }
+               int32_t start) const {
+  pinIndex(start);
+  return indexOf(srcChars, 0, srcLength, start, fLength - start);
+}
 
 inline int32_t 
 UnicodeString::indexOf(const UChar *srcChars,
@@ -3439,12 +3456,15 @@ UnicodeString::indexOf(UChar32 c) const {
 
 inline int32_t 
 UnicodeString::indexOf(UChar c,
-               int32_t start) const
-{ return doIndexOf(c, start, fLength - start); }
+               int32_t start) const {
+  pinIndex(start);
+  return doIndexOf(c, start, fLength - start);
+}
 
 inline int32_t 
 UnicodeString::indexOf(UChar32 c,
                int32_t start) const {
+  pinIndex(start);
   return indexOf(c, start, fLength - start);
 }
 
@@ -3467,8 +3487,10 @@ UnicodeString::lastIndexOf(const UnicodeString& text) const
 
 inline int32_t 
 UnicodeString::lastIndexOf(const UnicodeString& text,
-               int32_t start) const
-{ return lastIndexOf(text, 0, text.fLength, start, fLength - start); }
+               int32_t start) const {
+  pinIndex(start);
+  return lastIndexOf(text, 0, text.fLength, start, fLength - start);
+}
 
 inline int32_t 
 UnicodeString::lastIndexOf(const UnicodeString& text,
@@ -3495,8 +3517,10 @@ UnicodeString::lastIndexOf(const UnicodeString& srcText,
 inline int32_t 
 UnicodeString::lastIndexOf(const UChar *srcChars,
                int32_t srcLength,
-               int32_t start) const
-{ return lastIndexOf(srcChars, 0, srcLength, start, fLength - start); }
+               int32_t start) const {
+  pinIndex(start);
+  return lastIndexOf(srcChars, 0, srcLength, start, fLength - start);
+}
 
 inline int32_t 
 UnicodeString::lastIndexOf(const UChar *srcChars,
@@ -3516,12 +3540,15 @@ UnicodeString::lastIndexOf(UChar32 c) const {
 
 inline int32_t 
 UnicodeString::lastIndexOf(UChar c,
-               int32_t start) const
-{ return doLastIndexOf(c, start, fLength - start); }
+               int32_t start) const {
+  pinIndex(start);
+  return doLastIndexOf(c, start, fLength - start);
+}
 
 inline int32_t 
 UnicodeString::lastIndexOf(UChar32 c,
                int32_t start) const {
+  pinIndex(start);
   return lastIndexOf(c, start, fLength - start);
 }
 
@@ -3567,22 +3594,33 @@ UnicodeString::endsWith(const UnicodeString& text) const
 inline UBool 
 UnicodeString::endsWith(const UnicodeString& srcText,
             int32_t srcStart,
-            int32_t srcLength) const
-{ return doCompare(fLength - srcLength, srcLength, 
-           srcText, srcStart, srcLength) == 0; }
+            int32_t srcLength) const {
+  srcText.pinIndices(srcStart, srcLength);
+  return doCompare(fLength - srcLength, srcLength, 
+                   srcText, srcStart, srcLength) == 0;
+}
 
 inline UBool 
 UnicodeString::endsWith(const UChar *srcChars,
-            int32_t srcLength) const
-{ return doCompare(fLength - srcLength, srcLength, 
-           srcChars, 0, srcLength) == 0; }
+            int32_t srcLength) const {
+  if(srcLength < 0) {
+    srcLength = u_strlen(srcChars);
+  }
+  return doCompare(fLength - srcLength, srcLength, 
+                   srcChars, 0, srcLength) == 0;
+}
 
 inline UBool 
 UnicodeString::endsWith(const UChar *srcChars,
             int32_t srcStart,
-            int32_t srcLength) const
-{ return doCompare(fLength - srcLength, srcLength, 
-           srcChars, srcStart, srcLength) == 0;}
+            int32_t srcLength) const {
+  if(srcLength < 0) {
+    srcLength = u_strlen(srcChars + srcStart);
+  }
+  return doCompare(fLength - srcLength, srcLength, 
+                   srcChars, srcStart, srcLength) == 0;
+}
+
 //========================================
 // replace
 //========================================
@@ -3839,6 +3877,7 @@ UnicodeString::setTo(const UnicodeString& srcText,
              int32_t srcStart)
 {
   unBogus();
+  srcText.pinIndex(srcStart);
   return doReplace(0, fLength, srcText, srcStart, srcText.fLength - srcStart);
 }
 
@@ -4015,6 +4054,17 @@ UnicodeString::reverse(int32_t start,
 //========================================
 // Privates
 //========================================
+
+inline void
+UnicodeString::pinIndex(int32_t& start) const
+{
+  // pin index
+  if(start < 0) {
+    start = 0;
+  } else if(start > fLength) {
+    start = fLength;
+  }
+}
 
 inline void
 UnicodeString::pinIndices(int32_t& start,
