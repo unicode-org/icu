@@ -364,7 +364,7 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
     }
     element->cPoints[0] = theValue;
 
-    element->codepoint = element->cPoints[0];
+    /*element->codepoint = element->cPoints[0];*/
     if(spacePointer == 0) {
         detectedContraction = FALSE;
         element->cSize = 1;
@@ -468,14 +468,14 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
 
         uint32_t terValue = strtoul(tertiary+strlen(tertiary)-2, NULL, 16);
         if(terValue > 0x3F) {
-            fprintf(stderr, "Tertiary value %02X too big for %04X\n", terValue, element->codepoint);
+            fprintf(stderr, "Tertiary value %02X too big for %04X\n", terValue, element->cPoints[0]);
         }
         startCodePoint = endCodePoint+1;
         i++;
     }
     element->noOfCEs = CEindex;
 
-    element->isThai = UCOL_ISTHAIPREVOWEL(element->codepoint);
+    element->isThai = UCOL_ISTHAIPREVOWEL(element->cPoints[0]);
 
     // we don't want any strange stuff after useful data!
     while(pointer < commentStart)  {

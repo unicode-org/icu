@@ -533,8 +533,8 @@ U_CFUNC void ucol_doCE(uint32_t *CEparts, UColToken *tok, UHashtable *tailored, 
 
 
   /* and add them to a data table        */
-#if 0
-  fprintf(stderr, "str: %i, [%08X, %08X, %08X]: tok: ", tok->strength, CEparts[0] >> (32-8*noOfBytes[0]), CEparts[1] >> (32-8*noOfBytes[1]), CEparts[2]>> (32-8*noOfBytes[2]));
+#ifdef UCOL_DEBUG
+  fprintf(stderr, "%04X str: %i, [%08X, %08X, %08X]: tok: ", tok->debugSource, tok->strength, CEparts[0] >> (32-8*noOfBytes[0]), CEparts[1] >> (32-8*noOfBytes[1]), CEparts[2]>> (32-8*noOfBytes[2]));
   for(i = 0; i<tok->noOfCEs; i++) {
     fprintf(stderr, "%08X ", tok->CEs[i]);
   }
@@ -591,7 +591,7 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, UHashtable *tailored, UErro
 */
 
   ucol_inv_getGapPositions(lh);
-#if 0
+#ifdef UCOL_DEBUG
   fprintf(stderr, "BaseCE: %08X %08X\n", lh->baseCE, lh->baseContCE);
   int32_t j = 2;
   for(j = 2; j >= 0; j--) {
@@ -846,17 +846,17 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
       key.expansion = newExtensionsLen << 24 | extensionOffset;
 */
     UChar buff[128];
+    uint32_t decompSize;
     uprv_memcpy(buff, (tok->source & 0x00FFFFFF) + src->source, (tok->source >> 24)*sizeof(UChar));
-    unorm_normalize(buff, tok->source >> 24, UNORM_NFD, 0, el.uchars, 128, status);
+    decompSize = unorm_normalize(buff, tok->source >> 24, UNORM_NFD, 0, el.uchars, 128, status);
     /*uprv_memcpy(el.uchars, (tok->source & 0x00FFFFFF) + src->source, (tok->source >> 24)*sizeof(UChar));*/
     /* I think I don't want to have expansion chars in chars for UCAelement... HMMM! */
     /*uprv_memcpy(el.uchars+(tok->source >> 24), (tok->expansion & 0x00FFFFFF) + src->source, (tok->expansion >> 24)*sizeof(UChar));*/
-    el.cSize = (tok->source >> 24); /* + (tok->expansion >> 24);*/
+    el.cSize = decompSize; /*(tok->source >> 24); *//* + (tok->expansion >> 24);*/
     el.cPoints = el.uchars;
-    el.codepoint = el.cPoints[0];
 
     el.caseBit = FALSE; /* how to see if there is case bit - pick it out from the UCA */
-    if(UCOL_ISTHAIPREVOWEL(el.codepoint)) {
+    if(UCOL_ISTHAIPREVOWEL(el.cPoints[0])) {
       el.isThai = TRUE;
     } else {
       el.isThai = FALSE;
@@ -865,6 +865,9 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
 
 
     /* and then, add it */
+#ifdef UCOL_DEBUG
+    fprintf(stderr, "Adding: %04X with %08X\n", el.cPoints[0], el.CEs[0]);
+#endif
     uprv_uca_addAnElement(t, &el, status);
 
     tok = tok->next;
@@ -991,11 +994,14 @@ uint32_t ucol_getDynamicCEs(tempUCATable *t, UChar *decomp, uint32_t noOfDec, ui
       }
 
     }
+    if(resLen >= resultSize) {
+      *status = U_MEMORY_ALLOCATION_ERROR;
+    }
     j++;
   }
   return resLen;
 }
-
+  
 UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *status) {
   uint32_t i = 0;
 /*
@@ -1067,28 +1073,24 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     UCAElements el;
     el.isThai = FALSE;
     collIterate colIt;
-    uint32_t decompCE[256];
+    /*uint32_t decompCE[256];*/
     uint32_t compCE[256];
-    uint32_t decompRes = 0, compRes = 0;
+    uint32_t compRes = 0;
 
 
   /* produce canonical & compatibility closure */
     for(u = 0; u < 0x10000; u++) {
-      
-      /*if((noOfDec = unorm_normalize((const UChar *)&u, 1, UNORM_NFD, 0, decomp, 256, status)) > 1)*/
-      if((noOfDec = uprv_ucol_decompose ((UChar)u, decomp)) > 1) {
+      /*if((noOfDec = unorm_normalize((const UChar *)&u, 1, UNORM_NFD, 0, decomp, 256, status)) > 1
+        || (noOfDec == 1 && *decomp != (UChar)u))*/
+      if((noOfDec = uprv_ucol_decompose ((UChar)u, decomp)) > 1 || (noOfDec == 1 && *decomp != (UChar)u)) {
         compRes = ucol_getDynamicCEs(t, (UChar *)&u, 1, compCE, 256, status);
-        decompRes = ucol_getDynamicCEs(t, decomp, noOfDec, decompCE, 256, status);
+        el.noOfCEs = ucol_getDynamicCEs(t, decomp, noOfDec, el.CEs, 128, status);
 
-        if((compRes != decompRes) || (uprv_memcmp(compCE, decompCE, compRes*sizeof(uint32_t)) != 0)) {
+        if((compRes != el.noOfCEs) || (uprv_memcmp(compCE, el.CEs, compRes*sizeof(uint32_t)) != 0)) {
             el.uchars[0] = (UChar)u;
             el.cPoints = el.uchars;
-            el.codepoint = (UChar)u;
             el.cSize = 1;
-            el.noOfCEs = decompRes;
-            for(i = 0; i<decompRes; i++) {
-              el.CEs[i] = decompCE[i];
-            }
+
             uprv_uca_addAnElement(t, &el, status);
         }
       }
@@ -1105,7 +1107,6 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
         decomp[0] = (UChar)u;
         el.uchars[0] = (UChar)u;
         el.cPoints = el.uchars;
-        el.codepoint = (UChar)u;
         el.cSize = 1;
         el.noOfCEs = 0;
         init_collIterate(decomp, 1, &colIt, TRUE);

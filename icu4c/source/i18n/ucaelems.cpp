@@ -36,7 +36,6 @@ void uprv_uca_reverseElement(ExpansionTable *expansions, UCAElements *el) {
         el->cPoints[i] = el->cPoints[el->cSize-i-1];
         el->cPoints[el->cSize-i-1] = temp;
     }
-    el->codepoint = el->cPoints[0];
 
     if(el->noOfCEs>1) { /* this is an expansion that needs to be reversed and added - also, we need to change the mapValue */
       for(i = 0; i<el->noOfCEs/2; i++) {
