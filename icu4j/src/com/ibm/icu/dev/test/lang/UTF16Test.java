@@ -558,118 +558,235 @@ public final class UTF16Test extends TestFmwk
     /* 
      * Testing moveCodePointOffset APIs
      */
+    
+    //
+    //   checkMoveCodePointOffset
+    //      Run a single test case through each of the moveCodePointOffset() functions.
+    //          Parameters - 
+    //              s               The string to work in.
+    //              startIdx        The starting position within the string.
+    //              amount          The number of code points to move.
+    //              expectedResult  The string index after the move, or -1 if the
+    //                              function should throw an exception.
+    private void checkMoveCodePointOffset(String s, int startIdx, int amount, int expectedResult) {
+        // Test with the String flavor of moveCodePointOffset
+    	try {
+    		int result = UTF16.moveCodePointOffset(s, startIdx, amount);
+    		if (result != expectedResult) {
+    			errln("FAIL: UTF16.moveCodePointOffset(String \"" + s + "\", " + startIdx + ", " + amount + ")" +
+    					" returned "  + result + ", expected result was " + 
+                        (expectedResult==-1 ? "exception" : Integer.toString(expectedResult)));
+    		}
+    	}
+    	catch (IndexOutOfBoundsException e) {
+    		if (expectedResult != -1) {
+    			errln("FAIL: UTF16.moveCodePointOffset(String \"" + s + "\", " + startIdx + ", " + amount + ")" +
+    					" returned exception" + ", expected result was " + expectedResult);
+    		}
+    	}
+
+        // Test with the StringBuffer flavor of moveCodePointOffset
+        StringBuffer sb = new StringBuffer(s);
+        try {
+            int result = UTF16.moveCodePointOffset(sb, startIdx, amount);
+            if (result != expectedResult) {
+                errln("FAIL: UTF16.moveCodePointOffset(StringBuffer \"" + s + "\", " + startIdx + ", " + amount + ")" +
+                        " returned "  + result + ", expected result was " + 
+                        (expectedResult==-1 ? "exception" : Integer.toString(expectedResult)));
+            }
+        }
+        catch (IndexOutOfBoundsException e) {
+            if (expectedResult != -1) {
+                errln("FAIL: UTF16.moveCodePointOffset(StringBuffer \"" + s + "\", " + startIdx + ", " + amount + ")" +
+                        " returned exception" + ", expected result was " + expectedResult);
+            }
+        }
+    
+        // Test with the char[] flavor of moveCodePointOffset
+        char ca[] = s.toCharArray();
+        try {
+            int result = UTF16.moveCodePointOffset(ca, 0, s.length(), startIdx, amount);
+            if (result != expectedResult) {
+                errln("FAIL: UTF16.moveCodePointOffset(char[] \"" + s + "\", 0, " + s.length()
+                        + ", " + startIdx + ", " + amount + ")" +
+                        " returned "  + result + ", expected result was " + 
+                        (expectedResult==-1 ? "exception" : Integer.toString(expectedResult)));
+            }
+        }
+        catch (IndexOutOfBoundsException e) {
+            if (expectedResult != -1) {
+                errln("FAIL: UTF16.moveCodePointOffset(char[] \"" + s + "\", 0, " + s.length()
+                        + ", " + startIdx + ", " + amount + ")" +
+                        " returned exception" + ", expected result was " + expectedResult);
+            }
+        }
+        
+        // Put the test string into the interior of a char array,
+        //   run test on the subsection of the array.
+        char ca2[] = new char[s.length()+2];
+        ca2[0] = (char)0xd800;
+        ca2[s.length()+1] = (char)0xd8ff;
+        s.getChars(0, s.length(), ca2, 1);
+        try {
+            int result = UTF16.moveCodePointOffset(ca2, 1, s.length()+1, startIdx, amount);
+            if (result != expectedResult) {
+                errln("UTF16.moveCodePointOffset(char[] \"" + "." + s + ".\", 1, " + (s.length()+1)
+                        + ", " + startIdx + ", " + amount + ")" +
+                         " returned "  + result + ", expected result was " + 
+                        (expectedResult==-1 ? "exception" : Integer.toString(expectedResult)));
+            }
+        }
+        catch (IndexOutOfBoundsException e) {
+            if (expectedResult != -1) {
+                errln("UTF16.moveCodePointOffset(char[] \"" + "." + s + ".\", 1, " + (s.length()+1)
+                        + ", " + startIdx + ", " + amount + ")" +
+                        " returned exception" + ", expected result was " + expectedResult);
+            }
+        }
+    
+    }
+    
+        
     public void TestMoveCodePointOffset()
     {
-                                 //01234567890     1     2     3     45678901234
-          String str = new String("0123456789\ud800\udc00\ud801\udc010123456789");
-          int move1[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 12, 14, 14, 15, 16, 
-                         17, 18, 19, 20, 21, 22, 23, 24};
-          int move2[] = {2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 14, 15, 15, 16, 17, 
-               18, 19, 20, 21, 22, 23, 24};
-          int move3[] = {3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 15, 15, 16, 16, 17, 18,
-               19, 20, 21, 22, 23, 24};
-          int size = str.length();
-          for (int i = 0; i < size; i ++) {
-        if (UTF16.moveCodePointOffset(str, i, 1) != move1[i]) {
-                  errln("FAIL: Moving offset " + i + 
-              " by 1 codepoint expected result " + move1[i]);
-        }
-        try {
-                  if (UTF16.moveCodePointOffset(str, i, 2) != move2[i]) {
-            errln("FAIL: Moving offset " + i + 
-                          " by 2 codepoint expected result " + move2[i]);
-                  }
-        } catch (IndexOutOfBoundsException e) {
-                  if (i <= 22) {
-            throw e;
-                  }
-        }
-        try
-              {
-            if (UTF16.moveCodePointOffset(str, i, 3) != move3[i]) {
-                      errln("FAIL: Moving offset " + i + 
-                  " by 3 codepoint expected result " + move3[i]);
-            }
-              } catch (IndexOutOfBoundsException e) {
-            if (i <= 21) {
-                      throw e;
-            }
-              }
-          }
-     
-          StringBuffer strbuff = new StringBuffer(str);
-          for (int i = 0; i < size; i ++) {
-        if (UTF16.moveCodePointOffset(strbuff, i, 1) != move1[i]) {
-                  errln("FAIL: Moving offset " + i + 
-              " by 1 codepoint expected result " + move1[i]);
-        }
-        try {
-                  if (UTF16.moveCodePointOffset(strbuff, i, 2) != move2[i]) {
-            errln("FAIL: Moving offset " + i + 
-                          " by 2 codepoint expected result " + move2[i]);
-                  }
-        } catch (IndexOutOfBoundsException e) {
-                  if (i <= 22) {
-            throw e;
-                  }
-        }
-        try
-              {
-            if (UTF16.moveCodePointOffset(strbuff, i, 3) != move3[i]) {
-                      errln("FAIL: Moving offset " + i + 
-                  " by 3 codepoint expected result " + move3[i]);
-            }
-              } catch (IndexOutOfBoundsException e) {
-            if (i <= 21) {
-                      throw e;
-            }
-              }  
-          }
-      
-          char strarray[] = str.toCharArray();
-          for (int i = 0; i < size; i ++) {
-        if (UTF16.moveCodePointOffset(strarray, 0, size, i, 1) != move1[i]) 
-              {
-            errln("FAIL: Moving offset " + i + 
-              " by 1 codepoint expected result " + move1[i]);
-              }
-        try {
-                  if (UTF16.moveCodePointOffset(strarray, 0, size, i, 2) != 
-            move2[i]) {
-            errln("FAIL: Moving offset " + i + 
-                          " by 2 codepoint expected result " + move2[i]);
-                  }
-        } catch (IndexOutOfBoundsException e) {
-                  if (i <= 22) {
-            throw e;
-                  }
-        }
-        try
-              {
-            if (UTF16.moveCodePointOffset(strarray,  0, size, i, 3) != 
-            move3[i]) {
-                      errln("FAIL: Moving offset " + i + 
-                  " by 3 codepoint expected result " + move3[i]);
-            }
-              } catch (IndexOutOfBoundsException e) {
-            if (i <= 21) {
-                      throw e;
-            }
-              }  
-          }
-      
-          if (UTF16.moveCodePointOffset(strarray, 9, 13, 0, 2) != 3) {
-        errln("FAIL: Moving offset 0 by 2 codepoint in subarray [9, 13] " +
-          "expected result 3");
-          }
-          if (UTF16.moveCodePointOffset(strarray, 9, 13, 1, 2) != 4) {
-        errln("FAIL: Moving offset 1 by 2 codepoint in subarray [9, 13] " +
-          "expected result 4");
-          }
-          if (UTF16.moveCodePointOffset(strarray, 11, 14, 0, 2) != 3) {
-        errln("FAIL: Moving offset 0 by 2 codepoint in subarray [11, 14] " 
-          + "expected result 3");
-          }
+        // checkMoveCodePointOffset(String, startIndex, amount, expected );  expected=-1 for exception.
+        
+        // No Supplementary chars
+        checkMoveCodePointOffset("abc", 1,  1, 2);
+        checkMoveCodePointOffset("abc", 1, -1, 0);
+        checkMoveCodePointOffset("abc", 1, -2, -1);
+        checkMoveCodePointOffset("abc", 1,  2, 3);
+        checkMoveCodePointOffset("abc", 1,  3, -1);
+        checkMoveCodePointOffset("abc", 1,  0, 1);
+        
+        checkMoveCodePointOffset("abc", 3, 0, 3);
+        checkMoveCodePointOffset("abc", 4, 0, -1);
+        checkMoveCodePointOffset("abc", 0, 0, 0);
+        checkMoveCodePointOffset("abc", -1, 0, -1);
+        
+        checkMoveCodePointOffset("", 0, 0, 0);
+        checkMoveCodePointOffset("", 0, -1, -1);
+        checkMoveCodePointOffset("", 0, 1, -1);
+        
+        checkMoveCodePointOffset("a", 0, 0, 0);
+        checkMoveCodePointOffset("a", 1, 0, 1);
+        checkMoveCodePointOffset("a", 0, 1, 1);
+        checkMoveCodePointOffset("a", 1, -1, 0);
+        
+   
+        // Supplementary in middle of string
+        checkMoveCodePointOffset("a\ud800\udc00b", 0, 1, 1);
+        checkMoveCodePointOffset("a\ud800\udc00b", 0, 2, 3);
+        checkMoveCodePointOffset("a\ud800\udc00b", 0, 3, 4);
+        checkMoveCodePointOffset("a\ud800\udc00b", 0, 4, -1);
+        
+        checkMoveCodePointOffset("a\ud800\udc00b", 4, -1, 3);
+        checkMoveCodePointOffset("a\ud800\udc00b", 4, -2, 1);
+        checkMoveCodePointOffset("a\ud800\udc00b", 4, -3, 0);
+        checkMoveCodePointOffset("a\ud800\udc00b", 4, -4, -1);
+        
+        // Supplementary at start of string
+        checkMoveCodePointOffset("\ud800\udc00ab", 0, 1, 2);
+        checkMoveCodePointOffset("\ud800\udc00ab", 1, 1, 2);
+        checkMoveCodePointOffset("\ud800\udc00ab", 2, 1, 3);
+        checkMoveCodePointOffset("\ud800\udc00ab", 2, -1, 0);
+        checkMoveCodePointOffset("\ud800\udc00ab", 1, -1, 0);
+        checkMoveCodePointOffset("\ud800\udc00ab", 0, -1, -1);
+        
+        
+        // Supplementary at end of string
+        checkMoveCodePointOffset("ab\ud800\udc00", 1, 1, 2);
+        checkMoveCodePointOffset("ab\ud800\udc00", 2, 1, 4);
+        checkMoveCodePointOffset("ab\ud800\udc00", 3, 1, 4);
+        checkMoveCodePointOffset("ab\ud800\udc00", 4, 1, -1);
+        
+        checkMoveCodePointOffset("ab\ud800\udc00", 5, -2, -1);
+        checkMoveCodePointOffset("ab\ud800\udc00", 4, -1, 2);
+        checkMoveCodePointOffset("ab\ud800\udc00", 3, -1, 2);
+        checkMoveCodePointOffset("ab\ud800\udc00", 2, -1, 1);
+        checkMoveCodePointOffset("ab\ud800\udc00", 1, -1, 0);
+        
+        // Unpaired surrogate in middle
+        checkMoveCodePointOffset("a\ud800b", 0, 1, 1);
+        checkMoveCodePointOffset("a\ud800b", 1, 1, 2);
+        checkMoveCodePointOffset("a\ud800b", 2, 1, 3);
+        
+        checkMoveCodePointOffset("a\udc00b", 0, 1, 1);
+        checkMoveCodePointOffset("a\udc00b", 1, 1, 2);
+        checkMoveCodePointOffset("a\udc00b", 2, 1, 3);
+        
+        checkMoveCodePointOffset("a\udc00\ud800b", 0, 1, 1);
+        checkMoveCodePointOffset("a\udc00\ud800b", 1, 1, 2);
+        checkMoveCodePointOffset("a\udc00\ud800b", 2, 1, 3);
+        checkMoveCodePointOffset("a\udc00\ud800b", 3, 1, 4);
+
+        checkMoveCodePointOffset("a\ud800b", 1, -1, 0);
+        checkMoveCodePointOffset("a\ud800b", 2, -1, 1);
+        checkMoveCodePointOffset("a\ud800b", 3, -1, 2);
+        
+        checkMoveCodePointOffset("a\udc00b", 1, -1, 0);
+        checkMoveCodePointOffset("a\udc00b", 2, -1, 1);
+        checkMoveCodePointOffset("a\udc00b", 3, -1, 2);
+        
+        checkMoveCodePointOffset("a\udc00\ud800b", 1, -1, 0);
+        checkMoveCodePointOffset("a\udc00\ud800b", 2, -1, 1);
+        checkMoveCodePointOffset("a\udc00\ud800b", 3, -1, 2);
+        checkMoveCodePointOffset("a\udc00\ud800b", 4, -1, 3);
+
+        // Unpaired surrogate at start
+        checkMoveCodePointOffset("\udc00ab", 0, 1, 1);
+        checkMoveCodePointOffset("\ud800ab", 0, 2, 2);
+        checkMoveCodePointOffset("\ud800\ud800ab", 0, 3, 3);
+        checkMoveCodePointOffset("\udc00\udc00ab", 0, 4, 4);
+        
+        checkMoveCodePointOffset("\udc00ab", 2, -1, 1);
+        checkMoveCodePointOffset("\ud800ab", 1, -1, 0);
+        checkMoveCodePointOffset("\ud800ab", 1, -2, -1);
+        checkMoveCodePointOffset("\ud800\ud800ab", 2, -1, 1);
+        checkMoveCodePointOffset("\udc00\udc00ab", 2, -2, 0);
+        checkMoveCodePointOffset("\udc00\udc00ab", 2, -3, -1);
+        
+        // Unpaired surrogate at end
+        checkMoveCodePointOffset("ab\udc00\udc00ab", 3, 1, 4);
+        checkMoveCodePointOffset("ab\udc00\udc00ab", 2, 1, 3);
+        checkMoveCodePointOffset("ab\udc00\udc00ab", 1, 1, 2);
+        
+        checkMoveCodePointOffset("ab\udc00\udc00ab", 4, -1, 3);
+        checkMoveCodePointOffset("ab\udc00\udc00ab", 3, -1, 2);
+        checkMoveCodePointOffset("ab\udc00\udc00ab", 2, -1, 1);
+        
+        
+    	                       //01234567890     1     2     3     45678901234
+    	String str = new String("0123456789\ud800\udc00\ud801\udc010123456789");
+    	int move1[] = { 1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 
+                       12, 12, 14, 14, 15, 16, 17, 18, 19, 20,
+                       21, 22, 23, 24};
+    	int move2[] = { 2,  3,  4,  5,  6,  7,  8,  9, 10, 12,
+                       14, 14, 15, 15, 16, 17, 18, 19, 20, 21,
+                       22, 23, 24, -1};
+    	int move3[] = { 3,  4,  5,  6,  7,  8,  9, 10, 12, 14,
+                       15, 15, 16, 16, 17, 18, 19, 20, 21, 22,
+                       23, 24, -1, -1};
+    	int size = str.length();
+    	for (int i = 0; i < size; i ++) {
+            checkMoveCodePointOffset(str, i, 1, move1[i]);
+            checkMoveCodePointOffset(str, i, 2, move2[i]);
+            checkMoveCodePointOffset(str, i, 3, move3[i]);
+    	}
+
+        char strarray[] = str.toCharArray();
+    	if (UTF16.moveCodePointOffset(strarray, 9, 13, 0, 2) != 3) {
+    		errln("FAIL: Moving offset 0 by 2 codepoint in subarray [9, 13] " +
+    		"expected result 3");
+    	}
+    	if (UTF16.moveCodePointOffset(strarray, 9, 13, 1, 2) != 4) {
+    		errln("FAIL: Moving offset 1 by 2 codepoint in subarray [9, 13] " +
+    		"expected result 4");
+    	}
+    	if (UTF16.moveCodePointOffset(strarray, 11, 14, 0, 2) != 3) {
+    		errln("FAIL: Moving offset 0 by 2 codepoint in subarray [11, 14] " 
+    				+ "expected result 3");
+    	}
     }
   
     /**
