@@ -844,19 +844,14 @@ getTaggedArrayUCharsImplementation( const ResourceBundle*   bundle,
     return;
   }
   
-  UHashtable* forEnumerationValues = ((TaggedList*)data)->fHashtableValues;
-  void*                   value;
-  
   numItems = 0;
   int32_t pos = -1;
-  while(value = uhash_OLD_nextElement(forEnumerationValues, &pos)) {
-    if(numItems < maxItems) {
-      itemTags[numItems] = 
-	((const UnicodeString*)uhash_OLD_get(((TaggedList*)data)->fHashtableKeys,
-					 numItems+1))->getUChars();
-      items[numItems] = ((const UnicodeString*)value)->getUChars();
-    }
-    numItems++;
+  const UnicodeString *key, *value;
+  while (((TaggedList*)data)->nextElement(key, value, pos) &&
+         numItems < maxItems) {
+      itemTags[numItems] = key->getUChars();
+      items[numItems] = value->getUChars();
+      numItems++;
   }
 }
 
@@ -879,24 +874,20 @@ ResourceBundle::getTaggedArray( const char             *resourceTag,
   
   // go through the resource once and count how many items there are
   
-  numItems = uhash_count(((TaggedList*)data)->fHashtableValues);
+  numItems = ((TaggedList*)data)->count();
   
   // now create the string arrays and go through the hash table again, this
   // time copying the keys and values into the string arrays
   itemTags = new UnicodeString[numItems];
   items = new UnicodeString[numItems];
   
-  UHashtable* forEnumerationValues = ((TaggedList*)data)->fHashtableValues;
-  void*                   value;
-    
   numItems = 0;
   int32_t pos = -1;
-  while(value = uhash_OLD_nextElement(forEnumerationValues, &pos)) {
-    itemTags[numItems] = 
-      *((const UnicodeString*)uhash_OLD_get(((TaggedList*)data)->fHashtableKeys, 
-					numItems+1));
-    items[numItems] = *((const UnicodeString*)value);
-    numItems++;
+  const UnicodeString *key, *value;
+  while (((TaggedList*)data)->nextElement(key, value, pos)) {
+      itemTags[numItems] = *key;
+      items[numItems] = *value;
+      numItems++;
   }
 }
 
@@ -1025,7 +1016,7 @@ T_ResourceBundle_countArrayItemsImplementation(const ResourceBundle* resourceBun
     numItems = ((StringList*)data)->fCount;
   }
   else if(rbkeyClassID == TaggedList::getStaticClassID()) {
-    numItems =  uhash_count(((TaggedList*)data)->fHashtableValues);
+    numItems =  ((TaggedList*)data)->count();
   }
   else if(rbkeyClassID == String2dList::getStaticClassID()) {
     numItems = ((String2dList*)data)->fRowCount; 

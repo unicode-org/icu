@@ -79,54 +79,38 @@ String2dList::getStaticClassID()
 
 //-----------------------------------------------------------------------------
 
-TaggedList::TaggedList()
-{
-  UErrorCode err = U_ZERO_ERROR;
-  fHashtableValues = uhash_open((UHashFunction)uhash_OLD_hashUString,
-                                uhash_OLD_pointerComparator, &err);
-  uhash_setValueDeleter(fHashtableValues, deleteValue);
-  
-  fHashtableKeys = uhash_open((UHashFunction)uhash_OLD_hashUString,
-                              uhash_OLD_pointerComparator, &err);
+TaggedList::TaggedList() {
+    UErrorCode status = U_ZERO_ERROR;
+    hash = new Hashtable(status);
+    hash->setValueDeleter(uhash_deleteUnicodeString);
 }
   
-TaggedList::~TaggedList()
-{
-  uhash_close(fHashtableValues);
-  uhash_close(fHashtableKeys);
+TaggedList::~TaggedList() {
+    delete hash;
+}
+
+int32_t TaggedList::count() const {
+    return hash->count();
 }
 
 void 
 TaggedList::put(const UnicodeString& tag, 
-		const UnicodeString& data)
-{
-  UErrorCode err = U_ZERO_ERROR;
-  
-  uhash_OLD_putKey(fHashtableValues, 
-	       tag.hashCode() & 0x7FFFFFFF,
-	       (new UnicodeString(data)),
-	       &err);
-  
-  uhash_OLD_putKey(fHashtableKeys,
-	       uhash_count(fHashtableValues),
-	       (new UnicodeString(tag)),
-	       &err);
+		const UnicodeString& data) {
+    UErrorCode status = U_ZERO_ERROR;
+    hash->put(tag, new UnicodeString(data), status);
 }
 
 const UnicodeString* 
-TaggedList::get(const UnicodeString& tag) const
-{
-  return (const UnicodeString*)
-    uhash_OLD_get(fHashtableValues, tag.hashCode() & 0x7FFFFFFF);
+TaggedList::get(const UnicodeString& tag) const {
+    return (const UnicodeString*) hash->get(tag);
 }
 
-void
-TaggedList::deleteValue(void *value)
-{
-  delete (UnicodeString*)value;
+bool_t TaggedList::nextElement(const UnicodeString*& key,
+                               const UnicodeString*& value,
+                               int32_t& pos) const {
+    return hash->nextElement(key, (void*&)value, pos);
 }
 
-  
 UClassID 
 TaggedList::getDynamicClassID() const 
 { return getStaticClassID(); }
