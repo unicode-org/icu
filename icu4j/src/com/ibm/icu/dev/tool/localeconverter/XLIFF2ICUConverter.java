@@ -6,7 +6,7 @@
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/XLIFF2ICUConverter.java,v $ 
 * $Date: 2003/05/19 
-* $Revision: 1.3 $
+* $Revision: 1.4 $
 *
 ******************************************************************************
 */
@@ -29,12 +29,14 @@ import java.io.*;
 import java.util.*;
 
 public class XLIFF2ICUConverter {
+    
     protected String    sourceDir = null;
     protected String    fileName = null;
-    protected String    packageName = null;
     protected String    destDir = null;
+    protected boolean   targetOnly =false;
     protected String    xmlfileName = null;
     protected Document  doc;
+
     
     /**
      * These must be kept in sync with getOptions().
@@ -43,7 +45,7 @@ public class XLIFF2ICUConverter {
     private static final int HELP2 = 1;
     private static final int SOURCEDIR = 2;
     private static final int DESTDIR = 3;
-    private static final int PACKAGE_NAME = 4;
+    private static final int TARGETONLY = 4;
     private static final int FILENAME = 5;
        
     private static final UOption[] options = new UOption[] {
@@ -51,42 +53,56 @@ public class XLIFF2ICUConverter {
         UOption.HELP_QUESTION_MARK(),
         UOption.SOURCEDIR(),
         UOption.DESTDIR(),
-        UOption.PACKAGE_NAME(),
+        UOption.create("target-only", 't', 0),
     };
-    
-    private static int tabCount = 0;
-    private static ArrayList[] buf; 
-    private static ArrayList bundleLang;
-    private static ArrayList bundleName;
-    private static ArrayList bundleList;
-    private static int bundleLen = 0;
-    
-    private static final String RESTYPE = "restype";
-    private static final String RESNAME = "resname";
-    
-    private static final String BODY = "body";
-    private static final String GROUPS = "group";
-    private static final String FILES = "file";
-    private static final String TRANSUNIT = "trans-unit";
-    private static final String BINUNIT = "bin-unit";
-    private static final String TS = "ts";
-    private static final String ORIGINAL = "original";
-    private static final String SOURCELANGUAGE = "source-language";
-    private static final String TARGET = "target";
-    private static final String SOURCE = "source";
-    
-    private static final String INTVECTOR = "intvector";
-    private static final String ARRAYS = "array";
-    private static final String STRINGS = "string";
-    private static final String BIN = "bin";
-    private static final String INTS = "int";
 
-    private static final String HREF = "href";
-    private static final String EXTERNALFILE = "external-file";
-    private static final String CRC = "crc";
-    
-    private static final String LINESEP = System.getProperty("line.separator");
-    private static final String BOM = "\uFEFF";
+    private static final String RESTYPE         = "restype";
+    private static final String RESNAME         = "resname";
+    private static final String YES             = "yes";
+    private static final String NO              = "no";
+    private static final String TRANSLATE       = "translate";
+    private static final String BODY            = "body";
+    private static final String GROUPS          = "group";
+    private static final String FILES           = "file";
+    private static final String TRANSUNIT       = "trans-unit";
+    private static final String BINUNIT         = "bin-unit";
+    private static final String BINSOURCE       = "bin-source";
+    private static final String TS              = "ts";
+    private static final String ORIGINAL        = "original";
+    private static final String SOURCELANGUAGE  = "source-language";
+    private static final String TARGET          = "target";
+    private static final String SOURCE          = "source";
+    private static final String NOTE            = "note";
+    private static final String XMLLANG         = "xml:lang";
+    private static final String FILE            = "file";
+    private static final String INTVECTOR       = "intvector";
+    private static final String ARRAYS          = "array";
+    private static final String STRINGS         = "string";
+    private static final String BIN             = "bin";
+    private static final String INTS            = "int";
+    private static final String TABLE           = "table";
+    private static final String IMPORT          = "import";
+    private static final String HREF            = "href";
+    private static final String EXTERNALFILE    = "external-file";
+    private static final String INTERNALFILE    = "internal-file";
+    private static final String ALTTRANS        = "alt-trans";
+    private static final String CRC             = "crc";
+    private static final String ALIAS           = "alias";
+    private static final String LINESEP         = System.getProperty("line.separator");
+    private static final String BOM             = "\uFEFF";
+    private static final String CHARSET         = "UTF-8";
+    private static final String OPENBRACE       = "{";
+    private static final String CLOSEBRACE      = "}";
+    private static final String COLON           = ":";
+    private static final String COMMA           = ",";
+    private static final String QUOTE           = "\"";
+    private static final String COMMENTSTART    = "/**";
+    private static final String COMMENTEND      = " */";
+    private static final String TAG             = " * @ ";
+    private static final String COMMENTMIDDLE   = " * ";
+    private static final String SPACE           = " ";
+    private static final String INDENT          = "    ";
+    private static final String EMPTY           = "";
     
     public static void main(String[] args) {
         XLIFF2ICUConverter cnv = new XLIFF2ICUConverter();
@@ -104,61 +120,30 @@ public class XLIFF2ICUConverter {
         if(options[DESTDIR].doesOccur) {
             destDir = options[DESTDIR].value;
         }
-        if(options[PACKAGE_NAME].doesOccur) {
-            packageName = options[PACKAGE_NAME].value;
+        if(options[TARGETONLY].doesOccur){
+            targetOnly = true;
         }
-        
+        if(destDir==null){
+            destDir = ".";
+        }
         for (int i = 0; i < remainingArgc; i++) {
-            tabCount = 0;
             int lastIndex = args[i].lastIndexOf(File.separator, args[i].length()) + 1; /* add 1 to skip past the separator */
             fileName = args[i].substring(lastIndex, args[i].length());
-            convert(args[i]);
+            xmlfileName = getFullPath(false,args[i]);
+            System.out.println("Processing file: "+xmlfileName);
+            createRB(xmlfileName);
         }
-    }
-    
-    private void convert(String fileName) {
-        xmlfileName = getFullPath(false,fileName);
-
-        bundleName = new ArrayList();
-        bundleLang = new ArrayList();
-        bundleList = new ArrayList();
-
-        createRB(xmlfileName);
-
-        bundleLen = bundleList.size();
-
-        if(bundleLen == 0) {
-            boolean b;
-            b = bundleList.add(getFullPath(true, fileName));
-            if(b==false){
-                throw new RuntimeException("Could add "+fileName + "to bundleList");
-            }
-            int lastIndex = fileName.lastIndexOf('.', fileName.length());
-            b = bundleName.add(fileName.substring(0, lastIndex));
-            if(b==false){
-                throw new RuntimeException("Could add "+fileName.substring(0, lastIndex) + "to bundleList");
-            }
-            bundleLen++;
-        }
-        
-        buf = new ArrayList[bundleLen];
-        for(int s = 0; s < bundleLen; s++) {
-            buf[s] =  new ArrayList();
-        }
-        doc = parse(xmlfileName);
-        wirteAll();
     }
     
     private void usage() {
         System.out.println("\nUsage: XLIFF2ICUConverter [OPTIONS] [FILES]\n\n"+
-            "This program is used to convert XML files to TXT files.\n"+
-            "Please refer to the following options. Options are not \n"+
-            "case sensitive.\n"+
+            "This program is used to convert XLIFF files to ICU ResourceBundle TXT files.\n"+
+            "Please refer to the following options. Options are not case sensitive.\n"+
             "Options:\n"+
             "-s or --sourcedir    source directory for files followed by path, default is current directory.\n" +
             "-d or --destdir      destination directory, followed by the path, default is current directory.\n" +
-            "-p or --package-name user may specify the package name explicitly.\n" +
             "-h or -? or --help   this usage text.\n"+
+            "-t or --target-only  only generate the target language txt file.\n" +
             "example: XLIFF2ICUConverter -s xxx -d yyy myResources.xml");
     }
     
@@ -167,18 +152,32 @@ public class XLIFF2ICUConverter {
         int lastIndex1 = fName.lastIndexOf(File.separator, fName.length()) + 1; /*add 1 to skip past the separator*/
         int lastIndex2 = fName.lastIndexOf('.', fName.length());
         if (fileType == true) {
+            if(lastIndex2 == -1){
+                fName = fName.trim() + ".txt";
+            }else{
+                if(!fName.substring(lastIndex2).equalsIgnoreCase(".txt")){
+                    fName =  fName.substring(lastIndex1,lastIndex2) + ".txt";
+                }
+            }
             if (destDir != null && fName != null) {
-                str = destDir + File.separator + fName.substring(lastIndex1, lastIndex2) + ".txt";                   
+                str = destDir + File.separator + fName.trim();                   
             } else {
-                str = System.getProperty("user.dir") + File.separator + fName.substring(lastIndex1, lastIndex2) + ".txt";
+                str = System.getProperty("user.dir") + File.separator + fName.trim();
             }
         } else {
+            if(lastIndex2 == -1){
+                fName = fName.trim() + ".xlf";
+            }else{
+                if(!fName.substring(lastIndex2).equalsIgnoreCase(".xml") && fName.substring(lastIndex2).equalsIgnoreCase(".xlf")){
+                    fName = fName.substring(lastIndex1,lastIndex2) + ".xlf";
+                }
+            }
             if(sourceDir != null && fName != null) {
-                str = sourceDir + File.separator + fName.substring(lastIndex1, lastIndex2) + ".xlf";
+                str = sourceDir + File.separator + fName;
             } else if (lastIndex1 > 0) {
                 str = fName;
             } else {
-                str = System.getProperty("user.dir") + File.separator + fName.substring(lastIndex1, lastIndex2) + ".xlf";
+                str = System.getProperty("user.dir") + File.separator + fName;
             }
         }
         return str;
@@ -188,195 +187,7 @@ public class XLIFF2ICUConverter {
     private static int transID = -1;
     private static boolean isIntvector = false;
     
-    private void writeRB(Node doc) {
-        String resType = "string";
-        String resName = "";
-        String resValue = "";
-        switch(doc.getNodeType()){
-            case Node.ATTRIBUTE_NODE: {
-                break;
-            }
-            case Node.CDATA_SECTION_NODE: {
-                break;
-            }
-            case Node.COMMENT_NODE: {
-            }
-            case Node.DOCUMENT_FRAGMENT_NODE: {
-                break;
-            }
-            case Node.DOCUMENT_NODE: {
-                Node child = doc.getFirstChild();
-                while( child != null) {
-                    writeRB(child);
-                    child = child.getNextSibling();
-                }
-                break;
-            }
-            case Node.DOCUMENT_TYPE_NODE: {
-                break;
-            }
-            
-            case Node.ELEMENT_NODE: {
-                crc = "";
-                NamedNodeMap attributes = doc.getAttributes();
-                int attrCount = attributes.getLength();
-                
-                for (int i = 0; i < attrCount; i++) {
-                    Node  attribute = attributes.item(i);
-                    if (attribute.getNodeName().equals(RESTYPE)) {
-                        resType = attribute.getNodeValue();
-                        if (resType.equals(INTVECTOR)) {
-                            isIntvector = true;
-                        }
-                    } else if (attribute.getNodeName().equals(RESNAME)) {
-                        resName = attribute.getNodeValue();
-                    } else if (attribute.getNodeName().equals(HREF)) {
-                        resValue = attribute.getNodeValue();
-                    } else if (attribute.getNodeName().equals(CRC)) {
-                        crc = attribute.getNodeValue();
-                    }
-                }
-                                
-                if(doc.getNodeName().equals(GROUPS) && doc.getParentNode().getNodeName().equals(BODY)) {
-                    transID = -1;
-                    for(int s = 0; s < bundleLen; s++){
-                        Calendar c = Calendar.getInstance();
-                        buf[s].add("// ***************************************************************************" + LINESEP);
-                        buf[s].add("// *" + LINESEP);
-                        buf[s].add("// * Tool: com.ibm.icu.dev.tool.localeconverter.XLIFF2ICUConverter.java" + LINESEP);
-                        buf[s].add("// * Date & Time: " + c.get(Calendar.YEAR) + "/" + (c.get(Calendar.MONTH)+1) + "/" + c.get(Calendar.DAY_OF_MONTH) + " " + c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE)+ LINESEP);
-                        buf[s].add("// * Source File: " + fileName + LINESEP);
-                        buf[s].add("// *" + LINESEP);                    
-                        buf[s].add("// ***************************************************************************" + LINESEP);
-                        buf[s].add(LINESEP);
-                        buf[s].add(LINESEP);                                        
-                        buf[s].add((String)bundleName.get(s) + "{" + LINESEP);
-                        
-                    }
-                } else if (doc.getNodeName().equals(GROUPS)){
-                    transID = -1;
-                    if (!isIntvector) {
-                        writeTabs();
-                        tabCount++;
-                        for(int s = 0; s < bundleLen; s++){
-                            buf[s].add(resName + ":" + resType + "{" + LINESEP);
-                        }
-                    } else {
-                        writeTabs();
-                        tabCount++;
-                        for(int s = 0; s < bundleLen; s++){
-                            buf[s].add(resName + ":" + INTVECTOR + "{" + LINESEP);
-                        }
-                    }
-                } else if (doc.getNodeName().equals(TRANSUNIT)||doc.getNodeName().equals(BINUNIT)){
-                    writeTabs();
-                    if (resType.equals(STRINGS)) {
-                        transID = 0;
-                    } else{
-                        transID = -1;
-                    }
-                    
-                    if (resType.equals(STRINGS)||resType.equals(BIN)) {
-                        for(int s = 0; s < bundleLen; s++){
-                            buf[s].add(resName + ":" + resType + "{\"");    
-                        }
-                    } else if (resType.equals(INTS) && isIntvector){
-                    } else {
-                        for(int s = 0; s < bundleLen; s++){
-                            buf[s].add(resName + ":" + resType + "{");
-                        }
-                    }
-                } else if (doc.getNodeName().equals(EXTERNALFILE)) {
-                    for(int s = 0; s < bundleLen; s++){
-                        buf[s].add("\"" + resValue + "\"");     
-                    }
-                }
-                
-                Node child = doc.getFirstChild();
-                if (child != null) {
-                    while( child != null) {
-                        writeRB(child);
-                        child = child.getNextSibling();
-                    }
-                }
-                if(doc.getNodeName().equals(GROUPS)) {
-                    tabCount--;
-                    writeTabs();
-                    for(int s = 0; s < bundleLen; s++){
-                        buf[s].add("}" + LINESEP);     
-                    }
-                    isIntvector = false;
-                }else if (doc.getNodeName().equals(TRANSUNIT)||doc.getNodeName().equals(BINUNIT)){
-                    if (resType.equals(STRINGS)||resType.equals(BIN)) {
-                        for(int s = 0; s < bundleLen; s++){
-                           buf[s].add("\"}" + LINESEP);     
-                        }
-                    } else if (resType.equals(INTS)&&isIntvector){
-                        for(int s = 0; s < bundleLen; s++){
-                           buf[s].add("," + LINESEP);   
-                        }
-                    } else {
-                        for(int s = 0; s < bundleLen; s++){
-                           buf[s].add("}" + LINESEP);   
-                        }
-                    }
-                }
-                break;
-            }
-            case Node.ENTITY_NODE: {
-                break;
-            }
-            case Node.ENTITY_REFERENCE_NODE: {
-                break;
-            }
-            case Node.NOTATION_NODE: {
-                break;
-            }
-            case Node.PROCESSING_INSTRUCTION_NODE: {
-                break;
-            }
-            case Node.TEXT_NODE: {
-                try {   
-                    int index = doc.getNodeValue().indexOf("\"");
-                    if(index != -1) {
-                        resValue = doc.getNodeValue().replaceAll("\"", "\\\\\"");
-                    } else {
-                        resValue = doc.getNodeValue();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                
-                
-                if (transID == -1) {
-                    if (!crc.equals("")){
-                        if ((int)(resValue.charAt(0))!= 10){
-                            if(Integer.parseInt(crc, 10) != CalculateCRC32.computeCRC32(resValue)) {
-                                System.out.println("crc error! Please check.");
-                                System.exit(1);
-                              } else {
-                                  crc = "";
-                              }
-                        }
-                    }
-                    for(int s = 0; s < bundleLen; s++){
-                        if ((int)(resValue.charAt(0))!= 10){
-                            buf[s].add(resValue);
-                        }
-                    }
-                } else {
-                    if ((int)(resValue.charAt(0))!= 10){
-                        buf[transID].add(resValue);
-                        transID++;
-                    }
-                }
-                break;
-            }
-            default:
-                System.err.println("Unrecongized node type");
-        }
-    } 
-    
+
     /**
      * Utility method to translate a String filename to URL.  
      *
@@ -412,7 +223,7 @@ public class XLIFF2ICUConverter {
             || filename.startsWith("news:")
             || filename.startsWith("telnet:")
            )
-            return filename;
+        return filename;
 
         File f = new File(filename);
         String tmp = null;
@@ -443,16 +254,24 @@ public class XLIFF2ICUConverter {
 
     }
 
+    
     private void createRB(String docsrc) {
-        boolean tag = false;
-        
+       
         String urls = filenameToURL(docsrc);
         DocumentBuilderFactory dfactory = DocumentBuilderFactory.newInstance();
         dfactory.setNamespaceAware(true);
+        dfactory.setValidating(true);
         
         ErrorHandler nullHandler = new ErrorHandler() {
-            public void warning(SAXParseException e) throws SAXException {/*System.err.println("Warning: " + e.getMessage());*/}
-            public void error(SAXParseException e) throws SAXException {System.err.println("Error: " + e.getMessage());}
+            public void warning(SAXParseException e) throws SAXException {
+                            
+            }
+            public void error(SAXParseException e) throws SAXException {
+                System.err.println("The XLIFF document is invalid, please check it first: ");
+                System.err.println("Line "+e.getLineNumber()+", Column "+e.getColumnNumber());
+                System.err.println("Error: " + e.getMessage());
+                System.exit(0);
+            }
             public void fatalError(SAXParseException e) throws SAXException {
                 throw e;
             }
@@ -463,176 +282,729 @@ public class XLIFF2ICUConverter {
             docBuilder.setErrorHandler(nullHandler);
             doc = docBuilder.parse(new InputSource(urls));
             
-            String pkg = "";
-            String f = "";
-            String lg = "";
-            NodeList nlist1 = doc.getElementsByTagName(FILES);
-            for (int i = 0; i < nlist1.getLength(); i++) {
-                Node n = nlist1.item(i);
-                NamedNodeMap attributes = n.getAttributes();
-                int attrCount = attributes.getLength();
-                for (int k = 0; k < attrCount; k++) {
-                    Node  attribute = attributes.item(k);
-                    if (attribute.getNodeName().equals(TS)) {
-                        pkg = attribute.getNodeValue();
-                    }
-                    if (attribute.getNodeName().equals(ORIGINAL)) {
-                        f = attribute.getNodeValue();
-                    }
-                    if (attribute.getNodeName().equals(SOURCELANGUAGE)) {
-                        lg = attribute.getNodeValue();
-                    }
-                }
+            NodeList nlist = doc.getElementsByTagName(FILES);
+            if(nlist.getLength()>1){
+                throw new RuntimeException("Multiple <file> elements in the XLIFF file not supported.");
             }
-            if(packageName != null) {
-                pkg = packageName;
+            NodeList sourceList = doc.getElementsByTagName(SOURCE);
+            NodeList targetList = doc.getElementsByTagName(TARGET);
+            Resource[] set = new Resource[2];
+            set[0] = new ResourceTable();
+            set[1] = new ResourceTable();
+            set[0].name = getSourceBundleName(doc);
+            
+            // check if the xliff file is translated into multiple languages
+            checkLangAttribute(sourceList);
+            set[1].name = checkLangAttribute(targetList);
+            
+            // check if any <alt-trans> elements are present
+            NodeList altTrans = doc.getElementsByTagName(ALTTRANS);
+            if(altTrans.getLength()>0){
+                throw new RuntimeException("<alt-trans> elements in XLIFF format are not supported.");
             }
-            if(pkg.equals("")) {
-                NodeList nlist = doc.getElementsByTagName(TARGET);
-                if(nlist.getLength()> 0) {
-                    System.out.println("There are translation items in the file. Please specify the package name using \"-p packageName\" in the command line.");
-                    System.exit(0);
-                }
-                boolean b;
-                b = bundleLang.add(lg);
-                if(b==false){
-                    throw new RuntimeException("Could not add "+lg+" to bundleLang");
-                }
-                int lastIndex = f.lastIndexOf('.', f.length());
-                b = bundleName.add(f.substring(0, lastIndex));
-                if(b==false){
-                    throw new RuntimeException("Could not add "+f.substring(0, lastIndex)+" to bundleName");
-                }
-                b = bundleList.add(getFullPath(true,f));
-                if(b==false){
-                    throw new RuntimeException("Could not add "+getFullPath(true,f)+" to bundleList");
-                }
-            } else {
-                NodeList nlist = doc.getElementsByTagName(TRANSUNIT);
-                for(int i = 0; i < nlist.getLength(); i++) {
-                    String resType = "string";
-                    Node n = nlist.item(i);
-                    
-                    NamedNodeMap attributes = n.getAttributes();
-                    int attrCount = attributes.getLength();
-                    for (int k = 0; k < attrCount; k++) {
-                        Node  attribute = attributes.item(k);
-                        if (attribute.getNodeName().equals(RESTYPE)) {
-                            resType = attribute.getNodeValue();
-                        }
-                    }
-                    
-                    if (resType.equals(STRINGS)) {
-                        NodeList nlist2 = n.getChildNodes();
-                        for(int j = 0; j < nlist2.getLength(); j++) {
-                            Node n2 = nlist2.item(j);
-                            if(n2.getNodeName().equals(TARGET)||n2.getNodeName().equals(SOURCE)) {
-                                NamedNodeMap att =  n2.getAttributes();
-                                String lang = att.item(0).getNodeValue();
-                                String name = pkg + "_" + lang;
-                                boolean b;
-                                b = bundleLang.add(lang);
-                                if(b==false){
-                                    throw new RuntimeException("Could not add "+lang+" to bundleLang");
-                                }
-                                b = bundleName.add(name);
-                                if(b==false){
-                                    throw new RuntimeException("Could not add "+name+" to bundleName");
-                                }
-                                b = bundleList.add(getFullPath(true, name + ".txt"));
-                                if(b==false){
-                                    throw new RuntimeException("Could not add "+getFullPath(true, name + ".txt")+" to bundleList");
-                                }
-                                tag = true;
-                            }
-                        }
-                    }
-                    if(tag){
-                        break;
-                    }
-                }                    
-            }
-        }
+
+            NodeList list = doc.getElementsByTagName(GROUPS);
+            parseTable(list.item(0), set);
+            writeResource(set, targetOnly);
+         }
         catch (Throwable se) {
             System.out.println("ERROR :" + se.toString());
+            System.exit(1);
         }        
     }
     
-    private Document parse(String docsrc) {
-        String urls = filenameToURL(docsrc);
-        DocumentBuilderFactory dfactory = DocumentBuilderFactory.newInstance();
-        dfactory.setNamespaceAware(true);
-        
-        ErrorHandler nullHandler = new ErrorHandler() {
-            public void warning(SAXParseException e) throws SAXException {/*System.err.println("Warning: " + e.getMessage());*/}
-            public void error(SAXParseException e) throws SAXException {System.err.println("Error: " + e.getMessage());}
-            public void fatalError(SAXParseException e) throws SAXException {
-                throw e;
-            }
-        };
-        
+    private void writeResource(Resource[] set, boolean tragetOnly){
+        if(targetOnly==false){
+            writeResource(set[0], xmlfileName);
+        }
+        if(targetOnly==true && set[1].name == null){
+            throw new RuntimeException("The "+ xmlfileName +" does not contain translation\n");
+        }
+        if(set[1].name != null){
+            writeResource(set[1], xmlfileName);
+        }
+       
+    }
+    private void writeResource(Resource set, String sourceFileName){
         try {
-            DocumentBuilder docBuilder = dfactory.newDocumentBuilder();
-            docBuilder.setErrorHandler(nullHandler);
-            doc = docBuilder.parse(new InputSource(urls));
-            writeRB(doc);
+            String outputFileName = destDir+File.separator+set.name+".txt";
+            FileOutputStream file = new FileOutputStream(outputFileName);
+            BufferedOutputStream writer = new BufferedOutputStream(file);
+            writeBOM(writer);
+            writeHeader(writer,sourceFileName);
+            
+            //Now start writing the resource;
+            Resource current = set;
+            while(current!=null){
+                current.write(writer, 0, false);
+                current = current.next;
+            }
+            writer.flush();
+            writer.close();
+        } catch (Exception ie) {
+            System.out.println("ERROR :" + ie.toString());
+            return;
         }
-        catch (Throwable se) {
-
-            System.out.println("ERROR :" + se.toString());
-        }        
-        return doc;
+    }
+    private String getSourceBundleName(Document doc){
+        if(doc!=null){
+            NodeList list = doc.getElementsByTagName(FILE);
+            Node node = list.item(0);
+            NamedNodeMap attr = node.getAttributes();
+            Node orig = attr.getNamedItem("original");
+            String name = orig.getNodeValue();
+            return name.substring(0,name.indexOf("."));
+        }
+        return null;
     }
     
-    private static void writeTabs(){
-        int i=0;
-        for(;i<=tabCount;i++){
-            for(int s = 0; s < bundleLen; s++){
-                buf[s].add("    ");
+    // check if the xliff file is translated into multiple languages
+    // The XLIFF specification allows for single <target> element
+    // as the child of <trans-unit> but the attributes of the 
+    // <target> element may different across <trans-unit> elements
+    // check for it. Similar is the case with <source> elements
+    private String checkLangAttribute(NodeList list){
+        String oldLangName=null;
+        for(int i = 0 ;i<list.getLength(); i++){
+            Node node = list.item(i);
+            NamedNodeMap attr = node.getAttributes();
+            Node lang = attr.getNamedItem(XMLLANG);
+            // the source file sometimes may not contain xml:lang attribute
+            if(lang==null && node.getNodeName().equals(SOURCE)){
+                continue;
+            }
+            String langName = lang.getNodeValue();
+            if(i==0){
+                oldLangName = langName;
+            }
+            if(!langName.equals(oldLangName)){
+                throw new RuntimeException("The <trans-unit> elements must be bilingual, multilingual tranlations not supported. xml:lang = " + oldLangName + 
+                                           " and xml:lang = " + langName);
             }
         }
+        return oldLangName;
     }
     
-    private static void wirteAll() {
-        FileOutputStream file = null;
-        BufferedOutputStream buffer = null;
-
-        for(int s = 0; s < bundleLen; s++){        
+    private class Resource{
+        String[] note = new String[20];
+        int noteLen = 0;
+        String translate;
+        String comment;
+        String name;
+        Resource next;
+        public void write(OutputStream writer, int numIndent, boolean bare){
+            while(next!=null){
+                next.write(writer, numIndent+1, false);
+            }
+        }
+        public void writeIndent(OutputStream writer, int numIndent){
+            for(int i=0; i< numIndent; i++){
+                write(writer,INDENT);
+            }
+        }
+        public void write(OutputStream writer, String value){
             try {
-                file = new FileOutputStream((String)bundleList.get(s));
-                buffer = new BufferedOutputStream(file);
-            } catch (Exception ie) {
-                System.out.println("ERROR :" + ie.toString());
-                return;
+                byte[] bytes = value.getBytes(CHARSET);
+                writer.write(bytes, 0, bytes.length);
+            } catch(Exception e) {
+                System.err.println(e);
+                System.exit(1);
             }
-            writeBOM(buffer, "UTF-8");
-            for(int t = 0; t < buf[s].size(); t++){
-                WriteLine(buffer, (String)(buf[s].get(t)), "UTF-8");
+        }
+        public void writeComments(OutputStream writer, int numIndent){
+            if(comment!=null || translate != null || noteLen > 0){
+                // print the start of the comment
+                writeIndent(writer, numIndent);
+                write(writer, COMMENTSTART+LINESEP);
+                
+                // print comment if any
+                if(comment!=null){
+                    writeIndent(writer, numIndent);
+                    write(writer, COMMENTMIDDLE);
+                    write(writer, comment);
+                    write(writer, LINESEP);
+                }
+                
+                // print the translate attribute if any
+                if(translate!=null){
+                    writeIndent(writer, numIndent);
+                    write(writer, TAG+TRANSLATE+SPACE);
+                    write(writer, translate);
+                    write(writer, LINESEP);
+                }
+                
+                // print note elements if any
+                for(int i=0; i<noteLen; i++){
+                    if(note[i]!=null){
+                        writeIndent(writer, numIndent);
+                        write(writer, TAG+NOTE+SPACE+note[i]);
+                        write(writer, LINESEP);
+                    }
+                }
+                
+                // terminate the comment
+                writeIndent(writer, numIndent);
+                write(writer, COMMENTEND+LINESEP);
+            }          
+        }
+    }
+
+    private class ResourceString extends Resource{
+        String val;
+        public void write(OutputStream writer, int numIndent, boolean bare){
+            writeComments(writer, numIndent);
+            writeIndent(writer, numIndent);
+            if(bare==true){
+                if(name!=null){
+                    throw new RuntimeException("Bare option is set to true but the resource has a name!");
+                }
+                write(writer,QUOTE+val+QUOTE); 
+            }else{
+                write(writer, name+COLON+STRINGS+ OPENBRACE + QUOTE + val + QUOTE+ CLOSEBRACE + LINESEP);
             }
-            try {
-                buffer.flush();
-                buffer.close();
-                file.close();
-            } catch (IOException ie) {
-                System.err.println(ie);
-                return;
+        }
+    }
+    private class ResourceAlias extends Resource{
+        String val;
+        public void write(OutputStream writer, int numIndent, boolean bare){
+            writeComments(writer, numIndent);
+            writeIndent(writer, numIndent);
+            String line =  ((name==null)? EMPTY: name)+COLON+ALIAS+ OPENBRACE+QUOTE+val+QUOTE+CLOSEBRACE;
+            if(bare==true){
+                if(name!=null){
+                    throw new RuntimeException("Bare option is set to true but the resource has a name!");
+                }
+                write(writer,line); 
+            }else{
+                write(writer, line+LINESEP);
+            }
+        }
+    }
+    private class ResourceInt extends Resource{
+        String val;
+        public void write(OutputStream writer, int numIndent, boolean bare){
+            writeComments(writer, numIndent);
+            writeIndent(writer, numIndent);
+            String line =  ((name==null)? EMPTY: name)+COLON+INTS+ OPENBRACE + val +CLOSEBRACE;
+            if(bare==true){
+                if(name!=null){
+                    throw new RuntimeException("Bare option is set to true but the resource has a name!");
+                }
+                write(writer,line); 
+            }else{
+                write(writer, line+LINESEP);
+            }
+        }
+    }
+    private class ResourceBinary extends Resource{
+        String internal;
+        String external;
+        public void write(OutputStream writer, int numIndent, boolean bare){
+            writeComments(writer, numIndent);
+            writeIndent(writer, numIndent);
+            if(internal==null){
+                String line = ((name==null) ? EMPTY : name)+COLON+IMPORT+ OPENBRACE+QUOTE+external+QUOTE+CLOSEBRACE + ((bare==true) ?  EMPTY : LINESEP);
+                write(writer, line);
+            }else{
+                String line = ((name==null) ? EMPTY : name)+COLON+BIN+ OPENBRACE+internal+CLOSEBRACE+ ((bare==true) ?  EMPTY : LINESEP);
+                write(writer,line);
+            }
+            
+        }
+    }
+    private class ResourceIntVector extends Resource{
+        ResourceInt first;
+        public void write(OutputStream writer, int numIndent, boolean bare){
+            writeComments(writer, numIndent);
+            writeIndent(writer, numIndent);
+            write(writer, name+COLON+INTVECTOR+OPENBRACE+LINESEP);
+            numIndent++;
+            ResourceInt current = (ResourceInt) first;
+            while(current != null){
+                //current.write(writer, numIndent, true);
+                writeIndent(writer, numIndent);
+                write(writer, current.val);
+                write(writer, COMMA+LINESEP);
+                current = (ResourceInt) current.next;
+            }
+            numIndent--;
+            writeIndent(writer, numIndent);
+            write(writer, CLOSEBRACE+LINESEP);
+        }
+    }
+    private class ResourceTable extends Resource{
+        Resource first;
+        public void write(OutputStream writer, int numIndent, boolean bare){
+            writeComments(writer, numIndent);
+            writeIndent(writer, numIndent);
+            write(writer, name+OPENBRACE+LINESEP);
+            numIndent++;
+            Resource current = first;
+            while(current != null){
+                current.write(writer, numIndent, false);
+                current = current.next;
+            }
+            numIndent--;
+            writeIndent(writer, numIndent);
+            write(writer, CLOSEBRACE+LINESEP);
+        }
+    }
+    private class ResourceArray extends Resource{
+        Resource first;
+        public void write(OutputStream writer, int numIndent, boolean bare){
+            writeComments(writer, numIndent);
+            writeIndent(writer, numIndent);
+            write(writer, name+COLON+ARRAYS+OPENBRACE+LINESEP);
+            numIndent++;
+            Resource current = first;
+            while(current != null){
+                current.write(writer, numIndent, true);
+                write(writer, COMMA+LINESEP);
+                current = current.next;
+            }
+            numIndent--;
+            writeIndent(writer, numIndent);
+            write(writer, CLOSEBRACE+LINESEP);
+        }
+    }
+    
+    private String getAttributeValue(Node sNode, String attribName){
+        String value=null;
+        Node node = sNode;
+
+        NamedNodeMap attributes = node.getAttributes();
+        Node attr = attributes.getNamedItem(attribName);
+        if(attr!=null){
+            value = attr.getNodeValue();
+        }
+
+        return value;
+    }
+    
+    private void parseResourceString(Node node, ResourceString[] set){
+        ResourceString currentSource;
+        ResourceString currentTarget;
+        currentSource =  set[0];
+        currentTarget =  set[1];
+        String resName   = getAttributeValue(node, RESNAME);
+        String translate = getAttributeValue(node, TRANSLATE);
+        
+        // loop to pickup <source>, <note> and <target> elements
+        for(Node transUnit = node.getFirstChild(); transUnit!=null; transUnit = transUnit.getNextSibling()){
+            short type = transUnit.getNodeType();
+            String name = transUnit.getNodeName();
+            if(type == Node.COMMENT_NODE){
+                // get the comment
+               currentSource.comment =  currentTarget.comment = transUnit.getNodeValue();
+            }else if( type == Node.ELEMENT_NODE){
+                if(name.equals(SOURCE)){
+                    // save the source and target values
+                    currentSource.name = currentTarget.name = resName;
+                    currentSource.val = currentTarget.val = transUnit.getFirstChild().getNodeValue();
+                    currentSource.translate = currentTarget.translate = translate;
+                }else if(name.equals(NOTE)){
+                    // save the note values
+                    currentSource.note[currentSource.noteLen++] = 
+                        currentTarget.note[currentTarget.noteLen++] =
+                        transUnit.getFirstChild().getNodeValue();
+                }else if(name.equals(TARGET)){
+                    // if there is a target element replace it
+                    currentTarget.val = transUnit.getFirstChild().getNodeValue();
+                }
+            }
+            
+        }
+    }
+
+    private void parseResourceInt(Node node, ResourceInt[] set){
+        ResourceInt currentSource;
+        ResourceInt currentTarget;
+        currentSource =  set[0];
+        currentTarget =  set[1];
+        String resName   = getAttributeValue(node, RESNAME);
+        String translate = getAttributeValue(node, TRANSLATE);
+        // loop to pickup <source>, <note> and <target> elements
+        for(Node transUnit = node.getFirstChild(); transUnit!=null; transUnit = transUnit.getNextSibling()){
+            short type = transUnit.getNodeType();
+            String name = transUnit.getNodeName();
+            if(type == Node.COMMENT_NODE){
+                // get the comment
+               currentSource.comment =  currentTarget.comment = transUnit.getNodeValue();
+            }else if( type == Node.ELEMENT_NODE){
+                if(name.equals(SOURCE)){
+                    // save the source and target values
+                    currentSource.name = currentTarget.name = resName;
+                    currentSource.translate = currentTarget.translate = translate;
+                    currentSource.val = currentTarget.val = transUnit.getFirstChild().getNodeValue();
+                }else if(name.equals(NOTE)){
+                    // save the note values
+                    currentSource.note[currentSource.noteLen++] = 
+                        currentTarget.note[currentTarget.noteLen++] =
+                        transUnit.getFirstChild().getNodeValue();
+                }else if(name.equals(TARGET)){
+                    // if there is a target element replace it
+                    currentTarget.val = transUnit.getFirstChild().getNodeValue();
+                }
+            }
+            
+        }
+    }
+    
+    private void parseResourceAlias(Node node, ResourceAlias[] set){
+        ResourceAlias currentSource;
+        ResourceAlias currentTarget;
+        currentSource =  set[0];
+        currentTarget =  set[1];
+        String resName   = getAttributeValue(node, RESNAME);
+        String translate = getAttributeValue(node, TRANSLATE);
+        // loop to pickup <source>, <note> and <target> elements
+        for(Node transUnit = node.getFirstChild(); transUnit!=null; transUnit = transUnit.getNextSibling()){
+            short type = transUnit.getNodeType();
+            String name = transUnit.getNodeName();
+            if(type == Node.COMMENT_NODE){
+                // get the comment
+               currentSource.comment =  currentTarget.comment = transUnit.getNodeValue();
+            }else if( type == Node.ELEMENT_NODE){
+                if(name.equals(SOURCE)){
+                    // save the source and target values
+                    currentSource.name = currentTarget.name = resName;
+                    currentSource.translate = currentTarget.translate = translate;
+                    currentSource.val = currentTarget.val = transUnit.getFirstChild().getNodeValue();
+                }else if(name.equals(NOTE)){
+                    // save the note values
+                    currentSource.note[currentSource.noteLen++] = 
+                        currentTarget.note[currentTarget.noteLen++] =
+                        transUnit.getFirstChild().getNodeValue();
+                }else if(name.equals(TARGET)){
+                    // if there is a target element replace it
+                    currentTarget.val = transUnit.getFirstChild().getNodeValue();
+                }
+            }
+            
+        }
+    }
+    private void parseResourceBinary(Node node, ResourceBinary[] set){
+        ResourceBinary currentSource;
+        ResourceBinary currentTarget;
+        currentSource =  set[0];
+        currentTarget =  set[1];
+
+        // loop to pickup <source>, <note> and <target> elements
+        for(Node transUnit = node.getFirstChild(); transUnit!=null; transUnit = transUnit.getNextSibling()){
+            short type = transUnit.getNodeType();
+            String name = transUnit.getNodeName();
+            if(type == Node.COMMENT_NODE){
+                // get the comment
+               currentSource.comment =  currentTarget.comment = transUnit.getNodeValue();
+            }else if( type == Node.ELEMENT_NODE){
+                if(name.equals(BINSOURCE)){
+                    // loop to pickup internal-file/extenal-file element
+                    continue;
+                }else if(name.equals(NOTE)){
+                    // save the note values
+                    currentSource.note[currentSource.noteLen++] = 
+                        currentTarget.note[currentTarget.noteLen++] =
+                        transUnit.getFirstChild().getNodeValue();
+                }else if(name.equals(INTERNALFILE)){
+                    // if there is a target element replace it
+                    String crc = getAttributeValue(transUnit, CRC);
+                    String value = transUnit.getFirstChild().getNodeValue();
+                    
+                    //verify that the binary value conforms to the CRC
+                    if(Integer.parseInt(crc, 10) != CalculateCRC32.computeCRC32(value)) {
+                        System.out.println("crc error! Please check.");
+                        System.exit(1);
+                    }
+                    
+                    currentTarget.internal = currentSource.internal= value;
+                    
+                }else if(name.equals(EXTERNALFILE)){
+                    String fileName = getAttributeValue(transUnit, HREF);
+                    currentTarget.external = currentSource.external = fileName;
+                }
+            }
+            
+        }
+    }
+    private void parseTransUnit(Node node, Resource[] set){
+
+        String attrType = getAttributeValue(node, RESTYPE);
+        String translate = getAttributeValue(node, TRANSLATE);
+        if(attrType==null || attrType.equals(STRINGS)){
+            ResourceString[] strings = new ResourceString[2];
+            strings[0] = new ResourceString();
+            strings[1] = new ResourceString();
+            parseResourceString(node, strings);
+            strings[0].translate = strings[1].translate = translate;
+            set[0] = strings[0];
+            set[1] = strings[1];
+        }else if(attrType.equals(INTS)){
+            ResourceInt[] ints = new ResourceInt[2];
+            ints[0] = new ResourceInt();
+            ints[1] = new ResourceInt();
+            parseResourceInt(node, ints);
+            ints[0].translate = ints[1].translate = translate;
+            set[0] = ints[0];
+            set[1] = ints[1];
+        }else if(attrType.equals(ALIAS)){
+            ResourceAlias[] ints = new ResourceAlias[2];
+            ints[0] = new ResourceAlias();
+            ints[1] = new ResourceAlias();
+            parseResourceAlias(node, ints);
+            ints[0].translate = ints[1].translate = translate;
+            set[0] = ints[0];
+            set[1] = ints[1];
+        }
+    }
+
+    private void parseBinUnit(Node node, Resource[] set){
+        ResourceBinary[] bins = new ResourceBinary[2];
+        bins[0] = new ResourceBinary();
+        bins[1] = new ResourceBinary();
+        Resource currentSource = bins[0];
+        Resource currentTarget = bins[1];
+        String resName   = getAttributeValue(node, RESNAME);
+        String translate = getAttributeValue(node, TRANSLATE);
+        currentTarget.name = currentSource.name = resName;
+        currentSource.translate = currentTarget.translate = translate;
+        for(Node child = node.getFirstChild(); child != null; child = child.getNextSibling()){
+            short type = child.getNodeType();
+            String name = child.getNodeName();
+            if(type == Node.COMMENT_NODE){
+                currentSource.comment = currentTarget.comment = child.getNodeValue();
+            }else if(type == Node.ELEMENT_NODE){
+                if(name.equals(BINSOURCE)){
+                    parseResourceBinary(child, bins);
+                }else if(name.equals(NOTE)){
+                    String note =  child.getFirstChild().getNodeValue();
+                    currentSource.note[currentSource.noteLen++] = currentTarget.note[currentTarget.noteLen++] = note;
+                }
+            }
+        }
+        set[0] = bins[0];
+        set[1] = bins[1];
+    }
+    
+    private void parseArray(Node node, Resource[] set){
+        if(set[0]==null){
+            set[0] = new ResourceArray();
+            set[1] = new ResourceArray();
+        }
+        Resource currentSource = set[0];
+        Resource currentTarget = set[1];
+        String resName = getAttributeValue(node, RESNAME);
+        currentSource.name = currentTarget.name = resName;
+        boolean isFirst = true;
+        
+        for(Node child = node.getFirstChild(); child != null; child = child.getNextSibling()){
+            short type = child.getNodeType();
+            String name = child.getNodeName();
+            if(type == Node.COMMENT_NODE){
+                currentSource.comment = currentTarget.comment = child.getNodeValue();
+            }else if(type == Node.ELEMENT_NODE){
+                if(name.equals(TRANSUNIT)){
+                    Resource[] next = new Resource[2];
+                    parseTransUnit(child, next);
+                    if(isFirst==true){
+                       ((ResourceArray) currentSource).first = next[0];
+                       ((ResourceArray) currentTarget).first = next[1];
+                       currentSource = ((ResourceArray) currentSource).first;
+                       currentTarget = ((ResourceArray) currentTarget).first;
+                       isFirst = false;
+                    }else{
+                        currentSource.next = next[0];
+                        currentTarget.next = next[1];
+                        // set the next pointers
+                        currentSource = currentSource.next;
+                        currentTarget = currentTarget.next;
+                    }
+                }else if(name.equals(NOTE)){
+                    String note =  child.getFirstChild().getNodeValue();
+                    currentSource.note[currentSource.noteLen++] = currentTarget.note[currentTarget.noteLen++] = note;
+                }else if(name.equals(BINUNIT)){
+                    Resource[] next = new Resource[2];
+                    parseBinUnit(child, next);
+                    if(isFirst==true){
+                       ((ResourceArray) currentSource).first = next[0];
+                       ((ResourceArray) currentTarget).first = next[1];
+                       currentSource = ((ResourceArray) currentSource).first.next;
+                       currentTarget = ((ResourceArray) currentTarget).first.next;
+                       isFirst = false;
+                    }else{
+                        currentSource.next = next[0];
+                        currentTarget.next = next[1];
+                        // set the next pointers
+                        currentSource = currentSource.next;
+                        currentTarget = currentTarget.next;
+                    }
+                }
+            }
+        }
+    }
+    private void parseIntVector(Node node, Resource[] set){
+        if(set[0]==null){
+            set[0] = new ResourceIntVector();
+            set[1] = new ResourceIntVector();
+        }
+        Resource currentSource = set[0];
+        Resource currentTarget = set[1];
+        String resName = getAttributeValue(node, RESNAME);
+        String translate = getAttributeValue(node,TRANSLATE);
+        currentSource.name = currentTarget.name = resName;
+        currentSource.translate = translate;
+        boolean isFirst = true;
+        for(Node child = node.getFirstChild(); child != null; child = child.getNextSibling()){
+            short type = child.getNodeType();
+            String name = child.getNodeName();
+            if(type == Node.COMMENT_NODE){
+                currentSource.comment = currentTarget.comment = child.getNodeValue();
+            }else if(type == Node.ELEMENT_NODE){
+                if(name.equals(TRANSUNIT)){
+                    Resource[] next = new Resource[2];
+                    parseTransUnit(child, next);
+                    if(isFirst==true){
+                        // the down cast should be safe .. if not something is terribly wrong!!
+                       ((ResourceIntVector) currentSource).first = (ResourceInt)next[0];
+                       ((ResourceIntVector) currentTarget).first = (ResourceInt) next[1];
+                       currentSource = ((ResourceIntVector) currentSource).first;
+                       currentTarget = ((ResourceIntVector) currentTarget).first;
+                       isFirst = false;
+                    }else{
+                        currentSource.next = next[0];
+                        currentTarget.next = next[1];
+                        // set the next pointers
+                        currentSource = currentSource.next;
+                        currentTarget = currentTarget.next;
+                    }
+                }else if(name.equals(NOTE)){
+                    String note =  child.getFirstChild().getNodeValue();
+                    currentSource.note[currentSource.noteLen++] = currentTarget.note[currentTarget.noteLen++] = note;
+                }
+            }
+        }
+    }
+    private void parseTable(Node node, Resource[] set){
+        if(set[0]==null){
+            set[0] = new ResourceTable();
+            set[1] = new ResourceTable();
+        }
+        Resource currentSource = set[0];
+        Resource currentTarget = set[1];
+        
+        String resName = getAttributeValue(node, RESNAME);
+        String translate = getAttributeValue(node,TRANSLATE);
+        if(resName!=null && currentSource.name==null && currentTarget.name==null){
+            currentSource.name = currentTarget.name = resName;
+        }
+        currentTarget.translate = currentSource.translate = translate;
+        
+        boolean isFirst = true;
+        for(Node child = node.getFirstChild(); child != null; child = child.getNextSibling()){
+            short type = child.getNodeType();
+            String name = child.getNodeName();
+            if(type == Node.COMMENT_NODE){
+                currentSource.comment = currentTarget.comment = child.getNodeValue();
+            }else if(type == Node.ELEMENT_NODE){
+                if(name.equals(GROUPS)){
+                    Resource[] next = new Resource[2];
+                    parseGroup(child, next);
+                    if(isFirst==true){
+                        // the down cast should be safe .. if not something is terribly wrong!!
+                       ((ResourceTable) currentSource).first = next[0];
+                       ((ResourceTable) currentTarget).first = next[1];
+                       currentSource = ((ResourceTable) currentSource).first;
+                       currentTarget = ((ResourceTable) currentTarget).first;
+                       isFirst = false;
+                    }else{
+                        currentSource.next = next[0];
+                        currentTarget.next = next[1];
+                        // set the next pointers
+                        currentSource = currentSource.next;
+                        currentTarget = currentTarget.next;
+                    }
+                }else if(name.equals(TRANSUNIT)){
+                    Resource[] next = new Resource[2];
+                    parseTransUnit(child, next);
+                    if(isFirst==true){
+                        // the down cast should be safe .. if not something is terribly wrong!!
+                       ((ResourceTable) currentSource).first = next[0];
+                       ((ResourceTable) currentTarget).first = next[1];
+                       currentSource = ((ResourceTable) currentSource).first;
+                       currentTarget = ((ResourceTable) currentTarget).first;
+                       isFirst = false;
+                    }else{
+                        currentSource.next = next[0];
+                        currentTarget.next = next[1];
+                        // set the next pointers
+                        currentSource = currentSource.next;
+                        currentTarget = currentTarget.next;
+                    }
+                }else if(name.equals(NOTE)){
+                    String note =  child.getFirstChild().getNodeValue();
+                    currentSource.note[currentSource.noteLen++] = currentTarget.note[currentTarget.noteLen++] = note;
+                }else if(name.equals(BINUNIT)){
+                    Resource[] next = new Resource[2];
+                    parseBinUnit(child, next);
+                    if(isFirst==true){
+                        // the down cast should be safe .. if not something is terribly wrong!!
+                       ((ResourceTable) currentSource).first = next[0];
+                       ((ResourceTable) currentTarget).first = next[1];
+                       currentSource = ((ResourceTable) currentSource).first;
+                       currentTarget = ((ResourceTable) currentTarget).first;
+                       isFirst = false;
+                    }else{
+                        currentSource.next = next[0];
+                        currentTarget.next = next[1];
+                        // set the next pointers
+                        currentSource = currentSource.next;
+                        currentTarget = currentTarget.next;
+                    }
+                }
             }
         }
     }
     
-    private static void WriteLine(BufferedOutputStream buffer, String line, String charSet) {
+    private void parseGroup(Node node, Resource[] set){
+
+        // figure out what kind of group this is
+        String resType = getAttributeValue(node, RESTYPE);
+        if(resType.equals(ARRAYS)){
+            parseArray(node, set);
+        }else if( resType.equals(TABLE)){
+            parseTable(node, set);
+        }else if( resType.equals(INTVECTOR)){
+            parseIntVector(node, set);
+        }
+    }
+    
+
+    private void writeLine(OutputStream writer, String line) {
         try {
-            byte[] bytes = line.getBytes(charSet);
-            buffer.write(bytes, 0, bytes.length);
+            byte[] bytes = line.getBytes(CHARSET);
+            writer.write(bytes, 0, bytes.length);
         } catch (Exception e) {
             System.err.println(e);
             System.exit(1);
         }
     }
     
-    private static void writeBOM(BufferedOutputStream buffer, String charSet) {
+    private void writeHeader(OutputStream writer, String fileName){
+        writeBOM(writer);
+        Calendar c = Calendar.getInstance();
+        StringBuffer buffer =new StringBuffer();
+        buffer.append("// ***************************************************************************" + LINESEP);
+        buffer.append("// *" + LINESEP);
+        buffer.append("// * Tool: com.ibm.icu.dev.tool.localeconverter.XLIFF2ICUConverter.java" + LINESEP);
+        buffer.append("// * Date & Time: " + c.get(Calendar.YEAR) + "/" + (c.get(Calendar.MONTH)+1) + "/" + c.get(Calendar.DAY_OF_MONTH) + " " + c.get(Calendar.HOUR_OF_DAY) + COLON + c.get(Calendar.MINUTE)+ LINESEP);
+        buffer.append("// * Source File: " + fileName + LINESEP);
+        buffer.append("// *" + LINESEP);                    
+        buffer.append("// ***************************************************************************" + LINESEP);
+        writeLine(writer, buffer.toString());
+
+    }
+    private  void writeBOM(OutputStream buffer) {
         try {
-            byte[] bytes = BOM.getBytes(charSet);
+            byte[] bytes = BOM.getBytes(CHARSET);
             buffer.write(bytes, 0, bytes.length);
         } catch(Exception e) {
             System.err.println(e);
