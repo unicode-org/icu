@@ -16,6 +16,7 @@
 #include <stdlib.h>
 #include "unicode/utypes.h"
 #include "unicode/ucol.h"
+#include "unicode/ucoleitr.h"
 #include "unicode/uloc.h"
 #include "cintltst.h"
 #include "cdetst.h"
@@ -126,6 +127,112 @@ static void TestCase( )
 
 }
 
+/**
+ * Return an integer array containing all of the collation orders
+ * returned by calls to next on the specified iterator
+ */
+static int32_t* getOrders(UCollationElements *iter, int32_t *orderLength)
+{
+    UErrorCode status;
+    int32_t order;
+    int32_t maxSize = 100;
+    int32_t size = 0;
+    int32_t *temp;
+    int32_t *orders =(int32_t*)malloc(sizeof(int32_t) * maxSize);
+    status= U_ZERO_ERROR;
+
+
+    while ((order=ucol_next(iter, &status)) != UCOL_NULLORDER)
+    {
+        if (size == maxSize)
+        {
+            maxSize *= 2;
+            temp = (int32_t*)malloc(sizeof(int32_t) * maxSize);
+
+            memcpy(temp, orders, size * sizeof(int32_t));
+            free(orders);
+            orders = temp;
+            
+        }
+
+        orders[size++] = order;
+    }
+
+    if (maxSize > size)
+    {
+        temp = (int32_t*)malloc(sizeof(int32_t) * size);
+
+        memcpy(temp, orders, size * sizeof(int32_t));
+        free(orders);
+        orders = temp;
+
+
+    }
+
+    *orderLength = size;
+    return orders;
+}
+
+static void backAndForth(UCollationElements *iter)
+{
+    /* Run through the iterator forwards and stick it into an array */
+    int32_t index, o;
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t orderLength = 0;
+    int32_t *orders;
+    orders= getOrders(iter, &orderLength);
+    
+    
+    /* Now go through it backwards and make sure we get the same values */
+    index = orderLength;
+    ucol_reset(iter);
+    
+    /* synwee : changed */
+    while ((o = ucol_previous(iter, &status)) != UCOL_NULLORDER)
+    {
+      if (o != orders[-- index])
+      {
+        if (o == 0)
+          index ++;
+        else
+        {
+          while (index > 0 && orders[-- index] == 0)
+          {
+          }
+          if (o != orders[index])
+          {
+            log_err("Mismatch at index : %d\n", index);
+            break;
+          }
+        }
+      }
+    }
+
+    while (index != 0 && orders[index - 1] == 0) {
+      index --;
+    }
+
+    if (index != 0)
+    {
+        log_err("Didn't get back to beginning - index is %d\n", index);
+
+        ucol_reset(iter);
+        log_err("\nnext: ");
+        while ((o = ucol_next(iter, &status)) != UCOL_NULLORDER)
+        {
+            log_err("Error at %d\n", o);
+        }
+        log_err("\nprev: ");
+        while ((o = ucol_previous(iter, &status)) != UCOL_NULLORDER)
+        {
+            log_err("Error at %d\n", o);
+        }
+        log_verbose("\n");
+    }
+
+    free(orders);    
+}
+
 static void IncompleteCntTest( )
 {
   UErrorCode status = U_ZERO_ERROR;
@@ -136,6 +243,7 @@ static void IncompleteCntTest( )
   UCollator *coll =  NULL;
   uint32_t i = 0, j = 0;
   uint32_t size = 0;
+  
   u_uastrcpy(temp, " & Z < ABC < Q < B");
 
   coll = ucol_openRules(temp, u_strlen(temp), UCOL_NO_NORMALIZATION, 
@@ -147,9 +255,18 @@ static void IncompleteCntTest( )
     size = sizeof(cnt1)/sizeof(cnt1[0]);
     for(i = 0; i < size-1; i++) {
       for(j = i+1; j < size; j++) {
+        UCollationElements *iter;
         u_uastrcpy(t1, cnt1[i]);
         u_uastrcpy(t2, cnt1[j]);
         doTest(coll, t1, t2, UCOL_LESS);
+        /* synwee : added collation element iterator test */
+        iter = ucol_openElements(coll, t2, u_strlen(t2), &status);
+        if (U_FAILURE(status)) {
+          log_err("Creation of iterator failed\n");
+          break;
+        }
+        backAndForth(iter);
+        free(iter);
       }
     }
   } 
@@ -167,9 +284,19 @@ static void IncompleteCntTest( )
     size = sizeof(cnt2)/sizeof(cnt2[0]);
     for(i = 0; i < size-1; i++) {
       for(j = i+1; j < size; j++) {
+        UCollationElements *iter;
         u_uastrcpy(t1, cnt2[i]);
         u_uastrcpy(t2, cnt2[j]);
         doTest(coll, t1, t2, UCOL_LESS);
+
+        /* synwee : added collation element iterator test */
+        iter = ucol_openElements(coll, t2, u_strlen(t2), &status);
+        if (U_FAILURE(status)) {
+          log_err("Creation of iterator failed\n");
+          break;
+        }
+        backAndForth(iter);
+        free(iter);
       }
     }
   } 
@@ -178,7 +305,6 @@ static void IncompleteCntTest( )
 
 
 }
-
 
 const static char shifted[][20] = {
   "black bird",
