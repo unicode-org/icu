@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Attic/ByteTrie.java,v $ 
-* $Date: 2001/03/08 03:04:02 $ 
-* $Revision: 1.1 $
+* $Date: 2001/03/28 00:01:52 $ 
+* $Revision: 1.2 $
 *
 ******************************************************************************
 */
@@ -43,7 +43,7 @@ import com.ibm.text.UCharacter;
 *   int thirdindex = index2[secondindex] + ch & LAST_FOUR_BITS_MASK;<br>    
 *   f(ch) = value[thirdindex];<br>
 * </p>
-* @version            $Revision: 1.1 $
+* @version            $Revision: 1.2 $
 * @author             Syn Wee Quek
 */
 public final class ByteTrie
@@ -80,7 +80,7 @@ public final class ByteTrie
   * @param index to be manipulated into corresponding trie index
   * @return trie value at index
   */
-  public int getValue(int index)
+  public byte getValue(int index)
   {
     // index of the first access to the database 
     int index1 = index >> STAGE_1_SHIFT_;
@@ -174,5 +174,59 @@ public final class ByteTrie
                              stage2);
     m_stage2_ = new int[size];
     System.arraycopy(stage2, 0, m_stage2_, 0, size);
+  }
+  
+  /**
+  * Converts trie to a readable format
+  * @return string version of the trie
+  */
+  public String toString()
+  {
+    int size = m_stage1_.length;
+    int count = 0;
+    StringBuffer result = new StringBuffer("int m_stage1_[] = {\n");
+    for (int i = 0; i < size; i ++) {
+      result.append("0x" + Integer.toHexString(m_stage1_[i]));
+      if (i != size - 1) {
+        result.append(", ");
+      }
+      count ++;
+      if (count == 10) {
+        count = 0;
+        result.append("\n");
+      }
+    }
+    result.append("\n}\n\n");
+    size = m_stage2_.length;
+    result.append("int m_stage2_[] = {\n");
+    count = 0;
+    for (int i = 0; i < size; i ++) {
+      result.append("0x" + Integer.toHexString(m_stage2_[i]));
+      if (i != size - 1) {
+        result.append(", ");
+      }
+      count ++;
+      if (count == 10) {
+        count = 0;
+        result.append("\n");
+      }
+    }
+    result.append("\n}\n\n");
+    size = m_stage3_.length;
+    result.append("byte m_stage3_[] = {\n");
+    count = 0;
+    for (int i = 0; i < size; i ++) {
+      result.append("0x" + Integer.toHexString((char)m_stage3_[i]));
+      if (i != size - 1) {
+        result.append(", ");
+      }
+      count ++;
+      if (count == 10) {
+        count = 0;
+        result.append("\n");
+      }
+    }
+    result.append("\n}");
+    return result.toString();
   }
 }
