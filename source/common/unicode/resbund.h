@@ -181,7 +181,7 @@ public:
     /**
      * returns a string from a string resource type
      *
-     * @param status: fills in the outgoing error code
+     * @param status  fills in the outgoing error code
      *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
      *                could be a warning 
      *                e.g.: <TT>U_USING_FALLBACK_WARNING</TT>,<TT>U_USING_DEFAULT_WARNING </TT>
@@ -195,9 +195,8 @@ public:
      * returns a binary data from a resource. Can be used at most primitive resource types (binaries,
      * strings, ints)
      *
-     * @param resourceBundle: a string resource
-     * @param len:    fills in the length of resulting byte chunk
-     * @param status: fills in the outgoing error code
+     * @param len     fills in the length of resulting byte chunk
+     * @param status  fills in the outgoing error code
      *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
      *                could be a warning 
      *                e.g.: <TT>U_USING_FALLBACK_WARNING</TT>,<TT>U_USING_DEFAULT_WARNING </TT>
@@ -211,9 +210,8 @@ public:
     /**
      * returns an integer vector from a resource. 
      *
-     * @param resourceBundle: a string resource
-     * @param len:    fills in the length of resulting integer vector
-     * @param status: fills in the outgoing error code
+     * @param len     fills in the length of resulting integer vector
+     * @param status  fills in the outgoing error code
      *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
      *                could be a warning 
      *                e.g.: <TT>U_USING_FALLBACK_WARNING</TT>,<TT>U_USING_DEFAULT_WARNING </TT>
@@ -227,7 +225,7 @@ public:
      * returns an unsigned integer from a resource. 
      * This integer is originally 28 bits.
      *
-     * @param status: fills in the outgoing error code
+     * @param status  fills in the outgoing error code
      *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
      *                could be a warning 
      *                e.g.: <TT>U_USING_FALLBACK_WARNING</TT>,<TT>U_USING_DEFAULT_WARNING </TT>
@@ -241,7 +239,7 @@ public:
      * returns a signed integer from a resource. 
      * This integer is originally 28 bit and the sign gets propagated.
      *
-     * @param status: fills in the outgoing error code
+     * @param status  fills in the outgoing error code
      *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
      *                could be a warning 
      *                e.g.: <TT>U_USING_FALLBACK_WARNING</TT>,<TT>U_USING_DEFAULT_WARNING </TT>
