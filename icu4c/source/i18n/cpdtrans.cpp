@@ -18,6 +18,8 @@
  * transliterators have at least two components.
  * @param transliterators array of <code>Transliterator</code>
  * objects
+ * @param transliteratorCount The number of
+ * <code>Transliterator</code> objects in transliterators.
  * @param filter the filter.  Any character for which
  * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
  * altered by this transliterator.  If <tt>filter</tt> is
@@ -25,11 +27,11 @@
  */
 CompoundTransliterator::CompoundTransliterator(
                            Transliterator* const transliterators[],
-                           int32_t count,
+                           int32_t transliteratorCount,
                            UnicodeFilter* adoptedFilter) :
-    Transliterator(joinIDs(transliterators, count), adoptedFilter),
+    Transliterator(joinIDs(transliterators, transliteratorCount), adoptedFilter),
     trans(0), filters(0), count(0)  {
-    setTransliterators(transliterators, count);
+    setTransliterators(transliterators, transliteratorCount);
 }
 
 /**
@@ -102,18 +104,18 @@ UnicodeString CompoundTransliterator::joinIDs(Transliterator* const transliterat
  */
 UnicodeString* CompoundTransliterator::split(const UnicodeString& s,
                                              UChar divider,
-                                             int32_t* count) {
+                                             int32_t* countPtr) {
     // changed MED
     // see how many there are
-    *count = 1;
+    *countPtr = 1;
     int32_t i;
     for (i = 0; i < s.length(); ++i) {
         if (s.charAt(i) == divider)
-            ++(*count);
+            ++(*countPtr);
     }
     
     // make an array with them
-    UnicodeString* result = new UnicodeString[*count];
+    UnicodeString* result = new UnicodeString[*countPtr];
     int32_t last = 0;
     int32_t current = 0;
     
