@@ -1537,6 +1537,8 @@ u_istitle(UChar32 c);
 /**
  * Determines whether the specified code point is a digit character according to Java.
  * True for characters with general category "Nd" (decimal digit numbers).
+ * Beginning with Unicode 4, this is the same as
+ * testing for the Numeric_Type of Decimal.
  *
  * Same as java.lang.Character.isDigit().
  *
@@ -1964,13 +1966,23 @@ U_CAPI uint8_t U_EXPORT2
 u_getCombiningClass(UChar32 c);
 
 /**
- * Returns the decimal numeric value of a decimal digit character.
+ * Returns the decimal digit value of a decimal digit character.
  * Such characters have the general category "Nd" (decimal digit numbers)
  * and a Numeric_Type of Decimal.
- * Also returns decimal values for primary numeric Han digit characters.
  *
- * @param c the code point for which to get the decimal numeric value
- * @return the decimal numeric value of c in decimal radix,
+ * Unlike ICU releases before 2.6, no digit values are returned for any
+ * Han characters because Han number characters are often used with a special
+ * Chinese-style number format (with characters for powers of 10 in between)
+ * instead of in decimal-positional notation.
+ * Unicode 4 explicitly assigns Han number characters the Numeric_Type
+ * Numeric instead of Decimal.
+ * See Jitterbug 1483 for more details.
+ *
+ * Use u_getIntPropertyValue(c, UCHAR_NUMERIC_TYPE) and u_getNumericValue()
+ * for complete numeric Unicode properties.
+ *
+ * @param c the code point for which to get the decimal digit value
+ * @return the decimal digit value of c,
  *         or -1 if c is not a decimal digit character
  *
  * @see u_getNumericValue
