@@ -132,10 +132,13 @@ void UCAConformanceTest::openTestFile(const char *type)
       testFile = fopen(buffer, "rb");
 
       if (testFile == 0) {
-          errln("Error: could not open any of the conformance test files ");
-          return;        
+        *(buffer+bufLen) = 0;
+        errln("ERROR: could not open any of the conformance test files, tried opening base %s\n", buffer);
+        return;        
       } else {
-        logln("Warning: Working with the stub file. If you need the full conformance test, "
+        infoln(
+          "INFO: Working with the stub file.\n"
+          "If you need the full conformance test, please\n"
           "download the appropriate data files from:\n"
           "http://oss.software.ibm.com/cvs/icu4j/unicodetools/com/ibm/text/data/");
       }
@@ -186,18 +189,22 @@ void UCAConformanceTest::testConformance(UCollator *coll)
         errln("Compare result not symmetrical on line %i", line);
       }
 
-      if(res != cmpres) {
+      if(((res&0x80000000) != (cmpres&0x80000000)) || (res == 0 && cmpres != 0) || (res != 0 && cmpres == 0)) {
         errln("Difference between ucol_strcoll and sortkey compare on line %i", line);
+        logln("Data line %s", lineB);
       }
 
       if(res > 0) {
         errln("Line %i is not greater or equal than previous line", line);
+        logln("Data line %s", lineB);
       } else if(res == 0) { /* equal */
         res = u_strcmpCodePointOrder(oldB, buffer);
         if (res == 0) {
           errln("Probable error in test file on line %i (comparing identical strings)", line);
+          logln("Data line %s", lineB);
         } else if (res > 0) {
           errln("Sortkeys are identical, but code point comapare gives >0 on line %i", line);
+          logln("Data line %s", lineB);
         }
       }
     }
