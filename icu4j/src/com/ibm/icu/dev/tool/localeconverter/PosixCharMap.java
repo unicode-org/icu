@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/PosixCharMap.java,v $ 
- * $Date: 2002/06/20 01:17:12 $ 
- * $Revision: 1.3 $
+ * $Date: 2003/08/14 22:13:23 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -258,10 +258,12 @@ public class PosixCharMap {
                             int digit = Integer.parseInt(numData, 16);
                             defineMapping(key, ""+(char)digit);
                         }else if(data.startsWith("\\x")){
-                            byte[] encData = new byte[6];
+                            byte[] encData = new byte[100];
                             int num = hexToByte(data,encData);
                             String tData = new String(encData,0,num,encoding);
                             defineMapping(key,tData);
+                        }else{
+                            defineMapping(key,byteToChar(data,encoding));
                         }
                         state = p.nextToken();
                         key=p.getData();
@@ -330,7 +332,20 @@ public class PosixCharMap {
             }
         }       
         return i;
-    }        
+    }  
+    public String byteToChar(String data, String encoding) 
+        throws UnsupportedEncodingException{
+        
+        byte[] bytes = new byte[data.length()];
+        for(int i=0; i<data.length(); i++){
+            char ch = data.charAt(i);
+            if(ch > 0xFF){
+                throw new RuntimeException("Bytes in the string are greater than 0xFF");
+            }
+            bytes[i] = (byte) ch;        
+        }
+        return new String(bytes,encoding);
+    }      
     public void defineMapping(String from, String to) {
         table.put(from, to);
         backTable = null;

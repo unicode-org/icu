@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/CollationItem.java,v $ 
- * $Date: 2002/02/16 03:05:26 $ 
- * $Revision: 1.2 $
+ * $Date: 2003/08/14 22:13:23 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -81,11 +81,11 @@ public class CollationItem {
                     || ((c <= '\u007E') && (c >= '\u007B'))) {
                 if (i < result.length()-1) {
                     result = result.substring(0, i)
-                            + "'" + c +"'"
+                            + "\\" + c 
                             + result.substring(i+1);
                 } else {
                     result = result.substring(0, i)
-                            + "'" + c +"'";
+                            + "\\" + c;
                 }
                 i += 2; //skip the two characters we inserted
             }

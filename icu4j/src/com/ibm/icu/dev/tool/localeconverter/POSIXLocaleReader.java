@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/POSIXLocaleReader.java,v $ 
- * $Date: 2002/08/01 00:08:57 $ 
- * $Revision: 1.3 $
+ * $Date: 2003/08/14 22:13:23 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -236,7 +236,7 @@ public class POSIXLocaleReader {
                     s = p.nextToken();
                 }
                 if (s != EOL_TOKEN) {
-                    throw new IOException();
+                    System.err.println("WARNING: Could not parse the Unexpected token: Expecting EOL got "+s);
                 } else {
                     table.put(key, temp.toString());
                 }
