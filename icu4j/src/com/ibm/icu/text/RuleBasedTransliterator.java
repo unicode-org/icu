@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedTransliterator.java,v $ 
- * $Date: 2000/06/29 21:59:23 $ 
- * $Revision: 1.36 $
+ * $Date: 2000/07/12 16:31:36 $ 
+ * $Revision: 1.37 $
  *
  *****************************************************************************************
  */
@@ -252,7 +252,7 @@ import com.ibm.util.Utility;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  * 
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.36 $ $Date: 2000/06/29 21:59:23 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.37 $ $Date: 2000/07/12 16:31:36 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -333,11 +333,9 @@ public class RuleBasedTransliterator extends Transliterator {
          * uint32_t.
          */
         int loopCount = 0;
-        int loopLimit = index.limit - index.start;
-        if (loopLimit >= 0x08000000) {
+        int loopLimit = (index.limit - index.start) << 4;
+        if (loopLimit < 0) {
             loopLimit = 0x7FFFFFFF;
-        } else {
-            loopLimit <<= 4;
         }
 
         boolean partial[] = new boolean[1];
@@ -1292,6 +1290,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.37  2000/07/12 16:31:36  alan4j
+ * Simplify loop limit logic
+ *
  * Revision 1.36  2000/06/29 21:59:23  alan4j
  * Fix handling of Transliterator.Position fields
  *
