@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/ReplaceableTest.java,v $
- * $Date: 2002/11/14 01:43:43 $
- * $Revision: 1.13 $
+ * $Date: 2002/11/20 22:41:13 $
+ * $Revision: 1.14 $
  *
  *******************************************************************************
  */
@@ -43,6 +43,10 @@ public class ReplaceableTest extends TestFmwk {
         check("*(x) > A $1 B", "wxy", "11223");
         check("*(x)(y) > A $2 B $1 C $2 D", "wxyz", "113322334");
         check("*(x)(y)(z) > A $3 B $2 C $1 D", "wxyzu", "114433225");
+        check("*x > a", "xyz", "223"); // expect "123"?
+        check("*x > a", "wxy", "113"); // expect "123"?
+        check("*x > a", "\uFFFFxy", "_33"); // expect "_23"?
+        check("*(x) > A $1 B", "\uFFFFxy", "__223");
     }
     
     void check(String transliteratorName, String test, String shouldProduceStyles) {
@@ -70,19 +74,21 @@ public class ReplaceableTest extends TestFmwk {
 
     /**
      * This is a test class that simulates styled text.
-     * It associates a style number (0..65536) with each character,
+     * It associates a style number (0..65535) with each character,
      * and maintains that style in the normal fashion:
      * When setting text from raw string or characters,<br>
      * Set the styles to the style of the first character replaced.<br>
      * If no characters are replaced, use the style of the previous character.<br>
      * If at start, use the following character<br>
-     * Otherwise use defaultStyle.
+     * Otherwise use NO_STYLE.
      */
     static class TestReplaceable implements Replaceable {
         ReplaceableString chars;
         ReplaceableString styles;
         
-        char defaultStyle = '_';
+        static final char NO_STYLE = '_';
+
+        static final char NO_STYLE_MARK = 0xFFFF;
         
         TestReplaceable (String text, String styles) {
             chars = new ReplaceableString(text);
@@ -91,7 +97,11 @@ public class ReplaceableTest extends TestFmwk {
                 if (styles != null && i < styles.length()) {
                     s.append(styles.charAt(i));
                 } else {
-                    s.append((char) (i + '1'));
+                    if (text.charAt(i) == NO_STYLE_MARK) {
+                        s.append(NO_STYLE);
+                    } else {
+                        s.append((char) (i + '1'));
+                    }
                 }
             }
             this.styles = new ReplaceableString(s.toString());
@@ -127,30 +137,40 @@ public class ReplaceableTest extends TestFmwk {
 
         public void replace(int start, int limit, String text) {
             if (substring(start,limit).equals(text)) return; // NO ACTION!
+            if (DEBUG) System.out.print(Utility.escape(toString() + " -> replace(" + start +
+                                            "," + limit + "," + text) + ") -> ");
             chars.replace(start, limit, text);
             fixStyles(start, limit, text.length());
+            if (DEBUG) System.out.println(Utility.escape(toString()));
         }
         
         public void replace(int start, int limit, char[] chars,
                             int charsStart, int charsLen) {
             if (substring(start,limit).equals(new String(chars, charsStart, charsLen-charsStart))) return; // NO ACTION!
             this.chars.replace(start, limit, chars, charsStart, charsLen);
-            fixStyles(start, limit, charsLen-charsStart);
+            fixStyles(start, limit, charsLen);
         }
 
         void fixStyles(int start, int limit, int newLen) {
-            char newStyle = defaultStyle;
-            if (start != limit) {
+            char newStyle = NO_STYLE;
+            if (start != limit && styles.charAt(start) != NO_STYLE) {
                 newStyle = styles.charAt(start);
-            } else if (start > 0) {
+            } else if (start > 0 && charAt(start-1) != NO_STYLE_MARK) {
                 newStyle = styles.charAt(start-1);
-            } else if (limit < styles.length() - 1) {
-                newStyle = styles.charAt(limit+1);
+            } else if (limit < styles.length()) {
+                newStyle = styles.charAt(limit);
             }
             // dumb implementation for now.
             StringBuffer s = new StringBuffer();
             for (int i = 0; i < newLen; ++i) {
-                s.append(newStyle);
+                // this doesn't really handle an embedded NO_STYLE_MARK
+                // in the middle of a long run of characters right -- but
+                // that case shouldn't happen anyway
+                if (charAt(start+i) == NO_STYLE_MARK) {
+                    s.append(NO_STYLE);
+                } else {
+                    s.append(newStyle);
+                }
             }
             styles.replace(start, limit, s.toString());
         }
@@ -163,5 +183,7 @@ public class ReplaceableTest extends TestFmwk {
         public boolean hasMetaData() {
         	return true;
         }
+
+        static final boolean DEBUG = false;
     }
 }
