@@ -44,7 +44,6 @@ static void TestUCMP8API(){
     uint8_t *values;
     uint8_t *valuesSet;
     uint8_t const TEST_DEFAULT_VALUE = (uint8_t)0xFF;
-    //UMemoryStream *
     
 
     /*ucmp8_open*/
