@@ -807,6 +807,9 @@ SimpleTimeZone::decodeStartRule(UErrorCode& status)
     if(U_FAILURE(status)) return;
 
     useDaylight = ((startDay != 0) && (endDay != 0) ? TRUE : FALSE);
+    if (useDaylight && dstSavings == 0) {
+        dstSavings = U_MILLIS_PER_HOUR;
+    }
     if (startDay != 0) {
         if (startMonth < Calendar::JANUARY || startMonth > Calendar::DECEMBER) {
             status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -859,6 +862,9 @@ SimpleTimeZone::decodeEndRule(UErrorCode& status)
     if(U_FAILURE(status)) return;
 
     useDaylight = ((startDay != 0) && (endDay != 0) ? TRUE : FALSE);
+    if (useDaylight && dstSavings == 0) {
+        dstSavings = U_MILLIS_PER_HOUR;
+    }
     if (endDay != 0) {
         if (endMonth < Calendar::JANUARY || endMonth > Calendar::DECEMBER) {
             status = U_ILLEGAL_ARGUMENT_ERROR;
