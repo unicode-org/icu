@@ -43,6 +43,10 @@
 
 /* -------------------------------------------------------------------------- */
 
+enum {
+    _STACK_BUFFER_CAPACITY=100
+};
+
 /* Korean Hangul and Jamo constants */
 enum {
     JAMO_L_BASE=0x1100,     /* "lead" jamo */
@@ -101,6 +105,20 @@ static inline UBool
 isJamoVTNorm32JamoV(uint32_t norm32) {
     return norm32<_NORM_JAMO_V_TOP;
 }
+
+static const UChar *
+_findPreviousStarter(const UChar *start, const UChar *src,
+                     uint32_t ccOrQCMask, uint32_t decompQCMask, UChar minNoMaybe);
+
+static const UChar *
+_findNextStarter(const UChar *src, const UChar *limit,
+                 uint32_t qcMask, uint32_t decompQCMask, UChar minNoMaybe);
+
+static const UChar *
+_composePart(UChar *stackBuffer, UChar *&buffer, int32_t &bufferCapacity, int32_t &length,
+             const UChar *prevStarter, const UChar *src,
+             uint32_t qcMask, uint8_t &prevCC,
+             UErrorCode *pErrorCode);
 
 /* load unorm.dat ----------------------------------------------------------- */
 
@@ -932,13 +950,18 @@ unorm_checkFCD(const UChar *src, int32_t srcLength) {
     }
 }
 
-U_CAPI UNormalizationCheckResult U_EXPORT2
-unorm_quickCheck(const UChar *src,
-                 int32_t srcLength, 
-                 UNormalizationMode mode, 
-                 UErrorCode *pErrorCode) {
-    const UChar *limit;
-    uint32_t norm32, ccOrQCMask, qcMask;
+static UNormalizationCheckResult
+_quickCheck(const UChar *src,
+            int32_t srcLength,
+            UNormalizationMode mode,
+            UBool allowMaybe,
+            UErrorCode *pErrorCode) {
+    UChar stackBuffer[_STACK_BUFFER_CAPACITY];
+    UChar *buffer;
+    int32_t bufferCapacity;
+
+    const UChar *start, *limit;
+    uint32_t norm32, qcNorm32, ccOrQCMask, qcMask;
     UChar c, c2, minNoMaybe;
     uint8_t cc, prevCC;
     UNormalizationCheckResult result;
@@ -983,10 +1006,14 @@ unorm_quickCheck(const UChar *src,
     }
 
     /* initialize */
+    buffer=stackBuffer;
+    bufferCapacity=_STACK_BUFFER_CAPACITY;
+
     ccOrQCMask=_NORM_CC_MASK|qcMask;
     result=UNORM_YES;
     prevCC=0;
 
+    start=src;
     if(srcLength>=0) {
         /* string with length */
         limit=src+srcLength;
@@ -1004,7 +1031,7 @@ unorm_quickCheck(const UChar *src,
                 c=*src++;
                 if(c<minNoMaybe) {
                     if(c==0) {
-                        return result;
+                        goto endloop; /* break out of outer loop */
                     }
                 } else if(((norm32=_getNorm32(c))&ccOrQCMask)!=0) {
                     break;
@@ -1014,7 +1041,7 @@ unorm_quickCheck(const UChar *src,
         } else {
             for(;;) {
                 if(src==limit) {
-                    return result;
+                    goto endloop; /* break out of outer loop */
                 } else if((c=*src++)>=minNoMaybe && ((norm32=_getNorm32(c))&ccOrQCMask)!=0) {
                     break;
                 }
@@ -1036,18 +1063,82 @@ unorm_quickCheck(const UChar *src,
         /* check the combining order */
         cc=(uint8_t)(norm32>>_NORM_CC_SHIFT);
         if(cc!=0 && cc<prevCC) {
-            return UNORM_NO;
+            result=UNORM_NO;
+            break;
         }
         prevCC=cc;
 
         /* check for "no" or "maybe" quick check flags */
-        norm32&=qcMask;
-        if(norm32&_NORM_QC_ANY_NO) {
-            return UNORM_NO;
-        } else if(norm32!=0) {
-            result=UNORM_MAYBE;
+        qcNorm32=norm32&qcMask;
+        if(qcNorm32&_NORM_QC_ANY_NO) {
+            result=UNORM_NO;
+            break;
+        } else if(qcNorm32!=0) {
+            /* "maybe" can only occur for NFC and NFKC */
+            if(allowMaybe) {
+                result=UNORM_MAYBE;
+            } else {
+                /* normalize a section around here to see if it is really normalized or not */
+                const UChar *prevStarter;
+                uint32_t decompQCMask;
+                int32_t length;
+
+                decompQCMask=(qcMask<<2)&0xf; /* decomposition quick check mask */
+
+                /* find the previous starter */
+                prevStarter=src-1; /* set prevStarter to the beginning of the current character */
+                if(UTF_IS_TRAIL(*prevStarter)) {
+                    --prevStarter; /* safe because unpaired surrogates do not result in "maybe" */
+                }
+                prevStarter=_findPreviousStarter(start, prevStarter, ccOrQCMask, decompQCMask, minNoMaybe);
+
+                /* find the next true starter in [src..limit[ - modifies src to point to the next starter */
+                src=_findNextStarter(src, limit, qcMask, decompQCMask, minNoMaybe);
+
+                /* decompose and recompose [prevStarter..src[ */
+                _composePart(stackBuffer, buffer, bufferCapacity,
+                             length,
+                             prevStarter,
+                             src,
+                             qcMask,
+                             prevCC, pErrorCode);
+                if(U_FAILURE(*pErrorCode)) {
+                    result=UNORM_MAYBE; /* error (out of memory) */
+                    break;
+                }
+
+                /* compare the normalized version with the original */
+                if(0!=uprv_strCompare(prevStarter, (int32_t)(src-prevStarter), buffer, length, FALSE, FALSE)) {
+                    result=UNORM_NO; /* normalization differs */
+                    break;
+                }
+
+                /* continue after the next starter */
+            }
         }
     }
+endloop:
+
+    if(buffer!=stackBuffer) {
+        uprv_free(buffer);
+    }
+
+    return result;
+}
+
+U_CAPI UNormalizationCheckResult U_EXPORT2
+unorm_quickCheck(const UChar *src,
+                 int32_t srcLength, 
+                 UNormalizationMode mode, 
+                 UErrorCode *pErrorCode) {
+    return _quickCheck(src, srcLength, mode, TRUE, pErrorCode);
+}
+
+U_CAPI UBool U_EXPORT2
+unorm_isNormalized(const UChar *src, int32_t srcLength,
+                   UNormalizationMode mode,
+                   UErrorCode *pErrorCode) {
+    return (UBool)(UNORM_YES==_quickCheck(src, srcLength, mode, FALSE, pErrorCode));
 }
 
 /* make NFD & NFKD ---------------------------------------------------------- */
@@ -1686,10 +1777,6 @@ unorm_makeFCD(UChar *dest, int32_t destCapacity,
 
 /* make NFC & NFKC ---------------------------------------------------------- */
 
-enum {
-    _STACK_BUFFER_CAPACITY=100
-};
-
 /* get the composition properties of the next character */
 static inline uint32_t
 _getNextCombining(UChar *&p, const UChar *limit,
@@ -2002,6 +2089,22 @@ _recompose(UChar *p, UChar *&limit) {
     }
 }
 
+/* find the last true starter in [start..src[ and return the pointer to it */
+static const UChar *
+_findPreviousStarter(const UChar *start, const UChar *src,
+                     uint32_t ccOrQCMask, uint32_t decompQCMask, UChar minNoMaybe) {
+    uint32_t norm32;
+    UChar c, c2;
+
+    while(start<src) {
+        norm32=_getPrevNorm32(start, src, minNoMaybe, ccOrQCMask|decompQCMask, c, c2);
+        if(_isTrueStarter(norm32, ccOrQCMask, decompQCMask)) {
+            break;
+        }
+    }
+    return src;
+}
+
 /* find the first true starter in [src..limit[ and return the pointer to it */
 static const UChar *
 _findNextStarter(const UChar *src, const UChar *limit,
@@ -2059,21 +2162,11 @@ _findNextStarter(const UChar *src, const UChar *limit,
     return src;
 }
 
-/*
- * recompose around the current character:
- * this function is called when _compose() finds a quick check "no" or "maybe"
- * after some text (with quick check "yes") has been copied already
- *
- * decompose this character as well as parts of the source surrounding it,
- * bounded by the previous and the next true starter,
- * and then recompose this decomposition
- */
+/* decompose and recompose [prevStarter..src[ */
 static const UChar *
 _composePart(UChar *stackBuffer, UChar *&buffer, int32_t &bufferCapacity, int32_t &length,
-             const UChar *&prevStarter, const UChar *prevSrc, const UChar *src, const UChar *limit,
-             uint32_t norm32,
+             const UChar *prevStarter, const UChar *src,
              uint32_t qcMask, uint8_t &prevCC,
-             int32_t &destIndex,
              UErrorCode *pErrorCode) {
     UChar *recomposeLimit;
     uint32_t decompQCMask;
@@ -2087,21 +2180,6 @@ _composePart(UChar *stackBuffer, UChar *&buffer, int32_t &bufferCapacity, int32_
     } else {
         minNoMaybe=(UChar)indexes[_NORM_INDEX_MIN_NFKD_NO_MAYBE];
     }
-
-    /*
-     * find the last true starter in [prevStarter..src[
-     * it is either the decomposition of the current character (at prevSrc),
-     * or prevStarter
-     */
-    if(_isTrueStarter(norm32, _NORM_CC_MASK|qcMask, decompQCMask)) {
-        prevStarter=prevSrc;
-    } else {
-        /* adjust destIndex: back out what had been copied with qc "yes" */
-        destIndex-=(int32_t)(prevSrc-prevStarter);
-    }
-
-    /* find the next true starter in [src..limit[ */
-    src=_findNextStarter(src, limit, qcMask, decompQCMask, minNoMaybe);
 
     /* decompose [prevStarter..src[ */
     length=_decompose(buffer, bufferCapacity,
@@ -2118,9 +2196,6 @@ _composePart(UChar *stackBuffer, UChar *&buffer, int32_t &bufferCapacity, int32_
                           (decompQCMask&_NORM_QC_NFKD)!=0, FALSE,
                           trailCC);
     }
-
-    /* set the next starter */
-    prevStarter=src;
 
     /* recompose the decomposition */
     recomposeLimit=buffer+length;
@@ -2368,6 +2443,7 @@ _compose(UChar *dest, int32_t destCapacity,
                 cc=(uint8_t)(norm32>>_NORM_CC_SHIFT);
             } else {
                 const UChar *p;
+                uint32_t decompQCMask;
 
                 /*
                  * find appropriate boundaries around this character,
@@ -2382,13 +2458,29 @@ _compose(UChar *dest, int32_t destCapacity,
                  * for source text that passed the quick check but needed to
                  * take part in the recomposition
                  */
-                p=_composePart(stackBuffer, buffer, bufferCapacity, length,
-                               prevStarter,     /* in/out, will be set to the following true starter */
-                               prevSrc, src, limit,
-                               norm32,
+                decompQCMask=(qcMask<<2)&0xf; /* decomposition quick check mask */
+
+                /*
+                 * find the last true starter in [prevStarter..src[
+                 * it is either the decomposition of the current character (at prevSrc),
+                 * or prevStarter
+                 */
+                if(_isTrueStarter(norm32, ccOrQCMask, decompQCMask)) {
+                    prevStarter=prevSrc;
+                } else {
+                    /* adjust destIndex: back out what had been copied with qc "yes" */
+                    destIndex-=(int32_t)(prevSrc-prevStarter);
+                }
+
+                /* find the next true starter in [src..limit[ - modifies src to point to the next starter */
+                src=_findNextStarter(src, limit, qcMask, decompQCMask, minNoMaybe);
+
+                /* compose [prevStarter..src[ */
+                p=_composePart(stackBuffer, buffer, bufferCapacity,
+                               length,          /* output */
+                               prevStarter, src,
                                qcMask,
                                prevCC,          /* output */
-                               destIndex,       /* will be adjusted */
                                pErrorCode);
 
                 if(p==NULL) {
@@ -2408,7 +2500,9 @@ _compose(UChar *dest, int32_t destCapacity,
                     destIndex+=length;
                 }
 
-                src=prevStarter;
+                /* set the next starter */
+                prevStarter=src;
+
                 continue;
             }
         }
