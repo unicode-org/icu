@@ -29,7 +29,7 @@ private:
     /**
      * extensive subtests called by TestResourceBundles
      **/
-    bool_t testTag(const char* frag, bool_t in_Default, bool_t in_te, bool_t in_te_IN);
+    bool_t testTag(const char* frag, bool_t in_Root, bool_t in_te, bool_t in_te_IN);
 
     void record_pass(void);
     void record_fail(void);
