@@ -4054,11 +4054,43 @@ static void TestEquals(void) {
    */
   /* test whether the two collators instantiated from the same locale are equal */
   UErrorCode status = U_ZERO_ERROR;
+  UParseError parseError;
   int32_t noOfLoc = uloc_countAvailable();
   const char *locName = NULL;
   UCollator *source = NULL, *target = NULL;
-  int32_t i = 0;
+  int32_t i = 0, j = 0;
   int32_t cloneSize = 0;
+
+  const char* rules[] = {
+    "&l < lj <<< Lj <<< LJ",
+      "&n < nj <<< Nj <<< NJ",
+      "&ae <<< \\u00e4",
+      "&AE <<< \\u00c4"
+  };
+
+  const char* badRules[] = {
+    "&l <<< Lj",
+      "&n < nj <<< nJ <<< NJ",
+      "&a <<< \\u00e4",
+      "&AE <<< \\u00c4 <<< x"
+  };
+
+  UChar sourceRules[1024], targetRules[1024];
+  int32_t sourceRulesSize = 0, targetRulesSize = 0;
+  int32_t rulesSize = sizeof(rules)/sizeof(rules[0]);
+
+  for(i = 0; i < rulesSize; i++) {
+    sourceRulesSize += u_unescape(rules[i], sourceRules+sourceRulesSize, 1024 - sourceRulesSize);
+    targetRulesSize += u_unescape(rules[rulesSize-i-1], targetRules+targetRulesSize, 1024 - targetRulesSize);
+  }
+
+  source = ucol_openRules(sourceRules, sourceRulesSize, UCOL_DEFAULT, UCOL_DEFAULT, &parseError, &status);
+  target = ucol_openRules(targetRules, targetRulesSize, UCOL_DEFAULT, UCOL_DEFAULT, &parseError, &status);
+  if(!ucol_equals(source, target)) {
+    log_err("Equivalent collators not equal!\n");
+  }
+  ucol_close(source);
+  ucol_close(target);
 
   source = ucol_open("root", &status);
   target = ucol_safeClone(source, NULL, &cloneSize, &status);
@@ -4086,6 +4118,7 @@ static void TestEquals(void) {
     /*}*/
   }
 
+ 
 
 }
 
