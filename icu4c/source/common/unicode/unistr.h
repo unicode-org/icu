@@ -2777,7 +2777,7 @@ UnicodeString::reverse(UTextOffset start,
 //========================================
 inline UBool 
 UnicodeString::isBogus() const
-{ return fFlags & kIsBogus; }
+{ return (UBool)(fFlags & kIsBogus); }
 
 
 //========================================
