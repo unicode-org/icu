@@ -37,6 +37,9 @@ uprint(const UChar *s,
   char *myTarget;
   int32_t arraySize;
 
+  UConverterFromUCallback oldFromUAction;
+  void* oldFromUContext = NULL;
+
   if(s == 0) return;
 
   /* set up the conversion parameters */
@@ -52,8 +55,8 @@ uprint(const UChar *s,
   /* if we failed, clean up and exit */
   if(U_FAILURE(*status)) goto finish;
 
-	/* output unicode characters properly */
-  ucnv_setFromUCallBack(converter, UCNV_FROM_U_CALLBACK_ESCAPE, status);
+  /* output unicode characters properly */
+  ucnv_setFromUCallBack(converter, UCNV_FROM_U_CALLBACK_ESCAPE, NULL, oldFromUAction, &oldFromUContext, status);
   
   if(U_FAILURE(*status)) goto finish;
 
