@@ -45,10 +45,10 @@ public class SimpleConverter {
 
     public CharsetEncoder ce;
     public CharsetDecoder cd;
-    
+
     public UnicodeSet getCharset() {
         UnicodeSet result = new UnicodeSet();
-    	for (int i = 0; i < 0x10000; ++i) {
+        for (int i = 0; i < 0x10000; ++i) {
             if (0xD800 <= i && i < 0xE000) {
                 if (i >= 0xDC00) continue;
                 for (int j = 0xDC00; j <= 0xE000; ++j) {
@@ -60,7 +60,7 @@ public class SimpleConverter {
                     if (backMap.length() != 2 || UTF16.charAt(backMap,0) != i) continue;
                     result.add(i);
                 }
-            	continue;
+                continue;
             }
             cb[0] = (char) i;
             ByteArrayWrapper ab = encode(1);
@@ -75,22 +75,22 @@ public class SimpleConverter {
         }
         return result;
     }
-     
+
     public ByteArrayWrapper encode(int len) {
         charBuffer.limit(len);
         charBuffer.position(0);
-        byteBuffer.clear();   
+        byteBuffer.clear();
         ce.reset();
         CoderResult result = ce.encode(charBuffer, byteBuffer, true);
         if (result.isError()) return null;
         byteBuffer.flip();
         return new ByteArrayWrapper(byteBuffer);
     }
-    
+
     public String decode(int len) {
         byteBuffer.limit(len);
         byteBuffer.position(0);
-        charBuffer.clear();   
+        charBuffer.clear();
         cd.reset();
         CoderResult result = cd.decode(byteBuffer, charBuffer, true);
         if (result.isError()) return null;

@@ -68,10 +68,10 @@ import com.ibm.icu.dev.tool.cldr.ICUResourceWriter.ResourceTable;
  */
 
 public class GenerateCldrTests {
-    
+
     static private PrintWriter log;
     PrintWriter out;
-    private static final int 
+    private static final int
         HELP1 = 0,
         HELP2 = 1,
         DESTDIR = 2,
@@ -89,42 +89,42 @@ public class GenerateCldrTests {
             UOption.create("match", 'm', UOption.REQUIRES_ARG).setDefault(".*"),
             UOption.create("fullyresolved", 'f', UOption.NO_ARG),
     };
-    
-    CldrCollations cldrCollations;   
+
+    CldrCollations cldrCollations;
     static String logDir = null, destDir = null;
-    
-	public static void main(String[] args) throws Exception {
+
+    public static void main(String[] args) throws Exception {
         UOption.parseArgs(args, options);
         log = BagFormatter.openUTF8Writer(options[LOGDIR].value, "log.txt");
         try {
 
-			//compareAvailable();
+            //compareAvailable();
             //if (true) return;
-			//System.out.println(createCaseClosure(new UnicodeSet("[a{bc}{def}{oss}]")));
-			//System.out.println(createCaseClosure(new UnicodeSet("[a-zß{aa}]")));
+            //System.out.println(createCaseClosure(new UnicodeSet("[a{bc}{def}{oss}]")));
+            //System.out.println(createCaseClosure(new UnicodeSet("[a-zß{aa}]")));
             GenerateCldrTests t = new GenerateCldrTests();
-			//t.generate(new ULocale("hu"), null);
-			t.generate(options[MATCH].value);
-			/*
-			t.generate(new ULocale("da"));
-			t.generate(new ULocale("hu"));
-			t.generate(new ULocale("de"));
-			t.generate(new ULocale("ar@collation=direct"));
-			*/
-		} finally {
+            //t.generate(new ULocale("hu"), null);
+            t.generate(options[MATCH].value);
+            /*
+            t.generate(new ULocale("da"));
+            t.generate(new ULocale("hu"));
+            t.generate(new ULocale("de"));
+            t.generate(new ULocale("ar@collation=direct"));
+            */
+        } finally {
             log.close();
             System.out.println("Done");
-		}
+        }
     }
-    
+
     /**
-	 * 
-	 */
+     *
+     */
     /*
-	private static void compareAvailable() {
-		ULocale[] cols = Collator.getAvailableULocales();
+    private static void compareAvailable() {
+        ULocale[] cols = Collator.getAvailableULocales();
         Locale[] alocs = NumberFormat.getAvailableLocales();
-		Set sCols = filter(cols);
+        Set sCols = filter(cols);
         Set sLocs = filter(alocs);
         Set oldSLocs = new TreeSet(sCols);
         sLocs.removeAll(sCols);
@@ -134,36 +134,36 @@ public class GenerateCldrTests {
         log.println();
         log.println("collation - main");
         showLocales(sCols);
-	}
+    }
     */
 
-	/**
-	 * @param sLocs
-	 */
-	private static void showLocales(Set sLocs) {
-		for (Iterator it = sLocs.iterator(); it.hasNext();) {
+    /**
+     * @param sLocs
+     */
+    private static void showLocales(Set sLocs) {
+        for (Iterator it = sLocs.iterator(); it.hasNext();) {
             String s = (String) it.next();
-        	log.println(s + "\t" + ULocale.getDisplayLanguage(s,"en"));
+            log.println(s + "\t" + ULocale.getDisplayLanguage(s,"en"));
         }
-	}
+    }
 
-	/**
-	 * @param cols
-	 * @return
-	 */
-	private static Set filter(Object[] cols) {
-		Set result = new TreeSet();
+    /**
+     * @param cols
+     * @return
+     */
+    private static Set filter(Object[] cols) {
+        Set result = new TreeSet();
         for (int i = 0; i < cols.length; ++i) {
-        	String s = cols[i].toString();
+            String s = cols[i].toString();
             if (s.indexOf('_') >= 0) continue;
             result.add(s);
         }
         return result;
-	}
-    
+    }
+
     Set addULocales(Object[] objects, Set target) {
-    	for (int i = 0; i < objects.length; ++i) {
-    		target.add(new ULocale(objects[i].toString()));
+        for (int i = 0; i < objects.length; ++i) {
+            target.add(new ULocale(objects[i].toString()));
         }
         return target;
     }
@@ -176,7 +176,7 @@ public class GenerateCldrTests {
         /*
         RuleBasedCollator col = cldrCollations.getInstance(item);
         if (col == null) {
-        	System.out.println("No collator for: " + item);
+            System.out.println("No collator for: " + item);
         }
         String rules = col.getRules(); // ((RuleBasedCollator)Collator.getInstance(item)).getRules();
         rulesToLocales.add(rules, item);
@@ -193,12 +193,12 @@ public class GenerateCldrTests {
     Relation.CollectionFactory cm = new Relation.CollectionMaker(ULocaleComparator);
     Relation rulesToLocales = new Relation(new TreeMap(), cm);
     Relation parentToLocales = new Relation(new TreeMap(ULocaleComparator), cm);
-    
+
     void getLocaleList() {
         collationLocales = new TreeSet(ULocaleComparator);
         collationLocales.addAll(cldrCollations.getAvailableSet());
         /*
-    	collationLocales = addULocales(new String[] { // HACK
+        collationLocales = addULocales(new String[] { // HACK
                 "ga",
                 "nl",
                 "pt",
@@ -213,11 +213,11 @@ public class GenerateCldrTests {
         allLocales.addAll(collationLocales);
         allLocales.addAll(numberLocales);
         allLocales.addAll(dateLocales);
-        // HACK        
+        // HACK
         // get all collations with same rules
-        
+
         for (Iterator it = allLocales.iterator(); it.hasNext();) {
-			addLocale((ULocale) it.next());
+            addLocale((ULocale) it.next());
         }
         /*
         String[] others = new String[] {
@@ -233,10 +233,10 @@ public class GenerateCldrTests {
         }
         */
     }
-    
+
     CldrOthers cldrOthers;
-    
-	void generate(String pat) throws Exception {
+
+    void generate(String pat) throws Exception {
         cldrOthers = new CldrOthers(options[SOURCEDIR].value + "main" + File.separator, pat);
         cldrOthers.show();
         //if (true) return;
@@ -248,7 +248,7 @@ public class GenerateCldrTests {
         for (Iterator it = parentToLocales.keySet().iterator(); it.hasNext();) {
             String p = it.next().toString();
             if (!m.reset(p).matches()) continue;
-        	generate(new ULocale(p));
+            generate(new ULocale(p));
         }
     }
 
@@ -271,10 +271,10 @@ public class GenerateCldrTests {
     }
 
     /*
-     * 
+     *
         // first pass through and get all the functional equivalents
         Map uniqueLocales = new TreeMap();
-        
+
         String[] keywords = Collator.getKeywords();
         boolean [] isAvailable = new boolean[1];
         for (int i = 0; i < locales.length; ++i) {
@@ -288,7 +288,7 @@ public class GenerateCldrTests {
                     add(new ULocale(locales[i] + "@" + keywords[j] + "=" + values[k]), uniqueLocales);
                     //ULocale other = Collator.getFunctionalEquivalent(keywords[j], locales[i], isAvailable);
                 }
-            }            
+            }
         }
         for (int i = 0; i < extras.length; ++i) {
             add(new ULocale(extras[i]), uniqueLocales);
@@ -307,28 +307,28 @@ public class GenerateCldrTests {
             generate(ulocale);
         }
      */
-    
+
     /**
      * add locale into list. Replace old if shorter
      * @param locale
      */
     void add(ULocale locale, Map uniqueLocales) {
         try {
-			RuleBasedCollator col = cldrCollations.getInstance(locale); // (RuleBasedCollator) Collator.getInstance(locale);
+            RuleBasedCollator col = cldrCollations.getInstance(locale); // (RuleBasedCollator) Collator.getInstance(locale);
             // for our purposes, separate locales if we are using different exemplars
-			String key = col.getRules() + "\uFFFF" + getExemplarSet(locale, 0);
-			Set s = (Set) uniqueLocales.get(key);
-			if (s == null) {
-				s = new TreeSet(ULocaleComparator);
-			    uniqueLocales.put(key, s);
-			}
+            String key = col.getRules() + "\uFFFF" + getExemplarSet(locale, 0);
+            Set s = (Set) uniqueLocales.get(key);
+            if (s == null) {
+                s = new TreeSet(ULocaleComparator);
+                uniqueLocales.put(key, s);
+            }
             System.out.println("Adding " + locale);
-			s.add(locale);
-		} catch (Throwable e) { // skip
+            s.add(locale);
+        } catch (Throwable e) { // skip
             System.out.println("skipped " + locale);
-		}
+        }
     }
-    
+
     /**
      * Work-around
      * @param locale
@@ -343,24 +343,24 @@ public class GenerateCldrTests {
         if (options == 0) result.closeOver(UnicodeSet.CASE);
         return result;
     }
-    
+
     public static final Comparator ULocaleComparator = new Comparator() {
-		public int compare(Object o1, Object o2) {
-			return o1.toString().compareTo(o2.toString());
-		}	
+        public int compare(Object o1, Object o2) {
+            return o1.toString().compareTo(o2.toString());
+        }
     };
-    
+
     public interface Equator {
         public boolean equals(Object o1, Object o2);
     }
-    
+
     static boolean intersects(Collection a, Collection b) {
         for (Iterator it = a.iterator(); it.hasNext();) {
             if (b.contains(it.next())) return true;
         }
         return false;
     }
-    
+
     static Collection extract(Object x, Collection a, Equator e, Collection output) {
         List itemsToRemove = new ArrayList();
         for (Iterator it = a.iterator(); it.hasNext();) {
@@ -407,7 +407,7 @@ public class GenerateCldrTests {
             ULocale first = (ULocale) sublocales.iterator().next();
             Collection others = extract(first, sublocales, test, new ArrayList());
             generator.show(first, others);
-        }        
+        }
     }
 
     private void showLocales(String elementName, Collection others) {
@@ -438,11 +438,11 @@ public class GenerateCldrTests {
     }
 
     // ========== DATES ==========
-    
+
     static TimeZone utc = TimeZone.getTimeZone("GMT");
     static DateFormat iso = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     {
-    	iso.setTimeZone(utc);
+        iso.setTimeZone(utc);
     }
     static int[] DateFormatValues = {-1, DateFormat.SHORT, DateFormat.MEDIUM, DateFormat.LONG, DateFormat.FULL};
     static String[] DateFormatNames = {"none", "short", "medium", "long", "full"};
@@ -460,8 +460,8 @@ public class GenerateCldrTests {
         /**
          * Must both be ULocales
          */
-		public boolean equals(Object o1, Object o2) {
-			ULocale loc1 = (ULocale) o1;
+        public boolean equals(Object o1, Object o2) {
+            ULocale loc1 = (ULocale) o1;
             ULocale loc2 = (ULocale) o2;
             for (int i = 0; i < DateFormatValues.length; ++i) {
                 for (int j = 0; j < DateFormatValues.length; ++j) {
@@ -481,9 +481,9 @@ public class GenerateCldrTests {
                 }
             }
             return true;
-		}   	
+        }
     };
-    
+
     DataShower DateShower = new DataShower() {
      public void show(ULocale locale, Collection others) throws ParseException {
         showLocales("date", others);
@@ -502,7 +502,7 @@ public class GenerateCldrTests {
                 "2004-11-04T23:00:01Z",
                 "2010-12-01T23:59:59Z",
         };
-        
+
         ResultsPrinter rp = new ResultsPrinter();
         for (int j = 0; j < samples.length; ++j) {
             Date datetime = iso.parse(samples[j]);
@@ -512,18 +512,18 @@ public class GenerateCldrTests {
                 for (int k = 0; k < DateFormatValues.length; ++k) {
                     if (DateFormatValues[i] == -1 && DateFormatValues[k] == -1) continue;
                     rp.set("timeType", DateFormatNames[k]);
-                	DateFormat df = getDateFormat(locale, i, k);
+                    DateFormat df = getDateFormat(locale, i, k);
                     df.setTimeZone(utc);
-                	rp.print(df.format(datetime));
+                    rp.print(df.format(datetime));
                 }
             }
         }
-        out.println("  </date>");    	
+        out.println("  </date>");
     }};
 
     // ========== NUMBERS ==========
-    
-	static String[] NumberNames = {"standard", "integer", "decimal", "percent", "scientific"};
+
+    static String[] NumberNames = {"standard", "integer", "decimal", "percent", "scientific"};
     private static NumberFormat getNumberFormat(ULocale ulocale, int i) {
         Locale olocale = ulocale.toLocale();
         NumberFormat nf = null;
@@ -539,11 +539,11 @@ public class GenerateCldrTests {
     }
 
     static Currency NO_CURRENCY = Currency.getInstance("XXX");
-    
+
     static Equator NumberEquator = new Equator() {
         /**
          * Must both be ULocales
-         */      
+         */
         public boolean equals(Object o1, Object o2) {
             ULocale loc1 = (ULocale) o1;
             ULocale loc2 = (ULocale) o2;
@@ -552,19 +552,19 @@ public class GenerateCldrTests {
                 nf1.setCurrency(NO_CURRENCY);
                 NumberFormat nf2 = getNumberFormat(loc2, i);
                 nf2.setCurrency(NO_CURRENCY);
-            	if (!nf1.equals(nf2)) {
+                if (!nf1.equals(nf2)) {
                     //nf1.equals(nf2);
                     return false;
                 }
             }
             return true;
-        }       
+        }
     };
 
     DataShower NumberShower = new DataShower() {
         public void show(ULocale locale, Collection others) throws ParseException {
         showLocales("number", others);
-        
+
         double[] samples = {
                 0,
                 0.01, -0.01,
@@ -584,9 +584,9 @@ public class GenerateCldrTests {
                 rp.print(nf.format(sample));
             }
         }
-        out.println("  </number>");       
+        out.println("  </number>");
     }};
-    
+
 
     // ========== COLLATION ==========
 
@@ -598,16 +598,16 @@ public class GenerateCldrTests {
             ULocale loc1 = (ULocale) o1;
             ULocale loc2 = (ULocale) o2;
             return cldrCollations.getInstance(loc1).equals(cldrCollations.getInstance(loc2)); // Collator.getInstance(loc1).equals(Collator.getInstance(loc2));
-        }       
+        }
     };
-    
+
     DataShower CollationShower = new DataShower() {
-    	public void show(ULocale locale, Collection others) {
+        public void show(ULocale locale, Collection others) {
         showLocales("collation", others);
-        
-		Collator col = cldrCollations.getInstance(locale); // Collator.getInstance(locale);
-		
-		UnicodeSet tailored = col.getTailoredSet();
+
+        Collator col = cldrCollations.getInstance(locale); // Collator.getInstance(locale);
+
+        UnicodeSet tailored = col.getTailoredSet();
         if (locale.getLanguage().equals("zh")) {
             tailored.addAll(new UnicodeSet("[[a-z]-[v]]"));
             log.println("HACK for Pinyin");
@@ -615,20 +615,20 @@ public class GenerateCldrTests {
         tailored = createCaseClosure(tailored);
         tailored = nfc(tailored);
         //System.out.println(tailored.toPattern(true));
-        
-		UnicodeSet exemplars = getExemplarSet(locale, UnicodeSet.CASE);
+
+        UnicodeSet exemplars = getExemplarSet(locale, UnicodeSet.CASE);
         // add all the exemplars
         if (false) for (Iterator it = others.iterator(); it.hasNext(); ) {
             exemplars.addAll(getExemplarSet((ULocale)it.next(), UnicodeSet.CASE));
         }
-        
+
         exemplars = createCaseClosure(exemplars);
         exemplars = nfc(exemplars);
         //System.out.println(exemplars.toPattern(true));
-		tailored.addAll(exemplars);
+        tailored.addAll(exemplars);
         //UnicodeSet tailoredMinusHan = new UnicodeSet(tailored).removeAll(SKIP_COLLATION_SET);
         if (!exemplars.containsAll(tailored)) {
-        	//BagFormatter bf = new BagFormatter();
+            //BagFormatter bf = new BagFormatter();
             log.println("In Tailored, but not Exemplar; Locale: " + locale + "\t" + locale.getDisplayName());
             log.println(new UnicodeSet(tailored).removeAll(exemplars).toPattern(false));
             //bf.(log,"tailored", tailored, "exemplars", exemplars);
@@ -636,52 +636,52 @@ public class GenerateCldrTests {
         }
         tailored.addAll(new UnicodeSet("[\\ .02{12}]"));
         tailored.removeAll(SKIP_COLLATION_SET);
-		
+
         SortedBag bag = new SortedBag(col);
-		doCollationResult(col, tailored, bag);
-		out.println("  </collation>");
-	}};
+        doCollationResult(col, tailored, bag);
+        out.println("  </collation>");
+    }};
     static final UnicodeSet SKIP_COLLATION_SET = new UnicodeSet(
             "[[:script=han:][:script=hangul:]-[\u4e00-\u4eff \u9f00-\u9fff \uac00-\uacff \ud700-\ud7ff]]");
 
-	/**
-	 * @param col
-	 * @param tailored
-	 * @param bag
-	 */
-	private void doCollationResult(Collator col, UnicodeSet tailored, SortedBag bag) {
-		for (UnicodeSetIterator usi = new UnicodeSetIterator(tailored); usi.next(); ) {
-		    String s = usi.getString();
-		    bag.add('x' + s);
-		    bag.add('X' + s);
-		    bag.add('x' + s + 'x');
-		}
-		//out.println("   <set locale='" + locale + "'/>");
+    /**
+     * @param col
+     * @param tailored
+     * @param bag
+     */
+    private void doCollationResult(Collator col, UnicodeSet tailored, SortedBag bag) {
+        for (UnicodeSetIterator usi = new UnicodeSetIterator(tailored); usi.next(); ) {
+            String s = usi.getString();
+            bag.add('x' + s);
+            bag.add('X' + s);
+            bag.add('x' + s + 'x');
+        }
+        //out.println("   <set locale='" + locale + "'/>");
         /*
         if (others != null) for (Iterator it = others.iterator(); it.hasNext(); ) {
             ULocale uloc = (ULocale) it.next();
             if (uloc.equals(locale)) continue;
-        	out.println("   <other locale='" + uloc + "'/>");
+            out.println("   <other locale='" + uloc + "'/>");
         }
         */
-		out.println("   <result>");
-		String last = "";
-		boolean needEquals = false;
-		for (Iterator it = bag.iterator(); it.hasNext(); ) {
-		    String s = (String) it.next();
-		    if (col.compare(s, last) != 0) {
-		        if (needEquals) out.println(last);
+        out.println("   <result>");
+        String last = "";
+        boolean needEquals = false;
+        for (Iterator it = bag.iterator(); it.hasNext(); ) {
+            String s = (String) it.next();
+            if (col.compare(s, last) != 0) {
+                if (needEquals) out.println(last);
                 needEquals = false;
                 last = s;
-		    } else {
-		    	needEquals = true;
-		    }
-		    out.println(BagFormatter.toXML.transliterate(s));
+            } else {
+                needEquals = true;
+            }
+            out.println(BagFormatter.toXML.transliterate(s));
 
-		}
-		out.println("   </result>");
-	}
-    
+        }
+        out.println("   </result>");
+    }
+
     static public Set getMatchingXMLFiles(String sourceDir, String localeRegex) {
         Matcher m = Pattern.compile(localeRegex).matcher("");
         Set s = new TreeSet();
@@ -702,22 +702,22 @@ public class GenerateCldrTests {
         Map uniqueExemplars = new HashMap();
         String sourceDir;
         Set locales = new TreeSet(ULocaleComparator);
-        
+
         UnicodeSet getExemplarSet(ULocale locale) {
-        	return (UnicodeSet) ulocale_exemplars.get(locale); 
+            return (UnicodeSet) ulocale_exemplars.get(locale);
         }
-        
+
         void show() {
             log.println("Showing Locales");
             log.println("Unique Exemplars: " + uniqueExemplars.size());
             for (Iterator it2 = ulocale_exemplars.keySet().iterator(); it2.hasNext();) {
                 ULocale locale = (ULocale) it2.next();
                 UnicodeSet us = getExemplarSet(locale);
-                log.println("\t" + locale + ", " + us);   
-            }       	
+                log.println("\t" + locale + ", " + us);
+            }
         }
         static final ULocale ROOT = new ULocale("root"); // since CLDR has different root.
-        
+
         CldrOthers(String sourceDir, String localeRegex) {
             this.sourceDir = sourceDir;
             Set s = getMatchingXMLFiles(sourceDir, localeRegex);
@@ -727,42 +727,42 @@ public class GenerateCldrTests {
             // now do inheritance manually
             for (Iterator it = locales.iterator(); it.hasNext();) {
                 ULocale locale = (ULocale) it.next();
-            	UnicodeSet ex = (UnicodeSet) ulocale_exemplars.get(locale);
+                UnicodeSet ex = (UnicodeSet) ulocale_exemplars.get(locale);
                 if (ex != null) continue;
                 for (ULocale parent = locale.getFallback(); parent != null; parent = parent.getFallback()) {
                     ULocale fixedParent = parent.getLanguage().length() == 0 ? ROOT : parent;
-                	ex = (UnicodeSet) ulocale_exemplars.get(fixedParent);
+                    ex = (UnicodeSet) ulocale_exemplars.get(fixedParent);
                     if (ex == null) continue;
                     ulocale_exemplars.put(locale, ex);
                     break;
                 }
             }
-            
+
         }
         void getInfo(String locale) {
-            System.out.println("Getting info for: " + locale);     
+            System.out.println("Getting info for: " + locale);
             locales.add(new ULocale(locale));
             Document doc;
             if (options[FULLY_RESOLVED].doesOccur) {
-				doc = LDMLUtilities.getFullyResolvedLDML(sourceDir, locale,
-						false, false, false);
-			} else {
-				doc = LDMLUtilities.parse(sourceDir + locale + ".xml", false);
-			}
+                doc = LDMLUtilities.getFullyResolvedLDML(sourceDir, locale,
+                        false, false, false);
+            } else {
+                doc = LDMLUtilities.parse(sourceDir + locale + ".xml", false);
+            }
             Node node = LDMLUtilities.getNode(doc, "//ldml/characters/exemplarCharacters");
             if (node == null) return;
             if (isDraft(node)) System.out.println("Skipping draft: " + locale + ", " + getXPath(node));
-        	String exemplars = LDMLUtilities.getNodeValue(node);
+            String exemplars = LDMLUtilities.getNodeValue(node);
             UnicodeSet exemplarSet = new UnicodeSet(exemplars);
             UnicodeSet fixed = (UnicodeSet) uniqueExemplars.get(exemplarSet);
             if (fixed == null) {
-            	uniqueExemplars.put(exemplarSet, exemplarSet);
+                uniqueExemplars.put(exemplarSet, exemplarSet);
                 fixed = exemplarSet;
             }
             ulocale_exemplars.put(new ULocale(locale), fixed);
         }
     }
-    
+
     public static boolean isDraft(Node node) {
         for (; node.getNodeType() != Node.DOCUMENT_NODE; node = node.getParentNode()){
             NamedNodeMap attributes = node.getAttributes();
@@ -774,7 +774,7 @@ public class GenerateCldrTests {
         }
         return false;
     }
-    
+
     public static String getXPath(Node node) {
         StringBuffer xpathFragment = new StringBuffer();
         StringBuffer xpath = new StringBuffer();
@@ -784,17 +784,17 @@ public class GenerateCldrTests {
             NamedNodeMap attributes = node.getAttributes();
             if (attributes != null) {
                 for (int i = 0; i < attributes.getLength(); ++i) {
-                	Node attribute = attributes.item(i);
-                	xpathFragment.append("[@").append(attribute.getNodeName()).append('=')
-					    .append(attribute.getNodeValue()).append(']');
+                    Node attribute = attributes.item(i);
+                    xpathFragment.append("[@").append(attribute.getNodeName()).append('=')
+                        .append(attribute.getNodeValue()).append(']');
                 }
             }
             xpath.insert(0, xpathFragment);
         }
         xpath.insert(0, '/');
-        return xpath.toString();   
+        return xpath.toString();
     }
-    
+
     public static String getParent(String locale) {
         int pos = locale.lastIndexOf('_');
         if (pos >= 0) {
@@ -803,7 +803,7 @@ public class GenerateCldrTests {
         if (!locale.equals("root")) return "root";
         return null;
     }
-    
+
 
     static class CldrCollations {
         Set validLocales = new TreeSet();
@@ -812,43 +812,43 @@ public class GenerateCldrTests {
         String sourceDir;
         Map collation_collation = new HashMap();
         RuleBasedCollator emptyCollator = (RuleBasedCollator) Collator.getInstance(new ULocale(""));
-        
-        public Set getAvailableSet() {
-        	return ulocale_rules.keySet();
-        }
-        
-		public RuleBasedCollator getInstance(ULocale locale) {
-			return (RuleBasedCollator) ulocale_rules.get(locale);
-		}
 
-		void show() {
+        public Set getAvailableSet() {
+            return ulocale_rules.keySet();
+        }
+
+        public RuleBasedCollator getInstance(ULocale locale) {
+            return (RuleBasedCollator) ulocale_rules.get(locale);
+        }
+
+        void show() {
             log.println("Showing Locales");
             log.println("Unique Collators: " + collation_collation.size());
-        	for (Iterator it2 = ulocale_rules.keySet().iterator(); it2.hasNext();) {
+            for (Iterator it2 = ulocale_rules.keySet().iterator(); it2.hasNext();) {
                 ULocale locale = (ULocale) it2.next();
                 RuleBasedCollator col = (RuleBasedCollator) ulocale_rules.get(locale);
-                log.println("\t" + locale + ", " + col.getRules());   
+                log.println("\t" + locale + ", " + col.getRules());
             }
         }
-        
+
         CldrCollations(String sourceDir, String localeRegex) throws Exception {
-        	this.sourceDir = sourceDir;
+            this.sourceDir = sourceDir;
             Set s = getMatchingXMLFiles(sourceDir, localeRegex);
             for (Iterator it = s.iterator(); it.hasNext();) {
-            	getCollationRules((String) it.next());
+                getCollationRules((String) it.next());
             }
 
             // now fixup the validLocales, adding in what they inherit
             // TODO, add check: validSubLocales are masked by intervening locales.
             for (Iterator it = validLocales.iterator(); it.hasNext(); ) {
                 String locale = (String) it.next();
-            	Map types_rules = (Map) locale_types_rules.get(locale);
+                Map types_rules = (Map) locale_types_rules.get(locale);
                 if (types_rules != null) log.println("Weird: overlap in validLocales: " + locale);
                 else {
                     for (String parentlocale = getParent(locale); parentlocale != null; locale = getParent(parentlocale)) {
                         types_rules = (Map) locale_types_rules.get(parentlocale);
                         if (types_rules != null) {
-                        	locale_types_rules.put(locale, types_rules);
+                            locale_types_rules.put(locale, types_rules);
                             break;
                         }
                     }
@@ -856,26 +856,26 @@ public class GenerateCldrTests {
             }
             // now generate the @-style locales
             for (Iterator it = locale_types_rules.keySet().iterator(); it.hasNext(); ) {
-            	String locale = (String) it.next();
+                String locale = (String) it.next();
                 Map types_rules = (Map) locale_types_rules.get(locale);
                 for (Iterator it2 = types_rules.keySet().iterator(); it2.hasNext(); ) {
-                	String type = (String) it2.next();
+                    String type = (String) it2.next();
                     RuleBasedCollator col = (RuleBasedCollator) types_rules.get(type);
                     String name = type.equals("standard") ? locale : locale + "@collation=" + type;
                     ulocale_rules.put(new ULocale(name), col);
                 }
             }
         }
-        
+
         public static String replace(String source, String pattern, String replacement) {
             // dumb code for now
             for (int pos = source.indexOf(pattern, 0); pos >= 0; pos = source.indexOf(pattern, pos + 1)) {
-            	source = source.substring(0, pos) + replacement + source.substring(pos+pattern.length());
+                source = source.substring(0, pos) + replacement + source.substring(pos+pattern.length());
             }
             return source;
         }
         static Transliterator fromHex = Transliterator.getInstance("hex-any");
-        
+
         private void getCollationRules(String locale) throws Exception {
             System.out.println(locale);
             Document doc = LDMLUtilities.getFullyResolvedLDML(sourceDir, locale, false, false, false);
@@ -890,15 +890,15 @@ public class GenerateCldrTests {
                 if (current instanceof ICUResourceWriter.ResourceTable) {
                     ICUResourceWriter.ResourceTable table = (ICUResourceWriter.ResourceTable) current;
                     for (Resource current2 = table.first; current2 != null; current2 = current2.next) {
-                    	if (current2 instanceof ICUResourceWriter.ResourceString) {
-                    		ICUResourceWriter.ResourceString foo = (ICUResourceWriter.ResourceString) current2;
-                    		//System.out.println("\t" + foo.name + ", " + foo.val);
+                        if (current2 instanceof ICUResourceWriter.ResourceString) {
+                            ICUResourceWriter.ResourceString foo = (ICUResourceWriter.ResourceString) current2;
+                            //System.out.println("\t" + foo.name + ", " + foo.val);
                             /* skip since the utilities have the wrong value
                             if (current.name.equals("validSubLocales")) {
                                 // skip since it is wrong
                                 log.println("Valid Sub Locale: " + foo.name);
-                            	validLocales.add(foo.name);
-                            } else 
+                                validLocales.add(foo.name);
+                            } else
                             */
                             if (foo.name.equals("Sequence")) {
                                 // remove the \ u's, because they blow up
@@ -917,7 +917,7 @@ public class GenerateCldrTests {
                         }
                     }
                 }
-                //current.write(System.out,0,false);            
+                //current.write(System.out,0,false);
             }
             // now get the valid sublocales
             Document doc2 = LDMLUtilities.parse(sourceDir + locale + ".xml", false);
@@ -928,47 +928,47 @@ public class GenerateCldrTests {
                 Utility.split(validSubLocales, ' ', items);
                 for (int i = 0; items[i].length() != 0; ++i) {
                     log.println("Valid Sub Locale: " + items[i]);
-                    validLocales.add(items[i]);            	
+                    validLocales.add(items[i]);
                 }
             }
         }
 
-		/**
-		 * @param locale
-		 * @param current
-		 * @param foo
-		 * @param rules
-		 */
-		private RuleBasedCollator generateCollator(String locale, String current, String foo, String rules) {
+        /**
+         * @param locale
+         * @param current
+         * @param foo
+         * @param rules
+         */
+        private RuleBasedCollator generateCollator(String locale, String current, String foo, String rules) {
             RuleBasedCollator fixed = null;
-			try {
-			    if (rules.equals("")) fixed = emptyCollator;
-			    else {
-			        rules = replace(rules, "[optimize[", "[optimize [");
-			        rules = replace(rules, "[suppressContractions[", "[suppressContractions [");
-			        RuleBasedCollator col = new RuleBasedCollator(rules);
-			        fixed = (RuleBasedCollator) collation_collation.get(col);
-			        if (fixed == null) {
-			        	collation_collation.put(col, col);
-			            fixed = col;
-			        }
-			    }
-			} catch (Exception e) {
-				log.println("***Cannot create collator from: " + locale + ", " + current + ", " + foo + ", " + rules);
-			    e.printStackTrace(log);
-			    RuleBasedCollator coll = (RuleBasedCollator)Collator.getInstance(new ULocale(locale));
-			    String oldrules = coll.getRules();
-			    log.println("Old ICU4J: " + oldrules);
-			    log.println("Equal?: " + oldrules.equals(rules));
-			}
-			return fixed;
-		}
+            try {
+                if (rules.equals("")) fixed = emptyCollator;
+                else {
+                    rules = replace(rules, "[optimize[", "[optimize [");
+                    rules = replace(rules, "[suppressContractions[", "[suppressContractions [");
+                    RuleBasedCollator col = new RuleBasedCollator(rules);
+                    fixed = (RuleBasedCollator) collation_collation.get(col);
+                    if (fixed == null) {
+                        collation_collation.put(col, col);
+                        fixed = col;
+                    }
+                }
+            } catch (Exception e) {
+                log.println("***Cannot create collator from: " + locale + ", " + current + ", " + foo + ", " + rules);
+                e.printStackTrace(log);
+                RuleBasedCollator coll = (RuleBasedCollator)Collator.getInstance(new ULocale(locale));
+                String oldrules = coll.getRules();
+                log.println("Old ICU4J: " + oldrules);
+                log.println("Equal?: " + oldrules.equals(rules));
+            }
+            return fixed;
+        }
     }
     // ========== UNICODESET UTILITIES ==========
 
     public static interface Apply {
-    	String apply(String source);
-    }   
+        String apply(String source);
+    }
     static UnicodeSet apply(UnicodeSet source, Apply apply) {
         UnicodeSet target = new UnicodeSet();
         for (UnicodeSetIterator usi = new UnicodeSetIterator(source); usi.next(); ) {
@@ -979,21 +979,21 @@ public class GenerateCldrTests {
     }
     static UnicodeSet nfc(UnicodeSet source) {
         return apply(source, new Apply() {
-			public String apply(String source) {
-				return Normalizer.compose(source, false);
-			}
+            public String apply(String source) {
+                return Normalizer.compose(source, false);
+            }
         });
     }
-    
+
     public static interface CloseCodePoint {
-    	/**
-    	 * @param cp code point to get closure for
-    	 * @param toAddTo Unicode set for the closure
-    	 * @return toAddTo (for chaining)
-    	 */
-    	UnicodeSet close(int cp, UnicodeSet toAddTo);
+        /**
+         * @param cp code point to get closure for
+         * @param toAddTo Unicode set for the closure
+         * @return toAddTo (for chaining)
+         */
+        UnicodeSet close(int cp, UnicodeSet toAddTo);
     }
-    
+
     public static UnicodeSet createCaseClosure(UnicodeSet source) {
         UnicodeSet target = new UnicodeSet();
         for (UnicodeSetIterator usi = new UnicodeSetIterator(source); usi.next(); ) {
@@ -1004,16 +1004,16 @@ public class GenerateCldrTests {
         }
         return target;
     }
-    
+
     public static final CloseCodePoint CCCP = new CloseCodePoint() {
         Locale locale = Locale.ENGLISH;
         UnicodeSet NONE = new UnicodeSet();
         UnicodeMap map = new UnicodeMap();
-        
-		public UnicodeSet close(int cp, UnicodeSet toAddTo) {
+
+        public UnicodeSet close(int cp, UnicodeSet toAddTo) {
             UnicodeSet result = (UnicodeSet) map.getValue(cp);
             if (result == null) {
-    			result = new UnicodeSet();
+                result = new UnicodeSet();
                 result.add(cp);
                 String s = UCharacter.toLowerCase(locale, UTF16.valueOf(cp));
                 result.add(s);
@@ -1029,17 +1029,17 @@ public class GenerateCldrTests {
             if (result != NONE) toAddTo.addAll(result);
             else toAddTo.add(cp);
             return toAddTo;
-		}
+        }
     };
-    
+
     public static UnicodeSet createClosure(String source, CloseCodePoint closer) {
-    	return createClosure(source, 0, closer);
+        return createClosure(source, 0, closer);
     }
     public static UnicodeSet createClosure(String source, int position, CloseCodePoint closer) {
         UnicodeSet result = new UnicodeSet();
         // if at end, return empty set
         if (position >= source.length()) return result;
-    	int cp = UTF16.charAt(source, position);
+        int cp = UTF16.charAt(source, position);
         // if last character, return its set
         int endPosition = position + UTF16.getCharCount(cp);
         if (endPosition >= source.length()) return closer.close(cp, result);
@@ -1047,7 +1047,7 @@ public class GenerateCldrTests {
         UnicodeSet remainder = createClosure(source, endPosition, closer);
         return createAppend(closer.close(cp, result), remainder);
     }
-    
+
     /**
      * Produce the result of appending each element of this to each element of other.
      * That is, [a{cd}] + [d{ef}] => [{ad}{aef}{cdd}{cdef}]

@@ -41,42 +41,42 @@ public class Relation {
     }
 
     public void clear() {
-		m.clear();
-	}
-	public boolean containsKey(Object key) {
-		return m.containsKey(key);
-	}
-	public boolean containsValue(Object value) {
-		return m.containsValue(value);
-	}
-	public Set entrySet() {
-		return m.entrySet();
-	}
-	public boolean equals(Object obj) {
-		return m.equals(obj);
-	}
-	public int hashCode() {
-		return m.hashCode();
-	}
-	public boolean isEmpty() {
-		return m.isEmpty();
-	}
-	public Object remove(Object key) {
-		return m.remove(key);
-	}
-	public int size() {
-		return m.size();
-	}
-	public String toString() {
-		return m.toString();
-	}
+        m.clear();
+    }
+    public boolean containsKey(Object key) {
+        return m.containsKey(key);
+    }
+    public boolean containsValue(Object value) {
+        return m.containsValue(value);
+    }
+    public Set entrySet() {
+        return m.entrySet();
+    }
+    public boolean equals(Object obj) {
+        return m.equals(obj);
+    }
+    public int hashCode() {
+        return m.hashCode();
+    }
+    public boolean isEmpty() {
+        return m.isEmpty();
+    }
+    public Object remove(Object key) {
+        return m.remove(key);
+    }
+    public int size() {
+        return m.size();
+    }
+    public String toString() {
+        return m.toString();
+    }
     public Set keySet() {
         return m.keySet();
     }
     /*
     public void addAll(Relation t) {
         for (Iterator it = t.keySet().iterator(); it.hasNext();) {
-        	Object key = it.next();
+            Object key = it.next();
             add(key, t.get(key));
         }
     }
@@ -86,7 +86,7 @@ public class Relation {
     }
     public Collection get(Object key, Collection output) {
         output.addAll((Collection)m.get(key));
-    	return output;
+        return output;
     }
     public void add(Object key, Object value) {
         Collection o = (Collection) m.get(key);
@@ -111,17 +111,17 @@ public class Relation {
         public static final int HASH = 0, TREE = 1;
         private Comparator comparator = null;
         private int type = HASH;
-        
+
         public CollectionMaker(int type) {
             this.type = type;
         }
         public CollectionMaker(Comparator comparator) {
-    		this.comparator = comparator;
+            this.comparator = comparator;
         }
-		public Collection make() {
-			if (comparator != null) return new TreeSet(comparator);
+        public Collection make() {
+            if (comparator != null) return new TreeSet(comparator);
             else if (type == HASH) return new HashSet();
             else return new TreeSet();
-		}
+        }
     }
 }

@@ -64,7 +64,7 @@ import com.ibm.icu.util.UResourceBundle;
  * one element, where the file would otherwise be too large.
  * @author medavis
  */
-/* 
+/*
 Notes:
 http://xml.apache.org/xerces2-j/faq-grammars.html#faq-3
 http://developers.sun.com/dev/coolstuff/xml/readme.html
@@ -78,12 +78,12 @@ public class GenerateSidewaysView {
     static final boolean DEBUG_SHOW_ADD = false;
     static final boolean DEBUG_ELEMENT = false;
     static final boolean DEBUG_SHOW_BAT = false;
-    
+
     static final boolean FIX_ZONE_ALIASES = true;
 
-    private static final int 
+    private static final int
         HELP1 = 0,
-		HELP2 = 1,
+        HELP2 = 1,
         SOURCEDIR = 2,
         DESTDIR = 3,
         MATCH = 4,
@@ -91,7 +91,7 @@ public class GenerateSidewaysView {
         TZADIR = 6,
         NONVALIDATING = 7,
         SHOW_DTD = 8;
-        
+
     private static final String NEWLINE = "\n";
 
     private static final UOption[] options = {
@@ -106,9 +106,9 @@ public class GenerateSidewaysView {
             UOption.create("dtd", 'w', UOption.NO_ARG),
     };
     private static String timeZoneAliasDir = null;
-    
+
     public static void main(String[] args) throws SAXException, IOException {
-        
+
         UOption.parseArgs(args, options);
 
         Matcher skipper = Pattern.compile(options[SKIP].value).matcher("");
@@ -135,7 +135,7 @@ public class GenerateSidewaysView {
                 temp.writeTo(options[DESTDIR].value, baseName);
                 generateBat(options[SOURCEDIR].value, baseName + ".xml", options[DESTDIR].value, baseName + ".xml");
                 sidewaysView.putData(temp.data, baseName);
-                log.flush();          
+                log.flush();
             }
             sidewaysView.showCacheData();
         } finally {
@@ -143,18 +143,18 @@ public class GenerateSidewaysView {
             System.out.println("Done");
        }
     }
-    
-    /**
-	 * 
-	 */
-	private void writeDTDCheck() {
-		DEFAULT_DECLHANDLER.checkData();
-	}
 
-	static Collator DEFAULT_COLLATION = null;
-    
+    /**
+     *
+     */
+    private void writeDTDCheck() {
+        DEFAULT_DECLHANDLER.checkData();
+    }
+
+    static Collator DEFAULT_COLLATION = null;
+
     static final Set IGNOREABLE =  new HashSet(Arrays.asList(new String[] {
-            "draft", 
+            "draft",
             //"references",
             //"standard"
     }));
@@ -164,10 +164,10 @@ public class GenerateSidewaysView {
     }));
 
     static final Set LEAFNODES = new HashSet(Arrays.asList(new String[] {
-                   "alias", "default", "firstDay", "mapping", "measurementSystem", 
+                   "alias", "default", "firstDay", "mapping", "measurementSystem",
                    "minDays", "orientation", "settings", "weekendStart", "weekendEnd"
    }));
-    
+
     static Collator getDefaultCollation() {
         if (DEFAULT_COLLATION != null) return DEFAULT_COLLATION;
         RuleBasedCollator temp = (RuleBasedCollator) Collator.getInstance(ULocale.ENGLISH);
@@ -177,29 +177,29 @@ public class GenerateSidewaysView {
         return temp;
     }
 
-    public static class TimeZoneAliases {        
-    	static Map map = null;
+    public static class TimeZoneAliases {
+        static Map map = null;
         static void init() {
             map = new HashMap();
-        	try {
-				BufferedReader br = BagFormatter.openUTF8Reader(timeZoneAliasDir, "timezone_aliases.txt");
-				String[] pieces = new String[2];
-				while (true) {
-					String line = br.readLine();
-				    if (line == null) break;
-				    Utility.split(line,';', pieces);
-				    map.put(pieces[0].trim(), pieces[1].trim());
-				}
-				br.close();
+            try {
+                BufferedReader br = BagFormatter.openUTF8Reader(timeZoneAliasDir, "timezone_aliases.txt");
+                String[] pieces = new String[2];
+                while (true) {
+                    String line = br.readLine();
+                    if (line == null) break;
+                    Utility.split(line,';', pieces);
+                    map.put(pieces[0].trim(), pieces[1].trim());
+                }
+                br.close();
                 map.put("","EMPTY-REMOVE");
-			} catch (IOException e) {
+            } catch (IOException e) {
                 throw new RuntimeException(e);
-			}
+            }
         }
-        
+
         public static String get(Object id) {
             if (map == null) init();
-        	return (String) map.get(id);
+            return (String) map.get(id);
         }
     }
 
@@ -211,7 +211,7 @@ public class GenerateSidewaysView {
         attributeOrdering.add("draft");
     }
     static MapComparator valueOrdering = new MapComparator();
-        
+
     OrderedMap data = new OrderedMap();
     MyContentHandler DEFAULT_HANDLER = new MyContentHandler();
     MyDeclHandler DEFAULT_DECLHANDLER = new MyDeclHandler();
@@ -229,11 +229,11 @@ public class GenerateSidewaysView {
         }
     }
     */
-    
+
     static PrintWriter log;
-    
+
     /**
-     * 
+     *
      */
     /*private void addMissing() {
         String[] currencies = getCodes(new ULocale("en","",""), "Currencies");
@@ -256,7 +256,7 @@ public class GenerateSidewaysView {
         }
     }
     */
-    
+
     // UGLY hack
     private static String[] getCodes(ULocale locale, String tableName) {
         // TODO remove Ugly Hack
@@ -275,7 +275,7 @@ public class GenerateSidewaysView {
 
 
     static Map cache = new HashMap();
-    
+
     static GenerateSidewaysView getCLDR(String s, boolean validating) throws SAXException, IOException {
         GenerateSidewaysView temp = (GenerateSidewaysView)cache.get(s);
         if (temp == null) {
@@ -284,10 +284,10 @@ public class GenerateSidewaysView {
         }
         return temp;
     }
-    
+
     String filename;
     GenerateSidewaysView parent = null;
-        
+
     private GenerateSidewaysView(String filename, boolean validating) throws SAXException, IOException {
         this.filename = filename;
         xmlReader = createXMLReader(validating);
@@ -332,9 +332,9 @@ public class GenerateSidewaysView {
             }
         }
     }
-    
+
     static class Parent {
-    	GenerateSidewaysView parent;
+        GenerateSidewaysView parent;
     }
     private Object getInheritedValue(Object key, Parent parentOut) {
         if (parent == null) {
@@ -348,16 +348,16 @@ public class GenerateSidewaysView {
         }
         return parent.getInheritedValue(key, parentOut);
     }
-    
+
     /*
     Set badTimezoneIDs = null;
      private void detectAliases(String filename) {
-      
+
         Set problems = new TreeSet();
         for (Iterator it = data.iterator(); it.hasNext();) {
             ElementChain key = (ElementChain) it.next();
             for (int i = 0; i < key.contexts.size(); ++i) {
-            	Element e = (Element) key.contexts.get(i);
+                Element e = (Element) key.contexts.get(i);
                 if (!e.elementName.equals("zone")) continue;
                 for (Iterator q = e.attributes.contents.iterator(); q.hasNext(); ) {
                     SimpleAttribute a = (SimpleAttribute)q.next();
@@ -369,14 +369,14 @@ public class GenerateSidewaysView {
                 }
             }
         }
-       
+
         for (Iterator it = badTimezoneIDs.iterator(); it.hasNext();) {
             String oldOne = (String)it.next();
             String newOne = TimeZoneAliases.get(oldOne);
-        	log.println("Fix Timezone Alias: " + filename + "\t" + oldOne + " => " + newOne);
+            log.println("Fix Timezone Alias: " + filename + "\t" + oldOne + " => " + newOne);
         }
     } */
-    
+
     /*
     private void removeAll(GenerateSidewaysView temp) {
         data.removeAll(temp.data);
@@ -406,28 +406,28 @@ public class GenerateSidewaysView {
         xmlReader.parse(new InputSource(new FileInputStream(f)));
         //SAX.parse(f, DEFAULT_HANDLER);
     }
-    
+
     private Set findDuplicateZoneIDs() {
         Set result = new HashSet();
         // if a set contains both EST and America/Indianapolis, remove the former
-    	for (Iterator it = zoneIDs.iterator(); it.hasNext();) {
+        for (Iterator it = zoneIDs.iterator(); it.hasNext();) {
             Object possibleOmission = it.next();
-    		Object o = TimeZoneAliases.get(possibleOmission);
+            Object o = TimeZoneAliases.get(possibleOmission);
             if (o == null) continue;
             if (zoneIDs.contains(o)) result.add(possibleOmission);
         }
         return result;
     }
-    
+
     public String toString() {
         StringBuffer buffer = new StringBuffer();
 
         buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"+NEWLINE
         + "<!DOCTYPE ldml SYSTEM \"http://www.unicode.org/cldr/dtd/1.2/beta/ldml.dtd\">"+NEWLINE);
-        
+
         Set duplicateZoneIDs = findDuplicateZoneIDs();
         //badTimezoneIDs = new TreeSet();
-        
+
         ElementChain empty = new ElementChain();
         ElementChain old = empty;
         for (Iterator it = data.iterator(); it.hasNext();) {
@@ -435,9 +435,9 @@ public class GenerateSidewaysView {
             if (FIX_ZONE_ALIASES) {
                 Element zoneElement = key.getElement("zone");
                 if (zoneElement != null) {
-                	String zoneTypeValue = zoneElement.getValue("type");
+                    String zoneTypeValue = zoneElement.getValue("type");
                     if (zoneTypeValue != null) {
-                		if (duplicateZoneIDs.contains(zoneTypeValue)) continue;
+                        if (duplicateZoneIDs.contains(zoneTypeValue)) continue;
                     }
                 }
             }
@@ -453,21 +453,21 @@ public class GenerateSidewaysView {
             }
             EndNode value = (EndNode) data.get(key);
             key.writeDifference(old, value, buffer);
-            old = key;           
+            old = key;
         }
         empty.writeDifference(old, null, buffer);
         writeElementComment(buffer,finalComment,0);
 
         return buffer.toString();
     }
-    
+
     static void generateBat(String sourceDir, String sourceFile, String targetDir, String targetFile) {
         boolean needBat = true;
         try {
-			BufferedReader b1 = BagFormatter.openUTF8Reader(sourceDir, sourceFile);
+            BufferedReader b1 = BagFormatter.openUTF8Reader(sourceDir, sourceFile);
             BufferedReader b2 = BagFormatter.openUTF8Reader(targetDir, targetFile);
             while (true) {
-            	String line1 = b1.readLine();
+                String line1 = b1.readLine();
                 String line2 = b2.readLine();
                 if (line1 == null && line2 == null) {
                     needBat = false;
@@ -491,32 +491,32 @@ public class GenerateSidewaysView {
             String batDir = targetDir + File.separator + "diff" + File.separator;
             String batName = targetFile + ".bat";
             if (needBat) {
-            	PrintWriter bat = BagFormatter.openUTF8Writer(batDir, batName);
+                PrintWriter bat = BagFormatter.openUTF8Writer(batDir, batName);
                 bat.println("\"C:\\Program Files\\Compare It!\\wincmp3.exe\" " +
                         new File(sourceDir + sourceFile).getCanonicalPath() + " " +
                         new File(targetDir + targetFile).getCanonicalPath());
                 bat.close();
             } else {
-            	File f = new File(batDir + batName);
+                File f = new File(batDir + batName);
                 if (f.exists()) {
-                	if (DEBUG_SHOW_BAT) System.out.println("*Deleting old " + f.getCanonicalPath());
-                	f.delete();
+                    if (DEBUG_SHOW_BAT) System.out.println("*Deleting old " + f.getCanonicalPath());
+                    f.delete();
                 }
             }
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        
-     // 
-   
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+     //
+
     }
-    
+
     static boolean equalsIgnoringWhitespace(String a, String b) {
         int i = 0;
         int j = 0;
         char c, d;
-    	while (true) { // don't worry about surrogates
+        while (true) { // don't worry about surrogates
             do {c = i < a.length() ? a.charAt(i++) : 0xFFFF;} while (UCharacter.isUWhiteSpace(c));
             do {d = j < b.length() ? b.charAt(j++) : 0xFFFF;} while (UCharacter.isUWhiteSpace(d));
             if (c != d) return false;
@@ -542,9 +542,9 @@ public class GenerateSidewaysView {
         public String toString() {return toString(true);}
         public String toString(boolean path) {
             if (path) {
-            	return "[@" + name + "='" + BagFormatter.toHTML.transliterate(value) + "']";
+                return "[@" + name + "='" + BagFormatter.toHTML.transliterate(value) + "']";
             } else {
-                return " " + name + "=\"" + BagFormatter.toXML.transliterate(value) + "\"";                
+                return " " + name + "=\"" + BagFormatter.toXML.transliterate(value) + "\"";
             }
         }
         public int compareTo(Object o) {
@@ -554,36 +554,36 @@ public class GenerateSidewaysView {
             return valueOrdering.compare(value, that.value);
         }
     }
-    
+
     Set zoneIDs = new HashSet();
-    
+
     class SimpleAttributes implements Comparable {
         Set contents = new TreeSet();
-        
+
         SimpleAttributes() {}
-        
+
         SimpleAttributes(SimpleAttributes other, String elementName) {
             contents.clear();
             contents.addAll(other.contents);
         }
-        
+
         SimpleAttributes(Attributes attributes, String elementName) {
             boolean inZone = elementName.equals("zone");
             if (attributes != null) {
                 for (int i = 0; i < attributes.getLength(); ++i) {
                     String name = attributes.getQName(i);
                     String value = attributes.getValue(i);
-                    
+
                     if (FIX_ZONE_ALIASES && inZone) {
-                    	if (name.equals("type")) {
+                        if (name.equals("type")) {
                             zoneIDs.add(value);
                         }
                     }
-                    
+
                     // hack to removed #IMPLIED
                     if (elementName.equals("ldml")
                         && name.equals("version")) continue; // skip version
-                    if (name.equals("type") 
+                    if (name.equals("type")
                         && value.equals("standard")) continue;
 
                     contents.add(new SimpleAttribute(name, value));
@@ -591,7 +591,7 @@ public class GenerateSidewaysView {
                 }
             }
         }
-        
+
         public String toString() {return toString(true, false);}
         public String toString(boolean path, boolean isZone) {
             StringBuffer buffer = new StringBuffer();
@@ -619,21 +619,21 @@ public class GenerateSidewaysView {
             Iterator it2 = that.contents.iterator();
             int result;
             while (true) {
-            	SimpleAttribute a = getSkipping(it);
+                SimpleAttribute a = getSkipping(it);
                 SimpleAttribute a2 = getSkipping(it2);
                 if (a == null) {
-                	if (a2 == null) return 0;
+                    if (a2 == null) return 0;
                     return -1;
                 }
                 if (a2 == null) {
-                	return 1;
+                    return 1;
                 }
                 if ((result = a.compareTo(a2)) != 0) return result;
             }
         }
         private SimpleAttribute getSkipping(Iterator it) {
             while (it.hasNext()) {
-            	SimpleAttribute a = (SimpleAttribute)it.next();
+                SimpleAttribute a = (SimpleAttribute)it.next();
                 if (!IGNOREABLE.contains(a.name)) return a;
             }
             return null;
@@ -656,11 +656,11 @@ public class GenerateSidewaysView {
             return this;
         }
 
-		/**
-		 * @param attributeName
-		 * @return
-		 */
-		public String getValue(String attributeName) {
+        /**
+         * @param attributeName
+         * @return
+         */
+        public String getValue(String attributeName) {
             for (Iterator it = contents.iterator(); it.hasNext();) {
                 SimpleAttribute sa = (SimpleAttribute) it.next();
                 if (sa.name.equals(attributeName)) {
@@ -668,33 +668,33 @@ public class GenerateSidewaysView {
                 }
             }
             return null;
-		}
+        }
 
-		/**
-		 * @param attributes
-		 */
-		public void add(SimpleAttributes attributes) {
-			contents.addAll(attributes.contents);
-		}
+        /**
+         * @param attributes
+         */
+        public void add(SimpleAttributes attributes) {
+            contents.addAll(attributes.contents);
+        }
 
-		/**
-		 * @param ignorelist
-		 */
-		public void removeAttributes(Set ignorelist) {
+        /**
+         * @param ignorelist
+         */
+        public void removeAttributes(Set ignorelist) {
             for (Iterator it = contents.iterator(); it.hasNext();) {
                 SimpleAttribute sa = (SimpleAttribute) it.next();
                 if (ignorelist.contains(sa.name)) {
                     it.remove();
                 }
-            }	
-		}
+            }
+        }
     }
-    
+
     static class TripleData {
         Map elementToAttributeToValues = new TreeMap(getDefaultCollation());
         Map bigguys = null;
         static final String ANYSTRING = "[any]";
-        
+
         private void recordData(String element, String attribute, String value) {
             if (!element.equals(ANYSTRING) && IGNORELIST.contains(attribute)) return;
             if (bigguys == null) init();
@@ -711,10 +711,10 @@ public class GenerateSidewaysView {
             }
             if (value != null) valueSet.add(value);
         }
-        
+
         /**
          * @throws IOException
-         * 
+         *
          */
         private void writeData() throws IOException {
             String fileName = "attributeList.html";
@@ -745,7 +745,7 @@ public class GenerateSidewaysView {
                     Collection valueSet = getValues(element, elementToAttribute, attribute);
                     out.println("<tr>");
                     if (newElement) {
-                        out.print("<td rowSpan='" 
+                        out.print("<td rowSpan='"
                                 + attributeKeys.size()
                                 + "'>" + element + "</td>");
                         out.println("<!-- " + valueSet.size() + ", "  + attributeKeys.size() + "-->");
@@ -770,14 +770,14 @@ public class GenerateSidewaysView {
                         String value = (String) it3.next();
                         out.println("<tr>");
                         if (newElement) {
-                            out.print("<td rowSpan='" 
+                            out.print("<td rowSpan='"
                                     + getValueCount(elementToAttribute)
                                     + "'>" + element + "</td>");
                             out.println("<!-- " + valueSet.size() + ", "  + attributeKeys.size() + "-->");
                             newElement = false;
                         }
                         if (newAttribute) {
-                        	out.print("<td rowSpan='" + valueSet.size() + "'>" + attribute + "</td>");
+                            out.print("<td rowSpan='" + valueSet.size() + "'>" + attribute + "</td>");
                             out.println("<!-- " + valueSet.size() + "-->");
                             newAttribute = false;
                         }
@@ -789,7 +789,7 @@ public class GenerateSidewaysView {
             out.println("</table>");
             writeFooterAndClose(out);
         }
-        
+
         Object[][] fixList = {
                 {"alias", "path", "<valid XPath within locale tree>"},
                 {"alias", "source", "<valid locale ID>"},
@@ -811,17 +811,17 @@ public class GenerateSidewaysView {
                         "buddhist", "chinese", "gregorian", "hebrew", "islamic", "islamic-civil", "japanese"
                         ,"arabic[alias]", "civil-arabic[alias]", "thai-buddhist[alias]"
                 }},
-                {"measurementSystem", "type", new String[] {"metric", "US", "UK"}}, 
+                {"measurementSystem", "type", new String[] {"metric", "US", "UK"}},
                 {"type", "type", "<any type value--with appropriate key>"},
                 {"type", "key", "<any element name having 'type' attribute>"},
                 {"key", "type", "<any element name having 'type' attribute>"},
-                
+
                 {ANYSTRING, "draft", new String[] {"true", "false*"}},
                 {ANYSTRING, "alt", new String[] {"proposed", "variant"}},
                 {ANYSTRING, "references", "<list of references>"},
                 {ANYSTRING, "standard", "<list of standards>"},
                 {ANYSTRING, "validSubLocales", "<list of sub-locales>"},
-                
+
                 {"collation", "type", new String[] {"phonebook", "traditional", "direct", "pinyin", "stroke", "posix", "big5han", "gb2312han"}},
                 {"settings", "strength", new String[] {"primary", "secondary", "tertiary", "quaternary", "identical"}},
                 {"settings", "alternate", new String[] {"non-ignorable", "shifted"}},
@@ -832,11 +832,11 @@ public class GenerateSidewaysView {
                 {"settings", "hiraganaQuarternary", new String[] {"on", "off"}},
                 {"settings", "numeric", new String[] {"on", "off"}},
                 {"reset", "before", new String[] {"primary", "secondary", "tertiary"}},
-                
+
                 {"default", "type", "<any type value legal for one of the peer elements>"},
                 {"mapping", "registry", "<any charset registry, iana preferred>"},
                 {"mapping", "type", "<any valid charset from the given registry>"},
-                
+
                 {"abbreviationFallback", "type", new String[] {"standard", "GMT"}},
                 {"preferenceOrdering", "type", "<space-delimited list of timezone IDs>"},
                 {"exemplarCharacters", "type", new String[] {"standard", "auxiliary"}},
@@ -859,9 +859,9 @@ public class GenerateSidewaysView {
                 {"percentFormat", "type", new String[] {"standard", "<special-key>"}},
                 {"currencyFormat", "type", new String[] {"standard", "<special-key>"}},
         };
-        
+
         String[] pieces = new String[50];
-        
+
         private void init() {
             try {
                 bigguys = new HashMap();
@@ -889,62 +889,62 @@ public class GenerateSidewaysView {
                 throw new RuntimeException(e);
             }
         }
-        
-        /**
-		 * @param tag
-		 * @param id
-		 */
-		private void addTagValue(String tag, String id) {
-			Collection c = (Collection) bigguys.get(tag);
-			if (c == null) {
-				c = new TreeSet();
-			    bigguys.put(tag, c);
-			}
-			Utility.split(id, ',', pieces);
-			for (int i = 0; i < pieces.length; ++i) {
-			    if (pieces[i].length() == 0) continue;
-				c.add(pieces[i].trim());
-			}
-		}
 
-		/**
-		 * @param elementToAttribute
-		 * @param attribute
-		 * @return
-		 */
-		private Collection getValues(String element, Map elementToAttribute, String attribute) {
+        /**
+         * @param tag
+         * @param id
+         */
+        private void addTagValue(String tag, String id) {
+            Collection c = (Collection) bigguys.get(tag);
+            if (c == null) {
+                c = new TreeSet();
+                bigguys.put(tag, c);
+            }
+            Utility.split(id, ',', pieces);
+            for (int i = 0; i < pieces.length; ++i) {
+                if (pieces[i].length() == 0) continue;
+                c.add(pieces[i].trim());
+            }
+        }
+
+        /**
+         * @param elementToAttribute
+         * @param attribute
+         * @return
+         */
+        private Collection getValues(String element, Map elementToAttribute, String attribute) {
             for (int i = 0; i < fixList.length; ++i) {
                 Object[] row = fixList[i];
                 String elementItem = (String)row[0];
                 String attributeItem = (String)row[1];
-            	if ((attribute.equals(attributeItem) || "*".equals(attributeItem))
+                if ((attribute.equals(attributeItem) || "*".equals(attributeItem))
                         && (element.equals(elementItem) || "*".equals(elementItem))) {
-            		if (row[2] instanceof String) {
+                    if (row[2] instanceof String) {
                         String valueItem = (String)row[2];
                         if (valueItem.startsWith("%%%")) {
                             //System.out.println("Substituting Values: " + element + ", " + attribute);
-                        	Collection result = (Collection) bigguys.get(valueItem.substring(3));
+                            Collection result = (Collection) bigguys.get(valueItem.substring(3));
                             Set s = new TreeSet((Collection)elementToAttribute.get(attribute));
                             s.removeAll(result);
                             if (s.size() != 0) {
-                            	System.out.print("Warning: Missing values for " + element + ", " + attribute + ": ");
+                                System.out.print("Warning: Missing values for " + element + ", " + attribute + ": ");
                                 for (Iterator it = s.iterator(); it.hasNext(); ) {
-                                	System.out.print(it.next() + " ");
+                                    System.out.print(it.next() + " ");
                                 }
                                 System.out.println();
                             }
                             return result;
                         }
-            			List result = new ArrayList();
+                        List result = new ArrayList();
                         result.add(valueItem);
                         return result;
                     }
                     return Arrays.asList((Object[])row[2]);
                 }
             }
-			return (Collection) elementToAttribute.get(attribute);
-		}
-		int getValueCount(Map elementToAttribute) {
+            return (Collection) elementToAttribute.get(attribute);
+        }
+        int getValueCount(Map elementToAttribute) {
             int result = 0;
             for (Iterator it2 = elementToAttribute.keySet().iterator(); it2.hasNext();) {
                 String attribute = (String) it2.next();
@@ -954,9 +954,9 @@ public class GenerateSidewaysView {
             return result;
         }
     }
-    
+
     static TripleData tripleData = new TripleData();
-    
+
     class Element implements Comparable {
         String elementName;
         SimpleAttributes attributes;
@@ -969,27 +969,27 @@ public class GenerateSidewaysView {
             this.comment = comment;
         }
         /**
-		 * @param string
-		 * @param fixed
-		 */
-		public void setAttribute(String attribute, String value) {
-			attributes.set(elementName, attribute, value);			
-		}
-		/**
-		 * @param string
-		 * @return
-		 */
-		public String getValue(String attributeName) {
-			return attributes.getValue(attributeName);
-		}
-        
-		Element(Element other) {
+         * @param string
+         * @param fixed
+         */
+        public void setAttribute(String attribute, String value) {
+            attributes.set(elementName, attribute, value);
+        }
+        /**
+         * @param string
+         * @return
+         */
+        public String getValue(String attributeName) {
+            return attributes.getValue(attributeName);
+        }
+
+        Element(Element other) {
             //elementOrdering.add(elementName);
             this.elementName = other.elementName;
             this.attributes = new SimpleAttributes(other.attributes, elementName);
             this.comment = other.comment;
         }
-        
+
         public String toString() {
             //throw new IllegalArgumentException("Don't use2");
             return toString(PATH);
@@ -1023,7 +1023,7 @@ public class GenerateSidewaysView {
         }
         public boolean equals(Object o) {
             if (!(o instanceof Element)) return false;
-        	return compareTo(o) == 0;
+            return compareTo(o) == 0;
         }
         /*
         public void addComment(String in_comment) {
@@ -1032,15 +1032,15 @@ public class GenerateSidewaysView {
             return;
         }
         */
-		/**
-		 * @param ignorelist
-		 * @return
-		 */
-		public void removeAttributes(Set ignorelist) {
+        /**
+         * @param ignorelist
+         * @return
+         */
+        public void removeAttributes(Set ignorelist) {
             attributes.removeAttributes(ignorelist);
-		}
+        }
     }
-    
+
     private void writeElementComment(StringBuffer out, String comment, int common) {
         if (comment != null) {
             indent(common, out);
@@ -1050,7 +1050,7 @@ public class GenerateSidewaysView {
                 out.append("\r\n");
                 indent(common, out);
             } else {
-            	out.append(" ");
+                out.append(" ");
             }
             out.append("-->\r\n");
         }
@@ -1058,24 +1058,24 @@ public class GenerateSidewaysView {
 
     class ElementChain implements Comparable {
         List contexts;
-        
+
         ElementChain() {
             contexts = new ArrayList();
         }
-        
+
         /**
-		 * @param string
-		 * @return
-		 */
-		public Element getElement(String string) {
+         * @param string
+         * @return
+         */
+        public Element getElement(String string) {
             for (int i = 0; i < contexts.size(); ++i) {
                 Element x = (Element)contexts.get(i);
                 if (string.equals(x.elementName)) return x;
             }
             return null;
-		}
+        }
 
-		/**
+        /**
          * @param string
          * @param string2
          * @param string3
@@ -1095,25 +1095,25 @@ public class GenerateSidewaysView {
         ElementChain(ElementChain other) {
             contexts = new ArrayList(other.contexts);
         }
-        
+
         public ElementChain push(String elementName, Attributes attributes, String comment) {
             elementOrdering.add(elementName);
             contexts.add(new Element(elementName, attributes, comment));
             return this;
         }
-        
+
         public void pop(String elementName) {
             int last = contexts.size()-1;
             Element c = (Element) contexts.get(last);
             if (!c.elementName.equals(elementName)) throw new IllegalArgumentException("mismatch");
             contexts.remove(last);
         }
-        
+
         public String toString() {
             //throw new IllegalArgumentException("Don't use");
             return toString(true, 0, Integer.MAX_VALUE);
         }
-        
+
         public String toString(boolean path, int startLevel, int limitLevel) {
             StringBuffer buffer = new StringBuffer();
             if (startLevel < 0) startLevel = 0;
@@ -1126,7 +1126,7 @@ public class GenerateSidewaysView {
             }
             return buffer.toString();
         }
-        
+
         public boolean equals(Object other) {
             return compareTo(other) == 0;
         }
@@ -1155,7 +1155,7 @@ public class GenerateSidewaysView {
             int fsize = former.contexts.size();
             int minLen = Math.min(csize, fsize);
             int result;
-            
+
             // skip stuff that is in common
             int common;
             for (common = 0; common < minLen; ++common) {
@@ -1169,7 +1169,7 @@ public class GenerateSidewaysView {
                 out.append(NEWLINE);
             }
             if (csize == 0) return; // we must be at the very end, bail.
-            
+
             // write new elements if needed.
             for (; common < csize-1; ++common) {
                 Element ee = ((Element)contexts.get(common));
@@ -1182,7 +1182,7 @@ public class GenerateSidewaysView {
             Element ee = ((Element)contexts.get(csize-1));
             writeElementComment(out, ee.comment, common);
             indent(common, out);
-            if (value == null || "".equals(value.string)) {                           
+            if (value == null || "".equals(value.string)) {
                 out.append(ee.toString(Element.NO_VALUE));
             } else if (value.string == null) {
                 Element temp = new Element(ee); // clone for safety
@@ -1200,51 +1200,51 @@ public class GenerateSidewaysView {
             return getElement(string) != null;
         }
 
-		public Element getLast() {
-			return (Element) contexts.get(contexts.size()-1);
-		}
+        public Element getLast() {
+            return (Element) contexts.get(contexts.size()-1);
+        }
 
-		/**
-		 * @param ignorelist
-		 * @return
-		 */
-		public ElementChain createRemovingAttributes(Set ignorelist) {
-			ElementChain result = new ElementChain(this);
+        /**
+         * @param ignorelist
+         * @return
+         */
+        public ElementChain createRemovingAttributes(Set ignorelist) {
+            ElementChain result = new ElementChain(this);
             for (int i = 0; i < contexts.size(); ++i) {
-            	Element e = (Element)contexts.get(i);
+                Element e = (Element)contexts.get(i);
                 e.removeAttributes(ignorelist);
             }
             return result;
-		}
+        }
 
-		/**
-		 * @param comment
-		 */
+        /**
+         * @param comment
+         */
         /*
         public void addComment(String comment) {
-        	int count = contexts.size();
-        	if (count == 0) {
-        		System.out.println("Skipping start comment for now");
-        		//if (startComment == null) startComment = comment;
-        		//else startComment += NEWLINE + comment;
-        		return;
-        	}
-        	Element ec = (Element) contexts.get(count-1);
-        	ec.addComment(comment);
+            int count = contexts.size();
+            if (count == 0) {
+                System.out.println("Skipping start comment for now");
+                //if (startComment == null) startComment = comment;
+                //else startComment += NEWLINE + comment;
+                return;
+            }
+            Element ec = (Element) contexts.get(count-1);
+            ec.addComment(comment);
         }
         */
     }
-    
+
     static int compareInt(int a, int b) {
         return a < b ? -1 : a > b ? 1 : 0;
     }
-    
+
     static void indent(int count, StringBuffer out) {
         for (int i = 0; i < count; ++i) {
             out.append("\t");
         }
     }
-    
+
     /*
     static {
         Object[][] temp = {
@@ -1327,11 +1327,11 @@ public class GenerateSidewaysView {
         elementOrdering = new MapComparator(temp);
     }
     */
-    
+
     public static class MapComparator {
         Map ordering = new TreeMap(); // maps from name to rank
         List rankToName = new ArrayList();
-        
+
         MapComparator(){}
         MapComparator(Comparable[] data) {
             for (int i = 0; i < data.length; ++i) {
@@ -1360,7 +1360,7 @@ public class GenerateSidewaysView {
             return buffer.toString();
         }
     }
-    
+
     public static class OrderedMap {
         private Map map = new TreeMap();
         private List list = new ArrayList();
@@ -1369,23 +1369,23 @@ public class GenerateSidewaysView {
             list.add(a);
         }
         /**
-		 * @param key
-		 * @return
-		 */
-		public Object getKeyFor(ElementChain key) {
+         * @param key
+         * @return
+         */
+        public Object getKeyFor(ElementChain key) {
             for (int i = 0; i < list.size(); ++i) {
-            	if (list.get(i).equals(key)) return key;
+                if (list.get(i).equals(key)) return key;
             }
-			return null;
-		}
-		/**
-		 * @param object
-		 */
-		public void remove(Object object) {
-			map.remove(object);
+            return null;
+        }
+        /**
+         * @param object
+         */
+        public void remove(Object object) {
+            map.remove(object);
             list.remove(object);
-		}
-		/**
+        }
+        /**
          * @param map
          */
         /*
@@ -1410,25 +1410,25 @@ public class GenerateSidewaysView {
             return list.iterator();
         }
         public int size() {
-        	return list.size();
+            return list.size();
         }
         public Object get(int index) {
-        	return list.get(index);
+            return list.get(index);
         }
     }
-    
+
     ElementChain putData(ElementChain stack, String associatedData) {
-        
+
         //If the associated data is "" and we have a final element in LEAFNODE,
         //then pull off the last element, and make it the associated data
-        
+
         ElementChain result = new ElementChain(stack);
         EndNode value = new EndNode();
         value.string = associatedData;
         Element lastElement = result.getLast();
         if (LEAFNODES.contains(lastElement.elementName)) {
             if (associatedData.length() != 0) {
-                System.err.println("Leaf Node must be empty: " + lastElement + "\tData: " + associatedData);            	
+                System.err.println("Leaf Node must be empty: " + lastElement + "\tData: " + associatedData);
             }
             value.attributes = lastElement.attributes;
             lastElement.attributes = new SimpleAttributes();
@@ -1437,33 +1437,33 @@ public class GenerateSidewaysView {
         if (DEBUG_SHOW_ADD) System.out.println("Adding: " + result + "\t" + value);
         EndNode alreadyThere = (EndNode) data.get(result);
         if (alreadyThere != null) {
-        	System.err.println("Overriding: " + result + "\tOld Value: " + alreadyThere + ",\t New Value: " + value);
+            System.err.println("Overriding: " + result + "\tOld Value: " + alreadyThere + ",\t New Value: " + value);
         }
-        data.put(result, value);      
+        data.put(result, value);
         return result;
     }
-    
+
     //String startComment;
-    
+
     static SidewaysView sidewaysView = new SidewaysView();
-    
+
     static class EndNode {
-    	String string;
+        String string;
         SimpleAttributes attributes;
-		public void set(Object associatedData) {
-			if (associatedData instanceof String) {
-				string = (String) associatedData;
+        public void set(Object associatedData) {
+            if (associatedData instanceof String) {
+                string = (String) associatedData;
                 attributes = null;
             } else {
-            	attributes = (SimpleAttributes) associatedData;
+                attributes = (SimpleAttributes) associatedData;
                 string = null;
-            }			
-		}
+            }
+        }
         public String toString() {
-        	return toString(Element.PATH);
+            return toString(Element.PATH);
         }
         public String toString(int type) {
-        	if (string != null) return BagFormatter.toHTML.transliterate(string);
+            if (string != null) return BagFormatter.toHTML.transliterate(string);
             return attributes.toString(); // TO FIX type==Element.PATH
         }
         /*
@@ -1474,12 +1474,12 @@ public class GenerateSidewaysView {
             return ((Element)value).toString();
         }
         */
-        
+
 
     }
-    
+
     static class EndNodeComparator implements Comparator {
-		public int compare(Object o1, Object o2) {
+        public int compare(Object o1, Object o2) {
             EndNode these = (EndNode) o1;
                 EndNode that = (EndNode) o2;
                 if (these.string != null) {
@@ -1491,15 +1491,15 @@ public class GenerateSidewaysView {
                     return these.attributes.compareTo(that.attributes);
                 }
                 return 1;
-            }       
+            }
     }
-    
+
     static class SidewaysView {
         EndNodeComparator enc = new EndNodeComparator();
         Map contextCache = new TreeMap();
         Set fileNames = new TreeSet();
         Set allTypes = new TreeSet();
-        
+
         void putData(OrderedMap data, String filename) {
             for (Iterator it = data.iterator(); it.hasNext();) {
                 ElementChain original = (ElementChain) it.next();
@@ -1521,7 +1521,7 @@ public class GenerateSidewaysView {
             if (filename.indexOf('_') < 0
                 || filename.equals("zh_Hant")) fileNames.add(filename); // add all language-only locales
         }
- 
+
         int getChainDepth(ElementChain ec) {
             Element e = (Element)ec.contexts.get(1);
             String result = e.elementName;
@@ -1532,10 +1532,10 @@ public class GenerateSidewaysView {
         }
 
         String getChainName(ElementChain ec, int limit) {
-        	Element e = (Element)ec.contexts.get(1);
+            Element e = (Element)ec.contexts.get(1);
             String result = e.elementName;
             for (int i = 2; i < limit; ++i) {
-            	e = (Element)ec.contexts.get(i);
+                e = (Element)ec.contexts.get(i);
                 result += "_" + e.elementName;
             }
             return result;
@@ -1546,7 +1546,7 @@ public class GenerateSidewaysView {
             Element e = (Element)ec.contexts.get(ec.contexts.size()-1);
             SimpleAttributes sa = e.attributes;
             for (Iterator it = sa.contents.iterator(); it.hasNext();) {
-            	SimpleAttribute sa1 = (SimpleAttribute)it.next();
+                SimpleAttribute sa1 = (SimpleAttribute)it.next();
                 if (sa1.name.equals("type")) return sa1.value;
             }
             return "*NOT_FOUND*";
@@ -1567,17 +1567,17 @@ public class GenerateSidewaysView {
                         writeFooterAndClose(out);
                     }
                     allTypes.add(chainName); // add to the list
-                	out = openAndDoHeader(chainName);
+                    out = openAndDoHeader(chainName);
                     lastChainName = chainName;
                     lineCounter = 0;
                 }
                 String key = stack.toString(true, limit, Integer.MAX_VALUE);
                 // strip    /ldml@version="1.2"/;
-                
+
                 lineCounter++;
-                out.println("<tr><td colspan='2' class='head'>" + 
-                        "<a href='#" + lineCounter + "' name='" + lineCounter + "'>" 
-                        + lineCounter + "</a>&nbsp;" + 
+                out.println("<tr><td colspan='2' class='head'>" +
+                        "<a href='#" + lineCounter + "' name='" + lineCounter + "'>"
+                        + lineCounter + "</a>&nbsp;" +
                         BagFormatter.toHTML.transliterate(key) + "</td></tr>");
                 Map dataToFile = (Map) contextCache.get(stack);
                 // walk through once, and gather all the filenames
@@ -1597,7 +1597,7 @@ public class GenerateSidewaysView {
                         files.addAll(remainingFiles);
                         dataStyle = " class='nodata'";
                     }
-                    out.print("<tr><th" + dataStyle + 
+                    out.print("<tr><th" + dataStyle +
                             (lineCounter == 1 ? " width='20%'" : "")
                             + ">\"" + data + "\"</th><td>");
                     boolean first = true;
@@ -1624,20 +1624,20 @@ public class GenerateSidewaysView {
             tripleData.writeData();
         }
 
-		/**
-		 * @param type
-		 * @return
-		 * @throws IOException
-		 */
-		private PrintWriter openAndDoHeader(String type) throws IOException {
+        /**
+         * @param type
+         * @return
+         * @throws IOException
+         */
+        private PrintWriter openAndDoHeader(String type) throws IOException {
             String fileName = type + ".html";
-			PrintWriter out = BagFormatter.openUTF8Writer(options[DESTDIR].value, "by_type" + File.separator + fileName);
+            PrintWriter out = BagFormatter.openUTF8Writer(options[DESTDIR].value, "by_type" + File.separator + fileName);
             out.println("<html><head>");
             out.println("<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
-			out.println("<title>Comparison By Type: " + BagFormatter.toHTML.transliterate(type) + "</title>");
+            out.println("<title>Comparison By Type: " + BagFormatter.toHTML.transliterate(type) + "</title>");
             out.println("<link rel='stylesheet' type='text/css' href='http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/common.css'>");
             out.println("<link rel='stylesheet' type='text/css' href='by_type.css'>");
-			out.println("</head>");
+            out.println("</head>");
             out.println("<body>");
             out.println("<h2>By-Type Chart for " + "//ldml/" + type.replace('_', '/') + "/...</h1>");
             out.println("<p>" +
@@ -1645,17 +1645,17 @@ public class GenerateSidewaysView {
                     "| <a href='http://www.jtcsv.com/cgibin/cldrwiki.pl?InterimVettingCharts'>Interim Vetting Charts</a>" +
                     "| <a href='http://oss.software.ibm.com/cvs/icu/~checkout~/locale/docs/tr35.html'>LDML Specification</a>" +
                     "| <a href='http://www.unicode.org/cldr/filing_bug_reports.html'>Filing Bug Reports</a>" +
-                    "| <a href='http://oss.software.ibm.com/cvs/icu/~checkout~/locale/comparison_charts.html'>Cross Platform Charts</a>" +                        
+                    "| <a href='http://oss.software.ibm.com/cvs/icu/~checkout~/locale/comparison_charts.html'>Cross Platform Charts</a>" +
                     "</p>");
             out.println("<p>This chart shows values across locales for different fields. " +
                     "Each value is listed under the field designator (in XML XPath format), " +
                     "followed by all the locales that use it. " +
                     "Locales are omitted if the value would be the same as the parent's. " +
                     "The locales are listed in the format: ·aa· for searching. " +
-                    "The value appears in red if it is the same as the root. </p>");             
+                    "The value appears in red if it is the same as the root. </p>");
             out.println("<table>");
-			return out;
-		}
+            return out;
+        }
         private void writeStyleSheet() throws IOException {
             PrintWriter out = BagFormatter.openUTF8Writer(options[DESTDIR].value, "by_type" + File.separator + "by_type.css");
             out.println(".head { font-weight:bold; background-color:#DDDDFF }");
@@ -1665,22 +1665,22 @@ public class GenerateSidewaysView {
             out.println("table {margin-top: 1em}");
             out.close();
         }
-        
+
         private void writeIndex() throws IOException {
             String fileName = "index" + ".html";
-			PrintWriter out = BagFormatter.openUTF8Writer(options[DESTDIR].value, "by_type" + File.separator + fileName);
+            PrintWriter out = BagFormatter.openUTF8Writer(options[DESTDIR].value, "by_type" + File.separator + fileName);
             out.println("<html><head>");
             out.println("<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
-			out.println("<title>Comparison By Type: " + "index" + "</title>");
+            out.println("<title>Comparison By Type: " + "index" + "</title>");
             out.println("<link rel='stylesheet' type='text/css' href='http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/common.css'>");
             out.println("<link rel='stylesheet' type='text/css' href='by_type.css'>");
-			out.println("</head>");
+            out.println("</head>");
             out.println("<body><h1>By Type Chart Index</h1>");
             out.println("<p>The following are charts for the individual datatypes, " +
                     "that show a comparison across locales for different fields. " +
                     "For example, in the orientation chart, one can see that all locales " +
                     "are left-to-right except ·ar· ·fa· ·he· ·ps· (and their children).</p>" +
-                    "<p>Note: these charts do not yet include collations</p>");             
+                    "<p>Note: these charts do not yet include collations</p>");
             out.println("<ul>");
             for(Iterator e = allTypes.iterator();e.hasNext();) {
                 String f = (String)e.next();
@@ -1691,18 +1691,18 @@ public class GenerateSidewaysView {
             writeFooterAndClose(out);
         }
     }
-    
+
     class MyDeclHandler implements DeclHandler {
         Map element_childComparator = new TreeMap();
         boolean showReason = false;
         Set SKIP_LIST = new HashSet(Arrays.asList(new String[] {
-        		"collation", "base", "settings", "suppress_contractions", "optimize", "rules", "reset",
+                "collation", "base", "settings", "suppress_contractions", "optimize", "rules", "reset",
                 "context", "p", "pc", "s", "sc", "t", "tc", "q", "qc", "i", "ic", "extend", "x"
         }));
         Object DONE = new Object(); // marker
-        
+
         public void checkData() {
-        	// verify that the ordering is the consistent for all child elements
+            // verify that the ordering is the consistent for all child elements
             // do this by building an ordering from the lists.
             // The first item has no greater item in any set. So find an item that is only first
             showReason = false;
@@ -1712,10 +1712,10 @@ public class GenerateSidewaysView {
                 if (first == DONE) {
                     log.println("Successful Ordering");
                     int count = 0;
-                    for (Iterator it = orderingList.iterator(); it.hasNext();) log.println(++count + it.next().toString()); 
+                    for (Iterator it = orderingList.iterator(); it.hasNext();) log.println(++count + it.next().toString());
                     break;
                 }
-                if (first != null) { 
+                if (first != null) {
                     orderingList.add(first);
                 } else {
                     showReason = true;
@@ -1727,61 +1727,61 @@ public class GenerateSidewaysView {
                     log.println("Items:");
                     for (Iterator it =  element_childComparator.keySet().iterator(); it.hasNext();) showRow(it.next(), true);
                     log.println();
-                	break;
+                    break;
                 }
             }
         }
-        
+
         /**
-		 * @param parent
+         * @param parent
          * @param skipEmpty TODO
-		 */
-		private void showRow(Object parent, boolean skipEmpty) {
-			List items = (List) element_childComparator.get(parent);
+         */
+        private void showRow(Object parent, boolean skipEmpty) {
+            List items = (List) element_childComparator.get(parent);
             if (skipEmpty && items.size() == 0) return;
             log.print(parent);
-			for (Iterator it2 = items.iterator(); it2.hasNext();) log.print("\t" + it2.next());
-			log.println();
-		}
+            for (Iterator it2 = items.iterator(); it2.hasNext();) log.print("\t" + it2.next());
+            log.println();
+        }
 
-		/**
-		 * @param orderingList
-		 */
-		private Object getFirst(List orderingList) {
-			Set keys = element_childComparator.keySet();
+        /**
+         * @param orderingList
+         */
+        private Object getFirst(List orderingList) {
+            Set keys = element_childComparator.keySet();
             Set failures = new HashSet();
             boolean allZero = true;
             for (Iterator it = keys.iterator(); it.hasNext();) {
                 List list = (List) element_childComparator.get(it.next());
                 if (list.size() != 0) {
                     allZero = false;
-                	Object possibleFirst = list.get(0);
+                    Object possibleFirst = list.get(0);
                     if (!failures.contains(possibleFirst) && isAlwaysFirst(possibleFirst)) {
-                        // we survived the guantlet. add to ordering list, remove from the mappings              
+                        // we survived the guantlet. add to ordering list, remove from the mappings
                         removeEverywhere(possibleFirst);
                         return possibleFirst;
                     } else {
-                    	failures.add(possibleFirst);
+                        failures.add(possibleFirst);
                     }
                 }
             }
             if (allZero) return DONE;
             return null;
-		}
+        }
         /**
-		 * @param keys
-		 * @param it
-		 * @param possibleFirst
-		 */
-		private void removeEverywhere(Object possibleFirst) {
-			// and remove from all the lists
-			for (Iterator it2 = element_childComparator.keySet().iterator(); it2.hasNext();) {
-			    List list2 = (List) element_childComparator.get(it2.next());
-			    list2.remove(possibleFirst);
-			}
-		}
+         * @param keys
+         * @param it
+         * @param possibleFirst
+         */
+        private void removeEverywhere(Object possibleFirst) {
+            // and remove from all the lists
+            for (Iterator it2 = element_childComparator.keySet().iterator(); it2.hasNext();) {
+                List list2 = (List) element_childComparator.get(it2.next());
+                list2.remove(possibleFirst);
+            }
+        }
 
-		private boolean isAlwaysFirst(Object possibleFirst) {
+        private boolean isAlwaysFirst(Object possibleFirst) {
             if (showReason) log.println("Trying: " + possibleFirst);
             for (Iterator it2 = element_childComparator.keySet().iterator(); it2.hasNext();) {
                 Object key = it2.next();
@@ -1798,10 +1798,10 @@ public class GenerateSidewaysView {
             return true;
         }
 
-		// refine later; right now, doesn't handle multiple elements well.
-		public void elementDecl(String name, String model) throws SAXException {
+        // refine later; right now, doesn't handle multiple elements well.
+        public void elementDecl(String name, String model) throws SAXException {
             if (SKIP_LIST.contains(name)) return;
-			//log.println("Element\t" + name + "\t" + model);
+            //log.println("Element\t" + name + "\t" + model);
             String[] list = model.split("[^A-Z0-9a-z]");
             List mc = new ArrayList();
             if (name.equals("currency")) {
@@ -1811,7 +1811,7 @@ public class GenerateSidewaysView {
             }
             for (int i = 0; i < list.length; ++i) {
                 if (list[i].length() == 0) continue;
-            	//log.print("\t" + list[i]);
+                //log.print("\t" + list[i]);
                 if (mc.contains(list[i])) {
                     log.println("Duplicate attribute " + name + ", " + list[i]);
                 } else {
@@ -1820,26 +1820,26 @@ public class GenerateSidewaysView {
             }
             element_childComparator.put(name, mc);
             //log.println();
-		}
-		public void attributeDecl(String eName, String aName, String type, String mode, String value) throws SAXException {
-            //log.println("Attribute\t" + eName + "\t" + aName + "\t" + type + "\t" + mode + "\t" + value);         
-		}
-		public void internalEntityDecl(String name, String value) throws SAXException {
-            //log.println("Internal Entity\t" + name + "\t" + value);   
-		}
-		public void externalEntityDecl(String name, String publicId, String systemId) throws SAXException {
-            //log.println("Internal Entity\t" + name + "\t" + publicId + "\t" + systemId);   
-		}
-   
+        }
+        public void attributeDecl(String eName, String aName, String type, String mode, String value) throws SAXException {
+            //log.println("Attribute\t" + eName + "\t" + aName + "\t" + type + "\t" + mode + "\t" + value);
+        }
+        public void internalEntityDecl(String name, String value) throws SAXException {
+            //log.println("Internal Entity\t" + name + "\t" + value);
+        }
+        public void externalEntityDecl(String name, String publicId, String systemId) throws SAXException {
+            //log.println("Internal Entity\t" + name + "\t" + publicId + "\t" + systemId);
+        }
+
     }
-    
+
     class MyContentHandler implements ContentHandler, LexicalHandler {
-        
+
         ElementChain contextStack = new ElementChain();
         String lastChars = "";
         boolean justPopped = false;
         int commentStack = 0;
-        
+
         public void startElement(
             String uri,
             String localName,
@@ -1887,7 +1887,7 @@ public class GenerateSidewaysView {
             }
 
         // just for debugging
-        
+
         public void notationDecl (String name, String publicId, String systemId)
         throws SAXException {
             if (DEBUG2) System.out.println("notationDecl: " + name
@@ -1900,7 +1900,7 @@ public class GenerateSidewaysView {
         throws SAXException {
             if (DEBUG2) System.out.println("processingInstruction: " + target + ", " + data);
         }
-        
+
         public void skippedEntity (String name)
         throws SAXException
         {
@@ -1916,111 +1916,111 @@ public class GenerateSidewaysView {
             + ", " + notationName
             );
         }
-		public void setDocumentLocator(Locator locator) {
+        public void setDocumentLocator(Locator locator) {
             if (DEBUG2) System.out.println("setDocumentLocator Locator " + locator);
-		}
-		public void startDocument() throws SAXException {
+        }
+        public void startDocument() throws SAXException {
             if (DEBUG2) System.out.println("startDocument");
             commentStack = 0; // initialize
-		}
-		public void endDocument() throws SAXException {
+        }
+        public void endDocument() throws SAXException {
             if (DEBUG2) System.out.println("endDocument");
-		}
-		public void startPrefixMapping(String prefix, String uri) throws SAXException {
-            if (DEBUG2) System.out.println("startPrefixMapping prefix: " + prefix + 
+        }
+        public void startPrefixMapping(String prefix, String uri) throws SAXException {
+            if (DEBUG2) System.out.println("startPrefixMapping prefix: " + prefix +
                     ", uri: " + uri);
-		}
-		public void endPrefixMapping(String prefix) throws SAXException {
+        }
+        public void endPrefixMapping(String prefix) throws SAXException {
             if (DEBUG2) System.out.println("endPrefixMapping prefix: " + prefix);
-		}
-		public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
+        }
+        public void ignorableWhitespace(char[] ch, int start, int length) throws SAXException {
             if (DEBUG2) System.out.println("ignorableWhitespace length: " + length);
-		}
-		public void startDTD(String name, String publicId, String systemId) throws SAXException {
+        }
+        public void startDTD(String name, String publicId, String systemId) throws SAXException {
             if (DEBUG2) System.out.println("startDTD name: " + name
                     + ", publicId: " + publicId
-                    + ", systemId: " + systemId         
+                    + ", systemId: " + systemId
             );
             commentStack++;
-		}
-		public void endDTD() throws SAXException {
+        }
+        public void endDTD() throws SAXException {
             if (DEBUG2) System.out.println("endDTD");
             commentStack--;
-		}
-		public void startEntity(String name) throws SAXException {
+        }
+        public void startEntity(String name) throws SAXException {
             if (DEBUG2) System.out.println("startEntity name: " + name);
-		}
-		public void endEntity(String name) throws SAXException {
+        }
+        public void endEntity(String name) throws SAXException {
             if (DEBUG2) System.out.println("endEntity name: " + name);
-		}
-		public void startCDATA() throws SAXException {
+        }
+        public void startCDATA() throws SAXException {
             if (DEBUG2) System.out.println("startCDATA");
-		}
-		public void endCDATA() throws SAXException {
+        }
+        public void endCDATA() throws SAXException {
             if (DEBUG2) System.out.println("endCDATA");
-		}
-		public void comment(char[] ch, int start, int length) throws SAXException {
+        }
+        public void comment(char[] ch, int start, int length) throws SAXException {
             if (commentStack != 0) return;
             String comment = new String(ch, start,length).trim();
             if (finalComment == null) finalComment = comment;
             else finalComment += NEWLINE + comment;
             if (DEBUG2) System.out.println("comment: " + comment);
-		}
+        }
     };
-    
+
     String finalComment = null;
-    
+
     XMLReader createXMLReader(boolean validating) {
         XMLReader result = null;
-		try { // Xerces
-			result =  XMLReaderFactory
-					.createXMLReader("org.apache.xerces.parsers.SAXParser");
+        try { // Xerces
+            result =  XMLReaderFactory
+                    .createXMLReader("org.apache.xerces.parsers.SAXParser");
             result.setFeature("http://xml.org/sax/features/validation", validating);
-		} catch (SAXException e1) {
-			try { // Crimson
-				result =  XMLReaderFactory
-						.createXMLReader("org.apache.crimson.parser.XMLReaderImpl");
+        } catch (SAXException e1) {
+            try { // Crimson
+                result =  XMLReaderFactory
+                        .createXMLReader("org.apache.crimson.parser.XMLReaderImpl");
                 result.setFeature("http://xml.org/sax/features/validation", validating);
-			} catch (SAXException e2) {
-				try { // Ælfred
-					result =  XMLReaderFactory
-							.createXMLReader("gnu.xml.aelfred2.XmlReader");
+            } catch (SAXException e2) {
+                try { // Ælfred
+                    result =  XMLReaderFactory
+                            .createXMLReader("gnu.xml.aelfred2.XmlReader");
                     result.setFeature("http://xml.org/sax/features/validation", validating);
-				} catch (SAXException e3) {
-					try { // Piccolo
-						result =  XMLReaderFactory
-								.createXMLReader("com.bluecast.xml.Piccolo");
+                } catch (SAXException e3) {
+                    try { // Piccolo
+                        result =  XMLReaderFactory
+                                .createXMLReader("com.bluecast.xml.Piccolo");
                         result.setFeature("http://xml.org/sax/features/validation", validating);
-					} catch (SAXException e4) {
-						try { // Oracle
-							result =  XMLReaderFactory
-									.createXMLReader("oracle.xml.parser.v2.SAXParser");
+                    } catch (SAXException e4) {
+                        try { // Oracle
+                            result =  XMLReaderFactory
+                                    .createXMLReader("oracle.xml.parser.v2.SAXParser");
                             result.setFeature("http://xml.org/sax/features/validation", validating);
-						} catch (SAXException e5) {
-							try { // default
-								result =  XMLReaderFactory.createXMLReader();
+                        } catch (SAXException e5) {
+                            try { // default
+                                result =  XMLReaderFactory.createXMLReader();
                                 result.setFeature("http://xml.org/sax/features/validation", validating);
-							} catch (SAXException e6) {
-								throw new NoClassDefFoundError(
-										"No SAX parser is available, or unable to set validation correctly");
-								// or whatever exception your method is  
-								// declared to throw
-							}
-						}
-					}
-				}
-			}
-		}
+                            } catch (SAXException e6) {
+                                throw new NoClassDefFoundError(
+                                        "No SAX parser is available, or unable to set validation correctly");
+                                // or whatever exception your method is
+                                // declared to throw
+                            }
+                        }
+                    }
+                }
+            }
+        }
         try {
-			result.setEntityResolver(new CachingEntityResolver());
-		} catch (Throwable e) {
-			System.out
-					.println("WARNING: Can't set caching entity resolver  -  error "
-							+ e.toString());
-			e.printStackTrace();
-		}
+            result.setEntityResolver(new CachingEntityResolver());
+        } catch (Throwable e) {
+            System.out
+                    .println("WARNING: Can't set caching entity resolver  -  error "
+                            + e.toString());
+            e.printStackTrace();
+        }
         return result;
-	}
+    }
     private static void writeFooterAndClose(PrintWriter out)
     {
         out.println("Generated " + java.util.Calendar.getInstance().getTime());
@@ -2028,4 +2028,3 @@ public class GenerateSidewaysView {
         out.close();
     }
 }
- 

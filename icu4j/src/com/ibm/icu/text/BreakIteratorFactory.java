@@ -34,14 +34,14 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         iter.setText(new java.text.StringCharacterIterator(""));
         return service.registerObject(iter, locale, kind);
     }
-    
+
     public boolean unregister(Object key) {
         if (service.isDefault()) {
             return false;
         }
         return service.unregisterFactory((Factory)key);
-    } 
-    
+    }
+
     public Locale[] getAvailableLocales() {
         if (service == null) {
             return ICUResourceBundle.getAvailableLocales(ICUResourceBundle.ICU_BASE_NAME);
@@ -49,7 +49,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
             return service.getAvailableLocales();
         }
     }
-    
+
     public ULocale[] getAvailableULocales() {
         if (service == null) {
             return ICUResourceBundle.getAvailableULocales(ICUResourceBundle.ICU_BASE_NAME);
@@ -57,9 +57,9 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
             return service.getAvailableULocales();
         }
     }
-    
+
     public BreakIterator createBreakIterator(ULocale locale, int kind) {
-	// TODO: convert to ULocale when service switches over
+    // TODO: convert to ULocale when service switches over
         if (service.isDefault()) {
             return createBreakInstance(locale, kind);
         }
@@ -104,18 +104,18 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
             "char", "word", "line", "sent", "title"
         };
 
-    
+
     private static BreakIterator createBreakInstance(ULocale locale, int kind) {
         String prefix = KIND_NAMES[kind];
-        return createBreakInstance(locale, kind, 
-                                   prefix + "BreakRules", 
+        return createBreakInstance(locale, kind,
+                                   prefix + "BreakRules",
                                    prefix + "BreakDictionary");
     }
 
     private static BreakIterator createBreakInstance(ULocale where,
-						     int kind,
-						     String rulesName,
-						     String dictionaryName) {
+                             int kind,
+                             String rulesName,
+                             String dictionaryName) {
 
         BreakIterator iter = null;
         ResourceBundle bundle = ICULocaleData.getResourceBundle("BreakIteratorRules", where);
@@ -137,7 +137,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
                 iter = RuleBasedBreakIterator_New.getInstanceFromCompiledRules(is);
             }
             catch (IOException e) {
-                throw new IllegalArgumentException(e.toString());   
+                throw new IllegalArgumentException(e.toString());
             }
         }
         else if (classNames[kind].equals("DictionaryBasedBreakIterator")) {
@@ -167,7 +167,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         ///CLOVER:ON
         }
         else {
-        // TODO: we don't have 'bad' resource data, so this should never happen 
+        // TODO: we don't have 'bad' resource data, so this should never happen
         // in our current tests.
         ///CLOVER:OFF
             throw new IllegalArgumentException("Invalid break iterator class \"" +

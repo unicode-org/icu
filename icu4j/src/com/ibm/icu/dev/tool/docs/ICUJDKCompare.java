@@ -18,7 +18,7 @@ import java.util.*;
  * TODO: compare protected APIs.  Reflection on Class allows you
  * to either get all inherited methods with public access, or get methods
  * on the particular class with any access, but no way to get all
- * inherited methods with any access.  Go figure.  
+ * inherited methods with any access.  Go figure.
  */
 public class ICUJDKCompare {
     static final boolean DEBUG = false;
@@ -54,7 +54,7 @@ public class ICUJDKCompare {
 
     public static void main(String[] args) {
         System.out.println("ICU and Java API Comparison");
-	System.out.println("ICU Version " + com.ibm.icu.util.VersionInfo.ICU_VERSION);
+    System.out.println("ICU Version " + com.ibm.icu.util.VersionInfo.ICU_VERSION);
         System.out.println("JDK Version " + System.getProperty("java.version"));
 
         for (int i = 0; i < pairs.length; i += 2) {
@@ -97,7 +97,7 @@ public class ICUJDKCompare {
             return mref == null ? "<init>" : mref.getName();
         }
     }
-    
+
     static void compare(Class class1, Class class2) throws Exception {
         String n1 = class1.getName();
         String n2 = class2.getName();
@@ -122,27 +122,27 @@ public class ICUJDKCompare {
 
         PrintWriter pw = new PrintWriter(System.out);
 
-	Map diffConss = diffMethodMaps(cmap2, cmap1);
-	Map diffMeths = diffMethodMaps(map2, map1);
-	Set diffFields = diffFieldSets(set2, set1);
-	
-	if (diffConss.size() + diffMeths.size() + diffFields.size() > 0) {
-	    pw.println("\n============\nAPI in " + n2 + " missing from " + n1);
-	    if (diffConss.size() > 0) {
-		pw.println("\nCONSTRUCTORS");
-		dumpMethodMap(diffConss, pw);
-	    }
-	    if (diffMeths.size() > 0) {
-		pw.println("\nMETHODS");
-		dumpMethodMap(diffMeths, pw);
-	    }
-	    if (diffFields.size() > 0) {
-		pw.println("\nFIELDS");
-		dumpFieldSet(diffFields, pw);
-	    }
-	} else {
-	    pw.println("\n" + n1 + " OK");
-	}
+    Map diffConss = diffMethodMaps(cmap2, cmap1);
+    Map diffMeths = diffMethodMaps(map2, map1);
+    Set diffFields = diffFieldSets(set2, set1);
+
+    if (diffConss.size() + diffMeths.size() + diffFields.size() > 0) {
+        pw.println("\n============\nAPI in " + n2 + " missing from " + n1);
+        if (diffConss.size() > 0) {
+        pw.println("\nCONSTRUCTORS");
+        dumpMethodMap(diffConss, pw);
+        }
+        if (diffMeths.size() > 0) {
+        pw.println("\nMETHODS");
+        dumpMethodMap(diffMeths, pw);
+        }
+        if (diffFields.size() > 0) {
+        pw.println("\nFIELDS");
+        dumpFieldSet(diffFields, pw);
+        }
+    } else {
+        pw.println("\n" + n1 + " OK");
+    }
     }
 
     static final class MethodRecord {
@@ -259,7 +259,7 @@ public class ICUJDKCompare {
                 Class tc = pairClassEquivalent(tts[i]);
                 Class mc = pairClassEquivalent(mts[i]);
                 if (!assignableFrom(tc, mc)) { // m param must be same or narrower than t
-                    if (DEBUG) msg(t, m, "parameter " + i + " mismatch, " + 
+                    if (DEBUG) msg(t, m, "parameter " + i + " mismatch, " +
                                    tts[i].getName() + " not assignable from " + mts[i].getName());
                     return false;
                 }
@@ -360,7 +360,7 @@ public class ICUJDKCompare {
     };
 
     static final Class[] prims = {
-        boolean.class, char.class, byte.class, short.class, 
+        boolean.class, char.class, byte.class, short.class,
         int.class, long.class, float.class, double.class, void.class
     };
 

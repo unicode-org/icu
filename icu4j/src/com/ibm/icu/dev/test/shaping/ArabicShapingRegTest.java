@@ -56,7 +56,7 @@ public class ArabicShapingRegTest extends TestFmwk {
         public static TestData standard(String source, int flags, String result) {
             return new TestData(STANDARD, source, flags, result, 0, null);
         }
-        
+
         public static TestData preflight(String source, int flags, int length) {
             return new TestData(PREFLIGHT, source, flags, null, length, null);
         }
@@ -116,7 +116,7 @@ public class ArabicShapingRegTest extends TestFmwk {
          "\u0646\u0622\u0654\u0644\u0627\u0020" +
          "\uFEFC\u0639";
 
-    private static final String tashkeelSpecialVLTR = 
+    private static final String tashkeelSpecialVLTR =
         "\u064A\u0628\u0631\u0639\u0020" +
         "\u064A\u0628\u0651\u0631\u064E\u0639\u0020" +
         "\u064C\u064A\u0628\u0631\u064F\u0639\u0020" +
@@ -125,7 +125,7 @@ public class ArabicShapingRegTest extends TestFmwk {
         "\u0628\u0654\u0631\u0654\u0639\u0020" +
         "\u0628\u0655\u0631\u0655\u0639\u0020";
 
-    private static final String logicalUnshape = 
+    private static final String logicalUnshape =
         "\u0020\u0020\u0020\uFE8D\uFEF5\u0020\uFEE5\u0020\uFE8D\uFEF7\u0020" +
         "\uFED7\uFEFC\u0020\uFEE1\u0020\uFE8D\uFEDF\uFECC\uFEAE\uFE91\uFEF4" +
         "\uFE94\u0020\uFE8D\uFEDF\uFEA4\uFEAE\uFE93\u0020\u0020\u0020\u0020";
@@ -257,27 +257,27 @@ public class ArabicShapingRegTest extends TestFmwk {
                           "\u0644\u062d\u0631\u0629\u0020\u0020\u0020\u0020"),
 
         /* numbers */
-        TestData.standard(numSource, 
-                          DIGITS_EN2AN | DIGIT_TYPE_AN, 
+        TestData.standard(numSource,
+                          DIGITS_EN2AN | DIGIT_TYPE_AN,
                           "\u0661\u0627\u0662\u06f3\u0061\u0664"),
-        TestData.standard(numSource, 
-                          DIGITS_AN2EN | DIGIT_TYPE_AN_EXTENDED, 
+        TestData.standard(numSource,
+                          DIGITS_AN2EN | DIGIT_TYPE_AN_EXTENDED,
                           "\u0031\u0627\u0032\u0033\u0061\u0034"),
-        TestData.standard(numSource, 
-                          DIGITS_EN2AN_INIT_LR | DIGIT_TYPE_AN, 
+        TestData.standard(numSource,
+                          DIGITS_EN2AN_INIT_LR | DIGIT_TYPE_AN,
                           "\u0031\u0627\u0662\u06f3\u0061\u0034"),
-        TestData.standard(numSource, 
-                          DIGITS_EN2AN_INIT_AL | DIGIT_TYPE_AN_EXTENDED, 
+        TestData.standard(numSource,
+                          DIGITS_EN2AN_INIT_AL | DIGIT_TYPE_AN_EXTENDED,
                           "\u06f1\u0627\u06f2\u06f3\u0061\u0034"),
-        TestData.standard(numSource, 
+        TestData.standard(numSource,
                           DIGITS_EN2AN_INIT_LR | DIGIT_TYPE_AN | TEXT_DIRECTION_VISUAL_LTR,
                           "\u0661\u0627\u0032\u06f3\u0061\u0034"),
-        TestData.standard(numSource, 
+        TestData.standard(numSource,
                           DIGITS_EN2AN_INIT_AL | DIGIT_TYPE_AN_EXTENDED | TEXT_DIRECTION_VISUAL_LTR,
                           "\u06f1\u0627\u0032\u06f3\u0061\u06f4"),
 
         /* no-op */
-        TestData.standard(numSource, 
+        TestData.standard(numSource,
                           0,
                           numSource),
     };
@@ -319,11 +319,11 @@ public class ArabicShapingRegTest extends TestFmwk {
         TestData.error("\ufef7",
                        0xffffffff,
                        IllegalArgumentException.class),
-                       
+
         TestData.error("\ufef7",
                        LETTERS_UNSHAPE | LENGTH_GROW_SHRINK,
                        ArabicShapingException.class),
-                       
+
         TestData.error(null,
                        LETTERS_UNSHAPE | LENGTH_FIXED_SPACES_AT_END,
                        IllegalArgumentException.class),
@@ -336,7 +336,7 @@ public class ArabicShapingRegTest extends TestFmwk {
             Exception ex = null;
             String result = null;
             ArabicShaping shaper = null;
-            
+
             try {
                 shaper = new ArabicShaping(test.flags);
                 result = shaper.shape(test.source);
@@ -345,16 +345,16 @@ public class ArabicShapingRegTest extends TestFmwk {
                 ex = e;
             }
             catch (InternalError ie){
-            	warnln("InternalError: "+ie.toString());
+                warnln("InternalError: "+ie.toString());
                 return;
             }
-            
+
             if (!test.result.equals(result)) {
                 reportTestFailure(i, test, shaper, result, ex);
             }
         }
     }
-    
+
     public void testPreflight() {
         for (int i = 0; i < preflightTests.length; ++i) {
             TestData test = preflightTests[i];
@@ -363,11 +363,11 @@ public class ArabicShapingRegTest extends TestFmwk {
             char src[] = null;
             int len = 0;
             ArabicShaping shaper = null;
-            
+
             if (test.source != null) {
                 src = test.source.toCharArray();
             }
-            
+
             try {
                 shaper = new ArabicShaping(test.flags);
                 len = shaper.shape(src, 0, src.length, null, 0, 0);
@@ -375,14 +375,14 @@ public class ArabicShapingRegTest extends TestFmwk {
             catch (Exception e) {
                 ex = e;
             }
-            
+
             if (test.length != len) {
                 reportTestFailure(i, test, shaper, test.source, ex);
             }
         }
     }
-    
-    public void testError() {            
+
+    public void testError() {
         for (int i = 0; i < errorTests.length; ++i) {
             TestData test = errorTests[i];
 
@@ -390,12 +390,12 @@ public class ArabicShapingRegTest extends TestFmwk {
             char src[] = null;
             int len = 0;
             ArabicShaping shaper = null;
-            
+
             if (test.source != null) {
                 src = test.source.toCharArray();
                 len = src.length;
             }
-            
+
             try {
                 shaper = new ArabicShaping(test.flags);
                 shaper.shape(src, 0, len);
@@ -403,27 +403,27 @@ public class ArabicShapingRegTest extends TestFmwk {
             catch (Exception e) {
                 ex = e;
             }
-            
+
             if (!test.error.isInstance(ex)) {
                 reportTestFailure(i, test, shaper, test.source, ex);
             }
         }
     }
-    
+
     public void testEquals()
     {
         ArabicShaping as1 = new ArabicShaping(LETTERS_SHAPE | TEXT_DIRECTION_VISUAL_LTR | LENGTH_FIXED_SPACES_NEAR);
         ArabicShaping as2 = new ArabicShaping(LETTERS_SHAPE | TEXT_DIRECTION_VISUAL_LTR | LENGTH_FIXED_SPACES_NEAR);
         ArabicShaping as3 = new ArabicShaping(LETTERS_UNSHAPE | TEXT_DIRECTION_LOGICAL | LENGTH_FIXED_SPACES_AT_BEGINNING);
-        
+
         if (! as1.equals(as1)) {
             err("as1: " + as1 + " does not equal itself!\n");
         }
-        
+
         if (! as1.equals(as2)) {
             err("as1: " + as1 + ", as2: " + as2 + " are not equal, but should be.\n");
         }
-        
+
         if (as1.equals(as3)) {
             err("as1: " + as1 + ", as3: " + as3 + " are equal but should not be.\n");
         }

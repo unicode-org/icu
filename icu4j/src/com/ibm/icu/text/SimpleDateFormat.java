@@ -189,9 +189,9 @@ import java.util.Map;
  *
  * <h4>Synchronization</h4>
  *
- * Date formats are not synchronized. It is recommended to create separate 
- * format instances for each thread. If multiple threads access a format 
- * concurrently, it must be synchronized externally. 
+ * Date formats are not synchronized. It is recommended to create separate
+ * format instances for each thread. If multiple threads access a format
+ * concurrently, it must be synchronized externally.
  *
  * @see          com.ibm.icu.util.Calendar
  * @see          com.ibm.icu.util.GregorianCalendar
@@ -329,7 +329,7 @@ public class SimpleDateFormat extends DateFormat {
 
     /**
      * Construct a SimpleDateFormat using the given pattern and
-     * locale-specific symbol data. 
+     * locale-specific symbol data.
      * Warning: uses default locale for digits!
      * @stable ICU 2.0
      */
@@ -367,7 +367,7 @@ public class SimpleDateFormat extends DateFormat {
     private static final boolean CACHE = true;
     private static long cacheAge;
     private static SoftReference highCacheRef;
-    
+
     /* Package-private, called by DateFormat factory methods */
     SimpleDateFormat(int timeStyle, int dateStyle, ULocale loc) {
         // try a high level cache first!
@@ -401,7 +401,7 @@ public class SimpleDateFormat extends DateFormat {
                 return;
             }
         }
-  
+
         /* try the cache first */
         String[] dateTimePatterns = (String[]) cachedLocaleData.get(loc);
         if (dateTimePatterns == null) { /* cache miss */
@@ -409,16 +409,16 @@ public class SimpleDateFormat extends DateFormat {
             // TODO: get correct actual/valid locale here
             ULocale uloc = calData.getULocale();
             setLocale(uloc, uloc);
-            
+
             dateTimePatterns = calData.getStringArray("DateTimePatterns");
             /* update cache */
             cachedLocaleData.put(loc, dateTimePatterns);
         } else {
-	    // for now, just assume this is correct, so we have non-null locale info.
-	    // we may have to cache the result of calData.getULocale with the pattern strings
-	    // and set the locale with that.
-	    setLocale(loc, loc);
-	}
+        // for now, just assume this is correct, so we have non-null locale info.
+        // we may have to cache the result of calData.getULocale with the pattern strings
+        // and set the locale with that.
+        setLocale(loc, loc);
+    }
         formatData = new DateFormatSymbols(loc);
         if ((timeStyle >= 0) && (dateStyle >= 0)) {
             Object[] dateTimeArgs = {dateTimePatterns[timeStyle],
@@ -456,7 +456,7 @@ public class SimpleDateFormat extends DateFormat {
         numberFormat = NumberFormat.getInstance(loc);
         numberFormat.setGroupingUsed(false);
         ///CLOVER:OFF
-        // difficult to test for case where NumberFormat.getInstance does not 
+        // difficult to test for case where NumberFormat.getInstance does not
         // return a DecimalFormat
         if (numberFormat instanceof DecimalFormat)
             ((DecimalFormat)numberFormat).setDecimalSeparatorAlwaysShown(false);
@@ -558,7 +558,7 @@ public class SimpleDateFormat extends DateFormat {
                     if (i==n) { // trailing ' (pathological)
                         break;
                     }
-                
+
                     for (j=i; j<n && pattern.charAt(j)!='\''; ++j) {}
                     // j points to next ' or EOS
 
@@ -573,7 +573,7 @@ public class SimpleDateFormat extends DateFormat {
                     if (jj<n && pattern.charAt(jj)=='\'') {
                         ++k;
                     }
-                    
+
                     // append this run, and if there is '' within
                     // quotes, append a trailing ' as well
                     toAppendTo.append(pattern.substring(i, k));
@@ -724,10 +724,10 @@ public class SimpleDateFormat extends DateFormat {
             buf.append(formatData.eras[value]);
             break;
         case 1: // 'y' - YEAR
-            /* According to the specification, if the number of pattern letters ('y') is 2, 
-             * the year is truncated to 2 digits; otherwise it is interpreted as a number. 
-             * But the original code process 'y', 'yy', 'yyy' in the same way. and process 
-             * patterns with 4 or more than 4 'y' characters in the same way. 
+            /* According to the specification, if the number of pattern letters ('y') is 2,
+             * the year is truncated to 2 digits; otherwise it is interpreted as a number.
+             * But the original code process 'y', 'yy', 'yyy' in the same way. and process
+             * patterns with 4 or more than 4 'y' characters in the same way.
              * So I change the codes to meet the specification. [Richard/GCl]
              */
             if (count == 2)
@@ -745,7 +745,7 @@ public class SimpleDateFormat extends DateFormat {
             break;
         case 4: // 'k' - HOUR_OF_DAY (1..24)
             if (value == 0)
-                zeroPaddingNumber(buf, 
+                zeroPaddingNumber(buf,
                                   cal.getMaximum(Calendar.HOUR_OF_DAY)+1,
                                   count, maxIntCount);
             else
@@ -780,7 +780,7 @@ public class SimpleDateFormat extends DateFormat {
             break;
         case 15: // 'h' - HOUR (1..12)
             if (value == 0)
-                zeroPaddingNumber(buf, 
+                zeroPaddingNumber(buf,
                                   cal.getLeastMaximum(Calendar.HOUR)+1,
                                   count, maxIntCount);
             else
@@ -1029,7 +1029,7 @@ public class SimpleDateFormat extends DateFormat {
             // quoted characters and non-alphabetic unquoted
             // characters.
             else {
-                
+
                 abutPat = -1; // End of any abutting fields
 
                 // Handle quotes.  Two consecutive quotes is a quote
@@ -1055,7 +1055,7 @@ public class SimpleDateFormat extends DateFormat {
                            UCharacterProperty.isRuleWhiteSpace(pattern.charAt(i+1))) {
                         ++i;
                     }
-                    
+
                     // Advance over run in input text
                     int s = pos;
                     while (pos<text.length() &&
@@ -1193,7 +1193,7 @@ public class SimpleDateFormat extends DateFormat {
             }
         }
         return (j > 4) ? -1 : j;
-    }   
+    }
 
     /**
      * find time zone 'text' matched zoneStrings and set cal
@@ -1202,7 +1202,7 @@ public class SimpleDateFormat extends DateFormat {
         // At this point, check for named time zones by looking through
         // the locale data from the DateFormatZoneData strings.
         // Want to be able to parse both short and long forms.
-        int zoneIndex = 
+        int zoneIndex =
             formatData.getZoneIndex (getTimeZone().getID());
         TimeZone tz = null;
         int j = 0, i = 0;
@@ -1213,9 +1213,9 @@ public class SimpleDateFormat extends DateFormat {
                 i = zoneIndex;
             }
         }
-    
+
         if (tz == null) {
-            zoneIndex = 
+            zoneIndex =
                 formatData.getZoneIndex (TimeZone.getDefault().getID());
             if (zoneIndex != -1) {
                 j = matchZoneString(text, start, zoneIndex);
@@ -1224,7 +1224,7 @@ public class SimpleDateFormat extends DateFormat {
                     i = zoneIndex;
                 }
             }
-        }       
+        }
 
         if (tz == null) {
             for (i = 0; i < formatData.zoneStrings.length; i++) {
@@ -1235,7 +1235,7 @@ public class SimpleDateFormat extends DateFormat {
                 }
             }
         }
-    
+
         if (tz != null) { // Matched any ?
             cal.set(Calendar.ZONE_OFFSET, tz.getRawOffset());
             int savings = 0;
@@ -1463,7 +1463,7 @@ public class SimpleDateFormat extends DateFormat {
                             }
                             if( pos.getIndex() < text.length() &&
                                 text.charAt(pos.getIndex()) == ':' ) {
-                            
+
                                 // This is the hours:minutes case
                                 offset = tzNumber.intValue() * 60;
                                 pos.setIndex(pos.getIndex() + 1);

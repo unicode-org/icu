@@ -25,11 +25,11 @@ public class AstroTest extends TestFmwk {
     }
 
     static final double PI = Math.PI;
-    
+
     public void TestSolarLongitude() {
         try{
             GregorianCalendar gc = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));
-            CalendarAstronomer astro = new CalendarAstronomer(); 
+            CalendarAstronomer astro = new CalendarAstronomer();
             final double tests[][] = {
                 { 1980, 7, 27, 00, 00, 124.114347 },
                 { 1988, 7, 27, 00, 00, 124.187732 },
@@ -38,80 +38,80 @@ public class AstroTest extends TestFmwk {
             for (int i = 0; i < tests.length; i++) {
                 gc.clear();
                 gc.set((int)tests[i][0], (int)tests[i][1]-1, (int)tests[i][2], (int)tests[i][3], (int) tests[i][4]);
-                
+
                 astro.setDate(gc.getTime());
-                
+
                 double longitude = astro.getSunLongitude();
                 longitude = 0;
                 Equatorial result = astro.getSunPosition();
                 result = null;
             }
         }catch(Exception ex){
-        	warnln("Could not load data. " +ex.getMessage());
+            warnln("Could not load data. " +ex.getMessage());
         }
     }
-    
+
     public void TestLunarPosition() {
         try{
             GregorianCalendar gc = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));
-            CalendarAstronomer astro = new CalendarAstronomer(); 
+            CalendarAstronomer astro = new CalendarAstronomer();
             final double tests[][] = {
                 { 1979, 2, 26, 16, 00,  0, 0 },
             };
             logln("");
-            
+
             for (int i = 0; i < tests.length; i++) {
                 gc.clear();
                 gc.set((int)tests[i][0], (int)tests[i][1]-1, (int)tests[i][2], (int)tests[i][3], (int) tests[i][4]);
                 astro.setDate(gc.getTime());
-                
+
                 Equatorial result = astro.getMoonPosition();
                 result = null;
             }
         }catch(Exception ex){
-            warnln("Could not load data. "+ex.getMessage());   
+            warnln("Could not load data. "+ex.getMessage());
         }
     }
-    
+
     public void TestCoordinates() {
         try{
             GregorianCalendar gc = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));
-            CalendarAstronomer astro = new CalendarAstronomer(); 
-        	Equatorial result = astro.eclipticToEquatorial(139.686111 * PI/ 180.0, 4.875278* PI / 180.0);
-        	logln("result is " + result + ";  " + result.toHmsString());
+            CalendarAstronomer astro = new CalendarAstronomer();
+            Equatorial result = astro.eclipticToEquatorial(139.686111 * PI/ 180.0, 4.875278* PI / 180.0);
+            logln("result is " + result + ";  " + result.toHmsString());
         }catch(Exception ex){
-        	warnln("Could not load data. " + ex.getMessage());
+            warnln("Could not load data. " + ex.getMessage());
         }
     }
-    
+
     public void TestCoverage() {
         try{
             GregorianCalendar gc = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));
             GregorianCalendar cal = new GregorianCalendar(1958, Calendar.AUGUST, 15);
             Date then = cal.getTime();
             CalendarAstronomer myastro = new CalendarAstronomer(then);
-        
-            //Latitude:  34 degrees 05' North  
-            //Longitude:  118 degrees 22' West  
+
+            //Latitude:  34 degrees 05' North
+            //Longitude:  118 degrees 22' West
             double laLat = 34 + 5d/60, laLong = 360 - (118 + 22d/60);
             CalendarAstronomer myastro2 = new CalendarAstronomer(laLong, laLat);
-        
+
             double eclLat = laLat * Math.PI / 360;
             double eclLong = laLong * Math.PI / 360;
             Ecliptic ecl = new Ecliptic(eclLat, eclLong);
             logln("ecliptic: " + ecl);
-        
+
             CalendarAstronomer myastro3 = new CalendarAstronomer();
             myastro3.setJulianDay((4713 + 2000) * 365.25);
-        
+
             CalendarAstronomer[] astronomers = {
                 myastro, myastro2, myastro3, myastro2 // check cache
-          
+
             };
-        
+
             for (int i = 0; i < astronomers.length; ++i) {
                 CalendarAstronomer astro = astronomers[i];
-        
+
                 logln("astro: " + astro);
                 logln("   time: " + astro.getTime());
                 logln("   date: " + astro.getDate());
@@ -139,12 +139,12 @@ public class AstroTest extends TestFmwk {
     static final long DAY_MS = 24*60*60*1000L;
 
     public void TestSunriseTimes() {
-    	try{
-              
+        try{
+
             //        logln("Sunrise/Sunset times for San Jose, California, USA");
             //        CalendarAstronomer astro = new CalendarAstronomer(-121.55, 37.20);
             //        TimeZone tz = TimeZone.getTimeZone("America/Los_Angeles");
-    
+
             // We'll use a table generated by the UNSO website as our reference
             // From: http://aa.usno.navy.mil/
             //-Location: W079 25, N43 40
@@ -182,20 +182,20 @@ public class AstroTest extends TestFmwk {
                  6,13, 20,18,
                  6,11, 20,19,
             };
-    
+
             logln("Sunrise/Sunset times for Toronto, Canada");
             CalendarAstronomer astro = new CalendarAstronomer(-(79+25/60), 43+40/60);
-    
+
             // As of ICU4J 2.8 the ICU4J time zones implement pass-through
             // to the underlying JDK.  Because of variation in the
             // underlying JDKs, we have to use a fixed-offset
             // SimpleTimeZone to get consistent behavior between JDKs.
             // The offset we want is [-18000000, 3600000] (raw, dst).
             // [aliu 10/15/03]
-    
+
             // TimeZone tz = TimeZone.getTimeZone("America/Montreal");
             TimeZone tz = new SimpleTimeZone(-18000000 + 3600000, "Montreal(FIXED)");
-    
+
             GregorianCalendar cal = new GregorianCalendar(tz, Locale.US);
             GregorianCalendar cal2 = new GregorianCalendar(tz, Locale.US);
             cal.clear();
@@ -203,21 +203,21 @@ public class AstroTest extends TestFmwk {
             cal.set(Calendar.MONTH, Calendar.APRIL);
             cal.set(Calendar.DAY_OF_MONTH, 1);
             cal.set(Calendar.HOUR_OF_DAY, 12); // must be near local noon for getSunRiseSet to work
-    
+
             DateFormat df = DateFormat.getTimeInstance(cal, DateFormat.MEDIUM, Locale.US);
             DateFormat df2 = DateFormat.getDateTimeInstance(cal, DateFormat.MEDIUM, DateFormat.MEDIUM, Locale.US);
             DateFormat day = DateFormat.getDateInstance(cal, DateFormat.MEDIUM, Locale.US);
-    
+
             for (int i=0; i < 30; i++) {
                 astro.setDate(cal.getTime());
-                
+
                 Date sunrise = new Date(astro.getSunRiseSet(true));
                 Date sunset = new Date(astro.getSunRiseSet(false));
-    
+
                 cal2.setTime(cal.getTime());
                 cal2.set(Calendar.SECOND,      0);
                 cal2.set(Calendar.MILLISECOND, 0);
-    
+
                 cal2.set(Calendar.HOUR_OF_DAY, USNO[4*i+0]);
                 cal2.set(Calendar.MINUTE,      USNO[4*i+1]);
                 Date exprise = cal2.getTime();
@@ -227,7 +227,7 @@ public class AstroTest extends TestFmwk {
                 // Compute delta of what we got to the USNO data, in seconds
                 int deltarise = Math.abs((int)(sunrise.getTime() - exprise.getTime()) / 1000);
                 int deltaset = Math.abs((int)(sunset.getTime() - expset.getTime()) / 1000);
-    
+
                 // Allow a deviation of 0..MAX_DEV seconds
                 // It would be nice to get down to 60 seconds, but at this
                 // point that appears to be impossible without a redo of the
@@ -262,20 +262,20 @@ public class AstroTest extends TestFmwk {
                           " (USNO " + df.format(expset) + ")");
                 }
                 cal.add(Calendar.DATE, 1);
-            }        
-    
+            }
+
     //        CalendarAstronomer a = new CalendarAstronomer(-(71+5/60), 42+37/60);
     //        cal.clear();
     //        cal.set(cal.YEAR, 1986);
     //        cal.set(cal.MONTH, cal.MARCH);
-    //        cal.set(cal.DATE, 10);        
+    //        cal.set(cal.DATE, 10);
     //        cal.set(cal.YEAR, 1988);
     //        cal.set(cal.MONTH, cal.JULY);
-    //        cal.set(cal.DATE, 27);        
+    //        cal.set(cal.DATE, 27);
     //        a.setDate(cal.getTime());
-    //        long r = a.getSunRiseSet2(true);        
+    //        long r = a.getSunRiseSet2(true);
         }catch(Exception ex){
-            warnln("Could not load data. " + ex.getMessage());   
+            warnln("Could not load data. " + ex.getMessage());
         }
     }
 
@@ -283,7 +283,7 @@ public class AstroTest extends TestFmwk {
         // Check that our JD computation is the same as the book's (p. 88)
         try{
             GregorianCalendar gc = new GregorianCalendar(new SimpleTimeZone(0, "UTC"));
-            CalendarAstronomer astro = new CalendarAstronomer(); 
+            CalendarAstronomer astro = new CalendarAstronomer();
             GregorianCalendar cal3 = new GregorianCalendar(TimeZone.getTimeZone("GMT"), Locale.US);
             DateFormat d3 = DateFormat.getDateTimeInstance(cal3, DateFormat.MEDIUM,DateFormat.MEDIUM,Locale.US);
             cal3.clear();
@@ -300,7 +300,7 @@ public class AstroTest extends TestFmwk {
                       ", expected " + exp);
             }
         }catch(Exception ex){
-        	warnln("Exception: "+ ex.getMessage());
+            warnln("Exception: "+ ex.getMessage());
         }
 
 //        cal3.clear();

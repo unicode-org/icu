@@ -55,7 +55,7 @@ public class CurrencyTest extends TestFmwk {
     catch (Exception e) {
     }
     }
-    
+
     /**
      * Test registration.
      */
@@ -144,16 +144,16 @@ public class CurrencyTest extends TestFmwk {
         assertEquals("USD.getName(LONG_NAME)",
                      "US Dollar",
                      usd.getName(en, Currency.LONG_NAME, isChoiceFormat));
-        
+
         // TODO add more tests later
     }
 
     public void TestCurrencyKeyword() {
-	ULocale locale = new ULocale("th_TH@collation=traditional;currency=QQQ");
-	Currency currency = Currency.getInstance(locale);
-	String result = currency.getCurrencyCode();
-	if (!"QQQ".equals(result)) {
-	    errln("got unexpected currency: " + result);
-	}
+    ULocale locale = new ULocale("th_TH@collation=traditional;currency=QQQ");
+    Currency currency = Currency.getInstance(locale);
+    String result = currency.getCurrencyCode();
+    if (!"QQQ".equals(result)) {
+        errln("got unexpected currency: " + result);
+    }
     }
 }

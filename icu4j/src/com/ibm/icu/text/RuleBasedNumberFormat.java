@@ -596,7 +596,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
 
     /**
      * Creates a RuleBasedNumberFormat that behaves according to the description
-     * passed in.  The formatter uses the default locale.  
+     * passed in.  The formatter uses the default locale.
      * <p>
      * The localizations data provides information about the public
      * rule sets and their localized display names for different
@@ -614,7 +614,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @param localizations a list of localizations for the rule set
      * names in the description.
      * @draft ICU 3.2
-     * @deprecated This is a draft API and might change in a future release of ICU.  
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public RuleBasedNumberFormat(String description, String[][] localizations) {
         locale = ULocale.getDefault();
@@ -731,7 +731,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // or Collator?
         ULocale uloc = bundle.getULocale();
         setLocale(uloc, uloc);
-        
+
         String description = "";
 
         // pick a description from the resource bundle based on the
@@ -917,11 +917,11 @@ public class RuleBasedNumberFormat extends NumberFormat {
         }
         return null;
     }
-  
+
     /**
      * Return the rule set display names for the provided locale.  These are in the same order
      * as those returned by getRuleSetNames.  The locale is matched against the locales for
-     * which there is display name data, using normal fallback rules.  If no locale matches, 
+     * which there is display name data, using normal fallback rules.  If no locale matches,
      * the default display names are returned.  (These are the internal rule set names minus
      * the leading '%'.)
      * @return an array of the locales that have display name information
@@ -953,7 +953,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
     }
 
     /**
-     * Return the rule set display name for the provided rule set and locale.  
+     * Return the rule set display name for the provided rule set and locale.
      * The locale is matched against the locales for which there is display name data, using
      * normal fallback rules.  If no locale matches, the default display name is returned.
      * @return the display name for the rule set
@@ -1074,7 +1074,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
                                FieldPosition pos) {
         return format(new com.ibm.icu.math.BigDecimal(number), toAppendTo, pos);
     }
-    
+
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Implement com.ibm.icu.text.NumberFormat:
@@ -1240,14 +1240,14 @@ public class RuleBasedNumberFormat extends NumberFormat {
             if (publicRuleSetNames.length > 0) {
                 defaultRuleSet = findRuleSet(publicRuleSetNames[0]);
             } else {
-	        defaultRuleSet = null;
-  	        int n = ruleSets.length;
-		while (--n >= 0) {
-		  if (ruleSets[n].isPublic()) {
-		    defaultRuleSet = ruleSets[n];
-		    break;
-		  }
-		}
+            defaultRuleSet = null;
+            int n = ruleSets.length;
+        while (--n >= 0) {
+          if (ruleSets[n].isPublic()) {
+            defaultRuleSet = ruleSets[n];
+            break;
+          }
+        }
             }
         } else if (ruleSetName.startsWith("%%")) {
             throw new IllegalArgumentException("cannot use private rule set: " + ruleSetName);
@@ -1268,7 +1268,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         }
         return "";
     }
-    
+
     //-----------------------------------------------------------------------
     // package-internal API
     //-----------------------------------------------------------------------
@@ -1365,7 +1365,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
                     lpEnd = description.length() - 1; // later we add 1 back to get the '%'
                 }
                 int lpStart = lp + specialName.length();
-                while (lpStart < lpEnd && 
+                while (lpStart < lpEnd &&
                        UCharacterProperty.isRuleWhiteSpace(description.charAt(lpStart))) {
                     ++lpStart;
                 }
@@ -1446,7 +1446,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // by appending more rule sets to the end)
 
         // {dlf} Initialization of a fraction rule set requires the default rule
-        // set to be known.  For purposes of initialization, this is always the 
+        // set to be known.  For purposes of initialization, this is always the
         // last public rule set, no matter what the localization data says.
         defaultRuleSet = ruleSets[ruleSets.length - 1];
         for (int i = ruleSets.length - 1; i >= 0; --i) {
@@ -1518,7 +1518,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
                 String locale = data[0];
                 String[] names = new String[data.length-1];
                 if (names.length != publicRuleSetNames.length) {
-                    throw new IllegalArgumentException("public name length: " + publicRuleSetNames.length + 
+                    throw new IllegalArgumentException("public name length: " + publicRuleSetNames.length +
                                                        " != localized names[" + i + "] length: " + names.length);
                 }
                 System.arraycopy(data, 1, names, 0, names.length);
@@ -1671,7 +1671,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
                 }
                 catch (Exception e) {
                     // if debug, print it out
-                    System.out.println("could not locate " + ppClassName + ", error " + 
+                    System.out.println("could not locate " + ppClassName + ", error " +
                                        e.getClass().getName() + ", " + e.getMessage());
                     postProcessor = null;
                     postProcessRules = null; // don't try again

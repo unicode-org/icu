@@ -304,7 +304,7 @@ public class UnicodeSet extends UnicodeFilter {
      * U+4E00 to U+9FA5.
      */
     private static UnicodeSet INCLUSIONS = null;
-    
+
     //----------------------------------------------------------------
     // Public API
     //----------------------------------------------------------------
@@ -1977,7 +1977,7 @@ public class UnicodeSet extends UnicodeFilter {
             if (i != pattern.length()) {
                 throw new IllegalArgumentException("Parse of \"" + pattern +
                                                    "\" failed at " + i);
-            }   
+            }
         }
         return this;
     }
@@ -2000,7 +2000,7 @@ public class UnicodeSet extends UnicodeFilter {
                       StringBuffer rebuiltPat, int options) {
 
         // Syntax characters: [ ] ^ - & { }
-        
+
         // Recognized special forms for chars, sets: c-c s-s s&s
 
         int opts = RuleCharacterIterator.PARSE_VARIABLES |
@@ -2156,7 +2156,7 @@ public class UnicodeSet extends UnicodeFilter {
                     addAll(nested);
                     break;
                 }
-                
+
                 op = 0;
                 lastItem = 2;
 
@@ -2679,15 +2679,15 @@ public class UnicodeSet extends UnicodeFilter {
                    v.compareTo(version) <= 0;
         }
     }
-    
+
     private static synchronized UnicodeSet getInclusions() {
         if (INCLUSIONS == null) {
             UCharacterProperty property = UCharacterProperty.getInstance();
-            INCLUSIONS = property.getInclusions();         
+            INCLUSIONS = property.getInclusions();
         }
         return INCLUSIONS;
     }
-    
+
     /**
      * Generic filter-based scanning code for UCD property UnicodeSets.
      */
@@ -2716,7 +2716,7 @@ public class UnicodeSet extends UnicodeFilter {
             // get current range
             int start = inclusions.getRangeStart(j);
             int end = inclusions.getRangeEnd(j);
-            
+
             // for all the code points in the range, process
             for (int ch = start; ch <= end; ++ch) {
                 // only add to the unicodeset on inflection points --
@@ -2801,8 +2801,8 @@ public class UnicodeSet extends UnicodeFilter {
         }
         return this;
     }
-    
-    
+
+
 
     /**
      * Modifies this set to contain those code points which have the
@@ -2834,7 +2834,7 @@ public class UnicodeSet extends UnicodeFilter {
     public UnicodeSet applyPropertyAlias(String propertyAlias, String valueAlias) {
         return applyPropertyAlias(propertyAlias, valueAlias, null);
     }
-    
+
     /**
      * Modifies this set to contain those code points which have the
      * given value for the given property.  Prior contents of this
@@ -2852,8 +2852,8 @@ public class UnicodeSet extends UnicodeFilter {
         int p;
         int v;
         boolean mustNotBeEmpty = false;
-        
-        if (symbols != null 
+
+        if (symbols != null
                 && (symbols instanceof XSymbolTable)
                 && ((XSymbolTable)symbols).applyPropertyAlias(propertyAlias, valueAlias, this)) {
                 return this;
@@ -3227,7 +3227,7 @@ public class UnicodeSet extends UnicodeFilter {
         } else {
             for (int i=0; i<equiv.length; ++i) {
                 add(equiv[i]);
-            }            
+            }
         }
     }
 
@@ -3538,7 +3538,7 @@ public class UnicodeSet extends UnicodeFilter {
             }
         }
     }
-    
+
     /**
      * Internal class for customizing UnicodeSet parsing of properties.
      * TODO: extend to allow customizing of codepoint ranges
@@ -3548,16 +3548,16 @@ public class UnicodeSet extends UnicodeFilter {
      */
     abstract static class XSymbolTable implements SymbolTable {
         public UnicodeMatcher lookupMatcher(int i) {
-	    return null;
-	}
+        return null;
+    }
         public boolean applyPropertyAlias(String propertyName, String propertyValue, UnicodeSet result) {
-	    return false;   
+        return false;
         }
-	public char[] lookup(String s) {
-	    return null;
-	}
-	public String parseReference(String text, ParsePosition pos, int limit) {
-	    return null;
-	} 
+    public char[] lookup(String s) {
+        return null;
+    }
+    public String parseReference(String text, ParsePosition pos, int limit) {
+        return null;
+    }
     }
 }
