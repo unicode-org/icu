@@ -285,7 +285,7 @@ SOURCE=.\ucnvhz.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\ucnviscii.c
+SOURCE=.\ucnvisci.c
 # End Source File
 # Begin Source File
 
