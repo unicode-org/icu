@@ -24,6 +24,7 @@
 
 #include "unicode/ustring.h"
 #include "unicode/uchar.h"
+#include "unicode/uniset.h"
  
 #include "ucol_tok.h"
 #include "cmemory.h"
@@ -161,116 +162,6 @@ static void setIndirectBoundaries(uint32_t indexR, uint32_t *start, uint32_t *en
 }
 
 
-void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint32_t rulesLength, UCollator *UCA, UErrorCode *status) {
-  uint32_t nSize = 0;
-  uint32_t estimatedSize = (2*rulesLength+UCOL_TOK_EXTRA_RULE_SPACE_SIZE);
-  if(U_FAILURE(*status)) {
-    return;
-  }
-  
-  // set everything to zero, so that we can clean up gracefully
-  uprv_memset(src, 0, sizeof(UColTokenParser));
-  
-  src->source = (UChar *)uprv_malloc(estimatedSize*sizeof(UChar));
-  /* test for NULL */
-  if (src->source == NULL) {
-      *status = U_MEMORY_ALLOCATION_ERROR;
-      return;
-  }
-  nSize = unorm_normalize(rules, rulesLength, UNORM_NFD, 0, src->source, estimatedSize, status);
-  if(nSize > estimatedSize || *status == U_BUFFER_OVERFLOW_ERROR) {
-    *status = U_ZERO_ERROR;
-    src->source = (UChar *)uprv_realloc(src->source, (nSize+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
-    /* test for NULL */
-    if (src->source == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-    nSize = unorm_normalize(rules, rulesLength, UNORM_NFD, 0, src->source, nSize+UCOL_TOK_EXTRA_RULE_SPACE_SIZE, status);
-  }
-  src->current = src->source;
-  src->end = src->source+nSize;
-  src->sourceCurrent = src->source;
-  src->extraCurrent = src->end;
-  src->extraEnd = src->source+estimatedSize; //src->end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
-  src->varTop = NULL;
-  src->UCA = UCA;
-  src->invUCA = ucol_initInverseUCA(status);
-  src->parsedToken.charsLen = 0;
-  src->parsedToken.charsOffset = 0;
-  src->parsedToken.extensionLen = 0;
-  src->parsedToken.extensionOffset = 0;
-  src->parsedToken.prefixLen = 0;
-  src->parsedToken.prefixOffset = 0;
-  src->parsedToken.flags = 0;
-  src->parsedToken.strength = UCOL_TOK_UNSET;
-
-
-
-  if(U_FAILURE(*status)) {
-    return;
-  }
-  src->tailored = uhash_open(uhash_hashTokens, uhash_compareTokens, status);
-  if(U_FAILURE(*status)) {
-    return;
-  }
-  uhash_setValueDeleter(src->tailored, uhash_freeBlock);
-
-  src->opts = (UColOptionSet *)uprv_malloc(sizeof(UColOptionSet));
-  /* test for NULL */
-  if (src->opts == NULL) {
-      *status = U_MEMORY_ALLOCATION_ERROR;
-      return;
-  }
-
-  uprv_memcpy(src->opts, UCA->options, sizeof(UColOptionSet));
-
-  // rulesToParse = src->source;
-  src->lh = 0;
-  src->listCapacity = 1024;
-  src->lh = (UColTokListHeader *)uprv_malloc(src->listCapacity*sizeof(UColTokListHeader));
-  //Test for NULL
-  if (src->lh == NULL) {
-      *status = U_MEMORY_ALLOCATION_ERROR;
-      return;
-  }
-  src->resultLen = 0;
-
-  UCAConstants *consts = (UCAConstants *)((uint8_t *)src->UCA->image + src->UCA->image->UCAConsts);
-
-  // UCOL_RESET_TOP_VALUE
-  setIndirectBoundaries(0, consts->UCA_LAST_NON_VARIABLE, consts->UCA_FIRST_IMPLICIT); 
-  // UCOL_FIRST_PRIMARY_IGNORABLE
-  setIndirectBoundaries(1, consts->UCA_FIRST_PRIMARY_IGNORABLE, 0);
-  // UCOL_LAST_PRIMARY_IGNORABLE
-  setIndirectBoundaries(2, consts->UCA_LAST_PRIMARY_IGNORABLE, 0);
-  // UCOL_FIRST_SECONDARY_IGNORABLE
-  setIndirectBoundaries(3, consts->UCA_FIRST_SECONDARY_IGNORABLE, 0);
-  // UCOL_LAST_SECONDARY_IGNORABLE
-  setIndirectBoundaries(4, consts->UCA_LAST_SECONDARY_IGNORABLE, 0);
-  // UCOL_FIRST_TERTIARY_IGNORABLE
-  setIndirectBoundaries(5, consts->UCA_FIRST_TERTIARY_IGNORABLE, 0);
-  // UCOL_LAST_TERTIARY_IGNORABLE
-  setIndirectBoundaries(6, consts->UCA_LAST_TERTIARY_IGNORABLE, 0);
-  // UCOL_FIRST_VARIABLE
-  setIndirectBoundaries(7, consts->UCA_FIRST_VARIABLE, 0);
-  // UCOL_LAST_VARIABLE
-  setIndirectBoundaries(8, consts->UCA_LAST_VARIABLE, 0);
-  // UCOL_FIRST_NON_VARIABLE
-  setIndirectBoundaries(9, consts->UCA_FIRST_NON_VARIABLE, 0);
-  // UCOL_LAST_NON_VARIABLE
-  setIndirectBoundaries(10, consts->UCA_LAST_NON_VARIABLE, consts->UCA_FIRST_IMPLICIT);
-  // UCOL_FIRST_IMPLICIT
-  setIndirectBoundaries(11, consts->UCA_FIRST_IMPLICIT, 0);
-  // UCOL_LAST_IMPLICIT
-  setIndirectBoundaries(12, consts->UCA_LAST_IMPLICIT, consts->UCA_FIRST_TRAILING);
-  // UCOL_FIRST_TRAILING
-  setIndirectBoundaries(13, consts->UCA_FIRST_TRAILING, 0);
-  // UCOL_LAST_TRAILING
-  setIndirectBoundaries(14, consts->UCA_LAST_TRAILING, 0);
-  ucolIndirectBoundaries[14].limitCE = (consts->UCA_PRIMARY_SPECIAL_MIN<<24);
-}
-
 static inline 
 void syntaxError(const UChar* rules, 
                  int32_t pos,
@@ -327,7 +218,7 @@ void ucol_uprv_tok_setOptionInImage(UColOptionSet *opts, UColAttribute attrib, U
   }
 }
 
-#define UTOK_OPTION_COUNT 17
+#define UTOK_OPTION_COUNT 19
 
 static UBool didInit = FALSE;
 /* we can be strict, or we can be lenient */
@@ -372,6 +263,9 @@ U_STRING_DECL(option_13,    "hiraganaQ",      9);
 U_STRING_DECL(option_14,    "strength",       8);
 U_STRING_DECL(option_15,    "first",          5);
 U_STRING_DECL(option_16,    "last",           4);
+U_STRING_DECL(option_17,    "copy",           4);
+U_STRING_DECL(option_18,    "suppressContractions",         20);
+
 
 /*
 [last variable] last variable value 
@@ -427,23 +321,25 @@ static const ucolTokSuboption firstLastSub[7] = {
 };
 
 static const ucolTokOption rulesOptions[UTOK_OPTION_COUNT] = {
- {option_02,  9, alternateSub, 2, UCOL_ALTERNATE_HANDLING}, /*"alternate" */
- {option_03,  9, frenchSub, 1, UCOL_FRENCH_COLLATION}, /*"backwards"      */
- {option_07,  9, onOffSub, 2, UCOL_CASE_LEVEL},  /*"caseLevel"      */
- {option_08,  9, caseFirstSub, 3, UCOL_CASE_FIRST}, /*"caseFirst"   */
- {option_06, 13, onOffSub, 2, UCOL_NORMALIZATION_MODE}, /*"normalization" */
- {option_13, 9, onOffSub, 2, UCOL_HIRAGANA_QUATERNARY_MODE}, /*"hiraganaQ" */
- {option_14, 8, strengthSub, 5, UCOL_STRENGTH}, /*"strength" */
- {option_04, 12, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"variable top"   */
- {option_01,  9, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"rearrange"      */
- {option_12,  6, beforeSub, 3, UCOL_ATTRIBUTE_COUNT}, /*"before"    */
- {option_05,  3, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"top"            */
- {option_15,  5, firstLastSub, 7, UCOL_ATTRIBUTE_COUNT}, /*"first" */
- {option_16,  4, firstLastSub, 7, UCOL_ATTRIBUTE_COUNT}, /*"last" */
- {option_00,  9, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"undefined"      */
- {option_09, 11, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"scriptOrder"    */
- {option_10, 11, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"charsetname"    */
- {option_11,  7, NULL, 0, UCOL_ATTRIBUTE_COUNT}  /*"charset"        */
+ /*00*/ {option_02,  9, alternateSub, 2, UCOL_ALTERNATE_HANDLING}, /*"alternate" */
+ /*01*/ {option_03,  9, frenchSub, 1, UCOL_FRENCH_COLLATION}, /*"backwards"      */
+ /*02*/ {option_07,  9, onOffSub, 2, UCOL_CASE_LEVEL},  /*"caseLevel"      */
+ /*03*/ {option_08,  9, caseFirstSub, 3, UCOL_CASE_FIRST}, /*"caseFirst"   */
+ /*04*/ {option_06, 13, onOffSub, 2, UCOL_NORMALIZATION_MODE}, /*"normalization" */
+ /*05*/ {option_13, 9, onOffSub, 2, UCOL_HIRAGANA_QUATERNARY_MODE}, /*"hiraganaQ" */
+ /*06*/ {option_14, 8, strengthSub, 5, UCOL_STRENGTH}, /*"strength" */
+ /*07*/ {option_04, 12, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"variable top"   */
+ /*08*/ {option_01,  9, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"rearrange"      */
+ /*09*/ {option_12,  6, beforeSub, 3, UCOL_ATTRIBUTE_COUNT}, /*"before"    */
+ /*10*/ {option_05,  3, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"top"            */
+ /*11*/ {option_15,  5, firstLastSub, 7, UCOL_ATTRIBUTE_COUNT}, /*"first" */
+ /*12*/ {option_16,  4, firstLastSub, 7, UCOL_ATTRIBUTE_COUNT}, /*"last" */
+ /*13*/ {option_17,  4, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"copy"      */
+ /*14*/ {option_18, 20, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"remove"      */
+ /*15*/ {option_00,  9, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"undefined"      */
+ /*16*/ {option_09, 11, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"scriptOrder"    */
+ /*17*/ {option_10, 11, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"charsetname"    */
+ /*18*/ {option_11,  7, NULL, 0, UCOL_ATTRIBUTE_COUNT}  /*"charset"        */
 };
 
 static
@@ -508,9 +404,15 @@ void ucol_uprv_tok_initData() {
     U_STRING_INIT(option_14, "strength",       8);
     U_STRING_INIT(option_15, "first",          5);
     U_STRING_INIT(option_16, "last",           4);
+    U_STRING_INIT(option_17, "copy",           4);
+    U_STRING_INIT(option_18, "suppressContractions",         20);
+    didInit = TRUE;
   }
 }
 
+
+// This function reads basic options to set in the runtime collator
+// used by data driven tests. Should not support build time options
 U_CAPI const UChar * U_EXPORT2
 ucol_tok_getNextArgument(const UChar *start, const UChar *end, 
                                UColAttribute *attrib, UColAttributeValue *value, 
@@ -579,78 +481,143 @@ ucol_tok_getNextArgument(const UChar *start, const UChar *end,
   return NULL;
 }
 
+static 
+USet *ucol_uprv_tok_readAndSetUnicodeSet(const UChar *start, const UChar *end, UErrorCode *status) {
+  while(*start != 0x005b) { /* advance while we find the first '[' */
+    start++;
+  }
+  // now we need to get a balanced set of '[]'. The problem is that a set can have 
+  // many, and *end point to the first closing '['
+  int32_t noOpenBraces = 1;
+  int32_t current = 1; // skip the opening brace
+  while(start+current < end && noOpenBraces != 0) {
+    if(start[current] == 0x005b) {
+      noOpenBraces++;
+    } else if(start[current] == 0x005D) { // closing brace
+      noOpenBraces--;
+    }
+    current++;
+  }
+  UChar *nextBrace = NULL;
+
+  if(noOpenBraces != 0 || (nextBrace = u_strchr(start+current, 0x005d /*']'*/)) == NULL) {
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return NULL;
+  }
+  return uset_openPattern(start, current, status);
+}
+
 static
-uint8_t ucol_uprv_tok_readAndSetOption(UColTokenParser *src, const UChar *end, UErrorCode *status) {
-  const UChar* start = src->current;
-  uint32_t i = 0;
-  int32_t j=0;
-  UBool foundOption = FALSE;
-  const UChar *optionArg = NULL;
-
-  ucol_uprv_tok_initData();
-
-  start++; /*skip opening '['*/
+int32_t ucol_uprv_tok_readOption(const UChar *start, const UChar *end, const UChar **optionArg) {
+  int32_t i = 0;
+  while(u_isWhitespace(*start)) { /* eat whitespace */
+    start++;
+  }
   while(i < UTOK_OPTION_COUNT) {
     if(u_strncmpNoCase(start, rulesOptions[i].optionName, rulesOptions[i].optionLen) == 0) {
-      foundOption = TRUE;
       if(end - start > rulesOptions[i].optionLen) {
-        optionArg = start+rulesOptions[i].optionLen+1; /* start of the options, skip space */
-        while(u_isWhitespace(*optionArg)) { /* eat whitespace */
-          optionArg++;
+        *optionArg = start+rulesOptions[i].optionLen; /* start of the options*/
+        while(u_isWhitespace(**optionArg)) { /* eat whitespace */
+          (*optionArg)++;
         }
       }     
       break;
     }
     i++;
   }
+  if(i == UTOK_OPTION_COUNT) {
+    i = -1; // didn't find an option
+  } 
+  return i;
+}
 
-  if(!foundOption) {
-    *status = U_ILLEGAL_ARGUMENT_ERROR;
-    return FALSE;
+
+// reads and conforms to various options in rules
+// end is the position of the first closing ']'
+// However, some of the options take an UnicodeSet definition
+// which needs to duplicate the closing ']'
+// for example: '[copy [\uAC00-\uD7FF]]'
+// These options will move end to the second ']' and the 
+// caller will set the current to it.
+static
+uint8_t ucol_uprv_tok_readAndSetOption(UColTokenParser *src, UErrorCode *status) {
+  const UChar* start = src->current;
+  uint32_t i = 0;
+  int32_t j=0;
+  const UChar *optionArg = NULL;
+
+  uint8_t result = 0;
+
+  ucol_uprv_tok_initData();
+
+  start++; /*skip opening '['*/
+  i = ucol_uprv_tok_readOption(start, src->end, &optionArg);
+  if(optionArg) {
+    src->current = optionArg;
   }
 
-  if(i<7) {
+  if(i < 0) {
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+  } else if(i<7) {
     if(optionArg) {
       for(j = 0; j<rulesOptions[i].subSize; j++) {
         if(u_strncmpNoCase(optionArg, rulesOptions[i].subopts[j].subName, rulesOptions[i].subopts[j].subLen) == 0) {
           ucol_uprv_tok_setOptionInImage(src->opts, rulesOptions[i].attr, rulesOptions[i].subopts[j].attrVal);
-          return UCOL_TOK_SUCCESS;
+          result =  UCOL_TOK_SUCCESS;
         }
       }
+    } 
+    if(result == 0) {
+      *status = U_ILLEGAL_ARGUMENT_ERROR;
     }
-    *status = U_ILLEGAL_ARGUMENT_ERROR;
-    return FALSE;
   } else if(i == 7) { /* variable top */
-    return UCOL_TOK_SUCCESS | UCOL_TOK_VARIABLE_TOP;
+    result = UCOL_TOK_SUCCESS | UCOL_TOK_VARIABLE_TOP;
   } else if(i == 8) {  /*rearange */
-    return UCOL_TOK_SUCCESS;
+    result = UCOL_TOK_SUCCESS;
   } else if(i == 9) {  /*before*/
     if(optionArg) {
       for(j = 0; j<rulesOptions[i].subSize; j++) {
         if(u_strncmpNoCase(optionArg, rulesOptions[i].subopts[j].subName, rulesOptions[i].subopts[j].subLen) == 0) {
-        return UCOL_TOK_SUCCESS | rulesOptions[i].subopts[j].attrVal + 1;
+        result = UCOL_TOK_SUCCESS | rulesOptions[i].subopts[j].attrVal + 1;
         }
       }
     }
-    *status = U_ILLEGAL_ARGUMENT_ERROR;
-    return 0;
+    if(result == 0) {
+      *status = U_ILLEGAL_ARGUMENT_ERROR;
+    }
+    
   } else if(i == 10) {  /*top */ /* we are going to have an array with structures of limit CEs */
     /* index to this array will be src->parsedToken.indirectIndex*/
     src->parsedToken.indirectIndex = 0;
-    return UCOL_TOK_SUCCESS | UCOL_TOK_TOP;
-  } else if(i < 13) { /* first, last */
+    result = UCOL_TOK_SUCCESS | UCOL_TOK_TOP;
+  } else if(i == 11 || i ==12) { /* first, last */
     for(j = 0; j<rulesOptions[i].subSize; j++) {
       if(u_strncmpNoCase(optionArg, rulesOptions[i].subopts[j].subName, rulesOptions[i].subopts[j].subLen) == 0) {
         src->parsedToken.indirectIndex = (uint16_t)(i-10+j*2);         
-        return UCOL_TOK_SUCCESS | UCOL_TOK_TOP;;
+        result =  UCOL_TOK_SUCCESS | UCOL_TOK_TOP;;
       }
     }
-    *status = U_ILLEGAL_ARGUMENT_ERROR;
-    return FALSE;
+    if(result == 0) {
+      *status = U_ILLEGAL_ARGUMENT_ERROR;
+    }
+  } else if(i == 13 || i == 14) { // copy and remove are handled before normalization
+    // we need to move end here
+    int32_t noOpenBraces = 1;
+    src->current++; // skip opening brace
+    while(src->current < src->end && noOpenBraces != 0) {
+      if(*src->current == 0x005b) {
+        noOpenBraces++;
+      } else if(*src->current == 0x005D) { // closing brace
+        noOpenBraces--;
+      }
+      src->current++;
+    }
+    result = UCOL_TOK_SUCCESS;
   } else {
     *status = U_UNSUPPORTED_ERROR;
-    return 0;
   }
+  src->current = u_strchr(src->current, 0x005d /*']'*/);
+  return result;
 }
 
 inline UBool ucol_tok_doSetTop(UColTokenParser *src) {
@@ -826,8 +793,8 @@ ucol_tok_parseNextToken(UColTokenParser *src,
           case 0x005b/*'['*/:
             /* options - read an option, analyze it */
             if((optionEnd = u_strchr(src->current, 0x005d /*']'*/)) != NULL) {
-              uint8_t result = ucol_uprv_tok_readAndSetOption(src, optionEnd, status);
-              src->current = optionEnd;
+              uint8_t result = ucol_uprv_tok_readAndSetOption(src, status);
+              //src->current = optionEnd;
               if(U_SUCCESS(*status)) {
                 if(result & UCOL_TOK_TOP) {
                   if(newStrength == UCOL_TOK_RESET) { 
@@ -1554,8 +1521,158 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
   return src->resultLen;
 }
 
+void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint32_t rulesLength, UCollator *UCA, UErrorCode *status) {
+  uint32_t nSize = 0;
+  uint32_t estimatedSize = (2*rulesLength+UCOL_TOK_EXTRA_RULE_SPACE_SIZE);
+  if(U_FAILURE(*status)) {
+    return;
+  }
+  
+  // set everything to zero, so that we can clean up gracefully
+  uprv_memset(src, 0, sizeof(UColTokenParser));
+  
+  // first we need to find options that don't like to be normalized,
+  // like copy and remove...
+  const UChar *openBrace = rules;
+  int32_t optionNumber = -1;
+  const UChar *setStart;
+  while((openBrace = u_strchr(openBrace, 0x005B)) != NULL) { // find open braces
+    optionNumber = ucol_uprv_tok_readOption(openBrace+1, rules+rulesLength, &setStart);
+    if(optionNumber == 13) { /* copy - parts of UCA to tailoring */
+      USet *newSet = ucol_uprv_tok_readAndSetUnicodeSet(setStart, rules+rulesLength, status);
+      if(U_SUCCESS(*status)) {
+        if(src->copySet == NULL) {
+          src->copySet = newSet;
+        } else {
+          ((UnicodeSet *)src->copySet)->addAll(*((UnicodeSet *)newSet));
+          uset_close(newSet);
+        }
+      } else {
+        return;
+      }
+    } else if(optionNumber == 14) {
+      USet *newSet = ucol_uprv_tok_readAndSetUnicodeSet(setStart, rules+rulesLength, status);
+      if(U_SUCCESS(*status)) {
+        if(src->removeSet == NULL) {
+          src->removeSet = newSet;
+        } else {
+          ((UnicodeSet *)src->removeSet)->addAll(*((UnicodeSet *)newSet));
+          uset_close(newSet);
+        }
+      } else {
+        return;
+      }
+    }
+    openBrace++;
+  }
+
+  src->source = (UChar *)uprv_malloc(estimatedSize*sizeof(UChar));
+  /* test for NULL */
+  if (src->source == NULL) {
+      *status = U_MEMORY_ALLOCATION_ERROR;
+      return;
+  }
+  nSize = unorm_normalize(rules, rulesLength, UNORM_NFD, 0, src->source, estimatedSize, status);
+  if(nSize > estimatedSize || *status == U_BUFFER_OVERFLOW_ERROR) {
+    *status = U_ZERO_ERROR;
+    src->source = (UChar *)uprv_realloc(src->source, (nSize+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
+    /* test for NULL */
+    if (src->source == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    nSize = unorm_normalize(rules, rulesLength, UNORM_NFD, 0, src->source, nSize+UCOL_TOK_EXTRA_RULE_SPACE_SIZE, status);
+  }
+  src->current = src->source;
+  src->end = src->source+nSize;
+  src->sourceCurrent = src->source;
+  src->extraCurrent = src->end;
+  src->extraEnd = src->source+estimatedSize; //src->end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
+  src->varTop = NULL;
+  src->UCA = UCA;
+  src->invUCA = ucol_initInverseUCA(status);
+  src->parsedToken.charsLen = 0;
+  src->parsedToken.charsOffset = 0;
+  src->parsedToken.extensionLen = 0;
+  src->parsedToken.extensionOffset = 0;
+  src->parsedToken.prefixLen = 0;
+  src->parsedToken.prefixOffset = 0;
+  src->parsedToken.flags = 0;
+  src->parsedToken.strength = UCOL_TOK_UNSET;
+
+
+  if(U_FAILURE(*status)) {
+    return;
+  }
+  src->tailored = uhash_open(uhash_hashTokens, uhash_compareTokens, status);
+  if(U_FAILURE(*status)) {
+    return;
+  }
+  uhash_setValueDeleter(src->tailored, uhash_freeBlock);
+
+  src->opts = (UColOptionSet *)uprv_malloc(sizeof(UColOptionSet));
+  /* test for NULL */
+  if (src->opts == NULL) {
+      *status = U_MEMORY_ALLOCATION_ERROR;
+      return;
+  }
+
+  uprv_memcpy(src->opts, UCA->options, sizeof(UColOptionSet));
+
+  // rulesToParse = src->source;
+  src->lh = 0;
+  src->listCapacity = 1024;
+  src->lh = (UColTokListHeader *)uprv_malloc(src->listCapacity*sizeof(UColTokListHeader));
+  //Test for NULL
+  if (src->lh == NULL) {
+      *status = U_MEMORY_ALLOCATION_ERROR;
+      return;
+  }
+  src->resultLen = 0;
+
+  UCAConstants *consts = (UCAConstants *)((uint8_t *)src->UCA->image + src->UCA->image->UCAConsts);
+
+  // UCOL_RESET_TOP_VALUE
+  setIndirectBoundaries(0, consts->UCA_LAST_NON_VARIABLE, consts->UCA_FIRST_IMPLICIT); 
+  // UCOL_FIRST_PRIMARY_IGNORABLE
+  setIndirectBoundaries(1, consts->UCA_FIRST_PRIMARY_IGNORABLE, 0);
+  // UCOL_LAST_PRIMARY_IGNORABLE
+  setIndirectBoundaries(2, consts->UCA_LAST_PRIMARY_IGNORABLE, 0);
+  // UCOL_FIRST_SECONDARY_IGNORABLE
+  setIndirectBoundaries(3, consts->UCA_FIRST_SECONDARY_IGNORABLE, 0);
+  // UCOL_LAST_SECONDARY_IGNORABLE
+  setIndirectBoundaries(4, consts->UCA_LAST_SECONDARY_IGNORABLE, 0);
+  // UCOL_FIRST_TERTIARY_IGNORABLE
+  setIndirectBoundaries(5, consts->UCA_FIRST_TERTIARY_IGNORABLE, 0);
+  // UCOL_LAST_TERTIARY_IGNORABLE
+  setIndirectBoundaries(6, consts->UCA_LAST_TERTIARY_IGNORABLE, 0);
+  // UCOL_FIRST_VARIABLE
+  setIndirectBoundaries(7, consts->UCA_FIRST_VARIABLE, 0);
+  // UCOL_LAST_VARIABLE
+  setIndirectBoundaries(8, consts->UCA_LAST_VARIABLE, 0);
+  // UCOL_FIRST_NON_VARIABLE
+  setIndirectBoundaries(9, consts->UCA_FIRST_NON_VARIABLE, 0);
+  // UCOL_LAST_NON_VARIABLE
+  setIndirectBoundaries(10, consts->UCA_LAST_NON_VARIABLE, consts->UCA_FIRST_IMPLICIT);
+  // UCOL_FIRST_IMPLICIT
+  setIndirectBoundaries(11, consts->UCA_FIRST_IMPLICIT, 0);
+  // UCOL_LAST_IMPLICIT
+  setIndirectBoundaries(12, consts->UCA_LAST_IMPLICIT, consts->UCA_FIRST_TRAILING);
+  // UCOL_FIRST_TRAILING
+  setIndirectBoundaries(13, consts->UCA_FIRST_TRAILING, 0);
+  // UCOL_LAST_TRAILING
+  setIndirectBoundaries(14, consts->UCA_LAST_TRAILING, 0);
+  ucolIndirectBoundaries[14].limitCE = (consts->UCA_PRIMARY_SPECIAL_MIN<<24);
+}
+
 
 void ucol_tok_closeTokenList(UColTokenParser *src) {
+  if(src->copySet != NULL) {
+    uset_close(src->copySet);
+  }
+  if(src->removeSet != NULL) {
+    uset_close(src->removeSet);
+  }
   if(src->tailored != NULL) {
     uhash_close(src->tailored);
   }
