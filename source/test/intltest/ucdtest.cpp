@@ -310,7 +310,7 @@ void UnicodeTest::TestIdentifier()
 }
 
 /* for each line of UnicodeData.txt, check some of the properties */
-void
+void U_CALLCONV
 UnicodeTest::unicodeDataLineFn(void *context,
                   char *fields[][2], int32_t fieldCount,
                   UErrorCode *pErrorCode) {

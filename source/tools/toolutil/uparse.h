@@ -24,7 +24,7 @@
 #include "unicode/utypes.h"
 
 /* Function type for u_parseDelimitedFile(). */
-typedef void
+typedef void U_CALLCONV
 UParseLineFn(void *context,
               char *fields[][2],
               int32_t fieldCount,
