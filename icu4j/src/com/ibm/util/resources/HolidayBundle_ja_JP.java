@@ -1,4 +1,15 @@
-// HolidayBundle_jp_JP.java
+/*
+ *******************************************************************************
+ * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/util/resources/Attic/HolidayBundle_ja_JP.java,v $ 
+ * $Date: 2000/03/10 04:18:05 $ 
+ * $Revision: 1.2 $
+ *
+ *****************************************************************************************
+ */
 
 package com.ibm.util.resources;
 

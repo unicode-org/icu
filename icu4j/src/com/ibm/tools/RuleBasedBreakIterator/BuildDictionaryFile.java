@@ -1,3 +1,15 @@
+/*
+ *******************************************************************************
+ * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/tools/RuleBasedBreakIterator/Attic/BuildDictionaryFile.java,v $ 
+ * $Date: 2000/03/10 04:17:56 $ 
+ * $Revision: 1.2 $
+ *
+ *****************************************************************************************
+ */
 package com.ibm.tools.RuleBasedBreakIterator;
 
 import com.ibm.util.CompactByteArray;

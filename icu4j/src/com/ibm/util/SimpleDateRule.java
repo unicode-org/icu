@@ -1,4 +1,15 @@
-// SimpleDateRule.java
+/*
+ *******************************************************************************
+ * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * others. All Rights Reserved.                                                *
+ *******************************************************************************
+ *
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/util/Attic/SimpleDateRule.java,v $ 
+ * $Date: 2000/03/10 04:17:59 $ 
+ * $Revision: 1.3 $
+ *
+ *****************************************************************************************
+ */
 
 package com.ibm.util;
 
