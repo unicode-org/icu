@@ -26,6 +26,10 @@
 #include "ucmndata.h"
 #include "udatamem.h"
 
+#if defined(UDATA_DEBUG) || defined(UDATA_DEBUG_DUMP)
+#   include <stdio.h>
+#endif
+
 U_CFUNC uint16_t
 udata_getHeaderSize(const DataHeader *udh) {
     if(udh==NULL) {
@@ -103,6 +107,13 @@ offsetTOCLookupFn(const UDataMemory *pData,
         uint32_t start, limit, number;
 
         /* perform a binary search for the data in the common data's table of contents */
+#if defined (UDATA_DEBUG_DUMP)
+        /* list the contents of the TOC each time .. not recommended */
+        for(start=0;start<toc->count;start++) {
+          fprintf(stderr, "\tx%d: %s\n", start, &base[toc->entry[start].nameOffset]);
+        }
+#endif
+
         start=0;
         limit=toc->count;         /* number of names in this table of contents */
         if (limit == 0) {         /* Stub common data library used during build is empty. */
@@ -120,8 +131,8 @@ offsetTOCLookupFn(const UDataMemory *pData,
         if(uprv_strcmp(tocEntryName, &base[toc->entry[start].nameOffset])==0) {
             /* found it */
 #ifdef UDATA_DEBUG
-/*      fprintf(stderr, "Found: %p\n",(base+toc[2*start+1])) */
-            fprintf(stderr, "Found it\n");
+          /* fprintf(stderr, "Found: %p\n",(base+toc[2*start+1])); */
+          fprintf(stderr, "%s: Found.\n", tocEntryName);
 #endif
             if((start+1)<toc->count) {
                 *pLength=(int32_t)(toc->entry[start+1].dataOffset-toc->entry[start].dataOffset);
@@ -131,7 +142,7 @@ offsetTOCLookupFn(const UDataMemory *pData,
             return (const DataHeader *)&base[toc->entry[start].dataOffset];
         } else {
 #ifdef UDATA_DEBUG
-      fprintf(stderr, "Not found.\n");
+       fprintf(stderr, "%s: Not found.\n", tocEntryName);
 #endif
             return NULL;
         }
@@ -162,6 +173,13 @@ static const DataHeader *pointerTOCLookupFn(const UDataMemory *pData,
     if(pData->toc!=NULL) {
         const PointerTOC *toc = (PointerTOC *)pData->toc;
         uint32_t start, limit, number;
+
+#if defined (UDATA_DEBUG_DUMP)
+        /* list the contents of the TOC each time .. not recommended */
+        for(start=0;start<toc->count;start++) {
+          fprintf(stderr, "\tx%d: %s\n", start, toc->entry[start].entryName);
+        }
+#endif
 
         /* perform a binary search for the data in the common data's table of contents */
         start=0;

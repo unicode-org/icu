@@ -335,6 +335,14 @@ U_STABLE const char*  U_EXPORT2 uprv_getDefaultLocaleID(void);
 #endif
 
 /**
+ * Determine whether a pathname is absolute or not, as defined by the platform.
+ * @param path Pathname to test
+ * @return TRUE if the path is absolute
+ * @internal (ICU 3.0)
+ */
+U_STABLE UBool U_EXPORT2 uprv_pathIsAbsolute(const char *path);
+
+/**
  * Convert char characters to UChar characters.
  * This utility function is useful only for "invariant characters"
  * that are encoded in the platform default encoding.
