@@ -217,7 +217,7 @@ ures_openU(const UChar* path,
  *@param resourceBundle resource bundle containing the desired strings
  *@param resourceKey key tagging the resource
  *@param err fills in the outgoing error code
- *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
+ *                could be <TT>U_MISSING_RESOURCE_ERROR</TT> if the key is not found
  *                could be a non-failing error 
  *                e.g.: <TT>U_USING_FALLBACK_WARNING</TT>,<TT>U_USING_FALLBACK_WARNING </TT>
  *@return: for    <STRONG>Arrays</STRONG>: returns the number of resources in the array
@@ -327,7 +327,7 @@ ures_openFillIn(UResourceBundle *r,
  * @param resourceBundle a string resource
  * @param len    fills in the length of resulting string
  * @param status fills in the outgoing error code
- *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
+ *                could be <TT>U_MISSING_RESOURCE_ERROR</TT> if the key is not found
  *                Always check the value of status. Don't count on returning NULL.
  *                could be a non-failing error 
  *                e.g.: <TT>U_USING_FALLBACK_WARNING</TT>,<TT>U_USING_DEFAULT_WARNING </TT>
@@ -349,7 +349,7 @@ ures_getString(const UResourceBundle* resourceBundle,
  * @param resourceBundle a string resource
  * @param len    fills in the length of resulting byte chunk
  * @param status fills in the outgoing error code
- *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
+ *                could be <TT>U_MISSING_RESOURCE_ERROR</TT> if the key is not found
  *                Always check the value of status. Don't count on returning NULL.
  *                could be a non-failing error 
  *                e.g.: <TT>U_USING_FALLBACK_WARNING</TT>,<TT>U_USING_DEFAULT_WARNING </TT>
@@ -371,7 +371,7 @@ ures_getBinary(const UResourceBundle* resourceBundle,
  * @param resourceBundle an int vector resource
  * @param len    fills in the length of resulting byte chunk
  * @param status fills in the outgoing error code
- *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
+ *                could be <TT>U_MISSING_RESOURCE_ERROR</TT> if the key is not found
  *                Always check the value of status. Don't count on returning NULL.
  *                could be a non-failing error 
  *                e.g.: <TT>U_USING_FALLBACK_WARNING</TT>,<TT>U_USING_DEFAULT_WARNING </TT>
@@ -393,7 +393,7 @@ ures_getIntVector(const UResourceBundle* resourceBundle,
  *
  * @param resourceBundle a string resource
  * @param status fills in the outgoing error code
- *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
+ *                could be <TT>U_MISSING_RESOURCE_ERROR</TT> if the key is not found
  *                could be a non-failing error 
  *                e.g.: <TT>U_USING_FALLBACK_WARNING</TT>,<TT>U_USING_DEFAULT_WARNING </TT>
  * @return an integer value
@@ -413,7 +413,7 @@ ures_getUInt(const UResourceBundle* resourceBundle,
  *
  * @param resourceBundle a string resource
  * @param status  fills in the outgoing error code
- *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
+ *                could be <TT>U_MISSING_RESOURCE_ERROR</TT> if the key is not found
  *                could be a non-failing error 
  *                e.g.: <TT>U_USING_FALLBACK_WARNING</TT>,<TT>U_USING_DEFAULT_WARNING </TT>
  * @return an integer value
@@ -600,7 +600,7 @@ U_NAMESPACE_BEGIN
  *
  * @param resB              a resource
  * @param status: fills in the outgoing error code
- *                could be <TT>U_MISSING_RESOURCE_ERROR</T> if the key is not found
+ *                could be <TT>U_MISSING_RESOURCE_ERROR</TT> if the key is not found
  *                could be a non-failing error 
  *                e.g.: <TT>U_USING_FALLBACK_WARNING</TT>,<TT>U_USING_DEFAULT_WARNING </TT>
  * @return        an UnicodeString object. If there is an error, string is bogus
