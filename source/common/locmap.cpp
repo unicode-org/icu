@@ -4,7 +4,7 @@
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
 */
-// $Revision: 1.21 $
+// $Revision: 1.22 $
 //
 // Provides functionality for mapping between
 // LCID and Posix IDs.
@@ -51,7 +51,7 @@
 
 struct ILcidPosixElement
 {
-    uint16_t hostID;
+    uint32_t hostID;
     const char *posixID;
 };
 
@@ -145,7 +145,7 @@ static const ILcidPosixElement az[] = {         //Todo: Data does not exist
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0423, be, be_BY)
 ILCID_POSIX_ELEMENT_ARRAY(0x0402, bg, bg_BG)
-ILCID_POSIX_ELEMENT_ARRAY(0x0445, bn, bn_IN)    //Todo: Data does not exist
+ILCID_POSIX_ELEMENT_ARRAY(0x0445, bn, bn_IN)
 ILCID_POSIX_ELEMENT_ARRAY(0x0403, ca, ca_ES)
 ILCID_POSIX_ELEMENT_ARRAY(0x0405, cs, cs_CZ)
 ILCID_POSIX_ELEMENT_ARRAY(0x0406, da, da_DK)
@@ -156,7 +156,8 @@ static const ILcidPosixElement de[] = {
     {0x0807, "de_CH"},
     {0x0407, "de_DE"},
     {0x1407, "de_LI"},    //Todo: Data does not exist
-    {0x1007, "de_LU"}
+    {0x1007, "de_LU"},
+    {0x10407,"de__PHONEBOOK"}  //This is really de_DE_PHONEBOOK on Windows, maybe 10007
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0408, el, el_GR)
@@ -170,10 +171,10 @@ static const ILcidPosixElement en[] = {
     {0x1809, "en_IE"},
     {0x2009, "en_JM"},    //Todo: Data does not exist
     {0x1409, "en_NZ"},
-    {0x3409, "en_PH"},    //Todo: Data does not exist
+    {0x3409, "en_PH"},
     {0x2C09, "en_TT"},    //Todo: Data does not exist
     {0x0409, "en_US"},
-    {0x2409, "en_VI"},    //Todo: Data does not exist
+    {0x2409, "en_VI"},
     {0x1c09, "en_ZA"},
     {0x3009, "en_ZW"}
 };
@@ -188,7 +189,6 @@ static const ILcidPosixElement es[] = {
     {0x1c0a, "es_DO"},
     {0x300a, "es_EC"},
     {0x0c0a, "es_ES"},      //Modern sort.
-    {0x040a, "es_ES_T"},    //Todo: Data does not exist. Traditional sort?
     {0x100a, "es_GT"},
     {0x480a, "es_HN"},
     {0x080a, "es_MX"},
@@ -199,7 +199,8 @@ static const ILcidPosixElement es[] = {
     {0x3c0a, "es_PY"},
     {0x440a, "es_SV"},
     {0x380a, "es_UY"},
-    {0x200a, "es_VE"}
+    {0x200a, "es_VE"},
+    {0x040a, "es__TRADITIONAL"}  //This is really es_ES_PHONEBOOK on Windows
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0425, et, et_EE)
@@ -255,7 +256,7 @@ ILCID_POSIX_ELEMENT_ARRAY(0x044c, ml,  ml_IN)   //Todo: Data does not exist
 ILCID_POSIX_ELEMENT_ARRAY(0x0458, mni, mni_IN)  //Todo: Data does not exist
 ILCID_POSIX_ELEMENT_ARRAY(0x044e, mr,  mr_IN)
 
-static const ILcidPosixElement ms[] = {         //Todo: Data does not exist
+static const ILcidPosixElement ms[] = {
     {0x3e,   "ms"},
     {0x083e, "ms_BN"},   // Brunei Darussalam
     {0x043e, "ms_MY"}    // Malaysia
@@ -279,9 +280,9 @@ static const ILcidPosixElement nl[] = {
 
 
 static const ILcidPosixElement no[] = {
-    {0x14,   "no"},
-    {0x0414, "no_NO"},
-    {0x0814, "nn_NO_NY"}
+    {0x14,   "no"},         // really nb
+    {0x0414, "no_NO"},      // really nb_NO
+    {0x0814, "nn_NO_NY"}    // really nn_NO
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0814, nn, nn_NO)
@@ -615,7 +616,7 @@ ILcidPosixMap::searchPosixIDmap(const char* posixID, UErrorCode* status) const
 {
     uint32_t low  = 1;
     uint32_t mid;
-    uint32_t high = numRegions;
+    uint32_t high = numRegions - 1;
     int32_t  compVal;
 
     // Binary search for the map entry
