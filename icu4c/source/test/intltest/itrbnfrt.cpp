@@ -21,7 +21,7 @@
         }                             \
         break
 
-void RbnfRoundTripTest::runIndexedTest(int32_t index, UBool exec, const char* &name, char* par)
+void RbnfRoundTripTest::runIndexedTest(int32_t index, UBool exec, const char* &name, char* /*par*/)
 {
     if (exec) logln("TestSuite RuleBasedNumberFormatRT");
     switch (index) {
@@ -289,7 +289,7 @@ RbnfRoundTripTest::doTest(const RuleBasedNumberFormat* formatter,
     if (U_FAILURE(status)) {
       sprintf(buf, "Round-trip status failure: %.12g, status: %d", i, status);
       errln(buf);
-	  return;
+      return;
     } else {
       double rt = (parseResult.getType() == Formattable::kDouble) ? 
         parseResult.getDouble() : 
@@ -298,7 +298,7 @@ RbnfRoundTripTest::doTest(const RuleBasedNumberFormat* formatter,
       if (rt != i) {
         sprintf(buf, "Round-trip failed: %.12g -> %.12g", i, rt);
         errln(buf);
-		return;
+        return;
       }
     }
 
@@ -316,21 +316,21 @@ RbnfRoundTripTest::doTest(const RuleBasedNumberFormat* formatter,
       if (U_FAILURE(status)) {
         sprintf(buf, "Round-trip status failure: %.12g, status: %d", d, status);
         errln(buf);
-		return;
+        return;
       } else {
         double rt = (parseResult.getType() == Formattable::kDouble) ? 
           parseResult.getDouble() : 
           (double)parseResult.getLong();
 
         if (rt != d) {
-		  UnicodeString msg;
+          UnicodeString msg;
           sprintf(buf, "Round-trip failed: %.12g -> ", d);
-		  msg.append(buf);
-		  msg.append(formatResult);
-		  sprintf(buf, " -> %.12g", rt);
-		  msg.append(buf);
+          msg.append(buf);
+          msg.append(formatResult);
+          sprintf(buf, " -> %.12g", rt);
+          msg.append(buf);
           errln(msg);
-		  return;
+          return;
         }
       }
 
