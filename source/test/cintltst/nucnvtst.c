@@ -5099,14 +5099,16 @@ static void TestEBCDICUS4XML()
 
 #if !UCONFIG_NO_COLLATION
 
+#define TESTJITTERBUG981_BUFF_SIZE 131072
 static void TestJitterbug981(){
   const UChar* rules;
   int32_t rules_length, target_cap, bytes_needed;
   UErrorCode status = U_ZERO_ERROR;
   UConverter *utf8cnv;
   UCollator* myCollator;
-  char buff[50000];
+  char *buff;
   int numNeeded=0;
+  buff = uprv_malloc(TESTJITTERBUG981_BUFF_SIZE);
   utf8cnv = ucnv_open ("utf8", &status);
   if(U_FAILURE(status)){
       log_err("Could not open UTF-8 converter. Error: %s", u_errorName(status));
@@ -5124,6 +5126,10 @@ static void TestJitterbug981(){
   do {
       ucnv_reset(utf8cnv);
       status = U_ZERO_ERROR;
+      if(target_cap >= TESTJITTERBUG981_BUFF_SIZE) {
+        log_err("wanted %d bytes, only %d available\n", target_cap, TESTJITTERBUG981_BUFF_SIZE);
+        return;
+      }
       bytes_needed = ucnv_fromUChars(utf8cnv, buff, target_cap,
                                      rules, rules_length, &status);
       target_cap = (bytes_needed > target_cap) ? bytes_needed : target_cap +1;
@@ -5134,6 +5140,7 @@ static void TestJitterbug981(){
   } while (status == U_BUFFER_OVERFLOW_ERROR);
   ucol_close(myCollator);
   ucnv_close(utf8cnv);
+  free(buff);
 }
 
 #endif
