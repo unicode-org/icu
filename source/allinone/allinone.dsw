@@ -83,6 +83,9 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name stubdata
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name decmn
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -176,6 +179,12 @@ Package=<5>
 
 Package=<4>
 {{{
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name toolutil
+    End Project Dependency
 }}}
 
 ###############################################################################
