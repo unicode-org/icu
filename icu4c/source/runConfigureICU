@@ -182,32 +182,32 @@ case $platform in
 		THE_COMP="HP's CC"
 		CC=cc; export CC
 		CXX=CC; export CXX
-		RELEASE_CFLAGS=+O3
-		RELEASE_CXXFLAGS=+O3
+		RELEASE_CFLAGS=+O2
+		RELEASE_CXXFLAGS=+O2
 		;;
         HP/UX10.2ACC)
 		THE_OS="HP-UX 10.2"
 		THE_COMP="aCC"
 		CC=cc; export CC
 		CXX=aCC; export CXX
-		RELEASE_CFLAGS=+O3
-		RELEASE_CXXFLAGS=+O3
+		RELEASE_CFLAGS=+O2
+		RELEASE_CXXFLAGS=+O2
 		;;
         HP/UX11CC)
 		THE_OS="HP-UX 11"
 		THE_COMP="HP's CC"
                 CC=cc; export CC
 		CXX=/opt/CC/bin/CC; export CXX
-		RELEASE_CFLAGS=+O3
-		RELEASE_CXXFLAGS=+O3
+		RELEASE_CFLAGS=+O2
+		RELEASE_CXXFLAGS=+O2
                 ;;
         HP/UX11ACC)
 		THE_OS="HP-UX 11"
 		THE_COMP="aCC"
                 CC=cc; export CC
 		CXX=/opt/aCC/bin/aCC; export CXX
-		RELEASE_CFLAGS=+O3
-		RELEASE_CXXFLAGS=+O3
+		RELEASE_CFLAGS=+O2
+		RELEASE_CXXFLAGS=+O2
 		;;
         PTX)
 		THE_OS="PTX"
