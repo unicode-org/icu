@@ -784,6 +784,9 @@ UChar32 Normalizer:: current() const
         case DECOMP_COMPAT:
             nonConst->currentChar = nonConst->nextDecomp();        
             break;
+        case FCD:
+            /* ### TODO */
+            break;
         }
     }
     return currentChar;
@@ -834,6 +837,9 @@ UChar32 Normalizer::next() {
         case DECOMP_COMPAT:
             currentChar = nextDecomp();        
             break;
+        case FCD:
+            /* ### TODO */
+            break;
         }
     }
     return currentChar;
@@ -863,6 +869,9 @@ UChar32 Normalizer::previous()
         case DECOMP:    
         case DECOMP_COMPAT:
             currentChar = prevDecomp();        
+            break;
+        case FCD:
+            /* ### TODO */
             break;
         }
     }
