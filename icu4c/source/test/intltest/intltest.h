@@ -150,7 +150,7 @@ public:
 
 public:
     UBool run_phase2( char* name, char* par ); // internally, supports reporting memory leaks
-    const char* loadTestData(UErrorCode& err);
+    static const char* loadTestData(UErrorCode& err);
 
 // static members
 public:

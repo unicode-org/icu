@@ -1140,7 +1140,9 @@ const char* IntlTest::loadTestData(UErrorCode& err){
                 /* Fall back did not succeed either so return */
                 if(U_FAILURE(err)){
                     err = U_FILE_ACCESS_ERROR;
-                    errln("construction of NULL did not succeed  :  %s \n", u_errorName(err));
+                    it_errln((UnicodeString)"construction of NULL did not succeed:  "
+                           + (UnicodeString)u_errorName(err)
+                           + (UnicodeString)" \n");
                     return "";
                 }
                 ures_close(test);
