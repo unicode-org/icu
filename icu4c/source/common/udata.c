@@ -83,18 +83,18 @@ static UHashtable  *gCommonDataCache = NULL;  /* Global hash table of opened ICU
 UBool
 udata_cleanup()
 {
-    if (gCommonDataCache) {              /* Delete the cache of user data mappings.  */
-        uhash_close(gCommonDataCache);   /*   Table owns the contents, and will delete them. */
-        gCommonDataCache = 0;            /*   Cleanup is not thread safe.                */
+    if (gCommonDataCache) {             /* Delete the cache of user data mappings.  */
+        uhash_close(gCommonDataCache);  /*   Table owns the contents, and will delete them. */
+        gCommonDataCache = NULL;        /*   Cleanup is not thread safe.                */
     }
 
     if (gCommonICUData != NULL) {
-    udata_close(gCommonICUData);         /* Clean up common ICU Data             */
-    gCommonICUData = NULL;
+        udata_close(gCommonICUData);    /* Clean up common ICU Data             */
+        gCommonICUData = NULL;
     }
 
     if (gStubICUData != NULL) {
-        udata_close(gStubICUData);     /* Clean up the stub ICU Data             */
+        udata_close(gStubICUData);      /* Clean up the stub ICU Data             */
         gStubICUData = NULL;
     }
 
