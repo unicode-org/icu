@@ -10,7 +10,7 @@
 
 #include "unicode/uniset.h"
 #include "unicode/parsepos.h"
-#include "unicode/unicode.h"
+#include "unicode/uchar.h"
 #include "unicode/uscript.h"
 #include "symtable.h"
 #include "cmemory.h"
@@ -356,7 +356,7 @@ void UnicodeSet::applyPattern(const UnicodeString& pattern,
     // Skip over trailing whitespace
     int32_t i = pos.getIndex();
     int32_t n = pattern.length();
-    while (i<n && Unicode::isWhitespace(pattern.charAt(i))) {
+    while (i<n && u_isWhitespace(pattern.charAt(i))) {
         ++i;
     }
 

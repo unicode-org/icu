@@ -10,7 +10,7 @@
 #include "unicode/hextouni.h"
 #include "unicode/rep.h"
 #include "unicode/unifilt.h"
-#include "unicode/unicode.h"
+#include "unicode/uchar.h"
 
 
 U_NAMESPACE_BEGIN

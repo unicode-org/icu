@@ -16,7 +16,7 @@
 #include "RenderingFontInstance.h"
 
 #include "unicode/utypes.h"
-#include "unicode/unicode.h"
+#include "unicode/uchar.h"
 #include "unicode/uchriter.h"
 #include "unicode/brkiter.h"
 #include "unicode/locid.h"
@@ -218,8 +218,8 @@ int32_t Paragraph::previousBreak(int32_t charIndex)
     // characters, because they can hang in
     // the margin.
     while (charIndex < fCharCount &&
-           (Unicode::isWhitespace(ch) ||
-            Unicode::isControl(ch))) {
+           (u_isWhitespace(ch) ||
+            u_iscntrl(ch))) {
         ch = fText[++charIndex];
     }
 

@@ -10,7 +10,6 @@
 #include <string.h>
 
 #include "unicode/utypes.h"
-#include "unicode/unicode.h"
 #include "unicode/uchar.h"
 #include "unicode/uchriter.h"
 #include "unicode/brkiter.h"
