@@ -94,6 +94,28 @@ UnicodeFilter* UnicodeFilterLogic::createAnd(const UnicodeFilter* f,
     return new UnicodeAndFilter((UnicodeFilter*)f->clone(), (UnicodeFilter*)g->clone());
 }
 
+/**
+ * Returns a <tt>UnicodeFilter</tt> that implements a short
+ * circuit AND of the result of the two given filters.  That is,
+ * if <tt>f.contains()</tt> is <tt>false</tt>, then <tt>g.contains()</tt>
+ * is not called, and <tt>contains()</tt> returns <tt>false</tt>.
+ *
+ * ADOPTS both arguments.
+ */
+UnicodeFilter* UnicodeFilterLogic::createAdoptingAnd(UnicodeFilter* f,
+                                                     UnicodeFilter* g) {
+    if (f == 0) {
+        if (g == 0) {
+            return NULL;
+        }
+        return g;
+    }
+    if (g == 0) {
+        return f;
+    }
+    return new UnicodeAndFilter(f, g);
+}
+
 class UnicodeOrFilter : public UnicodeFilter {
     UnicodeFilter* filt1;
     UnicodeFilter* filt2;
