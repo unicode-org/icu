@@ -254,7 +254,7 @@ UBool NormalizerConformanceTest::hexsplit(const UnicodeString& s, UChar delimite
         // Our field is from pos..delim-1.
         buf.remove();
         while (pos < delim) {
-            if (s.charAt(pos) == ' ') {
+            if (s.charAt(pos) == 0x0020/*' '*/) {
                 ++pos;
             } else if (pos+4 > delim) {
                 errln((UnicodeString)"Premature eol in " + s);
