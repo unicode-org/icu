@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-hpux-gcc,v 1.4 2003/12/18 23:14:13 emader-oss Exp $
+## $Id: mh-hpux-gcc,v 1.5 2004/03/26 18:07:36 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
@@ -35,7 +35,7 @@ LD_RPATH=   -Wl,+b,
 LD_RPATH_PRE=
 
 ## Compiler switch to embed a library name
-LD_SONAME = -Wl,+h,$(MIDDLE_SO_TARGET)
+LD_SONAME = -Wl,+h,$(notdir $(MIDDLE_SO_TARGET))
 
 ## Environment variable to set a runtime search path
 LDLIBRARYPATH_ENVVAR = SHLIB_PATH

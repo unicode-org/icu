@@ -5,7 +5,7 @@
 ##
 ## Provided By: Chris McKillop <cdm@qnx.com>
 ##
-## $Id: mh-qnx,v 1.3 2003/08/08 23:53:43 grhoten-oss Exp $
+## $Id: mh-qnx,v 1.4 2004/03/26 18:07:36 grhoten-oss Exp $
 
 
 #
@@ -35,7 +35,7 @@ LD_RPATH=
 LD_RPATH_PRE = -Wl,-rpath,
 
 ## Compiler switch to embed a library name
-LD_SONAME = -Wl,-soname -Wl,$(MIDDLE_SO_TARGET)
+LD_SONAME = -Wl,-soname -Wl,$(notdir $(MIDDLE_SO_TARGET))
 
 ## Shared object suffix
 SO = so

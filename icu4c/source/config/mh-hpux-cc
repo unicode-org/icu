@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-hpux-cc,v 1.32 2003/12/18 23:14:12 emader-oss Exp $
+## $Id: mh-hpux-cc,v 1.33 2004/03/26 18:07:36 grhoten-oss Exp $
 
 
 ## This causes source/tools/pkgdata generated makefiles  to create and link
@@ -39,7 +39,7 @@ LD_RPATH_PRE=
 LDLIBRARYPATH_ENVVAR = SHLIB_PATH
 
 ## Compiler switch to embed a library name
-LD_SONAME = -Wl,+h,$(MIDDLE_SO_TARGET)
+LD_SONAME = -Wl,+h,$(notdir $(MIDDLE_SO_TARGET))
 
 ## Shared object suffix
 SO=		sl
