@@ -229,7 +229,6 @@ fa_AF {
         "\u2030",
         "\u221e",
         "\ufffd",
-        "\u066b",
         "+",
     }
     zoneStrings {

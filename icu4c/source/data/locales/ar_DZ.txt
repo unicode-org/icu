@@ -19,7 +19,6 @@ ar_DZ {
         "\u2030",
         "\u221E",
         "\uFFFD",
-        "\u066B",
         "+",
     }    
     calendar {

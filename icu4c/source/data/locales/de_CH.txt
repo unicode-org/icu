@@ -40,7 +40,6 @@ de_CH {
         "\u2030",
         "\u221E",
         "\uFFFD",
-        ".",
         "+",
     }
     NumberPatterns { 
