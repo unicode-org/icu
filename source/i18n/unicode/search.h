@@ -186,7 +186,8 @@ public:
      * re-use an iterator to search for the same pattern within a different 
      * body of text. The user is responsible for deleting the text.
      * @param text string to be searched.
-     * @param status for errors if it occurs
+     * @param status for errors. If the text length is 0, 
+     *        an U_ILLEGAL_ARGUMENT_ERROR is returned.
      */
     virtual void setText(const UnicodeString &text, UErrorCode &status);    
 
@@ -201,7 +202,8 @@ public:
      * in <tt>CharacterIterator</tt> will be used as it is.
      * The user is responsible for deleting the text.
      * @param text string iterator to be searched.
-     * @param  status for errors if it occurs
+     * @param status for errors if any. If the text length is 0 then an 
+     *        U_ILLEGAL_ARGUMENT_ERROR is returned.
      */
     virtual void setText(CharacterIterator &text, UErrorCode &status);
     
@@ -371,8 +373,7 @@ protected:
      *                boundary as determined by the <tt>BreakIterator</tt>, 
      *                the match is rejected and <tt>handleNext</tt> or 
      *                <tt>handlePrev</tt> is called again. If this parameter 
-     *                is <tt>NULL</tt>, no break detection is attempted.                
-     * @param status error status
+     *                is <tt>NULL</tt>, no break detection is attempted.                .
      */
     SearchIterator(const UnicodeString &text, 
                          BreakIterator *breakiter = NULL);
