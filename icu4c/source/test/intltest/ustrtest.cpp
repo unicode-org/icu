@@ -263,7 +263,7 @@ UnicodeStringTest::TestCompare()
 void
 UnicodeStringTest::TestExtract()
 {
-    UnicodeString  test1("Now is the time for all good men to come to the aid of their country.");
+    UnicodeString  test1("Now is the time for all good men to come to the aid of their country.", "");
     UnicodeString  test2;
     UChar          test3[13] = {1, 2, 3, 4, 5, 6, 7, 8, 8, 10, 11, 12, 13};
     char           test4[13] = {1, 2, 3, 4, 5, 6, 7, 8, 8, 10, 11, 12, 13};
@@ -323,6 +323,50 @@ UnicodeStringTest::TestExtract()
     }
     if (test4[2] != (char)0xffu) {
         errln("UnicodeString.extract(0, 10, test4, 2, \"\") overwrote test4[2]");
+    }
+
+    {
+        // test new, NUL-terminating extract() function
+        UnicodeString s("terminate", "");
+        UChar dest[20]={
+            0xa5, 0xa5, 0xa5, 0xa5, 0xa5, 0xa5, 0xa5, 0xa5, 0xa5, 0xa5,
+            0xa5, 0xa5, 0xa5, 0xa5, 0xa5, 0xa5, 0xa5, 0xa5, 0xa5, 0xa5
+        };
+        UErrorCode errorCode;
+        int32_t length;
+
+        errorCode=U_ZERO_ERROR;
+        length=s.extract(NULL, 0, errorCode);
+        if(errorCode!=U_BUFFER_OVERFLOW_ERROR || length!=s.length()) {
+            errln("UnicodeString.extract(NULL, 0)==%d (%s) expected %d (U_BUFFER_OVERFLOW_ERROR)", length, s.length(), u_errorName(errorCode));
+        }
+
+        errorCode=U_ZERO_ERROR;
+        length=s.extract(dest, s.length()-1, errorCode);
+        if(errorCode!=U_BUFFER_OVERFLOW_ERROR || length!=s.length()) {
+            errln("UnicodeString.extract(dest too short)==%d (%s) expected %d (U_BUFFER_OVERFLOW_ERROR)",
+                length, u_errorName(errorCode), s.length());
+        }
+
+        errorCode=U_ZERO_ERROR;
+        length=s.extract(dest, s.length(), errorCode);
+        if(errorCode!=U_STRING_NOT_TERMINATED_WARNING || length!=s.length()) {
+            errln("UnicodeString.extract(dest just right without NUL)==%d (%s) expected %d (U_STRING_NOT_TERMINATED_WARNING)",
+                length, u_errorName(errorCode), s.length());
+        }
+        if(dest[length-1]!=s[length-1] || dest[length]!=0xa5) {
+            errln("UnicodeString.extract(dest just right without NUL) did not extract the string correctly");
+        }
+
+        errorCode=U_ZERO_ERROR;
+        length=s.extract(dest, s.length()+1, errorCode);
+        if(errorCode!=U_ZERO_ERROR || length!=s.length()) {
+            errln("UnicodeString.extract(dest large enough)==%d (%s) expected %d (U_ZERO_ERROR)",
+                length, u_errorName(errorCode), s.length());
+        }
+        if(dest[length-1]!=s[length-1] || dest[length]!=0 || dest[length+1]!=0xa5) {
+            errln("UnicodeString.extract(dest large enough) did not extract the string correctly");
+        }
     }
 }
 
