@@ -407,7 +407,7 @@ static char* convertAndEscape(char** pDest, int32_t destCap, int32_t* destLength
                     destLen+=uprv_strlen("&apos;");
                     break;
                  /* escape the C0 controls */
-                //case 0x00:
+                /*case 0x00:*/
                 case 0x01:
 				case 0x02:
                 case 0x03:
@@ -1259,7 +1259,9 @@ bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outpu
     char* lang = NULL;
     char* pos;
     int first, index;
-  
+    time_t currTime;
+    char timeBuf[128];
+    
     outDir = outputDir;
 
     srBundle = bundle;
@@ -1359,7 +1361,10 @@ bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outpu
     T_FileStream_write(out,originalFileName, uprv_strlen(originalFileName));
     T_FileStream_write(out,file3, uprv_strlen(file3));
     T_FileStream_write(out,file4, uprv_strlen(file4));
-    _strdate( date );
+
+    time(&currTime);
+    strftime(timeBuf, sizeof(timeBuf), "%b %d %H:%M %Z %Y", localtime(&currTime));
+
     T_FileStream_write(out,date, uprv_strlen(date));
 
     if(package) {
