@@ -70,16 +70,8 @@ static UConverterSharedData* createConverterFromTableFile(const char* realName, 
  */
 void writeConverterData(UConverterSharedData *mySharedData, const char *cnvName, const char *cnvDir, UErrorCode *status);
 
-/*
- * Utility functions
- */
-static UConverterPlatform getPlatformFromName(char* name);
-static int32_t getCodepageNumberFromName(char* name);
-
 static const char NLTC_SEPARATORS[9] = { '\r', '\n', '\t', ' ', '<', '>' ,'"' , 'U', '\0' };
 static const char FALLBACK_SEPARATOR = '|';
-static const char PLAIN_SEPARATORS[9] = { '\r', '\n', '\t', ' ', '<', '>' ,'"' ,  '\0' };
-static const char STATE_SEPARATORS[9] = { '\r', '\n', '\t', '<', '>' ,'"' , '\0' }; /* do not break on space */
 static const char CODEPOINT_SEPARATORS[8] = {  '\r', '>', '\\', 'x', '\n', ' ', '\t', '\0' };
 static const char UNICODE_CODEPOINT_SEPARATORS[6] = {  '<', '>', 'U', ' ', '\t', '\0' };
 
@@ -125,9 +117,9 @@ static char *
   removeComments (char *line)
 {
   char *pound = uprv_strchr (line, '#');
-  char *fallback = uprv_strchr(line, '|');
   if (pound != NULL)
   {
+      char *fallback = uprv_strchr(pound + 1, '|');
       if (fallback != NULL)
       {
           uprv_memset(pound, ' ', fallback-pound);
@@ -138,20 +130,6 @@ static char *
       }
   }
   return line;
-}
-
-/*Returns uppercased string */
-static char *
-  strtoupper (char *name)
-{
-  char *oldPtr = name;
-
-  do {
-    *name = (char)uprv_toupper(*name);
-  }
-  while (*(name++));
-
-  return oldPtr;
 }
 
 /* Returns true in c is a in set 'setOfChars', false otherwise
@@ -441,30 +419,22 @@ int main(int argc, char* argv[])
   return err;
 }
 
-UConverterPlatform getPlatformFromName(char* name)
-{
-  char myPlatform[10];
-  char mySeparators[2] = { '-', '\0' };
-  
-  getToken(myPlatform, name, mySeparators);
-  strtoupper(myPlatform);
-
-  if (uprv_strcmp(myPlatform, "IBM") == 0)
-    return UCNV_IBM;
-  else
-    return UCNV_UNKNOWN;
-}
-
-int32_t getCodepageNumberFromName(char* name)
-{
-  char myNumber[10];
-  char mySeparators[2] = { '-', '\0' };
-  char* line = NULL;
- 
-  line = getToken(myNumber, name, mySeparators);
-  getToken(myNumber, line, mySeparators);
-
-  return T_CString_stringToInteger(myNumber, 10);
+static void
+getPlatformAndCCSIDFromName(const char *name, int8_t *pPlatform, int32_t *pCCSID) {
+    if( (name[0]=='i' || name[0]=='I') &&
+        (name[1]=='b' || name[1]=='B') &&
+        (name[2]=='m' || name[2]=='M')
+    ) {
+        name+=3;
+        if(*name=='-') {
+            ++name;
+        }
+        *pPlatform=UCNV_IBM;
+        *pCCSID=(int32_t)uprv_strtoul(name, NULL, 10);
+    } else {
+        *pPlatform=UCNV_UNKNOWN;
+        *pCCSID=0;
+    }
 }
 
 /*Reads the header of the table file and fills in basic knowledge about the converter in "converter"*/
@@ -544,8 +514,7 @@ void readHeaderFromFile(UConverterSharedData* mySharedData,
         if(uprv_strcmp(key, "code_set_name")==0) {
             if(*value!=0) {
                 uprv_strcpy((char*)staticData->name, value);
-                staticData->platform=(int8_t)getPlatformFromName(value);
-                staticData->codepage=getCodepageNumberFromName(value);
+                getPlatformAndCCSIDFromName(value, &staticData->platform, &staticData->codepage);
             }
         } else if(uprv_strcmp(key, "uconv_class")==0) {
             const UConverterStaticData *prototype;
