@@ -1275,8 +1275,17 @@ void TransliteratorRoundTripTest::TestHebrew() {
         errln("Could not construct LegalHebrew object. Error: %s", u_errorName(error));
         return;
     }
+    if (isICUVersionAtLeast(ICU_34)) {
+        // We temporarily filter against Unicode 4.1, but we only do this
+        // before version 3.4.
+        errln("FAIL: TestHebrew needs to be updated to remove delete the [:Age=4.0:] filter ");
+        return;
+    } else {
+        logln("Warning: TestHebrew needs to be updated to remove delete the section marked [:Age=4.0:] filter");
+    }
     RTTest test("Latin-Hebrew");
-        test.test("[a-zA-Z\\u02BC\\u02BB]", "[[:hebrew:]-[\\u05BD\\uFB00-\\uFBFF]]", "[\\u05F0\\u05F1\\u05F2]", this, quick, legal);
+    test.test("[a-zA-Z\\u02BC\\u02BB]", "[[[:hebrew:]-[\\u05BD\\uFB00-\\uFBFF]]&[:Age=4.0:]]", "[\\u05F0\\u05F1\\u05F2]", this, quick, legal);
+   
     //showElapsed(start, "TestHebrew");
     delete legal;
 }
