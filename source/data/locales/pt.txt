@@ -272,10 +272,10 @@ pt {
         DJF { "DJF", "Franco do Djibouti" }
         DKK { "DKK", "C\u00F4roa Dinamarquesa" }
         DOP { "DOP", "Peso Dominicano" }
-        DRP { "DRP", "Peso da Rep\u00FAblica Dominicana" }
+        // DRP { "DRP", "Peso da Rep\u00FAblica Dominicana" } -- invalid
         DZD { "DZD", "Dinar Argelino" }
         ECS { "ECS", "Sucre Equatorial" }
-        ECU { "ECU", "Unidade de Moeda Europeia" }
+        // ECU { "ECU", "Unidade de Moeda Europeia" } -- invalid
         EEK { "EEK", "C\u00F4roa Est\u00F3nia" }
         EGP { "EGP", "Libra Eg\u00EDpcia" }
         ESP { "ESP", "Peseta Espanhola" }
@@ -313,7 +313,7 @@ pt {
         JPY { "\uFFE5", "Yen Japon\u00EAs" }
         KES { "KES", "Shilling Queniano" }
         KHR { "KHR", "Riel Cambodjano" }
-        KIS { "KIS", "Som do Kirghizst\u00E3o" }
+        // KIS { "KIS", "Som do Kirghizst\u00E3o" } -- invalid
         KMF { "KMF", "Franco dos Comoros" }
         KPW { "KPW", "Won Norte-Coreano" }
         KRW { "\u20A9", "Won Sul-Coreano" }
@@ -346,7 +346,7 @@ pt {
         NGN { "\u20A6", "Naira Nigeriana" }
         //NIC { "NIC", "Cordoba de Nicar\u00E1gua" }
         NIO { "NIO", "Cordoba de Nicar\u00E1gua" }
-        NIS { "NIS", "Novo Shekel Israelita" }
+        // NIS { "NIS", "Novo Shekel Israelita" } -- invalid
         NLG { "NLG", "Guilda Holandesa" }
         NOK { "NOK", "Coroa Norueguesa" }
         NPR { "NPR", "Rupia Nepalesa" }
@@ -363,7 +363,7 @@ pt {
         PTE { "Esc.", "Escudo Portugues" }
         PYG { "PYG", "Guarani Paraguaio" }
         QAR { "QAR", "Riyal do Quatar" }
-        RMB { "RMB", "Renminbi Yuan Chin\u00EAs" }
+        // RMB { "RMB", "Renminbi Yuan Chin\u00EAs" } -- invalid
         ROL { "ROL", "Lei Romeno" }
         RUR { "RUR", "Rublo Russo" }
         RWF { "RWF", "Franco Ruand\u00EAs" }
