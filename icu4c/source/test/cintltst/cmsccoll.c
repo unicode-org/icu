@@ -28,8 +28,19 @@
 #include "ucol_tok.h"
 #include "cmemory.h"
 
+#ifdef WIN32
+#define UNICODE
+#include <windows.h>
+#else 
+#define LCID uint32_t
+#define LOCALE_SYSTEM_DEFAULT 0
+#endif 
+
 #define MAX_TOKEN_LEN 16
 
+typedef int tst_strcoll(void *collator, const int object, 
+                        const UChar *source, const int sLen, 
+                        const UChar *target, const int tLen);
 
 static UCollator *myCollation;
 const static UChar gRules[MAX_TOKEN_LEN] =
@@ -754,41 +765,204 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
   }
 }
 
+int ucaTest(void *collator, const int object, const UChar *source, const int sLen, const UChar *target, const int tLen) {
+  UCollator *UCA = (UCollator *)collator;
+  return ucol_strcoll(UCA, source, sLen, target, tLen);
+}
 
-static UBool doTestUCA(UCollator *UCA, UChar *source, UChar *target, UCollationResult result) {
-  uint32_t sLen = u_strlen(source);
-  uint32_t tLen = u_strlen(target);
+int winTest(void *collator, const int object, const UChar *source, const int sLen, const UChar *target, const int tLen) {
+#ifdef WIN32
+  LCID lcid = (LCID)collator;
+  return CompareString(lcid, 0, source, sLen, target, tLen);
+#else
+  return 0;
+#endif
+}
 
-  UCollationResult r = ucol_strcoll(UCA, source, sLen, target, tLen);
+static UCollationResult swampEarlier(tst_strcoll* func, void *collator, int opts, 
+                                     UChar s1, UChar s2, 
+                                     const UChar *s, const uint32_t sLen, 
+                                     const UChar *t, const uint32_t tLen) {
+  UChar source[256] = {0};
+  UChar target[256] = {0};
+  
+  source[0] = s1;
+  u_strcpy(source+1, s);
+  target[0] = s2;
+  u_strcpy(target+1, t);
 
-  if(r != result) {
-    return FALSE;
+  return func(collator, opts, source, sLen+1, target, tLen+1);
+}
+
+static UCollationResult swampLater(tst_strcoll* func, void *collator, int opts, 
+                                   UChar s1, UChar s2, 
+                                   const UChar *s, const uint32_t sLen, 
+                                   const UChar *t, const uint32_t tLen) {
+  UChar source[256] = {0};
+  UChar target[256] = {0};
+  
+  u_strcpy(source, s);
+  source[sLen] = s1;
+  u_strcpy(target, t);
+  target[tLen] = s2;
+
+  return func(collator, opts, source, sLen+1, target, tLen+1);
+}
+
+static uint32_t probeStrength(tst_strcoll* func, void *collator, int opts, 
+                              const UChar *s, const uint32_t sLen, 
+                              const UChar *t, const uint32_t tLen,
+                              UCollationResult result) {
+  UChar fPrimary = 0x6d;
+  UChar sPrimary = 0x6e;
+  UChar fSecondary = 0x310d;
+  UChar sSecondary = 0x31a3;
+  UChar fTertiary = 0x310f;
+  UChar sTertiary = 0x31b7;
+
+  UCollationResult oposite;
+  if(result == UCOL_EQUAL) {
+    return UCOL_IDENTICAL;
+  } else if(result == UCOL_GREATER) {
+    oposite = UCOL_LESS;
   } else {
-    return TRUE;
+    oposite = UCOL_GREATER;
+  }
+
+  if(swampEarlier(func, collator, opts, sSecondary, fSecondary, s, sLen, t, tLen) == result) {
+    return UCOL_PRIMARY;
+  } else if((swampEarlier(func, collator, opts, sTertiary, 0x310f, s, sLen, t, tLen) == result) && 
+    (swampEarlier(func, collator, opts, 0x310f, sTertiary, s, sLen, t, tLen) == result)) {
+    return UCOL_SECONDARY;
+  } else if((swampLater(func, collator, opts, sTertiary, fTertiary, s, sLen, t, tLen) == result) && 
+    (swampLater(func, collator, opts, fTertiary, sTertiary, s, sLen, t, tLen) == result)) {
+    return UCOL_TERTIARY;
+  } else if((swampLater(func, collator, opts, sTertiary, 0x310f, s, sLen, t, tLen) == oposite) && 
+    (swampLater(func, collator, opts, fTertiary, sTertiary, s, sLen, t, tLen) == oposite)) {
+    return UCOL_QUATERNARY;
+  } else {
+    return UCOL_IDENTICAL;
   }
 }
 
-static void logUCAFailure (const char *comment, const UChar *source, const UChar *target) { 
-  uint32_t sLen = u_strlen(source);
-  uint32_t tLen = u_strlen(target);
+static char *getRelationSymbol(UCollationResult res, uint32_t strength, char *buffer) {
   uint32_t i = 0;
 
-  char sEsc[256], tEsc[256], b[256];
+  if(res == UCOL_EQUAL || strength == 0xdeadbeef) {
+    buffer[0] = '=';
+    buffer[1] = '=';
+    buffer[2] = '\0';
+  } else if(res == UCOL_GREATER) {
+    for(i = 0; i<strength+1; i++) {
+      buffer[i] = '>';
+    }
+    buffer[strength+1] = '\0';
+  } else {
+    for(i = 0; i<strength+1; i++) {
+      buffer[i] = '<';
+    }
+    buffer[strength+1] = '\0';
+  }
 
-  *sEsc = *tEsc = 0;
+  return buffer;
+}
+  
+
+
+static void logFailure (const char *platform, const char *test, 
+                        const UChar *source, const uint32_t sLen,
+                        const UChar *target, const uint32_t tLen,
+                        UCollationResult realRes, uint32_t realStrength,
+                        UCollationResult expRes, uint32_t expStrength) { 
+
+  uint32_t i = 0;
+
+  char sEsc[256], s[256], tEsc[256], t[256], b[256], output[256], relation[256];
+
+  *sEsc = *tEsc = *s = *t = 0;
   for(i = 0; i<sLen; i++) {
-    sprintf(b, "\\u%04X", source[i]);
+    sprintf(b, "%04X", source[i]);
+    strcat(sEsc, "\\u");
     strcat(sEsc, b);
+    strcat(s, b);
+    strcat(s, " ");
   }
   for(i = 0; i<tLen; i++) {
-    sprintf(b, "\\u%04X", target[i]);
+    sprintf(b, "%04X", target[i]);
+    strcat(tEsc, "\\u");
     strcat(tEsc, b);
+    strcat(t, b);
+    strcat(t, " ");
   }
+/*
+  strcpy(output, "[[ ");
+  strcat(output, sEsc);
+  strcat(output, getRelationSymbol(expRes, expStrength, relation));
+  strcat(output, tEsc);
 
-  log_verbose("%s for %s and %s. \n", comment, sEsc, tEsc);
+  strcat(output, " : ");
+
+  strcat(output, sEsc);
+  strcat(output, getRelationSymbol(realRes, realStrength, relation));
+  strcat(output, tEsc);
+  strcat(output, " ]] ");
+
+  log_verbose("%s", output);
+*/
+
+
+  strcpy(output, "DIFF: ");
+
+  strcat(output, test);
+  strcat(output, ": ");
+
+  strcat(output, sEsc);
+  strcat(output, getRelationSymbol(expRes, expStrength, relation));
+  strcat(output, tEsc);
+
+  strcat(output, " ");
+
+  strcat(output, platform);
+  strcat(output, ": ");
+
+  strcat(output, sEsc);
+  strcat(output, getRelationSymbol(realRes, realStrength, relation));
+  strcat(output, tEsc);
+
+  strcat(output, " ");
+
+  strcat(output, " CPs: ");
+  strcat(output, s);
+  strcat(output, " and ");
+  strcat(output, t);
+
+  log_verbose("%s\n", output);
+
 }
 
-static void testAgainstUCA(UCollator *coll, UCollator *UCA, UErrorCode *status) {
+static uint32_t testSwitch(tst_strcoll* func, void *collator, int opts, uint32_t strength, const UChar *first, const UChar *second, const char* msg) {
+  uint32_t diffs = 0;
+  UCollationResult realResult;
+  uint32_t realStrength;
+
+  uint32_t sLen = u_strlen(first);
+  uint32_t tLen = u_strlen(second);
+
+  realResult = func(collator, opts, first, sLen, second, tLen);
+  realStrength = probeStrength(func, collator, opts, first, sLen, second, tLen, realResult);
+
+  if(strength == UCOL_IDENTICAL && realResult != UCOL_IDENTICAL) {
+    logFailure(msg, "tailoring", first, sLen, second, tLen, realResult, realStrength, UCOL_EQUAL, strength);
+    diffs++;
+  } else if(realResult != UCOL_LESS || realStrength != strength) {
+    logFailure(msg, "tailoring", first, sLen, second, tLen, realResult, realStrength, UCOL_LESS, strength);
+    diffs++;
+  } 
+  return diffs;
+}
+
+
+static void testAgainstUCA(UCollator *coll, UCollator *UCA, LCID lcid, UErrorCode *status) {
   const UChar *rules = NULL, *current = NULL;
   int32_t ruleLen = 0;
   uint32_t strength = 0;
@@ -805,10 +979,8 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, UErrorCode *status) 
   UChar second[256];
   UChar *rulesCopy = NULL;
 
-  UChar source[256] = { '\0'};
-  UChar target[256] = { '\0'};
-
   uint32_t UCAdiff = 0;
+  uint32_t Windiff = 1;
 
   src.opts = &opts;
 
@@ -837,120 +1009,26 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, UErrorCode *status) 
         firstLen += exLen;
       } 
 
-      switch(strength){
-      case UCOL_IDENTICAL:
-          if(!doTestUCA(UCA, first, second, UCOL_EQUAL)) {
-            logUCAFailure ("Rules says equal, but not UCA", first, second);
-            UCAdiff++;
-            goto EndOfLoop;
-          }
-          break;
-      case UCOL_PRIMARY:
-          if(!doTestUCA(UCA, first, second, UCOL_LESS)) {
-            logUCAFailure("Wrong order, primary level", first, second);
-            UCAdiff++;
-            goto EndOfLoop;
-          }
-
-          source[0] = 0x0491;
-          u_strcpy(source+1,first);
-          target[0] = 0x0413;
-          u_strcpy(target+1,second);
-          if(!doTestUCA(UCA, source, target, UCOL_LESS)) { /* UCA has non primary difference */
-            source[0] = 0x0053;
-            u_strcpy(source+1,first);
-            target[0]= 0x0073;
-            u_strcpy(target+1,second);
-            if(!doTestUCA(UCA, source, target, UCOL_LESS)) { /* test if it is tertiary */
-              logUCAFailure("Wrong strength: rules:primary UCA:tertiary", first, second);
-            } else {
-              logUCAFailure("Wrong strength - rules:primary UCA:secondary", first, second);
-            }
-            UCAdiff++;
-            goto EndOfLoop;
-          }
-          break;
-      case UCOL_SECONDARY:
-          if(!doTestUCA(UCA, first, second, UCOL_LESS)) {
-            logUCAFailure("Wrong order, secondary level", first, second);
-            UCAdiff++;
-            goto EndOfLoop;
-          }
-
-          source[0] = 0x0053;
-          u_strcpy(source+1,first);
-          target[0]= 0x0073;
-          u_strcpy(target+1,second);
-          if(!doTestUCA(UCA, source, target, UCOL_LESS)) {
-            logUCAFailure("Wrong strength - rules:secondary UCA:tertiary", first, second);
-            UCAdiff++;
-            goto EndOfLoop;
-          }
-
-          u_strcpy(source,first);
-          source[u_strlen(first)] = 0x62;
-          source[u_strlen(first)+1] = 0;
-          u_strcpy(target,second);
-          target[u_strlen(second)] = 0x61;
-          target[u_strlen(second)+1] = 0;
-          if(!doTestUCA(UCA, source, target, UCOL_GREATER)) {
-            logUCAFailure("Wrong strength - rules:secondary UCA:primary", first, second);
-            UCAdiff++;
-            goto EndOfLoop;
-          }
-          break;
-      case UCOL_TERTIARY:
-          if(!doTestUCA(UCA, first, second, UCOL_LESS)) {
-            logUCAFailure("Wrong order, tertiary level", first, second);
-            UCAdiff++;
-            goto EndOfLoop;
-          }
-
-          source[0] = 0x0020;
-          u_strcpy(source+1,first);
-          target[0]= 0x002D;
-          u_strcpy(target+1,second);
-          if(!doTestUCA(UCA, source, target, UCOL_LESS)) {
-            logUCAFailure("Wrong strength - rules:tertiary UCA:quad", first, second);
-            UCAdiff++;
-            goto EndOfLoop;
-          }
-
-          u_strcpy(source,first);
-          source[u_strlen(first)] = 0xE0;
-          source[u_strlen(first)+1] = 0;
-          u_strcpy(target,second);
-          target[u_strlen(second)] = 0x61;
-          target[u_strlen(second)+1] = 0;
-          if(!doTestUCA(UCA, source, target, UCOL_GREATER)) {
-            u_strcpy(source,first);
-            source[u_strlen(first)] = 0x62;
-            source[u_strlen(first)+1] = 0;
-            u_strcpy(target,second);
-            target[u_strlen(second)] = 0x61;
-            target[u_strlen(second)+1] = 0;
-            if(!doTestUCA(UCA, source, target, UCOL_GREATER)) {
-              logUCAFailure("Wrong strength - rules:tertiary UCA:primary", first, second);
-            } else {
-              logUCAFailure("Wrong strength - rules:tertiary UCA:secondary", first, second);
-            }
-            UCAdiff++;
-            goto EndOfLoop;
-          }
-
-          break;
-      case UCOL_TOK_RESET:
-      default:
-          break;
+      if(strength != UCOL_TOK_RESET) {
+        if((*first<0x3400 || *first>=0xa000) && (*second<0x3400 || *second>=0xa000)) {
+          UCAdiff += testSwitch(&ucaTest, (void *)UCA, 0, strength, first, second, "UCA");
+          /*Windiff += testSwitch(&winTest, (void *)lcid, 0, strength, first, second, "Win32");*/
+        }
       }
 
-EndOfLoop:
+
       firstLen = chLen;
       u_strcpy(first, second);
 
     }
+    if(UCAdiff != 0 && Windiff != 0) {
+      log_verbose("\n");
+    }
     if(UCAdiff == 0) {
-      log_verbose("No immediate conflict with UCA!\n");
+      log_verbose("No immediate difference with UCA!\n");
+    }
+    if(Windiff == 0) {
+      log_verbose("No immediate difference with Win32!\n");
     }
     uprv_free(rulesCopy);
   }
@@ -1124,11 +1202,16 @@ static UBool hasCollationElements(const char *locName) {
 }
 
 
-static void testCollations( ) {
+static void TestCollations( ) {
   int32_t noOfLoc = uloc_countAvailable();
-  int32_t i = 0;
+  int32_t i = 0, j = 0;
+  LCID lcid = LOCALE_SYSTEM_DEFAULT;
 
   UErrorCode status = U_ZERO_ERROR;
+  char cName[256];
+  UChar name[256];
+  int32_t nameSize;
+  
 
   const char *locName = NULL;
   UCollator *coll = NULL;
@@ -1140,9 +1223,15 @@ static void testCollations( ) {
     status = U_ZERO_ERROR;
     locName = uloc_getAvailable(i);
     if(hasCollationElements(locName)) {
-        log_verbose("\nTesting locale %s\n", locName);
+        lcid = uloc_getLCID(locName);
+        nameSize = uloc_getDisplayName(locName, NULL, name, 256, &status);
+        for(j = 0; j<nameSize; j++) {
+          cName[j] = (char)name[j];
+        }
+        cName[nameSize] = 0;
+        log_verbose("\nTesting locale %s (%s), LCID %04X\n", locName, cName, lcid);
         coll = ucol_open(locName, &status);
-        testAgainstUCA(coll, UCA, &status);
+        testAgainstUCA(coll, UCA, lcid, &status);
         ucol_close(coll);
     }
   }
@@ -1175,18 +1264,6 @@ static void RamsRulesTest( ) {
       }
     }
   }
-
-/*
-  for(i = 0; i<sizeof(localesToTest)/sizeof(localesToTest[0]); i++) {
-    coll = ucol_open(localesToTest[i], &status);
-    log_verbose("Testing locale: %s\n", localesToTest[i]);
-    if(U_SUCCESS(status)) {
-      testCollator(coll, &status);
-      testCEs(coll, &status);
-      ucol_close(coll);
-    }
-  }
-*/
 
   for(i = 0; i<sizeof(rulesToTest)/sizeof(rulesToTest[0]); i++) {
     log_verbose("Testing rule: %s\n", rulesToTest[i]);
@@ -1297,6 +1374,48 @@ static void TestVariableTop(void) {
     myCollation = NULL;
 }
 
+const static char chTest[][20] = {
+  "c",
+  "C",
+  "ca", "cb", "cx", "cy", "CZ",
+  "c\\u030C", "C\\u030C",
+  "h",
+  "H",
+  "ha", "Ha", "harly", "hb", "HB", "hx", "HX", "hy", "HY",
+  "ch", "cH", "Ch", "CH",
+  "cha", "charly", "che", "chh", "chch", "chr",
+  "i", "I", "iarly", 
+  "r", "R",
+  "r\\u030C", "R\\u030C",
+  "s",
+  "S",
+  "s\\u030C", "S\\u030C",
+  "z", "Z",
+  "z\\u030C", "Z\\u030C"
+};
+
+static void TestChMove(void) {
+  UChar t1[256] = {0};
+  UChar t2[256] = {0};
+
+  uint32_t i = 0, j = 0;
+  uint32_t size = 0;
+  UErrorCode status = U_ZERO_ERROR;
+
+  UCollator *coll = ucol_open("cs", &status);
+
+  if(U_SUCCESS(status)) {
+    size = sizeof(chTest)/sizeof(chTest[0]);
+    for(i = 0; i < size-1; i++) {
+      for(j = i+1; j < size; j++) {
+        u_unescape(chTest[i], t1, 256);
+        u_unescape(chTest[j], t2, 256);
+        doTest(coll, t1, t2, UCOL_LESS);
+      }
+    }
+  } 
+}
+
 void addMiscCollTest(TestNode** root)
 { 
     addTest(root, &TestCase, "tscoll/cmsccoll/TestCase");
@@ -1306,7 +1425,8 @@ void addMiscCollTest(TestNode** root)
     addTest(root, &BillFairmanTest, "tscoll/cmsccoll/BillFairmanTest");
     addTest(root, &RamsRulesTest, "tscoll/cmsccoll/RamsRulesTest");
     addTest(root, &IsTailoredTest, "tscoll/cmsccoll/IsTailoredTest");
-    addTest(root, &testCollations, "tscoll/cmsccoll/testCollations");
+    addTest(root, &TestCollations, "tscoll/cmsccoll/TestCollations");
+    addTest(root, &TestChMove, "tscoll/cmsccoll/TestChMove");
     /*addTest(root, &PrintMarkDavis, "tscoll/cmsccoll/PrintMarkDavis");*/
     /*addTest(root, &TestVariableTop, "tscoll/cmsccoll/TestVariableTop");*/
 }
