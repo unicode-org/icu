@@ -624,4 +624,7 @@ th {
     Currencies {
         THB { "\u0E3F", "\u0E1A\u0E32\u0E17" }
     }
+
+    // (ICU 2.6) International Calendar Data.  Note, THE FORMAT OF THIS DATA WILL CHANGE IN FUTURE RELEASES.
+    Eras_buddhist:array { "\u0e1e.\u0e28." }
 }
