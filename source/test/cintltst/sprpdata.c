@@ -59,14 +59,14 @@ strprepProfileLineFn(void *context,
         /* store the range */
         compareFlagsForRange(data, rangeStart,rangeEnd,USPREP_UNASSIGNED);
 
-    }else if(uprv_strstr(typeName, usprepTypeNames[USPREP_PROHIBITED])!=NULL){
+    }else if(strstr(typeName, usprepTypeNames[USPREP_PROHIBITED])!=NULL){
 
         u_parseCodePointRange(fields[0][0], &rangeStart,&rangeEnd, pErrorCode);
 
         /* store the range */
         compareFlagsForRange(data, rangeStart,rangeEnd,USPREP_PROHIBITED);
 
-    }else if(uprv_strstr(typeName, usprepTypeNames[USPREP_MAP])!=NULL){
+    }else if(strstr(typeName, usprepTypeNames[USPREP_MAP])!=NULL){
         /* get the character code, field 0 */
         code=(uint32_t)uprv_strtoul(fields[0][0], &end, 16);
 
@@ -76,7 +76,7 @@ strprepProfileLineFn(void *context,
         /* compare the mapping */
         compareMapping(data, code,mapping, length,USPREP_MAP);
 
-    }else if(uprv_strstr(typeName, usprepTypeNames[USPREP_LABEL_SEPARATOR])!=NULL){
+    }else if(strstr(typeName, usprepTypeNames[USPREP_LABEL_SEPARATOR])!=NULL){
 
         u_parseCodePointRange(fields[0][0], &rangeStart,&rangeEnd, pErrorCode);
 
@@ -275,9 +275,9 @@ doStringPrepTest(const char* binFileName, const char* txtFileName, int32_t optio
 
     const char *testdatapath = loadTestData(errorCode);
     const char *srcdatapath =ctest_dataOutDir();
-    char *filename = (char*) malloc(2 * uprv_strlen(srcdatapath) );
-    const char *relativepath = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING;
 
+    const char *relativepath = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING;
+    char *filename = (char*) malloc(strlen(srcdatapath)+strlen(relativepath)+strlen(txtFileName)+10 );
     UStringPrepProfile* profile = usprep_open(testdatapath, binFileName, errorCode);
 
     if(U_FAILURE(*errorCode)){
@@ -285,11 +285,13 @@ doStringPrepTest(const char* binFileName, const char* txtFileName, int32_t optio
         return;
     }
     /* open and load the txt file */
-    uprv_strcpy(filename,srcdatapath);
-    uprv_strcat(filename,relativepath);
-    uprv_strcat(filename,txtFileName);
+    strcpy(filename,srcdatapath);
+    strcat(filename,relativepath);
+    strcat(filename,txtFileName);
 
     parseMappings(filename,profile, TRUE,errorCode);
+
+    free(filename);
 }
 #endif
 /*
