@@ -935,7 +935,7 @@ enumAlgNames(AlgorithmicRange *range,
             for (;;) {
                 c=*--s;
                 if(('0'<=c && c<'9') || ('A'<=c && c<'F')) {
-                    *s=c+1;
+                    *s=(char)(c+1);
                     break;
                 } else if(c=='9') {
                     *s='A';
@@ -973,10 +973,10 @@ enumAlgNames(AlgorithmicRange *range,
         }
 
         /* append the suffix of the start character */
-        length=prefixLength+writeFactorSuffix(factors, count,
+        length=(uint16_t)(prefixLength+writeFactorSuffix(factors, count,
                                               s, (uint32_t)start-range->start,
                                               indexes, elementBases, elements,
-                                              suffix, (uint16_t)(sizeof(buffer)-prefixLength));
+                                              suffix, (uint16_t)(sizeof(buffer)-prefixLength)));
 
         /* call the enumerator function with this first character */
         if(!fn(context, start, nameChoice, buffer, length)) {
@@ -988,7 +988,7 @@ enumAlgNames(AlgorithmicRange *range,
             /* increment the indexes in lexical order bound by the factors */
             i=count;
             for (;;) {
-                index=indexes[--i]+1;
+                index=(uint16_t)(indexes[--i]+1);
                 if(index<factors[i]) {
                     /* skip one index and its element string */
                     indexes[i]=index;
@@ -1117,7 +1117,7 @@ findAlgName(AlgorithmicRange *range, UCharNameChoice nameChoice, const char *oth
             /* increment the indexes in lexical order bound by the factors */
             i=count;
             for (;;) {
-                index=indexes[--i]+1;
+                index=(uint16_t)(indexes[--i]+1);
                 if(index<factors[i]) {
                     /* skip one index and its element string */
                     indexes[i]=index;
