@@ -164,7 +164,7 @@ public:
      * at or after the current position in the iteration range.
      * @stable ICU 2.0
      */
-    virtual UBool        hasNext() = 0;
+    virtual UBool        hasNext() const = 0;
     
 protected:
     /** Default constructor to be overridden in the implementing class. @stable ICU 2.0*/

@@ -166,7 +166,7 @@ UCharCharacterIterator::nextPostInc() {
 }
 
 UBool
-UCharCharacterIterator::hasNext() {
+UCharCharacterIterator::hasNext() const {
     return (UBool)(pos < end ? TRUE : FALSE);
 }
 
