@@ -436,42 +436,41 @@ static void backAndForth(UCollationElements *iter)
  */
 static void TestMaxExpansion()
 {
-  UErrorCode          status = U_ZERO_ERROR; 
-  UCollator          *coll   ;/*= ucol_open("en_US", &status);*/
-  UChar               ch     = 0;
-  UCollationElements *iter   ;/*= ucol_openElements(coll, &ch, 1, &status);*/
-  int                 count  = 1;
-
-  UChar rule[256];
-  u_uastrcpy(rule, "&a < ab < c/aba < d < z < ch");
-  coll = ucol_openRules(rule, u_strlen(rule), UCOL_DEFAULT_NORMALIZATION,  
-                        UCOL_DEFAULT_STRENGTH, &status);
-  iter = ucol_openElements(coll, &ch, 1, &status);
-
-  while (ch < 0xFFFF && U_SUCCESS(status)) {
-    int      count = 1;
-    uint32_t order = 0;
-    ch ++;
-    ucol_setText(iter, &ch, 1, &status);
-    order = ucol_previous(iter, &status);
-
-    /* thai management */
-    if (order == 0)
-      order = ucol_previous(iter, &status);
-
-    while (U_SUCCESS(status) && 
-           ucol_previous(iter, &status) != UCOL_NULLORDER) {
-      count ++; 
+    UErrorCode          status = U_ZERO_ERROR; 
+    UCollator          *coll   ;/*= ucol_open("en_US", &status);*/
+    UChar               ch     = 0;
+    UCollationElements *iter   ;/*= ucol_openElements(coll, &ch, 1, &status);*/
+    
+    UChar rule[256];
+    u_uastrcpy(rule, "&a < ab < c/aba < d < z < ch");
+    coll = ucol_openRules(rule, u_strlen(rule), UCOL_DEFAULT_NORMALIZATION,  
+        UCOL_DEFAULT_STRENGTH, &status);
+    iter = ucol_openElements(coll, &ch, 1, &status);
+    
+    while (ch < 0xFFFF && U_SUCCESS(status)) {
+        int      count = 1;
+        uint32_t order;
+        ch++;
+        ucol_setText(iter, &ch, 1, &status);
+        order = ucol_previous(iter, &status);
+        
+        /* thai management */
+        if (order == 0)
+            order = ucol_previous(iter, &status);
+        
+        while (U_SUCCESS(status) && 
+            ucol_previous(iter, &status) != UCOL_NULLORDER) {
+            count ++; 
+        }
+        
+        if (U_FAILURE(status) && ucol_getMaxExpansion(iter, order) < count) {
+            log_err("Failure at codepoint %d, maximum expansion count < %d\n",
+                ch, count);
+        }
     }
-
-    if (U_FAILURE(status) && ucol_getMaxExpansion(iter, order) < count) {
-      log_err("Failure at codepoint %d, maximum expansion count < %d\n",
-                                                               ch, count);
-    }
-  }
-
-  ucol_closeElements(iter);
-  ucol_close(coll);
+    
+    ucol_closeElements(iter);
+    ucol_close(coll);
 }
 
 /**
