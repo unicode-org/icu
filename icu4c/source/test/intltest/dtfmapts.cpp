@@ -63,7 +63,7 @@ void IntlTestDateFormatAPI::runIndexedTest( int32_t index, bool_t exec, char* &n
 /**
  * Test that the equals method works correctly.
  */
-void IntlTestDateFormatAPI::TestEquals()
+void IntlTestDateFormatAPI::TestEquals(void)
 {
     UErrorCode status = U_ZERO_ERROR;
     // Create two objects at different system times
@@ -230,7 +230,7 @@ void IntlTestDateFormatAPI::testAPI(char *par)
  * the DateFormat API test.
  */
 void
-IntlTestDateFormatAPI::TestNameHiding() {
+IntlTestDateFormatAPI::TestNameHiding(void) {
 
     // N.B.: This test passes if it COMPILES, since it's a test of
     // compile-time name hiding.

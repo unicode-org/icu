@@ -43,7 +43,7 @@ HexToUnicodeTransliterator& HexToUnicodeTransliterator::operator=(
 /**
  * Transliterator API.
  */
-Transliterator* HexToUnicodeTransliterator::clone() const {
+Transliterator* HexToUnicodeTransliterator::clone(void) const {
     return new HexToUnicodeTransliterator(*this);
 }
 
@@ -150,6 +150,6 @@ UChar HexToUnicodeTransliterator::filteredCharAt(Replaceable& text, int32_t i) c
  * @return maximum number of preceding context characters this
  * transliterator needs to examine
  */
-int32_t HexToUnicodeTransliterator::getMaximumContextLength() const {
+int32_t HexToUnicodeTransliterator::getMaximumContextLength(void) const {
     return 0;
 }

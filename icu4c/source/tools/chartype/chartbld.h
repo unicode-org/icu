@@ -73,7 +73,7 @@ public :
 	};
 
 	static CompactByteArray* getByteArray(FILE*);
-	static void	writeByteArrays();
+	static void	writeByteArrays(void);
 
 private :
 	static int MakeProp(char* str);

@@ -36,12 +36,12 @@ private:
     /**
      * Test that the equals method works correctly.
      */
-    void TestEquals();
+    void TestEquals(void);
 
     /**
      * Test that no parse or format methods are hidden.
      */
-    void TestNameHiding();
+    void TestNameHiding(void);
 };
 
 #endif

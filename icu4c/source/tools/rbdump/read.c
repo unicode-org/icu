@@ -113,7 +113,7 @@ usage()
 static void
 version()
 {
-  printf("rbdump version %s (ICU version %s), by Stephen F. Booth.\n", 
+  printf("rbdump version %s (ICU version %s).\n", 
 	 RBDUMP_VERSION, ICU_VERSION);
   puts(U_COPYRIGHT_STRING);
 }

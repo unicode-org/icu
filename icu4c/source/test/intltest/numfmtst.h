@@ -29,19 +29,19 @@ public:
     /*
      * Test the handling of quotes
      **/
-    virtual void TestQuotes();
+    virtual void TestQuotes(void);
     /**
      * Test patterns with exponential representation
      **/
-    virtual void TestExponential();
+    virtual void TestExponential(void);
     /**
      * Test handling of patterns with currency symbols
      **/
-    virtual void TestCurrencySign();
+    virtual void TestCurrencySign(void);
     /**
      * Test different format patterns
      **/
-    virtual void TestPatterns();
+    virtual void TestPatterns(void);
  
 public: // package
     // internal utility routine
@@ -51,26 +51,26 @@ public:
     /**
      * Test localized currency patterns.
      */
-    virtual void TestCurrency();
+    virtual void TestCurrency(void);
     /**
      * Do rudimentary testing of parsing.
      */
-    virtual void TestParse();
+    virtual void TestParse(void);
     /**
      * Test proper rounding by the format method.
      */
-    virtual void TestRounding487();
+    virtual void TestRounding487(void);
 
     // New tests for alphaWorks upgrade
-    virtual void TestExponent();
-    virtual void TestScientific();
+    virtual void TestExponent(void);
+    virtual void TestScientific(void);
     void expect(NumberFormat& fmt, const UnicodeString& str, int32_t n);
     void expect(NumberFormat& fmt, const Formattable& n,
                 const UnicodeString& exp);
     void expect(NumberFormat* fmt, const Formattable& n,
                 const UnicodeString& exp, UErrorCode);
-    void TestPad();
-    void TestPatterns2();
+    void TestPad(void);
+    void TestPatterns2(void);
     void expectPad(DecimalFormat& fmt, const UnicodeString& pat,
                    int32_t pos);
     void expectPad(DecimalFormat& fmt, const UnicodeString& pat,

@@ -4,7 +4,7 @@
 #include "ucnv.h"
 #include <stdio.h>
 
-void TestEuroRegression();
+void TestEuroRegression(void);
 void addTestEuroRegression(TestNode** root)
 {
     addTest(root, &TestEuroRegression, "tsconv/eurocreg/TestEuroRegression");

@@ -344,7 +344,7 @@ void Transliterator::_keyboardTransliterate(Replaceable& text,
  * @return The maximum number of preceding context characters this
  * transliterator needs to examine
  */
-int32_t Transliterator::getMaximumContextLength() const {
+int32_t Transliterator::getMaximumContextLength(void) const {
     return 0;
 }
 
@@ -355,7 +355,7 @@ int32_t Transliterator::getMaximumContextLength() const {
  * @see #registerInstance
  * @see #getAvailableIDs
  */
-const UnicodeString& Transliterator::getID() const {
+const UnicodeString& Transliterator::getID(void) const {
     return ID;
 }
 
@@ -455,7 +455,7 @@ UnicodeString& Transliterator::getDisplayName(const Locale& inLocale,
  * if this transliterator uses no filter.  Caller musn't delete
  * the result!
  */
-const UnicodeFilter* Transliterator::getFilter() const {
+const UnicodeFilter* Transliterator::getFilter(void) const {
     return filter;
 }
 
@@ -492,7 +492,7 @@ void Transliterator::adoptFilter(UnicodeFilter* filterToAdopt) {
  * transliterator is registered.
  * @see #registerInstance
  */
-Transliterator* Transliterator::createInverse() const {
+Transliterator* Transliterator::createInverse(void) const {
     int32_t i = ID.indexOf((UChar)'-');
     if (i >= 0) {
         UnicodeString inverseID, right;
@@ -540,7 +540,7 @@ const char* Transliterator::RESOURCE_SUB_DIR = "translit";
  * files are located.  This is a subdirectory, named RESOURCE_SUB_DIR,
  * under Locale::getDataDirectory().  It ends in a path separator.
  */
-const char* Transliterator::getDataDirectory() {
+const char* Transliterator::getDataDirectory(void) {
     if (DATA_DIR == 0) {
         Mutex lock; // Okay to use the global mutex here
         if (DATA_DIR == 0) {
@@ -759,7 +759,7 @@ UVector Transliterator::cacheIDs;
  * To retrieve the actual IDs, call getAvailableID(i) with
  * i from 0 to countAvailableIDs() - 1.
  */
-int32_t Transliterator::countAvailableIDs() {
+int32_t Transliterator::countAvailableIDs(void) {
     if (!cacheInitialized) {
         initializeCache();
     }
@@ -793,7 +793,7 @@ bool_t Transliterator::compareIDs(void* a, void* b) {
     return *aa == *bb;
 }
 
-void Transliterator::initializeCache() {
+void Transliterator::initializeCache(void) {
     // Lock first, check init boolean second
     Mutex lock(&cacheMutex);
     if (cacheInitialized) {

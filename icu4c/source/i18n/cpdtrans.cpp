@@ -53,7 +53,7 @@ CompoundTransliterator::~CompoundTransliterator() {
     freeTransliterators();
 }
 
-void CompoundTransliterator::freeTransliterators() {
+void CompoundTransliterator::freeTransliterators(void) {
     for (int32_t i=0; i<count; ++i) {
         delete trans[i];
     }
@@ -87,7 +87,7 @@ CompoundTransliterator& CompoundTransliterator::operator=(
 /**
  * Transliterator API.
  */
-Transliterator* CompoundTransliterator::clone() const {
+Transliterator* CompoundTransliterator::clone(void) const {
     return new CompoundTransliterator(*this);
 }
 
@@ -95,7 +95,7 @@ Transliterator* CompoundTransliterator::clone() const {
  * Returns the number of transliterators in this chain.
  * @return number of transliterators in this chain.
  */
-int32_t CompoundTransliterator::getCount() const {
+int32_t CompoundTransliterator::getCount(void) const {
     return count;
 }
 
@@ -265,7 +265,7 @@ void CompoundTransliterator::handleKeyboardTransliterate(Replaceable& text,
  * @return maximum number of preceding context characters this
  * transliterator needs to examine
  */
-int32_t CompoundTransliterator::getMaximumContextLength() const {
+int32_t CompoundTransliterator::getMaximumContextLength(void) const {
     int32_t max = 0;
     for (int32_t i=0; i<count; ++i) {
         int32_t len = trans[i]->getMaximumContextLength();

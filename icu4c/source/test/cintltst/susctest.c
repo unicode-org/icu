@@ -732,8 +732,8 @@ segment_test(uint8_t *segment1,
 }
 
 
-int
-TestSCSU() 
+void
+TestSCSU(void) 
 {
   UChar *chars = 0;
   int32_t len = 0;
@@ -826,8 +826,6 @@ TestSCSU()
     gTotalChars += len;
 	i++;
   }
-
-  return 0;
 }
 
 void

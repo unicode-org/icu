@@ -32,7 +32,7 @@ UnicodeString* UnicodeSet::CATEGORY_PAIRS_CACHE =
  * ranges.  Ranges are listed in ascending Unicode order.  For
  * example, the set [a-zA-M3] is represented as "33AMaz".
  */
-const UnicodeString& UnicodeSet::getPairs() const {
+const UnicodeString& UnicodeSet::getPairs(void) const {
     return pairs;
 }
 
@@ -122,7 +122,7 @@ bool_t UnicodeSet::operator==(const UnicodeSet& o) const {
  * @return the hash code value for this set.
  * @see Object#hashCode()
  */
-int32_t UnicodeSet::hashCode() const {
+int32_t UnicodeSet::hashCode(void) const {
     return pairs.hashCode();
 }
 
@@ -212,7 +212,7 @@ UnicodeString& UnicodeSet::toPattern(UnicodeString& result) const {
  *
  * @return the number of elements in this set (its cardinality).
  */
-int32_t UnicodeSet::size() const {
+int32_t UnicodeSet::size(void) const {
     int32_t n = 0;
     for (int32_t i=0; i<pairs.length(); i+=2) {
         n += pairs.charAt(i+1) - pairs.charAt(i) + 1;
@@ -225,7 +225,7 @@ int32_t UnicodeSet::size() const {
  *
  * @return <tt>true</tt> if this set contains no elements.
  */
-bool_t UnicodeSet::isEmpty() const {
+bool_t UnicodeSet::isEmpty(void) const {
     return pairs.length() == 0;
 }
 
@@ -375,7 +375,7 @@ void UnicodeSet::removeAll(const UnicodeSet& c) {
  * its value is its complement.  This is equivalent to the pseudo code:
  * <code>this = new UnicodeSet("[\u0000-\uFFFF]").removeAll(this)</code>.
  */
-void UnicodeSet::complement() {
+void UnicodeSet::complement(void) {
     doComplement(pairs);
 }
 
@@ -383,7 +383,7 @@ void UnicodeSet::complement() {
  * Removes all of the elements from this set.  This set will be
  * empty after this call returns.
  */
-void UnicodeSet::clear() {
+void UnicodeSet::clear(void) {
     pairs.remove();
 }
 

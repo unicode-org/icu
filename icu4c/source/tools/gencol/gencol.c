@@ -26,8 +26,8 @@
 
 
 /* Protos */
-static void usage();
-static void version();
+static void usage(void);
+static void version(void);
 int main(int argc, char **argv);
 
 
@@ -123,7 +123,7 @@ usage()
 static void
 version()
 {
-  printf("gencol version %s (ICU version %s), by Stephen F. Booth.\n", 
+  printf("gencol version %s (ICU version %s).\n", 
 	 GENCOL_VERSION, ICU_VERSION);
   puts(U_COPYRIGHT_STRING);
 }

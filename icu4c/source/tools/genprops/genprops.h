@@ -43,24 +43,24 @@ genCategoryNames[];
 
 /* prototypes */
 extern void
-initStore();
+initStore(void);
 
 extern void
 addProps(Props *p);
 
 extern void
-repeatProps();
+repeatProps(void);
 
 extern void
-compactStage2();
+compactStage2(void);
 
 extern void
-compactStage3();
+compactStage3(void);
 
 extern void
-compactProps();
+compactProps(void);
 
 extern void
-generateData();
+generateData(void);
 
 #endif

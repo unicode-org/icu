@@ -35,7 +35,7 @@
 #include "crestst.h"
 #include "ctest.h"
 
-void TestFallback();
+void TestFallback(void);
 
 /*****************************************************************************/
 

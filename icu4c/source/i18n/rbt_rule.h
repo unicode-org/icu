@@ -143,32 +143,32 @@ public:
      * Return the length of the key.  Equivalent to <code>getKey().length()</code>.
      * @return the length of the match key.
      */
-    virtual int32_t getKeyLength() const;
+    virtual int32_t getKeyLength(void) const;
 
     /**
      * Return the key.
      * @return the match key.
      */
-    virtual const UnicodeString& getKey() const;
+    virtual const UnicodeString& getKey(void) const;
 
     /**
      * Return the output string.
      * @return the output string.
      */
-    virtual const UnicodeString& getOutput() const;
+    virtual const UnicodeString& getOutput(void) const;
 
     /**
      * Return the position of the cursor within the output string.
      * @return a value from 0 to <code>getOutput().length()</code>, inclusive.
      */
-    virtual int32_t getCursorPos() const;
+    virtual int32_t getCursorPos(void) const;
 
     /**
      * Return the preceding context length.  This method is needed to
      * support the <code>Transliterator</code> method
      * <code>getMaximumContextLength()</code>.
      */
-    virtual int32_t getAnteContextLength() const;
+    virtual int32_t getAnteContextLength(void) const;
 
     /**
      * Return true if this rule masks another rule.  If r1 masks r2 then
@@ -184,7 +184,7 @@ public:
      * Free up space.  Once this method is called, masks() must NOT be called.
      * If it is called, an exception will be thrown.
      */
-    virtual void freeze();
+    virtual void freeze(void);
 
     /**
      * Return true if this rule matches the given text.  The text being matched

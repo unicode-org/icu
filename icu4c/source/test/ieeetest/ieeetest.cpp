@@ -86,7 +86,7 @@ IEEETest::~IEEETest()
 //==============================
 
 int
-IEEETest::run()
+IEEETest::run(void)
 {
   int errCount = 0;
 
@@ -143,7 +143,7 @@ IEEETest::runTest(const char *testName,
 // NaN is weird- comparisons with NaN _always_ return false, with the
 // exception of !=, which _always_ returns true
 int
-IEEETest::testNaN()
+IEEETest::testNaN(void)
 {
   int errCount = 0;
 
@@ -161,7 +161,7 @@ IEEETest::testNaN()
 //==============================
 
 int			
-IEEETest::testPositiveInfinity()
+IEEETest::testPositiveInfinity(void)
 {
   int errCount = 0;
   double	pinf		= icu_getInfinity();
@@ -209,7 +209,7 @@ IEEETest::testPositiveInfinity()
 //==============================
 
 int			
-IEEETest::testNegativeInfinity()
+IEEETest::testNegativeInfinity(void)
 {
   int errCount = 0;
   double	pinf		= icu_getInfinity();
@@ -261,7 +261,7 @@ IEEETest::testNegativeInfinity()
 // -0.0 <  0.0 == FALSE
 // generating -0.0 must be done at runtime.  compiler apparently ignores sign?
 int			
-IEEETest::testZero()
+IEEETest::testZero(void)
 {
   int errCount = 0;
   double	ten			= 10.0;
@@ -321,7 +321,7 @@ IEEETest::testZero()
 //==============================
 
 int
-IEEETest::testIsNaN()
+IEEETest::testIsNaN(void)
 {
   int numErrors	= 0;
   double	pinf		= icu_getInfinity();
@@ -355,7 +355,7 @@ IEEETest::testIsNaN()
 //==============================
 
 int
-IEEETest::NaNGT()
+IEEETest::NaNGT(void)
 {
   double	pinf		= icu_getInfinity();
   double	ninf		= -icu_getInfinity();
@@ -389,7 +389,7 @@ IEEETest::NaNGT()
 //==============================
 
 int				
-IEEETest::NaNLT()
+IEEETest::NaNLT(void)
 {
   double	pinf		= icu_getInfinity();
   double	ninf		= -icu_getInfinity();
@@ -423,7 +423,7 @@ IEEETest::NaNLT()
 //==============================
 
 int				
-IEEETest::NaNGTE()
+IEEETest::NaNGTE(void)
 {
   double	pinf		= icu_getInfinity();
   double	ninf		= -icu_getInfinity();
@@ -457,7 +457,7 @@ IEEETest::NaNGTE()
 //==============================
 
 int				
-IEEETest::NaNLTE()
+IEEETest::NaNLTE(void)
 {
   double	pinf		= icu_getInfinity();
   double	ninf		= -icu_getInfinity();
@@ -491,7 +491,7 @@ IEEETest::NaNLTE()
 //==============================
 
 int				
-IEEETest::NaNE()
+IEEETest::NaNE(void)
 {
   double	pinf		= icu_getInfinity();
   double	ninf		= -icu_getInfinity();
@@ -525,7 +525,7 @@ IEEETest::NaNE()
 //==============================
 
 int				
-IEEETest::NaNNE()
+IEEETest::NaNNE(void)
 {
   double	pinf		= icu_getInfinity();
   double	ninf		= -icu_getInfinity();
@@ -639,7 +639,7 @@ IEEETest::log(double d)
 //==============================
 
 IEEETest& 
-IEEETest::logln()
+IEEETest::logln(void)
 {
   if(mFlags & kVerboseMode)
     cout << endl;
@@ -720,7 +720,7 @@ IEEETest::err(double d)
 //==============================
 
 IEEETest& 
-IEEETest::errln()
+IEEETest::errln(void)
 {
   cerr << endl;
   mNeedErrIndent = TRUE;

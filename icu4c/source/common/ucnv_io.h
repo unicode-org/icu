@@ -91,7 +91,7 @@ ucnv_io_fillAvailableAliases(const char **aliases, UErrorCode *pErrorCode);
  * This name is already resolved by <code>ucnv_io_getConverterName()</code>.
  */
 U_CFUNC const char *
-ucnv_io_getDefaultConverterName();
+ucnv_io_getDefaultConverterName(void);
 
 /**
  * Set the name of the default converter.

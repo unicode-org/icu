@@ -66,7 +66,7 @@ void CollationThaiTest::runIndexedTest(int32_t index, bool_t exec, char* &name,
  * sorted order, and confirm that the collator compares each line as
  * preceding the following line.
  */
-void CollationThaiTest::TestDictionary() {
+void CollationThaiTest::TestDictionary(void) {
     if (coll == 0) {
         errln("Error: could not construct Thai collator");
         return;
@@ -158,7 +158,7 @@ void CollationThaiTest::TestDictionary() {
  * Odd corner conditions taken from "How to Sort Thai Without Rewriting Sort",
  * by Doug Cooper, http://seasrc.th.net/paper/thaisort.zip
  */
-void CollationThaiTest::TestCornerCases() {
+void CollationThaiTest::TestCornerCases(void) {
     const char* TESTS[] = {
         // Shorter words precede longer
         "\\u0e01",                               "<",    "\\u0e01\\u0e01",

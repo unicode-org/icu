@@ -32,7 +32,9 @@
 #ifndef UTYPES_H
 #define UTYPES_H
 
+#ifndef __OS400__
 #include <memory.h>
+#endif
 #include <wchar.h>
 #include <stdlib.h>
 
