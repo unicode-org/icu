@@ -7,25 +7,27 @@
 *   11/17/99    aliu        Creation.
 **********************************************************************
 */
-#include "unicode/translit.h"
 #include "cmemory.h"
 #include "cstring.h"
-#include "unicode/hextouni.h"
-#include "unicode/locid.h"
-#include "unicode/msgfmt.h"
+#include "hash.h"
 #include "mutex.h"
 #include "rbt_data.h"
 #include "rbt_pars.h"
-#include "unicode/rep.h"
-#include "unicode/resbund.h"
-#include "hash.h"
-#include "unicode/unifilt.h"
-#include "unicode/unitohex.h"
+#include "unicode/cpdtrans.h"
+#include "unicode/hangjamo.h"
+#include "unicode/hextouni.h"
+#include "unicode/jamohang.h"
+#include "unicode/locid.h"
+#include "unicode/msgfmt.h"
 #include "unicode/nultrans.h"
 #include "unicode/putil.h"
-#include "unicode/cpdtrans.h"
-#include "unicode/jamohang.h"
-#include "unicode/hangjamo.h"
+#include "unicode/rep.h"
+#include "unicode/resbund.h"
+#include "unicode/translit.h"
+#include "unicode/unifilt.h"
+#include "unicode/uniset.h"
+#include "unicode/unitohex.h"
+#include <stdio.h>
 
 const UChar Transliterator::ID_SEP   = 0x002D; /*-*/
 const UChar Transliterator::ID_DELIM = 0x003B; /*;*/
@@ -554,6 +556,29 @@ Transliterator* Transliterator::createInstance(const UnicodeString& ID,
             t = 0;
         }
     } else {
+        // ID and id are identical, unless there is a filter pattern,
+        // in which case id is the substring of ID preceding the
+        // filter pattern.
+        UnicodeString id(ID);
+
+        // Look for embedded filter pattern
+        UnicodeSet *filter = 0;
+        int32_t bracket = ID.indexOf((UChar)0x005B /*[*/);
+        if (bracket >= 0) {
+            UErrorCode status = U_ZERO_ERROR;
+            ParsePosition pos(bracket);
+            filter = new UnicodeSet();
+            filter->applyPattern(ID, pos, 0, status);
+            if (U_FAILURE(status) || pos.getIndex() != ID.length()) {
+                // There was a parse failure in the filter pattern, or
+                // there was trailing junk after the closing ']'.  We
+                // fail.
+                delete filter;
+                return 0;
+            }
+            ID.extractBetween(0, bracket, id);
+        }
+
         // The 'facadeID' is the ID to be applied to an alias
         // transliterator like Hangul-Latin, which is really
         // Hangul-Jamo;Jamo-Latin, but which should have a getID()
@@ -566,27 +591,37 @@ Transliterator* Transliterator::createInstance(const UnicodeString& ID,
         // of the more efficient ways.
         UnicodeString alias, facadeID;
         if (dir == UTRANS_REVERSE) {
-            int32_t i = ID.indexOf(ID_SEP);
+            int32_t i = id.indexOf(ID_SEP);
             if (i >= 0) {
                 UnicodeString right;
-                ID.extractBetween(i+1, ID.length(), facadeID);
-                ID.extractBetween(0, i, right);
+                id.extractBetween(i+1, id.length(), facadeID);
+                id.extractBetween(0, i, right);
                 facadeID.append(ID_SEP).append(right);
             } else if (ID == NullTransliterator::ID) {
-                facadeID = ID;
+                facadeID = id;
             } else {
                 return 0;
             }
         } else {
-            facadeID = ID;
+            facadeID = id;
         }
         t = _createInstance(facadeID, alias, parseError);
 
+        UBool fixID = FALSE;
+
         if (alias.length() > 0) { // assert(t==0)
             t = createInstance(alias);
-            if (t != 0) {
-                t->setID(facadeID);
-            }
+            fixID = (t != 0);
+        }
+
+        if (t != 0 && filter != 0) {
+            t->adoptFilter(filter);
+            fixID = TRUE;
+            facadeID.append(ID, bracket, INT32_MAX);
+        }
+
+        if (fixID) {
+            t->setID(facadeID);
         }
     }
     return t;

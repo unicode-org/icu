@@ -64,6 +64,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         CASE(20,TestCopyJ476);
         CASE(21,TestAnchors);
         CASE(22,TestInterIndic);
+        CASE(23,TestFilterIDs);
         default: name = ""; break;
     }
 }
@@ -901,6 +902,39 @@ void TransliteratorTest::TestInterIndic(void) {
     UnicodeString guj = CharsToUnicodeString("\\u0A81\\u0A8B\\u0AA5");
     expect(*dg, dev, guj);
     delete dg;
+}
+
+/**
+ * Test filter syntax in IDs. (J918)
+ */
+void TransliteratorTest::TestFilterIDs(void) {
+    // Array of 3n strings:
+    // <id>, <input>, <expected output>
+    const char* DATA[] = {
+        "Unicode-Hex[aeiou]",
+        "quizzical",
+        "q\\u0075\\u0069zz\\u0069c\\u0061l",
+        
+        "Unicode-Hex[aeiou];Hex-Unicode[^5]",
+        "quizzical",
+        "q\\u0075izzical",
+    };
+
+    for (int i=0; i<6; i+=3) {
+        UnicodeString ID(DATA[i], "");
+        Transliterator *t = Transliterator::createInstance(ID);
+        if (t == 0) {
+            errln("FAIL: createInstance(" + ID + ") returned NULL");
+            return;
+        }
+        expect(*t, DATA[i+1], DATA[i+2]);
+        // Now check the ID
+        if (ID != t->getID()) {
+            errln("FAIL: createInstance(" + ID + ").getID() => " +
+                  t->getID());
+        }
+        delete t;
+    }
 }
 
 //======================================================================
