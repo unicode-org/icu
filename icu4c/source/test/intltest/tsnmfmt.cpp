@@ -197,7 +197,10 @@ IntlTestNumberFormat::testFormat(/* char* par */)
     // try again with very large numbers
     it = randDouble() * 10000000000.0;
     tryIt(it);
-    it = randDouble() * INT32_MAX;
+
+    // try again with very large numbers
+    // and without going outside of the int32_t range
+    it = randFraction() * INT32_MAX;
     tryIt(it);
     tryIt((int32_t)uprv_floor(it));
 
