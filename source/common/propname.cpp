@@ -196,7 +196,7 @@ U_CAPI int32_t U_EXPORT2
 u_getPropertyValueEnum(UProperty property,
                        const char* alias) {
     return load() ? PNAME->getPropertyValueEnum(property, alias)
-                  : UCHAR_INVALID_CODE;
+                  : (int32_t)UCHAR_INVALID_CODE;
 }
 
 /* data swapping ------------------------------------------------------------ */

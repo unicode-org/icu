@@ -762,7 +762,7 @@ utf8IteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origin)
             iter->index=iter->length; /* may or may not be <0 (unknown) */
             iter->start=iter->limit;
             iter->reservedField=0;
-            return iter->index>=0 ? iter->index : UITER_UNKNOWN_INDEX;
+            return iter->index>=0 ? iter->index : (int32_t)UITER_UNKNOWN_INDEX;
         }
     }
 
