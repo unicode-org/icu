@@ -108,32 +108,35 @@ the ICU data directory.
 The
 .BR static
 packaging mode is similar to the shared library one except that it
-produces a static library.  Note that many platforms are not able to
-dynamically load symbols from static object files, so for this reason
-.BR udata_setAppData() 
-must be called
-to install this data. As a convenience, pkgdata will build a C source file
-and a header file. Given a data package named
-.IR name, in the output 
-directory will be created
-.IR name .c
-and
-.IR name .h with the single
-function
-.BR "udata_install_\fcIname\fB(UErrorCode *err)" ,
-where
-.I cname
-is
-.I name
-turned into a valid C identifier.
-The application need to call this function once. The error code returned
-is that of
-.BR udata_setAppData() .
-Subsequently, the application can access this data by passing
-"\fIname\fP" for the
-.I path 
-rgument to functions such as
-.BR Bures_open() .
+produces a static library.
+.\" Note that many platforms are not able to
+.\" dynamically load symbols from static object files, so for this reason
+.\" .BR udata_setAppData() 
+.\" must be called
+.\" to install this data. As a convenience, pkgdata will build a C source file
+.\" and a header file. Given a data package named
+.\" .IR name, in the output 
+.\" directory will be created
+.\" .IR name .c
+.\" and
+.\" .IR name .h with the single
+.\" function
+.\" .BR "udata_install_\fcIname\fB(UErrorCode *err)" ,
+.\" where
+.\" .I cname
+.\" is
+.\" .I name
+.\" turned into a valid C identifier.
+.\" The application need to call this function once. The error code returned
+.\" is that of
+.\" .BR udata_setAppData() .
+.\" .PP
+.\" Data pakackaged in a library, whether shared or static, 
+.\" Subsequently, the application can access this data by passing
+.\" .I name for the
+.\" .I path 
+.\" rgument to functions such as
+.\" .BR Bures_open() .
 .PP
 Finally,
 .B pkgdata
@@ -150,8 +153,8 @@ mode.
 .B pkgdata
 relies on GNU
 .BR make (1)
-to do the packaging, and generates a makefile with rules to build
-and package the correct data.
+to do the packaging, and generates a makefile with rules to build,
+package, install, or clean the appropriate data.
 .SH OPTIONS
 .TP
 .BR "\-h\fP, \fB\-?\fP, \fB\-\-help"
