@@ -50,31 +50,61 @@
  * through ucol_open API.
  * Here is the format of binary collation image.
  * int32_t size; - image size in bytes
+
  * Offsets to interesting data. All offsets are in bytes.
  * to get the address add to the header address and cast properly.
  * Offsets are in ascending order if non-zero. 
- * uint32_t options; - offset to default collator options (UColOptionSet *), 1 signed 3-bit value, followed by 7 unsigned 32-bit values, followed by 64 reserved bytes (could be considered 16 32-bit values)
- * uint32_t UCAConsts; - only used in UCA image - structure which holds values for indirect positioning and implicit ranges 
- * uint32_t contractionUCACombos; - only used in UCA image - list of UCA contractions
+ *
+ * uint32_t options; - offset to default collator options (UColOptionSet *), 1 signed 3-bit value, followed by 7 unsigned 32-bit values, 
+ *                     followed by 64 reserved bytes (could be considered 16 32-bit values). See declaration of UColOptionSet for more details
+ *
+ * uint32_t UCAConsts; - only used in UCA image - structure which holds values for indirect positioning and implicit ranges
+ *                       See declaration of UCAConstants structure. This is a field of 37 unsigned 32-bit values used to store 
+ *                       important constant values that are defined in the UCA and used for building and runtime.
+ *
+ * uint32_t contractionUCACombos; - only used in UCA image - list of UCA contractions. This is a zero terminated array of UChar[3],
+ *                                  containing contractions from the UCA. These are needed in the build process to copy UCA contractions
+ *                                  in case the base contraction symbol is tailored.
+ *
  * uint32_t unusedReserved1; -  reserved for future use 
- * uint32_t mappingPosition;  - offset to UTrie (const uint8_t *mappingPosition)
- * uint32_t expansion;  - offset to expansion table (uint32_t *expansion)            
- * uint32_t contractionIndex; - offset to contraction table (UChar *contractionIndex)
- * uint32_t contractionCEs;  - offset to resulting contraction CEs (uint32_t *contractionCEs)
- * uint32_t contractionSize; - size of contraction table (both Index and CEs)
- * uint32_t endExpansionCE; - offset to array of last collation element in expansion (uint32_t *)
+ *
+ * uint32_t mappingPosition;  - offset to UTrie (const uint8_t *mappingPosition). This is a serialized UTrie and should be treated as such. 
+ *                              Used as a primary lookup table for collation elements.
+ *
+ * uint32_t expansion;  - offset to expansion table (uint32_t *expansion). This is an array of expansion CEs. 
+ *
+ * uint32_t contractionIndex; - offset to contraction table (UChar *contractionIndex). Used to look up contraction sequences. Contents
+ *                              are aligned with the contents of contractionCEs table.
+ *
+ * uint32_t contractionCEs;  - offset to resulting contraction CEs (uint32_t *contractionCEs). When a contraction is resolved in the
+ *                             in the contractionIndex table, the resulting index is used to look up corresponding CE in this table. 
+ *
+ * uint32_t contractionSize; - size of contraction table in elements (both Index and CEs). 
+ *
+ * Tables described below are used for Boyer-Moore searching algorithm - they define the size of longest expansion
+ * and last CEs in expansions.
+ * uint32_t endExpansionCE; - offset to array of last collation element in expansion (uint32_t *). .
  * uint32_t expansionCESize; - array of maximum expansion sizes (uint8_t *)
- * int32_t  endExpansionCECount; - size of endExpansionCE 
- * uint32_t unsafeCP; - hash table of unsafe code points (uint8_t *)
- * uint32_t contrEndCP; - hash table of final code points in contractions (uint8_t *)              
+ * int32_t  endExpansionCECount; - size of endExpansionCE. See UCOL_GETMAXEXPANSION
+ *                                 for the usage model
+ *
+ * These two offsets point to byte tables that are used in the backup heuristics.
+ * uint32_t unsafeCP; - hash table of unsafe code points (uint8_t *). See ucol_unsafeCP function.
+ * uint32_t contrEndCP; - hash table of final code points in contractions (uint8_t *). See ucol_contractionEndCP.              
+ *
  * int32_t CEcount; - currently unused
- * UBool jamoSpecial; - Jamo special indicator (uint8_t)
+ *
+ * UBool jamoSpecial; - Jamo special indicator (uint8_t). If TRUE, Jamos are special, so we cannot use simple Hangul decomposition.
  * uint8_t padding[3]; - padding 3 uint8_t 
+ *
+ * Various version fields
  * UVersionInfo version; - version 4 uint8_t
  * UVersionInfo UCAVersion;  - version 4 uint8_t
  * UVersionInfo UCDVersion;  - version 4 uint8_t
+ *
  * char charsetName[32];  - currently unused 32 uint8_t
  * uint8_t reserved[56];  - currently unused 64 uint8_t
+ *
  * This header is followed by data addressed by offsets in the header. 
  *
  * Inverse UCA is used for constructing collators from rules. It is always an individual file
@@ -84,8 +114,15 @@
  * uint32_t byteSize; - size of inverse UCA image in bytes
  * uint32_t tableSize; - size of inverse table (number of (inverse elements + 2)*3
  * uint32_t contsSize; - size of continuation table (number of UChars in table)
+ *
  * uint32_t table; - offset to inverse table (uint32_t *)
- * uint32_t conts; - offset to continuation table (uint16_t *)
+ *                   Inverse table contains of rows of 3 uint32_t values. First two values are CE and a possible continuation
+ *                   the third value is either a code unit (if there is only one code unit for element) or an index to continuation 
+ *                   (number of code units combined with an index).
+ *                   table. If more than one codepoint have the same CE, continuation table contains code units separated by FFFF and final
+ *                   code unit sequence for a CE is terminated by FFFE.
+ * uint32_t conts; - offset to continuation table (uint16_t *). Contains code units that transform to a same CE.
+ *
  * UVersionInfo UCAVersion; -  version of the UCA, read from file 4 uint8_t
  * uint8_t padding[8]; - padding 8 uint8_t
  * Header is followed by the table and continuation table.
