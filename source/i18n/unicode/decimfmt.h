@@ -545,9 +545,22 @@ public:
      * @see #setPadCharacter
      * @see #getPadPosition
      * @see #setPadPosition
+     * @deprecated remove after 2000-dec-31
+     */
+    inline UChar getPadCharacter(void);
+
+    /**
+     * Get the grapheme string (a character, possibly with modifier letters)
+     * used to pad to the format width.  The default is " ".
+     * @return the pad grapheme string
+     * @see #setFormatWidth
+     * @see #getFormatWidth
+     * @see #setPadCharacter
+     * @see #getPadPosition
+     * @see #setPadPosition
      * @draft
      */
-    virtual UChar getPadCharacter(void);
+    virtual UnicodeString getPadCharacterString();
 
     /**
      * Set the character used to pad to the format width.  This has no effect
@@ -558,9 +571,23 @@ public:
      * @see #getPadCharacter
      * @see #getPadPosition
      * @see #setPadPosition
+     * @deprecated remove after 2000-dec-31
+     */
+    inline void setPadCharacter(UChar padChar);
+
+    /**
+     * Set the grapheme string (a character, possibly with modifier letters)
+     * used to pad to the format width.  This has no effect
+     * unless padding is enabled.
+     * @param padChar the pad grapheme
+     * @see #setFormatWidth
+     * @see #getFormatWidth
+     * @see #getPadCharacter
+     * @see #getPadPosition
+     * @see #setPadPosition
      * @draft
      */
-    virtual void setPadCharacter(UChar padChar);
+    virtual void setPadCharacter(UnicodeString padChar);
 
     /**
      * Get the position at which padding will take place.  This is the location
@@ -1032,6 +1059,16 @@ DecimalFormat::format(int32_t number,
                       UnicodeString& output) const {
     return NumberFormat::format(number, output);
 }
- 
+
+inline UChar
+DecimalFormat::getPadCharacter() {
+    return getPadCharacterString().charAt(0);
+}
+
+inline void
+DecimalFormat::setPadCharacter(UChar padChar) {
+    setPadCharacter(UnicodeString(padChar));
+}
+
 #endif // _DECIMFMT
 //eof
