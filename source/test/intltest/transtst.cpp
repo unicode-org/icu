@@ -126,10 +126,11 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(44,TestCompoundFilterID);
         TESTCASE(45,TestPropertySet);
         TESTCASE(46,TestNewEngine);
-        TESTCASE(47,TestDevanagariLatinRT);
-        TESTCASE(48,TestTeluguLatinRT);
-        TESTCASE(49,TestCompoundLatinRT);
-        TESTCASE(50,TestSanskritLatinRT);
+        TESTCASE(47,TestQuantifiedSegment);
+        TESTCASE(48,TestDevanagariLatinRT);
+        TESTCASE(49,TestTeluguLatinRT);
+        TESTCASE(50,TestCompoundLatinRT);
+        TESTCASE(51,TestSanskritLatinRT);
         default: name = ""; break;
     }
 }
@@ -1657,9 +1658,11 @@ void TransliteratorTest::TestQuantifier() {
            "c abc ababc",
            "d d abd");
     
+    // NOTE: The (ab)+ when referenced just yields a single "ab",
+    // not the full sequence of them.  This accords with perl behavior.
     expect("(ab)+ {x} > '(' $1 ')';",
            "x abx ababxy",
-           "x ab(ab) abab(abab)y");
+           "x ab(ab) abab(ab)y");
 
     expect("b+ > x;",
            "ac abc abbc abbbc",
@@ -1677,12 +1680,11 @@ void TransliteratorTest::TestQuantifier() {
            "qa qab qaba qababc",
            "xa x xa xc");
 
-    // Oddity -- "(foo)* > $1" causes $1 to match the run of "foo"s
-    // In perl, it only matches the first occurrence, so the output
-    // is "()a (ab) (ab)a (ab)c".
+    // NOTE: The (ab)+ when referenced just yields a single "ab",
+    // not the full sequence of them.  This accords with perl behavior.
     expect("q(ab)* > '(' $1 ')';",
            "qa qab qaba qababc",
-           "()a (ab) (ab)a (abab)c");
+           "()a (ab) (ab)a (ab)c");
 
     // 'foo'+ and 'foo'* -- the quantifier should apply to the entire
     // quoted string
@@ -2143,6 +2145,60 @@ void TransliteratorTest::TestNewEngine() {
         "$rough <> h ;");
 
     expect(gr, CharsToUnicodeString("\\u03B1\\u0314"), "ha");
+}
+
+/**
+ * Test quantified segment behavior.  We want:
+ * ([abc])+ > x $1 x; applied to "cba" produces "xax"
+ */
+void TransliteratorTest::TestQuantifiedSegment(void) {
+    // The normal case
+    expect("([abc]+) > x $1 x;", "cba", "xcbax");
+
+    // The tricky case; the quantifier is around the segment
+    expect("([abc])+ > x $1 x;", "cba", "xax");
+
+    // Tricky case in reverse direction
+    expect("([abc])+ { q > x $1 x;", "cbaq", "cbaxax");
+
+    // Check post-context segment
+    expect("{q} ([a-d])+ > '(' $1 ')';", "ddqcba", "dd(a)cba");
+
+    // Test toRule/toPattern for non-quantified segment.
+    // Careful with spacing here.
+    UnicodeString r("([a-c]){q} > x $1 x;");
+    UParseError pe;
+    UErrorCode ec = U_ZERO_ERROR;
+    Transliterator* t = Transliterator::createFromRules("ID", r, UTRANS_FORWARD, pe, ec);
+    if (U_FAILURE(ec)) {
+        errln("FAIL: createFromRules");
+        delete t;
+        return;
+    }
+    UnicodeString rr;
+    t->toRules(rr, true);
+    if (r != rr) {
+        errln((UnicodeString)"FAIL: \"" + r + "\" x toRules() => \"" + rr + "\"");
+    } else {
+        logln((UnicodeString)"Ok: \"" + r + "\" x toRules() => \"" + rr + "\"");
+    }
+    delete t;
+
+    // Test toRule/toPattern for quantified segment.
+    // Careful with spacing here.
+    r = "([a-c])+{q} > x $1 x;";
+    t = Transliterator::createFromRules("ID", r, UTRANS_FORWARD, pe, ec);
+    if (U_FAILURE(ec)) {
+        errln("FAIL: createFromRules");
+        delete t;
+        return;
+    }
+    t->toRules(rr, true);
+    if (r != rr) {
+        errln((UnicodeString)"FAIL: \"" + r + "\" x toRules() => \"" + rr + "\"");
+    } else {
+        logln((UnicodeString)"Ok: \"" + r + "\" x toRules() => \"" + rr + "\"");
+    }
 }
 
 //======================================================================
