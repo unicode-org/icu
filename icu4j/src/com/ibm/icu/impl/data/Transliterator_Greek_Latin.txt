@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Greek_Latin.txt,v $
-# $Date: 2001/11/01 21:54:13 $
-# $Revision: 1.7 $
+# $Date: 2001/11/02 19:28:48 $
+# $Revision: 1.8 $
 #--------------------------------------------------------------------
 
 # Rules are predicated on running NFD first, and NFC afterwards
@@ -64,8 +64,8 @@ $beforeLetter = [\'[:M:]]* [:^L:] ;
 # IOTA: convert iota subscript to iota
 # first make previous alpha long!
 
-Α } $accent * $iotasub > A $macron ;  
-α } $accent * $iotasub > a $macron ; 
+Α } [$accent$rough$smooth] * $iotasub > A $macron ;  
+α } [$accent$rough$smooth] * $iotasub > a $macron ; 
 
 # now convert to uppercase if after uppercase, ow to lowercase
 
