@@ -63,8 +63,8 @@ T_FileStream_wopen(const wchar_t* filename, const wchar_t* mode)
     md[mdMbsSize] = 0;
 
     result = fopen(fn, md);
-    free(fn);
-    free(md);
+    icu_free(fn);
+    icu_free(md);
     return (FileStream*)result;
 #endif
 }

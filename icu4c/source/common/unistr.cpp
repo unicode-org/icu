@@ -79,7 +79,11 @@ u_arrayCompare(const UChar *src, int32_t srcStart,
 inline void
 us_arrayCopy(const UChar *src, int32_t srcStart,
          UChar *dst, int32_t dstStart, int32_t count)
-{icu_memmove(dst+dstStart, src+srcStart, (size_t)(count*sizeof(*src)));}
+{
+  if(count>0) {
+    icu_memmove(dst+dstStart, src+srcStart, (size_t)(count*sizeof(*src)));
+  }
+}
 
 // static initialization
 const UChar UnicodeString::fgInvalidUChar      = 0xFFFF;
@@ -980,8 +984,6 @@ UnicodeString::pinIndices(UTextOffset& start,
   if(length < 0 || start < 0)
     start = length = 0;
   else {
-    if(start < 0)
-      start = 0;
     if(length > (fLength - start))
       length = (fLength - start);
   }

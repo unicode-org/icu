@@ -138,12 +138,12 @@ if( mutex == NULL ) /* initialize the global mutex */
     return;
 
 #if defined( _WIN32 )
-  *mutex = malloc(sizeof(CRITICAL_SECTION));
+  *mutex = icu_malloc(sizeof(CRITICAL_SECTION));
   InitializeCriticalSection((CRITICAL_SECTION*)*mutex);
 
 #elif defined( POSIX )
 
-  *mutex = malloc(sizeof(pthread_mutex_t));
+  *mutex = icu_malloc(sizeof(pthread_mutex_t));
 
 #if defined(HPUX)
     pthread_mutex_init((pthread_mutex_t*)*mutex, pthread_mutexattr_default);

@@ -187,7 +187,7 @@ uhash_putKey(UHashtable *hash,
       void * result = hash->values[index];
     if (result != value) /*Make sure the same object isn't scheduled for a double deletion*/
       {
-        hash->toBeDeleted = (void**) realloc(hash->toBeDeleted, sizeof(void*)*(++(hash->toBeDeletedCount)));
+        hash->toBeDeleted = (void**) icu_realloc(hash->toBeDeleted, sizeof(void*)*(++(hash->toBeDeletedCount)));
         hash->toBeDeleted[(hash->toBeDeletedCount)-1] = result;
       }
       hash->values[index] = 0;
@@ -237,7 +237,7 @@ uhash_put(UHashtable *hash,
       void* result = hash->values[index];
     if (result != value) /*Make sure the same object isn't scheduled for a double deletion*/
       {
-        hash->toBeDeleted = (void**) realloc(hash->toBeDeleted,
+        hash->toBeDeleted = (void**) icu_realloc(hash->toBeDeleted,
                          sizeof(void*)*(++(hash->toBeDeletedCount)));
         hash->toBeDeleted[(hash->toBeDeletedCount)-1] = result;
       }
