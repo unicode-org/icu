@@ -569,6 +569,8 @@ void TestSafeClone() {
         ucol_close(someClonedCollators[index]);
         ucol_close(someCollators[index]);
     }
+    free(test1);
+    free(test2);
 }
 
 /*
