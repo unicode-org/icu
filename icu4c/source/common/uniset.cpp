@@ -56,12 +56,12 @@
 #define UPPER_N         ((UChar)78)     /*N*/
 #define EQUALS          ((UChar)0x003D) /*=*/
 
-static const UChar POSIX_OPEN[]  = { 91,58,0 };  // "[:"
-static const UChar POSIX_CLOSE[] = { 58,93,0 };  // ":]"
-static const UChar PERL_OPEN[]   = { 92,112,0 }; // "\\p"
-static const UChar PERL_CLOSE[]  = { 125,0 };    // "}"
-static const UChar NAME_OPEN[]   = { 92,78,0 };  // "\\N"
-static const UChar HYPHEN_RIGHT_BRACE[] = {0x2D,0x5D,0}; /*-]*/
+static const UChar POSIX_OPEN[]  = { SET_OPEN,COLON,0 };  // "[:"
+static const UChar POSIX_CLOSE[] = { COLON,SET_CLOSE,0 };  // ":]"
+static const UChar PERL_OPEN[]   = { BACKSLASH,LOWER_P,0 }; // "\\p"
+static const UChar PERL_CLOSE[]  = { CLOSE_BRACE,0 };    // "}"
+static const UChar NAME_OPEN[]   = { BACKSLASH,UPPER_N,0 };  // "\\N"
+static const UChar HYPHEN_RIGHT_BRACE[] = {HYPHEN,SET_CLOSE,0}; /*-]*/
 
 // Special property set IDs
 static const char ANY[]   = "ANY";   // [\u0000-\U0010FFFF]
@@ -1918,9 +1918,9 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
 
     while (mode != 2 && !chars.atEnd()) {
         U_ASSERT((lastItem == 0 && op == 0) ||
-                 (lastItem == 1 && (op == 0 || op == 0x2D /*'-'*/)) ||
-                 (lastItem == 2 && (op == 0 || op == 0x2D /*'-'*/ ||
-                                    op == 0x26 /*'&'*/)));
+                 (lastItem == 1 && (op == 0 || op == HYPHEN /*'-'*/)) ||
+                 (lastItem == 2 && (op == 0 || op == HYPHEN /*'-'*/ ||
+                                    op == INTERSECTION /*'&'*/)));
 
         UChar32 c = 0;
         UBool literal = FALSE;
@@ -1968,7 +1968,7 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
                     }
                     // Fall through to handle special leading '-';
                     // otherwise restart loop for nested [], \p{}, etc.
-                    if (c == 0x2D /*'-'*/) {
+                    if (c == HYPHEN /*'-'*/) {
                         literal = TRUE;
                         // Fall through to handle literal '-' below
                     } else {
@@ -2009,7 +2009,7 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
                 op = 0;
             }
 
-            if (op == 0x2D /*'-'*/ || op == 0x26 /*'&'*/) {
+            if (op == HYPHEN /*'-'*/ || op == INTERSECTION /*'&'*/) {
                 patLocal.append(op);
             }
 
@@ -2045,10 +2045,10 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
             }
 
             switch (op) {
-            case '-':
+            case HYPHEN: /*'-'*/
                 removeAll(*nested);
                 break;
-            case '&':
+            case INTERSECTION: /*'&'*/
                 retainAll(*nested);
                 break;
             case 0:
@@ -2080,10 +2080,10 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
                     _appendToPat(patLocal, lastChar, FALSE);
                 }
                 // Treat final trailing '-' as a literal
-                if (op == 0x2D /*'-'*/) {
+                if (op == HYPHEN /*'-'*/) {
                     add(op, op);
                     patLocal.append(op);
-                } else if (op == 0x26 /*'&'*/) {
+                } else if (op == INTERSECTION /*'&'*/) {
                     // syntaxError(chars, "Trailing '&'");
                     ec = U_MALFORMED_SET;
                     return;
@@ -2091,7 +2091,7 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
                 patLocal.append((UChar) 0x5D /*']'*/);
                 mode = 2;
                 continue;
-            case 0x2D /*'-'*/:
+            case HYPHEN /*'-'*/:
                 if (op == 0) {
                     if (lastItem != 0) {
                         op = (UChar) c;
@@ -2111,7 +2111,7 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
                 // syntaxError(chars, "'-' not after char or set");
                 ec = U_MALFORMED_SET;
                 return;
-            case 0x26 /*'&'*/:
+            case INTERSECTION /*'&'*/:
                 if (lastItem == 2 && op == 0) {
                     op = (UChar) c;
                     continue;
@@ -2208,7 +2208,7 @@ void UnicodeSet::applyPattern(RuleCharacterIterator& chars,
             lastChar = c;
             break;
         case 1:
-            if (op == 0x2D /*'-'*/) {
+            if (op == HYPHEN /*'-'*/) {
                 if (lastChar >= c) {
                     // Don't allow redundant (a-a) or empty (b-a) ranges;
                     // these are most likely typos.
