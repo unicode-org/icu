@@ -1,5 +1,5 @@
 # PropertyAliases-4.1.0.txt
-# Date: 2004-12-11, 05:46:23 GMT [MD]
+# Date: 2005-02-26, 11:13:41 GMT [MD]
 #
 # Unicode Character Database
 # Copyright (c) 1991-2005 Unicode, Inc.
@@ -150,7 +150,7 @@ Term      ; Terminal_Punctuation
 UIdeo     ; Unified_Ideograph
 Upper     ; Uppercase
 VS        ; Variation_Selector
-WSpace    ; White_Space
+WSpace    ; White_Space                 ; space
 XIDC      ; XID_Continue
 XIDS      ; XID_Start
 XO_NFC    ; Expands_On_NFC

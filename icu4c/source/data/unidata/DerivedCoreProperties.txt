@@ -1,5 +1,5 @@
 # DerivedCoreProperties-4.1.0.txt
-# Date: 2004-12-14, 01:09:24 GMT [MD]
+# Date: 2005-03-10, 02:04:29 GMT [MD]
 #
 # Unicode Character Database
 # Copyright (c) 1991-2005 Unicode, Inc.
@@ -213,10 +213,12 @@ FFE9..FFEC    ; Math
 0531..0556    ; Alphabetic
 0559          ; Alphabetic
 0561..0587    ; Alphabetic
-05B0..05BD    ; Alphabetic
+05B0..05B9    ; Alphabetic
+05BB..05BD    ; Alphabetic
 05BF          ; Alphabetic
 05C1..05C2    ; Alphabetic
 05C4..05C5    ; Alphabetic
+05C7          ; Alphabetic
 05D0..05EA    ; Alphabetic
 05F0..05F2    ; Alphabetic
 0610..0615    ; Alphabetic
@@ -1695,6 +1697,7 @@ FF21..FF3A    ; Uppercase
 # Derived Property: ID_Start
 #  Characters that can start an identifier.
 #  Generated from Lu+Ll+Lt+Lm+Lo+Nl+Other_ID_Start
+#  NOTE: See UAX #31 for more information
 
 0041..005A    ; ID_Start
 0061..007A    ; ID_Start
@@ -2089,7 +2092,7 @@ FFDA..FFDC    ; ID_Start
 # Derived Property: ID_Continue
 #  Characters that can continue an identifier.
 #  Generated from: ID_Start + Mn+Mc+Nd+Pc + Other_ID_Continue
-#  NOTE: Cf characters should be filtered out.
+#  NOTE: See UAX #31 for more information
 
 0030..0039    ; ID_Continue
 0041..005A    ; ID_Continue
@@ -2126,10 +2129,12 @@ FFDA..FFDC    ; ID_Start
 0531..0556    ; ID_Continue
 0559          ; ID_Continue
 0561..0587    ; ID_Continue
-0591..05BD    ; ID_Continue
+0591..05B9    ; ID_Continue
+05BB..05BD    ; ID_Continue
 05BF          ; ID_Continue
 05C1..05C2    ; ID_Continue
 05C4..05C5    ; ID_Continue
+05C7          ; ID_Continue
 05D0..05EA    ; ID_Continue
 05F0..05F2    ; ID_Continue
 0610..0615    ; ID_Continue
@@ -2650,7 +2655,6 @@ FFDA..FFDC    ; ID_Continue
 10A19..10A33  ; ID_Continue
 10A38..10A3A  ; ID_Continue
 10A3F         ; ID_Continue
-10A40..10A43  ; ID_Continue
 1D165..1D166  ; ID_Continue
 1D167..1D169  ; ID_Continue
 1D16D..1D172  ; ID_Continue
@@ -2693,7 +2697,7 @@ FFDA..FFDC    ; ID_Continue
 2F800..2FA1D  ; ID_Continue
 E0100..E01EF  ; ID_Continue
 
-# Total code points: 92802
+# Total code points: 92798
 
 # ================================================
 
@@ -2702,6 +2706,7 @@ E0100..E01EF  ; ID_Continue
 #  Modified as described in UAX #15
 #  NOTE: Does NOT remove the non-NFKx characters.
 #        Merely ensures that if isIdentifer(string) then isIdentifier(NFKx(string))
+#  NOTE: See UAX #31 for more information
 
 0041..005A    ; XID_Start
 0061..007A    ; XID_Start
@@ -3102,6 +3107,7 @@ FFDA..FFDC    ; XID_Start
 #  NOTE: Cf characters should be filtered out.
 #  NOTE: Does NOT remove the non-NFKx characters.
 #        Merely ensures that if isIdentifer(string) then isIdentifier(NFKx(string))
+#  NOTE: See UAX #31 for more information
 
 0030..0039    ; XID_Continue
 0041..005A    ; XID_Continue
@@ -3138,10 +3144,12 @@ FFDA..FFDC    ; XID_Start
 0531..0556    ; XID_Continue
 0559          ; XID_Continue
 0561..0587    ; XID_Continue
-0591..05BD    ; XID_Continue
+0591..05B9    ; XID_Continue
+05BB..05BD    ; XID_Continue
 05BF          ; XID_Continue
 05C1..05C2    ; XID_Continue
 05C4..05C5    ; XID_Continue
+05C7          ; XID_Continue
 05D0..05EA    ; XID_Continue
 05F0..05F2    ; XID_Continue
 0610..0615    ; XID_Continue
@@ -3667,7 +3675,6 @@ FFDA..FFDC    ; XID_Continue
 10A19..10A33  ; XID_Continue
 10A38..10A3A  ; XID_Continue
 10A3F         ; XID_Continue
-10A40..10A43  ; XID_Continue
 1D165..1D166  ; XID_Continue
 1D167..1D169  ; XID_Continue
 1D16D..1D172  ; XID_Continue
@@ -3710,7 +3717,7 @@ FFDA..FFDC    ; XID_Continue
 2F800..2FA1D  ; XID_Continue
 E0100..E01EF  ; XID_Continue
 
-# Total code points: 92784
+# Total code points: 92780
 
 # ================================================
 
@@ -3779,10 +3786,12 @@ FFFFE..FFFFF  ; Default_Ignorable_Code_Point
 0300..036F    ; Grapheme_Extend
 0483..0486    ; Grapheme_Extend
 0488..0489    ; Grapheme_Extend
-0591..05BD    ; Grapheme_Extend
+0591..05B9    ; Grapheme_Extend
+05BB..05BD    ; Grapheme_Extend
 05BF          ; Grapheme_Extend
 05C1..05C2    ; Grapheme_Extend
 05C4..05C5    ; Grapheme_Extend
+05C7          ; Grapheme_Extend
 0610..0615    ; Grapheme_Extend
 064B..065E    ; Grapheme_Extend
 0670          ; Grapheme_Extend
@@ -4273,7 +4282,8 @@ E0100..E01EF  ; Grapheme_Extend
 12D8..1310    ; Grapheme_Base
 1312..1315    ; Grapheme_Base
 1318..135A    ; Grapheme_Base
-1360..1368    ; Grapheme_Base
+1360          ; Grapheme_Base
+1361..1368    ; Grapheme_Base
 1369..137C    ; Grapheme_Base
 1380..138F    ; Grapheme_Base
 1390..1399    ; Grapheme_Base
@@ -4330,7 +4340,8 @@ E0100..E01EF  ; Grapheme_Extend
 19C1..19C7    ; Grapheme_Base
 19C8..19C9    ; Grapheme_Base
 19D0..19D9    ; Grapheme_Base
-19DE..19FF    ; Grapheme_Base
+19DE..19DF    ; Grapheme_Base
+19E0..19FF    ; Grapheme_Base
 1A00..1A16    ; Grapheme_Base
 1A19..1A1B    ; Grapheme_Base
 1A1E..1A1F    ; Grapheme_Base
@@ -4838,8 +4849,7 @@ FFFC..FFFD    ; Grapheme_Base
 10A10..10A13  ; Grapheme_Base
 10A15..10A17  ; Grapheme_Base
 10A19..10A33  ; Grapheme_Base
-10A40..10A43  ; Grapheme_Base
-10A44..10A47  ; Grapheme_Base
+10A40..10A47  ; Grapheme_Base
 10A50..10A58  ; Grapheme_Base
 1D000..1D0F5  ; Grapheme_Base
 1D100..1D126  ; Grapheme_Base
