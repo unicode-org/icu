@@ -540,6 +540,10 @@ SOURCE=.\mstrmtst.c
 
 SOURCE=.\putiltst.c
 # End Source File
+# Begin Source File
+
+SOURCE=.\tracetst.c
+# End Source File
 # End Group
 # Begin Group "normalization"
 

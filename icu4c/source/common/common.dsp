@@ -1076,6 +1076,10 @@ InputPath=.\unicode\utrace.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\utracimp.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\unicode\utypes.h
 
 !IF  "$(CFG)" == "common - Win32 Release"
@@ -1851,10 +1855,6 @@ InputPath=.\unicode\uidna.h
 
 !ENDIF 
 
-# End Source File
-# Begin Source File
-
-SOURCE=.\utracimp.h
 # End Source File
 # End Group
 # Begin Group "locales & resources"
