@@ -1274,18 +1274,49 @@ void TransliteratorTest::TestLiberalizedID(void) {
 
 /* test for Jitterbug 912 */
 void TransliteratorTest::TestCreateInstance(){
-    UParseError err;
-    UErrorCode status = U_ZERO_ERROR;
-    Transliterator* myTrans = Transliterator::createInstance(UnicodeString("Latin-Hangul"),UTRANS_REVERSE,err,status);
-    if (myTrans == 0) {
-        errln("FAIL: createInstance failed");
-        return;
+    const char* FORWARD = "F";
+    const char* REVERSE = "R";
+    const char* DATA[] = {
+        // Column 1: id
+        // Column 2: direction
+        // Column 3: expected ID, or "" if expect failure
+        "Latin-Hangul", REVERSE, "Hangul-Latin", // JB#912
+
+        // JB#2689: bad compound causes crash
+        "InvalidSource-InvalidTarget", FORWARD, "",
+        "InvalidSource-InvalidTarget", REVERSE, "",
+        "Hex-Any;InvalidSource-InvalidTarget", FORWARD, "",
+        "Hex-Any;InvalidSource-InvalidTarget", REVERSE, "",
+        "InvalidSource-InvalidTarget;Hex-Any", FORWARD, "",
+        "InvalidSource-InvalidTarget;Hex-Any", REVERSE, "",
+
+        NULL
+    };
+
+    for (int32_t i=0; DATA[i]; i+=3) {
+        UParseError err;
+        UErrorCode ec = U_ZERO_ERROR;
+        UnicodeString id(DATA[i]);
+        UTransDirection dir = (DATA[i+1]==FORWARD)?
+            UTRANS_FORWARD:UTRANS_REVERSE;
+        UnicodeString expID(DATA[i+2]);
+        Transliterator* t =
+            Transliterator::createInstance(id,dir,err,ec);
+        UnicodeString newID = t?t->getID():"";
+        UBool ok = (newID == expID);
+        if (!t) {
+            newID = u_errorName(ec);
+        }
+        if (ok) {
+            logln((UnicodeString)"Ok: createInstance(" +
+                  id + "," + DATA[i+1] + ") => " + newID);
+        } else {
+            errln((UnicodeString)"FAIL: createInstance(" +
+                  id + "," + DATA[i+1] + ") => " + newID +
+                  ", expected " + expID);
+        }
+        delete t;
     }
-    UnicodeString newID =myTrans->getID();
-    if(newID!=UnicodeString("Hangul-Latin")){
-        errln(UnicodeString("Test for Jitterbug 912 Transliterator::createInstance(id,UTRANS_REVERSE) failed"));
-    }
-    delete myTrans;
 }
 
 /**

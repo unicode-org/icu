@@ -487,6 +487,7 @@ int32_t TransliteratorIDParser::instantiateList(UVector& list,
             }
             tlist.addElement(t, ec);
             if (U_FAILURE(ec)) {
+                delete t;
                 goto RETURN;
             }
         }
@@ -500,21 +501,27 @@ int32_t TransliteratorIDParser::instantiateList(UVector& list,
             ec = U_INTERNAL_TRANSLITERATOR_ERROR;
         }
         tlist.addElement(t, ec);
+        if (U_FAILURE(ec)) {
+            delete t;
+        }
     }
 
  RETURN:
 
     UObjectDeleter *save = list.setDeleter(_deleteSingleID);
     list.removeAllElements();
-    list.setDeleter(_deleteTransliterator);
 
-    while (tlist.size() > 0) {
-        t = (Transliterator*) tlist.orphanElementAt(0);
-        list.addElement(t, ec);
-        if (U_FAILURE(ec)) {
-            delete t;
-            list.removeAllElements();
-            break;
+    if (U_SUCCESS(ec)) {
+        list.setDeleter(_deleteTransliterator);
+
+        while (tlist.size() > 0) {
+            t = (Transliterator*) tlist.orphanElementAt(0);
+            list.addElement(t, ec);
+            if (U_FAILURE(ec)) {
+                delete t;
+                list.removeAllElements();
+                break;
+            }
         }
     }
 
