@@ -365,17 +365,7 @@ SOURCE=.\ucnvsbcs.c
 # Begin Source File
 
 SOURCE=.\udata.c
-
-!IF  "$(CFG)" == "common - Win32 Release"
-
 # ADD CPP /Ze
-
-!ELSEIF  "$(CFG)" == "common - Win32 Debug"
-
-# ADD CPP /Ze
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
@@ -397,6 +387,10 @@ SOURCE=.\uhash_us.cpp
 # Begin Source File
 
 SOURCE=.\uloc.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\umemstrm.c
 # End Source File
 # Begin Source File
 
@@ -1071,6 +1065,10 @@ InputPath=.\unicode\umachine.h
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\umemstrm.h
 # End Source File
 # Begin Source File
 

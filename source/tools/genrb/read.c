@@ -29,6 +29,7 @@
 #define ASTERISK     0x002A
 #define SPACE        0x0020
 #define COLON        0x003A
+#define BADBOM       0xFFFE
 
 U_STRING_DECL(k_start_string, "string", 6);
 U_STRING_DECL(k_start_binary, "binary", 6);
@@ -42,8 +43,8 @@ static bool_t didInit=FALSE;
 
 /* Protos */
 static enum ETokenType getStringToken(UFILE *f, UChar initialChar, 
-				      struct UString *token,
-				      UErrorCode *status);
+                      struct UString *token,
+                      UErrorCode *status);
 static UChar unescape(UFILE *f, UErrorCode *status);
 static UChar getNextChar(UFILE *f, bool_t skipwhite, UErrorCode *status);
 static void seekUntilNewline(UFILE *f, UErrorCode *status);
@@ -61,12 +62,12 @@ static bool_t isNewline(UChar c);
    string tokens will be merged into one, with no intervening
    space. */
 enum ETokenType getNextToken(UFILE *f,
-			     struct UString *token,
-			     UErrorCode *status)
+                 struct UString *token,
+                 UErrorCode *status)
 {
     UChar c;
 
-    enum ETokenType tokenType;
+    /*enum ETokenType tokenType;*/
 
     if(U_FAILURE(*status)) return tok_error;
 
@@ -75,14 +76,17 @@ enum ETokenType getNextToken(UFILE *f,
     if(U_FAILURE(*status)) return tok_error;
 
     switch(c) {
+    case BADBOM:       return tok_error;
     case OPENBRACE:    return tok_open_brace;
     case CLOSEBRACE:   return tok_close_brace;
     case COMMA:        return tok_comma;
     case U_EOF:        return tok_EOF;
-    case COLON:        
+/*
+    case COLON:        return tok_colon;
       c = getNextChar(f, TRUE, status);
       tokenType = getStringToken(f, c, token, status);
       break;              
+*/
     default:           return getStringToken(f, c, token, status);
     }
     if(!didInit) {
@@ -193,7 +197,7 @@ static enum ETokenType getStringToken(UFILE *f,
 	   || c == OPENBRACE
 	   || c == CLOSEBRACE
 	   || c == COMMA
-       || c == COLON)
+       /*|| c == COLON*/)
 	  {
 	    u_fungetc(c, f);
 	    /*u_fungetc(c, f, status);*/
@@ -215,7 +219,7 @@ static enum ETokenType getStringToken(UFILE *f,
     if(U_FAILURE(*status)) 
       return tok_string;
     
-    if(c == OPENBRACE || c == CLOSEBRACE || c == COMMA || c == COLON) {
+    if(c == OPENBRACE || c == CLOSEBRACE || c == COMMA/* || c == COLON*/) {
        u_fungetc(c, f);
 	   /*u_fungetc(c, f, status);*/
       return tok_string;
@@ -399,8 +403,8 @@ static UChar unescape(UFILE *f,
 static bool_t isWhitespace(UChar c)
 {
   switch (c) {
-    /* ' ', '\t', '\n', '\r', 0x2029 */
-  case 0x0020: case 0x0009: case 0x000A: case 0x000D:  case 0x2029:
+    /* ' ', '\t', '\n', '\r', 0x2029, 0xFEFF */
+  case 0x0020: case 0x0009: case 0x000A: case 0x000D:  case 0x2029: case 0xFEFF:
     return TRUE;
     
   default:

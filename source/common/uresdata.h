@@ -30,8 +30,12 @@ typedef uint32_t Resource;
 #define RES_BOGUS 0xffffffff
 
 #define RES_GET_TYPE(res) ((res)>>28UL)
-#define RES_GET_OFFSET(res) ((res)&0xfffffff)
+#define RES_GET_OFFSET(res) ((res)&0x0fffffff)
 #define RES_GET_POINTER(pRoot, res) ((pRoot)+RES_GET_OFFSET(res))
+
+/* get signed and unsigned integer values directly from the Resource handle */
+#define RES_GET_INT(res) (((int32_t)((res)<<4L))>>4L)
+#define RES_GET_UINT(res) ((res)&0x0fffffff)
 
 /*
  * Resource types:
@@ -45,7 +49,7 @@ typedef uint32_t Resource;
  * 0  Unicode String:   int32_t length, UChar[length], (UChar)0, (padding)
  *                  or  (empty string ("") if offset==0)
  * 1  Binary:           int32_t length, uint8_t[length], (padding)
- *                      - this value should be 16-aligned -
+ *                      - this value should be 32-aligned -
  * 2  Table:            uint16_t count, uint16_t keyStringOffsets[count], (uint16_t padding), Resource[count]
  *
  * 7  Integer:          (28-bit offset is integer value)
@@ -87,6 +91,9 @@ res_unload(ResourceData *pResData);
  */
 U_CFUNC const UChar *
 res_getString(const ResourceData *pResData, const Resource res, int32_t *pLength);
+
+U_CFUNC const uint8_t *
+res_getBinary(const ResourceData *pResData, const Resource res, int32_t *pLength);
 
 /*
  * Get a Resource handle for an array of strings, and get the number of strings.

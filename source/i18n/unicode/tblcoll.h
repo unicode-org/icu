@@ -558,6 +558,18 @@ public:
    */
   static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
 
+
+  /**
+   * Returns the binary format of the class's rules.  The format is
+   * that of .col files.  
+   *
+   * @param length Returns the length of the data, in bytes
+   * @param status the error code status.
+   * @return memory, owned by the caller, of size 'length' bytes.
+   * @draft INTERNAL USE ONLY
+   */
+  uint8_t *cloneRuleData(int32_t &length, UErrorCode &status);
+
  /*****************************************************************************
  * PRIVATE
  *****************************************************************************/

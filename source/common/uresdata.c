@@ -28,9 +28,6 @@
 /* get a const char* pointer to the key with the keyOffset byte offset from pRoot */
 #define RES_GET_KEY(pRoot, keyOffset) ((const char *)(pRoot)+(keyOffset))
 
-/* get signed and unsigned integer values directly from the Resource handle */
-#define RES_GET_INT(res) (((int32_t)((res)<<4L))>>4L)
-#define RES_GET_UINT(res) ((res)&0xfffffff)
 
 /*
  * All the type-access functions assume that
@@ -51,9 +48,21 @@ _res_getString(Resource *pRoot, Resource res, int32_t *pLength) {
         *pLength=0;
         return &nulUChar;
     } else {
-        int32_t *p=(int32_t *)(pRoot+res);
+        int32_t *p=(int32_t *)RES_GET_POINTER(pRoot, res);
         *pLength=*p++;
         return (UChar *)p;
+    }
+}
+
+static const uint8_t *
+_res_getBinary(Resource *pRoot, Resource res, int32_t *pLength) {
+    if(res==0) {
+        *pLength=0;
+        return NULL;
+    } else {
+        int32_t *p=(int32_t *)RES_GET_POINTER(pRoot, res);
+        *pLength=*p++;
+        return (uint8_t *)p;
     }
 }
 
@@ -230,6 +239,16 @@ U_CFUNC const UChar *
 res_getString(const ResourceData *pResData, const Resource res, int32_t *pLength) {
     if(res!=RES_BOGUS && RES_GET_TYPE(res)==RES_STRING) {
         return _res_getString(pResData->pRoot, res, pLength);
+    } else {
+        *pLength=0;
+        return NULL;
+    }
+}
+
+U_CFUNC const uint8_t *
+res_getBinary(const ResourceData *pResData, const Resource res, int32_t *pLength) {
+    if(res!=RES_BOGUS && RES_GET_TYPE(res)==RES_BINARY) {
+        return _res_getBinary(pResData->pRoot, res, pLength);
     } else {
         *pLength=0;
         return NULL;

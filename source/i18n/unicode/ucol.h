@@ -747,4 +747,17 @@ ucol_setOffset(    UCollationElements    *elems,
 U_CAPI void U_EXPORT2
 ucol_getVersion(const UCollator* coll, UVersionInfo info);
 
+/**
+ * Makes a copy of the Collator's rule data. The format is
+ * that of .col files.
+ * 
+ * @param length returns the length of the data, in bytes.
+ * @param status the error status
+ * @return memory, owned by the caller, of size 'length' bytes.
+ * @draft INTERNAL USE ONLY
+ */
+U_CAPI uint8_t *
+ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
+
+
 #endif
