@@ -66,7 +66,7 @@ ucal.o calendar.o gregocal.o timezone.o simpletz.o \
 sortkey.o bocsu.o coleitr.o coll.o ucoleitr.o \
 ucol.o ucol_bld.o ucol_cnt.o ucol_elm.o ucol_tok.o ucol_wgt.o tblcoll.o \
 strmatch.o usearch.o search.o stsearch.o \
-uniset.o unifltlg.o unirange.o translit.o utrans.o \
+uniset.o unifltlg.o translit.o utrans.o \
 cpdtrans.o hextouni.o rbt.o rbt_data.o rbt_pars.o rbt_rule.o rbt_set.o \
 dbbi.o dbbi_tbl.o rbbi.o rbbi_tbl.o nultrans.o \
 remtrans.o titletrn.o tolowtrn.o toupptrn.o xformtrn.o \
