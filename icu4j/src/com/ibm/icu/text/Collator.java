@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $
-* $Date: 2003/05/01 17:09:16 $
-* $Revision: 1.25 $
+* $Date: 2003/05/02 22:32:45 $
+* $Revision: 1.26 $
 *
 *******************************************************************************
 */
@@ -719,31 +719,7 @@ public abstract class Collator implements Comparator, Cloneable
      */
     private int m_decomposition_ = CANONICAL_DECOMPOSITION;
     
-    private static ICULocaleService service;
-    
     // private methods -------------------------------------------------------
-    
-    ///CLOVER:OFF
-    
-    private static ICULocaleService getService() {
-        if (service == null) {
-            ICULocaleService newService = new ICULocaleService("Collator");
-
-            class CollatorFactory extends ICUResourceBundleFactory {
-                protected Object handleCreate(Locale loc, int kind, ICUService service) {
-                    return new RuleBasedCollator(loc);
-                }
-            }
-            newService.registerFactory(new CollatorFactory());
-
-            synchronized (Collator.class) {
-                if (service == null) {
-                    service = newService;
-                }
-            }
-        }
-        return service;
-    }
     
     // end registry stuff
 }
