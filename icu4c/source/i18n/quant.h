@@ -18,7 +18,7 @@
 
 U_NAMESPACE_BEGIN
 
-class U_I18N_API Quantifier : public UnicodeFunctor, public UnicodeMatcher {
+class Quantifier : public UnicodeFunctor, public UnicodeMatcher {
 
  public:
 
