@@ -131,7 +131,7 @@ SRCDATAFILESD=$(DATAFILESD:%.dat=%_dat.c)
 SRCDATAFILESC=$(DATAFILESC:%.cnv=%_cnv.c)
 SRCDATAFILESB=$(DATAFILESB:%.brk=%_brk.c)
 
-SRCDATAFILES=$(SRCDATAFILESD) $(SRCDATAFILESC) $(SRCDATAFILESB)
+SRCDATAFILES=$(SRCDATAFILESD) $(SRCDATAFILESC) $(SRCDATAFILESB) $(OBJDATADIR)/icudata_dat.c
 
 
 OBJDATAFILES=$(SRCDATAFILES:%.c=%.o)
@@ -173,32 +173,33 @@ build-cmnfile:  $(COMMONFILE)
 # the -Wpath [etc] has relative DLL paths in it
 # so we have to cd into the other dir..
 
-gencmn/mkmap.tmp: Makefile
-
-
-$(COMMONFILE):	$(DATAFILES)
+gencmn/mkmap.tmp: Makefile $(DATAFILES)
+	@echo -n Generating $@ list of data files
 	@-rm -f gencmn/mkmap.tmp
 	@for file in $(DATAFILES); do \
 	  echo `pwd`/$$file >> gencmn/mkmap.tmp; \
 	done;
+
+
+$(COMMONFILE):	$(DATAFILES) gencmn/mkmap.tmp
 	@echo -n Generating common file $(COMMONFILE).  Number of files:
 	-@wc -l gencmn/mkmap.tmp
 	-rm -f $(COMMONFILE)
-	@(cd gencmn ; ICU_DATA=$(OBJDATADIR)	./gencmn -c 1000000 mkmap.tmp )
+	@gencmn/gencmn -c -d $(OBJDATADIR) 1000000 gencmn/mkmap.tmp
 	-@ls -l $(COMMONFILE)
 
-build-dll: $(COMMONDLL)
+build-dll: $(DATAFILES) gencmn/mkmap.tmp $(COMMONDLL)
 
 build-testdlls: $(TESTDATADLL) $(BASEDATADLL) $(BASETESTDATADLL)
 
 %_dat.c: %.dat
-	(cd genccode ; ./genccode ../$< )
+	genccode/genccode $<
 
 %_cnv.c: %.cnv
-	(cd genccode ; ./genccode ../$< )
+	genccode/genccode $<
 
 %_brk.c: %.brk
-	(cd genccode ; ./genccode ../$< )
+	genccode/genccode $<
 
 ## Note: this generates a dummy C++ file to cause the HPUX CC linker
 ## to load exception handling (when requested..) 
@@ -214,6 +215,9 @@ hpux_junk_obj.o: hpux_junk_obj.cpp
 
 
 # HPUX_JUNK_OBJ is usually unset except by mh-hpux-cc
+
+$(OBJDATADIR)/icudata_dat.c: $(DATAFILES) gencmn/mkmap.tmp
+	@gencmn/gencmn -S -d $(OBJDATADIR) 1000000 gencmn/mkmap.tmp
 
 $(COMMONDLL): $(OBJDATAFILES) $(HPUX_JUNK_OBJ)
 	$(SHLIB.c) -o $@ $^
