@@ -262,6 +262,7 @@ U_CAPI int32_t U_EXPORT2
 u_getIntPropertyValue(UChar32 c, UProperty which) {
     UErrorCode errorCode;
     int32_t i;
+    int8_t type;
 
     if(which<UCHAR_BINARY_START) {
         return 0; /* undefined */
@@ -294,7 +295,7 @@ u_getIntPropertyValue(UChar32 c, UProperty which) {
              * Characters of joining type T can [be] derived by the following formula:
              *   T = Mn + Cf - ZWNJ - ZWJ
              */
-            i=(int32_t)(u_getUnicodeProperties(c, 2)&UPROPS_JG_MASK)>>UPROPS_JG_SHIFT;
+            i=(int32_t)(u_getUnicodeProperties(c, 2)&UPROPS_JT_MASK)>>UPROPS_JT_SHIFT;
             if(i==0 && c!=ZWNJ && c!=ZWJ && (FLAG(u_charType(c))&(_Mn|_Cf))!=0) {
                 i=(int32_t)U_JT_TRANSPARENT;
             }
@@ -305,9 +306,13 @@ u_getIntPropertyValue(UChar32 c, UProperty which) {
              *  - Assigned characters that are not listed explicitly are given the value
              *    "AL".
              *  - Unassigned characters are given the value "XX".
+             * ...
+             * E000..F8FF;XX # <Private Use, First>..<Private Use, Last>
+             * F0000..FFFFD;XX # <Plane 15 Private Use, First>..<Plane 15 Private Use, Last>
+             * 100000..10FFFD;XX # <Plane 16 Private Use, First>..<Plane 16 Private Use, Last>
              */
             i=(int32_t)(u_getUnicodeProperties(c, 0)&UPROPS_LB_MASK)>>UPROPS_LB_SHIFT;
-            if(i==0 && u_charType(c)!=0) {
+            if(i==0 && (type=u_charType(c))!=0 && type!=(int8_t)U_PRIVATE_USE_CHAR) {
                 i=(int32_t)U_LB_ALPHABETIC;
             }
             return i;
