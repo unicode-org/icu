@@ -97,8 +97,9 @@ U_DRAFT UCurrRegistryKey U_EXPORT2
  * @param key the registry key returned by a previous call to ucurr_register
  * @param status the in/out status code, no special meanings are assigned
  * @return TRUE if the currency for this key was successfully unregistered
+ * @draft ICU 2.6
  */
-U_STABLE UBool U_EXPORT2
+U_DRAFT UBool U_EXPORT2
     ucurr_unregister(UCurrRegistryKey key, UErrorCode* status);
 
 /**
