@@ -117,13 +117,15 @@ public class RbnfTest extends TestFmwk {
                         = new RuleBasedNumberFormat(Locale.US,
                         RuleBasedNumberFormat.DURATION);
         String[][] testData = {
+            { "3,600", "1:00:00" },		//move me and I fail
+            { "0", "0 sec." },
             { "1", "1 sec." },
             { "24", "24 sec." },
             { "60", "1:00" },
             { "73", "1:13" },
             { "145", "2:25" },
             { "666", "11:06" },
-            { "3,600", "1:00:00" },
+//            { "3,600", "1:00:00" },
             { "3,740", "1:02:20" },
             { "10,293", "2:51:33" }
         };
