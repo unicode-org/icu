@@ -18,9 +18,14 @@ static int32_t findOverlappingPosition(CompactByteArray* this_obj,
 /* internal constants*/
 
 
-int32_t ucmp8_getkUnicodeCount() { return UCMP8_kUnicodeCount;}
-int32_t ucmp8_getkBlockCount() { return UCMP8_kBlockCount;}
-void  ucmp8_initBogus(CompactByteArray* array)
+U_CAPI int32_t U_EXPORT2
+ucmp8_getkUnicodeCount() { return UCMP8_kUnicodeCount;}
+
+U_CAPI int32_t U_EXPORT2
+ucmp8_getkBlockCount() { return UCMP8_kBlockCount;}
+
+U_CAPI void U_EXPORT2
+ucmp8_initBogus(CompactByteArray* array)
 {
   CompactByteArray* this_obj = array;
 
@@ -38,7 +43,8 @@ void  ucmp8_initBogus(CompactByteArray* array)
 
 /* debug flags*/
 /*=======================================================*/
-void  ucmp8_init(CompactByteArray* array, int8_t defaultValue)
+U_CAPI void U_EXPORT2
+ucmp8_init(CompactByteArray* array, int8_t defaultValue)
 {
 /* set up the index array and the data array.
  * the index array always points into particular parts of the data array
@@ -99,7 +105,8 @@ void  ucmp8_init(CompactByteArray* array, int8_t defaultValue)
     }
 }
 
-CompactByteArray* ucmp8_open(int8_t defaultValue)
+U_CAPI CompactByteArray* U_EXPORT2
+ucmp8_open(int8_t defaultValue)
 {
 /* set up the index array and the data array.
  * the index array always points into particular parts of the data array
@@ -163,7 +170,8 @@ CompactByteArray* ucmp8_open(int8_t defaultValue)
   return this_obj;
 }
 
-CompactByteArray* ucmp8_openAdopt(uint16_t *indexArray,
+U_CAPI CompactByteArray* U_EXPORT2
+ucmp8_openAdopt(uint16_t *indexArray,
                   int8_t *newValues,
                   int32_t count)
 {
@@ -174,7 +182,8 @@ CompactByteArray* ucmp8_openAdopt(uint16_t *indexArray,
     return this_obj;
 }
 
-CompactByteArray* ucmp8_openAlias(uint16_t *indexArray,
+U_CAPI CompactByteArray* U_EXPORT2
+ucmp8_openAlias(uint16_t *indexArray,
                   int8_t *newValues,
                   int32_t count)
 {
@@ -187,7 +196,8 @@ CompactByteArray* ucmp8_openAlias(uint16_t *indexArray,
 
 /*=======================================================*/
 
-CompactByteArray* ucmp8_initAdopt(CompactByteArray *this_obj,
+U_CAPI CompactByteArray* U_EXPORT2
+ucmp8_initAdopt(CompactByteArray *this_obj,
                   uint16_t *indexArray,
                   int8_t *newValues,
                   int32_t count)
@@ -207,7 +217,8 @@ CompactByteArray* ucmp8_initAdopt(CompactByteArray *this_obj,
   return this_obj;
 }
 
-CompactByteArray* ucmp8_initAlias(CompactByteArray *this_obj,
+U_CAPI CompactByteArray* U_EXPORT2
+ucmp8_initAlias(CompactByteArray *this_obj,
                   uint16_t *indexArray,
                   int8_t *newValues,
                   int32_t count)
@@ -231,7 +242,8 @@ CompactByteArray* ucmp8_initAlias(CompactByteArray *this_obj,
 
 /*=======================================================*/
 
-void ucmp8_close(CompactByteArray* this_obj) 
+U_CAPI void U_EXPORT2
+ucmp8_close(CompactByteArray* this_obj) 
 {
   if(this_obj != NULL) {
     if(!this_obj->fAlias) {
@@ -252,7 +264,8 @@ void ucmp8_close(CompactByteArray* this_obj)
 
 /*=======================================================*/
  
-void ucmp8_expand(CompactByteArray* this_obj) 
+U_CAPI void U_EXPORT2
+ucmp8_expand(CompactByteArray* this_obj) 
 {
   /* can optimize later.
    * if we have to expand, then walk through the blocks instead of using Get
@@ -334,32 +347,32 @@ findOverlappingPosition(CompactByteArray* this_obj,
   return i;
 }
 
-UBool
+U_CAPI UBool U_EXPORT2
 ucmp8_isBogus(const CompactByteArray* this_obj)
 {
   return (UBool)(this_obj == NULL || this_obj->fBogus);
 }
 
-const int8_t*
+U_CAPI const int8_t* U_EXPORT2
 ucmp8_getArray(const CompactByteArray* this_obj)
 {
   return this_obj->fArray;
 }
 
-const uint16_t*
+U_CAPI const uint16_t* U_EXPORT2
 ucmp8_getIndex(const CompactByteArray* this_obj)
 {
   return this_obj->fIndex;
 }
 
-int32_t 
+U_CAPI int32_t U_EXPORT2
 ucmp8_getCount(const CompactByteArray* this_obj)
 {
   return this_obj->fCount;
 }
 
 
-void 
+U_CAPI void U_EXPORT2
 ucmp8_set(CompactByteArray* this_obj,
       UChar c,
       int8_t value)
@@ -373,7 +386,7 @@ ucmp8_set(CompactByteArray* this_obj,
 }
 
 
-void 
+U_CAPI void U_EXPORT2
 ucmp8_setRange(CompactByteArray* this_obj,
            UChar start,
            UChar end,
@@ -394,7 +407,7 @@ ucmp8_setRange(CompactByteArray* this_obj,
 
 /*=======================================================*/
  
-void 
+U_CAPI void U_EXPORT2
 ucmp8_compact(CompactByteArray* this_obj,
           uint32_t cycle) 
 {

@@ -2235,7 +2235,7 @@ unorm_internalNormalize(UChar *dest, int32_t destCapacity,
 }
 
 /** Public API for normalizing. */
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 unorm_normalize(const UChar *src, int32_t srcLength,
                 UNormalizationMode mode, int32_t option,
                 UChar *dest, int32_t destCapacity,

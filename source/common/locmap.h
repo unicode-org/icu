@@ -31,7 +31,8 @@
 #ifndef LOCMAP_H
 #define LOCMAP_H
 
-U_CAPI const char *uprv_defaultCodePageForLocale(const char *locale);
+U_CAPI const char* U_EXPORT2 
+uprv_defaultCodePageForLocale(const char *locale);
 
 #ifdef WIN32
 #define LANGUAGE_LCID(hostID) (uint16_t)(0x03FF & hostID)

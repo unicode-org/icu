@@ -36,7 +36,7 @@ static UConverter *gDefaultConverter = NULL;
 
 /* ---- String searching functions ---- */
 
-UChar*
+U_CAPI UChar* U_EXPORT2
 u_strchr(const UChar *s, UChar c) 
 {
   while (*s && *s != c) {
@@ -93,7 +93,7 @@ u_strchr32(const UChar *s, UChar32 c) {
 }
 
 /* Search for a codepoint in a string that matches one of the matchSet codepoints. */
-UChar *
+U_CAPI UChar * U_EXPORT2
 u_strpbrk(const UChar *string, const UChar *matchSet)
 {
     int32_t matchLen;
@@ -151,7 +151,7 @@ u_strpbrk(const UChar *string, const UChar *matchSet)
 }
 
 /* Search for a codepoint in a string that matches one of the matchSet codepoints. */
-int32_t
+U_CAPI int32_t U_EXPORT2
 u_strcspn(const UChar *string, const UChar *matchSet)
 {
     const UChar *foundStr = u_strpbrk(string, matchSet);
@@ -163,7 +163,7 @@ u_strcspn(const UChar *string, const UChar *matchSet)
 }
 
 /* Search for a codepoint in a string that does not match one of the matchSet codepoints. */
-int32_t
+U_CAPI int32_t U_EXPORT2
 u_strspn(const UChar *string, const UChar *matchSet)
 {
     UBool single = TRUE;
@@ -230,7 +230,7 @@ u_strspn(const UChar *string, const UChar *matchSet)
 
 /* ----- Text manipulation functions --- */
 
-UChar*
+U_CAPI UChar* U_EXPORT2
 u_strtok_r(UChar    *src, 
      const UChar    *delim,
            UChar   **saveState)
@@ -274,7 +274,7 @@ u_strtok_r(UChar    *src,
     return NULL;
 }
 
-UChar*
+U_CAPI UChar* U_EXPORT2
 u_strcat(UChar     *dst, 
     const UChar     *src)
 {
@@ -289,7 +289,7 @@ u_strcat(UChar     *dst,
     return anchor;
 }
 
-UChar* 
+U_CAPI UChar*  U_EXPORT2
 u_strncat(UChar     *dst, 
      const UChar     *src, 
      int32_t     n ) 
@@ -317,7 +317,7 @@ u_strncat(UChar     *dst,
 
 /* ----- Text property functions --- */
 
-int32_t  
+U_CAPI int32_t   U_EXPORT2
 u_strcmp(const UChar *s1, 
     const UChar *s2) 
 {
@@ -367,7 +367,7 @@ u_strcmpCodePointOrder(const UChar *s1, const UChar *s2) {
     return (int32_t)c1-(int32_t)c2;
 }
 
-int32_t  
+U_CAPI int32_t   U_EXPORT2
 u_strncmp(const UChar     *s1, 
      const UChar     *s2, 
      int32_t     n) 
@@ -420,7 +420,7 @@ u_strncmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t n) {
     return (int32_t)c1-(int32_t)c2;
 }
 
-UChar*
+U_CAPI UChar* U_EXPORT2
 u_strcpy(UChar     *dst, 
     const UChar     *src) 
 {
@@ -432,7 +432,7 @@ u_strcpy(UChar     *dst,
     return anchor;
 }
 
-UChar* 
+U_CAPI UChar*  U_EXPORT2
 u_strncpy(UChar     *dst, 
      const UChar     *src, 
      int32_t     n) 
@@ -445,7 +445,7 @@ u_strncpy(UChar     *dst,
     return anchor;
 }
 
-int32_t  
+U_CAPI int32_t   U_EXPORT2
 u_strlen(const UChar *s) 
 {
 #if U_SIZEOF_WCHAR_T == U_SIZEOF_UCHAR
@@ -500,17 +500,17 @@ u_countChar32(const UChar *s, int32_t length) {
     return count;
 }
 
-UChar *
+U_CAPI UChar * U_EXPORT2
 u_memcpy(UChar *dest, const UChar *src, int32_t count) {
     return (UChar *)uprv_memcpy(dest, src, count*U_SIZEOF_UCHAR);
 }
 
-UChar *
+U_CAPI UChar * U_EXPORT2
 u_memmove(UChar *dest, const UChar *src, int32_t count) {
     return (UChar *)uprv_memmove(dest, src, count*U_SIZEOF_UCHAR);
 }
 
-UChar *
+U_CAPI UChar * U_EXPORT2
 u_memset(UChar *dest, UChar c, int32_t count) {
     UChar *ptr = dest;
     UChar *limit = dest + count;
@@ -521,7 +521,7 @@ u_memset(UChar *dest, UChar c, int32_t count) {
     return dest;
 }
 
-int32_t
+U_CAPI int32_t U_EXPORT2
 u_memcmp(UChar *buf1, UChar *buf2, int32_t count) {
     UChar *limit = buf1 + count;
     int32_t result;
@@ -570,7 +570,7 @@ u_memcmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t count) {
     return (int32_t)c1-(int32_t)c2;
 }
 
-UChar *
+U_CAPI UChar * U_EXPORT2
 u_memchr(UChar *src, UChar ch, int32_t count) {
     UChar *ptr = src;
     UChar *limit = src + count;
@@ -585,7 +585,7 @@ u_memchr(UChar *src, UChar ch, int32_t count) {
     return NULL;
 }
 
-UChar *
+U_CAPI UChar * U_EXPORT2
 u_memchr32(UChar *src, UChar32 ch, int32_t count) {
     int32_t strItr = 0;
     int32_t lastIndex;
@@ -910,7 +910,8 @@ static int32_t u_astrnlen(const char *s1, int32_t n)
     return len;
 }
 
-UChar* u_uastrncpy(UChar *ucs1,
+U_CAPI UChar*  U_EXPORT2
+u_uastrncpy(UChar *ucs1,
            const char *s2,
            int32_t n)
 {
@@ -941,7 +942,8 @@ UChar* u_uastrncpy(UChar *ucs1,
   return ucs1;
 }
 
-UChar* u_uastrcpy(UChar *ucs1,
+U_CAPI UChar*  U_EXPORT2
+u_uastrcpy(UChar *ucs1,
           const char *s2 )
 {
   UErrorCode err = U_ZERO_ERROR;
@@ -980,7 +982,8 @@ static int32_t u_ustrnlen(const UChar *ucs1, int32_t n)
     return len;
 }
 
-char* u_austrncpy(char *s1,
+U_CAPI char*  U_EXPORT2
+u_austrncpy(char *s1,
         const UChar *ucs2,
         int32_t n)
 {
@@ -1011,7 +1014,8 @@ char* u_austrncpy(char *s1,
   return s1;
 }
 
-char* u_austrcpy(char *s1,
+U_CAPI char*  U_EXPORT2
+u_austrcpy(char *s1,
          const UChar *ucs2 )
 {
   UErrorCode err = U_ZERO_ERROR;
@@ -1043,7 +1047,7 @@ UBool ustring_cleanup(void) {
     return TRUE;
 }
 
-UConverter*
+U_CAPI UConverter* U_EXPORT2
 u_getDefaultConverter(UErrorCode *status)
 {
     UConverter *converter = NULL;
@@ -1070,7 +1074,7 @@ u_getDefaultConverter(UErrorCode *status)
     return converter;
 }
 
-void
+U_CAPI void U_EXPORT2
 u_releaseDefaultConverter(UConverter *converter)
 {
   if(gDefaultConverter == NULL) {

@@ -82,7 +82,8 @@ static pthread_mutex_t gPlatformMutex;
 #endif
 #endif /* ICU_USE_THREADS==1 */
 
-void umtx_lock(UMTX *mutex)
+U_CAPI void  U_EXPORT2
+umtx_lock(UMTX *mutex)
 {
 #if (ICU_USE_THREADS == 1)
     if (mutex == NULL)
@@ -116,7 +117,8 @@ void umtx_lock(UMTX *mutex)
 #endif /* ICU_USE_THREADS==1 */
 }
 
-void umtx_unlock(UMTX* mutex)
+U_CAPI void  U_EXPORT2
+umtx_unlock(UMTX* mutex)
 {
 #if (ICU_USE_THREADS==1)
     if(mutex == NULL)
@@ -143,7 +145,8 @@ void umtx_unlock(UMTX* mutex)
 #endif /* ICU_USE_THREADS == 1 */
 }
 
-U_CAPI void umtx_init(UMTX *mutex)
+U_CAPI void  U_EXPORT2
+umtx_init(UMTX *mutex)
 {
 #if (ICU_USE_THREADS == 1)
 
@@ -186,7 +189,8 @@ U_CAPI void umtx_init(UMTX *mutex)
 #endif /* ICU_USE_THREADS==1 */
 }
 
-U_CAPI void umtx_destroy(UMTX *mutex) {
+U_CAPI void  U_EXPORT2
+umtx_destroy(UMTX *mutex) {
 #if (ICU_USE_THREADS == 1)
     if (mutex == NULL) /* initialize the global mutex */
     {

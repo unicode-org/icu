@@ -188,14 +188,14 @@ static void _uhash_internalSetResizePolicy(UHashtable *hash, enum UHashResizePol
  * PUBLIC API
  ********************************************************************/
 
-U_CAPI UHashtable*
+U_CAPI UHashtable* U_EXPORT2
 uhash_open(UHashFunction keyHash, UKeyComparator keyComp,
            UErrorCode *status) {
 
     return _uhash_create(keyHash, keyComp, 3, status);
 }
 
-U_CAPI UHashtable*
+U_CAPI UHashtable* U_EXPORT2
 uhash_openSize(UHashFunction keyHash, UKeyComparator keyComp,
                int32_t size,
                UErrorCode *status) {
@@ -209,7 +209,7 @@ uhash_openSize(UHashFunction keyHash, UKeyComparator keyComp,
     return _uhash_create(keyHash, keyComp, i, status);
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 uhash_close(UHashtable *hash) {
     assert(hash != NULL);
     if (hash->elements != NULL) {
@@ -226,35 +226,35 @@ uhash_close(UHashtable *hash) {
     uprv_free(hash);
 }
 
-U_CAPI UHashFunction
+U_CAPI UHashFunction U_EXPORT2
 uhash_setKeyHasher(UHashtable *hash, UHashFunction fn) {
     UHashFunction result = hash->keyHasher;
     hash->keyHasher = fn;
     return result;
 }
 
-U_CAPI UKeyComparator
+U_CAPI UKeyComparator U_EXPORT2
 uhash_setKeyComparator(UHashtable *hash, UKeyComparator fn) {
     UKeyComparator result = hash->keyComparator;
     hash->keyComparator = fn;
     return result;
 }
 
-U_CAPI UObjectDeleter
+U_CAPI UObjectDeleter U_EXPORT2
 uhash_setKeyDeleter(UHashtable *hash, UObjectDeleter fn) {
     UObjectDeleter result = hash->keyDeleter;
     hash->keyDeleter = fn;
     return result;
 }
 
-U_CAPI UObjectDeleter
+U_CAPI UObjectDeleter U_EXPORT2
 uhash_setValueDeleter(UHashtable *hash, UObjectDeleter fn) {
     UObjectDeleter result = hash->valueDeleter;
     hash->valueDeleter = fn;
     return result;
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 uhash_setResizePolicy(UHashtable *hash, enum UHashResizePolicy policy) {
     _uhash_internalSetResizePolicy(hash, policy);
     hash->lowWaterMark  = (int32_t)(hash->length * hash->lowWaterRatio);
@@ -262,12 +262,12 @@ uhash_setResizePolicy(UHashtable *hash, enum UHashResizePolicy policy) {
     _uhash_rehash(hash);
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 uhash_count(const UHashtable *hash) {
     return hash->count;
 }
 
-U_CAPI void*
+U_CAPI void* U_EXPORT2
 uhash_get(const UHashtable *hash,
           const void* key) {
     UHashTok keyholder;
@@ -275,7 +275,7 @@ uhash_get(const UHashtable *hash,
     return _uhash_find(hash, keyholder, hash->keyHasher(keyholder))->value.pointer;
 }
 
-U_CAPI void*
+U_CAPI void* U_EXPORT2
 uhash_iget(const UHashtable *hash,
            int32_t key) {
     UHashTok keyholder;
@@ -283,7 +283,7 @@ uhash_iget(const UHashtable *hash,
     return _uhash_find(hash, keyholder, hash->keyHasher(keyholder))->value.pointer;
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 uhash_geti(const UHashtable *hash,
            const void* key) {
     UHashTok keyholder;
@@ -291,7 +291,7 @@ uhash_geti(const UHashtable *hash,
     return _uhash_find(hash, keyholder, hash->keyHasher(keyholder))->value.integer;
 }
 
-U_CAPI void*
+U_CAPI void* U_EXPORT2
 uhash_put(UHashtable *hash,
           void* key,
           void* value,
@@ -304,7 +304,7 @@ uhash_put(UHashtable *hash,
                       status).pointer;
 }
 
-void*
+U_CAPI void* U_EXPORT2
 uhash_iput(UHashtable *hash,
            int32_t key,
            void* value,
@@ -317,7 +317,7 @@ uhash_iput(UHashtable *hash,
                       status).pointer;
 }
 
-int32_t
+U_CAPI int32_t U_EXPORT2
 uhash_puti(UHashtable *hash,
            void* key,
            int32_t value,
@@ -330,7 +330,7 @@ uhash_puti(UHashtable *hash,
                       status).integer;
 }
 
-U_CAPI void*
+U_CAPI void* U_EXPORT2
 uhash_remove(UHashtable *hash,
              const void* key) {
     UHashTok keyholder;
@@ -338,7 +338,7 @@ uhash_remove(UHashtable *hash,
     return _uhash_remove(hash, keyholder).pointer;
 }
 
-U_CAPI void*
+U_CAPI void* U_EXPORT2
 uhash_iremove(UHashtable *hash,
               int32_t key) {
     UHashTok keyholder;
@@ -346,7 +346,7 @@ uhash_iremove(UHashtable *hash,
     return _uhash_remove(hash, keyholder).pointer;
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 uhash_removei(UHashtable *hash,
               const void* key) {
     UHashTok keyholder;
@@ -354,7 +354,7 @@ uhash_removei(UHashtable *hash,
     return _uhash_remove(hash, keyholder).integer;
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 uhash_removeAll(UHashtable *hash) {
     int32_t pos = -1;
     const UHashElement *e;
@@ -367,7 +367,7 @@ uhash_removeAll(UHashtable *hash) {
     assert(hash->count == 0);
 }
 
-U_CAPI const UHashElement*
+U_CAPI const UHashElement* U_EXPORT2
 uhash_find(const UHashtable *hash, const void* key) {
     UHashTok keyholder;
     const UHashElement *e;
@@ -376,7 +376,7 @@ uhash_find(const UHashtable *hash, const void* key) {
     return IS_EMPTY_OR_DELETED(e->hashcode) ? NULL : e;
 }
 
-U_CAPI const UHashElement*
+U_CAPI const UHashElement* U_EXPORT2
 uhash_nextElement(const UHashtable *hash, int32_t *pos) {
     /* Walk through the array until we find an element that is not
      * EMPTY and not DELETED.
@@ -394,7 +394,7 @@ uhash_nextElement(const UHashtable *hash, int32_t *pos) {
     return NULL;
 }
 
-U_CAPI void*
+U_CAPI void* U_EXPORT2
 uhash_removeElement(UHashtable *hash, const UHashElement* e) {
     assert(hash != NULL);
     assert(e != NULL);
@@ -411,7 +411,7 @@ uhash_removeElement(UHashtable *hash, const UHashElement* e) {
 /**
  * Return a UHashTok for an integer.
  */
-U_CAPI UHashTok
+U_CAPI UHashTok U_EXPORT2
 uhash_toki(int32_t i) {
     UHashTok tok;
     tok.integer = i;
@@ -421,7 +421,7 @@ uhash_toki(int32_t i) {
 /**
  * Return a UHashTok for a pointer.
  */
-U_CAPI UHashTok
+U_CAPI UHashTok U_EXPORT2
 uhash_tokp(void* p) {
     UHashTok tok;
     tok.pointer = p;
@@ -455,23 +455,23 @@ uhash_tokp(void* p) {
     }                                         \
     return hash
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 uhash_hashUChars(const UHashTok key) {
     STRING_HASH(UChar, key.pointer, u_strlen(p), *p);
 }
 
 /* Used by UnicodeString to compute its hashcode - Not public API. */
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 uhash_hashUCharsN(const UChar *str, int32_t length) {
     STRING_HASH(UChar, str, length, *p);
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 uhash_hashChars(const UHashTok key) {
     STRING_HASH(uint8_t, key.pointer, uprv_strlen((char*)p), *p);
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 uhash_hashIChars(const UHashTok key) {
     STRING_HASH(uint8_t, key.pointer, uprv_strlen((char*)p), uprv_tolower(*p));
 }
@@ -480,7 +480,7 @@ uhash_hashIChars(const UHashTok key) {
  * PUBLIC Comparator Functions
  ********************************************************************/
 
-U_CAPI UBool
+U_CAPI UBool U_EXPORT2
 uhash_compareUChars(const UHashTok key1, const UHashTok key2) {
     const UChar *p1 = (const UChar*) key1.pointer;
     const UChar *p2 = (const UChar*) key2.pointer;
@@ -497,7 +497,7 @@ uhash_compareUChars(const UHashTok key1, const UHashTok key2) {
     return (UBool)(*p1 == *p2);
 }
 
-U_CAPI UBool
+U_CAPI UBool U_EXPORT2
 uhash_compareChars(const UHashTok key1, const UHashTok key2) {
     const char *p1 = (const char*) key1.pointer;
     const char *p2 = (const char*) key2.pointer;
@@ -514,7 +514,7 @@ uhash_compareChars(const UHashTok key1, const UHashTok key2) {
     return (UBool)(*p1 == *p2);
 }
 
-U_CAPI UBool
+U_CAPI UBool U_EXPORT2
 uhash_compareIChars(const UHashTok key1, const UHashTok key2) {
     const char *p1 = (const char*) key1.pointer;
     const char *p2 = (const char*) key2.pointer;
@@ -535,12 +535,12 @@ uhash_compareIChars(const UHashTok key1, const UHashTok key2) {
  * PUBLIC int32_t Support Functions
  ********************************************************************/
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 uhash_hashLong(const UHashTok key) {
     return key.integer;
 }
 
-U_CAPI UBool
+U_CAPI UBool U_EXPORT2
 uhash_compareLong(const UHashTok key1, const UHashTok key2) {
     return (UBool)(key1.integer == key2.integer);
 }
@@ -549,7 +549,7 @@ uhash_compareLong(const UHashTok key1, const UHashTok key2) {
  * PUBLIC Deleter Functions
  ********************************************************************/
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 uhash_freeBlock(void *obj) {
     uprv_free(obj);
 }

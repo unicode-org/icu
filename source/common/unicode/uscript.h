@@ -81,7 +81,7 @@ typedef enum UScriptCode {
  * @return The number of script codes filled in the buffer passed in 
  * @draft ICU 2.0
  */
-U_CAPI int32_t 
+U_CAPI int32_t  U_EXPORT2 
 uscript_getCode(const char* nameOrAbbrOrLocale,UScriptCode* fillIn,int32_t capacity,UErrorCode *err);
 
 /**
@@ -91,7 +91,7 @@ uscript_getCode(const char* nameOrAbbrOrLocale,UScriptCode* fillIn,int32_t capac
  * @return script name as a string in full as given in TR#24
  * @draft ICU 2.0
  */
-U_CAPI const char* 
+U_CAPI const char*  U_EXPORT2 
 uscript_getName(UScriptCode scriptCode);
 
 /**
@@ -101,7 +101,7 @@ uscript_getName(UScriptCode scriptCode);
  * @return script abbreviated name as a string  as given in TR#24
  * @draft ICU 2.0
  */
-U_CAPI const char* 
+U_CAPI const char*  U_EXPORT2 
 uscript_getShortName(UScriptCode scriptCode);
 
 /** 
@@ -112,7 +112,7 @@ uscript_getShortName(UScriptCode scriptCode);
  * @return The UScriptCode 
  * @draft ICU 2.0
  */
-U_CAPI UScriptCode 
+U_CAPI UScriptCode  U_EXPORT2 
 uscript_getScript(UChar32 codepoint, UErrorCode *err);
 
 #endif

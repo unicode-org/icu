@@ -114,7 +114,7 @@ typedef enum {
  * @see UConverterToUnicodeArgs
  * @stable
  */
-typedef void (*UConverterToUCallback) (
+typedef void (U_EXPORT2 *UConverterToUCallback) (
                   const void* context,
                   UConverterToUnicodeArgs *args,
                   const char *codePoints,
@@ -134,7 +134,7 @@ typedef void (*UConverterToUCallback) (
  * @see ucnv_setFromUCallBack
  * @stable
  */
-typedef void (*UConverterFromUCallback) (
+typedef void (U_EXPORT2 *UConverterFromUCallback) (
                     const void* context,
                     UConverterFromUnicodeArgs *args,
                     const UChar* codeUnits,
@@ -334,7 +334,7 @@ ucnv_openCCSID (int32_t codepage,
  * @return pointer to the new clone
  * @draft ICU 1.8
  */
-U_CAPI UConverter *
+U_CAPI UConverter * U_EXPORT2 
 ucnv_safeClone(const UConverter *cnv, 
                void             *stackBuffer,
                int32_t          *pBufferSize, 
@@ -451,7 +451,7 @@ ucnv_reset (UConverter * converter);
  * @param converter the Unicode converter
  * @draft ICU 1.8
  */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 ucnv_resetToUnicode(UConverter *converter);
 
 /**
@@ -462,7 +462,7 @@ ucnv_resetToUnicode(UConverter *converter);
  * @param converter the Unicode converter
  * @draft ICU 1.8
  */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 ucnv_resetFromUnicode(UConverter *converter);
 
 /**
@@ -983,7 +983,7 @@ ucnv_getAvailableName (int32_t n);
  * @return number of names on alias list for given alias
  * @stable
  */
-U_CAPI uint16_t
+U_CAPI uint16_t U_EXPORT2 
 ucnv_countAliases(const char *alias, UErrorCode *pErrorCode);
 
 /**
@@ -997,7 +997,7 @@ ucnv_countAliases(const char *alias, UErrorCode *pErrorCode);
  * @see ucnv_countAliases
  * @stable
  */
-U_CAPI const char *
+U_CAPI const char * U_EXPORT2 
 ucnv_getAlias(const char *alias, uint16_t n, UErrorCode *pErrorCode);
 
 /**
@@ -1012,7 +1012,7 @@ ucnv_getAlias(const char *alias, uint16_t n, UErrorCode *pErrorCode);
  * @param pErrorCode result of operation
  * @stable
  */
-U_CAPI void
+U_CAPI void U_EXPORT2 
 ucnv_getAliases(const char *alias, const char **aliases, UErrorCode *pErrorCode);
 
 /**

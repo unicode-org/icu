@@ -472,7 +472,7 @@ ucnv_createConverter (const char *converterName, UErrorCode * err)
     return myUConverter;
 }
 
-UConverterSharedData*
+U_CAPI UConverterSharedData* U_EXPORT2
 ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *status)
 {
     /* UDataInfo info; -- necessary only if some converters have different formatVersion */
@@ -539,7 +539,7 @@ ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *status)
 
 /*Frees all shared immutable objects that aren't referred to (reference count = 0)
  */
-int32_t
+U_CAPI int32_t U_EXPORT2
 ucnv_flushCache ()
 {
     UConverterSharedData *mySharedData = NULL;

@@ -117,7 +117,7 @@ struct UConverter {
      * Error function pointer called when conversion issues
      * occur during a ucnv_fromUnicode call
      */
-    void (*fromUCharErrorBehaviour) (const void *context,
+    void (U_EXPORT2 *fromUCharErrorBehaviour) (const void *context,
                                      UConverterFromUnicodeArgs *args,
                                      const UChar *codeUnits,
                                      int32_t length,
@@ -128,7 +128,7 @@ struct UConverter {
      * Error function pointer called when conversion issues
      * occur during a T_UConverter_toUnicode call
      */
-    void (*fromCharErrorBehaviour) (const void *context,
+    void (U_EXPORT2 *fromCharErrorBehaviour) (const void *context,
                                     UConverterToUnicodeArgs *args,
                                     const char *codeUnits,
                                     int32_t length,

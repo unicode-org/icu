@@ -70,17 +70,20 @@ static const UAmbiguousConverter ambiguousConverters[]={
     { "ISO_2022,locale=ko,version=0", 0x20a9 }
 };
 
-const char* ucnv_getDefaultName ()
+U_CAPI const char*  U_EXPORT2
+ucnv_getDefaultName ()
 {
     return ucnv_io_getDefaultConverterName();
 }
 
-void   ucnv_setDefaultName (const char *converterName)
+U_CAPI void U_EXPORT2
+ucnv_setDefaultName (const char *converterName)
 {
   ucnv_io_setDefaultConverterName(converterName);
 }
 /*Calls through createConverter */
-UConverter* ucnv_open (const char *name,
+U_CAPI UConverter* U_EXPORT2
+ucnv_open (const char *name,
                        UErrorCode * err)
 {
     if (err == NULL || U_FAILURE (*err)) {
@@ -91,7 +94,8 @@ UConverter* ucnv_open (const char *name,
 }
 
 /*Extracts the UChar* to a char* and calls through createConverter */
-UConverter*  ucnv_openU (const UChar * name,
+U_CAPI UConverter*   U_EXPORT2
+ucnv_openU (const UChar * name,
                          UErrorCode * err)
 {
     char asciiName[UCNV_MAX_CONVERTER_NAME_LENGTH];
@@ -110,9 +114,10 @@ UConverter*  ucnv_openU (const UChar * name,
 
 /*Assumes a $platform-#codepage.$CONVERTER_FILE_EXTENSION scheme and calls
  *through createConverter*/
-UConverter*  ucnv_openCCSID (int32_t codepage,
-                             UConverterPlatform platform,
-                             UErrorCode * err)
+U_CAPI UConverter*   U_EXPORT2
+ucnv_openCCSID (int32_t codepage,
+                UConverterPlatform platform,
+                UErrorCode * err)
 {
     char myName[UCNV_MAX_CONVERTER_NAME_LENGTH];
     int32_t myNameLen;
@@ -133,7 +138,8 @@ UConverter*  ucnv_openCCSID (int32_t codepage,
 and created from a converter that is shared across threads.
 */
 
-UConverter *ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pBufferSize, UErrorCode *status)
+U_CAPI UConverter* U_EXPORT2
+ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pBufferSize, UErrorCode *status)
 {
     UConverter * localConverter;
     int32_t bufferSizeNeeded;
@@ -199,7 +205,8 @@ UConverter *ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pB
 /*Decreases the reference counter in the shared immutable section of the object
  *and frees the mutable part*/
 
-void ucnv_close (UConverter * converter)
+U_CAPI void  U_EXPORT2
+ucnv_close (UConverter * converter)
 {
     /* first, notify the callback functions that the converter is closed */
     UConverterToUnicodeArgs toUArgs = {
@@ -253,7 +260,8 @@ void ucnv_close (UConverter * converter)
 
 /*returns a single Name from the list, will return NULL if out of bounds
  */
-const char*  ucnv_getAvailableName (int32_t n)
+U_CAPI const char*   U_EXPORT2
+ucnv_getAvailableName (int32_t n)
 {
   if (0 <= n && n <= 0xffff) {
     UErrorCode err = U_ZERO_ERROR;
@@ -265,13 +273,14 @@ const char*  ucnv_getAvailableName (int32_t n)
   return NULL;
 }
 
-int32_t  ucnv_countAvailable ()
+U_CAPI int32_t   U_EXPORT2
+ucnv_countAvailable ()
 {
     UErrorCode err = U_ZERO_ERROR;
     return ucnv_io_countAvailableConverters(&err);
 }
 
-U_CAPI uint16_t
+U_CAPI uint16_t U_EXPORT2
 ucnv_countAliases(const char *alias, UErrorCode *pErrorCode)
 {
     const char *p;
@@ -279,13 +288,13 @@ ucnv_countAliases(const char *alias, UErrorCode *pErrorCode)
 }
 
 
-U_CAPI const char *
+U_CAPI const char* U_EXPORT2
 ucnv_getAlias(const char *alias, uint16_t n, UErrorCode *pErrorCode)
 {
     return ucnv_io_getAlias(alias, n, pErrorCode);
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 ucnv_getAliases(const char *alias, const char **aliases, UErrorCode *pErrorCode)
 {
     const char *p;
@@ -298,17 +307,18 @@ ucnv_getAliases(const char *alias, const char **aliases, UErrorCode *pErrorCode)
     }
 }
 
-U_CAPI uint16_t
+U_CAPI uint16_t U_EXPORT2
 ucnv_countStandards(void)
 {
     UErrorCode err = U_ZERO_ERROR;
     return ucnv_io_countStandards(&err);
 }
 
-void   ucnv_getSubstChars (const UConverter * converter,
-                           char *mySubChar,
-                           int8_t * len,
-                           UErrorCode * err)
+U_CAPI void    U_EXPORT2
+ucnv_getSubstChars (const UConverter * converter,
+                    char *mySubChar,
+                    int8_t * len,
+                    UErrorCode * err)
 {
     if (U_FAILURE (*err))
         return;
@@ -325,10 +335,11 @@ void   ucnv_getSubstChars (const UConverter * converter,
     *len = converter->subCharLen; /*store # of bytes copied to buffer */
 }
 
-void   ucnv_setSubstChars (UConverter * converter,
-                           const char *mySubChar,
-                           int8_t len,
-                           UErrorCode * err)
+U_CAPI void    U_EXPORT2
+ucnv_setSubstChars (UConverter * converter,
+                    const char *mySubChar,
+                    int8_t len,
+                    UErrorCode * err)
 {
     if (U_FAILURE (*err))
         return;
@@ -354,7 +365,7 @@ void   ucnv_setSubstChars (UConverter * converter,
     return;
 }
 
-int32_t
+U_CAPI int32_t U_EXPORT2
 ucnv_getDisplayName(const UConverter *cnv,
                     const char *displayLocale,
                     UChar *displayName, int32_t displayNameCapacity,
@@ -454,33 +465,39 @@ static void _reset(UConverter *converter, UConverterResetChoice choice) {
     }
 }
 
-void ucnv_reset(UConverter *converter)
+U_CAPI void  U_EXPORT2
+ucnv_reset(UConverter *converter)
 {
     _reset(converter, UCNV_RESET_BOTH);
 }
 
-void ucnv_resetToUnicode(UConverter *converter)
+U_CAPI void  U_EXPORT2
+ucnv_resetToUnicode(UConverter *converter)
 {
     _reset(converter, UCNV_RESET_TO_UNICODE);
 }
 
-void ucnv_resetFromUnicode(UConverter *converter)
+U_CAPI void  U_EXPORT2
+ucnv_resetFromUnicode(UConverter *converter)
 {
     _reset(converter, UCNV_RESET_FROM_UNICODE);
 }
 
-int8_t  ucnv_getMaxCharSize (const UConverter * converter)
+U_CAPI int8_t   U_EXPORT2
+ucnv_getMaxCharSize (const UConverter * converter)
 {
     return converter->sharedData->staticData->maxBytesPerChar;
 }
 
 
-int8_t  ucnv_getMinCharSize (const UConverter * converter)
+U_CAPI int8_t   U_EXPORT2
+ucnv_getMinCharSize (const UConverter * converter)
 {
     return converter->sharedData->staticData->minBytesPerChar;
 }
 
-const char*  ucnv_getName (const UConverter * converter, UErrorCode * err)
+U_CAPI const char*   U_EXPORT2
+ucnv_getName (const UConverter * converter, UErrorCode * err)
      
 {
     if (U_FAILURE (*err))
@@ -493,7 +510,8 @@ const char*  ucnv_getName (const UConverter * converter, UErrorCode * err)
     return converter->sharedData->staticData->name;
 }
 
-int32_t  ucnv_getCCSID (const UConverter * converter,
+U_CAPI int32_t   U_EXPORT2
+ucnv_getCCSID (const UConverter * converter,
                         UErrorCode * err)
 {
     if (U_FAILURE (*err))
@@ -503,7 +521,8 @@ int32_t  ucnv_getCCSID (const UConverter * converter,
 }
 
 
-UConverterPlatform  ucnv_getPlatform (const UConverter * converter,
+U_CAPI UConverterPlatform   U_EXPORT2
+ucnv_getPlatform (const UConverter * converter,
                                       UErrorCode * err)
 {
     if (U_FAILURE (*err))
@@ -530,7 +549,8 @@ U_CAPI void U_EXPORT2
     *context = converter->fromUContext;
 }
 
-void   ucnv_setToUCallBack (UConverter * converter,
+U_CAPI void    U_EXPORT2
+ucnv_setToUCallBack (UConverter * converter,
                             UConverterToUCallback newAction,
                             const void* newContext,
                             UConverterToUCallback *oldAction,
@@ -545,7 +565,8 @@ void   ucnv_setToUCallBack (UConverter * converter,
     converter->toUContext = newContext;
 }
 
-void ucnv_setFromUCallBack (UConverter * converter,
+U_CAPI void  U_EXPORT2
+ucnv_setFromUCallBack (UConverter * converter,
                             UConverterFromUCallback newAction,
                             const void* newContext,
                             UConverterFromUCallback *oldAction,
@@ -560,7 +581,8 @@ void ucnv_setFromUCallBack (UConverter * converter,
     converter->fromUContext = newContext;
 }
 
-void ucnv_fromUnicode (UConverter * _this,
+U_CAPI void  U_EXPORT2
+ucnv_fromUnicode (UConverter * _this,
                        char **target,
                        const char *targetLimit,
                        const UChar ** source,
@@ -655,14 +677,15 @@ void ucnv_fromUnicode (UConverter * _this,
 
 
 
-void   ucnv_toUnicode (UConverter * _this,
-                       UChar ** target,
-                       const UChar * targetLimit,
-                       const char **source,
-                       const char *sourceLimit,
-                       int32_t* offsets,
-                       UBool flush,
-                       UErrorCode * err)
+U_CAPI void    U_EXPORT2
+ucnv_toUnicode (UConverter * _this,
+                UChar ** target,
+                const UChar * targetLimit,
+                const char **source,
+                const char *sourceLimit,
+                int32_t* offsets,
+                UBool flush,
+                UErrorCode * err)
 {
     UConverterToUnicodeArgs args;
     const UChar *t;
@@ -745,7 +768,7 @@ void   ucnv_toUnicode (UConverter * _this,
     return;
 }
 
-int32_t
+U_CAPI int32_t U_EXPORT2
 ucnv_fromUChars(UConverter *cnv,
                 char *dest, int32_t destCapacity,
                 const UChar *src, int32_t srcLength,
@@ -805,7 +828,7 @@ ucnv_fromUChars(UConverter *cnv,
     return u_terminateChars(originalDest, destCapacity, destLength, pErrorCode);
 }
 
-int32_t
+U_CAPI int32_t U_EXPORT2
 ucnv_toUChars(UConverter *cnv,
               UChar *dest, int32_t destCapacity,
               const char *src, int32_t srcLength,
@@ -867,10 +890,11 @@ ucnv_toUChars(UConverter *cnv,
     return u_terminateUChars(originalDest, destCapacity, destLength, pErrorCode);
 }
 
-UChar32 ucnv_getNextUChar(UConverter * converter,
-                          const char **source,
-                          const char *sourceLimit,
-                          UErrorCode * err)
+U_CAPI UChar32  U_EXPORT2
+ucnv_getNextUChar(UConverter * converter,
+                  const char **source,
+                  const char *sourceLimit,
+                  UErrorCode * err)
 {
     UConverterToUnicodeArgs args;
     UChar32 ch;
@@ -925,7 +949,7 @@ UChar32 ucnv_getNextUChar(UConverter * converter,
     return ch;
 }
 
-int32_t
+U_CAPI int32_t U_EXPORT2
 ucnv_convert(const char *toConverterName, const char *fromConverterName,
              char *target, int32_t targetSize,
              const char *source, int32_t sourceSize,
@@ -1072,7 +1096,8 @@ ucnv_convert(const char *toConverterName, const char *fromConverterName,
     return u_terminateChars(target, targetSize, targetCapacity, pErrorCode);
 }
 
-UConverterType ucnv_getType(const UConverter* converter)
+U_CAPI UConverterType  U_EXPORT2
+ucnv_getType(const UConverter* converter)
 {
     int8_t type = converter->sharedData->staticData->conversionType;
     if(type == UCNV_MBCS) {
@@ -1081,9 +1106,10 @@ UConverterType ucnv_getType(const UConverter* converter)
     return (UConverterType)type;
 }
 
-void ucnv_getStarters(const UConverter* converter, 
-                      UBool starters[256],
-                      UErrorCode* err)
+U_CAPI void  U_EXPORT2
+ucnv_getStarters(const UConverter* converter, 
+                 UBool starters[256],
+                 UErrorCode* err)
 {
     if (err == NULL || U_FAILURE(*err)) {
         return;
@@ -1123,9 +1149,10 @@ static const UAmbiguousConverter *ucnv_getAmbiguous(const UConverter *cnv)
     return NULL;
 }
 
-void ucnv_fixFileSeparator(const UConverter *cnv, 
-                           UChar* source, 
-                           int32_t sourceLength) {
+U_CAPI void  U_EXPORT2
+ucnv_fixFileSeparator(const UConverter *cnv, 
+                      UChar* source, 
+                      int32_t sourceLength) {
     const UAmbiguousConverter *a;
     int32_t i;
     UChar variant5c;
@@ -1143,21 +1170,24 @@ void ucnv_fixFileSeparator(const UConverter *cnv,
     }
 }
 
-UBool ucnv_isAmbiguous(const UConverter *cnv) {
+U_CAPI UBool  U_EXPORT2
+ucnv_isAmbiguous(const UConverter *cnv) {
     return (UBool)(ucnv_getAmbiguous(cnv)!=NULL);
 }
 
-void ucnv_setFallback(UConverter *cnv, UBool usesFallback)
+U_CAPI void  U_EXPORT2
+ucnv_setFallback(UConverter *cnv, UBool usesFallback)
 {
     cnv->useFallback = usesFallback;
 }
 
-UBool ucnv_usesFallback(const UConverter *cnv)
+U_CAPI UBool  U_EXPORT2
+ucnv_usesFallback(const UConverter *cnv)
 {
     return cnv->useFallback;
 }
 
-void 
+U_CAPI void  U_EXPORT2
 ucnv_getInvalidChars (const UConverter * converter,
                       char *errBytes,
                       int8_t * len,
@@ -1183,7 +1213,7 @@ ucnv_getInvalidChars (const UConverter * converter,
     }
 }
 
-void 
+U_CAPI void  U_EXPORT2
 ucnv_getInvalidUChars (const UConverter * converter,
                        UChar *errChars,
                        int8_t * len,

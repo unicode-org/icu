@@ -35,7 +35,8 @@ ucln_registerCleanup(ECleanupLibraryType type,
     }
 }
 
-void u_cleanup(void)
+U_CAPI void U_EXPORT2
+u_cleanup(void)
 {
 
     ECleanupLibraryType libType = UCLN_START;
