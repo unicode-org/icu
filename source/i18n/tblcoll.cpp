@@ -483,6 +483,18 @@ int32_t RuleBasedCollator::hashCode() const
 }
 
 /**
+* return the locale of this collator
+*/
+const Locale RuleBasedCollator::getLocale(UErrorCode &status) const {
+  const char *result = ucol_getLocale(ucollator, &status);
+  if(result == NULL) {
+    return Locale("");
+  } else {
+    return Locale(result);
+  }
+}
+
+/**
 * Set the decomposition mode of the Collator object.
 * @param the new decomposition mode
 * @see Collator#getDecomposition

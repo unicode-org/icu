@@ -23,6 +23,7 @@
 #include "bocsu.h"
 
 #include "unormimp.h"
+#include "uresimp.h"
 #include "cstring.h"
 #include "umutex.h"
 #include "uhash.h"
@@ -280,7 +281,13 @@ ucol_open(    const    char         *loc,
   if(*status == U_MISSING_RESOURCE_ERROR) { /* if we don't find tailoring, we'll fallback to UCA */
     *status = U_USING_DEFAULT_ERROR;
     result = ucol_initCollator(UCA->image, result, status);
-    /*result = UCA;*/
+    // if we use UCA, real locale is root
+    result->rb = ures_open(NULL, "", status);
+    if(U_FAILURE(*status)) {
+      goto clean;
+    }
+    ures_close(binary);
+    ures_close(b);
     result->hasRealData = FALSE;
   } else if(U_SUCCESS(*status)) { /* otherwise, we'll pick a collation data that exists */
     int32_t len = 0;
@@ -302,16 +309,25 @@ ucol_open(    const    char         *loc,
       }
       result->hasRealData = FALSE;
     }
+    const char *realCollationDataLocale = ures_getLocale(binary, status);
+    ures_close(binary);
+    // if the real data came from the fallback, we want to drag around 
+    // the real resource bundle
+    if(uprv_strcmp(ures_getLocale(b, status), realCollationDataLocale) != NULL) {
+      result->rb = ures_open(NULL, realCollationDataLocale, status);
+      if(U_FAILURE(*status)) {
+        goto clean;
+      }
+      ures_close(b);
+    } else { // otherwise, we'll keep the initial RB around
+      result->rb = b;
+    }
   } else { /* There is another error, and we're just gonna clean up */
 clean:
     ures_close(b);
     ures_close(binary);
     return NULL;
   }
-
-  result->rb = b;
-  ures_close(binary);
-
   return result;
 }
 
@@ -5638,5 +5654,18 @@ ucol_equal(        const    UCollator        *coll,
 {
   return (ucol_strcoll(coll, source, sourceLength, target, targetLength)
       == UCOL_EQUAL);
+}
+
+/* returns the locale name the collation data comes from */
+U_CAPI const char * U_EXPORT2
+ucol_getLocale(const UCollator *coll, UErrorCode *status) {
+  if(status == NULL || U_FAILURE(*status)) {
+    return NULL;
+  }
+  if(coll->rb != NULL) {
+    return ures_getLocale(coll->rb, status);
+  } else {
+    return NULL;
+  }
 }
 

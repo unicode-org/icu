@@ -744,6 +744,19 @@ ucol_setNormalization(  UCollator        *coll,
             UNormalizationMode    mode);
 
 /**
+ * gets the locale name of the collator. If the collator
+ * is instantiated from the rules, then this function returns
+ * NULL.
+ * @param coll The UCollator for which the locale is needed
+ * @param status error code of the operation
+ * @return real locale name from which the collation data comes. 
+ *         If the collator was instantiated from rules, returns
+ *         NULL.
+ */
+U_CAPI const char * U_EXPORT2
+ucol_getLocale(const UCollator *coll, UErrorCode *status);
+
+/**
  *@deprecated Remove after Aug 2002
  */
 #ifdef U_USE_DEPRECATED_FORMAT_API
