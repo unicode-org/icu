@@ -4616,10 +4616,17 @@ static void TestTailorNULL( void ) {
 
     rlen = u_unescape(rule, rlz, RULE_BUFFER_LEN);
     coll = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT,NULL, &status);
-    res = ucol_strcoll(coll, &a, 1, &null, 1);
-    if(res != UCOL_LESS) {
-        log_err("NULL was not tailored properly!\n");
+
+    if(U_FAILURE(status)) {
+        log_err("Could not open default collator!\n");
+    } else {
+        res = ucol_strcoll(coll, &a, 1, &null, 1);
+
+        if(res != UCOL_LESS) {
+            log_err("NULL was not tailored properly!\n");
+        }
     }
+
     ucol_close(coll);
 }
 

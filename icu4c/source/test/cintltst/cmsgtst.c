@@ -998,10 +998,11 @@ static void OpenMessageFormatTest(void)
     umsg_toPattern(f1,result,256,&status);
     if(U_FAILURE(status) ){
         log_err("umsg_toPattern method failed. Error: %s \n",u_errorName(status));
-    }
-    if(u_strcmp(result,pattern)!=0){
-        u_UCharsToChars(result,cresult,256);
-        log_err("umsg_toPattern method failed. Expected: %s Got: %s \n",PAT,cresult);
+    } else {
+        if(u_strcmp(result,pattern)!=0){
+            u_UCharsToChars(result,cresult,256);
+            log_err("umsg_toPattern method failed. Expected: %s Got: %s \n",PAT,cresult);
+        }
     }
     /* umsg_format umsg_parse */
 
