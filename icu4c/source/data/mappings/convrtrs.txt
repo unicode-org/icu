@@ -99,20 +99,20 @@
 
 # Fully algorithmic converters
 
-UTF-8 { IANA* MIME* }           ibm-1208 cp1208
+UTF-8 { IANA* MIME* }           ibm-1208 ibm-1209 ibm-5304 ibm-5305 cp1208 cp65001
 
 # The ICU 2.2 UTF-16/32 converters detect and write a BOM.
-UTF-16 { IANA* MIME* }          ISO-10646-UCS-2 { IANA } csUnicode ibm-17584 ibm-13488 ibm-1200 cp1200 ucs-2
-UTF-16BE { IANA* MIME* }        UTF16_BigEndian x-utf-16be
-UTF-16LE { IANA* MIME* }        UTF16_LittleEndian x-utf-16le
+UTF-16 { IANA* MIME* }          ISO-10646-UCS-2 { IANA } csUnicode ucs-2
+UTF-16BE { IANA* MIME* }        UTF16_BigEndian x-utf-16be ibm-1200 ibm-1201 ibm-5297 ibm-13488 ibm-17584 cp1201
+UTF-16LE { IANA* MIME* }        UTF16_LittleEndian x-utf-16le ibm-1202 ibm-13490 ibm-17586 cp1200
 
 # ICU-specific names for special uses
 UTF16_PlatformEndian
 UTF16_OppositeEndian
 
-UTF-32 { IANA* MIME* }          ISO-10646-UCS-4 { IANA } csUCS4 ucs-4 ibm-1232
-UTF-32BE { IANA* }              UTF32_BigEndian
-UTF-32LE { IANA* }              UTF32_LittleEndian
+UTF-32 { IANA* MIME* }          ISO-10646-UCS-4 { IANA } csUCS4 ucs-4
+UTF-32BE { IANA* }              UTF32_BigEndian ibm-1232 ibm-1233
+UTF-32LE { IANA* }              UTF32_LittleEndian ibm-1234
 
 # ICU-specific names for special uses
 UTF32_PlatformEndian
@@ -127,7 +127,7 @@ UTF32_OppositeEndian
 # By choosing the option "version=1", set O will be escaped instead.
 # For example:
 #     utf7Converter=ucnv_open("UTF-7,version=1");
-UTF-7 { IANA* MIME* }
+UTF-7 { IANA* MIME* }           cp65000
 
 SCSU { IANA* }
 BOCU-1
