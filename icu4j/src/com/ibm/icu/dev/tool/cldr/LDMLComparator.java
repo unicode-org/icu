@@ -1066,6 +1066,14 @@ public class LDMLComparator {
                      }
                      
                  }
+                 if(m_Vetting) { // TODO: all?
+                     Node keyNode = attr.getNamedItem("key");
+                     String keyIndex="";
+                     if(keyNode!=null){
+                         String temp =keyNode.getNodeValue();
+                         index = index + " (" + temp + ")";
+                     }
+                 }
                  String nodeValue = "";
                  Node valueNode = childOfSource.getFirstChild();
                  if(valueNode != null){
