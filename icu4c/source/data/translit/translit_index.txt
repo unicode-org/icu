@@ -103,8 +103,10 @@ translit_index {
 
 // Compound rules
 
-{ "Latin-Hangul", "alias", "Latin-Jamo;Jamo-Hangul", "" },
-{ "Hangul-Latin", "alias", "Hangul-Jamo;Jamo-Latin", "" },
+/// TODO
+/// Add the appropriate compound filters here
+{ "Latin-Hangul", "alias", "Latin-Jamo;[\u1100-\u11FF]NFC", "" },
+{ "Hangul-Latin", "alias", "[\uAC00-\uD7AF]NFD;Jamo-Latin", "" },
 
 // Inter-Indic composed rules
 
