@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/UTF8StreamReader.java,v $
-* $Date: 2001/08/31 00:19:16 $
-* $Revision: 1.2 $
+* $Date: 2001/10/25 20:32:38 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -35,7 +35,7 @@ public final class UTF8StreamReader extends Reader {
     private InputStream input;
     private boolean checkIrregular = true;
 
-    UTF8StreamReader(InputStream stream, int buffersize) {
+    public UTF8StreamReader(InputStream stream, int buffersize) {
         if (buffersize < 1) {
             throw new IllegalArgumentException("UTF8StreamReader buffersize must be >= 1");
         }

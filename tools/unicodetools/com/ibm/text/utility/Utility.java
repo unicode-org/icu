@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2001/09/19 23:33:52 $
-* $Revision: 1.4 $
+* $Date: 2001/10/25 20:32:38 $
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -45,23 +45,23 @@ public final class Utility {    // COMMON UTILITIES
         }
     }
 
-    public static int setBits(int source, int start, int end) {
+    public static long setBits(long source, int start, int end) {
         if (start < end) {
             int temp = start;
             start = end;
             end = temp;
         }
-        int bmstart = (1 << (start+1)) - 1;
-        int bmend = (1 << end) - 1;
+        long bmstart = (1L << (start+1)) - 1;
+        long bmend = (1L << end) - 1;
         bmstart &= ~bmend;
         return source |= bmstart;
     }
 
-    public static int setBit(int source, int start) {
+    public static long setBit(long source, int start) {
         return setBits(source, start, start);
     }
 
-    public static int clearBits(int source, int start, int end) {
+    public static long clearBits(long source, int start, int end) {
         if (start < end) {
             int temp = start;
             start = end;
@@ -73,7 +73,7 @@ public final class Utility {    // COMMON UTILITIES
         return source &= ~bmstart;
     }
 
-    public static int clearBit(int source, int start) {
+    public static long clearBit(long source, int start) {
         return clearBits(source, start, start);
     }
 
@@ -424,9 +424,58 @@ public final class Utility {    // COMMON UTILITIES
     private static final String DATA_DIR = "C:\\DATA";
 
     public static PrintWriter openPrintWriter(String filename) throws IOException {
+        return openPrintWriter(filename, true);
+    }
+    
+    public static PrintWriter openPrintWriter(String filename, boolean removeCR) throws IOException {
         return new PrintWriter(
-                    new UTF8StreamWriter(new FileOutputStream(DATA_DIR + File.separator + "GEN" + File.separator + filename),
-                    32*1024));
+                    new UTF8StreamWriter(
+                        new FileOutputStream(DATA_DIR + File.separator + "GEN" + File.separator + filename),
+                        32*1024,
+                        removeCR));
+    }
+    
+    public static void print(PrintWriter pw, Collection c, String separator) {
+        print(pw, c, separator, null);
+    }
+    
+    public interface Breaker {
+        public String get(Object current, Object old);
+    }
+    
+    public static void print(PrintWriter pw, Collection c, String separator, Breaker b) {
+        Iterator it = c.iterator();
+        boolean first = true;
+        Object last = null;
+        while (it.hasNext()) {
+            Object obj = it.next();
+            if (first) {
+                first = false;
+            }
+            else pw.print(separator);
+            if (b != null) {
+                pw.print(b.get(obj, last));
+            }
+            pw.print(obj);
+            last = obj;
+        }
+    }
+    
+    public static void appendFile(String filename, boolean utf8, PrintWriter output) throws IOException {
+        FileInputStream fis = new FileInputStream(filename);
+        InputStreamReader isr = utf8 ? new InputStreamReader(fis, "UTF8") :  new InputStreamReader(fis);
+        BufferedReader br = new BufferedReader(isr, 32*1024);
+        while (true) {
+            String line = br.readLine();
+            if (line == null) break;
+            output.println(line);
+        }
+    }
+    
+    public static void copyTextFile(String filename, boolean utf8, String newName) throws IOException {
+        PrintWriter out = Utility.openPrintWriter(newName);
+        appendFile(filename, utf8, out);
+        out.close();
     }
 
     public static BufferedReader openUnicodeFile(String filename, String version) throws IOException {
@@ -465,5 +514,13 @@ public final class Utility {    // COMMON UTILITIES
         log.println("th           { border: 1 solid blue; padding: 2 }");
         log.println("--></style>");
         log.println("</head><body>");
+    }
+    
+    public static String replace(String source, String piece, String replacement) {
+        while (true) {
+            int pos = source.indexOf(piece);
+            if (pos < 0) return source;
+            source = source.substring(0,pos) + source.substring(pos + piece.length());
+        }
     }
 }
