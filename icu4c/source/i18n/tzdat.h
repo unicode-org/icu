@@ -51,6 +51,7 @@
  * In the following table, sizes are estimated sizes for a zone list
  * of about 200 standard and 200 DST zones, which is typical in 1999.
  *
+ * [THIS IS OBSOLETE - Needs updating for format 3]
  *  0K    TZHeader
  *  2K    Standard zone table (StandardZone[])
  *  4K    DST zone table (Zone[])
@@ -75,24 +76,39 @@
  * is a DST zone.
  */
 
+// Information used to identify and validate the data
+
+#define TZ_DATA_NAME "tz"
+#define TZ_DATA_TYPE "dat"
+
+// Fields in UDataInfo:
+
+// TZ_SIG[] is encoded as numeric literals for compatibility with the HP compiler
+static const uint8_t TZ_SIG_0 = 0x7a; // z
+static const uint8_t TZ_SIG_1 = 0x6f; // o
+static const uint8_t TZ_SIG_2 = 0x6e; // n
+static const uint8_t TZ_SIG_3 = 0x65; // e
+
+// This must match the version number at the top of tz.txt as
+// well as the version number in the udata header.
+static const int8_t TZ_FORMAT_VERSION = 3; // formatVersion[0]
+
 struct TZHeader {    
     uint16_t versionYear;     // e.g. "1999j" -> 1999
     uint16_t versionSuffix;   // e.g. "1999j" -> 10
 
     uint32_t count;           // standardCount + dstCount
-    uint32_t standardCount;   // # of standard zones
-    uint32_t dstCount;        // # of dst zones  
+
+    uint32_t equivTableDelta;  // delta to equivalency group table
+    uint32_t offsetIndexDelta; // delta to gmtOffset index table
 
     uint32_t nameIndexDelta;   // delta to name index table
-    uint32_t offsetIndexDelta; // delta to gmtOffset index table
-    uint32_t standardDelta;    // delta to standard zones ALWAYS < dstDelta
-    uint32_t dstDelta;         // delta to dst zones ALWAYS > standardDelta
-    uint32_t nameTableDelta;   // delta to name (aka ID) table
+    // The name index table is an array of 'count' 32-bit offsets from
+    // the start of this header to equivalency group table entries.
 
-    /* NOTE: Currently the standard and DST zone counts and deltas are
-     * unused (all zones are referenced via the name index table).
-     * However, they are retained for possible future use.
-     */
+    uint32_t nameTableDelta;   // delta to name (aka ID) table
+    // The name table contains all zone IDs, in sort order, each name
+    // terminated by a zero byte.
 };
 
 struct StandardZone {
@@ -112,6 +128,36 @@ struct DSTZone {
     uint16_t dstSavings;  // savings in minutes
     TZRule   onsetRule;   // onset rule
     TZRule   ceaseRule;   // cease rule
+};
+
+/**
+ * This variable-sized struct represents a time zone equivalency group.
+ * This is a set of one or more zones that are identical in GMT offset
+ * and rules, but differ in ID.  The struct has a variable size because
+ * the standard zone has no rule data, and also because it contains a
+ * variable number of index values listing the zones in the group.
+ * The struct is padded to take up 4n bytes so that 4-byte integers
+ * within the struct stay 4-aligned (namely, the gmtOffset members of
+ * the zone structs).
+ */
+struct TZEquivalencyGroup {
+    uint16_t nextEntryDelta;    // 0 for last entry
+    uint8_t  isDST;             // != 0 for DSTZone
+    uint8_t  reserved;
+    union {
+        struct {
+            StandardZone zone;
+            uint16_t     count;
+            uint16_t     index; // There are actually 'count' uint16_t's here
+        } s;
+        struct {
+            DSTZone      zone;
+            uint16_t     count;
+            uint16_t     index; // There are actually 'count' uint16_t's here
+        } d;
+    } u;
+    // There may be two bytes of padding HERE to make the whole struct
+    // have size 4n bytes.
 };
 
 /**
@@ -147,14 +193,5 @@ struct OffsetIndex {
     // there may be two bytes of padding to make the whole struct have
     // a size of 4n.  nextEntryDelta skips over any padding.
 };
-
-// Information used to identify and validate the data
-
-#define TZ_DATA_NAME "tz"
-#define TZ_DATA_TYPE "dat"
-
-// Fields in UDataInfo:
-static const char TZ_SIG[] = "zone";     // dataFormat
-static const int8_t TZ_FORMAT_VERSION = 2; // formatVersion[0]
 
 #endif

@@ -489,8 +489,7 @@ private:
 
     /**
      * INDEX_BY_ID is an index table in lexicographic order of ID.
-     * Each entry is an offset from DATA to the zone object, which
-     * will either be a StandardZone or a DSTZone object.
+     * Each entry is an offset from DATA to an equivalency group.
      */
     static const uint32_t*     INDEX_BY_ID;
 

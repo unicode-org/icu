@@ -523,7 +523,7 @@ void TimeZoneTest::TestShortZoneIDs()
         "EST", -300, TRUE,
         "PRT", -240, FALSE,
         "CNT", -210, TRUE,
-        "AGT", -180, TRUE, // updated 12/3/99 aliu
+        "AGT", -180, FALSE, // updated 26 Sep 2000 aliu
         "BET", -180, TRUE,
         // "CAT", -60, FALSE, // Wrong:
         // As of bug 4130885, fix CAT (Central Africa)
