@@ -10,6 +10,7 @@
 #include "unicode/cpdtrans.h"
 #include "unicode/unifilt.h"
 #include "unicode/unifltlg.h"
+#include "uvector.h"
 
 /**
  * Constructs a new compound transliterator given an array of
@@ -30,7 +31,7 @@ CompoundTransliterator::CompoundTransliterator(
                            int32_t transliteratorCount,
                            UnicodeFilter* adoptedFilter) :
     Transliterator(joinIDs(transliterators, transliteratorCount), adoptedFilter),
-    trans(0), filters(0), count(0)  {
+    trans(0), filters(0), count(0), compoundRBTIndex(-1)  {
     setTransliterators(transliterators, transliteratorCount);
 }
 
@@ -46,44 +47,142 @@ CompoundTransliterator::CompoundTransliterator(const UnicodeString& id,
                               UnicodeFilter* adoptedFilter,
                               UErrorCode& status) :
     Transliterator(id, 0), // set filter to 0 here!
-    trans(0), filters(0) {
-    init(id, direction, adoptedFilter, status);
+    trans(0), filters(0), compoundRBTIndex(-1) {
+    init(id, direction, adoptedFilter, -1, 0, TRUE, status);
 }
 
 CompoundTransliterator::CompoundTransliterator(const UnicodeString& id,
                               UErrorCode& status) :
     Transliterator(id, 0), // set filter to 0 here!
-    trans(0), filters(0) {
-    init(id, UTRANS_FORWARD, 0, status);
+    trans(0), filters(0), compoundRBTIndex(-1) {
+    init(id, UTRANS_FORWARD, 0, -1, 0, TRUE, status);
 }
 
+/**
+ * Private constructor for compound RBTs.  Construct a compound
+ * transliterator using the given idBlock, with the adoptedTrans
+ * inserted at the idSplitPoint.
+ */
+CompoundTransliterator::CompoundTransliterator(const UnicodeString& ID,
+                                               const UnicodeString& idBlock,
+                                               int32_t idSplitPoint,
+                                               Transliterator *adoptedTrans,
+                                               UErrorCode& status) :
+    Transliterator(ID, 0),
+    trans(0), filters(0), compoundRBTIndex(-1) {
+    init(idBlock, UTRANS_FORWARD, 0, idSplitPoint, adoptedTrans, FALSE, status);
+}
+
+/**
+ * Private constructor for Transliterator from a vector of
+ * transliterators.  The vector order is FORWARD, so if dir is REVERSE
+ * then the vector order will be reversed.
+ */
+CompoundTransliterator::CompoundTransliterator(const UnicodeString& ID,
+                                               UTransDirection dir,
+                                               UVector& list,
+                                               UErrorCode& status) :
+    Transliterator(ID, 0),
+    trans(0), filters(0), compoundRBTIndex(-1) {
+    init(list, dir, 0, TRUE, status);
+}
+
+/**
+ * Finish constructing a transliterator: only to be called by
+ * constructors.  Before calling init(), set trans and filter to NULL.
+ * @param id the id containing ';'-separated entries
+ * @param direction either FORWARD or REVERSE
+ * @param adoptedFilter a filter object to be owned by this transliterator.
+ * May be NULL.
+ * @param idSplitPoint the index into id at which the
+ * adoptedSplitTransliterator should be inserted, if there is one, or
+ * -1 if there is none.
+ * @param adoptedSplitTransliterator a transliterator to be inserted
+ * before the entry at offset idSplitPoint in the id string.  May be
+ * NULL to insert no entry.
+ * @param fixReverseID if TRUE, then reconstruct the ID of reverse
+ * entries by calling getID() of component entries.  Some constructors
+ * do not require this because they apply a facade ID anyway.
+ * @param status the error code indicating success or failure
+ */
 void CompoundTransliterator::init(const UnicodeString& id,
                                   UTransDirection direction,
                                   UnicodeFilter* adoptedFilter,
+                                  int32_t idSplitPoint,
+                                  Transliterator *adoptedSplitTrans,
+                                  UBool fixReverseID,
                                   UErrorCode& status) {
-    if (U_FAILURE(status))
-        return;
-    UnicodeString* list = split(id, ID_DELIM, &count);
-    trans = new Transliterator*[count];
-    for (int32_t i = 0; i < count; ++i) {
-        trans[i] = createInstance(list[direction==UTRANS_FORWARD ? i : (count-1-i)],
-                                  direction);
-        if (trans[i] == NULL) {
-            while (++i < count)
-                trans[i] = 0;
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-            delete[] list;
-            delete adoptedFilter;
-            return;
-        }
-    }
-    delete[] list;
+    // assert(trans == 0);
+    // assert(filters == 0);
 
-    // If the direction is UTRANS_REVERSE then we need to fix
-    // the ID.
-    if (direction == UTRANS_REVERSE) {
+    if (U_FAILURE(status)) {
+        delete adoptedFilter;
+        delete adoptedSplitTrans;
+        return;
+    }
+
+    UVector list;
+    Transliterator::parseCompoundID(id, direction,
+                                    idSplitPoint, adoptedSplitTrans,
+                                    list, compoundRBTIndex,
+                                    NULL, status);
+
+    init(list, direction, adoptedFilter, fixReverseID, status);
+}
+
+/**
+ * Finish constructing a transliterator: only to be called by
+ * constructors.  Before calling init(), set trans and filter to NULL.
+ * @param list a vector of transliterator objects to be adopted.  It
+ * should NOT be empty.  The list should be in declared order.  That
+ * is, it should be in the FORWARD order; if direction is REVERSE then
+ * the list order will be reversed.
+ * @param direction either FORWARD or REVERSE
+ * @param adoptedFilter a filter object to be owned by this transliterator.
+ * May be NULL.
+ * @param fixReverseID if TRUE, then reconstruct the ID of reverse
+ * entries by calling getID() of component entries.  Some constructors
+ * do not require this because they apply a facade ID anyway.
+ * @param status the error code indicating success or failure
+ */
+void CompoundTransliterator::init(UVector& list,
+                                  UTransDirection direction,
+                                  UnicodeFilter* adoptedFilter,
+                                  UBool fixReverseID,
+                                  UErrorCode& status) {
+    // assert(trans == 0);
+    // assert(filters == 0);
+
+    // Allocate array
+    if (U_SUCCESS(status)) {
+        count = list.size();
+        trans = new Transliterator*[count];
+    }
+
+    if (U_FAILURE(status) || trans == 0) {
+        delete adoptedFilter;
+        // assert(trans == 0);
+        return;
+    }
+
+    // Move the transliterators from the vector into an array.
+    // Reverse the order if necessary.
+    int32_t i;
+    for (i=0; i<count; ++i) {
+        int32_t j = (direction == UTRANS_FORWARD) ? i : count - 1 - i;
+        trans[i] = (Transliterator*) list.elementAt(j);
+    }
+
+    // Fix compoundRBTIndex for REVERSE transliterators
+    if (compoundRBTIndex >= 0 && direction == UTRANS_REVERSE) {
+        compoundRBTIndex = count - 1 - compoundRBTIndex;
+    }
+
+    // If the direction is UTRANS_REVERSE then we may need to fix the
+    // ID.
+    if (direction == UTRANS_REVERSE && fixReverseID) {
         UnicodeString newID;
-        for (int32_t i=0; i<count; ++i) {
+        for (i=0; i<count; ++i) {
             if (i > 0) {
                 newID.append(ID_DELIM);
             }
@@ -113,35 +212,35 @@ UnicodeString CompoundTransliterator::joinIDs(Transliterator* const transliterat
     return id; // Return temporary
 }
 
-/**
- * Splits a string, as in JavaScript
- */
-UnicodeString* CompoundTransliterator::split(const UnicodeString& s,
-                                             UChar divider,
-                                             int32_t* countPtr) {
-    // changed MED
-    // see how many there are
-    *countPtr = 1;
-    int32_t i;
-    for (i = 0; i < s.length(); ++i) {
-        if (s.charAt(i) == divider)
-            ++(*countPtr);
-    }
-    
-    // make an array with them
-    UnicodeString* result = new UnicodeString[*countPtr];
-    int32_t last = 0;
-    int32_t current = 0;
-    
-    for (i = 0; i < s.length(); ++i) {
-        if (s.charAt(i) == divider) {
-            s.extractBetween(last, i, result[current++]);
-            last = i+1;
-        }
-    }
-    s.extractBetween(last, i, result[current]);
-    return result;
-}
+///**
+// * Splits a string, as in JavaScript
+// */
+//UnicodeString* CompoundTransliterator::split(const UnicodeString& s,
+//                                             UChar divider,
+//                                             int32_t* countPtr) {
+//    // changed MED
+//    // see how many there are
+//    *countPtr = 1;
+//    int32_t i;
+//    for (i = 0; i < s.length(); ++i) {
+//        if (s.charAt(i) == divider)
+//            ++(*countPtr);
+//    }
+//    
+//    // make an array with them
+//    UnicodeString* result = new UnicodeString[*countPtr];
+//    int32_t last = 0;
+//    int32_t current = 0;
+//    
+//    for (i = 0; i < s.length(); ++i) {
+//        if (s.charAt(i) == divider) {
+//            s.extractBetween(last, i, result[current++]);
+//            last = i+1;
+//        }
+//    }
+//    s.extractBetween(last, i, result[current]);
+//    return result;
+//}
 
 /**
  * Copy constructor.
@@ -301,73 +400,102 @@ void CompoundTransliterator::adoptFilter(UnicodeFilter* f) {
     Transliterator::adoptFilter(f);
 }
 
+UnicodeString& CompoundTransliterator::toRules(UnicodeString& rulesSource,
+                                               UBool escapeUnprintable) const {
+    // We do NOT call toRules() on our component transliterators, in
+    // general.  If we have several rule-based transliterators, this
+    // yields a concatenation of the rules -- not what we want.  We do
+    // handle compound RBT transliterators specially -- those for which
+    // compoundRBTIndex >= 0.  For the transliterator at compoundRBTIndex,
+    // we do call toRules() recursively.
+    rulesSource.truncate(0);
+    for (int32_t i=0; i<count; ++i) {
+        UnicodeString rule;
+        if (i == compoundRBTIndex) {
+            trans[i]->toRules(rule, escapeUnprintable);
+        } else {
+            trans[i]->Transliterator::toRules(rule, escapeUnprintable);
+        }
+        if (rulesSource.length() &&
+            rulesSource.charAt(rulesSource.length() - 1) != 10) {
+            rulesSource.append((UChar)10);
+        }
+        rulesSource.append(rule);
+        if (rulesSource.length() &&
+            rulesSource.charAt(rulesSource.length() - 1) != ID_DELIM) {
+            rulesSource.append(ID_DELIM);
+        }
+    }
+    return rulesSource;
+}
+
 /**
  * Implements {@link Transliterator#handleTransliterate}.
  */
 void CompoundTransliterator::handleTransliterate(Replaceable& text, UTransPosition& index,
                                                  UBool incremental) const {
-    /* Call each transliterator with the same start value and
-     * initial cursor index, but with the limit index as modified
-     * by preceding transliterators.  The cursor index must be
+    /* Call each transliterator with the same contextStart and
+     * start, but with the limit as modified
+     * by preceding transliterators.  The start index must be
      * reset for each transliterator to give each a chance to
-     * transliterate the text.  The initial cursor index is known
+     * transliterate the text.  The initial contextStart index is known
      * to still point to the same place after each transliterator
      * is called because each transliterator will not change the
-     * text between start and the initial value of cursor.
+     * text between contextStart and the initial start index.
      *
      * IMPORTANT: After the first transliterator, each subsequent
      * transliterator only gets to transliterate text committed by
-     * preceding transliterators; that is, the cursor (output
+     * preceding transliterators; that is, the start (output
      * value) of transliterator i becomes the limit (input value)
      * of transliterator i+1.  Finally, the overall limit is fixed
      * up before we return.
      *
      * Assumptions we make here:
-     * (1) start <= cursor <= limit    ;cursor valid on entry
-     * (2) cursor <= cursor' <= limit' ;cursor doesn't move back
-     * (3) cursor <= limit'            ;text before cursor unchanged
-     * - cursor' is the value of cursor after calling handleKT
+     * (1) contextStart <= start <= limit ;cursor valid on entry
+     * (2) start <= start' <= limit' ;cursor doesn't move back
+     * (3) start <= limit'           ;text before start unchanged
+     * - start' is the value of start after calling handleKT
      * - limit' is the value of limit after calling handleKT
      */
 
     /**
      * Example: 3 transliterators.  This example illustrates the
-     * mechanics we need to implement.  S, C, and L are the start,
-     * cursor, and limit.  gl is the globalLimit.
+     * mechanics we need to implement.  C, S, and L are the contextStart,
+     * start, and limit.  gl is the globalLimit.
      *
      * 1. h-u, changes hex to Unicode
      *
      *    4  7  a  d  0      4  7  a
      *    abc/u0061/u    =>  abca/u    
-     *    S  C       L       S   C L   gl=f->a
+     *    C  S       L       C   S L   gl=f->a
      *
      * 2. upup, changes "x" to "XX"
      *
      *    4  7  a       4  7  a
      *    abca/u    =>  abcAA/u    
-     *    S  CL         S    C   
+     *    C  SL         C    S   
      *                       L    gl=a->b
      * 3. u-h, changes Unicode to hex
      *
      *    4  7  a        4  7  a  d  0  3
      *    abcAA/u    =>  abc/u0041/u0041/u    
-     *    S  C L         S              C
+     *    C  S L         C              S
      *                                  L   gl=b->15
      * 4. return
      *
      *    4  7  a  d  0  3
      *    abc/u0041/u0041/u    
-     *    S C L
+     *    C              S L
      */
 
     if (count < 1) {
+        index.start = index.limit;
         return; // Short circuit for empty compound transliterators
     }
 
     int32_t i;
-    int32_t cursor = index.start;
-    int32_t limit = index.limit;
-    int32_t globalLimit = limit;
+    int32_t start = index.start;
+    int32_t globalLimit = index.limit;
     /* globalLimit is the overall limit.  We keep track of this
      * since we overwrite index.limit with the previous
      * index.start.  After each transliteration, we update
@@ -375,16 +503,16 @@ void CompoundTransliterator::handleTransliterate(Replaceable& text, UTransPositi
      */
     
     for (i=0; i<count; ++i) {
-        index.start = cursor; // Reset cursor
-        index.limit = limit;
+        index.start = start; // Reset start
+        int32_t limit = index.limit;
         
         trans[i]->handleTransliterate(text, index, incremental);
         
         // Adjust overall limit for insertions/deletions
         globalLimit += index.limit - limit;
-        limit = index.start; // Move limit to end of committed text
+        index.limit = index.start; // Move limit to end of committed text
     }
-    // Cursor is good where it is -- where the last
+    // Start is good where it is -- where the last
     // transliterator left it.  Limit needs to be put back
     // where it was, modulo adjustments for deletions/insertions.
     index.limit = globalLimit;

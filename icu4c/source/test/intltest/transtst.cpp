@@ -17,6 +17,7 @@
 #include "unicode/hextouni.h"
 #include "unicode/unitohex.h"
 #include "unicode/unicode.h"
+#include "unicode/uniset.h"
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
 
@@ -61,6 +62,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(26,TestLiberalizedID);
         TESTCASE(27,TestCreateInstance);
         TESTCASE(28,TestNormalizationTransliterator);
+        TESTCASE(29,TestCompoundRBT);
         default: name = ""; break;
     }
 }
@@ -1053,93 +1055,6 @@ void TransliteratorTest::TestLiberalizedID(void) {
     }
 }
 
-//======================================================================
-// Support methods
-//======================================================================
-void TransliteratorTest::expect(const UnicodeString& rules,
-                                const UnicodeString& source,
-                                const UnicodeString& expectedResult) {
-    UErrorCode status = U_ZERO_ERROR;
-    Transliterator *t = new RuleBasedTransliterator("<ID>", rules, status);
-    if (U_FAILURE(status)) {
-        errln("FAIL: Transliterator constructor failed");
-    } else {
-        expect(*t, source, expectedResult);
-    }
-    delete t;
-}
-
-void TransliteratorTest::expect(const Transliterator& t,
-                                const UnicodeString& source,
-                                const UnicodeString& expectedResult,
-                                const Transliterator& reverseTransliterator) {
-    expect(t, source, expectedResult);
-    expect(reverseTransliterator, expectedResult, source);
-}
-
-void TransliteratorTest::expect(const Transliterator& t,
-                                const UnicodeString& source,
-                                const UnicodeString& expectedResult) {
-    UnicodeString result(source);
-    t.transliterate(result);
-    expectAux(t.getID() + ":String", source, result, expectedResult);
-
-    UnicodeString rsource(source);
-    t.transliterate(rsource);
-    expectAux(t.getID() + ":Replaceable", source, rsource, expectedResult);
-
-    // Test keyboard (incremental) transliteration -- this result
-    // must be the same after we finalize (see below).
-    rsource.remove();
-    UTransPosition index={0, 0, 0, 0};
-    UnicodeString log;
-
-    for (int32_t i=0; i<source.length(); ++i) {
-        if (i != 0) {
-            log.append(" + ");
-        }
-        log.append(source.charAt(i)).append(" -> ");
-        UErrorCode status = U_ZERO_ERROR;
-        t.transliterate(rsource, index, source.charAt(i), status);
-        // Append the string buffer with a vertical bar '|' where
-        // the committed index is.
-        UnicodeString left, right;
-        rsource.extractBetween(0, index.start, left);
-        rsource.extractBetween(index.start, rsource.length(), right);
-        log.append(left).append((UChar)PIPE).append(right);
-    }
-    
-    // As a final step in keyboard transliteration, we must call
-    // transliterate to finish off any pending partial matches that
-    // were waiting for more input.
-    t.finishTransliteration(rsource, index);
-    log.append(" => ").append(rsource);
-
-    expectAux(t.getID() + ":Keyboard", log,
-              rsource == expectedResult,
-              expectedResult);
-}
-
-void TransliteratorTest::expectAux(const UnicodeString& tag,
-                                   const UnicodeString& source,
-                                   const UnicodeString& result,
-                                   const UnicodeString& expectedResult) {
-    expectAux(tag, source + " -> " + result,
-              result == expectedResult,
-              expectedResult);
-}
-
-void TransliteratorTest::expectAux(const UnicodeString& tag,
-                                   const UnicodeString& summary, UBool pass,
-                                   const UnicodeString& expectedResult) {
-    if (pass) {
-        logln(UnicodeString("(")+tag+") " + prettify(summary));
-    } else {
-        errln(UnicodeString("FAIL: (")+tag+") "
-              + prettify(summary)
-              + ", expected " + prettify(expectedResult));
-    }
-}
 /* test for Jitterbug 912 */
 void TransliteratorTest::TestCreateInstance(){
     UParseError *err = 0;
@@ -1247,4 +1162,158 @@ void TransliteratorTest::TestNormalizationTransliterator() {
     }
     delete NFKD;
     delete NFKC;
+}
+
+/**
+ * Test compound RBT rules.
+ */
+void TransliteratorTest::TestCompoundRBT(void) {
+    // Careful with spacing and ';' here:  Phrase this exactly
+    // as toRules() is going to return it.  If toRules() changes
+    // with regard to spacing or ';', then adjust this string.
+    UnicodeString rule("::Hex-Unicode;\n"
+                       "::Any-Lower;\n"
+                       "a > '.A.';\n"
+                       "b > '.B.';\n"
+                       "::Any[^t]-Upper;", "");
+    Transliterator *t = Transliterator::createFromRules("Test", rule);
+    if (t == 0) {
+        errln("FAIL: createFromRules failed");
+        return;
+    }
+    expect(*t, "\\u0043at in the hat, bat on the mat",
+           "C.A.t IN tHE H.A.t, .B..A.t ON tHE M.A.t");
+    UnicodeString r;
+    t->toRules(r, TRUE);
+    if (r == rule) {
+        logln((UnicodeString)"OK: toRules() => " + r);
+    } else {
+        errln((UnicodeString)"FAIL: toRules() => " + r +
+              ", expected " + rule);
+    }
+    delete t;
+
+    // Now test toRules
+    t = Transliterator::createInstance("Greek-Latin; Latin-Cyrillic");
+    if (t == 0) {
+        errln("FAIL: createInstance failed");
+        return;
+    }
+    UnicodeString exp("::Greek-Latin;\n::Latin-Cyrillic;");
+    t->toRules(r, TRUE);
+    if (r != exp) {
+        errln((UnicodeString)"FAIL: toRules() => " + r +
+              ", expected " + exp);
+    } else {
+        logln((UnicodeString)"OK: toRules() => " + r);
+    }
+    delete t;
+
+    // Round trip the result of toRules
+    t = Transliterator::createFromRules("Test", r);
+    if (t == 0) {
+        errln("FAIL: createFromRules #2 failed");
+        return;
+    } else {
+        logln((UnicodeString)"OK: createFromRules(" + r + ") succeeded");
+    }
+
+    // Test toRules again
+    t->toRules(r, TRUE);
+    if (r != exp) {
+        errln((UnicodeString)"FAIL: toRules() => " + r +
+              ", expected " + exp);
+    } else {
+        logln((UnicodeString)"OK: toRules() => " + r);
+    }
+
+    delete t;
+}
+
+//======================================================================
+// Support methods
+//======================================================================
+void TransliteratorTest::expect(const UnicodeString& rules,
+                                const UnicodeString& source,
+                                const UnicodeString& expectedResult) {
+    UErrorCode status = U_ZERO_ERROR;
+    Transliterator *t = new RuleBasedTransliterator("<ID>", rules, status);
+    if (U_FAILURE(status)) {
+        errln("FAIL: Transliterator constructor failed");
+    } else {
+        expect(*t, source, expectedResult);
+    }
+    delete t;
+}
+
+void TransliteratorTest::expect(const Transliterator& t,
+                                const UnicodeString& source,
+                                const UnicodeString& expectedResult,
+                                const Transliterator& reverseTransliterator) {
+    expect(t, source, expectedResult);
+    expect(reverseTransliterator, expectedResult, source);
+}
+
+void TransliteratorTest::expect(const Transliterator& t,
+                                const UnicodeString& source,
+                                const UnicodeString& expectedResult) {
+    UnicodeString result(source);
+    t.transliterate(result);
+    expectAux(t.getID() + ":String", source, result, expectedResult);
+
+    UnicodeString rsource(source);
+    t.transliterate(rsource);
+    expectAux(t.getID() + ":Replaceable", source, rsource, expectedResult);
+
+    // Test keyboard (incremental) transliteration -- this result
+    // must be the same after we finalize (see below).
+    rsource.remove();
+    UTransPosition index={0, 0, 0, 0};
+    UnicodeString log;
+
+    for (int32_t i=0; i<source.length(); ++i) {
+        if (i != 0) {
+            log.append(" + ");
+        }
+        log.append(source.charAt(i)).append(" -> ");
+        UErrorCode status = U_ZERO_ERROR;
+        t.transliterate(rsource, index, source.charAt(i), status);
+        // Append the string buffer with a vertical bar '|' where
+        // the committed index is.
+        UnicodeString left, right;
+        rsource.extractBetween(0, index.start, left);
+        rsource.extractBetween(index.start, rsource.length(), right);
+        log.append(left).append((UChar)PIPE).append(right);
+    }
+    
+    // As a final step in keyboard transliteration, we must call
+    // transliterate to finish off any pending partial matches that
+    // were waiting for more input.
+    t.finishTransliteration(rsource, index);
+    log.append(" => ").append(rsource);
+
+    expectAux(t.getID() + ":Keyboard", log,
+              rsource == expectedResult,
+              expectedResult);
+}
+
+void TransliteratorTest::expectAux(const UnicodeString& tag,
+                                   const UnicodeString& source,
+                                   const UnicodeString& result,
+                                   const UnicodeString& expectedResult) {
+    expectAux(tag, source + " -> " + result,
+              result == expectedResult,
+              expectedResult);
+}
+
+void TransliteratorTest::expectAux(const UnicodeString& tag,
+                                   const UnicodeString& summary, UBool pass,
+                                   const UnicodeString& expectedResult) {
+    if (pass) {
+        logln(UnicodeString("(")+tag+") " + prettify(summary));
+    } else {
+        errln(UnicodeString("FAIL: (")+tag+") "
+              + prettify(summary)
+              + ", expected " + prettify(expectedResult));
+    }
 }

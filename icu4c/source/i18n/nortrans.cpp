@@ -15,10 +15,10 @@
  */
 void NormalizationTransliterator::registerIDs() {
     UErrorCode status = U_ZERO_ERROR;
-    Transliterator::_registerFactory(UnicodeString("NFC", ""), _createNFC, status);
-    Transliterator::_registerFactory(UnicodeString("NFKC", ""), _createNFKC, status);
-    Transliterator::_registerFactory(UnicodeString("NFD", ""), _createNFD, status);
-    Transliterator::_registerFactory(UnicodeString("NFKD", ""), _createNFKD, status);
+    Transliterator::_registerFactory(UnicodeString("Any-NFC", ""), _createNFC, status);
+    Transliterator::_registerFactory(UnicodeString("Any-NFKC", ""), _createNFKC, status);
+    Transliterator::_registerFactory(UnicodeString("Any-NFD", ""), _createNFD, status);
+    Transliterator::_registerFactory(UnicodeString("Any-NFKD", ""), _createNFKD, status);
 }
 
 /**

@@ -565,91 +565,347 @@ Transliterator* Transliterator::createInverse(void) const {
 Transliterator* Transliterator::createInstance(const UnicodeString& ID,
                                                UTransDirection dir,
                                                UParseError* parseError) {
-    Transliterator* t = 0;
-    if (ID.indexOf(ID_DELIM) >= 0) {
-        UErrorCode status = U_ZERO_ERROR;
-        t = new CompoundTransliterator(ID, dir, 0, status);
-        if (U_FAILURE(status)) {
-            delete t;
-            t = 0;
+    UErrorCode status = U_ZERO_ERROR;
+    return createInstance(ID, dir, -1, NULL, parseError, status);
+}
+
+/**
+ * Create a transliterator given a compound ID (possibly degenerate,
+ * with no ID_DELIM).  If idSplitPoint >= 0 and adoptedSplitTrans !=
+ * 0, then insert adoptedSplitTrans in the compound ID at offset
+ * idSplitPoint.  Otherwise idSplitPoint should be -1 and
+ * adoptedSplitTrans should be 0.  The resultant transliterator will
+ * be an atomic (non-compound) transliterator if this is indicated by
+ * ID.  Otherwise it will be a compound translitertor.
+ */
+Transliterator* Transliterator::createInstance(const UnicodeString& ID,
+                                               UTransDirection dir,
+                                               int32_t idSplitPoint,
+                                               Transliterator *adoptedSplitTrans,
+                                               UParseError* parseError,
+                                               UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return 0;
+    }
+
+    UVector list;
+    int32_t ignored;
+    parseCompoundID(ID, dir, idSplitPoint, adoptedSplitTrans,
+                    list, ignored, parseError, status);
+
+    if (U_FAILURE(status)) {
+        return 0;
+    }
+    
+    switch (list.size()) {
+    case 0:
+        return new NullTransliterator();
+
+    case 1:
+        return (Transliterator*) list.elementAt(0);
+
+    default:
+        return new CompoundTransliterator(ID, dir, list, status);
+    }
+}
+
+/**
+ * Returns a <code>Transliterator</code> object constructed from
+ * the given rule string.  This will be a RuleBasedTransliterator,
+ * if the rule string contains only rules, or a
+ * CompoundTransliterator, if it contains ID blocks, or a
+ * NullTransliterator, if it contains ID blocks which parse as
+ * empty for the given direction.
+ */
+Transliterator* Transliterator::createFromRules(const UnicodeString& ID,
+                                                const UnicodeString& rules,
+                                                UTransDirection dir,
+                                                UParseError* parseError) {
+    UnicodeString idBlock;
+    int32_t idSplitPoint = -1;
+    TransliterationRuleData *data = 0;
+    UErrorCode status = U_ZERO_ERROR;
+
+    TransliteratorParser::parse(rules, dir, data,
+                                idBlock, idSplitPoint,
+                                parseError, status);
+
+    if (U_FAILURE(status)) {
+        delete data;
+        return 0;
+    }
+
+    // NOTE: The logic here matches that in _createInstance().
+    if (idBlock.length() == 0) {
+        if (data == 0) {
+            // No idBlock, no data -- this is just an
+            // alias for Null
+            return new NullTransliterator();
+        } else {
+            // No idBlock, data != 0 -- this is an
+            // ordinary RBT_DATA.
+            return new RuleBasedTransliterator(ID, data, TRUE); // TRUE == adopt data object
         }
     } else {
-        // 'id' is the ID with the filter pattern removed and with
-        // whitespace deleted.
-        UnicodeString id(ID);
-
-        // Look for embedded filter pattern
-        UnicodeSet *filter = 0;
-        int32_t setStart = id.indexOf((UChar)0x005B /*[*/);
-        int32_t setLimit;
-        if (setStart >= 0) {
-            UErrorCode status = U_ZERO_ERROR;
-            ParsePosition pos(setStart);
-            filter = new UnicodeSet();
-            filter->applyPattern(id, pos, 0, status);
+        if (data == 0) {
+            // idBlock, no data -- this is an alias
+            Transliterator *t = createInstance(idBlock, dir, parseError);
+            if (t != 0) {
+                t->setID(ID);
+            }
+            return t;
+        } else {
+            // idBlock and data -- this is a compound
+            // RBT
+            UnicodeString id("_", "");
+            Transliterator *t = new RuleBasedTransliterator(id, data, TRUE); // TRUE == adopt data object
+            t = new CompoundTransliterator(ID, idBlock, idSplitPoint,
+                                           t, status);
             if (U_FAILURE(status)) {
-                // There was a parse failure in the filter pattern
-                delete filter;
-                return 0;
+                delete t;
+                t = 0;
             }
-            setLimit = pos.getIndex();
-            id.removeBetween(setStart, setLimit);
-        }
-
-        // Delete whitespace
-        int32_t i;
-        for (i=0; i<id.length(); ++i) {
-            if (Unicode::isWhitespace(id.charAt(i))) {
-                id.remove(i, 1);
-                --i;
-            }
-        }
-
-        // Fix the id, if necessary, by reversing it (A-B => B-A).
-        // Record the position of the separator.  Detect the special
-        // case of Null, whose inverse is itself.  Given an ID with no
-        // separator "Foo", an abbreviation for "Any-Foo", consider
-        // the inverse to be "Foo-Any".
-        int32_t sep = id.indexOf(ID_SEP);
-        if (id.caseCompare(NullTransliterator::ID,
-                           U_FOLD_CASE_DEFAULT) == 0) {
-            sep = id.length();
-        } else if (dir == UTRANS_REVERSE) {
-            UnicodeString left;
-            if (sep >= 0) {
-                id.extractBetween(0, sep, left);
-                id.removeBetween(0, sep+1);
-            } else {
-                left = UnicodeString("Any", "");
-            }
-            sep = id.length();
-            id.append(ID_SEP).append(left);
-        } else if (sep < 0) {
-            sep = id.length();
-        }
-
-        // The 'alias' parameter is non-empty if _createInstance()
-        // finds that the given ID refers to an alias.  The reason
-        // _createInstance() doesn't call createInstance() (this
-        // method) directly is to avoid deadlock.  There are other
-        // ways to do this but this is one of the more efficient ways.
-        UnicodeString alias;
-        t = _createInstance(id, alias, parseError);
-
-        if (alias.length() > 0) { // assert(t==0)
-            t = createInstance(alias);
-        }
-
-        if (t != 0) {
-            if (filter != 0) {
-                t->adoptFilter(filter);
-                id.insert(sep, ID, setStart, setLimit-setStart);
-            }
-            t->setID(id);
+            return t;
         }
     }
+}
+
+UnicodeString& Transliterator::toRules(UnicodeString& rulesSource,
+                                       UBool escapeUnprintable) const {
+    // The base class implementation of toRules munges the ID into
+    // the correct format.  That is: foo => ::foo
+    rulesSource = getID();
+    // KEEP in sync with rbt_pars
+    rulesSource.insert(0, UnicodeString("::", ""));
+    return rulesSource;
+}
+
+/**
+ * Parse a compound ID (possibly a degenerate one, containing no
+ * ID_DELIM).  If idSplitPoint >= 0 and adoptedSplitTrans != 0, then
+ * insert adoptedSplitTrans in the compound ID at offset idSplitPoint.
+ * Otherwise idSplitPoint should be -1 and adoptedSplitTrans should be
+ * 0.  Return in the result vector the instantiated transliterator
+ * objects (one of these will be adoptedSplitTrans, if the latter was
+ * specified).  These will be in order of id, so if dir is REVERSE,
+ * then the caller will have to reverse the order.
+ * 
+ * @param splitTransIndex output parameter to receive the index in
+ * 'result' at which the adoptedSplitTrans is stored, or -1 if
+ * adoptedSplitTrans == 0
+ */
+void Transliterator::parseCompoundID(const UnicodeString& id,
+                                     UTransDirection dir,
+                                     int32_t idSplitPoint,
+                                     Transliterator *adoptedSplitTrans,
+                                     UVector& result,
+                                     int32_t& splitTransIndex,
+                                     UParseError* parseError,
+                                     UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+    
+    splitTransIndex = -1;
+    int32_t pos = 0;
+    int32_t i;
+    while (pos < id.length()) {
+        // We compare (pos >= split), not (pos == split), so we can
+        // skip over whitespace (see below).
+        if (pos >= idSplitPoint && adoptedSplitTrans != 0) {
+            splitTransIndex = result.size();
+            result.addElement(adoptedSplitTrans);
+            adoptedSplitTrans = 0;
+        }
+        int32_t p = pos;
+        UBool sawDelimiter; // We ignore this
+        Transliterator *t =
+            parseID(id, p, sawDelimiter, dir, parseError, TRUE);
+        if (p == pos) {
+            delete t;
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            break;
+        }
+		pos = p;
+        // The return value may be NULL when, for instance, creating a
+        // REVERSE transliterator of ID "Latin-Greek()".
+        if (t != 0) {
+            result.addElement(t);
+        }
+    }
+
+    // Handle case of idSplitPoint == id.length()
+    if (pos >= idSplitPoint && adoptedSplitTrans != 0) {
+        splitTransIndex = result.size();
+        result.addElement(adoptedSplitTrans);
+        adoptedSplitTrans = 0;
+    }
+
+    if (U_FAILURE(status)) {
+        for (i=0; i<result.size(); ++i) {
+            delete (Transliterator*)result.elementAt(i);
+        }
+        result.removeAllElements();
+        delete adoptedSplitTrans;
+    }
+}
+
+/**
+ * Parse a single ID, possibly including an inline filter, and return
+ * the resultant transliterator object.  NOTE: If 'create' is FALSE,
+ * then the amount of syntax checking is limited.  However, the 'pos'
+ * parameter will be updated correctly, assuming the input string is
+ * valid.
+ *
+ * A trailing /;? \s* / is skipped.  The parameter sawDelimiter
+ * indicates whether the ';' was seen or not.  Upon return, if pos is
+ * advanced, it will either point to a non-whitespace character past
+ * the trailing ';', if any, or be equal to length().
+ *
+ * On return one of the following will be true:
+ *  pos unchanged: sawDelimiter meaningless
+ *  pos == ID.length(): sawDelimiter TRUE or FALSE
+ *  pos < ID.length(): sawDelimiter always TRUE
+ *
+ * @param ID the ID string
+ * @param pos INPUT-OUTPUT parameter.  On input, the position of the
+ * first character to parse.  On output, the position after the last
+ * character parsed.  This will be a semicolon or ID.length().  In the
+ * case of an error this value will be unchanged.
+ * @param create if TRUE, create and return the result.  If FALSE,
+ * only scan the ID, and return NULL.
+ * @return a newly created transliterator, or NULL.  NULL is returned
+ * in all cases if create is FALSE.  If create is TRUE, then NULL is
+ * returned on error, or if the ID is effectively empty.
+ * E.g. "Latin-Greek()" with dir == REVERSE.  Do NOT check for NULL to
+ * determine if there was an error.  Instead, check to see if pos
+ * moved.
+ */
+Transliterator* Transliterator::parseID(const UnicodeString& ID,
+                                        int32_t& pos,
+                                        UBool& sawDelimiter,
+                                        UTransDirection dir,
+                                        UParseError* parseError,
+                                        UBool create) {
+    Transliterator* t = 0;
+    UnicodeString str; // scratch
+
+    // Look for embedded filter pattern by looking for ';' and
+    // '[' and seeing which comes first.
+    UnicodeSet *filter = 0;
+    int32_t limit = ID.indexOf(ID_DELIM, pos);
+    sawDelimiter = limit >= 0;
+    if (!sawDelimiter) {
+        limit = ID.length();
+    }
+    int32_t setStart = ID.indexOf((UChar)0x005B /*[*/, pos);
+    int32_t setLimit;
+    if (setStart >= 0 && setStart < limit) {
+        UErrorCode status = U_ZERO_ERROR;
+        ParsePosition ppos(setStart);
+        filter = new UnicodeSet();
+        filter->applyPattern(ID, ppos, 0, status);
+        if (U_FAILURE(status)) {
+            // There was a parse failure in the filter pattern
+            delete filter;
+            return 0;
+        }
+        setLimit = ppos.getIndex();
+        if (limit < setLimit) {
+            limit = ID.indexOf(ID_DELIM, setLimit);
+            sawDelimiter = limit >= 0;
+            if (!sawDelimiter) {
+                limit = ID.length();
+            }
+        }
+    } else {
+        setStart = setLimit = pos;
+    }
+    
+    // Advance limit past /;?\s*/
+    int32_t idLimit = limit; // limit before separator
+    if (sawDelimiter) {
+        // assert(limit < ID.length() && ID.charAt(limit) == ID_DELIM);
+        ++limit;
+    }
+    while (limit < ID.length() && u_isspace(ID.charAt(limit))) {
+        ++limit;
+    }
+
+    if (!create) {
+        // TODO Improve performance by scanning the UnicodeSet pattern
+        // without actually constructing it, if create is FALSE.  That
+        // is, create a method like this one for UnicodeSet.
+        delete filter;
+        pos = limit;
+        return 0;
+    }
+
+    // 'id' is the ID with the filter pattern removed and with
+    // whitespace deleted.
+    UnicodeString id;
+    ID.extractBetween(pos, setStart, id);
+    ID.extractBetween(setLimit, idLimit, str);
+    id.append(str);
+
+    // Delete whitespace
+    int32_t i;
+    for (i=0; i<id.length(); ++i) {
+        if (Unicode::isWhitespace(id.charAt(i))) {
+            id.remove(i, 1);
+            --i;
+        }
+    }
+
+    // Fix the id, if necessary, by reversing it (A-B => B-A).
+    // Record the position of the separator.  Detect the special
+    // case of Null, whose inverse is itself.  Given an ID with no
+    // separator "Foo", an abbreviation for "Any-Foo", consider
+    // the inverse to be "Foo-Any".
+    int32_t sep = id.indexOf(ID_SEP);
+    if (sep < 0 && id.caseCompare(NullTransliterator::ID,
+                                  U_FOLD_CASE_DEFAULT) == 0) {
+        sep = id.length();
+    } else if (dir == UTRANS_REVERSE) {
+        if (sep >= 0) {
+            id.extractBetween(0, sep, str);
+            id.removeBetween(0, sep+1);
+        } else {
+            str = UnicodeString("Any", "");
+        }
+        sep = id.length();
+        id.append(ID_SEP).append(str);
+    } else if (sep < 0) {
+        str = UnicodeString("Any-", "");
+        sep = str.length();
+        id.insert(0, str);
+    }
+
+    // The 'alias' parameter is non-empty if _createInstance()
+    // finds that the given ID refers to an alias.  The reason
+    // _createInstance() doesn't call createInstance() (this
+    // method) directly is to avoid deadlock.  There are other
+    // ways to do this but this is one of the more efficient ways.
+    str.truncate(0);
+    t = _createInstance(id, str /*alias*/, parseError);
+
+    if (str.length() > 0) {
+        // assert(t==0);
+        t = createInstance(str, UTRANS_FORWARD, parseError);
+    }
+
+    if (t != 0) {
+        if (filter != 0) {
+            t->adoptFilter(filter);
+            id.insert(sep, ID, setStart, setLimit-setStart);
+        }
+        t->setID(id);
+        pos = limit;
+    }
+
     return t;
 }
+                                        
 
 /**
  * Returns a transliterator object given its ID.  Unlike getInstance(),
@@ -661,8 +917,6 @@ Transliterator* Transliterator::createInstance(const UnicodeString& ID,
 Transliterator* Transliterator::_createInstance(const UnicodeString& ID,
                                                 UnicodeString& aliasReturn,
                                                 UParseError* parseError) {
-    UErrorCode status = U_ZERO_ERROR;
-
     if (!cacheInitialized) {
         initializeCache();
     }
@@ -672,46 +926,55 @@ Transliterator* Transliterator::_createInstance(const UnicodeString& ID,
     CacheEntry* entry = (CacheEntry*) cache->get(ID);
     if (entry == 0) {
         entry = (CacheEntry*) internalCache->get(ID);
+        if (entry == 0) {
+            return 0; // out of memory
+        }
     }
 
-    TransliterationRuleData* data = 0;
+    UErrorCode status = U_ZERO_ERROR;
 
-    if (entry == 0) {
-        return 0;
-    }
+    for (;;) {
+        if (entry->entryType == CacheEntry::RBT_DATA) {
+            return new RuleBasedTransliterator(ID, entry->u.data);
+        } else if (entry->entryType == CacheEntry::PROTOTYPE) {
+            return entry->u.prototype->clone();
+        } else if (entry->entryType == CacheEntry::ALIAS) {
+            // We can't call createInstance() here because of deadlock.
+            aliasReturn = entry->stringArg;
+            return 0;
+        } else if (entry->entryType == CacheEntry::FACTORY) {
+            return entry->u.factory();
+        } else if (entry->entryType == CacheEntry::COMPOUND_RBT) {
+            UnicodeString id("_", "");
+            Transliterator *t = new RuleBasedTransliterator(id, entry->u.data);
+            t = new CompoundTransliterator(ID, entry->stringArg,
+                                           entry->intArg, t, status);
+            if (U_FAILURE(status)) {
+                delete t;
+                t = 0;
+                _unregister(ID);
+            }
+            return t;
+        }
 
-    if (entry->entryType == CacheEntry::RBT_DATA) {
-        data = entry->u.data;
-        // Fall through to construct transliterator from cached Data object.
-    } else if (entry->entryType == CacheEntry::PROTOTYPE) {
-        return entry->u.prototype->clone();
-    } else if (entry->entryType == CacheEntry::ALIAS) {
-        // We can't call createInstance() here because of deadlock.
-        aliasReturn = entry->stringArg;
-        return 0;
-    } else if (entry->entryType == CacheEntry::FACTORY) {
-        return entry->u.factory();
-    } else {
-        // At this point entry type must be either RULES_FORWARD
-        // or RULES_REVERSE
+        // At this point entry type must be either RULES_FORWARD or
+        // RULES_REVERSE.  We process the rule data into a
+        // TransliteratorRuleData object, and possibly also into an
+        // ::id header and/or footer.  Then we modify the cache with
+        // the parsed data and retry.
         UBool isReverse = (entry->entryType == CacheEntry::RULES_REVERSE);
-        
+
         // We use the file name, taken from another resource bundle
         // 2-d array at static init time, as a locale language.  We're
         // just using the locale mechanism to map through to a file
         // name; this in no way represents an actual locale.
 
-        char *ch;
-        ch = new char[entry->stringArg.length() + 1];
+        char *ch = new char[entry->stringArg.length() + 1];
         ch[entry->stringArg.extract(0, 0x7fffffff, ch, "")] = 0;
         Locale fakeLocale(ch);
         delete [] ch;
 
-        ResourceBundle bundle((char *)0,
-                              fakeLocale, status);
-        
-        // Call RBT to parse the rules from the resource bundle
-
+        ResourceBundle bundle((char *)0, fakeLocale, status);
         UnicodeString rules = bundle.getStringEx(RB_RULE, status);
 
         // If the status indicates a failure, then we don't have any
@@ -719,42 +982,54 @@ Transliterator* Transliterator::_createInstance(const UnicodeString& ID,
         // in the root locale should correspond to all the installed
         // transliterators; if it lists something that's not
         // installed, we'll get an error from ResourceBundle.
-        if (U_SUCCESS(status)) {
 
-            data = TransliterationRuleParser::parse(rules, isReverse
-                                    ? UTRANS_REVERSE
-                                    : UTRANS_FORWARD,
-                                    parseError);
+        TransliteratorParser::parse(rules, isReverse ?
+                                    UTRANS_REVERSE : UTRANS_FORWARD,
+                                    entry->u.data,
+                                    entry->stringArg,
+                                    entry->intArg,
+                                    parseError,
+                                    status);
 
-            // Double check to see if someone has modified the entry
-            // since we last looked at it.
-            if (entry->entryType != CacheEntry::RBT_DATA) {
-                entry->entryType = CacheEntry::RBT_DATA;
-                entry->u.data = data;
+        if (U_FAILURE(status)) {
+            // We have a failure of some kind.  Remove the ID from the
+            // cache so we don't keep trying.  NOTE: This will throw off
+            // anyone who is, at the moment, trying to iterate over the
+            // available IDs.  That's acceptable since we should never
+            // really get here except under installation, configuration,
+            // or unrecoverable run time memory failures.
+            _unregister(ID);
+            break;
+        }
+
+        // Reset entry->entryType to something that we process at the
+        // top of the loop, then loop back to the top.  As long as we
+        // do this, we only loop through twice at most.
+        // NOTE: The logic here matches that in createFromRules().
+        if (entry->stringArg.length() == 0) {
+            if (entry->u.data == 0) {
+                // No idBlock, no data -- this is just an
+                // alias for Null
+                entry->entryType = CacheEntry::ALIAS;
+                entry->stringArg = NullTransliterator::ID;
             } else {
-                // Oops!  Another thread has updated this cache entry
-                // already to point to a data object.  Discard the
-                // one we just created and use the one in the cache
-                // instead.
-                delete data;
-                data = entry->u.data;
+                // No idBlock, data != 0 -- this is an
+                // ordinary RBT_DATA
+                entry->entryType = CacheEntry::RBT_DATA;
+            }
+        } else {
+            if (entry->u.data == 0) {
+                // idBlock, no data -- this is an alias
+                entry->entryType = CacheEntry::ALIAS;
+            } else {
+                // idBlock and data -- this is a compound
+                // RBT
+                entry->entryType = CacheEntry::COMPOUND_RBT;
             }
         }
     }
 
-    if (data != 0) {
-        return new RuleBasedTransliterator(ID, data);
-    } else {
-        // We have a failure of some kind.  Remove the ID from the
-        // cache so we don't keep trying.  NOTE: This will throw off
-        // anyone who is, at the moment, trying to iterate over the
-        // available IDs.  That's acceptable since we should never
-        // really get here except under installation, configuration,
-        // or unrecoverable run time memory failures.
-        _unregister(ID);
-    }
-
-    return 0;
+    return 0; // failed
 }
 
 // For public consumption
@@ -907,10 +1182,11 @@ UChar Transliterator::filteredCharAt(const Replaceable& text, int32_t i) const {
         (localFilter->contains(c = text.charAt(i)) ? c : (UChar)0xFFFE);
 }
 
-// TODO Move this into the class
-// NO This should remain a C function for os/390 and Solaris Workshop [grhoten]
 /**
  * Comparison function for UVector.
+ *
+ * Do not make this a class static: This should remain a C function
+ * for os/390 and Solaris Workshop [grhoten]
  */
 U_CDECL_BEGIN
 static UBool U_CALLCONV
