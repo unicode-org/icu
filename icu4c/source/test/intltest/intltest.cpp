@@ -79,16 +79,19 @@ operator+(const UnicodeString& left,
 }
 
 UnicodeString
-operator+(const UnicodeString& left,
-      int64_t num)
+Int64ToUnicodeString(int64_t num)
 {
     char buffer[64];    // nos changed from 10 to 64
     char danger = 'p';  // guard against overrunning the buffer (rtg)
 
+#ifdef WIN32
+    sprintf(buffer, "%I64d", num);
+#else
     sprintf(buffer, "%lld", num);
+#endif
     assert(danger == 'p');
 
-    return left + buffer;
+    return buffer;
 }
 
 // [LIU] Just to get things working
@@ -136,7 +139,7 @@ UnicodeString toString(const Formattable& f) {
         break;
 
     case Formattable::kInt64:
-        s = UnicodeString("[Int64:") + f.getInt64() + "]"; // TODO: UnicodeString append Int64?
+        s = UnicodeString("[Int64:") + Int64ToUnicodeString(f.getInt64()) + "]";
         break;
 
     case Formattable::kString:
