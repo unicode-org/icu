@@ -4234,6 +4234,119 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
     return sortKeySize;
 }
 
+/**
+ * Get an inclusive lower bound sortkey for a given sortkey and strength.
+ */
+U_CAPI int32_t U_EXPORT2 
+ucol_getLowerBoundSortKey(const    UCollator    *coll,
+        const uint8_t       *source,
+        int32_t             sourceLength,
+        UColAttributeValue  strength,
+        uint8_t             *result,
+        int32_t             resultLength,
+        UErrorCode          *status) {
+/*
+ * The lowerbound is easy. Copy the input key up to the 01 terminating the
+ * requested level. Append a 00 and stop.
+ */
+  // consistency checks 
+  if(status == NULL || U_FAILURE(*status)) {
+    return 0;
+  }
+  if(coll == NULL || source == NULL ||
+    strength < UCOL_PRIMARY || 
+    (strength > UCOL_QUATERNARY && strength != UCOL_IDENTICAL)) {
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return 0;
+  }
+  // number of 01 to skip
+  int32_t toSkip = strength-1;
+  // need to adjust for UCOL_IDENTICAL
+  int32_t sourceIndex = 0;
+
+  if(coll->caseLevel == UCOL_ON) { // There is another level after primary and before the tertiary level
+    if(strength > UCOL_SECONDARY) { // We need to have the case level too
+      toSkip++;
+    }
+  }
+
+  // Scan the string until we skip enough of the key OR reach the end of the key
+  do {
+    sourceIndex++;
+    if(source[sourceIndex] == UCOL_LEVELTERMINATOR) {
+      toSkip--;
+    }
+  } while (toSkip >= 0 && source[sourceIndex] != 0);
+
+
+  if(result != NULL && resultLength >= sourceIndex) {
+    uprv_memcpy(result, source, sourceIndex);
+    result[sourceIndex] = 0;
+  }
+
+  return sourceIndex+1;
+}
+
+/**
+ * Get an exclusive upper bound sortkey for a given sortkey and strength.
+ */
+U_CAPI int32_t U_EXPORT2 
+ucol_getUpperBoundSortKey(const    UCollator    *coll,
+        const uint8_t       *source,
+        int32_t             sourceLength,
+        UColAttributeValue  strength,
+        uint8_t             *result,
+        int32_t             resultLength,
+        UErrorCode          *status){
+/*
+ * The upperbound is only slightly harder. Do the same as the lower bound, but then
+ * start backing up through the bytes. If a byte is neither FF nor 01, add one and
+ * stop. Otherwise, set it to 00 and continue to the previous byte.
+ */
+  // consistency checks 
+  if(status == NULL || U_FAILURE(*status)) {
+    return 0;
+  }
+  if(coll == NULL || source == NULL ||
+    strength < UCOL_PRIMARY || 
+    (strength > UCOL_QUATERNARY && strength != UCOL_IDENTICAL)) {
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return 0;
+  }
+  // number of 01 to skip
+  int32_t toSkip = strength-1;
+  // need to adjust for UCOL_IDENTICAL
+  int32_t sourceIndex = 0;
+
+  if(coll->caseLevel == UCOL_ON) { // There is another level after primary and before the tertiary level
+    if(strength > UCOL_SECONDARY) { // We need to have the case level too
+      toSkip++;
+    }
+  }
+
+  // Scan the string until we skip enough of the key OR reach the end of the key
+  do {
+    sourceIndex++;
+    if(source[sourceIndex] == UCOL_LEVELTERMINATOR) {
+      toSkip--;
+    }
+  } while (toSkip >= 0 && source[sourceIndex] != 0);
+
+  while(source[sourceIndex] == UCOL_LEVELTERMINATOR || 
+    source[sourceIndex] == 0xFF || 
+    source[sourceIndex] == 0) {
+    sourceIndex--;
+  }
+
+  if(result != NULL && resultLength > sourceIndex) {
+    uprv_memcpy(result, source, sourceIndex+1);
+    result[sourceIndex++]++; // add one to the last significant byte in the key
+    result[sourceIndex] = 0; // and terminate it
+  }
+
+  return sourceIndex+1;
+}
+
 static
 inline void uprv_appendByteToHexString(char *dst, uint8_t val) {
   uint32_t len = (uint32_t)uprv_strlen(dst);

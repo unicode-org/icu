@@ -471,6 +471,58 @@ ucol_getSortKey(const    UCollator    *coll,
 
 
 /**
+ * Get an inclusive lower bound sortkey for a given sortkey and strength.
+ * Return value is always the number of bytes needed, regardless of 
+ * whether the result buffer was big enough or even valid.
+ * Sort keys may be compared using <TT>strcmp</TT>.
+ * @param coll The UCollator containing the collation rules.
+ * @param source The source sortkey.
+ * @param sourceLength The length of source, or -1 if null-terminated. 
+ *                     (If an unmodified sortkey is passed, it is always null terminated).
+ * @param strength The strength of the lower bound
+ * @param result A pointer to a buffer to receive the resulting sortkey.
+ * @param resultLength The maximum size of result.
+ * @param status Used for returning error code if something went wrong.
+ * @return The size needed to fully store the sort key..
+ * @see ucol_keyHashCode
+ * @draft ICU 2.1
+ */
+U_CAPI int32_t U_EXPORT2 
+ucol_getLowerBoundSortKey(const    UCollator    *coll,
+        const uint8_t       *source,
+        int32_t             sourceLength,
+        UColAttributeValue  strength,
+        uint8_t             *result,
+        int32_t             resultLength,
+        UErrorCode          *status);
+
+/**
+ * Get an exclusive upper bound sortkey for a given sortkey and strength.
+ * Return value is always the number of bytes needed, regardless of 
+ * whether the result buffer was big enough or even valid.
+ * Sort keys may be compared using <TT>strcmp</TT>.
+ * @param coll The UCollator containing the collation rules.
+ * @param source The source sortkey.
+ * @param sourceLength The length of source, or -1 if null-terminated. 
+ *                     (If an unmodified sortkey is passed, it is always null terminated).
+ * @param strength The strength of the upper bound
+ * @param result A pointer to a buffer to receive the resulting sortkey.
+ * @param resultLength The maximum size of result.
+ * @param status Used for returning error code if something went wrong.
+ * @return The size needed to fully store the sort key..
+ * @see ucol_keyHashCode
+ * @draft ICU 2.1
+ */
+U_CAPI int32_t U_EXPORT2 
+ucol_getUpperBoundSortKey(const    UCollator    *coll,
+        const uint8_t       *source,
+        int32_t             sourceLength,
+        UColAttributeValue  strength,
+        uint8_t             *result,
+        int32_t             resultLength,
+        UErrorCode          *status);
+        
+/**
  * Gets the version information for a Collator. 
  * @param info the version # information, the result will be filled in
  * @stable
