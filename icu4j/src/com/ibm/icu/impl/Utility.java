@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2003/01/28 18:55:38 $
- * $Revision: 1.35 $
+ * $Date: 2003/02/07 21:07:37 $
+ * $Revision: 1.36 $
  *
  *****************************************************************************************
  */
@@ -628,6 +628,39 @@ public final class Utility {
     static final char[] HEX_DIGIT = {'0','1','2','3','4','5','6','7',
                      '8','9','A','B','C','D','E','F'};
 
+    /**
+     * Format a String for representation in a source file.  Like
+     * formatForSource but does not do line breaking.
+     */
+    static public final String format1ForSource(String s) {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("\"");
+        for (int i=0; i<s.length();) {
+            char c = s.charAt(i++);
+            if (c < '\u0020' || c == '"' || c == '\\') {
+                // Represent control characters, backslash and double quote
+                // using octal notation; otherwise the string we form
+                // won't compile, since Unicode escape sequences are
+                // processed before tokenization.
+                buffer.append('\\');
+                buffer.append(HEX_DIGIT[(c & 0700) >> 6]); // HEX_DIGIT works for octal
+                buffer.append(HEX_DIGIT[(c & 0070) >> 3]);
+                buffer.append(HEX_DIGIT[(c & 0007)]);
+            }
+            else if (c <= '\u007E') {
+                buffer.append(c);
+            }
+            else {
+                buffer.append("\\u");
+                buffer.append(HEX_DIGIT[(c & 0xF000) >> 12]);
+                buffer.append(HEX_DIGIT[(c & 0x0F00) >> 8]);
+                buffer.append(HEX_DIGIT[(c & 0x00F0) >> 4]);
+                buffer.append(HEX_DIGIT[(c & 0x000F)]);
+            }
+        }
+        buffer.append('"');
+        return buffer.toString();
+    }
 
     /**
      * Convert characters outside the range U+0020 to U+007F to
