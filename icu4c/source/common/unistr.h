@@ -1706,20 +1706,12 @@ UnicodeString::indexOf(const UnicodeString& srcText,
                UTextOffset start,
                int32_t length) const
 {
-  UTextOffset pos = 0, myStart = start;
-  int32_t myLength = length, limit = start + length;
-
-  // cache for speed
-  UChar ch = srcText.charAt(srcStart);
-
-  while( (pos = indexOf(ch, myStart, myLength)) != -1 && myLength > 0) {
-    if(compare(pos, srcLength, srcText, srcStart, srcLength) == 0)
-      return pos;
-
-    myStart = pos + 1;
-    myLength = limit - myStart;
+  if(!srcText.isBogus()) {
+    srcText.pinIndices(srcStart, srcLength);
+    if(srcLength > 0) {
+      return indexOf(srcText.getArrayStart(), srcStart, srcLength, start, length);
+    }
   }
-
   return -1;
 }
 
@@ -1735,30 +1727,6 @@ UnicodeString::indexOf(const UChar *srcChars,
                UTextOffset start,
                int32_t length) const
 { return indexOf(srcChars, 0, srcLength, start, length); }
-
-inline UTextOffset 
-UnicodeString::indexOf(const UChar *srcChars,
-               UTextOffset srcStart,
-               int32_t srcLength,
-               UTextOffset start,
-               int32_t length) const
-{
-  UTextOffset pos = 0, myStart = start;
-  int32_t myLength = length, limit = start + length;
-
-  // cache for speed
-  UChar ch = srcChars[srcStart];
-
-  while( (pos = indexOf(ch, myStart, myLength)) != -1 && myLength > 0) {
-    if(compare(pos, srcLength, srcChars, srcStart, srcLength) == 0)
-      return pos;
-
-    myStart = pos + 1;
-    myLength = limit - myStart;
-  }
-
-  return -1;
-}
 
 inline UTextOffset 
 UnicodeString::indexOf(UChar c) const
@@ -1797,19 +1765,12 @@ UnicodeString::lastIndexOf(const UnicodeString& srcText,
                UTextOffset start,
                int32_t length) const
 {
-  UTextOffset pos = 0, myStart = start;
-  int32_t myLength = length, limit = start + length;
-
-  // cache for speed
-  UChar ch = srcText.charAt(srcStart);
-
-  while( (pos = lastIndexOf(ch, myStart, myLength)) != -1 && myLength > 0) {
-    if(compare(pos, srcLength, srcText, srcStart, srcLength) == 0)
-      return pos;
-
-    myLength = pos - myStart - 1;
+  if(!srcText.isBogus()) {
+    srcText.pinIndices(srcStart, srcLength);
+    if(srcLength > 0) {
+      return lastIndexOf(srcText.getArrayStart(), srcStart, srcLength, start, length);
+    }
   }
-
   return -1;
 }
 
@@ -1825,29 +1786,6 @@ UnicodeString::lastIndexOf(const UChar *srcChars,
                UTextOffset start,
                int32_t length) const
 { return lastIndexOf(srcChars, 0, srcLength, start, length); }
-
-inline UTextOffset 
-UnicodeString::lastIndexOf(const UChar *srcChars,
-               UTextOffset srcStart,
-               int32_t srcLength,
-               UTextOffset start,
-               int32_t length) const
-{
-  UTextOffset pos = 0, myStart = start;
-  int32_t myLength = length, limit = start + length;
-
-  // cache for speed
-  UChar ch = srcChars[srcStart];
-
-  while( (pos = lastIndexOf(ch, myStart, myLength)) != -1 && myLength > 0) {
-    if(compare(pos, srcLength, srcChars, srcStart, srcLength) == 0)
-      return pos;
-
-    myLength = pos - myStart - 1;
-  }
-
-  return -1;
-}
 
 inline UTextOffset 
 UnicodeString::lastIndexOf(UChar c) const
