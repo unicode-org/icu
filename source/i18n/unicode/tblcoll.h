@@ -386,6 +386,12 @@ public:
   virtual UBool                  operator!=(const Collator& other) const;
 
   /**
+   * Gets the state of french collation. So what!
+   */
+  UCollationOptions getDirection();
+  void setDirection(UCollationOptions direction);
+
+  /**
    * Makes a deep copy of the object.  The caller owns the returned object.
    * @return the cloned object.
    * @stable
@@ -956,8 +962,5 @@ RuleBasedCollator::addContractOrder(const UnicodeString &groupChars,
 {
   addContractOrder(groupChars, anOrder, TRUE, status);
 }
-
-
-
 
 #endif
