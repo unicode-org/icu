@@ -320,6 +320,7 @@ RuleBasedBreakIterator(const void* image);
      * Set the iterator to analyze a new piece of text.  This function resets
      * the current iteration position to the beginning of the text.
      * @param newText The text to analyze.
+     * @deprecated
      * THIS FUNCTION SHOULD NOT BE HERE.  IT'S HERE BECAUSE BreakIterator DEFINES
      * IT AS PURE VIRTUAL, FORCING RBBI TO IMPLEMENT IT.  IT SHOULD BE REMOVED
      * FROM *BOTH* CLASSES.
