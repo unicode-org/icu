@@ -195,7 +195,7 @@ if (!uprv_mstrm_error(os))
             uprv_mstrm_write(os, (uint8_t *)this_obj->fIndex, sizeof(*(this_obj->fIndex)) * UCMP32_kIndexCount);
         }
         c = this_obj->fCompact ? 1 : 0;  /* char instead of int8_t for Mac compilation*/
-        uprv_mstrm_write(os, (const char*)&c, sizeof(c));
+        uprv_mstrm_write(os, (uint8_t *)&c, sizeof(c));
     }
 }
 
