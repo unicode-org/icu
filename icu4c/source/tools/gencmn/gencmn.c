@@ -85,12 +85,10 @@ static UOption options[]={
 /*6*/ UOPTION_DEF( "name", 'n', UOPT_REQUIRES_ARG),
 /*7*/ UOPTION_DEF( "type", 't', UOPT_REQUIRES_ARG),
 /*8*/ UOPTION_DEF( "source", 'S', UOPT_NO_ARG),
-/*9*/ UOPTION_DEF( "entrypoint", 'e', UOPT_REQUIRES_ARG),
-/*10*/ UOPTION_DEF( "revision", 'r', UOPT_REQUIRES_ARG)
-
+/*9*/ UOPTION_DEF( "entrypoint", 'e', UOPT_REQUIRES_ARG)
 };
 
-char symPrefix[100];
+static char *symPrefix;
 
 extern int
 main(int argc, char* argv[]) {
@@ -110,37 +108,6 @@ main(int argc, char* argv[]) {
     options[6].value=COMMON_DATA_NAME;
     options[7].value=DATA_TYPE;
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
-
-    if(options[6].doesOccur) /* name */
-    {
-      uprv_strcpy(symPrefix, options[6].value);
-    }
-    else
-    {
-      symPrefix[0] = 0;
-    }
-
-    if(options[10].doesOccur) /* revision */
-    {
-      int len;
-      int i;
-      uprv_strcat(symPrefix, options[10].value); 
-      /* Convert non alpha numeric symbols to underscores */
-
-      /* turn dots in the entry name into underscores */
-      len=uprv_strlen(symPrefix);
-      for(i=0; i<len; ++i) {
-        if(symPrefix[i]=='.') {
-          symPrefix[i]='_';
-        }
-      }
-    }
-
-    /* add an underscore to the prefix if non empty */
-    if(symPrefix[0] != 0)
-    {
-      uprv_strcat(symPrefix, "_");
-    }
 
     /* error handling, printing usage message */
     if(argc<0) {
@@ -348,6 +315,17 @@ main(int argc, char* argv[]) {
             exit(U_FILE_ACCESS_ERROR);
         }
 
+        /* If an entrypoint is specified, use it. */
+        if(options[9].doesOccur) {
+            entrypointName = options[9].value;
+        } else {
+            entrypointName = options[6].value;
+        }
+
+        symPrefix = (char *) uprv_malloc(uprv_strlen(entrypointName) + 2);
+        uprv_strcpy(symPrefix, entrypointName);
+        uprv_strcat(symPrefix, "_");
+
         /* write the source file */
         sprintf(buffer,
             "/*\n"
@@ -368,13 +346,6 @@ main(int argc, char* argv[]) {
             T_FileStream_writeLine(out, buffer);
         }
         T_FileStream_writeLine(out, ";\n\n");
-
-        /* If an entrypoint is specified, use it. */
-        if(options[9].doesOccur) {
-            entrypointName = options[9].value;
-        } else {
-            entrypointName = options[6].value;
-        }
 
         sprintf(
             buffer,
@@ -417,6 +388,8 @@ main(int argc, char* argv[]) {
 
         T_FileStream_writeLine(out, "\n    }\n};\n");
         T_FileStream_close(out);
+
+        uprv_free(symPrefix);
     }
 
     return 0;
