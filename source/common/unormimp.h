@@ -192,6 +192,33 @@ unorm_compose(UChar *dest, int32_t destCapacity,
               UErrorCode *pErrorCode);
 
 /**
+ * Internal option for unorm_cmpEquivFold() for decomposing.
+ * If not set, just do strcasecmp().
+ * @internal
+ */
+#define _COMPARE_EQUIV 0x80000
+
+/**
+ * Internal option for unorm_cmpEquivFold() for strncmp style.
+ * If set, checks for both string length and terminating NUL.
+ * @internal
+ */
+#define _STRNCMP_STYLE 0x1000
+
+/**
+ * Internal API, used by u_strcasecmp() etc.
+ * Compare strings for canonical equivalence (optional),
+ * case-insensitively (optional),
+ * in code point order or code unit order.
+ * @internal
+ */
+U_CAPI int32_t U_EXPORT2
+unorm_cmpEquivFold(const UChar *s1, int32_t length1,
+                   const UChar *s2, int32_t length2,
+                   uint32_t options,
+                   UErrorCode *pErrorCode);
+
+/**
  * Internal API, used by collation code.
  * Get access to the internal FCD trie table to be able to perform
  * incremental, per-code unit, FCD checks in collation.
