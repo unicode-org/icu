@@ -1,6 +1,6 @@
 ﻿// -*- Coding: utf-8; -*-  [all uconv resource files]
 // Copyright (c) 2000 IBM, Inc. and Others.
-// $Revision: 1.24 $
+// $Revision: 1.25 $
 //
 // Root translation file for uconv messages.
 // So you want to translate this file??? Great!
@@ -87,16 +87,16 @@ root
 
 // ICU errors - used by u_wmsg_errorName()
 
-  U_USING_FALLBACK_ERROR       { "Using fallback data." }
-  U_USING_DEFAULT_ERROR        { "Using default data." }
-  U_ZERO_ERROR                 { "No error has occured!" }
-  U_ILLEGAL_ARGUMENT_ERROR     { "Illegal argument!" }
+  U_USING_FALLBACK_ERROR       { "Using fallback data" }
+  U_USING_DEFAULT_ERROR        { "Using default data" }
+  U_ZERO_ERROR                 { "No error has occured" }
+  U_ILLEGAL_ARGUMENT_ERROR     { "Illegal argument" }
   U_MISSING_RESOURCE_ERROR     { "A resource was missing" }
-  U_INVALID_FORMAT_ERROR       { "Invalid format." }
-  U_FILE_ACCESS_ERROR          { "Problem accessing that file/object." }
-  U_INTERNAL_PROGRAM_ERROR     { "Internal program error!!" }
+  U_INVALID_FORMAT_ERROR       { "Invalid format" }
+  U_FILE_ACCESS_ERROR          { "Problem accessing that file/object" }
+  U_INTERNAL_PROGRAM_ERROR     { "Internal program error" }
   U_MESSAGE_PARSE_ERROR        { "Parse error on message format" }
-  U_MEMORY_ALLOCATION_ERROR    { "Out of memory!" }
+  U_MEMORY_ALLOCATION_ERROR    { "Out of memory" }
   U_INDEX_OUTOFBOUNDS_ERROR    { "An index was out-of-bounds" }
   U_PARSE_ERROR                { "Parse error" }
   U_INVALID_CHAR_FOUND         { "Invalid character found" }

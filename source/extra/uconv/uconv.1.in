@@ -84,9 +84,17 @@ to another.
 The transcoding is done using Unicode as a pivot encoding
 (i.e. the data are first transcoded from their original encoding to
 Unicode, and then from Unicode to the destination encoding).
+.PP
 If an
 .I encoding
-is not specified, the default encoding is used.
+is not specified or is
+.BR - ,
+the default encoding is used. Thus, calling
+.B uconv
+with no
+.I encoding
+provides an easy way to validate and sanitize data files for
+further consumption by tools requiring data in the default encoding.
 .PP
 When calling
 .BR uconv ,
