@@ -331,6 +331,32 @@ static void TestNextPrevChar(){
          i=i+6;
     }
 
+    {
+        /* test non-characters */
+        static const uint8_t nonChars[]={
+            0xef, 0xb7, 0x90,       /* U+fdd0 */
+            0xef, 0xbf, 0xbf,       /* U+feff */
+            0xf0, 0x9f, 0xbf, 0xbe, /* U+1fffe */
+            0xf0, 0xbf, 0xbf, 0xbf, /* U+3ffff */
+            0xf4, 0x8f, 0xbf, 0xbe  /* U+10fffe */
+        };
+
+        UChar32 c;
+        int32_t i;
+
+        for(i=0; i<sizeof(nonChars);) {
+            U8_NEXT(nonChars, i, sizeof(nonChars), c);
+            if(!U_IS_UNICODE_NONCHAR(c)) {
+                log_err("U8_NEXT(before %d) failed to read a non-character\n", i);
+            }
+        }
+        for(i=sizeof(nonChars); i>0;) {
+            U8_PREV(nonChars, 0, i, c);
+            if(!U_IS_UNICODE_NONCHAR(c)) {
+                log_err("U8_PREV(at %d) failed to read a non-character\n", i);
+            }
+        }
+    }
 }
 
 static void TestFwdBack(){ 
