@@ -4,7 +4,7 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/unicode/ucurr.h,v $ 
-* $Revision: 1.6 $
+* $Revision: 1.7 $
 **********************************************************************
 */
 #ifndef _UCURR_H_
@@ -13,6 +13,8 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
+
+typedef const void* UCurrRegistryKey;
 
 /**
  * The ucurr API encapsulates information about a currency, as defined by
@@ -65,6 +67,29 @@ typedef enum UCurrNameStyle {
      */
     UCURR_LONG_NAME
 } UCurrNameStyle;
+
+/**
+ * Register an (existing) ISO 4217 currency code for the given locale.
+ * @param isoCode the three-letter ISO 4217 currency code
+ * @param locale  the locale for which to register this currency code
+ * @param status the in/out status code, no special meanings are assigned
+ * @return a registry key that can be used to unregister this currency code
+ * @draft ICU 2.6
+ */
+U_CAPI UCurrRegistryKey U_EXPORT2
+    ucurr_register(const UChar* isoCode, 
+                   const char* locale,  
+                   UErrorCode* status);
+/**
+ * Unregister the previously-registered currency definitions using the
+ * URegistryKey returned from ucurr_register.  Key becomes invalid after
+ * a successful call and should not be used again.
+ * @param key the retgistry key returned by a previous call to ucurr_register
+ * @param status the in/out status code, no special meanings are assigned
+ * @return TRUE if the currency for this key was successfully unregistered
+ */
+U_CAPI UBool U_EXPORT2
+    ucurr_unregister(UCurrRegistryKey key, UErrorCode* status);
 
 /**
  * Returns the display name for the given currency in the
