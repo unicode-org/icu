@@ -8,14 +8,11 @@
 #define _INTLTESTNUMBERFORMAT
 
 
-#include <stdlib.h>
-
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/numfmt.h"
-#include "unicode/fmtable.h"
 #include "unicode/locid.h"
 #include "intltest.h"
 

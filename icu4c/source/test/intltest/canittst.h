@@ -26,7 +26,6 @@ class Transliterator;
 
 U_NAMESPACE_END
 
-#include "unicode/normlzr.h"
 #include "unicode/translit.h"
 #include "intltest.h"
 #include "hash.h"

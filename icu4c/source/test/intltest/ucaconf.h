@@ -18,10 +18,7 @@
 #if !UCONFIG_NO_COLLATION
 
 #include "unicode/tblcoll.h"
-#include "unicode/ustring.h"
 #include "tscoll.h"
-#include "uparse.h"
-#include "cstring.h"
 
 #include <stdio.h>
 

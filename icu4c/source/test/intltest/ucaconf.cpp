@@ -15,6 +15,10 @@
 #if !UCONFIG_NO_COLLATION
 
 #include "ucaconf.h"
+#include "unicode/ustring.h"
+#include "cstring.h"
+#include "uparse.h"
+
 UCAConformanceTest::UCAConformanceTest() :
 rbUCA(NULL),
 testFile(NULL),

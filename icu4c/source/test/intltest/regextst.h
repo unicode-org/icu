@@ -12,7 +12,6 @@
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
 
 #include "intltest.h"
-#include "unicode/regex.h"
 
 
 class RegexTest: public IntlTest {

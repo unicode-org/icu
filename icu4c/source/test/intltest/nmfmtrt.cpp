@@ -16,6 +16,7 @@
 
 #include <float.h>
 #include <stdio.h>    // for sprintf
+#include <stdlib.h>
  
 // *****************************************************************************
 // class NumberFormatRoundTripTest
@@ -49,6 +50,31 @@ NumberFormatRoundTripTest::failure(UErrorCode status, const char* msg)
     }
 
     return FALSE;
+}
+
+uint32_t
+NumberFormatRoundTripTest::randLong()
+{
+    // Assume 8-bit (or larger) rand values.  Also assume
+    // that the system rand() function is very poor, which it always is.
+    uint32_t d;
+    uint32_t i;
+    char* poke = (char*)&d;
+    for (i=0; i < sizeof(uint32_t); ++i)
+    {
+        poke[i] = (char)(rand() & 0xFF);
+    }
+    return d;
+}
+
+/**
+ * Return a random value from -range..+range.
+ */
+double 
+NumberFormatRoundTripTest::randomDouble(double range)
+{
+    double a = randFraction();
+    return (2.0 * range * a) - range;
 }
 
 void 
@@ -177,16 +203,6 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt)
         test(fmt, randomDouble(1e-78));  /*OS390 and OS400*/
 #endif /* OS390 and OS400*/
     }
-}
-
-/**
- * Return a random value from -range..+range.
- */
-double 
-NumberFormatRoundTripTest::randomDouble(double range)
-{
-    double a = randFraction();
-    return (2.0 * range * a) - range;
 }
 
 void 
