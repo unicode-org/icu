@@ -415,9 +415,25 @@ backAndForth(UCollationElements *iter)
     {
         if (o != orders[-- index])
         {
+        if (o == 0)
+          index ++;
+        else
+        {
+          while (index > 0 && orders[-- index] == 0)
+          {
+          }
+          if (o != orders[index])
+          {
             log_err("Mismatch at index : 0x%x\n", index);
             return;
         }
+
+        }
+      }
+    }
+
+    while (index != 0 && orders[index - 1] == 0) {
+      index --;
     }
 
     if (index != 0)

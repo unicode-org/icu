@@ -637,15 +637,36 @@ void IntlTestCollator::backAndForth(CollationElementIterator &iter)
     while ((o = iter.previous(status)) != CollationElementIterator::NULLORDER)
     {
         if (index == 0) {
+          if(o == 0) {
+            continue;
+          } else { // this is an error, orders exhausted but there are non-ignorable CEs from
             // going backwards
             errln("Backward iteration returned a non ignorable after orders are exhausted");
             break;
         }
+        }
         if (o != orders[--index])
         {
+            if (o == 0)
+                index ++;
+            else
+            {
+                while (index > 0 && orders[--index] == 0)
+                {
+                }
+                if (o != orders[index])
+                {
             errln("Mismatch at index %d: 0x%X vs 0x%X", index,
                   orders[index], o);
+                    break;
+                }
+            }
         }
+    }
+
+    while (index != 0 && orders[index - 1] == 0)
+    {
+      index --;
     }
 
     if (index != 0)
