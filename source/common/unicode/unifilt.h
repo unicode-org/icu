@@ -89,7 +89,7 @@ public:
      *
      * @draft ICU 2.2
      */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+    virtual inline UClassID getDynamicClassID() const = 0;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
