@@ -635,7 +635,7 @@ Locale::setToBogus() {
     fIsBogus = TRUE;
 }
 
-const Locale&
+const Locale& U_EXPORT2
 Locale::getDefault()
 {
     const Locale *retLocale;
@@ -657,7 +657,7 @@ Locale::getDefault()
 
 
 
-void
+void U_EXPORT2
 Locale::setDefault( const   Locale&     newLocale,
                             UErrorCode&  status)
 {
@@ -672,7 +672,7 @@ Locale::setDefault( const   Locale&     newLocale,
     locale_set_default_internal(localeID);
 }
 
-Locale
+Locale U_EXPORT2
 Locale::createFromName (const char *name)
 {
     if (name) {
@@ -685,7 +685,7 @@ Locale::createFromName (const char *name)
     }
 }
 
-Locale
+Locale U_EXPORT2
 Locale::createCanonical(const char* name) {
     Locale loc("");
     loc.init(name, TRUE);
@@ -943,7 +943,7 @@ Locale::getDisplayName(const Locale &displayLocale,
 
     return result;
 }
-const Locale*
+const Locale* U_EXPORT2
 Locale::getAvailableLocales(int32_t& count)
 {
     // for now, there is a hardcoded list, so just walk through that list and set it up.
@@ -980,12 +980,12 @@ Locale::getAvailableLocales(int32_t& count)
     return availableLocaleList;
 }
 
-const char* const* Locale::getISOCountries()
+const char* const* U_EXPORT2 Locale::getISOCountries()
 {
     return uloc_getISOCountries();
 }
 
-const char* const* Locale::getISOLanguages()
+const char* const* U_EXPORT2 Locale::getISOLanguages()
 {
     return uloc_getISOLanguages();
 }
@@ -996,128 +996,128 @@ void Locale::setFromPOSIXID(const char *posixID)
     init(posixID, TRUE);
 }
 
-const Locale &
+const Locale & U_EXPORT2
 Locale::getEnglish(void)
 {
     return getLocale(eENGLISH);
 }
 
-const Locale &
+const Locale & U_EXPORT2
 Locale::getFrench(void)
 {
     return getLocale(eFRENCH);
 }
 
-const Locale &
+const Locale & U_EXPORT2
 Locale::getGerman(void)
 {
     return getLocale(eGERMAN);
 }
 
-const Locale &
+const Locale & U_EXPORT2
 Locale::getItalian(void)
 {
     return getLocale(eITALIAN);
 }
 
-const Locale &
+const Locale & U_EXPORT2
 Locale::getJapanese(void)
 {
     return getLocale(eJAPANESE);
 }
 
-const Locale &
+const Locale & U_EXPORT2
 Locale::getKorean(void)
 {
     return getLocale(eKOREAN);
 }
 
-const Locale &
+const Locale & U_EXPORT2
 Locale::getChinese(void)
 {
     return getLocale(eCHINESE);
 }
 
-const Locale &
+const Locale & U_EXPORT2
 Locale::getSimplifiedChinese(void)
 {
     return getLocale(eCHINA);
 }
 
-const Locale &
+const Locale & U_EXPORT2
 Locale::getTraditionalChinese(void)
 {
     return getLocale(eTAIWAN);
 }
 
 
-const Locale &
+const Locale & U_EXPORT2
 Locale::getFrance(void)
 {
     return getLocale(eFRANCE);
 }
 
-const Locale &
+const Locale & U_EXPORT2
 Locale::getGermany(void)
 {
     return getLocale(eGERMANY);
 }
 
-const Locale &
+const Locale & U_EXPORT2
 Locale::getItaly(void)
 {
     return getLocale(eITALY);
 }
 
-const Locale &
+const Locale & U_EXPORT2
 Locale::getJapan(void)
 {
     return getLocale(eJAPAN);
 }
 
-const Locale &
+const Locale & U_EXPORT2
 Locale::getKorea(void)
 {
     return getLocale(eKOREA);
 }
 
-const Locale &
+const Locale & U_EXPORT2
 Locale::getChina(void)
 {
     return getLocale(eCHINA);
 }
 
-const Locale &
+const Locale & U_EXPORT2
 Locale::getPRC(void)
 {
     return getLocale(eCHINA);
 }
 
-const Locale &
+const Locale & U_EXPORT2
 Locale::getTaiwan(void)
 {
     return getLocale(eTAIWAN);
 }
 
-const Locale &
+const Locale & U_EXPORT2
 Locale::getUK(void)
 {
     return getLocale(eUK);
 }
 
-const Locale &
+const Locale & U_EXPORT2
 Locale::getUS(void)
 {
     return getLocale(eUS);
 }
 
-const Locale &
+const Locale & U_EXPORT2
 Locale::getCanada(void)
 {
     return getLocale(eCANADA);
 }
 
-const Locale &
+const Locale & U_EXPORT2
 Locale::getCanadaFrench(void)
 {
     return getLocale(eCANADA_FRENCH);
@@ -1193,7 +1193,7 @@ private:
     static const char fgClassID;/* Warning this is used beyond the typical RTTI usage. */
 
 public:
-    static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
+    static UClassID U_EXPORT2 getStaticClassID(void) { return (UClassID)&fgClassID; }
     virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); }
 public:
     KeywordEnumeration(const char *keys, int32_t keywordLen, int32_t currentIndex, UErrorCode &status)

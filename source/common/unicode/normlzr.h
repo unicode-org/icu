@@ -1,6 +1,6 @@
 /*
  ********************************************************************
- * COPYRIGHT: 
+ * COPYRIGHT:
  * Copyright (c) 1996-2004, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
@@ -23,7 +23,7 @@ typedef struct UCharIterator UCharIterator; /**< C typedef for struct UCharItera
 
 U_NAMESPACE_BEGIN
 /**
- * \brief C++ API: Unicode Normalization 
+ * \brief C++ API: Unicode Normalization
  *
  * The Normalizer class consists of two parts:
  * - static functions that normalize strings or test if strings are normalized
@@ -136,7 +136,7 @@ public:
    * @stable ICU 2.0
    */
   Normalizer(const UnicodeString& str, UNormalizationMode mode);
-    
+
   /**
    * Creates a new <code>Normalizer</code> object for iterating over the
    * normalized form of a given string.
@@ -194,7 +194,7 @@ public:
    * @param status    The error code.
    * @stable ICU 2.0
    */
-  static void normalize(const UnicodeString& source,
+  static void U_EXPORT2 normalize(const UnicodeString& source,
                         UNormalizationMode mode, int32_t options,
                         UnicodeString& result,
                         UErrorCode &status);
@@ -216,7 +216,7 @@ public:
    * @param status    The error code.
    * @stable ICU 2.0
    */
-  static void compose(const UnicodeString& source,
+  static void U_EXPORT2 compose(const UnicodeString& source,
                       UBool compat, int32_t options,
                       UnicodeString& result,
                       UErrorCode &status);
@@ -238,22 +238,22 @@ public:
    * @param status    The error code.
    * @stable ICU 2.0
    */
-  static void decompose(const UnicodeString& source,
+  static void U_EXPORT2 decompose(const UnicodeString& source,
                         UBool compat, int32_t options,
                         UnicodeString& result,
                         UErrorCode &status);
 
   /**
-   * Performing quick check on a string, to quickly determine if the string is 
+   * Performing quick check on a string, to quickly determine if the string is
    * in a particular normalization format.
    * This is a wrapper for unorm_quickCheck(), using a UnicodeString.
    *
    * Three types of result can be returned UNORM_YES, UNORM_NO or
    * UNORM_MAYBE. Result UNORM_YES indicates that the argument
    * string is in the desired normalized format, UNORM_NO determines that
-   * argument string is not in the desired normalized format. A 
-   * UNORM_MAYBE result indicates that a more thorough check is required, 
-   * the user may have to put the string in its normalized form and compare the 
+   * argument string is not in the desired normalized format. A
+   * UNORM_MAYBE result indicates that a more thorough check is required,
+   * the user may have to put the string in its normalized form and compare the
    * results.
    * @param source       string for determining if it is in a normalized format
    * @param mode         normalization format
@@ -353,7 +353,7 @@ public:
    * @stable ICU 2.1
    */
   static UnicodeString &
-  concatenate(UnicodeString &left, UnicodeString &right,
+  U_EXPORT2 concatenate(UnicodeString &left, UnicodeString &right,
               UnicodeString &result,
               UNormalizationMode mode, int32_t options,
               UErrorCode &errorCode);
@@ -430,7 +430,7 @@ public:
   //-------------------------------------------------------------------------
   // Iteration API
   //-------------------------------------------------------------------------
-  
+
   /**
    * Return the current character in the normalized text.
    * current() may need to normalize some text at getIndex().
@@ -572,7 +572,7 @@ public:
   /**
    * Returns a pointer to a new Normalizer that is a clone of this one.
    * The caller is responsible for deleting the new clone.
-   * @return a pointer to a new Normalizer 
+   * @return a pointer to a new Normalizer
    * @stable ICU 2.0
    */
   Normalizer*        clone(void) const;
@@ -634,7 +634,7 @@ public:
    * @see #getOption
    * @stable ICU 2.0
    */
-  void setOption(int32_t option, 
+  void setOption(int32_t option,
          UBool value);
 
   /**
@@ -657,7 +657,7 @@ public:
    * @param status a UErrorCode
    * @stable ICU 2.0
    */
-  void setText(const UnicodeString& newText, 
+  void setText(const UnicodeString& newText,
            UErrorCode &status);
 
   /**
@@ -668,7 +668,7 @@ public:
    * @param status a UErrorCode
    * @stable ICU 2.0
    */
-  void setText(const CharacterIterator& newText, 
+  void setText(const CharacterIterator& newText,
            UErrorCode &status);
 
   /**
@@ -696,7 +696,7 @@ public:
    * @returns a UClassID for this class.
    * @stable ICU 2.2
    */
-  static UClassID getStaticClassID();
+  static UClassID U_EXPORT2 getStaticClassID();
 
   /**
    * ICU "poor man's RTTI", returns a UClassID for the actual class.
@@ -751,7 +751,7 @@ Normalizer::operator!= (const Normalizer& other) const
 
 inline UNormalizationCheckResult
 Normalizer::quickCheck(const UnicodeString& source,
-                       UNormalizationMode mode, 
+                       UNormalizationMode mode,
                        UErrorCode &status) {
     if(U_FAILURE(status)) {
         return UNORM_MAYBE;
@@ -775,7 +775,7 @@ Normalizer::quickCheck(const UnicodeString& source,
 
 inline UBool
 Normalizer::isNormalized(const UnicodeString& source,
-                         UNormalizationMode mode, 
+                         UNormalizationMode mode,
                          UErrorCode &status) {
     if(U_FAILURE(status)) {
         return FALSE;

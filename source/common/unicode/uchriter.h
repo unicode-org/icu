@@ -78,14 +78,14 @@ public:
   /**
    * Copy constructor.  The new iterator iterates over the same range
    * of the same string as "that", and its initial position is the
-   * same as "that"'s current position.  
+   * same as "that"'s current position.
    * @param that The UCharCharacterIterator to be copied
    * @stable ICU 2.0
    */
   UCharCharacterIterator(const UCharCharacterIterator&  that);
 
   /**
-   * Destructor. 
+   * Destructor.
    * @stable ICU 2.0
    */
   ~UCharCharacterIterator();
@@ -93,9 +93,9 @@ public:
   /**
    * Assignment operator.  *this is altered to iterate over the sane
    * range of the same string as "that", and refers to the same
-   * character within that string as "that" does. 
+   * character within that string as "that" does.
    * @param that The object to be copied
-   * @return the newly created object 
+   * @return the newly created object
    * @stable ICU 2.0
    */
   UCharCharacterIterator&
@@ -103,7 +103,7 @@ public:
 
   /**
    * Returns true if the iterators iterate over the same range of the
-   * same string and are pointing at the same character.  
+   * same string and are pointing at the same character.
    * @param that The ForwardCharacterIterator used to be compared for equality
    * @return true if the iterators iterate over the same range of the
    * same string and are pointing at the same character.
@@ -112,7 +112,7 @@ public:
   virtual UBool          operator==(const ForwardCharacterIterator& that) const;
 
   /**
-   * Generates a hash code for this iterator.  
+   * Generates a hash code for this iterator.
    * @return the hash code.
    * @stable ICU 2.0
    */
@@ -121,12 +121,12 @@ public:
   /**
    * Returns a new UCharCharacterIterator referring to the same
    * character in the same range of the same string as this one.  The
-   * caller must delete the new iterator.  
+   * caller must delete the new iterator.
    * @return the CharacterIterator newly created
    * @stable ICU 2.0
    */
   virtual CharacterIterator* clone(void) const;
-                                
+
   /**
    * Sets the iterator to refer to the first code unit in its
    * iteration range, and returns that code unit.
@@ -188,7 +188,7 @@ public:
   /**
    * Sets the iterator to refer to the "position"-th code unit
    * in the text-storage object the iterator refers to, and
-   * returns that code unit.  
+   * returns that code unit.
    * @param position the position within the text-storage object
    * @return the code unit
    * @stable ICU 2.0
@@ -209,14 +209,14 @@ public:
   virtual UChar32       setIndex32(int32_t position);
 
   /**
-   * Returns the code unit the iterator currently refers to.  
+   * Returns the code unit the iterator currently refers to.
    * @return the code unit the iterator currently refers to.
    * @stable ICU 2.0
    */
   virtual UChar         current(void) const;
 
   /**
-   * Returns the code point the iterator currently refers to.  
+   * Returns the code point the iterator currently refers to.
    * @return the code point the iterator currently refers to.
    * @stable ICU 2.0
    */
@@ -225,8 +225,8 @@ public:
   /**
    * Advances to the next code unit in the iteration range (toward
    * endIndex()), and returns that code unit.  If there are no more
-   * code units to return, returns DONE. 
-   * @return the next code unit in the iteration range. 
+   * code units to return, returns DONE.
+   * @return the next code unit in the iteration range.
    * @stable ICU 2.0
    */
   virtual UChar         next(void);
@@ -240,11 +240,11 @@ public:
    * @stable ICU 2.0
    */
   virtual UChar         nextPostInc(void);
-        
+
   /**
    * Advances to the next code point in the iteration range (toward
    * endIndex()), and returns that code point.  If there are no more
-   * code points to return, returns DONE.  
+   * code points to return, returns DONE.
    * Note that iteration with "pre-increment" semantics is less
    * efficient than iteration with "post-increment" semantics
    * that is provided by next32PostInc().
@@ -262,7 +262,7 @@ public:
    * @stable ICU 2.0
    */
   virtual UChar32       next32PostInc(void);
-        
+
   /**
    * Returns FALSE if there are no more code units or code points
    * at or after the current position in the iteration range.
@@ -277,7 +277,7 @@ public:
   /**
    * Advances to the previous code unit in the iteration range (toward
    * startIndex()), and returns that code unit.  If there are no more
-   * code units to return, returns DONE.  
+   * code units to return, returns DONE.
    * @return the previous code unit in the iteration range.
    * @stable ICU 2.0
    */
@@ -287,7 +287,7 @@ public:
    * Advances to the previous code point in the iteration range (toward
    * startIndex()), and returns that code point.  If there are no more
    * code points to return, returns DONE.
-   * @return the previous code point in the iteration range.  
+   * @return the previous code point in the iteration range.
    * @stable ICU 2.0
    */
   virtual UChar32       previous32(void);
@@ -334,26 +334,26 @@ public:
    * @stable ICU 2.0
    */
   void setText(const UChar* newText, int32_t newTextLength);
-  
+
   /**
    * Copies the UChar array under iteration into the UnicodeString
    * referred to by "result".  Even if this iterator iterates across
    * only a part of this string, the whole string is copied.
-   * @param result Receives a copy of the text under iteration.  
+   * @param result Receives a copy of the text under iteration.
    * @stable ICU 2.0
    */
   virtual void            getText(UnicodeString& result);
 
   /**
-   * Return a class ID for this class (not really public) 
-   * @return a class ID for this class  
+   * Return a class ID for this class (not really public)
+   * @return a class ID for this class
    * @stable ICU 2.0
    */
-  static UClassID         getStaticClassID(void);
+  static UClassID         U_EXPORT2 getStaticClassID(void);
 
   /**
-   * Return a class ID for this object (not really public) 
-   * @return a class ID for this object.  
+   * Return a class ID for this object (not really public)
+   * @return a class ID for this object.
    * @stable ICU 2.0
    */
   virtual UClassID        getDynamicClassID(void) const;
@@ -367,7 +367,7 @@ protected:
   /**
    * Protected member text
    * @stable ICU 2.0
-   */      
+   */
   const UChar*            text;
 
 };
