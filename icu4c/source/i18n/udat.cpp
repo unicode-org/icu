@@ -243,6 +243,38 @@ udat_parse(    const    UDateFormat*        format,
   return res;
 }
 
+U_CAPI void U_EXPORT2
+udat_parseCalendar(const    UDateFormat*    format,
+                            UCalendar*      calendar,
+                   const    UChar*          text,
+                            int32_t         textLength,
+                            int32_t         *parsePos,
+                            UErrorCode      *status)
+{
+
+  if(U_FAILURE(*status)) return;
+
+  int32_t len = (textLength == -1 ? u_strlen(text) : textLength);
+  const UnicodeString src((UChar*)text, len, len);
+  ParsePosition pp;
+
+  if(parsePos != 0)
+    pp.setIndex(*parsePos);
+
+  ((DateFormat*)format)->parse(src, *(Calendar*)calendar, pp);
+
+  if(parsePos != 0) {
+    if(pp.getErrorIndex() == -1)
+      *parsePos = pp.getIndex();
+    else {
+      *parsePos = pp.getErrorIndex();
+      *status = U_PARSE_ERROR;
+    }
+  }
+  
+  return;
+}
+
 U_CAPI UBool U_EXPORT2
 udat_isLenient(const UDateFormat* fmt)
 {

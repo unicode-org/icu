@@ -254,6 +254,28 @@ udat_parse(    const    UDateFormat*    format,
                     UErrorCode      *status);
 
 /**
+* Parse a string into an date/time using a UDateFormat.
+* The date will be parsed using the conventions specified in \Ref{udat_open}
+* or \Ref{udat_openPattern}
+* @param fmt The formatter to use.
+* @param calendar The calendar in which to store the parsed data.
+* @param text The text to parse.
+* @param textLength The length of text, or -1 if null-terminated.
+* @param parsePos If not 0, on input a pointer to an integer specifying the offset at which
+* to begin parsing.  If not 0, on output the offset at which parsing ended.
+* @param status A pointer to an UErrorCode to receive any errors
+* @see udat_format
+* @stable
+*/
+U_CAPI void U_EXPORT2 
+udat_parseCalendar(const    UDateFormat*    format,
+                            UCalendar*      calendar,
+                   const    UChar*          text,
+                            int32_t         textLength,
+                            int32_t         *parsePos,
+                            UErrorCode      *status);
+
+/**
 * Determine if an UDateFormat will perform lenient parsing.
 * With lenient parsing, the parser may use heuristics to interpret inputs that do not
 * precisely match the pattern. With strict parsing, inputs must match the pattern.
@@ -491,7 +513,6 @@ udat_countSymbols(    const    UDateFormat                *fmt,
 * @param value The new value
 * @param valueLength The length of value, or -1 if null-terminated
 * @param status A pointer to an UErrorCode to receive any errors
-* @return A pointer to result.
 * @see udat_getSymbols
 * @see udat_countSymbols
 * @stable
