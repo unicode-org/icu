@@ -218,7 +218,7 @@ public:
 
     /**
      * Return a CharacterIterator over the text being analyzed.
-     * @draft
+     * @stable
      */
     virtual const CharacterIterator& getText(void) const = 0;
 
@@ -240,7 +240,7 @@ public:
     /**
      * Change the text over which this operates. The text boundary is
      * reset to the start.
-     * @draft
+     * @stable
      */
     virtual void  setText(const UnicodeString &text) = 0;
 
@@ -350,7 +350,7 @@ public:
      * used; neither the requested locale nor any of its fall back locales
      * could be found.
      * The caller owns the returned object and is responsible for deleting it.
-     * @draft
+     * @stable
      */
     static BreakIterator* createWordInstance(const Locale& where, 
                                                    UErrorCode& status);
@@ -373,7 +373,7 @@ public:
      * used; neither the requested locale nor any of its fall back locales
      * could be found.
      * The caller owns the returned object and is responsible for deleting it.
-     * @draft
+     * @stable
      */
     static BreakIterator* createLineInstance(const Locale& where, 
                                                    UErrorCode& status);
@@ -394,7 +394,7 @@ public:
      * used; neither the requested locale nor any of its fall back locales
      * could be found.
      * The caller owns the returned object and is responsible for deleting it.
-     * @draft
+     * @stable
      */
     static BreakIterator* createCharacterInstance(const Locale& where, 
                                                         UErrorCode& status);
@@ -414,7 +414,7 @@ public:
      * used; neither the requested locale nor any of its fall back locales
      * could be found.
      * The caller owns the returned object and is responsible for deleting it.
-     * @draft
+     * @stable
      */
     static BreakIterator* createSentenceInstance(const Locale& where, 
                                                        UErrorCode& status);
@@ -466,7 +466,7 @@ public:
         necessary.
      * @return pointer to the new clone
      *  
-     * @draft API 1.8 freeze
+     * @draft ICU 1.8
      */
 
     virtual BreakIterator *  createBufferClone(void *stackBuffer,
