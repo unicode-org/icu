@@ -12,7 +12,7 @@
 # 
 # Blank lines and lines beginning with '#' are ignored.
 # 
-# Lines in this fiel have one of the following forms (text not
+# Lines in this file have one of the following forms (text not
 # enclosed by <> is literal):
 # 
 #   <id>:file:<resource>:<encoding>:<direction>
