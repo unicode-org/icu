@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2003, International Business Machines Corporation and    *
+* Copyright (C) 1996-2004, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -384,7 +384,8 @@ public abstract class Collator implements Comparator, Cloneable
         abstract Object registerInstance(Collator c, Locale l);
         abstract Object registerFactory(CollatorFactory f);
         abstract boolean unregister(Object k);
-        abstract Locale[] getAvailableLocales();
+        abstract Locale[] getAvailableLocales(); // TODO remove
+        abstract ULocale[] getAvailableULocales();
         abstract String getDisplayName(Locale ol, Locale dl);
     }
     
@@ -474,19 +475,131 @@ public abstract class Collator implements Comparator, Cloneable
     }
 
     /**
-     * Get the set of Locales for which Collators are installed.
-     * @return the list of available locales in which collators are installed.
-     *         The list of Locales returned will include any that have been registered,
-     *         in addition to those Locales that are installed with ICU4J.
+     * Get the set of locales, as Locale objects, for which collators
+     * are installed.  Note that Locale objects do not support RFC 3066.
+     * @return the list of locales in which collators are installed.
+     * This list includes any that have been registered, in addition to
+     * those that are installed with ICU4J.
      * @draft ICU 2.4
      */
     public static Locale[] getAvailableLocales() {
+        // TODO make this wrap getAvailableULocales later
         if (shim == null) {
             return ICUResourceBundle.getAvailableLocales(UResourceBundle.ICU_COLLATION_BASE_NAME);
         }
         return shim.getAvailableLocales();
     }
 
+    /**
+     * Get the set of locales, as ULocale objects, for which collators
+     * are installed.  ULocale objects support RFC 3066.
+     * @return the list of locales in which collators are installed.
+     * This list includes any that have been registered, in addition to
+     * those that are installed with ICU4J.
+     * @draft ICU 3.0
+     */
+    public static final ULocale[] getAvailableULocales() {
+        if (shim == null) {
+            return ICUResourceBundle.getAvailableULocales(UResourceBundle.ICU_COLLATION_BASE_NAME);
+        }
+        return shim.getAvailableULocales();
+    }
+    
+    /**
+     * The list of keywords for this service.  This must be kept in sync with
+     * the resource data.
+     * @since ICU 3.0
+     */
+    private static final String[] KEYWORDS = { "collation" };
+
+    /**
+     * The resource name for this service.  Note that this is not the same as
+     * the keyword for this service.
+     * @since ICU 3.0
+     */
+    private static final String RESOURCE = "collations";
+
+    /**
+     * The resource bundle base name for this service.
+     * *since ICU 3.0
+     */
+    private static final String BASE = UResourceBundle.ICU_COLLATION_BASE_NAME;
+
+    /**
+     * Return an array of all possible keywords that are relevant to
+     * collation. At this point, the only recognized keyword for this
+     * service is "collation".
+     * @return an array of valid collation keywords.
+     * @see #getKeywordValues
+     * @draft ICU 3.0
+     */
+    public static final String[] getKeywords() {
+        return KEYWORDS;
+    }
+    
+    /**
+     * Given a keyword, return an array of all values for
+     * that keyword that are currently in use.
+     * @param keyword one of the keywords returned by getKeywords.
+     * @see #getKeywords
+     * @draft ICU 3.0
+     */
+    public static final String[] getKeywordValues(String keyword) {
+        if (!keyword.equals(KEYWORDS[0])) {
+            throw new IllegalArgumentException("Invalid keyword: " + keyword);
+        }
+        return ICUResourceBundle.getKeywordValues(BASE, RESOURCE);
+    }
+
+    /**
+     * Return the functionally equivalent locale for the given
+     * requested locale, with respect to given keyword, for the
+     * collation service.  If two locales return the same result, then
+     * collators instantiated for these locales will behave
+     * equivalently.  The converse is not always true; two collators
+     * may in fact be equivalent, but return different results, due to
+     * internal details.  The return result has no other meaning than
+     * that stated above, and implies nothing as to the relationship
+     * between the two locales.  This is intended for use by
+     * applications who wish to cache collators, or otherwise reuse
+     * collators when possible.  The functional equivalent may change
+     * over time.  For more information, please see the <a
+     * href="http://oss.software.ibm.com/icu/userguide/locale.html#services">
+     * Locales and Services</a> section of the ICU User Guide.
+     * @param keyword a particular keyword as enumerated by
+     * getKeywords.
+     * @param locID The requested locale
+     * @param isAvailable If non-null, isAvailable[0] will receive and
+     * output boolean that indicates whether the requested locale was
+     * 'available' to the collation service. The locale is defined as
+     * 'available' if it physically exists within the collation locale
+     * data.  If non-null, isAvailable must have length >= 1.
+     * @return the locale
+     * @draft ICU 3.0
+     */
+    public static final ULocale getFunctionalEquivalent(String keyword,
+                                                        ULocale locID,
+                                                        boolean isAvailable[]) {
+        return ICUResourceBundle.getFunctionalEquivalent(
+                   BASE, RESOURCE, keyword, locID, isAvailable);
+    }
+    
+    /**
+     * Return the functionally equivalent locale for the given
+     * requested locale, with respect to given keyword, for the
+     * collation service.
+     * @param keyword a particular keyword as enumerated by
+     * getKeywords.
+     * @param locID The requested locale
+     * @return the locale
+     * @see #getFunctionalEquivalent(String,ULocale,boolean[])
+     * @draft ICU 3.0
+     */
+    public static final ULocale getFunctionalEquivalent(String keyword,
+                                                        ULocale locID) {
+        return getFunctionalEquivalent(keyword, locID, null);
+    }
+    
     /**
      * Get the name of the collator for the objectLocale, localized for the displayLocale.
      * @param objectLocale the locale of the collator
@@ -595,14 +708,14 @@ public abstract class Collator implements Comparator, Cloneable
         return (compare(source, target) == 0);
     }
 
-      /**
-       * Get an UnicodeSet that contains all the characters and sequences
-       * tailored in this collator.
-       * @return a pointer to a UnicodeSet object containing all the
-       *         code points and sequences that may sort differently than
-       *         in the UCA.
-       * @draft ICU 2.4
-       */
+    /**
+     * Get an UnicodeSet that contains all the characters and sequences
+     * tailored in this collator.
+     * @return a pointer to a UnicodeSet object containing all the
+     *         code points and sequences that may sort differently than
+     *         in the UCA.
+     * @draft ICU 2.4
+     */
     public UnicodeSet getTailoredSet()
     {
         return new UnicodeSet(0, 0x10FFFF);
@@ -684,7 +797,7 @@ public abstract class Collator implements Comparator, Cloneable
     public abstract RawCollationKey getRawCollationKey(String source, 
                                                        RawCollationKey key);
 
-      /** 
+    /** 
      * <p>
      * Variable top is a two byte primary value which causes all the codepoints 
      * with primary values that are less or equal than the variable top to be 
