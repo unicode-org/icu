@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/TrieIterator.java,v $
-* $Date: 2002/02/16 03:05:37 $
-* $Revision: 1.3 $
+* $Date: 2002/03/06 19:28:32 $
+* $Revision: 1.4 $
 *
 ******************************************************************************
 */
@@ -16,6 +16,7 @@ package com.ibm.icu.impl;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.util.RangeValueIterator;
+import com.ibm.icu.util.RangeValueIterator.*;
 
 /**
  * <p>Class enabling iteration of the values in a Trie.</p>
