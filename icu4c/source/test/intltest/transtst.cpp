@@ -1369,6 +1369,30 @@ void TransliteratorTest::TestToRules(void) {
         SET,
         "[[:L:]-[A]]",
         "[[:L:]-[A]]",
+
+        SET,
+        "[~[:Lu:][:Ll:]]",
+        "[~[:Lu:][:Ll:]]",
+
+        SET,
+        "[~[a-z]]",
+        "[~[a-z]]",
+
+        RBT,
+        "$white=[:Zs:]; $black=[^$white]; $black{a} > A;",
+        "[^[:Zs:]]{a} > A;",
+
+        RBT,
+        "$a=[:Zs:]; $b=[[a-z]-$a]; $b{a} > A;",
+        "[[a-z]-[:Zs:]]{a} > A;",
+
+        RBT,
+        "$a=[:Zs:]; $b=[$a&[a-z]]; $b{a} > A;",
+        "[[:Zs:]&[a-z]]{a} > A;",
+
+        RBT,
+        "$a=[:Zs:]; $b=[x$a]; $b{a} > A;",
+        "[x[:Zs:]]{a} > A;",
     };
     const size_t DATA_length = sizeof(DATA) / sizeof(DATA[0]);
 
