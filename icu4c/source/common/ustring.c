@@ -318,18 +318,16 @@ int32_t
 u_strcmp(const UChar *s1, 
     const UChar *s2) 
 {
-    int32_t rc;
     UChar  c1, c2;
+
     for(;;) {
-        c1=*s1;
-        c2=*s2;
-        rc = (int32_t)c1 - (int32_t)c2;
-        if(rc != 0 || c1 == 0) {
-            return rc;
+        c1=*s1++;
+        c2=*s2++;
+        if (c1 != c2 || c1 == 0) {
+            break;
         }
-        ++s1;
-        ++s2;
     }
+    return (int32_t)c1 - (int32_t)c2;
 }
 
 /* rotate surrogates to the top to get code point order; assume c>=0xd800 */
@@ -349,20 +347,14 @@ u_strcmpCodePointOrder(const UChar *s1, const UChar *s2) {
 
     /* compare identical prefixes - they do not need to be fixed up */
     for(;;) {
-        c1=*s1;
-        c2=*s2;
-        if(c1==c2) {
-            if(c1==0) {
-                return 0;
-            }
-            ++s1;
-            ++s2;
-        } else {
+        c1=*s1++;
+        c2=*s2++;
+        if (c1 != c2 || c1 == 0) {
             break;
         }
     }
 
-   /* c1!=c2, fix up each one if they're both in or above the surrogate range, then compare them */
+   /*  if both values are in or above the surrogate range, Fix them up. */
    if (c1 >= 0xD800 && c2 >= 0xD800) {
         UTF16FIXUP(c1);
         UTF16FIXUP(c2);
