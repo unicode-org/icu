@@ -7,6 +7,10 @@
 *   11/17/99    aliu        Creation.
 **********************************************************************
 */
+
+/* These APIs are becoming private */
+#define ICU_HEXTOUNICODETRANSLITERATOR_USE_DEPRECATES 1
+
 #include "unicode/hextouni.h"
 #include "unicode/rep.h"
 #include "unicode/unifilt.h"
