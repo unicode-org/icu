@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/bnf/Attic/BigNumberFormatTest.java,v $ 
- * $Date: 2000/04/05 18:00:19 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/06/01 01:21:52 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -40,6 +40,23 @@ public class BigNumberFormatTest extends TestFmwk {
         expect(fmt1, "1.234E3", n);
         expect(fmt1, "1.234E+3", n); // Either format should parse "E+3"
         expect(fmt2, "1.234E+3", n);
+    }
+
+    /**
+     * Test the functioning of the secondary grouping value.
+     */
+    public void TestSecondaryGrouping() {
+        DecimalFormatSymbols US = new DecimalFormatSymbols(Locale.US);
+        DecimalFormat f = new DecimalFormat("#,##,###", US);
+        expect(f, new Long(123456789), "12,34,56,789");
+        expectPat(f, "#,##,###");
+        f.applyPattern("#,###");
+        f.setSecondaryGroupingSize(4);
+        expect(f, new Long(123456789), "12,3456,789");
+        expectPat(f, "#,####,###");
+        expect(NumberFormat.getInstance(new Locale("hi", "IN")),
+               new Long(1876543210),
+               "1,87,65,43,210");
     }
 
     private void expectPad(DecimalFormat fmt, String pat, int pos) {
