@@ -412,7 +412,7 @@ static const uint16_t *FCD_STAGE_3_;
 
 inline UBool ucol_unsafeCP(UChar c, const UCollator *coll) {
 
-    if (c < coll->minUnsafeCP) return false;
+    if (c < coll->minUnsafeCP) return FALSE;
 
     int32_t  hash = c;
     uint8_t  htbyte;
@@ -3343,7 +3343,7 @@ U_CAPI UBool isTailored(const UCollator *coll, const UChar u, UErrorCode *status
 
 UCollationResult    ucol_checkIdent(collIterate *sColl, collIterate *tColl, UBool normalize)
 {
-    int8_t            comparison;
+    int32_t            comparison;
     uint32_t          sLen        = (sColl->flags & UCOL_ITER_HASLEN) ? sColl->endp - sColl->string : -1;
     UChar            *sBuf        = sColl->string;
 
