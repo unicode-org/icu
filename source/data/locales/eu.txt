@@ -232,7 +232,16 @@ eu {
         //ZW { "Zimbabwe" }
     }
     Currencies {
-        ESP { "\u20A7", "ESP" }
+        ESP { 
+            "\u20A7", 
+            "ESP",
+            :array{
+                "\u00A4 #,##0;-\u00A4 #,##0", /*currency pattern*/
+		",",  /*decimal sperator*/   
+                ".", /*grouping separator*/
+                
+            }
+        }
     }
     Languages {
         eu { "euskara" }

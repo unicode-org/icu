@@ -24,6 +24,14 @@ de_LU {
 
     // Currency display names
     Currencies {
-        LUF { "F", "Luxemburgischer Franc" }
+        LUF { 
+            "F", 
+            "Luxemburgischer Franc", 
+            :array{
+                "#,##0 \u00A4;-#,##0 \u00A4", /*currency pattern*/  
+                ".", /*decimal sperator*/ 
+                ",", /*grouping separator*/
+            }
+         }
     }
 }

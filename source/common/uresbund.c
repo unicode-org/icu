@@ -1679,7 +1679,7 @@ ures_open(const char* path,
     /*r->fParent = RES_BOGUS;*/
     r->fSize = res_countArrayItems(&(r->fResData), r->fRes);
     r->fResPath = NULL;
-
+    r->fResPathLen = 0;
     /*
     if(r->fData->fPath != NULL) {
       ures_setResPath(r, r->fData->fPath);
@@ -1776,6 +1776,7 @@ ures_openDirect(const char* path, const char* localeID, UErrorCode* status) {
     /*r->fParent = RES_BOGUS;*/
     r->fSize = res_countArrayItems(&(r->fResData), r->fRes);
     r->fResPath = NULL;
+    r->fResPathLen = 0;
     r->fParentRes = NULL;
     r->fTopLevelData = r->fData;
 

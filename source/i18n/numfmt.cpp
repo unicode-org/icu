@@ -35,6 +35,7 @@
 #include "unicode/ucurr.h"
 #include "unicode/curramt.h"
 #include "uhash.h"
+#include "cmemory.h"
 #include "iculserv.h"
 #include "ucln_in.h"
 #include "cstring.h"
@@ -392,7 +393,7 @@ NumberFormat::createInstance(const Locale& inLocale, UErrorCode& status)
 NumberFormat*
 NumberFormat::createCurrencyInstance(UErrorCode& status)
 {
-    return createInstance(Locale::getDefault(), kCurrencyStyle, status);
+    return createCurrencyInstance(Locale::getDefault(),  status);
 }
 
 // -------------------------------------
@@ -400,7 +401,7 @@ NumberFormat::createCurrencyInstance(UErrorCode& status)
 
 NumberFormat*
 NumberFormat::createCurrencyInstance(const Locale& inLocale, UErrorCode& status)
-{
+{  
     return createInstance(inLocale, kCurrencyStyle, status);
 }
 
@@ -829,6 +830,7 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
     }
 
     ResourceBundle numberPatterns(resource.get(DecimalFormat::fgNumberPatterns, status));
+
     // If not all the styled patterns exists for the NumberFormat in this locale,
     // sets the status code to failure and returns nil.
     //if (patternCount < fgNumberPatternsCount) status = U_INVALID_FORMAT_ERROR;
@@ -850,8 +852,35 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
 
     // Creates the specified decimal format style of the desired locale.
     if (style < numberPatterns.getSize()) {
-        const UnicodeString pattern(numberPatterns.getStringEx(style, status));
+        UnicodeString pattern(numberPatterns.getStringEx(style, status));
         if (U_SUCCESS(status)) {
+            // Here we assume that the locale passed in is in the canonical
+            // form, e.g: pt_PT_@currency=PTE not pt_PT_PREEURO
+            if(style==kCurrencyStyle){
+                char buf[20]={0};
+                int32_t bufCap = 20;
+                const char* locName = desiredLocale.getName();
+                bufCap = uloc_getKeywordValue(locName, "currency", buf, bufCap, &status);
+                if(bufCap > 0){
+                    ResourceBundle currencies(resource.getWithFallback("Currencies", status));
+                    ResourceBundle currency(currencies.getWithFallback(buf,status));
+                    if(currency.getSize()>2){
+                        ResourceBundle elements = currency.get(2, status);
+                        UnicodeString currPattern = elements.getStringEx(0, status);
+                        UnicodeString decimalSep = elements.getStringEx(1, status);
+                        UnicodeString groupingSep = elements.getStringEx(2, status);
+                        if(U_SUCCESS(status)){
+                            symbolsToAdopt->setSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol, groupingSep);
+                            symbolsToAdopt->setSymbol(DecimalFormatSymbols::kMonetarySeparatorSymbol, decimalSep);
+                            pattern = currPattern;
+                        }
+                    }
+                }
+            }
+            if (U_FAILURE(status)) {
+                delete symbolsToAdopt;
+                return NULL;
+            }
             f = new DecimalFormat(pattern, symbolsToAdopt, status);
         }
         else {
@@ -864,7 +893,7 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
         // resource data in place.
         f = new DecimalFormat(fgLastResortNumberPatterns[style], symbolsToAdopt, status);
     }
-
+    
     if (f == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
