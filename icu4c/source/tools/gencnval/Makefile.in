@@ -10,6 +10,10 @@ VERSION = @VERSION@
 SECTION = 8
 MAN_FILES = $(TARGET).$(SECTION)
 
+MAN5_FILES = convrtrs.txt.5 cnvalias.dat.5
+
+ALL_MAN_FILES = $(MAN_FILES) $(MAN5_FILES)
+
 ICUDATADIR=$(top_builddir)/data/
 CONVRTRSFILE=$(top_srcdir)/../data/convrtrs.txt
 
@@ -51,7 +55,7 @@ top_builddir = ../..
 subdir = tools/gencnval
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(TARGET).$(SECTION)
+CLEANFILES = *~ $(ALL_MAN_FILES)
 
 ## Target information
 TARGET = gencnval
@@ -72,7 +76,7 @@ DEPS = $(OBJECTS:.o=.d)
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local		\
 distclean distclean-local dist dist-local check	\
-check-local build-data install-man
+check-local build-data install-man install-man-files install-man5-files
 
 ## Clear suffix list
 .SUFFIXES :
@@ -85,7 +89,7 @@ distclean : distclean-local
 dist: dist-local
 check: all check-local
 
-all-local: $(TARGET) $(MAN_FILES) build-data
+all-local: $(TARGET) $(ALL_MAN_FILES) build-data
 
 install-local: all-local build-data install-man
 	$(mkinstalldirs) $(DESTDIR)$(sbindir)
@@ -117,11 +121,19 @@ $(TARGET) : $(OBJECTS)
 	$(LINK.cc) -o $@ $^ $(LIBS) 
 
 # man page
-install-man: $(MAN_FILES)
-	$(mkinstalldirs) $(DESTDIR)$(mandir)/man$(SECTION)
-	$(INSTALL_DATA) $< $(DESTDIR)$(mandir)/man$(SECTION)
+install-man: install-man-files install-man5-files
 
-$(TARGET).$(SECTION): $(srcdir)/$(TARGET).$(SECTION).in
+install-man-files: $(MAN_FILES)
+	$(mkinstalldirs) $(DESTDIR)$(mandir)/man$(SECTION)
+	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
+install-man5-files: $(MAN5_FILES)
+	$(mkinstalldirs) $(DESTDIR)$(mandir)/man5
+	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man5
+
+%.$(SECTION): $(srcdir)/%.$(SECTION).in
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+%.5: $(srcdir)/%.5.in
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
@@ -139,3 +151,4 @@ ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
 -include $(DEPS)
 endif
 endif
+

@@ -113,6 +113,7 @@ icu4c/source/tools/gencnval/*.pdb
 icu4c/source/tools/gencnval/Debug
 icu4c/source/tools/gencnval/Makefile
 icu4c/source/tools/gencnval/Release
+icu4c/source/tools/gencnval/convrtrs.txt.[0-9]
 icu4c/source/tools/gencnval/gencnval
 icu4c/source/tools/gencnval/gencnval.[0-9]
 icu4c/source/tools/gencnval/tmp
