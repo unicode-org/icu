@@ -166,7 +166,7 @@ UCharCharacterIterator::nextPostInc() {
 }
 
 UBool
-UCharCharacterIterator::hasNext() const {
+UCharCharacterIterator::hasNext() {
     return (UBool)(pos < end ? TRUE : FALSE);
 }
 
@@ -180,7 +180,7 @@ UCharCharacterIterator::previous() {
 }
 
 UBool
-UCharCharacterIterator::hasPrevious() const {
+UCharCharacterIterator::hasPrevious() {
     return (UBool)(pos > begin ? TRUE : FALSE);
 }
 
@@ -356,7 +356,7 @@ void UCharCharacterIterator::setText(const UChar* newText,
 }
 
 void
-UCharCharacterIterator::getText(UnicodeString& result) const {
+UCharCharacterIterator::getText(UnicodeString& result) {
     result = UnicodeString(text, textLength);
 }
 

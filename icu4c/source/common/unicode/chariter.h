@@ -164,7 +164,7 @@ public:
      * at or after the current position in the iteration range.
      * @stable ICU 2.0
      */
-    virtual UBool        hasNext() const = 0;
+    virtual UBool        hasNext() = 0;
     
 protected:
     /** Default constructor to be overridden in the implementing class. @stable ICU 2.0*/
@@ -528,7 +528,7 @@ public:
      * before the current position in the iteration range, return TRUE otherwise.
      * @stable ICU 2.0
      */
-    virtual UBool        hasPrevious() const = 0;
+    virtual UBool        hasPrevious() = 0;
 
     /**
      * Returns the numeric index in the underlying text-storage
@@ -603,7 +603,7 @@ public:
      * @param result Receives a copy of the text under iteration.  
      * @stable ICU 2.0
      */
-    virtual void            getText(UnicodeString&  result) const = 0;
+    virtual void            getText(UnicodeString&  result) = 0;
 
 protected:
     /**
