@@ -1761,11 +1761,11 @@ public class CollationMiscTest extends TestFmwk{
             RuleBasedCollator coll 
                 = (RuleBasedCollator)Collator.getInstance(Locale.ENGLISH);
             String rule 
-                = coll.getRules(RuleBasedCollator.RuleOption.TAILORING_ONLY);
+                = coll.getRules(false);
             if (!rule.equals("")) {
                 errln("Empty rule string should have empty rules " + rule);
             }
-            rule = coll.getRules(RuleBasedCollator.RuleOption.FULL_RULES);
+            rule = coll.getRules(true);
             if (rule.equals("")) {
                 errln("UCA rule string should not be empty");
             }
