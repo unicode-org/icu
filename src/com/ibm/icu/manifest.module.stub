@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Specification-Title: Modularized ICU for Java
+Specification-Version: 2.8
+Specification-Vendor: ICU
+Implementation-Title: Modularized ICU for Java
+Implementation-Version: 2.8.0
+Implementation-Vendor: IBM Corporation
+Implementation-Vendor-Id: com.ibm
+Copyright-info: Copyright (c) 2002-2003, International Business Machines Corporation and others.  All Rights Reserved.
+
+Name: com/ibm/icu
+
