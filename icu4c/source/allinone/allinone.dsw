@@ -71,6 +71,9 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name ustdio
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name decmn
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -137,6 +140,18 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name makeconv
     End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "decmn"=..\tools\gencmn\decmn.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
 }}}
 
 ###############################################################################
