@@ -68,11 +68,11 @@ static const UCharIterator noopIterator={
 static int32_t U_CALLCONV
 stringIteratorGetIndex(UCharIterator *iter, UCharIteratorOrigin origin) {
     switch(origin) {
-    case UITERATOR_START:
+    case UITER_START:
         return iter->start;
-    case UITERATOR_CURRENT:
+    case UITER_CURRENT:
         return iter->index;
-    case UITERATOR_LIMIT:
+    case UITER_LIMIT:
         return iter->limit;
     default:
         /* not a valid origin */
@@ -86,13 +86,13 @@ stringIteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origi
     int32_t pos;
 
     switch(origin) {
-    case UITERATOR_START:
+    case UITER_START:
         pos=iter->start+delta;
         break;
-    case UITERATOR_CURRENT:
+    case UITER_CURRENT:
         pos=iter->index+delta;
         break;
-    case UITERATOR_LIMIT:
+    case UITER_LIMIT:
         pos=iter->limit+delta;
         break;
     default:
@@ -190,11 +190,11 @@ uiter_setString(UCharIterator *iter, const UChar *s, int32_t length) {
 static int32_t U_CALLCONV
 characterIteratorGetIndex(UCharIterator *iter, UCharIteratorOrigin origin) {
     switch(origin) {
-    case UITERATOR_START:
+    case UITER_START:
         return ((CharacterIterator *)(iter->context))->startIndex();
-    case UITERATOR_CURRENT:
+    case UITER_CURRENT:
         return ((CharacterIterator *)(iter->context))->getIndex();
-    case UITERATOR_LIMIT:
+    case UITER_LIMIT:
         return ((CharacterIterator *)(iter->context))->endIndex();
     default:
         /* not a valid origin */
@@ -333,6 +333,71 @@ uiter_setReplaceable(UCharIterator *iter, const Replaceable *rep) {
             *iter=noopIterator;
         }
     }
+}
+
+/* Helper functions --------------------------------------------------------- */
+
+U_CAPI int32_t U_EXPORT2
+uiter_current32(UCharIterator *iter) {
+    int32_t c, c2;
+
+    c=iter->current(iter);
+    if(UTF_IS_SURROGATE(c)) {
+        if(UTF_IS_SURROGATE_FIRST(c)) {
+            /*
+             * go to the next code unit
+             * we know that we are not at the limit because c!=-1
+             */
+            iter->move(iter, 1, UITER_CURRENT);
+            if(UTF_IS_SECOND_SURROGATE(c2=iter->current(iter))) {
+                c=UTF16_GET_PAIR_VALUE(c, c2);
+            }
+
+            /* undo index movement */
+            iter->move(iter, -1, UITER_CURRENT);
+        } else {
+            if(UTF_IS_FIRST_SURROGATE(c2=iter->previous(iter))) {
+                c=UTF16_GET_PAIR_VALUE(c2, c);
+            }
+            if(c2>=0) {
+                /* undo index movement */
+                iter->move(iter, 1, UITER_CURRENT);
+            }
+        }
+    }
+    return c;
+}
+
+U_CAPI int32_t U_EXPORT2
+uiter_next32(UCharIterator *iter) {
+    int32_t c, c2;
+
+    c=iter->next(iter);
+    if(UTF_IS_FIRST_SURROGATE(c)) {
+        if(UTF_IS_SECOND_SURROGATE(c2=iter->next(iter))) {
+            c=UTF16_GET_PAIR_VALUE(c, c2);
+        } else if(c2>=0) {
+            /* unmatched first surrogate, undo index movement */
+            iter->move(iter, -1, UITER_CURRENT);
+        }
+    }
+    return c;
+}
+
+U_CAPI int32_t U_EXPORT2
+uiter_previous32(UCharIterator *iter) {
+    int32_t c, c2;
+
+    c=iter->previous(iter);
+    if(UTF_IS_SECOND_SURROGATE(c)) {
+        if(UTF_IS_FIRST_SURROGATE(c2=iter->previous(iter))) {
+            c=UTF16_GET_PAIR_VALUE(c2, c);
+        } else if(c2>=0) {
+            /* unmatched second surrogate, undo index movement */
+            iter->move(iter, 1, UITER_CURRENT);
+        }
+    }
+    return c;
 }
 
 U_CDECL_END

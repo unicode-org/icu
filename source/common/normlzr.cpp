@@ -306,13 +306,13 @@ UChar32 Normalizer::previous() {
 }
 
 void Normalizer::reset() {
-    currentIndex=nextIndex=text->move(text, 0, UITERATOR_START);
+    currentIndex=nextIndex=text->move(text, 0, UITER_START);
     clearBuffer();
 }
 
 void
 Normalizer::setIndexOnly(UTextOffset index) {
-    currentIndex=nextIndex=text->move(text, index, UITERATOR_START); // validates index
+    currentIndex=nextIndex=text->move(text, index, UITER_START); // validates index
     clearBuffer();
 }
 
@@ -355,7 +355,7 @@ UChar32 Normalizer::first() {
  * the input text corresponding to that normalized character.
  */
 UChar32 Normalizer::last() {
-    currentIndex=nextIndex=text->move(text, 0, UITERATOR_LIMIT);
+    currentIndex=nextIndex=text->move(text, 0, UITER_LIMIT);
     clearBuffer();
     return previous();
 }
@@ -388,7 +388,7 @@ UTextOffset Normalizer::getIndex() const {
  * over which this <tt>Normalizer</tt> is iterating
  */
 UTextOffset Normalizer::startIndex() const {
-    return text->move(text, 0, UITERATOR_START);
+    return text->move(text, 0, UITER_START);
 }
 
 /**
@@ -397,7 +397,7 @@ UTextOffset Normalizer::startIndex() const {
  * over which this <tt>Normalizer</tt> is iterating
  */
 UTextOffset Normalizer::endIndex() const {
-    return text->move(text, 0, UITERATOR_LIMIT);
+    return text->move(text, 0, UITER_LIMIT);
 }
 
 //-------------------------------------------------------------------------
@@ -520,7 +520,7 @@ Normalizer::nextNormalize() {
 
     clearBuffer();
     currentIndex=nextIndex;
-    text->move(text, nextIndex, UITERATOR_START);
+    text->move(text, nextIndex, UITER_START);
     if(!text->hasNext(text)) {
         return FALSE;
     }
@@ -534,7 +534,7 @@ Normalizer::nextNormalize() {
     buffer.releaseBuffer(length);
     if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
         errorCode=U_ZERO_ERROR;
-        text->move(text, nextIndex, UITERATOR_START);
+        text->move(text, nextIndex, UITER_START);
         p=buffer.getBuffer(length);
         length=unorm_next(text, p, buffer.getCapacity(),
                           fUMode, fOptions!=0,
@@ -543,7 +543,7 @@ Normalizer::nextNormalize() {
         buffer.releaseBuffer(length);
     }
 
-    nextIndex=text->move(text, 0, UITERATOR_CURRENT);
+    nextIndex=text->move(text, 0, UITER_CURRENT);
     return U_SUCCESS(errorCode) && !buffer.isEmpty();
 }
 
@@ -555,7 +555,7 @@ Normalizer::previousNormalize() {
 
     clearBuffer();
     nextIndex=currentIndex;
-    text->move(text, currentIndex, UITERATOR_START);
+    text->move(text, currentIndex, UITER_START);
     if(!text->hasPrevious(text)) {
         return FALSE;
     }
@@ -569,7 +569,7 @@ Normalizer::previousNormalize() {
     buffer.releaseBuffer(length);
     if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
         errorCode=U_ZERO_ERROR;
-        text->move(text, currentIndex, UITERATOR_START);
+        text->move(text, currentIndex, UITER_START);
         p=buffer.getBuffer(length);
         length=unorm_previous(text, p, buffer.getCapacity(),
                               fUMode, fOptions,
@@ -579,7 +579,7 @@ Normalizer::previousNormalize() {
     }
 
     bufferPos=buffer.length();
-    currentIndex=text->move(text, 0, UITERATOR_CURRENT);
+    currentIndex=text->move(text, 0, UITER_CURRENT);
     return U_SUCCESS(errorCode) && !buffer.isEmpty();
 }
 
