@@ -529,7 +529,7 @@ int32_t kPercentFormatTestDataLength = sizeof(kPercentFormatTestData) / sizeof(k
 
 void errorToString(UErrorCode theStatus, UnicodeString &string)
 {
-    string=errorName(theStatus);
+    string=u_errorName(theStatus);
 }
 
 // "Someone from {2} is receiving a #{0} error - {1}. Their telephone call is costing {3 number,currency}."

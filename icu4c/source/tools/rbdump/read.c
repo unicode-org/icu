@@ -95,7 +95,7 @@ main(int argc,
     status = U_ZERO_ERROR;
     processFile(argv[i], &status);
     if(U_FAILURE(status)) {
-      printf("rbdump: %s processing file \"%s\"\n", errorName(status), argv[i]);
+      printf("rbdump: %s processing file \"%s\"\n", u_errorName(status), argv[i]);
     }
   }
 

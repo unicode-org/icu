@@ -66,7 +66,7 @@ U_CFUNC char *austrdup(const UChar* unichars);
  * converts the errorcode to an error descriptive string(const char*)
  * @param status the error code
  */
-#define myErrorName(errorCode) errorName(errorCode)
+#define myErrorName(errorCode) u_errorName(errorCode)
 
 
 #endif

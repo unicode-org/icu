@@ -158,7 +158,7 @@ main(int argc, char *argv[]) {
     /* create the output file */
     out=udata_create(DATA_TYPE, COMMON_DATA_NAME, &dataInfo, DATA_COPYRIGHT, &errorCode);
     if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "gencmn: unable to open output file - error %s\n", errorName(errorCode));
+        fprintf(stderr, "gencmn: unable to open output file - error %s\n", u_errorName(errorCode));
         exit(errorCode);
     }
 
@@ -203,7 +203,7 @@ main(int argc, char *argv[]) {
     /* finish */
     udata_finish(out, &errorCode);
     if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "gencmn: error finishing output file - %s\n", errorName(errorCode));
+        fprintf(stderr, "gencmn: error finishing output file - %s\n", u_errorName(errorCode));
         exit(errorCode);
     }
 

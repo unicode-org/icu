@@ -54,7 +54,7 @@ bool_t
 TimeZoneRegressionTest::failure(UErrorCode status, const char* msg)
 {
     if(U_FAILURE(status)) {
-        errln(UnicodeString("FAIL: ") + msg + " failed, error " + errorName(status));
+        errln(UnicodeString("FAIL: ") + msg + " failed, error " + u_errorName(status));
         return TRUE;
     }
 
@@ -628,10 +628,10 @@ TimeZoneRegressionTest::Test4154525()
                 
             if(U_FAILURE(status)) {
                 if(valid) {
-                    errln(UnicodeString("Fail: DST savings of ") + savings + " to " + method + " gave " + errorName(status));
+                    errln(UnicodeString("Fail: DST savings of ") + savings + " to " + method + " gave " + u_errorName(status));
                 } 
                 else {
-                    logln(UnicodeString("Pass: DST savings of ") + savings + " to " + method + " gave " + errorName(status));
+                    logln(UnicodeString("Pass: DST savings of ") + savings + " to " + method + " gave " + u_errorName(status));
                 }               
             }
             else {
@@ -705,7 +705,7 @@ TimeZoneRegressionTest::Test4154650()
             errln(UnicodeString("Fail: getOffset(") +
                   DATA[i+1] + ", " + DATA[i+2] + ", " + DATA[i+3] + ", " +
                   DATA[i+4] + ", " + DATA[i+5] + ", " + DATA[i+6] +
-                  (good ? (UnicodeString(") threw ") + errorName(status)) : UnicodeString(") accepts invalid args")));
+                  (good ? (UnicodeString(") threw ") + u_errorName(status)) : UnicodeString(") accepts invalid args")));
         }
         status = U_ZERO_ERROR; // reset
     }
