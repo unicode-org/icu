@@ -175,7 +175,7 @@ CNV_FILES_SHORT = $(ALL_UCM_SOURCE:%.ucm=%.cnv)
 -include $(LOCSRCDIR)/resfiles.mk
 -include $(COLSRCDIR)/colfiles.mk
 -include $(RBNFSRCDIR)/rbnffiles.mk
--include $(TRANSLITSRCDIR)/transfiles.mk
+-include $(TRANSLITSRCDIR)/trnsfiles.mk
 -include $(LOCSRCDIR)/reslocal.mk
 -include $(COLSRCDIR)/collocal.mk
 -include $(RBNFSRCDIR)/rbnflocal.mk
