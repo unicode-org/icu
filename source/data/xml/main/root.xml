@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE ldml SYSTEM " 	http://www.unicode.org/cldr/dtd/1.1/ldml.dtd" 
 [
-      <!ENTITY % icu SYSTEM " http://www.unicode.org/cldr/dtd/1.1/ldmlICU.dtd"> 
+    <!ENTITY % icu SYSTEM " http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldmlICU.dtd">  
 %icu;
 ]
 >
@@ -18,4 +18,13 @@
 			</icu:scripts>
 		</special>
 	</characters>
+  <special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+    <icu:boundaries>
+      <icu:grapheme icu:class="RuleBased" icu:import="char"/>
+      <icu:word icu:class="RuleBased" icu:import="word"/>
+      <icu:line icu:class="RuleBased" icu:import="line" />
+      <icu:sentence icu:class="RuleBased" icu:import="sentence"/>
+      <icu:title icu:class="RuleBased" icu:import="title"/>
+    </icu:boundaries>
+  </special>
 </ldml>
