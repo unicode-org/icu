@@ -20,6 +20,7 @@
 *   06/27/2000  Jim Snyder-Grant Deal with partial characters and small buffers.
 *                                Add comments to document LMBCS format and implementation
 *                                restructured order & breakdown of functions
+*   06/28/2000  helena           Major rewrite for the callback API changes.
 */
 
 #include "unicode/utypes.h"
@@ -27,7 +28,7 @@
 #include "ucmp16.h"
 #include "ucmp8.h"
 #include "unicode/ucnv_err.h"
-#include "unicode/ucnv_bld.h"
+#include "ucnv_bld.h"
 #include "unicode/ucnv.h"
 #include "ucnv_cnv.h"
 
@@ -1006,6 +1007,7 @@ _LMBCSGetNextUCharWorker(UConverter*   _this,
    ulmbcs_byte_t   CurByte; /* A byte from the input stream */
    UChar32 uniChar;    /* an output UNICODE char */
    const char * saveSource;
+   UConverterToUnicodeArgs args;
   
    /* error check */
    if (*source >= sourceLimit)
@@ -1013,7 +1015,7 @@ _LMBCSGetNextUCharWorker(UConverter*   _this,
       *err = U_ILLEGAL_ARGUMENT_ERROR;
       return missingUCharMarker;
    }
-
+   args.sourceStart = *source;
    /* Grab first byte & save address for error recovery */
    CurByte = *((ulmbcs_byte_t  *) (saveSource = (*source)++));
    
@@ -1154,14 +1156,20 @@ _LMBCSGetNextUCharWorker(UConverter*   _this,
       /* This code needs updating when new error callbacks are installed */
 
       UChar * pUniChar = (UChar *)&uniChar;
-      _this->fromCharErrorBehaviour(_this,
-                                        &pUniChar,
-                                        pUniChar+1,
-                                        &saveSource,
-                                        sourceLimit,
-                                        NULL,
-                                        TRUE,
-                                        err);
+      args.converter = _this;
+      args.pTarget = &pUniChar;
+      args.targetLimit = pUniChar + 1;
+      args.pSource = &saveSource;
+      args.sourceLimit = sourceLimit;
+      args.flush = TRUE;
+      args.offsets = NULL;  
+      args.size = sizeof(args);
+      _this->fromCharErrorBehaviour(_this->toUContext,
+                                    &args,
+                                    saveSource,
+                                    1,
+                                    UCNV_UNASSIGNED,
+                                    err);
       *source = saveSource;
    }
    return uniChar;
