@@ -594,8 +594,8 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
         if(status != expectedStatus && expectedStatus != U_IDNA_UNASSIGNED_CODEPOINT_FOUND_ERROR){
             errln( "Did not get the expected error for %s with source length and options set. Expected: %s Got: %s\n",testName, u_errorName(expectedStatus), u_errorName(status));
         }
-        uprv_free(tSrc);
     }
+    uprv_free(tSrc);
 }
 
 void TestIDNA::testCompare(const UChar* s1, int32_t s1Len,
