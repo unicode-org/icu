@@ -530,7 +530,8 @@ void IntlCalendarTest::TestJapaneseFormat() {
     }
     {   // This Feb 29th falls on a leap year by gregorian year, but not by Japanese year.
         UnicodeString expect = CharsToUnicodeString("\\u5EB7\\u6B632\\u5e742\\u670829\\u65e5\\u65e5\\u66dc\\u65e5");
-        UDate         expectDate =  -16214400000000.0;  // courtesy of date format round trip test
+        // Add -1:00 to the following for historical TZ - aliu
+        UDate         expectDate =  -16214403600000.0;  // courtesy of date format round trip test
         Locale        loc("ja_JP_TRADITIONAL");
         
         status = U_ZERO_ERROR;
