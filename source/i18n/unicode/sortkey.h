@@ -49,19 +49,21 @@ class RuleBasedCollator;
  *
  * <p>Example of use:
  * <pre>
- * .    UErrorCode success = U_ZERO_ERROR;
- * .    Collator* myCollator = Collator::createInstance(success);
- * .    CollationKey* keys = new CollationKey [3];
- * .    myCollator->getCollationKey("Tom", keys[0], success );
- * .    myCollator->getCollationKey("Dick", keys[1], success );
- * .    myCollator->getCollationKey("Harry", keys[2], success );
- * . 
- * .    // Inside body of sort routine, compare keys this way:
- * .    CollationKey tmp;
- * .    if(keys[0].compareTo( keys[1] ) > 0 ) {
- * .        tmp = keys[0]; keys[0] = keys[1]; keys[1] = tmp;
- * .    }
- * .    //...
+ * \code
+ *     UErrorCode success = U_ZERO_ERROR;
+ *     Collator* myCollator = Collator::createInstance(success);
+ *     CollationKey* keys = new CollationKey [3];
+ *     myCollator->getCollationKey("Tom", keys[0], success );
+ *     myCollator->getCollationKey("Dick", keys[1], success );
+ *     myCollator->getCollationKey("Harry", keys[2], success );
+ *  
+ *     // Inside body of sort routine, compare keys this way:
+ *     CollationKey tmp;
+ *     if(keys[0].compareTo( keys[1] ) > 0 ) {
+ *         tmp = keys[0]; keys[0] = keys[1]; keys[1] = tmp;
+ *     }
+ *     //...
+ * \endcode
  * </pre>
  * <p>Because Collator::compare()'s algorithm is complex, it is faster to sort
  * long lists of words by retrieving collation keys with Collator::getCollationKey().

@@ -56,65 +56,69 @@ class DigitList;
  * <P>
  * [Example:] 
  * <pre>
- * .    // normally we would have a GUI with a menu for this
- * .    int32_t locCount;
- * .    const Locale* locales = NumberFormat::getAvailableLocales(locCount);
- * .    if (locCount > 12) locCount = 12;  //limit output
- * .
- * .    double myNumber = -1234.56;
- * .    UErrorCode success = U_ZERO_ERROR;
- * .    NumberFormat* form; //= NumberFormat::createInstance(success);
- * .
- * .    // just for fun, we print out a number with the locale number, currency
- * .    // and percent format for each locale we can.
- * .    UnicodeString countryName;
- * .    UnicodeString displayName;
- * .    UnicodeString str;
- * .    UnicodeString pattern;
- * .    Formattable fmtable;
- * .    for (int32_t j = 0; j < 3; ++j) {
- * .        cout << endl << "FORMAT " << j << endl;
- * .        for (int32_t i = 0; i < locCount; ++i) {
- * .            if (locales[i].getCountry(countryName).size() == 0) {
- * .                // skip language-only
- * .                continue;
- * .            }
- * .            switch (j) {
- * .            default:
- * .                form = NumberFormat::createInstance(locales[i], success ); break;
- * .            case 1:
- * .                form = NumberFormat::createCurrencyInstance(locales[i], success ); break;
- * .            case 0:
- * .                form = NumberFormat::createPercentInstance(locales[i], success ); break;
- * .            }
- * .            if (form) {
- * .                str.remove();
- * .                pattern = ((DecimalFormat*)form)->toPattern(pattern);
- * .                cout << locales[i].getDisplayName(displayName) << ": " << pattern;
- * .                cout << "  ->  " << form->format(myNumber,str) << endl;
- * .                form->parse(form->format(myNumber,str), fmtable, success);
- * .                //cout << "   parsed: " << fmtable << endl;
- * .                delete form;  
- * .            }
- * .        }
- * .    }
+ * \code
+ *     // normally we would have a GUI with a menu for this
+ *     int32_t locCount;
+ *     const Locale* locales = NumberFormat::getAvailableLocales(locCount);
+ *     if (locCount > 12) locCount = 12;  //limit output
+ * 
+ *     double myNumber = -1234.56;
+ *     UErrorCode success = U_ZERO_ERROR;
+ *     NumberFormat* form; //= NumberFormat::createInstance(success);
+ * 
+ *     // just for fun, we print out a number with the locale number, currency
+ *     // and percent format for each locale we can.
+ *     UnicodeString countryName;
+ *     UnicodeString displayName;
+ *     UnicodeString str;
+ *     UnicodeString pattern;
+ *     Formattable fmtable;
+ *     for (int32_t j = 0; j < 3; ++j) {
+ *         cout << endl << "FORMAT " << j << endl;
+ *         for (int32_t i = 0; i < locCount; ++i) {
+ *             if (locales[i].getCountry(countryName).size() == 0) {
+ *                 // skip language-only
+ *                 continue;
+ *             }
+ *             switch (j) {
+ *             default:
+ *                 form = NumberFormat::createInstance(locales[i], success ); break;
+ *             case 1:
+ *                 form = NumberFormat::createCurrencyInstance(locales[i], success ); break;
+ *             case 0:
+ *                 form = NumberFormat::createPercentInstance(locales[i], success ); break;
+ *             }
+ *             if (form) {
+ *                 str.remove();
+ *                 pattern = ((DecimalFormat*)form)->toPattern(pattern);
+ *                 cout << locales[i].getDisplayName(displayName) << ": " << pattern;
+ *                 cout << "  ->  " << form->format(myNumber,str) << endl;
+ *                 form->parse(form->format(myNumber,str), fmtable, success);
+ *                 //cout << "   parsed: " << fmtable << endl;
+ *                 delete form;  
+ *             }
+ *         }
+ *     }
+ * \endcode
  * </pre>
  * [The following shows the structure of the pattern.] 
  * <pre>
- * .    pattern    := subpattern{;subpattern}
- * .    subpattern := {prefix}integer{.fraction}{suffix}
- * .    
- * .    prefix     := '\\u0000'..'\\uFFFD' - specialCharacters
- * .    suffix     := '\\u0000'..'\\uFFFD' - specialCharacters
- * .    integer    := '#'* '0'* '0'
- * .    fraction   := '0'* '#'*
- *    
+ * \code
+ *     pattern    := subpattern{;subpattern}
+ *     subpattern := {prefix}integer{.fraction}{suffix}
+ *     
+ *     prefix     := '\\u0000'..'\\uFFFD' - specialCharacters
+ *     suffix     := '\\u0000'..'\\uFFFD' - specialCharacters
+ *     integer    := '#'* '0'* '0'
+ *     fraction   := '0'* '#'*
+ *   
  *  Notation:
- * .    X*       0 or more instances of X
- * .    (X | Y)  either X or Y.
- * .    X..Y     any character from X up to Y, inclusive.
- * .    S - T    characters in S, except those in T
- * </pre>
+ *     X*       0 or more instances of X
+ *     (X | Y)  either X or Y.
+ *     X..Y     any character from X up to Y, inclusive.
+ *     S - T    characters in S, except those in T
+ * \code
+ * /pre>
  * The first subpattern is for positive numbers. The second (optional)
  * subpattern is used for negative numbers. (In both cases, ',' can
  * occur inside the integer portion--it is just too messy to indicate
@@ -124,22 +128,24 @@ class DigitList;
  * Here are the special characters used in the parts of the
  * subpattern, with notes on their usage.
  * <pre>
- * .    Symbol   Meaning
- * .      0      a digit, showing up a zero if it is zero
- * .      #      a digit, supressed if zero
- * .      .      placeholder for decimal separator
- * .      ,      placeholder for grouping separator.
- * .      E      separates mantissa and exponent for exponential formats.
- * .      ;      separates formats.
- * .      -      default negative prefix.
- * .      %      multiply by 100 and show as percentage
- * .      \u2030 multiply by 1000 and show as per mille
- * .      \u00A4 currency sign; replaced by currency symbol; if
- * .             doubled, replaced by international currency symbol.
- * .             If present in a pattern, the monetary decimal separator
- * .             is used instead of the decimal separator.
- * .      X      any other characters can be used in the prefix or suffix
- * .      '      used to quote special characters in a prefix or suffix.
+ * \code
+ *     Symbol   Meaning
+ *       0      a digit, showing up a zero if it is zero
+ *       #      a digit, supressed if zero
+ *       .      placeholder for decimal separator
+ *       ,      placeholder for grouping separator.
+ *       E      separates mantissa and exponent for exponential formats.
+ *       ;      separates formats.
+ *       -      default negative prefix.
+ *       %      multiply by 100 and show as percentage
+ *       \u2030 multiply by 1000 and show as per mille
+ *       \u00A4 currency sign; replaced by currency symbol; if
+ *              doubled, replaced by international currency symbol.
+ *              If present in a pattern, the monetary decimal separator
+ *              is used instead of the decimal separator.
+ *       X      any other characters can be used in the prefix or suffix
+ *       '      used to quote special characters in a prefix or suffix.
+ * \endcode
  * </pre>
  * [Notes] 
  * <P>

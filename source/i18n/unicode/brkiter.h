@@ -63,104 +63,118 @@
  * <P>
  * Helper function to output text
  * <pre>
- * .   void printTextRange( BreakIterator& iterator, UTextOffset start, UTextOffset end )
- * .   {
- * .       UnicodeString textBuffer, temp;
- * .       CharacterIterator *strIter = iterator.createText();
- * .       strIter->getText(temp);
- * .       cout &lt;&lt; " " &lt;&lt; start &lt;&lt; " " &lt;&lt; end &lt;&lt; " |" 
- * .            &lt;&lt; temp.extractBetween(start, end, textBuffer)
- * .            &lt;&lt; "|" &lt;&lt; endl;
- * .       delete strIter;
- * .   }
+ * \code 
+ *    void printTextRange( BreakIterator& iterator, UTextOffset start, UTextOffset end )
+ *    {
+ *        UnicodeString textBuffer, temp;
+ *        CharacterIterator *strIter = iterator.createText();
+ *        strIter->getText(temp);
+ *        cout &lt;&lt; " " &lt;&lt; start &lt;&lt; " " &lt;&lt; end &lt;&lt; " |" 
+ *             &lt;&lt; temp.extractBetween(start, end, textBuffer)
+ *             &lt;&lt; "|" &lt;&lt; endl;
+ *        delete strIter;
+ *    }
+ * \endcode
  * </pre>
  * Print each element in order:
  * <pre>
- * .   void printEachForward( BreakIterator& boundary)
- * .   {
- * .      UTextOffset start = boundary.first();
- * .      for (UTextOffset end = boundary.next();
- * .        end != BreakIterator::DONE;
- * .        start = end, end = boundary.next())
- * .        {
- * .            printTextRange( boundary, start, end );
- * .        }
- * .   }
+ * \code
+ *    void printEachForward( BreakIterator& boundary)
+ *    {
+ *       UTextOffset start = boundary.first();
+ *       for (UTextOffset end = boundary.next();
+ *         end != BreakIterator::DONE;
+ *         start = end, end = boundary.next())
+ *         {
+ *             printTextRange( boundary, start, end );
+ *         }
+ *    }
+ * \code
  * </pre>
  * Print each element in reverse order:
  * <pre>
- * .   void printEachBackward( BreakIterator& boundary)
- * .   {
- * .      UTextOffset end = boundary.last();
- * .      for (UTextOffset start = boundary.previous();
- * .        start != BreakIterator::DONE;
- * .        end = start, start = boundary.previous())
- * .        {
- * .            printTextRange( boundary, start, end );
- * .        }
- * .   }
+ * \code
+ *    void printEachBackward( BreakIterator& boundary)
+ *    {
+ *       UTextOffset end = boundary.last();
+ *       for (UTextOffset start = boundary.previous();
+ *         start != BreakIterator::DONE;
+ *         end = start, start = boundary.previous())
+ *         {
+ *             printTextRange( boundary, start, end );
+ *         }
+ *    }
+ * \endcode
  * </pre>
  * Print first element
  * <pre>
- * .   void printFirst(BreakIterator& boundary)
- * .   {
- * .       UTextOffset start = boundary.first();
- * .       UTextOffset end = boundary.next();
- * .       printTextRange( boundary, start, end );
- * .   }
+ * \code
+ *    void printFirst(BreakIterator& boundary)
+ *    {
+ *        UTextOffset start = boundary.first();
+ *        UTextOffset end = boundary.next();
+ *        printTextRange( boundary, start, end );
+ *    }
+ * \endcode
  * </pre>
  * Print last element
  * <pre>
- * .   void printLast(BreakIterator& boundary)
- * .   {
- * .       UTextOffset end = boundary.last();
- * .       UTextOffset start = boundary.previous();
- * .       printTextRange( boundary, start, end );
- * .   }
+ *  \code
+ *    void printLast(BreakIterator& boundary)
+ *    {
+ *        UTextOffset end = boundary.last();
+ *        UTextOffset start = boundary.previous();
+ *        printTextRange( boundary, start, end );
+ *    }
+ * \endcode
  * </pre>
  * Print the element at a specified position
  * <pre>
- * .   void printAt(BreakIterator &boundary, UTextOffset pos )
- * .   {
- * .       UTextOffset end = boundary.following(pos);
- * .       UTextOffset start = boundary.previous();
- * .       printTextRange( boundary, start, end );
- * .   }
+ * \code
+ *    void printAt(BreakIterator &boundary, UTextOffset pos )
+ *    {
+ *        UTextOffset end = boundary.following(pos);
+ *        UTextOffset start = boundary.previous();
+ *        printTextRange( boundary, start, end );
+ *    }
+ * \endcode
  * </pre>
  * Creating and using text boundaries
  * <pre>
- * .      void BreakIterator_Example( void )
- * .      {
- * .          BreakIterator* boundary;
- * .          UnicodeString stringToExamine("Aaa bbb ccc. Ddd eee fff.");
- * .          cout &lt;&lt; "Examining: " &lt;&lt; stringToExamine &lt;&lt; endl;
- * .
- * .          //print each sentence in forward and reverse order
- * .          boundary = BreakIterator::createSentenceInstance( Locale::US );
- * .          boundary->setText(stringToExamine);
- * .          cout &lt;&lt; "----- forward: -----------" &lt;&lt; endl;
- * .          printEachForward(*boundary);
- * .          cout &lt;&lt; "----- backward: ----------" &lt;&lt; endl;
- * .          printEachBackward(*boundary);
- * .          delete boundary;
- * .
- * .          //print each word in order
- * .          boundary = BreakIterator::createWordInstance();
- * .          boundary->setText(stringToExamine);
- * .          cout &lt;&lt; "----- forward: -----------" &lt;&lt; endl;
- * .          printEachForward(*boundary);
- * .          //print first element
- * .          cout &lt;&lt; "----- first: -------------" &lt;&lt; endl;
- * .          printFirst(*boundary);
- * .          //print last element
- * .          cout &lt;&lt; "----- last: --------------" &lt;&lt; endl;
- * .          printLast(*boundary);
- * .          //print word at charpos 10
- * .          cout &lt;&lt; "----- at pos 10: ---------" &lt;&lt; endl;
- * .          printAt(*boundary, 10 );
- * .
- * .          delete boundary;
- * .      }
+ * \code
+ *       void BreakIterator_Example( void )
+ *       {
+ *           BreakIterator* boundary;
+ *           UnicodeString stringToExamine("Aaa bbb ccc. Ddd eee fff.");
+ *           cout &lt;&lt; "Examining: " &lt;&lt; stringToExamine &lt;&lt; endl;
+ * 
+ *           //print each sentence in forward and reverse order
+ *           boundary = BreakIterator::createSentenceInstance( Locale::US );
+ *           boundary->setText(stringToExamine);
+ *           cout &lt;&lt; "----- forward: -----------" &lt;&lt; endl;
+ *           printEachForward(*boundary);
+ *           cout &lt;&lt; "----- backward: ----------" &lt;&lt; endl;
+ *           printEachBackward(*boundary);
+ *           delete boundary;
+ * 
+ *           //print each word in order
+ *           boundary = BreakIterator::createWordInstance();
+ *           boundary->setText(stringToExamine);
+ *           cout &lt;&lt; "----- forward: -----------" &lt;&lt; endl;
+ *           printEachForward(*boundary);
+ *           //print first element
+ *           cout &lt;&lt; "----- first: -------------" &lt;&lt; endl;
+ *           printFirst(*boundary);
+ *           //print last element
+ *           cout &lt;&lt; "----- last: --------------" &lt;&lt; endl;
+ *           printLast(*boundary);
+ *           //print word at charpos 10
+ *           cout &lt;&lt; "----- at pos 10: ---------" &lt;&lt; endl;
+ *           printAt(*boundary, 10 );
+ * 
+ *           delete boundary;
+ *       }
+ * \endcode
  * </pre>
  */
 class U_I18N_API BreakIterator {

@@ -49,40 +49,44 @@
  * alignment of an array of formatted floating-point numbers on
  * their decimal points:
  * <pre>
- * .      double doubleNum[] = {123456789.0, -12345678.9, 1234567.89, -123456.789,
- * .                 12345.6789, -1234.56789, 123.456789, -12.3456789, 1.23456789};
- * .      int dNumSize = (int)(sizeof(doubleNum)/sizeof(double));
- * .      
- * .      UErrorCode status = U_ZERO_ERROR;
- * .      DecimalFormat* fmt = (DecimalFormat*) NumberFormat::createInstance(status);
- * .      fmt->setDecimalSeparatorAlwaysShown(true);
- * .      
- * .      const int tempLen = 20;
- * .      char temp[tempLen];
- * .      
- * .      for (int i=0; i&lt;dNumSize; i++) {
- * .          FieldPosition pos(NumberFormat::INTEGER_FIELD);
- * .          UnicodeString buf;
- * .          char fmtText[tempLen];
- * .          ToCharString(fmt->format(doubleNum[i], buf, pos), fmtText);
- * .          for (int j=0; j&lt;tempLen; j++) temp[j] = ' '; // clear with spaces
- * .          temp[__min(tempLen, tempLen-pos.getEndIndex())] = '\0';
- * .          cout &lt;&lt; temp &lt;&lt; fmtText   &lt;&lt; endl;
- * .      }
- * .      delete fmt;
+ * \code
+ *       double doubleNum[] = {123456789.0, -12345678.9, 1234567.89, -123456.789,
+ *                  12345.6789, -1234.56789, 123.456789, -12.3456789, 1.23456789};
+ *       int dNumSize = (int)(sizeof(doubleNum)/sizeof(double));
+ *       
+ *       UErrorCode status = U_ZERO_ERROR;
+ *       DecimalFormat* fmt = (DecimalFormat*) NumberFormat::createInstance(status);
+ *       fmt->setDecimalSeparatorAlwaysShown(true);
+ *       
+ *       const int tempLen = 20;
+ *       char temp[tempLen];
+ *       
+ *       for (int i=0; i&lt;dNumSize; i++) {
+ *           FieldPosition pos(NumberFormat::INTEGER_FIELD);
+ *           UnicodeString buf;
+ *           char fmtText[tempLen];
+ *           ToCharString(fmt->format(doubleNum[i], buf, pos), fmtText);
+ *           for (int j=0; j&lt;tempLen; j++) temp[j] = ' '; // clear with spaces
+ *           temp[__min(tempLen, tempLen-pos.getEndIndex())] = '\0';
+ *           cout &lt;&lt; temp &lt;&lt; fmtText   &lt;&lt; endl;
+ *       }
+ *       delete fmt;
+ * \endcode
  * </pre>
  * <p>
  * The code will generate the following output:
  * <pre>
- * .          123,456,789.000
- * .          -12,345,678.900
- * .            1,234,567.880
- * .             -123,456.789
- * .               12,345.678
- * .               -1,234.567
- * .                  123.456
- * .                  -12.345
- * .                    1.234
+ * \code
+ *           123,456,789.000
+ *           -12,345,678.900
+ *             1,234,567.880
+ *              -123,456.789
+ *                12,345.678
+ *                -1,234.567
+ *                   123.456
+ *                   -12.345
+ *                     1.234
+ *  \endcode
  * </pre>
 */
 class U_I18N_API FieldPosition {

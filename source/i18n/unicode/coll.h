@@ -79,6 +79,7 @@ class CollationKey;
  * the <code>Collator</code> for the default locale.
  * <blockquote>
  * <pre>
+ * \code
  * // Compare two strings in the default locale
  * UErrorCode success = U_ZERO_ERROR;
  * Collator* myCollator = Collator::createInstance(success);
@@ -87,6 +88,7 @@ class CollationKey;
  * }else{
  *     cout &lt;&lt; "abc is greater than or equal to ABC" &lt;&lt; endl;
  * }
+ * \endcode
  * </pre>
  * </blockquote>
  *
@@ -103,6 +105,7 @@ class CollationKey;
  * US English.
  * <blockquote>
  * <pre>
+ * \code
  * //Get the Collator for US English and set its strength to PRIMARY
  * UErrorCode success = U_ZERO_ERROR;
  * Collator* usCollator = Collator::createInstance(Locale::US, success);
@@ -110,6 +113,7 @@ class CollationKey;
  * if( usCollator->compare("abc", "ABC") == 0 ) {
  *     cout &lt;&lt; "'abc' and 'ABC' strings are equivalent with strength PRIMARY" &lt;&lt; endl;
  * }
+ * \endcode
  * </pre>
  * </blockquote>
  * <p>

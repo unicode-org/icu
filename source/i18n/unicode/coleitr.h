@@ -45,13 +45,17 @@ typedef void *  UCollator;
  * collated in the given collation object.
  * For example, consider the following in Spanish:
  * <pre>
- * .       "ca" -> the first key is key('c') and second key is key('a').
- * .       "cha" -> the first key is key('ch') and second key is key('a').
+ * \code
+ *        "ca" -> the first key is key('c') and second key is key('a').
+ *        "cha" -> the first key is key('ch') and second key is key('a').
+ * \endcode
  * </pre>
  * And in German,
  * <pre>
- * .       "æb"-> the first key is key('a'), the second key is key('e'), and
- * .       the third key is key('b').
+ * \code
+ *        "æb"-> the first key is key('a'), the second key is key('e'), and
+ *        the third key is key('b').
+* \endcode
  * </pre>
  * The key of a character, is an integer composed of primary order(short),
  * secondary order(char), and tertiary order(char).  Java strictly defines
@@ -60,19 +64,21 @@ typedef void *  UCollator;
  * to ensure the correctness of the key value.
  * <p>Example of the iterator usage: (without error checking)
  * <pre>
- * .  void CollationElementIterator_Example()
- * .  {
- * .      UnicodeString str = "This is a test";
- * .      UErrorCode success = U_ZERO_ERROR;
- * .      RuleBasedCollator* rbc =
- * .          (RuleBasedCollator*) RuleBasedCollator::createInstance(success);
- * .      CollationElementIterator* c =
- * .          rbc->createCollationElementIterator( str );
- * .      int32_t order = c->next(success);
- * .      int32_t primaryOrder = CollationElementIterator::primaryOrder( order );
- * .      delete c;
- * .      delete rbc;
- * .  }
+ * \code
+ *   void CollationElementIterator_Example()
+ *   {
+ *       UnicodeString str = "This is a test";
+ *       UErrorCode success = U_ZERO_ERROR;
+ *       RuleBasedCollator* rbc =
+ *           (RuleBasedCollator*) RuleBasedCollator::createInstance(success);
+ *       CollationElementIterator* c =
+ *           rbc->createCollationElementIterator( str );
+ *       int32_t order = c->next(success);
+ *       int32_t primaryOrder = CollationElementIterator::primaryOrder( order );
+ *       delete c;
+ *       delete rbc;
+ *   }
+ * \endcode
  * </pre>
  * <p>
  * CollationElementIterator::next returns the collation order of the next

@@ -8,7 +8,10 @@
 
 #include "unicode/utypes.h"
 /**
- * @name BreakIterator C API
+ * \file
+ * \brief Description of BreakIterator C API
+ *
+ * <h2> BreakIterator C API </h2>
  *
  * The BreakIterator C API defines  methods for finding the location
  * of boundaries in text. Pointer to a UBreakIterator maintain a 
@@ -44,101 +47,115 @@
  * <P>
  * Helper function to output text
  * <pre>
- * .   void printTextRange(UChar* str, UTextOffset start, UTextOffset end ) {
- * .        UChar* result;
- * .        UChar* temp;
- * .        const char* res;
- * .        temp=(UChar*)malloc(sizeof(UChar) * ((u_strlen(str)-start)+1));
- * .        result=(UChar*)malloc(sizeof(UChar) * ((end-start)+1));
- * .        u_strcpy(temp, &str[start]);
- * .        u_strncpy(result, temp, end-start);
- * .        res=(char*)malloc(sizeof(char) * (u_strlen(result)+1));
- * .        u_austrcpy(res, result);
- * .        printf("%s\n", res); 
- * .   }
+ * \code
+ *    void printTextRange(UChar* str, UTextOffset start, UTextOffset end ) {
+ *         UChar* result;
+ *         UChar* temp;
+ *         const char* res;
+ *         temp=(UChar*)malloc(sizeof(UChar) * ((u_strlen(str)-start)+1));
+ *         result=(UChar*)malloc(sizeof(UChar) * ((end-start)+1));
+ *         u_strcpy(temp, &str[start]);
+ *         u_strncpy(result, temp, end-start);
+ *         res=(char*)malloc(sizeof(char) * (u_strlen(result)+1));
+ *         u_austrcpy(res, result);
+ *         printf("%s\n", res); 
+ *    }
+ * \endcode
  * </pre>
  * Print each element in order:
  * <pre>
- * .   void printEachForward( UBreakIterator* boundary, UChar* str) {
- * .      UTextOffset end;
- * .      UTextOffset start = ubrk_first(boundary);
- * .      for (end = ubrk_next(boundary)); end != UBRK_DONE; start = end, end = ubrk_next(boundary)) {
- * .            printTextRange(str, start, end );
- * .        }
- * .   }
+ * \code
+ *    void printEachForward( UBreakIterator* boundary, UChar* str) {
+ *       UTextOffset end;
+ *       UTextOffset start = ubrk_first(boundary);
+ *       for (end = ubrk_next(boundary)); end != UBRK_DONE; start = end, end = ubrk_next(boundary)) {
+ *             printTextRange(str, start, end );
+ *         }
+ *    }
+ * \endcode
  * </pre>
  * Print each element in reverse order:
  * <pre>
- * .   void printEachBackward( UBreakIterator* boundary, UChar* str) {
- * .      UTextOffset start;
- * .      UTextOffset end = ubrk_last(boundary);
- * .      for (start = ubrk_previous(boundary); start != UBRK_DONE;  end = start, start =ubrk_previous(boundary)) {
- * .            printTextRange( str, start, end );
- * .        }
- * .   }
+ * \code
+ *    void printEachBackward( UBreakIterator* boundary, UChar* str) {
+ *       UTextOffset start;
+ *       UTextOffset end = ubrk_last(boundary);
+ *       for (start = ubrk_previous(boundary); start != UBRK_DONE;  end = start, start =ubrk_previous(boundary)) {
+ *             printTextRange( str, start, end );
+ *         }
+ *    }
+ * \endcode
  * </pre>
  * Print first element
  * <pre>
- * .   void printFirst(UBreakIterator* boundary, UChar* str) {
- * .       UTextOffset end;
- * .       UTextOffset start = ubrk_first(boundary);
- * .       end = ubrk_next(boundary);
- * .       printTextRange( str, start, end );
- * .   }
+ * \code
+ *    void printFirst(UBreakIterator* boundary, UChar* str) {
+ *        UTextOffset end;
+ *        UTextOffset start = ubrk_first(boundary);
+ *        end = ubrk_next(boundary);
+ *        printTextRange( str, start, end );
+ *    }
+ * \endcode
  * </pre>
  * Print last element
  * <pre>
- * .   void printLast(UBreakIterator* boundary, UChar* str) {
- * .       UTextOffset start;
- * .       UTextOffset end = ubrk_last(boundary);
- * .       start = ubrk_previous(boundary);
- * .       printTextRange(str, start, end );
- * .   }
+ * \code
+ *    void printLast(UBreakIterator* boundary, UChar* str) {
+ *        UTextOffset start;
+ *        UTextOffset end = ubrk_last(boundary);
+ *        start = ubrk_previous(boundary);
+ *        printTextRange(str, start, end );
+ *    }
+ * \endcode
  * </pre>
  * Print the element at a specified position
  * <pre>
- * .   void printAt(UBreakIterator* boundary, UTextOffset pos , UChar* str) {
- * .       UTextOffset start;
- * .       UTextOffset end = ubrk_following(boundary, pos);
- * .       start = ubrk_previous(boundary);
- * .       printTextRange(str, start, end );
- * .   }
+ * \code
+ *    void printAt(UBreakIterator* boundary, UTextOffset pos , UChar* str) {
+ *        UTextOffset start;
+ *        UTextOffset end = ubrk_following(boundary, pos);
+ *        start = ubrk_previous(boundary);
+ *        printTextRange(str, start, end );
+ *    }
+ * \endcode
  * </pre>
  * Creating and using text boundaries
  * <pre>
- * .      void BreakIterator_Example( void ) {
- * .          UBreakIterator* boundary;
- * .          UChar *stringToExamine;
- * .          stringToExamine=(UChar*)malloc(sizeof(UChar) * (strlen("Aaa bbb ccc. Ddd eee fff.")+1) );
- * .          u_uastrcpy(stringToExamine, "Aaa bbb ccc. Ddd eee fff.");
- * .          printf("Examining: "Aaa bbb ccc. Ddd eee fff.");
- * .
- * .          //print each sentence in forward and reverse order
- * .          boundary = ubrk_open(UBRK_SENTENCE, "en_us", stringToExamine, u_strlen(stringToExamine), &status);
- * .          printf("----- forward: -----------\n"); 
- * .          printEachForward(boundary, stringToExamine);
- * .          printf("----- backward: ----------\n");
- * .          printEachBackward(boundary, stringToExamine);
- * .          ubrk_close(boundary);
- * .
- * .          //print each word in order
- * .          boundary = ubrk_open(UBRK_WORD, "en_us", stringToExamine, u_strlen(stringToExamine), &status);
- * .          printf("----- forward: -----------\n"); 
- * .          printEachForward(boundary, stringToExamine);
- * .          printf("----- backward: ----------\n");
- * .          printEachBackward(boundary, stringToExamine);
- * .          //print first element
- * .          printf("----- first: -------------\n");
- * .          printFirst(boundary, stringToExamine);
- * .          //print last element
- * .          printf("----- last: --------------\n");
- * .          printLast(boundary, stringToExamine);
- * .          //print word at charpos 10
- * .          printf("----- at pos 10: ---------\n");
- * .          printAt(boundary, 10 , stringToExamine);
- * .
- * .          ubrk_close(boundary);
- * .      }
+ * \code
+ *       void BreakIterator_Example( void ) {
+ *           UBreakIterator* boundary;
+ *           UChar *stringToExamine;
+ *           stringToExamine=(UChar*)malloc(sizeof(UChar) * (strlen("Aaa bbb ccc. Ddd eee fff.")+1) );
+ *           u_uastrcpy(stringToExamine, "Aaa bbb ccc. Ddd eee fff.");
+ *           printf("Examining: "Aaa bbb ccc. Ddd eee fff.");
+ * 
+ *           //print each sentence in forward and reverse order
+ *           boundary = ubrk_open(UBRK_SENTENCE, "en_us", stringToExamine, u_strlen(stringToExamine), &status);
+ *           printf("----- forward: -----------\n"); 
+ *           printEachForward(boundary, stringToExamine);
+ *           printf("----- backward: ----------\n");
+ *           printEachBackward(boundary, stringToExamine);
+ *           ubrk_close(boundary);
+ * 
+ *           //print each word in order
+ *           boundary = ubrk_open(UBRK_WORD, "en_us", stringToExamine, u_strlen(stringToExamine), &status);
+ *           printf("----- forward: -----------\n"); 
+ *           printEachForward(boundary, stringToExamine);
+ *           printf("----- backward: ----------\n");
+ *           printEachBackward(boundary, stringToExamine);
+ *           //print first element
+ *           printf("----- first: -------------\n");
+ *           printFirst(boundary, stringToExamine);
+ *           //print last element
+ *           printf("----- last: --------------\n");
+ *           printLast(boundary, stringToExamine);
+ *           //print word at charpos 10
+ *           printf("----- at pos 10: ---------\n");
+ *           printAt(boundary, 10 , stringToExamine);
+ * 
+ *           ubrk_close(boundary);
+ *       }
+ * \endcode
  * </pre>
  */
 
