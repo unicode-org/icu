@@ -16,6 +16,10 @@ public final class Default implements UCD_Types {
     public static Normalizer nfkd;
     public static Normalizer[] nf = new Normalizer[4];
     
+    public static void ensureUCD() {
+    	if (ucd == null) setUCD();
+    }
+    
     public static void setUCD(String version) {
     	ucdVersion = version;
     	setUCD();

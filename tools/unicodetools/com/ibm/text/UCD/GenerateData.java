@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2003/03/12 16:01:26 $
-* $Revision: 1.25 $
+* $Date: 2003/03/15 02:36:48 $
+* $Revision: 1.26 $
 *
 *******************************************************************************
 */
@@ -139,6 +139,39 @@ public class GenerateData implements UCD_Types {
         return "-" + Default.ucd.getVersion() 
             + ((withDVersion && dVersion >= 0) ? ("d" + dVersion) : "") 
             + ".html";
+    }
+    
+    public static void checkDifferences (String targetVersion) throws IOException {
+        System.out.println("Checking Differences");
+        UCD target = UCD.make(targetVersion);
+        
+        PrintWriter log1 = Utility.openPrintWriter("Log1.xml", Utility.LATIN1_UNIX);
+        log1.println("<diff version='" + target.getVersion() + "'>");
+
+        PrintWriter log2 = Utility.openPrintWriter("Log2.xml", Utility.LATIN1_UNIX);
+        log2.println("<diff version='" + Default.ucd.getVersion() + "'>");
+        
+        for (int i = 0; i <= 0x10FFFF; ++i) {
+            if (!target.isAllocated(i)) continue;
+            Utility.dot(i);
+            UData t = target.get(i, true);
+            UData current = Default.ucd.get(i, true);
+            if (i == 0x5E) {
+                System.out.println(target.getDecompositionTypeID(i) 
+                    + ", " + Utility.hex(target.getDecompositionMapping(i)));
+                System.out.println(Default.ucd.getDecompositionTypeID(i) 
+                    + ", " + Utility.hex(Default.ucd.getDecompositionMapping(i)));
+            }
+            if (t.equals(current)) continue;
+            
+            // print both for comparison
+            log1.println(t.toString(target, UData.ABBREVIATED));
+            log2.println(current.toString(Default.ucd, UData.ABBREVIATED));
+        }
+        log1.println("</diff>");
+        log2.println("</diff>");
+        log1.close();
+        log2.close();
     }
     
     public static void generateDerived (byte type, boolean checkTypeAndStandard, int headerChoice, String directory, String fileName) throws IOException {

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2003/03/12 16:01:26 $
-* $Revision: 1.28 $
+* $Date: 2003/03/15 02:36:47 $
+* $Revision: 1.29 $
 *
 *******************************************************************************
 */
@@ -34,6 +34,16 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
         System.arraycopy(array1, 0, temp, 0, array1.length);
         System.arraycopy(array2, 0, temp, array1.length, array2.length);
         return temp;
+    }
+
+    public static String[] subarray(String[] array1, int start, int limit) {
+        String[] temp = new String[limit - start];
+        System.arraycopy(array1, start, temp, 0, limit - start);
+        return temp;
+    }
+
+    public static String[] subarray(String[] array1, int start) {
+        return subarray(array1, start, array1.length);
     }
 
     public static String getName(int i, String[] names) {

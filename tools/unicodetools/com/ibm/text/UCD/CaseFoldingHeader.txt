@@ -11,6 +11,8 @@
 # (where string lengths may grow). Note that where they can be supported, the
 # full case foldings are superior: for example, they allow "MASSE" and "Maﬂe" to match.
 #
+# All code points not listed in this file map to themselves.
+#
 # NOTE: case folding does not preserve normalization formats!
 #
 # For information on case folding, see
