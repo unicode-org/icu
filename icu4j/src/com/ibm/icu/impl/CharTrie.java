@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and   *
+* Copyright (C) 1996-2005, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -10,6 +10,8 @@ package com.ibm.icu.impl;
 import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+
+import com.ibm.icu.text.UTF16;
 
 /**
  * Trie implementation which stores data in char, 16 bits.
@@ -100,7 +102,18 @@ public class CharTrie extends Trie
     */
     public final char getCodePointValue(int ch)
     {
-        int offset = getCodePointOffset(ch);
+        int offset;
+
+        // fastpath for U+0000..U+D7FF
+        if(0 <= ch && ch < UTF16.LEAD_SURROGATE_MIN_VALUE) {
+            // copy of getRawOffset()
+            offset = (m_index_[ch >> INDEX_STAGE_1_SHIFT_] << INDEX_STAGE_2_SHIFT_) 
+                    + (ch & INDEX_STAGE_3_MASK_);
+            return m_data_[offset];
+        }
+
+        // handle U+D800..U+10FFFF
+        offset = getCodePointOffset(ch);
         
         // return -1 if there is an error, in this case we return the default
         // value: m_initialValue_
