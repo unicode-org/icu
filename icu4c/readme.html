@@ -2,7 +2,7 @@
 
 <html>
   <head>
-    <meta name="GENERATOR" content="HTML Tidy, see www.w3.org">
+    <meta name="GENERATOR" content="Microsoft FrontPage 4.0">
     <meta name="COPYRIGHT" content=
     "Copyright (c) IBM Corporation and others. All Rights Reserved.">
     <meta name="KEYWORDS" content=
@@ -12,7 +12,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
     <title>ReadMe for ICU</title>
-<style type="text/css">
+    <style type="text/css">
       h1 {border-width: 2px; border-style: solid; text-align: center; width: 100%; font-size: 200%; font-weight: bold}
       h2 {margin-top: 3em; text-decoration: underline; page-break-before: always}
       h2.TOC {page-break-before: auto}
@@ -29,31 +29,25 @@
 
   <body lang="en-US">
     <h1>International Components for Unicode<br>
-     ReadMe</h1>
+    ICU 2.0 ReadMe</h1>
 
-    <p>Version: 2001-Nov-14<br>
+    <p>Version: 2001-Nov-15<br>
      Copyright &copy; 1995-2001 International Business Machines Corporation and
      others. All Rights Reserved.</p>
     <hr>
+
+    <p><b><font color="#FF0000">Markus 2001-nov-15 not finished...</font></b></p>
 
     <h2 class="TOC">Table of Contents</h2>
 
     <ul class="TOC">
       <li><a href="#Introduction">Introduction</a></li>
 
+      <li><a href="#GettingStarted">Getting started</a></li>
+
       <li>
-        <a href="#News">Late Breaking News And What Is New?</a>
+        <a href="#News"> What is new in this release?</a>
 
-        <ul class="TOC">
-          <li><a href="#NewsUnicodeVer">Support for Unicode 3.1</a></li>
-
-          <li><a href="#NewsTranslit">Transliterator Improvements</a></li>
-
-          <li><a href="#NewsUnicodeSet">UnicodeSet Improvements</a></li>
-
-          <li><a href="#NewsLicense">License Change from IPL to the X
-          license</a></li>
-        </ul>
       </li>
 
       <li><a href="#HowDown">How to Download the Source Code</a></li>
@@ -102,84 +96,200 @@
     </ul>
     <hr>
 
-    <h2><a name="Introduction">Introduction</a></h2>
+    <h2><a name="Introduction" href="#Introduction">Introduction</a></h2>
 
     <p>Today's software market is a global one in which it is desirable to
-    develop and maintain one application that supports a wide variety of
-    national languages. International Components for Unicode provides the
-    following tools to help you write language independent applications:</p>
+    develop and maintain one application (single source/single binary) that supports a wide variety of languages.
+    The International Components for Unicode (C/C++) provides tools to help write
+    platform-independent applications that are internationalized and localized,
+    with support for:</p>
 
     <ul>
-      <li>Support for the latest Unicode standard</li>
+      <li>Support for the latest version of the Unicode standard</li>
 
-      <li>Character set conversions, with support for over 200 code pages</li>
+      <li>Character set conversions, with support for over 200 codepages</li>
 
-      <li>A full-featured Unicode String class</li>
+      <li>Locale data for more than 160 locales</li>
+
+      <li>Text collation (sorting) based on the Unicode Collation Algorithm
+        (=ISO 14651), customizable and tailored for national standards</li>
+
+      <li>Transliteration services for script&lt;-&gt;script transliterations
+        and general text operations</li>
 
       <li>Resource bundles for storing and accessing localized information</li>
 
-      <li>Number formatters for converting binary numbers into text strings for
-      meaningful display</li>
-
-      <li>Date and time formatters for converting internal time data into text
-      strings for meaningful display</li>
-
-      <li>Message formatters for putting together sequences of strings, numbers
-      dates and other format to create messages</li>
-
-      <li>Text collation supporting language sensitive comparison of
-      strings</li>
+      <li>Date/Number/Message formatting and parsing of culture-specific
+        input/output formats</li>
 
       <li>Text boundary analysis for finding characters, word and sentence
       boundaries</li>
-
-      <li>Changing simple data files rather than modifying program code easily
-      localizes applications written using these tools</li>
-
-      <li>Over 160 locales supported. Visit the <a href=
-      "http://oss.software.ibm.com/developerworks/opensource/icu/localeexplorer">
-      LocaleExplorer</a> on the ICU website for a demonstration and a full list
-      of supported locales or see the <a href=
-      "http://oss.software.ibm.com/cvs/icu/~checkout~/icu/data/index.txt">index
-      file</a> with the supported locales.</li>
     </ul>
 
-    <p>Support additional locales by simply adding locale data
-    files, with no code changes required.</p>
+    <p>ICU has a sister project <a href="http://oss.software.ibm.com/icu4j/">ICU4J</a>
+    that extends the internationalization capabilities of Java to a level similar
+    to ICU. The ICU C/C++ project is also called ICU4C when a distinction is necessary.</p>
 
-    <p>This document will go into more detail on how to build and install ICU
-    on your machine. Once you start using ICU, the <a href="#UsageInformation">
-    Where To Find More Information</a> section of this document will be very
-    helpful resource.</p>
-    <br>
-    <br>
+    <h2><a name="#GettingStarted" href="#GettingStarted">Getting started</a></h2>
 
+    <p>This document describes how to build and install ICU on your machine.
+    For other information about ICU please see the following table of links.<br>
+    The ICU homepage also links to related information about writing
+    internationalized software.</p>
 
-    <p>Your comments are important to making this release successful. We are
-    committed to fixing any bugs, and will also use your feedback to help plan
-    future releases.</p>
+    <table border="1" cellpadding="3" width="100%">
+      <caption>
+        Here are some useful links regarding ICU and internationalization in
+        general.
+      </caption>
 
-    <p><strong>IMPORTANT:</strong> Please make sure you understand the <a href=
-    "license.html">Copyright and License Information</a>.</p>
+      <tr>
+        <td>ICU Homepage</td>
+        <td><a href="http://oss.software.ibm.com/icu/">http://oss.software.ibm.com/icu/</a></td>
+      </tr>
 
-    <h2><a name="News">Late Breaking News And What Is New?</a></h2>
+      <tr>
+        <td>ICU4J Homepage</td>
+        <td><a href="http://oss.software.ibm.com/icu4j/">http://oss.software.ibm.com/icu4j/</a></td>
+      </tr>
 
-    <p>For more news about this release, see the <a href=
-    "http://oss.software.ibm.com/icu/download/">online release notes</a>.</p>
+      <tr>
+        <td>FAQ - Frequently Asked Questions about ICU</td>
+        <td><a href="http://oss.software.ibm.com/icu/userguide/icufaq.html">
+        http://oss.software.ibm.com/icu/userguide/icufaq.html</a></td>
+      </tr>
 
-    <h3><a name="NewsUnicodeVer">Support for Unicode 3.1</a></h3>
+      <tr>
+        <td>ICU User's Guide</td>
+        <td><a href="http://oss.software.ibm.com/icu/userguide/">
+        http://oss.software.ibm.com/icu/userguide/</a></td>
+      </tr>
 
-    <p>ICU 2.0 has been upgraded to support Unicode 3.1, which
+      <tr>
+        <td>Download ICU</td>
+        <td><a href="http://oss.software.ibm.com/icu/download/">
+        http://oss.software.ibm.com/icu/download/</a></td>
+      </tr>
+
+      <tr>
+        <td>API Documentation Online</td>
+        <td><a href="http://oss.software.ibm.com/icu/apiref/">
+        http://oss.software.ibm.com/icu/apiref/</a></td>
+      </tr>
+
+      <tr>
+        <td>Online ICU Demos</td>
+        <td><a href="http://oss.software.ibm.com/icu/demo/">
+        http://oss.software.ibm.com/icu/demo/</a></td>
+      </tr>
+
+      <tr>
+        <td>Contacts &amp; Bug Reports/Feature Requests</td>
+        <td><a href="http://oss.software.ibm.com/icu/archives/">
+        http://oss.software.ibm.com/icu/archives/</a></td>
+      </tr>
+    </table>
+
+    <p><strong>Important:</strong> Please make sure you understand the
+    <a href="license.html">Copyright and License Information</a>.</p>
+
+    <h2><a name="News" href="#News"> What is new in this release?</a></h2>
+
+    <p>The following list concentrates on changes that affect existing
+    applications migrating from previous ICU releases. For more news about this release, see the <a href="http://oss.software.ibm.com/icu/download/2.0/">ICU
+    2.0 download page</a>.</p>
+
+    <h3>Support for Unicode 3.1.1</h3>
+
+    <p>ICU 2.0 has been upgraded to support <a href="http://www.unicode.org/unicode/standard/versions/Unicode3.1.1.html"> Unicode
+    3.1.1</a>, which
     includes the addition of 44,946 new encoded characters.
     These characters cover several historic scripts, several sets of symbols,
-    and a very large collection of additional CJK ideographs.  For more
-    information on Unicode 3.1, see <a href="http://www.unicode.org">
-    http://www.unicode.org</a>.</p>
+    and a very large collection of additional CJK ideographs.</p>
 
-    <h3><a name="NewsTranslit">Transliterator Improvements</a></h3>
+    <p>As part of this upgrade, a number of ICU services have been reviewed and
+    improved with regards to handling supplementary characters (surrogate
+    pairs). Especially, normalization is revamped for support of supplementary
+    characters and higher performance.</p>
+
+    <h3>Euro transition</h3>
+
+    <p>Locale data for countries that are switching their national currencies to
+    the Euro is updated to use the Euro symbol and appropriate currency
+    formatting. The old data is available in _PREEURO locale variants. The _EURO
+    variant selector can still be used to unambiguously get Euro currency symbol
+    formatting. For some time around the transition, software should explicitly
+    specify _PREEURO and _EURO variants to make sure to get the intended
+    currency format.</p>
+
+    <p>For more on this topic see the <a href="http://www.ibm.com/developerworks/unicode/library/u-euro/">developerWorks
+    article &quot;Are you really ready for the Euro?&quot;</a>.</p>
+
+    <h3>ICU versioning - C++ namespaces</h3>
+
+    <p>Beginning with ICU 2.0, multiple releases of ICU can be used in the same
+    process. Together with an arbitrary number of post-2.0 releases, one pre-2.0
+    release can be loaded and active.</p>
+
+    <p>This is achieved by renaming all library exports to include a release
+    number suffix. Each global function and each class is renamed in this way
+    using a header file with #defines. For C++, if the compiler supports
+    namespaces, all ICU C++ classes are defined in the &quot;icu&quot;
+    namespace. If the compiler does not support namespaces, then the classes are
+    renamed instead. This change also reduces the chance of naming collisions
+    with other libraries.</p>
+
+    <p>For details see the <a href="http://oss.software.ibm.com/icu/userguide/design.html">User's
+    Guide Design Chapter</a>.</p>
+
+    <h3>API changes</h3>
+
+    <p>The C++ Normalizer class had a partially broken model for iterative
+    normalization; this is redone in a more consistent way. See the <a href="http://oss.software.ibm.com/icu/apiref/normlzr_h.html">Normalizer
+    API documentation</a> for details.</p>
+
+    <p>APIs that take a rules or pattern string (for collation, transliteration,
+    message formats, etc.) now also take a UParseError structure that is filled
+    with useful debugging information when a rule syntax error is detected. This
+    makes it easier in large rules to find problems. As a result, the signatures
+    of some functions have changed. The old signatures will be available for
+    about a year by #defining a constant. See affected header files for details.</p>
+
+    <p>Functions that take C-style string input arguments with const UChar *src
+    and int32_t srcLength now consistently treat srcLength==-1 to mean that the
+    input string is NUL-terminated and get srcLength=u_strlen(src).</p>
+
+    <p>Functions that take C-style string output arguments with UChar *dest and
+    int32_t destCapacity now handle NUL-termination of the output string
+    consistently. If the output length is equal to destCapacity, then dest is
+    filled with the output string and a warning code is set. For details about
+    string handling see the <a href="http://oss.software.ibm.com/icu/userguide/strings.html">User's
+    Guide Strings chapter</a>.</p>
+
+    <p><b><font color="#FF0000">More... Markus 2001-nov-15 not finished...</font></b></p>
+
+    <p>&nbsp;</p>
+
+    <h3>Collation improvements</h3>
+
+    <p>The performance of Japanese Katakana collation is improved, and the
+    Japanese collation is changed for conformance with the JIS X 4061 standard.</p>
+
+    <h3>String search and Rule-based number formatting ported from ICU4J</h3>
+
+    <p>Boyer-Moore-style, collation-based string search and formatting numbers
+    in spelled-out format are now available in ICU4C.</p>
+
+    <p>&nbsp;</p>
+
+    <p>&nbsp;</p>
+
+    <h3>Transliterator improvements</h3>
 
     <p>The transliterator service has undergone an extensive overhaul, in both
-    the rule-based engine and the built-in system rules.</p>
+    the rule-based engine and the built-in system rules. For a complete
+    description see the <a href="http://oss.software.ibm.com/icu/userguide/Transliteration.html">User's
+    Guide chapter on transliteration</a>.</p>
 
     <ul>
       <li><b>New or rewritten rules:</b> <tt>Any-Accents</tt>, <tt>
@@ -364,7 +474,7 @@
       supported.</li>
     </ul>
 
-    <h3><a name="NewsLicense">License Change</a></h3>
+    <h3>License Change (for ICU 1.8.1 and up)</h3>
 
     <p>The ICU projects (ICU4C and ICU4J) have changed their licenses from the
     IPL (IBM Public License) to the X license. The X license is a non-viral and
@@ -1439,24 +1549,24 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
 #  define U_USE_DEPRECATED_FORMAT_API 1
 #endif
 
-#include "unicode/udat.h"
+#include &quot;unicode/udat.h&quot;
 
 int main(){
     UDateFormat *def, *fr, *fr_pat ;
     UErrorCode status = U_ZERO_ERROR;
     UChar temp[30];
 
-    fr = udat_open(UDAT_FULL, UDAT_DEFAULT, "fr_FR", NULL,0, &amp;status);
+    fr = udat_open(UDAT_FULL, UDAT_DEFAULT, &quot;fr_FR&quot;, NULL,0, &amp;status);
     if(U_FAILURE(status)){
-        printf("Error creating the french dateformat using full time style\n %s\n",
+        printf(&quot;Error creating the french dateformat using full time style\n %s\n&quot;,
             myErrorName(status) );
     }
     /* This is supposed to open default date format,
-       but later on it treats it like it is "en_US".
+       but later on it treats it like it is &quot;en_US&quot;.
        This is very bad when you try to run the tests
-       on a machine where the default locale is NOT "en_US"
+       on a machine where the default locale is NOT &quot;en_US&quot;
     */
-    def = udat_open(UDAT_SHORT, UDAT_SHORT, "en_US", NULL, 0, &amp;status);
+    def = udat_open(UDAT_SHORT, UDAT_SHORT, &quot;en_US&quot;, NULL, 0, &amp;status);
     if(U_FAILURE(status)){
         .... /* handle the error */
     }
@@ -1471,74 +1581,6 @@ int main(){
     Transliteration service U_USE_DEPRECATED_TRANSLITERATOR_API symbol should
     be defined before compiling ICU.</p>
 
-    <h2><a name="UsageInformation">Getting More Information About ICU</a></h2>
-
-    <table border="1" cellpadding="3" width="100%" summary="">
-      <caption>
-        Here are some useful links regarding ICU and internationalization in
-        general.
-      </caption>
-
-      <tr>
-        <td><a href="http://oss.software.ibm.com/icu/">
-        http://oss.software.ibm.com/icu/</a></td>
-
-        <td>International Components for Unicode homepage</td>
-      </tr>
-
-      <tr>
-        <td><a href="http://oss.software.ibm.com/icu/userguide/icufaq.html">
-        http://oss.software.ibm.com/icu/userguide/icufaq.html</a></td>
-
-        <td>Frequently asked questions about ICU</td>
-      </tr>
-
-      <tr>
-        <td><a href="http://oss.software.ibm.com/icu/download">
-        http://oss.software.ibm.com/icu/download</a></td>
-
-        <td>Download the latest version of ICU and documentation</td>
-      </tr>
-
-      <tr>
-        <td><a href="http://oss.software.ibm.com/icu/apiref/">
-        http://oss.software.ibm.com/icu/apiref/</a></td>
-
-        <td>API Documentation in HTML form</td>
-      </tr>
-
-      <tr>
-        <td><a href="http://oss.software.ibm.com/icu/userguide/">
-        http://oss.software.ibm.com/icu/userguide/</a></td>
-
-        <td>Draft User's Guide Documentation in HTML form</td>
-      </tr>
-
-      <tr>
-        <td><a href="http://oss.software.ibm.com/icu/userguide/icu.pdf">
-        http://oss.software.ibm.com/icu/userguide/icu.pdf</a></td>
-
-        <td>Draft User's Guide Documentation in PDF form</td>
-      </tr>
-
-      <tr>
-        <td><a href="http://www.ibm.com/developer/unicode/">
-        http://www.ibm.com/developer/unicode/</a></td>
-
-        <td>Information on how to make applications global.</td>
-      </tr>
-    </table>
-
-    <h2><a name="SubmittingComments">Submitting Comments, Requesting Features
-    and Reporting Bugs</a></h2>
-
-    <p>To submit comments, request features and report bugs, please contact us.
-    The best forum is the ICU mailing list. See the <a href=
-    "http://oss.software.ibm.com/icu/archives/">information on how to browse
-    and join the list</a>. If you find a bug in the code that has not been
-    submitted and/or fixed yet, then please <a href=
-    "http://oss.software.ibm.com/developerworks/opensource/icu/bugs">submit a
-    jitterbug</a>.</p>
     <hr>
 
     <p>Copyright &copy; 1997-2001 International Business Machines Corporation
