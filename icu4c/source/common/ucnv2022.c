@@ -322,7 +322,8 @@ static const char* getEndOfBuffer_2022(const char** source,
 typedef enum{               
     ISO_2022=0,
     ISO_2022_JP=1,
-    ISO_2022_CN=2
+    ISO_2022_KR=2,
+    ISO_2022_CN=3
 } Variant2022;
 
 /*runs through a state machine to determine the escape sequence - codepage correspondance
@@ -2068,8 +2069,9 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs *args,
                     mySource--;
                     changeState_2022(args->converter,&(mySource), 
                         args->sourceLimit, args->flush,ISO_2022_JP,&plane, err);
+                    /* Invalid or Illegal escape sequence */
                     if(U_FAILURE(*err)){
-                        return;
+                        goto END_LOOP;
                     }
                     continue;
             }
@@ -2150,7 +2152,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs *args,
                 
                 case INVALID_STATE:
                     *err = U_ILLEGAL_ESCAPE_SEQUENCE;
-                    return;
+                    goto END_LOOP;
                 
                 default :
                     break;
@@ -2209,6 +2211,7 @@ SAVE_STATE:
             break;
         }
     }
+END_LOOP:
     if((args->flush==TRUE)
         && (mySource == mySourceLimit) 
         && ( args->converter->toUnicodeStatus !=0x00)){
@@ -2303,9 +2306,9 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeA
                     mySource--;
                     changeState_2022(args->converter,&(mySource), 
                         args->sourceLimit, args->flush,ISO_2022_JP,&plane, err);
-
+                    /*Invalid or illegal escape sequence */
                     if(U_FAILURE(*err)){
-                        return;
+                        goto END_LOOP;
                     }
                     continue;
             }
@@ -2385,7 +2388,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeA
                 
                 case INVALID_STATE:
                     *err = U_ILLEGAL_ESCAPE_SEQUENCE;
-                    return;
+                    goto END_LOOP;
                 default:
                     /* For non-valid state MBCS and others */
                     break;
@@ -2461,6 +2464,7 @@ SAVE_STATE:
             break;
         }
     }
+END_LOOP:
     if((args->flush==TRUE)
         && (mySource == mySourceLimit) 
         && ( args->converter->toUnicodeStatus !=0x00)){
@@ -2937,18 +2941,17 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_KR(UConverterToUnicodeArgs *args,
                     /* Already doing some conversion and found escape Sequence*/
                     if(args->converter->mode == UCNV_SO){
                         *err = U_ILLEGAL_ESCAPE_SEQUENCE;
-                        goto SAVE_STATE;
+                        goto END_LOOP;
                     }
                     else{
                         mySource--;
                         changeState_2022(args->converter,&(mySource), 
-                        args->sourceLimit, args->flush,ISO_2022,&plane, err);
+                        args->sourceLimit, args->flush,ISO_2022_KR,&plane, err);
 
-                       
                     }
                     if(U_FAILURE(*err)){
                        *err = U_ILLEGAL_ESCAPE_SEQUENCE;
-                        goto SAVE_STATE;
+                        goto END_LOOP;
                     }
                     continue;
                 }
@@ -3035,6 +3038,7 @@ SAVE_STATE:
             break;
         }
     }
+END_LOOP:
     if((args->flush==TRUE)
         && (mySource == mySourceLimit) 
         && ( args->converter->toUnicodeStatus !=0x00)){
@@ -3107,18 +3111,18 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeA
                     /* Already doing some conversion and found escape Sequence*/
                     if(args->converter->mode == UCNV_SO){
                         *err = U_ILLEGAL_ESCAPE_SEQUENCE;
-                        goto SAVE_STATE;
+                        goto END_LOOP;
                     }
                     else{
                         mySource--;
                         changeState_2022(args->converter,&(mySource), 
-                        args->sourceLimit, args->flush,ISO_2022,&plane, err);
+                        args->sourceLimit, args->flush,ISO_2022_KR,&plane, err);
 
                        
                     }
                     if(U_FAILURE(*err)){
                        *err = U_ILLEGAL_ESCAPE_SEQUENCE;
-                        goto SAVE_STATE;
+                        goto END_LOOP;
                     }
                     continue;
                 }
@@ -3218,6 +3222,7 @@ SAVE_STATE:
             break;
         }
     }
+END_LOOP:
     if((args->flush==TRUE)
         && (mySource == mySourceLimit) 
         && ( args->converter->toUnicodeStatus !=0x00)){
@@ -4231,6 +4236,10 @@ DONE:
                         *err= (tempState==INVALID_STATE)?U_ILLEGAL_ESCAPE_SEQUENCE :U_ZERO_ERROR;
                     }
                     break;
+                case ISO_2022_KR:
+                    _this->mode = UCNV_SI;
+                    myUConverter = myData2022->currentConverter=myData2022->fromUnicodeConverter; 
+                    break;
                 default:
                     myUConverter=NULL;
                     *err = U_ILLEGAL_ESCAPE_SEQUENCE;
@@ -4355,8 +4364,9 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
                     
                         myData->currentType=ASCII1;
                     }
+                    /* illegal or invalid escape sequence */
                     if(U_FAILURE(*err)){
-                            return;
+                            goto END_LOOP;
                     }
                     continue;
             }
@@ -4484,6 +4494,7 @@ SAVE_STATE:
             break;
         }
     }
+END_LOOP:
     if((args->flush==TRUE)
         && (mySource == mySourceLimit) 
         && ( args->converter->toUnicodeStatus !=0x00)){
@@ -4595,8 +4606,9 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
                     
                     myData->currentType=ASCII1;
                 }
+                /* invalid or illegal escape sequence */
                 if(U_FAILURE(*err)){
-                    return;
+                    goto END_LOOP;
                 }
                 continue;
             
@@ -4746,6 +4758,7 @@ SAVE_STATE:
             break;
         }
     }
+END_LOOP:
     if((args->flush==TRUE)
         && (mySource == mySourceLimit) 
         && ( args->converter->toUnicodeStatus !=0x00)){
