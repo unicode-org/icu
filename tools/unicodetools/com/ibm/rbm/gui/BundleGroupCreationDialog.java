@@ -85,6 +85,7 @@ class BundleGroupCreationDialog extends JDialog {
 		nameField.setColumns(30);
 		commentLabel.setPreferredSize(leftDim);
 		commentField.setColumns(30);
+		getRootPane().setDefaultButton(createButton);
 		
 		box1.add(nameLabel); box1.add(nameField);
 		box2.add(commentLabel); box2.add(commentField);

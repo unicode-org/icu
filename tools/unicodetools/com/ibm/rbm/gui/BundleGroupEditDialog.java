@@ -70,7 +70,7 @@ class BundleGroupEditDialog extends JDialog {
 		return true;
 	}
 	
-	public void initComponents(){
+	private void initComponents(){
 		// Error check
 		if (group == null) {
 			String alert = Resources.getTranslation("error_modify_group");
@@ -89,6 +89,7 @@ class BundleGroupEditDialog extends JDialog {
 		
 		nameField.setText(group.getName());
 		commentField.setText(group.getComment());
+		getRootPane().setDefaultButton(editButton);
 		
 		box1.add(nameLabel); box1.add(nameField);
 		box2.add(commentLabel); box2.add(commentField);

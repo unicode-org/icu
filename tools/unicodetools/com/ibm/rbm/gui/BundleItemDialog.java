@@ -96,7 +96,8 @@ class BundleItemDialog extends JDialog implements ActionListener {
 		// Lookup the default translation
 		String defTrans = new String();
 		Object o = ((Bundle)rbm.getBundles().firstElement()).allItems.get(item.getKey());
-		if (o != null) defTrans = ((BundleItem)o).getTranslation();
+		if (o != null)
+			defTrans = ((BundleItem)o).getTranslation();
 		
 		keyField = new JTextField(item.getKey());
 		keyField.setEnabled(false);
@@ -180,7 +181,8 @@ class BundleItemDialog extends JDialog implements ActionListener {
 			});
 		
 			saveButton.addActionListener(this);
-		
+			getRootPane().setDefaultButton(saveButton);
+
 			transField.addFocusListener(new TranslationFocusListener(item.getTranslation(),transCheckBox));
 		}
 		

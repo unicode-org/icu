@@ -61,11 +61,14 @@ class AboutDialog {
 		
 		//dialog.validate();
 		dialog.pack();
-		dialog.setLocation(new Point(50,50));
-		//dialog.setResizable(false);
+		Point parentLoc = dialog.getParent().getLocation();
+		dialog.setLocation(new Point(parentLoc.x + 50, parentLoc.y + 50));
+		dialog.setResizable(false);
 	}
 	
 	private static void hideDialog() {
 		dialog.setVisible(false);
+		dialog.dispose();
+		dialog = null;
 	}
 }

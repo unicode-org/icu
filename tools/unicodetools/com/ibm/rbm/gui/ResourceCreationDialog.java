@@ -175,6 +175,7 @@ class ResourceCreationDialog extends JDialog {
 				}
 			}
 		});
+		getRootPane().setDefaultButton(createButton);
 		
 		// Complete the component layout
 		mainBox.removeAll();
