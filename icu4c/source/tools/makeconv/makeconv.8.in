@@ -13,9 +13,6 @@
 .SH SYNOPSIS
 .B makeconv
 [
-.BR "\-V\fP, \fB\-\-version"
-]
-[
 .BR "\-h\fP, \fB\-?\fP, \fB\-\-help"
 ]
 [
@@ -58,10 +55,6 @@ converters aliases file in order to be available to applications using ICU.
 They do need to be listed there if one wants to give them aliases, or
 tags, though.
 .SH OPTIONS
-.BR \-V\fP, \fB\-\-version
-Print the version of
-.B makeconv
-and exit.
 .TP
 .BR \-h\fP, \fB\-?\fP, \fB\-\-help
 Print help about usage and exit.
