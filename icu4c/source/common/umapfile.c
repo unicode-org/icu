@@ -84,6 +84,7 @@
 #else /* unknown platform, no memory map implementation: use FileStream/uprv_malloc() instead */
 
 #   include "filestrm.h"
+#   include "cmemory.h"
 
     typedef void *MemoryMap;
 
@@ -209,7 +210,7 @@
 
 
 #elif MAP_IMPLEMENTATION==MAP_FILE_STREAM
-    static UBool
+    UBool
     uprv_mapFile(UDataMemory *pData, const char *path) {
         FileStream *file;
         int32_t fileLength;
@@ -250,7 +251,7 @@
         return TRUE;
     }
 
-    static void
+    void
     uprv_unmapFile(UDataMemory *pData) {
         if(pData!=NULL && pData->map!=NULL) {
             uprv_free(pData->map);
