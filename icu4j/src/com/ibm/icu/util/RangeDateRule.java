@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/RangeDateRule.java,v $ 
- * $Date: 2002/02/16 03:06:29 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/12/04 01:03:39 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -16,12 +16,22 @@ package com.ibm.icu.util;
 import java.util.Date;
 import java.util.Vector;
 
+/**
+ * Implementation of DateRule that takes a range.
+ * @draft ICU 2.2
+ */
 public class RangeDateRule implements DateRule
 {
+    /**
+     * @draft ICU 2.2
+     */
     public RangeDateRule()
     {
     }
 
+    /**
+     * @draft ICU 2.2
+     */
     public RangeDateRule(Range[] ranges)
     {
         for (int i = 0; i < ranges.length; i++) {
@@ -29,11 +39,17 @@ public class RangeDateRule implements DateRule
         }
     }
 
+    /**
+     * @draft ICU 2.2
+     */
     public void add(DateRule rule)
     {
         add(new Date(Long.MIN_VALUE), rule);
     }
 
+    /**
+     * @draft ICU 2.2
+     */
     public void add(Date start, DateRule rule)
     {
         // TODO: Insert in the right place
@@ -43,6 +59,9 @@ public class RangeDateRule implements DateRule
 
     //-----------------------------------------------------------------------
 
+    /**
+     * @draft ICU 2.2
+     */
     public Date firstAfter(Date start)
     {
         // Find the range that I should look at
@@ -63,6 +82,9 @@ public class RangeDateRule implements DateRule
         return result;
     }
 
+    /**
+     * @draft ICU 2.2
+     */
     public Date firstBetween(Date start, Date end)
     {
         // Find the range that I should look at
@@ -85,6 +107,9 @@ public class RangeDateRule implements DateRule
         return result;
     }
 
+    /**
+     * @draft ICU 2.2
+     */
     public boolean isOn(Date date)
     {
         return false;
@@ -93,6 +118,7 @@ public class RangeDateRule implements DateRule
     /**
      * Check whether this event occurs at least once between the two
      * dates given.
+     * @draft ICU 2.2
      */
     public boolean isBetween(Date start, Date end)
     {

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Attic/CalendarAstronomer.java,v $ 
- * $Date: 2002/11/22 22:45:19 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/12/04 01:03:39 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -1057,6 +1057,7 @@ public class CalendarAstronomer {
      *
      * @see CalendarAstronomer.Equatorial
      * @see CalendarAstronomer.Horizon
+     * @stable
      */
     public static final class Ecliptic {
         /**

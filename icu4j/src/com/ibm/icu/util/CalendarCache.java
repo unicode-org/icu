@@ -5,15 +5,21 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Attic/CalendarCache.java,v $ 
- * $Date: 2002/02/16 03:06:26 $ 
- * $Revision: 1.4 $
+ * $Date: 2002/12/04 01:03:39 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.util;
 
+/**
+ * @internal
+ */
 public class CalendarCache
 {
+    /**
+     * @internal
+     */
     public CalendarCache() {
         makeArrays(arraySize);
     }
@@ -30,10 +36,16 @@ public class CalendarCache
         size = 0;
     }
     
+    /**
+     * @internal
+     */
     public synchronized long get(long key) {
         return values[findIndex(key)];
     }
     
+    /**
+     * @internal
+     */
     public synchronized void put(long key, long value)
     {
         if (size >= threshold) {

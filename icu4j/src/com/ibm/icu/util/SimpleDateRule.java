@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/SimpleDateRule.java,v $ 
- * $Date: 2002/03/20 05:11:17 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/12/04 01:03:39 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -18,6 +18,10 @@ import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.SimpleTimeZone;
 
+/**
+ * Simple implementation of DateRule.
+ * @draft ICU 2.2
+ */
 public class SimpleDateRule implements DateRule
 {
     /**
@@ -25,7 +29,7 @@ public class SimpleDateRule implements DateRule
      *
      * @param month         The month in which this rule occurs (0-based).
      * @param dayOfMonth    The date in that month (1-based).
-     * </ul>
+     * @draft ICU 2.2
      */
     public SimpleDateRule(int month, int dayOfMonth)
     {
@@ -43,7 +47,7 @@ public class SimpleDateRule implements DateRule
      * @param after         If true, this rule selects the first dayOfWeek
      *                      on or after dayOfMonth.  If false, the rule selects
      *                      the first dayOfWeek on or before dayOfMonth.
-     * </ul>
+     * @draft ICU 2.2
      */
     public SimpleDateRule(int month, int dayOfMonth, int dayOfWeek, boolean after)
     {
@@ -62,6 +66,7 @@ public class SimpleDateRule implements DateRule
      *              does not occur on or after the start date.
      *
      * @see #firstBetween
+     * @draft ICU 2.2
      */
     public Date firstAfter(Date start)
     {
@@ -83,6 +88,7 @@ public class SimpleDateRule implements DateRule
      *              does not occur between the start and end dates.
      *
      * @see #firstAfter
+     * @draft ICU 2.2
      */
     public Date firstBetween(Date start, Date end)
     {
@@ -105,6 +111,7 @@ public class SimpleDateRule implements DateRule
      *
      * @param date  The date to check.
      * @return      true if this event occurs on the given date.
+     * @draft ICU 2.2
      *
      */
     public boolean isOn(Date date)
@@ -135,6 +142,7 @@ public class SimpleDateRule implements DateRule
     /**
      * Check whether this event occurs at least once between the two
      * dates given.
+     * @draft ICU 2.2
      */
     public boolean isBetween(Date start, Date end)
     {
@@ -172,6 +180,7 @@ public class SimpleDateRule implements DateRule
             return result;
         }
     }
+
     private Date computeInYear(int year, Calendar c)
     {
         if (c == null) c = calendar;
@@ -211,6 +220,9 @@ public class SimpleDateRule implements DateRule
         }
     }
 
+    /**
+     * @draft ICU 2.2
+     */
     public void setCalendar(Calendar c) {
         calendar = c;
     }

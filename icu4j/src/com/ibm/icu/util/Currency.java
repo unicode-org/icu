@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Currency.java,v $
- * $Date: 2002/11/16 03:46:35 $
- * $Revision: 1.9 $
+ * $Date: 2002/12/04 01:03:39 $
+ * $Revision: 1.10 $
  *
  *******************************************************************************
  */
@@ -43,7 +43,7 @@ import com.ibm.icu.impl.ICULocaleService.ICUResourceBundleFactory;
  * <tt>java.util.Currency</tt> but it has a completely independent
  * implementation, and adds features not present in the JDK.
  * @author Alan Liu
- * @since ICU 2.2
+ * @draft ICU 2.2
  */
 public class Currency implements Serializable {
 
@@ -82,6 +82,7 @@ public class Currency implements Serializable {
     /**
      * Returns a currency object for the default currency in the given
      * locale.
+     * @draft ICU 2.2
      */
     public static Currency getInstance(Locale locale) {
         return (Currency)getService().get(locale);
@@ -89,6 +90,7 @@ public class Currency implements Serializable {
 
     /**
      * Returns a currency object given an ISO 4217 3-letter code.
+     * @draft ICU 2.2
      */
     public static Currency getInstance(String theISOCode) {
         return new Currency(theISOCode);
@@ -115,6 +117,7 @@ public class Currency implements Serializable {
     /**
      * Return an array of the locales for which a currency
      * is defined.
+     * @draft ICU 2.2
      */
     public static Locale[] getAvailableLocales() {
         if (service == null) {
@@ -128,6 +131,7 @@ public class Currency implements Serializable {
 
     /**
      * Return a hashcode for this currency.
+     * @draft ICU 2.2
      */
     public int hashCode() {
         return isoCode.hashCode();
@@ -136,6 +140,7 @@ public class Currency implements Serializable {
     /**
      * Return true if rhs is a Currency instance, 
      * is non-null, and has the same currency code.
+     * @draft ICU 2.2
      */
     public boolean equals(Object rhs) {
         try {
@@ -148,6 +153,7 @@ public class Currency implements Serializable {
 
     /**
      * Return true if c is non-null and has the same currency code.
+     * @draft ICU 2.2
      */
     public boolean equals(Currency c) {
         if (c == null) return false;
@@ -158,6 +164,7 @@ public class Currency implements Serializable {
 
     /**
      * Returns the ISO 4217 3-letter code for this currency object.
+     * @draft ICU 2.2
      */
     public String getCurrencyCode() {
         return isoCode;
@@ -167,6 +174,7 @@ public class Currency implements Serializable {
      * Returns the display string for this currency object in the
      * given locale.  For example, the display string for the USD
      * currency object in the en_US locale is "$".
+     * @draft ICU 2.2
      */
     public String getSymbol(Locale locale) {
         // Look up the Currencies resource for the given locale.  The
@@ -212,6 +220,7 @@ public class Currency implements Serializable {
      * be displayed for this currency.
      * @return a non-negative number of fraction digits to be
      * displayed
+     * @draft ICU 2.2
      */
     public int getDefaultFractionDigits() {
         return (findData())[0].intValue();
@@ -221,6 +230,7 @@ public class Currency implements Serializable {
      * Returns the rounding increment for this currency, or 0.0 if no
      * rounding is done by this currency.
      * @return the non-negative rounding increment, or 0.0 if none
+     * @draft ICU 2.2
      */
     public double getRoundingIncrement() {
         Integer[] data = findData();
@@ -247,6 +257,7 @@ public class Currency implements Serializable {
 
     /**
      * Returns the ISO 4217 code for this currency.
+     * @draft ICU 2.2
      */
     public String toString() {
         return isoCode;

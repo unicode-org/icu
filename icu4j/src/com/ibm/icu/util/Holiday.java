@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Holiday.java,v $ 
- * $Date: 2002/03/10 19:40:17 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/12/04 01:03:39 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -24,15 +24,21 @@ import java.util.ResourceBundle;
  * An abstract class representing a holiday.  This class simply adds
  * a holiday name to the DateRule interface for calculating the date
  * of an event.
- *
+ * @draft ICU 2.2
  */
 public abstract class Holiday implements DateRule
 {
+    /**
+     * @draft ICU 2.2
+     */
     public static Holiday[] getHolidays()
     {
         return getHolidays(Locale.getDefault());
     }
 
+    /**
+     * @draft ICU 2.2
+     */
     public static Holiday[] getHolidays(Locale locale)
     {
         Holiday[] result = noHolidays;
@@ -56,6 +62,7 @@ public abstract class Holiday implements DateRule
      *              does not occur on or after the start date.
      *
      * @see #firstBetween
+     * @draft ICU 2.2
      */
     public Date firstAfter(Date start) {
         return rule.firstAfter(start);
@@ -72,6 +79,7 @@ public abstract class Holiday implements DateRule
      *              does not occur between the start and end dates.
      *
      * @see #firstAfter
+     * @draft ICU 2.2
      */
     public Date firstBetween(Date start, Date end) {
         return rule.firstBetween(start, end);
@@ -84,6 +92,7 @@ public abstract class Holiday implements DateRule
      *
      * @param date  The date to check.
      * @return      true if this holiday occurs on the given date.
+     * @draft ICU 2.2
      *
      */
     public boolean isOn(Date date) {
@@ -94,6 +103,7 @@ public abstract class Holiday implements DateRule
     /**
      * Check whether this holiday occurs at least once between the two
      * dates given.
+     * @draft ICU 2.2
      */
     public boolean isBetween(Date start, Date end) {
         return rule.isBetween(start, end);
@@ -110,6 +120,7 @@ public abstract class Holiday implements DateRule
      * @param rule  The date rules used for determining when this holiday
      *              falls.  Holiday's implementation of the DateRule inteface
      *              simply delegates to this DateRule object.
+     * @draft ICU 2.2
      */
     protected Holiday(String name, DateRule rule)
     {
@@ -119,6 +130,7 @@ public abstract class Holiday implements DateRule
 
     /**
      * Return the name of this holiday in the language of the default locale
+     * @draft ICU 2.2
      */
     public String getDisplayName() {
         return getDisplayName(Locale.getDefault());
@@ -133,6 +145,7 @@ public abstract class Holiday implements DateRule
      * @param loc   A locale specifying the language in which the name is desired.
      *
      * @see ResourceBundle
+     * @draft ICU 2.2
      */
     public String getDisplayName(Locale locale)
     {
@@ -148,10 +161,16 @@ public abstract class Holiday implements DateRule
         return name;
     }
 
+    /**
+     * @draft ICU 2.2
+     */
     public DateRule getRule() {
         return rule;
     }
 
+    /**
+     * @draft ICU 2.2
+     */
     public void setRule(DateRule rule) {
         this.rule = rule;
     }
@@ -160,5 +179,4 @@ public abstract class Holiday implements DateRule
     private DateRule    rule;
 
     private static Holiday[] noHolidays = {};
-
 }
