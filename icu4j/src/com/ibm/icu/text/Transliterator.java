@@ -198,7 +198,7 @@ import java.text.MessageFormat;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.4 $ $Date: 1999/12/20 20:51:47 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.5 $ $Date: 2000/01/06 01:36:36 $
  */
 public abstract class Transliterator {
     /**
@@ -787,7 +787,17 @@ public abstract class Transliterator {
                 try {
                     ResourceBundle resource = ResourceBundle.getBundle(resourceName);
 
-                    data = RuleBasedTransliterator.parse(resource.getString(RB_RULE),
+                    // We allow the resource bundle to contain either an array
+                    // of rules, or a single rule string.
+                    String[] ruleArray;
+                    try {
+                        ruleArray = resource.getStringArray(RB_RULE);
+                    } catch (Exception e) {
+                        // This is a ClassCastException under JDK 1.1.8
+                        ruleArray = new String[] { resource.getString(RB_RULE) };
+                    }
+
+                    data = RuleBasedTransliterator.parse(ruleArray,
                                                          isReverse
                                                          ? RuleBasedTransliterator.REVERSE
                                                          : RuleBasedTransliterator.FORWARD);

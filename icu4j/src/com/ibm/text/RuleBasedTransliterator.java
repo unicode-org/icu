@@ -181,9 +181,12 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.6 $ $Date: 2000/01/04 21:43:57 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.7 $ $Date: 2000/01/06 01:36:36 $
  *
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.7  2000/01/06 01:36:36  Alan
+ * Allow string arrays in rule resource bundles
+ *
  * Revision 1.6  2000/01/04 21:43:57  Alan
  * Add rule indexing, and move masking check to TransliterationRuleSet.
  *
@@ -248,8 +251,12 @@ public class RuleBasedTransliterator extends Transliterator {
         this.data = data;
     }
 
-    static Data parse(String rules, int direction) {
+    static Data parse(String[] rules, int direction) {
         return new Parser(rules, direction).getData();
+    }
+
+    static Data parse(String rules, int direction) {
+        return parse(new String[] { rules }, direction);
     }
 
     /**
@@ -526,6 +533,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 
     private static class Parser {
+        /**
+         * Current rule being parsed.
+         */
         private String rules;
 
         private int direction;
@@ -580,15 +590,14 @@ public class RuleBasedTransliterator extends Transliterator {
         private static final String DEF_SPECIALS = "'{}";
 
         /**
-         * @param rules list of rules, separated by newline characters
+         * @param rules list of rules, separated by semicolon characters
          * @exception IllegalArgumentException if there is a syntax error in the
          * rules
          */
-        public Parser(String rules, int direction) {
-            this.rules = rules;
+        public Parser(String[] ruleArray, int direction) {
             this.direction = direction;
             data = new Data();
-            parseRules();
+            parseRules(ruleArray);
         }
 
         public Data getData() {
@@ -603,36 +612,39 @@ public class RuleBasedTransliterator extends Transliterator {
          * @exception IllegalArgumentException if there is a syntax error in the
          * rules
          */
-        private void parseRules() {
-            determineVariableRange();
+        private void parseRules(String[] ruleArray) {
+            determineVariableRange(ruleArray);
 
             StringBuffer errors = null;
-            int n = rules.length();
-            int i = 0;
-            while (i<n) {
-                int limit = rules.indexOf(';', i);
+            for (int irule=0; irule<ruleArray.length; ++irule) {
+                rules = ruleArray[irule];
+                int n = rules.length();
+                int i = 0;
+                while (i<n) {
+                    int limit = rules.indexOf(';', i);
 
-                // Recognize "\\;" as an escaped ";"
-                while (limit>0 && rules.charAt(limit-1) == '\\') {
-                    limit = rules.indexOf(';', limit+1);
-                }
+                    // Recognize "\\;" as an escaped ";"
+                    while (limit>0 && rules.charAt(limit-1) == '\\') {
+                        limit = rules.indexOf(';', limit+1);
+                    }
 
-                if (limit == -1) {
-                    limit = n;
-                }
-                // Skip over empty lines and line starting with #
-                if (limit > i && rules.charAt(i) != RULE_COMMENT_CHAR) {
-                    try {
-                        applyRule(i, limit);
-                    } catch (IllegalArgumentException e) {
-                        if (errors == null) {
-                            errors = new StringBuffer(e.getMessage());
-                        } else {
-                            errors.append("\n").append(e.getMessage());
+                    if (limit == -1) {
+                        limit = n;
+                    }
+                    // Skip over empty lines and line starting with #
+                    if (limit > i && rules.charAt(i) != RULE_COMMENT_CHAR) {
+                        try {
+                            applyRule(i, limit);
+                        } catch (IllegalArgumentException e) {
+                            if (errors == null) {
+                                errors = new StringBuffer(e.getMessage());
+                            } else {
+                                errors.append("\n").append(e.getMessage());
+                            }
                         }
                     }
+                    i = limit + 1;
                 }
-                i = limit + 1;
             }
 
             // Index the rules
@@ -1071,9 +1083,9 @@ public class RuleBasedTransliterator extends Transliterator {
          * When done, everything not in the hash is available for use.  In practice,
          * this method may employ some other algorithm for improved speed.
          */
-        private final void determineVariableRange() {
+        private final void determineVariableRange(String[] ruleArray) {
             Range r = new Range('\uE000', 0x1900); // Private use area
-            r = r.largestUnusedSubrange(rules);
+            r = r.largestUnusedSubrange(ruleArray);
             
             if (r == null) {
                 throw new RuntimeException(
@@ -1218,22 +1230,25 @@ public class RuleBasedTransliterator extends Transliterator {
              * characters in this range, then this range itself is
              * returned.
              */
-            Range largestUnusedSubrange(String str) {
-                int n = str.length();
-
+            Range largestUnusedSubrange(String[] strings) {
                 Vector v = new Vector(1);
                 v.addElement(clone());
-                for (int i=0; i<n; ++i) {
-                    char c = str.charAt(i);
-                    if (contains(c)) {
-                        for (int j=0; j<v.size(); ++j) {
-                            Range r = (Range) v.elementAt(j);
-                            if (r.contains(c)) {
-                                r = r.split(c);
-                                if (r != null) {
-                                    v.addElement(r);
+
+                for (int k=0; k<strings.length; ++k) {
+                    String str = strings[k];
+                    int n = str.length();
+                    for (int i=0; i<n; ++i) {
+                        char c = str.charAt(i);
+                        if (contains(c)) {
+                            for (int j=0; j<v.size(); ++j) {
+                                Range r = (Range) v.elementAt(j);
+                                if (r.contains(c)) {
+                                    r = r.split(c);
+                                    if (r != null) {
+                                        v.addElement(r);
+                                    }
+                                    break;
                                 }
-                                break;
                             }
                         }
                     }
