@@ -11,6 +11,8 @@ import java.util.*;
  */
 public class JamoTest extends TransliteratorTest {
 
+    private static final char SEP = '\'';
+
     public static void main(String[] args) throws Exception {
         new JamoTest().run(args);
     }
@@ -29,11 +31,11 @@ public class JamoTest extends TransliteratorTest {
             // Column 3 is expected value of L2.  If the expected
             // value of L2 is L1, then L2 is null.
             "bab", "(Bi)(A)(Bf)", null,
-            "babb", "(Bi)(A)(Bf)(Bi)(EU)", "bab-beu",
+            "babb", "(Bi)(A)(Bf)(Bi)(EU)", "bab"+SEP+"beu",
             "babbba", "(Bi)(A)(Bf)(BB)(A)", null,
             "bagg", "(Bi)(A)(GGf)", null,
             "baggga", "(Bi)(A)(GGf)(Gi)(A)", null,
-            "bag-gga", "(Bi)(A)(Gf)(GGi)(A)", null,
+            "bag"+SEP+"gga", "(Bi)(A)(Gf)(GGi)(A)", null,
             "kabsa", "(Ki)(A)(Bf)(Si)(A)", null,
             "kabska", "(Ki)(A)(BS)(Ki)(A)", null,
             "gabsbka", "(Gi)(A)(BS)(Bi)(EU)(Ki)(A)", "gabsbeuka", // not (Kf)

@@ -51,10 +51,6 @@ Greek-Latin:file:Transliterator_Greek_Latin.txt:UTF8:FORWARD
 Latin-Greek/UNGEGN:alias:Latin-el
 Greek-Latin/UNGEGN:alias:el-Latin
 
-LowerLatin-Jamo:internal:Transliterator_Latin_Jamo.txt:UTF8:FORWARD
-Latin-Jamo:alias:[\p{Latin}]Any-Lower;LowerLatin-Jamo
-Jamo-Latin:file:Transliterator_Latin_Jamo.txt:UTF8:REVERSE
-
 Latin-Katakana:file:Transliterator_Latin_Katakana.txt:UTF8:FORWARD
 Katakana-Latin:file:Transliterator_Latin_Katakana.txt:UTF8:REVERSE
 
@@ -76,10 +72,16 @@ Han-Pinyin:file:Transliterator_Han_Pinyin.utf8.txt:UTF8:FORWARD
 Kanji-English:file:Transliterator_Kanji_English.utf8.txt:UTF8:FORWARD
 Kanji-OnRomaji:file:Transliterator_Kanji_OnRomaji.utf8.txt:UTF8:FORWARD
 
-# Compound rules
+# Korean
+# N.B. Don't end Latin-Jamo with NFC; that produces Hangul.  For
+# Hangul output use Latin-Hangul.
 
-Latin-Hangul:alias:[\u002D[\p{Latin}]];NFD;Latin-Jamo;NFC
-Hangul-Latin:alias:[\p{Hangul}];NFD;Jamo-Latin
+LowerLatin-Jamo:internal:Transliterator_Latin_Jamo.txt:UTF8:FORWARD
+Jamo-LowerLatin:internal:Transliterator_Latin_Jamo.txt:UTF8:REVERSE
+Latin-Jamo:alias:[\u0027[\p{Latin}]];NFKD;Lower;LowerLatin-Jamo
+Jamo-Latin:alias:[\u1100-\u11FF];NFKD;Jamo-LowerLatin;NFC
+Latin-Hangul:alias:[\u0027[\p{Latin}]];NFKD;Lower;LowerLatin-Jamo;NFC
+Hangul-Latin:alias:[\p{Hangul}];NFKD;Jamo-LowerLatin;NFC
 
 # Inter-Indic composed rules
 Latin-InterIndic:internal:Transliterator_Latin_InterIndic.txt:UTF8:FORWARD

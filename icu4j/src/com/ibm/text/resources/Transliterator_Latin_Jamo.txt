@@ -3,11 +3,10 @@
 # Corporation and others.  All Rights Reserved.
 #--------------------------------------------------------------------
 
-# note: a global filter is more efficient, but MUST include all source chars
-:: [\u0000-\u00FF [:Latin:]] ;
-
-:: NFKD (NFC);
-:: Lower ();
+#- N.B. DO NOT put any filters, NFD, etc. here -- those are aliased in
+#- the INDEX file.  This transliterator is, by itself, not
+#- instantiated.  It is used as a part of Latin-Jamo, Latin-Hangul, or
+#- inverses thereof.
 
 # Transliteration from Latin characters to Korean script is done in
 # two steps: Latin to Jamo, then Jamo to Hangul.  The Jamo-Hangul
@@ -152,7 +151,7 @@
   $latinMedialEnd = [aeiou];
 
   # Disambiguation separator
-  $sep = '-';
+  $sep = \';
 
 #----------------------------------------------------------------------
 # Jamo-Latin
@@ -187,7 +186,7 @@
 # -- if we don't care about losing separators in the jamo, we can delete
 # this rule.
 
-  '--' <> $sep;
+  $sep $sep <> $sep;
 
 # Triple consonants.  For three consonants "axxx" we insert a
 # separator between the first and second "x" if XXf, Xf, and Xi all
@@ -514,9 +513,10 @@
 # since these may also occur in text.
 
   < $IEUNG;
-:: NFC (NFKD);
 
-# note: a global filter is more efficient, but MUST include all source chars!!
-:: ([:Hangul:]);
+#- N.B. DO NOT put any filters, NFD, etc. here -- those are aliased in
+#- the INDEX file.  This transliterator is, by itself, not
+#- instantiated.  It is used as a part of Latin-Jamo, Latin-Hangul, or
+#- inverses thereof.
 
 # eof
