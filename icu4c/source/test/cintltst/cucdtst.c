@@ -669,13 +669,28 @@ unicodeDataLineFn(void *context,
 
 static UBool U_CALLCONV
 enumTypeRange(const void *context, UChar32 start, UChar32 limit, UCharCategory type) {
-    static UChar32 test[][2]={
+    static const UChar32 test[][2]={
         {0x41, U_UPPERCASE_LETTER},
         {0x308, U_NON_SPACING_MARK},
         {0xfffe, U_GENERAL_OTHER_TYPES},
         {0xe0041, U_FORMAT_CHAR},
         {0xeffff, U_UNASSIGNED}
     };
+
+    /* default Bidi classes for unassigned code points */
+    static const int32_t defaultBidi[][2]={ /* { limit, class } */
+        { 0x0590, U_LEFT_TO_RIGHT },
+        { 0x0600, U_RIGHT_TO_LEFT },
+        { 0x07C0, U_RIGHT_TO_LEFT_ARABIC },
+        { 0xFB1D, U_LEFT_TO_RIGHT },
+        { 0xFB50, U_RIGHT_TO_LEFT },
+        { 0xFE00, U_RIGHT_TO_LEFT_ARABIC },
+        { 0xFE70, U_LEFT_TO_RIGHT },
+        { 0xFF00, U_RIGHT_TO_LEFT_ARABIC },
+        { 0x110000, U_LEFT_TO_RIGHT }
+    };
+
+    UChar32 c;
     int i, count;
 
     if(0!=uprv_strcmp((const char *)context, "a1")) {
@@ -711,11 +726,35 @@ enumTypeRange(const void *context, UChar32 start, UChar32 limit, UCharCategory t
      * Verify that no assigned character has "XX".
      */
     if(type!=U_UNASSIGNED && type!=U_PRIVATE_USE_CHAR) {
-        while(start<limit) {
-            if(0==u_getIntPropertyValue(start, UCHAR_LINE_BREAK)) {
-                log_err("error UCHAR_LINE_BREAK(assigned U+%04lx)=XX\n", start);
+        c=start;
+        while(c<limit) {
+            if(0==u_getIntPropertyValue(c, UCHAR_LINE_BREAK)) {
+                log_err("error UCHAR_LINE_BREAK(assigned U+%04lx)=XX\n", c);
             }
-            ++start;
+            ++c;
+        }
+    }
+
+    /*
+     * Verify default Bidi classes.
+     * See table 3-7 "Bidirectional Character Types" in UAX #9.
+     * http://www.unicode.org/reports/tr9/
+     */
+    if(type==U_UNASSIGNED || type==U_PRIVATE_USE_CHAR) {
+        /* enumerate the intersections of defaultBidi ranges with [start..limit[ */
+        c=start;
+        for(i=0; i<LENGTHOF(defaultBidi) && c<limit; ++i) {
+            if((int32_t)c<defaultBidi[i][0]) {
+                while(c<limit && (int32_t)c<defaultBidi[i][0]) {
+                    if( u_charDirection(c)!=(UCharDirection)defaultBidi[i][1] ||
+                        u_getIntPropertyValue(c, UCHAR_BIDI_CLASS)!=defaultBidi[i][1]
+                    ) {
+                        log_err("error: u_charDirection(unassigned/PUA U+%04lx)=%s should be %s\n",
+                            c, dirStrings[u_charDirection(c)], dirStrings[defaultBidi[i][1]]);
+                    }
+                    ++c;
+                }
+            }
         }
     }
 
@@ -795,6 +834,7 @@ static void TestUnicodeData()
         }
     }
 
+    /* test that PUA is not "unassigned" */
     for(c=0xe000; c<=0x10fffd;) {
         type=u_charType(c);
         if(type==U_UNASSIGNED) {
