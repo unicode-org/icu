@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/NormalizerImpl.java,v $
- * $Date: 2002/11/15 21:04:18 $
- * $Revision: 1.12 $
+ * $Date: 2002/11/26 23:47:06 $
+ * $Revision: 1.13 $
  *******************************************************************************
  */
  
@@ -2533,7 +2533,7 @@ public final class NormalizerImpl {
 	                }
 	            }
 	        } else {
-	            char high, low, h;
+	            char high, low, h,j=0;
 	
 	            table=(char[]) canonStartSets[CANON_SET_SUPP_TABLE_INDEX];
 	            start=0;
@@ -2545,19 +2545,35 @@ public final class NormalizerImpl {
 	            /* each entry is a triplet { high(c), low(c), result } */
 	            while(start<limit-3) {
                     /* (start+limit)/2 and address triplets */
-	                i=(char)(((start+limit)/6)*3); 
-	                h=(char)(table[i]&0x1f); /* high word */
-	                if(high<h || (high==h && low<table[i+1])) {
-	                    limit=i;
-	                } else {
-	                    start=i;
-	                }
-	            }
-	
+	                i=(char)(((start+limit)/6)*3);
+	                j=(char)(table[i]&0x1f); /* high word */
+                    int tableVal = table[i+1];
+                    int lowInt = low;
+                    if(high<j || ((tableVal>lowInt) && (high==j))) {
+                        limit=i;
+                    } else {
+                        start=i;
+                    }
+                    //System.err.println("\t((high==j) && (table[i+1]>low)) == " + ((high==j) && (tableVal>lowInt)) );
+                    //System.err.println("\t\t j = " + Integer.toHexString(j) +
+                    //                   "\t i = " + Integer.toHexString(i) +
+                    //                   "\t high = "+ Integer.toHexString(high)  +
+                    //                    "\t low = "  + Integer.toHexString(lowInt)   +
+                    //                   "\t table[i+1]: "+ Integer.toHexString(tableVal) 
+                    //                   );
+
+                }
+
 	            /* found? */
 	            h=table[start];
-	            if(high==(h&0x1f) && low==table[start+1]) {
-	                i=table[start+2];
+
+                //System.err.println("c: \\U"+ Integer.toHexString(c)+" i : "+Integer.toHexString(i) +" h : " + Integer.toHexString(h));
+                int tableVal1 = table[start+1];
+                int lowInt = low;
+
+	            if(high==(h&0x1f) && lowInt==tableVal1) {
+                    int tableVal2 = table[start+2];
+	                i=tableVal2;
 	                if((h&0x8000)==0) {
 	                    /* the result is an index to a USerializedSet */
 	                    return fillSet.getSet(startSets,(i-indexes.length));
@@ -2566,7 +2582,9 @@ public final class NormalizerImpl {
 	                     * single-code point set {x} in
                          * triplet { 100xxxxx 000hhhhh  llllllll llllllll  xxxxxxxx xxxxxxxx }
 	                     */
-	                    i|=((int)h & 0x1f00)<<8; /* add high bits from high(c) */
+	                    //i|=((int)h & 0x1f00)<<8; /* add high bits from high(c) */
+                        int temp = ((int)h & 0x1f00)<<8;
+                        i|=temp; /* add high bits from high(c) */
 	                    fillSet.setSerializedToOne((int)i);
 	                    return true;
 	                }
