@@ -10,6 +10,7 @@
 
 #include "brkdict.h"
 #include "cmemory.h"
+#include "unicode/resbund.h"
 
 //=================================================================================
 // deserialization
@@ -18,13 +19,26 @@
 BreakDictionary::BreakDictionary(char* dictionaryFilename, UErrorCode& status)
 {
     if (U_FAILURE(status)) return;
-    FileStream* dictionaryStream = T_FileStream_open(dictionaryFilename, "rb");
+    
+    ResourceBundle th((char *)0, Locale("th"), status);
+
+    if (U_FAILURE(status)) return;
+
+    ResourceBundle th_dict = th.get("BreakDictionaryData", status);
+    if (U_FAILURE(status)) return;
+
+    int32_t len;
+    const uint8_t * data = th_dict.getBinary(len, status);
+    if (U_FAILURE(status)) return;
+
+    UMemoryStream* dictionaryStream = uprv_mstrm_openBuffer(data, len);
+
     if (dictionaryStream == 0) {
         status = U_FILE_ACCESS_ERROR;
         return;
     }
     readDictionaryFile(dictionaryStream);
-    T_FileStream_close(dictionaryStream);
+    uprv_mstrm_close(dictionaryStream);
 }
 
 BreakDictionary::~BreakDictionary()
@@ -49,10 +63,8 @@ BreakDictionary::~BreakDictionary()
 #define SWAP16(x) x = (x << 8 & 0xff00) | (x >> 8 & 0xff)
 #endif
 
-#include <stdio.h>
-
 void
-BreakDictionary::readDictionaryFile(FileStream* in)
+BreakDictionary::readDictionaryFile(UMemoryStream* in)
 {
     int32_t l;
     int32_t version;
@@ -60,67 +72,65 @@ BreakDictionary::readDictionaryFile(FileStream* in)
 	int i;
 
     // read in the version number (right now we just ignore it)
-    T_FileStream_read(in, &version, 4);
+    uprv_mstrm_read(in, &version, 4);
 
     // read in the column map (this is serialized in its internal form:
     // an index array followed by a data array)
-    T_FileStream_read(in, &l, 4);
+    uprv_mstrm_read(in, &l, 4);
     SWAP32(l);
-    /*uint16_t* temp = new uint16_t[l];*/
     uint16_t* temp = (uint16_t*) uprv_malloc(sizeof(uint16_t)*l);
-    T_FileStream_read(in, temp, l * sizeof (int16_t) );
+    uprv_mstrm_read(in, temp, l * sizeof (int16_t) );
     for (i = 0; i < l; i++) {
         SWAP16(temp[i]);
     }
-    T_FileStream_read(in, &l, 4);
+    uprv_mstrm_read(in, &l, 4);
     SWAP32(l);
-    /*int8_t* temp2 = new int8_t[l];*/
     int8_t* temp2 = (int8_t*) uprv_malloc(sizeof(int8_t)*l);
-    T_FileStream_read(in, temp2, l);
+    uprv_mstrm_read(in, temp2, l);
     columnMap = ucmp8_openAdopt(temp, temp2, l);
 
     // read in numCols and numColGroups
-    T_FileStream_read(in, &numCols, 4);
+    uprv_mstrm_read(in, &numCols, 4);
     SWAP32(numCols);
-    T_FileStream_read(in, &numColGroups, 4);
+    uprv_mstrm_read(in, &numColGroups, 4);
     SWAP32(numColGroups);
 
     // read in the row-number index
-    T_FileStream_read(in, &l, 4);
+    uprv_mstrm_read(in, &l, 4);
     SWAP32(l);
     rowIndex = new int16_t[l];
-    T_FileStream_read(in, rowIndex, l * sizeof (int16_t) );
+    uprv_mstrm_read(in, rowIndex, l * sizeof (int16_t) );
     for (i = 0; i < l; i++) {
         SWAP16(rowIndex[i]);
     }
 
     // load in the populated-cells bitmap: index first, then bitmap list
-    T_FileStream_read(in, &l, 4);
+    uprv_mstrm_read(in, &l, 4);
     SWAP32(l);
     rowIndexFlagsIndex = new int16_t[l];
-    T_FileStream_read(in, rowIndexFlagsIndex, l * sizeof(int16_t) );
+    uprv_mstrm_read(in, rowIndexFlagsIndex, l * sizeof(int16_t) );
     for (i = 0; i < l; i++) {
         SWAP16(rowIndexFlagsIndex[i]);
     }
-    T_FileStream_read(in, &l, 4);
+    uprv_mstrm_read(in, &l, 4);
     SWAP32(l);
     rowIndexFlags = new int32_t[l];
-    T_FileStream_read(in, rowIndexFlags, l * sizeof(int32_t));
+    uprv_mstrm_read(in, rowIndexFlags, l * sizeof(int32_t));
     for (i = 0; i < l; i++) {
         SWAP32(rowIndexFlags[i]);
     }
 
     // load in the row-shift index
-    T_FileStream_read(in, &l, 4);
+    uprv_mstrm_read(in, &l, 4);
     SWAP32(l);
     rowIndexShifts = new int8_t[l];
-    T_FileStream_read(in, rowIndexShifts, l);
+    uprv_mstrm_read(in, rowIndexShifts, l);
 
     // finally, load in the actual state table
-    T_FileStream_read(in, &l, 4);
+    uprv_mstrm_read(in, &l, 4);
     SWAP32(l);
     table = new int16_t[l];
-    T_FileStream_read(in, table, l * sizeof(int16_t) );
+    uprv_mstrm_read(in, table, l * sizeof(int16_t) );
     for (i = 0; i < l; i++) {
         SWAP16(table[i]);
     }
