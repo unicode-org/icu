@@ -21,6 +21,7 @@
 #include "uhash.h"
 #include "unicode/unifilt.h"
 #include "unicode/unitohex.h"
+#include "unicode/nultrans.h"
 
 /**
  * Dictionary of known transliterators.  Keys are <code>String</code>
@@ -858,6 +859,7 @@ void Transliterator::initializeCache(void) {
     status = U_ZERO_ERROR; // Reset status for following calls
     _registerInstance(new HexToUnicodeTransliterator(), status);
     _registerInstance(new UnicodeToHexTransliterator(), status);
+    _registerInstance(new NullTransliterator(), status);
 
     cacheInitialized = TRUE;
 }
