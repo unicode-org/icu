@@ -998,10 +998,11 @@ int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable)
     UChar32            c                  = fText->previous32();
     // previous character
     int32_t            result             = fText->getIndex(); 
-    int32_t            lookaheadStatus = 0;//[]   = {0, 0, 0, 0, 0};
-    int32_t            lookaheadResult = 0;//[]   = {0, 0, 0, 0, 0};
-    int32_t            lookaheadTag = 0;//[]      = {0, 0, 0, 0, 0};
-    /*int32_t            lookaheadCount = 0;*/
+    int32_t            lookaheadStatus    = 0;
+    int32_t            lookaheadResult    = 0;
+    int32_t            lookaheadTag       = 0;
+    UBool              lookAheadHardBreak = (statetable->fFlags & RBBI_LOOKAHEAD_HARD_BREAK) != 0;
+
     RBBIStateTableRow *row;
 
     row = (RBBIStateTableRow *)
@@ -1081,7 +1082,7 @@ int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable)
                 /// syn wee todo hard coded for line breaks stuff
                 /// needs to provide a tag in rules to ensure a stop.
 
-                if (fData->fLookAheadHardBreak == TRUE) {
+                if (lookAheadHardBreak) {
                     fText->setIndex(result);
                     return result;
                 }

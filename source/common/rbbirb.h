@@ -134,6 +134,10 @@ public:
     UBool                         fLBCMNoChain;      // True:  suppress chaining of rules on
                                                      //   chars with LineBreak property == CM.
 
+    UBool                         fLookAheadHardBreak;  // True:  Look ahead matches cause an
+                                                     // immediate break, no continuing for the
+                                                     // longest match.
+
     RBBISetBuilder                *fSetBuilder;      // Set and Character Category builder.
     UVector                       *fUSetNodes;       // Vector of all uset nodes.
 
