@@ -501,7 +501,7 @@ u_strCaseMap(UChar *dest, int32_t destCapacity,
             temp=buffer;
         } else {
             /* allocate a buffer */
-            temp=uprv_malloc(destCapacity*U_SIZEOF_UCHAR);
+            temp=(UChar *)uprv_malloc(destCapacity*U_SIZEOF_UCHAR);
             if(temp==NULL) {
                 *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
                 return 0;

@@ -127,7 +127,7 @@ enumAlgNames(AlgorithmicRange *range,
 static UChar32
 findAlgName(AlgorithmicRange *range, UCharNameChoice nameChoice, const char *otherName);
 
-static UBool
+U_CFUNC UBool
 findNameDummy(void *context,
               UChar32 code, UCharNameChoice nameChoice,
               const char *name, UTextOffset length);
@@ -1158,7 +1158,7 @@ findAlgName(AlgorithmicRange *range, UCharNameChoice nameChoice, const char *oth
 }
 
 /* this is a dummy function that is used as a "find not enumerate" flag */
-static UBool
+U_CFUNC UBool
 findNameDummy(void *context,
               UChar32 code, UCharNameChoice nameChoice,
               const char *name, UTextOffset length) {
