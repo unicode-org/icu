@@ -172,12 +172,9 @@ UBool RegexTest::doRegexLMTest(const char *pat, const char *text, UBool looking,
 
 //---------------------------------------------------------------------------
 //
-//    REGEX_FIND       Macro + invocation function to simplify writing tests
-//                       regex tests.
+//    regex_find(pattern, inputString, lineNumber)
 //
-//       usage:
-//          REGEX_FIND("pattern",  "input text");
-//          REGEX_ERR("pattern",   expected status);
+//         function to simplify writing tests regex tests.
 //
 //          The input text is unescaped.  The pattern is not.
 //          The input text is marked with the expected match positions
@@ -188,15 +185,11 @@ UBool RegexTest::doRegexLMTest(const char *pat, const char *text, UBool looking,
 //
 //---------------------------------------------------------------------------
 
-// REGEX_FIND is invoked via a macro, which allows capturing the source file line
-//            number for use in error messages.
-#define REGEX_FIND(pat, text) regex_find(pat, text, U_ZERO_ERROR, __LINE__);
-
 
 //  Set a value into a UVector at position specified by a decimal number in
 //   a UnicodeString.   This is a utility function needed by the actual test function,
 //   which follows.
-void set(UVector &vec, int val, UnicodeString index) {
+static void set(UVector &vec, int val, UnicodeString index) {
     UErrorCode  status=U_ZERO_ERROR;
     int  idx = 0;
     for (int i=0; i<index.length(); i++) {
@@ -208,9 +201,10 @@ void set(UVector &vec, int val, UnicodeString index) {
     vec.setElementAt(val, idx);
 }
         
-void RegexTest::regex_find(const char *pat, const char *input, UErrorCode expectedStatus, int line) {
-    UnicodeString       pattern(pat);
-    UnicodeString       inputString(input);
+void RegexTest::regex_find(const UnicodeString &pattern, 
+                           const UnicodeString &flags,
+                           const UnicodeString &inputString,
+                           int line) {
     UnicodeString       unEscapedInput;
     UnicodeString       deTaggedInput;
 
@@ -228,13 +222,15 @@ void RegexTest::regex_find(const char *pat, const char *input, UErrorCode expect
     //
     //  Compile the caller's pattern
     //
-    UnicodeString patString(pat);
-    callerPattern = RegexPattern::compile(patString, 0, pe, status);
-    if (status != expectedStatus) {
+    callerPattern = RegexPattern::compile(pattern, 0, pe, status);
+    if (status != U_ZERO_ERROR) {
         errln("Line %d: error %x compiling pattern.", line, status);
         goto cleanupAndReturn;
     }
-    // callerPattern->dump();
+
+    if (flags.indexOf((UChar)'d') >= 0) {
+        callerPattern->dump();
+    }
 
     //
     //  Find the tags in the input data, remove them, and record the group boundary
@@ -266,7 +262,12 @@ void RegexTest::regex_find(const char *pat, const char *input, UErrorCode expect
     //
     matcher = callerPattern->matcher(deTaggedInput, status);
     REGEX_CHECK_STATUS_L(line);
+    if (flags.indexOf((UChar)'t') >= 0) {
+        matcher->setTrace(TRUE);
+    }
+
     isMatch = matcher->find();
+    matcher->setTrace(FALSE);
 
     //
     // Match up the groups from the find() with the groups from the tags
@@ -1068,6 +1069,9 @@ void RegexTest::API_Pattern() {
 //---------------------------------------------------------------------------
 //
 //      Extended       A more thorough check for features of regex patterns
+//                     The test cases are in a separate data file,
+//                       source/tests/testdata/regextst.txt
+//                     A description of the test data format is included in that file.
 //
 //---------------------------------------------------------------------------
 void RegexTest::Extended() {
@@ -1090,9 +1094,9 @@ void RegexTest::Extended() {
     //
     UnicodeString testString(FALSE, testData, len);
 
-    RegexMatcher    quotedStuffMat("\\s*?([\\'\\\"/])(.+?)\\1", 0, status);
-    RegexMatcher    commentMat    ("\\s*?(#.*)?$", 0, status); 
-    RegexMatcher    flagsMat      ("\\s*?([ixsmdt]*)([:letter:]*)", 0, status);
+    RegexMatcher    quotedStuffMat("\\s*([\\'\\\"/])(.+?)\\1", 0, status);
+    RegexMatcher    commentMat    ("\\s*(#.*)?$", 0, status); 
+    RegexMatcher    flagsMat      ("\\s*([ixsmdt]*)([:letter:]*)", 0, status);
 
     RegexMatcher    lineMat("(.*?)\\r?\\n", testString, 0, status);
     UnicodeString   testPattern;   // The pattern for test from the test file.
@@ -1128,7 +1132,7 @@ void RegexTest::Extended() {
         }
 
         //
-        //  Pull out the pattern field, remove it from the input line.
+        //  Pull out the pattern field, remove it from the test file line.
         //
         quotedStuffMat.reset(testLine);
         if (quotedStuffMat.lookingAt(status)) {
@@ -1141,7 +1145,7 @@ void RegexTest::Extended() {
 
 
         //
-        //  Pull out the flags from the input line.
+        //  Pull out the flags from the test file line.
         //
         flagsMat.reset(testLine);
         flagsMat.lookingAt(status);                  // Will always match, possibly an empty string.
@@ -1172,215 +1176,18 @@ void RegexTest::Extended() {
         commentMat.reset(testLine);
         if (commentMat.lookingAt(status) == FALSE) {
             errln("Line %d: unexpected characters at end of test line.", lineNum);
+            continue;
         }
 
-
+        //
+        //  Run the test
+        //
+        regex_find(testPattern, testFlags, matchString, lineNum);
     }
 
 
 }
 
-
-#if 0
-//---------------------------------------------------------------------------
-//
-//      Extended       A more thorough check for features of regex patterns
-//
-//---------------------------------------------------------------------------
-void RegexTest::Extended() {
-    // Capturing parens
-    REGEX_FIND(".(..).", "<0>a<1>bc</1>d</0>"); 
-    REGEX_FIND(".*\\A( +hello)", "<0><1>      hello</1></0>"); 
-    REGEX_FIND("(hello)|(goodbye)", "<0><1>hello</1></0>");
-    REGEX_FIND("(hello)|(goodbye)", "<0><2>goodbye</2></0>");
-    REGEX_FIND("abc( +(  inner(X?) +)  xyz)", "leading cruft <0>abc<1>     <2>  inner<3></3>    </2>  xyz</1></0> cruft");
-
-    // Non-capturing parens (?: stuff).   Groups, but does not capture.
-    REGEX_FIND("(?:abc)*(tail)", "<0>abcabcabc<1>tail</1></0>");
-
-    // Non-greedy  *? quantifier
-    REGEX_FIND(".*?(abc)", "<0>    abx    <1>abc</1></0> abc abc abc");
-    REGEX_FIND(".*(abc)",  "<0>    abx     abc abc abc <1>abc</1></0>");
-
-    REGEX_FIND(  "((?:abc |xyz )*?)abc ",  "<0><1>xyz </1>abc </0>abc abc ");
-    REGEX_FIND(  "((?:abc |xyz )*)abc ",   "<0><1>xyz abc abc </1>abc </0>");
-
-    // Non-greedy  +? quantifier
-    REGEX_FIND( "(a+?)(a*)", "<0><1>a</1><2>aaaaaaaaaaaa</2></0>");
-    REGEX_FIND( "(a+)(a*)", "<0><1>aaaaaaaaaaaaa</1><2></2></0>");
-
-    REGEX_FIND( "((ab)+?)((ab)*)", "<0><1><2>ab</2></1><3>ababababab<4>ab</4></3></0>");
-    REGEX_FIND( "((ab)+)((ab)*)", "<0><1>abababababab<2>ab</2></1><3></3></0>");
-
-    // Non-greedy ?? quantifier
-    REGEX_FIND( "(ab)(ab)\?\?(ab)\?\?(ab)\?\?(ab)\?\?c", 
-                "<0><1>ab</1><4>ab</4><5>ab</5>c</0>");
-
-    // Unicode Properties as naked elements in a pattern
-    REGEX_FIND( "\\p{Lu}+", "here we go ... <0>ABC</0> and no more.");
-    REGEX_FIND( "(\\p{L}+)(\\P{L}*?) (\\p{Zs}*)",  "7999<0><1>letters</1><2>4949%^&*(</2> <3>   </3></0>");
-
-    // \w and \W
-    REGEX_FIND( "\\w+", "  $%^&*( <0>hello123</0>%^&*(");
-    REGEX_FIND( "\\W+", "<0>  $%^&*( </0>hello123%^&*(");
-
-    // \A   match at beginning of input only.
-    REGEX_FIND (".*\\Ahello", "<0>hello</0> hello");
-    REGEX_FIND (".*hello", "<0>hello hello</0>");
-    REGEX_FIND(".*\\Ahello", "stuff\nhello");   // don't match after embedded new-line.
-
-    // \b \B
-    REGEX_FIND( ".*?\\b(.).*", "<0>  $%^&*( <1>h</1>ello123%^&*()gxx</0>");
-    REGEX_FIND( "\\ba\\b", "-<0>a</0>");
-    REGEX_FIND("\\by\\b",  "xy");
-
-                 // Finds first chars of up to 5 words
-    REGEX_FIND( "(?:.*?\\b(\\w))?(?:.*?\\b(\\w))?(?:.*?\\b(\\w))?(?:.*?\\b(\\w))?(?:.*?\\b(\\w))?",
-        "<0><1>T</1>the <2>q</2>ick <3>b</3>rown <4>f</4></0>ox");
-    REGEX_FIND( "H.*?((?:\\B.)+)", "<0>H<1>ello</1></0> ");
-    REGEX_FIND( ".*?((?:\\B.)+).*?((?:\\B.)+).*?((?:\\B.)+)",
-        "<0>H<1>ello</1> <2>    </2>g<3>oodbye</3></0> ");
-
-    REGEX_FIND("(?:.*?\\b(.))?(?:.*?\\b(.))?(?:.*?\\b(.))?(?:.*?\\b(.))?(?:.*?\\b(.))?.*",
-        "<0>   \\u0301 \\u0301<1>A</1>\\u0302BC\\u0303\\u0304<2> </2>\\u0305 \\u0306"
-        "<3>X</3>\\u0307Y\\u0308</0>");
-
-    // . does not match new-lines
-    REGEX_FIND(".", "\\u000a\\u000d\\u0085\\u000c\\u2028\\u2029<0>X</0>\\u000aY");
-    REGEX_FIND("A.", "A\\u000a ");  // no match
-
-    // \d for decimal digits
-    REGEX_FIND("\\d*", "<0>0123456789\\u0660\\u06F9\\u0969\\u0A66\\u1369"
-        "\\u17E2\\uFF10\\U0001D7CE\\U0001D7FF</0>non-digits");  
-    REGEX_FIND("\\D+", "<0>non digits</0>");
-    REGEX_FIND("\\D*(\\d*)(\\D*)", "<0>non-digits<1>3456666</1><2>more non digits</2></0>");
-
-    // \Q...\E quote mode
-    REGEX_FIND("hel\\Qlo, worl\\Ed", "<0>hello, world</0>");
-    REGEX_FIND("\\Q$*^^(*)?\\A\\E(a*)", "<0>$*^^(*)?\\\\A<1>aaaaaaaaaaaaaaa</1></0>");
-
-    // \S and \s  space characters
-    REGEX_FIND("\\s+", "not_space<0> \\t \\r \\n \\u3000 \\u2004 \\u2028 \\u2029</0>xyz");
-    REGEX_FIND("(\\S+).*?(\\S+).*", "<0><1>Not-spaces</1>   <2>more-non-spaces</2>  </0>");
-
-    // \X  consume one combining char sequence.
-    REGEX_FIND("(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?",
-        "<0><1>A</1><2>B</2><3> </3><4>\\r\\n</4></0>");
-    REGEX_FIND("(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?(\\X)?",
-        "<0><1>A\\u0301</1><2>\n</2><3>\\u0305</3><4>a\\u0302\\u0303\\u0304</4></0>");
-
-    // ^ matches only at beginning of line
-    REGEX_FIND(".*^(Hello)", "<0><1>Hello</1></0> Hello Hello Hello Goodbye");
-    REGEX_FIND(".*(Hello)",  "<0>Hello Hello Hello <1>Hello</1></0> Goodbye");
-    REGEX_FIND(".*^(Hello)", " Hello Hello Hello Hello Goodbye");   // No Match
-
-    // $ matches only at end of line, or before a newline preceding the end of line
-    REGEX_FIND(".*?(Goodbye)$", "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>");
-    REGEX_FIND(".*?(Goodbye)", "<0>Hello <1>Goodbye</1></0> Goodbye Goodbye");
-    REGEX_FIND(".*?(Goodbye)$", "Hello Goodbye> Goodbye Goodbye ");  // No Match
-
-    REGEX_FIND(".*?(Goodbye)$", "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\\n");
-    REGEX_FIND(".*?(Goodbye)$", "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\\n");
-    REGEX_FIND(".*?(Goodbye)$", "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\\r\\n");
-    REGEX_FIND(".*?(Goodbye)$", "Hello Goodbye Goodbye Goodbye\\n\\n");  // No Match
-    
-    // \Z matches at end of input, like $ with default flags.
-    REGEX_FIND(".*?(Goodbye)\\Z", "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>");
-    REGEX_FIND(".*?(Goodbye)", "<0>Hello <1>Goodbye</1></0> Goodbye Goodbye");
-    REGEX_FIND(".*?(Goodbye)\\Z", "Hello Goodbye> Goodbye Goodbye ");  // No Match
-    REGEX_FIND("here$", "here\\nthe end");   // No Match
-
-    REGEX_FIND(".*?(Goodbye)\\Z", "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\\n");
-    REGEX_FIND(".*?(Goodbye)\\Z", "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\\n");
-    REGEX_FIND(".*?(Goodbye)\\Z", "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>\\r\\n");
-    REGEX_FIND(".*?(Goodbye)\\Z", "Hello Goodbye Goodbye Goodbye\\n\\n");  // No Match
-    
-    // \z matches only at the end of string.
-    //    no special treatment of new lines.
-    //    no dependencies on flag settings.
-    REGEX_FIND(".*?(Goodbye)\\z", "<0>Hello Goodbye Goodbye <1>Goodbye</1></0>");
-    REGEX_FIND(".*?(Goodbye)\\z", "Hello Goodbye Goodbye Goodbye ");  // No Match
-    REGEX_FIND("here$", "here\\nthe end");   // No Match
-
-    REGEX_FIND(".*?(Goodbye)\\z", "Hello Goodbye Goodbye Goodbye\\n");   // No Match
-    REGEX_FIND(".*?(Goodbye)\\n\\z", "<0>Hello Goodbye Goodbye <1>Goodbye</1>\\n</0>");
-    
-    // (?# comment) doesn't muck up pattern
-    REGEX_FIND("Hello (?# this is a comment) world", "  <0>Hello  world</0>...");
-
-    // Check some implementation corner cases base on the way literal strings are compiled.
-    REGEX_FIND("A", "<0>A</0>");
-    REGEX_FIND("AB", "<0>AB</0>ABABAB");
-    REGEX_FIND("AB+", "<0>ABBB</0>A");
-    REGEX_FIND("AB+", "<0>AB</0>ABAB");
-    REGEX_FIND("ABC+", "<0>ABC</0>ABC");
-    REGEX_FIND("ABC+", "<0>ABCCCC</0>ABC");
-    REGEX_FIND("(?:ABC)+", "<0>ABCABCABC</0>D");
-    REGEX_FIND("(?:ABC)DEF+", "<0>ABCDEFFF</0>D");
-    REGEX_FIND("AB\\.C\\eD\\u0666E", "<0>AB.C\\u001BD\\u0666E</0>F");
-
-
-    // {min,max} iteration qualifier
-    REGEX_TESTLM("A{3}BC", "AAABC", TRUE, TRUE);
-
-    REGEX_FIND("(ABC){2,3}AB", "no matchAB");
-    REGEX_FIND("(ABC){2,3}AB", "ABCAB");
-    REGEX_FIND("(ABC){2,3}AB", "<0>ABC<1>ABC</1>AB</0>");
-    REGEX_FIND("(ABC){2,3}AB", "<0>ABCABC<1>ABC</1>AB</0>");
-    REGEX_FIND("(ABC){2,3}AB", "<0>ABCABC<1>ABC</1>AB</0>CAB");
-
-    REGEX_FIND("(ABC){2}AB", "ABCAB");
-    REGEX_FIND("(ABC){2}AB", "<0>ABC<1>ABC</1>AB</0>");
-    REGEX_FIND("(ABC){2}AB", "<0>ABC<1>ABC</1>AB</0>CAB");
-    REGEX_FIND("(ABC){2}AB", "<0>ABC<1>ABC</1>AB</0>CABCAB");
-
-    REGEX_FIND("(ABC){2,}AB", "ABCAB");
-    REGEX_FIND("(ABC){2,}AB", "<0>ABC<1>ABC</1>AB</0>");
-    REGEX_FIND("(ABC){2,}AB", "<0>ABCABC<1>ABC</1>AB</0>");
-    REGEX_FIND("(ABC){2,}AB", "<0>ABCABCABC<1>ABC</1>AB</0>");
-
-    REGEX_FIND("X{0,0}ABC", "<0>ABC</0>");
-    REGEX_FIND("X{0,1}ABC", "<0>ABC</0>");
-
-    REGEX_FIND("(?:Hello(!{1,3}) there){1}", "Hello there");
-    REGEX_FIND("(?:Hello(!{1,3}) there){1}", "<0>Hello<1>!</1> there</0>");
-    REGEX_FIND("(?:Hello(!{1,3}) there){1}", "<0>Hello<1>!!</1> there</0>");
-    REGEX_FIND("(?:Hello(!{1,3}) there){1}", "<0>Hello<1>!!!</1> there</0>");
-    REGEX_FIND("(?:Hello(!{1,3}) there){1}", "Hello!!!! there");
-
-    // Nongreedy {min,max}? intervals
-    REGEX_FIND("(ABC){2,3}?AB", "no matchAB");
-    REGEX_FIND("(ABC){2,3}?AB", "ABCAB");
-    REGEX_FIND("(ABC){2,3}?AB", "<0>ABC<1>ABC</1>AB</0>");
-    REGEX_FIND("(ABC){2,3}?AB", "<0>ABC<1>ABC</1>AB</0>CAB");
-    REGEX_FIND("(ABC){2,3}?AB", "<0>ABC<1>ABC</1>AB</0>CABCAB");
-    REGEX_FIND("(ABC){2,3}?AX", "<0>ABCABC<1>ABC</1>AX</0>");
-    REGEX_FIND("(ABC){2,3}?AX", "ABC<0>ABCABC<1>ABC</1>AX</0>");
-
-    // Atomic Grouping
-    REGEX_FIND("(?>.*)abc", "abcabcabc");      // no match.  .* consumed entire string.
-    REGEX_FIND("(?>(abc{2,4}?))(c*)", "<0><1>abcc</1><2>ccc</2></0>ddd");
-    REGEX_FIND("(\\.\\d\\d(?>[1-9]?))\\d+", "1.625");
-    REGEX_FIND("(\\.\\d\\d(?>[1-9]?))\\d+", "1<0><1>.625</1>0</0>");
-
-    // Possessive *+
-    REGEX_FIND("(abc)*+a", "abcabcabc");
-    REGEX_FIND("(abc)*+a", "<0>abc<1>abc</1>a</0>b");
-    REGEX_FIND("(a*b)*+a", "<0><1>aaaab</1>a</0>aaa");
-
-    // Possessive ?+
-    REGEX_FIND("c?+ddd", "<0>cddd</0>");
-    REGEX_FIND("c?+cddd", "cddd");
-    REGEX_FIND("c?cddd",  "<0>cddd</0>");
-
-    // Back Reference
-    REGEX_FIND("(?:ab(..)cd\\1)*", "<0>ab23cd23ab<1>ww</1>cdww</0>abxxcdyy");
-    REGEX_FIND("ab(?:c|(d?))(\\1)", "<0>ab<1><2></2></1></0>c");
-    REGEX_FIND("ab(?:c|(d?))(\\1)", "<0>ab<1>d</1><2>d</2></0>");
-    REGEX_FIND("ab(?:c|(d?))(\\1)", "<0>ab<1></1><2></2></0>e");
-    REGEX_FIND("ab(?:c|(d?))(\\1)", "<0>ab<1></1><2></2></0>");
-}
-#endif
 
 
 //---------------------------------------------------------------------------

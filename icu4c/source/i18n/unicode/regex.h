@@ -665,6 +665,14 @@ public:
     virtual UnicodeString &appendTail(UnicodeString &dest);
 
 
+
+   /**
+     *   setTrace   Debug function, enable/disable tracing of the matching engine.
+     *   @internal
+     */
+    void setTrace(UBool state);
+
+
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
@@ -717,6 +725,8 @@ private:
 
     int32_t             *fData;            // Data area for use by the compiled pattern.
     int32_t             fSmallData[8];     //   Use this for data if it's enough.
+
+    UBool               fTraceDebug;       // Set true for debug tracing of match engine.
 
     /**
      * The address of this static class variable serves as this class's ID
