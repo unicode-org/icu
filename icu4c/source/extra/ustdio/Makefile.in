@@ -125,7 +125,7 @@ $(FINAL_SO_TARGET): $(OBJECTS)
 
 ifeq ($(OS390BATCH),1)
 $(BATCH_TARGET): $(OBJECTS)
-        $(SHLIB.cc) $(LD_SONAME) -o $@ $^ $(BATCH_LIBS)
+	$(SHLIB.cc) $(LD_SONAME) -o $@ $^ $(BATCH_LIBS)
 endif # OS390BATCH
 
 endif
