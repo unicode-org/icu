@@ -355,7 +355,7 @@ void OlsonTimeZone::getOffset(UDate date, UBool local, int32_t& rawoff,
         if (!local) {
             // Adjust from GMT to local
             date += rawoff;
-            double days2 = Math::floorDivide(date, U_MILLIS_PER_DAY, millis);
+            double days2 = Math::floorDivide(date, (double)U_MILLIS_PER_DAY, millis);
             if (days2 != days) {
                 Grego::dayToFields(days2, year, month, dom, dow);
             }
