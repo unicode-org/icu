@@ -38,14 +38,14 @@ make_rbitem(const UChar *tag,
     return 0;
   }
 
-  //s = (UChar*) uprv_malloc(sizeof(UChar) * (u_strlen(tag) + 1));
+  /* s = (UChar*) uprv_malloc(sizeof(UChar) * (u_strlen(tag) + 1)); */
   s = (char*) uprv_malloc(sizeof(char) * (u_strlen(tag) + 1));
   if(s == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return 0;
   }
   u_UCharsToChars(tag, s, u_strlen(tag)+1);
-  //u_strcpy(s, tag);
+  /* u_strcpy(s, tag); */
 
   item->fTag = s;
   item->fData = (struct SList*) data;
@@ -70,7 +70,7 @@ rblist_open(UErrorCode *status)
   list->fLocale = 0;
   list->fFirst = NULL;
 
-//  list->fData = 0;
+/*  list->fData = 0; */
   list->fCount = 0;
   list->fCapacity = 32;
   list->fKeys = (char *) uprv_malloc(sizeof(char) * 65532);
@@ -82,17 +82,17 @@ rblist_open(UErrorCode *status)
 void rblist_close(struct SRBItemList *list,
          UErrorCode *status)
 {
-//  int32_t i;
+/*  int32_t i; */
   struct SRBItem *current;
   struct SRBItem *prev = NULL;
 
   if(U_FAILURE(*status)) return;
   current = list->fFirst;
   /* deallocate each list */
-//  for(i = 0; i < list->fCount; ++i) {
+/*  for(i = 0; i < list->fCount; ++i) { */
   while(current != NULL) {
 
-//    switch(list->fData[i]->fData->fType) {
+/*    switch(list->fData[i]->fData->fType) { */
     switch(current->fData->fType) {
         case eStringList:
           strlist_close(current->fData, status);
@@ -113,7 +113,7 @@ void rblist_close(struct SRBItemList *list,
     current=current->fNext;
     uprv_free(prev);
   }
-//  uprv_free(list->fData);
+/*  uprv_free(list->fData); */
   uprv_free(list->fLocale);
   uprv_free(list->fKeys);
 
@@ -141,7 +141,7 @@ void rblist_add(struct SRBItemList *list,
         struct SRBItem *s,
         UErrorCode *status)
 {
-//  int32_t index;
+/*  int32_t index; */
 
     struct SRBItem *current;
     struct SRBItem *prev = NULL;
