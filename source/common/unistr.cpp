@@ -91,6 +91,14 @@ us_arrayCopy(const UChar *src, int32_t srcStart,
   }
 }
 
+// u_unescapeAt() callback to get a UChar from a UnicodeString
+U_CDECL_BEGIN
+static UChar U_CALLCONV
+UnicodeString_charAt(int32_t offset, void *context) {
+    return ((UnicodeString*) context)->charAt(offset);
+}
+U_CDECL_END
+
 U_NAMESPACE_BEGIN
 
 const char UnicodeString::fgClassID=0;
@@ -555,14 +563,6 @@ UnicodeString UnicodeString::unescape() const {
     }
     return result;
 }
-
-// u_unescapeAt() callback to get a UChar from a UnicodeString
-U_CDECL_BEGIN
-static UChar U_CALLCONV
-UnicodeString_charAt(int32_t offset, void *context) {
-    return ((UnicodeString*) context)->charAt(offset);
-}
-U_CDECL_END
 
 UChar32 UnicodeString::unescapeAt(int32_t &offset) const {
     return u_unescapeAt(UnicodeString_charAt, &offset, length(), (void*)this);
