@@ -32,7 +32,7 @@
 #include "cstring.h"
 #include "filestrm.h"
 #include "udata.h"
-#include "../toolutil/unewdata.h"
+#include "unewdata.h"
 
 #define STRING_STORE_SIZE 1000000
 #define GROUP_STORE_SIZE 5000
