@@ -17,6 +17,15 @@
 // http://www.bkg.bund.de/kartographie/stagn/Staatennamen.htm
 
 de {
+    collations {
+	phonebook {
+          Version { "1.0" }
+          Sequence { "&ae <<< \u00E4 &AE <<< \u00C4" 
+          "&oe <<< \u00F6 &OE <<< \u00D6" 
+          "&ue <<< \u00FC &UE <<< \u00DC" }
+        }
+    }
+
     Version{ "3.0" }
     Variants{
         Fallback{"en"}
