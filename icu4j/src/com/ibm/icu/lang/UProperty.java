@@ -321,7 +321,7 @@ public interface UProperty
         Used for example in normalizing transforms in incremental mode
         to find the boundary of safely normalizable text despite possible
         text additions.
-        @see NFD_INERT
+        @see #NFD_INERT
         @draft ICU 3.0 */
     public static final int NFKD_INERT = 38;
     /** Binary property NFC_Inert.
@@ -330,7 +330,7 @@ public interface UProperty
         Used for example in normalizing transforms in incremental mode
         to find the boundary of safely normalizable text despite possible
         text additions.
-        @see NFD_INERT
+        @see #NFD_INERT
         @draft ICU 3.0 */
     public static final int NFC_INERT = 39;
     /** Binary property NFKC_Inert.
@@ -339,7 +339,7 @@ public interface UProperty
         Used for example in normalizing transforms in incremental mode
         to find the boundary of safely normalizable text despite possible
         text additions.
-        @see NFD_INERT
+        @see #NFD_INERT
         @draft ICU 3.0 */
     public static final int NFKC_INERT = 40;
     /** Binary Property Segment_Starter.
