@@ -1343,4 +1343,5 @@ zh_TW {
                 "GMT",
         }
     }
+    LocaleScript { "Hani" , "Bopo" }  
 }
