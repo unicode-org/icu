@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/NormalizerDataReader.java,v $
- * $Date: 2002/03/13 05:56:29 $
- * $Revision: 1.2 $
+ * $Date: 2002/03/28 01:50:59 $
+ * $Revision: 1.3 $
  *******************************************************************************
  */
  
@@ -225,24 +225,55 @@ import com.ibm.icu.impl.ICUDebug;
 	 *
 	 * - Auxiliary trie and data
 	 *
-	 * The auxiliary 32-bit trie contains data for additional properties.
+	 *
+	 * The auxiliary 16-bit trie contains data for additional properties.
 	 * Bits
-	 *     31   set if lead surrogate offset
-	 *     30   composition exclusion
-	 * 29..20   index into extraData[] to FC_NFKC_Closure string (bit 31==0),
-	 *          or lead surrogate offset (bit 31==1)
-	 * 19..16   skippable flags
-	 *     15   reserved
-	 *     14   flag: not a safe starter for canonical closure
-	 * 13.. 0   index to serialized USet for canonical closure
-	 *            the set lists the code points whose decompositions start with
-	 *            the one that this data is for
-	 *          for how USets are serialized see uset.c
+	 * 15..12   reserved (for skippable flags, see NormalizerTransliterator)
+	 *     11   flag: not a safe starter for canonical closure
+	 *     10   composition exclusion
+	 *  9.. 0   index into extraData[] to FC_NFKC_Closure string
+	 *          (not for lead surrogate),
+	 *          or lead surrogate offset (for lead surrogate, if 9..0 not zero)
 	 *
 	 * - FC_NFKC_Closure strings in extraData[]
 	 *
 	 * Strings are either stored as a single code unit or as the length
 	 * followed by that many units.
+	 * 
+     * - structure inside canonStartSets[]
+	 *
+	 * This array maps from code points c to sets of code points (USerializedSet).
+	 * The result sets are the code points whose canonical decompositions start
+	 * with c.
+	 *
+	 * canonStartSets[] contains the following sub-arrays:
+	 *
+	 * indexes[_NORM_SET_INDEX_TOP]
+	 *   - contains lengths of sub-arrays etc.
+	 *
+	 * startSets[indexes[_NORM_SET_INDEX_CANON_SETS_LENGTH]-_NORM_SET_INDEX_TOP]
+	 *   - contains serialized sets (USerializedSet) of canonical starters for
+	 *     enumerating canonically equivalent strings
+	 *     indexes[_NORM_SET_INDEX_CANON_SETS_LENGTH] includes _NORM_SET_INDEX_TOP
+	 *     for details about the structure see uset.c
+	 *
+	 * bmpTable[indexes[_NORM_SET_INDEX_CANON_BMP_TABLE_LENGTH]]
+	 *   - a sorted search table for BMP code points whose results are
+	 *     either indexes to USerializedSets or single code points for
+	 *     single-code point sets;
+	 *     each entry is a pair of { code point, result } with result=(binary) yy xxxxxx xxxxxxxx
+	 *     if yy==01 then there is a USerializedSet at canonStartSets+x
+	 *     else build a USerializedSet with result as the single code point
+	 *
+	 * suppTable[indexes[_NORM_SET_INDEX_CANON_SUPP_TABLE_LENGTH]]
+	 *   - a sorted search table for supplementary code points whose results are
+	 *     either indexes to USerializedSets or single code points for
+	 *     single-code point sets;
+	 *     each entry is a triplet of { high16(cp), low16(cp), result }
+	 *     each code point's high-word may contain extra data in bits 15..5:
+	 *     if the high word has bit 15 set, then build a set with a single code point
+	 *     which is (((high16(cp)&0x1f00)<<8)|result;
+	 *     else there is a USerializedSet at canonStartSets+result
 	 */
 final class NormalizerDataReader {
 	private final static boolean debug = ICUDebug.enabled("NormalizerDataReader");
@@ -278,36 +309,10 @@ final class NormalizerDataReader {
     */
     protected void read(NormalizerImpl impl) 
     		throws IOException{
-		/*
-		 * - Overall partition
-		 *
-		 * unorm.dat customarily begins with a UDataInfo structure, see udata.h and .c.
-		 * After that there are the following structures:
-		 *
-		 * char indexes[INDEX_TOP];           -- INDEX_TOP=32, see enum in this file
-		 *
-		 * Trie normTrie;                              -- size in bytes=indexes[INDEX_TRIE_SIZE]
-		 * 
-		 * char extraData[extraDataTop];            -- extraDataTop=indexes[INDEX_UCHAR_COUNT]
-		 *                                                 extraData[0] contains the number of units for
-		 *                                                 FC_NFKC_Closure (formatVersion>=2.1)
-		 *
-		 * char combiningTable[combiningTableTop];  -- combiningTableTop=indexes[INDEX_COMBINE_DATA_COUNT]
-		 *                                                 combiningTableTop may include one 16-bit padding unit
-		 *                                                 to make sure that fcdTrie is 32-bit-aligned
-		 *
-		 * Trie fcdTrie;                               -- size in bytes=indexes[INDEX_FCD_TRIE_SIZE]
-		 *
-		 * Trie auxTrie;                               -- size in bytes=indexes[INDEX_AUX_TRIE_SIZE]
-		 *
-		 * char canonStartSets[canonStartSetsTop]   -- canonStartSetsTop=indexes[INDEX_CANON_SET_COUNT]
-		 *                                                 serialized USets, see uset.c
-		 *
-		 */
 	 
 	 	//Read the indexes
 	 	int[] indexes = new int[NormalizerImpl.INDEX_TOP];
-        for (int i = 0; i <indexes.length ; i ++) {
+        for (int i = 0; i <indexes.length ; i++) {
              indexes[i] = dataInputStream.readInt();
         }
 	
@@ -343,16 +348,32 @@ final class NormalizerDataReader {
 	 	ByteArrayInputStream auxTrieStream= new ByteArrayInputStream(auxBytes);
 		
 		//Read the canonical start sets
-		char[] canonStartSets=new char[indexes[NormalizerImpl.INDEX_CANON_SET_COUNT]];
-        for(int i=0; i<canonStartSets.length; i++){
-	 		canonStartSets[i]=dataInputStream.readChar();
+		Object[] canonStartSets=new Object[NormalizerImpl.CANON_SET_MAX_CANON_SETS];
+		int[] canonStartSetsIndexes = new int[NormalizerImpl.SET_INDEX_TOP];
+		for(int i=0; i<canonStartSetsIndexes.length; i++){
+	 		canonStartSetsIndexes[i]=dataInputStream.readChar();
 	 	}
-	 	
+		char[] startSets = new char[canonStartSetsIndexes[NormalizerImpl.SET_INDEX_CANON_SETS_LENGTH]-NormalizerImpl.SET_INDEX_TOP];
+        for(int i=0; i<startSets.length; i++){
+	 		startSets[i]=dataInputStream.readChar();
+	 	}
+	 	char[] bmpTable  = new char[canonStartSetsIndexes[NormalizerImpl.SET_INDEX_CANON_BMP_TABLE_LENGTH]];
+        for(int i=0; i<bmpTable.length; i++){
+	 		bmpTable[i]=dataInputStream.readChar();
+	 	}		
+		char[] suppTable = new char[canonStartSetsIndexes[NormalizerImpl.SET_INDEX_CANON_SUPP_TABLE_LENGTH]];
+        for(int i=0; i<suppTable.length; i++){
+	 		suppTable[i]=dataInputStream.readChar();
+	 	}
+	 	canonStartSets[NormalizerImpl.CANON_SET_INDICIES_INDEX  ] = canonStartSetsIndexes;
+	 	canonStartSets[NormalizerImpl.CANON_SET_START_SETS_INDEX] = startSets;
+	 	canonStartSets[NormalizerImpl.CANON_SET_BMP_TABLE_INDEX	] = bmpTable;
+	 	canonStartSets[NormalizerImpl.CANON_SET_SUPP_TABLE_INDEX] = suppTable;	 	
  	 	 	
 	 	//Now set the tries 
 	 	impl.normTrieImpl.normTrie  	= new IntTrie( normTrieStream,impl.normTrieImpl	);
 	 	impl.fcdTrieImpl.fcdTrie   		= new CharTrie(fcdTrieStream,impl.fcdTrieImpl	);
-	 	impl.auxTrieImpl.auxTrie		= new IntTrie( auxTrieStream, impl.auxTrieImpl	);
+	 	impl.auxTrieImpl.auxTrie		= new CharTrie( auxTrieStream, impl.auxTrieImpl	);
 	 	impl.indexes   					= indexes;
 	 	impl.extraData 					= extraData;
 	 	impl.combiningTable 			= combiningTable;
