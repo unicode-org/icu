@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DigitList.java,v $ 
- * $Date: 2000/05/26 21:38:55 $ 
- * $Revision: 1.5 $
+ * $Date: 2001/05/21 23:33:47 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -81,7 +81,7 @@ final class DigitList implements Cloneable {
     public int count = 0;
     public byte[] digits = new byte[MAX_LONG_DIGITS];
 
-    private void ensureCapacity(int digitCapacity, int digitsToCopy) {
+    private final void ensureCapacity(int digitCapacity, int digitsToCopy) {
         if (digitCapacity > digits.length) {
             byte[] newDigits = new byte[digitCapacity * 2];
             System.arraycopy(digits, 0, newDigits, 0, digitsToCopy);
@@ -299,38 +299,7 @@ final class DigitList implements Cloneable {
         // DDDDDE+/-DDDDD.
         String rep = Double.toString(source);
 
-        decimalAt = -1;
-        count = 0;
-        int exponent = 0;
-        // Number of zeros between decimal point and first non-zero digit after
-        // decimal point, for numbers < 1.
-        int leadingZerosAfterDecimal = 0;
-        boolean nonZeroDigitSeen = false;
-        for (int i=0; i < rep.length(); ++i)
-        {
-            char c = rep.charAt(i);
-            if (c == '.')
-            {
-                decimalAt = count;
-            }
-            else if (c == 'e' || c == 'E')
-            {
-                exponent = Integer.valueOf(rep.substring(i+1)).intValue();
-                break;
-            }
-            else if (count < MAX_LONG_DIGITS)
-            {
-                if (!nonZeroDigitSeen)
-                {
-                    nonZeroDigitSeen = (c != '0');
-                    if (!nonZeroDigitSeen && decimalAt != -1) ++leadingZerosAfterDecimal;
-                }
-
-                if (nonZeroDigitSeen) digits[count++] = (byte)c;
-            }
-        }
-        if (decimalAt == -1) decimalAt = count;
-        decimalAt += exponent - leadingZerosAfterDecimal;
+        set(rep, MAX_LONG_DIGITS);
 
         if (fixedPoint) {
             // The negative of the exponent represents the number of leading
@@ -361,6 +330,56 @@ final class DigitList implements Cloneable {
         // Eliminate digits beyond maximum digits to be displayed.
         // Round up if appropriate.
         round(fixedPoint ? (maximumDigits + decimalAt) : maximumDigits);
+    }
+
+    /**
+     * Given a string representation of the form DDDDD, DDDDD.DDDDD,
+     * or DDDDDE+/-DDDDD, set this object's value to it.  Ignore
+     * any leading '-'.
+     */
+    private void set(String rep, int maxCount) {
+        decimalAt = -1;
+        count = 0;
+        int exponent = 0;
+        // Number of zeros between decimal point and first non-zero digit after
+        // decimal point, for numbers < 1.
+        int leadingZerosAfterDecimal = 0;
+        boolean nonZeroDigitSeen = false;
+        // Skip over leading '-'
+        int i=0;
+        if (rep.charAt(i) == '-') {
+            ++i;
+        }
+        for (; i < rep.length(); ++i) {
+            char c = rep.charAt(i);
+            if (c == '.') {
+                decimalAt = count;
+            } else if (c == 'e' || c == 'E') {
+                ++i;
+                // Integer.parseInt doesn't handle leading '+' signs
+                if (rep.charAt(i) == '+') {
+                    ++i;
+                }
+                exponent = Integer.valueOf(rep.substring(i)).intValue();
+                break;
+            } else if (count < maxCount) {
+                if (!nonZeroDigitSeen) {
+                    nonZeroDigitSeen = (c != '0');
+                    if (!nonZeroDigitSeen && decimalAt != -1) {
+                        ++leadingZerosAfterDecimal;
+                    }
+                }
+
+                if (nonZeroDigitSeen) {
+                    ensureCapacity(count+1, count);
+                    digits[count++] = (byte)c;
+                }
+            }
+        }
+        if (decimalAt == -1) {
+            decimalAt = count;
+        }
+        decimalAt += exponent - leadingZerosAfterDecimal;
     }
 
     /**
@@ -524,53 +543,56 @@ final class DigitList implements Cloneable {
      * fractional digits to be converted.  If false, total digits.
      */
     private void setBigDecimalDigits(String stringDigits,
-                                           int maximumDigits, boolean fixedPoint) {
-        // Find the first non-zero digit, the decimal, and the last non-zero digit.
-        int first=-1, last=stringDigits.length()-1, decimal=-1;
-        for (int i=0; (first<0 || decimal<0) && i<=last; ++i) {
-            char c = stringDigits.charAt(i);
-            if (c == '.') {
-                decimal = i;
-            } else if (first < 0 && (c >= '1' && c <= '9')) {
-                first = i;
-            }
-        }
+                                     int maximumDigits, boolean fixedPoint) {
+//|        // Find the first non-zero digit, the decimal, and the last non-zero digit.
+//|        int first=-1, last=stringDigits.length()-1, decimal=-1;
+//|        for (int i=0; (first<0 || decimal<0) && i<=last; ++i) {
+//|            char c = stringDigits.charAt(i);
+//|            if (c == '.') {
+//|                decimal = i;
+//|            } else if (first < 0 && (c >= '1' && c <= '9')) {
+//|                first = i;
+//|            }
+//|        }
+//|
+//|        if (first < 0) {
+//|            clear();
+//|            return;
+//|        }
+//|
+//|        // At this point we know there is at least one non-zero digit, so the
+//|        // following loop is safe.
+//|        for (;;) {
+//|            char c = stringDigits.charAt(last);
+//|            if (c != '0' && c != '.') {
+//|                break;
+//|            }
+//|            --last;
+//|        }
+//|
+//|        if (decimal < 0) {
+//|            decimal = stringDigits.length();
+//|        }
+//|
+//|        count = last - first;
+//|        if (decimal < first || decimal > last) {
+//|            ++count;
+//|        }
+//|        decimalAt = decimal - first;
+//|        if (decimalAt < 0) {
+//|            ++decimalAt;
+//|        }
+//|
+//|        ensureCapacity(count, 0);
+//|        for (int i = 0; i < count; ++i) {
+//|            digits[i] = (byte) stringDigits.charAt(first++);
+//|            if (first == decimal) {
+//|                ++first;
+//|            }
+//|        }
 
-        if (first < 0) {
-            clear();
-            return;
-        }
-
-        // At this point we know there is at least one non-zero digit, so the
-        // following loop is safe.
-        for (;;) {
-            char c = stringDigits.charAt(last);
-            if (c != '0' && c != '.') {
-                break;
-            }
-            --last;
-        }
-
-        if (decimal < 0) {
-            decimal = stringDigits.length();
-        }
-
-        count = last - first;
-        if (decimal < first || decimal > last) {
-            ++count;
-        }
-        decimalAt = decimal - first;
-        if (decimalAt < 0) {
-            ++decimalAt;
-        }
-
-        ensureCapacity(count, 0);
-        for (int i = 0; i < count; ++i) {
-            digits[i] = (byte) stringDigits.charAt(first++);
-            if (first == decimal) {
-                ++first;
-            }
-        }
+        // The maxDigits here could also be Integer.MAX_VALUE
+        set(stringDigits, stringDigits.length());
 
         // Eliminate digits beyond maximum digits to be displayed.
         // Round up if appropriate.
