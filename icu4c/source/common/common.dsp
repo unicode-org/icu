@@ -406,6 +406,10 @@ SOURCE=.\uresdata.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\ushape.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\ustring.c
 # End Source File
 # Begin Source File
@@ -1175,6 +1179,10 @@ SOURCE=.\uresdata.h
 # Begin Source File
 
 SOURCE=.\uresimp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\ushape.h
 # End Source File
 # Begin Source File
 
