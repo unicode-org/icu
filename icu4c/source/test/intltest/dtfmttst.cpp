@@ -50,6 +50,7 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCASE(20,TestWhiteSpaceParsing);
         TESTCASE(21,TestInvalidPattern);
         TESTCASE(22,TestGeneral);
+        TESTCASE(23,TestGreekMay);
         default: name = ""; break;
     }
 }
@@ -1123,6 +1124,20 @@ void DateFormatTest::TestInvalidPattern() {
     logln(out);
     // The bug is that the call to format() will crash.  By not
     // crashing, the test passes.
+}
+
+void DateFormatTest::TestGreekMay() {
+    UErrorCode ec = U_ZERO_ERROR;
+    UDate date = -9896080848000.0;
+    SimpleDateFormat fmt("EEEE, dd MMMM yyyy h:mm:ss a", Locale("el", "", ""), ec);
+    if (!assertSuccess("SimpleDateFormat::ct", ec)) return;
+    UnicodeString str;
+    fmt.format(date, str);
+    ParsePosition pos(0);
+    UDate d2 = fmt.parse(str, pos);
+    if (date != d2) {
+        errln("FAIL: unable to parse strings where case-folding changes length");
+    }
 }
 
 /**
