@@ -330,7 +330,7 @@ errorName(UErrorCode code)
     if(code>=0 && code<U_ERROR_LIMIT) {
         return _uErrorName[code];
     } else if(code>=U_ERROR_INFO_START && code<U_ERROR_INFO_LIMIT) {
-        return _uErrorInfoName[code];
+        return _uErrorInfoName[code-U_ERROR_INFO_START];
     } else {
         return "[BOGUS UErrorCode]";
     }
@@ -340,7 +340,7 @@ errorName(UErrorCode code)
         ((code)>=0 && (code)<U_ERROR_LIMIT) ? \
             _uErrorName[code] : \
             ((code)>=U_ERROR_INFO_START && (code)<U_ERROR_INFO_LIMIT) ? \
-                _uErrorInfoName[code] : \
+                _uErrorInfoName[code-U_ERROR_INFO_START] : \
                 "[BOGUS UErrorCode]"
 #endif
 
