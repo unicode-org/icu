@@ -432,6 +432,14 @@ SOURCE=.\uobjtest.h
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\calcasts.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\calcasts.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\callimts.cpp
 # End Source File
 # Begin Source File

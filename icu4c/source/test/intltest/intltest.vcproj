@@ -349,6 +349,12 @@
 			Name="formatting"
 			Filter="">
 			<File
+				RelativePath=".\calcasts.cpp">
+			</File>
+			<File
+				RelativePath=".\calcasts.h">
+			</File>
+			<File
 				RelativePath=".\callimts.cpp">
 			</File>
 			<File

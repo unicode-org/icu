@@ -30,8 +30,6 @@ public:
     void TestJapanese(void);
     void TestJapaneseFormat(void);
 
-    void TestIslamicCivilCases(void);
-
  protected:
     // Test a Gregorian-Like calendar
     void quasiGregorianTest(Calendar& cal, const Locale& gregoLocale, const int32_t *data);
