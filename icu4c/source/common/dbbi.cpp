@@ -37,6 +37,7 @@ DictionaryBasedBreakIterator::DictionaryBasedBreakIterator(UDataMemory* rbbiData
 : RuleBasedBreakIterator(rbbiData, status)
 {
     init();
+    if (U_FAILURE(status)) {return;};
     fTables = new DictionaryBasedBreakIteratorTables(dictionaryFilename, status);
     /* test for NULL */
     if(fTables == 0) {
