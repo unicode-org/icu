@@ -2219,6 +2219,7 @@ void CalendarRegressionTest::TestTimeZoneTransitionAdd() {
                 buf2.truncate(0);
             }
         }
+        delete cal;
     }
 
     if (U_FAILURE(ec)) {
