@@ -18,7 +18,7 @@ import com.ibm.icu.util.UResourceBundle;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.lang.ref.WeakReference;
+import java.lang.ref.SoftReference;
 import java.text.FieldPosition;
 import java.text.MessageFormat;
 import java.text.ParsePosition;
@@ -323,7 +323,7 @@ public class SimpleDateFormat extends DateFormat {
     // try caching
     private static final boolean CACHE = true;
     private static long cacheAge;
-    private static WeakReference highCacheRef;
+    private static SoftReference highCacheRef;
     
     /* Package-private, called by DateFormat factory methods */
     SimpleDateFormat(int timeStyle, int dateStyle, Locale loc) {
@@ -339,7 +339,7 @@ public class SimpleDateFormat extends DateFormat {
 	    }
 	    if (map == null) {
 		map = new HashMap(3);
-		highCacheRef = new WeakReference(map);
+		highCacheRef = new SoftReference(map);
 		cacheAge = time;
 	    }
 	    key = loc.toString() + timeStyle + dateStyle;
