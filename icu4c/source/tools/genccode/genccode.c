@@ -141,27 +141,25 @@ static const struct AssemblyType {
 } assemblyHeader[] = {
     {"gcc",
 
-    ".globl _%s\n"
-    /*"\t.section .rodata\n"*/ /* Not a portable named section */
-    "\t.text\n" /* program and const arrays are put here. .data is writable */
+    ".globl %s\n"
+    "\t.section .rodata\n"
     "\t.align 8\n" /* Either align 8 bytes or 2^8 (256) bytes. 8 bytes is needed. */
-    "_%s:\n\n",
+    "%s:\n\n",
 
     ".long "
     },
-#if 0
     {"gcc-darwin",
 
     /*"\t.section __TEXT,__text,regular,pure_instructions\n"
     "\t.section __TEXT,__picsymbolstub1,symbol_stubs,pure_instructions,32\n"*/
     ".globl _%s\n"
-    "\t.text\n"
+    "\t.data\n"
+    "\t.const\n"
     "\t.align 4\n"  /* 1<<4 = 16 */
     "_%s:\n\n",
 
     ".long "
     },
-#endif
     {"xlc",
     "",
     ""}
