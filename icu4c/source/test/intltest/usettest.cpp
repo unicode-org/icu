@@ -39,7 +39,7 @@ UnicodeSetTest::runIndexedTest(int32_t index, UBool exec,
         CASE(4,TestMinimalRep);
         CASE(5,TestAPI);
         CASE(6,TestExhaustive);
-		default: name = ""; break;
+        default: name = ""; break;
     }
 }
 
@@ -75,7 +75,6 @@ UnicodeSetTest::TestCategories(void) {
     int32_t failures = 0;
     // Make sure generation of L doesn't pollute cached Lu set
     // First generate L, then Lu
-    UChar32 TOP = 0x200; // Don't need to go over the whole range:
     set.applyPattern("[:L:]", status);
     if (U_FAILURE(status)) { errln("FAIL"); return; }
     for (i=0; i<0x200; ++i) {
@@ -158,7 +157,6 @@ UnicodeSetTest::TestCloneEqualHash(void) {
 }
 void
 UnicodeSetTest::TestAddRemove(void) {
-	UErrorCode status = U_ZERO_ERROR;
     UnicodeSet set; // Construct empty set
 	doAssert(set.isEmpty() == TRUE, "set should be empty");
 	doAssert(set.size() == 0, "size should be 0");
@@ -640,7 +638,7 @@ UnicodeSetTest::expectPairs(const UnicodeSet& set, const UnicodeString& expected
     }
 }
 
-static UChar toHexString(int32_t i) { return i + (i < 10 ? 0x30 : (0x41 - 10)); }
+static UChar toHexString(int32_t i) { return (UChar)(i + (i < 10 ? 0x30 : (0x41 - 10))); }
 
 void
 UnicodeSetTest::doAssert(UBool condition, const char *message)

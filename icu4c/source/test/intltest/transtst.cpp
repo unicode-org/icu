@@ -511,11 +511,11 @@ void TransliteratorTest::TestJ277(void) {
     UChar sigma = 0x3C3;
     UChar upsilon = 0x3C5;
     UChar nu = 0x3BD;
-    UChar PHI = 0x3A6;
+//    UChar PHI = 0x3A6;
     UChar alpha = 0x3B1;
-    UChar omega = 0x3C9;
-    UChar omicron = 0x3BF;
-    UChar epsilon = 0x3B5;
+//    UChar omega = 0x3C9;
+//    UChar omicron = 0x3BF;
+//    UChar epsilon = 0x3B5;
 
     // sigma upsilon nu -> syn
     UnicodeString syn;
@@ -940,4 +940,4 @@ void TransliteratorTest::expectAux(const UnicodeString& tag,
     }
 }
 
-static UChar toHexString(int32_t i) { return i + (i < 10 ? ZERO : (UPPER_A - 10)); }
+static UChar toHexString(int32_t i) { return (UChar)(i + (i < 10 ? ZERO : (UPPER_A - 10))); }
