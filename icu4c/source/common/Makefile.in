@@ -74,7 +74,7 @@ uscript.o usc_impl.o uvector.o ustack.o uvectr32.o ucmp8.o \
 uarrsort.o utrie.o uset.o uset_props.o uniset.o uniset_props.o ruleiter.o caniter.o unifilt.o unifunct.o usetiter.o \
 brkiter.o brkdict.o ubrk.o dbbi.o dbbi_tbl.o \
 rbbi.o rbbidata.o rbbinode.o rbbirb.o rbbiscan.o rbbisetb.o rbbistbl.o rbbitblb.o \
-serv.o servnotf.o servls.o servlu.o servlk.o servlkf.o servrbf.o servslkf.o \
+serv.o servnotf.o servls.o servlk.o servlkf.o servrbf.o servslkf.o locutil.o \
 uenum.o ustrenum.o uidna.o usprep.o punycode.o \
 cwchar.o filestrm.o util.o parsepos.o utrace.o locbased.o
 
