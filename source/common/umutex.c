@@ -65,7 +65,7 @@
 # endif /* POSIX_DEBUG_REENTRANCY */
 #endif /* POSIX && (ICU_USE_THREADS==1) */
 
-#ifdef _WIN32
+#ifdef WIN32
 # include <WINDOWS.H>
 #endif
 
@@ -88,7 +88,7 @@ void umtx_lock( UMTX *mutex )
       umtx_init(mutex);
     }
 
-#if defined(_WIN32)
+#if defined(WIN32)
 
     EnterCriticalSection((CRITICAL_SECTION*) *mutex);
 
@@ -123,7 +123,7 @@ void umtx_unlock( UMTX* mutex )
         }
     }
 
-#if defined(_WIN32)
+#if defined(WIN32)
 
     LeaveCriticalSection((CRITICAL_SECTION*)*mutex);
 
@@ -149,7 +149,7 @@ if( mutex == NULL ) /* initialize the global mutex */
   if(*mutex != NULL) /* someone already did it. */
     return;
 
-#if defined( _WIN32 )
+#if defined(WIN32)
   *mutex = uprv_malloc(sizeof(CRITICAL_SECTION));
   InitializeCriticalSection((CRITICAL_SECTION*)*mutex);
 
