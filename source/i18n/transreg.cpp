@@ -103,7 +103,7 @@ Transliterator* TransliteratorAlias::create(UParseError& pe,
     if (U_FAILURE(ec)) {
         return 0;
     }
-    Transliterator *t;
+    Transliterator *t = NULL;
     switch (type) {
     case SIMPLE:
         t = Transliterator::createInstance(aliasID, UTRANS_FORWARD, pe, ec);
