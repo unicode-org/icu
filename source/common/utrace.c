@@ -121,6 +121,8 @@ static void outputString(const char *s, char *outBuf, int32_t *outIx, int32_t ca
     } while (c != 0);
 }
         
+
+
 static void outputUString(const UChar *s, int32_t len, 
                           char *outBuf, int32_t *outIx, int32_t capacity, int32_t indent) {
     int32_t i = 0;
@@ -190,12 +192,11 @@ utrace_format(char *outBuf, int32_t capacity, int32_t indent, const char *fmt, v
             break;
 
         case 'S':
-            /* UChar * string, null terminated. */
-            ptrArg = va_arg(args, void *);
-            intArg =(int32_t)va_arg(args, int32_t);
+            /* UChar * string, with length, len==-1 for null terminated. */
+            ptrArg = va_arg(args, void *);             /* Ptr    */
+            intArg =(int32_t)va_arg(args, int32_t);    /* Length */
             outputUString((const unsigned short *)ptrArg, intArg, outBuf, &outIx, capacity, indent);
             break;
-
 
         case 'b':
             /*  8 bit int  */
@@ -300,6 +301,15 @@ utrace_format(char *outBuf, int32_t capacity, int32_t indent, const char *fmt, v
                             ptrPtr++;
                             break;
 
+                        case 'S':
+                            charsToOutput = 0;
+                            //outputString(*ptrPtr, outBuf, &outIx, capacity, indent);
+                            outputUString((const unsigned short *)*ptrPtr, -1, outBuf, &outIx, capacity, indent);
+                            outputChar('\n', outBuf, &outIx, capacity, indent);
+                            longArg = *ptrPtr==NULL? 0: 1;   /* for test for null term. array. */
+                            ptrPtr++;
+                            break;
+
                             
                         }
                         if (charsToOutput > 0) {
@@ -371,23 +381,37 @@ utrace_formatExit(char *outBuf, int32_t capacity, int32_t indent,
 
 U_CAPI void U_EXPORT2
 utrace_setFunctions(const void *context,
-                    UTraceEntry *e, UTraceExit *x, UTraceData *d,
-                    int32_t traceLevel,
-                    UErrorCode *pErrorCode) {
-    if (U_FAILURE(*pErrorCode)) {
-        return;
-    }
-
-    if (traceLevel < UTRACE_OFF || traceLevel > UTRACE_VERBOSE) {
-        *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-    }
-
+                    UTraceEntry *e, UTraceExit *x, UTraceData *d) {
     pTraceEntryFunc = e;
     pTraceExitFunc  = x;
     pTraceDataFunc  = d;
-    utrace_level    = traceLevel;
     gTraceContext   = context;
+}
+
+
+U_CAPI void U_EXPORT2
+utrace_getFunctions(const void **context,
+                    UTraceEntry **e, UTraceExit **x, UTraceData **d) {
+    *e = pTraceEntryFunc;
+    *x = pTraceExitFunc;
+    *d = pTraceDataFunc;
+    *context = gTraceContext;
+}
+
+U_CAPI void U_EXPORT2
+utrace_setLevel(int32_t level) {
+    if (level < UTRACE_OFF) {
+        level = UTRACE_OFF;
+    }
+    if (level > UTRACE_VERBOSE) {
+        level = UTRACE_VERBOSE;
+    }
+    utrace_level = level;
+}
+
+U_CAPI int32_t U_EXPORT2
+utrace_getLevel() {
+    return utrace_level;
 }
 
 
