@@ -540,6 +540,39 @@ void RBBITest::TestDefaultRuleBasedSentenceIteration()
                                    "\\u0939\\u0948\\u0964 ", 0, status);
       ADD_DATACHUNK(sentdata, "Let's end here. ", 0, status);
 
+      // Regression test for bug #1984, Sentence break in Arabic text.
+      ADD_DATACHUNK(sentdata, 
+          "\\u0623\\u0633\\u0627\\u0633\\u064b\\u0627\\u060c\\u0020\\u062a\\u062a\\u0639\\u0627"
+          "\\u0645\\u0644\\u0020\\u0627\\u0644\\u062d\\u0648\\u0627\\u0633\\u064a\\u0628\\u0020"
+          "\\u0641\\u0642\\u0637\\u0020\\u0645\\u0639\\u0020\\u0627\\u0644\\u0623\\u0631\\u0642"
+          "\\u0627\\u0645\\u060c\\u0648\\u062a\\u0642\\u0648\\u0645\\u0020\\u0628\\u062a\\u062e"
+          "\\u0632\\u064a\\u0646\\u0020\\u0627\\u0644\\u0623\\u062d\\u0631\\u0641\\u0020\\u0648"
+          "\\u0627\\u0644\\u0645\\u062d\\u0627\\u0631\\u0641\\u0020\\u0627\\u0644\\u0623\\u062e"
+          "\\u0631\\u0649\\u0020\\u0628\\u0639\\u062f\\u0020\\u0623\\u0646\\u062a\\u064f\\u0639"
+          "\\u0637\\u064a\\u0020\\u0631\\u0642\\u0645\\u0627\\u0020\\u0645\\u0639\\u064a\\u0646"
+          "\\u0627\\u0020\\u0644\\u0643\\u0644\\u0020\\u0648\\u0627\\u062d\\u062f\\u0020\\u0645"
+          "\\u0646\\u0647\\u0627\\u002e\\u0020" , 0, status);
+      ADD_DATACHUNK(sentdata, 
+          "\\u0648\\u0642\\u0628\\u0644\\u0020\\u0627\\u062e\\u062a\\u0631\\u0627\\u0639\\u0022"
+          "\\u064a\\u0648\\u0646\\u0650\\u0643\\u0648\\u062f\\u0022\\u060c\\u0020\\u0643\\u0627"
+          "\\u0646\\u0020\\u0647\\u0646\\u0627\\u0643\\u0020\\u0645\\u0626\\u0627\\u062a\\u0020"
+          "\\u0627\\u0644\\u0623\\u0646\\u0638\\u0645\\u0629\\u0020\\u0644\\u0644\\u062a\\u0634"
+          "\\u0641\\u064a\\u0631\\u0648\\u062a\\u062e\\u0635\\u064a\\u0635\\u0020\\u0647\\u0630"
+          "\\u0647\\u0020\\u0627\\u0644\\u0623\\u0631\\u0642\\u0627\\u0645\\u0020\\u0644\\u0644"
+          "\\u0645\\u062d\\u0627\\u0631\\u0641\\u060c\\u0020\\u0648\\u0644\\u0645\\u0020\\u064a"
+          "\\u0648\\u062c\\u062f\\u0020\\u0646\\u0638\\u0627\\u0645\\u062a\\u0634\\u0641\\u064a"
+          "\\u0020\\u0639\\u0644\\u0649\\u0020\\u062c\\u0645\\u064a\\u0639\\u0020\\u0627\\u0644"
+          "\\u0645\\u062d\\u0627\\u0631\\u0641\\u0020\\u0627\\u0644\\u0636\\u0631\\u0648\\u0631"
+          "\\u064a\\u0629.  ", 0, status);
+
+      // Try a few more of the less common sentence endings.
+      ADD_DATACHUNK(sentdata, "Hello, world\\u3002 ", 0, status);
+      ADD_DATACHUNK(sentdata, "Hello, world\\u037e ", 0, status);  
+      ADD_DATACHUNK(sentdata, "Hello, world\\u2048 ", 0, status);
+      ADD_DATACHUNK(sentdata, "Hello, world\\u203c ", 0, status);
+      ADD_DATACHUNK(sentdata, "Let's end here. ", 0, status);
+
+
       generalIteratorTest(*sentIterDefault, sentdata);
 
       delete sentIterDefault;
