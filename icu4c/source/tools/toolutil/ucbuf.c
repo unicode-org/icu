@@ -259,7 +259,7 @@ ucbuf_getc(UCHARBUF* buf,UErrorCode* err){
 
 
 /* u_unescapeAt() callback to return a UChar*/
-static UChar
+static UChar U_CALLCONV
 _charAt(int32_t offset, void *context) {
     return ((UCHARBUF*) context)->currentPos[offset];
 }

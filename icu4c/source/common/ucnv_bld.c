@@ -142,7 +142,7 @@ U_CAPI UBool U_EXPORT2 ucnv_cleanup(void) {
     return (SHARED_DATA_HASHTABLE == NULL);
 }
 
-static UBool
+static UBool U_CALLCONV
 isCnvAcceptable(void *context,
              const char *type, const char *name,
              const UDataInfo *pInfo) {

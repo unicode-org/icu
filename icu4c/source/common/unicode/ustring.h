@@ -751,7 +751,7 @@ u_unescape(const char *src,
  * @stable
  */
 U_CDECL_BEGIN
-typedef UChar (*UNESCAPE_CHAR_AT)(int32_t offset, void *context);
+typedef UChar (U_CALLCONV *UNESCAPE_CHAR_AT)(int32_t offset, void *context);
 U_CDECL_END
 
 /**

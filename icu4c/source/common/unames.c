@@ -68,7 +68,7 @@ static UCharNames *uCharNames=NULL;
 static UBool
 isDataLoaded(UErrorCode *pErrorCode);
 
-static UBool
+static UBool U_CALLCONV
 isAcceptable(void *context,
              const char *type, const char *name,
              const UDataInfo *pInfo);
@@ -465,7 +465,7 @@ isDataLoaded(UErrorCode *pErrorCode) {
     return TRUE;
 }
 
-static UBool
+static UBool U_CALLCONV
 isAcceptable(void *context,
              const char *type, const char *name,
              const UDataInfo *pInfo) {

@@ -26,7 +26,7 @@
 /* The global cache */
 UHashtable     *gLocaleCache = NULL;
 
-static U_EXPORT2 void U_CALLCONV
+static void U_CALLCONV
 hash_freeBundle(void* obj)
 {
     u_locbund_delete((ULocaleBundle *)obj);

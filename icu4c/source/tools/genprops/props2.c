@@ -52,37 +52,37 @@ parseArabicShaping(char *filename, char *basename,
                    const char *suffix,
                    UErrorCode *pErrorCode);
 
-static void
+static void U_CALLCONV
 ageLineFn(void *context,
           char *fields[][2], int32_t fieldCount,
           UErrorCode *pErrorCode);
 
-static void
+static void U_CALLCONV
 scriptsLineFn(void *context,
               char *fields[][2], int32_t fieldCount,
               UErrorCode *pErrorCode);
 
-static void
+static void U_CALLCONV
 blocksLineFn(void *context,
              char *fields[][2], int32_t fieldCount,
              UErrorCode *pErrorCode);
 
-static void
+static void U_CALLCONV
 propListLineFn(void *context,
                char *fields[][2], int32_t fieldCount,
                UErrorCode *pErrorCode);
 
-static void
+static void U_CALLCONV
 derivedPropListLineFn(void *context,
                       char *fields[][2], int32_t fieldCount,
                       UErrorCode *pErrorCode);
 
-static void
+static void U_CALLCONV
 eaWidthLineFn(void *context,
               char *fields[][2], int32_t fieldCount,
               UErrorCode *pErrorCode);
 
-static void
+static void U_CALLCONV
 lineBreakLineFn(void *context,
                 char *fields[][2], int32_t fieldCount,
                 UErrorCode *pErrorCode);
@@ -191,7 +191,7 @@ parseTwoFieldFile(char *filename, char *basename,
 
 /* DerivedAge.txt ----------------------------------------------------------- */
 
-static void
+static void U_CALLCONV
 ageLineFn(void *context,
           char *fields[][2], int32_t fieldCount,
           UErrorCode *pErrorCode) {
@@ -235,7 +235,7 @@ ageLineFn(void *context,
 
 /* Scripts.txt -------------------------------------------------------------- */
 
-static void
+static void U_CALLCONV
 scriptsLineFn(void *context,
               char *fields[][2], int32_t fieldCount,
               UErrorCode *pErrorCode) {
@@ -394,7 +394,7 @@ blockNames[UBLOCK_COUNT]={
     "Supplementary Private Use Area-B"          /* 110 */
 };
 
-static void
+static void U_CALLCONV
 blocksLineFn(void *context,
              char *fields[][2], int32_t fieldCount,
              UErrorCode *pErrorCode) {
@@ -471,7 +471,7 @@ propListNames[]={
     "Logical_Order_Exception"
 };
 
-static void
+static void U_CALLCONV
 propListLineFn(void *context,
                char *fields[][2], int32_t fieldCount,
                UErrorCode *pErrorCode) {
@@ -509,7 +509,7 @@ derivedPropListNames[]={
     "XID_Continue"
 };
 
-static void
+static void U_CALLCONV
 derivedPropListLineFn(void *context,
                       char *fields[][2], int32_t fieldCount,
                       UErrorCode *pErrorCode) {
@@ -547,7 +547,7 @@ eaNames[U_EA_COUNT]={
     "W"         /* Wide, default for plane 2 */
 };
 
-static void
+static void U_CALLCONV
 eaWidthLineFn(void *context,
               char *fields[][2], int32_t fieldCount,
               UErrorCode *pErrorCode) {
@@ -619,7 +619,7 @@ lbNames[U_LB_COUNT]={
     "ZW"
 };
 
-static void
+static void U_CALLCONV
 lineBreakLineFn(void *context,
                 char *fields[][2], int32_t fieldCount,
                 UErrorCode *pErrorCode) {
@@ -715,7 +715,7 @@ jgNames[U_JG_COUNT]={
     "ZAIN"
 };
 
-static void
+static void U_CALLCONV
 arabicShapingLineFn(void *context,
                     char *fields[][2], int32_t fieldCount,
                     UErrorCode *pErrorCode) {

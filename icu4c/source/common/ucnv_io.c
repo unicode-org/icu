@@ -179,7 +179,7 @@ static const char *defaultConverterName = NULL;
 #define GET_STRING(idx) (const char *)(stringTable + (idx))
 #define NUM_RESERVED_TAGS 2
 
-static UBool
+static UBool U_CALLCONV
 isAcceptable(void *context,
              const char *type, const char *name,
              const UDataInfo *pInfo) {
