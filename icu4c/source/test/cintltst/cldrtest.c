@@ -418,7 +418,7 @@ TestLocaleStructure(void) {
     int32_t locCount = uloc_countAvailable();
     int32_t locIndex;
     UErrorCode errorCode = U_ZERO_ERROR;
-    const char *currLoc;
+    const char *currLoc, *resolvedLoc;
 
     /* TODO: Compare against parent's data too. This code can't handle fallbacks that some tools do already. */
 /*    char locName[ULOC_FULLNAME_CAPACITY];
@@ -476,6 +476,13 @@ TestLocaleStructure(void) {
         else if (ures_getStringByKey(currentLocale, "Version", NULL, &errorCode)[0] == (UChar)(0x78)) {
             log_verbose("WARNING: The locale %s is experimental! It shouldn't be listed as an installed locale.\n",
                 currLoc);
+        }
+        resolvedLoc = ures_getLocaleByType(currentLocale, ULOC_ACTUAL_LOCALE, &errorCode);
+        if (strcmp(resolvedLoc, currLoc) != 0) {
+            /* All locales have at least a Version resource.
+               If it's absolutely empty, then the previous test will fail too.*/
+            log_err("Locale resolves to different locale. Is %s an alias of %s?\n",
+                currLoc, resolvedLoc);
         }
         TestKeyInRootRecursive(root, "root", currentLocale, currLoc);
 
