@@ -1,10 +1,10 @@
 ## -*-makefile-*-
 ## Darwin-specific setup (Darwin is the Mac OS X developer preview, successor
 ## to Rhapsody, aka Mac OS X Server)
-## Copyright (c) 1999-2000, International Business Machines Corporation and
+## Copyright (c) 1999-2002, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-darwin,v 1.19 2002/01/04 23:48:42 yves-oss Exp $
+## $Id: mh-darwin,v 1.20 2002/01/25 06:28:45 yves-oss Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -dynamic
@@ -26,6 +26,9 @@ SHLIB.cc=	$(CXX) -dynamiclib -dynamic $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	-L
 LD_RPATH_PRE=	
+
+## Environment variable to set a runtime search path
+LDLIBRARYPATH_ENVVAR = DYLD_LIBRARY_PATH
 
 ## Versioned target for a shared library.
 FINAL_SO_TARGET = $(SO_TARGET)
