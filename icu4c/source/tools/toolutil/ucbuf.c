@@ -79,11 +79,11 @@ static UBool ucbuf_autodetect_nrw(FileStream* in, const char** cp,int* numRead){
         signatureLength=0;
         autodetect=FALSE;
     }
-    T_FileStream_rewind(in);
-    T_FileStream_read(in, start, *numRead);
-/*    while(signatureLength<*numRead) {
+/*    T_FileStream_rewind(in);
+    T_FileStream_read(in, start, *numRead);*/
+    while(signatureLength<*numRead) {
         T_FileStream_ungetc(start[--*numRead], in);
-    }*/
+    }
     return autodetect;
 }
 
