@@ -1,7 +1,7 @@
 // -*- Coding:US-ASCII-*-
 // *   Copyright (C) 1997-2001, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
-// $Revision: 1.5 $
+// $Revision: 1.6 $
 //
 // Telugu Locale. Data by Ram [ram@jtcsv.com]
 
@@ -28,19 +28,19 @@ te_IN {
         "{1} {0}",
     }
 
-    LanguageLibraryUse { "Te" }
-    Measurement { "Metric" }
+    // LanguageLibraryUse { "Te" }
+    // Measurement { "Metric" }
     NumberPatterns {
         "#,#0.##;-#,#0.##",
         "\u00A4 #,#0.00;-\u00A4 #,#0.00",
         "#,#0%",
     }
     ShortLanguage { "tel" }
-    PaperSize {
-        Hieght { "297" }
-        Width { "210" }
-        Units { "mm" }
-    }
+    //PaperSize {
+    //    Hieght { "297" }
+    //    Width { "210" }
+    //    Units { "mm" }
+    //}
     LocaleID {"44a"}
     // /**************** Info Below is needed ****************/
     // CollationElements{}

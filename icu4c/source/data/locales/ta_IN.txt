@@ -8,7 +8,7 @@ ta_IN {
     ShortCountry { IND }
 
     CurrencyElements {
-        "$",
+        "\u0bb0\u0bc2.",
         "INR",  // Rs. ? No.
         "."
     }

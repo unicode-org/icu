@@ -433,7 +433,7 @@ root {
         GY { "Guyana" }
         HT { "Haiti" }
         HN { "Honduras" }
-        HK { "Hong Kong" }
+        HK { "Hong Kong S.A.R., China" }
         HU { "Hungary" }
         IS { "Iceland" }
         IN { "India" }
@@ -1165,6 +1165,12 @@ root {
                 "ADT",
                 "Anchorage",
         }
+    }
+    LocaleScript{
+        "Latin",
+        "Latn",
+        "Latf",
+        "Latg"
     }
 }
 

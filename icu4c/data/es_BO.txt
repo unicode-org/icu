@@ -9,7 +9,7 @@ es_BO {
     CurrencyElements { 
             "B$",
             "BOB",
-            ".",
+            ",",
     }
     DateTimePatterns { 
             "hh:mm:ss a z",
