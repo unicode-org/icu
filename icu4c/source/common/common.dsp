@@ -227,6 +227,11 @@ SOURCE=.\ucnv_io.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\udata.c
+# ADD CPP /Ze
+# End Source File
+# Begin Source File
+
 SOURCE=.\uhash.c
 # End Source File
 # Begin Source File
@@ -237,6 +242,10 @@ SOURCE=.\uloc.c
 
 SOURCE=.\umutex.c
 # ADD CPP /Ze
+# End Source File
+# Begin Source File
+
+SOURCE=.\unames.c
 # End Source File
 # Begin Source File
 
