@@ -37,11 +37,10 @@
  * <pre>
  * \code
  *    UChar myString[20];
- *    UFieldPosition pos=0;
  *    double myNumber = 7.0;
  *    UErrorCode success = U_ZERO_ERROR;
  *    UNumberFormat* nf = unum_open(UNUM_DEFAULT, NULL, &success)
- *    unum_formatDouble(nf, myNumber, myString, u_strlen(myString), &pos, &status);
+ *    unum_formatDouble(nf, myNumber, myString, u_strlen(myString), NULL, &status);
  *    printf(" Example 1: %s\n", austrdup(myString) ); //austrdup( a function used to convert UChar* to char*)
  * \endcode
  * </pre>
@@ -52,20 +51,19 @@
  * <pre>
  * \code
  *     UChar* myString;
- *     t_int32 i, resultlength, reslenneeded;
+ *     int32_t i, resultlength, reslenneeded;
  *     UErrorCode success = U_ZERO_ERROR;
- *     UFieldPosition pos=0;
- *     t_int32 a[] = { 123, 3333, -1234567 };
- *     const t_int32 a_len = sizeof(a) / sizeof(a[0]);
+ *     int32_t a[] = { 123, 3333, -1234567 };
+ *     const int32_t a_len = sizeof(a) / sizeof(a[0]);
  *     UNumberFormat* nf = unum_open(UNUM_DEFAULT, NULL, &success)
  *     for (i = 0; i < a_len; i++) {
  *     resultlength=0;
- *     reslenneeded=unum_format(nf, a[i], NULL, resultlength, &pos, &status);
+ *     reslenneeded=unum_format(nf, a[i], NULL, resultlength, NULL, &status);
  *     if(status==U_BUFFER_OVERFLOW_ERROR){
  *         status=U_ZERO_ERROR;
  *         resultlength=resultlengthneeded+1;
  *         result=(UChar*)malloc(sizeof(UChar) * resultlength);
- *         unum_format(nf, a[i], result, resultlength, &pos, &status);
+ *         unum_format(nf, a[i], result, resultlength, NULL, &status);
  *     }
  *     printf(" Example 2: %s\n", austrdup(result) );
  *     free(result);
@@ -83,7 +81,7 @@
  * <pre>
  * \code
  *    UErrorCode success;
- *    t_int32 pos=0;
+ *    int32_t pos=0;
  *    unum_parse(nf, result, u_strlen(result), &pos, &success);
  * \endcode
  * </pre>
@@ -214,12 +212,16 @@ unum_clone(const UNumberFormat *fmt,
 * @param number The number to format.
 * @param result A pointer to a buffer to receive the formatted number.
 * @param resultLength The maximum size of result.
-* @param pos If not 0, a UFieldPosition which will receive the information on a specific field.
+* @param position A pointer to a UFieldPosition.  On input, position->field
+* is read.  On output, position->beginIndex and position->endIndex indicate
+* the beginning and ending indices of field number position->field, if such
+* a field exists.  This parameter may be NULL, in which case no field
 * @param status A pointer to an UErrorCode to receive any errors
 * @return The total buffer size needed; if greater than resultLength, the output was truncated.
 * @see unum_formatDouble
 * @see unum_parse
 * @see unum_parseDouble
+* @see UFieldPosition
 * @draft
 */
 U_CAPI int32_t
@@ -237,12 +239,16 @@ unum_format(    const    UNumberFormat*    fmt,
 * @param number The number to format.
 * @param result A pointer to a buffer to receive the formatted number.
 * @param resultLength The maximum size of result.
-* @param pos If not 0, a UFieldPosition which will receive the information on a specific field.
+* @param position A pointer to a UFieldPosition.  On input, position->field
+* is read.  On output, position->beginIndex and position->endIndex indicate
+* the beginning and ending indices of field number position->field, if such
+* a field exists.  This parameter may be NULL, in which case no field
 * @param status A pointer to an UErrorCode to receive any errors
 * @return The total buffer size needed; if greater than resultLength, the output was truncated.
 * @see unum_format
 * @see unum_parse
 * @see unum_parseDouble
+* @see UFieldPosition
 * @draft
 */
 U_CAPI int32_t
