@@ -417,6 +417,15 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
             Create new list, create new sourceToken, make the baseCE from source, put 
             the sourceToken in ListHeader of the new list */
         if(sourceToken == NULL) {
+
+          /*
+              3. The rule for "& abcdefg < xyz" is a bit tricky. What it turns into is:
+
+              a. Find the longest sequence in "abcdefg" that is in UCA *OR* in the
+              tailoring so far. Suppose that is "abcd".
+              b. Then treat this rule as equivalent to:
+              "& abcd < xyz / efg"
+          */
           if(newCharsLen > 1) {
             key.source = 0x01000000 | charsOffset;
             sourceToken = (UColToken *)uhash_get(uchars2tokens, &key);
@@ -482,6 +491,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
   }
 
   src->lh = ListList;
+  src->resultLen = listPosition;
 
   return listPosition;
 }
