@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $
-* $Date: 2003/09/19 00:14:37 $
-* $Revision: 1.46 $
+* $Date: 2003/09/22 06:24:20 $
+* $Revision: 1.47 $
 *
 *******************************************************************************
 */
@@ -729,9 +729,37 @@ public final class RuleBasedCollator extends Collator
      *         null, a null CollationKey is returned.
      * @see CollationKey
      * @see #compare(String, String)
+     * @see #getRawCollationKey
      * @draft ICU 2.2
      */
-    public CollationKey getCollationKey(String source)
+    public CollationKey getCollationKey(String source) {
+        if (source == null) {
+            return null;
+        }
+        m_utilRawCollationKey_ = getRawCollationKey(source, 
+                                                    m_utilRawCollationKey_);
+        return new CollationKey(source, m_utilRawCollationKey_);
+    }
+    
+    /**
+     * Gets the simpler form of a CollationKey for the String source following
+     * the rules of this Collator and stores the result into the user provided 
+     * argument key. 
+     * If key has a internal byte array of length that's too small for the 
+     * result, the internal byte array will be grown to the exact required 
+     * size.
+     * @param source the text String to be transformed into a RawCollationKey  
+     * @param key output RawCollationKey to store results
+     * @return If key is null, a new instance of RawCollationKey will be 
+     *         created and returned, otherwise the user provided key will be 
+     *         returned.
+     * @see #getCollationKey 
+     * @see #compare(String, String)
+     * @see RawCollationKey
+     * @draft ICU 2.8
+     */
+    public RawCollationKey getRawCollationKey(String source, 
+                                              RawCollationKey key)
     {
         if (source == null) {
             return null;
@@ -786,9 +814,11 @@ public final class RuleBasedCollator extends Collator
         }
         getSortKeyBytes(source, doFrench, hiragana4, commonBottom4,
                         bottomCount4);
-        byte sortkey[] = getSortKey(source, doFrench, commonBottom4,
-                                    bottomCount4);
-        return new CollationKey(source, sortkey);
+        if (key == null) {
+            key = new RawCollationKey();
+        }
+        getSortKey(source, doFrench, commonBottom4, bottomCount4, key);
+        return key;
     }
 
     /**
@@ -1035,6 +1065,13 @@ public final class RuleBasedCollator extends Collator
      * If comparison are to be done to the same String multiple times, it would
      * be more efficient to generate CollationKeys for the Strings and use
      * CollationKey.compareTo(CollationKey) for the comparisons.
+     * If speed performance is critical and object instantiation is to be 
+     * reduced, further optimization may be achieved by generating a simpler 
+     * key of the form RawCollationKey and reusing this RawCollationKey 
+     * object with the method RuleBasedCollator.getRawCollationKey. Internal 
+     * byte representation can be directly accessed via RawCollationKey and
+     * stored for future use. Like CollationKey, RawCollationKey provides a
+     * method RawCollationKey.compareTo for key comparisons.
      * If the each Strings are compared to only once, using the method
      * RuleBasedCollator.compare(String, String) will have a better performance.
      * </p>
@@ -1951,6 +1988,7 @@ public final class RuleBasedCollator extends Collator
     private byte m_utilBytes3_[];
     private byte m_utilBytes4_[];
     private byte m_utilBytes5_[];
+    private RawCollationKey m_utilRawCollationKey_;
 
     private int m_utilBytesCount0_;
     private int m_utilBytesCount1_;
@@ -2567,10 +2605,12 @@ public final class RuleBasedCollator extends Collator
      *                  be done
      * @param commonBottom4 smallest common quaternary byte
      * @param bottomCount4 smallest quaternary byte
-     * @return the compact sortkey
+     * @param key output RawCollationKey to store results, key cannot be null
      */
-    private final byte[] getSortKey(String source, boolean doFrench,
-                                    int commonBottom4, int bottomCount4)
+    private final void getSortKey(String source, boolean doFrench,
+                                             int commonBottom4, 
+                                             int bottomCount4,
+                                             RawCollationKey key)
     {
         // we have done all the CE's, now let's put them together to form
         // a key
@@ -2592,8 +2632,8 @@ public final class RuleBasedCollator extends Collator
         }
         m_utilBytes1_ = append(m_utilBytes1_, m_utilBytesCount1_, (byte)0);
         m_utilBytesCount1_ ++;
-        byte result[] = (byte [])m_utilBytes1_.clone();
-        return result;
+
+        key.set(m_utilBytes1_, 0, m_utilBytesCount1_);
     }
 
     /**
@@ -2917,10 +2957,13 @@ public final class RuleBasedCollator extends Collator
     private static final byte[] append(byte array[], int appendindex,
                                        byte value)
     {
-        if (appendindex + 1 >= array.length) {
-            array = increase(array, appendindex, SORT_BUFFER_INIT_SIZE_);
+        try {
+            array[appendindex] = value;
         }
-        array[appendindex] = value;
+        catch (ArrayIndexOutOfBoundsException e) {
+            array = increase(array, appendindex, SORT_BUFFER_INIT_SIZE_);
+            array[appendindex] = value;
+        }
         return array;
     }
 
@@ -2934,9 +2977,11 @@ public final class RuleBasedCollator extends Collator
     private final int compareBySortKeys(String source, String target)
 
     {
-        CollationKey sourcekey = getCollationKey(source);
-        CollationKey targetkey = getCollationKey(target);
-        return sourcekey.compareTo(targetkey);
+        m_utilRawCollationKey_ = getRawCollationKey(source, 
+                                                    m_utilRawCollationKey_);
+        // this method is very seldom called
+        RawCollationKey targetkey = getRawCollationKey(target, null);
+        return m_utilRawCollationKey_.compareTo(targetkey);
     }
 
     /**
