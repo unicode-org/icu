@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Names.java,v $
-* $Date: 2003/03/12 16:01:26 $
-* $Revision: 1.17 $
+* $Date: 2003/03/15 02:36:48 $
+* $Revision: 1.18 $
 *
 *******************************************************************************
 */
@@ -51,7 +51,9 @@ final class UCD_Names implements UCD_Types {
             + "#\tAll code points not listed here have the type U",
         "Joining Group (listing ArabicShaping.txt, field 2)",
         "BidiMirrored (listing UnicodeData.txt, field 9: see UnicodeData.html)",
-        "Script",
+        "Script\r\n"
+            + "#\tThe value for all code points not explicitly listed in this file is COMMON."
+        ,
         "Age (from a comparison of UCD versions 1.1 [minus Hangul], 2.0, 2.1, 3.0, 3.1)",
         "Hangul Syllable Type\r\n# All codepoints not explicitly listed here have the value NA",
         "Derived"
@@ -219,11 +221,11 @@ final class UCD_Names implements UCD_Types {
         "IS", "PR", "PO", "NU", "AL", "ID", "IN", "HY",
         "CM", "BB", "BA", "SP", "BK", "CR", "LF", "CB",
         "SA", "AI", "B2", "SG", "ZW",
-        "JL",
-        "JV",
-        "JT",
         "NL",
         "WJ",
+        //"JL",
+        //"JV",
+        //"JT",
 
     };
 
@@ -235,11 +237,11 @@ final class UCD_Names implements UCD_Types {
         "CombiningMark", "BreakBefore", "BreakAfter", "Space",
         "MandatoryBreak", "CarriageReturn", "LineFeed", "ContingentBreak",
         "ComplexContext", "Ambiguous", "BreakBoth", "Surrogate", "ZWSpace",
-        "Leading_Jamo",
-        "Vowel_Jamo",
-        "Trailing_Jamo",
         "Next_Line",
         "Word_Joiner"
+        //"Leading_Jamo",
+        //"Vowel_Jamo",
+        //"Trailing_Jamo",
     };
 
 	public static final String[] SCRIPT = {

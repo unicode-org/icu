@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UData.java,v $
-* $Date: 2003/03/12 16:01:26 $
-* $Revision: 1.7 $
+* $Date: 2003/03/15 02:36:48 $
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -78,6 +78,9 @@ class UData implements UCD_Types {
 
     public boolean equals(Object that) {
         UData other = (UData) that;
+        
+        // use equals for objects
+        
         if (!name.equals(other.name)) return false;
         if (!decompositionMapping.equals(other.decompositionMapping)) return false;
         if (!simpleUppercase.equals(other.simpleUppercase)) return false;
@@ -90,8 +93,12 @@ class UData implements UCD_Types {
         if (!fullCaseFolding.equals(other.fullCaseFolding)) return false;
         if (!specialCasing.equals(other.specialCasing)) return false;
         if (!bidiMirror.equals(other.bidiMirror)) return false;
+        
+        // == for primitives
+        // Warning: doubles have to use special comparison, because of NaN
+        
         if (codePoint != other.codePoint) return false;
-        if (numericValue != other.numericValue) return false;
+        if (numericValue < other.numericValue || numericValue > other.numericValue) return false;
         if (binaryProperties != other.binaryProperties) return false;
         if (generalCategory != other.generalCategory) return false;
         if (combiningClass != other.combiningClass) return false;
@@ -104,6 +111,7 @@ class UData implements UCD_Types {
         if (joiningGroup != other.joiningGroup) return false;
         if (script != other.script) return false;
         if (age != other.age) return false;
+        
         return true;
     }
 
@@ -178,17 +186,17 @@ class UData implements UCD_Types {
     static final byte ABBREVIATED = 0, FULL = 1;
 
     public String toString() {
-        return toString(FULL);
+        return toString(Default.ucd, FULL);
     }
 
-    public String toString(byte style) {
+    public String toString(UCD ucd, byte style) {
         boolean full = style == FULL;
         StringBuffer result = new StringBuffer();
         String s = UTF32.valueOf32(codePoint);
 
-        result.append("<e c='").append(Utility.quoteXML(codePoint)).append('\'');
+        result.append("<e cp='").append(Utility.quoteXML(codePoint)).append('\'');
         result.append(" hx='").append(Utility.hex(codePoint)).append('\'');
-        if (full || script != COMMON_SCRIPT) result.append(" sn='").append(UCD_Names.SCRIPT[script]).append('\'');
+        if (full || script != COMMON_SCRIPT) result.append(" sn='").append(ucd.getScriptID_fromIndex(script,SHORT)).append('\'');
         result.append(" n='").append(Utility.quoteXML(name)).append("'\r\n");
 
         int lastPos = result.length();

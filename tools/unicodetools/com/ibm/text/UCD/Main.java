@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2003/03/12 16:01:26 $
-* $Revision: 1.27 $
+* $Date: 2003/03/15 02:36:48 $
+* $Revision: 1.28 $
 *
 *******************************************************************************
 */
@@ -47,11 +47,31 @@ public final class Main implements UCD_Types {
     public static void main (String[] args) throws Exception {
 
         for (int i = 0; i < args.length; ++i) {
+        
+            long mask = 0;
+
             String arg = args[i];
             if (arg.charAt(0) == '#') return; // skip rest of line
 
             Utility.fixDot();
             System.out.println("Argument: " + args[i]);
+            
+            // Expand string arguments
+            
+            if (arg.equalsIgnoreCase("All")) {
+                args = Utility.append(ALL_FILES, Utility.subarray(args, i+1));
+                continue;
+            }
+            
+            // make sure the UCD is set up
+            
+            if (arg.equalsIgnoreCase("version")) {
+                Default.setUCD(args[++i]);
+                continue;
+            }
+            Default.ensureUCD();
+            
+            // Now handle other options
 
             if (arg.equalsIgnoreCase("verify")) {
                 VerifyUCD.verify();
@@ -60,7 +80,6 @@ public final class Main implements UCD_Types {
                 VerifyUCD.checkAgainstUInfo();
 
             } else if (arg.equalsIgnoreCase("build")) ConvertUCD.main(new String[]{Default.ucdVersion});
-            else if (arg.equalsIgnoreCase("version")) Default.setUCD(args[++i]);
             else if (arg.equalsIgnoreCase("statistics")) VerifyUCD.statistics();
             else if (arg.equalsIgnoreCase("NFSkippable")) NFSkippable.main(null);
             else if (arg.equalsIgnoreCase("diffIgnorable")) VerifyUCD.diffIgnorable();
@@ -123,6 +142,7 @@ public final class Main implements UCD_Types {
             else if (arg.equalsIgnoreCase("TestDirectoryIterator")) DirectoryIterator.test();
             else if (arg.equalsIgnoreCase("checkIdentical")) GenerateData.handleIdentical();
             else if (arg.equalsIgnoreCase("testnameuniqueness")) TestNameUniqueness.test();
+            else if (arg.equalsIgnoreCase("checkDifferences")) GenerateData.checkDifferences("3.2.0");
             
             //else if (arg.equalsIgnoreCase("NormalizationCharts")) ChartGenerator.writeNormalizationCharts();
             
@@ -130,36 +150,9 @@ public final class Main implements UCD_Types {
             /*else if (arg.equalsIgnoreCase("writeNormalizerTestSuite"))
                 GenerateData.writeNormalizerTestSuite("NormalizationTest-3.1.1d1.txt");
                 */
-            else extras(new String[] {arg});
-        }
-    }
-    
-    public static void extras (String[] args) throws Exception {
-        //ubp = new UnifiedBinaryProperty(ucd);
-        
-        boolean expanding = false;
-        
-        for (int i = 0; i < args.length; ++i) {
-            String arg = args[i];
-            if (arg.charAt(0) == '#') return; // skip rest of line
-            long mask = 0;
-
-            Utility.fixDot();
-            if (expanding) System.out.println("Argument: " + args[i]);
-
-            if (arg.equalsIgnoreCase("All")) {
-                // Append all args at end
-                /*
-                String[] temp = new String[args.length + ALL_FILES.length];
-                System.arraycopy(args, 0, temp, 0, args.length);
-                System.arraycopy(ALL_FILES, 0, temp, args.length, ALL_FILES.length);
-                */
-                args = Utility.append(args, ALL_FILES);
-                expanding = true;
-
             // EXTRACTED PROPERTIES
             
-            } else if (arg.equalsIgnoreCase("DerivedBidiClass")) {
+            else if (arg.equalsIgnoreCase("DerivedBidiClass")) {
                 GenerateData.generateVerticalSlice(BIDI_CLASS, BIDI_CLASS+NEXT_ENUM, GenerateData.HEADER_DERIVED,
                     "DerivedData/extracted/", "DerivedBidiClass");
                     

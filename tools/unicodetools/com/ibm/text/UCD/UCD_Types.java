@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Types.java,v $
-* $Date: 2003/03/12 16:01:26 $
-* $Revision: 1.18 $
+* $Date: 2003/03/15 02:36:48 $
+* $Revision: 1.19 $
 *
 *******************************************************************************
 */
@@ -15,7 +15,7 @@ package com.ibm.text.UCD;
 
 public interface UCD_Types {
     
-    public static final int dVersion = 15; // change to fix the generated file D version. If less than zero, no "d"
+    public static final int dVersion = 18; // change to fix the generated file D version. If less than zero, no "d"
     
     public static final String BASE_DIR = "C:\\DATA\\";
     public static final String UCD_DIR = BASE_DIR + "UCD\\";
@@ -34,7 +34,7 @@ public interface UCD_Types {
     	CJK_B_BASE = 0x20000,
     	CJK_B_LIMIT = 0x2A6DF+1;
     
-    static final byte BINARY_FORMAT = 7; // bumped if binary format of UCD changes
+    static final byte BINARY_FORMAT = 8; // bumped if binary format of UCD changes
     
     // Unicode Property Types
     static final byte 
@@ -240,12 +240,12 @@ public interface UCD_Types {
         LB_IS = 8, LB_PR = 9, LB_PO = 10, LB_NU = 11, LB_AL = 12, LB_ID = 13, LB_IN = 14, LB_HY = 15,
         LB_CM = 16, LB_BB = 17, LB_BA = 18, LB_SP = 19, LB_BK = 20, LB_CR = 21, LB_LF = 22, LB_CB = 23,
         LB_SA = 24, LB_AI = 25, LB_B2 = 26, LB_SG = 27, LB_ZW = 28,
-        LB_JL = 29,
-        LB_JV = 30,
-        LB_JT = 31,
-        LB_NL = 32,
-        LB_WJ = 33,
-        LIMIT_LINE_BREAK = 34,
+        LB_NL = 29,
+        LB_WJ = 30,
+        //LB_JL = 29,
+        //LB_JV = 30,
+        //LB_JT = 31,
+        LIMIT_LINE_BREAK = 31,
         LB_LIMIT = LIMIT_LINE_BREAK;
 
     // east asian width

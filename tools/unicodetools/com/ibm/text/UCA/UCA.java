@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA.java,v $ 
-* $Date: 2002/07/03 02:15:47 $ 
-* $Revision: 1.17 $
+* $Date: 2003/03/15 02:36:49 $ 
+* $Revision: 1.18 $
 *
 *******************************************************************************
 */
@@ -1109,7 +1109,7 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
         int itemInRange = startOfRange;
         int skip = 1;
         boolean doSamples = false;
-        UnicodeSetIterator usi = new UnicodeSetIterator();
+        AbbreviatedUnicodeSetIterator usi = new AbbreviatedUnicodeSetIterator();
         
         /**
          * use FIXED_CE as the limit
@@ -1120,8 +1120,8 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
             this.nfkd = new Normalizer(Normalizer.NFKD, unicodeVersion);
             this.skipDecomps = skipDecomps;
             currentRange = 0;
-            usi.reset(unspecified);
-            usi.setAbbreviated(true);
+            usi.reset(unspecified, true);
+            //usi.setAbbreviated(true);
             
             // FIX SAMPLES
             if (SAMPLE_RANGES[0][0] == 0) {
@@ -1204,8 +1204,8 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
                     }
                 }
                 unspecified = temp;
-                usi.reset(unspecified);
-                usi.setAbbreviated(true);
+                usi.reset(unspecified, true);
+                //usi.setAbbreviated(true);
                 if (DEBUG) System.out.println("Unspecified = " + unspecified.toPattern(true));
                 haveUnspecified = true;
              }

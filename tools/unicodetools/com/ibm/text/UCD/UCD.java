@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2003/03/12 16:01:26 $
-* $Revision: 1.21 $
+* $Date: 2003/03/15 02:36:48 $
+* $Revision: 1.22 $
 *
 *******************************************************************************
 */
@@ -123,7 +123,7 @@ public final class UCD implements UCD_Types {
      * Return XML version of the data associated with the code point.
      */
     public String toString(int codePoint) {
-        return get(codePoint, true).toString(FULL);
+        return get(codePoint, true).toString(this,FULL);
     }
 
     /**
@@ -1389,6 +1389,7 @@ to guarantee identifier closure.
             size = uDataFileCount = dataIn.readInt();
 
             boolean didJoiningHack = false;
+            System.out.println("Loading UCD " + foundVersion);
 
 
             // records
@@ -1396,7 +1397,7 @@ to guarantee identifier closure.
                 UData uData = new UData();
                 uData.readBytes(dataIn);
 
-                if (uData.codePoint == 0x0221) {
+                if (uData.codePoint == 0x5E) {
                     System.out.println("SPOT-CHECK: " + uData);
                 }
 
