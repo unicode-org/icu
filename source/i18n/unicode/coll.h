@@ -49,7 +49,6 @@
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 #include "unicode/normlzr.h"
-#include "cmemory.h"
 
 class CollationKey;
 
@@ -602,12 +601,5 @@ Collator::getDecomposition() const
   return decmp;
 }
 
-inline void 
-Collator::getVersion(UVersionInfo versionInfo) const 
-{
-    if(versionInfo!=NULL) {
-        uprv_memcpy(versionInfo, fVersion, U_MAX_VERSION_LENGTH);
-    }
-}
 
 #endif
