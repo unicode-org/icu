@@ -158,7 +158,8 @@ NumberFormat::parseObject(const UnicodeString& source,
 UnicodeString&
 NumberFormat::format(double number, UnicodeString& toAppendTo) const
 {
-    return format(number, toAppendTo, FieldPosition(0));
+    FieldPosition pos(0);
+    return format(number, toAppendTo, pos);
 }
  
 // -------------------------------------
@@ -167,7 +168,8 @@ NumberFormat::format(double number, UnicodeString& toAppendTo) const
 UnicodeString&
 NumberFormat::format(int32_t number, UnicodeString& toAppendTo) const
 {
-    return format(number, toAppendTo, FieldPosition(0));
+    FieldPosition pos(0);
+    return format(number, toAppendTo, pos);
 }
  
 // -------------------------------------
