@@ -77,8 +77,8 @@
  *
  */
 
-#define DATA_NAME "cnvalias"
-#define DATA_TYPE "dat"
+static const char DATA_NAME[] = "cnvalias";
+static const char DATA_TYPE[] = "dat";
 
 static UDataMemory *aliasData=NULL;
 static const uint16_t *aliasTable=NULL;

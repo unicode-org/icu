@@ -206,8 +206,8 @@ static const uint32_t staticProps32Table[]={
  * loaded uprops.dat -
  * for a description of the file format, see icu/source/tools/genprops/store.c
  */
-#define DATA_NAME "uprops"
-#define DATA_TYPE "dat"
+static const char DATA_NAME[] = "uprops";
+static const char DATA_TYPE[] = "dat";
 
 static UDataMemory *propsData=NULL;
 
