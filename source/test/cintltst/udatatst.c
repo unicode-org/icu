@@ -1445,7 +1445,7 @@ static const struct {
     const struct {
         const char *const name; 
         const void *const data;
-    } toc[2];
+    } toc[3];
 } gOffsetTOCAppData_dat = {
     32,          /* headerSize */
     0xda,        /* magic1,  (see struct MappedData in udata.c)  */
@@ -1463,9 +1463,10 @@ static const struct {
            {0, 0, 0, 0}    /* dataVersion   */
     },
     {0,0,0,0,0,0,0,0},  /* Padding[8]   */ 
-    2,                  /* count        */
+    3,                  /* count        */
     0,                  /* Reserved     */
     {                   /*  TOC structure */
+        { "OffsetTOCAppData/a/gOffsetTOCAppDataItem1", &gOffsetTOCAppDataItem1 },
         { "OffsetTOCAppData/gOffsetTOCAppDataItem1", &gOffsetTOCAppDataItem1 },
         { "OffsetTOCAppData/gOffsetTOCGarbage", &gOffsetTOCGarbage }
     }
@@ -1494,6 +1495,18 @@ static void PointerTableOfContents() {
     }
     if (udata_getMemory(dataItem) != NULL) {
         log_verbose("FAIL: udata_getMemory(dataItem) passed\n");
+    }
+    else {
+        log_err("FAIL: udata_getMemory returned NULL\n", u_errorName(status));
+    }
+    udata_close(dataItem);
+
+    dataItem = udata_open("OffsetTOCAppData-a", "", "gOffsetTOCAppDataItem1", &status);
+    if (U_FAILURE(status)) {
+        log_err("FAIL: gOffsetTOCAppDataItem1 in tree \"a\" could not be opened. status = %s\n", u_errorName(status));
+    }
+    if (udata_getMemory(dataItem) != NULL) {
+        log_verbose("FAIL: udata_getMemory(dataItem) in tree \"a\" passed\n");
     }
     else {
         log_err("FAIL: udata_getMemory returned NULL\n", u_errorName(status));
