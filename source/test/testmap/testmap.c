@@ -18,9 +18,9 @@
 #include <string.h>
 #include "unicode/udata.h"
 #include "unicode/ucnv.h"
-#include "unicode/platform.h"
+//#include "unicode/platform.h"
 
-extern const char U_ICUDATA_ENTRY_POINT [];
+extern const  char U_IMPORT U_ICUDATA_ENTRY_POINT [];
 
 int
 main(int argc,
@@ -66,7 +66,7 @@ main(int argc,
   status = U_ZERO_ERROR;
   udata_setCommonData(U_ICUDATA_ENTRY_POINT, &status);
   printf("setCommonData(%p) -> %s [should fail]\n", U_ICUDATA_ENTRY_POINT, u_errorName(status));
-  if ( status != U_USING_DEFAULT_ERROR )
+  if ( status != U_USING_DEFAULT_WARNING )
   {
     printf("\n*** FAIL: should have returned U_USING_DEFAULT_ERROR\n");
     return 1;
