@@ -833,7 +833,7 @@ scsu_compress(UnicodeCompressor *comp,
   *source = unicharBuffer;
 
   if(unicharBuffer < sourceLimit)
-    *status = U_INDEX_OUTOFBOUNDS_ERROR;
+    *status = U_BUFFER_OVERFLOW_ERROR;
 }
 
 void 
@@ -1226,7 +1226,7 @@ scsu_decompress(UnicodeCompressor *comp,
   *source = byteBuffer;
 
   if(byteBuffer < sourceLimit)
-    *status = U_INDEX_OUTOFBOUNDS_ERROR;
+    *status = U_BUFFER_OVERFLOW_ERROR;
 }
 
 /** Reset the compressor to its initial state. */

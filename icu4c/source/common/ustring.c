@@ -282,10 +282,10 @@ UChar* u_uastrncpy(UChar *ucs1,
                    &err);
     ucnv_reset(cnv); /* be good citizens */
     releaseDefaultConverter(cnv);
-    if(U_FAILURE(err) && (err != U_INDEX_OUTOFBOUNDS_ERROR) ) {
+    if(U_FAILURE(err) && (err != U_BUFFER_OVERFLOW_ERROR) ) {
       *ucs1 = 0; /* failure */
     }
-    if(target < (ucs1+n)) { /* Indexoutofbounds isn't an err, just means no termination will happen. */
+    if(target < (ucs1+n)) { /* U_BUFFER_OVERFLOW_ERROR isn't an err, just means no termination will happen. */
       *target = 0;  /* terminate */
     }
   } else {

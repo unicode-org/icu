@@ -141,7 +141,7 @@ U_CFUNC void T_UConverter_toUnicode_SBCS (UConverterToUnicodeArgs * args,
         }
       else
         {
-          *err = U_INDEX_OUTOFBOUNDS_ERROR;
+          *err = U_BUFFER_OVERFLOW_ERROR;
           break;
         }
     }
@@ -266,7 +266,7 @@ U_CFUNC void T_UConverter_fromUnicode_SBCS (UConverterFromUnicodeArgs * args,
         }
       else
         {
-          *err = U_INDEX_OUTOFBOUNDS_ERROR;
+          *err = U_BUFFER_OVERFLOW_ERROR;
           break;
         }
 
@@ -333,7 +333,7 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_SBCS(UConverterToUnicodeArgs* args,
                                     err);
 
       /*makes the internal caching transparent to the user*/
-      if (*err == U_INDEX_OUTOFBOUNDS_ERROR) *err = U_ZERO_ERROR;
+      if (*err == U_BUFFER_OVERFLOW_ERROR) *err = U_ZERO_ERROR;
       
       return myUChar;
     }
@@ -504,7 +504,7 @@ U_CFUNC void   T_UConverter_toUnicode_DBCS (UConverterToUnicodeArgs * args,
         }
       else
         {
-          *err = U_INDEX_OUTOFBOUNDS_ERROR;
+          *err = U_BUFFER_OVERFLOW_ERROR;
           break;
         }
     }
@@ -569,7 +569,7 @@ U_CFUNC void   T_UConverter_fromUnicode_DBCS (UConverterFromUnicodeArgs * args,
                 {
                   args->converter->charErrorBuffer[0] = (char) targetUniChar;
                   args->converter->charErrorBufferLength = 1;
-                  *err = U_INDEX_OUTOFBOUNDS_ERROR;
+                  *err = U_BUFFER_OVERFLOW_ERROR;
                 }
             }
           else if ((args->converter->useFallback == TRUE) &&
@@ -589,7 +589,7 @@ U_CFUNC void   T_UConverter_fromUnicode_DBCS (UConverterFromUnicodeArgs * args,
                       {
                         args->converter->charErrorBuffer[0] = (char) targetUniChar;
                         args->converter->charErrorBufferLength = 1;
-                        *err = U_INDEX_OUTOFBOUNDS_ERROR;
+                        *err = U_BUFFER_OVERFLOW_ERROR;
                       }
                 }
           }
@@ -662,7 +662,7 @@ U_CFUNC void   T_UConverter_fromUnicode_DBCS (UConverterFromUnicodeArgs * args,
         }
       else
         {
-          *err = U_INDEX_OUTOFBOUNDS_ERROR;
+          *err = U_BUFFER_OVERFLOW_ERROR;
           break;
         }
     }
@@ -744,7 +744,7 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_DBCS(UConverterToUnicodeArgs* args,
                                     reason,
                                     err);
       /*makes the internal caching transparent to the user*/
-      if (*err == U_INDEX_OUTOFBOUNDS_ERROR) *err = U_ZERO_ERROR;
+      if (*err == U_BUFFER_OVERFLOW_ERROR) *err = U_ZERO_ERROR;
 
       return myUChar;
     }
