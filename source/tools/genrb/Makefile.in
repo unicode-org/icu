@@ -75,10 +75,10 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 $(TARGET) : $(OBJECTS)
-	$(LINK.cc) -o $@ $^ $(LIBS) 
+	$(LINK.c) -o $@ $^ $(LIBS) 
 
 $(DERB) : $(DERB_OBJ)
-	$(LINK.cc) -o $@ $^ $(LIBS) 
+	$(LINK.c) -o $@ $^ $(LIBS) 
 
 
 # the 'mv' will always fail if you are building in the source dir
