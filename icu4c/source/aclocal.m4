@@ -1,4 +1,6 @@
 dnl aclocal.m4 for ICU
+dnl Copyright (c) 1999-2000, International Business Machines Corporation and
+dnl others. All Rights Reserved.
 dnl Stephen F. Booth
 
 dnl @TOP@

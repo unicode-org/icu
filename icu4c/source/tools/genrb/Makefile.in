@@ -1,5 +1,6 @@
 ## Makefile.in for ICU - tools/genrb
-## Stephen F. Booth
+## Copyright (c) 1999, International Business Machines Corporation and
+## others. All Rights Reserved.
 
 ## Shell to use
 SHELL = @SHELL@

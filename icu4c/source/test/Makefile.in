@@ -1,5 +1,7 @@
 ## Makefile.in for ICU tests
-## Stephen F. Booth
+## Copyright (c) 1999, International Business Machines Corporation and
+## others. All Rights Reserved.
+
 
 ## Shell to use
 SHELL = @SHELL@
