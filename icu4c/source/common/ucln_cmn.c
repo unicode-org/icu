@@ -102,7 +102,12 @@ u_cleanup(void)
 
 U_CAPI void U_EXPORT2
 u_init(UErrorCode *status) {
-    /* Make sure the global mutex is initialized. */
+    /* Make sure the global mutexes are initialized. */
+    /*
+     * NOTE:  This section of code replicates functionality from GlobalMutexInitialize()
+     *        in the file mutex.cpp.  Any changes must be made in both places.
+     *        TODO:  combine them.
+     */
     umtx_init(NULL);
     ucnv_init(status);
     ures_init(status);
