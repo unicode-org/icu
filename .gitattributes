@@ -88,9 +88,6 @@ icu4j/src/com/ibm/icu/dev/data/unicode/Draft-TestSuite.txt -text
 icu4j/src/com/ibm/icu/impl/data/thai_dict -text
 icu4j/src/com/ibm/icu/impl/data/unames.dat -text
 icu4j/src/com/ibm/icu/impl/data/uprops.dat -text
-icu4j/src/com/ibm/text/resources/Transliterator_Han_Pinyin.utf8.txt -text
-icu4j/src/com/ibm/text/resources/Transliterator_Kanji_English.utf8.txt -text
-icu4j/src/com/ibm/text/resources/Transliterator_Kanji_OnRomaji.utf8.txt -text
 icu4j/src/com/ibm/text/resources/thai_dict -text
 icu4j/src/com/ibm/text/resources/unames.dat -text
 icu4j/src/com/ibm/text/resources/uprops.dat -text
