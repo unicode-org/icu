@@ -2981,25 +2981,24 @@ UnicodeSet& UnicodeSet::applyPropertyPattern(const UnicodeString& pattern,
 //----------------------------------------------------------------
 
 const UnicodeSet* UnicodeSet::getInclusions(UErrorCode &status) {
-    if (INCLUSIONS == NULL) {
-        UnicodeSet *incl = new UnicodeSet();
-        if(incl == NULL) {
+    umtx_lock(NULL);
+    UBool f = (INCLUSIONS == NULL);
+    umtx_unlock(NULL);
+    if (f) {
+        UnicodeSet* incl = new UnicodeSet();
+        if (incl != NULL) {
+            uprv_getInclusions((USet*)incl, &status);
+            if (U_SUCCESS(status)) {
+                umtx_lock(NULL);
+                if (INCLUSIONS == NULL) {
+                    INCLUSIONS = incl;
+                    incl = NULL;        
+                } 
+                umtx_unlock(NULL);
+            }
+            delete incl;
+        } else {
             status = U_MEMORY_ALLOCATION_ERROR;
-            return NULL;
-        }
-        uprv_getInclusions((USet *)incl, &status);
-        if(U_FAILURE(status)) {
-            delete incl;
-            return NULL;
-        }
-        umtx_lock(NULL);
-        if (INCLUSIONS == NULL) {
-            INCLUSIONS = incl;
-            incl = NULL;
-        }
-        umtx_unlock(NULL);
-        if(incl != NULL) {
-            delete incl;
         }
     }
     return INCLUSIONS;
@@ -3493,30 +3492,34 @@ void UnicodeSet::caseCloseOne(const CaseEquivClass& c) {
  * CaseEquivClass containing this string, or NULL if none.
  */
 const CaseEquivClass* UnicodeSet::getCaseMapOf(const UnicodeString& folded) {
+    umtx_lock(NULL);
+    UBool f = (CASE_EQUIV_HASH == NULL);
+    umtx_unlock(NULL);
 
-    if (CASE_EQUIV_HASH == NULL) {
+    if (f) {
         // Create the Hashtable, which maps UnicodeStrings to index
         // values into CASE_NONPAIRS.
         UErrorCode ec = U_ZERO_ERROR;
         Hashtable* hash = new Hashtable();
-        int32_t i;
-        for (i=0; i<(int32_t)CASE_NONPAIRS_LENGTH; ++i) {
-            const CaseEquivClass* c = &CASE_NONPAIRS[i];
-            const UChar* p;
-            for (c->getStrings(p); *p; c->nextString(p)) {
-                hash->put(UnicodeString(p), (void*) c, ec);
+        if (hash != NULL) {
+            int32_t i;
+            for (i=0; i<(int32_t)CASE_NONPAIRS_LENGTH; ++i) {
+                const CaseEquivClass* c = &CASE_NONPAIRS[i];
+                const UChar* p;
+                for (c->getStrings(p); *p; c->nextString(p)) {
+                    hash->put(UnicodeString(p), (void*) c, ec);
+                }
             }
-        }
-        if (U_SUCCESS(ec)) {
-            umtx_lock(NULL);
-            if (CASE_EQUIV_HASH == NULL) {
-                CASE_EQUIV_HASH = hash;
-                hash = NULL;
+            if (U_SUCCESS(ec)) {
+                umtx_lock(NULL);
+                if (CASE_EQUIV_HASH == NULL) {
+                    CASE_EQUIV_HASH = hash;
+                    hash = NULL;
+                }
+                umtx_unlock(NULL);
             }
-            umtx_unlock(NULL);
+            delete hash;
         }
-
-        delete hash;
     }
 
     return (CASE_EQUIV_HASH != NULL) ?
@@ -3528,8 +3531,11 @@ const CaseEquivClass* UnicodeSet::getCaseMapOf(const UnicodeString& folded) {
  * or NULL if none.
  */
 const CaseEquivClass* UnicodeSet::getCaseMapOf(UChar folded) {
+    umtx_lock(NULL);
+    UBool f = (CASE_EQUIV_CBA == NULL);
+    umtx_unlock(NULL);
 
-    if (CASE_EQUIV_CBA == NULL) {
+    if (f) {
         // Create the CompactByteArray, which maps single code units
         // to index values into CASE_NONPAIRS.
         CompactByteArray* cba = ucmp8_open(-1);
