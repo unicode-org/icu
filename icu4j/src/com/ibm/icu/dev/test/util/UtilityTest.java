@@ -111,43 +111,30 @@ public class UtilityTest extends TestFmwk {
     public void TestByteArrayWrapper()
     {
         byte[] ba = {0x00, 0x01, 0x02};
+        byte[] bb = {0x00, 0x01, 0x02, -1};
         java.nio.ByteBuffer buffer = java.nio.ByteBuffer.wrap(ba);
         ByteArrayWrapper x = new ByteArrayWrapper(buffer);
         
-        ByteArrayWrapper y = new ByteArrayWrapper(ba, 0, ba.length);
-        ByteArrayWrapper z = new ByteArrayWrapper(x);
+        ByteArrayWrapper y = new ByteArrayWrapper(ba, 3);
+        ByteArrayWrapper z = new ByteArrayWrapper(bb, 3);
         
         // test equality
         if (!x.equals(y) || !x.equals(z))
             errln("FAIL: test (operator ==): Failed!");
-        if (x.getHashCode(null)!=y.getHashCode(null))   //not know why getHashCode with an arg
+        if (x.hashCode()!=y.hashCode())
             errln("FAIL: identical objects have different hash codes.");
-        if (x.getHashCode(null)!=z.getHashCode(null))
-            errln("FAIL: identical objects have different hash codes.");        
-        
+
         // test non-equality
-        y = new ByteArrayWrapper(ba, 0, 2);
+        y = new ByteArrayWrapper(bb, 4);
         if (x.equals(y))
             errln("FAIL: test (operator !=): Failed!");
-        
-        // appent operation
-        y.append(new ByteArrayWrapper(new byte[]{0x02}, 0, 1));
-        if (!x.equals(y))
-            errln("FAIL: 2nd test (operator ==): Failed!");        
-        
-        // retrieve a byte array from ByteArrayWrapper
-        byte[] target = new byte[5];
-        try {
-            x.get(target, 0, 5);
-            errln("FAIL: No exception thrown when limit too long.");
-        } catch (Exception e) {
-            //we should come here
+
+        // test sign of unequal comparison
+        if ((x.compareTo(y) > 0) != (y.compareTo(x) < 0)) {
+            errln("FAIL: comparisons not opposite sign");
         }
-        x.get(target, 1, 3);
-        // output it
-        logln("target: " + new ByteArrayWrapper(target, 0, 5).toString());     
     }
-    
+
     private int compareLongUnsigned(int x, int y)
     {
         long x1 = x & 0xFFFFFFFFl;

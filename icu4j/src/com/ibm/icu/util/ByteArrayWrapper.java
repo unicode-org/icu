@@ -34,6 +34,7 @@ public class ByteArrayWrapper implements Comparable
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public byte[] bytes;
+
     /**
      * Size of the internal byte array used. 
      * Different from bytes.length, size will be &lt;= bytes.length. 
@@ -51,12 +52,31 @@ public class ByteArrayWrapper implements Comparable
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public ByteArrayWrapper() {
-	// leave bytes null, don't allocate twice
+        // leave bytes null, don't allocate twice
     }
 
     /**
-     * Create from ByteBuffer
-     * @param byteBuffer
+     * Construct a new ByteArrayWrapper from a byte array and size
+     * @param bytesToAdopt the byte array to adopt
+     * @param size the length of valid data in the byte array
+     * @throws IndexOutOfBoundsException if bytesToAdopt == null and size != 0, or
+     * size < 0, or size > bytesToAdopt.length.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public ByteArrayWrapper(byte[] bytesToAdopt, int size) {
+        if ((bytesToAdopt == null && size != 0) || size < 0 || size > bytesToAdopt.length) {
+            throw new IndexOutOfBoundsException("illegal size: " + size);
+        }
+        this.bytes = bytesToAdopt;
+        this.size = size;
+    }
+
+    /**
+     * Construct a new ByteArrayWrapper from the contents of a ByteBuffer.
+     * @param source the ByteBuffer from which to get the data.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public ByteArrayWrapper(ByteBuffer source) {
         size = source.limit();
@@ -67,34 +87,35 @@ public class ByteArrayWrapper implements Comparable
     /**
      * Create from ByteBuffer
      * @param byteBuffer
-     */
     public ByteArrayWrapper(ByteArrayWrapper source) {
         size = source.size;
         bytes = new byte[size];
         copyBytes(source.bytes, 0, bytes, 0, size);
     }
+     */
 
     /**
      * create from byte buffer
      * @param src
      * @param start
      * @param limit
-     */
     public ByteArrayWrapper(byte[] src, int start, int limit) {
         size = limit - start;
         bytes = new byte[size];
         copyBytes(src, start, bytes, 0, size);
     }
+     */
 
     // public methods ----------------------------------------------------
 
-	/**
+    /**
      * Ensure that the internal byte array is at least of length capacity.     
      * If the byte array is null or its length is less than capacity, a new 
      * byte array of length capacity will be allocated.  
      * The contents of the array (between 0 and size) remain unchanged. 
      * @param capacity minimum length of internal byte array.
-     * @draft ICU 2.8 
+     * @param return this ByteArrayWrapper
+     * @draft ICU 3.2
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public ByteArrayWrapper ensureCapacity(int capacity) 
@@ -115,7 +136,8 @@ public class ByteArrayWrapper implements Comparable
      * @param src source byte array to copy from
      * @param start start offset of src to copy from
      * @param limit end + 1 offset of src to copy from
-     * @draft ICU 2.8
+     * @return this ByteArrayWrapper
+     * @draft ICU 3.2
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public final ByteArrayWrapper set(byte[] src, int start, int limit) 
@@ -125,14 +147,16 @@ public class ByteArrayWrapper implements Comparable
         return this;
     }
     
+    /*
     public final ByteArrayWrapper get(byte[] target, int start, int limit) 
     {
-    	int len = limit - start;
+        int len = limit - start;
         if (len > size) throw new IllegalArgumentException("limit too long");
         copyBytes(bytes, 0, target, start, len);
         return this;
     }
-    
+    */
+
     /**
      * Appends the internal byte array from offset size with the 
      * contents of src from offset start to limit. This increases the size of
@@ -140,7 +164,8 @@ public class ByteArrayWrapper implements Comparable
      * @param src source byte array to copy from
      * @param start start offset of src to copy from
      * @param limit end + 1 offset of src to copy from
-     * @draft ICU 2.8
+     * @return this ByteArrayWrapper
+     * @draft ICU 3.2
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public final ByteArrayWrapper append(byte[] src, int start, int limit) 
@@ -152,11 +177,12 @@ public class ByteArrayWrapper implements Comparable
         return this;
     }
 
+    /*
     public final ByteArrayWrapper append(ByteArrayWrapper other) 
     {
         return append(other.bytes, 0, other.size);
     }
-
+    */
 
     /**
      * Releases the internal byte array to the caller, resets the internal
@@ -177,48 +203,74 @@ public class ByteArrayWrapper implements Comparable
     
     /**
      * Returns string value for debugging
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public String toString() {
-    	StringBuffer result = new StringBuffer();
+        StringBuffer result = new StringBuffer();
         for (int i = 0; i < size; ++i) {
             if (i != 0) result.append(" ");
             result.append(Utility.hex(bytes[i]&0xFF,2));
         }
         return result.toString();
     }
-    
+
+    /**
+     * Return true if the bytes in each wrapper are equal.
+     * @param other the object to compare to.
+     * @return true if the two objects are equal.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
     public boolean equals(Object other) {
         if (this == other) return true;
         if (other == null) return false;
-        ByteArrayWrapper that = (ByteArrayWrapper) other;
-        if (size != that.size) return false;
-        for (int i = 0; i < size; ++i) {
-            if (bytes[i] != that.bytes[i]) return false;
+        try {
+            ByteArrayWrapper that = (ByteArrayWrapper)other;
+            if (size != that.size) return false;
+            for (int i = 0; i < size; ++i) {
+                if (bytes[i] != that.bytes[i]) return false;
+            }
+            return true;
         }
-        return true;
+        catch (ClassCastException e) {
+        }
+        return false;
     }
 
-    public int getHashCode(Object object) {
+    /**
+     * Return the hashcode.
+     * @return the hashcode.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public int hashCode() {
         int result = bytes.length;
         for (int i = 0; i < size; ++i) {
             result = 37*result + bytes[i];
         }
         return result;
     }
-        
+
+    /**
+     * Compare this object to another ByteArrayWrapper, which must not be null.
+     * @param other the object to compare to.
+     * @return a value <0, 0, or >0 as this compares less than, equal to, or
+     * greater than other.
+     * @throws ClassCastException if the other object is not a ByteArrayWrapper
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
     public int compareTo(Object other) {
         if (this == other) return 0;
-        if (other == null) return 1;
         ByteArrayWrapper that = (ByteArrayWrapper) other;
         int minSize = size < that.size ? size : that.size;
         for (int i = 0; i < minSize; ++i) {
-            if (bytes[i] == that.bytes[i]) continue;
-            if ((bytes[i] & 0xFF) < (that.bytes[i] & 0xFF)) return -1;
-            return 1;
+            if (bytes[i] != that.bytes[i]) {
+                return (bytes[i] & 0xFF) - (that.bytes[i] & 0xFF);
+            }
         }
-        if (size == that.size) return 0;
-        if (size < that.size) return -1;
-        return 1;
+        return size - that.size;
     }
     
     // private methods -----------------------------------------------------
