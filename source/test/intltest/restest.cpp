@@ -144,7 +144,7 @@ randul()
 double
 randd()
 {
-    return ((double)randul()) / UINT32_MAX;
+    return (double)(randul() / UINT32_MAX);
 }
 
 /**
