@@ -48,12 +48,49 @@
 /*===========================================================================*/
 
 #if defined(WIN32) || defined(_WIN32)
-#include "pwin32.h"
+#   include "pwin32.h"
 #elif defined(__OS2__)
-#include "pos2.h"
+#   include "pos2.h"
+#elif defined(__OS400__)
+#   include "pos400.h"
 #else
-#include "platform.h"
+#   include "platform.h"
 #endif
+
+/* XP_CPLUSPLUS is a cross-platform symbol which should be defined when 
+   using C++.  It should not be defined when compiling under C. */
+#ifdef __cplusplus
+#   ifndef XP_CPLUSPLUS
+#       define XP_CPLUSPLUS
+#   endif
+#else
+#   undef XP_CPLUSPLUS
+#endif
+
+/*===========================================================================*/
+/* Boolean data type                                                         */
+/*===========================================================================*/
+
+#if ! HAVE_BOOL_T
+typedef int8_t bool_t;
+#endif
+
+#ifndef TRUE
+#   define TRUE  1
+#endif
+#ifndef FALSE
+#   define FALSE 0
+#endif
+
+/*===========================================================================*/
+/* Unicode string offset                                                     */
+/*===========================================================================*/
+typedef int32_t UTextOffset;
+
+/*===========================================================================*/
+/* Unicode character                                                         */
+/*===========================================================================*/
+typedef uint16_t UChar;
 
 /*===========================================================================*/
 /* ICU version number                                                        */
@@ -78,30 +115,15 @@
 /*===========================================================================*/
 /* For C wrappers, we use the symbol CAPI.                                   */
 /* This works properly if the includer is C or C++.                          */
-/* ADDED MVS SPECIFICS - JJD   Including: FUNC_EXPORT                        */
-/*                                 Since _Export MUST come after return type */
+/* Functions are declared   CAPI return-type U_EXPORT2 function-name() ...   */
 /*===========================================================================*/
 
 #ifdef XP_CPLUSPLUS
-# define C_FUNC extern "C"
-# ifdef OS390
-#  define CAPI C_FUNC
-#  define U_EXPORT2 U_EXPORT
-# else
-#  define CAPI C_FUNC U_EXPORT
-#  define U_EXPORT2
-# endif
+#   define C_FUNC extern "C"
 #else
-#define C_FUNC
-#if defined(OS390)
-# define CAPI
-# define U_EXPORT2 U_EXPORT
-#else
-# define CAPI U_EXPORT
-# define U_EXPORT2
+#   define C_FUNC
 #endif
-#endif
-
+#define CAPI C_FUNC U_EXPORT
 
 
 /* Define NULL pointer value  if it isn't already defined */
