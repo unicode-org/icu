@@ -694,17 +694,12 @@ private:
 
 inline UBool Collator::operator==(const Collator& other) const
 {
-  UBool result;
-  if (this == &other) 
-    result = TRUE;
-  return result;
+  return (UBool)(this == &other);
 }
 
 inline UBool Collator::operator!=(const Collator& other) const
 {
-  UBool result;
-  result = !(*this == other);
-  return result;
+  return (UBool)!(*this == other);
 }
 
 /*
