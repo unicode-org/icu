@@ -134,7 +134,7 @@ static UDataInfo dataInfo={
 
     /* dataFormat="BiDi" */
     { UBIDI_FMT_0, UBIDI_FMT_1, UBIDI_FMT_2, UBIDI_FMT_3 },
-    { 1, 1, UTRIE_SHIFT, UTRIE_INDEX_SHIFT },   /* formatVersion */
+    { 1, 0, UTRIE_SHIFT, UTRIE_INDEX_SHIFT },   /* formatVersion */
     { 4, 0, 1, 0 }                              /* dataVersion */
 };
 
