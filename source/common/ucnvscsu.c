@@ -381,15 +381,15 @@ singleByteMode:
                     goto fastSingle;
                 } else if(SC0<=b) {
                     if(b<=SC7) {
-                        dynamicWindow=b-SC0;
+                        dynamicWindow=(int8_t)(b-SC0);
                         sourceIndex=nextSourceIndex;
                         goto fastSingle;
                     } else /* if(SD0<=b && b<=SD7) */ {
-                        dynamicWindow=b-SD0;
+                        dynamicWindow=(int8_t)(b-SD0);
                         state=defineOne;
                     }
                 } else if(/* SQ0<=b && */ b<=SQ7) {
-                    quoteWindow=b-SQ0;
+                    quoteWindow=(int8_t)(b-SQ0);
                     state=quoteOne;
                 } else if(b==SDX) {
                     state=definePairOne;
@@ -411,7 +411,7 @@ singleByteMode:
                 state=quotePairTwo;
                 break;
             case quotePairTwo:
-                *target++=((UChar)byteOne<<8)|b;
+                *target++=(UChar)((byteOne<<8)|b);
                 if(offsets!=NULL) {
                     *offsets++=sourceIndex;
                 }
@@ -457,8 +457,8 @@ singleByteMode:
                 state=readCommand;
                 goto fastSingle;
             case definePairOne:
-                dynamicWindow=(b>>5)&7;
-                byteOne=b&0x1f;
+                dynamicWindow=(int8_t)((b>>5)&7);
+                byteOne=(uint8_t)(b&0x1f);
                 state=definePairTwo;
                 break;
             case definePairTwo:
@@ -469,7 +469,7 @@ singleByteMode:
             case defineOne:
                 if(b==0) {
                     /* callback(illegal): Reserved window offset value 0 */
-                    cnv->invalidCharBuffer[0]=SD0+dynamicWindow;
+                    cnv->invalidCharBuffer[0]=(char)(SD0+dynamicWindow);
                     cnv->invalidCharBuffer[1]=b;
                     cnv->invalidCharLength=2;
                     goto callback;
@@ -481,7 +481,7 @@ singleByteMode:
                     scsu->toUDynamicOffsets[dynamicWindow]=fixedOffsets[b-fixedThreshold];
                 } else {
                     /* callback(illegal): Reserved window offset value 0xa8..0xf8 */
-                    cnv->invalidCharBuffer[0]=SD0+dynamicWindow;
+                    cnv->invalidCharBuffer[0]=(char)(SD0+dynamicWindow);
                     cnv->invalidCharBuffer[1]=b;
                     cnv->invalidCharLength=2;
                     goto callback;
@@ -496,7 +496,7 @@ singleByteMode:
         if(state==readCommand) {
 fastUnicode:
             while(source+1<sourceLimit && target<targetLimit && (uint8_t)((b=*source)-UC0)>(Urs-UC0)) {
-                *target++=((UChar)b<<8)|source[1];
+                *target++=(UChar)((b<<8)|source[1]);
                 if(offsets!=NULL) {
                     *offsets++=sourceIndex;
                 }
@@ -522,12 +522,12 @@ fastUnicode:
                     byteOne=b;
                     state=quotePairTwo;
                 } else if(/* UC0<=b && */ b<=UC7) {
-                    dynamicWindow=b-UC0;
+                    dynamicWindow=(int8_t)(b-UC0);
                     sourceIndex=nextSourceIndex;
                     isSingleByteMode=TRUE;
                     goto fastSingle;
                 } else if(/* UD0<=b && */ b<=UD7) {
-                    dynamicWindow=b-UD0;
+                    dynamicWindow=(int8_t)(b-UD0);
                     isSingleByteMode=TRUE;
                     state=defineOne;
                     goto singleByteMode;
@@ -549,7 +549,7 @@ fastUnicode:
                 state=quotePairTwo;
                 break;
             case quotePairTwo:
-                *target++=((UChar)byteOne<<8)|b;
+                *target++=(UChar)((byteOne<<8)|b);
                 if(offsets!=NULL) {
                     *offsets++=sourceIndex;
                 }
@@ -663,7 +663,7 @@ getWindow(const uint32_t offsets[8], uint32_t c) {
     int i;
     for(i=0; i<8; ++i) {
         if((uint32_t)(c-offsets[i])<=0x7f) {
-            return i;
+            return (int8_t)(i);
         }
     }
     return -1;
@@ -672,9 +672,9 @@ getWindow(const uint32_t offsets[8], uint32_t c) {
 /* is the character in the dynamic window starting at the offset, or in the direct-encoded range? */
 static UBool
 isInOffsetWindowOrDirect(uint32_t offset, uint32_t c) {
-    return c<=offset+0x7f &&
+    return (UBool)(c<=offset+0x7f &&
           (c>=offset || (c<=0x7f &&
-                        (c>=0x20 || (1UL<<c)&0x2601)));
+                        (c>=0x20 || (1UL<<c)&0x2601))));
                                 /* binary 0010 0110 0000 0001,
                                    check for b==0xd || b==0xa || b==9 || b==0 */
 }
@@ -874,7 +874,7 @@ loop:
                 }
             } else if((delta=c-currentOffset)<=0x7f) {
                 /* use the current dynamic window */
-                *target++=(uint8_t)delta|0x80;
+                *target++=(uint8_t)(delta|0x80);
                 if(offsets!=NULL) {
                     *offsets++=sourceIndex;
                 }
@@ -910,7 +910,7 @@ getTrailSingle:
                 /* compress supplementary character U+10000..U+10ffff */
                 if((delta=c-currentOffset)<=0x7f) {
                     /* use the current dynamic window */
-                    *target++=(uint8_t)delta|0x80;
+                    *target++=(uint8_t)(delta|0x80);
                     if(offsets!=NULL) {
                         *offsets++=sourceIndex;
                     }
@@ -1347,7 +1347,7 @@ U_CFUNC void
 _SCSUWriteSub(UConverterFromUnicodeArgs *pArgs,
                int32_t offsetIndex,
                UErrorCode *pErrorCode) {
-    static const char squ_fffd[]={ (char)SQU, (char)0xff, (char)0xfd };
+    static const char squ_fffd[]={ SQU, 0xffu, 0xfdu };
 
     /*
      * The substitution character is U+fffd={ ff, fd }.
