@@ -637,7 +637,7 @@ UnicodeStringTest::TestCaseConversion()
 
         /* lowercase with root locale */
         s=UnicodeString(FALSE, beforeLower, (int32_t)(sizeof(beforeLower)/U_SIZEOF_UCHAR));
-        s.toLower();
+        s.toLower("");
         if( s.length()!=(sizeof(lowerRoot)/U_SIZEOF_UCHAR) ||
             s!=UnicodeString(FALSE, lowerRoot, s.length())
         ) {
@@ -673,11 +673,86 @@ UnicodeStringTest::TestCaseConversion()
 
         /* uppercase a short string with root locale */
         s=UnicodeString(FALSE, beforeMiniUpper, (int32_t)(sizeof(beforeMiniUpper)/U_SIZEOF_UCHAR));
-        s.setCharAt(0, beforeMiniUpper[0]).toUpper();
+        s.setCharAt(0, beforeMiniUpper[0]).toUpper("");
         if( s.length()!=(sizeof(miniUpper)/U_SIZEOF_UCHAR) ||
             s!=UnicodeString(FALSE, miniUpper, s.length())
         ) {
             errln("error in toUpper(root locale)=\"" + s + "\" expected \"" + UnicodeString(FALSE, miniUpper, (int32_t)(sizeof(miniUpper)/U_SIZEOF_UCHAR)) + "\"");
+        }
+    }
+
+    // Unicode 3.1.1 SpecialCasing tests
+    {
+        UnicodeString t;
+
+        // sigmas preceded and/or followed by cased letters
+        UnicodeString
+            sigmas=UnicodeString("i\\u0307\\u03a3\\u0308j \\u0307\\u03a3\\u0308j i\\u00ad\\u03a3\\u0308 \\u0307\\u03a3\\u0308 ", "").unescape(),
+            sigmasLower=UnicodeString("i\\u0307\\u03c3\\u0308j \\u0307\\u03c3\\u0308j i\\u00ad\\u03c2\\u0308 \\u0307\\u03c3\\u0308 ", "").unescape(),
+            sigmasUpper=UnicodeString("I\\u0307\\u03a3\\u0308J \\u0307\\u03a3\\u0308J I\\u00ad\\u03a3\\u0308 \\u0307\\u03a3\\u0308 ", "").unescape();
+
+        (t=sigmas).toLower();
+        if(t!=sigmasLower) {
+            errln("error in sigmas.toLower()=\"" + t + "\" expected \"" + sigmasLower + "\"");
+        }
+
+        (t=sigmas).toUpper();
+        if(t!=sigmasUpper) {
+            errln("error in sigmas.toUpper()=\"" + t + "\" expected \"" + sigmasUpper + "\"");
+        }
+
+        // turkish & azerbaijani dotless i & dotted I
+        // remove dot above if there was a capital I before and there are no more accents above
+        UnicodeString
+            dots=UnicodeString("I \\u0130 I\\u0307 I\\u0327\\u0307 I\\u0301\\u0307 I\\u0327\\u0307\\u0301", "").unescape(),
+            dotsTurkish=UnicodeString("\\u0131 i i i\\u0327 \\u0131\\u0301\\u0307 i\\u0327\\u0307\\u0301", "").unescape(),
+            dotsDefault=UnicodeString("i i i i\\u0327 i\\u0301\\u0307 i\\u0327\\u0307\\u0301", "").unescape();
+
+        (t=dots).toLower("tr");
+        if(t!=dotsTurkish) {
+            errln("error in dots.toLower(tr)=\"" + t + "\" expected \"" + dotsTurkish + "\"");
+        }
+
+        (t=dots).toLower("de");
+        if(t!=dotsDefault) {
+            errln("error in dots.toLower(de)=\"" + t + "\" expected \"" + dotsDefault + "\"");
+        }
+    }
+
+    // more Unicode 3.1.1 tests
+    {
+        UnicodeString t;
+
+        // lithuanian dot above in uppercasing
+        UnicodeString
+            dots=UnicodeString("a\\u0307 \\u0307 i\\u0307 j\\u0327\\u0307 j\\u0301\\u0307", "").unescape(),
+            dotsLithuanian=UnicodeString("A\\u0307 \\u0307 I J\\u0327 J\\u0301\\u0307", "").unescape(),
+            dotsDefault=UnicodeString("A\\u0307 \\u0307 I\\u0307 J\\u0327\\u0307 J\\u0301\\u0307", "").unescape();
+
+        (t=dots).toUpper("lt");
+        if(t!=dotsLithuanian) {
+            errln("error in dots.toUpper(lt)=\"" + t + "\" expected \"" + dotsLithuanian + "\"");
+        }
+
+        (t=dots).toUpper("de");
+        if(t!=dotsDefault) {
+            errln("error in dots.toUpper(de)=\"" + t + "\" expected \"" + dotsDefault + "\"");
+        }
+
+        // lithuanian adds dot above to i in lowercasing if there are more above accents
+        UnicodeString
+            i=UnicodeString("I I\\u0301 J J\\u0301 \\u012e \\u012e\\u0301 \\u00cc\\u00cd\\u0128", "").unescape(),
+            iLithuanian=UnicodeString("i i\\u0307\\u0301 j j\\u0307\\u0301 \\u012f \\u012f\\u0307\\u0301 i\\u0307\\u0300i\\u0307\\u0301i\\u0307\\u0303", "").unescape(),
+            iDefault=UnicodeString("i i\\u0301 j j\\u0301 \\u012f \\u012f\\u0301 \\u00ec\\u00ed\\u0129", "").unescape();
+
+        (t=i).toLower("lt");
+        if(t!=iLithuanian) {
+            errln("error in i.toLower(lt)=\"" + t + "\" expected \"" + iLithuanian + "\"");
+        }
+
+        (t=i).toLower("de");
+        if(t!=iDefault) {
+            errln("error in i.toLower(de)=\"" + t + "\" expected \"" + iDefault + "\"");
         }
     }
 
