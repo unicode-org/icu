@@ -76,14 +76,11 @@
  * u_fsettransliterator does not support U_READ side of transliteration.
  * The format specifier should limit the size of a format or honor it in
     order to prevent buffer overruns.  (e.g. %256.256d).
- * u_fgets is different from stdio. The UChar and UFile arguments are swapped.
  * u_fread and u_fwrite don't exist. They're needed for reading and writing
     data structures without any conversion.
  * u_file_read and u_file_write are used for writing strings. u_fgets and
     u_fputs or u_fread and u_fwrite should be used to do this.
- * u_fgetcx isn't really needed anymore because the transliterator is a
-    part of the file API. It allows multiple kinds of escape sequences
-    to be unescaped.
+ * u_fgetcx may not be needed anymore. Maybe u_fgetc should return a UChar32.
  * We should consider using a UnicodeSet for scanset.
  * scanset has a buffer overflow and underflow bug for both string and file
     APIs.
@@ -210,8 +207,8 @@ u_fgetlocale(UFILE *file);
  * @draft
  */
 U_CAPI int32_t U_EXPORT2
-u_fsetlocale(const char        *locale,
-         UFILE        *file);
+u_fsetlocale(const char *locale,
+             UFILE      *file);
 
 #endif
 
@@ -240,8 +237,8 @@ u_fgetcodepage(UFILE *file);
  * @draft
  */
 U_CAPI int32_t U_EXPORT2
-u_fsetcodepage(const char    *codepage,
-           UFILE        *file);
+u_fsetcodepage(const char   *codepage,
+               UFILE        *file);
 
 
 /**
@@ -263,9 +260,9 @@ U_CAPI UConverter* U_EXPORT2 u_fgetConverter(UFILE *f);
  * @draft
  */
 U_CAPI int32_t U_EXPORT2
-u_fprintf(    UFILE        *f,
-        const char    *patternSpecification,
-        ... );
+u_fprintf(UFILE         *f,
+          const char    *patternSpecification,
+          ... );
 
 /**
  * Write formatted data to a UFILE.
@@ -280,9 +277,9 @@ u_fprintf(    UFILE        *f,
  * @draft
  */
 U_CAPI int32_t U_EXPORT2
-u_vfprintf(    UFILE        *f,
-        const char    *patternSpecification,
-        va_list        ap);
+u_vfprintf(UFILE        *f,
+           const char   *patternSpecification,
+           va_list      ap);
 
 /**
  * Write formatted data to a UFILE.
@@ -293,9 +290,9 @@ u_vfprintf(    UFILE        *f,
  * @draft
  */
 U_CAPI int32_t U_EXPORT2
-u_fprintf_u(    UFILE        *f,
-        const UChar    *patternSpecification,
-        ... );
+u_fprintf_u(UFILE       *f,
+            const UChar *patternSpecification,
+            ... );
 
 /**
  * Write formatted data to a UFILE.
@@ -310,9 +307,9 @@ u_fprintf_u(    UFILE        *f,
  * @draft
  */
 U_CAPI int32_t U_EXPORT2
-u_vfprintf_u(    UFILE        *f,
-        const UChar    *patternSpecification,
-        va_list        ap);
+u_vfprintf_u(UFILE      *f,
+            const UChar *patternSpecification,
+            va_list     ap);
 
 /**
  * Write a Unicode to a UFILE.  The null (U+0000) terminated UChar*
@@ -324,8 +321,8 @@ u_vfprintf_u(    UFILE        *f,
  * @draft
  */
 U_CAPI int32_t U_EXPORT2
-u_fputs(const UChar    *s,
-    UFILE        *f);
+u_fputs(const UChar *s,
+        UFILE       *f);
 
 /**
  * Write a UChar to a UFILE.
@@ -335,8 +332,8 @@ u_fputs(const UChar    *s,
  * @draft
  */
 U_CAPI int32_t U_EXPORT2
-u_fputc(UChar        uc,
-    UFILE        *f);
+u_fputc(UChar   uc,
+        UFILE  *f);
 
 /**
  * Write Unicode to a UFILE.
@@ -349,9 +346,9 @@ u_fputc(UChar        uc,
  * @draft
  */
 U_CAPI int32_t U_EXPORT2
-u_file_write(const UChar     *chars, 
-         int32_t        count, 
-         UFILE         *f);
+u_file_write(const UChar    *chars, 
+             int32_t        count, 
+             UFILE          *f);
 
 
 /* Input functions */
@@ -366,9 +363,9 @@ u_file_write(const UChar     *chars,
  * @draft
  */
 U_CAPI int32_t U_EXPORT2
-u_fscanf(    UFILE        *f,
-        const char     *patternSpecification,
-        ... );
+u_fscanf(UFILE      *f,
+         const char *patternSpecification,
+         ... );
 
 /**
  * Read formatted data from a UFILE.
@@ -384,9 +381,9 @@ u_fscanf(    UFILE        *f,
  * @draft
  */
 U_CAPI int32_t U_EXPORT2
-u_vfscanf(    UFILE        *f,
-        const char     *patternSpecification,
-        va_list        ap);
+u_vfscanf(UFILE         *f,
+          const char    *patternSpecification,
+          va_list        ap);
 
 /**
  * Read formatted data from a UFILE.
@@ -398,9 +395,9 @@ u_vfscanf(    UFILE        *f,
  * @draft
  */
 U_CAPI int32_t U_EXPORT2
-u_fscanf_u(    UFILE        *f,
-        const UChar     *patternSpecification,
-        ... );
+u_fscanf_u(UFILE        *f,
+           const UChar  *patternSpecification,
+           ... );
 
 /**
  * Read formatted data from a UFILE.
@@ -416,9 +413,9 @@ u_fscanf_u(    UFILE        *f,
  * @draft
  */
 U_CAPI int32_t U_EXPORT2
-u_vfscanf_u(    UFILE        *f,
-        const UChar     *patternSpecification,
-        va_list        ap);
+u_vfscanf_u(UFILE       *f,
+            const UChar *patternSpecification,
+            va_list      ap);
 
 /**
  * Read one line of text into a UChar* string from a UFILE. The newline
@@ -433,9 +430,9 @@ u_vfscanf_u(    UFILE        *f,
  * @draft
  */
 U_CAPI UChar* U_EXPORT2
-u_fgets(UFILE        *f,
-    int32_t        n,
-    UChar        *s);
+u_fgets(UChar  *s,
+        int32_t n,
+        UFILE  *f);
 
 /**
  * Read a UChar from a UFILE.
@@ -444,24 +441,20 @@ u_fgets(UFILE        *f,
  * @draft
  */
 U_CAPI UChar U_EXPORT2
-u_fgetc(UFILE        *f);
+u_fgetc(UFILE   *f);
 
 /**
- * Read a UChar from a UFILE and process escape sequences.  If the
- * next character is not a backslash, this is the same as calling
- * u_fgetc().  If it is, then additional characters comprising the
- * escape sequence will be read from the UFILE, parsed, and the
- * resultant UChar returned.  Ill-formed escape sequences return
- * U+FFFFFFFF.
+ * Read a UChar32 from a UFILE.
+ *
  * @param f The UFILE from which to read.
- * @return The UChar value read, or U+FFFF if no character was
- * available, or U+FFFFFFFF if an ill-formed escape sequence was
+ * @return The UChar32 value read, or U_EOF if no character was
+ * available, or U+FFFFFFFF if an ill-formed character was
  * encountered.
  * @see u_unescape()
  * @draft
  */
 U_CAPI UChar32 U_EXPORT2
-u_fgetcx(UFILE        *f);
+u_fgetcx(UFILE  *f);
 
 /**
  * Unget a UChar from a UFILE.
@@ -469,11 +462,11 @@ u_fgetcx(UFILE        *f);
  * to <TT>u_fgetc</TT>, the results are undefined.
  * @param c The UChar to put back on the stream.
  * @param f The UFILE to receive <TT>c</TT>.
- * @return The UChar value put back if successful, U+FFFF otherwise.
+ * @return The UChar32 value put back if successful, U_EOF otherwise.
  * @draft
  */
-U_CAPI UChar U_EXPORT2
-u_fungetc(UChar        c,
+U_CAPI UChar32 U_EXPORT2
+u_fungetc(UChar32   c,
       UFILE        *f);
 
 /**
@@ -786,6 +779,5 @@ u_vsscanf_u(const UChar *buffer,
 
 
 #endif
-
 
 
