@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2002/04/05 01:38:11 $ 
-* $Revision: 1.37 $
+* $Date: 2002/07/08 23:52:13 $ 
+* $Revision: 1.38 $
 *
 *******************************************************************************
 */
@@ -15,9 +15,7 @@ package com.ibm.icu.dev.test.lang;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
-import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UCharacterDirection;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.UTF16;
@@ -39,7 +37,7 @@ public final class UCharacterTest extends TestFmwk
   	/**
   	* ICU4J data version number
   	*/
-  	private final VersionInfo VERSION_ = VersionInfo.getInstance("3.1.1.0");
+  	private final VersionInfo VERSION_ = VersionInfo.getInstance("3.2.0.0");
   
   	// constructor ===================================================
   
@@ -144,7 +142,7 @@ public final class UCharacterTest extends TestFmwk
   	*/
   	public void TestDefined()
   	{
-    	int undefined[] = {0xfff1, 0x00fff7, 0x00fa30};
+    	int undefined[] = {0xfff1, 0xfff7, 0xfa6b};
     	int defined[] = {0x523E, 0x004f88, 0x00fffd};
     
     	int size = undefined.length;
@@ -420,9 +418,9 @@ public final class UCharacterTest extends TestFmwk
     	int nonunicodeidstart[] = {0x2000, 0x00000a, 0x002019};
     	int unicodeidpart[] = {0x005f, 0x000032, 0x000045};
     	int nonunicodeidpart[] = {0x2030, 0x0000a3, 0x000020};
-    	int idignore[] = {0x070F, 0x00180B, 0x00180C};
+    	int idignore[] = {0x0006, 0x0010, 0x206b};
     	int nonidignore[] = {0x0075, 0x0000a3, 0x000061};
-
+    
     	int size = unicodeidstart.length;
     	for (int i = 0; i < size; i ++) 
     	{
@@ -452,7 +450,7 @@ public final class UCharacterTest extends TestFmwk
               			"character");
         		break;
       		}
-      		if (!UCharacter.isIdentifierIgnorable(idignore[i]))
+            if (!UCharacter.isIdentifierIgnorable(idignore[i]))
       		{
         		errln("FAIL \\u" + hex(idignore[i]) + 
               			" expected to be a ignorable unicode character");
@@ -572,19 +570,18 @@ public final class UCharacterTest extends TestFmwk
   	{
     	int c[] = {0x0061, 0x000284, 0x003401, 0x007fed, 0x00ac00, 0x00d7a3, 
     		       0x00d800, 0x00dc00, 0xff08, 0x00ffe5, 0x00ffff, 
-    		       0x0023456, 0x009};
+    		       0x0023456};
     	String name[] = {"LATIN SMALL LETTER A", 
                      "LATIN SMALL LETTER DOTLESS J WITH STROKE AND HOOK", 
                      "CJK UNIFIED IDEOGRAPH-3401", 
                      "CJK UNIFIED IDEOGRAPH-7FED", "HANGUL SYLLABLE GA", 
                      "HANGUL SYLLABLE HIH", "", "",
                      "FULLWIDTH LEFT PARENTHESIS",
-                     "FULLWIDTH YEN SIGN", "", "CJK UNIFIED IDEOGRAPH-23456",
-                     ""};
+                     "FULLWIDTH YEN SIGN", "", "CJK UNIFIED IDEOGRAPH-23456"};
     	String oldname[] = {"", "LATIN SMALL LETTER DOTLESS J BAR HOOK", "", 
     		            "",
                         "", "", "", "", "FULLWIDTH OPENING PARENTHESIS", "", 
-                        "", "", "HORIZONTAL TABULATION"};
+                        "", ""};
     	String extendedname[] = {"LATIN SMALL LETTER A", 
                              "LATIN SMALL LETTER DOTLESS J WITH STROKE AND HOOK",
                              "CJK UNIFIED IDEOGRAPH-3401",
@@ -596,8 +593,7 @@ public final class UCharacterTest extends TestFmwk
                              "FULLWIDTH LEFT PARENTHESIS",
                              "FULLWIDTH YEN SIGN",
                              "<noncharacter-FFFF>",
-                             "CJK UNIFIED IDEOGRAPH-23456", 
-                             "HORIZONTAL TABULATION"};
+                             "CJK UNIFIED IDEOGRAPH-23456"};
                              
     	int size = c.length;
     	String str;
@@ -1163,8 +1159,7 @@ public final class UCharacterTest extends TestFmwk
 	    	    }
 	    	    continue;
 	        }
-	        
-	        if (UCharacter.hasBinaryProperty(props[i][0], props[i][1])
+            if (UCharacter.hasBinaryProperty(props[i][0], props[i][1])
 	            != expected[i]) {
 	            errln("error: UCharacter.hasBinaryProperty(\\u" + 
 	                  Integer.toHexString(props[i][0]) + ", " + 

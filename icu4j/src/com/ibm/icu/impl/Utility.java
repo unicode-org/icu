@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2002/06/20 01:18:09 $
- * $Revision: 1.24 $
+ * $Date: 2002/07/08 23:52:14 $
+ * $Revision: 1.25 $
  *
  *****************************************************************************************
  */
@@ -1525,5 +1525,24 @@ public final class Utility {
             appendToRule(rule, matcher.toPattern(escapeUnprintable),
                          true, escapeUnprintable, quoteBuf);
         }
+    }
+    
+    /**
+     * Compares 2 unsigned integers
+     * @param source 32 bit unsigned integer
+     * @param target 32 bit unsigned integer
+     * @return 0 if equals, 1 if source is greater than target and -1 
+     *         otherwise
+     */
+    public static final int compareUnsigned(int source, int target) 
+    {
+        if (source == target) {
+            return 0;
+        }
+        if ((long)(source & 0xFFFFFFFFL) >
+            (long)(target & 0xFFFFFFFFL)) {
+            return 1;
+        }
+        return -1;
     }
 }
