@@ -189,13 +189,29 @@ NumberFormatTest::TestExponential(void)
             Formattable af;
             fmt.parse(s, af, pos);
             double a;
+            bool_t useEpsilon = FALSE;
             if (af.getType() == Formattable::kLong) a = af.getLong();
-            else if (af.getType() == Formattable::kDouble) a = af.getDouble();
+            else if (af.getType() == Formattable::kDouble) {
+                a = af.getDouble();
+#if defined(OS390)
+                // S/390 will show a failure like this:
+                //| -3.141592652999999e-271 -format-> -3.1416E-271
+                //|                          -parse-> -3.1416e-271
+                //| FAIL: Expected -3.141599999999999e-271
+                // To compensate, we use an epsilon-based equality
+                // test on S/390 only.  We don't want to do this in
+                // general because it's less exacting.
+                useEpsilon = TRUE;
+#endif
+            }
             else errln((UnicodeString)"FAIL: Non-numeric Formattable returned");
             if (pos.getIndex() == s.length())
             {
                 logln((UnicodeString)"  -parse-> " + a);
-                if (a != valParse[v+ival])
+                // Use epsilon comparison as necessary
+                if ((useEpsilon &&
+                     (uprv_fabs(a - valParse[v+ival]) / a > (2*DBL_EPSILON))) ||
+                    (!useEpsilon && a != valParse[v+ival]))
                 errln((UnicodeString)"FAIL: Expected " + valParse[v+ival]);
             }
             else
