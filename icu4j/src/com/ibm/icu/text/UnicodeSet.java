@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2000/05/25 19:31:37 $
- * $Revision: 1.27 $
+ * $Date: 2000/05/26 20:57:24 $
+ * $Revision: 1.28 $
  *
  *****************************************************************************************
  */
@@ -21,12 +21,25 @@ import java.text.*;
  * which in this implementation is the characters from U+0000 to
  * U+FFFF, ignoring surrogates.
  *
- * <p>This class supports two APIs.  The first is modeled after Java 2's
- * <code>java.util.Set</code> interface, although this class does not
- * implement that interface.  All methods of <code>Set</code> are
- * supported, with the modification that they take a character range
- * or single character instead of an <code>Object</code>, and they
- * take a <code>UnicodeSet</code> instead of a <code>Collection</code>.
+ * <p><code>UnicodeSet</code> supports two APIs. The first is the
+ * <em>operand</em> API that allows the caller to modify the value of
+ * a <code>UnicodeSet</code> object. It conforms to Java 2's
+ * <code>java.util.Set</code> interface, although
+ * <code>UnicodeSet</code> cannot actually implement that
+ * interface. All methods of <code>Set</code> are supported, with the
+ * modification that they take a character range or single character
+ * instead of an <code>Object</code>, and they take a
+ * <code>UnicodeSet</code> instead of a <code>Collection</code>.  The
+ * operand API may be thought of in terms of boolean logic: a boolean
+ * OR is implemented by <code>add</code>, a boolean AND is implemented
+ * by <code>retain</code>, a boolean XOR is implemented by
+ * <code>complement</code> taking an argument, and a boolean NOT is
+ * implemented by <code>complement</code> with no argument.  In terms
+ * of traditional set theory function names, <code>add</code> is a
+ * union, <code>retain</code> is an intersection, <code>remove</code>
+ * is an asymmetric difference, and <code>complement</code> with no
+ * argument is a set complement with respect to the superset range
+ * <code>MIN_VALUE-MAX_VALUE</code>
  *
  * <p>The second API is the
  * <code>applyPattern()</code>/<code>toPattern()</code> API from the
@@ -241,8 +254,7 @@ import java.text.*;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.27 $ $Date: 2000/05/25 19:31:37 $
- */
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.28 $ $Date: 2000/05/26 20:57:24 $ */
 public class UnicodeSet implements UnicodeFilter {
 
     /* Implementation Notes.
@@ -339,7 +351,7 @@ public class UnicodeSet implements UnicodeFilter {
      */
     public UnicodeSet(char start, char end) {
         this();
-        xor(start, end);
+        complement(start, end);
     }
 
     /**
@@ -408,7 +420,7 @@ public class UnicodeSet implements UnicodeFilter {
      */
     public void set(char start, char end) {
         clear();
-        xor(start, end);
+        complement(start, end);
     }
 
     /**
@@ -675,14 +687,14 @@ public class UnicodeSet implements UnicodeFilter {
      * Complements the specified range in this set.  Any character in
      * the range will be removed if it is in this set, or will be
      * added if it is not in this set.  If <code>end > start</code>
-     * then an empty range is xor'ed, leaving the set unchanged.
+     * then an empty range is complemented, leaving the set unchanged.
      *
      * @param start first character, inclusive, of range to be removed
      * from this set.
      * @param end last character, inclusive, of range to be removed
      * from this set.
      */
-    public void xor(char start, char end) {
+    public void complement(char start, char end) {
         if (start <= end) {
             xor(range(start, end), 2, 0);
         }
@@ -693,8 +705,25 @@ public class UnicodeSet implements UnicodeFilter {
      * will be removed if it is in this set, or will be added if it is
      * not in this set.
      */
-    public final void xor(char c) {
-        xor(c, c);
+    public final void complement(char c) {
+        complement(c, c);
+    }
+
+    /**
+     * Inverts this set.  This operation modifies this set so that its
+     * value is its complement.  This is equivalent to
+     * <code>complement(MIN_VALUE, MAX_VALUE)</code>.
+     */
+    public void complement() {
+        if (list[0] == LOW) {
+            System.arraycopy(list, 1, list, 0, len-1);
+            --len;
+        } else {
+            ensureCapacity(len+1);
+            System.arraycopy(list, 0, list, 1, len);
+            list[0] = LOW;
+            ++len;
+        }
     }
 
     /**
@@ -763,29 +792,11 @@ public class UnicodeSet implements UnicodeFilter {
      * set.  Any character in the other set will be removed if it is
      * in this set, or will be added if it is not in this set.
      *
-     * @param c set that defines which elements will be xor'ed from
+     * @param c set that defines which elements will be complemented from
      *          this set.
      */
-    public void xorAll(UnicodeSet c) {
+    public void complementAll(UnicodeSet c) {
         xor(c.list, c.len, 0);
-    }
-
-    /**
-     * Inverts this set.  This operation modifies this set so that its
-     * value is its complement.  This is equivalent to the pseudo
-     * code: <code>this = new UnicodeSet(UnicodeSet.MIN_VALUE,
-     * UnicodeSet.MAX_VALUE).removeAll(this)</code>.
-     */
-    public void complement() {
-        if (list[0] == LOW) {
-            System.arraycopy(list, 1, list, 0, len-1);
-            --len;
-        } else {
-            ensureCapacity(len+1);
-            System.arraycopy(list, 0, list, 1, len);
-            list[0] = LOW;
-            ++len;
-        }
     }
 
     /**
