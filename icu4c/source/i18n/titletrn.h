@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2003, International Business Machines
+*   Copyright (C) 2001-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -54,7 +54,7 @@ class U_I18N_API TitlecaseTransliterator : public Transliterator {
      * Transliterator API.
      * @return a copy of the object.
      */
-    Transliterator* clone(void) const;
+    virtual Transliterator* clone(void) const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
@@ -81,7 +81,7 @@ class U_I18N_API TitlecaseTransliterator : public Transliterator {
      * @param incremental if true, assume more text may be coming after
      *                    pos.contextLimit.  Otherwise, assume the text is complete.
      */
-    void handleTransliterate(Replaceable& text, UTransPosition& offset,
+    virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
                              UBool isIncremental) const;
 
  public:

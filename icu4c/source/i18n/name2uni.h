@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2003, International Business Machines
+*   Copyright (C) 2001-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -51,7 +51,7 @@ public:
      * Transliterator API.
      * @return    A copy of the object.
      */
-    Transliterator* clone(void) const;
+    virtual Transliterator* clone(void) const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.

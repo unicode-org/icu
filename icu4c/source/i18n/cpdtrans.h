@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2003, International Business Machines
+*   Copyright (C) 1999-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -115,7 +115,7 @@ public:
      * Transliterator API.
      * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
-    Transliterator* clone(void) const;
+    virtual Transliterator* clone(void) const;
 
     /**
      * Returns the number of transliterators in this chain.
