@@ -76,7 +76,10 @@ all-local: icupkg.inc build-local packagedata testdata packagetest $(OS390PKG)
 
 dist-local:
 
-clean-local: cleanpackage cleanfiles
+clean-map:
+	-test -z *.map || $(RMV) *.map
+
+clean-local: cleanpackage cleanfiles clean-map
 	$(RMV) $(TESTOUTDIR)/testdata.dat
 
 cleanfiles:
