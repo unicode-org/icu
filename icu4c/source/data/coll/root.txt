@@ -1,20 +1,20 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/26 13:6
+// * Source File: \work\locale\common\collation\\root.xml
 // *
 // ***************************************************************************
-
-root {
-    // TODO: Remove this
-    // this is a special tag that makes genrb include UCARules.txt for collation
-    "%%UCARULES" { "UCARules.txt"} // UCARules
-
-    collations {
-        default { "standard" }
-        standard {
-            Sequence { "" }
-            Version  { "0.0" }
+root{
+    "%%UCARULES"{"UCARules.txt"}
+    Version{"1.1.1"}
+    collations{
+        default{"standard"}
+        standard{
+            Sequence{""}
+            Version{"0.0"}
         }
     }
 }

@@ -3,19 +3,20 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/9 14:56
+// * Date & Time: 2004/8/26 12:55
 // * Source File: \work\locale\common\collation\\es.xml
 // *
 // ***************************************************************************
 es{
+    Version{"1.1.1"}
     collations{
         standard{
             Sequence{"&N<ñ<<<Ñ&A<<Æ/E&a<<æ/e"}
-            Version{"1.1.1"}
+            Version{"1.1"}
         }
         traditional{
             Sequence{"&N<ñ<<<Ñ&C<ch<<<Ch<<<CH&l<ll<<<Ll<<<LL"}
-            Version{"1.1.1"}
+            Version{"1.0"}
         }
     }
 }

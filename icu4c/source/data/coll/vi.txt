@@ -3,11 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/9 14:58
+// * Date & Time: 2004/8/26 13:0
 // * Source File: \work\locale\common\collation\\vi.xml
 // *
 // ***************************************************************************
 vi{
+    Version{"1.1.1"}
     collations{
         standard{
             Sequence{
@@ -19,7 +20,7 @@ vi{
                 "&o<ô<<<Ô<ơ<<<Ơ"
                 "&u<ư<<<Ư"
             }
-            Version{"1.1.1"}
+            Version{"3.1"}
         }
     }
 }

@@ -3,11 +3,12 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/9 14:56
+// * Date & Time: 2004/8/26 12:56
 // * Source File: \work\locale\common\collation\\hu.xml
 // *
 // ***************************************************************************
 hu{
+    Version{"1.1.1"}
     collations{
         standard{
             Sequence{
@@ -50,7 +51,7 @@ hu{
                 "&Zs<<<Zzs/zs"
                 "&ZS<<<ZZS/ZS"
             }
-            Version{"1.1.1"}
+            Version{"2.0"}
         }
     }
 }
