@@ -20,9 +20,9 @@ class UnicodeString;
 class TestUtility {
 
 public:
-    static int8_t getScript(UChar c);
+    static inline int8_t getScript(UChar c);
 
-    static int8_t getScript(int8_t block);
+    static inline int8_t getScript(int8_t block);
 
     static int8_t getBlock(UChar c);
 
@@ -176,5 +176,16 @@ private:
 
     TestUtility() {} // Prevent instantiation
 };
+
+inline int8_t
+TestUtility::getScript(UChar c) {
+  return blockToScript[getBlock(c)];
+}
+
+inline int8_t
+TestUtility::getScript(int8_t block) {
+  return blockToScript[block];
+}
+
 
 #endif
