@@ -7,7 +7,7 @@
 * >       DO NOT EDIT BY HAND       <
 * >      RUN TOOL TO REGENERATE     <
 * Tool: com.ibm.text.Normalizer
-* Creation date: Wed Jul 12 12:31:00 PDT 2000
+* Creation date: Thu Jul 13 15:14:01 PDT 2000
 */
 #include "dcmpdata.h" 
 
