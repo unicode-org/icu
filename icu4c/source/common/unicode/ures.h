@@ -137,15 +137,16 @@ typedef enum {
     RES_NONE=-1,
     RES_STRING=0,
     RES_BINARY=1,
-    RES_INT=2,
+    RES_TABLE=2,
   /* this resource is an alias - contains a string 
    * that is the name of resource containing data 
    */
     RES_ALIAS=3, 
-    RES_INT_VECTOR=4,
 
-    RES_TABLE=7,
+    RES_INT=7,
     RES_ARRAY=8,
+
+    RES_INT_VECTOR=14,
     RES_RESERVED=15
 } UResType;
 
