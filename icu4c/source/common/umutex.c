@@ -58,18 +58,18 @@
 
 
 /* The global ICU mutex.    
- * Special cased to allow thread safe lazy initialization (windows)
+ * Handled differently than other ICU mutexes to allow thread safe lazy initialization (windows)
  *   or pure static C style initialization (Posix)
  */
-#if defined( WIN32 )
+#if defined(WIN32) || (ICU_USE_THREADS==0)
 static UMTX              gGlobalMutex      = NULL;
+#endif
 
-#elif defined( POSIX )
+#if defined(POSIX) && (ICU_USE_THREADS==1)
 static pthread_mutex_t   gGlobalPosixMutex = PTHREAD_MUTEX_INITIALIZER;
 static UMTX              gGlobalMutex      = &gGlobalPosixMutex;
-
 static UMTX              gIncDecMutex      = NULL;
-#endif /* cascade of platforms */
+#endif
 
 
 /* Detect Recursive locking of the global mutex.  For debugging only. */
@@ -117,7 +117,7 @@ umtx_lock(UMTX *mutex)
 #endif /* ICU_USE_THREADS==1 */
     }
 
-#if defined(WIN32) && defined(_DEBUG)
+#if defined(WIN32) && defined(_DEBUG) && (ICU_USE_THREADS==1)
         if (mutex == &gGlobalMutex) {         /* Detect Reentrant locking of the global mutex.      */
             gRecursionCount++;                /* Recursion causes deadlocks on Unixes.              */
             U_ASSERT(gRecursionCount == 1);   /* Detection works on Windows.  Debug problems there. */
@@ -142,7 +142,7 @@ umtx_unlock(UMTX* mutex)
         return; 
     }
 
-#if defined (WIN32) && defined (_DEBUG) 
+#if defined (WIN32) && defined (_DEBUG) && (ICU_USE_THREADS==1)
     if (mutex == &gGlobalMutex) {
         gRecursionCount--;
         U_ASSERT(gRecursionCount == 0);  /* Detect unlock of an already unlocked mutex */

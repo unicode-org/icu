@@ -32,6 +32,7 @@
 #include "ustr_imp.h"
 #include "udataswp.h"
 #include "uprops.h"
+#include "uassert.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
@@ -55,7 +56,10 @@ static const uint32_t *pData32=NULL, *props32Table=NULL, *exceptionsTable=NULL, 
 static const UChar *ucharsTable=NULL;
 static int32_t countPropsVectors=0, propsVectorsColumns=0;
 
-static int8_t havePropsData=0;
+static int8_t havePropsData=0;     /*  == 0   ->  Data has not been loaded.
+                                    *   < 0   ->  Error occured attempting to load data.
+                                    *   > 0   ->  Data has been successfully loaded.
+                                    */
 
 /* index values loaded from uprops.dat */
 static int32_t indexes[UPROPS_INDEX_COUNT];
@@ -108,13 +112,14 @@ uchar_cleanup()
     propsVectors=NULL;
     countPropsVectors=0;
     dataErrorCode=U_ZERO_ERROR;
-    havePropsData=FALSE;
+    havePropsData=0;
 
     return TRUE;
 }
 
-static int8_t
-loadPropsData(void) {
+
+U_CFUNC int8_t
+uprv_loadPropsData(UErrorCode *errorCode) {
     /* load Unicode character properties data from file if necessary */
 
     /*
@@ -124,15 +129,14 @@ loadPropsData(void) {
      */
     if(havePropsData==0) {
         UTrie trie={ 0 }, trie2={ 0 };
-        UErrorCode errorCode=U_ZERO_ERROR;
         UDataMemory *data;
         const uint32_t *p=NULL;
         int32_t length;
 
         /* open the data outside the mutex block */
-        data=udata_openChoice(NULL, DATA_TYPE, DATA_NAME, isAcceptable, NULL, &errorCode);
-        dataErrorCode=errorCode;
-        if(U_FAILURE(errorCode)) {
+        data=udata_openChoice(NULL, DATA_TYPE, DATA_NAME, isAcceptable, NULL, errorCode);
+        dataErrorCode=*errorCode;
+        if(U_FAILURE(*errorCode)) {
             return havePropsData=-1;
         }
 
@@ -140,9 +144,9 @@ loadPropsData(void) {
 
         /* unserialize the trie; it is directly after the int32_t indexes[UPROPS_INDEX_COUNT] */
         length=(int32_t)p[UPROPS_PROPS32_INDEX]*4;
-        length=utrie_unserialize(&trie, (const uint8_t *)(p+UPROPS_INDEX_COUNT), length-64, &errorCode);
-        if(U_FAILURE(errorCode)) {
-            dataErrorCode=errorCode;
+        length=utrie_unserialize(&trie, (const uint8_t *)(p+UPROPS_INDEX_COUNT), length-64, errorCode);
+        if(U_FAILURE(*errorCode)) {
+            dataErrorCode=*errorCode;
             udata_close(data);
             return havePropsData=-1;
         }
@@ -153,8 +157,8 @@ loadPropsData(void) {
             p[UPROPS_ADDITIONAL_VECTORS_INDEX]!=0
         ) {
             length=(int32_t)(p[UPROPS_ADDITIONAL_VECTORS_INDEX]-p[UPROPS_ADDITIONAL_TRIE_INDEX])*4;
-            length=utrie_unserialize(&trie2, (const uint8_t *)(p+p[UPROPS_ADDITIONAL_TRIE_INDEX]), length, &errorCode);
-            if(U_FAILURE(errorCode)) {
+            length=utrie_unserialize(&trie2, (const uint8_t *)(p+p[UPROPS_ADDITIONAL_TRIE_INDEX]), length, errorCode);
+            if(U_FAILURE(*errorCode)) {
                 uprv_memset(&trie2, 0, sizeof(trie2));
             } else {
                 trie2.getFoldingOffset=getFoldingPropsOffset;
@@ -196,6 +200,15 @@ loadPropsData(void) {
 
     return havePropsData;
 }
+
+
+static int8_t 
+loadPropsData(void) {
+    UErrorCode   errorCode = U_ZERO_ERROR;
+    int8_t       retVal    = uprv_loadPropsData(&errorCode);
+    return retVal;
+}
+
 
 /* Unicode properties data swapping ----------------------------------------- */
 
@@ -331,7 +344,7 @@ uprops_swap(const UDataSwapper *ds,
 /* constants and macros for access to the data ------------------------------ */
 
 /* getting a uint32_t properties word from the data */
-#define HAVE_DATA (havePropsData>0 || (havePropsData==0 && loadPropsData()>0))
+#define HAVE_DATA (havePropsData>0 || loadPropsData()>0)
 #define VALIDATE(c) (((uint32_t)(c))<=0x10ffff && HAVE_DATA)
 #define GET_PROPS_UNSAFE(c, result) \
     UTRIE_GET16(&propsTrie, c, result); \
@@ -378,13 +391,13 @@ static const uint8_t flagsOffset[256]={
 
 U_CFUNC UBool
 uprv_haveProperties(UErrorCode *pErrorCode) {
-    if(HAVE_DATA) {
-        return TRUE;
-    } else {
-        *pErrorCode=dataErrorCode;
-        return FALSE;
+    U_ASSERT(havePropsData>0);
+    if (havePropsData == 0) {
+        uprv_loadPropsData(pErrorCode);
     }
+    return (havePropsData>0);
 }
+
 
 /* API functions ------------------------------------------------------------ */
 

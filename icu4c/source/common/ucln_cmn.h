@@ -62,5 +62,10 @@ U_CFUNC void ucnv_init(UErrorCode *status);
 U_CFUNC void ures_init(UErrorCode *status);
 
 
+/**
+  * Test whether ICU has been initialized.
+  * @internal
+  */
+U_CFUNC UBool u_isUInit(void);
 
 #endif

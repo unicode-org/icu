@@ -122,7 +122,7 @@ u_init(UErrorCode *status) {
      */
 
     /* Char Properties */
-    uprv_haveProperties(status);
+    uprv_loadPropsData(status);
 
 #if !UCONFIG_NO_NORMALIZATION
     /*  Normalization  */
