@@ -590,6 +590,11 @@ ucol_normalizeShortDefinitionString(const char *definition,
         uprv_memset(destination, 0, capacity*sizeof(char));
     }
 
+    UParseError pe;
+    if(!parseError) {
+        parseError = &pe;
+    }
+
     // validate
     CollatorSpec s;
     ucol_sit_initCollatorSpecs(&s);
