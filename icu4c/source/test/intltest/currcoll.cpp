@@ -34,7 +34,7 @@ CollationCurrencyTest::~CollationCurrencyTest()
 {
 }
 
-void CollationCurrencyTest::currencyTest(char *par)
+void CollationCurrencyTest::currencyTest(/*char *par*/)
 {
     // All the currency symbols, in collation order
     static const UChar currency[] =
@@ -124,7 +124,7 @@ void CollationCurrencyTest::currencyTest(char *par)
     delete c;
 }
 
-void CollationCurrencyTest::runIndexedTest(int32_t index, UBool exec, const char* &name, char* par)
+void CollationCurrencyTest::runIndexedTest(int32_t index, UBool exec, const char* &name, char* /*par*/)
 {
     if (exec)
     {
@@ -133,7 +133,7 @@ void CollationCurrencyTest::runIndexedTest(int32_t index, UBool exec, const char
 
     switch (index)
     {
-        case  0: name = "currencyTest"; if (exec) currencyTest(par); break;
+        case  0: name = "currencyTest"; if (exec) currencyTest(/*par*/); break;
         default: name = ""; break;
     }
 }

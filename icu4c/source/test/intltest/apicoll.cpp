@@ -62,7 +62,7 @@ CollationAPITest::doAssert(UBool condition, const char *message)
 // ctor, dtor, createInstance, compare, getStrength/setStrength
 // getDecomposition/setDecomposition, getDisplayName
 void
-CollationAPITest::TestProperty( char* par )
+CollationAPITest::TestProperty(/* char* par */)
 {
     UErrorCode success = U_ZERO_ERROR;
     Collator *col = 0;
@@ -206,7 +206,7 @@ CollationAPITest::TestProperty( char* par )
 }
 
 void 
-CollationAPITest::TestHashCode( char* par )
+CollationAPITest::TestHashCode(/* char* par */)
 {
     logln("hashCode tests begin.");
     UErrorCode success = U_ZERO_ERROR;
@@ -251,7 +251,7 @@ CollationAPITest::TestHashCode( char* par )
 // CollationKey -- Tests the CollationKey methods
 //
 void
-CollationAPITest::TestCollationKey( char* par )
+CollationAPITest::TestCollationKey(/* char* par */)
 {       
     logln("testing CollationKey begins...");
     Collator *col = 0;
@@ -335,7 +335,7 @@ CollationAPITest::TestCollationKey( char* par )
 // ctor, RuleBasedCollator::createCollationElementIterator(), operator==, operator!=
 // 
 void
-CollationAPITest::TestElemIter( char* par )
+CollationAPITest::TestElemIter(/* char* par */)
 {       
     logln("testing sortkey begins...");
     Collator *col = 0;
@@ -525,7 +525,7 @@ CollationAPITest::TestElemIter( char* par )
 
 // Test RuleBasedCollator ctor, dtor, operator==, operator!=, clone, copy, and getRules
 void
-CollationAPITest::TestOperators( char* par )
+CollationAPITest::TestOperators(/* char* par */)
 {
     UErrorCode success = U_ZERO_ERROR;
     UnicodeString ruleset1("< a, A < b, B < c, C; ch, cH, Ch, CH < d, D, e, E");
@@ -607,7 +607,7 @@ CollationAPITest::TestOperators( char* par )
 
 // test clone and copy
 void 
-CollationAPITest::TestDuplicate( char* par )
+CollationAPITest::TestDuplicate(/* char* par */)
 {
     UErrorCode status = U_ZERO_ERROR;
     Collator *col1 = Collator::createInstance(status);
@@ -628,7 +628,7 @@ CollationAPITest::TestDuplicate( char* par )
 }   
 
 void
-CollationAPITest::TestCompare( char* par )
+CollationAPITest::TestCompare(/* char* par */)
 {
     logln("The compare tests begin : ");
     Collator *col = 0;
@@ -663,7 +663,7 @@ CollationAPITest::TestCompare( char* par )
 }
 
 void
-CollationAPITest::TestGetAll( char* par )
+CollationAPITest::TestGetAll(/* char* par */)
 {
     int32_t count;
     const Locale* list = Collator::getAvailableLocales(count);
@@ -677,18 +677,18 @@ CollationAPITest::TestGetAll( char* par )
 }
 
 
-void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par */)
 {
     if (exec) logln("TestSuite CollationAPITest: ");
     switch (index) {
-        case 0: name = "TestProperty";  if (exec)   TestProperty( par ); break;
-        case 1: name = "TestOperators"; if (exec)   TestOperators( par ); break;
-        case 2: name = "TestDuplicate"; if (exec)   TestDuplicate( par ); break;
-        case 3: name = "TestCompare";   if (exec)   TestCompare( par ); break;
-        case 4: name = "TestHashCode";  if (exec)   TestHashCode( par ); break;
-        case 5: name = "TestCollationKey";  if (exec)   TestCollationKey( par ); break;
-        case 6: name = "TestElemIter";  if (exec)   TestElemIter( par ); break;
-        case 7: name = "TestGetAll";    if (exec)   TestGetAll( par ); break;
+        case 0: name = "TestProperty";  if (exec)   TestProperty(/* par */); break;
+        case 1: name = "TestOperators"; if (exec)   TestOperators(/* par */); break;
+        case 2: name = "TestDuplicate"; if (exec)   TestDuplicate(/* par */); break;
+        case 3: name = "TestCompare";   if (exec)   TestCompare(/* par */); break;
+        case 4: name = "TestHashCode";  if (exec)   TestHashCode(/* par */); break;
+        case 5: name = "TestCollationKey";  if (exec)   TestCollationKey(/* par */); break;
+        case 6: name = "TestElemIter";  if (exec)   TestElemIter(/* par */); break;
+        case 7: name = "TestGetAll";    if (exec)   TestGetAll(/* par */); break;
         default: name = ""; break;
     }
 }

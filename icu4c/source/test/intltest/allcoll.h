@@ -36,23 +36,23 @@ public:
 
     CollationDummyTest();
     virtual ~CollationDummyTest();
-    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par = NULL */);
 
     // main test method called with different strengths,
     // tests comparison of custum collation with different strengths
     void doTest( UnicodeString source, UnicodeString target, Collator::EComparisonResult result);
 
     // perform test with strength PRIMARY
-    void TestPrimary( char* par );
+    void TestPrimary(/* char* par */);
 
     // perform test with strength SECONDARY
-    void TestSecondary( char* par );
+    void TestSecondary(/* char* par */);
 
     // perform test with strength tertiary
-    void TestTertiary( char* par );
+    void TestTertiary(/* char* par */);
 
     // perform extra tests
-    void TestExtra( char* par );
+    void TestExtra(/* char* par */);
 
 private:
     static const Collator::EComparisonResult results[];

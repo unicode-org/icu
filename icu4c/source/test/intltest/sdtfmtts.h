@@ -21,7 +21,7 @@ private:
     /**
      * Performs tests on many API functions, see detailed comments in source code
      **/
-    void testAPI(char *par);
+    void testAPI(/* char* par */);
 };
 
 #endif

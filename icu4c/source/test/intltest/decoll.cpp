@@ -103,7 +103,7 @@ void CollationGermanTest::doTest( UnicodeString source, UnicodeString target, Co
     reportCResult( source, target, sortKey1, sortKey2, compareResult, keyResult, result );
 }
 
-void CollationGermanTest::TestTertiary( char* par )
+void CollationGermanTest::TestTertiary(/* char* par */)
 {
     int32_t i = 0;
     myCollation->setStrength(Collator::TERTIARY);
@@ -112,7 +112,7 @@ void CollationGermanTest::TestTertiary( char* par )
         doTest(testSourceCases[i], testTargetCases[i], results[i][1]);
     }
 }
-void CollationGermanTest::TestPrimary( char* par )
+void CollationGermanTest::TestPrimary(/* char* par */)
 {
     int32_t i;
     myCollation->setStrength(Collator::PRIMARY);
@@ -122,13 +122,13 @@ void CollationGermanTest::TestPrimary( char* par )
     }
 }
 
-void CollationGermanTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void CollationGermanTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite CollationGermanTest: ");
     switch (index)
     {
-        case 0: name = "TestPrimary";   if (exec)   TestPrimary( par ); break;
-        case 1: name = "TestTertiary";  if (exec)   TestTertiary( par ); break;
+        case 0: name = "TestPrimary";   if (exec)   TestPrimary(/* par */); break;
+        case 1: name = "TestTertiary";  if (exec)   TestTertiary(/* par */); break;
         default: name = ""; break;
     }
 }

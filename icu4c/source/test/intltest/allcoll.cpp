@@ -109,7 +109,7 @@ void CollationDummyTest::doTest( UnicodeString source, UnicodeString target, Col
     reportCResult( source, target, sortKey1, sortKey2, compareResult, keyResult, result );
 }
 
-void CollationDummyTest::TestTertiary( char* par )
+void CollationDummyTest::TestTertiary(/* char* par */)
 {
     int32_t i = 0;
     myCollation->setStrength(Collator::TERTIARY);
@@ -118,7 +118,7 @@ void CollationDummyTest::TestTertiary( char* par )
         doTest(testSourceCases[i], testTargetCases[i], results[i]);
     }
 }
-void CollationDummyTest::TestPrimary( char* par )
+void CollationDummyTest::TestPrimary(/* char* par */)
 {
     int32_t i;
     myCollation->setStrength(Collator::PRIMARY);
@@ -128,7 +128,7 @@ void CollationDummyTest::TestPrimary( char* par )
     }
 }
 
-void CollationDummyTest::TestSecondary( char* par )
+void CollationDummyTest::TestSecondary(/* char* par */)
 {
     int32_t i;
     myCollation->setStrength(Collator::SECONDARY);
@@ -138,7 +138,7 @@ void CollationDummyTest::TestSecondary( char* par )
     }
 }
 
-void CollationDummyTest::TestExtra( char* par )
+void CollationDummyTest::TestExtra(/* char* par */)
 {
     int32_t i, j;
     myCollation->setStrength(Collator::TERTIARY);
@@ -151,14 +151,14 @@ void CollationDummyTest::TestExtra( char* par )
     }
 }
 
-void CollationDummyTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void CollationDummyTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite CollationDummyTest: ");
     switch (index) {
-        case 0: name = "TestPrimary";   if (exec)   TestPrimary( par ); break;
-        case 1: name = "TestSecondary"; if (exec)   TestSecondary( par ); break;
-        case 2: name = "TestTertiary";  if (exec)   TestTertiary( par ); break;
-        case 3: name = "TestExtra";     if (exec)   TestExtra( par ); break;
+        case 0: name = "TestPrimary";   if (exec)   TestPrimary(/* par */); break;
+        case 1: name = "TestSecondary"; if (exec)   TestSecondary(/* par */); break;
+        case 2: name = "TestTertiary";  if (exec)   TestTertiary(/* par */); break;
+        case 3: name = "TestExtra";     if (exec)   TestExtra(/* par */); break;
         default: name = ""; break;
     }
 }

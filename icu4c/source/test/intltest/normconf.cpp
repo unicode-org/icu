@@ -23,7 +23,7 @@
                           }                             \
                           break
 
-void NormalizerConformanceTest::runIndexedTest(int32_t index, UBool exec, const char* &name, char* par) {
+void NormalizerConformanceTest::runIndexedTest(int32_t index, UBool exec, const char* &name, char* /*par*/) {
     switch (index) {
         CASE(0,TestConformance);
         // CASE(1,TestCase6);

@@ -76,7 +76,7 @@ void CollationFinnishTest::doTest( UnicodeString source, UnicodeString target, C
     reportCResult( source, target, sortKey1, sortKey2, compareResult, keyResult, result );
 }
 
-void CollationFinnishTest::TestTertiary( char* par )
+void CollationFinnishTest::TestTertiary(/* char* par */)
 {
     int32_t i = 0;
     myCollation->setStrength(Collator::TERTIARY);
@@ -84,7 +84,7 @@ void CollationFinnishTest::TestTertiary( char* par )
         doTest(testSourceCases[i], testTargetCases[i], results[i]);
     }
 }
-void CollationFinnishTest::TestPrimary( char* par )
+void CollationFinnishTest::TestPrimary(/* char* par */)
 {
     int32_t i;
     myCollation->setStrength(Collator::PRIMARY);
@@ -93,12 +93,12 @@ void CollationFinnishTest::TestPrimary( char* par )
     }
 }
 
-void CollationFinnishTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void CollationFinnishTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite CollationFinnishTest: ");
     switch (index) {
-        case 0: name = "TestPrimary";   if (exec)   TestPrimary( par ); break;
-        case 1: name = "TestTertiary";  if (exec)   TestTertiary( par ); break;
+        case 0: name = "TestPrimary";   if (exec)   TestPrimary(/* par */); break;
+        case 1: name = "TestTertiary";  if (exec)   TestTertiary(/* par */); break;
         default: name = ""; break;
     }
 }

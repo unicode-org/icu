@@ -591,8 +591,6 @@ TestChoiceFormat::TestGapNextDouble()
     it_out << "MSG: nextDouble & previousDouble tested." << endl;
 }
 
-void foo (double* bar) {}
-
 /** 
  * test a value for TestGapNextDouble
  **/
@@ -617,7 +615,6 @@ TestChoiceFormat::testValue( double val )
     double middle;    
     double *middlePtr = &middle;
     *middlePtr = (val + valnext) / 2.0;
-    foo(middlePtr); 
     if ((*middlePtr != val) && (*middlePtr != valnext)) {
         errln( (UnicodeString)
             "*** TestChoiceFormat::testValue #3 WARNING: There seems to be a gap for:" + val );
@@ -625,7 +622,6 @@ TestChoiceFormat::testValue( double val )
     }
 
     *middlePtr = (val + valprev) / 2.0;
-    foo(middlePtr);
 
     if ((*middlePtr != val) && (*middlePtr != valprev)) {
          errln( (UnicodeString)
@@ -635,7 +631,7 @@ TestChoiceFormat::testValue( double val )
 }
 
 
-void TestChoiceFormat::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void TestChoiceFormat::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     switch (index) {
         case 0: name = "TestSimpleExample"; 

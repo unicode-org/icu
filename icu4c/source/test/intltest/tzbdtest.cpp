@@ -10,7 +10,7 @@
 #include "unicode/simpletz.h"
 #include "unicode/gregocal.h"
 
-void TimeZoneBoundaryTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void TimeZoneBoundaryTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite TestTimeZoneBoundary");
     switch (index) {

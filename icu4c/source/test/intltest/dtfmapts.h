@@ -24,7 +24,7 @@ private:
     /**
      * Tests basic functionality of various generic API methods in DateFormat 
      */
-    void testAPI(char *par);
+    void testAPI(/* char* par */);
     /**
      * Test that the equals method works correctly.
      */

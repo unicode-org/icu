@@ -11,7 +11,7 @@
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
 
 void 
-PUtilTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+PUtilTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     //if (exec) logln("TestSuite PUtilTest: ");
     switch (index) {
@@ -26,11 +26,11 @@ PUtilTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* p
 void
 PUtilTest::testIEEEremainder()
 {
-    double    pinf        = uprv_getInfinity();
-    double    ninf        = -uprv_getInfinity();
-    double    nan            = uprv_getNaN();
-    double    pzero        = 0.0;
-    double    nzero        = 0.0;
+    double    pinf  = uprv_getInfinity();
+    double    ninf  = -uprv_getInfinity();
+    double    nan   = uprv_getNaN();
+    double    pzero = 0.0;
+    double    nzero = 0.0;
 
     nzero *= -1;
 

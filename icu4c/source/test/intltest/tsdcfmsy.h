@@ -21,7 +21,7 @@ private:
     /**
      * Test the API of DecimalFormatSymbols; primarily a simple get/set set.
      */
-    void testSymbols(char *par);
+    void testSymbols(/*char *par*/);
 
      /** helper functions**/
     void Verify(double value, const UnicodeString& pattern, DecimalFormatSymbols sym, const UnicodeString& expected);

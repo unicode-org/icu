@@ -25,16 +25,16 @@ private:
     /**
      *  test DateFormat::getAvailableLocales
      **/
-    void testAvailableLocales(char *par);
+    void testAvailableLocales(/* char* par */);
     /**
      *  call testLocale for all locales
      **/
-    void monsterTest(char *par);
+    void monsterTest(/* char *par */);
 
     /**
      *  call tryDate with variations, called by testLocale
      **/
-    void testFormat(char *par);
+    void testFormat(/* char* par */);
     /**
      *  perform tests using date and fFormat, called in many variations
      **/
@@ -42,7 +42,7 @@ private:
     /**
      *  call testFormat for different DateFormat::EStyle's, etc
      **/
-    void testLocale(char *par, const Locale&, const UnicodeString&);
+    void testLocale(/*char *par, */const Locale&, const UnicodeString&);
     /**
      *  return a random number
      **/

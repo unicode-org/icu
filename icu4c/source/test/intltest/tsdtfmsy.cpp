@@ -10,14 +10,14 @@
 #include "unicode/dtfmtsym.h"
 
 
-void IntlTestDateFormatSymbols::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void IntlTestDateFormatSymbols::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite DateFormatSymbols");
     switch (index) {
         case 0: name = "DateFormatSymbols test"; 
                 if (exec) {
                     logln("DateFormatSymbols test---"); logln("");
-                    testSymbols(par);
+                    testSymbols(/*par*/);
                 }
                 break;
 
@@ -59,7 +59,7 @@ void IntlTestDateFormatSymbols::TestGetMonths()
 /**
  * Test the API of DateFormatSymbols; primarily a simple get/set set.
  */
-void IntlTestDateFormatSymbols::testSymbols(char *par)
+void IntlTestDateFormatSymbols::testSymbols(/* char *par */)
 {
     UErrorCode status = U_ZERO_ERROR;
 

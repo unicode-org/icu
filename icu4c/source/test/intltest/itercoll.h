@@ -53,27 +53,27 @@ public:
      * @bug 4108758 - Make sure it works with contracting characters
      * 
      */
-    void TestPrevious(char *par);
+    void TestPrevious(/* char* par */);
     
     /**
      * Test for getOffset() and setOffset()
      */
-    void TestOffset(char *par);
+    void TestOffset(/* char* par */);
 
     /**
      * Test for setText()
      */
-    void TestSetText(char *par);
+    void TestSetText(/* char* par */);
     
     /** @bug 4108762
      * Test for getMaxExpansion()
      */
-    void TestMaxExpansion(char *par);
+    void TestMaxExpansion(/* char* par */);
 
     /*
      * @bug 4157299
      */
-    void TestClearBuffers(char *par);
+    void TestClearBuffers(/* char* par */);
     
     //------------------------------------------------------------------------
     // Internal utilities

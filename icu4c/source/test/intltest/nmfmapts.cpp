@@ -15,7 +15,7 @@
 // try to test the full functionality.  It just calls each function in the class and
 // verifies that it works on a basic level.
 
-void IntlTestNumberFormatAPI::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void IntlTestNumberFormatAPI::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite NumberFormatAPI");
     switch (index) {
@@ -27,7 +27,7 @@ void IntlTestNumberFormatAPI::runIndexedTest( int32_t index, UBool exec, const c
                     if(U_FAILURE(status)) {
                         errln("ERROR: Could not set default locale, test may not give correct results");
                     }
-                    testAPI(par);
+                    testAPI(/* par */);
                 }
                 break;
 
@@ -39,7 +39,7 @@ void IntlTestNumberFormatAPI::runIndexedTest( int32_t index, UBool exec, const c
  * This test does round-trip testing (format -> parse -> format -> parse -> etc.) of
  * NumberFormat.
  */
-void IntlTestNumberFormatAPI::testAPI(char *par)
+void IntlTestNumberFormatAPI::testAPI(/* char* par */)
 {
     UErrorCode status = U_ZERO_ERROR;
 

@@ -27,7 +27,7 @@ double NumberFormatRoundTripTest::min_numeric_error       = 1.0;
 
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
 
-void NumberFormatRoundTripTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void NumberFormatRoundTripTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     // if (exec) logln((UnicodeString)"TestSuite NumberFormatRoundTripTest");
     switch (index) {

@@ -27,7 +27,7 @@ private:
     /**
      *  call tryIt with many variations, called by testLocale
      **/
-    void testFormat(char *par);
+    void testFormat(/* char* par */);
     /**
      *  perform tests using aNumber and fFormat, called in many variations
      **/
@@ -39,15 +39,15 @@ private:
     /**
      *  test NumberFormat::getAvailableLocales
      **/
-    void testAvailableLocales(char *par);
+    void testAvailableLocales(/* char* par */);
     /**
      *  call testLocale for all locales
      **/
-    void monsterTest(char *par);
+    void monsterTest(/* char *par */);
     /**
      *  call testFormat for currency, percent and plain number instances
      **/
-    void testLocale(char *par, const Locale& locale, const UnicodeString& localeName);
+    void testLocale(/* char *par, */const Locale& locale, const UnicodeString& localeName);
 
     NumberFormat*   fFormat;
     UErrorCode       fStatus;

@@ -93,7 +93,7 @@ void CollationKanaTest::doTest( UnicodeString source, UnicodeString target, Coll
     reportCResult( source, target, sortKey1, sortKey2, compareResult, keyResult, result );
 }
 
-void CollationKanaTest::TestTertiary( char* par )
+void CollationKanaTest::TestTertiary(/* char* par */)
 {
     int32_t i = 0;
     myCollation->setStrength(Collator::TERTIARY);
@@ -102,11 +102,11 @@ void CollationKanaTest::TestTertiary( char* par )
     }
 }
 
-void CollationKanaTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void CollationKanaTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite CollationKanaTest: ");
     switch (index) {
-        case 0: name = "TestTertiary";  if (exec)   TestTertiary( par ); break;
+        case 0: name = "TestTertiary";  if (exec)   TestTertiary(/* par */); break;
         default: name = ""; break;
     }
 }

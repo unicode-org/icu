@@ -10,14 +10,14 @@
 #include "unicode/unum.h"
 #include "tsdcfmsy.h"
 
-void IntlTestDecimalFormatSymbols::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void IntlTestDecimalFormatSymbols::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite DecimalFormatSymbols");
     switch (index) {
         case 0: name = "DecimalFormatSymbols test"; 
                 if (exec) {
                     logln("DecimalFormatSymbols test---"); logln("");
-                    testSymbols(par);
+                    testSymbols(/*par*/);
                 }
                 break;
 
@@ -28,7 +28,7 @@ void IntlTestDecimalFormatSymbols::runIndexedTest( int32_t index, UBool exec, co
 /**
  * Test the API of DecimalFormatSymbols; primarily a simple get/set set.
  */
-void IntlTestDecimalFormatSymbols::testSymbols(char *par)
+void IntlTestDecimalFormatSymbols::testSymbols(/* char *par */)
 {
     UErrorCode status = U_ZERO_ERROR;
 

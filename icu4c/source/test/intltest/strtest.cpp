@@ -46,7 +46,7 @@ void StringTest::TestCharsetFamily(void) {
 
 U_STRING_DECL(ustringVar, "aZ0 -", 5);
 
-void StringTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char *par) {
+void StringTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {
     if(exec) {
         logln("TestSuite Character and String Test: ");
     }

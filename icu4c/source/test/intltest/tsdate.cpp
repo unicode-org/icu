@@ -19,7 +19,7 @@ const double IntlTestDateFormat::ONEYEAR = 365.25 * ONEDAY; // Approximate
  * DateFormat.
  */
 // par is ignored throughout this file
-void IntlTestDateFormat::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void IntlTestDateFormat::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite DateFormat");
     switch (index) {
@@ -29,27 +29,27 @@ void IntlTestDateFormat::runIndexedTest( int32_t index, UBool exec, const char* 
                 fFormat = DateFormat::createInstance();
                 fTestName = "createInstance";
                 fLimit = 3;
-                testFormat( par );
+                testFormat(/* par */);
             }
             break;
         case 1: name = "Default Locale";
             if (exec) {
                 logln(name);
-                testLocale(par, Locale::getDefault(), "Default Locale");
+                testLocale(/*par, */Locale::getDefault(), "Default Locale");
             }
             break;
 
         case 2: name = "Determine Available Locales"; 
             if (exec) {
                 logln(name);
-                testAvailableLocales(par);
+                testAvailableLocales(/* par */);
             }
             break;
 
         case 3: name = "Test Available Locales"; 
             if (exec) {
                 logln(name);
-                monsterTest(par);
+                monsterTest(/*par*/);
             }
             break;
 
@@ -58,7 +58,7 @@ void IntlTestDateFormat::runIndexedTest( int32_t index, UBool exec, const char* 
 }
 
 void
-IntlTestDateFormat::testLocale(char* par, const Locale& locale, const UnicodeString& localeName)
+IntlTestDateFormat::testLocale(/*char* par, */const Locale& locale, const UnicodeString& localeName)
 {
     DateFormat::EStyle timeStyle, dateStyle;
     
@@ -73,7 +73,7 @@ IntlTestDateFormat::testLocale(char* par, const Locale& locale, const UnicodeStr
     {
         fTestName = (UnicodeString) "Time test " + (int32_t) timeStyle + " (" + localeName + ")";
         fFormat = DateFormat::createTimeInstance(timeStyle, locale);
-        testFormat(par);
+        testFormat(/* par */);
     }
 
     fLimit = 2;
@@ -84,7 +84,7 @@ IntlTestDateFormat::testLocale(char* par, const Locale& locale, const UnicodeStr
     {
         fTestName = (UnicodeString) "Date test " + (int32_t) dateStyle + " (" + localeName + ")";
         fFormat = DateFormat::createDateInstance(dateStyle, locale);
-        testFormat(par);
+        testFormat(/* par */);
     }
 
     for(dateStyle = (DateFormat::EStyle)0; 
@@ -97,12 +97,12 @@ IntlTestDateFormat::testLocale(char* par, const Locale& locale, const UnicodeStr
         {
             fTestName = (UnicodeString) "DateTime test " + (int32_t) dateStyle + "/" + (int32_t) timeStyle + " (" + localeName + ")";
             fFormat = DateFormat::createDateTimeInstance(dateStyle, timeStyle, locale);
-            testFormat(par);
+            testFormat(/* par */);
         }
     }
 }
 
-void IntlTestDateFormat::testFormat(char *par)
+void IntlTestDateFormat::testFormat(/* char* par */)
 {
     if (fFormat == 0)
     {
@@ -224,7 +224,7 @@ double IntlTestDateFormat::randDouble()
     return d;
 }
 
-void IntlTestDateFormat::testAvailableLocales(char *par)
+void IntlTestDateFormat::testAvailableLocales(/* char* par */)
 {
     int32_t count = 0;
     const Locale* locales = DateFormat::getAvailableLocales(count);
@@ -243,7 +243,7 @@ void IntlTestDateFormat::testAvailableLocales(char *par)
     else errln((UnicodeString)"********** FAIL: Zero available locales or null array pointer");
 }
 
-void IntlTestDateFormat::monsterTest(char *par)
+void IntlTestDateFormat::monsterTest(/*char *par*/)
 {
     int32_t count;
     const Locale* locales = DateFormat::getAvailableLocales(count);
@@ -257,7 +257,7 @@ void IntlTestDateFormat::monsterTest(char *par)
         {
             UnicodeString name = UnicodeString(locales[i].getName(), "");
             logln((UnicodeString)"Testing " + name + "...");
-            testLocale(par, locales[i], name);
+            testLocale(/*par, */locales[i], name);
         }
     }
 }

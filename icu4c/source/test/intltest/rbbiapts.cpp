@@ -547,7 +547,7 @@ void RBBIAPITest::TestIsBoundary(){
 // runIndexedTest
 //---------------------------------------------
 
-void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln((UnicodeString)"TestSuite RuleBasedBreakIterator API ");
     switch (index) {

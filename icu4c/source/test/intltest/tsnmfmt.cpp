@@ -17,7 +17,7 @@
  * This test does round-trip testing (format -> parse -> format -> parse -> etc.) of
  * NumberFormat.
  */
-void IntlTestNumberFormat::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void IntlTestNumberFormat::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
 
     if (exec) logln((UnicodeString)"TestSuite NumberFormat");
@@ -28,25 +28,25 @@ void IntlTestNumberFormat::runIndexedTest( int32_t index, UBool exec, const char
                 logln(name);
                 fStatus = U_ZERO_ERROR;
                 fFormat = NumberFormat::createInstance(fStatus);
-                testFormat(par);
+                testFormat(/*par*/);
             }
             break;
 
         case 1: name = "Default Locale";
-            if (exec) testLocale(par, Locale::getDefault(), "Default Locale");
+            if (exec) testLocale(/*par, */Locale::getDefault(), "Default Locale");
             break;
 
         case 2: name = "Determine Available Locales"; 
             if (exec) {
                 logln(name);
-                testAvailableLocales(par);
+                testAvailableLocales(/*par*/);
             }
             break;
 
         case 3: name = "Test Available Locales"; 
             if (exec) {
                 logln(name);
-                monsterTest(par);
+                monsterTest(/*par*/);
             }
             break;
 
@@ -55,7 +55,7 @@ void IntlTestNumberFormat::runIndexedTest( int32_t index, UBool exec, const char
 }
 
 void
-IntlTestNumberFormat::testLocale(char* par, const Locale& locale, const UnicodeString& localeName)
+IntlTestNumberFormat::testLocale(/* char* par, */const Locale& locale, const UnicodeString& localeName)
 {
     const char* name;
     
@@ -63,28 +63,29 @@ IntlTestNumberFormat::testLocale(char* par, const Locale& locale, const UnicodeS
     logln((UnicodeString)name + " (" + localeName + ")");
     fStatus = U_ZERO_ERROR;
     fFormat = NumberFormat::createInstance(locale, fStatus);
-    testFormat(par);
+    testFormat(/* par */);
 
     name = "Currency test";
     logln((UnicodeString)name + " (" + localeName + ")");
     fStatus = U_ZERO_ERROR;
     fFormat = NumberFormat::createCurrencyInstance(locale, fStatus);
-    testFormat(par);
+    testFormat(/* par */);
 
     name = "Percent test";
     logln((UnicodeString)name + " (" + localeName + ")");
     fStatus = U_ZERO_ERROR;
     fFormat = NumberFormat::createPercentInstance(locale, fStatus);
-    testFormat(par);
+    testFormat(/* par */);
 }
 
 void
-IntlTestNumberFormat::testFormat(char *par)
+IntlTestNumberFormat::testFormat(/* char* par */)
 {
     if (U_FAILURE(fStatus))
     { 
         errln((UnicodeString)"********** FAIL: createXxxInstance failed.");
-        if (fFormat != 0) errln("********** FAIL: Non-null format returned by createXxxInstance upon failure.");
+        if (fFormat != 0)
+            errln("********** FAIL: Non-null format returned by createXxxInstance upon failure.");
         delete fFormat;
         fFormat = 0;
         return;
@@ -336,7 +337,7 @@ IntlTestNumberFormat::tryIt(int32_t aNumber)
     }
 }
 
-void IntlTestNumberFormat::testAvailableLocales(char *par)
+void IntlTestNumberFormat::testAvailableLocales(/* char* par */)
 {
     int32_t count = 0;
     const Locale* locales = NumberFormat::getAvailableLocales(count);
@@ -355,7 +356,7 @@ void IntlTestNumberFormat::testAvailableLocales(char *par)
     else errln((UnicodeString)"********** FAIL: Zero available locales or null array pointer");
 }
 
-void IntlTestNumberFormat::monsterTest(char *par)
+void IntlTestNumberFormat::monsterTest(/* char* par */)
 {
     const char *SEP = "============================================================\n";
     int32_t count;
@@ -370,7 +371,7 @@ void IntlTestNumberFormat::monsterTest(char *par)
         {
             UnicodeString name(locales[i].getName(), "");
             logln(SEP);
-            testLocale(par, locales[i], name);
+            testLocale(/* par, */locales[i], name);
         }
     }
 

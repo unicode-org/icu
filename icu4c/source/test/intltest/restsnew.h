@@ -31,7 +31,7 @@ public:
 
 private:
     /**
-     * The assignment operator have no real implementation.
+     * The assignment operator has no real implementation.
      * It is provided to make the compiler happy. Do not call.
      */
     NewResourceBundleTest& operator=(const NewResourceBundleTest&) { return *this; }

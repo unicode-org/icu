@@ -24,7 +24,7 @@
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
 
 void 
-DateFormatMiscTests::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+DateFormatMiscTests::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     // if (exec) logln((UnicodeString)"TestSuite DateFormatMiscTests");
     switch (index) {
@@ -48,7 +48,7 @@ DateFormatMiscTests::failure(UErrorCode status, const char* msg)
 }
 
 /*
- * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.11 $ $Date: 2000/08/14 21:42:35 $
+ * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.12 $ $Date: 2000/08/23 19:11:16 $
  *
  * @bug 4097450
  */
@@ -140,7 +140,7 @@ DateFormatMiscTests::test4097450()
 }
 
 /*
- * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.11 $ $Date: 2000/08/14 21:42:35 $
+ * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.12 $ $Date: 2000/08/23 19:11:16 $
  *
  * @bug 4099975
  */

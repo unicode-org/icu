@@ -45,15 +45,15 @@ public:
     /** 
     * tests the static MessageFormat::format method
      **/
-    void testStaticFormat(char* parm);
+    void testStaticFormat(/* char* par */);
     /** 
      * tests MesageFormat functionality with a simple format
      **/
-    void testSimpleFormat(char* parm);
+    void testSimpleFormat(/* char* par */);
     /** 
      * tests MesageFormat functionality with a format including a ChoiceFormat
      **/
-    void testMsgFormatChoice(char* parm);
+    void testMsgFormatChoice(/* char* par */);
 
     //
     /** 
