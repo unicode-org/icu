@@ -24,14 +24,14 @@
 
 static void
 _SBCSLoad(UConverterSharedData *sharedData, const uint8_t *raw, UErrorCode *pErrorCode) {
-    sharedData->table->sbcs.toUnicode = (UChar*)raw;
-    raw += sizeof(UChar)*256;
-    sharedData->table->sbcs.fromUnicode = ucmp8_cloneFromData(&raw, pErrorCode);
+    sharedData->table->sbcs.toUnicode = (uint16_t*)raw;
+    raw += sizeof(uint16_t)*256;
+    ucmp8_initFromData(&sharedData->table->sbcs.fromUnicode, &raw, pErrorCode);
 }
 
 static void
 _SBCSUnload(UConverterSharedData *sharedData) {
-    ucmp8_close (sharedData->table->sbcs.fromUnicode);
+    ucmp8_close (&sharedData->table->sbcs.fromUnicode);
     uprv_free (sharedData->table);
 }
 
@@ -121,7 +121,7 @@ void T_UConverter_fromUnicode_SBCS (UConverter * _this,
   CompactByteArray *myFromUnicode;
   unsigned char targetChar = 0x00;
 
-  myFromUnicode = _this->sharedData->table->sbcs.fromUnicode;
+  myFromUnicode = &_this->sharedData->table->sbcs.fromUnicode;
 
   /*writing the char to the output stream */
   while (mySourceIndex < sourceLength)
@@ -241,11 +241,17 @@ static const UConverterImpl _SBCSImpl={
     NULL
 };
 
+const UConverterStaticData _SBCSStaticData={
+  sizeof(UConverterStaticData),
+  "SBCS",
+    0, UCNV_IBM, UCNV_SBCS, 1, 1,
+  1, { 0, 0, 0, 0 }
+};
+
 const UConverterSharedData _SBCSData={
     sizeof(UConverterSharedData), 1,
-    NULL, NULL, &_SBCSImpl, "SBCS",
-    0, UCNV_IBM, UCNV_SBCS, 1, 1,
-    { 0, 1, { 0, 0, 0, 0 } }
+    NULL, NULL, &_SBCSStaticData, FALSE, &_SBCSImpl, 
+    0
 };
 
 /* DBCS --------------------------------------------------------------------- */
@@ -253,18 +259,18 @@ const UConverterSharedData _SBCSData={
 U_CFUNC void
 _DBCSLoad(UConverterSharedData *sharedData, const uint8_t *raw, UErrorCode *pErrorCode) {
     const uint8_t *oldraw = raw;
-    sharedData->table->dbcs.toUnicode=ucmp16_cloneFromData(&raw, pErrorCode);
+    ucmp16_initFromData(&sharedData->table->dbcs.toUnicode,&raw, pErrorCode);
     if(((raw-oldraw)&3)!=0) {
         raw+=4-((raw-oldraw)&3);    /* pad to 4 */
     }
-    sharedData->table->dbcs.fromUnicode =ucmp16_cloneFromData(&raw, pErrorCode);
+    ucmp16_initFromData(&sharedData->table->dbcs.fromUnicode, &raw, pErrorCode);
 }
 
 U_CFUNC void
 _DBCSUnload(UConverterSharedData *sharedData) {
-    ucmp16_close (sharedData->table->dbcs.fromUnicode);
-    ucmp16_close (sharedData->table->dbcs.toUnicode);
-	uprv_free (sharedData->table);
+    ucmp16_close (&sharedData->table->dbcs.fromUnicode);
+    ucmp16_close (&sharedData->table->dbcs.toUnicode);
+    uprv_free (sharedData->table);
 }
 
 void   T_UConverter_toUnicode_DBCS (UConverter * _this,
@@ -286,7 +292,7 @@ void   T_UConverter_toUnicode_DBCS (UConverter * _this,
   UChar targetUniChar = 0x0000;
   UChar mySourceChar = 0x0000;
 
-  myToUnicode = _this->sharedData->table->dbcs.toUnicode;
+  myToUnicode = &_this->sharedData->table->dbcs.toUnicode;
 
   while (mySourceIndex < sourceLength)
     {
@@ -386,7 +392,7 @@ void   T_UConverter_fromUnicode_DBCS (UConverter * _this,
   UChar targetUniChar = 0x0000;
   UChar mySourceChar = 0x0000;
 
-  myFromUnicode = _this->sharedData->table->dbcs.fromUnicode;
+  myFromUnicode = &_this->sharedData->table->dbcs.fromUnicode;
 
   /*writing the char to the output stream */
   while (mySourceIndex < sourceLength)
@@ -475,7 +481,7 @@ UChar32 T_UConverter_getNextUChar_DBCS(UConverter* converter,
     }
   
   /*Gets the corresponding codepoint*/
-  myUChar = ucmp16_getu(converter->sharedData->table->dbcs.toUnicode,
+  myUChar = ucmp16_getu((&converter->sharedData->table->dbcs.toUnicode),
                         (uint16_t)(((UChar)((**source)) << 8) |((uint8_t)*((*source)+1))));
   
   /*update the input pointer*/
@@ -527,9 +533,15 @@ static const UConverterImpl _DBCSImpl={
     NULL
 };
 
+const UConverterStaticData _DBCSStaticData={
+  sizeof(UConverterStaticData),
+  "DBCS",
+    0, UCNV_IBM, UCNV_DBCS, 2, 2,
+     1, { 0, 0, 0, 0 }  /* subchar */
+};
+
 const UConverterSharedData _DBCSData={
     sizeof(UConverterSharedData), 1,
-    NULL, NULL, &_DBCSImpl, "DBCS",
-    0, UCNV_IBM, UCNV_DBCS, 2, 2,
-    { 0, 1, { 0, 0, 0, 0 } }
+    NULL, NULL, &_DBCSStaticData, FALSE, &_DBCSImpl, 
+    0, /* tounicodestatus */
 };

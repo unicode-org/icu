@@ -239,8 +239,8 @@ void   ucnv_setSubstChars (UConverter * converter,
     return;
 
   /*Makes sure that the subChar is within the codepages char length boundaries */
-  if ((len > converter->sharedData->maxBytesPerChar)
-      || (len < converter->sharedData->minBytesPerChar))
+  if ((len > converter->sharedData->staticData->maxBytesPerChar)
+      || (len < converter->sharedData->staticData->minBytesPerChar))
     {
       *err = U_ILLEGAL_ARGUMENT_ERROR;
       return;
@@ -273,7 +273,7 @@ int32_t  ucnv_getDisplayName (const UConverter * converter,
   rb = ures_open (NULL, displayLocale, err);
 
   stringToWrite = ures_get (rb,
-			    converter->sharedData->name,
+			    converter->sharedData->staticData->name,
 			    err);
 
   if (rb)
@@ -289,8 +289,8 @@ int32_t  ucnv_getDisplayName (const UConverter * converter,
        *sets stringToWriteLength (which accounts for a NULL terminator)
        *and stringToWrite
        */
-      stringToWriteLength = uprv_strlen (converter->sharedData->name) + 1;
-      stringToWrite = u_uastrcpy (stringToWriteBuffer, converter->sharedData->name);
+      stringToWriteLength = uprv_strlen (converter->sharedData->staticData->name) + 1;
+      stringToWrite = u_uastrcpy (stringToWriteBuffer, converter->sharedData->staticData->name);
 
       /*Hides the fallback to the internal name from the user */
       if (*err == U_MISSING_RESOURCE_ERROR)
@@ -332,7 +332,7 @@ int32_t  ucnv_getDisplayName (const UConverter * converter,
  */
 void  ucnv_reset (UConverter * converter)
 {
-  converter->toUnicodeStatus = converter->sharedData->defaultConverterValues.toUnicodeStatus;
+  converter->toUnicodeStatus = converter->sharedData->toUnicodeStatus;
   converter->fromUnicodeStatus = 0;
   converter->UCharErrorBufferLength = 0;
   converter->charErrorBufferLength = 0;
@@ -347,13 +347,13 @@ void  ucnv_reset (UConverter * converter)
 
 int8_t  ucnv_getMaxCharSize (const UConverter * converter)
 {
-  return converter->sharedData->maxBytesPerChar;
+  return converter->sharedData->staticData->maxBytesPerChar;
 }
 
 
 int8_t  ucnv_getMinCharSize (const UConverter * converter)
 {
-  return converter->sharedData->minBytesPerChar;
+  return converter->sharedData->staticData->minBytesPerChar;
 }
 
 const char*  ucnv_getName (const UConverter * converter, UErrorCode * err)
@@ -362,7 +362,7 @@ const char*  ucnv_getName (const UConverter * converter, UErrorCode * err)
   if (U_FAILURE (*err))
     return NULL;
 
-  return converter->sharedData->name;
+  return converter->sharedData->staticData->name;
 }
 
 int32_t  ucnv_getCCSID (const UConverter * converter,
@@ -371,7 +371,7 @@ int32_t  ucnv_getCCSID (const UConverter * converter,
   if (U_FAILURE (*err))
     return -1;
 
-  return converter->sharedData->codepage;
+  return converter->sharedData->staticData->codepage;
 }
 
 
@@ -381,7 +381,7 @@ UConverterPlatform  ucnv_getPlatform (const UConverter * converter,
   if (U_FAILURE (*err))
     return UCNV_UNKNOWN;
   
-  return converter->sharedData->platform;
+  return converter->sharedData->staticData->platform;
 }
 
 UConverterToUCallback  ucnv_getToUCallBack (const UConverter * converter)
@@ -473,7 +473,7 @@ void   ucnv_fromUnicode (UConverter * _this,
     } else {
       /* all code points are of the same length */
       int32_t targetSize = targetLimit - *target;
-      int32_t i, bytesPerChar = _this->sharedData->maxBytesPerChar;
+      int32_t i, bytesPerChar = _this->sharedData->staticData->maxBytesPerChar;
 
       if(bytesPerChar == 1) {
         for (i=0; i<targetSize; i++) {
@@ -565,7 +565,7 @@ void   ucnv_toUnicode (UConverter * _this,
     } else {
       /* all code points are of the same length */
       int32_t targetSize = targetLimit - *target;
-      int32_t i, bytesPerChar = _this->sharedData->maxBytesPerChar;
+      int32_t i, bytesPerChar = _this->sharedData->staticData->maxBytesPerChar;
 
       if(bytesPerChar == 1) {
         for (i=0; i<targetSize; i++) {
@@ -1046,7 +1046,7 @@ int32_t  ucnv_convert(const char *toConverterName,
 
 UConverterType ucnv_getType(const UConverter* converter)
 {
-  return converter->sharedData->conversionType;
+  return converter->sharedData->staticData->conversionType;
 }
 
 void ucnv_getStarters(const UConverter* converter, 

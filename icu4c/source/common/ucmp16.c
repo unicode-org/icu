@@ -85,6 +85,7 @@ CompactShortArray* ucmp16_open(int16_t defaultValue)
   this_obj->fAlias = FALSE;
   this_obj->fIndex = NULL;
   this_obj->fHashes = NULL; 
+  this_obj->fIAmOwned = FALSE;
   this_obj->fDefaultValue = defaultValue;
   
   this_obj->fArray = (int16_t*)uprv_malloc(UCMP16_kUnicodeCount * sizeof(int16_t));
@@ -129,6 +130,62 @@ CompactShortArray* ucmp16_open(int16_t defaultValue)
   return this_obj;
 }
 
+
+void ucmp16_init(CompactShortArray *this_obj, int16_t defaultValue)
+{
+  int32_t i;
+
+  this_obj->fStructSize = sizeof(CompactShortArray);
+  this_obj->fCount = UCMP16_kUnicodeCount;
+  this_obj->fCompact = FALSE; 
+  this_obj->fBogus = FALSE;
+  this_obj->fArray = NULL;
+  this_obj->fAlias = FALSE;
+  this_obj->fIndex = NULL;
+  this_obj->fHashes = NULL; 
+  this_obj->fIAmOwned = TRUE;
+  this_obj->fDefaultValue = defaultValue;
+  
+  this_obj->fArray = (int16_t*)uprv_malloc(UCMP16_kUnicodeCount * sizeof(int16_t));
+  if (this_obj->fArray == NULL)
+    {
+      this_obj->fBogus = TRUE;
+      return;
+    }
+  
+  this_obj->fIndex = (uint16_t*)uprv_malloc(UCMP16_kIndexCount * sizeof(uint16_t));
+  if (this_obj->fIndex == NULL)
+    {
+      uprv_free(this_obj->fArray);
+      this_obj->fArray = NULL;
+      
+      this_obj->fBogus = TRUE;
+      return;
+    }
+  
+  this_obj->kBlockShift = UCMP16_kBlockShift;
+  this_obj->kBlockMask = UCMP16_kBlockMask;
+  for (i = 0; i < UCMP16_kUnicodeCount; i += 1)
+    {
+      this_obj->fArray[i] = defaultValue;
+    }
+  
+  this_obj->fHashes =(int32_t*)uprv_malloc(UCMP16_kIndexCount * sizeof(int32_t));
+  if (this_obj->fHashes == NULL)
+    {
+      uprv_free(this_obj->fArray);
+      uprv_free(this_obj->fIndex);
+      this_obj->fBogus = TRUE;
+      return;
+    }
+  
+  for (i = 0; i < UCMP16_kIndexCount; i += 1)
+    {
+      this_obj->fIndex[i] = (uint16_t)(i << UCMP16_kBlockShift);
+      this_obj->fHashes[i] = 0;
+    }
+}
+
 CompactShortArray* ucmp16_openAdopt(uint16_t *indexArray,
                     int16_t *newValues, 
                     int32_t count,
@@ -147,6 +204,8 @@ CompactShortArray* ucmp16_openAdopt(uint16_t *indexArray,
   this_obj->kBlockShift = UCMP16_kBlockShift;
   this_obj->kBlockMask = UCMP16_kBlockMask;
   this_obj->fAlias = FALSE;
+  this_obj->fIAmOwned = FALSE;
+
   return this_obj;
 }
 
@@ -188,6 +247,8 @@ CompactShortArray* ucmp16_openAlias(uint16_t *indexArray,
   this_obj->kBlockShift = UCMP16_kBlockShift;
   this_obj->kBlockMask = UCMP16_kBlockMask;
   this_obj->fAlias = TRUE;
+  this_obj->fIAmOwned = FALSE;
+
   return this_obj;
 }
 
@@ -207,7 +268,10 @@ void ucmp16_close(CompactShortArray* this_obj)
     if(this_obj->fHashes != NULL) {
       uprv_free(this_obj->fHashes);
     }
-    uprv_free(this_obj);
+    if(!this_obj->fIAmOwned)
+      {
+        uprv_free(this_obj);
+      }
   }
 }
 
@@ -432,41 +496,51 @@ const uint16_t* ucmp16_getIndex(const CompactShortArray* this_obj)
    possible between the ucmpX_ family.  Check lines marked 'SIZE'.
 */
 
-U_CAPI  CompactShortArray * U_EXPORT2 ucmp16_cloneFromData(const uint8_t **source,  UErrorCode *status)
+U_CAPI  void U_EXPORT2 ucmp16_initFromData(CompactShortArray *this_obj, const uint8_t **source, UErrorCode *status)
 {
-  CompactShortArray *array;
-  const CompactShortArray *oldArray;
+  uint32_t i;
+  const uint8_t *oldSource = *source;
 
   if(U_FAILURE(*status))
-    return NULL;
+    return;
 
-  oldArray= (const CompactShortArray*)*source;
-
-  if(oldArray->fStructSize != sizeof(*oldArray))
-    {
-      *status = U_INVALID_TABLE_FORMAT; /* ? */
-      return NULL;
-    }
-  array = (CompactShortArray*)malloc(sizeof(*array));
+ this_obj->fArray = NULL;
+ this_obj->fIndex = NULL; 
+ this_obj->fBogus = FALSE;
+ this_obj->fStructSize = sizeof(CompactShortArray);
+ this_obj->fCompact = TRUE;
+ this_obj->fAlias = TRUE;
+ this_obj->fIAmOwned = TRUE;
+ this_obj->fHashes = NULL;
+ this_obj->fDefaultValue = 0x0000; /* not used */
   
-  uprv_memcpy(array,*source, sizeof(*array));
+ i = * ((const uint32_t*) *source);
+ (*source) += 4;
 
-  *source += array->fStructSize;
-
-  array->fArray = (int16_t*)*source;         /* SIZE */
-  *source +=  (sizeof(int16_t)*array->fCount);     /* SIZE */
-
-  array->fIndex = (uint16_t*)*source;
-  *source += (sizeof(uint16_t)*UCMP16_kIndexCount); /* SIZE*/
+ if(i != ICU_UCMP16_VERSION)
+ {
+   *status = U_INVALID_FORMAT_ERROR;
+   return;
+ }
   
-  array->fAlias = TRUE;
-  
-  /* eat up padding */
-  while((*source-((uint8_t*)oldArray))%4)
-      (*source)++;
+ this_obj->fCount = * ((const uint32_t*)*source);
+ (*source) += 4;
 
-  return array;
+ this_obj->kBlockShift = * ((const uint32_t*)*source);
+ (*source) += 4;
 
+ this_obj->kBlockMask = * ((const uint32_t*)*source);
+ (*source) += 4;
+
+ this_obj->fIndex = (uint16_t*) *source;
+ (*source) += sizeof(this_obj->fIndex[0])*UCMP16_kIndexCount;
+
+ this_obj->fArray = (uint16_t*) *source;
+ (*source) += sizeof(this_obj->fArray[0])*this_obj->fCount;
+
+ /* eat up padding */
+ while((*source-(oldSource))%4)
+    (*source)++;
 }
 
 

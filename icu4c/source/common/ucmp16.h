@@ -21,6 +21,10 @@
 
 #include "unicode/utypes.h"
 
+/* 32-bits.
+  Bump this whenever the internal structure changes.
+*/
+#define ICU_UCMP16_VERSION 0x01270000
 
 
 /**
@@ -66,7 +70,7 @@
  * @see                CompactIntArray
  * @see                CompactCharArray
  * @see                CompactStringArray
- * @version            $Revision: 1.8 $ 8/25/98
+ * @version            $Revision: 1.9 $ 8/25/98
  * @author             Helena Shih
  */
 
@@ -82,6 +86,7 @@ typedef struct CompactShortArray {
   bool_t fAlias;
   int32_t kBlockShift;
   int32_t kBlockMask;
+  bool_t fIAmOwned; /* don't free CSA on close */
 } CompactShortArray;
 
 
@@ -93,6 +98,7 @@ U_CAPI int32_t U_EXPORT2 ucmp16_getkBlockCount(void);
  * @param defaultValue the default value for all characters not explicitly in the array
  */
 U_CAPI  CompactShortArray* U_EXPORT2 ucmp16_open(int16_t defaultValue);
+U_CAPI void U_EXPORT2 ucmp16_init(CompactShortArray* array, int16_t defaultValue);
 
  /**
   * Construct a CompactShortArray from a pre-computed index and values array. The values
@@ -203,7 +209,7 @@ U_CAPI  const uint16_t* U_EXPORT2 ucmp16_getIndex(const CompactShortArray* array
 
 
 /** INTERNAL USE ONLY **/
-U_CAPI  CompactShortArray * U_EXPORT2 ucmp16_cloneFromData(const uint8_t **source,  UErrorCode *status);
+U_CAPI void U_EXPORT2 ucmp16_initFromData(CompactShortArray* array, const uint8_t **source,  UErrorCode *status);
 
 #endif
 
