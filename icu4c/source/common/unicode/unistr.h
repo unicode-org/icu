@@ -249,7 +249,7 @@ public:
    * in <TT>text</TT>
    * @param start the offset at which the compare operation begins
    * @param length the number of characters of text to compare.
-   * @param srcText the text to be compared
+   * @param text the other text to be compared against this string.
    * @return The result of bitwise character comparison: 0 if this
    * contains the same characters as <code>text</code>, -1 if the characters in 
    * this are bitwise less than the characters in <code>text</code>, +1 if the

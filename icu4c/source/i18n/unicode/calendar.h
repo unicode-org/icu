@@ -1373,7 +1373,7 @@ protected:
      * @param useMonth if false, compute the day before the first day of
      * the given year, otherwise, compute the day before the first day of
      * the given month
-     * @param return the Julian day number of the day before the first
+     * @return the Julian day number of the day before the first
      * day of the given month and year
      * @internal
      */
@@ -1451,6 +1451,8 @@ protected:
      * @param millis milliseconds of the date fields
      * @param millisInDay milliseconds of the time fields; may be out
      * or range.
+     * @param ec Output param set to failure code on function return
+     *          when this function fails.
      * @internal
      */
     int32_t computeZoneOffset(double millis, int32_t millisInDay, UErrorCode &ec);
@@ -1460,7 +1462,7 @@ protected:
      * Determine the best stamp in a range.
      * @param start first enum to look at
      * @param end last enum to look at
-     * @param best stamp prior to function call
+     * @param bestSoFar stamp prior to function call
      * @return the stamp value of the best stamp
      * @internal
      */
@@ -1739,6 +1741,8 @@ protected:
      * something more efficient for that field.
      * <p>
      * @param field The calendar field whose value should be pinned.
+     * @param status Output param set to failure code on function return
+     *          when this function fails.
      *
      * @see #getActualMinimum
      * @see #getActualMaximum
@@ -1772,13 +1776,13 @@ protected:
      *              {@link #DAY_OF_MONTH DAY_OF_MONTH} whose week number is desired.
      *              Should be 1 for the first day of the period.
      *
-     * @param knownDayOfPeriod   The {@link #DAY_OF_YEAR DAY_OF_YEAR}
+     * @param dayOfPeriod   The {@link #DAY_OF_YEAR DAY_OF_YEAR}
      *              or {@link #DAY_OF_MONTH DAY_OF_MONTH} for a day in the period whose
      *              {@link #DAY_OF_WEEK DAY_OF_WEEK} is specified by the
      *              <code>knownDayOfWeek</code> parameter.
      *              Should be 1 for first day of period.
      *
-     * @param knownDayOfWeek  The {@link #DAY_OF_WEEK DAY_OF_WEEK} for the day
+     * @param dayOfWeek  The {@link #DAY_OF_WEEK DAY_OF_WEEK} for the day
      *              corresponding to the <code>knownDayOfPeriod</code> parameter.
      *              1-based with 1=Sunday.
      *
@@ -1810,7 +1814,7 @@ protected:
      *                      {@link #DAY_OF_MONTH DAY_OF_MONTH} whose week number is desired.
      *                      Should be 1 for the first day of the period.
      *
-     * @param dayofWeek     The {@link #DAY_OF_WEEK DAY_OF_WEEK} for the day
+     * @param dayOfWeek     The {@link #DAY_OF_WEEK DAY_OF_WEEK} for the day
      *                      corresponding to the <code>dayOfPeriod</code> parameter.
      *                      1-based with 1=Sunday.
      *
