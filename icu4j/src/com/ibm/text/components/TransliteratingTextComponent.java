@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/components/Attic/TransliteratingTextComponent.java,v $ 
- * $Date: 2000/03/10 04:07:26 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/04/25 17:18:54 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -25,7 +25,7 @@ import com.ibm.text.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliteratingTextComponent.java,v $ $Revision: 1.3 $ $Date: 2000/03/10 04:07:26 $
+ * @version $RCSfile: TransliteratingTextComponent.java,v $ $Revision: 1.4 $ $Date: 2000/04/25 17:18:54 $
  */
 public class TransliteratingTextComponent extends DumbTextComponent {
 
@@ -101,8 +101,8 @@ public class TransliteratingTextComponent extends DumbTextComponent {
         int saveStart = start;
 
         ReplaceableString buf = new ReplaceableString();
-        buf.getStringBuffer().append(getText().substring(start,
-                                                         getSelectionStart()));
+        buf.replace(0, 1, getText().substring(start,
+                                              getSelectionStart()));
 
         Transliterator.Position index =
             new Transliterator.Position(0, getSelectionStart() - start,

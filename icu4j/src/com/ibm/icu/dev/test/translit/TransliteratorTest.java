@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $ 
- * $Date: 2000/04/25 01:43:23 $ 
- * $Revision: 1.18 $
+ * $Date: 2000/04/25 17:19:34 $ 
+ * $Revision: 1.19 $
  *
  *****************************************************************************************
  */
@@ -514,7 +514,7 @@ public class TransliteratorTest extends TestFmwk {
 
         // Test keyboard (incremental) transliteration -- this result
         // must be the same after we finalize (see below).
-        rsource.getStringBuffer().setLength(0);
+        rsource.replace(0, rsource.length(), "");
         Transliterator.Position index = new Transliterator.Position();
         StringBuffer log = new StringBuffer();
 
