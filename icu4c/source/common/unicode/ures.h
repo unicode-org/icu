@@ -438,7 +438,7 @@ ures_getInt(const UResourceBundle* resourceBundle,
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2 
-ures_getSize(UResourceBundle *resourceBundle);
+ures_getSize(const UResourceBundle *resourceBundle);
 
 /**
  * Returns the type of a resource. Available types are defined in enum UResType
@@ -449,7 +449,7 @@ ures_getSize(UResourceBundle *resourceBundle);
  * @stable ICU 2.0
  */
 U_STABLE UResType U_EXPORT2 
-ures_getType(UResourceBundle *resourceBundle);
+ures_getType(const UResourceBundle *resourceBundle);
 
 /**
  * Returns the key associated with a given resource. Not all the resources have a key - only 
@@ -460,7 +460,7 @@ ures_getType(UResourceBundle *resourceBundle);
  * @stable ICU 2.0
  */
 U_STABLE const char * U_EXPORT2 
-ures_getKey(UResourceBundle *resourceBundle);
+ures_getKey(const UResourceBundle *resourceBundle);
 
 /* ITERATION API 
     This API provides means for iterating through a resource
@@ -483,7 +483,7 @@ ures_resetIterator(UResourceBundle *resourceBundle);
  * @stable ICU 2.0
  */
 U_STABLE UBool U_EXPORT2 
-ures_hasNext(UResourceBundle *resourceBundle);
+ures_hasNext(const UResourceBundle *resourceBundle);
 
 /**
  * Returns the next resource in a given resource or NULL if there are no more resources 
