@@ -874,9 +874,8 @@ checkDataItem
 
     if(pHeader->dataHeader.magic1==0xda &&
         pHeader->dataHeader.magic2==0x27 &&
-        pHeader->info.isBigEndian==U_IS_BIG_ENDIAN &&
         (isAcceptable==NULL || isAcceptable(context, type, name, &pHeader->info))
-        ) {
+    ) {
         rDataMem=UDataMemory_createNewInstance(fatalErr);
         if (U_FAILURE(*fatalErr)) {
             return NULL;
@@ -1165,10 +1164,16 @@ udata_getInfo(UDataMemory *pData, UDataInfo *pInfo) {
     if(pInfo!=NULL) {
         if(pData!=NULL && pData->pHeader!=NULL) {
             const UDataInfo *info=&pData->pHeader->info;
-            if(pInfo->size>info->size) {
-                pInfo->size=info->size;
+            uint16_t dataInfoSize=udata_getInfoSize(info);
+            if(pInfo->size>dataInfoSize) {
+                pInfo->size=dataInfoSize;
             }
-            uprv_memcpy((uint16_t *)pInfo+1, (uint16_t *)info+1, pInfo->size-2);
+            uprv_memcpy((uint16_t *)pInfo+1, (const uint16_t *)info+1, pInfo->size-2);
+            if(info->isBigEndian!=U_IS_BIG_ENDIAN) {
+                /* opposite endianness */
+                uint16_t x=info->reservedWord;
+                pInfo->reservedWord=(uint16_t)((x<<8)|(x>>8));
+            }
         } else {
             pInfo->size=0;
         }
