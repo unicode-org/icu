@@ -128,7 +128,7 @@ static struct STransition gTransitionTable [] = {
 #define GETTRANSITION(row,col) (gTransitionTable[col + (row<<2)])
 
 struct SRBItemList*
-parse(FileStream *f,
+parse(FileStream *f, const char *cp,
       UErrorCode *status)
 {
   struct UFILE *file;
@@ -165,7 +165,7 @@ parse(FileStream *f,
   current = 0;
   item = 0;
 
-  file = u_finit(f, status);
+  file = u_finit(f, cp, status);
   list = rblist_open(status);
   if(U_FAILURE(*status)) goto finish;
   

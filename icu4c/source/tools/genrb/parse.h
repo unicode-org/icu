@@ -26,6 +26,6 @@
 #include "rblist.h"
 
 /* Parse a ResourceBundle text file */
-struct SRBItemList* parse(FileStream *f, UErrorCode *status);
+struct SRBItemList* parse(FileStream *f, const char *cp, UErrorCode *status);
 
 #endif
