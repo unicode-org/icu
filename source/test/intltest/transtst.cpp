@@ -70,6 +70,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(34,TestSupplemental);
         TESTCASE(35,TestQuantifier);
         TESTCASE(36,TestSTV);
+        TESTCASE(37,TestCompoundInverse);
         default: name = ""; break;
     }
 }
@@ -1622,6 +1623,27 @@ void TransliteratorTest::TestSTV(void) {
             }
         }
     }
+}
+
+/**
+ * Test inverse of Greek-Latin; Title()
+ */
+void TransliteratorTest::TestCompoundInverse(void) {
+    Transliterator *t = Transliterator::createInstance
+        ("Greek-Latin; Title()", UTRANS_REVERSE);
+    if (t == 0) {
+        errln("FAIL: crateInstance");
+        return;
+    }
+    UnicodeString exp("(Title);Latin-Greek");
+    if (t->getID() == exp) {
+        logln("Ok: inverse of \"Greek-Latin; Title()\" is \"" +
+              t->getID());
+    } else {
+        errln("FAIL: inverse of \"Greek-Latin; Title()\" is \"" +
+              t->getID() + "\", expected \"" + exp + "\"");
+    }
+    delete t;
 }
 
 //======================================================================
