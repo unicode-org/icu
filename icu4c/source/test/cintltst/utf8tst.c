@@ -22,13 +22,13 @@
 
 static void printUChars(uint8_t *uchars, int16_t len);
 
-static void TestCodeUnitValues();
-static void TestCharLength();
-static void TestGetChar();
-static void TestNextPrevChar();
-static void TestFwdBack();
-static void TestSetChar();
-static void TestAppendChar();
+static void TestCodeUnitValues(void);
+static void TestCharLength(void);
+static void TestGetChar(void);
+static void TestNextPrevChar(void);
+static void TestFwdBack(void);
+static void TestSetChar(void);
+static void TestAppendChar(void);
 
 
 
