@@ -39,8 +39,7 @@ void addAllTests(TestNode** root)
     addBreakIter(root);
     addFormatTest(root);
     addConvert(root);
-    /* WEIVTODO: return collation here */
-    /*addCollTest(root);*/
+    addCollTest(root);
     addComplexTest(root);
     addUDataTest(root);
     addUTransTest(root);

@@ -177,15 +177,18 @@ static void TestTertiary( )
     int32_t i;
     UErrorCode status = U_ZERO_ERROR;
     myCollation = ucol_open("fr_FR", &status);
+    ucol_setAttribute(myCollation, UCOL_FRENCH_COLLATION, UCOL_ON, &status);
+    ucol_setAttribute(myCollation, UCOL_ALTERNATE_HANDLING, UCOL_SHIFTED, &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
     }
     log_verbose("Testing French Collation with Tertiary strength\n");
-    ucol_setStrength(myCollation, UCOL_TERTIARY);
+    ucol_setStrength(myCollation, UCOL_QUATERNARY);
     for (i = 0; i < 12 ; i++)
     {
         doTest(myCollation, testSourceCases[i], testTargetCases[i], results[i]);
     }
+    ucol_setAttribute(myCollation, UCOL_FRENCH_COLLATION, UCOL_OFF, &status);
     ucol_close(myCollation);
 }
 
@@ -195,6 +198,7 @@ static void TestSecondary()
     UCollationResult expected=UCOL_EQUAL;
     UErrorCode status = U_ZERO_ERROR;
     myCollation = ucol_open("fr_FR", &status);
+    ucol_setAttribute(myCollation, UCOL_FRENCH_COLLATION, UCOL_ON, &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
     }
@@ -211,6 +215,7 @@ static void TestSecondary()
             doTest(myCollation, testAcute[i], testAcute[j], expected );
         }
     }
+    ucol_setAttribute(myCollation, UCOL_FRENCH_COLLATION, UCOL_OFF, &status);
     ucol_close(myCollation);
 }
 
@@ -224,6 +229,7 @@ static void TestExtra()
     }
     log_verbose("Testing French Collation extra with secondary strength\n");
     ucol_setStrength(myCollation, UCOL_TERTIARY);
+    ucol_setAttribute(myCollation, UCOL_FRENCH_COLLATION, UCOL_ON, &status);
     for (i = 0; i < 9 ; i++)
     {
         for (j = i + 1; j < 10; j += 1)
@@ -231,5 +237,6 @@ static void TestExtra()
             doTest(myCollation, testBugs[i], testBugs[j], UCOL_LESS);
         }
     }
+    ucol_setAttribute(myCollation, UCOL_FRENCH_COLLATION, UCOL_OFF, &status);
     ucol_close(myCollation);
 }
