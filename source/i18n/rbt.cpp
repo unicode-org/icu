@@ -25,6 +25,7 @@ U_NAMESPACE_BEGIN
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RuleBasedTransliterator)
 
 static UMTX  transliteratorDataMutex = NULL;
+static Replaceable *gLockedText;
 
 void RuleBasedTransliterator::_construct(const UnicodeString& rules,
                                          UTransDirection direction,
@@ -230,16 +231,41 @@ RuleBasedTransliterator::handleTransliterate(Replaceable& text, UTransPosition& 
         loopLimit <<= 4;
     }
 
-    if (isDataOwned==FALSE) {
-        //umtx_lock(&transliteratorDataMutex);
+    // Transliterator locking.  Rule-based Transliterators are not thread safe; concurrent
+    //   operations must be prevented.  
+    // A Complication: compound transliterators can result in recursive entries to this
+    //   function, sometimes with different "This" objects, always with the same text. 
+    //   Double-locking must be prevented in these cases.
+    //   
+
+    // If the transliteration data is exclusively owned by this transliterator object,
+    //   we don't need to do any locking.  No sharing between transliterators is possible,
+    //   so no concurrent access from multiple threads is possible.
+    UBool    lockedMutexAtThisLevel = FALSE;
+    if (isDataOwned == FALSE) {
+        umtx_lock(NULL);
+            // Test whether this request is operating on the same text string as some
+            //   some other transliteration that is still in progress and holding the 
+            //   transliteration mutex.  If so, do not lock the transliteration
+            //    mutex again.
+            UBool needToLock = (&text != gLockedText);
+        umtx_unlock(NULL);
+        if (needToLock) {
+            umtx_lock(&transliteratorDataMutex);
+            gLockedText = &text;
+            lockedMutexAtThisLevel = TRUE;
+        }
     }
+    
+
     while (index.start < index.limit &&
            loopCount <= loopLimit &&
            fData->ruleSet.transliterate(text, index, isIncremental)) {
         ++loopCount;
     }
-    if (isDataOwned==FALSE) {
-        //umtx_unlock(&transliteratorDataMutex);
+    if (lockedMutexAtThisLevel) {
+        gLockedText = NULL;
+        umtx_unlock(&transliteratorDataMutex);
     }
 }
 
