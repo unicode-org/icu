@@ -191,10 +191,6 @@ _SCSUOpen(UConverter *cnv,
           const char *locale,
           uint32_t options,
           UErrorCode *pErrorCode) {
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return;
-    }
     cnv->extraInfo=uprv_malloc(sizeof(SCSUData));
     if(cnv->extraInfo!=NULL) {
         if(locale!=NULL && locale[0]=='j' && locale[1]=='a' && (locale[2]==0 || locale[2]=='_')) {
@@ -238,10 +234,7 @@ _SCSUToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     int32_t sourceIndex, nextSourceIndex;
 
     uint8_t b;
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return;
-    }
+
     /* set up the local pointers */
     cnv=pArgs->converter;
     scsu=(SCSUData *)cnv->extraInfo;
@@ -632,10 +625,7 @@ _SCSUToUnicode(UConverterToUnicodeArgs *pArgs,
     int8_t quoteWindow, dynamicWindow;
 
     uint8_t b;
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return;
-    }
+
     /* set up the local pointers */
     cnv=pArgs->converter;
     scsu=(SCSUData *)cnv->extraInfo;
@@ -1114,10 +1104,6 @@ _SCSUFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     int code;
     int8_t window;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return;
-    }
     /* set up the local pointers */
     cnv=pArgs->converter;
     scsu=(SCSUData *)cnv->extraInfo;
@@ -1666,10 +1652,6 @@ _SCSUFromUnicode(UConverterFromUnicodeArgs *pArgs,
     int code;
     int8_t window;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return;
-    }
     /* set up the local pointers */
     cnv=pArgs->converter;
     scsu=(SCSUData *)cnv->extraInfo;

@@ -104,10 +104,6 @@ T_UConverter_toUnicode_UTF32_BE(UConverterToUnicodeArgs * args,
     unsigned char *toUBytes = args->converter->toUBytes;
     uint32_t ch, i;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*err)) {
-        return;
-    }
     /* UTF-8 returns here for only non-offset, this needs to change.*/
     if (args->converter->toUnicodeStatus && myTarget < targetLimit)
     {
@@ -218,10 +214,6 @@ T_UConverter_toUnicode_UTF32_BE_OFFSET_LOGIC(UConverterToUnicodeArgs * args,
     uint32_t ch, i;
     int32_t offsetNum = 0;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*err)) {
-        return;
-    }
     if (args->converter->toUnicodeStatus && myTarget < targetLimit)
     {
         i = args->converter->toULength;       /* restore # of bytes consumed */
@@ -339,10 +331,6 @@ T_UConverter_fromUnicode_UTF32_BE(UConverterFromUnicodeArgs * args,
 
     temp[0] = 0;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*err)) {
-        return;
-    }
     if (args->converter->fromUnicodeStatus)
     {
         ch = args->converter->fromUnicodeStatus;
@@ -418,10 +406,6 @@ T_UConverter_fromUnicode_UTF32_BE_OFFSET_LOGIC(UConverterFromUnicodeArgs * args,
 
     temp[0] = 0;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*err)) {
-        return;
-    }
     if (args->converter->fromUnicodeStatus)
     {
         ch = args->converter->fromUnicodeStatus;
@@ -601,10 +585,6 @@ T_UConverter_toUnicode_UTF32_LE(UConverterToUnicodeArgs * args,
     unsigned char *toUBytes = args->converter->toUBytes;
     uint32_t ch, i;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*err)) {
-        return;
-    }
     /* UTF-8 returns here for only non-offset, this needs to change.*/
     if (args->converter->toUnicodeStatus && myTarget < targetLimit)
     {
@@ -716,10 +696,6 @@ T_UConverter_toUnicode_UTF32_LE_OFFSET_LOGIC(UConverterToUnicodeArgs * args,
     uint32_t ch, i;
     int32_t offsetNum = 0;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*err)) {
-        return;
-    }
     /* UTF-8 returns here for only non-offset, this needs to change.*/
     if (args->converter->toUnicodeStatus && myTarget < targetLimit)
     {
@@ -839,10 +815,6 @@ T_UConverter_fromUnicode_UTF32_LE(UConverterFromUnicodeArgs * args,
 
     temp[3] = 0;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*err)) {
-        return;
-    }
     if (args->converter->fromUnicodeStatus)
     {
         ch = args->converter->fromUnicodeStatus;
@@ -918,10 +890,6 @@ T_UConverter_fromUnicode_UTF32_LE_OFFSET_LOGIC(UConverterFromUnicodeArgs * args,
 
     temp[3] = 0;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*err)) {
-        return;
-    }
     if (args->converter->fromUnicodeStatus)
     {
         ch = args->converter->fromUnicodeStatus;
@@ -1166,10 +1134,6 @@ _UTF32ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
      */
     offsetDelta=0;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return;
-    }
     while(source<sourceLimit && U_SUCCESS(*pErrorCode)) {
         switch(state) {
         case 0:

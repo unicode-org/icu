@@ -4,7 +4,7 @@
 * and others.  All Rights Reserved.
 *****************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/anytrans.cpp,v $ 
-* $Revision: 1.8 $
+* $Revision: 1.9 $
 *****************************************************************
 * Date        Name        Description
 * 06/06/2002  aliu        Creation.
@@ -161,11 +161,6 @@ UBool ScriptRunIterator::next() {
         }
     }
 
-    /* test for buffer overflows */
-    if (U_FAILURE(ec)) {
-        return FALSE;
-    }
-
     // Move limit ahead to include COMMON, INHERITED, and characters
     // of the current script.
     while (limit < textLimit) {
@@ -179,11 +174,6 @@ UBool ScriptRunIterator::next() {
             }
         }
         ++limit;
-    }
-
-    /* test for buffer overflows */
-    if (U_FAILURE(ec)) {
-        return FALSE;
     }
 
     // Return TRUE even if the entire text is COMMON / INHERITED, in
@@ -210,12 +200,6 @@ AnyTransliterator::AnyTransliterator(const UnicodeString& id,
     targetScript(theTargetScript) 
 {
     cache = uhash_open(uhash_hashLong, uhash_compareLong, &ec);
-
-    /* test for buffer overflows */
-    if (U_FAILURE(ec)) {
-        return;
-    }
-
     uhash_setValueDeleter(cache, _deleteTransliterator);
 
     target = theTarget;
@@ -239,12 +223,6 @@ AnyTransliterator::AnyTransliterator(const AnyTransliterator& o) :
     // Don't copy the cache contents
     UErrorCode ec = U_ZERO_ERROR;
     cache = uhash_open(uhash_hashLong, uhash_compareLong, &ec);
-
-    /* test for buffer overflows */
-    if (U_FAILURE(ec)) {
-        return;
-    }
-
     uhash_setValueDeleter(cache, _deleteTransliterator);
 }
 
@@ -331,11 +309,6 @@ Transliterator* AnyTransliterator::getTransliterator(UScriptCode source) const {
 
         if (t != NULL) {
             uhash_iput(cache, (int32_t) source, t, &ec);
-            /* test for buffer overflows */
-            if (U_FAILURE(ec)) {
-                delete t;
-                t = NULL;
-            }
         }
     }
 

@@ -84,11 +84,6 @@ TransliteratorAlias::~TransliteratorAlias() {
 
 Transliterator* TransliteratorAlias::create(UParseError& pe,
                                             UErrorCode& ec) {
-    /* test for buffer overflows */
-    if (U_FAILURE(ec)) {
-        return 0;
-    }
-
     Transliterator *t;
     if (trans == 0) {
         t = Transliterator::createInstance(aliasID, UTRANS_FORWARD, pe, ec);
@@ -471,10 +466,6 @@ TransliteratorRegistry::TransliteratorRegistry(UErrorCode& status) :
     specDAG(TRUE),
     availableIDs(status)
 {
-    /* test for buffer overflows */
-    if (U_FAILURE(status)) {
-        return;
-    }
     registry.setValueDeleter(deleteEntry);
     availableIDs.setDeleter(uhash_deleteUnicodeString);
     availableIDs.setComparer(uhash_compareCaselessUnicodeString);
@@ -489,10 +480,6 @@ Transliterator* TransliteratorRegistry::get(const UnicodeString& ID,
                                             TransliteratorAlias*& aliasReturn,
                                             UParseError& parseError,
                                             UErrorCode& status) {
-    /* test for buffer overflows */
-    if (U_FAILURE(status)) {
-        return 0;
-    }
     Entry *entry = find(ID);
     return (entry == 0) ? 0
         : instantiateEntry(ID, entry, aliasReturn, parseError,status);
@@ -704,10 +691,6 @@ void TransliteratorRegistry::registerEntry(const UnicodeString& ID,
                                            UBool visible) {
     UErrorCode status = U_ZERO_ERROR;
     registry.put(ID, adopted, status);
-    /* test for buffer overflows */
-    if (U_FAILURE(status)) {
-        return;
-    }
     if (visible) {
         registerSTV(source, target, variant);
         if (!availableIDs.contains((void*) &ID)) {
@@ -739,10 +722,6 @@ void TransliteratorRegistry::registerSTV(const UnicodeString& source,
         }
         targets->setValueDeleter(uhash_deleteUVector);
         specDAG.put(source, targets, status);
-        /* test for buffer overflows */
-        if (U_FAILURE(status)) {
-            return;
-        }
     }
     UVector *variants = (UVector*) targets->get(target);
     if (variants == 0) {
@@ -752,10 +731,6 @@ void TransliteratorRegistry::registerSTV(const UnicodeString& source,
             return;
         }
         targets->put(target, variants, status);
-        /* test for buffer overflows */
-        if (U_FAILURE(status)) {
-            return;
-        }
     }
     // assert(NO_VARIANT == "");
     // We add the variant string.  If it is the special "no variant"

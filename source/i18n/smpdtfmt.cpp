@@ -510,10 +510,6 @@ SimpleDateFormat::subFormat(UnicodeString& result,
                             Calendar& cal,
                             UErrorCode& status) const
 {
-    /* test for buffer overflows */
-    if (U_FAILURE(status)) {
-        return result;
-    }
     // this function gets called by format() to produce the appropriate substitution
     // text for an individual pattern symbol (e.g., "HH" or "yyyy")
 
@@ -619,10 +615,6 @@ SimpleDateFormat::subFormat(UnicodeString& result,
 
             value = cal.get(Calendar::ZONE_OFFSET, status) +
                     cal.get(Calendar::DST_OFFSET, status);
-            /* test for buffer overflows */
-            if (U_FAILURE(status)) {
-                return result;
-            }
 
             if (value < 0) {
                 zoneString += fgGmtMinus;

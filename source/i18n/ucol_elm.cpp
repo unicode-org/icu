@@ -126,10 +126,6 @@ uhash_freeBlockWrapper(void *obj) {
 
 U_CAPI tempUCATable*  U_EXPORT2
 uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollator *UCA, UColCETags initTag, UErrorCode *status) {
-  /* test for buffer overflows */
-  if (U_FAILURE(*status)) {
-      return NULL;
-  }
   tempUCATable *t = (tempUCATable *)uprv_malloc(sizeof(tempUCATable));
   /* test for NULL */
   if (t == NULL) {
@@ -170,17 +166,9 @@ uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollat
   /*t->mapping = ucmpe32_open(UCOL_SPECIAL_FLAG | (initTag<<24), UCOL_SPECIAL_FLAG | (SURROGATE_TAG<<24), UCOL_SPECIAL_FLAG | (LEAD_SURROGATE_TAG<<24), status);*/
   t->mapping = utrie_open(NULL, NULL, 0x100000, UCOL_SPECIAL_FLAG | (initTag<<24), TRUE); // Do your own mallocs for the structure, array and have linear Latin 1
   t->prefixLookup = uhash_open(prefixLookupHash, prefixLookupComp, status);
-  /* test for buffer overflows */
-  if (U_FAILURE(*status)) {
-      return NULL;
-  }
   uhash_setValueDeleter(t->prefixLookup, uhash_freeBlock);
 
   t->contractions = uprv_cnttab_open(t->mapping, status);
-  /* test for buffer overflows */
-  if (U_FAILURE(*status)) {
-      return NULL;
-  }
 
   /* copy UCA's maxexpansion and merge as we go along */
   t->maxExpansions       = maxet;
@@ -291,10 +279,6 @@ uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
 
   if(t->contractions != NULL) {
     r->contractions = uprv_cnttab_clone(t->contractions, status);
-    /* test for buffer overflows */
-    if (U_FAILURE(*status)) {
-        return NULL;
-    }
     r->contractions->mapping = r->mapping;
   }
 
@@ -437,10 +421,6 @@ int uprv_uca_setMaxExpansion(uint32_t           endexpansion,
                              MaxExpansionTable *maxexpansion,
                              UErrorCode        *status)
 {
-  /* test for buffer overflows */
-  if (U_FAILURE(*status)) {
-      return NULL;
-  }
   if (maxexpansion->size == 0) {
     /* we'll always make the first element 0, for easier manipulation */
     maxexpansion->endExpansionCE = 
@@ -584,10 +564,6 @@ int uprv_uca_setMaxJamoExpansion(UChar                  ch,
                                  MaxJamoExpansionTable *maxexpansion,
                                  UErrorCode            *status)
 {
-  /* test for buffer overflows */
-  if (U_FAILURE(*status)) {
-      return NULL;
-  }
   UBool isV = TRUE;
   if (((uint32_t)ch - 0x1100) <= (0x1112 - 0x1100)) {
       /* determines L for Jamo, doesn't need to store this since it is never
@@ -745,10 +721,6 @@ uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE,
   // long. Although this table could quite easily mimic complete contraction stuff
   // there is no good reason to make a general solution, as it would require some 
   // error prone messing.
-    /* test for buffer overflows */
-    if (U_FAILURE(*status)) {
-        return NULL;
-    }
     CntTable *contractions = t->contractions;
     UChar32 cp;
     uint32_t cpsize = 0;
@@ -880,10 +852,6 @@ uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE,
 // would complicate code way too much.
 uint32_t uprv_uca_addContraction(tempUCATable *t, uint32_t CE, 
                                  UCAElements *element, UErrorCode *status) {
-    /* test for buffer overflows */
-    if (U_FAILURE(*status)) {
-        return 0;
-    }
     CntTable *contractions = t->contractions;
     UChar32 cp;
     uint32_t cpsize = 0;
@@ -974,10 +942,6 @@ static uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements 
         return element->mapCE; /*can't do just that. existingCe might be a contraction, meaning that we need to do another step */
       }
     }
-    /* test for buffer overflows */
-    if (U_FAILURE(*status)) {
-        return UCOL_NOT_FOUND;
-    }
 
     /* this recursion currently feeds on the only element we have... We will have to copy it in order to accomodate */
     /* for both backward and forward cycles */
@@ -1012,10 +976,6 @@ static uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements 
 }
 
 static uint32_t uprv_uca_finalizeAddition(tempUCATable *t, UCAElements *element, UErrorCode *status) {
-  /* test for buffer overflows */
-  if (U_FAILURE(*status)) {
-      return 0;
-  }
   uint32_t CE = UCOL_NOT_FOUND;
   // This should add a completely ignorable element to the 
   // unsafe table, so that backward iteration will skip
@@ -1141,10 +1101,6 @@ uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status)
     }
   }
 
-  /* test for buffer overflows */
-  if (U_FAILURE(*status)) {
-      return 0;
-  }
   // here we want to add the prefix structure.
   // I will try to process it as a reverse contraction, if possible.
   // prefix buffer is already reversed.
@@ -1198,10 +1154,6 @@ uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status)
   if(element->cSize > 1 && !(element->cSize==2 && UTF16_IS_LEAD(element->cPoints[0]) && UTF16_IS_TRAIL(element->cPoints[1]))) { // this is a contraction, we should check whether a composed form should also be included
     UnicodeString source(element->cPoints, element->cSize);
     CanonicalIterator it(source, *status);
-    /* test for buffer overflows */
-    if (U_FAILURE(*status)) {
-        return 0;
-    }
     source = it.next();
     while(source.length() > 0) {
       if(Normalizer::quickCheck(source, UNORM_FCD, *status) != UNORM_NO) {
@@ -1234,20 +1186,12 @@ void uprv_uca_getMaxExpansionJamo(UNewTrie       *mapping,
   uint32_t v = VBASE + VCOUNT - 1;
   uint32_t t = TBASE + TCOUNT - 1;
   uint32_t ce;
-  /* test for buffer overflows */
-  if (U_FAILURE(*status)) {
-      return;
-  }
 
   while (v >= VBASE) {
       /*ce = ucmpe32_get(mapping, v);*/
       ce = utrie_get32(mapping, v, NULL);
       if (ce < UCOL_SPECIAL_FLAG) {
           uprv_uca_setMaxExpansion(ce, 2, maxexpansion, status);
-          /* test for buffer overflows */
-          if (U_FAILURE(*status)) {
-              return;
-          }
       }
       v --;
   }
@@ -1258,10 +1202,6 @@ void uprv_uca_getMaxExpansionJamo(UNewTrie       *mapping,
       ce = utrie_get32(mapping, t, NULL);
       if (ce < UCOL_SPECIAL_FLAG) {
           uprv_uca_setMaxExpansion(ce, 3, maxexpansion, status);
-          /* test for buffer overflows */
-          if (U_FAILURE(*status)) {
-              return;
-          }
       }
       t --;
   }
@@ -1375,10 +1315,6 @@ uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
 
     // After setting the jamo expansions, compact the trie and get the needed size
     int32_t mappingSize = utrie_serialize(mapping, NULL, 0, getFoldedValue /*getFoldedValue*/, FALSE, status);
-    /* test for buffer overflows */
-    if (U_FAILURE(*status)) {
-        return NULL;
-    }
 
     uint32_t tableOffset = 0;
     uint8_t *dataStart;
@@ -1460,10 +1396,6 @@ uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
 
     myData->mappingPosition = tableOffset;
     utrie_serialize(mapping, dataStart+tableOffset, toAllocate-tableOffset, getFoldedValue, FALSE, status);
-    /* test for buffer overflows */
-    if (U_FAILURE(*status)) {
-        return NULL;
-    }
 #ifdef UCOL_DEBUG
     // This is debug code to dump the contents of the trie. It needs two functions defined above
     {
@@ -1504,10 +1436,6 @@ uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
 
     /* Unsafe chars table.  Finish it off, then copy it. */
     uprv_uca_unsafeCPAddCCNZ(t, status);
-    /* test for buffer overflows */
-    if (U_FAILURE(*status)) {
-        return NULL;
-    }
     if (t->UCA != 0) {              /* Or in unsafebits from UCA, making a combined table.    */
        for (i=0; i<UCOL_UNSAFECP_TABLE_SIZE; i++) {    
            t->unsafeCP[i] |= t->UCA->unsafeCP[i];

@@ -194,10 +194,6 @@ DecimalFormat::construct(UErrorCode&             status,
                          const UnicodeString*   pattern,
                          DecimalFormatSymbols*  symbolsToAdopt)
 {
-    /* test for buffer overflows */
-    if (U_FAILURE(status)) {
-        return;
-    }
     fSymbols = symbolsToAdopt; // Do this BEFORE aborting on status failure!!!
 //    fDigitList = new DigitList(); // Do this BEFORE aborting on status failure!!!
     fRoundingIncrement = NULL;
@@ -1457,11 +1453,6 @@ DecimalFormat::setCurrencyForSymbols() {
     // we set the currency to null.
     UErrorCode ec = U_ZERO_ERROR;
     DecimalFormatSymbols def(fSymbols->getLocale(), ec);
-
-    /* test for buffer overflows */
-    if (U_FAILURE(ec)) {
-        currency[0] = 0; // Use DFS currency info
-    }
 
     if (fSymbols->getSymbol(DecimalFormatSymbols::kCurrencySymbol) ==
         def.getSymbol(DecimalFormatSymbols::kCurrencySymbol) &&

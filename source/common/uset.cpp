@@ -35,10 +35,6 @@ uset_open(UChar32 start, UChar32 end) {
 U_CAPI USet* U_EXPORT2
 uset_openPattern(const UChar* pattern, int32_t patternLength,
                  UErrorCode* ec) {
-    /* test for buffer overflows */
-    if (U_FAILURE(*ec)) {
-        return 0;
-    }
     UnicodeString pat(patternLength==-1, pattern, patternLength);
     UnicodeSet* set = new UnicodeSet(pat, *ec);
     /* test for NULL */

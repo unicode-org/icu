@@ -865,10 +865,6 @@ _res_getTableItemWithFallback(const char *path, const char *locale,
     const char *defaultLocale;
     UBool lookedAtDefault;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return NULL;
-    }
     *pMainRB=NULL;
     lookedAtDefault=FALSE;
     defaultLocale=uloc_getDefault();
