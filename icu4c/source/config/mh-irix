@@ -1,0 +1,62 @@
+## -*-makefile-*-
+## IRIX-specific setup (for CC)
+
+
+## Commands to generate dependency files
+GEN_DEPS.c=	$(CC) -E -M $(DEFS) $(CPPFLAGS)
+GEN_DEPS.cc=	$(CXX) -E -M $(DEFS) $(CPPFLAGS)
+
+## Commands to compile
+COMPILE.c=	$(CC) -shared $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
+COMPILE.cc=	$(CXX) -shared $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
+
+## Commands to link
+## We need to use the C++ linker, even when linking C programs, since
+##  our libraries contain C++ code (C++ static init not called)
+#LINK.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
+LINK.c=		$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+LINK.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+
+## Commands to make a shared library
+## SHLIB.c=        ${PLATFORM_CPP_COMPILER} -D${PLATFORM} -shared
+## SHLIB.cc=       ${PLATFORM_C_COMPILER} -D${PLATFORM} -shared
+## SHLIB.c=	${PLATFORM_CPP_COMPILER}
+## SHLIB.c=	${PLATFORM_C_COMPILER}
+SHLIB.c=        $(CC) -shared $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+SHLIB.cc=       $(CXX) -shared $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+
+
+
+## Compiler switch to embed a runtime search path
+LD_RPATH=	-I
+LD_RPATH_PRE=
+
+## Shared object suffix
+SO=		so
+
+## Link commands to link to ICU libs
+LIBICU-UC= 	-L$(top_builddir)/common -licu-uc
+LIBICU-I18N= 	-L$(top_builddir)/i18n -licu-i18n
+LIBCTESTFW= 	-L$(top_builddir)/tools/ctestfw -lctestfw
+
+## Compilation rules
+%.o : $(srcdir)/%.c
+	$(COMPILE.c) -o $@ $<
+
+%.o : $(srcdir)/%.cpp
+	$(COMPILE.cc) -o $@ $<
+
+## Dependency rules
+%.d : $(srcdir)/%.c
+	@echo "Generating dependency information for $<"
+	@$(SHELL) -ec '$(GEN_DEPS.c) $< \
+		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
+		[ -s $@ ] || rm -f $@'
+
+%.d : $(srcdir)/%.cpp
+	@echo "Generating dependency information for $<"
+	@$(SHELL) -ec '$(GEN_DEPS.cc) $< \
+		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
+		[ -s $@ ] || rm -f $@'
+
+## End IRIX-specific setup
