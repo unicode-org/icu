@@ -311,9 +311,11 @@ static void writeOutInverseData(InverseTableHeader *data,
     }
 
     /* write the data to the file */
-    fprintf(stdout, "Writing out inverse UCA table: %s%s.%s\n", outputDir,
+    if (VERBOSE) {
+        fprintf(stdout, "Writing out inverse UCA table: %s%c%s.%s\n", outputDir, U_FILE_SEP_CHAR,
                                                                 INVC_DATA_NAME,
                                                                 INVC_DATA_TYPE);
+    }
     udata_writeBlock(pData, data, data->byteSize);
 
     /* finish up */
@@ -547,9 +549,12 @@ void writeOutData(UCATableHeader *data,
     }
 
     /* write the data to the file */
-    fprintf(stdout, "Writing out UCA table: %s%s.%s\n", outputDir,
+    if (VERBOSE) {
+        fprintf(stdout, "Writing out UCA table: %s%c%s.%s\n", outputDir,
+                                                        U_FILE_SEP_CHAR,
                                                         UCA_DATA_NAME,
                                                         UCA_DATA_TYPE);
+    }
     udata_writeBlock(pData, data, size);
 
     if(noOfcontractions != 0) {

@@ -72,6 +72,8 @@ char symPrefix[100];
 
 extern int
 main(int argc, char* argv[]) {
+    UBool verbose = FALSE;
+
     options[2].value = ".";
 
     /* read command line options */
@@ -117,17 +119,19 @@ main(int argc, char* argv[]) {
         void (*writeCode)(const char *, const char *);
 #ifdef CAN_GENERATE_OBJECTS
         if(options[5].doesOccur) {
-            message="Generating object code for %s\n";
+            message="generating object code for %s\n";
             writeCode=&writeObjectCode;
         } else
 #endif
         {
-            message="Generating C code for %s\n";
+            message="generating C code for %s\n";
             writeCode=&writeCCode;
         }
         while(--argc) {
             filename=getLongPathname(argv[argc]);
-            fprintf(stdout, message, filename);
+            if (verbose) {
+                fprintf(stdout, message, filename);
+            }
             column=0xffff;
             writeCode(filename, options[2].value);
         }

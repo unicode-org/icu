@@ -69,7 +69,7 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 	@dot_seen=no; \
 	target=`echo $@ | sed s/-recursive//`; \
 	list='$(SUBDIRS)'; for subdir in $$list; do \
-	  echo "Making $$target in $$subdir"; \
+	  echo "$(MAKE)[$(MAKELEVEL)]: Making \`$$target' in \`$$subdir'"; \
 	  if test "$$subdir" = "."; then \
 	    dot_seen=yes; \
 	    local_target="$$target-local"; \
@@ -116,9 +116,8 @@ packagetest: $(TESTDATAOBJDIR)/testdata.lst $(top_builddir)/tools/pkgdata/icupkg
 	cd $(TESTDATAOBJDIR) ; $(INVOKE) $(PKGDATA) -T . -s . -p testdata -m common testdata.lst
 
 cleanpackage:
-	@echo Cleaning up packaged data..
-	@-cd build ; $(INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) -s . -T . -p $(ICUDATA_NAME) icudata.lst --clean 2> /dev/null
-	@-cd $(TESTDATAOBJDIR) ; $(INVOKE) $(PKGDATA) -m common -T . -s . -p testdata testdata.lst  --clean 2> /dev/null
+	-cd build ; $(INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) -s . -T . -p $(ICUDATA_NAME) icudata.lst --clean 2> /dev/null
+	-cd $(TESTDATAOBJDIR) ; $(INVOKE) $(PKGDATA) -m common -T . -s . -p testdata testdata.lst  --clean 2> /dev/null
 	$(RMV) $(ICUDATA_NAME).* build/icudata.lst build/*.mak
 
 ## Install ICU data. Make a convenience link 'icudata' library if it's a library mode.

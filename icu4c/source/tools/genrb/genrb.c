@@ -54,7 +54,7 @@ enum
 {
     HELP1,
     HELP2,
-/*    VERBOSE, */
+    VERBOSE,
     QUIET,
     VERSION,
     SOURCEDIR,
@@ -67,7 +67,7 @@ enum
 UOption options[]={
                       UOPTION_HELP_H,
                       UOPTION_HELP_QUESTION_MARK,
-/*                      UOPTION_VERBOSE, */
+                      UOPTION_VERBOSE,
                       UOPTION_QUIET,
                       UOPTION_VERSION,
                       UOPTION_SOURCEDIR,
@@ -82,6 +82,8 @@ UOption options[]={
 #include <console.h>
 #endif
 
+static     UBool       verbose = FALSE;
+
 int
 main(int argc,
      char* argv[]) {
@@ -90,7 +92,6 @@ main(int argc,
     const char *outputDir = NULL; /* NULL = no output directory, use current */
     const char *inputDir  = NULL;
     const char *encoding  = "";
-/*    UBool       verbose; */
     int         i;
 
 #ifdef XP_MAC_CONSOLE
@@ -102,7 +103,7 @@ main(int argc,
 
     /* error handling, printing usage message */
     if(argc<0) {
-        fprintf(stderr, "error in command line argument \"%s\"\n", argv[-argc]);
+        fprintf(stderr, "%s: error in command line argument \"%s\"\n", argv[0], argv[-argc]);
     } else if(argc<2) {
         argc = -1;
     }
@@ -142,9 +143,9 @@ main(int argc,
         return argc < 0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
-/*    if(options[VERBOSE].doesOccur) {
+    if(options[VERBOSE].doesOccur) {
         verbose = TRUE;
-    }*/
+    }
 
     if(options[QUIET].doesOccur) {
         setShowWarning(FALSE);
@@ -177,8 +178,9 @@ main(int argc,
         status = U_ZERO_ERROR;
         arg    = getLongPathname(argv[i]);
 
-        printf("genrb: processing file \"%s\"\n", arg);
-
+	if (verbose) {
+            printf("%s: processing file \"%s\"\n", argv[0], arg);
+	}
         processFile(arg, encoding, inputDir, outputDir, &status);
     }
 
@@ -251,12 +253,12 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
 
     if(in == 0) {
         *status = U_FILE_ACCESS_ERROR;
-        fprintf(stderr, "Couldn't open file %s\n", openFileName == NULL ? filename : openFileName);
+        fprintf(stderr, "couldn't open file %s\n", openFileName == NULL ? filename : openFileName);
         goto finish;
     } else {
         /* auto detect popular encodings */
-        if (*cp=='\0' &&ucbuf_autodetect(in, &cp)) {
-            printf("Autodetected encoding %s\n", cp);
+        if (*cp=='\0' && ucbuf_autodetect(in, &cp) && verbose) {
+            printf("%s: autodetected encoding %s\n", cp);
         }
     }
 

@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-hpux-acc,v 1.25 2001/10/03 23:32:11 grhoten-oss Exp $
+## $Id: mh-hpux-acc,v 1.26 2002/01/04 23:48:42 yves-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	:
@@ -55,11 +55,11 @@ STATIC_O = o
 
 ## Dependency rules
 %.d : $(srcdir)/%.c
-	@echo "Generating dependency information for $<"
+	@echo "generating dependency information for $<"
 	@$(GEN_DEPS.c) $< > $@
 
 %.d : $(srcdir)/%.cpp
-	@echo "Generating dependency information for $<"
+	@echo "generating dependency information for $<"
 	@$(GEN_DEPS.cc) $< > $@
 
 ## Versioned libraries rules

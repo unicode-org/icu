@@ -110,6 +110,8 @@ class gentz {
     uint32_t equivCount; // Number of equivalency groups
 
     UBool useCopyright;
+    UBool verbose;
+
 
 public:
     int      MMain(int argc, char *argv[]);
@@ -169,7 +171,8 @@ static UOption options[]={
     UOPTION_HELP_H,
     UOPTION_HELP_QUESTION_MARK,
     UOPTION_COPYRIGHT,
-    UOPTION_DESTDIR
+    UOPTION_DESTDIR,
+    UOPTION_VERBOSE
 };
 
 int gentz::MMain(int argc, char* argv[]) {
@@ -191,6 +194,7 @@ int gentz::MMain(int argc, char* argv[]) {
             "\tread the timezone file produced by tz.pl and create " TZ_DATA_NAME "." TZ_DATA_TYPE "\n"
             "\toptions:\n"
             "\t\t-h or -? or --help  this usage text\n"
+            "\t\t-v or --verbose     turn on verbose output\n"
             "\t\t-c or --copyright   include a copyright notice\n"
             "\t\t-d or --destdir     destination directory, followed by the path\n",
             argv[0]);
@@ -199,13 +203,17 @@ int gentz::MMain(int argc, char* argv[]) {
 
     /* get the options values */
     useCopyright=options[2].doesOccur;
+    verbose = options[4].doesOccur;
+
 
     ////////////////////////////////////////////////////////////
     // Read the input file
     ////////////////////////////////////////////////////////////
     *buffer = NUL;
     lineNumber = 0;
-    fprintf(stdout, "Input file: %s\n", argv[1]);
+    if (verbose) {
+        fprintf(stdout, "Input file: %s\n", argv[1]);
+    }
     FileStream* in = T_FileStream_open(argv[1], "r");
     if (in == 0) {
         die("Cannot open input file");
@@ -218,8 +226,10 @@ int gentz::MMain(int argc, char* argv[]) {
     // Write the output file
     ////////////////////////////////////////////////////////////
     int32_t wlen = writeTzDatFile(options[3].value);
-    fprintf(stdout, "Output file: %s.%s, %ld bytes\n",
+    if (verbose) {
+        fprintf(stdout, "Output file: %s.%s, %ld bytes\n",
             TZ_DATA_NAME, TZ_DATA_TYPE, (long)wlen);
+    }
 
     return 0; // success
 }
@@ -435,8 +445,10 @@ TZEquivalencyGroup* gentz::parseEquivTable(FileStream* in) {
     }
     equivTableSize = (int8_t*)eg - (int8_t*)result;
     readEndMarker(in);
-    fprintf(stdout, " Read %lu equivalency table entries, in-memory size %ld bytes\n",
+    if (verbose) {
+        fprintf(stdout, " Read %lu equivalency table entries, in-memory size %ld bytes\n",
             (unsigned long)equivCount, (long)equivTableSize);
+    }
     return (TZEquivalencyGroup*)result;
 }
 
@@ -508,8 +520,10 @@ OffsetIndex* gentz::parseOffsetIndexTable(FileStream* in) {
         die("Yikes! Interal error while constructing offset index table");
     }
     readEndMarker(in);
-    fprintf(stdout, " Read %lu offset index table entries, in-memory size %ld bytes\n",
+    if (verbose) {
+        fprintf(stdout, " Read %lu offset index table entries, in-memory size %ld bytes\n",
             (unsigned long)n, (long)offsetIndexSize);
+    }
     return (OffsetIndex*)result;
 }
 
@@ -567,8 +581,9 @@ CountryIndex* gentz::parseCountryIndexTable(FileStream* in) {
         countryIndexSize += pad;
         *(uint16_t*)index = 0; // Clear pad bits
     }
-    fprintf(stdout, " Read %lu country index table entries, in-memory size %ld bytes\n",
-            (unsigned long)n, (long)countryIndexSize);
+    if (verbose) {
+        fprintf(stdout, " Read %lu country index table entries, in-memory size %ld bytes\n", (unsigned long)n, (long)countryIndexSize);
+    }
     return (CountryIndex*)result;
 }
 
@@ -594,9 +609,11 @@ void gentz::parseHeader(FileStream* in) {
 
     readEndMarker(in);
 
-    fprintf(stdout, " Read header, data version %u(%u), in-memory size %ld bytes\n",
+    if (verbose) {
+        fprintf(stdout, " Read header, data version %u(%u), in-memory size %ld bytes\n",
             header.versionYear, header.versionSuffix,
             (unsigned long)sizeof(header));
+    }
 }
 
 void gentz::parseDSTRule(char*& p, TZRule& rule) {
@@ -665,8 +682,10 @@ char* gentz::parseNameTable(FileStream* in) {
         die("Name table shorter than declared size");
     }
     readEndMarker(in);
-    fprintf(stdout, " Read %ld names, in-memory size %ld bytes\n",
+    if (verbose) {
+        fprintf(stdout, " Read %ld names, in-memory size %ld bytes\n",
         (long)n, (long)nameTableSize);
+    }
     return names;
 }
 
