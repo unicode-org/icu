@@ -700,8 +700,11 @@ CollationAPITest::TestElemIter(/* char* par */)
 
     order1 = iterator1->next(success); 
     order3 = iterator3->next(success);
+    /* NO! Secondary orders of two CEs are not related, especially in the case of '_' vs 'I' */
+    /*
     doAssert((CollationElementIterator::secondaryOrder(order1) != 
         CollationElementIterator::secondaryOrder(order3)), "The secondary orders should not be the same");
+    */
     doAssert((order1 != CollationElementIterator::NULLORDER), "Unexpected end of iterator reached");
 
     iterator1->reset(); iterator2->reset(); iterator3->reset();
@@ -757,8 +760,11 @@ CollationAPITest::TestElemIter(/* char* par */)
         return;
     }
 
+    /* NO! Secondary orders of two CEs are not related, especially in the case of '_' vs 'I' */
+    /*
     doAssert((CollationElementIterator::secondaryOrder(order1) != 
         CollationElementIterator::secondaryOrder(order3)), "The secondary orders should not be the same");
+    */
     doAssert((order1 != CollationElementIterator::NULLORDER), "Unexpected end of iterator reached");
     doAssert((*iterator2 != *iterator3), "The iterators should be different");
 
@@ -973,12 +979,19 @@ void CollationAPITest::TestSortKey()
     col->setAttribute(UCOL_STRENGTH, UCOL_IDENTICAL, status);
 
     uint8_t key2compat[] = { 
+        /* 2.2 key */
+        0x1D, 0x1F, 0x21, 0x23, 0x1D, 0x01,
+        0x09, 0x01, 0x09, 0x01, 0x1F, 0x01,
+        0x92, 0x93, 0x94, 0x95, 0x92, 0x00
+
         /* 2.0 key */
+        /*
         0x19, 0x1B, 0x1D, 0x1F, 0x19, 
         0x01, 0x09, 0x01, 0x09, 0x01,
         0x18, 0x01, 
         0x92, 0x93, 0x94, 0x95, 0x92, 
         0x00
+        */
         /* 1.8.1 key.*/
         /*
         0x19, 0x1B, 0x1D, 0x1F, 0x19, 
