@@ -4,82 +4,79 @@
 #**********************************************************************
 # nmake file for creating data files on win32
 # invoke with
-# nmake /f makedata.mak icup=<path_to_icu_instalation> [Debug|Release]
+# nmake /f makedata.mak [Debug|Release]
 #
 #	12/10/1999	weiv	Created
 
-U_ICUDATA_NAME=icudt19l
+U_ICUDATA_NAME=icudt19
+U_ICUDATA_ENDIAN_SUFFIX=l
 
-#If no config, we default to debug
-!IF "$(CFG)" == ""
-CFG=Debug
-!MESSAGE No configuration specified. Defaulting to common - Win32 Debug.
-!ENDIF
-
-#Here we test if a valid configuration is given
-!IF "$(CFG)" != "Release" && "$(CFG)" != "release" && "$(CFG)" != "Debug" && "$(CFG)" != "debug"
-!MESSAGE Invalid configuration "$(CFG)" specified.
-!MESSAGE You can specify a configuration when running NMAKE
-!MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE
-!MESSAGE NMAKE /f "makedata.mak" CFG="Debug"
-!MESSAGE
-!MESSAGE Possible choices for configuration are:
-!MESSAGE
-!MESSAGE "Release"
-!MESSAGE "Debug"
-!MESSAGE
-!ERROR An invalid configuration is specified.
-!ENDIF
-
-#Let's see if user has given us a path to ICU
-#This could be found according to the path to makefile, but for now it is this way
-!IF "$(ICUP)"==""
-!ERROR Can't find path!
-!ENDIF
-!MESSAGE icu path is $(ICUP)
-ICUDATA=$(ICUP)\data
-
+#  ICUDBLD
+#     Must be provided by whoever runs this makefile.
+#     Is the directory containing this file (makedata.mak)
+#     Is the directory into which most data is built (prior to packaging)
+#     Is icu\source\data\build
+#
 !IF "$(ICUDBLD)"==""
 !ERROR Can't find ICUDBLD (ICU Data Build dir, should point to icu\source\data\build\ )!
 !ENDIF
 !MESSAGE icu data build path is $(ICUDBLD)
 
-#ICUDBLD=$(ICUP)\source\data\build
 
+#  ICUP
+#     The root of the ICU source directory tree
+#
+ICUP=$(ICUDBLD)\..\..\..
+
+
+#
+#  ICUDATA
+#     The source directory.  Contains the source files for the common data to be built.
+#     WARNING:  NOT THE SAME AS ICU_DATA environment variable.  Confusing.
+ICUDATA=$(ICUP)\data
+
+
+#
+#  DLL_OUTPUT
+#      Destination directory for the common data DLL file.
+#      This is the same place that all of the other ICU DLLs go (the code-containing DLLs)
+#      The lib file for the data DLL goes in $(DLL_OUTPUT)/../lib/
+#
+DLL_OUTPUT=$(ICUP)\bin
+
+#
+#  TESTDATA
+#     The source directory for data needed for test programs.
 TESTDATA=$(ICUP)\source\test\testdata
 
-#If ICU_DATA is not set, we want to output stuff in binary directory
-DLL_OUTPUT=$(ICUP)\source\data
-TESTDATAOUT=$(TESTDATA)
-#TESTDATAOUT=$(DLL_OUTPUT)
+#
+#   TESTDATAOUT
+#      The destination directory for the built test data .dat file
+#         When running the tests, ICU_DATA environment variable is set to here
+#         so that test data files can be loaded.  (Tests are NOT run from this makefile,
+#         only the data is put in place.)
+TESTDATAOUT=$(ICUP)\source\data
 
 
-ICD=$(ICUDATA)^\
-DATA_PATH=$(ICUP)\data^\
-TEST=..\source\test\testdata^\
+#
+#   ICUTOOLS
+#       Directory under which all of the ICU data building tools live.
+#
 ICUTOOLS=$(ICUP)\source\tools
 
-ICU_DATA=$(ICUDBLD)
-!MESSAGE Intermediate files will go in $(ICU_DATA)
+
+PATH = $(PATH);$(ICUP)\bin
+
 
 # We have to prepare params for pkgdata - to help it find the tools
 !IF "$(CFG)" == "Debug" || "$(CFG)" == "debug"
+!MESSAGE makedata.mak: doing a Debug build.
 PKGOPT=D:$(ICUP)
 !ELSE
+!MESSAGE makedata.mak: doing a Release build.
 PKGOPT=R:$(ICUP)
 !ENDIF
 
-# This appears in original Microsofts makefiles
-!IF "$(OS)" == "Windows_NT"
-NULL=
-!ELSE
-NULL=nul
-!ENDIF
-
-# Adjust the path to find DLLs. If $(U_ICUDATA_NAME).dll really needs to be in $(ICUP)\bin\$(CFG),
-# then add $(ICUP)\bin\$(CFG) to this path, as the other DLLs are in $(ICUP)\bin.
-PATH = $(PATH);$(ICUP)\bin
 
 # Suffixes for data files
 .SUFFIXES : .ucm .cnv .dll .dat .res .txt .c
@@ -124,23 +121,34 @@ ALL_RES = $(RB_FILES) $(TRANSLIT_FILES)
 
 RB_SOURCE_DIR = $(GENRB_SOURCE:$=$)
 
-# This target should build all the data files
-ALL : GODATA  testdata "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" $(DLL_OUTPUT)\test1.cnv $(DLL_OUTPUT)\test3.cnv $(DLL_OUTPUT)\test4.cnv GOBACK #$(U_ICUDATA_NAME).dat
+#############################################################################
+#
+# ALL  
+#     This target builds all the data files.  The world starts here.
+#
+#############################################################################
+ALL : GODATA  testdata "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" $(TESTDATAOUT)\test1.cnv $(TESTDATAOUT)\test3.cnv $(TESTDATAOUT)\test4.cnv 
 	@echo All targets are up to date
 
+#
+# testdata - nmake will invoke pkgdata, which will create testdata.dat 
+#
 testdata: ucadata.dat $(RB_FILES) {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe
 	@cd "$(TESTDATA)"
-	nmake /nologo /f $(TESTDATA)\testdata.mk TESTDATA=$(TESTDATA) ICUTOOLS=$(ICUTOOLS) PKGOPT=$(PKGOPT) CFG=$(CFG) DLL_OUTPUT=$(DLL_OUTPUT) TESTDATAOUT=$(TESTDATAOUT)
+	nmake /nologo /f $(TESTDATA)\testdata.mk TESTDATA=$(TESTDATA) ICUTOOLS=$(ICUTOOLS) PKGOPT=$(PKGOPT) CFG=$(CFG) TESTDATAOUT=$(TESTDATAOUT) ICUDATA=$(ICUDATA)
 	@cd "$(ICUDBLD)"
 
 
 BRK_FILES = "$(ICUDBLD)\sent.brk" "$(ICUDBLD)\char.brk" "$(ICUDBLD)\line.brk" "$(ICUDBLD)\word.brk" "$(ICUDBLD)\line_th.brk" "$(ICUDBLD)\word_th.brk"
 
-#invoke pkgdata
+#invoke pkgdata for ICU common data
+#  pkgdata will drop all output files (.dat, .dll, .lib) into the target (ICUDBLD) directory.
+#  move the .dll and .lib files to their final destination afterwards.
+#
 "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" :  $(CNV_FILES) $(BRK_FILES) qchk.dat fchk.dat uprops.dat unames.dat unorm.dat cnvalias.dat tz.dat ucadata.dat invuca.dat $(ALL_RES) icudata.res
 	@echo Building icu data
 	@cd "$(ICUDBLD)"
- 	"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -e $(U_ICUDATA_NAME) -v -T . -m dll -c -p $(U_ICUDATA_NAME) -O "$(PKGOPT)" -d "$(DLL_OUTPUT)" -s . <<pkgdatain.txt
+ 	"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -e $(U_ICUDATA_NAME) -v -m dll -c -p $(U_ICUDATA_NAME) -O "$(PKGOPT)" -d "$(ICUDBLD)" -s . <<pkgdatain.txt
 qchk.dat
 fchk.dat
 uprops.dat
@@ -159,6 +167,11 @@ $(TRANSLIT_FILES:.res =.res
 $(BRK_FILES:.brk" =.brk"
 )
 <<KEEP
+	move $(U_ICUDATA_NAME).dll $(DLL_OUTPUT)
+	move $(U_ICUDATA_NAME).lib $(TESTDATAOUT)\..\lib
+	move $(U_ICUDATA_NAME).dat ..\$(U_ICUDATA_NAME)$(U_ICUDATA_ENDIAN_SUFFIX).dat
+
+
 
 
 "$(ICUDBLD)\sent.brk" : "$(ICUDATA)\sentLE.brk"
@@ -179,13 +192,10 @@ $(BRK_FILES:.brk" =.brk"
 "$(ICUDBLD)\word_th.brk" : "$(ICUDATA)\word_thLE.brk"
     copy "$(ICUDATA)\word_thLE.brk" "$(ICUDBLD)\word_th.brk"
 
-# utility to send us to the right dir
+# utility target to send us to the right dir
 GODATA :
 	@cd "$(ICUDBLD)"
 
-# utility to get us back to the right dir
-GOBACK :
-	@cd "$(ICUDBLD)"
 
 # This is to remove all the data files
 CLEAN :
@@ -214,6 +224,7 @@ CLEAN :
 	-@erase "base*.*"
 	@cd "$(DLL_OUTPUT)"
 	-@erase "*.cnv"
+	-@erase $(U_ICUDATA_NAME).dll
 	@cd "$(TESTDATA)"
 	-@erase "*.res"
 	@cd "$(ICUTOOLS)"
@@ -232,19 +243,19 @@ CLEAN :
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $<
 
 # Targets for test converter data
-$(DLL_OUTPUT)\test1.cnv: "$(TESTDATA)\test1.ucm"
+$(TESTDATAOUT)\test1.cnv: "$(TESTDATA)\test1.ucm"
 	@cd "$(ICUDATA)"
-	@set ICU_DATA=$(DLL_OUTPUT)
+	@set ICU_DATA=$(TESTDATAOUT)
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $**
 
-$(DLL_OUTPUT)\test3.cnv: "$(TESTDATA)\test3.ucm"
+$(TESTDATAOUT)\test3.cnv: "$(TESTDATA)\test3.ucm"
 	@cd "$(ICUDATA)"
-	@set ICU_DATA=$(DLL_OUTPUT)
+	@set ICU_DATA=$(TESTDATAOUT)
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $**
 
-$(DLL_OUTPUT)\test4.cnv: "$(TESTDATA)\test4.ucm"
+$(TESTDATAOUT)\test4.cnv: "$(TESTDATA)\test4.ucm"
 	@cd "$(ICUDATA)"
-	@set ICU_DATA=$(DLL_OUTPUT)
+	@set ICU_DATA=$(TESTDATAOUT)
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $**
 
 # DLL version information

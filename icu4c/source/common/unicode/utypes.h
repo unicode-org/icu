@@ -135,6 +135,28 @@
    ICU 1.8.x on EBCDIC, etc.. */
 #define U_ICUDATA_NAME    "icudt" U_ICU_VERSION_SHORT U_ICUDATA_TYPE_LETTER
 
+
+/*
+ *  Define U_ICU_ENTRY_POINT to be the name of the DLL entry point.
+ *    Defined as a literal, not a string.
+ *    Tricky Preprocessor use - ## operator replaces macro paramters with the literal string
+ *                              from the corresponding macro invocation, _before_ other macro substitutions.
+ *                              Need a nested #defines to get the actual version numbers rather than
+ *                              the literal text U_ICU_VERSION_MAJOR_NUM into the name.
+ *                              The net result will be something of the form
+ *                                  #define U_ICU_ENTRY_POINT icudt19_dat
+ */
+#define U_ICUDATA_ENTRY_POINT  U_DEF2_ICUDATA_ENTRY_POINT(U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM)
+#define U_DEF2_ICUDATA_ENTRY_POINT(major, minor) U_DEF_ICUDATA_ENTRY_POINT(major, minor)
+#define U_DEF_ICUDATA_ENTRY_POINT(major, minor) icudt##major##minor##_dat
+
+#if 0
+#define FOO(X) STRINGIZE(X)
+#define BAR FOO(U_ICUDATA_ENTRY_POINT)
+#define STRINGIZE(X) #X
+#pragma message("icu data entrypoint name is " BAR)
+#endif 
+
 /**
  * \def U_CALLCONV
  * Work around the OS390 compiler issue, to be removed when the compiler
