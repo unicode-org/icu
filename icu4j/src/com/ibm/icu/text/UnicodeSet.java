@@ -124,6 +124,10 @@ import java.util.Dictionary;
  *   </table>
  * </blockquote>
  *
+ * Any character may be preceded by a backslash in order to remove any special
+ * meaning.  White space characters, as defined by Character.isWhitespace(), are
+ * ignored, unless they are escaped.
+ *
  * Patterns specify individual characters, ranges of characters, and
  * Unicode character categories.  When elements are concatenated, they
  * specify their union.  To complement a set, place a '^' immediately
@@ -226,7 +230,8 @@ import java.util.Dictionary;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.3 $ $Date: 2000/01/11 02:25:03 $ */
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.4 $ $Date: 2000/01/11 04:03:54 $
+ */
 public class UnicodeSet {
     /**
      * The internal representation is a StringBuffer of even length.
@@ -300,17 +305,27 @@ public class UnicodeSet {
         applyPattern(pattern);
     }
 
-
-
-
-
+    /**
+     * Constructs a set from the given pattern.  See the class description
+     * for the syntax of the pattern language.
+     * @param pattern a string specifying what characters are in the set
+     * @param pos on input, the position in pattern at which to start parsing.
+     * On output, the position after the last character parsed.
+     * @param varNameToChar a mapping from variable names (String) to characters
+     * (Character).  May be null.  If varCharToSet is non-null, then names may
+     * map to either single characters or sets, depending on whether a mapping
+     * exists in varCharToSet.  If varCharToSet is null then all names map to
+     * single characters.
+     * @param varCharToSet a mapping from characters (Character objects from
+     * varNameToChar) to UnicodeSet objects.  May be null.  Is only used if
+     * varNameToChar is also non-null.
+     * @exception <code>IllegalArgumentException</code> if the pattern
+     * contains a syntax error.
+     */
     public UnicodeSet(String pattern, ParsePosition pos,
                       Dictionary varNameToChar, Dictionary varCharToSet) {
         applyPattern(pattern, pos, varNameToChar, varCharToSet);
     }
-
-
-
 
     /**
      * Constructs a set from the given Unicode character category.
@@ -344,18 +359,26 @@ public class UnicodeSet {
         }
     }
 
-
-
-
-
+    /**
+     * Modifies this set to represent the set specified by the given pattern.
+     * @param pattern a string specifying what characters are in the set
+     * @param pos on input, the position in pattern at which to start parsing.
+     * On output, the position after the last character parsed.
+     * @param varNameToChar a mapping from variable names (String) to characters
+     * (Character).  May be null.  If varCharToSet is non-null, then names may
+     * map to either single characters or sets, depending on whether a mapping
+     * exists in varCharToSet.  If varCharToSet is null then all names map to
+     * single characters.
+     * @param varCharToSet a mapping from characters (Character objects from
+     * varNameToChar) to UnicodeSet objects.  May be null.  Is only used if
+     * varNameToChar is also non-null.
+     * @exception <code>IllegalArgumentException</code> if the pattern
+     * contains a syntax error.
+     */
     private void applyPattern(String pattern, ParsePosition pos,
                               Dictionary varNameToChar, Dictionary varCharToSet) {
         pairs = parse(pattern, pos, varNameToChar, varCharToSet);
     }
-
-
-
-
 
     /**
      * Returns a string representation of this set.  If the result of
