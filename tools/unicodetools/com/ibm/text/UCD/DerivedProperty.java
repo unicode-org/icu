@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DerivedProperty.java,v $
-* $Date: 2002/03/20 00:21:43 $
-* $Revision: 1.12 $
+* $Date: 2002/04/23 01:59:13 $
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */
@@ -97,7 +97,7 @@ public final class DerivedProperty implements UCD_Types {
         Normalizer nfx;
         ExDProp(int i) {
             type = DERIVED_NORMALIZATION;
-            nfx = Main.nf[i];
+            nfx = Default.nf[i];
             name = "Expands_On_" + nfx.getName();
             shortName = "XO_" + nfx.getName();
             header = "# Derived Property: " + name
@@ -121,7 +121,7 @@ public final class DerivedProperty implements UCD_Types {
         NF_UnsafeStartProp(int i) {
             isStandard = false;
             type = DERIVED_NORMALIZATION;
-            nfx = Main.nf[i];
+            nfx = Default.nf[i];
             name = nfx.getName() + "_UnsafeStart";
             shortName = nfx.getName() + "_SS";
             header = "# Derived Property: " + name
@@ -157,7 +157,7 @@ public final class DerivedProperty implements UCD_Types {
                 case NFC_TrailingNonZero: bitsets[1] = bitset = new BitSet(); break;
             }
             filter = bitsets[1] != null;
-            Main.nfc.getCompositionStatus(bitsets[0], bitsets[1], bitsets[2]);
+            Default.nfc.getCompositionStatus(bitsets[0], bitsets[1], bitsets[2]);
             
             name = Names[i-NFC_Leading];
             shortName = SNames[i-NFC_Leading];
@@ -193,17 +193,17 @@ public final class DerivedProperty implements UCD_Types {
             isStandard = false;
             setValueType(NON_ENUMERATED);
             type = DERIVED_NORMALIZATION;
-            nfx = Main.nf[i];
+            nfx = Default.nf[i];
             name = nfx.getName();
             String compName = "the character itself";
             
             if (i == NFKC || i == NFD) {
                 name += "-NFC";
-                nfComp = Main.nfc;
+                nfComp = Default.nfc;
                 compName = "NFC for the character";
             } else if (i == NFKD) {
                 name += "-NFD";
-                nfComp = Main.nfd;
+                nfComp = Default.nfd;
                 compName = "NFD for the character";
             }
             header = "# Derived Property: " + name              
@@ -269,7 +269,7 @@ public final class DerivedProperty implements UCD_Types {
         QuickDProp (int i) {
             setValueType((i == NFC || i == NFKC) ? ENUMERATED : BINARY);
             type = DERIVED_NORMALIZATION;
-            nfx = Main.nf[i];
+            nfx = Default.nf[i];
             NO = nfx.getName() + "_NO";
             MAYBE = nfx.getName() + "_MAYBE";
             name = nfx.getName() + "_QuickCheck";
@@ -507,8 +507,8 @@ of characters, the first of which has a non-zero combining class.
             }
             public String getValue(int cp, byte style) { 
                 if (!ucdData.isRepresented(cp)) return "";
-                String b = Main.nfkc.normalize(fold(cp));
-                String c = Main.nfkc.normalize(fold(b));
+                String b = Default.nfkc.normalize(fold(cp));
+                String c = Default.nfkc.normalize(fold(b));
                 if (c.equals(b)) return "";
                 return "FNC; " + Utility.hex(c);
             } // default
@@ -529,8 +529,8 @@ of characters, the first of which has a non-zero combining class.
             }
             public String getValue(int cp, byte style) { 
                 if (!ucdData.isRepresented(cp)) return "";
-                String b = Main.nfc.normalize(fold(cp));
-                String c = Main.nfc.normalize(fold(b));
+                String b = Default.nfc.normalize(fold(cp));
+                String c = Default.nfc.normalize(fold(b));
                 if (c.equals(b)) return "";
                 return "FN; " + Utility.hex(c);
             } // default
@@ -598,8 +598,8 @@ of characters, the first of which has a non-zero combining class.
             }
             boolean hasValue(int cp) {
                 if (hasSoftDot(cp)) return true;
-                if (!Main.nfkd.normalizationDiffers(cp)) return false;
-                String decomp = Main.nfd.normalize(cp);
+                if (!Default.nfkd.normalizationDiffers(cp)) return false;
+                String decomp = Default.nfd.normalize(cp);
                 boolean ok = false;
                 for (int i = decomp.length()-1; i >= 0; --i) {
                     int ch = UTF16.charAt(decomp, i);
@@ -698,11 +698,11 @@ of characters, the first of which has a non-zero combining class.
             || ucdData.getBinaryProperty(cp, Other_Lowercase)) return Ll;
         if (cat == Lt || cat == Lo || cat == Lm || cat == Nl) return cat;
         
-       // if (true) throw new IllegalArgumentException("FIX Main.nf[2]");
+       // if (true) throw new IllegalArgumentException("FIX Default.nf[2]");
         
-        if (!Main.nf[NFKD].normalizationDiffers(cp)) return Lo;
+        if (!Default.nf[NFKD].normalizationDiffers(cp)) return Lo;
 
-        String norm = Main.nf[NFKD].normalize(cp);
+        String norm = Default.nf[NFKD].normalize(cp);
         int cp2;
         boolean gotUpper = false;
         boolean gotLower = false;
@@ -740,8 +740,8 @@ of characters, the first of which has a non-zero combining class.
     }
     
     public static void test() {
-        Main.setUCD();
-        DerivedProperty dprop = new DerivedProperty(Main.ucd);
+        Default.setUCD();
+        DerivedProperty dprop = new DerivedProperty(Default.ucd);
         /*
         for (int j = 0; j < LIMIT; ++j) {
             System.out.println();
@@ -752,9 +752,9 @@ of characters, the first of which has a non-zero combining class.
         
         for (int cp = 0xA0; cp < 0xFF; ++cp) {
             System.out.println();
-            System.out.println(Main.ucd.getCodeAndName(cp));
+            System.out.println(Default.ucd.getCodeAndName(cp));
             for (int j = 0; j < DERIVED_PROPERTY_LIMIT; ++j) {
-                String prop = make(j, Main.ucd).getValue(cp);
+                String prop = make(j, Default.ucd).getValue(cp);
                 if (prop.length() != 0) System.out.println("\t" + prop);
             }
         }

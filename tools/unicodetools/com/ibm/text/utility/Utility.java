@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2002/03/15 01:57:01 $
-* $Revision: 1.12 $
+* $Date: 2002/04/23 01:59:16 $
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */
@@ -422,12 +422,12 @@ public final class Utility {    // COMMON UTILITIES
              // fix noncharacters, since XML can't handle
             case 0xFFFE: case 0xFFFF:
 
-                return "#x" + hex(c,1) + ";";
+                return "#" + hex(c,1);
         }
 
         // fix surrogates, since XML can't handle
         if (UTF32.isSurrogate(c)) {
-            return "#x" + hex(c,1) + ";";
+            return "#" + hex(c,1);
         }
 
         if (c <= 0x7E || UTF8) {
@@ -519,9 +519,14 @@ public final class Utility {    // COMMON UTILITIES
     }
     
     public static PrintWriter openPrintWriter(String filename, boolean removeCR, boolean latin1) throws IOException {
+        File file = new File(getOutputName(filename));
+        System.out.println("Creating File: " + file);
+        File parent = new File(file.getParent());
+        //System.out.println("Creating File: "+ parent);
+        parent.mkdirs();
         return new PrintWriter(
                     new UTF8StreamWriter(
-                        new FileOutputStream(getOutputName(filename)),
+                        new FileOutputStream(file),
                         32*1024,
                         removeCR, latin1));
     }

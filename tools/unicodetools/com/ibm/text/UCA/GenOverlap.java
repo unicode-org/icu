@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/GenOverlap.java,v $ 
-* $Date: 2002/03/15 01:57:01 $ 
-* $Revision: 1.7 $
+* $Date: 2002/04/23 01:59:14 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -34,8 +34,8 @@ public class GenOverlap implements UCD_Types {
         collator = collatorIn;
         ucd = UCD.make();
 
-        nfd = new Normalizer(Normalizer.NFD);
-        nfkd = new Normalizer(Normalizer.NFKD);
+        nfd = new Normalizer(Normalizer.NFD, collatorIn.getUCDVersion());
+        nfkd = new Normalizer(Normalizer.NFKD, collatorIn.getUCDVersion());
 
         for (int cp = 0x0; cp <= 0x10FFFF; ++cp) {
             Utility.dot(cp);
@@ -67,8 +67,8 @@ public class GenOverlap implements UCD_Types {
             
         ucd = UCD.make();
 
-        nfd = new Normalizer(Normalizer.NFD);
-        nfkd = new Normalizer(Normalizer.NFKD);
+        nfd = new Normalizer(Normalizer.NFD, collatorIn.getUCDVersion());
+        nfkd = new Normalizer(Normalizer.NFKD, collatorIn.getUCDVersion());
             
         UCA.UCAContents cc = collator.getContents(UCA.FIXED_CE, nfd);
             
@@ -339,8 +339,8 @@ public class GenOverlap implements UCD_Types {
             
         ucd = UCD.make();
 
-        nfd = new Normalizer(Normalizer.NFD);
-        nfkd = new Normalizer(Normalizer.NFKD);
+        nfd = new Normalizer(Normalizer.NFD, collatorIn.getUCDVersion());
+        nfkd = new Normalizer(Normalizer.NFKD, collatorIn.getUCDVersion());
             
         UCA.UCAContents cc = collator.getContents(UCA.FIXED_CE, nfd);
             
@@ -448,7 +448,7 @@ public class GenOverlap implements UCD_Types {
         newKeys.removeAll(joint);
         oldKeys.removeAll(joint);
         
-        PrintWriter log = Utility.openPrintWriter("UCA-old-vs-new" + (doMax ? "-MAX.txt" : ".txt"), false);
+        PrintWriter log = Utility.openPrintWriter("UCA-old-vs-new" + (doMax ? "-MAX.txt" : ".txt"), false, false);
         Iterator it = list.iterator();
         int last = -1;
         while (it.hasNext()) {
@@ -541,8 +541,8 @@ public class GenOverlap implements UCD_Types {
         //nfkd = new Normalizer(Normalizer.NFKD);
             
         UCA.UCAContents cc = collator.getContents(UCA.FIXED_CE, nfd);
-        nfd = new Normalizer(Normalizer.NFD);
-        nfkd = new Normalizer(Normalizer.NFKD);
+        nfd = new Normalizer(Normalizer.NFD, collatorIn.getUCDVersion());
+        nfkd = new Normalizer(Normalizer.NFKD, collatorIn.getUCDVersion());
             
         
         int tableLength = 257;
@@ -694,12 +694,12 @@ public class GenOverlap implements UCD_Types {
     }
     
     public static void listCyrillic(UCA collatorIn) throws IOException {
-        PrintWriter log = Utility.openPrintWriter("ListCyrillic.txt", false);
+        PrintWriter log = Utility.openPrintWriter("ListCyrillic.txt", false, false);
         Set set = new TreeSet(collatorIn);
         Set set2 = new TreeSet(collatorIn);
         ucd = UCD.make();
         
-        nfd = new Normalizer(Normalizer.NFD);
+        nfd = new Normalizer(Normalizer.NFD, collatorIn.getUCDVersion());
         
         for (char i = 0; i < 0xFFFF; ++i) {
             Utility.dot(i);

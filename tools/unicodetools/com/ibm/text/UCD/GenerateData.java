@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2002/03/20 00:21:42 $
-* $Revision: 1.16 $
+* $Date: 2002/04/23 01:59:14 $
+* $Revision: 1.17 $
 *
 *******************************************************************************
 */
@@ -32,7 +32,7 @@ public class GenerateData implements UCD_Types {
     //static UnifiedBinaryProperty ubp
         
     public static void checkHoffman(String test) {
-        String result = Main.nfkc.normalize(test);
+        String result = Default.nfkc.normalize(test);
         System.out.println(Utility.hex(test) + " => " + Utility.hex(result));
         System.out.println();
         show(test, 0);
@@ -44,10 +44,10 @@ public class GenerateData implements UCD_Types {
         int cp;
         for (int i = 0; i < s.length(); i += UTF32.count16(cp)) {
             cp = UTF32.char32At(s, i);
-            String cc = " " + Main.ucd.getCombiningClass(cp);
+            String cc = " " + Default.ucd.getCombiningClass(cp);
             cc = Utility.repeat(" ", 4 - cc.length()) + cc;
-            System.out.println(Utility.repeat(" ", indent) + Main.ucd.getCode(cp) + cc + " " + Main.ucd.getName(cp));
-            String decomp = Main.nfkc.normalize(cp);
+            System.out.println(Utility.repeat(" ", indent) + Default.ucd.getCode(cp) + cc + " " + Default.ucd.getName(cp));
+            String decomp = Default.nfkc.normalize(cp);
             if (!decomp.equals(UTF32.valueOf32(cp))) {
                 show(decomp, indent + 4);
             }
@@ -98,14 +98,14 @@ public class GenerateData implements UCD_Types {
     }
 
     public static String getFileSuffix(boolean withDVersion) {
-        return "-" + Main.ucd.getVersion() 
+        return "-" + Default.ucd.getVersion() 
             + ((withDVersion && dVersion >= 0) ? ("d" + dVersion) : "") 
             + ".txt";
     }
     
     public static void generateDerived (byte type, boolean checkTypeAndStandard, int headerChoice, String directory, String fileName) throws IOException {
 
-        Main.setUCD();
+        Default.setUCD();
         String newFile = directory + fileName + getFileSuffix(true);
         System.out.println("New File: " + newFile);
         PrintWriter output = Utility.openPrintWriter(newFile);
@@ -114,7 +114,7 @@ public class GenerateData implements UCD_Types {
         
         doHeader(fileName + getFileSuffix(false), output, headerChoice);
         for (int i = 0; i < DERIVED_PROPERTY_LIMIT; ++i) {
-            UnicodeProperty up = DerivedProperty.make(i, Main.ucd);
+            UnicodeProperty up = DerivedProperty.make(i, Default.ucd);
             boolean keepGoing = true;
             if (!up.isStandard()) keepGoing = false;
             if ((up.getType() & type) == 0) keepGoing = false;
@@ -125,7 +125,7 @@ public class GenerateData implements UCD_Types {
             System.out.print('.');
             output.println(HORIZONTAL_LINE);
             output.println();
-            new DerivedPropertyLister(Main.ucd, i, output).print();
+            new DerivedPropertyLister(Default.ucd, i, output).print();
             output.flush();
         }
         output.close();
@@ -134,27 +134,27 @@ public class GenerateData implements UCD_Types {
 
     /*
     public static void listStrings(String file, int type, int subtype) throws IOException {
-        Main.ucd = UCD.make("3.1.0");
+        Default.ucd = UCD.make("3.1.0");
         UCD ucd30 = UCD.make("3.0.0");
         PrintStream output = new PrintStream(new FileOutputStream(GEN_DIR + file));
 
         for (int i = 0; i < 0x10FFFF; ++i) {
             if ((i & 0xFFF) == 0) System.out.println("# " + i);
-            if (!Main.ucd.isRepresented(i)) continue;
+            if (!Default.ucd.isRepresented(i)) continue;
             if (ucd30.isRepresented(i)) continue;
             String string = "";
             switch(type) {
-                case 0: string = Main.ucd.getSimpleLowercase(i);
+                case 0: string = Default.ucd.getSimpleLowercase(i);
             }
             if (UTF32.length32(string) == 1 && UTF32.char32At(string,0) == i) continue;
-            output.println(Utility.hex(i) + "; C; " + Utility.hex(string) + "; # " + Main.ucd.getName(i));
+            output.println(Utility.hex(i) + "; C; " + Utility.hex(string) + "; # " + Default.ucd.getName(i));
         }
         output.close();
     }
     */
 
     public static void generateCompExclusions() throws IOException {
-        Main.setUCD();
+        Default.setUCD();
         String newFile = "DerivedData/CompositionExclusions" + getFileSuffix(true);
         PrintWriter output = Utility.openPrintWriter(newFile);
         String mostRecent = generateBat("DerivedData/", "CompositionExclusions", getFileSuffix(true));
@@ -164,7 +164,7 @@ public class GenerateData implements UCD_Types {
         output.println("#");
         output.println("# This file lists the characters from the UAX #15 Composition Exclusion Table.");
         output.println("#");
-        if (Main.ucd.getVersion().equals("3.2.0")) {
+        if (Default.ucd.getVersion().equals("3.2.0")) {
             output.println("# The format of the comments in this file has been updated since the last version,");
             output.println("# CompositionExclusions-3.txt. The only substantive change to this file between that");
             output.println("# version and this one is the addition of U+2ADC FORKING.");
@@ -226,7 +226,7 @@ public class GenerateData implements UCD_Types {
 
         public CompLister(PrintWriter output, int type) {
             this.output = output;
-            ucdData = Main.ucd;
+            ucdData = Default.ucd;
             oldUCD = UCD.make("3.0.0");
             // showOnConsole = true;
             alwaysBreaks = type <= 2; // CHANGE LATER
@@ -269,13 +269,13 @@ public class GenerateData implements UCD_Types {
 
         // find properties
 
-        Main.setUCD();
+        Default.setUCD();
         int count = 0;
         UnicodeProperty[] props = new UnicodeProperty[500];
         for (int i = 1; i < LIMIT_ENUM; ++i) { //   || iType == SCRIPT
             int iType = i & 0xFF00;
             if (iType == JOINING_GROUP || iType == AGE || iType == COMBINING_CLASS) continue;
-            UnicodeProperty up = UnifiedBinaryProperty.make(i, Main.ucd);
+            UnicodeProperty up = UnifiedBinaryProperty.make(i, Default.ucd);
             if (up == null) continue;
             if (!up.isStandard()) {
                 System.out.println("Skipping " + up.getName() + "; not standard");
@@ -312,9 +312,9 @@ public class GenerateData implements UCD_Types {
         int total = 0;
         for (int cp = 0; cp <= 0x10FFFF; ++cp) {
             Utility.dot(cp);
-            int cat = Main.ucd.getCategory(cp);
+            int cat = Default.ucd.getCategory(cp);
             if (cat == UNASSIGNED || cat == PRIVATE_USE || cat == SURROGATE) continue;
-            if (!Main.ucd.isAllocated(cp)) continue;
+            if (!Default.ucd.isAllocated(cp)) continue;
 
             for (int i = 0; i < count; ++i) {
                 UnicodeProperty up = props[i];
@@ -326,7 +326,7 @@ public class GenerateData implements UCD_Types {
             if (!map.containsKey(probe)) {
                 map.put(probe.clone(), new Integer(cp));
                 Utility.fixDot();
-                // System.out.println("Set Size: " + map.size() + ", total: " + total + ", " + Main.ucd.getCodeAndName(cp));
+                // System.out.println("Set Size: " + map.size() + ", total: " + total + ", " + Default.ucd.getCodeAndName(cp));
             }
         }
 
@@ -338,7 +338,7 @@ public class GenerateData implements UCD_Types {
         while (it.hasNext()) {
             BitSet probe2 = (BitSet) it.next();
             int ch = ((Integer) map.get(probe2)).intValue();
-            output.println(Main.ucd.getCodeAndName(ch));
+            output.println(Default.ucd.getCodeAndName(ch));
             for (int i = 0; i < count; ++i) {
                 if (!probe2.get(i)) continue;
                 output.print(" " + props[i].getFullName(SHORT));
@@ -350,10 +350,10 @@ public class GenerateData implements UCD_Types {
 
     public static void listDifferences() throws IOException {
 
-        Main.setUCD();
+        Default.setUCD();
         PrintWriter output = Utility.openPrintWriter("PropertyDifferences" + getFileSuffix(true));
         output.println("# Listing of relationships among properties, suitable for analysis by spreadsheet");
-        output.println("# Generated for " + Main.ucd.getVersion());
+        output.println("# Generated for " + Default.ucd.getVersion());
         output.println(generateDateLine());
         output.println("# P1	P2	R(P1,P2)	C(P1&P2)	C(P1-P2)	C(P2-P1)");
         
@@ -361,7 +361,7 @@ public class GenerateData implements UCD_Types {
         for (int i = 1; i < LIMIT_ENUM; ++i) {
             int iType = i & 0xFF00;
             if (iType == JOINING_GROUP || iType == AGE || iType == COMBINING_CLASS || iType == SCRIPT) continue;
-            UnicodeProperty upi = UnifiedBinaryProperty.make(i, Main.ucd);
+            UnicodeProperty upi = UnifiedBinaryProperty.make(i, Default.ucd);
             if (upi == null) continue;
             if (!upi.isStandard()) {
                 System.out.println("Skipping " + upi.getName() + "; not standard");
@@ -385,7 +385,7 @@ public class GenerateData implements UCD_Types {
                 int jType = j & 0xFF00;
                 if (jType == JOINING_GROUP || jType == AGE || jType == COMBINING_CLASS || jType == SCRIPT
                     || (jType == iType && jType != BINARY_PROPERTIES)) continue;
-                UnicodeProperty upj = UnifiedBinaryProperty.make(j, Main.ucd);
+                UnicodeProperty upj = UnifiedBinaryProperty.make(j, Default.ucd);
                 if (upj == null) continue;
                 if (!upj.isStandard()) continue;
                 if (upj.getValueType() < BINARY) continue;
@@ -405,9 +405,9 @@ public class GenerateData implements UCD_Types {
                 int bothCount = 0, i_jPropCount = 0, j_iPropCount = 0, iCount = 0, jCount = 0;
 
                 for (int cp = 0; cp <= 0x10FFFF; ++cp) {
-                    int cat = Main.ucd.getCategory(cp);
+                    int cat = Default.ucd.getCategory(cp);
                     if (cat == UNASSIGNED || cat == PRIVATE_USE || cat == SURROGATE) continue;
-                    if (!Main.ucd.isAllocated(cp)) continue;
+                    if (!Default.ucd.isAllocated(cp)) continue;
 
                     boolean iProp = upi.hasValue(cp);
                     boolean jProp = upj.hasValue(cp);
@@ -444,7 +444,7 @@ public class GenerateData implements UCD_Types {
     }
 
     public static void generatePropertyAliases() throws IOException {
-        Main.setUCD();
+        Default.setUCD();
         String prop = "";
         String propAbb = "";
         String value = "";
@@ -455,7 +455,7 @@ public class GenerateData implements UCD_Types {
         Set accumulation = new TreeSet(java.text.Collator.getInstance());
         
         /*
-        BufferedReader blocks = Utility.openUnicodeFile("Blocks", Main.ucd.getVersion());
+        BufferedReader blocks = Utility.openUnicodeFile("Blocks", Default.ucd.getVersion());
         String[] parts = new String[10];
         while (true) {
             String line = blocks.readLine();
@@ -509,7 +509,7 @@ public class GenerateData implements UCD_Types {
             if (type == AGE) continue;
             if (i == (BINARY_PROPERTIES | CaseFoldTurkishI)) continue;
             
-            UnicodeProperty up = UnifiedBinaryProperty.make(i, Main.ucd);
+            UnicodeProperty up = UnifiedBinaryProperty.make(i, Default.ucd);
             if (up == null) continue;
             if (!up.isStandard()) continue;
             
@@ -547,7 +547,7 @@ public class GenerateData implements UCD_Types {
             
             
             if (type == SCRIPT) {
-                value = Main.ucd.getCase(value, FULL, TITLE);
+                value = Default.ucd.getCase(value, FULL, TITLE);
             }
             
             valueAbb = up.getValue(SHORT);
@@ -774,7 +774,7 @@ public class GenerateData implements UCD_Types {
     // static final byte KEEP_SPECIAL = 0, SKIP_SPECIAL = 1;
     
     public static String generateBat(String directory, String fileRoot, String suffix) throws IOException {
-        String mostRecent = Utility.getMostRecentUnicodeDataFile(fixFile(fileRoot), Main.ucd.getVersion(), true, true);
+        String mostRecent = Utility.getMostRecentUnicodeDataFile(fixFile(fileRoot), Default.ucd.getVersion(), true, true);
         if (mostRecent != null) {
             generateBatAux(directory + "DIFF/Diff_" + fileRoot + suffix,
                 mostRecent, directory + fileRoot + suffix);
@@ -783,7 +783,7 @@ public class GenerateData implements UCD_Types {
             return null;
         }
        
-        String lessRecent = Utility.getMostRecentUnicodeDataFile(fixFile(fileRoot), Main.ucd.getVersion(), false, true);
+        String lessRecent = Utility.getMostRecentUnicodeDataFile(fixFile(fileRoot), Default.ucd.getVersion(), false, true);
         if (lessRecent != null && !mostRecent.equals(lessRecent)) {
             generateBatAux(directory + "DIFF/Diff_" + fileRoot + suffix + "-OLDER",
                 lessRecent, directory + fileRoot + suffix);
@@ -809,7 +809,7 @@ public class GenerateData implements UCD_Types {
     public static void generateVerticalSlice(int startEnum, int endEnum,
             int headerChoice, String directory, String file) throws IOException {
 
-        Main.setUCD();
+        Default.setUCD();
         String newFile = directory + file + getFileSuffix(true);
         PrintWriter output = Utility.openPrintWriter(newFile);
         String mostRecent = generateBat(directory, file, getFileSuffix(true));
@@ -817,7 +817,7 @@ public class GenerateData implements UCD_Types {
         doHeader(file + getFileSuffix(false), output, headerChoice);
         int last = -1;
         for (int i = startEnum; i < endEnum; ++i) {
-            UnicodeProperty up = UnifiedBinaryProperty.make(i, Main.ucd);
+            UnicodeProperty up = UnifiedBinaryProperty.make(i, Default.ucd);
             if (up == null) continue;
             
             if (i == DECOMPOSITION_TYPE || i == NUMERIC_TYPE
@@ -845,7 +845,7 @@ public class GenerateData implements UCD_Types {
             }
             System.out.print(".");
             if (DEBUG) System.out.println(i);
-            new MyPropertyLister(Main.ucd, i, output).print();
+            new MyPropertyLister(Default.ucd, i, output).print();
             output.flush();
         }
         if (endEnum == LIMIT_ENUM) {
@@ -859,13 +859,13 @@ public class GenerateData implements UCD_Types {
 
             Set floatSet = new TreeSet();
             for (int i = 0; i < 0x10FFFF; ++i) {
-                float nv = Main.ucd.getNumericValue(i);
+                float nv = Default.ucd.getNumericValue(i);
                 if (Float.isNaN(nv)) continue;
                 floatSet.add(new Float(nv));
             }
             Iterator it = floatSet.iterator();
             while(it.hasNext()) {
-                new MyFloatLister(Main.ucd, ((Float)it.next()).floatValue(), output).print();
+                new MyFloatLister(Default.ucd, ((Float)it.next()).floatValue(), output).print();
                 output.println();
                 System.out.print(".");
             }
@@ -878,7 +878,7 @@ public class GenerateData implements UCD_Types {
     }
     
     static public void writeNormalizerTestSuite(String directory, String fileName) throws IOException {
-        Main.setUCD();
+        Default.setUCD();
         String newFile = directory + fileName + getFileSuffix(true);
         PrintWriter log = Utility.openPrintWriter(newFile, true, false);
         String mostRecent = generateBat(directory, fileName, getFileSuffix(true));
@@ -936,8 +936,8 @@ public class GenerateData implements UCD_Types {
 
         for (int ch = 0; ch < 0x10FFFF; ++ch) {
             Utility.dot(ch);
-            if (!Main.ucd.isAssigned(ch)) continue;
-            if (Main.ucd.isPUA(ch)) continue;
+            if (!Default.ucd.isAssigned(ch)) continue;
+            if (Default.ucd.isPUA(ch)) continue;
             String cc = UTF32.valueOf32(ch);
             writeLine(cc,log, true);
         }
@@ -947,9 +947,9 @@ public class GenerateData implements UCD_Types {
 
         for (int ch = 0; ch < 0x10FFFF; ++ch) {
             Utility.dot(ch);
-            if (!Main.ucd.isAssigned(ch)) continue;
-            if (Main.ucd.isPUA(ch)) continue;
-            int cc = Main.ucd.getCombiningClass(ch);
+            if (!Default.ucd.isAssigned(ch)) continue;
+            if (Default.ucd.isPUA(ch)) continue;
+            int cc = Default.ucd.getCombiningClass(ch);
             if (example[cc] == null) example[cc] = UTF32.valueOf32(ch);
         }
 
@@ -963,9 +963,9 @@ public class GenerateData implements UCD_Types {
         for (int ch = 0; ch < 0x10FFFF; ++ch) {
 
             Utility.dot(ch);
-            if (!Main.ucd.isAssigned(ch)) continue;
-            if (Main.ucd.isPUA(ch)) continue;
-            short c = Main.ucd.getCombiningClass(ch);
+            if (!Default.ucd.isAssigned(ch)) continue;
+            if (Default.ucd.isPUA(ch)) continue;
+            short c = Default.ucd.getCombiningClass(ch);
             if (c == 0) continue;
 
             // add character with higher class, same class, lower class
@@ -1012,19 +1012,19 @@ public class GenerateData implements UCD_Types {
     }
 
     static void writeLine(String cc, PrintWriter log, boolean check) {
-        String c = Main.nfc.normalize(cc);
-        String d = Main.nfd.normalize(cc);
-        String kc = Main.nfkc.normalize(cc);
-        String kd = Main.nfkd.normalize(cc);
+        String c = Default.nfc.normalize(cc);
+        String d = Default.nfd.normalize(cc);
+        String kc = Default.nfkc.normalize(cc);
+        String kd = Default.nfkd.normalize(cc);
         if (check & cc.equals(c) && cc.equals(d) && cc.equals(kc) && cc.equals(kd)) return;
 
         // consistency check
-        String dc = Main.nfd.normalize(c);
-        String dkc = Main.nfd.normalize(kc);
+        String dc = Default.nfd.normalize(c);
+        String dkc = Default.nfd.normalize(kc);
         if (!dc.equals(d) || !dkc.equals(kd)) {
             System.out.println("Danger Will Robinson!");
             Normalizer.SHOW_PROGRESS = true;
-            d = Main.nfd.normalize(cc);
+            d = Default.nfd.normalize(cc);
         }
 
         // printout
@@ -1033,7 +1033,7 @@ public class GenerateData implements UCD_Types {
             + Utility.hex(kc," ") + ";" + Utility.hex(kd," ")
             + "; # ("
             + comma(cc) + "; " + comma(c) + "; " + comma(d) + "; " + comma(kc) + "; " + comma(kd) + "; "
-            + ") " + Main.ucd.getName(cc));
+            + ") " + Default.ucd.getName(cc));
     }
 
     static StringBuffer commaResult = new StringBuffer();
@@ -1044,7 +1044,7 @@ public class GenerateData implements UCD_Types {
         int cp;
         for (int i = 0; i < s.length(); i += UTF32.count16(i)) {
             cp = UTF32.char32At(s, i);
-            if (Main.ucd.getCategory(cp) == Mn) commaResult.append('\u25CC');
+            if (Default.ucd.getCategory(cp) == Mn) commaResult.append('\u25CC');
             UTF32.append32(commaResult, cp);
         }
         return commaResult.toString();
@@ -1078,7 +1078,7 @@ public class GenerateData implements UCD_Types {
     };
     
     static final void generateAge(String directory, String filename) throws IOException {
-        Main.setUCD();
+        Default.setUCD();
         String newFile = directory + filename + getFileSuffix(true);
         PrintWriter log = Utility.openPrintWriter(newFile);
         String mostRecent = generateBat(directory, filename, getFileSuffix(true));
@@ -1174,32 +1174,32 @@ public class GenerateData implements UCD_Types {
     }
     
     public static void listCombiningAccents() throws IOException {
-        Main.setUCD();
+        Default.setUCD();
         PrintWriter log = Utility.openPrintWriter("ListAccents" + getFileSuffix(true));
         Set set = new TreeSet();
         Set set2 = new TreeSet();
         
         for (int i = 0; i < 0x10FFFF; ++i) {
             Utility.dot(i);
-            if (!Main.ucd.isRepresented(i)) continue;
+            if (!Default.ucd.isRepresented(i)) continue;
             
-            if (!Main.nfd.normalizationDiffers(i)) {
-                if (Main.ucd.getScript(i) == LATIN_SCRIPT) {
+            if (!Default.nfd.normalizationDiffers(i)) {
+                if (Default.ucd.getScript(i) == LATIN_SCRIPT) {
                     int cp = i;
                     String hex = "u" + Utility.hex(cp, 4);
-                    set.add("# yyy $x <> \\" + hex + " ; # " + Main.ucd.getName(cp));
+                    set.add("# yyy $x <> \\" + hex + " ; # " + Default.ucd.getName(cp));
                 }
                 continue;
             }
             
-            String decomp = Main.nfd.normalize(i);
+            String decomp = Default.nfd.normalize(i);
             int j;
             for (j = 0; j < decomp.length(); j += UTF16.getCharCount(i)) {
                 int cp = UTF16.charAt(decomp, j);
-                byte cat = Main.ucd.getCategory(cp);
+                byte cat = Default.ucd.getCategory(cp);
                 if (cat != Mn) continue;
                 String hex = "u" + Utility.hex(cp, 4);
-                set.add("# xxx $x <> \\" + hex + " ; # " + Main.ucd.getName(cp));
+                set.add("# xxx $x <> \\" + hex + " ; # " + Default.ucd.getName(cp));
             }
         }
         
@@ -1211,7 +1211,7 @@ public class GenerateData implements UCD_Types {
     }
     
     public static void listGreekVowels() throws IOException {
-        Main.setUCD();
+        Default.setUCD();
         PrintWriter log = Utility.openPrintWriter("ListGreekVowels" + getFileSuffix(true));
         Set set = new TreeSet();
         Set set2 = new TreeSet();
@@ -1224,14 +1224,14 @@ public class GenerateData implements UCD_Types {
         
         for (char i = 0; i < 0xFFFF; ++i) {
             Utility.dot(i);
-            if (!Main.ucd.isRepresented(i)) continue;
-            if (Main.ucd.getScript(i) != GREEK_SCRIPT) continue;
-            String decomp = Main.nfd.normalize(i);
+            if (!Default.ucd.isRepresented(i)) continue;
+            if (Default.ucd.getScript(i) != GREEK_SCRIPT) continue;
+            String decomp = Default.nfd.normalize(i);
             
             if (decomp.indexOf('\u0306') >= 0) continue; // skip breve
             if (decomp.indexOf('\u0304') >= 0) continue; // skip macron
             
-            String comp = Main.nfc.normalize(decomp);
+            String comp = Default.nfc.normalize(decomp);
             if (!comp.equals(String.valueOf(i))) continue; // skip compats
             
             char first = decomp.charAt(0);
@@ -1245,7 +1245,7 @@ public class GenerateData implements UCD_Types {
                 for (int j = 0; j < diphthongStart.length(); ++j) {
                     String v = diphthongStart.substring(j, j+1);
                     char vc = v.charAt(0);
-                    if (Main.ucd.getCategory(vc) == Ll && Main.ucd.getCategory(first) == Lu) continue;
+                    if (Default.ucd.getCategory(vc) == Ll && Default.ucd.getCategory(first) == Lu) continue;
                     if (etas.indexOf(vc) >= 0 && iotas.indexOf(first) >= 0) continue;
                     set.add(new Pair(h + v + first, new Pair(v + decomp, v + i)));
                 }
@@ -1271,7 +1271,7 @@ public class GenerateData implements UCD_Types {
     
     public static void listKatakana() throws IOException {
         
-        Main.setUCD();
+        Default.setUCD();
         for (char i = 'a'; i <= 'z'; ++i) {
             doKana(String.valueOf(i));
             if (i == 'c') doKana("ch");
@@ -1304,18 +1304,18 @@ public class GenerateData implements UCD_Types {
     }
     
     public static void genTrailingZeros() {
-        Main.setUCD();
+        Default.setUCD();
         UnicodeSet result = new UnicodeSet();
         for (int i = 0; i < 0x10FFFF; ++i) {
             if ((i & 0xFFF) == 0) System.out.println("# " + i);
-            if (!Main.ucd.isAssigned(i)) continue;
-            if (!Main.nfd.normalizationDiffers(i)) continue;
-            String decomp = Main.nfd.normalize(i);
+            if (!Default.ucd.isAssigned(i)) continue;
+            if (!Default.nfd.normalizationDiffers(i)) continue;
+            String decomp = Default.nfd.normalize(i);
             int cp;
             for (int j = 0; j < decomp.length(); j += UTF16.getCharCount(cp)) {
                 cp = UTF16.charAt(decomp,j);
                 if (j == 0) continue; // skip first
-                if (Main.ucd.getCombiningClass(cp) == 0) {
+                if (Default.ucd.getCombiningClass(cp) == 0) {
                     result.add(cp);
                 }
             }
@@ -1328,8 +1328,8 @@ public class GenerateData implements UCD_Types {
                 Utility.hex(start)
                 + (start != end ? ".." + Utility.hex(end) : "")
                 + "; "
-                + Main.ucd.getName(start)
-                + (start != end ? ".." + Main.ucd.getName(end) : ""));
+                + Default.ucd.getName(start)
+                + (start != end ? ".." + Default.ucd.getName(end) : ""));
         }
         System.out.println("TrailingZero count: " + result.size());
     }

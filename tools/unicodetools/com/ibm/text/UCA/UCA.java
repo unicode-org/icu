@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA.java,v $ 
-* $Date: 2002/03/15 01:57:01 $ 
-* $Revision: 1.9 $
+* $Date: 2002/04/23 01:59:14 $ 
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -483,9 +483,10 @@ final public class UCA implements Comparator {
     /**
      * Returns the char associated with a FIXED value
      */
-    public char charFromFixed(int ce) {
+    /*public char charFromFixed(int ce) {
         return getPrimary(ce);
     }
+    */
     
     /**
      * Return the type of the CE
@@ -716,7 +717,7 @@ final public class UCA implements Comparator {
     /**
      * Records the dataversion
      */
-    private String dataVersion = "?";
+    private String dataVersion = "3.1d1";
 
     /**
      * Records the dataversion
@@ -791,7 +792,7 @@ final public class UCA implements Comparator {
      * A special bit combination in a CE is used to reserve exception cases. This has the effect
      * of removing 32 primary key values out of the 65536 possible.
      */
-    static final int EXCEPTION_CE_MASK = 0xFFC00000;
+    static final int EXCEPTION_CE_MASK = 0xFF000000;
     
     /**
      * Used to composed Hangul and Han characters
@@ -807,7 +808,8 @@ final public class UCA implements Comparator {
      * There are at least 34 values, so that we can use a range for surrogates
      * However, we do add to the first weight if we have surrogate pairs!
      */
-    public static final int UNSUPPORTED_BASE = 0xFFC2;
+    public static final int UNSUPPORTED_BASE = 0xFF40;
+    public static final int UNSUPPORTED_TOP = 0xFFFF;
     static final int UNSUPPORTED = makeKey(UNSUPPORTED_BASE, NEUTRAL_SECONDARY, NEUTRAL_TERTIARY);
     
     // was 0xFFC20101;
@@ -819,7 +821,7 @@ final public class UCA implements Comparator {
      * to be looked up (with following characters) in the contractingTable.<br>
      * This isn't a MASK since there is exactly one value.
      */
-    static final int CONTRACTING = 0xFFC10000;
+    static final int CONTRACTING = 0xFF310000;
 
     /**
      * Expanding characters are marked with a exception bit combination
@@ -827,7 +829,7 @@ final public class UCA implements Comparator {
      * This means that they map to more than one CE, which is looked up in
      * the expansionTable by index. See EXCEPTION_INDEX_MASK
      */
-    static final int EXPANDING_MASK = 0xFFC00000; // marks expanding range start
+    static final int EXPANDING_MASK = 0xFF300000; // marks expanding range start
     
     /**
      * This mask is used to get the index from an EXPANDING exception.
@@ -1165,12 +1167,12 @@ final public class UCA implements Comparator {
     }
     
     public UCAContents getContents(byte ceLimit, Normalizer skipDecomps) {
-        return new UCAContents(ceLimit, skipDecomps);
+        return new UCAContents(ceLimit, skipDecomps, ucdVersion);
     }
     
     public class UCAContents {
         int current = -1;
-        Normalizer skipDecomps = new Normalizer(Normalizer.NFD);
+        Normalizer skipDecomps;
         Normalizer nfd = skipDecomps;
         Iterator enum = null;
         byte ceLimit;
@@ -1183,8 +1185,9 @@ final public class UCA implements Comparator {
         /**
          * use FIXED_CE as the limit
          */
-        UCAContents(byte ceLimit, Normalizer skipDecomps) {
+        UCAContents(byte ceLimit, Normalizer skipDecomps, String unicodeVersion) {
             this.ceLimit = ceLimit;
+            this.nfd = new Normalizer(Normalizer.NFD, unicodeVersion);
             this.skipDecomps = skipDecomps;
         }
         
@@ -1208,7 +1211,7 @@ final public class UCA implements Comparator {
                 
                 if (!nfd.normalizationDiffers(current) || type == HANGUL_CE) {
                     if (type >= ceLimit) continue;
-                    if (skipDecomps != null && skipDecomps.hasDecomposition(current)) continue;
+                    if (skipDecomps != null && skipDecomps.normalizationDiffers(current)) continue;
                 }
                 result = UTF16.valueOf(current);
                 return result;
@@ -1363,9 +1366,13 @@ final public class UCA implements Comparator {
             boolean record = true;
             /* if (multiChars.length() > 0) record = false;
             else */
-            if (toD.hasDecomposition(value)) record = false;
+            if (toD.normalizationDiffers(value)) record = false;
             
             // collect CEs
+            if (value == 0x2F00) {
+            	System.out.println("debug");
+            }
+            
             int ce = getCEFromLine(value, line, position, record);
             int ce2 = getCEFromLine(value, line, position, record);
             if (CHECK_UNIQUE && (ce2 == TERMINATOR || CHECK_UNIQUE_EXPANSIONS)) {
@@ -1765,7 +1772,7 @@ final public class UCA implements Comparator {
      * Used for checking data file integrity
      */
     private void checkUnique(char value, int result, int fourth, String line) {
-        if (toD.hasDecomposition(value)) return; // don't check decomposables.
+        if (toD.normalizationDiffers(value)) return; // don't check decomposables.
         Object ceObj = new Long(((long)result << 16) | fourth);
         Object probe = uniqueTable.get(ceObj);
         if (probe != null) {
