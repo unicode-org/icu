@@ -502,11 +502,12 @@ ParagraphLayout::Line *ParagraphLayout::nextLine(float width)
 
         fLineEnd = previousBreak(fGlyphToCharMap[glyph]);
 
-        // If there's no real break, break at the
-        // glyph that didn't fit.
-        if (fLineEnd <= fLineStart) {
-            fLineEnd = fGlyphToCharMap[glyph];
-        }
+        // If this break is at or before the last one,
+		// find a glyph, starting at the one which didn't
+		// fit, that produces a break after the last one.
+		while (fLineEnd <= fLineStart) {
+			fLineEnd = fGlyphToCharMap[glyph++];
+		}
     } else {
         fLineEnd = fCharCount;
     }
