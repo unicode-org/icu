@@ -40,7 +40,7 @@
  *  Extra, repeated, or otherwise unneeded calls to u_init() do no harm,
  *  other than taking a small amount of time.
  *
- * @param pErrorCode An ICU UErrorCode parameter. It must not be <code>NULL</code>.
+ * @param status An ICU UErrorCode parameter. It must not be <code>NULL</code>.
  *    An Error will be returned if some required part of ICU data can not
  *    be loaded or initialized.
  *    The function returns immediately if the input error code indicates a
