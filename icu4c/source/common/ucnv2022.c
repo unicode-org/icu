@@ -1154,7 +1154,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args,
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
-    
+    initIterState = myConverterData->currentState;
     while(mySourceIndex <  mySourceLength){
         currentState = myConverterData->currentState;
         myConverterData->fromUnicodeConverter = (myConverterData->fromUnicodeConverter == NULL) ?
@@ -1201,7 +1201,6 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args,
                 if(currentState > 2){
                     concatEscape(args, &myTargetIndex, &myTargetLength,	escSeqChars[0],err,strlen(escSeqChars[0]));
                     
-                    TEST_ERROR_CONDITION(args,myTargetIndex, mySourceIndex, isTargetUCharDBCS,myConverterData, err);
                     isTargetUCharDBCS=FALSE;
                 }
                 concatString(args, &myTargetIndex, &myTargetLength,&targetUniChar,err,&mySourceIndex);
@@ -1218,7 +1217,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args,
                     isShiftAppended	=FALSE;
                     myConverterData->isEscapeAppended=isEscapeAppended=FALSE;
                     myConverterData->isShiftAppended=FALSE;
-                    TEST_ERROR_CONDITION(args,myTargetIndex, mySourceIndex, isTargetUCharDBCS,myConverterData, err);
+                    
                 }
                 
                 targetUniChar = mySourceChar;
@@ -1312,17 +1311,17 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args,
                     isEscapeAppended =TRUE;
                     myConverterData->isEscapeAppended=TRUE;
                     
-                    TEST_ERROR_CONDITION(args,myTargetIndex, mySourceIndex, isTargetUCharDBCS,myConverterData, err);
+                    
                     
                     /* Append SSN for shifting to G2 */
                     if(currentState==ISO8859_1 || currentState==ISO8859_7){
                         concatEscape(args, &myTargetIndex, &myTargetLength,
                             UCNV_SS2,err,strlen(UCNV_SS2));
                         
-                        TEST_ERROR_CONDITION(args,myTargetIndex, mySourceIndex, isTargetUCharDBCS,myConverterData, err);
+                        
                     }
                 }
-                /*else{
+               /*else{
                     
                     if(oldIsTargetUCharDBCS != isTargetUCharDBCS  ){
                         /*Shifting from a double byte to single byte mode
@@ -2415,7 +2414,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN(UConverterFromUnicodeArgs* args,
     myTargetIndex = myConverterData->targetIndex;
     isEscapeAppended =(UBool) myConverterData->isEscapeAppended;
     isShiftAppended =(UBool) myConverterData->isShiftAppended;
-    initIterState =ASCII;
+    initIterState = myConverterData->currentState;
     /* arguments check*/
     if ((args->converter == NULL) || (args->targetLimit < args->target) || (args->sourceLimit < args->source)){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
@@ -2556,7 +2555,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN(UConverterFromUnicodeArgs* args,
                         escSeq,err,strlen(escSeq));
                     isEscapeAppended=myConverterData->isEscapeAppended=TRUE;
                     
-                    TEST_ERROR_CONDITION_CN(args,myTargetIndex, mySourceIndex,myConverterData, err);
+                    
                     
                 }
                 /* Append Shift Sequences */
@@ -2569,14 +2568,14 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN(UConverterFromUnicodeArgs* args,
                                 strlen(shiftSeqCharsCN[currentState]));
                             myConverterData->isShiftAppended =isShiftAppended=TRUE;
                         }
-                        TEST_ERROR_CONDITION_CN(args,myTargetIndex, mySourceIndex,myConverterData, err);
+                       
                     }
                     else{
                         concatEscape(args,&myTargetIndex,&myTargetLength,shiftSeqCharsCN[currentState+plane],
                             err,strlen(shiftSeqCharsCN[currentState+plane]));
                         
                         myConverterData->isShiftAppended =isShiftAppended=FALSE;
-                        TEST_ERROR_CONDITION_CN(args,myTargetIndex, mySourceIndex,myConverterData, err);
+                    
                     }
                     
                 }
@@ -2867,7 +2866,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
     UConverterDataISO2022* myData=(UConverterDataISO2022*)(args->converter->extraInfo);
     CompactShortArray *myToUnicodeDBCS=NULL, *myToUnicodeFallbackDBCS = NULL; 
     
-    
+    plane=myData->plane;
     /*Arguments Check*/
     if (U_FAILURE(*err)) 
         return;
@@ -3064,6 +3063,7 @@ SAVE_STATE:
             args->converter->toUnicodeStatus = 0x00;
         }
     }
+    
     args->target = myTarget;
     args->source = mySource;
 }
