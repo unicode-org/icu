@@ -218,6 +218,7 @@ void LocaleTest::TestBasicGetters() {
     }
     
     /*tests for the depracted API*/
+#ifdef ICU_LOCID_USE_DEPRECATES
     for (i = 0; i <= MAX_LOCALES; i++) {
         Locale testLocale((UnicodeString)rawData[LANG][i], (UnicodeString)rawData[CTRY][i], (UnicodeString)rawData[VAR][i]);
         logln("Testing " + (UnicodeString)testLocale.getName() + "...");
@@ -249,6 +250,7 @@ void LocaleTest::TestBasicGetters() {
         if (testLocale.getVariant(temp).length() != 0 )
             errln("  Variant code mismatch: something versus \"\"");
     }
+#endif
     /*----------*/
     // NOTE: There used to be a special test for locale names that had language or
     // country codes that were longer than two letters.  The new version of Locale
@@ -286,6 +288,7 @@ void LocaleTest::TestSimpleResourceInfo() {
   }
 
   /*tests for the deprecated API*/
+#ifdef ICU_LOCID_USE_DEPRECATES
   for (i = 0; i <= MAX_LOCALES; i++) {
     Locale testLocale((UnicodeString)rawData[LANG][i], (UnicodeString)rawData[CTRY][i], (UnicodeString)rawData[VAR][i]);
     logln("Testing " + (testLocale.getName(temp)) + "...");
@@ -303,10 +306,11 @@ void LocaleTest::TestSimpleResourceInfo() {
       }
     err = U_ZERO_ERROR;
    }
+#endif
 
-   Locale locale((UnicodeString)"en");
-   if(locale.getName(temp) != (UnicodeString)"en" ||
-       locale.getLanguage(temp) != (UnicodeString)"en"){
+   Locale locale("en");
+   if(strcmp(locale.getName(), "en") != 0||
+       strcmp(locale.getLanguage(), "en") != 0) {
        errln("construction of Locale(en) failed\n");
    }
    /*-----*/
@@ -816,6 +820,7 @@ LocaleTest::TestGetLangsAndCountries()
 void 
 LocaleTest::Test4126880() 
 {
+#ifdef ICU_LOCID_USE_DEPRECATES
     
     const UnicodeString *test;
     int32_t testCount=0;
@@ -841,8 +846,10 @@ LocaleTest::Test4126880()
     if(testCount != 142){
         errln((UnicodeString)"There is an error in getISOLanguages " + testCount);
     }
-    /*----------*/
-        
+/*----------*/
+#else
+    logln("Skipping Test4126880 for deprecated API");
+#endif        
 }
 
 /**
