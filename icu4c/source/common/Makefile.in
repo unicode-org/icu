@@ -107,7 +107,7 @@ install-library: all-local
 
 install-headers:
 	$(mkinstalldirs) $(includedir)/unicode
-	@list='$(HEADERS)'; for file in $$list; do \
+	@for file in $(HEADERS); do \
 	 echo " $(INSTALL_DATA) $$file $(includedir)/$$file"; \
 	 $(INSTALL_DATA) $$file $(includedir)/$$file; \
 	done
