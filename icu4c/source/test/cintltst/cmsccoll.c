@@ -43,52 +43,6 @@ typedef int tst_strcoll(void *collator, const int object,
                         const UChar *target, const int tLen);
 
 
-
-static void TestCase( )
-{
-    int32_t i,j,k;
-    UErrorCode status = U_ZERO_ERROR;
-    UCollator  *myCollation;
-    myCollation = ucol_open("en_US", &status);
-    if(U_FAILURE(status)){
-        log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
-        return;
-    }
-    log_verbose("Testing different case settings\n");
-    ucol_setStrength(myCollation, UCOL_TERTIARY);
-
-    for(k = 0; k<4; k++) {
-      ucol_setAttribute(myCollation, UCOL_CASE_FIRST, caseTestAttributes[k][0], &status);
-      ucol_setAttribute(myCollation, UCOL_CASE_LEVEL, caseTestAttributes[k][1], &status);
-      for (i = 0; i < 3 ; i++) {
-        for(j = i+1; j<4; j++) {
-          doTest(myCollation, testCase[i], testCase[j], caseTestResults[k][3*i+j-1]);
-        }
-      }
-    }
-    ucol_close(myCollation);
-
-    myCollation = ucol_openRules(gRules, u_strlen(gRules), UNORM_NONE, UCOL_TERTIARY, &status);
-    if(U_FAILURE(status)){
-        log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
-        return;
-    }
-    log_verbose("Testing different case settings with custom rules\n");
-    ucol_setStrength(myCollation, UCOL_TERTIARY);
-
-    for(k = 0; k<4; k++) {
-      ucol_setAttribute(myCollation, UCOL_CASE_FIRST, caseTestAttributes[k][0], &status);
-      ucol_setAttribute(myCollation, UCOL_CASE_LEVEL, caseTestAttributes[k][1], &status);
-      for (i = 0; i < 3 ; i++) {
-        for(j = i+1; j<4; j++) {
-          doTest(myCollation, testCase[i], testCase[j], caseTestResults[k][3*i+j-1]);
-        }
-      }
-    }
-    ucol_close(myCollation);
-
-}
-
 /**
  * Return an integer array containing all of the collation orders
  * returned by calls to next on the specified iterator
