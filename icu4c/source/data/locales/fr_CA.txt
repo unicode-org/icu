@@ -12,10 +12,6 @@ fr_CA {
         "CAD",
         ",",
     }
-    DateTimeElements {
-        "1",
-        "1",
-    }
     DateTimePatterns { 
         "H' h 'mm z",
         "HH:mm:ss z",
