@@ -70,9 +70,9 @@ static const char* rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
     /* display country (French) */
     {   "\\u00C9tats-Unis",    "France",   "Espagne",  "Gr\\u00E8ce",   "Norv\\u00E8ge"    },
     /* display variant (French) */
-    {   "",     "",     "",     "",     "Nynorsk"    },
+    {   "",     "",     "",     "",     "NY"    },
     /* display name (French) */
-    {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "catalan (Espagne)", "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, Nynorsk)" },
+    {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "catalan (Espagne)", "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, NY)" },
 
     /* display language (Catalan) */
     {   "angl\\u00E8s", "franc\\u00E8s", "catal\\u00E0", "grec",  "noruec" },
@@ -1226,9 +1226,7 @@ TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
                         UBool isRoot = strcmp(rootName, "root") == 0;
                         UBool isSpecial = FALSE;
                         if (currentBundleKey) {
-                            isSpecial = strcmp(currentBundleKey, "Currencies") == 0
-                                || strcmp(currentBundleKey, "Languages") == 0
-                                || strcmp(currentBundleKey, "Countries") == 0;
+                            isSpecial = strcmp(currentBundleKey, "Currencies") == 0;
                         }
 
                         if ((isRoot && !isSpecial)
