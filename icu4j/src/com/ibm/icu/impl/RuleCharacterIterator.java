@@ -160,7 +160,9 @@ public class RuleCharacterIterator {
             }
 
             if (c == '\\' && (options & PARSE_ESCAPES) != 0) {
-                c = Utility.unescapeAt(this);
+                int offset[] = new int[] { 0 };
+                c = Utility.unescapeAt(lookahead(), offset);
+                jumpahead(offset[0]);
                 isEscaped = true;
                 if (c < 0) {
                     throw new IllegalArgumentException("Invalid escape");

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2003/09/29 23:18:03 $
- * $Revision: 1.45 $
+ * $Date: 2003/10/07 16:51:56 $
+ * $Revision: 1.46 $
  *
  *****************************************************************************************
  */
@@ -827,118 +827,6 @@ public final class Utility {
         /* If no special forms are recognized, then consider
          * the backslash to generically escape the next character. */
         offset16[0] = offset;
-        return c;
-    }
-
-    /**
-     * Convert an escape sequence to a 32-bit code point value.  This
-     * parallels the icu4c unescapeAt() function.
-     * @param chars iterator over the characters to be parsed.  Upon
-     * entry it should point to the character immediately following
-     * the escape character (typically '\\').  Upon return it will be
-     * advanced to the first character after the parsed pattern, or
-     * the end of the iteration if all characters are parsed.  If the
-     * parse fails, the iterator will be unchanged upon return.
-     * During parsing, the iterator will be dereferenced with none of
-     * the RuleCharacterIterator options set, to allow backslash,
-     * SYMBOL_REF, and whitespace characters to be escaped.
-     * @return 32-bit code point value from 0 to 10FFFF, or -1 on
-     * error.
-     */
-    public static int unescapeAt(RuleCharacterIterator chars) {
-        int c;
-        int result = 0;
-        int n = 0;
-        int minDig = 0;
-        int maxDig = 0;
-        int bitsPerDigit = 4;
-        int dig;
-        int i;
-        boolean braces = false;
-        Object save = chars.getPos(null), backup = null;
-
-        /* Fetch first UChar after '\\' */
-        c = chars.next(0);
-
-        /* Convert hexadecimal and octal escapes */
-        switch (c) {
-        case 'u':
-            c = chars.next(0); 
-            minDig = maxDig = 4;
-            break;
-        case 'U':
-            c = chars.next(0); 
-            minDig = maxDig = 8;
-            break;
-        case 'x':
-            c = chars.next(0);
-            minDig = 1;
-            if (c == 0x7B /*{*/) {
-                c = chars.next(0);
-                braces = true;
-                maxDig = 8;
-            } else {
-                maxDig = 2;
-            }
-            break;
-        default:
-            if (UCharacter.digit(c, 8) >= 0) {
-                minDig = 1;
-                maxDig = 3;
-                bitsPerDigit = 3;
-            }
-            break;
-        }
-        if (minDig != 0) {
-            while (n < maxDig && !chars.atEnd()) {
-                dig = UCharacter.digit(c, (bitsPerDigit == 3) ? 8 : 16);
-                if (dig < 0) {
-                    break;
-                }
-                result = (result << bitsPerDigit) | dig;
-                ++n;
-                backup = chars.getPos(backup);
-                c = chars.next(0);
-            }
-            if (n < minDig) {
-                chars.setPos(save);
-                return -1;
-            }
-            if (braces) {
-                if (c != 0x7D /*}*/) {
-                    chars.setPos(save);
-                    return -1;
-                }
-            } else {
-                chars.setPos(backup);
-            }
-            if (result < 0 || result >= 0x110000) {
-                chars.setPos(save);
-                return -1;
-            }           
-            return result;
-        }
-
-        /* Convert C-style escapes in table */
-        for (i=0; i<UNESCAPE_MAP.length; i+=2) {
-            if (c == UNESCAPE_MAP[i]) {
-                return UNESCAPE_MAP[i+1];
-            } else if (c < UNESCAPE_MAP[i]) {
-                break;
-            }
-        }
-
-        /* Map \cX to control-X: X & 0x1F */
-        if (c == 'c') {
-            if (chars.atEnd()) {
-                chars.setPos(save);
-                return -1;
-            }
-            return 0x1F & chars.next(0);
-        }
-
-        /* If no special forms are recognized, then consider
-         * the backslash to generically escape the next character. */
         return c;
     }
 
