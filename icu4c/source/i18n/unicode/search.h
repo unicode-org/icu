@@ -80,13 +80,13 @@ public:
     * Copy constructor that creates a SearchIterator instance with the same 
     * behavior, and iterating over the same text. 
     * @param other the SearchIterator instance to be copied.
-    * @draft ICU 2.0
+    * @stable
     */
     SearchIterator(const SearchIterator &other);
 
     /**
      * Destructor. Cleans up the search iterator data struct.
-     * @draft ICU 2.0
+     * @stable
      */
     virtual ~SearchIterator();
 
@@ -103,7 +103,7 @@ public:
      * 			than or greater than the text range for searching, 
      *          an U_INDEX_OUTOFBOUNDS_ERROR will be returned
      * @param status for errors if it occurs
-     * @draft ICU 2.0
+     * @stable
      */
     virtual void setOffset(int32_t position, UErrorCode &status) = 0;
 
@@ -113,7 +113,7 @@ public:
      * (or past the beginning for a backwards search), USEARCH_DONE
      * is returned.
      * @return current index in the text being searched.
-     * @draft ICU 2.0
+     * @stable
      */
     virtual int32_t getOffset(void) const = 0;
 
@@ -124,7 +124,7 @@ public:
     * @param attribute text attribute (enum USearchAttribute) to be set
     * @param value text attribute value
     * @param status for errors if it occurs
-    * @draft ICU 2.0
+    * @stable
     */
     void setAttribute(USearchAttribute       attribute,
                       USearchAttributeValue  value,
@@ -134,7 +134,7 @@ public:
     * Gets the text searching attributes
     * @param attribute text attribute (enum USearchAttribute) to be retrieve
     * @return text attribute value
-    * @draft ICU 2.0
+    * @stable
     */
     USearchAttributeValue getAttribute(USearchAttribute  attribute) const;
     
@@ -152,7 +152,7 @@ public:
     * @see #next
     * @see #previous
     * @see #last
-    * @draft ICU 2.0
+    * @stable
     */
     int32_t getMatchedStart(void) const;
 
@@ -168,7 +168,7 @@ public:
      * @see #next
      * @see #previous
      * @see #last
-     * @draft ICU 2.0
+     * @stable
      */
     int32_t getMatchedLength(void) const;
     
@@ -184,7 +184,7 @@ public:
      * @see #next
      * @see #previous
      * @see #last
-     * @draft ICU 2.0
+     * @stable
      */
     void getMatchedText(UnicodeString &result) const;
     
@@ -201,7 +201,7 @@ public:
      *                detection is attempted.
      * @param status for errors if it occurs
      * @see BreakIterator
-     * @draft ICU 2.0
+     * @stable
      */
     void setBreakIterator(BreakIterator *breakiter, UErrorCode &status);
     
@@ -213,7 +213,7 @@ public:
      * detection should not be attempted.
      * @return BreakIterator used to restrict matchings.
      * @see #setBreakIterator
-     * @draft ICU 2.0
+     * @stable
      */
     const BreakIterator * getBreakIterator(void) const;
 
@@ -225,7 +225,7 @@ public:
      * @param text string to be searched.
      * @param status for errors. If the text length is 0, 
      *        an U_ILLEGAL_ARGUMENT_ERROR is returned.
-     * @draft ICU 2.0
+     * @stable
      */
     virtual void setText(const UnicodeString &text, UErrorCode &status);    
 
@@ -242,14 +242,14 @@ public:
      * @param text string iterator to be searched.
      * @param status for errors if any. If the text length is 0 then an 
      *        U_ILLEGAL_ARGUMENT_ERROR is returned.
-     * @draft ICU 2.0
+     * @stable
      */
     virtual void setText(CharacterIterator &text, UErrorCode &status);
     
     /**
      * Return the string text to be searched.
      * @return text string to be searched.
-     * @draft ICU 2.0
+     * @stable
      */
     const UnicodeString & getText(void) const;
 
@@ -261,7 +261,7 @@ public:
      * @return TRUE if both BreakIterators are of the same class, have the 
      *         same behavior, terates over the same text and have the same
      *         attributes. FALSE otherwise.
-     * @draft ICU 2.0
+     * @stable
      */
     virtual UBool operator==(const SearchIterator &that) const;
 
@@ -269,7 +269,7 @@ public:
      * Not-equal operator. 
      * @param that SearchIterator instance to be compared.
      * @return FALSE if operator== returns TRUE, and vice versa.
-     * @draft ICU 2.0
+     * @stable
      */
     UBool operator!=(const SearchIterator &that) const;
 
@@ -280,7 +280,7 @@ public:
      * iterating over the same text, as this one. Note that all data will be
      * replicated, except for the text string to be searched.
      * @return cloned object
-     * @draft ICU 2.0
+     * @stable
      */
     virtual SearchIterator* safeClone(void) const = 0;
 
@@ -295,7 +295,7 @@ public:
      * @return The character index of the first match, or 
      *         <tt>USEARCH_DONE</tt> if there are no matches.
      * @see #getOffset
-     * @draft ICU 2.0
+     * @stable
      */
     int32_t first(UErrorCode &status);
 
@@ -314,7 +314,7 @@ public:
      *         <tt>position</tt>, or <tt>USEARCH_DONE</tt> if there are no 
      *         matches.
      * @see #getOffset
-     * @draft ICU 2.0
+     * @stable
      */
     int32_t following(int32_t position, UErrorCode &status);
     
@@ -329,7 +329,7 @@ public:
      * @return The index of the first match, or <tt>USEARCH_DONE</tt> if 
      *         there are no matches.
      * @see #getOffset
-     * @draft ICU 2.0
+     * @stable
      */
     int32_t last(UErrorCode &status);
 
@@ -348,7 +348,7 @@ public:
      *         <tt>position</tt>, or <tt>USEARCH_DONE</tt> if there are 
      *         no matches.
      * @see #getOffset
-     * @draft ICU 2.0
+     * @stable
      */
     int32_t preceding(int32_t position, UErrorCode &status);
 
@@ -364,7 +364,7 @@ public:
      * @return The index of the next match after the current position,
      *          or <tt>USEARCH_DONE</tt> if there are no more matches.
      * @see #getOffset
-     * @draft ICU 2.0
+     * @stable
      */
      int32_t next(UErrorCode &status);
 
@@ -379,7 +379,7 @@ public:
      * @return The index of the previous match before the current position,
      *          or <tt>USEARCH_DONE</tt> if there are no more matches.
      * @see #getOffset
-     * @draft ICU 2.0
+     * @stable
      */
     int32_t previous(UErrorCode &status);
 
@@ -389,7 +389,7 @@ public:
     * iteration is initiated before a backwards iteration. Otherwise if a 
     * backwards iteration is initiated before a forwards iteration, the 
     * search will begin at the end of the text string.    
-    * @draft ICU 2.0
+    * @stable
     */
     virtual void reset();
 
@@ -398,7 +398,7 @@ protected:
 
     /**
     * C search data struct
-	* @draft ICU 2.0.
+	* @stable.
     */
     USearch *m_search_;
 
@@ -408,13 +408,13 @@ protected:
     * another in C. Hence we keep the original around and do the verification
     * at the end of the match. The user is responsible for deleting this
     * break iterator.
-	* @draft ICU 2.0.
+	* @stable.
     */
     BreakIterator *m_breakiterator_;
     
     /**
     * Unicode string version of the search text
-	* @draft ICU 2.0.
+	* @stable.
     */
     UnicodeString  m_text_;
 
@@ -423,7 +423,7 @@ protected:
     /**
     * Default constructor.
     * Initializes data to the default values.
-	* @draft ICU 2.0
+	* @stable
     */
     SearchIterator();
 
@@ -440,7 +440,7 @@ protected:
      *                is <tt>NULL</tt>, no break detection is attempted.  
      * @see #handleNext
      * @see #handlePrev
-	 * @draft ICU 2.0.
+	 * @stable.
      */
     SearchIterator(const UnicodeString &text, 
                          BreakIterator *breakiter = NULL);
@@ -462,7 +462,7 @@ protected:
      *                is <tt>NULL</tt>, no break detection is attempted.
      * @see #handleNext
      * @see #handlePrev
-	 * @draft ICU 2.0.
+	 * @stable.
      */
     SearchIterator(CharacterIterator &text, BreakIterator *breakiter = NULL);
 
@@ -472,7 +472,7 @@ protected:
      * Assignment operator. Sets this iterator to have the same behavior,
      * and iterate over the same text, as the one passed in.
      * @param that instance to be copied.
-	 * @draft ICU 2.0.
+	 * @stable.
      */
     SearchIterator & operator=(const SearchIterator &that);
 
@@ -493,7 +493,7 @@ protected:
      * @return index at which the match starts, else if match is not found 
      *         USEARCH_DONE is returned
      * @see #setMatchLength
-	 * @draft ICU 2.0.
+	 * @stable.
      */
     virtual int32_t handleNext(int32_t position, UErrorCode &status) 
                                                                          = 0;
@@ -515,7 +515,7 @@ protected:
      * @return index at which the match starts, else if match is not found 
      *         USEARCH_DONE is returned
      * @see #setMatchLength
-	 * @draft ICU 2.0.
+	 * @stable.
      */
      virtual int32_t handlePrev(int32_t position, UErrorCode &status) 
                                                                          = 0;
@@ -528,7 +528,7 @@ protected:
      * @param length length of the matched text.
      * @see #handleNext
      * @see #handlePrev
-	 * @draft ICU 2.0.
+	 * @stable.
      */
     virtual void setMatchLength(int32_t length);
 
@@ -540,13 +540,13 @@ protected:
      * @param position start offset of the matched text.
      * @see #handleNext
      * @see #handlePrev
-	 * @draft ICU 2.0.
+	 * @stable.
      */
     virtual void setMatchStart(int32_t position);
 
     /**
     * sets match not found 
-	* @draft ICU 2.0.
+	* @stable.
     */
     void setMatchNotFound();
 };
