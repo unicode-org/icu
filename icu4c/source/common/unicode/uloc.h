@@ -903,7 +903,7 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable,
  */
 U_DRAFT int32_t U_EXPORT2
 uloc_acceptLanguage(char *result, int32_t resultAvailable, 
-                    UAcceptResult *outResult, const char *acceptList[],
+                    UAcceptResult *outResult, const char **acceptList,
                     int32_t acceptListCount,
                     UEnumeration* availableLocales,
                     UErrorCode *status);
