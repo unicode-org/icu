@@ -1,0 +1,16 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+de_LI{
+    Version{ "x0.1" }
+    LocaleID:int { 0x1407 }
+    CurrencyElements{
+        "CHF",
+        "CHF",
+        "."
+    }
+}

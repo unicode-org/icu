@@ -1,0 +1,71 @@
+## -*-makefile-*-
+## Solaris-specific setup using gcc
+## Copyright (c) 1999-2000, International Business Machines Corporation and
+## others. All Rights Reserved.
+##
+## $Id: mh-solaris-gcc,v 1.25 2002/01/04 23:48:43 yves-oss Exp $
+
+## Flags for position independent code
+SHAREDLIBCFLAGS = -fPIC
+SHAREDLIBCXXFLAGS = -fPIC
+SHAREDLIBCPPFLAGS = -DPIC
+
+## Commands to generate dependency files
+GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
+GEN_DEPS.cc=	$(CXX) -E -MM $(DEFS) $(CPPFLAGS)
+
+# Commands to link
+LINK.c=       $(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
+LINK.cc=      $(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+
+## Commands to make a shared library
+SHLIB.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -G
+SHLIB.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -G
+
+## Compiler switch to embed a runtime search path
+LD_RPATH=	-R
+LD_RPATH_PRE=	
+
+## Compiler switch to embed a library name
+LD_SONAME = -h $(MIDDLE_SO_TARGET)
+
+## Shared object suffix
+SO=		so
+## Non-shared intermediate object suffix
+STATIC_O = ao
+
+## Compilation rules
+%.$(STATIC_O): $(srcdir)/%.c
+	$(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS) -o $@ $<
+%.o: $(srcdir)/%.c
+	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
+
+%.$(STATIC_O): $(srcdir)/%.cpp
+	$(COMPILE.cc) $(STATICCPPFLAGS) $(STATICCXXFLAGS) -o $@ $<
+%.o: $(srcdir)/%.cpp
+	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<
+
+../data/%.o: ../data/%.c
+	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
+
+## Dependency rules
+%.d : $(srcdir)/%.c
+	@echo "generating dependency information for $<"
+	@$(SHELL) -ec '$(GEN_DEPS.c) $< \
+		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
+		[ -s $@ ] || rm -f $@'
+
+%.d : $(srcdir)/%.cpp
+	@echo "generating dependency information for $<"
+	@$(SHELL) -ec '$(GEN_DEPS.cc) $< \
+		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
+		[ -s $@ ] || rm -f $@'
+
+## Versioned libraries rules
+
+%.$(SO).$(SO_TARGET_VERSION_MAJOR): %.$(SO).$(SO_TARGET_VERSION)
+	$(RM) $@ && ln -s $< $@
+%.$(SO): %.$(SO).$(SO_TARGET_VERSION_MAJOR)
+	$(RM) $@ && ln -s $*.$(SO).$(SO_TARGET_VERSION) $@
+
+## End Solaris-specific setup

@@ -1,0 +1,10 @@
+Makefile
+.links
+*.dat
+*.dll
+*.exp
+*.obj
+*.lib
+*.plg
+icupkg.inc
+out

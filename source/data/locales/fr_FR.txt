@@ -1,0 +1,22 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+fr_FR {
+    Version{ "1.0"}
+    CurrencyElements { 
+        "\u20AC",
+        "EUR",
+        ",",
+    }
+    DateTimeElements:intvector {
+        2,
+        1,
+    }
+//    LocaleString { "fr_FR" }
+//    ShortCountry { "FRA" }
+    LocaleID:int { 0x040c }
+}

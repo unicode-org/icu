@@ -1,0 +1,100 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+// * Tigrigna language locale for Eritrea.
+// * Contributed by Daniel Yacob <yacob@geez.org>, Ge'ez Frontier Foundation
+
+ti_ER{ 
+    Version{ "x0.2" }
+    DayAbbreviations {
+        "\u1230\u1295\u1260",
+        "\u1230\u1291\u12ED",
+        "\u1230\u1209\u1235",
+        "\u1228\u1261\u12D5",
+        "\u1213\u1219\u1235",
+        "\u12D3\u122D\u1262",
+        "\u1240\u12F3\u121D",
+    }
+    DayNames {
+        "\u1230\u1295\u1260\u1275",
+        "\u1230\u1291\u12ED",
+        "\u1230\u1209\u1235",
+        "\u1228\u1261\u12D5",
+        "\u1213\u1219\u1235",
+        "\u12D3\u122D\u1262",
+        "\u1240\u12F3\u121D",
+    }
+    MonthAbbreviations {
+        "\u1325\u122A",
+        "\u1208\u12AB\u1272",
+        "\u1218\u130B\u1262",
+        "\u121A\u12EB\u12DD",
+        "\u130D\u1295\u1266",
+        "\u1230\u1290",
+        "\u1213\u121D\u1208",
+        "\u1290\u1213\u1230",
+        "\u1218\u1235\u12A8",
+        "\u1325\u1245\u121D",
+        "\u1215\u12F3\u122D",
+        "\u1273\u1215\u1233",
+    }
+    MonthNames {
+        "\u1325\u122A",
+        "\u1208\u12AB\u1272\u1275",
+        "\u1218\u130B\u1262\u1275",
+        "\u121A\u12EB\u12DD\u12EB",
+        "\u130D\u1295\u1266\u1275",
+        "\u1230\u1290",
+        "\u1213\u121D\u1208",
+        "\u1290\u1213\u1230",
+        "\u1218\u1235\u12A8\u1228\u121D",
+        "\u1325\u1245\u121D\u1272",
+        "\u1215\u12F3\u122D",
+        "\u1273\u1215\u1233\u1235",
+    }
+    AmPmMarkers {
+        "\u1295\u1309\u1206 \u1230\u12D3\u1270",
+        "\u12F5\u1215\u122D \u1230\u12D3\u1275",
+    }
+    // CountryISBNNumber { "231" }
+    // CountryNumber { "231" }
+    CurrencyElements {
+        "$",
+        "ETB",
+        ".",
+    }
+    DateTimePatterns { 
+        "h:mm:ss a",
+        "h:mm:ss a",
+        "h:mm:ss a",
+        "h:mm a",
+        "EEEE\u1363 dd MMMM \u1218\u12D3\u120D\u1272 yyyy G",
+        "dd MMMM yyyy",
+        "dd-MMM-yy",
+        "dd/MM/yy",
+        "{1} {0}",
+    }
+    // Measurement { "Metric" }
+//    NumberElements {
+//        ".",
+//        ",",
+//        ";",
+//        "%",
+//        "0",
+//        "#",
+//        "-",
+//        "E",
+//        "\u2030",
+//        "\u221E",
+//        "\uFFFD",
+//    }
+    NumberPatterns {
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;-\u00A4#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+}

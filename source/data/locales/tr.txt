@@ -1,0 +1,118 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+tr {
+    Version{ "1.2" }
+    // According to Nurdan Mete from IBM Turkey, the following would be the correct
+    // sorting order for Turkish
+    CollationElements { 
+        Version { "2" }
+        Sequence { "& C < c\u0327 <<< C\u0327" 
+                   "& G < g\u0306 <<< G\u0306"
+                   "& H < \u0131 <<< I < i <<< \u0130" 
+                   "& O < o\u0308 <<< O\u0308"
+                   "& S < s\u0327 <<< S\u0327" 
+                   "& U < u\u0308 <<< U\u0308" }
+    }
+    Countries { 
+        TR { "T\u00FCrkiye" }
+    }
+    DateTimeElements:intvector { 
+        2,
+        1,
+    }
+    DateTimePatterns { 
+        "HH:mm:ss z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "dd MMMM yyyy EEEE",
+        "dd MMMM yyyy EEEE",
+        "dd.MMM.yyyy",
+        "dd.MM.yyyy",
+        "{1} {0}",
+    }
+    DayAbbreviations { 
+        "Paz",
+        "Pzt",
+        "Sal",
+        "\u00C7ar",
+        "Per",
+        "Cum",
+        "Cmt",
+    }
+    DayNames { 
+        "Pazar",
+        "Pazartesi",
+        "Sal\u0131",
+        "\u00C7ar\u015Famba",
+        "Per\u015Fembe",
+        "Cuma",
+        "Cumartesi",
+    }
+    Languages { 
+        tr { "T\u00FCrk\u00E7e" }
+    }
+    LocaleID:int { 0x1f }
+//    LocaleString { "tr" }
+    MonthAbbreviations { 
+        "Oca",
+        "\u015Eub",
+        "Mar",
+        "Nis",
+        "May",
+        "Haz",
+        "Tem",
+        "A\u011Fu",
+        "Eyl",
+        "Eki",
+        "Kas",
+        "Ara",
+    }
+    MonthNames { 
+        "Ocak",
+        "\u015Eubat",
+        "Mart",
+        "Nisan",
+        "May\u0131s",
+        "Haziran",
+        "Temmuz",
+        "A\u011Fustos",
+        "Eyl\u00FCl",
+        "Ekim",
+        "Kas\u0131m",
+        "Aral\u0131k",
+    }
+    NumberElements { 
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+    }
+//    ShortLanguage { "tur" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
+    zoneStrings { 
+        {
+            "Africa/Casablanca",
+            "GMT",
+            "GMT",
+            "GMT",
+            "GMT",
+        }
+    }
+//    LocaleScript{ 
+//        "Latn",  // ISO 15924 Name 
+//    }
+    ExemplarCharacters { "[a-z \u00e2 \u00ee \u00fb \u00f6 \u00fc \u0131 \u00e7 \u015f \u011f]" }
+}

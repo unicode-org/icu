@@ -1,0 +1,55 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+en_IE {
+    Version { "1.0" }
+//    Duplicated in parent
+//    Countries { 
+//        US { "United States" }
+//        GB { "United Kingdom" }
+//        CA { "Canada" }
+//        IE { "Ireland" }
+//        AU { "Australia" }
+//        NZ { "New Zealand" }
+//    }
+    CurrencyElements { 
+        "\u20AC",
+        "EUR",
+        ".",
+    }
+    DateTimeElements:intvector { 
+        2,
+        1,
+    }
+    DateTimePatterns { 
+        "HH:mm:ss z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "dd MMMM yyyy",
+        "dd MMMM yyyy",
+        "dd-MMM-yy",
+        "dd/MM/yy",
+        "{1} {0}",
+    }
+//    Duplicated in parent
+//    Languages { 
+//        en { "English" }
+//    }
+    LocaleID:int { 0x1809 }
+//    LocaleString { "en_IE" }
+//    ShortCountry { "IRL" }
+    zoneStrings { 
+        {
+            "Europe/London",
+            "Greenwich Mean Time",
+            "GMT",
+            "Ireland Summer Time",
+            "IST",
+        }
+    }
+}

@@ -1,0 +1,24 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+hu_HU {
+    Version{ "1.1" }
+    CurrencyElements { 
+        "Ft",
+        "HUF",
+        ",",
+    }
+//    LocaleString { "hu_HU" }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;-\u00A4#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+//    ShortCountry { "HUN" }
+    LocaleID:int { 0x040e }
+}

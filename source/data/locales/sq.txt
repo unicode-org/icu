@@ -1,0 +1,115 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+sq {
+    Version{ "1.0" }
+    AmPmMarkers { 
+        "PD",
+        "MD",
+    }
+    CollationElements { 
+        Version { "1.0" }
+        Sequence { "@" }
+    }
+    Countries { 
+        AL { "Shqip\u00EBria" }
+    }
+    DateTimePatterns { 
+        "h.mm.ss.a z",
+        "h.mm.ss.a z",
+        "h:mm:ss.a",
+        "h.mm.a",
+        "EEEE, dd MMMM yyyy",
+        "dd MMMM yyyy",
+        "yyyy-MM-dd",
+        "yy-MM-dd",
+        "{1} {0}",
+    }
+    DayAbbreviations { 
+        "Die",
+        "H\u00EBn",
+        "Mar",
+        "M\u00EBr",
+        "Enj",
+        "Pre",
+        "Sht",
+    }
+    DayNames { 
+        "e diel",
+        "e h\u00EBn\u00EB",
+        "e mart\u00EB",
+        "e m\u00EBrkur\u00EB",
+        "e enjte",
+        "e premte",
+        "e shtun\u00EB",
+    }
+    Eras { 
+        "p.e.r.",
+        "n.e.r.",
+    }
+    Languages { 
+        sq { "shqipe" }
+    }
+    LocaleID:int { 0x1c }
+//    LocaleString { "sq" }
+    MonthAbbreviations { 
+        "Jan",
+        "Shk",
+        "Mar",
+        "Pri",
+        "Maj",
+        "Qer",
+        "Kor",
+        "Gsh",
+        "Sht",
+        "Tet",
+        "N\u00EBn",
+        "Dhj",
+    }
+    MonthNames { 
+        "janar",
+        "shkurt",
+        "mars",
+        "prill",
+        "maj",
+        "qershor",
+        "korrik",
+        "gusht",
+        "shtator",
+        "tetor",
+        "n\u00EBntor",
+        "dhjetor",
+    }
+    NumberElements { 
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+    }
+//    ShortLanguage { "sqi" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
+    zoneStrings { 
+        {
+            "Africa/Casablanca",
+            "GMT",
+            "GMT",
+            "GMT",
+            "GMT",
+        }
+    }
+//    LocaleScript{ 
+//                "Latn",  // ISO 15924 Name 
+//    }
+    ExemplarCharacters { "[a-z \u00eb \u00e7]" }
+}

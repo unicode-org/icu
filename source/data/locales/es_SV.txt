@@ -1,0 +1,42 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+es_SV {
+    Version { "1.0" }
+    CurrencyElements { 
+        "\u20A1",
+        "SVC",
+        ".",
+    }
+    DateTimePatterns { 
+        "hh:mm:ss a z",
+        "hh:mm:ss a z",
+        "hh:mm:ss a",
+        "hh:mm a",
+        "EEEE d' de 'MMMM' de 'yyyy",
+        "d' de 'MMMM' de 'yyyy",
+        "dd/MM/yyyy",
+        "dd/MM/yy",
+        "{1} {0}",
+    }
+//    LocaleString { "es_SV" }
+//    NumberElements { 
+//        ".",
+//        ",",
+//        ";",
+//        "%",
+//        "0",
+//        "#",
+//        "-",
+//        "E",
+//        "\u2030",
+//        "\u221E",
+//        "\uFFFD",
+//    }
+//    ShortCountry { "SLV" }
+    LocaleID:int { 0x440a }
+}

@@ -1,0 +1,24 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+da_DK {
+    Version{"1.0"}
+    CurrencyElements { 
+        "kr",
+        "DKK",
+        ",",
+    }
+//    LocaleString { "da_DK" }
+    NumberPatterns { 
+        "#,##0.###;-#,##0.###",
+        "\u00A4 #,##0.00;\u00A4 -#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+//    ShortCountry { "DNK" }
+    LocaleID:int { 0x0406 }
+}

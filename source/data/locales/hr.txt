@@ -1,0 +1,113 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+hr {
+    Version{"1.2"}
+    CollationElements { 
+        Version { "2.0" }
+        Sequence {
+            "& C < \u010D <<< \u010C < \u0107 <<< \u0106"
+            "&\u0110 < d\u017E <<< D\u017E <<< D\u017D"
+            "& L < lj, Lj <<< LJ"
+            "& N < nj, Nj <<< NJ "
+            "& S < \u0161 <<< \u0160"
+            "& Z < \u017E <<< \u017D"			}
+    }
+    Countries { 
+        HR { "Hrvatska" }
+    }
+    DateTimePatterns { 
+        "HH:mm:ss z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "yyyy. MMMM dd",
+        "yyyy. MMMM dd",
+        "yyyy.MM.dd",
+        "yyyy.MM.dd",
+        "{1} {0}",
+    }
+    DayAbbreviations { 
+        "ned",
+        "pon",
+        "uto",
+        "sri",
+        "\u010Det",
+        "pet",
+        "sub",
+    }
+    DayNames { 
+        "nedjelja",
+        "ponedjeljak",
+        "utorak",
+        "srijeda",
+        "\u010Detvrtak",
+        "petak",
+        "subota",
+    }
+    Languages { 
+        hr { "hrvatski" }
+    }
+    LocaleID:int { 0x1a }
+//    LocaleString { "hr" }
+    MonthAbbreviations { 
+        "sij",
+        "vel",
+        "o\u017Eu",
+        "tra",
+        "svi",
+        "lip",
+        "srp",
+        "kol",
+        "ruj",
+        "lis",
+        "stu",
+        "pro",
+    }
+    MonthNames { 
+        "sije\u010Danj",
+        "velja\u010Da",
+        "o\u017Eujak",
+        "travanj",
+        "svibanj",
+        "lipanj",
+        "srpanj",
+        "kolovoz",
+        "rujan",
+        "listopad",
+        "studeni",
+        "prosinac",
+    }
+    NumberElements { 
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+    }
+//    ShortLanguage { "hrv" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
+    zoneStrings { 
+        {
+            "Africa/Casablanca",
+            "GMT",
+            "GMT",
+            "GMT",
+            "GMT",
+        }
+    }
+    ExemplarCharacters { "[a-p r-v z \u0111 \u0107 \u010d \u017e \u0161 {lj} {nj} {d\u017e}]" }
+//    LocaleScript:array {
+//        "Latn"  // ISO 15924 Name 
+//    }
+}

@@ -1,0 +1,67 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+// * Oromo language locale for Ethiopia.
+// * Contributed by Daniel Yacob <yacob@geez.org>
+// *
+// * Oromo terms are provided by Mahdi Hamid Muudee of Sagalee Oromoo
+// * Publishing Co. Inc and formatted in Posix format locale by Daniel Yacob of
+// * the Ge'ez Frontier Foundation.  The Oromo language terms used here
+// * are those considered to be canonical in the Oromo language under
+// * contemporary and progressive usage adopted by government bureaus
+// * across the Oromo region.  Regional synonyms naturally exist for many
+// * of the month and day names.
+
+om_ET {
+    Version{ "x0.2" }
+    AmPmMarkers {
+        "WD",  // WD = Waaree Dura
+        "WB",  // WD = Waaree Booda
+    }
+    // CountryISBNNumber { "231" }
+    // CountryNumber { "231" }
+    CurrencyElements {
+        "$",
+        "ETB",
+        ".",
+    }
+    DateTimePatterns { 
+        "h:mm:ss a",
+        "h:mm:ss a",
+        "h:mm:ss a",
+        "h:mm a",
+        "EEEE, MMMM d, yyyy",
+        "dd MMMM yyyy",
+        "dd-MMM-yy",
+        "dd/MM/yy",
+        "{1} {0}",
+    }
+    // Measurement { "Metric" }
+//    NumberElements {
+//        ".",
+//        ",",
+//        ";",
+//        "%",
+//        "0",
+//        "#",
+//        "-",
+//        "E",
+//        "\u2030",
+//        "\u221E",
+//        "\uFFFD",
+//    }
+    NumberPatterns {
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;-\u00A4#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    // PaperSize {
+    //    Height { "297" }
+    //    Width { "210" }
+    //    Units { "mm" }
+    // }
+}

@@ -1,0 +1,11 @@
+tmp
+Debug
+Release
+Makefile
+*.d
+*.pdb
+gencmn
+gencmn.[0-9]
+*.plg
+decmn
+decmn.[0-9]

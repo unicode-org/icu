@@ -1,0 +1,89 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+// * Somali language locale.
+// * Contributed by :
+// *    Daniel Yacob <yacob@geez.org>, Ge'ez Frontier Foundation
+// *    Mohamed Diriye Abdullahi <diriyeam@magellan.umontreal.ca>
+// *    Department of Linguistics and Translation, Universite de Montreal, Montreal
+
+so{ 
+    Version{ "x0.2" }
+    DayAbbreviations {
+        "Axa",
+        "Isn",
+        "Sal",
+        "Arb",
+        "Kha",
+        "Jim",
+        "Sab",
+    }
+    DayNames {
+        "Axad",
+        "Isniin",
+        "Salaaso",
+        "Arbaco",
+        "Khamiis",
+        "Jimco",
+        "Sabti",
+    }
+    MonthAbbreviations {
+        "Kob",
+        "Lab",
+        "Sad",
+        "Afr",
+        "Sha",
+        "Lix",
+        "Tod",
+        "Sid",
+        "Sag",
+        "Tob",
+        "KIT",
+        "LIT",
+    }
+    MonthNames {
+        "Bisha Koobaad",
+        "Bisha Labaad",
+        "Bisha Saddexaad",
+        "Bisha Afraad",
+        "Bisha Shanaad",
+        "Bisha Lixaad",
+        "Bisha Todobaad",
+        "Bisha Sideedaad",
+        "Bisha Sagaalaad",
+        "Bisha Tobnaad",
+        "Bisha Kow iyo Tobnaad",
+        "Bisha Laba iyo Tobnaad",
+    }
+    Eras { 
+            "Ciise ka hor",
+            "Ciise ka dib"
+    }
+    Languages { 
+        so { "Soomaali" }
+    }
+    Countries { 
+        DJ { "Jabuuti" }
+        ET { "Itoobiya" }
+        KE { "Kiiniya" }
+        SO { "Soomaaliya" }
+    }
+    AmPmMarkers {
+        "sn",
+        "gn",
+    }
+    DateTimePatterns { 
+        "h:mm:ss a",
+        "h:mm:ss a",
+        "h:mm:ss a",
+        "h:mm a",
+        "EEEE, MMMM dd, yyyy",
+        "dd MMMM yyyy",
+        "dd-MMM-yy",
+        "dd/MM/yy",
+        "{1} {0}",
+    }
+}

@@ -1,0 +1,38 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *   Data by :
+// *         Bedo Agopian    www.agosoft.com
+// *         Aram Airapetian
+// *         Arminco Global Telecommunications
+// *         Jora Manoucherians
+// *         Richard Youatt
+// ***************************************************************************
+
+hy_AM{
+    Version { "x0.2" }
+
+//    LocaleString { "hy_AM" }
+    Eras {
+        "\u0554\u2024\u0531\u2024",      // K.A.
+        "\u0554\u2024\u0535\u2024"       // K.E.
+    }
+    LocaleID:int { 0x042b }
+}
+
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  
