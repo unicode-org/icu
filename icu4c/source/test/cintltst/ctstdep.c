@@ -85,9 +85,9 @@ static void
 TestDeprecatedCollationAPI(void)
 {
   UErrorCode status = U_ZERO_ERROR;
-  UChar *temp=(UChar*)malloc(sizeof(UChar) * 90);
-  UChar *t1 =(UChar*)malloc(sizeof(UChar) * 90);
-  UChar *t2 =(UChar*)malloc(sizeof(UChar) * 90);
+  UChar temp[90];
+  UChar t1[90];
+  UChar t2[90];
 
   UCollator *coll =  NULL;
   uint32_t i = 0, j = 0;
@@ -284,6 +284,8 @@ TestDeprecatedDateFmtAPI(void)
     else
         log_verbose("PASS: creating dateformat using udat_openPattern() succesful\n");
 
+    udat_close(def);
+    udat_close(fr_pat);
 }
 
 static void
