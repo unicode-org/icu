@@ -4,18 +4,28 @@
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
+
+/**
+ * Preprocess with com.ibm.icu.dev.tool.docs.CodeMangler to generate
+ * either a JDK 1.4 or JDK 1.5 version.  For the 1.5 version, define
+ * VERSION_1.5.
+ */
+
 package com.ibm.icu.dev.tool.docs;
 
 import com.sun.javadoc.*;
 import com.sun.tools.doclets.*;
+#ifdef VERSION_1.5
+
 import com.sun.tools.doclets.internal.toolkit.taglets.*;
 import com.sun.tools.doclets.internal.toolkit.taglets.Taglet;
 
-// stupid jdk 1.5 contains both com.sun.tools.doclets.Taglet and
+// jdk 1.5 contains both com.sun.tools.doclets.Taglet and
 // com.sun.tools.doclets.internal.toolkit.taglets.Taglet.
-// their registration code casts to the second, not the first, and the
+// Their registration code casts to the second, not the first, and the
 // second doesn't implement the first, so if you just implement the
 // first, you die.
+#endif
 
 import java.text.BreakIterator;
 import java.util.Locale;
@@ -40,7 +50,9 @@ public abstract class ICUTaglet implements Taglet {
         ICUInternalTaglet.register(taglets);
         ICUDraftTaglet.register(taglets);
         ICUStableTaglet.register(taglets);
-//         ICUDeprecatedTaglet.register(taglets);
+ #ifndef VERSION_1.5
+        ICUDeprecatedTaglet.register(taglets);
+ #endif
         ICUObsoleteTaglet.register(taglets);
         ICUIgnoreTaglet.register(taglets);
     }
@@ -100,6 +112,7 @@ public abstract class ICUTaglet implements Taglet {
         }
         return null;
     }
+#ifdef VERSION_1.5
 
     public TagletOutput getTagletOutput(Tag tag, TagletWriter writer) throws IllegalArgumentException {
 	TagletOutput out = writer.getTagletOutputInstance();
@@ -116,6 +129,7 @@ public abstract class ICUTaglet implements Taglet {
  	out.setOutput(toString(tags[0]));
  	return out;
     }
+#endif
 
     protected static final String STATUS = "<dt><b>Status:</b></dt>";
 
@@ -175,12 +189,12 @@ public abstract class ICUTaglet implements Taglet {
             }
         }
     }
+#ifndef VERSION_1.5
 
     /*
      * sigh, in JDK 1.5 we can't override the standard deprecated taglet
      * so easily.  I'm not impressed with the javadoc code.
-     *
-
+     */
     public static class ICUDeprecatedTaglet extends ICUTaglet {
         private static final String NAME = "deprecated";
 
@@ -207,7 +221,7 @@ public abstract class ICUTaglet implements Taglet {
             }
         }
     }
-    */
+#endif
 
     public static class ICUObsoleteTaglet extends ICUTaglet {
         private static final String NAME = "obsolete";
