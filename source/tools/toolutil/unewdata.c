@@ -165,6 +165,25 @@ udata_writeBlock(UNewDataMemory *pData, const void *s, UTextOffset length) {
 }
 
 U_CAPI void U_EXPORT2
+udata_writePadding(UNewDataMemory *pData, UTextOffset length) {
+    static uint8_t padding[16]={
+        0xaa, 0xaa, 0xaa, 0xaa,
+        0xaa, 0xaa, 0xaa, 0xaa,
+        0xaa, 0xaa, 0xaa, 0xaa,
+        0xaa, 0xaa, 0xaa, 0xaa
+    };
+    if(pData!=NULL && pData->file!=NULL) {
+        while(length>=16) {
+            T_FileStream_write(pData->file, padding, 16);
+            length-=16;
+        }
+        if(length>0) {
+            T_FileStream_write(pData->file, padding, length);
+        }
+    }
+}
+
+U_CAPI void U_EXPORT2
 udata_writeString(UNewDataMemory *pData, const char *s, UTextOffset length) {
     if(pData!=NULL && pData->file!=NULL) {
         if(length==-1) {
