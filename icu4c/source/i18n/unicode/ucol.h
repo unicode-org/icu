@@ -522,6 +522,7 @@ ucol_getSortKey(const    UCollator    *coll,
  *  @return the actual number of bytes of a sortkey. It can be
  *          smaller than count if we have reached the end of 
  *          the sort key.
+ *  @draft ICU 2.6
  */
 U_CAPI int32_t U_EXPORT2 
 ucol_nextSortKeyPart(const UCollator *coll,
