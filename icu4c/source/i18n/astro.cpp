@@ -1463,7 +1463,7 @@ UnicodeString CalendarAstronomer::Horizon::toString() const
 //  }
 
 // =============== Calendar Cache ================
-UMTX ccLock = NULL;
+static UMTX ccLock = NULL;
 
 void CalendarCache::createCache(CalendarCache** cache, UErrorCode& status) {
   ucln_i18n_registerCleanup();

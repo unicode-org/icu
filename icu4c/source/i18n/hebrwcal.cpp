@@ -134,7 +134,7 @@ static const int32_t  LEAP_MONTH_START[][3] = {
 // Data Members...
 //-------------------------------------------------------------------------
 
-CalendarCache *gCache =  NULL;
+static CalendarCache *gCache =  NULL;
 
 //-------------------------------------------------------------------------
 // Constructors...

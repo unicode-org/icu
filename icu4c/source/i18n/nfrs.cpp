@@ -266,7 +266,7 @@ NFRuleSet::~NFRuleSet()
     delete fractionRules[2];
 }
 
-UBool
+static UBool
 util_equalRules(const NFRule* rule1, const NFRule* rule2)
 {
     if (rule1) {

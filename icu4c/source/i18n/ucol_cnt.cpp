@@ -28,7 +28,7 @@
 
 U_NAMESPACE_BEGIN
 
-void uprv_growTable(ContractionTable *tbl, UErrorCode *status) {
+static void uprv_growTable(ContractionTable *tbl, UErrorCode *status) {
     if(tbl->position == tbl->size) {
         uint32_t *newData = (uint32_t *)uprv_realloc(tbl->CEs, 2*tbl->size*sizeof(uint32_t));
         if(newData == NULL) {
@@ -228,7 +228,7 @@ uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorCode *sta
     return table->position;
 }
 
-ContractionTable *uprv_cnttab_cloneContraction(ContractionTable *t, UErrorCode *status) {
+static ContractionTable *uprv_cnttab_cloneContraction(ContractionTable *t, UErrorCode *status) {
   ContractionTable *r = (ContractionTable *)uprv_malloc(sizeof(ContractionTable));
   if(r == NULL) {
     *status = U_MEMORY_ALLOCATION_ERROR;
