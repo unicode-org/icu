@@ -37,6 +37,7 @@ void addCollIterTest(TestNode** root)
     addTest(root, &TestUnicodeChar, "tscoll/citertst/TestUnicodeChar");
     addTest(root, &TestNormalizedUnicodeChar,
                                 "tscoll/citertst/TestNormalizedUnicodeChar");
+    addTest(root, &TestNormalization, "tscoll/citertst/TestNormalization");
     addTest(root, &TestBug672, "tscoll/citertst/TestBug672");
     addTest(root, &TestSmallBuffer, "tscoll/citertst/TestSmallBuffer");
 }
@@ -127,6 +128,11 @@ static void TestUnicodeChar()
 
     UChar *test;
     en_us = ucol_open("en_US", &status);
+    if (U_FAILURE(status)){
+       log_err("ERROR: in creation of collation data using ucol_open()\n %s\n",
+              myErrorName(status));
+       return;
+    }
 
     for (codepoint = 1; codepoint < 0xFFFE;)
     {
@@ -150,7 +156,19 @@ static void TestUnicodeChar()
       if(U_FAILURE(status)){
           log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n",
               myErrorName(status));
-            ucol_close(en_us);
+          ucol_close(en_us);
+          return;
+      }
+      /* A basic test to see if it's working at all */
+      backAndForth(iter);
+      ucol_closeElements(iter);
+
+      /* null termination test */
+      iter=ucol_openElements(en_us, source, -1, &status);
+      if(U_FAILURE(status)){
+          log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n",
+              myErrorName(status));
+          ucol_close(en_us);
           return;
       }
       /* A basic test to see if it's working at all */
@@ -176,7 +194,12 @@ static void TestNormalizedUnicodeChar()
     UChar *test;
     /* thai should have normalization on */
     th_th = ucol_open("th_TH", &status);
-
+    if (U_FAILURE(status)){
+        log_err("ERROR: in creation of thai collation using ucol_open()\n %s\n",
+              myErrorName(status));
+        return;
+    }
+    
     for (codepoint = 1; codepoint < 0xFFFE;)
     {
       test = source;
@@ -205,9 +228,84 @@ static void TestNormalizedUnicodeChar()
 
       backAndForth(iter);
       ucol_closeElements(iter);
+
+      iter=ucol_openElements(th_th, source, -1, &status);
+      if(U_FAILURE(status)){
+          log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n",
+              myErrorName(status));
+            ucol_close(th_th);
+          return;
+      }
+
+      backAndForth(iter);
+      ucol_closeElements(iter);
     }
 
     ucol_close(th_th);
+}
+
+/**
+* Test the incremental normalization
+*/
+static void TestNormalization()
+{
+          UErrorCode          status = U_ZERO_ERROR;
+    const char               *str    = 
+                            "&a < \\u0300\\u0315 < A\\u0300\\u0315 < \\u0316\\u0315B < \\u0316\\u0300\\u0315";
+          UCollator          *coll;
+          UChar               rule[50];
+          int                 rulelen = u_unescape(str, rule, 50);
+          int                 count = 0;
+    const char                *testdata[] =
+                        {"\\u0300\\u0315", "\\u0315\\u0300",
+                        "A\\u0300\\u0315B", "A\\u0315\\u0300B",
+                        "A\\u0316\\u0315B", "A\\u0315\\u0316B",
+                        "\\u0316\\u0300\\u0315", "\\u0315\\u0300\\u0316",
+                        "A\\u0316\\u0300\\u0315B", "A\\u0315\\u0300\\u0316B",
+                        "\\u0316\\u0315\\u0300", "A\\u0316\\u0315\\u0300B"};
+
+    coll = ucol_openRules(rule, rulelen, UNORM_NFD, UCOL_TERTIARY, &status);
+    ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
+    if (U_FAILURE(status)){
+        log_err("ERROR: in creation of collator using ucol_openRules()\n %s\n",
+              myErrorName(status));
+        return;
+    }
+
+    while (count < 12) {
+        UCollationElements *iter;
+        UChar               source[10];
+        int                 srclen = 0;
+
+        srclen = u_unescape(testdata[count], source, 10);
+        iter = ucol_openElements(coll, source, srclen - 1, &status);
+
+        if (U_FAILURE(status)){
+            log_err("ERROR: in creation of collator element iterator\n %s\n",
+                  myErrorName(status));
+            return;
+        }
+        backAndForth(iter);
+        ucol_closeElements(iter);
+
+        iter = ucol_openElements(coll, source, -1, &status);
+
+        if (U_FAILURE(status)){
+            log_err("ERROR: in creation of collator element iterator\n %s\n",
+                  myErrorName(status));
+            return;
+        }
+        if (count == 6) {
+            log_verbose("count %x\n", count);
+        }
+        else {
+            log_verbose("count %x\n", count);
+        }
+        backAndForth(iter);
+        ucol_closeElements(iter);
+        count ++;
+    }
+    ucol_close(coll);
 }
 
 /**
@@ -267,8 +365,7 @@ static void TestPrevious()
     backAndForth(iter);
     ucol_closeElements(iter);
     ucol_close(c1);
-    free(source);
-
+    
     /* Test with an expanding character sequence */
     u_uastrcpy(rule, "&a < b < c/abd < d");
     c2 = ucol_openRules(rule, u_strlen(rule), UCOL_NO_NORMALIZATION, UCOL_DEFAULT_STRENGTH,  &status);
@@ -278,7 +375,6 @@ static void TestPrevious()
             myErrorName(status));
         return;
     }
-    source=(UChar*)malloc(sizeof(UChar) * 5);
     u_uastrcpy(source, "abcd");
     iter=ucol_openElements(c2, source, u_strlen(source), &status);
     if(U_FAILURE(status)){
@@ -289,7 +385,6 @@ static void TestPrevious()
     backAndForth(iter);
     ucol_closeElements(iter);
     ucol_close(c2);
-    free(source);
     /* Now try both */
     u_uastrcpy(rule, "&a < b < c/aba < d < z < ch");
     c3 = ucol_openRules(rule, u_strlen(rule), UCOL_DEFAULT_NORMALIZATION,  UCOL_DEFAULT_STRENGTH, &status);
@@ -299,7 +394,6 @@ static void TestPrevious()
             myErrorName(status));
         return;
     }
-    source=(UChar*)malloc(sizeof(UChar) * 10);
     u_uastrcpy(source, "abcdbchdc");
     iter=ucol_openElements(c3, source, u_strlen(source), &status);
     if(U_FAILURE(status)){
@@ -310,7 +404,6 @@ static void TestPrevious()
     backAndForth(iter);
     ucol_closeElements(iter);
     ucol_close(c3);
-
     source[0] = 0x0e41;
     source[1] = 0x0e02;
     source[2] = 0x0e41;
@@ -517,7 +610,7 @@ static void backAndForth(UCollationElements *iter)
           }
           if (o != orders[index])
           {
-            log_err("Mismatch at index : %d\n", index);
+            log_err("Mismatch at index : 0x%x\n", index);
             return;
           }
         }
@@ -536,13 +629,13 @@ static void backAndForth(UCollationElements *iter)
         log_err("\nnext: ");
         while ((o = ucol_next(iter, &status)) != UCOL_NULLORDER)
         {
-            log_err("Error at %d\n", o);
+            log_err("Error at %x\n", o);
             break;
         }
         log_err("\nprev: ");
         while ((o = ucol_previous(iter, &status)) != UCOL_NULLORDER)
         {
-            log_err("Error at %d\n", o);
+            log_err("Error at %x\n", o);
             break;
         }
         log_verbose("\n");
