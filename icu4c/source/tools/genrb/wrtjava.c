@@ -19,7 +19,7 @@
 #include "reslist.h"
 #include "unewdata.h"
 #include "unicode/ures.h"
-#include "error.h"
+#include "errmsg.h"
 #include "filestrm.h"
 #include "cstring.h"
 #include "unicode/ucnv.h"
@@ -40,8 +40,8 @@ static const char copyRight[] =
     " *\n"
     " *******************************************************************************\n"
     " * $Source: /xsrl/Nsvn/icu/icu/source/tools/genrb/wrtjava.c,v $ \n"
-    " * $Date: 2002/04/04 02:43:27 $ \n"
-    " * $Revision: 1.9 $ \n"
+    " * $Date: 2002/04/23 22:25:43 $ \n"
+    " * $Revision: 1.10 $ \n"
     " *******************************************************************************\n"
     " */\n\n";
 static const char warningMsg[] = 

@@ -18,7 +18,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include "cstring.h"
-#include "error.h"
+#include "errmsg.h"
 
 void error(uint32_t linenumber, const char *msg, ...)
 {

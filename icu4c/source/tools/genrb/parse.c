@@ -20,7 +20,7 @@
 
 #include "ucol_imp.h"
 #include "parse.h"
-#include "error.h"
+#include "errmsg.h"
 #include "uhash.h"
 #include "cmemory.h"
 #include "cstring.h"
