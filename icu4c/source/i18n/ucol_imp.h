@@ -663,6 +663,7 @@ U_CAPI int32_t U_EXPORT2 ucol_inv_getPrevCE(uint32_t CE, uint32_t contCE,
 
 
 
+#ifdef XP_CPLUSPLUS
 /*
  *  Test whether a character is potentially "unsafe" for use as a collation
  *  starting point.  Unsafe chars are those with combining class != 0 plus
@@ -671,7 +672,7 @@ U_CAPI int32_t U_EXPORT2 ucol_inv_getPrevCE(uint32_t CE, uint32_t contCE,
  *  Function is in header file because it's used in both collation and string search,
  *  and needs to be inline for performance.
  */
- /* __inline */ static UBool ucol_unsafeCP(UChar c, const UCollator *coll) {
+static inline UBool ucol_unsafeCP(UChar c, const UCollator *coll) {
     int32_t  hash;
     uint8_t  htbyte;
 
@@ -691,6 +692,8 @@ U_CAPI int32_t U_EXPORT2 ucol_inv_getPrevCE(uint32_t CE, uint32_t contCE,
     htbyte = coll->unsafeCP[hash>>3];
     return (((htbyte >> (hash & 7)) & 1) == 1);
 }
+#endif /* XP_CPLUSPLUS */
+
 
 #endif
 
