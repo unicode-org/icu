@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA.java,v $ 
-* $Date: 2003/03/15 02:36:49 $ 
-* $Revision: 1.18 $
+* $Date: 2003/03/18 00:28:18 $ 
+* $Revision: 1.19 $
 *
 *******************************************************************************
 */
@@ -80,7 +80,7 @@ final public class UCA implements Comparator, UCA_Types {
      */
     //private static final String VERSION = "-3.0.1d3"; // ""; // "-2.1.9d7"; 
     public static final String UCA_BASE = "3.1.1"; // ""; // "-2.1.9d7"; 
-    public static final String VERSION = "-" + UCA_BASE + "d6"; // ""; // "-2.1.9d7"; 
+    public static final String VERSION = "-" + UCA_BASE; //  + "d6" ""; // "-2.1.9d7"; 
     public static final String ALLFILES = "allkeys"; // null if not there
     
     /**
@@ -1422,10 +1422,11 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
             UCD.BINARY_PROPERTIES + UCD.Logical_Order_Exception, ucd);
         UnicodeSet desiredSet = ubp.getSet();
         
-        if (!rearrangeList.equals(desiredSet)) {
+        /*if (!rearrangeList.equals(desiredSet)) {
             throw new IllegalArgumentException("Rearrangement should be " + desiredSet.toPattern(true)
                 + ", but is " + rearrangeList.toPattern(true));
         }
+        */
         
         ucaData.checkConsistency();
 
