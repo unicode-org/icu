@@ -422,9 +422,13 @@ u_getIntPropertyMaxValue(UProperty which) {
  * UnicodeSet depends on the inclusions set.
  */
 U_CAPI void U_EXPORT2
-uprv_getInclusions(USet* set) {
-    uset_removeRange(set, 0, 0x10ffff);
+uprv_getInclusions(USet* set, UErrorCode *pErrorCode) {
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return;
+    }
 
-    unorm_addPropertyStarts(set);
-    uchar_addPropertyStarts(set);
+    uset_clear(set);
+
+    unorm_addPropertyStarts(set, pErrorCode);
+    uchar_addPropertyStarts(set, pErrorCode);
 }

@@ -332,7 +332,7 @@ uprv_getISOCommentCharacters(USet* set);
  * @internal
  */
 U_CAPI void U_EXPORT2
-uchar_addPropertyStarts(USet *set);
+uchar_addPropertyStarts(USet *set, UErrorCode *pErrorCode);
 
 /**
  * Return a set of characters for property enumeration.
@@ -343,6 +343,6 @@ uchar_addPropertyStarts(USet *set);
  * @internal
  */
 U_CAPI void U_EXPORT2
-uprv_getInclusions(USet* set);
+uprv_getInclusions(USet* set, UErrorCode *pErrorCode);
 
 #endif

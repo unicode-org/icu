@@ -885,11 +885,12 @@ _enumPropertyStartsRange(const void *context, UChar32 start, UChar32 limit, uint
 #define USET_ADD_CP_AND_NEXT(set, cp) uset_add(set, cp); uset_add(set, cp+1)
 
 U_CAPI void U_EXPORT2
-uchar_addPropertyStarts(USet *set) {
+uchar_addPropertyStarts(USet *set, UErrorCode *pErrorCode) {
     UChar32 c;
     int32_t value, value2;
 
     if(!HAVE_DATA) {
+        *pErrorCode=dataErrorCode;
         return;
     }
 
