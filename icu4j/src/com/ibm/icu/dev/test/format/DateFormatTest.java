@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatTest.java,v $ 
- * $Date: 2003/03/07 01:05:51 $ 
- * $Revision: 1.12 $
+ * $Date: 2003/03/13 20:27:47 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
@@ -331,7 +331,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         else
             then = ((DateFormat) formatter).format(date2);
         logln(then);
-        if (!date2.equals(date1))
+        if (date2 == null || !date2.equals(date1))
             errln("FAIL");
     }
 
@@ -362,9 +362,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         Date o = new Date();
         o = (Date) ((DateFormat) fmt).parseObject(str, new ParsePosition(0));
         logln("Parsed object: " + o);
-        if (!o.equals(expected))
+        if (o == null || !o.equals(expected))
             errln("FAIL: Expected " + expected);
-        String formatted = ((DateFormat) fmt).format(o);
+        String formatted = o==null? "null" : ((DateFormat) fmt).format(o);
         logln( "Formatted string: " + formatted);
         if (!formatted.equals(str))
             errln( "FAIL: Expected " + str);
@@ -865,11 +865,12 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
             // pattern, input, expected parse or null if expect parse failure
             "HHmmss", "123456", "1970 01 01 12:34:56",
-            null, "12345", "1970 01 01 12:34:05",
-            null, "1234",  null,
-            null, "00-05", null,
-            null, "12-34", null,
-            null, "00+05", null,
+            null,     "12345",  "1970 01 01 01:23:45",
+            null,     "1234",   null,
+            null,     "00-05",  null,
+            null,     "12-34",  null,
+            null,     "00+05",  null,
+            "ahhmm",  "PM730",  "1970 01 01 19:30:00",
         };
 
         expectParse(DATA, new Locale("en"));
