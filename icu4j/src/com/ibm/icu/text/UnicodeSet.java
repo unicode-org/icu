@@ -229,7 +229,7 @@ import java.text.*;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.13 $ $Date: 2000/03/08 21:56:41 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.14 $ $Date: 2000/03/08 23:55:34 $
  */
 public class UnicodeSet implements UnicodeFilter {
     /**
@@ -297,18 +297,31 @@ public class UnicodeSet implements UnicodeFilter {
      * Constructs a copy of an existing set.
      */
     public UnicodeSet(UnicodeSet other) {
-        pairs = new StringBuffer(other.getPairs());
+        pairs = new StringBuffer(other.pairs.toString());
+    }
+
+    /**
+     * Constructs a set from the given pattern.  See the class description
+     * for the syntax of the pattern language.  Whitespace is ignored.
+     * @param pattern a string specifying what characters are in the set
+     * @exception java.lang.IllegalArgumentException if the pattern contains
+     * a syntax error.
+     */
+    public UnicodeSet(String pattern) {
+        applyPattern(pattern, true);
     }
 
     /**
      * Constructs a set from the given pattern.  See the class description
      * for the syntax of the pattern language.
      * @param pattern a string specifying what characters are in the set
+     * @param ignoreWhitespace if true, ignore characters for which
+     * Character.isWhitespace() returns true
      * @exception java.lang.IllegalArgumentException if the pattern contains
      * a syntax error.
      */
-    public UnicodeSet(String pattern) {
-        applyPattern(pattern);
+    public UnicodeSet(String pattern, boolean ignoreWhitespace) {
+        applyPattern(pattern, ignoreWhitespace);
     }
 
     /**
@@ -354,15 +367,18 @@ public class UnicodeSet implements UnicodeFilter {
      * @exception java.lang.IllegalArgumentException if the pattern
      * contains a syntax error.
      */
-    public void applyPattern(String pattern) {
+    public void applyPattern(String pattern, boolean ignoreWhitespace) {
         ParsePosition pos = new ParsePosition(0);
-        pairs = parse(pattern, pos, null);
+        pairs = parse(pattern, pos, null, ignoreWhitespace);
 
-        // Skip over trailing whitespace
         int i = pos.getIndex();
         int n = pattern.length();
-        while (i < n && Character.isWhitespace(pattern.charAt(i))) {
-            ++i;
+
+        // Skip over trailing whitespace
+        if (ignoreWhitespace) {
+            while (i < n && Character.isWhitespace(pattern.charAt(i))) {
+                ++i;
+            }
         }
 
         if (i != n) {
@@ -388,7 +404,29 @@ public class UnicodeSet implements UnicodeFilter {
      * contains a syntax error.
      */
     private void applyPattern(String pattern, ParsePosition pos, SymbolTable symbols) {
-        pairs = parse(pattern, pos, symbols);
+        pairs = parse(pattern, pos, symbols, true);
+    }
+
+    /**
+     * Modifies this set to represent the set specified by the given pattern.
+     * @param pattern a string specifying what characters are in the set
+     * @param pos on input, the position in pattern at which to start parsing.
+     * On output, the position after the last character parsed.
+     * @param varNameToChar a mapping from variable names (String) to characters
+     * (Character).  May be null.  If varCharToSet is non-null, then names may
+     * map to either single characters or sets, depending on whether a mapping
+     * exists in varCharToSet.  If varCharToSet is null then all names map to
+     * single characters.
+     * @param varCharToSet a mapping from characters (Character objects from
+     * varNameToChar) to UnicodeSet objects.  May be null.  Is only used if
+     * varNameToChar is also non-null.
+     * @exception java.lang.IllegalArgumentException if the pattern
+     * contains a syntax error.
+     */
+    private void applyPattern(String pattern,
+                              ParsePosition pos, SymbolTable symbols,
+                              boolean ignoreWhitespace) {
+        pairs = parse(pattern, pos, symbols, ignoreWhitespace);
     }
 
     /**
@@ -682,7 +720,7 @@ public class UnicodeSet implements UnicodeFilter {
      * @exception java.lang.IllegalArgumentException if the parse fails.
      */
     private static StringBuffer parse(String pattern, ParsePosition pos,
-                                      SymbolTable symbols) {
+                                      SymbolTable symbols, boolean ignoreWhitespace) {
 
         StringBuffer pairsBuf = new StringBuffer();
         boolean invert = false;
@@ -728,7 +766,7 @@ public class UnicodeSet implements UnicodeFilter {
 
             // Ignore whitespace.  This is not Unicode whitespace, but Java
             // whitespace, a subset of Unicode whitespace.
-            if (Character.isWhitespace(c)) {
+            if (ignoreWhitespace && Character.isWhitespace(c)) {
                 continue;
             }
 
@@ -846,7 +884,7 @@ public class UnicodeSet implements UnicodeFilter {
                 } else {
                     // Recurse to get the pairs for this nested set.
                     pos.setIndex(i); // Add 2 to point AFTER op
-                    nestedPairs = parse(pattern, pos, symbols).toString();
+                    nestedPairs = parse(pattern, pos, symbols, ignoreWhitespace).toString();
                     i = pos.getIndex() - 1; // - 1 to point at ']'
                 }
             }
