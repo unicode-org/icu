@@ -522,6 +522,19 @@ void
 DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBool useLastResortData)
 {
     int32_t i;
+
+    /* In case something goes wrong, initialize all of the data to NULL. */
+    fEras = NULL;
+    fMonths = NULL;
+    fShortMonths = NULL;
+    fWeekdays = NULL;
+    fShortWeekdays = NULL;
+    fAmPms = NULL;
+    fZoneStringsRowCount = 0;
+    fZoneStringsColCount = 0;
+    fZoneStrings = NULL;
+
+
     if (U_FAILURE(status)) return;
 
     /**
@@ -558,15 +571,6 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
             fZoneStringsRowCount = 1;
             initField(fZoneStrings, fZoneStringsColCount, (const UChar *)gLastResortZoneStrings, kZoneNum, kZoneLen, status);
             fLocalPatternChars = gPatternChars;
-        }
-        else {
-            fEras = NULL;
-            fMonths = NULL;
-            fShortMonths = NULL;
-            fWeekdays = NULL;
-            fShortWeekdays = NULL;
-            fAmPms = NULL;
-            fZoneStrings = NULL;
         }
         return;
     }
