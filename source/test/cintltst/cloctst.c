@@ -248,7 +248,7 @@ setUpDataTable();
         }
         sprintf(temp2, "%x", uloc_getLCID(testLocale));
         if (strcmp(temp2, rawData2[LCID][i]) != 0) {
-            log_err("LCID mismatch: %ld versus %s\n", (int32_t)uloc_getLCID(testLocale) , rawData2[LCID][i]);
+            log_err("LCID mismatch: %s versus %s\n", temp2 , rawData2[LCID][i]);
         }
 
     }
