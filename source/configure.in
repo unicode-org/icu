@@ -13,6 +13,10 @@ AC_SUBST(VERSION)
 UNICODE_VERSION="3.0.0"
 AC_SUBST(UNICODE_VERSION)
 
+dnl Shouldn't need the AC_SUBST
+CPPFLAGS="${CPPFLAGS} -I."
+AC_SUBST(CPPFLAGS)
+
 dnl Checks for programs
 AC_PROG_CC
 AC_PROG_CXX
@@ -274,7 +278,7 @@ fi
 
 dnl output the Makefiles
 AC_OUTPUT([Makefile \
-		common/Makefile common/platform.h config/Makefile i18n/Makefile \
+		common/Makefile common/unicode/platform.h config/Makefile i18n/Makefile \
 		extra/Makefile extra/ustdio/Makefile \
 		tools/Makefile tools/ctestfw/Makefile tools/makeconv/Makefile \
 		tools/genrb/Makefile tools/gencol/Makefile \
