@@ -3438,6 +3438,10 @@ SOURCE=.\ustr_cnv.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\ustr_cnv.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\ustr_imp.h
 # End Source File
 # Begin Source File
