@@ -54,31 +54,29 @@ UnicodeSetTest::runIndexedTest(int32_t index, UBool exec,
  * whitespace.
  */
 void UnicodeSetTest::TestToPattern() {
+    static const char* OTHER_TOPATTERN_TESTS[] = {
+        "[[:latin:]&[:greek:]]", 
+        "[[:latin:]-[:greek:]]",
+        "[:nonspacing mark:]",
+        NULL
+    };
+
+    for (int32_t j=0; OTHER_TOPATTERN_TESTS[j]!=NULL; ++j) {
+        UErrorCode ec = U_ZERO_ERROR;
+        UnicodeSet s(OTHER_TOPATTERN_TESTS[j], ec);
+        if (U_FAILURE(ec)) {
+            errln((UnicodeString)"FAIL: bad pattern " + OTHER_TOPATTERN_TESTS[j]);
+            continue;
+        }
+        checkPat(OTHER_TOPATTERN_TESTS[j], s);
+    }
+    
     for (UChar32 i = 0; i <= 0x10FFFF; ++i) {
         if ((i <= 0xFF && !u_isalpha(i)) || u_isspace(i)) {
             // check various combinations to make sure they all work.
             if (i != 0 && !toPatternAux(i, i)) continue;
             if (!toPatternAux(0, i)) continue;
             if (!toPatternAux(i, 0xFFFF)) continue;
-        }
-    }
-    
-    UErrorCode ec = U_ZERO_ERROR;
-    UnicodeString spat = "[:nonspacing mark:]";
-    UnicodeSet s(spat, ec);
-    if (U_FAILURE(ec)) { errln("FAIL: UnicodeSet constructor"); return; }
-    UnicodeString tpat;
-    s.toPattern(tpat, TRUE);
-    UnicodeSet t(tpat, ec);
-    if (U_FAILURE(ec)) {
-        errln((UnicodeString)"FAIL: " + spat + ".toPattern() => " + tpat +
-              ": INVALID PATTERN");
-    } else {
-        if (s!=t) {
-            UnicodeString str;
-            t.toPattern(str, TRUE);
-            errln((UnicodeString)"FAIL: " + spat + ".toPattern().new UnicodeSet() => " +
-                  str);
         }
     }
 }
@@ -93,7 +91,11 @@ UBool UnicodeSetTest::toPatternAux(UChar32 start, UChar32 end) {
     if (start != end) source = source + ".." + (int32_t)end;
     UnicodeSet testSet;
     testSet.add(start, end);
-        
+    return checkPat(source, testSet);
+}
+    
+UBool UnicodeSetTest::checkPat(const UnicodeString& source,
+                               const UnicodeSet& testSet) {
     // What we want to make sure of is that a pattern generated
     // by toPattern(), with or without escaped unprintables, can
     // be passed back into the UnicodeSet constructor.
@@ -113,7 +115,7 @@ UBool UnicodeSetTest::toPatternAux(UChar32 start, UChar32 end) {
     logln((UnicodeString)source + " => " + pat0 + ", " + pat2);
     return TRUE;
 }
-    
+
 UBool UnicodeSetTest::checkPat(const UnicodeString& source,
                                const UnicodeSet& testSet,
                                const UnicodeString& pat) {

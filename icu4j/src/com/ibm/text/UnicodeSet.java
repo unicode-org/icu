@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UnicodeSet.java,v $
- * $Date: 2001/12/01 01:31:18 $
- * $Revision: 1.49 $
+ * $Date: 2001/12/01 21:46:25 $
+ * $Revision: 1.50 $
  *
  *****************************************************************************************
  */
@@ -204,7 +204,7 @@ import com.ibm.util.Utility;
  * Unicode property
  * </table>
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.49 $ $Date: 2001/12/01 01:31:18 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.50 $ $Date: 2001/12/01 21:46:25 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -1243,6 +1243,13 @@ public class UnicodeSet extends UnicodeFilter {
                     }
                     nestedPatStart = newPat.length();
                     nestedPatDone = true; // we're going to do it just below
+
+                    switch (lastOp) {
+                    case '-':
+                    case '&':
+                        newPat.append(lastOp);
+                        break;
+                    }
 
                     // If we have a top-level property pattern, then trim
                     // off the opening '[' and use the property pattern

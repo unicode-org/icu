@@ -1084,6 +1084,13 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
                 nestedPatStart = newPat.length();
                 nestedPatDone = TRUE; // we're going to do it just below
                 
+                switch (lastOp) {
+                case HYPHEN:
+                case INTERSECTION:
+                    newPat.append(lastOp);
+                    break;
+                }
+
                 // If we have a top-level property pattern, then trim
                 // off the opening '[' and use the property pattern
                 // as the entire pattern.
