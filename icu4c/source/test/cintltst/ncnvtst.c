@@ -43,14 +43,14 @@ void printSeq(const unsigned char* a, int len)
 {
     int i=0;
     log_verbose("\n{");
-    while (i<len) log_verbose("%X", a[i++]);
+    while (i<len) log_verbose("0x%02X ", a[i++]);
     log_verbose("}\n");
 }
 static void printUSeq(const UChar* a, int len)
 {
     int i=0;
     log_verbose("\n{");
-    while (i<len) log_verbose("%4X", a[i++]);
+    while (i<len) log_verbose("%0x04X ", a[i++]);
     log_verbose("}\n");
 }
 
@@ -58,14 +58,14 @@ void printSeqErr(const unsigned char* a, int len)
 {
     int i=0;
     fprintf(stderr, "\n{");
-    while (i<len)  fprintf(stderr, "%X", a[i++]);
+    while (i<len)  fprintf(stderr, "0x%02X ", a[i++]);
     fprintf(stderr, "}\n");
 }
 static void printUSeqErr(const UChar* a, int len)
 {
     int i=0;
     fprintf(stderr, "\n{");
-    while (i<len) fprintf(stderr, "%4X", a[i++]);
+    while (i<len) fprintf(stderr, "0x%04X ", a[i++]);
     fprintf(stderr,"}\n");
 }
 
@@ -123,32 +123,27 @@ void TestSurrogateBehaviour(){
         UChar    sampleText[] =   { 0x4e00, 0x0701, 0x0031, 0xbfc1, 0xd801, 0xdc01, 0x0032};
         int32_t offsets[]={(char)0x00, (char)0x00, (char)0x00, (char)0x01, (char)0x01, (char)0x02,
                            (char)0x03, (char)0x03, (char)0x03, (char)0x04, (char)0x04, (char)0x04,
-                           (char)0x05, (char)0x05, (char)0x05,  (char)0x06 };
+                           (char)0x04, (char)0x06 };
         const char expected[] = 
-            {  (char)0xe4, (char)0xb8, (char)0x80, (char)0xdc, (char)0x81, (char)0x31,  
-               (char)0xeb, (char)0xbf, (char)0x81, (char)0xed, (char)0xa0, (char)0x81,
-               (char)0xed, (char)0xb0, (char)0x81, (char)0x32};
-        const char expectedFlushFalse[] = 
-            {  (char)0xe4, (char)0xb8, (char)0x80, (char)0xdc, (char)0x81, (char)0x31, (char)0xeb, (char)0xbf, 
-               (char)0x81, (char)0xF0, (char)0x90, (char)0x90, (char)0x81, (char)0x32};
+            {  (char)0xe4, (char)0xb8, (char)0x80,  (char)0xdc, (char)0x81,  (char)0x31, 
+            (char)0xeb, (char)0xbf, (char)0x81,  (char)0xF0, (char)0x90, (char)0x90, (char)0x81,  (char)0x32};
         
-        int32_t fromOffsets[] = { 0x0000, 0x0002, 0x0005, 0x0006, 0x0009, 0x000C, 0x000F }; 
+         
+        int32_t fromOffsets[] = { 0x0000, 0x0003, 0x0005, 0x0006, 0x0009, 0x0009, 0x000D }; 
         /*UTF-8*/
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
             expected, sizeof(expected), "UTF8", offsets, TRUE, U_ZERO_ERROR ))
-            log_err("u-> UTF8 with offsets did not match.\n");
-        if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-            expectedFlushFalse, sizeof(expectedFlushFalse), "UTF8", offsets, FALSE, U_ZERO_ERROR ))
-            log_err("u-> UTF8 with offsets did not match.\n");
-         /*UTF-8*/
+            log_err("u-> UTF8 with offsets and flush true did not match.\n");
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
             expected, sizeof(expected), "UTF8", 0, TRUE, U_ZERO_ERROR ))
-            log_err("u-> UTF8 did not match with flush true.\n");
+            log_err("u-> UTF8 with offsets and flush true did not match.\n");
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-            expectedFlushFalse, sizeof(expectedFlushFalse), "UTF8", 0, FALSE, U_ZERO_ERROR ))
-            log_err("u-> UTF8 did not match with flush false.\n");
-
-
+            expected, sizeof(expected), "UTF8", offsets, FALSE, U_ZERO_ERROR ))
+            log_err("u-> UTF8 with offsets and flush true did not match.\n");
+        if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
+            expected, sizeof(expected), "UTF8", 0, FALSE, U_ZERO_ERROR ))
+            log_err("u-> UTF8 with offsets and flush true did not match.\n");
+       
         if(!convertToU(expected, sizeof(expected), 
             sampleText, sizeof(sampleText)/sizeof(sampleText[0]), "UTF8", 0, TRUE, U_ZERO_ERROR ))
             log_err("UTF8 -> did not match.\n");
@@ -331,10 +326,15 @@ void TestToUnicodeErrorBehaviour()
         UChar    expectedUTF8[] = {  0x0031, 0x4e8c};
         int32_t offsets[] = {   0x0000, 0x0001};
 
-        const char sampleText2[] = { (char)0x31, (char)0xff, (char)0xe4, (char)0xba, (char)0x8c};
-        UChar    expected2UTF8[] = {  0x0031, 0xfffd, 0x4e8c};
-        int32_t offsets2[] = {   0x0000, 0x0000, 0x0002};
+        const char sampleText2[] = { (char)0x31, (char)0xff, (char)0xe4, (char)0xba, (char)0x8c, 
+            (char)0xe0, (char)0x80, (char)0x61};
+        UChar    expected2UTF8[] = {  0x0031, 0xfffd, 0x4e8c, 0xfffd, 0x0061};
+        int32_t offsets2[] = {   0x0000, 0x0001, 0x0002, 0x0003, 0x0005};
 
+        const char sampleText3[] = { (char)0x31, (char)0xfb, (char)0xbf, (char)0xbf, (char)0xbf, (char)0xbf, 
+            (char)0x61,};
+        UChar    expected3UTF8[] = {  0x0031, 0xfffd, 0x0061};
+        int32_t offsets3[] = {   0x0000, 0x0001, 0x0006};
 
         if(!convertToU(sampleText, sizeof(sampleText), 
                 expectedUTF8, sizeof(expectedUTF8)/sizeof(expectedUTF8[0]), "utf-8", 0, TRUE, U_TRUNCATED_CHAR_FOUND ))
@@ -362,6 +362,13 @@ void TestToUnicodeErrorBehaviour()
                 expected2UTF8, sizeof(expected2UTF8)/sizeof(expected2UTF8[0]), "utf-8", offsets2, FALSE, U_ZERO_ERROR ))
             log_err("utf-8->Unicode  did not match.\n");
 
+        if(!convertToU(sampleText3, sizeof(sampleText3), 
+                expected3UTF8, sizeof(expected3UTF8)/sizeof(expected3UTF8[0]), "utf-8", offsets3, TRUE, U_ZERO_ERROR ))
+            log_err("utf-8->Unicode  did not match.\n");
+        if(!convertToU(sampleText2, sizeof(sampleText3), 
+                expected3UTF8, sizeof(expected3UTF8)/sizeof(expected3UTF8[0]), "utf-8", offsets3, FALSE, U_ZERO_ERROR ))
+            log_err("utf-8->Unicode  did not match with flush false.\n");
+
     }
     
  
@@ -382,7 +389,8 @@ void TestGetNextErrorBehaviour(){
         log_err("FAIL in TestGetNextErrorBehaviour(unassigned): Expected: U_INVALID_CHAR_ERROR or 0xfffd ----Got:%s and 0x%lx\n",  myErrorName(err), c);
     }
     ucnv_close(cnv);
-
+    
+    
             
 }
 UBool convertFromU( const UChar *source, int sourceLen,  const char *expect, int expectLen, 
@@ -549,10 +557,10 @@ UBool convertToU( const char *source, int sourceLen, const UChar *expect, int ex
 		      printf("%d, ", expectOffsets[i]);
 		    printf("\nGot result:");
 		    for(i=0; i<(targ-buffer); i++)
-		      printf("%X,", buffer[i]);
+		      printf("0x%04X,", buffer[i]);
 		    printf("\nFrom Input:");
 		    for(i=0; i<(src-source); i++)
-		      printf("%X,", (unsigned char)source[i]);
+		      printf("0x%02X,", (unsigned char)source[i]);
             puts("\n");
 		}
     }
@@ -561,11 +569,11 @@ UBool convertToU( const char *source, int sourceLen, const UChar *expect, int ex
         return TRUE;
     }
     else {    
-        log_err("String does not match. FROM Unicode to codePage%s\n", codepage);
+        log_err("String does not match. from codePage %s TO Unicode\n", codepage);
         printf("\nGot:");
-        printUSeq(buffer, expectLen);
+        printUSeqErr(buffer, expectLen);
         printf("\nExpected:");
-        printUSeq(expect, expectLen);
+        printUSeqErr(expect, expectLen);
         return FALSE;
     }
    
