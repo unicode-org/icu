@@ -967,9 +967,6 @@ ko {
             pinyin      { "\uBCD1\uC74C\uC21C"    }
             stroke      { "\uC790\uD68D\uC21C"    }
         }
-        //calendar{
-        //     traditional { "\uc804\ud1b5 \uc5ed\ubc95" }
-        //}
         calendar{
             buddhist      { "\uBD88\uAD50\uB825" }
             chinese       { "\uC911\uAD6D\uB825" }
