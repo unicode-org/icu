@@ -1025,6 +1025,10 @@
       release build of max speed optimization).</li>
     </ul>
 
+    <p>(If you want to build with Microsoft Visual C++ .NET, please
+    refer to the <a href="#HowToBuildWindowsDotNet">note about
+    building with Visual Studio .NET</a> below.)</net>
+
     <p>The steps are:</p>
 
     <ol>
@@ -1110,6 +1114,16 @@
     "makedata" project will be run automatically to convert the locale data
     files from text format into icudata.dll.</p>
 
+    <p><a name="HowToBuildWindowsDotNet"><strong>Microsoft Visual
+    Studio .NET Note:</strong></a>
+    ICU will build with Microsoft Visual Studio .NET, though this
+    is not a supported platform at the time of this writing. Visual
+    Studio .NET will offer to convert the project files when you open
+    the existing workspace file. Choose "Yes to All" in the dialog
+    asking whether to convert the files or not (this creates new
+    files) and then follow the rest of the build instructions.</p>
+
+
     <h3><a name="HowToBuildUnix" href="#HowToBuildUnix">How To Build And
     Install On Unix</a></h3>
 
@@ -1128,19 +1142,29 @@
 
       <li>Change directory to the "icu/source".</li>
 
-      <li>chmod +x runConfigureICU install-sh</li>
+      <li>Run "chmod +x runConfigureICU configure install-sh" as these
+      files may have the wrong permissions.</li>
 
       <li>Run the <a href="source/runConfigureICU">runConfigureICU</a> script
-      for your platform. If you are not using the runConfigureICU script or
-      your platform is not supported by the script, you need to set your CC,
-      CXX, CFLAGS and CXXFLAGS environment variables, and type "./configure".
-      You can type "./configure --help" to print the available options.</li>
+      for your platform. Type "./runConfigureICU --help" for help on how to
+      run it and a list of supported platforms. You may also want to
+      type "./configure --help" to print configure options that you
+      may want to give runConfigureICU.
+      If you are not using the runConfigureICU script, or
+      your platform is not supported by the script, you may need to set your
+      CC,CXX, CFLAGS and CXXFLAGS environment variables, and type
+      "./configure". You can type "./configure --help" to print the
+      available options.</li> 
 
-      <li>Type "gmake" to compile the libraries and all the data files.</li>
+      <li>Type "gmake" (or "make" if GNU make is the default make on
+      your platform) to compile the libraries and all the data
+      files. The proper name of the GNU make command is printed at the
+      end of the configuration run, as in "You must use gmake to
+      compile ICU".</li>
 
       <li>
-        Optionally, type "gmake check" to verify the test suite.
-
+        Optionally, type "gmake check" (or "make check") to run the
+        test suite, which checks for ICU's functionality integrity.
         <ul>
           <li>
             <b>Note:</b> You may have to set certain variables if you with to
@@ -1152,15 +1176,16 @@
             conversion mapping tables are. The trailing "/" is required after
             the directory name (e.g. "$Root/source/data/" will work, but the
             value "$Root/source/data" is not acceptable).
-
-            <p>When running samples or other applications, ICU_DATA only needs
-            to be set if the data is not installed (such as via 'make install')
-            into the default location.</p>
+            When running samples or other applications, ICU_DATA only needs
+            to be set if the data is not installed (such as via "gmake
+            install" or "make install") into the default location.
           </li>
         </ul>
       </li>
-
-      <li>Type "gmake install" to install.</li>
+      <li>Type "gmake install" (or "make install") to install. The
+      install targets support the use of the DESTDIR variable to
+      create the installation tree under a specific destination
+      directory.</li>
     </ol>
 
     <p>Some platforms use package management tools to control the installation
@@ -1485,10 +1510,27 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
     <h3><a name="ImportantNotesUnix" href="#ImportantNotesUnix">Unix Type
     Platform</a></h3>
 
-    <p>If you are building on a Unix platform, it is important that you add the
-    location of your ICU libraries (including the data library) to your
-    LD_LIBRARY_PATH environment variable. The ICU libraries may not link or
+    <p>If you are building on a Unix platform, and if you are
+    installing ICU in a non-standard location, you may need to add the
+    location of your ICU libraries to your
+    <strong>LD_LIBRARY_PATH</strong> environment variable (or the
+    equivalent runtime library path environment variable for your
+    system).
+    The ICU libraries may not link or
     load properly without doing this.</p>
+    <p>Note that if you do not want to have to set this variable, you
+    may instead use the --enable-rpath option at configuration
+    time. This option will instruct the linker to always look for the
+    libraries where they are installed. You will need to use the
+    appropriate linker options when linking your own applications and
+    libraries against ICU, too. Please refer to your system's linker
+    manual for information about runtime paths. The use of rpath also
+    means that when building a new version of ICU you should not have
+    an older version installed in the same place as the new version's
+    installation directory, as the older libraries will used during
+    the build, instead of the new ones, likely leading to an incorrectly
+    build ICU. (This is the proper behavior of rpath.)
+    </p>
 
     <h3><a name="ImportantNotesDefaultCP" href="#ImportantNotesDefaultCP">Using
     the default codepage</a></h3>
