@@ -1405,19 +1405,19 @@ TestSwapData() {
 static const struct {
     double bogus;
     const char *bytes;
-} gOffsetTOCAppDataItem1={ 0.0,
-    "\x00\x14"
+} gOffsetTOCAppDataItem1={ 0.0, /* alignment bytes */
+    "\x00\x14" /* sizeof(UDataInfo) *//* MappedData { */
     "\xda"
-    "\x27"
-    "\x00\x14"
-    "\x00\x00"
-    "\x01"
-    "\x0"U_CHARSET_FAMILY
-    "\x02"
-    "\x00"
+    "\x27"                            /* } */
+    "\x00\x14" /* sizeof(UDataInfo) *//* UDataInfo  { */
+    "\0\0"
+    "\1"       /* U_IS_BIG_ENDIAN   */
+    "\1"       /* U_CHARSET_FAMILY  */
+    "\2"       /* U_SIZEOF_WHAR_T   */
+    "\0"
     "\x31\x31\x31\x31"
-    "\x00\x00\x00\x00"
-    "\x00\x00\x00\x00"
+    "\0\0\0\0"
+    "\0\0\0\0"                        /* } */
 };
 #else
 static const struct {
