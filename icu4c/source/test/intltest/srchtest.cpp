@@ -2155,7 +2155,7 @@ SearchIterator * TestSearch::safeClone() const
 UBool TestSearch::operator!=(const TestSearch &that) const
 {
     if (SearchIterator::operator !=(that)) {
-        return false;
+        return FALSE;
     }
     return m_offset_ != that.m_offset_ || m_pattern_ != that.m_pattern_;
 }
