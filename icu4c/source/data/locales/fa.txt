@@ -10,6 +10,9 @@
 
 fa {
 
+   Version { "x0.0" }
+
+
     DayAbbreviations { 
             "ی∔",
             "د∔",

@@ -8,6 +8,8 @@
 
 eu_ES {
    // /* Discarding duplicate data for tag: AmPmMarkers */
+   Version { "x0.0" }
+
     CurrencyElements { 
             "Pts",
             "ESP ",
