@@ -147,61 +147,66 @@ class ChoiceFormat;
  *     <td>Yes
  *     <td>'1' through '9' indicate rounding.
  *   <tr valign=top>
+ *     <td><code>\htmlonly&#x40;\endhtmlonly</code> <!--doxygen doesn't like @-->
+ *     <td>Number
+ *     <td>No
+ *     <td>Significant digit
+ *   <tr valign=top bgcolor="#eeeeff">
  *     <td><code>#</code>
  *     <td>Number
  *     <td>Yes
  *     <td>Digit, zero shows as absent
- *   <tr valign=top bgcolor="#eeeeff">
+ *   <tr valign=top>
  *     <td><code>.</code>
  *     <td>Number
  *     <td>Yes
  *     <td>Decimal separator or monetary decimal separator
- *   <tr valign=top>
+ *   <tr valign=top bgcolor="#eeeeff">
  *     <td><code>-</code>
  *     <td>Number
  *     <td>Yes
  *     <td>Minus sign
- *   <tr valign=top bgcolor="#eeeeff">
+ *   <tr valign=top>
  *     <td><code>,</code>
  *     <td>Number
  *     <td>Yes
  *     <td>Grouping separator
- *   <tr valign=top>
+ *   <tr valign=top bgcolor="#eeeeff">
  *     <td><code>E</code>
  *     <td>Number
  *     <td>Yes
  *     <td>Separates mantissa and exponent in scientific notation.
  *         <em>Need not be quoted in prefix or suffix.</em>
- *   <tr valign=top bgcolor="#eeeeff">
+ *   <tr valign=top>
  *     <td><code>+</code>
  *     <td>Exponent
  *     <td>Yes
  *     <td>Prefix positive exponents with localized plus sign.
  *         <em>Need not be quoted in prefix or suffix.</em>
- *   <tr valign=top>
+ *   <tr valign=top bgcolor="#eeeeff">
  *     <td><code>;</code>
  *     <td>Subpattern boundary
  *     <td>Yes
  *     <td>Separates positive and negative subpatterns
- *   <tr valign=top bgcolor="#eeeeff">
+ *   <tr valign=top>
  *     <td><code>%</code>
  *     <td>Prefix or suffix
  *     <td>Yes
  *     <td>Multiply by 100 and show as percentage
- *   <tr valign=top>
+ *   <tr valign=top bgcolor="#eeeeff">
  *     <td><code>\u2030</code>
  *     <td>Prefix or suffix
  *     <td>Yes
  *     <td>Multiply by 1000 and show as per mille
- *   <tr valign=top bgcolor="#eeeeff">
- *     <td><code>&#164;</code> (<code>\u00A4</code>)
+ *   <tr valign=top>
+ *     <td><code>\htmlonly&curren;\endhtmlonly</code> (<code>\u00A4</code>)
  *     <td>Prefix or suffix
  *     <td>No
  *     <td>Currency sign, replaced by currency symbol.  If
  *         doubled, replaced by international currency symbol.
  *         If present in a pattern, the monetary decimal separator
  *         is used instead of the decimal separator.
- *   <tr valign=top>
+ *   <tr valign=top bgcolor="#eeeeff">
  *     <td><code>'</code>
  *     <td>Prefix or suffix
  *     <td>No
@@ -209,7 +214,7 @@ class ChoiceFormat;
  *         for example, <code>"'#'#"</code> formats 123 to
  *         <code>"#123"</code>.  To create a single quote
  *         itself, use two in a row: <code>"# o''clock"</code>.
- *   <tr valign=top bgcolor="#eeeeff">
+ *   <tr valign=top>
  *     <td><code>*</code>
  *     <td>Prefix or suffix boundary
  *     <td>Yes
@@ -259,28 +264,33 @@ class ChoiceFormat;
  *
  * <pre>
  * pattern    := subpattern (';' subpattern)?
- * subpattern := prefix? number suffix?
- * number     := integer ('.' fraction)? exponent?
+ * subpattern := prefix? number exponent? suffix?
+ * number     := (integer ('.' fraction)?) | sigDigits
  * prefix     := '\u0000'..'\uFFFD' - specialCharacters
  * suffix     := '\u0000'..'\uFFFD' - specialCharacters
  * integer    := '#'* '0'* '0'
  * fraction   := '0'* '#'*
+ * sigDigits  := '#'* '@' '@'* '#'*
  * exponent   := 'E' '+'? '0'* '0'
  * padSpec    := '*' padChar
  * padChar    := '\u0000'..'\uFFFD' - quote
- * &#32;
+ * &nbsp;
  * Notation:
  *   X*       0 or more instances of X
  *   X?       0 or 1 instances of X
- *   X..Y     any character from X up to Y, inclusive
- *   S - T    characters in S, except those in T
+ *   X|Y      either X or Y
+ *   C..D     any character from C up to D, inclusive
+ *   S-T      characters in S, except those in T
  * </pre>
  * The first subpattern is for positive numbers. The second (optional)
  * subpattern is for negative numbers.
  * 
  * <p>Not indicated in the BNF syntax above:
- * <ul><li>The grouping separator ',' can occur inside the integer portion between the
- * most significant digit and the least significant digit.
+ *
+ * <ul><li>The grouping separator ',' can occur inside the integer and
+ * sigDigits elements, between any two pattern characters of that
+ * element, as long as the integer or sigDigits element is not
+ * followed by the exponent element.
  *
  * <li>Two grouping intervals are recognized: That between the
  *     decimal point and the first grouping symbol, and that
@@ -317,9 +327,9 @@ class ChoiceFormat;
  * <p><strong>Formatting</strong>
  *
  * <p>Formatting is guided by several parameters, all of which can be
- * specified either using a pattern or using the API.
- *
- * <p>For <em>non-exponential</em> formatters:
+ * specified either using a pattern or using the API.  The following
+ * description applies to formats that do not use <a href="#sci">scientific
+ * notation</a> or <a href="#sigdig">significant digits</a>.
  *
  * <ul><li>If the number of actual integer digits exceeds the
  * <em>maximum integer digits</em>, then only the least significant
@@ -343,9 +353,9 @@ class ChoiceFormat;
  * digits is set to 4.
  *
  * <li>Trailing fractional zeros are not displayed if they occur
- * <em>j</em> positions after the decimal, where <em>j</em> is greater
- * than the minimum fraction digits. For example, 0.10005 is
- * formatted as "0.1" if the minimum fraction digits is 0 or 1.
+ * <em>j</em> positions after the decimal, where <em>j</em> is less
+ * than the maximum fraction digits. For example, 0.10004 is
+ * formatted as "0.1" if the maximum fraction digits is four or less.
  * </ul>
  *
  * <p><strong>Special Values</strong>
@@ -360,7 +370,7 @@ class ChoiceFormat;
  * applied.  The infinity character is determined by the
  * DecimalFormatSymbols object.
  *
- * <p><strong>Scientific Notation</strong>
+ * <a name="sci"><strong>Scientific Notation</strong></a>
  *
  * <p>Numbers in scientific notation are expressed as the product of a mantissa
  * and a power of ten, for example, 1234 can be expressed as 1.234 x 10<sup>3</sup>. The
@@ -392,14 +402,84 @@ class ChoiceFormat;
  * notation</em>, in which the exponent is a multiple of three, e.g.,
  * "##0.###E0".  The number 12345 is formatted using "##0.####E0" as "12.345E3".
  *
- * <li>The number of significant digits is the sum of the <em>minimum
- * integer</em> and <em>maximum fraction</em> digits, and is unaffected by the
- * maximum integer digits.  If this sum is zero, then all significant digits are
- * shown.  The number of significant digits limits the total number of integer
- * and fraction digits that will be shown in the mantissa; it does not affect
- * parsing.  For example, 12345 formatted with "##0.##E0" is "12.3E3".
+ * <li>If significant digits are not being used, then the number of significant
+ * digits is the sum of the <em>minimum integer</em> and <em>maximum
+ * fraction</em> digits, and is unaffected by the maximum integer digits.  If
+ * this sum is zero, then all significant digits are shown.  The number of
+ * significant digits limits the total number of integer and fraction digits
+ * that will be shown in the mantissa; it does not affect parsing.  For example,
+ * 12345 formatted with "##0.##E0" is "12.3E3".
+ *
+ * <li>If significant digits are being used, then the number of significant
+ * digits is specified directly by the pattern. In this case, the number of
+ * integer digits is fixed at one, and there is no exponent grouping.
  *
  * <li>Exponential patterns may not contain grouping separators.
+ * </ul>
+ *
+ * <a name="sigdig"><strong>Significant Digits</strong></a>
+ *
+ * <p>DecimalFormat supports significant digits patterns.
+ * Rather than specifying integer and fraction digit counts, these specify
+ * a minimum and maximum number of significant digits.  These are indicated
+ * by the <code>'@'</code> and <code>'#'</code> characters. Each formatter
+ * object is in one of two modes, in this regard. Either (a) it uses
+ * significant digits, or (b) it uses the integer and fraction digit
+ * counts.
+ *
+ * <ul>
+ * <li>In order to enable significant digits formatting, use a pattern
+ * containing the <code>'@'</code> pattern character.  Alternatively,
+ * call either setMinimumSignificantDigits() or
+ * setMaximumSignificantDigits().
+ *
+ * <li>In order to disable significant digits formatting, use a
+ * pattern containing the <code>'0'</code> pattern
+ * character. Alternatively, call either
+ * setMinimumIntegerDigits() or setMaximumIntegerDigits().
+ *
+ * <li>If a pattern uses significant digits, it may not contain
+ * the <code>'0'</code> character, nor may it include a fraction
+ * element.  Patterns such as <code>'@00'</code> or
+ * <code>'@.###'</code> are disallowed.
+ *
+ * <li>The minimum number of significant digits is the number of
+ * <code>'@'</code> characters.  The maximum number of significant
+ * digits is the number of <code>'@'</code> characters plus the number
+ * of <code>'#'</code> characters following on the right.  For
+ * example, the pattern <code>\htmlonly'@@@'\endhtmlonly</code> indicates exactly 3
+ * significant digits.  The pattern <code>\htmlonly'@##'\endhtmlonly</code> indicates from
+ * 1 to 3 significant digits.  Trailing zero digits are suppressed
+ * after the minimum number of significant digits have been shown.
+ * This is similar to the behavior of fraction digits.
+ *
+ * <li>Any number of <code>'#'</code> characters may be prepended to
+ * the left of the leftmost <code>'@'</code> character.  These have no
+ * effect on the minimum and maximum significant digits counts, but
+ * may be used to position grouping separators.  For example,
+ * <code>\htmlonly"#,#@#"\endhtmlonly</code> indicates a minimum of one significant digits,
+ * a maximum of two significant digits, and a grouping size of three.
+ *
+ * <li>The number of significant digits has no effect on parsing.
+ *
+ * <li>Significant digits may be used together with exponential notation. Such
+ * patterns are equivalent to a normal exponential pattern with a minimum and
+ * maximum integer digit count of one, a minimum fraction digit count of
+ * getMinimumSignificantDigits()<code> - 1</code>, and a maximum fraction digit
+ * count of getMaximumSignificantDigits()<code> - 1</code>. For example, the
+ * pattern <code>\htmlonly"@@###E0"\endhtmlonly</code> is equivalent to <code>\htmlonly"0.0###E0"\endhtmlonly</code>.
+ *
+ * <li>Significant digit counts are stored as negative values in the
+ * integer digit count fields. Thus, if significant digits are used,
+ * then getMinimumIntegerDigits() and
+ * getMaximumIntegerDigits() will return negative numbers. The
+ * converse is also true. If significant digits are not being used,
+ * then getMinimumSignificantDigits() and
+ * getMaximumSignificantDigits() will return non-positive numbers.
+ *
+ * <li>If signficant digits are in use, then the fraction digit counts
+ * are ignored.
+ *
  * </ul>
  *
  * <p><strong>Padding</strong>
@@ -1421,7 +1501,7 @@ public:
      * than <code>max</code>, then it is set to <code>max</code>.  If
      * significant digits were not in use before this call, then the
      * minimum significant digits count will be set to one.
-     * @param min the most significant digits to be shown 
+     * @param max the most significant digits to be shown 
      * @draft ICU 3.0
      */
     void setMaximumSignificantDigits(int32_t max);
