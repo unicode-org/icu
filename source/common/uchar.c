@@ -95,8 +95,7 @@ isAcceptable(void *context,
     }
 }
 
-UBool
-uchar_cleanup()
+static UBool U_CALLCONV uchar_cleanup(void)
 {
     if (propsData) {
         udata_close(propsData);
@@ -203,6 +202,7 @@ uprv_loadPropsData(UErrorCode *pErrorCode) {
             }
 
             havePropsData=1;
+            ucln_common_registerCleanup(UCLN_COMMON_UCHAR, uchar_cleanup);
             umtx_unlock(NULL);
         } else {
             dataErrorCode=*pErrorCode;

@@ -26,6 +26,7 @@
 #include "unicode/brkiter.h"
 #include "unicode/udata.h"
 #include "unicode/ures.h"
+#include "ucln_cmn.h"
 #include "cstring.h"
 #include "mutex.h"
 #include "iculserv.h"
@@ -362,6 +363,26 @@ public:
 
 // -------------------------------------
 
+U_NAMESPACE_END
+
+// defined in ucln_cmn.h
+
+/**
+ * Release all static memory held by breakiterator.  
+ */
+U_CDECL_BEGIN
+static UBool U_CALLCONV breakiterator_cleanup(void) {
+#if !UCONFIG_NO_SERVICE
+    if (gService) {
+        delete gService;
+        gService = NULL;
+    }
+#endif
+    return TRUE;
+}
+U_CDECL_END
+U_NAMESPACE_BEGIN
+
 static ICULocaleService* 
 getService(void)
 {
@@ -376,6 +397,7 @@ getService(void)
         if (gService == NULL) {
             gService = tService;
             tService = NULL;
+            ucln_common_registerCleanup(UCLN_COMMON_BREAKITERATOR, breakiterator_cleanup);
         }
         umtx_unlock(NULL);
         delete tService;
@@ -519,21 +541,6 @@ BreakIterator::getLocaleID(ULocDataLocaleType type, UErrorCode& status) const {
 }
 
 U_NAMESPACE_END
-
-// defined in ucln_cmn.h
-
-/**
- * Release all static memory held by breakiterator.  
- */
-U_CFUNC UBool breakiterator_cleanup(void) {
-#if !UCONFIG_NO_SERVICE
-    if (gService) {
-        delete gService;
-        gService = NULL;
-    }
-#endif
-    return TRUE;
-}
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
 

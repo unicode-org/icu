@@ -547,7 +547,6 @@ public:
   static UnicodeString& initNameFromLocale(const Locale& locale, UnicodeString& result);
   static const Hashtable* getAvailableLocaleNames(const UnicodeString& bundleID);
   static UBool isFallbackOf(const UnicodeString& root, const UnicodeString& child);
-  static UBool cleanup(void);
 };
 
 U_NAMESPACE_END

@@ -85,8 +85,7 @@ charCatNames[U_CHAR_EXTENDED_CATEGORY_COUNT];
 
 /* implementation ----------------------------------------------------------- */
 
-UBool
-unames_cleanup()
+static UBool U_CALLCONV unames_cleanup(void)
 {
     if(uCharNamesData) {
         udata_close(uCharNamesData);
@@ -151,6 +150,7 @@ isDataLoaded(UErrorCode *pErrorCode) {
                 uCharNamesData=data;
                 data=NULL;
                 names=NULL;
+                ucln_common_registerCleanup(UCLN_COMMON_UNAMES, unames_cleanup);
             }
             umtx_unlock(NULL);
         }

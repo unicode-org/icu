@@ -14,6 +14,7 @@
 #include "umutex.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "ucln_cmn.h"
 #include "uarrsort.h"
 
 U_CDECL_BEGIN
@@ -232,8 +233,7 @@ isPNameAcceptable(void* /*context*/,
         info->formatVersion[0] == PNAME_FORMAT_VERSION;
 }
 
-UBool
-pname_cleanup() {
+static UBool U_CALLCONV pname_cleanup() {
     if (UDATA) {
         udata_close(UDATA);
         UDATA = NULL;
@@ -258,6 +258,7 @@ static UBool _load() {
         if (UDATA == NULL) {
             UDATA = data;
             PNAME = (const PropertyAliases*) udata_getMemory(UDATA);
+            ucln_common_registerCleanup(UCLN_COMMON_PNAME, pname_cleanup);
             data = NULL;
         }
         umtx_unlock(NULL);

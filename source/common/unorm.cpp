@@ -33,6 +33,7 @@
 #include "unicode/uniset.h"
 #include "unicode/usetiter.h"
 #include "unicode/unorm.h"
+#include "ucln_cmn.h"
 #include "unormimp.h"
 #include "ucase.h"
 #include "cmemory.h"
@@ -189,7 +190,7 @@ static UnicodeSet *nxCache[_NORM_OPTIONS_SETS_MASK+1]={ NULL };
 
 U_CDECL_BEGIN
 
-UBool
+static UBool U_CALLCONV
 unorm_cleanup() {
     int32_t i;
 
@@ -348,6 +349,7 @@ loadNormData(UErrorCode &errorCode) {
                 (indexes[_NORM_INDEX_FCD_TRIE_SIZE]+indexes[_NORM_INDEX_AUX_TRIE_SIZE])/2;
         }
         haveNormData=1;
+        ucln_common_registerCleanup(UCLN_COMMON_UNORM, unorm_cleanup);
         umtx_unlock(NULL);
 
         /* if a different thread set it first, then close the extra data */

@@ -1712,6 +1712,10 @@ SOURCE=.\umapfile.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\uinit.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\umapfile.h
 # End Source File
 # Begin Source File

@@ -27,6 +27,7 @@
 #include "ruleiter.h"
 #include "cmemory.h"
 #include "uhash.h"
+#include "ucln_cmn.h"
 #include "util.h"
 #include "uvector.h"
 #include "uprops.h"
@@ -1464,6 +1465,32 @@ _set_addString(USet *set, const UChar *str, int32_t length) {
     ((UnicodeSet *)set)->add(UnicodeString((UBool)(length<0), str, length));
 }
 
+/**
+ * Cleanup function for UnicodeSet
+ */
+static UBool U_CALLCONV uset_cleanup(void) {
+    int32_t i;
+
+    for(i = UPROPS_SRC_NONE; i < UPROPS_SRC_COUNT; ++i) {
+        if (INCLUSIONS[i] != NULL) {
+            delete INCLUSIONS[i];
+            INCLUSIONS[i] = NULL;
+        }
+    }
+
+    if (CASE_EQUIV_HASH != NULL) {
+        delete CASE_EQUIV_HASH;
+        CASE_EQUIV_HASH = NULL;
+    }
+
+    if (CASE_EQUIV_CBA != NULL) {
+        ucmp8_close(CASE_EQUIV_CBA);
+        CASE_EQUIV_CBA = NULL;
+    }
+
+    return TRUE;
+}
+
 U_CDECL_END
 
 const UnicodeSet* UnicodeSet::getInclusions(int32_t src, UErrorCode &status) {
@@ -1503,8 +1530,9 @@ const UnicodeSet* UnicodeSet::getInclusions(int32_t src, UErrorCode &status) {
                 umtx_lock(NULL);
                 if (INCLUSIONS[src] == NULL) {
                     INCLUSIONS[src] = incl;
-                    incl = NULL;        
-                } 
+                    incl = NULL;
+                    ucln_common_registerCleanup(UCLN_COMMON_USET, uset_cleanup);
+                }
                 umtx_unlock(NULL);
             }
             delete incl;
@@ -1513,32 +1541,6 @@ const UnicodeSet* UnicodeSet::getInclusions(int32_t src, UErrorCode &status) {
         }
     }
     return INCLUSIONS[src];
-}
-
-/**
- * Cleanup function for UnicodeSet
- */
-U_CFUNC UBool uset_cleanup(void) {
-    int32_t i;
-
-    for(i = UPROPS_SRC_NONE; i < UPROPS_SRC_COUNT; ++i) {
-        if (INCLUSIONS[i] != NULL) {
-            delete INCLUSIONS[i];
-            INCLUSIONS[i] = NULL;
-        }
-    }
-
-    if (CASE_EQUIV_HASH != NULL) {
-        delete CASE_EQUIV_HASH;
-        CASE_EQUIV_HASH = NULL;
-    }
-
-    if (CASE_EQUIV_CBA != NULL) {
-        ucmp8_close(CASE_EQUIV_CBA);
-        CASE_EQUIV_CBA = NULL;
-    }
-
-    return TRUE;
 }
 
 //----------------------------------------------------------------
@@ -2030,6 +2032,7 @@ const CaseEquivClass* UnicodeSet::getCaseMapOf(const UnicodeString& folded) {
                 if (CASE_EQUIV_HASH == NULL) {
                     CASE_EQUIV_HASH = hash;
                     hash = NULL;
+                    ucln_common_registerCleanup(UCLN_COMMON_USET, uset_cleanup);
                 }
                 umtx_unlock(NULL);
             }
@@ -2073,6 +2076,7 @@ const CaseEquivClass* UnicodeSet::getCaseMapOf(UChar folded) {
         if (CASE_EQUIV_CBA == NULL) {
             CASE_EQUIV_CBA = cba;
             cba = NULL;
+            ucln_common_registerCleanup(UCLN_COMMON_USET, uset_cleanup);
         }
         umtx_unlock(NULL);
         if (cba != NULL) {
