@@ -1607,7 +1607,7 @@ typedef struct {
 } tester;
 
 static void TestComposeDecompose(void) {
-    int32_t noOfLoc = uloc_countAvailable();
+    int32_t noOfLoc;
     int32_t i = 0, j = 0;
 
     UErrorCode status = U_ZERO_ERROR;
@@ -1616,13 +1616,19 @@ static void TestComposeDecompose(void) {
 
     uint32_t nfcSize;
     uint32_t nfdSize;
-    tester **t = uprv_malloc(0x30000 * sizeof(tester *));
+    tester **t;
     uint32_t noCases = 0;
     UCollator *coll = NULL;
     UChar32 u = 0;
     UChar comp[NORM_BUFFER_TEST_LEN];
     uint32_t len = 0;
 
+    log_err("error - ### TODO re-enable /tscoll/cmsccoll/TestComposeDecompose after the upgrade to Unicode 3.2 _and_ the new UCA table/algorithm is complete (see Mark & Markus)\n");
+    return;
+
+    noOfLoc = uloc_countAvailable();
+
+    t = uprv_malloc(0x30000 * sizeof(tester *));
     t[0] = (tester *)uprv_malloc(sizeof(tester));
 
     for(u = 0; u < 0x30000; u++) {
