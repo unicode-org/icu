@@ -2545,6 +2545,7 @@ int32_t RBBILineMonkey::next(int32_t prevPos) {
         prevPos   = pos;
         pos       = nextPos;
 
+        // TODO:  prevChar = thisChar;   // So adjustments to thisChar stick for next iteration.
         UChar32 prevChar = fText->char32At(prevPos);
         UChar32 thisChar = fText->char32At(pos);
 
@@ -2585,14 +2586,23 @@ int32_t RBBILineMonkey::next(int32_t prevPos) {
             continue;
         }
 
-        if (!fSP->contains(thisChar)) {
-            // nextPos advances over Hangul Syllables plus any chars
-            //    of line break class CM.
-            // Advancing by a grapheme cluster with a character break iterator
-            //  almost gets this, except Line Break CM includes some
-            //  stuff that is not combining from the grapheme cluster definition.
-            nextPos   = fCharBI->following(pos);     // Advance by grapheme cluster
-            // now advance over any CM class chars that were missed
+        // LB 5  Break after zero width space
+        if (fZW->contains(prevChar)) {
+            break;
+        }
+
+
+        // LB 6  Treat Korean Syllables as a single unit
+        int32_t  hangultype = u_getIntPropertyValue(thisChar, UCHAR_HANGUL_SYLLABLE_TYPE);
+        if (hangultype != U_HST_NOT_APPLICABLE) {
+            nextPos   = fCharBI->following(pos);     // Advance by grapheme cluster, which
+                                                     //  contains the logic to locate Hangul syllables.
+        }
+
+        // LB 7b  Keep combining sequences together.  Here we just locate the end of "thisChar".
+        //                                            (except for Hangul, which we did above.
+        if (hangultype == U_HST_NOT_APPLICABLE) {
+            //  advance over any CM class chars
             for (;;) {
                 UChar32 c = fText->char32At(nextPos);
                 if (!fCM->contains(c)) {
@@ -2602,15 +2612,6 @@ int32_t RBBILineMonkey::next(int32_t prevPos) {
             }
         }
 
-
-        // LB 5  Break after zero width space
-        if (fZW->contains(prevChar)) {
-            break;
-        }
-
-        // LB 6  Treat Korean Syllables as a single unit
-        //       (Requires no explicit action.  nextChar already advances by grapheme cluster
-        //        which goes over an entire syllable.
 
         // LB 7a In a SP CM* sequence, treat the SP as an ID
         if (nextCPPos != nextPos && fSP->contains(thisChar)) {
