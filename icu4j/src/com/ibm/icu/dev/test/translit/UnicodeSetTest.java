@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2003/02/14 18:26:01 $ 
- * $Revision: 1.44 $
+ * $Date: 2003/02/18 00:51:31 $ 
+ * $Revision: 1.45 $
  *
  *****************************************************************************************
  */
@@ -975,6 +975,66 @@ public class UnicodeSetTest extends TestFmwk {
         expectContainment(s, "abcABC", "defDEF");
         s = new UnicodeSet("[^abc]", UnicodeSet.CASE);
         expectContainment(s, "defDEF", "abcABC");
+    }
+
+    public void TestEscapePattern() {
+        String pattern =
+            "[\\uFEFF \\uFFF9-\\uFFFC \\U0001D173-\\U0001D17A \\U000F0000-\\U000FFFFD ]";
+        String exp =
+            "[\\uFEFF\\uFFF9-\\uFFFC\\U0001D173-\\U0001D17A\\U000F0000-\\U000FFFFD]";
+        // We test this with two passes; in the second pass we
+        // pre-unescape the pattern.  Since U+FEFF and several other code
+        // points are rule whitespace, this fails -- which is what we
+        // expect.
+        for (int pass=1; pass<=2; ++pass) {
+            String pat = pattern;
+            if (pass==2) {
+                pat = Utility.unescape(pat);
+            }
+            // Pattern is only good for pass 1
+            boolean isPatternValid = (pass==1);
+
+            UnicodeSet set = null;
+            try {
+                set = new UnicodeSet(pat);
+            } catch (IllegalArgumentException e) {
+                set = null;
+            }
+            if ((set != null) != isPatternValid){
+                errln("FAIL: applyPattern(" +
+                      Utility.escape(pat) + ") => " + set);
+                continue;
+            }
+            if (set == null) {
+                continue;
+            }
+            if (set.contains((char)0x0644)){
+                errln("FAIL: " + Utility.escape(pat) + " contains(U+0664)");
+            }
+
+            String newpat = set.toPattern(true);
+            if (newpat.equals(exp)) {
+                logln(Utility.escape(pat) + " => " + newpat);
+            } else {
+                errln("FAIL: " + Utility.escape(pat) + " => " + newpat);
+            }
+
+            for (int i=0; i<set.getRangeCount(); ++i) {
+                StringBuffer str = new StringBuffer("Range ");
+                str.append((char)(0x30 + i))
+                    .append(": ");
+                UTF16.append(str, set.getRangeStart(i));
+                str.append(" - ");
+                UTF16.append(str, set.getRangeEnd(i));
+                String s = Utility.escape(str.toString() + " (" + set.getRangeStart(i) + " - " +
+                    set.getRangeEnd(i) + ")");
+                if (set.getRangeStart(i) < 0) {
+                    errln("FAIL: " + s);
+                } else {
+                    logln(s);
+                }
+            }
+        }
     }
 
     void _testComplement(int a) {

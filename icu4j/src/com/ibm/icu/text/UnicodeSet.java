@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2003/02/14 22:27:00 $
- * $Revision: 1.90 $
+ * $Date: 2003/02/18 00:51:30 $
+ * $Revision: 1.91 $
  *
  *****************************************************************************************
  */
@@ -541,9 +541,9 @@ public class UnicodeSet extends UnicodeFilter {
      * Append the <code>toPattern()</code> representation of a
      * string to the given <code>StringBuffer</code>.
      */
-    private static void _appendToPat(StringBuffer buf, String s, boolean useHexEscape) {
+    private static void _appendToPat(StringBuffer buf, String s, boolean escapeUnprintable) {
         for (int i = 0; i < s.length(); i += UTF16.getCharCount(i)) {
-            _appendToPat(buf, UTF16.charAt(s, i), useHexEscape);
+            _appendToPat(buf, UTF16.charAt(s, i), escapeUnprintable);
         }
     }
 
@@ -551,8 +551,8 @@ public class UnicodeSet extends UnicodeFilter {
      * Append the <code>toPattern()</code> representation of a
      * character to the given <code>StringBuffer</code>.
      */
-    private static void _appendToPat(StringBuffer buf, int c, boolean useHexEscape) {
-        if (useHexEscape) {
+    private static void _appendToPat(StringBuffer buf, int c, boolean escapeUnprintable) {
+        if (escapeUnprintable && Utility.isUnprintable(c)) {
             // Use hex escape notation (<backslash>uxxxx or <backslash>Uxxxxxxxx) for anything
             // unprintable
             if (Utility.escapeUnprintable(buf, c)) {
@@ -2315,7 +2315,7 @@ public class UnicodeSet extends UnicodeFilter {
             } else if (lastOp == 0 && !isLiteral && (c == '-' || c == '&')) {
                 lastOp = (char) c;
             } else if (lastOp == '-') {
-                if (lastChar >= c) {
+                if (lastChar >= c || lastChar == NONE) {
                     // Don't allow redundant (a-a) or empty (b-a) ranges;
                     // these are most likely typos.
                     throw new IllegalArgumentException("Invalid range " + lastChar +
