@@ -244,11 +244,6 @@ icu4j/license.html svneol=native#text/html
 icu4j/readme.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/data/ThaiWordFreq.xls -text
 icu4j/src/com/ibm/icu/dev/data/holidays_jp.ucs -text svneol=native#application/octet-stream
-icu4j/src/com/ibm/icu/dev/data/nfscis.spp -text
-icu4j/src/com/ibm/icu/dev/data/nfscsi.spp -text
-icu4j/src/com/ibm/icu/dev/data/nfscss.spp -text
-icu4j/src/com/ibm/icu/dev/data/nfsmxp.spp -text
-icu4j/src/com/ibm/icu/dev/data/nfsmxs.spp -text
 icu4j/src/com/ibm/icu/dev/data/rbbi/english.dict -text svneol=native#application/octet-stream
 icu4j/src/com/ibm/icu/dev/data/testdata.jar -text svneol=unset#application/java-archive
 icu4j/src/com/ibm/icu/dev/data/thai6.ucs -text
