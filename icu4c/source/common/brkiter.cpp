@@ -53,41 +53,38 @@ BreakIterator::buildInstance(const Locale& loc, const char *type, UBool dict, UE
     char actualLocale[ULOC_FULLNAME_CAPACITY];
     int32_t size;
     const UChar* brkfname = NULL;
-    UResourceBundle brkrules, brkname;
+    UResourceBundle brkRulesStack, brkNameStack;
+    UResourceBundle *brkRules = &brkRulesStack, *brkName = &brkNameStack;
     BreakIterator *result = NULL;
     
     if (U_FAILURE(status))
         return NULL;
 
+    ures_initStackObject(brkRules);
+    ures_initStackObject(brkName);
+
     // Get the locale
     UResourceBundle *b = ures_open(NULL, loc.getName(), &status);
-    ures_initStackObject(&brkrules);
-    ures_initStackObject(&brkname);
 
     // Get the "boundaries" array.
     if (U_SUCCESS(status)) {
-        (void) ures_getByKeyWithFallback(b, "boundaries", &brkrules, &status);
+        brkRules = ures_getByKeyWithFallback(b, "boundaries", brkRules, &status);
+        // Get the string object naming the rules file
+        brkName = ures_getByKeyWithFallback(brkRules, type, brkName, &status);
+        // Get the actual string
+        brkfname = ures_getString(brkName, &size, &status);
+
+        // Use the string if we found it
+        if (U_SUCCESS(status) && brkfname) {
+            uprv_strncpy(actualLocale,
+                ures_getLocale(brkName, &status),
+                sizeof(actualLocale)/sizeof(actualLocale[0]));
+            u_UCharsToChars(brkfname, fnbuff, size+1);
+        }
     }
 
-    // Get the string object naming the rules file
-    if (U_SUCCESS(status)) {
-        (void) ures_getByKeyWithFallback(&brkrules, type, &brkname, &status);
-    }
-
-    // Get the actual string
-    if (U_SUCCESS(status)) {
-        brkfname = ures_getString(&brkname, &size, &status);
-        uprv_strncpy(actualLocale, ures_getLocale(&brkname, &status), sizeof(actualLocale)/sizeof(actualLocale[0]));
-    }
-    
-    // Use the string if we found it
-    if (U_SUCCESS(status)) {
-        u_UCharsToChars(brkfname, fnbuff, size);
-        fnbuff[size] = '\0';
-    }
-    
-    ures_close(&brkrules);
-    ures_close(&brkname);
+    ures_close(brkRules);
+    ures_close(brkName);
     
     UDataMemory* file = udata_open(NULL, "brk", fnbuff, &status);
     if (U_FAILURE(status)) {
@@ -99,8 +96,9 @@ BreakIterator::buildInstance(const Locale& loc, const char *type, UBool dict, UE
     if (dict)
     {
         UErrorCode localStatus = U_ZERO_ERROR;
-        ures_initStackObject(&brkname);
-        (void) ures_getByKeyWithFallback(b, "BreakDictionaryData", &brkname, &localStatus);
+        brkName = &brkNameStack;
+        ures_initStackObject(brkName);
+        brkName = ures_getByKeyWithFallback(b, "BreakDictionaryData", brkName, &localStatus);
 #if 0
         if (U_SUCCESS(localStatus)) {
             brkfname = ures_getString(&brkname, &size, &localStatus);
@@ -113,7 +111,7 @@ BreakIterator::buildInstance(const Locale& loc, const char *type, UBool dict, UE
 #endif
             result = new DictionaryBasedBreakIterator(file, "thaidict.brk", status);
         }
-        ures_close(&brkname);
+        ures_close(brkName);
     }
     
     // If there is still no result but we haven't had an error, no dictionary,
