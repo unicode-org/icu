@@ -14,6 +14,7 @@
 #include "unicode/unicode.h"
 #include "unicode/normlzr.h"
 #include "unicode/uchar.h"
+#include "unicode/parseerr.h"
 #include "transrt.h"
 #include "testutil.h"
 #include <string.h>
@@ -54,8 +55,7 @@ TransliteratorRoundTripTest::runIndexedTest(int32_t index, UBool exec,
         CASE(7,Testel);
         CASE(8,TestCyrillic);
         CASE(9,TestDevanagariLatin);
-
-        EXHAUSTIVE(10,TestInterIndic);
+        CASE(10,TestInterIndic);
         default: name = ""; break;
     }
 }
@@ -352,7 +352,7 @@ UBool UnicodeSetIterator::containsAll(const UnicodeSet& set,
 // RTTest Interface
 //--------------------------------------------------------------------
 
-class RTTest {
+class RTTest : IntlTest {
 
     // PrintWriter out;
 
@@ -583,13 +583,17 @@ void RTTest::test2(UBool quick) {
 
     UnicodeString cs, targ, reverse;
     UErrorCode status = U_ZERO_ERROR;
+    UParseError parseError ;
     Transliterator* sourceToTarget = 
-        Transliterator::createInstance(transliteratorID, UTRANS_FORWARD, 
+        Transliterator::createInstance(transliteratorID, UTRANS_FORWARD, parseError,
                                        status);
     if (sourceToTarget == NULL) {
         log->errln("Fail: createInstance(" + transliteratorID +
-                   ") returned NULL");
-        return;
+                   ") returned NULL. Error: " + u_errorName(status)
+                   + "\n\tpreContext : " + prettify(parseError.preContext) 
+                   + "\n\tpostContext : " + prettify(parseError.postContext));
+        
+                return;
     }
     Transliterator* targetToSource = sourceToTarget->createInverse(status);
     if (targetToSource == NULL) {
@@ -1275,6 +1279,10 @@ static const char * array[][4] = {
 
 void TransliteratorRoundTripTest::TestInterIndic() {
     int num = sizeof(array) / 4;
+    if(quick==TRUE){
+        logln("Testing only 5 of %i. Skipping rest (use -e for exhaustive)",num);
+        num = 5;
+    }
     for(int i = 0; i < num;i ++){
         RTTest test(array[i][0]);
         Legal *legal = new Legal();
