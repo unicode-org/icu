@@ -918,7 +918,7 @@ u_strFoldCase(UChar *dest, int32_t destCapacity,
  *
  * @param dest          A buffer for the result string. The result will be zero-terminated if
  *                      the buffer is large enough.
- * @param destCapacity  The size of the buffer (number of UChars). If it is 0, then
+ * @param destCapacity  The size of the buffer (number of wchar_t's). If it is 0, then
  *                      dest may be NULL and the function will only return the length of the 
  *                      result without writing any of the result string (pre-flighting).
  * @param pDestLength   A pointer to receive the number of units written to the destination. If 
@@ -970,7 +970,7 @@ u_strFromWCS(UChar   *dest,
  *
  * @param dest          A buffer for the result string. The result will be zero-terminated if
  *                      the buffer is large enough.
- * @param destCapacity  The size of the buffer (number of UChars). If it is 0, then
+ * @param destCapacity  The size of the buffer (number of chars). If it is 0, then
  *                      dest may be NULL and the function will only return the length of the 
  *                      result without writing any of the result string (pre-flighting).
  * @param pDestLength   A pointer to receive the number of units written to the destination. If 
@@ -1024,7 +1024,7 @@ u_strFromUTF8(UChar *dest,
  *
  * @param dest          A buffer for the result string. The result will be zero-terminated if
  *                      the buffer is large enough.
- * @param destCapacity  The size of the buffer (number of UChars). If it is 0, then
+ * @param destCapacity  The size of the buffer (number of UChar32s). If it is 0, then
  *                      dest may be NULL and the function will only return the length of the 
  *                      result without writing any of the result string (pre-flighting).
  * @param pDestLength   A pointer to receive the number of units written to the destination. If 
