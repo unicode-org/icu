@@ -888,3 +888,23 @@ void u_getUnicodeVersion(UVersionInfo versionArray) {
         uprv_memcpy(versionArray, dataVersion, U_MAX_VERSION_LENGTH);
     }
 }
+
+/* string casing ------------------------------------------------------------ */
+
+U_CAPI int32_t U_EXPORT2
+u_strToUpper(const UChar *src, int32_t srcLength,
+             UChar *dest, int32_t destCapacity,
+             const char *locale,
+             UErrorCode *pErrorCode) {
+    *pErrorCode=U_UNSUPPORTED_ERROR;
+    return 0;
+}
+
+U_CAPI int32_t U_EXPORT2
+u_strToLower(const UChar *src, int32_t srcLength,
+             UChar *dest, int32_t destCapacity,
+             const char *locale,
+             UErrorCode *pErrorCode) {
+    *pErrorCode=U_UNSUPPORTED_ERROR;
+    return 0;
+}
