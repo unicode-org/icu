@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/IntTrie.java,v $
-* $Date: 2002/04/25 22:19:25 $
-* $Revision: 1.5 $
+* $Date: 2002/06/22 00:02:41 $
+* $Revision: 1.6 $
 *
 ******************************************************************************
 */
@@ -226,6 +226,25 @@ public class IntTrie extends Trie
         return m_initialValue_;
     }
 
+    // package private methods -----------------------------------------
+    
+    /**
+     * Internal constructor for builder use
+     * @param index the index array to be slotted into this trie
+     * @param data the data array to be slotted into this trie
+     * @param initialvalue the initial value for this trie
+     * @param options trie options to use
+     * @param datamanipulate folding implementation
+     */
+    IntTrie(char index[], int data[], int initialvalue, int options,
+            DataManipulate datamanipulate)
+    {
+        super(index, options, datamanipulate);
+        m_index_ = index;
+        m_data_ = data;
+        m_initialValue_ = initialvalue;
+    }
+    
     // private data members --------------------------------------------
 
     /**

@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Trie.java,v $
-* $Date: 2002/04/25 22:19:25 $
-* $Revision: 1.5 $
+* $Date: 2002/06/22 00:02:41 $
+* $Revision: 1.6 $
 *
 ******************************************************************************
 */
@@ -71,7 +71,7 @@ public abstract class Trie
         * @return data offset or 0 if there is no data for the lead surrogate
         * @draft 2.1
         */
-        public int getFoldingOffset(int value);
+        public int getFoldingOffset(int value); 
     }
     
     // public methods --------------------------------------------------
@@ -116,6 +116,24 @@ public abstract class Trie
         m_dataLength_     = input.readInt();
         unserialize(inputStream);
     }
+    
+    /**
+    * Trie constructor
+    * @param index array to be used for index
+    * @param options used by the trie
+    * @param datamanipulate object containing the information to parse the 
+    *                       trie data
+    * @draft 2.2
+    */
+    protected Trie(char index[], int options, DataManipulate dataManipulate)
+    {
+        m_options_ = options;
+        m_dataManipulate_ = dataManipulate;
+        m_isLatin1Linear_ = (m_options_ &
+                             HEADER_OPTIONS_LATIN1_IS_LINEAR_MASK_) != 0;
+        m_index_ = index;
+    }
+
 
     // protected data members ------------------------------------------
 
