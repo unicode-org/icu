@@ -165,16 +165,6 @@ struct UConverter {
 
 U_CDECL_END /* end of UConverter */
 
-
-typedef struct
-  {
-    UConverter *currentConverter;
-    uint8_t escSeq2022[10];
-    int8_t escSeq2022Length;
-  }
-UConverterDataISO2022;
-
-
 typedef struct
   {
     UConverter *OptGrpConverter[0x20];    /* Converter per Opt. grp. */
