@@ -276,7 +276,7 @@ sk {
         "Ut",
         "St",
         "\u0160t",
-        "Pa",
+        "Pi",
         "So",
     }
     DayNames { 
@@ -291,6 +291,10 @@ sk {
     Eras { 
         "pred n.l.",
         "n.l.",
+    }
+    DateTimeElements:intvector {
+        2,
+        4
     }
     Languages { 
         ar { "arabsk\u00FD" }
