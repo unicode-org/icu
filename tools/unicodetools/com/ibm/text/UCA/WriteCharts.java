@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCharts.java,v $ 
-* $Date: 2001/09/19 23:31:50 $ 
-* $Revision: 1.1 $
+* $Date: 2001/10/25 20:35:41 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -30,6 +30,7 @@ public class WriteCharts implements UCD_Types {
         
         ucd = UCD.make();
         Normalizer nfd = new Normalizer(Normalizer.NFD);
+        Normalizer nfc = new Normalizer(Normalizer.NFC);
           
         UCA.UCAContents cc = uca.getContents(UCA.FIXED_CE, null); // nfd instead of null if skipping decomps
           
@@ -53,18 +54,23 @@ public class WriteCharts implements UCD_Types {
         
         int lastPrimary = -1;
         
-        String lastSortKey = null;
+        String lastSortKey = "\u0000";
         
         int high = uca.getSortKey("a").charAt(0);
         int variable = UCA.getPrimary(uca.getVariableHigh());
         
         int columnCount = 0;
         
+        Utility.copyTextFile("index.html", true, "CollationCharts\\index.html");
+        Utility.copyTextFile("charts.css", false, "CollationCharts\\charts.css");
+        Utility.copyTextFile("help.html", true, "CollationCharts\\help.html");
+        
         indexFile = Utility.openPrintWriter("CollationCharts\\index_list.html");
 
         indexFile.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
         indexFile.println("<title>UCA Default Collation Table</title>");
         indexFile.println("<base target='main'>");
+        indexFile.println("<style><!-- p { font-size: 90% } --></style>");
         indexFile.println("</head><body><h2 align='center'>UCA Default Collation Table</h2>");
         indexFile.println("<p align='center'><a href = 'help.html'>Help</a>");
         
@@ -102,19 +108,31 @@ public class WriteCharts implements UCD_Types {
                 oldScript = script;
             }
             
-            int strength = 6;
-            if (lastSortKey != null && sortKey.charAt(0) == lastSortKey.charAt(0)) {
-                strength = uca.strengthDifference(sortKey, lastSortKey);
-                if (strength < 0) strength = -strength;
-            }
+            boolean firstPrimaryEquals = sortKey.charAt(0) == lastSortKey.charAt(0);
+            
+            int strength = uca.strengthDifference(sortKey, lastSortKey);
+            if (strength < 0) strength = -strength;
             lastSortKey = sortKey;
+            
+            // find out if this is an expansion: more than one primary weight
+            
+            int primaryCount = 0;
+            for (int i = 0; i < sortKey.length(); ++i) {
+                char w = sortKey.charAt(i);
+                if (w == 0) break;
+                ++ primaryCount;
+            }
+            
             String breaker = "";
-            if (columnCount > 10 || strength > 5) {
-                if (strength <= 5) breaker = "</tr><tr><td></td>";
-                else breaker = "</tr><tr>";
+            if (columnCount > 10 || !firstPrimaryEquals) {
+                if (!firstPrimaryEquals) breaker = "</tr><tr>";
+                else breaker = "</tr><tr><td></td>"; // indent 1 cell
                 columnCount = 0;
             }
-            output.println(breaker + CLASSNAME[strength] + s 
+            
+            String classname = primaryCount > 1 ? XCLASSNAME[strength] : CLASSNAME[strength];
+            
+            output.println(breaker + classname + nfc.normalize(s) 
                 + "<br><tt>" + Utility.hex(s) 
                 //+ "<br>" + script
                 //+ "<br>" + UCA.toString(sortKey) 
@@ -133,8 +151,15 @@ public class WriteCharts implements UCD_Types {
         "<td class='q'>", 
         "<td class='t'>", 
         "<td class='s'>", 
-        "<td class='p'>", 
-        "<td class='f'>"};
+        "<td class='p'>"};
+        
+    static final String[] XCLASSNAME = {
+        "<td class='eq'>", 
+        "<td class='eq'>", 
+        "<td class='eq'>", 
+        "<td class='et'>", 
+        "<td class='es'>", 
+        "<td class='ep'>"};
         
 
     static PrintWriter indexFile;

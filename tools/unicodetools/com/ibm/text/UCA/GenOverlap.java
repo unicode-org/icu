@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/GenOverlap.java,v $ 
-* $Date: 2001/09/19 23:32:21 $ 
-* $Revision: 1.4 $
+* $Date: 2001/10/25 20:35:42 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -29,6 +29,33 @@ public class GenOverlap implements UCD_Types {
     static UCD ucd;
     static Normalizer nfd;
     static Normalizer nfkd;
+    
+    public static void validateUCA(UCA collatorIn) throws Exception {
+        collator = collatorIn;
+        ucd = UCD.make();
+
+        nfd = new Normalizer(Normalizer.NFD);
+        nfkd = new Normalizer(Normalizer.NFKD);
+
+        for (int cp = 0x0; cp <= 0x10FFFF; ++cp) {
+            Utility.dot(cp);
+            if (!ucd.isRepresented(cp)) continue;
+            byte decompType = ucd.getDecompositionType(cp);
+            if (decompType >= UCD.COMPATIBILITY) {
+                String decomp = nfkd.normalize(cp);
+                CEList celistDecomp = getCEList(cp, decomp, true, decompType);
+                CEList celistNormal = getCEList(UTF16.valueOf(cp), false);
+                if (!celistNormal.equals(celistDecomp)) {
+                    Utility.fixDot();
+                    System.out.println();
+                    System.out.println(ucd.getCodeAndName(cp));
+                    System.out.println(celistNormal);
+                    System.out.println(celistDecomp);
+                }
+            }
+        }
+        
+    }
     
     public static void test(UCA collatorIn) throws Exception {
         collator = collatorIn;
@@ -68,7 +95,7 @@ public class GenOverlap implements UCD_Types {
             byte decompType = ucd.getDecompositionType(cp);
             if (decompType >= UCD.COMPATIBILITY) {
                 String decomp = nfkd.normalize(cp);
-                CEList celist = getCEList(cp, decomp, decompType);
+                CEList celist = getCEList(cp, decomp, true, decompType);
                 addString(decomp, celist);
                 System.out.println("Adding: " + ucd.getCodeAndName(cp) + "\t" + celist);
             }
@@ -182,16 +209,22 @@ public class GenOverlap implements UCD_Types {
     }
   
     static private CEList getCEList(String s) {
-        int len = collator.getCEs(s, true, ces);
+        return getCEList(s, true);
+    }
+    
+    static private CEList getCEList(String s, boolean decomp) {
+        int len = collator.getCEs(s, decomp, ces);
         return new CEList(ces, 0, len);
     }
   
-    static private CEList getCEList(int originalChar, String s, byte type) {
-        int len = collator.getCEs(s, true, ces);
-        for (int i = 0; i < len; ++i) {
-            ces[i] = UCA.makeKey(UCA.getPrimary(ces[i]), 
-                UCA.getSecondary(ces[i]),
-                CEList.remap(originalChar, type, UCA.getTertiary(ces[i])));
+    static private CEList getCEList(int originalChar, String s, boolean decomp, byte type) {
+        int len = collator.getCEs(s, decomp, ces);
+        if (decomp) {
+            for (int i = 0; i < len; ++i) {
+                ces[i] = UCA.makeKey(UCA.getPrimary(ces[i]), 
+                    UCA.getSecondary(ces[i]),
+                    CEList.remap(originalChar, type, UCA.getTertiary(ces[i])));
+            }
         }
         return new CEList(ces, 0, len);
     }
@@ -290,7 +323,7 @@ public class GenOverlap implements UCD_Types {
     }
     
     public static void generateRevision (UCA collatorIn) throws Exception {
-        generateRevision(collatorIn, false);
+        //generateRevision(collatorIn, false);
         generateRevision(collatorIn, true);
     }
         
@@ -336,7 +369,7 @@ public class GenOverlap implements UCD_Types {
             int cp;
             for (int i = 0; i < str.length(); i += UTF16.getCharCount(cp)) {
                 cp = UTF16.charAt(str, i);
-                if (0xFF67 <= cp && cp <= 0xFF6F) {
+                if (0xFF3F == cp) {
                     System.out.println("debug");
                 }
                 boolean mashLast = false;
@@ -351,7 +384,7 @@ public class GenOverlap implements UCD_Types {
                             int s = UCA.getSecondary(ces[j]);
                             boolean needsFix = (s != 0x20 && p != 0);
                             if (needsFix) ++len;
-                            int t = (doMax && len > 1 && j == len-1 ? 0x1F : CEList.remap(cp, type, UCA.getTertiary(ces[j])));
+                            int t = (doMax && j > 0 ? 0x1F : CEList.remap(cp, type, UCA.getTertiary(ces[j])));
                             if (needsFix) {
                                 ces[j++] = UCA.makeKey(p, 0x20, t);             // Set Extra
                                 System.arraycopy(ces, j, ces, j+1, len - j);    // Insert HOLE!
@@ -413,7 +446,7 @@ public class GenOverlap implements UCD_Types {
         newKeys.removeAll(joint);
         oldKeys.removeAll(joint);
         
-        PrintWriter log = Utility.openPrintWriter("UCA-old-vs-new" + (doMax ? "-MAX.txt" : ".txt"));
+        PrintWriter log = Utility.openPrintWriter("UCA-old-vs-new" + (doMax ? "-MAX.txt" : ".txt"), false);
         Iterator it = list.iterator();
         int last = -1;
         while (it.hasNext()) {
@@ -657,4 +690,51 @@ public class GenOverlap implements UCD_Types {
             + "</td><td align='right'>" + nf.format(sd)
             + "</td></tr>");            
     }
+    
+    public static void listCyrillic(UCA collatorIn) throws IOException {
+        PrintWriter log = Utility.openPrintWriter("ListCyrillic.txt", false);
+        Set set = new TreeSet(collatorIn);
+        Set set2 = new TreeSet(collatorIn);
+        ucd = UCD.make();
+        
+        nfd = new Normalizer(Normalizer.NFD);
+        
+        for (char i = 0; i < 0xFFFF; ++i) {
+            Utility.dot(i);
+            if (!ucd.isRepresented(i)) continue;
+            if (ucd.getScript(i) != CYRILLIC_SCRIPT) continue;
+            
+            String decomp = nfd.normalize(String.valueOf(i));
+            String oldDecomp = decomp;
+            for (int j = 0; j < decomp.length(); ++j) {
+                if (ucd.getCategory(decomp.charAt(j)) == Mn) {
+                    decomp = decomp.substring(0,j) + decomp.substring(j+1);
+                }
+            }
+            if (decomp.length() == 0) continue;
+            
+            set.add(decomp);
+            if (!decomp.equals(oldDecomp)) set2.add(oldDecomp);
+        }
+        
+        Iterator it = set.iterator();
+        while (it.hasNext()) {
+            String s = (String) it.next();
+            String name = ucd.getName(s.charAt(0));
+            Utility.replace(name, "CYRILLIC ", "");
+            log.println("# " + s + " <> XXX ; # " + name);
+        }
+ 
+        it = set2.iterator();
+        while (it.hasNext()) {
+            String s = (String) it.next();
+            String name = ucd.getName(s.charAt(0));
+            Utility.replace(name, "CYRILLIC ", "");
+            log.println("### " + s + " <> XXX ; # " + name);
+        }
+        
+        log.close();
+    }
+    
+    
 }

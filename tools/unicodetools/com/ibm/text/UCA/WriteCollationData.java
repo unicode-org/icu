@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2001/09/19 23:32:21 $ 
-* $Revision: 1.4 $
+* $Date: 2001/10/25 20:35:41 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -63,9 +63,13 @@ public class WriteCollationData implements UCD_Types {
             String arg = args[i];
             if      (arg.equalsIgnoreCase("WriteRulesWithNames")) writeRules(WITH_NAMES);
             else if (arg.equalsIgnoreCase("GenOverlap")) GenOverlap.test(collator);
+            else if (arg.equalsIgnoreCase("validateUCA")) GenOverlap.validateUCA(collator);
+            else if (arg.equalsIgnoreCase("writeNonspacingDifference")) writeNonspacingDifference();
+            
             else if (arg.equalsIgnoreCase("WriteCharts")) WriteCharts.test(collator);
             else if (arg.equalsIgnoreCase("CheckHash")) GenOverlap.checkHash(collator);
             else if (arg.equalsIgnoreCase("generateRevision")) GenOverlap.generateRevision(collator);
+            else if (arg.equalsIgnoreCase("listCyrillic")) GenOverlap.listCyrillic(collator);
             
             else if (arg.equalsIgnoreCase("WriteRules")) writeRules(WITHOUT_NAMES);
             else if (arg.equalsIgnoreCase("WriteRulesXML")) writeRules(IN_XML);
@@ -746,6 +750,47 @@ public class WriteCollationData implements UCD_Types {
             //}
         }
         return len;
+    }
+    
+    static void writeNonspacingDifference() throws IOException {
+        PrintWriter diLog = new PrintWriter(
+            new BufferedWriter(
+                new OutputStreamWriter(
+                    new FileOutputStream(GEN_DIR + "UCA_Nonspacing.txt"),
+                    "UTF8"),
+                32*1024));
+        diLog.write('\uFEFF');
+
+        Normalizer nfd = new Normalizer(Normalizer.NFD);
+        
+        Set sorted = new TreeSet();
+        
+        for (int i = 0; i < 0x10FFFF; ++i) {
+            Utility.dot(i);
+            if (!ucd.isRepresented(i)) continue;
+            byte cat = ucd.getCategory(i);
+            boolean isNonSpacing = cat == Mn || cat == Me;
+            CEList celist = collator.getCEList(UTF32.valueOf32(i), true);
+            boolean isPrimaryIgnorable = true;
+            for (int j = 0; j < celist.length(); ++j) {
+                int ce = celist.at(j);
+                int primary = collator.getPrimary(ce);
+                if (primary != 0) {
+                    isPrimaryIgnorable = false;
+                    break;
+                }
+            }
+            
+            if (isNonSpacing != isPrimaryIgnorable) {
+                sorted.add(ucd.getCategoryID(i)
+                    + "\t" + celist
+                    + "\t" + ucd.getCodeAndName(i));
+            }
+        }
+        
+        Utility.print(diLog, sorted, "\r\n");
+        
+        diLog.close();
     }
     
     static void writeContractions() throws IOException {

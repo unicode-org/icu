@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA.java,v $ 
-* $Date: 2001/09/19 23:32:21 $ 
-* $Revision: 1.4 $
+* $Date: 2001/10/25 20:35:41 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -61,9 +61,13 @@ This is because of shared
 characters between scripts with different directions, like French with Arabic or Greek.
 */
 
-final public class UCA {
+final public class UCA implements Comparator {
     public static final String copyright = 
       "Copyright (C) 2000, IBM Corp. and others. All Rights Reserved.";
+      
+    public int compare(Object a, Object b) {
+        return getSortKey((String) a).compareTo(getSortKey((String) b));
+    }
 
     /**
      * Version of the UCA tables to use
