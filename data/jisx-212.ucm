@@ -73,7 +73,7 @@
 #	   LATIN CAPITAL LETTER	D WITH STROKE.
 #
 #
-<code_set_name>		      "JISX212"
+<code_set_name>		      "JISX-212"
 <char_name_mask>	      "AXXXX"
 <mb_cur_max>		      1
 <mb_cur_min>		      1
