@@ -157,10 +157,6 @@ main(int argc, char* argv[]) {
     sourceTOC=options[8].doesOccur;
 
     maxSize=(uint32_t)uprv_strtoul(argv[1], NULL, 0);
-    if(maxSize==0 && !sourceTOC) {
-        fprintf(stderr, "gencmn: maxSize %s not valid\n", argv[1]);
-        exit(U_ILLEGAL_ARGUMENT_ERROR);
-    }
 
     if(argc==2) {
         in=T_FileStream_stdin();
@@ -189,6 +185,14 @@ main(int argc, char* argv[]) {
             }
             ++s;
         }
+
+        /* check for comment */
+
+	if (*line == '#') {
+            continue;
+        }
+
+        /* add the file */
 
         addFile(getLongPathname(line), sourceTOC);
     }
@@ -418,7 +422,7 @@ addFile(const char *filename, UBool sourceTOC) {
         T_FileStream_close(file);
 
         /* do not add files that are longer than maxSize */
-        if(length>maxSize) {
+        if(maxSize && length>maxSize) {
             return;
         }
         files[fileCount].fileSize=length;
