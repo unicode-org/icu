@@ -103,6 +103,9 @@ icu4c/source/extra/uconv/pkgdata.inc
 icu4c/source/extra/uconv/pkgdatain.txt
 icu4c/source/extra/uconv/uconv
 icu4c/source/extra/uconv/uconv.1
+icu4c/source/extra/uconv/uconv.ncb
+icu4c/source/extra/uconv/uconv.opt
+icu4c/source/extra/uconv/uconv.plg
 icu4c/source/extra/uconv/uconvmsg
 icu4c/source/extra/ustdio/*.d
 icu4c/source/extra/ustdio/Debug
