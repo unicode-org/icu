@@ -21,15 +21,9 @@
 #include "nfrs.h"
 #include "nfrule.h"
 #include "llong.h"
-#include "float.h"
+#include <float.h>
 
 U_NAMESPACE_BEGIN
-
-
-//static double round(double n)
-//{
-//    return floor(n + .5);
-//}
 
 class NFSubstitution {
     int32_t pos;
@@ -219,7 +213,7 @@ public:
     
     llong transformNumber(llong number) const { return number; }
     double transformNumber(double number) const { return number; }
-    double composeRuleValue(double newRuleValue, double oldRuleValue) const { return newRuleValue; }
+    double composeRuleValue(double newRuleValue, double /*oldRuleValue*/) const { return newRuleValue; }
     double calcUpperBound(double oldUpperBound) const { return oldUpperBound; }
     UChar tokenChar() const { return (UChar)0x003d; } // '='
 private:
@@ -261,11 +255,11 @@ public:
         return uprv_floor(number / divisor);
     }
     
-    double composeRuleValue(double newRuleValue, double oldRuleValue) const {
+    double composeRuleValue(double newRuleValue, double /*oldRuleValue*/) const {
         return newRuleValue * divisor;
     }
     
-    double calcUpperBound(double oldUpperBound) const { return divisor; }
+    double calcUpperBound(double /*oldUpperBound*/) const { return divisor; }
     
     UChar tokenChar() const { return (UChar)0x003c; } // '<'
 private:
@@ -313,7 +307,7 @@ public:
         return oldRuleValue - uprv_fmod(oldRuleValue, divisor) + newRuleValue;
     }
     
-    double calcUpperBound(double oldUpperBound) const { return divisor; }
+    double calcUpperBound(double /*oldUpperBound*/) const { return divisor; }
     
     UBool isModulusSubstitution() const { return TRUE; }
     
@@ -338,7 +332,7 @@ public:
     llong transformNumber(llong number) const { return number; }
     double transformNumber(double number) const { return uprv_floor(number); }
     double composeRuleValue(double newRuleValue, double oldRuleValue) const { return newRuleValue + oldRuleValue; }
-    double calcUpperBound(double oldUpperBound) const { return DBL_MAX; }
+    double calcUpperBound(double /*oldUpperBound*/) const { return DBL_MAX; }
     UChar tokenChar() const { return (UChar)0x003c; } // '<'
 private:
     static const char fgClassID;
@@ -362,8 +356,8 @@ public:
     UBool operator==(const NFSubstitution& rhs) const;
     
     void doSubstitution(double number, UnicodeString& toInsertInto, int32_t pos) const;
-    void doSubstitution(llong number, UnicodeString& toInsertInto, int32_t _pos) const {}
-    llong transformNumber(llong number) const { return llong(0,0); }
+    void doSubstitution(llong /*number*/, UnicodeString& /*toInsertInto*/, int32_t /*_pos*/) const {}
+    llong transformNumber(llong /*number*/) const { return llong(0,0); }
     double transformNumber(double number) const { return number - uprv_floor(number); }
     
     UBool doParse(const UnicodeString& text,
@@ -374,7 +368,7 @@ public:
         Formattable& result) const;
     
     double composeRuleValue(double newRuleValue, double oldRuleValue) const { return newRuleValue + oldRuleValue; }
-    double calcUpperBound(double oldUpperBound) const { return 0; }
+    double calcUpperBound(double /*oldUpperBound*/) const { return 0.0; }
     UChar tokenChar() const { return (UChar)0x003e; } // '>'
 private:
     static const char fgClassID;
@@ -395,8 +389,8 @@ public:
     
     llong transformNumber(llong number) const { return llong_abs(number); }
     double transformNumber(double number) const { return uprv_fabs(number); }
-    double composeRuleValue(double newRuleValue, double oldRuleValue) const { return -newRuleValue; }
-    double calcUpperBound(double oldUpperBound) const { return DBL_MAX; }
+    double composeRuleValue(double newRuleValue, double /*oldRuleValue*/) const { return -newRuleValue; }
+    double calcUpperBound(double /*oldUpperBound*/) const { return DBL_MAX; }
     UChar tokenChar() const { return (UChar)0x003e; } // '>'
 private:
     static const char fgClassID;
@@ -439,7 +433,7 @@ public:
         return NFSubstitution::doParse(text, parsePosition, baseValue, upperBound, FALSE, result);
     }
     double composeRuleValue(double newRuleValue, double oldRuleValue) const { return newRuleValue / oldRuleValue; }
-    double calcUpperBound(double oldUpperBound) const { return denominator; }
+    double calcUpperBound(double /*oldUpperBound*/) const { return denominator; }
     UChar tokenChar() const { return (UChar)0x003c; } // '<'
 private:
     static const char fgClassID;
@@ -458,20 +452,20 @@ public:
         UErrorCode& status)
         : NFSubstitution(_pos, _ruleSet, formatter, description, status) {}
     
-    void toString(UnicodeString& result) const {}
-    void doSubstitution(double number, UnicodeString& toInsertInto, int32_t _pos) const {}
-    void doSubstitution(llong number, UnicodeString& toInsertInto, int32_t _pos) const {}
-    llong transformNumber(llong number) const { return llong(0,0); }
-    double transformNumber(double number) const { return 0; }
-    UBool doParse(const UnicodeString& text, 
-                ParsePosition& parsePosition, 
+    void toString(UnicodeString& /*result*/) const {}
+    void doSubstitution(double /*number*/, UnicodeString& /*toInsertInto*/, int32_t /*_pos*/) const {}
+    void doSubstitution(llong /*number*/, UnicodeString& /*toInsertInto*/, int32_t /*_pos*/) const {}
+    llong transformNumber(llong /*number*/) const { return llong(0,0); }
+    double transformNumber(double /*number*/) const { return 0; }
+    UBool doParse(const UnicodeString& /*text*/,
+                ParsePosition& /*parsePosition*/, 
                 double baseValue,
-                double upperBound, 
+                double /*upperBound*/,
                 UBool lenientParse,
                 Formattable& result) const
             { result.setDouble(baseValue); return TRUE; }
-    double composeRuleValue(double newRuleValue, double oldRuleValue) const { return 0; } // never called
-    double calcUpperBound(double oldUpperBound) const { return 0; } // never called
+    double composeRuleValue(double /*newRuleValue*/, double /*oldRuleValue*/) const { return 0.0; } // never called
+    double calcUpperBound(double /*oldUpperBound*/) const { return 0; } // never called
     UBool isNullSubstitution() const { return TRUE; }
     UChar tokenChar() const { return (UChar)0x0020; } // ' ' never called
 private:

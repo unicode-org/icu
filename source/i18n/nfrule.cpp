@@ -542,6 +542,7 @@ NFRule::operator==(const NFRule& rhs) const
         && *sub2 == *rhs.sub2;
 }
 
+/*
 static void
 util_append_llong(UnicodeString& result, const llong& value) 
 {
@@ -562,6 +563,7 @@ util_append_llong(UnicodeString& result, const llong& value)
         }
     }
 }
+*/
 
 /**
 * Returns a textual representation of the rule.  This won't
