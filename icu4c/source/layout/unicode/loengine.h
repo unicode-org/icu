@@ -47,6 +47,7 @@ U_NAMESPACE_BEGIN
  *
  * @obsolete ICU 3.0. Use LayoutEngine.h instead since this API will be removed in that release.
  */
+#ifndef U_HIDE_OBSOLETE_API
 class U_LAYOUT_API ICULayoutEngine : public UObject {
 private:
     /**
@@ -359,6 +360,7 @@ inline ICULayoutEngine *ICULayoutEngine::createInstance(const LEFontInstance *fo
 
     return new ICULayoutEngine(engine);
 }
+#endif // U_HIDE_OBSOLETE_API
 
 U_NAMESPACE_END
 #endif
