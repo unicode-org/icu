@@ -11,9 +11,7 @@
 #define UNICODESET_H
 
 #include "unicode/unifilt.h"
-#include "unicode/utypes.h"
 #include "unicode/unistr.h"
-#include "unicode/uchar.h"
 #include "unicode/uset.h"
 
 U_NAMESPACE_BEGIN
