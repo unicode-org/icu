@@ -148,7 +148,13 @@ public:
     }
     virtual Format* clone() const 
     { return NULL; }
+
     virtual UnicodeString& format(int32_t, 
+                UnicodeString& foo, 
+                FieldPosition&) const
+    { return foo.remove(); }
+
+    virtual UnicodeString& format(int64_t, 
                 UnicodeString& foo, 
                 FieldPosition&) const
     { return foo.remove(); }
