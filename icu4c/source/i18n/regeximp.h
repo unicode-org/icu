@@ -99,12 +99,15 @@ enum {
                                //   capture group variables in the state stack frame.
      URX_STO_INP_LOC   = 35,   // Store the input location.  Operand is location
                                //   within the matcher data (not stack).
-     URX_JMPX          = 36    // Conditional JMP.
+     URX_JMPX          = 36,   // Conditional JMP.
                                //   First Operand:  JMP target location.
                                //   Second Operand:  Data location containing an 
                                //     input position.  If current input position ==
                                //     saved input position, FAIL rather than taking
                                //     the JMP.
+    URX_END_CAPTURE_N  = 37    // End Capture when cg contains nested groups.
+                               //   first operand:  Capture group being closed.
+                               //   second operand: Last nested capture group.
 };
 
 // Keep this list of opcode names in sync with the above enum
@@ -146,7 +149,8 @@ enum {
         "LD_SP",               \
         "BACKREF",             \
         "STO_INP_LOC",         \
-        "JMPX"
+        "JMPX",                \
+        "END_CAPTURE_N"
 
 //
 //  Convenience macros for assembling and disassembling a compiled operation.

@@ -19,6 +19,8 @@
 #include "regextst.h"
 #include "uvector.h"
 #include "stdlib.h"
+#include "charstr.h"
+#include "util.h"
 
 
 //---------------------------------------------------------------------------
@@ -1513,15 +1515,27 @@ void RegexTest::PerlTests() {
     RegexMatcher *bangMat = bangPat->matcher("", status);
     
     //
-    // Regex to find ${nulnul}.  Perl doesn't put \u0000\u0000 into patterns.
+    // ${nulnul} and its replacement string.
     //
-    RegexPattern *nulnulPat = RegexPattern::compile("\\$\\{nulnul\\}", 0, pe, status);
-    RegexMatcher *nulnulMat = nulnulPat->matcher("", status);
+    UnicodeString nulnulSrc("${nulnul}");
+    UnicodeString nulnul("\\u0000\\u0000");
+    nulnul = nulnul.unescape();
+
     //
     // Regex to find ${ffff}.  Perl doesn't put \uffff into patterns.
     //
-    RegexPattern *ffffPat = RegexPattern::compile("\\$\\{ffff\\}", 0, pe, status);
-    RegexMatcher *ffffMat = ffffPat->matcher("", status);
+    UnicodeString ffffSrc("${ffff}");
+    UnicodeString ffff("\\uffff");
+    ffff = ffff.unescape();
+
+    //  regexp for $-[0], $+[2], etc.
+    RegexPattern *groupsPat = RegexPattern::compile("\\$([+\\-])\\[(\\d+)\\]", 0, pe, status);
+    RegexMatcher *groupsMat = groupsPat->matcher("", status);
+    
+    //  regexp for $0, $1, $2, etc.
+    RegexPattern *cgPat = RegexPattern::compile("\\$(\\d+)", 0, pe, status);
+    RegexMatcher *cgMat = cgPat->matcher("", status);
+
 
     int32_t  lineNum = 0;
     int32_t  skippedUnimplementedCount = 0;
@@ -1536,10 +1550,8 @@ void RegexTest::PerlTests() {
         UnicodeString pattern  = flagMat->group(2, status);
         bangMat->reset(pattern);
         pattern = bangMat->replaceAll("!", status);
-        nulnulMat->reset(pattern);
-        pattern = nulnulMat->replaceAll("\\u0000\\u0000", status);
-        ffffMat->reset(pattern);
-        pattern = ffffMat->replaceAll("\\uffff", status);
+        pattern.findAndReplace(nulnulSrc, "\\u0000\\u0000");
+        pattern.findAndReplace(ffffSrc, ffff);
         UnicodeString flagStr = flagMat->group(3, status);
         // printf("pattern = %s\n", cstar(pattern));
         // printf("   flags = %s\n", cstar(flags));
@@ -1606,10 +1618,9 @@ void RegexTest::PerlTests() {
         // replace the Perl variables that appear in some of the
         //   match data strings.  
         //
-        nulnulMat->reset(fields[1]);
-        UnicodeString matchString = nulnulMat->replaceAll("\\u0000\\u0000", status);
-        ffffMat->reset(matchString);
-        matchString = ffffMat->replaceAll("\\uffff", status);
+        UnicodeString matchString = fields[1];
+        matchString.findAndReplace(nulnulSrc, nulnul);
+        matchString.findAndReplace(ffffSrc,   ffff);
 
         // Replace any \n in the match string with an actual new-line char.
         //  Don't do full unescape, as this unescapes more than Perl does, which
@@ -1632,16 +1643,124 @@ void RegexTest::PerlTests() {
                 lineNum, expected?"":"no ", found?"":"no " );
         }
 
+        //
+        // Interpret the Perl expression from the fourth field of the data file.
+        //
+        UnicodeString resultString;
+        UnicodeString perlExpr = fields[3];
+
+        while (perlExpr.length() > 0) {
+            groupsMat->reset(perlExpr);
+            cgMat->reset(perlExpr);
+            if (perlExpr.startsWith("$&")) {
+                resultString.append(testMat->group(status));
+                perlExpr.remove(0, 2);
+            }
+
+            else if (groupsMat->lookingAt(status)) {
+                // $-[0]   $+[2]  etc.
+                UnicodeString digitString = groupsMat->group(2, status);
+                int32_t t = 0;
+                int32_t groupNum = ICU_Utility::parseNumber(digitString, t, 10);
+                UnicodeString plusOrMinus = groupsMat->group(1, status);
+                int32_t matchPosition;
+                if (plusOrMinus.compare("+") == 0) {
+                    matchPosition = testMat->end(groupNum, status);
+                } else {
+                    matchPosition = testMat->start(groupNum, status);
+                }
+                if (matchPosition != -1) {
+                    ICU_Utility::appendNumber(resultString, matchPosition);
+                }
+                perlExpr.remove(0, groupsMat->end(status));
+            }
+
+            else if (cgMat->lookingAt(status)) {
+                // $1, $2, $3, etc.
+                UnicodeString digitString = cgMat->group(1, status);
+                int32_t t = 0;
+                int32_t groupNum = ICU_Utility::parseNumber(digitString, t, 10);
+                if (U_SUCCESS(status)) {
+                    resultString.append(testMat->group(groupNum, status));
+                    status = U_ZERO_ERROR;
+                }
+                perlExpr.remove(0, cgMat->end(status));
+            }
+
+            else if (perlExpr.startsWith("@-")) {
+                int i;
+                for (i=0; i<=testMat->groupCount(); i++) {
+                    if (i>0) {
+                        resultString.append(" ");
+                    }
+                    ICU_Utility::appendNumber(resultString, testMat->start(i, status));
+                }
+                perlExpr.remove(0, 2);
+            }
+
+            else if (perlExpr.startsWith("@+")) {
+                int i;
+                for (i=0; i<=testMat->groupCount(); i++) {
+                    if (i>0) {
+                        resultString.append(" ");
+                    }
+                    ICU_Utility::appendNumber(resultString, testMat->end(i, status));
+                }
+                perlExpr.remove(0, 2);
+            }
+
+            else if (perlExpr.startsWith("\\")) {    // \Escape.  Take following char as a literal.
+                if (perlExpr.length() > 1) {
+                    perlExpr.remove(0, 1);  // Remove the '\', but only if not last char.
+                }
+                resultString.append(perlExpr.charAt(0));
+                perlExpr.remove(0, 1);
+            }
+
+            else  {
+                // Any characters from the perl expression that we don't explicitly
+                //  recognize before here are assumed to be literals and copied
+                //  as-is to the expected results.
+                resultString.append(perlExpr.charAt(0));
+                perlExpr.remove(0, 1);
+            }
+
+            if (U_FAILURE(status)) {
+                errln("Line %d: ICU Error \"%s\"", lineNum, u_errorName(status));
+                break;
+            }
+        }
         
+        //
+        // Expected Results Compare
+        //
+        UnicodeString expectedS(fields[4]);
+        expectedS.findAndReplace(nulnulSrc, nulnul);
+        expectedS.findAndReplace(ffffSrc,   ffff);
+
+        if (expectedS.compare(resultString) != 0) {
+            errln("Line %d: Incorrect perl expression results.  Expected \"%s\"; got \"%s\"",
+                lineNum, (const char *)CharString(expectedS),
+                (const char *)CharString(resultString));
+        }
 
         delete testMat;
         delete testPat;
+
     }
+    delete cgMat;
+    delete cgPat;
+    
+    delete groupsMat;
+    delete groupsPat;
+    
+    delete flagMat;
+    delete flagPat;
+    
+    delete fieldPat;
+    
 
     logln("%d tests skipped because of unimplemented regexp features.", skippedUnimplementedCount);
-
-
-
 
 }
 
