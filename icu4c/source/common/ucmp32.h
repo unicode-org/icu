@@ -75,7 +75,7 @@
  * @see                CompactIntArray
  * @see                CompactCharArray
  * @see                CompactStringArray
- * @version            $Revision: 1.7 $ 8/25/98
+ * @version            $Revision: 1.8 $ 8/25/98
  * @author             Helena Shih
  */
 /*====================================*/
@@ -141,11 +141,11 @@ U_CAPI  bool_t U_EXPORT2 ucmp32_isBogus(const CompactIntArray* array);
 /**
   * Set a new value for a Unicode character.
   * Set automatically expands the array if it is compacted.
-  * @param index the character to set the mapped value with
+  * @param character the character to set the mapped value with
   * @param value the new mapped value
   */
 U_CAPI  void U_EXPORT2 ucmp32_set(CompactIntArray *array,
-                  UChar idx,
+                  UChar character,
                   int32_t value);
 
  /**

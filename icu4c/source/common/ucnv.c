@@ -168,11 +168,11 @@ int32_t  ucnv_flushCache ()
 
 /*returns a single Name from the list, will return NULL if out of bounds
  */
-const char*  ucnv_getAvailableName (int32_t idx)
+const char*  ucnv_getAvailableName (int32_t n)
 {
-  if (0 <= idx && idx <= 0xffff) {
+  if (0 <= n && n <= 0xffff) {
     UErrorCode err = U_ZERO_ERROR;
-    const char *name = ucnv_io_getAvailableConverter((uint16_t)idx, &err);
+    const char *name = ucnv_io_getAvailableConverter((uint16_t)n, &err);
     if (U_SUCCESS(err)) {
       return name;
     }
@@ -194,8 +194,8 @@ ucnv_countAliases(const char *alias, UErrorCode *pErrorCode) {
 
 
 U_CAPI const char *
-ucnv_getAlias(const char *alias, uint16_t idx, UErrorCode *pErrorCode) {
-    return ucnv_io_getAlias(alias, idx, pErrorCode);
+ucnv_getAlias(const char *alias, uint16_t n, UErrorCode *pErrorCode) {
+    return ucnv_io_getAlias(alias, n, pErrorCode);
 }
 
 U_CAPI void
@@ -1092,18 +1092,18 @@ void ucnv_fixFileSeparator(const UConverter *cnv,
                            int32_t sourceLength)
 {
     int32_t i = 0;
-    int32_t idx = 0;
+    int32_t offset = 0;
     if ((source == NULL) || (cnv == NULL))
     {
         return;
     }
-    if ((idx = ucnv_getAmbiguousCCSID(cnv)) != -1)
+    if ((offset = ucnv_getAmbiguousCCSID(cnv)) != -1)
     {
         for (i = 0; i < sourceLength; i++) 
         {
-            if (source[i] == UCNV_AMBIGUOUSCONVERTERS[idx].mismapped)
+            if (source[i] == UCNV_AMBIGUOUSCONVERTERS[offset].mismapped)
             {
-                source[i] = UCNV_AMBIGUOUSCONVERTERS[idx].replacement;
+                source[i] = UCNV_AMBIGUOUSCONVERTERS[offset].replacement;
             }
         }
     }

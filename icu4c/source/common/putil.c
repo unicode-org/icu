@@ -687,10 +687,10 @@ uprv_timezone()
 }
 
 char* 
-uprv_tzname(int idx)
+uprv_tzname(int n)
 {
 #ifdef POSIX
-  return tzname[idx];
+  return tzname[n];
 #endif
 
 #if defined(OS400) || defined(XP_MAC)

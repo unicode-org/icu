@@ -419,12 +419,12 @@ uloc_getDisplayName(const char* localeID,
  * a locale name array.  Both this array and the pointers
  * it contains are owned by ICU and should not be deleted or written through
  * by the caller.  The locale name is terminated by a null pointer.
- * @param index the specific locale name index of the available locale list
+ * @param n the specific locale name index of the available locale list
  * @return a specified locale name of all available locales
  * @stable
  */
 U_CAPI const char* U_EXPORT2
-uloc_getAvailable(int32_t idx);
+uloc_getAvailable(int32_t n);
 
 /**
  * Gets the size of the all available locale list.
