@@ -245,148 +245,6 @@ pt {
         ZM { "Z\u00E2mbia" }
         ZW { "Zimb\u00E1bue" }
     }
-    DateTimePatterns { 
-        "HH'H'mm'm'ss's' z",
-        "HH:mm:ss z",
-        "HH:mm:ss",
-        "HH:mm",
-        "EEEE, d' de 'MMMM' de 'yyyy",
-        "d' de 'MMMM' de 'yyyy",
-        "d/MMM/yyyy",
-        "dd-MM-yyyy",
-        "{1} {0}",
-    }
-    DayAbbreviations { 
-        "dom",
-        "seg",
-        "ter",
-        "qua",
-        "qui",
-        "sex",
-        "s\u00E1b",
-    }
-    DayNames { 
-        "domingo",
-        "segunda-feira",
-        "ter\u00E7a-feira",
-        "quarta-feira",
-        "quinta-feira",
-        "sexta-feira",
-        "s\u00E1bado",
-    }
-    Languages { 
-        ar { "ar\u00E1bico" }
-        az { "azerbaij\u00E3o" }
-        ba { "basco" }
-        be { "bielo-russo" }
-        bg { "b\u00FAlgaro" }
-        bn { "bengala" }
-        ca { "catal\u00E3o" }
-        cs { "tcheco" }
-        da { "dinamarqu\u00EAs" }
-        de { "alem\u00E3o" }
-        el { "grego" }
-        en { "ingl\u00EAs" }
-        es { "espanhol" }
-        et { "estoniano" }
-        fa { "farsi" }
-        fi { "finland\u00EAs" }
-        fr { "franc\u00EAs" }
-        gu { "guzarate" }
-        //he { "hebreu" } // Old value
-        he { "hebraico" }
-        hr { "croata" }
-        hu { "h\u00FAngaro" }
-        id { "indon\u00E9sio" }
-        it { "italiano" }
-        ja { "japon\u00EAs" }
-        ka { "georgiano" }
-        km { "cmer" }
-        kn { "canad\u00E1" }
-        ko { "coreano" }
-        ku { "curdo" }
-        la { "latino" }
-        lt { "lituano" }
-        lv { "latviano" }
-        mk { "maced\u00F4nio" }
-        mr { "marati" }
-        my { "birman\u00EAs" }
-        nl { "holand\u00EAs" }
-        no { "noruegu\u00EAs" }
-        pl { "polon\u00EAs" }
-        pt { "portugu\u00EAs" }
-        ro { "romeno" }
-        ru { "russo" }
-        sk { "eslovaco" }
-        sl { "eslov\u00EAnio" }
-        sq { "alban\u00EAs" }
-        sr { "s\u00E9rvio" }
-        sv { "sueco" }
-        te { "t\u00E9lugu" }
-        th { "tailand\u00EAs" }
-        tk { "tagalo" }
-        tr { "turco" }
-        uk { "ucraniano" }
-        uz { "usbeque" }
-        zh { "chin\u00EAs" }
-    }
-    MonthAbbreviations { 
-        "jan",
-        "fev",
-        "mar",
-        "abr",
-        "mai",
-        "jun",
-        "jul",
-        "ago",
-        "set",
-        "out",
-        "nov",
-        "dez",
-    }
-    MonthNames { 
-        "janeiro",
-        "fevereiro",
-        "mar\u00E7o",
-        "abril",
-        "maio",
-        "junho",
-        "julho",
-        "agosto",
-        "setembro",
-        "outubro",
-        "novembro",
-        "dezembro",
-    }
-    NumberElements { 
-        ",",
-        ".",
-        ";",
-        "%",
-        "0",
-        "#",
-        "-",
-        "E",
-        "\u2030",
-        "\u221E",
-        "\uFFFD",
-        ",",
-        "+",
-    }
-    zoneStrings { 
-        {
-            "Africa/Casablanca",
-            "GMT",
-            "GMT",
-            "GMT",
-            "GMT",
-        }
-    }
-//    LocaleScript{
-//        "Latn",  // ISO 15924 Name 
-//    }
-    ExemplarCharacters { "[a-z \u00e3 \u00f5 \u00e7 \u00e1 \u00e9 \u00ed \u00f3 \u00fa \u00e0 \u00e2 \u00ea \u00f4 \u00fc \u00f2]" }
-
     // Currency display names
     Currencies {
         ADP { "ADP", "Peseta de Andorra" }
@@ -569,4 +427,178 @@ pt {
         ZMK { "ZMK", "Kwacha da Z\u00E2mbia" }
         ZWD { "ZWD", "D\u00F3lar do Zimbabue" }
     }
+    DateTimePatterns { 
+        "HH'H'mm'm'ss's' z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "EEEE, d' de 'MMMM' de 'yyyy",
+        "d' de 'MMMM' de 'yyyy",
+        "d/MMM/yyyy",
+        "dd-MM-yyyy",
+        "{1} {0}",
+    }
+    DayAbbreviations { 
+        "dom",
+        "seg",
+        "ter",
+        "qua",
+        "qui",
+        "sex",
+        "s\u00E1b",
+    }
+    DayNames { 
+        "domingo",
+        "segunda-feira",
+        "ter\u00E7a-feira",
+        "quarta-feira",
+        "quinta-feira",
+        "sexta-feira",
+        "s\u00E1bado",
+    }
+    ExemplarCharacters { "[a-z \u00e3 \u00f5 \u00e7 \u00e1 \u00e9 \u00ed \u00f3 \u00fa \u00e0 \u00e2 \u00ea \u00f4 \u00fc \u00f2]" }
+    Languages { 
+        ar { "ar\u00E1bico" }
+        az { "azerbaij\u00E3o" }
+        ba { "basco" }
+        be { "bielo-russo" }
+        bg { "b\u00FAlgaro" }
+        bn { "bengala" }
+        ca { "catal\u00E3o" }
+        cs { "tcheco" }
+        da { "dinamarqu\u00EAs" }
+        de { "alem\u00E3o" }
+        el { "grego" }
+        en { "ingl\u00EAs" }
+        es { "espanhol" }
+        et { "estoniano" }
+        fa { "farsi" }
+        fi { "finland\u00EAs" }
+        fr { "franc\u00EAs" }
+        gu { "guzarate" }
+        //he { "hebreu" } // Old value
+        he { "hebraico" }
+        hr { "croata" }
+        hu { "h\u00FAngaro" }
+        id { "indon\u00E9sio" }
+        it { "italiano" }
+        ja { "japon\u00EAs" }
+        ka { "georgiano" }
+        km { "cmer" }
+        kn { "canad\u00E1" }
+        ko { "coreano" }
+        ku { "curdo" }
+        la { "latino" }
+        lt { "lituano" }
+        lv { "latviano" }
+        mk { "maced\u00F4nio" }
+        mr { "marati" }
+        my { "birman\u00EAs" }
+        nl { "holand\u00EAs" }
+        no { "noruegu\u00EAs" }
+        pl { "polon\u00EAs" }
+        pt { "portugu\u00EAs" }
+        ro { "romeno" }
+        ru { "russo" }
+        sk { "eslovaco" }
+        sl { "eslov\u00EAnio" }
+        sq { "alban\u00EAs" }
+        sr { "s\u00E9rvio" }
+        sv { "sueco" }
+        te { "t\u00E9lugu" }
+        th { "tailand\u00EAs" }
+        tk { "tagalo" }
+        tr { "turco" }
+        uk { "ucraniano" }
+        uz { "usbeque" }
+        zh { "chin\u00EAs" }
+    }
+    MonthAbbreviations { 
+        "jan",
+        "fev",
+        "mar",
+        "abr",
+        "mai",
+        "jun",
+        "jul",
+        "ago",
+        "set",
+        "out",
+        "nov",
+        "dez",
+    }
+    MonthNames { 
+        "janeiro",
+        "fevereiro",
+        "mar\u00E7o",
+        "abril",
+        "maio",
+        "junho",
+        "julho",
+        "agosto",
+        "setembro",
+        "outubro",
+        "novembro",
+        "dezembro",
+    }
+    NumberElements { 
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+        ",",
+        "+",
+    }
+    SpelloutRules {
+        "-x: menos >>;\n"
+        "x.x: << ponto >>;\n"
+        "zero; um; dois; tr\u00EAs; qtro; cinco; seis; sete; oito; nove;\n"
+        "dez; onze; doze; treze; catorze; quinze; dezasseis;"
+        "    dezassete; dezoito; dezanove;\n"
+        "vinte; vinte e um; vinte e dois; vinte e tr\u00EAs; vete e quatro;"
+        "    vinte cinco; vinte seis; vinte sete; vinte e oito;"
+        "    vinte e nove;\n"
+        "30: trinta[ e >>];\n"
+        "40: cuarenta[ e >>];\n"
+        "50: cincuenta[ e >>];\n"
+        "60: sessenta[ e >>];\n"
+        "70: setenta[ e >>];\n"
+        "80: oitenta[ e >>];\n"
+        "90: noventa[ e >>];\n"
+        "100: cem;\n"
+        "200: doscentos[ >>];\n"
+        "300: tr\u00E8sentos[ >>];\n"
+        "400: cuatrocentos[ >>];\n"
+        "500: quinientos[ >>];\n"
+        "600: seiscentos[ >>];\n"
+        "700: setecentos[ >>];\n"
+        "800: oitocentos[ >>];\n"
+        "900: novecentos[ >>];\n"
+        "1000: mil[ >>];\n"
+        "2000: << mil[ >>];\n"
+        "1,000,000: um milh\u00E3o[ >>];\n"
+        "2,000,000: << milh\u00F5es[ >>];\n"
+        "1,000,000,000: um bilh\u00E3o[>>];\n"         
+        "2,000,000,000: << bilh\u00F5es[>>];\n"     
+        "1,000,000,000,000: =#,##0=;" 
+    }
+    zoneStrings { 
+        {
+            "Africa/Casablanca",
+            "GMT",
+            "GMT",
+            "GMT",
+            "GMT",
+        }
+    }
+//    LocaleScript{
+//        "Latn",  // ISO 15924 Name 
+//    }
 }

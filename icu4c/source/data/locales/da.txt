@@ -247,6 +247,10 @@ da {
         //ZM { "Zambia" }
         //ZW { "Zimbabwe" }
     }
+    // Currency display names
+    Currencies {
+        DKK { "kr", "DKK" }
+    }
     DateTimeElements:intvector { 
         2,
         4,
@@ -280,6 +284,11 @@ da {
         "fredag",
         "l\u00F8rdag",
     }
+    Eras { 
+        "f.Kr.",
+        "e.Kr.",
+    }
+    ExemplarCharacters { "[a-z \u00e6 \u00e5 \u00f8 \u00e1 \u00e9 \u00ed \u00f3 \u00fa \u00fd]" }
     Languages {
         ar { "Arabisk" }
         bg { "Bulgarsk" }
@@ -315,6 +324,7 @@ da {
         //zh_cn { "Kinesisk (Forkortet)" }
         //zh_tw { "Kinesisk (Uforkortet)" }
     }
+    localPatternChars { "GuMtkHmsSEDFwWahKzUe" }
     MonthAbbreviations { 
         "jan",
         "feb",
@@ -358,13 +368,34 @@ da {
         ",",
         "+",
     }
-    localPatternChars { "GuMtkHmsSEDFwWahKzUe" }
-    Eras { 
-        "f.Kr.",
-        "e.Kr.",
+//    LocaleScript{  
+//        "Latn",  // ISO 15924 Name 
+//    }
+    SpelloutRules {
+        "-x: minus >>;\n"
+        "nol; en; to; tre; fire; fem; seks; syv; otte; ni;\n"
+        "ti; elleve; tolv; tretten; fjorten; femten; seksten; sytten; atten; nitten;\n"
+        "20: [>>og]tvye;\n"
+        "30: [>>og]tredive;\n"
+        "40: [>>og]fyrre;\n"
+        "50: [>>og]femti;\n"
+        "60: [>>og]seksti;\n"
+        "70: [>>og]syvti;\n"
+        "80: [>>og]otteti;\n"
+        "90: [>>og]niti;\n"
+        "100: et hundrede[>>];\n"
+        "200: << hundrede[>>];\n"
+        "1000: et tusinde[ >>];\n"
+        "2000: << tusinde[ >>];\n"
+        "1,000,000: en million[ >>];\n"
+        "2,000,000: << million[ >>];\n"
+        "1,000,000,000: en milliarde[ >>];\n"
+        "2,000,000,000: << milliarde[ >>];\n"
+        "1,000,000,000,000: en billione[ >>];\n"
+        "2,000,000,000,000: << billione[ >>];\n"
+        "1,000,000,000,000,000: =#,##0=;"
     }
-
-    zoneStrings { 
+    zoneStrings {
         {
             "Europe/Copenhagen",
             "Central European Time",
@@ -373,14 +404,5 @@ da {
             "MET",
             "Copenhagen",
         }
-    }
-//    LocaleScript{  
-//        "Latn",  // ISO 15924 Name 
-//    }
-    ExemplarCharacters { "[a-z \u00e6 \u00e5 \u00f8 \u00e1 \u00e9 \u00ed \u00f3 \u00fa \u00fd]" }
-
-    // Currency display names
-    Currencies {
-        DKK { "kr", "DKK" }
     }
 }
