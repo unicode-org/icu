@@ -107,7 +107,7 @@ U_NAMESPACE_BEGIN
  * later with setIndexOnly().
  *
  * @author Laura Werner, Mark Davis, Markus Scherer
- * @draft ICU 2.0
+ * @stable
  */
 class U_COMMON_API Normalizer : public UObject {
 public:
@@ -130,7 +130,7 @@ public:
    *              will start at the beginning of the string.
    *
    * @param mode  The normalization mode.
-   * @draft ICU 2.0
+   * @stable
    */
   Normalizer(const UnicodeString& str, UNormalizationMode mode);
     
@@ -143,7 +143,7 @@ public:
    *
    * @param length Length of the string, or -1 if NUL-terminated.
    * @param mode  The normalization mode.
-   * @draft ICU 2.0
+   * @stable
    */
   Normalizer(const UChar* str, int32_t length, UNormalizationMode mode);
 
@@ -155,7 +155,7 @@ public:
    *              will start at the beginning of the string.
    *
    * @param mode  The normalization mode.
-   * @draft ICU 2.0
+   * @stable
    */
   Normalizer(const CharacterIterator& iter, UNormalizationMode mode);
 
@@ -192,7 +192,7 @@ public:
    * @param options   the optional features to be enabled (0 for no options)
    * @param result    The normalized string (on output).
    * @param status    The error code.
-   * @draft ICU 2.0
+   * @stable
    */
   static void normalize(const UnicodeString& source,
                         UNormalizationMode mode, int32_t options,
@@ -270,7 +270,7 @@ public:
    * @return UNORM_YES, UNORM_NO or UNORM_MAYBE
    *
    * @see isNormalized
-   * @draft ICU 2.0
+   * @stable
    */
   static inline UNormalizationCheckResult
   quickCheck(const UnicodeString &source, UNormalizationMode mode, UErrorCode &status);
@@ -410,7 +410,7 @@ public:
    * The getIndex() is not changed.
    *
    * @return the current normalized code point
-   * @draft ICU 2.0
+   * @stable
    */
   UChar32              current(void);
 
@@ -420,7 +420,7 @@ public:
    * (Post-increment semantics.)
    *
    * @return the first normalized code point
-   * @draft ICU 2.0
+   * @stable
    */
   UChar32              first(void);
 
@@ -430,7 +430,7 @@ public:
    * (Pre-decrement semantics.)
    *
    * @return the last normalized code point
-   * @draft ICU 2.0
+   * @stable
    */
   UChar32              last(void);
 
@@ -440,7 +440,7 @@ public:
    * If the end of the text has already been reached, {@link #DONE} is returned.
    *
    * @return the next normalized code point
-   * @draft ICU 2.0
+   * @stable
    */
   UChar32              next(void);
 
@@ -450,7 +450,7 @@ public:
    * If the beginning of the text has already been reached, {@link #DONE} is returned.
    *
    * @return the previous normalized code point
-   * @draft ICU 2.0
+   * @stable
    */
   UChar32              previous(void);
 
@@ -484,7 +484,7 @@ public:
    * specified here.
    *
    * @param index the desired index in the input text.
-   * @draft ICU 2.0
+   * @stable
    */
   void                 setIndexOnly(int32_t index);
 
@@ -598,7 +598,7 @@ public:
    *
    * @return the mode for this <code>Normalizer</code>
    * @see #setMode
-   * @draft ICU 2.0
+   * @stable
    */
   UNormalizationMode getUMode(void) const;
 

@@ -1199,7 +1199,7 @@ public:
    * @param offset a valid offset into one code point of the text
    * @return offset of the first code unit of the same code point
    * @see U16_SET_CP_START
-   * @draft ICU 2.0
+   * @stable
    */
   inline int32_t getChar32Start(int32_t offset) const;
 
@@ -1217,7 +1217,7 @@ public:
    * @param offset a valid offset after any code unit of a code point of the text
    * @return offset of the first code unit after the same code point
    * @see U16_SET_CP_LIMIT
-   * @draft ICU 2.0
+   * @stable
    */
   inline int32_t getChar32Limit(int32_t offset) const;
 
@@ -1329,7 +1329,7 @@ public:
    * @param delta (signed) code point count to move the index forward or backward
    *        in the string
    * @return the resulting code unit index
-   * @draft ICU 2.0
+   * @stable
    */
   int32_t moveIndex32(int32_t index, int32_t delta) const;
 
@@ -1374,7 +1374,7 @@ public:
    * @param destCapacity Number of UChars available at dest.
    * @param errorCode ICU error code.
    * @return length()
-   * @draft ICU 2.0
+   * @stable
    */
   int32_t
   extract(UChar *dest, int32_t destCapacity,
@@ -1493,7 +1493,7 @@ public:
    * @return the length of the output string, not counting the terminating NUL;
    *         if the length is greater than destCapacity, then the string will not fit
    *         and a buffer of the indicated length would need to be passed in
-   * @draft ICU 2.0
+   * @stable
    */
   int32_t extract(char *dest, int32_t destCapacity,
                   UConverter *cnv,
@@ -1519,7 +1519,7 @@ public:
    * @param start the index of the first code unit to check
    * @param length the number of UChar code units to check
    * @return the number of code points in the specified code units
-   * @draft ICU 2.0
+   * @stable
    */
   int32_t
   countChar32(int32_t start=0, int32_t length=INT32_MAX) const;
@@ -1553,7 +1553,7 @@ public:
   /**
    * Determine if this string is empty.
    * @return TRUE if this string contains 0 characters, FALSE otherwise.
-   * @draft ICU 2.0
+   * @stable
    */
   inline UBool isEmpty(void) const;
 
@@ -1564,7 +1564,7 @@ public:
    *
    * @return the number of UChars available in the internal buffer
    * @see getBuffer
-   * @draft ICU 2.0 (was private before)
+   * @stable
    */
   inline int32_t getCapacity(void) const;
 
@@ -1586,7 +1586,7 @@ public:
    *
    * @return TRUE if the string is valid, FALSE otherwise
    * @see setToBogus()
-   * @draft ICU 2.0 (was private before)
+   * @stable
    */
   inline UBool isBogus(void) const;
 
@@ -1803,7 +1803,7 @@ public:
    * \endcode
    *
    * @see isBogus()
-   * @draft ICU 2.0 (was private in earlier releases)
+   * @stable
    */
   void setToBogus();
 
@@ -2491,7 +2491,7 @@ public:
    *
    * @see releaseBuffer
    * @see getTerminatedBuffer()
-   * @draft ICU 2.0
+   * @stable
    */
   UChar *getBuffer(int32_t minCapacity);
 
@@ -2513,7 +2513,7 @@ public:
    *        the current capacity of the string
    *
    * @see getBuffer(int32_t minCapacity)
-   * @draft ICU 2.0
+   * @stable
    */
   void releaseBuffer(int32_t newLength=-1);
 
@@ -2545,7 +2545,7 @@ public:
    *
    * @see getBuffer(int32_t minCapacity)
    * @see getTerminatedBuffer()
-   * @draft ICU 2.0
+   * @stable
    */
   inline const UChar *getBuffer() const;
 
@@ -2730,7 +2730,7 @@ public:
    * @param cnv converter object (ucnv_resetToUnicode() will be called),
    *        can be NULL for the default converter
    * @param errorCode normal ICU error code
-   * @draft ICU 2.0
+   * @stable
    */
   UnicodeString(
         const char *src, int32_t srcLength,

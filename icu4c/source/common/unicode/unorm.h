@@ -134,7 +134,7 @@ typedef enum {
   UNORM_DEFAULT = UNORM_NFC, 
   /** Compatibility decomposition followed by canonical composition. @stable */
   UNORM_NFKC =5,
-  /** "Fast C or D" form. @draft ICU 2.0 */
+  /** "Fast C or D" form. @stable */
   UNORM_FCD = 6,
 
   /** One more than the highest normalization mode constant. @stable */

@@ -162,7 +162,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
  * The only difference with U_SHAPE_LETTERS_SHAPE is that Tashkeel letters
  * are always "shaped" into the isolated form instead of the medial form
  * (selecting code points from the Arabic Presentation Forms-B block).
- * @draft ICU 2.0
+ * @stable
  */
 #define U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED 0x18
 

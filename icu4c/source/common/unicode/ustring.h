@@ -88,7 +88,7 @@ u_strlen(const UChar *s);
  * @param length The number of UChar code units to be checked, or -1 to count all
  *               code points before the first NUL (U+0000).
  * @return The number of code points in the specified code units.
- * @draft ICU 2.0
+ * @stable
  */
 U_CAPI int32_t U_EXPORT2
 u_countChar32(const UChar *s, int32_t length);
@@ -593,7 +593,7 @@ u_strncasecmp(const UChar *s1, const UChar *s2, int32_t n, uint32_t options);
  *   - U_FOLD_CASE_EXCLUDE_SPECIAL_I
  *
  * @return A negative, zero, or positive integer indicating the comparison result.
- * @draft ICU 2.0
+ * @stable
  */
 U_CAPI int32_t U_EXPORT2
 u_memcasecmp(const UChar *s1, const UChar *s2, int32_t length, uint32_t options);
@@ -1122,7 +1122,7 @@ u_strFoldCase(UChar *dest, int32_t destCapacity,
  * @param pErrorCode    Must be a valid pointer to an error code value,
  *                      which must not indicate a failure before the function call.
  * @return The pointer to destination buffer.
- * @draft ICU 2.0
+ * @stable
  */
 U_CAPI wchar_t* U_EXPORT2
 u_strToWCS(wchar_t *dest, 
@@ -1148,7 +1148,7 @@ u_strToWCS(wchar_t *dest,
  * @param pErrorCode    Must be a valid pointer to an error code value,
  *                      which must not indicate a failure before the function call.
  * @return The pointer to destination buffer.
- * @draft ICU 2.0
+ * @stable
  */
 U_CAPI UChar* U_EXPORT2
 u_strFromWCS(UChar   *dest,
@@ -1174,7 +1174,7 @@ u_strFromWCS(UChar   *dest,
  * @param pErrorCode    Must be a valid pointer to an error code value,
  *                      which must not indicate a failure before the function call.
  * @return The pointer to destination buffer.
- * @draft ICU 2.0
+ * @stable
  */
 U_CAPI char* U_EXPORT2 
 u_strToUTF8(char *dest,           
@@ -1201,7 +1201,7 @@ u_strToUTF8(char *dest,
  * @param pErrorCode    Must be a valid pointer to an error code value,
  *                      which must not indicate a failure before the function call.
  * @return The pointer to destination buffer.
- * @draft ICU 2.0
+ * @stable
  */
 U_CAPI UChar* U_EXPORT2
 u_strFromUTF8(UChar *dest,             
@@ -1228,7 +1228,7 @@ u_strFromUTF8(UChar *dest,
  * @param pErrorCode    Must be a valid pointer to an error code value,
  *                      which must not indicate a failure before the function call.
  * @return The pointer to destination buffer.
- * @draft ICU 2.0
+ * @stable
  */
 U_CAPI UChar32* U_EXPORT2 
 u_strToUTF32(UChar32 *dest, 
@@ -1255,7 +1255,7 @@ u_strToUTF32(UChar32 *dest,
  * @param pErrorCode    Must be a valid pointer to an error code value,
  *                      which must not indicate a failure before the function call.
  * @return The pointer to destination buffer.
- * @draft ICU 2.0
+ * @stable
  */
 U_CAPI UChar* U_EXPORT2 
 u_strFromUTF32(UChar   *dest,

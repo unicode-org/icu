@@ -350,7 +350,7 @@ typedef enum UCharCategory
 
     /** Non-category for unassigned and non-character code points. @stable */
     U_UNASSIGNED              = 0,
-    /** Cn "Other, Not Assigned (no characters in [UnicodeData.txt] have this property)" (same as U_UNASSIGNED!) @draft ICU 2.0 */
+    /** Cn "Other, Not Assigned (no characters in [UnicodeData.txt] have this property)" (same as U_UNASSIGNED!) @stable */
     U_GENERAL_OTHER_TYPES     = 0,
     /** Lu @stable */
     U_UPPERCASE_LETTER        = 1,
@@ -541,244 +541,244 @@ typedef enum UCharDirection {
 /**
  * Constants for Unicode blocks, generated from Unicode Data file Blocks.txt
  * These are the same values as Unicode::EUnicodeScript
- * @draft ICU 2.0
+ * @stable
  */
 enum UBlockCode {
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_BASIC_LATIN = 1, /*[0000]*/ /*See note !!*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_LATIN_1_SUPPLEMENT=2, /*[0080]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_LATIN_EXTENDED_A =3, /*[0100]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_LATIN_EXTENDED_B =4, /*[0180]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_IPA_EXTENSIONS =5, /*[0250]*/
     
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_SPACING_MODIFIER_LETTERS =6, /*[02B0]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_COMBINING_DIACRITICAL_MARKS =7, /*[0300]*/
     
     /**
      * Unicode 3.2 renames this block to "Greek and Coptic".
-     * @draft ICU 2.0
+     * @stable
      */
     UBLOCK_GREEK =8, /*[0370]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_CYRILLIC =9, /*[0400]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_ARMENIAN =10, /*[0530]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_HEBREW =11, /*[0590]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_ARABIC =12, /*[0600]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_SYRIAC =13, /*[0700]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_THAANA =14, /*[0780]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_DEVANAGARI =15, /*[0900]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_BENGALI =16, /*[0980]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_GURMUKHI =17, /*[0A00]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_GUJARATI =18, /*[0A80]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_ORIYA =19, /*[0B00]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_TAMIL =20, /*[0B80]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_TELUGU =21, /*[0C00]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_KANNADA =22, /*[0C80]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_MALAYALAM =23, /*[0D00]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_SINHALA =24, /*[0D80]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_THAI =25, /*[0E00]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_LAO =26, /*[0E80]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_TIBETAN =27, /*[0F00]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_MYANMAR =28, /*[1000]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_GEORGIAN =29, /*[10A0]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_HANGUL_JAMO =30, /*[1100]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_ETHIOPIC =31, /*[1200]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_CHEROKEE =32, /*[13A0]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS =33, /*[1400]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_OGHAM =34, /*[1680]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_RUNIC =35, /*[16A0]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_KHMER =36, /*[1780]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_MONGOLIAN =37, /*[1800]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_LATIN_EXTENDED_ADDITIONAL =38, /*[1E00]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_GREEK_EXTENDED =39, /*[1F00]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_GENERAL_PUNCTUATION =40, /*[2000]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_SUPERSCRIPTS_AND_SUBSCRIPTS =41, /*[2070]*/
     
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_CURRENCY_SYMBOLS =42, /*[20A0]*/
     
     /**
      * Unicode 3.2 renames this block to "Combining Diacritical Marks for Symbols".
-     * @draft ICU 2.0
+     * @stable
      */
     UBLOCK_COMBINING_MARKS_FOR_SYMBOLS =43, /*[20D0]*/
     
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_LETTERLIKE_SYMBOLS =44, /*[2100]*/
     
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_NUMBER_FORMS =45, /*[2150]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_ARROWS =46, /*[2190]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_MATHEMATICAL_OPERATORS =47, /*[2200]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_MISCELLANEOUS_TECHNICAL =48, /*[2300]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_CONTROL_PICTURES =49, /*[2400]*/
  
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_OPTICAL_CHARACTER_RECOGNITION =50, /*[2440]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_ENCLOSED_ALPHANUMERICS =51, /*[2460]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_BOX_DRAWING =52, /*[2500]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_BLOCK_ELEMENTS =53, /*[2580]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_GEOMETRIC_SHAPES =54, /*[25A0]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_MISCELLANEOUS_SYMBOLS =55, /*[2600]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_DINGBATS =56, /*[2700]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_BRAILLE_PATTERNS =57, /*[2800]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_CJK_RADICALS_SUPPLEMENT =58, /*[2E80]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_KANGXI_RADICALS =59, /*[2F00]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_IDEOGRAPHIC_DESCRIPTION_CHARACTERS =60, /*[2FF0]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_CJK_SYMBOLS_AND_PUNCTUATION =61, /*[3000]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_HIRAGANA =62, /*[3040]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_KATAKANA =63, /*[30A0]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_BOPOMOFO =64, /*[3100]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_HANGUL_COMPATIBILITY_JAMO =65, /*[3130]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_KANBUN =66, /*[3190]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_BOPOMOFO_EXTENDED =67, /*[31A0]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_ENCLOSED_CJK_LETTERS_AND_MONTHS =68, /*[3200]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_CJK_COMPATIBILITY =69, /*[3300]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A =70, /*[3400]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_CJK_UNIFIED_IDEOGRAPHS =71, /*[4E00]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_YI_SYLLABLES =72, /*[A000]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_YI_RADICALS =73, /*[A490]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_HANGUL_SYLLABLES =74, /*[AC00]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_HIGH_SURROGATES =75, /*[D800]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_HIGH_PRIVATE_USE_SURROGATES =76, /*[DB80]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_LOW_SURROGATES =77, /*[DC00]*/
 
     /**
@@ -788,7 +788,7 @@ enum UBlockCode {
      * Unicode 3.2 renames the block for the BMP PUA to "Private Use Area" and
      * adds separate blocks for the supplementary PUAs.
      *
-     * @draft ICU 2.0
+     * @stable
      */
     UBLOCK_PRIVATE_USE = 78,
     /**
@@ -798,54 +798,54 @@ enum UBlockCode {
      * Unicode 3.2 renames the block for the BMP PUA to "Private Use Area" and
      * adds separate blocks for the supplementary PUAs.
      *
-     * @draft ICU 2.0
+     * @stable
      */
     UBLOCK_PRIVATE_USE_AREA =UBLOCK_PRIVATE_USE, /*[E000]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS =79, /*[F900]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_ALPHABETIC_PRESENTATION_FORMS =80, /*[FB00]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_ARABIC_PRESENTATION_FORMS_A =81, /*[FB50]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_COMBINING_HALF_MARKS =82, /*[FE20]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_CJK_COMPATIBILITY_FORMS =83, /*[FE30]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_SMALL_FORM_VARIANTS =84, /*[FE50]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_ARABIC_PRESENTATION_FORMS_B =85, /*[FE70]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_SPECIALS =86, /*[FFF0]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_HALFWIDTH_AND_FULLWIDTH_FORMS =87, /*[FF00]*/
     
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_OLD_ITALIC = 88  , /*[10300]*/
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_GOTHIC = 89 , /*[10330]*/
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_DESERET = 90 , /*[10400]*/
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_BYZANTINE_MUSICAL_SYMBOLS = 91 , /*[1D000]*/
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_MUSICAL_SYMBOLS = 92 , /*[1D100]*/
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_MATHEMATICAL_ALPHANUMERIC_SYMBOLS = 93  , /*[1D400]*/
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B  = 94 , /*[20000]*/
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT = 95 , /*[2F800]*/
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_TAGS = 96, /*[E0000]*/
 
     /* New blocks in Unicode 3.2 */
@@ -879,10 +879,10 @@ enum UBlockCode {
     /** @draft ICU 2.2 */
     UBLOCK_SUPPLEMENTARY_PRIVATE_USE_AREA_B = 110, /*[100000]*/
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_COUNT,
 
-    /** @draft ICU 2.0 */
+    /** @stable */
     UBLOCK_INVALID_CODE=-1
 
 #ifdef ICU_UCHAR_USE_DEPRECATES
@@ -1071,7 +1071,7 @@ enum UBlockCode {
 #endif /* ICU_UCHAR_USE_DEPRECATES */
 };
 
-/** @draft ICU 2.0 */
+/** @stable */
 typedef enum UBlockCode UBlockCode;
 
 /**
@@ -1904,7 +1904,7 @@ u_charDigitValue(UChar32 c);
  * @param ch The character to be tested
  * @return the Unicode allocation block that contains the character
  * @see #UBlockCode
- * @draft ICU 2.0
+ * @stable
  */
 U_CAPI UBlockCode U_EXPORT2
 ublock_getCode(UChar32    ch);
@@ -2424,7 +2424,7 @@ u_foldCase(UChar32 c, uint32_t options);
  * @see     u_forDigit
  * @see     u_charDigitValue
  * @see     u_isdigit
- * @draft ICU 2.0
+ * @stable
  */
 U_CAPI int32_t U_EXPORT2
 u_digit(UChar32 ch, int8_t radix);
@@ -2453,7 +2453,7 @@ u_digit(UChar32 ch, int8_t radix);
  * @see     u_digit
  * @see     u_charDigitValue
  * @see     u_isdigit
- * @draft ICU 2.0
+ * @stable
  */
 U_CAPI UChar32 U_EXPORT2
 u_forDigit(int32_t digit, int8_t radix);
