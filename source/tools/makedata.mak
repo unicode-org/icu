@@ -118,7 +118,7 @@ COL_FILES = $(GENCOL_SOURCE:.txt=.col)
 ALL : GODATA $(RB_FILES) $(CNV_FILES) $(COL_FILES) icudata.dll icudata.dat GOBACK
 	@echo All targets are up to date
 
-BRK_FILES = sent.brk char.brk line.brk word.brk line_th.brk word_th.brk
+BRK_FILES = $(ICUDATA)\sent.brk $(ICUDATA)\char.brk $(ICUDATA)\line.brk $(ICUDATA)\word.brk $(ICUDATA)\line_th.brk $(ICUDATA)\word_th.brk
 BRK_CSOURCES = $(BRK_FILES:.brk=_brk.c)
 
 CPP_SOURCES = $(C_CNV_FILES) unames_dat.c cnvalias_dat.c tz_dat.c $(BRK_CSOURCES)
