@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/translit/CaseIterator.java,v $
-* $Date: 2002/12/09 23:23:46 $
-* $Revision: 1.1 $
+* $Date: 2003/02/07 01:22:43 $
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -16,6 +16,7 @@ import java.util.*;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.Transliterator;
+import com.ibm.icu.text.UnicodeSet;
 
 /**
  * Incrementally returns the set of all strings that case-fold to the same value.
@@ -26,6 +27,7 @@ public class CaseIterator {
     private static final boolean DEBUG = true;
     static Transliterator toName = Transliterator.getInstance("[:^ascii:] Any-Name");
     static Transliterator toHex = Transliterator.getInstance("[:^ascii:] Any-Hex");
+    static Transliterator toHex2 = Transliterator.getInstance("[[^\u0021-\u007F]-[,]] Any-Hex");
     
     // global tables (could be precompiled)
     private static Map fromCaseFold = new HashMap();
@@ -39,6 +41,8 @@ public class CaseIterator {
     // to get around certain complications in the data.
     
     private static final boolean GENERATE = false;
+
+    private static final boolean DUMP = false;
     
     private static String[][] exceptionList = {
         // a\N{MODIFIER LETTER RIGHT HALF RING}
@@ -214,7 +218,7 @@ public class CaseIterator {
         
         // walk through all the characters, and at every case fold result,
         // put a set of all the characters that map to that result
-        
+
         boolean defaultmapping = true; // false for turkish
         for (int i = 0; i <= 0x10FFFF; ++i) {
             int cat = UCharacter.getType(i);
@@ -239,6 +243,39 @@ public class CaseIterator {
             toCaseFold.put(mapped, mapped); // add mapping to self
         }
         
+        // Emit the final data
+
+        if (DUMP) {
+            System.out.println("maxLength = " + maxLength);
+
+            System.out.println("\nfromCaseFold:");
+            Iterator it = fromCaseFold.keySet().iterator();
+            while (it.hasNext()) {
+                Object key = it.next();
+                System.out.print(" " + toHex2.transliterate((String)key) + ": ");
+                Set s = (Set) fromCaseFold.get(key);
+                Iterator it2 = s.iterator();
+                boolean first = true;
+                while (it2.hasNext()) {
+                    if (first) {
+                        first = false;
+                    } else {
+                        System.out.print(", ");
+                    }
+                    System.out.print(toHex2.transliterate((String)it2.next()));
+                }
+                System.out.println("");
+            }
+
+            System.out.println("\ntoCaseFold:");
+            it = toCaseFold.keySet().iterator();
+            while (it.hasNext()) {
+                String key = (String) it.next();
+                String value = (String) toCaseFold.get(key);
+                System.out.println(" " + toHex2.transliterate(key) + ": " + toHex2.transliterate(value));
+            }            
+        }
+        
         // Now convert all those sets into linear arrays
         // We can't do this in place in Java, so make a temporary target array
         
@@ -256,7 +293,7 @@ public class CaseIterator {
             fromCaseFold2.put(key, temp);
         }
         fromCaseFold = fromCaseFold2;
-        
+
         // We have processed everything, so the iterator will now work
         // The following is normally OFF. 
         // It is here to generate (under the GENERATE flag) the static exception list.
@@ -264,7 +301,7 @@ public class CaseIterator {
         // (easiest to do it that way)
             
         if (GENERATE) {
-            
+
             // first get small set of items that have multiple characters
             
             Set multichars = new TreeSet();
@@ -488,5 +525,37 @@ public class CaseIterator {
             }
             System.out.println("Total: " + count);
         }
+
+        // generate a list of all caseless characters -- characters whose
+        // case closure is themselves.
+
+        UnicodeSet caseless = new UnicodeSet();
+
+        for (int i = 0; i <= 0x10FFFF; ++i) {
+            String cp = UTF16.valueOf(i);
+            ci.reset(cp);
+            int count = 0;
+            String fold = null;
+            for (String temp = ci.next(); temp != null; temp = ci.next()) {
+                fold = temp;
+                if (++count > 1) break;
+            }
+            if (count==1 && fold.equals(cp)) {
+                caseless.add(i);
+            }
+        }
+
+        System.out.println("caseless = " + caseless.toPattern(true));
+
+        UnicodeSet not_lc = new UnicodeSet("[:^lc:]");
+        
+        UnicodeSet a = new UnicodeSet();
+        a.set(not_lc);
+        a.removeAll(caseless);
+        System.out.println("[:^lc:] - caseless = " + a.toPattern(true));
+
+        a.set(caseless);
+        a.removeAll(not_lc);
+        System.out.println("caseless - [:^lc:] = " + a.toPattern(true));
     }
 }
