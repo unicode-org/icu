@@ -249,14 +249,14 @@ U_CAPI int32_t U_EXPORT2
 ucol_primaryOrder (int32_t order) 
 {
   order &= UCOL_PRIMARYMASK;
-  return (order >> UCOL_PRIMARYMASK);
+  return (order >> UCOL_PRIMARYORDERSHIFT);
 }
 
 U_CAPI int32_t U_EXPORT2
 ucol_secondaryOrder (int32_t order) 
 {
   order &= UCOL_SECONDARYMASK;
-  return (order >> UCOL_SECONDARYMASK);
+  return (order >> UCOL_SECONDARYORDERSHIFT);
 }
 
 U_CAPI int32_t U_EXPORT2
