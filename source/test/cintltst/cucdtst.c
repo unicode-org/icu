@@ -1146,15 +1146,7 @@ static void TestUnicodeData()
     /* As a fallback, try to guess where the source data was located
      *    at the time ICU was built, and look there.
      */
-#if defined (U_TOPSRCDIR)
-    strcpy(backupPath, U_TOPSRCDIR  U_FILE_SEP_STRING "data");
-#else
-    strcpy(backupPath, __FILE__);
-    strrchr(backupPath, U_FILE_SEP_CHAR)[0] = 0; /* Remove the file name */
-    strrchr(backupPath, U_FILE_SEP_CHAR)[0] = 0; /* Previous directory */
-    strrchr(backupPath, U_FILE_SEP_CHAR)[0] = 0; /* Previous directory */
-    strcat(backupPath, U_FILE_SEP_STRING "data");
-#endif
+    strcpy(backupPath, ctest_dataSrcDir());
     strcat(backupPath, U_FILE_SEP_STRING);
     strcat(backupPath, "unidata" U_FILE_SEP_STRING "UnicodeData.txt");
 
