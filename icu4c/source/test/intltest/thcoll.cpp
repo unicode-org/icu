@@ -19,30 +19,19 @@
 #include "unicode/ustring.h"
 #include "cstring.h"
 #include "filestrm.h"
+#include "textfile.h"
 
 /**
  * The TestDictionary test expects a file of this name, with this
  * encoding, to be present in the directory $ICU/source/test/testdata.
  */
 //#define TEST_FILE           "th18057.txt"
-#define TEST_FILE           "riwords.txt"
-#define TEST_FILE_ENCODING  "UTF8"
 
 /**
  * This is the most failures we show in TestDictionary.  If this number
  * is < 0, we show all failures.
  */
 #define MAX_FAILURES_TO_SHOW -1
-
-#define CASE(id,test)                 \
-    case id:                          \
-        name = #test;                 \
-        if (exec) {                   \
-            logln(#test "---");       \
-            logln((UnicodeString)""); \
-            test();                   \
-        }                             \
-        break;
 
 CollationThaiTest::CollationThaiTest() {
     UErrorCode status = U_ZERO_ERROR;
@@ -69,40 +58,14 @@ void CollationThaiTest::runIndexedTest(int32_t index, UBool exec, const char* &n
     }
 
     switch (index) {
-        CASE(0,TestDictionary)
-        CASE(1,TestCornerCases)
-        CASE(2,TestNamesList)
-        CASE(3,TestInvalidThai)
-        CASE(4,TestReordering)
+        TESTCASE(0,TestDictionary);
+        TESTCASE(1,TestCornerCases);
+        TESTCASE(2,TestNamesList);
+        TESTCASE(3,TestInvalidThai);
+        TESTCASE(4,TestReordering);
         default: name = ""; break;
     }
 }
-
-/**
- * Read a line terminated by a single ^J or ^M, and convert it from
- * the TEST_FILE_ENCODING to Unicode.  ASSUMES FILE LINES ARE 127
- * characters long or less.  This is true for th18057.txt, which
- * has 80-char or shorter lines.  DOES NOT HANDLE ^M^J sequence.
- */
-static UBool readLine(FileStream *in, UnicodeString& line, const char* encoding) {
-    if (T_FileStream_eof(in)) {
-        return FALSE;
-    }
-    char buffer[1024];
-    char* p = buffer;
-    char* limit = p + sizeof(buffer) - 1; // Leave space for 0
-    while (p<limit) {
-        int c = T_FileStream_getc(in);
-        if (c < 0 || c == 0xD || c == 0xA) {
-            break;
-        }
-        *p++ = c;
-    }
-    *p = 0;
-    line = UnicodeString(buffer, encoding);
-    return TRUE;
-}
-
 
 /**
  * Read the external names list, and confirms that the collator 
@@ -115,28 +78,12 @@ void CollationThaiTest::TestNamesList(void) {
         return;
     }
  
-    // Read in a dictionary of Thai words
-    UErrorCode status = U_ZERO_ERROR;
-    char buffer[1024];
-    uprv_strcpy(buffer,IntlTest::loadTestData(status) );
-    char* index = 0;
-   
-    if (U_FAILURE(status)) {
-        errln("ERROR: could not open test data %s", u_errorName(status));
-	    return;
-    }
-    index=strrchr(buffer,(char)U_FILE_SEP_CHAR);
-
-    if((unsigned int)(index-buffer) != (strlen(buffer)-1)){
-            *(index+1)=0;
-    }
-    uprv_strcat(buffer,".."U_FILE_SEP_STRING);
-    uprv_strcat(buffer, "TestNames_Thai.txt");
-
-    FileStream *in = T_FileStream_open(buffer, "rb");
-    if (in == 0) {
-        logln((UnicodeString)"Could not find file: " + buffer +" will not do this test");
-        return;        
+    UErrorCode ec = U_ZERO_ERROR;
+    TextFile names("TestNames_Thai.txt", "UTF16LE", ec);
+    if (U_FAILURE(ec)) {
+        logln("Can't open TestNames_Thai.txt: %s; skipping test",
+              u_errorName(ec));
+        return;
     }
 
     //
@@ -144,16 +91,9 @@ void CollationThaiTest::TestNamesList(void) {
     // word.  They should be in sorted order.
     //
     UnicodeString lastWord, word;
-    int32_t line = 0;
     //int32_t failed = 0;
     int32_t wordCount = 0;
-    while (readLine(in, word, "UTF16LE")) {
-        line++;
-
-        // Skip comments and blank lines
-        if (word.charAt(0) == 0x23 || word.length() == 0) {
-            continue;
-        }
+    while (names.readLineSkippingComments(word, ec, FALSE) && U_SUCCESS(ec)) {
 
         // Show the first 8 words being compared, so we can see what's happening
         ++wordCount;
@@ -169,9 +109,9 @@ void CollationThaiTest::TestNamesList(void) {
         lastWord = word;
     }
 
+    assertSuccess("readLine", ec);
 
     logln((UnicodeString)"Words checked: " + wordCount);
-    T_FileStream_close(in);
 }
 
 /**
@@ -184,29 +124,13 @@ void CollationThaiTest::TestDictionary(void) {
         errln("Error: could not construct Thai collator");
         return;
     }
- 
-    // Read in a dictionary of Thai words
-    UErrorCode status = U_ZERO_ERROR;
-    char buffer[1024];
-    uprv_strcpy(buffer,IntlTest::loadTestData(status) );
-    char* index = 0;
-   
-    if (U_FAILURE(status)) {
-        errln("ERROR: could not open test data %s", u_errorName(status));
-	    return;
-    }
-    index=strrchr(buffer,(char)U_FILE_SEP_CHAR);
 
-    if((unsigned int)(index-buffer) != (strlen(buffer)-1)){
-            *(index+1)=0;
-    }
-    uprv_strcat(buffer,".."U_FILE_SEP_STRING);
-    uprv_strcat(buffer, TEST_FILE);
-
-    FileStream *in = T_FileStream_open(buffer, "rb");
-    if (in == 0) {
-        infoln((UnicodeString)"INFO: could not open test file " + buffer + ". Aborting test.");
-        return;        
+    UErrorCode ec = U_ZERO_ERROR;
+    TextFile riwords("riwords.txt", "UTF8", ec);
+    if (U_FAILURE(ec)) {
+        logln("Can't open riwords.txt: %s; skipping test",
+              u_errorName(ec));
+        return;
     }
 
     //
@@ -214,16 +138,9 @@ void CollationThaiTest::TestDictionary(void) {
     // word.  They should be in sorted order.
     //
     UnicodeString lastWord, word;
-    int32_t line = 0;
     int32_t failed = 0;
     int32_t wordCount = 0;
-    while (readLine(in, word, "UTF8")) {
-        line++;
-
-        // Skip comments and blank lines
-        if (word.charAt(0) == 0x23 || word.length() == 0) {
-            continue;
-        }
+    while (riwords.readLineSkippingComments(word, ec, FALSE) && U_SUCCESS(ec)) {
 
         // Show the first 8 words being compared, so we can see what's happening
         ++wordCount;
@@ -243,7 +160,7 @@ void CollationThaiTest::TestDictionary(void) {
                     UnicodeString str;
                     UnicodeString msg =
                         UnicodeString("--------------------------------------------\n")
-                        + line
+                        + riwords.getLineNumber()
                         + " compare(" + IntlTest::prettify(lastWord, str);
                     msg += UnicodeString(", ")
                         + IntlTest::prettify(word, str) + ") returned " + result
@@ -265,17 +182,18 @@ void CollationThaiTest::TestDictionary(void) {
         lastWord = word;
     }
 
+    assertSuccess("readLine", ec);
+
     if (failed != 0) {
         if (failed > MAX_FAILURES_TO_SHOW) {
             errln((UnicodeString)"Too many failures; only the first " +
                   MAX_FAILURES_TO_SHOW + " failures were shown");
         }
-        errln((UnicodeString)"Summary: " + failed + " of " + (line - 1) +
+        errln((UnicodeString)"Summary: " + failed + " of " + (riwords.getLineNumber() - 1) +
               " comparisons failed");
     }
 
     logln((UnicodeString)"Words checked: " + wordCount);
-    T_FileStream_close(in);
 }
 
 /**
