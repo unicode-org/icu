@@ -2487,7 +2487,7 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, uint32_t  seed, 
 
     // Verify that the character classes all have at least one member.
     for (i=0; i<numCharClasses; i++) {
-        UnicodeSet *s = (UnicodeSet *)chClasses->elementAti(i);
+        UnicodeSet *s = (UnicodeSet *)chClasses->elementAt(i);
         if (s == NULL || s->size() == 0) {
             errln("Character Class #%d is null or of zero size.", i);
             return;
@@ -2503,7 +2503,7 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, uint32_t  seed, 
         testText.truncate(0);
         for (i=0; i<TESTSTRINGLEN; i++) {
             int32_t  aClassNum = m_rand() % numCharClasses;
-            UnicodeSet *classSet = (UnicodeSet *)chClasses->elementAti(aClassNum);
+            UnicodeSet *classSet = (UnicodeSet *)chClasses->elementAt(aClassNum);
             int32_t   charIdx = m_rand() % classSet->size();
             UChar32   c = classSet->charAt(charIdx);
             assert(c >= 0);   // TODO:  deal with sets containing strings.
