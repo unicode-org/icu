@@ -68,5 +68,9 @@ public:
      * Test the functionality of allocating UnicodeStrings on the stack
      **/
     void TestStackAllocation(void);
+    /**
+     * Test the unescape() function.
+     */
+    void TestUnescape(void);
 };
 
