@@ -27,26 +27,11 @@
 //  02/10/98    damiba      Added test for compare(UnicodeString&, UnicodeString&, int32_t)
 //===============================================================================
 
-#ifndef COLL_H
 #include "unicode/coll.h"
-#endif
-
-#ifndef TBLCOLL_H
 #include "unicode/tblcoll.h"
-#endif
-
-#ifndef COLEITR_H
 #include "unicode/coleitr.h"
-#endif
-
-#ifndef SORTKEY_H
 #include "unicode/sortkey.h"
-#endif
-
-#ifndef _APICOLL
 #include "apicoll.h"
-#endif
-
 #include "unicode/chariter.h"
 #include "unicode/schriter.h"
 
@@ -261,62 +246,62 @@ CollationAPITest::TestProperty(/* char* par */)
 void 
 CollationAPITest::TestRuleBasedColl()
 {
-  RuleBasedCollator *col1, *col2, *col3, *col4;
-  UErrorCode status = U_ZERO_ERROR;
-    
-  UnicodeString ruleset1("&9 < a, A < b, B < c, C; ch, cH, Ch, CH < d, D, e, E");
-  UnicodeString ruleset2("&9 < a, A < b, B < c, C < d, D, e, E");
-    
-  col1 = new RuleBasedCollator(ruleset1, status);
-  if (U_FAILURE(status)) {
-    errln("RuleBased Collator creation failed.\n");
-    return;
-  }
-  else {
-    logln("PASS: RuleBased Collator creation passed\n");
-  }
-    
-  status = U_ZERO_ERROR;
-  col2 = new RuleBasedCollator(ruleset2, status);
-  if (U_FAILURE(status)) {
-    errln("RuleBased Collator creation failed.\n");
-    return;
-  }
-  else {
-    logln("PASS: RuleBased Collator creation passed\n");
-  }
-    
-  status = U_ZERO_ERROR;
-  col3 = (RuleBasedCollator *)Collator::createInstance(status);
-  if (U_FAILURE(status)) {
-    errln("Default Collator creation failed.: %s\n");
-    return;
-  }
-  else {
-    logln("PASS: Default Collator creation passed\n");
-  }
-    
-  UnicodeString rule1 = col1->getRules();
-  UnicodeString rule2 = col2->getRules();
-  UnicodeString rule3 = col3->getRules();
+    RuleBasedCollator *col1, *col2, *col3, *col4;
+    UErrorCode status = U_ZERO_ERROR;
 
-  doAssert(rule1 != rule2, "Default collator getRules failed");
-  doAssert(rule2 != rule3, "Default collator getRules failed");
-  doAssert(rule1 != rule3, "Default collator getRules failed");
-    
-  col4 = new RuleBasedCollator(rule2, status);
-  if (U_FAILURE(status)) {
-    errln("RuleBased Collator creation failed.\n");
-    return;
-  }
-  
-  UnicodeString rule4 = col4->getRules();
-  doAssert(rule2 == rule4, "Default collator getRules failed");
+    UnicodeString ruleset1("&9 < a, A < b, B < c, C; ch, cH, Ch, CH < d, D, e, E");
+    UnicodeString ruleset2("&9 < a, A < b, B < c, C < d, D, e, E");
 
-  delete col1;
-  delete col2;
-  delete col3;
-  delete col4;
+    col1 = new RuleBasedCollator(ruleset1, status);
+    if (U_FAILURE(status)) {
+        errln("RuleBased Collator creation failed.\n");
+        return;
+    }
+    else {
+        logln("PASS: RuleBased Collator creation passed\n");
+    }
+
+    status = U_ZERO_ERROR;
+    col2 = new RuleBasedCollator(ruleset2, status);
+    if (U_FAILURE(status)) {
+        errln("RuleBased Collator creation failed.\n");
+        return;
+    }
+    else {
+        logln("PASS: RuleBased Collator creation passed\n");
+    }
+
+    status = U_ZERO_ERROR;
+    col3 = (RuleBasedCollator *)Collator::createInstance(status);
+    if (U_FAILURE(status)) {
+        errln("Default Collator creation failed.: %s\n");
+        return;
+    }
+    else {
+        logln("PASS: Default Collator creation passed\n");
+    }
+
+    UnicodeString rule1 = col1->getRules();
+    UnicodeString rule2 = col2->getRules();
+    UnicodeString rule3 = col3->getRules();
+
+    doAssert(rule1 != rule2, "Default collator getRules failed");
+    doAssert(rule2 != rule3, "Default collator getRules failed");
+    doAssert(rule1 != rule3, "Default collator getRules failed");
+    
+    col4 = new RuleBasedCollator(rule2, status);
+    if (U_FAILURE(status)) {
+        errln("RuleBased Collator creation failed.\n");
+        return;
+    }
+
+    UnicodeString rule4 = col4->getRules();
+    doAssert(rule2 == rule4, "Default collator getRules failed");
+
+    delete col1;
+    delete col2;
+    delete col3;
+    delete col4;
 }
 
 void 
@@ -354,39 +339,39 @@ CollationAPITest::TestDecomposition() {
 
 void 
 CollationAPITest::TestSafeClone() {
-  static const int CLONETEST_COLLATOR_COUNT = 3;
-  Collator *someCollators [CLONETEST_COLLATOR_COUNT];
-	Collator *col;
-  UErrorCode err = U_ZERO_ERROR;
-	int index;
-    
-  UnicodeString test1("abCda");
-  UnicodeString test2("abcda");
-    
-  /* one default collator & two complex ones */
-  someCollators[0] = Collator::createInstance(err);
-  someCollators[1] = Collator::createInstance("ko", err);
-  someCollators[2] = Collator::createInstance("ja_JP", err);
+    static const int CLONETEST_COLLATOR_COUNT = 3;
+    Collator *someCollators [CLONETEST_COLLATOR_COUNT];
+    Collator *col;
+    UErrorCode err = U_ZERO_ERROR;
+    int index;
 
-	/* change orig & clone & make sure they are independent */
+    UnicodeString test1("abCda");
+    UnicodeString test2("abcda");
 
-	for (index = 0; index < CLONETEST_COLLATOR_COUNT; index++)
-	{
-		col = someCollators[index]->safeClone();
-    if (col == 0) {
-      errln("SafeClone of collator should not return null\n");
-      break;
+    /* one default collator & two complex ones */
+    someCollators[0] = Collator::createInstance(err);
+    someCollators[1] = Collator::createInstance("ko", err);
+    someCollators[2] = Collator::createInstance("ja_JP", err);
+
+    /* change orig & clone & make sure they are independent */
+
+    for (index = 0; index < CLONETEST_COLLATOR_COUNT; index++)
+    {
+        col = someCollators[index]->safeClone();
+        if (col == 0) {
+            errln("SafeClone of collator should not return null\n");
+            break;
+        }
+        col->setStrength(Collator::TERTIARY);
+        someCollators[index]->setStrength(Collator::PRIMARY);
+        col->setAttribute(UCOL_CASE_LEVEL, UCOL_OFF, err);
+        someCollators[index]->setAttribute(UCOL_CASE_LEVEL, UCOL_OFF, err);
+
+        doAssert(col->greater(test1, test2), "Result should be \"abCda\" >>> \"abcda\" ");
+        doAssert(someCollators[index]->equals(test1, test2), "Result should be \"abcda\" == \"abCda\"");
+        delete col;
+        delete someCollators[index];
     }
-    col->setStrength(Collator::TERTIARY);
-    someCollators[index]->setStrength(Collator::PRIMARY);
-    col->setAttribute(UCOL_CASE_LEVEL, UCOL_OFF, err);
-    someCollators[index]->setAttribute(UCOL_CASE_LEVEL, UCOL_OFF, err);
-        
-    doAssert(col->greater(test1, test2), "Result should be \"abCda\" >>> \"abcda\" ");
-    doAssert(someCollators[index]->equals(test1, test2), "Result should be \"abcda\" == \"abCda\"");
-    delete col;
-		delete someCollators[index];
-	}
 }
 
 void 
