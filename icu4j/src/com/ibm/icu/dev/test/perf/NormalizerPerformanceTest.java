@@ -187,6 +187,7 @@ public class NormalizerPerformanceTest extends PerfTest {
             }
         };
     }
+/** I really wish there was conditional compilation in Java      
         // Test NFC Performance
     PerfTest.Function TestJDK_NFC_NFD_Text() {
         return new PerfTest.Function() {
@@ -205,7 +206,7 @@ public class NormalizerPerformanceTest extends PerfTest {
             }
         };
     }
-/** I really wish there was conditional compilation in Java    
+  
     PerfTest.Function TestJDK_NFC_NFC_Text() {
         return new PerfTest.Function() {
             public void call() {
