@@ -22,6 +22,7 @@
 #include "cnormtst.h"
 #include "ccolltst.h"
 #include "unicode/ustring.h"
+#include <time.h>
 
 #define ARRAY_LENGTH(array) (sizeof (array) / sizeof (*array))
 
@@ -559,6 +560,27 @@ void TestCheckFCD()
                           0x02B9, 0x0314, 0x0315, 0x0316};
   const UChar TRUE_[] = {0x0030, 0x0040, 0x0440, 0x056D, 0x064F, 0x06E7, 
                          0x0050, 0x0730, 0x09EE, 0x1E10};
+
+  const UChar datastr[][5] = 
+  { {0x0061, 0x030A, 0x1E05, 0x0302, 0},
+    {0x0061, 0x030A, 0x00E2, 0x0323, 0},
+    {0x0061, 0x0323, 0x00E2, 0x0323, 0},
+    {0x0061, 0x0323, 0x1E05, 0x0302, 0} };
+  const UBool result[] = {TRUE, FALSE, FALSE, TRUE};
+
+  const UChar datachar[] = {0x60, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 
+                            0x6a,
+                            0xe0, 0xe1, 0xe2, 0xe3, 0xe4, 0xe5, 0xe6, 0xe7, 0xe8, 0xe9, 
+                            0xea,
+                            0x0300, 0x0301, 0x0302, 0x0303, 0x0304, 0x0305, 0x0306, 
+                            0x0307, 0x0308, 0x0309, 0x030a, 
+                            0x0320, 0x0321, 0x0322, 0x0323, 0x0324, 0x0325, 0x0326,
+                            0x0327, 0x0328, 0x0329, 0x032a,
+                            0x1e00, 0x1e01, 0x1e02, 0x1e03, 0x1e04, 0x1e05, 0x1e06, 
+                            0x1e07, 0x1e08, 0x1e09, 0x1e0a};
+
+  int count = 0;
+  
   if (checkFCD(FAST_, 10, &status) != TRUE)
     log_err("checkFCD failed: expected value for fast checkFCD is TRUE\n");
   if (checkFCD(FALSE_, 10, &status) != FALSE)
@@ -568,6 +590,70 @@ void TestCheckFCD()
 
   if (U_FAILURE(status))
     log_err("checkFCD failed: %s\n", u_errorName(status));
+
+  while (count < 4)
+  {
+    UBool fcdresult = checkFCD(datastr[count], 4, &status);
+    if (U_FAILURE(status)) {
+      log_err("checkFCD failed: exception occured at data set %d\n", count);
+      break;
+    }
+    else {
+      if (result[count] != fcdresult) {
+        log_err("checkFCD failed: Data set %d expected value %d\n", count, 
+                 result[count]);
+      }
+    }
+    count ++;
+  }
+
+  /* random checks of long strings */
+  status = U_ZERO_ERROR;
+  srand((unsigned)time( NULL ));
+
+  for (count = 0; count < 50; count ++)
+  {
+    int size = 0;
+    UBool testresult = TRUE;
+    UChar data[20];
+    UChar norm[100];
+    UChar nfd[100];
+    int normsize = 0;
+    int nfdsize = 0;
+    
+    while (size != 19) {
+      data[size] = datachar[(rand() * 50) / RAND_MAX];
+      log_verbose("0x%x", data[size]);
+      normsize += unorm_normalize(data + size, 1, UCOL_DECOMP_CAN, UCOL_IGNORE_HANGUL, 
+                                  norm + normsize, 100 - normsize, &status);       
+      if (U_FAILURE(status)) {
+        log_err("checkFCD failed: exception occured at data generation\n");
+        break;
+      }
+      size ++;
+    }
+    log_verbose("\n");
+
+    nfdsize = unorm_normalize(data, size, UCOL_DECOMP_CAN, UCOL_IGNORE_HANGUL, 
+                              nfd, 100, &status);       
+    if (U_FAILURE(status)) {
+      log_err("checkFCD failed: exception occured at normalized data generation\n");
+    }
+
+    if (nfdsize != normsize || u_memcmp(nfd, norm, nfdsize) != 0) {
+      testresult = FALSE;
+    }
+    if (testresult == TRUE) {
+      log_verbose("result TRUE\n");
+    }
+    else {
+      log_verbose("result FALSE\n");
+    }
+
+    if (checkFCD(data, size, &status) != testresult || U_FAILURE(status)) {
+      log_err("checkFCD failed: expected %d for random data\n", testresult);
+    }
+  }
 }
 
 static void
