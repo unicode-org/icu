@@ -14,7 +14,6 @@
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
 #include "ucmp8.h"
-#include "umemstrm.h"
 
 U_NAMESPACE_BEGIN
 
@@ -118,7 +117,7 @@ public:
      * representation.
      * @param in The given memory stream
      */
-    void readDictionaryFile(UMemoryStream* in);
+    void readDictionaryFile(const uint8_t * in);
 
     //=================================================================================
     // access to the words
