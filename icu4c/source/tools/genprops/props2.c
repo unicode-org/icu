@@ -34,7 +34,7 @@
 /* data --------------------------------------------------------------------- */
 
 static UNewTrie *trie;
-static uint32_t *pv;
+uint32_t *pv;
 static int32_t pvCount;
 
 static uint32_t prevStart=0, prevLimit=0, prevValue=0;
@@ -46,6 +46,11 @@ parseTwoFieldFile(char *filename, char *basename,
                   const char *ucdFile, const char *suffix,
                   UParseLineFn *lineFn,
                   UErrorCode *pErrorCode);
+
+static void
+parseArabicShaping(char *filename, char *basename,
+                   const char *suffix,
+                   UErrorCode *pErrorCode);
 
 static void
 ageLineFn(void *context,
@@ -77,6 +82,11 @@ eaWidthLineFn(void *context,
               char *fields[][2], int32_t fieldCount,
               UErrorCode *pErrorCode);
 
+static void
+lineBreakLineFn(void *context,
+                char *fields[][2], int32_t fieldCount,
+                UErrorCode *pErrorCode);
+
 /* -------------------------------------------------------------------------- */
 
 U_CFUNC void
@@ -87,7 +97,6 @@ initAdditionalProperties() {
 U_CFUNC void
 generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pErrorCode) {
     char *basename;
-    UErrorCode errorCode;
 
     basename=filename+uprv_strlen(filename);
 
@@ -118,18 +127,22 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
 
     parseTwoFieldFile(filename, basename, "DerivedCoreProperties", suffix, derivedPropListLineFn, pErrorCode);
 
+    parseTwoFieldFile(filename, basename, "LineBreak", suffix, lineBreakLineFn, pErrorCode);
+
+    parseArabicShaping(filename, basename, suffix, pErrorCode);
+
     /*
      * Preset East Asian Width defaults:
      * N for all
      * A for Private Use
      * W for plane 2
      */
-    errorCode=U_ZERO_ERROR;
-    if( !upvec_setValue(pv, 0, 0x110000, 0, (uint32_t)(U_EA_NEUTRAL<<UPROPS_EA_WIDTH_SHIFT), UPROPS_EA_WIDTH_MASK, pErrorCode) ||
-        !upvec_setValue(pv, 0xe000, 0xf900, 0, (uint32_t)(U_EA_AMBIGUOUS<<UPROPS_EA_WIDTH_SHIFT), UPROPS_EA_WIDTH_MASK, pErrorCode) ||
-        !upvec_setValue(pv, 0xf0000, 0xffffe, 0, (uint32_t)(U_EA_AMBIGUOUS<<UPROPS_EA_WIDTH_SHIFT), UPROPS_EA_WIDTH_MASK, pErrorCode) ||
-        !upvec_setValue(pv, 0x100000, 0x10fffe, 0, (uint32_t)(U_EA_AMBIGUOUS<<UPROPS_EA_WIDTH_SHIFT), UPROPS_EA_WIDTH_MASK, pErrorCode) ||
-        !upvec_setValue(pv, 0x20000, 0x2fffe, 0, (uint32_t)(U_EA_WIDE<<UPROPS_EA_WIDTH_SHIFT), UPROPS_EA_WIDTH_MASK, pErrorCode)
+    *pErrorCode=U_ZERO_ERROR;
+    if( !upvec_setValue(pv, 0, 0x110000, 0, (uint32_t)(U_EA_NEUTRAL<<UPROPS_EA_SHIFT), UPROPS_EA_MASK, pErrorCode) ||
+        !upvec_setValue(pv, 0xe000, 0xf900, 0, (uint32_t)(U_EA_AMBIGUOUS<<UPROPS_EA_SHIFT), UPROPS_EA_MASK, pErrorCode) ||
+        !upvec_setValue(pv, 0xf0000, 0xffffe, 0, (uint32_t)(U_EA_AMBIGUOUS<<UPROPS_EA_SHIFT), UPROPS_EA_MASK, pErrorCode) ||
+        !upvec_setValue(pv, 0x100000, 0x10fffe, 0, (uint32_t)(U_EA_AMBIGUOUS<<UPROPS_EA_SHIFT), UPROPS_EA_MASK, pErrorCode) ||
+        !upvec_setValue(pv, 0x20000, 0x2fffe, 0, (uint32_t)(U_EA_WIDE<<UPROPS_EA_SHIFT), UPROPS_EA_MASK, pErrorCode)
     ) {
         fprintf(stderr, "genprops: unable to set default East Asian Widths: %s\n", u_errorName(*pErrorCode));
         exit(*pErrorCode);
@@ -138,7 +151,7 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
     /* parse EastAsianWidth.txt */
     parseTwoFieldFile(filename, basename, "EastAsianWidth", suffix, eaWidthLineFn, pErrorCode);
     /* set last range */
-    if(!upvec_setValue(pv, prevStart, prevLimit, 0, (uint32_t)(prevValue<<UPROPS_EA_WIDTH_SHIFT), UPROPS_EA_WIDTH_MASK, pErrorCode)) {
+    if(!upvec_setValue(pv, prevStart, prevLimit, 0, (uint32_t)(prevValue<<UPROPS_EA_SHIFT), UPROPS_EA_MASK, pErrorCode)) {
         fprintf(stderr, "genprops error: unable to set East Asian Width: %s\n", u_errorName(*pErrorCode));
         exit(*pErrorCode);
     }
@@ -164,13 +177,16 @@ parseTwoFieldFile(char *filename, char *basename,
                   UErrorCode *pErrorCode) {
     char *fields[2][2];
 
-    writeUCDFilename(basename, ucdFile, suffix);
-
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return;
     }
 
+    writeUCDFilename(basename, ucdFile, suffix);
+
     u_parseDelimitedFile(filename, ';', fields, 2, lineFn, NULL, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        fprintf(stderr, "error parsing %s.txt: %s\n", ucdFile, u_errorName(*pErrorCode));
+    }
 }
 
 /* DerivedAge.txt ----------------------------------------------------------- */
@@ -522,7 +538,7 @@ derivedPropListLineFn(void *context,
 
 /* keep this list in sync with UEAWidthCode in uprops.h or uchar.h */
 static const char *const
-eaNames[U_EA_TOP]={
+eaNames[U_EA_COUNT]={
     "N",        /* Non-East Asian Neutral, default for unassigned code points */
     "A",        /* Ambiguous, default for Private Use code points */
     "H",        /* Half-width */
@@ -546,7 +562,7 @@ eaWidthLineFn(void *context,
     ++limit;
 
     /* parse binary property name */
-    i=getTokenIndex(eaNames, U_EA_TOP, fields[1][0]);
+    i=getTokenIndex(eaNames, U_EA_COUNT, fields[1][0]);
     if(i<0) {
         fprintf(stderr, "genprops error: unknown width name \"%s\" in EastAsianWidth.txt\n", fields[1][0]);
         *pErrorCode=U_PARSE_ERROR;
@@ -557,13 +573,199 @@ eaWidthLineFn(void *context,
     if(prevLimit==start && (uint32_t)i==prevValue) {
         prevLimit=limit;
     } else {
-        if(!upvec_setValue(pv, prevStart, prevLimit, 0, (uint32_t)(prevValue<<UPROPS_EA_WIDTH_SHIFT), UPROPS_EA_WIDTH_MASK, pErrorCode)) {
+        if(!upvec_setValue(pv, prevStart, prevLimit, 0, (uint32_t)(prevValue<<UPROPS_EA_SHIFT), UPROPS_EA_MASK, pErrorCode)) {
             fprintf(stderr, "genprops error: unable to set East Asian Width: %s\n", u_errorName(*pErrorCode));
             exit(*pErrorCode);
         }
         prevStart=start;
         prevLimit=limit;
         prevValue=(uint32_t)i;
+    }
+}
+
+/* LineBreak.txt ------------------------------------------------------------ */
+
+/* LineBreak.txt block names in the order of the parallel ULineBreak constants */
+static const char *const
+lbNames[U_LB_COUNT]={
+    "XX",
+    "AI",
+    "AL",
+    "B2",
+    "BA",
+    "BB",
+    "BK",
+    "CB",
+    "CL",
+    "CM",
+    "CR",
+    "EX",
+    "GL",
+    "HY",
+    "ID",
+    "IN",
+    "IS",
+    "LF",
+    "NS",
+    "NU",
+    "OP",
+    "PO",
+    "PR",
+    "QU",
+    "SA",
+    "SG",
+    "SP",
+    "SY",
+    "ZW"
+};
+
+static void
+lineBreakLineFn(void *context,
+                char *fields[][2], int32_t fieldCount,
+                UErrorCode *pErrorCode) {
+    uint32_t start, limit;
+    int32_t i;
+
+    u_parseCodePointRange(fields[0][0], &start, &limit, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        fprintf(stderr, "genprops: syntax error in LineBreak.txt field 0 at %s\n", fields[0][0]);
+        exit(*pErrorCode);
+    }
+    ++limit;
+
+    /* parse block name */
+    i=getTokenIndex(lbNames, U_LB_COUNT, fields[1][0]);
+    if(i<0) {
+        fprintf(stderr, "genprops error: unknown line break name \"%s\" in LineBreak.txt\n", fields[1][0]);
+        *pErrorCode=U_PARSE_ERROR;
+        exit(U_PARSE_ERROR);
+    }
+
+    if(!upvec_setValue(pv, start, limit, 2, (uint32_t)i<<UPROPS_LB_SHIFT, UPROPS_LB_MASK, pErrorCode)) {
+        fprintf(stderr, "genprops error: unable to set line break code: %s\n", u_errorName(*pErrorCode));
+        exit(*pErrorCode);
+    }
+}
+
+/* ArabicShaping.txt -------------------------------------------------------- */
+
+/* Joining Type/Joining Group names in the order of the parallel UJoiningType/UJoiningGroup constants */
+static const char *const
+jtNames[U_JT_COUNT]={
+    "U",
+    "C",
+    "D",
+    "L",
+    "R",
+    "T"
+};
+
+static const char *const
+jgNames[U_JG_COUNT]={
+    "<no shaping>",
+    "AIN",
+    "ALAPH",
+    "ALEF",
+    "BEH",
+    "BETH",
+    "DAL",
+    "DALATH RISH",
+    "E",
+    "FEH",
+    "FINAL SEMKATH",
+    "GAF",
+    "GAMAL",
+    "HAH",
+    "HAMZA ON HEH GOAL",
+    "HE",
+    "HEH",
+    "HEH GOAL",
+    "HETH",
+    "KAF",
+    "KAPH",
+    "KNOTTED HEH",
+    "LAM",
+    "LAMADH",
+    "MEEM",
+    "MIM",
+    "NOON",
+    "NUN",
+    "PE",
+    "QAF",
+    "QAPH",
+    "REH",
+    "REVERSED PE",
+    "SAD",
+    "SADHE",
+    "SEEN",
+    "SEMKATH",
+    "SHIN",
+    "SWASH KAF",
+    "SYRIAC WAW",
+    "TAH",
+    "TAW",
+    "TEH MARBUTA",
+    "TETH",
+    "WAW",
+    "YEH",
+    "YEH BARREE",
+    "YEH WITH TAIL",
+    "YUDH",
+    "YUDH HE",
+    "ZAIN"
+};
+
+static void
+arabicShapingLineFn(void *context,
+                    char *fields[][2], int32_t fieldCount,
+                    UErrorCode *pErrorCode) {
+    uint32_t start, limit;
+    int32_t jt, jg;
+
+    u_parseCodePointRange(fields[0][0], &start, &limit, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        fprintf(stderr, "genprops: syntax error in ArabicShaping.txt field 0 at %s\n", fields[0][0]);
+        exit(*pErrorCode);
+    }
+    ++limit;
+
+    /* parse joining type */
+    jt=getTokenIndex(jtNames, U_JT_COUNT, fields[2][0]);
+    if(jt<0) {
+        fprintf(stderr, "genprops error: unknown joining type in \"%s\" in ArabicShaping.txt\n", fields[2][0]);
+        *pErrorCode=U_PARSE_ERROR;
+        exit(U_PARSE_ERROR);
+    }
+
+    /* parse joining group */
+    jg=getTokenIndex(jgNames, U_JG_COUNT, fields[3][0]);
+    if(jg<0) {
+        fprintf(stderr, "genprops error: unknown joining group in \"%s\" in ArabicShaping.txt\n", fields[3][0]);
+        *pErrorCode=U_PARSE_ERROR;
+        exit(U_PARSE_ERROR);
+    }
+
+    if(!upvec_setValue(pv, start, limit, 2, ((uint32_t)jt<<UPROPS_JT_SHIFT)|((uint32_t)jg<<UPROPS_JG_SHIFT), UPROPS_JT_MASK|UPROPS_JG_MASK, pErrorCode)) {
+        fprintf(stderr, "genprops error: unable to set joining type/group code: %s\n", u_errorName(*pErrorCode));
+        exit(*pErrorCode);
+    }
+}
+
+static void
+parseArabicShaping(char *filename, char *basename,
+                   const char *suffix,
+                   UErrorCode *pErrorCode) {
+    char *fields[4][2];
+
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return;
+    }
+
+    writeUCDFilename(basename, "ArabicShaping", suffix);
+
+    u_parseDelimitedFile(filename, ';', fields, 4, arabicShapingLineFn, NULL, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        fprintf(stderr, "error parsing ArabicShaping.txt: %s\n", u_errorName(*pErrorCode));
     }
 }
 
@@ -593,6 +795,10 @@ writeAdditionalData(uint8_t *p, int32_t capacity, int32_t indexes[UPROPS_INDEX_C
         indexes[UPROPS_ADDITIONAL_VECTORS_COLUMNS_INDEX]=UPROPS_VECTOR_WORDS;
         indexes[UPROPS_RESERVED_INDEX]=
             indexes[UPROPS_ADDITIONAL_VECTORS_INDEX]+pvCount;
+
+        indexes[UPROPS_MAX_VALUES_INDEX]=
+            (((int32_t)UBLOCK_COUNT-1)<<UPROPS_BLOCK_SHIFT)|
+            ((int32_t)USCRIPT_CODE_LIMIT-1);
     }
 
     if(p!=NULL && (pvCount*4)<=capacity) {
