@@ -51,8 +51,8 @@ fi.txt fi_FI.txt fi_FI_EURO.txt\
 fo.txt fo_FO.txt\
 fr.txt fr_BE.txt fr_BE_EURO.txt fr_CA.txt fr_CH.txt\
 fr_FR.txt fr_FR_EURO.txt fr_LU.txt fr_LU_EURO.txt\
-ga.txt ga_IE.txt\
-gl.txt gl_ES.txt\
+ga.txt ga_IE.txt ga_IE_EURO.txt\
+gl.txt gl_ES.txt gl_ES_EURO.txt\
 gv.txt gv_GB.txt\
 he.txt he_IL.txt\
 hi.txt hi_IN.txt\
