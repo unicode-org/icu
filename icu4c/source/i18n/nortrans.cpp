@@ -143,6 +143,7 @@ void NormalizationTransliterator::handleTransliterate(Replaceable& text, UTransP
     // the output string and buffer pointer
     UnicodeString output;
     UChar *buffer;
+    UBool neededToNormalize;
 
     UErrorCode errorCode;
 
@@ -186,8 +187,10 @@ void NormalizationTransliterator::handleTransliterate(Replaceable& text, UTransP
         // incrementally normalize a small chunk of the input
         buffer = output.getBuffer(-1);
         errorCode = U_ZERO_ERROR;
-        length = unorm_nextNormalize(buffer, output.getCapacity(), &iter,
-                                     fMode, FALSE, &errorCode);
+        length = unorm_next(&iter, buffer, output.getCapacity(),
+                            fMode, 0,
+                            TRUE, &neededToNormalize,
+                            &errorCode);
         output.releaseBuffer(length);
 
         if(errorCode == U_BUFFER_OVERFLOW_ERROR) {
@@ -195,8 +198,10 @@ void NormalizationTransliterator::handleTransliterate(Replaceable& text, UTransP
             iter.index = start;
             buffer = output.getBuffer(length);
             errorCode = U_ZERO_ERROR;
-            length = unorm_nextNormalize(buffer, output.getCapacity(), &iter,
-                                         fMode, FALSE, &errorCode);
+            length = unorm_next(&iter, buffer, output.getCapacity(),
+                                fMode, 0,
+                                TRUE, &neededToNormalize,
+                                &errorCode);
             output.releaseBuffer(length);
         }
 
@@ -217,14 +222,20 @@ void NormalizationTransliterator::handleTransliterate(Replaceable& text, UTransP
             }
         }
 
-        // replace the input chunk with its normalized form
-        text.handleReplaceBetween(start, limit, output);
+        if(neededToNormalize) {
+            // replace the input chunk with its normalized form
+            text.handleReplaceBetween(start, limit, output);
 
-        // update all necessary indexes accordingly
-        delta = length - (limit - start);   // length change in the text object
-        start = limit += delta;             // the next chunk starts where this one ends, with adjustment
-        limit = offsets.limit += delta;     // set the iteration limit to the adjusted end of the input range
-        offsets.contextLimit += delta;
+            // update all necessary indexes accordingly
+            delta = length - (limit - start);   // length change in the text object
+            start = limit += delta;             // the next chunk starts where this one ends, with adjustment
+            limit = offsets.limit += delta;     // set the iteration limit to the adjusted end of the input range
+            offsets.contextLimit += delta;
+        } else {
+            // delta == 0
+            start = limit;
+            limit = offsets.limit;
+        }
     }
 
     offsets.start = start;
