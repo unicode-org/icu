@@ -9,10 +9,6 @@
 
 te_IN {
     Version{ "2.0" }
-    AmPmMarkers {
-        "\u0c2a\u0c42\u0c30\u0c4d\u0c35\u0c3e\u0c39\u0c4d\u0c28",
-        "\u0c05\u0c2a\u0c30\u0c3e\u0c39\u0c4d\u0c28",
-    }
     DateTimePatterns {
         "h:mm:ss a z",
         "h:mm:ss a z",
