@@ -110,6 +110,10 @@ SOURCE=.\calendar.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\caniter.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\choicfmt.cpp
 # End Source File
 # Begin Source File
@@ -468,6 +472,33 @@ InputPath=.\unicode\calendar.h
 
 "..\..\include\unicode\calendar.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                unicode\calendar.h                ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\caniter.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\caniter.h
+
+"..\..\include\unicode\caniter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy                unicode\caniter.h                ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\caniter.h
+
+"..\..\include\unicode\caniter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy                unicode\caniter.h                ..\..\include\unicode
 
 # End Custom Build
 
