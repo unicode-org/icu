@@ -273,7 +273,11 @@ void TestPUtilAPI(){
     y1=4.9406564584125e-78;
 #endif
 #else
+# if defined(XP_MAC)
+    y1=4.9406564584125e-78;
+# else
     y1=4.9406564584125e-324;
+# endif
 #endif
     doAssert(uprv_nextDouble(0, TRUE),   y1, "uprv_nextDouble(0, TRUE) failed.");
     doAssert(uprv_nextDouble(0, FALSE), -y1, "uprv_nextDouble(0, FALSE) failed.");
