@@ -16,6 +16,7 @@
 
 void addLocaleTest(TestNode**);
 void addUnicodeTest(TestNode**);
+void addUStringTest(TestNode**);
 void addResourceBundleTest(TestNode**);
 void addNEWResourceBundleTest(TestNode**);
 void addHashtableTest(TestNode** root);
@@ -31,6 +32,7 @@ void addUtility(TestNode** root)
     addTrieTest(root);
     addLocaleTest(root);
     addUnicodeTest(root);
+    addUStringTest(root);
     addResourceBundleTest(root);
     addNEWResourceBundleTest(root);
     addHashtableTest(root);
