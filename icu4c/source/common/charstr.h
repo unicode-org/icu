@@ -27,7 +27,7 @@ class U_COMMON_API CharString : public UMemory {
 public:
     inline CharString(const UnicodeString& str);
     inline ~CharString();
-    inline operator const char*() { return ptr; }
+    inline operator const char*() const { return ptr; }
 
 private:
     char buf[128];
@@ -38,8 +38,7 @@ private:
 };
 
 inline CharString::CharString(const UnicodeString& str) {
-    // TODO This isn't quite right -- we should probably do
-    // preflighting here to determine the real length.
+    // Invariant converter should create str.length() chars
     if (str.length() >= (int32_t)sizeof(buf)) {
         ptr = (char *)uprv_malloc(str.length() + 8);
     } else {
