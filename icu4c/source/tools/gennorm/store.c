@@ -172,10 +172,10 @@ utm_allocN(UToolMemory *mem, int32_t n) {
 typedef void EnumTrieFn(void *context, uint32_t code, Norm *norm);
 
 static UNewTrie
-    normTrie={ {0},0,0,0,0,0,0,0,0,{0} },
-    norm32Trie={ {0},0,0,0,0,0,0,0,0,{0} },
-    fcdTrie={ {0},0,0,0,0,0,0,0,0,{0} },
-    auxTrie={ {0},0,0,0,0,0,0,0,0,{0} };
+    *normTrie,
+    *norm32Trie,
+    *fcdTrie,
+    *auxTrie;
 
 static UToolMemory *normMem, *utf32Mem, *extraMem, *combiningTriplesMem;
 
@@ -228,8 +228,17 @@ extern void
 init() {
     uint16_t *p16;
 
+    normTrie = (UNewTrie *)uprv_malloc(sizeof(UNewTrie));
+    uprv_memset(normTrie, 0, sizeof(UNewTrie));
+    norm32Trie = (UNewTrie *)uprv_malloc(sizeof(UNewTrie));
+    uprv_memset(norm32Trie, 0, sizeof(UNewTrie));
+    fcdTrie = (UNewTrie *)uprv_malloc(sizeof(UNewTrie));
+    uprv_memset(fcdTrie, 0, sizeof(UNewTrie));
+    auxTrie = (UNewTrie *)uprv_malloc(sizeof(UNewTrie));
+    uprv_memset(auxTrie, 0, sizeof(UNewTrie));
+
     /* initialize the two tries */
-    if(NULL==utrie_open(&normTrie, NULL, 30000, 0, FALSE)) {
+    if(NULL==utrie_open(normTrie, NULL, 30000, 0, FALSE)) {
         fprintf(stderr, "error: failed to initialize tries\n");
         exit(U_MEMORY_ALLOCATION_ERROR);
     }
@@ -272,13 +281,13 @@ createNorm(uint32_t code) {
     Norm *p;
     uint32_t i;
 
-    i=utrie_get32(&normTrie, (UChar32)code, NULL);
+    i=utrie_get32(normTrie, (UChar32)code, NULL);
     if(i!=0) {
         p=norms+i;
     } else {
         /* allocate Norm */
         p=(Norm *)utm_alloc(normMem);
-        if(!utrie_set32(&normTrie, (UChar32)code, (uint32_t)(p-norms))) {
+        if(!utrie_set32(normTrie, (UChar32)code, (uint32_t)(p-norms))) {
             fprintf(stderr, "error: too many normalization entries\n");
             exit(U_BUFFER_OVERFLOW_ERROR);
         }
@@ -291,7 +300,7 @@ static Norm *
 getNorm(uint32_t code) {
     uint32_t i;
 
-    i=utrie_get32(&normTrie, (UChar32)code, NULL);
+    i=utrie_get32(normTrie, (UChar32)code, NULL);
     if(i==0) {
         return NULL;
     }
@@ -321,7 +330,7 @@ enumTrie(EnumTrieFn *fn, void *context) {
 
     count=0;
     for(code=0; code<=0x10ffff;) {
-        i=utrie_get32(&normTrie, code, &isInBlockZero);
+        i=utrie_get32(normTrie, code, &isInBlockZero);
         if(isInBlockZero) {
             code+=UTRIE_DATA_BLOCK_LENGTH;
         } else {
@@ -931,7 +940,7 @@ setHangulJamoSpecials() {
     norm->specialTag=_NORM_EXTRA_INDEX_TOP+_NORM_EXTRA_HANGUL;
     norm->qcFlags=_NORM_QC_NFD|_NORM_QC_NFKD;
 
-    if(!utrie_setRange32(&normTrie, 0xac00, 0xd7a4, (uint32_t)(norm-norms), TRUE)) {
+    if(!utrie_setRange32(normTrie, 0xac00, 0xd7a4, (uint32_t)(norm-norms), TRUE)) {
         fprintf(stderr, "error: too many normalization entries (setting Hangul)\n");
         exit(U_BUFFER_OVERFLOW_ERROR);
     }
@@ -1261,7 +1270,7 @@ makeAll32() {
         norms[i].value32=make32BitNorm(norms+i);
     }
 
-    pNormData=utrie_getData(&norm32Trie, &normLength);
+    pNormData=utrie_getData(norm32Trie, &normLength);
 
     count=0;
     for(i=0; i<normLength; ++i) {
@@ -1294,7 +1303,7 @@ makeFCD() {
         norms[i].value32=bothCCs;
     }
 
-    pFCDData=utrie_getData(&fcdTrie, &fcdLength);
+    pFCDData=utrie_getData(fcdTrie, &fcdLength);
 
     for(i=0; i<fcdLength; ++i) {
         n=pFCDData[i];
@@ -1600,7 +1609,7 @@ makeAux() {
     uint32_t *pData;
     int32_t i, length;
 
-    pData=utrie_getData(&auxTrie, &length);
+    pData=utrie_getData(auxTrie, &length);
 
     for(i=0; i<length; ++i) {
         norm=norms+pData[i];
@@ -1746,9 +1755,9 @@ processData() {
     enumTrie(makeCanonSetFn, NULL);
 
     /* clone the normalization builder trie to make the final data tries */
-    if( NULL==utrie_clone(&norm32Trie, &normTrie, NULL, 0) ||
-        NULL==utrie_clone(&fcdTrie, &normTrie, NULL, 0) ||
-        NULL==utrie_clone(&auxTrie, &normTrie, NULL, 0)
+    if( NULL==utrie_clone(norm32Trie, normTrie, NULL, 0) ||
+        NULL==utrie_clone(fcdTrie, normTrie, NULL, 0) ||
+        NULL==utrie_clone(auxTrie, normTrie, NULL, 0)
     ) {
         fprintf(stderr, "error: unable to clone the normalization trie\n");
         exit(U_MEMORY_ALLOCATION_ERROR);
@@ -1795,19 +1804,19 @@ generateData(const char *dataDir) {
 
     int32_t normTrieSize, fcdTrieSize, auxTrieSize;
 
-    normTrieSize=utrie_serialize(&norm32Trie, normTrieBlock, sizeof(normTrieBlock), getFoldedNormValue, FALSE, &errorCode);
+    normTrieSize=utrie_serialize(norm32Trie, normTrieBlock, sizeof(normTrieBlock), getFoldedNormValue, FALSE, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "error: utrie_serialize(normalization properties) failed, %s\n", u_errorName(errorCode));
         exit(errorCode);
     }
 
-    fcdTrieSize=utrie_serialize(&fcdTrie, fcdTrieBlock, sizeof(fcdTrieBlock), getFoldedFCDValue, TRUE, &errorCode);
+    fcdTrieSize=utrie_serialize(fcdTrie, fcdTrieBlock, sizeof(fcdTrieBlock), getFoldedFCDValue, TRUE, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "error: utrie_serialize(FCD data) failed, %s\n", u_errorName(errorCode));
         exit(errorCode);
     }
 
-    auxTrieSize=utrie_serialize(&auxTrie, auxTrieBlock, sizeof(auxTrieBlock), getFoldedAuxValue, TRUE, &errorCode);
+    auxTrieSize=utrie_serialize(auxTrie, auxTrieBlock, sizeof(auxTrieBlock), getFoldedAuxValue, TRUE, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "error: utrie_serialize(auxiliary data) failed, %s\n", u_errorName(errorCode));
         exit(errorCode);
@@ -1928,10 +1937,15 @@ cleanUpData(void) {
     utm_close(utf32Mem);
     utm_close(extraMem);
     utm_close(combiningTriplesMem);
-    utrie_close(&normTrie);
-    utrie_close(&norm32Trie);
-    utrie_close(&fcdTrie);
-    utrie_close(&auxTrie);
+    utrie_close(normTrie);
+    utrie_close(norm32Trie);
+    utrie_close(fcdTrie);
+    utrie_close(auxTrie);
+
+    uprv_free(normTrie);
+    uprv_free(norm32Trie);
+    uprv_free(fcdTrie);
+    uprv_free(auxTrie);
 }
 
 #endif /* #if !UCONFIG_NO_NORMALIZATION */
