@@ -127,6 +127,7 @@ void SearchIterator::setText(const UnicodeString &text, UErrorCode &status)
         else {
             m_text_        = text;
             m_search_->text = m_text_.getBuffer();
+            m_search_->textLength = m_text_.length();
         }
     }
 }
@@ -205,10 +206,10 @@ int32_t SearchIterator::preceding(int32_t position,
 int32_t SearchIterator::next(UErrorCode &status)
 {
     if (U_SUCCESS(status)) {
-        int32_t offset      = getOffset();
+        int32_t offset = getOffset();
         int32_t matchindex  = m_search_->matchedIndex;
         int32_t     matchlength = m_search_->matchedLength;
-        m_search_->reset        = FALSE;
+        m_search_->reset = FALSE;
         if (m_search_->isForwardSearching == TRUE) {
             int32_t textlength = m_search_->textLength;
             if (offset == textlength || matchindex == textlength || 
@@ -291,7 +292,9 @@ int32_t SearchIterator::previous(UErrorCode &status)
 
 void SearchIterator::reset()
 {
+    UErrorCode status = U_ZERO_ERROR;
     setMatchNotFound();
+    setOffset(0, status);
     m_search_->isOverlap          = FALSE;
     m_search_->isCanonicalMatch   = FALSE;
     m_search_->isForwardSearching = TRUE;
@@ -300,7 +303,7 @@ void SearchIterator::reset()
 
 // protected constructors and destructors -----------------------------
 
-SearchIterator::SearchIterator() : m_breakiterator_(NULL)
+SearchIterator::SearchIterator()
 {
     m_search_                     = (USearch *)uprv_malloc(sizeof(USearch));
     m_search_->breakIter          = NULL;
@@ -316,8 +319,8 @@ SearchIterator::SearchIterator() : m_breakiterator_(NULL)
 
 SearchIterator::SearchIterator(const UnicodeString &text, 
                                      BreakIterator *breakiter) :
-                               m_breakiterator_(breakiter),
-                               m_text_(text)
+                                     m_breakiterator_(breakiter),
+                                     m_text_(text)
 {
     m_search_                     = (USearch *)uprv_malloc(sizeof(USearch));
     m_search_->breakIter          = NULL;
