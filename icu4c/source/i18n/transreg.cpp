@@ -535,7 +535,7 @@ Transliterator* TransliteratorRegistry::reget(const UnicodeString& ID,
                 // No idBlock, no data -- this is just an
                 // alias for Null
                 entry->entryType = Entry::ALIAS;
-                entry->stringArg = NullTransliterator::ID;
+                entry->stringArg = UNICODE_STRING_SIMPLE("Any-Null");
             } else {
                 // No idBlock, data != 0 -- this is an
                 // ordinary RBT_DATA

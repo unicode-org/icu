@@ -1526,8 +1526,8 @@ UBool Transliterator::initializeRegistry() {
     NormalizationTransliterator::registerIDs();
     AnyTransliterator::registerIDs();
 
-    _registerSpecialInverse(NullTransliterator::SHORT_ID,
-                            NullTransliterator::SHORT_ID, FALSE);
+    _registerSpecialInverse(UNICODE_STRING_SIMPLE("Null"),
+                            UNICODE_STRING_SIMPLE("Null"), FALSE);
     _registerSpecialInverse(UNICODE_STRING_SIMPLE("Upper"),
                             UNICODE_STRING_SIMPLE("Lower"), TRUE);
     _registerSpecialInverse(UNICODE_STRING_SIMPLE("Title"),
