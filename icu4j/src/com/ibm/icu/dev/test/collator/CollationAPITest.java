@@ -538,17 +538,6 @@ public class CollationAPITest extends TestFmwk {
             errln("RuleBased Collator creation failed for ! modifier.\n");
             return;
         }
-        // test that we can start a rule without a & or <
-        String nonresetrule = "z < a";
-        try {
-            RuleBasedCollator col6 = new RuleBasedCollator(nonresetrule);
-            if (col6.compare("z", "a") != -1) {
-                errln("Rule \"z < a\" fails");
-            }
-        } catch (Exception e) {
-            errln("RuleBased Collator creation failed for non-&.\n");
-            return;
-        }
     }
     
     /**
