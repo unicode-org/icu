@@ -1050,8 +1050,8 @@ void ICUServiceTest::testLocale() {
     UnicodeString* one = new UnicodeString("one/de_US");
     UnicodeString* two = new UnicodeString("two/de_US");
 
-    service.registerInstance(one, UnicodeString("de_US"), 1, status);
-    service.registerInstance(two, UnicodeString("de_US"), 2, status);
+    service.registerInstance(one, Locale("de_US"), 1, status);
+    service.registerInstance(two, Locale("de_US"), 2, status);
 
     {
         UErrorCode status = U_ZERO_ERROR;
