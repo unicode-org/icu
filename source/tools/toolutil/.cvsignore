@@ -5,6 +5,5 @@ Makefile
 *.d
 *.pdb
 pkgdata
-*.so*
-*.a
+libtoolutil.*
 
