@@ -33,6 +33,7 @@ void UnicodeStringTest::runIndexedTest( int32_t index, bool_t exec, char* &name,
         case 2: name = "TestExtract"; if (exec) TestExtract(); break;
         case 3: name = "TestRemoveReplace"; if (exec) TestRemoveReplace(); break;
         case 4: name = "TestCaseConversion"; if (exec) TestCaseConversion(); break;
+        case 5: name = "TestNothing"; break;
         case 6: name = "TestSearching"; if (exec) TestSearching(); break;
         case 7: name = "TestSpacePadding"; if (exec) TestSpacePadding(); break;
         case 8: name = "TestPrefixAndSuffix"; if (exec) TestPrefixAndSuffix(); break;
