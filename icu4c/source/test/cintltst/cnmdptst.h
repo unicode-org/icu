@@ -17,6 +17,10 @@
 #ifndef _CNUMDEPTST
 #define _CNUMDEPTST
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "cintltst.h"
 
 /* The function used to test differnet format patterns*/
@@ -44,5 +48,7 @@ static void TestSecondaryGrouping(void);
 
 /*Internal functions used*/
 static void roundingTest(UNumberFormat*, double,  int32_t, const char*);
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif

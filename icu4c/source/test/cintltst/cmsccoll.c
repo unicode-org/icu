@@ -14,7 +14,11 @@
  */
 
 #include <stdio.h>
+
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "unicode/ucol.h"
 #include "unicode/ucoleitr.h"
 #include "unicode/uloc.h"
@@ -3661,3 +3665,5 @@ void addMiscCollTest(TestNode** root)
     /*addTest(root, &PrintMarkDavis, "tscoll/cmsccoll/PrintMarkDavis");*/ /* this test doesn't test - just prints sortkeys */
     /*addTest(root, &TestGetCaseBit, "tscoll/cmsccoll/TestGetCaseBit");*/ /*this one requires internal things to be exported */
 }
+
+#endif /* #if !UCONFIG_NO_COLLATION */

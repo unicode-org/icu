@@ -20,6 +20,10 @@
 #ifndef _CALLCOLLTST
 #define _CALLCOLLTST
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "cintltst.h"
 
 
@@ -28,5 +32,6 @@
 void doTest(UCollator*, const UChar* source, const UChar* target, UCollationResult result);
 
 
+#endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif

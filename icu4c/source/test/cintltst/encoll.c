@@ -20,7 +20,11 @@
 
 #include <stdlib.h>
 #include <string.h>
+
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
 #include "unicode/ucol.h"
 #include "unicode/uloc.h"
 #include "cintltst.h"
@@ -349,3 +353,5 @@ static void TestSecondary()
     }
 ucol_close(myCollation);
 }
+
+#endif /* #if !UCONFIG_NO_COLLATION */

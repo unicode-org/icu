@@ -28,11 +28,16 @@
  * a customized collator object.  For example, number 1 to be sorted 
  * equlivalent to word 'one'. 
  */
-#ifndef INCLUDE_CALLCOLL_C
 
 #include <string.h>
 #include <stdlib.h>
+
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
+
+#ifndef INCLUDE_CALLCOLL_C
+
 #include "unicode/ucol.h"
 #include "unicode/uloc.h"
 #include "cstring.h"
@@ -851,3 +856,5 @@ TestJitterbug1098(){
 }
 
 #endif
+
+#endif /* #if !UCONFIG_NO_COLLATION */

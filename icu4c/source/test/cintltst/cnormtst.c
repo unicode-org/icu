@@ -19,13 +19,11 @@
 #include <time.h>
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
+#include "unicode/unorm.h"
 #include "cintltst.h"
 #include "cnormtst.h"
-#include "ccolltst.h"
 
 #define ARRAY_LENGTH(array) (sizeof (array) / sizeof (*array))
-
-static UCollator *myCollation;
 
 static void
 TestAPI(void);
@@ -126,11 +124,6 @@ void TestDecomp()
     int32_t x, neededLen, resLen;
     UChar *source=NULL, *result=NULL; 
     status = U_ZERO_ERROR;
-    myCollation = ucol_open("en_US", &status);
-    if(U_FAILURE(status)){
-        log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
-        return;
-    }
     resLen=0;
     log_verbose("Testing unorm_normalize with  Decomp canonical\n");
     for(x=0; x < ARRAY_LENGTH(canonTests); x++)
@@ -151,7 +144,6 @@ void TestDecomp()
         free(result);
         free(source);
     }
-    ucol_close(myCollation);
 }
 
 void TestCompatDecomp() 
@@ -160,11 +152,6 @@ void TestCompatDecomp()
     int32_t x, neededLen, resLen;
     UChar *source=NULL, *result=NULL; 
     status = U_ZERO_ERROR;
-    myCollation = ucol_open("en_US", &status);
-    if(U_FAILURE(status)){
-        log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
-        return;
-    }
     resLen=0;
     log_verbose("Testing unorm_normalize with  Decomp compat\n");
     for(x=0; x < ARRAY_LENGTH(compatTests); x++)
@@ -185,7 +172,6 @@ void TestCompatDecomp()
         free(result);
         free(source);
     }
-    ucol_close(myCollation);            
 }
 
 void TestCanonDecompCompose() 
@@ -194,11 +180,6 @@ void TestCanonDecompCompose()
     int32_t x, neededLen, resLen;
     UChar *source=NULL, *result=NULL; 
     status = U_ZERO_ERROR;
-    myCollation = ucol_open("en_US", &status);
-    if(U_FAILURE(status)){
-        log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
-        return;
-    }
     resLen=0;
     log_verbose("Testing unorm_normalize with Decomp can compose compat\n");
     for(x=0; x < ARRAY_LENGTH(canonTests); x++)
@@ -219,7 +200,6 @@ void TestCanonDecompCompose()
         free(result);
         free(source);
     }
-    ucol_close(myCollation);            
 }
 
 void TestCompatDecompCompose() 
@@ -228,11 +208,6 @@ void TestCompatDecompCompose()
     int32_t x, neededLen, resLen;
     UChar *source=NULL, *result=NULL;
     status = U_ZERO_ERROR;
-    myCollation = ucol_open("en_US", &status);
-    if(U_FAILURE(status)){
-        log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
-        return;
-    }
     resLen=0;
     log_verbose("Testing unorm_normalize with compat decomp compose can\n");
     for(x=0; x < ARRAY_LENGTH(compatTests); x++)
@@ -253,7 +228,6 @@ void TestCompatDecompCompose()
         free(result);
         free(source);
     }
-    ucol_close(myCollation);            
 }
 
 

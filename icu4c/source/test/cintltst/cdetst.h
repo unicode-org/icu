@@ -21,6 +21,9 @@
 #ifndef _CGERCOLLTST
 #define _CGERCOLLTST
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_COLLATION
 
 #include "cintltst.h"
 
@@ -34,6 +37,6 @@ static    void TestPrimary(void);
 static     void TestTertiary(void);
 
 
-
+#endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif

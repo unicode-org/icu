@@ -339,8 +339,14 @@ void ctest_setICU_DATA() {
     u_setDataDirectory(ctest_dataOutDir());
 }
 
-
-
+UChar* CharsToUChars(const char* str) {
+    /* Might be faster to just use uprv_strlen() as the preflight len - liu */
+    int32_t len = u_unescape(str, 0, 0); /* preflight */
+    /* Do NOT use malloc() - we are supposed to be acting like user code! */
+    UChar *buf = (UChar*) malloc(sizeof(UChar) * (len + 1));
+    u_unescape(str, buf, len + 1);
+    return buf;
+}
 
 char *austrdup(const UChar* unichars)
 {

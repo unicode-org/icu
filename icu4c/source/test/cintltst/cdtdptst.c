@@ -14,8 +14,11 @@
 */
 /* INDEPTH TEST FOR DATE FORMAT */
 
-#include "unicode/uloc.h"
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
+#include "unicode/uloc.h"
 #include "unicode/udat.h"
 #include "unicode/ucal.h"
 #include "unicode/unum.h"
@@ -314,3 +317,5 @@ void TestQuotePattern161()
     free(pattern);
     
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

@@ -15,6 +15,10 @@
 #ifndef _CCALTST
 #define _CCALTST
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "cintltst.h"
 
 
@@ -71,7 +75,6 @@
     static void verify2(const char* msg, UCalendar* c, UDateFormat* dat, int32_t year, int32_t month, int32_t day,
                                                                 int32_t hour, int32_t min, int32_t sec, int32_t am_pm);
 
-
-
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif

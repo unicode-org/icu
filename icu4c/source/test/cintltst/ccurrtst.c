@@ -14,7 +14,11 @@
 */
 
 #include <stdlib.h>
+
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/ucol.h"
 #include "unicode/uloc.h"
 #include "cintltst.h"
@@ -160,5 +164,4 @@ void currTest()
     ucol_close(c);
 }
 
-
-
+#endif /* #if !UCONFIG_NO_FORMATTING */
