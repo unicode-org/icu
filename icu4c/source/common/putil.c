@@ -1328,7 +1328,7 @@ uprv_getDefaultLocaleID()
 #if U_POSIX_LOCALE
   char *correctedPOSIXLocale = 0;
   const char* posixID = uprv_getPOSIXID();
-  char *p;
+  const char *p;
 
   /* Format: (no spaces)
      ll [ _CC ] [ . MM ] [ @ VV]
