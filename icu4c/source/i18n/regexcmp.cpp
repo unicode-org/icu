@@ -513,8 +513,12 @@ void    RegexCompile::compile(
     fRXPat->fFrameSize+=2;
 
     //
+    // Get bounds for the minimum and maximum length of a string that this
+    //   pattern can match.  Used to avoid looking for matches in strings that
+    //   are too short.
     //
     fRXPat->fMinMatchLen = minMatchLength(3, fRXPat->fCompiledPat->size()-1);
+    fRXPat->fMaxMatchLen = maxMatchLength(3, fRXPat->fCompiledPat->size()-1);
 
     //
     // A stupid bit of non-sense to prevent code coverage testing from complaining
@@ -1900,7 +1904,13 @@ UBool  RegexCompile::possibleNullMatch(int32_t start, int32_t end) {
 
 //----------------------------------------------------------------------------------------
 //
-//   minMatchLength
+//   minMatchLength    Calculate the length of the shortest string that could
+//                     match the specified pattern.   
+//                     Length is in 16 bit code units, not code points.
+//
+//                     The calculated length may not be exact.  The returned
+//                     value may be shorter than the actual minimum; it must
+//                     never be longer.
 //
 //----------------------------------------------------------------------------------------
 int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
@@ -1920,7 +1930,6 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
         lengthSoFar.setElementAt(INT32_MAX, loc);
     }
 
-    loc = start-1;
     for (loc = start; loc<=end; loc++) {
         op = fRXPat->fCompiledPat->elementAti(loc);
         opType = URX_TYPE(op);
@@ -1960,8 +1969,8 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
             break;
             
 
-            // Ops that match a minimum of one character
-            //   (and, ususally, exactly one character.)
+            // Ops that match a minimum of one character (one or two 16 bit code units.)
+            //   
         case URX_ONECHAR:
         case URX_STATIC_SETREF:
         case URX_SETREF:
@@ -2083,6 +2092,203 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
         }
         return currentLen;
         
+}
+
+
+
+//----------------------------------------------------------------------------------------
+//
+//   maxMatchLength    Calculate the length of the longest string that could
+//                     match the specified pattern.   
+//                     Length is in 16 bit code units, not code points.
+//
+//                     The calculated length may not be exact.  The returned
+//                     value may be longer than the actual maximum; it must
+//                     never be shorter.
+//
+//----------------------------------------------------------------------------------------
+int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
+    U_ASSERT(start <= end);
+    U_ASSERT(end < fRXPat->fCompiledPat->size());
+
+
+    int32_t    patSegLen = end - start + 1;
+    int32_t    loc;
+    int32_t    op;
+    int32_t    opType;
+    int32_t    currentLen = 0;
+    UVector32  lengthSoFar(fRXPat->fCompiledPat->size(), *fStatus);
+    lengthSoFar.setSize(fRXPat->fCompiledPat->size());
+
+    for (loc=start; loc<=end; loc++) {
+        lengthSoFar.setElementAt(0, loc);
+    }
+
+    for (loc = start; loc<=end; loc++) {
+        op = fRXPat->fCompiledPat->elementAti(loc);
+        opType = URX_TYPE(op);
+
+        // The loop is advancing linearly through the pattern.
+        // If the op we are now at was the destination of a branch in the pattern,
+        // and that path has a longer maximum length than the current accumulated value,
+        // replace the current accumulated value.
+        if (lengthSoFar.elementAti(loc) > currentLen) {
+            currentLen = lengthSoFar.elementAti(loc);
+        }
+
+        switch (opType) {
+            // Ops that don't change the total length matched
+        case URX_RESERVED_OP:
+        case URX_END:
+        case URX_STRING_LEN:
+        case URX_NOP:
+        case URX_START_CAPTURE:
+        case URX_END_CAPTURE:
+        case URX_BACKSLASH_A:
+        case URX_BACKSLASH_B:
+        case URX_BACKSLASH_G:
+        case URX_BACKSLASH_Z:
+        case URX_CARET:
+        case URX_DOLLAR:
+        case URX_RELOC_OPRND:
+        case URX_STO_INP_LOC:
+        case URX_DOLLAR_M:
+        case URX_CARET_M:
+        case URX_BACKTRACK:
+
+        case URX_STO_SP:          // Setup for atomic or possessive blocks.  Doesn't change what can match.
+        case URX_LD_SP:
+            break;
+            
+
+            // Ops that increase that cause an unbounded increase in the length
+            //   of a matched string, or that increase it a hard to characterize way.
+            //   Call the max length unbounded, and stop further checking.
+        case URX_BACKREF:         // BackRef.  Must assume that it might be a zero length match
+        case URX_BACKREF_I:
+        case URX_BACKSLASH_X:   // Grahpeme Cluster.  Minimum is 1, max unbounded.
+            currentLen = INT32_MAX;
+            break;
+
+
+            // Ops that match a max of one character (possibly two 16 bit code units.)
+            //   
+        case URX_STATIC_SETREF:
+        case URX_SETREF:
+        case URX_BACKSLASH_D:
+        case URX_ONECHAR_I:
+        case URX_BACKSLASH_W:
+        case URX_DOTANY_ALL:  
+        case URX_DOTANY:
+            currentLen+=2;
+            break;
+
+            // Single literal character.  Increase current max length by one or two,
+            //       depending on whether the char is in the supplementary range.
+        case URX_ONECHAR:
+            currentLen++;
+            if (URX_VAL(op) > 0x10000) {
+                currentLen++;
+            }
+            break;
+
+            // Jumps.  
+            //
+        case URX_JMP:
+        case URX_JMPX:
+            {
+                int32_t  jmpDest = URX_VAL(op);
+                if (jmpDest < loc) {
+                    // Loop of some kind.  Max match length is unbounded.
+                    currentLen = INT32_MAX;
+                } else {
+                    // Forward jump.  Propagate the current min length to the target loc of the jump.
+                    if (lengthSoFar.elementAti(jmpDest) < currentLen) {
+                        lengthSoFar.setElementAt(currentLen, jmpDest);
+                    }
+                    currentLen = 0;
+                }
+            }
+            break;
+
+        case URX_FAIL:
+            // Fails are kind of like a branch, except that the max length was
+            //   propagated already, by the state save.
+            currentLen = lengthSoFar.elementAti(loc+1);
+            break;
+
+
+        case URX_STATE_SAVE:
+            {
+                // State Save, for forward jumps, propagate the current minimum.
+                //               of the state save.
+                //             For backwards jumps, they create a loop, maximum
+                //               match length is unbounded.
+                int32_t  jmpDest = URX_VAL(op);
+                if (jmpDest > loc) {
+                    if (currentLen > lengthSoFar.elementAti(jmpDest)) {
+                        lengthSoFar.setElementAt(currentLen, jmpDest);
+                    }
+                } else {
+                    currentLen = INT32_MAX;
+                }
+            }
+            break;
+            
+
+
+
+        case URX_STRING:
+        case URX_STRING_I:
+            {
+                loc++;
+                int32_t stringLenOp = fRXPat->fCompiledPat->elementAti(loc);
+                currentLen += URX_VAL(stringLenOp);
+            }
+            break;
+
+
+        case URX_CTR_INIT:
+        case URX_CTR_INIT_NG:
+        case URX_CTR_INIT_P:
+        case URX_CTR_LOOP:
+        case URX_CTR_LOOP_NG:
+        case URX_CTR_LOOP_P:
+            // For anything to do with loops, make the match length unbounded.
+            //  TODO, possibly later, special case short loops like {0,1}.
+            //   Note:  INIT instructions are multi-word.  Can ignore because
+            //          INT32_MAX length will stop the per-instruction loop.
+            currentLen = INT32_MAX;
+            break;
+            
+            
+
+        case URX_LA_START:
+        case URX_LA_END:
+            // Look-ahead.  Just ignore, treat the look-ahead block as if
+            // it were normal pattern.  Gives a too-long match length,
+            //  but good enough for now.
+            break;
+            
+            // End of look-ahead ops should always be consumed by the processing at
+            //  the URX_LA_START op.
+            U_ASSERT(FALSE);
+            break;
+            
+        default:
+            U_ASSERT(FALSE);
+        }
+
+            
+        if (currentLen == INT32_MAX) {
+            //  The maximum length is unbounded.
+            //  Stop further processing of the pattern.
+            break;
+        }
+        
+    }
+    return currentLen;
+    
 }
 
 

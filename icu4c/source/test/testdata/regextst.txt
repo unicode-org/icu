@@ -242,3 +242,4 @@
 "a b c [x y z]"               x "<0>abcx</0>yz"
 "a b c [x y z]"               x "<0>abcy</0>yz"
 
+#"abc|de"                      d "x"
