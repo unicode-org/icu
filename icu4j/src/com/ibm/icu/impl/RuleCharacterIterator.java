@@ -161,7 +161,7 @@ public class RuleCharacterIterator {
 
             if (c == '\\' && (options & PARSE_ESCAPES) != 0) {
                 c = Utility.unescapeAt(this);
-                isEscaped = true; // unescapeAt() sets isEscaped to false
+                isEscaped = true;
                 if (c < 0) {
                     throw new IllegalArgumentException("Invalid escape");
                 }
