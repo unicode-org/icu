@@ -2657,7 +2657,7 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
           }
           // Now we have the character that needs to be decomposed
           // if the normalizing buffer was not used, we can just use our structure and be happy.
-          if((source->flags & UCOL_ITER_INNORMBUF) == 0) {
+          if(source->flags & UCOL_ITER_INNORMBUF == 0) {
             // decompose into writable buffer
             int32_t decompLen = unorm_getDecomposition(cp, FALSE, &(source->writableBuffer[1]), UCOL_WRITABLE_BUFFER_SIZE-1);
             if(decompLen < 0) {
