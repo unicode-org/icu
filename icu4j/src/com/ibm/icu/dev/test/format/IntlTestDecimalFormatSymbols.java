@@ -1,7 +1,11 @@
 /*****************************************************************************************
+ *
+ *   Copyright (C) 1996-2003, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/IntlTestDecimalFormatSymbols.java,v $ 
- * $Date: 2003/12/13 00:30:57 $ 
- * $Revision: 1.7 $
+ * $Date: 2003/12/20 03:06:52 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  **/
@@ -15,12 +19,6 @@
     @test 1.4 98/03/06
     @summary test International Decimal Format Symbols
 */
-/***************************************************************************
-*
-*   Copyright (C) 1996-2003, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*
-************************************************************************/
 
 
 package com.ibm.icu.dev.test.format;

@@ -1,12 +1,12 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICUBinary.java,v $
- * $Date: 2003/09/19 00:14:36 $
- * $Revision: 1.8 $
+ * $Date: 2003/12/20 03:06:55 $
+ * $Revision: 1.9 $
  *  *****************************************************************************************
  */
 package com.ibm.icu.impl;

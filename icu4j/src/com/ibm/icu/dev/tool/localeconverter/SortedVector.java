@@ -1,12 +1,12 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2004, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/SortedVector.java,v $ 
- * $Date: 2002/02/16 03:05:31 $ 
- * $Revision: 1.2 $
+ * $Date: 2003/12/20 03:07:02 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */

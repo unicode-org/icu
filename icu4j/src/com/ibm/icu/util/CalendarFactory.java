@@ -1,12 +1,12 @@
 /**
 *******************************************************************************
-* Copyright (C) 2002, International Business Machines Corporation and    *
+* Copyright (C) 2002-2003, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/CalendarFactory.java,v $ 
-* $Date: 2003/10/02 20:50:25 $ 
-* $Revision: 1.5 $
+* $Date: 2003/12/20 03:07:08 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */

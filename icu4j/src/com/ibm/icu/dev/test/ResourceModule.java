@@ -1,12 +1,12 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2002, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/ResourceModule.java,v $
- * $Date: 2003/07/15 22:50:45 $
- * $Revision: 1.5 $
+ * $Date: 2003/12/20 03:07:06 $
+ * $Revision: 1.6 $
  *
  *******************************************************************************
  */
