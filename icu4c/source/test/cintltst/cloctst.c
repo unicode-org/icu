@@ -2456,7 +2456,6 @@ static int32_t _canonicalize(int32_t selector, /* 0==getName, 1==canonicalize */
     case 1:
         return uloc_canonicalize(localeID, result, resultCapacity, ec);
     default:
-        U_ASSERT(FALSE);
         return -1;
     }
 }
