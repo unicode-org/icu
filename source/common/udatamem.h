@@ -52,10 +52,10 @@ void             UDataMemory_setData (UDataMemory *This, const void *dataAddr);
 const DataHeader *UDataMemory_normalizeDataPointer(const void *p);
 
 U_CAPI int32_t U_EXPORT2
-udata_getLength(UDataMemory *pData);
+udata_getLength(const UDataMemory *pData);
 
 U_CAPI const void * U_EXPORT2
-udata_getRawMemory(UDataMemory *pData);
+udata_getRawMemory(const UDataMemory *pData);
 
 #endif
 

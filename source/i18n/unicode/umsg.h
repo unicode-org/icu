@@ -468,7 +468,7 @@ umsg_setLocale(UMessageFormat *fmt,
  * @stable ICU 2.0
  */
 U_STABLE const char*  U_EXPORT2 
-umsg_getLocale(UMessageFormat *fmt);
+umsg_getLocale(const UMessageFormat *fmt);
 
 /**
  * Sets the pattern.
@@ -501,7 +501,7 @@ umsg_applyPattern( UMessageFormat *fmt,
  * @stable ICU 2.0
  */
 U_STABLE int32_t  U_EXPORT2 
-umsg_toPattern(UMessageFormat *fmt,
+umsg_toPattern(const UMessageFormat *fmt,
                UChar* result, 
                int32_t resultLength,
                UErrorCode* status);
@@ -522,7 +522,7 @@ umsg_toPattern(UMessageFormat *fmt,
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2 
-umsg_format(    UMessageFormat *fmt,
+umsg_format(    const UMessageFormat *fmt,
                 UChar          *result,
                 int32_t        resultLength,
                 UErrorCode     *status,
@@ -544,7 +544,7 @@ umsg_format(    UMessageFormat *fmt,
  * @stable ICU 2.0
  */
 U_STABLE int32_t U_EXPORT2 
-umsg_vformat(   UMessageFormat *fmt,
+umsg_vformat(   const UMessageFormat *fmt,
                 UChar          *result,
                 int32_t        resultLength,
                 va_list        ap,
@@ -565,7 +565,7 @@ umsg_vformat(   UMessageFormat *fmt,
  * @stable ICU 2.0
  */
 U_STABLE void U_EXPORT2 
-umsg_parse( UMessageFormat *fmt,
+umsg_parse( const UMessageFormat *fmt,
             const UChar    *source,
             int32_t        sourceLength,
             int32_t        *count,
@@ -588,7 +588,7 @@ umsg_parse( UMessageFormat *fmt,
  * @stable ICU 2.0
  */
 U_STABLE void U_EXPORT2 
-umsg_vparse(UMessageFormat *fmt,
+umsg_vparse(const UMessageFormat *fmt,
             const UChar    *source,
             int32_t        sourceLength,
             int32_t        *count,
