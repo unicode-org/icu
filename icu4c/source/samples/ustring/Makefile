@@ -1,5 +1,5 @@
 # Copyright (c) 2000 IBM, Inc. and others
-# conversion sample code $Revision: 1.1 $
+# conversion sample code $Revision: 1.2 $
 
 
 # Usage:
@@ -18,9 +18,9 @@
 ICU_DEFAULT_PREFIX=~/icu
 
 ifeq ($(strip $(ICU_PREFIX)),)
-  ICU_INC=$(ICU_DEFAULT_PREFIX)/share/icu/Makefile.inc
+  ICU_INC=$(ICU_DEFAULT_PREFIX)/lib/icu/Makefile.inc
 else
-  ICU_INC=$(ICU_PREFIX)/share/icu/Makefile.inc
+  ICU_INC=$(ICU_PREFIX)/lib/icu/Makefile.inc
 endif
 ICUPATH=
 
