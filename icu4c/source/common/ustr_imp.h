@@ -116,7 +116,7 @@ u_internalGetCombiningClass(UChar32 c);
  * Remember to use the u_releaseDefaultConverter when you are done.
  * @internal
  */
-U_CFUNC UConverter*
+U_CAPI UConverter*
 u_getDefaultConverter(UErrorCode *status);
 
 
@@ -124,7 +124,7 @@ u_getDefaultConverter(UErrorCode *status);
  * Release the default converter to the converter cache.
  * @internal
  */
-U_CFUNC void
+U_CAPI void
 u_releaseDefaultConverter(UConverter *converter);
 
 #endif

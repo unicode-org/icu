@@ -33,7 +33,7 @@ public:
 #endif
 
 
-U_COMMON_API STD_OSTREAM &
+U_USTDIO_API STD_OSTREAM &
 operator<<(STD_OSTREAM& stream, const UnicodeString& s)
 {
     if(s.length() > 0) {
