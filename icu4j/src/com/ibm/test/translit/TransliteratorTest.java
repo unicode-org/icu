@@ -119,16 +119,16 @@ public class TransliteratorTest extends IntlTest {
                                                        "dummy=\uE100;" +
                                                        "vowel=[aeiouAEIOU];" +
                                                        "lu=[:Lu:];" +
-                                                       "{vowel}[{lu}>!;" +
-                                                       "{vowel}>&;" +
-                                                       "!]{lu}>^;" +
-                                                       "{lu}>*;" +
+                                                       "{vowel} ({lu}) > !;" +
+                                                       "{vowel} > &;" +
+                                                       "(!) {lu} > ^;" +
+                                                       "{lu} > *;" +
                                                        "a>ERROR");
         expect(t, "abcdefgABCDEFGU", "&bcd&fg!^**!^*&");
     }
 
     // Restore this test if/when it's been deciphered.  In general,
-    // tests that depend on a specific tranliterator are subject
+    // tests that depend on a specific transliterator are subject
     // to the same fragility as tests that depend on resource data.
 
 //    public void TestKana() {
@@ -304,12 +304,13 @@ public class TransliteratorTest extends IntlTest {
 
     public void TestArabic() {
         String DATA[] = {
-            "Arabic", "\u062a\u062a\u0645\u062a\u0639\u0020"+
-                      "\u0627\u0644\u0644\u063a\u0629\u0020"+
-                      "\u0627\u0644\u0639\u0631\u0628\u0628\u064a\u0629\u0020"+
-                      "\u0628\u0628\u0646\u0638\u0645\u0020"+
-                      "\u0643\u062a\u0627\u0628\u0628\u064a\u0629\u0020"+
-                      "\u062c\u0645\u064a\u0644\u0629",
+            "Arabic",
+                "\u062a\u062a\u0645\u062a\u0639 "+
+                "\u0627\u0644\u0644\u063a\u0629 "+
+                "\u0627\u0644\u0639\u0631\u0628\u0628\u064a\u0629 "+
+                "\u0628\u0628\u0646\u0638\u0645 "+
+                "\u0643\u062a\u0627\u0628\u0628\u064a\u0629 "+
+                "\u062c\u0645\u064a\u0644\u0629"
         };
 
         Transliterator t = Transliterator.getInstance("Latin-Arabic");
@@ -366,6 +367,23 @@ public class TransliteratorTest extends IntlTest {
             logln("Ok:   \"" + exp + "\"");
         } else {
             logln("FAIL: \"" + out + "\", wanted \"" + exp + "\"");
+        }
+    }
+
+    /**
+     * Test pattern quoting and escape mechanisms.
+     */
+    public void TestPatternQuoting() {
+        // Array of 3n items
+        // Each item is <rules>, <input>, <expected output>
+        String[] DATA = {
+            "\u4E01>'[male adult]'", "\u4E01", "[male adult]",
+        };
+
+        for (int i=0; i<DATA.length; i+=3) {
+            logln("Pattern: " + escape(DATA[i]));
+            Transliterator t = new RuleBasedTransliterator("<ID>", DATA[i]);
+            expect(t, DATA[i+1], DATA[i+2]);
         }
     }
 
@@ -470,304 +488,4 @@ public class TransliteratorTest extends IntlTest {
         }
         return buf.toString();
     }
-
-    /*
-    static final String KANA_RT_DATA =
-"a "+
-
-"ba bi bu be bo "+
-"bya byi byu bye byo "+
-"bba "+
-
-"da di du de do "+
-"dya dyi dyu dye dyo "+
-"dha dhi dhu dhe dho "+
-"dda "+
-
-"e "+
-
-"fa fi fe fo "+
-"fya fyu fyo "+
-"ffa "+
-
-"ga gi gu ge go "+
-"gya gyi gyu gye gyo "+
-"gwa gwi gwu gwe gwo "+
-"gga "+
-
-"ha hi hu he ho "+
-"hya hyi hyu hye hyo "+
-"hha "+
-
-"i "+
-
-"ka ki ku ke ko "+
-"kwa kwi kwu kwe kwo "+
-"kya kyi kyu kye kyo "+
-"kka "+
-
-"ma mi mu me mo "+
-"mya myi myu mye myo "+
-"mba mfa mma mpa mva "+
-"m'' "+
-
-"na ni nu ne no "+
-"nya nyi nyu nye nyo "+
-"nn n'' n "+
-
-"o "+
-
-"pa pi pu pe po "+
-"pya pyi pyu pye pyo "+
-"ppa "+
-
-"qa qi qu qe qo "+
-"qya qyi qyu qye qyo "+
-"qqa "+
-
-"ra ri ru re ro "+
-"rya ryi ryu rye ryo "+
-"rra "+
-
-"sa si su se so "+
-"sya syi syu sye syo "+
-"ssya ssa "+
-
-"ta ti tu te to "+
-"tha thi thu the tho "+
-"tsa tsi tse tso "+
-"tya tyi tyu tye tyo "+
-"ttsa "+
-"tta "+
-
-"u "+
-
-"va vi vu ve vo "+
-"vya vyi vyu vye vyo "+
-"vva "+
-
-"wa wi we wo "+
-"wwa "+
-
-"ya yu ye yo "+
-"yya "+
-
-"za zi zu ze zo "+
-"zya zyi zyu zye zyo "+
-"zza "+
-
-"xa xi xu xe xo "+
-"xka xke "+
-"xtu "+
-"xwa "+
-"xya xyu xyo "+
-
-        "akka akki akku akke akko "+
-        "akkya akkyu akkyo "+
-
-        "atta atti attu atte atto "+
-        "attya attyu attyo "+
-        "adda addi addu adde addo "+
-
-        "atcha atchi atchu atche atcho "+
-
-        "assa assi assu asse asso "+
-        "assya assyu assyo "+
-
-        "ahha ahhi ahhu ahhe ahho "+
-        "appa appi appu appe appo "+
-
-        "an "+
-        "ana ani anu ane ano "+
-        "anna anni annu anne anno "+
-        "an'a an'i an'u an'e an'o "+
-
-        "annna annni annnu annne annno "+
-        "an'na an'ni an'nu an'ne an'no "+
-
-        "anka anki anku anke anko "+
-        "anga angi angu ange ango "+
-
-        "ansa ansi ansu anse anso "+
-        "anza anzi anzu anze anzo "+
-        "anzya anzyu anzyo "+
-
-        "anta anti antu ante anto "+
-        "antya antyu antyo "+
-        "anda andi andu ande ando "+
-
-        "ancha anchi anchu anche ancho "+
-        "anja anji anju anje anjo "+
-        "antsa antsu antso "+
-
-        "anpa anpi anpu anpe anpo "+
-        "ampa ampi ampu ampe ampo "+
-
-        "anba anbi anbu anbe anbo "+
-        "amba ambi ambu ambe ambo "+
-
-        "anma anmi anmu anme anmo "+
-        "amma ammi ammu amme ammo "+
-
-        "anwa anwi anwu anwe anwo "+
-
-        "anha anhi anhu anhe anho "+
-
-        "anya anyi anyu anye anyo "+
-        "annya annyi annyu annye annyo "+
-        "an'ya an'yi an'yu an'ye an'yo "+
-
-        "kkk "+
-        "ggg "+
-        "sss "+
-        "zzz "+
-        "ttt "+
-        "ddd "+
-        "nnn "+
-        "hhh "+
-        "bbb "+
-        "ppp "+
-        "mmm "+
-        "yyy "+
-        "rrr "+
-        "www ";
-*/
-
-        /*+
-
-        "A I U E O "+
-        "XA XI XU XE XO "+
-
-        "KA KI KU KE KO "+
-        "KYA KYI KYU KYE KYO "+
-        "KWA KWI KWU KWE KWO "+
-        "QA QI QU QE QO "+
-        "QYA QYI QYU QYE QYO "+
-        "XKA XKE "+
-
-        "GA GI GU GE GO "+
-        "GYA GYI GYU GYE GYO "+
-        "GWA GWI GWU GWE GWO "+
-
-        "SA SI SU SE SO  "+
-        "SHA SHI SHU SHE SHO "+
-        "SYA SYI SYU SYE SYO "+
-
-        "ZA ZI ZU ZE ZO "+
-        "ZYA ZYI ZYU ZYE ZYO "+
-        "JA JI JU JE JO "+
-        "JYA JYU JYO "+
-
-        "TA TI TU TE TO "+
-        "XTU XTSU "+
-        "TYA TYU TYO "+
-        "CYA CYU CYO "+
-        "CHA CHI CHU CHE CHO "+
-        "TSA TSI TSU TSE TSO "+
-        "DA DI DU DE DO "+
-        "DYA DYU DYO "+
-        "THA THI THU THE THO "+
-        "DHA DHI DHU DHE DHO "+
-
-        "NA NI NU NE NO "+
-        "NYA NYU NYO "+
-
-        "HA HI HU HE HO "+
-        "HYA HYU HYO "+
-        "FA FI FU FE FO "+
-        "FYA FYU FYO "+
-        "BA BI BU BE BO "+
-        "BYA BYU BYO "+
-        "PA PI PU PE PO "+
-        "PYA PYU PYO "+
-
-        "MA MI MU ME MO "+
-        "MYA MYU MYO "+
-        "YA YI YU YE YO "+
-        "XYA XYI XYU XYE XYO "+
-
-        "RA RI RU RE RO "+
-        "LA LI LU LE LO "+
-        "RYA RYI RYU RYE RYO "+
-        "LYA LYI LYU LYE LYO "+
-
-        "WA WI WU WE WO "+
-        "VA VI VU VE VO "+
-        "VYA VYU VYO "+
-
-        "CYA CYI CYU CYE CYO "+
-
-        "NN "+
-        "N' "+
-        "N "+
-
-        "AKKA AKKI AKKU AKKE AKKO "+
-        "AKKYA AKKYU AKKYO "+
-
-        "ATTA ATTI ATTU ATTE ATTO "+
-        "ATTYA ATTYU ATTYO "+
-        "ADDA ADDI ADDU ADDE ADDO "+
-
-        "ATCHA ATCHI ATCHU ATCHE ATCHO "+
-
-        "ASSA ASSI ASSU ASSE ASSO "+
-        "ASSYA ASSYU ASSYO "+
-
-        "AHHA AHHI AHHU AHHE AHHO "+
-        "APPA APPI APPU APPE APPO "+
-
-        "AN "+
-        "ANA ANI ANU ANE ANO "+
-        "ANNA ANNI ANNU ANNE ANNO "+
-        "AN'A AN'I AN'U AN'E AN'O "+
-
-        "ANNNA ANNNI ANNNU ANNNE ANNNO "+
-        "AN'NA AN'NI AN'NU AN'NE AN'NO "+
-
-        "ANKA ANKI ANKU ANKE ANKO "+
-        "ANGA ANGI ANGU ANGE ANGO "+
-
-        "ANSA ANSI ANSU ANSE ANSO "+
-        "ANZA ANZI ANZU ANZE ANZO "+
-        "ANZYA ANZYU ANZYO "+
-
-        "ANTA ANTI ANTU ANTE ANTO "+
-        "ANTYA ANTYU ANTYO "+
-        "ANDA ANDI ANDU ANDE ANDO "+
-
-        "ANCHA ANCHI ANCHU ANCHE ANCHO "+
-        "ANJA ANJI ANJU ANJE ANJO "+
-        "ANTSA ANTSU ANTSO "+
-
-        "ANPA ANPI ANPU ANPE ANPO "+
-        "AMPA AMPI AMPU AMPE AMPO "+
-
-        "ANBA ANBI ANBU ANBE ANBO "+
-        "AMBA AMBI AMBU AMBE AMBO "+
-
-        "ANMA ANMI ANMU ANME ANMO "+
-        "AMMA AMMI AMMU AMME AMMO "+
-
-        "ANWA ANWI ANWU ANWE ANWO "+
-
-        "ANHA ANHI ANHU ANHE ANHO "+
-
-        "ANYA ANYI ANYU ANYE ANYO "+
-        "ANNYA ANNYI ANNYU ANNYE ANNYO "+
-        "AN'YA AN'YI AN'YU AN'YE AN'YO "+
-
-        "KKK "+
-        "GGG "+
-        "SSS "+
-        "ZZZ "+
-        "TTT "+
-        "DDD "+
-        "NNN "+
-        "HHH "+
-        "BBB "+
-        "PPP "+
-        "MMM "+
-        "YYY "+
-        "RRR "+
-        "WWW";*/
 }
