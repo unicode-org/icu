@@ -112,7 +112,7 @@ static UConverterSharedData* ucnv_data_unFlattenClone(UDataMemory *pData, UError
 
 /*initializes some global variables */
 static UHashtable *SHARED_DATA_HASHTABLE = NULL;
-static UMTX        cnvCacheMutex;         /* Mutex for synchronizing cnv cache access. */
+static UMTX        cnvCacheMutex = NULL;  /* Mutex for synchronizing cnv cache access. */
                                           /*  Note:  the global mutex is used for      */
                                           /*         reference count updates.          */
 
