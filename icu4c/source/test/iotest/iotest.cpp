@@ -363,7 +363,7 @@ static void DataDrivenScanf(void) {
     double dbl, expectedDbl;
     int32_t uBufferLenReturned;
 
-    const char *fileLocale = "en_US_POSIX";
+    //const char *fileLocale = "en_US_POSIX";
     //int32_t uFileBufferLenReturned;
     //UFILE *testFile;
 
