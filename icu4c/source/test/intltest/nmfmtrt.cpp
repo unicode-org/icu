@@ -110,7 +110,7 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt)
 {
     if (TRUE)
     {
-#if !defined(OS390) || defined(IEEE_ON)
+#if IEEE_754
         test(fmt, uprv_getNaN());
         test(fmt, uprv_getInfinity());
         test(fmt, -uprv_getInfinity());
@@ -133,7 +133,7 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt)
             test(fmt, randomDouble(1e-50));
 #ifndef OS390
             test(fmt, randomDouble(1e100));
-#elif defined(IEEE_ON)
+#elif IEEE_754
             test(fmt, randomDouble(1e75));    /*OS390*/
 #endif
             // {sfb} When formatting with a percent instance, numbers very close to
@@ -150,7 +150,7 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt)
 #ifndef OS390
                 test(fmt, randomDouble(1e308) / ((DecimalFormat*)fmt)->getMultiplier());
 #else
-#   ifdef IEEE_ON
+#   if IEEE_754
                 test(fmt, randomDouble(1e75) / ((DecimalFormat*)fmt)->getMultiplier());   
 #   else
                 test(fmt, randomDouble(1e65) / ((DecimalFormat*)fmt)->getMultiplier());   /*OS390*/
@@ -162,7 +162,7 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt)
 // doesn't match NT
             test(fmt, randomDouble(1e-290));
 #elif defined(OS390)
-#   ifdef IEEE_ON
+#   if IEEE_754
             test(fmt, randomDouble(1e-78));  /*OS390*/
 #   endif
 #else
@@ -170,7 +170,7 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt)
 #endif
 #ifndef OS390
             test(fmt, randomDouble(1e-100));
-#elif defined(IEEE_ON)
+#elif IEEE_754
             test(fmt, randomDouble(1e-78));  /*OS390*/
 #endif
         }
