@@ -475,6 +475,10 @@ private:
 };
 
 U_NAMESPACE_END
+#else
+
+#error "The unicode/convert.h header is deprecated. Please use the converter C API in unicode/ucnv.h instead."
+
 #endif /* ICU_UNICODECONVERTER_USE_DEPRECATES */
 
 #endif
