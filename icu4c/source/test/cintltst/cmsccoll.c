@@ -2432,6 +2432,43 @@ static void TestContraction() {
     }
 }
 
+static void TestExpansion() {
+    const static char *testrules[] = {
+        "&J << K / B & K << M",
+        "&J << K / B << M"
+    };
+    const static UChar testdata[][3] = {
+        {(UChar)'J', (UChar)'A', 0},
+        {(UChar)'K', (UChar)'A', 0},
+        {(UChar)'M', (UChar)'A', 0},
+        {(UChar)'K', (UChar)'C', 0},
+        {(UChar)'J', (UChar)'C', 0},
+        {(UChar)'M', (UChar)'C', 0}
+    };
+    
+    UErrorCode  status   = U_ZERO_ERROR;
+    UCollator  *coll;
+    UChar       rule[256] = {0};
+    uint32_t    rlen     = 0;
+    int         i;
+
+    for (i = 0; i < sizeof(testrules) / sizeof(testrules[0]); i ++) {
+        int j = 0;
+        log_verbose("Rule %s for testing\n", testrules[i]);
+        rlen = u_unescape(testrules[i], rule, 32);
+        coll = ucol_openRules(rule, rlen, UNORM_NFD, UCOL_TERTIARY, &status);
+        if (U_FAILURE(status)) {
+            log_err("Collator creation failed %s\n", testrules[i]);
+            return;
+        }
+        
+        for (j = 0; j < 5; j ++) {
+            doTest(coll, testdata[j], testdata[j + 1], UCOL_LESS);
+        }
+        ucol_close(coll);
+    }
+}
+
 void addMiscCollTest(TestNode** root)
 {
     addTest(root, &TestCyrillicTailoring, "tscoll/cmsccoll/TestCyrillicTailoring");
@@ -2459,6 +2496,7 @@ void addMiscCollTest(TestNode** root)
     addTest(root, &TestComposeDecompose, "tscoll/cmsccoll/TestComposeDecompose");
     addTest(root, &TestCompressOverlap, "tscoll/cmsccoll/TestCompressOverlap");
     addTest(root, &TestContraction, "tscoll/cmsccoll/TestContraction");
+    /* addTest(root, &TestExpansion, "tscoll/cmsccoll/TestExpansion"); */
     /*addTest(root, &PrintMarkDavis, "tscoll/cmsccoll/PrintMarkDavis");*/ /* this test doesn't test - just prints sortkeys */
     /*addTest(root, &TestGetCaseBit, "tscoll/cmsccoll/TestGetCaseBit");*/ /*this one requires internal things to be exported */
 }
