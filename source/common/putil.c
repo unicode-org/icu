@@ -126,7 +126,6 @@
 #elif defined(U_QNX)
 #include <sys/neutrino.h>
 #endif
-#endif
 
 /* Define the extension for data files, again... */
 #define DATA_TYPE "dat"
