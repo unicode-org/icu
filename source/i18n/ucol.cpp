@@ -3108,7 +3108,7 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
 			// Skipping over leading zeroes.      	
       		if (digVal != 0 || nonZeroValReached){
 				if (digVal != 0 && !nonZeroValReached)
-					nonZeroValReached = true;
+					nonZeroValReached = TRUE;
 				
 				/*
 					We parse the digit string into base 100 numbers (this fits into a byte).
@@ -3778,7 +3778,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
 			// Skipping over "trailing" zeroes but we still add to digIndx.
       		if (digVal != 0 || nonZeroValReached){
 				if (digVal != 0 && !nonZeroValReached)
-					nonZeroValReached = true;
+					nonZeroValReached = TRUE;
 				
 				/*
 					We parse the digit string into base 100 numbers (this fits into a byte).
