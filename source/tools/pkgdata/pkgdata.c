@@ -216,10 +216,12 @@ main(int argc, char* argv[]) {
         char *csname, *cp;
         const char *sp;
 
-        csname = (char *) uprv_malloc((len + 1 + 1) * sizeof(*o.cShortName));
-        *csname = '_';
-        for (sp = o.shortName, cp = csname + 1; *sp; ++sp) {
-            *cp++ = isalnum(*sp) ? *sp : '_';
+        cp = csname = (char *) uprv_malloc((len + 1 + 1) * sizeof(*o.cShortName));
+        if (*(sp = o.shortName)) {
+            *cp++ = isalpha(*sp) ? * sp : '_';
+            for (++sp; *sp; ++sp) {
+                *cp++ = isalnum(*sp) ? *sp : '_';
+            }
         }
         *cp = 0;
 

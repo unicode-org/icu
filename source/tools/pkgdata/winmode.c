@@ -119,11 +119,11 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
   }
   else if (isStatic)
   {
-      uprv_strcpy(tmp, LIB_PREFIX "$(CNAME)" UDATA_LIB_SUFFIX);
+      uprv_strcpy(tmp, LIB_PREFIX);
+      uprv_strcat(tmp, o->cShortName);
+      uprv_stract(tmp, UDATA_LIB_SUFFIX);
 
       pkg_sttc_writeReadme(o, tmp, status);
-      fprintf(stdout, "HEY! wrote to readme. -> %s\n", u_errorName(*status));
-
       if(U_FAILURE(*status))
       {
           return;
