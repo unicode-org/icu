@@ -846,6 +846,55 @@ public class TimeZoneRegression extends TestFmwk {
 	    logln("got IllegalArgumentException");
 	}
     }
+
+    /**
+     * Test to see if DateFormat understands zone equivalency groups.  It
+     * might seem that this should be a DateFormat test, but it's really a
+     * TimeZone test -- the changes to DateFormat are minor.
+     *
+     * We use two known, stable zones that shouldn't change much over time
+     * -- America/Vancouver and America/Los_Angeles.  However, they MAY
+     * change at some point -- if that happens, replace them with any two
+     * zones in an equivalency group where one zone has localized name
+     * data, and the other doesn't, in some locale.
+     */
+    public void TestJ449() {
+        String str;
+
+        // Modify the following three as necessary.  The two IDs must
+        // specify two zones in the same equivalency group.  One must have
+        // locale data in 'loc'; the other must not.
+        String idWithLocaleData = "America/Los_Angeles";
+        String idWithoutLocaleData = "America/Vancouver";
+        Locale loc = new Locale("en", "", "");
+
+        TimeZone zoneWith = TimeZone.getTimeZone(idWithLocaleData);
+        TimeZone zoneWithout = TimeZone.getTimeZone(idWithoutLocaleData);
+        // Make sure we got valid zones
+        if (!(zoneWith.getID().equals(idWithLocaleData) &&
+              zoneWithout.getID().equals(idWithoutLocaleData))) {
+            errln("Fail: Unable to create zones");
+        } else {
+            GregorianCalendar calWith = new GregorianCalendar(zoneWith);
+            GregorianCalendar calWithout = new GregorianCalendar(zoneWithout);
+            SimpleDateFormat fmt =
+                new SimpleDateFormat("MMM d yyyy hh:mm a zzz", loc);
+            Date date = new Date(0L);
+            fmt.setCalendar(calWith);
+            String strWith = fmt.format(date);
+            fmt.setCalendar(calWithout);
+            String strWithout = fmt.format(date);
+            if (strWith.equals(strWithout)) {
+                logln("Ok: " + idWithLocaleData + " -> " +
+                      strWith + "; " + idWithoutLocaleData + " -> " +
+                      strWithout);
+            } else {
+                errln("FAIL: " + idWithLocaleData + " -> " +
+                      strWith + "; " + idWithoutLocaleData + " -> " +
+                      strWithout);
+            }
+        }
+    }
 }
 
 //eof

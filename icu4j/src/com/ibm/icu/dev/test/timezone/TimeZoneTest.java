@@ -706,6 +706,24 @@ public class TimeZoneTest extends TestFmwk
             errln("The offset for 10AM, 10/17/98 should have been -5 hours, but we got "
                   + (offset / millisPerHour) + " hours.");
     }
+
+    public void TestEquivalencyGroups() {
+        String id = "America/Los_Angeles";
+        int n = TimeZone.countEquivalentIDs(id);
+        if (n < 2) {
+            errln("FAIL: countEquivalentIDs(" + id + ") returned " + n +
+                  ", expected >= 2");
+        }
+        for (int i=0; i<n; ++i) {
+            String s = TimeZone.getEquivalentID(id, i);
+            if (s.length() == 0) {
+                errln("FAIL: getEquivalentID(" + id + ", " + i +
+                      ") returned \"" + s + "\", expected valid ID");
+            } else {
+                logln("" + i + ":" + s);
+            }
+        }
+    }
 }
 
 //eof
