@@ -1869,7 +1869,7 @@ void TransliteratorTest::TestSTV(void) {
         errln((UnicodeString)"FAIL: Bad source count: " + ns);
         return;
     }
-    int32_t i;
+    int32_t i, j;
     for (i=0; i<ns; ++i) {
         UnicodeString source;
         Transliterator::getAvailableSource(i, source);
@@ -1910,6 +1910,8 @@ void TransliteratorTest::TestSTV(void) {
 
     // Test registration
     const char* IDS[] = { "Fieruwer", "Seoridf-Sweorie", "Oewoir-Oweri/Vsie" };
+    const char* FULL_IDS[] = { "Any-Fieruwer", "Seoridf-Sweorie", "Oewoir-Oweri/Vsie" };
+    const char* SOURCES[] = { NULL, "Seoridf", "Oewoir" };
     for (i=0; i<3; ++i) {
         Transliterator *t = new TestTrans(IDS[i]);
         if (t == 0) {
@@ -1938,6 +1940,36 @@ void TransliteratorTest::TestSTV(void) {
             errln((UnicodeString)"FAIL: Unregistration failed for ID " +
                   IDS[i]);
             delete t;
+        }
+    }
+
+    // Make sure getAvailable API reflects removal
+    int32_t n = Transliterator::countAvailableIDs();
+    for (i=0; i<n; ++i) {
+        UnicodeString id = Transliterator::getAvailableID(i);
+        for (j=0; j<3; ++j) {
+            if (id.caseCompare(FULL_IDS[j],0)==0) {
+                errln((UnicodeString)"FAIL: unregister(" + id + ") failed");
+            }
+        }
+    }
+    n = Transliterator::countAvailableTargets("Any");
+    for (i=0; i<n; ++i) {
+        UnicodeString t;
+        Transliterator::getAvailableTarget(i, "Any", t);
+        if (t.caseCompare(IDS[0],0)==0) {
+            errln((UnicodeString)"FAIL: unregister(Any-" + t + ") failed");
+        }
+    }
+    n = Transliterator::countAvailableSources();
+    for (i=0; i<n; ++i) {
+        UnicodeString s;
+        Transliterator::getAvailableSource(i, s);
+        for (j=0; j<3; ++j) {
+            if (SOURCES[j] == NULL) continue;
+            if (s.caseCompare(SOURCES[j],0)==0) {
+                errln((UnicodeString)"FAIL: unregister(" + s + "-*) failed");
+            }
         }
     }
 }
