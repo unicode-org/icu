@@ -480,16 +480,17 @@ public class GregorianCalendar extends Calendar {
     }
 
     /**
-     * Compares this GregorianCalendar to an object reference.
-     * @param obj the object reference with which to compare
-     * @return true if this object is equal to <code>obj</code>; false otherwise
+     * Returns true if the given Calendar object is equivalent to this
+     * one.  Calendar override.
+     *
+     * @param other the Calendar to be compared with this Calendar   
+     * @since ICU 2.4
      */
-    public boolean equals(Object obj) {
-        return super.equals(obj) &&
-            // Calendar.equals() ensures obj instanceof GregorianCalendar
-            gregorianCutover == ((GregorianCalendar)obj).gregorianCutover;
+    public boolean isEquivalentTo(Calendar other) {
+        return super.isEquivalentTo(other) &&
+            gregorianCutover == ((GregorianCalendar)other).gregorianCutover;
     }
-    
+
     /**
      * Override hashCode.
      * Generates the hash code for the GregorianCalendar object
