@@ -32,21 +32,29 @@ import com.ibm.icu.text.UnicodeSet;
 public class BagFormatter {
     static final boolean DEBUG = false;
     
+    private static final String HTML_RULES = 
+    "'<' > '&lt;' ;" +
+    "'<' < '&'[lL][Tt]';' ;" +
+    "'&' > '&amp;' ;" +
+    "'&' < '&'[aA][mM][pP]';' ;" +
+    "'>' > '&gt;' ;" +
+    "'>' < '&'[gG][tT]';' ;" +
+    "'\"' > '&quot;' ; " +
+    "'\"' < '&'[qQ][uU][oO][tT]';' ; ";
+    
+    private static final String XML_RULES = HTML_RULES +
+    "'' > '&apos;' ; " +
+    "'' < '&'[aA][pP][oO][sS]';' ; ";
+
+    public static final Transliterator toXML = Transliterator.createFromRules(
+            "any-xml", XML_RULES, Transliterator.FORWARD);
+    public static final Transliterator fromXML = Transliterator.createFromRules(
+            "xml-any", XML_RULES, Transliterator.REVERSE);
+    
     public static final Transliterator toHTML = Transliterator.createFromRules(
-        "any-html",        
-            "'<' > '&lt;' ;" +
-            "'&' > '&amp;' ;" +
-            "'>' > '&gt;' ;" +
-            "'\"' > '&quot;' ; ",
-        Transliterator.FORWARD);
-        
+            "any-html", HTML_RULES, Transliterator.FORWARD);    
     public static final Transliterator fromHTML = Transliterator.createFromRules(
-        "html-any",        
-            "'<' < '&'[lL][Tt]';' ;" +
-            "'&' < '&'[aA][mM][pP]';' ;" +
-            "'>' < '&'[gG][tT]';' ;" +
-            "'\"' < '&'[qQ][uU][oO][tT]';' ; ",
-        Transliterator.REVERSE);
+    		"html-any", HTML_RULES, Transliterator.REVERSE);
 
     public static final PrintWriter CONSOLE = new PrintWriter(System.out,true);
 

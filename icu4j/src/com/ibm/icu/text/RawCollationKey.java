@@ -31,12 +31,15 @@ import com.ibm.icu.util.ByteArrayWrapper;
  *     // do something with key.bytes
  * }
  * </code>
+ * <p><strong>Note:</strong> Comparison between RawCollationKeys created by 
+ * different Collators might return incorrect results.  
+ * See class documentation for Collator.</p>
  * @draft ICU 2.8
  * @deprecated This is a draft API and might change in a future release of ICU.
  * @see RuleBasedCollator
  * @see CollationKey
  */
-public final class RawCollationKey extends ByteArrayWrapper 
+public final class RawCollationKey extends ByteArrayWrapper
 {
     // public constructors --------------------------------------------------
     
@@ -94,38 +97,4 @@ public final class RawCollationKey extends ByteArrayWrapper
         this.size = size;
     }
     
-    // public method --------------------------------------------------------
-
-    /**
-     * <p>
-     * Compares this RawCollationKey object to the target RawCollationKey 
-     * object. The collation rules of the Collator that created this key are
-     * applied.
-     * </p>
-     * <p><strong>Note:</strong> Comparison between RawCollationKeys created by 
-     * different Collators might return incorrect results.  
-     * See class documentation.</p>
-     * @param target RawCollationKey to be compared with
-     * @return 0 if the sort order is the same,
-     *         &lt; 0 if this RawCollationKey has a smaller sort order than 
-     *                target,
-     *         &gt; 0 if this RawCollationKey has a bigger sort order than 
-     *                target.
-     * @draft ICU 2.8 
-     * @deprecated This is a draft API and might change in a future release of ICU.
-     */
-    public int compareTo(RawCollationKey target) 
-    {
-    for (int i = 0;; ++i) {
-        int l = bytes[i]&0xff;
-        int r = target.bytes[i]&0xff;
-        if (l < r) {
-        return -1;
-        } else if (l > r) {
-        return 1;
-        } else if (l == 0) {
-        return 0;
-        }
-    }
-    }
 }
