@@ -478,7 +478,7 @@ void TestSafeClone() {
     u_uastrcpy(test2, "abcda");
     
     /* one default collator & two complex ones */
-	someCollators[0] = ucol_open(NULL, &err);
+	someCollators[0] = ucol_open("en_US", &err);
 	someCollators[1] = ucol_open("ko", &err);
 	someCollators[2] = ucol_open("ja_JP", &err);
 
@@ -773,7 +773,7 @@ void TestElemIter()
     UCollationElements *iterator1, *iterator2, *iterator3;
     UErrorCode status = U_ZERO_ERROR;
     log_verbose("testing UCollatorElements begins...\n");
-    col = ucol_open(NULL, &status);
+    col = ucol_open("en_US", &status);
     ucol_setNormalization(col, UCOL_NO_NORMALIZATION);
     if (U_FAILURE(status)) {
         log_err("ERROR: Default collation creation failed.: %s\n", myErrorName(status));
@@ -849,18 +849,30 @@ void TestElemIter()
     doAssert( ((order1 & UCOL_TERTIARYMASK) == (order3 & UCOL_TERTIARYMASK)), "The tertiary orders should be identical");
     
     order1=ucol_next(iterator1, &status);
+    if (U_FAILURE(status)) {
+        log_err("Somehow ran out of memory stepping through the iterator2.: %s\n", myErrorName(status));
+        return;
+    }
     order3=ucol_next(iterator3, &status);
+    if (U_FAILURE(status)) {
+        log_err("Somehow ran out of memory stepping through the iterator2.: %s\n", myErrorName(status));
+        return;
+    }
     doAssert( ((order1 & UCOL_PRIMARYMASK) == (order3 & UCOL_PRIMARYMASK)), "The primary orders should be identical");
     doAssert( ((order1 & UCOL_TERTIARYMASK) != (order3 & UCOL_TERTIARYMASK)), "The tertiary orders should be different");
     
     order1=ucol_next(iterator1, &status);
+    if (U_FAILURE(status)) {
+        log_err("Somehow ran out of memory stepping through the iterator2.: %s\n", myErrorName(status));
+        return;
+    }
     order3=ucol_next(iterator3, &status);
+    if (U_FAILURE(status)) {
+        log_err("Somehow ran out of memory stepping through the iterator2.: %s\n", myErrorName(status));
+        return;
+    }
     doAssert( ((order1 & UCOL_SECONDARYMASK) != (order3 & UCOL_SECONDARYMASK)), "The secondary orders should be different");
     doAssert( (order1 != UCOL_NULLORDER), "Unexpected end of iterator reached");
-
-    ucol_reset(iterator1);
-    ucol_reset(iterator2);
-    ucol_reset(iterator3);
 
     free(testString1);
     free(testString2);
