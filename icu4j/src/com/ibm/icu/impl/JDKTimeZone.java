@@ -208,7 +208,6 @@ public class JDKTimeZone extends TimeZone {
 		// TimeZone (JDK 1.4) or SimpleTimeZone (JDK 1.3).   
 		final Object[] args = new Object[0];
 		final Class[] argtypes = new Class[0];
-		System.out.println("JDKTimeZone.getDSTSavings");
 		Method m = zone.getClass().getMethod("getDSTSavings", argtypes); 
 		return ((Integer) m.invoke(zone, args)).intValue();   
 	    } catch (Exception e) {   
