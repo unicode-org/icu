@@ -81,8 +81,8 @@ ALL : $(OUTPUT)
 # invoke pkgdata - static
 "$(DLL_OUTPUT)\$(RESNAME).lib" : $(RB_FILES) $(RESFILES)
 	@echo Building $(RESNAME).lib
-	@"$(ICUTOOLS)\pkgdata" -f -v -m static -c -p $(RESNAME) -d "$(DLL_OUTPUT)" <<pkgdatain.txt
-$(RB_FILES:.res =.res
+	@"$(ICUTOOLS)\pkgdata" -f -v -m static -c -p $(RESNAME) -d "$(DLL_OUTPUT)" -s "$(RESDIR)" <<pkgdatain.txt
+$(RESSRC:.txt =.res
 )
 <<KEEP
 
@@ -90,7 +90,7 @@ $(RB_FILES:.res =.res
 CLEAN :
     -@erase "$(RB_FILES)"
 	-@erase "$(CFG)\*uconvmsg*.*"
-    -@"$(ICUTOOLS)\pkgdata" -f --clean -v -m static -c -p $(RESNAME) -d "$(DLL_OUTPUT)" pkgdatain.txt
+    -@"$(ICUTOOLS)\pkgdata" -f --clean -v -m static -c -p $(RESNAME) -d "$(DLL_OUTPUT)" -s "$(RESDIR)" pkgdatain.txt
 
 # Inference rule for creating resource bundles
 {$(RESDIR)}.txt{$(RESDIR)}.res:
