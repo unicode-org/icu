@@ -721,6 +721,11 @@ RegexMatcher &RegexMatcher::reset(const UnicodeString &input) {
     return *this;
 }
 
+RegexMatcher &RegexMatcher::reset(const UChar *) {
+    fDeferredStatus = U_INTERNAL_PROGRAM_ERROR;
+    return *this;
+}
+
 
 RegexMatcher &RegexMatcher::reset(int32_t position, UErrorCode &status) {
     if (U_FAILURE(status)) {

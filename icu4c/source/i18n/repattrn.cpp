@@ -324,6 +324,15 @@ RegexMatcher *RegexPattern::matcher(const UnicodeString &input,
     return retMatcher;
 };
 
+RegexMatcher *RegexPattern::matcher(const UChar *input,
+                                    UErrorCode          &status)  const 
+{
+    RegexMatcher *retMatcher = NULL;
+    if (U_SUCCESS(status)) {
+        status = U_UNSUPPORTED_ERROR;
+    }
+    return retMatcher;
+}
 
 
 //---------------------------------------------------------------------
