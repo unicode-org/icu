@@ -1385,7 +1385,7 @@ static const struct {
     {0xac00, "HANGUL SYLLABLE GA", "", "HANGUL SYLLABLE GA" },
     {0xd7a3, "HANGUL SYLLABLE HIH", "", "HANGUL SYLLABLE HIH" },
     {0xd800, "", "", "<lead surrogate-D800>" },
-    {0xdc00, "", "", "<trail surrogate-D800>" },
+    {0xdc00, "", "", "<trail surrogate-DC00>" },
     {0xff08, "FULLWIDTH LEFT PARENTHESIS", "FULLWIDTH OPENING PARENTHESIS", "FULLWIDTH LEFT PARENTHESIS" },
     {0xffe5, "FULLWIDTH YEN SIGN", "", "FULLWIDTH YEN SIGN" },
     {0xffff, "", "", "<noncharacter-FFFF>" },
