@@ -225,6 +225,7 @@ case "${host}" in
 	*-*-freebsd*) 	platform=LINUX ;;
 	*-*-aix*) 	platform=AIX ;;
 	*-*-hpux*) 	platform=HPUX ;;
+	*-*-irix*)      platform=IRIX ;;
 	*-*-os390*)	platform=OS390 ;;
 	*) 		platform=UNKNOWN ;;
 esac
@@ -239,6 +240,7 @@ case "${host}" in
 	*-*-freebsd*) 	ld_rpath_suf=" " ;;
 	*-*-aix*) 	ld_rpath_suf="" ;;
 	*-*-hpux*) 	ld_rpath_suf=":" ;;
+	*-*-irix*)      ld_rpath_suf=" " ;;
 	*-*-os390*)	ld_rpath_suf=" " ;;
 	*) 		ld_rpath_suf="" ;;
 esac
