@@ -265,7 +265,7 @@ void RBBISetBuilder::build() {
 //  getTrieSize()    Return the size that will be required to serialize the Trie.
 //
 //-----------------------------------------------------------------------------------
-int32_t RBBISetBuilder::getTrieSize() {
+int32_t RBBISetBuilder::getTrieSize() /*const*/ {
     fTrieSize  = utrie_serialize(fTrie,
                                     NULL,                // Buffer
                                     0,                   // Capacity
@@ -339,7 +339,7 @@ void  RBBISetBuilder::addValToSets(UVector *sets, uint32_t val) {
 //   getNumOutputSets
 //
 //------------------------------------------------------------------------
-int32_t  RBBISetBuilder::getNumCharCategories() {
+int32_t  RBBISetBuilder::getNumCharCategories() const {
     return fGroupCount + 1;
 }
 
@@ -351,7 +351,7 @@ int32_t  RBBISetBuilder::getNumCharCategories() {
 //                     the first UChar32 that is in the set of chars 
 //                     in the category.
 //------------------------------------------------------------------------
-UChar32  RBBISetBuilder::getFirstChar(int32_t category) {
+UChar32  RBBISetBuilder::getFirstChar(int32_t category) const {
     RangeDescriptor   *rlRange;
     UChar32            retVal = (UChar32)-1;
     for (rlRange = fRangeList; rlRange!=0; rlRange=rlRange->fNext) {

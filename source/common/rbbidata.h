@@ -144,7 +144,7 @@ public:
     void                  removeReference();
     UBool                 operator ==(const RBBIDataWrapper &other) const;
     int32_t               hashCode();
-    const UnicodeString  &getRuleSourceString();
+    const UnicodeString  &getRuleSourceString() const;
 #ifdef RBBI_DEBUG
     void                  printData();
     void                  printTable(const char *heading, const RBBIStateTable *table);

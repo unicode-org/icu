@@ -38,7 +38,7 @@ public:
     ~RBBITableBuilder();
 
     void     build();
-    int32_t  getTableSize();            // Return the runtime size in bytes of
+    int32_t  getTableSize() const;      // Return the runtime size in bytes of
                                         //     the built state table
     void     exportTable(void *where);  // fill in the runtime state table.
                                         //     Sufficient memory must exist at

@@ -887,7 +887,7 @@ void RBBITableBuilder::printPosSets(RBBINode *n) {
 //                     state transition table.
 //
 //-----------------------------------------------------------------------------
-int32_t  RBBITableBuilder::getTableSize() {
+int32_t  RBBITableBuilder::getTableSize() const {
     int32_t    size = 0;
     int32_t    numRows;
     int32_t    numCols;
