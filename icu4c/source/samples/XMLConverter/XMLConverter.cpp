@@ -23,7 +23,7 @@
 #endif
 
 #include <string.h>
-#include <cstring.h>
+#include "cstring.h"
 
 #ifdef _WIN32
 #  include <windows.h>
@@ -110,7 +110,7 @@ void usage(char *  exeName)
 {
     fprintf(stdout, "\n USAGE: \n \t%s [-h] [-v] -e trgEncName inputFile outputFile \n\n", exeName);
     fprintf(stdout, " %s    = Exe name \n ", exeName);
-	fprintf(stdout, "-h     \t= to get help (this information!) \n ");
+    fprintf(stdout, "-h     \t= to get help (this information!) \n ");
     fprintf(stdout, "-v     \t= set verbose on; \n \t\t  to get more information about the conversion process \n ");
     fprintf(stdout, "-e     \t= This is a mandatory option and follows with the targetEncName");
     fprintf(stdout, "       \t\t  E.g., output encoding can be like : \n \t\t  ascii, utf8, utf-16be, utf-16le, ebcdic-cp-us \n");
@@ -126,11 +126,11 @@ void usage(char *  exeName)
 int main(int argc, char** argv)
 {
     UErrorCode err = U_ZERO_ERROR;
-    char* inFileName; 
-    char* outFileName;
+    char* inFileName = NULL;
+    char* outFileName = NULL;
     char * encName = NULL;
 
-	UConverter*  conv = NULL;
+    UConverter*  conv = NULL;
 
     for (int i=0; i< argc; i++)
     {
@@ -161,23 +161,23 @@ int main(int argc, char** argv)
         }
     }
 
-	conv = ucnv_open(encName, &err);
-	if (U_FAILURE(err))
-	{
+    conv = ucnv_open(encName, &err);
+    if (U_FAILURE(err))
+    {
         if (verbose)
         {
             fprintf(stderr, "Could not create converter to: %s\n", encName);
 #if defined(_DEBUG) && defined(XP_CPLUSPLUS)
-	    	fprintf (stderr,"FAILURE! (%s) (%d)\n", u_errorName(err), err);
+            fprintf (stderr,"FAILURE! (%s) (%d)\n", u_errorName(err), err);
 #endif
         }
         ucnv_close(conv);
         exit(1);
     }
-	
+    
     fprintf(stdout, "Converting %s to %s...\n", inFileName, outFileName);
-	convertFile(encName, inFileName, outFileName, conv);
-	fprintf(stdout, "Finished transcoding file: %s\n", inFileName);
+    convertFile(encName, inFileName, outFileName, conv);
+    fprintf(stdout, "Finished transcoding file: %s\n", inFileName);
     
     ucnv_close(conv);
     if (encName)
@@ -197,25 +197,25 @@ void convertFile(char* encName, char* iFN, char* oFN, UConverter* outConvrtr)
     }
 
     FILE*   outFile = fopen(oFN, "wb");
-	if (outFile == NULL)
-	{
+    if (outFile == NULL)
+    {
         if (verbose)
-		    fprintf(stderr, "Could not open output file - %s for writing \n", oFN);
-		fclose(inFile);
-		return;
-	}
+            fprintf(stderr, "Could not open output file - %s for writing \n", oFN);
+        fclose(inFile);
+        return;
+    }
 
     char            rawBuf[RAWBUFSIZE];
     char*           pRawBuf     = NULL;
     unsigned long   bytesRead   = 0;
-	UErrorCode       err         = U_ZERO_ERROR;
-	
+    UErrorCode       err         = U_ZERO_ERROR;
+
     //get the file size
     //
     unsigned int    curPos      = ftell(inFile);
 
     if(verbose)
-      fprintf(stderr, "curPos = %d\n", curPos);
+        fprintf(stdout, "curPos = %d\n", curPos);
 
     if (curPos == 0xFFFFFFFF)
     {
@@ -263,13 +263,13 @@ void convertFile(char* encName, char* iFN, char* oFN, UConverter* outConvrtr)
     bytesRead = fread( (void*)rawBuf, 1, toRead, inFile);
     if (ferror(inFile)) 
     {
-        fprintf(stderr," couldnot read file for input encoding \n");
+        fprintf(stderr," could not read file for input encoding \n");
         exit(1);
     }
     
     if (bytesRead ==  0) 
     {
-        fprintf(stderr," couldnot fill raw buffer \n");
+        fprintf(stderr," could not fill raw buffer \n");
         exit(1);
     }
     pRawBuf = rawBuf;
@@ -289,7 +289,7 @@ void convertFile(char* encName, char* iFN, char* oFN, UConverter* outConvrtr)
     
     UChar          ucBuf[RAWBUFSIZE];
     char * inEncodName;
-    char* tmpPtr = (char*) rawBuf;
+//    char* tmpPtr = (char*) rawBuf;
     
     //get the input encoding name
     //
@@ -316,20 +316,23 @@ void convertFile(char* encName, char* iFN, char* oFN, UConverter* outConvrtr)
         strcpy(inEncodName, "utf-16le");
         break;
     default :
+        fprintf(stderr, " Unknown encoded input file. \n Only input encodings supported in the first line are \n");
+        fprintf(stderr, " ascii, ebcdic-cp-us, utf8, utf-16be, utf-16le \n");
+        exit(1);
         break;
     };
 
     if(verbose)
-      {
-	fprintf(stderr, "inConverter = %s\n", inEncodName);
-      }
-    
+    {
+        fprintf(stdout, "inConverter = %s\n", inEncodName);
+    }
+
     UConverter* inConvrtr = ucnv_open(inEncodName, &err);
     //now read and transcode the input to output file
     //Process the firstline separately
     //
     long afterFirstLine = convertFirstLine(inFile, inEncodName, outFile, encName, 
-					   pRawBuf, toRead, (UChar*)ucBuf);
+                       pRawBuf, toRead, (UChar*)ucBuf);
     
     //move the pointer after the first line
     //
@@ -338,9 +341,8 @@ void convertFile(char* encName, char* iFN, char* oFN, UConverter* outConvrtr)
         fprintf(stderr, "fileSize - Could not set the cursor to %d after the first line \n", afterFirstLine);
         exit(1);
     }
-    else
-      if(verbose)
-	fprintf(stderr,"Seeked to %d OK \n", afterFirstLine);
+    else if(verbose)
+        fprintf(stdout,"Seeked to %d OK \n", afterFirstLine);
     bytesLeft = endPos - afterFirstLine;
     toRead = (RAWBUFSIZE > bytesLeft) ? bytesLeft : RAWBUFSIZE;
     
@@ -400,8 +402,8 @@ void convertFile(char* encName, char* iFN, char* oFN, UConverter* outConvrtr)
         }
         if ((bytesRead > 0) && (err !=U_ZERO_ERROR))
         {
-	  if(verbose)
-	    fprintf(stderr, "err=%d * read %d bytes\n", err,bytesRead);
+            if(verbose)
+                fprintf(stderr, "err=%d * read %d bytes\n", err,bytesRead);
 
             if (fseek(inFile, (curPos+bytesRead), SEEK_SET))
             {
@@ -417,7 +419,8 @@ void convertFile(char* encName, char* iFN, char* oFN, UConverter* outConvrtr)
             bytesLeft = endPos - curPos;
         }
         toRead = (RAWBUFSIZE > bytesLeft) ? bytesLeft : RAWBUFSIZE;
-        if (toRead < RAWBUFSIZE) tFlush = TRUE;
+        if (toRead < RAWBUFSIZE)
+            tFlush = TRUE;
         if (err == U_BUFFER_OVERFLOW_ERROR)
             err = U_ZERO_ERROR;
     }
@@ -516,46 +519,46 @@ long convertFirstLine( FILE* inF, char* inEncName,
     UErrorCode      err             = U_ZERO_ERROR;
 
     bytesNeeded = ucnv_convert("ascii",
-			inEncName,
-			(char*) tempBuf,
-			0,
-			(const char*) ptrBuf,
-			bytesRead,
-			&err);
-    
+                        inEncName,
+                        (char*) tempBuf,
+                        0,
+                        (const char*) ptrBuf,
+                        bytesRead,
+                        &err);
+
     if (err == U_BUFFER_OVERFLOW_ERROR)
     {
-	    err = U_ZERO_ERROR;
+        err = U_ZERO_ERROR;
     }
-	else if (U_FAILURE(err))
-	{
+    else if (U_FAILURE(err))
+    {
 #if defined(_DEBUG)
-		printf ("Error transcoding first line of input file: (%s) %d\n", u_errorName(err), err);
+        printf ("Error transcoding first line of input file: (%s) %d\n", u_errorName(err), err);
 #endif
         fclose(inF);
-    	fclose(outF);
+        fclose(outF);
         exit(1);
-	}
+    }
 
     ucnv_convert("ascii",
-			inEncName,
-			(char*) tempBuf,
-			bytesNeeded,
-			(const char*) ptrBuf,
-			bytesRead,
-			&err);										 
+            inEncName,
+            (char*) tempBuf,
+            bytesNeeded,
+            (const char*) ptrBuf,
+            bytesRead,
+            &err);
 
-	if (U_FAILURE(err))
-	{
+    if (U_FAILURE(err))
+    {
 #if defined(_DEBUG)
-		printf ("Error transcoding2 first line of input file: (%s) %d\n", u_errorName(err), err);
+        printf ("Error transcoding2 first line of input file: (%s) %d\n", u_errorName(err), err);
 #endif
         fclose(inF);
-    	fclose(outF);
+        fclose(outF);
         exit(1);
     } 
     else
-	{
+    {
         //read the tempBuf to get the first line
         //
         char firstLineBuf[FIRSTLINEBUF];
@@ -563,7 +566,10 @@ long convertFirstLine( FILE* inF, char* inEncName,
                 
         for( bufLength = 0,  tempBufLength=0; bufLength < FIRSTLINEBUF; bufLength++, tempBufLength++)
         {
-            if ((tempBufLength == 0) && ((inEncName == "utf-16be") || (inEncName == "utf-16le") || (inEncName == "utf16")) )
+            if ((tempBufLength == 0)
+                && (!strcmp(inEncName, "utf-16be")
+                || !strcmp(inEncName, "utf-16le")
+                || !strcmp(inEncName, "utf16")) )
                 tempBufLength++;
             firstLineBuf[bufLength] = (char)tempBuf[tempBufLength];
             if (tempBuf[tempBufLength] == 0x3E) {
@@ -581,55 +587,55 @@ long convertFirstLine( FILE* inF, char* inEncName,
         {
               fprintf(stderr,"Illegal xml file: It doesnot contain the xml declaration statement on the first line \n");
               fclose(inF);
-    	      fclose(outF);
+              fclose(outF);
               exit(1);
         }
-     
+
         UBool encString      = TRUE;
         UBool stdString      = TRUE;
         UBool encInsertMid   = FALSE;
         UBool encInsertLast  = FALSE;
         UBool dQuote         = TRUE;
-        char* doubleQuote   = "\"";
-        char* singleQuote   = "\'";
-        
+        const char* doubleQuote   = "\"";
+        const char* singleQuote   = "\'";
+
         if (!strstr( (const char*)pFLB, doubleQuote))
         {
             if (!strstr( (const char*)pFLB, singleQuote))
             {
               fprintf(stderr,"Illegal xml file: It doesnot contain the approprite xml declaration \n");
               fclose(inF);
-    	      fclose(outF);
+              fclose(outF);
               exit(1);
             }
             dQuote = FALSE;
         }
-        
+
         char* newString     = strstr( (const char*) pFLB, "encoding");
         char* stringWithEnc = 0;
 
         if (!newString)
             encString = FALSE;
         else 
-	  {
-	    stringWithEnc = new char[strlen(newString)+1];
+        {
+            stringWithEnc = new char[strlen(newString)+1];
             strcpy(stringWithEnc, newString);
-	  }
-            
+        }
+
         newString = strstr( (const char*) pFLB, "standalone");
         char* stringWithStd = 0;
         if (!newString) 
             stdString = FALSE;
         else
         {
-	    stringWithStd = new char[strlen(newString)+1];
+            stringWithStd = new char[strlen(newString)+1];
             strcpy(stringWithStd, newString);
-       }
-        
+        }
+
         if (!encString && !stdString)
-             encInsertLast = TRUE;
+            encInsertLast = TRUE;
         if (!encString && stdString)
-             encInsertMid = TRUE;
+            encInsertMid = TRUE;
 
         //Encodingname for the rest of the input file could be different. 
         //If its not specified in the  first line then assume it to be UTF8
@@ -643,30 +649,30 @@ long convertFirstLine( FILE* inF, char* inEncName,
             {
                 fprintf(stderr, "Illegal xml file: it doesnot contain the encoding string in the first line of the input file\n");
                 fclose(inF);
-    	        fclose(outF);
+                fclose(outF);
                 exit(1);
             }
             strcpy(encodingNameInFile, inEncName);
         }
 
-        char* tempString    = " encoding=";
+        const char* tempString    = " encoding=";
         char* dupFLB        = uprv_strdup(pFLB);
-	int stringTwoLength = 0;
+        int stringTwoLength = 0;
 
-	/* build up the length */
-	stringTwoLength = bufLength;
+        /* build up the length */
+        stringTwoLength = bufLength;
 
-	if(tempString)
-	  stringTwoLength += strlen(tempString);
+        if(tempString)
+          stringTwoLength += strlen(tempString);
 
-	if(outEncName)
-	  stringTwoLength += strlen(outEncName);
+        if(outEncName)
+          stringTwoLength += strlen(outEncName);
 
-	if(stringWithStd)
-	  stringTwoLength += strlen(stringWithStd);
+        if(stringWithStd)
+          stringTwoLength += strlen(stringWithStd);
 
-	stringTwoLength   += 5;
-	
+        stringTwoLength   += 5;
+
         char* stringTwo     = new char[stringTwoLength];
 
         if (encInsertLast) {
@@ -780,40 +786,40 @@ long convertFirstLine( FILE* inF, char* inEncName,
         {
             //transcode character-by-character
             oneChar = ucnv_convert(outEncName,
-			    "ascii",
-			    (char*) uBuf,
-			    0,
-                (const char*) stringTwo,
-			    1,
-			    &err);
+                            "ascii",
+                            (char*) uBuf,
+                            0,
+                            (const char*) stringTwo,
+                            1,
+                            &err);
             if (err == U_BUFFER_OVERFLOW_ERROR)
             {
-	            err = U_ZERO_ERROR;
+                err = U_ZERO_ERROR;
             }
-	        else if (U_FAILURE(err))
-	        {
+            else if (U_FAILURE(err))
+            {
 #if defined(_DEBUG)
-		        fprintf (stderr, "Error transcoding char-by-char: (%s) %d\n", u_errorName(err), err);
+                fprintf (stderr, "Error transcoding char-by-char: (%s) %d\n", u_errorName(err), err);
 #endif
                 fclose(inF);
-    	        fclose(outF);
+                fclose(outF);
                 exit(1);
-	        }
+            }
 
             ucnv_convert(outEncName,
-			    "ascii",
-			    (char*) uBuf,
-			    oneChar,
+                "ascii",
+                (char*) uBuf,
+                oneChar,
                 (const char*) stringTwo,
-			    1,
-			    &err);
-	        if (U_FAILURE(err))
-	        {
+                1,
+                &err);
+            if (U_FAILURE(err))
+            {
 #if defined(_DEBUG)
-		        fprintf (stderr, "Error transcoding2 char-by-char: (%s) %d\n", u_errorName(err), err);
+                fprintf (stderr, "Error transcoding2 char-by-char: (%s) %d\n", u_errorName(err), err);
 #endif
                 fclose(inF);
-    	        fclose(outF);
+                fclose(outF);
                 exit(1);
             } 
             fwrite( (void*) uBuf, 1, oneChar, outF);
@@ -852,41 +858,41 @@ long convertFirstLine( FILE* inF, char* inEncName,
      //
      err = U_ZERO_ERROR;
      endBytes = ucnv_convert(newInEncName,
-     		"ascii",
-			(char*) newBuf,
-			0,
-			(const char*) oldBuf,
-			bufHere,
-			&err);
-    
+            "ascii",
+            (char*) newBuf,
+            0,
+            (const char*) oldBuf,
+            bufHere,
+            &err);
+
     if (err == U_BUFFER_OVERFLOW_ERROR)
     {
-	    err = U_ZERO_ERROR;
+        err = U_ZERO_ERROR;
     }
-	else if (U_FAILURE(err))
-	{
+    else if (U_FAILURE(err))
+    {
 #if defined(_DEBUG)
-		fprintf (stderr, "Error transcoding from ascii to input encoding: (%s) %d\n", u_errorName(err), err);
+        fprintf (stderr, "Error transcoding from ascii to input encoding: (%s) %d\n", u_errorName(err), err);
 #endif
         fclose(inF);
-    	fclose(outF);
+        fclose(outF);
         exit(1);
-	}
+    }
     ucnv_convert(newInEncName,
-        	"ascii",
-			(char*) newBuf,
-			endBytes,
-			(const char*) oldBuf,
-			bufHere,
-			&err);										 
-	if (U_FAILURE(err))
-	{
+            "ascii",
+            (char*) newBuf,
+            endBytes,
+            (const char*) oldBuf,
+            bufHere,
+            &err);
+    if (U_FAILURE(err))
+    {
 #if defined(_DEBUG)
-		fprintf (stderr, "Error transcoding2 from ascii to input encoding: (%s) %d\n", u_errorName(err), err);
+        fprintf (stderr, "Error transcoding2 from ascii to input encoding: (%s) %d\n", u_errorName(err), err);
 #endif
         delete newInEncName;
         fclose(inF);
-    	fclose(outF);
+        fclose(outF);
         exit(1);
     }
     
@@ -935,24 +941,24 @@ void XMLU_fromCodepageToCodepage(    UConverter*    outConverter,
                         UBool         flush,
                         UErrorCode*    err)
 {
-    
 #if 0
     UChar out_chunk[RAWBUFSIZE];
     const UChar* out_chunk_limit = out_chunk + RAWBUFSIZE;
     UChar* out_chunk_alias;
     UChar const* out_chunk_alias2;
     UChar const* consumed_UChars;
-    
-    
-    if (U_FAILURE(*err)) return;
-    
+
+
+    if (U_FAILURE(*err))
+        return;
+
     *consumed = *source;
     /*loops until the input buffer is completely consumed
     *or if an error has be encountered
     *first we convert from inConverter codepage to Unicode
     *then from Unicode to outConverter codepage
     */
-    
+
     while ((sourceLimit != *source) && U_SUCCESS(*err))
     {
         out_chunk_alias = out_chunk;
@@ -966,16 +972,16 @@ void XMLU_fromCodepageToCodepage(    UConverter*    outConverter,
             consumed,
             flush,
             err);
-        
+
             /*U_BUFFER_OVERFLOW_ERROR means that the output "CHUNK" is full
             *we will require at least another loop (it's a recoverable error)
         */
-        
+
         if (U_SUCCESS(*err) || (*err == U_BUFFER_OVERFLOW_ERROR))
         {
             *err = U_ZERO_ERROR;
             out_chunk_alias2 = out_chunk;
-            
+
             while ((out_chunk_alias2 != out_chunk_alias) && U_SUCCESS(*err))
             {
                 ucnv_fromUnicode(outConverter,
@@ -996,59 +1002,57 @@ void XMLU_fromCodepageToCodepage(    UConverter*    outConverter,
 #endif
 
 
-  UChar out_chunk[RAWBUFSIZE];
-  const UChar *out_chunk_limit = out_chunk + RAWBUFSIZE;
-  UChar *out_chunk_alias;
-  UChar const *out_chunk_alias2;
+    UChar out_chunk[RAWBUFSIZE];
+    const UChar *out_chunk_limit = out_chunk + RAWBUFSIZE;
+    UChar *out_chunk_alias;
+    UChar const *out_chunk_alias2;
 
 
-  if (U_FAILURE (*err))    return;
+    if (U_FAILURE (*err))
+        return;
 
 
-  /*loops until the input buffer is completely consumed
-   *or if an error has be encountered
-   *first we convert from inConverter codepage to Unicode
-   *then from Unicode to outConverter codepage
-   */
-  while ((*source != sourceLimit) && U_SUCCESS (*err))
+    /*loops until the input buffer is completely consumed
+    *or if an error has be encountered
+    *first we convert from inConverter codepage to Unicode
+    *then from Unicode to outConverter codepage
+    */
+    while ((*source != sourceLimit) && U_SUCCESS (*err))
     {
-      out_chunk_alias = out_chunk;
-      ucnv_toUnicode (inConverter,
-		      &out_chunk_alias,
-		      out_chunk_limit,
-		      source,
-		      sourceLimit,
-		      NULL,
-		      flush,
-		      err);
+        out_chunk_alias = out_chunk;
+        ucnv_toUnicode (inConverter,
+              &out_chunk_alias,
+              out_chunk_limit,
+              source,
+              sourceLimit,
+              NULL,
+              flush,
+              err);
 
-      /*U_BUFFER_OVERFLOW_ERROR means that the output "CHUNK" is full
-       *we will require at least another loop (it's a recoverable error)
-       */
+        /*U_BUFFER_OVERFLOW_ERROR means that the output "CHUNK" is full
+         *we will require at least another loop (it's a recoverable error)
+         */
 
-      if (U_SUCCESS (*err) || (*err == U_BUFFER_OVERFLOW_ERROR))
-	{
-	  *err = U_ZERO_ERROR;
-	  out_chunk_alias2 = out_chunk;
+        if (U_SUCCESS (*err) || (*err == U_BUFFER_OVERFLOW_ERROR))
+        {
+            *err = U_ZERO_ERROR;
+            out_chunk_alias2 = out_chunk;
 
-	  while ((out_chunk_alias2 != out_chunk_alias) && U_SUCCESS (*err))
-	    {
-	      ucnv_fromUnicode (outConverter,
-				target,
-				targetLimit,
-				&out_chunk_alias2,
-				out_chunk_alias,
-				NULL,
-				TRUE,
-				err);
-
-	    }
-	}
-      else
-	break;
+            while ((out_chunk_alias2 != out_chunk_alias) && U_SUCCESS (*err))
+            {
+                ucnv_fromUnicode (outConverter,
+                        target,
+                        targetLimit,
+                        &out_chunk_alias2,
+                        out_chunk_alias,
+                        NULL,
+                        TRUE,
+                        err);
+            }
+        }
+        else
+            break;
     }
-
-  return;
 }
 
 void catString(char* thisString, UBool quote)
