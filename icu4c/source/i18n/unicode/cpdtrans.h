@@ -34,17 +34,12 @@ class U_I18N_API UVector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.14 $ $Date: 2001/07/16 20:48:26 $
+ * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.15 $ $Date: 2001/07/17 00:15:49 $
  * @draft
  */
 class U_I18N_API CompoundTransliterator : public Transliterator {
 
     Transliterator** trans;
-
-    /**
-     * Array of original filters associated with transliterators.
-     */
-    UnicodeFilter** filters;
 
     int32_t count;
 
@@ -150,14 +145,6 @@ public:
                               int32_t count);
 
     /**
-     * Override Transliterator.  Modify the transliterators that make up
-     * this compound transliterator so their filters are the logical AND
-     * of this transliterator's filter and their own.  Original filters
-     * are kept in the filters array.
-     */
-    virtual void adoptFilter(UnicodeFilter* f);
-
-    /**
      * Override Transliterator:
      * Create a rule string that can be passed to createFromRules()
      * to recreate this transliterator.
@@ -202,7 +189,6 @@ private:
 
     void init(const UnicodeString& id,
               UTransDirection direction,
-              UnicodeFilter* adoptedFilter,
               int32_t idSplitPoint,
               Transliterator *adoptedRbt,
               UBool fixReverseID,
@@ -210,7 +196,6 @@ private:
 
     void init(UVector& list,
               UTransDirection direction,
-              UnicodeFilter* adoptedFilter,
               UBool fixReverseID,
               UErrorCode& status);
 
@@ -221,13 +206,6 @@ private:
      */
     UnicodeString joinIDs(Transliterator* const transliterators[],
                           int32_t transCount);
-
-    /**
-     * Splits a string, as in JavaScript
-     */
-    //UnicodeString* split(const UnicodeString& s,
-    //                     UChar divider,
-    //                     int32_t* countPtr);
 
     void freeTransliterators(void);
 
