@@ -28,6 +28,7 @@
 #include "uprops.h"
 #include "usc_impl.h"
 #include "unormimp.h"
+#include "cucdapi.h"
 
 #define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
 
@@ -45,7 +46,7 @@ static void TestCodePoint(void);
 static void TestCharLength(void);
 static void TestCharNames(void);
 static void TestMirroring(void);
-       void TestUScriptCodeAPI(void);    /* defined in cucdapi.c */
+/*       void TestUScriptCodeAPI(void);*/    /* defined in cucdapi.h */
 static void TestUScriptRunAPI(void);
 static void TestAdditionalProperties(void);
 static void TestNumericProperties(void);
