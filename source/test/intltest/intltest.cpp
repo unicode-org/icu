@@ -1086,7 +1086,58 @@ main(int argc, char* argv[])
     }
     return major.getErrors();
 }
+void IntlTest::loadTestData(char* testdatapath,int32_t len, UErrorCode& err ){
+    const char*      directory=NULL;
+    UResourceBundle* test =NULL;
+    char tdpath[256];
+    const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
+    char tdpathFallback[256];
 
+    directory= u_getDataDirectory();
+    strcpy(tdpath, directory);
+    strcpy(tdpathFallback,directory);
+    
+    if(len < 256){
+        err = U_BUFFER_OVERFLOW_ERROR;
+        return ;
+    }
+
+    /* u_getDataDirectory shoul return \source\data ... set the
+     * directory to ..\source\data\..\test\testdata\out\testdata
+     *
+     * Fallback: When Memory mapped file is built
+     * ..\source\data\out\..\..\test\testdata\out\testdata
+     */
+    strcat(tdpath, tdrelativepath);
+    strcat(tdpath,"testdata");
+    
+    strcat(tdpathFallback,".."U_FILE_SEP_STRING);
+    strcat(tdpathFallback, tdrelativepath);
+    strcat(tdpathFallback,"testdata");
+    
+    test=ures_open(tdpath, "testtypes", &err);
+    
+    /* we could not find the data in tdpath 
+     * try tdpathFallback
+     */
+    if(U_FAILURE(err))
+    {
+        testdatapath=tdpathFallback;
+        err =U_ZERO_ERROR;
+        test=ures_open(testdatapath, "ja_data", &err);
+        /* Fall back did not succeed either so return */
+        if(U_FAILURE(err)){
+            err = U_FILE_ACCESS_ERROR;
+            errln("construction of NULL did not succeed  : " + UnicodeString(u_errorName(err)));
+            return;
+        }
+        ures_close(test);
+        strcpy(testdatapath,tdpathFallback);
+        return;
+    }
+    ures_close(test);
+    strcpy(testdatapath,tdpath);
+}
 /*
  * This is a variant of cintltst/ccolltst.c:CharsToUChars().
  * It converts a character string into a UnicodeString, with

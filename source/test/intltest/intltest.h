@@ -153,6 +153,7 @@ public:
 
 public:
     UBool run_phase2( char* name, char* par ); // internally, supports reporting memory leaks
+    void loadTestData(char* testdatapath,int32_t len,UErrorCode& err);
 
 // static members
 public:
