@@ -812,6 +812,33 @@ SOURCE=.\ucnv_io.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\udata.h
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\udata.h
+
+"..\..\include\udata.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy udata.h ..\..\include
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\udata.h
+
+"..\..\include\udata.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy udata.h ..\..\include
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\uhash.h
 # End Source File
 # Begin Source File
