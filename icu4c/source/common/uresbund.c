@@ -217,8 +217,10 @@ UBool ures_cleanup(void)
         if (cache != NULL && uhash_count(cache) == 0) {
             uhash_close(cache);
             cache = NULL;
-            umtx_destroy(&resbMutex);
         }
+    }
+    if (cache == NULL && resbMutex != NULL) {
+        umtx_destroy(&resbMutex);
     }
     return (cache == NULL);
 }
