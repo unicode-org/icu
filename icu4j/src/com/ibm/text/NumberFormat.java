@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/NumberFormat.java,v $ 
- * $Date: 2000/03/10 04:07:22 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/04/05 17:40:54 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -141,7 +141,7 @@ import java.io.ObjectOutputStream;
  *
  * see          java.text.DecimalFormat
  * see          java.text.ChoiceFormat
- * @version      $Revision: 1.5 $
+ * @version      $Revision: 1.6 $
  * @author       Mark Davis
  * @author       Helena Shih
  * @author       Alan Liu
@@ -177,10 +177,9 @@ public abstract class NumberFormat extends Format{
             return format((BigInteger) number, toAppendTo, pos);
         } else if (number instanceof java.math.BigDecimal) {
             return format((java.math.BigDecimal) number, toAppendTo, pos);
-// This has been removed pending addition of com.ibm.math package to ICU4J
-/*        } else if (number instanceof com.ibm.math.BigDecimal) {
+        } else if (number instanceof com.ibm.math.BigDecimal) {
             return format((com.ibm.math.BigDecimal) number, toAppendTo, pos);
-*/        } else if (number instanceof Number) {
+        } else if (number instanceof Number) {
             return format(((Number)number).doubleValue(), toAppendTo, pos);
         } else {
             throw new IllegalArgumentException("Cannot format given Object as a Number");
@@ -232,11 +231,11 @@ public abstract class NumberFormat extends Format{
     /* this has been removed pending addition of com.ibm.math packge to ICU4J
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Convenience method to format a BigDecimal.
-     *
+     */
     public final String format(com.ibm.math.BigDecimal number) {
         return format(number, new StringBuffer(),
                       new FieldPosition(0)).toString();
-    } */
+    }
 
    /**
      * Specialization of format.
@@ -270,13 +269,13 @@ public abstract class NumberFormat extends Format{
                                         StringBuffer toAppendTo,
                                         FieldPosition pos);
 
-    /* This has been removed pending addition of com.ibm.math package to ICU4J
+    /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Format a BigDecimal.
-     *
+     */
     public abstract StringBuffer format(com.ibm.math.BigDecimal number,
                                         StringBuffer toAppendTo,
-                                        FieldPosition pos); */
+                                        FieldPosition pos);
    
    /**
      * Returns a Long if possible (e.g., within the range [Long.MIN_VALUE,
