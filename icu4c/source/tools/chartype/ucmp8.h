@@ -27,16 +27,16 @@
  *====================================
  */
 
-CAPI  const int32_t UCMP8_kUnicodeCount;
-CAPI  const int32_t UCMP8_kBlockShift;
-CAPI  const int32_t UCMP8_kBlockCount;
-CAPI  const int32_t UCMP8_kIndexShift;
-CAPI  const int32_t UCMP8_kIndexCount;
-CAPI  const uint32_t UCMP8_kBlockMask;
+U_CAPI  const int32_t UCMP8_kUnicodeCount;
+U_CAPI  const int32_t UCMP8_kBlockShift;
+U_CAPI  const int32_t UCMP8_kBlockCount;
+U_CAPI  const int32_t UCMP8_kIndexShift;
+U_CAPI  const int32_t UCMP8_kIndexCount;
+U_CAPI  const uint32_t UCMP8_kBlockMask;
 
-CAPI int32_t ucmp8_getkUnicodeCount(void);
-CAPI int32_t ucmp8_getkBlockCount(void);
-CAPI int32_t ucmp8_getkIndexCount(void);
+U_CAPI int32_t ucmp8_getkUnicodeCount(void);
+U_CAPI int32_t ucmp8_getkBlockCount(void);
+U_CAPI int32_t ucmp8_getkIndexCount(void);
 typedef struct{
   int8_t* fArray;
   uint16_t* fIndex;
@@ -45,29 +45,29 @@ typedef struct{
   bool_t fBogus;
 } CompactByteArray;
 
-CAPI  CompactByteArray* ucmp8_open(int8_t defaultValue);
-CAPI  CompactByteArray* ucmp8_openAdopt(uint16_t* indexArray, 
+U_CAPI  CompactByteArray* ucmp8_open(int8_t defaultValue);
+U_CAPI  CompactByteArray* ucmp8_openAdopt(uint16_t* indexArray, 
                                int8_t* newValues,
                                int32_t count);
-CAPI  void ucmp8_close(CompactByteArray* array);
-CAPI  bool_t isBogus(const CompactByteArray* array);
+U_CAPI  void ucmp8_close(CompactByteArray* array);
+U_CAPI  bool_t isBogus(const CompactByteArray* array);
 
 
-CAPI int8_t ucmp8_get(CompactByteArray* array, uint16_t index); 
-CAPI uint8_t ucmp8_getu(CompactByteArray* array, uint16_t index);
+U_CAPI int8_t ucmp8_get(CompactByteArray* array, uint16_t index); 
+U_CAPI uint8_t ucmp8_getu(CompactByteArray* array, uint16_t index);
 
-CAPI  void ucmp8_set(CompactByteArray* array,
+U_CAPI  void ucmp8_set(CompactByteArray* array,
                  UChar index,
                  int8_t value);
 
-CAPI  void ucmp8_setRange(CompactByteArray* array, 
+U_CAPI  void ucmp8_setRange(CompactByteArray* array, 
                   UChar start,
                   UChar end, 
                   int8_t value);
 
-CAPI  int32_t ucmp8_getCount(const CompactByteArray* array);
-CAPI  const int8_t* ucmp8_getArray(const CompactByteArray* array);
-CAPI  const uint16_t* ucmp8_getIndex(const CompactByteArray* array);
+U_CAPI  int32_t ucmp8_getCount(const CompactByteArray* array);
+U_CAPI  const int8_t* ucmp8_getArray(const CompactByteArray* array);
+U_CAPI  const uint16_t* ucmp8_getIndex(const CompactByteArray* array);
 
 /* Compact the array.
    The value of cycle determines how large the overlap can be.
@@ -76,11 +76,11 @@ CAPI  const uint16_t* ucmp8_getIndex(const CompactByteArray* array);
    then using that will be faster than cycle = 1, and get almost the
    same compression.
 */
-CAPI  void ucmp8_compact(CompactByteArray* array, 
+U_CAPI  void ucmp8_compact(CompactByteArray* array, 
                  uint32_t cycle);
 
 /* Expanded takes the array back to a 65536 element array*/
-CAPI  void ucmp8_expand(CompactByteArray* array);
+U_CAPI  void ucmp8_expand(CompactByteArray* array);
 
 
 
