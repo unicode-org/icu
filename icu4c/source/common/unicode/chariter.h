@@ -528,7 +528,7 @@ public:
      * before the current position in the iteration range, return TRUE otherwise.
      * @stable ICU 2.0
      */
-    virtual UBool        hasPrevious() = 0;
+    virtual UBool        hasPrevious() const = 0;
 
     /**
      * Returns the numeric index in the underlying text-storage
