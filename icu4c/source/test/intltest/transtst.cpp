@@ -65,6 +65,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(29,TestCompoundRBT);
         TESTCASE(30,TestCompoundFilter);
         TESTCASE(31,TestRemove);
+        TESTCASE(32,TestToRules);
         default: name = ""; break;
     }
 }
@@ -1339,7 +1340,33 @@ void TransliteratorTest::TestRemove(void) {
     
     expect(*t, "Able bodied baker's cats", "Ale odied ker's ts");
     delete t;                                       
-    
+}
+
+void TransliteratorTest::TestToRules(void) {
+    Transliterator *t = Transliterator::createFromRules("ID",
+         "$a=\\u4E61; [$a] > A;");
+    if (t == 0) {
+        errln("FAIL: createFromRules failed");
+        return;
+    }
+    UnicodeString rules, escapedRules;
+    t->toRules(rules, FALSE);
+    t->toRules(escapedRules, TRUE);
+    // Adjust spacing etc. as necessary.  We expect an actual
+    // U+4E61 in the rules and "\\u4E61" in the escaped rules.
+    UnicodeString expRules = CharsToUnicodeString("[\\u4E61] > A;");
+    UnicodeString expEscapedRules("[\\u4E61] > A;");
+    if (rules == expRules) {
+        logln(rules);
+    } else {
+        errln((UnicodeString)"FAIL: got " + rules + ", exp " + expRules);
+    }
+    if (escapedRules == expEscapedRules) {
+        logln(escapedRules);
+    } else {
+        errln((UnicodeString)"FAIL: got " + escapedRules + ", exp " + expEscapedRules);
+    }
+    delete t;                                       
 }
 
 //======================================================================
