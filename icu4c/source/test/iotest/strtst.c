@@ -350,7 +350,7 @@ static void TestSnprintf(void) {
     if (cNumPrinted != uNumPrinted) {\
         log_err("%" uFormat " number printed Got: %d, Expected: %d\n", uNumPrinted, cNumPrinted);\
     }\
-    if (buffer[uNumPrinted+1] != 0x2a) {\
+    if (buffer[uNumPrinted+1] != '*') {\
         log_err("%" uFormat " too much stored\n");\
     }\
 
