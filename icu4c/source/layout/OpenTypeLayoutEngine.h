@@ -18,6 +18,8 @@
 #include "GlyphDefinitionTables.h"
 #include "GlyphPositioningTables.h"
 
+#include "cmemory.h"
+
 U_NAMESPACE_BEGIN
 
 /**
