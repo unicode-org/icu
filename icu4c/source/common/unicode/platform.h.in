@@ -113,12 +113,14 @@ typedef unsigned short uint16_t;
 
 #ifdef OS390
 #   define U_CHARSET_FAMILY 1
-#   define U_SIZEOF_WCHAR_T 2
 #endif
 
-#ifdef AIX
-#   define U_SIZEOF_WCHAR_T 2
-#endif
+/*===========================================================================*/
+/* Information about wchar support                                           */
+/*===========================================================================*/
+
+#define U_HAVE_WCHAR_H		@U_HAVE_WCHAR_H@
+#define U_SIZEOF_WCHAR_T	@U_SIZEOF_WCHAR_T@
 
 /*===========================================================================*/
 /* Symbol import-export control                                              */
