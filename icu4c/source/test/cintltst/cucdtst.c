@@ -845,8 +845,12 @@ static void TestStringFunctions()
         k=u_strlen(dataTable[i][j]);
         u_uastrcpy(temp,"");
         u_strncpy(temp,dataTable[i+2][j],k);
+        temp[k] = 0xa4;
 
-        if(u_strcmp(temp,dataTable[i][j])!=0)
+        if(u_strncmp(temp,dataTable[i][j],k)!=0)
+            log_err("something threw an error in u_strncpy()\n");
+
+        if(temp[k] != 0xa4)
             log_err("something threw an error in u_strncpy()\n");
     }
 
