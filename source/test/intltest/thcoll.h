@@ -49,6 +49,10 @@ private:
      */
     void TestNamesList(void);
 
+    /** 
+     * test that invalid Thai sorts properly
+     */
+    void TestInvalidThai(void);
 private:
 
     void compareArray(const Collator& c, const char* tests[],
