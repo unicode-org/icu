@@ -462,7 +462,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
           } 
 
  
-          init_collIterate(src->source+charsOffset, newCharsLen, &s, FALSE);
+          init_collIterate(src->source+charsOffset, 1, &s, FALSE); /* or newCharsLen instead of 1??? */
 
           CE = ucol_getNextCE(src->UCA, &s, status);
           /*UCOL_GETNEXTCE(CE, src->UCA, s, &status);*/
@@ -471,6 +471,13 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
           /*UCOL_GETNEXTCE(SecondCE, src->UCA, s, &status);*/
     
           ListList[listPosition].baseCE = CE;
+          if(isContinuation(SecondCE)) {
+            ListList[listPosition].baseContCE = SecondCE;
+          } else {
+            ListList[listPosition].baseContCE = 0;
+          }
+
+
           ListList[listPosition].first[UCOL_TOK_POLARITY_NEGATIVE] = NULL;
           ListList[listPosition].last[UCOL_TOK_POLARITY_NEGATIVE] = NULL;
           ListList[listPosition].first[UCOL_TOK_POLARITY_POSITIVE] = NULL;
