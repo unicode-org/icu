@@ -197,7 +197,7 @@ void TestNewTypes() {
   char action[256];
   char testdatapath[256];
   const char*    directory =  ctest_getTestDirectory();
-  UErrorCode expected_status,status = U_ZERO_ERROR,expected_resource_status = U_ZERO_ERROR;
+  UErrorCode status = U_ZERO_ERROR,expected_resource_status = U_ZERO_ERROR;
   UResourceBundle* res = NULL;
   uint8_t *binResult = NULL;
   int32_t len = 0;
@@ -291,7 +291,7 @@ void TestBinaryCollationData(){
     coll = ures_getByKey(teRes, "CollationElements", coll, &status);
 	if(U_SUCCESS(status)){
         CONFIRM_ErrorCode(status, U_ZERO_ERROR);
-        CONFIRM_INT_EQ(ures_getType(coll), RES_STRING);
+        CONFIRM_INT_EQ(ures_getType(coll), RES_TABLE);
         binColl=ures_getByKey(teRes, "%%Collation", binColl, &status);  
 		if(U_SUCCESS(status)){
 			CONFIRM_ErrorCode(status, U_ZERO_ERROR);

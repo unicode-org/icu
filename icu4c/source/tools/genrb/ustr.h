@@ -29,6 +29,9 @@ struct UString {
 
 void ustr_init(struct UString *s);
 
+void
+ustr_initChars(struct UString *s, const char* source, int32_t length, UErrorCode *status);
+
 void ustr_deinit(struct UString *s);
 
 void ustr_setlen(struct UString *s, int32_t len, UErrorCode *status);

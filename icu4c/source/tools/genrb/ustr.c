@@ -17,6 +17,7 @@
 
 #include "ustr.h"
 #include "cmemory.h"
+#include "cstring.h"
 
 /* Protos */
 static void ustr_resize(struct UString *s, int32_t len, UErrorCode *status);
@@ -29,6 +30,30 @@ ustr_init(struct UString *s)
 {
   s->fChars = 0;
   s->fLength = s->fCapacity = 0;
+}
+
+void
+ustr_initChars(struct UString *s, const char* source, int32_t length, UErrorCode *status)
+{   
+    int i = 0;
+    if (U_FAILURE(*status)) return;
+    s->fChars = 0;
+    s->fLength = s->fCapacity = 0;
+    if (length == -1) length = uprv_strlen(source);
+    if(s->fCapacity < length) {
+      ustr_resize(s, ALLOCATION(length), status);
+      if(U_FAILURE(*status)) return;
+    }
+    for (; i < length; i++)
+    {
+#if U_CHARSET_FAMILY==U_ASCII_FAMILY
+        ustr_ucat(s, (UChar)(uint8_t)(source[i]), status);
+#elif U_CHARSET_FAMILY==U_EBCDIC_FAMILY
+        ustr_ucat(s, (UChar)asciiFromEbcdic[(uint8_t)(*cs++)], status);
+#else
+#   error U_CHARSET_FAMILY is not valid
+#endif
+    }
 }
 
 void

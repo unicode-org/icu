@@ -10,7 +10,10 @@ ja {
             "\u5348\u524D",
             "\u5348\u5F8C",
     }
-    CollationElements { "&\u0486;\u30FC;\u3099;\u309A;\u30FB,\u303F&\u2212 <\u309B"
+    CollationElements { 
+	    Version { "1.0" }
+		Override { "FALSE" }
+		Sequence { "&\u0486;\u30FC;\u3099;\u309A;\u30FB,\u303F&\u2212 <\u309B"
         "<\u309C<\u309D,\u30FD<\u309E,\u30FE& Z <\u3042,\u3041,\u30A2,\u30A1<\u3044,\u3043"
         ",\u30A4,\u30A3<\u3046,\u3045,\u30A6,\u30A5<\u3048,\u3047,\u30A8,\u30A7<\u304A,\u3049"
         ",\u30AA,\u30A9<\u304B,\u30AB,\u30F5<\u304D,\u30AD<\u304F,\u30AF<\u3051,\u30B1,\u30F6"
@@ -787,6 +790,7 @@ ja {
         " < \u9F5F < \u9F60 < \u9F61 < \u9F66 < \u9F67 < \u9F6C < \u9F6A < \u9F77 < \u9F72"
         " < \u9F76 < \u9F95 < \u9F9C < \u9FA0 < \u582F < \u69C7 < \u9059 < \u7464 < \u51DC"
         " < \u7199" }
+	}
     Countries { 
         JP { "\u65E5\u672C" }
     }

@@ -10,9 +10,13 @@ cs {
             "dop.",
             "odp.",
     }
-    CollationElements { "& \u0361 ; \u0308 = \u030D& C < c\u030C , C\u030C& H < "
+    CollationElements { 
+	    Version { "1.0" }
+		Override { "FALSE" }
+		Sequence { "& \u0361 ; \u0308 = \u030D& C < c\u030C , C\u030C& H < "
         "ch , cH , Ch , CH & R < r\u030C , R\u030C& S < s\u030C , S\u030C& Z < z\u030C ,"
         " Z\u030C" }
+	}
     Countries { 
         CZ { "\u010Cesk\u00E1 republika" }
     }

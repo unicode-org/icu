@@ -11,12 +11,14 @@ th {
             "\u0E01\u0E48\u0E2D\u0E19\u0E40\u0E17\u0E35\u0E48\u0E22\u0E07",
             "\u0E2B\u0E25\u0E31\u0E07\u0E40\u0E17\u0E35\u0E48\u0E22\u0E07",
     }
+    // -------------------- ibm.597 --------------------
+    //
+    // First put in all of the consonants, after Z
+    //
     CollationElements {
-        // -------------------- ibm.597 --------------------
-        //
-        // First put in all of the consonants, after Z
-        //
-        "& Z "
+	    Version { "1.0" }
+		Override { "FALSE" }
+		Sequence { "& Z "
         "< \u0E01 "                   //  KO KAI
         "< \u0E02 "                   //  KHO KHAI
         "< \u0E03 "                   //  KHO KHUAT
@@ -150,7 +152,8 @@ th {
         // These are supposed to be ignored, so I'm treating them as controls
         "& \u0001 "
         "= \u0E3A "                   //  PHINTHU
-        "= '.' "                      //  period
+        "= '.' "                      //  period 
+		}
     }
     Countries { 
         TH { "\u0E1B\u0E23\u0E30\u0E40\u0E17\u0E28\u0E44\u0E17\u0E22" }

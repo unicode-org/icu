@@ -6,10 +6,14 @@
 // *******************************************************************************
 
 sl {
-    CollationElements { "& C < c\u030C , C\u030C < c\u0301 , C\u0301 & D < \u01F3"
+    CollationElements { 
+	    Version { "1.0" }
+		Override { "FALSE" }
+		Sequence { "& C < c\u030C , C\u030C < c\u0301 , C\u0301 & D < \u01F3"
         " , \u01F2 , \u01F1 < \u01C6 , \u01C5 , \u01C4 < \u0111 , \u0110 & L < \u0142 , "
         "\u0141 & N < nj , nJ , Nj , NJ & S < s\u030C , S\u030C < s\u0301, S\u0301 & Z <"
         " z\u030C , Z\u030C < z\u0301 , Z\u0301 < z\u0307 , Z\u0307 " }
+	}
     Countries { 
         SI { "Slovenija" }
     }

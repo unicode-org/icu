@@ -225,7 +225,9 @@ parse(FileStream *f, const char *cp, const char *inputDir,
     struct SResource *temp = NULL;
     struct SResource *temp1 = NULL;
     struct SResource *temp2 = NULL;
-    UBool colEl = FALSE;
+    UBool colEl = FALSE, colOverride = FALSE;
+    UChar trueValue[] = {0x0054, 0x0052, 0x0055, 0x0045, 0x0000}; /* Just to store "TRUE" and "FALSE" */
+    UChar falseValue[] = {0x0046, 0x0041, 0x004C, 0x0053, 0x0045, 0x0000}; 
 
     /* Hashtable for keeping track of seen tag names */
     struct UHashtable *data;
@@ -478,6 +480,7 @@ parse(FileStream *f, const char *cp, const char *inputDir,
         }
         temp = string_open(bundle, cTag, token.fChars, token.fLength, status);
         table_add(rootTable, temp, status);
+#if 0
 		if(colEl == TRUE) {
 			const UChar * defaultRulesArray;
             UErrorCode intStatus = U_ZERO_ERROR;
@@ -509,8 +512,8 @@ parse(FileStream *f, const char *cp, const char *inputDir,
 			uprv_free(rules);
 			colEl = FALSE;
 		} 
+#endif
  
-
         /*uhash_put(data, tag.fChars, status);*/
         put(data, &tag, status);
         if(U_FAILURE(*status)) {
@@ -518,7 +521,6 @@ parse(FileStream *f, const char *cp, const char *inputDir,
         }
         temp = NULL;
         break;
-
       /* Begin a string list */
     case eBegList:
         if(temp != NULL) {
@@ -624,6 +626,67 @@ parse(FileStream *f, const char *cp, const char *inputDir,
         temp1 = NULL;
         if(U_FAILURE(*status)) {
             goto finish;
+        }
+        /* We have seen the Override tag aleady, now checks if the value is "TRUE" or "FALSE". */
+        if (uprv_strcmp(cSubTag, "Override") == 0) 
+        {
+            if (u_strncmp(token.fChars, trueValue, u_strlen(trueValue)) == 0)
+            {
+                colOverride = TRUE;
+            } else {
+                colOverride = FALSE;
+            }
+        }
+        if (colEl && (uprv_strcmp(cSubTag, "Sequence") == 0))
+        {
+			const UChar * defaultRulesArray;
+            UErrorCode intStatus = U_ZERO_ERROR;
+			uint32_t defaultRulesArrayLength = 0;
+			/* do the collation elements */
+			int32_t len = 0;
+			uint8_t *binColData = NULL;
+			UCollator *coll = NULL; 
+			UChar *rules = NULL;
+            struct UString newTag;
+
+            if (colOverride == FALSE)
+            {
+			    defaultRulesArray = ucol_getDefaultRulesArray(&defaultRulesArrayLength);
+			    rules = uprv_malloc(sizeof(defaultRulesArray[0])*(defaultRulesArrayLength + token.fLength));
+			    uprv_memcpy(rules, defaultRulesArray, defaultRulesArrayLength*sizeof(defaultRulesArray[0]));
+			    uprv_memcpy(rules + defaultRulesArrayLength, token.fChars, token.fLength*sizeof(token.fChars[0]));
+			    
+			    coll = ucol_openRules(rules, defaultRulesArrayLength + token.fLength, UCOL_DECOMP_CAN, 0, &intStatus);
+            } else {
+                coll = ucol_openRules(token.fChars, token.fLength, UCOL_DECOMP_CAN, 0, &intStatus);
+            }
+			
+			ucol_setNormalization(coll, UCOL_NO_NORMALIZATION);
+
+			if(U_SUCCESS(intStatus) && coll !=NULL) {
+				binColData = ucol_cloneRuleData(coll, &len, &intStatus);
+				if(U_SUCCESS(*status) && data != NULL) {
+					temp1 = bin_open(bundle, "%%Collation", len, binColData, status);
+					table_add(rootTable, temp1, status);
+					uprv_free(binColData);
+				}
+				ucol_close(coll);
+            } else {
+                setErrorText("Warning: %%Collation could not be constructed from CollationElements - check context!");
+            }
+			uprv_free(rules);
+			colEl = FALSE;
+            colOverride = FALSE;
+            intStatus = U_ZERO_ERROR;
+            ustr_initChars(&newTag, "CollationElements", -1, &intStatus);
+            if(U_FAILURE(intStatus)) {
+                goto finish;
+		    } 
+            put(data, &newTag, &intStatus);
+            ustr_deinit(&newTag);
+            if(U_FAILURE(intStatus)) {
+                goto finish;
+            }
         }
         break;
       

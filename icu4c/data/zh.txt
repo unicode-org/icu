@@ -10,7 +10,10 @@ zh {
             "\u4E0A\u5348",
             "\u4E0B\u5348",
     }
-    CollationElements { "& Z < \u3000 < \u3001 < \u3002 < \u30FB < \u02C9< \u02C7"
+    CollationElements { 
+       Version { "1.0" }
+       Override { "FALSE" }
+       Sequence { "& Z < \u3000 < \u3001 < \u3002 < \u30FB < \u02C9< \u02C7"
         " < \u3003 < \u3005 < \u2015 < \uFF5E < \u2016< \u2026 < \u2018 < \u2019 < \u201C"
         " < \u201D < \u3014 < \u3015< \u3008 < \u3009 < \u300A < \u300B < \u300C < \u300D"
         " < \u300E< \u300F < \u3016 < \u3017 < \u3010 < \u3011< \u2236 < \u2227 < \u2228"
@@ -832,8 +835,8 @@ zh {
         " < \u9AF9 < \u9B08 < \u9B0F < \u9B13< \u9B1F < \u9B23 < \u9EBD < \u9EBE < \u7E3B"
         " < \u9E82 < \u9E87< \u9E88 < \u9E8B < \u9E92 < \u93D6 < \u9E9D < \u9E9F < \u9EDB"
         "< \u9EDC < \u9EDD < \u9EE0 < \u9EDF < \u9EE2 < \u9EE9 < \u9EE7< \u9EE5 < \u9EEA"
-        " < \u9EEF < \u9F22 < \u9F2C < \u9F2F < \u9F39< \u9F37 < \u9F3D < \u9F3E < \u9F44"
-        "" }
+        " < \u9EEF < \u9F22 < \u9F2C < \u9F2F < \u9F39< \u9F37 < \u9F3D < \u9F3E < \u9F44" }
+    }
     Countries {
         CN { "\u4E2D\u83EF\u4EBA\u6C11\u5171\u548C\u570B" }
         TW { "\u53F0\u6E7E" }

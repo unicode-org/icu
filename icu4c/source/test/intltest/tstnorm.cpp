@@ -73,7 +73,7 @@ static UnicodeString str(const char *input)
 }
 
 
-UnicodeString BasicNormalizerTest::canonTests[23][3];
+UnicodeString BasicNormalizerTest::canonTests[24][3];
 
 UnicodeString BasicNormalizerTest::compatTests[11][3];
 
@@ -127,6 +127,8 @@ BasicNormalizerTest::BasicNormalizerTest()
     canonTests[21][0] = str("\\u30AB\\uFF9E"); canonTests[21][1] = str("\\u30AB\\uFF9E");  canonTests[21][2] = str("\\u30AB\\uFF9E");         // ka + hw_ten
 
     canonTests[22][0] = str("\\uFF76\\u3099"); canonTests[22][1] = str("\\uFF76\\u3099");  canonTests[22][2] = str("\\uFF76\\u3099");         // hw_ka + ten
+
+    canonTests[23][0] = str("A\\u0300\\u0316"); canonTests[23][1] = str("A\\u0316\\u0300");  canonTests[23][2] = str("\\u00C0\\u0316");     
 
     /* compatTest */
   // Input                        Decomposed                        Composed
