@@ -418,6 +418,7 @@ NumberFormat::createInstance(const Locale& desiredLocale,
     }
 
     ResourceBundle resource((char *)0, desiredLocale, status);
+    NumberFormat* f;
 
     if (U_FAILURE(status))
     {
@@ -426,40 +427,70 @@ NumberFormat::createInstance(const Locale& desiredLocale,
         
         // Use the DecimalFormatSymbols constructor which uses last-resort data
         DecimalFormatSymbols* symbolsToAdopt = new DecimalFormatSymbols(status);
-        if (U_FAILURE(status)) { delete symbolsToAdopt; return NULL; } // This should never happen
+        if (symbolsToAdopt == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
+        }
+        if (U_FAILURE(status)) {
+            delete symbolsToAdopt; // This should never happen
+            return NULL;
+        }
 
         // Creates a DecimalFormat instance with the last resort number patterns.
-        NumberFormat* f = new DecimalFormat(fgLastResortNumberPatterns[style], symbolsToAdopt, status);
-        if (U_FAILURE(status)) { delete f; f = NULL; }
+        f = new DecimalFormat(fgLastResortNumberPatterns[style], symbolsToAdopt, status);
+        if (f == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
+        }
+        if (U_FAILURE(status)) {
+            delete f;
+            f = NULL;
+        }
         return f;
     }
 
-    //int32_t patternCount=0;
-    //const UnicodeString* numberPatterns = resource.getStringArray(DecimalFormat::fgNumberPatterns,
-    //                                                              patternCount, status);
-
-    ResourceBundle numberPatterns = resource.get(DecimalFormat::fgNumberPatterns, status);
+    ResourceBundle numberPatterns(resource.get(DecimalFormat::fgNumberPatterns, status));
     // If not all the styled patterns exists for the NumberFormat in this locale,
     // sets the status code to failure and returns nil.
     //if (patternCount < fgNumberPatternsCount) status = U_INVALID_FORMAT_ERROR;
-    if (numberPatterns.getSize() < fgNumberPatternsCount) status = U_INVALID_FORMAT_ERROR;
-    if (U_FAILURE(status)) return NULL;
-
-    // If the requested style doesn't exist, use a last-resort style.
-    // This is to support scientific styles before we have all the
-    // resource data in place.
-    //const UnicodeString& pattern = style < patternCount ?
-    //    numberPatterns[style] : fgLastResortNumberPatterns[style];
-    const UnicodeString pattern = style < numberPatterns.getSize()?
-        numberPatterns.getStringEx(style, status) : fgLastResortNumberPatterns[style];
+    if (numberPatterns.getSize() < fgNumberPatternsCount)
+        status = U_INVALID_FORMAT_ERROR;
+    if (U_FAILURE(status))
+        return NULL;
 
     // Loads the decimal symbols of the desired locale.
     DecimalFormatSymbols* symbolsToAdopt = new DecimalFormatSymbols(desiredLocale, status);
-    if (U_FAILURE(status)) { delete symbolsToAdopt; return NULL; }
+    if (symbolsToAdopt == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+    if (U_FAILURE(status)) {
+        delete symbolsToAdopt;
+        return NULL;
+    }
 
     // Creates the specified decimal format style of the desired locale.
-    NumberFormat* f = new DecimalFormat(pattern, symbolsToAdopt, status);
-    if (U_FAILURE(status)) { delete f; f = NULL; }
+    if (style < numberPatterns.getSize()) {
+        const UnicodeString pattern(numberPatterns.getStringEx(style, status));
+        if (U_SUCCESS(status)) {
+            f = new DecimalFormat(pattern, symbolsToAdopt, status);
+        }
+    }
+    else {
+        // If the requested style doesn't exist, use a last-resort style.
+        // This is to support scientific styles before we have all the
+        // resource data in place.
+        f = new DecimalFormat(fgLastResortNumberPatterns[style], symbolsToAdopt, status);
+    }
+
+    if (f == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+    if (U_FAILURE(status)) {
+        delete f;
+        f = NULL;
+    }
     return f;
 }
 
