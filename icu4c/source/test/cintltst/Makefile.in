@@ -55,7 +55,7 @@ DEFS = @DEFS@
 
 # we define ICU_UNICODE_VERSION so we can test it
 CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/ctestfw  \
- -DICU_UNICODE_VERSION=\"$(UNICODE_VERSION)\"
+ -DICU_UNICODE_VERSION=\"$(UNICODE_VERSION)\" -DICU_VERSION=\"@VERSION@\"
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ \
