@@ -3,7 +3,7 @@
 <ldml>
 	<identity>
 		<version number="4.0"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="eo" /> 
 	</identity>
 	<localeDisplayNames>
@@ -382,52 +382,60 @@
 		<localizedPatternChars>GjMtkHmslTDUSnahKzJdugAZ</localizedPatternChars>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">jan</month>
-					<month type="2">feb</month>
-					<month type="3">mar</month>
-					<month type="4">apr</month>
-					<month type="5">maj</month>
-					<month type="6">jun</month>
-					<month type="7">jul</month>
-					<month type="8">aŭg</month>
-					<month type="9">sep</month>
-					<month type="10">okt</month>
-					<month type="11">nov</month>
-					<month type="12">dec</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">januaro</month>
-					<month type="2">februaro</month>
-					<month type="3">marto</month>
-					<month type="4">aprilo</month>
-					<month type="5">majo</month>
-					<month type="6">junio</month>
-					<month type="7">julio</month>
-					<month type="8">aŭgusto</month>
-					<month type="9">septembro</month>
-					<month type="10">oktobro</month>
-					<month type="11">novembro</month>
-					<month type="12">decembro</month>
-				</monthNames>
-				<dayNames context="format" width="abbreviated" >
-					<day type="sun">di</day>
-					<day type="mon">lu</day>
-					<day type="tue">ma</day>
-					<day type="wed">me</day>
-					<day type="thu">ĵa</day>
-					<day type="fri">ve</day>
-					<day type="sat">sa</day>
-				</dayNames>
-				<dayNames context="format" width="wide" >
-					<day type="sun">dimanĉo</day>
-					<day type="mon">lundo</day>
-					<day type="tue">mardo</day>
-					<day type="wed">merkredo</day>
-					<day type="thu">ĵaŭdo</day>
-					<day type="fri">vendredo</day>
-					<day type="sat">sabato</day>
-				</dayNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">jan</month>
+							<month type="2">feb</month>
+							<month type="3">mar</month>
+							<month type="4">apr</month>
+							<month type="5">maj</month>
+							<month type="6">jun</month>
+							<month type="7">jul</month>
+							<month type="8">aŭg</month>
+							<month type="9">sep</month>
+							<month type="10">okt</month>
+							<month type="11">nov</month>
+							<month type="12">dec</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">januaro</month>
+							<month type="2">februaro</month>
+							<month type="3">marto</month>
+							<month type="4">aprilo</month>
+							<month type="5">majo</month>
+							<month type="6">junio</month>
+							<month type="7">julio</month>
+							<month type="8">aŭgusto</month>
+							<month type="9">septembro</month>
+							<month type="10">oktobro</month>
+							<month type="11">novembro</month>
+							<month type="12">decembro</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">di</day>
+							<day type="mon">lu</day>
+							<day type="tue">ma</day>
+							<day type="wed">me</day>
+							<day type="thu">ĵa</day>
+							<day type="fri">ve</day>
+							<day type="sat">sa</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">dimanĉo</day>
+							<day type="mon">lundo</day>
+							<day type="tue">mardo</day>
+							<day type="wed">merkredo</day>
+							<day type="thu">ĵaŭdo</day>
+							<day type="fri">vendredo</day>
+							<day type="sat">sabato</day>
+						</dayWidth>
+					</dayContext>
+				</days>
 				<am>atm</am>
 				<pm>ptm</pm>
 				<dateFormats>

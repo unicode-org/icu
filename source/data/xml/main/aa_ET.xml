@@ -3,27 +3,31 @@
 <ldml draft="true">
 	<identity>
 		<version number="x0.1"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="aa" /> 
 		<territory type="ET" /> 
 	</identity>
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames context="format" width="wide">
-					<month type="1">Qunxa Garablu</month>
-					<month type="2">Kudo</month>
-					<month type="3">Ciggilta Kudo</month>
-					<month type="4">Agda Baxis</month>
-					<month type="5">Caxah Alsa</month>
-					<month type="6">Qasa Dirri</month>
-					<month type="7">Qado Dirri</month>
-					<month type="8">Liiqen</month>
-					<month type="9">Waysu</month>
-					<month type="10">Diteli</month>
-					<month type="11">Ximoli</month>
-					<month type="12">Kaxxa Garablu</month>
-				</monthNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="wide">
+							<month type="1">Qunxa Garablu</month>
+							<month type="2">Kudo</month>
+							<month type="3">Ciggilta Kudo</month>
+							<month type="4">Agda Baxis</month>
+							<month type="5">Caxah Alsa</month>
+							<month type="6">Qasa Dirri</month>
+							<month type="7">Qado Dirri</month>
+							<month type="8">Liiqen</month>
+							<month type="9">Waysu</month>
+							<month type="10">Diteli</month>
+							<month type="11">Ximoli</month>
+							<month type="12">Kaxxa Garablu</month>
+						</monthWidth>
+					</monthContext>
+				</months>
 			</calendar>
 		</calendars>
 	</dates>

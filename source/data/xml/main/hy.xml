@@ -3,7 +3,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="hy" /> 
 	</identity>
 	<localeDisplayNames>
@@ -211,52 +211,60 @@
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">Յնր</month>
-					<month type="2">Փտր</month>
-					<month type="3">Մրտ</month>
-					<month type="4">Ապր</month>
-					<month type="5">Մյս</month>
-					<month type="6">Յնս</month>
-					<month type="7">Յլս</month>
-					<month type="8">Օգս</month>
-					<month type="9">Սեպ</month>
-					<month type="10">Հոկ</month>
-					<month type="11">Նոյ</month>
-					<month type="12">Դեկ</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">Յունուար</month>
-					<month type="2">Փետրուար</month>
-					<month type="3">Մարտ</month>
-					<month type="4">Ապրիլ</month>
-					<month type="5">Մայիս</month>
-					<month type="6">Յունիս</month>
-					<month type="7">Յուլիս</month>
-					<month type="8">Օգոստոս</month>
-					<month type="9">Սեպտեմբեր</month>
-					<month type="10">Հոկտեմբեր</month>
-					<month type="11">Նոյեմբեր</month>
-					<month type="12">Դեկտեմբեր</month>
-				</monthNames>
-				<dayNames context="format" width="abbreviated" >
-					<day type="sun">Կիր</day>
-					<day type="mon">Երկ</day>
-					<day type="tue">Երք</day>
-					<day type="wed">Չոր</day>
-					<day type="thu">Հնգ</day>
-					<day type="fri">Ուր</day>
-					<day type="sat">Շաբ</day>
-				</dayNames>
-				<dayNames context="format" width="wide" >
-					<day type="sun">Կիրակի</day>
-					<day type="mon">Երկուշաբթի</day>
-					<day type="tue">Երեքշաբթի</day>
-					<day type="wed">Չորեքշաբթի</day>
-					<day type="thu">Հինգշաբթի</day>
-					<day type="fri">Ուրբաթ</day>
-					<day type="sat">Շաբաթ</day>
-				</dayNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">Յնր</month>
+							<month type="2">Փտր</month>
+							<month type="3">Մրտ</month>
+							<month type="4">Ապր</month>
+							<month type="5">Մյս</month>
+							<month type="6">Յնս</month>
+							<month type="7">Յլս</month>
+							<month type="8">Օգս</month>
+							<month type="9">Սեպ</month>
+							<month type="10">Հոկ</month>
+							<month type="11">Նոյ</month>
+							<month type="12">Դեկ</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Յունուար</month>
+							<month type="2">Փետրուար</month>
+							<month type="3">Մարտ</month>
+							<month type="4">Ապրիլ</month>
+							<month type="5">Մայիս</month>
+							<month type="6">Յունիս</month>
+							<month type="7">Յուլիս</month>
+							<month type="8">Օգոստոս</month>
+							<month type="9">Սեպտեմբեր</month>
+							<month type="10">Հոկտեմբեր</month>
+							<month type="11">Նոյեմբեր</month>
+							<month type="12">Դեկտեմբեր</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">Կիր</day>
+							<day type="mon">Երկ</day>
+							<day type="tue">Երք</day>
+							<day type="wed">Չոր</day>
+							<day type="thu">Հնգ</day>
+							<day type="fri">Ուր</day>
+							<day type="sat">Շաբ</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">Կիրակի</day>
+							<day type="mon">Երկուշաբթի</day>
+							<day type="tue">Երեքշաբթի</day>
+							<day type="wed">Չորեքշաբթի</day>
+							<day type="thu">Հինգշաբթի</day>
+							<day type="fri">Ուրբաթ</day>
+							<day type="sat">Շաբաթ</day>
+						</dayWidth>
+					</dayContext>
+				</days>
 				<am>Առ․</am>
 				<pm>Եր․</pm>
 				<dateFormats>

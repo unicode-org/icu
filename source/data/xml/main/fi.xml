@@ -3,7 +3,7 @@
 <ldml>
 	<identity>
 		<version number="3.0"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="fi" /> 
 	</identity>
 	<localeDisplayNames>
@@ -452,124 +452,140 @@
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
 		<calendars>
 			<calendar type="arabic">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">Muhárram</month>
-					<month type="2">Sáfar</month>
-					<month type="3">Rabí' al-áwwal</month>
-					<month type="4">Rabí' al-ákhir</month>
-					<month type="5">Džumada-l-úla</month>
-					<month type="6">Džumada-l-ákhira</month>
-					<month type="7">Radžab</month>
-					<month type="8">Ša'bán</month>
-					<month type="9">Ramadán</month>
-					<month type="10">Šawwal</month>
-					<month type="11">Dhu-l-qada</month>
-					<month type="12">Dhu-l-hiddža</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">Muhárram</month>
-					<month type="2">Sáfar</month>
-					<month type="3">Rabí' al-áwwal</month>
-					<month type="4">Rabí' al-ákhir</month>
-					<month type="5">Džumada-l-úla</month>
-					<month type="6">Džumada-l-ákhira</month>
-					<month type="7">Radžab</month>
-					<month type="8">Ša'bán</month>
-					<month type="9">Ramadán</month>
-					<month type="10">Šawwal</month>
-					<month type="11">Dhu-l-qada</month>
-					<month type="12">Dhu-l-hiddža</month>
-				</monthNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">Muhárram</month>
+							<month type="2">Sáfar</month>
+							<month type="3">Rabí' al-áwwal</month>
+							<month type="4">Rabí' al-ákhir</month>
+							<month type="5">Džumada-l-úla</month>
+							<month type="6">Džumada-l-ákhira</month>
+							<month type="7">Radžab</month>
+							<month type="8">Ša'bán</month>
+							<month type="9">Ramadán</month>
+							<month type="10">Šawwal</month>
+							<month type="11">Dhu-l-qada</month>
+							<month type="12">Dhu-l-hiddža</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Muhárram</month>
+							<month type="2">Sáfar</month>
+							<month type="3">Rabí' al-áwwal</month>
+							<month type="4">Rabí' al-ákhir</month>
+							<month type="5">Džumada-l-úla</month>
+							<month type="6">Džumada-l-ákhira</month>
+							<month type="7">Radžab</month>
+							<month type="8">Ša'bán</month>
+							<month type="9">Ramadán</month>
+							<month type="10">Šawwal</month>
+							<month type="11">Dhu-l-qada</month>
+							<month type="12">Dhu-l-hiddža</month>
+						</monthWidth>
+					</monthContext>
+				</months>
 			</calendar>
 			<calendar type="arabic-civil">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">Muhárram</month>
-					<month type="2">Sáfar</month>
-					<month type="3">Rabí' al-áwwal</month>
-					<month type="4">Rabí' al-ákhir</month>
-					<month type="5">Džumada-l-úla</month>
-					<month type="6">Džumada-l-ákhira</month>
-					<month type="7">Radžab</month>
-					<month type="8">Ša'bán</month>
-					<month type="9">Ramadán</month>
-					<month type="10">Šawwal</month>
-					<month type="11">Dhu-l-qada</month>
-					<month type="12">Dhu-l-hiddža</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">Muhárram</month>
-					<month type="2">Sáfar</month>
-					<month type="3">Rabí' al-áwwal</month>
-					<month type="4">Rabí' al-ákhir</month>
-					<month type="5">Džumada-l-úla</month>
-					<month type="6">Džumada-l-ákhira</month>
-					<month type="7">Radžab</month>
-					<month type="8">Ša'bán</month>
-					<month type="9">Ramadán</month>
-					<month type="10">Šawwal</month>
-					<month type="11">Dhu-l-qada</month>
-					<month type="12">Dhu-l-hiddža</month>
-				</monthNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">Muhárram</month>
+							<month type="2">Sáfar</month>
+							<month type="3">Rabí' al-áwwal</month>
+							<month type="4">Rabí' al-ákhir</month>
+							<month type="5">Džumada-l-úla</month>
+							<month type="6">Džumada-l-ákhira</month>
+							<month type="7">Radžab</month>
+							<month type="8">Ša'bán</month>
+							<month type="9">Ramadán</month>
+							<month type="10">Šawwal</month>
+							<month type="11">Dhu-l-qada</month>
+							<month type="12">Dhu-l-hiddža</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Muhárram</month>
+							<month type="2">Sáfar</month>
+							<month type="3">Rabí' al-áwwal</month>
+							<month type="4">Rabí' al-ákhir</month>
+							<month type="5">Džumada-l-úla</month>
+							<month type="6">Džumada-l-ákhira</month>
+							<month type="7">Radžab</month>
+							<month type="8">Ša'bán</month>
+							<month type="9">Ramadán</month>
+							<month type="10">Šawwal</month>
+							<month type="11">Dhu-l-qada</month>
+							<month type="12">Dhu-l-hiddža</month>
+						</monthWidth>
+					</monthContext>
+				</months>
 			</calendar>
 			<calendar type="gregorian">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">tammi</month>
-					<month type="2">helmi</month>
-					<month type="3">maalis</month>
-					<month type="4">huhti</month>
-					<month type="5">touko</month>
-					<month type="6">kesä</month>
-					<month type="7">heinä</month>
-					<month type="8">elo</month>
-					<month type="9">syys</month>
-					<month type="10">loka</month>
-					<month type="11">marras</month>
-					<month type="12">joulu</month>
-				</monthNames>
-				<monthNames context="format" width="narrow">
-					<month type="1">THMHTKHESLMJ</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">tammikuu</month>
-					<month type="2">helmikuu</month>
-					<month type="3">maaliskuu</month>
-					<month type="4">huhtikuu</month>
-					<month type="5">toukokuu</month>
-					<month type="6">kesäkuu</month>
-					<month type="7">heinäkuu</month>
-					<month type="8">elokuu</month>
-					<month type="9">syyskuu</month>
-					<month type="10">lokakuu</month>
-					<month type="11">marraskuu</month>
-					<month type="12">joulukuu</month>
-				</monthNames>
-				<dayNames context="format" width="abbreviated" >
-					<day type="sun">su</day>
-					<day type="mon">ma</day>
-					<day type="tue">ti</day>
-					<day type="wed">ke</day>
-					<day type="thu">to</day>
-					<day type="fri">pe</day>
-					<day type="sat">la</day>
-				</dayNames>
-				<dayNames context="format" width="narrow" >
-					<day type="sun">S</day>
-					<day type="mon">M</day>
-					<day type="tue">T</day>
-					<day type="wed">K</day>
-					<day type="thu">T</day>
-					<day type="fri">P</day>
-					<day type="sat">L</day>
-				</dayNames>
-				<dayNames context="format" width="wide" >
-					<day type="sun">sunnuntai</day>
-					<day type="mon">maanantai</day>
-					<day type="tue">tiistai</day>
-					<day type="wed">keskiviikko</day>
-					<day type="thu">torstai</day>
-					<day type="fri">perjantai</day>
-					<day type="sat">lauantai</day>
-				</dayNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">tammi</month>
+							<month type="2">helmi</month>
+							<month type="3">maalis</month>
+							<month type="4">huhti</month>
+							<month type="5">touko</month>
+							<month type="6">kesä</month>
+							<month type="7">heinä</month>
+							<month type="8">elo</month>
+							<month type="9">syys</month>
+							<month type="10">loka</month>
+							<month type="11">marras</month>
+							<month type="12">joulu</month>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">THMHTKHESLMJ</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">tammikuu</month>
+							<month type="2">helmikuu</month>
+							<month type="3">maaliskuu</month>
+							<month type="4">huhtikuu</month>
+							<month type="5">toukokuu</month>
+							<month type="6">kesäkuu</month>
+							<month type="7">heinäkuu</month>
+							<month type="8">elokuu</month>
+							<month type="9">syyskuu</month>
+							<month type="10">lokakuu</month>
+							<month type="11">marraskuu</month>
+							<month type="12">joulukuu</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">su</day>
+							<day type="mon">ma</day>
+							<day type="tue">ti</day>
+							<day type="wed">ke</day>
+							<day type="thu">to</day>
+							<day type="fri">pe</day>
+							<day type="sat">la</day>
+						</dayWidth>
+						<dayWidth type="narrow">
+							<day type="sun">S</day>
+							<day type="mon">M</day>
+							<day type="tue">T</day>
+							<day type="wed">K</day>
+							<day type="thu">T</day>
+							<day type="fri">P</day>
+							<day type="sat">L</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">sunnuntai</day>
+							<day type="mon">maanantai</day>
+							<day type="tue">tiistai</day>
+							<day type="wed">keskiviikko</day>
+							<day type="thu">torstai</day>
+							<day type="fri">perjantai</day>
+							<day type="sat">lauantai</day>
+						</dayWidth>
+					</dayContext>
+				</days>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">
@@ -625,36 +641,40 @@
 				</dateTimeFormats>
 			</calendar>
 			<calendar type="hebrew">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">Tišrìkuu</month>
-					<month type="2">Hešvánkuu</month>
-					<month type="3">Kislévkuu</month>
-					<month type="4">Tevétkuu</month>
-					<month type="5">Ševatkuu</month>
-					<month type="6">Adárkuu</month>
-					<month type="7">Adárkuu II</month>
-					<month type="8">Nisánkuu</month>
-					<month type="9">Ijjárkuu</month>
-					<month type="10">Sivánkuu</month>
-					<month type="11">Tammúzkuu</month>
-					<month type="12">Abkuu</month>
-					<month type="13">Elúlkuu</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">Tišrìkuu</month>
-					<month type="2">Hešvánkuu</month>
-					<month type="3">Kislévkuu</month>
-					<month type="4">Tevétkuu</month>
-					<month type="5">Ševatkuu</month>
-					<month type="6">Adárkuu</month>
-					<month type="7">Adárkuu II</month>
-					<month type="8">Nisánkuu</month>
-					<month type="9">Ijjárkuu</month>
-					<month type="10">Sivánkuu</month>
-					<month type="11">Tammúzkuu</month>
-					<month type="12">Abkuu</month>
-					<month type="13">Elúlkuu</month>
-				</monthNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">Tišrìkuu</month>
+							<month type="2">Hešvánkuu</month>
+							<month type="3">Kislévkuu</month>
+							<month type="4">Tevétkuu</month>
+							<month type="5">Ševatkuu</month>
+							<month type="6">Adárkuu</month>
+							<month type="7">Adárkuu II</month>
+							<month type="8">Nisánkuu</month>
+							<month type="9">Ijjárkuu</month>
+							<month type="10">Sivánkuu</month>
+							<month type="11">Tammúzkuu</month>
+							<month type="12">Abkuu</month>
+							<month type="13">Elúlkuu</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Tišrìkuu</month>
+							<month type="2">Hešvánkuu</month>
+							<month type="3">Kislévkuu</month>
+							<month type="4">Tevétkuu</month>
+							<month type="5">Ševatkuu</month>
+							<month type="6">Adárkuu</month>
+							<month type="7">Adárkuu II</month>
+							<month type="8">Nisánkuu</month>
+							<month type="9">Ijjárkuu</month>
+							<month type="10">Sivánkuu</month>
+							<month type="11">Tammúzkuu</month>
+							<month type="12">Abkuu</month>
+							<month type="13">Elúlkuu</month>
+						</monthWidth>
+					</monthContext>
+				</months>
 			</calendar>
 		</calendars>
 	</dates>

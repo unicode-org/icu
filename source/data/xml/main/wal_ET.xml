@@ -4,8 +4,8 @@
 	<identity>
 		<version number="x0.1"/>
 		<generation date="2004-05-14" />
-		<language type="byn" /> 
-		<territory type="ER" /> 
+		<language type="wal" /> 
+		<territory type="ET" /> 
 	</identity>
 	<dates>
 		<calendars>
@@ -14,7 +14,7 @@
 					<default type="medium"/>
 					<dateFormatLength type="full">
 						<dateFormat >
-							<pattern>EEEE፡ dd MMMM ግርጋ yyyy G</pattern>
+							<pattern>EEEE፥ dd MMMM ጋላሳ yyyy G</pattern>
 						</dateFormat>
 					</dateFormatLength >
 					<dateFormatLength type="long">
@@ -70,7 +70,7 @@
 		<decimalFormats>
 			<decimalFormatLength >
 				<decimalFormat >
-					<pattern>#,##0.###;-#,##0.###</pattern>
+					<pattern>#ወ##0.###;-#ወ##0.###</pattern>
 				</decimalFormat>
 			</decimalFormatLength >
 		</decimalFormats>
@@ -84,14 +84,14 @@
 		<percentFormats>
 			<percentFormatLength >
 				<percentFormat >
-					<pattern>#,##0%</pattern>
+					<pattern>#ወ##0%</pattern>
 				</percentFormat>
 			</percentFormatLength >
 		</percentFormats>
 		<currencyFormats>
 			<currencyFormatLength >
 				<currencyFormat >
-					<pattern>¤#,##0.00;-¤#,##0.00</pattern>
+					<pattern>¤#ወ##0.00;-¤#ወ##0.00</pattern>
 				</currencyFormat>
 			</currencyFormatLength >
 		</currencyFormats>

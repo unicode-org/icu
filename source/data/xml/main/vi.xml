@@ -3,7 +3,7 @@
 <ldml>
 	<identity>
 		<version number="2.1"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="vi" /> 
 	</identity>
 	<localeDisplayNames>
@@ -265,52 +265,60 @@
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">thg 1</month>
-					<month type="2">thg 2</month>
-					<month type="3">thg 3</month>
-					<month type="4">thg 4</month>
-					<month type="5">thg 5</month>
-					<month type="6">thg 6</month>
-					<month type="7">thg 7</month>
-					<month type="8">thg 8</month>
-					<month type="9">thg 9</month>
-					<month type="10">thg 10</month>
-					<month type="11">thg 11</month>
-					<month type="12">thg 12</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">tháng một</month>
-					<month type="2">tháng hai</month>
-					<month type="3">tháng ba</month>
-					<month type="4">tháng tư</month>
-					<month type="5">tháng năm</month>
-					<month type="6">tháng sáu</month>
-					<month type="7">tháng bảy</month>
-					<month type="8">tháng tám</month>
-					<month type="9">tháng chín</month>
-					<month type="10">tháng mười</month>
-					<month type="11">tháng mười một</month>
-					<month type="12">tháng mười hai</month>
-				</monthNames>
-				<dayNames context="format" width="abbreviated" >
-					<day type="sun">CN</day>
-					<day type="mon">Th 2</day>
-					<day type="tue">Th 3</day>
-					<day type="wed">Th 4</day>
-					<day type="thu">Th 5</day>
-					<day type="fri">Th 6</day>
-					<day type="sat">Th 7</day>
-				</dayNames>
-				<dayNames context="format" width="wide" >
-					<day type="sun">Chủ nhật</day>
-					<day type="mon">Thứ hai</day>
-					<day type="tue">Thứ ba</day>
-					<day type="wed">Thứ tư</day>
-					<day type="thu">Thứ năm</day>
-					<day type="fri">Thứ sáu</day>
-					<day type="sat">Thứ bảy</day>
-				</dayNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">thg 1</month>
+							<month type="2">thg 2</month>
+							<month type="3">thg 3</month>
+							<month type="4">thg 4</month>
+							<month type="5">thg 5</month>
+							<month type="6">thg 6</month>
+							<month type="7">thg 7</month>
+							<month type="8">thg 8</month>
+							<month type="9">thg 9</month>
+							<month type="10">thg 10</month>
+							<month type="11">thg 11</month>
+							<month type="12">thg 12</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">tháng một</month>
+							<month type="2">tháng hai</month>
+							<month type="3">tháng ba</month>
+							<month type="4">tháng tư</month>
+							<month type="5">tháng năm</month>
+							<month type="6">tháng sáu</month>
+							<month type="7">tháng bảy</month>
+							<month type="8">tháng tám</month>
+							<month type="9">tháng chín</month>
+							<month type="10">tháng mười</month>
+							<month type="11">tháng mười một</month>
+							<month type="12">tháng mười hai</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">CN</day>
+							<day type="mon">Th 2</day>
+							<day type="tue">Th 3</day>
+							<day type="wed">Th 4</day>
+							<day type="thu">Th 5</day>
+							<day type="fri">Th 6</day>
+							<day type="sat">Th 7</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">Chủ nhật</day>
+							<day type="mon">Thứ hai</day>
+							<day type="tue">Thứ ba</day>
+							<day type="wed">Thứ tư</day>
+							<day type="thu">Thứ năm</day>
+							<day type="fri">Thứ sáu</day>
+							<day type="sat">Thứ bảy</day>
+						</dayWidth>
+					</dayContext>
+				</days>
 				<am>SA</am>
 				<pm>CH</pm>
 				<dateFormats>

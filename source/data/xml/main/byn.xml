@@ -3,7 +3,7 @@
 <ldml draft="true">
 	<identity>
 		<version number="x0.1"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="byn" /> 
 	</identity>
 	<localeDisplayNames>
@@ -290,52 +290,60 @@
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">ልደት</month>
-					<month type="2">ካብኽ</month>
-					<month type="3">ክብላ</month>
-					<month type="4">ፋጅኺ</month>
-					<month type="5">ክቢቅ</month>
-					<month type="6">ም/ት</month>
-					<month type="7">ኰር</month>
-					<month type="8">ማርያ</month>
-					<month type="9">ያኸኒ</month>
-					<month type="10">መተሉ</month>
-					<month type="11">ም/ም</month>
-					<month type="12">ተሕሳ</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">ልደትሪ</month>
-					<month type="2">ካብኽብቲ</month>
-					<month type="3">ክብላ</month>
-					<month type="4">ፋጅኺሪ</month>
-					<month type="5">ክቢቅሪ</month>
-					<month type="6">ምኪኤል ትጓ̅ኒሪ</month>
-					<month type="7">ኰርኩ</month>
-					<month type="8">ማርያም ትሪ</month>
-					<month type="9">ያኸኒ መሳቅለሪ</month>
-					<month type="10">መተሉ</month>
-					<month type="11">ምኪኤል መሽወሪ</month>
-					<month type="12">ተሕሳስሪ</month>
-				</monthNames>
-				<dayNames context="format" width="abbreviated" >
-					<day type="sun">ሰ/ቅ</day>
-					<day type="mon">ሰኑ</day>
-					<day type="tue">ሰሊጝ</day>
-					<day type="wed">ለጓ</day>
-					<day type="thu">ኣምድ</day>
-					<day type="fri">ኣርብ</day>
-					<day type="sat">ሰ/ሽ</day>
-				</dayNames>
-				<dayNames context="format" width="wide" >
-					<day type="sun">ሰንበር ቅዳዅ</day>
-					<day type="mon">ሰኑ</day>
-					<day type="tue">ሰሊጝ</day>
-					<day type="wed">ለጓ ወሪ ለብዋ</day>
-					<day type="thu">ኣምድ</day>
-					<day type="fri">ኣርብ</day>
-					<day type="sat">ሰንበር ሽጓዅ</day>
-				</dayNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">ልደት</month>
+							<month type="2">ካብኽ</month>
+							<month type="3">ክብላ</month>
+							<month type="4">ፋጅኺ</month>
+							<month type="5">ክቢቅ</month>
+							<month type="6">ም/ት</month>
+							<month type="7">ኰር</month>
+							<month type="8">ማርያ</month>
+							<month type="9">ያኸኒ</month>
+							<month type="10">መተሉ</month>
+							<month type="11">ም/ም</month>
+							<month type="12">ተሕሳ</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">ልደትሪ</month>
+							<month type="2">ካብኽብቲ</month>
+							<month type="3">ክብላ</month>
+							<month type="4">ፋጅኺሪ</month>
+							<month type="5">ክቢቅሪ</month>
+							<month type="6">ምኪኤል ትጓ̅ኒሪ</month>
+							<month type="7">ኰርኩ</month>
+							<month type="8">ማርያም ትሪ</month>
+							<month type="9">ያኸኒ መሳቅለሪ</month>
+							<month type="10">መተሉ</month>
+							<month type="11">ምኪኤል መሽወሪ</month>
+							<month type="12">ተሕሳስሪ</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">ሰ/ቅ</day>
+							<day type="mon">ሰኑ</day>
+							<day type="tue">ሰሊጝ</day>
+							<day type="wed">ለጓ</day>
+							<day type="thu">ኣምድ</day>
+							<day type="fri">ኣርብ</day>
+							<day type="sat">ሰ/ሽ</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">ሰንበር ቅዳዅ</day>
+							<day type="mon">ሰኑ</day>
+							<day type="tue">ሰሊጝ</day>
+							<day type="wed">ለጓ ወሪ ለብዋ</day>
+							<day type="thu">ኣምድ</day>
+							<day type="fri">ኣርብ</day>
+							<day type="sat">ሰንበር ሽጓዅ</day>
+						</dayWidth>
+					</dayContext>
+				</days>
 				<am>ፋዱስ ጃብ</am>
 				<pm>ፋዱስ ደምቢ</pm>
 			</calendar>

@@ -3,7 +3,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="ru" /> 
 	</identity>
 	<localeDisplayNames>
@@ -398,52 +398,60 @@
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">янв</month>
-					<month type="2">фев</month>
-					<month type="3">мар</month>
-					<month type="4">апр</month>
-					<month type="5">май</month>
-					<month type="6">июн</month>
-					<month type="7">июл</month>
-					<month type="8">авг</month>
-					<month type="9">сен</month>
-					<month type="10">окт</month>
-					<month type="11">ноя</month>
-					<month type="12">дек</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">Январь</month>
-					<month type="2">Февраль</month>
-					<month type="3">Март</month>
-					<month type="4">Апрель</month>
-					<month type="5">Май</month>
-					<month type="6">Июнь</month>
-					<month type="7">Июль</month>
-					<month type="8">Август</month>
-					<month type="9">Сентябрь</month>
-					<month type="10">Октябрь</month>
-					<month type="11">Ноябрь</month>
-					<month type="12">Декабрь</month>
-				</monthNames>
-				<dayNames context="format" width="abbreviated" >
-					<day type="sun">Вс</day>
-					<day type="mon">Пн</day>
-					<day type="tue">Вт</day>
-					<day type="wed">Ср</day>
-					<day type="thu">Чт</day>
-					<day type="fri">Пт</day>
-					<day type="sat">Сб</day>
-				</dayNames>
-				<dayNames context="format" width="wide" >
-					<day type="sun">воскресенье</day>
-					<day type="mon">понедельник</day>
-					<day type="tue">вторник</day>
-					<day type="wed">среда</day>
-					<day type="thu">четверг</day>
-					<day type="fri">пятница</day>
-					<day type="sat">суббота</day>
-				</dayNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">янв</month>
+							<month type="2">фев</month>
+							<month type="3">мар</month>
+							<month type="4">апр</month>
+							<month type="5">май</month>
+							<month type="6">июн</month>
+							<month type="7">июл</month>
+							<month type="8">авг</month>
+							<month type="9">сен</month>
+							<month type="10">окт</month>
+							<month type="11">ноя</month>
+							<month type="12">дек</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Январь</month>
+							<month type="2">Февраль</month>
+							<month type="3">Март</month>
+							<month type="4">Апрель</month>
+							<month type="5">Май</month>
+							<month type="6">Июнь</month>
+							<month type="7">Июль</month>
+							<month type="8">Август</month>
+							<month type="9">Сентябрь</month>
+							<month type="10">Октябрь</month>
+							<month type="11">Ноябрь</month>
+							<month type="12">Декабрь</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">Вс</day>
+							<day type="mon">Пн</day>
+							<day type="tue">Вт</day>
+							<day type="wed">Ср</day>
+							<day type="thu">Чт</day>
+							<day type="fri">Пт</day>
+							<day type="sat">Сб</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">воскресенье</day>
+							<day type="mon">понедельник</day>
+							<day type="tue">вторник</day>
+							<day type="wed">среда</day>
+							<day type="thu">четверг</day>
+							<day type="fri">пятница</day>
+							<day type="sat">суббота</day>
+						</dayWidth>
+					</dayContext>
+				</days>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">
