@@ -244,6 +244,10 @@ public:
      */
     virtual UnicodeString& toRule(UnicodeString& pat,
                                   UBool escapeUnprintable) const;
+    UnicodeString& getPattern(UnicodeString& fillIn){
+        fillIn.append(pattern);
+        return fillIn;
+    }
  private:
 
     friend class StringMatcher;

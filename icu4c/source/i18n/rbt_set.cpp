@@ -16,6 +16,30 @@ static void U_CALLCONV _deleteRule(void *rule) {
     delete (TransliterationRule *)rule;
 }
 
+static void syntaxError(const UnicodeString& r1,
+                        const UnicodeString& r2,
+                        UParseError& parseError) {
+   parseError.line =0 ;
+   parseError.offset =0;
+   int32_t len1 = r1.length();
+   int32_t len2 = r2.length();
+   // for pre-context
+   int32_t start = (len1<U_PARSE_CONTEXT_LEN) ? 0: (len1 - (U_PARSE_CONTEXT_LEN-1));
+   int32_t stop  = len1;
+
+   r1.extract(start,stop-start,parseError.preContext);
+   //null terminate the buffer
+   parseError.preContext[stop-start] = 0;
+   //for post-context
+   start = 0;
+   stop  = (len2<U_PARSE_CONTEXT_LEN)? len2 : (U_PARSE_CONTEXT_LEN-1);
+
+   r2.extract(start,stop-start,parseError.postContext);
+   //null terminate the buffer
+   parseError.postContext[stop-start]= 0;   
+
+}
+
 /**
  * Construct a new empty rule set.
  */
@@ -95,7 +119,7 @@ void TransliterationRuleSet::addRule(TransliterationRule* adoptedRule,
  * That is, <code>freeze()</code> may be called multiple times,
  * although for optimal performance it shouldn't be.
  */
-void TransliterationRuleSet::freeze(UErrorCode& status) {
+void TransliterationRuleSet::freeze(UParseError& parseError,UErrorCode& status) {
     /* Construct the rule array and index table.  We reorder the
      * rules by sorting them into 256 bins.  Each bin contains all
      * rules matching the index value for that bin.  A rule
@@ -181,7 +205,9 @@ void TransliterationRuleSet::freeze(UErrorCode& status) {
 //|                     errors.append("\n");
 //|                 }
 //|                 errors.append("Rule " + r1 + " masks " + r2);
-                    status = U_ILLEGAL_ARGUMENT_ERROR;
+                    status = U_RULE_MASK_ERROR;
+                    UnicodeString rp1,rp2;
+                    syntaxError(r1->getPattern(rp1),r2->getPattern(rp2),parseError);
                     return;
                 }
             }
@@ -217,6 +243,8 @@ UBool TransliterationRuleSet::transliterate(Replaceable& text,
             return TRUE;
         case U_PARTIAL_MATCH:
             return FALSE;
+        default: /* Ram: added default to make GCC happy */
+            break;
         }
     }
     // No match or partial match from any rule

@@ -128,10 +128,12 @@ _utrans_copyUnicodeStringToChars(const UnicodeString& str,
 /********************************************************************
  * General API
  ********************************************************************/
+#if 0
 
 U_CAPI UTransliterator*
 utrans_open(const char* id,
             UTransDirection dir,
+            UParseError* parseError,
             UErrorCode* status) {
 
     utrans_ENTRY(status) NULL;
@@ -144,7 +146,7 @@ utrans_open(const char* id,
     UnicodeString ID(id, ""); // use invariant converter
     Transliterator *trans = NULL;
 
-    trans = Transliterator::createInstance(ID, dir, NULL);
+    trans = Transliterator::createInstance(ID, dir, *parseError, *status);
 
     if (trans == NULL) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -192,6 +194,57 @@ utrans_openRules(const char* id,
     }
     return (UTransliterator*) trans;
 }
+#endif
+
+U_CAPI UTransliterator*
+utrans_open(const char* id,
+            UTransDirection dir,
+            const UChar* rules,         /* may be Null */
+            int32_t rulesLength,        /* -1 if null-terminated */ 
+            UParseError* parseError,    /* may be Null */
+            UErrorCode* status) {
+
+    utrans_ENTRY(status) NULL;
+
+    if (id == NULL) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
+    UParseError temp;
+    
+    if(parseError == NULL){
+        parseError = &temp;
+    }
+    
+    UnicodeString ID(id, ""); // use invariant converter
+
+    if(rules==NULL){
+
+        Transliterator *trans = NULL;
+
+        trans = Transliterator::createInstance(ID, dir, *parseError, *status);
+        
+        if(U_FAILURE(*status)){
+            return NULL;
+        }
+        return (UTransliterator*) trans;
+    }else{
+        UnicodeString ruleStr(rulesLength < 0,
+                              rules,
+                              rulesLength); // r-o alias
+
+        RuleBasedTransliterator *trans = NULL;
+        trans = new RuleBasedTransliterator(ID, ruleStr, dir,
+                                            NULL, *parseError, *status);
+        if (trans == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+        } else if (U_FAILURE(*status)) {
+            delete trans;
+            trans = NULL;
+        }
+        return (UTransliterator*) trans;
+    }
+}
 
 U_CAPI UTransliterator*
 utrans_openInverse(const UTransliterator* trans,
@@ -200,11 +253,7 @@ utrans_openInverse(const UTransliterator* trans,
     utrans_ENTRY(status) NULL;
 
     UTransliterator* result =
-        (UTransliterator*) ((Transliterator*) trans)->createInverse();
-
-    if (result == NULL) {
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-    }
+        (UTransliterator*) ((Transliterator*) trans)->createInverse(*status);
 
     return result;
 }

@@ -477,8 +477,8 @@ private:
 
     void _construct(const UnicodeString& rules,
                     UTransDirection direction,
-                    UErrorCode& status,
-                    UParseError* parseError = 0);
+                    UParseError& parseError,
+                    UErrorCode& status);
 };
 
 /**
@@ -496,7 +496,7 @@ inline RuleBasedTransliterator::RuleBasedTransliterator(
                             UParseError& parseError,
                             UErrorCode& status) :
     Transliterator(id, adoptedFilter) {
-    _construct(rules, direction, status, &parseError);
+    _construct(rules, direction,parseError,status);
 }
 
 /**
@@ -513,7 +513,8 @@ inline RuleBasedTransliterator::RuleBasedTransliterator(
                             UnicodeFilter* adoptedFilter,
                             UErrorCode& status) :
     Transliterator(id, adoptedFilter) {
-    _construct(rules, direction, status);
+    UParseError parseError;
+    _construct(rules, direction,parseError, status);
 }
 
 /**
@@ -525,7 +526,8 @@ inline RuleBasedTransliterator::RuleBasedTransliterator(
                             UTransDirection direction,
                             UErrorCode& status) :
     Transliterator(id, 0) {
-    _construct(rules, direction, status);
+    UParseError parseError;
+    _construct(rules, direction,parseError, status);
 }
 
 /**
@@ -536,7 +538,8 @@ inline RuleBasedTransliterator::RuleBasedTransliterator(
                             const UnicodeString& rules,
                             UErrorCode& status) :
     Transliterator(id, 0) {
-    _construct(rules, UTRANS_FORWARD, status);
+    UParseError parseError;
+    _construct(rules, UTRANS_FORWARD, parseError, status);
 }
 
 /**
@@ -548,7 +551,8 @@ inline RuleBasedTransliterator::RuleBasedTransliterator(
                             UnicodeFilter* adoptedFilter,
                             UErrorCode& status) :
     Transliterator(id, adoptedFilter) {
-    _construct(rules, UTRANS_FORWARD, status);
+    UParseError parseError;
+    _construct(rules, UTRANS_FORWARD,parseError, status);
 }
 
 #endif
