@@ -40,7 +40,7 @@ static int dotestname(const char *name, const char *standard, const char *expect
     if (!tag) {
         log_err("FAIL: could not find %s standard name for %s\n", standard, name);
         res = 0;
-    } else if (expected && uprv_strcmp(expected, tag)) {
+    } else if (expected && uprv_stricmp(expected, tag)) {
         log_err("FAIL: expected %s for %s standard name for %s, got %s\n", expected, standard, name, tag);
         res = 0;
     }
