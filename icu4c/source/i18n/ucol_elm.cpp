@@ -102,7 +102,9 @@ int32_t uprv_uca_addExpansion(ExpansionTable *expansions, uint32_t value, UError
     if(expansions->position == expansions->size) {
         uint32_t *newData = (uint32_t *)realloc(expansions->CEs, 2*expansions->size*sizeof(uint32_t));
         if(newData == NULL) {
+#ifdef UCOL_DEBUG
             fprintf(stderr, "out of memory for expansions\n");
+#endif
             *status = U_MEMORY_ALLOCATION_ERROR;
             return -1;
         }
@@ -280,7 +282,9 @@ int uprv_uca_setMaxExpansion(uint32_t           endexpansion,
     uint8_t  *neweces = (uint8_t *)uprv_realloc(maxexpansion->expansionCESize, 
                                     2 * maxexpansion->size * sizeof(uint8_t));
     if (neweece == NULL || neweces == NULL) {
+#ifdef UCOL_DEBUG
       fprintf(stderr, "out of memory for maxExpansions\n");
+#endif
       *status = U_MEMORY_ALLOCATION_ERROR;
       return -1;
     }
@@ -505,7 +509,9 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
     if(composed->cSize != element->cSize || uprv_memcmp(composed->cPoints+1, element->cPoints+1, element->cSize-1)) {
       // do it!
       CE = uprv_uca_addContraction(t, CE, composed, status);
+#ifdef UCOL_DEBUG
       fprintf(stderr, "Adding composed for %04X\n", *element->cPoints);
+#endif
     }
     uprv_free(composed);
 
@@ -764,7 +770,9 @@ UCATableHeader *uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
     tableOffset += paddedsize(UCOL_UNSAFECP_TABLE_SIZE);
 
     if(tableOffset != toAllocate) {
+#ifdef UCOL_DEBUG
         fprintf(stderr, "calculation screwup!!! Expected to write %i but wrote %i instead!!!\n", toAllocate, tableOffset);
+#endif
         *status = U_INTERNAL_PROGRAM_ERROR;
         free(dataStart);
         return 0;

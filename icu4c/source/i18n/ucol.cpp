@@ -34,7 +34,9 @@
 #include "umutex.h"
 #include "uhash.h"
 
+#ifdef UCOL_DEBUG
 #include <stdio.h>
+#endif
 #include <limits.h>
 
 /* added by synwee for trie manipulation*/
