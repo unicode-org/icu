@@ -109,7 +109,7 @@ class TransliteratorRegistry {
 
             Locale toploc = getLocale(top);
             res = ResourceBundle.getBundle(RB_LOCALE_ELEMENTS, toploc);
-            if (res.getLocale() != ROOT_LOCALE) {
+            if (res.getLocale().equals(ROOT_LOCALE)) {
                 isSpecLocale = false;
                 res = null;
             } else {
@@ -608,6 +608,8 @@ class TransliteratorRegistry {
         }
     }
 
+    private static final boolean DEBUG = false;
+
     /**
      * Attempt to find a source-target/variant in the dynamic registry
      * store.  Return 0 on failure.
@@ -616,6 +618,10 @@ class TransliteratorRegistry {
                                       Spec trg,
                                       String variant) {
         String ID = STVtoID(src.get(), trg.get(), variant);
+        if (DEBUG) {
+            System.out.println("TransliteratorRegistry.findInDynamicStore:" +
+                               ID);
+        }
         return (Object[]) registry.get(new CaseInsensitiveString(ID));
     }
 
@@ -631,6 +637,11 @@ class TransliteratorRegistry {
     private Object[] findInStaticStore(Spec src,
                                      Spec trg,
                                      String variant) {
+        if (DEBUG) {
+            String ID = STVtoID(src.get(), trg.get(), variant);
+            System.out.println("TransliteratorRegistry.findInStaticStore:" +
+                               ID);
+        }
         Object[] entry = null;
         if (src.isLocale()) {
             entry = findInBundle(src, trg, variant,
