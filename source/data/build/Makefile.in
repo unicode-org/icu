@@ -43,7 +43,7 @@ check check-local check-recursive build-testdlls build-basetestdata build-local
 all: all-local
 install: all-local 
 clean: clean-local
-distclean : distclean
+distclean : clean
 dist: 
 check: all
 
