@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/Attic/TestFmwk.java,v $ 
- * $Date: 2000/04/25 17:40:11 $ 
- * $Revision: 1.10 $
+ * $Date: 2000/04/26 17:11:52 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -34,7 +34,7 @@ import java.text.*;
  * log only if the test is being run in verbose mode.
  */
 
-public class TestFmwk {
+public class TestFmwk implements TestLog {
 
     /**
      * Puts a copyright in the .class file
@@ -142,7 +142,7 @@ public class TestFmwk {
     /**
      * Adds given string to the log if we are in verbose mode.
      */
-    protected void log( String message ) {
+    public void log( String message ) {
         if( params.verbose ) {
             indent(params.indentLevel + 1);
             params.log.print( message );
@@ -150,14 +150,14 @@ public class TestFmwk {
         }
     }
 
-    protected void logln( String message ) {
+    public void logln( String message ) {
         log(message + System.getProperty("line.separator"));
     }
 
     /**
      * Report an error
      */
-    protected void err( String message ) {
+    public void err( String message ) {
         params.errorCount++;
         indent(params.indentLevel + 1);
         params.log.print( message );
@@ -168,7 +168,7 @@ public class TestFmwk {
         }
     }
 
-    protected void errln( String message ) {
+    public void errln( String message ) {
         err(message + System.getProperty("line.separator"));
     }
 
