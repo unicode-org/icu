@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2002/10/10 20:08:29 $
- * $Revision: 1.73 $
+ * $Date: 2002/10/10 21:07:53 $
+ * $Revision: 1.74 $
  *
  *****************************************************************************************
  */
@@ -210,7 +210,7 @@ import java.util.Iterator;
  * </table>
  * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.73 $ $Date: 2002/10/10 20:08:29 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.74 $ $Date: 2002/10/10 21:07:53 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -1765,7 +1765,7 @@ public class UnicodeSet extends UnicodeFilter {
      * Return a programmer-readable string representation of this object.
      */
     public String toString() {
-        return getClass().getName() + '(' + toPattern(false) + ')';
+        return toPattern(true);
     }
 
     //----------------------------------------------------------------
