@@ -147,7 +147,7 @@ RB_SOURCE_DIR = $(GENRB_SOURCE:$=$)
 #				Building the common dll in $(ICUBLD) unconditionally copies it to $(DLL_OUTPUT) too.
 #
 #############################################################################
-ALL : GODATA  testdata "$(ICUDBLD)\$(U_ICUDATA_NAME).dll" $(TESTDATAOUT)\test1.cnv $(TESTDATAOUT)\test3.cnv $(TESTDATAOUT)\test4.cnv 
+ALL : GODATA "$(ICUDBLD)\$(U_ICUDATA_NAME).dll" testdata $(TESTDATAOUT)\test1.cnv $(TESTDATAOUT)\test3.cnv $(TESTDATAOUT)\test4.cnv 
 	@echo All targets are up to date
 
 #
@@ -233,9 +233,6 @@ CLEAN :
 	@cd "$(ICUTOOLS)"
 
 
-{$(ICUDATA)}.txt.res:
-	@echo Making Resource Bundle files
-	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -s$(ICUDATA) -d$(@D) $(?F)
 
 # Inference rule for creating converters, with a kludge to create
 # c versions of converters at the same time
@@ -260,6 +257,10 @@ $(TESTDATAOUT)\test4.cnv: "$(TESTDATA)\test4.ucm"
 	@cd "$(ICUDATA)"
 	@set ICU_DATA=$(TESTDATAOUT)
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" $**
+
+{$(ICUDATA)}.txt.res:
+	@echo Making Resource Bundle files
+	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -s$(ICUDATA) -d$(@D) $(?F)
 
 # DLL version information
 icudata.res: "$(ICUDATA)\icudata.rc"
@@ -304,6 +305,8 @@ ucadata.dat: "$(ICUDATA)\unidata\FractionalUCA.txt" "$(ICUTOOLS)\genuca\$(CFG)\g
 
 invuca.dat: ucadata.dat
 
+$(UCM_SOURCE) : {"$(ICUTOOLS)\makeconv\$(CFG)"}makeconv.exe {"$(ICUTOOLS)\genccode\$(CFG)"}genccode.exe
+
 {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe : ucadata.dat uprops.dat unorm.dat
 
 ucadata.dat : uprops.dat unorm.dat
@@ -318,4 +321,3 @@ uprops.dat unames.dat unorm.dat cnvalias.dat tz.dat ucadata.dat invuca.dat: {"$(
 
 $(TRANSLIT_SOURCE) $(GENRB_SOURCE) : {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe ucadata.dat uprops.dat unorm.dat
 
-$(UCM_SOURCE) : {"$(ICUTOOLS)\makeconv\$(CFG)"}makeconv.exe {"$(ICUTOOLS)\genccode\$(CFG)"}genccode.exe
