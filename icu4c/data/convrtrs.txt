@@ -67,7 +67,7 @@
 UTF8                    utf-8 { MIME } ibm-1208 cp1208 
 UTF16_BigEndian         utf-16be { MIME } x-utf-16be
 UTF16_LittleEndian       utf-16le { MIME } x-utf-16le
-UTF16_PlatformEndian     ISO-10646-UCS-2 { IANA } csUnicode utf-16 { MIME } ibm-1200 cp1200 ucs-2
+UTF16_PlatformEndian     ISO-10646-UCS-2 { IANA } csUnicode utf-16 { MIME } ibm-17584 ibm-13488 ibm-1200 cp1200 ucs-2
 UTF16_OppositeEndian
 UTF32_BigEndian          utf-32be { MIME }
 UTF32_LittleEndian       utf-32le { MIME }
