@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - test/thaitest
-## Copyright (c) 2001, International Business Machines Corporation and
+## Copyright (c) 2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -10,9 +10,6 @@ top_builddir = ../..
 
 include $(top_builddir)/icudefs.mk
 
-## Platform-specific setup
-include @platform_make_fragment@
-
 ## Build directory information
 subdir = test/thaitest
 
@@ -20,18 +17,14 @@ subdir = test/thaitest
 CLEANFILES = *~ $(DEPS)
 
 ## Target information
-TARGET = thaitest
+TARGET = thaitest$(EXEEXT)
 
 DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n 
-CFLAGS = @CFLAGS@
-CXXFLAGS = @CXXFLAGS@
-ENABLE_RPATH = @ENABLE_RPATH@
-ifeq ($(ENABLE_RPATH),YES)
-RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
-endif
-LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
-LIBS = $(LIBICUI18N) $(LIBICUUC) @LIBS@ @LIB_M@
+CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n 
+#CFLAGS += @CFLAGS@
+#CXXFLAGS = @CXXFLAGS@
+
+LIBS = $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
 OBJECTS = thaitest.o
 
@@ -66,16 +59,14 @@ distclean-local: clean-local
 	$(RMV) Makefile
 
 check-local: all-local
+	$(INVOKE) ./$(TARGET)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 $(TARGET) : $(OBJECTS)
-	$(LINK.cc) -o $@ $^ $(LIBS)
-
-invoke:
-	ICU_DATA=$${ICU_DATA:-$(top_builddir)/data/} TZ=PST8PDT $(INVOKE) $(INVOCATION)
+	$(LINK.cc) $(OUTOPT)$@ $^ $(LIBS)
 
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)
