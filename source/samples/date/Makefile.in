@@ -20,7 +20,7 @@ subdir = samples/date
 CLEANFILES = *~ $(DEPS)
 
 ## Target information
-TARGET = date
+TARGET = icudate
 
 ENABLE_STATIC = @ENABLE_STATIC@
 
@@ -74,6 +74,7 @@ distclean-local: clean-local
 	$(RMV) Makefile
 
 check-local:
+	-$(INVOKE) $(TARGET)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \

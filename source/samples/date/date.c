@@ -95,7 +95,7 @@ main(int argc,
     }
     /* unrecognized option */
     else if(strncmp(arg, "-", strlen("-")) == 0) {
-      printf("date: invalid option -- %s\n", arg+1);
+      printf("icudate: invalid option -- %s\n", arg+1);
       printUsage = 1;
     }
     /* done with options, display date */
@@ -127,7 +127,7 @@ main(int argc,
 static void
 usage()
 {  
-  puts("Usage: date [OPTIONS]");
+  puts("Usage: icudate [OPTIONS]");
   puts("Options:");
   puts("  -h, --help        Print this message and exit.");
   puts("  -v, --version     Print the version number of date and exit.");
@@ -142,10 +142,9 @@ usage()
 static void
 version()
 {
-  printf("date version %s (ICU version %s), created by Stephen F. Booth.\n", 
+  printf("icudate version %s (ICU version %s), created by Stephen F. Booth.\n", 
 	 DATE_VERSION, U_ICU_VERSION);
-  puts("Copyright (C) 1998-2000 International Business Machines Corporation and others.");
-  puts("All Rights Reserved.");
+  puts(U_COPYRIGHT_STRING);
 }
 
 /* Format the date */

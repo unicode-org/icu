@@ -1,5 +1,5 @@
 # Copyright (c) 2000 IBM, Inc. and others
-# conversion sample code $Revision: 1.4 $
+# conversion sample code $Revision: 1.5 $
 
 
 # Usage:
@@ -56,7 +56,7 @@ $(TARGET): $(OBJECTS)
 
 # Make check: simply runs the sample, logged to a file
 check: $(TARGET)
-	$(TARGET) | tee $(TARGET).out
+	$(INVOKE) ./$(TARGET) | tee $(TARGET).out
 
 # Make report: creates a 'report file' with both source and sample run
 report: $(TARGET).report

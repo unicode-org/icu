@@ -124,7 +124,7 @@ main(int argc,
             
             /* Make sure the month value is legal */
             if(month < 0 || month > 12) {
-                printf("cal: Bad value for month -- %d\n", month);
+                printf("icucal: Bad value for month -- %d\n", month);
                 
                 /* Display usage */
                 printUsage = 1;
@@ -164,7 +164,7 @@ main(int argc,
 static void
 usage()
 {  
-    puts("Usage: cal [OPTIONS] [[MONTH] YEAR]");
+    puts("Usage: icucal [OPTIONS] [[MONTH] YEAR]");
     puts("");
     puts("Options:");
     puts("  -h, --help        Print this message and exit.");
@@ -182,10 +182,9 @@ usage()
 static void
 version()
 {
-    printf("cal version %s (ICU version %s), created by Stephen F. Booth.\n", 
+    printf("icucal version %s (ICU version %s), created by Stephen F. Booth.\n", 
         CAL_VERSION, U_ICU_VERSION); 
-    puts("Copyright (C) 1998-2000 International Business Machines Corporation and others.");
-    puts("All Rights Reserved.");
+    puts(U_COPYRIGHT_STRING);
 }
 
 static void

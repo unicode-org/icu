@@ -1,20 +1,24 @@
-numfmt: a sample program which displays number formatting in C and C++
+uresb: Resource Bundle
 
 This sample demonstrates
-         Formatting a number
-         Outputting text in the default codepage to the console
+         Building a resource bundle
+         Using ICU to print data from a resource bundle
+
          
 Files:
-    main.cpp                   Main source file in C++
-    capi.c                     C version 
-    util.cpp                   formatted output convenience implementation
-    util.h                     formatted output convenience header
-    numfmt.dsw                 Windows MSVC workspace.  Double-click this to get started.
-    numfmt.dsp                 Windows MSVC project file
+    uresb.c        Main source file in C
+    uresb.dsw      Windows MSVC workspace.  Double-click this to get started.
+    uresb.dsp      Windows MSVC project file
+    resources.dsp  Windows project file for resources
+    resources.mak  Windows makefile for resources
 
-To Build on Windows
+    root.txt       Root resource bundle
+    en.txt         English translation
+    sr.txt         Serbian translation (cp1251)
+
+To Build uresb on Windows
     1.  Install and build ICU
-    2.  In MSVC, open the workspace file icu\samples\numfmt\numfmt.dsw
+    2.  In MSVC, open the workspace file icu\samples\uresb\uresb.dsw
     3.  Choose a Debug or Release build.
     4.  Build.
 	
@@ -23,10 +27,10 @@ To Run on Windows
     2.  Add ICU's bin directory to the path, e.g.
             set PATH=c:\icu\bin;%PATH%
         (Use the path to where ever ICU is on your system.)
-    3.  cd into the numfmt directory, e.g.
-            cd c:\icu\source\samples\numfmt\debug
-    4.  Run it
-            numfmt
+    3.  cd into the uresb directory, e.g.
+            cd c:\icu\source\samples\uresb\debug
+    4.  Run it  (with a locale name, ex. english)
+            uresb  en
 
 To Build on Unixes
     1.  Build ICU.  
@@ -41,17 +45,18 @@ To Build on Unixes
            gmake install
  
     3.  Compile
-           cd <icu directory>/source/samples/numfmt
-           gmake ICU_PREFIX=<icu install directory)
+           cd <icu directory>/source/samples/uresb
+           gmake ICU_PREFIX=<icu install directory) ICU_PATH=<icu source directory>
            
  To Run on Unixes
-           cd <icu directory>/source/samples/numfmt
+           cd <icu directory>/source/samples/uresb
            
            gmake ICU_PREFIX=<icu install directory>  check
                -or- 
 
            export LD_LIBRARY_PATH=<icu install directory>/lib:.:$LD_LIBRARY_PATH
-           numfmt
+           uresb
+           
            
  Note:  The name of the LD_LIBRARY_PATH variable is different on some systems.
         If in doubt, run the sample using "gmake check", and note the name of

@@ -1,20 +1,20 @@
-numfmt: a sample program which displays number formatting in C and C++
+icudate: a sample program which displays the current date
 
 This sample demonstrates
-         Formatting a number
+         Formatting a date
          Outputting text in the default codepage to the console
+
          
 Files:
-    main.cpp                   Main source file in C++
-    capi.c                     C version 
-    util.cpp                   formatted output convenience implementation
-    util.h                     formatted output convenience header
-    numfmt.dsw                 Windows MSVC workspace.  Double-click this to get started.
-    numfmt.dsp                 Windows MSVC project file
+    date.c                      Main source file
+    uprint.h                   codepage output convenience header
+    uprint.h                   codepage output convenience implementation
+    date.dsw                    Windows MSVC workspace.  Double-click this to get started.
+    date.dsp                    Windows MSVC project file
 
-To Build on Windows
+To Build icudate on Windows
     1.  Install and build ICU
-    2.  In MSVC, open the workspace file icu\samples\numfmt\numfmt.dsw
+    2.  In MSVC, open the workspace file icu\samples\date\date.dsw
     3.  Choose a Debug or Release build.
     4.  Build.
 	
@@ -23,13 +23,13 @@ To Run on Windows
     2.  Add ICU's bin directory to the path, e.g.
             set PATH=c:\icu\bin;%PATH%
         (Use the path to where ever ICU is on your system.)
-    3.  cd into the numfmt directory, e.g.
-            cd c:\icu\source\samples\numfmt\debug
+    3.  cd into the icudate directory, e.g.
+            cd c:\icu\source\samples\date\debug
     4.  Run it
-            numfmt
+            date
 
 To Build on Unixes
-    1.  Build ICU.  
+    1.  Build ICU.  icudate is built automatically by default unless samples are turned off.
         Specify an ICU install directory when running configure,
         using the --prefix option.  The steps to build ICU will look something
         like this:
@@ -39,19 +39,16 @@ To Build on Unixes
            
     2.  Install ICU, 
            gmake install
- 
-    3.  Compile
-           cd <icu directory>/source/samples/numfmt
-           gmake ICU_PREFIX=<icu install directory)
            
  To Run on Unixes
-           cd <icu directory>/source/samples/numfmt
+           cd <icu directory>/source/samples/date
            
-           gmake ICU_PREFIX=<icu install directory>  check
+           gmake check
                -or- 
 
            export LD_LIBRARY_PATH=<icu install directory>/lib:.:$LD_LIBRARY_PATH
-           numfmt
+           date
+           
            
  Note:  The name of the LD_LIBRARY_PATH variable is different on some systems.
         If in doubt, run the sample using "gmake check", and note the name of
