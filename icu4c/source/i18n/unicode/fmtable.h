@@ -15,11 +15,10 @@
 #ifndef FMTABLE_H
 #define FMTABLE_H
 
+#include "unicode/utypes.h"
+#include "unicode/unistr.h"
 
 #if !UCONFIG_NO_FORMATTING
-
-#include "unicode/unistr.h"
-#include "unicode/utypes.h"
 
 U_NAMESPACE_BEGIN
 
