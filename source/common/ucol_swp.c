@@ -34,11 +34,11 @@ ucol_swapBinary(const UDataSwapper *ds,
 
     const UCATableHeader *inHeader;
     UCATableHeader *outHeader;
-    UCATableHeader header;
+    UCATableHeader header={ 0 };
 
     uint32_t count;
 
-    /* argument checking */
+    /* argument checking in case we were not called from ucol_swap() */
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return 0;
     }
@@ -57,9 +57,9 @@ ucol_swapBinary(const UDataSwapper *ds,
      * The collation binary must contain at least the UCATableHeader,
      * starting with its size field.
      * sizeof(UCATableHeader)==42*4 in ICU 2.8
+     * check the length against the header size before reading the size field
      */
-    header.size=udata_readInt32(ds, inHeader->size);
-    if(length>=0 && (length<(42*4) || length<header.size)) {
+    if(length>=0 && (length<(42*4) || length<(header.size=udata_readInt32(ds, inHeader->size)))) {
         udata_printError(ds, "ucol_swapBinary(): too few bytes (%d after header) for collation data\n",
                          length);
         *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
@@ -217,4 +217,94 @@ ucol_swap(const UDataSwapper *ds,
     } else {
         return 0;
     }
+}
+
+/* swap inverse UCA collation data (invuca.icu) */
+U_CAPI int32_t U_EXPORT2
+ucol_swapInverseUCA(const UDataSwapper *ds,
+                    const void *inData, int32_t length, void *outData,
+                    UErrorCode *pErrorCode) {
+    const UDataInfo *pInfo;
+    int32_t headerSize;
+
+    const uint8_t *inBytes;
+    uint8_t *outBytes;
+
+    const InverseUCATableHeader *inHeader;
+    InverseUCATableHeader *outHeader;
+    InverseUCATableHeader header={ 0 };
+
+    /* udata_swapDataHeader checks the arguments */
+    headerSize=udata_swapDataHeader(ds, inData, length, outData, pErrorCode);
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+
+    /* check data format and format version */
+    pInfo=(const UDataInfo *)((const char *)inData+4);
+    if(!(
+        pInfo->dataFormat[0]==0x49 &&   /* dataFormat="InvC" */
+        pInfo->dataFormat[1]==0x6e &&
+        pInfo->dataFormat[2]==0x76 &&
+        pInfo->dataFormat[3]==0x43 &&
+        pInfo->formatVersion[0]==2 &&
+        pInfo->formatVersion[1]>=1
+    )) {
+        udata_printError(ds, "ucol_swapInverseUCA(): data format %02x.%02x.%02x.%02x (format version %02x.%02x) is not an inverse UCA collation file\n",
+                         pInfo->dataFormat[0], pInfo->dataFormat[1],
+                         pInfo->dataFormat[2], pInfo->dataFormat[3],
+                         pInfo->formatVersion[0], pInfo->formatVersion[1]);
+        *pErrorCode=U_UNSUPPORTED_ERROR;
+        return 0;
+    }
+
+    inBytes=(const uint8_t *)inData+headerSize;
+    outBytes=(uint8_t *)outData+headerSize;
+
+    inHeader=(const InverseUCATableHeader *)inBytes;
+    outHeader=(InverseUCATableHeader *)outBytes;
+
+    /*
+     * The inverse UCA collation binary must contain at least the InverseUCATableHeader,
+     * starting with its size field.
+     * sizeof(UCATableHeader)==8*4 in ICU 2.8
+     * check the length against the header size before reading the size field
+     */
+    if( length>=0 &&
+        ((length-headerSize)<(8*4) ||
+         (uint32_t)(length-headerSize)<(header.byteSize=udata_readInt32(ds, inHeader->byteSize)))
+    ) {
+        udata_printError(ds, "ucol_swapInverseUCA(): too few bytes (%d after header) for inverse UCA collation data\n",
+                         length);
+        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+        return 0;
+    }
+
+    if(length>=0) {
+        /* copy everything, takes care of data that needs no swapping */
+        if(inBytes!=outBytes) {
+            uprv_memcpy(outBytes, inBytes, header.byteSize);
+        }
+
+        /* swap the necessary pieces in the order of their occurrence in the data */
+
+        /* read more of the InverseUCATableHeader (the byteSize field was read above) */
+        header.tableSize=   ds->readUInt32(inHeader->tableSize);
+        header.contsSize=   ds->readUInt32(inHeader->contsSize);
+        header.table=       ds->readUInt32(inHeader->table);
+        header.conts=       ds->readUInt32(inHeader->conts);
+
+        /* swap the 32-bit integers in the header */
+        ds->swapArray32(ds, inHeader, 5*4, outHeader, pErrorCode);
+
+        /* swap the inverse table; tableSize counts uint32_t[3] rows */
+        ds->swapArray32(ds, inBytes+header.table, header.tableSize*3*4,
+                           outBytes+header.table, pErrorCode);
+
+        /* swap the continuation table; contsSize counts UChars */
+        ds->swapArray16(ds, inBytes+header.conts, header.contsSize*U_SIZEOF_UCHAR,
+                           outBytes+header.conts, pErrorCode);
+    }
+
+    return headerSize+header.byteSize;
 }
