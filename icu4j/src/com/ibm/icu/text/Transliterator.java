@@ -1142,7 +1142,7 @@ public abstract class Transliterator {
      * transliterator needs to examine
      * @stable ICU 2.0
      */
-    protected final int getMaximumContextLength() {
+    public final int getMaximumContextLength() {
         return maximumContextLength;
     }
 
