@@ -6,7 +6,7 @@
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/XLIFF2ICUConverter.java,v $ 
 * $Date: 2003/05/19 
-* $Revision: 1.5 $
+* $Revision: 1.6 $
 *
 ******************************************************************************
 */
@@ -161,6 +161,7 @@ public final class XLIFF2ICUConverter {
             "-h or -? or --help   this usage text.\n"+
             "-t or --target-only  only generate the target language txt file.\n" +
             "example: XLIFF2ICUConverter -t <optional argument> -s xxx -d yyy myResources.xlf");
+        System.exit(-1);
     }
     
     private String getFullPath(boolean fileType, String fName){
