@@ -35,7 +35,24 @@ int32_t getInt(UnicodeString str)
 	return atoi(buffer);
 }
 
-	    
+// [HSYS] Just to make it easier to use with UChar array.
+static UnicodeString CharsToUnicodeString(const char* chars)
+{
+    int len = strlen(chars);
+    int i;
+    UnicodeString buffer;
+    for (i = 0; i < len;) {
+        if ((chars[i] == '\\') && (i+1 < len) && (chars[i+1] == 'u')) {
+            int unicode;
+            sscanf(&(chars[i+2]), "%4X", &unicode);
+            buffer += (UChar)unicode;
+            i += 6;
+        } else {
+            buffer += (UChar)chars[i++];
+        }
+    }
+    return buffer;
+}	    
           
 
 //---------------------------------------------
@@ -220,7 +237,10 @@ void TransliteratorAPITest::TestGetDisplayName() {
             doTest(message, name, dispNames[i+1]);
             name=""; 
 		    t->getDisplayName(t->getID(), Locale::US, name);
-			message="Display name for on english locale ID:" + t->getID();
+			message.remove();
+			message.append("Display name for on english locale ID:");
+			message.append(t->getID());
+		//	message="Display name for on english locale ID:" + t->getID();
 		    doTest(message, name, dispNames[i+1]);
 			name="";
 			
@@ -267,7 +287,10 @@ void TransliteratorAPITest::TestTransliterate1(){
             //doubt here
             temp=Data[i+1];
             t->transliterate(temp);
-			message=t->getID() + "->transliterate(Replaceable) for \n\tSource:" +Data[i][1];
+            message.remove();
+            message.append(t->getID());
+            message.append("->transliterate(Replaceable) for \n\tSource:");
+            message.append(Data[i][1]);
             doTest(message, temp, Data[i+2]);
 			
          }
