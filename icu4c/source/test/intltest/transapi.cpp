@@ -511,7 +511,7 @@ void TransliteratorAPITest::TestKeyboardTransliterator3(){
     Transliterator *t=Transliterator::createInstance("Unicode-Hex");
     if(t == 0)
         errln("FAIL : construction");
-    for(int32_t i=0; i<sizeof(Data)/sizeof(Data[0]); i=i+4){
+    for(uint32_t i=0; i<sizeof(Data)/sizeof(Data[0]); i=i+4){
         UnicodeString log;
         index.contextStart=getInt(Data[i+0]);
         index.contextLimit=index.limit=getInt(Data[i+1]);
