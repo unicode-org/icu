@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2003, International Business Machines
+*   Copyright (c) 2001-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -615,13 +615,13 @@ UnicodeString& TransliteratorRegistry::getAvailableVariant(int32_t index,
 //----------------------------------------------------------------------
 
 TransliteratorRegistry::Enumeration::Enumeration(const TransliteratorRegistry& _reg) :
-    reg(_reg), index(0) {
+    index(0), reg(_reg) {
 }
 
 TransliteratorRegistry::Enumeration::~Enumeration() {
 }
 
-int32_t TransliteratorRegistry::Enumeration::count(UErrorCode& status) const {
+int32_t TransliteratorRegistry::Enumeration::count(UErrorCode& /*status*/) const {
     return reg.availableIDs.size();
 }
 
@@ -652,7 +652,7 @@ const UnicodeString* TransliteratorRegistry::Enumeration::snext(UErrorCode& stat
     }
 }
 
-void TransliteratorRegistry::Enumeration::reset(UErrorCode& status) {
+void TransliteratorRegistry::Enumeration::reset(UErrorCode& /*status*/) {
     index = 0;
 }
 
