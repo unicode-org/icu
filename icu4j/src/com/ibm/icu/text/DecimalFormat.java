@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2001/10/23 13:22:19 $ 
- * $Revision: 1.10 $
+ * $Date: 2001/10/25 06:25:23 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -2784,9 +2784,19 @@ public class DecimalFormat extends NumberFormat {
         // We only need to check the maximum counts because NumberFormat
         // .readObject has already ensured that the maximum is greater than the
         // minimum count.
+        /*Commented for compatibility with previous version, and reserved for further use
         if (getMaximumIntegerDigits() > DOUBLE_INTEGER_DIGITS ||
             getMaximumFractionDigits() > DOUBLE_FRACTION_DIGITS) {
             throw new InvalidObjectException("Digit count out of range");
+        }*/
+        /* Truncte the maximumIntegerDigits to DOUBLE_INTEGER_DIGITS and maximumFractionDigits
+         * to DOUBLE_FRACTION_DIGITS
+         */
+        if (getMaximumIntegerDigits() > DOUBLE_INTEGER_DIGITS) {
+             setMaximumIntegerDigits(DOUBLE_INTEGER_DIGITS);
+        }
+        if (getMaximumFractionDigits() > DOUBLE_FRACTION_DIGITS) {
+            setMaximumFractionDigits(DOUBLE_FRACTION_DIGITS);
         }
         if (serialVersionOnStream < 2) {
             exponentSignAlwaysShown = false;
