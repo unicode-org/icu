@@ -31,7 +31,7 @@ struct TestNode
 typedef enum { RUNTESTS, SHOWTESTS } TestMode;
 #define TEST_SEPARATOR '/'
 
-#include "ctest.h"
+#include "unicode/ctest.h"
 
 char ERROR_LOG[MAX_TEST_LOG][MAXTESTNAME];
 
