@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/util/Attic/HebrewHoliday.java,v $ 
- * $Date: 2000/03/10 04:17:58 $ 
- * $Revision: 1.2 $
+ * $Date: 2001/02/26 22:21:15 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -18,7 +18,7 @@ public class HebrewHoliday extends Holiday
     private static final HebrewCalendar gCalendar = new HebrewCalendar();
 
     /**
-     * Construct a holiday that falls on Easter Sunday every year
+     * Construct a holiday defined in reference to the Hebrew calendar.
      *
      * @param name The name of the holiday
      */
