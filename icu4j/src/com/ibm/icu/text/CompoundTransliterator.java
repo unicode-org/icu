@@ -23,7 +23,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.3 $ $Date: 2000/01/18 17:51:08 $
+ * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.4 $ $Date: 2000/01/18 20:36:16 $
  */
 public class CompoundTransliterator extends Transliterator {
 
@@ -42,7 +42,7 @@ public class CompoundTransliterator extends Transliterator {
      * @param transliterators array of <code>Transliterator</code>
      * objects
      * @param filter the filter.  Any character for which
-     * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
      */

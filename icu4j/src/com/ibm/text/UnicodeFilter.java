@@ -15,8 +15,8 @@ public interface UnicodeFilter {
     /**
      * Returns <tt>true</tt> for characters that are in the selected
      * subset.  In other words, if a character is <b>to be
-     * filtered</b>, then <tt>isIn()</tt> returns
+     * filtered</b>, then <tt>contains()</tt> returns
      * <b><tt>false</tt></b>.
      */
-    public boolean isIn(char c);
+    public boolean contains(char c);
 }

@@ -230,9 +230,9 @@ import java.util.Dictionary;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.5 $ $Date: 2000/01/13 23:53:23 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.6 $ $Date: 2000/01/18 20:36:17 $
  */
-public class UnicodeSet {
+public class UnicodeSet implements UnicodeFilter {
     /**
      * The internal representation is a StringBuffer of even length.
      * Each pair of characters represents a range that is included in

@@ -15,9 +15,12 @@ import java.util.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.5 $ $Date: 2000/01/04 21:43:57 $
+ * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.6 $ $Date: 2000/01/18 20:36:17 $
  *
  * $Log: TransliterationRuleSet.java,v $
+ * Revision 1.6  2000/01/18 20:36:17  Alan
+ * Make UnicodeSet inherit from UnicodeFilter
+ *
  * Revision 1.5  2000/01/04 21:43:57  Alan
  * Add rule indexing, and move masking check to TransliterationRuleSet.
  *
@@ -205,7 +208,7 @@ class TransliterationRuleSet {
      * @param variables a dictionary mapping variables to the sets they
      * represent (maps <code>Character</code> to <code>UnicodeSet</code>)
      * @param filter the filter.  Any character for which
-     * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
      * @return the matching rule, or null if none found.
@@ -242,7 +245,7 @@ class TransliterationRuleSet {
      * @param variables a dictionary mapping variables to the sets they
      * represent (maps <code>Character</code> to <code>UnicodeSet</code>)
      * @param filter the filter.  Any character for which
-     * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
      * @return the matching rule, or null if none found.
@@ -284,7 +287,7 @@ class TransliterationRuleSet {
      * @param partial output parameter.  <code>partial[0]</code> is set to
      * true if a partial match is returned.
      * @param filter the filter.  Any character for which
-     * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
      * @return the matching rule, or null if none found, or if the text buffer
