@@ -16,6 +16,7 @@ case "${host}" in
 	else
 		icu_cv_host_frag=$srcdir/config/mh-solaris 
 	fi ;;
+*-*-mips*)	icu_cv_host_frag=$srcdir/config/mh-irix ;;
 *-*-linux*) 	icu_cv_host_frag=$srcdir/config/mh-linux ;;
 *-*-freebsd*) 	icu_cv_host_frag=$srcdir/config/mh-freebsd ;;
 *-*-aix*) 	icu_cv_host_frag=$srcdir/config/mh-aix ;;
