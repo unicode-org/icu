@@ -118,7 +118,7 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
 
         sprintf(tmp2,
             "LINK32 = link.exe\n"
-            "LINK32_FLAGS = /nologo /out:\"$(TARGETDIR)\\$(DLLTARGET)\" /DLL /NOENTRY /base:\"0x4ad00000\" /implib:\"$(TARGETDIR)\\$(ENTRYPOINT).lib\" %s%s%s\n",
+            "LINK32_FLAGS = /nologo /out:\"$(TARGETDIR)\\$(DLLTARGET)\" /DLL /NOENTRY /base:\"0x4ad00000\" /implib:\"$(TARGETDIR)\\$(LIBNAME).lib\" %s%s%s\n",
             (o->comment ? "/comment:\"" : ""),
             (o->comment ? o->comment : ""),
             (o->comment ? "\"" : ""),
@@ -153,10 +153,12 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
     else if (isStatic)
     {
         uprv_strcpy(tmp, LIB_PREFIX);
-        uprv_strcat(tmp, o->cShortName);
+        uprv_strcat(tmp, o->libName);
         uprv_strcat(tmp, UDATA_LIB_SUFFIX);
 
-        pkg_sttc_writeReadme(o, tmp, status);
+        if (!o->quiet) {
+            pkg_sttc_writeReadme(o, tmp, status);
+        }
         if(U_FAILURE(*status))
         {
             return;
@@ -177,7 +179,7 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
         sprintf(tmp2,
             "LINK32 = LIB.exe\n"
             "LINK32_FLAGS = /nologo /out:\"$(TARGETDIR)\\$(DLLTARGET)\" /EXPORT:\"%s\"\n",
-            o->cShortName
+            o->libName
             );
         T_FileStream_writeLine(makefile, tmp2);
 
@@ -203,12 +205,12 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
 
         uprv_strcpy(tmp, UDATA_CMN_PREFIX "$(NAME)" UDATA_CMN_INTERMEDIATE_SUFFIX OBJ_SUFFIX);
 
-        sprintf(tmp2, "# intermediate obj file:\nCMNOBJTARGET=%s\n\n", tmp);
+        sprintf(tmp2, "# intermediate obj file\nCMNOBJTARGET=%s\n\n", tmp);
         T_FileStream_writeLine(makefile, tmp2);
     }
     uprv_strcpy(tmp, UDATA_CMN_PREFIX);
     uprv_strcat(tmp, o->cShortName);
-    if (o->version) {
+    if (o->version && !uprv_strstr(o->shortName,o->version)) {
         uprv_strcat(tmp, "$(TARGET_VERSION)");
     }
     uprv_strcat(tmp, UDATA_CMN_SUFFIX);
@@ -230,11 +232,11 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
         sprintf(tmp, "all: \"$(TARGETDIR)\\$(DLLTARGET)\"\n\n");
         T_FileStream_writeLine(makefile, tmp);
 
-        sprintf(tmp, "\"$(TARGETDIR)\\$(DLLTARGET)\": \"$(TARGETDIR)\\$(CMNOBJTARGET)\"\n"
-            "\t$(LINK32) $(LINK32_FLAGS) \"$(TARGETDIR)\\$(CMNOBJTARGET)\" $(DATA_VER_INFO)\n\n");
+        sprintf(tmp, "\"$(TARGETDIR)\\$(DLLTARGET)\": \"$(TEMP_DIR)\\$(CMNOBJTARGET)\"\n"
+            "\t$(LINK32) $(LINK32_FLAGS) \"$(TEMP_DIR)\\$(CMNOBJTARGET)\" $(DATA_VER_INFO)\n\n");
         T_FileStream_writeLine(makefile, tmp);
-        sprintf(tmp, "\"$(TARGETDIR)\\$(CMNOBJTARGET)\": \"$(TARGETDIR)\\$(CMNTARGET)\"\n"
-            "\t@\"$(GENCCODE)\" $(GENCOPTIONS) -e $(ENTRYPOINT) -o -d \"$(TARGETDIR)\" \"$(TARGETDIR)\\$(CMNTARGET)\"\n\n");
+        sprintf(tmp, "\"$(TEMP_DIR)\\$(CMNOBJTARGET)\": \"$(TARGETDIR)\\$(CMNTARGET)\"\n"
+            "\t@\"$(GENCCODE)\" $(GENCOPTIONS) -e $(ENTRYPOINT) -o -d \"$(TEMP_DIR)\" \"$(TARGETDIR)\\$(CMNTARGET)\"\n\n");
         T_FileStream_writeLine(makefile, tmp);
 
         sprintf(tmp2,
