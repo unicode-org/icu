@@ -113,10 +113,13 @@ enum {
                                //   Operand:  Static data offset for saved data.
      URX_ONECHAR_I     = 39,   // Test for case-insensitive match of a literal character.
                                //   Operand:  the literal char.
-     URX_STRING_I      = 40    // Case insensitive string compare.
+     URX_STRING_I      = 40,   // Case insensitive string compare.
                                //   First Operand:  Index of start of string in string literals
                                //   Second Operand (next word in compiled code):
                                //     the length of the string.
+     URX_BACKREF_I     = 41    // Case insensitive back reference.
+                               //   Parameter is the index of the
+                               //   capture group variables in the state stack frame.
 };           
 
 // Keep this list of opcode names in sync with the above enum
@@ -162,7 +165,8 @@ enum {
         "LA_START",            \
         "LA_END",              \
         "ONECHAR_I",           \
-        "STRING_I"
+        "STRING_I",            \
+        "BACKREF_I"
 
 //
 //  Convenience macros for assembling and disassembling a compiled operation.

@@ -215,7 +215,7 @@ RegexPattern  *RegexPattern::compile(
         return NULL;
     }
 
-    if (flags != 0) {
+    if ((flags & (UREGEX_CANON_EQ | UREGEX_COMMENTS | UREGEX_DOTALL | UREGEX_MULTILINE)) != 0) {
         status = U_REGEX_UNIMPLEMENTED;
         return NULL;
     }
@@ -231,8 +231,8 @@ RegexPattern  *RegexPattern::compile(
     }
     This->fFlags = flags;
 
-    RegexCompile     compiler(status);
-    compiler.compile(*This, regex, pe, status);
+    RegexCompile     compiler(This, status);
+    compiler.compile(regex, pe, status);
 
     return This;
 };
