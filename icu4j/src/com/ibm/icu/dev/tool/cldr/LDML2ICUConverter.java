@@ -1529,7 +1529,7 @@ public class LDML2ICUConverter {
                 /* get information about long */
                 Node ssn = getVettedNode(node, LDMLConstants.STANDARD, xpath);
                 Node sdn = getVettedNode(node, LDMLConstants.DAYLIGHT, xpath);
-                if(ssn==null||sdn==null){
+                if((ssn==null||sdn==null) && !writeDraft){
                     System.err.println("ERROR: Could not get timeZone string for " + xpath.toString());
                     System.exit(-1);
                 }
@@ -2196,7 +2196,7 @@ public class LDML2ICUConverter {
         Node node =null;
         for(int i =0; i<list.getLength(); i++){
             node = list.item(i);
-            if(isDraft(node, xpath)){
+            if(isDraft(node, xpath) && !writeDraft){
                 continue;
             }
             if(isAlternate(node)){
@@ -2450,10 +2450,7 @@ public class LDML2ICUConverter {
         list.add(getVettedNode(parent, "currencyFormats/currencyFormatLength/currencyFormat/pattern",  xpath));
         list.add(getVettedNode(parent, "percentFormats/percentFormatLength/percentFormat/pattern",  xpath));
         list.add(getVettedNode(parent, "scientificFormats/scientificFormatLength/scientificFormat/pattern",  xpath));
-        
-        if(list.size()<4){
-            throw new RuntimeException("Did not get expected output for number patterns!!");
-        }
+
         ICUResourceWriter.ResourceArray arr = new ICUResourceWriter.ResourceArray();
         arr.name = NUMBER_PATTERNS;
         ICUResourceWriter.Resource current = null;
@@ -2461,7 +2458,11 @@ public class LDML2ICUConverter {
             ICUResourceWriter.ResourceString str = new ICUResourceWriter.ResourceString();
             Node temp = (Node)list.get(i);
             if(temp==null){
-                throw new RuntimeException("Did not get expected output for number patterns!!");
+                //the resource is not fully populated even in the parent
+                // dont write the resource
+                printWarning(fileName,"Did not get expected output for number patterns. Not producing the resource.");
+                return null;
+                //throw new RuntimeException("Did not get expected output for number patterns!!");
             }
             str.val = LDMLUtilities.getNodeValue(temp);
             if(str.val!=null){
