@@ -440,6 +440,10 @@ public:
     /**
      * Create BreakIterator for title-casing breaks using the specified locale
      * Returns an instance of a BreakIterator implementing title breaks.
+     * The iterator returned locates title boundaries as described for 
+     * Unicode 3.2 only. For Unicode 4.0 and above title boundary iteration,
+     * please use Word Boundary iterator.{@link createWordInstance}
+     *
      * @param where the locale.
      * @param status The error code.
      * @return A BreakIterator for title-breaks.  The UErrorCode& status
