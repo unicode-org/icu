@@ -40,7 +40,7 @@ de.txt de__PHONEBOOK.txt de_AT.txt de_AT_PREEURO.txt de_BE.txt de_CH.txt\
 de_DE.txt de_DE_PREEURO.txt de_LU.txt de_LU_PREEURO.txt\
 el.txt el_GR.txt el_GR_PREEURO.txt\
 en.txt en_AS.txt en_AU.txt en_BE.txt en_BE_PREEURO.txt en_BW.txt en_CA.txt en_GB.txt en_GB_EURO.txt\
-en_GU.txt en_HK.txt en_IE.txt en_IE_PREEURO.txt en_IN.txt en_MH.txt en_MP.txt en_NZ.txt en_PH.txt en_SG.txt\
+en_GU.txt en_HK.txt en_IE.txt en_IE_PREEURO.txt en_IN.txt en_MH.txt en_MP.txt en_NZ.txt en_PH.txt en_SG.txt en_MT.txt\
 en_UM.txt en_US.txt en_US_POSIX.txt en_VI.txt en_ZA.txt en_ZW.txt\
 eo.txt\
 es.txt es__TRADITIONAL.txt es_AR.txt es_BO.txt es_CL.txt es_CO.txt\
