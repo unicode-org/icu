@@ -492,6 +492,9 @@ typedef struct {
       uint8_t reserved[64];                 /* for future use */
 } UCATableHeader;
 
+#define U_UNKNOWN_STATE 0
+#define U_COLLATOR_STATE 0x01
+#define U_STATE_LIMIT 0x02
 
 /* This is the first structure in a state */
 /* it should be machine independent */
@@ -506,6 +509,10 @@ typedef struct {
   uint8_t charsetFamily;
   /* version of ICU this state structure comes from */
   uint8_t icuVersion[4];
+  /* What is the data following this state */
+  uint8_t type;
+  /* more stuff to come, keep it on 16 byte boundary */
+  uint8_t reserved[7];
 } UStatusStruct;
 
 /* This structure follows UStatusStruct */
@@ -516,16 +523,36 @@ typedef struct {
   /* size of this structure */
   uint8_t sizeLo;
   uint8_t sizeHi;
-  uint8_t reserved[2];
-  char charsetName[32];                 /* for charset CEs */
-  char locale[32];                      /* this is the resolved locale name*/
+  /* This state is followed by the frozen tailoring */
+  uint8_t containsTailoring;
+  /* This state is followed by the frozen UCA */
+  uint8_t containsUCA;
+  /* Version info - the same one */
+  uint8_t versionInfo[4];
+
+  /* for charset CEs */
+  uint8_t charsetName[32];                 
+  /* this is the resolved locale name*/
+  uint8_t locale[32];                      
+
+  /* Attributes. Open ended */
+  /* all the following will be moved to uint32_t because of portability */
+  /* variable top value */
   uint32_t variableTopValue;
-  UColAttributeValue frenchCollation;
-  UColAttributeValue alternateHandling; /* attribute for handling variable elements*/
-  UColAttributeValue caseFirst;         /* who goes first, lower case or uppercase */
-  UColAttributeValue caseLevel;         /* do we have an extra case level */
-  UColAttributeValue normalizationMode; /* attribute for normalization */
-  UColAttributeValue strength;          /* attribute for strength */
+  /* attribute for handling variable elements*/
+  uint32_t /*UColAttributeValue*/ alternateHandling; 
+  /* how to handle secondary weights */
+  uint32_t /*UColAttributeValue*/ frenchCollation;
+  /* who goes first, lower case or uppercase */
+  uint32_t /*UColAttributeValue*/ caseFirst;         
+  /* do we have an extra case level */
+  uint32_t /*UColAttributeValue*/ caseLevel;         
+  /* attribute for normalization */
+  uint32_t /*UColAttributeValue*/ normalizationMode; 
+  /* attribute for strength */
+  uint32_t /*UColAttributeValue*/ strength;
+  /* to be immediately 16 byte aligned */
+  uint8_t reserved[12];
 } UColStatusStruct;
 
 #define UCOL_INV_SIZEMASK 0xFFF00000
