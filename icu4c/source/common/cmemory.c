@@ -34,8 +34,11 @@ uprv_malloc(size_t s) {
 
 U_CAPI void * U_EXPORT2
 uprv_realloc(void * buffer, size_t size) {
-    if (buffer == zeroMem || size == 0) {
+    if (buffer == zeroMem) {
         return uprv_malloc(size);
+    } else if (size == 0) {
+        free(buffer);
+        return (void *)zeroMem;
     } else {
         return realloc(buffer, size);
     }
