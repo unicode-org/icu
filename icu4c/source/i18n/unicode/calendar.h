@@ -788,9 +788,18 @@ public:
      * Gets what the first day of the week is; e.g., Sunday in US, Monday in France.
      *
      * @return   The first day of the week.
-     * @stable ICU 2.0
+     * @deprecated ICU 2.6 use the overload with error code
      */
     EDaysOfWeek getFirstDayOfWeek(void) const;
+
+    /**
+     * Gets what the first day of the week is; e.g., Sunday in US, Monday in France.
+     *
+     * @param status error code
+     * @return   The first day of the week.
+     * @draft ICU 2.6
+     */
+    UCalendarDaysOfWeek getFirstDayOfWeek(UErrorCode &status) const;
 
     /**
      * Sets what the minimal days required in the first week of the year are; For
