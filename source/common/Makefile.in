@@ -58,7 +58,7 @@ cpputils.o cstring.o dcmpdata.o digitlst.o filestrm.o locid.o locmap.o	\
 mutex.o normlzr.o putil.o rbcache.o resbund.o schriter.o scsu.o		\
 uchar.o uchriter.o ucmp8.o ucmp16.o ucmp32.o ucnv.o ucnv_bld.o		\
 ucnv_cnv.o ucnv_err.o ucnv_io.o uhash.o uloc.o unicode.o unistr.o	\
-ures.o ustring.o rbread.o rbdata.o ubidi.o ubidiln.o bidi.o
+ures.o ustring.o rbread.o rbdata.o ubidi.o ubidiln.o bidi.o uvector.o
 
 DEPS = $(OBJECTS:.o=.d)
 
@@ -66,7 +66,7 @@ DEPS = $(OBJECTS:.o=.d)
 HEADERS = utypes.h uloc.h ures.h ustring.h uchar.h chariter.h		\
 uchriter.h locid.h resbund.h unicode.h putil.h platform.h unistr.h	\
 schriter.h normlzr.h ucnv_err.h ucnv.h ucnv_bld.h convert.h         \
-ubidi.h bidi.h umisc.h
+ubidi.h bidi.h umisc.h rep.h
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local	\
