@@ -302,16 +302,6 @@ protected:
     Transliterator& operator=(const Transliterator&);
     
     /**
-     * Internal factory method.
-     */
-    static Transliterator* createInstance(const UnicodeString& ID,
-                                          UTransDirection dir,
-                                          int32_t idSplitPoint,
-                                          Transliterator *adoptedSplitTrans,
-                                          UParseError& parseError,
-                                          UErrorCode& status);
-    
-    /**
      * Create a transliterator from a basic ID.  This is an ID
      * containing only the forward direction source, target, and
      * variant.
