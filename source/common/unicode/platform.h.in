@@ -95,10 +95,13 @@
 #define U_DISABLE_RENAMING @U_DISABLE_RENAMING@
 #endif
 
-/* Determine whether to disable renaming or not. This overrides the
-   setting in umachine.h which is for all platforms. */
+/* Determine whether to override new and delete. */
 #ifndef U_OVERRIDE_CXX_ALLOCATION
 #define U_OVERRIDE_CXX_ALLOCATION @U_OVERRIDE_CXX_ALLOCATION@
+#endif
+/* Determine whether to override placement new and delete for STL. */
+#ifndef U_HAVE_PLACEMENT_NEW
+#define U_HAVE_PLACEMENT_NEW @U_HAVE_PLACEMENT_NEW@
 #endif
 
 /* Define the library suffix in a C syntax. */

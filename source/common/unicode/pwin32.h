@@ -58,10 +58,13 @@
 /* Determines the endianness of the platform */
 #define U_IS_BIG_ENDIAN 0
 
-/* Determine whether to disable renaming or not. This overrides the
-   setting in umachine.h which is for all platforms. */
+/* Determine whether to override new and delete. */
 #ifndef U_OVERRIDE_CXX_ALLOCATION
 #define U_OVERRIDE_CXX_ALLOCATION 1
+#endif
+/* Determine whether to override placement new and delete for STL. */
+#ifndef U_HAVE_PLACEMENT_NEW
+#define U_HAVE_PLACEMENT_NEW 0
 #endif
 
 /*===========================================================================*/
