@@ -27,11 +27,7 @@ subdir = data
 include @platform_make_fragment@
 
 ## Files to remove for 'make clean'
-ifeq ($(strip $(PKGDATA_MODE)), dll)
-CLEANFILES = *~ $(SPECIALTESTDATA) $(LIB_ICUDATA_NAME).$(SO)
-else
 CLEANFILES = *~ $(SPECIALTESTDATA) 
-endif
 
 DOCDIRS = 
 SUBDIRS = build
