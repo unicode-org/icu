@@ -11,11 +11,11 @@
 ********************************************************************
 */
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "sdtfmtts.h"
 
-#include "smpdtfmt.h"
-#include "dtfmtsym.h"
+#include "unicode/smpdtfmt.h"
+#include "unicode/dtfmtsym.h"
 
 // This is an API test, not a unit test.  It doesn't test very many cases, and doesn't
 // try to test the full functionality.  It just calls each function in the class and

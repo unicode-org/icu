@@ -17,9 +17,9 @@
 ********************************************************************************
 */
  
-#include "dcfmtsym.h"
-#include "resbund.h"
-#include "decimfmt.h"
+#include "unicode/dcfmtsym.h"
+#include "unicode/resbund.h"
+#include "unicode/decimfmt.h"
 
 // *****************************************************************************
 // class DecimalFormatSymbols

@@ -24,7 +24,7 @@
 #define UNICDCM_H
 
 #include "spclmap.h"
-#include "unicode.h"
+#include "unicode/unicode.h"
 
 /**
  * This class maps characters to state change inputs for

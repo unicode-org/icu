@@ -23,7 +23,7 @@
 #ifndef TXTBDAT_H
 #define TXTBDAT_H
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 class WordBreakTable;
 class UnicodeClassMapping;
 class SpecialMapping;

@@ -11,19 +11,19 @@
 ********************************************************************
 */
 #ifndef _COLL
-#include "coll.h"
+#include "unicode/coll.h"
 #endif
 
 #ifndef _TBLCOLL
-#include "tblcoll.h"
+#include "unicode/tblcoll.h"
 #endif
 
 #ifndef _UNISTR
-#include "unistr.h"
+#include "unicode/unistr.h"
 #endif
 
 #ifndef _SORTKEY
-#include "sortkey.h"
+#include "unicode/sortkey.h"
 #endif
 
 #ifndef _TRCOLL

@@ -20,7 +20,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
-#include "ustring.h"
+#include "unicode/ustring.h"
 #include "error.h"
 #include "list.h"
 

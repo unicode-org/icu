@@ -21,11 +21,11 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "uloc.h"
-#include "udat.h"
-#include "ucal.h"
-#include "ures.h"
-#include "ustring.h"
+#include "unicode/uloc.h"
+#include "unicode/udat.h"
+#include "unicode/ucal.h"
+#include "unicode/ures.h"
+#include "unicode/ustring.h"
 
 #include "uprint.h"
 

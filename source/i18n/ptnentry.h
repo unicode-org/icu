@@ -6,10 +6,10 @@
 #ifndef PTNENTRY_H
 #define PTNENTRY_H
 
-#include "utypes.h"
-#include "unistr.h"
-#include "coll.h"
-#include "normlzr.h"
+#include "unicode/utypes.h"
+#include "unicode/unistr.h"
+#include "unicode/coll.h"
+#include "unicode/normlzr.h"
 
 /**
  *

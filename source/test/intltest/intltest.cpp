@@ -30,10 +30,10 @@
 #include <iostream.h>
 #include <assert.h>
 
-#include "utypes.h"
-#include "unistr.h"
-#include "coll.h"
-#include "smpdtfmt.h"
+#include "unicode/utypes.h"
+#include "unicode/unistr.h"
+#include "unicode/coll.h"
+#include "unicode/smpdtfmt.h"
 
 #include "intltest.h"
 #include "itmajor.h"

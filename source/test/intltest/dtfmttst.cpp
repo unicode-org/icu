@@ -12,11 +12,11 @@
 */
  
 #include "dtfmttst.h"
-#include "timezone.h"
-#include "gregocal.h"
-#include "smpdtfmt.h"
-#include "datefmt.h"
-#include "simpletz.h"
+#include "unicode/timezone.h"
+#include "unicode/gregocal.h"
+#include "unicode/smpdtfmt.h"
+#include "unicode/datefmt.h"
+#include "unicode/simpletz.h"
 
 // *****************************************************************************
 // class DateFormatTest

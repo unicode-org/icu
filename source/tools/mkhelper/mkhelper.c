@@ -10,7 +10,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
@@ -216,30 +216,30 @@ int main(int argc, char *argv[]) {
  */
 void substitute(int varNo) {
     int i;
-    int32_t oldLen = icu_strlen(OLD);
-    int32_t newLen = icu_strlen(NEW);
+    int32_t oldLen = uprv_strlen(OLD);
+    int32_t newLen = uprv_strlen(NEW);
     assert(oldLen > 0 && newLen > 0);
     for (i=0; i<VARS_DEF_COUNT[varNo]; ++i) {
         char* oldDef = VARS_DEF[varNo][i];
-        char* match = icu_strstr(oldDef, OLD);
+        char* match = uprv_strstr(oldDef, OLD);
         if (match != NULL) {
-            char* newDef = icu_malloc(icu_strlen(oldDef) + 1 + newLen - oldLen);
+            char* newDef = uprv_malloc(uprv_strlen(oldDef) + 1 + newLen - oldLen);
             memassert(newDef);
-            icu_strncpy(newDef, oldDef, match - oldDef);
+            uprv_strncpy(newDef, oldDef, match - oldDef);
             newDef[match - oldDef] = NUL;
-            icu_strcat(newDef, NEW);
-            icu_strcat(newDef, match + oldLen);
+            uprv_strcat(newDef, NEW);
+            uprv_strcat(newDef, match + oldLen);
             VARS_DEF[varNo][i] = newDef;
 
             /* Check for multiple matches and issue warning if found. */
-            match = icu_strstr(newDef, OLD);
+            match = uprv_strstr(newDef, OLD);
             if (match) {
                 fprintf(stderr,
                         "Warning(mkhelper): ignoring multiple matches of \"%s\" in \"%s\"\n",
                         OLD, oldDef);
             }
 
-            icu_free(oldDef);
+            uprv_free(oldDef);
         }
     }
 }
@@ -261,10 +261,10 @@ char* substituteEnvironmentVars(char* str) {
         p = str;
         /* Do pass-specific initialization */
         if (pass==0) {
-            len = icu_strlen(str);
+            len = uprv_strlen(str);
         } else {
             /* len was computed in pass 1 */
-            pp = result = icu_malloc(len+1);
+            pp = result = uprv_malloc(len+1);
             memassert(result);
         }
         while (*p) {
@@ -297,10 +297,10 @@ char* substituteEnvironmentVars(char* str) {
                         }
                         *q = '$'; /* restore */
                         if (pass==0) {
-                            len = len - 2 - varNameLen + icu_strlen(env);
+                            len = len - 2 - varNameLen + uprv_strlen(env);
                         } else {
-                            icu_strcpy(pp, env);
-                            pp += icu_strlen(pp);
+                            uprv_strcpy(pp, env);
+                            pp += uprv_strlen(pp);
                         }
                     }
                     p = q+1; /* Move p to after closing '$' */
@@ -351,7 +351,7 @@ void readVarDefs(char* line, int32_t len, int fileNo, int varNo) {
     }
     if (!line) {
         /* Allocate the array of pointers */
-        VARS_DEF[varNo] = icu_malloc(sizeof(char*) * VARS_DEF_COUNT[varNo]);
+        VARS_DEF[varNo] = uprv_malloc(sizeof(char*) * VARS_DEF_COUNT[varNo]);
         memassert(VARS_DEF[varNo]);
         /* Initialize index */
         VARS_DEF_I[varNo] = 0;
@@ -359,10 +359,10 @@ void readVarDefs(char* line, int32_t len, int fileNo, int varNo) {
         /* Sanity check */
         assert(VARS_DEF_I[varNo] < VARS_DEF_COUNT[varNo]);
         /* Allocate buffer */
-        copy = VARS_DEF[varNo][VARS_DEF_I[varNo]] = icu_malloc(len + 1);
+        copy = VARS_DEF[varNo][VARS_DEF_I[varNo]] = uprv_malloc(len + 1);
         memassert(copy);
         /* Copy */
-        icu_strncpy(copy, line, len);
+        uprv_strncpy(copy, line, len);
         copy[len] = NUL;
         ++VARS_DEF_I[varNo];
     }
@@ -412,12 +412,12 @@ enum FileStat processFile(FileStream* in, TokenHandler proc, int fileNo) {
             p = skipWhiteSpace(BUFFER);
             /* Is the next word a var? */
             for (j=0; j<VARS_COUNT && !varFound; ++j) {
-                if (0 == icu_strncmp(VARS[j], p, icu_strlen(VARS[j]))) {
+                if (0 == uprv_strncmp(VARS[j], p, uprv_strlen(VARS[j]))) {
                     /* Yes, found a var, maybe...parse more to see */
                     char* savep = p;
                     bool_t isFirstLine = TRUE;
 
-                    p += icu_strlen(VARS[j]); /* Go past var name */
+                    p += uprv_strlen(VARS[j]); /* Go past var name */
 
                     /* Now look for /\s*=/ */
                     if (*p != SPACE && *p != TAB && *p != '=') {
@@ -439,7 +439,7 @@ enum FileStat processFile(FileStream* in, TokenHandler proc, int fileNo) {
                     for (;;) {
                         processLine(fileNo, j, p, isFirstLine, proc);
                         isFirstLine = FALSE;
-                        if (*(p + icu_strlen(p) - 1) == CONTINUE) {
+                        if (*(p + uprv_strlen(p) - 1) == CONTINUE) {
                             if ((len = readLine(in)) < 0) {
                                 fprintf(stderr, "Error(mkhelper): unexpected eof after continuation char\n");
                                 return FS_ERR; /*fail*/
@@ -579,7 +579,7 @@ int32_t readLine(FileStream* in) {
         return -1; /* EOF */
     }
     /* Trim off trailing comment */
-    p = icu_strchr(BUFFER, COMMENT);
+    p = uprv_strchr(BUFFER, COMMENT);
     if (p != 0) {
         /* Back up past any space or tab characters before
          * the comment character. */
@@ -589,12 +589,12 @@ int32_t readLine(FileStream* in) {
         *p = NUL;
     }
     /* Delete any trailing ^J and/or ^M characters */
-    p = BUFFER + icu_strlen(BUFFER);
+    p = BUFFER + uprv_strlen(BUFFER);
     while (p > BUFFER && (p[-1] == CR || p[-1] == LF)) {
         p--;
     }
     *p = NUL;
-    return icu_strlen(BUFFER);
+    return uprv_strlen(BUFFER);
 }
 
 void assert(int a) {

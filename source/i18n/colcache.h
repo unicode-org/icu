@@ -29,7 +29,7 @@
 #define COLCACHE_H
 
 #include "uhash.h"
-#include "unistr.h"
+#include "unicode/unistr.h"
 
 class TableCollationData;
 

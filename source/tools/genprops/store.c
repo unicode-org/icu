@@ -19,12 +19,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "utypes.h"
-#include "uchar.h"
+#include "unicode/utypes.h"
+#include "unicode/uchar.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
-#include "udata.h"
+#include "unicode/udata.h"
 #include "unewdata.h"
 #include "genprops.h"
 
@@ -322,12 +322,12 @@ addUChars(const UChar *s, uint16_t length);
 
 extern void
 initStore() {
-    icu_memset(stage1, 0, sizeof(stage1));
-    icu_memset(stage2, 0, sizeof(stage2));
-    icu_memset(stage3, 0, sizeof(stage3));
-    icu_memset(map, 0, sizeof(map));
-    icu_memset(props, 0, sizeof(props));
-    icu_memset(props32, 0, sizeof(props32));
+    uprv_memset(stage1, 0, sizeof(stage1));
+    uprv_memset(stage2, 0, sizeof(stage2));
+    uprv_memset(stage3, 0, sizeof(stage3));
+    uprv_memset(map, 0, sizeof(map));
+    uprv_memset(props, 0, sizeof(props));
+    uprv_memset(props32, 0, sizeof(props32));
 }
 
 /* store a character's properties ------------------------------------------- */
@@ -1035,7 +1035,7 @@ addUChars(const UChar *s, uint16_t length) {
         exit(U_MEMORY_ALLOCATION_ERROR);
     }
     p=uchars+ucharsTop;
-    icu_memcpy(p, s, length);
+    uprv_memcpy(p, s, length);
     p[length]=0;
     ucharsTop=top;
     return (uint16_t)(p-uchars);

@@ -22,7 +22,7 @@
 #define _NUCNVTST
 /* C API TEST FOR CALL BACK ROUTINES OF CODESET CONVERSION COMPONENT */
 #include "cintltst.h"
-#include "utypes.h"
+#include "unicode/utypes.h"
 
 
 static void TestSkipCallBack(void);

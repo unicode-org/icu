@@ -17,8 +17,8 @@
 #ifndef __UNEWDATA_H__
 #define __UNEWDATA_H__
 
-#include "utypes.h"
-#include "udata.h"
+#include "unicode/utypes.h"
+#include "unicode/udata.h"
 
 /* API for writing data -----------------------------------------------------*/
 

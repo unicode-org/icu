@@ -22,12 +22,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "uloc.h"
-#include "ucnv.h"
-#include "ucnv_err.h"
+#include "unicode/uloc.h"
+#include "unicode/ucnv.h"
+#include "unicode/ucnv_err.h"
 #include "cintltst.h"
-#include "utypes.h"
-#include "ustring.h"
+#include "unicode/utypes.h"
+#include "unicode/ustring.h"
 #include "nccbtst.h"
 #define NEW_MAX_BUFFER 999
 

@@ -16,7 +16,7 @@
 #ifndef TXTBDRY_H
 #define TXTBDRY_H
 
-#include "brkiter.h"
+#include "unicode/brkiter.h"
 
 #endif // _TXTBDRY
 //eof

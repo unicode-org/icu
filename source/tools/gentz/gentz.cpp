@@ -25,11 +25,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
-#include "udata.h"
+#include "unicode/udata.h"
 #include "unewdata.h"
 #include "tzdat.h"
 
@@ -509,7 +509,7 @@ char* gentz::parseNameTable(FileStream* in) {
     for (int32_t i=0; i<n; ++i) {
         int32_t len = readLine(in);
         if ((p + len) <= limit) {
-            icu_memcpy(p, buffer, len);
+            uprv_memcpy(p, buffer, len);
             p += len;
             *p++ = NUL;
         } else {
@@ -529,7 +529,7 @@ char* gentz::parseNameTable(FileStream* in) {
  */
 void gentz::readEndMarker(FileStream* in) {
     readLine(in);
-    if (icu_strcmp(buffer, END_KEYWORD) != 0) {
+    if (uprv_strcmp(buffer, END_KEYWORD) != 0) {
         die("Keyword 'end' missing");
     }
 }
@@ -601,7 +601,7 @@ int32_t gentz::readLine(FileStream* in) {
     ++lineNumber;
     T_FileStream_readLine(in, buffer, BUFLEN);
     // Trim off trailing comment
-    char* p = icu_strchr(buffer, COMMENT);
+    char* p = uprv_strchr(buffer, COMMENT);
     if (p != 0) {
         // Back up past any space or tab characters before
         // the comment character.
@@ -611,10 +611,10 @@ int32_t gentz::readLine(FileStream* in) {
         *p = NUL;
     }
     // Delete any trailing ^J and/or ^M characters
-    p = buffer + icu_strlen(buffer);
+    p = buffer + uprv_strlen(buffer);
     while (p > buffer && (p[-1] == CR || p[-1] == LF)) {
         p--;
     }
     *p = NUL;
-    return icu_strlen(buffer);
+    return uprv_strlen(buffer);
 }

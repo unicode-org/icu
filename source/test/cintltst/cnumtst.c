@@ -25,10 +25,10 @@
 
 /* C API TEST FOR NUMBER FORMAT */
 
-#include "uloc.h"
-#include "utypes.h"
-#include "unum.h"
-#include "ustring.h"
+#include "unicode/uloc.h"
+#include "unicode/utypes.h"
+#include "unicode/unum.h"
+#include "unicode/ustring.h"
 #include "cintltst.h"
 #include "cnumtst.h"
 #include<stdio.h>

@@ -15,10 +15,10 @@
 #define _INTLTESTNUMBERFORMAT
 
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "intltest.h"
 
-#include "fmtable.h"
+#include "unicode/fmtable.h"
 
 class NumberFormat;
 

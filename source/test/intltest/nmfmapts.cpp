@@ -11,12 +11,12 @@
 ********************************************************************
 */
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "nmfmapts.h"
 
-#include "numfmt.h"
-#include "decimfmt.h"
-#include "locid.h"
+#include "unicode/numfmt.h"
+#include "unicode/decimfmt.h"
+#include "unicode/locid.h"
 
 // This is an API test, not a unit test.  It doesn't test very many cases, and doesn't
 // try to test the full functionality.  It just calls each function in the class and

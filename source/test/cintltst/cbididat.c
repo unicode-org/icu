@@ -17,9 +17,9 @@
 *   created by: Markus W. Scherer
 */
 
-#include "utypes.h"
-#include "uchar.h"
-#include "ubidi.h"
+#include "unicode/utypes.h"
+#include "unicode/uchar.h"
+#include "unicode/ubidi.h"
 #include "cbiditst.h"
 
 extern const char *

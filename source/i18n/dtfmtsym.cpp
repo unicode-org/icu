@@ -17,9 +17,9 @@
 *******************************************************************************
 */
  
-#include "dtfmtsym.h"
-#include "resbund.h"
-#include "smpdtfmt.h"
+#include "unicode/dtfmtsym.h"
+#include "unicode/resbund.h"
+#include "unicode/smpdtfmt.h"
 #include "mutex.h"
  
 // *****************************************************************************
@@ -109,7 +109,7 @@ DateFormatSymbols::assignArray(UnicodeString*& dstArray,
     if (owned)
     {
         dstArray = new UnicodeString[srcCount];
-        icu_arrayCopy(srcArray, dstArray, srcCount);
+        uprv_arrayCopy(srcArray, dstArray, srcCount);
     }
     else
     {
@@ -130,7 +130,7 @@ DateFormatSymbols::createZoneStrings(const UnicodeString *const * otherStrings)
     for (int32_t row=0; row<fZoneStringsRowCount; ++row)
     {
         fZoneStrings[row] = new UnicodeString[fZoneStringsColCount];
-        icu_arrayCopy(otherStrings[row], fZoneStrings[row], fZoneStringsColCount);
+        uprv_arrayCopy(otherStrings[row], fZoneStrings[row], fZoneStringsColCount);
     }
 }
 
@@ -296,7 +296,7 @@ DateFormatSymbols::setEras(const UnicodeString* erasArray, int32_t count)
     // than adopting the list passed in)
     setIsOwned(kEras, TRUE);
     fEras = new UnicodeString[count];
-    icu_arrayCopy(erasArray,fEras,  count);
+    uprv_arrayCopy(erasArray,fEras,  count);
     fErasCount = count;
 }
 
@@ -310,7 +310,7 @@ DateFormatSymbols::setMonths(const UnicodeString* monthsArray, int32_t count)
     // than adopting the list passed in)
     setIsOwned(kMonths, TRUE);
     fMonths = new UnicodeString[count];
-    icu_arrayCopy( monthsArray,fMonths,count);
+    uprv_arrayCopy( monthsArray,fMonths,count);
     fMonthsCount = count;
 }
 
@@ -324,7 +324,7 @@ DateFormatSymbols::setShortMonths(const UnicodeString* shortMonthsArray, int32_t
     // than adopting the list passed in)
     setIsOwned(kShortMonths, TRUE);
     fShortMonths = new UnicodeString[count];
-    icu_arrayCopy(shortMonthsArray,fShortMonths,  count);
+    uprv_arrayCopy(shortMonthsArray,fShortMonths,  count);
     fShortMonthsCount = count;
 }
 
@@ -337,7 +337,7 @@ void DateFormatSymbols::setWeekdays(const UnicodeString* weekdaysArray, int32_t 
     // than adopting the list passed in)
     setIsOwned(kWeekdays, TRUE);
     fWeekdays = new UnicodeString[count];
-    icu_arrayCopy(weekdaysArray,fWeekdays,count);
+    uprv_arrayCopy(weekdaysArray,fWeekdays,count);
     fWeekdaysCount = count;
 }
 
@@ -351,7 +351,7 @@ DateFormatSymbols::setShortWeekdays(const UnicodeString* shortWeekdaysArray, int
     // than adopting the list passed in)
     setIsOwned(kShortWeekdays, TRUE);
     fShortWeekdays = new UnicodeString[count];
-    icu_arrayCopy( shortWeekdaysArray,fShortWeekdays,count);
+    uprv_arrayCopy( shortWeekdaysArray,fShortWeekdays,count);
     fShortWeekdaysCount = count;
 }
 
@@ -365,7 +365,7 @@ DateFormatSymbols::setAmPmStrings(const UnicodeString* amPmsArray, int32_t count
     // than adopting the list passed in)
     setIsOwned(kAmPms, TRUE);
     fAmPms = new UnicodeString[count];
-    icu_arrayCopy(amPmsArray,fAmPms,count);
+    uprv_arrayCopy(amPmsArray,fAmPms,count);
     fAmPmsCount = count;
 }
 
@@ -471,14 +471,14 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, bool
     UnicodeString *lWeekdays = (UnicodeString*)resource.getStringArray(SimpleDateFormat::fgDayNamesTag, fWeekdaysCount, status);
     fWeekdays = new UnicodeString [8];
     fWeekdays[0] = UnicodeString();
-    icu_arrayCopy(lWeekdays, 0, fWeekdays, 1, 7);
+    uprv_arrayCopy(lWeekdays, 0, fWeekdays, 1, 7);
     setIsOwned(kWeekdays, TRUE);
     //fWeekdays       = (UnicodeString*)resource.getStringArray(SimpleDateFormat::fgDayNamesTag, fWeekdaysCount, status);
 
     UnicodeString *lSWeekdays = (UnicodeString*)resource.getStringArray(SimpleDateFormat::fgDayAbbreviationsTag, fShortWeekdaysCount, status);
     fShortWeekdays = new UnicodeString [8];
     fShortWeekdays[0] = UnicodeString();
-    icu_arrayCopy(lSWeekdays, 0, fShortWeekdays, 1, 7);
+    uprv_arrayCopy(lSWeekdays, 0, fShortWeekdays, 1, 7);
     setIsOwned(kShortWeekdays, TRUE);
     //fShortWeekdays  = (UnicodeString*)resource.getStringArray(SimpleDateFormat::fgDayAbbreviationsTag, fShortWeekdaysCount, status);
 

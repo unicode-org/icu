@@ -22,12 +22,12 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "utypes.h"
-#include "ustring.h"
+#include "unicode/utypes.h"
+#include "unicode/ustring.h"
 
-#include "ucnv.h"
-#include "udat.h"
-#include "ucal.h"
+#include "unicode/ucnv.h"
+#include "unicode/udat.h"
+#include "unicode/ucal.h"
 
 #include "uprint.h"
 

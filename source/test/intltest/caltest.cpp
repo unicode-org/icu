@@ -12,9 +12,9 @@
 */
  
 #include "caltest.h"
-#include "gregocal.h"
-#include "smpdtfmt.h"
-#include "simpletz.h"
+#include "unicode/gregocal.h"
+#include "unicode/smpdtfmt.h"
+#include "unicode/simpletz.h"
  
 // *****************************************************************************
 // class CalendarTest

@@ -7,11 +7,11 @@
 *   11/17/99    aliu        Creation.
 **********************************************************************
 */
-#include "rbt.h"
+#include "unicode/rbt.h"
 #include "rbt_pars.h"
 #include "rbt_data.h"
 #include "rbt_rule.h"
-#include "rep.h"
+#include "unicode/rep.h"
 
 void RuleBasedTransliterator::_construct(const UnicodeString& rules,
                                          Direction direction,
@@ -117,7 +117,7 @@ void RuleBasedTransliterator::transliterate(const UnicodeString& text,
 
             // First, figure out the range of result being replaced.
             int32_t rfirst = cursor;
-            int32_t rlimit = icu_min(result.length(),
+            int32_t rlimit = uprv_min(result.length(),
                                      cursor + r->getKeyLength());
 
             // resultPad is length of result to right of cursor; >= 0

@@ -11,7 +11,7 @@
 #define RBBI_BLD_H
 
 #include "rbbi.h"
-#include "uniset.h"
+#include "unicode/uniset.h"
 #include "uvector.h"
 
 //=======================================================================

@@ -17,10 +17,10 @@
 ********************************************************************************
 */
 
-#include "datefmt.h"
-#include "smpdtfmt.h"
+#include "unicode/datefmt.h"
+#include "unicode/smpdtfmt.h"
 #include "mutex.h"
-#include "resbund.h"
+#include "unicode/resbund.h"
 
 // *****************************************************************************
 // class DateFormat

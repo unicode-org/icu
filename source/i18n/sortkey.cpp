@@ -25,7 +25,7 @@
 //===============================================================================
 
 #ifndef _SORTKEY
-#include "sortkey.h"
+#include "unicode/sortkey.h"
 #endif
 
 #ifndef _CMEMORY
@@ -57,7 +57,7 @@ CollationKey::CollationKey(const uint8_t* newValues, int32_t count)
         return;
     }
 
-    icu_memcpy(fBytes, newValues, fCount);
+    uprv_memcpy(fBytes, newValues, fCount);
 }
 
 CollationKey::CollationKey(const UnicodeString& value)
@@ -83,9 +83,9 @@ CollationKey::CollationKey(const CollationKey& other)
         return;
     }
 
-    icu_memcpy(fBytes, other.fBytes, other.fCount);
+    uprv_memcpy(fBytes, other.fBytes, other.fCount);
     if(fCapacity>fCount) {
-        icu_memset(fBytes+fCount, 0, fCapacity-fCount);
+        uprv_memset(fBytes+fCount, 0, fCapacity-fCount);
     }
 }
 
@@ -124,7 +124,7 @@ CollationKey::operator==(const CollationKey& source) const
 {
     return (this->fCount == source.fCount &&
             (this->fBytes == source.fBytes ||
-             icu_memcmp(this->fBytes, source.fBytes, this->fCount) == 0));
+             uprv_memcmp(this->fBytes, source.fBytes, this->fCount) == 0));
 }
 
 const CollationKey&
@@ -147,7 +147,7 @@ CollationKey::operator=(const CollationKey& other)
             }
 
             fHashCode = other.fHashCode;
-            icu_memcpy(fBytes, other.fBytes, fCount);
+            uprv_memcpy(fBytes, other.fBytes, fCount);
         }
         else
         {
@@ -185,7 +185,7 @@ CollationKey::compareTo(const CollationKey& target) const
         return Collator::EQUAL;
     }
 
-    int result = icu_memcmp(this->fBytes, target.fBytes, count);
+    int result = uprv_memcmp(this->fBytes, target.fBytes, count);
 
     if (result < 0)
     {
@@ -214,7 +214,7 @@ CollationKey::ensureCapacity(int32_t newSize)
             return setToBogus();
         }
 
-        icu_memset(fBytes, 0, fCapacity);
+        uprv_memset(fBytes, 0, fCapacity);
         fCapacity = newSize;
     }
 
@@ -294,7 +294,7 @@ CollationKey::toByteArray(int32_t& count) const
     else
     {
         count = fCount;
-        icu_memcpy(result, fBytes, fCount);
+        uprv_memcpy(result, fBytes, fCount);
     }
 
     return result;  

@@ -16,9 +16,9 @@
 #define _INTLTESTTEXTBOUNDARY
 
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "intltest.h"
-#include "brkiter.h"
+#include "unicode/brkiter.h"
 
 class Vector;
 class Enumeration;

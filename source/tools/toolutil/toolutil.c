@@ -21,8 +21,8 @@
 #   define WIN32_LEAN_AND_MEAN
 #   include <windows.h>
 #endif
-#include "utypes.h"
-#include "putil.h"
+#include "unicode/utypes.h"
+#include "unicode/putil.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "toolutil.h"
@@ -39,8 +39,8 @@ getLongPathname(char *pathname) {
             const char *basename=findBasename(pathname);
             if(basename!=pathname) {
                 /* prepend the long filename with the original path */
-                icu_memmove(info.cFileName+(basename-pathname), info.cFileName, icu_strlen(info.cFileName)+1);
-                icu_memcpy(info.cFileName, pathname, basename-pathname);
+                uprv_memmove(info.cFileName+(basename-pathname), info.cFileName, uprv_strlen(info.cFileName)+1);
+                uprv_memcpy(info.cFileName, pathname, basename-pathname);
             }
             pathname=info.cFileName;
         }
@@ -52,7 +52,7 @@ getLongPathname(char *pathname) {
 
 U_CFUNC const char *
 findBasename(const char *filename) {
-    const char *basename=icu_strrchr(filename, U_FILE_SEP_CHAR);
+    const char *basename=uprv_strrchr(filename, U_FILE_SEP_CHAR);
     if(basename!=NULL) {
         return basename+1;
     } else {

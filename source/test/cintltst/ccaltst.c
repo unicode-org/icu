@@ -20,11 +20,11 @@
 
 /* C API AND FUNCTIONALITY TEST FOR CALENDAR (ucol.h)*/
 
-#include "uloc.h"
-#include "utypes.h"
-#include "ucal.h"
-#include "udat.h"
-#include "ustring.h"
+#include "unicode/uloc.h"
+#include "unicode/utypes.h"
+#include "unicode/ucal.h"
+#include "unicode/udat.h"
+#include "unicode/ustring.h"
 #include "cintltst.h"
 #include "ccaltst.h"
 #include <stdio.h>

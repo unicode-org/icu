@@ -15,7 +15,7 @@
  * IntlTestCollator is the medium level test class for everything in the directory "collate".
  */
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "tscoll.h"
 
 #include "encoll.h"

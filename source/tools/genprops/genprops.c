@@ -22,12 +22,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "utypes.h"
-#include "uchar.h"
+#include "unicode/utypes.h"
+#include "unicode/uchar.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "filestrm.h"
-#include "udata.h"
+#include "unicode/udata.h"
 #include "unewdata.h"
 #include "genprops.h"
 
@@ -149,7 +149,7 @@ parseDB(FileStream *in) {
     bool_t hasNumericValue;
 
     while(T_FileStream_readLine(in, line, sizeof(line))!=NULL) {
-        length=icu_strlen(line);
+        length=uprv_strlen(line);
 
         /* remove trailing newline characters */
         while(length>0 && (line[length-1]=='\r' || line[length-1]=='\n')) {
@@ -157,11 +157,11 @@ parseDB(FileStream *in) {
         }
 
         /* reset the properties */
-        icu_memset(&p, 0, sizeof(p));
+        uprv_memset(&p, 0, sizeof(p));
         hasNumericValue=FALSE;
 
         /* get the character code, field 0 */
-        p.code=icu_strtoul(line, &end, 16);
+        p.code=uprv_strtoul(line, &end, 16);
         limit=end-line;
         if(limit<1 || *end!=';') {
             fprintf(stderr, "genprops: syntax error in field 0 at code 0x%lx\n", p.code);
@@ -178,7 +178,7 @@ parseDB(FileStream *in) {
         limit=getField(line, start, length);
         line[limit]=0;
         for(i=1;;) {
-            if(icu_strcmp(line+start, genCategoryNames[i])==0) {
+            if(uprv_strcmp(line+start, genCategoryNames[i])==0) {
                 p.generalCategory=(uint8_t)i;
                 break;
             }
@@ -191,7 +191,7 @@ parseDB(FileStream *in) {
         /* get canonical combining class, field 3 */
         start=limit+1;
         checkLineIndex(p.code, start, length);
-        p.canonicalCombining=(uint8_t)icu_strtoul(line+start, &end, 10);
+        p.canonicalCombining=(uint8_t)uprv_strtoul(line+start, &end, 10);
         limit=end-line;
         if(start>=limit || *end!=';') {
             fprintf(stderr, "genprops: syntax error in field 3 at code 0x%lx\n", p.code);
@@ -204,7 +204,7 @@ parseDB(FileStream *in) {
         limit=getField(line, start, length);
         line[limit]=0;
         for(i=0;;) {
-            if(icu_strcmp(line+start, bidiNames[i])==0) {
+            if(uprv_strcmp(line+start, bidiNames[i])==0) {
                 p.bidi=(uint8_t)i;
                 break;
             }
@@ -222,7 +222,7 @@ parseDB(FileStream *in) {
         /* decimal digit value, field 6 */
         start=limit+1;
         checkLineIndex(p.code, start, length);
-        value=icu_strtoul(line+start, &end, 10);
+        value=uprv_strtoul(line+start, &end, 10);
         if(*end!=';') {
             fprintf(stderr, "genprops: syntax error in field 6 at code 0x%lx\n", p.code);
             exit(U_PARSE_ERROR);
@@ -236,7 +236,7 @@ parseDB(FileStream *in) {
         /* digit value, field 7 */
         start=limit+1;
         checkLineIndex(p.code, start, length);
-        value=icu_strtoul(line+start, &end, 10);
+        value=uprv_strtoul(line+start, &end, 10);
         if(*end!=';') {
             fprintf(stderr, "genprops: syntax error in field 7 at code 0x%lx\n", p.code);
             exit(U_PARSE_ERROR);
@@ -257,9 +257,9 @@ parseDB(FileStream *in) {
         /* numeric value, field 8 */
         start=limit+1;
         checkLineIndex(p.code, start, length);
-        value=icu_strtoul(line+start, &end, 10);
+        value=uprv_strtoul(line+start, &end, 10);
         if(value>0 && *end=='/') {
-            p.denominator=icu_strtoul(end+1, &end, 10);
+            p.denominator=uprv_strtoul(end+1, &end, 10);
         }
         if(*end!=';') {
             fprintf(stderr, "genprops: syntax error in field 8 at code 0x%lx\n", p.code);
@@ -300,7 +300,7 @@ parseDB(FileStream *in) {
         /* get uppercase mapping, field 12 */
         start=limit+1;
         checkLineIndex(p.code, start, length);
-        p.upperCase=icu_strtoul(line+start, &end, 16);
+        p.upperCase=uprv_strtoul(line+start, &end, 16);
         limit=end-line;
         if(*end!=';') {
             fprintf(stderr, "genprops: syntax error in field 12 at code 0x%lx\n", p.code);
@@ -310,7 +310,7 @@ parseDB(FileStream *in) {
         /* get lowercase mapping, field 13 */
         start=limit+1;
         checkLineIndex(p.code, start, length);
-        p.lowerCase=icu_strtoul(line+start, &end, 16);
+        p.lowerCase=uprv_strtoul(line+start, &end, 16);
         limit=end-line;
         if(*end!=';') {
             fprintf(stderr, "genprops: syntax error in field 13 at code 0x%lx\n", p.code);
@@ -321,7 +321,7 @@ parseDB(FileStream *in) {
         start=limit+1;
         if(start<length) {
             /* this is the last field */
-            p.titleCase=icu_strtoul(line+start, &end, 16);
+            p.titleCase=uprv_strtoul(line+start, &end, 16);
             if(*end!=';' && *end!=0) {
                 fprintf(stderr, "genprops: syntax error in field 14 at code 0x%lx\n", p.code);
                 exit(U_PARSE_ERROR);

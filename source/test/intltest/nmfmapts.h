@@ -15,7 +15,7 @@
 #define _INTLTESTNUMBERFORMATAPI
 
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "intltest.h"
 
 

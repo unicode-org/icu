@@ -12,10 +12,10 @@
 #ifndef _DATEFORMATROUNDTRIPTEST_
 #define _DATEFORMATROUNDTRIPTEST_
  
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "intltest.h"
 #include "locale.h"
-#include "unistr.h"
+#include "unicode/unistr.h"
 
 class DateFormat;
 class SimpleDateFormat;

@@ -24,8 +24,8 @@
 #define _CFORMATTST
 
 #include "cintltst.h"
-#include "utypes.h"
-#include "udat.h"
+#include "unicode/utypes.h"
+#include "unicode/udat.h"
 
 
 /* Internal fucntion used by all the test format files */

@@ -25,9 +25,9 @@
 #include <signal.h>
 #include <string.h>
 
-#include "scsu.h"
-#include "ustring.h"
-#include "utypes.h"
+#include "unicode/scsu.h"
+#include "unicode/ustring.h"
+#include "unicode/utypes.h"
 #include "cintltst.h"
 
 #ifdef MIN

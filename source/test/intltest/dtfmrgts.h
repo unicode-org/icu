@@ -14,7 +14,7 @@
 #ifndef _DATEFORMATREGRESSIONTEST_
 #define _DATEFORMATREGRESSIONTEST_
  
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "caltztst.h"
 
 class SimpleDateFormat;

@@ -21,13 +21,13 @@
 // 12/10/99      aliu          Ported Thai collation support from Java.
 //=============================================================================
 
-#include "sortkey.h"
-#include "coleitr.h"
+#include "unicode/sortkey.h"
+#include "unicode/coleitr.h"
 
-#include "chariter.h"
+#include "unicode/chariter.h"
 #include "tables.h"
-#include "normlzr.h"
-#include "unicode.h"
+#include "unicode/normlzr.h"
+#include "unicode/unicode.h"
 #include "tcoldata.h"
 #include "ucmp32.h"
 

@@ -34,7 +34,7 @@ ustr_init(struct UString *s)
 void
 ustr_deinit(struct UString *s)
 {
-  icu_free(s->fChars);
+  uprv_free(s->fChars);
   s->fChars = 0;
   s->fLength = s->fCapacity = 0;
 }
@@ -51,7 +51,7 @@ ustr_cpy(struct UString *dst,
     if(U_FAILURE(*status)) return;
   }
 
-  icu_memcpy(dst->fChars, src->fChars, sizeof(UChar) * src->fLength);
+  uprv_memcpy(dst->fChars, src->fChars, sizeof(UChar) * src->fLength);
   dst->fLength = src->fLength;
   dst->fChars[dst->fLength] = 0x0000;
 }
@@ -93,7 +93,7 @@ ustr_ncat(struct UString *dst,
     if(U_FAILURE(*status)) return;
   }
   
-  icu_memcpy(dst->fChars + dst->fLength, src->fChars, 
+  uprv_memcpy(dst->fChars + dst->fLength, src->fChars, 
 	     sizeof(UChar) * n);
   dst->fLength += src->fLength;
   dst->fChars[dst->fLength] = 0x0000;
@@ -111,7 +111,7 @@ ustr_ucat(struct UString *dst,
     if(U_FAILURE(*status)) return;
   }
   
-  icu_memcpy(dst->fChars + dst->fLength, &c, 
+  uprv_memcpy(dst->fChars + dst->fLength, &c, 
 	     sizeof(UChar) * 1);
   dst->fLength += 1;
   dst->fChars[dst->fLength] = 0x0000;
@@ -126,7 +126,7 @@ ustr_resize(struct UString *s,
   if(U_FAILURE(*status)) return;
 
   /* +1 for trailing 0x0000 */
-  s->fChars = (UChar*) icu_realloc(s->fChars, sizeof(UChar) * (len + 1));
+  s->fChars = (UChar*) uprv_realloc(s->fChars, sizeof(UChar) * (len + 1));
   if(s->fChars == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     s->fChars = 0;

@@ -18,11 +18,11 @@
 */
 
 #include <wchar.h>
-#include "utypes.h"
-#include "putil.h"
+#include "unicode/utypes.h"
+#include "unicode/putil.h"
 #include "intltest.h"
 #include "strtest.h"
-#include "ustring.h"
+#include "unicode/ustring.h"
 
 void StringTest::TestEndian(void) {
     union {

@@ -1,7 +1,7 @@
-#include "utypes.h"
-#include "ustring.h"
+#include "unicode/utypes.h"
+#include "unicode/ustring.h"
 #include "ctest.h"
-#include "ucnv.h"
+#include "unicode/ucnv.h"
 #include <stdio.h>
 
 void TestEuroRegression(void);

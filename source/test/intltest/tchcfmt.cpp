@@ -12,13 +12,13 @@
 */
 
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 
 #include "intltest.h"
 #include "tchcfmt.h"
 
-#include "msgfmt.h"
-#include "choicfmt.h"
+#include "unicode/msgfmt.h"
+#include "unicode/choicfmt.h"
 
 #include <float.h>
 

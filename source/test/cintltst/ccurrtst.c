@@ -19,13 +19,13 @@
 *********************************************************************************
 */
 
-#include "utypes.h"
-#include "ucol.h"
-#include "uloc.h"
+#include "unicode/utypes.h"
+#include "unicode/ucol.h"
+#include "unicode/uloc.h"
 #include "cintltst.h"
 #include "ccurrtst.h"
 #include "ccolltst.h"
-#include "ustring.h"
+#include "unicode/ustring.h"
 
 #define ARRAY_LENGTH(array) (sizeof array / sizeof array[0]) 
 

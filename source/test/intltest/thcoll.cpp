@@ -9,8 +9,8 @@
 */
 
 #include "thcoll.h"
-#include "coll.h"
-#include "sortkey.h"
+#include "unicode/coll.h"
+#include "unicode/sortkey.h"
 #include "cstring.h"
 #include "filestrm.h"
 
@@ -74,8 +74,8 @@ void CollationThaiTest::TestDictionary(void) {
 
     // Read in a dictionary of Thai words
     char buffer[1024];
-    icu_strcpy(buffer, IntlTest::getTestDirectory());
-    icu_strcat(buffer, TEST_FILE);
+    uprv_strcpy(buffer, IntlTest::getTestDirectory());
+    uprv_strcat(buffer, TEST_FILE);
 
     FileStream *in = T_FileStream_open(buffer, "r");
     if (in == 0) {
@@ -290,7 +290,7 @@ int8_t CollationThaiTest::sign(int32_t i) {
 UnicodeString& CollationThaiTest::parseChars(UnicodeString& result,
                                              const char* chars) {
     result.remove();
-    int32_t len = icu_strlen(chars);
+    int32_t len = uprv_strlen(chars);
     for (int32_t i=0; i<len; ) {
         if ((i+5)<len && chars[i] == '\\' &&
             (chars[i+1] == 'u' || chars[i+1] == 'U')) {

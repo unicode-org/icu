@@ -30,10 +30,10 @@
 #define TCOLDATA_H
 
 #include "ucmp32.h"
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "colcache.h"
-#include "unistr.h"
-#include "locid.h"
+#include "unicode/unistr.h"
+#include "unicode/locid.h"
 #include "filestrm.h"
 
 //=============================================================================

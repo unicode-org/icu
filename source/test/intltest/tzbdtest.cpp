@@ -13,9 +13,9 @@
 
 #include "tzbdtest.h"
 #include <math.h>
-#include "timezone.h"
-#include "simpletz.h"
-#include "gregocal.h"
+#include "unicode/timezone.h"
+#include "unicode/simpletz.h"
+#include "unicode/gregocal.h"
 
 void TimeZoneBoundaryTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
 {
@@ -58,7 +58,7 @@ UDate TimeZoneBoundaryTest::ONE_HOUR = 60 * ONE_MINUTE;
  
 UDate TimeZoneBoundaryTest::ONE_DAY = 24 * ONE_HOUR;
  
-UDate TimeZoneBoundaryTest::ONE_YEAR = icu_floor(365.25 * ONE_DAY);
+UDate TimeZoneBoundaryTest::ONE_YEAR = uprv_floor(365.25 * ONE_DAY);
  
 UDate TimeZoneBoundaryTest::SIX_MONTHS = ONE_YEAR / 2;
  
@@ -172,7 +172,7 @@ TimeZoneBoundaryTest::showDate(UDate d)
     dateToFields(d, y, m, day, h, min, sec);
     return UnicodeString("") + y + "/" + showNN(m + 1) + "/" +
         showNN(day) + " " + showNN(h) + ":" + showNN(min) +
-        " \"" + dateToString(d) + "\" = " + icu_floor(d+0.5);
+        " \"" + dateToString(d) + "\" = " + uprv_floor(d+0.5);
 }
  
 // -------------------------------------

@@ -25,7 +25,7 @@
 #include "ustr.h"
 #include "list.h"
 #include "rblist.h"
-#include "ustring.h"
+#include "unicode/ustring.h"
 
 /* Node IDs for the state transition table. */
 enum ENode {
@@ -208,7 +208,7 @@ parse(FileStream *f, const char *cp,
       if(uhash_get(data, uhash_hashUString(tag.fChars)) != 0) {
 	 char *s;
 	*status = U_INVALID_FORMAT_ERROR;
-       s = icu_malloc(1024);
+       s = uprv_malloc(1024);
        strcpy(s, "Duplicate tag name detected: ");
        u_austrcpy(s+strlen(s), tag.fChars);
        setErrorText(s);
@@ -350,7 +350,7 @@ parse(FileStream *f, const char *cp,
     uhash_close(data);
 
   if(item != 0)
-    icu_free(item);
+    uprv_free(item);
 
   ustr_deinit(&token);
   ustr_deinit(&tag);

@@ -7,9 +7,9 @@
 *   11/17/99    aliu        Creation.
 **********************************************************************
 */
-#include "cpdtrans.h"
-#include "unifilt.h"
-#include "unifltlg.h"
+#include "unicode/cpdtrans.h"
+#include "unicode/unifilt.h"
+#include "unicode/unifltlg.h"
 
 CompoundTransliterator::CompoundTransliterator(const UnicodeString& ID,
                            UnicodeFilter* adoptedFilter) :

@@ -8,7 +8,7 @@
 #ifndef RBT_RULE_H
 #define RBT_RULE_H
 
-#include "unistr.h"
+#include "unicode/unistr.h"
 
 class Replaceable;
 class TransliterationRuleData;

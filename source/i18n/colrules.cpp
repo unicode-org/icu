@@ -23,11 +23,11 @@
 //===============================================================================
 
 #ifndef _TBLCOLL
-#include "tblcoll.h"
+#include "unicode/tblcoll.h"
 #endif
 
 #ifndef _UNISTR
-#include "unistr.h"
+#include "unicode/unistr.h"
 #endif
 
 #define ARRAY_LENGTH(array) (sizeof array / sizeof array[0])

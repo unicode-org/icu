@@ -18,7 +18,7 @@
 #ifndef LIST_H
 #define LIST_H 1
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 
 /* A string list */
 struct SStringList {

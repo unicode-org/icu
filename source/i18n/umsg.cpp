@@ -5,15 +5,15 @@
 *******************************************************************************
 */
 
-#include "umsg.h"
+#include "unicode/umsg.h"
 #include "mutex.h"
-#include "uloc.h"
-#include "ustring.h"
-#include "fmtable.h"
+#include "unicode/uloc.h"
+#include "unicode/ustring.h"
+#include "unicode/fmtable.h"
 #include "cpputils.h"
-#include "msgfmt.h"
-#include "unistr.h"
-#include "numfmt.h"
+#include "unicode/msgfmt.h"
+#include "unicode/unistr.h"
+#include "unicode/numfmt.h"
 
 
 // MessageFormat Type List  Number, Date, Time or Choice

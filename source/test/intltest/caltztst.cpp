@@ -20,7 +20,7 @@
 */
 
 #include "caltztst.h"
-#include "smpdtfmt.h"
+#include "unicode/smpdtfmt.h"
 #include "mutex.h"
 
 DateFormat*         CalendarTimeZoneTest::fgDateFormat = 0;

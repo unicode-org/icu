@@ -24,15 +24,15 @@
 ********************************************************************************
 */
 
-#include "smpdtfmt.h"
-#include "dtfmtsym.h"
-#include "resbund.h"
-#include "msgfmt.h"
-#include "calendar.h"
-#include "gregocal.h"
-#include "timezone.h"
-#include "decimfmt.h"
-#include "dcfmtsym.h"
+#include "unicode/smpdtfmt.h"
+#include "unicode/dtfmtsym.h"
+#include "unicode/resbund.h"
+#include "unicode/msgfmt.h"
+#include "unicode/calendar.h"
+#include "unicode/gregocal.h"
+#include "unicode/timezone.h"
+#include "unicode/decimfmt.h"
+#include "unicode/dcfmtsym.h"
 #include "mutex.h"
 #include <float.h>
 #ifdef _DEBUG

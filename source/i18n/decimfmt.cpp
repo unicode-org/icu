@@ -37,11 +37,11 @@
 ********************************************************************************
 */
  
-#include "decimfmt.h"
+#include "unicode/decimfmt.h"
 #include "digitlst.h"
-#include "dcfmtsym.h"
-#include "resbund.h"
-#include "unicode.h"
+#include "unicode/dcfmtsym.h"
+#include "unicode/resbund.h"
+#include "unicode/unicode.h"
 #include "cmemory.h"
 #include <float.h>
 #include <limits.h>
@@ -519,7 +519,7 @@ DecimalFormat::format(  double number,
 
     // Special case for NaN, sets the begin and end index to be the
     // the string length of localized name of NaN.
-    if (icu_isNaN(number))
+    if (uprv_isNaN(number))
     {
         if (fieldPosition.getField() == NumberFormat::kIntegerField)
             fieldPosition.setBeginIndex(result.length());
@@ -544,7 +544,7 @@ DecimalFormat::format(  double number,
      * -Infinity.  Proper detection of -0.0 is needed to deal with the
      * issues raised by bugs 4106658, 4106667, and 4147706.  Liu 7/6/98.
      */
-    bool_t isNegative = icu_isNegative(number);
+    bool_t isNegative = uprv_isNegative(number);
     if (isNegative) number = -number;
 
     // Do this BEFORE checking to see if value is infinite! Sets the
@@ -561,7 +561,7 @@ DecimalFormat::format(  double number,
     }
 
     // Special case for INFINITE,
-    if (icu_isInfinite(number))
+    if (uprv_isInfinite(number))
     {
         result += (isNegative ? fNegativePrefix : fPositivePrefix);
 
@@ -604,26 +604,26 @@ DecimalFormat::format(  double number,
 double DecimalFormat::round(double a, ERoundingMode mode, bool_t isNegative) {
     switch (mode) {
     case kRoundCeiling:
-        return isNegative ? icu_floor(a) : icu_ceil(a);
+        return isNegative ? uprv_floor(a) : uprv_ceil(a);
     case kRoundFloor:
-        return isNegative ? icu_ceil(a) : icu_floor(a);
+        return isNegative ? uprv_ceil(a) : uprv_floor(a);
     case kRoundDown:
-        return icu_floor(a);
+        return uprv_floor(a);
     case kRoundUp:
-        return icu_ceil(a);
+        return uprv_ceil(a);
     case kRoundHalfEven:
         {
-            double f = icu_floor(a);
+            double f = uprv_floor(a);
             if ((a - f) != 0.5) {
-                return icu_floor(a + 0.5);
+                return uprv_floor(a + 0.5);
             }
             double g = f / 2.0;
-            return (g == icu_floor(g)) ? f : (f + 1.0);
+            return (g == uprv_floor(g)) ? f : (f + 1.0);
         }
     case kRoundHalfDown:
-        return ((a - icu_floor(a)) <= 0.5) ? icu_floor(a) : icu_ceil(a);
+        return ((a - uprv_floor(a)) <= 0.5) ? uprv_floor(a) : uprv_ceil(a);
     case kRoundHalfUp:
-        return ((a - icu_floor(a)) < 0.5) ? icu_floor(a) : icu_ceil(a);
+        return ((a - uprv_floor(a)) < 0.5) ? uprv_floor(a) : uprv_ceil(a);
     }
     return 1.0;
 }
@@ -921,7 +921,7 @@ void DecimalFormat::addPadding(UnicodeString& result, bool_t hasAffixes,
     if (fFormatWidth > 0) {
         int32_t len = fFormatWidth - result.length();
         if (len > 0) {
-            UChar* padding = (UChar*) icu_malloc(sizeof(UChar) * len);
+            UChar* padding = (UChar*) uprv_malloc(sizeof(UChar) * len);
             for (int32_t i=0; i<len; ++i) {
                 padding[i] = fPad;
             }
@@ -948,7 +948,7 @@ void DecimalFormat::addPadding(UnicodeString& result, bool_t hasAffixes,
                 result += padding;
                 break;
             }
-            icu_free(padding);
+            uprv_free(padding);
         }
     }
 }
@@ -989,7 +989,7 @@ DecimalFormat::parse(const UnicodeString& text,
     if (text.compare(parsePosition.getIndex(), nan.length(), nan,
                      0, nan.length()) == 0) {
         parsePosition.setIndex(parsePosition.getIndex() + nan.length());
-        result.setDouble(icu_getNaN());
+        result.setDouble(uprv_getNaN());
         return;
     }
 
@@ -1010,7 +1010,7 @@ DecimalFormat::parse(const UnicodeString& text,
 
     // Handle infinity
     if (status[fgStatusInfinite]) {
-        double inf = icu_getInfinity();
+        double inf = uprv_getInfinity();
         result.setDouble(status[fgStatusPositive] ? inf : -inf);
         return;
     }
@@ -1977,7 +1977,7 @@ DecimalFormat::toPattern(UnicodeString& result, bool_t localized) const
       }
       int32_t sub0Start = result.length();
       int32_t maxIntDig = fUseExponentialNotation ? getMaximumIntegerDigits() :
-	(icu_max(icu_max(fGroupingSize, getMinimumIntegerDigits()),
+	(uprv_max(uprv_max(fGroupingSize, getMinimumIntegerDigits()),
 		 roundingDecimalPos) + 1);
       for (i = maxIntDig; i > 0; --i) {
 	if (isGroupingUsed() && fGroupingSize != 0
@@ -2577,7 +2577,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
  * @see NumberFormat#setMaximumIntegerDigits
  */
 void DecimalFormat::setMaximumIntegerDigits(int32_t newValue) {
-    NumberFormat::setMaximumIntegerDigits(icu_min(newValue, kDoubleIntegerDigits));
+    NumberFormat::setMaximumIntegerDigits(uprv_min(newValue, kDoubleIntegerDigits));
 }
 
 /**
@@ -2586,7 +2586,7 @@ void DecimalFormat::setMaximumIntegerDigits(int32_t newValue) {
  * @see NumberFormat#setMinimumIntegerDigits
  */
 void DecimalFormat::setMinimumIntegerDigits(int32_t newValue) {
-    NumberFormat::setMinimumIntegerDigits(icu_min(newValue, kDoubleIntegerDigits));
+    NumberFormat::setMinimumIntegerDigits(uprv_min(newValue, kDoubleIntegerDigits));
 }
 
 /**
@@ -2595,7 +2595,7 @@ void DecimalFormat::setMinimumIntegerDigits(int32_t newValue) {
  * @see NumberFormat#setMaximumFractionDigits
  */
 void DecimalFormat::setMaximumFractionDigits(int32_t newValue) {
-    NumberFormat::setMaximumFractionDigits(icu_min(newValue, kDoubleFractionDigits));
+    NumberFormat::setMaximumFractionDigits(uprv_min(newValue, kDoubleFractionDigits));
 }
 
 /**
@@ -2604,7 +2604,7 @@ void DecimalFormat::setMaximumFractionDigits(int32_t newValue) {
  * @see NumberFormat#setMinimumFractionDigits
  */
 void DecimalFormat::setMinimumFractionDigits(int32_t newValue) {
-    NumberFormat::setMinimumFractionDigits(icu_min(newValue, kDoubleFractionDigits));
+    NumberFormat::setMinimumFractionDigits(uprv_min(newValue, kDoubleFractionDigits));
 }
 
 //eof

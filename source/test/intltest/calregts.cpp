@@ -11,9 +11,9 @@
  
 #include "calregts.h"
 
-#include "gregocal.h"
-#include "simpletz.h"
-#include "smpdtfmt.h"
+#include "unicode/gregocal.h"
+#include "unicode/simpletz.h"
+#include "unicode/smpdtfmt.h"
 
 #include <float.h>
 #include <limits.h> // LONG_{MIN,MAX}

@@ -5,12 +5,12 @@
 *****************************************************************************************
 */
 
-#include "ubrk.h"
+#include "unicode/ubrk.h"
 
-#include "brkiter.h"
-#include "uloc.h"
-#include "ustring.h"
-#include "uchriter.h"
+#include "unicode/brkiter.h"
+#include "unicode/uloc.h"
+#include "unicode/ustring.h"
+#include "unicode/uchriter.h"
 
 U_CAPI UBreakIterator*
 ubrk_open(UBreakIteratorType type,

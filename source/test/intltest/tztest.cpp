@@ -13,11 +13,11 @@
 
 #include <math.h>
 #include "tztest.h"
-#include "timezone.h"
-#include "simpletz.h"
-#include "calendar.h"
-#include "gregocal.h"
-#include "resbund.h"
+#include "unicode/timezone.h"
+#include "unicode/simpletz.h"
+#include "unicode/calendar.h"
+#include "unicode/gregocal.h"
+#include "unicode/resbund.h"
 
 #define CHECK_HEAP 0
 
@@ -150,7 +150,7 @@ TimeZoneTest::TestGenericAPI()
         logln("to get the difference in seconds between coordinated universal");
         logln("time and local time. E.g., -28,800 for PST (GMT-8hrs)");
 
-    int32_t tzoffset = icu_timezone();
+    int32_t tzoffset = uprv_timezone();
     logln(UnicodeString("Value returned from t_timezone = ") + tzoffset);
     // Invert sign because UNIX semantics are backwards
     if (tzoffset < 0) tzoffset = -tzoffset;
@@ -278,8 +278,8 @@ TimeZoneTest::testUsingBinarySearch(SimpleTimeZone* tz, UDate min, UDate max, UD
         }
         if (failure(status, "SimpleTimeZone::inDaylightTime")) return;
     }
-    logln(UnicodeString("Binary Search Before: ") + icu_floor(0.5 + min) + " = " + dateToString(min));
-    logln(UnicodeString("Binary Search After:  ") + icu_floor(0.5 + max) + " = " + dateToString(max));
+    logln(UnicodeString("Binary Search Before: ") + uprv_floor(0.5 + min) + " = " + dateToString(min));
+    logln(UnicodeString("Binary Search After:  ") + uprv_floor(0.5 + max) + " = " + dateToString(max));
     UDate mindelta = expectedBoundary - min;
     UDate maxdelta = max - expectedBoundary;
     if (mindelta >= 0 &&

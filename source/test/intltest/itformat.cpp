@@ -15,7 +15,7 @@
  * IntlTestFormat is the medium level test class for everything in the directory "format".
  */
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 #include "itformat.h"
 #include "tsdate.h"
 #include "tsnmfmt.h"

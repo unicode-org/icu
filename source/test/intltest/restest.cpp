@@ -17,7 +17,7 @@
 
 #define RESTEST_HEAP_CHECK 0
 
-#include "utypes.h"
+#include "unicode/utypes.h"
 
 #if defined(_WIN32) && !defined(__WINDOWS__)
 #define _CRTDBG_MAP_ALLOC
@@ -25,8 +25,8 @@
 #endif
 
 #include "cstring.h"
-#include "unistr.h"
-#include "resbund.h"
+#include "unicode/unistr.h"
+#include "unicode/resbund.h"
 #include "restest.h"
 
 //***************************************************************************************
@@ -404,8 +404,8 @@ ResourceBundleTest::testTag(const char* frag,
         action += tag;
         action += ")";
 
-        icu_strcpy(tag, "string_");
-        icu_strcat(tag, frag);
+        uprv_strcpy(tag, "string_");
+        uprv_strcat(tag, frag);
 
         UnicodeString string(kERROR);
         status = U_ZERO_ERROR;
@@ -426,8 +426,8 @@ ResourceBundleTest::testTag(const char* frag,
         action += tag;
         action += ")";
 
-        icu_strcpy(tag, "array_");
-        icu_strcat(tag, frag);
+        uprv_strcpy(tag, "array_");
+        uprv_strcat(tag, frag);
 
         int32_t count = kERROR_COUNT;
         status = U_ZERO_ERROR;
@@ -492,8 +492,8 @@ ResourceBundleTest::testTag(const char* frag,
         action += tag;
         action += ")";
 
-        icu_strcpy(tag, "array_2d_");
-        icu_strcat(tag, frag);
+        uprv_strcpy(tag, "array_2d_");
+        uprv_strcat(tag, frag);
 
         int32_t row_count = kERROR_COUNT, column_count = kERROR_COUNT;
         status = U_ZERO_ERROR;
@@ -562,8 +562,8 @@ ResourceBundleTest::testTag(const char* frag,
         //--------------------------------------------------------------------------
         // taggedArrayItem
 
-        icu_strcpy(tag, "tagged_array_");
-        icu_strcat(tag, frag);
+        uprv_strcpy(tag, "tagged_array_");
+        uprv_strcat(tag, frag);
 
         action = param[i].name;
         action += ".getTaggedArray(";

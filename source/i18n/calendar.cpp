@@ -25,8 +25,8 @@
 */
 
 #include "cpputils.h"
-#include "resbund.h"
-#include "gregocal.h"
+#include "unicode/resbund.h"
+#include "unicode/gregocal.h"
 
 // Resource bundle tags read by this class
 const char* Calendar::kDateTimeElements = "DateTimeElements";
@@ -157,9 +157,9 @@ Calendar::operator=(const Calendar &right)
 {
     if (this != &right)
     {
-        icu_arrayCopy(right.fFields, fFields, FIELD_COUNT);
-        icu_arrayCopy(right.fIsSet, fIsSet, FIELD_COUNT);
-        icu_arrayCopy(right.fStamp, fStamp, FIELD_COUNT);
+        uprv_arrayCopy(right.fFields, fFields, FIELD_COUNT);
+        uprv_arrayCopy(right.fIsSet, fIsSet, FIELD_COUNT);
+        uprv_arrayCopy(right.fStamp, fStamp, FIELD_COUNT);
         fTime                     = right.fTime;
         fIsTimeSet                 = right.fIsTimeSet;
         fAreAllFieldsSet         = right.fAreAllFieldsSet;
@@ -337,7 +337,7 @@ Calendar::getAvailableLocales(int32_t& count)
 UDate
 Calendar::getNow()
 {
-    return (UDate)icu_getUTCtime() * U_MILLIS_PER_SECOND; // return as milliseconds
+    return (UDate)uprv_getUTCtime() * U_MILLIS_PER_SECOND; // return as milliseconds
 }
 
 // -------------------------------------

@@ -12,7 +12,7 @@
 */
 
 #include "intltest.h"
-#include "locid.h"
+#include "unicode/locid.h"
 
 /**
  * Tests for the Locale class
