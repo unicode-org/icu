@@ -40,7 +40,7 @@ the udata API for loading ICU data. Especially, a UDataInfo structure
 precedes the actual data. It contains platform properties values and the
 file format version.
 
-The following is a description of format version 1.0 .
+The following is a description of format version 1.1 .
 
 
 Data contents:
@@ -71,19 +71,19 @@ Formally, the file contains the following structures:
     A1 const uint16_t STAGE_3_BITS(=4);
       (STAGE_1_BITS(=11) not stored, implicitly=21-(STAGE_2_BITS+STAGE_3_BITS))
     A2 const uint16_t exceptionsIndex;  -- 32-bit unit index
-    A3 const uint16_t reservedIndex;
-    A4 const uint16_t reservedIndex;
-    A5 const uint16_t reservedIndex;
+    A3 const uint16_t stage2Top; -- number of elements in stage2, new in formatVersion 1.1
+    A4 const uint16_t propsIndex; -- 32-bit unit index, new in formatVersion 1.1
+    A5 const uint16_t exceptionsTop; -- number of exceptions units, new in formatVersion 1.1
     A6 const uint16_t reservedIndex;
     A7 const uint16_t reservedIndex;
 
     S1 const uint16_t stage1[0x440];    -- 0x440=0x110000>>10
-    S2 const uint16_t stage2[variable size];
+    S2 const uint16_t stage2[variable size, stage2Top==A3];
     S3 const uint16_t stage3[variable size];
        (possible 1*uint16_t for padding to 4-alignment)
 
     P  const uint32_t props32[variable size];
-    E  const uint32_t exceptions[variable size];
+    E  const uint32_t exceptions[variable size, exceptionsTop==A5];
 
 3-stage lookup and properties:
 
@@ -249,7 +249,7 @@ static UDataInfo dataInfo={
     0,
 
     0x55, 0x50, 0x72, 0x6f,     /* dataFormat="UPro" */
-    1, 0, 0, 0,                 /* formatVersion */
+    1, 1, 0, 0,                 /* formatVersion */
     3, 0, 0, 0                  /* dataVersion */
 };
 
@@ -1043,23 +1043,28 @@ generateData(const char *dataDir) {
     uint16_t i, offset;
 
     /* fix up the indexes in the stage tables to include the table offsets in the data */
-    offset=8+STAGE_1_BLOCK;         /* uint16_t offset to stage2[] */
+    offset=8+STAGE_1_BLOCK;                 /* uint16_t offset to stage2[] */
     for(i=0; i<STAGE_1_BLOCK; ++i) {
         stage1[i]+=offset;
     }
 
-    offset+=stage2Top;              /* uint16_t offset to stage3[] */
+    indexes[3]=stage2Top;                   /* number of elements in stage2 */
+    offset+=stage2Top;                      /* uint16_t offset to stage3[] */
     for(i=0; i<stage2Top; ++i) {
         stage2[i]+=offset;
     }
 
     offset=(uint16_t)((offset+stage3Top+1)/2);  /* uint32_t offset to props[], include padding */
+    indexes[4]=offset;                      /* uint32_t offset to props[] */
+
     for(i=0; i<stage3Top; ++i) {
         stage3[i]+=offset;
     }
 
-    indexes[2]=offset+=propsTop;            /* uint32_t offset to exceptions[] */
+    offset+=propsTop;
+    indexes[2]=offset;                      /* uint32_t offset to exceptions[] */
 
+    indexes[5]=exceptionsTop;               /* number of exceptions units */
     size=4*(offset+exceptionsTop);          /* total size of data */
 
     if(beVerbose) {
