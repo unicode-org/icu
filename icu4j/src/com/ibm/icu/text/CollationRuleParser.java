@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationRuleParser.java,v $ 
-* $Date: 2002/08/01 16:24:37 $ 
-* $Revision: 1.4 $
+* $Date: 2002/08/01 21:11:27 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -497,7 +497,7 @@ class CollationRuleParser
         INDIRECT_BOUNDARIES_[6] = new IndirectBoundaries(
                    RuleBasedCollator.UCA_CONSTANTS_.LAST_TERTIARY_IGNORABLE_, 
                    null);
-        // UCOL_FIRST_VARIABLE
+        // UCOL_FIRST_VARIABLE;
         INDIRECT_BOUNDARIES_[7] = new IndirectBoundaries(
                    RuleBasedCollator.UCA_CONSTANTS_.FIRST_VARIABLE_, 
                    null);  
@@ -1049,6 +1049,31 @@ class CollationRuleParser
         throw new ParseException(error.toString(), offset);
     }
     
+    private final boolean doSetTop() {
+        m_parsedToken_.m_charsOffset_ = m_extraCurrent_;
+        m_source_.append((char)0xFFFE);
+        IndirectBoundaries ib = 
+                  INDIRECT_BOUNDARIES_[m_parsedToken_.m_indirectIndex_];
+        m_source_.append((char)(ib.m_startCE_ >> 16));
+        m_source_.append((char)(ib.m_startCE_ & 0xFFFF));
+        m_extraCurrent_ += 3;
+        if (INDIRECT_BOUNDARIES_[m_parsedToken_.m_indirectIndex_
+                                                       ].m_startContCE_ == 0) {
+            m_parsedToken_.m_charsLen_ = 3;
+        }
+        else { 
+            m_source_.append((char)(INDIRECT_BOUNDARIES_[
+                                        m_parsedToken_.m_indirectIndex_
+                                    ].m_startContCE_ >> 16)); 
+            m_source_.append((char)(INDIRECT_BOUNDARIES_[
+                                        m_parsedToken_.m_indirectIndex_
+                                    ].m_startContCE_ & 0xFFFF)); 
+            m_extraCurrent_ += 2;
+            m_parsedToken_.m_charsLen_ = 5;
+        } 
+        return true;
+    }
+    
     /**
      * Getting the next token
      * @param startofrules flag indicating if we are at the start of rules
@@ -1065,11 +1090,13 @@ class CollationRuleParser
 	    boolean wasinquote = false;
 	    byte before = 0;
 	    boolean isescaped = false;
-	    int newcharslen = 0, newextensionlen = 0;
-	    int charsoffset = 0, extensionoffset = 0;
+	    int /*newcharslen = 0,*/ newextensionlen = 0;
+	    int /*charsoffset = 0,*/ extensionoffset = 0;
 	    int newstrength = TOKEN_UNSET_; 
 	
-	    m_parsedToken_.m_prefixOffset_ = 0; 
+        m_parsedToken_.m_charsLen_ = 0;
+	    m_parsedToken_.m_charsOffset_ = 0;
+        m_parsedToken_.m_prefixOffset_ = 0; 
         m_parsedToken_.m_prefixLen_ = 0;
 	    m_parsedToken_.m_indirectIndex_ = 0;
 	
@@ -1081,11 +1108,11 @@ class CollationRuleParser
 		            inquote = false;
 		        } 
                 else {
-		            if ((newcharslen == 0) || inchars) {
-		                 if (newcharslen == 0) {
-		                     charsoffset = m_extraCurrent_;
+		            if ((m_parsedToken_.m_charsLen_ == 0) || inchars) {
+		                 if (m_parsedToken_.m_charsLen_ == 0) {
+		                     m_parsedToken_.m_charsOffset_ = m_extraCurrent_;
 		                 }
-		                 newcharslen ++;
+		                 m_parsedToken_.m_charsLen_ ++;
 		            } 
                     else {
 		                if (newextensionlen == 0) {
@@ -1102,10 +1129,10 @@ class CollationRuleParser
 	            }
 	            if (ch != 0 && m_current_ != limit) {
 	                if (inchars) {
-	                    if (newcharslen == 0) {
-	                        charsoffset = m_current_;
+	                    if (m_parsedToken_.m_charsLen_ == 0) {
+	                        m_parsedToken_.m_charsOffset_ = m_current_;
 	                    }
-	                    newcharslen ++;
+	                    m_parsedToken_.m_charsLen_ ++;
 	                } 
                     else {
 	                    if (newextensionlen == 0) {
@@ -1121,17 +1148,18 @@ class CollationRuleParser
 	                switch (ch) {
 	                case 0x003D : // '='
 	                    if (newstrength != TOKEN_UNSET_) {
-	                        return doEndParseNextToken(newstrength, newcharslen, 
-                                                       top, charsoffset,
+	                        return doEndParseNextToken(newstrength, 
+                                                       top, 
                                                        extensionoffset,
                                                        newextensionlen, 
                                                        variabletop, before);
 	                    }
 	                    // if we start with strength, we'll reset to top
 	                    if (startofrules == true) {
+                            m_parsedToken_.m_indirectIndex_ = 5;
+                            top = doSetTop();
 	                        return doEndParseNextToken(TOKEN_RESET_, 
-	                                                   newcharslen,
-                                                       true, charsoffset,
+                                                       top, 
                                                        extensionoffset, 
                                                        newextensionlen, 
                                                        variabletop, before);
@@ -1140,17 +1168,18 @@ class CollationRuleParser
 	                    break;
 	                case 0x002C : // ','
 	                    if (newstrength != TOKEN_UNSET_) {
-	                        return doEndParseNextToken(newstrength, newcharslen,
-                                                       top, charsoffset,
+	                        return doEndParseNextToken(newstrength, 
+                                                       top, 
                                                        extensionoffset, 
                                                        newextensionlen, 
                                                        variabletop, before);
 	                    }
 	                    // if we start with strength, we'll reset to top
 	                    if (startofrules == true) {
+                            m_parsedToken_.m_indirectIndex_ = 5;
+                            top = doSetTop();
 	                        return doEndParseNextToken(TOKEN_RESET_, 
-	                                                   newcharslen,
-                                                       true, charsoffset,
+                                                       top, 
                                                        extensionoffset, 
                                                        newextensionlen, 
                                                        variabletop, before);
@@ -1159,17 +1188,18 @@ class CollationRuleParser
 	                    break;
 	                case 0x003B : // ';'
 	                    if (newstrength != TOKEN_UNSET_) {
-	                        return doEndParseNextToken(newstrength, newcharslen,
-                                                       top, charsoffset,
+	                        return doEndParseNextToken(newstrength, 
+                                                       top, 
                                                        extensionoffset, 
                                                        newextensionlen, 
                                                        variabletop, before);   
 	                    }
 	                    // if we start with strength, we'll reset to top
 	                    if (startofrules == true) {
-	                        return doEndParseNextToken(TOKEN_RESET_, 
-	                                                   newcharslen,
-                                                       true, charsoffset,
+                            m_parsedToken_.m_indirectIndex_ = 5;
+                            top = doSetTop();
+                            return doEndParseNextToken(TOKEN_RESET_, 
+                                                       top, 
                                                        extensionoffset, 
                                                        newextensionlen, 
                                                        variabletop, before);
@@ -1178,17 +1208,18 @@ class CollationRuleParser
 	                    break;
 	                case 0x003C : // '<'
 	                    if (newstrength != TOKEN_UNSET_) {
-	                        return doEndParseNextToken(newstrength, newcharslen,
-                                                       top, charsoffset,
+	                        return doEndParseNextToken(newstrength, 
+                                                       top, 
                                                        extensionoffset, 
                                                        newextensionlen, 
                                                        variabletop, before);
 	                    }
 	                    // if we start with strength, we'll reset to top
 		                if (startofrules == true) {
-		                    return doEndParseNextToken(TOKEN_RESET_, 
-		                                               newcharslen, true, 
-		                                               charsoffset,
+                            m_parsedToken_.m_indirectIndex_ = 5;
+                            top = doSetTop();
+                            return doEndParseNextToken(TOKEN_RESET_, 
+                                                       top, 
                                                        extensionoffset, 
                                                        newextensionlen, 
                                                        variabletop, before);
@@ -1211,8 +1242,8 @@ class CollationRuleParser
 		                break;
 		            case 0x0026 : // '&'
 		                if (newstrength != TOKEN_UNSET_) {
-		                    return doEndParseNextToken(newstrength, newcharslen,
-                                                       top, charsoffset,
+		                    return doEndParseNextToken(newstrength, 
+                                                       top, 
                                                        extensionoffset, 
                                                        newextensionlen, 
                                                        variabletop, before);
@@ -1227,34 +1258,7 @@ class CollationRuleParser
 		                    m_current_ = optionend;
 		                    if ((result & TOKEN_TOP_MASK_) != 0) {
 		                        if (newstrength == TOKEN_RESET_) { 
-                                    top = true;
-		                            charsoffset = m_extraCurrent_;
-		                            m_source_.append((char)0xFFFE);
-		                            IndirectBoundaries ib = 
-		                                      INDIRECT_BOUNDARIES_[
-		                                      m_parsedToken_.m_indirectIndex_];
-		                            m_source_.append((char)(ib.m_startCE_ 
-		                                                               >> 16));
-		                            m_source_.append((char)(ib.m_startCE_ 
-		                                                            & 0xFFFF));
-                                    m_extraCurrent_ += 3;
-                                    if (INDIRECT_BOUNDARIES_[
-                                              m_parsedToken_.m_indirectIndex_
-                                              ].m_startContCE_ == 0) {
-		                                newcharslen = 3;
-                                    }
-                                    else { 
-                                        m_source_.append((char)
-                                            (INDIRECT_BOUNDARIES_[
-                                                m_parsedToken_.m_indirectIndex_
-                                                ].m_startContCE_ >> 16)); 
-                                        m_source_.append((char)
-                                            (INDIRECT_BOUNDARIES_[
-                                                m_parsedToken_.m_indirectIndex_
-                                                ].m_startContCE_ & 0xFFFF)); 
-                                        m_extraCurrent_ += 2;
-                                        newcharslen = 5;
-                                    } 
+                                    top = doSetTop();
                                     if (before != 0) { 
                                         // This is a combination of before and 
                                         // indirection like 
@@ -1262,12 +1266,11 @@ class CollationRuleParser
                                         m_source_.append((char)0x002d); 
                                         m_source_.append((char)before); 
                                         m_extraCurrent_ += 2; 
-                                        newcharslen += 2;
+                                        m_parsedToken_.m_charsLen_ += 2;
                                     } 
 		                            m_current_ ++;
 		                            return doEndParseNextToken(newstrength, 
-		                                               newcharslen, true, 
-                                                       charsoffset,
+		                                               true, 
                                                        extensionoffset, 
                                                        newextensionlen, 
                                                        variabletop, before);
@@ -1280,12 +1283,13 @@ class CollationRuleParser
 		                        if (newstrength != TOKEN_RESET_ 
 		                            && newstrength != TOKEN_UNSET_) {
 		                            variabletop = true;
-		                            charsoffset = m_extraCurrent_;
+		                            m_parsedToken_.m_charsOffset_ = m_extraCurrent_;
 		                            m_source_.append((char)0xFFFF);
 		                            m_extraCurrent_ ++;
 		                            m_current_ ++;
+                                    m_parsedToken_.m_charsLen_ = 1;
 		                            return doEndParseNextToken(newstrength, 
-		                                               1, top, charsoffset,
+		                                               top, 
                                                        extensionoffset, 
                                                        newextensionlen, 
                                                        variabletop, before);
@@ -1321,15 +1325,15 @@ class CollationRuleParser
 		                inquote = true;
 		                if (inchars) { // we're doing characters 
 		                    if (wasinquote == false) {
-		                        charsoffset = m_extraCurrent_;
+		                        m_parsedToken_.m_charsOffset_ = m_extraCurrent_;
 		                    }
-		                    if (newcharslen != 0) {
+		                    if (m_parsedToken_.m_charsLen_ != 0) {
 		                    	m_source_.append(m_source_.substring(
-                                                     m_current_ - newcharslen, 
+                                                     m_current_ - m_parsedToken_.m_charsLen_, 
 		                                             m_current_));
-		                        m_extraCurrent_ += newcharslen;
+		                        m_extraCurrent_ += m_parsedToken_.m_charsLen_;
 		                    }
-		                    newcharslen ++;
+		                    m_parsedToken_.m_charsLen_ ++;
 		                } 
 		                else { // we're doing an expansion
 		                    if (wasinquote == false) {
@@ -1368,20 +1372,20 @@ class CollationRuleParser
 		                // which I do not intend to play with. Instead, we will 
 		                // do prefixes when prefixes are due (before adding the 
 		                // elements).
-		                m_parsedToken_.m_prefixOffset_ = charsoffset;
-		                m_parsedToken_.m_prefixLen_ = newcharslen;
+		                m_parsedToken_.m_prefixOffset_ = m_parsedToken_.m_charsOffset_;
+		                m_parsedToken_.m_prefixLen_ = m_parsedToken_.m_charsLen_;
                         if (inchars) { // we're doing characters
 		                    if (wasinquote == false) {
-		                        charsoffset = m_extraCurrent_;
+		                        m_parsedToken_.m_charsOffset_ = m_extraCurrent_;
 		                    }
-		                    if (newcharslen != 0) {
+		                    if (m_parsedToken_.m_charsLen_ != 0) {
                                 String prefix = m_source_.substring(
-                                                      m_current_ - newcharslen, 
+                                                      m_current_ - m_parsedToken_.m_charsLen_, 
                                                       m_current_);
 		                    	m_source_.append(prefix);
-		                        m_extraCurrent_ += newcharslen;
+		                        m_extraCurrent_ += m_parsedToken_.m_charsLen_;
 		                    }
-		                    newcharslen ++;
+		                    m_parsedToken_.m_charsLen_ ++;
 		                }
 		                wasinquote = true;
 		                m_current_ ++;
@@ -1400,10 +1404,10 @@ class CollationRuleParser
 	                        break;
 	                    }
 	                    if (inchars) {
-	                        if (newcharslen == 0) {
-	                            charsoffset = m_current_;
+	                        if (m_parsedToken_.m_charsLen_ == 0) {
+	                            m_parsedToken_.m_charsOffset_ = m_current_;
 	                        }
-	                        newcharslen++;
+	                        m_parsedToken_.m_charsLen_++;
 	                    } 
 	                    else {
 	                        if (newextensionlen == 0) {
@@ -1423,7 +1427,7 @@ class CollationRuleParser
 	        }   
 	        m_current_ ++;
 	    }  
-	    return doEndParseNextToken(newstrength, newcharslen, top, charsoffset,
+	    return doEndParseNextToken(newstrength, top, 
                                    extensionoffset, newextensionlen, 
                                    variabletop, before);
 	}
@@ -1433,8 +1437,8 @@ class CollationRuleParser
      * @param newstrength new strength
      * @return offset in rules, -1 for end of rules
      */
-    private int doEndParseNextToken(int newstrength, int newcharslen,
-                                    boolean top, int charsoffset,
+    private int doEndParseNextToken(int newstrength, /*int newcharslen,*/
+                                    boolean top, /*int charsoffset,*/
                                     int extensionoffset, int newextensionlen, 
                                     boolean variabletop, int before)
                                     throws ParseException
@@ -1442,14 +1446,14 @@ class CollationRuleParser
         if (newstrength == TOKEN_UNSET_) {
             return -1;
         }
-        if (newcharslen == 0 && top == false) {
+        if (m_parsedToken_.m_charsLen_ == 0 && top == false) {
 		    throwParseException(m_rules_, m_current_); 
 		    return -1;
 		}
 		
 		m_parsedToken_.m_strength_ = newstrength; 
-		m_parsedToken_.m_charsOffset_ = charsoffset;
-		m_parsedToken_.m_charsLen_ = newcharslen;
+		//m_parsedToken_.m_charsOffset_ = charsoffset;
+		//m_parsedToken_.m_charsLen_ = newcharslen;
 		m_parsedToken_.m_extensionOffset_ = extensionoffset;
 	    m_parsedToken_.m_extensionLen_ = newextensionlen;
 		m_parsedToken_.m_flags_ = (char)
