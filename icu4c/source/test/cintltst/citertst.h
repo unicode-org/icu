@@ -65,6 +65,12 @@
     * a previous for the same string at the same position
     */
     static void TestBug672(void);
+
+    /**
+     * Repeat TestBug672 with normalizatin enabled - this test revealed a bug
+     *   in incremental normalization.
+     */
+    static void TestBug672Normalize(void);
     /**
     * Test iterators with an relatively small buffer
     */
