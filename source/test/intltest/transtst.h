@@ -266,6 +266,12 @@ class TransliteratorTest : public IntlTest {
      */
     void TestOutputSet();
 
+    /**
+     * Test the use variable range pragma, making sure that use of
+     * variable range characters is detected and flagged as an error.
+     */
+    void TestVariableRange();
+
     //======================================================================
     // Support methods
     //======================================================================
