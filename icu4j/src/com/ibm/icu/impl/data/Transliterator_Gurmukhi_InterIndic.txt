@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Gurmukhi_InterIndic.txt,v $
-# $Date: 2002/09/19 18:11:23 $
-# $Revision: 1.12 $
+# $Date: 2004/05/19 04:18:46 $
+# $Revision: 1.13 $
 #--------------------------------------------------------------------
 
 # Gurmukhi-InterIndic
@@ -16,7 +16,7 @@
 #\u0A38\u0A3C>\uE036; # LETTER SHA
 #\u0A32\u0A3C>\uE033; # LETTER LLA
 #\u0A2B\u0A3C>\uE05E; # LETTER FA
-
+\u0A01>\ue001;  # SIGN CHANDRABINDU
 \u0A02>\uE002;  # SIGN BINDI
 \u0A05>\uE005;  # LETTER A
 \u0A06>\uE006;  # LETTER AA
