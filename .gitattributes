@@ -147,7 +147,5 @@ tools/unicodetools/com/ibm/text/UCA/index_header.html svneol=native#text/html
 tools/unicodetools/com/ibm/text/UCA/norm_help.html svneol=native#text/html
 tools/unicodetools/com/ibm/text/UCA/norm_index_header.html svneol=native#text/html
 tools/unicodetools/com/ibm/text/data/CheckCollationValidity.html svneol=native#text/html
-tools/unicodetools/com/ibm/text/data/CollationTest_NON_IGNORABLE_SHORT.txt svneol=native#unset
-tools/unicodetools/com/ibm/text/data/CollationTest_SHIFTED_SHORT.txt svneol=native#unset
 tools/unicodetools/com/ibm/text/data/UCA_Rules.xml svneol=native#text/xml
 tools/unicodetools/license.html svneol=native#text/html
