@@ -16,6 +16,8 @@
 #include "GlyphIterator.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 LEGlyphID MarkToLigaturePositioningSubtable::findLigatureGlyph(GlyphIterator *glyphIterator) const
 {
     if (glyphIterator->prev()) {
@@ -102,3 +104,5 @@ le_int32 MarkToLigaturePositioningSubtable::process(GlyphIterator *glyphIterator
 
     return 1;
 }
+
+U_NAMESPACE_END

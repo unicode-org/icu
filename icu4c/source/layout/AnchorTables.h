@@ -12,6 +12,8 @@
 #include "LEFontInstance.h"
 #include "OpenTypeTables.h"
 
+U_NAMESPACE_BEGIN
+
 struct AnchorTable
 {
     le_uint16  anchorFormat;
@@ -42,7 +44,7 @@ struct Format3AnchorTable : AnchorTable
     void getAnchor(const LEFontInstance *fontInstance, LEPoint &anchor) const;
 };
 
-
+U_NAMESPACE_END
 #endif
 
 

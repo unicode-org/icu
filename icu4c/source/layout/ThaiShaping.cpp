@@ -10,6 +10,8 @@
 #include "OpenTypeTables.h"
 #include "ThaiShaping.h"
 
+U_NAMESPACE_BEGIN
+
 enum {
     CH_SPACE        = 0x0020,
     CH_YAMAKKAN     = 0x0E4E,
@@ -351,4 +353,4 @@ le_bool ThaiMarkFilter::filter(LEGlyphID glyph)
     return false;
 }
 
-
+U_NAMESPACE_END

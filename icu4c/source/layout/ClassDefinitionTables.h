@@ -11,6 +11,8 @@
 #include "LETypes.h"
 #include "OpenTypeTables.h"
 
+U_NAMESPACE_BEGIN
+
 struct ClassDefinitionTable
 {
     le_uint16 classFormat;
@@ -45,4 +47,5 @@ struct ClassDefFormat2Table : ClassDefinitionTable
     le_bool hasGlyphClass(le_int32 glyphClass) const;
 };
 
+U_NAMESPACE_END
 #endif

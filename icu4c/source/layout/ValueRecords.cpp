@@ -14,6 +14,8 @@
 #include "GlyphPositionAdjustments.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 #define Nibble(value, nibble) ((value >> (nibble * 4)) & 0xF)
 #define NibbleBits(value, nibble) (bitsInNibble[Nibble(value, nibble)])
 
@@ -285,3 +287,4 @@ le_int16 ValueRecord::getFieldIndex(ValueFormat valueFormat, ValueRecordField fi
     return getFieldCount(valueFormat & beforeMasks[field]);
 }
 
+U_NAMESPACE_END

@@ -13,6 +13,8 @@
 #include "SegmentArrayProcessor.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 SegmentArrayProcessor::SegmentArrayProcessor()
 {
 }
@@ -51,3 +53,4 @@ void SegmentArrayProcessor::process(LEGlyphID *glyphs, le_int32 *charIndices, le
     }
 }
  
+U_NAMESPACE_END

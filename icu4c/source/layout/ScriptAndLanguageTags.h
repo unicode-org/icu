@@ -14,6 +14,8 @@
 #include "LETypes.h"
 #include "LEScripts.h"
 
+U_NAMESPACE_BEGIN
+
 const LETag zyyyScriptTag = 0x7A797979; /* 'zyyy' (COMMON) */
 const LETag qaaiScriptTag = 0x71616169; /* 'qaai' (INHERITED) */
 const LETag arabScriptTag = 0x61726162; /* 'arab' (ARABIC) */
@@ -61,4 +63,5 @@ const LETag nullScriptTag = 0x00000000; /* ''     (NULL) */
 
 const LETag noLangSysTag  = 0x00000000; /* ''     (NONE) */
 
+U_NAMESPACE_END
 #endif

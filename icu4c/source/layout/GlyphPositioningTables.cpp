@@ -14,6 +14,8 @@
 #include "GlyphPositioningTables.h"
 #include "GlyphPosnLookupProc.h"
 
+U_NAMESPACE_BEGIN
+
 void GlyphPositioningTableHeader::process(LEGlyphID *glyphs, GlyphPositionAdjustment *glyphPositionAdjustments,
                                           const LETag **glyphTags, le_int32 glyphCount, le_bool rightToLeft,
                                           LETag scriptTag, LETag languageTag,
@@ -26,3 +28,4 @@ void GlyphPositioningTableHeader::process(LEGlyphID *glyphs, GlyphPositionAdjust
         glyphDefinitionTableHeader, fontInstance);
 }
 
+U_NAMESPACE_END

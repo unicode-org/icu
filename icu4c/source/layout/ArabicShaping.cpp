@@ -9,6 +9,8 @@
 #include "OpenTypeTables.h"
 #include "ArabicShaping.h"
 
+U_NAMESPACE_BEGIN
+
 enum {
     _c_ = ArabicShaping::ST_NOSHAPE_DUAL,
     _d_ = ArabicShaping::ST_DUAL,
@@ -239,3 +241,4 @@ LEUnicode CharShaper::getToIsolateShape(LEUnicode ch)
     return isolateShapes[ch - 0x0621];
 }
 
+U_NAMESPACE_END

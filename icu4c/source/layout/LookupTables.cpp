@@ -10,6 +10,8 @@
 #include "LookupTables.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 /*
     These are the rolled-up versions of the uniform binary search.
     Someday, if we need more performance, we can un-roll them.
@@ -78,3 +80,5 @@ const LookupSingle *BinarySearchLookupTable::lookupSingle(const LookupSingle *en
 
     return NULL;
 }
+
+U_NAMESPACE_END

@@ -11,6 +11,8 @@
 #ifndef __LESCRIPTS_H
 #define __LESCRIPTS_H
 
+U_NAMESPACE_BEGIN
+
 enum ScriptCodes {
     zyyyScriptCode =  0,
     qaaiScriptCode =  1,
@@ -58,4 +60,5 @@ enum ScriptCodes {
     scriptCodeCount = 42
 };
 
+U_NAMESPACE_END
 #endif

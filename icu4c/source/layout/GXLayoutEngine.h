@@ -16,6 +16,8 @@
 
 #include "MorphTables.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * This class implements layout for QuickDraw GX or Apple Advanced Typograyph (AAT)
  * fonts. A font is a GX or AAT font if it contains a 'mort' table. See Apple's
@@ -96,5 +98,6 @@ protected:
         le_int32 glyphCount, float positions[], LEErrorCode &success);
 };
 
+U_NAMESPACE_END
 #endif
 

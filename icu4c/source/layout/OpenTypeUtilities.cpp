@@ -10,6 +10,8 @@
 #include "OpenTypeUtilities.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 //
 // Finds the high bit by binary searching
 // through the bits in n.
@@ -162,5 +164,4 @@ le_int32 OpenTypeUtilities::search(le_uint16 value, const le_uint16 array[], le_
     return index;
 }
 
-
-
+U_NAMESPACE_END

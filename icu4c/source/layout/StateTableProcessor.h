@@ -13,6 +13,8 @@
 #include "MorphStateTables.h"
 #include "SubtableProcessor.h"
 
+U_NAMESPACE_BEGIN
+
 class StateTableProcessor : public SubtableProcessor
 {
 public:
@@ -43,4 +45,5 @@ protected:
     const MorphStateTableHeader *stateTableHeader;
 };
 
+U_NAMESPACE_END
 #endif

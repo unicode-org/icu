@@ -14,6 +14,8 @@
 #include "MorphTables.h"
 #include "MorphStateTables.h"
 
+U_NAMESPACE_BEGIN
+
 struct ContextualGlyphInsertionHeader : MorphStateTableHeader
 {
 };
@@ -36,4 +38,5 @@ struct LigatureSubstitutionStateEntry : StateEntry
     ByteOffset markedInsertionListOffset;
 };
 
+U_NAMESPACE_END
 #endif

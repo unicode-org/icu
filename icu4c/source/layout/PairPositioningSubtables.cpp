@@ -16,6 +16,8 @@
 #include "OpenTypeUtilities.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 le_uint32 PairPositioningSubtable::process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance) const
 {
     switch(SWAPW(subtableFormat))
@@ -156,3 +158,5 @@ const PairValueRecord *PairPositioningFormat1Subtable::findPairValueRecord(LEGly
 
     return NULL;
 }
+
+U_NAMESPACE_END

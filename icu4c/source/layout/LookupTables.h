@@ -11,6 +11,8 @@
 #include "LETypes.h"
 #include "LayoutTables.h"
 
+U_NAMESPACE_BEGIN
+
 enum LookupTableFormat
 {
     ltfSimpleArray      = 0,
@@ -80,4 +82,5 @@ struct TrimmedArrayLookupTable : LookupTable
     LookupValue valueArray[ANY_NUMBER];
 };
 
+U_NAMESPACE_END
 #endif

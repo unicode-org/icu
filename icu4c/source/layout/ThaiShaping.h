@@ -12,6 +12,8 @@
 #include "LEGlyphFilter.h"
 #include "OpenTypeTables.h"
 
+U_NAMESPACE_BEGIN
+
 class ThaiMarkFilter : public LEGlyphFilter
 {
 private:
@@ -109,6 +111,7 @@ inline ThaiShaping::StateTransition ThaiShaping::getTransition(le_uint8 state, l
     return thaiStateTable[state][currClass];
 }
 
+U_NAMESPACE_END
 #endif
 
 

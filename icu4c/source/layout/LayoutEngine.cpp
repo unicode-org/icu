@@ -21,6 +21,8 @@
 
 #include "DefaultCharMapper.h"
 
+U_NAMESPACE_BEGIN
+
 #define ARRAY_SIZE(array) (sizeof array  / sizeof array[0])
 
 LEUnicode32 DefaultCharMapper::controlChars[] = {
@@ -399,3 +401,4 @@ LayoutEngine::~LayoutEngine() {
     reset();
 }
 
+U_NAMESPACE_END

@@ -14,6 +14,8 @@
 #include "NonContextualGlyphSubst.h"
 #include "NonContextualGlyphSubstProc.h"
 
+U_NAMESPACE_BEGIN
+
 class SingleTableProcessor : public NonContextualGlyphSubstitutionProcessor
 {
 public:
@@ -30,4 +32,5 @@ protected:
     const SingleTableLookupTable *singleTableLookupTable;
 };
 
+U_NAMESPACE_END
 #endif

@@ -10,6 +10,8 @@
 #include "Features.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 const FeatureTable *FeatureListTable::getFeatureTable(le_uint16 featureIndex, LETag *featureTag) const
 {
     if (featureIndex >= SWAPW(featureCount)) {
@@ -23,3 +25,4 @@ const FeatureTable *FeatureListTable::getFeatureTable(le_uint16 featureIndex, LE
     return (const FeatureTable *) ((char *) this + SWAPW(featureTableOffset));
 }
 
+U_NAMESPACE_END

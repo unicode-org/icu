@@ -19,6 +19,8 @@
 #include "GlyphDefinitionTables.h"
 #include "GlyphPositioningTables.h"
 
+U_NAMESPACE_BEGIN
+
 /**
  * This class implements OpenType layout for Arabic fonts. It overrides
  * the characerProcessing method to assign the correct OpenType feature
@@ -194,5 +196,6 @@ protected:
     virtual void adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, LEGlyphID glyphs[], le_int32 glyphCount, float positions[], LEErrorCode &success);
 };
 
+U_NAMESPACE_END
 #endif
 

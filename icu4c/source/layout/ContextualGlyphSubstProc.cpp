@@ -14,6 +14,8 @@
 #include "ContextualGlyphSubstProc.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 ContextualGlyphSubstitutionProcessor::ContextualGlyphSubstitutionProcessor(const MorphSubtableHeader *morphSubtableHeader)
   : StateTableProcessor(morphSubtableHeader)
 {
@@ -69,3 +71,5 @@ ByteOffset ContextualGlyphSubstitutionProcessor::processStateEntry(LEGlyphID *gl
 void ContextualGlyphSubstitutionProcessor::endStateTable()
 {
 }
+
+U_NAMESPACE_END

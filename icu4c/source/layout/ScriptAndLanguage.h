@@ -11,6 +11,8 @@
 #include "LETypes.h"
 #include "OpenTypeTables.h"
 
+U_NAMESPACE_BEGIN
+
 typedef TagAndOffsetRecord LangSysRecord;
 
 struct LangSysTable
@@ -41,5 +43,6 @@ struct ScriptListTable
     const LangSysTable	*findLanguage(LETag scriptTag, LETag languageTag) const;
 };
 
+U_NAMESPACE_END
 #endif
 

@@ -23,6 +23,8 @@
 #include "GlyphSubstLookupProc.h"
 #include "LESwaps.h"
 
+U_NAMESPACE_BEGIN
+
 GlyphSubstitutionLookupProcessor::GlyphSubstitutionLookupProcessor(
         const GlyphSubstitutionTableHeader *glyphSubstitutionTableHeader,
         LETag scriptTag, LETag languageTag, const LEGlyphFilter *filter)
@@ -109,3 +111,4 @@ GlyphSubstitutionLookupProcessor::~GlyphSubstitutionLookupProcessor()
 {
 }
 
+U_NAMESPACE_END

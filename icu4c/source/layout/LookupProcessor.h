@@ -17,6 +17,8 @@
 #include "GlyphPositionAdjustments.h"
 #include "GlyphIterator.h"
 
+U_NAMESPACE_BEGIN
+
 class LookupProcessor
 {
 public:
@@ -51,4 +53,5 @@ protected:
     LETag					requiredFeatureTag;
 };
 
+U_NAMESPACE_END
 #endif

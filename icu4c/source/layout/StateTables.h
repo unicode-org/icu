@@ -11,6 +11,8 @@
 #include "LETypes.h"
 #include "LayoutTables.h"
 
+U_NAMESPACE_BEGIN
+
 struct StateTableHeader
 {
     le_int16 stateSize;
@@ -54,5 +56,6 @@ struct StateEntry
     le_int16    flags;
 };
 
+U_NAMESPACE_END
 #endif
 

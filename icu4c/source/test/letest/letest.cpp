@@ -23,6 +23,8 @@
 
 #include "letest.h"
 
+U_NAMESPACE_USE
+
 UBool compareResults(int32_t testNumber, TestResult *expected, TestResult *actual)
 {
 	/* NOTE: we'll stop on the first failure 'cause once there's one error, it may cascade... */

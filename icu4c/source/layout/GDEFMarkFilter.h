@@ -12,6 +12,8 @@
 #include "LEGlyphFilter.h"
 #include "GlyphDefinitionTables.h"
 
+U_NAMESPACE_BEGIN
+
 class GDEFMarkFilter : public LEGlyphFilter
 {
 private:
@@ -24,5 +26,5 @@ public:
     virtual le_bool accept(LEGlyphID glyph) const;
 };
 
-
+U_NAMESPACE_END
 #endif

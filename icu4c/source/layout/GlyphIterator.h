@@ -13,6 +13,8 @@
 #include "GlyphDefinitionTables.h"
 #include "GlyphPositionAdjustments.h"
 
+U_NAMESPACE_BEGIN
+
 class GlyphIterator
 {
 public:
@@ -65,4 +67,5 @@ private:
     const MarkAttachClassDefinitionTable *markAttachClassDefinitionTable;
 };
 
+U_NAMESPACE_END
 #endif

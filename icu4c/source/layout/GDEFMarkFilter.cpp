@@ -10,6 +10,8 @@
 #include "GDEFMarkFilter.h"
 #include "GlyphDefinitionTables.h"
 
+U_NAMESPACE_BEGIN
+
 GDEFMarkFilter::GDEFMarkFilter(const GlyphDefinitionTableHeader *gdefTable)
 {
     classDefTable = gdefTable->getGlyphClassDefinitionTable();
@@ -26,3 +28,5 @@ le_bool GDEFMarkFilter::accept(LEGlyphID glyph) const
 
     return glyphClass == gcdMarkGlyph;
 }
+
+U_NAMESPACE_END

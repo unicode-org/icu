@@ -13,9 +13,12 @@
 #include "MorphTables.h"
 #include "StateTables.h"
 
+U_NAMESPACE_BEGIN
+
 struct MorphStateTableHeader : MorphSubtableHeader
 {
     StateTableHeader stHeader;
 };
 
+U_NAMESPACE_END
 #endif
