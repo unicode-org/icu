@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestAll.java,v $ 
- * $Date: 2001/09/21 05:12:30 $ 
- * $Revision: 1.11 $
+ * $Date: 2001/10/19 10:15:16 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -115,5 +115,35 @@ public class TestAll extends TestFmwk {
         run( new TestFmwk[] {
             new com.ibm.icu.test.text.TestUScript(),
         });
+    }
+    
+    public void TestNumberFormat() throws Exception {
+        run(new TestFmwk[] {
+            new com.ibm.icu.test.format.IntlTestNumberFormat(),
+            new com.ibm.icu.test.format.IntlTestNumberFormatAPI(),
+            new com.ibm.icu.test.format.NumberFormatTest(),
+            new com.ibm.icu.test.format.NumberFormatRoundTripTest(),
+            new com.ibm.icu.test.format.NumberRegression(),
+            new com.ibm.icu.test.format.NumberFormatRegressionTest(),
+            new com.ibm.icu.test.format.IntlTestDecimalFormatAPI(),
+            new com.ibm.icu.test.format.IntlTestDecimalFormatAPIC(),
+            new com.ibm.icu.test.format.IntlTestDecimalFormatSymbols(),
+            new com.ibm.icu.test.format.IntlTestDecimalFormatSymbolsC()
+                });
+    }
+    
+    public void TestDateFormat() throws Exception {
+        run(new TestFmwk[] {
+            new com.ibm.icu.test.format.DateFormatMiscTests(),
+            new com.ibm.icu.test.format.DateFormatRegressionTest(),
+            new com.ibm.icu.test.format.DateFormatRoundTripTest(),
+            new com.ibm.icu.test.format.DateFormatTest(),
+            new com.ibm.icu.test.format.IntlTestDateFormat(),
+            new com.ibm.icu.test.format.IntlTestDateFormatAPI(),
+            new com.ibm.icu.test.format.IntlTestDateFormatAPIC(),
+            new com.ibm.icu.test.format.IntlTestDateFormatSymbols(),
+            new com.ibm.icu.test.format.IntlTestSimpleDateFormatAPI(),
+            new com.ibm.icu.test.format.DateFormatRegressionTestJ()
+                });
     }
 }
