@@ -113,38 +113,6 @@ utmscale_getTimeScaleValue(UDateTimeScale timeScale, UTimeScaleValue value, UErr
 }
 
 U_CAPI int64_t U_EXPORT2
-utmscale_fromDouble(double otherTime, UDateTimeScale timeScale, UErrorCode *status)
-{
-    /*
-     * NOTE: fromMin and fromMax are marked "volatile" because the
-     * with the gcc compiler, the code which compares otherTime to
-     * fromMin and fromMax seems to fail if data->fromMax is U_INT64_MAX.
-     */
-    const InternalTimeScaleData *data;
-    volatile double fromMin, fromMax;
-
-    if (status == NULL || U_FAILURE(*status)) {
-        return 0;
-    }
-
-    if (timeScale < 0 || timeScale >= UDTS_MAX_SCALE) {
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-
-    data = &timeScaleTable[timeScale];
-    fromMin = (double) data->fromMin;
-    fromMax = (double) data->fromMax;
-
-    if (!(otherTime >= fromMin && otherTime <= fromMax)) {
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-    
-    return ((int64_t)otherTime + data->epochOffset) * data->units;
-}
-
-U_CAPI int64_t U_EXPORT2
 utmscale_fromInt64(int64_t otherTime, UDateTimeScale timeScale, UErrorCode *status)
 {
     const InternalTimeScaleData *data;
@@ -168,42 +136,6 @@ utmscale_fromInt64(int64_t otherTime, UDateTimeScale timeScale, UErrorCode *stat
     return (otherTime + data->epochOffset) * data->units;
 }
 
-U_CAPI double U_EXPORT2
-utmscale_toDouble(int64_t universalTime, UDateTimeScale timeScale, UErrorCode *status)
-{
-    const InternalTimeScaleData *data;
-    
-    if (status == NULL || U_FAILURE(*status)) {
-        return 0;
-    }
-
-    if (timeScale < 0 || timeScale >= UDTS_MAX_SCALE) {
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-
-    data = &timeScaleTable[timeScale];
-
-    if (universalTime < data->toMin || universalTime > data->toMax) {
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-    
-    if (universalTime < 0) {
-        if (universalTime < data->minRound) {
-            return (double) (universalTime + data->unitsRound) / data->units - data->epochOffsetP1;
-        }
-        
-        return (double) (universalTime - data->unitsRound) / data->units - data->epochOffset;
-    }
-    
-    if (universalTime > data->maxRound) {
-        return (double) (universalTime - data->unitsRound) / data->units - data->epochOffsetM1;
-    }
-    
-    return (double) (universalTime + data->unitsRound) / data->units - data->epochOffset;
-}
-    
 U_CAPI int64_t U_EXPORT2
 utmscale_toInt64(int64_t universalTime, UDateTimeScale timeScale, UErrorCode *status)
 {

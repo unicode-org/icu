@@ -427,20 +427,6 @@ U_DRAFT int64_t U_EXPORT2
 /* Conversion to 'universal time scale' */
 
 /**
- * Convert a <code>double</code> datetime from the given time scale to the universal time scale.
- *
- * @param otherTime The <code>double</code> datetime
- * @param timeScale The time scale to convert from
- * @param status The status code. Set to <code>U_ILLEGAL_ARGUMENT_ERROR</code> if the conversion is out of range.
- * 
- * @return The datetime converted to the universal time scale
- *
- * @draft ICU 3.2
- */
-U_DRAFT int64_t U_EXPORT2
-    utmscale_fromDouble(double otherTime, UDateTimeScale timeScale, UErrorCode *status);
-
-/**
  * Convert a <code>int64_t</code> datetime from the given time scale to the universal time scale.
  *
  * @param otherTime The <code>int64_t</code> datetime
@@ -455,20 +441,6 @@ U_DRAFT int64_t U_EXPORT2
     utmscale_fromInt64(int64_t otherTime, UDateTimeScale timeScale, UErrorCode *status);
 
 /* Conversion from 'universal time scale' */
-
-/**
- * Convert a datetime from the universal time scale to a <code>double</code> in the given time scale.
- *
- * @param universal The datetime in the universal time scale
- * @param timeScale The time scale to convert to
- * @param status The status code. Set to <code>U_ILLEGAL_ARGUMENT_ERROR</code> if the conversion is out of range.
- * 
- * @return The datetime converted to the given time scale
- *
- * @draft ICU 3.2
- */
-U_DRAFT double U_EXPORT2
-    utmscale_toDouble(int64_t universalTime, UDateTimeScale timeScale, UErrorCode *status);
 
 /**
  * Convert a datetime from the universal time scale to a <code>int64_t</code> in the given time scale.

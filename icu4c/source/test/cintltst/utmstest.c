@@ -142,16 +142,6 @@ static void epochOffsetTest(int64_t epochOffset, int64_t units, int32_t scale)
     }
 }
 
-static double valueLessThan(double value)
-{
-    return value - 100000.0;
-}
-
-static double valueGreaterThan(double value)
-{
-    return value + 100000.0;
-}
-    
 static void TestEpochOffsets(void)
 {
     UErrorCode status = U_ZERO_ERROR;
@@ -192,62 +182,6 @@ static void TestToLimits(void)
         
         toLimitTest(toMin, fromMin, scale);
         toLimitTest(toMax, fromMax, scale);
-    }
-}
-
-static void TestFromDouble(void)
-{
-    int32_t scale;
-    int64_t result;
-    UErrorCode status = U_ZERO_ERROR;
-    
-    result = utmscale_fromDouble(0, -1, &status);
-    if (status != U_ILLEGAL_ARGUMENT_ERROR) {
-        log_err("utmscale_fromDouble(0, -1, status) did not set status to U_ILLEGAL_ARGUMENT_ERROR.\n");
-    }
-    
-    for (scale = 0; scale < UDTS_MAX_SCALE; scale += 1) {
-        double fromMin, fromMax;
-        
-        status = U_ZERO_ERROR;
-        fromMin = (double) utmscale_getTimeScaleValue(scale, UTSV_FROM_MIN_VALUE, &status);
-        fromMax = (double) utmscale_getTimeScaleValue(scale, UTSV_FROM_MAX_VALUE, &status);
-
-        status = U_ZERO_ERROR;
-        result = utmscale_fromDouble(0, scale, &status);
-        if (status == U_ILLEGAL_ARGUMENT_ERROR) {
-            log_err("utmscale_fromDouble(0, %d, &status) generated U_ILLEGAL_ARGUMENT_ERROR.\n", scale);
-        }
-        
-        status = U_ZERO_ERROR;
-        result = utmscale_fromDouble(fromMin, scale, &status);
-        if (status == U_ILLEGAL_ARGUMENT_ERROR) {
-            log_err("utmscale_fromDouble(fromMin, %d, &status) generated U_ILLEGAL_ARGUMENT_ERROR.\n", scale);
-        }
-
-        status = U_ZERO_ERROR;
-        result = utmscale_fromDouble(valueLessThan(fromMin), scale, &status);
-        if (status != U_ILLEGAL_ARGUMENT_ERROR) {
-            log_err("utmscale_fromDouble(fromMin - 1, %d, &status) did not generate U_ILLEGAL_ARGUMENT_ERROR.\n", scale);
-        }
-            
-        status = U_ZERO_ERROR;
-        result = utmscale_fromDouble(fromMax, scale, &status);
-        if (status == U_ILLEGAL_ARGUMENT_ERROR) {
-            log_err("utmscale_fromDouble(fromMax, %d, &status) generated U_ILLEGAL_ARGUMENT_ERROR.\n", scale);
-        }
-
-        status = U_ZERO_ERROR;
-        result = utmscale_fromDouble(valueGreaterThan(fromMax), scale, &status);
-        if (status != U_ILLEGAL_ARGUMENT_ERROR) {
-            log_err("utmscale_fromDouble(fromMax + 1, %d, &status) didn't generate U_ILLEGAL_ARGUMENT_ERROR.\n", scale);
-        }
-    }
-    
-    status = U_ZERO_ERROR;
-    result = utmscale_fromDouble(0, UDTS_MAX_SCALE, &status);
-    if (status != U_ILLEGAL_ARGUMENT_ERROR) {
-        log_err("utmscale_fromDouble(0, UDTS_MAX_SCALE, &status) did not generate U_ILLEGAL_ARGUMENT_ERROR.\n");
     }
 }
 
@@ -308,67 +242,6 @@ static void TestFromInt64(void)
     result = utmscale_fromInt64(0, UDTS_MAX_SCALE, &status);
     if (status != U_ILLEGAL_ARGUMENT_ERROR) {
         log_err("utmscale_fromInt64(0, UDTS_MAX_SCALE, &status) did not generate U_ILLEGAL_ARGUMENT_ERROR.\n");
-    }
-}
-
-static void TestToDouble(void)
-{
-    int32_t scale;
-    double result;
-    UErrorCode status = U_ZERO_ERROR;
-    
-    result = utmscale_toDouble(0, -1, &status);
-    if (status != U_ILLEGAL_ARGUMENT_ERROR) {
-        log_err("utmscale_toDouble(0, -1, &status) did not generate U_ILLEGAL_ARGUMENT_ERROR.\n");
-    }
-    
-    for (scale = 0; scale < UDTS_MAX_SCALE; scale += 1) {
-        int64_t toMin, toMax;
-        
-        status = U_ZERO_ERROR;
-        toMin = utmscale_getTimeScaleValue(scale, UTSV_TO_MIN_VALUE, &status);
-        toMax = utmscale_getTimeScaleValue(scale, UTSV_TO_MAX_VALUE, &status);
-
-        status = U_ZERO_ERROR;
-        result = utmscale_toDouble(0, scale, &status);
-        if (status == U_ILLEGAL_ARGUMENT_ERROR) {
-            log_err("utmscale_toDouble(0, %d, &status) generated U_ILLEGAL_ARGUMENT_ERROR.\n", scale);
-        }
-        
-        status = U_ZERO_ERROR;
-        result = utmscale_toDouble(toMin, scale, &status);
-        if (status == U_ILLEGAL_ARGUMENT_ERROR) {
-            log_err("utmscale_toDouble(toMin, %d, &status) generated U_ILLEGAL_ARGUMENT_ERROR.\n", scale);
-        }
-            
-        if (toMin > U_INT64_MIN) {
-            status = U_ZERO_ERROR;
-            result = utmscale_toDouble(toMin - 1, scale, &status);
-            if (status != U_ILLEGAL_ARGUMENT_ERROR) {
-                log_err("utmscale_toDouble(toMin - 1, %d, &status) did not generate U_ILLEGAL_ARGUMENT_ERROR.\n", scale);
-            }
-        }
-
-            
-        status = U_ZERO_ERROR;
-        result = utmscale_toDouble(toMax, scale, &status);
-        if (status == U_ILLEGAL_ARGUMENT_ERROR) {
-            log_err("utmscale_toDouble(toMax, %d, &status) generated U_ILLEGAL_ARGUMENT_ERROR.\n", scale);
-        }
-            
-        if (toMax < U_INT64_MAX) {
-            status = U_ZERO_ERROR;
-            result = utmscale_toDouble(toMax + 1, scale, &status);
-            if (status != U_ILLEGAL_ARGUMENT_ERROR) {
-                log_err("utmscale_toDouble(toMax + 1, %d, &status) did not generate U_ILLEGAL_ARGUMENT_ERROR.\n", scale);
-            }
-        }
-    }
-    
-    status = U_ZERO_ERROR;
-    result = utmscale_toDouble(0, UDTS_MAX_SCALE, &status);
-    if (status != U_ILLEGAL_ARGUMENT_ERROR) {
-        log_err("utmscale_toDouble(0, UDTS_MAX_SCALE, &status) did not generate U_ILLEGAL_ARGUMENT_ERROR.\n");
     }
 }
 
@@ -435,9 +308,7 @@ static void TestToInt64(void)
 
 static void TestAPI(void)
 {
-    TestFromDouble();
     TestFromInt64();
-    TestToDouble();
     TestToInt64();
 }
 
