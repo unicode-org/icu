@@ -193,7 +193,7 @@ static UDataInfo dataInfo={
     0,
 
     0x63, 0x6e, 0x76, 0x74,     /* dataFormat="cnvt" */
-    4, 0, 0, 0,                 /* formatVersion -- the new MBCS format needs at least 5.0.0.0 */
+    5, 0, 0, 0,                 /* formatVersion */
     1, 6, 0, 0                  /* dataVersion */
 };
 
@@ -203,7 +203,6 @@ void writeConverterData(UConverterSharedData *mySharedData,
                         const char *cnvDir, 
                         UErrorCode *status)
 {
-  UVersionInfo generalFormatVersion;
   UNewDataMemory *mem = NULL;
   uint32_t sz2;
   
@@ -212,16 +211,7 @@ void writeConverterData(UConverterSharedData *mySharedData,
       return;
     }
 
-  uprv_memcpy(&generalFormatVersion, &dataInfo.formatVersion, sizeof(UVersionInfo));
-  if(mySharedData->staticData->conversionType==UCNV_MBCS && dataInfo.formatVersion[0]<5) {
-    /* adjust the formatVersion for MBCS if necessary */
-    dataInfo.formatVersion[0]=5;
-    dataInfo.formatVersion[1]=0;
-    dataInfo.formatVersion[2]=0;
-    dataInfo.formatVersion[3]=0;
-  }
   mem = udata_create(cnvDir, "cnv", cnvName, &dataInfo, haveCopyright ? U_COPYRIGHT_STRING : NULL, status);
-  uprv_memcpy(&dataInfo.formatVersion, &generalFormatVersion, sizeof(UVersionInfo));
 
   if(U_FAILURE(*status))
     {
@@ -639,17 +629,15 @@ UConverterTable *loadSBCSTableFromFile(FileStream* convFile, UConverterStaticDat
   char storageLine[UCNV_MAX_LINE_TEXT];
   char* line = NULL;
   UConverterTable* myUConverterTable = NULL;
-  UChar unicodeValue = 0xFFFF;
+  UChar unicodeValue = 0xfffe;
   int32_t sbcsCodepageValue = 0, fallback = 0;
   UBool seenFallback = FALSE;
   char codepointBytes[5];
-  unsigned char replacementChar = '\0';
   int32_t i = 0;
   CompactByteArray *myFromUnicode = NULL, *myFromUnicodeFallback = NULL;
 
   
   if (U_FAILURE(*err)) return NULL;
-  replacementChar = myConverter->subChar[0];
   myUConverterTable = (UConverterTable*)uprv_malloc(sizeof(UConverterSBCSTable));
 
   if (myUConverterTable == NULL) 
@@ -725,8 +713,8 @@ UConverterTable *loadSBCSTableFromFile(FileStream* convFile, UConverterStaticDat
   seenFallback = FALSE;
   for (i = 0; i < 256; i++) 
   {
-      if ((myUConverterTable->sbcs.toUnicode[i] == 0xFFFF) &&
-          (myUConverterTable->sbcs.toUnicodeFallback[i] != 0xFFFF))
+      if ((myUConverterTable->sbcs.toUnicode[i] >= 0xfffe) &&
+          (myUConverterTable->sbcs.toUnicodeFallback[i] < 0xfffe))
           
       {
           seenFallback = TRUE;
@@ -835,7 +823,7 @@ UConverterTable *loadEBCDIC_STATEFULTableFromFile(FileStream* convFile, UConvert
   char storageLine[UCNV_MAX_LINE_TEXT];
   char* line = NULL;
   UConverterTable* myUConverterTable = NULL;
-  UChar unicodeValue = 0xFFFF;
+  UChar unicodeValue = 0xfffe;
   int32_t mbcsCodepageValue = '\0';
   char codepointBytes[6];
   int32_t replacementChar = 0x0000, fallback = 0;
@@ -862,7 +850,7 @@ UConverterTable *loadEBCDIC_STATEFULTableFromFile(FileStream* convFile, UConvert
   myFromUnicode = &myUConverterTable->dbcs.fromUnicode;
   ucmp16_init(myFromUnicode, (uint16_t)replacementChar);
   myToUnicode = &myUConverterTable->dbcs.toUnicode;
-  ucmp16_init(myToUnicode, (int16_t)0xFFFD);  
+  ucmp16_init(myToUnicode, (int16_t)0xfffe);  
 
   myFromUnicodeFallback = &myUConverterTable->dbcs.fromUnicodeFallback;
   ucmp16_initBogus(myFromUnicodeFallback);
@@ -907,7 +895,7 @@ UConverterTable *loadEBCDIC_STATEFULTableFromFile(FileStream* convFile, UConvert
               {
                   myConverter->hasFromUnicodeFallback = myConverter->hasToUnicodeFallback = seenFallback = TRUE;
                   ucmp16_init(myFromUnicodeFallback, (uint16_t)replacementChar);
-                  ucmp16_init(myToUnicodeFallback, (uint16_t)0xFFFD);
+                  ucmp16_init(myToUnicodeFallback, (uint16_t)0xfffe);
               }
               ucmp16_set(myToUnicodeFallback, (int16_t)mbcsCodepageValue, unicodeValue);
               ucmp16_set(myFromUnicodeFallback, unicodeValue, (int16_t)mbcsCodepageValue);
@@ -919,8 +907,8 @@ UConverterTable *loadEBCDIC_STATEFULTableFromFile(FileStream* convFile, UConvert
   {
       for (i = 0; i < (uint32_t)ucmp16_getkUnicodeCount(); i++) 
       {
-        if ((ucmp16_getu(myToUnicode, i) == 0xFFFD) &&
-            (ucmp16_getu(myToUnicodeFallback, i) != 0xFFFD))
+        if ((ucmp16_getu(myToUnicode, i) >= 0xfffe) &&
+            (ucmp16_getu(myToUnicodeFallback, i) < 0xfffe))
         {
             seenFallback = TRUE;
             break;
@@ -950,7 +938,7 @@ UConverterTable * loadDBCSTableFromFile(FileStream* convFile, UConverterStaticDa
   char storageLine[UCNV_MAX_LINE_TEXT];
   char* line = NULL;
   UConverterTable* myUConverterTable = NULL;
-  UChar unicodeValue = 0xFFFD;
+  UChar unicodeValue = 0xfffe;
   int32_t dbcsCodepageValue = '\0';
   char codepointBytes[6];
   int32_t replacementChar = 0x0000, fallback = 0;
@@ -976,7 +964,7 @@ UConverterTable * loadDBCSTableFromFile(FileStream* convFile, UConverterStaticDa
   myFromUnicode = &(myUConverterTable->dbcs.fromUnicode);
   ucmp16_init(myFromUnicode, (int16_t)replacementChar);
   myToUnicode = &(myUConverterTable->dbcs.toUnicode);
-  ucmp16_init(myToUnicode, (int16_t)0xFFFD);
+  ucmp16_init(myToUnicode, (int16_t)0xfffe);
   
   myFromUnicodeFallback = &(myUConverterTable->dbcs.fromUnicodeFallback);
   ucmp16_initBogus(myFromUnicodeFallback);
@@ -1020,7 +1008,7 @@ UConverterTable * loadDBCSTableFromFile(FileStream* convFile, UConverterStaticDa
           {
               myConverter->hasFromUnicodeFallback = myConverter->hasToUnicodeFallback = seenFallback = TRUE;
               ucmp16_init(myFromUnicodeFallback, (uint16_t)replacementChar);
-              ucmp16_init(myToUnicodeFallback, (uint16_t)0xFFFD);
+              ucmp16_init(myToUnicodeFallback, (uint16_t)0xfffe);
           }
           ucmp16_set(myToUnicodeFallback, (int16_t)dbcsCodepageValue, unicodeValue);
           ucmp16_set(myFromUnicodeFallback, unicodeValue, (int16_t)dbcsCodepageValue);
@@ -1031,8 +1019,8 @@ UConverterTable * loadDBCSTableFromFile(FileStream* convFile, UConverterStaticDa
   {
       for (i = 0; i < (uint32_t)ucmp16_getkUnicodeCount(); i++) 
       {
-        if ((ucmp16_getu(myToUnicode, i) == 0xFFFD) &&
-            (ucmp16_getu(myToUnicodeFallback, i) != 0xFFFD))
+        if ((ucmp16_getu(myToUnicode, i) >= 0xfffe) &&
+            (ucmp16_getu(myToUnicodeFallback, i) < 0xfffe))
         {
             seenFallback = TRUE;
             break;

@@ -591,7 +591,7 @@ static UChar32 T_UConverter_getNextUChar_ISO_2022(UConverterToUnicodeArgs* args,
   if  (args->sourceLimit < args->source)
     {
       *err = U_ILLEGAL_ARGUMENT_ERROR;
-      return 0xFFFD;
+      return 0xffff;
     }
   
   for (;;)
@@ -621,7 +621,7 @@ static UChar32 T_UConverter_getNextUChar_ISO_2022(UConverterToUnicodeArgs* args,
       args->source++;
     }
   
-  return 0xFFFD;
+  return 0xffff;
 }
 
 static const UConverterImpl _ISO2022Impl={
@@ -711,7 +711,7 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL (UConverterToUnicodeArgs *args,
               targetUniChar = (UChar) ucmp16_getu (myToUnicode, mySourceChar);
 
               /*writing the UniChar to the output stream */
-              if (targetUniChar != missingUCharMarker)
+              if (targetUniChar < 0xfffe)
                 {
                   /*writes the UniChar to the output stream */
                   args->target[myTargetIndex++] = targetUniChar;
@@ -722,8 +722,19 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL (UConverterToUnicodeArgs *args,
                   const char* saveSource = args->source;
                   UChar* saveTarget = args->target;
                   int32_t *saveOffsets = args->offsets;
+                  UConverterCallbackReason reason;
 
-                  *err = U_INVALID_CHAR_FOUND;
+                  if (targetUniChar == 0xfffe)
+                  {
+                    reason = UCNV_UNASSIGNED;
+                    *err = U_INVALID_CHAR_FOUND;
+                  }
+                  else
+                  {
+                    reason = UCNV_ILLEGAL;
+                    *err = U_ILLEGAL_CHAR_FOUND;
+                  }
+
                   if (mySourceChar > 0xff)
                     {
                       args->converter->invalidCharLength = 2;
@@ -740,9 +751,9 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL (UConverterToUnicodeArgs *args,
                   args->source += mySourceIndex;
                   ToU_CALLBACK_MACRO(args->converter->toUContext,
                                      args,
-                                     args->source,
-                                     1, 
-                                     UCNV_UNASSIGNED,
+                                     args->converter->invalidCharBuffer,
+                                     args->converter->invalidCharLength,
+                                     reason,
                                      err);
 
                   args->source = saveSource;
@@ -828,7 +839,7 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverterToUnicodeAr
               targetUniChar = (UChar) ucmp16_getu (myToUnicode, mySourceChar);
 
               /*writing the UniChar to the output stream */
-              if (targetUniChar != missingUCharMarker)
+              if (targetUniChar < 0xfffe)
                 {
                   /*writes the UniChar to the output stream */
                   {
@@ -846,8 +857,19 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverterToUnicodeAr
                   const char* saveSource = args->source;
                   UChar* saveTarget = args->target;
                   int32_t *saveOffsets = args->offsets;
-                  
-                  *err = U_INVALID_CHAR_FOUND;
+                  UConverterCallbackReason reason;
+
+                  if (targetUniChar == 0xfffe)
+                  {
+                    reason = UCNV_UNASSIGNED;
+                    *err = U_INVALID_CHAR_FOUND;
+                  }
+                  else
+                  {
+                    reason = UCNV_ILLEGAL;
+                    *err = U_ILLEGAL_CHAR_FOUND;
+                  }
+
                   if (mySourceChar > 0xFF)
                     {
                       args->converter->invalidCharLength = 2;
@@ -869,7 +891,7 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverterToUnicodeAr
                                      args,
                                      args->source,
                                      1, 
-                                     UCNV_UNASSIGNED,
+                                     reason,
                                      err);                  
                   
                   args->source = saveSource;
@@ -1160,24 +1182,25 @@ UChar32 T_UConverter_getNextUChar_EBCDIC_STATEFUL(UConverterToUnicodeArgs* args,
   /*safe keeps a ptr to the beginning in case we need to step back*/
   
   /*Input boundary check*/
-  if (args->source+1 > args->sourceLimit) 
+  if (args->source >= args->sourceLimit) 
     {
       *err = U_INDEX_OUTOFBOUNDS_ERROR;
-      return 0xFFFD;
+      return 0xffff;
     }
   
   /*Checks to see if with have SI/SO shifters
    if we do we change the mode appropriately and we consume the byte*/
-  if ((*(args->source) == UCNV_SI) || (*(args->source) == UCNV_SO)) 
+  while ((*(args->source) == UCNV_SI) || (*(args->source) == UCNV_SO)) 
     {
       args->converter->mode = *(args->source);
       args->source++;
+      sourceInitial = args->source;
       
       /*Rechecks boundary after consuming the shift sequence*/
-      if (args->source+1 > args->sourceLimit) 
+      if (args->source >= args->sourceLimit) 
         {
           *err = U_INDEX_OUTOFBOUNDS_ERROR;
-          return 0xFFFD;
+          return 0xffff;
         }
     }
   
@@ -1195,7 +1218,7 @@ UChar32 T_UConverter_getNextUChar_EBCDIC_STATEFUL(UConverterToUnicodeArgs* args,
       if ((args->source + 2) > args->sourceLimit) 
         {
           *err = U_TRUNCATED_CHAR_FOUND;
-          return 0xFFFD;
+          return 0xffff;
         }
 
       myUChar = ucmp16_getu( (&(args->converter->sharedData->table->dbcs.toUnicode)),
@@ -1204,28 +1227,34 @@ UChar32 T_UConverter_getNextUChar_EBCDIC_STATEFUL(UConverterToUnicodeArgs* args,
       args->source += 2;
     }
   
-  if (myUChar != 0xFFFD) return myUChar;
+  if (myUChar < 0xfffe) return myUChar;
   else
     {      
-      /*rewinds source*/
       /* HSYS: Check logic here */
-      const char* sourceFinal = args->source;
       UChar* myUCharPtr = &myUChar;
-      
-      *err = U_INVALID_CHAR_FOUND;
-      args->source = sourceInitial;
-      
+      UConverterCallbackReason reason;
+
+      if (myUChar == 0xfffe)
+      {
+        reason = UCNV_UNASSIGNED;
+        *err = U_INVALID_CHAR_FOUND;
+      }
+      else
+      {
+        reason = UCNV_ILLEGAL;
+        *err = U_ILLEGAL_CHAR_FOUND;
+      }
+
       /*It's is very likely that the ErrorFunctor will write to the
        *internal buffers */
       args->target = myUCharPtr;
       args->targetLimit = myUCharPtr + 1;
-      args->source = sourceFinal;
 
       args->converter->fromCharErrorBehaviour(args->converter->toUContext,
                                     args,
-                                    sourceFinal,
-                                    1,
-                                    UCNV_UNASSIGNED,
+                                    sourceInitial,
+                                    args->source - sourceInitial,
+                                    reason,
                                     err);
       
       /*makes the internal caching transparent to the user*/

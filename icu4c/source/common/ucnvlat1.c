@@ -128,7 +128,7 @@ static void   T_UConverter_fromUnicode_LATIN_1 (UConverterFromUnicodeArgs * args
                                      args->converter->invalidUCharLength,
                                      (UChar32) (args->converter->invalidUCharLength == 2 ? 
                                          UTF16_GET_PAIR_VALUE(args->converter->invalidUCharBuffer[0], 
-                                                              args->converter->invalidUCharBuffer[2]) 
+                                                              args->converter->invalidUCharBuffer[1]) 
                                                 : args->converter->invalidUCharBuffer[0]),
                                      reason,
                                      err);
@@ -168,7 +168,7 @@ static UChar32 T_UConverter_getNextUChar_LATIN_1(UConverterToUnicodeArgs* args,
   if (args->source+1 > args->sourceLimit) 
     {
       *err = U_INDEX_OUTOFBOUNDS_ERROR;
-      return 0xFFFD;
+      return 0xffff;
     }
 
   /* make sure that we zero-extend, not sign-extend, the byte */

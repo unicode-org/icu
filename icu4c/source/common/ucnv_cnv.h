@@ -54,8 +54,16 @@ union UConverterTable
 
 U_CDECL_BEGIN
 
+/* this is used in fromUnicode DBCS tables as an "unassigned" marker */
 #define missingCharMarker 0xFFFF
-#define missingUCharMarker 0xFFFD
+
+/*
+ * #define missingUCharMarker 0xfffe
+ *
+ * there are actually two values used in toUnicode tables:
+ * U+fffe "unassigned"
+ * U+ffff "illegal"
+ */
 
 #define FromU_CALLBACK_MACRO(context, args, codeUnits, length, codePoint, reason, err) \
               if (args->converter->fromUCharErrorBehaviour == (UConverterFromUCallback) UCNV_FROM_U_CALLBACK_STOP) break;\
