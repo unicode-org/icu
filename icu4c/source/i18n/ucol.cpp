@@ -1031,7 +1031,7 @@ ucol_cleanup(void)
     */
 
 // CONSTANTS
-static const uint32_t
+static const UChar32
     NON_CJK_OFFSET = 0x110000,
     UCOL_MAX_INPUT = 0x220001; // 2 * Unicode range + 2
 
@@ -6974,7 +6974,7 @@ ucol_setUpLatinOne(UCollator *coll, UErrorCode *status) {
       switch (getCETag(CE)) {
       case EXPANSION_TAG:
         ucol_setText(it, &ch, 1, status);
-        while((CE = ucol_next(it, status)) != UCOL_NULLORDER) {
+        while((int32_t)(CE = ucol_next(it, status)) != UCOL_NULLORDER) {
           if(primShift < 0 || secShift < 0 || terShift < 0) {
             coll->latinOneCEs[ch] = UCOL_BAIL_OUT_CE;
             coll->latinOneCEs[coll->latinOneTableLen+ch] = UCOL_BAIL_OUT_CE;
