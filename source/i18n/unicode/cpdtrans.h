@@ -35,10 +35,8 @@ class TransliteratorRegistry;
  * transliterator.  See the class documentation for {@link
  * Transliterator} for details.
  *
- * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
- *
  * @author Alan Liu
- * @deprecated To be removed after 2002-sep-30.
+ * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
  */
 class U_I18N_API CompoundTransliterator : public Transliterator {
 
@@ -69,7 +67,7 @@ public:
      * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
-     * @deprecated To be removed after 2002-sep-30; use the Transliterator::createInstance factory method.
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     CompoundTransliterator(Transliterator* const transliterators[],
                            int32_t transliteratorCount,
@@ -81,7 +79,7 @@ public:
      * @param dir either UTRANS_FORWARD or UTRANS_REVERSE
      * @param adoptedFilter a global filter for this compound transliterator
      * or NULL
-     * @deprecated To be removed after 2002-sep-30; use the Transliterator::createInstance factory method.
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     CompoundTransliterator(const UnicodeString& id,
                            UTransDirection dir,
@@ -92,39 +90,39 @@ public:
     /**
      * Constructs a new compound transliterator in the FORWARD
      * direction with a NULL filter.
-     * @deprecated To be removed after 2002-sep-30; use the Transliterator::createInstance factory method.
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     CompoundTransliterator(const UnicodeString& id,
                            UParseError& parseError,
                            UErrorCode& status);
     /**
      * Destructor.
-     * @deprecated To be removed after 2002-sep-30.
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     virtual ~CompoundTransliterator();
 
     /**
      * Copy constructor.
-     * @deprecated To be removed after 2002-sep-30; use the Transliterator::createInstance factory method.
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     CompoundTransliterator(const CompoundTransliterator&);
 
     /**
      * Assignment operator.
-     * @deprecated To be removed after 2002-sep-30.
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     CompoundTransliterator& operator=(const CompoundTransliterator&);
 
     /**
      * Transliterator API.
-     * @deprecated To be removed after 2002-sep-30.
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     Transliterator* clone(void) const;
 
     /**
      * Returns the number of transliterators in this chain.
      * @return number of transliterators in this chain.
-     * @deprecated To be removed after 2002-sep-30.
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     virtual int32_t getCount(void) const;
 
@@ -132,20 +130,20 @@ public:
      * Returns the transliterator at the given index in this chain.
      * @param index index into chain, from 0 to <code>getCount() - 1</code>
      * @return transliterator at the given index
-     * @deprecated To be removed after 2002-sep-30.
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     virtual const Transliterator& getTransliterator(int32_t index) const;
 
     /**
      * Sets the transliterators.
-     * @deprecated To be removed after 2002-sep-30.
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     void setTransliterators(Transliterator* const transliterators[],
                             int32_t count);
 
     /**
      * Adopts the transliterators.
-     * @deprecated To be removed after 2002-sep-30.
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     void adoptTransliterators(Transliterator* adoptedTransliterators[],
                               int32_t count);
@@ -160,7 +158,7 @@ public:
      * character to their hex escape representations, \uxxxx or
      * \Uxxxxxxxx.  Unprintable characters are those other than
      * U+000A, U+0020..U+007E.
-     * @deprecated To be removed after 2002-sep-30.
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     virtual UnicodeString& toRules(UnicodeString& result,
                                    UBool escapeUnprintable) const;
@@ -185,7 +183,7 @@ public:
 #endif
     /**
      * Implements {@link Transliterator#handleTransliterate}.
-     * @deprecated To be removed after 2002-sep-30.
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     virtual void handleTransliterate(Replaceable& text, UTransPosition& index,
                                      UBool incremental) const;
@@ -272,8 +270,7 @@ public:
      * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
-     * @deprecated Remove after Aug 2002. Use the constructor that takes
-     * UParseError as one of the paramerters.
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     CompoundTransliterator(const UnicodeString& id,
                            UTransDirection dir,
@@ -284,8 +281,7 @@ public:
      * Constructs a new compound transliterator in the FORWARD
      * direction with a NULL filter.
      * Use Transliterator::createInstance factory method.
-     * @deprecated Remove after Aug 2002. Use the constructor that takes
-     * UParseError as one of the parmeters.
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     CompoundTransliterator(const UnicodeString& id,
                            UErrorCode& status);
@@ -294,8 +290,8 @@ public:
 };
 
 /**
- * Definitions for deprecated API
- * @deprecated Remove after Aug 2002
+ * Definitions for obsolete API
+ * TODO: Remove after Aug 2002
  */
 
 #ifdef U_USE_DEPRECATED_TRANSLITERATOR_API

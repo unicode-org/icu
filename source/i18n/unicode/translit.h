@@ -758,7 +758,7 @@ public:
      * multiple threads.  The filter should not be changed by one
      * thread while another thread may be transliterating.
      *
-     * @deprecated This method will be made NON-VIRTUAL in Aug 2002.
+     * @obsolete ICU 2.4. This method will be made non-virtual in that release.
      */
     virtual void adoptFilter(UnicodeFilter* adoptedFilter);
 #else
@@ -1235,8 +1235,7 @@ public:
      * @see #registerInstance
      * @see #getAvailableIDs
      * @see #getID
-     * @deprecated Remove after Aug 2002 use factory mehod that takes UParseError
-     * and UErrorCode
+     * @obsolete ICU 2.4. Use the factory method that takes UParseError and UErrorCode instead since this API will be removed in that release.
      */
     inline Transliterator* createInstance(const UnicodeString& ID, 
                                           UTransDirection dir=UTRANS_FORWARD,
@@ -1259,7 +1258,7 @@ public:
      * @return a transliterator that is an inverse, not necessarily
      * exact, of this transliterator, or <code>null</code> if no such
      * transliterator is registered.
-     * @deprecated Remove after Aug 2002 use factory mehod that takes UErrorCode
+     * @obsolete ICU 2.4. Use the factory method that takes UErrorCode instead since this API will be removed in that release.
      */
     inline Transliterator* createInverse() const;
 
@@ -1275,8 +1274,7 @@ protected:
      * subclasses with special requirements, such as those overriding
      * filteredTransliterate(), should need this method.
      *
-     * @deprecated the new architecture provides filtering at the top
-     * level.  This method will be removed Aug 2002.
+     * @obsolete ICU 2.4. No need to call this since the new architecture provides filtering at the top level.
      */
     UChar filteredCharAt(const Replaceable& text, int32_t i) const;
 
@@ -1304,8 +1302,8 @@ inline Transliterator::Token Transliterator::pointerToken(void* p) {
 }
 
 /**
- * Definitions for deprecated API
- * @deprecated Remove after Aug 2002
+ * Definitions for obsolete API
+ * TODO: Remove after Aug 2002
  */
 #ifdef U_USE_DEPRECATED_TRANSLITERATOR_API
 

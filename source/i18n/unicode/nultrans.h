@@ -22,7 +22,7 @@ U_NAMESPACE_BEGIN
 /**
  * A transliterator that leaves text unchanged.
  * @author Alan Liu
- * @deprecated To be removed after 2002-sep-30; use Transliterator::createInstance factory method
+ * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
  */
 class U_I18N_API NullTransliterator : public Transliterator {
 
@@ -30,37 +30,37 @@ public:
 
     /**
      * ID for this transliterator.
-     * @deprecated To be removed after 2002-sep-30.
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     static const UChar ID[]; // public for Transliterator
 
     /**
      * ID for this transliterator.
-     * @deprecated To be removed after 2002-sep-30.
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     static const UChar SHORT_ID[]; // public for Transliterator
 
     /**
      * Constructs a transliterator.
-     * @deprecated To be removed after 2002-sep-30.
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     NullTransliterator();
 
     /**
      * Destructor.
-     * @deprecated To be removed after 2002-sep-30.
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     virtual ~NullTransliterator();
 
     /**
      * Transliterator API.
-     * @deprecated To be removed after 2002-sep-30.
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     Transliterator* clone(void) const;
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
-     * @deprecated To be removed after 2002-sep-30.
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
                                      UBool isIncremental) const;

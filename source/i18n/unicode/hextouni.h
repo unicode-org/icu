@@ -29,10 +29,8 @@ U_NAMESPACE_BEGIN
  * or more custom prefix/suffix pairs may be specified.  See
  * applyPattern() for details.
  *
- * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
- *
  * @author Alan Liu
- * @deprecated To be removed after 2002-sep-30, use Transliterator::createInstance factory method.
+ * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
  */
 class U_I18N_API HexToUnicodeTransliterator : public Transliterator {
 
@@ -82,14 +80,14 @@ public:
      * Constructs a transliterator that recognizes the standard
      * prefixes "&#92;u", "&#92;U", "u+", and "U+", each with no
      * suffix.
-     * @deprecated To be removed after 2002-sep-30, use Transliterator::createInstance factory method.
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     HexToUnicodeTransliterator(UnicodeFilter* adoptedFilter = 0);
 
     /**
      * Constructs a custom transliterator with the given pattern.
      * @see #applyPattern
-     * @deprecated To be removed after 2002-sep-30, use Transliterator::createInstance factory method.
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     HexToUnicodeTransliterator(const UnicodeString& pattern,
                                UErrorCode& status);
@@ -98,7 +96,7 @@ public:
      * Constructs a custom transliterator with the given pattern
      * and filter.
      * @see #applyPattern
-     * @deprecated To be removed after 2002-sep-30, use Transliterator::createInstance factory method.
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     HexToUnicodeTransliterator(const UnicodeString& pattern,
                                UnicodeFilter* adoptedFilter,
@@ -106,25 +104,25 @@ public:
 
     /**
      * Destructor.
-     * @deprecated To be removed after 2002-sep-30, use Transliterator dtor directly.
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     virtual ~HexToUnicodeTransliterator();
 
     /**
      * Copy constructor.
-     * @deprecated To be removed after 2002-sep-30, use Transliterator::createInstance factory method
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     HexToUnicodeTransliterator(const HexToUnicodeTransliterator&);
 
     /**
      * Assignment operator.
-     * @deprecated To be removed after 2002-sep-30.
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     HexToUnicodeTransliterator& operator=(const HexToUnicodeTransliterator&);
 
     /**
      * Transliterator API.
-     * @deprecated To be removed after 2002-sep-30.
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     Transliterator* clone(void) const;
 
@@ -153,19 +151,19 @@ public:
      * suffix-char := [^special-char] | '\\' special-char
      * special-char := ';' | '0' | '#' | '\\'
      * </pre>
-     * @deprecated To be removed after 2002-sep-30.
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     void applyPattern(const UnicodeString& thePattern, UErrorCode& status);
 
     /**
      * Return this transliterator's pattern.
-     * @deprecated To be removed after 2002-sep-30.
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     const UnicodeString& toPattern(void) const;
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
-     * @deprecated To be removed after 2002-sep-30.
+     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
      */
     virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
                                      UBool isIncremental) const;
