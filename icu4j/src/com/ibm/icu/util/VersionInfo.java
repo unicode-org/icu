@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/VersionInfo.java,v $ 
- * $Date: 2002/03/08 18:22:59 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/03/08 23:38:26 $ 
+ * $Revision: 1.3 $
  *
  * jitterbug 1741
  *****************************************************************************************
@@ -30,79 +30,81 @@ public final class VersionInfo
 	 * Unicode 1.0 version
 	 * @draft 2.1
 	 */
-	public static final VersionInfo UNICODE_1_0 = getInstance(1, 0, 0, 0);
+	public static final VersionInfo UNICODE_1_0;
 	/**
 	 * Unicode 1.0.1 version
 	 * @draft 2.1
 	 */
-	public static final VersionInfo UNICODE_1_0_1 = getInstance(1, 0, 1, 0);
+	public static final VersionInfo UNICODE_1_0_1;
 	/**
 	 * Unicode 1.1.0 version
 	 * @draft 2.1
 	 */
-	public static final VersionInfo UNICODE_1_1_0 = getInstance(1, 1, 0, 0);
+	public static final VersionInfo UNICODE_1_1_0;
 	/**
 	 * Unicode 1.1.5 version
 	 * @draft 2.1
 	 */
-	public static final VersionInfo UNICODE_1_1_5 = getInstance(1, 1, 5, 0);
+	public static final VersionInfo UNICODE_1_1_5;
 	/**
 	 * Unicode 2.0 version
 	 * @draft 2.1
 	 */
-	public static final VersionInfo UNICODE_2_0 = getInstance(2, 0, 0, 0);	
+	public static final VersionInfo UNICODE_2_0;	
 	/**
 	 * Unicode 2.1.2 version
 	 * @draft 2.1
 	 */
-	public static final VersionInfo UNICODE_2_1_2 = getInstance(2, 1, 2, 0);
+	public static final VersionInfo UNICODE_2_1_2;
 	/**
 	 * Unicode 2.1.5 version
 	 * @draft 2.1
 	 */
-	public static final VersionInfo UNICODE_2_1_5 = getInstance(2, 1, 5, 0);
+	public static final VersionInfo UNICODE_2_1_5;
 	/**
 	 * Unicode 2.1.8 version
 	 * @draft 2.1
 	 */
-	public static final VersionInfo UNICODE_2_1_8 = getInstance(2, 1, 8, 0);
+	public static final VersionInfo UNICODE_2_1_8;
 	/**
 	 * Unicode 2.1.9 version
 	 * @draft 2.1
 	 */
-	public static final VersionInfo UNICODE_2_1_9 = getInstance(2, 1, 9, 0);
+	public static final VersionInfo UNICODE_2_1_9;
 	/**
 	 * Unicode 3.0 version
 	 * @draft 2.1
 	 */
-	public static final VersionInfo UNICODE_3_0 = getInstance(3, 0, 0, 0);
+	public static final VersionInfo UNICODE_3_0;
 	/**
 	 * Unicode 3.0.1 version
 	 * @draft 2.1
 	 */
-	public static final VersionInfo UNICODE_3_0_1 = getInstance(3, 0, 1, 0);
+	public static final VersionInfo UNICODE_3_0_1;
 	/**
 	 * Unicode 3.1.0 version
 	 * @draft 2.1
 	 */
-	public static final VersionInfo UNICODE_3_1_0 = getInstance(3, 1, 0, 0);
+	public static final VersionInfo UNICODE_3_1_0;
 	/**
 	 * Unicode 3.1.1 version
 	 * @draft 2.1
 	 */
-	public static final VersionInfo UNICODE_3_1_1 = getInstance(3, 1, 1, 0);
+	public static final VersionInfo UNICODE_3_1_1;
 	/**
 	 * Unicode 3.2 version
 	 * @draft 2.1
 	 */
-	public static final VersionInfo UNICODE_3_2 = getInstance(3, 2, 0, 0);
+	public static final VersionInfo UNICODE_3_2;
 	
 	// public methods ------------------------------------------------------
 	
     /**
      * Returns an instance of VersionInfo with the argument version.
-     * @param version version String in the format of "major.minor.milli.micro", 
+     * @param version version String in the format of "major.minor.milli.micro"
+     *                or "major.minor.milli" or "major.minor" or "major",
      *                where major, minor, milli, micro are non-negative numbers
+     *                less than 255
      * @return an instance of VersionInfo with the argument version.
      * @exception throws an IllegalArgumentException when the argument version 
      *                is not in the right format
@@ -130,7 +132,7 @@ public final class VersionInfo
     		}
     		index ++;
     	}
-    	if (index != length || count != 3) {
+    	if (index != length || count > 3) {
     		throw new IllegalArgumentException(
     		    "Invalid version number: Insufficient data or string exceeds version format");
     	}
@@ -140,25 +142,17 @@ public final class VersionInfo
     	    }
     	}
     	
-    	int     tempversion = getInt(array[0], array[1], array[2], array[3]);
-    	Integer key         = new Integer(tempversion);
-    	Object  result      = MAP_.get(key);
-    	// checks if it is in the hashmap
-    	if (result == null) {
-    		result = new VersionInfo(tempversion);
-    		MAP_.put(key, result);
-    	}
-    	return (VersionInfo)result;
+    	return getInstance(array[0], array[1], array[2], array[3]);
     }
  
     /** 
      * Returns an instance of VersionInfo with the argument version.
-     * @param major major version, non-negative number.
-     * @param minor minor version, non-negative number.
-     * @param milli milli version, non-negative number.
-     * @param micro micro version, non-negative number.
+     * @param major major version, non-negative number less than 255.
+     * @param minor minor version, non-negative number less than 255.
+     * @param milli milli version, non-negative number less than 255.
+     * @param micro micro version, non-negative number less than 255.
      * @exception throws an IllegalArgumentException when either arguments are
-     *                                     negative 
+     *                                     negative or greater than 255 
      * @draft 2.1
      */
     public static VersionInfo getInstance(int major, int minor, int milli, 
@@ -178,6 +172,45 @@ public final class VersionInfo
 	   	 	MAP_.put(key, result);
     	}
       	return (VersionInfo)result;
+    }
+    
+    /** 
+     * Returns an instance of VersionInfo with the argument version.
+     * @param major major version, non-negative number less than 255.
+     * @param minor minor version, non-negative number less than 255.
+     * @param milli milli version, non-negative number less than 255.
+     * @exception throws an IllegalArgumentException when either arguments are
+     *                                     negative or greater than 255 
+     * @draft 2.1
+     */
+    public static VersionInfo getInstance(int major, int minor, int milli)
+    {
+   	 	return getInstance(major, minor, milli, 0);
+    }
+    
+    /** 
+     * Returns an instance of VersionInfo with the argument version.
+     * @param major major version, non-negative number less than 255.
+     * @param minor minor version, non-negative number less than 255.
+     * @exception throws an IllegalArgumentException when either arguments are
+     *                                     negative or greater than 255 
+     * @draft 2.1
+     */
+    public static VersionInfo getInstance(int major, int minor)
+    {
+   	 	return getInstance(major, minor, 0, 0);
+    }
+    
+    /** 
+     * Returns an instance of VersionInfo with the argument version.
+     * @param major major version, non-negative number less than 255.
+     * @exception throws an IllegalArgumentException when either arguments are
+     *                                     negative or greater than 255 
+     * @draft 2.1
+     */
+    public static VersionInfo getInstance(int major)
+    {
+   	 	return getInstance(major, 0, 0, 0);
     }
  
     /** 
@@ -279,7 +312,7 @@ public final class VersionInfo
     /**
      * Map of singletons
      */
-    private static HashMap MAP_ = new HashMap();
+    private static final HashMap MAP_ = new HashMap();
     /**
      * Last byte mask
      */
@@ -289,6 +322,28 @@ public final class VersionInfo
      */
     private static final String INVALID_VERSION_NUMBER_ = 
         "Invalid version number: Version number may be negative or greater than 255";
+        
+    // static declaration ------------------------------------------------
+    
+    /**
+     * Initialize versions only after MAP_ has been created
+     */
+    static {
+    	UNICODE_1_0   = getInstance(1, 0, 0, 0);
+		UNICODE_1_0_1 = getInstance(1, 0, 1, 0);
+		UNICODE_1_1_0 = getInstance(1, 1, 0, 0);
+		UNICODE_1_1_5 = getInstance(1, 1, 5, 0);
+		UNICODE_2_0   = getInstance(2, 0, 0, 0);	
+		UNICODE_2_1_2 = getInstance(2, 1, 2, 0);
+		UNICODE_2_1_5 = getInstance(2, 1, 5, 0);
+		UNICODE_2_1_8 = getInstance(2, 1, 8, 0);
+		UNICODE_2_1_9 = getInstance(2, 1, 9, 0);
+		UNICODE_3_0   = getInstance(3, 0, 0, 0);
+		UNICODE_3_0_1 = getInstance(3, 0, 1, 0);
+		UNICODE_3_1_0 = getInstance(3, 1, 0, 0);
+		UNICODE_3_1_1 = getInstance(3, 1, 1, 0);
+		UNICODE_3_2   = getInstance(3, 2, 0, 0);
+    }
     
     // private constructor -----------------------------------------------
     

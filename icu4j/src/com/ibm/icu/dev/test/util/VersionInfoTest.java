@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/VersionInfoTest.java,v $ 
-* $Date: 2002/03/08 00:24:09 $ 
-* $Revision: 1.2 $
+* $Date: 2002/03/08 23:38:26 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -60,18 +60,18 @@ public final class VersionInfoTest extends TestFmwk
     	}
     	try {
     		version = VersionInfo.getInstance("2");
-    		errln("\"2\" should produce an exception");
     	} catch (RuntimeException e) {
+    		errln("\"2\" should produce a valid version");
     	}
     	try {
     		version = VersionInfo.getInstance("2.0");
-    		errln("\"2.0\" should produce an exception");
     	} catch (RuntimeException e) {
+    		errln("\"2.0\" should produce a valid version");
     	}
     	try {
     		version = VersionInfo.getInstance("2.0.0");
-    		errln("\"2.0.0\" should produce an exception");
     	} catch (RuntimeException e) {
+    		errln("\"2.0.0\" should produce a valid version");
     	}
     	try {
     		version = VersionInfo.getInstance("-2.0.0");
@@ -80,7 +80,7 @@ public final class VersionInfoTest extends TestFmwk
     	}
     	try {
     		version = VersionInfo.getInstance("2.300.0");
-    		errln("\"2.0.0\" should produce an exception");
+    		errln("\"2.300.0\" should produce an exception");
     	} catch (RuntimeException e) {
     	}
     	try {
@@ -91,7 +91,7 @@ public final class VersionInfoTest extends TestFmwk
     	try {
     		version = VersionInfo.getInstance("2.100.100.100");
     	} catch (RuntimeException e) {
-    		errln("\"2.0.0.0\" should produce an valid version");
+    		errln("\"2.100.100.100\" should produce an valid version");
     	}
     	try {
     		version = VersionInfo.getInstance(-2, 0, 0, 0);
@@ -121,16 +121,34 @@ public final class VersionInfoTest extends TestFmwk
     	    unicode10.compareTo(unicode10again) != 0) {
     	    errln("Creation by string and int should produce the same VersionInfo 1.0.0.0");
     	}
+    	VersionInfo unicode1 = VersionInfo.getInstance("1");
+    	VersionInfo unicode1again = VersionInfo.getInstance("1.0");
+    	if (unicode1 != unicode10 || !unicode1.equals(unicode1again) ||
+    	    unicode1.compareTo(unicode1again) != 0) {
+    	    errln("Creation by string and int should produce the same VersionInfo 1.0.0.0");
+    	}
     	VersionInfo unicode20 = VersionInfo.getInstance(2, 0, 0, 0);
     	VersionInfo unicode20again = VersionInfo.getInstance(2, 0, 0, 0);
     	if (unicode20 != unicode20again || !unicode20.equals(unicode20again) ||
     	    unicode20.compareTo(unicode20again) != 0) {
     	    errln("Creation by int should produce the same VersionInfo 2.0.0.0");
     	}
+    	VersionInfo unicode2 = VersionInfo.getInstance(2);
+    	VersionInfo unicode2again = VersionInfo.getInstance(2, 0);
+    	if (unicode20 != unicode2 || !unicode2.equals(unicode2again) ||
+    	    unicode2.compareTo(unicode2again) != 0) {
+    	    errln("Creation by int should produce the same VersionInfo 2.0.0.0");
+    	}
     	VersionInfo unicode30 = VersionInfo.getInstance("3.0.0.0");
     	VersionInfo unicode30again = VersionInfo.getInstance("3.0.0.0");
     	if (unicode30 != unicode30again || !unicode30.equals(unicode30again) ||
     	    unicode30.compareTo(unicode30again) != 0) {
+    	    errln("Creation by string should produce the same VersionInfo 3.0.0.0");
+    	}
+    	VersionInfo unicode3 = VersionInfo.getInstance("3");
+    	VersionInfo unicode3again = VersionInfo.getInstance(3, 0);
+    	if (unicode3 != unicode30 || !unicode3.equals(unicode3again) ||
+    	    unicode3.compareTo(unicode3again) != 0) {
     	    errln("Creation by string should produce the same VersionInfo 3.0.0.0");
     	}
     	if (unicode10 == unicode20 || unicode10.equals(unicode20) ||
