@@ -1116,7 +1116,7 @@ static char * getCEs(char *str, uint32_t *ces, UErrorCode *status) {
 * Testing the CEs returned by the iterator
 */
 static void TestCEs() {
-    char        dir[100];        
+    char        dir[150];        
     FileStream *file = NULL;
     char        line[300];
     char       *pDir = dir;
@@ -1131,25 +1131,19 @@ static void TestCEs() {
         return;
     }
 
-    uprv_strcpy(pDir, u_getDataDirectory());
+    uprv_strcpy(pDir, getenv("ICU_DATA"));
     pDir += uprv_strlen(pDir);
-    
-    if (*(pDir - 1) == U_FILE_SEP_CHAR) {
-        pDir --;
-        *pDir = 0;
+    if (*(pDir - 1) != U_FILE_SEP_CHAR) {
+        *(pDir - 1)= U_FILE_SEP_CHAR;
     }
 
-    pDir = uprv_strrchr(dir, U_FILE_SEP_CHAR);
-    *pDir = 0;
-    pDir = uprv_strrchr(dir, U_FILE_SEP_CHAR);
-    *pDir = 0;
-
+    /* dirty : because some platforms might not return the full path */
 #ifdef XP_MAC
-    uprv_strcpy(pDir, ":data:unidata:FractionalUCA.txt");
+    uprv_strcpy(pDir, "..:..:data:unidata:FractionalUCA.txt");
 #elif defined(WIN32) || defined(OS2)
-    uprv_strcpy(pDir, "\\data\\unidata\\FractionalUCA.txt");
+    uprv_strcpy(pDir, "..\\..\\data\\unidata\\FractionalUCA.txt");
 #else 
-    uprv_strcpy(pDir, "/data/unidata/FractionalUCA.txt");
+    uprv_strcpy(pDir, "../../data/unidata/FractionalUCA.txt");
 #endif
     
     file = T_FileStream_open(dir, "r");
@@ -1263,12 +1257,7 @@ static void TestDiscontiguos() {
         int    strlen = u_unescape(src[count], str, 20);
         UChar *s;
 
-        ucol_setText(iter, str, strlen, &status);
-        if (count == 0x13)
-            printf("count %x\n", count);
-        else 
-            printf("count %x\n", count);
-        
+        ucol_setText(iter, str, strlen, &status);        
         if (U_FAILURE(status)) {
             log_err("Error opening collation iterator\n");
             return;
