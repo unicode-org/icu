@@ -623,6 +623,7 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
   uint32_t strength = 0;
   uint32_t chOffset = 0; uint32_t chLen = 0;
   uint32_t exOffset = 0; uint32_t exLen = 0;
+  uint32_t prefixOffset = 0; uint32_t prefixLen = 0;
   uint32_t firstEx = 0;
 /*  uint32_t rExpsLen = 0; */
   uint32_t firstLen = 0;
@@ -651,6 +652,7 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
     
     while ((current = ucol_tok_parseNextToken(&src, &strength,
                       &chOffset, &chLen, &exOffset, &exLen,
+                      &prefixOffset, &prefixLen,
                       &specs, startOfRules,&parseError, status)) != NULL) {
       startOfRules = FALSE;
       varT = (UBool)((specs & UCOL_TOK_VARIABLE_TOP) != 0);
@@ -945,6 +947,7 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, const char *refName,
   uint32_t strength = 0;
   uint32_t chOffset = 0; uint32_t chLen = 0;
   uint32_t exOffset = 0; uint32_t exLen = 0;
+  uint32_t prefixOffset = 0; uint32_t prefixLen = 0;
 /*  uint32_t rExpsLen = 0; */
   uint32_t firstLen = 0, secondLen = 0;
   UBool varT = FALSE; UBool top_ = TRUE;
@@ -978,6 +981,7 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, const char *refName,
 
     while ((current = ucol_tok_parseNextToken(&src, &strength,
                       &chOffset, &chLen, &exOffset, &exLen,
+                      &prefixOffset, &prefixLen,
                       &specs, startOfRules, &parseError,status)) != NULL) {
       startOfRules = FALSE;
       varT = (UBool)((specs & UCOL_TOK_VARIABLE_TOP) != 0);
@@ -1032,6 +1036,7 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
   int32_t result = 0;
   uint32_t chOffset = 0; uint32_t chLen = 0;
   uint32_t exOffset = 0; uint32_t exLen = 0;
+  uint32_t prefixOffset = 0; uint32_t prefixLen = 0;
   uint32_t oldOffset = 0;
 
   /* uint32_t rExpsLen = 0; */
@@ -1063,6 +1068,7 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
 
     while ((current = ucol_tok_parseNextToken(&src, &strength,
                       &chOffset, &chLen, &exOffset, &exLen,
+                      &prefixOffset, &prefixLen,
                       &specs, startOfRules, &parseError,status)) != NULL) {
       startOfRules = FALSE;
       varT = (UBool)((specs & UCOL_TOK_VARIABLE_TOP) != 0);
@@ -2247,10 +2253,28 @@ static void TestHangulTailoring() {
         "<<< \\u6A9F <<< \\u73C8 <<< \\u7B33 <<< \\u801E <<< \\u8238 <<< \\u846D <<< \\u8B0C";
 
 
-    log_verbose("Using start of korean rules\n");
-    genericRulesStarter(rules, koreanData, sizeof(koreanData)/sizeof(koreanData[0]));
-    log_verbose("Using ko__LOTUS locale\n");
-    genericLocaleStarter("ko__LOTUS", koreanData, sizeof(koreanData)/sizeof(koreanData[0]));
+  UErrorCode status = U_ZERO_ERROR;
+  UChar rlz[2048] = { 0 };
+  uint32_t rlen = u_unescape(rules, rlz, 2048);
+
+  UCollator *coll = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT,NULL, &status);
+
+  log_verbose("Using start of korean rules\n");
+
+  if(U_SUCCESS(status)) {
+    genericOrderingTest(coll, koreanData, sizeof(koreanData)/sizeof(koreanData[0]));
+  } else {
+    log_err("Unable to open collator with rules %s\n", rules);
+  }
+
+  log_verbose("Setting jamoSpecial to TRUE and testing once more\n");
+  ((UCATableHeader *)coll->image)->jamoSpecial = TRUE; // don't try this at home
+  genericOrderingTest(coll, koreanData, sizeof(koreanData)/sizeof(koreanData[0]));
+
+  ucol_close(coll);
+
+  log_verbose("Using ko__LOTUS locale\n");
+  genericLocaleStarter("ko__LOTUS", koreanData, sizeof(koreanData)/sizeof(koreanData[0]));
 }
 
 static void TestCompressOverlap() {
@@ -2647,6 +2671,8 @@ static void TestVariableTopSetting() {
   uint32_t oldChLen = 0;
   uint32_t oldExOffset = 0; 
   uint32_t oldExLen = 0;
+  uint32_t prefixOffset = 0;
+  uint32_t prefixLen = 0;
 
   UBool startOfRules = TRUE;
   UColTokenParser src;
@@ -2676,6 +2702,7 @@ static void TestVariableTopSetting() {
 
     while ((current = ucol_tok_parseNextToken(&src, &strength,
                       &chOffset, &chLen, &exOffset, &exLen,
+                      &prefixOffset, &prefixLen,
                       &specs, startOfRules, &parseError,&status)) != NULL) {
       startOfRules = FALSE;
       if(0) {
