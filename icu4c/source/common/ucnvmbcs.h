@@ -18,6 +18,7 @@
 #define __UCNVMBCS_H__
 
 #include "unicode/utypes.h"
+#include "unicode/ucnv.h"
 
 /* MBCS converter data and state -------------------------------------------- */
 
@@ -202,5 +203,12 @@ U_CFUNC int32_t
 _MBCSSingleFromUChar32(UConverterSharedData *sharedData,
                        UChar32 c,
                        UBool useFallback);
+
+/**
+ * SBCS, DBCS, and EBCDIC_STATEFUL are replaced by MBCS, but
+ * we cheat a little about the type, returning the old types if appropriate.
+ */
+U_CFUNC UConverterType
+_MBCSGetType(const UConverter* converter);
 
 #endif
