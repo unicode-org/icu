@@ -15,8 +15,13 @@
 #include "cintltst.h"
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
+#include "unicode/ustring.h"
 #include "unicode/ubidi.h"
+#include "unicode/ushape.h"
+#include "cmemory.h"
 #include "cbiditst.h"
+
+#define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
 
 /* prototypes ---------------------------------------------------------------*/
 
@@ -46,6 +51,9 @@ static char *levelString;
 static UChar *
 getStringFromDirProps(const uint8_t *dirProps, UTextOffset length);
 
+extern void
+doArabicShapingTest();
+
 static void
 printUnicode(const UChar *s, int32_t length, const UBiDiLevel *levels);
 
@@ -55,6 +63,7 @@ extern void
 addComplexTest(TestNode** root) {
     addTest(root, doBiDiTest, "complex/bidi");
     addTest(root, doInverseBiDiTest, "complex/invbidi");
+    addTest(root, doArabicShapingTest, "complex/arabic-shaping");
 }
 
 extern void
@@ -366,7 +375,7 @@ static const UChar
     string3[]={ 0x31, 0x32, 0x33, 0x20, 0x5d0, 0x5d1, 0x5d2, 0x20, 0x34, 0x35, 0x36 },
     string4[]={ 0x61, 0x62, 0x20, 0x61, 0x62, 0x20, 0x661, 0x662 };
 
-#define STRING_TEST_CASE(s) { (s), sizeof(s)/U_SIZEOF_UCHAR }
+#define STRING_TEST_CASE(s) { (s), LENGTHOF(s) }
 
 static const struct {
     const UChar *s;
@@ -392,14 +401,14 @@ doInverseBiDiTest() {
         return;
     }
 
-    log_info("inverse BiDi: testInverseBiDi(L) with %u test cases ---\n", sizeof(testCases)/sizeof(testCases[0]));
-    for(i=0; i<sizeof(testCases)/sizeof(testCases[0]); ++i) {
+    log_info("inverse BiDi: testInverseBiDi(L) with %u test cases ---\n", LENGTHOF(testCases));
+    for(i=0; i<LENGTHOF(testCases); ++i) {
         errorCode=U_ZERO_ERROR;
         testInverseBiDi(pBiDi, testCases[i].s, testCases[i].length, 0, &errorCode);
     }
 
-    log_info("inverse BiDi: testInverseBiDi(R) with %u test cases ---\n", sizeof(testCases)/sizeof(testCases[0]));
-    for(i=0; i<sizeof(testCases)/sizeof(testCases[0]); ++i) {
+    log_info("inverse BiDi: testInverseBiDi(R) with %u test cases ---\n", LENGTHOF(testCases));
+    for(i=0; i<LENGTHOF(testCases); ++i) {
         errorCode=U_ZERO_ERROR;
         testInverseBiDi(pBiDi, testCases[i].s, testCases[i].length, 1, &errorCode);
     }
@@ -459,7 +468,7 @@ testInverseBiDi(UBiDi *pBiDi, const UChar *src, int32_t srcLength, UBiDiLevel di
         /* convert visual to logical */
         ubidi_setInverse(pBiDi, TRUE);
         ubidi_setPara(pBiDi, src, srcLength, 0, NULL, pErrorCode);
-        logicalLength=ubidi_writeReordered(pBiDi, logicalDest, sizeof(logicalDest)/U_SIZEOF_UCHAR,
+        logicalLength=ubidi_writeReordered(pBiDi, logicalDest, LENGTHOF(logicalDest),
                                            UBIDI_DO_MIRRORING|UBIDI_INSERT_LRM_FOR_NUMERIC, pErrorCode);
         log_verbose("  v ");
         printUnicode(src, srcLength, ubidi_getLevels(pBiDi, pErrorCode));
@@ -468,13 +477,13 @@ testInverseBiDi(UBiDi *pBiDi, const UChar *src, int32_t srcLength, UBiDiLevel di
         /* convert back to visual LTR */
         ubidi_setInverse(pBiDi, FALSE);
         ubidi_setPara(pBiDi, logicalDest, logicalLength, 0, NULL, pErrorCode);
-        visualLength=ubidi_writeReordered(pBiDi, visualDest, sizeof(visualDest)/U_SIZEOF_UCHAR,
+        visualLength=ubidi_writeReordered(pBiDi, visualDest, LENGTHOF(visualDest),
                                           UBIDI_DO_MIRRORING|UBIDI_REMOVE_BIDI_CONTROLS, pErrorCode);
     } else {
         log_verbose("inverse BiDi: testInverseBiDi(R)\n");
 
         /* reverse visual from RTL to LTR */
-        ltrLength=ubidi_writeReverse(src, srcLength, visualLTR, sizeof(visualLTR)/U_SIZEOF_UCHAR, 0, pErrorCode);
+        ltrLength=ubidi_writeReverse(src, srcLength, visualLTR, LENGTHOF(visualLTR), 0, pErrorCode);
         log_verbose("  vr");
         printUnicode(src, srcLength, NULL);
         log_verbose("\n");
@@ -482,7 +491,7 @@ testInverseBiDi(UBiDi *pBiDi, const UChar *src, int32_t srcLength, UBiDiLevel di
         /* convert visual RTL to logical */
         ubidi_setInverse(pBiDi, TRUE);
         ubidi_setPara(pBiDi, visualLTR, ltrLength, 0, NULL, pErrorCode);
-        logicalLength=ubidi_writeReordered(pBiDi, logicalDest, sizeof(logicalDest)/U_SIZEOF_UCHAR,
+        logicalLength=ubidi_writeReordered(pBiDi, logicalDest, LENGTHOF(logicalDest),
                                            UBIDI_DO_MIRRORING|UBIDI_INSERT_LRM_FOR_NUMERIC, pErrorCode);
         log_verbose("  vl");
         printUnicode(visualLTR, ltrLength, ubidi_getLevels(pBiDi, pErrorCode));
@@ -491,7 +500,7 @@ testInverseBiDi(UBiDi *pBiDi, const UChar *src, int32_t srcLength, UBiDiLevel di
         /* convert back to visual RTL */
         ubidi_setInverse(pBiDi, FALSE);
         ubidi_setPara(pBiDi, logicalDest, logicalLength, 0, NULL, pErrorCode);
-        visualLength=ubidi_writeReordered(pBiDi, visualDest, sizeof(visualDest)/U_SIZEOF_UCHAR,
+        visualLength=ubidi_writeReordered(pBiDi, visualDest, LENGTHOF(visualDest),
                                           UBIDI_DO_MIRRORING|UBIDI_REMOVE_BIDI_CONTROLS|UBIDI_OUTPUT_REVERSE, pErrorCode);
     }
     log_verbose("  l ");
@@ -514,6 +523,104 @@ testInverseBiDi(UBiDi *pBiDi, const UChar *src, int32_t srcLength, UBiDiLevel di
         log_err("inverse BiDi: transformation visual->logical->visual did not roundtrip the text;\n"
                 "                 turn on verbose mode to see details\n");
     }
+}
+
+/* arabic shaping ----------------------------------------------------------- */
+
+extern void
+doArabicShapingTest() {
+    static const UChar
+    source[]={
+        0x31,   /* en:1 */
+        0x627,  /* arabic:alef */
+        0x32,   /* en:2 */
+        0x6f3,  /* an:3 */
+        0x61,   /* latin:a */
+        0x34,   /* en:4 */
+        0
+    }, en2an[]={
+        0x661, 0x627, 0x662, 0x6f3, 0x61, 0x664, 0
+    }, an2en[]={
+        0x31, 0x627, 0x32, 0x33, 0x61, 0x34, 0
+    }, logical_alen2an_init_lr[]={
+        0x31, 0x627, 0x662, 0x6f3, 0x61, 0x34, 0
+    }, logical_alen2an_init_al[]={
+        0x6f1, 0x627, 0x6f2, 0x6f3, 0x61, 0x34, 0
+    }, reverse_alen2an_init_lr[]={
+        0x661, 0x627, 0x32, 0x6f3, 0x61, 0x34, 0
+    }, reverse_alen2an_init_al[]={
+        0x6f1, 0x627, 0x32, 0x6f3, 0x61, 0x6f4, 0
+    };
+    UChar dest[8];
+    UErrorCode errorCode;
+    int32_t length;
+
+    /* test number shaping */
+
+    /* european->arabic */
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(source, LENGTHOF(source),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_DIGITS_EN2AN|U_SHAPE_DIGIT_TYPE_AN,
+                         &errorCode);
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(source) || uprv_memcmp(dest, en2an, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(en2an)\n");
+    }
+
+    /* arabic->european */
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(source, -1,
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_DIGITS_AN2EN|U_SHAPE_DIGIT_TYPE_AN_EXTENDED,
+                         &errorCode);
+    if(U_FAILURE(errorCode) || length!=u_strlen(source) || uprv_memcmp(dest, an2en, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(an2en)\n");
+    }
+
+    /* european->arabic with context, logical order, initial state not AL */
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(source, LENGTHOF(source),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_DIGITS_ALEN2AN_INIT_LR|U_SHAPE_DIGIT_TYPE_AN,
+                         &errorCode);
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(source) || uprv_memcmp(dest, logical_alen2an_init_lr, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(logical_alen2an_init_lr)\n");
+    }
+
+    /* european->arabic with context, logical order, initial state AL */
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(source, LENGTHOF(source),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_DIGITS_ALEN2AN_INIT_AL|U_SHAPE_DIGIT_TYPE_AN_EXTENDED,
+                         &errorCode);
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(source) || uprv_memcmp(dest, logical_alen2an_init_al, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(logical_alen2an_init_al)\n");
+    }
+
+    /* european->arabic with context, reverse order, initial state not AL */
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(source, LENGTHOF(source),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_DIGITS_ALEN2AN_INIT_LR|U_SHAPE_DIGIT_TYPE_AN|U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
+                         &errorCode);
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(source) || uprv_memcmp(dest, reverse_alen2an_init_lr, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(reverse_alen2an_init_lr)\n");
+    }
+
+    /* european->arabic with context, reverse order, initial state AL */
+    errorCode=U_ZERO_ERROR;
+    length=u_shapeArabic(source, LENGTHOF(source),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_DIGITS_ALEN2AN_INIT_AL|U_SHAPE_DIGIT_TYPE_AN_EXTENDED|U_SHAPE_TEXT_DIRECTION_VISUAL_LTR,
+                         &errorCode);
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(source) || uprv_memcmp(dest, reverse_alen2an_init_al, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(reverse_alen2an_init_al)\n");
+    }
+
+    /* test noop */
+    /* test illegal arguments */
+    /* test that letter shaping sets "unsupported" */
+    /* ### to be done */
 }
 
 /* helpers ------------------------------------------------------------------ */
