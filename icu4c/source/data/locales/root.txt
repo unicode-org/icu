@@ -13,11 +13,25 @@
 
 root {
     Version { "3.1.1" }
+
+    // each variant name that occurs in locales should be listed with %% and a display string
     "%%EURO" { "Euro" }         // Euro variant display name
     "%%B"    { "Bokm\u00e5l" }  // Norwegian variant display name
     "%%NY"   { "Nynorsk" }      // Norwegian variant display name
-    "%%AL" { "\u00C5land" } // Aland variant display name
+    "%%AL"   { "\u00C5land" }   // Aland variant display name
+
+    "%%POSIX" { "POSIX" }
+
+    // variants for collation (traditional may also be used for traditional chinese)
+    "%%PHONEBOOK" { "Phonebook Order" }
+    "%%PINYIN" { "Pinyin Order" }
+    "%%TRADITIONAL" { "Traditional" }
+    "%%STROKE" { "Stroke Order" }
+    "%%DIRECT" { "Direct Order" }
+
+    // this is a special tag that makes genrb include UCARules.txt for collation
     "%%UCARULES" { "UCARules.txt"} // UCARules
+
     // no collation elements any more
     // CollationElements { 
     //	    Version { "1.0" }
