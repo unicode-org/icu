@@ -792,7 +792,9 @@ static const UConverterImpl _UTF7Impl={
 
     NULL,
     _UTF7GetName,
-    NULL /* we don't need writeSub() because we never call a callback at fromUnicode() */
+    NULL, /* we don't need writeSub() because we never call a callback at fromUnicode() */
+    NULL,
+    ucnv_getCompleteUnicodeSet
 };
 
 static const UConverterStaticData _UTF7StaticData={
@@ -1527,7 +1529,9 @@ static const UConverterImpl _IMAPImpl={
 
     NULL,
     NULL,
-    NULL /* we don't need writeSub() because we never call a callback at fromUnicode() */
+    NULL, /* we don't need writeSub() because we never call a callback at fromUnicode() */
+    NULL,
+    ucnv_getCompleteUnicodeSet
 };
 
 static const UConverterStaticData _IMAPStaticData={

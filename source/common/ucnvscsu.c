@@ -2198,7 +2198,8 @@ static const UConverterImpl _SCSUImpl={
     NULL,
     _SCSUGetName,
     _SCSUWriteSub,
-    _SCSUSafeClone
+    _SCSUSafeClone,
+    ucnv_getCompleteUnicodeSet
 };
 
 static const UConverterStaticData _SCSUStaticData={

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2002, International Business Machines
+*   Copyright (C) 1999-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
  *  ucnv.h:
@@ -50,6 +50,14 @@ typedef struct UConverter UConverter;
 #include "unicode/utypes.h"
 #include "unicode/ucnv_err.h"
 #include "unicode/uenum.h"
+
+#ifndef __USET_H__
+
+/* see unicode/uset.h */
+struct USet;
+typedef struct USet USet;
+
+#endif
 
 U_CDECL_BEGIN
 
@@ -678,6 +686,19 @@ U_CAPI void U_EXPORT2
 ucnv_getStarters(const UConverter* converter, 
                  UBool starters[256],
                  UErrorCode* err);
+
+/** ### TODO @draft ICU 2.6 */
+typedef enum UConverterUnicodeSet {
+    UCNV_ROUNDTRIP_SET,
+    UCNV_SET_COUNT
+} UConverterUnicodeSet;
+
+/** ### TODO @draft ICU 2.6 */
+U_CAPI void U_EXPORT2
+ucnv_getUnicodeSet(const UConverter *cnv,
+                   USet *set,
+                   UConverterUnicodeSet which,
+                   UErrorCode *pErrorCode);
 
 /**
  * Gets the current calback function used by the converter when an illegal

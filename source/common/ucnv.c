@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2001, International Business Machines
+*   Copyright (C) 1998-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -24,6 +24,7 @@
 #include "unicode/ures.h"
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
+#include "unicode/uset.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "umutex.h"
@@ -667,6 +668,34 @@ ucnv_getPlatform (const UConverter * converter,
         return UCNV_UNKNOWN;
 
     return (UConverterPlatform)converter->sharedData->staticData->platform;
+}
+
+/** ### TODO @draft ICU 2.6 */
+U_CAPI void U_EXPORT2
+ucnv_getUnicodeSet(const UConverter *cnv,
+                   USet *set,
+                   UConverterUnicodeSet which,
+                   UErrorCode *pErrorCode) {
+    /* argument checking */
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return;
+    }
+    if(cnv==NULL || set==NULL || which<UCNV_ROUNDTRIP_SET || UCNV_SET_COUNT<=which) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
+    /* does this converter support this function? */
+    if(cnv->sharedData->impl->getUnicodeSet==NULL) {
+        *pErrorCode=U_UNSUPPORTED_ERROR;
+        return;
+    }
+
+    /* empty the set */
+    uset_clear(set);
+
+    /* call the converter to add the code points it supports */
+    cnv->sharedData->impl->getUnicodeSet(cnv, set, which, pErrorCode);
 }
 
 U_CAPI void U_EXPORT2

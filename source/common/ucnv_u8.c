@@ -975,7 +975,8 @@ static const UConverterImpl _UTF8Impl={
     NULL,
     NULL,
     NULL,
-    NULL
+    NULL,
+    ucnv_getNonSurrogateUnicodeSet
 };
 
 /* The 1208 CCSID refers to any version of Unicode of UTF-8 */
