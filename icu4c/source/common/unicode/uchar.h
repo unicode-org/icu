@@ -700,6 +700,7 @@ typedef enum UCellWidth UCellWidth;
 enum UCharNameChoice {
     U_UNICODE_CHAR_NAME,
     U_UNICODE_10_CHAR_NAME,
+    U_UNICODE_EXTENDED_CHAR_NAME,
     U_CHAR_NAME_CHOICE_COUNT
 };
 

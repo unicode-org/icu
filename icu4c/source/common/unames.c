@@ -176,8 +176,16 @@ u_charName(UChar32 code, UCharNameChoice nameChoice,
     }
 
     if(i==0) {
-        /* normal character name */
-        length=getName(uCharNames, (uint32_t)code, nameChoice, buffer, (uint16_t)bufferLength);
+        if (nameChoice == U_UNICODE_EXTENDED_CHAR_NAME) {
+            /* extended character name */
+            length=getName(uCharNames, (uint32_t)code, U_UNICODE_CHAR_NAME, buffer, (uint16_t)bufferLength);
+            if (!length && u_charType(code) == U_CONTROL_CHAR) {
+                length=getName(uCharNames, (uint32_t)code, U_UNICODE_CHAR_NAME, buffer, (uint16_t)bufferLength);
+            }
+        } else {
+            /* normal character name */
+            length=getName(uCharNames, (uint32_t)code, nameChoice, buffer, (uint16_t)bufferLength);
+        }
     }
 
     return u_terminateChars(buffer, bufferLength, length, pErrorCode);
@@ -1203,3 +1211,12 @@ findNameDummy(void *context,
               const char *name, UTextOffset length) {
     return FALSE;
 }
+
+/*
+ * Hey, Emacs, please set the following:
+ *
+ * Local Variables:
+ * indent-tabs-mode: nil
+ * End:
+ *
+ */

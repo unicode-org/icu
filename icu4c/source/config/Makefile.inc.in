@@ -2,7 +2,7 @@
 #******************************************************************************
 #   Copyright (C) 1999-2001, International Business Machines
 #   Corporation and others.  All Rights Reserved.
-# $Revision: 1.23 $
+# $Revision: 1.24 $
 #******************************************************************************
 # This Makefile is designed to be included into projects which make use
 # of the ICU.
@@ -22,7 +22,7 @@ LIBS = @LIBS@
 ICUPREFIX = icu
 ICULIBSUFFIX = @ICULIBSUFFIX@
 ICULIBS = $(LIBS) -L$(libdir)                      \
-			-l$(ICUPREFIX)data                     \
+			-l$(ICUPREFIX)data$(ICULIBSUFFIX)      \
 			-l$(ICUPREFIX)i18n$(ICULIBSUFFIX)      \
 			-l$(ICUPREFIX)uc$(ICULIBSUFFIX)        \
 			-l$(ICUPREFIX)toolutil$(ICULIBSUFFIX)  \
