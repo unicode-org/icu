@@ -1,5 +1,5 @@
 /*
- * $RCSfile: TestFmwk.java,v $ $Revision: 1.3 $ $Date: 2000/02/25 18:38:20 $
+ * $RCSfile: TestFmwk.java,v $ $Revision: 1.4 $ $Date: 2000/02/25 18:57:12 $
  *
  * (C) Copyright Taligent, Inc. 1996, 1997 - All Rights Reserved
  * (C) Copyright IBM Corp. 1996 - 1998 - All Rights Reserved
@@ -75,7 +75,8 @@ public class TestFmwk {
         testMethods = new Hashtable();
         Method[] methods = getClass().getDeclaredMethods();
         for( int i=0; i<methods.length; i++ ) {
-            if( methods[i].getName().startsWith("Test") ) {
+            if( methods[i].getName().startsWith("Test") 
+					|| methods[i].getName().startsWith("test")) {
                 testMethods.put( methods[i].getName(), methods[i] );
             }
         }
