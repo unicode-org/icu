@@ -56,6 +56,7 @@ u_cleanup(void)
     locale_cleanup();
     uloc_cleanup();
     ustring_cleanup();
+	breakiterator_cleanup();
 #ifdef ICU_UNICODECONVERTER_USE_DEPRECATES
     UnicodeConverter_cleanup(); /* <-- deprecated code */
 #endif /* ICU_UNICODECONVERTER_USE_DEPRECATES */

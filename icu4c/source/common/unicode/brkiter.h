@@ -43,9 +43,6 @@ U_NAMESPACE_END
 #include "unicode/ubrk.h"
 #include "unicode/strenum.h"
 
-#include "mutex.h"
-#include "iculserv.h"
-
 U_NAMESPACE_BEGIN
 
 /**
@@ -550,10 +547,6 @@ public:
     static StringEnumeration* getAvailableLocales(void);
 
  private:
-    static ICULocaleService* fgService;
-    static UMTX fgLock;
-    static ICULocaleService* getService(void);
-
     static BreakIterator* makeCharacterInstance(const Locale& loc, UErrorCode& status);
     static BreakIterator* makeWordInstance(const Locale& loc, UErrorCode& status);
     static BreakIterator* makeLineInstance(const Locale& loc, UErrorCode& status);
@@ -564,7 +557,7 @@ public:
     static BreakIterator* makeInstance(const Locale& loc, int32_t kind, UErrorCode& status);
 
     friend class ICUBreakIteratorFactory;
-	friend class ICUBreakIteratorService;
+    friend class ICUBreakIteratorService;
 
 protected:
     BreakIterator();
