@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $ 
-* $Date: 2002/09/17 21:31:58 $ 
-* $Revision: 1.21 $
+* $Date: 2002/10/25 22:05:19 $ 
+* $Revision: 1.22 $
 *
 *******************************************************************************
 */
@@ -314,9 +314,15 @@ public final class RuleBasedCollator extends Collator
     public void setUpperCaseFirst(boolean upperfirst)
     {
         if (upperfirst) {
+            if(m_caseFirst_ != AttributeValue.UPPER_FIRST_) {
+                latinOneRegenTable_ = true;
+            }
             m_caseFirst_ = AttributeValue.UPPER_FIRST_;
         }
         else {
+            if(m_caseFirst_ != AttributeValue.OFF_) {
+                latinOneRegenTable_ = true;
+            }
             m_caseFirst_ = AttributeValue.OFF_;
         }
         updateInternalState();
@@ -341,9 +347,15 @@ public final class RuleBasedCollator extends Collator
    	public void setLowerCaseFirst(boolean lowerfirst)
    	{
    		if (lowerfirst) {
+            if(m_caseFirst_ != AttributeValue.LOWER_FIRST_) {
+                latinOneRegenTable_ = true;
+            }            
    			m_caseFirst_ = AttributeValue.LOWER_FIRST_;
    		}
    		else {
+            if(m_caseFirst_ != AttributeValue.OFF_) {
+                latinOneRegenTable_ = true;
+            }            
    			m_caseFirst_ = AttributeValue.OFF_;
    		}
    		updateInternalState();
@@ -362,6 +374,9 @@ public final class RuleBasedCollator extends Collator
    	 */
    	public final void setCaseFirstDefault()
    	{
+        if(m_caseFirst_ != m_defaultCaseFirst_) {
+            latinOneRegenTable_ = true;
+        }            
    		m_caseFirst_ = m_defaultCaseFirst_;
    		updateInternalState();
    	}
@@ -417,6 +432,9 @@ public final class RuleBasedCollator extends Collator
      */
     public void setFrenchCollationDefault()
     {
+        if(m_isFrenchCollation_ != m_defaultIsFrenchCollation_) {
+            latinOneRegenTable_ = true;
+        }
     	m_isFrenchCollation_ = m_defaultIsFrenchCollation_;
     	updateInternalState();
     }
@@ -450,6 +468,9 @@ public final class RuleBasedCollator extends Collator
      */
     public void setFrenchCollation(boolean flag) 
     {
+        if(m_isFrenchCollation_ != flag) {
+            latinOneRegenTable_ = true;
+        }
     	m_isFrenchCollation_ = flag;
     	updateInternalState();
     }
@@ -893,7 +914,20 @@ public final class RuleBasedCollator extends Collator
 	    	}
 	    	return 1;
 	    }
+        
+        //return compareRegular(source, target, offset);
+        if(latinOneUse_) {
+          if (source.charAt(offset) > ENDOFLATINONERANGE_ || target.charAt(offset) > ENDOFLATINONERANGE_) { // source or target start with non-latin-1
+            return compareRegular(source, target, offset);
+          } else {
+            return compareUseLatin1(source, target, offset);
+          }
+        } else {
+          return compareRegular(source, target, offset);
+        }        
+    }
 
+    private final int compareRegular(String source, String target, int offset) {
         int strength = getStrength();
 		// setting up the collator parameters	
 		m_utilCompare0_ = m_isCaseLevel_;
@@ -1457,6 +1491,8 @@ public final class RuleBasedCollator extends Collator
      */
     final void setWithUCAData()
     {
+        latinOneFailed_ = true;
+        
     	m_addition3_ = UCA_.m_addition3_;
     	m_bottom3_ = UCA_.m_bottom3_;
     	m_bottomCount3_ = UCA_.m_bottomCount3_;
@@ -1490,6 +1526,7 @@ public final class RuleBasedCollator extends Collator
     	m_topCount3_ = UCA_.m_topCount3_;
     	m_variableTopValue_ = UCA_.m_variableTopValue_;
     	setWithUCATables();
+        latinOneFailed_ = false;
     }
     
     /**
@@ -1655,9 +1692,9 @@ public final class RuleBasedCollator extends Collator
      */
 	private static final char HEURISTIC_MASK_ = 7;
 	
-	private int m_caseSwitch_;
+	private int m_caseSwitch_; 
     private int m_common3_;
-    private int m_mask3_;
+    private int m_mask3_; 
     /** 
      * When switching case, we need to add or subtract different values.
      */
@@ -1680,7 +1717,7 @@ public final class RuleBasedCollator extends Collator
 	/**
 	 * Case level constants
 	 */
-	private static final int CE_REMOVE_CASE_ = 0x3F;
+	private static final int CE_REMOVE_CASE_ = 0x3F; 
 	private static final int CE_KEEP_CASE_ = 0xFF;
 	/**
 	 * Case strength mask
@@ -1723,6 +1760,8 @@ public final class RuleBasedCollator extends Collator
 	private static final int COMMON_UPPER_FIRST_3_ = 0xC5;
 	private static final int COMMON_NORMAL_3_ = COMMON_BOTTOM_3_;
 	private static final int COMMON_4_ = (byte)0xFF;
+    
+    
 	
 	/**
 	 * Minimum size required for the binary collation data in bytes.
@@ -1738,7 +1777,7 @@ public final class RuleBasedCollator extends Collator
 	/**
      * French collation sorting flag
      */
-    private boolean m_isFrenchCollation_;
+    private boolean m_isFrenchCollation_; 
     /**
      * Flag indicating if shifted is requested for Quaternary alternate
      * handling. If this is not true, the default for alternate handling will
@@ -1760,7 +1799,7 @@ public final class RuleBasedCollator extends Collator
 	private static final int SORT_BUFFER_INIT_SIZE_4_ = SORT_BUFFER_INIT_SIZE_;
     
     private static final int CE_CONTINUATION_TAG_ = 0xC0;
-	private static final int CE_REMOVE_CONTINUATION_MASK_ = 0xFFFFFF3F;
+	private static final int CE_REMOVE_CONTINUATION_MASK_ = 0xFFFFFF3F; 
 
 	private static final int LAST_BYTE_MASK_ = 0xFF;
 	
@@ -1776,7 +1815,14 @@ public final class RuleBasedCollator extends Collator
 	 * CE buffer size
 	 */
 	private static final int CE_BUFFER_SIZE_ = 512;
-    
+       
+    // variables for Latin-1 processing
+    boolean latinOneUse_        = false;
+    boolean latinOneRegenTable_ = false;
+    boolean latinOneFailed_     = false;
+
+    int latinOneTableLen_ = 0;       
+    int latinOneCEs_[] = null;
     /**
      * Bunch of utility iterators
      */
@@ -3422,6 +3468,23 @@ public final class RuleBasedCollator extends Collator
       	else {
         	m_isSimple3_ = false;
       	}
+        if(!m_isCaseLevel_ && getStrength() <= AttributeValue.TERTIARY_ 
+          && !m_isAlternateHandlingShifted_ && !latinOneFailed_) {
+          if(latinOneCEs_ == null || latinOneRegenTable_) {
+            if(setUpLatinOne()) { // if we succeed in building latin1 table, we'll use it
+              latinOneUse_ = true; 
+            } else {
+              latinOneUse_ = false;
+              latinOneFailed_ = true;
+            }
+            latinOneRegenTable_ = false;
+          } else { // latin1Table exists and it doesn't need to be regenerated, just use it
+            latinOneUse_ = true;
+          }
+        } else {
+          latinOneUse_ = false;
+        }     
+        
 	}
 	
 	/**
@@ -3445,6 +3508,7 @@ public final class RuleBasedCollator extends Collator
         		break;
         	}
     	}
+        latinOneFailed_ = true;
     	setStrength(m_defaultStrength_);
     	setDecomposition(m_defaultDecomposition_);
         m_variableTopValue_ = m_defaultVariableTopValue_;
@@ -3453,6 +3517,7 @@ public final class RuleBasedCollator extends Collator
     	m_isCaseLevel_ = m_defaultIsCaseLevel_;
     	m_caseFirst_ = m_defaultCaseFirst_;
     	m_isHiragana4_ = m_defaultIsHiragana4_;
+        latinOneFailed_ = false;
     	updateInternalState();
     }
     
@@ -3472,4 +3537,562 @@ public final class RuleBasedCollator extends Collator
        m_srcUtilCEBuffer_ = new int[CE_BUFFER_SIZE_];
        m_tgtUtilCEBuffer_ = new int[CE_BUFFER_SIZE_];
     }
+    
+    
+    
+    // Consts for Latin-1 special processing
+    private static final int ENDOFLATINONERANGE_ = 0xFF;
+    private static final int LATINONETABLELEN_   = (ENDOFLATINONERANGE_+50);
+    private static final int BAIL_OUT_CE_        = 0xFF000000;
+    
+     /** 
+     * Generate latin-1 tables
+     */
+    
+    private class shiftValues {
+        int primShift = 24;
+        int secShift = 24;
+        int terShift = 24;
+    };
+    
+    private final void 
+    addLatinOneEntry(char ch, int CE, shiftValues sh) {
+      int primary1 = 0, primary2 = 0, secondary = 0, tertiary = 0;
+      boolean reverseSecondary = false;
+      if(!isContinuation(CE)) {
+        tertiary = ((CE & m_mask3_));
+        tertiary ^= m_caseSwitch_;
+        reverseSecondary = true;
+      } else {
+        tertiary = (byte)((CE & CE_REMOVE_CONTINUATION_MASK_));
+        tertiary &= CE_REMOVE_CASE_;
+        reverseSecondary = false;
+      }
+    
+      secondary = ((CE >>>= 8) & LAST_BYTE_MASK_);
+      primary2 =  ((CE >>>= 8) & LAST_BYTE_MASK_);
+      primary1 =  (CE >>> 8);
+    
+      if(primary1 != 0) {
+        latinOneCEs_[ch] |= (primary1 << sh.primShift);
+        sh.primShift -= 8;
+      }
+      if(primary2 != 0) {
+        if(sh.primShift < 0) {
+          latinOneCEs_[ch] = BAIL_OUT_CE_;
+          latinOneCEs_[latinOneTableLen_+ch] = BAIL_OUT_CE_;
+          latinOneCEs_[2*latinOneTableLen_+ch] = BAIL_OUT_CE_;
+          return;
+        }
+        latinOneCEs_[ch] |= (primary2 << sh.primShift);
+        sh.primShift -= 8;
+      }
+      if(secondary != 0) {
+        if(reverseSecondary && m_isFrenchCollation_) { // reverse secondary
+          latinOneCEs_[latinOneTableLen_+ch] >>>= 8; // make space for secondary
+          latinOneCEs_[latinOneTableLen_+ch] |= (secondary << 24);
+        } else { // normal case 
+          latinOneCEs_[latinOneTableLen_+ch] |= (secondary << sh.secShift);
+        }
+        sh.secShift -= 8;
+      }
+      if(tertiary != 0) {
+        latinOneCEs_[2*latinOneTableLen_+ch] |= (tertiary << sh.terShift);
+        sh.terShift -= 8;
+      }
+    }
+    
+    private final void
+    resizeLatinOneTable(int newSize) {
+        int newTable[] = new int[3*newSize];
+        int sizeToCopy = ((newSize<latinOneTableLen_)?newSize:latinOneTableLen_);
+        //uprv_memset(newTable, 0, newSize*sizeof(uint32_t)*3); // automatically cleared.
+        System.arraycopy(latinOneCEs_, 0, newTable, 0, sizeToCopy);
+        System.arraycopy(latinOneCEs_, latinOneTableLen_, newTable, newSize, sizeToCopy);
+        System.arraycopy(latinOneCEs_, 2*latinOneTableLen_, newTable, 2*newSize, sizeToCopy);
+        latinOneTableLen_ = newSize;
+        latinOneCEs_ = newTable;
+    }
+    
+    private final boolean setUpLatinOne() {
+      boolean result = true;
+      if(latinOneCEs_ == null) {
+        latinOneCEs_ = new int[3*LATINONETABLELEN_]; 
+        latinOneTableLen_ = LATINONETABLELEN_;
+      } else {
+        Arrays.fill(latinOneCEs_, 0);
+      }
+      if(m_ContInfo_ == null) {
+        m_ContInfo_ = new ContractionInfo();
+      }
+      char ch = 0;
+      StringBuffer sCh = new StringBuffer();
+      CollationElementIterator it = getCollationElementIterator(sCh.toString());
+    
+      shiftValues s = new shiftValues();
+      int CE = 0;
+      char contractionOffset = ENDOFLATINONERANGE_+1;
+    
+      for(ch = 0; ch <= ENDOFLATINONERANGE_; ch++) {
+        s.primShift = 24; s.secShift = 24; s.terShift = 24;
+        if(ch < 0x100) {
+          CE = m_trie_.getLatin1LinearValue(ch);
+        } else {
+          CE = m_trie_.getLeadValue(ch);
+          if(CE == CollationElementIterator.CE_NOT_FOUND_) {
+            CE = UCA_.m_trie_.getLeadValue(ch);
+          }
+        }
+        if(!isSpecial(CE)) { 
+          addLatinOneEntry(ch, CE, s);
+        } else {
+          switch (RuleBasedCollator.getTag(CE)) {
+          case CollationElementIterator.CE_EXPANSION_TAG_:
+            sCh.delete(0, sCh.length());
+            sCh.append(ch);
+            it.setText(sCh.toString());
+            while((CE = it.next()) != CollationElementIterator.NULLORDER) {
+              if(s.primShift < 0 || s.secShift < 0 || s.terShift < 0) {
+                latinOneCEs_[ch] = BAIL_OUT_CE_;
+                latinOneCEs_[latinOneTableLen_+ch] = BAIL_OUT_CE_;
+                latinOneCEs_[2*latinOneTableLen_+ch] = BAIL_OUT_CE_;
+                break;
+              }
+              addLatinOneEntry(ch, CE, s);
+            }
+            break;
+          case CollationElementIterator.CE_CONTRACTION_TAG_:
+            // here is the trick
+            // F2 is contraction. We do something very similar to contractions
+            // but have two indices, one in the real contraction table and the
+            // other to where we stuffed things. This hopes that we don't have
+            // many contractions (this should work for latin-1 tables).
+            {
+              if((CE & 0x00FFF000) != 0) {
+                return false;
+              }
+    
+              int UCharOffset = (CE & 0xFFFFFF) - m_contractionOffset_; //getContractionOffset(CE)]
+    
+              CE |= (contractionOffset & 0xFFF) << 12; // insert the offset in latin-1 table
+        
+              latinOneCEs_[ch] = CE;
+              latinOneCEs_[latinOneTableLen_+ch] = CE;
+              latinOneCEs_[2*latinOneTableLen_+ch] = CE;
+    
+              // We're going to jump into contraction table, pick the elements
+              // and use them
+              do {
+                  //CE = *(contractionCEs + (UCharOffset - contractionIndex));
+                  CE = m_contractionCE_[UCharOffset];
+                  if(getTag(CE) == CollationElementIterator.CE_EXPANSION_TAG_) {
+                    int i;    /* general counter */
+                    //uint32_t *CEOffset = (uint32_t *)image+getExpansionOffset(CE); /* find the offset to expansion table */
+                    int offset = ((CE & 0xFFFFF0) >> 4) - m_expansionOffset_; //it.getExpansionOffset(this, CE);
+                    int size = CE & 0xF; // getExpansionCount(CE);
+                    //CE = *CEOffset++;
+                    if(size != 0) { /* if there are less than 16 elements in expansion, we don't terminate */
+                      for(i = 0; i<size; i++) {
+                        if(s.primShift < 0 || s.secShift < 0 || s.terShift < 0) {
+                          latinOneCEs_[contractionOffset] = BAIL_OUT_CE_;
+                          latinOneCEs_[latinOneTableLen_+contractionOffset] = BAIL_OUT_CE_;
+                          latinOneCEs_[2*latinOneTableLen_+contractionOffset] = BAIL_OUT_CE_;
+                          break;
+                        }
+                        addLatinOneEntry(contractionOffset, m_expansion_[offset+i], s);
+                      }
+                    } else { /* else, we do */
+                      while(m_expansion_[offset] != 0) {
+                        if(s.primShift < 0 || s.secShift < 0 || s.terShift < 0) {
+                          latinOneCEs_[contractionOffset] = BAIL_OUT_CE_;
+                          latinOneCEs_[latinOneTableLen_+contractionOffset] = BAIL_OUT_CE_;
+                          latinOneCEs_[2*latinOneTableLen_+contractionOffset] = BAIL_OUT_CE_;
+                          break;
+                        }
+                        addLatinOneEntry(contractionOffset, m_expansion_[offset++], s);
+                      }
+                    }
+                    contractionOffset++;
+                  } else {
+                    addLatinOneEntry(contractionOffset++, CE, s);
+                  }
+                  UCharOffset++;
+                  s.primShift = 24; s.secShift = 24; s.terShift = 24;
+                  if(contractionOffset == latinOneTableLen_) { // we need to reallocate
+                   resizeLatinOneTable(2*latinOneTableLen_);
+                  }
+              } while(m_contractionIndex_[UCharOffset] != 0xFFFF);
+            }
+            break;
+          default:
+            latinOneFailed_ = true;
+            return false;
+          }
+        }
+      }
+      // compact table
+      if(contractionOffset < latinOneTableLen_) {
+        resizeLatinOneTable(contractionOffset);
+      }
+      return true;
+    }
+
+    private class
+    ContractionInfo {
+        int index;
+    };
+    
+    ContractionInfo m_ContInfo_;
+
+    private int 
+    getLatinOneContraction(int strength, int CE, String s) {
+    //int strength, int CE, String s, Integer ind) {
+      int len = s.length();                          
+      //const UChar *UCharOffset = (UChar *)coll->image+getContractOffset(CE&0xFFF);
+      int UCharOffset = (CE & 0xFFF) - m_contractionOffset_;
+      int offset = 1;
+      int latinOneOffset = (CE & 0x00FFF000) >>> 12;
+      char schar = 0, tchar = 0;
+    
+      for(;;) {
+        /*
+        if(len == -1) {
+          if(s[*index] == 0) { // end of string
+            return(coll->latinOneCEs[strength*coll->latinOneTableLen+latinOneOffset]);
+          } else {
+            schar = s[*index];
+          }
+        } else {
+        */
+          if(m_ContInfo_.index == len) {
+            return(latinOneCEs_[strength*latinOneTableLen_+latinOneOffset]);
+          } else {
+            schar = s.charAt(m_ContInfo_.index);
+          }
+        //}
+    
+        while(schar > (tchar = m_contractionIndex_[UCharOffset+offset]/**(UCharOffset+offset)*/)) { /* since the contraction codepoints should be ordered, we skip all that are smaller */
+          offset++;
+        }
+    
+        if (schar == tchar) {
+          m_ContInfo_.index++;
+          return(latinOneCEs_[strength*latinOneTableLen_+latinOneOffset+offset]);
+        }
+        else
+        {
+          if(schar  > ENDOFLATINONERANGE_ /*& 0xFF00*/) {
+            return BAIL_OUT_CE_;
+          }
+          // skip completely ignorables
+          int isZeroCE = m_trie_.getLeadValue(schar); //UTRIE_GET32_FROM_LEAD(coll->mapping, schar);
+          if(isZeroCE == 0) { // we have to ignore completely ignorables
+            m_ContInfo_.index++;
+            continue;
+          }
+    
+          return(latinOneCEs_[strength*latinOneTableLen_+latinOneOffset]);
+        }
+      }
+    }
+
+    
+    /** 
+     * This is a fast strcoll, geared towards text in Latin-1. 
+     * It supports contractions of size two, French secondaries
+     * and case switching. You can use it with strengths primary
+     * to tertiary. It does not support shifted and case level.
+     * It relies on the table build by setupLatin1Table. If it
+     * doesn't understand something, it will go to the regular
+     * strcoll. 
+     */
+    private final int 
+    compareUseLatin1(String source, String target, int startOffset)
+    {
+        int sLen = source.length();
+        int tLen = target.length();
+        
+        int strength = getStrength();
+    
+        int sIndex = startOffset, tIndex = startOffset;
+        char sChar = 0, tChar = 0;
+        int sOrder=0, tOrder=0;
+    
+        boolean endOfSource = false, endOfTarget = false;
+    
+        //uint32_t *elements = coll->latinOneCEs;
+    
+        boolean haveContractions = false; // if we have contractions in our string
+                                        // we cannot do French secondary
+    
+        int offset = latinOneTableLen_;
+        
+        // Do the primary level
+    primLoop:
+        for(;;) {
+          while(sOrder==0) { // this loop skips primary ignorables
+            // sOrder=getNextlatinOneCE(source);
+              if(sIndex==sLen) {
+                endOfSource = true;
+                break;
+              }
+              sChar=source.charAt(sIndex++); //[sIndex++];              
+            //}
+            if(sChar > ENDOFLATINONERANGE_) { // if we encounter non-latin-1, we bail out 
+              //fprintf(stderr, "R");
+              return compareRegular(source, target, startOffset);
+            }
+            sOrder = latinOneCEs_[sChar];
+            if(isSpecial(sOrder)) { // if we got a special
+              // specials can basically be either contractions or bail-out signs. If we get anything
+              // else, we'll bail out anywasy
+              if(getTag(sOrder) == CollationElementIterator.CE_CONTRACTION_TAG_) {
+                m_ContInfo_.index = sIndex;
+                sOrder = getLatinOneContraction(0, sOrder, source);
+                sIndex = m_ContInfo_.index;
+                haveContractions = true; // if there are contractions, we cannot do French secondary
+                // However, if there are contractions in the table, but we always use just one char,
+                // we might be able to do French. This should be checked out.
+              }
+              if(isSpecial(sOrder) /*== UCOL_BAIL_OUT_CE*/) {
+                //fprintf(stderr, "S");
+                return compareRegular(source, target, startOffset);
+              }
+            }
+          }
+    
+          while(tOrder==0) {  // this loop skips primary ignorables
+            // tOrder=getNextlatinOneCE(target);
+            if(tIndex==tLen) {
+              if(endOfSource) {
+                break primLoop;
+              } else {
+                return 1;
+              }
+            }
+            tChar=target.charAt(tIndex++); //[tIndex++];
+            if(tChar > ENDOFLATINONERANGE_) { // if we encounter non-latin-1, we bail out 
+              //fprintf(stderr, "R");
+              return compareRegular(source, target, startOffset);
+            }
+            tOrder = latinOneCEs_[tChar];
+            if(isSpecial(tOrder)) {
+              // Handling specials, see the comments for source
+              if(getTag(tOrder) == CollationElementIterator.CE_CONTRACTION_TAG_) {
+                m_ContInfo_.index = tIndex;
+                tOrder = getLatinOneContraction(0, tOrder, target);
+                tIndex = m_ContInfo_.index;
+                haveContractions = true;
+              }
+              if(isSpecial(tOrder)/*== UCOL_BAIL_OUT_CE*/) {
+                //fprintf(stderr, "S");
+                return compareRegular(source, target, startOffset);
+              }
+            }
+          }
+          if(endOfSource) { // source is finished, but target is not, say the result.
+              return -1;
+          }
+    
+          if(sOrder == tOrder) { // if we have same CEs, we continue the loop
+            sOrder = 0; tOrder = 0;
+            continue;
+          } else {
+            // compare current top bytes
+            if(((sOrder^tOrder)&0xFF000000)!=0) {
+              // top bytes differ, return difference
+              if(sOrder >>> 8 < tOrder >>> 8) {
+                return -1;
+              } else {
+                return 1;
+              }
+              // instead of return (int32_t)(sOrder>>24)-(int32_t)(tOrder>>24);
+              // since we must return enum value
+            }
+    
+            // top bytes match, continue with following bytes
+            sOrder<<=8;
+            tOrder<<=8;
+          } 
+        }
+    
+        // after primary loop, we definitely know the sizes of strings, 
+        // so we set it and use simpler loop for secondaries and tertiaries
+        //sLen = sIndex; tLen = tIndex;
+        if(strength >= SECONDARY) {
+          // adjust the table beggining
+          //latinOneCEs_ += coll->latinOneTableLen;
+          endOfSource = false; endOfTarget = false;
+    
+          if(!m_isFrenchCollation_) { // non French
+            // This loop is a simplified copy of primary loop
+            // at this point we know that whole strings are latin-1, so we don't 
+            // check for that. We also know that we only have contractions as 
+            // specials.
+            //sIndex = 0; tIndex = 0;
+            sIndex = startOffset; tIndex = startOffset;
+    secLoop:
+            for(;;) {
+              while(sOrder==0) {
+                if(sIndex==sLen) {
+                  endOfSource = true;
+                  break;
+                }
+                sChar=source.charAt(sIndex++); //[sIndex++];
+                sOrder = latinOneCEs_[offset+sChar];
+                if(isSpecial(sOrder)) {
+                    m_ContInfo_.index = sIndex;
+                    sOrder = getLatinOneContraction(1, sOrder, source);
+                    sIndex = m_ContInfo_.index;
+                }
+              }
+    
+              while(tOrder==0) {
+                if(tIndex==tLen) {
+                  if(endOfSource) {
+                    break secLoop;
+                  } else {
+                    return 1;
+                  }
+                }
+                tChar=target.charAt(tIndex++); //[tIndex++];
+                tOrder = latinOneCEs_[offset+tChar];
+                if(isSpecial(tOrder)) {
+                    m_ContInfo_.index = tIndex;
+                    tOrder = getLatinOneContraction(1, tOrder, target);
+                    tIndex = m_ContInfo_.index;
+                }
+              }
+              if(endOfSource) {
+                  return -1;
+              }
+    
+              if(sOrder == tOrder) {
+                sOrder = 0; tOrder = 0;
+                continue;
+              } else {
+                // see primary loop for comments on this
+                if(((sOrder^tOrder)&0xFF000000)!=0) {
+                  if(sOrder >>> 8 < tOrder >>> 8) {
+                    return -1;
+                  } else {
+                    return 1;
+                  }
+                }
+                sOrder<<=8;
+                tOrder<<=8;
+              } 
+            }
+          } else { // French
+            if(haveContractions) { // if we have contractions, we have to bail out
+              // since we don't really know how to handle them here
+              return compareRegular(source, target, startOffset);
+            }
+            // For French, we go backwards
+            sIndex = sLen; tIndex = tLen;
+    secFLoop:
+            for(;;) {
+              while(sOrder==0) {
+                if(sIndex==startOffset) {
+                  endOfSource = true;
+                  break;
+                }
+                sChar=source.charAt(--sIndex); //[--sIndex];
+                sOrder = latinOneCEs_[offset+sChar];
+                // don't even look for contractions
+              }
+    
+              while(tOrder==0) {
+                if(tIndex==startOffset) {
+                  if(endOfSource) {
+                    break secFLoop;
+                  } else {
+                    return 1;
+                  }
+                }
+                tChar=target.charAt(--tIndex); //[--tIndex];
+                tOrder = latinOneCEs_[offset+tChar];
+                // don't even look for contractions
+              }
+              if(endOfSource) {
+                  return -1;
+              }
+    
+              if(sOrder == tOrder) {
+                sOrder = 0; tOrder = 0;
+                continue;
+              } else {
+                // see the primary loop for comments
+                if(((sOrder^tOrder)&0xFF000000)!=0) {
+                  if(sOrder >>> 8 < tOrder >>> 8) {
+                    return -1;
+                  } else {
+                    return 1;
+                  }
+                }
+                sOrder<<=8;
+                tOrder<<=8;
+              }       
+            }
+          }
+        } 
+    
+        if(strength >= TERTIARY) {
+          // tertiary loop is the same as secondary (except no French)
+          offset += latinOneTableLen_;
+          //sIndex = 0; tIndex = 0;
+          sIndex = startOffset; tIndex = startOffset;
+          endOfSource = false; endOfTarget = false;
+          for(;;) {
+            while(sOrder==0) {
+              if(sIndex==sLen) {
+                endOfSource = true;
+                break;
+              }
+              sChar=source.charAt(sIndex++); //[sIndex++];
+              sOrder = latinOneCEs_[offset+sChar];
+              if(isSpecial(sOrder)) {
+                m_ContInfo_.index = sIndex;
+                sOrder = getLatinOneContraction(2, sOrder, source);
+                sIndex = m_ContInfo_.index;
+              }
+            }
+            while(tOrder==0) {
+              if(tIndex==tLen) {
+                if(endOfSource) {
+                  return 0; // if both strings are at the end, they are equal
+                } else {
+                  return 1;
+                }
+              }
+              tChar=target.charAt(tIndex++); //[tIndex++];
+              tOrder = latinOneCEs_[offset+tChar];
+              if(isSpecial(tOrder)) {
+                m_ContInfo_.index = tIndex;
+                tOrder = getLatinOneContraction(2, tOrder, target);
+                tIndex = m_ContInfo_.index;
+              }
+            }
+            if(endOfSource) {
+                return -1;
+            }
+            if(sOrder == tOrder) {
+              sOrder = 0; tOrder = 0;
+              continue;
+            } else {
+              if(((sOrder^tOrder)&0xff000000)!=0) {
+                if(sOrder >>> 8 < tOrder >>> 8) {
+                  return -1;
+                } else {
+                  return 1;
+                }
+              }
+              sOrder<<=8;
+              tOrder<<=8;
+            } 
+          }
+        } 
+        return 0;
+    }
+    
 }
