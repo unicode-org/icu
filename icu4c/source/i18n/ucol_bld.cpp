@@ -857,6 +857,73 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
   }
 }
 
+struct enumStruct {
+  tempUCATable *t;
+  UCollator *tempColl;
+  UCollationElements* colEl;
+  UErrorCode *status;
+};
+
+static UBool U_CALLCONV
+_enumCategoryRangeClosureCategory(const void *context, UChar32 start, UChar32 limit, UCharCategory type) {
+
+  UErrorCode *status = ((enumStruct *)context)->status;
+  tempUCATable *t = ((enumStruct *)context)->t;
+  UCollator *tempColl = ((enumStruct *)context)->tempColl;
+  UCollationElements* colEl = ((enumStruct *)context)->colEl;
+  static UCAElements el;
+  static UChar decomp[256] = { 0 };
+  static uint32_t noOfDec = 0;
+
+  UChar32 u32 = 0;
+  UChar comp[2];
+  uint32_t len = 0;
+
+  if (type > 0) { // if the range is assigned - we might ommit more categories later
+    for(u32 = start; u32 < limit; u32++) {
+      len = 0;
+      UTF_APPEND_CHAR_UNSAFE(comp, len, u32);
+      if((noOfDec = unorm_normalize(comp, len, UNORM_NFD, 0, decomp, 256, status)) > 1
+        || (noOfDec == 1 && *decomp != (UChar)u32))
+      {
+        if(ucol_strcoll(tempColl, comp, len, decomp, noOfDec) != UCOL_EQUAL) {
+          el.cPoints = decomp;
+          el.cSize = noOfDec;
+          el.noOfCEs = 0;
+          el.prefix = el.prefixChars;
+          el.prefixSize = 0;
+
+          UCAElements *prefix=(UCAElements *)uhash_get(t->prefixLookup, &el);
+          if(prefix == NULL) {
+            el.cPoints = comp;
+            el.cSize = len;
+            el.prefix = el.prefixChars;
+            el.prefixSize = 0;
+            el.noOfCEs = 0;
+            ucol_setText(colEl, decomp, noOfDec, status);
+            while((el.CEs[el.noOfCEs] = ucol_next(colEl, status)) != UCOL_NULLORDER) {
+              el.noOfCEs++;
+            }
+          } else {
+            el.cPoints = comp;
+            el.cSize = len;
+            el.prefix = el.prefixChars;
+            el.prefixSize = 0;
+            el.noOfCEs = 1;
+            el.CEs[0] = prefix->mapCE;
+            // This character uses a prefix. We have to add it 
+            // to the unsafe table, as it decomposed form is already
+            // in. In Japanese, this happens for \u309e & \u30fe
+            // Since unsafeCPSet is static in ucol_elm, we are going
+            // to wrap it up in the uprv_uca_unsafeCPAddCCNZ function
+          }
+          uprv_uca_addAnElement(t, &el, status);
+        }
+      }
+    }
+  }
+  return TRUE;
+}
 
   
 UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *status) {
@@ -952,165 +1019,108 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     }
   }
 
-  {
-    UChar decomp[256];
-    uint32_t noOfDec = 0, CE = UCOL_NOT_FOUND;
-    UChar u = 0;
-    UCAElements el;
-    el.isThai = FALSE;
-    el.prefixSize = 0;
-    el.prefixChars[0] = 0;
-    collIterate colIt;
+  UChar decomp[256];
+  uint32_t noOfDec = 0, CE = UCOL_NOT_FOUND;
+  UChar u = 0;
+  UCAElements el;
+  el.isThai = FALSE;
+  el.prefixSize = 0;
+  el.prefixChars[0] = 0;
+  collIterate colIt;
 
-    /* add latin-1 stuff */
-    if(U_SUCCESS(*status)) {
-      for(u = 0; u<0x100; u++) {
-        /*if((CE = ucmpe32_get(t->mapping, u)) == UCOL_NOT_FOUND */
-        if((CE = utrie_get32(t->mapping, u, NULL)) == UCOL_NOT_FOUND 
-          /* this test is for contractions that are missing the starting element. Looks like latin-1 should be done before assembling */
-          /* the table, even if it results in more false closure elements */
-           || ((isCntTableElement(CE)/*isContraction(CE)*/) &&
-          (uprv_cnttab_getCE(t->contractions, CE, 0, status) == UCOL_NOT_FOUND))
-          ) {
-          decomp[0] = (UChar)u;
-          el.uchars[0] = (UChar)u;
-          el.cPoints = el.uchars;
-          el.cSize = 1;
-          el.noOfCEs = 0;
+  /* add latin-1 stuff */
+  if(U_SUCCESS(*status)) {
+    for(u = 0; u<0x100; u++) {
+      /*if((CE = ucmpe32_get(t->mapping, u)) == UCOL_NOT_FOUND */
+      if((CE = utrie_get32(t->mapping, u, NULL)) == UCOL_NOT_FOUND 
+        /* this test is for contractions that are missing the starting element. Looks like latin-1 should be done before assembling */
+        /* the table, even if it results in more false closure elements */
+         || ((isCntTableElement(CE)/*isContraction(CE)*/) &&
+        (uprv_cnttab_getCE(t->contractions, CE, 0, status) == UCOL_NOT_FOUND))
+        ) {
+        decomp[0] = (UChar)u;
+        el.uchars[0] = (UChar)u;
+        el.cPoints = el.uchars;
+        el.cSize = 1;
+        el.noOfCEs = 0;
+        el.prefix = el.prefixChars;
+        el.prefixSize = 0;
+        init_collIterate(src->UCA, decomp, 1, &colIt);
+        while(CE != UCOL_NO_MORE_CES) {
+          CE = ucol_getNextCE(src->UCA, &colIt, status);
+          if(CE != UCOL_NO_MORE_CES) {
+            el.CEs[el.noOfCEs++] = CE;
+          }
+        }
+        uprv_uca_addAnElement(t, &el, status);
+      }
+    }
+  }
+
+  if(U_SUCCESS(*status)) {
+    /* copy contractions from the UCA - this is felt mostly for cyrillic*/
+
+    uint32_t tailoredCE = UCOL_NOT_FOUND;
+    UChar *conts = (UChar *)((uint8_t *)src->UCA->image + src->UCA->image->contractionUCACombos);
+    UCollationElements *ucaEl = ucol_openElements(src->UCA, NULL, 0, status);
+    while(*conts != 0) {
+      /*tailoredCE = ucmpe32_get(t->mapping, *conts);*/
+      tailoredCE = utrie_get32(t->mapping, *conts, NULL);
+      if(tailoredCE != UCOL_NOT_FOUND) {         
+        UBool needToAdd = TRUE;
+        if(isCntTableElement(tailoredCE)) {
+          if(uprv_cnttab_isTailored(t->contractions, tailoredCE, conts+1, status) == TRUE) {
+            needToAdd = FALSE;
+          }
+        }
+
+        if(needToAdd == TRUE) { // we need to add if this contraction is not tailored.
           el.prefix = el.prefixChars;
           el.prefixSize = 0;
-          init_collIterate(src->UCA, decomp, 1, &colIt);
-          while(CE != UCOL_NO_MORE_CES) {
-            CE = ucol_getNextCE(src->UCA, &colIt, status);
-            if(CE != UCOL_NO_MORE_CES) {
-              el.CEs[el.noOfCEs++] = CE;
-            }
+          el.cPoints = el.uchars;
+          el.noOfCEs = 0;
+          el.uchars[0] = *conts;
+          el.uchars[1] = *(conts+1);
+          if(*(conts+2)!=0) {
+            el.uchars[2] = *(conts+2);
+            el.cSize = 3;
+          } else {
+            el.cSize = 2;
+          }
+          ucol_setText(ucaEl, el.uchars, el.cSize, status);
+          while ((el.CEs[el.noOfCEs] = ucol_next(ucaEl, status)) != UCOL_NULLORDER) {
+            el.noOfCEs++;
           }
           uprv_uca_addAnElement(t, &el, status);
         }
-      }
-    }
 
+      }
+      conts+=3;
+    }
+    ucol_closeElements(ucaEl);
+
+    UCollator *tempColl = NULL;
     if(U_SUCCESS(*status)) {
-      /* copy contractions from the UCA - this is felt mostly for cyrillic*/
+      tempUCATable *tempTable = uprv_uca_cloneTempTable(t, status);
 
-      uint32_t tailoredCE = UCOL_NOT_FOUND;
-      UChar *conts = (UChar *)((uint8_t *)src->UCA->image + src->UCA->image->contractionUCACombos);
-      UCollationElements *ucaEl = ucol_openElements(src->UCA, NULL, 0, status);
-      while(*conts != 0) {
-        /*tailoredCE = ucmpe32_get(t->mapping, *conts);*/
-        tailoredCE = utrie_get32(t->mapping, *conts, NULL);
-        if(tailoredCE != UCOL_NOT_FOUND) {         
-          UBool needToAdd = TRUE;
-          if(isCntTableElement(tailoredCE)) {
-            if(uprv_cnttab_isTailored(t->contractions, tailoredCE, conts+1, status) == TRUE) {
-              needToAdd = FALSE;
-            }
-          }
+      UCATableHeader *tempData = uprv_uca_assembleTable(tempTable, status);
+      tempColl = ucol_initCollator(tempData, 0, status);
 
-          if(needToAdd == TRUE) { // we need to add if this contraction is not tailored.
-            el.prefix = el.prefixChars;
-            el.prefixSize = 0;
-            el.cPoints = el.uchars;
-            el.noOfCEs = 0;
-            el.uchars[0] = *conts;
-            el.uchars[1] = *(conts+1);
-            if(*(conts+2)!=0) {
-              el.uchars[2] = *(conts+2);
-              el.cSize = 3;
-            } else {
-              el.cSize = 2;
-            }
-            ucol_setText(ucaEl, el.uchars, el.cSize, status);
-            while ((el.CEs[el.noOfCEs] = ucol_next(ucaEl, status)) != UCOL_NULLORDER) {
-              el.noOfCEs++;
-            }
-            uprv_uca_addAnElement(t, &el, status);
-          }
-
-        }
-        conts+=3;
-      }
-      ucol_closeElements(ucaEl);
-
-      UCollator *tempColl = NULL;
       if(U_SUCCESS(*status)) {
-        tempUCATable *tempTable = uprv_uca_cloneTempTable(t, status);
-
-        UCATableHeader *tempData = uprv_uca_assembleTable(tempTable, status);
-        tempColl = ucol_initCollator(tempData, 0, status);
-
-        if(U_SUCCESS(*status)) {
-          tempColl->rb = NULL;
-          tempColl->hasRealData = TRUE;
-        }
-        uprv_uca_closeTempTable(tempTable);    
+        tempColl->rb = NULL;
+        tempColl->hasRealData = TRUE;
       }
-
-      /* produce canonical closure */
-      UCollationElements* colEl = ucol_openElements(tempColl, NULL, 0, status);
-      UChar32 u32 = 0;
-      UChar comp[2];
-      uint32_t len = 0;
-      while(u32 < 0x30000) {
-        len = 0;
-        UTF_APPEND_CHAR_UNSAFE(comp, len, u32);
-        if((noOfDec = unorm_normalize(comp, len, UNORM_NFD, 0, decomp, 256, status)) > 1
-          || (noOfDec == 1 && *decomp != (UChar)u))
-        {
-          if(ucol_strcoll(tempColl, comp, len, decomp, noOfDec) != UCOL_EQUAL) {
-            el.cPoints = decomp;
-            el.cSize = noOfDec;
-            el.noOfCEs = 0;
-            el.prefix = el.prefixChars;
-            el.prefixSize = 0;
-
-            UCAElements *prefix=(UCAElements *)uhash_get(t->prefixLookup, &el);
-            if(prefix == NULL) {
-              el.cPoints = comp;
-              el.cSize = len;
-              el.prefix = el.prefixChars;
-              el.prefixSize = 0;
-              el.noOfCEs = 0;
-              ucol_setText(colEl, decomp, noOfDec, status);
-              while((el.CEs[el.noOfCEs] = ucol_next(colEl, status)) != UCOL_NULLORDER) {
-                el.noOfCEs++;
-              }
-            } else {
-              el.cPoints = comp;
-              el.cSize = len;
-              el.prefix = el.prefixChars;
-              el.prefixSize = 0;
-              el.noOfCEs = 1;
-              el.CEs[0] = prefix->mapCE;
-              // This character uses a prefix. We have to add it 
-              // to the unsafe table, as it decomposed form is already
-              // in. In Japanese, this happens for \u309e & \u30fe
-              // Since unsafeCPSet is static in ucol_elm, we are going
-              // to wrap it up in the uprv_uca_unsafeCPAddCCNZ function
-            }
-
-            uprv_uca_addAnElement(t, &el, status);
-          }
-        }
-        switch(u32) {
-        case 0x33FF:
-          u32 = 0xAC00;
-          break;
-        case 0xFFFF:
-          u32 = 0x1D000;
-          break;
-        case 0x1DFFF:
-          u32 = 0x2F800;
-          break;
-        default:
-          u32++;
-          break;
-        }
-      }
-      ucol_closeElements(colEl);
-      ucol_close(tempColl);
+      uprv_uca_closeTempTable(tempTable);    
     }
+
+    /* produce canonical closure */
+    UCollationElements* colEl = ucol_openElements(tempColl, NULL, 0, status);
+
+    enumStruct context = { t, tempColl, colEl, status };
+    u_enumCharTypes(_enumCategoryRangeClosureCategory, &context);
+
+    ucol_closeElements(colEl);
+    ucol_close(tempColl);
   }
 
     /* still need to produce compatibility closure */
