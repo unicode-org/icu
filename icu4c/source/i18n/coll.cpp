@@ -630,7 +630,7 @@ Collator::getFunctionalEquivalent(const char* keyword, const Locale& locale,
     // This is a wrapper over ucol_getFunctionalEquivalent
     char loc[ULOC_FULLNAME_CAPACITY];
     /*int32_t len =*/ ucol_getFunctionalEquivalent(loc, sizeof(loc),
-                           keyword, locale.getName(), &isAvailable, &status);
+                    keyword, locale.getName(), &isAvailable, &status);
     if (U_FAILURE(status)) {
         *loc = 0; // root
     }
