@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/TestCanonicalIterator.java,v $ 
- * $Date: 2002/11/22 00:44:06 $ 
- * $Revision: 1.10 $
+ * $Date: 2002/12/11 23:29:28 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -203,15 +203,25 @@ public class TestCanonicalIterator extends TestFmwk {
             CanonicalIterator it = new CanonicalIterator(testArray[i][0]);
             int counter = 0;
             set.clear();
+            String first = null;
             while (true) {
                 String result = it.next();
+                if(first==null){
+                    first = result;
+                }
                 if (result == null) break;
                 set.add(result); // sort them
                 //logln(++counter + ": " + hex.transliterate(result));
                 //logln(" = " + name.transliterate(result));
             }
             expectEqual(i + ": ", testArray[i][0], collectionToString(set), testArray[i][1]);
-
+            it.reset();
+            if(!it.next().equals(first)){
+                errln("CanonicalIterator.reset() failed");
+            }
+            if(!it.getSource().equals(Normalizer.normalize(testArray[i][0],Normalizer.NFD))){
+                errln("CanonicalIterator.getSource() does not return NFD of input source");
+            }
         }
     }
     

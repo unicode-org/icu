@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/BasicTest.java,v $
- * $Date: 2002/11/26 23:16:58 $
- * $Revision: 1.22 $
+ * $Date: 2002/12/11 23:29:09 $
+ * $Revision: 1.23 $
  *
  *****************************************************************************************
  */
@@ -2063,7 +2063,7 @@ public class BasicTest extends TestFmwk {
         + "\u313A-\u313F\u314F-\u3163\uFF9E-\uFF9F\uFFA3\uFFA5-\uFFA6\uFFAA-\uFFAF\uFFC2-\uFFC7\uFFCA-\uFFCF"
         + "\uFFD2-\uFFD7\uFFDA-\uFFDC]", false);
     */
-     static final int D = 0, C = 1, KD= 2, KC = 3;   
+     static final int D = 0, C = 1, KD= 2, KC = 3, FCD=4, NONE=5;   
     private static UnicodeSet[] initSkippables(UnicodeSet[] skippables){
         if( skippables.length < 4 ){
             return null;
@@ -2489,16 +2489,20 @@ public class BasicTest extends TestFmwk {
     public void TestSkippable() {
        UnicodeSet starts, diff;
        UnicodeSet[] skipSets = new UnicodeSet[]{
-                                                    new UnicodeSet(),
-                                                    new UnicodeSet(),
-                                                    new UnicodeSet(),
-                                                    new UnicodeSet()
+                                                    new UnicodeSet(), //NFD
+                                                    new UnicodeSet(), //NFC
+                                                    new UnicodeSet(), //NFKC
+                                                    new UnicodeSet(), //NFKD
+                                                    new UnicodeSet(), //FCD
+                                                    new UnicodeSet(), //NONE
                                                };
        UnicodeSet[] expectSets = new UnicodeSet[]{
                                                     new UnicodeSet(),
                                                     new UnicodeSet(),
                                                     new UnicodeSet(),
-                                                    new UnicodeSet()
+                                                    new UnicodeSet(),
+                                                    new UnicodeSet(),
+                                                    new UnicodeSet(),
                                                };
        StringBuffer s, pattern;
        int start, limit, rangeStart, rangeEnd;
@@ -2528,6 +2532,13 @@ public class BasicTest extends TestFmwk {
                if(Normalizer.isNFSkippable(start, Normalizer.NFKC)) {
                    skipSets[KC].add(start, limit-1);
                }
+               if(Normalizer.isNFSkippable(start, Normalizer.FCD)) {
+                   skipSets[FCD].add(start, limit-1);
+               }
+               if(Normalizer.isNFSkippable(start, Normalizer.NONE)) {
+                   skipSets[NONE].add(start, limit-1);
+               }
+               
            }
    
            /* go to next range of same properties */
@@ -2548,7 +2559,7 @@ public class BasicTest extends TestFmwk {
        }
    
        expectSets = initSkippables(expectSets);
-       for(i=0; i<expectSets.length; ++i) {
+       for(i=0; i< 4/*expectSets.length for now do not test FCD and NONE since there is no data*/; ++i) {
            if(!skipSets[i].equals(expectSets[i])) {
                errln("error: TestSkippable skipSets["+i+"]!=expectedSets["+i+"]\n"+
                      "may need to update hardcoded UnicodeSet patterns in com.ibm.icu.dev.test.normalizer.BasicTest.java\n");

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/NormalizerImpl.java,v $
- * $Date: 2002/11/26 23:47:06 $
- * $Revision: 1.13 $
+ * $Date: 2002/12/11 23:29:51 $
+ * $Revision: 1.14 $
  *******************************************************************************
  */
  
@@ -442,7 +442,7 @@ public final class NormalizerImpl {
 	    return fcdTrieImpl.fcdTrie.getTrailValue(fcd16, c2);
 	}
     public static int getFCD16(int c) {
-        return  fcdTrieImpl.fcdTrie.getValue(c);
+        return  fcdTrieImpl.fcdTrie.getCodePointValue(c);
     }
     	
 	private static int getExtraDataIndex(long norm32) {
