@@ -354,8 +354,6 @@ void TestQuickCheckResultNO()
   int count = 0;
   UErrorCode error = U_ZERO_ERROR;
 
-  // u_getCombiningClass(0x00c5);
-
   for (; count < SIZE; count ++)
   {
     if (unorm_quickCheck(&(CPNFD[count]), 1, UCOL_DECOMP_CAN, &error) != 
