@@ -641,9 +641,11 @@ public class ICUService extends ICUNotifier {
      * This also resets the statistics. Used for debugging purposes.
      */
     public String stats() {
-	String stats = factoryLock.getStats().toString();
-	factoryLock.clearStats();
-	return stats;
+	ICURWLock.Stats stats = factoryLock.clearStats();
+	if (stats != null) {
+	    return stats.toString();
+	}
+	return "no stats";
     }
 }
 
