@@ -216,7 +216,7 @@ main(int argc, const char *argv[]) {
 
     /* determine the length of tables for the data offset of the strings */
     tagOffset = 2 + 4 * aliasCount + 2 + 4 * converterCount;
-    stringOffset = tagOffset + 2 + (2 * tagCount) * converterCount + tagBlock.top;
+    stringOffset = (uint16_t)(tagOffset + 2 + (2 * tagCount) * converterCount + tagBlock.top);
 
     /* write the table of aliases */
     udata_write16(out, aliasCount);
@@ -314,15 +314,15 @@ parseLine(const char *line) {
                 ++pos;
             }
             limit = pos;
-            
+
             if (start != limit) {
                 uint16_t tag;
-                
+
                 /* add the tag to the tag table */
-                tag = getTagNumber(line + start, limit - start);
+                tag = getTagNumber(line + start, (uint16_t)(limit - start));
                 addTaggedAlias(tag, alias, cnv);
             }
-            
+
             while (line[pos] && isspace((unsigned char)line[pos])) {
                 ++pos;
             }
@@ -383,7 +383,7 @@ parseLine(const char *line) {
                     uint16_t tag;
 
                     /* add the tag to the tag table */
-                    tag = getTagNumber(line + start, limit - start);
+                    tag = getTagNumber(line + start, (uint16_t)(limit - start));
                     addTaggedAlias(tag, alias, cnv);
                 }
 
