@@ -5,8 +5,7 @@
 // *
 // *******************************************************************************
 // * Amharic language.
-// * Contributed by Daniel Yacob <yacob@geez.org>
-// *
+// * Contributed by Daniel Yacob <yacob@geez.org>, Ge'ez Frontier Foundation
 
 am {
     Version{ "x0.1" }
@@ -61,5 +60,15 @@ am {
     }
     LocaleScript {
     	"Ethi",
+    }
+    Eras {
+            "\u12D3/\u12D3",
+            "\u12D3/\u121D"
+    }
+    Languages { 
+        am { "\u12A0\u121B\u122D\u129" }
+    }
+    Countries { 
+        ET { "\u12A2\u1275\u12EE\u1335\u12EB" }
     }
 }

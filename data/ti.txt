@@ -5,7 +5,7 @@
 // *
 // *******************************************************************************
 // * Tigrigna language locale.
-// * Contributed by Daniel Yacob <yacob@geez.org>
+// * Contributed by Daniel Yacob <yacob@geez.org>, Ge'ez Frontier Foundation
 
 ti{ 
     Version{ "x0.1" }
@@ -57,4 +57,16 @@ ti{
             "\u12F2\u1234\u121D\u1260\u122D",
             "",
     }
+    Eras {
+            "\u12D3/\u12D3",
+            "\u12D3/\u121D"
+    }
+    Languages { 
+        ti { "\u1275\u130D\u122D\u129B" }
+    }
+    Countries { 
+        ER { "\u12A4\u122D\u1275\u122B" }
+        ET { "\u12A2\u1275\u12EE\u1335\u12EB" }
+    }
 }
+

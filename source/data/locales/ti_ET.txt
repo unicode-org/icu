@@ -5,7 +5,7 @@
 // *
 // *******************************************************************************
 // * Tigrigna language locale for Ethiopia.
-// * Contributed by Daniel Yacob <yacob@geez.org>
+// * Contributed by Daniel Yacob <yacob@geez.org>, Ge'ez Frontier Foundation
 
 ti_ET {
     Version{ "x0.1" }
@@ -17,7 +17,7 @@ ti_ET {
     // CountryNumber { "231" }
     CurrencyElements {
             "$",
-            "ETB ",
+            "ETB",
             ".",
     }
     DateTimePatterns { 
@@ -25,9 +25,9 @@ ti_ET {
             "hh:mm:ss a",
             "h:mm:ss a",
             "h:mm a",
-            "EEEE dd MMMM yyyy",
+            "EEEE\u1363 dd MMMM \u1218\u12D3\u120D\u1272 yyyy G",
             "dd MMMM yyyy",
-            "MMM dd,yy",
+            "dd-MMM-yy",
             "dd/MM/yy",
             "{1} {0}",
     }
