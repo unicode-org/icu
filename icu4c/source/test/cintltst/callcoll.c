@@ -249,11 +249,16 @@ void addAllCollTest(TestNode** root)
 
 static UCollationResult compareUsingPartials(UCollator *coll, const UChar source[], int32_t sLen, const UChar target[], int32_t tLen, int32_t pieceSize, UErrorCode *status) {
   int32_t partialSKResult = 0;
-  uint8_t sBuf[512], tBuf[512];
   UCharIterator sIter, tIter;
   uint32_t sState[2], tState[2];
   int32_t sSize = pieceSize, tSize = pieceSize;
   int32_t i = 0;
+  uint8_t sBuf[16384], tBuf[16384];
+  if(pieceSize > 16384) {
+    log_err("Partial sortkey size buffer too small. Please consider increasing the buffer!\n");
+    *status = U_BUFFER_OVERFLOW_ERROR;
+    return UCOL_EQUAL;
+  }
   *status = U_ZERO_ERROR;
   sState[0] = 0; sState[1] = 0;
   tState[0] = 0; tState[1] = 0;
