@@ -176,7 +176,7 @@
 #endif
 
 /** The possible types of text boundaries. */
-enum UBreakIteratorType {
+typedef enum UBreakIteratorType {
   /** Character breaks */
   UBRK_CHARACTER,
   /** Word breaks */
@@ -187,8 +187,7 @@ enum UBreakIteratorType {
   UBRK_SENTENCE,
   /** Title Case breaks */
   UBRK_TITLE
-};
-typedef enum UBreakIteratorType UBreakIteratorType;
+} UBreakIteratorType;
 
 /** Value indicating all text boundaries have been returned.
  *
@@ -203,7 +202,7 @@ typedef enum UBreakIteratorType UBreakIteratorType;
  *  Applications should check for tag values falling within the range, rather
  *  than for single individual values.
 */
-enum UWordBreak {
+typedef enum UWordBreak {
     /** Tag value for "words" that do not fit into any of other categories. 
      *  Includes spaces and most punctuation. */
     UBRK_WORD_NONE           = 0,
@@ -226,8 +225,7 @@ enum UWordBreak {
     UBRK_WORD_IDEO           = 400,
     /** Tag value for words containing ideographic characters, upper limit */
     UBRK_WORD_IDEO_LIMIT     = 500
-};
-typedef enum UWordBreak UWordBreak;
+} UWordBreak;
 
 
 /**
