@@ -159,6 +159,8 @@ RegexStaticSets::RegexStaticSets(UErrorCode *status) {
         fRuleSets[i] = NULL;
     }
     fUnescapeCharSet = NULL;
+    fRuleDigits      = NULL;
+    fEmptyString     = NULL;
 
     // Then init the sets to their correct values.
     fPropSets[URX_ISWORD_SET]  = new UnicodeSet(gIsWordPattern,     *status);
@@ -170,7 +172,11 @@ RegexStaticSets::RegexStaticSets(UErrorCode *status) {
     fPropSets[URX_GC_T]        = new UnicodeSet(gGC_TPattern,       *status);
     fPropSets[URX_GC_LV]       = new UnicodeSet(gGC_LVPattern,      *status);
     fPropSets[URX_GC_LVT]      = new UnicodeSet(gGC_LVTPattern,     *status);
-    
+    if (U_FAILURE(*status)) {
+        // Bail out if we were unable to create the above sets.
+        // The rest of the initialization needs them, so we cannot proceed.
+        return;
+    }
     
     
     //
@@ -236,6 +242,7 @@ void RegexStaticSets::initGlobals(UErrorCode *status) {
     if (p == NULL) {
         p = new RegexStaticSets(status);
         if (U_FAILURE(*status)) {
+            delete p;
             return;
         }
         umtx_lock(NULL);
