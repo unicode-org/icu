@@ -6,8 +6,8 @@
 *
 * $Source: 
 *      /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterCategory.java $ 
-* $Date: 2002/12/11 19:41:02 $ 
-* $Revision: 1.9 $
+* $Date: 2003/01/22 19:22:51 $ 
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -362,7 +362,8 @@ public interface UProperty
     public static final int INT_LIMIT = 0x100B;
 
     /** 
-     * Enumerated property General_Category, returned as a bit mask. 
+     * Bitmask property General_Category_Mask.
+     * This is the General_Category property returned as a bit mask.
      * When used in UCharacter.getIntPropertyValue(c),
      * returns bit masks for UCharacterCategory values where exactly one bit is set. 
      * When used with UCharacter.getPropertyValueName() and UCharacter.getPropertyValueEnum(), 
