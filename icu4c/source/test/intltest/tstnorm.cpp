@@ -780,4 +780,14 @@ BasicNormalizerTest::TestNormalizerAPI() {
     if(copy.last()!=0x308) {
         errln("error in Normalizer(1000*U+0308).last()");
     }
+
+    // test UNORM_NONE
+    norm.setMode(UNORM_NONE);
+    if(norm.first()!=0x61 || norm.next()!=0x308 || norm.last()!=0x2f800) {
+        errln("error in Normalizer(UNORM_NONE).first()/next()/last()");
+    }
+    Normalizer::normalize(s, UNORM_NONE, 0, out, status);
+    if(out!=s) {
+        errln("error in Normalizer::normalize(UNORM_NONE)");
+    }
 }
