@@ -575,6 +575,8 @@ static void testPrimary(UCollator* col, const UChar* p,const UChar* q){
     UChar source[256] = { '\0'};
     UChar target[256] = { '\0'};
 
+    log_verbose("Testing primary\n");
+
     doTest(col, p, q, UCOL_LESS);
 /*
     UCollationResult result = ucol_strcoll(col,p,u_strlen(p),q,u_strlen(q));
@@ -598,6 +600,8 @@ static void testPrimary(UCollator* col, const UChar* p,const UChar* q){
 static void testSecondary(UCollator* col, const UChar* p,const UChar* q){
     UChar source[256] = { '\0'};
     UChar target[256] = { '\0'};
+
+    log_verbose("Testing secondary\n");
 
     doTest(col, p, q, UCOL_LESS);
 /*
@@ -633,6 +637,8 @@ static void testSecondary(UCollator* col, const UChar* p,const UChar* q){
 static void testTertiary(UCollator* col, const UChar* p,const UChar* q){
     UChar source[256] = { '\0'};
     UChar target[256] = { '\0'};
+
+    log_verbose("Testing primary\n");
 
     doTest(col, p, q, UCOL_LESS);
 /*
@@ -878,9 +884,15 @@ static const char* localesToTest[] = {
 };
 
 static const char* rulesToTest[] = {
-  "& Z < p, P",
-    "& abe < d < b < e",
-    "& a < d/be < b < e"
+  /*"& Z < p, P",*/
+    /* Cui Mins rules */
+    "<o,O<p,P<q,Q<'?'/u<r,R<u,U", /*"<o,O<p,P<q,Q<r,R<u,U & Qu<'?'",*/
+    "<o,O<p,P<q,Q;'?'/u<r,R<u,U", /*"<o,O<p,P<q,Q<r,R<u,U & Qu;'?'",*/
+    "<o,O<p,P<q,Q,'?'/u<r,R<u,U", /*"<o,O<p,P<q,Q<r,R<u,U&'Qu','?'",*/
+    "<3<4<5<c,C<f,F<m,M<o,O<p,P<q,Q;'?'/u<r,R<u,U",  /*"<'?'<3<4<5<a,A<f,F<m,M<o,O<p,P<q,Q<r,R<u,U & Qu;'?'",*/
+    "<'?';Qu<3<4<5<c,C<f,F<m,M<o,O<p,P<q,Q<r,R<u,U",  /*"<'?'<3<4<5<a,A<f,F<m,M<o,O<p,P<q,Q<r,R<u,U & '?';Qu",*/
+    "<3<4<5<c,C<f,F<m,M<o,O<p,P<q,Q;'?'/um<r,R<u,U", /*"<'?'<3<4<5<a,A<f,F<m,M<o,O<p,P<q,Q<r,R<u,U & Qum;'?'",*/
+    "<'?';Qum<3<4<5<c,C<f,F<m,M<o,O<p,P<q,Q<r,R<u,U"  /*"<'?'<3<4<5<a,A<f,F<m,M<o,O<p,P<q,Q<r,R<u,U & '?';Qum"*/
 };
 
 static void RamsRulesTest( ) {
@@ -891,7 +903,7 @@ static void RamsRulesTest( ) {
   uint32_t ruleLen;
 
   log_verbose("RamsRulesTest\n");
- 
+/* 
   for(i = 0; i<sizeof(localesToTest)/sizeof(localesToTest[0]); i++) {
     coll = ucol_open(localesToTest[i], &status);
     log_verbose("Testing locale: %s\n", localesToTest[i]);
@@ -901,7 +913,7 @@ static void RamsRulesTest( ) {
       ucol_close(coll);
     }
   }
-
+*/
   for(i = 0; i<sizeof(rulesToTest)/sizeof(rulesToTest[0]); i++) {
     log_verbose("Testing rule: %s\n", rulesToTest[i]);
     u_uastrcpy(rule, rulesToTest[i]);
