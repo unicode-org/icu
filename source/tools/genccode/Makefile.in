@@ -26,7 +26,7 @@ MANX_FILES = $(TARGET).$(SECTION)
 ALL_MAN_FILES = $(MANX_FILES)
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(DEPS) $(RES_FILES) $(TEST_FILES)
+CLEANFILES = *~ $(DEPS) $(RES_FILES) $(TEST_FILES) $(ALL_MAN_FILES)
 
 ## Target information
 TARGET = genccode
