@@ -37,6 +37,7 @@
 #define CR               0x000D
 #define LF               0x000A
 #define SPACE            0x0020
+#define TAB              0x0009
 #define ESCAPE           0x005C
 #define HASH             0x0023
 #define QUOTE            0x0027
@@ -476,7 +477,7 @@ parseUCARules(char *tag, uint32_t startline, UErrorCode *status)
                 return NULL;
             }
         }
-        else if (c == SPACE || c == CR || c == LF)
+        else if (c == SPACE || c == CR || c == LF || c == TAB)
         {
         /* ignore spaces carriage returns
         * and line feed unless in the form \uXXXX
@@ -495,7 +496,7 @@ parseUCARules(char *tag, uint32_t startline, UErrorCode *status)
         }
     }
 
-    result = string_open(bundle, tag, pTarget, (int32_t)(target - pTarget), NULL, status);
+    result = string_open(bundle, tag, pTarget, (int32_t)(target - pTarget - 1), NULL, status);
 
     ucbuf_close(ucbuf);
     uprv_free(pTarget);
