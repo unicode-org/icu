@@ -29,6 +29,7 @@
 #include "regextst.h"
 #include "tstnorm.h"
 #include "canittst.h"
+#include "icusvtst.h"
 
 #define CASE_SUITE(id, suite) case id:                  \
                           name = #suite;                \
@@ -135,6 +136,15 @@ void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, const char* &nam
 #endif /* ICU_UNICODECONVERTER_USE_DEPRECATES */
                 break;
 
+        case 10: name = "icuserv";
+#if !UCONFIG_NO_SERVICE
+                if (exec) {
+                    logln("TestSuite ICUService---"); logln();
+                    ICUServiceTest test;
+                    callTest(test, par);
+                }
+#endif
+                break;
         default: name = ""; break;
     }
 }
