@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2003/10/24 17:57:09 $
-* $Revision: 1.79 $
+* $Date: 2003/11/14 21:55:19 $
+* $Revision: 1.80 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -307,6 +307,20 @@
                 <!-- pathelement location="clover.jar"-->
                 <pathelement path="${build.dir}"/>
             </classpath>
+    </java>
+    </target>
+
+    <target name="secureCheck" depends="tests">
+    <java classname="com.ibm.icu.dev.test.TestAll" fork="yes">
+        <!-- (use for debugging, LOTS of output) jvmarg value="-Djava.security.debug=access" -->
+        <jvmarg value="-Djava.security.manager"/>
+	<jvmarg value="-Djava.security.policy=src/com/ibm/icu/dev/test/security.policy"/>
+	<arg value="-w"/>
+        <classpath>
+            <pathelement path="${java.class.path}/"/>
+	    <!-- pathelement location="clover.jar"-->
+            <pathelement path="${build.dir}"/>
+        </classpath>
     </java>
     </target>
 

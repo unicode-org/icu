@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatRegressionTest.java,v $ 
- * $Date: 2003/10/02 20:50:58 $ 
- * $Revision: 1.9 $
+ * $Date: 2003/11/14 21:56:53 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -468,6 +468,8 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         } catch (ClassNotFoundException e) {
             errln("Fail: " + e);
         } catch (Exception e) {
+	    System.out.println(e);
+	    System.out.println(e.getCause());
             errln("Fail: " + e);
         }
     
@@ -646,6 +648,8 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
     // {sfb} what to do with this one ?? 
     public void Test4108407() {
         /*
+	// TODO user.timezone is a protected system property, catch securityexception and warn
+	// if this is reenabled
         long l = System.currentTimeMillis(); 
         logln("user.timezone = " + System.getProperty("user.timezone", "?"));
         logln("Time Zone :" + 

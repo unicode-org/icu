@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/RoundTripTest.java,v $
- * $Date: 2003/09/09 21:30:46 $
- * $Revision: 1.56 $
+ * $Date: 2003/11/14 21:56:53 $
+ * $Revision: 1.57 $
  *
  *******************************************************************************
  */
@@ -998,13 +998,18 @@ public class RoundTripTest extends TestFmwk {
 
             // note: check that every transliterator transliterates the null string correctly!
 
-            String logFileName = "test_" + transliteratorID.replace('/', '_') + ".html";
+	    // {dlf} reorganize so can run test in protected security environment
+//              String logFileName = "test_" + transliteratorID.replace('/', '_') + ".html";
 
-            File lf = new File(logFileName);
-            log.logln("Creating log file " + lf.getAbsoluteFile());
+//              File lf = new File(logFileName);
+//              log.logln("Creating log file " + lf.getAbsoluteFile());
 
+//              out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
+//                        new FileOutputStream(logFileName), "UTF8"), 4*1024));
+
+	    ByteArrayOutputStream bast = new ByteArrayOutputStream();
             out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
-                      new FileOutputStream(logFileName), "UTF8"), 4*1024));
+                      bast, "UTF8"), 4*1024));
             //out.write('\uFFEF');    // BOM
             out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">");
             out.println("<HTML><HEAD>");
@@ -1020,12 +1025,25 @@ public class RoundTripTest extends TestFmwk {
             out.close();
 
             if (errorCount > 0) {
-                log.errln(transliteratorID + " errors: "
-                    + errorCount + (errorCount > errorLimit ? " (at least!)" : "")
-                    + ", see " + lf.getAbsoluteFile());
+		try {
+		    String logFileName = "test_" + transliteratorID.replace('/', '_') + ".html";
+		    File lf = new File(logFileName);
+		    log.logln("Creating log file " + lf.getAbsoluteFile());
+		    FileOutputStream fos = new FileOutputStream(lf);
+		    fos.write(bast.toByteArray());
+		    fos.close();
+		    log.errln(transliteratorID + " errors: "
+			      + errorCount + (errorCount > errorLimit ? " (at least!)" : "")
+			      + ", see " + lf.getAbsoluteFile());
+		}
+		catch (SecurityException e) {
+		    log.errln(transliteratorID + " errors: "
+			      + errorCount + (errorCount > errorLimit ? " (at least!)" : "")
+			      + ", no log provided due to protected test domain");
+		}
             } else {
                 log.logln(transliteratorID + " ok");
-                new File(logFileName).delete();
+//                  new File(logFileName).delete();
             }
         }
 

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/timezone/TimeZoneRegression.java,v $
- * $Date: 2003/10/09 22:30:05 $
- * $Revision: 1.13 $
+ * $Date: 2003/11/14 21:56:53 $
+ * $Revision: 1.14 $
  *
  *******************************************************************************
  */
@@ -34,10 +34,16 @@ public class TimeZoneRegression extends TestFmwk {
     public void Test4052967() {
         logln("*** CHECK TIMEZONE AGAINST HOST OS SETTING ***");
 	String id = TimeZone.getDefault().getID();
-        logln("user.timezone: " + System.getProperty("user.timezone", "<not set>"));
-	logln("TimeZone.getDefault().getID(): " + id);
-        logln(new Date().toString());
-        logln("*** THE RESULTS OF THIS TEST MUST BE VERIFIED MANUALLY ***");
+	try {
+	    // user.timezone is a protected system property
+	    logln("user.timezone: " + System.getProperty("user.timezone", "<not set>"));
+	    logln("TimeZone.getDefault().getID(): " + id);
+	    logln(new Date().toString());
+	    logln("*** THE RESULTS OF THIS TEST MUST BE VERIFIED MANUALLY ***");
+	}
+	catch (SecurityException e) {
+	    warnln("security exception: " + e.toString());
+	}
     }
 
     public void Test4073209() {

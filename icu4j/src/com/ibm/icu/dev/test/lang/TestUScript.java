@@ -13,7 +13,7 @@ import com.ibm.icu.dev.test.TestFmwk;
 import java.util.Locale;
 import java.util.MissingResourceException;
 
-public class TestUScript extends TestFmwk{
+public class TestUScript extends TestFmwk {
 
     /**
     * Constructor
@@ -62,7 +62,9 @@ public class TestUScript extends TestFmwk{
                 errln("Number of Errors in UScript.getCode() : " + numErrors);
             }
         }catch(MissingResourceException e){
-            warnln("Could not find locale data: " + e.getMessage());
+            if (!noData()) {
+                warnln("Could not find locale data: " + e.getMessage());
+            }
         }
     }
     public void TestMultipleCode(){
@@ -93,7 +95,9 @@ public class TestUScript extends TestFmwk{
                 errln("Number of Errors in UScript.getCode() : " + numErrors);
             }
         }catch(MissingResourceException e){
-            warnln("Could not find locale data: " + e.getMessage());
+            if (!noData()) {
+                warnln("Could not find locale data: " + e.getMessage());
+            }
         }
     }
     public void TestGetCode(){
@@ -163,7 +167,9 @@ public class TestUScript extends TestFmwk{
                 errln("Number of Errors in UScript.getCode() : " + numErrors);
             }
         }catch(MissingResourceException e){
-            warnln("Could not find locale data: " + e.getMessage());
+            if (!noData()) {
+                warnln("Could not find locale data: " + e.getMessage());
+            }
         }
 
     }

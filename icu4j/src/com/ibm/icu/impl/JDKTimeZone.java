@@ -14,6 +14,7 @@ import com.ibm.icu.util.SimpleTimeZone;
 import java.util.Date;
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
+import java.io.IOException;
 
 /**
  * A wrapper around a java.util.TimeZone object.  This is a concrete
@@ -33,7 +34,7 @@ public class JDKTimeZone extends TimeZone {
     /**
      * The java.util.TimeZone wrapped by this object.  Must not be null.
      */
-    java.util.TimeZone zone;
+    transient java.util.TimeZone zone;
 
     /**
      * Given a java.util.TimeZone, wrap it in the appropriate adapter
@@ -202,6 +203,15 @@ public class JDKTimeZone extends TimeZone {
      */
     public String toString() {
         return "JDKTimeZone: " + unwrap().toString();
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+	out.writeObject(zone.getID());
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+	String id = (String)in.readObject();
+	zone = java.util.TimeZone.getTimeZone(id);
     }
 }
 

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $
- * $Date: 2003/10/09 21:24:37 $
- * $Revision: 1.54 $
+ * $Date: 2003/11/14 21:56:53 $
+ * $Revision: 1.55 $
  *
  *****************************************************************************************
  */
@@ -1044,6 +1044,10 @@ public class TestFmwk extends AbstractTestLog {
             return inDocMode() && (listlevel == 2 || (indentLevel == 1 && listlevel > 0));
         }
 
+	// return 0, -1, or 1
+	// 1: run this test
+	// 0: might run this test, no positive include or exclude on this group
+	// -1: exclude this test
         public int filter(String testName) {
             int result = 0;
             if (filter == null) {
