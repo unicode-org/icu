@@ -6,10 +6,10 @@
 */
 
 #include "unicode/utypes.h"
-#include "cmemory.h"
 #include "rbbidata.h"
 #include "utrie.h"
 #include "udatamem.h"
+#include "cmemory.h"
 
 #include <assert.h>
 #include <stdio.h>

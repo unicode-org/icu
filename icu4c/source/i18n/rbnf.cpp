@@ -8,10 +8,6 @@
 
 #if U_HAVE_RBNF
 
-#include "nfrs.h"
-
-#include "cmemory.h"
-#include "cstring.h"
 #include "unicode/normlzr.h"
 #include "unicode/tblcoll.h"
 #include "unicode/uchar.h"
@@ -22,7 +18,10 @@
 #include "unicode/ustring.h"
 #include "unicode/utf16.h"
 
-#include <stdio.h>
+#include "nfrs.h"
+
+#include "cmemory.h"
+#include "cstring.h"
 
 static const UChar gPercentPercent[] =
 {

@@ -16,15 +16,15 @@
  *
  */
 
-#include <stdio.h>
-#include <errno.h>
-#include <string.h>
-#include <stdlib.h>
-
 #include <unicode/utypes.h>
 #include <unicode/ucnv.h>
 #include <unicode/unistr.h>
 #include <unicode/translit.h>
+
+#include <stdio.h>
+#include <errno.h>
+#include <string.h>
+#include <stdlib.h>
 
 #include "cmemory.h"
 #include "cstring.h"

@@ -23,12 +23,12 @@
 *   03/07/2001  synwee     merged UCA's maxexpansion and tailoring's
 */
 
-#include "ucol_elm.h"
 #include "unicode/uchar.h"
-#include "unormimp.h"
-#include "cmemory.h"
 #include "unicode/unistr.h"
+#include "ucol_elm.h"
+#include "unormimp.h"
 #include "caniter.h"
+#include "cmemory.h"
 
 U_NAMESPACE_BEGIN
 

@@ -41,8 +41,8 @@
 #include "mutex.h"
 #include "unicode/udata.h"
 #include "tzdat.h"
-#include "cstring.h"
 #include "ucln_in.h"
+#include "cstring.h"
 
 // static initialization
 

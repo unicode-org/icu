@@ -4,16 +4,16 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
-#include <stdlib.h>
-#include <time.h>
-#include <string.h>
-
 #include "unicode/utypes.h"
 
 #include "cstring.h"
 #include "unicode/unistr.h"
 #include "unicode/resbund.h"
 #include "restsnew.h"
+
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
 #include <limits.h>
 
 //***************************************************************************************

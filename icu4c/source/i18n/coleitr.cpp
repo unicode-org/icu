@@ -25,9 +25,9 @@
 */
 
 #include "unicode/coleitr.h"
+#include "unicode/ustring.h"
 #include "ucol_imp.h"
 #include "cmemory.h"
-#include "unicode/ustring.h"
 
 
 /* Constants --------------------------------------------------------------- */

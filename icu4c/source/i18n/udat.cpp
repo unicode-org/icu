@@ -12,12 +12,12 @@
 #include "unicode/timezone.h"
 #include "unicode/smpdtfmt.h"
 #include "unicode/fieldpos.h"
-#include "cpputils.h"
 #include "unicode/parsepos.h"
 #include "unicode/calendar.h"
 #include "unicode/numfmt.h"
 #include "unicode/dtfmtsym.h"
 #include "unicode/ustring.h"
+#include "cpputils.h"
 
 U_NAMESPACE_USE
 

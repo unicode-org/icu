@@ -16,6 +16,14 @@
 * 03/16/2001  weiv      Collation framework is rewritten in C and made UCA compliant
 */
 
+#include "unicode/uloc.h"
+#include "unicode/coll.h"
+#include "unicode/tblcoll.h"
+#include "unicode/coleitr.h"
+#include "unicode/unorm.h"
+#include "unicode/udata.h"
+#include "unicode/uchar.h"
+
 #include "ucol_bld.h"
 #include "ucol_imp.h"
 #include "ucol_tok.h"
@@ -24,18 +32,10 @@
 
 #include "unormimp.h"
 #include "uresimp.h"
-#include "cstring.h"
 #include "umutex.h"
 #include "uhash.h"
 #include "ucln_in.h" 
-
-#include "unicode/uloc.h"
-#include "unicode/coll.h"
-#include "unicode/tblcoll.h"
-#include "unicode/coleitr.h"
-#include "unicode/unorm.h"
-#include "unicode/udata.h"
-#include "unicode/uchar.h"
+#include "cstring.h"
 
 #ifdef UCOL_DEBUG
 #include <stdio.h>

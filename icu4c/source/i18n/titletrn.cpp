@@ -9,11 +9,11 @@
 */
 
 #include "unicode/uchar.h"
-#include "titletrn.h"
 #include "unicode/uniset.h"
+#include "unicode/ustring.h"
+#include "titletrn.h"
 #include "mutex.h"
 #include "ucln_in.h"
-#include "unicode/ustring.h"
 #include "ustr_imp.h"
 #include "cpputils.h"
 

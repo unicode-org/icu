@@ -18,17 +18,17 @@
 *   It is used only internally by ucol_bld.
 */
 
+#include "unicode/utypes.h"
+#include "ucol_imp.h"
+#include "ucol_wgt.h"
+#include "cmemory.h"
+
 #ifdef UCOL_DEBUG
 #   include <stdio.h>
 #endif
 
 /* we are using qsort() */
 #include <stdlib.h>
-
-#include "unicode/utypes.h"
-#include "cmemory.h"
-#include "ucol_imp.h"
-#include "ucol_wgt.h"
 
 #if defined(UCOL_DEBUG) && defined(WIN32)
     /* turn off "unreferenced formal parameter" */

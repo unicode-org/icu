@@ -38,14 +38,14 @@
 */
  
 #include "unicode/decimfmt.h"
-#include "digitlst.h"
+#include "unicode/ucurr.h"
+#include "unicode/ustring.h"
 #include "unicode/dcfmtsym.h"
 #include "unicode/resbund.h"
 #include "unicode/uchar.h"
+#include "digitlst.h"
 #include "cmemory.h"
 #include "cstring.h"
-#include "unicode/ucurr.h"
-#include "unicode/ustring.h"
 
 U_NAMESPACE_BEGIN
 
