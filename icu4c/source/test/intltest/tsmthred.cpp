@@ -1,20 +1,4 @@
-/*
-*****************************************************************************************
-*                                                                                       *
-* COPYRIGHT:                                                                            *
-*   (C) Copyright International Business Machines Corporation,  1998                    *
-*   Licensed Material - Program-Property of IBM - All Rights Reserved.                  *
-*   US Government Users Restricted Rights - Use, duplication, or disclosure             *
-*   restricted by GSA ADP Schedule Contract with IBM Corp.                              *
-*                                                                                       *
-*****************************************************************************************
-*/
-
-// define NO_THREADED_INTL to not test ICU in a threaded way.
-
-
-/* Check our settings... */
-#include "platform.h"
+#include "utypes.h"
 
 /* APP_NO_THREADS is an old symbol. We'll honour it if present. */
 #ifdef APP_NO_THREADS
