@@ -13,6 +13,7 @@
 *                         instead of calling the equivalent c++ api (coleitr.h)
 ******************************************************************************/
 
+#include <stdio.h>
 #include "unicode/ucoleitr.h"
 #include "unicode/ustring.h"
 #include "unicode/sortkey.h"
@@ -174,9 +175,14 @@ ucol_previous(UCollationElements *elems,
     }                                                                          
     else 
     {                    
-      if (data->pos == data->string || data->pos == data->writableBuffer)
+      /* weiv tentatively changed */
+      /*if (data->pos == data->string || data->pos == data->writableBuffer)*/
+      if ((data->pos <= data->string && data->isUsingWritable == FALSE) || (data->pos <= data->writableBuffer && data->isUsingWritable == TRUE)) {
+        if ((data->pos < data->string && data->isUsingWritable == FALSE) || (data->pos < data->writableBuffer && data->isUsingWritable == TRUE)) {
+          fprintf(stderr, "less pos:%x string:%x writable:%x\n", data->pos, data->string, data->writableBuffer);
+        }  
         (result) = UCOL_NO_MORE_CES;                                                                                                                    
-      else 
+     } else 
       {                  
         data->pos --;                                 
       

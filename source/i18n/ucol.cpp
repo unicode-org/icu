@@ -825,8 +825,13 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
     if (UTF_IS_SECOND_SURROGATE(ch)) 
     {
       UChar *temp = collationSource->pos;
-      if (((collationSource->string < temp) ||
-          (collationSource->writableBuffer < temp)) &&
+      /* This is where the s***t hits the fan */
+      /* it turns out, the first part of the if can be satisfied even if we're */
+      /* at the beggining of the string */
+      /* we have to make sure we know what is the situation we're in */
+      /* quick fix is by using isUsingWritable, as shown below */
+      if ((((collationSource->string < temp && collationSource->isUsingWritable == FALSE)) ||
+          ((collationSource->writableBuffer < temp && collationSource->isUsingWritable == TRUE))) &&
           (UTF_IS_FIRST_SURROGATE(prevChar = *(collationSource->pos - 1)))) 
       {
         uint32_t cp = ((prevChar << 10UL) + ch - ((0xd800 << 10UL) + 0xdc00));
@@ -1067,6 +1072,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
         source->pos   = targetCopy;
         source->len   = targetCopy;
         source->CEpos = source->toReturn = source->CEs;
+        source->isUsingWritable = TRUE;
         CE = UCOL_IGNORABLE;
       } 
       else 
