@@ -57,7 +57,7 @@ public:
             if (i < newStyles.length()) {
                 s.append(newStyles.charAt(i));
             } else {
-                s.append((UChar)(i + 0x0041));
+                s.append((UChar)(i + 0x0031));
             }
         }
         this->styles = s;
@@ -155,18 +155,24 @@ ReplaceableTest::runIndexedTest(int32_t index, UBool exec,
 
 
 void ReplaceableTest::TestReplaceableClass(void) {
-    UChar rawTestArray[5][6] = {
+    UChar rawTestArray[8][6] = {
         {0x0041, 0x0042, 0x0043, 0x0044, 0x0000, 0x0000}, // ABCD
         {0x0061, 0x0062, 0x0063, 0x0064, 0x00DF, 0x0000}, // abcd\u00DF
         {0x0061, 0x0042, 0x0043, 0x0044, 0x0000, 0x0000}, // aBCD
         {0x0041, 0x0300, 0x0045, 0x0300, 0x0000, 0x0000}, // A\u0300E\u0300
-        {0x00C0, 0x00C8, 0x0000, 0x0000, 0x0000, 0x0000}  // \u00C0\u00C8
+        {0x00C0, 0x00C8, 0x0000, 0x0000, 0x0000, 0x0000}, // \u00C0\u00C8
+        {0x0077, 0x0078, 0x0079, 0x0000, 0x0000, 0x0000}, /* "wxy" */
+        {0x0077, 0x0078, 0x0079, 0x007A, 0x0000, 0x0000}, /* "wxyz" */
+        {0x0077, 0x0078, 0x0079, 0x007A, 0x0075, 0x0000}, /* "wxyzu" */
     };
-    Check("Lower", rawTestArray[0], "1234", "");
-    Check("Upper", rawTestArray[1], "123455", ""); // must map 00DF to SS
-    Check("Title", rawTestArray[2], "1234", "");
-    Check("NFC",   rawTestArray[3], "1234", "13");
-    Check("NFD",   rawTestArray[4], "12", "1122");
+    Check("Lower", rawTestArray[0], "", "1234");
+    Check("Upper", rawTestArray[1], "", "123455"); // must map 00DF to SS
+    Check("Title", rawTestArray[2], "", "1234");
+    Check("NFC",   rawTestArray[3], "", "13");
+    Check("NFD",   rawTestArray[4], "", "1122");
+    Check("*(x) > A $1 B", rawTestArray[5], "", "11223");
+    Check("*(x)(y) > A $2 B $1 C $2 D", rawTestArray[6], "", "113322334");
+    Check("*(x)(y)(z) > A $3 B $2 C $1 D", rawTestArray[7], "", "114433225");
 }
     
 void ReplaceableTest::Check(const UnicodeString& transliteratorName, 
@@ -181,8 +187,17 @@ void ReplaceableTest::Check(const UnicodeString& transliteratorName,
         expectedStyles = styles;
     }
     UnicodeString original = tr->toString();
-    
-    Transliterator* t = Transliterator::createInstance(transliteratorName, UTRANS_FORWARD, status);
+
+    Transliterator* t;
+    if (transliteratorName.charAt(0) == 0x2A /*'*'*/) {
+        UnicodeString rules(transliteratorName);
+        rules.remove(0,1);
+        UParseError pe;
+        t = Transliterator::createFromRules("test", rules, UTRANS_FORWARD,
+                                            pe, status);
+    } else {
+        t = Transliterator::createInstance(transliteratorName, UTRANS_FORWARD, status);
+    }
     if (U_FAILURE(status)) {
         log("FAIL: failed to create the ");
         log(transliteratorName);
