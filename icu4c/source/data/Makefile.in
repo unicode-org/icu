@@ -265,7 +265,7 @@ thaidict.brk: $(SRCDATADIR)/thaidict.brk
 	$(RMV) $@ && ln -s $(BUILDDIR) $@
 
 $(BUILDDIR)/$(ICUDT)%.brk: $(BRKSRCDIR)/%.txt $(TOOLDIR)/genbrk/genbrk$(EXEEXT) $(DAT_FILES)
-	$(INVOKE) $(TOOLDIR)/genbrk/genbrk -i $(BUILDDIR) -r $< -o $@
+	$(INVOKE) $(TOOLDIR)/genbrk/genbrk -c -i $(BUILDDIR) -r $< -o $@
 
 ####################################################    CNV
 # CNV FILES
