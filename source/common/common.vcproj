@@ -364,6 +364,12 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\uarrsort.c">
+			</File>
+			<File
+				RelativePath=".\uarrsort.h">
+			</File>
+			<File
 				RelativePath=".\ucmp8.c">
 			</File>
 			<File
