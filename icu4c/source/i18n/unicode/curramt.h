@@ -24,7 +24,7 @@ U_NAMESPACE_BEGIN
  * A currency together with a numeric amount, such as 200 USD.
  *
  * @author Alan Liu
- * @internal
+ * @draft ICU 3.0
  */
 class U_I18N_API CurrencyAmount: public Measure {
  public:
@@ -36,7 +36,7 @@ class U_I18N_API CurrencyAmount: public Measure {
      * NULL and must have length 3
      * @param ec input-output error code. If the amount or the isoCode
      * is invalid, then this will be set to a failing value.
-     * @internal
+     * @draft ICU 3.0
      */
     CurrencyAmount(const Formattable& amount, const UChar* isoCode,
                    UErrorCode &ec);
@@ -49,33 +49,33 @@ class U_I18N_API CurrencyAmount: public Measure {
      * NULL and must have length 3
      * @param ec input-output error code. If the isoCode is invalid,
      * then this will be set to a failing value.
-     * @internal
+     * @draft ICU 3.0
      */
     CurrencyAmount(double amount, const UChar* isoCode,
                    UErrorCode &ec);
 
     /**
      * Copy constructor
-     * @internal
+     * @draft ICU 3.0
      */
     CurrencyAmount(const CurrencyAmount& other);
  
     /**
      * Assignment operator
-     * @internal
+     * @draft ICU 3.0
      */
     CurrencyAmount& operator=(const CurrencyAmount& other);
 
     /**
      * Return a polymorphic clone of this object.  The result will
      * have the same class as returned by getDynamicClassID().
-     * @internal
+     * @draft ICU 3.0
      */
     virtual UObject* clone() const;
 
     /**
      * Destructor
-     * @internal
+     * @draft ICU 3.0
      */
     virtual ~CurrencyAmount();
     
@@ -85,7 +85,7 @@ class U_I18N_API CurrencyAmount: public Measure {
      * @return The class ID for this object. All objects of a given
      * class have the same class ID.  Objects of other classes have
      * different class IDs.
-     * @internal
+     * @draft ICU 3.0
      */
     virtual UClassID getDynamicClassID() const;
 
@@ -93,19 +93,19 @@ class U_I18N_API CurrencyAmount: public Measure {
      * Returns the class ID for this class. This is used to compare to
      * the return value of getDynamicClassID().
      * @return The class ID for all objects of this class.
-     * @internal
+     * @draft ICU 3.0
      */
     static UClassID getStaticClassID();
 
     /**
      * Return the currency unit object of this object.
-     * @internal
+     * @draft ICU 3.0
      */
     inline const CurrencyUnit& getCurrency() const;
 
     /**
      * Return the ISO currency code of this object.
-     * @internal
+     * @draft ICU 3.0
      */
     inline const UChar* getISOCurrency() const;
 };
