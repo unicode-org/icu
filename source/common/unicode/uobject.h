@@ -69,11 +69,14 @@ public:
 #define U_CPP_MEMORY_TEST
 #ifdef U_CPP_MEMORY_TEST
     void *operator new(size_t size);
-    void *operator new[](size_t size);
     void operator delete(void *p);
+#if 0
+    /* Sun Forte really dislikes these functions. */
+    void *operator new[](size_t size);
     void operator delete[](void *p);
     void operator delete(void *p, size_t size);
     void operator delete[](void *p, size_t size);
+#endif
 #endif
 
     /**
