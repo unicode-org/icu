@@ -242,6 +242,7 @@ static void TestNewTypes() {
     int32_t len = 0;
     int32_t i = 0;
     int32_t intResult = 0;
+    const UChar *zeroString;
 
     strcpy(action, "Construction of testtypes bundle");
 
@@ -252,6 +253,21 @@ static void TestNewTypes() {
     CONFIRM_ErrorCode(status, U_ZERO_ERROR);
 
     CONFIRM_INT_NE(theBundle, NULL);
+
+    /* This test reads the string "abc\u0000def" from the bundle   */
+    /* if everything is working correctly, the size of this string */
+    /* should be 7. Everything else is a wrong answer, esp. 3 and 6*/
+
+    strcpy(action, "getting and testing of string with embeded zero");
+    res = ures_getByKey(theBundle, "zerotest", res, &status);
+    CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+    CONFIRM_INT_EQ(ures_getType(res), RES_STRING);
+    zeroString=ures_getString(res, &len, &status);
+    if(U_SUCCESS(status)){
+        CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+        CONFIRM_INT_EQ(len, 7);
+        CONFIRM_INT_NE(len, 3);
+    }
 
     strcpy(action, "getting and testing of binary type");
     res = ures_getByKey(theBundle, "binarytest", res, &status);
