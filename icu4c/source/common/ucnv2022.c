@@ -23,6 +23,7 @@
 *   09/20/2000  Ram	    Added support for ISO-2022-CN
 *		    Added implementations for getNextUChar()
 *		    for specific 2022 country variants.
+*   10/31/2000  Ram     Implemented offsets logic functions 
 */
 
 #include "unicode/utypes.h"
@@ -80,11 +81,12 @@ typedef enum  {
 
 
 typedef enum {
-        SBCS = 0,
+        ASCII1=0,
+        LATIN1,
+        SBCS,
         DBCS,
         MBCS,
-        LATIN1,
-        ASCII1
+        
 }Cnv2022Type;
 
 
@@ -92,7 +94,8 @@ typedef struct{
     UConverter *currentConverter;
     UConverter *fromUnicodeConverter;
     UBool isFirstBuffer;
-    StateEnum currentState;
+    StateEnum toUnicodeCurrentState;
+    StateEnum fromUnicodeCurrentState;
     int plane;
     uint8_t escSeq2022[10];
     UConverter* myConverterArray[9];
@@ -136,6 +139,9 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_ISO_2022 (UConverterToUnicodeArgs * ar
 U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args, 
                                                 UErrorCode* err);
 
+U_CFUNC void UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args, 
+                                                UErrorCode* err);
+
 U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs* args, 
                                               UErrorCode* err);
 
@@ -163,6 +169,9 @@ U_CFUNC UChar32 UConverter_getNextUChar_ISO_2022_KR (UConverterToUnicodeArgs * a
 
 /***************** ISO-2022-CN ********************************/
 U_CFUNC void UConverter_fromUnicode_ISO_2022_CN(UConverterFromUnicodeArgs* args, 
+                                                UErrorCode* err);
+
+U_CFUNC void UConverter_fromUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args, 
                                                 UErrorCode* err);
 
 U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs* args, 
@@ -276,24 +285,23 @@ const char* escSeqStateTable_Result_2022[MAX_STATES_2022] = {
          NULL		            ,NULL		        ,NULL	             ,NULL	            ,NULL		        ,NULL		            ,NULL	    	        ,"latin1"		        ,"latin1"		        ,"latin1"	            
         ,"ibm-865"	            ,"ibm-865"	        ,"ibm-865"	        ,"ibm-865"	        ,"ibm-865"	        ,"ibm-865"		        ,"JISX-201"	            ,"JISX-201"	            ,"latin1"		        ,"latin1"	            
         ,NULL		            ,"JISX-208"	        ,"gb_2312_80-1"     ,"JISX-208"	        ,NULL		        ,NULL		            ,NULL		            ,NULL		            ,"UTF8"		            ,"ISO-8859-1"           
-        ,"ISO-8859-7"	        ,NULL		        ,"ibm-955"	        ,"bm-367"	        ,"ibm-952"	        ,"ibm-949"		        ,"JISX-212"	            ,"ibm-1383"	            ,"ibm-952"		        ,"ibm-964"	            
+        ,"ISO-8859-7"	        ,NULL		        ,"ibm-955"	        ,"ibm-367"	        ,"ibm-952"	        ,"ibm-949"		        ,"JISX-212"	            ,"ibm-1383"	            ,"ibm-952"		        ,"ibm-964"	            
         ,"ibm-964"	            ,"ibm-964"	        ,"ibm-964"	        ,"ibm-964"	        ,"ibm-964"	        ,"gb_2312_80-1"	        ,"ibm-949"		        ,"ISO-IR-165"           ,"CNS-11643-1992,1"	    ,"CNS-11643-1992,2"     
         ,"CNS-11643-1992,3"	    ,"CNS-11643-1992,4" ,"CNS-11643-1992,5" ,"CNS-11643-1992,6" ,"CNS-11643-1992,7" ,"UTF16_PlatformEndian" ,"UTF16_PlatformEndian" ,"UTF16_PlatformEndian" ,"UTF16_PlatformEndian" ,"UTF16_PlatformEndian" 
         ,"UTF16_PlatformEndian" ,NULL		        ,"latin1"	        ,"ibm-912"	        ,"ibm-913"	        ,"ibm-914"		        ,"ibm-813"		        ,"ibm-1089"	            ,"ibm-920"		        ,"ibm-915"	            
         ,"ibm-915"	            ,"latin1"
 };
-    
-        
+           
 UCNV_TableStates_2022 escSeqStateTable_Value_2022[MAX_STATES_2022] = {
-    /*          0		        1			2		    3		    4			5		        6		        7			8		    9	    */
+    /*          0		                    1			              2		                        3		                    4			                5		                        6		                 7			                8		                    9	    */
     
-        VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_SS2_SEQUENCE	        ,VALID_SS2_SEQUENCE         ,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022        ,VALID_MAYBE_TERMINAL_2022  
-        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022	,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022	,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        
-        ,VALID_NON_TERMINAL_2022    ,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022	,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022	,VALID_NON_TERMINAL_2022    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        
-        ,VALID_TERMINAL_2022        ,VALID_NON_TERMINAL_2022    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022	,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        
-        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022	,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022	,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        
-        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022	,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022	,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        
-        ,VALID_TERMINAL_2022        ,VALID_NON_TERMINAL_2022    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022	,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        
+        VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022     ,VALID_NON_TERMINAL_2022    ,VALID_SS2_SEQUENCE	        ,VALID_SS2_SEQUENCE         ,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022        ,VALID_MAYBE_TERMINAL_2022  
+        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        
+        ,VALID_NON_TERMINAL_2022    ,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022	    ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022    ,VALID_NON_TERMINAL_2022	,VALID_NON_TERMINAL_2022    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        
+        ,VALID_TERMINAL_2022        ,VALID_NON_TERMINAL_2022    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        
+        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        
+        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        
+        ,VALID_TERMINAL_2022        ,VALID_NON_TERMINAL_2022    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022	    ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022        
         ,VALID_TERMINAL_2022        ,VALID_TERMINAL_2022
 };
     
@@ -391,7 +399,8 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
             myConverterData->myConverterArray[8]=   NULL;
             
             /* initialize the state variables */
-            myConverterData->currentState =ASCII;
+            myConverterData->toUnicodeCurrentState =ASCII;
+            myConverterData->fromUnicodeCurrentState= ASCII;
             myConverterData->targetIndex = 0;
             myConverterData->sourceIndex =0;
             myConverterData->isEscapeAppended=FALSE;
@@ -403,7 +412,7 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
             _ISO2022Impl.toUnicode		= UConverter_toUnicode_ISO_2022_JP;
             _ISO2022Impl.toUnicodeWithOffsets   = UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC;
             _ISO2022Impl.fromUnicode            = UConverter_fromUnicode_ISO_2022_JP;
-            _ISO2022Impl.fromUnicodeWithOffsets = UConverter_fromUnicode_ISO_2022_JP;
+            _ISO2022Impl.fromUnicodeWithOffsets = UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC;
             _ISO2022Impl.getNextUChar           = UConverter_getNextUChar_ISO_2022_JP;
             
             if(version){
@@ -457,7 +466,8 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
             myConverterData->myConverterArray[4] = NULL;
             
             /*initialize the state variables*/
-            myConverterData->currentState =ASCII;
+            myConverterData->toUnicodeCurrentState =ASCII;
+            myConverterData->fromUnicodeCurrentState =ASCII;
             myConverterData->targetIndex = 0;
             myConverterData->sourceIndex =0;
             myConverterData->isEscapeAppended=FALSE;
@@ -465,10 +475,10 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
             myConverterData->isLocaleSpecified=TRUE;
             
             /* set the function pointers to appropriate funtions */
-            _ISO2022Impl.toUnicode		= UConverter_toUnicode_ISO_2022_CN;
+            _ISO2022Impl.toUnicode		        = UConverter_toUnicode_ISO_2022_CN;
             _ISO2022Impl.toUnicodeWithOffsets   = UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC;
             _ISO2022Impl.fromUnicode            = UConverter_fromUnicode_ISO_2022_CN;
-            _ISO2022Impl.fromUnicodeWithOffsets = UConverter_fromUnicode_ISO_2022_CN;
+            _ISO2022Impl.fromUnicodeWithOffsets = UConverter_fromUnicode_ISO_2022_CN_OFFSETS_LOGIC;
             _ISO2022Impl.getNextUChar           = UConverter_getNextUChar_ISO_2022_CN;
             if(version){
                 switch (*version){
@@ -536,7 +546,8 @@ _ISO2022Reset(UConverter *converter) {
     }
     else {
         /* reset the state variables */
-        myConverterData->currentState =ASCII;
+        myConverterData->toUnicodeCurrentState =ASCII;
+        myConverterData->fromUnicodeCurrentState =ASCII;
         myConverterData->targetIndex = 0;
         myConverterData->sourceIndex =0;
         myConverterData->isEscapeAppended=FALSE;
@@ -1129,10 +1140,10 @@ static  char* escSeqChars[8] ={
 
 
 static void concatChar(UConverterFromUnicodeArgs* args, int32_t *targetIndex, int32_t *targetLength,
-                       int8_t charToAppend,UErrorCode* err);
+                       int8_t charToAppend,UErrorCode* err,int32_t *sourceIndex);
 
 static void concatEscape(UConverterFromUnicodeArgs* args, int32_t *targetIndex, int32_t *targetLength,
-                         const	char* strToAppend,UErrorCode* err,int len);
+                         const	char* strToAppend,UErrorCode* err,int len,int32_t *sourceIndex);
 
 static void concatString(UConverterFromUnicodeArgs* args, int32_t *targetIndex, int32_t *targetLength,
                          const	UChar32* strToAppend,UErrorCode* err,int32_t *sourceIndex);
@@ -1167,7 +1178,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args,
     const UChar *saveSource;
     char *saveTarget;
     uint32_t targetValue=0;
-    int32_t *saveOffsets ;
+    
     int32_t myTargetLength = args->targetLimit - args->target;
     int32_t mySourceLength = args->sourceLimit - args->source;
     int32_t mySourceIndex = 0;
@@ -1185,23 +1196,21 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args,
     const char *escSeq = NULL;
     UBool isShiftAppended = FALSE;
     UBool isTargetUCharDBCS=FALSE,oldIsTargetUCharDBCS=FALSE; 
-    
-    mySourceIndex = myConverterData->sourceIndex;
-    myTargetIndex = myConverterData->targetIndex;
     isEscapeAppended =(UBool) myConverterData->isEscapeAppended;
     isShiftAppended =(UBool) myConverterData->isShiftAppended;
     initIterState =ASCII;
+
     /* arguments check*/
     if ((args->converter == NULL) || (args->targetLimit < args->target) || (args->sourceLimit < args->source)){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
-    initIterState = myConverterData->currentState;
+    initIterState = myConverterData->fromUnicodeCurrentState;
     while(mySourceIndex <  mySourceLength){
-        currentState = myConverterData->currentState;
+        currentState = myConverterData->fromUnicodeCurrentState;
         myConverterData->fromUnicodeConverter = (myConverterData->fromUnicodeConverter == NULL) ?
             myConverterData->myConverterArray[0] :
-        myConverterData->myConverterArray[(int)myConverterData->currentState];
+        myConverterData->myConverterArray[(int)myConverterData->fromUnicodeCurrentState];
         isTargetUCharDBCS   = (UBool) args->converter->fromUnicodeStatus;
         
         if(myTargetIndex < myTargetLength){
@@ -1240,7 +1249,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args,
             if(mySourceChar == 0x0020){
                 
                 if(currentState > 2){
-                    concatEscape(args, &myTargetIndex, &myTargetLength,	escSeqChars[0],err,strlen(escSeqChars[0]));
+                    concatEscape(args, &myTargetIndex, &myTargetLength,	escSeqChars[0],err,strlen(escSeqChars[0]),&mySourceIndex);
                     
                     isTargetUCharDBCS=FALSE;
                 }
@@ -1253,7 +1262,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args,
             else if(mySourceChar== 0x000A || mySourceChar== 0x000D || mySourceChar==0x0009 || mySourceChar==0x000B){
                 
                 if((isTargetUCharDBCS || currentState==JISX201) &&  mySource[mySourceIndex-2]!=0x000D){
-                    concatEscape(args, &myTargetIndex, &myTargetLength,	escSeqChars[0],err,strlen(escSeqChars[0]));
+                    concatEscape(args, &myTargetIndex, &myTargetLength,	escSeqChars[0],err,strlen(escSeqChars[0]),&mySourceIndex);
                     isTargetUCharDBCS=FALSE;
                     isShiftAppended	=FALSE;
                     myConverterData->isEscapeAppended=isEscapeAppended=FALSE;
@@ -1325,9 +1334,18 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args,
                         case LATIN1:
                             if(mySourceChar < 0x0100){
                                 targetUniChar = mySourceChar;
-                            } else targetUniChar = missingCharMarker;
+                            } 
+                            else 
+                                targetUniChar = missingCharMarker;
                             break;
-                    
+
+                        case ASCII1:
+                            if(mySourceChar < 0x7f){
+                                targetUniChar = mySourceChar;
+                            }
+                            else 
+                                targetUniChar = missingCharMarker;
+                            break;
                         default:
                             /*not expected */ 
                             break;
@@ -1335,16 +1353,16 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args,
                     if(targetUniChar==missingCharMarker){
                         isEscapeAppended = FALSE; 
                         /* save the state */
-                        myConverterData->currentState=nextStateArray[myConverterData->version][currentState];
+                        myConverterData->fromUnicodeCurrentState=nextStateArray[myConverterData->version][currentState];
                         myConverterData->isEscapeAppended = isEscapeAppended;
                         myConverterData->isShiftAppended =isShiftAppended;
                         args->converter->fromUnicodeStatus = isTargetUCharDBCS;
-                        myConverterData->sourceIndex = mySourceIndex;
-                        myConverterData->targetIndex = myTargetIndex;
-                        currentState = myConverterData->currentState;
+                       /* myConverterData->sourceIndex = mySourceIndex;
+                        myConverterData->targetIndex = myTargetIndex;*/
+                        currentState = myConverterData->fromUnicodeCurrentState;
                         myConverterData->fromUnicodeConverter = (myConverterData->fromUnicodeConverter == NULL) ?
                         myConverterData->myConverterArray[0] :
-                                        myConverterData->myConverterArray[(int)myConverterData->currentState];
+                                        myConverterData->myConverterArray[(int)myConverterData->fromUnicodeCurrentState];
                         isTargetUCharDBCS   = (UBool) args->converter->fromUnicodeStatus;
                         myType= (Cnv2022Type) myConverterType[currentState];
                     }
@@ -1366,7 +1384,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args,
                     escSeq = escSeqChars[(int)currentState];
                     concatEscape(args, &myTargetIndex, &myTargetLength, 
                         escSeqChars[(int)currentState],
-                        err,strlen(escSeqChars[(int)currentState]));
+                        err,strlen(escSeqChars[(int)currentState]),&mySourceIndex);
                     
                     isEscapeAppended =TRUE;
                     myConverterData->isEscapeAppended=TRUE;
@@ -1375,7 +1393,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args,
                     if(currentState==ISO8859_1 || currentState==ISO8859_7){
 
                         concatEscape(args, &myTargetIndex, &myTargetLength,
-                            UCNV_SS2,err,strlen(UCNV_SS2));
+                            UCNV_SS2,err,strlen(UCNV_SS2),&mySourceIndex);
                     }
                 }
 
@@ -1393,20 +1411,19 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args,
                     reason = UCNV_UNASSIGNED;
                     *err = U_INVALID_CHAR_FOUND;
                     args->converter->invalidUCharBuffer[0]=(UChar)mySourceChar;
-                    args->converter->invalidCharLength++;
+                    args->converter->invalidUCharLength++;
                     
 CALLBACK:
                     saveSource = args->source;
                     saveTarget = args->target;
-                    saveOffsets = args->offsets;
+     
                     args->target = (char*)myTarget + myTargetIndex;
                     args->source = mySource + mySourceIndex;
-                    myConverterData->isEscapeAppended = isEscapeAppended;
                     myConverterData->isShiftAppended =isShiftAppended;
                     args->converter->fromUnicodeStatus = isTargetUCharDBCS;
-                    myConverterData->sourceIndex = mySourceIndex;
-                    myConverterData->targetIndex = myTargetIndex;
-                    
+                            
+                    args->converter->fromUnicodeStatus = (int32_t)isTargetUCharDBCS;
+
                     FromU_CALLBACK_MACRO(args->converter->fromUContext,
                         args,
                         args->converter->invalidUCharBuffer,
@@ -1417,14 +1434,18 @@ CALLBACK:
                         : args->converter->invalidUCharBuffer[0]),
                         reason,
                         err);
+
+                    myConverterData->isEscapeAppended = isEscapeAppended=FALSE;
+                    args->source=saveSource;
+                    args->target=saveTarget;
                     
-                    args->source = saveSource;
-                    args->target = saveTarget;
-                    args->offsets =	saveOffsets;
+                    initIterState = myConverterData->fromUnicodeCurrentState;
+                    isTargetUCharDBCS  = (UBool)(args->converter->fromUnicodeStatus);
+                    args->converter->invalidUCharLength = 0;
                     if (U_FAILURE (*err)){
                         break;
                     }
-                    args->converter->invalidUCharLength = 0;
+                    
             }
             targetUniChar =missingCharMarker;
         } /* end if(myTargetIndex<myTargetLength) */
@@ -1443,7 +1464,307 @@ CALLBACK:
     args->converter->fromUnicodeStatus = isTargetUCharDBCS;
     
 }
+U_CFUNC void UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args, UErrorCode* err){
+    UChar* mySource =(UChar*)args->source;
+    
+    UConverterDataISO2022 *myConverterData=(UConverterDataISO2022*)args->converter->extraInfo;
+    UConverterCallbackReason reason;
+    UBool isEscapeAppended = FALSE;
+    StateEnum initIterState;
+    unsigned char *myTarget = (unsigned char *) args->target; 
+    const UChar *saveSource;
+    char *saveTarget;
+    uint32_t targetValue=0;
+    int32_t *saveOffsets ;
+    int32_t myTargetLength = args->targetLimit - args->target;
+    int32_t mySourceLength = args->sourceLimit - args->source;
+    int32_t mySourceIndex = 0;
+    int32_t myTargetIndex = 0;
+    int32_t length  =0;
+    CompactShortArray *myFromUnicodeDBCS = NULL;
+    CompactShortArray *myFromUnicodeDBCSFallback = NULL;
+    CompactByteArray  *myFromUnicodeSBCS = NULL;
+    CompactByteArray  *myFromUnicodeSBCSFallback = NULL;
+    UChar32 targetUniChar = missingCharMarker;
+    StateEnum currentState=ASCII;
+    Cnv2022Type myType;
+    UChar32 mySourceChar = 0x0000;
+    int iterCount = 0;
+    int32_t currentOffset;
+    const char *escSeq = NULL;
+    UBool isShiftAppended = FALSE;
+    UBool isTargetUCharDBCS=FALSE,oldIsTargetUCharDBCS=FALSE; 
+    isEscapeAppended =(UBool) myConverterData->isEscapeAppended;
+    isShiftAppended =(UBool) myConverterData->isShiftAppended;
+    initIterState =ASCII;
 
+    /* arguments check*/
+    if ((args->converter == NULL) || (args->targetLimit < args->target) || (args->sourceLimit < args->source)){
+        *err = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    initIterState = myConverterData->fromUnicodeCurrentState;
+    while(mySourceIndex <  mySourceLength){
+        currentState = myConverterData->fromUnicodeCurrentState;
+        myConverterData->fromUnicodeConverter = (myConverterData->fromUnicodeConverter == NULL) ?
+            myConverterData->myConverterArray[0] :
+        myConverterData->myConverterArray[(int)myConverterData->fromUnicodeCurrentState];
+        isTargetUCharDBCS   = (UBool) args->converter->fromUnicodeStatus;
+        
+        if(myTargetIndex < myTargetLength){
+
+            
+            mySourceChar = (UChar) args->source[mySourceIndex++];
+            
+            myType= (Cnv2022Type) myConverterType[currentState];
+            
+            /* I am handling surrogates in the begining itself so that I donot have to go through 8 
+            * iterations on codepages that we support. 
+            */
+            if(args->converter->fromUSurrogateLead!=0 || UTF_IS_SURROGATE(mySourceChar)){
+                if(UTF_IS_SURROGATE_FIRST(mySourceChar)){  
+                    /* no more input */
+                    args->converter->fromUSurrogateLead = (UChar) mySourceChar;
+                    continue;
+                }
+                else if(UTF_IS_SECOND_SURROGATE(mySourceChar)){
+                    if(args->converter->fromUSurrogateLead !=0){
+                        mySourceChar = (UChar32) UTF16_GET_PAIR_VALUE(args->converter->fromUSurrogateLead,mySourceChar);
+                        break;
+                    }
+                    else{
+                        reason=UCNV_ILLEGAL;
+                        *err=U_ILLEGAL_CHAR_FOUND;
+                        goto CALLBACK;
+                    }
+                }
+                else {
+                    reason=UCNV_ILLEGAL;
+                    *err=U_ILLEGAL_CHAR_FOUND;
+                    goto CALLBACK;
+                }
+            }
+            /*Do the conversion*/
+            if(mySourceChar == 0x0020){
+                
+                if(currentState > 2){
+                    concatEscape(args, &myTargetIndex, &myTargetLength,	escSeqChars[0],err,strlen(escSeqChars[0]),&mySourceIndex);
+                    
+                    isTargetUCharDBCS=FALSE;
+                }
+                concatString(args, &myTargetIndex, &myTargetLength,&mySourceChar,err,&mySourceIndex);
+                myConverterData->isEscapeAppended=isEscapeAppended =FALSE;
+                TEST_ERROR_CONDITION(args,myTargetIndex, mySourceIndex,	isTargetUCharDBCS,myConverterData, err);
+                continue;
+            }
+            /* if the source character is CR or LF then append the ASCII escape sequence*/
+            else if(mySourceChar== 0x000A || mySourceChar== 0x000D || mySourceChar==0x0009 || mySourceChar==0x000B){
+                
+                if((isTargetUCharDBCS || currentState==JISX201) &&  mySource[mySourceIndex-2]!=0x000D){
+                    concatEscape(args, &myTargetIndex, &myTargetLength,	escSeqChars[0],err,strlen(escSeqChars[0]),&mySourceIndex);
+                    isTargetUCharDBCS=FALSE;
+                    isShiftAppended	=FALSE;
+                    myConverterData->isEscapeAppended=isEscapeAppended=FALSE;
+                    myConverterData->isShiftAppended=FALSE;
+                    
+                }
+                
+                concatString(args, &myTargetIndex, &myTargetLength,&mySourceChar,err,&mySourceIndex);
+                
+                if(currentState==ISO8859_1 || currentState ==ISO8859_7)
+                    isEscapeAppended =FALSE;
+                
+                TEST_ERROR_CONDITION(args,myTargetIndex, mySourceIndex,	isTargetUCharDBCS,myConverterData, err);
+                
+                continue;
+            }
+            else{
+                
+                do{
+                    switch (myType){
+                    
+                        case SBCS:
+                    
+                            myFromUnicodeSBCS =	&myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicode;
+                            myFromUnicodeSBCSFallback = &myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicodeFallback;
+                    
+                            targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCS, mySourceChar);
+                    
+                            if ((targetUniChar==0)&&(args->converter->useFallback == TRUE) &&
+                                (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
+                                targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCSFallback, mySourceChar);
+                            }
+                            /* ucmp8_getU returns 0 for missing char so	explicitly set it missingCharMarker*/
+                            targetUniChar=(UChar)((targetUniChar==0) ? (UChar) missingCharMarker : targetUniChar);
+                
+                            break;
+                    
+                        case DBCS:
+                            if(mySourceChar < 0xffff){
+                                myFromUnicodeDBCS =	&myConverterData->fromUnicodeConverter->sharedData->table->dbcs.fromUnicode;
+                                myFromUnicodeDBCSFallback = &myConverterData->fromUnicodeConverter->sharedData->table->dbcs.fromUnicodeFallback;
+                                targetUniChar = (UChar) ucmp16_getu (myFromUnicodeDBCS,	mySourceChar);
+                        
+                                if ((targetUniChar==missingCharMarker)&&(args->converter->useFallback== TRUE) &&
+                                    (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
+                                    targetUniChar = (UChar) ucmp16_getu (myFromUnicodeDBCSFallback, mySourceChar);
+                                }
+                            }
+                            break;
+                    
+                        case MBCS:
+                            length= _MBCSFromUChar32(myConverterData->fromUnicodeConverter->sharedData,
+                                mySourceChar,&targetValue,args->converter->useFallback);
+                    
+                            targetUniChar = (UChar32) targetValue;
+                    
+                            if(length==0x0000){
+                                targetUniChar = missingCharMarker;
+                                *err =U_ZERO_ERROR;
+                            } 
+                            /* only DBCS or SBCS characters are	expected*/
+                            else if(length > 2){
+                                reason =UCNV_ILLEGAL;
+                                *err =U_INVALID_CHAR_FOUND;
+                                goto CALLBACK;
+                            }
+                            break;
+                    
+                        case LATIN1:
+                            if(mySourceChar < 0x0100){
+                                targetUniChar = mySourceChar;
+                            } 
+                            else 
+                                targetUniChar = missingCharMarker;
+                            break;
+
+                        case ASCII1:
+                            if(mySourceChar < 0x7f){
+                                targetUniChar = mySourceChar;
+                            }
+                            else 
+                                targetUniChar = missingCharMarker;
+                            break;
+                        default:
+                            /*not expected */ 
+                            break;
+                    }
+                    if(targetUniChar==missingCharMarker){
+                        isEscapeAppended = FALSE; 
+                        /* save the state */
+                        myConverterData->fromUnicodeCurrentState=nextStateArray[myConverterData->version][currentState];
+                        myConverterData->isEscapeAppended = isEscapeAppended;
+                        myConverterData->isShiftAppended =isShiftAppended;
+                        args->converter->fromUnicodeStatus = isTargetUCharDBCS;
+                        currentState = myConverterData->fromUnicodeCurrentState;
+                        myConverterData->fromUnicodeConverter = (myConverterData->fromUnicodeConverter == NULL) ?
+                        myConverterData->myConverterArray[0] :
+                                        myConverterData->myConverterArray[(int)myConverterData->fromUnicodeCurrentState];
+                        isTargetUCharDBCS   = (UBool) args->converter->fromUnicodeStatus;
+                        myType= (Cnv2022Type) myConverterType[currentState];
+                    }
+
+                }while(targetUniChar==missingCharMarker && initIterState != currentState);
+
+            }
+            
+            if(targetUniChar!= missingCharMarker){
+                
+                oldIsTargetUCharDBCS = isTargetUCharDBCS;
+                isTargetUCharDBCS =(UBool) (targetUniChar >0x00FF);
+                args->converter->fromUnicodeStatus= isTargetUCharDBCS;
+                /* set the iteration state and iteration count  */	    
+                initIterState = currentState;
+                iterCount =0;
+                /* Append the escpace sequence */
+                if(!isEscapeAppended){
+                    escSeq = escSeqChars[(int)currentState];
+                    concatEscape(args, &myTargetIndex, &myTargetLength, 
+                        escSeqChars[(int)currentState],
+                        err,strlen(escSeqChars[(int)currentState]),&mySourceIndex);
+                    
+                    isEscapeAppended =TRUE;
+                    myConverterData->isEscapeAppended=TRUE;
+                    
+                    /* Append SSN for shifting to G2 */
+                    if(currentState==ISO8859_1 || currentState==ISO8859_7){
+
+                        concatEscape(args, &myTargetIndex, &myTargetLength,
+                            UCNV_SS2,err,strlen(UCNV_SS2),&mySourceIndex);
+                    }
+                }
+
+                concatString(args, &myTargetIndex, &myTargetLength,
+                    &targetUniChar,err, &mySourceIndex);
+                
+                TEST_ERROR_CONDITION(args,myTargetIndex, mySourceIndex,	isTargetUCharDBCS,myConverterData, err);
+                
+            }/* end of end if(targetUniChar==missingCharMarker)*/
+            else{
+                
+                /* if we cannot	find the character after checking all codepages 
+                 * then this is	an error
+                 */
+                    reason = UCNV_UNASSIGNED;
+                    *err = U_INVALID_CHAR_FOUND;
+                    
+CALLBACK:
+                    args->converter->invalidUCharBuffer[args->converter->invalidUCharLength++]=(UChar)mySourceChar;
+                    currentOffset = args->offsets[myTargetIndex-1]+1;
+                    saveSource = args->source;
+                    saveTarget = args->target;
+                    saveOffsets = args->offsets;
+                    args->target = (char*)myTarget + myTargetIndex;
+                    args->source = mySource + mySourceIndex;
+
+                    myConverterData->isEscapeAppended = isEscapeAppended;
+                    myConverterData->isShiftAppended =isShiftAppended;
+                    args->converter->fromUnicodeStatus = isTargetUCharDBCS;
+                    myConverterData->sourceIndex = mySourceIndex;
+                    myConverterData->targetIndex = myTargetIndex;
+                               
+                    args->converter->fromUnicodeStatus = (int32_t)isTargetUCharDBCS;
+
+                    args->offsets = args->offsets?args->offsets+myTargetIndex:0;
+                    FromU_CALLBACK_OFFSETS_LOGIC_MACRO(args->converter->fromUContext,
+                        args,
+                        args->converter->invalidUCharBuffer,
+                        args->converter->invalidUCharLength,
+                        (UChar32) (args->converter->invalidUCharLength == 2 ? 
+                        UTF16_GET_PAIR_VALUE(args->converter->invalidUCharBuffer[0], 
+                        args->converter->invalidUCharBuffer[1]) 
+                        : args->converter->invalidUCharBuffer[0]),
+                        reason,
+                        err);
+             
+                    args->source=saveSource;
+                    args->target=saveTarget;
+                    args->offsets=saveOffsets;
+                    initIterState = myConverterData->fromUnicodeCurrentState;
+                    isTargetUCharDBCS  = (UBool)(args->converter->fromUnicodeStatus);
+                    args->converter->invalidUCharLength = 0;
+                    if (U_FAILURE (*err)){
+                        break;
+                    }
+                    
+            }
+            targetUniChar =missingCharMarker;
+        } /* end if(myTargetIndex<myTargetLength) */
+        else{
+            *err =U_BUFFER_OVERFLOW_ERROR;
+            break;
+        } 
+        
+    }/* end while(mySourceIndex<mySourceLength) */
+    
+    /*save the state and return */
+    args->target += myTargetIndex;
+    args->source += mySourceIndex;
+    myConverterData->sourceIndex = 0;
+    myConverterData->targetIndex = 0;
+    args->converter->fromUnicodeStatus = isTargetUCharDBCS;
+    
+}
 
 static void concatString(UConverterFromUnicodeArgs* args, int32_t *targetIndex, int32_t *targetLength,
                          const	UChar32* strToAppend,UErrorCode* err, int32_t *sourceIndex){
@@ -1500,10 +1821,14 @@ static void concatString(UConverterFromUnicodeArgs* args, int32_t *targetIndex, 
 
 
 static void concatEscape(UConverterFromUnicodeArgs* args, int32_t *targetIndex, int32_t *targetLength,
-                         const	char* strToAppend,UErrorCode* err,int len){
+                         const	char* strToAppend,UErrorCode* err,int len,int32_t *sourceIndex){
     while(len-->0){
         if(*targetIndex < *targetLength){
-            args->target[(*targetIndex)++] = (unsigned char) *strToAppend;
+            args->target[*targetIndex] = (unsigned char) *strToAppend;
+            if(args->offsets!=NULL){
+                args->offsets[*targetIndex] = *sourceIndex-1;
+            }
+            (*targetIndex)++;
         }
         else{
             args->converter->charErrorBuffer[(int)args->converter->charErrorBufferLength++] = (unsigned char) *strToAppend;
@@ -1514,9 +1839,12 @@ static void concatEscape(UConverterFromUnicodeArgs* args, int32_t *targetIndex, 
 }
 
 static void concatChar(UConverterFromUnicodeArgs* args, int32_t *targetIndex, int32_t *targetLength,
-                       int8_t charToAppend,UErrorCode* err){
+                       int8_t charToAppend,UErrorCode* err,int32_t *sourceIndex){
     if( *targetIndex < *targetLength){
         args->target[(*targetIndex)++] = (unsigned char) charToAppend;
+        if(args->offsets!=NULL){
+                args->offsets[*targetIndex] = *sourceIndex-1;
+        }
     }else{
         args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = (unsigned char) charToAppend;
         *err = U_BUFFER_OVERFLOW_ERROR;
@@ -1575,192 +1903,699 @@ UConverter_getNextUChar_ISO_2022_JP(UConverterToUnicodeArgs *pArgs,
  * <ESC>$A  GB2312     
  * <ESC>$(C KSC5601
  */
-U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs *args,
-                                              UErrorCode* err){ 
+static StateEnum nextStateToUnicodeJP[3][MAX_STATES_2022]= {
+
+    {
+/*      0		                1		             2	                    3		            4		        5		                    6		                   7		            8		            9	 */
+            
+        INVALID_STATE		    ,INVALID_STATE		,INVALID_STATE      ,INVALID_STATE	    ,INVALID_STATE      ,INVALID_STATE          ,INVALID_STATE          ,INVALID_STATE		    ,INVALID_STATE		    ,ASCII1	            
+        ,INVALID_STATE          ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE          ,JISX201	            ,JISX201	            ,INVALID_STATE          ,INVALID_STATE          
+        ,INVALID_STATE		    ,JISX208	        ,INVALID_STATE      ,JISX208	        ,INVALID_STATE		,INVALID_STATE		    ,INVALID_STATE		    ,INVALID_STATE		    ,INVALID_STATE          ,INVALID_STATE          
+        ,INVALID_STATE	        ,INVALID_STATE		,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE	    ,INVALID_STATE		    ,INVALID_STATE	        ,INVALID_STATE          ,INVALID_STATE	        ,INVALID_STATE          
+        ,INVALID_STATE          ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE	        ,INVALID_STATE		    ,INVALID_STATE          ,INVALID_STATE  	    ,INVALID_STATE     
+        ,INVALID_STATE	        ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE          ,INVALID_STATE          ,INVALID_STATE          ,INVALID_STATE          ,INVALID_STATE
+        ,INVALID_STATE          ,INVALID_STATE		,INVALID_STATE      ,INVALID_STATE	    ,INVALID_STATE	    ,INVALID_STATE		    ,INVALID_STATE		    ,INVALID_STATE	        ,INVALID_STATE		    ,INVALID_STATE	            
+        ,INVALID_STATE          ,INVALID_STATE
+    },
     
-    const char *mySourceLimit;
-    char const* sourceStart;
-    UConverter *saveThis;
-    
-    /*Arguments Check*/
-    if (U_FAILURE(*err)) 
-        return;
-    
-    if ((args->converter == NULL) || (args->targetLimit < args->target) || (args->sourceLimit < args->source)){
-        *err = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
+    {
+/*      0		                1		             2	                    3		            4		        5		                    6		                   7		            8		            9	 */
+            
+        INVALID_STATE		    ,INVALID_STATE		,INVALID_STATE      ,INVALID_STATE	    ,INVALID_STATE      ,INVALID_STATE          ,INVALID_STATE          ,INVALID_STATE		    ,INVALID_STATE		    ,ASCII1	            
+        ,INVALID_STATE          ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE          ,JISX201	            ,JISX201	            ,INVALID_STATE          ,INVALID_STATE          
+        ,INVALID_STATE		    ,JISX208	        ,INVALID_STATE      ,JISX208	        ,INVALID_STATE		,INVALID_STATE		    ,INVALID_STATE		    ,INVALID_STATE		    ,INVALID_STATE          ,INVALID_STATE          
+        ,INVALID_STATE	        ,INVALID_STATE		,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE	    ,INVALID_STATE		    ,JISX212	            ,INVALID_STATE          ,INVALID_STATE	        ,INVALID_STATE          
+        ,INVALID_STATE          ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE	        ,INVALID_STATE		    ,INVALID_STATE          ,INVALID_STATE  	    ,INVALID_STATE     
+        ,INVALID_STATE	        ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE          ,INVALID_STATE          ,INVALID_STATE          ,INVALID_STATE          ,INVALID_STATE
+        ,INVALID_STATE          ,INVALID_STATE		,INVALID_STATE      ,INVALID_STATE	    ,INVALID_STATE	    ,INVALID_STATE		    ,INVALID_STATE		    ,INVALID_STATE	        ,INVALID_STATE		    ,INVALID_STATE	            
+        ,INVALID_STATE          ,INVALID_STATE
+    },
+        
+    {
+/*      0		                1		             2	                    3		            4		        5		                    6		                   7		            8		            9	 */
+            
+        INVALID_STATE		    ,INVALID_STATE		,INVALID_STATE      ,INVALID_STATE	    ,INVALID_STATE      ,INVALID_STATE          ,INVALID_STATE          ,INVALID_STATE		    ,INVALID_STATE		    ,ASCII1	            
+        ,INVALID_STATE          ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE          ,JISX201	            ,JISX201	            ,INVALID_STATE          ,INVALID_STATE          
+        ,INVALID_STATE		    ,JISX208	        ,GB2312             ,JISX208	        ,INVALID_STATE		,INVALID_STATE		    ,INVALID_STATE		    ,INVALID_STATE		    ,INVALID_STATE          ,ISO8859_1          
+        ,ISO8859_7  	        ,INVALID_STATE		,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE	    ,KSC5601		        ,JISX212	            ,INVALID_STATE          ,INVALID_STATE	        ,INVALID_STATE          
+        ,INVALID_STATE          ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE  	    ,INVALID_STATE		    ,INVALID_STATE          ,INVALID_STATE  	    ,INVALID_STATE     
+        ,INVALID_STATE	        ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE      ,INVALID_STATE          ,INVALID_STATE          ,INVALID_STATE          ,INVALID_STATE          ,INVALID_STATE
+        ,INVALID_STATE          ,INVALID_STATE		,INVALID_STATE      ,INVALID_STATE	    ,INVALID_STATE	    ,INVALID_STATE		    ,INVALID_STATE		    ,INVALID_STATE	        ,INVALID_STATE		    ,INVALID_STATE	            
+        ,INVALID_STATE          ,INVALID_STATE
     }
+};
+static void changeState_2022_JP(UConverter* _this,
+                             const char** source, 
+                             const char* sourceLimit,
+                             UBool flush,
+                             UErrorCode* err){
+    UConverter* myUConverter;
+    UCNV_TableStates_2022 value;
+    UConverterDataISO2022* myData2022 = ((UConverterDataISO2022*)_this->extraInfo);
+    uint32_t key = myData2022->key;
+    const char* chosenConverterName = NULL;
+    const char* sourceStart =*source;
+    int32_t offset;
+    
+    /*In case we were in the process of consuming an escape sequence
+    we need to reprocess it */
     
     do{
         
-        /*Find the end of the buffer e.g : Next Escape Seq | end of Buffer*/
-        mySourceLimit =	 getEndOfBuffer_2022(&(args->source), args->sourceLimit, args->flush); 
-        
-        if (args->converter->mode == UCNV_SO && ((UConverterDataISO2022*)(args->converter->extraInfo))->key==0) /*Already doing some conversion*/{
-            
-            saveThis = args->converter;
-            args->offsets = NULL;
-            args->converter = ((UConverterDataISO2022*)(args->converter->extraInfo))->currentConverter;
-            ucnv_toUnicode(args->converter,
-                &args->target,
-                args->targetLimit,
-                &args->source,
-                mySourceLimit,
-                args->offsets,
-                args->flush,
-                err);
-            args->converter = saveThis;
+        /* Needed explicit cast for key on MVS to make compiler happy - JJD */
+        if(**source == UCNV_SI || **source==UCNV_SO){
+            if(sourceStart == *source)
+                (*source)++;
+            return;
         }
-        /* in ISO-2022-jp the characters preceeding any escape sequence are assumed
-        * to be ASCII so we need to explicitly check for it
-        */
-        if((((UConverterDataISO2022 *)args->converter->extraInfo)->isFirstBuffer) && (args->source[0]!=(char)ESC_2022)
-            &&  (((UConverterDataISO2022*)(args->converter->extraInfo))->currentConverter==NULL)){
+        value = getKey_2022(**source,(int32_t *) &key, &offset);
+        switch (value){
+        case VALID_NON_TERMINAL_2022 : 
+            break;
             
+        case VALID_TERMINAL_2022:
+            {
+                (*source)++;
+                chosenConverterName = escSeqStateTable_Result_2022[offset];
+                key	= 0;
+                goto DONE;
+            };
+            break;
             
-            saveThis = args->converter;
-            args->offsets = NULL;
-            ((UConverterDataISO2022*)(args->converter->extraInfo))->currentConverter = ucnv_open("ASCII",err);
-            
-            if(U_FAILURE(*err)){
-                break;
+        case INVALID_2022:
+            {
+                myData2022->key = key;
+                *err = U_ILLEGAL_ESCAPE_SEQUENCE;
+                return;
+            }
+        case VALID_SS2_SEQUENCE:
+            {
+                (*source)++;
+                key	= 0;
+                goto DONE;
             }
             
-            args->converter = ((UConverterDataISO2022*)(args->converter->extraInfo))->currentConverter;
-            ucnv_toUnicode(args->converter,
-                &args->target,
-                args->targetLimit,
-                &args->source,
-                mySourceLimit,
-                args->offsets,
-                args->flush,
-                err);
-            args->converter = saveThis;
-            args->converter->mode = UCNV_SO;
-            ((UConverterDataISO2022*)(args->converter->extraInfo))->isFirstBuffer=FALSE;
+        case VALID_MAYBE_TERMINAL_2022:
+            {
+                const char* mySource = (*source+1);
+                int32_t myKey =	key;
+                UCNV_TableStates_2022 myValue = value;
+                int32_t myOffset=0;
+                if(*mySource==ESC_2022){
+                    while ((mySource < sourceLimit) && 
+                        ((myValue == VALID_MAYBE_TERMINAL_2022)||(myValue ==	VALID_NON_TERMINAL_2022))){
+                        myValue	= getKey_2022(*(mySource++), &myKey, &myOffset);
+                    }
+                }
+                else{
+                    (*source)++;
+                    myValue=(UCNV_TableStates_2022) 1;
+                    myOffset = 9;
+                }
+                
+                switch (myValue){
+                case INVALID_2022:
+                    {
+                        /*Backs off*/
+                        chosenConverterName = escSeqStateTable_Result_2022[offset];
+                        value = VALID_TERMINAL_2022;
+                        goto DONE;
+                    };
+                    break;
+                    
+                case VALID_TERMINAL_2022:
+                    {
+                        /*uses longer escape sequence*/
+                        chosenConverterName = escSeqStateTable_Result_2022[myOffset];
+                        key	= 0;
+                        value = VALID_TERMINAL_2022;
+                        goto DONE;
+                    };
+                    break;
+                    
+                    /* Not expected. Added to make the gcc happy */
+                case VALID_SS2_SEQUENCE:
+                    {
+                        (*source)++;
+                        key	= 0;
+                        goto DONE;
+                    }
+                    
+                case VALID_NON_TERMINAL_2022: 
+                    
+                case VALID_MAYBE_TERMINAL_2022:
+                    {
+                        if (flush){
+                            /*Backs off*/
+                            chosenConverterName = escSeqStateTable_Result_2022[offset];
+                            value = VALID_TERMINAL_2022;
+                            key = 0;
+                            goto DONE;
+                        }
+                        else{
+                            key = myKey;
+                            value = VALID_NON_TERMINAL_2022;
+                        }
+                    };
+                    break;
+                };
+                break;
+            };
+            break;
+        }
+    }while (++(*source) < sourceLimit);
+    
+DONE:
+    myData2022->key = key;
+    
+    if ((value == VALID_NON_TERMINAL_2022) || (value == VALID_MAYBE_TERMINAL_2022)) {
+        return;
+    }
+    if (value > 0 ) {
+        if(value==3){
+            _this->mode = UCNV_SI;
+            myUConverter =myData2022->currentConverter;
+        }
+        else{
+            _this->mode = UCNV_SI;
+            myData2022->currentConverter = myUConverter = 
+                myData2022->myConverterArray[nextStateToUnicodeJP[myData2022->version][offset]]; 
+            myData2022->toUnicodeCurrentState = nextStateToUnicodeJP[myData2022->version][offset];   
+               
             
         }
-        
-        /*-Done with buffer with entire buffer
-        -Error while converting
-        */
-        
-        if (U_FAILURE(*err) || (args->source == args->sourceLimit)) 
-            return;
-        
-        sourceStart = args->source;
-        changeState_2022(args->converter,
-            &(args->source), 
-            args->sourceLimit,
-            args->flush,
-            err);
-        /* args->source = sourceStart; */
-        
-        
-    }while(args->source < args->sourceLimit);
-    
-    ((UConverterDataISO2022*)(args->converter->extraInfo))->isFirstBuffer=FALSE;
+        if (U_SUCCESS(*err)){
+            /*Customize the converter with the attributes set on the 2022 converter*/
+            myUConverter->fromUCharErrorBehaviour = _this->fromUCharErrorBehaviour;
+            myUConverter->fromUContext = _this->fromUContext;
+            myUConverter->fromCharErrorBehaviour = _this->fromCharErrorBehaviour;
+            myUConverter->toUContext = _this->toUContext;
+            
+            uprv_memcpy(myUConverter->subChar, 
+                _this->subChar,
+                myUConverter->subCharLen	= _this->subCharLen);
+            
+            _this->mode = UCNV_SO;
+        }
+    }
     
     return;
 }
 
-U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
-                                                            UErrorCode* err){
-    int32_t myOffset=0;
-    int32_t base = 0;
-    const char* mySourceLimit;
-    char const* sourceStart;
-    UConverter* _this = NULL;
+U_CFUNC void UConverter_toUnicode_ISO_2022_JP(UConverterToUnicodeArgs *args,
+                                              UErrorCode* err){
+    char tempBuf[2];
+    char* pBuf;
+    const char *mySource = ( char *) args->source;
+    UChar *myTarget = args->target;
+    char *tempLimit = &tempBuf[2]+1; 
+    int32_t mySourceIndex = 0;
+    int32_t myTargetIndex = 0;
+    const char *mySourceLimit = args->sourceLimit;
+    UChar32 targetUniChar = 0x0000;
+    UChar mySourceChar = 0x0000;
+    UConverterDataISO2022* myData=(UConverterDataISO2022*)(args->converter->extraInfo);
+    CompactShortArray *myToUnicodeDBCS=NULL, *myToUnicodeFallbackDBCS = NULL; 
+    UChar *myToUnicodeSBCS = NULL, *myToUnicodeFallbackSBCS = NULL;
     
     /*Arguments Check*/
     if (U_FAILURE(*err)) 
         return;
+    
     if ((args->converter == NULL) || (args->targetLimit < args->target) || (args->sourceLimit < args->source)){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
     
-    do{
-        mySourceLimit =	 getEndOfBuffer_2022(&(args->source), args->sourceLimit, args->flush); 
-        /*Find the end of the buffer e.g : Next Escape Seq | end of Buffer*/
+    while(mySource< args->sourceLimit){
         
-        if (args->converter->mode == UCNV_SO) /*Already doing some conversion*/{
-            const UChar* myTargetStart = args->target;
+        if(myTarget < args->targetLimit){
             
-            _this = args->converter;
-            args->converter = ((UConverterDataISO2022*)(_this->extraInfo))->currentConverter;
-            ucnv_toUnicode(args->converter, 
-                &(args->target),
-                args->targetLimit,
-                &(args->source),
-                mySourceLimit,
-                args->offsets,
-                args->flush,
-                err);
+            mySourceChar= (unsigned char) *mySource++;
             
-            args->converter = _this;
-            {
-                int32_t	lim =  args->target - myTargetStart;
-                int32_t	i = 0;
-                for (i=base; i < lim;i++){   
-                    args->offsets[i] += myOffset;
-                }
-                base +=	lim;
+            if(args->converter->mode==UCNV_SI){
+                    
+               /* if there	are no escape sequences in the first buffer then they
+                * are assumed to be ASCII according to RFC-1554
+                */    
+                myData->toUnicodeCurrentState = ASCII1;
+             }
+            
+            switch(mySourceChar){
+                case 0x0A:
+                    if(args->converter->toUnicodeStatus !=	0x00){
+                        goto SAVE_STATE;
+                    }
+                     myData->toUnicodeCurrentState = ASCII1; 
+                    break;
+                
+                case 0x0D:
+                    if(args->converter->toUnicodeStatus !=	0x00){
+                        goto SAVE_STATE;
+                    }
+                     myData->toUnicodeCurrentState = ASCII1;
+
+                    break;
+                                
+                case 0x20:
+                    if(args->converter->toUnicodeStatus !=	0x00){
+                        goto SAVE_STATE;
+                    }
+                    myData->toUnicodeCurrentState = ASCII1;
+
+                    break;
+                            
+                default:
+                    /* if we are in the middle of consuming an escape sequence 
+                     * we continue to next switch tag else we break
+                     */
+                    if(myData->key==0){
+                        break;
+                    }
+
+                case ESC_2022:
+                    if(args->converter->toUnicodeStatus != 0x00){
+                        goto SAVE_STATE;
+                    }
+                    mySource--;
+                    changeState_2022_JP(args->converter,&(mySource), 
+                        args->sourceLimit, args->flush,err);
+                    if(U_FAILURE(*err)){
+                        goto SAVE_STATE;
+                    }
+                    continue;
             }
             
-        }
-        if(((UConverterDataISO2022 *)args->converter->extraInfo)->isFirstBuffer && args->source[0]!=ESC_2022
-            && ((UConverterDataISO2022*)(args->converter->extraInfo))->currentConverter==NULL){
-            
-            const UChar* myTargetStart = args->target;
-            UConverter* saveThis = args->converter;
-            args->offsets = NULL;
-            ((UConverterDataISO2022*)(args->converter->extraInfo))->currentConverter = ucnv_open("ASCII",err);
-            
-            if(U_FAILURE(*err)){
-                break;
+            switch(myConverterType[myData->toUnicodeCurrentState]){
+                
+                 case ASCII1:
+                    if(args->converter->toUnicodeStatus == 0x00 && mySourceChar < 0x7F){
+                        targetUniChar = (UChar)	 mySourceChar;
+                    }
+                    else{
+                        goto SAVE_STATE;
+                    }
+                    break;
+                case SBCS:
+                    if(args->converter->toUnicodeStatus == 0x00){
+                        myToUnicodeSBCS	= myData->currentConverter->sharedData->table->sbcs.toUnicode;
+                        myToUnicodeFallbackSBCS = myData->currentConverter->sharedData->table->sbcs.toUnicodeFallback;
+                        targetUniChar = myToUnicodeSBCS[(unsigned char) mySourceChar];
+                        if(targetUniChar> 0xfffe){
+                            if((args->converter->useFallback == TRUE) && 
+                                (myData->currentConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
+                            
+                                targetUniChar =	myToUnicodeFallbackSBCS[(unsigned char) mySource[mySourceIndex-1]];
+                            }
+                        }
+                        
+                    }
+                    else{
+                        goto SAVE_STATE;
+                    }
+                    break;
+                
+                case DBCS:
+                    myToUnicodeDBCS	= &myData->currentConverter->sharedData->table->dbcs.toUnicode;
+                    myToUnicodeFallbackDBCS = &myData->currentConverter->sharedData->table->dbcs.toUnicodeFallback;
+                
+                    if(args->converter->toUnicodeStatus == 0x00){
+                        args->converter->toUnicodeStatus = (UChar) mySourceChar;
+                        continue;
+                    }
+                    else{
+                        tempBuf[0] =	(char) args->converter->toUnicodeStatus ;
+                        tempBuf[1] =	(char) mySourceChar;
+                        mySourceChar= (UChar)((args->converter->toUnicodeStatus << 8) | (mySourceChar & 0x00ff));
+                        args->converter->toUnicodeStatus =0x00;
+                    
+                        targetUniChar = ucmp16_getu(myToUnicodeDBCS,mySourceChar);
+                        if(targetUniChar> 0xfffe){
+                            if((args->converter->useFallback == TRUE) && 
+                                (myData->currentConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
+                            
+                                targetUniChar =	(UChar) ucmp16_getu(myToUnicodeFallbackDBCS, mySourceChar);
+                            }
+                        }
+                    }
+                
+                    break;
+                
+                case MBCS:
+                
+                    if(args->converter->toUnicodeStatus == 0x00){
+                        args->converter->toUnicodeStatus = (UChar) mySourceChar;
+                        continue;
+                    }
+                    else{
+                        tempBuf[0] = (char) (args->converter->toUnicodeStatus);
+                        tempBuf[1] = (char) (mySourceChar);
+                        args->converter->toUnicodeStatus = 0x00;
+                        mySourceChar= (UChar)((args->converter->toUnicodeStatus << 8) | (mySourceChar & 0x00ff));
+                        pBuf = &tempBuf[0];
+                        tempLimit = &tempBuf[2]+1;
+                        targetUniChar	= _MBCSSimpleGetNextUChar(myData->currentConverter->sharedData,
+                            &pBuf,tempLimit,args->converter->useFallback);
+                    }
+                    break;
+                    
+                case LATIN1:
+                    if(args->converter->fromUnicodeStatus == 0x00 && mySourceChar < 0x100){
+                        targetUniChar = (UChar)	 mySourceChar;
+                    }
+                    else{
+                        goto SAVE_STATE;
+                    }
+                    break;
+                
+                case INVALID_STATE:
+                    *err = U_ILLEGAL_ESCAPE_SEQUENCE;
+                    goto SAVE_STATE;
+
             }
-            
-            args->converter = ((UConverterDataISO2022*)(args->converter->extraInfo))->currentConverter;
-            ucnv_toUnicode(args->converter,
-                &args->target,
-                args->targetLimit,
-                &args->source,
-                mySourceLimit,
-                args->offsets,
-                args->flush,
-                err);
-            args->converter = saveThis;
-            args->converter->mode = UCNV_SO;
-            ((UConverterDataISO2022*)(args->converter->extraInfo))->isFirstBuffer=FALSE;
-            args->converter = _this;
-            {
-                int32_t	lim =  args->target - myTargetStart;
-                int32_t	i = 0;
-                for (i=base; i < lim;i++){   
-                    args->offsets[i] += myOffset;
-                }
-                base +=	lim;
+            if(targetUniChar < 0xfffe){
+                *(myTarget++)=(UChar)targetUniChar;
+                targetUniChar=missingCharMarker;
             }
-        }
-        /*-Done with buffer with entire buffer
-        -Error while converting
-        */
-        
-        if (U_FAILURE(*err) || (args->source == args->sourceLimit)) 
-            return;
-        
-        sourceStart = args->source;
-        changeState_2022(args->converter,
-            &(args->source), 
-            args->sourceLimit,
-            args->flush,
-            err);
-        myOffset += args->source - sourceStart;
-        
-    }while(mySourceLimit != args->sourceLimit);
+            else if(targetUniChar>=0xfffe){
+SAVE_STATE:
+                {
+                    const char *saveSource = args->source;
+                    UChar *saveTarget = args->target;
+                    UConverterCallbackReason reason;
+                
+                    if(targetUniChar == 0xfffe){
+                        reason = UCNV_UNASSIGNED;
+                        *err = U_INVALID_CHAR_FOUND;
+                    }
+                    else{
+                        reason = UCNV_ILLEGAL;
+                        *err = U_ILLEGAL_CHAR_FOUND;
+                    }
+                    
+                    if(myConverterType[myData->toUnicodeCurrentState] == SBCS || 
+                        myConverterType[myData->toUnicodeCurrentState]== ASCII1 ||
+                        myConverterType[myData->toUnicodeCurrentState]== LATIN1){
+                    
+                        args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char) mySourceChar;
+                    }
+                    else{
+                        
+                        args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = tempBuf[0];
+                        args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = tempBuf[1];
     
-    return;
+                    }
+
+                    args->target = myTarget;
+                    args->source = mySource;
+                    ToU_CALLBACK_MACRO( args->converter->toUContext,
+                        args,
+                        args->converter->invalidCharBuffer,
+                        args->converter->invalidCharLength,
+                        reason,
+                        err);
+                    myTarget += args->target - myTarget;
+                    args->source = saveSource;
+                    args->target = saveTarget;
+                    args->converter->invalidCharLength=0;
+                    if(U_FAILURE(*err))
+                        break;
+
+                }
+            }
+        }
+        else{
+            *err =U_BUFFER_OVERFLOW_ERROR;
+            break;
+        }
+    }
+    if((args->flush==TRUE)
+        && (mySource == mySourceLimit) 
+        && ( args->converter->toUnicodeStatus !=0x00)){
+        if(U_SUCCESS(*err)){
+            *err = U_TRUNCATED_CHAR_FOUND;
+            args->converter->toUnicodeStatus = 0x00;
+        }
+    }
+    args->target = myTarget;
+    args->source = mySource;
+}
+
+U_CFUNC void UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
+                                                            UErrorCode* err){
+    char tempBuf[2];
+    char* pBuf;
+    const char *mySource = ( char *) args->source;
+    UChar *myTarget = args->target;
+    char *tempLimit = &tempBuf[2]+1; 
+    int32_t mySourceIndex = 0;
+    int32_t myTargetIndex = 0;
+    const char *mySourceLimit = args->sourceLimit;
+    UChar32 targetUniChar = 0x0000;
+    UChar mySourceChar = 0x0000;
+    UConverterDataISO2022* myData=(UConverterDataISO2022*)(args->converter->extraInfo);
+    CompactShortArray *myToUnicodeDBCS=NULL, *myToUnicodeFallbackDBCS = NULL; 
+    UChar *myToUnicodeSBCS = NULL, *myToUnicodeFallbackSBCS = NULL;
+    
+    /*Arguments Check*/
+    if (U_FAILURE(*err)) 
+        return;
+    
+    if ((args->converter == NULL) || (args->targetLimit < args->target) || (args->sourceLimit < args->source)){
+        *err = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    
+    while(mySource< args->sourceLimit){
+        
+        if(myTarget < args->targetLimit){
+            
+            mySourceChar= (unsigned char) *mySource++;
+            
+            if(args->converter->mode==UCNV_SI){
+                    
+               /* if there	are no escape sequences in the first buffer then they
+                * are assumed to be ASCII according to RFC-1554
+                */    
+                myData->toUnicodeCurrentState = ASCII1;
+             }
+            
+            switch(mySourceChar){
+                case 0x0A:
+                    if(args->converter->toUnicodeStatus !=	0x00){
+                        goto SAVE_STATE;
+                    }
+                     myData->toUnicodeCurrentState = ASCII1; 
+                    break;
+                
+                case 0x0D:
+                    if(args->converter->toUnicodeStatus !=	0x00){
+                        goto SAVE_STATE;
+                    }
+                    myData->toUnicodeCurrentState = ASCII1;
+
+                    break;
+
+                case 0x20:
+                    if(args->converter->toUnicodeStatus !=	0x00){
+                        goto SAVE_STATE;
+                    }
+                    myData->toUnicodeCurrentState = ASCII1; 
+                    break;
+                            
+                default:
+                    /* if we are in the middle of consuming an escape sequence 
+                     * we continue to next switch tag else we break
+                     */
+                    if(myData->key==0){
+                        break;
+                    }
+
+                case ESC_2022:
+                    if(args->converter->toUnicodeStatus != 0x00){
+                        goto SAVE_STATE;
+                    }
+                    mySource--;
+                    changeState_2022_JP(args->converter,&(mySource), 
+                        args->sourceLimit, args->flush,err);
+                    if(U_FAILURE(*err)){
+                        goto SAVE_STATE;
+                    }
+                    continue;
+            }
+            
+            switch(myConverterType[myData->toUnicodeCurrentState]){
+                
+                 case ASCII1:
+                    if(args->converter->toUnicodeStatus == 0x00 && mySourceChar < 0x7F){
+                        targetUniChar = (UChar)	 mySourceChar;
+                    }
+                    else{
+                        goto SAVE_STATE;
+                    }
+                    break;
+                case SBCS:
+                    if(args->converter->toUnicodeStatus == 0x00){
+                        myToUnicodeSBCS	= myData->currentConverter->sharedData->table->sbcs.toUnicode;
+                        myToUnicodeFallbackSBCS = myData->currentConverter->sharedData->table->sbcs.toUnicodeFallback;
+                        targetUniChar = myToUnicodeSBCS[(unsigned char) mySourceChar];
+                        if(targetUniChar> 0xfffe){
+                            if((args->converter->useFallback == TRUE) && 
+                                (myData->currentConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
+                            
+                                targetUniChar =	myToUnicodeFallbackSBCS[(unsigned char) mySource[mySourceIndex-1]];
+                            }
+                        }
+                        
+                    }
+                    else{
+                        goto SAVE_STATE;
+                    }
+                    break;
+                
+                case DBCS:
+                    myToUnicodeDBCS	= &myData->currentConverter->sharedData->table->dbcs.toUnicode;
+                    myToUnicodeFallbackDBCS = &myData->currentConverter->sharedData->table->dbcs.toUnicodeFallback;
+                
+                    if(args->converter->toUnicodeStatus == 0x00){
+                        args->converter->toUnicodeStatus = (UChar) mySourceChar;
+                        continue;
+                    }
+                    else{
+                        tempBuf[0] =	(char) args->converter->toUnicodeStatus ;
+                        tempBuf[1] =	(char) mySourceChar;
+                        mySourceChar= (UChar)((args->converter->toUnicodeStatus << 8) | (mySourceChar & 0x00ff));
+                        args->converter->toUnicodeStatus =0x00;
+                    
+                        targetUniChar = ucmp16_getu(myToUnicodeDBCS,mySourceChar);
+                        if(targetUniChar> 0xfffe){
+                            if((args->converter->useFallback == TRUE) && 
+                                (myData->currentConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
+                            
+                                targetUniChar =	(UChar) ucmp16_getu(myToUnicodeFallbackDBCS, mySourceChar);
+                            }
+                        }
+                    }
+                
+                    break;
+                
+                case MBCS:
+                
+                    if(args->converter->toUnicodeStatus == 0x00){
+                        args->converter->toUnicodeStatus = (UChar) mySourceChar;
+                        continue;
+                    }
+                    else{
+                        tempBuf[0] = (char) (args->converter->toUnicodeStatus);
+                        tempBuf[1] = (char) (mySourceChar);
+                        args->converter->toUnicodeStatus = 0x00;
+                        mySourceChar= (UChar)((args->converter->toUnicodeStatus << 8) | (mySourceChar & 0x00ff));
+                        pBuf = &tempBuf[0];
+                        tempLimit = &tempBuf[2]+1;
+                        targetUniChar	= _MBCSSimpleGetNextUChar(myData->currentConverter->sharedData,
+                            &pBuf,tempLimit,args->converter->useFallback);
+                    }
+                    break;
+                    
+                case LATIN1:
+                    if(args->converter->fromUnicodeStatus == 0x00 && mySourceChar < 0x100){
+                        targetUniChar = (UChar)	 mySourceChar;
+                    }
+                    else{
+                        goto SAVE_STATE;
+                    }
+                    break;
+                
+                case INVALID_STATE:
+                    *err = U_ILLEGAL_ESCAPE_SEQUENCE;
+                    goto SAVE_STATE;
+
+            }
+            if(targetUniChar < 0xfffe){
+                if(myConverterType[myData->toUnicodeCurrentState] == SBCS || 
+                    myConverterType[myData->toUnicodeCurrentState]== ASCII1 ||
+                    myConverterType[myData->toUnicodeCurrentState]== LATIN1){
+
+                    args->offsets[myTarget - args->target]=	mySource - args->source -1;
+                }
+                else{
+                    args->offsets[myTarget - args->target]=	mySource - args->source - 2;
+                }
+                *(myTarget++)=(UChar)targetUniChar;
+                targetUniChar=missingCharMarker;
+            }
+            else if(targetUniChar>=0xfffe){
+SAVE_STATE:
+                {
+                    const char *saveSource = args->source;
+                    UChar *saveTarget = args->target;
+
+                    int32_t *saveOffsets = args->offsets;
+                    
+                    UConverterCallbackReason reason;
+                    int32_t currentOffset ;
+                    int32_t My_i = myTarget - args->target;
+                    if(myConverterType[myData->toUnicodeCurrentState] == SBCS || 
+                        myConverterType[myData->toUnicodeCurrentState]== ASCII1 ||
+                        myConverterType[myData->toUnicodeCurrentState]== LATIN1){
+
+                        currentOffset=	mySource - args->source -1;
+                        args->converter->invalidCharBuffer[args->converter->invalidCharLength++] =(char) mySourceChar;
+                    }
+                    else{
+                        currentOffset=	mySource - args->source - 2;
+                        args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = tempBuf[0];
+                        args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = tempBuf[1];
+    
+                    }
+                    
+                    
+                    if(targetUniChar == 0xfffe){
+                        reason = UCNV_UNASSIGNED;
+                        *err = U_INVALID_CHAR_FOUND;
+                    }
+                    else{
+                        reason = UCNV_ILLEGAL;
+                        *err = U_ILLEGAL_CHAR_FOUND;
+                    }
+
+                   
+                    args->offsets = args->offsets?args->offsets+(myTarget - args->target):0;
+                    args->target =myTarget;
+                    myTarget =saveTarget;
+                    args->source = mySource;
+                    ToU_CALLBACK_OFFSETS_LOGIC_MACRO( args->converter->toUContext,
+                        args,
+                        args->converter->invalidCharBuffer,
+                        args->converter->invalidCharLength,
+                        reason,
+                        err);
+                    args->converter->invalidCharLength=0;
+                    myTarget=args->target;
+                    args->source  = saveSource;
+                    args->target  = saveTarget;
+                    /*args->offsets = saveOffsets;*/
+                    if(U_FAILURE(*err))
+                        break;
+
+                }
+            }
+        }
+        else{
+            *err =U_BUFFER_OVERFLOW_ERROR;
+            break;
+        }
+    }
+    if((args->flush==TRUE)
+        && (mySource == mySourceLimit) 
+        && ( args->converter->toUnicodeStatus !=0x00)){
+        if(U_SUCCESS(*err)){
+            *err = U_TRUNCATED_CHAR_FOUND;
+            args->converter->toUnicodeStatus = 0x00;
+        }
+    }
+    args->target = myTarget;
+    args->source = mySource;
 }
 
 
@@ -1837,6 +2672,12 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR(UConverterFromUnicodeArgs* args,
                 *err =U_INVALID_CHAR_FOUND;
                 goto CALLBACK;
             }
+            /* DB haracters with high bit set to 1 are expected */
+            if(((targetUniChar & 0x8080) != 0x8080)&& length==2){
+                reason =UCNV_ILLEGAL;
+                *err =U_INVALID_CHAR_FOUND;
+                goto CALLBACK;
+            }
             
             oldIsTargetUCharDBCS = isTargetUCharDBCS;
             isTargetUCharDBCS = (UBool)(targetUniChar>0x00FF);
@@ -1858,8 +2699,8 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR(UConverterFromUnicodeArgs* args,
                     }
                     else if (myTargetIndex+1 >= targetLength){
                         
-                        args->converter->charErrorBuffer[0] =	(char) (targetUniChar >> 8);
-                        args->converter->charErrorBuffer[1] =	(char)(targetUniChar & 0x00FF);
+                        args->converter->charErrorBuffer[0] =	(char) ((targetUniChar >> 8) -0x80);
+                        args->converter->charErrorBuffer[1] =	(char)((targetUniChar & 0x00FF) -0x80);
                         args->converter->charErrorBufferLength = 2;
                         *err = U_BUFFER_OVERFLOW_ERROR;
                         break;
@@ -1872,12 +2713,12 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR(UConverterFromUnicodeArgs* args,
                     args->target[myTargetIndex++]	= (char) targetUniChar;
                 }
                 else{
-                    args->target[myTargetIndex++]	= (char) (targetUniChar >> 8);
+                    args->target[myTargetIndex++]	= (char) ((targetUniChar >> 8) - 0x80);
                     if (myTargetIndex	< targetLength){
-                        args->target[myTargetIndex++] = (char) targetUniChar;
+                        args->target[myTargetIndex++] = (char)((targetUniChar & 0x00FF) -0x80);
                     }
                     else{
-                        args->converter->charErrorBuffer[0] =	(char) targetUniChar;
+                        args->converter->charErrorBuffer[0] =	(char)((targetUniChar & 0x00FF) -0x80);
                         args->converter->charErrorBufferLength = 1;
                         *err = U_BUFFER_OVERFLOW_ERROR;
                         break;
@@ -1911,8 +2752,10 @@ CALLBACK:
                 args->target = saveTarget;
                 args->offsets = saveOffsets;
                 isTargetUCharDBCS	 = (UBool) args->converter->fromUnicodeStatus;
-                if (U_FAILURE (*err)) break;
                 args->converter->invalidUCharLength = 0;
+                if (U_FAILURE (*err)) 
+                    break;
+                
             }
             }
         }
@@ -1992,7 +2835,13 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnic
                 *err =U_INVALID_CHAR_FOUND;
                 goto CALLBACK;
             }
-            
+            /* DB haracters with high bit set to 1 are expected */
+            if(((targetUniChar & 0x8080) != 0x8080)&& length==2){
+                reason =UCNV_ILLEGAL;
+                *err =U_INVALID_CHAR_FOUND;
+                goto CALLBACK;
+            }
+
             oldIsTargetUCharDBCS = isTargetUCharDBCS;
             isTargetUCharDBCS = (UBool)(targetUniChar>0x00FF);
             if (targetUniChar != missingCharMarker){
@@ -2000,9 +2849,11 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnic
                 if (oldIsTargetUCharDBCS != isTargetUCharDBCS){
                     
                     args->offsets[myTargetIndex] = mySourceIndex-1;
-                    if (isTargetUCharDBCS) args->target[myTargetIndex++] = UCNV_SO;
-                    else args->target[myTargetIndex++] = UCNV_SI;
-                    
+
+                    if (isTargetUCharDBCS) 
+                        args->target[myTargetIndex++] = UCNV_SO;
+                    else
+                        args->target[myTargetIndex++] = UCNV_SI;
                     
                     if ((!isTargetUCharDBCS)&&(myTargetIndex+1 >= targetLength)){
                         
@@ -2013,8 +2864,8 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnic
                     }
                     else if (myTargetIndex+1 >=	targetLength){
                         
-                        args->converter->charErrorBuffer[0]	= (char) (targetUniChar >> 8);
-                        args->converter->charErrorBuffer[1]	= (char) (targetUniChar & 0x00FF);
+                        args->converter->charErrorBuffer[0]	= (char) ((targetUniChar >> 8)-0x80);
+                        args->converter->charErrorBuffer[1]	= (char) ((targetUniChar & 0x00FF)-0x80);
                         args->converter->charErrorBufferLength = 2;
                         *err = U_BUFFER_OVERFLOW_ERROR;
                         break;
@@ -2028,14 +2879,14 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnic
                 }
                 else{
                     args->offsets[myTargetIndex] = mySourceIndex-1;
-                    args->target[myTargetIndex++] = (char) (targetUniChar >> 8);
+                    args->target[myTargetIndex++] = (char) ((targetUniChar >> 8)-0x80);
                     
                     if (myTargetIndex < targetLength){
                         args->offsets[myTargetIndex] = mySourceIndex-1;
-                        args->target[myTargetIndex++] = (char) targetUniChar;
+                        args->target[myTargetIndex++] = (char)((targetUniChar & 0x00FF)-0x80);
                     }
                     else{
-                        args->converter->charErrorBuffer[0]	= (char) targetUniChar;
+                        args->converter->charErrorBuffer[0]	=(char) ((targetUniChar & 0x00FF)-0x80);
                         args->converter->charErrorBufferLength = 1;
                         *err = U_BUFFER_OVERFLOW_ERROR;
                         break;
@@ -2069,10 +2920,11 @@ CALLBACK:
                 args->source = saveSource;
                 args->target = saveTarget;
                 args->offsets =	saveOffsets;
-                isTargetUCharDBCS  = (UBool)(args->converter->fromUnicodeStatus);
+                oldIsTargetUCharDBCS = TRUE;
+                args->converter->invalidUCharLength = 0;
                 if (U_FAILURE (*err))     
                     break;
-                args->converter->invalidUCharLength = 0;
+
             }
             }
         }
@@ -2122,18 +2974,14 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_KR(UConverterToUnicodeArgs *args,
         if(myTarget < args->targetLimit){
             
             mySourceChar= (unsigned char) *mySource++;
-            
-            if( mySourceChar <= 0x20){
-                myData->currentState = SBCS;
-            }
 
             switch(mySourceChar){
             
                 case UCNV_SI:
-                    myData->currentState = SBCS;
+                    myData->toUnicodeCurrentState = SBCS;
                     continue;
                 case UCNV_SO:
-                    myData->currentState =DBCS;
+                    myData->toUnicodeCurrentState =DBCS;
                     /*consume the source */
                     continue;
                        
@@ -2165,15 +3013,15 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_KR(UConverterToUnicodeArgs *args,
                 }
             }
              
-            if(myData->currentState==DBCS){
+            if(myData->toUnicodeCurrentState==DBCS){
                 if(args->converter->toUnicodeStatus == 0x00){
                     args->converter->toUnicodeStatus = (UChar) mySourceChar;
                     continue;
                 }
                 else{
-                    tempBuf[0] =	(char) (args->converter->toUnicodeStatus);
-                    tempBuf[1] =	(char) (mySourceChar);
-                    mySourceChar= (UChar)(((args->converter->toUnicodeStatus) << 8) | ((mySourceChar & 0x00ff)));
+                    tempBuf[0] =	(char) (args->converter->toUnicodeStatus+0x80) ;
+                    tempBuf[1] =	(char) (mySourceChar+0x80);
+                    mySourceChar= (UChar)(((args->converter->toUnicodeStatus << 8)+0x80) | ((mySourceChar & 0x00ff)+0x80));
                     args->converter->toUnicodeStatus =0x00;
                     pBuf = &tempBuf[0];
                     tempLimit = &tempBuf[2]+1;
@@ -2213,8 +3061,8 @@ SAVE_STATE:
                         reason = UCNV_ILLEGAL;
                         *err = U_ILLEGAL_CHAR_FOUND;
                     }
-                    args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = tempBuf[0];
-                    args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = tempBuf[1];
+                    args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char)(tempBuf[0]-0x80);
+                    args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char)(tempBuf[1]-0x80);
                     args->target = myTarget;
                     args->source = mySource;
                     ToU_CALLBACK_MACRO( args->converter->toUContext,
@@ -2224,11 +3072,13 @@ SAVE_STATE:
                         reason,
                         err);
                     args->source  =	saveSource;
+                    myTarget = args->target;
                     args->target  =	saveTarget;
                     args->offsets =	saveOffsets;
+                    args->converter->invalidCharLength=0;
                     if(U_FAILURE(*err))
                         break;
-                    args->converter->invalidCharLength=0;
+
                 }
             }
         }
@@ -2251,7 +3101,7 @@ SAVE_STATE:
 
 U_CFUNC void UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                                                             UErrorCode* err){
-        char tempBuf[3];
+    char tempBuf[3];
     const char* pBuf;
     const char *mySource = ( char *) args->source;
     UChar *myTarget = args->target;
@@ -2279,17 +3129,13 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeA
             
             mySourceChar= (unsigned char) *mySource++;
             
-            if( mySourceChar <= 0x20){
-                myData->currentState = SBCS;
-            }
-
             switch(mySourceChar){
             
                 case UCNV_SI:
-                    myData->currentState = SBCS;
+                    myData->toUnicodeCurrentState = SBCS;
                     continue;
                 case UCNV_SO:
-                    myData->currentState =DBCS;
+                    myData->toUnicodeCurrentState =DBCS;
                     /*consume the source */
                     continue;
                        
@@ -2325,15 +3171,15 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeA
                 }
             }
              
-            if(myData->currentState==DBCS){
+            if(myData->toUnicodeCurrentState==DBCS){
                 if(args->converter->toUnicodeStatus == 0x00){
                     args->converter->toUnicodeStatus = (UChar) mySourceChar;
                     continue;
                 }
                 else{
-                    tempBuf[0] =	(char) (args->converter->toUnicodeStatus);
-                    tempBuf[1] =	(char) (mySourceChar);
-                    mySourceChar= (UChar)(((args->converter->toUnicodeStatus) << 8) | ((mySourceChar & 0x00ff)));
+                    tempBuf[0] =	(char) (args->converter->toUnicodeStatus+0x80) ;
+                    tempBuf[1] =	(char) (mySourceChar+0x80);
+                    mySourceChar= (UChar)(((args->converter->toUnicodeStatus+0x80) << 8) | ((mySourceChar & 0x00ff)+0x80));
                     args->converter->toUnicodeStatus =0x00;
                     pBuf = &tempBuf[0];
                     tempLimit = &tempBuf[2]+1;
@@ -2355,13 +3201,12 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeA
 
             }
             if(targetUniChar < 0xfffe){
-                 if(myData->currentState){
+                 if(myData->toUnicodeCurrentState==DBCS){
                     args->offsets[myTarget - args->target]=	mySource - args->source - 2;
                 }
                 else{
                     args->offsets[myTarget - args->target]=	mySource - args->source - 1;
                 }
-                *(myTarget++)=(UChar)targetUniChar;
                 *(myTarget++)=(UChar)targetUniChar;
             }
             else if(targetUniChar>=0xfffe){
@@ -2369,9 +3214,13 @@ SAVE_STATE:
                 {
                     const char *saveSource = args->source;
                     UChar *saveTarget = args->target;
+                    UChar *saveMyTarget = myTarget;  
                     int32_t *saveOffsets = args->offsets;
+                    
                     UConverterCallbackReason reason;
-                
+                    int32_t currentOffset ;
+                    int32_t My_i = myTarget - args->target;
+                    
                     if(targetUniChar == 0xfffe){
                         reason = UCNV_UNASSIGNED;
                         *err = U_INVALID_CHAR_FOUND;
@@ -2380,22 +3229,35 @@ SAVE_STATE:
                         reason = UCNV_ILLEGAL;
                         *err = U_ILLEGAL_CHAR_FOUND;
                     }
-                    args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = tempBuf[0];
-                    args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = tempBuf[1];
+                    if(myData->toUnicodeCurrentState== DBCS){
+
+                        args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char)(tempBuf[0]-0x80);
+                        args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char)(tempBuf[1]-0x80);
+                        currentOffset=	mySource - args->source -2;
+                    
+                    }
+                    else{
+                        args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char)mySourceChar;
+                        currentOffset=	mySource - args->source -1;
+                    }
+                    args->offsets = args->offsets?args->offsets+(myTarget - args->target):0;
                     args->target = myTarget;
                     args->source = mySource;
-                    ToU_CALLBACK_MACRO( args->converter->toUContext,
+                    myTarget = saveTarget;
+                    ToU_CALLBACK_OFFSETS_LOGIC_MACRO( args->converter->toUContext,
                         args,
                         args->converter->invalidCharBuffer,
                         args->converter->invalidCharLength,
                         reason,
                         err);
+                    args->converter->invalidCharLength=0;
                     args->source  =	saveSource;
+                    myTarget = args->target;
                     args->target  =	saveTarget;
                     args->offsets =	saveOffsets;
                     if(U_FAILURE(*err))
                         break;
-                    args->converter->invalidCharLength=0;
+
                 }
             }
         }
@@ -2590,7 +3452,6 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN(UConverterFromUnicodeArgs* args,
     const UChar *saveSource;
     uint32_t targetValue=0;
     char *saveTarget;
-    int32_t *saveOffsets ;
     int32_t myTargetLength = args->targetLimit - args->target;
     int32_t mySourceLength = args->sourceLimit - args->source;
     int32_t mySourceIndex = 0;
@@ -2609,11 +3470,10 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN(UConverterFromUnicodeArgs* args,
     int iterCount = 0;
     const char *escSeq = NULL;
     UBool isShiftAppended = FALSE;
-    mySourceIndex = myConverterData->sourceIndex;
-    myTargetIndex = myConverterData->targetIndex;
+
     isEscapeAppended =(UBool) myConverterData->isEscapeAppended;
     isShiftAppended =(UBool) myConverterData->isShiftAppended;
-    initIterState = myConverterData->currentState;
+    initIterState = myConverterData->fromUnicodeCurrentState;
     /* arguments check*/
     if ((args->converter == NULL) || (args->targetLimit < args->target) || (args->sourceLimit < args->source)){
         *err = U_ILLEGAL_ARGUMENT_ERROR;
@@ -2621,10 +3481,10 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN(UConverterFromUnicodeArgs* args,
     }
     
     while(mySourceIndex <  mySourceLength){
-        currentState =(StateEnumCN) myConverterData->currentState;
+        currentState =(StateEnumCN) myConverterData->fromUnicodeCurrentState;
         myConverterData->fromUnicodeConverter = (myConverterData->fromUnicodeConverter == NULL) ?
             myConverterData->myConverterArray[0] :
-        myConverterData->myConverterArray[(int)myConverterData->currentState];
+        myConverterData->myConverterArray[(int)myConverterData->fromUnicodeCurrentState];
         
         if(myTargetIndex < myTargetLength){
             
@@ -2660,7 +3520,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN(UConverterFromUnicodeArgs* args,
             if(mySourceChar== 0x000A || mySourceChar== 0x000D){
                 
                 if((int)currentState > 0 && isShiftAppended){
-                    concatChar(args, &myTargetIndex, &myTargetLength, UCNV_SI,err);
+                    concatChar(args, &myTargetIndex, &myTargetLength, UCNV_SI,err,&mySourceIndex);
                     isShiftAppended=myConverterData->isShiftAppended=FALSE;
                     TEST_ERROR_CONDITION_CN(args,myTargetIndex, mySourceIndex,myConverterData, err);
                 }
@@ -2744,11 +3604,11 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN(UConverterFromUnicodeArgs* args,
                     }
                     if(targetUniChar==missingCharMarker){
                         iterCount = (iterCount<3)? iterCount+1 : 0;
-                        myConverterData->currentState=currentState=(StateEnum)(currentState<3)? currentState+1:0;
-                        currentState =(StateEnumCN) myConverterData->currentState;
+                        myConverterData->fromUnicodeCurrentState=currentState=(StateEnum)(currentState<3)? currentState+1:0;
+                        currentState =(StateEnumCN) myConverterData->fromUnicodeCurrentState;
                         myConverterData->fromUnicodeConverter = (myConverterData->fromUnicodeConverter == NULL) ?
                                                         myConverterData->myConverterArray[0] :
-                                                    myConverterData->myConverterArray[(int)myConverterData->currentState];
+                                                    myConverterData->myConverterArray[(int)myConverterData->fromUnicodeCurrentState];
                         targetUniChar =missingCharMarker;
                         isEscapeAppended = FALSE; 
                         /* save the state */
@@ -2773,7 +3633,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN(UConverterFromUnicodeArgs* args,
                 if(!isEscapeAppended){
                     escSeq = (currentState==CNS_11643) ? escSeqCharsCN[(int)currentState+plane-1]:escSeqCharsCN[(int)currentState];
                     concatEscape(args, &myTargetIndex, &myTargetLength, 
-                        escSeq,err,strlen(escSeq));
+                        escSeq,err,strlen(escSeq),&mySourceIndex);
                     isEscapeAppended=myConverterData->isEscapeAppended=TRUE;
                     
                     
@@ -2786,14 +3646,14 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN(UConverterFromUnicodeArgs* args,
                         if(!isShiftAppended){
                             concatEscape(args,&myTargetIndex,&myTargetLength,
                                 shiftSeqCharsCN[currentState],err,
-                                strlen(shiftSeqCharsCN[currentState]));
+                                strlen(shiftSeqCharsCN[currentState]),&mySourceIndex);
                             myConverterData->isShiftAppended =isShiftAppended=TRUE;
                         }
                        
                     }
                     else{
                         concatEscape(args,&myTargetIndex,&myTargetLength,shiftSeqCharsCN[currentState+plane],
-                            err,strlen(shiftSeqCharsCN[currentState+plane]));
+                            err,strlen(shiftSeqCharsCN[currentState+plane]),&mySourceIndex);
                         
                         myConverterData->isShiftAppended =isShiftAppended=FALSE;
                     
@@ -2813,21 +3673,17 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN(UConverterFromUnicodeArgs* args,
                  */
                     reason = UCNV_UNASSIGNED;
                     *err = U_INVALID_CHAR_FOUND;
-                    args->converter->invalidUCharBuffer[0]= (UChar)mySourceChar;
-                    args->converter->invalidCharLength++;
+                    args->converter->invalidUCharBuffer[0]=(UChar)mySourceChar;
+                    args->converter->invalidUCharLength++;
                     
 CALLBACK:
                     saveSource = args->source;
                     saveTarget = args->target;
-                    saveOffsets = args->offsets;
+     
                     args->target = (char*)myTarget + myTargetIndex;
                     args->source = mySource + mySourceIndex;
-                    myConverterData->isEscapeAppended = isEscapeAppended;
                     myConverterData->isShiftAppended =isShiftAppended;
-                    
-                    myConverterData->sourceIndex = mySourceIndex;
-                    myConverterData->targetIndex = myTargetIndex;
-                    
+
                     FromU_CALLBACK_MACRO(args->converter->fromUContext,
                         args,
                         args->converter->invalidUCharBuffer,
@@ -2838,22 +3694,24 @@ CALLBACK:
                         : args->converter->invalidUCharBuffer[0]),
                         reason,
                         err);
+                    args->converter->invalidUCharLength=0;
+                    myConverterData->isEscapeAppended = isEscapeAppended=FALSE;
+                    args->source=saveSource;
+                    args->target=saveTarget;
                     
-                    args->source = saveSource;
-                    args->target = saveTarget;
-                    args->offsets =	saveOffsets;
+                    initIterState = myConverterData->fromUnicodeCurrentState;
+
                     if (U_FAILURE (*err)){
                         break;
                     }
-                    args->converter->invalidUCharLength = 0;
+                  
             }
-            targetUniChar = missingCharMarker;
-            
+            targetUniChar =missingCharMarker;
         } /* end if(myTargetIndex<myTargetLength) */
         else{
             *err =U_BUFFER_OVERFLOW_ERROR;
             break;
-        } 
+        }
         
     }/* end while(mySourceIndex<mySourceLength) */
     
@@ -2865,6 +3723,292 @@ CALLBACK:
     myConverterData->targetIndex = 0;
 }
 
+U_CFUNC void UConverter_fromUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args, UErrorCode* err){
+    
+    UChar* mySource =(UChar*)args->source;
+    UConverterDataISO2022 *myConverterData=(UConverterDataISO2022*)args->converter->extraInfo;
+    UConverterCallbackReason reason;
+    UBool isEscapeAppended = FALSE;
+    StateEnumCN initIterState;
+    unsigned char *myTarget = (unsigned char *) args->target; 
+    const UChar *saveSource;
+    uint32_t targetValue=0;
+    char *saveTarget;
+    int32_t *saveOffsets ;
+    int32_t myTargetLength = args->targetLimit - args->target;
+    int32_t mySourceLength = args->sourceLimit - args->source;
+    int32_t mySourceIndex = 0;
+    int32_t myTargetIndex = 0;
+    int32_t length  =0;
+    int plane = 0;
+    CompactShortArray *myFromUnicodeDBCS = NULL;
+    CompactShortArray *myFromUnicodeDBCSFallback = NULL;
+    CompactByteArray  *myFromUnicodeSBCS = NULL;
+    CompactByteArray  *myFromUnicodeSBCSFallback = NULL;
+    UChar32 targetUniChar = missingCharMarker;
+    int32_t currentOffset=0;
+    StateEnumCN currentState=ASCII;
+    
+    UChar32 mySourceChar = 0x0000;
+    int iterCount = 0;
+    const char *escSeq = NULL;
+    UBool isShiftAppended = FALSE;
+
+    isEscapeAppended =(UBool) myConverterData->isEscapeAppended;
+    isShiftAppended =(UBool) myConverterData->isShiftAppended;
+    initIterState = myConverterData->fromUnicodeCurrentState;
+    /* arguments check*/
+    if ((args->converter == NULL) || (args->targetLimit < args->target) || (args->sourceLimit < args->source)){
+        *err = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    
+    while(mySourceIndex <  mySourceLength){
+        currentState =(StateEnumCN) myConverterData->fromUnicodeCurrentState;
+        myConverterData->fromUnicodeConverter = (myConverterData->fromUnicodeConverter == NULL) ?
+            myConverterData->myConverterArray[0] :
+        myConverterData->myConverterArray[(int)myConverterData->fromUnicodeCurrentState];
+        
+        if(myTargetIndex < myTargetLength){
+            
+            mySourceChar = (UChar) args->source[mySourceIndex++];
+            
+            /* I am handling surrogates in the begining itself so that I donot have to go through 4
+             * iterations on codepages that we support. 
+             */
+            if(args->converter->fromUSurrogateLead!=0 || UTF_IS_SURROGATE(mySourceChar)){
+                if(UTF_IS_SURROGATE_FIRST(mySourceChar)){  
+                    /* no more input */
+                    args->converter->fromUSurrogateLead = (UChar) mySourceChar;
+                    continue;
+                }
+                else if(UTF_IS_SECOND_SURROGATE(mySourceChar)){
+                    if(args->converter->fromUSurrogateLead !=0){
+                        mySourceChar = (UChar32) UTF16_GET_PAIR_VALUE(args->converter->fromUSurrogateLead,mySourceChar);
+                        break;
+                    }
+                    else{
+                        reason=UCNV_ILLEGAL;
+                        *err=U_ILLEGAL_CHAR_FOUND;
+                        goto CALLBACK;
+                    }
+                }
+                else {
+                    reason=UCNV_ILLEGAL;
+                    *err=U_ILLEGAL_CHAR_FOUND;
+                    goto CALLBACK;
+                }
+            }
+            /* if the source character is CR or LF then append the ASCII escape sequence*/
+            if(mySourceChar== 0x000A || mySourceChar== 0x000D){
+                
+                if((int)currentState > 0 && isShiftAppended){
+                    concatChar(args, &myTargetIndex, &myTargetLength, UCNV_SI,err,&mySourceIndex);
+                    isShiftAppended=myConverterData->isShiftAppended=FALSE;
+                    TEST_ERROR_CONDITION_CN(args,myTargetIndex, mySourceIndex,myConverterData, err);
+                }
+                myConverterData->isEscapeAppended=isEscapeAppended=FALSE;
+                targetUniChar = mySourceChar;
+                concatString(args, &myTargetIndex, &myTargetLength,&targetUniChar,err,&mySourceIndex);
+                TEST_ERROR_CONDITION_CN(args,myTargetIndex,	mySourceIndex,myConverterData, err);
+                
+                continue;
+            }
+            else{
+                do{
+                    switch (myConverterTypeCN[currentState]){
+                    
+                        case SBCS:
+                            if(mySourceChar<0xff){
+                                myFromUnicodeSBCS =	&myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicode;
+                                myFromUnicodeSBCSFallback = &myConverterData->fromUnicodeConverter->sharedData->table->sbcs.fromUnicodeFallback;
+                        
+                                targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCS, mySourceChar);
+                        
+                                if ((targetUniChar==0)&&(args->converter->useFallback == TRUE) &&
+                                    (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
+                                    targetUniChar = (UChar32) ucmp8_getu (myFromUnicodeSBCSFallback, mySourceChar);
+                                }
+                        
+                            }
+                            /* ucmp8_getU returns 0	for missing char so explicitly set it missingCharMarker*/
+                            targetUniChar=(UChar)((targetUniChar==0) ? (UChar) missingCharMarker : targetUniChar);
+                            break;
+                    
+                        case DBCS:
+                            if(mySourceChar<0xffff){
+                                myFromUnicodeDBCS =	&myConverterData->fromUnicodeConverter->sharedData->table->dbcs.fromUnicode;
+                                myFromUnicodeDBCSFallback = &myConverterData->fromUnicodeConverter->sharedData->table->dbcs.fromUnicodeFallback;
+                                targetUniChar = (UChar) ucmp16_getu (myFromUnicodeDBCS,	mySourceChar);
+                        
+                                if ((targetUniChar==missingCharMarker)&&(args->converter->useFallback	== TRUE) &&
+                                    (myConverterData->fromUnicodeConverter->sharedData->staticData->hasFromUnicodeFallback == TRUE)){
+                                    targetUniChar = (UChar) ucmp16_getu (myFromUnicodeDBCSFallback, mySourceChar);
+                                }
+                            }
+                            if(( myConverterData->version) == 0 && currentState==ISO_IR_165){
+                                targetUniChar=missingCharMarker;
+                            }
+                            break;
+                    
+                        case MBCS:
+                    
+                            length= _MBCSFromUChar32(myConverterData->fromUnicodeConverter->sharedData,
+                                mySourceChar,&targetValue,args->converter->useFallback);
+                    
+                            targetUniChar = (UChar32) targetValue;
+                    
+                            if(length==0){
+                                targetUniChar = missingCharMarker;
+                            } 
+                            else if(length==3){
+                                uint8_t	planeVal = (uint8_t) ((targetValue)>>16);
+                                if(planeVal >0x80 && planeVal<0x89){
+                                    plane = (int)(planeVal - 0x80);
+                                    targetUniChar -= (planeVal<<16);
+                                }else 
+                                    plane =-1;
+                            }
+                            else if(length >3){
+                                reason =UCNV_ILLEGAL;
+                                *err =U_INVALID_CHAR_FOUND;
+                                goto CALLBACK;
+                            }
+                            if(myConverterData->version == 0 && plane >2){
+                                    targetUniChar = missingCharMarker;
+                            }
+                            break;
+                    
+                        case LATIN1:
+                    
+                        default:
+                            /*not expected */ 
+                            break;
+                    }
+                    if(targetUniChar==missingCharMarker){
+                        iterCount = (iterCount<3)? iterCount+1 : 0;
+                        myConverterData->fromUnicodeCurrentState=currentState=(StateEnum)(currentState<3)? currentState+1:0;
+                        currentState =(StateEnumCN) myConverterData->fromUnicodeCurrentState;
+                        myConverterData->fromUnicodeConverter = (myConverterData->fromUnicodeConverter == NULL) ?
+                                                        myConverterData->myConverterArray[0] :
+                                                    myConverterData->myConverterArray[(int)myConverterData->fromUnicodeCurrentState];
+                        targetUniChar =missingCharMarker;
+                        isEscapeAppended = FALSE; 
+                        /* save the state */
+                        myConverterData->isEscapeAppended = isEscapeAppended;
+                        myConverterData->isShiftAppended =isShiftAppended;
+                        myConverterData->sourceIndex = mySourceIndex;
+                        myConverterData->targetIndex = myTargetIndex;
+                    }
+                }while(targetUniChar==missingCharMarker && initIterState != currentState);
+            }
+            
+            if(targetUniChar!= missingCharMarker){
+                
+                /* set the iteration state and iteration count  */	    
+                initIterState = currentState;
+                iterCount =0;
+                if(myConverterData->plane != plane){
+                    isEscapeAppended=myConverterData->isEscapeAppended=FALSE;
+                    myConverterData->plane = plane;
+                }
+                /* Append the escpace sequence */
+                if(!isEscapeAppended){
+                    escSeq = (currentState==CNS_11643) ? escSeqCharsCN[(int)currentState+plane-1]:escSeqCharsCN[(int)currentState];
+                    concatEscape(args, &myTargetIndex, &myTargetLength, 
+                        escSeq,err,strlen(escSeq),&mySourceIndex);
+                    isEscapeAppended=myConverterData->isEscapeAppended=TRUE;
+                    
+                    
+                    
+                }
+                /* Append Shift Sequences */
+                if(currentState!=ASCII){
+                    
+                    if(currentState!=CNS_11643 ){
+                        if(!isShiftAppended){
+                            concatEscape(args,&myTargetIndex,&myTargetLength,
+                                shiftSeqCharsCN[currentState],err,
+                                strlen(shiftSeqCharsCN[currentState]),&mySourceIndex);
+                            myConverterData->isShiftAppended =isShiftAppended=TRUE;
+                        }
+                       
+                    }
+                    else{
+                        concatEscape(args,&myTargetIndex,&myTargetLength,shiftSeqCharsCN[currentState+plane],
+                            err,strlen(shiftSeqCharsCN[currentState+plane]),&mySourceIndex);
+                        
+                        myConverterData->isShiftAppended =isShiftAppended=FALSE;
+                    
+                    }
+                    
+                }
+                
+                concatString(args, &myTargetIndex, &myTargetLength,
+                    &targetUniChar,err, &mySourceIndex);
+                TEST_ERROR_CONDITION_CN(args,myTargetIndex,	mySourceIndex,myConverterData, err);
+                
+            }/* end of end if(targetUniChar==missingCharMarker)*/
+            else{
+
+               
+                /* if we cannot	find the character after checking all codepages 
+                 * then this is	an error
+                 */
+                    reason = UCNV_UNASSIGNED;
+                    *err = U_INVALID_CHAR_FOUND;
+                    
+CALLBACK:
+                    args->converter->invalidUCharBuffer[args->converter->invalidUCharLength++]=(UChar)mySourceChar;
+                    currentOffset = args->offsets[myTargetIndex-1]+1;
+                    saveSource = args->source;
+                    saveTarget = args->target;
+                    saveOffsets = args->offsets;
+                    args->target = (char*)myTarget + myTargetIndex;
+                    args->source = mySource + mySourceIndex;
+
+                    myConverterData->isEscapeAppended = isEscapeAppended;
+                    myConverterData->isShiftAppended =isShiftAppended;
+                    myConverterData->sourceIndex = mySourceIndex;
+                    myConverterData->targetIndex = myTargetIndex;
+
+                    args->offsets = args->offsets?args->offsets+myTargetIndex:0;
+                    FromU_CALLBACK_OFFSETS_LOGIC_MACRO(args->converter->fromUContext,
+                        args,
+                        args->converter->invalidUCharBuffer,
+                        args->converter->invalidUCharLength,
+                        (UChar32) (args->converter->invalidUCharLength == 2 ? 
+                        UTF16_GET_PAIR_VALUE(args->converter->invalidUCharBuffer[0], 
+                        args->converter->invalidUCharBuffer[1]) 
+                        : args->converter->invalidUCharBuffer[0]),
+                        reason,
+                        err);
+                    args->converter->invalidUCharLength=0;
+                    args->source=saveSource;
+                    args->target=saveTarget;
+                    args->offsets=saveOffsets;
+                    initIterState = myConverterData->fromUnicodeCurrentState;
+
+                    if (U_FAILURE (*err)){
+                        break;
+                    }
+            }
+            targetUniChar =missingCharMarker;
+        } /* end if(myTargetIndex<myTargetLength) */
+        else{
+            *err =U_BUFFER_OVERFLOW_ERROR;
+            break;
+        }
+        
+    }/* end while(mySourceIndex<mySourceLength) */
+    
+    
+    /*save the state and return */
+    args->target += myTargetIndex;
+    args->source += mySourceIndex;
+    myConverterData->sourceIndex = 0;
+    myConverterData->targetIndex = 0;
+}
 /*************** to unicode *******************/
 
 static void changeState_2022_CN(UConverter* _this,
@@ -3104,7 +4248,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
                 * are assumed to be ASCII according to RFC-1922
                 */
                     
-                    myData->currentState = SBCS;
+                    myData->toUnicodeCurrentState = SBCS;
                     myData->plane=plane = 0;
              }
             
@@ -3113,7 +4257,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
                     if(args->converter->toUnicodeStatus !=	0x00){
                         goto SAVE_STATE;
                     }
-                    myData->currentState = SBCS;
+                    myData->toUnicodeCurrentState = SBCS;
                     myData->plane=plane = 0;
                     break;
                 
@@ -3121,7 +4265,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
                     if(args->converter->toUnicodeStatus !=	0x00){
                         goto SAVE_STATE;
                     }
-                    myData->currentState = SBCS;
+                    myData->toUnicodeCurrentState = SBCS;
                     myData->plane=plane = 0;
                     break;
                 
@@ -3129,7 +4273,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
                     if(args->converter->toUnicodeStatus != 0x00){
                         goto SAVE_STATE;
                     }
-                    myData->currentState = SBCS;
+                    myData->toUnicodeCurrentState = SBCS;
                     myData->plane=plane = 0;
                     continue;
                 
@@ -3138,7 +4282,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
                         goto SAVE_STATE;
                     }
                 
-                    myData->currentState = (plane>0) ? MBCS: DBCS;
+                    myData->toUnicodeCurrentState = (plane>0) ? MBCS: DBCS;
                     continue;
                             
                 default:
@@ -3158,13 +4302,13 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
                 
                     myData->plane=plane;
                     if(plane>0){
-                        myData->currentState = MBCS;
+                        myData->toUnicodeCurrentState = MBCS;
                     }
                     else if(myData->currentConverter &&  
                                 uprv_stricmp("latin_1", 
                                 myData->currentConverter->sharedData->staticData->name)==0){
                     
-                        myData->currentState=SBCS;
+                        myData->toUnicodeCurrentState=SBCS;
                     }
                     if(U_FAILURE(*err)){
                         goto SAVE_STATE;
@@ -3172,7 +4316,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
                     continue;
             }
             
-            switch(myData->currentState){
+            switch(myData->toUnicodeCurrentState){
                 
                 case SBCS:
                 
@@ -3237,38 +4381,52 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
             }
             else if(targetUniChar>=0xfffe){
 SAVE_STATE:
-            {
-                const char *saveSource = args->source;
-                UChar *saveTarget = args->target;
-                int32_t *saveOffsets = args->offsets;
-                UConverterCallbackReason reason;
+                {
+                    const char *saveSource = args->source;
+                    UChar *saveTarget = args->target;
+                    int32_t *saveOffsets = args->offsets;
+                    UConverterCallbackReason reason;
                 
-                if(targetUniChar == 0xfffe){
-                    reason = UCNV_UNASSIGNED;
-                    *err = U_INVALID_CHAR_FOUND;
+                    if(targetUniChar == 0xfffe){
+                        reason = UCNV_UNASSIGNED;
+                        *err = U_INVALID_CHAR_FOUND;
+                    }
+                    else{
+                        reason = UCNV_ILLEGAL;
+                        *err = U_ILLEGAL_CHAR_FOUND;
+                    }
+                    switch(myData->toUnicodeCurrentState){
+                        case SBCS:
+                            args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char)mySourceChar;
+                            break;
+
+                        case DBCS:
+                            args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = tempBuf[0];
+                            args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = tempBuf[1];
+                            break;
+
+                        case MBCS:
+                            args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = tempBuf[1];
+                            args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = tempBuf[2];
+                    }
+
+                    args->target = myTarget;
+                    args->source = mySource;
+                    ToU_CALLBACK_MACRO( args->converter->toUContext,
+                        args,
+                        args->converter->invalidCharBuffer,
+                        args->converter->invalidCharLength,
+                        reason,
+                        err);
+                    myTarget += args->target - myTarget;
+                    args->source = saveSource;
+                    args->target = saveTarget;
+                    args->offsets = saveOffsets;
+                    args->converter->invalidCharLength=0;
+                    if(U_FAILURE(*err))
+                        break;
+
                 }
-                else{
-                    reason = UCNV_ILLEGAL;
-                    *err = U_ILLEGAL_CHAR_FOUND;
-                }
-                args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = tempBuf[0];
-                args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = tempBuf[1];
-                args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = tempBuf[2];
-                args->target = myTarget;
-                args->source = mySource;
-                ToU_CALLBACK_MACRO( args->converter->toUContext,
-                    args,
-                    args->converter->invalidCharBuffer,
-                    args->converter->invalidCharLength,
-                    reason,
-                    err);
-                args->source  =	saveSource;
-                args->target  =	saveTarget;
-                args->offsets =	saveOffsets;
-                if(U_FAILURE(*err))
-                    break;
-                args->converter->invalidCharLength=0;
-            }
             }
         }
         else{
@@ -3326,7 +4484,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
                 if(args->converter->toUnicodeStatus !=	0x00){
                     goto SAVE_STATE;
                 }
-                myData->currentState = SBCS;
+                myData->toUnicodeCurrentState = SBCS;
                 myData->plane=plane = 0;
                 break;
                 
@@ -3334,7 +4492,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
                 if(args->converter->toUnicodeStatus !=	0x00){
                     goto SAVE_STATE;
                 }
-                myData->currentState = SBCS;
+                myData->toUnicodeCurrentState = SBCS;
                 myData->plane=plane = 0;
                 break;
                 
@@ -3342,7 +4500,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
                 if(args->converter->toUnicodeStatus != 0x00){
                     goto SAVE_STATE;
                 }
-                myData->currentState = SBCS;
+                myData->toUnicodeCurrentState = SBCS;
                 myData->plane=plane = 0;
                 continue;
                 
@@ -3351,7 +4509,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
                     goto SAVE_STATE;
                 }
                 
-                myData->currentState = (plane>0) ? MBCS: DBCS;
+                myData->toUnicodeCurrentState = (plane>0) ? MBCS: DBCS;
                 continue;
                 
             default:
@@ -3371,13 +4529,13 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
                 
                 myData->plane=plane;
                 if(plane>0){
-                    myData->currentState = MBCS;
+                    myData->toUnicodeCurrentState = MBCS;
                 }
                 else if(myData->currentConverter &&  
                             uprv_stricmp("latin_1", 
                             myData->currentConverter->sharedData->staticData->name)==0){
                     
-                    myData->currentState=SBCS;
+                    myData->toUnicodeCurrentState=SBCS;
                 }
                 if(U_FAILURE(*err)){
                     goto SAVE_STATE;
@@ -3386,7 +4544,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
             
             }
             
-            switch(myData->currentState){
+            switch(myData->toUnicodeCurrentState){
                 
             case SBCS:
                 
@@ -3446,7 +4604,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
                 break;
             }
             if(targetUniChar < 0xfffe){
-                if(myData->currentState == SBCS){
+                if(myData->toUnicodeCurrentState == SBCS){
                     args->offsets[myTarget - args->target]=	mySource - args->source - 1;
                 }
                 else{
@@ -3456,38 +4614,62 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
             }
             else if(targetUniChar>=0xfffe){
 SAVE_STATE:
-            {
-                const char *saveSource = args->source;
-                UChar *saveTarget = args->target;
-                int32_t *saveOffsets = args->offsets;
-                UConverterCallbackReason reason;
-                
-                if(targetUniChar == 0xfffe){
-                    reason = UCNV_UNASSIGNED;
-                    *err = U_INVALID_CHAR_FOUND;
+                {
+                    const char *saveSource = args->source;
+                    UChar *saveTarget = args->target;
+                    int32_t *saveOffsets = args->offsets;
+                    UConverterCallbackReason reason;
+                    int32_t currentOffset ;
+                    int32_t My_i = myTarget - args->target;
+                    
+                    
+                    switch(myData->toUnicodeCurrentState){
+                        case SBCS:
+                            currentOffset=	mySource - args->source -1;
+                            args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char)mySourceChar;
+                            break;
+
+                        case DBCS:
+                            currentOffset=	mySource - args->source -2;
+                            args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = tempBuf[0];
+                            args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = tempBuf[1];
+                            break;
+
+                        case MBCS:
+                            currentOffset=	mySource - args->source -2;
+                            args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = tempBuf[1];
+                            args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = tempBuf[2];
+                            break;
+
+                        default:
+                            currentOffset = mySource - args->source -1;
+                    }
+
+                    if(targetUniChar == 0xfffe){
+                        reason = UCNV_UNASSIGNED;
+                        *err = U_INVALID_CHAR_FOUND;
+                    }
+                    else{
+                        reason = UCNV_ILLEGAL;
+                        *err = U_ILLEGAL_CHAR_FOUND;
+                    }
+
+                    
+                    args->offsets = args->offsets?args->offsets+(myTarget - args->target):0;
+                    args->target =myTarget;
+                    myTarget =saveTarget;
+                    ToU_CALLBACK_OFFSETS_LOGIC_MACRO( args->converter->toUContext,
+                        args,
+                        args->converter->invalidCharBuffer,
+                        args->converter->invalidCharLength,
+                        reason,
+                        err);
+                    args->converter->invalidCharLength=0;
+                    myTarget=args->target;
+                    args->source  = saveSource;
+                    args->target  = saveTarget;
+                    args->offsets = saveOffsets;
                 }
-                else{
-                    reason = UCNV_ILLEGAL;
-                    *err = U_ILLEGAL_CHAR_FOUND;
-                }
-                args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = tempBuf[0];
-                args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = tempBuf[1];
-                args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = tempBuf[2];
-                args->target = myTarget;
-                args->source = mySource;
-                ToU_CALLBACK_MACRO( args->converter->toUContext,
-                    args,
-                    args->converter->invalidCharBuffer,
-                    args->converter->invalidCharLength,
-                    reason,
-                    err);
-                args->source  =	saveSource;
-                args->target  =	saveTarget;
-                args->offsets =	saveOffsets;
-                if(U_FAILURE(*err))
-                    break;
-                args->converter->invalidCharLength=0;
-            }
             }
         }
         else{
