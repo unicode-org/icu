@@ -27,6 +27,7 @@ U_NAMESPACE_BEGIN
 //  End of #defines inteded to be directly set.
 
 #if defined(REGEX_SCAN_DEBUG) || defined(REGEX_RUN_DEBUG) || defined(REGEX_DUMP_DEBUG)
+#define REGEX_DEBUG 1
 #include <stdio.h>
 #endif
 
