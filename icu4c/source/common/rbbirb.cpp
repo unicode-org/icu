@@ -59,6 +59,7 @@ RBBIRuleBuilder::RBBIRuleBuilder(const UnicodeString   &rules,
     fReverseTree        = NULL;
     fForwardTables      = NULL;
     fReverseTables      = NULL;
+    fChainRules         = FALSE;
 
     UErrorCode oldstatus = status;   
 

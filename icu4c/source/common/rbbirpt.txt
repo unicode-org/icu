@@ -58,7 +58,7 @@ start:
     escaped                term                  ^break-rule-end    doExprStart                       
     white_space          n start                     
     '$'                    scan-var-name         ^assign-or-rule    doExprStart
-    '!'                  n reverse-rule                             doReverseDir
+    '!'                  n rev-option                             
     ';'                  n start                                                  # ignore empty rules.
     eof                    exit              
     default                term                  ^break-rule-end    doExprStart
@@ -73,9 +73,25 @@ break-rule-end:
      
 
 #
-#   Reverse Rule    We've just scanned a '!', indicating a reverse direction rule.
-#                   A rule expression must follow.
+#   !               We've just scanned a '!', indicating either a !!key word flag or a
+#                   !Reverse rule.
 #
+rev-option:
+    '!'                  n option-scan1   
+    default                reverse-rule           ^break-rule-end   doReverseDir
+    
+option-scan1:
+    name_start_char      n option-scan2                             doOptionStart
+    default                errorDeath                               doRuleError
+    
+option-scan2:
+    name_char            n option-scan2
+    white_space            start                                    doOptionEnd
+    ';'                    start                                    doOptionEnd
+    default                errorDeath                               doRuleError
+    
+    
+
 reverse-rule:
     default                term                   ^break-rule-end   doExprStart
     
