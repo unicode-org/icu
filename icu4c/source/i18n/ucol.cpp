@@ -398,7 +398,6 @@ ucol_openRules(    const    UChar                  *rules,
       fprintf(stderr, "invalid rule just before offset %i\n", src.current-src.source);
     }
 #endif
-    uprv_free(src.opts);
     ucol_tok_closeTokenList(&src);
     return NULL;
   }
@@ -412,9 +411,13 @@ ucol_openRules(    const    UChar                  *rules,
       result->hasRealData = TRUE;
     }
   } else { /* no rules, but no error either */
-    /* must be only options */
+    // must be only options
+    // We will init the collator from UCA   
     result = ucol_initCollator(UCA->image,0,status);
-    ucol_setOptionsFromHeader(result, src.opts, status);
+    // And set only the options
+    UColOptionSet *opts = (UColOptionSet *)uprv_malloc(sizeof(UColOptionSet));
+    uprv_memcpy(opts, src.opts, sizeof(UColOptionSet));
+    ucol_setOptionsFromHeader(result, opts, status);
     result->freeOptionsOnClose = TRUE;
     result->hasRealData = FALSE;
   }
@@ -428,7 +431,6 @@ ucol_openRules(    const    UChar                  *rules,
     ucol_setAttribute(result, UCOL_STRENGTH, strength, status);
     ucol_setAttribute(result, UCOL_NORMALIZATION_MODE, norm, status);
   } else {
-    uprv_free(src.opts);
     if(table != NULL) {
       uprv_free(table);
     }
