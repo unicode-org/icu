@@ -1,4 +1,5 @@
 * text=auto !eol
+icu4c/as_is/win32/msvc7.zip -text
 icu4c/license.html svneol=native#text/html
 icu4c/readme.html svneol=native#text/html
 icu4c/source/data/brkitr/thaidict.brk -text
