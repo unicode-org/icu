@@ -395,6 +395,9 @@ void  ucnv_reset (UConverter * converter)
   };
   UErrorCode errorCode;
 
+  if(converter == NULL) {
+    return;
+  }
   toUArgs.converter = fromUArgs.converter = converter;
   errorCode = U_ZERO_ERROR;
   converter->fromCharErrorBehaviour(converter->toUContext, &toUArgs, NULL, 0, UCNV_RESET, &errorCode);
@@ -897,6 +900,10 @@ UChar32 ucnv_getNextUChar (UConverter * converter,
 {
   UConverterToUnicodeArgs args;
   UChar32 ch;
+
+  if(err == NULL || U_FAILURE(*err)) {
+      return 0xffff;
+  }
 
   /* In case internal data had been stored
    * we return the first UChar32 in the internal buffer,
