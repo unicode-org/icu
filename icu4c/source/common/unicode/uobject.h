@@ -40,6 +40,15 @@ U_NAMESPACE_BEGIN
 #define U_OVERRIDE_CXX_ALLOCATION 1
 #endif
 
+/**  U_HAVE_PLACEMENT_NEW - Define this to define the placement new and
+ *                          delete in UMemory for STL.
+ *
+ * @draft ICU 2.6
+ */                              
+#ifndef U_HAVE_PLACEMENT_NEW
+#define U_HAVE_PLACEMENT_NEW 1
+#endif
+
 /**
  * UMemory is the common ICU base class.
  * All other ICU C++ classes are derived from UMemory (starting with ICU 2.4).
@@ -93,6 +102,7 @@ public:
      */
     static void operator delete[](void *p);
 
+#if U_HAVE_PLACEMENT_NEW
     /**
      * Override for ICU4C C++ memory management for STL.
      * See new().
@@ -106,7 +116,8 @@ public:
      * @draft ICU 2.6
      */
     static inline void operator delete(void *, void *) {}
-#endif
+#endif /* U_HAVE_PLACEMENT_NEW */
+#endif /* U_OVERRIDE_CXX_ALLOCATION */
 };
 
 /**
