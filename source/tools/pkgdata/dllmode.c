@@ -237,7 +237,7 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
                                    "\t-ls -l $@\n\n");
 #endif
 
-  T_FileStream_writeLine(makefile, "CLEANFILES= $(OBJECTS) $(HPUX_JUNK_OBJ) $(TARGETDIR)/$(FINAL_SO_TARGET) $(TARGETDIR)/$(MIDDLE_SO_TARGET) $(TARGETDIR)/$(TARGET)\n\nclean:\n\t-$(RMV) $(CLEANFILES) $(MAKEFILE)");
+  T_FileStream_writeLine(makefile, "CLEANFILES= $(CMNLIST) $(OBJECTS) $(HPUX_JUNK_OBJ) $(TARGETDIR)/$(FINAL_SO_TARGET) $(TARGETDIR)/$(MIDDLE_SO_TARGET) $(TARGETDIR)/$(TARGET)\n\nclean:\n\t-$(RMV) $(CLEANFILES) $(MAKEFILE)");
   T_FileStream_writeLine(makefile, "\n\n");
 
   T_FileStream_writeLine(makefile, "install: $(TARGETDIR)/$(FINAL_SO_TARGET)\n"
