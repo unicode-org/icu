@@ -407,6 +407,21 @@ void TestSortKey()
     UCollator *col;
     UChar *test1, *test2, *test3;
     UErrorCode status = U_ZERO_ERROR;
+
+
+    char s1[] = { 0x9f, 0x00 };
+    char s2[] = { 0x61, 0x00 };
+    int  strcmpResult;
+
+    strcmpResult = strcmp(s1,s2);
+    log_verbose("strcmp(0x9f..., 0x61...) = %d\n", strcmpResult);
+    
+    if(strcmpResult <= 0) {
+      log_err("ERR: expected strcmp(\"9f 00\", \"61 00\") to be >=0 (GREATER).. got %d. Calling strcmp() for sortkeys may not work! \n",
+              strcmpResult);
+    }
+
+
     log_verbose("testing SortKey begins...\n");
     /* this is supposed to open default date format, but later on it treats it like it is "en_US" 
        - very bad if you try to run the tests on machine where default locale is NOT "en_US" */
