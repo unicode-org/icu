@@ -5,13 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/ICUListResourceBundleTest.java,v $
- * $Date: 2003/11/20 01:41:01 $
- * $Revision: 1.8 $
+ * $Date: 2003/11/20 19:32:49 $
+ * $Revision: 1.9 $
  *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.util;
 
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import com.ibm.icu.dev.test.TestFmwk;
@@ -302,20 +303,25 @@ public final class ICUListResourceBundleTest extends TestFmwk
         }else{
             errln("Did not get the expected bundle.");
         }
-        
-        /*
-        ResourceBundle bundle1 = ICULocaleData.getResourceBundle("com.ibm.icu.impl.data","LocaleElements","de__PHONEBOOK");
-        if(bundle instanceof ICUListResourceBundle){
-            ICUListResourceBundle ilrb = (ICUListResourceBundle) bundle1;
-            String key = (String) ilrb.getObjectWithFallback("collations/collation/default");
-            if(!key.equals("phonebook")){
-                errln("Did not get the expected result from getObjectWithFallback method.");
-            }
 
-        }else{
-            errln("Did not get the expected bundle.");
-        } 
-        */        
+        try{
+            ResourceBundle bundle1 = ICULocaleData.getResourceBundle("com.ibm.icu.impl.data","LocaleElements","de__PHONEBOOK");
+            if(bundle instanceof ICUListResourceBundle){
+                ICUListResourceBundle ilrb = (ICUListResourceBundle) bundle1;
+                String key = (String) ilrb.getObjectWithFallback("collations/collation/default");
+                if(!key.equals("phonebook")){
+                    errln("Did not get the expected result from getObjectWithFallback method.");
+                }
+    
+            }else{
+                errln("Did not get the expected bundle.");
+            } 
+            errln("Did not get the expected exception.");
+        }catch(MissingResourceException ex){
+            logln("got the expected exception");
+        }
+         
+               
     }
     
 }
