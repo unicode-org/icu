@@ -29,6 +29,7 @@
 #include "unicode/ucnv.h"
 #include "unicode/ures.h"
 #include "unicode/uclean.h"
+#include "uoptions.h"
 
 #ifdef XP_MAC_CONSOLE
 #   include <console.h>
@@ -57,6 +58,56 @@ void ctest_setICU_DATA(void);
 #   define TRY_CNV_2 "sjis"
 #endif
 
+
+/*
+ * Tracing functions.
+ */
+static int traceFnNestingDepth = 0;
+void U_CALLCONV TraceEntry(const void *context, int32_t fnNumber) {
+    fprintf(stderr, "%s() Enter \n", utrace_functionName(fnNumber));
+    traceFnNestingDepth++;
+}
+        
+void U_CALLCONV TraceExit(const void *context, int32_t fnNumber, UTraceExitVal type, va_list args) {
+    int32_t   intVal;
+    UBool     boolVal;
+    void      *ptrVal;
+
+    fprintf(stderr, "%s() returns", utrace_functionName(fnNumber));
+    switch (type & UTRACE_EXITV_MASK) {
+    case UTRACE_EXITV_NONE:
+        fprintf(stderr, ".");
+        break;
+    case UTRACE_EXITV_I32:
+        intVal = (int32_t)va_arg(args, int32_t);
+        fprintf(stderr, " %d", intVal);
+        break;
+    case UTRACE_EXITV_PTR:
+        ptrVal = (void *)va_arg(args, void *);
+        fprintf(stderr, " %x", ptrVal);
+        break;
+    case UTRACE_EXITV_BOOL:
+        boolVal = (UBool)va_arg(args, int32_t);    /* gcc wants int, not UBool */
+        fprintf(stderr, boolVal? " TRUE": " FALSE");
+    }
+    if (type & UTRACE_EXITV_STATUS) {
+        UErrorCode status = (UErrorCode)va_arg(args, UErrorCode);
+        fprintf(stderr, "  Status = %s.", u_errorName(status));
+    }
+    traceFnNestingDepth--;
+    fprintf(stderr, "\n");
+}
+
+void U_CALLCONV TraceData(const void *context, int32_t fnNumber, 
+                          int32_t level, const char *fmt, va_list args) {
+    char buf[2000];
+    utrace_format(buf, sizeof(buf), traceFnNestingDepth*3, fmt, args);
+    fprintf(stderr, "%s\n", buf); 
+}
+
+
+
+
 int main(int argc, const char* const argv[])
 {
     int nerrors = 0;
@@ -70,19 +121,43 @@ int main(int argc, const char* const argv[])
     UResourceBundle *rb;
     UConverter *cnv;
 
-#ifdef XP_MAC_CONSOLE
-        argc = ccommand((char***)&argv);
-#endif
+    U_MAIN_INIT_ARGS(argc, argv);
 
     /* Checkargs */
+    /* TODO:  Test framework arg handling needs to be decoupled from test execution
+     *        so that the args being processed here don't need special handling,
+     *        separate from the other test args.
+     */
+    ICU_TRACE = UTRACE_OFF;
     for(i=1;i<argc;i++) {
         if(!strcmp(argv[i],"-w")) {
             warnOnMissingData = 1;
             warnOrErr = "Warning";
         }
+        else if (strcmp( argv[i], "-t_info") == 0) {
+            ICU_TRACE = UTRACE_INFO;
+        }
+        else if (strcmp( argv[i], "-t_error") == 0) {
+            ICU_TRACE = UTRACE_ERROR;
+        }
+        else if (strcmp( argv[i], "-t_warn") == 0) {
+            ICU_TRACE = UTRACE_WARNING;
+        }
+        else if (strcmp( argv[i], "-t_verbose") == 0) {
+            ICU_TRACE = UTRACE_VERBOSE;
+        }
     }
-
-    while (REPEAT_TESTS > 0) {
+    
+    
+    utrace_setFunctions(NULL, TraceEntry, TraceExit, TraceData, ICU_TRACE, &errorCode);
+    if (U_FAILURE(errorCode)) {
+        log_err("utrace_setFunctions()  failed.: %s\n", myErrorName(errorCode));
+        return -1;
+    }
+ 
+    
+    while (REPEAT_TESTS > 0) {   /* Loop runs once per complete execution of the tests 
+                                  *   used for -r  (repeat) test option.                */
 
 #ifdef CTST_LEAK_CHECK
         ctst_init();
@@ -156,21 +231,26 @@ int main(int argc, const char* const argv[])
 
         fprintf(stdout, "Default locale for this run is %s\n", uloc_getDefault());
 
+        /* Build a tree of all tests.   
+         *   Subsequently will be used to find / iterate the tests to run */
         root = NULL;
         addAllTests(&root);
+
+        /*  Tests acutally run HERE.   TODO:  separate command line option parsing & setting from test execution!! */
         nerrors = processArgs(root, argc, argv);
+
         if (--REPEAT_TESTS > 0) {
             printf("Repeating tests %d more time(s)\n", REPEAT_TESTS);
         }
         cleanUpTestTree(root);
+
 #ifdef CTST_LEAK_CHECK
         ctst_freeAll();
-
         /* To check for leaks */
-
         u_cleanup(); /* nuke the hashtable.. so that any still-open cnvs are leaked */
 #endif
-    }
+
+    }  /* End of loop that repeats the entire test, if requested.  (Normally doesn't loop)  */
 
     return nerrors ? 1 : 0;
 }

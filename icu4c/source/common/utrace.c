@@ -11,6 +11,7 @@
 
 #include "unicode/utrace.h"
 #include "cstring.h"
+#include "uassert.h"
 
 
 static UTraceEntry     *pTraceEntryFunc = NULL;
@@ -28,13 +29,17 @@ utrace_entry(int32_t fnNumber) {
 
 
 U_CAPI void U_EXPORT2
-utrace_exit(int32_t fnNumber, UErrorCode status) {
+utrace_exit(int32_t fnNumber, UTraceExitVal returnType, ...) {
     if (pTraceExitFunc != NULL) {
-        (*pTraceExitFunc)(gTraceContext, fnNumber, status);
+        va_list args;
+        va_start(args, returnType);
+        (*pTraceExitFunc)(gTraceContext, fnNumber, returnType, args);
+        va_end(args);
     }
 }
  
 
+ 
 U_CAPI void U_EXPORT2 
 utrace_data(int32_t fnNumber, int32_t level, const char *fmt, ...) {
     if (pTraceDataFunc != NULL) {
@@ -46,111 +51,225 @@ utrace_data(int32_t fnNumber, int32_t level, const char *fmt, ...) {
 }
 
 
+static void outputChar(char c, char *outBuf, int32_t *outIx, int32_t capacity, int32_t indent) {
+    int32_t i;
+    if (*outIx < capacity) {
+        outBuf[*outIx] = c;
+        (*outIx)++;
+    }
+    if (c == '\n') {
+        for(i=0; i<indent; i++) {
+            if (*outIx < capacity) {
+                outBuf[*outIx] = ' ';
+                (*outIx)++;
+            }
+        }
+    }
+}
+
+static void outputHexBytes(int64_t val, int32_t charsToOutput,
+                           char *outBuf, int32_t *outIx, int32_t capacity) {
+    static const char gHexChars[] = "0123456789abcdef";
+    int32_t shiftCount;
+    for  (shiftCount=(charsToOutput-1)*4; shiftCount >= 0; shiftCount-=4) {
+        char c = gHexChars[(val >> shiftCount) & 0xf];
+        outputChar(c, outBuf, outIx, capacity, 0);
+    }
+}
+
+/* Output a pointer value in hex.  Work with any size of pointer   */
+static void outputPtrBytes(void *val, char *outBuf, int32_t *outIx, int32_t capacity) {
+    static const int16_t endianTestVal = (int16_t)0xabcd;
+    int32_t  i;
+    int32_t  incVal = 1;              /* +1 for big endian, -1 for little endian          */
+    char     *p     = (char *)&val;   /* point to current byte to output in the ptr val  */
+
+    if (*(uint8_t *)&endianTestVal == (uint8_t)0xcd) {
+        /* Little Endian.  Move p to most significant end of the value      */
+        incVal = -1;
+        p += sizeof(void *) - 1;
+    }
+
+    /* Loop through the bytes of the ptr as it sits in memory, from 
+     * most significant to least significant end                    */
+    for (i=0; i<sizeof(void *); i++) {
+        outputHexBytes(*p, 2, outBuf, outIx, capacity);
+        p += incVal;
+    }
+}
+
+static void outputString(const char *s, char *outBuf, int32_t *outIx, int32_t capacity, int32_t indent) {
+    int32_t i = 0;
+    char    c;
+    if (s==NULL) {
+        s = "*NULL*";
+    }
+    do {
+        c = s[i++];
+        outputChar(c, outBuf, outIx, capacity, indent);
+    } while (c != 0);
+}
+        
 U_CAPI int32_t U_EXPORT2
-utrace_format(char *outBuf, int32_t capacity, const char *fmt, va_list args) {
-    int32_t outIx  = 0;
-    int32_t fmtIx  = 0;
-    int32_t tbufIx = 0;
-    char    fmtC;
-    int32_t intArg;
-    char    *ptrArg;
-    char    tbuf[32];     /* Small buffer to hold numeric conversions, which may
-                           *  not fit in output buffer without overflow.   */
+utrace_format(char *outBuf, int32_t capacity, int32_t indent, const char *fmt, va_list args) {
+    int32_t   outIx  = 0;
+    int32_t   fmtIx  = 0;
+    int32_t   tbufIx = 0;
+    char      fmtC;
+    char      c;
+    int32_t   intArg;
+    int64_t   longArg;
+    char      *ptrArg;
+    int32_t   i;
+
+    for (i=0; i<indent; i++) {
+        outputChar(' ', outBuf, &outIx, capacity, indent);
+    }
 
     /*   Loop runs once for each character in the format string.
-     *   Break out when format is exhausted or the output buffer fills, whichever comes first.
      */
     for (;;) {
-        if (outIx >= capacity) {
-            break;
-        }
         fmtC = fmt[fmtIx++];
         if (fmtC != '%') {
-            outBuf[outIx++] = fmtC;
+            /* Literal character, not part of a %sequence.  Just copy it to the output. */
+            outputChar(fmtC, outBuf, &outIx, capacity, indent);
             if (fmtC == 0) {
+                /* We hit the null that terminates the format string.
+                 * This is the normal (and only) exit from the loop that
+                 * interprets the format
+                 */
                 break;
             }
             continue;
         }
 
+        /* We encountered a '%'.  Pick up the following format char */
         fmtC = fmt[fmtIx++];
-        if (fmtC == '%' || fmtC == 0) {
-            outBuf[outIx++] = '%';
-            if (fmtC == 0) {
-                /* Single '%' at end of fmt string.  Treat as literal.   */
-                break;
-            } else {
-                /* %% in string, outputs a single %.   */
-                continue;
-            }
-        }
-
-        if (fmtC == 'v') {
-            /* TODO:  vector handling... */
-        }
 
         switch (fmtC) {
         case 'c':
-            outBuf[outIx++] = (char)va_arg(args, int32_t);
+            /* single 8 bit char   */
+            c = (char)va_arg(args, int32_t);
+            outputChar(c, outBuf, &outIx, capacity, indent);
             break;
 
         case 's':
+            /* char * string, null terminated.  */
             ptrArg = va_arg(args, char *);
-            if (ptrArg == NULL) {
-                if (capacity - outIx > 6) {
-                    uprv_strcpy(outBuf+outIx, "*NULL*");
-                    outIx += 6;
-                } else {
-                    outBuf[outIx++] = '0';
-                }
-                break;
-            }
-
-            while (*ptrArg != 0 && outIx < capacity) {
-                outBuf[outIx++] = *ptrArg++;
-            }
+            outputString((const char *)ptrArg, outBuf, &outIx, capacity, indent);
             break;
 
         case 'b':
-        case 'h':
-        case 'd':
-            /*  8, 16, 32 bit ints.  Not in a vector, so these all are passed
-             *  in the same way, as a plain in32_t
-             */
-            intArg = va_arg(args, int32_t);
-            tbufIx = 0;
-            if (intArg < 0) {
-                tbuf[0] = '-';
-                tbufIx = 1;
-                intArg = -intArg;
-            }
-            T_CString_integerToString(tbuf + tbufIx, intArg, 10);
-            for (tbufIx = 0; tbuf[tbufIx] != 0 && outIx < capacity; tbufIx++) {
-                outBuf[outIx++] = tbuf[tbufIx];
-            }
+            /*  8 bit int  */
+            intArg = va_arg(args, int);
+            outputHexBytes(intArg, 2, outBuf, &outIx, capacity);
             break;
 
-        case 'p':
-            /*  Pointers  */
-            ptrArg = va_arg(args, char *);
-            /* TODO:  handle 64 bit ptrs.  */
-            intArg = (int)ptrArg;
-            T_CString_integerToString(tbuf, intArg, 16);
-            for (tbufIx = 0; tbuf[tbufIx] != 0 && outIx < capacity; tbufIx++) {
-                outBuf[outIx++] = tbuf[tbufIx];
-            }
+        case 'h':
+            /*  16 bit int  */
+            intArg = va_arg(args, int);
+            outputHexBytes(intArg, 4, outBuf, &outIx, capacity);
+            break;
+
+        case 'd':
+            /*  32 bit int  */
+            intArg = va_arg(args, int);
+            outputHexBytes(intArg, 8, outBuf, &outIx, capacity);
             break;
 
         case 'l':
-            /*  TODO:  64 bit longs  */
-            outBuf[outIx++] = 'X';
+            /*  64 bit long  */
+            longArg = va_arg(args, int64_t);
+            outputHexBytes(longArg, 16, outBuf, &outIx, capacity);
             break;
             
-        default:
-            /* %? in format string, where ? is some character not in the set
-             *    of recognized format chars.  Just output it as if % wasn't there.
+        case 'p':
+            /*  Pointers.   */
+            ptrArg = va_arg(args, void *);
+            outputPtrBytes(ptrArg, outBuf, &outIx, capacity);
+            break;
+
+        case 0:
+            /* Single '%' at end of fmt string.  Output as literal '%'.   
+             * Back up index into format string so that the terminating null will be
+             * re-fetched in the outer loop, causing it to terminate.
              */
-            outBuf[outIx++] = fmtC;
+            outputChar('%', outBuf, &outIx, capacity, indent);
+            fmtIx--;
+            break;
+
+        case 'v':
+            {
+                /* Vector of values, e.g. %vh */
+                char     vectorType;
+                int32_t  vectorLen;
+                const char   *i8Ptr;
+                int16_t  *i16Ptr;
+                int32_t  *i32Ptr;
+                int64_t  *i64Ptr;
+                void     **ptrPtr;
+                int32_t   charsToOutput;
+                int32_t   i;
+                
+                vectorType = fmt[fmtIx];
+                if (vectorType != 0) {
+                    fmtIx++;
+                }
+                i8Ptr = (const char *)va_arg(args, void*);
+                i16Ptr = (int16_t *)i8Ptr;
+                i32Ptr = (int32_t *)i8Ptr;
+                i64Ptr = (int64_t *)i8Ptr;
+                ptrPtr = (void **)i8Ptr;
+                vectorLen =(int32_t)va_arg(args, int32_t);
+                for (i=0; i<vectorLen; i++) { 
+                    switch (vectorType) {
+                    case 'b':
+                        charsToOutput = 2;
+                        longArg = *i8Ptr++;
+                        break;
+                    case 'h':
+                        charsToOutput = 4;
+                        longArg = *i16Ptr++;
+                        break;
+                    case 'd':
+                        charsToOutput = 8;
+                        longArg = *i32Ptr++;
+                        break;
+                    case 'l':
+                        charsToOutput = 16;
+                        longArg = *i64Ptr++;
+                        break;
+                    case 'p':
+                        charsToOutput = 0;
+                        outputPtrBytes(*ptrPtr, outBuf, &outIx, capacity);
+                        ptrPtr++;
+                        break;
+                    case 'c':
+                        charsToOutput = 0;
+                        outputChar(*i8Ptr, outBuf, &outIx, capacity, indent);
+                        i8Ptr++;
+                        break;
+                    case 's':
+                        charsToOutput = 0;
+                        outputString(i8Ptr, outBuf, &outIx, capacity, indent);
+                        outputChar('\n', outBuf, &outIx, capacity, indent);
+                        
+                    }
+                    if (charsToOutput > 0) {
+                        outputHexBytes(longArg, charsToOutput, outBuf, &outIx, capacity);
+                        outputChar(' ', outBuf, &outIx, capacity, indent);
+                    }
+                }
+            }
+            break;
+
+
+        default:
+            /* %. in format string, where . is some character not in the set
+             *    of recognized format chars.  Just output it as if % wasn't there.
+             *    (Covers "%%" outputing a single '%')
+             */
+             outputChar(fmtC, outBuf, &outIx, capacity, indent);
         }
     }
     return outIx;
@@ -177,3 +296,42 @@ utrace_setFunctions(const void *context,
     pTraceDataFunc  = d;
     utrace_level    = traceLevel;
 }
+
+static const char * const
+trFnName[] = {"u_init",
+             "u_cleanup",
+             0};
+
+
+static const char * const
+trConvNames[] = {
+    "ucnv_open",
+    "ucnv_close",
+    "ucnv_flushCache",
+    0};
+
+    
+static const char * const
+trCollNames[] = {
+    "ucol_open",
+    "ucol_close",
+    "ucol_strcoll",
+    "ucol_getSortKey",
+    "ucol_getLocale",
+    0};
+
+
+                
+U_CAPI const char * U_EXPORT2
+utrace_functionName(int32_t fnNumber) {
+    if(UTRACE_FUNCTION_START <= fnNumber && fnNumber < UTRACE_FUNCTION_LIMIT) {
+        return trFnName[fnNumber];
+    } else if(UTRACE_CONVERSION_START <= fnNumber && fnNumber < UTRACE_CONVERSION_LIMIT) {
+        return trConvNames[fnNumber - UTRACE_CONVERSION_START];
+    } else if(UTRACE_COLLATION_START <= fnNumber && fnNumber < UTRACE_COLLATION_LIMIT){
+        return trCollNames[fnNumber - UTRACE_COLLATION_START];
+    } else {
+        return "[BOGUS Trace Function Number]";
+    }
+}
+

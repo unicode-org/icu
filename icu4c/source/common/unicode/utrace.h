@@ -112,6 +112,20 @@ utrace_setLevel(int32_t traceLevel);
         utrace_entry(fnNumber); \
     }
 
+/* Function Exit return types.  Internal 
+ *   Bits 0-3:  The function return type.  First variable param.
+ *   Bit    4:  Flag for presence of U_ErrorCode status param.
+ */
+enum UTraceExitVal {
+    UTRACE_EXITV_NONE   = 0,
+    UTRACE_EXITV_I32    = 1,
+    UTRACE_EXITV_PTR    = 2,
+    UTRACE_EXITV_BOOL   = 3,
+    UTRACE_EXITV_MASK   = 0xf,
+    UTRACE_EXITV_STATUS = 0x10
+};
+typedef enum UTraceExitVal UTraceExitVal;
+
 /**
  * Trace statement for each exit point of a function that has a UTRACE_ENTRY()
  * statement.
@@ -124,10 +138,29 @@ utrace_setLevel(int32_t traceLevel);
  *
  * @draft ICU 2.8
  */
-#define UTRACE_EXIT(errorCode) \
+#define UTRACE_EXIT() \
     if(UTRACE_IS_ON) { \
-        utrace_exit(utraceFnNumber, errorCode); \
+        utrace_exit(utraceFnNumber, UTRACE_EXITV_NONE); \
     }
+
+/**
+ * Trace statement for each exit point of a function that has a UTRACE_ENTRY()
+ * statement, and that returns a value.
+ *
+ * @param val       The function's return value, int32_t or comatible type.
+ *
+ * @draft ICU 2.8
+ */
+#define UTRACE_EXIT_D(val) \
+    if(UTRACE_IS_ON) { \
+        utrace_exit(utraceFnNumber, UTRACE_EXITV_I32, val); \
+    }
+
+#define UTRACE_EXIT_S(status) \
+    if(UTRACE_IS_ON) { \
+        utrace_exit(utraceFnNumber, UTRACE_EXITV_STATUS, status); \
+    }
+
 
 /**
  * Trace function for the entry point of a function.
@@ -140,13 +173,15 @@ utrace_entry(int32_t fnNumber);
 
 /**
  * Trace function for each exit point of a function.
- * Do not use directly, use UTRACE_EXIT instead.
+ * Do not use directly, use UTRACE_EXIT* instead.
  * @param fnNumber The UTraceFunctionNumber for the current function.
+ * @param returnType The type of the value returned by the function.
  * @param errorCode The UErrorCode value at function exit. See UTRACE_EXIT.
  * @internal
  */
 U_CAPI void U_EXPORT2
-utrace_exit(int32_t fnNumber, UErrorCode errorCode);
+utrace_exit(int32_t fnNumber, UTraceExitVal returnType, ...);
+
 
 /**
  * Trace function used inside functions that have a UTRACE_ENTRY() statement.
@@ -363,7 +398,8 @@ typedef void U_CALLCONV
 UTraceEntry(const void *context, int32_t fnNumber);
 
 typedef void U_CALLCONV
-UTraceExit(const void *context, int32_t fnNumber, UErrorCode errorCode);
+UTraceExit(const void *context, int32_t fnNumber, 
+           UTraceExitVal retType, va_list args);
 
 typedef void U_CALLCONV
 UTraceData(const void *context, int32_t fnNumber, int32_t level,
@@ -377,12 +413,21 @@ utrace_setFunctions(const void *context,
 
 
 /**
-  *  Trace output Formatter.  Application tracing functions may call
-  *  back to this function to format the trace output.
+  *  Trace output   Formatter.  Application tracing functions may call
+  *  back to this   function to format the trace output.
+  *  @param outBuf  pointer to a buffer to receive the formatted output.  Output
+  *                 will be null terminated if there is space in the buffer -
+  *                 if the length of the requested output < the output buffer size.
+  *  @param capacity  Length of the output buffer.
+  *  @param indent  Number of spaces to indent the output.  Intended to allow
+  *                 data displayed from nested functions to be indented for readability.
+  *  @param fmt     Format specification for the data to output
+  *  @param args    Data to be formatted.
+  *  @return        Length of formatted output, including the terminating NULL if present.
   */
 U_CAPI int32_t U_EXPORT2
 utrace_format(char *outBuf, int32_t capacity,
-              const char *fmt,  va_list args);
+              int32_t indent, const char *fmt,  va_list args);
 
 
 /* Trace function numbers --------------------------------------------------- */
@@ -400,22 +445,24 @@ U_CAPI const char * U_EXPORT2
 utrace_functionName(int32_t fnNumber);
 
 enum UTraceFunctionNumber {
-    UTRACE_U_CLEANUP=0,
-    UTRACE_FUNCTION_START=UTRACE_U_CLEANUP,
+    UTRACE_FUNCTION_START=0,
+    UTRACE_U_INIT=UTRACE_FUNCTION_START,
+    UTRACE_U_CLEANUP,
+    UTRACE_FUNCTION_LIMIT,
 
-    UTRACE_UCNV_OPEN=0x1000,
-    UTRACE_CONVERSION_START=UTRACE_UCNV_OPEN,
+    UTRACE_CONVERSION_START=0x1000,
+    UTRACE_UCNV_OPEN=UTRACE_CONVERSION_START,
     UTRACE_UCNV_CLOSE,
     UTRACE_UCNV_FLUSH_CACHE,
+    UTRACE_CONVERSION_LIMIT,
 
-    UTRACE_UCOL_OPEN=0x2000,
-    UTRACE_COLLATION_START=UTRACE_UCOL_OPEN,
+    UTRACE_COLLATION_START=0x2000,
+    UTRACE_UCOL_OPEN=UTRACE_COLLATION_START,
     UTRACE_UCOL_CLOSE,
     UTRACE_UCOL_STRCOLL,
     UTRACE_UCOL_GET_SORTKEY,
     UTRACE_COLLATION_LIMIT,
-
-    UTRACE_FUNCTION_LIMIT=UTRACE_COLLATION_LIMIT
+    UTRACE_COLLATION_GETLOCALE
 };
 typedef enum UTraceFunctionNumber UTraceFunctionNumber;
 
