@@ -225,7 +225,7 @@ void CollationThaiTest::TestCornerCases(void) {
         // Periods are ignored entirely
         "\\u0e01.\\u0e01.",                      "<",    "\\u0e01\\u0e32",
     };
-    const int32_t TESTS_length = sizeof(TESTS)/sizeof(TESTS[0]);
+    const int32_t TESTS_length = (int32_t)(sizeof(TESTS)/sizeof(TESTS[0]));
 
     if (coll == 0) {
         errln("Error: could not construct Thai collator");

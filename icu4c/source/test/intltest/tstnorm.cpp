@@ -7,7 +7,7 @@
 #include "tstnorm.h"
 #include "compitr.h"
 
-#define ARRAY_LENGTH(array) (sizeof (array) / sizeof (*array))
+#define ARRAY_LENGTH(array) ((int32_t)(sizeof (array) / sizeof (*array)))
 
 #define CASE(id,test) case id:                          \
                           name = #test;                 \
