@@ -143,4 +143,25 @@ u_releaseDefaultConverter(UConverter *converter);
 U_CAPI int32_t U_EXPORT2
 u_terminateUChars(UChar *dest, int32_t destCapacity, int32_t length, UErrorCode *pErrorCode);
 
+/**
+ * NUL-terminate a char * string if possible.
+ * Same as u_terminateUChars() but for a different string type.
+ */
+U_CAPI int32_t U_EXPORT2
+u_terminateChars(char *dest, int32_t destCapacity, int32_t length, UErrorCode *pErrorCode);
+
+/**
+ * NUL-terminate a UChar32 * string if possible.
+ * Same as u_terminateUChars() but for a different string type.
+ */
+U_CAPI int32_t U_EXPORT2
+u_terminateUChar32s(UChar32 *dest, int32_t destCapacity, int32_t length, UErrorCode *pErrorCode);
+
+/**
+ * NUL-terminate a wchar_t * string if possible.
+ * Same as u_terminateUChars() but for a different string type.
+ */
+U_CAPI int32_t U_EXPORT2
+u_terminateWChars(wchar_t *dest, int32_t destCapacity, int32_t length, UErrorCode *pErrorCode);
+
 #endif
