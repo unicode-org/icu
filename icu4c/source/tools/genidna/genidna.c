@@ -149,10 +149,7 @@ main(int argc, char* argv[]) {
     setUnicodeVersion(options[6].value);
 
     /* prepare the filename beginning with the source dir */
-    if(srcDir[0] == U_FILE_SEP_CHAR){
-        filename[0]= 0x2E;
-        uprv_strcat(filename+1,srcDir);
-    }else if(uprv_strchr(srcDir,U_FILE_SEP_CHAR) == NULL){
+    if(uprv_strchr(srcDir,U_FILE_SEP_CHAR) == NULL){
         filename[0] = 0x2E;
         filename[1] = U_FILE_SEP_CHAR;
         uprv_strcpy(filename+2,srcDir);
