@@ -85,6 +85,7 @@ icu4c/source/samples/date/Release
 icu4c/source/samples/date/date
 icu4c/source/test/Makefile
 icu4c/source/test/cintltst/*.d
+icu4c/source/test/cintltst/*.plg
 icu4c/source/test/cintltst/Debug
 icu4c/source/test/cintltst/Makefile
 icu4c/source/test/cintltst/Release
