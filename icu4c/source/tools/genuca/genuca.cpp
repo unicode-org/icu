@@ -149,9 +149,9 @@ static uint32_t inverseTable[0xFFFF][3];
 static uint32_t inversePos = 0;
 /*UChar *stringContinue[0xFFFF];*/
 static UChar stringContinue[0xFFFF];
-static uint32_t stringContSize[0xFFFF]; 
+/*static uint32_t stringContSize[0xFFFF]; */
 static uint32_t sContPos = 0;
-static uint32_t contSize = 0;
+/*static uint32_t contSize = 0;*/
 
 static void addNewInverse(UCAElements *element, UErrorCode *status) {
   if(U_FAILURE(*status)) {
