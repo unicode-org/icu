@@ -902,12 +902,6 @@ inline UBool RuleBasedCollator::operator!=(const Collator& other) const
   return !(*this == other);
 }
 
-inline void RuleBasedCollator::setUCollator(const Locale &locale, 
-                                               UErrorCode &status)
-{
-  setUCollator(locale.getName(), status);
-}
-
 inline void RuleBasedCollator::setUCollator(const char *locale, 
                                                UErrorCode &status)
 {
@@ -916,6 +910,12 @@ inline void RuleBasedCollator::setUCollator(const char *locale,
   if (ucollator && dataIsOwned)
     ucol_close(ucollator);
   ucollator = ucol_open(locale, &status);
+}
+
+inline void RuleBasedCollator::setUCollator(const Locale &locale, 
+                                               UErrorCode &status)
+{
+  setUCollator(locale.getName(), status);
 }
 
 inline void RuleBasedCollator::setUCollator(UCollator *collator)
