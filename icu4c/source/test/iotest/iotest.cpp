@@ -13,13 +13,13 @@
 */
 
 
-#include "unicode\ustdio.h"
-#include "unicode\ustream.h"
+#include "unicode/ustdio.h"
+#include "unicode/ustream.h"
 
-#include "unicode\ucnv.h"
-#include "unicode\unistr.h"
-#include "unicode\ustring.h"
-#include "unicode\ctest.h"
+#include "unicode/ucnv.h"
+#include "unicode/unistr.h"
+#include "unicode/ustring.h"
+#include "unicode/ctest.h"
 #include "ustr_imp.h"
 
 #if U_IOSTREAM_SOURCE >= 199711
@@ -28,7 +28,7 @@
 using namespace std;
 #elif U_IOSTREAM_SOURCE >= 198506
 #include <iostream.h>
-#include <strstrea.h>
+#include <strstream.h>
 #endif
 
 #include <string.h>
