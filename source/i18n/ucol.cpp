@@ -1,12 +1,19 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-1999, International Business Machines
+*   Copyright (C) 1996-2001, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
+*   file name:  ucol.cpp
+*   encoding:   US-ASCII
+*   tab size:   8 (not used)
+*   indentation:4
+*
 * Modification history
 * Date        Name      Comments
+* 1996-1999   various members of ICU team maintained C API for collation framework
 * 02/16/2001  synwee    Added internal method getPrevSpecialCE 
 * 03/01/2001  synwee    Added maxexpansion functionality.
+* 03/16/2001  weiv      Collation framework is rewritten in C and made UCA compliant
 */
 
 #include "ucol_bld.h"
@@ -878,8 +885,6 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
           break;  
         }
 #endif
-        /* there is a bug here which will make us look bad if we have multiple level contraction */
-        /* that fails after level 1 */
         if(CE == UCOL_NOT_FOUND) {
           if(firstCE != UCOL_NOT_FOUND) {
             CE = firstCE;
@@ -1227,8 +1232,8 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
     
 
     for(;;) {
-          order = ucol_getNextCE(coll, s, &status);
-          /*UCOL_GETNEXTCE(order, coll, *s, &status);*/
+          /*order = ucol_getNextCE(coll, s, &status);*/
+          UCOL_GETNEXTCE(order, coll, *s, &status);
           
           if(order == UCOL_NO_MORE_CES) {
               break;
@@ -2883,16 +2888,16 @@ ucol_strcoll(    const    UCollator    *coll,
         /* Get the next collation element in each of the strings, unless */
         /* we've been requested to skip it. */
         while(sOrder == 0) {
-          /*UCOL_GETNEXTCE(sOrder, coll, sColl, &status);*/
-          sOrder = ucol_getNextCE(coll, &sColl, &status);
+          UCOL_GETNEXTCE(sOrder, coll, sColl, &status);
+          /*sOrder = ucol_getNextCE(coll, &sColl, &status);*/
           sOrder ^= caseSwitch;
           *(sCEs++) = sOrder;
           sOrder &= 0xFFFF0000;
         }
 
         while(tOrder == 0) {
-          /*UCOL_GETNEXTCE(tOrder, coll, tColl, &status);*/
-          tOrder = ucol_getNextCE(coll, &tColl, &status);
+          UCOL_GETNEXTCE(tOrder, coll, tColl, &status);
+          /*tOrder = ucol_getNextCE(coll, &tColl, &status);*/
           tOrder ^= caseSwitch;
           *(tCEs++) = tOrder;
           tOrder &= 0xFFFF0000;
@@ -2923,8 +2928,8 @@ ucol_strcoll(    const    UCollator    *coll,
 
 /* This is where abridged version for shifted should go */
         for(;;) {
-          /*UCOL_GETNEXTCE(sOrder, coll, sColl, &status);*/
-          sOrder = ucol_getNextCE(coll, &sColl, &status);
+          UCOL_GETNEXTCE(sOrder, coll, sColl, &status);
+          /*sOrder = ucol_getNextCE(coll, &sColl, &status);*/
           if(sOrder == UCOL_NO_MORE_CES) {
             *(sCEs++) = sOrder;
             break;
@@ -2972,8 +2977,8 @@ ucol_strcoll(    const    UCollator    *coll,
         sInShifted = FALSE;
 
         for(;;) {
-          /*UCOL_GETNEXTCE(tOrder, coll, tColl, &status);*/
-          tOrder = ucol_getNextCE(coll, &tColl, &status);
+          UCOL_GETNEXTCE(tOrder, coll, tColl, &status);
+          /*tOrder = ucol_getNextCE(coll, &tColl, &status);*/
           if(tOrder == UCOL_NO_MORE_CES) {
             *(tCEs++) = tOrder;
             break;
@@ -3445,10 +3450,15 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
           tOrder ^= caseSwitch;
           *(tCEs++) = tOrder;
           tOrder &= 0xFFFF0000;
-        } 
+        }
+        
+        if((sOrder == (UCOL_NO_MORE_CES & UCOL_PRIMARYORDERMASK) && sColl.panic == TRUE) || 
+          (tOrder == (UCOL_NO_MORE_CES & UCOL_PRIMARYORDERMASK) && tColl.panic == TRUE)) {
+          return alternateIncrementalProcessing(coll, &sColl, &tColl);
+        }
 
         if(sOrder == tOrder) {
-            if(sOrder == 0x00010000) {
+            if(sOrder == (UCOL_NO_MORE_CES & UCOL_PRIMARYORDERMASK)) {
 
               break;
             } else {
@@ -3474,6 +3484,9 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
         for(;;) {
           sOrder = ucol_getIncrementalCE(coll, &sColl, &status);
           if(sOrder == UCOL_NO_MORE_CES) {
+            if(sColl.panic == TRUE) {
+              return alternateIncrementalProcessing(coll, &sColl, &tColl);
+            }
             *(sCEs++) = sOrder;
             break;
           } else if((sOrder & 0xFFFFFFBF) == 0) {
@@ -3522,6 +3535,9 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
         for(;;) {
           tOrder = ucol_getIncrementalCE(coll, &tColl, &status);
           if(tOrder == UCOL_NO_MORE_CES) {
+            if(tColl.panic == TRUE) {
+              return alternateIncrementalProcessing(coll, &sColl, &tColl);
+            }
             *(tCEs++) = tOrder;
             break;
           } else if((tOrder & 0xFFFFFFBF) == 0) {
@@ -4018,10 +4034,11 @@ uint32_t ucol_getIncrementalUCA(UChar ch, incrementalContext *collationSource, U
 
 int32_t ucol_getIncrementalSpecialCE(const UCollator *coll, uint32_t CE, incrementalContext *source, UErrorCode *status) {
   int32_t i = 0; /* general counter */
+  uint32_t firstCE = UCOL_NOT_FOUND;
 
   if(U_FAILURE(*status)) return -1;
 
-  while (TRUE) {
+  for(;;) {
     const uint32_t *CEOffset = NULL;
     const UChar *UCharOffset = NULL;
     UChar schar, tchar;
@@ -4048,16 +4065,15 @@ int32_t ucol_getIncrementalSpecialCE(const UCollator *coll, uint32_t CE, increme
 
         /* we need to convey the notion of having a backward search - most probably through the context object */
         /* if (backwardsSearch) offset += contractionUChars[(int16_t)offset]; else UCharOffset++;  */
-        UCharOffset++; /* skip the backward offset, see above */
-//!        schar = *(++source->pos);
         schar = source->lastChar = source->source(source->sourceContext);
         incctx_appendChar(source, source->lastChar);
-
         if (schar == 0xFFFF) { /* this is the end of string */
           CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex)); /* So we'll pick whatever we have at the point... */
 //!          source->pos--; /* I think, since we'll advance in the getCE */         
           break;
         }
+        UCharOffset++; /* skip the backward offset, see above */
+//!        schar = *(++source->pos);
         while(schar > (tchar = *UCharOffset)) { /* since the contraction codepoints should be ordered, we skip all that are smaller */
           UCharOffset++;
         }
@@ -4070,8 +4086,18 @@ int32_t ucol_getIncrementalSpecialCE(const UCollator *coll, uint32_t CE, increme
           source->lastChar = 0xFFFF;
         }
         CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
+/*
         if(!isContraction(CE)) {
           break;  
+        }
+*/
+        if(isContraction(CE)) { /* fix for the bug. Other places need to be checked */
+        /* this is contraction, and we will continue. However, we can fail along the */
+        /* th road, which means that we have part of contraction correct */
+          source->panic = TRUE;
+          return UCOL_NO_MORE_CES;
+        } else {
+          break;
         }
       }
       break;
@@ -4152,83 +4178,3 @@ UCollationResult alternateIncrementalProcessing(const UCollator *coll, increment
     incctx_cleanUpContext(trgCtx);
     return result;
 }
-
-#if 0
-        /* This is abridged version of the loop                 */
-        /* should work the same, but it's harder to understand  */
-        for(;;) {
-          /*UCOL_GETNEXTCE(sOrder, coll, sColl, &status);*/
-          sOrder = ucol_getNextCE(coll, &sColl, &status);
-          sOrder ^= caseSwitch;
-          if(sOrder == 0x00010101) {
-            *(sCEs++) = sOrder;
-            break;
-          } else if((sOrder & 0xFFFFFFBF) == 0) {
-            continue;
-          } else if(isContinuation(sOrder)) {
-            if((sOrder & 0xFFFF0000) > 0) { /* There is primary value */
-              if(sInShifted) {
-                sOrder &= 0xFFFF0000;
-              } else {
-                *(sCEs++) = sOrder;
-                break;
-              }
-            } else { /* Just lower level values */
-              if(sInShifted) {
-                continue;
-              }
-            }
-          } else { /* regular */
-            if(sOrder > LVT) {
-              *(sCEs++) = sOrder;
-              break;
-            } else {
-              if((sOrder & 0xFFFF0000) > 0) {
-                sInShifted = TRUE;
-                sOrder &= 0xFFFF0000;
-              }
-            }
-          }
-          *(sCEs++) = sOrder;
-        }
-        sOrder &= 0xFFFF0000;
-        sInShifted = FALSE;
-
-        for(;;) {
-          /*UCOL_GETNEXTCE(tOrder, coll, tColl, &status);*/
-          tOrder = ucol_getNextCE(coll, &tColl, &status);*/
-          tOrder ^= caseSwitch;
-          if(tOrder == 0x00010101) {
-            *(tCEs++) = tOrder;
-            break;
-          } else if((tOrder & 0xFFFFFFBF) == 0) {
-            continue;
-          } else if(isContinuation(tOrder)) {
-            if((tOrder & 0xFFFF0000) > 0) { /* There is primary value */
-              if(tInShifted) {
-                tOrder &= 0xFFFF0000;
-              } else {
-                *(tCEs++) = tOrder;
-                break;
-              }
-            } else { /* Just lower level values */
-              if(tInShifted) {
-                continue;
-              } 
-            }
-          } else { /* regular */
-            if(tOrder > LVT) {
-              *(tCEs++) = tOrder;
-              break;
-            } else {
-              if((tOrder & 0xFFFF0000) > 0) {
-                tInShifted = TRUE;
-                tOrder &= 0xFFFF0000;
-              }
-            }
-          }
-          *(tCEs++) = tOrder;
-        }
-        tOrder &= 0xFFFF0000;
-        tInShifted = FALSE;
-#endif 
