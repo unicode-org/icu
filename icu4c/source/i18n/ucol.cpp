@@ -7579,12 +7579,11 @@ ucol_getKeywordValues(const char *keyword, UErrorCode *status) {
 
 U_CAPI int32_t U_EXPORT2
 ucol_getFunctionalEquivalent(char* result, int32_t resultCapacity,
-                             const char* locale, UBool* isAvailable,
-                             UErrorCode* status) {
-    // odd that resource name is "collations" but keyword is
-    // "collation"
+                             const char* keyword, const char* locale,
+                             UBool* isAvailable, UErrorCode* status) {
+    // N.B.: Resource name is "collations" but keyword is "collation"
     return ures_getFunctionalEquivalent(result, resultCapacity, U_ICUDATA_COLL,
-                                        "collations", KEYWORDS[0], locale,
+                                        "collations", keyword, locale,
                                         isAvailable, status);
 }
 

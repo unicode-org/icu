@@ -639,6 +639,8 @@ public:
     /**
      * Return a functionally equivalent collation locale for the given
      * requested locale.
+     * @param keyword a particular keyword as enumerated by
+     * ucol_getKeywords.
      * @param locale the requested locale
      * @param isAvailable reference to a fillin parameter that
      * indicates whether the requested locale was 'available' to the
@@ -649,8 +651,8 @@ public:
      * locale upon error.
      * @draft ICU 3.0
      */
-    static Locale getFunctionalEquivalent(const Locale& locale, UBool& isAvailable,
-                                          UErrorCode& status);
+    static Locale getFunctionalEquivalent(const char* keyword, const Locale& locale,
+                                          UBool& isAvailable, UErrorCode& status);
 
     /**
      * Register a new Collator.  The collator will be adopted.

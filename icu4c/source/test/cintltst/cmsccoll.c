@@ -4348,14 +4348,14 @@ ucol_getFunctionalEquivalent(char* result, int32_t resultCapacity,
                              UErrorCode* status);
 }
 */
-    n = ucol_getFunctionalEquivalent(loc, sizeof(loc), "fr",
+    n = ucol_getFunctionalEquivalent(loc, sizeof(loc), "collation", "fr",
                                      &isAvailable, &ec);
     assertSuccess("getFunctionalEquivalent", &ec);
     assertEquals("getFunctionalEquivalent(fr)", "fr", loc);
     assertTrue("getFunctionalEquivalent(fr).isAvailable==TRUE",
                isAvailable == TRUE);
     
-    n = ucol_getFunctionalEquivalent(loc, sizeof(loc), "fr_FR",
+    n = ucol_getFunctionalEquivalent(loc, sizeof(loc), "collation", "fr_FR",
                                      &isAvailable, &ec);
     assertSuccess("getFunctionalEquivalent", &ec);
     assertEquals("getFunctionalEquivalent(fr_FR)", "fr", loc);
