@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: BidiDemo.java,v $ $Revision: 1.2 $ $Date: 2002/02/16 03:06:41 $
+ * @(#)$RCSfile: BidiDemo.java,v $ $Revision: 1.3 $ $Date: 2002/12/12 23:26:57 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -34,7 +34,7 @@ public class BidiDemo {
                 "(C) Copyright IBM Corp. 1998-1999 - All Rights Reserved";
     private static final AppCloser fgListener = new AppCloser();
 
-    private static final String BUNDLE_NAME = "textapps.resources.Sample";
+    private static final String BUNDLE_NAME = "com.ibm.richtext.textapps.resources.Sample";
     
     public static void main(String[] args) {
 
