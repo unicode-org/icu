@@ -2795,7 +2795,7 @@ static int uloc_acceptLanguageCompare(const void *a, const void *b)
   }
 
   if(rc==0) {
-    rc = strcasecmp(aa->locale, bb->locale);
+    rc = uprv_stricmp(aa->locale, bb->locale);
   }
   
 #if defined(ULOC_DEBUG)
@@ -2910,7 +2910,7 @@ uloc_acceptLanguage(char *result, int32_t resultAvailable,
                     int32_t acceptListCount,
                     UEnumeration* availableLocales,
                     UErrorCode *status) {
-  int32_t i;
+  int32_t i,j;
   int32_t len;
   int32_t maxLen=0;
   char tmp[ULOC_FULLNAME_CAPACITY+1];
@@ -2939,8 +2939,8 @@ uloc_acceptLanguage(char *result, int32_t resultAvailable,
         if(len>0) {
           uprv_strncpy(result, l, uprv_min(len, resultAvailable));
         }
-        for(i=0;i<acceptListCount;i++) {
-          uprv_free(fallbackList[i]);
+        for(j=0;j<i;j++) {
+          uprv_free(fallbackList[j]);
         }
         uprv_free(fallbackList);
         return u_terminateChars(result, resultAvailable, len, status);   
