@@ -1113,6 +1113,70 @@ static void TestBadScanfFormat(void) {
     TestBadFScanfFormat("%[]  ", abcUChars, abcChars);
 }
 
+static void Test_u_vfprintf(const char *expectedResult, const char *format, ...) {
+    UChar uBuffer[256];
+    UChar uBuffer2[256];
+    va_list ap;
+    int32_t count;
+    UFILE *myFile;
+
+    myFile = u_fopen(STANDARD_TEST_FILE, "w", "en_US_POSIX", "UTF-8");
+    if (!myFile) {
+        log_err("Test file can't be opened\n");
+        return;
+    }
+
+    va_start(ap, format);
+    count = u_vfprintf(myFile, format, ap);
+    va_end(ap);
+
+    u_fclose(myFile);
+
+
+    myFile = u_fopen(STANDARD_TEST_FILE, "r", NULL, NULL);
+    if (!myFile) {
+        log_err("Test file can't be opened\n");
+        return;
+    }
+    u_fgets(uBuffer, sizeof(uBuffer)/sizeof(*uBuffer), myFile);
+    u_uastrcpy(uBuffer2, expectedResult);
+    if (u_strcmp(uBuffer, uBuffer2) != 0) {
+        log_err("Got two different results for \"%s\" expected \"%s\"\n", format, expectedResult);
+    }
+    u_fclose(myFile);
+
+
+    myFile = u_fopen(STANDARD_TEST_FILE, "w", NULL, NULL);
+    if (!myFile) {
+        log_err("Test file can't be opened\n");
+        return;
+    }
+    u_uastrcpy(uBuffer, format);
+
+    va_start(ap, format);
+    count = u_vfprintf_u(myFile, uBuffer, ap);
+    va_end(ap);
+
+    u_fclose(myFile);
+
+
+    myFile = u_fopen(STANDARD_TEST_FILE, "r", NULL, NULL);
+    if (!myFile) {
+        log_err("Test file can't be opened\n");
+        return;
+    }
+    u_fgets(uBuffer, sizeof(uBuffer)/sizeof(*uBuffer), myFile);
+    u_uastrcpy(uBuffer2, expectedResult);
+    if (u_strcmp(uBuffer, uBuffer2) != 0) {
+        log_err("Got two different results for \"%s\" expected \"%s\"\n", format, expectedResult);
+    }
+    u_fclose(myFile);
+}
+
+static void TestVargs(void) {
+    Test_u_vfprintf("8 9 a B 8.9", "%d %u %x %X %.1f", 8, 9, 10, 11, 8.9);
+}
+
 static void TestTranslitOps(void)
 {
     UFILE *f;
@@ -1275,6 +1339,7 @@ addFileTest(TestNode** root) {
     addTest(root, &TestCodepage, "file/TestCodepage");
     addTest(root, &TestFilePrintCompatibility, "file/TestFilePrintCompatibility");
     addTest(root, &TestBadScanfFormat, "file/TestBadScanfFormat");
+    addTest(root, &TestVargs, "file/TestVargs");
 
     addTest(root, &TestTranslitOps, "file/translit/ops");
     addTest(root, &TestTranslitOut, "file/translit/out");
