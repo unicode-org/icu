@@ -53,7 +53,7 @@ ByteOffset ContextualGlyphSubstitutionProcessor::processStateEntry(LEGlyphID *gl
 
     if (currOffset != 0) {
         const le_int16 *table = (const le_int16 *) ((char *) &stateTableHeader->stHeader + currOffset * 2);
-        le_int16 newGlyph = SWAPW(table[LE_GET_GLYPH(glyphs[currGlyph])]);
+        TTGlyphID newGlyph = SWAPW(table[LE_GET_GLYPH(glyphs[currGlyph])]);
 
         glyphs[currGlyph] = LE_SET_GLYPH(glyphs[currGlyph], newGlyph);
     }

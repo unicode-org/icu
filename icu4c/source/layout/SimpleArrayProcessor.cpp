@@ -39,7 +39,7 @@ void SimpleArrayProcessor::process(LEGlyphID *glyphs, le_int32 * /*charIndices*/
 
     for (glyph = 0; glyph < glyphCount; glyph += 1) {
         if (glyphs[glyph] < 0xFFFF) {
-            le_int16 newGlyph = SWAPW(simpleArrayLookupTable->valueArray[glyphs[glyph]]);
+            TTGlyphID newGlyph = SWAPW(simpleArrayLookupTable->valueArray[glyphs[glyph]]);
 
             glyphs[glyph] = LE_SET_GLYPH(glyphs[glyph], newGlyph);
         }
