@@ -349,23 +349,21 @@ fi {
             "Dhu-l-qada",                   // Dhu al-Qi'dah
             "Dhu-l-hidd\u017Ea"            // Dhu al-Hijjah
     }
-
-    MonthAbbreviations_islamic {  // Copied from MonthNames
-            "Muh\u00E1rram",                // Muharram
-            "S\u00E1far",                   // Safar
-            "Rab\u00ED' al-\u00E1wwal",     // Rabi' al-awwal
-            "Rab\u00ED' al-\u00E1khir",     // Rabi' al-thani
-            "D\u017Eumada-l-\u00FAla",      // Jumada al-awwal
-            "D\u017Eumada-l-\u00E1khira",   // Jumada al-thani
-            "Rad\u017Eab",                  // Rajab
-            "\u0160a'b\u00E1n",             // Sha'ban
-            "Ramad\u00E1n",                 // Ramadan
-            "\u0160awwal",                  // Shawwal
-            "Dhu-l-qada",                   // Dhu al-Qi'dah
-            "Dhu-l-hidd\u017Ea"            // Dhu al-Hijjah
-    }
     //Eras_islamic {
     //    "AH"   // Anno Hid\u017Era (in root)
     //}
+    MonthAbbreviations_islamic {  // same as MonthNames (no data)
+        "fi/MonthNames_islamic"
+    }   
+    // Civil is identical other than in calculations
+    Eras_islamic-civil:alias {
+        "fi/Eras_islamic"
+    }
+    MonthNames_islamic-civil:alias {
+        "fi/MonthNames_islamic"
+    }
+    MonthAbbreviations_islamic-civil:alias {
+        "fi/MonthAbbreviations_islamic"
+    }
 
 }

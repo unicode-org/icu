@@ -413,21 +413,6 @@ he {
             "\u05E9\u05E0\u05EA \u05D4\u05D9\u05D2'\u05E8\u05D4"
     }
 
-    MonthAbbreviations_islamic { // Copied from MonthNames
-            "\u05DE\u05D5\u05D7\u05E8\u05DD",                                               // Muharram
-            "\u05E1\u05E4\u05E8",                                                           // Safar
-            "\u05E8\u05D1\u05D9\u05E2 \u05D0\u05DC-\u05D0\u05D5\u05D5\u05D0\u05DC",         // Rabi' al-awwal
-            "\u05E8\u05D1\u05D9\u05E2 \u05D0\u05DC-\u05EA\u05E0\u05D9",                     // Rabi' al-thani
-            "\u05D2'\u05D5\u05DE\u05D3\u05D4 \u05D0\u05DC-\u05D0\u05D5\u05D5\u05D0\u05DC",  // Jumada al-awwal
-            "\u05D2'\u05D5\u05DE\u05D3\u05D4 \u05D0\u05DC-\u05EA\u05E0\u05D9",              // Jumada al-thani
-            "\u05E8\u05D2'\u05D0\u05D1",                                                    // Rajab
-            "\u05E9\u05E2\u05D1\u05D0\u05DF",                                               // Sha'ban
-            "\u05E8\u05D0\u05DE\u05D3\u05DF",                                               // Ramadan
-            "\u05E9\u05D5\u05D5\u05D0\u05DC",                                               // Shawwal
-            "\u05E9\u05D5\u05D5\u05D0\u05DC",                                               // Dhu al-Qi'dah
-            "\u05D6\u05D5 \u05D0\u05DC-\u05D7\u05D9\u05D2'\u05D4",                          // Dhu al-Hijjah
-    }
-
     MonthNames_islamic {
             "\u05DE\u05D5\u05D7\u05E8\u05DD",                                               // Muharram
             "\u05E1\u05E4\u05E8",                                                           // Safar
@@ -443,5 +428,18 @@ he {
             "\u05D6\u05D5 \u05D0\u05DC-\u05D7\u05D9\u05D2'\u05D4",                          // Dhu al-Hijjah
        }
 
+    MonthAbbreviations_islamic {  // same as MonthNames (no data)
+        "he/MonthNames_islamic"
+    }   
+    // Civil is identical other than in calculations
+    Eras_islamic-civil:alias {
+        "he/Eras_islamic"
+    }
+    MonthNames_islamic-civil:alias {
+        "he/MonthNames_islamic"
+    }
+    MonthAbbreviations_islamic-civil:alias {
+        "he/MonthAbbreviations_islamic"
+    }
 
 }

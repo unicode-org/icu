@@ -1602,25 +1602,10 @@ root {
         "{1} {0}",
     }
 
-    // Islamic calendar
+    // Islamic calendar  - the Religious (Astronomical) variant first
     Eras_islamic:array { 
         "AH" // Anno Hijri
     }
-
-    MonthAbbreviations_islamic {
-        "Muh",                   
-        "Saf",
-        "Rab I",
-        "Rab II",
-        "Jum I",
-        "Jum II",
-        "Raj",
-        "Sha",
-        "Ram",
-        "Sha",
-        "Dhu l-Q",
-        "Dhu l-H"
-      }   
 
     MonthNames_islamic {
         "Muharram",                   
@@ -1635,7 +1620,20 @@ root {
         "Shawwal",
         "Dhu'l-Qi'dah",
         "Dhu'l-Hijjah"
-      }   
+    }   
+    MonthAbbreviations_islamic {  // same as MonthNames (no data)
+        "root/MonthNames_islamic"
+    }   
+    // Civil is identical other than in calculations
+    Eras_islamic-civil:alias {
+        "root/Eras_islamic"
+    }
+    MonthNames_islamic-civil:alias {
+        "root/MonthNames_islamic"
+    }
+    MonthAbbreviations_islamic-civil:alias {
+        "root/MonthAbbreviations_islamic"
+    }
 
     // the PaperSize units are in mm
     PaperSize:intvector{
