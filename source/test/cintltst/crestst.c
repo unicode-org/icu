@@ -938,6 +938,7 @@ static void TestGetKeywordValues(void) {
   UBool foundStandard = FALSE;
   UErrorCode status = U_ZERO_ERROR;
   const char *kw;
+#if !UCONFIG_NO_COLLATION
   kwVals = ures_getKeywordValues( U_ICUDATA_COLL, "collations", &status);
 
   log_verbose("Testing getting collation keyword values:\n");
@@ -960,23 +961,24 @@ static void TestGetKeywordValues(void) {
     log_err("err %s getting collation values\n", u_errorName(status));
   }
   status = U_ZERO_ERROR;
-
+#endif
+  foundStandard = FALSE;
   kwVals = ures_getKeywordValues( "ICUDATA", "calendar", &status);
 
   log_verbose("Testing getting calendar keyword values:\n");
   
   while((kw=uenum_next(kwVals, NULL, &status))) {
     log_verbose("  %s\n", kw);
-    if(!strcmp(kw,"standard")) {
+    if(!strcmp(kw,"japanese")) {
       if(foundStandard == FALSE) {
         foundStandard = TRUE;
       } else {
-        log_err("'standard' was found twice in the calendar keyword list.\n");
+        log_err("'japanese' was found twice in the calendar keyword list.\n");
       }
     }
   }
   if(foundStandard == FALSE) {
-    log_err("'standard' was not found in the calendar keyword list.\n");
+    log_err("'japanese' was not found in the calendar keyword list.\n");
   }
   uenum_close(kwVals);
   if(U_FAILURE(status)) {
@@ -1048,9 +1050,12 @@ static void TestGetFunctionalEquivalent(void) {
     NULL
   };
   
+#if !UCONFIG_NO_COLLATION
   TestGetFunctionalEquivalentOf(U_ICUDATA_COLL, "collations", "collation", TRUE, collCases);
+#endif
   TestGetFunctionalEquivalentOf("ICUDATA", "calendar", "calendar", FALSE, calCases);
 
+#if !UCONFIG_NO_COLLATION
   log_verbose("Testing error conditions:\n");
   {
     char equivLocale[256] = "???";
@@ -1069,5 +1074,6 @@ static void TestGetFunctionalEquivalent(void) {
               equivLocale, gotAvail?'t':'f', u_errorName(status));
     }
   }
+#endif
 }
 
