@@ -27,7 +27,6 @@
 #include "unicode/utypes.h"
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
-#include "ucnvmbcs.h"
 
 /* size of the overflow buffers in UConverter, enough for escaping callbacks */
 #define UCNV_ERROR_BUFFER_LENGTH 32
@@ -43,14 +42,7 @@ typedef struct
     UChar replacement;
 } UAmbiguousConverter;
 
-static const UAmbiguousConverter UCNV_AMBIGUOUSCONVERTERS[UCNV_MAX_AMBIGUOUSCCSIDS] =
-{
-    { 943, 0x00A5, 0x005C },
-    { 949, 0x20A9, 0x005C },
-    { 1361, 0x20A9, 0x005C },
-    { 942, 0x00A5, 0x005C },
-    { 1363, 0x20A9, 0x005C }
-};
+extern const UAmbiguousConverter UCNV_AMBIGUOUSCONVERTERS[UCNV_MAX_AMBIGUOUSCCSIDS];
 
 
 U_CDECL_BEGIN /* We must declare the following as 'extern "C"' so that if ucnv
@@ -111,6 +103,7 @@ struct UConverterSharedData {
     uint32_t toUnicodeStatus;
 };
 
+typedef struct UConverterSharedData UConverterSharedData;
 
 /* Defines a UConverter, the lightweight mutable part the user sees */
 
