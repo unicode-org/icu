@@ -241,4 +241,8 @@ th {
                 "Bangkok",
         }
     }
+    LocaleScript{ 
+                "Thai", // Script Name  
+                "Thai"  // ISO 15924 Name 
+    }
 }

@@ -237,7 +237,10 @@ kok {
           "IST"
       }
     }
-
+    LocaleScript{ 
+                "Devanagari", // Script Name  
+                "Deva"        // ISO 15924 Name 
+    }
 //    CollationElements {
 //            ""
 //      }

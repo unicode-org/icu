@@ -1,7 +1,7 @@
 // -*- Coding: US-ASCII -*-
 // *   Copyright (C) 1997-2001, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
-// $Revision: 1.6 $
+// $Revision: 1.7 $
 //
 // Telugu Locale. Data by Ram [ram@jtcsv.com]
 
@@ -71,9 +71,14 @@ te {
 	"\u221e",
 	"\ufffd",
     }
-	LocaleID { "4a"}
-	CollationElements {
-	    Version { "1.0" }
-		Sequence { "[normalization on]" }
-	}
+    LocaleID { "4a"}
+    CollationElements {
+	 Version { "1.0" }
+	Sequence { "[normalization on]" }
+    }
+    LocaleScript{ 
+                "Telugu", // Script Name  
+                "Telu",  // ISO 15924 Name 
+
+    }
 }
