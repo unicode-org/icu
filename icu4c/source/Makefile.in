@@ -15,7 +15,7 @@ top_builddir = .
 include $(top_builddir)/icudefs.mk
 
 docdir = $(datadir)/doc
-docsubdir = $(PACKAGE)
+docsubdir = $(PACKAGE)/html
 
 ##
 
