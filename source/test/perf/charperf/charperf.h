@@ -37,7 +37,7 @@ public:
 		return -1;
 	}
 
-	UErrorCode getStatus()
+	virtual UErrorCode getStatus()
 	{
 		return U_ZERO_ERROR;
 	}
@@ -77,7 +77,7 @@ public:
 		return -1;
 	}
 
-	UErrorCode getStatus()
+	virtual UErrorCode getStatus()
 	{
 		return U_ZERO_ERROR;
 	}

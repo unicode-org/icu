@@ -77,7 +77,7 @@ public:
     virtual long getEventsPerIteration(){
         return -1;
     }
-    UErrorCode getStatus(){
+    virtual UErrorCode getStatus(){
         return status;
     }
     QuickCheckPerfFunction(QuickCheckFn func, ULine* srcLines,int32_t srcNumLines, UNormalizationMode _mode, UBool _uselen){
@@ -110,6 +110,7 @@ private:
     ULine* lines;
     int32_t numLines;
     UChar dest[DEST_BUFFER_CAPACITY];
+	UChar* pDest;
     int32_t destLen;
     UErrorCode status;
     NormFn fn;
@@ -124,18 +125,18 @@ public:
         if(line_mode==TRUE){
             if(uselen){
                 for(int32_t i = 0; i< numLines; i++){
-                    retVal =  (*fn)(lines[i].name,lines[i].len,dest,destLen,&status);
+                    retVal =  (*fn)(lines[i].name,lines[i].len,pDest,destLen,&status);
                 }
             }else{
                 for(int32_t i = 0; i< numLines; i++){
-                    retVal =  (*fn)(lines[i].name,-1,dest,destLen,&status);
+                    retVal =  (*fn)(lines[i].name,-1,pDest,destLen,&status);
                 }
             }
         }else{
             if(uselen){
-                retVal =  (*fn)(src,srcLen,dest,destLen,&status);
+                retVal =  (*fn)(src,srcLen,pDest,destLen,&status);
             }else{
-                retVal =  (*fn)(src,-1,dest,destLen,&status);
+                retVal =  (*fn)(src,-1,pDest,destLen,&status);
             }
         }
     }
@@ -153,7 +154,7 @@ public:
     virtual long getEventsPerIteration(){
         return -1;
     }
-    UErrorCode getStatus(){
+    virtual UErrorCode getStatus(){
         return status;
     }
     NormPerfFunction(NormFn func,ULine* srcLines,int32_t srcNumLines,UBool _uselen){
@@ -162,6 +163,7 @@ public:
         numLines = srcNumLines;
         uselen = _uselen;
         destLen = DEST_BUFFER_CAPACITY;
+		pDest = dest;
         status = U_ZERO_ERROR;
         src = NULL;
         srcLen = 0;
@@ -172,12 +174,18 @@ public:
         lines = NULL;
         numLines = 0;
         uselen = _uselen;
-        destLen = DEST_BUFFER_CAPACITY;
+        destLen = sourceLen*3;
+		pDest = (UChar*) malloc(destLen * U_SIZEOF_UCHAR);
         status = U_ZERO_ERROR;
         src = source;
         srcLen = sourceLen;
         line_mode = FALSE;
-    }   
+    }
+	~NormPerfFunction(){
+		if(dest != pDest){
+			free(pDest);
+		}
+	}
 };
 
 
