@@ -1236,7 +1236,7 @@ private:
     int32_t                 fGroupingSize2;
     UBool                  fDecimalSeparatorAlwaysShown;
     /*transient*/ UBool    fIsCurrencyFormat;
-    /* @deprecated */ DecimalFormatSymbols*   fSymbols;
+    DecimalFormatSymbols*   fSymbols;
 
     UBool                  fUseExponentialNotation;
     int8_t                  fMinExponentDigits;

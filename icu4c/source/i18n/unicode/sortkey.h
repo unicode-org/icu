@@ -170,7 +170,7 @@ public:
     * this storage and should free it.
     * @param count the output parameter of number of collation key values,
     * including any trailing nulls.
-    * @deprecated Remove after 2003-mar-25. Use getByteArray instead.
+    * @obsolete ICU 2.6. Use getByteArray instead since this API will be removed in that release.
     */
     uint8_t*                toByteArray(int32_t& count) const;
 
