@@ -200,6 +200,14 @@ if test $HAVE_DLOPEN = 0; then
 fi
 AC_SUBST(HAVE_DLOPEN)
 
+dnl Check for mmap()
+
+AC_FUNC_MMAP
+if test $ac_cv_func_mmap_fixed_mapped = yes; then
+    HAVE_MMAP=1
+fi
+AC_SUBST(HAVE_MMAP)
+
 dnl Checks for header files
 AC_CHECK_HEADERS(inttypes.h)
 if test $ac_cv_header_inttypes_h = no; then
@@ -210,7 +218,7 @@ fi
 AC_SUBST(U_HAVE_INTTYPES_H)
 
 AC_ARG_WITH(iostream,
-	[  --with-iostream=version specify the version of iostream to use (nonem old, std, auto) [default=auto]],
+	[  --with-iostream=version specify the version of iostream to use (old, std, auto) [default=auto]],
 	[case "${withval}" in
                 none) streams=none ;;
 		old) streams=198506 ;;
@@ -364,18 +372,38 @@ AC_ARG_ENABLE(extras,
 	extras=true)
 ICU_CONDITIONAL(EXTRAS, test "$extras" = true)
 
-dnl Enable/disable mapped files [default DLL]
-AC_ARG_ENABLE(mapped,
-	[  --enable-mapped         try to use memory-mapped files (instead of DLLs) when possible [default=no]],
-	[case "${enableval}" in
-		yes) mapped=true ;;
-		no)  mapped=false ;;
-		*) AC_MSG_ERROR(bad value ${enableval} for --enable-mapped) ;;
+AC_ARG_WITH(data-packaging,
+	[  --with-data-packaging=type specify how to package ICU data (files, archive, library, auto) [default=auto]],
+	[case "${withval}" in
+                files|archive|library) datapackaging=$withval ;;
+		auto) datapackaging= ;;
+		*) AC_MSG_ERROR(bad value ${withval} for --with-iostream) ;;
 		esac], 
-	mapped=false)
+        [datapackaging=])
 
-ICU_CONDITIONAL(USE_MAPPED, test "$mapped" = true -o "$HAVE_DLOPEN" = 0)
+if test x"$datapackaging" = x; then
+    if test "$HAVE_DLOPEN" -eq 1; then
+	datapackaging=library
+    else
+	datapackaging=archive
+    fi
+fi
 
+case "$datapackaging" in
+    files)
+	DATA_PACKAGING_MODE=files
+	;;
+    archive)
+	DATA_PACKAGING_CPPFLAGFS=-DUDATA_MAP
+	DATA_PACKAGING_MODE=common
+	;;
+    library)
+	DATA_PACKAGING_CPPFLAGS=-DUDATA_DLL
+	DATA_PACKAGING_MODE=dll
+	;;
+esac
+AC_SUBST(DATA_PACKAGING_CPPFLAGS)
+AC_SUBST(DATA_PACKAGING_MODE)
 
 dnl Enable/disable tests
 AC_ARG_ENABLE(tests,
