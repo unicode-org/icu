@@ -673,15 +673,15 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
     if(element->isThai == FALSE) {
       element->mapCE = element->CEs[0];
     } else { /* add thai - totally bad here */
-      expansion = UCOL_SPECIAL_FLAG | (THAI_TAG<<UCOL_TAG_SHIFT) 
+      expansion = (uint32_t)(UCOL_SPECIAL_FLAG | (THAI_TAG<<UCOL_TAG_SHIFT) 
         | ((uprv_uca_addExpansion(expansions, element->CEs[0], status)+(headersize>>2))<<4) 
-        | 0x1;
+        | 0x1);
       element->mapCE = expansion;
     }
   } else {     
-    expansion = UCOL_SPECIAL_FLAG | (EXPANSION_TAG<<UCOL_TAG_SHIFT) 
+    expansion = (uint32_t)(UCOL_SPECIAL_FLAG | (EXPANSION_TAG<<UCOL_TAG_SHIFT) 
       | ((uprv_uca_addExpansion(expansions, element->CEs[0], status)+(headersize>>2))<<4)
-      & 0xFFFFF0;
+      & 0xFFFFF0);
 
     for(i = 1; i<element->noOfCEs; i++) {
       uprv_uca_addExpansion(expansions, element->CEs[i], status);
@@ -790,11 +790,11 @@ void uprv_uca_getMaxExpansionJamo(CompactEIntArray       *mapping,
   if (jamospecial) {
       /* gets the max expansion in all unicode characters */
       int     count    = maxjamoexpansion->position;
-      uint8_t maxTSize = maxjamoexpansion->maxLSize + 
-                         maxjamoexpansion->maxVSize +
-                         maxjamoexpansion->maxTSize;
-      uint8_t maxVSize = maxjamoexpansion->maxLSize + 
-                         maxjamoexpansion->maxVSize;
+      uint8_t maxTSize = (uint8_t)(maxjamoexpansion->maxLSize + 
+                                   maxjamoexpansion->maxVSize +
+                                   maxjamoexpansion->maxTSize);
+      uint8_t maxVSize = (uint8_t)(maxjamoexpansion->maxLSize + 
+                                   maxjamoexpansion->maxVSize);
 
       while (count > 0) {
           count --;
@@ -816,14 +816,14 @@ void uprv_uca_getMaxExpansionJamo(CompactEIntArray       *mapping,
 UCATableHeader *uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
     CompactEIntArray *mapping = t->mapping;
     ExpansionTable *expansions = t->expansions;
-    CntTable *contractions = t->contractions; 
+    CntTable *contractions = t->contractions;
     MaxExpansionTable *maxexpansion = t->maxExpansions;
 
     if(U_FAILURE(*status)) {
         return NULL;
     }
 
-    uint32_t beforeContractions = (headersize+paddedsize(expansions->position*sizeof(uint32_t)))/sizeof(UChar);
+    uint32_t beforeContractions = (uint32_t)((headersize+paddedsize(expansions->position*sizeof(uint32_t)))/sizeof(UChar));
 
     int32_t contractionsSize = 0;
     contractionsSize = uprv_cnttab_constructTable(contractions, beforeContractions, status);
@@ -840,7 +840,7 @@ UCATableHeader *uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
     uint32_t tableOffset = 0;
     uint8_t *dataStart;
 
-    uint32_t toAllocate =           headersize+                                    
+    uint32_t toAllocate =(uint32_t)(headersize+                                    
                                     paddedsize(expansions->position*sizeof(uint32_t))+
                                     paddedsize(mappingSize)+
                                     paddedsize(contractionsSize*(sizeof(UChar)+sizeof(uint32_t)))+
@@ -850,7 +850,7 @@ UCATableHeader *uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
                                      /* maxexpansion size array */
                                      paddedsize(maxexpansion->position * sizeof(uint8_t)) +
                                      paddedsize(UCOL_UNSAFECP_TABLE_SIZE) +   /*  Unsafe chars             */
-                                     paddedsize(UCOL_UNSAFECP_TABLE_SIZE);    /*  Contraction Ending chars */
+                                     paddedsize(UCOL_UNSAFECP_TABLE_SIZE));    /*  Contraction Ending chars */
 
 
     dataStart = (uint8_t *)malloc(toAllocate);
@@ -873,17 +873,17 @@ UCATableHeader *uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
 
     myData->contractionSize = contractionsSize;
 
-    tableOffset += paddedsize(sizeof(UCATableHeader));
+    tableOffset += (uint32_t)(paddedsize(sizeof(UCATableHeader)));
 
     myData->options = tableOffset;
     memcpy(dataStart+tableOffset, t->options, sizeof(UColOptionSet));
-    tableOffset += paddedsize(sizeof(UColOptionSet));
+    tableOffset += (uint32_t)(paddedsize(sizeof(UColOptionSet)));
 
     /* copy expansions */
     /*myData->expansion = (uint32_t *)dataStart+tableOffset;*/
     myData->expansion = tableOffset;
     memcpy(dataStart+tableOffset, expansions->CEs, expansions->position*sizeof(uint32_t));
-    tableOffset += paddedsize(expansions->position*sizeof(uint32_t));
+    tableOffset += (uint32_t)(paddedsize(expansions->position*sizeof(uint32_t)));
 
     /* contractions block */
     if(contractionsSize != 0) {
@@ -891,13 +891,13 @@ UCATableHeader *uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
       /*myData->contractionIndex = (UChar *)(dataStart+tableOffset);*/
       myData->contractionIndex = tableOffset;
       memcpy(dataStart+tableOffset, contractions->codePoints, contractionsSize*sizeof(UChar));
-      tableOffset += paddedsize(contractionsSize*sizeof(UChar));
+      tableOffset += (uint32_t)(paddedsize(contractionsSize*sizeof(UChar)));
 
       /* copy contraction collation elements */
       /*myData->contractionCEs = (uint32_t *)(dataStart+tableOffset);*/
       myData->contractionCEs = tableOffset;
       memcpy(dataStart+tableOffset, contractions->CEs, contractionsSize*sizeof(uint32_t));
-      tableOffset += paddedsize(contractionsSize*sizeof(uint32_t));
+      tableOffset += (uint32_t)(paddedsize(contractionsSize*sizeof(uint32_t)));
     } else {
       myData->contractionIndex = 0;
       myData->contractionIndex = 0;
@@ -915,7 +915,7 @@ UCATableHeader *uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
     int32_t i = 0;
     for(i = 0; i<=0xFF; i++) {
         *(store++) = ucmpe32_get(mapping,i);
-        tableOffset+=sizeof(uint32_t);
+        tableOffset+=(uint32_t)(sizeof(uint32_t));
     }
 
     /* copy max expansion table */
@@ -924,11 +924,11 @@ UCATableHeader *uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
     /* not copying the first element which is a dummy */
     uprv_memcpy(dataStart + tableOffset, maxexpansion->endExpansionCE + 1, 
                 maxexpansion->position * sizeof(uint32_t));
-    tableOffset += paddedsize(maxexpansion->position * sizeof(uint32_t));
+    tableOffset += (uint32_t)(paddedsize(maxexpansion->position * sizeof(uint32_t)));
     myData->expansionCESize = tableOffset;
     uprv_memcpy(dataStart + tableOffset, maxexpansion->expansionCESize + 1, 
                 maxexpansion->position * sizeof(uint8_t));
-    tableOffset += paddedsize(maxexpansion->position * sizeof(uint8_t));
+    tableOffset += (uint32_t)(paddedsize(maxexpansion->position * sizeof(uint8_t)));
 
     /* Unsafe chars table.  Finish it off, then copy it. */
     uprv_uca_unsafeCPAddCCNZ(t);
