@@ -708,10 +708,6 @@ protected:
     virtual void getEffectiveCurrency(UChar* result, UErrorCode& ec) const;
 
 private:
-    static const int32_t fgMaxIntegerDigits;
-    static const int32_t fgMinIntegerDigits;
-
-private:
 
     enum EStyles {
         kNumberStyle,
@@ -740,8 +736,6 @@ private:
      * @return                 A new NumberFormat instance.
      */
     static NumberFormat* makeInstance(const Locale& desiredLocale, EStyles choice, UErrorCode& success);
-    static const int32_t    fgNumberPatternsCount;
-    static const UChar* const fgLastResortNumberPatterns[];
 
     UBool      fGroupingUsed;
     int32_t     fMaxIntegerDigits;
