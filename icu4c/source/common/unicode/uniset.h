@@ -282,13 +282,21 @@ public:
      * Minimum value that can be stored in a UnicodeSet.
      * @draft ICU 2.4
      */
+#ifdef U_CYGWIN
+    static U_COMMON_API const UChar32 MIN_VALUE;
+#else
     static const UChar32 MIN_VALUE;
+#endif
 
     /**
      * Maximum value that can be stored in a UnicodeSet.
      * @draft ICU 2.4
      */
+#ifdef U_CYGWIN
+    static U_COMMON_API const UChar32 MAX_VALUE;
+#else
     static const UChar32 MAX_VALUE;
+#endif
 
     //----------------------------------------------------------------
     // Constructors &c
