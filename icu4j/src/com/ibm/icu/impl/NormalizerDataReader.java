@@ -5,46 +5,55 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/NormalizerDataReader.java,v $
- * $Date: 2002/03/12 17:49:15 $
- * $Revision: 1.1 $
- *  *****************************************************************************************
+ * $Date: 2002/03/13 05:56:29 $
+ * $Revision: 1.2 $
+ *******************************************************************************
  */
  
 package com.ibm.icu.impl;
 import java.io.*;
+import com.ibm.icu.impl.ICUDebug;	
 /**
  * @version 	1.0
  * @author		Ram Viswanadha
  */
 
 	/*
-	 * Description of the format of unorm.dat version 2.0.
+	 * Description of the format of unorm.dat version 2.1.
 	 *
 	 * Main change from version 1 to version 2:
-	 * Use of new, common UTrie instead of normalization-specific tries.
+	 * Use of new, common Trie instead of normalization-specific tries.
+	 * Change to version 2.1: add third/auxiliary trie with associated data.
 	 *
 	 * For more details of how to use the data structures see the code
 	 * in unorm.cpp (runtime normalization code) and
 	 * in gennorm.c and gennorm/store.c (build-time data generation).
 	 *
-	 * For the serialized format of UTrie see utrie.c/UTrieHeader.
+	 * For the serialized format of Trie see Trie.c/TrieHeader.
 	 *
 	 * - Overall partition
 	 *
 	 * unorm.dat customarily begins with a UDataInfo structure, see udata.h and .c.
 	 * After that there are the following structures:
 	 *
-	 * uint16_t indexes[INDEX_TOP];           -- INDEX_TOP=32, see enum in this file
+	 * char indexes[INDEX_TOP];           		-- INDEX_TOP=32, see enum in this file
 	 *
-	 * UTrie normTrie;                              -- size in bytes=indexes[INDEX_TRIE_SIZE]
+	 * Trie normTrie;                           -- size in bytes=indexes[INDEX_TRIE_SIZE]
 	 * 
-	 * uint16_t extraData[extraDataTop];            -- extraDataTop=indexes[INDEX_UCHAR_COUNT]
+	 * char extraData[extraDataTop];            -- extraDataTop=indexes[INDEX_UCHAR_COUNT]
+	 *                                                 extraData[0] contains the number of units for
+	 *                                                 FC_NFKC_Closure (formatVersion>=2.1)
 	 *
-	 * uint16_t combiningTable[combiningTableTop];  -- combiningTableTop=indexes[INDEX_COMBINE_DATA_COUNT]
+	 * char combiningTable[combiningTableTop];  -- combiningTableTop=indexes[INDEX_COMBINE_DATA_COUNT]
 	 *                                                 combiningTableTop may include one 16-bit padding unit
 	 *                                                 to make sure that fcdTrie is 32-bit-aligned
 	 *
-	 * UTrie fcdTrie;                               -- size in bytes=indexes[INDEX_FCD_TRIE_SIZE]
+	 * Trie fcdTrie;                            -- size in bytes=indexes[INDEX_FCD_TRIE_SIZE]
+	 *
+	 * Trie auxTrie;                            -- size in bytes=indexes[INDEX_AUX_TRIE_SIZE]
+	 *
+	 * char canonStartSets[canonStartSetsTop]   -- canonStartSetsTop=indexes[INDEX_CANON_SET_COUNT]
+	 *                                                 serialized USets, see uset.c
 	 *
 	 *
 	 * The indexes array contains lengths and sizes of the following arrays and structures
@@ -62,9 +71,9 @@ import java.io.*;
 	 *
 	 * - Tries
 	 *
-	 * The main structures are two UTrie tables ("compact arrays"),
+	 * The main structures are two Trie tables ("compact arrays"),
 	 * each with one index array and one data array.
-	 * See utrie.h and utrie.c.
+	 * See Trie.h and Trie.c.
 	 *
 	 *
 	 * - Tries in unorm.dat
@@ -156,7 +165,7 @@ import java.io.*;
 	 * They are used for (re)composition in NF*C.
 	 * Values of combining indexes are arranged according to whether a character
 	 * combines forward, backward, or both ways:
-	 *    forward-only &lt; both ways  &lt; backward-only
+	 *    forward-only < both ways < backward-only
 	 *
 	 * The index values for forward-only and both-ways combining characters
 	 * are indexes into the combiningTable[].
@@ -212,10 +221,33 @@ import java.io.*;
 	 * This is done only if the 16-bit data word is not zero.
 	 * If the code unit is a leading surrogate and the data word is not zero,
 	 * then instead of cc's it contains the offset for the second trie lookup.
+	 *
+	 *
+	 * - Auxiliary trie and data
+	 *
+	 * The auxiliary 32-bit trie contains data for additional properties.
+	 * Bits
+	 *     31   set if lead surrogate offset
+	 *     30   composition exclusion
+	 * 29..20   index into extraData[] to FC_NFKC_Closure string (bit 31==0),
+	 *          or lead surrogate offset (bit 31==1)
+	 * 19..16   skippable flags
+	 *     15   reserved
+	 *     14   flag: not a safe starter for canonical closure
+	 * 13.. 0   index to serialized USet for canonical closure
+	 *            the set lists the code points whose decompositions start with
+	 *            the one that this data is for
+	 *          for how USets are serialized see uset.c
+	 *
+	 * - FC_NFKC_Closure strings in extraData[]
+	 *
+	 * Strings are either stored as a single code unit or as the length
+	 * followed by that many units.
 	 */
 final class NormalizerDataReader {
+	private final static boolean debug = ICUDebug.enabled("NormalizerDataReader");
 	
-    /**
+   /**
     * <p>Protected constructor.</p>
     * @param inputStream ICU uprop.dat file input stream
     * @exception IOException throw if data file fails authentication 
@@ -223,12 +255,16 @@ final class NormalizerDataReader {
     */
     protected NormalizerDataReader(InputStream inputStream) 
                                         throws IOException{
-    	//System.out.println("Bytes in inputStream " + inputStream.available());
+        if(debug) System.out.println("Bytes in inputStream " + inputStream.available());
+        
         ICUBinary.readHeader(inputStream, DATA_FORMAT_ID_, 
                              DATA_FORMAT_VERSION_, UNICODE_VERSION_);
-        //System.out.println("Bytes left in inputStream " +inputStream.available());
+        
+        if(debug) System.out.println("Bytes left in inputStream " +inputStream.available());
+        
         dataInputStream = new DataInputStream(inputStream);
-        //System.out.println("Bytes left in dataInputStream " +dataInputStream.available());
+        
+        if(debug) System.out.println("Bytes left in dataInputStream " +dataInputStream.available());
     }
     
     // protected methods -------------------------------------------------
@@ -248,17 +284,24 @@ final class NormalizerDataReader {
 		 * unorm.dat customarily begins with a UDataInfo structure, see udata.h and .c.
 		 * After that there are the following structures:
 		 *
-		 * uint16_t indexes[INDEX_TOP];           -- INDEX_TOP=32, see enum in this file
+		 * char indexes[INDEX_TOP];           -- INDEX_TOP=32, see enum in this file
 		 *
-		 * UTrie normTrie;                              -- size in bytes=indexes[INDEX_TRIE_SIZE]
+		 * Trie normTrie;                              -- size in bytes=indexes[INDEX_TRIE_SIZE]
 		 * 
-		 * uint16_t extraData[extraDataTop];            -- extraDataTop=indexes[INDEX_UCHAR_COUNT]
+		 * char extraData[extraDataTop];            -- extraDataTop=indexes[INDEX_UCHAR_COUNT]
+		 *                                                 extraData[0] contains the number of units for
+		 *                                                 FC_NFKC_Closure (formatVersion>=2.1)
 		 *
-		 * uint16_t combiningTable[combiningTableTop];  -- combiningTableTop=indexes[INDEX_COMBINE_DATA_COUNT]
+		 * char combiningTable[combiningTableTop];  -- combiningTableTop=indexes[INDEX_COMBINE_DATA_COUNT]
 		 *                                                 combiningTableTop may include one 16-bit padding unit
 		 *                                                 to make sure that fcdTrie is 32-bit-aligned
 		 *
-		 * UTrie fcdTrie;                               -- size in bytes=indexes[INDEX_FCD_TRIE_SIZE]
+		 * Trie fcdTrie;                               -- size in bytes=indexes[INDEX_FCD_TRIE_SIZE]
+		 *
+		 * Trie auxTrie;                               -- size in bytes=indexes[INDEX_AUX_TRIE_SIZE]
+		 *
+		 * char canonStartSets[canonStartSetsTop]   -- canonStartSetsTop=indexes[INDEX_CANON_SET_COUNT]
+		 *                                                 serialized USets, see uset.c
 		 *
 		 */
 	 
@@ -292,14 +335,30 @@ final class NormalizerDataReader {
 	 	byte[] fcdBytes = new byte[indexes[NormalizerImpl.INDEX_FCD_TRIE_SIZE]];
 	 	dataInputStream.read(fcdBytes);
 	 	ByteArrayInputStream fcdTrieStream= new ByteArrayInputStream(fcdBytes);
-	 	 	
+	 	
+	 	
+	 	//Read the AuxTrie
+	 	byte[] auxBytes = new byte[indexes[NormalizerImpl.INDEX_AUX_TRIE_SIZE]];
+        dataInputStream.read(auxBytes);
+	 	ByteArrayInputStream auxTrieStream= new ByteArrayInputStream(auxBytes);
+		
+		//Read the canonical start sets
+		char[] canonStartSets=new char[indexes[NormalizerImpl.INDEX_CANON_SET_COUNT]];
+        for(int i=0; i<canonStartSets.length; i++){
+	 		canonStartSets[i]=dataInputStream.readChar();
+	 	}
+	 	
+ 	 	 	
 	 	//Now set the tries 
 	 	impl.normTrieImpl.normTrie  	= new IntTrie( normTrieStream,impl.normTrieImpl	);
 	 	impl.fcdTrieImpl.fcdTrie   		= new CharTrie(fcdTrieStream,impl.fcdTrieImpl	);
+	 	impl.auxTrieImpl.auxTrie		= new IntTrie( auxTrieStream, impl.auxTrieImpl	);
 	 	impl.indexes   					= indexes;
 	 	impl.extraData 					= extraData;
 	 	impl.combiningTable 			= combiningTable;
 	 	impl.isDataLoaded				= true;	
+	 	impl.canonStartSets				= canonStartSets;
+	 	impl.isFormatVersion_2_1		= DATA_FORMAT_VERSION_[0]>2 || (DATA_FORMAT_VERSION_[0]==2 && DATA_FORMAT_VERSION_[1]>=1);
 	 	
     }
 
@@ -318,7 +377,7 @@ final class NormalizerDataReader {
     */
     private static final byte DATA_FORMAT_ID_[] = {(byte)0x4E, (byte)0x6F, 
                                                     (byte)0x72, (byte)0x6D};
-    private static final byte DATA_FORMAT_VERSION_[] = {(byte)0x2, (byte)0x0, 
+    private static final byte DATA_FORMAT_VERSION_[] = {(byte)0x2, (byte)0x1, 
                                                         (byte)0x5, (byte)0x2};
 	//TODO: Set the version info after the VersionInfo class is ported
     private static final byte UNICODE_VERSION_[] = {(byte)0x3, (byte)0x1, 
