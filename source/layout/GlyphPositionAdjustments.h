@@ -26,28 +26,28 @@ private:
     class Adjustment : public UMemory {
     public:
 
-        Adjustment();
-        Adjustment(float xPlace, float yPlace, float xAdv, float yAdv, le_int32 baseOff = -1);
-        ~Adjustment();
+        inline Adjustment();
+        inline Adjustment(float xPlace, float yPlace, float xAdv, float yAdv, le_int32 baseOff = -1);
+        inline ~Adjustment();
 
-        float    getXPlacement() const;
-        float    getYPlacement() const;
-        float    getXAdvance() const;
-        float    getYAdvance() const;
+        inline float    getXPlacement() const;
+        inline float    getYPlacement() const;
+        inline float    getXAdvance() const;
+        inline float    getYAdvance() const;
 
-        le_int32 getBaseOffset() const;
+        inline le_int32 getBaseOffset() const;
 
-        void     setXPlacement(float newXPlacement);
-        void     setYPlacement(float newYPlacement);
-        void     setXAdvance(float newXAdvance);
-        void     setYAdvance(float newYAdvance);
+        inline void     setXPlacement(float newXPlacement);
+        inline void     setYPlacement(float newYPlacement);
+        inline void     setXAdvance(float newXAdvance);
+        inline void     setYAdvance(float newYAdvance);
 
-        void     setBaseOffset(le_int32 newBaseOffset);
+        inline void     setBaseOffset(le_int32 newBaseOffset);
 
-        void    adjustXPlacement(float xAdjustment);
-        void    adjustYPlacement(float yAdjustment);
-        void    adjustXAdvance(float xAdjustment);
-        void    adjustYAdvance(float yAdjustment);
+        inline void    adjustXPlacement(float xAdjustment);
+        inline void    adjustYPlacement(float yAdjustment);
+        inline void    adjustXAdvance(float xAdjustment);
+        inline void    adjustYAdvance(float yAdjustment);
 
     private:
         float xPlacement;
@@ -58,22 +58,23 @@ private:
         le_int32 baseOffset;
 
         // allow copying of this class because all of its fields are simple types
-};
+    };
 
     class EntryExitPoint : public UMemory
     {
     public:
-        EntryExitPoint();
-        ~EntryExitPoint();
+        inline EntryExitPoint();
+        inline ~EntryExitPoint();
 
-        le_bool isCursiveGlyph() const;
-        le_bool baselineIsLogicalEnd() const;
+        inline le_bool isCursiveGlyph() const;
+        inline le_bool baselineIsLogicalEnd() const;
+
         LEPoint *getEntryPoint(LEPoint &entryPoint) const;
         LEPoint *getExitPoint(LEPoint &exitPoint) const;
 
-        void setEntryPoint(LEPoint &newEntryPoint, le_bool baselineIsLogicalEnd);
-        void setExitPoint(LEPoint &newExitPoint, le_bool baselineIsLogicalEnd);
-        void setCursiveGlyph(le_bool baselineIsLogicalEnd);
+        inline void setEntryPoint(LEPoint &newEntryPoint, le_bool baselineIsLogicalEnd);
+        inline void setExitPoint(LEPoint &newExitPoint, le_bool baselineIsLogicalEnd);
+        inline void setCursiveGlyph(le_bool baselineIsLogicalEnd);
 
     private:
         enum EntryExitFlags
@@ -99,31 +100,31 @@ public:
     GlyphPositionAdjustments(le_int32 glyphCount);
     ~GlyphPositionAdjustments();
 
-    le_bool hasCursiveGlyphs() const;
-    le_bool isCursiveGlyph(le_int32 index) const;
-    le_bool baselineIsLogicalEnd(le_int32 index) const;
+    inline le_bool hasCursiveGlyphs() const;
+    inline le_bool isCursiveGlyph(le_int32 index) const;
+    inline le_bool baselineIsLogicalEnd(le_int32 index) const;
 
     const LEPoint *getEntryPoint(le_int32 index, LEPoint &entryPoint) const;
     const LEPoint *getExitPoint(le_int32 index, LEPoint &exitPoint) const;
 
-    float getXPlacement(le_int32 index) const;
-    float getYPlacement(le_int32 index) const;
-    float getXAdvance(le_int32 index) const;
-    float getYAdvance(le_int32 index) const;
+    inline float getXPlacement(le_int32 index) const;
+    inline float getYPlacement(le_int32 index) const;
+    inline float getXAdvance(le_int32 index) const;
+    inline float getYAdvance(le_int32 index) const;
 
-    le_int32 getBaseOffset(le_int32 index) const;
+    inline le_int32 getBaseOffset(le_int32 index) const;
 
-    void setXPlacement(le_int32 index, float newXPlacement);
-    void setYPlacement(le_int32 index, float newYPlacement);
-    void setXAdvance(le_int32 index, float newXAdvance);
-    void setYAdvance(le_int32 index, float newYAdvance);
+    inline void setXPlacement(le_int32 index, float newXPlacement);
+    inline void setYPlacement(le_int32 index, float newYPlacement);
+    inline void setXAdvance(le_int32 index, float newXAdvance);
+    inline void setYAdvance(le_int32 index, float newYAdvance);
 
-    void setBaseOffset(le_int32 index, le_int32 newBaseOffset);
+    inline void setBaseOffset(le_int32 index, le_int32 newBaseOffset);
 
-    void adjustXPlacement(le_int32 index, float xAdjustment);
-    void adjustYPlacement(le_int32 index, float yAdjustment);
-    void adjustXAdvance(le_int32 index, float xAdjustment);
-    void adjustYAdvance(le_int32 index, float yAdjustment);
+    inline void adjustXPlacement(le_int32 index, float xAdjustment);
+    inline void adjustYPlacement(le_int32 index, float yAdjustment);
+    inline void adjustXAdvance(le_int32 index, float xAdjustment);
+    inline void adjustYAdvance(le_int32 index, float yAdjustment);
    
     void setEntryPoint(le_int32 index, LEPoint &newEntryPoint, le_bool baselineIsLogicalEnd);
     void setExitPoint(le_int32 index, LEPoint &newExitPoint, le_bool baselineIsLogicalEnd);
