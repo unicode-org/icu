@@ -58,7 +58,7 @@ class TransliterationRuleData;
  *         string on the right when performing forward
  *         transliteration.</dd>
  *     <dt>&nbsp;</dt>
- *     <dt><code>ai&lt;$alefmadda;</code></dt>
+ *     <dt><code>ai<$alefmadda;</code></dt>
  *     <dd><strong>Reverse translation rule.</strong> This rule
  *         states that the string on the right will be changed to
  *         the string on the left when performing reverse
@@ -66,7 +66,7 @@ class TransliterationRuleData;
  * </dl>
  * 
  * <dl>
- *     <dt><code>ai&lt;&gt;$alefmadda;</code></dt>
+ *     <dt><code>ai<>$alefmadda;</code></dt>
  *     <dd><strong>Bidirectional translation rule.</strong> This
  *         rule states that the string on the right will be changed
  *         to the string on the left when performing forward

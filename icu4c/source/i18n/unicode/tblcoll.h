@@ -238,7 +238,7 @@ class CollationElementIterator;
  * \code
  *      UErrorCode status = U_ZERO_ERROR;
  *      RuleBasedCollator *mySimple = new
- *        RuleBasedCollator(" &lt; a &lt; b & b &lt; c & c &lt; d", status);
+ *        RuleBasedCollator(" < a < b & b < c & c < d", status);
  * \endcode
  * </pre>
  * Or,
@@ -246,7 +246,7 @@ class CollationElementIterator;
  * \code
  *      UErrorCode status = U_ZERO_ERROR;
  *      RuleBasedCollator *mySimple = new
- *            RuleBasedCollator(" &lt; a &lt; b &lt; d & b &lt; c", status);
+ *            RuleBasedCollator(" < a < b < d & b < c", status);
  * \endcode
  * </pre>
  * Because " &lt; a &lt; b &lt; c &lt; d" is the same as "a &lt; b &lt; d & b 
@@ -331,7 +331,7 @@ class CollationElementIterator;
  *      // add a few Japanese character to sort before English characters
  *      // suppose the last character before the first base letter 'a' in
  *      // the English collation rule is 0x2212
- *      UChar jaString[] = {'&', 0x2212, '&lt;', 0x3041, ',', 0x3042, '&lt;', 
+ *      UChar jaString[] = {'&', 0x2212, '<', 0x3041, ',', 0x3042, '<', 
  *                          0x3043, ',', 0x3044, 0};
  *      UnicodeString rules(en_USCollation->getRules());
  *      rules += jaString;

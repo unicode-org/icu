@@ -37,7 +37,7 @@
  * specifies a half-open interval up to the next item:
  * <pre>
  * \code
- *     X matches j if and only if limit[j] &lt;= X &lt; limit[j+1]
+ *     X matches j if and only if limit[j] <= X < limit[j+1]
  * \endcode
  * </pre>
  * If there is no match, then either the first or last index is used, depending
@@ -66,16 +66,16 @@
  *       ParsePosition* status = new ParsePosition(0);
  *       UnicodeString str;
  *       FieldPosition f1(0), f2(0);
- *       for (double i = 0.0; i &lt;= 8.0; ++i) {
+ *       for (double i = 0.0; i <= 8.0; ++i) {
  *           status->setIndex(0);
  *           Formattable parseResult;
  *           str.remove();
- *           cout &lt;&lt; i &lt;&lt; " -> " &lt;&lt; form->format(i,str, f1) 
- *                     &lt;&lt; " -> " &lt;&lt; parseResult &lt;&lt; endl;
+ *           cout << i << " -> " << form->format(i,str, f1) 
+ *                     << " -> " << parseResult << endl;
  *       }
  *       delete form;
  *       delete status;
- *       cout &lt;&lt; endl;
+ *       cout << endl;
  *   }
  * \endcode
  * </pre>
@@ -94,16 +94,16 @@
  *       Formattable testArgs[] = {0L, "Disk_A", 0L};
  *       FieldPosition fp(0);
  *       UnicodeString str;
- *       for (int32_t i = 0; i &lt; 4; ++i) {
+ *       for (int32_t i = 0; i < 4; ++i) {
  *           Formattable fInt(i);
  *           testArgs[0] = fInt;
  *           testArgs[2] = testArgs[0];
  *           str.remove();
  *           pattform->format(testArgs, 3, str, fp, success );
- *           cout &lt;&lt; "Output for i=" &lt;&lt; i &lt;&lt; " : " &lt;&lt; str &lt;&lt; endl;
+ *           cout << "Output for i=" << i << " : " << str << endl;
  *       }
  *       delete pattform;
- *       cout &lt;&lt; endl;
+ *       cout << endl;
  *   }
  * \endcode
  * </pre>
@@ -122,8 +122,8 @@
  * <pre>
  *  \code
  *        <number> "#"  Specifies a limit value.
- *        <number> "&lt;"  Specifies a limit of nextDouble(&lt;number>).
- *        <number> ">"  Specifies a limit of previousDouble(&lt;number>).
+ *        <number> "<"  Specifies a limit of nextDouble(<number>).
+ *        <number> ">"  Specifies a limit of previousDouble(<number>).
  *  \endcode
  * </pre>
  * Each limit value is followed by a string, which is terminated by

@@ -46,7 +46,7 @@ class Locale;
  *    UErrorCode success = U_ZERO_ERROR;
  *    NumberFormat* nf = NumberFormat::createInstance(success)
  *    nf->format(myNumber, myString);
- *    cout &lt;&lt; " Example 1: " &lt;&lt; myString &lt;&lt; endl;
+ *    cout << " Example 1: " << myString << endl;
  * \endcode
  * </pre>
  * If you are formatting multiple numbers, it is more efficient to get
@@ -65,7 +65,7 @@ class Locale;
  *         nf->format(a[i], myString);
  *         myString += " ; ";
  *     }
- *     cout &lt;&lt; " Example 2: " &lt;&lt; myString &lt;&lt; endl;
+ *     cout << " Example 2: " << myString << endl;
  * \endcide
  * </pre>
  * To format a number for a different Locale, specify it in the
