@@ -8,9 +8,11 @@ package com.ibm.icu.impl;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 
 import com.ibm.icu.util.VersionInfo;
 
@@ -151,7 +153,7 @@ public class ICUResourceBundleReader implements ICUBinary.Authenticate{
             if(DEBUG) System.out.println("The bytes avialable in stream after reading the header: " + bs.available());
                  
             data = readData(bs);
-            
+
             stream.close();
         }catch(IOException ex){
             throw new RuntimeException("Data file "+ resolvedName+ " is corrupt.", ex);   
@@ -188,19 +190,39 @@ public class ICUResourceBundleReader implements ICUBinary.Authenticate{
         
         int length = indexes[URES_INDEX_BUNDLE_TOP]*4;
         if(DEBUG) System.out.println("The number of bytes in the bundle: "+length);
-
-        byte[] data = new byte[length];
-        ds.readFully(data);
-        return ByteBuffer.wrap(data);
+        
+        if(stream instanceof FileInputStream){
+            FileChannel channel = ((FileInputStream)stream).getChannel();
+            ByteBuffer val = channel.map(FileChannel.MapMode.READ_ONLY,0,length);
+            return val;
+        }else{    
+            byte[] data = new byte[length];
+            ds.readFully(data);
+            return ByteBuffer.wrap(data);
+        }
         
     }
-    
+    /**
+     * Gets the full name of the resource with suffix.
+     * If the 
+     * @param baseName
+     * @param localeName
+     * @return
+     */
     public static String getFullName(String baseName, String localeName){
-        baseName = baseName.replace('.','/');
-        if(baseName.charAt(baseName.length()-1)!= '/'){
-            return baseName+"/"+localeName+ICU_RESOURCE_SUFFIX;
+        if(baseName.indexOf('.')==-1){
+            if(baseName.charAt(baseName.length()-1)!= '/'){
+                return baseName+"/"+localeName+ICU_RESOURCE_SUFFIX;
+            }else{
+                return baseName+localeName+ICU_RESOURCE_SUFFIX;   
+            }
         }else{
-            return baseName+localeName+ICU_RESOURCE_SUFFIX;   
+            baseName = baseName.replace('.','/');
+            if(localeName.length()==0){
+                return baseName+ICU_RESOURCE_SUFFIX;   
+            }else{
+                return baseName+"_"+localeName+ICU_RESOURCE_SUFFIX;
+            }
         }
     }
     

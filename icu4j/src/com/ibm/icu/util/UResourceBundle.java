@@ -35,9 +35,41 @@ import com.ibm.icu.util.ULocale;
  * More on resource bundle concepts and syntax can be found in the 
  * <a href="http://oss.software.ibm.com/icu/userguide/ResourceManagement.html">Users Guide</a>.
  * <P>
- *
- *
- *
+ * 
+ * The packaging of ICU *.res files can be of two types
+ * ICU4C:
+ * <code>
+ *       root.res
+ *         |
+ *      --------
+ *     |        |
+ *   fr.res  en.res
+ *     |
+ *   --------
+ *  |        |
+ * fr_CA.res fr_FR.res     
+ * </code>
+ * JAVA/JDK:
+ * <code>
+ *    LocaleElements.res
+ *         |
+ *      -------------------
+ *     |                   |
+ * LocaleElements_fr.res  LocaleElements_en.res
+ *     |
+ *   ---------------------------
+ *  |                            |
+ * LocaleElements_fr_CA.res   LocaleElements_fr_FR.res
+ * </code>
+ * Depending on the organization of your resources, the syntax to getBundleInstance will change.
+ * To open ICU style organization use:
+ * <code>
+ *      UResourceBundle bundle = UResourceBundle.getBundleInstance("com/ibm/icu/impl/data/icudt30b", "en_US");
+ * </code>
+ * To open Java/JDK style organization use:
+ * <code>
+ *      UResourceBundle bundle = UResourceBundle.getBundleInstance("com.ibm.icu.impl.data.LocaleElements", "en_US");
+ * </code>
  * @draft ICU 3.0
  * @author ram
  */
@@ -348,7 +380,14 @@ public abstract class UResourceBundle extends ResourceBundle{
         String fullName = ICUResourceBundleReader.getFullName(baseName, localeName);
         cacheKey.setKeyValues(root, fullName, defaultLocale);
         UResourceBundle b = loadFromCache(cacheKey);
-        final String rootLocale = "root";
+        // here we assume that java type resource bundle organization
+        // is required then the base name contains '.' else 
+        // the resource organization is of ICU type
+        // so clients can instantiate resources of the type
+        // com.mycompany.data.MyLocaleElements_en.res and 
+        // com.mycompany.data.MyLocaleElements.res
+        //
+        final String rootLocale = (baseName.indexOf('.')==-1) ? "root" : "";
         final String defaultID = ULocale.getDefault().toString();
         if(localeName.equals("")){
             localeName = rootLocale;   
