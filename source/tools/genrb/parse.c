@@ -445,6 +445,13 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                           importFile = T_FileStream_open(openFileName, "rb");
                           uprv_free(openFileName);
                         }
+                        if(importFile == NULL) {
+                          fprintf(stderr, "Error! Couldn't open input file %s for tag %s\n", fileName, cTag);
+
+                          node = eError;
+                          continue;
+                        }
+
                         len = T_FileStream_size(importFile);
                         binData = uprv_malloc(len);
                         T_FileStream_read(importFile,binData,len);
