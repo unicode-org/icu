@@ -505,6 +505,33 @@ SOURCE=.\rbread.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\rep.h
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\rep.h
+
+"..\..\include\rep.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    rep.h    ..\..\include
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\rep.h
+
+"..\..\include\rep.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    rep.h    ..\..\include
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\resbund.h
 
 !IF  "$(CFG)" == "common - Win32 Release"
