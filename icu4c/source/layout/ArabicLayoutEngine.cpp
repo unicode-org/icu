@@ -56,7 +56,7 @@ ArabicOpenTypeLayoutEngine::~ArabicOpenTypeLayoutEngine()
 // Output: characters, char indices, tags
 // Returns: output character count
 le_int32 ArabicOpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
-        LEUnicode *&/*outChars*/, LEGlyphStorage &glyphStorage, LEErrorCode &success)
+        LEUnicode *&outChars, LEGlyphStorage &glyphStorage, LEErrorCode &success)
 {
     if (LE_FAILURE(success)) {
         return 0;
@@ -67,14 +67,26 @@ le_int32 ArabicOpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[]
         return 0;
     }
 
-    glyphStorage.adoptGlyphCount(count);
-    glyphStorage.allocateAuxData(success);
+    outChars = LE_NEW_ARRAY(LEUnicode, count);
 
-    if (LE_FAILURE(success)) {
+    if (outChars == NULL) {
         success = LE_MEMORY_ALLOCATION_ERROR;
         return 0;
     }
 
+    glyphStorage.allocateGlyphArray(count, rightToLeft, success);
+    glyphStorage.allocateAuxData(success);
+
+    if (LE_FAILURE(success)) {
+        LE_DELETE_ARRAY(outChars);
+        return 0;
+    }
+
+    CanonShaping::reorderMarks(&chars[offset], count, rightToLeft, outChars, glyphStorage);
+
+    // Note: This process the *original* character array so we can get context
+    // for the first and last characters. This is OK because only the marks
+    // will have been reordered, and they don't contribute to shaping.
     ArabicShaping::shape(chars, offset, count, max, rightToLeft, glyphStorage);
 
     return count;
