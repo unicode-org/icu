@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/CheckCollator.java,v $
-* $Date: 2002/08/08 15:35:01 $
-* $Revision: 1.1 $
+* $Date: 2002/08/09 23:56:24 $
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -41,7 +41,7 @@ abstract public class CheckCollator {
         // later, drive off of args
         
         // choices are: Asian, Chinese, Japanese, Japanese_h, Japanese_k, Korean, Latin, Russian, Thai
-        test(Locale.KOREAN, "Korean");
+        //test(Locale.KOREAN, "Korean");
         test(Locale.ENGLISH, "Latin");
         test(Locale.FRENCH, "Latin");
         test(Locale.JAPANESE, "Japanese");
