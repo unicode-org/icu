@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-hpux-acc,v 1.34 2003/08/08 23:53:43 grhoten-oss Exp $
+## $Id: mh-hpux-acc,v 1.35 2003/12/04 22:04:51 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	:
@@ -20,8 +20,10 @@ SHAREDLIBCXXFLAGS = +z
 #    740 Unsafe cast between pointers/references to incomplete classes...
 #    749 This operation is non-portable and potentially unsafe.
 #        (Ironically the solution to fix this warning is non-portable)
+#    823 Redundant preprocessing concatenation operation results in two valid
+#        preprocessing tokens. This comes from INT64_C in <inttypes.h>
 CFLAGS += +Olibcalls -Ae +ESlit
-CXXFLAGS += +Olibcalls +W495 +W740 +W749
+CXXFLAGS += +Olibcalls +W495 +W740 +W749 +W823
 
 ## Commands to compile
 COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
