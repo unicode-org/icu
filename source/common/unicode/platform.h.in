@@ -44,6 +44,14 @@
 #define U_IOSTREAM_SOURCE @U_IOSTREAM_SOURCE@
 #endif
 
+#ifndef U_DEBUG
+#define U_DEBUG @ENABLE_DEBUG@
+#endif
+
+#ifndef U_RELEASE
+#define U_RELEASE @ENABLE_RELEASE@
+#endif
+
 /* Determines whether specific types are available */
 #ifndef U_HAVE_INT8_T
 #define U_HAVE_INT8_T @HAVE_INT8_T@
@@ -264,4 +272,3 @@ typedef unsigned short uint16_t;
 /*===========================================================================*/
 
 #define U_MAKE  "@U_MAKE@"
-
