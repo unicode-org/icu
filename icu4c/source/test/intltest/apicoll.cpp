@@ -1387,6 +1387,54 @@ void CollationAPITest::TestVariableTopSetting() {
 
 }
 
+void CollationAPITest::TestGetLocale() {
+  UErrorCode status = U_ZERO_ERROR;
+  const char *rules = "&a<x<y<z";
+  UChar rlz[256] = {0};
+  uint32_t rlzLen = u_unescape(rules, rlz, 256);
+  rlz[rlzLen] = 0;
+
+  const char *openLoc[] = {
+  /* opening from a nonexistent locale should get root */
+    "blahehe",
+  /* opening from down the tree should get a first locale with data */
+      "sr_YU",
+      "ar_KW",
+      "fr_FR_nonexistent",
+  };
+
+  const char *expectLoc[] = {
+    "root",
+      "root",
+      "ar",
+      "fr",
+  };
+
+  int32_t i = 0;
+  Collator *coll  = NULL;
+  Locale locale;
+
+  for(i = 0; i<sizeof(openLoc)/sizeof(openLoc[0]); i++) {
+    coll  = Collator::createInstance(openLoc[i], status);
+    locale = coll->getLocale(status);
+    if(locale != expectLoc[i]) {
+      errln("Bad locale: expected %s, got %s", expectLoc[i], locale);
+    }
+    if(locale.isBogus() == TRUE) {
+      errln("Collators instanitated from a locale should not return a bogus locale");
+    }
+    delete coll;
+  }
+
+  /* opening from rules should get us NULL locale */
+  coll = new RuleBasedCollator(rlz, status);
+  locale = coll->getLocale(status);
+  if(locale.isBogus() != TRUE) {
+    errln("Rule instantiated collator should return bogus locale");
+  }
+  delete coll;
+}
+
 void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par */)
 {
     if (exec) logln("TestSuite CollationAPITest: ");
@@ -1409,6 +1457,7 @@ void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &n
         case 14: name = "TestAttribute";   if (exec)   TestAttribute(); break;
         case 15: name = "TestVariableTopSetting"; if (exec) TestVariableTopSetting(); break;
         case 16: name = "TestRules"; if (exec) TestRules(); break;
+        case 17: name = "TestGetLocale"; if (exec) TestGetLocale(); break;
         default: name = ""; break;
     }
 }
