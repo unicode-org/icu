@@ -695,6 +695,9 @@ static void TestFilePrintCompatibility() {
     if (cNumPrinted != uNumPrinted) {\
         log_err("%" uFormat " number printed Got: %d, Expected: %d\n", uNumPrinted, cNumPrinted);\
     }\
+    if (buffer[uNumPrinted+1] != 0x2a) {\
+        log_err("%" uFormat " too much stored\n");\
+    }\
 
 #define TestFPrintFormat2(format, precision, value) \
     myFile = u_fopen(STANDARD_TEST_FILE, "w", "en_US_POSIX", NULL);\
@@ -779,6 +782,9 @@ static void TestFprintfFormat() {
     TestFPrintFormat("%8i", 123456, "%8i", 123456);
     TestFPrintFormat("%-8i", 123456, "%-8i", 123456);
 
+    TestFPrintFormat2("%+1.*e", 4, 1.2345678);
+    TestFPrintFormat2("%+2.*e", 6, 1.2345678);
+
     log_verbose("Get really crazy with the formatting.\n");
 
     TestFPrintFormat("%-#12x", 123, "%-#12x", 123);
@@ -827,8 +833,6 @@ static void TestFprintfFormat() {
     TestFPrintFormat("%3f", 1.234,       "%3f", 1.234);
     TestFPrintFormat("%3f", -1.234,      "%3f", -1.234);
 
-    TestFPrintFormat2("%+1.*e", 4, 1.2345678);
-    TestFPrintFormat2("%+2.*e", 6, 1.2345678);
 }
 
 #undef TestFPrintFormat
@@ -1072,6 +1076,9 @@ static void TestSnprintf() {
     if (cNumPrinted != uNumPrinted) {\
         log_err("%" uFormat " number printed Got: %d, Expected: %d\n", uNumPrinted, cNumPrinted);\
     }\
+    if (buffer[uNumPrinted+1] != 0x2a) {\
+        log_err("%" uFormat " too much stored\n");\
+    }\
 
 #define TestSPrintFormat2(format, precision, value) \
     /* Reinitialize the buffer to verify null termination works. */\
@@ -1150,6 +1157,9 @@ static void TestSprintfFormat() {
     TestSPrintFormat("%8i", 123456, "%8i", 123456);
     TestSPrintFormat("%-8i", 123456, "%-8i", 123456);
 
+    TestSPrintFormat2("%+1.*e", 4, 1.2345678);
+    TestSPrintFormat2("%+2.*e", 6, 1.2345678);
+
     log_verbose("Get really crazy with the formatting.\n");
 
     TestSPrintFormat("%-#12x", 123, "%-#12x", 123);
@@ -1198,8 +1208,6 @@ static void TestSprintfFormat() {
     TestSPrintFormat("%3f", 1.234,       "%3f", 1.234);
     TestSPrintFormat("%3f", -1.234,      "%3f", -1.234);
 
-    TestSPrintFormat2("%+1.*e", 4, 1.2345678);
-    TestSPrintFormat2("%+2.*e", 6, 1.2345678);
 }
 
 #undef TestSPrintFormat
@@ -1298,6 +1306,146 @@ static void TestStringCompatibility() {
             log_err("%%c Got: 0x%x, Expected: 0x%x\n", myString[0], testBuf[0]);
         }
     }
+}
+
+#define TestSScanSetFormat(format, uValue, cValue) \
+    /* Reinitialize the buffer to verify null termination works. */\
+    u_memset(uBuffer, 0x2a, sizeof(uBuffer)/sizeof(*uBuffer));\
+    memset(buffer, 0x2a, sizeof(buffer)/sizeof(*buffer));\
+    \
+    uNumScanned = u_sscanf(uValue, NULL, format, uBuffer);\
+    u_austrncpy(compBuffer, uBuffer, sizeof(uBuffer)/sizeof(uBuffer[0]));\
+    cNumScanned = sscanf(cValue, format, buffer);\
+    if (strncmp(buffer, compBuffer, sizeof(uBuffer)/sizeof(uBuffer[0])) != 0) {\
+        log_err("%" format " Got: \"%s\", Expected: \"%s\"\n", compBuffer, buffer);\
+    }\
+    if (cNumScanned != uNumScanned) {\
+        log_err("%" format " number scanned Got: %d, Expected: %d\n", uNumScanned, cNumScanned);\
+    }\
+    if (uNumScanned > 0 && uBuffer[u_strlen(uBuffer)+1] != 0x2a) {\
+        log_err("%" format " too much stored\n");\
+    }\
+
+static void TestSScanf() {
+    static const UChar abcUChars[] = {0x61,0x62,0x63,0x63,0x64,0x65,0x66,0x67,0};
+    static const char abcChars[] = "abccdefg";
+    UChar uBuffer[256];
+    char buffer[256];
+    char compBuffer[256];
+    int32_t uNumScanned;
+    int32_t cNumScanned;
+
+    TestSScanSetFormat("%[bc]U", abcUChars, abcChars);
+    TestSScanSetFormat("%[cb]U", abcUChars, abcChars);
+
+    TestSScanSetFormat("%[ab]U", abcUChars, abcChars);
+    TestSScanSetFormat("%[ba]U", abcUChars, abcChars);
+
+    TestSScanSetFormat("%[ab]", abcUChars, abcChars);
+    TestSScanSetFormat("%[ba]", abcUChars, abcChars);
+
+    TestSScanSetFormat("%[abcdefgh]", abcUChars, abcChars);
+    TestSScanSetFormat("%[;hgfedcba]", abcUChars, abcChars);
+
+    TestSScanSetFormat("%[a-f]", abcUChars, abcChars);
+    TestSScanSetFormat("%[f-a]", abcUChars, abcChars);
+    TestSScanSetFormat("%[a-c]", abcUChars, abcChars);
+    TestSScanSetFormat("%[c-a]", abcUChars, abcChars);
+
+    TestSScanSetFormat("%[^e-f]", abcUChars, abcChars);
+
+    TestSScanSetFormat("%[^a]", abcUChars, abcChars);
+    TestSScanSetFormat("%[^e]", abcUChars, abcChars);
+    TestSScanSetFormat("%[^ed]", abcUChars, abcChars);
+    TestSScanSetFormat("%[^dc]", abcUChars, abcChars);
+    TestSScanSetFormat("%[^e]  ", abcUChars, abcChars);
+
+    TestSScanSetFormat("%[]  ", abcUChars, abcChars);
+    TestSScanSetFormat("%1[ab]  ", abcUChars, abcChars);
+    TestSScanSetFormat("%2[^f]", abcUChars, abcChars);
+
+    /* Bad format */
+    TestSScanSetFormat("%[a", abcUChars, abcChars);
+    /* The following is not deterministic on Windows */
+/*    TestSScanSetFormat("%[a-", abcUChars, abcChars);*/
+    TestSScanSetFormat("%[a-]", abcUChars, abcChars);
+
+    /* TODO: Need to specify precision with a "*" */
+}
+
+#undef TestSScanSetFormat
+
+
+#define TestFScanSetFormat(format, uValue, cValue) \
+    myFile = u_fopen(STANDARD_TEST_FILE, "w", NULL, NULL);\
+    /* Reinitialize the buffer to verify null termination works. */\
+    u_memset(uBuffer, 0x2a, sizeof(uBuffer)/sizeof(*uBuffer));\
+    memset(buffer, 0x2a, sizeof(buffer)/sizeof(*buffer));\
+    \
+    u_fprintf(myFile, "%U", uValue);\
+    u_fclose(myFile);\
+    myFile = u_fopen(STANDARD_TEST_FILE, "r", "en_US_POSIX", NULL);\
+    uNumScanned = u_fscanf(myFile, format, uBuffer);\
+    u_fclose(myFile);\
+    u_austrncpy(compBuffer, uBuffer, sizeof(uBuffer)/sizeof(*uBuffer));\
+    cNumScanned = sscanf(cValue, format, buffer);\
+    if (strncmp(buffer, compBuffer, sizeof(uBuffer)/sizeof(*uBuffer)) != 0) {\
+        log_err("%" format " Got: \"%s\", Expected: \"%s\"\n", compBuffer, buffer);\
+    }\
+    if (cNumScanned != uNumScanned) {\
+        log_err("%" format " number printed Got: %d, Expected: %d\n", uNumScanned, cNumScanned);\
+    }\
+    if (uNumScanned > 0 && uBuffer[u_strlen(uBuffer)+1] != 0x2a) {\
+        log_err("%" format " too much stored\n");\
+    }\
+
+
+static void TestFScanf() {
+    UFILE *myFile;
+    static const UChar abcUChars[] = {0x61,0x62,0x63,0x63,0x64,0x65,0x66,0x67,0};
+    static const char abcChars[] = "abccdefg";
+    UChar uBuffer[256];
+    char buffer[256];
+    char compBuffer[256];
+    int32_t uNumScanned;
+    int32_t cNumScanned;
+
+    TestFScanSetFormat("%[bc]U", abcUChars, abcChars);
+    TestFScanSetFormat("%[cb]U", abcUChars, abcChars);
+
+    TestFScanSetFormat("%[ab]U", abcUChars, abcChars);
+    TestFScanSetFormat("%[ba]U", abcUChars, abcChars);
+
+    TestFScanSetFormat("%[ab]", abcUChars, abcChars);
+    TestFScanSetFormat("%[ba]", abcUChars, abcChars);
+
+    TestFScanSetFormat("%[abcdefgh]", abcUChars, abcChars);
+    TestFScanSetFormat("%[;hgfedcba]", abcUChars, abcChars);
+
+    TestFScanSetFormat("%[a-f]", abcUChars, abcChars);
+    TestFScanSetFormat("%[f-a]", abcUChars, abcChars);
+    TestFScanSetFormat("%[a-c]", abcUChars, abcChars);
+    TestFScanSetFormat("%[c-a]", abcUChars, abcChars);
+
+    TestFScanSetFormat("%[^e-f]", abcUChars, abcChars);
+
+    TestFScanSetFormat("%[^a]", abcUChars, abcChars);
+    TestFScanSetFormat("%[^e]", abcUChars, abcChars);
+    TestFScanSetFormat("%[^ed]", abcUChars, abcChars);
+    TestFScanSetFormat("%[^dc]", abcUChars, abcChars);
+    TestFScanSetFormat("%[^e]  ", abcUChars, abcChars);
+
+    TestFScanSetFormat("%[]  ", abcUChars, abcChars);
+    TestFScanSetFormat("%1[ab]  ", abcUChars, abcChars);
+    TestFScanSetFormat("%2[^f]", abcUChars, abcChars);
+
+    /* Bad format */
+    TestFScanSetFormat("%[a", abcUChars, abcChars);
+    /* The following is not deterministic on Windows */
+/*    TestFScanSetFormat("%[a-", abcUChars, abcChars);*/
+    TestFScanSetFormat("%[a-]", abcUChars, abcChars);
+
+    /* TODO: Need to specify precision with a "*" */
 }
 
 static void TestStream() {
@@ -1520,11 +1668,13 @@ static void addAllTests(TestNode** root) {
     addTest(root, &TestfgetsBuffers, "file/TestfgetsBuffers");
     addTest(root, &TestfgetsLineCount, "file/TestfgetsLineCount");
     addTest(root, &TestFprintfFormat, "file/TestFprintfFormat");
+    addTest(root, &TestFScanf, "file/TestFScanf");
     addTest(root, &TestFilePrintCompatibility, "file/TestFilePrintCompatibility");
 
     addTest(root, &TestString, "string/TestString");
     addTest(root, &TestSprintfFormat, "string/TestSprintfFormat");
     addTest(root, &TestSnprintf, "string/TestSnprintf");
+    addTest(root, &TestSScanf, "string/TestSScanf");
     addTest(root, &TestStringCompatibility, "string/TestStringCompatibility");
     addTest(root, &TestStream, "stream/TestStream");
 
