@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2001/10/25 20:33:46 $
-* $Revision: 1.4 $
+* $Date: 2001/10/26 23:33:07 $
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -315,7 +315,7 @@ public final class UCD implements UCD_Types {
             if (caseType == TITLE) {    // set the case type for the next character
             
                 // certain characters are ignored
-                if (cp == '-' || cp == SHY || cp == '\'' || cp == APOSTROPHE) continue;
+                if (cp == SHY || cp == '\'' || cp == APOSTROPHE) continue;
                 byte cat = getCategory(cp);
                 if (cat == Mn || cat == Me || cat == Cf || cat == Lm) continue;
                 if (dp.hasProperty(cp, DerivedProperty.DefaultIgnorable)) continue;
@@ -572,7 +572,7 @@ public final class UCD implements UCD_Types {
             case 230: s = style < LONG ? "A" :   "Above"; break;
             case 232: s = style < LONG ? "AR" :   "AboveRight"; break;
             case 233: s = style < LONG ? "DB" :   "DoubleBelow"; break;
-            case 234: s = style < LONG ? "DB" :   "DoubleAbove"; break;
+            case 234: s = style < LONG ? "DA" :   "DoubleAbove"; break;
             case 240: s = style < LONG ? "IS" :   "IotaSubscript"; break;
             default: s += "_" + index;
         }

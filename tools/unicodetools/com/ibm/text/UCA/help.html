@@ -42,7 +42,15 @@ characters. The characters are arranged in the following groups:</p>
     <th align="left"><i>Letters</i></th>
     <th class="x">According to script</th>
   </tr>
+  <tr>
+    <th align="left"><i>Unsupported</i></th>
+    <th class="x">Not explicitly supported in this version of UCA; uses 
+      code-point order</th>
+  </tr>
 </table>
+<p>Characters from large blocks, such as CJK-Ideographs, Hangul Syllables, 
+Private Use Area, etc. are represented by a sampling. Some unassigned code 
+points, non-characters and other edge cases are also added to the list.</p>
 <p>The characters* within each group are arranged in cells. The color of the 
 cell indicates the strength of the difference between that character and the <i>previous</i> 
 character in the chart, as follows.</p>
@@ -85,7 +93,10 @@ character in the chart, as follows.</p>
       or no difference</th>
   </tr>
 </table>
-&nbsp;
+<p align="left">If tool-tips are enabled in your browser, then if you pause the 
+mouse over any cell, you will see a representation of the sort key. In this 
+representation, the separators between the weight levels are represented with 
+&quot;|&quot;.</p>
 <table>
   <tr>
     <th>*</th>

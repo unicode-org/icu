@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2001/10/25 20:33:46 $
-* $Revision: 1.7 $
+* $Date: 2001/10/26 23:33:07 $
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -23,6 +23,8 @@ import com.ibm.text.UTF16;
 
 
 public class GenerateData implements UCD_Types {
+    
+    static final String HORIZONTAL_LINE = "# ================================================";
 
     static UnifiedBinaryProperty ubp;
     
@@ -44,7 +46,7 @@ public class GenerateData implements UCD_Types {
 
             if (arg.equalsIgnoreCase("partition")) {
                 partitionProperties();
-            } else if (arg.equalsIgnoreCase("list")) {
+            } else if (arg.equalsIgnoreCase("PropertyAliases")) {
                 listProperties();                
             } else if (arg.equalsIgnoreCase("listAccents")) {
                 listCombiningAccents();
@@ -225,7 +227,7 @@ public class GenerateData implements UCD_Types {
         output.println("# Date: " + myDateFormat.format(new Date()) + " [MD]");
         output.println("# Note: Unassigned and Noncharacter codepoints are omitted,");
         output.println("#       except when listing Noncharacter or Cn.");
-        output.println("# ================================================");
+        output.println(HORIZONTAL_LINE);
         output.println();
     }
 
@@ -235,7 +237,7 @@ public class GenerateData implements UCD_Types {
         for (int i = 0; i < DerivedProperty.LIMIT; ++i) {
             if ((bitMask & (1L<<i)) == 0) continue;
             System.out.print('.');
-            output.println("# ================================================");
+            output.println(HORIZONTAL_LINE);
             output.println();
             new DerivedPropertyLister(ucd, i, output).print();
             output.flush();
@@ -417,27 +419,28 @@ public class GenerateData implements UCD_Types {
         
         Map duplicates = new TreeMap();
         Set sorted = new TreeSet(java.text.Collator.getInstance());
+        Map accumulation = new TreeMap();
         String spacing;
         
         for(int k = 0; k < UCD_Names.NON_ENUMERATED.length; ++k) {
-            propAbb = UCD_Names.NON_ENUMERATED[k][0];
-            prop = UCD_Names.NON_ENUMERATED[k][1];
+            propAbb = fixGaps(UCD_Names.NON_ENUMERATED[k][0], false);
+            prop = fixGaps(UCD_Names.NON_ENUMERATED[k][1], true);
             spacing = Utility.repeat(" ", 10-propAbb.length());
             sorted.add("AA; " + propAbb + spacing + "; " + prop);
-            checkDuplicate(duplicates, propAbb, prop);
-            if (!prop.equals(propAbb)) checkDuplicate(duplicates, prop, prop);
+            checkDuplicate(duplicates, accumulation, propAbb, prop);
+            if (!prop.equals(propAbb)) checkDuplicate(duplicates, accumulation, prop, prop);
         }
         
         sorted.add("xx; T         ; True");
-        checkDuplicate(duplicates, "T", "xx");
+        checkDuplicate(duplicates, accumulation, "T", "xx=True");
         sorted.add("xx; F         ; False");
-        checkDuplicate(duplicates, "F", "xx");
+        checkDuplicate(duplicates, accumulation, "F", "xx=False");
         sorted.add("qc; Y         ; Yes");
-        checkDuplicate(duplicates, "Y", "qc");
+        checkDuplicate(duplicates, accumulation, "Y", "qc=Yes");
         sorted.add("qc; N         ; No");
-        checkDuplicate(duplicates, "Y", "qc");
+        checkDuplicate(duplicates, accumulation, "N", "qc=No");
         sorted.add("qc; M         ; Maybe");
-        checkDuplicate(duplicates, "Y", "qc");
+        checkDuplicate(duplicates, accumulation, "M", "qc=Maybe");
         
         
         for (int i = 0; i < LIMIT_ENUM; ++i) {
@@ -446,12 +449,12 @@ public class GenerateData implements UCD_Types {
             if (i == (BINARY_PROPERTIES | CaseFoldTurkishI)) continue;
             
             if (type == i && type != BINARY_PROPERTIES && type != DERIVED) {
-                propAbb = ubp.getPropertyName(i, SHORT);
-                prop = ubp.getPropertyName(i, LONG);
+                propAbb = fixGaps(ubp.getPropertyName(i, SHORT), false);
+                prop = fixGaps(ubp.getPropertyName(i, LONG), true);
                 spacing = Utility.repeat(" ", 10-propAbb.length());
                 sorted.add("BB; " + propAbb + spacing + "; " + prop);
-                checkDuplicate(duplicates, propAbb, prop);
-                if (!prop.equals(propAbb)) checkDuplicate(duplicates, prop, prop);
+                checkDuplicate(duplicates, accumulation, propAbb, prop);
+                if (!prop.equals(propAbb)) checkDuplicate(duplicates, accumulation, prop, prop);
             }
             
             if (!ubp.isDefined(i)) continue;
@@ -460,7 +463,7 @@ public class GenerateData implements UCD_Types {
             String value = ubp.getID(i, LONG);
             if (value.length() == 0) value = "none";
             else if (value.equals("<unused>")) continue;
-            value = fixGaps(value);
+            value = fixGaps(value, true);
             
             if (type == SCRIPT) {
                 value = ucd.getCase(value, FULL, TITLE);
@@ -468,6 +471,7 @@ public class GenerateData implements UCD_Types {
             
             String abbvalue = ubp.getID(i, SHORT);
             if (abbvalue.length() == 0) abbvalue = "no";
+            abbvalue = fixGaps(abbvalue, false);
 
             if (type == COMBINING_CLASS) {
                 if (value.startsWith("Fixed_")) { continue; }
@@ -497,19 +501,32 @@ public class GenerateData implements UCD_Types {
             
             if (type == BINARY_PROPERTIES || type == DERIVED) {
                 sorted.add("ZZ; " + abbvalue + spacing + "; " + value);
-                checkDuplicate(duplicates, value, value);
-                if (!value.equals(abbvalue)) checkDuplicate(duplicates, abbvalue, value);
+                checkDuplicate(duplicates, accumulation, value, value);
+                if (!value.equalsIgnoreCase(abbvalue)) checkDuplicate(duplicates, accumulation, abbvalue, value);
                 continue;
             }
             
             sorted.add(propAbb + "; " + abbvalue + spacing + "; " + value);
-            checkDuplicate(duplicates, value, prop + "=" + value);
-            if (!value.equals(abbvalue)) checkDuplicate(duplicates, abbvalue, prop + "=" + value);
+            checkDuplicate(duplicates, accumulation, value, prop + "=" + value);
+            if (!value.equalsIgnoreCase(abbvalue)) checkDuplicate(duplicates, accumulation, abbvalue, prop + "=" + value);
         }
         
-        PrintWriter log = Utility.openPrintWriter("PropertyAliases.txt");
-        Utility.appendFile("PropertyAliasHeader.txt", log);
+        PrintWriter log = Utility.openPrintWriter("PropertyAliases-" + ucd.getVersion() + "dX.txt");
+        Utility.appendFile("PropertyAliasHeader.txt", false, log);
+        log.println("# Generated: " + new Date() + ", MD");
+        log.println(HORIZONTAL_LINE);
+        log.println();
         Utility.print(log, sorted, "\r\n", new MyBreaker());
+        log.println();
+        log.println(HORIZONTAL_LINE);
+        log.println();
+        log.println("# Non-Unique names: the same name (under either an exact or loose match)");
+        log.println("# occurs as a property name or property value name");
+        log.println("# Note: no two property names can be the same,");
+        log.println("# nor can two property value names for the same property be the same.");
+        log.println();
+        Utility.print(log, accumulation.values(), "\r\n", new MyBreaker());
+        log.println();
         log.close();
     }
     
@@ -525,26 +542,70 @@ public class GenerateData implements UCD_Types {
         }
     }
     
-    static void checkDuplicate(Map m, String toCheck, String comment) {
-        String result = (String) m.get(toCheck);
+    static void checkDuplicate(Map m, Map accumulation, String toCheck, String originalComment) {
+        toCheck = skeleton(toCheck);
+        String comment = "{" + originalComment + "}";
+        
+        Set result = (Set) m.get(toCheck);
         if (result != null) {
-            System.out.println("Collision with " + toCheck);
-            System.out.println("  Between " + comment);
-            System.out.println("  And     " + result);
+            // Warn on serious problem: two property-names collide
+            // or two property names & values collide.
+            // examples:
+            // if (1) "c" stood for both "General_Category" and "Combining_Class"
+            // or if (2) "X=cc" stood for "X=control" and "X=compatibility"
+            // 1: comment doesn't contain "=", and something in the results doesn't contain "="
+            // 2: comment does contain "X=", and something else in results contains "X="
+            
+            int equalPos = comment.indexOf('=');
+            if (equalPos < 0) { // #1
+                String conflict = Utility.findSubstring("=", result, false);
+                if (conflict != null) {
+                    System.out.println("Property Name Conflict " + toCheck);
+                    System.out.println("  With " + comment);
+                    System.out.println("  And  " + conflict);
+                }
+            } else {    // #2
+                String trial = comment.substring(0,equalPos+1);
+                String conflict = Utility.findSubstring(trial, result, true);
+                if (conflict != null) {
+                    System.out.println("Property Value Name Conflict " + toCheck);
+                    System.out.println("  With " + comment);
+                    System.out.println("  And  " + conflict);
+                }
+            }
+            
+            // accumulate differences
+            String acc = (String)accumulation.get(toCheck);
+            /*if (acc == null) {
+                acc = "# \"" + toCheck + "\":\t" + originalComment;
+            }
+            acc += ";\t" + result;
+            */
+            result.add(comment);
+            accumulation.put(toCheck, "# \"" + toCheck + "\":\t" + result);
         } else {
-            m.put(skeleton(toCheck), comment);
+            result = new TreeSet();
+            result.add(comment);
+            m.put(toCheck, result);
         }
     }
     
-    static String fixGaps(String source) {
+    static String fixGaps(String source, boolean titlecaseStart) {
         StringBuffer result = new StringBuffer();
         byte lastCat = -1;
+        boolean haveFirstCased = true;
         for (int i = 0; i < source.length(); ++i) {
             char c = source.charAt(i);
             if (c == ' ' || c == '-') c = '_';
             byte cat = ucd.getCategory(c);
             if (lastCat == Ll && cat == Lu) {
                 result.append('_');
+            }
+            if (haveFirstCased && (cat == Ll || cat == Lt || cat == Lu)) {
+                if (titlecaseStart) {
+                    c = ucd.getCase(c, SIMPLE, TITLE).charAt(0);
+                }
+                haveFirstCased = false;
             }
             result.append(c);
             lastCat = cat;
@@ -557,7 +618,7 @@ public class GenerateData implements UCD_Types {
         source = source.toLowerCase();
         for (int i = 0; i < source.length(); ++i) {
             char c = source.charAt(i);
-            if (c < 'a' || c > 'z') continue;
+            if (c == ' ' || c == '_' || c == '-') continue;
             result.append(c);
         }
         return result.toString();
@@ -596,15 +657,15 @@ public class GenerateData implements UCD_Types {
                     && i < (AGE + NEXT_ENUM)) continue;
             if ((last & 0xFF00) != (i & 0xFF00) && (i <= BINARY_PROPERTIES || i >= SCRIPT)) {
                 output.println();
-                output.println("# ================================================");
+                output.println(HORIZONTAL_LINE);
                 output.println("# " + UCD_Names.UNIFIED_PROPERTIES[i>>8]);
-                output.println("# ================================================");
+                output.println(HORIZONTAL_LINE);
                 output.println();
                 System.out.println();
                 System.out.println(UCD_Names.UNIFIED_PROPERTIES[i>>8]);
                 last = i;
             } else {
-                output.println("# ================================================");
+                output.println(HORIZONTAL_LINE);
                 output.println();
             }
             System.out.print(".");
@@ -612,9 +673,9 @@ public class GenerateData implements UCD_Types {
         }
         if (endEnum == LIMIT_ENUM) {
             output.println();
-                output.println("# ================================================");
+                output.println(HORIZONTAL_LINE);
             output.println("# Numeric Values (from UnicodeData.txt, field 6/7/8)");
-                output.println("# ================================================");
+                output.println(HORIZONTAL_LINE);
             output.println();
             System.out.println();
             System.out.println("@NUMERIC VALUES");
@@ -829,8 +890,7 @@ public class GenerateData implements UCD_Types {
         PrintWriter log = Utility.openPrintWriter(filename + "dX.txt");
         try {
             log.println("# Derived file showing when various code points were designated in Unicode");
-            log.println("# author: M. Davis");
-            log.println("# generated: " + new Date());
+            log.println("# generated: " + new Date() + ", MD");
             log.println("# Notes:");
             log.println("# - The term 'designated' means that a previously reserved code point was specified");
             log.println("#   to be a noncharacter or surrogate, or assigned as a character,");
@@ -842,22 +902,22 @@ public class GenerateData implements UCD_Types {
             log.println("#   were designated in version 2.0, but not specifically listed in the UCD");
             log.println("#   until versions 3.0 and 3.1 respectively.");
             
-            log.println("# ================================================");
+            log.println(HORIZONTAL_LINE);
             log.println();
             new DiffPropertyLister(null, "1.1.0", log).print();
-            log.println("# ================================================");
+            log.println(HORIZONTAL_LINE);
             log.println();
             new DiffPropertyLister("1.1.0", "2.0.0", log).print();
-            log.println("# ================================================");
+            log.println(HORIZONTAL_LINE);
             log.println();
             new DiffPropertyLister("2.0.0", "2.1.2", log).print();
-            log.println("# ================================================");
+            log.println(HORIZONTAL_LINE);
             log.println();
             new DiffPropertyLister("2.1.2", "3.0.0", log).print();
-            log.println("# ================================================");
+            log.println(HORIZONTAL_LINE);
             log.println();
             new DiffPropertyLister("3.0.0", "3.1.0", log).print();
-            log.println("# ================================================");
+            log.println(HORIZONTAL_LINE);
             log.println();
             new DiffPropertyLister("3.1.0", "3.2.0", log).print();
             /*

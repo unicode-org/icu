@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteHTMLCollation.java,v $ 
-* $Date: 2001/08/31 00:20:39 $ 
-* $Revision: 1.2 $
+* $Date: 2001/10/26 23:32:03 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -48,7 +48,7 @@ public class WriteHTMLCollation implements UCD_Types {
         checkFixes();
         
         System.out.println("Building UCA");
-        collator = new UCA(null);
+        collator = new UCA(null, "");
         
         System.out.println("Building UCD data (old)");
         //UInfo.init();

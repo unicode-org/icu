@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCharts.java,v $ 
-* $Date: 2001/10/25 20:35:41 $ 
-* $Revision: 1.2 $
+* $Date: 2001/10/26 23:32:03 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -24,6 +24,8 @@ public class WriteCharts implements UCD_Types {
     
     static UCD ucd;
     
+    static final byte UNSUPPORTED = 120;
+    
     static public void test(UCA uca) throws IOException {
   
         uca.setAlternate(UCA.NON_IGNORABLE);
@@ -33,6 +35,7 @@ public class WriteCharts implements UCD_Types {
         Normalizer nfc = new Normalizer(Normalizer.NFC);
           
         UCA.UCAContents cc = uca.getContents(UCA.FIXED_CE, null); // nfd instead of null if skipping decomps
+        cc.enableSamples();
           
         Set set = new TreeSet();
         
@@ -46,9 +49,9 @@ public class WriteCharts implements UCD_Types {
         
         Iterator it = set.iterator();
         
-        int oldScript = -999;
+        byte oldScript = -127;
         
-        int[] scriptCount = new int[LIMIT_SCRIPT];
+        int[] scriptCount = new int[128];
         
         int counter = 0;
         
@@ -66,13 +69,16 @@ public class WriteCharts implements UCD_Types {
         Utility.copyTextFile("help.html", true, "CollationCharts\\help.html");
         
         indexFile = Utility.openPrintWriter("CollationCharts\\index_list.html");
-
+        Utility.appendFile("index_header.html", true, indexFile);
+        
+        /*
         indexFile.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
         indexFile.println("<title>UCA Default Collation Table</title>");
         indexFile.println("<base target='main'>");
         indexFile.println("<style><!-- p { font-size: 90% } --></style>");
         indexFile.println("</head><body><h2 align='center'>UCA Default Collation Table</h2>");
         indexFile.println("<p align='center'><a href = 'help.html'>Help</a>");
+        */
         
         while (it.hasNext()) {
             Utility.dot(counter);
@@ -83,8 +89,6 @@ public class WriteCharts implements UCD_Types {
             
             int cp = UTF16.charAt(s,0);
             byte script = ucd.getScript(cp);
-            if (script == KATAKANA_SCRIPT) script = HIRAGANA_SCRIPT;
-            else if (script == INHERITED_SCRIPT) script = COMMON_SCRIPT;
             
             // get first non-zero primary
             int primary = sortKey.charAt(0);
@@ -92,23 +96,29 @@ public class WriteCharts implements UCD_Types {
             else if (primary == 0) script = -2;
             else if (primary < variable) script = -1;
             else if (primary < high) script = COMMON_SCRIPT;
+            else if (primary >= UCA.UNSUPPORTED_BASE) script = UNSUPPORTED;
             
+            if (script == KATAKANA_SCRIPT) script = HIRAGANA_SCRIPT;
+            else if ((script == INHERITED_SCRIPT || script == COMMON_SCRIPT) && oldScript >= 0) script = oldScript;
+
             if (script != oldScript 
-                    && (oldScript < COMMON_SCRIPT || script != COMMON_SCRIPT && script != INHERITED_SCRIPT)) {
+                    // && (script != COMMON_SCRIPT && script != INHERITED_SCRIPT)
+                    ) {
                 closeFile(output);
                 output = null;
+                oldScript = script;
             }
+            
             if (output == null) {
                 ++scriptCount[script+3];
                 if (scriptCount[script+3] > 1) {
                     System.out.println("\t\tFAIL: " + scriptCount[script+3] + ", " + 
-                        ucd.getScriptID_fromIndex(script) + ", " + ucd.getCodeAndName(s));
+                        getChunkName(script) + ", " + ucd.getCodeAndName(s));
                 }
                 output = openFile(scriptCount[script+3], script);
-                oldScript = script;
             }
             
-            boolean firstPrimaryEquals = sortKey.charAt(0) == lastSortKey.charAt(0);
+            boolean firstPrimaryEquals = primary == lastSortKey.charAt(0);
             
             int strength = uca.strengthDifference(sortKey, lastSortKey);
             if (strength < 0) strength = -strength;
@@ -125,41 +135,46 @@ public class WriteCharts implements UCD_Types {
             
             String breaker = "";
             if (columnCount > 10 || !firstPrimaryEquals) {
-                if (!firstPrimaryEquals) breaker = "</tr><tr>";
+                if (!firstPrimaryEquals || script == UNSUPPORTED) breaker = "</tr><tr>";
                 else breaker = "</tr><tr><td></td>"; // indent 1 cell
                 columnCount = 0;
             }
             
             String classname = primaryCount > 1 ? XCLASSNAME[strength] : CLASSNAME[strength];
             
-            output.println(breaker + classname + nfc.normalize(s) 
-                + "<br><tt>" + Utility.hex(s) 
+            output.println(breaker + classname 
+                + " title='" + UCA.toString(sortKey) + "'>"
+                + nfc.normalize(s) 
+                + "<br><tt>"
+                + Utility.hex(s)
                 //+ "<br>" + script
-                //+ "<br>" + UCA.toString(sortKey) 
                 + "</tt></td>");
             ++columnCount;
         }
         
         closeFile(output);
-        indexFile.println("</body></html>");
+        indexFile.println("<hr><p>Last Modified: " + new Date());
+        indexFile.println("<br>UCA Version: " + uca.getDataVersion());
+        indexFile.println("<br>UCD Version: " + ucd.getVersion());
+        indexFile.println("</p></body></html>");
         indexFile.close();
     }
     
     static final String[] CLASSNAME = {
-        "<td class='q'>", 
-        "<td class='q'>", 
-        "<td class='q'>", 
-        "<td class='t'>", 
-        "<td class='s'>", 
-        "<td class='p'>"};
+        "<td class='q'", 
+        "<td class='q'", 
+        "<td class='q'", 
+        "<td class='t'", 
+        "<td class='s'", 
+        "<td class='p'"};
         
     static final String[] XCLASSNAME = {
-        "<td class='eq'>", 
-        "<td class='eq'>", 
-        "<td class='eq'>", 
-        "<td class='et'>", 
-        "<td class='es'>", 
-        "<td class='ep'>"};
+        "<td class='eq'", 
+        "<td class='eq'", 
+        "<td class='eq'", 
+        "<td class='et'", 
+        "<td class='es'", 
+        "<td class='ep'"};
         
 
     static PrintWriter indexFile;
@@ -188,6 +203,7 @@ public class WriteCharts implements UCD_Types {
         else if (script == -2) return "IGNORABLE";
         else if (script == -1) return "VARIABLE";
         else if (script == HIRAGANA_SCRIPT) return "KATAKANA-HIRAGANA";
+        else if (script == UNSUPPORTED) return "UNSUPPORTED";
         else return ucd.getScriptID_fromIndex(script);
     }
 

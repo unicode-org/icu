@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2001/10/25 20:35:41 $ 
-* $Revision: 1.5 $
+* $Date: 2001/10/26 23:32:03 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -51,7 +51,7 @@ public class WriteCollationData implements UCD_Types {
     public static void main(String args[]) throws Exception {
         
         System.out.println("Building UCA");
-        collator = new UCA(null);
+        collator = new UCA(null, "");
         
         System.out.println("Building UCD data");
         ucd = UCD.make("");

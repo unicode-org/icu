@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA.java,v $ 
-* $Date: 2001/10/25 20:35:41 $ 
-* $Revision: 1.5 $
+* $Date: 2001/10/26 23:32:03 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -23,6 +23,7 @@ import java.io.IOException;
 import com.ibm.text.UCD.Normalizer;
 import com.ibm.text.UCD.UCD;
 import com.ibm.text.utility.*;
+import com.ibm.text.UTF16;
 
 //import com.ibm.text.CollationData.*;
 
@@ -116,7 +117,7 @@ final public class UCA implements Comparator {
      * If the source is null, uses the normal Unicode data files, which
      * need to be in BASE_DIR.
      */
-    public UCA(BufferedReader source) throws java.io.IOException {
+    public UCA(BufferedReader source, String unicodeVersion) throws java.io.IOException {
         fullData = source == null;
 
         // clear some tables
@@ -125,8 +126,10 @@ final public class UCA implements Comparator {
         }
         // load the normalizer
         if (toD == null) {
-            toD = new Normalizer(Normalizer.NFD);
+            toD = new Normalizer(Normalizer.NFD, unicodeVersion);
         }
+        
+        ucdVersion = UCD.make(unicodeVersion).getVersion();
         
         // either get the full sources, or just a demo set
         if (fullData) {
@@ -369,10 +372,17 @@ final public class UCA implements Comparator {
     }
 
     /**
-     * Retrieves version
+     * Retrieves versions
      */
     public String getDataVersion() {
         return dataVersion;
+    }
+    
+    /**
+     * Retrieves versions
+     */
+    public String getUCDVersion() {
+        return ucdVersion;
     }
     
     public static String codePointOrder(String s) {
@@ -556,7 +566,7 @@ final public class UCA implements Comparator {
     public static int makeKey(int primary, int secondary, int tertiary) {
         return (primary << 16) | (secondary << 7) | tertiary;
     }
-
+    
 // =============================================================
 // Utility methods
 // =============================================================
@@ -571,11 +581,11 @@ final public class UCA implements Comparator {
         result.append("[");
         for (int i = 0; i < sortKey.length(); ++i) {
             char ch = sortKey.charAt(i);
+            if (needSep) result.append(" ");
             if (ch == 0) {
                 result.append("|");
-                needSep = false;
+                needSep = true;
             } else {
-                if (needSep) result.append(" ");
                 result.append(hex(ch));
                 needSep = true;
             }
@@ -700,6 +710,11 @@ final public class UCA implements Comparator {
     private String dataVersion = "?";
 
     /**
+     * Records the dataversion
+     */
+    private String ucdVersion = "?";
+
+    /**
      * Turns backwards (e.g. for French) on globally for all secondaries
      */
     private boolean useBackwards = false;
@@ -783,8 +798,8 @@ final public class UCA implements Comparator {
      * There are at least 34 values, so that we can use a range for surrogates
      * However, we do add to the first weight if we have surrogate pairs!
      */
-    static final int UNSUPPORTED_P = 0xFFC2;
-    static final int UNSUPPORTED = makeKey(UNSUPPORTED_P, NEUTRAL_SECONDARY, NEUTRAL_TERTIARY);
+    public static final int UNSUPPORTED_BASE = 0xFFC2;
+    static final int UNSUPPORTED = makeKey(UNSUPPORTED_BASE, NEUTRAL_SECONDARY, NEUTRAL_TERTIARY);
     
     // was 0xFFC20101;
     
@@ -977,7 +992,7 @@ final public class UCA implements Comparator {
                     //return UNSUPPORTED + (bigChar & 0xFFFF0000);    // top bits added
             expandingStack.push(makeKey((bigChar & 0x7FFF) | 0x8000, 0, 0)); // primary = bottom 15 bits plus turn bottom bit on.
             // secondary and tertiary are both zero
-            return makeKey(UNSUPPORTED_P + (bigChar >> 15), NEUTRAL_SECONDARY, NEUTRAL_TERTIARY); // top 34 values plus UNSUPPORTED
+            return makeKey(UNSUPPORTED_BASE + (bigChar >>> 15), NEUTRAL_SECONDARY, NEUTRAL_TERTIARY); // top 34 values plus UNSUPPORTED
             /*
             expandingStack.push(((bigChar & 0x7FFF) << 16) | 0x10000000); // primary = bottom 15 bits plus turn bottom bit on.
             // secondary and tertiary are both zero
@@ -1148,6 +1163,11 @@ final public class UCA implements Comparator {
         Normalizer skipDecomps = new Normalizer(Normalizer.NFD);
         Iterator enum = null;
         byte ceLimit;
+        int currentRange = Integer.MAX_VALUE; // set to ZERO to enable
+        int startOfRange = SAMPLE_RANGES[0][0];
+        int endOfRange = startOfRange;
+        int itemInRange = startOfRange;
+        int skip = 1;
         
         /**
          * use FIXED_CE as the limit
@@ -1155,6 +1175,13 @@ final public class UCA implements Comparator {
         UCAContents(byte ceLimit, Normalizer skipDecomps) {
             this.ceLimit = ceLimit;
             this.skipDecomps = skipDecomps;
+        }
+        
+        /**
+         * use FIXED_CE as the limit
+         */
+        public void enableSamples() {
+            currentRange = 0;
         }
         
         /**
@@ -1176,12 +1203,35 @@ final public class UCA implements Comparator {
             if (enum == null) enum = multiTable.keySet().iterator();
             if (enum.hasNext()) {
                 result = (String)enum.next();
+                return result;
+            }
+            
+            // extra samples
+            if (currentRange < SAMPLE_RANGES.length) {
+                try {
+                    result = UTF16.valueOf(itemInRange);
+                } catch (RuntimeException e) {
+                    System.out.println(Utility.hex(itemInRange));
+                    throw e;
+                }
+                ++itemInRange;
+                if (itemInRange > endOfRange) {
+                    ++currentRange;
+                    if (currentRange < SAMPLE_RANGES.length) {
+                        startOfRange = itemInRange = SAMPLE_RANGES[currentRange][0];
+                        endOfRange = SAMPLE_RANGES[currentRange].length > 1
+                            ? SAMPLE_RANGES[currentRange][1]
+                            : startOfRange;
+                        skip = ((endOfRange - startOfRange) / 513);
+                    }
+                } else if (itemInRange > startOfRange + 9 && itemInRange < endOfRange - 9 - skip) {
+                    itemInRange += skip;
+                }
             }
             
             return result;
         }
         
-       
         /**
          * returns a string and its ces
          */
@@ -1208,6 +1258,30 @@ final public class UCA implements Comparator {
         }
     }
     
+    static final int[][] SAMPLE_RANGES = {
+                {0x10000},
+                {0x10FFFF},
+                {0x0220},
+                {0xFFF0}, 
+                {0xD800},
+                {0xDFFF},
+                {0xFFFE},
+                {0xFFFF},
+                {0x10FFFE},
+                {0x10FFFF},
+                {0x3400, 0x4DB5},
+                {0x4E00, 0x9FA5},
+                {0xAC00, 0xD7A3},
+                {0xA000, 0xA48C},
+                {0xE000, 0xF8FF},
+                {0x20000, 0x2A6D6},
+                {0xE0000, 0xE00FF},
+                {0xF0000, 0xF00FD},
+                {0xFFF00, 0xFFFFD},
+                {0x100000, 0x1000FD},
+                {0x10FF00, 0x10FFFD},
+    };
+                
     /**
      * Adds the collation elements from a file (or other stream) in the UCA format.
      * Values will override any previous mappings.
