@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UnifiedBinaryProperty.java,v $
-* $Date: 2002/10/05 01:28:57 $
-* $Revision: 1.10 $
+* $Date: 2003/02/25 23:38:22 $
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -122,7 +122,11 @@ public final class UnifiedBinaryProperty extends UnicodeProperty {
         propValue = propMask & 0xFF;
         
         //System.out.println("A: " + getValueType());
-        if (majorProp <= (JOINING_GROUP>>8) || majorProp == SCRIPT>>8) setValueType(FLATTENED_BINARY);
+        if (majorProp <= (JOINING_GROUP>>8) 
+                || majorProp == (SCRIPT>>8) 
+                || majorProp==(HANGUL_SYLLABLE_TYPE>>8)) {
+            setValueType(FLATTENED_BINARY);
+        }
         //System.out.println("B: " + getValueType());
         
         header = UCD_Names.UNIFIED_PROPERTY_HEADERS[majorProp];
@@ -217,6 +221,8 @@ public final class UnifiedBinaryProperty extends UnicodeProperty {
             return true;
           case AGE>>8: if (propValue >= LIMIT_AGE) break;
             return true;
+          case HANGUL_SYLLABLE_TYPE>>8: if (propValue >= HANGUL_SYLLABLE_TYPE_LIMIT) break;
+            return true;
             /*
           case DERIVED>>8:
             UnicodeProperty up = DerivedProperty.make(propValue, ucd);
@@ -226,6 +232,28 @@ public final class UnifiedBinaryProperty extends UnicodeProperty {
         }
         return false;
     }
+    
+    public boolean isDefaultValue() {
+        switch ((majorProp<<8) | propValue) {
+            //case CATEGORY | Cn:
+            //case COMBINING_CLASS | 0:
+            //case BIDI_CLASS | BIDI_L:
+            case DECOMPOSITION_TYPE | NONE:
+            case NUMERIC_TYPE | NUMERIC_NONE:
+            // case EAST_ASIAN_WIDTH | EAN:
+            // case LINE_BREAK | LB_XX:
+            case JOINING_TYPE | JT_U:
+            case JOINING_GROUP | NO_SHAPING:
+            case BINARY_PROPERTIES | Non_break:
+            case BINARY_PROPERTIES | CaseFoldTurkishI:
+            case SCRIPT | COMMON_SCRIPT:
+            case HANGUL_SYLLABLE_TYPE | NA:
+                return true;
+        }
+        return false;
+    }
+      
+    
     
     public boolean hasValue(int cp) {
         try {
@@ -242,6 +270,8 @@ public final class UnifiedBinaryProperty extends UnicodeProperty {
             case BINARY_PROPERTIES>>8: return ucd.getBinaryProperty(cp, propValue);
             case SCRIPT>>8: return ucd.getScript(cp) == propValue;
             case AGE>>8: return ucd.getAge(cp) == propValue;
+            case HANGUL_SYLLABLE_TYPE>>8: return ucd.getHangulSyllableType(cp) == propValue;
+            // return true;
                 /*
             case DERIVED>>8:
                 UnicodeProperty up = DerivedProperty.make(propValue, ucd);
@@ -307,6 +337,7 @@ public final class UnifiedBinaryProperty extends UnicodeProperty {
             case BINARY_PROPERTIES>>8: return ucd.getBinaryPropertiesID_fromIndex((byte)propValue, style);
             case SCRIPT>>8: return ucd.getScriptID_fromIndex((byte)propValue, style);
             case AGE>>8: return ucd.getAgeID_fromIndex((byte)propValue);
+            case HANGUL_SYLLABLE_TYPE>>8: return ucd.getHangulSyllableTypeID_fromIndex((byte)propValue, style);
                 /*
             case DERIVED>>8:
                 UnicodeProperty up = DerivedProperty.make(propValue, ucd);
@@ -337,6 +368,7 @@ public final class UnifiedBinaryProperty extends UnicodeProperty {
             case BINARY_PROPERTIES>>8: return LONG;
             case SCRIPT>>8: return LONG;
             case AGE>>8: return LONG;
+            case HANGUL_SYLLABLE_TYPE>>8: return SHORT;
             }
         } catch (RuntimeException e) {
             throw new ChainException("Illegal property Number {0}, {1}", new Object[]{

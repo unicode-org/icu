@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateCaseFolding.java,v $
-* $Date: 2002/10/05 01:28:58 $
-* $Revision: 1.12 $
+* $Date: 2003/02/25 23:38:23 $
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */
@@ -45,10 +45,19 @@ public class GenerateCaseFolding implements UCD_Types {
         System.out.println("Writing Log: " + "CaseFoldingLog" + GenerateData.getFileSuffix(true));
         
         System.out.println("Making Full Data");
-        Map fullData = getCaseFolding(true, NF_CLOSURE);
+        Map fullData = getCaseFolding(true, NF_CLOSURE, "");
         Utility.fixDot();
+
         System.out.println("Making Simple Data");
-        Map simpleData = getCaseFolding(false, NF_CLOSURE);
+        Map simpleData = getCaseFolding(false, NF_CLOSURE, "");
+        // write the data
+
+        System.out.println("Making Turkish Full Data");
+        Map fullDataTurkish = getCaseFolding(true, NF_CLOSURE, "tr");
+        Utility.fixDot();
+
+        System.out.println("Making Simple Data");
+        Map simpleDataTurkish = getCaseFolding(false, NF_CLOSURE, "tr");
         // write the data
 
         Utility.fixDot();
@@ -58,7 +67,8 @@ public class GenerateCaseFolding implements UCD_Types {
         String directory = "DerivedData/";
         String newFile = directory + filename + GenerateData.getFileSuffix(true);
         PrintWriter out = Utility.openPrintWriter(newFile, Utility.LATIN1_UNIX);
-        String mostRecent = GenerateData.generateBat(directory, filename, GenerateData.getFileSuffix(true));
+        String[] batName = {""};
+        String mostRecent = GenerateData.generateBat(directory, filename, GenerateData.getFileSuffix(true), batName);
         
         out.println("# CaseFolding" + GenerateData.getFileSuffix(false));
         out.println(GenerateData.generateDateLine());
@@ -81,7 +91,10 @@ public class GenerateCaseFolding implements UCD_Types {
             
             String rFull = (String)fullData.get(UTF32.valueOf32(ch));
             String rSimple = (String)simpleData.get(UTF32.valueOf32(ch));
-            if (rFull == null && rSimple == null) continue;
+            String rFullTurkish = (String)fullDataTurkish.get(UTF32.valueOf32(ch));
+            String rSimpleTurkish = (String)simpleDataTurkish.get(UTF32.valueOf32(ch));
+            if (rFull == null && rSimple == null && rFullTurkish == null && rSimpleTurkish == null) continue;
+            
             if (rFull != null && rFull.equals(rSimple) 
               || (PICK_SHORT && UTF16.countCodePoint(rFull) == 1)) {
                 String type = "C";
@@ -105,10 +118,16 @@ public class GenerateCaseFolding implements UCD_Types {
                     drawLine(out, ch, "S", rSimple);
                 }
             }
+            if (rFullTurkish != null && !rFullTurkish.equals(rFull)) {
+                drawLine(out, ch, "T", rFullTurkish);
+            }
+            if (rSimpleTurkish != null && !rSimpleTurkish.equals(rSimple)) {
+                drawLine(out, ch, "t", rSimpleTurkish);
+            }
         }
         out.close();
         log.close();
-        Utility.renameIdentical(mostRecent, Utility.getOutputName(newFile));
+        Utility.renameIdentical(mostRecent, Utility.getOutputName(newFile), batName[0]);
     }
     
 /* Goal is following (with no entries for 0131 or 0069)
@@ -146,7 +165,7 @@ public class GenerateCaseFolding implements UCD_Types {
     static int probeCh = 0x01f0;
     static String shower = UTF16.valueOf(probeCh);
 
-    static Map getCaseFolding(boolean full, boolean nfClose) throws java.io.IOException {
+    static Map getCaseFolding(boolean full, boolean nfClose, String condition) throws java.io.IOException {
         Map data = new TreeMap();
         Map repChar = new TreeMap();
         //String option = "";
@@ -157,7 +176,7 @@ public class GenerateCaseFolding implements UCD_Types {
             Utility.dot(ch);
             //if ((ch & 0x3FF) == 0) System.out.println(Utility.hex(ch));
             if (!Default.ucd.isRepresented(ch)) continue;
-            getClosure(ch, data, full, nfClose);
+            getClosure(ch, data, full, nfClose, condition);
         }
 
         // get the representative characters
@@ -180,7 +199,7 @@ public class GenerateCaseFolding implements UCD_Types {
             Iterator it2 = set.iterator();
             while (it2.hasNext()) {
                 String s2 = (String)it2.next();
-                int s2Good = goodness(s2, full);
+                int s2Good = goodness(s2, full, condition);
                 if (s2Good > repGood) {
                     rep = s2;
                     repGood = s2Good;
@@ -206,12 +225,20 @@ public class GenerateCaseFolding implements UCD_Types {
                 log.println(" Set:\t" + toString(set,true, true));
             }
             
+            log.println();
+            log.println();
+            log.println(rep + "\t#" + Default.ucd.getName(rep));
+ 
         // Add it for all the elements of the set
         
             it2 = set.iterator();
             while (it2.hasNext()) {
                 String s2 = (String)it2.next();
-                if (UTF16.countCodePoint(s2) == 1 && !s2.equals(rep)) {
+                if (s2.equals(rep)) continue;
+                
+                log.println(s2 + "\t#" + Default.ucd.getName(s2));
+                
+                if (UTF16.countCodePoint(s2) == 1) {
                     repChar.put(UTF32.getCodePointSubstring(s2,0), rep);
                     charsUsed.set(UTF16.charAt(s2, 0));
                 }
@@ -225,14 +252,14 @@ public class GenerateCaseFolding implements UCD_Types {
     static final int NFC_FORMAT = 64;
     static final int ISLOWER = 128;
 
-    static int goodness(String s, boolean full) {
+    static int goodness(String s, boolean full, String condition) {
         if (s == null) return 0;
         int result = 32-s.length();
         if (!PICK_SHORT) {
             result = s.length();
         }
         if (!full) result <<= 8;
-        String low = lower(upper(s, full), full);
+        String low = lower(upper(s, full, condition), full, condition);
         if (s.equals(low)) result |= ISLOWER;
         else if (PICK_SHORT && Default.nfd.normalize(s).equals(Default.nfd.normalize(low))) result |= ISLOWER;
         
@@ -295,11 +322,11 @@ public class GenerateCaseFolding implements UCD_Types {
             }
             */
 
-    static void getClosure(int ch, Map data, boolean full, boolean nfClose) {
+    static void getClosure(int ch, Map data, boolean full, boolean nfClose, String condition) {
         String charStr = UTF32.valueOf32(ch);
-        String lowerStr = lower(charStr, full);
-        String titleStr = title(charStr, full);
-        String upperStr = upper(charStr, full);
+        String lowerStr = lower(charStr, full, condition);
+        String titleStr = title(charStr, full, condition);
+        String upperStr = upper(charStr, full, condition);
         if (charStr.equals(lowerStr) && charStr.equals(upperStr) && charStr.equals(titleStr)) return;
         if (DEBUG) System.err.println("Closure for " + Utility.hex(ch));
 
@@ -327,47 +354,47 @@ public class GenerateCaseFolding implements UCD_Types {
                     if (add(set, Default.nfkd.normalize(s), data)) continue main;
                     if (add(set, Default.nfkc.normalize(s), data)) continue main;
                 }
-                if (add(set, lower(s, full), data)) continue main;
-                if (add(set, title(s, full), data)) continue main;
-                if (add(set, upper(s, full), data)) continue main;
+                if (add(set, lower(s, full, condition), data)) continue main;
+                if (add(set, title(s, full, condition), data)) continue main;
+                if (add(set, upper(s, full, condition), data)) continue main;
             }
             break;
         }
     }
 
-    static String lower(String s, boolean full) {
-        String result = lower2(s,full);
+    static String lower(String s, boolean full, String condition) {
+        String result = lower2(s,full, condition);
         return result.replace('\u03C2', '\u03C3'); // HACK for lower
     }
 
     // These functions are no longer necessary, since Default.ucd is parameterized,
     // but it's not worth changing
 
-    static String lower2(String s, boolean full) {
+    static String lower2(String s, boolean full, String condition) {
         /*if (!full) {
             if (s.length() != 1) return s;
             return Default.ucd.getCase(UTF32.char32At(s,0), SIMPLE, LOWER);
         }
         */
-        return Default.ucd.getCase(s, full ? FULL : SIMPLE, LOWER);
+        return Default.ucd.getCase(s, full ? FULL : SIMPLE, LOWER, condition);
     }
 
-    static String upper(String s, boolean full) {
+    static String upper(String s, boolean full, String condition) {
         /* if (!full) {
             if (s.length() != 1) return s;
             return Default.ucd.getCase(UTF32.char32At(s,0), FULL, UPPER);
         }
         */
-        return Default.ucd.getCase(s, full ? FULL : SIMPLE, UPPER);
+        return Default.ucd.getCase(s, full ? FULL : SIMPLE, UPPER, condition);
     }
 
-    static String title(String s, boolean full) {
+    static String title(String s, boolean full, String condition) {
         /*if (!full) {
             if (s.length() != 1) return s;
             return Default.ucd.getCase(UTF32.char32At(s,0), FULL, TITLE);
         }
         */
-        return Default.ucd.getCase(s, full ? FULL : SIMPLE, TITLE);
+        return Default.ucd.getCase(s, full ? FULL : SIMPLE, TITLE, condition);
     }
 
     static boolean add(Set set, String s, Map data) {
@@ -557,7 +584,8 @@ public class GenerateCaseFolding implements UCD_Types {
         System.out.println("Writing");
         String newFile = "DerivedData/SpecialCasing" + suffix2 + GenerateData.getFileSuffix(true);
         PrintWriter out = Utility.openPrintWriter(newFile, Utility.LATIN1_UNIX);
-        String mostRecent = GenerateData.generateBat("DerivedData/", "SpecialCasing", suffix2 + GenerateData.getFileSuffix(true));
+        String[] batName = {""};
+        String mostRecent = GenerateData.generateBat("DerivedData/", "SpecialCasing", suffix2 + GenerateData.getFileSuffix(true), batName);
         out.println("# SpecialCasing" + GenerateData.getFileSuffix(false));
         out.println(GenerateData.generateDateLine());
         out.println("#");
@@ -594,6 +622,6 @@ public class GenerateCaseFolding implements UCD_Types {
         }
         Utility.appendFile("SpecialCasingFooter.txt", Utility.UTF8, out);
         out.close();
-        Utility.renameIdentical(mostRecent, Utility.getOutputName(newFile));
+        Utility.renameIdentical(mostRecent, Utility.getOutputName(newFile), batName[0]);
     }
 }

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Names.java,v $
-* $Date: 2002/10/05 01:28:58 $
-* $Revision: 1.15 $
+* $Date: 2003/02/25 23:38:22 $
+* $Revision: 1.16 $
 *
 *******************************************************************************
 */
@@ -53,6 +53,7 @@ final class UCD_Names implements UCD_Types {
         "BidiMirrored (listing UnicodeData.txt, field 9: see UnicodeData.html)",
         "Script",
         "Age (from a comparison of UCD versions 1.1 [minus Hangul], 2.0, 2.1, 3.0, 3.1)",
+        "Hangul Syllable Type\r\n# All codepoints not explicitly listed here have the value NA",
         "Derived"
     };
 
@@ -69,6 +70,7 @@ final class UCD_Names implements UCD_Types {
         "",
         "Script",
         "Age",
+        "Hangul_Syllable_Type",
         ""
     };
 
@@ -85,6 +87,7 @@ final class UCD_Names implements UCD_Types {
         "",
         "sc",
         "ag",
+        "hst",
         "",
     };
 
@@ -121,6 +124,7 @@ final class UCD_Names implements UCD_Types {
         "Deprecated",
         "Soft_Dotted",
         "Logical_Order_Exception",
+        "ID_Start_Exceptions",
     };
 
     static final String[] SHORT_BP = {
@@ -155,6 +159,7 @@ final class UCD_Names implements UCD_Types {
         "Dep",
         "SD",
         "LOE",
+        "IDSX",
     };
 
     /*
@@ -273,6 +278,14 @@ final class UCD_Names implements UCD_Types {
     "HANUNOO",
     "BUHID",
     "TAGBANWA",
+    "LIMBU",
+    "TAI_LE",
+    "LINEAR_B",
+    "UGARITIC",
+    "SHAVIAN",
+    "OSMANYA",
+    "CYPRIOT", 
+    
   };
 
 	public static final String[] ABB_SCRIPT = {
@@ -322,6 +335,13 @@ final class UCD_Names implements UCD_Types {
     "Hano",
     "Buhd",
     "Tagb",
+    "LIMBU",
+    "TAI_LE",
+    "LINEAR_B",
+    "UGARITIC",
+    "SHAVIAN",
+    "OSMANYA",
+    "CYPRIOT", 
   };
 
 
@@ -330,7 +350,8 @@ final class UCD_Names implements UCD_Types {
     "UNSPECIFIED",
     "1.1",
     "2.0", "2.1",
-    "3.0", "3.1"
+    "3.0", "3.1", "3.2",
+    "4.0"
   };
 
 
@@ -573,6 +594,24 @@ final class UCD_Names implements UCD_Types {
 
     public static byte ON = Utility.lookup("ON", BC, true);
 
+    public static String[] HANGUL_SYLLABLE_TYPE = {
+        "NA",
+        "L",
+        "V",
+        "T",
+        "LV",
+        "LVT",
+    };
+
+    public static String[] LONG_HANGUL_SYLLABLE_TYPE = {
+        "Not_Applicable",
+        "Leading_Jamo",
+        "Vowel_Jamo",
+        "Trailing_Jamo",
+        "LV_Syllable",
+        "LVT_Syllable",
+    };
+
     public static String[] JOINING_TYPE = {
         "C",
         "D",
@@ -643,6 +682,9 @@ final class UCD_Names implements UCD_Types {
         "YUDH",
         "YUDH_HE",
         "ZAIN",
+        "ZHAIN",
+        "KHAPH",
+        "FE",
     };
 
     public static String[] OLD_JOINING_GROUP = {
@@ -697,6 +739,9 @@ final class UCD_Names implements UCD_Types {
         "YUDH",
         "YUDH_HE",
         "ZAIN",
+        "ZHAIN",
+        "KHAPH",
+        "FE",
     };
 
 

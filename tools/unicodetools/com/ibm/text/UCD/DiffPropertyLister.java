@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DiffPropertyLister.java,v $
-* $Date: 2002/06/22 01:21:09 $
-* $Revision: 1.7 $
+* $Date: 2003/02/25 23:38:23 $
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -31,6 +31,7 @@ class DiffPropertyLister extends PropertyLister {
         }
         breakByCategory = property != NOPROPERTY;
         useKenName = false;
+        usePropertyComment = false;
     }
     
     public DiffPropertyLister(String oldUCDName, String newUCDName, PrintWriter output) {
@@ -61,11 +62,19 @@ class DiffPropertyLister extends PropertyLister {
 	
     public String optionalComment(int cp) {
     	String normal = super.optionalComment(cp);
-        return oldUCD.getModCatID_fromIndex(
-        	oldUCD.getModCat(cp, breakByCategory ? CASED_LETTER_MASK : 0))
-        	+ "/" + normal;
+    	if (oldUCD != null && breakByCategory) {
+    	    byte modCat = oldUCD.getModCat(cp, breakByCategory ? CASED_LETTER_MASK : 0);
+            normal = oldUCD.getModCatID_fromIndex(modCat) + "/" + normal;
+        }
+        return normal;
     }
 
+	
+    byte getModCat(int cp) {
+    	byte result = ucdData.getModCat(cp, breakByCategory ? CASED_LETTER_MASK : -1);
+    	//System.out.println(breakByCategory + ", " + ucdData.getModCatID_fromIndex(result));
+    	return result;
+    }
 	
 
     public byte status(int cp) {
@@ -73,8 +82,7 @@ class DiffPropertyLister extends PropertyLister {
         	if (ucdData.isAllocated(cp) && (oldUCD == null || !oldUCD.isAllocated(cp))) {
     	        set.add(cp);
         	    return INCLUDE;
-        	}
-        	else {
+        	} else {
         	    return EXCLUDE;
         	}
     	}

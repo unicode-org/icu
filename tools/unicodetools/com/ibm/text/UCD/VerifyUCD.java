@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/VerifyUCD.java,v $
-* $Date: 2002/08/09 23:56:24 $
-* $Revision: 1.19 $
+* $Date: 2003/02/25 23:38:22 $
+* $Revision: 1.20 $
 *
 *******************************************************************************
 */
@@ -1806,8 +1806,11 @@ E0020-E007F; [TAGGING CHARACTERS]
 
                 String x_cp = 'x' + UTF32.valueOf32(cp);
                 String nfx_x_cp = normalize(x_cp, j);
-                plain = Default.ucd.isIdentifier(x_cp, true);
-                norm = Default.ucd.isIdentifier(nfx_x_cp, true);
+                if (true) {
+                    throw new RuntimeException("Fix plain & norm, 4 instances!!");
+                }
+                // plain = Default.ucd.isIdentifier(x_cp, true);
+                //norm = Default.ucd.isIdentifier(nfx_x_cp, true);
                 if (plain & !norm) {
                     Utility.fixDot();
                     System.out.println("*Not Identifier: " + Default.ucd.getCodeAndName(cp));
@@ -1822,8 +1825,8 @@ E0020-E007F; [TAGGING CHARACTERS]
                 }
 
                 String nfx_cp = normalize(UTF32.valueOf32(cp), j);
-                plain = Default.ucd.isIdentifierStart(cp, true);
-                norm = Default.ucd.isIdentifier(nfx_cp, true);
+                // plain = Default.ucd.isIdentifierStart(cp, true);
+                // norm = Default.ucd.isIdentifier(nfx_cp, true);
                 if (plain & !norm) {
                     Utility.fixDot();
                     System.out.println(" Changes Category: " + Default.ucd.getCodeAndName(cp));

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Types.java,v $
-* $Date: 2002/10/05 01:28:58 $
-* $Revision: 1.16 $
+* $Date: 2003/02/25 23:38:22 $
+* $Revision: 1.17 $
 *
 *******************************************************************************
 */
@@ -15,7 +15,7 @@ package com.ibm.text.UCD;
 
 public interface UCD_Types {
     
-    public static final int dVersion = 2; // change to fix the generated file D version. If less than zero, no "d"
+    public static final int dVersion = 10; // change to fix the generated file D version. If less than zero, no "d"
     
     public static final String BASE_DIR = "C:\\DATA\\";
     public static final String UCD_DIR = BASE_DIR + "UCD\\";
@@ -41,7 +41,7 @@ public interface UCD_Types {
         NOT_DERIVED = 1, 
         DERIVED_CORE = 2, 
         DERIVED_NORMALIZATION = 4, 
-        DERIVED_ALL = 6, 
+        DERIVED_ALL = 0x6, 
         ALL = (byte)-1;
         
      static final byte
@@ -86,9 +86,10 @@ public interface UCD_Types {
         BINARY_PROPERTIES = 0x900,
         SCRIPT = 0xA00,
         AGE = 0xB00,
-        DERIVED = 0xC00,
-        NEXT_ENUM = 0x100,
-        LIMIT_ENUM = DERIVED + 0x100;
+        HANGUL_SYLLABLE_TYPE = 0xC00,
+        DERIVED = 0xD00,
+        LIMIT_ENUM = DERIVED + 0x100,
+        NEXT_ENUM = 0x100;
 
     public static final int LIMIT_COMBINING_CLASS = 256;
 
@@ -207,7 +208,8 @@ public interface UCD_Types {
         Deprecated = 28,
         Soft_Dotted = 29,
         Logical_Order_Exception = 30,
-	    LIMIT_BINARY_PROPERTIES = 31;
+        ID_Start_Exceptions = 31,
+	    LIMIT_BINARY_PROPERTIES = 32;
 
 	/*
     static final int
@@ -309,6 +311,9 @@ public interface UCD_Types {
     // numericType
     static final byte NUMERIC_NONE = 0, NUMERIC = 1, DIGIT = 2, DECIMAL = 3,
         LIMIT_NUMERIC_TYPE = 4;
+        
+    static final byte NA = 0, L = 1, V = 2, T = 3, LV = 4, LVT = 5,
+        HANGUL_SYLLABLE_TYPE_LIMIT = 6;
 
     public static final byte // SCRIPT CODE
         COMMON_SCRIPT = 0,
@@ -357,7 +362,14 @@ public interface UCD_Types {
         HANUNOO_SCRIPT = 43,
         BUHID_SCRIPT = 44,
         TAGBANWA_SCRIPT = 45,
-        LIMIT_SCRIPT = 46;
+        LIMBU = 46,
+        TAI_LE = 47,
+        LINEAR_B = 48,
+        UGARITIC = 49,
+        SHAVIAN = 50,
+        OSMANYA = 51,
+        CYPRIOT = 52,
+        LIMIT_SCRIPT = 53;
 
   static final int
     UNKNOWN = 0,
@@ -366,7 +378,9 @@ public interface UCD_Types {
     AGE21 = 3,
     AGE30 = 4,
     AGE31 = 5,
-    LIMIT_AGE = 6;
+    AGE32 = 6,
+    AGE40 = 7,
+    LIMIT_AGE = 8;
 
 
 
@@ -431,7 +445,11 @@ public static byte
     YUDH = 48,
     YUDH_HE = 49,
     ZAIN = 50,
-    LIMIT_JOINING_GROUP = 51;
+    ZHAIN = 51,
+    KHAPH = 52,
+    FE = 53,
+    
+    LIMIT_JOINING_GROUP = 54;
     
     static final byte NFD = 0, NFC = 1, NFKD = 2, NFKC = 3;    
     public static final int
@@ -500,7 +518,9 @@ public static byte
         NFC_Skippable = 42,
         NFKD_Skippable = 43,
         NFKC_Skippable = 44,
+        
+        Case_Sensitive = 45,
 
-        DERIVED_PROPERTY_LIMIT = 41;
+        DERIVED_PROPERTY_LIMIT = 46;
     
 }

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/PropertyLister.java,v $
-* $Date: 2002/05/29 02:01:00 $
-* $Revision: 1.9 $
+* $Date: 2003/02/25 23:38:22 $
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -57,7 +57,7 @@ abstract public class PropertyLister implements UCD_Types {
     }
 
     public String optionalComment(int cp) {
-        if (!usePropertyComment || !breakByCategory) return "";
+        if (!usePropertyComment) return "";
         return ucdData.getModCatID_fromIndex(getModCat(cp));
     }
 
@@ -143,7 +143,8 @@ abstract public class PropertyLister implements UCD_Types {
     }
     
     byte getModCat(int cp) {
-    	return ucdData.getModCat(cp, breakByCategory ? CASED_LETTER_MASK : 0);
+    	byte result = ucdData.getModCat(cp, breakByCategory ? CASED_LETTER_MASK : 0);
+    	return result;
     }
 
 

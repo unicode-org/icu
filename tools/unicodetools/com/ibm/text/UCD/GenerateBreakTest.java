@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateBreakTest.java,v $
-* $Date: 2002/08/09 23:56:24 $
-* $Revision: 1.2 $
+* $Date: 2003/02/25 23:38:23 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -83,14 +83,14 @@ abstract public class GenerateBreakTest implements UCD_Types {
         Default.setUCD();
     }
         
-    static UnicodeSet extraAlpha = new UnicodeSet("[\\u02B9-\\u02BA\\u02C2-\\u02CF\\u02D2-\\u02DF\\u02E5\\u02ED\\u05F3]");
+    static UnicodeSet extraAlpha = new UnicodeSet("[\\u02B9-\\u02BA\\u02C2-\\u02CF\\u02D2-\\u02DF\\u02E5-\\u02ED\\u05F3]");
     static UnicodeSet alphabeticSet = UnifiedBinaryProperty.make(DERIVED | PropAlphabetic).getSet()
         .addAll(extraAlpha);
         
     static UnicodeSet ideographicSet = UnifiedBinaryProperty.make(BINARY_PROPERTIES | Ideographic).getSet();
     
     static {
-        System.out.println("alphabetic: " + alphabeticSet.toPattern(true));
+        if (false) System.out.println("alphabetic: " + alphabeticSet.toPattern(true));
     }
     
 
@@ -116,15 +116,15 @@ abstract public class GenerateBreakTest implements UCD_Types {
             PrintWriter systemPrintWriter = new PrintWriter(System.out);
             gwb.printLine(systemPrintWriter, "n\u0308't", true, true, false);
             systemPrintWriter.flush();
-        }
-        
-        if (false) {
-            GenerateSentenceBreakTest foo = new GenerateSentenceBreakTest();
-            foo.isBreak("(\"Go.\") (He did)", 5, true);
-        
             showSet("sepSet", GenerateSentenceBreakTest.sepSet);
             showSet("atermSet", GenerateSentenceBreakTest.atermSet);
             showSet("termSet", GenerateSentenceBreakTest.termSet);
+        }
+        
+        if (true) {
+            GenerateSentenceBreakTest foo = new GenerateSentenceBreakTest();
+            //foo.isBreak("(\"Go.\") (He did)", 5, true);
+            foo.isBreak("3.4", 2, true);
         }
 
         new GenerateSentenceBreakTest().run();
@@ -276,7 +276,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
 
         PrintWriter out = Utility.openPrintWriter(fileName + "BreakTest.html", Utility.UTF8_WINDOWS);
         out.println("<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'><title>"
-            + fileName + "</title></head>");
+            + fileName + " Break Chart</title></head>");
         out.println("<body bgcolor='#FFFFFF'><h3>Current:</h3>");
 
 
@@ -304,7 +304,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
         PrintWriter out = Utility.openPrintWriter(fileName + "BreakTest" 
             + (recommended & recommendedDiffers() ? "_NEW" : "")
             + (shortVersion ? "_SHORT" : "")
-            + ".txt", Utility.LATIN1_WINDOWS);
+            + ".txt", Utility.UTF8_WINDOWS);
         int counter = 0;
 
         out.println("# Default " + fileName + " Break Test");
@@ -620,6 +620,60 @@ abstract public class GenerateBreakTest implements UCD_Types {
             if (f != notLBType) return i;
         }
         return -1;
+    }
+
+
+    static public class Context {
+        public int cpBefore2, cpBefore, cpAfter, cpAfter2;
+        public byte tBefore2, tBefore, tAfter, tAfter2;
+        public String toString() {
+            return "[" 
+            + Utility.hex(cpBefore2) + "(" + tBefore2 + "), "
+            + Utility.hex(cpBefore) + "(" + tBefore + "), "
+            + Utility.hex(cpAfter) + "(" + tAfter + "), "
+            + Utility.hex(cpAfter2) + "(" + tAfter2 + ")]";
+        }
+    }
+
+    public void getGraphemeBases(String source, int offset, boolean recommended, byte ignoreType, Context context) {
+        context.cpBefore2 = context.cpBefore = context.cpAfter = context.cpAfter2 = -1;
+        context.tBefore2 = context.tBefore = context.tAfter = context.tAfter2 = -1;
+        //if (DEBUG_GRAPHEMES) System.out.println(Utility.hex(source) + "; " + offset + "; " + ignoreType);
+            
+        MyBreakIterator graphemeIterator = new MyBreakIterator();
+
+        graphemeIterator.set(source, offset);
+        while (true) {
+            int cp = graphemeIterator.previousBase();
+            if (cp == -1) break;
+            byte t = getResolvedType(cp, recommended);
+            if (t == ignoreType) continue;
+                
+            if (context.cpBefore == -1) {
+                context.cpBefore = cp;
+                context.tBefore = t;
+            } else {
+                context.cpBefore2 = cp;
+                context.tBefore2 = t;
+                break;
+            }
+        }
+        graphemeIterator.set(source, offset);
+        while (true) {
+            int cp = graphemeIterator.nextBase();
+            if (cp == -1) break;
+            byte t = getResolvedType(cp, recommended);
+            if (t == ignoreType) continue;
+                
+            if (context.cpAfter == -1) {
+                context.cpAfter = cp;
+                context.tAfter = t;
+            } else {
+                context.cpAfter2 = cp;
+                context.tAfter2 = t;
+                break;
+            }
+        }
     }
 
 
@@ -1050,7 +1104,7 @@ abstract public class GenerateBreakTest implements UCD_Types {
             if (cp == 0xA) return LF;
             if (cp == 0xD) return CR;
             if (recommended) {
-                if (cp == 0x034F) return CGJ;
+                if (cp == 0x034F) return Extend;
             }
             if (cp == 0x2028 || cp == 0x2029) return Control;
 
@@ -1178,7 +1232,6 @@ abstract public class GenerateBreakTest implements UCD_Types {
 
         static UnicodeSet extraKatakana = new UnicodeSet("[" + LENGTH + HALFWIDTH_KATAKANA + KATAKANA_ITERATION + "]");
 
-        //static UnicodeProperty LineBreakIdeographic = UnifiedBinaryProperty.make(LINE_BREAK | LB_ID);
         static UnicodeProperty baseProp = UnifiedBinaryProperty.make(DERIVED | GraphemeBase);
         static UnicodeProperty linkProp = UnifiedBinaryProperty.make(BINARY_PROPERTIES | GraphemeLink);
 
@@ -1325,52 +1378,6 @@ U+02E5..U+02ED  # MODIFIER LETTER EXTRA-HIGH TONE BAR..MODIFIER LETTER UNASPIRAT
             return 3;
         }
 
-        static public class Context {
-            public int cpBefore2, cpBefore, cpAfter, cpAfter2;
-            public byte tBefore2, tBefore, tAfter, tAfter2;
-        }
-
-        public void getGraphemeBases(String source, int offset, boolean recommended, Context context) {
-            context.cpBefore2 = context.cpBefore = context.cpAfter = context.cpAfter2 = -1;
-            context.tBefore2 = context.tBefore = context.tAfter = context.tAfter2 = -1;
-            
-            MyBreakIterator graphemeIterator = new MyBreakIterator();
-
-            graphemeIterator.set(source, offset);
-            while (true) {
-                int cp = graphemeIterator.previousBase();
-                if (cp == -1) break;
-                byte t = getResolvedType(cp, recommended);
-                if (t == Format) continue;
-                
-                if (context.cpBefore == -1) {
-                    context.cpBefore = cp;
-                    context.tBefore = t;
-                } else {
-                    context.cpBefore2 = cp;
-                    context.tBefore2 = t;
-                    break;
-                }
-            }
-            graphemeIterator.set(source, offset);
-            while (true) {
-                int cp = graphemeIterator.nextBase();
-                if (cp == -1) break;
-                byte t = getResolvedType(cp, recommended);
-                if (t == Format) continue;
-                
-                if (context.cpAfter == -1) {
-                    context.cpAfter = cp;
-                    context.tAfter = t;
-                } else {
-                    context.cpAfter2 = cp;
-                    context.tAfter2 = t;
-                    break;
-                }
-            }
-        }
-
-
         public boolean isBreak(String source, int offset, boolean recommended) {
             recommended = true; // don't care about old stuff
 
@@ -1391,7 +1398,7 @@ U+02E5..U+02ED  # MODIFIER LETTER EXTRA-HIGH TONE BAR..MODIFIER LETTER UNASPIRAT
 
             // now get the base character before and after, and their types
 
-            getGraphemeBases(source, offset, recommended, context);
+            getGraphemeBases(source, offset, recommended, Format, context);
 
             byte before = context.tBefore;
             byte after = context.tAfter;
@@ -1457,42 +1464,55 @@ U+02E5..U+02ED  # MODIFIER LETTER EXTRA-HIGH TONE BAR..MODIFIER LETTER UNASPIRAT
     static class GenerateSentenceBreakTest extends GenerateBreakTest {
         
         static final byte Format = 0, Sep = 1, Sp = 2, OLetter = 3, Lower = 4, Upper = 5,
-            Close = 6, ATerm = 7, Term = 8, Other = 9,
+            Numeric = 6, Close = 7, ATerm = 8, Term = 9, Other = 10,
             LIMIT = Other + 1;
 
-        static final String[] Names = {"Format", "Sep", "Sp", "OLetter", "Lower", "Upper",
+        static final String[] Names = {"Format", "Sep", "Sp", "OLetter", "Lower", "Upper", "Numeric",
             "Close", "ATerm", "Term", "Other" };
 
         static GenerateGraphemeBreakTest grapheme = new GenerateGraphemeBreakTest();
 
         static UnicodeSet sepSet = new UnicodeSet("[\\u000a\\u000d\\u0085\\u2029\\u2028]");
         static UnicodeSet atermSet = new UnicodeSet("[\\u002E]");
-        static UnicodeSet termSet = new UnicodeSet("[\\u0021\\u003F\\u0589\\u061f\\u06d4\\u0700-\\u0702\\u0934"
-            + "\\u1362\\u1367\\u1368\\u1803\\u1809\\u203c\\u203d\\u2048\\u2049\\u3002\\ufe52\\ufe57\\uff01\\uff0e\\uff1f\\uff61]");
+        static UnicodeSet termSet = new UnicodeSet(
+            "[\\u0021\\u003F\\u0589\\u061f\\u06d4\\u0700-\\u0702\\u0934"
+            + "\\u1362\\u1367\\u1368\\u104A\\u104B\\u166E"
+            + "\\u1803\\u1809\\u203c\\u203d"
+            + "\\u2048\\u2049\\u3002\\ufe52\\ufe57\\uff01\\uff0e\\uff1f\\uff61]");
         
         static UnicodeProperty lowercaseProp = UnifiedBinaryProperty.make(DERIVED | PropLowercase);
         static UnicodeProperty uppercaseProp = UnifiedBinaryProperty.make(DERIVED | PropUppercase);
+        
+        UnicodeSet linebreakNS = UnifiedBinaryProperty.make(LINE_BREAK | LB_NU).getSet();
         
         {
 
             fileName = "Sentence";
             extraSamples = new String[] {
-                
             };
-            String[] temp = new String[] {
+            
+            extraSingleSamples = new String[] {
                 "(\"Go.\") (He did.)", 
-                "(\"Go?\") (He did.)", 
+                "(\u201CGo?\u201D) (He did.)", 
                 "U.S.A\u0300. is", 
                 "U.S.A\u0300? He", 
                 "U.S.A\u0300.", 
-                "\u4e00.\u4300",
-                "\u4e00?\u4300",
+                "3.4", 
+                "c.d",
+                "etc.)\u2019 \u2018(the",
+                "etc.)\u2019 \u2018(The",
+                "the resp. leaders are",
+                "\u5B57.\u5B57",
+                "etc.\u5B83",
+                "etc.\u3002",
+                "\u5B57\u3002\u5B83",
             };
-            extraSingleSamples = new String [temp.length * 2];
-            System.arraycopy(temp, 0, extraSingleSamples, 0, temp.length);
-            for (int i = 0; i < temp.length; ++i) {
-                extraSingleSamples[i+temp.length] = insertEverywhere(temp[i], "\u2060", grapheme);
+            String[] temp = new String [extraSingleSamples.length * 2];
+            System.arraycopy(extraSingleSamples, 0, temp, 0, extraSingleSamples.length);
+            for (int i = 0; i < extraSingleSamples.length; ++i) {
+                temp[i+extraSingleSamples.length] = insertEverywhere(extraSingleSamples[i], "\u2060", grapheme);
             }
+            extraSingleSamples = temp;
 
         }
         
@@ -1509,9 +1529,10 @@ U+02E5..U+02ED  # MODIFIER LETTER EXTRA-HIGH TONE BAR..MODIFIER LETTER UNASPIRAT
             if (cat == Cf) return Format;
             if (sepSet.contains(cp)) return Sep;
             if (Default.ucd.getBinaryProperty(cp, White_space)) return Sp;
-            if (alphabeticSet.contains(cp)) return OLetter;
+            if (linebreakNS.contains(cp)) return Numeric;
             if (lowercaseProp.hasValue(cp)) return Lower;
             if (uppercaseProp.hasValue(cp) || cat == Lt) return Upper;
+            if (alphabeticSet.contains(cp)) return OLetter;
             if (atermSet.contains(cp)) return ATerm;
             if (termSet.contains(cp)) return Term;
             if (cat == Po || cat == Pe
@@ -1529,6 +1550,8 @@ U+02E5..U+02ED  # MODIFIER LETTER EXTRA-HIGH TONE BAR..MODIFIER LETTER UNASPIRAT
             return 1;
         }
 
+        static Context context = new Context();
+        
         public boolean isBreak(String source, int offset, boolean recommended) {
 
             rule = "1";
@@ -1541,8 +1564,8 @@ U+02E5..U+02ED  # MODIFIER LETTER EXTRA-HIGH TONE BAR..MODIFIER LETTER UNASPIRAT
 
             // Sep ÷  (3) 
             rule = "3";
-            byte before = getResolvedType(source.charAt(offset-1), recommended);
-            if (before == Sep) return true;
+            byte beforeChar = getResolvedType(source.charAt(offset-1), recommended);
+            if (beforeChar == Sep) return true;
             
             // Treat a grapheme cluster as if it were a single character:
             // the first base character, if there is one; otherwise the first character.
@@ -1556,17 +1579,29 @@ U+02E5..U+02ED  # MODIFIER LETTER EXTRA-HIGH TONE BAR..MODIFIER LETTER UNASPIRAT
             rule="3";
             if (!grapheme.isBreak( source,  offset,  recommended)) return false;
             
-            // Do not break after ambiguous terminators like period, if the first following letter is lowercase. For example, a period may be an abbreviation or numeric period, and not mark the end of a sentence.
-            // ATerm Close* Sp*×(¬( OLetter | Upper ))* Lower(6)
-            // ATerm ×Upper (7)
-            
-            // Break after sentence terminators, but include closing punctuation, trailing spaces, and (optionally) a paragraph separator.
-            // ( Term | ATerm ) Close*×( Close | Sp | Sep )(8)
-            // ( Term | ATerm ) Close* Sp×( Sp | Sep )(9)
-            // ( Term | ATerm ) Close* Sp*÷(10)
+            getGraphemeBases(source, offset, recommended, Format, context);
 
+            byte before = context.tBefore;
+            byte after = context.tAfter;
+            byte before2 = context.tBefore2;
+            byte after2 = context.tAfter2;
             
-            // These cases are all handled together.
+            
+            // Do not break after ambiguous terminators like period, if immediately followed by a number or lowercase letter, is between uppercase letters, or if the first following letter (optionally after certain punctuation) is lowercase. For example, a period may be an abbreviation or numeric period, and not mark the end of a sentence.
+
+            // ATerm × (Lower | Numeric) (6)
+            // Upper ATerm × Upper (7)
+
+            if (before == ATerm) {
+                rule = "6";
+                if (after == Lower || after == Numeric) return false;
+                rule = "7";
+                if (DEBUG_GRAPHEMES) System.out.println(context + ", " + Upper);
+                if (before2 == Upper && after == Upper) return false;
+            }
+            
+            // The following cases are all handled together.
+            
             // First we loop backwards, checking for the different types.
             
             MyBreakIterator graphemeIterator = new MyBreakIterator();
@@ -1620,19 +1655,18 @@ U+02E5..U+02ED  # MODIFIER LETTER EXTRA-HIGH TONE BAR..MODIFIER LETTER UNASPIRAT
             if (lookAfter == -1) {
                 // Otherwise, do not break
                 // Any × Any (11)
-                rule = "11";
+                rule = "12";
                 return false;
             }
                 
-            // Do not break after ambiguous terminators like period, if the first following letter is lowercase. For example, a period may be an abbreviation or numeric period, and not mark the end of a sentence.
-            // ATerm Close* Sp*×(¬( OLetter | Upper ))* Lower(6)
-            // ATerm ×Upper (7)
+            // ATerm Close* Sp*×(¬( OLetter))* Lower(8)
             
             // Break after sentence terminators, but include closing punctuation, trailing spaces, and (optionally) a paragraph separator.
-            // ( Term | ATerm ) Close*×( Close | Sp | Sep )(8)
-            // ( Term | ATerm ) Close* Sp×( Sp | Sep )(9)
-            // ( Term | ATerm ) Close* Sp*÷(10)
-            
+            // ( Term | ATerm ) Close*×( Close | Sp | Sep )(9)
+            // ( Term | ATerm ) Close* Sp×( Sp | Sep )(10)
+            // ( Term | ATerm ) Close* Sp*÷(11)
+
+                        
             // We DID find one. Loop to see if the right side is ok.
 
             graphemeIterator.set(source, offset);
@@ -1648,16 +1682,16 @@ U+02E5..U+02ED  # MODIFIER LETTER EXTRA-HIGH TONE BAR..MODIFIER LETTER UNASPIRAT
                 if (isFirst) {
                     isFirst = false;
                     if (lookAfter == ATerm && t == Upper) {
-                        rule = "7";
+                        rule = "8";
                         return false;
                     }
                     if (gotSpace) {
                         if (t == Sp || t == Sep) {
-                            rule = "9";
+                            rule = "10";
                             return false;
                         }
                     } else if (t == Close || t == Sp || t == Sep) {
-                        rule = "8";
+                        rule = "9";
                         return false;
                     }
                     if (lookAfter == Term) break;
@@ -1666,15 +1700,17 @@ U+02E5..U+02ED  # MODIFIER LETTER EXTRA-HIGH TONE BAR..MODIFIER LETTER UNASPIRAT
                 // at this point, we have an ATerm. All other conditions are ok, but we need to verify 6
                 if (t != OLetter && t != Upper && t != Lower) continue;
                 if (t == Lower) {
-                    rule = "6";
+                    rule = "8";
                     return false;
                 }
                 break;
             }
-            rule = "10";
+            rule = "11";
             return true;
         }
     }
+    
+    static final boolean DEBUG_GRAPHEMES = false;
     
     static class MyBreakIterator {
         int offset = 0;
@@ -1683,6 +1719,7 @@ U+02E5..U+02ED  # MODIFIER LETTER EXTRA-HIGH TONE BAR..MODIFIER LETTER UNASPIRAT
         boolean recommended = true;
         
         public MyBreakIterator set(String source, int offset) {
+            //if (DEBUG_GRAPHEMES) System.out.println(Utility.hex(string) + "; " + offset);
             string = source;
             this.offset = offset;
             return this;
@@ -1694,6 +1731,7 @@ U+02E5..U+02ED  # MODIFIER LETTER EXTRA-HIGH TONE BAR..MODIFIER LETTER UNASPIRAT
             for (++offset; offset < string.length(); ++offset) {
                 if (breaker.isBreak(string, offset, recommended)) break;
             }
+            //if (DEBUG_GRAPHEMES) System.out.println(Utility.hex(result));
             return result;
         }
         
@@ -1702,7 +1740,9 @@ U+02E5..U+02ED  # MODIFIER LETTER EXTRA-HIGH TONE BAR..MODIFIER LETTER UNASPIRAT
             for (--offset; offset >= 0; --offset) {
                 if (breaker.isBreak(string, offset, recommended)) break;
             }
-            return UTF16.charAt(string, offset);
+            int result = UTF16.charAt(string, offset);
+            //if (DEBUG_GRAPHEMES) System.out.println(Utility.hex(result));
+            return result;
         }
     }
 }

@@ -4,8 +4,7 @@
 # It contains additional information about the casing of Unicode characters.
 # (For compatibility, the UnicodeData.txt file only contains case mappings for
 # characters where they are 1-1, and does not have locale-specific mappings.)
-# For more information, see
-# UTR #21 Case Mappings, at http://www.unicode.org/unicode/reports/tr21/
+# For more information, see the discussion of Case Mappings in the Unicode Standard.
 #
 # ================================================================================
 # Format
@@ -31,10 +30,10 @@
 # <ISO_3166_code> := 2-letter ISO country code,
 # <ISO_639_code> :=  2-letter ISO language code
 #
-# A context is one of the following, as defined in UAX #21: Case Mappings:
-#   Final_Sigma, After_Soft_Dotted, More_Above, Before_Dot
+# A context is one of the following, as defined in the Unicode Standard:
+#   Final_Sigma, After_Soft_Dotted, More_Above, Before_Dot, Not_Before_Dot, After_I
 #
-# Parsers of this file must be prepared to deal future additions to this format:
+# Parsers of this file must be prepared to deal with future additions to this format:
 #  * Additional contexts
 #  * Additional fields
 # ================================================================================

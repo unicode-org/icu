@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Normalizer.java,v $
-* $Date: 2002/07/30 09:56:41 $
-* $Revision: 1.13 $
+* $Date: 2003/02/25 23:38:22 $
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -416,7 +416,11 @@ public final class Normalizer implements UCD_Types {
                         String s = ucd.getDecompositionMapping(i);
                         int len = UTF16.countCodePoint(s);
                         if (len != 2) {
-                            if (len > 2) throw new IllegalArgumentException("BAD LENGTH: " + len + ucd.toString(i));
+                            if (len > 2) {
+                                if (ucd.getVersion().compareTo("3.0.0") >= 0) {
+                                    throw new IllegalArgumentException("BAD LENGTH: " + len + ucd.toString(i));
+                                }
+                            }
                             continue;
                         }
                         int a = UTF16.charAt(s, 0);
