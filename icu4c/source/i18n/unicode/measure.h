@@ -47,40 +47,40 @@ class U_I18N_API Measure: public UObject {
      * @param adpoptedUnit the unit object, which must not be NULL
      * @param ec input-output error code. If the amount or the unit
      * is invalid, then this will be set to a failing value.
-     * @internal
+     * @draft ICU 3.0
      */
     Measure(const Formattable& number, MeasureUnit* adoptedUnit,
             UErrorCode& ec);
 
     /**
      * Copy constructor
-     * @internal
+     * @draft ICU 3.0
      */
     Measure(const Measure& other);
 
     /**
      * Assignment operator
-     * @internal
+     * @draft ICU 3.0
      */
     Measure& operator=(const Measure& other);
 
     /**
      * Return a polymorphic clone of this object.  The result will
      * have the same class as returned by getDynamicClassID().
-     * @internal
+     * @draft ICU 3.0
      */
     virtual UObject* clone() const = 0;
 
     /**
      * Destructor
-     * @internal
+     * @draft ICU 3.0
      */
     virtual ~Measure();
     
     /**
      * Equality operator.  Return true if this object is equal
      * to the given object.
-     * @internal
+     * @draft ICU 3.0
      */
     UBool operator==(const UObject& other) const;
 
@@ -88,13 +88,13 @@ class U_I18N_API Measure: public UObject {
      * Return a reference to the numeric value of this object.  The
      * numeric value may be of any numeric type supported by
      * Formattable.
-     * @internal
+     * @draft ICU 3.0
      */
     inline const Formattable& getNumber() const;
 
     /**
      * Return a reference to the unit of this object.
-     * @internal
+     * @draft ICU 3.0
      */
     inline const MeasureUnit& getUnit() const;
 
