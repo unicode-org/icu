@@ -5,13 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2002/03/10 19:40:16 $ 
- * $Revision: 1.15 $
+ * $Date: 2002/05/08 23:36:37 $ 
+ * $Revision: 1.16 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
 
+import com.ibm.icu.util.Currency;
 import java.text.Format;
 import java.text.ParsePosition;
 import java.text.FieldPosition;
@@ -394,6 +395,7 @@ public class DecimalFormat extends NumberFormat {
         String pattern = getPattern(def, 0);
         // Always applyPattern after the symbols are set
         this.symbols = new DecimalFormatSymbols(def);
+        currency = Currency.getInstance(def);
         applyPattern(pattern, false);
     }
 
@@ -416,7 +418,9 @@ public class DecimalFormat extends NumberFormat {
      */
     public DecimalFormat(String pattern) {
     // Always applyPattern after the symbols are set
-        this.symbols = new DecimalFormatSymbols( Locale.getDefault() );
+        Locale def = Locale.getDefault();
+        this.symbols = new DecimalFormatSymbols(def);
+        currency = Currency.getInstance(def);
         applyPattern( pattern, false );
     }
 
@@ -442,7 +446,7 @@ public class DecimalFormat extends NumberFormat {
      */
     public DecimalFormat (String pattern, DecimalFormatSymbols symbols) {
         // Always applyPattern after the symbols are set
-        this.symbols = (DecimalFormatSymbols)symbols.clone();
+        _setDecimalFormatSymbols(symbols);
         applyPattern( pattern, false );
     }
 
@@ -1385,17 +1389,35 @@ public class DecimalFormat extends NumberFormat {
      * @see DecimalFormatSymbols
      */
     public void setDecimalFormatSymbols(DecimalFormatSymbols newSymbols) {
-        try {
-            // don't allow multiple references
-            symbols = (DecimalFormatSymbols) newSymbols.clone();
-            /*Bug 4212072
-             Update the affix strings accroding to symbols in order to keep
-             the affix strings up to date.
-             [Richard/GCL]
-             */
-            expandAffixes();
-        } catch (Exception foo) {
-            // should never happen
+        _setDecimalFormatSymbols(newSymbols);
+        expandAffixes();
+    }
+
+    private void _setDecimalFormatSymbols(DecimalFormatSymbols newSymbols) {
+        // don't allow multiple references
+        symbols = (DecimalFormatSymbols) newSymbols.clone();
+        /*Bug 4212072
+          Update the affix strings accroding to symbols in order to keep
+          the affix strings up to date.
+          [Richard/GCL]
+        */
+        
+        // With the introduction of the Currency object, the currency
+        // symbols in the DFS object are ignored.  For backward
+        // compatibility, we check any explicitly set DFS object.  If it
+        // is a default symbols object for its locale, we change the
+        // currency object to one for that locale.  If it is custom,
+        // we create a CompatibilityCurrency object and use that.
+        DecimalFormatSymbols def =
+            new DecimalFormatSymbols(symbols.getLocale());
+        
+        if (symbols.getCurrencySymbol().equals(
+                def.getCurrencySymbol()) &&
+            symbols.getInternationalCurrencySymbol().equals(
+                def.getInternationalCurrencySymbol())) {
+            currency = Currency.getInstance(symbols.getLocale());
+        } else {
+            currency = Currency.getCompatibilityInstance(symbols);
         }
     }
 
@@ -1997,12 +2019,14 @@ public class DecimalFormat extends NumberFormat {
             //    c = pattern.charAt(i++);
                 switch (c) {
                 case CURRENCY_SIGN:
+                    // As of ICU 2.2 we use the currency object, and
+                    // ignore the currency symbols in the DFS.
                     if (i<pattern.length() &&
                         pattern.charAt(i) == CURRENCY_SIGN) {
                         ++i;
-                        buffer.append(symbols.getInternationalCurrencySymbol());
+                        buffer.append(currency.getCurrencyCode());
                     } else {
-                        buffer.append(symbols.getCurrencySymbol());
+                        buffer.append(currency.getSymbol(symbols.getLocale()));
                     }
                     continue;
                 case PATTERN_PERCENT:
@@ -2771,6 +2795,42 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
+     * Sets the <tt>Currency</tt> object used to display currency
+     * amounts.  This takes effect immediately, if this format is a
+     * currency format.  If this format is not a currency format, then
+     * the currency object is used if and when this object becomes a
+     * currency format through the application of a new pattern.
+     * @since ICU 2.2
+     */
+    public void setCurrency(Currency theCurrency) {
+        // If we are a currency format, then modify our affixes to
+        // encode the currency symbol for the given currency in our
+        // locale, and adjust the decimal digits and rounding for the
+        // given currency.
+
+        currency = theCurrency;
+
+        if (isCurrencyFormat) {
+            setRoundingIncrement(currency.getRoundingIncrement());
+
+            int d = currency.getDefaultFractionDigits();
+            setMinimumFractionDigits(d);
+            setMaximumFractionDigits(d);
+
+            expandAffixes();
+        }
+    }
+
+    /**
+     * Gets the <tt>Currency</tt> object used to display currency
+     * amounts.
+     * @since ICU 2.2
+     */
+    public Currency getCurrency() {
+        return currency;
+    }
+    
+    /**
      * Sets the maximum number of digits allowed in the fraction portion of a
      * number. This override limits the fraction digit count to 340.
      * @see NumberFormat#setMaximumFractionDigits
@@ -3077,6 +3137,13 @@ public class DecimalFormat extends NumberFormat {
      * @since AlphaWorks NumberFormat
      */
     private int padPosition = PAD_BEFORE_PREFIX;
+
+    /**
+     * Currency object used to format currencies.  Only used if
+     * <tt>isCurrencyFormat</tt> is true.
+     * @since ICU 2.2
+     */
+    private Currency currency;
 
     //----------------------------------------------------------------------
 
