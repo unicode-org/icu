@@ -26,35 +26,54 @@
 #include "cstring.h"
 #include "filestrm.h"
 #include "toolutil.h"
+#include "uoptions.h"
 
 static uint16_t column=0xffff;
 
 /* prototypes --------------------------------------------------------------- */
 
 static void
-writeCCode(const char *filename);
+writeCCode(const char *filename, const char *destdir);
 
 static void
-getOutFilename(const char *inFilename, char *outFilename, char *entryName);
+getOutFilename(const char *inFilename, const char *destdir, char *outFilename, char *entryName);
 
 static void
 write8(FileStream *out, uint8_t byte);
 
 /* -------------------------------------------------------------------------- */
 
+static UOption options[]={
+    UOPTION_HELP_H,
+    UOPTION_HELP_QUESTION_MARK,
+    UOPTION_DESTDIR
+};
+
 extern int
 main(int argc, char *argv[]) {
-    if(argc<=1) {
+    /* read command line options */
+    argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
+
+    /* error handling, printing usage message */
+    if(argc<0) {
         fprintf(stderr,
-            "usage: %s filename1 filename2 ...\n"
-            "\tread the binary input file and \n"
-            "\tcreate a .c file with a byte array that contains the input file's data\n",
+            "error in command line argument \"%s\"\n",
+            argv[-argc]);
+    }
+    if(argc<0 || options[0].doesOccur || options[1].doesOccur) {
+        fprintf(stderr,
+            "usage: %s [-options] filename1 filename2 ...\n"
+            "\tread each binary input file and \n"
+            "\tcreate a .c file with a byte array that contains the input file's data\n"
+            "\toptions:\n"
+            "\t\t-h or -? or --help  this usage text\n"
+            "\t\t-d or --destdir     destination directory, followed by the path\n",
             argv[0]);
     } else {
         while (--argc) {
             fprintf(stdout, "Generating C code for %s\n", getLongPathname(argv[argc]));
             column=0xffff;
-            writeCCode(getLongPathname(argv[argc]));
+            writeCCode(getLongPathname(argv[argc]), options[2].value);
         }
     }
 
@@ -62,7 +81,7 @@ main(int argc, char *argv[]) {
 }
 
 static void
-writeCCode(const char *filename) {
+writeCCode(const char *filename, const char *destdir) {
     char buffer[4096], entry[40];
     FileStream *in, *out;
     size_t i, length;
@@ -73,7 +92,7 @@ writeCCode(const char *filename) {
         exit(U_FILE_ACCESS_ERROR);
     }
 
-    getOutFilename(filename, buffer, entry);
+    getOutFilename(filename, destdir, buffer, entry);
     out=T_FileStream_open(buffer, "w");
     if(out==NULL) {
         fprintf(stderr, "genccode: unable to open output file %s\n", buffer);
@@ -124,12 +143,22 @@ writeCCode(const char *filename) {
 }
 
 static void
-getOutFilename(const char *inFilename, char *outFilename, char *entryName) {
+getOutFilename(const char *inFilename, const char *destdir, char *outFilename, char *entryName) {
     const char *basename=findBasename(inFilename), *suffix=uprv_strrchr(basename, '.');
 
     /* copy path */
-    while(inFilename<basename) {
-        *outFilename++=*inFilename++;
+    if(destdir!=NULL && *destdir!=0) {
+        do {
+            *outFilename++=*destdir++;
+        } while(*destdir!=0);
+        if(*(outFilename-1)!=U_FILE_SEP_CHAR) {
+            *outFilename++=U_FILE_SEP_CHAR;
+        }
+        inFilename=basename;
+    } else {
+        while(inFilename<basename) {
+            *outFilename++=*inFilename++;
+        }
     }
 
     if(suffix==NULL) {
