@@ -662,7 +662,7 @@ void IntlTestTextBoundary::TestLineInvariants()
     doBreakInvariantTest(*e, testChars);
     doOtherInvariantTest(*e, testChars);
 
-    int errorCount = 0;
+    int errCount = 0;
     UTextOffset i, j, k;
 
     // in addition to the other invariants, a line-break iterator should make sure that:
@@ -683,8 +683,8 @@ void IntlTestTextBoundary::TestLineInvariants()
                     if (l == 1 || l == 2) {
                         errln("Got break between U+" + UCharToUnicodeString(work[l - 1]) + 
                             " and U+" + UCharToUnicodeString(work[l]));
-                        errorCount++;
-                        if (errorCount >= 75)
+                        errCount++;
+                        if (errCount >= 75)
                             return;
                     }
             }
@@ -722,8 +722,8 @@ void IntlTestTextBoundary::TestLineInvariants()
                 if (!saw2) {
                     errln("Didn't get break between U+" + UCharToUnicodeString(work[1]) + 
                         " and U+" + UCharToUnicodeString(work[2]));
-                    errorCount++;
-                    if (errorCount >= 75)
+                    errCount++;
+                    if (errCount >= 75)
                         return;
                 }
             }
@@ -1023,6 +1023,7 @@ void IntlTestTextBoundary::TestBug4153072() {
     }
     delete iter;
 }
+
 /*
  * Test Preceding()
  */
@@ -1045,8 +1046,10 @@ void IntlTestTextBoundary::TestPreceding()
     UTextOffset p4 = e->next();
     UTextOffset f = e->following( p2+1 );
     UTextOffset p = e->preceding( p2+1 );
-    if (f!=p3) errln("IntlTestTextBoundary::TestPreceding: f!=p3");
-    if (p!=p2) errln("IntlTestTextBoundary::TestPreceding: p!=p2");
+    if (f!=p3)
+        errln("IntlTestTextBoundary::TestPreceding: f!=p3");
+    if (p!=p2)
+        errln("IntlTestTextBoundary::TestPreceding: p!=p2");
     if (!e->isBoundary(p2) || e->isBoundary(p2+1) || !e->isBoundary(p3))
     {
         errln("IntlTestTextBoundary::TestPreceding: isBoundary err");
@@ -1355,7 +1358,7 @@ void IntlTestTextBoundary::doMultipleSelectionTest(BreakIterator& iterator,
 void IntlTestTextBoundary::doBreakInvariantTest(BreakIterator& tb, UnicodeString& testChars)
 {
     UnicodeString work("aaa");
-    int errorCount = 0;
+    int errCount = 0;
 
     // a break should always occur after CR (unless followed by LF), LF, PS, and LS
     UnicodeString breaks = CharsToUnicodeString("\r\n\\u2029\\u2028");
@@ -1384,8 +1387,8 @@ void IntlTestTextBoundary::doBreakInvariantTest(BreakIterator& tb, UnicodeString
                 if (!seen2) {
                     errln("No break between U+" + UCharToUnicodeString(work[1])
                                 + " and U+" + UCharToUnicodeString(work[2]));
-                    errorCount++;
-                    if (errorCount >= 75)
+                    errCount++;
+                    if (errCount >= 75)
                         return;
                 }
             }
@@ -1396,7 +1399,7 @@ void IntlTestTextBoundary::doBreakInvariantTest(BreakIterator& tb, UnicodeString
 void IntlTestTextBoundary::doOtherInvariantTest(BreakIterator& tb, UnicodeString& testChars)
 {
     UnicodeString work("a\r\na");
-    int32_t errorCount = 0;
+    int32_t errCount = 0;
     UTextOffset i, j;
 
     // a break should never occur between CR and LF
@@ -1409,8 +1412,8 @@ void IntlTestTextBoundary::doOtherInvariantTest(BreakIterator& tb, UnicodeString
                 if (k == 2) {
                     errln("Break between CR and LF in string U+" + UCharToUnicodeString(work[0]) + 
                         ", U+d U+a U+" + UCharToUnicodeString(work[3]));
-                    errorCount++;
-                    if (errorCount >= 75)
+                    errCount++;
+                    if (errCount >= 75)
                         return;
                 }
         }
@@ -1436,8 +1439,8 @@ void IntlTestTextBoundary::doOtherInvariantTest(BreakIterator& tb, UnicodeString
                 if (k == 2) {
                     errln("Break between U+" + UCharToUnicodeString(work[1])
                             + " and U+" + UCharToUnicodeString(work[2]));
-                    errorCount++;
-                    if (errorCount >= 75)
+                    errCount++;
+                    if (errCount >= 75)
                         return;
                 }
         }
