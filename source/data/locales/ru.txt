@@ -9,11 +9,13 @@ ru {
     Version{ "2.0" }
     // Using the new options in rules in order to 
     // improve the performance for Cyrillic chars.
-    CollationElements { 
+    collations {
+      standard { 
         Version { "1.1" }
         Sequence { 
             "[suppressContractions [\u0400-\u045f]]"
         }
+      }
     }
     Countries { 
         AD { "\u0410\u043D\u0434\u043E\u0440\u0440\u0430" }

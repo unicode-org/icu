@@ -9,7 +9,8 @@ tr {
     Version{ "2.0" }
     // According to Nurdan Mete from IBM Turkey, the following would be the correct
     // sorting order for Turkish
-    CollationElements { 
+    collations {
+      standard { 
         Version { "2" }
         Sequence { "& C < c\u0327 <<< C\u0327" 
                    "& G < g\u0306 <<< G\u0306"
@@ -17,6 +18,7 @@ tr {
                    "& O < o\u0308 <<< O\u0308"
                    "& S < s\u0327 <<< S\u0327" 
                    "& U < u\u0308 <<< U\u0308" }
+      }
     }
     Countries { 
         Fallback{ "en"}

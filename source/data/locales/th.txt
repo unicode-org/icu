@@ -12,7 +12,8 @@ th {
     //
     // First put in all of the consonants, after Z
     //
-    CollationElements {
+    collations {
+      standard { 
         Version { "3.0" }
         Sequence { 
            // Tailoring of UCA for Thai Royal Institute Dictionary Sort, B.E. 2525
@@ -56,6 +57,7 @@ th {
            "<<< \u0E5B" // U+0E5B  THAI CHARACTER KHOMUT (ancient symbol used to mark end of story)
  
         }
+      }
     }
     Countries { 
         AF { "\u0e2d\u0e31\u0e1f\u0e01\u0e32\u0e19\u0e34\u0e2a\u0e16\u0e32\u0e19" }

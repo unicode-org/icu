@@ -60,21 +60,8 @@ root {
           Version  { "0.0" }
           Sequence { "" }
        }
-       // placeholder for phonebook
-       phonebook:alias { "root/collations/standard" }
-       traditional:alias { "root/collations/standard" }
-       
        default { "standard" }
     }
-
-    // For backwards compatibility
-    CollationElements:alias { "root/collations/standard" }
-
-    // Here are empty collation rules just for the consistency. UCA is used instead... 01/16/2001 by weiv
-    //CollationElements {
-        //Version { "0.0" }
-        //Sequence{ ""  }
-    //}
 
     //------------------------------------------------------------
     // BEGIN Transliterator support

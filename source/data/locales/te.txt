@@ -75,9 +75,11 @@ te {
 //        "\u221e",
 //        "\ufffd",
 //    }
-    CollationElements {
+    collations {
+      standard { 
         Version { "1.0" }
         Sequence { "[normalization on]" }
+      }
     }
     LocaleScript{ 
         "Telu",  // ISO 15924 Name 

@@ -29,7 +29,8 @@ ja {
         REVISED { "\u6539\u8a02\u7248" }
     }
 
-    CollationElements {
+    collations {
+      standard { 
         Version { "4.0" }
         Sequence {
             "[strength 3]" // if you want complete JIS 4061X support use strength I or 4
@@ -1328,6 +1329,7 @@ ja {
             "<\u9f76<\u9f95<\u9f9c<\u9fa0<\u582f<\u69c7<\u9059<\u7464<\u51dc"
             "<\u7199"
         }
+      }
     }
 
     Countries { 

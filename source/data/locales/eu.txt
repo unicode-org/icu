@@ -77,7 +77,7 @@ eu {
     ExemplarCharacters { "[a-z \u00f1 \u00e7]" }
 
     // /**************** Info Below is needed ****************/
-    // CollationElements{}
+    // collations{}
     // Countries{}
     // Eras{}
     // Languages{}
