@@ -257,7 +257,7 @@ void TransliteratorAPITest::TestTransliterate1(){
          //ID, input string, transliterated string
          "Any-Hex",         "hello",    UnicodeString("\\u0068\\u0065\\u006C\\u006C\\u006F", "") ,
          "Hex-Any",         UnicodeString("\\u0068\\u0065\\u006C\\u006C\\u006F", ""), "hello"  ,
-         "Latin-Devanagari","bhaarata", CharsToUnicodeString("\\u092D\\u093E\\u0930\\u0924") ,
+         "Latin-Devanagari",CharsToUnicodeString("bha\\u0304rata"), CharsToUnicodeString("\\u092D\\u093E\\u0930\\u0924") ,
          "Latin-Devanagari",UnicodeString("kra ksha khra gra cra dya dhya",""), CharsToUnicodeString("\\u0915\\u094D\\u0930 \\u0915\\u094D\\u0936 \\u0916\\u094D\\u0930 \\u0917\\u094D\\u0930 \\u091a\\u094D\\u0930 \\u0926\\u094D\\u092F \\u0927\\u094D\\u092F") ,
 
          "Devanagari-Latin",    CharsToUnicodeString("\\u092D\\u093E\\u0930\\u0924"),        UnicodeString("bh\\u0101rata"),
@@ -498,9 +498,9 @@ void TransliteratorAPITest::TestKeyboardTransliterator2(){
         "b",      UnicodeString("\\u0062In\\u0069\\u0061tial String: add-\\u0061\\u0062\\u0063-", ""), "0",  "0",  "0" ,
         "",       UnicodeString("\\u0062In\\u0069\\u0061tial String: add-\\u0061\\u0062\\u0063-", ""), "0",  "0",  "0" ,
         //data for Latin-Devanagiri
-        CharsToUnicodeString("aa"),     CharsToUnicodeString("Hindi -\\u0906-"),                            "6", "7", "6",
-        CharsToUnicodeString("maa"),    CharsToUnicodeString("Hindi -\\u0906\\u092E\\u093E-"),              "7", "8", "7",
-        CharsToUnicodeString("raa"),    CharsToUnicodeString("Hi\\u0930\\u093Endi -\\u0906\\u092E\\u093E-"),"1", "2", "2",
+        CharsToUnicodeString("a\\u0304"),     CharsToUnicodeString("Hindi -\\u0906-"),                            "6", "7", "6",
+        CharsToUnicodeString("ma\\u0304"),    CharsToUnicodeString("Hindi -\\u0906\\u092E\\u093E-"),              "7", "8", "7",
+        CharsToUnicodeString("ra\\u0304"),    CharsToUnicodeString("Hi\\u0930\\u093Endi -\\u0906\\u092E\\u093E-"),"1", "2", "2",
         CharsToUnicodeString(""),       CharsToUnicodeString("Hi\\u0930\\u093Endi -\\u0906\\u092E\\u093E-"),"1", "2", "2"
         //data for contracted-Expanded
      //   CharsToUnicodeString("\\u00C1"), CharsToUnicodeString("Ad\\u0041\\u0301d here:"),             "1",  "2",  "1" ,
