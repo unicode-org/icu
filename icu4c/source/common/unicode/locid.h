@@ -579,7 +579,7 @@ private:
     /**
      * Initialize the locale cache for commonly used locales
      */
-    static void initLocaleCache(void);
+    static Locale *getLocaleCache(void);
 
     char language[ULOC_LANG_CAPACITY];
     char country[ULOC_COUNTRY_CAPACITY];
