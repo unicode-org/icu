@@ -1045,6 +1045,10 @@ SOURCE=.\pnamedat.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\propname.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\unicode\putil.h
 
 !IF  "$(CFG)" == "common - Win32 Release"
