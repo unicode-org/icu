@@ -1347,7 +1347,7 @@ zh_TW {
         "ahh'\u6642'mm'\u5206'ss'\u79D2'",
         "a h:mm:ss",
         "a h:mm",
-        "yyyy'\u5E74'M'\u6708'd'\u65E5'",
+        "yyyy'\u5E74'M'\u6708'd'\u65E5'EEEE",
         "yyyy'\u5E74'M'\u6708'd'\u65E5'",
         "yyyy/M/d",
         "yyyy/M/d",

@@ -13,15 +13,15 @@ zh_CN {
         "#,##0%",
         "#E0",
     }
-    Countries {
-        CN { "\u4E2D\u534E\u4EBA\u6C11\u5171\u548C\u56FD" }
-        TW { "\u53F0\u6E7E" }
-        HK { "\u9999\u6E2F" }
-    }
+//    Countries {
+//        CN { "\u4E2D\u534E\u4EBA\u6C11\u5171\u548C\u56FD" }
+//        TW { "\u53F0\u6E7E" }
+//        HK { "\u9999\u6E2F" }
+//    }
     DateTimePatterns { 
-        "HH'\u65F6'mm'\u5206'ss'\u79D2' z",
+        "ahh'\u65F6'mm'\u5206'ss'\u79D2' z",    //"HH'\u65F6'mm'\u5206'ss'\u79D2' z", // use 12-hour time
         "ahh'\u65F6'mm'\u5206'ss'\u79D2'",
-        "H:mm:ss",
+        "ahh:mm:ss",    //"H:mm:ss", // use 12-hour time
         "ah:mm",
         "yyyy'\u5E74'M'\u6708'd'\u65E5'",
         "yyyy'\u5E74'M'\u6708'd'\u65E5'",
