@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/RuleBasedBreakIterator_Old.java,v $
- * $Date: 2004/04/12 22:08:32 $
- * $Revision: 1.1 $
+ * $Date: 2004/05/05 01:17:23 $
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -229,8 +229,8 @@ import java.io.*;
  * &nbsp; For examples, see the resource data (which is annotated).</p>
  *
  * @author Richard Gillam
- * @stable ICU 2.0
- * $RCSfile: RuleBasedBreakIterator_Old.java,v $ $Revision: 1.1 $ $Date: 2004/04/12 22:08:32 $
+ * @internal ICU 2.0
+ * $RCSfile: RuleBasedBreakIterator_Old.java,v $ $Revision: 1.2 $ $Date: 2004/05/05 01:17:23 $
  */
 public class RuleBasedBreakIterator_Old extends RuleBasedBreakIterator {
 
