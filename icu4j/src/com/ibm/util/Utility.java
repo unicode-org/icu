@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/util/Attic/Utility.java,v $
- * $Date: 2001/10/22 05:35:12 $
- * $Revision: 1.9 $
+ * $Date: 2001/11/07 18:48:23 $
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -612,26 +612,19 @@ public final class Utility {
      */
     public static final String escape(String s) {
         StringBuffer buf = new StringBuffer();
-        for (int i=0; i<s.length(); ++i) {
-            char c = s.charAt(i);
+        for (int i=0; i<s.length(); ) {
+            int c = UTF16.charAt(s, i);
+            i += UTF16.getCharCount(c);
             if (c >= ' ' && c <= 0x007F) {
                 if (c == '\\') {
                     buf.append("\\\\"); // That is, "\\"
                 } else {
-                    buf.append(c);
+                    buf.append((char)c);
                 }
             } else {
-                buf.append("\\u");
-                if (c < 0x1000) {
-                    buf.append('0');
-                    if (c < 0x100) {
-                        buf.append('0');
-                        if (c < 0x10) {
-                            buf.append('0');
-                        }
-                    }
-                }
-                buf.append(Integer.toHexString(c));
+                boolean four = c <= 0xFFFF;
+                buf.append(four ? "\\u" : "\\U");
+                hex(c, four ? 4 : 8, buf);
             }
         }
         return buf.toString();
