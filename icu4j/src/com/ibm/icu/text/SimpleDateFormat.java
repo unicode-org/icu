@@ -9,13 +9,10 @@ package com.ibm.icu.text;
 
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.CalendarData;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.ref.SoftReference;

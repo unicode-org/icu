@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;

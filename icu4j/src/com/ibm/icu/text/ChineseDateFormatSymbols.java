@@ -6,9 +6,7 @@
 package com.ibm.icu.text;
 import com.ibm.icu.util.*;
 import java.util.Locale;
-import java.util.ResourceBundle;
 import com.ibm.icu.impl.CalendarData;
-import java.util.MissingResourceException;
 
 /**
  * A subclass of {@link DateFormatSymbols} for {@link ChineseDateFormat}.
