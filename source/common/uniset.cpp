@@ -676,6 +676,16 @@ UBool UnicodeSet::contains(UChar32 c) const {
  * inclusive, such that c < list[i]
  */
 int32_t UnicodeSet::findCodePoint(UChar32 c) const {
+    /* Examples:
+                                       findCodePoint(c)
+       set              list[]         c=0 1 3 4 7 8
+       ===              ==============   ===========
+       []               [110000]         0 0 0 0 0 0
+       [\u0000-\u0003]  [0, 4, 110000]   1 1 1 2 2 2
+       [\u0004-\u0007]  [4, 8, 110000]   0 0 0 1 1 2
+       [:all:]          [0, 110000]      1 1 1 1 1 1
+     */
+
     // Return the smallest i such that c < list[i].  Assume
     // list[len - 1] == HIGH and that c is legal (0..HIGH-1).
     if (c < list[0]) return 0;
@@ -1079,7 +1089,7 @@ void dump(UChar32 c) {
     if (c <= 0xFF) {
         printf("%c", (char)c);
     } else {
-        printf((c<0x10000)?"U+%04X":"U+%06X", c);
+        printf("U+%04X", c);
     }
 }
 void dump(const UChar32* list, int32_t len) {
@@ -1112,7 +1122,7 @@ UnicodeSet& UnicodeSet::add(UChar32 c) {
     // empty = [HIGH]
     // [start_0, limit_0, start_1, limit_1, HIGH]
     
-    // [..., start_i-1, limit_i-1, start_i, limit_i, ..., HIGH]
+    // [..., start_k-1, limit_k-1, start_k, limit_k, ..., HIGH]
     //                             ^
     //                             list[i]
 
@@ -1138,7 +1148,7 @@ UnicodeSet& UnicodeSet::add(UChar32 c) {
         if (i > 0 && c == list[i-1]) {
             // collapse adjacent ranges
 
-            // [..., start_i-1, c, c, limit_i, ..., HIGH]
+            // [..., start_k-1, c, c, limit_k, ..., HIGH]
             //                     ^
             //                     list[i]
 
@@ -1165,11 +1175,11 @@ UnicodeSet& UnicodeSet::add(UChar32 c) {
         // any existing ranges, and it is not 10FFFF.
 
 
-        // [..., start_i-1, limit_i-1, start_i, limit_i, ..., HIGH]
+        // [..., start_k-1, limit_k-1, start_k, limit_k, ..., HIGH]
         //                             ^
         //                             list[i]
 
-        // [..., start_i-1, limit_i-1, c, c+1, start_i, limit_i, ..., HIGH]
+        // [..., start_k-1, limit_k-1, c, c+1, start_k, limit_k, ..., HIGH]
         //                             ^
         //                             list[i]
 
