@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2004/01/08 22:26:59 $ 
- * $Revision: 1.40 $
+ * $Date: 2004/02/11 00:00:18 $ 
+ * $Revision: 1.41 $
  *
  *****************************************************************************************
  */
@@ -2039,6 +2039,7 @@ public class DecimalFormat extends NumberFormat {
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Get the width to which the output of <code>format()</code> is padded.
+     * The width is counted in 16-bit code units.
      * @return the format width, or zero if no padding is in effect
      * @see #setFormatWidth
      * @see #getPadCharacter
@@ -2054,6 +2055,7 @@ public class DecimalFormat extends NumberFormat {
     /**
      * <strong><font face=helvetica color=red>NEW</font></strong>
      * Set the width to which the output of <code>format()</code> is padded.
+     * The width is counted in 16-bit code units.
      * This method also controls whether padding is enabled.
      * @param width the width to which to pad the result of
      * <code>format()</code>, or zero to disable padding

@@ -2058,29 +2058,10 @@ void DecimalFormat::setFormatWidth(int32_t width) {
     fFormatWidth = (width > 0) ? width : 0;
 }
 
-/**
- * Get the character used to pad to the format width.  The default is ' '.
- * @return the pad character
- * @see #setFormatWidth
- * @see #getFormatWidth
- * @see #setPadCharacter
- * @see #getPadPosition
- * @see #setPadPosition
- */
 UnicodeString DecimalFormat::getPadCharacterString() {
     return fPad;
 }
 
-/**
- * Set the character used to pad to the format width.  This has no effect
- * unless padding is enabled.
- * @param padChar the pad character
- * @see #setFormatWidth
- * @see #getFormatWidth
- * @see #getPadCharacter
- * @see #getPadPosition
- * @see #setPadPosition
- */
 void DecimalFormat::setPadCharacter(const UnicodeString &padChar) {
     if (padChar.length() > 0) {
         fPad = padChar.char32At(0);

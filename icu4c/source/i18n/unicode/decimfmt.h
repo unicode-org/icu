@@ -669,6 +669,7 @@ public:
 
     /**
      * Get the width to which the output of <code>format()</code> is padded.
+     * The width is counted in 16-bit code units.
      * @return the format width, or zero if no padding is in effect
      * @see #setFormatWidth
      * @see #getPadCharacter
@@ -681,6 +682,7 @@ public:
 
     /**
      * Set the width to which the output of <code>format()</code> is padded.
+     * The width is counted in 16-bit code units.
      * This method also controls whether padding is enabled.
      * @param width the width to which to pad the result of
      * <code>format()</code>, or zero to disable padding.  A negative
@@ -695,11 +697,10 @@ public:
     virtual void setFormatWidth(int32_t width);
 
     /**
-     * Get the grapheme string (a character, possibly with modifier letters)
-     * used to pad to the format width.  The default is " ".
-     * Note: The current implementation only stores the first code unit of the
-     * pad string.
-     * @return the pad grapheme string
+     * Get the pad character used to pad to the format width.  The
+     * default is ' '.  Note: The result string will have a length of
+     * one 32-bit code point.
+     * @return a string containing the pad character
      * @see #setFormatWidth
      * @see #getFormatWidth
      * @see #setPadCharacter
@@ -710,12 +711,12 @@ public:
     virtual UnicodeString getPadCharacterString();
 
     /**
-     * Set the grapheme string (a character, possibly with modifier letters)
-     * used to pad to the format width.  This has no effect
-     * unless padding is enabled.
-     * Note: The current implementation only stores the first code unit of the
-     * pad string.
-     * @param padChar the pad grapheme
+     * Set the character used to pad to the format width.  This has no
+     * effect unless padding is enabled.  Note: The current
+     * implementation only reads the first 32-bit code point of the
+     * given string.
+     * @param padChar a string containing the pad charcter. If the
+     * string has length 0, then the pad characer is set to ' '.
      * @see #setFormatWidth
      * @see #getFormatWidth
      * @see #getPadCharacter
