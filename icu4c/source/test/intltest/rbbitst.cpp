@@ -1371,6 +1371,9 @@ void RBBITest::TestExtended() {
 
     int    len;
     UChar *testFile = ReadAndConvertFile(testFileName, len, status);
+    if (U_FAILURE(status)) {
+        return; /* something went wrong, error already output */
+    }
 
 
 
@@ -1705,7 +1708,8 @@ UChar *RBBITest::ReadAndConvertFile(const char *fileName, int &ulen, UErrorCode 
     f = fopen(fileName, "rb");
     if (f == 0) {
         errln("Error opening test data file %s\n", fileName);
-        goto cleanUpAndReturn;
+        status = U_FILE_ACCESS_ERROR;
+        return NULL;
     }
     //
     //  Read it in
