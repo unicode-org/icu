@@ -39,7 +39,7 @@ SPECIALTESTDATA=test1.cnv test3.cnv test4.cnv
 TESTDATAOBJDIR=../test/testdata
 top_builddir_from_tmp = $(patsubst ..%,../..%,$(top_builddir))
 INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir_from_tmp)/common:$(top_builddir_from_tmp)/tools/toolutil:$$$(LDLIBRARYPATH_ENVVAR)
-CURDIR=$(shell /bin/pwd)
+CURDIR=$(shell pwd)
 PKGDATA = $(top_builddir_from_tmp)/tools/pkgdata/pkgdata -O $(top_builddir_from_tmp)/tools/pkgdata/icupkg.inc -d $(CURDIR) -m $(PKGDATA_MODE) 
 
 
