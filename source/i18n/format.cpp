@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2003, International Business Machines Corporation and    *
+* Copyright (C) 1997-2004, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -104,9 +104,7 @@ Format::format(const Formattable& obj,
 {
     if (U_FAILURE(status)) return toAppendTo;
 
-    // {sfb} should really be FieldPosition::DONT_CARE, not 0
-    // leave at 0 for now, to keep in sync with Java
-    FieldPosition pos(0);
+    FieldPosition pos(FieldPosition::DONT_CARE);
 
     return format(obj, toAppendTo, pos, status);
 }
