@@ -564,7 +564,7 @@ ModulusSubstitution::ModulusSubstitution(int32_t _pos,
   // substitution: rather than keeping a backpointer to the rule,
   // we keep a copy of the divisor
 
-  if (ldivisor == 1 || ldivisor == 0) {
+  if (ldivisor == 0) {
       status = U_PARSE_ERROR;
   }
 
