@@ -116,9 +116,9 @@ public class CollationMiscTest extends TestFmwk{
                 doTest(coll, t1, t2, result);
                 /* synwee : added collation element iterator test */
                 iter.setText(t1);
-                backAndForth(iter);
+                CollationIteratorTest.backAndForth(this, iter);
                 iter.setText(t2);
-                backAndForth(iter);
+                CollationIteratorTest.backAndForth(this, iter);
             }
         }
     }
@@ -228,85 +228,6 @@ public class CollationMiscTest extends TestFmwk{
         }
         target += "]";
         return target;
-    }
-    
-    /**
-     * Return an integer array containing all of the collation orders
-     * returned by calls to next on the specified iterator
-     */
-    int[] getOrders(CollationElementIterator iter) {
-        int maxSize = 100;
-        int size = 0;
-        int[] orders = new int[maxSize];
-    
-        int order;
-        while ((order = iter.next()) != CollationElementIterator.NULLORDER) {
-            if (size == maxSize) {
-                maxSize *= 2;
-                int[] temp = new int[maxSize];
-                System.arraycopy(orders, 0, temp,  0, size);
-                orders = temp;
-            }
-            orders[size++] = order;
-        }
-    
-        if (maxSize > size)
-        {
-            int[] temp = new int[size];
-            System.arraycopy(orders, 0, temp,  0, size);
-            orders = temp;
-        }
-        return orders;
-    }
-    
-    void backAndForth(CollationElementIterator iter) {
-        // Run through the iterator forwards and stick it into an array
-        int[] orders = getOrders(iter);
-    
-        // Now go through it backwards and make sure we get the same values
-        int index = orders.length;
-        int o;
-    
-        // reset the iterator
-        iter.reset();
-    
-        while ((o = iter.previous()) != CollationElementIterator.NULLORDER) {
-            if (o != orders[--index]) {
-                if (o == 0) {
-                    index ++;
-                } else {
-                    while (index > 0 && orders[--index] == 0) {
-                    } if (o != orders[index]) {
-                        errln("Mismatch at index " + index + ": 0x" 
-                            + Integer.toHexString(orders[index]) + " vs 0x" + Integer.toHexString(o));
-                        break;
-                    }
-                }
-            }
-        }
-    
-        while (index != 0 && orders[index - 1] == 0) {
-          index --;
-        }
-    
-        if (index != 0) {
-            String msg = "Didn't get back to beginning - index is ";
-            errln(msg + index);
-    
-            iter.reset();
-            err("next: ");
-            while ((o = iter.next()) != CollationElementIterator.NULLORDER) {
-                String hexString = "0x" + Integer.toHexString(o) + " ";
-                err(hexString);
-            }
-            errln("");
-            err("prev: ");
-            while ((o = iter.previous()) != CollationElementIterator.NULLORDER) {
-                String hexString = "0x" + Integer.toHexString(o) + " ";
-                 err(hexString);
-            }
-            errln("");
-        }
     }
     
     public void TestBeforePrefixFailure() {
@@ -818,7 +739,7 @@ public class CollationMiscTest extends TestFmwk{
                     errln("Creation of iterator failed");
                     break;
                 }
-                backAndForth(iter);
+                CollationIteratorTest.backAndForth(this, iter);
             }
         }
         
@@ -845,7 +766,7 @@ public class CollationMiscTest extends TestFmwk{
                     errln("Creation of iterator failed");
                     break;
                 }
-                backAndForth(iter);
+                CollationIteratorTest.backAndForth(this, iter);
             }
         }
     }
@@ -1773,5 +1694,17 @@ public class CollationMiscTest extends TestFmwk{
         } catch (Exception e) {
             errln(e.getMessage());
         }
+    }
+    
+    /**
+     * Jitterbug 2726
+     */
+    public void TestShifted()
+    {
+        RuleBasedCollator collator = (RuleBasedCollator) Collator.getInstance();
+        collator.setStrength(Collator.PRIMARY);
+        collator.setAlternateHandlingShifted(true);
+        doTest(collator, " a", "a", 0);       // works properly
+        doTest(collator, "a", "a ", 0);       // inconsistent results
     }
 }
