@@ -159,12 +159,8 @@ void test_FieldPosition( void )
 
 void test_Formattable( void )
 {
-    UErrorCode status = U_ZERO_ERROR;
     Formattable* ftp = new Formattable();
-    if (!ftp || !(ftp->getType() == Formattable::kLong) 
-             || !(ftp->getLong() == 0) 
-             || !(ftp->getLong(status) == 0)
-             || !(ftp->getLong(&status) == 0)) {
+    if (!ftp || !(ftp->getType() == Formattable::kLong) || !(ftp->getLong() == 0)) {
         it_errln("*** Formattable constructor or getType or getLong");
     }
     delete ftp;
@@ -183,39 +179,23 @@ void test_Formattable( void )
         it_errln("*** FT operator= or operator== or operator!=");
     }
     
-    status = U_ZERO_ERROR;
     fta.setDouble( 3.0 );
-    if ((fta.getType() == Formattable::kDouble) 
-         && (fta.getDouble() == 3.0)
-         && (fta.getDouble(status) == 3.0)) {
+    if ((fta.getType() == Formattable::kDouble) && (fta.getDouble() == 3.0)) {
         it_logln("FT set- and getDouble tested.");
     }else{
         it_errln("*** FT set- or getDouble");
     }
 
-    status = U_ZERO_ERROR;
-    const Formattable ftd(4.0, Formattable::kIsDate);
     fta.setDate( 4.0 );
-    if ((fta.getType() == Formattable::kDate)
-        && (fta.getDate() == 4.0)
-        && (fta.getDate(status) == 4.0)
-        && (ftd.getDate(status) == 4.0)) {  // const
+    if ((fta.getType() == Formattable::kDate) && (fta.getDate() == 4.0)) {
         it_logln("FT set- and getDate tested.");
     }else{
         it_errln("*** FT set- or getDate");
     }
 
-    status = U_ZERO_ERROR;
-    const Formattable ftc("abc");
     fta.setString("abc");
     UnicodeString res;
-    if ((fta.getType() == Formattable::kString) 
-        && (fta.getString(res) == "abc")
-        && (fta.getString(res,status) == "abc")
-        && (fta.getString() == "abc")
-        && (ftc.getString() == "abc")   // const
-        && (fta.getString(status) == "abc")
-        && (ftc.getString(status) == "abc")) {  // const
+    if ((fta.getType() == Formattable::kString) && (fta.getString(res) == "abc")) {
         it_logln("FT set- and getString tested.");
     }else{
         it_errln("*** FT set- or getString");
@@ -244,15 +224,6 @@ void test_Formattable( void )
         it_logln("FT constr. for date, double, long, ustring, ustring* and array tested");
     }else{
         it_errln("*** FT constr. for date, double, long, ustring, ustring* or array");
-    }
-
-    {
-        status = U_ZERO_ERROR;
-        int32_t res_cnt;
-        const Formattable* res_array2 = ft_arr.getArray(res_cnt ,status );
-
-        Formattable a(0);
-        a.getString(status);    //test getBogus();
     }
 
     int32_t i, res_cnt;

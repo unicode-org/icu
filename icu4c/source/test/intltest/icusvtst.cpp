@@ -34,20 +34,20 @@ class ICUNSubclass : public ICUNotifier {
 };
 
 class LKFSubclass : public LocaleKeyFactory {
-    Hashtable table;
+	Hashtable table;
 
     public:
     LKFSubclass(UBool visible) 
         : LocaleKeyFactory(visible ? VISIBLE : INVISIBLE, "LKFSubclass")
     {
-        UErrorCode status = U_ZERO_ERROR;
-        table.put("en_US", this, status);
+		UErrorCode status = U_ZERO_ERROR;
+		table.put("en_US", this, status);
     }
 
     protected:
-    virtual const Hashtable* getSupportedIDs(UErrorCode &/*status*/) const {
-        return &table;
-    }
+	virtual const Hashtable* getSupportedIDs(UErrorCode &/*status*/) const {
+		return &table;
+	}
 };
 
 class Integer : public UObject {
@@ -300,7 +300,7 @@ void
 ICUServiceTest::msgstr(const UnicodeString& message, UObject* obj, UBool err)
 {
     if (obj) {
-    UnicodeString* str = (UnicodeString*)obj;
+	UnicodeString* str = (UnicodeString*)obj;
         logln(message + *str);
         delete str;
     } else if (err) {
@@ -317,7 +317,7 @@ ICUServiceTest::testAPI_One()
     // register an object with one locale, 
     // search for an object with a more specific locale
     // should return the original object
-    UErrorCode status = U_ZERO_ERROR;
+	UErrorCode status = U_ZERO_ERROR;
     Integer* singleton0 = new Integer(0);
     service.registerInstance(singleton0, "en_US", status);
     {
@@ -442,7 +442,7 @@ ICUServiceTest::testAPI_One()
         confirmEqual("17) get invisible", result, singleton5);
         delete result;
     }
-    
+	
     // should not be able to locate invisible services
     {
         UErrorCode status = U_ZERO_ERROR;
@@ -532,17 +532,17 @@ class TestMultipleKeyStringFactory : public ICUServiceFactory {
 
     UObject* create(const ICUServiceKey& key, const ICUService* /* service */, UErrorCode& status) const {
         if (U_FAILURE(status)) {
-        return NULL;
+	    return NULL;
         }
         UnicodeString temp;
         key.currentID(temp);
         if (U_SUCCESS(_status)) {
-        if (_ids.contains(&temp)) {
+	    if (_ids.contains(&temp)) {
                 return new UnicodeString(_factoryID + temp);
-        }
+	    }
         } else {
-        status = _status;
-    }
+	    status = _status;
+	}
         return NULL;
     }
 
@@ -590,7 +590,7 @@ const char TestMultipleKeyStringFactory::fgClassID = '\0';
 void 
 ICUServiceTest::testAPI_Two()
 {
-    UErrorCode status = U_ZERO_ERROR;
+	UErrorCode status = U_ZERO_ERROR;
     TestStringService service;
     service.registerFactory(new AnonymousStringFactory(), status);
 
@@ -858,7 +858,7 @@ void
 ICUServiceTest::testRBF()
 {
     // resource bundle factory.
-    UErrorCode status = U_ZERO_ERROR;
+	UErrorCode status = U_ZERO_ERROR;
     TestStringService service;
     service.registerFactory(new ICUResourceBundleFactory(), status);
 
@@ -1002,7 +1002,7 @@ class TestStringLocaleService : public ICULocaleService {
 };
 
 void ICUServiceTest::testLocale() {
-    UErrorCode status = U_ZERO_ERROR;
+	UErrorCode status = U_ZERO_ERROR;
     TestStringLocaleService service;
 
     UnicodeString* root = new UnicodeString("root");
@@ -1092,7 +1092,7 @@ void ICUServiceTest::testLocale() {
     }
 
     {
-        UErrorCode status = U_ZERO_ERROR;
+		UErrorCode status = U_ZERO_ERROR;
         UnicodeString english = "en";
         Locale localeResult;
         UnicodeString result;
@@ -1184,7 +1184,7 @@ class WrapFactory : public ICUServiceFactory {
     public:
     static const UnicodeString& getGreetingID() {
       if (greetingID == NULL) {
-    greetingID = new UnicodeString("greeting");
+	greetingID = new UnicodeString("greeting");
       }
       return *greetingID;
     }
@@ -1246,7 +1246,7 @@ ICUServiceTest::testWrapFactory()
 {
     UnicodeString* greeting = new UnicodeString("Hello There");
     UnicodeString greetingID = "greeting";
-    UErrorCode status = U_ZERO_ERROR;
+	UErrorCode status = U_ZERO_ERROR;
     TestStringService service;
     service.registerInstance(greeting, greetingID, status);
 
@@ -1274,22 +1274,6 @@ ICUServiceTest::testWrapFactory()
   // misc coverage tests
 void ICUServiceTest::testCoverage() 
 {
-  //ICUService
-  {
-    TestStringService service;
-    UErrorCode status = U_ZERO_ERROR;
-    UVector result(status);
-    service.getDisplayNames(result, status);
-
-    class ICUService_stub_sub : public ICUService{
-        virtual UObject* cloneInstance(UObject* instance) const{return NULL;};
-    };
-    
-    ICUService_stub_sub service2;
-    service2.createSimpleFactory(NULL,NULL,FALSE,status);
-    service2.createKey(NULL,status);
-  }
-
   // ICUServiceKey
   {
     UnicodeString temp;
@@ -1302,11 +1286,6 @@ void ICUServiceTest::testCoverage()
     if (key.getDynamicClassID() != ICUServiceKey::getStaticClassID()) {
       errln("service key rtt failed.");
     }
-
-    key.currentDescriptor(temp);
-    key.isFallbackOf(NULL);
-    key.parsePrefix(temp);
-    key.prefix(temp);
   }
 
   // SimpleFactory
@@ -1330,10 +1309,10 @@ void ICUServiceTest::testCoverage()
     {
       UnicodeString* result = (UnicodeString*)service.get("object", status);
       if (result) {
-    logln("object is: " + *result);
-    delete result;
+	logln("object is: " + *result);
+	delete result;
       } else {
-    errln("could not get object");
+	errln("could not get object");
       }
     }
   }

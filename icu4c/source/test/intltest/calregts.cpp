@@ -539,21 +539,16 @@ void CalendarRegressionTest::dowTest(UBool lenient)
         errln("FAIL: actual minimum differs from minimum");
     }
     if(cal->getActualMinimum(Calendar::DAY_OF_WEEK, status) != min) {
-        errln("FAIL: actual minimum (Calendar::DAY_OF_WEEK, status) differs from minimum");
-    }
-    if(cal->getActualMinimum(Calendar::DAY_OF_WEEK) != min) {
         errln("FAIL: actual minimum (Calendar::DAY_OF_WEEK) differs from minimum");
     }
-
-	Calendar * calendar = cal;
-    if(calendar->getActualMinimum(UCAL_DAY_OF_WEEK, status) != min) {
+    if(((Calendar*)cal)->getActualMinimum(UCAL_DAY_OF_WEEK, status) != min) {
         errln("FAIL: actual minimum (UCAL_DAY_OF_WEEK, status) differs from minimum");
     }
-    if(calendar->getActualMinimum(Calendar::DAY_OF_WEEK, status) != min) {
-        errln("FAIL: actual minimum (Calendar::DAY_OF_WEEK, status) differs from minimum");
-    }
-
-	if(U_FAILURE(status)) {
+// NOTE: This function does not exist!  jitterbug #3016
+//    if(((Calendar*)cal)->getActualMinimum(Calendar::DAY_OF_WEEK, status) != min) {
+//        errln("FAIL: actual minimum (Calendar::DAY_OF_WEEK, status) differs from minimum");
+//    }
+    if(U_FAILURE(status)) {
       errln("Error getting actual minimum: %s", u_errorName(status));
       return;
     }

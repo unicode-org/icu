@@ -201,17 +201,6 @@ void AstroTest::TestCoverage(void) {
 
   closeAstro(status);
   ASSERT_OK(status);
-
-  CalendarAstronomer::AUTUMN_EQUINOX();
-  CalendarAstronomer::FIRST_QUARTER();
-  CalendarAstronomer::LAST_QUARTER();
-  CalendarAstronomer::NEW_MOON();
-  CalendarAstronomer::VERNAL_EQUINOX();
-  CalendarAstronomer::WINTER_SOLSTICE();
-  CalendarAstronomer::Ecliptic ecliptic;
-  CalendarAstronomer::MoonAge moon_age(0);
-  ecliptic.set(0,0);
-  moon_age.set(0);
 }
 
 
