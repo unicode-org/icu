@@ -56,21 +56,21 @@ U_NAMESPACE_BEGIN
  * and replace with uprv_malloc/uprv_free.
  */
 
-void *UMemory::operator new(size_t size) {
+void * U_EXPORT2 UMemory::operator new(size_t size) {
     return uprv_malloc(size);
 }
 
-void UMemory::operator delete(void *p) {
+void U_EXPORT2 UMemory::operator delete(void *p) {
     if(p!=NULL) {
         uprv_free(p);
     }
 }
 
-void *UMemory::operator new[](size_t size) {
+void * U_EXPORT2 UMemory::operator new[](size_t size) {
     return uprv_malloc(size);
 }
 
-void UMemory::operator delete[](void *p) {
+void U_EXPORT2 UMemory::operator delete[](void *p) {
     if(p!=NULL) {
         uprv_free(p);
     }
