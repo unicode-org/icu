@@ -22,6 +22,7 @@ import com.ibm.icu.text.*;
 import com.ibm.icu.impl.Utility;
 import java.util.Locale;
 
+
 public class CollationMiscTest extends TestFmwk{
 
     public static void main(String[] args) throws Exception {
@@ -64,9 +65,9 @@ public class CollationMiscTest extends TestFmwk{
                 {"c", "b", "\\u0332", "a"},
                 {"\\u0332", "\\u20e3", "c", "b", "a"},
                 {"c", "b", "\\u0009", "a", "\\u000a"},
-                {"c", "b", "\\uD800\\uDF23", "a", "\\u02d0"},
+                {"c", "b", "\\uD800\\uDD33", "a", "\\u02d0"},
                 {"b", "\\u02d0", "a", "\\u02d1"},
-                {"b", "\\ud801\\udc25", "a", "\\u4e00"},
+                {"b", "\\ud800\\udf9d", "a", "\\u4e00"},
                 {"b", "\\u4e00", "a", "\\u4e01"},
                 {"b", "\\U0010FFFC", "a"},
                 {"\ufffb",  "w", "y", "\u20e3", "x", "\u137c", "z", "u"},
@@ -417,9 +418,11 @@ public class CollationMiscTest extends TestFmwk{
         for(int i = 0; i < attrs.length; i++) {
             if (attrs[i].equals("strength")) {
                 coll.setStrength(((Integer)values[i]).intValue());
-            } else if (attrs[i].equals("decomp")) {
+            } 
+            else if (attrs[i].equals("decomp")) {
                 coll.setDecomposition(((Integer)values[i]).intValue());
-            } else if (attrs[i].equals("AlternateHandling")) {
+            } 
+            else if (attrs[i].equals("AlternateHandling")) {
                 coll.setAlternateHandlingShifted(((Boolean)values[i]
                                                             ).booleanValue());
             }
@@ -564,7 +567,7 @@ public class CollationMiscTest extends TestFmwk{
         // logln("Testing different case settings");
         myCollation.setStrength(Collator.TERTIARY);
     
-        for(k = 0; k<4; k++) {
+        for(k = 0; k <4; k++) {
             if (caseTestAttributes[k][0] == true) {
                 // upper case first
                 ((RuleBasedCollator)myCollation).setUpperCaseFirst(true);
@@ -573,16 +576,18 @@ public class CollationMiscTest extends TestFmwk{
                 // upper case first
                 ((RuleBasedCollator)myCollation).setLowerCaseFirst(true);   
             }
-          ((RuleBasedCollator)myCollation).setCaseLevel(caseTestAttributes[k][1]);
+            ((RuleBasedCollator)myCollation).setCaseLevel(
+                                                caseTestAttributes[k][1]);
           
-          // logln("Case first = " + caseTestAttributes[k][0] + ", Case level = " + caseTestAttributes[k][1]);
-          for (i = 0; i < 3 ; i++) {
-            for(j = i+1; j<4; j++) {
-              CollationTest.doTest(this, (RuleBasedCollator)myCollation, 
-                                   testCase[i], testCase[j], 
-                                   caseTestResults[k][3*i+j-1]);
+            // logln("Case first = " + caseTestAttributes[k][0] + ", Case level = " + caseTestAttributes[k][1]);
+            for (i = 0; i < 3 ; i++) {
+                for(j = i+1; j<4; j++) {
+                    CollationTest.doTest(this, 
+                                        (RuleBasedCollator)myCollation, 
+                                        testCase[i], testCase[j], 
+                                        caseTestResults[k][3*i+j-1]);
+                }
             }
-          }
         }
         try {
             myCollation = new RuleBasedCollator(gRules);
@@ -600,14 +605,16 @@ public class CollationMiscTest extends TestFmwk{
         	else {
         		((RuleBasedCollator)myCollation).setUpperCaseFirst(false);
         	}
-          ((RuleBasedCollator)myCollation).setCaseLevel(caseTestAttributes[k][1]);
-          for (i = 0; i < 3 ; i++) {
-            for(j = i+1; j<4; j++) {
-              CollationTest.doTest(this, (RuleBasedCollator)myCollation, 
-                                   testCase[i], testCase[j], 
-                                   caseTestResults[k][3*i+j-1]);
+            ((RuleBasedCollator)myCollation).setCaseLevel(
+                                                  caseTestAttributes[k][1]);
+            for (i = 0; i < 3 ; i++) {
+                for(j = i+1; j<4; j++) {
+                    CollationTest.doTest(this, 
+                                         (RuleBasedCollator)myCollation, 
+                                         testCase[i], testCase[j], 
+                                         caseTestResults[k][3*i+j-1]);
+                }
             }
-          }
         }
 
         {
@@ -644,9 +651,9 @@ public class CollationMiscTest extends TestFmwk{
             };
             // logln("mixed case test");
             // logln("lower first, case level off");
-            /* syn wee genericRulesStarter("[casefirst lower]&H<ch<<<Ch<<<CH", lowerFirst); */
+            genericRulesStarter("[casefirst lower]&H<ch<<<Ch<<<CH", lowerFirst); 
             // logln("upper first, case level off");
-            /* syn wee genericRulesStarter("[casefirst upper]&H<ch<<<Ch<<<CH", upperFirst); */
+            genericRulesStarter("[casefirst upper]&H<ch<<<Ch<<<CH", upperFirst);
             // logln("lower first, case level on");
             genericRulesStarter("[casefirst lower][caselevel on]&H<ch<<<Ch<<<CH", lowerFirst);
             // logln("upper first, case level on");
@@ -1487,6 +1494,7 @@ public class CollationMiscTest extends TestFmwk{
             // not serious enough to run this
             return;
         }
+        /// TODO: synwee to do strict checks on the locales
         Locale locale[] = Collator.getAvailableLocales();
         String prevrule = null;
         for (int i = 0; i < locale.length; i ++) {
