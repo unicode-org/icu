@@ -283,25 +283,25 @@ $(BRK_FILES:.brk =.brk
 BRKDEPS = "$(ICUBLD)\$(ICUDT)uprops.icu" "$(ICUBLD)\$(ICUDT)unames.icu" "$(ICUBLD)\$(ICUDT)pnames.icu" "$(ICUBLD)\$(ICUDT)unorm.icu"
 
 $(ICUDT)char.brk : "$(ICUBRK)\char.txt" $(BRKDEPS)
-	genbrk -r "$(ICUBRK)\char.txt" -o $@ -d"$(ICUBLD)" -i "$(ICUBLD)\\"
+	genbrk -c -r "$(ICUBRK)\char.txt" -o $@ -d"$(ICUBLD)" -i "$(ICUBLD)\\"
 
 $(ICUDT)word.brk : "$(ICUBRK)\word.txt" $(BRKDEPS)
-	genbrk -r "$(ICUBRK)\word.txt" -o $@ -d"$(ICUBLD)" -i "$(ICUBLD)\\"
+	genbrk -c -r "$(ICUBRK)\word.txt" -o $@ -d"$(ICUBLD)" -i "$(ICUBLD)\\"
 
 $(ICUDT)line.brk : "$(ICUBRK)\line.txt" $(BRKDEPS)
-	genbrk -r "$(ICUBRK)\line.txt" -o $@ -d"$(ICUBLD)" -i "$(ICUBLD)\\"
+	genbrk -c -r "$(ICUBRK)\line.txt" -o $@ -d"$(ICUBLD)" -i "$(ICUBLD)\\"
 
 $(ICUDT)sent.brk : "$(ICUBRK)\sent.txt" $(BRKDEPS)
-	genbrk -r "$(ICUBRK)\sent.txt" -o $@ -d"$(ICUBLD)" -i "$(ICUBLD)\\"
+	genbrk -c -r "$(ICUBRK)\sent.txt" -o $@ -d"$(ICUBLD)" -i "$(ICUBLD)\\"
 
 $(ICUDT)title.brk : "$(ICUBRK)\title.txt" $(BRKDEPS)
-	genbrk -r "$(ICUBRK)\title.txt" -o $@ -d"$(ICUBLD)" -i "$(ICUBLD)\\"
+	genbrk -c -r "$(ICUBRK)\title.txt" -o $@ -d"$(ICUBLD)" -i "$(ICUBLD)\\"
 
 $(ICUDT)word_th.brk : "$(ICUBRK)\word_th.txt" $(BRKDEPS)
-	genbrk -r "$(ICUBRK)\word_th.txt" -o $@ -d"$(ICUBLD)" -i "$(ICUBLD)\\"
+	genbrk -c -r "$(ICUBRK)\word_th.txt" -o $@ -d"$(ICUBLD)" -i "$(ICUBLD)\\"
 
 $(ICUDT)line_th.brk : "$(ICUBRK)\line_th.txt" $(BRKDEPS)
-	genbrk -r "$(ICUBRK)\line_th.txt" -o $@ -d"$(ICUBLD)" -i "$(ICUBLD)\\"
+	genbrk -c -r "$(ICUBRK)\line_th.txt" -o $@ -d"$(ICUBLD)" -i "$(ICUBLD)\\"
 
 
 # utility target to send us to the right dir
