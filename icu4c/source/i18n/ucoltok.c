@@ -513,6 +513,7 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
 }
 
 uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
-    ucol_uprv_tok_assembleTokenList(src, status);
-    ucol_tok_closeTokenList();
+  uint32_t res = ucol_uprv_tok_assembleTokenList(src, status);
+  ucol_tok_closeTokenList();
+  return res;
 }
