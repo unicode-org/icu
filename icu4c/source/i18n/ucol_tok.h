@@ -1,7 +1,7 @@
 #ifndef UCOL_TOKENS_H
 #define UCOL_TOKENS_H
 
-#include "ucolimp.h"
+#include "ucol_imp.h"
 
 #define UCOL_TOK_POLARITY_NEGATIVE 0
 #define UCOL_TOK_POLARITY_POSITIVE 1

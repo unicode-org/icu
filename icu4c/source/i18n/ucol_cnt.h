@@ -26,7 +26,7 @@
 
 #include "ucmp32.h"
 #include "uhash.h"
-#include "ucaelems.h"
+#include "ucol_elm.h"
 
 #define UPRV_CNTTAB_NEWELEMENT 0xFFFFFF
 

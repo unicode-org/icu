@@ -137,10 +137,6 @@ SOURCE=.\choicfmt.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\cnttable.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\coleitr.cpp
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
@@ -561,10 +557,6 @@ SOURCE=.\ubrk.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ucaelems.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\ucal.cpp
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
@@ -584,18 +576,26 @@ SOURCE=.\ucol.cpp
 
 !ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
 
-# ADD CPP /Ze
+# ADD CPP /Ze /W3 /D "UCOL_DEBUG"
 
 !ENDIF 
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\ucoleitr.cpp
+SOURCE=.\ucol_cnt.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ucoltok.c
+SOURCE=.\ucol_elm.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucol_tok.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucoleitr.cpp
 # End Source File
 # Begin Source File
 
@@ -780,10 +780,6 @@ InputPath=.\unicode\choicfmt.h
 
 !ENDIF 
 
-# End Source File
-# Begin Source File
-
-SOURCE=.\cnttable.h
 # End Source File
 # Begin Source File
 
@@ -1598,10 +1594,6 @@ InputPath=.\unicode\ubrk.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\ucaelems.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\unicode\ucal.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
@@ -1656,6 +1648,22 @@ InputPath=.\unicode\ucol.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\ucol_cnt.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucol_elm.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucol_imp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucol_tok.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\unicode\ucoleitr.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
@@ -1680,14 +1688,6 @@ InputPath=.\unicode\ucoleitr.h
 
 !ENDIF 
 
-# End Source File
-# Begin Source File
-
-SOURCE=.\ucolimp.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\ucoltok.h
 # End Source File
 # Begin Source File
 

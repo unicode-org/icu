@@ -16,7 +16,7 @@
 #include "unicode/ucoleitr.h"
 #include "unicode/ustring.h"
 #include "unicode/sortkey.h"
-#include "ucolimp.h"
+#include "ucol_imp.h"
 #include "cmemory.h"
 
 #define BUFFER_LENGTH 100

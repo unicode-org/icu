@@ -2,7 +2,7 @@
 #include "unicode/uchar.h"
  
 #include "cmemory.h"
-#include "ucoltok.h"
+#include "ucol_tok.h"
 #include "uhash.h"
 #include "ucmp32.h"
 

@@ -7,7 +7,7 @@
 *******************************************************************************
 *
 * Private implementation header for C collation
-*   file name:  ucolimp.h
+*   file name:  ucol_imp.h
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -573,7 +573,6 @@ void incctx_cleanUpContext(incrementalContext *ctx);
 UChar incctx_appendChar(incrementalContext *ctx, UChar c);
 UCollationResult alternateIncrementalProcessing(const UCollator *coll, incrementalContext *srcCtx, incrementalContext *trgCtx);
 void ucol_initUCA(UErrorCode *status);
-void ucol_initInverseUCA(UErrorCode *status);
 
 UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UErrorCode *status);
 void ucol_setOptionsFromHeader(UCollator* result, const UCATableHeader * image, UErrorCode *status);
