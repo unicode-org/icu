@@ -144,6 +144,8 @@ UTF32_OppositeEndian
 # By choosing the option "version=1", set O will be escaped instead.
 # For example:
 #     utf7Converter=ucnv_open("UTF-7,version=1");
+#
+# For details about email headers see RFC 2047.
 UTF-7 { IANA* MIME* }           cp65000
 
 SCSU { IANA* }
