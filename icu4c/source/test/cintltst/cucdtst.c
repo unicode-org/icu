@@ -33,6 +33,9 @@ TestCharNames();
 static void
 TestMirroring();
 
+static void
+TestUnescape();
+
 /* test data ---------------------------------------------------------------- */
 #define MIN(a,b) (a < b ? a : b)
 
@@ -107,6 +110,7 @@ void addUnicodeTest(TestNode** root)
     addTest(root, &TestStringFunctions, "tsutil/cucdtst/TestStringFunctions");
     addTest(root, &TestCharNames, "tsutil/cucdtst/TestCharNames");
     addTest(root, &TestMirroring, "tsutil/cucdtst/TestMirroring");
+    addTest(root, &TestUnescape, "tsutil/cucdtst/TestUnescape");
 }
 
 /*==================================================== */
@@ -823,4 +827,27 @@ TestMirroring() {
     ) {
         log_err("u_charMirror() does not work correctly\n");
     }
+}
+
+/* test u_unescape() and u_unescapeAt() ------------------------------------- */
+
+static void
+TestUnescape() {
+    static UChar buffer[200];
+    static const UChar expect[]={
+        0x53, 0x63, 0x68, 0xf6, 0x6e, 0x65, 0x73, 0x20, 0x41, 0x75, 0x74, 0x6f, 0x3a, 0x20,
+        0x20ac, 0x20, 0x31, 0x31, 0x32, 0x34, 0x30, 0x2e, 0x0c,
+        0x50, 0x72, 0x69, 0x76, 0x61, 0x74, 0x65, 0x73, 0x20,
+        0x5a, 0x65, 0x69, 0x63, 0x68, 0x65, 0x6e, 0x3a, 0x20, 0xdbc8, 0xdf45, 0x0a, 0
+    };
+    int32_t length;
+    
+    length=u_unescape(
+        "Sch\\u00f6nes Auto: \\u20ac 11240.\\fPrivates Zeichen: \\U00102345\\n",
+        buffer, sizeof(buffer)/sizeof(buffer[0]));
+    if(length!=45 || u_strcmp(buffer, expect)!=0) {
+        log_err("failure in u_unescape(): length %d!=44 and/or incorrect result string\n", length);
+    }
+
+    /* ### TODO: test u_unescapeAt() */
 }
