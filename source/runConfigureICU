@@ -113,8 +113,8 @@ case $platform in
 		THE_COMP=xlC
                 CC=/usr/lpp/xlC/bin/xlc; export CC
                 CXX=/usr/lpp/xlC/bin/xlC_r; export CXX
-		RELEASE_CFLAGS=-O2
-		RELEASE_CXXFLAGS=-O2
+		RELEASE_CFLAGS="-qignerrno"
+		RELEASE_CXXFLAGS="-qignerrno"
                 #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
                 #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
 		;;
@@ -123,8 +123,8 @@ case $platform in
 		THE_COMP=xlC
                 CC=/usr/ibmcxx/bin/xlc; export CC
                 CXX=/usr/ibmcxx/bin/xlC_r; export CXX
-		RELEASE_CFLAGS=-O2
-		RELEASE_CXXFLAGS=-O2
+		RELEASE_CFLAGS="-qignerrno"
+		RELEASE_CXXFLAGS="-qignerrno"
                 #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
                 #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
 		;;
@@ -133,8 +133,8 @@ case $platform in
 		THE_COMP=xlC
                 CC=/usr/vacpp/bin/xlc; export CC
                 CXX=/usr/vacpp/bin/xlC_r; export CXX
-		RELEASE_CFLAGS=-O2
-		RELEASE_CXXFLAGS=-O2
+		#RELEASE_CFLAGS=-O2
+		#RELEASE_CXXFLAGS=-O2
                 #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
                 #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
                 ;;
@@ -228,7 +228,7 @@ esac
 
 if test $release -eq 1
 then
-    if test x$RELEASE_CFLAGS = x
+    if test "$RELEASE_CFLAGS" = ""
     then
 	case $CC in
 	    gcc|*/gcc|*-gcc-*|*/*-gcc-*)
@@ -236,12 +236,12 @@ then
 		;;
 	esac
     fi
-    if test x$RELEASE_CFLAGS != x
+    if test "$RELEASE_CFLAGS" != ""
     then
 	CFLAGS="$CFLAGS $RELEASE_CFLAGS"
     fi
     export CFLAGS
-    if test x$RELEASE_CXXFLAGS = x
+    if test "$RELEASE_CXXFLAGS" = ""
     then
 	case $CXX in
 	    g++|*/g++|*-g++-*|*/*-g++-*)
@@ -249,7 +249,7 @@ then
 		;;
 	esac
     fi
-    if test x$RELEASE_CXXFLAGS != x
+    if test "$RELEASE_CXXFLAGS" != ""
     then
 	CXXFLAGS="$CXXFLAGS $RELEASE_CXXFLAGS"
     fi
@@ -258,12 +258,12 @@ fi
 
 if test $debug -eq 1
 then
-    if test x$DEBUG_CFLAGS != x
+    if test "$DEBUG_CFLAGS" != ""
     then
 	CFLAGS="$CFLAGS $DEBUG_CFLAGS"
     fi
     export CFLAGS
-    if test x$DEBUG_CXXFLAGS != x
+    if test "$DEBUG_CXXFLAGS" != ""
     then
 	CXXFLAGS="$CXXFLAGS $DEBUG_CXXFLAGS"
     fi
