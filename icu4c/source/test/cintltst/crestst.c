@@ -437,7 +437,7 @@ static void TestFallback()
     status = U_ZERO_ERROR;
 
     /* OK first one. This should be a Default value. */
-    subResource = ures_getByKey(fr_FR, "CurrencyMap", NULL, &status);
+    subResource = ures_getByKey(fr_FR, "MeasurementSystem", NULL, &status);
     if(status != U_USING_DEFAULT_WARNING)
     {
         log_data_err("Expected U_USING_DEFAULT_ERROR when trying to get CurrencyMap from fr_FR, got %s\n",

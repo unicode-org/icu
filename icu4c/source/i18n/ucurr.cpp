@@ -41,7 +41,9 @@ static const int32_t MAX_POW10 = (sizeof(POW10)/sizeof(POW10[0])) - 1;
 
 //------------------------------------------------------------
 // Resource tags
+//
 
+static const char CURRENCY_DATA[] = "CurrencyData";
 // Tag for meta-data, in root.
 static const char CURRENCY_META[] = "CurrencyMeta";
 
@@ -109,10 +111,11 @@ _findMetaData(const UChar* currency, UErrorCode& ec) {
     // Get CurrencyMeta resource out of root locale file.  [This may
     // move out of the root locale file later; if it does, update this
     // code.]
-    ResourceBundle currencyMeta =
-        ResourceBundle((char*)0, Locale(""), ec).get(CURRENCY_META, ec);
+    UResourceBundle* currencyData = ures_openDirect(NULL, CURRENCY_DATA, &ec);
+    UResourceBundle* currencyMeta = ures_getByKey(currencyData, CURRENCY_META, currencyData, &ec);
 
     if (U_FAILURE(ec)) {
+        ures_close(currencyMeta);
         // Config/build error; return hard-coded defaults
         return LAST_RESORT_DATA;
     }
@@ -120,25 +123,32 @@ _findMetaData(const UChar* currency, UErrorCode& ec) {
     // Look up our currency, or if that's not available, then DEFAULT
     char buf[ISO_COUNTRY_CODE_LENGTH+1];
     UErrorCode ec2 = U_ZERO_ERROR; // local error code: soft failure
-    ResourceBundle rb = currencyMeta.get(myUCharsToChars(buf, currency), ec2);
-    if (U_FAILURE(ec2)) {
-        rb = currencyMeta.get(DEFAULT_META, ec);
+    UResourceBundle* rb = ures_getByKey(currencyMeta, myUCharsToChars(buf, currency), NULL, &ec2);
+      if (U_FAILURE(ec2)) {
+        ures_close(rb);
+        rb = ures_getByKey(currencyMeta,DEFAULT_META, NULL, &ec);
         if (U_FAILURE(ec)) {
+            ures_close(currencyMeta);
+            ures_close(rb);
             // Config/build error; return hard-coded defaults
             return LAST_RESORT_DATA;
         }
     }
 
     int32_t len;
-    const int32_t *data = rb.getIntVector(len, ec);
+    const int32_t *data = ures_getIntVector(rb, &len, &ec);
     if (U_FAILURE(ec) || len != 2) {
         // Config/build error; return hard-coded defaults
         if (U_SUCCESS(ec)) {
             ec = U_INVALID_FORMAT_ERROR;
         }
+        ures_close(currencyMeta);
+        ures_close(rb);
         return LAST_RESORT_DATA;
     }
 
+    ures_close(currencyMeta);
+    ures_close(rb);
     return data;
 }
 
@@ -334,7 +344,7 @@ ucurr_forLocale(const char* locale,
 #endif
 
                 // Look up the CurrencyMap element in the root bundle.
-                UResourceBundle *rb = ures_open(NULL, "", &localStatus);
+                UResourceBundle *rb = ures_openDirect(NULL, CURRENCY_DATA, &localStatus);
                 UResourceBundle *cm = ures_getByKey(rb, CURRENCY_MAP, rb, &localStatus);
                 s = ures_getStringByKey(cm, id, &resLen, &localStatus);
 

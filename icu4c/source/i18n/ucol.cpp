@@ -7472,6 +7472,13 @@ ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int3
     /* take the UCA rules and append real rules at the end */
     /* UCA rules will be probably coming from the root RB */
     ucaRules = ures_getStringByKey(coll->rb,"%%UCARULES",&UCAlen,&status);
+    /*
+    UResourceBundle* cresb = ures_getByKeyWithFallback(coll->rb, "collations", NULL, &status);
+    UResourceBundle*  uca = ures_getByKeyWithFallback(cresb, "UCA", NULL, &status);
+    ucaRules = ures_getStringByKey(uca,"Sequence",&UCAlen,&status);
+    ures_close(uca);
+    ures_close(cresb);
+    */
   }
   if(U_FAILURE(status)) {
     return 0;

@@ -290,7 +290,7 @@ free(result);
     if (U_FAILURE(status)) {
         log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status));
     }
-    if (u_strcmp(result, temp1)==0) {
+    if (result && u_strcmp(result, temp1)==0) {
         log_verbose("Pass: Number Formatting using unum_formatDouble() Successful\n");
     } else {
         log_err("FAIL: Error in number formatting using unum_formatDouble()\n");
