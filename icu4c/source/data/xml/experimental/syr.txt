@@ -25,6 +25,9 @@ syr{
             }
         }
     }
+    Countries {
+        SY { "\u0723\u0718\u072A\u071D\u071D\u0710" }
+    }
     Currencies {
         SYP { "\u0644.\u0633.\u200F", "SYP" }
     }
