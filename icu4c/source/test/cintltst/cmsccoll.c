@@ -575,7 +575,7 @@ static void testPrimary(UCollator* col, const UChar* p,const UChar* q){
     UChar source[256] = { '\0'};
     UChar target[256] = { '\0'};
 
-    log_verbose("Testing primary\n");
+    /*log_verbose("Testing primary\n");*/
 
     doTest(col, p, q, UCOL_LESS);
 /*
@@ -601,7 +601,7 @@ static void testSecondary(UCollator* col, const UChar* p,const UChar* q){
     UChar source[256] = { '\0'};
     UChar target[256] = { '\0'};
 
-    log_verbose("Testing secondary\n");
+    /*log_verbose("Testing secondary\n");*/
 
     doTest(col, p, q, UCOL_LESS);
 /*
@@ -638,7 +638,7 @@ static void testTertiary(UCollator* col, const UChar* p,const UChar* q){
     UChar source[256] = { '\0'};
     UChar target[256] = { '\0'};
 
-    log_verbose("Testing primary\n");
+    /*log_verbose("Testing tertiary\n");*/
 
     doTest(col, p, q, UCOL_LESS);
 /*
@@ -744,6 +744,108 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
       firstLen = chLen;
       u_strcpy(first, second);
 
+    }
+    uprv_free(rulesCopy);
+  }
+}
+
+static void testAgainstUCA(UCollator *coll, UCollator *UCA, UErrorCode *status) {
+  const UChar *rules = NULL, *current = NULL;
+  int32_t ruleLen = 0;
+  uint32_t strength = 0;
+  uint32_t chOffset = 0; uint32_t chLen = 0;
+  uint32_t exOffset = 0; uint32_t exLen = 0;
+/*  uint32_t rExpsLen = 0; */
+  uint32_t firstLen = 0, secondLen = 0;
+  UBool varT = FALSE; UBool top_ = TRUE;
+  UBool startOfRules = TRUE;
+  UColTokenParser src;
+  UColOptionSet opts;
+
+  UChar first[256];
+  UChar second[256];
+  UChar *rulesCopy = NULL;
+
+  uint32_t UCAdiff = 0;
+
+  src.opts = &opts;
+
+  rules = ucol_getRules(coll, &ruleLen);
+  if(U_SUCCESS(*status) && ruleLen > 0) {
+    rulesCopy = (UChar *)uprv_malloc((ruleLen+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
+    uprv_memcpy(rulesCopy, rules, ruleLen*sizeof(UChar));
+    src.source = src.current = rulesCopy;
+    src.end = rulesCopy+ruleLen;
+    src.extraCurrent = src.end;
+    src.extraEnd = src.end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
+    *first = *second = 0;
+
+    while ((current = ucol_tok_parseNextToken(&src, &strength, 
+                      &chOffset, &chLen, &exOffset, &exLen,
+                      &varT, &top_, startOfRules, status)) != NULL) {
+      startOfRules = FALSE;
+
+      u_strncpy(second,rulesCopy+chOffset, chLen);
+      second[chLen] = 0;
+      secondLen = chLen;
+
+      if(exLen > 0) {
+        u_strncat(first, rulesCopy+exOffset, exLen);
+        first[firstLen+exLen] = 0;
+        firstLen += exLen;
+      } 
+
+      switch(strength){
+      case UCOL_IDENTICAL:
+          /*testEquality(coll,first,second);*/
+          testEquality(UCA,first,second);
+          ucol_setAttribute(UCA, UCOL_STRENGTH, UCOL_QUATERNARY, status);
+          if(ucol_strcoll(UCA, first, firstLen, second, secondLen) != UCOL_EQUAL) {
+            /*log_verbose("UCA is different for \\u%04X = \\u%04X!\n", *first, *second);*/
+            UCAdiff++;
+          }
+          break;
+      case UCOL_PRIMARY:
+          /*testPrimary(coll,first,second);*/
+          ucol_setAttribute(UCA, UCOL_STRENGTH, UCOL_TERTIARY, status);
+          testPrimary(UCA,first,second);
+          ucol_setAttribute(UCA, UCOL_STRENGTH, UCOL_PRIMARY, status);
+          if(ucol_strcoll(UCA, first, firstLen, second, secondLen) != UCOL_LESS) {
+            /*log_verbose("UCA is different for \\u%04X < \\u%04X!!\n", *first, *second);*/
+            UCAdiff++;
+          }
+          break;
+      case UCOL_SECONDARY:
+          /*testSecondary(coll,first,second);*/
+          ucol_setAttribute(UCA, UCOL_STRENGTH, UCOL_TERTIARY, status);
+          testSecondary(UCA,first,second);
+          ucol_setAttribute(UCA, UCOL_STRENGTH, UCOL_SECONDARY, status);
+          if(ucol_strcoll(UCA, first, firstLen, second, secondLen) != UCOL_LESS) {
+            /*log_verbose("UCA is different for \\u%04X << \\u%04X!\n", *first, *second);*/
+            UCAdiff++;
+          }
+          break;
+      case UCOL_TERTIARY:
+          /*testTertiary(coll,first,second);*/
+          ucol_setAttribute(UCA, UCOL_STRENGTH, UCOL_TERTIARY, status);
+          testTertiary(UCA,first,second);
+          ucol_setAttribute(UCA, UCOL_STRENGTH, UCOL_TERTIARY, status);
+          if(ucol_strcoll(UCA, first, firstLen, second, secondLen) != UCOL_LESS) {
+            /*log_verbose("UCA is different for \\u%04X <<< \\u%04X!!\n", *first, *second);*/
+            UCAdiff++;
+          }
+          break;
+      case UCOL_TOK_RESET:
+      default:
+          break;
+      }
+
+      firstLen = chLen;
+      u_strcpy(first, second);
+
+    }
+    if(UCAdiff == 0) {
+      log_verbose("No immediate conflict with UCA!\n");
     }
     uprv_free(rulesCopy);
   }
@@ -899,21 +1001,23 @@ static void RamsRulesTest( ) {
   UErrorCode status = U_ZERO_ERROR;
   uint32_t i = 0;
   UCollator *coll = NULL;
+  UCollator *UCA = ucol_open("", &status);
   UChar rule[2048];
   uint32_t ruleLen;
 
   log_verbose("RamsRulesTest\n");
-/* 
+
   for(i = 0; i<sizeof(localesToTest)/sizeof(localesToTest[0]); i++) {
     coll = ucol_open(localesToTest[i], &status);
     log_verbose("Testing locale: %s\n", localesToTest[i]);
     if(U_SUCCESS(status)) {
       testCollator(coll, &status);
       testCEs(coll, &status);
+      /*testAgainstUCA(coll, UCA, &status);*/
       ucol_close(coll);
     }
   }
-*/
+
   for(i = 0; i<sizeof(rulesToTest)/sizeof(rulesToTest[0]); i++) {
     log_verbose("Testing rule: %s\n", rulesToTest[i]);
     u_uastrcpy(rule, rulesToTest[i]);
@@ -922,9 +1026,11 @@ static void RamsRulesTest( ) {
     if(U_SUCCESS(status)) {
       testCollator(coll, &status);
       testCEs(coll, &status);
+      /*testAgainstUCA(coll, UCA, &status);*/
       ucol_close(coll);
     }
   }
+
 }
 
 static void IsTailoredTest( ) {
