@@ -2123,8 +2123,8 @@ void CollationAPITest::TestNULLCharTailoring()
     UErrorCode status = U_ZERO_ERROR;
     UChar buf[256] = {0};
     int32_t len = u_unescape("&a < '\\u0000'", buf, 256);
-    UnicodeString first(0x0061);
-    UnicodeString second(0);
+    UnicodeString first((UChar)0x0061);
+    UnicodeString second(UChar)0);
     RuleBasedCollator *coll = new RuleBasedCollator(UnicodeString(buf, len), status);
     if(U_FAILURE(status)) {
         errln("Failed to open collator");
