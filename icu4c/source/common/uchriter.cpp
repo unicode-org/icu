@@ -10,47 +10,24 @@
 
 UCharCharacterIterator::UCharCharacterIterator()
   : CharacterIterator(),
-  text(0),
-  textLength(0),
-  pos(0),
-  begin(0),
-  end(0)
+  text(0)
 {
     // never default construct!
 }
 
 UCharCharacterIterator::UCharCharacterIterator(const UChar* text,
                                                int32_t textLength)
-  : CharacterIterator(),
-  text(text),
-  textLength(textLength),
-  pos(0),
-  begin(0),
-  end(textLength)
+ : CharacterIterator(text != 0 ? textLength : 0),
+  text(text)
 {
-    if(text == 0 || textLength < 0) {
-        textLength = end = 0;
-    }
 }
 
 UCharCharacterIterator::UCharCharacterIterator(const UChar* text,
                                                int32_t textLength,
                                                UTextOffset pos)
-  : CharacterIterator(),
-  text(text),
-  textLength(textLength),
-  pos(pos),
-  begin(0),
-  end(textLength)
+  : CharacterIterator(text != 0 ? textLength : 0, pos),
+  text(text)
 {
-    if(text == 0 || textLength < 0) {
-        textLength = end = 0;
-    }
-    if(pos < 0) {
-        pos = 0;
-    } else if(pos > end) {
-        pos = end;
-    }
 }
 
 UCharCharacterIterator::UCharCharacterIterator(const UChar* text,
@@ -58,50 +35,21 @@ UCharCharacterIterator::UCharCharacterIterator(const UChar* text,
                                                UTextOffset begin,
                                                UTextOffset end,
                                                UTextOffset pos)
-  : CharacterIterator(),
-  text(text),
-  textLength(textLength),
-  pos(pos),
-  begin(begin),
-  end(end)
+  : CharacterIterator(text != 0 ? textLength : 0, begin, end, pos),
+  text(text)
 {
-    if(text == 0 || textLength < 0) {
-        textLength = 0;
-    }
-    if(begin < 0) {
-        begin = 0;
-    } else if(begin > textLength) {
-        begin = textLength;
-    }
-    if(end < begin) {
-        end = begin;
-    } else if(end > textLength) {
-        end = textLength;
-    }
-    if(pos < begin) {
-        pos = begin;
-    } else if(pos > end) {
-        pos = end;
-    }
 }
 
 UCharCharacterIterator::UCharCharacterIterator(const UCharCharacterIterator& that)
 : CharacterIterator(that),
-  text(that.text),
-  textLength(that.textLength),
-  pos(that.pos),
-  begin(that.begin),
-  end(that.end)
+  text(that.text)
 {
 }
 
 UCharCharacterIterator&
 UCharCharacterIterator::operator=(const UCharCharacterIterator& that) {
+    CharacterIterator::operator=(that);
     text = that.text;
-    textLength = that.textLength;
-    pos = that.pos;
-    begin = that.begin;
-    end = that.end;
     return *this;
 }
 
@@ -109,7 +57,7 @@ UCharCharacterIterator::~UCharCharacterIterator() {
 }
 
 bool_t
-UCharCharacterIterator::operator==(const CharacterIterator& that) const {
+UCharCharacterIterator::operator==(const ForwardCharacterIterator& that) const {
     if (this == &that) {
         return TRUE;
     }
@@ -147,9 +95,14 @@ UCharCharacterIterator::first() {
     }
 }
 
-UTextOffset
-UCharCharacterIterator::setToStart() {
-    return pos = begin;
+UChar
+UCharCharacterIterator::firstPostInc() {
+    pos = begin;
+    if(pos < end) {
+        return text[pos++];
+    } else {
+        return DONE;
+    }
 }
 
 UChar
@@ -160,11 +113,6 @@ UCharCharacterIterator::last() {
     } else {
         return DONE;
     }
-}
-
-UTextOffset
-UCharCharacterIterator::setToEnd() {
-    return pos = end;
 }
 
 UChar
@@ -237,6 +185,18 @@ UCharCharacterIterator::first32() {
         UTextOffset i = pos;
         UChar32 c;
         UTF_NEXT_CHAR(text, i, end, c);
+        return c;
+    } else {
+        return DONE;
+    }
+}
+
+UChar32
+UCharCharacterIterator::first32PostInc() {
+    pos = begin;
+    if(pos < end) {
+        UChar32 c;
+        UTF_NEXT_CHAR(text, pos, end, c);
         return c;
     } else {
         return DONE;
@@ -324,17 +284,58 @@ UCharCharacterIterator::previous32() {
 }
 
 UTextOffset
-UCharCharacterIterator::startIndex() const {
-    return begin;
+UCharCharacterIterator::move(int32_t delta, CharacterIterator::EOrigin origin) {
+    switch(origin) {
+    case kStart:
+        pos = begin + delta;
+        break;
+    case kCurrent:
+        pos += delta;
+        break;
+    case kEnd:
+        pos = end + delta;
+        break;
+    default:
+        break;
+    }
+
+    if(pos < begin) {
+        pos = begin;
+    } else if(pos > end) {
+        pos = end;
+    }
+
+    return pos;
 }
 
 UTextOffset
-UCharCharacterIterator::endIndex() const {
-    return end;
-}
+UCharCharacterIterator::move32(int32_t delta, CharacterIterator::EOrigin origin) {
+    // this implementation relies on the "safe" version of the UTF macros
+    // (or the trustworthiness of the caller)
+    switch(origin) {
+    case kStart:
+        pos = begin;
+        if(delta > 0) {
+            UTF_FWD_N(text, pos, end, delta);
+        }
+        break;
+    case kCurrent:
+        if(delta > 0) {
+            UTF_FWD_N(text, pos, end, delta);
+        } else {
+            UTF_BACK_N(text, pos, end, -delta);
+        }
+        break;
+    case kEnd:
+        pos = end;
+        if(delta < 0) {
+            UTF_BACK_N(text, pos, end, -delta);
+        }
+        break;
+    default:
+        break;
+    }
 
-UTextOffset
-UCharCharacterIterator::getIndex() const {
     return pos;
 }
 
