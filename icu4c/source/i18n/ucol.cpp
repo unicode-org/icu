@@ -2755,6 +2755,7 @@ U_CFUNC uint8_t *ucol_getSortKeyWithAllocation(const UCollator *coll,
     return result;
 }
 
+#define UCOL_FSEC_BUF_SIZE 256
 
 /* This function tries to get the size of a sortkey. It will be invoked if the size of resulting buffer is 0  */
 /* or if we run out of space while making a sortkey and want to return ASAP                                   */
@@ -2768,6 +2769,10 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
     UBool  shifted = (coll->alternateHandling == UCOL_SHIFTED);
     UBool  qShifted = shifted  && (compareQuad == 0);
     UBool  isFrenchSec = (coll->frenchCollation == UCOL_ON) && (compareSec == 0);
+    uint8_t fSecsBuff[UCOL_FSEC_BUF_SIZE];
+    uint8_t *fSecs = fSecsBuff;
+    uint32_t fSecsLen = 0, fSecsMaxLen = UCOL_FSEC_BUF_SIZE;
+    uint8_t *frenchStartPtr = NULL, *frenchEndPtr = NULL;
 
     uint32_t variableTopValue = coll->variableTopValue;
     uint8_t UCOL_COMMON_BOT4 = (uint8_t)((coll->variableTopValue>>8)+1);
@@ -2878,7 +2883,27 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
                   currentSize++;
                 }
               } else {
-                currentSize++;
+                fSecs[fSecsLen++] = secondary;
+                if(fSecsLen == fSecsMaxLen) {
+                  if(fSecs == fSecsBuff) {
+                    fSecs = (uint8_t *)uprv_malloc(2*fSecsLen);
+                  } else {
+                    fSecs = (uint8_t *)uprv_realloc(fSecs, 2*fSecsLen);
+                  }
+                  fSecsMaxLen *= 2;
+                }
+                if(notIsContinuation) {
+                  if (frenchStartPtr != NULL) {
+                      /* reverse secondaries from frenchStartPtr up to frenchEndPtr */
+                    uprv_ucol_reverse_buffer(uint8_t, frenchStartPtr, frenchEndPtr);
+                    frenchStartPtr = NULL;
+                  }
+                } else {
+                  if (frenchStartPtr == NULL) {
+                    frenchStartPtr = fSecs+fSecsLen-2;
+                  }
+                  frenchEndPtr = fSecs+fSecsLen-1;
+                }
               }
             }
 
@@ -2928,8 +2953,38 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
           }
     }
 
-    if(c2 > 0) {
-      currentSize += (c2/(uint32_t)UCOL_BOT_COUNT2)+1;
+    if(!isFrenchSec){
+      if(c2 > 0) {
+        currentSize += (c2/(uint32_t)UCOL_BOT_COUNT2)+1;
+      }
+    } else {
+      uint32_t i = 0;
+      if(frenchStartPtr != NULL) {
+        uprv_ucol_reverse_buffer(uint8_t, frenchStartPtr, frenchEndPtr);
+      }
+      for(i = 0; i<fSecsLen; i++) {
+        secondary = *(fSecs+fSecsLen-i-1);
+        /* This is compression code. */
+        if (secondary == UCOL_COMMON2) {
+          ++c2;
+        } else {
+          if(c2 > 0) {
+            if (secondary > UCOL_COMMON2) { // not necessary for 4th level.
+              currentSize += (c2/(uint32_t)UCOL_TOP_COUNT2)+1;
+            } else {
+              currentSize += (c2/(uint32_t)UCOL_BOT_COUNT2)+1;
+            }
+            c2 = 0;
+          }
+          currentSize++;
+        }
+      }
+      if(c2 > 0) {
+        currentSize += (c2/(uint32_t)UCOL_BOT_COUNT2)+1;
+      }
+      if(fSecs != fSecsBuff) {
+        uprv_free(fSecs);
+      }
     }
 
     if(c3 > 0) {
@@ -2952,6 +3007,52 @@ inline void doCaseShift(uint8_t **cases, uint32_t &caseShift) {
     *(*cases)++ = UCOL_CASE_BYTE_START;
     caseShift = UCOL_CASE_SHIFT_START;
   }
+}
+
+inline uint8_t *packFrench(uint8_t *primaries, uint8_t *secondaries, uint32_t *secsize, uint8_t *frenchStartPtr, uint8_t *frenchEndPtr) {
+  uint8_t secondary;
+  int32_t count2 = 0;
+  uint32_t i = 0;
+  uint8_t *primStart = primaries;
+  /* If there are any unresolved continuation secondaries, reverse them here so that we can reverse the whole secondary thing */
+  if(frenchStartPtr != NULL) {
+    uprv_ucol_reverse_buffer(uint8_t, frenchStartPtr, frenchEndPtr);
+  }
+  for(i = 0; i<*secsize; i++) {
+    secondary = *(secondaries-i-1);
+    /* This is compression code. */
+    if (secondary == UCOL_COMMON2) {
+      ++count2;
+    } else {
+      if (count2 > 0) {
+        if (secondary > UCOL_COMMON2) { // not necessary for 4th level.
+          while (count2 > UCOL_TOP_COUNT2) {
+            *(primaries)++ = (uint8_t)(UCOL_COMMON_TOP2 - UCOL_TOP_COUNT2);
+            count2 -= (uint32_t)UCOL_TOP_COUNT2;
+          }
+          *(primaries)++ = (uint8_t)(UCOL_COMMON_TOP2 - (count2-1));
+        } else {
+          while (count2 > UCOL_BOT_COUNT2) {
+            *(primaries)++ = (uint8_t)(UCOL_COMMON_BOT2 + UCOL_BOT_COUNT2);
+            count2 -= (uint32_t)UCOL_BOT_COUNT2;
+          }
+          *(primaries)++ = (uint8_t)(UCOL_COMMON_BOT2 + (count2-1));
+        }
+        count2 = 0;
+      }
+      *(primaries)++ = secondary;
+      //*(primaries++) = *(secondaries-i-1);
+    }
+  }
+  if (count2 > 0) {
+    while (count2 > UCOL_BOT_COUNT2) {
+      *(primaries)++ = (uint8_t)(UCOL_COMMON_BOT2 + UCOL_BOT_COUNT2);
+      count2 -= (uint32_t)UCOL_BOT_COUNT2;
+    }
+    *(primaries)++ = (uint8_t)(UCOL_COMMON_BOT2 + (count2-1));
+  }
+  *secsize = primaries - primStart;
+  return primaries;
 }
 
 /* This is the sortkey work horse function */
@@ -3329,18 +3430,12 @@ ucol_calcSortKey(const    UCollator    *coll,
         }
         *(primaries++) = UCOL_LEVELTERMINATOR;
         uint32_t secsize = secondaries-secStart;
-        sortKeySize += secsize;
         if(sortKeySize <= resultLength) {
           if(isFrenchSec) { /* do the reverse copy */
-            /* If there are any unresolved continuation secondaries, reverse them here so that we can reverse the whole secondary thing */
-            if(frenchStartPtr != NULL) {
-              uprv_ucol_reverse_buffer(uint8_t, frenchStartPtr, frenchEndPtr);
-            }
-            /* TODO: put French secondary compression here */
-            for(i = 0; i<secsize; i++) {
-                *(primaries++) = *(secondaries-i-1);
-            }
+            primaries = packFrench(primaries, secondaries, &secsize, frenchStartPtr, frenchEndPtr);
+            sortKeySize += secsize;
           } else {
+            sortKeySize += secsize;
             uprv_memcpy(primaries, secStart, secsize);
             primaries += secsize;
           }
@@ -3349,15 +3444,10 @@ ucol_calcSortKey(const    UCollator    *coll,
             primStart = reallocateBuffer(&primaries, *result, prim, &resultLength, 2*sortKeySize, status);
             *result = primStart;
             if(isFrenchSec) { /* do the reverse copy */
-              /* If there are any unresolved continuation secondaries, reverse them here so that we can reverse the whole secondary thing */
-              if(frenchStartPtr != NULL) {
-                uprv_ucol_reverse_buffer(uint8_t, frenchStartPtr, frenchEndPtr);
-              }
-            /* TODO: put French secondary compression here */
-              for(i = 0; i<secsize; i++) {
-                  *(primaries++) = *(secondaries-i-1);
-              }
+              primaries = packFrench(primaries, secondaries, &secsize, frenchStartPtr, frenchEndPtr);
+              sortKeySize += secsize;
             } else {
+              sortKeySize += secsize;
               uprv_memcpy(primaries, secStart, secsize);
               primaries += secsize;
             }
