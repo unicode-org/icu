@@ -807,7 +807,7 @@ void TestVariantParsing()
     size=uloc_getDisplayVariant(en_US_custom, "en_US", NULL, size, &status);
     if(status==U_BUFFER_OVERFLOW_ERROR) {
         status=U_ZERO_ERROR;
-        got=(UChar*)malloc(sizeof(UChar) * (size+1));
+        got=(UChar*)realloc(got, sizeof(UChar) * (size+1));
         uloc_getDisplayVariant(en_US_custom, "en_US", got, size, &status);
     }
     u_uastrcpy(displayVar, dispVar);
@@ -870,5 +870,5 @@ void TestVariantParsing()
     if(strcmp(austrdup(got),"_FOO_")!=0) {
         log_err("FAIL: getDisplayVariant()  Wanted: _FOO_  Got: %s\n", austrdup(got));
     }
-  
+    free(got);  
 }

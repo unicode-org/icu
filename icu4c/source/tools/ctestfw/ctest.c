@@ -105,6 +105,18 @@ TestNode *createTestNode( )
   return  newNode;
 }
 
+void cleanUpTestTree(TestNode *tn) {
+    if(tn->child != NULL) {
+        cleanUpTestTree(tn->child);
+    }
+    if(tn->sibling != NULL) {
+        cleanUpTestTree(tn->sibling);
+    }
+
+    free(tn);
+}
+
+
 void addTest ( TestNode** root,
            TestFunctionPtr test,
            const char* name )

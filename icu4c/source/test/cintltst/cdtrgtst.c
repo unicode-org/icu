@@ -46,7 +46,8 @@ void addDateForRgrTest(TestNode** root)
 void Test4029195() 
 {
     int32_t resultlength, resultlengthneeded;
-    UChar *pat, *fmdt, *todayS, *rt;
+    UChar  *fmdt, *todayS, *rt;
+    UChar *pat=NULL;
     UChar *temp;
     UDate today, d1;
     UDateFormat *df;
@@ -102,6 +103,9 @@ void Test4029195()
         log_verbose("Pass: parse and format working fine\n");
     udat_close(df);
     free(temp);
+    if(pat != NULL) {
+        free(pat);
+    }
 }
 
 
@@ -174,6 +178,10 @@ void Test4056591()
                     austrdup(gotdate), austrdup(expdate) );
             }
         }
+
+        udat_close(def);
+        ucal_close(cal);
+        free(tzID);
    
 
 }
@@ -244,7 +252,7 @@ void aux917( UDateFormat *fmt, UChar* str)
     if( u_strcmp(formatted,str)!=0) {
         log_err("Fail: Want %s Got: %s\n", austrdup(str),  austrdup(formatted) );
     }
-    
+    free(pat);
 }
 
 /**
@@ -326,6 +334,8 @@ void Test4061287()
         ok = TRUE;
     if(ok!=TRUE) 
         log_err("Fail: Lenient not working: does lenient parsing in spite of setting Leninent as FALSE ");
+
+    udat_close(df);
     
 }
 
@@ -404,6 +414,7 @@ void Test4073003()
             
        
         }
+        udat_close(fmt);
 }
 
 /**
@@ -434,6 +445,7 @@ void Test4162071()
         log_verbose("Parse format \"%s \" ok.\n", austrdup(format) );
     }
     log_verbose("date= %s\n", austrdup(myFormatit(df, x)) );    
+    udat_close(df);
 }
 
 /*INTERNAL FUNCTION USED */
@@ -451,7 +463,8 @@ UChar* myFormatit(UDateFormat* datdef, UDate d1)
     {
         status=U_ZERO_ERROR;
         resultlength=resultlengthneeded+1;
-        result1=(UChar*)malloc(sizeof(UChar) * resultlength);
+        /*result1=(UChar*)malloc(sizeof(UChar) * resultlength);*/ /*this leaks*/
+        result1=(UChar*)ctst_malloc(sizeof(UChar) * resultlength); /*this won't*/
         udat_format(datdef, d1, result1, resultlength, &pos, &status);
     }
     if(U_FAILURE(status))

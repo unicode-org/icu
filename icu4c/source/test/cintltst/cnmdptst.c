@@ -95,6 +95,9 @@ void TestPatterns()
 	  log_err("FAIL: Pattern %s should format zero as %s; %s Seen instead\n", pat[i], num[i], austrdup(str) );
             
         }
+      free(unewp);
+      free(str);
+      unum_close(fmt);
     }
 }
 /* Test the handling of quotes*/
@@ -410,6 +413,7 @@ void TestCurrency()
       if (u_strcmp(str, res) != 0) log_err("FAIL: Expected %s\n", result[i]);
       unum_close(currencyFmt);
       free(str);
+      free(res);
     }
 }
 /**
@@ -440,7 +444,7 @@ void TestRounding487()
  
 void roundingTest(UNumberFormat* nf, double x, int32_t maxFractionDigits, const char* expected)
 {
-  UChar *out;
+  UChar *out = NULL;
   UChar *res;
   UFieldPosition pos;
   UErrorCode status;
@@ -462,6 +466,10 @@ void roundingTest(UNumberFormat* nf, double x, int32_t maxFractionDigits, const 
   res=(UChar*)malloc(sizeof(UChar) * (strlen(expected)+1) );
   u_uastrcpy(res, expected);
   if (u_strcmp(out, res) != 0) log_err("FAIL: Expected: %s or %s\n", expected, austrdup(res) );
+  free(res);
+  if(out != NULL) {
+    free(out);
+  }
 }
 /*
  * Testing unum_getDoubleAttribute and  unum_setDoubleAttribute() 

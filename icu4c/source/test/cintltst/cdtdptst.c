@@ -124,6 +124,7 @@ void TestPartialParse994()
     tryPat994(f, "yy/MM/dd HH:mm:ss", "97/01/01 ", null);
     tryPat994(f, "yy/MM/dd HH:mm:ss", "97/01/01", null);
     udat_close(f);
+    free(s);
 }
  
 
@@ -289,5 +290,11 @@ void TestQuotePattern161()
     log_verbose("%s\n", austrdup(dateString) );
     if(u_strncmp(dateString, exp, strlen(expStr)) !=0)
         log_err("Error in formatting a pattern with single quotes\n");
+
+    udat_close(format);
+    ucal_close(cal);
+    free(exp);
+    free(tzID);
+    free(pattern);
     
 }
