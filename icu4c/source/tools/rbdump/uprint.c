@@ -51,7 +51,12 @@ uprint(const UChar *s,
   
   /* if we failed, clean up and exit */
   if(U_FAILURE(*status)) goto finish;
+
+	/* output unicode characters properly */
+  ucnv_setFromUCallBack(converter, UCNV_FROM_U_CALLBACK_ESCAPE, status);
   
+  if(U_FAILURE(*status)) goto finish;
+
   /* perform the conversion */
   do {
     /* reset the error code */
