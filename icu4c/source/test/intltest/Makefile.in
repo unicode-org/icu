@@ -65,7 +65,8 @@ numfmtst.o numrgts.o pptest.o regcoll.o restest.o sdtfmtts.o tchcfmt.o	\
 tfsmalls.o tmsgfmt.o trcoll.o tscoll.o tsdate.o tsdcfmsy.o tsdtfmsy.o	\
 tsmthred.o tsmutex.o tsnmfmt.o tsputil.o tstnorm.o tzbdtest.o		\
 tzregts.o tztest.o ucdtest.o usettest.o ustrtest.o transtst.o strtest.o thcoll.o \
-itrbbi.o rbbiapts.o rbbitst.o ittrans.o transapi.o
+itrbbi.o rbbiapts.o rbbitst.o ittrans.o transapi.o cpdtrtst.o unhxtrts.o hxuntrts.o \
+jahatrts.o hajatrts.o ufltlgts.o
 
 DEPS = $(OBJECTS:.o=.d)
 
