@@ -55,9 +55,19 @@
 /*===========================================================================*/
 /* Wide-character functions                                                  */
 /*===========================================================================*/
-#define uprv_wcscat(dst, src) wcscat(dst, src)
-#define uprv_wcscpy(dst, src) wcscpy(dst, src)
-#define uprv_wcslen(src) wcslen(src)
+
+/* The following are not available on all systemts, defined in wchar.h or string.h . */
+#if U_HAVE_WCHAR_H
+#   define uprv_wcscat(dst, src) wcscat(dst, src)
+#   define uprv_wcscpy(dst, src) wcscpy(dst, src)
+#   define uprv_wcslen(src) wcslen(src)
+#else
+U_CAPI wchar_t *uprv_wcscat(wchar_t *dst, const wchar_t *src);
+U_CAPI wchar_t *uprv_wcscpy(wchar_t *dst, const wchar_t *src);
+U_CAPI size_t uprv_wcslen(const wchar_t *src);
+#endif
+
+/* The following are part of the ANSI C standard, defined in stdlib.h . */
 #define uprv_wcstombs(mbstr, wcstr, count) wcstombs(mbstr, wcstr, count)
 #define uprv_mbstowcs(wcstr, mbstr, count) mbstowcs(wcstr, mbstr, count)
 

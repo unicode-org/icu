@@ -16,6 +16,7 @@
 *******************************************************************************
 */
 
+#include "unicode/utypes.h"
 #include "unicode/uchar.h"
 
 #include "uscanf.h"
@@ -33,8 +34,6 @@
 #include <stdlib.h>
 #include <float.h>
 #include <limits.h>
-#include <wchar.h>
-
 
 u_scanf_handler g_u_scanf_handlers     [256];
 u_scanf_info       g_u_scanf_infos     [256];
