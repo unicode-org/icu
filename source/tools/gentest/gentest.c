@@ -23,6 +23,7 @@
 #include "unewdata.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "uoptions.h"
 
 #define DATA_NAME "test"
 #define DATA_TYPE "dat"
@@ -42,71 +43,40 @@ static const UDataInfo dataInfo={
     1, 0, 0, 0                  /* dataVersion */
 };
 
-static void usage();
 static void createData(const char*);
-static bool_t beVerbose=FALSE, haveCopyright=FALSE;
 
-int
-main(int argc, char *argv[]) {
+static UOption options[]={
+    UOPTION_HELP_H,
+    UOPTION_HELP_QUESTION_MARK,
+    UOPTION_DESTDIR
+};
 
-  int printUsage = 0;
-  int option = 1;
-  char *arg;
-  char *outputDir = NULL; /* NULL = no output directory, use the default one(data) */
-  
-  if(argc > 3)
-      printUsage=1;
-   
-   /* parse the options */
-   for(option = 1; option < argc; ++option) {
-    arg = argv[option];
-    
-    /* usage info */
-    if(uprv_strcmp(arg, "-h") == 0 || uprv_strcmp(arg, "--help") == 0) {
-      printUsage = 1;
+extern int
+main(int argc, const char *argv[]) {
+    /* preset then read command line options */
+    options[2].value=u_getDataDirectory();
+    argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
+
+    /* error handling, printing usage message */
+    if(argc<0) {
+        fprintf(stderr,
+            "error in command line argument \"%s\"\n",
+            argv[-argc]);
+    }
+    if(argc<0 || options[0].doesOccur || options[1].doesOccur) {
+        fprintf(stderr,
+            "usage: %s [-options]\n"
+            "\tcreate the test file " DATA_NAME "." DATA_TYPE "\n"
+            "\toptions:\n"
+            "\t\t-h or -? or --help  this usage text\n"
+            "\t\t-d or --destdir     destination directory, followed by the path\n",
+            argv[0]);
+        return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
-    else if(uprv_strcmp(arg, "-D") == 0 || uprv_strcmp(arg, "--dir") == 0) {
-        outputDir = argv[++option];
-    }
-
-    /* all arguments after -- are not options */
-    else if(uprv_strcmp(arg, "--") == 0) {
-      /* skip the -- */
-      ++option;
-      break;
-    }
-    /* unrecognized option */
-    else if(uprv_strncmp(arg, "-", uprv_strlen("-")) == 0) {
-      printf("genrb: invalid option -- %s\n", arg+1);
-      printUsage = 1;
-    }
-    /* done with options, start Generating the memory mapped file */
-    else {
-      break;
-    }
-  }
-
-  /* print usage info */
-  if(printUsage) {
-    usage();
+    printf("Generating the test memory mapped file"); 
+    createData(options[2].value);
     return 0;
-  }
-  printf("Generating the test memory mapped file"); 
-  createData(outputDir);
-  return 0;
-}
-/* Usage information */
-static void
-usage()
-{  
-  /*("Usage: gentest [OPTIONS] [DIR]");*/
-  fprintf(stderr, "Usage: gentest [OPTIONS] [DIR]\n"
-                  "\tCreates the memory mapped file \"" DATA_NAME "." DATA_TYPE "\" for testing purpose\n"
-                  "Options: \n"
-                  "\t-h, --help        Print this message and exit.\n"
-                  "\t-D, --dir         Store the created memory mapped file under 'dir'.\n");
-
 }
 
 /* Create data file ----------------------------------------------------- */
@@ -121,7 +91,7 @@ createData(const char* outputDirectory) {
     uint32_t size;
 
     pData=udata_create(outputDirectory, DATA_TYPE, DATA_NAME, &dataInfo,
-                       haveCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
+                       U_COPYRIGHT_STRING, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "gentest: unable to create data memory, error %d\n", errorCode);
         exit(errorCode);
