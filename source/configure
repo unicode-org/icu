@@ -4091,7 +4091,7 @@ trap 'rm -fr `echo "README icudefs.mk \
 		data/Makefile data/build/Makefile \
 		common/Makefile config/Makefile.inc i18n/Makefile \
 		layout/Makefile \
-		extra/Makefile extra/ustdio/Makefile extra/uconv/Makefile \
+		extra/Makefile extra/ustdio/Makefile extra/uconv/Makefile extra/scrptrun/Makefile \
 		stubdata/Makefile \
 		tools/Makefile tools/ctestfw/Makefile tools/makeconv/Makefile \
 		tools/genrb/Makefile  \
@@ -4263,7 +4263,7 @@ CONFIG_FILES=\${CONFIG_FILES-"README icudefs.mk \
 		data/Makefile data/build/Makefile \
 		common/Makefile config/Makefile.inc i18n/Makefile \
 		layout/Makefile \
-		extra/Makefile extra/ustdio/Makefile extra/uconv/Makefile \
+		extra/Makefile extra/ustdio/Makefile extra/uconv/Makefile extra/scrptrun/Makefile \
 		stubdata/Makefile \
 		tools/Makefile tools/ctestfw/Makefile tools/makeconv/Makefile \
 		tools/genrb/Makefile  \
