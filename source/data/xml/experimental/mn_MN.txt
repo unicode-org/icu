@@ -1,0 +1,24 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2003, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+mn_MN{
+    Version{ "x0.2" }
+    Currencies {
+        MNT { "\u20AE", "MNT" }
+    }
+    DateTimePatterns{
+        "H:mm:ss",
+        "H:mm:ss",
+        "H:mm:ss",
+        "H:mm:ss",
+        "yyyy '\u043E\u043D\u044B' MMMM d",
+        "yyyy '\u043E\u043D\u044B' MMMM d",
+        "yyyy.MM.dd",
+        "yy.MM.dd",
+        "{1} {0}",
+    }
+}

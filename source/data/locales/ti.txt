@@ -1,0 +1,92 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../locale/common/main/ti.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main/ti.xml
+ */
+ti{
+    Countries:alias{"am"}
+    ExemplarCharacters{"[:Ethi:]"}
+    Languages:alias{"am"}
+    LocaleScript{
+        "Ethi",
+    }
+    Version{"1.2"}
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "ንጉሆ ሰዓተ",
+                "ድሕር ሰዓት",
+            }
+            DateTimeElements:intvector{
+                7,
+                1,
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "ሰንበ",
+                        "ሰኑይ",
+                        "ሠሉስ",
+                        "ረቡዕ",
+                        "ኃሙስ",
+                        "ዓርቢ",
+                        "ቀዳም",
+                    }
+                    wide{
+                        "ሰንበት",
+                        "ሰኑይ",
+                        "ሠሉስ",
+                        "ረቡዕ",
+                        "ኃሙስ",
+                        "ዓርቢ",
+                        "ቀዳም",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "ዓ/ዓ",
+                    "ዓ/ም",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "ጃንዩ",
+                        "ፌብሩ",
+                        "ማርች",
+                        "ኤፕረ",
+                        "ሜይ",
+                        "ጁን",
+                        "ጁላይ",
+                        "ኦገስ",
+                        "ሴፕቴ",
+                        "ኦክተ",
+                        "ኖቬም",
+                        "ዲሴም",
+                    }
+                    wide{
+                        "ጃንዩወሪ",
+                        "ፌብሩወሪ",
+                        "ማርች",
+                        "ኤፕረል",
+                        "ሜይ",
+                        "ጁን",
+                        "ጁላይ",
+                        "ኦገስት",
+                        "ሴፕቴምበር",
+                        "ኦክተውበር",
+                        "ኖቬምበር",
+                        "ዲሴምበር",
+                    }
+                }
+            }
+        }
+    }
+}

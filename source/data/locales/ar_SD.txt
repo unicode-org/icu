@@ -1,0 +1,11 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../locale/common/main/ar_SD.xml
+// *
+// ***************************************************************************
+ar_SD{
+    Version{"1.2"}
+}

@@ -1,0 +1,22 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../locale/common/collation/root.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/collation/root.xml
+ */
+root{
+    "%%UCARULES":include{"../unidata/UCARules.txt"}
+    Version{"1.2"}
+    collations{
+        default{"standard"}
+        standard{
+            Sequence{""}
+            Version{"0.0"}
+        }
+    }
+}

@@ -1,0 +1,21 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2003, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+ky_KG{
+    Version{ "x0.3" }
+    DateTimePatterns{
+        "H:mm:ss",
+        "H:mm:ss",
+        "H:mm:ss",
+        "H:mm:ss",
+        "d'-'MMMM yyyy'-\u0436.'",
+        "d'-'MMMM yyyy'-\u0436.',EEEE",
+        "dd.MM.yyyy",
+        "dd.MM.yy",
+        "{1} {0}",
+    }
+}
