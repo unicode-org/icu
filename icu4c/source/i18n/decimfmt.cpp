@@ -64,7 +64,6 @@ static void debugout(UnicodeString s) {
 // *****************************************************************************
 
 const char DecimalFormat::fgClassID = 0; // Value is irrelevant
-UParseError DecimalFormat::fParseError;
 
 // Constants for characters used in programmatic (unlocalized) patterns.
 const UChar DecimalFormat::kPatternZeroDigit           = 0x0030 /*'0'*/;
@@ -103,7 +102,8 @@ DecimalFormat::DecimalFormat(UErrorCode& status)
   fNegSuffixPattern(0),
   fSymbols(0)
 {
-    construct(status,fParseError);
+    UParseError parseError;
+    construct(status, parseError);
 }
 
 //------------------------------------------------------------------------------
@@ -119,7 +119,8 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern,
   fNegSuffixPattern(0),
   fSymbols(0)
 {
-    construct(status,fParseError, &pattern);
+    UParseError parseError;
+    construct(status, parseError, &pattern);
 }
 
 //------------------------------------------------------------------------------
@@ -137,9 +138,10 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern,
   fNegSuffixPattern(0),
   fSymbols(0)
 {
+    UParseError parseError;
     if (symbolsToAdopt == NULL)
         status = U_ILLEGAL_ARGUMENT_ERROR;
-    construct(status,fParseError, &pattern, symbolsToAdopt);
+    construct(status, parseError, &pattern, symbolsToAdopt);
 }
  
 DecimalFormat::DecimalFormat(  const UnicodeString& pattern,
@@ -172,7 +174,8 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern,
   fNegSuffixPattern(0),
   fSymbols(0)
 {
-    construct(status,fParseError, &pattern, new DecimalFormatSymbols(symbols));
+    UParseError parseError;
+    construct(status, parseError, &pattern, new DecimalFormatSymbols(symbols));
 }
 
 //------------------------------------------------------------------------------
