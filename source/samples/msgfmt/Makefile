@@ -7,7 +7,7 @@
 #  - do 'make install' of icu 
 #
 #  - change the following line to point to the $(prefix) that 
-#    was used (will look for $(prefix)/share/icu/Makefile.inc )
+#    was used (will look for $(prefix)/lib/icu/Makefile.inc )
 #      OR 
 #   set the variable ICU_PREFIX to point at $(prefix)
 #  
@@ -16,9 +16,9 @@
 ICU_DEFAULT_PREFIX=~/icu
 
 ifeq ($(strip $(ICU_PREFIX)),)
-  ICU_INC=$(ICU_DEFAULT_PREFIX)/share/icu/Makefile.inc
+  ICU_INC=$(ICU_DEFAULT_PREFIX)/lib/icu/Makefile.inc
 else
-  ICU_INC=$(ICU_PREFIX)/share/icu/Makefile.inc
+  ICU_INC=$(ICU_PREFIX)/lib/icu/Makefile.inc
 endif
 ICUPATH=
 
