@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/Transliterator_Cyrillic_Latin.txt,v $
-# $Date: 2001/10/20 01:33:44 $
-# $Revision: 1.3 $
+# $Date: 2001/11/02 19:07:05 $
+# $Revision: 1.4 $
 #--------------------------------------------------------------------
 # TODO: add remaining characters
 # Should add variants for Russian-English, Russian-German
@@ -23,6 +23,7 @@ $breve = \u0306 ;
 $dot = \u0307 ;
 $caron = \u030C ;
 $comma = \u0326 ;
+$under = \u0331 ;
 
 # move up so not masked
 
@@ -202,12 +203,14 @@ $comma = \u0326 ;
 # Ҿ <> XXX ; # CYRILLIC CAPITAL LETTER ABKHASIAN CHE WITH DESCENDER
 
 
-ъ <>  [:Ll:] { $modprime2 ; # CYRILLIC SMALL LETTER HARD SIGN
-Ъ <> $modprime2 ; # CYRILLIC CAPITAL LETTER HARD SIGN
+Ъ <> $modprime2 $under ; # CYRILLIC CAPITAL LETTER HARD SIGN
+ъ <>  $modprime2 ; # CYRILLIC SMALL LETTER HARD SIGN
+Ь <> $modprime $under ; # CYRILLIC CAPITAL LETTER SOFT SIGN
+ь <>  $modprime ; # CYRILLIC SMALL LETTER SOFT SIGN
+
 ы <> y ; # CYRILLIC SMALL LETTER YERU
 Ы <> Y ; # CYRILLIC CAPITAL LETTER YERU
-ь <>  [:Ll:] { $modprime ; # CYRILLIC SMALL LETTER SOFT SIGN
-Ь <> $modprime ; # CYRILLIC CAPITAL LETTER SOFT SIGN
+
 # ҍ <> XXX ; # CYRILLIC SMALL LETTER SEMISOFT SIGN
 # Ҍ <> XXX ; # CYRILLIC CAPITAL LETTER SEMISOFT SIGN
 # ѣ <> XXX ; # CYRILLIC SMALL LETTER YAT
