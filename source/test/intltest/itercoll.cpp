@@ -292,7 +292,7 @@ void CollationIteratorTest::TestMaxExpansion(/* char* par */)
         order = iter->previous(status);
 
         /* thai management */
-        if (order == 0)
+        if (CollationElementIterator::isIgnorable(order))
             order = iter->previous(status);
 
         while (U_SUCCESS(status)
