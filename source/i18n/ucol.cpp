@@ -621,7 +621,7 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
     /*CompactEIntArray *newUCAmapping = ucmpe32_openFromData(&mapping, status);*/
     UTrie *newUCAmapping = (UTrie *)uprv_malloc(sizeof(UTrie)); 
     if(newUCAmapping != NULL) {
-      utrie_unserialize(newUCAmapping, mapping, result->image->latinOneMapping - result->image->mappingPosition, status);
+      utrie_unserialize(newUCAmapping, mapping, result->image->endExpansionCE - result->image->mappingPosition, status);
     } else {
       *status = U_MEMORY_ALLOCATION_ERROR;
       if(result->freeOnClose == TRUE) {
