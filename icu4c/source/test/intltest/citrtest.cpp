@@ -120,8 +120,8 @@ void CharIterTest::TestConstructionAndEquality() {
 
 }
 void CharIterTest::TestConstructionAndEqualityUChariter() {
-    const char testTextchars[]= {"Now is the time for all good men to come to the aid of their country."};
-    const char testText2chars[]={"Don't bother using this string."};
+    const char testTextchars[]= "Now is the time for all good men to come to the aid of their country.";
+    const char testText2chars[]="Don't bother using this string.";
 
     UChar *testText = new UChar[sizeof(testTextchars)];
     UChar *testText2 = new UChar[sizeof(testText2chars)];
