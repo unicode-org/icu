@@ -67,3 +67,4 @@ typedef int32_t (*u_scanf_handler) (UFILE            *stream,
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif
+
