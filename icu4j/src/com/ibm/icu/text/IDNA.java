@@ -3,19 +3,18 @@
  * Copyright (C) 2003-2004, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/stringprep/Attic/IDNA.java,v $
- * $Date: 2003/08/27 03:09:08 $
- * $Revision: 1.2 $ 
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/IDNA.java,v $
+ * $Date: 2003/08/27 21:12:04 $
+ * $Revision: 1.1 $ 
  *
  *****************************************************************************************
  */
-package com.ibm.icu.stringprep;
+package com.ibm.icu.text;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 import com.ibm.icu.impl.LocaleUtility;
-import com.ibm.icu.text.UCharacterIterator;
 
 /**
  *
@@ -78,16 +77,23 @@ public final class IDNA {
      */
     public static final int USE_STD3_RULES      = 0x0002;
     
-    private static StringPrep prep  = null;
+    // static final singleton object that is initialized
+    // at class initialization time, hence guaranteed to
+    // be initialized and thread safe
+    private static final IDNA singleton  = new IDNA();
     
-  
-    private static synchronized void loadInstance()
-                                throws IOException{
-        if(prep==null){
+    // The NamePrep profile object
+    private StringPrep namePrep;
+    
+    /* private constructor to prevent construction of the object */
+    private IDNA(){
+        try{
            InputStream stream = LocaleUtility.getImplDataResourceAsStream("uidna.spp");
-           prep = StringPrep.getInstance(stream);
+           namePrep = StringPrep.getInstance(stream);
            stream.close();
-        }        
+        }catch (IOException e){
+            throw new RuntimeException(e.toString());
+        }
     }
     
     private static boolean startsWithPrefix(StringBuffer src){
@@ -140,32 +146,10 @@ public final class IDNA {
             }
         }
     }
-    private static int compareCaseInsensitiveASCII(String s1, String s2){
-        char c1,c2;
-        int rc;
-        for(int i =0;/* no condition */;i++) {
-            /* If we reach the ends of both strings then they match */
-            if(i == s1.length()) {
-                return 0;
-            }
-
-            c1 = s1.charAt(i);
-            c2 = s2.charAt(i);
-        
-            /* Case-insensitive comparison */
-            if(c1!=c2) {
-                rc=(int)toASCIILower(c1)-(int)toASCIILower(c2);
-                if(rc!=0) {
-                    return rc;
-                }
-            }
-        }
-    }   
-    private static int getSeparatorIndex(char[] src,int start, int limit)
-                       throws IOException{
-        loadInstance();
+   
+    private static int getSeparatorIndex(char[] src,int start, int limit){
         for(; start<limit;start++){
-            if(prep.isLabelSeparator(src[start])){
+            if(isLabelSeparator(src[start])){
                 return start;
             }
         }
@@ -173,6 +157,26 @@ public final class IDNA {
         return start;
     }
     
+    /*
+    private static int getSeparatorIndex(UCharacterIterator iter){
+        int currentIndex = iter.getIndex();
+        int separatorIndex = 0;
+        int ch;
+        while((ch=iter.next())!= UCharacterIterator.DONE){
+            if(isLabelSeparator(ch)){
+                separatorIndex = iter.getIndex();
+                iter.setIndex(currentIndex);
+                return separatorIndex;
+            }
+        }
+        // reset index
+        iter.setIndex(currentIndex);
+        // we have not found the separator just return the length
+       
+    }
+    */
+    
+
     private static boolean isLDHChar(int ch){
         // high runner case
         if(ch>0x007A){
@@ -189,9 +193,26 @@ public final class IDNA {
         return false;
     }
     
-    /* private constructor to prevent construction of the object */
-    private IDNA(){}
-    
+    /**
+     * Ascertain if the given code point is a label separator as 
+     * defined by the IDNA RFC
+     * 
+     * @param ch The code point to be ascertained
+     * @return true if the char is a label separator
+     * @draft ICU 2.8
+     */
+    public static boolean isLabelSeparator(int ch){
+        switch(ch){
+            case 0x002e:
+            case 0x3002:
+            case 0xFF0E:
+            case 0xFF61:
+                return true;
+            default:
+                return false;           
+        }
+    }
+       
     /**
      * This function implements the ToASCII operation as defined in the IDNA RFC.
      * This operation is done on <b>single labels</b> before sending it to something that expects
@@ -215,11 +236,10 @@ public final class IDNA {
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
      * @throws ParseException
-     * @throws IOException
      * @draft ICU 2.8
      */    
     public static StringBuffer convertToASCII(String src, int options)
-        throws ParseException, IOException{
+        throws StringPrepParseException{
         UCharacterIterator iter = UCharacterIterator.getInstance(src);
         return convertToASCII(iter,options);
     }
@@ -247,11 +267,10 @@ public final class IDNA {
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
      * @throws ParseException
-     * @throws IOException
      * @draft ICU 2.8
      */
     public static StringBuffer convertToASCII(StringBuffer src, int options)
-        throws ParseException, IOException{
+        throws StringPrepParseException{
         UCharacterIterator iter = UCharacterIterator.getInstance(src);
         return convertToASCII(iter,options);
     }
@@ -279,13 +298,10 @@ public final class IDNA {
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
      * @throws ParseException
-     * @throws IOException
      * @draft ICU 2.8
      */
     public static StringBuffer convertToASCII(UCharacterIterator srcIter, int options)
-                throws ParseException, IOException{
-        //load the data
-        loadInstance();
+                throws StringPrepParseException{
         
         boolean[] caseFlags = null;
     
@@ -299,7 +315,7 @@ public final class IDNA {
     
         int failPos = -1;
         // step 2
-        StringBuffer processOut = prep.prepare(srcIter,options);
+        StringBuffer processOut = singleton.namePrep.prepare(srcIter,options);
         int poLen = processOut.length();
         StringBuffer dest = new StringBuffer();
         // step 3 & 4
@@ -325,17 +341,17 @@ public final class IDNA {
 
                 /* populate the parseError struct */
                 if(srcIsLDH==false){
-                     throw new ParseException( "The input does not conform to the STD 3 ASCII rules",
-                                              ParseException.STD3_ASCII_RULES_ERROR,
+                     throw new StringPrepParseException( "The input does not conform to the STD 3 ASCII rules",
+                                              StringPrepParseException.STD3_ASCII_RULES_ERROR,
                                               processOut.toString(),
                                              (failPos>0) ? (failPos-1) : failPos);
                 }else if(processOut.charAt(0) == HYPHEN){
-                    throw new ParseException("The input does not conform to the STD 3 ASCII rules",
-                                              ParseException.STD3_ASCII_RULES_ERROR,processOut.toString(),0);
+                    throw new StringPrepParseException("The input does not conform to the STD 3 ASCII rules",
+                                              StringPrepParseException.STD3_ASCII_RULES_ERROR,processOut.toString(),0);
      
                 }else{
-                     throw new ParseException("The input does not conform to the STD 3 ASCII rules",
-                                              ParseException.STD3_ASCII_RULES_ERROR,
+                     throw new StringPrepParseException("The input does not conform to the STD 3 ASCII rules",
+                                              StringPrepParseException.STD3_ASCII_RULES_ERROR,
                                               processOut.toString(),
                                               (poLen>0) ? poLen-1 : poLen);
 
@@ -362,13 +378,13 @@ public final class IDNA {
                 dest.append(lowerOut);
             }else{
 
-                throw new ParseException("The input does not start with the ACE Prefix.",
-                                         ParseException.ACE_PREFIX_ERROR,processOut.toString(),0);
+                throw new StringPrepParseException("The input does not start with the ACE Prefix.",
+                                         StringPrepParseException.ACE_PREFIX_ERROR,processOut.toString(),0);
             }
         }
         if(dest.length() > MAX_LABEL_LENGTH){
-            throw new ParseException("The labels in the input are too long. Length > 64.", 
-                                     ParseException.LABEL_TOO_LONG_ERROR,dest.toString(),0);
+            throw new StringPrepParseException("The labels in the input are too long. Length > 64.", 
+                                     StringPrepParseException.LABEL_TOO_LONG_ERROR,dest.toString(),0);
         }
         return dest;
     }
@@ -401,11 +417,10 @@ public final class IDNA {
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
      * @throws ParseException
-     * @throws IOException
      * @draft ICU 2.8
      */
-    public static StringBuffer convertIDNtoASCII(UCharacterIterator iter,int options)
-            throws ParseException, IOException{
+    public static StringBuffer convertIDNToASCII(UCharacterIterator iter,int options)
+            throws StringPrepParseException{
         return convertIDNToASCII(iter.getText(), options);          
     }
     
@@ -437,11 +452,10 @@ public final class IDNA {
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
      * @throws ParseException
-     * @throws IOException
      * @draft ICU 2.8
      */
-    public static StringBuffer convertIDNtoASCII(StringBuffer str,int options)
-            throws ParseException, IOException{
+    public static StringBuffer convertIDNToASCII(StringBuffer str,int options)
+            throws StringPrepParseException{
             return convertIDNToASCII(str.toString(), options);          
     }
     
@@ -473,13 +487,11 @@ public final class IDNA {
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
      * @throws ParseException
-     * @throws IOException
      * @draft ICU 2.8
      */
     public static StringBuffer convertIDNToASCII(String src,int options)
-            throws ParseException, IOException{
-        //load the data
-        loadInstance();
+            throws StringPrepParseException{
+
         char[] srcArr = src.toCharArray();
         StringBuffer result = new StringBuffer();
         int sepIndex=0;
@@ -523,11 +535,10 @@ public final class IDNA {
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
      * @throws ParseException
-     * @throws IOException
      * @draft ICU 2.8
      */
     public static StringBuffer convertToUnicode(String src, int options)
-           throws ParseException, IOException{
+           throws StringPrepParseException{
         UCharacterIterator iter = UCharacterIterator.getInstance(src);
         return convertToUnicode(iter,options);
     }
@@ -555,11 +566,10 @@ public final class IDNA {
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
      * @throws ParseException
-     * @throws IOException
      * @draft ICU 2.8
      */
     public static StringBuffer convertToUnicode(StringBuffer src, int options)
-           throws ParseException, IOException{
+           throws StringPrepParseException{
         UCharacterIterator iter = UCharacterIterator.getInstance(src);
         return convertToUnicode(iter,options);
     }
@@ -587,13 +597,10 @@ public final class IDNA {
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
      * @throws ParseException
-     * @throws IOException
      * @draft ICU 2.8
      */
     public static StringBuffer convertToUnicode(UCharacterIterator iter, int options)
-           throws ParseException, IOException{
-        //load the data
-        loadInstance();
+           throws StringPrepParseException{
         
         boolean[] caseFlags = null;
         
@@ -622,7 +629,7 @@ public final class IDNA {
         if(srcIsASCII == false){
             // step 2: process the string
             iter.setIndex(saveIndex);
-            processOut = prep.prepare(iter,options);
+            processOut = singleton.namePrep.prepare(iter,options);
 
         }else{
             //just point to source
@@ -649,8 +656,8 @@ public final class IDNA {
 
             //step 7: verify
             if(compareCaseInsensitiveASCII(processOut, toASCIIOut) !=0){
-                throw new ParseException("The verification step prescribed by the RFC 3491 failed",
-                                         ParseException.VERIFICATION_ERROR); 
+                throw new StringPrepParseException("The verification step prescribed by the RFC 3491 failed",
+                                         StringPrepParseException.VERIFICATION_ERROR); 
             }
 
             //step 8: return output of step 5
@@ -664,17 +671,17 @@ public final class IDNA {
                     || processOut.charAt(processOut.length()-1) == HYPHEN){
     
                     if(srcIsLDH==false){
-                        throw new ParseException("The input does not conform to the STD 3 ASCII rules",
-                                                 ParseException.STD3_ASCII_RULES_ERROR,processOut.toString(),
+                        throw new StringPrepParseException("The input does not conform to the STD 3 ASCII rules",
+                                                 StringPrepParseException.STD3_ASCII_RULES_ERROR,processOut.toString(),
                                                  (failPos>0) ? (failPos-1) : failPos);
                     }else if(processOut.charAt(0) == HYPHEN){
-                        throw new ParseException("The input does not conform to the STD 3 ASCII rules",
-                                                 ParseException.STD3_ASCII_RULES_ERROR,
+                        throw new StringPrepParseException("The input does not conform to the STD 3 ASCII rules",
+                                                 StringPrepParseException.STD3_ASCII_RULES_ERROR,
                                                  processOut.toString(),0);
          
                     }else{
-                        throw new ParseException("The input does not conform to the STD 3 ASCII rules",
-                                                 ParseException.STD3_ASCII_RULES_ERROR,
+                        throw new StringPrepParseException("The input does not conform to the STD 3 ASCII rules",
+                                                 StringPrepParseException.STD3_ASCII_RULES_ERROR,
                                                  processOut.toString(),
                                                  processOut.length());
     
@@ -711,11 +718,10 @@ public final class IDNA {
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
      * @throws ParseException
-     * @throws IOException
      * @draft ICU 2.8
      */
     public static StringBuffer convertIDNToUnicode(UCharacterIterator iter, int options)
-        throws ParseException, IOException{
+        throws StringPrepParseException{
         return convertIDNToUnicode(iter.getText(), options);
     }
     
@@ -744,11 +750,10 @@ public final class IDNA {
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
      * @throws ParseException
-     * @throws IOException
      * @draft ICU 2.8
      */
     public static StringBuffer convertIDNToUnicode(StringBuffer str, int options)
-        throws ParseException, IOException{
+        throws StringPrepParseException{
         return convertIDNToUnicode(str.toString(), options);
     }
     
@@ -777,11 +782,10 @@ public final class IDNA {
      *                              the operation will fail with ParseException
      * @return StringBuffer the converted String
      * @throws ParseException
-     * @throws IOException
      * @draft ICU 2.8
      */
     public static StringBuffer convertIDNToUnicode(String src, int options)
-        throws ParseException, IOException{
+        throws StringPrepParseException{
             
         char[] srcArr = src.toCharArray();
         StringBuffer result = new StringBuffer();
@@ -828,12 +832,11 @@ public final class IDNA {
      *                              the operation will fail with ParseException
      * @return 0 if the strings are equal, > 0 if s1 > s2 and < 0 if s1 < s2
      * @throws ParseException
-     * @throws IOException
      * @draft ICU 2.8
      */
     //  TODO: optimize
     public static int compare(StringBuffer s1, StringBuffer s2, int options)
-        throws ParseException, IOException{
+        throws StringPrepParseException{
         if(s1==null || s2 == null){
             throw new IllegalArgumentException("One of the source buffers is null");
         }
@@ -868,12 +871,11 @@ public final class IDNA {
      *                              the operation will fail with ParseException
      * @return 0 if the strings are equal, > 0 if s1 > s2 and < 0 if s1 < s2
      * @throws ParseException
-     * @throws IOException
      * @draft ICU 2.8
      */
     //  TODO: optimize
     public static int compare(String s1, String s2, int options)
-        throws ParseException, IOException{
+        throws StringPrepParseException{
         if(s1==null || s2 == null){
             throw new IllegalArgumentException("One of the source buffers is null");
         }
@@ -907,12 +909,11 @@ public final class IDNA {
      *                              the operation will fail with ParseException
      * @return 0 if the strings are equal, > 0 if i1 > i2 and < 0 if i1 < i2
      * @throws ParseException
-     * @throws IOException
      * @draft ICU 2.8
      */
     //  TODO: optimize
     public static int compare(UCharacterIterator i1, UCharacterIterator i2, int options)
-        throws ParseException, IOException{
+        throws StringPrepParseException{
         if(i1==null || i2 == null){
             throw new IllegalArgumentException("One of the source buffers is null");
         }

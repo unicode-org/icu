@@ -5,15 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/stringprep/IDNAReference.java,v $
- * $Date: 2003/08/21 23:42:25 $
- * $Revision: 1.1 $
+ * $Date: 2003/08/27 21:13:14 $
+ * $Revision: 1.2 $
  *
  *******************************************************************************
 */
 package com.ibm.icu.dev.test.stringprep;
 
+import com.ibm.icu.text.StringPrepParseException;
 import com.ibm.icu.text.UCharacterIterator;
-import com.ibm.icu.stringprep.ParseException;
 
 /**
  * @author ram
@@ -117,17 +117,17 @@ public class IDNAReference {
     }
         
     public static StringBuffer convertToASCII(String src, int options)
-        throws ParseException{
+        throws StringPrepParseException{
         UCharacterIterator iter = UCharacterIterator.getInstance(src);
         return convertToASCII(iter,options);
     }
     public static StringBuffer convertToASCII(StringBuffer src, int options)
-        throws ParseException{
+        throws StringPrepParseException{
         UCharacterIterator iter = UCharacterIterator.getInstance(src);
         return convertToASCII(iter,options);
     }
     public static StringBuffer convertToASCII(UCharacterIterator srcIter, int options)
-                throws ParseException{
+                throws StringPrepParseException{
     
         char[] caseFlags = null;
     
@@ -168,17 +168,17 @@ public class IDNAReference {
 
                 /* populate the parseError struct */
                 if(srcIsLDH==false){
-                     throw new ParseException( "The input does not conform to the STD 3 ASCII rules",
-                                              ParseException.STD3_ASCII_RULES_ERROR,
+                     throw new StringPrepParseException( "The input does not conform to the STD 3 ASCII rules",
+                                              StringPrepParseException.STD3_ASCII_RULES_ERROR,
                                               processOut.toString(),
                                              (failPos>0) ? (failPos-1) : failPos);
                 }else if(processOut.charAt(0) == HYPHEN){
-                    throw new ParseException("The input does not conform to the STD 3 ASCII rules",
-                                              ParseException.STD3_ASCII_RULES_ERROR,processOut.toString(),0);
+                    throw new StringPrepParseException("The input does not conform to the STD 3 ASCII rules",
+                                              StringPrepParseException.STD3_ASCII_RULES_ERROR,processOut.toString(),0);
      
                 }else{
-                     throw new ParseException("The input does not conform to the STD 3 ASCII rules",
-                                              ParseException.STD3_ASCII_RULES_ERROR,
+                     throw new StringPrepParseException("The input does not conform to the STD 3 ASCII rules",
+                                              StringPrepParseException.STD3_ASCII_RULES_ERROR,
                                               processOut.toString(),
                                               (poLen>0) ? poLen-1 : poLen);
 
@@ -202,27 +202,27 @@ public class IDNAReference {
                 //Step 6: copy the contents in b2 into dest
                 dest.append(lowerOut);
             }else{
-                throw new ParseException("The input does not start with the ACE Prefix.",
-                                   ParseException.ACE_PREFIX_ERROR,processOut.toString(),0);
+                throw new StringPrepParseException("The input does not start with the ACE Prefix.",
+                                   StringPrepParseException.ACE_PREFIX_ERROR,processOut.toString(),0);
             }
         }
         if(dest.length() > MAX_LABEL_LENGTH){
-            throw new ParseException("The labels in the input are too long. Length > 64.", 
-                                    ParseException.LABEL_TOO_LONG_ERROR,dest.toString(),0);
+            throw new StringPrepParseException("The labels in the input are too long. Length > 64.", 
+                                    StringPrepParseException.LABEL_TOO_LONG_ERROR,dest.toString(),0);
         }
         return dest;
     }
     
     public static StringBuffer convertIDNtoASCII(UCharacterIterator iter,int options)
-            throws ParseException{
+            throws StringPrepParseException{
             return convertIDNToASCII(iter.getText(), options);          
     }
     public static StringBuffer convertIDNtoASCII(StringBuffer str,int options)
-            throws ParseException{
+            throws StringPrepParseException{
             return convertIDNToASCII(str.toString(), options);          
     }
     public static StringBuffer convertIDNToASCII(String src,int options)
-            throws ParseException{
+            throws StringPrepParseException{
         char[] srcArr = src.toCharArray();
         StringBuffer result = new StringBuffer();
         int sepIndex=0;
@@ -243,17 +243,17 @@ public class IDNAReference {
     }
 
     public static StringBuffer convertToUnicode(String src, int options)
-           throws ParseException{
+           throws StringPrepParseException{
         UCharacterIterator iter = UCharacterIterator.getInstance(src);
         return convertToUnicode(iter,options);
     }
     public static StringBuffer convertToUnicode(StringBuffer src, int options)
-           throws ParseException{
+           throws StringPrepParseException{
         UCharacterIterator iter = UCharacterIterator.getInstance(src);
         return convertToUnicode(iter,options);
     }   
     public static StringBuffer convertToUnicode(UCharacterIterator iter, int options)
-           throws ParseException{
+           throws StringPrepParseException{
 
         char[] caseFlags = null;
         
@@ -309,8 +309,8 @@ public class IDNAReference {
 
             //step 7: verify
             if(compareCaseInsensitiveASCII(processOut, toASCIIOut) !=0){
-                throw new ParseException("The verification step prescribed by the RFC 3491 failed",
-                                          ParseException.VERIFICATION_ERROR); 
+                throw new StringPrepParseException("The verification step prescribed by the RFC 3491 failed",
+                                          StringPrepParseException.VERIFICATION_ERROR); 
              }
 
             //step 8: return output of step 5
@@ -324,17 +324,17 @@ public class IDNAReference {
                     || processOut.charAt(processOut.length()-1) == HYPHEN){
     
                         if(srcIsLDH==false){
-                            throw new ParseException("The input does not conform to the STD 3 ASCII rules",
-                                                     ParseException.STD3_ASCII_RULES_ERROR,processOut.toString(),
+                            throw new StringPrepParseException("The input does not conform to the STD 3 ASCII rules",
+                                                     StringPrepParseException.STD3_ASCII_RULES_ERROR,processOut.toString(),
                                                      (failPos>0) ? (failPos-1) : failPos);
                         }else if(processOut.charAt(0) == HYPHEN){
-                            throw new ParseException("The input does not conform to the STD 3 ASCII rules",
-                                                     ParseException.STD3_ASCII_RULES_ERROR,
+                            throw new StringPrepParseException("The input does not conform to the STD 3 ASCII rules",
+                                                     StringPrepParseException.STD3_ASCII_RULES_ERROR,
                                                      processOut.toString(),0);
          
                         }else{
-                            throw new ParseException("The input does not conform to the STD 3 ASCII rules",
-                                                     ParseException.STD3_ASCII_RULES_ERROR,
+                            throw new StringPrepParseException("The input does not conform to the STD 3 ASCII rules",
+                                                     StringPrepParseException.STD3_ASCII_RULES_ERROR,
                                                      processOut.toString(),
                                                      processOut.length());
     
@@ -346,15 +346,15 @@ public class IDNAReference {
         }  
     }
     public static StringBuffer convertIDNToUnicode(UCharacterIterator iter, int options)
-        throws ParseException{
+        throws StringPrepParseException{
         return convertIDNToUnicode(iter.getText(), options);
     }
     public static StringBuffer convertIDNToUnicode(StringBuffer str, int options)
-        throws ParseException{
+        throws StringPrepParseException{
         return convertIDNToUnicode(str.toString(), options);
     }
     public static StringBuffer convertIDNToUnicode(String src, int options)
-        throws ParseException{
+        throws StringPrepParseException{
             
         char[] srcArr = src.toCharArray();
         StringBuffer result = new StringBuffer();
@@ -376,7 +376,7 @@ public class IDNAReference {
     }
     //  TODO: optimize
     public static int compare(StringBuffer s1, StringBuffer s2, int options)
-        throws ParseException{
+        throws StringPrepParseException{
         if(s1==null || s2 == null){
             throw new IllegalArgumentException("One of the source buffers is null");
         }
@@ -386,7 +386,7 @@ public class IDNAReference {
     }
     //  TODO: optimize
     public static int compare(String s1, String s2, int options)
-        throws ParseException{
+        throws StringPrepParseException{
         if(s1==null || s2 == null){
             throw new IllegalArgumentException("One of the source buffers is null");
         }
@@ -396,7 +396,7 @@ public class IDNAReference {
     }
     //  TODO: optimize
     public static int compare(UCharacterIterator i1, UCharacterIterator i2, int options)
-        throws ParseException{
+        throws StringPrepParseException{
         if(i1==null || i2 == null){
             throw new IllegalArgumentException("One of the source buffers is null");
         }

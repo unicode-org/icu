@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/stringprep/NFS4StringPrep.java,v $
- * $Date: 2003/08/27 03:08:29 $
- * $Revision: 1.2 $
+ * $Date: 2003/08/27 21:13:14 $
+ * $Revision: 1.3 $
  *
  *******************************************************************************
 */
@@ -17,8 +17,8 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
 import com.ibm.icu.dev.test.TestUtil;
-import com.ibm.icu.stringprep.ParseException;
-import com.ibm.icu.stringprep.StringPrep;
+import com.ibm.icu.text.StringPrepParseException;
+import com.ibm.icu.text.StringPrep;
 import com.ibm.icu.text.UCharacterIterator;
 
 /**
@@ -78,7 +78,7 @@ public final class NFS4StringPrep {
     }
     
     private static byte[] prepare(byte[] src, StringPrep prep)
-                throws ParseException, UnsupportedEncodingException{
+                throws StringPrepParseException, UnsupportedEncodingException{
         String s = new String(src, "UTF-8");
         UCharacterIterator iter =  UCharacterIterator.getInstance(s);
         StringBuffer out = prep.prepare(iter,StringPrep.NONE);
@@ -86,17 +86,17 @@ public final class NFS4StringPrep {
     }
     
     public static byte[] cs_prepare(byte[] src, boolean caseInsensitive)
-                         throws IOException, ParseException, UnsupportedEncodingException{
+                         throws IOException, StringPrepParseException, UnsupportedEncodingException{
         NFS4StringPrep prep = getInstance();
         if(caseInsensitive){
             return prepare(src, prep.nfscsi);
         }else{
-            return prepare(src,prep.nfscsi);
+            return prepare(src, prep.nfscss);
         }
     }
     
     public static byte[] cis_prepare(byte[] src)
-                         throws IOException, ParseException, UnsupportedEncodingException{
+                         throws IOException, StringPrepParseException, UnsupportedEncodingException{
         NFS4StringPrep prep = getInstance();
         return prepare(src, prep.nfscis);
     }  
@@ -140,7 +140,7 @@ public final class NFS4StringPrep {
     private static final char AT_SIGN = '@';
     
     public static byte[] mixed_prepare(byte[] src)
-                         throws IOException, ParseException, UnsupportedEncodingException{
+                         throws IOException, StringPrepParseException, UnsupportedEncodingException{
         String s = new String(src, "UTF-8");
         int index = s.indexOf(AT_SIGN);
         StringBuffer out = new StringBuffer();
@@ -151,7 +151,7 @@ public final class NFS4StringPrep {
             int i= findStringIndex(special_prefixes, prefixString);
             String suffixString = s.substring(index+1, s.length());
             if(i>-1 && !suffixString.equals("")){
-                throw new ParseException("Suffix following a special index", ParseException.INVALID_CHAR_FOUND);
+                throw new StringPrepParseException("Suffix following a special index", StringPrepParseException.INVALID_CHAR_FOUND);
             }
             UCharacterIterator prefix = UCharacterIterator.getInstance(prefixString);
             UCharacterIterator suffix = UCharacterIterator.getInstance(suffixString);

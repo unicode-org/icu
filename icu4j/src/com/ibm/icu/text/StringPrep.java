@@ -3,13 +3,13 @@
  * Copyright (C) 2003-2004, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/stringprep/Attic/StringPrep.java,v $
- * $Date: 2003/08/27 03:09:08 $
- * $Revision: 1.2 $ 
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringPrep.java,v $
+ * $Date: 2003/08/27 21:12:04 $
+ * $Revision: 1.1 $ 
  *
  *****************************************************************************************
  */
-package com.ibm.icu.stringprep;
+package com.ibm.icu.text;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -19,9 +19,6 @@ import java.io.InputStream;
 import com.ibm.icu.impl.CharTrie;
 import com.ibm.icu.impl.StringPrepDataReader;
 import com.ibm.icu.impl.Trie;
-import com.ibm.icu.text.Normalizer;
-import com.ibm.icu.text.UCharacterIterator;
-import com.ibm.icu.text.UTF16;
 import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterDirection;
@@ -29,11 +26,11 @@ import com.ibm.icu.lang.UCharacterDirection;
 /**
  * StringPrep API implements the StingPrep framework as described by RFC 3454.
  * StringPrep prepares Unicode strings for use in network protocols.
- * Profiles of StingPrep are set of rules and data according to with the
+ * Profiles of StingPrep are set of rules and data according to which the
  * Unicode Strings are prepared. Each profiles contains tables which describe
  * how a code point should be treated. The tables are broadly classied into
  * <ul>
- *     <li> Unassinged Table: Contains code points that are unassigned 
+ *     <li> Unassigned Table: Contains code points that are unassigned 
  *          in the Unicode Version supported by StringPrep. Currently 
  *          RFC 3454 supports Unicode 3.2. </li>
  *     <li> Prohibited Table: Contains code points that are prohibted from
@@ -48,7 +45,7 @@ import com.ibm.icu.lang.UCharacterDirection;
  *      <li> Normalize: Possibly normalize the result of step 1 using Unicode
  *           normalization. </li>
  *      <li> Prohibit: Check for any characters that are not allowed in the
- *        output.  If any are found, return an error.</li>
+ *           output.  If any are found, return an error.</li>
  *      <li> Check bidi: Possibly check for right-to-left characters, and if
  *           any are found, make sure that the whole string satisfies the
  *           requirements for bidirectional strings.  If the string does not
@@ -61,15 +58,15 @@ public final class StringPrep {
     /** 
      * Option to prohibit processing of unassigned code points in the input
      * 
-     * @see  usprep_prepare
+     * @see   prepare
      * @draft ICU 2.8
      */
-    public static final int NONE = 0x0000;
+    public static final int DEFAULT = 0x0000;
 
     /** 
      * Option to allow processing of unassigned code points in the input
      * 
-     * @see  usprep_prepare
+     * @see   prepare
      * @draft ICU 2.8
      */
     public static final int ALLOW_UNASSIGNED = 0x0001;
@@ -246,7 +243,7 @@ public final class StringPrep {
 
 
     private StringBuffer map( UCharacterIterator iter, int options)
-                            throws ParseException{
+                            throws StringPrepParseException{
     
         Values val = new Values();
         char result = 0;
@@ -261,8 +258,8 @@ public final class StringPrep {
 
             // check if the source codepoint is unassigned
             if(val.type == UNASSIGNED && allowUnassigned == false){
-                 throw new ParseException("An unassigned code point was found in the input",
-                                          ParseException.UNASSIGNED_ERROR,
+                 throw new StringPrepParseException("An unassigned code point was found in the input",
+                                          StringPrepParseException.UNASSIGNED_ERROR,
                                           iter.getText(),iter.getIndex());    
             }else if((val.type == MAP)){
                 int index, length;
@@ -303,15 +300,15 @@ public final class StringPrep {
     private StringBuffer normalize(StringBuffer src){
         return new StringBuffer(Normalizer.normalize(src.toString(),Normalizer.NFKC,Normalizer.UNICODE_3_2));
     }
-    
-    protected boolean isLabelSeparator(int ch){
+    /*
+    boolean isLabelSeparator(int ch){
         int result = getCodePointValue(ch);
         if( (result & 0x07)  == LABEL_SEPARATOR){
             return true;
         }
         return false;
     }
-
+    */
      /*
        1) Map -- For each character in the input, check if it has a mapping
           and, if so, replace it with its mapping.  
@@ -368,7 +365,7 @@ public final class StringPrep {
      * @draft ICU 2.8
      */
     public StringBuffer prepare(UCharacterIterator src, int options)
-                        throws ParseException{
+                        throws StringPrepParseException{
                                               
         // map 
         StringBuffer mapOut = map(src,options);
@@ -393,8 +390,8 @@ public final class StringPrep {
             getValues(result,val);
 
             if(val.type == PROHIBITED ){
-                throw new ParseException("A prohibited code point was found in the input",
-                                         ParseException.PROHIBITED_ERROR,iter.getText(),val.value);
+                throw new StringPrepParseException("A prohibited code point was found in the input",
+                                         StringPrepParseException.PROHIBITED_ERROR,iter.getText(),val.value);
             }
 
             direction = UCharacter.getDirection(ch);
@@ -413,8 +410,8 @@ public final class StringPrep {
         if(checkBiDi == true){
             // satisfy 2
             if( leftToRight == true && rightToLeft == true){
-                throw new ParseException("The input does not conform to the rules for BiDi code points.",
-                                         ParseException.CHECK_BIDI_ERROR,iter.getText(),
+                throw new StringPrepParseException("The input does not conform to the rules for BiDi code points.",
+                                         StringPrepParseException.CHECK_BIDI_ERROR,iter.getText(),
                                          (rtlPos>ltrPos) ? rtlPos : ltrPos);
              }
     
@@ -423,8 +420,8 @@ public final class StringPrep {
                 !((firstCharDir == UCharacterDirection.RIGHT_TO_LEFT || firstCharDir == UCharacterDirection.RIGHT_TO_LEFT_ARABIC) &&
                 (direction == UCharacterDirection.RIGHT_TO_LEFT || direction == UCharacterDirection.RIGHT_TO_LEFT_ARABIC))
               ){
-                throw new ParseException("The input does not conform to the rules for BiDi code points.",
-                                         ParseException.CHECK_BIDI_ERROR,iter.getText(),
+                throw new StringPrepParseException("The input does not conform to the rules for BiDi code points.",
+                                         StringPrepParseException.CHECK_BIDI_ERROR,iter.getText(),
                                          (rtlPos>ltrPos) ? rtlPos : ltrPos);
             }
         }

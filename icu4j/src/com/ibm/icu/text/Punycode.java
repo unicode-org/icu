@@ -4,16 +4,15 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/stringprep/Attic/Punycode.java,v $ 
- * $Date: 2003/08/27 03:09:08 $ 
- * $Revision: 1.2 $
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Punycode.java,v $ 
+ * $Date: 2003/08/27 21:12:04 $ 
+ * $Revision: 1.1 $
  *
  *****************************************************************************************
  */
-package com.ibm.icu.stringprep;
+package com.ibm.icu.text;
 
 import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.text.UTF16;
 
 /**
  * Ported code from ICU punycode.c 
@@ -138,7 +137,7 @@ final class Punycode {
      * @return
      * @throws ParseException
      */
-    public static StringBuffer encode(StringBuffer src, boolean[] caseFlags) throws ParseException{
+    public static StringBuffer encode(StringBuffer src, boolean[] caseFlags) throws StringPrepParseException{
 		
         int[] cpBuffer = new int[MAX_CP_COUNT];
         int n, delta, handledCPCount, basicLength, destLength, bias, j, m, q, k, t, srcCPCount;
@@ -178,7 +177,7 @@ final class Punycode {
                     n|=UCharacter.getCodePoint(c, c2);
                 } else {
                     /* error: unmatched surrogate */
-                    throw new ParseException("Illegal char found",ParseException.ILLEGAL_CHAR_FOUND);
+                    throw new StringPrepParseException("Illegal char found",StringPrepParseException.ILLEGAL_CHAR_FOUND);
                 }
                 cpBuffer[srcCPCount++]=n;
             }
@@ -299,7 +298,7 @@ final class Punycode {
      * @throws ParseException
      */
     public static StringBuffer decode(StringBuffer src, boolean[] caseFlags) 
-                               throws ParseException{
+                               throws StringPrepParseException{
         int srcLength = src.length();
         StringBuffer result = new StringBuffer();
         int n, destLength, i, bias, basicLength, j, in, oldi, w, k, digit, t,
@@ -326,7 +325,7 @@ final class Punycode {
         while(j>0) {
             b=src.charAt(--j);
             if(!isBasic(b)) {
-                throw new ParseException("Illegal char found", ParseException.INVALID_CHAR_FOUND);
+                throw new StringPrepParseException("Illegal char found", StringPrepParseException.INVALID_CHAR_FOUND);
             }
 
             if(j<destCapacity) {
@@ -361,16 +360,16 @@ final class Punycode {
              */
             for(oldi=i, w=1, k=BASE; /* no condition */; k+=BASE) {
                 if(in>=srcLength) {
-                    throw new ParseException("Illegal char found", ParseException.ILLEGAL_CHAR_FOUND);
+                    throw new StringPrepParseException("Illegal char found", StringPrepParseException.ILLEGAL_CHAR_FOUND);
                 }
 
                 digit=basicToDigit[(byte)src.charAt(in++)];
                 if(digit<0) {
-                    throw new ParseException("Invalid char found", ParseException.INVALID_CHAR_FOUND);
+                    throw new StringPrepParseException("Invalid char found", StringPrepParseException.INVALID_CHAR_FOUND);
                 }
                 if(digit>(0x7fffffff-i)/w) {
                     /* integer overflow */
-                    throw new ParseException("Illegal char found", ParseException.ILLEGAL_CHAR_FOUND);
+                    throw new StringPrepParseException("Illegal char found", StringPrepParseException.ILLEGAL_CHAR_FOUND);
                 }
 
                 i+=digit*w;
@@ -386,7 +385,7 @@ final class Punycode {
 
                 if(w>0x7fffffff/(BASE-t)) {
                     /* integer overflow */
-                    throw new ParseException("Illegal char found", ParseException.ILLEGAL_CHAR_FOUND);
+                    throw new StringPrepParseException("Illegal char found", StringPrepParseException.ILLEGAL_CHAR_FOUND);
                 }
                 w*=BASE-t;
             }
@@ -405,7 +404,7 @@ final class Punycode {
              */
             if(i/destCPCount>(0x7fffffff-n)) {
                 /* integer overflow */
-                throw new ParseException("Illegal char found", ParseException.ILLEGAL_CHAR_FOUND);
+                throw new StringPrepParseException("Illegal char found", StringPrepParseException.ILLEGAL_CHAR_FOUND);
             }
 
             n+=i/destCPCount;
@@ -415,7 +414,7 @@ final class Punycode {
 
             if(n>0x10ffff || isSurrogate(n)) {
                 /* Unicode code point overflow */
-                throw new ParseException("Illegal char found", ParseException.ILLEGAL_CHAR_FOUND);
+                throw new StringPrepParseException("Illegal char found", StringPrepParseException.ILLEGAL_CHAR_FOUND);
             }
 
             /* Insert n at position i of the output: */

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/stringprep/NamePrepTransform.java,v $
- * $Date: 2003/08/21 23:42:21 $
- * $Revision: 1.1 $
+ * $Date: 2003/08/27 21:13:14 $
+ * $Revision: 1.2 $
  *
  *******************************************************************************
 */
@@ -17,7 +17,7 @@ import java.util.ResourceBundle;
 import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterDirection;
-import com.ibm.icu.stringprep.ParseException;
+import com.ibm.icu.text.StringPrepParseException;
 import com.ibm.icu.text.UCharacterIterator;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.Transliterator;
@@ -97,11 +97,11 @@ public class NamePrepTransform {
     */
     public StringBuffer prepare(UCharacterIterator src,
                                        int options)
-                                       throws ParseException{
+                                       throws StringPrepParseException{
              return prepare(src.getText(),options);
     }
     private String map ( String src, int options)
-                                throws ParseException{
+                                throws StringPrepParseException{
         // map 
         boolean allowUnassigned = (boolean) ((options & ALLOW_UNASSIGNED)>0);
         String caseMapOut = transform.mapTransform.transliterate(src);    
@@ -109,14 +109,14 @@ public class NamePrepTransform {
         int ch;
         while((ch=iter.nextCodePoint())!=UCharacterIterator.DONE){                          
             if(transform.unassignedSet.contains(ch)==true && allowUnassigned ==false){
-                throw new ParseException("An unassigned code point was found in the input",
-                                         ParseException.UNASSIGNED_ERROR);
+                throw new StringPrepParseException("An unassigned code point was found in the input",
+                                         StringPrepParseException.UNASSIGNED_ERROR);
             }
         }
         return caseMapOut;
     }
     public StringBuffer prepare(String src,int options)
-                                   throws ParseException{
+                                   throws StringPrepParseException{
  
         int ch;
         String mapOut = map(src,options);
@@ -131,8 +131,8 @@ public class NamePrepTransform {
 
 
             if(transform.prohibitedSet.contains(ch)==true){
-                throw new ParseException("A prohibited code point was found in the input",
-                                         ParseException.PROHIBITED_ERROR,
+                throw new StringPrepParseException("A prohibited code point was found in the input",
+                                         StringPrepParseException.PROHIBITED_ERROR,
                                          iter.getText(),iter.getIndex());
             }
 
@@ -152,8 +152,8 @@ public class NamePrepTransform {
 
         // satisfy 2
         if( leftToRight == true && rightToLeft == true){
-            throw new ParseException("The input does not conform to the rules for BiDi code points.",
-                                     ParseException.CHECK_BIDI_ERROR,iter.getText(),(rtlPos>ltrPos) ? rtlPos : ltrPos);
+            throw new StringPrepParseException("The input does not conform to the rules for BiDi code points.",
+                                     StringPrepParseException.CHECK_BIDI_ERROR,iter.getText(),(rtlPos>ltrPos) ? rtlPos : ltrPos);
         }
 
         //satisfy 3
@@ -161,8 +161,8 @@ public class NamePrepTransform {
             !((firstCharDir == UCharacterDirection.RIGHT_TO_LEFT || firstCharDir == UCharacterDirection.RIGHT_TO_LEFT_ARABIC) &&
             (direction == UCharacterDirection.RIGHT_TO_LEFT || direction == UCharacterDirection.RIGHT_TO_LEFT_ARABIC))
            ){
-            throw new ParseException("The input does not conform to the rules for BiDi code points.",
-                                      ParseException.CHECK_BIDI_ERROR,iter.getText(),(rtlPos>ltrPos) ? rtlPos : ltrPos);
+            throw new StringPrepParseException("The input does not conform to the rules for BiDi code points.",
+                                      StringPrepParseException.CHECK_BIDI_ERROR,iter.getText(),(rtlPos>ltrPos) ? rtlPos : ltrPos);
         }
         
         return new StringBuffer(mapOut);

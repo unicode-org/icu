@@ -3,13 +3,15 @@
  * Copyright (C) 2003-2004, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/stringprep/Attic/ParseException.java,v $
- * $Date: 2003/08/27 03:09:08 $
- * $Revision: 1.2 $ 
+ * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringPrepParseException.java,v $
+ * $Date: 2003/08/27 21:12:04 $
+ * $Revision: 1.1 $ 
  *
  *****************************************************************************************
  */
-package com.ibm.icu.stringprep;
+package com.ibm.icu.text;
+
+import java.text.ParseException;
 
 /**
  * Exception that signals an error has occurred while parsing the 
@@ -17,7 +19,7 @@ package com.ibm.icu.stringprep;
  *
  * @author Ram Viswanadha
  */
-public class ParseException extends Exception {
+public class StringPrepParseException extends ParseException {
     /**
      * @draft ICU 2.8
      */
@@ -67,10 +69,9 @@ public class ParseException extends Exception {
      * @param error   The error that has occurred
      * @draft ICU 2.8
      */
-    public ParseException(String message,int error){
-        super(message);
+    public StringPrepParseException(String message,int error){
+        super(message, -1);
         this.error = error;
-        this.offset = -1;
         this.line = 0;
     }
     
@@ -84,11 +85,10 @@ public class ParseException extends Exception {
      * @param pos     The position of error in the rules string
      * @draft ICU 2.8
      */
-    public ParseException(String message,int error, String rules, int pos){
-        super(message);
+    public StringPrepParseException(String message,int error, String rules, int pos){
+        super(message, -1);
         this.error = error;
         setContext(rules,pos);  
-        this.offset = -1;  
         this.line = 0;
     }
     /**
@@ -98,22 +98,16 @@ public class ParseException extends Exception {
      * @param error      The error that has occurred
      * @param rules      The input rules string 
      * @param pos        The position of error in the rules string
-     * @param offset     The character offset to the error.  If the line field is
-     *                   being used, then this offset is from the start of the line.
-     *                   If the line field is not being used, then this offset is from
-     *                   the start of the text.The default value of this field
-     *                   is -1. 
      * @param lineNumber The line number at which the error has occurred. 
      *                   If the parse engine is not using this field, it should set it to zero.  Otherwise
      *                   it should be a positive integer. The default value of this field
      *                   is -1. It will be set to 0 if the code populating this struct is not
      *                   using line numbers.
      */
-    public ParseException(String message, int error, String rules, int pos, int offset, int lineNumber){
-        super(message);
+    public StringPrepParseException(String message, int error, String rules, int pos, int lineNumber){
+        super(message, -1);
         this.error = error;
-        setContext(rules,pos);  
-        this.offset = offset;  
+        setContext(rules,pos);   
         this.line = lineNumber;
     }
     /**
@@ -126,10 +120,10 @@ public class ParseException extends Exception {
      * @draft ICU 2.8
      */
     public boolean equals(Object other){
-        if(!(other instanceof ParseException)){
+        if(!(other instanceof StringPrepParseException)){
             return false;
         }
-        return ((ParseException)other).error == this.error;
+        return ((StringPrepParseException)other).error == this.error;
         
     }
     /**
@@ -161,16 +155,6 @@ public class ParseException extends Exception {
      */
     private int line;
 
-    /**
-     * The character offset to the error.  If the line field is
-     * being used, then this offset is from the start of the line.
-     * If the line field is not being used, then this offset is from
-     * the start of the text.The default value of this field
-     * is -1. It will be set to appropriate value by the code that 
-     * populating the struct.
-     * @draft ICU 2.8 
-     */
-    private int    offset;
 
     /**
      * Textual context before the error.  Null-terminated.
