@@ -32,6 +32,7 @@ static void
 writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
 {
   const char *p, *baseName;
+  char *tmpPtr;
   char tmp[1024];
   char stanza[1024];
   char cfile[1024];
@@ -54,6 +55,13 @@ writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
     uprv_strcpy(tmp+(p-1-baseName), "_"); /* to append */
     uprv_strcat(tmp, p);
     uprv_strcat(tmp, OBJ_SUFFIX);
+
+    /* iSeries cannot have '-' in the .o objects. */
+    for( tmpPtr = tmp; *tmpPtr; tmpPtr++ ) {
+      if ( *tmpPtr == '-' ) {
+        *tmpPtr = '_';
+      }
+    }
 
     *objects = pkg_appendToList(*objects, &oTail, uprv_strdup(tmp));
 
