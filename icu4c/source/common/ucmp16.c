@@ -364,10 +364,14 @@ static CompactShortArray* setToBogus(CompactShortArray* this_obj)
     this_obj->fCompact = FALSE;
     this_obj->fBogus = TRUE;
   }
-  
+
   return this_obj;
 }
 
+UBool ucmp16_isBogus(const CompactShortArray* this_obj)
+{
+    return (UBool)(this_obj == NULL || this_obj->fBogus);
+}
 
 void ucmp16_expand(CompactShortArray* this_obj)
 {
