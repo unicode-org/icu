@@ -6,7 +6,7 @@
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/CalculateCRC32.java,v $ 
 * $Date: 2003/05/19 
-* $Revision: 1.1 $
+* $Revision: 1.2 $
 *
 ******************************************************************************
 */
@@ -15,7 +15,8 @@ package com.ibm.icu.dev.tool.localeconverter;
 
 import java.math.*;
 
-/* The code is from  http://www.theorem.com/java/CRC32.java
+/*
+ *  The code is from  http://www.theorem.com/java/CRC32.java
  * Calculates the CRC32 - 32 bit Cyclical Redundancy Check
  * <P> This check is used in numerous systems to verify the integrity
  * of information.  It's also used as a hashing function.  Unlike a regular
