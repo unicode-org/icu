@@ -150,7 +150,11 @@ UObject *UObjectTest::testClass(UObject *obj,
 #include "unesctrn.h"
 #include "uni2name.h"
 #include "uvector.h"
+#include "currfmt.h"
+#include "buddhcal.h"
 #include "islamcal.h"
+#include "japancal.h"
+#include "hebrwcal.h"
 
 // External Things
 #include "unicode/brkiter.h"
@@ -160,6 +164,7 @@ UObject *UObjectTest::testClass(UObject *obj,
 #include "unicode/choicfmt.h"
 #include "unicode/coleitr.h"
 #include "unicode/coll.h"
+#include "unicode/curramt.h"
 #include "unicode/datefmt.h"
 #include "unicode/dbbi.h"
 #include "unicode/dcfmtsym.h"
@@ -203,6 +208,7 @@ UObject *UObjectTest::testClass(UObject *obj,
 void UObjectTest::testIDs()
 {
     ids_count = 0;
+    const UChar SMALL_STR[] = {0x51, 0x51, 0x51, 0}; // "QQQ"
 
 #if !UCONFIG_NO_TRANSLITERATION
     UParseError parseError;
@@ -228,15 +234,19 @@ void UObjectTest::testIDs()
     /* TESTCLASSID_FACTORY(NFSubstitution,  NFSubstitution::makeSubstitution(8, */
     /* TESTCLASSID_DEFAULT(DigitList);  UMemory but not UObject*/
     TESTCLASSID_ABSTRACT(NumberFormat);
+    TESTCLASSID_CTOR(ChoiceFormat, (UNICODE_STRING_SIMPLE("0#are no files|1#is one file|1<are many files"), status));
     TESTCLASSID_CTOR(DateFormatSymbols, (status));
     TESTCLASSID_CTOR(DecimalFormatSymbols, (status));
-#if UOBJTEST_TEST_INTERNALS
-    TESTCLASSID_CTOR(FunctionReplacer, (NULL,NULL) ); /* don't care */
-#endif
     TESTCLASSID_DEFAULT(FieldPosition);
     TESTCLASSID_DEFAULT(Formattable);
+    TESTCLASSID_CTOR(CurrencyAmount, (1.0, SMALL_STR, status));
+    TESTCLASSID_CTOR(CurrencyUnit, (SMALL_STR, status));
+    TESTCLASSID_CTOR(CurrencyFormat, (Locale::getUS(), status));
     TESTCLASSID_CTOR(GregorianCalendar, (status));
+    TESTCLASSID_CTOR(BuddhistCalendar, (Locale::getUS(), status));
     TESTCLASSID_CTOR(IslamicCalendar, (Locale::getUS(), status));
+    TESTCLASSID_CTOR(JapaneseCalendar, (Locale::getUS(), status));
+    TESTCLASSID_CTOR(HebrewCalendar, (Locale::getUS(), status));
 #endif
 
 #if !UCONFIG_NO_BREAK_ITERATION
@@ -251,7 +261,6 @@ void UObjectTest::testIDs()
     
 #if !UCONFIG_NO_TRANSLITERATION
 
-    
     TESTCLASSID_TRANSLIT(AnyTransliterator, "Any-Latin");
     TESTCLASSID_TRANSLIT(CompoundTransliterator, "Latin-Greek");
     TESTCLASSID_TRANSLIT(EscapeTransliterator, "Any-Hex");
@@ -265,6 +274,9 @@ void UObjectTest::testIDs()
     TESTCLASSID_TRANSLIT(UnescapeTransliterator, "Hex-Any");
     TESTCLASSID_TRANSLIT(UnicodeNameTransliterator, "Any-Name");
     TESTCLASSID_TRANSLIT(UppercaseTransliterator, "Upper");
+#if UOBJTEST_TEST_INTERNALS
+    TESTCLASSID_CTOR(FunctionReplacer, (NULL,NULL) ); /* don't care */
+#endif
 #endif
         
     TESTCLASSID_FACTORY(Locale, new Locale("123"));
