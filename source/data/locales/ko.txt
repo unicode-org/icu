@@ -2199,18 +2199,18 @@ ko {
     LocaleID:int { 0x12 }
 //    LocaleString { "ko" }
     MonthAbbreviations {
-        "1",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "10",
-        "11",
-        "12",
+        "1\uC6D4",
+        "2\uC6D4",
+        "3\uC6D4",
+        "4\uC6D4",
+        "5\uC6D4",
+        "6\uC6D4",
+        "7\uC6D4",
+        "8\uC6D4",
+        "9\uC6D4",
+        "10\uC6D4",
+        "11\uC6D4",
+        "12\uC6D4",
     }
     MonthNames {
         "1\uC6D4",
