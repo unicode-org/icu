@@ -10,9 +10,9 @@
 */
 #ifndef GREGOIMP_H
 #define GREGOIMP_H
-#if !UCONFIG_NO_FORMATTING
-
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
 
 U_NAMESPACE_BEGIN
 
