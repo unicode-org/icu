@@ -229,8 +229,8 @@ void aux917( UDateFormat *fmt, UChar* str)
 {    
    int32_t resultlength, resultlengthneeded;
    UErrorCode status = U_ZERO_ERROR;
-   UChar* formatted;
-   UChar *pat;
+   UChar* formatted=NULL;
+   UChar *pat=NULL;
    UDate d1=1000000000.0;
    
     resultlength=0;
@@ -452,7 +452,7 @@ void Test4162071()
 
 UChar* myFormatit(UDateFormat* datdef, UDate d1)
 {
-    UChar *result1;
+    UChar *result1=NULL;
     int32_t resultlength, resultlengthneeded;
     UFieldPosition pos;
     UErrorCode status = U_ZERO_ERROR;

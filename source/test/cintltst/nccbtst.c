@@ -449,7 +449,7 @@ void TestStop(int32_t inputsize, int32_t outputsize)
 
         if(!testConvertToUnicode(sampleTxt_euc_tw, sizeof(sampleTxt_euc_tw),
                  euc_twtoUnicode, sizeof(euc_twtoUnicode)/sizeof(euc_twtoUnicode[0]),"euc-tw",
-                (UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP, from_euc_jpOffs, NULL, 0 ))
+                (UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP, from_euc_twOffs, NULL, 0 ))
             log_err("euc-tw->u with stop did not match.\n");
     }
     log_verbose("Testing fromUnicode for UTF-8 with UCNV_TO_U_CALLBACK_STOP \n");
@@ -887,7 +887,7 @@ void TestEBCDIC_STATEFUL_Sub(int32_t inputsize, int32_t outputsize)
             
             if(!testConvertFromUnicode(ebcdic_inputTest, sizeof(ebcdic_inputTest)/sizeof(ebcdic_inputTest[0]),
                 toIBM930_maxbuffer, sizeof(toIBM930_maxbuffer), "ibm-930",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE, offset_930, NULL, 0 ))
+                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE, offset_930_maxbuffer, NULL, 0 ))
                     log_err("u-> ibm-930(EBCDIC_STATEFUL) with subst did not match.\n");
 
             if(!testConvertFromUnicode(ebcdic_inputTest, sizeof(ebcdic_inputTest)/sizeof(ebcdic_inputTest[0]),
