@@ -76,7 +76,7 @@ check check-local check-recursive builddata
 .SUFFIXES :
 
 ## List of standard targets
-all: all-recursive all-local
+all: all-local all-recursive
 install: install-recursive install-local
 clean: clean-recursive clean-local
 distclean : distclean-recursive distclean-local
@@ -103,13 +103,12 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 
 all-local: $(srcdir)/configure builddata
 
-install-local: $(top_builddir)/config/Makefile.inc
-	@for file in $(EXTRA_DATA); do \
-	  echo $(INSTALL_DATA) $(top_srcdir)/../data/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file; \
-	  $(INSTALL_DATA) $(top_srcdir)/../data/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file || exit; \
-	done
+install-local: $(top_builddir)/config/Makefile.inc $(EXTRA_DATA:%=$(DESTDIR)$(pkgdatadir)/$(VERSION)/%)
 	$(INSTALL_DATA) $(top_builddir)/config/Makefile.inc $(DESTDIR)$(pkgdatadir)/Makefile.inc
 	$(INSTALL_SCRIPT) $(top_srcdir)/mkinstalldirs $(DESTDIR)$(sbindir)/mkinstalldirs
+
+$(DESTDIR)$(pkgdatadir)/$(VERSION)/%: $(top_srcdir)/../data/%
+	$(INSTALL_DATA) $< $@
 
 ## Generate HTML documentation
 doc:
