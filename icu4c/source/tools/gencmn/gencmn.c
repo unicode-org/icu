@@ -30,7 +30,7 @@
 #define STRING_STORE_SIZE 100000
 #define MAX_FILE_COUNT 2000
 
-#define COMMON_DATA_NAME "icudata"
+#define COMMON_DATA_NAME U_ICUDATA_NAME
 #define DATA_TYPE "dat"
 
 /* UDataInfo cf. udata.h */
