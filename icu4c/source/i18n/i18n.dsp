@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "I18N_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /Ob1 /I "..\..\source\common" /I "..\..\include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "I18N_EXPORTS" /D "U_I18N_IMPLEMENTATION" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I "..\..\source\common" /I "..\..\include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "I18N_EXPORTS" /D "U_I18N_IMPLEMENTATION" /YX /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -658,6 +658,10 @@ SOURCE=.\ucol.cpp
 # Begin Source File
 
 SOURCE=.\ucoleitr.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucoltok.c
 # End Source File
 # Begin Source File
 
@@ -1758,6 +1762,10 @@ InputPath=.\unicode\ucoleitr.h
 # Begin Source File
 
 SOURCE=.\ucolimp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucoltok.h
 # End Source File
 # Begin Source File
 
