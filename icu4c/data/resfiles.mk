@@ -1,3 +1,5 @@
+# *   Copyright (C) 1997-2001, International Business Machines
+# *   Corporation and others.  All Rights Reserved.
 # A list of txt's to build
 # Note: 
 #

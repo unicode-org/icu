@@ -1,4 +1,5 @@
-// Copyright (c) 2000 IBM, Inc. and Others.
+// *   Copyright (C) 1997-2001, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
 // Tamil locale.  Based on Hindi locale
 
 ta_IN {
