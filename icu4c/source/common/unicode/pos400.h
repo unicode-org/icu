@@ -107,3 +107,9 @@ typedef unsigned long uint32_t;
 #define U_EXPORT
 #define U_EXPORT2
 #define U_IMPORT
+
+/*===========================================================================*/
+/* Programs used by ICU code                                                 */
+/*===========================================================================*/
+
+#define U_MAKE	"gmake"
