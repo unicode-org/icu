@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/upropset.cpp,v $
-* $Date: 2001/11/21 21:29:23 $
-* $Revision: 1.9 $
+* $Date: 2001/11/21 21:46:28 $
+* $Revision: 1.10 $
 **********************************************************************
 */
 #include "upropset.h"
@@ -374,7 +374,7 @@ UnicodeString UnicodePropertySet::munge(const UnicodeString& str,
     for (int32_t i=start; i<limit; ) {
         UChar32 c = str.char32At(i);
         i += UTF_CHAR_LENGTH(c);
-        if (!u_isspace(c)) {
+        if (c != 95/*_*/ && !u_isspace(c)) {
             buf.append(c);
         }
     }
