@@ -22,7 +22,22 @@
 
 #include <stdio.h>
 
-static const UnicodeString gPercentPercent("%%");
+static const UChar gPercentPercent[] =
+{
+    0x25, 0x25, 0
+}; /* "%%" */
+
+// All urbnf objects are created through openRules, so we init all of the
+// Unicode string constants required by rbnf, nfrs, or nfr here.
+static const UChar gLenientParse[] =
+{
+    0x25, 0x25, 0x6C, 0x65, 0x6E, 0x69, 0x65, 0x6E, 0x74, 0x2D, 0x70, 0x61, 0x72, 0x73, 0x65, 0x3A, 0
+}; /* "%%lenient-parse:" */
+static const UChar gSemiColon = 0x003B;
+static const UChar gSemiPercent[] =
+{
+    0x3B, 0x25, 0
+}; /* ";%" */
 
 #define kSomeNumberOfBitsDiv2 22
 #define kHalfMaxDouble (double)(1 << kSomeNumberOfBitsDiv2)
@@ -357,12 +372,6 @@ RuleBasedNumberFormat::setLenient(UBool enabled)
   }
 }
 
-// All urbnf objects are created through openRules, so we init all of the
-// Unicode string constants required by rbnf, nfrs, or nfr here.
-static const UnicodeString gLenientParse("%%lenient-parse:");
-static const UChar gSemiColon = 0x003B;
-static const UnicodeString gSemiPercent(";%");
-
 void 
 RuleBasedNumberFormat::init(const UnicodeString& rules, UParseError& perror, UErrorCode& status)
 {
@@ -402,7 +411,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, UParseError& perror, UEr
       if (lpEnd == -1) {
         lpEnd = description.length() - 1;
       }
-      int lpStart = lp + gLenientParse.length();
+      int lpStart = lp + u_strlen(gLenientParse);
       while (u_isWhitespace(description.charAt(lpStart))) {
         ++lpStart;
       }

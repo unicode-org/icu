@@ -1,7 +1,16 @@
 /*
-*******************************************************************************
-* Copyright (C) 1997-2001, International Business Machines Corporation and others. All Rights Reserved.
-*******************************************************************************
+******************************************************************************
+*   Copyright (C) 1997-2001, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+******************************************************************************
+*   file name:  nfsubs.h
+*   encoding:   US-ASCII
+*   tab size:   8 (not used)
+*   indentation:4
+*
+* Modification history
+* Date        Name      Comments
+* 10/11/2001  Doug      Ported from ICU4J
 */
 
 #ifndef NFSUBS_H
@@ -18,478 +27,477 @@ U_NAMESPACE_BEGIN
 static double MAX_DOUBLE = 1.7976931348623157e+308;
 static double java_fmod(double n, double d) 
 {
-  // c doesn't define '%' for floating point, but java does.
-  // from the java language spec 15.17:
-  // "In the remaining cases, where neither an infinity, nor a zero, 
-  // nor NaN is involved, the floating-point remainder r from the 
-  // division of a dividend n by a divisor d is defined by the 
-  // mathematical relation r = n - (d . q) where q is an integer 
-  // that is negative only if n/d is negative and positive only if 
-  // n/d is positive, and whose magnitude is as large as possible 
-  // without exceeding the magnitude of the true mathematical 
-  // quotient of n and d."
-  //
-  // I'm not sure if fmod (from what header?) has the same implemenation
-
-  double q = n/d;
-  q = q < 0 ? -floor(-q) : floor(q);
-  return n - d * q;
+    // c doesn't define '%' for floating point, but java does.
+    // from the java language spec 15.17:
+    // "In the remaining cases, where neither an infinity, nor a zero, 
+    // nor NaN is involved, the floating-point remainder r from the 
+    // division of a dividend n by a divisor d is defined by the 
+    // mathematical relation r = n - (d . q) where q is an integer 
+    // that is negative only if n/d is negative and positive only if 
+    // n/d is positive, and whose magnitude is as large as possible 
+    // without exceeding the magnitude of the true mathematical 
+    // quotient of n and d."
+    //
+    // I'm not sure if fmod (from what header?) has the same implemenation
+    
+    double q = n/d;
+    q = q < 0 ? -floor(-q) : floor(q);
+    return n - d * q;
 }
 
 static double round(double n)
 {
-  return floor(n + .5);
+    return floor(n + .5);
 }
 
 class NFSubstitution {
-  int32_t pos;
-  const NFRuleSet* ruleSet;
-  const DecimalFormat* numberFormat;
-
- protected:
-  NFSubstitution(int32_t pos,
-                 const NFRuleSet* ruleSet,
-                 const RuleBasedNumberFormat* rbnf,
-                 const UnicodeString& description,
-				 UErrorCode& status);
-
-  const NFRuleSet* getRuleSet() const { return ruleSet; }
-  const DecimalFormat* getNumberFormat() const { return numberFormat; }
-
- public:
-  static NFSubstitution* makeSubstitution(int32_t pos, 
-                                          const NFRule* rule, 
-                                          const NFRule* predecessor,
-                                          const NFRuleSet* ruleSet, 
-                                          const RuleBasedNumberFormat* rbnf, 
-                                          const UnicodeString& description,
-										  UErrorCode& status);
-
-  virtual ~NFSubstitution();
-
-  virtual UBool operator==(const NFSubstitution& rhs) const;
-  UBool operator!=(const NFSubstitution& rhs) const { return !operator==(rhs); }
-
-  /**
-   * Sets the substitution's divisor.  Used by NFRule.setBaseValue().
-   * A no-op for all substitutions except multiplier and modulus
-   * substitutions.
-   * @param radix The radix of the divisor
-   * @param exponent The exponent of the divisor
-   */
-  virtual void setDivisor(int32_t radix, int32_t exponent);
-
-  /**
-   * Replaces result with the string describing the substitution.
-   */
-  virtual void toString(UnicodeString& result) const;
-
-  //-----------------------------------------------------------------------
-  // formatting
-  //-----------------------------------------------------------------------
-
-  /**
-   * Performs a mathematical operation on the number, formats it using
-   * either ruleSet or decimalFormat, and inserts the result into
-   * toInsertInto.
-   * @param number The number being formatted.
-   * @param toInsertInto The string we insert the result into
-   * @param pos The position in toInsertInto where the owning rule's
-   * rule text begins (this value is added to this substitution's
-   * position to determine exactly where to insert the new text)
-   */
-  virtual void doSubstitution(llong number, UnicodeString& toInsertInto, int32_t pos) const;
-  virtual void doSubstitution(double number, UnicodeString& toInsertInto, int32_t pos) const;
-
- protected:
-  /**
-   * Subclasses override this function to perform some kind of
-   * mathematical operation on the number.  The result of this operation
-   * is formatted using the rule set or DecimalFormat that this
-   * substitution refers to, and the result is inserted into the result
-   * string.
-   * @param The number being formatted
-   * @return The result of performing the opreration on the number
-   */
-  virtual llong  transformNumber(llong number) const = 0;
-  virtual double transformNumber(double number) const = 0;
-
- public:
-  //-----------------------------------------------------------------------
-  // parsing
-  //-----------------------------------------------------------------------
-
-  /**
-   * Parses a string using the rule set or DecimalFormat belonging
-   * to this substitution.  If there's a match, a mathematical
-   * operation (the inverse of the one used in formatting) is
-   * performed on the result of the parse and the value passed in
-   * and returned as the result.  The parse position is updated to
-   * point to the first unmatched character in the string.
-   * @param text The string to parse
-   * @param parsePosition On entry, ignored, but assumed to be 0.
-   * On exit, this is updated to point to the first unmatched
-   * character (or 0 if the substitution didn't match)
-   * @param baseValue A partial parse result that should be
-   * combined with the result of this parse
-   * @param upperBound When searching the rule set for a rule
-   * matching the string passed in, only rules with base values
-   * lower than this are considered
-   * @param lenientParse If true and matching against rules fails,
-   * the substitution will also try matching the text against
-   * numerals using a default-costructed NumberFormat.  If false,
-   * no extra work is done.  (This value is false whenever the
-   * formatter isn't in lenient-parse mode, but is also false
-   * under some conditions even when the formatter _is_ in
-   * lenient-parse mode.)
-   * @return If there's a match, this is the result of composing
-   * baseValue with whatever was returned from matching the
-   * characters.  This will be either a Long or a Double.  If there's
-   * no match this is new Long(0) (not null), and parsePosition
-   * is left unchanged.
-   */
-  virtual UBool doParse(const UnicodeString& text, 
-		ParsePosition& parsePosition, 
-		double baseValue,
+    int32_t pos;
+    const NFRuleSet* ruleSet;
+    const DecimalFormat* numberFormat;
+    
+protected:
+    NFSubstitution(int32_t pos,
+        const NFRuleSet* ruleSet,
+        const RuleBasedNumberFormat* rbnf,
+        const UnicodeString& description,
+        UErrorCode& status);
+    
+    const NFRuleSet* getRuleSet() const { return ruleSet; }
+    const DecimalFormat* getNumberFormat() const { return numberFormat; }
+    
+public:
+    static NFSubstitution* makeSubstitution(int32_t pos, 
+        const NFRule* rule, 
+        const NFRule* predecessor,
+        const NFRuleSet* ruleSet, 
+        const RuleBasedNumberFormat* rbnf, 
+        const UnicodeString& description,
+        UErrorCode& status);
+    
+    virtual ~NFSubstitution();
+    
+    virtual UBool operator==(const NFSubstitution& rhs) const;
+    UBool operator!=(const NFSubstitution& rhs) const { return !operator==(rhs); }
+    
+    /**
+     * Sets the substitution's divisor.  Used by NFRule.setBaseValue().
+     * A no-op for all substitutions except multiplier and modulus
+     * substitutions.
+     * @param radix The radix of the divisor
+     * @param exponent The exponent of the divisor
+     */
+    virtual void setDivisor(int32_t radix, int32_t exponent);
+    
+    /**
+     * Replaces result with the string describing the substitution.
+     */
+    virtual void toString(UnicodeString& result) const;
+    
+    //-----------------------------------------------------------------------
+    // formatting
+    //-----------------------------------------------------------------------
+    
+    /**
+     * Performs a mathematical operation on the number, formats it using
+     * either ruleSet or decimalFormat, and inserts the result into
+     * toInsertInto.
+     * @param number The number being formatted.
+     * @param toInsertInto The string we insert the result into
+     * @param pos The position in toInsertInto where the owning rule's
+     * rule text begins (this value is added to this substitution's
+     * position to determine exactly where to insert the new text)
+     */
+    virtual void doSubstitution(llong number, UnicodeString& toInsertInto, int32_t pos) const;
+    virtual void doSubstitution(double number, UnicodeString& toInsertInto, int32_t pos) const;
+    
+protected:
+    /**
+     * Subclasses override this function to perform some kind of
+     * mathematical operation on the number.  The result of this operation
+     * is formatted using the rule set or DecimalFormat that this
+     * substitution refers to, and the result is inserted into the result
+     * string.
+     * @param The number being formatted
+     * @return The result of performing the opreration on the number
+     */
+    virtual llong  transformNumber(llong number) const = 0;
+    virtual double transformNumber(double number) const = 0;
+    
+public:
+    //-----------------------------------------------------------------------
+    // parsing
+    //-----------------------------------------------------------------------
+    
+    /**
+     * Parses a string using the rule set or DecimalFormat belonging
+     * to this substitution.  If there's a match, a mathematical
+     * operation (the inverse of the one used in formatting) is
+     * performed on the result of the parse and the value passed in
+     * and returned as the result.  The parse position is updated to
+     * point to the first unmatched character in the string.
+     * @param text The string to parse
+     * @param parsePosition On entry, ignored, but assumed to be 0.
+     * On exit, this is updated to point to the first unmatched
+     * character (or 0 if the substitution didn't match)
+     * @param baseValue A partial parse result that should be
+     * combined with the result of this parse
+     * @param upperBound When searching the rule set for a rule
+     * matching the string passed in, only rules with base values
+     * lower than this are considered
+     * @param lenientParse If true and matching against rules fails,
+     * the substitution will also try matching the text against
+     * numerals using a default-costructed NumberFormat.  If false,
+     * no extra work is done.  (This value is false whenever the
+     * formatter isn't in lenient-parse mode, but is also false
+     * under some conditions even when the formatter _is_ in
+     * lenient-parse mode.)
+     * @return If there's a match, this is the result of composing
+     * baseValue with whatever was returned from matching the
+     * characters.  This will be either a Long or a Double.  If there's
+     * no match this is new Long(0) (not null), and parsePosition
+     * is left unchanged.
+     */
+    virtual UBool doParse(const UnicodeString& text, 
+        ParsePosition& parsePosition, 
+        double baseValue,
         double upperBound, 
-		UBool lenientParse,
-		Formattable& result) const;
-
-  /**
-   * Derives a new value from the two values passed in.  The two values
-   * are typically either the base values of two rules (the one containing
-   * the substitution and the one matching the substitution) or partial
-   * parse results derived in some other way.  The operation is generally
-   * the inverse of the operation performed by transformNumber().
-   * @param newRuleValue The value produced by matching this substitution
-   * @param oldRuleValue The value that was passed to the substitution
-   * by the rule that owns it
-   * @return A third value derived from the other two, representing a
-   * partial parse result
-   */
-  virtual double composeRuleValue(double newRuleValue, double oldRuleValue) const = 0;
-
-  /**
-   * Calculates an upper bound when searching for a rule that matches
-   * this substitution.  Rules with base values greater than or equal
-   * to upperBound are not considered.
-   * @param oldUpperBound The current upper-bound setting.  The new
-   * upper bound can't be any higher.
-   */
-  virtual double calcUpperBound(double oldUpperBound) const = 0;
-
-  //-----------------------------------------------------------------------
-  // simple accessors
-  //-----------------------------------------------------------------------
-
-  /**
-   * Returns the substitution's position in the rule that owns it.
-   * @return The substitution's position in the rule that owns it.
-   */
-
-  int32_t getPos() const { return pos; }
-
-  /**
-   * Returns the character used in the textual representation of
-   * substitutions of this type.  Used by toString().
-   * @return This substitution's token character.
-   */
-  virtual UChar tokenChar() const = 0;
-
-  /**
-   * Returns true if this is a null substitution.  (We didn't do this
-   * with instanceof partially because it causes source files to
-   * proliferate and partially because we have to port this to C++.)
-   * @return true if this object is an instance of NullSubstitution
-   */
-  virtual UBool isNullSubstitution() const;
-
-  /**
-   * Returns true if this is a modulus substitution.  (We didn't do this
-   * with instanceof partially because it causes source files to
-   * proliferate and partially because we have to port this to C++.)
-   * @return true if this object is an instance of ModulusSubstitution
-   */
-  virtual UBool isModulusSubstitution() const;
-
- private:
-  static char fgClassID;
-
- public:
-  static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
-  virtual UClassID getDynamicClassID(void) const;
+        UBool lenientParse,
+        Formattable& result) const;
+    
+    /**
+     * Derives a new value from the two values passed in.  The two values
+     * are typically either the base values of two rules (the one containing
+     * the substitution and the one matching the substitution) or partial
+     * parse results derived in some other way.  The operation is generally
+     * the inverse of the operation performed by transformNumber().
+     * @param newRuleValue The value produced by matching this substitution
+     * @param oldRuleValue The value that was passed to the substitution
+     * by the rule that owns it
+     * @return A third value derived from the other two, representing a
+     * partial parse result
+     */
+    virtual double composeRuleValue(double newRuleValue, double oldRuleValue) const = 0;
+    
+    /**
+     * Calculates an upper bound when searching for a rule that matches
+     * this substitution.  Rules with base values greater than or equal
+     * to upperBound are not considered.
+     * @param oldUpperBound The current upper-bound setting.  The new
+     * upper bound can't be any higher.
+     */
+    virtual double calcUpperBound(double oldUpperBound) const = 0;
+    
+    //-----------------------------------------------------------------------
+    // simple accessors
+    //-----------------------------------------------------------------------
+    
+    /**
+     * Returns the substitution's position in the rule that owns it.
+     * @return The substitution's position in the rule that owns it.
+     */
+    int32_t getPos() const { return pos; }
+    
+    /**
+     * Returns the character used in the textual representation of
+     * substitutions of this type.  Used by toString().
+     * @return This substitution's token character.
+     */
+    virtual UChar tokenChar() const = 0;
+    
+    /**
+     * Returns true if this is a null substitution.  (We didn't do this
+     * with instanceof partially because it causes source files to
+     * proliferate and partially because we have to port this to C++.)
+     * @return true if this object is an instance of NullSubstitution
+     */
+    virtual UBool isNullSubstitution() const;
+    
+    /**
+     * Returns true if this is a modulus substitution.  (We didn't do this
+     * with instanceof partially because it causes source files to
+     * proliferate and partially because we have to port this to C++.)
+     * @return true if this object is an instance of ModulusSubstitution
+     */
+    virtual UBool isModulusSubstitution() const;
+    
+private:
+    static const char fgClassID;
+    
+public:
+    static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
+    virtual UClassID getDynamicClassID(void) const;
 };
 
 class SameValueSubstitution : public NFSubstitution {
- public:
-  SameValueSubstitution(int32_t pos,
-                        const NFRuleSet* ruleset,
-                        const RuleBasedNumberFormat* formatter,
-                        const UnicodeString& description,
-						UErrorCode& status);
-  
-  llong transformNumber(llong number) const { return number; }
-  double transformNumber(double number) const { return number; }
-  double composeRuleValue(double newRuleValue, double oldRuleValue) const { return newRuleValue; }
-  double calcUpperBound(double oldUpperBound) const { return oldUpperBound; }
-  UChar tokenChar() const { return (UChar)0x003d; } // '='
- private:
-  static char fgClassID;
-
- public:
-  static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
-  virtual UClassID getDynamicClassID(void) const;
+public:
+    SameValueSubstitution(int32_t pos,
+        const NFRuleSet* ruleset,
+        const RuleBasedNumberFormat* formatter,
+        const UnicodeString& description,
+        UErrorCode& status);
+    
+    llong transformNumber(llong number) const { return number; }
+    double transformNumber(double number) const { return number; }
+    double composeRuleValue(double newRuleValue, double oldRuleValue) const { return newRuleValue; }
+    double calcUpperBound(double oldUpperBound) const { return oldUpperBound; }
+    UChar tokenChar() const { return (UChar)0x003d; } // '='
+private:
+    static char fgClassID;
+    
+public:
+    static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
+    virtual UClassID getDynamicClassID(void) const;
 };
 
 class MultiplierSubstitution : public NFSubstitution {
-  double divisor;
-  llong ldivisor;
-
- public:
-  MultiplierSubstitution(int32_t _pos,
-                         double _divisor,
-                         const NFRuleSet* _ruleSet,
-                         const RuleBasedNumberFormat* formatter,
-                         const UnicodeString& description,
-						 UErrorCode& status)
-						 : NFSubstitution(_pos, _ruleSet, formatter, description, status), divisor(_divisor)
-  {
-	  ldivisor = _divisor;
-  }
-
-  void setDivisor(int32_t radix, int32_t exponent) { 
-	  divisor = pow(radix, exponent);
-	  ldivisor = divisor;
-  }
-
-  UBool operator==(const NFSubstitution& rhs) const;
-  
-  llong transformNumber(llong number) const {
-    return number / ldivisor;
-  }
-
-  double transformNumber(double number) const {
-    return floor(number / divisor);
-  }
-
-  double composeRuleValue(double newRuleValue, double oldRuleValue) const {
-    return newRuleValue * divisor;
-  }
-
-  double calcUpperBound(double oldUpperBound) const { return divisor; }
-  
-  UChar tokenChar() const { return (UChar)0x003c; } // '<'
- private:
-  static char fgClassID;
-
- public:
-  static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
-  virtual UClassID getDynamicClassID(void) const;
+    double divisor;
+    llong ldivisor;
+    
+public:
+    MultiplierSubstitution(int32_t _pos,
+        double _divisor,
+        const NFRuleSet* _ruleSet,
+        const RuleBasedNumberFormat* formatter,
+        const UnicodeString& description,
+        UErrorCode& status)
+        : NFSubstitution(_pos, _ruleSet, formatter, description, status), divisor(_divisor)
+    {
+        ldivisor = _divisor;
+    }
+    
+    void setDivisor(int32_t radix, int32_t exponent) { 
+        divisor = pow(radix, exponent);
+        ldivisor = divisor;
+    }
+    
+    UBool operator==(const NFSubstitution& rhs) const;
+    
+    llong transformNumber(llong number) const {
+        return number / ldivisor;
+    }
+    
+    double transformNumber(double number) const {
+        return floor(number / divisor);
+    }
+    
+    double composeRuleValue(double newRuleValue, double oldRuleValue) const {
+        return newRuleValue * divisor;
+    }
+    
+    double calcUpperBound(double oldUpperBound) const { return divisor; }
+    
+    UChar tokenChar() const { return (UChar)0x003c; } // '<'
+private:
+    static const char fgClassID;
+    
+public:
+    static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
+    virtual UClassID getDynamicClassID(void) const;
 };
 
 class ModulusSubstitution : public NFSubstitution {
-  double divisor;
-  llong  ldivisor;
-  const NFRule* ruleToUse;
- public:
-  ModulusSubstitution(int32_t pos,
-                      double _divisor,
-                      const NFRule* rulePredecessor,
-                      const NFRuleSet* ruleSet,
-                      const RuleBasedNumberFormat* formatter,
-                      const UnicodeString& description,
-					  UErrorCode& status);
-
-  void setDivisor(int32_t radix, int32_t exponent) { 
-	  divisor = pow(radix, exponent);
-	  ldivisor = divisor;
-  }
-  
-  UBool operator==(const NFSubstitution& rhs) const;
-
-  void doSubstitution(llong number, UnicodeString& toInsertInto, int32_t pos) const;
-  void doSubstitution(double number, UnicodeString& toInsertInto, int32_t pos) const;
-
-  llong transformNumber(llong number) const { return number % ldivisor; }
-  double transformNumber(double number) const { return java_fmod(number, divisor); }
-
-  UBool doParse(const UnicodeString& text, 
-                ParsePosition& parsePosition,
-                double baseValue,
-                double upperBound,
-                UBool lenientParse,
-                Formattable& result) const;
-  
-  double composeRuleValue(double newRuleValue, double oldRuleValue) const {
-    return oldRuleValue - java_fmod(oldRuleValue, divisor) + newRuleValue;
-  }
-
-  double calcUpperBound(double oldUpperBound) const { return divisor; }
-
-  UBool isModulusSubstitution() const { return TRUE; }
-
-  UChar tokenChar() const { return (UChar)0x003e; } // '>'
- private:
-  static char fgClassID;
-
- public:
-  static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
-  virtual UClassID getDynamicClassID(void) const;
+    double divisor;
+    llong  ldivisor;
+    const NFRule* ruleToUse;
+public:
+    ModulusSubstitution(int32_t pos,
+        double _divisor,
+        const NFRule* rulePredecessor,
+        const NFRuleSet* ruleSet,
+        const RuleBasedNumberFormat* formatter,
+        const UnicodeString& description,
+        UErrorCode& status);
+    
+    void setDivisor(int32_t radix, int32_t exponent) { 
+        divisor = pow(radix, exponent);
+        ldivisor = divisor;
+    }
+    
+    UBool operator==(const NFSubstitution& rhs) const;
+    
+    void doSubstitution(llong number, UnicodeString& toInsertInto, int32_t pos) const;
+    void doSubstitution(double number, UnicodeString& toInsertInto, int32_t pos) const;
+    
+    llong transformNumber(llong number) const { return number % ldivisor; }
+    double transformNumber(double number) const { return java_fmod(number, divisor); }
+    
+    UBool doParse(const UnicodeString& text, 
+        ParsePosition& parsePosition,
+        double baseValue,
+        double upperBound,
+        UBool lenientParse,
+        Formattable& result) const;
+    
+    double composeRuleValue(double newRuleValue, double oldRuleValue) const {
+        return oldRuleValue - java_fmod(oldRuleValue, divisor) + newRuleValue;
+    }
+    
+    double calcUpperBound(double oldUpperBound) const { return divisor; }
+    
+    UBool isModulusSubstitution() const { return TRUE; }
+    
+    UChar tokenChar() const { return (UChar)0x003e; } // '>'
+private:
+    static const char fgClassID;
+    
+public:
+    static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
+    virtual UClassID getDynamicClassID(void) const;
 };
 
 class IntegralPartSubstitution : public NFSubstitution {
- public:
-  IntegralPartSubstitution(int32_t _pos,
-                           const NFRuleSet* _ruleSet,
-                           const RuleBasedNumberFormat* formatter,
-                           const UnicodeString& description,
-						   UErrorCode& status)
-    : NFSubstitution(_pos, _ruleSet, formatter, description, status) {}
-
-  llong transformNumber(llong number) const { return number; }
-  double transformNumber(double number) const { return floor(number); }
-  double composeRuleValue(double newRuleValue, double oldRuleValue) const { return newRuleValue + oldRuleValue; }
-  double calcUpperBound(double oldUpperBound) const { return MAX_DOUBLE; }
-  UChar tokenChar() const { return (UChar)0x003c; } // '<'
- private:
-  static char fgClassID;
-
- public:
-  static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
-  virtual UClassID getDynamicClassID(void) const;
+public:
+    IntegralPartSubstitution(int32_t _pos,
+        const NFRuleSet* _ruleSet,
+        const RuleBasedNumberFormat* formatter,
+        const UnicodeString& description,
+        UErrorCode& status)
+        : NFSubstitution(_pos, _ruleSet, formatter, description, status) {}
+    
+    llong transformNumber(llong number) const { return number; }
+    double transformNumber(double number) const { return floor(number); }
+    double composeRuleValue(double newRuleValue, double oldRuleValue) const { return newRuleValue + oldRuleValue; }
+    double calcUpperBound(double oldUpperBound) const { return MAX_DOUBLE; }
+    UChar tokenChar() const { return (UChar)0x003c; } // '<'
+private:
+    static const char fgClassID;
+    
+public:
+    static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
+    virtual UClassID getDynamicClassID(void) const;
 };
 
 class FractionalPartSubstitution : public NFSubstitution {
-  UBool byDigits;
-  UBool useSpaces;
-  enum { kMaxDecimalDigits = 8 };
- public:
-  FractionalPartSubstitution(int32_t pos,
-                             const NFRuleSet* ruleSet,
-                             const RuleBasedNumberFormat* formatter,
-                             const UnicodeString& description,
-							 UErrorCode& status);
-
-  UBool operator==(const NFSubstitution& rhs) const;
-
-  void doSubstitution(double number, UnicodeString& toInsertInto, int32_t pos) const;
-  llong transformNumber(llong number) const { return llong::kZero; }
-  double transformNumber(double number) const { return number - floor(number); }
-
-  UBool doParse(const UnicodeString& text,
-                ParsePosition& parsePosition,
-                double baseValue,
-                double upperBound,
-                UBool lenientParse,
-                Formattable& result) const;
-
-  double composeRuleValue(double newRuleValue, double oldRuleValue) const { return newRuleValue + oldRuleValue; }
-  double calcUpperBound(double oldUpperBound) const { return 0; }
-  UChar tokenChar() const { return (UChar)0x003e; } // '>'
- private:
-  static char fgClassID;
-
- public:
-  static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
-  virtual UClassID getDynamicClassID(void) const;
+    UBool byDigits;
+    UBool useSpaces;
+    enum { kMaxDecimalDigits = 8 };
+public:
+    FractionalPartSubstitution(int32_t pos,
+        const NFRuleSet* ruleSet,
+        const RuleBasedNumberFormat* formatter,
+        const UnicodeString& description,
+        UErrorCode& status);
+    
+    UBool operator==(const NFSubstitution& rhs) const;
+    
+    void doSubstitution(double number, UnicodeString& toInsertInto, int32_t pos) const;
+    llong transformNumber(llong number) const { return llong::kZero; }
+    double transformNumber(double number) const { return number - floor(number); }
+    
+    UBool doParse(const UnicodeString& text,
+        ParsePosition& parsePosition,
+        double baseValue,
+        double upperBound,
+        UBool lenientParse,
+        Formattable& result) const;
+    
+    double composeRuleValue(double newRuleValue, double oldRuleValue) const { return newRuleValue + oldRuleValue; }
+    double calcUpperBound(double oldUpperBound) const { return 0; }
+    UChar tokenChar() const { return (UChar)0x003e; } // '>'
+private:
+    static const char fgClassID;
+    
+public:
+    static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
+    virtual UClassID getDynamicClassID(void) const;
 };
 
 class AbsoluteValueSubstitution : public NFSubstitution {
- public:
-  AbsoluteValueSubstitution(int32_t _pos,
-                            const NFRuleSet* _ruleSet,
-                            const RuleBasedNumberFormat* formatter,
-                            const UnicodeString& description,
-							UErrorCode& status)
-  : NFSubstitution(_pos, _ruleSet, formatter, description, status) {}
-
-  llong transformNumber(llong number) const { return llong_abs(number); }
-  double transformNumber(double number) const { return fabs(number); }
-  double composeRuleValue(double newRuleValue, double oldRuleValue) const { return -newRuleValue; }
-  double calcUpperBound(double oldUpperBound) const { return MAX_DOUBLE; }
-  UChar tokenChar() const { return (UChar)0x003e; } // '>'
- private:
-  static char fgClassID;
-
- public:
-  static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
-  virtual UClassID getDynamicClassID(void) const;
+public:
+    AbsoluteValueSubstitution(int32_t _pos,
+        const NFRuleSet* _ruleSet,
+        const RuleBasedNumberFormat* formatter,
+        const UnicodeString& description,
+        UErrorCode& status)
+        : NFSubstitution(_pos, _ruleSet, formatter, description, status) {}
+    
+    llong transformNumber(llong number) const { return llong_abs(number); }
+    double transformNumber(double number) const { return fabs(number); }
+    double composeRuleValue(double newRuleValue, double oldRuleValue) const { return -newRuleValue; }
+    double calcUpperBound(double oldUpperBound) const { return MAX_DOUBLE; }
+    UChar tokenChar() const { return (UChar)0x003e; } // '>'
+private:
+    static const char fgClassID;
+    
+public:
+    static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
+    virtual UClassID getDynamicClassID(void) const;
 };
 
 class NumeratorSubstitution : public NFSubstitution {
-  double denominator;
-  llong ldenominator;
- public:
-  NumeratorSubstitution(int32_t _pos,
-                            double _denominator,
-                            const NFRuleSet* _ruleSet,
-                            const RuleBasedNumberFormat* formatter,
-                            const UnicodeString& description,
-							UErrorCode& status)
-  : NFSubstitution(_pos, _ruleSet, formatter, description, status), denominator(_denominator) 
-  {
-	ldenominator = _denominator;
-  }
-
-  UBool operator==(const NFSubstitution& rhs) const;
-
-  llong transformNumber(llong number) const { return number * ldenominator; }
-  double transformNumber(double number) const { return round(number * denominator); }
-
-  UBool doParse(const UnicodeString& text, 
-                ParsePosition& parsePosition,
-                double baseValue,
-                double upperBound,
-                UBool lenientParse,
-                Formattable& result) const 
+    double denominator;
+    llong ldenominator;
+public:
+    NumeratorSubstitution(int32_t _pos,
+        double _denominator,
+        const NFRuleSet* _ruleSet,
+        const RuleBasedNumberFormat* formatter,
+        const UnicodeString& description,
+        UErrorCode& status)
+        : NFSubstitution(_pos, _ruleSet, formatter, description, status), denominator(_denominator) 
     {
-      // we don't have to do anything special to do the parsing here,
-      // but we have to turn lenient parsing off-- if we leave it on,
-      // it SERIOUSLY messes up the algorithm
-      return NFSubstitution::doParse(text, parsePosition, baseValue, upperBound, FALSE, result);
+        ldenominator = _denominator;
     }
-  double composeRuleValue(double newRuleValue, double oldRuleValue) const { return newRuleValue / oldRuleValue; }
-  double calcUpperBound(double oldUpperBound) const { return denominator; }
-  UChar tokenChar() const { return (UChar)0x003c; } // '<'
- private:
-  static char fgClassID;
-
- public:
-  static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
-  virtual UClassID getDynamicClassID(void) const;
+    
+    UBool operator==(const NFSubstitution& rhs) const;
+    
+    llong transformNumber(llong number) const { return number * ldenominator; }
+    double transformNumber(double number) const { return round(number * denominator); }
+    
+    UBool doParse(const UnicodeString& text, 
+        ParsePosition& parsePosition,
+        double baseValue,
+        double upperBound,
+        UBool lenientParse,
+        Formattable& result) const 
+    {
+        // we don't have to do anything special to do the parsing here,
+        // but we have to turn lenient parsing off-- if we leave it on,
+        // it SERIOUSLY messes up the algorithm
+        return NFSubstitution::doParse(text, parsePosition, baseValue, upperBound, FALSE, result);
+    }
+    double composeRuleValue(double newRuleValue, double oldRuleValue) const { return newRuleValue / oldRuleValue; }
+    double calcUpperBound(double oldUpperBound) const { return denominator; }
+    UChar tokenChar() const { return (UChar)0x003c; } // '<'
+private:
+    static const char fgClassID;
+    
+public:
+    static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
+    virtual UClassID getDynamicClassID(void) const;
 };
 
 class NullSubstitution : public NFSubstitution {
- public:
-  NullSubstitution(int32_t _pos,
-                   const NFRuleSet* _ruleSet,
-                   const RuleBasedNumberFormat* formatter,
-                   const UnicodeString& description,
-				   UErrorCode& status)
-				   : NFSubstitution(_pos, _ruleSet, formatter, description, status) {}
-
-  void toString(UnicodeString& result) const {}
-  void doSubstitution(double number, UnicodeString& toInsertInto, int32_t _pos) const {}
-  void doSubstitution(llong number, UnicodeString& toInsertInto, int32_t _pos) const {}
-  llong transformNumber(llong number) const { return llong::kZero; }
-  double transformNumber(double number) const { return 0; }
-  UBool doParse(const UnicodeString& text, 
-		ParsePosition& parsePosition, 
-		double baseValue,
-                double upperBound, 
-		UBool lenientParse,
-		Formattable& result) const
-		{ result.setDouble(baseValue); return TRUE; }
-  double composeRuleValue(double newRuleValue, double oldRuleValue) const { return 0; } // never called
-  double calcUpperBound(double oldUpperBound) const { return 0; } // never called
-  UBool isNullSubstitution() const { return TRUE; }
-  UChar tokenChar() const { return (UChar)0x0020; } // ' ' never called
- private:
-  static char fgClassID;
-
- public:
-  static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
-  virtual UClassID getDynamicClassID(void) const;
+public:
+    NullSubstitution(int32_t _pos,
+        const NFRuleSet* _ruleSet,
+        const RuleBasedNumberFormat* formatter,
+        const UnicodeString& description,
+        UErrorCode& status)
+        : NFSubstitution(_pos, _ruleSet, formatter, description, status) {}
+    
+    void toString(UnicodeString& result) const {}
+    void doSubstitution(double number, UnicodeString& toInsertInto, int32_t _pos) const {}
+    void doSubstitution(llong number, UnicodeString& toInsertInto, int32_t _pos) const {}
+    llong transformNumber(llong number) const { return llong::kZero; }
+    double transformNumber(double number) const { return 0; }
+    UBool doParse(const UnicodeString& text, 
+        ParsePosition& parsePosition, 
+        double baseValue,
+        double upperBound, 
+        UBool lenientParse,
+        Formattable& result) const
+    { result.setDouble(baseValue); return TRUE; }
+    double composeRuleValue(double newRuleValue, double oldRuleValue) const { return 0; } // never called
+    double calcUpperBound(double oldUpperBound) const { return 0; } // never called
+    UBool isNullSubstitution() const { return TRUE; }
+    UChar tokenChar() const { return (UChar)0x0020; } // ' ' never called
+private:
+    static const char fgClassID;
+    
+public:
+    static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
+    virtual UClassID getDynamicClassID(void) const;
 };
 
 U_NAMESPACE_END
