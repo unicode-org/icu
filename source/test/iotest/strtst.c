@@ -329,6 +329,7 @@ static void TestSprintfFormat(void) {
     int32_t uNumPrinted;
     int32_t cNumPrinted;
 
+
     TestSPrintFormat("%8U", abcUChars, "%8s", abcChars);
     TestSPrintFormat("%-8U", abcUChars, "%-8s", abcChars);
     TestSPrintFormat("%.2U", abcUChars, "%.2s", abcChars); /* strlen is 3 */
@@ -346,11 +347,13 @@ static void TestSprintfFormat(void) {
     TestSPrintFormat("%10f", 1.23456789, "%10f", 1.23456789);
     TestSPrintFormat("%-10f", 1.23456789, "%-10f", 1.23456789);
     TestSPrintFormat("%10f", 123.456789, "%10f", 123.456789);
+    TestSPrintFormat("%10.4f", 123.456789, "%10.4f", 123.456789);
     TestSPrintFormat("%-10f", 123.456789, "%-10f", 123.456789);
 
     TestSPrintFormat("%e", 1234567.89, "%e", 1234567.89);
     TestSPrintFormat("%E", 1234567.89, "%E", 1234567.89);
     TestSPrintFormat("%10e", 1.23456789, "%10e", 1.23456789);
+    TestSPrintFormat("%10.4e", 1.23456789, "%10.4e", 1.23456789);
     TestSPrintFormat("%-10e", 1.23456789, "%-10e", 1.23456789);
     TestSPrintFormat("%10e", 123.456789, "%10e", 123.456789);
     TestSPrintFormat("%-10e", 123.456789, "%-10e", 123.456789);
@@ -359,35 +362,43 @@ static void TestSprintfFormat(void) {
     TestSPrintFormat("%g", 1234567.89, "%g", 1234567.89);
     TestSPrintFormat("%G", 1234567.89, "%G", 1234567.89);
     TestSPrintFormat("%10g", 1.23456789, "%10g", 1.23456789);
+    TestSPrintFormat("%10.4g", 1.23456789, "%10.4g", 1.23456789);
     TestSPrintFormat("%-10g", 1.23456789, "%-10g", 1.23456789);
     TestSPrintFormat("%10g", 123.456789, "%10g", 123.456789);
     TestSPrintFormat("%-10g", 123.456789, "%-10g", 123.456789);
 
     TestSPrintFormat("%8x", 123456, "%8x", 123456);
     TestSPrintFormat("%-8x", 123456, "%-8x", 123456);
+    TestSPrintFormat("%08x", 123456, "%08x", 123456);
 
     TestSPrintFormat("%8X", 123456, "%8X", 123456);
     TestSPrintFormat("%-8X", 123456, "%-8X", 123456);
+    TestSPrintFormat("%08X", 123456, "%08X", 123456);
     TestSPrintFormat("%#x", 123456, "%#x", 123456);
     TestSPrintFormat("%#x", -123456, "%#x", -123456);
 
     TestSPrintFormat("%8o", 123456, "%8o", 123456);
     TestSPrintFormat("%-8o", 123456, "%-8o", 123456);
+    TestSPrintFormat("%08o", 123456, "%08o", 123456);
     TestSPrintFormat("%#o", 123, "%#o", 123);
     TestSPrintFormat("%#o", -123, "%#o", -123);
 
     TestSPrintFormat("%8u", 123456, "%8u", 123456);
     TestSPrintFormat("%-8u", 123456, "%-8u", 123456);
+    TestSPrintFormat("%08u", 123456, "%08u", 123456);
     TestSPrintFormat("%8u", -123456, "%8u", -123456);
     TestSPrintFormat("%-8u", -123456, "%-8u", -123456);
+    TestSPrintFormat("%-08u", -123456, "%-08u", -123456);
 
     TestSPrintFormat("%8d", 123456, "%8d", 123456);
     TestSPrintFormat("%-8d", 123456, "%-8d", 123456);
+    TestSPrintFormat("%08d", 123456, "%08d", 123456);
     TestSPrintFormat("% d", 123456, "% d", 123456);
     TestSPrintFormat("% d", -123456, "% d", -123456);
 
     TestSPrintFormat("%8i", 123456, "%8i", 123456);
     TestSPrintFormat("%-8i", 123456, "%-8i", 123456);
+    TestSPrintFormat("%08i", 123456, "%08i", 123456);
 
     TestSPrintFormat2("%+1.*e", 4, 1.2345678);
     TestSPrintFormat2("%+2.*e", 6, 1.2345678);
