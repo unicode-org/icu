@@ -40,13 +40,25 @@ U_CDECL_BEGIN
  * Character used to separate package names from tree names 
  * @internal ICU 3.0
  */
-#define U_TREE_SEPARATOR '/'
+#define U_TREE_SEPARATOR '-'
 
 /**
  * String used to separate package names from tree names 
  * @internal ICU 3.0
  */
-#define U_TREE_SEPARATOR_STRING "/"
+#define U_TREE_SEPARATOR_STRING "-"
+
+/**
+ * Character used to separate parts of entry names
+ * @internal ICU 3.0
+ */
+#define U_TREE_ENTRY_SEP_CHAR '/'
+
+/**
+ * String used to separate parts of entry names
+ * @internal ICU 3.0
+ */
+#define U_TREE_ENTRY_SEP_STRING "/"
 
 /**
  * UDataInfo contains the properties about the requested data.
