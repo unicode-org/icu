@@ -1046,19 +1046,23 @@ int32_t SimpleDateFormat::matchString(const UnicodeString& text,
     // {sfb} kludge to support case-insensitive comparison
     // {markus 2002oct11} do not just use caseCompareBetween because we do not know
     // the length of the match after case folding
-    UnicodeString lcaseText;
-    lcaseText.fastCopyFrom(text).foldCase();
+    // {alan 20040607} don't case change the whole string, since the length
+    // can change
+    // TODO we need a case-insensitive startsWith function
+    UnicodeString lcase, lcaseText;
+    text.extract(start, INT32_MAX, lcaseText);
+    lcaseText.foldCase();
 
     for (; i < count; ++i)
     {
-        int32_t length = data[i].length();
         // Always compare if we have no match yet; otherwise only compare
         // against potentially better matches (longer strings).
 
-        UnicodeString lcase;
         lcase.fastCopyFrom(data[i]).foldCase();
+        int32_t length = lcase.length();
                     
-        if (length > bestMatchLength && (lcaseText.compareBetween(start, start + length, lcase, 0, length)) == 0)
+        if (length > bestMatchLength &&
+            lcaseText.compareBetween(0, length, lcase, 0, length) == 0)
         {
             bestMatch = i;
             bestMatchLength = length;
@@ -1067,7 +1071,33 @@ int32_t SimpleDateFormat::matchString(const UnicodeString& text,
     if (bestMatch >= 0)
     {
         cal.set(field, bestMatch);
-        return start + bestMatchLength;
+
+        // Once we have a match, we have to determine the length of the
+        // original source string.  This will usually be == the length of
+        // the case folded string, but it may differ (e.g. sharp s).
+        lcase.fastCopyFrom(data[bestMatch]).foldCase();
+
+        // Most of the time, the length will be the same as the length
+        // of the string from the locale data.  Sometimes it will be
+        // different, in which case we will have to figure it out by
+        // adding a character at a time, until we have a match.  We do
+        // this all in one loop, where we try 'len' first (at index
+        // i==0).
+        int32_t len = data[bestMatch].length(); // 99+% of the time
+        int32_t n = text.length() - start;
+        for (i=0; i<=n; ++i) {
+            int32_t j=i;
+            if (i == 0) {
+                j = len;
+            } else if (i == len) {
+                continue; // already tried this when i was 0
+            }
+            text.extract(start, j, lcaseText);
+            lcaseText.foldCase();
+            if (lcase == lcaseText) {
+                return start + j;
+            }
+        }
     }
     
     return -start;
