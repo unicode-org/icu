@@ -26,6 +26,7 @@
     void TestCompatDecomp(void);
     void TestCanonDecompCompose(void);
     void TestCompatDecompCompose(void);
+    void TestNull(void);
 
     /*internal functions*/
     
