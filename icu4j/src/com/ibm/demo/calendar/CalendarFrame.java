@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/demo/calendar/Attic/CalendarFrame.java,v $ 
- * $Date: 2000/04/26 18:40:15 $ 
- * $Revision: 1.6 $
+ * $Date: 2000/05/12 23:21:23 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -20,7 +20,8 @@ import com.ibm.util.BuddhistCalendar;
 import com.ibm.util.JapaneseCalendar;
 import com.ibm.util.IslamicCalendar;
 import com.ibm.text.SimpleDateFormat;
-import java.util.SimpleTimeZone;
+//import java.util.SimpleTimeZone;
+import com.ibm.util.SimpleTimeZone;
 import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.*;
@@ -37,7 +38,8 @@ import com.ibm.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import java.util.TimeZone;
+//import java.util.TimeZone;
+import com.ibm.util.TimeZone;
 
 /**
  * A Frame is a top-level window with a title. The default layout for a frame

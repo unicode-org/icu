@@ -31,7 +31,6 @@
 package com.ibm.util;
 import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 
 /**
  * <code>GregorianCalendar</code> is a concrete subclass of
@@ -1184,8 +1183,9 @@ public class GregorianCalendar extends Calendar {
         //        getOffset(..., monthLen).  This makes some zones behave incorrectly.
         //        Fix this later, if desired, by porting TimeZone and STZ to this pkg.
         //        -Alan
-        int dstOffset = getTimeZone().getOffset(era,year,month,date,dayOfWeek,millisInDay /*,
-                                                monthLength(month), prevMonthLength(month)*/)
+        // [icu4j fixed after 'port' of tz&stz to com.ibm.util - liu]
+        int dstOffset = getTimeZone().getOffset(era,year,month,date,dayOfWeek,millisInDay,
+                                                monthLength(month), prevMonthLength(month))
                         - rawOffset;
 
         // Adjust our millisInDay for DST, if necessary.
@@ -1525,14 +1525,15 @@ public class GregorianCalendar extends Calendar {
             //        getOffset(..., millis).  This makes some zones behave incorrectly.
             //        Fix this later, if desired, by porting TimeZone and STZ to this pkg.
             //        -Alan
+            // [icu4j fixed after 'port' of tz&stz to com.ibm.util - liu]
             dstOffset = zone.getOffset(era,
                                        internalGet(YEAR),
                                        internalGet(MONTH),
                                        internalGet(DATE),
                                        dow,
-                                       normalizedMillisInDay[0] /*,
+                                       normalizedMillisInDay[0],
                                        monthLength(internalGet(MONTH)),
-                                       prevMonthLength(internalGet(MONTH)) */) -
+                                       prevMonthLength(internalGet(MONTH))) -
                 zoneOffset;
             // Note: Because we pass in wall millisInDay, rather than
             // standard millisInDay, we interpret "1:00 am" on the day

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/calendar/Attic/TestCase.java,v $ 
- * $Date: 2000/03/21 02:20:08 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/05/12 23:19:12 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -16,7 +16,7 @@ import com.ibm.test.*;
 import com.ibm.util.Calendar;
 import com.ibm.util.GregorianCalendar;
 import java.util.Date;
-import java.util.SimpleTimeZone;
+import com.ibm.util.SimpleTimeZone;
 import java.util.Locale;
 
 /**

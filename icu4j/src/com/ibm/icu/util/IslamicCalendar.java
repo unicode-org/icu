@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/IslamicCalendar.java,v $ 
- * $Date: 2000/03/21 02:19:32 $ 
- * $Revision: 1.4 $
+ * $Date: 2000/05/12 23:20:10 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -16,7 +16,6 @@ import com.ibm.util.Calendar;
 import java.util.Date;
 import com.ibm.util.GregorianCalendar;
 import java.util.Locale;
-import java.util.TimeZone;
 import com.ibm.util.CalendarAstronomer;
 
 /**
@@ -69,7 +68,7 @@ import com.ibm.util.CalendarAstronomer;
  * fixed-cycle civil calendar is used.  However, if <code>setCivil(false)</code>
  * is called, an approximation of the true lunar calendar will be used.
  *
- * @see java.util.GregorianCalendar
+ * @see com.ibm.util.GregorianCalendar
  *
  * @author Laura Werner
  * @version 1.0
@@ -297,7 +296,7 @@ public class IslamicCalendar extends IBMCalendar {
      *
      * @param field The field whose minimum value is desired.
      *
-     * @see java.util.Calendar#getMinimum
+     * @see com.ibm.util.Calendar#getMinimum
      */
     public int getMinimum(int field)
     {

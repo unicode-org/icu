@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/demo/calendar/Attic/CalendarCalc.java,v $ 
- * $Date: 2000/04/26 18:40:15 $ 
- * $Revision: 1.6 $
+ * $Date: 2000/05/12 23:21:23 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -28,7 +28,8 @@ import java.text.ParsePosition;
 import com.ibm.util.Calendar;
 //import java.util.GregorianCalendar;
 import com.ibm.util.GregorianCalendar;
-import java.util.TimeZone;
+//import java.util.TimeZone;
+import com.ibm.util.TimeZone;
 import java.util.Locale;
 
 import com.ibm.util.*;

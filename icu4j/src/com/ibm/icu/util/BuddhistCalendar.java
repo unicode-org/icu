@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/BuddhistCalendar.java,v $ 
- * $Date: 2000/03/21 02:19:32 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/05/12 23:20:10 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -16,7 +16,6 @@ package com.ibm.util;
 import java.util.Date;
 import com.ibm.util.GregorianCalendar;
 import java.util.Locale;
-import java.util.TimeZone;
 
 /**
  * <code>BuddhistCalendar</code> is a subclass of <code>GregorianCalendar</code>
@@ -33,7 +32,7 @@ import java.util.TimeZone;
  * calendar is not in lenient mode (see <code>setLenient</code>), dates before
  * 1/1/1 BE are rejected with an <code>IllegalArgumentException</code>.
  *
- * @see java.util.GregorianCalendar
+ * @see com.ibm.util.GregorianCalendar
  *
  * @author Laura Werner
  */
@@ -49,7 +48,7 @@ public class BuddhistCalendar extends GregorianCalendar {
      * Constant for the Buddhist Era.  This is the only allowable <code>ERA</code>
      * value for the Buddhist calendar.
      *
-     * @see java.util.Calendar#ERA
+     * @see com.ibm.util.Calendar#ERA
      */
     public static final int BE = 0;
     

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/util/Attic/EasterHoliday.java,v $ 
- * $Date: 2000/03/21 02:19:32 $ 
- * $Revision: 1.4 $
+ * $Date: 2000/05/12 23:20:10 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -16,7 +16,7 @@ package com.ibm.util;
 import java.util.Date;
 import com.ibm.util.GregorianCalendar;
 import com.ibm.util.Calendar;
-import java.util.SimpleTimeZone;
+import com.ibm.util.SimpleTimeZone;
 
 /**
  * A Holiday subclass which represents holidays that occur

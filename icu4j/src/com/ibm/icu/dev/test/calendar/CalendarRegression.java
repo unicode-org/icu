@@ -1,8 +1,6 @@
 package com.ibm.test.calendar;
 import com.ibm.util.*;
 import java.util.Date;
-import java.util.TimeZone;
-import java.util.SimpleTimeZone;
 import java.util.Locale;
 import com.ibm.text.*;
 
@@ -771,23 +769,25 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
     // I am disabling this test -- it is currently failing because of a bug
     // in Sun's latest change to STZ.getOffset().  I have filed a Sun bug
     // against this problem.
-//!    /**
-//!     * Prove that GregorianCalendar is proleptic (it used to cut off
-//!     * at 45 BC, and not have leap years before then).
-//!     */
-//!    public void Test4125892() {
-//!        GregorianCalendar cal = (GregorianCalendar) Calendar.getInstance();
-//!        DateFormat fmt = new SimpleDateFormat("MMMM d, yyyy G");
-//!        cal.clear();
-//!        cal.set(Calendar.ERA, GregorianCalendar.BC);
-//!        cal.set(Calendar.YEAR, 81); // 81 BC is a leap year (proleptically)
-//!        cal.set(Calendar.MONTH, Calendar.FEBRUARY);
-//!        cal.set(Calendar.DATE, 28);
-//!        cal.add(Calendar.DATE, 1);
-//!        if (cal.get(Calendar.DATE) != 29 ||
-//!            !cal.isLeapYear(-80)) // -80 == 81 BC
-//!            errln("Calendar not proleptic");
-//!    }
+
+    // Re-enabled after 'porting' TZ and STZ from java.util to com.ibm.util.
+    /**
+     * Prove that GregorianCalendar is proleptic (it used to cut off
+     * at 45 BC, and not have leap years before then).
+     */
+    public void Test4125892() {
+        GregorianCalendar cal = (GregorianCalendar) Calendar.getInstance();
+        DateFormat fmt = new SimpleDateFormat("MMMM d, yyyy G");
+        cal.clear();
+        cal.set(Calendar.ERA, GregorianCalendar.BC);
+        cal.set(Calendar.YEAR, 81); // 81 BC is a leap year (proleptically)
+        cal.set(Calendar.MONTH, Calendar.FEBRUARY);
+        cal.set(Calendar.DATE, 28);
+        cal.add(Calendar.DATE, 1);
+        if (cal.get(Calendar.DATE) != 29 ||
+            !cal.isLeapYear(-80)) // -80 == 81 BC
+            errln("Calendar not proleptic");
+    }
 
     /**
      * Calendar and GregorianCalendar hashCode() methods need improvement.

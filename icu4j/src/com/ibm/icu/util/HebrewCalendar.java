@@ -5,17 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/HebrewCalendar.java,v $ 
- * $Date: 2000/03/10 04:17:58 $ 
- * $Revision: 1.2 $
+ * $Date: 2000/05/12 23:20:10 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
 package com.ibm.util;
 
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
-import java.util.TimeZone;
 
 /**
  * <code>HebrewCalendar</code> is a subclass of <code>Calendar</code>
@@ -63,7 +61,7 @@ import java.util.TimeZone;
  *      http://www.pip.dknet.dk/~pip10160/calendar.html</a>
  * </ul>
  * <p>
- * @see java.util.GregorianCalendar
+ * @see com.ibm.util.GregorianCalendar
  *
  * @author Laura Werner
  */
@@ -352,7 +350,7 @@ public class HebrewCalendar extends IBMCalendar {
      *
      * @param field The field whose minimum value is desired.
      *
-     * @see java.util.Calendar#getMinimum
+     * @see com.ibm.util.Calendar#getMinimum
      */
     public int getMinimum(int field)
     {
@@ -570,7 +568,7 @@ public class HebrewCalendar extends IBMCalendar {
     //-------------------------------------------------------------------------
     // Functions for converting from field values to milliseconds and back...
     //
-    // These are overrides of abstract methods on java.util.Calendar
+    // These are overrides of abstract methods on com.ibm.util.Calendar
     //-------------------------------------------------------------------------
 
     /**
