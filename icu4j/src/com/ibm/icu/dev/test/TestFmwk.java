@@ -6,6 +6,7 @@
  */
 package com.ibm.icu.dev.test;
 import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.ULocale;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -1252,24 +1253,103 @@ public class TestFmwk extends AbstractTestLog {
     }
 
     /**
+     * Check the given array to see that all the strings
+     * in the expected array are present.
+     * @param msg string message, for log output
+     * @param array array of strings to check
+     * @param expected array of strings we expect to see, or null
+     * @return the length of 'array', or -1 on error
+     */
+    protected int checkArray(String msg,
+                             String array[],
+                             String expected[]) {
+        int explen = (expected != null) ? expected.length : 0;
+        if (!(explen >= 0 && explen < 31)) { // [sic] 31 not 32
+            errln("FAIL: Internal error");
+            return -1;
+        }
+        int i = 0;
+        StringBuffer buf = new StringBuffer();
+        int seenMask = 0;
+        for (; i<array.length; ++i) {
+            String s = array[i];
+            if (i != 0) buf.append(", ");
+            buf.append(s);
+            // check expected list
+            for (int j=0, bit=1; j<explen; ++j, bit<<=1) {
+                if ((seenMask&bit)==0) {
+                    if (s.equals(expected[j])) {
+                        seenMask |= bit;
+                        logln("Ok: \"" + s + "\" seen");
+                    }
+                }
+            }
+        }
+        logln(msg + " = [" + buf + "] (" + i + ")");
+        // did we see all expected strings?
+        if (((1<<explen)-1) != seenMask) {
+            for (int j=0, bit=1; j<expected.length; ++j, bit<<=1) {
+                if ((seenMask&bit)==0) {
+                    errln("\"" + expected[j] + "\" not seen");
+                }
+            }
+        }
+        return array.length;
+    }
+
+    /**
+     * Check the given array to see that all the locales
+     * in the expected array are present.
+     * @param msg string message, for log output
+     * @param array array of locales to check
+     * @param expected array of locales names we expect to see, or null
+     * @return the length of 'array'
+     */
+    protected int checkArray(String msg,
+                             Locale array[],
+                             String expected[]) {
+        String strs[] = new String[array.length];
+        for (int i=0; i<array.length; ++i) strs[i] = array[i].toString(); 
+        return checkArray(msg, strs, expected);
+    }
+    
+    /**
+     * Check the given array to see that all the locales
+     * in the expected array are present.
+     * @param msg string message, for log output
+     * @param array array of locales to check
+     * @param expected array of locales names we expect to see, or null
+     * @return the length of 'array'
+     */
+    protected int checkArray(String msg,
+                             ULocale array[],
+                             String expected[]) {
+        String strs[] = new String[array.length];
+        for (int i=0; i<array.length; ++i) strs[i] = array[i].toString(); 
+        return checkArray(msg, strs, expected);
+    }
+    
+    /**
      * JUnit-like assertions.
      */
-    protected void assertTrue(String message, boolean condition) {
+    protected boolean assertTrue(String message, boolean condition) {
         if (!condition) {
             errln("assertTrue() failed: " + message);
         } else if (VERBOSE_ASSERTIONS) {
             logln("Ok: " + message);
         }
+        return condition;
     }
-    protected void assertFalse(String message, boolean condition) {
+    protected boolean assertFalse(String message, boolean condition) {
         if (condition) {
             errln("assertFalse() failed: " + message);
         } else if (VERBOSE_ASSERTIONS) {
             logln("Ok: " + message);
         }
+        return !condition;
     }
-    protected void assertEquals(String message,
-                                Object expected, Object actual) {
+    protected boolean assertEquals(String message,
+                                   Object expected, Object actual) {
         if (!expected.equals(actual)) {
             if (actual instanceof String) {
                 // display quotes around string objects, for clarity
@@ -1278,6 +1358,7 @@ public class TestFmwk extends AbstractTestLog {
             }
             errln(message + "; got " + actual +
                   "; expected " + expected);
+            return false;
         } else if (VERBOSE_ASSERTIONS) {
             if (actual instanceof String) {
                 // display quotes around string objects, for clarity
@@ -1285,6 +1366,7 @@ public class TestFmwk extends AbstractTestLog {
             }
             logln("Ok: " + message + "; got " + actual);
         }
+        return true;
     }
     protected void fail(String message) {
         errln(message);
