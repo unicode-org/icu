@@ -466,7 +466,7 @@ public abstract class PerfTest {
         return data;
     }
     
-    public String[] readLines(String fileName, String encoding) {
+    public String[] readLines(String fileName, String encoding, boolean bulkMode) {
         FileInputStream fis = null;
         InputStreamReader isr = null;
         BufferedReader br = null;
@@ -493,11 +493,25 @@ public abstract class PerfTest {
         }
         
         int size = list.size();
-        String[] lines = new String [size];
+        String[] lines = null;
         
-        for (int i = 0; i < size; ++i) {
-            lines[i] = (String) list.get(i);
+        if (bulkMode) {
+            lines = new String[1];
+            StringBuffer buffer = new StringBuffer("");
+            for (int i = 0; i < size; ++i) {
+                buffer.append((String) list.get(i));
+                /*if (i < (size - 1)) {
+                    buffer.append("\r\n");
+                }*/
+            }
+            lines[0] = buffer.toString();
+        } else {
+            lines = new String [size];
+            for (int i = 0; i < size; ++i) {
+                lines[i] = (String) list.get(i);
+            }
         }
+        
         return lines;
     }
     
