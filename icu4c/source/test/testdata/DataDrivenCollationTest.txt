@@ -27,7 +27,7 @@ DataDrivenCollationTest {
                     TestLocale { "lt" }
                 }
             }
-            Cases { "cz<č<d<y<h<sz<š<t<zz<ž" } // cz<č<d<iz<y<h<sz<š<t<zz<ž
+            Cases { "cz<č<d<iz<y<j<sz<š<t<zz<ž" } 
         }
         TestLatvian {
             Info {
@@ -260,5 +260,150 @@ DataDrivenCollationTest {
                "= \u30A1\u30FC"
             }
         }  
+        da_TestPrimary {
+            Info {
+                Description { "This test goes through primary strength cases" }
+            }
+            Settings {
+                {
+                    TestLocale { "da" }
+                    Arguments { "[strength 1]" }
+                }
+            }
+            Cases {
+                "Lvi<Lwi",
+                "L\u00e4vi<L\u00f6wi",
+                "L\u00fcbeck=Lybeck",
+            }
+        }
+        da_TestTertiary {
+            Info {
+                Description { "This test goes through tertiary strength cases" }
+            }
+            Settings {
+                {
+                    TestLocale { "da" }
+                    Arguments { "[strength 3]" }
+                }
+            }
+            Cases {
+                "Luc<luck",
+                "luck<L\u00fcbeck",
+                "L\u00fcbeck>lybeck",
+                "L\u00e4vi<L\u00f6we",
+                "L\u00f6ww<mast",
+                // constUCharCollationDanishTest::testBugs[][CollationDanishTest::MAX_TOKEN_LEN]="
+                "A/S<"
+                "ANDRE<"
+                "ANDR\u00c9<"
+                "ANDREAS<"
+                "AS<"
+                "CA<"
+                "\u00c7A<"
+                "CB<"
+                "\u00c7C<"
+                "D.S.B.<"
+                "DA<"
+                "\u00d0A<"
+                "DB<"
+                "\u00d0C<"
+                "DSB<"
+                "DSC<"
+                "EKSTRA_ARBEJDE<"
+                "EKSTRABUD0<"
+                "H\u00d8ST<"
+                "HAAG<"
+                "H\u00c5NDBOG<"
+                "HAANDV\u00c6RKSBANKEN<"
+                "Karl<"
+                "karl<"
+                "'NIELS J\u00d8RGEN'<"
+                "NIELS-J\u00d8RGEN<"
+                "NIELSEN<"
+                "'R\u00c9E, A'<"
+                "'REE, B'<"
+                "'R\u00c9E, L'<"
+                "'REE, V'<"
+                "'SCHYTT, B'<"
+                "'SCHYTT, H'<"
+                "'SCH\u00dcTT, H'<"
+                "'SCHYTT, L'<"
+                "'SCH\u00dcTT, M'<"
+                "SS<"
+                "\u00df<"
+                "SSA<"
+                "'STORE VILDMOSE'<"
+                "STOREK\u00c6R0<"
+                "'STORM PETERSEN'<"
+                "STORMLY<"
+                "THORVALD<"
+                "THORVARDUR<"
+                "\u00feORVAR\u00d0UR<"
+                "THYGESEN<"
+                "'VESTERG\u00c5RD, A'<"
+                "'VESTERGAARD, A'<"
+                "'VESTERG\u00c5RD, B'<"
+                "\u00c6BLE<"
+                "\u00c4BLE<"
+                "\u00d8BERG<"
+                "\u00d6BERG",
+
+                // constUCharCollationDanishTest::testNTList[][CollationDanishTest::MAX_TOKEN_LEN]="
+                "andere<"
+                "chaque<"
+                "chemin<"
+                "cote<"
+                "cot\u00e9<"
+                "c\u00f4te<"
+                "c\u00f4t\u00e9<"
+                "\u010du\u010d\u0113t<"
+                "Czech<"
+                "hi\u0161a<"
+                "irdisch<"
+                "lie<"
+                "lire<"
+                "llama<"
+                "l\u00f5ug<"
+                "l\u00f2za<"
+                "lu\u010d<"
+                "luck<"
+                "L\u00fcbeck<"
+                "lye<"
+                "l\u00e4vi<"
+                "L\u00f6wen<"
+                "m\u00e0\u0161ta<"
+                "m\u00eer<"
+                "myndig<"
+                "M\u00e4nner<"
+                "m\u00f6chten<"
+                "pi\u00f1a<"
+                "pint<"
+                "pylon<"
+                "\u0161\u00e0ran<"
+                "savoir<"
+                "\u0160erb\u016bra<"
+                "Sietla<"
+                "\u015blub<"
+                "subtle<"
+                "symbol<"
+                "s\u00e4mtlich<"
+                "verkehrt<"
+                "vox<"
+                "v\u00e4ga<"
+                "waffle<"
+                "wood<"
+                "yen<"
+                "yuan<"
+                "yucca<"
+                "\u017eal<"
+                "\u017eena<"
+                "\u017den\u0113va<"
+                "zoo0<"
+                "Zviedrija<"
+                "Z\u00fcrich<"
+                "zysk0<"
+                "\u00e4ndere"
+            }
+        }        
     }
 }
