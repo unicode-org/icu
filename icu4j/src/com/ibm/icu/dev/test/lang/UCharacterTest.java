@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2002/10/03 23:42:02 $ 
-* $Revision: 1.43 $
+* $Date: 2002/11/13 20:19:43 $ 
+* $Revision: 1.44 $
 *
 *******************************************************************************
 */
@@ -1588,7 +1588,7 @@ public final class UCharacterTest extends TestFmwk
             || UCharacter.getIntPropertyMinValue(UProperty.BLOCK)
                             != UCharacter.UnicodeBlock.INVALID_CODE_ID 
             || UCharacter.getIntPropertyMinValue(UProperty.SCRIPT)
-                            != UScript.INVALID_CODE 
+                            != 0 /* JB#2410 */ 
             || UCharacter.getIntPropertyMinValue(0x2345) != 0) {
             errln("error: UCharacter.getIntPropertyMinValue() wrong");
         }
@@ -1604,7 +1604,7 @@ public final class UCharacterTest extends TestFmwk
                                         != UCharacter.LineBreak.COUNT - 1 
             || UCharacter.getIntPropertyMaxValue(UProperty.SCRIPT)
                                         != UScript.CODE_LIMIT - 1 
-            || UCharacter.getIntPropertyMaxValue(0x2345) != 0) {
+            || UCharacter.getIntPropertyMaxValue(0x2345) != -1 /*JB#2410*/ ) {
             errln("error: UCharacter.getIntPropertyMaxValue() wrong");
         }
         
@@ -1767,5 +1767,57 @@ public final class UCharacterTest extends TestFmwk
             }
         }
     }
-}
 
+    /**
+     * Test the property values API.  See JB#2410.
+     */
+    public void TestPropertyValues() {
+        int i, p, min, max;
+
+        /* Min should be 0 for everything. */
+        /* Until JB#2478 is fixed, the one exception is UCHAR_BLOCK. */
+        for (p=UProperty.INT_START; p<UProperty.INT_LIMIT; ++p) {
+            min = UCharacter.getIntPropertyMinValue(p);
+            if (min != 0) {
+                if (p == UProperty.BLOCK) {
+                    /* This is okay...for now.  See JB#2487.
+                       TODO Update this for JB#2487. */
+                } else {
+                    String name;
+                    name = UCharacter.getPropertyName(p, UProperty.NameChoice.LONG);
+                    errln("FAIL: UCharacter.getIntPropertyMinValue(" + name + ") = " +
+                          min + ", exp. 0");
+                }
+            }
+        }
+
+        /* Max should be -1 for invalid properties. */
+        max = UCharacter.getIntPropertyMaxValue(-1);
+        if (max != -1) {
+            errln("FAIL: UCharacter.getIntPropertyMaxValue(-1) = " +
+                  max + ", exp. -1");
+        }
+
+        /* Script should return 0 for an invalid code point. If the API
+           throws an exception then that's fine too. */
+        for (i=0; i<2; ++i) {
+            try {
+                int script = 0;
+                String desc = null;
+                switch (i) {
+                case 0:
+                    script = UScript.getScript(-1);
+                    desc = "UScript.getScript(-1)";
+                    break;
+                case 1:
+                    script = UCharacter.getIntPropertyValue(-1, UProperty.SCRIPT);
+                    desc = "UCharacter.getIntPropertyValue(-1, UProperty.SCRIPT)";
+                    break;
+                }
+                if (script != 0) {
+                    errln("FAIL: " + desc + " = " + script + ", exp. 0");
+                }
+            } catch (IllegalArgumentException e) {}
+        }
+    }
+}
