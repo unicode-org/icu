@@ -363,18 +363,18 @@ static void TestFwdBack(){
 static void TestSetChar(){
     static const uint8_t input[]
         = {0x61, 0xe4, 0xba, 0x8c, 0x7f, 0xfe, 0x62, 0xc5, 0x7f, 0x61, 0x80, 0x80, 0xe0, 0x00 };
-    static const uint16_t start_unsafe[]
+    static const int16_t start_unsafe[]
         = {0,    1,    1,    1,    4,    5,    6,    7,    8,    9,    9,    9,    12,   13 };
-    static const uint16_t start_safe[]
+    static const int16_t start_safe[]
         = {0,    1,    1,    1,    4,    5,    6,    7,    8,    9,    10,   11,   12,   13 };
-    static const uint16_t limit_unsafe[]
+    static const int16_t limit_unsafe[]
         = {0,    1,    4,    4,    4,    5,    6,    7,    9,    9,    10,   10,   10,   15 };
-    static const uint16_t limit_safe[]
+    static const int16_t limit_safe[]
         = {0,    1,    4,    4,    4,    5,    6,    7,    8,    9,    10,   11,   12,   13 };
     
     uint32_t i=0;
-    uint32_t offset=0, setOffset=0;
-    for(offset=0; offset<sizeof(input); offset++){
+    int32_t offset=0, setOffset=0;
+    for(offset=0; offset<(int32_t)sizeof(input); offset++){
          setOffset=offset;
          UTF8_SET_CHAR_START_UNSAFE(input, setOffset);
          if(setOffset != start_unsafe[i]){
