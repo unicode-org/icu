@@ -1246,10 +1246,20 @@ void TimeZoneTest::TestHistorical() {
 
 void TimeZoneTest::TestEquivalentIDs() {
     int32_t n = TimeZone::countEquivalentIDs("PST");
-    logln((UnicodeString)"PST: " + n);
-    for (int32_t i=0; i<n; ++i) {
-        UnicodeString id = TimeZone::getEquivalentID("PST", i);
-        logln((UnicodeString)i + " : " + id);
+    if (n < 2) {
+        errln((UnicodeString)"FAIL: countEquivalentIDs(PST) = " + n);
+    } else {
+        UBool sawLA = FALSE;
+        for (int32_t i=0; i<n; ++i) {
+            UnicodeString id = TimeZone::getEquivalentID("PST", i);
+            logln((UnicodeString)"" + i + " : " + id);
+            if (id == UnicodeString("America/Los_Angeles")) {
+                sawLA = TRUE;
+            }
+        }
+        if (!sawLA) {
+            errln("FAIL: America/Los_Angeles should be in the list");
+        }
     }
 }
 
