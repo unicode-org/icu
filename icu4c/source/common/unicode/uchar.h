@@ -45,18 +45,15 @@
  * Constants.
  */
 
-/**
- * The minimum value a UChar can have.  The lowest value a
- * UChar can have is 0x0000.
- */
-  static UChar UCHAR_MIN_VALUE;
-/**
- * The maximum value a UChar can have.  The greatest value a
- * UChar can have is 0xffff.
- * @draft
- */
+/** The lowest Unicode code point value. Code points are non-negative. */
+#define UCHAR_MIN_VALUE 0
 
- static UChar UCHAR_MAX_VALUE;
+/**
+ * The highest Unicode code point value (scalar value) according to
+ * The Unicode Standard. This is a 21-bit value (20.1 bits, rounded up).
+ * For a single character, UChar32 is a simple type that can hold any code point value.
+ */
+#define UCHAR_MAX_VALUE 0x10ffff
 
  /**
  * Data for enumerated Unicode general category types
