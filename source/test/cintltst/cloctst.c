@@ -42,60 +42,60 @@ void PrintDataTable();
 
 static const char* rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
     /* language code */
-    {   "en",   "fr",   "hr",   "el",   "no"    },
+    {   "en",   "fr",   "ca",   "el",   "no"    },
     /* country code */
-    {   "US",   "FR",   "HR",   "GR",   "NO"    },
+    {   "US",   "FR",   "ES",   "GR",   "NO"    },
     /* variant code */
     {   "",     "",     "",     "",     "NY"    },
     /* full name */
-    {   "en_US",    "fr_FR",    "hr_HR",    "el_GR",    "no_NO_NY"  },
+    {   "en_US",    "fr_FR",    "ca_ES",    "el_GR",    "no_NO_NY"  },
     /* ISO-3 language */
-    {   "eng",  "fra",  "hrv",  "ell",  "nor"   },
+    {   "eng",  "fra",  "cat",  "ell",  "nor"   },
     /* ISO-3 country */
-    {   "USA",  "FRA",  "HRV",  "GRC",  "NOR"   },
-    /* LCID (not currently public) */
-    {   "409", "40c", "41a", "408", "814"  },
+    {   "USA",  "FRA",  "ESP",  "GRC",  "NOR"   },
+    /* LCID */
+    {   "409", "40c", "403", "408", "814"  },
 
     /* display language (English) */
-    {   "English",  "French",   "Croatian", "Greek",    "Norwegian" },
+    {   "English",  "French",   "Catalan", "Greek",    "Norwegian" },
     /* display country (English) */
-    {   "United States",    "France",   "Croatia",  "Greece",   "Norway"    },
+    {   "United States",    "France",   "Spain",  "Greece",   "Norway"    },
     /* display variant (English) */
     {   "",     "",     "",     "",     "Nynorsk"    },
     /* display name (English) */
-    {   "English (United States)", "French (France)", "Croatian (Croatia)", "Greek (Greece)", "Norwegian (Norway, Nynorsk)" },
+    {   "English (United States)", "French (France)", "Catalan (Spain)", "Greek (Greece)", "Norwegian (Norway, Nynorsk)" },
 
     /* display language (French) */
-    {   "anglais",  "fran\\u00E7ais",   "croate", "grec",    "norv\\u00E9gien" },
+    {   "anglais",  "fran\\u00E7ais",   "catalan", "grec",    "norv\\u00E9gien" },
     /* display country (French) */
-    {   "\\u00C9tats-Unis",    "France",   "Croatie",  "Gr\\u00E8ce",   "Norv\\u00E8ge"    },
+    {   "\\u00C9tats-Unis",    "France",   "Espagne",  "Gr\\u00E8ce",   "Norv\\u00E8ge"    },
     /* display variant (French) */
     {   "",     "",     "",     "",     "Nynorsk"    },
     /* display name (French) */
-    {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "croate (Croatie)", "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, Nynorsk)" },
+    {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "catalan (Espagne)", "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, Nynorsk)" },
 
-    /* display language (Croatian) */
-    {   "", "", "hrvatski",            "",  "" },
-    /* display country (Croatian) */
-    {   "", "", "Hrvatska",            "", "" },
-    /* display variant (Croatian) */
+    /* display language (Catalan) */
+    {   "", "", "catal\\u00E0",            "",  "" },
+    /* display country (Catalan) */
+    {   "", "", "Espanya",            "", "" },
+    /* display variant (Catalan) */
     {   "", "", "",                    "", "Nynorsk" },
-    /* display name (Croatian) */
-    {   "", "", "hrvatski (Hrvatska)", "", "" },
+    /* display name (Catalan) */
+    {   "", "", "catal\\u00E0 (Espanya)", "", "" },
 
     /* display language (Greek) */
     {
         "\\u0391\\u03b3\\u03b3\\u03bb\\u03b9\\u03ba\\u03ac",
         "\\u0393\\u03b1\\u03bb\\u03bb\\u03b9\\u03ba\\u03ac",
-        "\\u039a\\u03c1\\u03bf\\u03b1\\u03c4\\u03b9\\u03ba\\u03ac",
-        "\\u03b5\\u03bb\\u03bb\\u03b7\\u03bd\\u03b9\\u03ba\\u03ac",
+        "\\u039a\\u03b1\\u03c4\\u03b1\\u03bb\\u03b1\\u03bd\\u03b9\\u03ba\\u03ac",
+        "\\u0395\\u03bb\\u03bb\\u03b7\\u03bd\\u03b9\\u03ba\\u03ac",
         "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03b9\\u03ba\\u03ac"
     },
     /* display country (Greek) */
     {
-        "\\u0397\\u03bd\\u03c9\\u03bc\\u03ad\\u03bd\\u03b5\\u03c2 \\u03a0\\u03bf\\u03bb\\u03b9\\u03c4\\u03b5\\u03af\\u03b5\\u03c2 \\u0391\\u03bc\\u03b5\\u03c1\\u03b9\\u03ba\\u03ae\\u03c2",
+        "\\u0397\\u03bd\\u03c9\\u03bc\\u03ad\\u03bd\\u03b5\\u03c2 \\u03a0\\u03bf\\u03bb\\u03b9\\u03c4\\u03b5\\u03af\\u03b5\\u03c2",
         "\\u0393\\u03b1\\u03bb\\u03bb\\u03af\\u03b1",
-        "\\u039a\\u03c1\\u03bf\\u03b1\\u03c4\\u03af\\u03b1",
+        "\\u0399\\u03c3\\u03c0\\u03b1\\u03bd\\u03af\\u03b1",
         "\\u0395\\u03bb\\u03bb\\u03ac\\u03b4\\u03b1",
         "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03af\\u03b1"
     },
@@ -103,10 +103,10 @@ static const char* rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
     {   "", "", "", "", "Nynorsk" },
     /* display name (Greek) */
     {
-        "\\u0391\\u03b3\\u03b3\\u03bb\\u03b9\\u03ba\\u03ac (\\u0397\\u03bd\\u03c9\\u03bc\\u03ad\\u03bd\\u03b5\\u03c2 \\u03a0\\u03bf\\u03bb\\u03b9\\u03c4\\u03b5\\u03af\\u03b5\\u03c2 \\u0391\\u03bc\\u03b5\\u03c1\\u03b9\\u03ba\\u03ae\\u03c2)",
+        "\\u0391\\u03b3\\u03b3\\u03bb\\u03b9\\u03ba\\u03ac (\\u0397\\u03bd\\u03c9\\u03bc\\u03ad\\u03bd\\u03b5\\u03c2 \\u03a0\\u03bf\\u03bb\\u03b9\\u03c4\\u03b5\\u03af\\u03b5\\u03c2)",
         "\\u0393\\u03b1\\u03bb\\u03bb\\u03b9\\u03ba\\u03ac (\\u0393\\u03b1\\u03bb\\u03bb\\u03af\\u03b1)",
-        "\\u039a\\u03c1\\u03bf\\u03b1\\u03c4\\u03b9\\u03ba\\u03ac (\\u039a\\u03c1\\u03bf\\u03b1\\u03c4\\u03af\\u03b1)",
-        "\\u03b5\\u03bb\\u03bb\\u03b7\\u03bd\\u03b9\\u03ba\\u03ac (\\u0395\\u03bb\\u03bb\\u03ac\\u03b4\\u03b1)",
+        "\\u039a\\u03b1\\u03c4\\u03b1\\u03bb\\u03b1\\u03bd\\u03b9\\u03ba\\u03ac (\\u0399\\u03c3\\u03c0\\u03b1\\u03bd\\u03af\\u03b1)",
+        "\\u0395\\u03bb\\u03bb\\u03b7\\u03bd\\u03b9\\u03ba\\u03ac (\\u0395\\u03bb\\u03bb\\u03ac\\u03b4\\u03b1)",
         "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03b9\\u03ba\\u03ac (\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03af\\u03b1, Nynorsk)"
     }
 };
@@ -115,7 +115,7 @@ static UChar*** dataTable=0;
 enum {
     ENGLISH = 0,
     FRENCH = 1,
-    CROATIAN = 2,
+    CATALAN = 2,
     GREEK = 3,
     NORWEGIAN = 4
 };
@@ -136,10 +136,10 @@ enum {
     DCTRY_FR = 12,
     DVAR_FR = 13,
     DNAME_FR = 14,
-    DLANG_HR = 15,
-    DCTRY_HR = 16,
-    DVAR_HR = 17,
-    DNAME_HR = 18,
+    DLANG_CA = 15,
+    DCTRY_CA = 16,
+    DVAR_CA = 17,
+    DNAME_CA = 18,
     DLANG_EL = 19,
     DCTRY_EL = 20,
     DVAR_EL = 21,
@@ -470,8 +470,8 @@ static void TestDisplayNames()
     doTestDisplayNames("en_US", DLANG_EN);
     log_verbose("  In locale = fr_FR....\n");
     doTestDisplayNames("fr_FR", DLANG_FR);
-    log_verbose("  In locale = hr_HR...\n");
-    doTestDisplayNames("hr_HR", DLANG_HR);
+    log_verbose("  In locale = ca_ES...\n");
+    doTestDisplayNames("ca_ES", DLANG_CA);
     log_verbose("  In locale = gr_EL..\n");
     doTestDisplayNames("el_GR", DLANG_EL);
 
