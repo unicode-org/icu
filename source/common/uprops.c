@@ -26,7 +26,9 @@
 
 /* helper definitions ------------------------------------------------------- */
 
-#define CGJ     0x34f
+#define CGJ     0x034f
+#define ZWNJ    0x200C
+#define ZWJ     0x200D
 
 /**
  * Unicode property names and property value names are compared
@@ -259,6 +261,7 @@ u_isUWhiteSpace(UChar32 c) {
 U_CAPI int32_t U_EXPORT2
 u_getIntPropertyValue(UChar32 c, UProperty which) {
     UErrorCode errorCode;
+    int32_t i;
 
     if(which<UCHAR_BINARY_START) {
         return 0; /* undefined */
@@ -274,22 +277,40 @@ u_getIntPropertyValue(UChar32 c, UProperty which) {
             return (int32_t)ublock_getCode(c);
         case UCHAR_CANONICAL_COMBINING_CLASS:
             return u_getCombiningClass(c);
-#if 0 /* ### */
         case UCHAR_DECOMPOSITION_TYPE:
-            return ;
-#endif
+            return (int32_t)(u_getUnicodeProperties(c, 2)&UPROPS_DT_MASK);
         case UCHAR_EAST_ASIAN_WIDTH:
-            return (int32_t)(u_getUnicodeProperties(c, 0)&UPROPS_EA_WIDTH_MASK)>>UPROPS_EA_WIDTH_SHIFT;
+            return (int32_t)(u_getUnicodeProperties(c, 0)&UPROPS_EA_MASK)>>UPROPS_EA_SHIFT;
         case UCHAR_GENERAL_CATEGORY:
             return (int32_t)u_charType(c);
-#if 0 /* ### */
         case UCHAR_JOINING_GROUP:
-            return ;
+            return (int32_t)(u_getUnicodeProperties(c, 2)&UPROPS_JG_MASK)>>UPROPS_JG_SHIFT;
         case UCHAR_JOINING_TYPE:
-            return ;
+            /*
+             * ArabicShaping.txt:
+             * Note: Characters of joining type T and most characters of 
+             * joining type U are not explicitly listed in this file.
+             *
+             * Characters of joining type T can [be] derived by the following formula:
+             *   T = Mn + Cf - ZWNJ - ZWJ
+             */
+            i=(int32_t)(u_getUnicodeProperties(c, 2)&UPROPS_JG_MASK)>>UPROPS_JG_SHIFT;
+            if(i==0 && c!=ZWNJ && c!=ZWJ && (FLAG(u_charType(c))&(_Mn|_Cf))!=0) {
+                i=(int32_t)U_JT_TRANSPARENT;
+            }
+            return i;
         case UCHAR_LINE_BREAK:
-            return ;
-#endif
+            /*
+             * LineBreak.txt:
+             *  - Assigned characters that are not listed explicitly are given the value
+             *    "AL".
+             *  - Unassigned characters are given the value "XX".
+             */
+            i=(int32_t)(u_getUnicodeProperties(c, 0)&UPROPS_LB_MASK)>>UPROPS_LB_SHIFT;
+            if(i==0 && u_charType(c)!=0) {
+                i=(int32_t)U_LB_ALPHABETIC;
+            }
+            return i;
         case UCHAR_NUMERIC_TYPE:
             return (int32_t)GET_NUMERIC_TYPE(u_getUnicodeProperties(c, -1));
         case UCHAR_SCRIPT:
@@ -317,6 +338,8 @@ u_getIntPropertyMinValue(UProperty which) {
 
 U_CAPI int32_t U_EXPORT2
 u_getIntPropertyMaxValue(UProperty which) {
+    int32_t max;
+
     if(which<UCHAR_BINARY_START) {
         return 0; /* undefined */
     } else if(which<UCHAR_BINARY_LIMIT) {
@@ -328,31 +351,33 @@ u_getIntPropertyMaxValue(UProperty which) {
         case UCHAR_BIDI_CLASS:
             return (int32_t)U_CHAR_DIRECTION_COUNT-1;
         case UCHAR_BLOCK:
-            /* ### TODO This should be data-driven from uprops.dat */
-            return (int32_t)UBLOCK_COUNT-1;
+            max=(uprv_getMaxValues()&UPROPS_BLOCK_MASK)>>UPROPS_BLOCK_SHIFT;
+            if(max==0) {
+                max=(int32_t)UBLOCK_COUNT-1;
+            }
+            return max;
         case UCHAR_CANONICAL_COMBINING_CLASS:
             return 0xff; /* TODO do we need to be more precise, getting the actual maximum? */
-#if 0 /* ### */
         case UCHAR_DECOMPOSITION_TYPE:
-            return ;
-#endif
+            return (int32_t)U_DT_COUNT-1;
         case UCHAR_EAST_ASIAN_WIDTH:
             return (int32_t)U_EA_COUNT-1;
         case UCHAR_GENERAL_CATEGORY:
             return (int32_t)U_CHAR_CATEGORY_COUNT-1;
-#if 0 /* ### */
         case UCHAR_JOINING_GROUP:
-            return ;
+            return (int32_t)U_JG_COUNT-1;
         case UCHAR_JOINING_TYPE:
-            return ;
+            return (int32_t)U_JT_COUNT-1;
         case UCHAR_LINE_BREAK:
-            return ;
-#endif
+            return (int32_t)U_LB_COUNT-1;
         case UCHAR_NUMERIC_TYPE:
             return (int32_t)U_NT_COUNT-1;
         case UCHAR_SCRIPT:
-            /* ### TODO This should be data-driven from uprops.dat */
-            return (int32_t)USCRIPT_CODE_LIMIT-1;
+            max=uprv_getMaxValues()&UPROPS_SCRIPT_MASK;
+            if(max==0) {
+                max=(int32_t)USCRIPT_CODE_LIMIT-1;
+            }
+            return max;
         default:
             return 0; /* undefined */
         }
