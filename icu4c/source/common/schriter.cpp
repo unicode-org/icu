@@ -17,7 +17,7 @@
 #include "unicode/schriter.h"
 
 
-UClassID StringCharacterIterator::fgClassID = 0;
+const char StringCharacterIterator::fgClassID = 0;
 
 StringCharacterIterator::StringCharacterIterator()
   : UCharCharacterIterator(),

@@ -143,8 +143,8 @@ protected:
   void setText(const UChar* newText, int32_t newTextLength);
         
   UnicodeString            text;
-
-  static UClassID           fgClassID;
+private:
+  static const char        fgClassID;
 };
 
 #endif

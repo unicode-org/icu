@@ -8,6 +8,8 @@
 #include "unicode/uchriter.h"
 #include "uhash.h"
 
+const char UCharCharacterIterator::fgClassID = 0;
+
 UCharCharacterIterator::UCharCharacterIterator()
   : CharacterIterator(),
   text(0)
@@ -355,4 +357,3 @@ UCharCharacterIterator::getText(UnicodeString& result) {
     result = UnicodeString(text, textLength);
 }
 
-char UCharCharacterIterator::fgClassID = 0;
