@@ -188,7 +188,7 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
 
   /* Open the input file for reading */
   if(inputDir == NULL) {
-      in = T_FileStream_open(filename, "r");
+      in = T_FileStream_open(filename, "rb");
   } else {
       char *openFileName = NULL;
       int32_t dirlen = uprv_strlen(inputDir);
