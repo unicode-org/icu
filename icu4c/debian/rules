@@ -104,7 +104,33 @@ install: build
 
 # Build architecture-independent files here.
 binary-indep: build install
-# We have nothing to do by default.
+	#
+	# build icu-doc package by moving files
+	#
+	mv debian/tmp/usr/share/doc/icu debian/tmp/usr/share/doc/icu-doc
+	dh_movefiles -picu-doc \
+	    usr/share/doc/icu-doc
+	#
+	# build icu-i18ndata from the source data
+	#
+	test -d debian/icu-i18ndata/$(datasrcdir) || \
+	    mkdir -p debian/icu-i18ndata/$(datasrcdir)
+	install -m 644 $(srcdir)/../data/*.txt \
+	    $(srcdir)/../data/*.brk \
+	    debian/icu-i18ndata/$(datasrcdir)
+	cd debian/icu-i18ndata/$(datasrcdir) && \
+	    $(RM) convrtrs.txt
+	#
+	# build icu-data from the source data
+	#
+	test -d debian/icu-data/$(datasrcdir) || \
+	    mkdir -p debian/icu-data/$(datasrcdir)
+	install -m 644 $(srcdir)/../data/*.ucm \
+	    debian/icu-data/$(datasrcdir)
+	test -d debian/icu-data/$(datasrcdir)/unidata || \
+	    mkdir -p debian/icu-data/$(datasrcdir)/unidata
+	install -m 644 $(srcdir)/../data/unidata/*.* \
+	    debian/icu-data/$(datasrcdir)/unidata
 
 # Build architecture-dependent files here.
 binary-arch: build install
@@ -116,10 +142,8 @@ binary-arch: build install
 	# build libicu${major} package by moving files from icu-dev
 	#
 	dh_movefiles -plibicu$(major) \
-	    usr/lib/libicuuc.so.* \
-	    usr/lib/libicui18n.so.* \
-	    usr/lib/libicutoolutil.so.* \
-	    usr/lib/libustdio.so.*
+	    usr/lib/*.so.* \
+	    usr/lib/libicudt*
 	mkdir debian/libicu$(major)/usr/lib/icu
 	#
 	# build icu package by moving files from icu-dev
@@ -141,27 +165,6 @@ binary-arch: build install
 	    $(iculibdir)/*.res \
 	    $(iculibdir)/*.brk
 	#
-	# build icu-data from the source data
-	#
-	test -d debian/icu-data/$(datasrcdir) || \
-	    mkdir -p debian/icu-data/$(datasrcdir)
-	install -m 644 $(srcdir)/../data/*.ucm \
-	    debian/icu-data/$(datasrcdir)
-	test -d debian/icu-data/$(datasrcdir)/unidata || \
-	    mkdir -p debian/icu-data/$(datasrcdir)/unidata
-	install -m 644 $(srcdir)/../data/unidata/*.* \
-	    debian/icu-data/$(datasrcdir)/unidata
-	#
-	# build icu-i18ndata from the source data
-	#
-	test -d debian/icu-i18ndata/$(datasrcdir) || \
-	    mkdir -p debian/icu-i18ndata/$(datasrcdir)
-	install -m 644 $(srcdir)/../data/*.txt \
-	    $(srcdir)/../data/*.brk \
-	    debian/icu-i18ndata/$(datasrcdir)
-	cd debian/icu-i18ndata/$(datasrcdir) && \
-	    $(RM) convrtrs.txt
-	#
 	# move the rest of the development files
 	# in their package
 	#
@@ -177,6 +180,7 @@ binary-arch: build install
 #	dh_installdebconf
 	dh_installdocs
 	dh_installexamples $(srcdir)/samples/*
+	find debian/libicu-dev -name CVS -o -name .cvsignore | xargs rm -rf
 	dh_installmenu
 #	dh_installemacsen
 #	dh_installpam
