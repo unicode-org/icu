@@ -1320,7 +1320,7 @@ protected:
     virtual void prepareGetActual(UCalendarDateFields field, UBool isMinimum, UErrorCode &status);
     
     /**
-     * Limit enums. Not in sync with UCalendarLimitTypes (refers to internal fields).
+     * Limit enums. Not in sync with UCalendarLimitType (refers to internal fields).
      * @internal  
      */
     enum ELimitType { 
