@@ -632,11 +632,17 @@ void TransliteratorIDParser::registerSpecialInverse(const UnicodeString& target,
                                                     const UnicodeString& inverseTarget,
                                                     UBool bidirectional) {
     init();
+
+    // If target == inverseTarget then force bidirectional => FALSE
+    if (bidirectional && 0==target.caseCompare(inverseTarget, U_FOLD_CASE_DEFAULT)) {
+        bidirectional = FALSE;
+    }
+
     Mutex lock(&LOCK);
 
     UErrorCode ec = U_ZERO_ERROR;
     SPECIAL_INVERSES->put(target, new UnicodeString(inverseTarget), ec);
-    if (bidirectional && 0!=target.caseCompare(inverseTarget, U_FOLD_CASE_DEFAULT)) {
+    if (bidirectional) {
         SPECIAL_INVERSES->put(inverseTarget, new UnicodeString(target), ec);
     }
 }
@@ -821,9 +827,13 @@ TransliteratorIDParser::specsToSpecialInverse(const Specs& specs) {
         return NULL;
     }
     init();
-    Mutex lock(&LOCK);
-    UnicodeString* inverseTarget = (UnicodeString*) SPECIAL_INVERSES->get(
-        specs.target);
+
+    UnicodeString* inverseTarget;
+
+    umtx_lock(&LOCK);
+    inverseTarget = (UnicodeString*) SPECIAL_INVERSES->get(specs.target);
+    umtx_unlock(&LOCK);
+
     if (inverseTarget != NULL) {
         // If the original ID contained "Any-" then make the
         // special inverse "Any-Foo"; otherwise make it "Foo".
@@ -862,15 +872,20 @@ Transliterator* TransliteratorIDParser::createBasicInstance(const UnicodeString&
  * Initialize static memory.
  */
 void TransliteratorIDParser::init() {
-    // Lock first, check static pointer second
-    Mutex lock(&LOCK);
-    if (SPECIAL_INVERSES != 0) {
-        // We were blocked by another thread in this method
+    if (SPECIAL_INVERSES != NULL) {
         return;
     }
 
-    SPECIAL_INVERSES = new Hashtable(TRUE);
-    SPECIAL_INVERSES->setValueDeleter(uhash_deleteUnicodeString);
+    Hashtable* special_inverses = new Hashtable(TRUE);
+    special_inverses->setValueDeleter(uhash_deleteUnicodeString);
+
+    umtx_lock(&LOCK);
+    if (SPECIAL_INVERSES == NULL) {
+        SPECIAL_INVERSES = special_inverses;
+        special_inverses = NULL;
+    }
+    umtx_unlock(&LOCK);
+    delete special_inverses;
 
     ucln_i18n_registerCleanup();
 }
