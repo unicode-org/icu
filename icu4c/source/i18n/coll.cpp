@@ -266,6 +266,7 @@ Collator* Collator::makeInstance(const Locale&  desiredLocale,
     return collation;
 }
 
+#ifdef U_USE_COLLATION_OBSOLETE_2_6
 // !!! dlf the following is obsolete, ignore registration for this
 
 Collator *
@@ -293,6 +294,7 @@ Collator::createInstance(const Locale &loc,
     }
     return collator;
 }
+#endif
 
 // implement deprecated, previously abstract method
 Collator::EComparisonResult Collator::compare(const UnicodeString& source, 

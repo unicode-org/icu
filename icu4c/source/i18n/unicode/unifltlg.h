@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (C) 1999, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) 1999-2003, International Business Machines Corporation and others. All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
 *   11/17/99    aliu        Creation.
@@ -21,7 +21,7 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_TRANSLITERATION
+#if !UCONFIG_NO_TRANSLITERATION && defined(U_USE_UNICODE_FILTER_LOGIC_OBSOLETE_2_8)
 
 #include "unicode/uobject.h"
 
