@@ -84,15 +84,15 @@ isAcceptableUCA(void * /*context*/,
     if( pInfo->size>=20 &&
         pInfo->isBigEndian==U_IS_BIG_ENDIAN &&
         pInfo->charsetFamily==U_CHARSET_FAMILY &&
-        pInfo->dataFormat[0]==ucaDataInfo.dataFormat[0] &&   /* dataFormat="UCol" */
-        pInfo->dataFormat[1]==ucaDataInfo.dataFormat[1] &&
-        pInfo->dataFormat[2]==ucaDataInfo.dataFormat[2] &&
-        pInfo->dataFormat[3]==ucaDataInfo.dataFormat[3] &&
-        pInfo->formatVersion[0]==ucaDataInfo.formatVersion[0] &&
-        pInfo->formatVersion[1]>=ucaDataInfo.formatVersion[1]// &&
-        //pInfo->formatVersion[1]==ucaDataInfo.formatVersion[1] &&
-        //pInfo->formatVersion[2]==ucaDataInfo.formatVersion[2] && // Too harsh
-        //pInfo->formatVersion[3]==ucaDataInfo.formatVersion[3] && // Too harsh
+        pInfo->dataFormat[0]==UCA_DATA_FORMAT_0 &&   /* dataFormat="UCol" */
+        pInfo->dataFormat[1]==UCA_DATA_FORMAT_1 &&
+        pInfo->dataFormat[2]==UCA_DATA_FORMAT_2 &&
+        pInfo->dataFormat[3]==UCA_DATA_FORMAT_3 &&
+        pInfo->formatVersion[0]==UCA_FORMAT_VERSION_0 &&
+        pInfo->formatVersion[1]>=UCA_FORMAT_VERSION_1// &&
+        //pInfo->formatVersion[1]==UCA_FORMAT_VERSION_1 &&
+        //pInfo->formatVersion[2]==UCA_FORMAT_VERSION_2 && // Too harsh
+        //pInfo->formatVersion[3]==UCA_FORMAT_VERSION_3 && // Too harsh
         ) {
         UVersionInfo UCDVersion;
         u_getUnicodeVersion(UCDVersion);
