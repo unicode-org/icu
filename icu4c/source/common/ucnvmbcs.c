@@ -668,13 +668,10 @@ _MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
         pArgs->sourceLimit=pArgs->source+1;
         pArgs->flush= pArgs->sourceLimit==realLimit;
         _MBCSToUnicode(pArgs, pErrorCode);
-        if(U_FAILURE(*pErrorCode)) {
+        if(U_FAILURE(*pErrorCode) && *pErrorCode!=U_INDEX_OUTOFBOUNDS_ERROR) {
             return 0xffff;
         } else if(pArgs->target!=buffer) {
-            UChar32 c;
-            int32_t length=pArgs->target-buffer, i=0;
-            UTF_NEXT_CHAR_SAFE(buffer, i, length, c, FALSE);
-            return c;
+            return ucnv_getUChar32KeepOverflow(pArgs->converter, buffer, pArgs->target-buffer);
         }
     }
 
@@ -814,7 +811,7 @@ _MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     const UChar *source=pArgs->source,
                 *sourceLimit=pArgs->sourceLimit;
     uint8_t *target=(uint8_t *)pArgs->target;
-    const uint8_t *targetLimit=(const uint8_t *)pArgs->targetLimit;
+    int32_t targetCapacity=pArgs->targetLimit-pArgs->target;
     int32_t *offsets=pArgs->offsets;
 
     const uint16_t *table=cnv->sharedData->table->mbcs.fromUnicodeTable;
@@ -843,7 +840,7 @@ _MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
          * Therefore, those situations also test for overflows and will
          * then break the loop, too.
          */
-        if(target<targetLimit) {
+        if(targetCapacity>0) {
             /*
              * Get a correct Unicode code point:
              * a single UChar for a BMP code point or
@@ -857,21 +854,35 @@ _MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                     /* convert this BMP code point */
                     /* exit this condition tree */
                 } else if(UTF_IS_SURROGATE_FIRST(c)) {
-                    /* collect the trail code unit in the next iteration */
-                    continue;
-                    /*
-                     * I could have duplicated here the code from below
-                     * that gets the trail unit and checks for a match.
-                     * There would need to be an if(source<sourceLimit)
-                     * here, and I do not think that with pre-existing state
-                     * in the converter I could get around duplicating this
-                     * at all.
-                     * For now, I leave the continue statement here for
-                     * simplicity and maintainability, although it is a little
-                     * slower - only for surrogates though.
-                     *
-                     * Markus Scherer 2000-jul-06
-                     */
+                    if(source<sourceLimit) {
+                        /*
+                         * I have duplicated here the code from below
+                         * that gets the trail unit and checks for a match.
+                         * I do not think that with pre-existing state
+                         * in the converter I could get around duplicating this
+                         * at all.
+                         * (I would have to jump here from outside the loop if(c!=0).)
+                         *
+                         * Markus Scherer 2000-jul-17
+                         */
+                        UChar trail=*source;
+                        if(UTF_IS_SECOND_SURROGATE(trail)) {
+                            ++source;
+                            ++nextSourceIndex;
+                            c=UTF16_GET_PAIR_VALUE(c, trail);
+                            /* convert this surrogate code point */
+                            /* exit this condition tree */
+                        } else {
+                            /* this is an unmatched lead code unit (1st surrogate) */
+                            /* callback(illegal) */
+                            reason=UCNV_ILLEGAL;
+                            *pErrorCode=U_ILLEGAL_CHAR_FOUND;
+                            goto callback;
+                        }
+                    } else {
+                        /* no more input */
+                        break;
+                    }
                 } else {
                     /* this is an unmatched trail code unit (2nd surrogate) */
                     /* callback(illegal) */
@@ -1062,10 +1073,10 @@ _MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                 if(offsets!=NULL) {
                     *offsets++=sourceIndex;
                 }
+                --targetCapacity;
             } else {
-                int32_t available=targetLimit-target;
                 /* from the first if in the loop we know that available>0 */
-                if(length<=available) {
+                if(length<=targetCapacity) {
                     switch(length) {
                         /* each branch falls through to the next one */
                     case 4:
@@ -1092,6 +1103,7 @@ _MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                         /* will never occur */
                         break;
                     }
+                    targetCapacity-=length;
                 } else {
                     uint8_t *p;
 
@@ -1102,7 +1114,7 @@ _MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                      * regular target.
                      */
                     /* we know that 1<=available<length<=4 */
-                    length-=available;
+                    length-=targetCapacity;
                     p=(uint8_t *)cnv->charErrorBuffer;
                     switch(length) {
                         /* each branch falls through to the next one */
@@ -1120,7 +1132,7 @@ _MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
 
                     /* now output what fits into the regular target */
                     value>>=8*length; /* length was reduced by available */
-                    switch(available) {
+                    switch(targetCapacity) {
                         /* each branch falls through to the next one */
                     case 3:
                         *target++=(uint8_t)(value>>16);
@@ -1143,6 +1155,7 @@ _MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                     }
 
                     /* target overflow */
+                    targetCapacity=0;
                     *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
                     c=0;
                     break;
@@ -1203,6 +1216,7 @@ callback:
             /* update the source pointer and index */
             sourceIndex=nextSourceIndex+(pArgs->source-source);
             source=pArgs->source;
+            targetCapacity=(uint8_t *)pArgs->targetLimit-target;
 
             /* break on error */
             if(U_FAILURE(*pErrorCode)) {
