@@ -83,14 +83,14 @@ UVector Transliterator::cacheIDs;
  * transliterator.  The ID is appended to this to form the key.
  * The resource bundle value should be a String.
  */
-const char* Transliterator::RB_DISPLAY_NAME_PREFIX = "%Translit%%";
+static const char* RB_DISPLAY_NAME_PREFIX = "%Translit%%";
 
 /**
  * Prefix for resource bundle key for the display name for a
  * transliterator SCRIPT.  The ID is appended to this to form the key.
  * The resource bundle value should be a String.
  */
-const char* Transliterator::RB_SCRIPT_DISPLAY_NAME_PREFIX = "%Translit%";
+static const char* RB_SCRIPT_DISPLAY_NAME_PREFIX = "%Translit%";
 
 /**
  * Resource bundle key for display name pattern.
@@ -98,8 +98,7 @@ const char* Transliterator::RB_SCRIPT_DISPLAY_NAME_PREFIX = "%Translit%";
  * MessageFormat pattern, e.g.:
  * "{0,choice,0#|1#{1} Transliterator|2#{1} to {2} Transliterator}".
  */
-const char* Transliterator::RB_DISPLAY_NAME_PATTERN =
-    "TransliteratorNamePattern";
+static const char* RB_DISPLAY_NAME_PATTERN = "TransliteratorNamePattern";
 
 /**
  * Resource bundle key for the list of RuleBasedTransliterator IDs.
@@ -107,13 +106,12 @@ const char* Transliterator::RB_DISPLAY_NAME_PATTERN =
  * being a valid ID.  The ID will be appended to RB_RULE_BASED_PREFIX
  * to obtain the class name in which the RB_RULE key will be sought.
  */
-const char* Transliterator::RB_RULE_BASED_IDS =
-    "RuleBasedTransliteratorIDs";
+static const char* RB_RULE_BASED_IDS = "RuleBasedTransliteratorIDs";
 
 /**
  * Resource bundle key for the RuleBasedTransliterator rule.
  */
-const char* Transliterator::RB_RULE = "Rule";
+static const char* RB_RULE = "Rule";
 
 /**
  * Class identifier for subclasses of Transliterator that do not
@@ -433,17 +431,19 @@ void Transliterator::filteredTransliterate(Replaceable& text,
         // Narrow the range to be transliterated to the first segment
         // of unfiltered characters at or after index.start.
 
+        UChar32 c;
+
         // Advance compoundStart past filtered chars
         while (index.start < globalLimit &&
-               !filter->contains(text.charAt(index.start))) {
-            ++index.start;
+               !filter->contains(c=text.char32At(index.start))) {
+            index.start += UTF_CHAR_LENGTH(c);
         }
 
         // Find the end of this run of unfiltered chars
         index.limit = index.start;
         while (index.limit < globalLimit &&
-               filter->contains(text.charAt(index.limit))) {
-            ++index.limit;
+               filter->contains(c=text.char32At(index.limit))) {
+            index.limit += UTF_CHAR_LENGTH(c);
         }
 
         // Check to see if the unfiltered run is empty.  This only
