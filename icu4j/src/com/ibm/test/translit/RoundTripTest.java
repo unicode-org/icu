@@ -1092,20 +1092,21 @@ public class RoundTripTest extends TestFmwk {
             if (++errorCount > errorLimit) {
                 throw new TestTruncated("Test truncated; too many failures");
             }
-            out.println("<br>Fail (can.equiv)" + label);
+            out.println("<br>Fail " + label);
         }
 
-        final void logToRulesFails(String label, String from, String to, String toCan) {
+        final void logToRulesFails(String label, String from, String to, String otherTo) {
             if (++errorCount > errorLimit) {
                 throw new TestTruncated("Test truncated; too many failures");
             }
-            out.println("<br>Fail (can.equiv)" + label + ": " +
+            out.println("<br>Fail " + label + ": " +
                         from + " (" +
                         TestUtility.hex(from) + ") => " +
                         to + " (" +
                         TestUtility.hex(to) + ")" +
-                        toCan + " (" +
-                        TestUtility.hex(to) + ")"
+                        " != " +
+                        otherTo + " (" +
+                        TestUtility.hex(otherTo) + ")"
                         );
         }
 
