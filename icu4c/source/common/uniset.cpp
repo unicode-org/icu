@@ -689,11 +689,11 @@ int32_t UnicodeSet::findCodePoint(UChar32 c) const {
     // Return the smallest i such that c < list[i].  Assume
     // list[len - 1] == HIGH and that c is legal (0..HIGH-1).
     if (c < list[0]) return 0;
-    int32_t lo = 0;
-    int32_t hi = len - 1;
     // High runner test.  c is often after the last range, so an
     // initial check for this condition pays off. 
     if (len >= 2 && c >= list[len-2]) return len-1;
+    int32_t lo = 0;
+    int32_t hi = len - 1;
     // invariant: c >= list[lo]
     // invariant: c < list[hi]
     for (;;) {
