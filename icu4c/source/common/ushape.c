@@ -497,10 +497,6 @@ removeLamAlefSpaces(UChar *dest, int32_t sourceLength,
     int32_t i = 0, j = 0;
     int32_t count = 0;
     UChar *tempbuffer=NULL;
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return 0;
-    }
 
     switch(options&U_SHAPE_LENGTH_MASK) {
     case U_SHAPE_LENGTH_GROW_SHRINK :
@@ -640,10 +636,6 @@ expandLamAlef(UChar *dest, int32_t sourceLength,
     int32_t  inpsize = sourceLength;
     UChar    lamalefChar;
     UChar    *tempbuffer=NULL;
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return 0;
-    }
 
     switch(options&U_SHAPE_LENGTH_MASK) {
 
@@ -809,10 +801,6 @@ shapeUnicode(UChar *dest, int32_t sourceLength,
     int32_t          lamalef_found = 0;
     UChar            prevLink = 0, lastLink = 0, currLink, nextLink = 0;
     UChar            wLamalef;
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return 0;
-    }
 
     /*
      * Converts the input buffer from FExx Range into 06xx Range
@@ -946,10 +934,6 @@ deShapeUnicode(UChar *dest, int32_t sourceLength,
                UErrorCode *pErrorCode) {
     int32_t i = 0;
     int32_t lamalef_found = 0;
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return 0;
-    }
 
     /*
      *This for loop changes the buffer from the Unicode FE range to
@@ -1074,10 +1058,6 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
             /* will never occur because of validity checks above */
             outputSize = 0;
             break;
-        }
-        /* test for buffer overflows */
-        if (U_FAILURE(*pErrorCode)) {
-            return 0;
         }
 
         if((options&U_SHAPE_TEXT_DIRECTION_MASK) == U_SHAPE_TEXT_DIRECTION_LOGICAL) {

@@ -192,10 +192,6 @@ _UTF7Open(UConverter *cnv,
           const char *locale,
           uint32_t options,
           UErrorCode *pErrorCode) {
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return;
-    }
     if((options&0xf)<=1) {
         cnv->fromUnicodeStatus=(options&0xf)<<28;
         _UTF7Reset(cnv, UCNV_RESET_BOTH);
@@ -228,10 +224,6 @@ _UTF7ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     int32_t sourceIndex, nextSourceIndex;
 
     uint8_t b;
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return;
-    }
     /* set up the local pointers */
     cnv=pArgs->converter;
 
@@ -240,7 +232,6 @@ _UTF7ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     target=pArgs->target;
     targetLimit=pArgs->targetLimit;
     offsets=pArgs->offsets;
-
     /* get the state machine state */
     {
         uint32_t status=cnv->toUnicodeStatus;
@@ -526,10 +517,6 @@ _UTF7FromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     int8_t base64Counter;
     UBool inDirectMode;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return;
-    }
     /* set up the local pointers */
     cnv=pArgs->converter;
 

@@ -214,10 +214,6 @@ StringSearch & StringSearch::operator=(const StringSearch &that)
                                               m_text_.length(), 
                                               that.m_strsrch_->collator, 
                                               NULL, &status);
-        /* test for buffer overflows */
-        if (U_SUCCESS(status)) {
-            return *this;
-        }
         int32_t  length;
         const UChar   *rules = ucol_getRules(m_strsrch_->collator, &length);
         m_collation_rules_.setTo(rules, length);
@@ -319,10 +315,6 @@ SearchIterator * StringSearch::safeClone(void) const
         status = U_MEMORY_ALLOCATION_ERROR;
         return 0;
     }
-    /* test for buffer overflows */
-    if (U_FAILURE(status)) {
-        return NULL;
-    }
     result->setOffset(getOffset(), status);
     result->setMatchStart(m_strsrch_->search->matchedIndex);
     result->setMatchLength(m_strsrch_->search->matchedLength);
@@ -345,10 +337,6 @@ int32_t StringSearch::handleNext(int32_t position, UErrorCode &status)
             m_search_->matchedLength = 0;
             ucol_setOffset(m_strsrch_->textIter, m_search_->matchedIndex, 
                            &status);
-            /* test for buffer overflows */
-            if (U_FAILURE(status)) {
-                return USEARCH_DONE;
-            }
             if (m_search_->matchedIndex == m_search_->textLength) {
                 m_search_->matchedIndex = USEARCH_DONE;
             }
@@ -402,10 +390,6 @@ int32_t StringSearch::handlePrev(int32_t position, UErrorCode &status)
                 m_search_->matchedIndex --;
                 ucol_setOffset(m_strsrch_->textIter, m_search_->matchedIndex, 
                                &status);
-                /* test for buffer overflows */
-                if (U_FAILURE(status)) {
-                    return USEARCH_DONE;
-                }
                 m_search_->matchedLength = 0;
             }
         }

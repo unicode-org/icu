@@ -380,10 +380,6 @@ void CanonicalIterator::permute(UnicodeString &source, UBool skipZeros, Hashtabl
 UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, int32_t &result_len, UErrorCode &status) {
     //private String[] getEquivalents(String segment)
 
-    /* test for buffer overflows */
-    if (U_FAILURE(status)) {
-        return 0;
-    }
     Hashtable *result = new Hashtable(FALSE, status);
     /* test for NULL */
     if (result == 0) {
@@ -489,10 +485,6 @@ UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, i
 Hashtable *CanonicalIterator::getEquivalents2(const UChar *segment, int32_t segLen, UErrorCode &status) {
 //Hashtable *CanonicalIterator::getEquivalents2(const UnicodeString &segment, int32_t segLen, UErrorCode &status) {
 
-    /* test for buffer overflows */
-    if (U_FAILURE(status)) {
-        return 0;
-    }
     Hashtable *result = new Hashtable(FALSE, status);
     /* test for NULL */
     if (result == 0) {
@@ -572,10 +564,6 @@ Hashtable *CanonicalIterator::extract(UChar32 comp, const UChar *segment, int32_
     //if (PROGRESS) printf(" extract: %s, ", UToS(Tr(UnicodeString(comp))));
     //if (PROGRESS) printf("%s, %i\n", UToS(Tr(segment)), segmentPos);
 
-    /* test for buffer overflows */
-    if (U_FAILURE(status)) {
-        return 0;
-    }
     const int32_t bufSize = 256;
     int32_t bufLen = 0;
     UChar temp[bufSize];

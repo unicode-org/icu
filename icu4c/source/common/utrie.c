@@ -379,11 +379,6 @@ utrie_fold(UNewTrie *trie, UNewTrieGetFoldedValue *getFoldedValue, UErrorCode *p
     UChar32 c;
     int32_t indexLength, block;
 
-    /* test for buffer overflows */
-    if (U_FAILURE(*pErrorCode)) {
-        return;
-    }
-
     index=trie->index;
 
     /* copy the lead surrogate indexes into a temporary array */

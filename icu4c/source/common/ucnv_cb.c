@@ -39,11 +39,6 @@ ucnv_cbFromUWriteBytes (UConverterFromUnicodeArgs *args,
     int8_t toerr;
     int32_t i;
 
-    /* test for buffer overflows*/
-    if (U_FAILURE (*err)){
-        return;
-    }
-
     if((args->targetLimit - args->target) >= length) /* If the buffer fits.. */
     {
         uprv_memcpy(args->target, source, length);
