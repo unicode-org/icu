@@ -35,11 +35,15 @@ public:
 
     UObjectDeleter setValueDeleter(UObjectDeleter fn);
 
+    int32_t count() const;
+
     void* put(const UnicodeString& key, void* value, UErrorCode& status);
 
     void* get(const UnicodeString& key) const;
     
     void* remove(const UnicodeString& key);
+
+    bool_t nextElement(const UnicodeString*& key, void*& value, int32_t& pos) const;
 };
 
 /*********************************************************************
@@ -68,6 +72,10 @@ inline UObjectDeleter Hashtable::setValueDeleter(UObjectDeleter fn) {
     return uhash_setValueDeleter(hash, fn);
 }
 
+inline int32_t Hashtable::count() const {
+    return uhash_count(hash);
+}
+
 inline void* Hashtable::put(const UnicodeString& key, void* value, UErrorCode& status) {
     return uhash_put(hash, new UnicodeString(key), value, &status);
 }
@@ -78,6 +86,17 @@ inline void* Hashtable::get(const UnicodeString& key) const {
 
 inline void* Hashtable::remove(const UnicodeString& key) {
     return uhash_remove(hash, &key);
+}
+
+inline bool_t Hashtable::nextElement(const UnicodeString*& key, void*& value, int32_t& pos) const {
+    UHashElement *e = uhash_nextElement(hash, &pos);
+    if (e != 0) {
+        key = (const UnicodeString*) e->key;
+        value = e->value;
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
 
 #endif
