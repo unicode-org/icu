@@ -866,9 +866,9 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
                     ResourceBundle currency(currencies.getWithFallback(buf,status));
                     if(currency.getSize()>2){
                         ResourceBundle elements = currency.get(2, status);
-                        UnicodeString currPattern = elements.getStringEx(0, status);
-                        UnicodeString decimalSep = elements.getStringEx(1, status);
-                        UnicodeString groupingSep = elements.getStringEx(2, status);
+                        UnicodeString currPattern = elements.getStringEx((int32_t)0, status);
+                        UnicodeString decimalSep = elements.getStringEx((int32_t)1, status);
+                        UnicodeString groupingSep = elements.getStringEx((int32_t)2, status);
                         if(U_SUCCESS(status)){
                             symbolsToAdopt->setSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol, groupingSep);
                             symbolsToAdopt->setSymbol(DecimalFormatSymbols::kMonetarySeparatorSymbol, decimalSep);
