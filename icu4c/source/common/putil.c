@@ -1081,14 +1081,41 @@ const char*
 uprv_getDefaultLocaleID()
 {
 #if U_POSIX_LOCALE
+/*
+  Note that:  (a '!' means the ID is improper somehow)
+     LC_ALL  ---->     default_loc          codepage
+--------------------------------------------------------
+     ab.CD             ab                   CD
+     ab@CD             ab__CD               -
+     ab@CD.EF          ab__CD               EF
+
+     ab_CD.EF@GH       ab_CD_GH             EF
+
+Some 'improper' ways to do the same as above:
+  !  ab_CD@GH.EF       ab_CD_GH             EF
+  !  ab_CD.EF@GH.IJ    ab_CD_GH             EF
+  !  ab_CD@ZZ.EF@GH.IJ ab_CD_GH             EF
+
+     _CD@GH            _CD_GH               -
+     _CD.EF@GH         _CD_GH               EF
+
+The variant cannot have dots in it.
+The 'rightmost' variant (@xxx) wins.
+The leftmost codepage (.xxx) wins.
+*/
     char *correctedPOSIXLocale = 0;
     const char* posixID = uprv_getPOSIXID();
     const char *p;
+    const char *q;
+    int32_t len;
 
     /* Format: (no spaces)
     ll [ _CC ] [ . MM ] [ @ VV]
 
       l = lang, C = ctry, M = charmap, V = variant
+
+
+
     */
 
     if((p = uprv_strchr(posixID, '.')) != NULL)
@@ -1098,10 +1125,15 @@ uprv_getDefaultLocaleID()
         uprv_strncpy(correctedPOSIXLocale, posixID, p-posixID);
         correctedPOSIXLocale[p-posixID] = 0;
 
-        posixID = correctedPOSIXLocale;
+        /* do not copy after the @ */
+        if((p = uprv_strchr(correctedPOSIXLocale, '@')) != NULL)
+        {
+          correctedPOSIXLocale[p-correctedPOSIXLocale] = 0;
+        }
     }
 
-    if((p = uprv_strchr(posixID, '@')) != NULL)
+    /* Note that we scan the *uncorrected* ID. */
+    if((p = uprv_strrchr(posixID, '@')) != NULL)
     {
         if(correctedPOSIXLocale == NULL) {
             correctedPOSIXLocale = uprv_malloc(uprv_strlen(posixID));
@@ -1126,13 +1158,28 @@ uprv_getDefaultLocaleID()
             uprv_strcat(correctedPOSIXLocale, "__"); /* aa@b -> aa__b */
         else
             uprv_strcat(correctedPOSIXLocale, "_"); /* aa_CC@b -> aa_CC_b */
-        uprv_strcat(correctedPOSIXLocale, p);
+
+        if(q = uprv_strchr(p, '.'))
+        {
+          /* How big will the resulting string be? */
+          len = uprv_strlen(correctedPOSIXLocale) + (q-p);
+          uprv_strncat(correctedPOSIXLocale, p, q-p);
+          correctedPOSIXLocale[len] = 0;
+        }
+        else
+        {
+          uprv_strcat(correctedPOSIXLocale, p);  /* Anything following the @ sign */
+        }
 
         /* Should there be a map from 'no@nynorsk' -> no_NO_NY here?
         How about 'russian' -> 'ru'?
         */
+    }
 
-        posixID = correctedPOSIXLocale;
+    /* Was a correction made? */
+    if(correctedPOSIXLocale != NULL) 
+    {
+      posixID = correctedPOSIXLocale;
     }
 
     return posixID;
