@@ -76,8 +76,10 @@ UnicodeConverterCPP&   UnicodeConverterCPP::operator=(const UnicodeConverterCPP&
 
 UBool UnicodeConverterCPP::operator==(const UnicodeConverterCPP& that) const
 {
-  if ((myUnicodeConverter->sharedData    == that.myUnicodeConverter->sharedData) &&
+  return
+      (myUnicodeConverter->sharedData == that.myUnicodeConverter->sharedData) &&
       (myUnicodeConverter->fromCharErrorBehaviour == that.myUnicodeConverter->fromCharErrorBehaviour) &&
+      (myUnicodeConverter->toUContext == that.myUnicodeConverter->toUContext) &&
       (myUnicodeConverter->toUnicodeStatus == that.myUnicodeConverter->toUnicodeStatus) &&
       (myUnicodeConverter->subCharLen == that.myUnicodeConverter->subCharLen) &&
       (uprv_memcmp(myUnicodeConverter->subChar, that.myUnicodeConverter->subChar, myUnicodeConverter->subCharLen) == 0) &&
@@ -85,9 +87,8 @@ UBool UnicodeConverterCPP::operator==(const UnicodeConverterCPP& that) const
       (myUnicodeConverter->charErrorBufferLength == that.myUnicodeConverter->charErrorBufferLength) &&
       (uprv_memcmp(myUnicodeConverter->UCharErrorBuffer, that.myUnicodeConverter->UCharErrorBuffer, myUnicodeConverter->UCharErrorBufferLength) == 0) &&
       (uprv_memcmp(myUnicodeConverter->charErrorBuffer, that.myUnicodeConverter->charErrorBuffer, myUnicodeConverter->charErrorBufferLength) == 0) &&
-      (myUnicodeConverter->fromUCharErrorBehaviour == that.myUnicodeConverter->fromUCharErrorBehaviour))
-  return TRUE;
-  else return FALSE;
+      (myUnicodeConverter->fromUCharErrorBehaviour == that.myUnicodeConverter->fromUCharErrorBehaviour) &&
+      (myUnicodeConverter->fromUContext == that.myUnicodeConverter->fromUContext);
 }
 
 UBool UnicodeConverterCPP::operator!=(const UnicodeConverterCPP& that) const
