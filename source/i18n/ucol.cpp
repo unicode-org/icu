@@ -797,7 +797,7 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
 uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, UErrorCode *status) {
   uint32_t i = 0; /* general counter */
   uint32_t firstCE = UCOL_NOT_FOUND;
-  UChar *firstUChar = NULL;
+  UChar *firstUChar = source->pos;
   //uint32_t CE = *source->CEpos;
   for (;;) {
     const uint32_t *CEOffset = NULL;
@@ -855,11 +855,11 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
         if (source->pos>=source->len) { /* this is the end of string */
           {
             CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex)); /* So we'll pick whatever we have at the point... */
-            if (CE == UCOL_NOT_FOUND && firstCE != UCOL_NOT_FOUND) {
-              CE = firstCE;
+            if (CE == UCOL_NOT_FOUND) {
               source->pos = firstUChar; /* spit all the not found chars, which led us in this contraction */
-              firstCE = UCOL_NOT_FOUND;
-              firstUChar = NULL;
+              if(firstCE != UCOL_NOT_FOUND) {
+                CE = firstCE;
+              }
             }
           }
           break;
@@ -876,20 +876,15 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
         }
         if(schar != tchar) { /* we didn't find the correct codepoint. We can use either the first or the last CE */
           UCharOffset = ContractionStart; /* We're not at the end, bailed out in the middle. Better use starting CE */
+          /*source->pos = firstUChar; *//* spit all the not found chars, which led us in this contraction */
           source->pos--; /* Spit out the last char of the string, wasn't tasty enough */
         } 
         CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
-#if 0
-        /* old code, with problem */
-        if(!isContraction(CE)) {
-          break;  
-        }
-#endif
+
         if(CE == UCOL_NOT_FOUND) {
+          source->pos = firstUChar; /* spit all the not found chars, which led us in this contraction */
           if(firstCE != UCOL_NOT_FOUND) {
             CE = firstCE;
-            firstCE = UCOL_NOT_FOUND;
-            source->pos--; /* spit out yet another char, which led us in this contraction */
           }
           break;
         } else if(isContraction(CE)) { /* fix for the bug. Other places need to be checked */
