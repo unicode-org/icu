@@ -264,7 +264,6 @@ int
 IEEETest::testZero(void)
 {
   int errCount = 0;
-  double        ten                     = 10.0;
   double        pzero           = 0.0;
   double        nzero           = 0.0;
 
