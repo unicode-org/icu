@@ -22,6 +22,7 @@
 #define ULOC_H
 
 #include "unicode/utypes.h"
+#include "unicode/uenum.h"
 
 /**    
  * \file
@@ -264,7 +265,16 @@
  * @stable ICU 2.0
  */
 #define ULOC_FULLNAME_CAPACITY 56
-
+/**
+ * Useful constant for the maximum size of keywords in a locale
+ * @draft ICU 2.8
+ */
+#define ULOC_KEYWORDS_CAPACITY 50
+/**
+ * Useful constant for the maximum size of keywords in a locale
+ * @draft ICU 2.8
+ */
+#define ULOC_KEYWORD_AND_VALUES_CAPACITY 100
 
 /**
  * Constants for *_getLocale()
@@ -397,6 +407,8 @@ uloc_getVariant(const char*    localeID,
         char* variant,
         int32_t variantCapacity,
         UErrorCode* err);
+
+
 /**
  * Gets the full name for the specified locale.
  * Note: This has the effect of 'canonicalizing' the string to
@@ -631,6 +643,54 @@ uloc_getParent(const char*    localeID,
                  char* parent,
                  int32_t parentCapacity,
                  UErrorCode* err);
+
+
+/**
+ * Character separating keywords from the locale string
+ * different for EBCDIC - TODO
+ * @draft ICU 2.8
+ */
+#define ULOC_KEYWORD_SEPARATOR '@'
+/**
+ * Character for assigning value to a keyword
+ * @draft ICU 2.8
+ */
+#define ULOC_KEYWORD_ASSIGN '='
+/**
+ * Character separating keywords
+ * @draft ICU 2.8
+ */
+#define ULOC_KEYWORD_ITEM_SEPARATOR ';'
+
+/**
+ * Gets an enumeration of keywords for the specified locale. Enumeration
+ * must get disposed of by the client using uenum_close function.
+ *
+ * @param localeID the locale to get the variant code with
+ * @param err error information if retrieving the keywords failed
+ * @return enumeration of keywords or NULL if there are no keywords.
+ * @draft ICU 2.8
+ */
+U_CAPI UEnumeration* U_EXPORT2
+uloc_getKeywords(const char* localeID,
+                        UErrorCode* status);
+
+/**
+ * Get the value for a keyword. Locale name does not need to be normalized.
+ * 
+ * @param localeID locale name containing the keyword ("de_DE@currency=EURO;collation=PHONEBOOK")
+ * @param keywordName name of the keyword for which we want the value. Case insensitive.
+ * @param buffer receiving buffer
+ * @param bufferCapacity capacity of receiving buffer
+ * @param status containing error code - buffer not big enough.
+ * @return the length of keyword value
+ * @draft ICU 2.8
+ */
+U_CAPI int32_t U_EXPORT2
+uloc_getKeywordValue(const char* localeID,
+                     const char* keywordName,
+                     char* buffer, int32_t bufferCapacity,
+                     UErrorCode* status);
 
 /*eof*/
 

@@ -38,6 +38,8 @@
 #include "cmemory.h"
 #include "ucln_cmn.h"
 #include "locmap.h"
+#include "uarrsort.h"
+#include "uenumimp.h"
 
 
 /****************************************************************************
@@ -737,6 +739,130 @@ _getVariant(const char *localeID,
 
     return i;
 }
+#define ULOC_KEYWORD_BUFFER_LEN 25
+#define ULOC_MAX_NO_KEYWORDS 25
+
+typedef struct {
+  char keyword[ULOC_KEYWORD_BUFFER_LEN];
+  int32_t keywordLen;
+  const char *valueStart;
+  int32_t valueLen;
+} keywordStruct;
+
+static int32_t U_CALLCONV
+compareKeywordStructs(const void *context, const void *left, const void *right) {
+  const char* leftString = ((const keywordStruct *)left)->keyword;
+  const char* rightString = ((const keywordStruct *)right)->keyword;
+  return uprv_strcmp(leftString, rightString);
+}
+
+static int32_t
+_getKeywords(const char *localeID,
+            char prev,
+            char *keywords, int32_t keywordCapacity,
+            UBool valuesToo,
+            UErrorCode *status) {
+
+  keywordStruct keywordList[ULOC_MAX_NO_KEYWORDS];
+
+  int32_t maxKeywords = ULOC_MAX_NO_KEYWORDS;
+  int32_t numKeywords = 0;
+  const char* startSearchHere = localeID;
+  const char* nextSeparator = NULL;
+  int32_t i = 0;
+  int32_t keywordsLen = 0;
+
+  if(prev == '@') { /* start of keyword definition */
+    /* we will grab pairs, trim spaces, lowercase keywords, sort and return */
+    do {
+      if(numKeywords == maxKeywords) {
+        *status = U_INTERNAL_PROGRAM_ERROR;
+        return 0;
+      }
+      /* skip leading spaces (allowed?) */
+      while(*startSearchHere == ' ') {
+        startSearchHere++;
+      }
+      nextSeparator = uprv_strchr(startSearchHere, ULOC_KEYWORD_ASSIGN);
+      /* need to normalize both keyword and keyword name */
+      if(!nextSeparator) {
+        *status = U_INVALID_FORMAT_ERROR;
+        return 0;
+      }
+      if(nextSeparator - startSearchHere >= ULOC_KEYWORD_BUFFER_LEN) {
+        /* keyword name too long for internal buffer */
+        *status = U_INTERNAL_PROGRAM_ERROR;
+        return 0;
+      }
+      for(i = 0; i < nextSeparator - startSearchHere; i++) {
+        keywordList[numKeywords].keyword[i] = uprv_tolower(startSearchHere[i]);
+      }
+      /* trim trailing spaces */
+      while(keywordList[numKeywords].keyword[i-1] == ' ') {
+        i--;
+      }
+      keywordList[numKeywords].keyword[i] = 0;
+      keywordList[numKeywords].keywordLen = i;
+      /* now grab the value part. First we skip the '=' */
+      nextSeparator++;
+      /* then we leading spaces */
+      while(*nextSeparator == ' ') {
+        nextSeparator++;
+      }
+      keywordList[numKeywords].valueStart = nextSeparator;
+
+      startSearchHere = strchr(nextSeparator, ULOC_KEYWORD_ITEM_SEPARATOR);
+      i = 0;
+      if(startSearchHere) {
+        while(*(startSearchHere - i - 1) == ' ') {
+          i++;
+        }
+        keywordList[numKeywords].valueLen = startSearchHere - nextSeparator - i;
+        startSearchHere++;
+      } else {
+        i = uprv_strlen(nextSeparator);
+        while(nextSeparator[i-1] == ' ') {
+          i--;
+        }
+        keywordList[numKeywords].valueLen = i;
+      }
+      numKeywords++;
+    } while(startSearchHere);
+    /* now we have a list of keywords */
+    /* we need to sort it */
+    uprv_sortArray(keywordList, numKeywords, sizeof(keywordStruct), compareKeywordStructs, NULL, FALSE, status);
+
+    /* Now construct the keyword part */
+    for(i = 0; i < numKeywords; i++) {
+      if(keywordsLen + keywordList[i].keywordLen + 1< keywordCapacity) {
+        uprv_strcpy(keywords+keywordsLen, keywordList[i].keyword);
+        if(valuesToo) {
+          keywords[keywordsLen + keywordList[i].keywordLen] = '=';
+        } else {
+          keywords[keywordsLen + keywordList[i].keywordLen] = 0;
+        }
+      }
+      keywordsLen += keywordList[i].keywordLen + 1;
+      if(valuesToo) {
+        if(keywordsLen + keywordList[i].valueLen < keywordCapacity) {
+          uprv_strncpy(keywords+keywordsLen, keywordList[i].valueStart, keywordList[i].valueLen);
+        }
+        keywordsLen += keywordList[i].valueLen;
+
+        if(i < numKeywords - 1) {
+          if(keywordsLen < keywordCapacity) {       
+            keywords[keywordsLen] = ';';
+          }
+          keywordsLen++;
+        }
+      }
+    }
+
+    return u_terminateChars(keywords, keywordCapacity, keywordsLen, status);   
+  } else {
+    return 0;
+  }
+}
 
 U_CAPI int32_t  U_EXPORT2
 uloc_getVariant(const char* localeID,
@@ -782,6 +908,125 @@ uloc_getVariant(const char* localeID,
     return u_terminateChars(variant, variantCapacity, i, err);
 }
 
+typedef struct UKeywordsContext {
+    char* keywords;
+    char* current;
+} UKeywordsContext;
+
+static void U_CALLCONV
+uloc_kw_closeKeywords(UEnumeration *enumerator) {
+  uprv_free(((UKeywordsContext *)enumerator->context)->keywords);
+  uprv_free(enumerator->context);
+  uprv_free(enumerator);
+}
+
+static int32_t U_CALLCONV
+uloc_kw_countKeywords(UEnumeration *en, UErrorCode *status) {
+  char *kw = ((UKeywordsContext *)en->context)->keywords;
+  int32_t result = 0;
+  while(*kw) {
+    result++;
+    kw += uprv_strlen(kw)+1;
+  }
+  return result;
+}
+
+static const char* U_CALLCONV 
+uloc_kw_nextKeyword(UEnumeration* en,
+           int32_t* resultLength,
+           UErrorCode* status) {
+  const char* result = ((UKeywordsContext *)en->context)->current;
+  if(*result) {
+    *resultLength = uprv_strlen(((UKeywordsContext *)en->context)->current);
+    ((UKeywordsContext *)en->context)->current += *resultLength+1;
+  } else {
+    *resultLength = 0;
+    result = NULL;
+  }
+  return result;
+}
+
+static void U_CALLCONV 
+uloc_kw_resetKeywords(UEnumeration* en, 
+                      UErrorCode* status) {
+  ((UKeywordsContext *)en->context)->current = ((UKeywordsContext *)en->context)->keywords;
+}
+
+
+static const UEnumeration gKeywordsEnum = {
+    NULL,
+    NULL,
+    uloc_kw_closeKeywords,
+    uloc_kw_countKeywords,
+    uenum_unextDefault,
+    uloc_kw_nextKeyword,
+    uloc_kw_resetKeywords
+};
+
+
+U_CAPI UEnumeration* U_EXPORT2
+uloc_getKeywords(const char* localeID,
+                        UErrorCode* status) 
+{
+    int32_t i=0;
+    char keywords[256];
+    int32_t keywordsCapacity = 256;
+    UKeywordsContext *myContext = NULL;
+
+    UEnumeration *result = NULL;
+
+    if(status==NULL || U_FAILURE(*status)) {
+        return 0;
+    }
+    
+    if(localeID==NULL) {
+        localeID=uloc_getDefault();
+    }
+
+    /* Skip the language */
+    _getLanguage(localeID, NULL, 0, &localeID);
+    if(_isIDSeparator(*localeID)) {
+        const char *scriptID;
+        /* Skip the script if available */
+        _getScript(localeID+1, NULL, 0, &scriptID);
+        if(scriptID != localeID+1) {
+            /* Found optional script */
+            localeID = scriptID;
+        }
+        /* Skip the Country */
+        if (_isIDSeparator(*localeID)) {
+            _getCountry(localeID+1, NULL, 0, &localeID);
+            if(_isIDSeparator(*localeID)) {
+                _getVariant(localeID+1, *localeID, NULL, 0);
+            }
+        }
+    }
+
+    /* keywords are located after '@' */
+    if((localeID = uprv_strchr(localeID, '@')) != NULL) {
+        i=_getKeywords(localeID+1, '@', keywords, keywordsCapacity, FALSE, status);
+    }
+
+    if(i) {
+      result = (UEnumeration *)uprv_malloc(sizeof(UEnumeration));
+      uprv_memcpy(result, &gKeywordsEnum, sizeof(UEnumeration));
+      myContext = uprv_malloc(sizeof(UKeywordsContext));
+      if (myContext == NULL) {
+          *status = U_MEMORY_ALLOCATION_ERROR;
+          uprv_free(result);
+          return NULL;
+      }
+      myContext->keywords = (char *)uprv_malloc(i+1);
+      uprv_memcpy(myContext->keywords, keywords, i);
+      myContext->keywords[i] = 0;
+      myContext->current = myContext->keywords;
+      result->context = myContext;
+    }
+
+    return result;
+
+    /*return u_terminateChars(keywords, keywordsCapacity, i, status);*/
+}
 
 U_CAPI int32_t  U_EXPORT2
 uloc_getName(const char* localeID,
@@ -841,7 +1086,17 @@ uloc_getName(const char* localeID,
     }
 
     /* if we do not have a variant tag yet then try a POSIX variant after '@' */
-    if(fieldCount<2 && (localeID=uprv_strrchr(localeID, '@'))!=NULL) {
+    if((localeID=uprv_strrchr(localeID, '@'))!=NULL) {
+      const char *keywordIndicator = uprv_strchr(localeID, ULOC_KEYWORD_ASSIGN);
+      const char *separatorIndicator = uprv_strchr(localeID, ULOC_KEYWORD_ITEM_SEPARATOR);
+      if(keywordIndicator && (!separatorIndicator || separatorIndicator > keywordIndicator)) {
+        if(i<nameCapacity) {
+            name[i]='@';
+        }
+        ++i;
+        ++fieldCount;
+        i += _getKeywords(localeID+1, '@', name+i, nameCapacity-i, TRUE, err);
+      } else if(fieldCount < 2) {
         do {
             if(i<nameCapacity) {
                 name[i]='_';
@@ -850,6 +1105,7 @@ uloc_getName(const char* localeID,
             ++fieldCount;
         } while(fieldCount<2);
         i+=_getVariant(localeID+1, '@', name+i, nameCapacity-i);
+      }
     }
     return u_terminateChars(name, nameCapacity, i, err);
 }
@@ -1496,4 +1752,92 @@ U_CAPI const char* const*  U_EXPORT2
 uloc_getISOCountries() 
 {
     return _countries;
+}
+
+
+U_CAPI int32_t U_EXPORT2
+uloc_getKeywordValue(const char* localeID,
+                     const char* keywordName,
+                     char* buffer, int32_t bufferCapacity,
+                     UErrorCode* status)
+{
+  const char* nextSeparator = NULL;
+  int32_t localeIDLen = 0;
+  int32_t keywordNameLen = uprv_strlen(keywordName);
+  char keywordNameBuffer[ULOC_KEYWORD_BUFFER_LEN];
+  char localeKeywordNameBuffer[ULOC_KEYWORD_BUFFER_LEN];
+  int32_t i = 0;
+  int32_t result = 0;
+
+  const char* startSearchHere = uprv_strchr(localeID, ULOC_KEYWORD_SEPARATOR);
+  if(startSearchHere == NULL) {
+    /* no keywords, return at once */
+    return 0;
+  }
+
+  if(keywordNameLen >= ULOC_KEYWORD_BUFFER_LEN) {
+    /* keyword name too long for internal buffer */
+    *status = U_INTERNAL_PROGRAM_ERROR;
+    return 0;
+  }
+
+  /* normalize the keyword name */
+  for(i = 0; i < keywordNameLen; i++) {
+    keywordNameBuffer[i] = uprv_tolower(keywordName[i]);
+  }
+  keywordNameBuffer[i] = 0;
+
+  /* find the first keyword */
+  while(startSearchHere) {
+    startSearchHere++;
+    /* skip leading spaces (allowed?) */
+    while(*startSearchHere == ' ') {
+      startSearchHere++;
+    }
+    nextSeparator = uprv_strchr(startSearchHere, ULOC_KEYWORD_ASSIGN);
+    /* need to normalize both keyword and keyword name */
+    if(!nextSeparator) {
+      break;
+    }
+    if(nextSeparator - startSearchHere >= ULOC_KEYWORD_BUFFER_LEN) {
+      /* keyword name too long for internal buffer */
+      *status = U_INTERNAL_PROGRAM_ERROR;
+      return 0;
+    }
+    for(i = 0; i < nextSeparator - startSearchHere; i++) {
+      localeKeywordNameBuffer[i] = uprv_tolower(startSearchHere[i]);
+    }
+    /* trim trailing spaces */
+    while(startSearchHere[i-1] == ' ') {
+      i--;
+    }
+    localeKeywordNameBuffer[i] = 0;
+
+    startSearchHere = strchr(nextSeparator, ULOC_KEYWORD_ITEM_SEPARATOR);
+
+    if(uprv_strcmp(keywordNameBuffer, localeKeywordNameBuffer) == 0) {
+      nextSeparator++;
+      while(*nextSeparator == ' ') {
+        nextSeparator++;
+      }
+      /* we actually found the keyword. Copy the value */
+      if(startSearchHere && startSearchHere - nextSeparator < bufferCapacity) {
+        uprv_strncpy(buffer, nextSeparator, startSearchHere - nextSeparator);
+        result = u_terminateChars(buffer, bufferCapacity, startSearchHere - nextSeparator, status);
+      } else if(!startSearchHere && (int32_t)uprv_strlen(nextSeparator) < bufferCapacity) { /* last item in string */
+        uprv_strcpy(buffer, nextSeparator);
+        result = u_terminateChars(buffer, bufferCapacity, uprv_strlen(nextSeparator), status);
+      } else {
+        /* give a bigger buffer, please */
+        *status = U_BUFFER_OVERFLOW_ERROR;
+        if(startSearchHere) {
+          result = startSearchHere - nextSeparator;
+        } else {
+          result = uprv_strlen(nextSeparator); 
+        }
+      }
+      return result;
+    }
+  }
+  return 0;
 }
