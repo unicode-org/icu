@@ -320,7 +320,7 @@ void TestUnicodeData()
     const char *expectVersion = "3.0.0";  /* NOTE: this purposely breaks to force the tests to stay in sync with the unicodedata */
     char expectString[256];
 
-    strcpy(newPath,icu_getDefaultDataDirectory());
+    strcpy(newPath, u_getDataDirectory());
     strcat(newPath, "UnicodeData-");
     strcat(newPath, expectVersion);
     strcat(newPath, ".txt");

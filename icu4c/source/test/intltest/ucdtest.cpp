@@ -304,7 +304,7 @@ void UnicodeTest::TestUnicodeData()
     char path[256];
     const char* datafile = "UnicodeData-3.0.0.txt";
   
-    strcpy(path ,  icu_getDefaultDataDirectory());
+    strcpy(path, u_getDataDirectory());
     strcat(path, datafile);
       
     input = fopen( path, "r");
