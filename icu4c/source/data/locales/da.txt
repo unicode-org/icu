@@ -14,13 +14,6 @@ da {
         " <<< A\u030A<<< aa <<< aA <<< Aa <<< AA & V<<< w<<< W & Y << u\u0308 <<< U\u0308 &D < \u00F0<<< \u00D0 &T < \u00FE<<< \u00DE" }
     }
 
-    Variants{
-        Fallback{"en"}
-    }
-    Keys{
-        Fallback{"en"}
-    }
-
     Countries {
         Fallback{ "en"}
         //AD { "Andorra" }
@@ -304,7 +297,6 @@ da {
         "f.Kr.",
         "e.Kr.",
     }
-    ExemplarCharacters { "[a-z \u00e6 \u00e5 \u00f8 \u00e1 \u00e9 \u00ed \u00f3 \u00fa \u00fd]" }
     Languages {
         Fallback{ "en"}
         ar { "Arabisk" }
@@ -397,9 +389,10 @@ da {
         ",",
         "+",
     }
-//    LocaleScript{  
-//        "Latn",  // ISO 15924 Name 
-//    }
+    ExemplarCharacters { "[a-z \u00e6 \u00e5 \u00f8 \u00e1 \u00e9 \u00ed \u00f3 \u00fa \u00fd]" }
+    LocaleScript{  
+        "Latn",  // ISO 15924 Name 
+    }
     SpelloutRules {
         "-x: minus >>;\n"
         "nol; en; to; tre; fire; fem; seks; syv; otte; ni;\n"

@@ -17,13 +17,6 @@ cs {
         "ch <<< cH <<< Ch <<< CH & R < r\u030C <<< R\u030C& S < s\u030C <<< S\u030C& Z < z\u030C <<<"
         " Z\u030C" }
     }
-
-    Variants{
-        Fallback{"en"}
-    }
-    Keys{
-       Fallback{"en"}
-    }
     Countries {
         Fallback{"en"}
         //AD { "Andorra" }
@@ -300,7 +293,6 @@ cs {
         "po Kr.",
     }
     Languages {
-        Fallback{ "en"}
         ar { "arapski" }
         bg { "bugarski" }
         cs { "\u010De\u0161ki" }
@@ -388,9 +380,9 @@ cs {
             "GMT",
         }
     }
-//    LocaleScript{ 
-//        "Latn",  // ISO 15924 Name 
-//    }
+    LocaleScript{ 
+        "Latn",  // ISO 15924 Name 
+    }
     ExemplarCharacters { "[a-z \u00fd \u00e1 \u00e9 \u00ed \u00f3 \u00fa \u011b \u016f \u010d \u010f \u0148 \u0159 \u0161 \u0165 \u017e]" }
 
     // Currency display names

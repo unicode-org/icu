@@ -11,10 +11,10 @@
 sw {
     Version { "2.0" }
 
-//    Countries {   // This does not need to be overridden
-//        KE { "Kenya" }
-//        TZ { "Tanzania" }
-//    }
+    Countries {   
+        KE { "Kenya" }
+        TZ { "Tanzania" }
+    }
     DateTimeElements:intvector { 
         7,
         1,
@@ -82,9 +82,12 @@ sw {
             "Nairobi",
         }
     }
-//    LocaleScript{ 
-//        "Latn",  // ISO 15924 Name 
-//    }
+    LocaleScript:array{ 
+      "Latn",  // ISO 15924 Name 
+    }
+    ExemplarCharacters{
+      "[a-z]"
+    }
 
 // /**************** Info Below is needed ****************/
 // NumberElements{}

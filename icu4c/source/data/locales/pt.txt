@@ -606,7 +606,7 @@ pt {
             "GMT",
         }
     }
-//    LocaleScript{
-//        "Latn",  // ISO 15924 Name 
-//    }
+    LocaleScript{
+        "Latn",  // ISO 15924 Name 
+    }
 }

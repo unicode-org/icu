@@ -394,7 +394,7 @@ sv {
         fi   {"finska"}
         fj   {"fidjianska"}
         fo   {"f\u00E4r\u00F6iska"}
-        fon  {"fon"}
+        // fon  {"fon"}
         fr   {"franska"}
         fur  {"friuilian"}
         fy   {"frisiska"}
@@ -431,7 +431,7 @@ sv {
         id   {"indonesiska"}
         ig   {"ibo"}
         ii   {"yi"}
-        ijo  {"ijo"}
+        //ijo  {"ijo"}
         ik   {"inupiaq"}
         ilo  {"iloko"}
         is   {"isl\u00E4ndska"}
@@ -486,7 +486,7 @@ sv {
         lua  {"luba-lulua"}
         lui  {"luise\u00F1o"}
         lun  {"lunda"}
-        luo  {"luo"}
+        //luo  {"luo"}
         lus  {"lushai"}
         lv   {"lettiska"}
         mad  {"madurese"}
@@ -637,7 +637,7 @@ sv {
         umb  {"umbundu"}
         ur   {"urdu"}
         uz   {"uzbekiska"}
-        vai  {"vai"}
+        //vai  {"vai"}
         ve   {"venda"}
         vi   {"vietnamesiska"}
         vot  {"votiska"}
@@ -647,8 +647,8 @@ sv {
         was  {"washo"}
         wo   {"wolof"}
         xh   {"xhosa"}
-        yao  {"yao"}
-        yap  {"yap"}
+        //yao  {"yao"}
+        //yap  {"yap"}
         yi   {"jiddisch"}
         yo   {"yoruba"}
         za   {"zhuang"}
@@ -716,9 +716,9 @@ sv {
             "Stockholm",
         }
     }
-//    LocaleScript{ 
-//        "Latn",  // ISO 15924 Name 
-//    }
+    LocaleScript{ 
+        "Latn",  // ISO 15924 Name 
+    }
     ExemplarCharacters { "[a-z \u00e4 \u00f6 \u00e5 \u00e1 \u00e9 \u00eb \u00fc]" }
     
     //------------------------------------------------------------

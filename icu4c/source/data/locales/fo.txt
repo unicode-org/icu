@@ -8,17 +8,9 @@
 fo {
     Version { "2.0" }
     Languages {
-        Fallback{"en"}
         fo { "føroyskt" }
     }
-    Variants{
-        Fallback{"en"}
-    }
-    Keys{
-       Fallback{"en"}
-    }
     Countries {
-        Fallback{"en"}
         FO { "Føroyar" }
     }
     DayAbbreviations { 
@@ -82,9 +74,9 @@ fo {
         ",",
         "+",
     }
-//    LocaleScript{ 
-//        "Latn",  // ISO 15924 Name 
-//    }
+    LocaleScript{ 
+        "Latn",  // ISO 15924 Name 
+    }
     ExemplarCharacters { "[a-z \u00e1 \u00e6 \u00ed \u00f0 \u00f3 \u00f8 \u00fa \u00fd]" }
 
     // Currency display names

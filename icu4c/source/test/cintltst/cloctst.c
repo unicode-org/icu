@@ -75,13 +75,13 @@ static const char* rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
     {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "catalan (Espagne)", "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, Nynorsk)" },
 
     /* display language (Catalan) */
-    {   "", "", "catal\\u00E0",            "",  "" },
+    {   "angl\\u00E8s", "franc\\u00E8s", "catal\\u00E0", "grec",  "noruec" },
     /* display country (Catalan) */
-    {   "", "", "Espanya",            "", "" },
+    {   "Estats Units", "Fran\\u00E7a", "Espanya",  "Gr\\u00E8cia", "Noruega" },
     /* display variant (Catalan) */
-    {   "", "", "",                    "", "Nynorsk" },
+    {   "", "", "",                    "", "NY" },
     /* display name (Catalan) */
-    {   "", "", "catal\\u00E0 (Espanya)", "", "" },
+    {   "angl\\u00E8s (Estats Units)", "franc\\u00E8s (Fran\\u00E7a)", "catal\\u00E0 (Espanya)", "grec (Gr\\u00E8cia)", "noruec (Noruega, NY)" },
 
     /* display language (Greek) */
     {
@@ -163,7 +163,7 @@ void addLocaleTest(TestNode** root)
     addTest(root, &TestUninstalledISO3Names, "tsutil/cloctst/TestUninstalledISO3Names");
     addTest(root, &TestSimpleDisplayNames,   "tsutil/cloctst/TestSimpleDisplayNames");
     addTest(root, &TestVariantParsing,       "tsutil/cloctst/TestVariantParsing");
-    /*addTest(root, &TestLocaleStructure,      "tsutil/cloctst/TestLocaleStructure");*/
+    addTest(root, &TestLocaleStructure,      "tsutil/cloctst/TestLocaleStructure");
     addTest(root, &TestConsistentCountryInfo,"tsutil/cloctst/TestConsistentCountryInfo");
     addTest(root, &VerifyTranslation,        "tsutil/cloctst/VerifyTranslation");
 }
@@ -1345,7 +1345,6 @@ TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
                             ures_getSize(subRootBundle),
                             ures_getSize(subBundle));
                 }
-
                 for (idx = 0; idx < minSize; idx++) {
                     int32_t rootStrLen, localeStrLen;
                     const UChar *rootStr = ures_getStringByIndex(subRootBundle,idx,&rootStrLen,&errorCode);
@@ -1868,6 +1867,47 @@ findStringSetMismatch(const UChar *string, int32_t langSize,
     return -1;
 }
 
+static void 
+findSetMatch( UScriptCode *scriptCodes, int32_t scriptsLen, 
+              const UChar *exemplarCharacters, int32_t exemplarLen,
+              const char  *locale){
+    USet *scripts[10]= {0};
+    char pattern[256] = { '[', ':', 0x000 };
+    UChar uPattern[256] = {0};
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t i;
+    UBool testFailed = FALSE;
+
+    /* create the sets with script codes */
+    for(i = 0; i<scriptsLen; i++){
+        strcat(pattern, uscript_getShortName(scriptCodes[i]));
+        strcat(pattern, ":]");
+        u_charsToUChars(pattern, uPattern, strlen(pattern));
+        scripts[i] = uset_openPattern(uPattern, strlen(pattern), &status);
+        if(U_FAILURE(status)){
+            log_err("Could not create set for patter %s. Error: %s\n", pattern, u_errorName(status));
+            break;
+        }
+        pattern[2] = 0; 
+    }
+    if(U_SUCCESS(status)){
+        UBool existsInScript = FALSE;
+        for( i = 0; i < scriptsLen; i++){
+            if(uset_containsString(scripts[i],exemplarCharacters, exemplarLen) == TRUE){
+                existsInScript = TRUE;
+            }
+        }
+        if(existsInScript = FALSE){
+            log_err("ExemplarCharacters and LocaleScript containment test failed for locale %s. \n", locale);
+        }
+    }
+
+    /* close the sets */
+    for(i = 0; i<scriptsLen; i++){
+        uset_close(scripts[i]);
+    }
+}
+
 static void VerifyTranslation(void) {
     UResourceBundle *root, *currentLocale;
     int32_t locCount = uloc_countAvailable();
@@ -1998,7 +2038,12 @@ static void VerifyTranslation(void) {
             numScripts = uscript_getCode(currLoc, scripts, sizeof(scripts)/sizeof(scripts[0]), &errorCode);
             if (numScripts == 0) {
                 log_err("uscript_getCode(%s) doesn't work.\n", currLoc);
+            }else if(scripts[0] == USCRIPT_COMMON){
+                log_err("uscript_getCode(%s) returned USCRIPT_COMMON.\n", currLoc); 
             }
+            /* test if exemplar characters are part of script code */
+            findSetMatch(scripts, numScripts, exemplarCharacters, exemplarLen, currLoc);
+
             /* TODO: test that the scripts are a superset of exemplar characters. */
         }
         ures_close(currentLocale);

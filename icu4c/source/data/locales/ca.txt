@@ -13,15 +13,349 @@ ca {
         "&C < ch <<< Ch <<< CH"
         "&L < ll <<< l\u00b7l <<< Ll <<< L\u00b7l <<< LL <<< L\u00b7L" }
     }
-    Variants{
-        Fallback{"en"}
-    }
-    Keys{
-       Fallback{"en"}
-    }
     Countries { 
-        Fallback{"en"}
+        AF { "Afganistan" }
+        AL { "Alb\u00E0nia" }
+        DZ { "Alg\u00E8ria" }
+        AD { "Andorra" }
+        AO { "Angola" }
+        AI { "Anguilla" }
+        AR { "Argentina" }
+        AM { "Arm\u00E8nia" }
+        AW { "Aruba" }
+        AU { "Austr\u00E0lia" }
+        AT { "\u00C2ustria" }
+        AZ { "Azerbaidjan" }
+        BS { "Bahames" }
+        BH { "Bahrain" }
+        BD { "Bangla Desh" }
+        BB { "Barbados" }
+        BY { "Bielor\u00FAssia" }
+        BE { "B\u00E8lgica" }
+        BZ { "Belize" }
+        BJ { "Benin" }
+        BM { "Bermudes" }
+        BT { "Bhutan" }
+        BO { "Bol\u00EDvia" }
+        BA { "B\u00F2snia i Hercegovina" }
+        BW { "Botswana" }
+        BR { "Brasil" }
+        BN { "Brunei" }
+        BG { "Bulg\u00E0ria" }
+        BF { "Burkina Faso" }
+        BI { "Burundi" }
+        KH { "Cambodja" }
+        CM { "Camerun" }
+        CA { "Canad\u00E0" }
+        CV { "Cap Verd" }
+        CF { "Rep\u00FAblica Centrafricana" }
+        TD { "Txad" }
+        CL { "Xile" }
+        CN { "Xina" }
+        CO { "Col\u00F2mbia" }
+        KM { "Comores" }
+        CG { "Congo" }
+        CR { "Costa Rica" }
+        CI { "Costa d'Ivori" }
+        HR { "Cro\u00E0cia" }
+        CU { "Cuba" }
+        CY { "Xipre" }
+        CZ { "Rep\u00FAblica Txeca" }
+        DK { "Dinamarca" }
+        DJ { "Djibouti" }
+        DM { "Dominica" }
+        DO { "Rep\u00FAblica Dominicana" }
+        TP { "Timor Oriental" }
+        EC { "Equador" }
+        EG { "Egipte" }
+        SV { "El Salvador" }
+        GQ { "Guinea Equatorial" }
+        ER { "Eritrea" }
+        EE { "Est\u00F2nia" }
+        ET { "Eti\u00F2pia" }
+        FJ { "Fiji" }
+        FI { "Finl\u00E0ndia" }
+        FR { "Fran\u00E7a" }
+        GF { "Guaiana Francesa" }
+        PF { "Polin\u00E8sia Francesa" }
+        TF { "Territoris Meridionals Francesos" }
+        GA { "Gabon" }
+        GM { "G\u00E0mbia" }
+        GE { "Ge\u00F2rgia" }
+        DE { "Alemanya" }
+        GH { "Ghana" }
+        GR { "Gr\u00E8cia" }
+        GP { "Guadeloupe" }
+        GT { "Guatemala" }
+        GN { "Guinea" }
+        GW { "Guinea Bissau" }
+        GY { "Guyana" }
+        HT { "Hait\u00ED" }
+        HN { "Hondures" }
+        HK { "Hong Kong" }
+        HU { "Hongria" }
+        IS { "Isl\u00E0ndia" }
+        IN { "\u00CDndia" }
+        ID { "Indon\u00E8sia" }
+        IR { "Iran" }
+        IQ { "Iraq" }
+        IE { "Irlanda" }
+        IL { "Israel" }
+        IT { "It\u00E0lia" }
+        JM { "Jamaica" }
+        JP { "Jap\u00F3" }
+        JO { "Jord\u00E0nia" }
+        KZ { "Kazakhstan" }
+        KE { "Kenya" }
+        KI { "Kiribati" }
+        KP { "Corea del Nord" }
+        KR { "Corea del Sud" }
+        KW { "Kuwait" }
+        KG { "Kirgizistan" }
+        LA { "Laos" }
+        LV { "Let\u00F2nia" }
+        LB { "L\u00EDban" }
+        LS { "Lesotho" }
+        LR { "Lib\u00E8ria" }
+        LY { "L\u00EDbia" }
+        LI { "Liechtenstein" }
+        LT { "Litu\u00E0nia" }
+        LU { "Luxemburg" }
+        MK { "Maced\u00F2nia" }
+        MG { "Madagascar" }
+        MY { "Mal\u00E0isia" }
+        ML { "Mali" }
+        MT { "Malta" }
+        MQ { "Martinica" }
+        MR { "Maurit\u00E0nia" }
+        MU { "Maurici" }
+        YT { "Mayotte" }
+        MX { "M\u00E8xic" }
+        FM { "Micron\u00E8sia" }
+        MD { "Mold\u00E0via" }
+        MC { "M\u00F2naco" }
+        MN { "Mong\u00F2lia" }
+        MS { "Montserrat" }
+        MA { "Marroc" }
+        MZ { "Mo\u00E7ambic" }
+        MM { "Myanmar" }
+        NA { "Nam\u00EDbia" }
+        NP { "Nepal" }
+        NL { "Pa\u00EFsos Baixos" }
+        AN { "Antilles Holandeses" }
+        NC { "Nova Caled\u00F2nia" }
+        NZ { "Nova Zelanda" }
+        NI { "Nicaragua" }
+        NE { "N\u00EDger" }
+        NG { "Nig\u00E8ria" }
+        NU { "Niue" }
+        NO { "Noruega" }
+        OM { "Oman" }
+        PK { "Pakistan" }
+        PA { "Panam\u00E0" }
+        PG { "Papua Nova Guinea" }
+        PY { "Paraguai" }
+        PE { "Per\u00FA" }
+        PH { "Filipines" }
+        PL { "Pol\u00F2nia" }
+        PT { "Portugal" }
+        PR { "Puerto Rico" }
+        QA { "Qatar" }
+        RO { "Romania" }
+        RU { "R\u00FAssia" }
+        RW { "Rwanda" }
+        SA { "Ar\u00E0bia Saud\u00ED" }
+        SN { "Senegal" }
+        SP { "S\u00E8rbia" }
+        SC { "Seychelles" }
+        SL { "Sierra Leone" }
+        SG { "Singapur" }
+        SK { "Eslov\u00E0quia" }
+        SI { "Eslov\u00E8nia" }
+        SO { "Som\u00E0lia" }
+        ZA { "Sud-\u00E0frica" }
         ES { "Espanya" }
+        LK { "Sri Lanka" }
+        SD { "Sudan" }
+        SR { "Surinam" }
+        SZ { "Swazil\u00E0ndia" }
+        SE { "Su\u00E8cia" }
+        CH { "Switzerland" }
+        SY { "S\u00EDria" }
+        TW { "Taiwan" }
+        TJ { "Tadjikistan" }
+        TZ { "Tanz\u00E0nia" }
+        TH { "Tail\u00E0ndia" }
+        TG { "Togo" }
+        TK { "Tokelau" }
+        TO { "Tonga" }
+        TT { "Trinitat i Tobago" }
+        TN { "Tun\u00EDsia" }
+        TR { "Turquia" }
+        TM { "Turkmenistan" }
+        UG { "Uganda" }
+        UA { "Ucra\u00EFna" }
+        AE { "Uni\u00F3 dels Emirats \u00C0rabs" }
+        GB { "Regne Unit" }
+        US { "Estats Units" }
+        UY { "Uruguai" }
+        UZ { "Uzbekistan" }
+        VU { "Vanuatu" }
+        VA { "Vatic\u00E0" }
+        VE { "Vene\u00E7uela" }
+        VN { "Vietnam" }
+        VG { "Illes Verges Brit\u00E0niques" }
+        VI { "Illes Verges dels USA" }
+        EH { "S\u00E0hara Occidental" }
+        YE { "Iemen" }
+        YU { "Iugosl\u00E0via" }
+        ZR { "Zaire" }
+        ZM { "Z\u00E0mbia" }
+        ZW { "Zimbabwe" }
+    }
+    Languages { 
+        ab { "abkhaz" }
+        aa { "\u00E0far" }
+        af { "afrikaans" }
+        sq { "alban\u00E8s" }
+        am { "amh\u00E0ric" }
+        ar { "\u00E2rab" }
+        hy { "armeni" }
+        as { "assam\u00E8s" }
+        ay { "aimara" }
+        az { "\u00E0zeri" }
+        ba { "baixkir" }
+        eu { "basc" }
+        bn { "bengal\u00ED" }
+        dz { "bhutan\u00E8s" }
+        bh { "bihari" }
+        bi { "bislama" }
+        br { "bret\u00F3" }
+        bg { "b\u00FAlgar" }
+        my { "birm\u00E0" }
+        be { "bielor\u00FAs" }
+        km { "cambodj\u00E0" }
+        ca { "catal\u00E0" }
+        zh { "xin\u00E9s" }
+        co { "cors" }
+        hr { "croat" }
+        cs { "txec" }
+        da { "dan\u00E8s" }
+        nl { "neerland\u00E8s" }
+        en { "angl\u00E8s" }
+        eo { "esperanto" }
+        et { "estoni\u00E0" }
+        fo { "fero\u00E8s" }
+        fj { "fiji\u00E0" }
+        fi { "fin\u00E8s" }
+        fr { "franc\u00E8s" }
+        fy { "fris\u00F3" }
+        gl { "gallec" }
+        ka { "georgi\u00E0" }
+        de { "alemany" }
+        el { "grec" }
+        kl { "greenland\u00E8s" }
+        gn { "guaran\u00ED" }
+        gu { "gujarati" }
+        ha { "hausa" }
+        he { "hebreu" }
+        iw { "hebreu" }
+        hi { "hindi" }
+        hu { "hongar\u00E8s" }
+        is { "island\u00E8s" }
+        id { "indonesi" }
+        in { "indonesi" }
+        ia { "interlingua" }
+        ie { "interlingue" }
+        iu { "inuktitut" }
+        ik { "inupiak" }
+        ga { "irland\u00E8s" }
+        it { "itali\u00E0" }
+        ja { "japon\u00E8s" }
+        jw { "javan\u00E8s" }
+        kn { "kannada" }
+        ks { "caixmiri" }
+        kk { "kazakh" }
+        rw { "kinyarwanda" }
+        ky { "kirgu\u00EDs" }
+        rn { "kirundi" }
+        ko { "core\u00E0" }
+        ku { "kurd" }
+        lo { "laosi\u00E0" }
+        la { "llat\u00ED" }
+        lv { "let\u00F3)" }
+        ln { "lingala" }
+        lt { "litu\u00E0" }
+        mk { "macedoni" }
+        mg { "malgaix" }
+        ms { "malai" }
+        ml { "malaialam" }
+        mt { "malt\u00E8s" }
+        mi { "maori" }
+        mr { "marathi" }
+        mo { "moldau" }
+        mn { "mongol" }
+        na { "nauru\u00E0" }
+        ne { "nepal\u00E8s" }
+        no { "noruec" }
+        oc { "occit\u00E0" }
+        or { "oriya" }
+        om { "oromo (afan)" }
+        ps { "paixto" }
+        fa { "persa" }
+        pl { "polon\u00E8s" }
+        pt { "portugu\u00E8s" }
+        pa { "panjabi" }
+        qu { "qu\u00E8txua" }
+        rm { "retorom\u00E0nic" }
+        ro { "roman\u00E8s" }
+        ru { "rus" }
+        sm { "samo\u00E0" }
+        sg { "sango" }
+        sa { "s\u00E0nscrit" }
+        gd { "escoc\u00E8s" }
+        sr { "serbi" }
+        sh { "serbo-croat" }
+        st { "sotho" }
+        tn { "tswana" }
+        sn { "shona" }
+        sd { "sindhi" }
+        si { "sinhal\u00E8s" }
+        ss { "siswati" }
+        sk { "eslovac" }
+        sl { "eslov\u00E8" }
+        so { "somali" }
+        es { "espanyol" }
+        su { "sundan\u00E8s" }
+        sw { "swahili" }
+        sv { "suec" }
+        tl { "tag\u00E0log" }
+        tg { "tadjik" }
+        ta { "t\u00E0mil" }
+        tt { "t\u00E0tar" }
+        te { "telugu" }
+        th { "thai" }
+        bo { "tibet\u00E0" }
+        ti { "tigrinya" }
+        to { "tonga" }
+        ts { "tsonga" }
+        tr { "turc" }
+        tk { "turcman" }
+        tw { "twi" }
+        ug { "uigur" }
+        uk { "ucra\u00EFn\u00E8s" }
+        ur { "urd\u00FA" }
+        uz { "uzbek" }
+        vi { "vietnamita" }
+        vo { "volapuk" }
+        cy { "gal\u00B7l\u00E8s" }
+        wo { "w\u00F2lof" }
+        xh { "xosa" }
+        ji { "jiddish" }
+        yi { "jiddish" }
+        yo { "ioruba" }
+        za { "zhuang" }
+        zu { "zulu" }
     }
     DateTimePatterns { 
         "HH:mm:ss z",
@@ -51,10 +385,6 @@ ca {
         "dijous",
         "divendres",
         "dissabte",
-    }
-    Languages { 
-        Fallback{"en"}
-        ca { "catal\u00E0" }
     }
     MonthAbbreviations { 
         "gen.",
@@ -109,9 +439,9 @@ ca {
             "GMT",
         }
     }
-//    LocaleScript{ 
-//                "Latn",  // ISO 15924 Name 
-//    }
+    LocaleScript{ 
+                "Latn",  // ISO 15924 Name 
+    }
     ExemplarCharacters { "[a-z \u00e9 \u00ed \u00f3 \u00fa \u00e0 \u00e8 \u00f2 \u00ef \u00fc \u0140 \u00e7 \u00f1]" }
 
 
