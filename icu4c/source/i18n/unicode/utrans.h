@@ -74,46 +74,52 @@ typedef enum _UTransDirection {
 
 /**
  * Position structure for utrans_transIncremental() incremental
- * transliteration.  This structure determines what portion of the
- * text is transliterated, as well as the overall boundaries of the
- * text.  There are two sets of indices to accomodate users that wish
- * to transliterate a substring but make surrounding text available as
- * context.
-
- * TODO FIX:
- * doc that this is input/output
- * change names
- * contextStart not changed
- * others may change (and why)
+ * transliteration.  This structure defines two substrings of the text
+ * being transliterated.  The first region, [contextStart,
+ * contextLimit), defines what characters the transliterator will read
+ * as context.  The second region, [start, limit), defines what
+ * characters will actually be transliterated.  The second region
+ * should be a subset of the first.
+ *
+ * <p>After a transliteration operation, some of the indices in this
+ * structure will be modified.  See the field descriptions for
+ * details.
  * @draft
  */
 typedef struct _UTransPosition {
 
     /**
-     * Beginning index, inclusive.  The transliterator will ignore
-     * anything before this index.
+     * Beginning index, inclusive, of the context to be considered for
+     * a transliteration operation.  The transliterator will ignore
+     * anything before this index.  INPUT parameter: This parameter is
+     * not changed by a transliteration operation.
      */
-    int32_t start; /* contextStart */
+    int32_t contextStart;
     
     /**
-     * Ending index, exclusive.  The transliterator will ignore
-     * anything at or after this index.
+     * Ending index, exclusive, of the context to be considered for a
+     * transliteration operation.  The transliterator will ignore
+     * anything at or after this index.  INPUT/OUTPUT parameter: This
+     * parameter is updated to reflect changes in the length of the
+     * text, but points to the same logical position in the text.
      */
-    int32_t limit; /* contextLimit */
+    int32_t contextLimit;
     
     /**
-     * The next character to be considered for transliteration,
-     * inclusive.  The transliterator will try to transliterate text
-     * from cursor to end-1.
+     * Beginning index, inclusive, of the text to be transliteratd.
+     * INPUT/OUTPUT parameter: This parameter is advanced past
+     * characters that have already been transliterated by a
+     * transliteration operation.
      */
-    int32_t cursor; /* start */
+    int32_t start;
     
     /**
-     * The limit character to be considered for transliteration,
-     * exclusive.  The transliterator will not transliterate text at
-     * or after this index.
+     * Ending index, exclusive, of the text to be transliteratd.
+     * INPUT/OUTPUT parameter: This parameter is updated to reflect
+     * changes in the length of the text, but points to the same
+     * logical position in the text.
      */
-    int32_t end; /* limit */
+    int32_t limit;
 
 } UTransPosition;
 
