@@ -146,7 +146,7 @@ typedef uint16_t UChar;
 /* Related version information                                               */
 /*===========================================================================*/
 
-typedef struct { uint8_t versions[U_MAX_VERSION_LEN]; } UVersionInfo;
+typedef uint8_t UVersionInfo[U_MAX_VERSION_LEN];
 
 /* U_SIZEOF_UCHAR==sizeof(UChar) */
 #define U_SIZEOF_UCHAR 2
