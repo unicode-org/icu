@@ -84,7 +84,7 @@ U_CDECL_BEGIN
  * icu enum constants and UCD entities.  Do not delete them.  Update
  * these comments as needed.
  *
- * Any comment of the form "/*[name]* /" (space added) is such
+ * Any comment of the form "/ *[name]* /" (spaces added) is such
  * a comment.
  *
  * The U_JG_* and U_GC_*_MASK constants are matched by their symbolic
