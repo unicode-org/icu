@@ -26,6 +26,8 @@
 #include "ustrtest.h"
 #include "tstdtmod.h"
 
+StringCaseTest::~StringCaseTest() {}
+
 void
 StringCaseTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /*par*/) {
     if (exec) logln("TestSuite StringCaseTest: ");

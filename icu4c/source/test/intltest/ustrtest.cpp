@@ -26,15 +26,13 @@ using namespace std;
 
 #define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
 
+UnicodeStringTest::~UnicodeStringTest() {}
+
 void UnicodeStringTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char *par)
 {
     if (exec) logln("TestSuite UnicodeStringTest: ");
     switch (index) {
-        case 0: name = "TestBasicManipulation"; if (exec) TestBasicManipulation(); break;
-        case 1: name = "TestCompare"; if (exec) TestCompare(); break;
-        case 2: name = "TestExtract"; if (exec) TestExtract(); break;
-        case 3: name = "TestRemoveReplace"; if (exec) TestRemoveReplace(); break;
-        case 4:
+        case 0:
             name = "StringCaseTest";
             if (exec) {
                 logln("StringCaseTest---"); logln("");
@@ -42,6 +40,10 @@ void UnicodeStringTest::runIndexedTest( int32_t index, UBool exec, const char* &
                 callTest(test, par);
             }
             break;
+        case 1: name = "TestBasicManipulation"; if (exec) TestBasicManipulation(); break;
+        case 2: name = "TestCompare"; if (exec) TestCompare(); break;
+        case 3: name = "TestExtract"; if (exec) TestExtract(); break;
+        case 4: name = "TestRemoveReplace"; if (exec) TestRemoveReplace(); break;
         case 5: name = "TestSearching"; if (exec) TestSearching(); break;
         case 6: name = "TestSpacePadding"; if (exec) TestSpacePadding(); break;
         case 7: name = "TestPrefixAndSuffix"; if (exec) TestPrefixAndSuffix(); break;

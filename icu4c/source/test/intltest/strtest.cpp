@@ -23,6 +23,7 @@
 using namespace std;
 #endif
 
+StringTest::~StringTest() {}
 
 void StringTest::TestEndian(void) {
     union {

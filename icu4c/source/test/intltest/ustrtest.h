@@ -15,7 +15,7 @@
 class UnicodeStringTest: public IntlTest {
 public:
     UnicodeStringTest() {}
-    virtual ~UnicodeStringTest() {}
+    virtual ~UnicodeStringTest();
     
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
 
@@ -76,7 +76,7 @@ public:
 class StringCaseTest: public IntlTest {
 public:
     StringCaseTest() {}
-    virtual ~StringCaseTest() {}
+    virtual ~StringCaseTest();
     
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=0);
 
