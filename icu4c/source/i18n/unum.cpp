@@ -225,9 +225,10 @@ unum_parseDouble(    const   UNumberFormat*  fmt,
             int32_t         *parsePos /* 0 = start */,
             UErrorCode      *status)
 {
-  if(U_FAILURE(*status)) return 0;
+  if(U_FAILURE(*status))
+      return 0;
 
-  int32_t len = (textLength == -1 ? u_strlen(text) : textLength);
+  int32_t len = (textLength < 0 ? u_strlen(text) : textLength);
   const UnicodeString src((UChar*)text, len, len);
   ParsePosition pp;
   Formattable res;
