@@ -2526,6 +2526,14 @@ InputPath=.\unicode\symtable.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\ucase.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucase.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\uchar.c
 # End Source File
 # Begin Source File
