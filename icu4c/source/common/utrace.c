@@ -193,11 +193,6 @@ utrace_vformat(char *outBuf, int32_t capacity, int32_t indent, const char *fmt, 
     int32_t   intArg;
     int64_t   longArg;
     char      *ptrArg;
-    int32_t   i;
-
-    for (i=0; i<indent; i++) {
-        outputChar(' ', outBuf, &outIx, capacity, indent);
-    }
 
     /*   Loop runs once for each character in the format string.
      */
