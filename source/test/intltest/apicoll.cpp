@@ -1711,7 +1711,7 @@ void CollationAPITest::TestUClassID()
 	delete coll;
 }
 
-class TestCollator: Collator
+class TestCollator  : public Collator
 {
 public:
     virtual Collator* clone(void) const;
