@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2002/12/02 05:45:46 $
-* $Revision: 1.56 $
+* $Date: 2002/12/02 17:04:21 $
+* $Revision: 1.57 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -43,7 +43,28 @@
     </target>
     <!-- ### end clover setup ### -->
 
-    <target name="init">
+    <target name="hack1">
+        <!-- It's a real pain to set properties conditionally.
+          Ant 1.5 isn't really any better than 1.4, in fact 1.5 enforces that
+          properties are write-once so you can't even set a default and then
+          override it, which we used to do for Ant 1.4. -->
+        <condition property="version.1.4.or.higher">
+        <or>
+	    <equals arg1="${ant.java.version}" arg2="1.4"/>
+        </or>
+        </condition>
+
+	<condition property="doc.params"
+	    value="-breakiterator -tag draft:a:&quot;Draft&quot; -tag internal:X:&quot;Internal&quot; -tag stable:a:&quot;Stable&quot;">
+            <equals arg1="${version.1.4.or.higher}" arg2="true"/>
+	</condition>
+    </target>
+
+    <target name="hack2" unless="doc.params">
+        <property name="doc.params" value=""/>
+    </target>
+
+    <target name="init" depends="hack1, hack2">
         <tstamp/>
         <property name="src.dir" value="src"/>
         <property name="build.dir" value="classes"/>
@@ -73,24 +94,7 @@
         <echo message="java version: ${java.version}"/>
         <echo message="ant java version: ${ant.java.version}"/>
         <echo message="${ant.version}"/>
-        <!-- It's a real pain to set properties conditionally.
-          Ant 1.5 isn't really any better than 1.4, in fact 1.5 enforces that
-          properties are write-once so you can't even set a default and then
-          override it, which we used to do for Ant 1.4. -->
-        <condition property="version.1.4.or.higher">
-        <or>
-	    <equals arg1="${ant.java.version}" arg2="1.4"/>
-        </or>
-        </condition>
-	<condition property="doc.params"
-	    value="-breakiterator -tag draft:a:&quot;Draft&quot; -tag internal:X:&quot;Internal&quot; -tag stable:a:&quot;Stable&quot;">
-            <equals arg1="${version.1.4.or.higher}" arg2="true"/>
-	</condition>
-        <condition property="doc.params"
-            value="">
-            <equals arg1="${version.1.4.or.higher}" arg2="false"/>
-        </condition>
-        <echo message="javadoc: ${doc.params}"/>
+        <echo message="doc params: ${doc.params}"/>
     </target>
 
     <!-- build everything but dist-related stuff -->
@@ -273,7 +277,7 @@
     </target>
 
 
-    <target name="checktags" depends="tools">
+    <target name="checktags" depends="tools" if="version1.4.or.higher">
         <echo message="Execute with a JDK that provides access to com.sun.* packages"/>
         <javadoc sourcepath="${src.dir}" 
                  packagenames="com.ibm.icu.*"
