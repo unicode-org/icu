@@ -79,6 +79,8 @@ const static UChar testBugs[][MAX_TOKEN_LEN] = {
     {(UChar)0x0044 /* 'D' */, (UChar)0x0042 /* 'B' */, (UChar)0x0000 /* '\0' */},
     {(UChar)0x0044 /* 'D' */, (UChar)0x0053 /* 'S' */, (UChar)0x0042 /* 'B' */, (UChar)0x0000 /* '\0' */},
     {(UChar)0x0044 /* 'D' */, (UChar)0x0053 /* 'S' */, (UChar)0x0043 /* 'C' */, (UChar)0x0000 /* '\0' */},
+    {0x00D0, /*0x0110,*/ (UChar)0x0041 /* 'A' */, (UChar)0x0000 /* '\0' */},
+    {0x00D0, /*0x0110,*/ (UChar)0x0043 /* 'C' */, (UChar)0x0000 /* '\0' */},
     {(UChar)0x0045 /* 'E' */, (UChar)0x004B /* 'K' */, (UChar)0x0053 /* 'S' */, (UChar)0x0054 /* 'T' */, (UChar)0x0052 /* 'R' */, (UChar)0x0041 /* 'A' */, (UChar)0x005F /* '_' */, (UChar)0x0041 /* 'A' */, (UChar)0x0052 /* 'R' */, (UChar)0x0042 /* 'B' */, (UChar)0x0045 /* 'E' */, (UChar)0x004A /* 'J' */, (UChar)0x0044 /* 'D' */, (UChar)0x0045 /* 'E' */, (UChar)0x0000 /* '\0' */},
     {(UChar)0x0045 /* 'E' */, (UChar)0x004B /* 'K' */, (UChar)0x0053 /* 'S' */, (UChar)0x0054 /* 'T' */, (UChar)0x0052 /* 'R' */, (UChar)0x0041 /* 'A' */, (UChar)0x0042 /* 'B' */, (UChar)0x0055 /* 'U' */, (UChar)0x0044 /* 'D' */, 0},
     {(UChar)0x0048 /* 'H' */, 0x00D8, (UChar)0x0053 /* 'S' */, (UChar)0x0054 /* 'T' */, (UChar)0x0000 /* '\0' */},  
@@ -87,9 +89,9 @@ const static UChar testBugs[][MAX_TOKEN_LEN] = {
     {(UChar)0x0048 /* 'H' */, (UChar)0x0041 /* 'A' */, (UChar)0x0041 /* 'A' */, (UChar)0x004E /* 'N' */, (UChar)0x0044 /* 'D' */, (UChar)0x0056 /* 'V' */, 0x00C6, (UChar)0x0052 /* 'R' */, (UChar)0x004B /* 'K' */, (UChar)0x0053 /* 'S' */, (UChar)0x0042 /* 'B' */, (UChar)0x0041 /* 'A' */, (UChar)0x004E /* 'N' */, (UChar)0x004B /* 'K' */, (UChar)0x0045 /* 'E' */, (UChar)0x004E /* 'N' */, (UChar)0x0000 /* '\0' */},
     {(UChar)0x006B /* 'k' */, (UChar)0x0061 /* 'a' */, (UChar)0x0072 /* 'r' */, (UChar)0x006C /* 'l' */, (UChar)0x0000 /* '\0' */},
     {(UChar)0x004B /* 'K' */, (UChar)0x0061 /* 'a' */, (UChar)0x0072 /* 'r' */, (UChar)0x006C /* 'l' */, (UChar)0x0000 /* '\0' */},
-    {(UChar)0x004E /* 'N' */, (UChar)0x0049 /* 'I' */, (UChar)0x0045 /* 'E' */, (UChar)0x004C /* 'L' */, (UChar)0x0053 /* 'S' */, (UChar)0x0045 /* 'E' */, (UChar)0x004E /* 'N' */, (UChar)0x0000 /* '\0' */},
     {(UChar)0x004E /* 'N' */, (UChar)0x0049 /* 'I' */, (UChar)0x0045 /* 'E' */, (UChar)0x004C /* 'L' */, (UChar)0x0053 /* 'S' */, (UChar)0x0020 /* ' ' */, (UChar)0x004A /* 'J' */, 0x00D8, (UChar)0x0052 /* 'R' */, (UChar)0x0047 /* 'G' */, (UChar)0x0045 /* 'E' */, (UChar)0x004E /* 'N' */, (UChar)0x0000 /* '\0' */},
     {(UChar)0x004E /* 'N' */, (UChar)0x0049 /* 'I' */, (UChar)0x0045 /* 'E' */, (UChar)0x004C /* 'L' */, (UChar)0x0053 /* 'S' */, (UChar)0x002D /* '-' */, (UChar)0x004A /* 'J' */, 0x00D8, (UChar)0x0052 /* 'R' */, (UChar)0x0047 /* 'G' */, (UChar)0x0045 /* 'E' */, (UChar)0x004E /* 'N' */, (UChar)0x0000 /* '\0' */},
+    {(UChar)0x004E /* 'N' */, (UChar)0x0049 /* 'I' */, (UChar)0x0045 /* 'E' */, (UChar)0x004C /* 'L' */, (UChar)0x0053 /* 'S' */, (UChar)0x0045 /* 'E' */, (UChar)0x004E /* 'N' */, (UChar)0x0000 /* '\0' */},
     {(UChar)0x0052 /* 'R' */, 0x00C9, (UChar)0x0045 /* 'E' */, (UChar)0x002C /* ',' */, (UChar)0x0020 /* ' ' */, (UChar)0x0041 /* 'A' */, (UChar)0x0000 /* '\0' */},
     {(UChar)0x0052 /* 'R' */, (UChar)0x0045 /* 'E' */, (UChar)0x0045 /* 'E' */, (UChar)0x002C /* ',' */, (UChar)0x0020 /* ' ' */, (UChar)0x0042 /* 'B' */, (UChar)0x0000 /* '\0' */},
     {(UChar)0x0052 /* 'R' */, 0x00C9, (UChar)0x0045 /* 'E' */, (UChar)0x002C /* ',' */, (UChar)0x0020 /* ' ' */, (UChar)0x004C /* 'L' */, (UChar)0x0000 /* '\0' */},                                                    
@@ -102,23 +104,21 @@ const static UChar testBugs[][MAX_TOKEN_LEN] = {
     {(UChar)0x0053 /* 'S' */, (UChar)0x0053 /* 'S' */, (UChar)0x0000 /* '\0' */},
     {0x00DF, (UChar)0x0000 /* '\0' */},
     {(UChar)0x0053 /* 'S' */, (UChar)0x0053 /* 'S' */, (UChar)0x0041 /* 'A' */, (UChar)0x0000 /* '\0' */},
-    {(UChar)0x0053 /* 'S' */, (UChar)0x0054 /* 'T' */, (UChar)0x004F /* 'O' */, (UChar)0x0052 /* 'R' */, (UChar)0x0045 /* 'E' */, (UChar)0x004B /* 'K' */, 0x00C6, (UChar)0x0052 /* 'R' */, 0},
     {(UChar)0x0053 /* 'S' */, (UChar)0x0054 /* 'T' */, (UChar)0x004F /* 'O' */, (UChar)0x0052 /* 'R' */, (UChar)0x0045 /* 'E' */, (UChar)0x0020 /* ' ' */, (UChar)0x0056 /* 'V' */, (UChar)0x0049 /* 'I' */, (UChar)0x004C /* 'L' */, (UChar)0x0044 /* 'D' */, (UChar)0x004D /* 'M' */, (UChar)0x004F /* 'O' */, (UChar)0x0053 /* 'S' */, (UChar)0x0045 /* 'E' */, (UChar)0x0000 /* '\0' */},               
-    {(UChar)0x0053 /* 'S' */, (UChar)0x0054 /* 'T' */, (UChar)0x004F /* 'O' */, (UChar)0x0052 /* 'R' */, (UChar)0x004D /* 'M' */, (UChar)0x004C /* 'L' */, (UChar)0x0059 /* 'Y' */, (UChar)0x0000 /* '\0' */},
+    {(UChar)0x0053 /* 'S' */, (UChar)0x0054 /* 'T' */, (UChar)0x004F /* 'O' */, (UChar)0x0052 /* 'R' */, (UChar)0x0045 /* 'E' */, (UChar)0x004B /* 'K' */, 0x00C6, (UChar)0x0052 /* 'R' */, 0},
     {(UChar)0x0053 /* 'S' */, (UChar)0x0054 /* 'T' */, (UChar)0x004F /* 'O' */, (UChar)0x0052 /* 'R' */, (UChar)0x004D /* 'M' */, (UChar)0x0020 /* ' ' */, (UChar)0x0050 /* 'P' */, (UChar)0x0045 /* 'E' */, (UChar)0x0054 /* 'T' */, (UChar)0x0045 /* 'E' */, (UChar)0x0052 /* 'R' */, (UChar)0x0053 /* 'S' */, (UChar)0x0045 /* 'E' */, (UChar)0x004E /* 'N' */, (UChar)0x0000 /* '\0' */},
+    {(UChar)0x0053 /* 'S' */, (UChar)0x0054 /* 'T' */, (UChar)0x004F /* 'O' */, (UChar)0x0052 /* 'R' */, (UChar)0x004D /* 'M' */, (UChar)0x004C /* 'L' */, (UChar)0x0059 /* 'Y' */, (UChar)0x0000 /* '\0' */},
     {(UChar)0x0054 /* 'T' */, (UChar)0x0048 /* 'H' */, (UChar)0x004F /* 'O' */, (UChar)0x0052 /* 'R' */, (UChar)0x0056 /* 'V' */, (UChar)0x0041 /* 'A' */, (UChar)0x004C /* 'L' */, (UChar)0x0044 /* 'D' */, (UChar)0x0000 /* '\0' */},
     {(UChar)0x0054 /* 'T' */, (UChar)0x0048 /* 'H' */, (UChar)0x004F /* 'O' */, (UChar)0x0052 /* 'R' */, (UChar)0x0056 /* 'V' */, (UChar)0x0041 /* 'A' */, (UChar)0x0052 /* 'R' */, (UChar)0x0044 /* 'D' */, (UChar)0x0055 /* 'U' */, (UChar)0x0052 /* 'R' */, (UChar)0x0000 /* '\0' */},
-    {0x00FE, (UChar)0x004F /* 'O' */, (UChar)0x0052 /* 'R' */, (UChar)0x0056 /* 'V' */, (UChar)0x0041 /* 'A' */, (UChar)0x0052 /* 'R' */, 0x0110, (UChar)0x0055 /* 'U' */, (UChar)0x0052 /* 'R' */, (UChar)0x0000 /* '\0' */},
     {(UChar)0x0054 /* 'T' */, (UChar)0x0048 /* 'H' */, (UChar)0x0059 /* 'Y' */, (UChar)0x0047 /* 'G' */, (UChar)0x0045 /* 'E' */, (UChar)0x0053 /* 'S' */, (UChar)0x0045 /* 'E' */, (UChar)0x004E /* 'N' */, (UChar)0x0000 /* '\0' */},
+    {0x00FE, (UChar)0x004F /* 'O' */, (UChar)0x0052 /* 'R' */, (UChar)0x0056 /* 'V' */, (UChar)0x0041 /* 'A' */, (UChar)0x0052 /* 'R' */, 0x00D0, /*0x0110,*/ (UChar)0x0055 /* 'U' */, (UChar)0x0052 /* 'R' */, (UChar)0x0000 /* '\0' */},
     {(UChar)0x0056 /* 'V' */, (UChar)0x0045 /* 'E' */, (UChar)0x0053 /* 'S' */, (UChar)0x0054 /* 'T' */, (UChar)0x0045 /* 'E' */, (UChar)0x0052 /* 'R' */, (UChar)0x0047 /* 'G' */, 0x00C5, (UChar)0x0052 /* 'R' */, (UChar)0x0044 /* 'D' */, (UChar)0x002C /* ',' */, (UChar)0x0020 /* ' ' */, (UChar)0x0041 /* 'A' */, (UChar)0x0000 /* '\0' */},
     {(UChar)0x0056 /* 'V' */, (UChar)0x0045 /* 'E' */, (UChar)0x0053 /* 'S' */, (UChar)0x0054 /* 'T' */, (UChar)0x0045 /* 'E' */, (UChar)0x0052 /* 'R' */, (UChar)0x0047 /* 'G' */, (UChar)0x0041 /* 'A' */, (UChar)0x0041 /* 'A' */, (UChar)0x0052 /* 'R' */, (UChar)0x0044 /* 'D' */, (UChar)0x002C /* ',' */, (UChar)0x0020 /* ' ' */, (UChar)0x0041 /* 'A' */, (UChar)0x0000 /* '\0' */},
     {(UChar)0x0056 /* 'V' */, (UChar)0x0045 /* 'E' */, (UChar)0x0053 /* 'S' */, (UChar)0x0054 /* 'T' */, (UChar)0x0045 /* 'E' */, (UChar)0x0052 /* 'R' */, (UChar)0x0047 /* 'G' */, 0x00C5, (UChar)0x0052 /* 'R' */, (UChar)0x0044 /* 'D' */, (UChar)0x002C /* ',' */, (UChar)0x0020 /* ' ' */, (UChar)0x0042 /* 'B' */, (UChar)0x0000 /* '\0' */},                 
     {0x00C6, (UChar)0x0042 /* 'B' */, (UChar)0x004C /* 'L' */, (UChar)0x0045 /* 'E' */, (UChar)0x0000 /* '\0' */},
     {0x00C4, (UChar)0x0042 /* 'B' */, (UChar)0x004C /* 'L' */, (UChar)0x0045 /* 'E' */, (UChar)0x0000 /* '\0' */},
     {0x00D8, (UChar)0x0042 /* 'B' */, (UChar)0x0045 /* 'E' */, (UChar)0x0052 /* 'R' */, (UChar)0x0047 /* 'G' */, (UChar)0x0000 /* '\0' */},
-    {0x00D6, (UChar)0x0042 /* 'B' */, (UChar)0x0045 /* 'E' */, (UChar)0x0052 /* 'R' */, (UChar)0x0047 /* 'G' */, (UChar)0x0000 /* '\0' */},
-    {0x0110, (UChar)0x0041 /* 'A' */, (UChar)0x0000 /* '\0' */},
-    {0x0110, (UChar)0x0043 /* 'C' */, (UChar)0x0000 /* '\0' */}                                                                         
+    {0x00D6, (UChar)0x0042 /* 'B' */, (UChar)0x0045 /* 'E' */, (UChar)0x0052 /* 'R' */, (UChar)0x0047 /* 'G' */, (UChar)0x0000 /* '\0' */}
 };
 
 const static UChar testNTList[][MAX_TOKEN_LEN] = {
@@ -196,6 +196,8 @@ static void TestTertiary( )
     int32_t i,j;
     UErrorCode status = U_ZERO_ERROR;
     myCollation = ucol_open("da_DK", &status);
+    /* problem in strcollinc for unfinshed contractions */
+    ucol_setAttribute(myCollation, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
 	return;
