@@ -2635,6 +2635,10 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                 this bail*/
                 *status = U_BUFFER_OVERFLOW_ERROR;
                 source->CEpos = source->CEs;
+                freeHeapWritableBuffer(&temp);
+                if (strbuffer != buffer) {
+                    uprv_free(strbuffer);
+                }
                 return UCOL_NULLORDER;
             }
             CE = ucol_IGetNextCE(coll, &temp, status);
