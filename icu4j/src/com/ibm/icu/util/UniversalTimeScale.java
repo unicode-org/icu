@@ -202,7 +202,7 @@ public final class UniversalTimeScale
     public static final int JAVA_TIME = 0;
 
     /**
-     * Used in Unix systems. Data is an <code>int> or a <code>long</code>. Value
+     * Used in Unix systems. Data is an <code>int</code> or a <code>long</code>. Value
      * is seconds since January 1, 1970.
      *
      * @draft ICU 3.2
