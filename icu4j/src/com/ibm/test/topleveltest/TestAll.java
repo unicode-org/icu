@@ -62,6 +62,10 @@ public class TestAll extends TestFmwk {
 		run(new com.ibm.test.translit.TransliteratorTest());
 	}
 	
+	public void TestSearch() throws Exception {
+		run(new com.ibm.test.search.SearchTest());
+	}
+	
 	private void run(TestFmwk test) throws Exception {
 		test.setParent(this);
 		test.run(new String[0]);
