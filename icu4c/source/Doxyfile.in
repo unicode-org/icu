@@ -297,7 +297,7 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces. 
 
-INPUT                  = ./common/unicode @srcdir@/common/unicode @srcdir@/i18n/unicode @srcdir@/layout/unicode
+INPUT                  = ./common/unicode/platform.h @srcdir@/common/unicode @srcdir@/i18n/unicode @srcdir@/layout/unicode
 
 # If the value of the INPUT tag contains directories, you can use the 
 # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 
