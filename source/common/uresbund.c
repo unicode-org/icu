@@ -595,9 +595,6 @@ U_CAPI const int32_t* U_EXPORT2 ures_getIntVector(const UResourceBundle* resB, i
 /* this function returns a signed integer */ 
 /* it performs sign extension */
 U_CAPI int32_t U_EXPORT2 ures_getInt(const UResourceBundle* resB, UErrorCode *status) {
-  uint32_t uintValue = 0;
-  int32_t returnValue = 0;
-  
   if (status==NULL || U_FAILURE(*status)) {
     return 0xffffffff;
   }
@@ -605,18 +602,23 @@ U_CAPI int32_t U_EXPORT2 ures_getInt(const UResourceBundle* resB, UErrorCode *st
     *status = U_ILLEGAL_ARGUMENT_ERROR;
     return 0xffffffff;
   }
-  uintValue = RES_GET_UINT(resB->fRes);
-  returnValue = (int32_t)(uintValue<<4)>>4;
-  return returnValue;
+  if(RES_GET_TYPE(resB->fRes) != RES_INT) {
+    *status = U_RESOURCE_TYPE_MISMATCH;
+    return 0xffffffff;
+  }
+  return RES_GET_INT(resB->fRes);
 }
 
 U_CAPI uint32_t U_EXPORT2 ures_getUInt(const UResourceBundle* resB, UErrorCode *status) {
-  
   if (status==NULL || U_FAILURE(*status)) {
     return 0xffffffff;
   }
   if(resB == NULL) {
     *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return 0xffffffff;
+  }
+  if(RES_GET_TYPE(resB->fRes) != RES_INT) {
+    *status = U_RESOURCE_TYPE_MISMATCH;
     return 0xffffffff;
   }
   return RES_GET_UINT(resB->fRes);
