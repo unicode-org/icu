@@ -273,15 +273,6 @@ static  void changeState_2022(UConverter* _this,
 UCNV_TableStates_2022 getKey_2022(char source,
                                   int32_t* key,
                                   int32_t* offset);
-/* gets targetUniChar value from an
- * MBCS converter
- */
-
-static void getUniCharFromUnicodeMBCS(UConverterSharedData* sharedData, UBool useFallback, UChar sourceChar, 
-                                      uint32_t* value, UConverterCallbackReason *reason, int32_t* length, 
-                                      int* plane, UErrorCode* err);
-
-    
 
 static void
 _ISO2022Open(UConverter *cnv, const char *name, const char *locale, UErrorCode *errorCode) {
@@ -645,7 +636,6 @@ U_CFUNC void T_UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* arg
     CompactByteArray  *myFromUnicodeSBCS = NULL;
     CompactByteArray  *myFromUnicodeSBCSFallback = NULL;
     UChar32 targetUniChar = missingCharMarker;
-    int plane;
     StateEnum currentState=ASCII;
     Cnv2022Type myType;
     UChar mySourceChar = 0x0000;
@@ -794,14 +784,12 @@ U_CFUNC void T_UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* arg
                         break;
 
                     case MBCS:
-                                                
-                        getUniCharFromUnicodeMBCS(myConverterData->fromUnicodeConverter->sharedData,
-                                                  myConverterData->fromUnicodeConverter->useFallback, 
-                                                  mySourceChar, &targetValue,&reason, &length,
-                                                  &plane /*dummy argument*/,err);
+                        length= _MBCSFromUChar32(myConverterData->fromUnicodeConverter->sharedData,
+                                                mySourceChar,&targetValue,args->converter->useFallback);
+                        
                         targetUniChar = (UChar32) targetValue;
             
-                       if(U_FAILURE(*err)){
+                       if(length==0x0000){
                             targetUniChar = missingCharMarker;
                             *err =U_ZERO_ERROR;
                        } 
@@ -883,8 +871,13 @@ U_CFUNC void T_UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* arg
 
             }/* end of end if(targetUniChar==missingCharMarker)*/
             else{
-                myConverterData->currentState=currentState=(StateEnum)(currentState<7)? currentState+1:0;
+                
                 iterCount = (iterCount<8)? iterCount+1 : 0;
+                if(mySourceChar>0x00ff && currentState==7){
+                    myConverterData->currentState=currentState=(StateEnum)4;
+                }
+                else
+                    myConverterData->currentState=currentState=(StateEnum)(currentState<7)? currentState+1:0;
                 
                 if((currentState!= initIterState) ){
 
@@ -1334,10 +1327,7 @@ U_CFUNC void T_UConverter_toUnicode_ISO_2022(UConverterToUnicodeArgs *args,
 
             saveThis = args->converter;
             args->offsets = NULL;
-            /* While in ISO-2022-JP2 we reached the end of the buffer after finding 
-             * ASCII escape sequence. We need to find if the the escape sequence is
-             * for next char or not.
-             */
+
             if(*(args->source) == 0x20 || *(args->source) == 0x0A || *(args->source) == 0x0D
                 || *(args->source) ==0x09 || *(args->source) ==0x0B){
                 
@@ -1565,140 +1555,6 @@ U_CFUNC void T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverterToUnicodeAr
  */
  const char* getEndOfBuffer_2022_KR(UConverterToUnicodeArgs* args, UErrorCode* err);
 
-void getUniCharFromUnicodeMBCS(UConverterSharedData* sharedData, UBool useFallback, UChar sourceChar, uint32_t* value,
-                                    UConverterCallbackReason *reason, int32_t* length, int* plane, UErrorCode* err){
-    
-    uint32_t i;
-    
-    const uint16_t *table=sharedData->table->mbcs.fromUnicodeTable;
-    const uint8_t *bytes=sharedData->table->mbcs.fromUnicodeBytes;
-    uint8_t outputType=sharedData->table->mbcs.outputType;
-    
-    i=0x440+2*((uint32_t)table[sourceChar>>10]+((sourceChar>>4)&0x3f));
-
-    /* is this code point assigned, or do we use fallbacks? */
-    if((table[i++]&(1<<(sourceChar&0xf)))!=0 || useFallback) {
-        const uint8_t *p;
-
-        /* get the bytes and the length for the output */
-        switch(outputType) {
-        case MBCS_OUTPUT_1:
-            p=bytes+(16*(uint32_t)table[i]+(sourceChar&0xf));
-            *value=*p;
-            *length=1;
-            break;
-        case MBCS_OUTPUT_2:
-            p=bytes+(16*(uint32_t)table[i]+(sourceChar&0xf))*2;
-#           if U_IS_BIG_ENDIAN
-                *value=*(uint16_t *)p;
-#           else
-                *value=((uint32_t)*p<<8)|p[1];
-#           endif
-            if(*value<=0xff) {
-                *length=1;
-            } else {
-                *length=2;
-            }
-            break;
-        case MBCS_OUTPUT_3:
-        {
-            uint8_t planeVal;
-            p=bytes+(16*(uint32_t)table[i]+(sourceChar&0xf))*3;
-            *value=((uint32_t)*p<<16)|((uint32_t)p[1]<<8)|p[2];
-            planeVal = (uint8_t) ((*value)>>16);
-            if(planeVal >0x80 && planeVal<0x89){
-                *plane = (int)(planeVal - 0x80);
-                *value -= (planeVal<<16);
-            }else *plane =-1;
-
-            if(*value<=0xff) {
-                *length=1;
-            } else if(*value<=0xffff) {
-                *length=2;
-            } else {
-                *length=3;
-            }
-            break;
-        }
-        case MBCS_OUTPUT_4:
-            p=bytes+(16*(uint32_t)table[i]+(sourceChar&0xf))*4;
-#           if U_IS_BIG_ENDIAN
-                *value=*(uint32_t *)p;
-#           else
-                *value=((uint32_t)*p<<24)|((uint32_t)p[1]<<16)|((uint32_t)p[2]<<8)|p[3];
-#           endif
-            if(*value<=0xff) {
-                *length=1;
-            } else if(*value<=0xffff) {
-                *length=2;
-            } else if(*value<=0xffffff) {
-                *length=3;
-            } else {
-                *length=4;
-            }
-            break;
-        case MBCS_OUTPUT_3_EUC:
-            p=bytes+(16*(uint32_t)table[i]+(sourceChar&0xf))*2;
-#           if U_IS_BIG_ENDIAN
-                *value=*(uint16_t *)p;
-#           else
-                *value=((uint32_t)*p<<8)|p[1];
-#           endif
-            /* EUC 16-bit fixed-length representation */
-            if(*value<=0xff) {
-                *length=1;
-            } else if((*value&0x8000)==0) {
-                *value|=0x8e8000;
-                *length=3;
-            } else if((*value&0x80)==0) {
-                *value|=0x8f0080;
-                *length=3;
-            } else {
-                *length=2;
-            }
-            break;
-        case MBCS_OUTPUT_4_EUC:
-            p=bytes+(16*(uint32_t)table[i]+(sourceChar&0xf))*3;
-            *value=((uint32_t)*p<<16)|((uint32_t)p[1]<<8)|p[2];
-            /* EUC 16-bit fixed-length representation applied to the first two bytes */
-            if(*value<=0xff) {
-                *length=1;
-            } else if(*value<=0xffff) {
-                *length=2;
-            } else if((*value&0x800000)==0) {
-                *value|=0x8e800000;
-                *length=4;
-            } else if((*value&0x8000)==0) {
-                *value|=0x8f008000;
-                *length=4;
-            } else {
-                *length=3;
-            }
-            break;
-        default:
-            /* must not occur */
-            *value=0;
-            *length=0;
-            break;
-        }
-
-        /* is the codepage value really an "unassigned" indicator? */
-        if(*value==0 && sourceChar!=0 && (table[i-1]&(1<<(sourceChar&0xf)))==0) {
-           
-            *reason=UCNV_UNASSIGNED;
-            *err=U_INVALID_CHAR_FOUND;
-            return;
-        }
-    } else {
-        /* callback(unassigned) */
-        *reason=UCNV_UNASSIGNED;
-        *err=U_INVALID_CHAR_FOUND;
-        return;
-    }   
-}
-
-
-
 
 U_CFUNC void UConverter_fromUnicode_ISO_2022_KR(UConverterFromUnicodeArgs* args, UErrorCode* err){
 
@@ -1782,16 +1638,12 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR(UConverterFromUnicodeArgs* args,
                 }
             }
 
-            getUniCharFromUnicodeMBCS(myConverterData->fromUnicodeConverter->sharedData,
-                                      myConverterData->fromUnicodeConverter->useFallback, 
-                                      mySourceChar, &targetValue,&reason, &length,
-                                      &plane /*dummy argument*/,err);
+            length= _MBCSFromUChar32(myConverterData->fromUnicodeConverter->sharedData,
+                                     mySourceChar,&targetValue,args->converter->useFallback);
             targetUniChar = (UChar32) targetValue;
-            if(*err>0){
-                goto CALLBACK;
-            }
+
             /* only DBCS or SBCS characters are expected*/
-            if(length > 2){
+            if(length > 2 || length==0){
                 reason =UCNV_ILLEGAL;
                 *err =U_INVALID_CHAR_FOUND;
                 goto CALLBACK;
@@ -1973,16 +1825,12 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnic
             }
         
             
-            getUniCharFromUnicodeMBCS(myConverterData->fromUnicodeConverter->sharedData,
-                                      myConverterData->fromUnicodeConverter->useFallback, 
-                                      mySourceChar, &targetValue,&reason, &length,
-                                      &plane /*dummy argument*/,err);
+            length= _MBCSFromUChar32(myConverterData->fromUnicodeConverter->sharedData,
+                                     mySourceChar,&targetValue,args->converter->useFallback);
             targetUniChar = (UChar32) targetValue;
-            if(*err>0){
-                goto CALLBACK;
-            }
+
             /* only DBCS or SBCS characters are expected*/
-            if(length > 2){
+            if(length > 2 || length==0){
                 reason =UCNV_ILLEGAL;
                 *err =U_INVALID_CHAR_FOUND;
                 goto CALLBACK;
@@ -2465,18 +2313,23 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN(UConverterFromUnicodeArgs* args,
 
                     case MBCS:
                        
-                        getUniCharFromUnicodeMBCS(myConverterData->fromUnicodeConverter->sharedData,
-                                                  myConverterData->fromUnicodeConverter->useFallback, 
-                                                  mySourceChar, &targetValue,&reason, &length,
-                                                  &plane /*dummy argument*/,err);
-                        targetUniChar = (UChar32) targetValue;
+                       length= _MBCSFromUChar32(myConverterData->fromUnicodeConverter->sharedData,
+                                     mySourceChar,&targetValue,args->converter->useFallback);
+
+                       targetUniChar = (UChar32) targetValue;
             
-                       if(U_FAILURE(*err)){
+                       if(length==0){
                             targetUniChar = missingCharMarker;
-                            *err =U_ZERO_ERROR;
                        } 
-                        /* only DBCS or SBCS characters are expected*/
-                       else if(length > 2){
+                       else if(length==3){
+                            uint8_t planeVal = (uint8_t) ((targetValue)>>16);
+                            if(planeVal >0x80 && planeVal<0x89){
+                                plane = (int)(planeVal - 0x80);
+                                targetUniChar -= (planeVal<<16);
+                            }else 
+                                plane =-1;
+                       }
+                       else if(length >3){
                             reason =UCNV_ILLEGAL;
                             *err =U_INVALID_CHAR_FOUND;
                             goto CALLBACK;
@@ -2536,8 +2389,10 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_CN(UConverterFromUnicodeArgs* args,
 
             }/* end of end if(targetUniChar==missingCharMarker)*/
             else{
-                myConverterData->currentState=currentState=(StateEnum)(currentState<3)? currentState+1:0;
+                
+
                 iterCount = (iterCount<3)? iterCount+1 : 0;
+                myConverterData->currentState=currentState=(StateEnum)(currentState<3)? currentState+1:0;
                 
                 if((currentState!= initIterState) ){
 
