@@ -603,9 +603,10 @@ public:
      * @param theCurrency a 3-letter ISO code indicating new currency
      * to use.  It need not be null-terminated.  May be the empty
      * string or NULL to indicate no currency.
-     * @draft ICU 2.6
+     * @param ec input-output error code
+     * @draft ICU 3.0
      */
-    virtual void setCurrency(const UChar* theCurrency);
+    virtual void setCurrency(const UChar* theCurrency, UErrorCode& ec);
 
     /**
      * Gets the currency used to display currency
@@ -695,7 +696,7 @@ private:
     UBool      fParseIntegerOnly;
 
     // ISO currency code
-    UChar      currency[4];
+    UChar      fCurrency[4];
 
     friend class ICUNumberFormatFactory; // access to makeInstance, EStyles
     friend class ICUNumberFormatService;

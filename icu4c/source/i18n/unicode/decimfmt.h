@@ -1096,10 +1096,12 @@ public:
      * the currency is used if and when this object becomes a
      * currency format through the application of a new pattern.
      * @param theCurrency a 3-letter ISO code indicating new currency
-     * to use.  It need not be null-terminated.
-     * @stable ICU 2.2
+     * to use.  It need not be null-terminated.  May be the empty
+     * string or NULL to indicate no currency.
+     * @param ec input-output error code
+     * @draft ICU 3.0
      */
-    virtual void setCurrency(const UChar* theCurrency);
+    virtual void setCurrency(const UChar* theCurrency, UErrorCode& ec);
 
     /**
      * The resource tags we use to retrieve decimal format data from
