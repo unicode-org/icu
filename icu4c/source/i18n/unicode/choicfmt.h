@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2001, International Business Machines
+*   Copyright (C) 1997-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -15,7 +15,7 @@
 *                           boolean array.
 *   4/10/97     aliu        Clean up.  Modified to work on AIX.
 *   8/6/97      nos         Removed overloaded constructor, member var 'buffer'.
-*    07/22/98    stephen        Removed operator!= (implemented in Format)
+*   07/22/98    stephen     Removed operator!= (implemented in Format)
 ********************************************************************************
 */
  
@@ -253,7 +253,7 @@ public:
      *                  pattern cannot be parsed, set to failure code.
      * @stable ICU 2.0
      */
-    ChoiceFormat(const UnicodeString& newPattern,
+    ChoiceFormat(const UnicodeString& pattern,
                  UErrorCode& status);
 
 
@@ -296,18 +296,18 @@ public:
     /**
      * Copy constructor.
      *
-     * @param   ChoiceFormat object to be copied from
+     * @param that   ChoiceFormat object to be copied from
      * @stable ICU 2.0
      */
-    ChoiceFormat(const ChoiceFormat&);
+    ChoiceFormat(const ChoiceFormat& that);
 
     /**
      * Assignment operator.
      *
-     * @param   ChoiceFormat object to be copied
+     * @param that   ChoiceFormat object to be copied
      * @stable ICU 2.0
      */
-    const ChoiceFormat& operator=(const ChoiceFormat&);
+    const ChoiceFormat& operator=(const ChoiceFormat& that);
 
     /**
      * Destructor.
