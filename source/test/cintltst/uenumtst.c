@@ -38,18 +38,21 @@ typedef struct chArrayContext chArrayContext;
 
 #define cont ((chArrayContext *)en->context)
 
-void chArrayClose(UEnumeration *en) {
+void U_CALLCONV
+chArrayClose(UEnumeration *en) {
   if(cont->currUChar != NULL) {
     uprv_free(cont->currUChar);
   }
   uprv_free(en);
 }
 
-int32_t chArrayCount(UEnumeration *en, UErrorCode *status) {
+int32_t U_CALLCONV
+chArrayCount(UEnumeration *en, UErrorCode *status) {
   return cont->maxIndex;
 }
 
-const UChar* chArrayUNext(UEnumeration *en, int32_t *resultLength, UErrorCode *status) {
+const UChar* U_CALLCONV 
+chArrayUNext(UEnumeration *en, int32_t *resultLength, UErrorCode *status) {
   if(cont->currIndex >= cont->maxIndex) {
     return NULL;
   }
@@ -65,7 +68,8 @@ const UChar* chArrayUNext(UEnumeration *en, int32_t *resultLength, UErrorCode *s
   return cont->currUChar;
 }
 
-const char* chArrayNext(UEnumeration *en, int32_t *resultLength, UErrorCode *status) {
+const char* U_CALLCONV
+chArrayNext(UEnumeration *en, int32_t *resultLength, UErrorCode *status) {
   if(cont->currIndex >= cont->maxIndex) {
     return NULL;
   }
@@ -76,7 +80,8 @@ const char* chArrayNext(UEnumeration *en, int32_t *resultLength, UErrorCode *sta
   return cont->currChar;
 }
 
-void chArrayReset(UEnumeration *en, UErrorCode *status) {
+void U_CALLCONV
+chArrayReset(UEnumeration *en, UErrorCode *status) {
   cont->currIndex = 0;
 }
 
