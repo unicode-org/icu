@@ -729,7 +729,7 @@ void NumberFormatRegressionTest::Test4070798 (void)
     UnicodeString expectedPercent(chars3, 9, 9);
 
     UErrorCode status = U_ZERO_ERROR;
-    formatter = NumberFormat::createInstance(Locale::FRANCE, status);
+    formatter = NumberFormat::createInstance(Locale("fr_FR_PREEURO"), status);
     failure(status, "NumberFormat::createNumberInstance");
     tempString = formatter->format (-5789.9876, tempString);
 
@@ -857,7 +857,7 @@ void NumberFormatRegressionTest::Test4071014 (void)
     UnicodeString expectedPercent("-578.999%");
 
     UErrorCode status = U_ZERO_ERROR;
-    formatter = NumberFormat::createInstance(Locale::GERMANY, status);
+    formatter = NumberFormat::createInstance(Locale("de_DE_PREEURO"), status);
     failure(status, "NumberFormat::createNumberInstance");
     tempString.remove();
     tempString = formatter->format (-5789.9876, tempString);
@@ -917,7 +917,7 @@ void NumberFormatRegressionTest::Test4071859 (void)
     UnicodeString expectedPercent("-578.999%");
 
     UErrorCode status = U_ZERO_ERROR;
-    formatter = NumberFormat::createInstance(Locale::ITALY, status);
+    formatter = NumberFormat::createInstance(Locale("it_IT_PREEURO"), status);
     failure(status, "NumberFormat::createNumberInstance");
     tempString = formatter->format (-5789.9876, tempString);
 
