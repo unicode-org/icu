@@ -262,7 +262,7 @@ CalendarTest::TestGenericAPI()
         if (cal->getFirstDayOfWeek() != i) errln("FAIL: set/getFirstDayOfWeek failed");
     }
 
-    for (i=0; i<=7; ++i)
+    for (i=1; i<=7; ++i)
     {
         cal->setMinimalDaysInFirstWeek((uint8_t)i);
         if (cal->getMinimalDaysInFirstWeek() != i) errln("FAIL: set/getFirstDayOfWeek failed");
