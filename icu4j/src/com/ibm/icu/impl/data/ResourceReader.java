@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/ResourceReader.java,v $
- * $Date: 2004/02/06 21:54:04 $
- * $Revision: 1.6 $
+ * $Date: 2004/03/22 23:55:50 $
+ * $Revision: 1.7 $
  *
  *******************************************************************************
  */
@@ -15,9 +15,11 @@ package com.ibm.icu.impl.data;
 import java.io.*;
 
 import com.ibm.icu.impl.ICUData;
+import com.ibm.icu.impl.Utility;
 
 /**
- * A reader for text resource data in the current package.  The
+ * A reader for text resource data in the current package or the package
+ * of a given class object.  The
  * resource data is loaded through the class loader, so it will
  * typically be a file in the same directory as the *.class files, or
  * a file within a JAR file in the corresponding subdirectory.  The
@@ -25,22 +27,26 @@ import com.ibm.icu.impl.ICUData;
  * resource is opened by constructing a <code>ResourceReader</code>
  * object the encoding is specified.
  *
- * <p>Although this class has a public API, it is designed for
- * internal use by classes in the <code>com.ibm.icu.text</code> package.
- *
  * @author Alan Liu
  */
 public class ResourceReader {
     private BufferedReader reader;
     private String resourceName;
     private String encoding; // null for default encoding
-    private boolean isReset; // TRUE if we are at the start of the file
+    private Class root;
+    
+    /**
+     * The one-based line number. Has the special value -1 before the
+     * object is initialized. Has the special value 0 after initialization
+     * but before the first line is read.
+     */
+    private int lineNo;
 
     /**
      * Construct a reader object for the text file of the given name
      * in this package, using the given encoding.
      * @param resourceName the name of the text file located in this
-     * package
+     * package's ".data" subpackage.
      * @param encoding the encoding of the text file; if unsupported
      * an exception is thrown
      * @exception UnsupportedEncodingException if
@@ -48,23 +54,49 @@ public class ResourceReader {
      */
     public ResourceReader(String resourceName, String encoding)
         throws UnsupportedEncodingException {
-
-        this.resourceName = "data/" + resourceName;
-        this.encoding = encoding;
-        isReset = false;
-        _reset();
+        this(ICUData.class, "data/" + resourceName, encoding);
     }
 
     /**
      * Construct a reader object for the text file of the given name
      * in this package, using the default encoding.
      * @param resourceName the name of the text file located in this
-     * package
+     * package's ".data" subpackage.
      */
     public ResourceReader(String resourceName) {
-        this.resourceName = "data/" + resourceName;
+        this(ICUData.class, "data/" + resourceName);
+    }
+
+    /**
+     * Construct a reader object for the text file of the given name
+     * in the given class's package, using the given encoding.
+     * @param resourceName the name of the text file located in the
+     * given class's package.
+     * @param encoding the encoding of the text file; if unsupported
+     * an exception is thrown
+     * @exception UnsupportedEncodingException if
+     * <code>encoding</code> is not supported by the JDK.
+     */
+    public ResourceReader(Class rootClass, String resourceName, String encoding)
+        throws UnsupportedEncodingException {
+        this.root = rootClass;
+        this.resourceName = resourceName;
+        this.encoding = encoding;
+        lineNo = -1;
+        _reset();
+    }
+
+    /**
+     * Construct a reader object for the text file of the given name
+     * in the given class's package, using the default encoding.
+     * @param resourceName the name of the text file located in the
+     * given class's package.
+     */
+    public ResourceReader(Class rootClass, String resourceName) {
+        this.root = rootClass;
+        this.resourceName = resourceName;
         this.encoding = null;
-        isReset = false;
+        lineNo = -1;
         try {
             _reset();
         } catch (UnsupportedEncodingException e) {}
@@ -75,19 +107,70 @@ public class ResourceReader {
      * if the end of the file has been reached.
      */
     public String readLine() throws IOException {
-        if (isReset) {
+        if (lineNo == 0) {
             // Remove BOMs
-            isReset = false;
+            ++lineNo;
             String line = reader.readLine();
             if (line.charAt(0) == '\uFFEF' ||
                 line.charAt(0) == '\uFEFF') {
-                return line.substring(1);
+                line = line.substring(1);
             }
             return line;
         }
+        ++lineNo;
         return reader.readLine();
     }
 
+    /**
+     * Read a line, ignoring blank lines and lines that start with
+     * '#'.
+     * @param trim if true then trim leading rule white space.
+     */
+    public String readLineSkippingComments(boolean trim) throws IOException {
+        for (;;) {
+            String line = readLine();
+            if (line == null) {
+                return line;
+            }
+            // Skip over white space
+            int pos = Utility.skipWhitespace(line, 0);
+            // Ignore blank lines and comment lines
+            if (pos == line.length() || line.charAt(pos) == '#') {
+                continue;
+            }
+            // Process line
+            if (trim) line = line.substring(pos);
+            return line;
+        }
+    }
+
+
+    /**
+     * Read a line, ignoring blank lines and lines that start with
+     * '#'. Do not trim leading rule white space.
+     */
+    public String readLineSkippingComments() throws IOException {
+        return readLineSkippingComments(false);
+    }
+
+    /**
+     * Return the one-based line number of the last line returned by
+     * readLine() or readLineSkippingComments(). Should only be called
+     * after a call to one of these methods; otherwise the return
+     * value is undefined.
+     */
+    public int getLineNumber() {
+        return lineNo;
+    }
+    
+    /**
+     * Return a string description of the position of the last line
+     * returned by readLine() or readLineSkippingComments().
+     */
+    public String describePosition() {
+    	return resourceName + ':' + lineNo;
+    }
+    
     /**
      * Reset this reader so that the next call to
      * <code>readLine()</code> returns the first line of the file
@@ -113,10 +196,10 @@ public class ResourceReader {
      * are large, e.g., 400k.
      */
     private void _reset() throws UnsupportedEncodingException {
-        if (isReset) {
+        if (lineNo == 0) {
             return;
         }
-		InputStream is = ICUData.getStream(resourceName);
+		InputStream is = ICUData.getStream(root, resourceName);
         if (is == null) {
             throw new IllegalArgumentException("Can't open " + resourceName);
         }
@@ -125,6 +208,6 @@ public class ResourceReader {
             (encoding == null) ? new InputStreamReader(is) :
                                  new InputStreamReader(is, encoding);
         reader = new BufferedReader(isr);
-        isReset = true;
+        lineNo = 0;
     }
 }
