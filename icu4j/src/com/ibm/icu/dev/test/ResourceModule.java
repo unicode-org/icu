@@ -1,9 +1,5 @@
 package com.ibm.icu.dev.test;
 
-import com.ibm.icu.dev.test.TestDataModule.DataMap;
-import com.ibm.icu.dev.test.TestDataModule.TestData;
-import com.ibm.icu.impl.ICULocaleData;
-
 import java.util.ResourceBundle;
 
 /**
@@ -17,7 +13,7 @@ public class ResourceModule extends TestDataModule {
     /**
      * For internal use.
      */
-    static final String TESTS = "Tests";
+    static final String TESTS = "TestData";
 
     /**
      * For internal use.
@@ -275,8 +271,11 @@ public class ResourceModule extends TestDataModule {
     static class RBTestData extends TestData {
 	ResourceModule m;
 	RBDataMap info;
-	Object[][][] settings;
-	Object[][] cases;
+	Object[] settings;
+    /** 
+     * changed to fit the c genrb format. this is actually Object[] {Object[]}
+     */
+	Object[] cases; 
 	String[] headers;
 	int sx;
 	int cx;
@@ -303,14 +302,14 @@ public class ResourceModule extends TestDataModule {
 	    }
 
 	    try {
-		this.settings = (Object[][][])namedData.getValue(SETTINGS);
+		this.settings = (Object[])namedData.getValue(SETTINGS);
 	    }
 	    catch (ClassCastException e) {
 		m.log.errln("Test " + name + " in module " + m.getName() + " has bad type for " + SETTINGS);
 	    }
 
 	    try {
-		this.cases = (Object[][])namedData.getValue(CASES);
+		this.cases = (Object[])namedData.getValue(CASES);
 	    }
 	    catch (ClassCastException e) {
 		m.log.errln("Test " + name + " in module " + m.getName() + " has bad type for " + CASES);
@@ -338,7 +337,7 @@ public class ResourceModule extends TestDataModule {
 	public DataMap nextSettings() {
 	    if (settings != null && sx < settings.length) {
 		cx = 0;
-		NamedArray na = NamedArray.create(settings[sx++]);
+		NamedArray na = NamedArray.create((Object[][])settings[sx++]);
 		if (na.count() < 0) {
 		    m.log.errln("Bad settings data for settings " + (sx-1));
 		    return null;
@@ -356,7 +355,7 @@ public class ResourceModule extends TestDataModule {
 	 */
 	public DataMap nextCase() {
 	    if (cases != null && cx < cases.length) {
-		NamedArray na = NamedArray.create(headers, cases[cx++]);
+		NamedArray na = NamedArray.create(headers, (Object[])cases[cx++]);
 		if (na.count() < 0) {
 		    m.log.errln("Bad cases data for case " + (cx-1));
 		} else {

@@ -24,7 +24,7 @@ public class ModuleTestSampleData extends ListResourceBundle {
 	}},
 	
 
-	{ "Tests", new Object[][] {
+	{ "TestData", new Object[][] {
 	    { "Test01", new Object[][] {
 		{ "Info", new Object[][] {
 		    { "Description", "A typical test using both settings and cases." },
@@ -32,26 +32,31 @@ public class ModuleTestSampleData extends ListResourceBundle {
 		      "uses the default headers defined for the module.  " +
 		      "There are two sets of settings and three cases." },
 		}},
-		{ "Settings", new Object[][][] {
+		{ "Settings", new Object[] {
+            new Object[][]
 		    {{ "aString", "this is a string" },
 		     { "anInt", "43" },
 		     { "aBoolean", "false" }},
-		    {{ "aString", "this is another string" },
+		    new Object[][] 
+            {{ "aString", "this is another string" },
 		     { "aBoolean", "true" }}
 		}},
-		{ "Cases", new Object[][] {
-		    { new String[] { "one", "two", "three" },
-		      new String[] { "24", "48", "72" },
-		      new String[] { "true", "false", "true" }
-		    },
-		    { new String[] { "four", "five", "six" },
-		      new String[] { "-1", "-5", "-10" },
-		      new String[] { "true", "false", "false" }
-		    },
-		    { new String[] { "bagel", "peanuts", "carrot" },
-		      new String[] { "0", "00001", "10101" },
-		      new String[] { "false", "false", "False" }
-		    },
+		{ "Cases", new Object[] {
+            new Object[] {
+    		    new String[] { "one", "two", "three" },
+    		    new String[] { "24", "48", "72" },
+    		    new String[] { "true", "false", "true" }
+    		},
+    		new Object[] { 
+                new String[] { "four", "five", "six" },
+    		    new String[] { "-1", "-5", "-10" },
+    		    new String[] { "true", "false", "false" }
+    		},
+    		new Object[] { 
+                new String[] { "bagel", "peanuts", "carrot" },
+    		    new String[] { "0", "00001", "10101" },
+    		    new String[] { "false", "false", "False" }
+            },
 		}}
 	    }},
 
@@ -63,10 +68,10 @@ public class ModuleTestSampleData extends ListResourceBundle {
 			"aString", "anInt", "aBoolean"
 		    }},
 		}},
-		{ "Cases", new Object[][] {
-		    { "Superstring", "42", "true" },
-		    { "Underdog", "12", "false" },
-		    { "ScoobyDoo", "7", "TrUe" }
+		{ "Cases", new Object[] {
+		    new Object[] { "Superstring", "42", "true" },
+		    new Object[] { "Underdog", "12", "false" },
+		    new Object[] { "ScoobyDoo", "7", "TrUe" }
 		}}
 	    }},
 
@@ -94,11 +99,11 @@ public class ModuleTestSampleData extends ListResourceBundle {
 			"IsGood", "Data",
 		    }},
 		}},
-		{ "Cases", new Object[][] {
-		    { "Good", "23" },
-		    { "Good", "-123" },
-		    { "Bad", "Whoops" },
-		    { "Not Executed", "35" },
+		{ "Cases", new Object[] {
+		    new Object[] { "Good", "23" },
+		    new Object[] { "Good", "-123" },
+		    new Object[] { "Bad", "Whoops" },
+		    new Object[] { "Not Executed", "35" },
 		}},
 	    }},
 
@@ -113,17 +118,17 @@ public class ModuleTestSampleData extends ListResourceBundle {
 			"Factor",
 		    }},
 		}},
-		{ "Settings" , new Object[][][] {
-		    {{ "Value", "210" }},
-		    {{ "Value", "420" }},
-		    {{ "Value", "42" }},
-		    {{ "Value", "Not reached." }}
+		{ "Settings" , new Object[] {
+		    new Object[][] {{ "Value", "210" }},
+		    new Object[][] {{ "Value", "420" }},
+		    new Object[][] {{ "Value", "42" }},
+		    new Object[][] {{ "Value", "Not reached." }}
 		}},
-		{ "Cases", new Object[][] {
-		    { "2" },
-		    { "3" },
-		    { "5" },
-		    { "7" },
+		{ "Cases", new Object[] {
+		    new Object[] { "2" },
+		    new Object[] { "3" },
+		    new Object[] { "5" },
+		    new Object[] { "7" },
 		}},
 	    }},
 
@@ -134,10 +139,10 @@ public class ModuleTestSampleData extends ListResourceBundle {
 			"One", "Two", "Three"
 		    }},
 		}},
-		{ "Cases", new Object[][] {
-		    { "1", "2", "3" },
-		    { "4", "5" }, // too short
-		    { "6", "7", "8" },
+		{ "Cases", new Object[] {
+		    new Object[] { "1", "2", "3" },
+		    new Object[] { "4", "5" }, // too short
+		    new Object[] { "6", "7", "8" },
 		}},
 	    }},
 	}},
