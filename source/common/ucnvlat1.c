@@ -18,6 +18,11 @@
 #include "ucnv_bld.h"
 #include "ucnv_cnv.h"
 
+/* control optimizations according to the platform */
+#define LATIN1_UNROLL_TO_UNICODE 1
+#define LATIN1_UNROLL_FROM_UNICODE 1
+#define ASCII_UNROLL_TO_UNICODE 1
+
 /* ISO 8859-1 --------------------------------------------------------------- */
 
 /* This is a table-less and callback-less version of _MBCSSingleToBMPWithOffsets(). */
@@ -29,10 +34,15 @@ _Latin1ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     int32_t targetCapacity, length;
     int32_t *offsets;
 
+    int32_t sourceIndex;
+
     /* set up the local pointers */
     source=(const uint8_t *)pArgs->source;
     target=pArgs->target;
     targetCapacity=pArgs->targetLimit-pArgs->target;
+    offsets=pArgs->offsets;
+
+    sourceIndex=0;
 
     /*
      * since the conversion here is 1:1 UChar:uint8_t, we need only one counter
@@ -47,6 +57,54 @@ _Latin1ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
         length=targetCapacity;
     }
 
+#if LATIN1_UNROLL_TO_UNICODE
+    if(targetCapacity>=16) {
+        int32_t count, loops;
+
+        loops=count=targetCapacity>>4;
+        length=targetCapacity&=0xf;
+        do {
+            *target++=*source++;
+            *target++=*source++;
+            *target++=*source++;
+            *target++=*source++;
+            *target++=*source++;
+            *target++=*source++;
+            *target++=*source++;
+            *target++=*source++;
+            *target++=*source++;
+            *target++=*source++;
+            *target++=*source++;
+            *target++=*source++;
+            *target++=*source++;
+            *target++=*source++;
+            *target++=*source++;
+            *target++=*source++;
+        } while(--count>0);
+
+        if(offsets!=NULL) {
+            do {
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+            } while(--loops>0);
+        }
+    }
+#endif
+
     /* conversion loop */
     while(targetCapacity>0) {
         *target++=*source++;
@@ -58,10 +116,7 @@ _Latin1ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     pArgs->target=target;
 
     /* set offsets */
-    offsets=pArgs->offsets;
     if(offsets!=NULL) {
-        int32_t sourceIndex=0;
-
         while(length>0) {
             *offsets++=sourceIndex++;
             --length;
@@ -136,6 +191,86 @@ _Latin1FromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     if(c!=0 && targetCapacity>0) {
         goto getTrail;
     }
+
+#if LATIN1_UNROLL_FROM_UNICODE
+    /* unroll the loop with the most common case */
+unrolled:
+    if(targetCapacity>=16) {
+        int32_t count, loops;
+        UChar u, oredChars;
+
+        loops=count=targetCapacity>>4;
+        do {
+            oredChars=u=*source++;
+            *target++=(uint8_t)u;
+            oredChars|=u=*source++;
+            *target++=(uint8_t)u;
+            oredChars|=u=*source++;
+            *target++=(uint8_t)u;
+            oredChars|=u=*source++;
+            *target++=(uint8_t)u;
+            oredChars|=u=*source++;
+            *target++=(uint8_t)u;
+            oredChars|=u=*source++;
+            *target++=(uint8_t)u;
+            oredChars|=u=*source++;
+            *target++=(uint8_t)u;
+            oredChars|=u=*source++;
+            *target++=(uint8_t)u;
+            oredChars|=u=*source++;
+            *target++=(uint8_t)u;
+            oredChars|=u=*source++;
+            *target++=(uint8_t)u;
+            oredChars|=u=*source++;
+            *target++=(uint8_t)u;
+            oredChars|=u=*source++;
+            *target++=(uint8_t)u;
+            oredChars|=u=*source++;
+            *target++=(uint8_t)u;
+            oredChars|=u=*source++;
+            *target++=(uint8_t)u;
+            oredChars|=u=*source++;
+            *target++=(uint8_t)u;
+            oredChars|=u=*source++;
+            *target++=(uint8_t)u;
+
+            /* were all 16 entries really valid? */
+            if(oredChars>max) {
+                /* no, return to the first of these 16 */
+                source-=16;
+                target-=16;
+                break;
+            }
+        } while(--count>0);
+        count=loops-count;
+        targetCapacity-=16*count;
+
+        if(offsets!=NULL) {
+            lastSource+=16*count;
+            while(count>0) {
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                --count;
+            }
+        }
+
+        c=0;
+    }
+#endif
 
     while(targetCapacity>0) {
         /*
@@ -251,6 +386,10 @@ getTrail:
                 *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
                 break;
             }
+
+#if LATIN1_UNROLL_FROM_UNICODE
+            goto unrolled;
+#endif
         }
     }
 
@@ -333,7 +472,6 @@ _ASCIIToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     int32_t *offsets;
 
     int32_t sourceIndex;
-    uint8_t b;
 
     /* set up the local pointers */
     source=(const uint8_t *)pArgs->source;
@@ -355,15 +493,80 @@ _ASCIIToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
         targetCapacity=length;
     }
 
+#if ASCII_UNROLL_TO_UNICODE
+    /* unroll the loop with the most common case */
+unrolled:
+    if(targetCapacity>=16) {
+        int32_t count, loops;
+        UChar oredChars;
+
+        loops=count=targetCapacity>>4;
+        do {
+            oredChars=*target++=*source++;
+            oredChars|=*target++=*source++;
+            oredChars|=*target++=*source++;
+            oredChars|=*target++=*source++;
+            oredChars|=*target++=*source++;
+            oredChars|=*target++=*source++;
+            oredChars|=*target++=*source++;
+            oredChars|=*target++=*source++;
+            oredChars|=*target++=*source++;
+            oredChars|=*target++=*source++;
+            oredChars|=*target++=*source++;
+            oredChars|=*target++=*source++;
+            oredChars|=*target++=*source++;
+            oredChars|=*target++=*source++;
+            oredChars|=*target++=*source++;
+            oredChars|=*target++=*source++;
+
+            /* were all 16 entries really valid? */
+            if(oredChars>0x7f) {
+                /* no, return to the first of these 16 */
+                source-=16;
+                target-=16;
+                break;
+            }
+        } while(--count>0);
+        count=loops-count;
+        targetCapacity-=16*count;
+
+        if(offsets!=NULL) {
+            lastSource+=16*count;
+            while(count>0) {
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                *offsets++=sourceIndex++;
+                --count;
+            }
+        }
+    }
+#endif
+
     /* conversion loop */
     while(targetCapacity>0) {
-        b=*source++;
-        if(b<=0x7f) {
-            *target++=b;
+        if((*target++=*source++)<=0x7f) {
             --targetCapacity;
         } else {
+            UConverter *cnv;
+
+            /* back out the illegal character */
+            --target;
+
             /* call the callback function with all the preparations and post-processing */
-            UConverter *cnv=pArgs->converter;
+            cnv=pArgs->converter;
 
             /* callback(illegal) */
             *pErrorCode=U_ILLEGAL_CHAR_FOUND;
@@ -385,7 +588,7 @@ _ASCIIToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
             pArgs->offsets=offsets;
 
             /* copy the current bytes to invalidCharBuffer */
-            cnv->invalidCharBuffer[0]=b;
+            cnv->invalidCharBuffer[0]=*(source-1);
             cnv->invalidCharLength=1;
 
             /* call the callback function */
@@ -418,6 +621,10 @@ _ASCIIToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                 *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
                 break;
             }
+
+#if ASCII_UNROLL_TO_UNICODE
+            goto unrolled;
+#endif
         }
     }
 
