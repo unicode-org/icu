@@ -13,15 +13,19 @@ es {
         Sequence { "& N < n\u0303, N\u0303 " }
     }
     Countries { 
+        AE { "Emiratos \u00C1rabes Unidos" }
         AR { "Argentina" }
-        BO { "Bolivia" }
         BE { "B\u00E9lgica" }
+        BH { "Bahr\u00E1in" }
+        BO { "Bolivia" }
         BR { "Brasil" }
+        BY { "Bielorrusia" }
         CA { "Canad\u00E1" }
         CH { "Suiza" }
         CL { "Chile" }
         CO { "Colombia" }
         CR { "Costa Rica" }
+        CZ { "Chequia" }
         DE { "Alemania" }
         DK { "Dinamarca" }
         DO { "Rep\u00FAblica Dominicana" }
@@ -36,42 +40,56 @@ es {
         GR { "Grecia" }
         GT { "Guatemala" }
         HN { "Honduras" }
+        HR { "Croacia" }
         HU { "Hungr\u00EDa" }
-        IE { "Irelanda" }
-        IT { "Italia" }
+        IE { "Irlanda" }
         IQ { "Irak" }
         IR { "Ir\u00E1n" }
-        JP { "Jap\u00F3n" }
+        IS { "Islandia" }
+        IT { "Italia" }
         JO { "Jordania" }
+        JP { "Jap\u00F3n" }
         KE { "Kenia" }
         KP { "Corea del Norte" }
         KR { "Corea del Sur" }
         LB { "L\u00EDbano" }
+        LT { "Lituania" }
+        LU { "Luxemburgo" }
+        LV { "Letonia" }
         MA { "Marruecos" }
         MX { "M\u00E9xico" }
         NI { "Nicaragua" }
         NL { "Pa\u00EDses Bajos" }
         NO { "Noruega" }
         NZ { "Nueva Zelanda" }
+        OM { "Om\u00E1n" }
         PA { "Panam\u00E1" }
         PE { "Per\u00FA" }
         PH { "Islas Filipinas" }
+        PK { "Pakist\u00E1n" }
         PL { "Polonia" }
         PR { "Puerto Rico" }
         PY { "Paraguay" }
+        RO { "Rumania" }
         RU { "Rusia" }
+        SA { "Arabia Saud\u00ED" }
         SD { "Sud\u00E1n" }
         SE { "Suecia" }
         SG { "Singapur" }
+        SI { "Eslovenia" }
+        SK { "Eslovaquia" }
+        SP { "Servia" }
         SV { "El Salvador" }
         SY { "Siria" }
         TH { "Tailandia" }
         TN { "T\u00FAnez" }
         TR { "Turqu\u00EDa" }
         TW { "Taiw\u00E1n" }
-        UY { "Uruguay" }
+        UA { "Ucraina" }
         US { "Estados Unidos" }
+        UY { "Uruguay" }
         VE { "Venezuela" }
+        ZA { "Sud\u00E1frica" }
     }
     DateTimeElements { 
             "2",
@@ -110,36 +128,66 @@ es {
             "a.C.",  // Said to be a.C. for antes de Cristo
             "d.C.",  // Said to be d.C. for despu\u00E9s de Cristo
     }
+    // Spanish does not capitalize the language names like English
     Languages { 
-        ar { "ar\u00E1bigo" }
+        ar { "\u00E1rabe" }
+        az { "azerbayano" }
+        be { "bielorruso" }
         bg { "b\u00FAlgaro" }
+        bh { "bihari" }
+        bn { "bengal\u00ED" }
+        ca { "catal\u00E1n" }
         cs { "checo" }
-        da { "dan\u00E1s" }
+        da { "dan\u00E9s" }
         de { "alem\u00E1n" }
         el { "griego" }
         en { "ingl\u00E9s" }
         es { "espa\u00F1ol" }
-        ga { "irland\u00E9s" }
-        fr { "franc\u00E9s" }
+        et { "estonio" }
+        eu { "vasco" }
+        fa { "farsi" }
         fi { "finland\u00E9s" }
+        fr { "franc\u00E9s" }
+        ga { "irland\u00E9s" }
+        gu { "gujarati" }
         he { "hebreo" }
+        hi { "hindi" }
         hr { "croata" }
         hu { "h\u00FAngaro" }
+        id { "indonesio" }
         it { "italiano" }
         ja { "japon\u00E9s" }
+        ka { "georgiano" }
+        kk { "kazajo" }
+        km { "kmer" }
+        kn { "canara" }
         ko { "coreano" }
+        ku { "kurdo" }
+        la { "lat\u00EDn" }
+        lt { "lituano" }
+        lv { "let\u00F3n" }
+        mk { "macedonio" }
+        mr { "marathi" }
+        my { "birmano" }
         nl { "holand\u00E9s" }
         no { "noruego" }
         pl { "polaco" }
         pt { "portugu\u00E9s" }
+        ro { "rumano" }
         ru { "ruso" }
         sk { "eslovaco" }
+        sl { "esloveno" }
         sq { "alban\u00E9s" }
         sr { "servio" }
         sv { "sueco" }
+        sw { "swahili" }
+        te { "telugu" }
         th { "tailand\u00E9s" }
         tr { "turco" }
         vi { "vietnam\u00E9s" }
+        uk { "ucraniano" }
+        ur { "urdu" }
+        uz { "uzbeko" }
         zh { "chino" }
         zu { "zul\u00FA" }
     }
