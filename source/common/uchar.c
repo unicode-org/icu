@@ -29,6 +29,7 @@
 #include "ucln_cmn.h"
 #include "utrie.h"
 #include "ustr_imp.h"
+#include "uprops.h"
 
 /* dynamically loaded Unicode character properties -------------------------- */
 
@@ -209,21 +210,15 @@ static UDataMemory *propsData=NULL;
 static uint8_t formatVersion[4]={ 0, 0, 0, 0 };
 static UVersionInfo dataVersion={ 3, 0, 0, 0 };
 
-static UTrie propsTrie={ 0 };
-static const uint32_t *pData32=NULL, *props32Table=NULL, *exceptionsTable=NULL;
+static UTrie propsTrie={ 0 }, propsVectorsTrie={ 0 };
+static const uint32_t *pData32=NULL, *props32Table=NULL, *exceptionsTable=NULL, *propsVectors=NULL;
 static const UChar *ucharsTable=NULL;
+static int32_t countPropsVectors=0, propsVectorsColumns=0;
 
 static int8_t havePropsData=0;
 
 /* index values loaded from uprops.dat */
-static int32_t indexes[16];
-
-enum {
-    INDEX_PROPS,
-    INDEX_EXCEPTIONS,
-    INDEX_UCHARS,
-    INDEX_RESERVED      /* contains the uint32_t offset to the top of the known data */
-};
+static int32_t indexes[UPROPS_INDEX_COUNT];
 
 /* if bit 15 is set, then the folding offset is in bits 14..0 of the 16-bit trie result */
 static int32_t U_CALLCONV
@@ -270,6 +265,8 @@ uchar_cleanup()
     props32Table=NULL;
     exceptionsTable=NULL;
     ucharsTable=NULL;
+    propsVectors=NULL;
+    countPropsVectors=0;
     havePropsData=FALSE;
     return TRUE;
 }
@@ -278,7 +275,7 @@ static int8_t
 loadPropsData() {
     /* load Unicode character properties data from file if necessary */
     if(havePropsData==0) {
-        UTrie trie={ 0 };
+        UTrie trie={ 0 }, trie2={ 0 };
         UErrorCode errorCode=U_ZERO_ERROR;
         UDataMemory *data;
         const uint32_t *p=NULL;
@@ -292,14 +289,28 @@ loadPropsData() {
 
         p=(const uint32_t *)udata_getMemory(data);
 
-        /* unserialize the trie; it is directly after the int32_t indexes[16] */
-        length=(*(int32_t *)p)*4;
-        length=utrie_unserialize(&trie, (const uint8_t *)(p+16), length-64, &errorCode);
+        /* unserialize the trie; it is directly after the int32_t indexes[UPROPS_INDEX_COUNT] */
+        length=(int32_t)p[UPROPS_PROPS32_INDEX]*4;
+        length=utrie_unserialize(&trie, (const uint8_t *)(p+UPROPS_INDEX_COUNT), length-64, &errorCode);
         if(U_FAILURE(errorCode)) {
             udata_close(data);
             return havePropsData=-1;
         }
         trie.getFoldingOffset=getFoldingPropsOffset;
+
+        /* unserialize the properties vectors trie, if any */
+        if( (formatVersion[0]>2 || (formatVersion[0]==2 && formatVersion[1]>=1)) &&
+            p[UPROPS_ADDITIONAL_TRIE_INDEX]!=0 &&
+            p[UPROPS_ADDITIONAL_VECTORS_INDEX]!=0
+        ) {
+            length=(int32_t)(p[UPROPS_ADDITIONAL_VECTORS_INDEX]-p[UPROPS_ADDITIONAL_TRIE_INDEX])*4;
+            length=utrie_unserialize(&trie2, (const uint8_t *)(p+p[UPROPS_ADDITIONAL_TRIE_INDEX]), length, &errorCode);
+            if(U_FAILURE(errorCode)) {
+                uprv_memset(&trie2, 0, sizeof(trie2));
+            } else {
+                trie2.getFoldingOffset=getFoldingPropsOffset;
+            }
+        }
 
         /* in the mutex block, set the data for this process */
         umtx_lock(NULL);
@@ -309,14 +320,23 @@ loadPropsData() {
             pData32=p;
             p=NULL;
             uprv_memcpy(&propsTrie, &trie, sizeof(trie));
+            uprv_memcpy(&propsVectorsTrie, &trie2, sizeof(trie2));
         }
         umtx_unlock(NULL);
 
         /* initialize some variables */
         uprv_memcpy(indexes, pData32, sizeof(indexes));
-        props32Table=pData32+indexes[INDEX_PROPS];
-        exceptionsTable=pData32+indexes[INDEX_EXCEPTIONS];
-        ucharsTable=(const UChar *)(pData32+indexes[INDEX_UCHARS]);
+        props32Table=pData32+indexes[UPROPS_PROPS32_INDEX];
+        exceptionsTable=pData32+indexes[UPROPS_EXCEPTIONS_INDEX];
+        ucharsTable=(const UChar *)(pData32+indexes[UPROPS_EXCEPTIONS_TOP_INDEX]);
+
+        /* additional properties */
+        if(indexes[UPROPS_ADDITIONAL_VECTORS_INDEX]!=0) {
+            propsVectors=pData32+indexes[UPROPS_ADDITIONAL_VECTORS_INDEX];
+            countPropsVectors=indexes[UPROPS_ADDITIONAL_VECTORS_COLUMNS_INDEX]-indexes[UPROPS_ADDITIONAL_VECTORS_INDEX];
+            propsVectorsColumns=indexes[UPROPS_ADDITIONAL_VECTORS_COLUMNS_INDEX];
+        }
+
         havePropsData=1;
 
         /* if a different thread set it first, then close the extra data */
@@ -1102,6 +1122,21 @@ u_getUnicodeVersion(UVersionInfo versionArray) {
             uprv_memset(versionArray, 0, U_MAX_VERSION_LENGTH);
         }
     }
+}
+
+U_CFUNC uint32_t
+u_getUnicodeProperties(UChar32 c, int32_t column) {
+    uint16_t vecIndex;
+
+    if( !HAVE_DATA || countPropsVectors==0 ||
+        (uint32_t)c>0x10ffff ||
+        column<0 || column>=propsVectorsColumns
+    ) {
+        return 0;
+    }
+
+    UTRIE_GET16(&propsVectorsTrie, c, vecIndex);
+    return propsVectors[vecIndex+column];
 }
 
 /* string casing ------------------------------------------------------------ */
