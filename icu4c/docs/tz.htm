@@ -1,0 +1,597 @@
+<html>
+
+<head>
+<title>ICU System Time Zones</title>
+</head>
+
+<body>
+
+<h1>ICU System Time Zones</h1>
+
+<table border="0">
+  <tr>
+    <td>Version</td>
+    <td><strong>tzdata1999j</strong> (1999.10)</td>
+  </tr>
+  <tr>
+    <td>Total zone count</td>
+    <td><strong>417</strong></td>
+  </tr>
+  <tr>
+    <td>Original source</td>
+    <td><strong><a href="ftp://elsie.nci.nih.gov/pub">ftp://elsie.nci.nih.gov/pub</a></strong></td>
+  </tr>
+  <tr>
+    <td>Author</td>
+    <td><strong>Alan Liu <a href="mailto:liuas@us.ibm.com">&lt;liuas@us.ibm.com&gt;</a></strong></td>
+  </tr>
+  <tr>
+    <td>This document generated</td>
+    <td><strong>Thu Dec 16 16:02:43 1999</strong></td>
+  </tr>
+</table>
+
+<h3>Background</h3>
+
+<p>A time zone represents an offset applied to Greenwich Mean Time
+(GMT) to obtain local time. The offset may vary throughout the year,
+if daylight savings time (DST) is used, or may be the same all year
+long. Typically, regions closer to the equator do not use DST. If DST
+is in use, then specific rules define the point at which the offset
+changes, and the amount by which it changes. Thus, a time zone is
+described by the following information:
+
+<ul>
+  <li><a name="cols">An</a> identifying string, or ID. This consists only of invariant characters (see the file <code>utypes.h</code>).
+    It typically has the format <em>continent</em> / <em>city</em>. The city chosen is
+    not the only city in which the zone applies, but rather a representative city for the
+    region. Some IDs consist of three or four uppercase letters; these are legacy zone
+    names that are aliases to standard zone names.</li>
+  <li>An offset from GMT, either positive or negative. Offsets range from approximately minus
+    half a day to plus half a day.</li>
+</ul>
+
+<p>If DST is observed, then three additional pieces of information are needed:
+
+<ul>
+  <li>The precise date and time during the year when DST begins. This is in the first
+    half of the year in the northern hemisphere, and in the second half of the year in the
+    southern hemisphere.</li>
+  <li>The precise date and time during the year when DST ends. This is in the first half
+    of the year in the southern hemisphere, and in the second half of the year in the northern
+    hemisphere.</li>
+  <li>The amount by which the GMT offset changes when DST is in effect. This is almost
+    always one hour.</li>
+</ul>
+
+<h3>System and User Time Zones</h3>
+
+<p>ICU supports local time zones through the classes
+<code>TimeZone</code> and <code>SimpleTimeZone</code> in the C++
+API. In the C API, time zones are designated by their ID strings.</p>
+
+<p>Users may construct their own time zone objects by specifying the
+above information to the C++ API. However, it is more typical for
+users to use a pre-existing system time zone, since these represent
+all current international time zones in use. This document lists the
+system time zones, both in order of GMT offset, and in alphabetical
+order of ID.</p>
+
+<p>Since this list changes one or more times a year, <em>this document
+only represents a snapshot</em>. For the current list of ICU system
+zones, use the method <code>TimeZone::getAvailableIDs()</code>.</p>
+
+<h3>Notes</h3>
+
+<p><a name="order">The</a> zones are listed in binary sort order.  That is, 'A' through
+'Z' come before 'a' through 'z'.  This is the same order in which the
+zones are stored internally, and the same order in which they are
+returned by <code>TimeZone::getAvailableIDs()</code>.  The reason for
+this is that ICU locates zones using a binary search, and the binary
+search relies on this sort order.</p>
+
+<p>You may notice that zones such as <a href="#EtcGMTp1">Etc/GMT+1</a>
+appear to have the wrong sign for their GMT offset.  In fact, their
+sign is inverted because the the Etc zones follow the POSIX sign
+conventions.  This is the way the original Olson data is set up, and
+ICU reproduces the Olson data faithfully, including this confusing
+aspect.  See the Olson files for more details.
+
+<h3>References</h3>
+
+<p>The ICU system time zones are derived from the Olson data at <a
+href="ftp://elsie.nci.nih.gov/pub">ftp://elsie.nci.nih.gov/pub</a>. This is the data used by UNIX systems and is
+updated one or more times each year. Unlike the Olson zone data, ICU
+only contains data for current zone usage. There is no support for
+historical zone data in ICU at this time.</p>
+
+<hr>
+
+<h2>Time Zones in order of GMT offset</h2>
+
+<p>Zone listed in <strong>bold</strong> are the default zone for a
+given GMT offset. This default is used by ICU if it cannot identify
+the host OS time zone by name. In that case, it uses the default zone
+for the host zone offset.</p>
+
+<p><table>
+<tr valign=top><td><a name="GMTm1200">GMT-12:00</a></td><td><a href="#EtcGMTp12"><b>Etc/GMT+12</b></a></td></tr>
+<tr valign=top><td><a name="GMTm1100">GMT-11:00</a></td><td><a href="#EtcGMTp11">Etc/GMT+11</a>, <a href="#MIT">MIT</a>, <a href="#PacificApia"><b>Pacific/Apia</b></a>, <a href="#PacificMidway">Pacific/Midway</a>, <a href="#PacificNiue">Pacific/Niue</a>, <a href="#PacificPago_Pago">Pacific/Pago_Pago</a></td></tr>
+<tr valign=top><td><a name="GMTm1000">GMT-10:00</a></td><td><a href="#AmericaAdak">America/Adak</a>, <a href="#EtcGMTp10">Etc/GMT+10</a>, <a href="#HST">HST</a>, <a href="#PacificFakaofo">Pacific/Fakaofo</a>, <a href="#PacificHonolulu"><b>Pacific/Honolulu</b></a>, <a href="#PacificJohnston">Pacific/Johnston</a>, <a href="#PacificRarotonga">Pacific/Rarotonga</a>, <a href="#PacificTahiti">Pacific/Tahiti</a></td></tr>
+<tr valign=top><td><a name="GMTm930">GMT-9:30</a></td><td><a href="#PacificMarquesas"><b>Pacific/Marquesas</b></a></td></tr>
+<tr valign=top><td><a name="GMTm900">GMT-9:00</a></td><td><a href="#AST">AST</a>, <a href="#AmericaAnchorage"><b>America/Anchorage</b></a>, <a href="#AmericaJuneau">America/Juneau</a>, <a href="#AmericaNome">America/Nome</a>, <a href="#AmericaYakutat">America/Yakutat</a>, <a href="#EtcGMTp9">Etc/GMT+9</a>, <a href="#PacificGambier">Pacific/Gambier</a></td></tr>
+<tr valign=top><td><a name="GMTm800">GMT-8:00</a></td><td><a href="#AmericaDawson">America/Dawson</a>, <a href="#AmericaLos_Angeles"><b>America/Los_Angeles</b></a>, <a href="#AmericaTijuana">America/Tijuana</a>, <a href="#AmericaVancouver">America/Vancouver</a>, <a href="#AmericaWhitehorse">America/Whitehorse</a>, <a href="#EtcGMTp8">Etc/GMT+8</a>, <a href="#PST">PST</a>, <a href="#PacificPitcairn">Pacific/Pitcairn</a></td></tr>
+<tr valign=top><td><a name="GMTm700">GMT-7:00</a></td><td><a href="#AmericaBoise">America/Boise</a>, <a href="#AmericaChihuahua">America/Chihuahua</a>, <a href="#AmericaDawson_Creek">America/Dawson_Creek</a>, <a href="#AmericaDenver"><b>America/Denver</b></a>, <a href="#AmericaEdmonton">America/Edmonton</a>, <a href="#AmericaInuvik">America/Inuvik</a>, <a href="#AmericaMazatlan">America/Mazatlan</a>, <a href="#AmericaPhoenix">America/Phoenix</a>, <a href="#AmericaYellowknife">America/Yellowknife</a>, <a href="#EtcGMTp7">Etc/GMT+7</a>, <a href="#MST">MST</a>, <a href="#PNT">PNT</a></td></tr>
+<tr valign=top><td><a name="GMTm600">GMT-6:00</a></td><td><a href="#AmericaBelize">America/Belize</a>, <a href="#AmericaCambridge_Bay">America/Cambridge_Bay</a>, <a href="#AmericaCancun">America/Cancun</a>, <a href="#AmericaChicago"><b>America/Chicago</b></a>, <a href="#AmericaCosta_Rica">America/Costa_Rica</a>, <a href="#AmericaEl_Salvador">America/El_Salvador</a>, <a href="#AmericaGuatemala">America/Guatemala</a>, <a href="#AmericaIqaluit">America/Iqaluit</a>, <a href="#AmericaManagua">America/Managua</a>, <a href="#AmericaMenominee">America/Menominee</a>, <a href="#AmericaMexico_City">America/Mexico_City</a>, <a href="#AmericaPangnirtung">America/Pangnirtung</a>, <a href="#AmericaRainy_River">America/Rainy_River</a>, <a href="#AmericaRankin_Inlet">America/Rankin_Inlet</a>, <a href="#AmericaRegina">America/Regina</a>, <a href="#AmericaSwift_Current">America/Swift_Current</a>, <a href="#AmericaTegucigalpa">America/Tegucigalpa</a>, <a href="#AmericaWinnipeg">America/Winnipeg</a>, <a href="#CST">CST</a>, <a href="#EtcGMTp6">Etc/GMT+6</a>, <a href="#PacificEaster">Pacific/Easter</a>, <a href="#PacificGalapagos">Pacific/Galapagos</a></td></tr>
+<tr valign=top><td><a name="GMTm500">GMT-5:00</a></td><td><a href="#AmericaBogota">America/Bogota</a>, <a href="#AmericaCayman">America/Cayman</a>, <a href="#AmericaDetroit">America/Detroit</a>, <a href="#AmericaGrand_Turk">America/Grand_Turk</a>, <a href="#AmericaGuayaquil">America/Guayaquil</a>, <a href="#AmericaHavana">America/Havana</a>, <a href="#AmericaIndianaKnox">America/Indiana/Knox</a>, <a href="#AmericaIndianaMarengo">America/Indiana/Marengo</a>, <a href="#AmericaIndianaVevay">America/Indiana/Vevay</a>, <a href="#AmericaIndianapolis"><b>America/Indianapolis</b></a>, <a href="#AmericaJamaica">America/Jamaica</a>, <a href="#AmericaLima">America/Lima</a>, <a href="#AmericaLouisville">America/Louisville</a>, <a href="#AmericaMontreal">America/Montreal</a>, <a href="#AmericaNassau">America/Nassau</a>, <a href="#AmericaNew_York">America/New_York</a>, <a href="#AmericaNipigon">America/Nipigon</a>, <a href="#AmericaPanama">America/Panama</a>, <a href="#AmericaPortmaumPrince">America/Port-au-Prince</a>, <a href="#AmericaPorto_Acre">America/Porto_Acre</a>, <a href="#AmericaThunder_Bay">America/Thunder_Bay</a>, <a href="#EST">EST</a>, <a href="#EtcGMTp5">Etc/GMT+5</a>, <a href="#IET">IET</a></td></tr>
+<tr valign=top><td><a name="GMTm400">GMT-4:00</a></td><td><a href="#AmericaAnguilla">America/Anguilla</a>, <a href="#AmericaAntigua">America/Antigua</a>, <a href="#AmericaAruba">America/Aruba</a>, <a href="#AmericaAsuncion">America/Asuncion</a>, <a href="#AmericaBarbados">America/Barbados</a>, <a href="#AmericaBoa_Vista">America/Boa_Vista</a>, <a href="#AmericaCaracas">America/Caracas</a>, <a href="#AmericaCuiaba">America/Cuiaba</a>, <a href="#AmericaCuracao">America/Curacao</a>, <a href="#AmericaDominica">America/Dominica</a>, <a href="#AmericaGlace_Bay">America/Glace_Bay</a>, <a href="#AmericaGoose_Bay">America/Goose_Bay</a>, <a href="#AmericaGrenada">America/Grenada</a>, <a href="#AmericaGuadeloupe">America/Guadeloupe</a>, <a href="#AmericaGuyana">America/Guyana</a>, <a href="#AmericaHalifax">America/Halifax</a>, <a href="#AmericaLa_Paz">America/La_Paz</a>, <a href="#AmericaManaus">America/Manaus</a>, <a href="#AmericaMartinique">America/Martinique</a>, <a href="#AmericaMontserrat">America/Montserrat</a>, <a href="#AmericaPort_of_Spain">America/Port_of_Spain</a>, <a href="#AmericaPorto_Velho">America/Porto_Velho</a>, <a href="#AmericaPuerto_Rico"><b>America/Puerto_Rico</b></a>, <a href="#AmericaSantiago">America/Santiago</a>, <a href="#AmericaSanto_Domingo">America/Santo_Domingo</a>, <a href="#AmericaSt_Kitts">America/St_Kitts</a>, <a href="#AmericaSt_Lucia">America/St_Lucia</a>, <a href="#AmericaSt_Thomas">America/St_Thomas</a>, <a href="#AmericaSt_Vincent">America/St_Vincent</a>, <a href="#AmericaThule">America/Thule</a>, <a href="#AmericaTortola">America/Tortola</a>, <a href="#AntarcticaPalmer">Antarctica/Palmer</a>, <a href="#AtlanticBermuda">Atlantic/Bermuda</a>, <a href="#AtlanticStanley">Atlantic/Stanley</a>, <a href="#EtcGMTp4">Etc/GMT+4</a>, <a href="#PRT">PRT</a></td></tr>
+<tr valign=top><td><a name="GMTm330">GMT-3:30</a></td><td><a href="#AmericaSt_Johns"><b>America/St_Johns</b></a>, <a href="#CNT">CNT</a></td></tr>
+<tr valign=top><td><a name="GMTm300">GMT-3:00</a></td><td><a href="#AGT">AGT</a>, <a href="#AmericaAraguaina">America/Araguaina</a>, <a href="#AmericaBelem">America/Belem</a>, <a href="#AmericaBuenos_Aires"><b>America/Buenos_Aires</b></a>, <a href="#AmericaCatamarca">America/Catamarca</a>, <a href="#AmericaCayenne">America/Cayenne</a>, <a href="#AmericaCordoba">America/Cordoba</a>, <a href="#AmericaFortaleza">America/Fortaleza</a>, <a href="#AmericaGodthab">America/Godthab</a>, <a href="#AmericaJujuy">America/Jujuy</a>, <a href="#AmericaMaceio">America/Maceio</a>, <a href="#AmericaMendoza">America/Mendoza</a>, <a href="#AmericaMiquelon">America/Miquelon</a>, <a href="#AmericaMontevideo">America/Montevideo</a>, <a href="#AmericaParamaribo">America/Paramaribo</a>, <a href="#AmericaRosario">America/Rosario</a>, <a href="#AmericaSao_Paulo">America/Sao_Paulo</a>, <a href="#BET">BET</a>, <a href="#EtcGMTp3">Etc/GMT+3</a></td></tr>
+<tr valign=top><td><a name="GMTm200">GMT-2:00</a></td><td><a href="#AmericaNoronha"><b>America/Noronha</b></a>, <a href="#AtlanticSouth_Georgia">Atlantic/South_Georgia</a>, <a href="#EtcGMTp2">Etc/GMT+2</a></td></tr>
+<tr valign=top><td><a name="GMTm100">GMT-1:00</a></td><td><a href="#AmericaScoresbysund">America/Scoresbysund</a>, <a href="#AtlanticAzores"><b>Atlantic/Azores</b></a>, <a href="#AtlanticCape_Verde">Atlantic/Cape_Verde</a>, <a href="#AtlanticJan_Mayen">Atlantic/Jan_Mayen</a>, <a href="#EtcGMTp1">Etc/GMT+1</a></td></tr>
+<tr valign=top><td><a name="GMTp000">GMT+0:00</a></td><td><a href="#AfricaAbidjan">Africa/Abidjan</a>, <a href="#AfricaAccra">Africa/Accra</a>, <a href="#AfricaBamako">Africa/Bamako</a>, <a href="#AfricaBanjul">Africa/Banjul</a>, <a href="#AfricaBissau">Africa/Bissau</a>, <a href="#AfricaCasablanca">Africa/Casablanca</a>, <a href="#AfricaConakry">Africa/Conakry</a>, <a href="#AfricaDakar">Africa/Dakar</a>, <a href="#AfricaEl_Aaiun">Africa/El_Aaiun</a>, <a href="#AfricaFreetown">Africa/Freetown</a>, <a href="#AfricaLome">Africa/Lome</a>, <a href="#AfricaMonrovia">Africa/Monrovia</a>, <a href="#AfricaNouakchott">Africa/Nouakchott</a>, <a href="#AfricaOuagadougou">Africa/Ouagadougou</a>, <a href="#AfricaSao_Tome">Africa/Sao_Tome</a>, <a href="#AfricaTimbuktu">Africa/Timbuktu</a>, <a href="#AtlanticCanary">Atlantic/Canary</a>, <a href="#AtlanticFaeroe">Atlantic/Faeroe</a>, <a href="#AtlanticMadeira">Atlantic/Madeira</a>, <a href="#AtlanticReykjavik">Atlantic/Reykjavik</a>, <a href="#AtlanticSt_Helena">Atlantic/St_Helena</a>, <a href="#EtcGMT">Etc/GMT</a>, <a href="#EtcUCT">Etc/UCT</a>, <a href="#EtcUTC">Etc/UTC</a>, <a href="#EuropeBelfast">Europe/Belfast</a>, <a href="#EuropeDublin">Europe/Dublin</a>, <a href="#EuropeLisbon">Europe/Lisbon</a>, <a href="#EuropeLondon">Europe/London</a>, <a href="#GMT"><b>GMT</b></a>, <a href="#UTC">UTC</a>, <a href="#WET">WET</a></td></tr>
+<tr valign=top><td><a name="GMTp100">GMT+1:00</a></td><td><a href="#AfricaAlgiers">Africa/Algiers</a>, <a href="#AfricaBangui">Africa/Bangui</a>, <a href="#AfricaBrazzaville">Africa/Brazzaville</a>, <a href="#AfricaCeuta">Africa/Ceuta</a>, <a href="#AfricaDouala">Africa/Douala</a>, <a href="#AfricaKinshasa">Africa/Kinshasa</a>, <a href="#AfricaLagos">Africa/Lagos</a>, <a href="#AfricaLibreville">Africa/Libreville</a>, <a href="#AfricaLuanda">Africa/Luanda</a>, <a href="#AfricaMalabo">Africa/Malabo</a>, <a href="#AfricaNdjamena">Africa/Ndjamena</a>, <a href="#AfricaNiamey">Africa/Niamey</a>, <a href="#AfricaPortomNovo">Africa/Porto-Novo</a>, <a href="#AfricaTunis">Africa/Tunis</a>, <a href="#AfricaWindhoek">Africa/Windhoek</a>, <a href="#CET">CET</a>, <a href="#ECT">ECT</a>, <a href="#EtcGMTm1">Etc/GMT-1</a>, <a href="#EuropeAmsterdam">Europe/Amsterdam</a>, <a href="#EuropeAndorra">Europe/Andorra</a>, <a href="#EuropeBelgrade">Europe/Belgrade</a>, <a href="#EuropeBerlin">Europe/Berlin</a>, <a href="#EuropeBrussels">Europe/Brussels</a>, <a href="#EuropeBudapest">Europe/Budapest</a>, <a href="#EuropeCopenhagen">Europe/Copenhagen</a>, <a href="#EuropeGibraltar">Europe/Gibraltar</a>, <a href="#EuropeLuxembourg">Europe/Luxembourg</a>, <a href="#EuropeMadrid">Europe/Madrid</a>, <a href="#EuropeMalta">Europe/Malta</a>, <a href="#EuropeMonaco">Europe/Monaco</a>, <a href="#EuropeOslo">Europe/Oslo</a>, <a href="#EuropeParis"><b>Europe/Paris</b></a>, <a href="#EuropePrague">Europe/Prague</a>, <a href="#EuropeRome">Europe/Rome</a>, <a href="#EuropeStockholm">Europe/Stockholm</a>, <a href="#EuropeTirane">Europe/Tirane</a>, <a href="#EuropeVaduz">Europe/Vaduz</a>, <a href="#EuropeVienna">Europe/Vienna</a>, <a href="#EuropeWarsaw">Europe/Warsaw</a>, <a href="#EuropeZurich">Europe/Zurich</a>, <a href="#MET">MET</a></td></tr>
+<tr valign=top><td><a name="GMTp200">GMT+2:00</a></td><td><a href="#ART">ART</a>, <a href="#AfricaBlantyre">Africa/Blantyre</a>, <a href="#AfricaBujumbura">Africa/Bujumbura</a>, <a href="#AfricaCairo"><b>Africa/Cairo</b></a>, <a href="#AfricaGaborone">Africa/Gaborone</a>, <a href="#AfricaHarare">Africa/Harare</a>, <a href="#AfricaJohannesburg">Africa/Johannesburg</a>, <a href="#AfricaKhartoum">Africa/Khartoum</a>, <a href="#AfricaKigali">Africa/Kigali</a>, <a href="#AfricaLubumbashi">Africa/Lubumbashi</a>, <a href="#AfricaLusaka">Africa/Lusaka</a>, <a href="#AfricaMaputo">Africa/Maputo</a>, <a href="#AfricaMaseru">Africa/Maseru</a>, <a href="#AfricaMbabane">Africa/Mbabane</a>, <a href="#AfricaTripoli">Africa/Tripoli</a>, <a href="#AsiaAmman">Asia/Amman</a>, <a href="#AsiaBeirut">Asia/Beirut</a>, <a href="#AsiaDamascus">Asia/Damascus</a>, <a href="#AsiaGaza">Asia/Gaza</a>, <a href="#AsiaJerusalem">Asia/Jerusalem</a>, <a href="#AsiaNicosia">Asia/Nicosia</a>, <a href="#CAT">CAT</a>, <a href="#EET">EET</a>, <a href="#EtcGMTm2">Etc/GMT-2</a>, <a href="#EuropeAthens">Europe/Athens</a>, <a href="#EuropeBucharest">Europe/Bucharest</a>, <a href="#EuropeChisinau">Europe/Chisinau</a>, <a href="#EuropeHelsinki">Europe/Helsinki</a>, <a href="#EuropeIstanbul">Europe/Istanbul</a>, <a href="#EuropeKaliningrad">Europe/Kaliningrad</a>, <a href="#EuropeKiev">Europe/Kiev</a>, <a href="#EuropeMinsk">Europe/Minsk</a>, <a href="#EuropeRiga">Europe/Riga</a>, <a href="#EuropeSimferopol">Europe/Simferopol</a>, <a href="#EuropeSofia">Europe/Sofia</a>, <a href="#EuropeTallinn">Europe/Tallinn</a>, <a href="#EuropeUzhgorod">Europe/Uzhgorod</a>, <a href="#EuropeVilnius">Europe/Vilnius</a>, <a href="#EuropeZaporozhye">Europe/Zaporozhye</a></td></tr>
+<tr valign=top><td><a name="GMTp300">GMT+3:00</a></td><td><a href="#AfricaAddis_Ababa"><b>Africa/Addis_Ababa</b></a>, <a href="#AfricaAsmera">Africa/Asmera</a>, <a href="#AfricaDar_es_Salaam">Africa/Dar_es_Salaam</a>, <a href="#AfricaDjibouti">Africa/Djibouti</a>, <a href="#AfricaKampala">Africa/Kampala</a>, <a href="#AfricaMogadishu">Africa/Mogadishu</a>, <a href="#AfricaNairobi">Africa/Nairobi</a>, <a href="#AntarcticaSyowa">Antarctica/Syowa</a>, <a href="#AsiaAden">Asia/Aden</a>, <a href="#AsiaBaghdad">Asia/Baghdad</a>, <a href="#AsiaBahrain">Asia/Bahrain</a>, <a href="#AsiaKuwait">Asia/Kuwait</a>, <a href="#AsiaQatar">Asia/Qatar</a>, <a href="#AsiaRiyadh">Asia/Riyadh</a>, <a href="#EAT">EAT</a>, <a href="#EtcGMTm3">Etc/GMT-3</a>, <a href="#EuropeMoscow">Europe/Moscow</a>, <a href="#EuropeTiraspol">Europe/Tiraspol</a>, <a href="#IndianAntananarivo">Indian/Antananarivo</a>, <a href="#IndianComoro">Indian/Comoro</a>, <a href="#IndianMayotte">Indian/Mayotte</a></td></tr>
+<tr valign=top><td><a name="GMTp30704">GMT+3:07:04</a></td><td><a href="#AsiaRiyadh87">Asia/Riyadh87</a>, <a href="#AsiaRiyadh88">Asia/Riyadh88</a>, <a href="#AsiaRiyadh89"><b>Asia/Riyadh89</b></a></td></tr>
+<tr valign=top><td><a name="GMTp330">GMT+3:30</a></td><td><a href="#AsiaTehran"><b>Asia/Tehran</b></a></td></tr>
+<tr valign=top><td><a name="GMTp400">GMT+4:00</a></td><td><a href="#AsiaAqtau">Asia/Aqtau</a>, <a href="#AsiaBaku">Asia/Baku</a>, <a href="#AsiaDubai">Asia/Dubai</a>, <a href="#AsiaMuscat">Asia/Muscat</a>, <a href="#AsiaTbilisi">Asia/Tbilisi</a>, <a href="#AsiaYerevan"><b>Asia/Yerevan</b></a>, <a href="#EtcGMTm4">Etc/GMT-4</a>, <a href="#EuropeSamara">Europe/Samara</a>, <a href="#IndianMahe">Indian/Mahe</a>, <a href="#IndianMauritius">Indian/Mauritius</a>, <a href="#IndianReunion">Indian/Reunion</a>, <a href="#NET">NET</a></td></tr>
+<tr valign=top><td><a name="GMTp430">GMT+4:30</a></td><td><a href="#AsiaKabul"><b>Asia/Kabul</b></a></td></tr>
+<tr valign=top><td><a name="GMTp500">GMT+5:00</a></td><td><a href="#AsiaAqtobe">Asia/Aqtobe</a>, <a href="#AsiaAshkhabad">Asia/Ashkhabad</a>, <a href="#AsiaBishkek">Asia/Bishkek</a>, <a href="#AsiaDushanbe">Asia/Dushanbe</a>, <a href="#AsiaKarachi"><b>Asia/Karachi</b></a>, <a href="#AsiaSamarkand">Asia/Samarkand</a>, <a href="#AsiaTashkent">Asia/Tashkent</a>, <a href="#AsiaYekaterinburg">Asia/Yekaterinburg</a>, <a href="#EtcGMTm5">Etc/GMT-5</a>, <a href="#IndianChagos">Indian/Chagos</a>, <a href="#IndianKerguelen">Indian/Kerguelen</a>, <a href="#IndianMaldives">Indian/Maldives</a>, <a href="#PLT">PLT</a></td></tr>
+<tr valign=top><td><a name="GMTp530">GMT+5:30</a></td><td><a href="#AsiaCalcutta"><b>Asia/Calcutta</b></a>, <a href="#IST">IST</a></td></tr>
+<tr valign=top><td><a name="GMTp545">GMT+5:45</a></td><td><a href="#AsiaKatmandu"><b>Asia/Katmandu</b></a></td></tr>
+<tr valign=top><td><a name="GMTp600">GMT+6:00</a></td><td><a href="#AntarcticaMawson">Antarctica/Mawson</a>, <a href="#AsiaAlmaty">Asia/Almaty</a>, <a href="#AsiaColombo">Asia/Colombo</a>, <a href="#AsiaDacca"><b>Asia/Dacca</b></a>, <a href="#AsiaNovosibirsk">Asia/Novosibirsk</a>, <a href="#AsiaOmsk">Asia/Omsk</a>, <a href="#AsiaThimbu">Asia/Thimbu</a>, <a href="#BST">BST</a>, <a href="#EtcGMTm6">Etc/GMT-6</a></td></tr>
+<tr valign=top><td><a name="GMTp630">GMT+6:30</a></td><td><a href="#AsiaRangoon"><b>Asia/Rangoon</b></a>, <a href="#IndianCocos">Indian/Cocos</a></td></tr>
+<tr valign=top><td><a name="GMTp700">GMT+7:00</a></td><td><a href="#AntarcticaDavis">Antarctica/Davis</a>, <a href="#AsiaBangkok">Asia/Bangkok</a>, <a href="#AsiaJakarta">Asia/Jakarta</a>, <a href="#AsiaKrasnoyarsk">Asia/Krasnoyarsk</a>, <a href="#AsiaPhnom_Penh">Asia/Phnom_Penh</a>, <a href="#AsiaSaigon"><b>Asia/Saigon</b></a>, <a href="#AsiaVientiane">Asia/Vientiane</a>, <a href="#EtcGMTm7">Etc/GMT-7</a>, <a href="#IndianChristmas">Indian/Christmas</a>, <a href="#VST">VST</a></td></tr>
+<tr valign=top><td><a name="GMTp800">GMT+8:00</a></td><td><a href="#AntarcticaCasey">Antarctica/Casey</a>, <a href="#AsiaBrunei">Asia/Brunei</a>, <a href="#AsiaChungking">Asia/Chungking</a>, <a href="#AsiaDili">Asia/Dili</a>, <a href="#AsiaHarbin">Asia/Harbin</a>, <a href="#AsiaHong_Kong">Asia/Hong_Kong</a>, <a href="#AsiaIrkutsk">Asia/Irkutsk</a>, <a href="#AsiaKashgar">Asia/Kashgar</a>, <a href="#AsiaKuala_Lumpur">Asia/Kuala_Lumpur</a>, <a href="#AsiaKuching">Asia/Kuching</a>, <a href="#AsiaMacao">Asia/Macao</a>, <a href="#AsiaManila">Asia/Manila</a>, <a href="#AsiaShanghai"><b>Asia/Shanghai</b></a>, <a href="#AsiaSingapore">Asia/Singapore</a>, <a href="#AsiaTaipei">Asia/Taipei</a>, <a href="#AsiaUjung_Pandang">Asia/Ujung_Pandang</a>, <a href="#AsiaUlan_Bator">Asia/Ulan_Bator</a>, <a href="#AsiaUrumqi">Asia/Urumqi</a>, <a href="#AustraliaPerth">Australia/Perth</a>, <a href="#CTT">CTT</a>, <a href="#EtcGMTm8">Etc/GMT-8</a></td></tr>
+<tr valign=top><td><a name="GMTp900">GMT+9:00</a></td><td><a href="#AsiaJayapura">Asia/Jayapura</a>, <a href="#AsiaPyongyang">Asia/Pyongyang</a>, <a href="#AsiaSeoul">Asia/Seoul</a>, <a href="#AsiaTokyo"><b>Asia/Tokyo</b></a>, <a href="#AsiaYakutsk">Asia/Yakutsk</a>, <a href="#EtcGMTm9">Etc/GMT-9</a>, <a href="#JST">JST</a>, <a href="#PacificPalau">Pacific/Palau</a></td></tr>
+<tr valign=top><td><a name="GMTp930">GMT+9:30</a></td><td><a href="#ACT">ACT</a>, <a href="#AustraliaAdelaide">Australia/Adelaide</a>, <a href="#AustraliaBroken_Hill">Australia/Broken_Hill</a>, <a href="#AustraliaDarwin"><b>Australia/Darwin</b></a></td></tr>
+<tr valign=top><td><a name="GMTp1000">GMT+10:00</a></td><td><a href="#AET">AET</a>, <a href="#AntarcticaDumontDUrville">Antarctica/DumontDUrville</a>, <a href="#AsiaVladivostok">Asia/Vladivostok</a>, <a href="#AustraliaBrisbane">Australia/Brisbane</a>, <a href="#AustraliaHobart">Australia/Hobart</a>, <a href="#AustraliaLindeman">Australia/Lindeman</a>, <a href="#AustraliaMelbourne">Australia/Melbourne</a>, <a href="#AustraliaSydney"><b>Australia/Sydney</b></a>, <a href="#EtcGMTm10">Etc/GMT-10</a>, <a href="#PacificGuam">Pacific/Guam</a>, <a href="#PacificPort_Moresby">Pacific/Port_Moresby</a>, <a href="#PacificSaipan">Pacific/Saipan</a>, <a href="#PacificTruk">Pacific/Truk</a>, <a href="#PacificYap">Pacific/Yap</a></td></tr>
+<tr valign=top><td><a name="GMTp1030">GMT+10:30</a></td><td><a href="#AustraliaLord_Howe"><b>Australia/Lord_Howe</b></a></td></tr>
+<tr valign=top><td><a name="GMTp1100">GMT+11:00</a></td><td><a href="#AsiaMagadan">Asia/Magadan</a>, <a href="#EtcGMTm11">Etc/GMT-11</a>, <a href="#PacificEfate">Pacific/Efate</a>, <a href="#PacificGuadalcanal"><b>Pacific/Guadalcanal</b></a>, <a href="#PacificKosrae">Pacific/Kosrae</a>, <a href="#PacificNoumea">Pacific/Noumea</a>, <a href="#PacificPonape">Pacific/Ponape</a>, <a href="#SST">SST</a></td></tr>
+<tr valign=top><td><a name="GMTp1130">GMT+11:30</a></td><td><a href="#PacificNorfolk"><b>Pacific/Norfolk</b></a></td></tr>
+<tr valign=top><td><a name="GMTp1200">GMT+12:00</a></td><td><a href="#AntarcticaMcMurdo">Antarctica/McMurdo</a>, <a href="#AsiaAnadyr">Asia/Anadyr</a>, <a href="#AsiaKamchatka">Asia/Kamchatka</a>, <a href="#EtcGMTm12">Etc/GMT-12</a>, <a href="#NST">NST</a>, <a href="#PacificAuckland"><b>Pacific/Auckland</b></a>, <a href="#PacificFiji">Pacific/Fiji</a>, <a href="#PacificFunafuti">Pacific/Funafuti</a>, <a href="#PacificKwajalein">Pacific/Kwajalein</a>, <a href="#PacificMajuro">Pacific/Majuro</a>, <a href="#PacificNauru">Pacific/Nauru</a>, <a href="#PacificTarawa">Pacific/Tarawa</a>, <a href="#PacificWake">Pacific/Wake</a>, <a href="#PacificWallis">Pacific/Wallis</a></td></tr>
+<tr valign=top><td><a name="GMTp1245">GMT+12:45</a></td><td><a href="#PacificChatham"><b>Pacific/Chatham</b></a></td></tr>
+<tr valign=top><td><a name="GMTp1300">GMT+13:00</a></td><td><a href="#EtcGMTm13">Etc/GMT-13</a>, <a href="#PacificEnderbury"><b>Pacific/Enderbury</b></a>, <a href="#PacificTongatapu">Pacific/Tongatapu</a></td></tr>
+<tr valign=top><td><a name="GMTp1400">GMT+14:00</a></td><td><a href="#EtcGMTm14">Etc/GMT-14</a>, <a href="#PacificKiritimati"><b>Pacific/Kiritimati</b></a></td></tr>
+</table>
+
+<hr>
+
+<h2>Time Zones in order of ID</h2>
+
+<p>Zone listed in <strong>bold</strong> are the default zone for their
+GMT offset. This default is used by ICU if it cannot identify the host
+OS time zone by name. In that case, it uses the default zone for the
+host zone offset. See above for a description of <a
+href="#cols">columns</a>. See note above for an explanation of the
+sort <a href="#order">order</a>.</p>
+
+<p>Times suffixed with 's' are in standard time. Times suffixed with 'u' are in UTC time.
+Times without suffixes are in wall time (that is, either standard time or daylight savings
+time, depending on which is in effect).</p>
+
+<p><table>
+<tr><td>ID</td><td>Offset</td><td>DST Begins</td><td>DST Ends</td><td>Savings</td><td></td></tr>
+<tr><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td><hr></td><td></td></tr>
+<tr><td><a name="ACT">ACT</a></td><td><a href="#GMTp930">GMT+9:30</a></td><td>Oct 3 2:00</td><td>Mar lastSun 2:00</td><td>1:00</td><td><em>alias for</em> <a href="#AustraliaDarwin">Australia/Darwin</a></td></tr>
+<tr><td><a name="AET">AET</a></td><td><a href="#GMTp1000">GMT+10:00</a></td><td>Oct lastSun 2:00s</td><td>Mar lastSun 2:00s</td><td>1:00</td><td><em>alias for</em> <a href="#AustraliaSydney">Australia/Sydney</a></td></tr>
+<tr><td><a name="AGT">AGT</a></td><td><a href="#GMTm300">GMT-3:00</a></td><td>Oct Sun>=15 0:00</td><td>Mar Sun>=1 0:00</td><td>1:00</td><td><em>alias for</em> <a href="#AmericaBuenos_Aires">America/Buenos_Aires</a></td></tr>
+<tr><td><a name="ART">ART</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td>Apr lastFri 0:00s</td><td>Sep lastThu 23:00s</td><td>1:00</td><td><em>alias for</em> <a href="#AfricaCairo">Africa/Cairo</a></td></tr>
+<tr><td><a name="AST">AST</a></td><td><a href="#GMTm900">GMT-9:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td><em>alias for</em> <a href="#AmericaAnchorage">America/Anchorage</a></td></tr>
+<tr><td><a name="AfricaAbidjan">Africa/Abidjan</a></td><td><a href="#GMTp000">GMT+0:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaAccra">Africa/Accra</a></td><td><a href="#GMTp000">GMT+0:00</a></td><td>Sep 1 0:00</td><td>Dec 31 0:00</td><td>0:20</td><td></td></tr>
+<tr><td><b><a name="AfricaAddis_Ababa">Africa/Addis_Ababa</a></b></td><td><a href="#GMTp300">GMT+3:00</a></td><td colspan=3></td><td><em>alias </em> <a href="#EAT">EAT</a></td></tr>
+<tr><td><a name="AfricaAlgiers">Africa/Algiers</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaAsmera">Africa/Asmera</a></td><td><a href="#GMTp300">GMT+3:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaBamako">Africa/Bamako</a></td><td><a href="#GMTp000">GMT+0:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaBangui">Africa/Bangui</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaBanjul">Africa/Banjul</a></td><td><a href="#GMTp000">GMT+0:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaBissau">Africa/Bissau</a></td><td><a href="#GMTp000">GMT+0:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaBlantyre">Africa/Blantyre</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaBrazzaville">Africa/Brazzaville</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaBujumbura">Africa/Bujumbura</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><b><a name="AfricaCairo">Africa/Cairo</a></b></td><td><a href="#GMTp200">GMT+2:00</a></td><td>Apr lastFri 0:00s</td><td>Sep lastThu 23:00s</td><td>1:00</td><td><em>alias </em> <a href="#ART">ART</a></td></tr>
+<tr><td><a name="AfricaCasablanca">Africa/Casablanca</a></td><td><a href="#GMTp000">GMT+0:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaCeuta">Africa/Ceuta</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AfricaConakry">Africa/Conakry</a></td><td><a href="#GMTp000">GMT+0:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaDakar">Africa/Dakar</a></td><td><a href="#GMTp000">GMT+0:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaDar_es_Salaam">Africa/Dar_es_Salaam</a></td><td><a href="#GMTp300">GMT+3:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaDjibouti">Africa/Djibouti</a></td><td><a href="#GMTp300">GMT+3:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaDouala">Africa/Douala</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaEl_Aaiun">Africa/El_Aaiun</a></td><td><a href="#GMTp000">GMT+0:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaFreetown">Africa/Freetown</a></td><td><a href="#GMTp000">GMT+0:00</a></td><td>Jun 1 0:00</td><td>Sep 1 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AfricaGaborone">Africa/Gaborone</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaHarare">Africa/Harare</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td colspan=3></td><td><em>alias </em> <a href="#CAT">CAT</a></td></tr>
+<tr><td><a name="AfricaJohannesburg">Africa/Johannesburg</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td>Sep Sun>=15 2:00</td><td>Mar Sun>=15 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AfricaKampala">Africa/Kampala</a></td><td><a href="#GMTp300">GMT+3:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaKhartoum">Africa/Khartoum</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td>Apr lastSun 0:00</td><td>Oct 15 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AfricaKigali">Africa/Kigali</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaKinshasa">Africa/Kinshasa</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaLagos">Africa/Lagos</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaLibreville">Africa/Libreville</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaLome">Africa/Lome</a></td><td><a href="#GMTp000">GMT+0:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaLuanda">Africa/Luanda</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaLubumbashi">Africa/Lubumbashi</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaLusaka">Africa/Lusaka</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaMalabo">Africa/Malabo</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaMaputo">Africa/Maputo</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaMaseru">Africa/Maseru</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaMbabane">Africa/Mbabane</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaMogadishu">Africa/Mogadishu</a></td><td><a href="#GMTp300">GMT+3:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaMonrovia">Africa/Monrovia</a></td><td><a href="#GMTp000">GMT+0:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaNairobi">Africa/Nairobi</a></td><td><a href="#GMTp300">GMT+3:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaNdjamena">Africa/Ndjamena</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaNiamey">Africa/Niamey</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaNouakchott">Africa/Nouakchott</a></td><td><a href="#GMTp000">GMT+0:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaOuagadougou">Africa/Ouagadougou</a></td><td><a href="#GMTp000">GMT+0:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaPortomNovo">Africa/Porto-Novo</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaSao_Tome">Africa/Sao_Tome</a></td><td><a href="#GMTp000">GMT+0:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaTimbuktu">Africa/Timbuktu</a></td><td><a href="#GMTp000">GMT+0:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaTripoli">Africa/Tripoli</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AfricaTunis">Africa/Tunis</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td>May 1 0:00s</td><td>Sep lastSun 0:00s</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AfricaWindhoek">Africa/Windhoek</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td>Sep Sun>=1 2:00</td><td>Apr Sun>=1 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaAdak">America/Adak</a></td><td><a href="#GMTm1000">GMT-10:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><b><a name="AmericaAnchorage">America/Anchorage</a></b></td><td><a href="#GMTm900">GMT-9:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td><em>alias </em> <a href="#AST">AST</a></td></tr>
+<tr><td><a name="AmericaAnguilla">America/Anguilla</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaAntigua">America/Antigua</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaAraguaina">America/Araguaina</a></td><td><a href="#GMTm300">GMT-3:00</a></td><td>Oct Sun>=1 0:00</td><td>Feb 21 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaAruba">America/Aruba</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaAsuncion">America/Asuncion</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td>Oct Sun>=1 0:00</td><td>Feb lastSun 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaBarbados">America/Barbados</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td>Apr Sun>=15 2:00</td><td>Sep 25 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaBelem">America/Belem</a></td><td><a href="#GMTm300">GMT-3:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaBelize">America/Belize</a></td><td><a href="#GMTm600">GMT-6:00</a></td><td>Dec 18 0:00</td><td>Feb 12 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaBoa_Vista">America/Boa_Vista</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td>Oct Sun>=1 0:00</td><td>Feb 21 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaBogota">America/Bogota</a></td><td><a href="#GMTm500">GMT-5:00</a></td><td>May 2 0:00</td><td>Dec 31 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaBoise">America/Boise</a></td><td><a href="#GMTm700">GMT-7:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><b><a name="AmericaBuenos_Aires">America/Buenos_Aires</a></b></td><td><a href="#GMTm300">GMT-3:00</a></td><td>Oct Sun>=15 0:00</td><td>Mar Sun>=1 0:00</td><td>1:00</td><td><em>alias </em> <a href="#AGT">AGT</a></td></tr>
+<tr><td><a name="AmericaCambridge_Bay">America/Cambridge_Bay</a></td><td><a href="#GMTm600">GMT-6:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaCancun">America/Cancun</a></td><td><a href="#GMTm600">GMT-6:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaCaracas">America/Caracas</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaCatamarca">America/Catamarca</a></td><td><a href="#GMTm300">GMT-3:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaCayenne">America/Cayenne</a></td><td><a href="#GMTm300">GMT-3:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaCayman">America/Cayman</a></td><td><a href="#GMTm500">GMT-5:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><b><a name="AmericaChicago">America/Chicago</a></b></td><td><a href="#GMTm600">GMT-6:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td><em>alias </em> <a href="#CST">CST</a></td></tr>
+<tr><td><a name="AmericaChihuahua">America/Chihuahua</a></td><td><a href="#GMTm700">GMT-7:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaCordoba">America/Cordoba</a></td><td><a href="#GMTm300">GMT-3:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaCosta_Rica">America/Costa_Rica</a></td><td><a href="#GMTm600">GMT-6:00</a></td><td>Jan Sat>=15 0:00</td><td>Mar 15 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaCuiaba">America/Cuiaba</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td>Oct Sun>=1 0:00</td><td>Feb 21 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaCuracao">America/Curacao</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaDawson">America/Dawson</a></td><td><a href="#GMTm800">GMT-8:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaDawson_Creek">America/Dawson_Creek</a></td><td><a href="#GMTm700">GMT-7:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><b><a name="AmericaDenver">America/Denver</a></b></td><td><a href="#GMTm700">GMT-7:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td><em>alias </em> <a href="#MST">MST</a></td></tr>
+<tr><td><a name="AmericaDetroit">America/Detroit</a></td><td><a href="#GMTm500">GMT-5:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaDominica">America/Dominica</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaEdmonton">America/Edmonton</a></td><td><a href="#GMTm700">GMT-7:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaEl_Salvador">America/El_Salvador</a></td><td><a href="#GMTm600">GMT-6:00</a></td><td>May Sun>=1 0:00</td><td>Sep lastSun 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaFortaleza">America/Fortaleza</a></td><td><a href="#GMTm300">GMT-3:00</a></td><td>Oct Sun>=1 0:00</td><td>Feb 21 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaGlace_Bay">America/Glace_Bay</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaGodthab">America/Godthab</a></td><td><a href="#GMTm300">GMT-3:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaGoose_Bay">America/Goose_Bay</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaGrand_Turk">America/Grand_Turk</a></td><td><a href="#GMTm500">GMT-5:00</a></td><td>Apr Sun>=1 0:00</td><td>Oct lastSun 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaGrenada">America/Grenada</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaGuadeloupe">America/Guadeloupe</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaGuatemala">America/Guatemala</a></td><td><a href="#GMTm600">GMT-6:00</a></td><td>Mar 23 0:00</td><td>Sep 7 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaGuayaquil">America/Guayaquil</a></td><td><a href="#GMTm500">GMT-5:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaGuyana">America/Guyana</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaHalifax">America/Halifax</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaHavana">America/Havana</a></td><td><a href="#GMTm500">GMT-5:00</a></td><td>Apr 1 0:00s</td><td>Oct lastSun 0:00s</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaIndianaKnox">America/Indiana/Knox</a></td><td><a href="#GMTm500">GMT-5:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaIndianaMarengo">America/Indiana/Marengo</a></td><td><a href="#GMTm500">GMT-5:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaIndianaVevay">America/Indiana/Vevay</a></td><td><a href="#GMTm500">GMT-5:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><b><a name="AmericaIndianapolis">America/Indianapolis</a></b></td><td><a href="#GMTm500">GMT-5:00</a></td><td colspan=3></td><td><em>alias </em> <a href="#IET">IET</a></td></tr>
+<tr><td><a name="AmericaInuvik">America/Inuvik</a></td><td><a href="#GMTm700">GMT-7:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaIqaluit">America/Iqaluit</a></td><td><a href="#GMTm600">GMT-6:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaJamaica">America/Jamaica</a></td><td><a href="#GMTm500">GMT-5:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaJujuy">America/Jujuy</a></td><td><a href="#GMTm300">GMT-3:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaJuneau">America/Juneau</a></td><td><a href="#GMTm900">GMT-9:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaLa_Paz">America/La_Paz</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaLima">America/Lima</a></td><td><a href="#GMTm500">GMT-5:00</a></td><td>Jan 1 0:00</td><td>Apr 1 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><b><a name="AmericaLos_Angeles">America/Los_Angeles</a></b></td><td><a href="#GMTm800">GMT-8:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td><em>alias </em> <a href="#PST">PST</a></td></tr>
+<tr><td><a name="AmericaLouisville">America/Louisville</a></td><td><a href="#GMTm500">GMT-5:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaMaceio">America/Maceio</a></td><td><a href="#GMTm300">GMT-3:00</a></td><td>Oct Sun>=1 0:00</td><td>Feb 21 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaManagua">America/Managua</a></td><td><a href="#GMTm600">GMT-6:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaManaus">America/Manaus</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaMartinique">America/Martinique</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaMazatlan">America/Mazatlan</a></td><td><a href="#GMTm700">GMT-7:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaMendoza">America/Mendoza</a></td><td><a href="#GMTm300">GMT-3:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaMenominee">America/Menominee</a></td><td><a href="#GMTm600">GMT-6:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaMexico_City">America/Mexico_City</a></td><td><a href="#GMTm600">GMT-6:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaMiquelon">America/Miquelon</a></td><td><a href="#GMTm300">GMT-3:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaMontevideo">America/Montevideo</a></td><td><a href="#GMTm300">GMT-3:00</a></td><td>Oct 18 0:00</td><td>Feb 28 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaMontreal">America/Montreal</a></td><td><a href="#GMTm500">GMT-5:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaMontserrat">America/Montserrat</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaNassau">America/Nassau</a></td><td><a href="#GMTm500">GMT-5:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaNew_York">America/New_York</a></td><td><a href="#GMTm500">GMT-5:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td><em>alias </em> <a href="#EST">EST</a></td></tr>
+<tr><td><a name="AmericaNipigon">America/Nipigon</a></td><td><a href="#GMTm500">GMT-5:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaNome">America/Nome</a></td><td><a href="#GMTm900">GMT-9:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><b><a name="AmericaNoronha">America/Noronha</a></b></td><td><a href="#GMTm200">GMT-2:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaPanama">America/Panama</a></td><td><a href="#GMTm500">GMT-5:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaPangnirtung">America/Pangnirtung</a></td><td><a href="#GMTm600">GMT-6:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaParamaribo">America/Paramaribo</a></td><td><a href="#GMTm300">GMT-3:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaPhoenix">America/Phoenix</a></td><td><a href="#GMTm700">GMT-7:00</a></td><td colspan=3></td><td><em>alias </em> <a href="#PNT">PNT</a></td></tr>
+<tr><td><a name="AmericaPortmaumPrince">America/Port-au-Prince</a></td><td><a href="#GMTm500">GMT-5:00</a></td><td>Apr Sun>=1 1:00s</td><td>Oct lastSun 1:00s</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaPort_of_Spain">America/Port_of_Spain</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaPorto_Acre">America/Porto_Acre</a></td><td><a href="#GMTm500">GMT-5:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaPorto_Velho">America/Porto_Velho</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><b><a name="AmericaPuerto_Rico">America/Puerto_Rico</a></b></td><td><a href="#GMTm400">GMT-4:00</a></td><td colspan=3></td><td><em>alias </em> <a href="#PRT">PRT</a></td></tr>
+<tr><td><a name="AmericaRainy_River">America/Rainy_River</a></td><td><a href="#GMTm600">GMT-6:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaRankin_Inlet">America/Rankin_Inlet</a></td><td><a href="#GMTm600">GMT-6:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaRegina">America/Regina</a></td><td><a href="#GMTm600">GMT-6:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaRosario">America/Rosario</a></td><td><a href="#GMTm300">GMT-3:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaSantiago">America/Santiago</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td>Oct Sun>=9 0:00</td><td>Apr 4 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaSanto_Domingo">America/Santo_Domingo</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaSao_Paulo">America/Sao_Paulo</a></td><td><a href="#GMTm300">GMT-3:00</a></td><td>Oct Sun>=1 0:00</td><td>Feb 21 0:00</td><td>1:00</td><td><em>alias </em> <a href="#BET">BET</a></td></tr>
+<tr><td><a name="AmericaScoresbysund">America/Scoresbysund</a></td><td><a href="#GMTm100">GMT-1:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><b><a name="AmericaSt_Johns">America/St_Johns</a></b></td><td><a href="#GMTm330">GMT-3:30</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td><em>alias </em> <a href="#CNT">CNT</a></td></tr>
+<tr><td><a name="AmericaSt_Kitts">America/St_Kitts</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaSt_Lucia">America/St_Lucia</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaSt_Thomas">America/St_Thomas</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaSt_Vincent">America/St_Vincent</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaSwift_Current">America/Swift_Current</a></td><td><a href="#GMTm600">GMT-6:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaTegucigalpa">America/Tegucigalpa</a></td><td><a href="#GMTm600">GMT-6:00</a></td><td>May Sun>=1 0:00</td><td>Sep lastSun 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaThule">America/Thule</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaThunder_Bay">America/Thunder_Bay</a></td><td><a href="#GMTm500">GMT-5:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaTijuana">America/Tijuana</a></td><td><a href="#GMTm800">GMT-8:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaTortola">America/Tortola</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AmericaVancouver">America/Vancouver</a></td><td><a href="#GMTm800">GMT-8:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaWhitehorse">America/Whitehorse</a></td><td><a href="#GMTm800">GMT-8:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaWinnipeg">America/Winnipeg</a></td><td><a href="#GMTm600">GMT-6:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaYakutat">America/Yakutat</a></td><td><a href="#GMTm900">GMT-9:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AmericaYellowknife">America/Yellowknife</a></td><td><a href="#GMTm700">GMT-7:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AntarcticaCasey">Antarctica/Casey</a></td><td><a href="#GMTp800">GMT+8:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AntarcticaDavis">Antarctica/Davis</a></td><td><a href="#GMTp700">GMT+7:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AntarcticaDumontDUrville">Antarctica/DumontDUrville</a></td><td><a href="#GMTp1000">GMT+10:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AntarcticaMawson">Antarctica/Mawson</a></td><td><a href="#GMTp600">GMT+6:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AntarcticaMcMurdo">Antarctica/McMurdo</a></td><td><a href="#GMTp1200">GMT+12:00</a></td><td>Oct Sun>=1 2:00s</td><td>Mar Sun>=15 2:00s</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AntarcticaPalmer">Antarctica/Palmer</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td>Oct Sun>=9 0:00</td><td>Apr 4 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AntarcticaSyowa">Antarctica/Syowa</a></td><td><a href="#GMTp300">GMT+3:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AsiaAden">Asia/Aden</a></td><td><a href="#GMTp300">GMT+3:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AsiaAlmaty">Asia/Almaty</a></td><td><a href="#GMTp600">GMT+6:00</a></td><td>Mar lastSun 0:00</td><td>Oct lastSun 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AsiaAmman">Asia/Amman</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td>Apr 1 0:00</td><td>Oct 1 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AsiaAnadyr">Asia/Anadyr</a></td><td><a href="#GMTp1200">GMT+12:00</a></td><td>Mar lastSun 2:00s</td><td>Oct lastSun 2:00s</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AsiaAqtau">Asia/Aqtau</a></td><td><a href="#GMTp400">GMT+4:00</a></td><td>Mar lastSun 0:00</td><td>Oct lastSun 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AsiaAqtobe">Asia/Aqtobe</a></td><td><a href="#GMTp500">GMT+5:00</a></td><td>Mar lastSun 0:00</td><td>Oct lastSun 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AsiaAshkhabad">Asia/Ashkhabad</a></td><td><a href="#GMTp500">GMT+5:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AsiaBaghdad">Asia/Baghdad</a></td><td><a href="#GMTp300">GMT+3:00</a></td><td>Apr 1 3:00s</td><td>Oct 1 3:00s</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AsiaBahrain">Asia/Bahrain</a></td><td><a href="#GMTp300">GMT+3:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AsiaBaku">Asia/Baku</a></td><td><a href="#GMTp400">GMT+4:00</a></td><td>Mar lastSun 1:00</td><td>Oct lastSun 1:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AsiaBangkok">Asia/Bangkok</a></td><td><a href="#GMTp700">GMT+7:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AsiaBeirut">Asia/Beirut</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td>Mar lastSun 0:00</td><td>Oct lastSun 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AsiaBishkek">Asia/Bishkek</a></td><td><a href="#GMTp500">GMT+5:00</a></td><td>Mar lastSun 2:30</td><td>Oct lastSun 2:30</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AsiaBrunei">Asia/Brunei</a></td><td><a href="#GMTp800">GMT+8:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><b><a name="AsiaCalcutta">Asia/Calcutta</a></b></td><td><a href="#GMTp530">GMT+5:30</a></td><td colspan=3></td><td><em>alias </em> <a href="#IST">IST</a></td></tr>
+<tr><td><a name="AsiaChungking">Asia/Chungking</a></td><td><a href="#GMTp800">GMT+8:00</a></td><td>Apr Sun>=10 0:00</td><td>Sep Sun>=11 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AsiaColombo">Asia/Colombo</a></td><td><a href="#GMTp600">GMT+6:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><b><a name="AsiaDacca">Asia/Dacca</a></b></td><td><a href="#GMTp600">GMT+6:00</a></td><td colspan=3></td><td><em>alias </em> <a href="#BST">BST</a></td></tr>
+<tr><td><a name="AsiaDamascus">Asia/Damascus</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td>Apr 1 0:00</td><td>Oct 1 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AsiaDili">Asia/Dili</a></td><td><a href="#GMTp800">GMT+8:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AsiaDubai">Asia/Dubai</a></td><td><a href="#GMTp400">GMT+4:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AsiaDushanbe">Asia/Dushanbe</a></td><td><a href="#GMTp500">GMT+5:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AsiaGaza">Asia/Gaza</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td>Apr Fri>=15 0:00</td><td>Oct Fri>=15 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AsiaHarbin">Asia/Harbin</a></td><td><a href="#GMTp800">GMT+8:00</a></td><td>Apr Sun>=10 0:00</td><td>Sep Sun>=11 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AsiaHong_Kong">Asia/Hong_Kong</a></td><td><a href="#GMTp800">GMT+8:00</a></td><td>Apr Sun>=10 0:00</td><td>Sep Sun>=11 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AsiaIrkutsk">Asia/Irkutsk</a></td><td><a href="#GMTp800">GMT+8:00</a></td><td>Mar lastSun 2:00s</td><td>Oct lastSun 2:00s</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AsiaJakarta">Asia/Jakarta</a></td><td><a href="#GMTp700">GMT+7:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AsiaJayapura">Asia/Jayapura</a></td><td><a href="#GMTp900">GMT+9:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AsiaJerusalem">Asia/Jerusalem</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td>Apr Fri>=1 2:00</td><td>Sep 3 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><b><a name="AsiaKabul">Asia/Kabul</a></b></td><td><a href="#GMTp430">GMT+4:30</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AsiaKamchatka">Asia/Kamchatka</a></td><td><a href="#GMTp1200">GMT+12:00</a></td><td>Mar lastSun 2:00s</td><td>Oct lastSun 2:00s</td><td>1:00</td><td></td></tr>
+<tr><td><b><a name="AsiaKarachi">Asia/Karachi</a></b></td><td><a href="#GMTp500">GMT+5:00</a></td><td colspan=3></td><td><em>alias </em> <a href="#PLT">PLT</a></td></tr>
+<tr><td><a name="AsiaKashgar">Asia/Kashgar</a></td><td><a href="#GMTp800">GMT+8:00</a></td><td>Apr Sun>=10 0:00</td><td>Sep Sun>=11 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><b><a name="AsiaKatmandu">Asia/Katmandu</a></b></td><td><a href="#GMTp545">GMT+5:45</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AsiaKrasnoyarsk">Asia/Krasnoyarsk</a></td><td><a href="#GMTp700">GMT+7:00</a></td><td>Mar lastSun 2:00s</td><td>Oct lastSun 2:00s</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AsiaKuala_Lumpur">Asia/Kuala_Lumpur</a></td><td><a href="#GMTp800">GMT+8:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AsiaKuching">Asia/Kuching</a></td><td><a href="#GMTp800">GMT+8:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AsiaKuwait">Asia/Kuwait</a></td><td><a href="#GMTp300">GMT+3:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AsiaMacao">Asia/Macao</a></td><td><a href="#GMTp800">GMT+8:00</a></td><td>Apr Sun>=10 0:00</td><td>Sep Sun>=11 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AsiaMagadan">Asia/Magadan</a></td><td><a href="#GMTp1100">GMT+11:00</a></td><td>Mar lastSun 2:00s</td><td>Oct lastSun 2:00s</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AsiaManila">Asia/Manila</a></td><td><a href="#GMTp800">GMT+8:00</a></td><td>Mar 22 0:00</td><td>Sep 21 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AsiaMuscat">Asia/Muscat</a></td><td><a href="#GMTp400">GMT+4:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AsiaNicosia">Asia/Nicosia</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AsiaNovosibirsk">Asia/Novosibirsk</a></td><td><a href="#GMTp600">GMT+6:00</a></td><td>Mar lastSun 2:00s</td><td>Oct lastSun 2:00s</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AsiaOmsk">Asia/Omsk</a></td><td><a href="#GMTp600">GMT+6:00</a></td><td>Mar lastSun 2:00s</td><td>Oct lastSun 2:00s</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AsiaPhnom_Penh">Asia/Phnom_Penh</a></td><td><a href="#GMTp700">GMT+7:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AsiaPyongyang">Asia/Pyongyang</a></td><td><a href="#GMTp900">GMT+9:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AsiaQatar">Asia/Qatar</a></td><td><a href="#GMTp300">GMT+3:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><b><a name="AsiaRangoon">Asia/Rangoon</a></b></td><td><a href="#GMTp630">GMT+6:30</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AsiaRiyadh">Asia/Riyadh</a></td><td><a href="#GMTp300">GMT+3:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AsiaRiyadh87">Asia/Riyadh87</a></td><td><a href="#GMTp30704">GMT+3:07:04</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AsiaRiyadh88">Asia/Riyadh88</a></td><td><a href="#GMTp30704">GMT+3:07:04</a></td><td colspan=3></td><td></td></tr>
+<tr><td><b><a name="AsiaRiyadh89">Asia/Riyadh89</a></b></td><td><a href="#GMTp30704">GMT+3:07:04</a></td><td colspan=3></td><td></td></tr>
+<tr><td><b><a name="AsiaSaigon">Asia/Saigon</a></b></td><td><a href="#GMTp700">GMT+7:00</a></td><td colspan=3></td><td><em>alias </em> <a href="#VST">VST</a></td></tr>
+<tr><td><a name="AsiaSamarkand">Asia/Samarkand</a></td><td><a href="#GMTp500">GMT+5:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AsiaSeoul">Asia/Seoul</a></td><td><a href="#GMTp900">GMT+9:00</a></td><td>May Sun<=14 0:00</td><td>Oct Sun<=14 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><b><a name="AsiaShanghai">Asia/Shanghai</a></b></td><td><a href="#GMTp800">GMT+8:00</a></td><td>Apr Sun>=10 0:00</td><td>Sep Sun>=11 0:00</td><td>1:00</td><td><em>alias </em> <a href="#CTT">CTT</a></td></tr>
+<tr><td><a name="AsiaSingapore">Asia/Singapore</a></td><td><a href="#GMTp800">GMT+8:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AsiaTaipei">Asia/Taipei</a></td><td><a href="#GMTp800">GMT+8:00</a></td><td>Jun 30 0:00</td><td>Sep 30 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AsiaTashkent">Asia/Tashkent</a></td><td><a href="#GMTp500">GMT+5:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AsiaTbilisi">Asia/Tbilisi</a></td><td><a href="#GMTp400">GMT+4:00</a></td><td>Mar lastSun 0:00</td><td>Oct lastSun 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><b><a name="AsiaTehran">Asia/Tehran</a></b></td><td><a href="#GMTp330">GMT+3:30</a></td><td>Mar 20 0:00</td><td>Sep 23 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AsiaThimbu">Asia/Thimbu</a></td><td><a href="#GMTp600">GMT+6:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><b><a name="AsiaTokyo">Asia/Tokyo</a></b></td><td><a href="#GMTp900">GMT+9:00</a></td><td colspan=3></td><td><em>alias </em> <a href="#JST">JST</a></td></tr>
+<tr><td><a name="AsiaUjung_Pandang">Asia/Ujung_Pandang</a></td><td><a href="#GMTp800">GMT+8:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AsiaUlan_Bator">Asia/Ulan_Bator</a></td><td><a href="#GMTp800">GMT+8:00</a></td><td>Mar lastSun 0:00</td><td>Sep lastSun 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AsiaUrumqi">Asia/Urumqi</a></td><td><a href="#GMTp800">GMT+8:00</a></td><td>Apr Sun>=10 0:00</td><td>Sep Sun>=11 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AsiaVientiane">Asia/Vientiane</a></td><td><a href="#GMTp700">GMT+7:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AsiaVladivostok">Asia/Vladivostok</a></td><td><a href="#GMTp1000">GMT+10:00</a></td><td>Mar lastSun 2:00s</td><td>Oct lastSun 2:00s</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AsiaYakutsk">Asia/Yakutsk</a></td><td><a href="#GMTp900">GMT+9:00</a></td><td>Mar lastSun 2:00s</td><td>Oct lastSun 2:00s</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AsiaYekaterinburg">Asia/Yekaterinburg</a></td><td><a href="#GMTp500">GMT+5:00</a></td><td>Mar lastSun 2:00s</td><td>Oct lastSun 2:00s</td><td>1:00</td><td></td></tr>
+<tr><td><b><a name="AsiaYerevan">Asia/Yerevan</a></b></td><td><a href="#GMTp400">GMT+4:00</a></td><td>Mar lastSun 2:00s</td><td>Oct lastSun 2:00s</td><td>1:00</td><td><em>alias </em> <a href="#NET">NET</a></td></tr>
+<tr><td><b><a name="AtlanticAzores">Atlantic/Azores</a></b></td><td><a href="#GMTm100">GMT-1:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AtlanticBermuda">Atlantic/Bermuda</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AtlanticCanary">Atlantic/Canary</a></td><td><a href="#GMTp000">GMT+0:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AtlanticCape_Verde">Atlantic/Cape_Verde</a></td><td><a href="#GMTm100">GMT-1:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AtlanticFaeroe">Atlantic/Faeroe</a></td><td><a href="#GMTp000">GMT+0:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AtlanticJan_Mayen">Atlantic/Jan_Mayen</a></td><td><a href="#GMTm100">GMT-1:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AtlanticMadeira">Atlantic/Madeira</a></td><td><a href="#GMTp000">GMT+0:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AtlanticReykjavik">Atlantic/Reykjavik</a></td><td><a href="#GMTp000">GMT+0:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AtlanticSouth_Georgia">Atlantic/South_Georgia</a></td><td><a href="#GMTm200">GMT-2:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AtlanticSt_Helena">Atlantic/St_Helena</a></td><td><a href="#GMTp000">GMT+0:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="AtlanticStanley">Atlantic/Stanley</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td>Sep Sun>=8 0:00</td><td>Apr Sun>=16 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AustraliaAdelaide">Australia/Adelaide</a></td><td><a href="#GMTp930">GMT+9:30</a></td><td>Oct lastSun 2:00s</td><td>Mar lastSun 2:00s</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AustraliaBrisbane">Australia/Brisbane</a></td><td><a href="#GMTp1000">GMT+10:00</a></td><td>Oct lastSun 2:00s</td><td>Mar Sun>=1 2:00s</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AustraliaBroken_Hill">Australia/Broken_Hill</a></td><td><a href="#GMTp930">GMT+9:30</a></td><td>Oct lastSun 2:00s</td><td>Mar lastSun 2:00s</td><td>1:00</td><td></td></tr>
+<tr><td><b><a name="AustraliaDarwin">Australia/Darwin</a></b></td><td><a href="#GMTp930">GMT+9:30</a></td><td>Oct 3 2:00</td><td>Mar lastSun 2:00</td><td>1:00</td><td><em>alias </em> <a href="#ACT">ACT</a></td></tr>
+<tr><td><a name="AustraliaHobart">Australia/Hobart</a></td><td><a href="#GMTp1000">GMT+10:00</a></td><td>Oct Sun>=1 2:00s</td><td>Mar lastSun 2:00s</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AustraliaLindeman">Australia/Lindeman</a></td><td><a href="#GMTp1000">GMT+10:00</a></td><td>Oct lastSun 2:00s</td><td>Mar Sun>=1 2:00s</td><td>1:00</td><td></td></tr>
+<tr><td><b><a name="AustraliaLord_Howe">Australia/Lord_Howe</a></b></td><td><a href="#GMTp1030">GMT+10:30</a></td><td>Oct lastSun 2:00s</td><td>Mar lastSun 2:00s</td><td>0:30</td><td></td></tr>
+<tr><td><a name="AustraliaMelbourne">Australia/Melbourne</a></td><td><a href="#GMTp1000">GMT+10:00</a></td><td>Oct lastSun 2:00s</td><td>Mar lastSun 2:00s</td><td>1:00</td><td></td></tr>
+<tr><td><a name="AustraliaPerth">Australia/Perth</a></td><td><a href="#GMTp800">GMT+8:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><b><a name="AustraliaSydney">Australia/Sydney</a></b></td><td><a href="#GMTp1000">GMT+10:00</a></td><td>Oct lastSun 2:00s</td><td>Mar lastSun 2:00s</td><td>1:00</td><td><em>alias </em> <a href="#AET">AET</a></td></tr>
+<tr><td><a name="BET">BET</a></td><td><a href="#GMTm300">GMT-3:00</a></td><td>Oct Sun>=1 0:00</td><td>Feb 21 0:00</td><td>1:00</td><td><em>alias for</em> <a href="#AmericaSao_Paulo">America/Sao_Paulo</a></td></tr>
+<tr><td><a name="BST">BST</a></td><td><a href="#GMTp600">GMT+6:00</a></td><td colspan=3></td><td><em>alias for</em> <a href="#AsiaDacca">Asia/Dacca</a></td></tr>
+<tr><td><a name="CAT">CAT</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td colspan=3></td><td><em>alias for</em> <a href="#AfricaHarare">Africa/Harare</a></td></tr>
+<tr><td><a name="CET">CET</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td>Mar lastSun 2:00s</td><td>Oct lastSun 2:00s</td><td>1:00</td><td></td></tr>
+<tr><td><a name="CNT">CNT</a></td><td><a href="#GMTm330">GMT-3:30</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td><em>alias for</em> <a href="#AmericaSt_Johns">America/St_Johns</a></td></tr>
+<tr><td><a name="CST">CST</a></td><td><a href="#GMTm600">GMT-6:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td><em>alias for</em> <a href="#AmericaChicago">America/Chicago</a></td></tr>
+<tr><td><a name="CTT">CTT</a></td><td><a href="#GMTp800">GMT+8:00</a></td><td>Apr Sun>=10 0:00</td><td>Sep Sun>=11 0:00</td><td>1:00</td><td><em>alias for</em> <a href="#AsiaShanghai">Asia/Shanghai</a></td></tr>
+<tr><td><a name="EAT">EAT</a></td><td><a href="#GMTp300">GMT+3:00</a></td><td colspan=3></td><td><em>alias for</em> <a href="#AfricaAddis_Ababa">Africa/Addis_Ababa</a></td></tr>
+<tr><td><a name="ECT">ECT</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td><em>alias for</em> <a href="#EuropeParis">Europe/Paris</a></td></tr>
+<tr><td><a name="EET">EET</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EST">EST</a></td><td><a href="#GMTm500">GMT-5:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td><em>alias for</em> <a href="#AmericaNew_York">America/New_York</a></td></tr>
+<tr><td><a name="EtcGMT">Etc/GMT</a></td><td><a href="#GMTp000">GMT+0:00</a></td><td colspan=3></td><td><em>alias </em> <a href="#UTC">UTC</a></td></tr>
+<tr><td><a name="EtcGMTp1">Etc/GMT+1</a></td><td><a href="#GMTm100">GMT-1:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="EtcGMTp10">Etc/GMT+10</a></td><td><a href="#GMTm1000">GMT-10:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="EtcGMTp11">Etc/GMT+11</a></td><td><a href="#GMTm1100">GMT-11:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><b><a name="EtcGMTp12">Etc/GMT+12</a></b></td><td><a href="#GMTm1200">GMT-12:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="EtcGMTp2">Etc/GMT+2</a></td><td><a href="#GMTm200">GMT-2:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="EtcGMTp3">Etc/GMT+3</a></td><td><a href="#GMTm300">GMT-3:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="EtcGMTp4">Etc/GMT+4</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="EtcGMTp5">Etc/GMT+5</a></td><td><a href="#GMTm500">GMT-5:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="EtcGMTp6">Etc/GMT+6</a></td><td><a href="#GMTm600">GMT-6:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="EtcGMTp7">Etc/GMT+7</a></td><td><a href="#GMTm700">GMT-7:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="EtcGMTp8">Etc/GMT+8</a></td><td><a href="#GMTm800">GMT-8:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="EtcGMTp9">Etc/GMT+9</a></td><td><a href="#GMTm900">GMT-9:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="EtcGMTm1">Etc/GMT-1</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="EtcGMTm10">Etc/GMT-10</a></td><td><a href="#GMTp1000">GMT+10:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="EtcGMTm11">Etc/GMT-11</a></td><td><a href="#GMTp1100">GMT+11:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="EtcGMTm12">Etc/GMT-12</a></td><td><a href="#GMTp1200">GMT+12:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="EtcGMTm13">Etc/GMT-13</a></td><td><a href="#GMTp1300">GMT+13:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="EtcGMTm14">Etc/GMT-14</a></td><td><a href="#GMTp1400">GMT+14:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="EtcGMTm2">Etc/GMT-2</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="EtcGMTm3">Etc/GMT-3</a></td><td><a href="#GMTp300">GMT+3:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="EtcGMTm4">Etc/GMT-4</a></td><td><a href="#GMTp400">GMT+4:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="EtcGMTm5">Etc/GMT-5</a></td><td><a href="#GMTp500">GMT+5:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="EtcGMTm6">Etc/GMT-6</a></td><td><a href="#GMTp600">GMT+6:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="EtcGMTm7">Etc/GMT-7</a></td><td><a href="#GMTp700">GMT+7:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="EtcGMTm8">Etc/GMT-8</a></td><td><a href="#GMTp800">GMT+8:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="EtcGMTm9">Etc/GMT-9</a></td><td><a href="#GMTp900">GMT+9:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="EtcUCT">Etc/UCT</a></td><td><a href="#GMTp000">GMT+0:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="EtcUTC">Etc/UTC</a></td><td><a href="#GMTp000">GMT+0:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="EuropeAmsterdam">Europe/Amsterdam</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeAndorra">Europe/Andorra</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeAthens">Europe/Athens</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeBelfast">Europe/Belfast</a></td><td><a href="#GMTp000">GMT+0:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeBelgrade">Europe/Belgrade</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeBerlin">Europe/Berlin</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeBrussels">Europe/Brussels</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeBucharest">Europe/Bucharest</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeBudapest">Europe/Budapest</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeChisinau">Europe/Chisinau</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeCopenhagen">Europe/Copenhagen</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeDublin">Europe/Dublin</a></td><td><a href="#GMTp000">GMT+0:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeGibraltar">Europe/Gibraltar</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeHelsinki">Europe/Helsinki</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeIstanbul">Europe/Istanbul</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeKaliningrad">Europe/Kaliningrad</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td>Mar lastSun 2:00s</td><td>Oct lastSun 2:00s</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeKiev">Europe/Kiev</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeLisbon">Europe/Lisbon</a></td><td><a href="#GMTp000">GMT+0:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeLondon">Europe/London</a></td><td><a href="#GMTp000">GMT+0:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeLuxembourg">Europe/Luxembourg</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeMadrid">Europe/Madrid</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeMalta">Europe/Malta</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeMinsk">Europe/Minsk</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td>Mar lastSun 2:00s</td><td>Oct lastSun 2:00s</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeMonaco">Europe/Monaco</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeMoscow">Europe/Moscow</a></td><td><a href="#GMTp300">GMT+3:00</a></td><td>Mar lastSun 2:00s</td><td>Oct lastSun 2:00s</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeOslo">Europe/Oslo</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><b><a name="EuropeParis">Europe/Paris</a></b></td><td><a href="#GMTp100">GMT+1:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td><em>alias </em> <a href="#ECT">ECT</a></td></tr>
+<tr><td><a name="EuropePrague">Europe/Prague</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeRiga">Europe/Riga</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeRome">Europe/Rome</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeSamara">Europe/Samara</a></td><td><a href="#GMTp400">GMT+4:00</a></td><td>Mar lastSun 2:00s</td><td>Oct lastSun 2:00s</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeSimferopol">Europe/Simferopol</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeSofia">Europe/Sofia</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeStockholm">Europe/Stockholm</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeTallinn">Europe/Tallinn</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="EuropeTirane">Europe/Tirane</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeTiraspol">Europe/Tiraspol</a></td><td><a href="#GMTp300">GMT+3:00</a></td><td>Mar lastSun 2:00s</td><td>Oct lastSun 2:00s</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeUzhgorod">Europe/Uzhgorod</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeVaduz">Europe/Vaduz</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeVienna">Europe/Vienna</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeVilnius">Europe/Vilnius</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeWarsaw">Europe/Warsaw</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeZaporozhye">Europe/Zaporozhye</a></td><td><a href="#GMTp200">GMT+2:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><a name="EuropeZurich">Europe/Zurich</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+<tr><td><b><a name="GMT">GMT</a></b></td><td><a href="#GMTp000">GMT+0:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="HST">HST</a></td><td><a href="#GMTm1000">GMT-10:00</a></td><td colspan=3></td><td><em>alias for</em> <a href="#PacificHonolulu">Pacific/Honolulu</a></td></tr>
+<tr><td><a name="IET">IET</a></td><td><a href="#GMTm500">GMT-5:00</a></td><td colspan=3></td><td><em>alias for</em> <a href="#AmericaIndianapolis">America/Indianapolis</a></td></tr>
+<tr><td><a name="IST">IST</a></td><td><a href="#GMTp530">GMT+5:30</a></td><td colspan=3></td><td><em>alias for</em> <a href="#AsiaCalcutta">Asia/Calcutta</a></td></tr>
+<tr><td><a name="IndianAntananarivo">Indian/Antananarivo</a></td><td><a href="#GMTp300">GMT+3:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="IndianChagos">Indian/Chagos</a></td><td><a href="#GMTp500">GMT+5:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="IndianChristmas">Indian/Christmas</a></td><td><a href="#GMTp700">GMT+7:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="IndianCocos">Indian/Cocos</a></td><td><a href="#GMTp630">GMT+6:30</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="IndianComoro">Indian/Comoro</a></td><td><a href="#GMTp300">GMT+3:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="IndianKerguelen">Indian/Kerguelen</a></td><td><a href="#GMTp500">GMT+5:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="IndianMahe">Indian/Mahe</a></td><td><a href="#GMTp400">GMT+4:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="IndianMaldives">Indian/Maldives</a></td><td><a href="#GMTp500">GMT+5:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="IndianMauritius">Indian/Mauritius</a></td><td><a href="#GMTp400">GMT+4:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="IndianMayotte">Indian/Mayotte</a></td><td><a href="#GMTp300">GMT+3:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="IndianReunion">Indian/Reunion</a></td><td><a href="#GMTp400">GMT+4:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="JST">JST</a></td><td><a href="#GMTp900">GMT+9:00</a></td><td colspan=3></td><td><em>alias for</em> <a href="#AsiaTokyo">Asia/Tokyo</a></td></tr>
+<tr><td><a name="MET">MET</a></td><td><a href="#GMTp100">GMT+1:00</a></td><td>Mar lastSun 2:00s</td><td>Oct lastSun 2:00s</td><td>1:00</td><td></td></tr>
+<tr><td><a name="MIT">MIT</a></td><td><a href="#GMTm1100">GMT-11:00</a></td><td colspan=3></td><td><em>alias for</em> <a href="#PacificApia">Pacific/Apia</a></td></tr>
+<tr><td><a name="MST">MST</a></td><td><a href="#GMTm700">GMT-7:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td><em>alias for</em> <a href="#AmericaDenver">America/Denver</a></td></tr>
+<tr><td><a name="NET">NET</a></td><td><a href="#GMTp400">GMT+4:00</a></td><td>Mar lastSun 2:00s</td><td>Oct lastSun 2:00s</td><td>1:00</td><td><em>alias for</em> <a href="#AsiaYerevan">Asia/Yerevan</a></td></tr>
+<tr><td><a name="NST">NST</a></td><td><a href="#GMTp1200">GMT+12:00</a></td><td>Oct Sun>=1 2:00s</td><td>Mar Sun>=15 2:00s</td><td>1:00</td><td><em>alias for</em> <a href="#PacificAuckland">Pacific/Auckland</a></td></tr>
+<tr><td><a name="PLT">PLT</a></td><td><a href="#GMTp500">GMT+5:00</a></td><td colspan=3></td><td><em>alias for</em> <a href="#AsiaKarachi">Asia/Karachi</a></td></tr>
+<tr><td><a name="PNT">PNT</a></td><td><a href="#GMTm700">GMT-7:00</a></td><td colspan=3></td><td><em>alias for</em> <a href="#AmericaPhoenix">America/Phoenix</a></td></tr>
+<tr><td><a name="PRT">PRT</a></td><td><a href="#GMTm400">GMT-4:00</a></td><td colspan=3></td><td><em>alias for</em> <a href="#AmericaPuerto_Rico">America/Puerto_Rico</a></td></tr>
+<tr><td><a name="PST">PST</a></td><td><a href="#GMTm800">GMT-8:00</a></td><td>Apr Sun>=1 2:00</td><td>Oct lastSun 2:00</td><td>1:00</td><td><em>alias for</em> <a href="#AmericaLos_Angeles">America/Los_Angeles</a></td></tr>
+<tr><td><b><a name="PacificApia">Pacific/Apia</a></b></td><td><a href="#GMTm1100">GMT-11:00</a></td><td colspan=3></td><td><em>alias </em> <a href="#MIT">MIT</a></td></tr>
+<tr><td><b><a name="PacificAuckland">Pacific/Auckland</a></b></td><td><a href="#GMTp1200">GMT+12:00</a></td><td>Oct Sun>=1 2:00s</td><td>Mar Sun>=15 2:00s</td><td>1:00</td><td><em>alias </em> <a href="#NST">NST</a></td></tr>
+<tr><td><b><a name="PacificChatham">Pacific/Chatham</a></b></td><td><a href="#GMTp1245">GMT+12:45</a></td><td>Oct Sun>=1 2:45s</td><td>Mar Sun>=15 2:45s</td><td>1:00</td><td></td></tr>
+<tr><td><a name="PacificEaster">Pacific/Easter</a></td><td><a href="#GMTm600">GMT-6:00</a></td><td>Oct Sun>=9 0:00</td><td>Apr 4 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="PacificEfate">Pacific/Efate</a></td><td><a href="#GMTp1100">GMT+11:00</a></td><td>Oct Sun>=23 0:00</td><td>Jan Sun>=23 0:00</td><td>1:00</td><td></td></tr>
+<tr><td><b><a name="PacificEnderbury">Pacific/Enderbury</a></b></td><td><a href="#GMTp1300">GMT+13:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="PacificFakaofo">Pacific/Fakaofo</a></td><td><a href="#GMTm1000">GMT-10:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="PacificFiji">Pacific/Fiji</a></td><td><a href="#GMTp1200">GMT+12:00</a></td><td>Nov Sun>=1 2:00</td><td>Feb lastSun 3:00</td><td>1:00</td><td></td></tr>
+<tr><td><a name="PacificFunafuti">Pacific/Funafuti</a></td><td><a href="#GMTp1200">GMT+12:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="PacificGalapagos">Pacific/Galapagos</a></td><td><a href="#GMTm600">GMT-6:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="PacificGambier">Pacific/Gambier</a></td><td><a href="#GMTm900">GMT-9:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><b><a name="PacificGuadalcanal">Pacific/Guadalcanal</a></b></td><td><a href="#GMTp1100">GMT+11:00</a></td><td colspan=3></td><td><em>alias </em> <a href="#SST">SST</a></td></tr>
+<tr><td><a name="PacificGuam">Pacific/Guam</a></td><td><a href="#GMTp1000">GMT+10:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><b><a name="PacificHonolulu">Pacific/Honolulu</a></b></td><td><a href="#GMTm1000">GMT-10:00</a></td><td colspan=3></td><td><em>alias </em> <a href="#HST">HST</a></td></tr>
+<tr><td><a name="PacificJohnston">Pacific/Johnston</a></td><td><a href="#GMTm1000">GMT-10:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><b><a name="PacificKiritimati">Pacific/Kiritimati</a></b></td><td><a href="#GMTp1400">GMT+14:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="PacificKosrae">Pacific/Kosrae</a></td><td><a href="#GMTp1100">GMT+11:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="PacificKwajalein">Pacific/Kwajalein</a></td><td><a href="#GMTp1200">GMT+12:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="PacificMajuro">Pacific/Majuro</a></td><td><a href="#GMTp1200">GMT+12:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><b><a name="PacificMarquesas">Pacific/Marquesas</a></b></td><td><a href="#GMTm930">GMT-9:30</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="PacificMidway">Pacific/Midway</a></td><td><a href="#GMTm1100">GMT-11:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="PacificNauru">Pacific/Nauru</a></td><td><a href="#GMTp1200">GMT+12:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="PacificNiue">Pacific/Niue</a></td><td><a href="#GMTm1100">GMT-11:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><b><a name="PacificNorfolk">Pacific/Norfolk</a></b></td><td><a href="#GMTp1130">GMT+11:30</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="PacificNoumea">Pacific/Noumea</a></td><td><a href="#GMTp1100">GMT+11:00</a></td><td>Dec 1 2:00s</td><td>Mar 2 2:00s</td><td>1:00</td><td></td></tr>
+<tr><td><a name="PacificPago_Pago">Pacific/Pago_Pago</a></td><td><a href="#GMTm1100">GMT-11:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="PacificPalau">Pacific/Palau</a></td><td><a href="#GMTp900">GMT+9:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="PacificPitcairn">Pacific/Pitcairn</a></td><td><a href="#GMTm800">GMT-8:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="PacificPonape">Pacific/Ponape</a></td><td><a href="#GMTp1100">GMT+11:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="PacificPort_Moresby">Pacific/Port_Moresby</a></td><td><a href="#GMTp1000">GMT+10:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="PacificRarotonga">Pacific/Rarotonga</a></td><td><a href="#GMTm1000">GMT-10:00</a></td><td>Oct lastSun 0:00</td><td>Mar Sun>=1 0:00</td><td>0:30</td><td></td></tr>
+<tr><td><a name="PacificSaipan">Pacific/Saipan</a></td><td><a href="#GMTp1000">GMT+10:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="PacificTahiti">Pacific/Tahiti</a></td><td><a href="#GMTm1000">GMT-10:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="PacificTarawa">Pacific/Tarawa</a></td><td><a href="#GMTp1200">GMT+12:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="PacificTongatapu">Pacific/Tongatapu</a></td><td><a href="#GMTp1300">GMT+13:00</a></td><td>Oct Sat>=1 2:00s</td><td>Apr Sun>=16 2:00s</td><td>1:00</td><td></td></tr>
+<tr><td><a name="PacificTruk">Pacific/Truk</a></td><td><a href="#GMTp1000">GMT+10:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="PacificWake">Pacific/Wake</a></td><td><a href="#GMTp1200">GMT+12:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="PacificWallis">Pacific/Wallis</a></td><td><a href="#GMTp1200">GMT+12:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="PacificYap">Pacific/Yap</a></td><td><a href="#GMTp1000">GMT+10:00</a></td><td colspan=3></td><td></td></tr>
+<tr><td><a name="SST">SST</a></td><td><a href="#GMTp1100">GMT+11:00</a></td><td colspan=3></td><td><em>alias for</em> <a href="#PacificGuadalcanal">Pacific/Guadalcanal</a></td></tr>
+<tr><td><a name="UTC">UTC</a></td><td><a href="#GMTp000">GMT+0:00</a></td><td colspan=3></td><td><em>alias for</em> <a href="#EtcGMT">Etc/GMT</a></td></tr>
+<tr><td><a name="VST">VST</a></td><td><a href="#GMTp700">GMT+7:00</a></td><td colspan=3></td><td><em>alias for</em> <a href="#AsiaSaigon">Asia/Saigon</a></td></tr>
+<tr><td><a name="WET">WET</a></td><td><a href="#GMTp000">GMT+0:00</a></td><td>Mar lastSun 1:00u</td><td>Oct lastSun 1:00u</td><td>1:00</td><td></td></tr>
+</table>
+
+</body>
+</html>
