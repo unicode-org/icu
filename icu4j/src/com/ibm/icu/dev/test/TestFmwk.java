@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $
- * $Date: 2004/02/06 21:54:04 $
- * $Revision: 1.60 $
+ * $Date: 2004/02/12 01:08:32 $
+ * $Revision: 1.61 $
  *
  *****************************************************************************************
  */
@@ -1233,6 +1233,38 @@ public class TestFmwk extends AbstractTestLog {
         }
         return name;
     }
+
+    /**
+     * JUnit-like assertions.
+     */
+    protected void assertTrue(String message, boolean condition) {
+        if (!condition) {
+            errln("FAIL: assertTrue() failed: " + message);
+        } else if (VERBOSE_ASSERTIONS) {
+            logln("Ok: " + message);
+        }
+    }
+    protected void assertFalse(String message, boolean condition) {
+        if (condition) {
+            errln("FAIL: assertFalse() failed: " + message);
+        } else if (VERBOSE_ASSERTIONS) {
+            logln("Ok: " + message);
+        }
+    }
+    protected void assertEquals(String message,
+                                Object expected, Object actual) {
+        if (!expected.equals(actual)) {
+            errln("FAIL: " + message + "; got " + actual +
+                  "; expected " + expected);
+        } else if (VERBOSE_ASSERTIONS) {
+            logln("Ok: " + message + "; got " + actual);
+        }
+    }
+    protected void fail(String message) {
+        errln(message);
+    }
+
+    private static final boolean VERBOSE_ASSERTIONS = true;
 
     protected TestParams params = null;
 
