@@ -15,7 +15,7 @@
 /**
  * ID for this transliterator.
  */
-const char* HexToUnicodeTransliterator::_ID = "Hex-Unicode";
+const char* HexToUnicodeTransliterator::_ID = "Hex-Any";
 
 /**
  * This pattern encodes the following specs for the default constructor:

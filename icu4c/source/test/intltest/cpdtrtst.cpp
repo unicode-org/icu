@@ -188,7 +188,7 @@ void CompoundTransliteratorTest::TestGetCount(){
     logln("Testing the getCount() API of CompoundTransliterator");
     UErrorCode status = U_ZERO_ERROR;
     CompoundTransliterator *ct1=new CompoundTransliterator("Halfwidth-Fullwidth;Fullwidth-Halfwidth", status);
-    CompoundTransliterator *ct2=new CompoundTransliterator("Unicode-Hex;Hex-Unicode;Cyrillic-Latin;Latin-Cyrillic", status);
+    CompoundTransliterator *ct2=new CompoundTransliterator("Any-Hex;Hex-Any;Cyrillic-Latin;Latin-Cyrillic", status);
     CompoundTransliterator *ct3=(CompoundTransliterator*)ct1;
     CompoundTransliterator *ct4=new CompoundTransliterator("Latin-Devanagari", status);
     CompoundTransliterator *ct5=new CompoundTransliterator(*ct4);
@@ -211,7 +211,7 @@ void CompoundTransliteratorTest::TestGetCount(){
 
 void CompoundTransliteratorTest::TestGetSetAdoptTransliterator(){
     logln("Testing the getTransliterator() API of CompoundTransliterator");
-    UnicodeString ID("Latin-Greek;Greek-Latin;Latin-Devanagari;Devanagari-Latin;Latin-Cyrillic;Cyrillic-Latin;Unicode-Hex;Hex-Unicode");
+    UnicodeString ID("Latin-Greek;Greek-Latin;Latin-Devanagari;Devanagari-Latin;Latin-Cyrillic;Cyrillic-Latin;Any-Hex;Hex-Any");
     UErrorCode status = U_ZERO_ERROR;
     CompoundTransliterator *ct1=new CompoundTransliterator(ID, status);
     if(U_FAILURE(status)){
@@ -233,7 +233,7 @@ void CompoundTransliteratorTest::TestGetSetAdoptTransliterator(){
 
 
     logln("Testing setTransliterator() API of CompoundTransliterator");
-    UnicodeString ID2("Hex-Unicode;Unicode-Hex;Latin-Cyrillic;Cyrillic-Latin;Halfwidth-Fullwidth;Fullwidth-Halfwidth");
+    UnicodeString ID2("Hex-Any;Any-Hex;Latin-Cyrillic;Cyrillic-Latin;Halfwidth-Fullwidth;Fullwidth-Halfwidth");
     array=split(ID2, 0x003b, count);
     Transliterator** transarray=new Transliterator*[count];
     for(i=0;i<count;i++){
@@ -306,7 +306,7 @@ UnicodeString* CompoundTransliteratorTest::split(const UnicodeString& str, UChar
 void CompoundTransliteratorTest::TestTransliterate(){
     logln("Testing the handleTransliterate() API of CompoundTransliterator");
     UErrorCode status = U_ZERO_ERROR;
-    CompoundTransliterator *ct1=new CompoundTransliterator("Unicode-Hex;Hex-Unicode", status);
+    CompoundTransliterator *ct1=new CompoundTransliterator("Any-Hex;Hex-Any", status);
     if(U_FAILURE(status)){
         errln("CompoundTransliterator construction failed");
     }else {
@@ -327,8 +327,8 @@ void CompoundTransliteratorTest::TestTransliterate(){
     delete ct1;
     UnicodeString Data[]={
              //ID, input string, transliterated string
-             "Unicode-Hex;Hex-Unicode;Unicode-Hex",     "hello",  UnicodeString("\\u0068\\u0065\\u006C\\u006C\\u006F", ""), 
-             "Unicode-Hex;Hex-Unicode",                 "hello! How are you?",  "hello! How are you?",
+             "Any-Hex;Hex-Any;Any-Hex",     "hello",  UnicodeString("\\u0068\\u0065\\u006C\\u006C\\u006F", ""), 
+             "Any-Hex;Hex-Any",                 "hello! How are you?",  "hello! How are you?",
              "Devanagari-Latin;Latin-Devanagari",        CharsToUnicodeString("\\u092D\\u0948'\\u0930'\\u0935"),  CharsToUnicodeString("\\u092D\\u0948\\u0930\\u0935"), // quotes lost
              "Latin-Cyrillic;Cyrillic-Latin",           "a'b'k'd'e'f'g'h'i'j'Shch'shch'zh'h", "abkdefghijShchshchzhh",
              "Latin-Greek;Greek-Latin",                 "ABGabgAKLMN", "ABGabgAKLMN",

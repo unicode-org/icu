@@ -61,7 +61,7 @@ class Filter2: public UnicodeFilter{
 
 void UnicodeFilterLogicTest::TestAll(){
 
-    Transliterator *t1=Transliterator::createInstance("Unicode-Hex");
+    Transliterator *t1=Transliterator::createInstance("Any-Hex");
     if(t1 == 0){
         errln("FAIL: Error in instantiation.");
         return;
