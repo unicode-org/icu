@@ -1369,8 +1369,8 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
           } else if(sourceToken->expansion == 0) { /* if there is no expansion, implicit is just added to the token */
             sourceToken->expansion = expandNext;
           } else { /* there is both explicit and implicit expansion. We need to make a combination */
-            memcpy(src->extraCurrent, src->source + (expandNext & 0xFFFFFF), (expandNext >> 24)*sizeof(UChar));
-            memcpy(src->extraCurrent+(expandNext >> 24), src->source + src->parsedToken.extensionOffset, src->parsedToken.extensionLen*sizeof(UChar));
+            uprv_memcpy(src->extraCurrent, src->source + (expandNext & 0xFFFFFF), (expandNext >> 24)*sizeof(UChar));
+            uprv_memcpy(src->extraCurrent+(expandNext >> 24), src->source + src->parsedToken.extensionOffset, src->parsedToken.extensionLen*sizeof(UChar));
             sourceToken->expansion = (uint32_t)(((expandNext >> 24) + src->parsedToken.extensionLen)<<24 | (src->extraCurrent - src->source));
             src->extraCurrent += (expandNext >> 24) + src->parsedToken.extensionLen;
           }
