@@ -28,7 +28,7 @@
 #include "unicode/ustring.h"
 
 /* it is official IDNA ACE Prefix is "xn--" */
-static const UChar ACE_PREFIX[] ={ 0x0058,0x004E,0x002d,0x002d } ;
+static const UChar ACE_PREFIX[] ={ 0x0078,0x006E,0x002d,0x002d } ;
 #define ACE_PREFIX_LENGTH 4
 
 #define MAX_LABEL_LENGTH 63
@@ -52,7 +52,7 @@ startsWithPrefix(const UChar* src , int32_t srcLength){
     }
 
     for(int8_t i=0; i< ACE_PREFIX_LENGTH; i++){
-        if(u_toupper(src[i]) != ACE_PREFIX[i]){
+        if(u_tolower(src[i]) != ACE_PREFIX[i]){
             startsWithPrefix = FALSE;
         }
     }
