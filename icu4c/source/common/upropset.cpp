@@ -112,24 +112,97 @@ static const UChar EQUALS     = 0x003D; /*=*/
 // (Even better: move the logic into UCharacter for building these
 // properties, since that is where it belongs!)
 
+/*
+ * ### TODO ICU 2.4 markus Ideas for getting properties-unique code point ranges:
+ *
+ * To enumerate properties efficiently, one needs to know ranges of
+ * repetitive values, so that the value of only each start code point
+ * can be applied to the whole range.
+ * This information is in principle available in the uprops.icu data.
+ *
+ * There are two obstacles:
+ *
+ * 1. Some properties are computed from multiple data structures,
+ *    making it necessary to get repetitive ranges by intersecting
+ *    ranges from multiple tries.
+ *
+ * 2. It is not economical to write code for getting repetitive ranges
+ *    that are precise for each of some 50 properties.
+ *
+ * Compromise ideas:
+ *
+ * - Get ranges per trie, not per individual property.
+ *   Each range contains the same values for a whole group of properties.
+ *   This would generate currently five range sets, two for uprops.icu tries
+ *   and three for unorm.icu tries.
+ *
+ * - Combine sets of ranges for multiple tries to get sufficient sets
+ *   for properties, e.g., the uprops.icu main and auxiliary tries
+ *   for all non-normalization properties.
+ *
+ * Ideas for representing ranges and combining them:
+ *
+ * - A UnicodeSet could hold just the start code points of ranges.
+ *   Multiple sets are easily combined by or-ing them together.
+ *
+ * - Alternatively, a UnicodeSet could hold each even-numbered range.
+ *   All ranges could be enumerated by using each start code point
+ *   (for the even-numbered ranges) as well as each limit (end+1) code point
+ *   (for the odd-numbered ranges).
+ *   It should be possible to combine two such sets by xor-ing them,
+ *   but no more than two.
+ *
+ * The second way to represent ranges may(?!) yield smaller UnicodeSet arrays,
+ * but the first one is certainly simpler and applicable for combining more than
+ * two range sets.
+ *
+ * It is possible to combine all range sets for all uprops/unorm tries into one
+ * set that can be used for all properties.
+ * As an optimization, there could be less-combined range sets for certain
+ * groups of properties.
+ * The relationship of which less-combined range set to use for which property
+ * depends on the implementation of the properties and must be hardcoded
+ * - somewhat error-prone and higher maintenance but can be tested easily
+ * by building property sets "the simple way" in test code.
+ */
+
 // See INCLUSIONS above
-static const UChar INCLUSIONS_PATTERN[] =
-{91,94,92,117,51,52,48,49,45,92,117,52,68,66,53,32,
-92,117,52,69,48,49,45,92,117,57,70,65,53,32,
-92,117,65,67,48,49,45,92,117,68,55,65,51,32,
-92,117,68,56,48,49,45,92,117,68,66,55,70,32,
-92,117,68,66,56,49,45,92,117,68,66,70,70,32,
-92,117,68,67,48,49,45,92,117,68,70,70,70,32,
-92,117,69,48,48,49,45,92,117,70,56,70,70,32,
-92,85,48,48,48,49,48,52,52,70,45,92,85,48,48,48,49,67,70,70,70,32,
-92,85,48,48,48,49,68,56,48,49,45,92,85,48,48,48,49,70,70,70,70,32,
-92,85,48,48,48,50,48,48,48,49,45,92,85,48,48,48,50,65,54,68,54,32,
-92,85,48,48,48,50,65,54,68,56,45,92,85,48,48,48,50,70,55,70,70,32,
-92,85,48,48,48,50,70,65,49,70,45,92,85,48,48,48,69,48,48,48,48,32,
-92,85,48,48,48,69,48,48,56,49,45,92,85,48,48,48,69,70,70,70,70,32,
-92,85,48,48,48,70,48,48,48,49,45,92,85,48,48,48,70,70,70,70,68,32,
-92,85,48,48,49,48,48,48,48,49,45,92,85,48,48,49,48,70,70,70,68,93,0};
-// "[^\\u3401-\\u4DB5 \\u4E01-\\u9FA5 \\uAC01-\\uD7A3 \\uD801-\\uDB7F \\uDB81-\\uDBFF \\uDC01-\\uDFFF \\uE001-\\uF8FF \\U0001044F-\\U0001CFFF \\U0001D801-\\U0001FFFF \\U00020001-\\U0002A6D6 \\U0002A6D8-\\U0002F7FF \\U0002FA1F-\\U000E0000 \\U000E0081-\\U000EFFFF \\U000F0001-\\U000FFFFD \\U00100001-\\U0010FFFD]"
+// Do not use a pattern because that causes a recursion of the init() function!
+static UnicodeSet *
+getInclusions() {
+    UnicodeSet *set;
+
+    // Build a UnicodeSet for all of Unicode,
+    // then remove known ranges with all-same properties.
+    set=new UnicodeSet(0, 0x10ffff);
+    if(set==NULL) {
+        return NULL;
+    }
+
+    // Effectively, build a UnicodeSet according to the following pattern:
+    // "[^\\u3401-\\u4DB5 \\u4E01-\\u9FA5 \\uAC01-\\uD7A3 \\uD801-\\uDB7F
+    //    \\uDB81-\\uDBFF \\uDC01-\\uDFFF \\uE001-\\uF8FF \\U0001044F-\\U0001CFFF
+    //    \\U0001D801-\\U0001FFFF \\U00020001-\\U0002A6D6 \\U0002A6D8-\\U0002F7FF
+    //    \\U0002FA1F-\\U000E0000 \\U000E0081-\\U000EFFFF \\U000F0001-\\U000FFFFD
+    //    \\U00100001-\\U0010FFFD]"
+    set->remove(0x3401, 0x4DB5);
+    set->remove(0x4E01, 0x9FA5);
+    set->remove(0xAC01, 0xD7A3);
+    set->remove(0xD801, 0xDB7F);
+    set->remove(0xDB81, 0xDBFF);
+    set->remove(0xDC01, 0xDFFF);
+    set->remove(0xE001, 0xF8FF);
+    set->remove(0x1044F, 0x1CFFF);
+    set->remove(0x1D801, 0x1FFFF);
+    set->remove(0x20001, 0x2A6D6);
+    set->remove(0x2A6D8, 0x2F7FF);
+    set->remove(0x2FA1F, 0xE0000);
+    set->remove(0xE0081, 0xEFFFF);
+    set->remove(0xF0001, 0xFFFFD);
+    set->remove(0x100001, 0x10FFFD);
+
+    return set;
+}
 
 /**
  * Cleanup function for UnicodePropertySet
@@ -497,6 +570,10 @@ UnicodePropertySet::getRuleWhiteSpaceSet(UErrorCode &status) {
     UnicodeSet set;
     int32_t code;
 
+    if(U_FAILURE(status)){
+        return set; // return empty set
+    }
+
     /* "white space" in the sense of ICU rule parsers: Cf+White_Space */
     code = UCHAR_WHITE_SPACE;
     initSetFromFilter(set, _binaryPropertyFilter, &code, status);
@@ -716,7 +793,7 @@ void UnicodePropertySet::init(UErrorCode &status) {
 
     UnicodeSet *tSCRIPT_CACHE = new UnicodeSet[(size_t)USCRIPT_CODE_LIMIT];
     CATEGORY_CACHE = new UnicodeSet[32];  // 32 is guaranteed by the Unicode standard
-    INCLUSIONS = new UnicodeSet(INCLUSIONS_PATTERN, status); // This may call us again!
+    INCLUSIONS = getInclusions();
     NAME_MAP = new Hashtable(TRUE);
     CATEGORY_MAP = new Hashtable(TRUE);
     COMBINING_CLASS_MAP = new Hashtable(TRUE);
