@@ -278,7 +278,7 @@ sk {
         "So",
     }
     DayNames { 
-        "Nede\u013Ee",
+        "Nede\u013Ea", // Is this Nede\u013Ea or Nede\u013Ee?
         "Pondelok",
         "Utorok",
         "Streda",
