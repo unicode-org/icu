@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TitlecaseTransliterator.java,v $ 
- * $Date: 2001/10/31 20:56:04 $ 
- * $Revision: 1.4 $
+ * $Date: 2001/11/17 20:45:35 $ 
+ * $Revision: 1.5 $
  */
 package com.ibm.text;
 import java.util.*;
@@ -16,7 +16,7 @@ import java.util.*;
  * case using <code>UCharacter.toTitleCase()</code>.
  * @author Alan Liu
  */
-public class TitlecaseTransliterator extends Transliterator {
+class TitlecaseTransliterator extends Transliterator {
 
     static final String _ID = "Any-Title";
 
