@@ -197,6 +197,8 @@ case $platform in
         THE_COMP="Compaq's CC"
         CC=ccc; export CC
         CXX=cxx; export CXX
+        RELEASE_CFLAGS='-O4'
+        RELEASE_CXXFLAGS='-O4'       
         ;;
     ALPHA/LINUXGCC)
         THE_OS="Linux"
