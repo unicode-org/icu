@@ -102,7 +102,7 @@ typedef unsigned short uint16_t;
 
 #if ! U_HAVE_INT64_T
     /* Could use _MSC_VER to detect Microsoft compiler. */
-    typedef __int64   int64_t;
+    typedef signed __int64   int64_t;
 #endif
 
 #if ! U_HAVE_UINT64_T
@@ -151,7 +151,7 @@ typedef unsigned short uint16_t;
 
 #define U_INLINE __inline
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && defined(_M_IX86)
 #define U_ALIGN_CODE(val)    __asm      align val
 #else
 #define U_ALIGN_CODE(val)
