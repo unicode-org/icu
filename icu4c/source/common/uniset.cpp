@@ -1879,7 +1879,8 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
 
     // mode 0: No chars parsed yet; next must be '['
     // mode 1: '[' seen; if next is '^' or ':' then special
-    // mode 2: '[' '^'? seen; parse pattern and close with ']'
+    // mode 15: "[^" seen; if next is '-' then literal
+    // mode 2: '[' '^'? '-'? seen; parse pattern and close with ']'
     // mode 3: '[:' seen; parse category and close with ':]'
     // mode 4: ']' seen; parse complete
     // mode 5: Top-level property pattern seen
@@ -1958,14 +1959,16 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
             case COMPLEMENT:
                 invert = TRUE;
                 newPat.append(c);
+                mode = 15;
                 continue; // Back to top to fetch next character
             case HYPHEN:
                 isLiteral = TRUE; // Treat leading '-' as a literal
                 break; // Fall through
             }
             break;
-        case 2:
-            if (c == HYPHEN && invert) {
+        case 15:
+            mode = 2;
+            if (c == HYPHEN) {
                 isLiteral = TRUE; // [^-...] starts with literal '-'
             }
             break;

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2003/04/09 23:01:03 $
- * $Revision: 1.94 $
+ * $Date: 2003/05/09 21:25:25 $
+ * $Revision: 1.95 $
  *
  *****************************************************************************************
  */
@@ -2007,6 +2007,7 @@ public class UnicodeSet extends UnicodeFilter {
 
         // mode 0: No chars parsed yet; next must be '['
         // mode 1: '[' seen; if next is '^' or ':' then special
+        // mode 15: "[^" seen; if next is '-' then literal
         // mode 2: '[' '^'? seen; parse pattern and close with ']'
         // mode 3: '[:' seen; parse category and close with ':]'
         // mode 4: ']' seen; parse complete
@@ -2082,11 +2083,19 @@ public class UnicodeSet extends UnicodeFilter {
                 case '^':
                     invert = true;
                     newPat.append((char) c);
+                    mode = 15;
                     continue; // Back to top to fetch next character
                 case '-':
                     isLiteral = true; // Treat leading '-' as a literal
                     break; // Fall through
                 }
+                break;
+            case 15:
+                mode = 2;
+                if (c == '-') {
+                    isLiteral = true; // [^-...] starts with literal '-'
+                }
+                break;
                 // else fall through and parse this character normally
             }
 
