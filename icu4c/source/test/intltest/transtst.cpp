@@ -8,18 +8,19 @@
 **********************************************************************
 */
 #include "transtst.h"
-#include "unicode/utypes.h"
-#include "unicode/translit.h"
-#include "unicode/rbt.h"
-#include "unicode/unifilt.h"
 #include "unicode/cpdtrans.h"
 #include "unicode/dtfmtsym.h"
 #include "unicode/hextouni.h"
-#include "unicode/unitohex.h"
-#include "unicode/unicode.h"
-#include "unicode/uniset.h"
+#include "unicode/nultrans.h"
+#include "unicode/rbt.h"
+#include "unicode/translit.h"
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
+#include "unicode/unicode.h"
+#include "unicode/unifilt.h"
+#include "unicode/uniset.h"
+#include "unicode/unitohex.h"
+#include "unicode/utypes.h"
 
 // Define character constants thusly to be EBCDIC-friendly
 enum {
@@ -1238,6 +1239,18 @@ void TransliteratorTest::TestNormalizationTransliterator() {
     }
     delete NFKD;
     delete NFKC;
+
+    UParseError pe;
+    status = U_ZERO_ERROR;
+    Transliterator *t = Transliterator::createInstance("NFD; [x]Remove",
+                                                       UTRANS_FORWARD,
+                                                       pe, status);
+    if (t == 0) {
+        errln("FAIL: createInstance failed");
+    }
+    expect(*t, CharsToUnicodeString("\\u010dx"),
+           CharsToUnicodeString("c\\u030C"));
+    delete t;
 }
 
 /**
@@ -1623,12 +1636,24 @@ void TransliteratorTest::TestQuantifier() {
            "bb x xb");
 }
 
+class TestTrans : public NullTransliterator {
+public:
+    TestTrans(const UnicodeString& id) {
+        setID(id);
+    }
+};
+
 /**
  * Test Source-Target/Variant.
  */
 void TransliteratorTest::TestSTV(void) {
     int32_t ns = Transliterator::countAvailableSources();
-    for (int32_t i=0; i<ns; ++i) {
+    if (ns < 0 || ns > 255) {
+        errln((UnicodeString)"FAIL: Bad source count: " + ns);
+        return;
+    }
+    int32_t i;
+    for (i=0; i<ns; ++i) {
         UnicodeString source;
         Transliterator::getAvailableSource(i, source);
         logln((UnicodeString)"" + i + ": " + source);
@@ -1637,6 +1662,10 @@ void TransliteratorTest::TestSTV(void) {
             continue;
         }
         int32_t nt = Transliterator::countAvailableTargets(source);
+        if (nt < 0 || nt > 255) {
+            errln((UnicodeString)"FAIL: Bad target count: " + nt);
+            continue;
+        }
         for (int32_t j=0; j<nt; ++j) {
             UnicodeString target;
             Transliterator::getAvailableTarget(j, source, target);
@@ -1646,15 +1675,52 @@ void TransliteratorTest::TestSTV(void) {
                 continue;
             }
             int32_t nv = Transliterator::countAvailableVariants(source, target);
-            for (int32_t k=0; j<nv; ++k) {
+            if (nv < 0 || nv > 255) {
+                errln((UnicodeString)"FAIL: Bad variant count: " + nv);
+                continue;
+            }
+            for (int32_t k=0; k<nv; ++k) {
                 UnicodeString variant;
                 Transliterator::getAvailableVariant(k, source, target, variant);
-                logln((UnicodeString)"  " + k + ": " + variant);
-                if (variant.length() == 0) {
-                    errln("FAIL: empty variant");
-                    break;
+                if (variant.length() == 0) { 
+                    logln((UnicodeString)"  " + k + ": <empty>");
+                } else {
+                    logln((UnicodeString)"  " + k + ": " + variant);
                 }
             }
+        }
+    }
+
+    // Test registration
+    const char* IDS[] = { "Fieruwer", "Seoridf-Sweorie", "Oewoir-Oweri/Vsie" };
+    for (i=0; i<3; ++i) {
+        Transliterator *t = new TestTrans(IDS[i]);
+        if (t == 0) {
+            errln("FAIL: out of memory");
+            return;
+        }
+        if (t->getID() != IDS[i]) {
+            errln((UnicodeString)"FAIL: ID mismatch for " + IDS[i]);
+            delete t;
+            return;
+        }
+        Transliterator::registerInstance(t);
+        UErrorCode status = U_ZERO_ERROR;
+        t = Transliterator::createInstance(IDS[i], UTRANS_FORWARD, status);
+        if (t == NULL) {
+            errln((UnicodeString)"FAIL: Registration/creation failed for ID " +
+                  IDS[i]);
+        } else {
+            logln((UnicodeString)"Ok: Registration/creation succeeded for ID " +
+                  IDS[i]);
+            delete t;
+        }
+        Transliterator::unregister(IDS[i]);
+        t = Transliterator::createInstance(IDS[i], UTRANS_FORWARD, status);
+        if (t != NULL) {
+            errln((UnicodeString)"FAIL: Unregistration failed for ID " +
+                  IDS[i]);
+            delete t;
         }
     }
 }
@@ -1668,7 +1734,7 @@ void TransliteratorTest::TestCompoundInverse(void) {
     Transliterator *t = Transliterator::createInstance
         ("Greek-Latin; Title()", UTRANS_REVERSE,parseError, status);
     if (t == 0) {
-        errln("FAIL: crateInstance");
+        errln("FAIL: createInstance");
         return;
     }
     UnicodeString exp("(Title);Latin-Greek");
