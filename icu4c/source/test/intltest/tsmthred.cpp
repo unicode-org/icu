@@ -207,7 +207,7 @@ void SimpleThread::sleep(int32_t millis)
 
 #ifdef HPUX_CMA
    cma_sleep(millis/100);
-#elif HPUX
+#elif defined(HPUX)
    useconds_t m = millis * 1000;
    if (m > 1000000) m = 1000000;
    usleep(m); 
