@@ -88,10 +88,10 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(URBNFRuleSetTag tag, const Locale& 
     UResourceBundle* nfrb = ures_open(NULL, locale.getName(), &status);
     //    UResourceBundle* yuck = ures_getByKey(nfrb, fmt_tag, NULL, &status);
     //    const UChar* description = ures_getString(yuck, &len, &status);
-    uprv_strcpy(validLocale, ures_getLocaleByType(nfrb, ULOC_VALID_LOCALE, &status));
-    uprv_strcpy(actualLocale, ures_getLocaleByType(nfrb, ULOC_ACTUAL_LOCALE, &status));
-    const UChar* description = ures_getStringByKey(nfrb, fmt_tag, &len, &status);
     if (U_SUCCESS(status)) {
+      uprv_strcpy(validLocale, ures_getLocaleByType(nfrb, ULOC_VALID_LOCALE, &status));
+      uprv_strcpy(actualLocale, ures_getLocaleByType(nfrb, ULOC_ACTUAL_LOCALE, &status));
+      const UChar* description = ures_getStringByKey(nfrb, fmt_tag, &len, &status);
         UnicodeString desc(description, len);
         UParseError perror;
         init (desc, perror, status);
