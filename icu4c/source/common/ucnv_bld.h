@@ -75,11 +75,14 @@ struct UConverterSharedData {
     uint32_t structSize;            /* Size of this structure */
     uint32_t referenceCounter;      /* used to count number of clients, 0xffffffff for static SharedData */
 
-    const void *dataMemory;         /* from udata_openChoice() */
+    const void *dataMemory;         /* from udata_openChoice() - for cleanup */
     UConverterTable *table;         /* Pointer to conversion data */
 
     const UConverterStaticData *staticData; /* pointer to the static (non changing) data. */
-    UBool                staticDataOwned; /* T if we own the staticData */
+
+    UBool                sharedDataCached;   /* TRUE:  shared data is in cache, don't destroy on ucnv_close() if 0 ref.  FALSE: shared data isn't in the cache, do attempt to clean it up if the ref is 0 */
+  /*UBool               staticDataOwned;   TRUE if static data owned by shared data & should be freed with it, NEVER true for udata() loaded statics. This ignored variable was removed to make space for sharedDataCached.   */
+
     const UConverterImpl *impl;     /* vtable-style struct of mostly function pointers */
 
     /*initial values of some members of the mutable part of object */
@@ -137,8 +140,9 @@ struct UConverter {
 
     const void *fromUContext;
     const void *toUContext;
-    UBool isCopyLocal;   /* TRUE if created by safeClone with no allocation or ref count */
+    UBool isCopyLocal;   /* TRUE if created by safeClone with no allocation - Don't free cnv memory on ucnv_close.  */
     UConverterSharedData *sharedData;   /* Pointer to the shared immutable part of the converter object */
+    UBool sharedDataIsCached;  /* TRUE:  shared data is in cache, don't destroy on ucnv_close() if 0 ref.  FALSE: shared data isn't in the cache, do attempt to clean it up if the ref is 0 */
 
     /*
      * currently only used to point to a struct containing UConverter used by iso 2022;

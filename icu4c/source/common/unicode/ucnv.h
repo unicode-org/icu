@@ -325,6 +325,36 @@ ucnv_openCCSID (int32_t codepage,
                 UErrorCode * err);
 
 /**
+ * <p>Creates a UConverter object specified from a packageName and a converterName.</p>
+ * 
+ * <p>The packageName and converterName must point to an ICU udata object, as defined by
+ *   <code> udata_open( packageName, "cnv", converterName, err) </code> or equivalent.
+ * Typically, packageName will refer to a (.dat) file, or to a package registered with
+ * udata_setAppData().</p>
+ * 
+ * <p>The name will NOT be looked up in the alias mechanism, nor will the converter be
+ * stored in the converter cache or the alias table. The only way to open further converters
+ * is call this function multiple times, or use the ucnv_safeClone() function to clone a 
+ * 'master' converter.</p>
+ * 
+ * <p>Example Use:
+ *      <code>cnv = ucnv_openPackage("myapp", "myconverter", &err);</conv>
+ * </p>
+ *
+ * @param packageName name of the package (equivalent to 'path' in udata_open() call)
+ * @param converterName name of the data item to be used, without suffix.
+ * @param err outgoing error status <TT>U_MEMORY_ALLOCATION_ERROR, U_FILE_ACCESS_ERROR</TT>
+ * @return the created Unicode converter object, or <TT>NULL</TT> if an error occured
+ * @see udata_open
+ * @see ucnv_open
+ * @see ucnv_safeClone
+ * @see ucnv_close
+ * @draft ICU 2.2
+ */
+U_CAPI UConverter* U_EXPORT2 
+ucnv_openPackage   (const char *packageName, const char *converterName, UErrorCode * err);
+
+/**
  * Thread safe cloning operation
  * @param cnv converter to be cloned
  * @param stackBuffer user allocated space for the new clone. If NULL new memory will be allocated. 
