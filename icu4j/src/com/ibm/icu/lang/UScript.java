@@ -762,7 +762,7 @@ public final class UScript {
     }
 
     private static final String localeScript = "com.ibm.text.resources.LocaleScript";
-     
+    
     private static int findCodeFromLocale(Locale locale)
             throws MissingResourceException{
         //TODO: Currently we use a hacked fallback mechanism.
@@ -779,12 +779,13 @@ public final class UScript {
                     code =  scriptNameCodes[strIndex];
                 }
             }catch(MissingResourceException e){
+                
                 /* handle fallback */
                 int index = temp.indexOf('_');
                 if(index >0){
                     temp = temp.substring(0,index);
                 }else{
-                    temp = "root";
+                    break;
                 }
                 continue;
             }
