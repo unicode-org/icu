@@ -495,10 +495,12 @@ public:
    * Get an UnicodeSet that contains all the characters and sequences tailored in 
    * this collator.
    * @param status      error code of the operation
-   * @return an UnicodeSet object containing all the tailored code points and sequences
+   * @return a pointer to a UnicodeSet object containing all the 
+   *         code points and sequences that may sort differently than
+   *         in the UCA. The object must be disposed of by using delete
    * @draft ICU 2.4
    */
-  virtual UnicodeSet getTailoredSet(UErrorCode &status) const;
+  virtual UnicodeSet *getTailoredSet(UErrorCode &status) const;
 
   /**
    * Thread safe cloning operation.

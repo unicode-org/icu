@@ -23,6 +23,7 @@
 #include "unicode/unorm.h"
 #include "unicode/udata.h"
 #include "unicode/uchar.h"
+#include "unicode/caniter.h"
 
 #include "ucol_bld.h"
 #include "ucol_imp.h"
@@ -6729,17 +6730,33 @@ ucol_getTailoredSet(const UCollator *coll, UErrorCode *status)
   const UChar *rules = ucol_getRules(coll, &rulesLen);
   const UChar *current = NULL;
   UBool startOfRules = TRUE;
-  USet *tailored = uset_open(1, 0);
+  // we internally use the C++ class, for the following reasons:
+  // 1. we need to utilize canonical iterator, which is a C++ only class
+  // 2. canonical iterator returns UnicodeStrings - USet cannot take them
+  // 3. USet is internally really UnicodeSet, C is just a wrapper
+  UnicodeSet *tailored = new UnicodeSet();
   UnicodeString pattern;
+  CanonicalIterator it("", *status);
 
+
+  // The idea is to tokenize the rule set. For each non-reset token,
+  // we add all the canonicaly equivalent FCD sequences 
   ucol_tok_initTokenList(&src, rules, rulesLen, UCA, status);
   while ((current = ucol_tok_parseNextToken(&src, startOfRules, &parseError, status)) != NULL) {
     startOfRules = FALSE;
     if(src.parsedToken.strength != UCOL_TOK_RESET) {
       const UChar *stuff = src.source+(src.parsedToken.charsOffset);
-      uset_addString(tailored, stuff, src.parsedToken.charsLen);
+      it.setSource(UnicodeString(stuff, src.parsedToken.charsLen), *status);
+      pattern = it.next();
+      while(!pattern.isBogus()) {
+        if(Normalizer::quickCheck(pattern, UNORM_FCD, *status) != UNORM_NO) {
+          tailored->add(pattern);
+        }
+        pattern = it.next();
+      }
     }
   }
   ucol_tok_closeTokenList(&src);
-  return tailored;
+  return (USet *)tailored;
 }
+

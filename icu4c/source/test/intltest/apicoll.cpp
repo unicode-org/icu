@@ -1661,6 +1661,47 @@ void CollationAPITest::TestBounds(void) {
     delete coll;
 }
 
+
+void CollationAPITest::TestGetTailoredSet() 
+{
+  struct {
+    char *rules;
+    char *tests[20];
+    int32_t testsize;
+  } setTest[] = {
+    { "&a < \\u212b", { "\\u212b", "A\\u030a", "\\u00c5" }, 3},
+    { "& S < \\u0161 <<< \\u0160", { "\\u0161", "s\\u030C", "\\u0160", "S\\u030C" }, 4}
+  };
+
+  int32_t i = 0, j = 0;
+  UErrorCode status = U_ZERO_ERROR;
+
+  RuleBasedCollator *coll = NULL;
+  UnicodeString buff;
+  UnicodeSet *set = NULL;
+
+  for(i = 0; i < sizeof(setTest)/sizeof(setTest[0]); i++) {
+    buff = UnicodeString(setTest[i].rules, "").unescape();
+    coll = new RuleBasedCollator(buff, status);
+    if(U_SUCCESS(status)) {
+      set = coll->getTailoredSet(status);
+      if(set->size() != setTest[i].testsize) {
+        errln("Tailored set size different (%d) than expected (%d)", set->size(), setTest[i].testsize);
+      }
+      for(j = 0; j < setTest[i].testsize; j++) {
+        buff = UnicodeString(setTest[i].tests[j], "").unescape();
+        if(!set->contains(buff)) {
+          errln("Tailored set doesn't contain %s... It should", setTest[i].tests[j]);
+        }
+      }
+      delete set;
+    } else {
+      errln("Couldn't open collator with rules %s\n", setTest[i].rules);
+    }
+    delete coll;
+  }
+}
+
 void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par */)
 {
     if (exec) logln("TestSuite CollationAPITest: ");
@@ -1684,6 +1725,7 @@ void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &n
         case 16: name = "TestRules"; if (exec) TestRules(); break;
         case 17: name = "TestGetLocale"; if (exec) TestGetLocale(); break;
         case 18: name = "TestBounds"; if (exec) TestBounds(); break;
+        case 19: name = "TestGetTailoredSet"; if (exec) TestGetTailoredSet(); break;
         default: name = ""; break;
     }
 }

@@ -608,13 +608,15 @@ public:
   virtual uint32_t getVariableTop(UErrorCode &status) const = 0;
 
   /**
-   * Get an UnicodeSet that contains all the characters and sequences tailored in 
-   * this collator.
+   * Get an UnicodeSet that contains all the characters and sequences 
+   * tailored in this collator.
    * @param status      error code of the operation
-   * @return an UnicodeSet object containing all the tailored code points and sequences
+   * @return a pointer to a UnicodeSet object containing all the 
+   *         code points and sequences that may sort differently than
+   *         in the UCA. The object must be disposed of by using delete
    * @draft ICU 2.4
    */
-  virtual UnicodeSet getTailoredSet(UErrorCode &status) const;
+  virtual UnicodeSet *getTailoredSet(UErrorCode &status) const;
 
 
   /**
@@ -785,10 +787,13 @@ inline UBool Collator::operator!=(const Collator& other) const
   return (UBool)!(*this == other);
 }
 
-inline UnicodeSet Collator::getTailoredSet(UErrorCode &status) const
+inline UnicodeSet *Collator::getTailoredSet(UErrorCode &status) const
 {
-  status = U_UNSUPPORTED_ERROR;
-  return UnicodeSet();
+  if(U_FAILURE(status)) {
+    return NULL;
+  }
+  // everything can be changed
+  return new UnicodeSet(0, 0x10FFFF);
 }
 
 /*
