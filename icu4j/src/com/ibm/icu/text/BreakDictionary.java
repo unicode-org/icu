@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakDictionary.java,v $ 
- * $Date: 2000/07/20 17:01:36 $ 
- * $Revision: 1.4 $
+ * $Date: 2000/09/22 18:51:16 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -60,7 +60,7 @@ public class BreakDictionary {
 
     public void printWordList(String partialWord, int state, PrintWriter out)
             throws IOException {
-        if (state == -1) {
+        if (state == 0xFFFF) {
             System.out.println(partialWord);
             if (out != null) {
                 out.println(partialWord);
