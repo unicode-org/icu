@@ -34,6 +34,7 @@ void BasicNormalizerTest::runIndexedTest(int32_t index, UBool exec,
         CASE(8,TestCompositionExclusion);
         CASE(9,TestZeroIndex);
         CASE(10,TestComposedCharIter);
+        CASE(11,TestVerisign);
         default: name = ""; break;
     }
 }
@@ -385,6 +386,100 @@ void BasicNormalizerTest::TestComposedCharIter(void) {
                   " vs. Normalizer:" + hex(buffer));
         }
     }
+}
+
+/**
+ * Run a few specific cases that are failing for Verisign.
+ */
+void BasicNormalizerTest::TestVerisign(void) {
+    /*
+      > Their input:
+      > 05B8 05B9 05B1 0591 05C3 05B0 05AC 059F
+      > Their output (supposedly from ICU):
+      > 05B8 05B1 05B9 0591 05C3 05B0 05AC 059F
+      > My output from charlint:
+      > 05B1 05B8 05B9 0591 05C3 05B0 05AC 059F
+      
+      05B8 05B9 05B1 0591 05C3 05B0 05AC 059F => 05B1 05B8 05B9 0591 05C3 05B0
+      05AC 059F
+      
+      U+05B8  18  E HEBREW POINT QAMATS
+      U+05B9  19  F HEBREW POINT HOLAM
+      U+05B1  11 HEBREW POINT HATAF SEGOL
+      U+0591 220 HEBREW ACCENT ETNAHTA
+      U+05C3   0 HEBREW PUNCTUATION SOF PASUQ
+      U+05B0  10 HEBREW POINT SHEVA
+      U+05AC 230 HEBREW ACCENT ILUY
+      U+059F 230 HEBREW ACCENT QARNEY PARA
+      
+      U+05B1  11 HEBREW POINT HATAF SEGOL
+      U+05B8  18 HEBREW POINT QAMATS
+      U+05B9  19 HEBREW POINT HOLAM
+      U+0591 220 HEBREW ACCENT ETNAHTA
+      U+05C3   0 HEBREW PUNCTUATION SOF PASUQ
+      U+05B0  10 HEBREW POINT SHEVA
+      U+05AC 230 HEBREW ACCENT ILUY
+      U+059F 230 HEBREW ACCENT QARNEY PARA
+      
+      Wrong result:
+      U+05B8  18 HEBREW POINT QAMATS
+      U+05B1  11 HEBREW POINT HATAF SEGOL
+      U+05B9  19 HEBREW POINT HOLAM
+      U+0591 220 HEBREW ACCENT ETNAHTA
+      U+05C3   0 HEBREW PUNCTUATION SOF PASUQ
+      U+05B0  10 HEBREW POINT SHEVA
+      U+05AC 230 HEBREW ACCENT ILUY
+      U+059F 230 HEBREW ACCENT QARNEY PARA
+
+      
+      > Their input:
+      >0592 05B7 05BC 05A5 05B0 05C0 05C4 05AD
+      >Their output (supposedly from ICU):
+      >0592 05B0 05B7 05BC 05A5 05C0 05AD 05C4
+      >My output from charlint:
+      >05B0 05B7 05BC 05A5 0592 05C0 05AD 05C4
+      
+      0592 05B7 05BC 05A5 05B0 05C0 05C4 05AD => 05B0 05B7 05BC 05A5 0592 05C0
+      05AD 05C4
+      
+      U+0592 230 HEBREW ACCENT SEGOL
+      U+05B7  17 HEBREW POINT PATAH
+      U+05BC  21 HEBREW POINT DAGESH OR MAPIQ
+      U+05A5 220 HEBREW ACCENT MERKHA
+      U+05B0  10 HEBREW POINT SHEVA
+      U+05C0   0 HEBREW PUNCTUATION PASEQ
+      U+05C4 230 HEBREW MARK UPPER DOT
+      U+05AD 222 HEBREW ACCENT DEHI
+      
+      U+05B0  10 HEBREW POINT SHEVA
+      U+05B7  17 HEBREW POINT PATAH
+      U+05BC  21 HEBREW POINT DAGESH OR MAPIQ
+      U+05A5 220 HEBREW ACCENT MERKHA
+      U+0592 230 HEBREW ACCENT SEGOL
+      U+05C0   0 HEBREW PUNCTUATION PASEQ
+      U+05AD 222 HEBREW ACCENT DEHI
+      U+05C4 230 HEBREW MARK UPPER DOT
+
+      Wrong result:
+      U+0592 230 HEBREW ACCENT SEGOL
+      U+05B0  10 HEBREW POINT SHEVA
+      U+05B7  17 HEBREW POINT PATAH
+      U+05BC  21 HEBREW POINT DAGESH OR MAPIQ
+      U+05A5 220 HEBREW ACCENT MERKHA
+      U+05C0   0 HEBREW PUNCTUATION PASEQ
+      U+05AD 222 HEBREW ACCENT DEHI
+      U+05C4 230 HEBREW MARK UPPER DOT
+    */
+    UnicodeString data[2][3];
+    data[0][0] = str("\\u05B8\\u05B9\\u05B1\\u0591\\u05C3\\u05B0\\u05AC\\u059F");
+    data[0][1] = str("\\u05B1\\u05B8\\u05B9\\u0591\\u05C3\\u05B0\\u05AC\\u059F");
+    data[0][2] = str("");
+    data[1][0] = str("\\u0592\\u05B7\\u05BC\\u05A5\\u05B0\\u05C0\\u05C4\\u05AD");
+    data[1][1] = str("\\u05B0\\u05B7\\u05BC\\u05A5\\u0592\\u05C0\\u05AD\\u05C4");
+    data[1][2] = str("");
+
+    staticTest(Normalizer::DECOMP, 0, data, ARRAY_LENGTH(data), 1);
+    staticTest(Normalizer::COMPOSE, 0, data, ARRAY_LENGTH(data), 1);
 }
 
 //------------------------------------------------------------------------
