@@ -269,10 +269,6 @@ SOURCE=.\schriter.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\scsu.c
-# End Source File
-# Begin Source File
-
 SOURCE=.\ubidi.c
 # End Source File
 # Begin Source File
@@ -1300,53 +1296,6 @@ InputPath=.\unicode\schriter.h
 InputPath=.\unicode\schriter.h
 
 "..\..\include\unicode\schriter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\unicode\scsu.h
-
-!IF  "$(CFG)" == "common - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\scsu.h
-
-"..\..\include\unicode\scsu.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "common - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\scsu.h
-
-"..\..\include\unicode\scsu.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "common - Win64 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\scsu.h
-
-"..\..\include\unicode\scsu.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "common - Win64 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\scsu.h
-
-"..\..\include\unicode\scsu.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
