@@ -6,18 +6,16 @@
 // ***************************************************************************
 
 ru {
-     Version{ "1.1" }
-// According to the Russian dictionaries and Word, e-diaresis is 
-// a secondary difference from e, as it is in the UCA, so no tailoring is needed
-//    CollationElements { 
-//        Version { "1.0" }
-//        Override { "FALSE" }
-// Russian is almost UCA. The problem is currently < \u0435 , \u0415 < \u0451, \u0401 - UCA
-// has it < \u0435 , \u0415 ; \u0451, \u0401
-//        Sequence { // this needs to be checked again
-//            "&\u0415 < \u0451, \u0401"
-//        }
-//    }
+    Version{ "1.1" }
+    // Using the new options in rules in order to 
+    // improve the performance for Cyrillic chars.
+    CollationElements { 
+      Version { "1.1" }
+      Sequence { 
+        "[copy [\\u0400-\\u045f]]"
+        "[suppressContractions [\\u0400-\\u045f]]"
+      }
+    }
     Countries { 
         AL { "\u0410\u043b\u0431\u0430\u043d\u0438\u044f" }
         AS { "\u0410\u0437\u0438\u044f" }
