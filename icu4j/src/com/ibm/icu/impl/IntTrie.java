@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/IntTrie.java,v $
-* $Date: 2002/09/06 01:53:17 $
-* $Revision: 1.7 $
+* $Date: 2002/09/06 19:04:07 $
+* $Revision: 1.8 $
 *
 ******************************************************************************
 */
@@ -16,7 +16,7 @@ package com.ibm.icu.impl;
 import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
-import com.ibm.icu.lang.UCharacter;
+import java.util.Arrays;
 import com.ibm.icu.text.UTF16;
 
 /**
@@ -168,14 +168,9 @@ public class IntTrie extends Trie
         boolean result = super.equals(other);
         if (result && other instanceof IntTrie) {
             IntTrie othertrie = (IntTrie)other;
-            if (m_initialValue_ != othertrie.m_initialValue_) {
+            if (m_initialValue_ != othertrie.m_initialValue_
+                || !Arrays.equals(m_data_, othertrie.m_data_)) {
                 return false;
-            }
-            for (int i = UCharacter.MAX_VALUE; i >= UCharacter.MIN_VALUE; i --)
-            {
-                if (getCodePointValue(i) != othertrie.getCodePointValue(i)) {
-                    return false;
-                }
             }
             return true;
         }

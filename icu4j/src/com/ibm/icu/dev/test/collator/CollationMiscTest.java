@@ -26,8 +26,8 @@ import java.util.Locale;
 public class CollationMiscTest extends TestFmwk{
 
     public static void main(String[] args) throws Exception {
-        new CollationMiscTest().run(args);
-        // new CollationMiscTest().TestLocaleRuleBasedCollators();
+        // new CollationMiscTest().run(args);
+        new CollationMiscTest().TestLocaleRuleBasedCollators();
     }
     
     public void TestRuleOptions() {
@@ -1586,20 +1586,22 @@ public class CollationMiscTest extends TestFmwk{
             return;
         }
         Locale locale[] = ICULocaleData.getAvailableLocales();
-        
+        String prevrule = null;
         for (int i = 0; i < locale.length; i ++) {
             Locale l = locale[i];
             try {
                 RuleBasedCollator col1 = 
                                   (RuleBasedCollator)Collator.getInstance(l);
                 String rule = col1.getRules();
-                if (rule != null && rule.length() > 0) {
+                if (rule != null && rule.length() > 0 
+                    && !rule.equals(prevrule)) {
                     RuleBasedCollator col2 = new RuleBasedCollator(rule);
                     if (!col1.equals(col2)) {
                         errln("Error creating RuleBasedCollator from " +
-                              "locale rules");
+                              "locale rules for " + l.toString());
                     }
                 }
+                prevrule = rule;
             } catch (Exception e) {
                 errln("Error retrieving resource bundle for testing");
             }

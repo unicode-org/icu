@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $ 
-* $Date: 2002/09/06 01:53:17 $ 
-* $Revision: 1.18 $
+* $Date: 2002/09/06 19:04:07 $ 
+* $Revision: 1.19 $
 *
 *******************************************************************************
 */
@@ -20,6 +20,7 @@ import java.util.ResourceBundle;
 import java.util.Arrays;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
+import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.impl.IntTrie;
 import com.ibm.icu.impl.Trie;
 import com.ibm.icu.impl.ICULocaleData;
@@ -769,16 +770,48 @@ public final class RuleBasedCollator extends Collator
             return false;
         }
         if (!m_trie_.equals(other.m_trie_)) {
-            return false;
+            // we should use the trie iterator here, but then this part is 
+            // only used in the test.
+            for (int i = UCharacter.MAX_VALUE; i >= UCharacter.MIN_VALUE; i --)
+            {
+                int v = m_trie_.getCodePointValue(i);
+                int otherv = other.m_trie_.getCodePointValue(i);
+                if (v != otherv) {
+                    int mask = v & (CE_TAG_MASK_ | CE_SPECIAL_FLAG_);
+                    if (mask == (otherv & 0xff000000)) {
+                        v &= 0xffffff; 
+                        otherv &= 0xffffff; 
+                        if (mask == 0xf1000000) {
+                            v -= (m_expansionOffset_ << 4);
+                            otherv -= (other.m_expansionOffset_ << 4);
+                        }
+                        else if (mask == 0xf2000000) {
+                            v -= m_contractionOffset_;
+                            otherv -= other.m_contractionOffset_;
+                        }
+                        if (v == otherv) {
+                            continue;
+                        }
+                    }
+                    return false;
+                }
+            }
         }
-        return Arrays.equals(m_contractionCE_, other.m_contractionCE_)
-                  && Arrays.equals(m_contractionEnd_, other.m_contractionEnd_)
-                  && Arrays.equals(m_contractionIndex_, 
-                                   other.m_contractionIndex_)
-                  && Arrays.equals(m_expansion_, other.m_expansion_)
-                  && Arrays.equals(m_expansionEndCE_, other.m_expansionEndCE_)
-                  && Arrays.equals(m_expansionEndCEMaxSize_, 
-                                   other.m_expansionEndCEMaxSize_);
+        if (Arrays.equals(m_contractionCE_, other.m_contractionCE_)
+            && Arrays.equals(m_contractionEnd_, other.m_contractionEnd_)
+            && Arrays.equals(m_contractionIndex_, other.m_contractionIndex_)
+            && Arrays.equals(m_expansion_, other.m_expansion_)
+            && Arrays.equals(m_expansionEndCE_, other.m_expansionEndCE_)) {
+            // not comparing paddings
+            for (int i = 0; i < m_expansionEndCE_.length; i ++) {
+                 if (m_expansionEndCEMaxSize_[i] 
+                     != other.m_expansionEndCEMaxSize_[i]) {
+                     return false;
+                 }
+                 return true;
+            }
+        }
+        return false;
     }
     
 	/**

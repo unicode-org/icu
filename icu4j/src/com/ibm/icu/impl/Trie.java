@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Trie.java,v $
-* $Date: 2002/09/06 01:53:16 $
-* $Revision: 1.7 $
+* $Date: 2002/09/06 19:04:07 $
+* $Revision: 1.8 $
 *
 ******************************************************************************
 */
@@ -103,7 +103,9 @@ public abstract class Trie
         }
         Trie othertrie = (Trie)other;
         return m_isLatin1Linear_ == othertrie.m_isLatin1Linear_
-               && m_options_ == othertrie.m_options_;
+               && m_options_ == othertrie.m_options_
+               && m_dataLength_ == othertrie.m_dataLength_
+               && Arrays.equals(m_index_, othertrie.m_index_);
     }
 
     // protected constructor -------------------------------------------
