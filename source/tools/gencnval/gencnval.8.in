@@ -65,19 +65,19 @@ The default destination directory is specified by the environment variable
 .TP 10
 .B ICU_DATA
 Specifies the directory containing ICU data. Defaults to
-.BR @thedatadir@/icu/@VERSION@/ .
+.BR @theicudatadir@/icu/@VERSION@/ .
 Some tools in ICU depend on the presence of the trailing slash. It is thus
 important to make sure that it is present if
 .B ICU_DATA
 is set.
 .SH FILES
-.TP \w'\fB@sysconfdir@/icu/convrtrs.txt'u+3n
-.B @sysconfdir@/icu/convrtrs.txt
+.TP \w'\fB@thesysconfdir@/icu/convrtrs.txt'u+3n
+.B @thesysconfdir@/icu/convrtrs.txt
 Description of ICU's converters and their aliases.
 .SH VERSION
 @VERSION@
 .SH COPYRIGHT
-Copyright (C) 2000 IBM, Inc. and others.
+Copyright (C) 2000-2002 IBM, Inc. and others.
 .SH SEE ALSO
 .BR convrtrs.txt (5) 
 .br
