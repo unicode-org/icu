@@ -62,6 +62,9 @@ genCategoryNames[];
 U_CFUNC void
 writeUCDFilename(char *basename, const char *filename, const char *suffix);
 
+U_CFUNC UBool
+isToken(const char *token, const char *s);
+
 U_CFUNC int32_t
 getTokenIndex(const char *const tokens[], int32_t countTokens, const char *s);
 
@@ -89,9 +92,6 @@ generateData(const char *dataDir);
 /* props2.c */
 U_CFUNC void
 initAdditionalProperties(void);
-
-U_CFUNC void
-setMainProperties(uint32_t start, uint32_t limit, uint32_t value);
 
 U_CFUNC void
 generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pErrorCode);
