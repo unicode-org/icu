@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedBreakIterator.java,v $
- * $Date: 2001/11/05 23:38:59 $
- * $Revision: 1.14 $
+ * $Date: 2001/11/14 00:27:40 $
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -241,7 +241,7 @@ import java.io.*;
  * &nbsp; For examples, see the resource data (which is annotated).</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.14 $ $Date: 2001/11/05 23:38:59 $
+ * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.15 $ $Date: 2001/11/14 00:27:40 $
  */
 public class RuleBasedBreakIterator extends BreakIterator {
 
@@ -1636,9 +1636,16 @@ visitedChars = 0;
 
                 // go through the character ranges in the category one by one...
                 for (int j = 0; j < n; ++j) {
+                    int rangeStart = chars.getRangeStart(j);
+                    
+                    // (ignore anything above the BMP for now...)
+                    if (rangeStart >= 0x10000) {
+                        break;
+                    }
+                    
                     // and set the corresponding elements in the CompactArray accordingly
                     if (i != 0) {
-                        charCategoryTable.setElementAt((char)chars.getRangeStart(j),
+                        charCategoryTable.setElementAt((char)rangeStart,
                             (char)chars.getRangeEnd(j), (byte)i);
                     }
 
@@ -1647,7 +1654,7 @@ visitedChars = 0;
                     // -1 [this is because category 0 contains all characters not
                     // specifically mentioned anywhere in the rules] )
                     else {
-                        charCategoryTable.setElementAt((char)chars.getRangeStart(j),
+                        charCategoryTable.setElementAt((char)rangeStart,
                             (char)chars.getRangeEnd(j), IGNORE);
                     }
                 }
