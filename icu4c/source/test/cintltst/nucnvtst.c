@@ -3790,9 +3790,9 @@ static void TestJitterbug792()
     {0x8A, 0x8A, 0x8A, 0x8F, 0x8F, 0x98, 0x98,0x98,0x9A,0x9A,0x9F,0x9F,0xAA,0xAA,0xAA,0xC0,0xC0,0xC0,0xFF,0xFF, 0x00},
     {0x8D, 0x8E, 0x8F, 0x9D, 0x9E, 0xB4, 0xFF, 0x00}
     };
-    uint8_t outBuffer [U_MAX_792_TEST_SIZE];
+    char outBuffer [U_MAX_792_TEST_SIZE];
     UErrorCode status = U_ZERO_ERROR;
-    uint8_t * pOutBuffer;
+    char * pOutBuffer;
     UConverter *cnv = 0;
     int i;
 
@@ -3814,7 +3814,7 @@ static void TestJitterbug792()
         if (U_FAILURE(status)) {
             log_err("Failed to convert correctly for %s\n", ConverterNames[i]);
         }
-        if (strcmp(outBuffer, outBytes[i])){
+        if (strcmp(outBuffer, (const char *)outBytes[i])){
             log_err("Failed to correctly convert buffer for %s\n", ConverterNames[i]);
         }
         ucnv_close(cnv);
