@@ -360,7 +360,7 @@ void UnicodeSetTest::TestAPI() {
     }
     c.complement();
     exp.set((UChar32)0, (UChar32)2);
-    exp.add((UChar32)16, UnicodeSet.MAX_VALUE);
+    exp.add((UChar32)16, UnicodeSet::MAX_VALUE);
     if (c == exp) {
         logln((UnicodeString)"c.complement(): " + c);
     } else {
@@ -373,7 +373,7 @@ void UnicodeSetTest::TestAPI() {
     } else {
         errln((UnicodeString)"FAIL: c.complement() = " + c + ", expect " + exp);
     }
-    c = a; c.xorAll(b);
+    c = a; c.exclusiveOrAll(b);
     exp.set((UChar32)3,(UChar32)6);
     exp.add((UChar32)11,(UChar32) 15);
     if (c == exp) {
@@ -467,7 +467,7 @@ void UnicodeSetTest::_testXor(int32_t a, int32_t b, UnicodeSet& x, UnicodeSet& y
     bitsToSet(a, x);
     bitsToSet(b, y);
     z = x;
-    z.xorAll(y);
+    z.exclusiveOrAll(y);
     int32_t c = setToBits(z);
     if (c != (a ^ b)) {
         errln((UnicodeString)"FAILED: xor: " + x + " ^ " + y + " != " + z);
