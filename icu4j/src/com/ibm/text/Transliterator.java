@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Transliterator.java,v $ 
- * $Date: 2001/05/23 21:06:36 $ 
- * $Revision: 1.33 $
+ * $Date: 2001/06/12 23:00:35 $ 
+ * $Revision: 1.34 $
  *
  *****************************************************************************************
  */
@@ -240,7 +240,7 @@ import com.ibm.text.resources.ResourceReader;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.33 $ $Date: 2001/05/23 21:06:36 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.34 $ $Date: 2001/06/12 23:00:35 $
  */
 public abstract class Transliterator {
     /**
@@ -868,6 +868,8 @@ public abstract class Transliterator {
                     return (Transliterator) ((Class) obj).newInstance();
                 } catch (InstantiationException e) {
                 } catch (IllegalAccessException e2) {}
+            } else if (obj instanceof Factory) {
+                return ((Factory) obj).getInstance();
             } else if (obj instanceof String) {
                 String spec = (String) obj;
                 if (spec.charAt(0) == 'a') {
@@ -970,6 +972,16 @@ public abstract class Transliterator {
         if (displayName != null) {
             displayNameCache.put(ID, displayName);
         }
+    }
+
+    /**
+     * Register a factory object with the given ID.  The factory
+     * method should return a new instance of the given transliterator.
+     * @param ID the ID of this transliterator
+     * @param factory the factory object
+     */
+    public static void registerFactory(String ID, Factory factory) {
+        cache.put(ID, factory);
     }
 
     /**
@@ -1091,5 +1103,15 @@ public abstract class Transliterator {
                       LowerUpperTransliterator.class, null);
         registerClass(TitleCaseTransliterator._ID,
                       TitleCaseTransliterator.class, null);
+        NormalizationTransliterator.register();
+    }
+
+    /**
+     * The factory interface for transliterators.  Transliterator
+     * subclasses can register factory objects for IDs using the
+     * registerFactory() method of Transliterator.
+     */
+    public static interface Factory {
+        Transliterator getInstance();
     }
 }
