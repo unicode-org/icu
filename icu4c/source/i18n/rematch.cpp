@@ -5,10 +5,10 @@
 //         which is one of the main API classes for the ICU regular expression package.
 //
 /*
-**********************************************************************
-*   Copyright (C) 2002 International Business Machines Corporation   *
-*   and others. All rights reserved.                                 *
-**********************************************************************
+**************************************************************************
+*   Copyright (C) 2002-2003 International Business Machines Corporation  *
+*   and others. All rights reserved.                                     *
+**************************************************************************
 */
 
 #include "unicode/utypes.h"
@@ -37,11 +37,14 @@ RegexMatcher::RegexMatcher(const RegexPattern *pat)  {
     fPatternOwned      = FALSE;
     fInput             = NULL;
     fTraceDebug        = FALSE;
-    UErrorCode  status = U_ZERO_ERROR;
-    fStack             = new UVector32(status);   // TODO:  do something with status.
+    fDeferredStatus    = U_ZERO_ERROR;
+    fStack             = new UVector32(fDeferredStatus); 
     fData              = fSmallData;
     if (pat->fDataSize > sizeof(fSmallData)/sizeof(int32_t)) {
-        fData = (int32_t *)uprv_malloc(pat->fDataSize * sizeof(int32_t));      // TODO:  null check
+        fData = (int32_t *)uprv_malloc(pat->fDataSize * sizeof(int32_t)); 
+    }
+    if (fStack == NULL || fData == NULL) {
+        fDeferredStatus = U_MEMORY_ALLOCATION_ERROR;
     }
         
     reset();
@@ -55,10 +58,14 @@ RegexMatcher::RegexMatcher(const UnicodeString &regexp, const UnicodeString &inp
     fPattern           = RegexPattern::compile(regexp, flags, pe, status);
     fPatternOwned      = TRUE;
     fTraceDebug        = FALSE;
+    fDeferredStatus    = U_ZERO_ERROR;
     fStack             = new UVector32(status); 
     fData              = fSmallData;
     if (fPattern->fDataSize > sizeof(fSmallData)/sizeof(int32_t)) {
-        fData = (int32_t *)uprv_malloc(fPattern->fDataSize * sizeof(int32_t));      // TODO:  null check
+        fData = (int32_t *)uprv_malloc(fPattern->fDataSize * sizeof(int32_t)); 
+    }
+    if (fStack == NULL || fData == NULL) {
+        fDeferredStatus = U_MEMORY_ALLOCATION_ERROR;
     }
     reset(input);
 }

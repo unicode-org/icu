@@ -123,7 +123,8 @@ UBool RegexTest::doRegexLMTest(const char *pat, const char *text, UBool looking,
     UnicodeString patString(pat);
     REPattern = RegexPattern::compile(patString, 0, pe, status);
     if (U_FAILURE(status)) {
-        errln("RegexTest failure in RegexPattern::compile() at line %d.  Status = %d\n", line, status);
+        errln("RegexTest failure in RegexPattern::compile() at line %d.  Status = %s\n",
+            line, u_errorName(status));
         return FALSE;
     }
     if (line==376) { REPattern->dump();}
@@ -132,14 +133,16 @@ UBool RegexTest::doRegexLMTest(const char *pat, const char *text, UBool looking,
     UnicodeString unEscapedInput = inputString.unescape();
     REMatcher = REPattern->matcher(unEscapedInput, status);
     if (U_FAILURE(status)) {
-        errln("RegexTest failure in REPattern::matcher() at line %d.  Status = %d\n", line, status);
+        errln("RegexTest failure in REPattern::matcher() at line %d.  Status = %s\n",
+            line, u_errorName(status));
         return FALSE;
     }
   
     UBool actualmatch;
     actualmatch = REMatcher->lookingAt(status);
     if (U_FAILURE(status)) {
-        errln("RegexTest failure in lookingAt() at line %d.  Status = %d\n", line, status);
+        errln("RegexTest failure in lookingAt() at line %d.  Status = %s\n",
+            line, u_errorName(status));
         retVal =  FALSE;
     }
     if (actualmatch != looking) {
@@ -150,7 +153,8 @@ UBool RegexTest::doRegexLMTest(const char *pat, const char *text, UBool looking,
     status = U_ZERO_ERROR;
     actualmatch = REMatcher->matches(status);
     if (U_FAILURE(status)) {
-        errln("RegexTest failure in matches() at line %d.  Status = %d\n", line, status);
+        errln("RegexTest failure in matches() at line %d.  Status = %s\n",
+            line, u_errorName(status));
         retVal = FALSE;
     }
     if (actualmatch != match) {
@@ -478,9 +482,6 @@ void RegexTest::Basic() {
     REGEX_TESTLM("[\\p{Nd}]*", "123456", TRUE, TRUE);
     REGEX_TESTLM("[\\p{Nd}]*", "a123456", TRUE, FALSE);   // note that * matches 0 occurences.
     REGEX_TESTLM("[a][b][[:Zs:]]*", "ab   ", TRUE, TRUE);
-
-    // Set contains only a string, no individual chars.
-    REGEX_TESTLM("[{ab}]", "a", FALSE, FALSE);
 
     //
     //   OR operator in patterns
@@ -1272,6 +1273,9 @@ void RegexTest::Errors() {
     REGEX_ERR("abc{1,,2}",1,7, U_REGEX_BAD_INTERVAL);
     REGEX_ERR("abc{1,2a}",1,8, U_REGEX_BAD_INTERVAL);
     REGEX_ERR("abc{222222222222222222222}",1,14, U_REGEX_NUMBER_TOO_BIG);
+
+    // UnicodeSet containing a string
+    REGEX_ERR("abc[{def}]xyz", 1, 10, U_REGEX_SET_CONTAINS_STRING);
 
 }
 

@@ -631,6 +631,7 @@ typedef enum UErrorCode {
      U_REGEX_INVALID_BACK_REF,             /**< Back-reference to a non-existent capture group.    */
      U_REGEX_INVALID_FLAG,                 /**< Invalid value for match mode flags.                */
      U_REGEX_LOOK_BEHIND_LIMIT,            /**< Look-Behind pattern matches must have a bounded maximum length.    */
+     U_REGEX_SET_CONTAINS_STRING,          /**< Regexps cannot have UnicodeSets containing strings.*/
      U_REGEX_ERROR_LIMIT,                  /**< This must always be the last value to indicate the limit for regexp errors */
 
      /*
