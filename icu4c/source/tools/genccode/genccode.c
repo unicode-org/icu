@@ -100,7 +100,7 @@ static UOption options[]={
      UOPTION_DEF("name", 'n', UOPT_REQUIRES_ARG),
      UOPTION_DEF( "entrypoint", 'e', UOPT_REQUIRES_ARG),
 #ifdef CAN_GENERATE_OBJECTS
-/*5*/, UOPTION_DEF("object", 'o', UOPT_NO_ARG),
+/*5*/UOPTION_DEF("object", 'o', UOPT_NO_ARG),
 #endif
      UOPTION_DEF("filename", 'f', UOPT_REQUIRES_ARG)
 };
@@ -424,7 +424,7 @@ getOutFilename(const char *inFilename, const char *destdir, char *outFilename, c
         }
         uprv_strcat(outFilename, newSuffix);
     } else {
-        const char *saveOutFilename = outFilename;
+        char *saveOutFilename = outFilename;
         /* copy basename */
         while(inFilename<suffix) {
             if(*inFilename=='-') {
