@@ -388,6 +388,18 @@ public class TimeZoneTest extends TestFmwk
             !name.equals("GMT+0130") &&
             !name.equals("GMT+130"))
             errln("Fail: Expected GMT+01:30 or something similar");
+        
+        // cover getDisplayName() - null arg
+        ULocale save = ULocale.getDefault();
+        ULocale.setDefault(ULocale.US);
+        name = zone2.getDisplayName();
+        logln("GMT+90min->" + name + "for default display locale");
+        if (!name.equals("GMT+01:30") &&
+            !name.equals("GMT+1:30") &&
+            !name.equals("GMT+0130") &&
+            !name.equals("GMT+130"))
+            errln("Fail: Expected GMT+01:30 or something similar");        
+        ULocale.setDefault(save);
     }
 
     public void TestGenericAPI() {
