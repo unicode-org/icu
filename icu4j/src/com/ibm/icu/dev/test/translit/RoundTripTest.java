@@ -268,9 +268,17 @@ public class RoundTripTest extends TestFmwk {
     }
 
     public void TestHebrew() throws IOException {
+        //      Time bomb
+        if (skipIfBeforeICU(3,4)) {
+            // We temporarily filter against Unicode 4.1, but we only do this
+            // before version 3.4.
+            logln("TestHebrew needs to be updated to remove delete the section marked [:Age=4.0:] filter");
+        } else {
+            errln("TestHebrew needs to be updated to remove delete the [:Age=4.0:] filter ");
+        }
         long start = System.currentTimeMillis();
         new Test("Latin-Hebrew")
-          .test("[a-zA-Z\u02BC\u02BB]", "[[:hebrew:]-[\u05BD\uFB00-\uFBFF]]", "[\u05F0\u05F1\u05F2]", this, new LegalHebrew());
+          .test("[a-zA-Z\u02BC\u02BB]", "[[[:hebrew:]-[\u05BD\uFB00-\uFBFF]]& [:Age=4.0:]]", "[\u05F0\u05F1\u05F2]", this, new LegalHebrew());
         showElapsed(start, "TestHebrew");
     }
 
