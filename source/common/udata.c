@@ -107,7 +107,7 @@ getChoice(Library lib, const char *entry,
 
 #define LIB_SUFFIX ".dll"
 
-#define GET_ENTRY(lib, entryName) (MappedData *)GetProcAddress(lib, entry)
+#define GET_ENTRY(lib, entryName) (MappedData *)GetProcAddress(lib, entryName)
 
 #define NO_LIBRARY NULL
 #define IS_LIBRARY(lib) ((lib)!=NULL)
@@ -131,7 +131,7 @@ getChoice(Library lib, const char *entry,
 
 #define LIB_SUFFIX ".dat"
 
-#define GET_ENTRY(lib, entryName) getCommonMapData(lib, entry)
+#define GET_ENTRY(lib, entryName) getCommonMapData(lib, entryName)
 
 #define NO_LIBRARY NULL
 #define IS_LIBRARY(lib) ((lib)!=NULL)
@@ -251,11 +251,11 @@ getChoice(Library lib, const char *entry,
           UDataMemoryIsAcceptable *isAcceptable, void *context,
           UErrorCode *pErrorCode);
 
-#define GET_ENTRY(lib, entryName) (MappedData *)dlsym(lib, entry)
+#define GET_ENTRY(lib, entryName) (MappedData *)dlsym(lib, entryName)
 
 #define NO_LIBRARY NULL
 #define IS_LIBRARY(lib) ((lib)!=NULL)
-#define LOAD_LIBRARY(path, basename, isCommon) dlopen(path, RTLD_LAZY|RTLD_GLOBAL);
+#define LOAD_LIBRARY(path, basename, isCommon) dlopen(path, RTLD_LAZY|RTLD_GLOBAL)
 #define UNLOAD_LIBRARY(lib) dlclose(lib)
 
 #   else /* POSIX memory map implementation --------------------------------- */
@@ -280,7 +280,7 @@ getChoice(Library lib, const char *entry,
 
 #define LIB_SUFFIX ".dat"
 
-#define GET_ENTRY(lib, entryName) getCommonMapData(lib, entry)
+#define GET_ENTRY(lib, entryName) getCommonMapData(lib, entryName)
 
 #define NO_LIBRARY NULL
 #define IS_LIBRARY(lib) ((lib)!=NULL)
@@ -565,6 +565,42 @@ udata_getInfo(UDataMemory *pData, UDataInfo *pInfo) {
 
 static Library commonLib=NO_LIBRARY;
 
+static const char *strcpy_dllentry(char *target, const char *src)
+{
+    int i, length;
+
+    icu_strcpy(target,src);
+    length = icu_strlen(target);
+    for(i=0;i<length;i++)
+    {
+         if(target[i] == '-')
+         {
+             target[i] = '_';
+         }
+    }
+    return target;
+}
+
+static const char *strcat_dllentry(char *target, const char *src)
+{
+    int i, length;
+
+    i = icu_strlen(target); /* original size */
+
+    icu_strcat(target,src);
+
+    length = i + icu_strlen(src);
+
+    for(;i<length;i++)
+    {
+         if(target[i] == '-')
+         {
+             target[i] = '_';
+         }
+    }
+    return target;
+}
+
 static UDataMemory *
 doOpenChoice(const char *path, const char *type, const char *name,
              UDataMemoryIsAcceptable *isAcceptable, void *context,
@@ -670,16 +706,32 @@ doOpenChoice(const char *path, const char *type, const char *name,
 
     /* set up the entry point name */
     if(type!=NULL && *type!=0) {
+#ifdef UDATA_DLL
+        strcpy_dllentry(entryNameBuffer, name);
+#else
         icu_strcpy(entryNameBuffer, name);
+#endif
+
 #       ifdef UDATA_DLL
             icu_strcat(entryNameBuffer, "_");
 #       else
             icu_strcat(entryNameBuffer, ".");
 #       endif
+
+#ifdef UDATA_DLL
+        strcat_dllentry(entryNameBuffer, type);
+#else
         icu_strcat(entryNameBuffer, type);
+#endif
+
         entryName=entryNameBuffer;
     } else {
+#ifdef UDATA_DLL
+        strcpy_dllentry(entryNameBuffer, name);
+        entryName=entryNameBuffer;
+#else
         entryName=name;
+#endif
     }
 
     /* try the common data first */
