@@ -779,20 +779,24 @@ void IntlTest::LL_message( UnicodeString message, UBool newline )
     int32_t length;
 
     // stream out the indentation string first if necessary
-    length = indent.extract(1, indent.length(), buffer);
+    length = indent.extract(1, indent.length(), buffer, sizeof(buffer));
     fwrite(buffer, sizeof(*buffer), length, testoutfp);
 
     // replace each LineFeed by the indentation string
     message.findAndReplace(UnicodeString((UChar)'\n'), indent);
 
     // stream out the message
-    length = message.extract(0, message.length(), buffer);
+    length = message.extract(0, message.length(), buffer, sizeof(buffer));
     fwrite(buffer, sizeof(*buffer), length, testoutfp);
 
     if (newline) {
         char newLine = '\n';
         fwrite(&newLine, sizeof(newLine), 1, testoutfp);
     }
+
+    // A newline usually flushes the buffer, but 
+    // flush the message just in case of a core dump.
+    fflush(testoutfp);
 }
 
 /**
