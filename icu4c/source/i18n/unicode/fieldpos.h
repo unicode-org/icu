@@ -193,16 +193,16 @@ private:
     int32_t fField;
 
     /**
-     * Output: End offset of field in text.
-     * If the field does not occur in the text, 0 is returned.
-     */
-    int32_t fEndIndex;
-
-    /**
      * Output: Start offset of field in text.
      * If the field does not occur in the text, 0 is returned.
      */
     int32_t fBeginIndex;
+
+    /**
+     * Output: End offset of field in text.
+     * If the field does not occur in the text, 0 is returned.
+     */
+    int32_t fEndIndex;
 };
 
 inline FieldPosition&
