@@ -1614,7 +1614,8 @@ void RBBITest::TestLineBreakData() {
     //   TODO:  a proper way to handle this data.
     ss.fFile = fopen(lbdfName, "rb");
     if (ss.fFile == NULL) {
-        // infoln("Unable to open Line Break Test Data file.  Skipping test.");
+        logln("Unable to open Line Break Test Data file.  Skipping test.");
+        delete bi;
         return;
     }
 
