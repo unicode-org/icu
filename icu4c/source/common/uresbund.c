@@ -326,7 +326,7 @@ static UResourceDataEntry *init_entry(const char *localeID, const char *path, UE
             Resource aliasres = res_getResource(&(r->fData), "%%ALIAS");
             const UChar *alias = res_getString(&(r->fData), aliasres, &aliasLen);
             if(alias != NULL && aliasLen > 0) { /* if there is actual alias - unload and load new data */
-                u_UCharsToChars(alias, aliasName, u_strlen(alias)+1);
+                u_UCharsToChars(alias, aliasName, aliasLen+1);
                 isAlias = TRUE;
                 res_unload(&(r->fData));
                 result = res_load(&(r->fData), r->fPath, aliasName, status);
@@ -512,9 +512,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
         const UChar *alias = res_getAlias(rdata, r, &len);   
         if(len > 0) {
           /* we have an alias, now let's cut it up */
-          int32_t i = 0;
           char *chAlias = NULL, *path = NULL, *locale = NULL, *keyPath = NULL;
-          int32_t pathLen = 0, localeLen = 0, keyPathLen = 0;
           chAlias = (char *)uprv_malloc((len+1)*sizeof(char));
           /* test for NULL */
           if(chAlias == NULL) {
@@ -546,7 +544,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
           {
             /* got almost everything, let's try to open */
             /* first, open the bundle with real data */
-            UResourceBundle *main = ures_openDirect(path, locale, status); 
+            UResourceBundle *mainRes = ures_openDirect(path, locale, status); 
             UResourceBundle *result = NULL;
 
             if(keyPath == NULL) {
@@ -559,27 +557,27 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
                */
               const char* aKey = parent->fResPath;
               if(aKey) {
-                r = res_findResource(&(main->fResData), main->fRes, &aKey);
+                r = res_findResource(&(mainRes->fResData), mainRes->fRes, &aKey);
               } else {
-                r = main->fRes;
+                r = mainRes->fRes;
               }
               if(key) {
               /* we need to make keyPath from parents fResPath and 
                * current key, if there is a key associated
                */
                 aKey = key;
-                r = res_findResource(&(main->fResData), r, &aKey);
+                r = res_findResource(&(mainRes->fResData), r, &aKey);
               } else if(index != -1) {
               /* if there is no key, but there is an index, try to get by the index */
               /* here we have either a table or an array, so get the element */
                 if(RES_GET_TYPE(r) == RES_TABLE) {
-                  r = res_getTableItemByIndex(&(main->fResData), r, index, &aKey);
+                  r = res_getTableItemByIndex(&(mainRes->fResData), r, index, &aKey);
                 } else { /* array */
-                  r = res_getArrayItem(&(main->fResData), r, index);
+                  r = res_getArrayItem(&(mainRes->fResData), r, index);
                 }
               }
               if(r != RES_BOGUS) {
-                result = init_resb_result(&(main->fResData), r, key, -1, main->fData, parent, noAlias+1, resB, status);
+                result = init_resb_result(&(mainRes->fResData), r, key, -1, mainRes->fData, parent, noAlias+1, resB, status);
               } else {
                 *status = U_MISSING_RESOURCE_ERROR;
                 result = resB;
@@ -592,7 +590,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
                *     anotheralias:alias { "/ICUDATA/sh/CollationElements" }
                * aliastest resource should finally have the sequence, not collation elements.
                */
-              result = main;
+              result = mainRes;
               while(*keyPath) {
                 r = res_findResource(&(result->fResData), result->fRes, (const char**)&keyPath);
                 if(r == RES_BOGUS) {
@@ -605,7 +603,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
               }
           }
             uprv_free(chAlias);
-            ures_close(main);
+            ures_close(mainRes);
             return result;
           }
         } else {
@@ -1031,9 +1029,9 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByIndex(const UResourceBundle *resB,
     return NULL;
 }
 
-U_CAPI const char *ures_getResPath(UResourceBundle *resB) {
+/*U_CAPI const char *ures_getResPath(UResourceBundle *resB) {
   return resB->fResPath;
-}
+}*/
 
 U_CAPI UResourceBundle* U_EXPORT2
 ures_findResource(const char* path, UResourceBundle *fillIn, UErrorCode *status) 

@@ -178,7 +178,7 @@ u_getUnicodeProperties(UChar32 c, int32_t column);
  * @internal
  */
 U_CFUNC int32_t
-uprv_getMaxValues();
+uprv_getMaxValues(void);
 
 /**
  * Unicode property names and property value names are compared
