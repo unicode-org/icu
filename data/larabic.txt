@@ -5,7 +5,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: src\com\ibm\tools\translit\dumpICUrules.bat
 // Source: src\com\ibm\text\resources/TransliterationRule_Latin_Arabic.java
-// Date: Fri May 19 15:50:22 2000
+// Date: Wed Jul  5 16:11:18 2000
 //--------------------------------------------------------------------
 
 // Latin-Arabic
@@ -13,6 +13,7 @@
 larabic {
   Rule {
     // To Do: finish adding shadda, add sokoon
+    // [Is this done?  Can someone finish this?]
     
     "$alefmadda=\u0622;"
     "$alefuhamza=\u0623;"
@@ -61,17 +62,26 @@ larabic {
     "$shadda=\u0651;"
     "$sokoon=\u0652;"
     
-    // handle doubles - liu
+    // Doubles - liu
     "t'' < {$teh} [$teh$theh$tehmarbuta$tah];"
     "h'' < {$heh} [$heh$hah];"
     "s'' < {$seen} $sheen;"
-    // handle a few pathological special cases to make round
+    
+    // A few pathological special cases to make round
     // trip work. - liu
     "d'~'d   <> $dal $dal;"
     "dh'~'dh <> $dhal $dhal;"
     "dd'~'dd <> $dad $dad;"
     
-    // convert English to Arabic
+    // Shadda:  Map x $shadda to x x, where x is dh, dd, or
+    // d (that is, $dhal, $dad, or $dal).  If x is d, d'd is
+    // output.  Net effect is to map s.th. like $dad $shadda
+    // to dd'dd. - liu
+    "$dhal {dh} <> dh {$shadda};"
+    "$dad  {dd} <> dd {$shadda};"
+    "$dal {''d} [^dh] <> d {$shadda};" // Avoid d'dd or d'dh
+    
+    // [This should be removed, but it's good for demos]
     "Arabic>"
     "\u062a\u062a\u0645\u062a\u0639' '"
     "\u0627\u0644\u0644\u063a\u0629' '"
@@ -80,178 +90,107 @@ larabic {
     "\u0643\u062a\u0627\u0628\u0628\u064a\u0629' '"
     "\u062c\u0645\u064a\u0644\u0629;"
     
-    "ai>$alefmadda;"
-    "ae>$alefuhamza;"
-    "ao>$alefhamza;"
-    "aa>$alef;"
-    "an>$fathatein;"
-    "a>$fatha;"
-    "b>$beh;"
-    "c>$kaf;"
-    // To be symmetrical with shadda rules below, we want to
-    // map $dad $shadda to dd'dd, etc.  - liu
-    "$dhal{dh>$shadda;"
-    "dh>$dhal;"
-    "$dad{dd>$shadda;"
-    "dd>$dad;"
-    "$dal{d>$shadda;"
-    "d>$dal;"
-    "e>$ein;"
-    "f>$feh;"
-    "gh>$ghein;"
-    "g>$geem;"
-    "hh>$hah;"
-    "h>$heh;"
-    "ii>$kasratein;"
-    "i>$kasra;"
-    "j>$geem;"
-    "kh>$kha;"
-    "k>$kaf;"
-    "l>$lam;"
-    "m>$meem;"
-    "n>$noon;"
-    "o>$hamza;"
-    "p>$peh;"
-    "q>$qaaf;"
-    "r>$reh;"
-    "sh>$sheen;"
-    "ss>$sad;"
-    "s>$seen;"
-    "th>$theh;"
-    "tm>$tehmarbuta;"
-    "tt>$tah;"
-    "t>$teh;"
-    "uu>$dammatein;"
-    "u>$damma;"
-    "v>$beh;"
-    "we>$wauuhamza;"
-    "w>$wau;"
-    "x>$kaf$shadda$seen;"
-    "ye>$yehuhamza;"
-    "ym>$yehmaqsura;"
-    "y>$yeh;"
-    "zz>$zah;"
-    "z>$zain;"
-    
-    "0>\u0660;" // Arabic digit 0
-    "1>\u0661;" // Arabic digit 1
-    "2>\u0662;" // Arabic digit 2
-    "3>\u0663;" // Arabic digit 3
-    "4>\u0664;" // Arabic digit 4
-    "5>\u0665;" // Arabic digit 5
-    "6>\u0666;" // Arabic digit 6
-    "7>\u0667;" // Arabic digit 7
-    "8>\u0668;" // Arabic digit 8
-    "9>\u0669;" // Arabic digit 9
-    "'%'>\u066A;" // Arabic %
-    "'.'>\u066B;" // Arabic decimal separator
-    "','>\u066C;" // Arabic thousands separator
-    "'*'>\u066D;" // Arabic five-pointed star
-    
-    "'`0'>0;" // Escaped forms of the above
-    "'`1'>1;"
-    "'`2'>2;"
-    "'`3'>3;"
-    "'`4'>4;"
-    "'`5'>5;"
-    "'`6'>6;"
-    "'`7'>7;"
-    "'`8'>8;"
-    "'`9'>9;"
-    "'`%'>'%';"
-    "'`.'>'.';"
-    "'`,'>',';"
-    "'`*'>'*';"
-    "'``'>'`';"
-    
-    "''>;"
-    
-    // now Arabic to English
-    
+    // Main rules
     "''ai<a{$alefmadda;"
-    "ai<$alefmadda;"
+    "ai<>$alefmadda;"
     "''ae<a{$alefuhamza;"
-    "ae<$alefuhamza;"
+    "ae<>$alefuhamza;"
     "''ao<a{$alefhamza;"
-    "ao<$alefhamza;"
+    "ao<>$alefhamza;"
     "''aa<a{$alef;"
-    "aa<$alef;"
+    "aa<>$alef;"
     "''an<a{$fathatein;"
-    "an<$fathatein;"
+    "an<>$fathatein;"
     "''a<a{$fatha;"
-    "a<$fatha;"
-    "b<$beh;"
+    "a<>$fatha;"
+    "b<>$beh;"
     "''dh<d{$dhal;"
-    "dh<$dhal;"
+    "dh<>$dhal;"
     "''dd<d{$dad;"
-    "dd<$dad;"
+    "dd<>$dad;"
     "''d<d{$dal;"
-    "d<$dal;"
+    "d<>$dal;"
     "''e<a{$ein;"
     "''e<w{$ein;"
     "''e<y{$ein;"
-    "e<$ein;"
-    "f<$feh;"
-    "gh<$ghein;"
+    "e<>$ein;"
+    "f<>$feh;"
+    "gh<>$ghein;"
     "''hh<d{$hah;"
     "''hh<t{$hah;"
     "''hh<k{$hah;"
     "''hh<s{$hah;"
-    "hh<$hah;"
+    "hh<>$hah;"
     "''h<d{$heh;"
     "''h<t{$heh;"
     "''h<k{$heh;"
     "''h<s{$heh;"
-    "h<$heh;"
+    "h<>$heh;"
     "''ii<i{$kasratein;"
-    "ii<$kasratein;"
+    "ii<>$kasratein;"
     "''i<i{$kasra;"
-    "i<$kasra;"
-    "j<$geem;"
-    "kh<$kha;"
-    "x<$kaf$shadda$seen;"
-    "k<$kaf;"
-    "l<$lam;"
+    "i<>$kasra;"
+    "j<>$geem;"
+    "kh<>$kha;"
+    "k<>$kaf;"
+    "l<>$lam;"
     "''m<y{$meem;"
     "''m<t{$meem;"
-    "m<$meem;"
-    "n<$noon;"
+    "m<>$meem;"
+    "n<>$noon;"
     "''o<a{$hamza;"
-    "o<$hamza;"
-    "p<$peh;"
-    "q<$qaaf;"
-    "r<$reh;"
-    "sh<$sheen;"
+    "o<>$hamza;"
+    "p<>$peh;"
+    "q<>$qaaf;"
+    "r<>$reh;"
+    "sh<>$sheen;"
     "''ss<s{$sad;"
-    "ss<$sad;"
+    "ss<>$sad;"
     "''s<s{$seen;"
-    "s<$seen;"
-    "th<$theh;"
-    "tm<$tehmarbuta;"
+    "s<>$seen;"
+    "th<>$theh;"
+    "tm<>$tehmarbuta;"
     "''tt<t{$tah;"
-    "tt<$tah;"
+    "tt<>$tah;"
     "''t<t{$teh;"
-    "t<$teh;"
+    "t<>$teh;"
     "''uu<u{$dammatein;"
-    "uu<$dammatein;"
+    "uu<>$dammatein;"
     "''u<u{$damma;"
-    "u<$damma;"
-    "we<$wauuhamza;"
-    "w<$wau;"
-    "ye<$yehuhamza;"
-    "ym<$yehmaqsura;"
+    "u<>$damma;"
+    "we<>$wauuhamza;"
+    "w<>$wau;"
+    "ye<>$yehuhamza;"
+    "ym<>$yehmaqsura;"
     "''y<y{$yeh;"
-    "y<$yeh;"
+    "y<>$yeh;"
     "''zz<z{$zah;"
-    "zz<$zah;"
+    "zz<>$zah;"
     "''z<z{$zain;"
-    "z<$zain;"
+    "z<>$zain;"
     
-    // The following three rules map x $shadda to x x, where
-    // x is dh or dd.  If x is d, d'd is output.  Net effect
-    // is to map s.th. like $dad $shadda to dd'dd. - liu
-    "dh<dh{$shadda;"
-    "dd<dd{$shadda;"
-    "''d<d{$shadda;"
+    // One-way Latin-Arabic compatability rules
+    "c>$kaf;"
+    "g>$geem;"
+    "x>$kaf$shadda$seen;"
+    "v>$beh;"
+    
+    // Digits
+    "0<>\u0660;" // Arabic digit 0
+    "1<>\u0661;" // Arabic digit 1
+    "2<>\u0662;" // Arabic digit 2
+    "3<>\u0663;" // Arabic digit 3
+    "4<>\u0664;" // Arabic digit 4
+    "5<>\u0665;" // Arabic digit 5
+    "6<>\u0666;" // Arabic digit 6
+    "7<>\u0667;" // Arabic digit 7
+    "8<>\u0668;" // Arabic digit 8
+    "9<>\u0669;" // Arabic digit 9
+    "'%'<>\u066A;" // Arabic %
+    "'.'<>\u066B;" // Arabic decimal separator
+    "','<>\u066C;" // Arabic thousands separator
+    "'*'<>\u066D;" // Arabic five-pointed star
+    
+    "''>;"
   }
 }
