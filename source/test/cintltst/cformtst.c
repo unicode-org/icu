@@ -29,6 +29,7 @@ void addMsgForTest(TestNode**);
 void addDateForRgrTest(TestNode**);
 void addNumFrDepTest(TestNode**);
 void addDtFrDepTest(TestNode**);
+void addUtmsTest(TestNode**);
 
 void addFormatTest(TestNode** root);
 
@@ -41,9 +42,10 @@ void addFormatTest(TestNode** root)
     addMsgForTest(root);
     addDateForRgrTest(root);
     addDtFrDepTest(root);
+    addUtmsTest(root);
 
 }
-/*INternal functions used*/
+/*Internal functions used*/
 
 UChar* myDateFormat(UDateFormat* dat, UDate d1)
 {

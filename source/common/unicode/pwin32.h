@@ -84,9 +84,8 @@
 #endif
 
 /* Define 64 bit limits */
-#define INT64_C(x) x
-#define UINT64_C(x) x
-
+#define INT64_C(x) ((int64_t)x)
+#define UINT64_C(x) ((uint64_t)x)
 
 /*===========================================================================*/
 /* Generic data types                                                        */
