@@ -45,7 +45,7 @@ void TestFlushCache(void) {
         log_data_err("FAILURE! %s\n", myErrorName(err));
     }
 
-    someConverters[4] = ucnv_open("ibm-949", &err);
+    someConverters[4] = ucnv_open("ibm-954", &err);
     if (U_FAILURE(err)) {
         log_data_err("FAILURE! %s\n", myErrorName(err));
     }
@@ -78,10 +78,10 @@ void TestFlushCache(void) {
             flushCount);
 
     ucnv_close(someConverters[4]);
-    if ( (flushCount=ucnv_flushCache())>=1) 
+    if ( (flushCount=ucnv_flushCache())==1) 
         log_verbose("Flush cache ok\n");
     else 
-        log_data_err("Flush Cache failed line %d, expected >=1 got %d \n", __LINE__, flushCount);
+        log_data_err("Flush Cache failed line %d, expected 1 got %d \n", __LINE__, flushCount);
 
 }
 
