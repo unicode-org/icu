@@ -62,9 +62,10 @@ void EntryPair::streamOut(FileStream* os) const
 {
     if (!T_FileStream_error(os))
     {
-        UnicodeStringStreamer::streamOut(&UnicodeString(nameChars, nameLen), os);
-        T_FileStream_write(os, &value, sizeof(value));
-        T_FileStream_write(os, &fwd, sizeof(fwd));
+      UnicodeString tempForStreaming(nameChars, nameLen);
+      UnicodeStringStreamer::streamOut(&tempForStreaming, os);
+      T_FileStream_write(os, &value, sizeof(value));
+      T_FileStream_write(os, &fwd, sizeof(fwd));
     }
 }
 
@@ -89,7 +90,8 @@ void EntryPair::streamOut(UMemoryStream* os) const
 {
     if (!uprv_mstrm_error(os))
     {
-        UnicodeStringStreamer::streamOut(&UnicodeString(nameChars, nameLen), os);
+      UnicodeString stringForStream(nameChars, nameLen);
+        UnicodeStringStreamer::streamOut(&stringForStream, os);
         uprv_mstrm_write(os, (uint8_t *)&value, sizeof(value));
         uprv_mstrm_write(os, (uint8_t *)&fwd, sizeof(fwd));
     }
