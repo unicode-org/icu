@@ -32,6 +32,7 @@
 #include "unicode/dcfmtsym.h"
 #include "unicode/decimfmt.h"
 #include "unicode/ustring.h"
+#include "unicode/ucurr.h"
 #include "uhash.h"
 #include "iculserv.h"
 #include "ucln_in.h"
@@ -220,20 +221,41 @@ NumberFormat::format(const Formattable& obj,
 {
     if (U_FAILURE(status)) return appendTo;
 
-    if (obj.getType() == Formattable::kDouble) {
-        return format(obj.getDouble(), appendTo, pos);
+    NumberFormat* nonconst = (NumberFormat*) this;
+
+    UChar save[4];
+    UBool setCurr = FALSE;
+    const UChar *curr = obj.getCurrency(); // most commonly curr==NULL
+    if (curr != NULL) {
+        // getCurrency() returns a pointer to internal storage, so we
+        // copy it to retain it across the call to setCurrency().
+        u_strcpy(save, getCurrency());
+        setCurr = (u_strcmp(curr, save) != 0);
+        if (setCurr) {
+            nonconst->setCurrency(curr, status);
+        }
     }
-    else if (obj.getType() == Formattable::kLong) {
-        return format(obj.getLong(), appendTo, pos);
-    }
-    else if (obj.getType() == Formattable::kInt64) {
-       return format(obj.getInt64(), appendTo, pos);
-    }
-    // can't try to format a non-numeric object
-    else {
+
+    switch (obj.getType()) {
+    case Formattable::kDouble:
+        format(obj.getDouble(), appendTo, pos);
+        break;
+    case Formattable::kLong:
+        format(obj.getLong(), appendTo, pos);
+        break;
+    case Formattable::kInt64:
+        format(obj.getInt64(), appendTo, pos);
+        break;
+    default:
         status = U_INVALID_FORMAT_ERROR;
-        return appendTo;
+        break;
     }
+
+    if (setCurr) {
+        UErrorCode ok = U_ZERO_ERROR;
+        nonconst->setCurrency(save, ok); // always restore currency
+    }
+    return appendTo;
 }
 
 // -------------------------------------
@@ -307,6 +329,36 @@ NumberFormat::parse(const UnicodeString& text,
     if (parsePosition.getIndex() == 0) {
         status = U_INVALID_FORMAT_ERROR;
     }
+}
+
+Formattable& NumberFormat::parseCurrency(const UnicodeString& text,
+                                         Formattable& result,
+                                         ParsePosition& pos) const {
+    // Default implementation only -- subclasses should override
+    int32_t start = pos.getIndex();
+    parse(text, result, pos);
+    if (pos.getIndex() != start) {
+        UChar curr[4];
+        UErrorCode ec = U_ZERO_ERROR;
+        getEffectiveCurrency(curr, ec);
+        if (U_SUCCESS(ec)) {
+            result.setCurrency(curr);
+        }
+    }
+    return result;
+}
+
+Formattable& NumberFormat::parseCurrency(const UnicodeString& text,
+                                         Formattable& result,
+                                         UErrorCode& ec) const {
+    if (U_SUCCESS(ec)) {
+        ParsePosition pos(0);
+        parseCurrency(text, result, pos);
+        if (pos.getIndex() == 0) {
+            ec = U_INVALID_FORMAT_ERROR;
+        }
+    }
+    return result;
 }
 
 // -------------------------------------
@@ -714,6 +766,20 @@ void NumberFormat::setCurrency(const UChar* theCurrency, UErrorCode& ec) {
 
 const UChar* NumberFormat::getCurrency() const {
     return fCurrency;
+}
+
+void NumberFormat::getEffectiveCurrency(UChar* result, UErrorCode& ec) const {
+    const UChar* c = getCurrency();
+    if (*c != 0) {
+        u_strncpy(result, c, 3);
+        result[3] = 0;
+    } else {
+        const char* loc = getLocaleID(ULOC_VALID_LOCALE, ec);
+        if (loc == NULL) {
+            loc = uloc_getDefault();
+        }
+        ucurr_forLocale(loc, result, 4, &ec);
+    }
 }
 
 // -------------------------------------

@@ -1187,8 +1187,39 @@ DecimalFormat::parse(const UnicodeString& text,
 void
 DecimalFormat::parse(const UnicodeString& text,
                      Formattable& result,
-                     ParsePosition& parsePosition) const
-{
+                     ParsePosition& parsePosition) const {
+    parse(text, result, parsePosition, FALSE);
+}
+
+Formattable& DecimalFormat::parseCurrency(const UnicodeString& text,
+                                          Formattable& result,
+                                          ParsePosition& pos) const {
+    parse(text, result, pos, TRUE);
+    return result;
+}
+
+Formattable& DecimalFormat::parseCurrency(const UnicodeString& text,
+                                          Formattable& result,
+                                          UErrorCode& status) const {
+    return NumberFormat::parseCurrency(text, result, status);
+}
+
+/**
+ * Parses the given text as either a number or a currency amount.
+ * @param text the string to parse
+ * @param result output parameter for the result
+ * @param parsePosition input-output position; on input, the
+ * position within text to match; must have 0 <= pos.getIndex() <
+ * text.length(); on output, the position after the last matched
+ * character. If the parse fails, the position in unchanged upon
+ * output.
+ * @param parseCurrency if true, a currency amount is parsed;
+ * otherwise a Number is parsed
+ */
+void DecimalFormat::parse(const UnicodeString& text,
+                          Formattable& result,
+                          ParsePosition& parsePosition,
+                          UBool parseCurrency) const {
     int32_t backup;
     int32_t i = backup = parsePosition.getIndex();
 
@@ -1219,11 +1250,17 @@ DecimalFormat::parse(const UnicodeString& text,
 
     // status is used to record whether a number is infinite.
     UBool status[fgStatusLength];
+    UChar curbuf[4];
+    UChar* currency = parseCurrency ? curbuf : NULL;
     DigitList digits;
 
-    if (!subparse(text, parsePosition, digits, status)) {
+    if (!subparse(text, parsePosition, digits, status, currency)) {
         parsePosition.setIndex(backup);
         return;
+    }
+
+    if (parseCurrency) {
+        result.setCurrency(curbuf);
     }
 
     // Handle infinity
@@ -1283,21 +1320,27 @@ DecimalFormat::parse(const UnicodeString& text,
 This is an old implimentation that was preparing for 64-bit numbers in ICU.
 It is very slow, and 64-bit numbers are not ANSI-C compatible. This code
 is here if we change our minds.
+
+^^^ what is this referring to? remove? ^^^ [alan]
 */
+
 /**
  * Parse the given text into a number.  The text is parsed beginning at
  * parsePosition, until an unparseable character is seen.
- * @param text The string to parse.
+ * @param text the string to parse.
  * @param parsePosition The position at which to being parsing.  Upon
- * return, the first unparseable character.
- * @param digits The DigitList to set to the parsed value.
- * @param isExponent If true, parse an exponent.  This means no
- * infinite values and integer only. By default it's really false.
- * @param status Upon return contains boolean status flags indicating
+ * return, the first unparsed character.
+ * @param digits the DigitList to set to the parsed value.
+ * @param status output param containing boolean status flags indicating
  * whether the value was infinite and whether it was positive.
+ * @param currency return value for parsed currency, for generic
+ * currency parsing mode, or NULL for normal parsing. In generic
+ * currency parsing mode, any currency is parsed, not just the
+ * currency that this formatter is set to.
  */
 UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePosition,
-                               DigitList& digits, UBool* status) const
+                              DigitList& digits, UBool* status,
+                              UChar* currency) const
 {
     int32_t position = parsePosition.getIndex();
     int32_t oldStart = position;
@@ -1308,8 +1351,8 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
     }
 
     // Match positive and negative prefixes; prefer longest match.
-    int32_t posMatch = compareAffix(text, position, FALSE, TRUE);
-    int32_t negMatch = compareAffix(text, position, TRUE, TRUE);
+    int32_t posMatch = compareAffix(text, position, FALSE, TRUE, currency);
+    int32_t negMatch = compareAffix(text, position, TRUE, TRUE, currency);
     if (posMatch >= 0 && negMatch >= 0) {
         if (posMatch > negMatch) {
             negMatch = -1;
@@ -1524,10 +1567,10 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
 
     // Match positive and negative suffixes; prefer longest match.
     if (posMatch >= 0) {
-        posMatch = compareAffix(text, position, FALSE, FALSE);
+        posMatch = compareAffix(text, position, FALSE, FALSE, currency);
     }
     if (negMatch >= 0) {
-        negMatch = compareAffix(text, position, TRUE, FALSE);
+        negMatch = compareAffix(text, position, TRUE, FALSE, currency);
     }
     if (posMatch >= 0 && negMatch >= 0) {
         if (posMatch > negMatch) {
@@ -1585,19 +1628,24 @@ int32_t DecimalFormat::skipPadding(const UnicodeString& text, int32_t position) 
  * @param pos offset into input at which to begin matching
  * @param isNegative
  * @param isPrefix
+ * @param currency return value for parsed currency, for generic
+ * currency parsing mode, or null for normal parsing. In generic
+ * currency parsing mode, any currency is parsed, not just the
+ * currency that this formatter is set to.
  * @return length of input that matches, or -1 if match failure
  */
 int32_t DecimalFormat::compareAffix(const UnicodeString& text,
                                     int32_t pos,
                                     UBool isNegative,
-                                    UBool isPrefix) const {
-    if (fCurrencyChoice != NULL) {
+                                    UBool isPrefix,
+                                    UChar* currency) const {
+    if (fCurrencyChoice != NULL || currency != NULL) {
         if (isPrefix) {
             return compareComplexAffix(isNegative ? *fNegPrefixPattern : *fPosPrefixPattern,
-                                       text, pos);
+                                       text, pos, currency);
         } else {
             return compareComplexAffix(isNegative ? *fNegSuffixPattern : *fPosSuffixPattern,
-                                       text, pos);
+                                       text, pos, currency);
         }
     }
     
@@ -1709,13 +1757,18 @@ int32_t DecimalFormat::skipUWhiteSpace(const UnicodeString& text, int32_t pos) {
  * @param affixPat pattern string
  * @param input input text
  * @param pos offset into input at which to begin matching
+ * @param currency return value for parsed currency, for generic
+ * currency parsing mode, or null for normal parsing. In generic
+ * currency parsing mode, any currency is parsed, not just the
+ * currency that this formatter is set to.
  * @return length of input that matches, or -1 if match failure
  */
 int32_t DecimalFormat::compareComplexAffix(const UnicodeString& affixPat,
                                            const UnicodeString& text,
-                                           int32_t pos) const {
-    U_ASSERT(fCurrencyChoice != NULL);
-    U_ASSERT(*getCurrency() != 0);
+                                           int32_t pos,
+                                           UChar* currency) const {
+    U_ASSERT(currency != NULL ||
+             (fCurrencyChoice != NULL && *getCurrency() != 0));
 
     for (int32_t i=0; i<affixPat.length() && pos >= 0; ) {
         UChar32 c = affixPat.char32At(i);
@@ -1730,16 +1783,44 @@ int32_t DecimalFormat::compareComplexAffix(const UnicodeString& affixPat,
 
             switch (c) {
             case kCurrencySign: {
+                // If currency != null, then perform generic currency matching.
+                // Otherwise, do currency choice parsing.
                 UBool intl = i<affixPat.length() &&
                     affixPat.char32At(i) == kCurrencySign;
-                if (intl) {
-                    ++i;
-                    pos = match(text, pos, getCurrency());
-                } else {
+                // Parse generic currency -- anything for which we
+                // have a display name, or any 3-letter ISO code.
+                if (currency != NULL) {
+                    // Try to parse display name for our locale; first
+                    // determine our locale.
+                    UErrorCode ec = U_ZERO_ERROR;
+                    const char* loc = getLocaleID(ULOC_VALID_LOCALE, ec);
+                    if (U_FAILURE(ec) || loc == NULL || *loc == 0) {
+                        // applyPattern has been called; use the symbols
+                        loc = fSymbols->getLocale().getName();
+                        ec = U_ZERO_ERROR;
+                    }
+                    // Delegate parse of display name => ISO code to Currency
                     ParsePosition ppos(pos);
-                    Formattable result;
-                    fCurrencyChoice->parse(text, result, ppos);
-                    pos = (ppos.getIndex() == pos) ? -1 : ppos.getIndex();
+                    UChar curr[4];
+                    uprv_parseCurrency(loc, text, ppos, curr, ec);
+
+                    // If parse succeeds, populate currency[0]
+                    if (U_SUCCESS(ec) && ppos.getIndex() != pos) {
+                        u_strcpy(currency, curr);
+                        pos = ppos.getIndex();
+                    } else {
+                        pos = -1;
+                    }
+                } else {
+                    if (intl) {
+                        ++i;
+                        pos = match(text, pos, getCurrency());
+                    } else {
+                        ParsePosition ppos(pos);
+                        Formattable result;
+                        fCurrencyChoice->parse(text, result, ppos);
+                        pos = (ppos.getIndex() == pos) ? -1 : ppos.getIndex();
+                    }
                 }
                 continue;
             }
@@ -3605,6 +3686,17 @@ void DecimalFormat::setCurrency(const UChar* theCurrency, UErrorCode& ec) {
         }
         expandAffixes();
     }
+}
+
+void DecimalFormat::getEffectiveCurrency(UChar* result, UErrorCode& ec) const {
+    const UChar* c = getCurrency();
+    if (*c == 0) {
+        const UnicodeString &intl =
+            fSymbols->getConstSymbol(DecimalFormatSymbols::kIntlCurrencySymbol);
+        c = intl.getBuffer(); // ok for intl to go out of scope
+    }
+    u_strncpy(result, c, 3);
+    result[3] = 0;
 }
 
 /**

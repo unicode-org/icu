@@ -1,5 +1,5 @@
 /*
-* Copyright (C) {1997-2003}, International Business Machines Corporation and others. All Rights Reserved.
+* Copyright (C) {1997-2004}, International Business Machines Corporation and others. All Rights Reserved.
 ********************************************************************************
 *
 * File NUMFMT.H
@@ -201,8 +201,8 @@ public:
      * <P>
      * Before calling, set parse_pos.index to the offset you want to
      * start parsing at in the source. After calling, parse_pos.index
-     * is the end of the text you parsed.  If error occurs, index is
-     * unchanged.
+     * indicates the position after the successfully parsed text.  If
+     * an error occurs, parse_pos.index is unchanged.
      * <P>
      * When parsing, leading whitespace is discarded (with successful
      * parse), while trailing whitespace is left as is.
@@ -369,6 +369,51 @@ public:
     virtual void parse( const UnicodeString& text,
                         Formattable& result,
                         UErrorCode& status) const;
+
+    /**
+     * Parses text from the given string as a currency amount.  Unlike
+     * the parse() method, this method will attempt to parse a generic
+     * currency name, searching for a match of this object's locale's
+     * currency display names, or for a 3-letter ISO currency code.
+     * This method will fail if this format is not a currency format,
+     * that is, if it does not contain the currency pattern symbol
+     * (U+00A4) in its prefix or suffix.
+     *
+     * @param text the string to parse
+     * @param result output parameter to receive result. This will have
+     * its currency set to the parsed ISO currency code.
+     * @param pos input-output position; on input, the position within
+     * text to match; must have 0 <= pos.getIndex() < text.length();
+     * on output, the position after the last matched character. If
+     * the parse fails, the position in unchanged upon output.
+     * @return a reference to result
+     * @draft ICU 3.0
+     */
+    virtual Formattable& parseCurrency(const UnicodeString& text,
+                                       Formattable& result,
+                                       ParsePosition& pos) const;
+
+    /**
+     * Parses text from the beginning of the given string as a
+     * currency amount.  The method might not use the entire text of
+     * the given string.  Unlike the parse() method, this method will
+     * attempt to parse a generic currency name, searching for a match
+     * of this object's locale's currency display names, or for a
+     * 3-letter ISO currency code.  This method will fail if this
+     * format is not a currency format, that is, if it does not
+     * contain the currency pattern symbol (U+00A4) in its prefix or
+     * suffix.
+     *
+     * @param text the string to parse
+     * @param result output parameter to receive result. This will have
+     * its currency set to the parsed ISO currency code.
+     * @param status input-output error code
+     * @return a reference to result
+     * @draft ICU 3.0
+     */
+    Formattable& parseCurrency(const UnicodeString& text,
+                               Formattable& result,
+                               UErrorCode& status) const;
 
     /**
      * Return true if this format will parse numbers as integers
@@ -658,18 +703,14 @@ protected:
     NumberFormat& operator=(const NumberFormat&);
 
     /**
-     * Sets the minimum integer digits count directly, with no range
-     * pinning. For use by subclasses.
+     * Returns the currency in effect for this formatter.  Subclasses
+     * should override this method as needed.  Unlike getCurrency(),
+     * this method should never return "".
+     * @result output parameter for null-terminated result, which must
+     * have a capacity of at least 4
      * @internal
      */
-    inline void internalSetMinimumIntegerDigits(int32_t n);
-
-    /**
-     * Sets the maximum integer digits count directly, with no range
-     * pinning. For use by subclasses.
-     * @internal
-     */
-    inline void internalSetMaximumIntegerDigits(int32_t n);
+    virtual void getEffectiveCurrency(UChar* result, UErrorCode& ec) const;
 
 private:
     static const int32_t fgMaxIntegerDigits;
@@ -821,14 +862,6 @@ NumberFormat::format(const Formattable& obj,
                      UnicodeString& appendTo,
                      UErrorCode& status) const {
     return Format::format(obj, appendTo, status);
-}
-
-inline void NumberFormat::internalSetMinimumIntegerDigits(int32_t n) {
-    fMinIntegerDigits = n;
-}
-
-inline void NumberFormat::internalSetMaximumIntegerDigits(int32_t n) {
-    fMaxIntegerDigits = n;
 }
 
 U_NAMESPACE_END
