@@ -29,7 +29,7 @@
 .BI "\-d\fP, \fB\-\-destdir" " destination"
 ]
 [
-.BI "\-i\fP, \fB\-\-icudatadir" " ICU data directory"
+.BI "\-i\fP, \fB\-\-icudatadir" " directory"
 ]
 .IR bundle " \.\.\."
 .SH DESCRIPTION
@@ -94,10 +94,12 @@ or is the location set when ICU was built if
 .B ICU_DATA
 is not set.
 .TP
-.BI "\-i\fP, \fB\-\-icudatadir" " ICU data directory"
-Set the directory used to locate any necessary ICU data files to
-.IR icudatadir .
-For example, when processing collation overrides, ucadata.dat must be located.
+.BI "\-i\fP, \fB\-\-icudatadir" " directory"
+Look for any necessary ICU data files in
+.IR directory .
+For example, when processing collation overrides, the file
+.B ucadata.dat
+must be located.
 The default ICU data directory is specified by the environment variable
 .BR ICU_DATA .
 .SH INVARIANT CHARACTERS
