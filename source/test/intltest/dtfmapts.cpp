@@ -4,6 +4,7 @@
 * COPYRIGHT: 
 * (C) Copyright Taligent, Inc., 1997
 * (C) Copyright International Business Machines Corporation, 1997 - 1998
+* Copyright (C) 1999 Alan Liu and others. All rights reserved.
 * Licensed Material - Program-Property of IBM - All Rights Reserved. 
 * US Government Users Restricted Rights - Use, duplication, or disclosure 
 * restricted by GSA ADP Schedule Contract with IBM Corp. 
@@ -16,6 +17,9 @@
 
 #include "datefmt.h"
 #include "smpdtfmt.h"
+#include "decimfmt.h"
+#include "choicfmt.h"
+#include "msgfmt.h"
 
 
 // This is an API test, not a unit test.  It doesn't test very many cases, and doesn't
@@ -42,6 +46,13 @@ void IntlTestDateFormatAPI::runIndexedTest( int32_t index, bool_t exec, char* &n
                 if (exec) {
                     logln("TestEquals---"); logln("");
                     TestEquals();
+                }
+                break;
+
+        case 2: name = "TestNameHiding"; 
+                if (exec) {
+                    logln("TestNameHiding---"); logln("");
+                    TestNameHiding();
                 }
                 break;
 
@@ -211,4 +222,112 @@ void IntlTestDateFormatAPI::testAPI(char *par)
     delete fr;
     delete it;
     delete de;
+}
+
+/**
+ * Test hiding of parse() and format() APIs in the Format hierarchy.
+ * We test the entire hierarchy, even though this test is located in
+ * the DateFormat API test.
+ */
+void
+IntlTestDateFormatAPI::TestNameHiding() {
+
+    // N.B.: This test passes if it COMPILES, since it's a test of
+    // compile-time name hiding.
+
+    UErrorCode status = U_ZERO_ERROR;
+    Formattable dateObj(0, Formattable::kIsDate);
+    Formattable numObj(3.1415926535897932384626433832795);
+    Formattable obj;
+    UnicodeString str;
+    FieldPosition fpos;
+    ParsePosition ppos;
+
+    // DateFormat calling Format API
+    {
+        logln("DateFormat");
+        DateFormat *dateFmt = DateFormat::createInstance();
+        if (dateFmt) {
+            dateFmt->format(dateObj, str, status);
+            dateFmt->format(dateObj, str, fpos, status);
+            delete dateFmt;
+        } else {
+            errln("FAIL: Can't create DateFormat");
+        }
+    }
+
+    // SimpleDateFormat calling Format & DateFormat API
+    {
+        logln("SimpleDateFormat");
+        status = U_ZERO_ERROR;
+        SimpleDateFormat sdf(status);
+        // Format API
+        sdf.format(dateObj, str, status);
+        sdf.format(dateObj, str, fpos, status);
+        // DateFormat API
+        sdf.format((UDate)0, str, fpos);
+        sdf.format((UDate)0, str);
+        sdf.parse(str, status);
+        sdf.parse(str, ppos);
+    }
+
+    // NumberFormat calling Format API
+    {
+        logln("NumberFormat");
+        status = U_ZERO_ERROR;
+        NumberFormat *fmt = NumberFormat::createInstance(status);
+        if (fmt) {
+            fmt->format(numObj, str, status);
+            fmt->format(numObj, str, fpos, status);
+            delete fmt;
+        } else {
+            errln("FAIL: Can't create NumberFormat");
+        }
+    }
+
+    // DecimalFormat calling Format & NumberFormat API
+    {
+        logln("DecimalFormat");
+        status = U_ZERO_ERROR;
+        DecimalFormat fmt(status);
+        // Format API
+        fmt.format(numObj, str, status);
+        fmt.format(numObj, str, fpos, status);
+        // NumberFormat API
+        fmt.format(2.71828, str);
+        fmt.format(1234567, str);
+        fmt.format(1.41421, str, fpos);
+        fmt.format(9876543, str, fpos);
+        fmt.parse(str, obj, ppos);
+        fmt.parse(str, obj, status);
+    }
+
+    // ChoiceFormat calling Format & NumberFormat API
+    {
+        logln("ChoiceFormat");
+        status = U_ZERO_ERROR;
+        ChoiceFormat fmt("0#foo|1#foos|2#foos", status);
+        // Format API
+        fmt.format(numObj, str, status);
+        fmt.format(numObj, str, fpos, status);
+        // NumberFormat API
+        fmt.format(2.71828, str);
+        fmt.format(1234567, str);
+        fmt.format(1.41421, str, fpos);
+        fmt.format(9876543, str, fpos);
+        fmt.parse(str, obj, ppos);
+        fmt.parse(str, obj, status);
+    }
+
+    // MessageFormat calling Format API
+    {
+        logln("MessageFormat");
+        status = U_ZERO_ERROR;
+        MessageFormat fmt("", status);
+        // Format API
+        // We use dateObj, which MessageFormat should reject.
+        // We're testing name hiding, not the format method.
+        fmt.format(dateObj, str, status);
+        fmt.format(dateObj, str, fpos, status);
+    }
 }

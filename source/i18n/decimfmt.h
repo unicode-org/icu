@@ -4,6 +4,7 @@
 * COPYRIGHT:                                                                   *
 *   (C) Copyright Taligent, Inc.,  1997                                        *
 *   (C) Copyright International Business Machines Corporation,  1997-1999      *
+*   Copyright (C) 1999 Alan Liu and others. All rights reserved.               *
 *   Licensed Material - Program-Property of IBM - All Rights Reserved.         *
 *   US Government Users Restricted Rights - Use, duplication, or disclosure    *
 *   restricted by GSA ADP Schedule Contract with IBM Corp.                     *
@@ -304,6 +305,25 @@ public:
                                   UnicodeString& toAppendTo,
                                   FieldPosition& pos,
                                   UErrorCode& status) const;
+
+    /**
+     * Redeclared NumberFormat method.
+     */
+    UnicodeString& format(const Formattable& obj,
+                          UnicodeString& result,
+                          UErrorCode& status) const;
+
+    /**
+     * Redeclared NumberFormat method.
+     */
+    UnicodeString& format(double number,
+                          UnicodeString& output) const;
+
+    /**
+     * Redeclared NumberFormat method.
+     */
+    UnicodeString& format(int32_t number,
+                          UnicodeString& output) const;
 
    /**
     * Parse the given string using this object's choices. The method
@@ -940,6 +960,27 @@ protected:
     static const int32_t  kDoubleIntegerDigits;
     static const int32_t  kDoubleFractionDigits;
 };
+
+inline UnicodeString&
+DecimalFormat::format(const Formattable& obj,
+                      UnicodeString& result,
+                      UErrorCode& status) const {
+    // Don't use Format:: - use immediate base class only,
+    // in case immediate base modifies behavior later.
+    return NumberFormat::format(obj, result, status);
+}
+
+inline UnicodeString&
+DecimalFormat::format(double number,
+                      UnicodeString& output) const {
+    return NumberFormat::format(number, output);
+}
+
+inline UnicodeString&
+DecimalFormat::format(int32_t number,
+                      UnicodeString& output) const {
+    return NumberFormat::format(number, output);
+}
  
 #endif // _DECIMFMT
 //eof
