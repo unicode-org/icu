@@ -503,7 +503,6 @@ u_vformatMessage(   const char  *locale,
 
 {
     UMessageFormat *fmt = umsg_open(pattern,patternLength,locale,NULL,status);
-    int32_t fieldPos=0;
     int32_t retVal = umsg_vformat(fmt,result,resultLength,ap,status);
     umsg_close(fmt);
     return retVal;
