@@ -346,6 +346,17 @@ class TransliteratorRegistry {
     }
 
     /**
+     * Register an ID and a Transliterator object.  This adds an entry
+     * to the dynamic store, or replaces an existing entry.  Any entry
+     * in the underlying static locale resource store is masked.
+     */
+    public void put(String ID,
+                    Transliterator trans,
+                    boolean visible) {
+        registerEntry(ID, trans, visible);
+    }
+
+    /**
      * Unregister an ID.  This removes an entry from the dynamic store
      * if there is one.  The static locale resource store is
      * unaffected.
@@ -353,7 +364,7 @@ class TransliteratorRegistry {
     public void remove(String ID) {
         String[] stv = TransliteratorIDParser.IDtoSTV(ID);
         // Only need to do this if ID.indexOf('-') < 0
-        String id = STVtoID(stv[0], stv[1], stv[2]);
+        String id = TransliteratorIDParser.STVtoID(stv[0], stv[1], stv[2]);
         registry.remove(new CaseInsensitiveString(id));
         removeSTV(stv[0], stv[1], stv[2]);
         availableIDs.removeElement(new CaseInsensitiveString(id));
@@ -444,25 +455,6 @@ class TransliteratorRegistry {
     //----------------------------------------------------------------------
 
     /**
-     * Given source, target, and variant strings, concatenate them into a
-     * full ID.  If the source is empty, then "Any" will be used for the
-     * source, so the ID will always be of the form s-t/v or s-t.
-     */
-    private String STVtoID(String source,
-                           String target,
-                           String variant) {
-        StringBuffer id = new StringBuffer(source);
-        if (id.length() == 0) {
-            id.append(ANY);
-        }
-        id.append(ID_SEP).append(target);
-        if (variant != null && variant.length() != 0) {
-            id.append(VARIANT_SEP).append(variant);
-        }
-        return id.toString();
-    }
-
-    /**
      * Convenience method.  Calls 6-arg registerEntry().
      */
     private void registerEntry(String source,
@@ -474,7 +466,7 @@ class TransliteratorRegistry {
         if (s.length() == 0) {
             s = ANY;
         }
-        String ID = STVtoID(source, target, variant);
+        String ID = TransliteratorIDParser.STVtoID(source, target, variant);
         registerEntry(ID, s, target, variant, entry, visible);
     }
 
@@ -486,7 +478,7 @@ class TransliteratorRegistry {
                                boolean visible) {
         String[] stv = TransliteratorIDParser.IDtoSTV(ID);
         // Only need to do this if ID.indexOf('-') < 0
-        String id = STVtoID(stv[0], stv[1], stv[2]);
+        String id = TransliteratorIDParser.STVtoID(stv[0], stv[1], stv[2]);
         registerEntry(id, stv[0], stv[1], stv[2], entry, visible);
     }
 
@@ -592,7 +584,7 @@ class TransliteratorRegistry {
     private Object[] findInDynamicStore(Spec src,
                                       Spec trg,
                                       String variant) {
-        String ID = STVtoID(src.get(), trg.get(), variant);
+        String ID = TransliteratorIDParser.STVtoID(src.get(), trg.get(), variant);
         if (DEBUG) {
             System.out.println("TransliteratorRegistry.findInDynamicStore:" +
                                ID);
@@ -613,7 +605,7 @@ class TransliteratorRegistry {
                                      Spec trg,
                                      String variant) {
         if (DEBUG) {
-            String ID = STVtoID(src.get(), trg.get(), variant);
+            String ID = TransliteratorIDParser.STVtoID(src.get(), trg.get(), variant);
             System.out.println("TransliteratorRegistry.findInStaticStore:" +
                                ID);
         }
@@ -835,6 +827,8 @@ class TransliteratorRegistry {
                 return ((Transliterator.Factory) entry).getInstance(ID);
             } else if (entry instanceof CompoundRBTEntry) {
                 return ((CompoundRBTEntry) entry).getInstance();
+            } else if (entry instanceof Transliterator) {
+                return (Transliterator) entry;
             }
 
             // At this point entry type must be either RULES_FORWARD or

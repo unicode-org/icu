@@ -534,6 +534,25 @@ class TransliteratorIDParser {
     }
 
     /**
+     * Given source, target, and variant strings, concatenate them into a
+     * full ID.  If the source is empty, then "Any" will be used for the
+     * source, so the ID will always be of the form s-t/v or s-t.
+     */
+    public static String STVtoID(String source,
+                                 String target,
+                                 String variant) {
+        StringBuffer id = new StringBuffer(source);
+        if (id.length() == 0) {
+            id.append(ANY);
+        }
+        id.append(TARGET_SEP).append(target);
+        if (variant != null && variant.length() != 0) {
+            id.append(VARIANT_SEP).append(variant);
+        }
+        return id.toString();
+    }
+
+    /**
      * Register two targets as being inverses of one another.  For
      * example, calling registerSpecialInverse("NFC", "NFD", true) causes
      * Transliterator to form the following inverse relationships:
