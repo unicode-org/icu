@@ -70,8 +70,10 @@ static  void TestDisplayNames(void);
  /* Make sure we can pass "de_DE@Collation=PHONEBOOK" */
  static void MoreVariants(void);
  
+ /* Test getting keyword enumeratin */
  static void TestKeywordVariants(void);
 
+ /* Test getting keyword values */
  static void TestKeywordVariantParsing(void);
 
 /**

@@ -69,6 +69,12 @@ public:
     void Test4147552(void);
     
     void TestVariantParsing(void);
+
+   /* Test getting keyword enumeratin */
+   void TestKeywordVariants(void);
+
+   /* Test getting keyword values */
+   void TestKeywordVariantParsing(void);
     
 #if !UCONFIG_NO_FORMATTING
     void Test4105828(void) ;
