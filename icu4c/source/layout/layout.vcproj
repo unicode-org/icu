@@ -164,6 +164,9 @@
 				RelativePath=".\CanonData.cpp">
 			</File>
 			<File
+				RelativePath=".\CanonShaping.cpp">
+			</File>
+			<File
 				RelativePath=".\ClassDefinitionTables.cpp">
 			</File>
 			<File
