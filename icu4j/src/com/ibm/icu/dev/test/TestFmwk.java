@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $ 
- * $Date: 2000/03/14 19:48:25 $ 
- * $Revision: 1.9 $
+ * $Date: 2000/04/25 17:40:11 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -66,7 +66,7 @@ public class TestFmwk {
         // tests to be run.
         testsToRun = new Vector(args.length);
         for (int i = 0; i < args.length; i++) {
-            if (args[i].equals("-verbose")) {
+            if (args[i].equals("-verbose") || args[i].equals("-v")) {
                 params.verbose = true;
             }
             else if (args[i].equals("-prompt")) {
