@@ -481,7 +481,7 @@ void
 DateFormatSymbols::initField(UnicodeString **field, int32_t& length, const UChar *data, LastResortSize numStr, LastResortSize strLen, UErrorCode &status) {
     if (U_SUCCESS(status)) {
         length = numStr;
-        *field = new UnicodeString[numStr];
+        *field = new UnicodeString[(size_t)numStr];
         if (*field) {
             for(int32_t i = 0; i<length; i++) {
                 *(*(field)+i) = data+(i*((int32_t)strLen));
