@@ -17,7 +17,7 @@ $CR = \r;
 $LF = \n;
 $Control    = [[:Zl:] [:Zp:] [:Cc:] [:Cf:]];
 
-$Extend     = [[:Grapheme_Extend = TRUE:]]; 
+$Extend     = [[:Grapheme_Extend = TRUE:]];
 
 #
 # Korean Syllable Definitions
@@ -44,7 +44,7 @@ $CR $LF;
 
 $BackHangulSyllable = $L+ | ($T* ($V+$LV? | $LV | $LVT) $L*) | $T+;
 $BackOneCluster = ($LF $CR) | ($Extend* ([^$Control] | $BackHangulSyllable));
-$BackOneCluster; 
+$BackOneCluster;
 
 ## -------------------------------------------------
 
@@ -52,7 +52,7 @@ $BackOneCluster;
 
 # rule 6, 7, 8
 $V+ $L;
- 
+
 ## -------------------------------------------------
 
 !!safe_forward;

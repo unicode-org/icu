@@ -347,21 +347,21 @@ $Closings =  ($SPcm*( ($CL ($SPcm* $NScm)?  |  $EX  | $IS  | $SY) $Extend*) | $B
 #  Words.  Includes mixed Alpha-numerics.
 #          Rules 11a, 16, 17, 19, more or less.
 #
-$NumberInterior = $IDcm | ($NUcm | $ALcm | $IS $NUcm)+;  
-$Number         =  $PR? ($OPcm | $HYcm)? $NumberInterior $CL? $POcm?;   # Fancy Number     18 
-$Word           = (($IDcm | ($ALcm | $NUcm)+) ($POcm? | $INcm?));       # Alpha-numeric.   16, 17 
-$Dashes         = (($B2cm $SPcm*)*);                                    # Dashes           11a   
+$NumberInterior = $IDcm | ($NUcm | $ALcm | $IS $NUcm)+;
+$Number         =  $PR? ($OPcm | $HYcm)? $NumberInterior $CL? $POcm?;   # Fancy Number     18
+$Word           = (($IDcm | ($ALcm | $NUcm)+) ($POcm? | $INcm?));       # Alpha-numeric.   16, 17
+$Dashes         = (($B2cm $SPcm*)*);                                    # Dashes           11a
 $ThaiRange      = $dictionary+ | $thai_etc;
 $WordLikeThing  = $Number | $Word | $Dashes | $ThaiRange;
-        
 
 
-        
+
+
 $Word15 = ($BBcm* ($WordLikeThing)? ($BAcm | $HYcm | $NScm)*) |     # Rule 15. Stuff sticks around words.
-          [^[:Cc:] $BK $CR $LF $ZW $SP $GL] $Extend*  |                 # Allow characters that don't meet the
-          [^$BK $CR $LF $ZW $SP $GL ];                                  #  more elaborate definitions for WORD
-                                                                    #  to be glued.
-        
+          [^[:Cc:] $BK $CR $LF $ZW $SP $GL] $Extend*  |             # Allow characters that don't meet the
+          [^$BK $CR $LF $ZW $SP $GL ];                              #  more elaborate definitions for WORD to be glued.
+
+
 $GluedWord  = ($GLcm | $QUcm)? $Word15 (($GLcm | $QUcm) $Word15)*;  # "Glue" will stick anything below it together.
                                                                     # Rules 13, 14
 
@@ -371,10 +371,10 @@ $GluedWord  = ($GLcm | $QUcm)? $Word15 (($GLcm | $QUcm) $Word15)*;  # "Glue" wil
 $Openings $GluedWord  $Closings $paiyannoi? $EndingsMandatory;
 $Openings $GluedWord  $Closings  $Endings;
 
-$Openings $GluedWord  $Closings $paiyannoi   /  
+$Openings $GluedWord  $Closings $paiyannoi   / 
                ([^\u0e25 $Extend] | \u0e25[^$paiyannoi $Extend]);
-     
-     
+
+
  #"$word($nbsp+$word)*$paiyannoi/([^[\u0e25$_ignore_]]|"
  #                       + "\u0e25[^$paiyannoi$_ignore_]);"
 
