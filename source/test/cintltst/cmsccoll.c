@@ -2946,6 +2946,11 @@ static void TestNewJapanese() {
 
   static const char *test[] = {
 /*
+"\\u30D3\\u30E5\\u30FC\\u30A2\\u30FC",
+"\\u30D3\\u30E5\\u30A6\\u30A2\\u30FC",
+"\\u3074\\u3085\\u30FC\\u3042\\u30FC",
+*/
+
       "\\u30b7\\u30e3\\u30fc\\u30ec",
       "\\u30b7\\u30e3\\u30a4",
       "\\u30b7\\u30e4\\u30a3",
@@ -2954,12 +2959,10 @@ static void TestNewJapanese() {
       "\\u3061\\u3088\\u3053",
       "\\u30c1\\u30e7\\u30b3\\u30ec\\u30fc\\u30c8",
       "\\u3066\\u30fc\\u305f",
-*/
-      "\\u30c6\\u30fc\\u30bf", // *
+      "\\u30c6\\u30fc\\u30bf", 
       "\\u30c6\\u30a7\\u30bf",
       "\\u3066\\u3048\\u305f",
-      "\\u3067\\u30fc\\u305f", // *
-/*
+      "\\u3067\\u30fc\\u305f", 
       "\\u30c7\\u30fc\\u30bf",
       "\\u30c7\\u30a7\\u30bf",
       "\\u3067\\u3048\\u305f",
@@ -2983,9 +2986,11 @@ static void TestNewJapanese() {
       "\\u30d2\\u30e5\\u30a6",
       "\\u30d2\\u30e6\\u30a6",
       "\\u30d4\\u30e5\\u30a6\\u30a2",
-      "\\u3074\\u3085\\u30fc\\u3042\\u30fc",
+      /* It appears that we have a bug in the test contents. Awaiting confirmation from Maedera-san */
+      /*"\\u3074\\u3085\\u30fc\\u3042\\u30fc",*/ /* This one is moved two lines below, as semi-voiced should go after voiced */
       "\\u30d3\\u30e5\\u30fc\\u30a2\\u30fc",
       "\\u30d3\\u30e5\\u30a6\\u30a2\\u30fc",
+      "\\u3074\\u3085\\u30fc\\u3042\\u30fc",     /* The semi-voiced example is moved here */
       "\\u3072\\u3085\\u3093",
       "\\u3074\\u3085\\u3093",
       "\\u3075\\u30fc\\u308a",
@@ -3020,11 +3025,11 @@ static void TestNewJapanese() {
       "\\u30d6\\u30d5",
       "\\u3076\\u309e",
       "\\u3076\\u3077",
-      "\\u30d6\\u3077", //*
+      "\\u30d6\\u3077",
       "\\u3077\\u309d",
       "\\u30d7\\u30fd",
-      "\\u3077\\u3075", //*
-*/
+      "\\u3077\\u3075",
+
 /*
 "\\u3042\\u30fc",
 "\\u3042\\u3041",
@@ -3033,15 +3038,12 @@ static void TestNewJapanese() {
 */
   };
 
+/*
   uint32_t i = 0;
   UCollationElements *it = NULL;
   uint32_t CE;
-  /*genericRulesStarter(rules, testaz, 2);*/
-
-  genericLocaleStarter("ja_JP_JIS", test, sizeof(test)/sizeof(test[0]));
 
 
-  /*uStringLen = u_unescape(rules, string, 256);*/
   coll = ucol_open("ja_JP_JIS", &status);
   it = ucol_openElements(coll, string, 0, &status);
 
@@ -3059,6 +3061,9 @@ static void TestNewJapanese() {
 
   ucol_closeElements(it);
   ucol_close(coll);
+*/
+  /*genericRulesStarter(rules, testaz, 2);*/
+  genericLocaleStarter("ja_JP_JIS", test, sizeof(test)/sizeof(test[0]));
 }
 
 void addMiscCollTest(TestNode** root)
