@@ -76,7 +76,6 @@ struct collIterate {
   uint32_t CEs[UCOL_EXPAND_CE_BUFFER_SIZE]; /* This is where we store CEs */
   UBool isThai; /* Have we already encountered a Thai prevowel */
   UBool isWritable; /* is the source buffer writable? */
-  UBool JamoSpecial;
   UChar stackWritableBuffer[UCOL_WRITABLE_BUFFER_SIZE]; /* A writable buffer. */
   UChar *writableBuffer;
 };
@@ -119,7 +118,6 @@ struct incrementalContext {
     uint32_t *toReturn; /* This is the CE from CEs buffer that should be returned */
     uint32_t *CEpos; /* This is the position to which we have stored processed CEs */
     uint32_t CEs[UCOL_EXPAND_CE_BUFFER_SIZE]; /* This is where we store CEs */
-    UBool JamoSpecial;
     UBool panic; /* can't handle it any more - we have to call the cavalry */
 };
 
@@ -206,6 +204,12 @@ struct incrementalContext {
  */
 #define UCOL_ISTHAIBASECONSONANT(ch) ((uint32_t)(ch) - 0xe01) <= (0xe2e - 0xe01)
 
+#define UCOL_ISJAMO(ch) ((((uint32_t)(ch) - 0x1100) <= (0x1112 - 0x1100)) || \
+                        (((uint32_t)(ch) - 0x1161) <= (0x1175 - 0x1161)) || \
+                        (((uint32_t)(ch) - 0x11A8) <= (0x11C2 - 0x11A8)))
+
+
+
 /* initializes collIterate structure */
 /* made as macro to speed up things */
 #define init_collIterate(sourceString, sourceLen, s, isSourceWritable) { \
@@ -215,7 +219,6 @@ struct incrementalContext {
 	(s)->isThai = TRUE; \
 	(s)->isWritable = (isSourceWritable); \
 	(s)->writableBuffer = (s)->stackWritableBuffer; \
-    (s)->JamoSpecial = FALSE; \
 }
 
 /* a macro that gets a simple CE */
@@ -236,7 +239,8 @@ struct incrementalContext {
       if((order) >= UCOL_NOT_FOUND) {                                                 \
         (order) = getSpecialCE((coll), (order), &(collationSource), (status));        \
         if((order) == UCOL_NOT_FOUND) {                                               \
-          (order) = ucol_getNextUCA(ch, &(collationSource), (status));                \
+          (order) = ucol_getNextUCA(ch, &(collationSource),                           \
+                                (coll)->image->jamoSpecial, (status));                \
         }                                                                             \
       }                                                                               \
     } else {                                                                          \
@@ -278,7 +282,8 @@ struct incrementalContext {
         (order) = getSpecialPrevCE((coll), (order), &(data), (length),       \
                                                              (status));      \
         if ((order) == UCOL_NOT_FOUND) {                                     \
-          (order) = ucol_getPrevUCA(ch, &(data), (length), (status));        \
+          (order) = ucol_getPrevUCA(ch, &(data), (length),                   \
+                               (coll)->image->jamoSpecial, (status));        \
         }                                                                    \
       }                                                                      \
     }                                                                        \
@@ -330,9 +335,9 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
                           collIterate *source, uint32_t length, 
                           UErrorCode *status);
 U_CFUNC uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSource, UErrorCode *status);
-uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *status);
+uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UBool jamoSpecial, UErrorCode *status);
 uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource, 
-                         uint32_t length, UErrorCode *status);
+                         uint32_t length, UBool jamoSpecial, UErrorCode *status);
 
 void incctx_cleanUpContext(incrementalContext *ctx);
 UChar incctx_appendChar(incrementalContext *ctx, UChar c);
@@ -504,6 +509,7 @@ typedef struct {
       UColAttributeValue caseLevel;         /* do we have an extra case level */
       UColAttributeValue normalizationMode; /* attribute for normalization */
       UColAttributeValue strength;          /* attribute for strength */
+      UBool jamoSpecial;                    /* is jamoSpecial */
 } UCATableHeader;
 
 typedef struct {
@@ -573,7 +579,7 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
 void ucol_setOptionsFromHeader(UCollator* result, const UCATableHeader * image, UErrorCode *status);
 void ucol_putOptionsToHeader(UCollator* result, UCATableHeader * image, UErrorCode *status);
 
-uint32_t ucol_getIncrementalUCA(UChar ch, incrementalContext *collationSource, UErrorCode *status);
+uint32_t ucol_getIncrementalUCA(UChar ch, incrementalContext *collationSource, UBool jamoSpecial, UErrorCode *status);
 int32_t ucol_getIncrementalSpecialCE(const UCollator *coll, uint32_t CE, incrementalContext *ctx, UErrorCode *status);
 void ucol_updateInternalState(UCollator *coll);
 
