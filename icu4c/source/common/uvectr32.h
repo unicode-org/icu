@@ -204,8 +204,8 @@ public:
     int32_t push(int32_t i, UErrorCode &status);
 
     int32_t *reserveBlock(int32_t size, UErrorCode &status);
-    int32_t *popBlock(int32_t amount);
-};
+    int32_t *popFrame(int32_t size);
+    };
 
 
 // UVector32 inlines
@@ -235,6 +235,15 @@ inline int32_t *UVector32::reserveBlock(int32_t size, UErrorCode &status) {
     int32_t  *rp = elements+count;
     count += size;
     return rp;
+}
+
+inline int32_t *UVector32::popFrame(int32_t size) {
+    U_ASSERT(count >= size);
+    count -= size;
+    if (count < 0) {
+        count = 0;
+    }
+    return elements+count-size;
 }
 
 
@@ -286,13 +295,6 @@ inline int32_t UVector32::popi(void) {
         result = elements[count];
     }
     return result;
-}
-
-inline int32_t *UVector32::popBlock(int32_t amount) {
-    U_ASSERT(amount <= count);
-    count -= amount;
-    if (count < 0) {count = 0;}
-    return elements + count;
 }
 
 U_NAMESPACE_END

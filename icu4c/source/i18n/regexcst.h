@@ -28,6 +28,7 @@ enum Regex_PatternParseAction {
     doOpenCaptureParen,
     doBadOpenParenType,
     doRuleError,
+    doIntevalLowerDigit,
     doBackslashs,
     doNGOpt,
     doNamedChar,
@@ -37,12 +38,14 @@ enum Regex_PatternParseAction {
     doOpenLookBehind,
     doBackslashx,
     doBackslashz,
+    doIntervalError,
     doStar,
     doCaret,
     doEnterQuoteMode,
     doPossesivePlus,
     doNGStar,
     doMatchMode,
+    doIntervalUpperDigit,
     doOpenLookAheadNeg,
     doPlus,
     doOpenNonCaptureParen,
@@ -54,7 +57,10 @@ enum Regex_PatternParseAction {
     doPossesiveOpt,
     doBackslashG,
     doOpt,
+    doInterval,
     doLiteralChar,
+    doPossesiveInterval,
+    doIntervalInit,
     doOpenAtomicParen,
     doBackslashS,
     doOpenLookAhead,
@@ -67,10 +73,11 @@ enum Regex_PatternParseAction {
     doBackslashZ,
     doNOP,
     doExit,
+    doNGInterval,
     doPatStart,
     doBackslashb,
-    doNotImplementedError,
     doBackslashd,
+    doIntervalSame,
     doOpenLookBehindNeg,
     rbbiLastAction};
 
@@ -99,13 +106,13 @@ static const struct RegexTableEl gRuleParseStateTable[] = {
     , {doDotAny, 46 /* . */, 12,0,  TRUE}     //  6 
     , {doCaret, 94 /* ^ */, 2,0,  TRUE}     //  7 
     , {doDollar, 36 /* $ */, 2,0,  TRUE}     //  8 
-    , {doNOP, 92 /* \ */, 59,0,  TRUE}     //  9 
+    , {doNOP, 92 /* \ */, 70,0,  TRUE}     //  9 
     , {doPatFinish, 253, 2,0,  FALSE}     //  10 
-    , {doRuleError, 255, 79,0,  FALSE}     //  11 
+    , {doRuleError, 255, 90,0,  FALSE}     //  11 
     , {doNOP, 42 /* * */, 48,0,  TRUE}     //  12      expr-quant
     , {doNOP, 43 /* + */, 51,0,  TRUE}     //  13 
     , {doNOP, 63 /* ? */, 54,0,  TRUE}     //  14 
-    , {doNOP, 123 /* { */, 57,0,  TRUE}     //  15 
+    , {doIntervalInit, 123 /* { */, 57,0,  TRUE}     //  15 
     , {doNOP, 255, 17,0,  FALSE}     //  16 
     , {doOrOperator, 124 /* | */, 2,0,  TRUE}     //  17      expr-cont
     , {doCloseParen, 41 /* ) */, 255,0,  TRUE}     //  18 
@@ -123,12 +130,12 @@ static const struct RegexTableEl gRuleParseStateTable[] = {
     , {doMatchMode, 115 /* s */, 40,0,  TRUE}     //  30 
     , {doMatchMode, 109 /* m */, 40,0,  TRUE}     //  31 
     , {doMatchMode, 45 /* - */, 40,0,  TRUE}     //  32 
-    , {doBadOpenParenType, 255, 79,0,  FALSE}     //  33 
+    , {doBadOpenParenType, 255, 90,0,  FALSE}     //  33 
     , {doOpenLookBehind, 61 /* = */, 2, 17, TRUE}     //  34      open-paren-lookbehind
     , {doOpenLookBehindNeg, 33 /* ! */, 2, 17, TRUE}     //  35 
-    , {doBadOpenParenType, 255, 79,0,  FALSE}     //  36 
+    , {doBadOpenParenType, 255, 90,0,  FALSE}     //  36 
     , {doNOP, 41 /* ) */, 2,0,  TRUE}     //  37      paren-comment
-    , {doMismatchedParenErr, 253, 79,0,  FALSE}     //  38 
+    , {doMismatchedParenErr, 253, 90,0,  FALSE}     //  38 
     , {doNOP, 255, 37,0,  TRUE}     //  39 
     , {doMatchMode, 105 /* i */, 40,0,  TRUE}     //  40      paren-flag
     , {doMatchMode, 115 /* s */, 40,0,  TRUE}     //  41 
@@ -137,7 +144,7 @@ static const struct RegexTableEl gRuleParseStateTable[] = {
     , {doMatchMode, 45 /* - */, 40,0,  TRUE}     //  44 
     , {doNOP, 41 /* ) */, 2,0,  TRUE}     //  45 
     , {doOpenNonCaptureParen, 58 /* : */, 2, 12, TRUE}     //  46 
-    , {doNOP, 255, 79,0,  FALSE}     //  47 
+    , {doNOP, 255, 90,0,  FALSE}     //  47 
     , {doNGStar, 63 /* ? */, 17,0,  TRUE}     //  48      quant-star
     , {doPossesiveStar, 43 /* + */, 17,0,  TRUE}     //  49 
     , {doStar, 255, 17,0,  FALSE}     //  50 
@@ -148,28 +155,39 @@ static const struct RegexTableEl gRuleParseStateTable[] = {
     , {doPossesiveOpt, 43 /* + */, 17,0,  TRUE}     //  55 
     , {doOpt, 255, 17,0,  FALSE}     //  56 
     , {doNOP, 129, 57,0,  TRUE}     //  57      interval-open
-    , {doNotImplementedError, 255, 79,0,  FALSE}     //  58 
-    , {doBackslashA, 65 /* A */, 2,0,  TRUE}     //  59      backslash
-    , {doBackslashB, 66 /* B */, 2,0,  TRUE}     //  60 
-    , {doBackslashb, 98 /* b */, 2,0,  TRUE}     //  61 
-    , {doBackslashd, 100 /* d */, 12,0,  TRUE}     //  62 
-    , {doBackslashD, 68 /* D */, 12,0,  TRUE}     //  63 
-    , {doBackslashG, 71 /* G */, 2,0,  TRUE}     //  64 
-    , {doNamedChar, 78 /* N */, 12,0,  TRUE}     //  65 
-    , {doProperty, 112 /* p */, 12,0,  FALSE}     //  66 
-    , {doProperty, 80 /* P */, 12,0,  FALSE}     //  67 
-    , {doEnterQuoteMode, 81 /* Q */, 2,0,  TRUE}     //  68 
-    , {doBackslashS, 83 /* S */, 12,0,  TRUE}     //  69 
-    , {doBackslashs, 115 /* s */, 12,0,  TRUE}     //  70 
-    , {doBackslashW, 87 /* W */, 12,0,  TRUE}     //  71 
-    , {doBackslashw, 119 /* w */, 12,0,  TRUE}     //  72 
-    , {doBackslashX, 88 /* X */, 12,0,  TRUE}     //  73 
-    , {doBackslashx, 120 /* x */, 12,0,  TRUE}     //  74 
-    , {doBackslashZ, 90 /* Z */, 2,0,  TRUE}     //  75 
-    , {doBackslashz, 122 /* z */, 2,0,  TRUE}     //  76 
-    , {doBackRef, 128, 12,0,  TRUE}     //  77 
-    , {doLiteralChar, 255, 12,0,  TRUE}     //  78 
-    , {doExit, 255, 79,0,  TRUE}     //  79      errorDeath
+    , {doNOP, 128, 60,0,  FALSE}     //  58 
+    , {doIntervalError, 255, 90,0,  FALSE}     //  59 
+    , {doIntevalLowerDigit, 128, 60,0,  TRUE}     //  60      interval-lower
+    , {doNOP, 44 /* , */, 64,0,  TRUE}     //  61 
+    , {doIntervalSame, 125 /* } */, 67,0,  TRUE}     //  62 
+    , {doIntervalError, 255, 90,0,  FALSE}     //  63 
+    , {doIntervalUpperDigit, 128, 64,0,  TRUE}     //  64      interval-upper
+    , {doNOP, 125 /* } */, 67,0,  TRUE}     //  65 
+    , {doIntervalError, 255, 90,0,  FALSE}     //  66 
+    , {doNGInterval, 63 /* ? */, 17,0,  TRUE}     //  67      interval-type
+    , {doPossesiveInterval, 43 /* + */, 17,0,  TRUE}     //  68 
+    , {doInterval, 255, 17,0,  FALSE}     //  69 
+    , {doBackslashA, 65 /* A */, 2,0,  TRUE}     //  70      backslash
+    , {doBackslashB, 66 /* B */, 2,0,  TRUE}     //  71 
+    , {doBackslashb, 98 /* b */, 2,0,  TRUE}     //  72 
+    , {doBackslashd, 100 /* d */, 12,0,  TRUE}     //  73 
+    , {doBackslashD, 68 /* D */, 12,0,  TRUE}     //  74 
+    , {doBackslashG, 71 /* G */, 2,0,  TRUE}     //  75 
+    , {doNamedChar, 78 /* N */, 12,0,  TRUE}     //  76 
+    , {doProperty, 112 /* p */, 12,0,  FALSE}     //  77 
+    , {doProperty, 80 /* P */, 12,0,  FALSE}     //  78 
+    , {doEnterQuoteMode, 81 /* Q */, 2,0,  TRUE}     //  79 
+    , {doBackslashS, 83 /* S */, 12,0,  TRUE}     //  80 
+    , {doBackslashs, 115 /* s */, 12,0,  TRUE}     //  81 
+    , {doBackslashW, 87 /* W */, 12,0,  TRUE}     //  82 
+    , {doBackslashw, 119 /* w */, 12,0,  TRUE}     //  83 
+    , {doBackslashX, 88 /* X */, 12,0,  TRUE}     //  84 
+    , {doBackslashx, 120 /* x */, 12,0,  TRUE}     //  85 
+    , {doBackslashZ, 90 /* Z */, 2,0,  TRUE}     //  86 
+    , {doBackslashz, 122 /* z */, 2,0,  TRUE}     //  87 
+    , {doBackRef, 128, 12,0,  TRUE}     //  88 
+    , {doLiteralChar, 255, 12,0,  TRUE}     //  89 
+    , {doExit, 255, 90,0,  TRUE}     //  90      errorDeath
  };
 static const char * const RegexStateNames[] = {    0,
      "start",
@@ -229,6 +247,17 @@ static const char * const RegexStateNames[] = {    0,
     0,
     0,
      "interval-open",
+    0,
+    0,
+     "interval-lower",
+    0,
+    0,
+    0,
+     "interval-upper",
+    0,
+    0,
+     "interval-type",
+    0,
     0,
      "backslash",
     0,

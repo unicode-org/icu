@@ -145,13 +145,14 @@ RegexCompile::RegexCompile(UErrorCode &status) : fParenStack(status)
 {
     fStatus             = &status;
 
-    fScanIndex = 0;
-    fNextIndex = 0;
-    fPeekChar  = -1;
-    fLineNum    = 1;
-    fCharNum    = 0;
-    fQuoteMode  = FALSE;
-    fFreeForm   = FALSE;
+    fScanIndex      = 0;
+    fNextIndex      = 0;
+    fPeekChar       = -1;
+    fLineNum        = 1;
+    fCharNum        = 0;
+    fQuoteMode      = FALSE;
+    fFreeForm       = FALSE;
+    fMatcherDataEnd = 0;
 
     fMatchOpenParen  = -1;
     fMatchCloseParen = -1;
@@ -374,12 +375,21 @@ void    RegexCompile::compile(
     fRXPat->fMaxCaptureDigits = 1;
     int32_t  n = 10;
     for (;;) {
-        if (n > fRXPat->fNumCaptureGroups) {
+        if (n > fRXPat->fGroupMap->size()) {
             break;
         }
         fRXPat->fMaxCaptureDigits++;
         n *= 10;
     }
+
+    //
+    // The pattern's fFrameSize so far has accumulated the requirements for
+    //   storage for capture parentheses, counters, etc. that are encountered
+    //   in the pattern.  Add space for the two variables that are always
+    //   present in the saved state:  the input string position and the
+    //   position in the compiled pattern.
+    //
+    fRXPat->fFrameSize+=2;
 
     //
     // A stupid bit of non-sense to prevent code coverage testing from complaining
@@ -499,8 +509,9 @@ UBool RegexCompile::doParseActions(EParseAction action)
         //             is an '|' alternation within the parens.
         {
             fRXPat->fCompiledPat->addElement(URX_BUILD(URX_NOP, 0), *fStatus);
-            fRXPat->fNumCaptureGroups++;
-            int32_t  cop = URX_BUILD(URX_START_CAPTURE, fRXPat->fNumCaptureGroups);
+            int32_t  varsLoc    = fRXPat->fFrameSize;    // Reserve two slots in match stack frame.
+            fRXPat->fFrameSize += 2;
+            int32_t  cop        = URX_BUILD(URX_START_CAPTURE, varsLoc);
             fRXPat->fCompiledPat->addElement(cop, *fStatus);
             fRXPat->fCompiledPat->addElement(URX_BUILD(URX_NOP, 0), *fStatus);
 
@@ -511,6 +522,9 @@ UBool RegexCompile::doParseActions(EParseAction action)
             fParenStack.push(-2, *fStatus);           // Begin a new frame.
             fParenStack.push(fRXPat->fCompiledPat->size()-3, *fStatus);   // The first NOP
             fParenStack.push(fRXPat->fCompiledPat->size()-1, *fStatus);   // The second NOP
+
+            // Save the mapping from group number to stack frame variable position.
+            fRXPat->fGroupMap->addElement(varsLoc, *fStatus);
         }
          break;
 
@@ -704,6 +718,64 @@ UBool RegexCompile::doParseActions(EParseAction action)
         break;
 
 
+    case doIntervalInit:
+        // The '{' opening an interval quantifier was just scanned.
+        // Init the counter varaiables that will accumulate the values as the digits
+        //    are scanned.
+        fIntervalLow = 0;
+        fIntervalUpper = -1;
+        break;
+
+    case doIntevalLowerDigit:
+        // Scanned a digit from the lower value of an {lower,upper} interval
+        {
+            int32_t digitValue = u_charDigitValue(fC.fChar);
+            U_ASSERT(digitValue >= 0);
+            fIntervalLow = fIntervalLow*10 + digitValue;
+            if (fIntervalLow < 0) {
+                error(U_REGEX_NUMBER_TOO_BIG);
+            }
+        }
+        break;
+
+    case doIntervalUpperDigit:
+        // Scanned a digit from the upper value of an {lower,upper} interval
+        {
+            if (fIntervalUpper < 0) {
+                fIntervalUpper = 0;
+            }
+            int32_t digitValue = u_charDigitValue(fC.fChar);
+            U_ASSERT(digitValue >= 0);
+            fIntervalUpper = fIntervalUpper*10 + digitValue;
+            if (fIntervalLow < 0) {
+                error(U_REGEX_NUMBER_TOO_BIG);
+            }
+        }
+        break;
+
+    case doIntervalSame:
+        // Scanned a single value interval like {27}.  Upper = Lower.
+        fIntervalUpper = fIntervalLow;
+        break;
+
+    case doInterval:
+        // Finished scanning a normal {lower,upper} interval.  Generate the code for it.
+        compileInterval(URX_CTR_INIT, URX_CTR_LOOP);
+        break;
+
+    case doPossesiveInterval:
+        // Finished scanning a Possessive {lower,upper}+ interval.  Generate the code for it.
+        compileInterval(URX_CTR_INIT_P, URX_CTR_LOOP_P);
+        break;
+
+    case doNGInterval:
+        // Finished scanning a non-greedy {lower,upper}? interval.  Generate the code for it.
+        compileInterval(URX_CTR_INIT_NG, URX_CTR_LOOP_NG);
+        break;
+
+    case doIntervalError:
+        error(U_REGEX_BAD_INTERVAL);
+        break;
 
     case doLiteralChar:
         // We've just scanned a "normal" character from the pattern, 
@@ -832,11 +904,6 @@ UBool RegexCompile::doParseActions(EParseAction action)
 
     case doMatchMode:   //  (?i)    and similar
         // TODO:  implement
-        error(U_REGEX_UNIMPLEMENTED);
-        break;
-
-    case doNotImplementedError:
-        // TODO:  get rid of this once everything is implemented.
         error(U_REGEX_UNIMPLEMENTED);
         break;
 
@@ -997,6 +1064,54 @@ void    RegexCompile::fixLiterals(UBool split) {
 
 //------------------------------------------------------------------------------
 //
+//   insertOp()             Insert a slot for a new opcode into the already
+//                          compiled pattern code.
+//
+//                          Fill the slot with a NOP.  Our caller will replace it
+//                          with what they really wanted.
+//
+//------------------------------------------------------------------------------
+void   RegexCompile::insertOp(int32_t where) {
+    UVector32 *code = fRXPat->fCompiledPat;
+    U_ASSERT(where>0 && where < code->size());
+
+    int32_t  nop = URX_BUILD(URX_NOP, 0);
+    code->insertElementAt(nop, where, *fStatus);
+
+    // Walk through the pattern, looking for any ops with targets that
+    //  were moved down by the insert.  Fix them.
+    int32_t loc;
+    for (loc=0; loc<code->size(); loc++) {
+        int32_t op = code->elementAti(loc);
+        int32_t opType = URX_TYPE(op);
+        int32_t opValue = URX_VAL(op);
+        if ((opType == URX_JMP         ||
+            opType == URX_STATE_SAVE   ||
+            opType == URX_CTR_LOOP     ||
+            opType == URX_RELOC_OPRND)    && opValue > where) {
+            // Target location for this opcode is after the insertion point and
+            //   needs to be incremented to adjust for the insertion.
+            opValue++;
+            op = URX_BUILD(opType, opValue);
+            code->setElementAt(op, loc);
+        }
+    }
+
+    // Now fix up the parentheses stack.  All positive values in it are locations in
+    //  the compiled pattern.   (Negative values are frame boundaries, and don't need fixing.)
+    for (loc=0; loc<fParenStack.size(); loc++) {
+        int32_t x = fParenStack.elementAti(loc);
+        if (x>where) {
+            x++;
+            fParenStack.setElementAt(x, loc);
+        }
+    }
+}
+
+
+
+//------------------------------------------------------------------------------
+//
 //   blockTopLoc()          Find or create a location in the compiled pattern
 //                          at the start of the operation or block that has
 //                          just been compiled.  Needed when a quantifier (* or
@@ -1007,9 +1122,10 @@ void    RegexCompile::fixLiterals(UBool split) {
 //                          is reserved for this purpose.  .* or similar don't
 //                          and a slot needs to be added.
 //
-//       parameter reserveLoc   :  TRUE - ensure that there is space to add an opcode
-//                                        at the returned location.
-//                                 FALSE - just return the address, reserve a location there.
+//       parameter reserveLoc   :  TRUE -  ensure that there is space to add an opcode
+//                                         at the returned location.
+//                                 FALSE - just return the address, 
+//                                         do not reserve a location there.
 //
 //------------------------------------------------------------------------------
 int32_t   RegexCompile::blockTopLoc(UBool reserveLoc) {
@@ -1097,9 +1213,8 @@ void  RegexCompile::handleCloseParen() {
         {
             int32_t   captureOp = fRXPat->fCompiledPat->elementAti(fMatchOpenParen+1);
             U_ASSERT(URX_TYPE(captureOp) == URX_START_CAPTURE);
-            int32_t   captureGroupNumber = URX_VAL(captureOp);
-            U_ASSERT(captureGroupNumber > 0);
-            int32_t   endCaptureOp = URX_BUILD(URX_END_CAPTURE, captureGroupNumber);
+            int32_t   framVarLocation = URX_VAL(captureOp);
+            int32_t   endCaptureOp = URX_BUILD(URX_END_CAPTURE, framVarLocation+1);
             fRXPat->fCompiledPat->addElement(endCaptureOp, *fStatus);
         }
         break;
@@ -1165,6 +1280,53 @@ void        RegexCompile::compileSet(UnicodeSet *theSet)
         }
     }
 }
+
+
+//----------------------------------------------------------------------------------------
+//
+//   compileInterval    Generate the code for a {min, max} style interval quantifier.
+//                      Except for the specific opcodes used, the code is the same
+//                      for all three types (greedy, non-greedy, possessive) of
+//                      intervals.  The opcodes are supplied as parameters.
+//
+//----------------------------------------------------------------------------------------
+void        RegexCompile::compileInterval(int32_t InitOp,  int32_t LoopOp)
+{
+    // The CTR_INIT op at the top of the block with the {n,m} quantifier takes
+    //   four slots in the compiled code.  Reserve them.
+    int32_t   topOfBlock = blockTopLoc(TRUE);
+    insertOp(topOfBlock);
+    insertOp(topOfBlock);
+    insertOp(topOfBlock);
+
+    // The operands for the CTR_INIT opcode include the index in the matcher data
+    //   of the counter.  Allocate it now.
+    int32_t   counterLoc = fRXPat->fFrameSize;
+    fRXPat->fFrameSize++;
+
+    int32_t   op = URX_BUILD(InitOp, counterLoc);
+    fRXPat->fCompiledPat->setElementAt(op, topOfBlock);
+
+    // The second operand of CTR_INIT is the location following the end of the loop.
+    //   Must put in as a URX_RELOC_OPRND so that the value will be adjusted if the
+    //   compilation of something later on causes the code to grow and the target
+    //   position to move.
+    int32_t loopEnd = fRXPat->fCompiledPat->size();
+    op = URX_BUILD(URX_RELOC_OPRND, loopEnd);
+    fRXPat->fCompiledPat->setElementAt(op, topOfBlock+1);
+
+    // Followed by the min and max counts.
+    fRXPat->fCompiledPat->setElementAt(fIntervalLow, topOfBlock+2);
+    fRXPat->fCompiledPat->setElementAt(fIntervalUpper, topOfBlock+3);
+
+    // Apend the CTR_LOOP op.  The operand is the location of the CTR_INIT op.
+    //   Goes at end of the block being looped over, so just append to the code so far.
+    op = URX_BUILD(LoopOp, topOfBlock);
+    fRXPat->fCompiledPat->addElement(op, *fStatus);
+
+
+}
+
 
 
 //----------------------------------------------------------------------------------------
