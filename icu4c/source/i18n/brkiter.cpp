@@ -187,6 +187,7 @@ BreakIterator::getDisplayName(const Locale& objectLocale,
 
 BreakIterator::BreakIterator()
 {
+    fBufferClone = FALSE;
 }
 
 BreakIterator::~BreakIterator()

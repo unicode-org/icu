@@ -12,6 +12,7 @@
 #include "unicode/dbbi.h"
 #include "dbbi_tbl.h"
 #include "uvector.h"
+#include "unicode/schriter.h"
 
 char DictionaryBasedBreakIterator::fgClassID = 0;
 
@@ -239,6 +240,101 @@ DictionaryBasedBreakIterator::reset()
     dictionaryCharCount = 0;
     positionInCache = 0;
 }
+
+
+// internal type for BufferClone 
+struct bufferCloneStructUChar
+{
+    DictionaryBasedBreakIterator bi;
+    UCharCharacterIterator text;
+};
+
+struct bufferCloneStructString
+{
+    DictionaryBasedBreakIterator bi;
+    StringCharacterIterator text;
+};
+
+BreakIterator *  DictionaryBasedBreakIterator::createBufferClone(void *stackBuffer,
+                                   int32_t &BufferSize,
+                                   UErrorCode &status)
+{
+    DictionaryBasedBreakIterator * localIterator;
+    int32_t bufferSizeNeeded; 
+    UBool IterIsUChar;
+    UBool IterIsString;
+
+    if (U_FAILURE(status)){
+        return 0;
+    }
+    if (!this){
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    if (text == NULL)
+    {
+        bufferSizeNeeded = sizeof(DictionaryBasedBreakIterator);
+        IterIsString = IterIsUChar = FALSE;
+    }
+    else if (text->getDynamicClassID() == StringCharacterIterator::getStaticClassID()) 
+    {
+        bufferSizeNeeded = sizeof(struct bufferCloneStructString);
+        IterIsString = TRUE;
+        IterIsUChar = FALSE;
+    } 
+    else if (text->getDynamicClassID() == UCharCharacterIterator::getStaticClassID()) 
+    {
+        bufferSizeNeeded = sizeof(struct bufferCloneStructUChar);
+        IterIsString = FALSE;
+        IterIsUChar = TRUE;
+    }
+    else
+    {
+        // code has changed - time to make a real CharacterIterator::CreateBufferClone()
+    }
+    if (BufferSize == 0){ /* 'preflighting' request - set needed size into *pBufferSize */
+		BufferSize = bufferSizeNeeded;
+		return 0;
+    }
+    if (BufferSize < bufferSizeNeeded || !stackBuffer)
+    {
+		/* allocate one here...*/
+		localIterator = new DictionaryBasedBreakIterator(*this);
+		status = U_SAFECLONE_ALLOCATED_ERROR;
+        return localIterator;
+	} 
+    if (IterIsUChar) {
+		struct bufferCloneStructUChar * localClone 
+                = (struct bufferCloneStructUChar  *)stackBuffer;
+        localIterator = &localClone->bi;
+        memcpy(localIterator, this, sizeof(DictionaryBasedBreakIterator));
+        memcpy(&localClone->text, text, sizeof(UCharCharacterIterator));
+        localClone->text = *(UCharCharacterIterator*)text;
+	    localIterator->text = &localClone->text;
+    } else if (IterIsString) {
+        struct bufferCloneStructString * localClone 
+                = (struct bufferCloneStructString  *)stackBuffer;
+        localIterator = &localClone->bi;
+        memcpy(localIterator, this, sizeof(DictionaryBasedBreakIterator));
+        memcpy(&localClone->text, text, sizeof(StringCharacterIterator));
+        localClone->text = *(StringCharacterIterator*)text;
+	    localIterator->text = &localClone->text;
+    } else {
+        DictionaryBasedBreakIterator * localClone 
+                = (DictionaryBasedBreakIterator *)stackBuffer;
+        localIterator = localClone;
+        memcpy(localIterator, this, sizeof(DictionaryBasedBreakIterator));
+    }
+    // must not use the old cache if it exists - not threadsafe
+    localIterator->fBufferClone = TRUE;
+    localIterator->cachedBreakPositions = NULL;
+    localIterator->numCachedBreakPositions = 0;
+    localIterator->positionInCache = 0;
+
+	return localIterator;    
+}
+
+
 
 /**
  * This is the function that actually implements the dictionary-based
