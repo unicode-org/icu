@@ -40,7 +40,7 @@ U_CDECL_BEGIN
  * From such a folded value, an offset needs to be extracted to supply
  * to the _FROM_OFFSET_TRAIL() macros.
  *
- * Most of the more complex (and more convenient) functions call a callback function
+ * Most of the more complex (and more convenient) functions/macros call a callback function
  * to get that offset from the folded value for a lead surrogate unit.
  */
 
@@ -104,7 +104,7 @@ enum {
 /**
  * Maximum length of the build-time data (stage 2) array.
  * The maximum length is 0x110000+UTRIE_DATA_BLOCK_LENGTH+0x400.
- * (Number of Unicode code points + one all-zero block +
+ * (Number of Unicode code points + one all-initial-value block +
  *  possible duplicate entries for 1024 lead surrogates.)
  */
 #define UTRIE_MAX_BUILD_TIME_DATA_LENGTH (0x110000+UTRIE_DATA_BLOCK_LENGTH+0x400)
@@ -114,6 +114,7 @@ enum {
  * Extract from a lead surrogate's data the
  * index array offset of the indexes for that lead surrogate.
  *
+ * @param data data value for a surrogate from the trie, including the folding offset
  * @return offset>=UTRIE_BMP_INDEX_LENGTH, or 0 if there is no data for the lead surrogate
  */
 typedef int32_t U_CALLCONV
@@ -140,6 +141,7 @@ struct UTrie {
     UTrieGetFoldingOffset *getFoldingOffset;
 
     int32_t indexLength, dataLength;
+    uint32_t initialValue;
     UBool isLatin1Linear;
 };
 
@@ -153,7 +155,7 @@ typedef struct UTrie UTrie;
     ]
 
 /** Internal trie getter from a pair of surrogates */
-#define _UTRIE_GET_FROM_PAIR(trie, data, c, c2, result) { \
+#define _UTRIE_GET_FROM_PAIR(trie, data, c, c2, result, resultType) { \
     int32_t __offset; \
 \
     /* get data for lead surrogate */ \
@@ -164,7 +166,7 @@ typedef struct UTrie UTrie;
     if(__offset>0) { \
         (result)=_UTRIE_GET_RAW((trie), data, __offset, (c2)&0x3ff); \
     } else { \
-        (result)=0; \
+        (result)=(resultType)((trie)->initialValue); \
     } \
 }
 
@@ -177,28 +179,28 @@ typedef struct UTrie UTrie;
  * Could be faster(?) but longer with
  *   if((c32)<=0xd7ff) { (result)=_UTRIE_GET_RAW(trie, data, 0, c32); }
  */
-#define _UTRIE_GET(trie, data, c32, result) \
+#define _UTRIE_GET(trie, data, c32, result, resultType) \
     if((uint32_t)(c32)<=0xffff) { \
         /* BMP code points */ \
         (result)=_UTRIE_GET_FROM_BMP(trie, data, c32); \
     } else if((uint32_t)(c32)<=0x10ffff) { \
         /* supplementary code point */ \
         UChar __lead16=UTF16_LEAD(c32); \
-        _UTRIE_GET_FROM_PAIR(trie, data, __lead16, c32, result); \
+        _UTRIE_GET_FROM_PAIR(trie, data, __lead16, c32, result, resultType); \
     } else { \
         /* out of range */ \
-        (result)=0; \
+        (result)=(resultType)((trie)->initialValue); \
     }
 
 /** Internal next-post-increment: get the next code point (c, c2) and its data */
-#define _UTRIE_NEXT(trie, data, src, limit, c, c2, result) { \
+#define _UTRIE_NEXT(trie, data, src, limit, c, c2, result, resultType) { \
     (c)=*(src)++; \
     if(!UTF_IS_LEAD(c)) { \
         (c2)=0; \
         (result)=_UTRIE_GET_RAW((trie), data, 0, (c)); \
     } else if((src)!=(limit) && UTF_IS_TRAIL((c2)=*(src))) { \
         ++(src); \
-        _UTRIE_GET_FROM_PAIR((trie), data, (c), (c2), (result)); \
+        _UTRIE_GET_FROM_PAIR((trie), data, (c), (c2), (result), resultType); \
     } else { \
         /* unpaired lead surrogate code point */ \
         (c2)=0; \
@@ -207,7 +209,7 @@ typedef struct UTrie UTrie;
 }
 
 /** Internal previous: get the previous code point (c, c2) and its data */
-#define _UTRIE_PREVIOUS(trie, data, start, src, c, c2, result) { \
+#define _UTRIE_PREVIOUS(trie, data, start, src, c, c2, result, resultType) { \
     (c)=*--(src); \
     if(!UTF_IS_SURROGATE(c)) { \
         (c2)=0; \
@@ -217,7 +219,7 @@ typedef struct UTrie UTrie;
         if((start)!=(src) && UTF_IS_LEAD((c2)=*((src)-1))) { \
             --(src); \
             (result)=(c); (c)=(c2); (c2)=(UChar)(result); /* swap c, c2 */ \
-            _UTRIE_GET_FROM_PAIR((trie), data, (c), (c2), (result)); \
+            _UTRIE_GET_FROM_PAIR((trie), data, (c), (c2), (result), resultType); \
         } else { \
             /* unpaired trail surrogate code point */ \
             (c2)=0; \
@@ -305,7 +307,7 @@ typedef struct UTrie UTrie;
  * @param c32 (UChar32, in) the input code point
  * @param result (uint16_t, out) uint16_t variable for the trie lookup result
  */
-#define UTRIE_GET16(trie, c32, result) _UTRIE_GET(trie, index, c32, result)
+#define UTRIE_GET16(trie, c32, result) _UTRIE_GET(trie, index, c32, result, uint16_t)
 
 /**
  * Get a 32-bit trie value from a code point.
@@ -316,7 +318,7 @@ typedef struct UTrie UTrie;
  * @param c32 (UChar32, in) the input code point
  * @param result (uint32_t, out) uint32_t variable for the trie lookup result
  */
-#define UTRIE_GET32(trie, c32, result) _UTRIE_GET(trie, data32, c32, result)
+#define UTRIE_GET32(trie, c32, result) _UTRIE_GET(trie, data32, c32, result, uint32_t)
 
 /**
  * Get the next code point (c, c2), post-increment src,
@@ -329,7 +331,7 @@ typedef struct UTrie UTrie;
  * @param c2 (UChar, out) variable for 0 or the trail code unit
  * @param result (uint16_t, out) uint16_t variable for the trie lookup result
  */
-#define UTRIE_NEXT16(trie, src, limit, c, c2, result) _UTRIE_NEXT(trie, index, src, limit, c, c2, result)
+#define UTRIE_NEXT16(trie, src, limit, c, c2, result) _UTRIE_NEXT(trie, index, src, limit, c, c2, result, uint16_t)
 
 /**
  * Get the next code point (c, c2), post-increment src,
@@ -342,7 +344,7 @@ typedef struct UTrie UTrie;
  * @param c2 (UChar, out) variable for 0 or the trail code unit
  * @param result (uint32_t, out) uint32_t variable for the trie lookup result
  */
-#define UTRIE_NEXT32(trie, src, limit, c, c2, result) _UTRIE_NEXT(trie, data32, src, limit, c, c2, result)
+#define UTRIE_NEXT32(trie, src, limit, c, c2, result) _UTRIE_NEXT(trie, data32, src, limit, c, c2, result, uint32_t)
 
 /**
  * Get the previous code point (c, c2), pre-decrement src,
@@ -355,7 +357,7 @@ typedef struct UTrie UTrie;
  * @param c2 (UChar, out) variable for 0 or the trail code unit
  * @param result (uint16_t, out) uint16_t variable for the trie lookup result
  */
-#define UTRIE_PREVIOUS16(trie, start, src, c, c2, result) _UTRIE_PREVIOUS(trie, index, start, src, c, c2, result)
+#define UTRIE_PREVIOUS16(trie, start, src, c, c2, result) _UTRIE_PREVIOUS(trie, index, start, src, c, c2, result, uint16_t)
 
 /**
  * Get the previous code point (c, c2), pre-decrement src,
@@ -368,7 +370,7 @@ typedef struct UTrie UTrie;
  * @param c2 (UChar, out) variable for 0 or the trail code unit
  * @param result (uint32_t, out) uint32_t variable for the trie lookup result
  */
-#define UTRIE_PREVIOUS32(trie, start, src, c, c2, result) _UTRIE_PREVIOUS(trie, data32, start, src, c, c2, result)
+#define UTRIE_PREVIOUS32(trie, start, src, c, c2, result) _UTRIE_PREVIOUS(trie, data32, start, src, c, c2, result, uint32_t)
 
 /**
  * Get a 16-bit trie value from a pair of surrogates.
@@ -378,7 +380,7 @@ typedef struct UTrie UTrie;
  * @param c2 (UChar, in) a trail surrogate
  * @param result (uint16_t, out) uint16_t variable for the trie lookup result
  */
-#define UTRIE_GET16_FROM_PAIR(trie, c, c2, result) _UTRIE_GET_FROM_PAIR(trie, index, c, c2, result)
+#define UTRIE_GET16_FROM_PAIR(trie, c, c2, result) _UTRIE_GET_FROM_PAIR(trie, index, c, c2, result, uint16_t)
 
 /**
  * Get a 32-bit trie value from a pair of surrogates.
@@ -388,7 +390,7 @@ typedef struct UTrie UTrie;
  * @param c2 (UChar, in) a trail surrogate
  * @param result (uint32_t, out) uint32_t variable for the trie lookup result
  */
-#define UTRIE_GET32_FROM_PAIR(trie, c, c2, result) _UTRIE_GET_FROM_PAIR(trie, data32, c, c2, result)
+#define UTRIE_GET32_FROM_PAIR(trie, c, c2, result) _UTRIE_GET_FROM_PAIR(trie, data32, c, c2, result, uint32_t)
 
 /**
  * Get a 16-bit trie value from a folding offset (from the value of a lead surrogate)
@@ -530,7 +532,7 @@ UNewTrieGetFoldedValue(UNewTrie *trie, UChar32 start, int32_t offset);
  * utrie_setRange32() is used, the data array could be large during build time.
  * The maximum length is
  * UTRIE_MAX_BUILD_TIME_DATA_LENGTH=0x110000+UTRIE_DATA_BLOCK_LENGTH+0x400.
- * (Number of Unicode code points + one all-zero block +
+ * (Number of Unicode code points + one all-initial-value block +
  *  possible duplicate entries for 1024 lead surrogates.)
  * (UTRIE_DATA_BLOCK_LENGTH<=0x200 in all cases.)
  *
@@ -540,12 +542,15 @@ UNewTrieGetFoldedValue(UNewTrie *trie, UChar32 start, int32_t offset);
  *                  NULL if one is to be allocated
  * @param maxDataLength the capacity of aliasData (if not NULL) or
  *                      the length of the data array to be allocated
+ * @param initialValue the initial value that is set for all code points
  * @param latin1Linear a flag indicating whether the Latin-1 range is to be allocated and
  *                     kept in a linear, contiguous part of the data array
  * @return a pointer to the initialized fillIn or the allocated and initialized new UNewTrie
  */
 U_CAPI UNewTrie * U_EXPORT2
-utrie_open(UNewTrie *fillIn, uint32_t *aliasData, int32_t maxDataLength, UBool latin1Linear);
+utrie_open(UNewTrie *fillIn,
+           uint32_t *aliasData, int32_t maxDataLength,
+           uint32_t initialValue, UBool latin1Linear);
 
 /**
  * Clone a build-time trie structure with all entries.
@@ -600,7 +605,7 @@ utrie_set32(UNewTrie *trie, UChar32 c, uint32_t value);
  * @param c the code point
  * @param pInBlockZero if not NULL, then *pInBlockZero is set to TRUE
  *                     iff the value is retrieved from block 0;
- *                     block 0 is the all-zero initial block
+ *                     block 0 is the all-initial-value initial block
  * @return the value
  */
 U_CAPI uint32_t U_EXPORT2
@@ -615,7 +620,7 @@ utrie_get32(UNewTrie *trie, UChar32 c, UBool *pInBlockZero);
  * @param start the first code point to get the value
  * @param limit one past the last code point to get the value
  * @param value the value
- * @param overwrite flag for whether old non-zero values are to be overwritten
+ * @param overwrite flag for whether old non-initial values are to be overwritten
  * @return FALSE if a failure occurred (illegal argument or data array overrun)
  */
 U_CAPI UBool U_EXPORT2
