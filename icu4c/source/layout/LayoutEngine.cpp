@@ -173,11 +173,6 @@ le_int32 LayoutEngine::characterProcessing(const LEUnicode chars[], le_int32 off
     LETag langSysTag = OpenTypeLayoutEngine::getLangSysTag(fLanguageCode);
     le_int32 i, dir = 1, out = 0, outCharCount = count;
 
-    if (rightToLeft) {
-        out = count - 1;
-        dir = -1;
-    }
-
     if (canonGSUBTable->coversScript(scriptTag)) {
         CharSubstitutionFilter *substitutionFilter = new CharSubstitutionFilter(fFontInstance);
 
@@ -188,16 +183,23 @@ le_int32 LayoutEngine::characterProcessing(const LEUnicode chars[], le_int32 off
             return 0;
         }
 
+        if (rightToLeft) {
+            out = count - 1;
+            dir = -1;
+        }
+
         for (i = 0; i < count; i += 1, out += dir) {
-            glyphStorage[i] = (LEGlyphID) chars[offset + i];
-            glyphStorage.setAuxData(i, (void *) canonFeatures, success);
+            glyphStorage[out] = (LEGlyphID) chars[offset + i];
+            glyphStorage.setAuxData(out, (void *) canonFeatures, success);
         }
 
         outCharCount = canonGSUBTable->process(glyphStorage, rightToLeft, scriptTag, langSysTag, NULL, substitutionFilter, NULL);
 
+        out = (rightToLeft? count - 1 : 0);
+
         outChars = LE_NEW_ARRAY(LEUnicode, outCharCount);
-        for (i = 0; i < outCharCount; i += 1) {
-            outChars[i] = (LEUnicode) LE_GET_GLYPH(glyphStorage[i]);
+        for (i = 0; i < outCharCount; i += 1, out += dir) {
+            outChars[out] = (LEUnicode) LE_GET_GLYPH(glyphStorage[i]);
         }
 
         delete substitutionFilter;
@@ -481,7 +483,7 @@ LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstan
             }
 
             case arabScriptCode:
-            case hebrScriptCode:
+            //case hebrScriptCode:
                 result = new UnicodeArabicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode);
                 break;
 

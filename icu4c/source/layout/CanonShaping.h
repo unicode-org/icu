@@ -15,6 +15,7 @@ class CanonShaping /* not : public UObject because all members are static */
 {
 public:
     static const le_uint8 glyphSubstitutionTable[];
+    static const le_uint8 glyphDefinitionTable[];
 };
 
 U_NAMESPACE_END
