@@ -11,61 +11,10 @@
 #include "unicode/chariter.h"
 #include "unicode/schriter.h"
 #include "unicode/uchriter.h"
+#include "unicode/uiter.h"
 #include "unicode/normlzr.h"
 #include "cmemory.h"
 #include "unormimp.h"
-
-U_CDECL_BEGIN
-
-/*
- * This is wrapper code around a C++ CharacterIterator to
- * look like a C UCharIterator for the internal API
- * for incremental normalization.
- *
- * The UCharIterator.context field holds a pointer to the CharacterIterator.
- */
-
-static int32_t U_CALLCONV
-characterIteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origin) {
-    return ((CharacterIterator *)(iter->context))->move(delta, (CharacterIterator::EOrigin)origin);
-}
-
-static UBool U_CALLCONV
-characterIteratorHasNext(UCharIterator *iter) {
-    return ((CharacterIterator *)(iter->context))->hasNext();
-}
-
-static UBool U_CALLCONV
-characterIteratorHasPrevious(UCharIterator *iter) {
-    return ((CharacterIterator *)(iter->context))->hasPrevious();
-}
-
-static UChar U_CALLCONV
-characterIteratorCurrent(UCharIterator *iter) {
-    return ((CharacterIterator *)(iter->context))->current();
-}
-
-static UChar U_CALLCONV
-characterIteratorNext(UCharIterator *iter) {
-    return ((CharacterIterator *)(iter->context))->nextPostInc();
-}
-
-static UChar U_CALLCONV
-characterIteratorPrevious(UCharIterator *iter) {
-    return ((CharacterIterator *)(iter->context))->previous();
-}
-
-static const UCharIterator characterIteratorWrapper={
-    0, 0, 0, 0, 0,
-    characterIteratorMove,
-    characterIteratorHasNext,
-    characterIteratorHasPrevious,
-    characterIteratorCurrent,
-    characterIteratorNext,
-    characterIteratorPrevious
-};
-
-U_CDECL_END
 
 U_NAMESPACE_BEGIN
 
@@ -160,13 +109,12 @@ Normalizer::init(CharacterIterator *iter) {
     UErrorCode errorCode=U_ZERO_ERROR;
 
     text=new UCharIterator;
-    uprv_memcpy(text, &characterIteratorWrapper, sizeof(UCharIterator));
 
     if(unorm_haveData(&errorCode)) {
-        text->context=iter;
+        uiter_setCharacterIterator(text, iter);
     } else {
         delete iter;
-        text->context=new UCharCharacterIterator(&_NUL, 0);
+        uiter_setCharacterIterator(text, new UCharCharacterIterator(&_NUL, 0));
     }
 }
 
