@@ -513,6 +513,10 @@ void    RegexCompile::compile(
     fRXPat->fFrameSize+=2;
 
     //
+    //
+    fRXPat->fMinMatchLen = minMatchLength(3, fRXPat->fCompiledPat->size()-1);
+
+    //
     // A stupid bit of non-sense to prevent code coverage testing from complaining
     //   about the pattern.dump() debug function.  Go through the motions of dumping,
     //   even though, without the #define set, it will do nothing.
@@ -1907,6 +1911,7 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
     int32_t    patSegLen = end - start + 1;
     int32_t    loc;
     int32_t    op;
+    int32_t    opType;
     int32_t    currentLen = 0;
     UVector32  lengthSoFar(fRXPat->fCompiledPat->size(), *fStatus);
     lengthSoFar.setSize(fRXPat->fCompiledPat->size());
@@ -1918,11 +1923,17 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
     loc = start-1;
     for (loc = start; loc<=end; loc++) {
         op = fRXPat->fCompiledPat->elementAti(loc);
+        opType = URX_TYPE(op);
+
+        // The loop is advancing linearly through the pattern.
+        // If the op we are now at was the destination of a branch in the pattern,
+        // and that path has a shorter minimum length than the current accumulated value,
+        // replace the current accumulated value.
         if (lengthSoFar.elementAti(loc) < currentLen) {
             currentLen = lengthSoFar.elementAti(loc);
         }
 
-        switch (op) {
+        switch (opType) {
             // Ops that don't change the total length matched
         case URX_RESERVED_OP:
         case URX_END:
@@ -1936,9 +1947,6 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
         case URX_BACKSLASH_Z:
         case URX_CARET:
         case URX_DOLLAR:
-        case URX_CTR_INIT:
-        case URX_CTR_INIT_NG:
-        case URX_CTR_INIT_P:
         case URX_RELOC_OPRND:
         case URX_STO_INP_LOC:
         case URX_DOLLAR_M:
@@ -2018,18 +2026,25 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
             break;
 
 
-
-        case URX_CTR_LOOP:
-        case URX_CTR_LOOP_NG:
-        case URX_CTR_LOOP_P:
+        case URX_CTR_INIT:
+        case URX_CTR_INIT_NG:
+        case URX_CTR_INIT_P:
             {
-                // Loop ops.  These are four word instructions.
-                //  The jump is conditional, backwards only.
+                // Loop Init Ops.  These don't change the min length, but they are 4 word ops
+                //   so location must be updated accordingly.
                 loc+=3;
             }
             break;
 
 
+        case URX_CTR_LOOP:
+        case URX_CTR_LOOP_NG:
+        case URX_CTR_LOOP_P:
+            // Loop ops. 
+            //  The jump is conditional, backwards only.
+            break;
+            
+            
 
         case URX_LA_START:
             {
@@ -2041,10 +2056,10 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
                 for (;;) {
                     loc++;
                     op = fRXPat->fCompiledPat->elementAti(loc);
-                    if (URX_VAL(op) == URX_LA_START) {
+                    if (URX_TYPE(op) == URX_LA_START) {
                         depth++;
                     }
-                    if (URX_VAL(op) == URX_LA_END) {
+                    if (URX_TYPE(op) == URX_LA_END) {
                         if (depth == 0) {
                             break;
                         }
