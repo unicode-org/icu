@@ -1197,7 +1197,7 @@ int32_t RuleBasedBreakIterator::getRuleStatusVec(
     int32_t  numVals = fData->fRuleStatusTable[fLastRuleStatusIndex];
     int32_t  numValsToCopy = numVals;
     if (numVals > capacity) {
-        status = U_STRING_NOT_TERMINATED_WARNING;    // TODO:  probably need a different warning
+        status = U_BUFFER_OVERFLOW_ERROR;   
         numValsToCopy = capacity;
     }
     int i;
