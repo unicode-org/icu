@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberRegression.java,v $ 
- * $Date: 2002/08/21 00:05:59 $ 
- * $Revision: 1.11 $
+ * $Date: 2002/09/14 21:36:28 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  **/
@@ -634,7 +634,7 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
         if (tempString.equals(expectedDefault)) {
             logln ("Bug 4071859 default test passed.");
         } else {
-            errln("Failed:" +
+            errln("a) Failed:" +
             " Expected " + expectedDefault +
             " Received " + tempString );
         }
@@ -645,7 +645,7 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
         if (tempString.equals(expectedCurrency) ) {
             logln ("Bug 4071859 currency test passed.");
         } else {
-            errln("Failed:" +
+            errln("b) Failed:" +
             " Expected " + expectedCurrency +
             " Received " + tempString );
         }
@@ -656,7 +656,7 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
         if (tempString.equals(expectedPercent) ) {
             logln ("Bug 4071859 percentage test passed.");
         } else {
-            errln("Failed:" +
+            errln("c) Failed:" +
             " Expected " + expectedPercent +
             " Received " + tempString );
         }

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Currency.java,v $
- * $Date: 2002/09/07 00:15:35 $
- * $Revision: 1.5 $
+ * $Date: 2002/09/14 21:36:30 $
+ * $Revision: 1.6 $
  *
  *******************************************************************************
  */
@@ -56,11 +56,11 @@ public class Currency implements Serializable {
 
     private static ICULocaleService getService() {
         if (service == null) {
-            service = new ICULocaleService();
+            service = new ICULocaleService("Currency");
 
             class CurrencyFactory extends ICUResourceBundleFactory {
                 CurrencyFactory() {
-                    super ("LocaleElements", "CurrencyElements", true);
+                    super("CurrencyElements", true);
                 }
 
                 protected Object createFromBundle(ResourceBundle bundle, Key key) {
