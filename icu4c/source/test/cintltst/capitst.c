@@ -24,9 +24,6 @@
 #include "cmemory.h"
 
 
-U_CAPI const UChar * U_EXPORT2 ucol_getDefaultRulesArray(uint32_t *size);
-
-
 
 void addCollAPITest(TestNode** root)
 {
@@ -50,6 +47,9 @@ static void doAssert(int condition, const char *message)
         log_err("ERROR :  %s\n", message);
     }
 }
+
+#if 0
+/* We don't have default rules, at least not in the previous sense */
 void TestGetDefaultRules(){
     uint32_t size=0;
     UErrorCode status=U_ZERO_ERROR;
@@ -60,7 +60,6 @@ void TestGetDefaultRules(){
     UResourceBundle *res = NULL;
     UResourceBundle *binColl = NULL;
     uint8_t *binResult = NULL;
-    
     
     
     const UChar * defaultRulesArray=ucol_getDefaultRulesArray(&size);
@@ -103,9 +102,8 @@ void TestGetDefaultRules(){
     ures_close(res);
     ucol_close(coll);
   
-
 }
-
+#endif
 
 /* Collator Properties
  ucol_open, ucol_strcoll,  getStrength/setStrength

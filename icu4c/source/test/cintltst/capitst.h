@@ -59,8 +59,8 @@
     void TestGetAll(void);
     /**
      * Test ucol_GetDefaultRules ()
-     **/
     void TestGetDefaultRules(void);
+     **/
 
     void TestDecomposition(void);
     /**
