@@ -108,10 +108,6 @@ SOURCE=.\convert.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\cpputils.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\cstring.c
 # End Source File
 # Begin Source File
