@@ -133,6 +133,8 @@ store(uint32_t codepoint, uint32_t* mapping, int32_t length, uint32_t flags, UEr
         if(length==0){
             trieWord =  flags;
         }else{
+            int32_t adjustedLen = 0;
+            int32_t i=0;
             /*
             int32_t delta;
         
@@ -142,8 +144,18 @@ store(uint32_t codepoint, uint32_t* mapping, int32_t length, uint32_t flags, UEr
              */
             /* set the 0..2 bits the flags */
             trieWord = flags;
-            /* set the 3..4 bits the length */
 
+            /* figure out the real length */ 
+            for(i=0; i<length; i++){
+                if(mapping[i] > 0xFFFF){
+                    adjustedLen +=2;
+                }else{
+                    adjustedLen++;
+                }      
+            }
+            length = adjustedLen;
+
+            /* set the 3..4 bits the length */
             if(length > 2){
                 trieWord += _IDNA_LENGTH_IN_MAPPING_TABLE << 3;
             }else{
