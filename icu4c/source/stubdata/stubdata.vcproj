@@ -23,7 +23,7 @@
 				InlineFunctionExpansion="2"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="..\common"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;STUBDATA_EXPORTS"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
@@ -40,10 +40,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				OutputFile="..\..\bin\icudt32.dll"
+				OutputFile="..\..\bin\icudt33.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				ProgramDatabaseFile=".\Release/icudt32.pdb"
+				ProgramDatabaseFile=".\Release/icudt33.pdb"
 				ResourceOnlyDLL="TRUE"
 				ImportLibrary="..\..\lib\icudt.lib"/>
 			<Tool
@@ -89,7 +89,7 @@
 				ImproveFloatingPointConsistency="TRUE"
 				OptimizeForProcessor="2"
 				AdditionalIncludeDirectories="..\common"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;STUBDATA_EXPORTS"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				DisableLanguageExtensions="TRUE"
@@ -106,10 +106,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				OutputFile="..\..\bin\icudt32.dll"
+				OutputFile="..\..\bin\icudt33.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				ProgramDatabaseFile=".\Debug/icudt32.pdb"
+				ProgramDatabaseFile=".\Debug/icudt33.pdb"
 				ResourceOnlyDLL="TRUE"
 				ImportLibrary="..\..\lib\icudt.lib"/>
 			<Tool

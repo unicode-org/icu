@@ -24,7 +24,7 @@
 				ImproveFloatingPointConsistency="TRUE"
 				OptimizeForProcessor="2"
 				AdditionalIncludeDirectories="..\..\include,..\common"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;U_LAYOUT_IMPLEMENTATION"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;U_LAYOUT_IMPLEMENTATION"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				DisableLanguageExtensions="TRUE"
@@ -41,11 +41,11 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\icule32d.dll"
+				OutputFile="..\..\bin\icule33d.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\..\..\lib\icule32d.pdb"
+				ProgramDatabaseFile=".\..\..\lib\icule33d.pdb"
 				BaseAddress="0x4ac00000"
 				ImportLibrary="..\..\lib\iculed.lib"/>
 			<Tool
@@ -90,7 +90,7 @@
 				InlineFunctionExpansion="2"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="..\..\include,..\common"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;U_LAYOUT_IMPLEMENTATION"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;U_LAYOUT_IMPLEMENTATION"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
@@ -106,10 +106,10 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\icule32.dll"
+				OutputFile="..\..\bin\icule33.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				ProgramDatabaseFile=".\..\..\lib\icule32.pdb"
+				ProgramDatabaseFile=".\..\..\lib\icule33.pdb"
 				BaseAddress="0x4ac00000"
 				ImportLibrary="..\..\lib\icule.lib"/>
 			<Tool

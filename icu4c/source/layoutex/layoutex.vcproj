@@ -23,7 +23,7 @@
 				InlineFunctionExpansion="2"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="..\..\include,..\common"
-				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;_USRDLL;U_LAYOUTEX_IMPLEMENTATION"
+				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;U_LAYOUTEX_IMPLEMENTATION"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
@@ -38,10 +38,10 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\iculx32.dll"
+				OutputFile="..\..\bin\iculx33.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				ProgramDatabaseFile=".\..\..\lib\iculx32.pdb"
+				ProgramDatabaseFile=".\..\..\lib\iculx33.pdb"
 				BaseAddress="0x4ac80000"
 				ImportLibrary="..\..\lib\iculx.lib"/>
 			<Tool
@@ -84,7 +84,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\include,..\common"
-				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;_USRDLL;U_LAYOUTEX_IMPLEMENTATION"
+				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS;U_LAYOUTEX_IMPLEMENTATION"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				PrecompiledHeaderFile=".\Debug/layoutex.pch"
@@ -100,11 +100,11 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="..\..\bin\iculx32d.dll"
+				OutputFile="..\..\bin\iculx33d.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\..\..\lib\iculx32d.pdb"
+				ProgramDatabaseFile=".\..\..\lib\iculx33d.pdb"
 				BaseAddress="0x4ac80000"
 				ImportLibrary="..\..\lib\iculxd.lib"/>
 			<Tool
