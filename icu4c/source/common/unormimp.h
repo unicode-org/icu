@@ -293,7 +293,7 @@ struct UCharIterator {
      * (protected) Pointer to string or wrapped object or similar.
      * Not used by caller.
      */
-    const void *context;
+    void *context;
 
     /**
      * (protected) Length of string or similar.
