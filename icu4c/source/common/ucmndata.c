@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2001, International Business Machines
+*   Copyright (C) 1999-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************/
@@ -48,18 +48,7 @@ typedef struct  {
 }  PointerTOC;
 
 
-
-typedef struct {
-    int32_t           nameOffset;
-    int32_t           dataOffset;
-}  OffsetTOCEntry;
-
-
-typedef struct {
-    uint32_t          count;
-    OffsetTOCEntry    entry[2];    /* Acutal size of array is from count. */
-}  OffsetTOC;
-
+/* definition of OffsetTOC struct types moved to ucmndata.h */
 
 /*----------------------------------------------------------------------------------*
  *                                                                                  *
@@ -68,7 +57,7 @@ typedef struct {
  *----------------------------------------------------------------------------------*/
 static uint32_t offsetTOCEntryCount(const UDataMemory *pData) {
     int32_t          retVal=0;
-    const OffsetTOC *toc = (OffsetTOC *)pData->toc;
+    const UDataOffsetTOC *toc = (UDataOffsetTOC *)pData->toc;
     if (toc != NULL) {
         retVal = toc->count;
     } 
@@ -80,7 +69,7 @@ static const DataHeader *
 offsetTOCLookupFn(const UDataMemory *pData,
                   const char *tocEntryName,
                   UErrorCode *pErrorCode) {
-    const OffsetTOC  *toc = (OffsetTOC *)pData->toc;
+    const UDataOffsetTOC  *toc = (UDataOffsetTOC *)pData->toc;
     if(toc!=NULL) {
         const char *base=(const char *)pData->toc;
         uint32_t start, limit, number;
@@ -228,3 +217,22 @@ void udata_checkCommonData(UDataMemory *udm, UErrorCode *err) {
     }
 }
 
+/*
+ * TODO: Add a udata_swapPackageHeader() function that swaps an ICU .dat package
+ * header but not its sub-items.
+ * This function will be needed for automatic runtime swapping.
+ * Sub-items should not be swapped to limit the swapping to the parts of the
+ * package that are actually used.
+ *
+ * Since lengths of items are implicit in the order and offsets of their
+ * ToC entries, and since offsets are relative to the start of the ToC,
+ * a swapped version may need to generate a different data structure
+ * with pointers to the original data items and with their lengths
+ * (-1 for the last one if it is not known), and maybe even pointers to the
+ * swapped versions of the items.
+ * These pointers to swapped versions would establish a cache;
+ * instead, each open data item could simply own the storage for its swapped
+ * data. This fits better with the current design.
+ *
+ * markus 2003sep18 Jitterbug 2235
+ */

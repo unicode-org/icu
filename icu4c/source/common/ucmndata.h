@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2001, International Business Machines
+*   Copyright (C) 1999-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************/
@@ -42,6 +42,16 @@ typedef struct  {
     MappedData  dataHeader;
     UDataInfo   info;
 } DataHeader;
+
+typedef struct {
+    uint32_t nameOffset;
+    uint32_t dataOffset;
+} UDataOffsetTOCEntry;
+
+typedef struct {
+    uint32_t count;
+    UDataOffsetTOCEntry entry[2];    /* Acutal size of array is from count. */
+} UDataOffsetTOC;
 
 
 /*
