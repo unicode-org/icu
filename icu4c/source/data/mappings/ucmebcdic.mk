@@ -7,8 +7,8 @@ UCM_SOURCE_EBCDIC = ebcdic-xml-us.ucm\
 ibm-1025_P100-1995.ucm ibm-1026_P100-1995.ucm ibm-1097_P100-1995.ucm\
 ibm-1112_P100-1995.ucm ibm-1122_P100-1999.ucm ibm-1130_P100-1997.ucm\
 ibm-1132_P100-1998.ucm ibm-1137_P100-1999.ucm ibm-1364_P110-1997.ucm\
-ibm-1371_P100-1999.ucm ibm-1388_P103-2001.ucm ibm-1390_P100-1999.ucm\
-ibm-1399_P100-1999.ucm ibm-870_P100-1995.ucm ibm-875_P100-1995.ucm\
+ibm-1371_P100-1999.ucm ibm-1388_P103-2001.ucm ibm-1390_P110-2003.ucm\
+ibm-1399_P110-2003.ucm ibm-870_P100-1995.ucm ibm-875_P100-1995.ucm\
 ibm-838_P100-1995.ucm ibm-918_P100-1995.ucm ibm-930_P120-1999.ucm\
 ibm-933_P110-1995.ucm ibm-935_P110-1999.ucm ibm-937_P110-1999.ucm\
 ibm-939_P120-1999.ucm ibm-1123_P100-1995.ucm ibm-1140_P100-1997.ucm\
