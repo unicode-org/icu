@@ -276,7 +276,7 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
         int32_t from_euc_twOffs [] ={ 0, 1, 1, 2, 2, 2, 2, 6, 7, 7, 8,};
 
         /*ISO-2022-JP*/
-        UChar iso_2022_jp_inputText[]={0x0041, 0x00E9, 0x0042, };
+        UChar iso_2022_jp_inputText[]={0x0041, 0x00E9/*unassigned*/,0x0042, };
         const uint8_t to_iso_2022_jp[]={ 
             0x41,       
             0x42,
@@ -292,8 +292,17 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
         };
         int32_t from_iso_2022_jpOffs1 [] ={0,0,0,0,0,2,2,};
 
+        /*ISO-2022-JP*/
+        UChar iso_2022_jp_inputText2[]={0x0041, 0x00E9/*unassigned*/,0x43,0xd800/*illegal*/,0x0042, };
+        const uint8_t to_iso_2022_jp2[]={ 
+            0x41,       
+            0x43,
+
+        };
+        int32_t from_iso_2022_jpOffs2 [] ={0,2};
+
         /*ISO-2022-cn*/
-        UChar iso_2022_cn_inputText[]={ 0x0041, 0x3712, 0x0042, };
+        UChar iso_2022_cn_inputText[]={ 0x0041, 0x3712/*unassigned*/, 0x0042, };
         const uint8_t to_iso_2022_cn[]={  
             0x0F,   0x41,   
             0x0F,   0x42, 
@@ -303,6 +312,15 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
             2,2,
         };
         
+        /*ISO-2022-CN*/
+        UChar iso_2022_cn_inputText1[]={0x0041, 0x3712/*unassigned*/,0x43,0xd800/*illegal*/,0x0042, };
+        const uint8_t to_iso_2022_cn1[]={ 
+            0x0F,   0x41,   
+            0x0F,   0x43, 
+
+        };
+        int32_t from_iso_2022_cnOffs1 [] ={0,0,2,2};
+
         /*ISO-2022-kr*/
         UChar iso_2022_kr_inputText[]={ 0x0041, 0x03A0,0x3712/*unassigned*/,0x03A0, 0x0042, };
         const uint8_t to_iso_2022_kr[]={  
@@ -320,6 +338,22 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
             4,4
         };
 
+        /*ISO-2022-kr*/
+        UChar iso_2022_kr_inputText1[]={ 0x0041, 0x03A0,0x3712/*unassigned*/,0x03A0,0xd801/*illegal*/, 0x0042, };
+        const uint8_t to_iso_2022_kr1[]={  
+            0x1b,   0x24,   0x29,   0x43,   
+            0x41,   
+            0x0e,   0x25,   0x50,   
+            0x25,   0x50, 
+ 
+        };
+        int32_t from_iso_2022_krOffs1 [] ={ 
+            -1,-1,-1,-1,
+            0,
+            1,1,1,
+            3,3,
+
+        };
         /* HZ encoding */       
         UChar hz_inputText[]={ 0x0041, 0x03A0,0x0662/*unassigned*/,0x03A0, 0x0042, };
 
@@ -337,6 +371,22 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
             4,4,4,4
         };
 
+        UChar hz_inputText1[]={ 0x0041, 0x03A0,0x0662/*unassigned*/,0x03A0,0xd801/*illegal*/, 0x0042, };
+
+        const uint8_t to_hz1[]={    
+            0x7e,   0x7d,   0x41,   
+            0x7e,   0x7b,   0x26,   0x30,   
+            0x26,   0x30,
+
+           
+        };
+        int32_t from_hzOffs1 [] ={ 
+            0,0,0,
+            1,1,1,1,
+            3,3,
+
+        };
+
         if(!testConvertFromUnicode(inputTest, sizeof(inputTest)/sizeof(inputTest[0]),
                 toIBM943, sizeof(toIBM943), "ibm-943",
                 (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, offset, NULL, 0 ))
@@ -352,6 +402,7 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
                 (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, from_euc_twOffs, NULL, 0 ))
             log_err("u-> euc-tw with skip did not match.\n");  
         
+        /*iso_2022_jp*/
         if(!testConvertFromUnicode(iso_2022_jp_inputText, sizeof(iso_2022_jp_inputText)/sizeof(iso_2022_jp_inputText[0]),
                 to_iso_2022_jp, sizeof(to_iso_2022_jp), "iso-2022-jp",
                 (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, from_iso_2022_jpOffs, NULL, 0 ))
@@ -361,24 +412,45 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
                 to_iso_2022_jp1, sizeof(to_iso_2022_jp1), "iso-2022-jp",
                 (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, from_iso_2022_jpOffs1, NULL, 0 ))
             log_err("u-> iso-2022-jp with skip did not match.\n"); 
-        
-        if(!testConvertFromUnicode(iso_2022_jp_inputText, sizeof(iso_2022_jp_inputText)/sizeof(iso_2022_jp_inputText[0]),
-                to_iso_2022_jp, sizeof(to_iso_2022_jp), "iso-2022-jp",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, from_iso_2022_jpOffs, NULL, 0 ))
-            log_err("u-> iso-2022-jp with skip did not match.\n");         if(!testConvertFromUnicode(iso_2022_cn_inputText, sizeof(iso_2022_cn_inputText)/sizeof(iso_2022_cn_inputText[0]),
+        /* with context */
+        if(!testConvertFromUnicodeWithContext(iso_2022_jp_inputText2, sizeof(iso_2022_jp_inputText2)/sizeof(iso_2022_jp_inputText2[0]),
+                to_iso_2022_jp2, sizeof(to_iso_2022_jp2), "iso-2022-jp",
+                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, from_iso_2022_jpOffs2, NULL, 0,UCNV_SKIP_STOP_ON_ILLEGAL,U_ILLEGAL_CHAR_FOUND ))
+            log_err("u-> iso-2022-jp with skip & UCNV_SKIP_STOP_ON_ILLEGAL did not match.\n"); 
+    
+        /*iso_2022_cn*/
+        if(!testConvertFromUnicode(iso_2022_cn_inputText, sizeof(iso_2022_cn_inputText)/sizeof(iso_2022_cn_inputText[0]),
                 to_iso_2022_cn, sizeof(to_iso_2022_cn), "iso-2022-cn",
                 (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, from_iso_2022_cnOffs, NULL, 0 ))
             log_err("u-> iso-2022-cn with skip did not match.\n"); 
-        
+        /*with context*/
+        if(!testConvertFromUnicodeWithContext(iso_2022_cn_inputText1, sizeof(iso_2022_cn_inputText1)/sizeof(iso_2022_cn_inputText1[0]),
+                to_iso_2022_cn1, sizeof(to_iso_2022_cn1), "iso-2022-cn",
+                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, from_iso_2022_cnOffs1, NULL, 0,UCNV_SKIP_STOP_ON_ILLEGAL,U_ILLEGAL_CHAR_FOUND ))
+            log_err("u-> iso-2022-cn with skip & UCNV_SKIP_STOP_ON_ILLEGAL did not match.\n"); 
+
+        /*iso_2022_kr*/
         if(!testConvertFromUnicode(iso_2022_kr_inputText, sizeof(iso_2022_kr_inputText)/sizeof(iso_2022_kr_inputText[0]),
                 to_iso_2022_kr, sizeof(to_iso_2022_kr), "iso-2022-kr",
                 (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, from_iso_2022_krOffs, NULL, 0 ))
             log_err("u-> iso-2022-kr with skip did not match.\n"); 
-       
+          /*with context*/
+        if(!testConvertFromUnicodeWithContext(iso_2022_kr_inputText1, sizeof(iso_2022_kr_inputText1)/sizeof(iso_2022_kr_inputText1[0]),
+                to_iso_2022_kr1, sizeof(to_iso_2022_kr1), "iso-2022-kr",
+                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, from_iso_2022_krOffs1, NULL, 0,UCNV_SKIP_STOP_ON_ILLEGAL,U_ILLEGAL_CHAR_FOUND ))
+            log_err("u-> iso-2022-kr with skip & UCNV_SKIP_STOP_ON_ILLEGAL did not match.\n"); 
+
+        /*hz*/
         if(!testConvertFromUnicode(hz_inputText, sizeof(hz_inputText)/sizeof(hz_inputText[0]),
                 to_hz, sizeof(to_hz), "HZ",
                 (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, from_hzOffs, NULL, 0 ))
             log_err("u-> HZ with skip did not match.\n"); 
+          /*with context*/
+        if(!testConvertFromUnicodeWithContext(hz_inputText1, sizeof(hz_inputText1)/sizeof(hz_inputText1[0]),
+                to_hz1, sizeof(to_hz1), "hz",
+                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SKIP, from_hzOffs1, NULL, 0,UCNV_SKIP_STOP_ON_ILLEGAL,U_ILLEGAL_CHAR_FOUND ))
+            log_err("u-> hz with skip & UCNV_SKIP_STOP_ON_ILLEGAL did not match.\n"); 
+
 
       
     }
@@ -478,7 +550,7 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
         const uint8_t sampleTxt_iso_2022_jp[]={ 
             0x41,
             0x1b,   0x24,   0x42,   0x2A, 0x44, /*unassigned*/
-            0x1b,   0x28,   0x42,   0x42,
+             0x1b,   0x28,   0x42,   0x42,
             
         };
         UChar iso_2022_jptoUnicode[]={    0x41,0x42 };
@@ -492,6 +564,7 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
             0x0f,   0x42,
             
         };
+
         UChar iso_2022_cntoUnicode[]={    0x41, 0x44,0x42 };
         int32_t from_iso_2022_cnOffs [] ={  1,   2,   11   };
 
@@ -1122,28 +1195,59 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
              6, 7, 7, 8,
         };
         /*ISO-2022-JP*/
-        UChar iso_2022_jp_inputText[]={ 0x0041, 0x00E9, 0x0042, };
+        UChar iso_2022_jp_inputText[]={ 0x0041, 0x00E9, 0x0042,0x00E9,0x3000 };
         const uint8_t to_iso_2022_jp[]={  
                0x41,   
                0x25,  0x55,   0x30,   0x30,   0x45,   0x39,   
-               0x42, 
+               0x42,
+               0x25,  0x55,   0x30,   0x30,   0x45,   0x39,
+               0x1b,  0x24,   0x42,   0x21,   0x21, 
         };
+
         int32_t from_iso_2022_jpOffs [] ={ 
             0,
             1,1,1,1,1,1,
             2,
+            3,3,3,3,3,3,
+            4,4,4,4,4
         };
-        UChar iso_2022_jp_inputText1[]={ 0x3000, 0x00E9, 0x3001,} ;
+        UChar iso_2022_jp_inputText1[]={ 0x3000, 0x00E9, 0x3001,0x00E9, 0x0042} ;
         const uint8_t to_iso_2022_jp1[]={  
             0x1b,   0x24,   0x42,   0x21, 0x21,   
             0x1b,   0x28,   0x42,   0x25, 0x55,   0x30,   0x30,   0x45,   0x39,   
-            0x1b,   0x24,   0x42,   0x21, 0x22, 
+            0x1b,   0x24,   0x42,   0x21, 0x22,
+            0x1b,   0x28,   0x42,   0x25, 0x55,   0x30,   0x30,   0x45,   0x39, 
+            0x42,
         };
+
         int32_t from_iso_2022_jpOffs1 [] ={ 
             0,0,0,0,0,
             1,1,1,1,1,1,1,1,1,
             2,2,2,2,2,
+            3,3,3,3,3,3,3,3,3,
+            4,
         };
+        /* surrogate pair*/
+        UChar iso_2022_jp_inputText2[]={ 0x3000, 0xD84D, 0xDC56, 0x3001,0xD84D,0xDC56, 0x0042} ;
+        const uint8_t to_iso_2022_jp2[]={  
+                                0x1b,   0x24,   0x42,   0x21,   0x21,   
+                                0x1b,   0x28,   0x42,   0x25,   0x55,   0x44,   0x38,   0x34,   0x44,   
+                                0x25,   0x55,   0x44,   0x43,   0x35,   0x36,   
+                                0x1b,   0x24,   0x42,   0x21,   0x22,
+                                0x1b,   0x28,   0x42,   0x25,   0x55,   0x44,   0x38,   0x34,   0x44,   
+                                0x25,   0x55,   0x44,   0x43,   0x35,   0x36,   
+                                0x42,
+                                };
+        int32_t from_iso_2022_jpOffs2 [] ={ 
+            0,0,0,0,0,
+            1,1,1,1,1,1,1,1,1,
+            1,1,1,1,1,1,
+            3,3,3,3,3,
+            4,4,4,4,4,4,4,4,4,
+            4,4,4,4,4,4,
+            6,
+        };
+
         /*ISO-2022-cn*/
         UChar iso_2022_cn_inputText[]={ 0x0041, 0x3712, 0x0042, };
         const uint8_t to_iso_2022_cn[]={  
@@ -1189,8 +1293,56 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
             1,1,1,1,1,1,1,
             2,2,2,2,2,2,2
         };
+        
+        UChar iso_2022_cn_inputText4[]={ 0x3000, 0xD84D, 0xDC56, 0x3001,0xD84D,0xDC56, 0x0042};
+
+        const uint8_t to_iso_2022_cn4[]={  
+                             0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x21,   
+                             0x0f,   0x25,   0x55,   0x44,   0x38,   0x34,   0x44,   
+                             0x25,   0x55,   0x44,   0x43,   0x35,   0x36,   
+                             0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x22,   
+                             0x0f,   0x25,   0x55,   0x44,   0x38,   0x34,   0x44,   
+                             0x25,   0x55,   0x44,   0x43,   0x35,   0x36,   
+                             0x0f,   0x42, 
+                             };
+        int32_t from_iso_2022_cnOffs4 [] ={ 
+            0,0,0,0,0,0,0,
+            1,1,1,1,1,1,1,
+            1,1,1,1,1,1,
+            3,3,3,3,3,3,3,
+            4,4,4,4,4,4,4,
+            4,4,4,4,4,4,
+            6, 6
+
+        };
 
         /*ISO-2022-kr*/
+        UChar iso_2022_kr_inputText2[]={ 0x0041, 0x03A0,0xD84D, 0xDC56/*unassigned*/,0x03A0, 0x0042,0xD84D, 0xDC56/*unassigned*/,0x43 };
+        const uint8_t to_iso_2022_kr2[]={  
+            0x1b,   0x24,   0x29,   0x43,   
+            0x41,   
+            0x0e,   0x25,   0x50,   
+            0x0f,   0x25,   0x55,   0x44,   0x38,   0x34,   0x44,   
+            0x25,   0x55,   0x44,   0x43,   0x35,   0x36,  
+            0x0e,   0x25,   0x50, 
+            0x0f,   0x42, 
+            0x25,   0x55,   0x44,   0x38,   0x34,   0x44,   
+            0x25,   0x55,   0x44,   0x43,   0x35,   0x36,  
+            0x43
+        };
+        int32_t from_iso_2022_krOffs2 [] ={ 
+            -1,-1,-1,-1,
+             0,
+            1,1,1,
+            2,2,2,2,2,2,2,
+            2,2,2,2,2,2,
+            4,4,4,
+            5,5,
+            6,6,6,6,6,6,
+            6,6,6,6,6,6,
+            8,
+        };
+
         UChar iso_2022_kr_inputText[]={ 0x0041, 0x03A0,0x3712/*unassigned*/,0x03A0, 0x0042,0x3712/*unassigned*/,0x43 };
         const uint8_t to_iso_2022_kr[]={  
             0x1b,   0x24,   0x29,   0x43,   
@@ -1202,6 +1354,8 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
             0x25,   0x55,   0x33,   0x37,   0x31,   0x32,  /*unassigned*/ 
             0x43
         };
+     
+
         int32_t from_iso_2022_krOffs [] ={ 
             -1,-1,-1,-1,
              0,
@@ -1212,7 +1366,6 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
             5,5,5,5,5,5,
             6,
         };
-
         /* HZ encoding */       
         UChar hz_inputText[]={ 0x0041, 0x03A0,0x0662/*unassigned*/,0x03A0, 0x0042, };
 
@@ -1230,6 +1383,30 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
             2,2,2,2,2,2,2,2,
             3,3,3,3,
             4,4,4
+        };
+
+        UChar hz_inputText2[]={ 0x0041, 0x03A0,0xD84D, 0xDC56/*unassigned*/,0x03A0, 0x0042,0xD84D, 0xDC56/*unassigned*/,0x43 };
+        const uint8_t to_hz2[]={   
+            0x7e,   0x7d,   0x41,   
+            0x7e,   0x7b,   0x26,   0x30,   
+            0x7e,   0x7d,   0x25,   0x55,   0x44,   0x38,   0x34,   0x44,   
+            0x25,   0x55,   0x44,   0x43,   0x35,   0x36,  
+            0x7e,   0x7b,   0x26,   0x30,
+            0x7e,   0x7d,   0x42, 
+            0x25,   0x55,   0x44,   0x38,   0x34,   0x44,   
+            0x25,   0x55,   0x44,   0x43,   0x35,   0x36,  
+            0x43
+        };
+        int32_t from_hzOffs2 [] ={ 
+            0,0,0,
+            1,1,1,1,
+            2,2,2,2,2,2,2,2,
+            2,2,2,2,2,2,
+            4,4,4,4,
+            5,5,5,
+            6,6,6,6,6,6,
+            6,6,6,6,6,6,
+            8,
         };
 
         if(!testConvertFromUnicode(inputTest, sizeof(inputTest)/sizeof(inputTest[0]),
@@ -1257,10 +1434,124 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
                 (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_jpOffs1, NULL, 0 ))
             log_err("u-> iso_2022_jp with subst with value did not match.\n"); 
         
+        if(!testConvertFromUnicode(iso_2022_jp_inputText1, sizeof(iso_2022_jp_inputText1)/sizeof(iso_2022_jp_inputText1[0]),
+                to_iso_2022_jp1, sizeof(to_iso_2022_jp1), "iso-2022-jp",
+                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_jpOffs1, NULL, 0 ))
+            log_err("u-> iso_2022_jp with subst with value did not match.\n"); 
+        
+        if(!testConvertFromUnicode(iso_2022_jp_inputText2, sizeof(iso_2022_jp_inputText2)/sizeof(iso_2022_jp_inputText2[0]),
+                to_iso_2022_jp2, sizeof(to_iso_2022_jp2), "iso-2022-jp",
+                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_jpOffs2, NULL, 0 ))
+            log_err("u-> iso_2022_jp with subst with value did not match.\n");
+        /*ESCAPE OPTIONS*/
+        {
+            const uint8_t to_iso_2022_jp2[]={  
+                    0x1b,   0x24,   0x42,   0x21,   0x21,   
+                    0x1b,   0x28,   0x42,   0x26,   0x23,   0x31,  0x34,   0x34,   0x34,   0x37, 0x30,   
+                      
+                    0x1b,   0x24,   0x42,   0x21,   0x22,
+                    0x1b,   0x28,   0x42,   0x26,   0x23,  0x31,  0x34,   0x34,   0x34,   0x37, 0x30,  
+                    
+                    0x42,
+                    };
+
+            int32_t from_iso_2022_jpOffs2 [] ={ 
+                0,0,0,0,0,
+                1,1,1,1,1,1,1,1,1,1,1,
+
+                3,3,3,3,3,
+                4,4,4,4,4,4,4,4,4,4,4,
+
+                6,
+            };
+
+            if(!testConvertFromUnicodeWithContext(iso_2022_jp_inputText2, sizeof(iso_2022_jp_inputText2)/sizeof(iso_2022_jp_inputText2[0]),
+                    to_iso_2022_jp2, sizeof(to_iso_2022_jp2), "iso-2022-jp",
+                    (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_jpOffs2, NULL, 0,UCNV_ESCAPE_XML_DEC,U_ZERO_ERROR ))
+                log_err("u-> iso-2022-jp with skip & UCNV_ESCAPE_XML_DEC did not match.\n"); 
+        }
+        {
+             const uint8_t to_iso_2022_jp2[]={  
+                    0x1b,   0x24,   0x42,   0x21,   0x21,   
+                    0x1b,   0x28,   0x42,   0x26,   0x23,   0x78,  0x32,   0x33,   0x34,   0x35, 0x36,   
+                      
+                    0x1b,   0x24,   0x42,   0x21,   0x22,
+                    0x1b,   0x28,   0x42,   0x26,   0x23,   0x78,  0x32,   0x33,   0x34,   0x35, 0x36,  
+                    
+                    0x42,
+                    };
+
+            int32_t from_iso_2022_jpOffs2 [] ={ 
+                0,0,0,0,0,
+                1,1,1,1,1,1,1,1,1,1,1,
+
+                3,3,3,3,3,
+                4,4,4,4,4,4,4,4,4,4,4,
+
+                6,
+            };
+            if(!testConvertFromUnicodeWithContext(iso_2022_jp_inputText2, sizeof(iso_2022_jp_inputText2)/sizeof(iso_2022_jp_inputText2[0]),
+                to_iso_2022_jp2, sizeof(to_iso_2022_jp2), "iso-2022-jp",
+                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_jpOffs2, NULL, 0,UCNV_ESCAPE_XML_HEX,U_ZERO_ERROR ))
+                log_err("u-> iso-2022-jp with skip & UCNV_ESCAPE_XML_HEX did not match.\n"); 
+
+        }
+        {             
+            const uint8_t to_iso_2022_cn4[]={  
+                             0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x21,   
+                             0x0f,   0x5c,   0x75,   0x44,   0x38,   0x34,   0x44,   
+                             0x5c,   0x75,   0x44,   0x43,   0x35,   0x36,   
+                             0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x22,   
+                             0x0f,   0x5c,   0x75,   0x44,   0x38,   0x34,   0x44,   
+                             0x5c,   0x75,   0x44,   0x43,   0x35,   0x36,   
+                             0x0f,   0x42, 
+                             };
+            int32_t from_iso_2022_cnOffs4 [] ={ 
+                0,0,0,0,0,0,0,
+                1,1,1,1,1,1,1,
+                1,1,1,1,1,1,
+                3,3,3,3,3,3,3,
+                4,4,4,4,4,4,4,
+                4,4,4,4,4,4,
+                6, 6
+
+            };
+            if(!testConvertFromUnicodeWithContext(iso_2022_cn_inputText4, sizeof(iso_2022_cn_inputText4)/sizeof(iso_2022_cn_inputText4[0]),
+                to_iso_2022_cn4, sizeof(to_iso_2022_cn4), "iso-2022-cn",
+                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs4, NULL, 0,UCNV_ESCAPE_JAVA,U_ZERO_ERROR ))
+                log_err("u-> iso-2022-cn with skip & UCNV_ESCAPE_JAVA did not match.\n"); 
+
+        }
+        {
+            const uint8_t to_iso_2022_cn4[]={  
+                            0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x21,   
+                            0x0f,   0x5c,   0x75,   0x30,   0x30,   0x30,   0x32,   0x33,   0x34,   0x35,   0x36,   
+                            0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x22,
+                            0x0f,   0x5c,   0x75,   0x30,   0x30,   0x30,   0x32,   0x33,   0x34,   0x35,   0x36, 
+                            0x0f,   0x42 
+                             };
+
+
+            int32_t from_iso_2022_cnOffs4 [] ={ 
+                0,0,0,0,0,0,0,
+                1,1,1,1,1,1,1,1,1,1,1,
+
+                3,3,3,3,3,3,3,
+                4,4,4,4,4,4,4,4,4,4,4,
+
+                6,6
+
+            };
+            if(!testConvertFromUnicodeWithContext(iso_2022_cn_inputText4, sizeof(iso_2022_cn_inputText4)/sizeof(iso_2022_cn_inputText4[0]),
+                to_iso_2022_cn4, sizeof(to_iso_2022_cn4), "iso-2022-cn",
+                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs4, NULL, 0,UCNV_ESCAPE_C,U_ZERO_ERROR ))
+                log_err("u-> iso-2022-cn with skip & UCNV_ESCAPE_C did not match.\n"); 
+        }
         if(!testConvertFromUnicode(iso_2022_cn_inputText, sizeof(iso_2022_cn_inputText)/sizeof(iso_2022_cn_inputText[0]),
                 to_iso_2022_cn, sizeof(to_iso_2022_cn), "iso-2022-cn",
                 (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs, NULL, 0 ))
             log_err("u-> iso_2022_cn with subst with value did not match.\n");
+
         if(!testConvertFromUnicode(iso_2022_cn_inputText1, sizeof(iso_2022_cn_inputText1)/sizeof(iso_2022_cn_inputText1[0]),
                 to_iso_2022_cn1, sizeof(to_iso_2022_cn1), "iso-2022-cn",
                 (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs1, NULL, 0 ))
@@ -1273,15 +1564,25 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
                 to_iso_2022_cn3, sizeof(to_iso_2022_cn3), "iso-2022-cn",
                 (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs3, NULL, 0 ))
             log_err("u-> iso_2022_cn with subst with value did not match.\n");
-        
+        if(!testConvertFromUnicode(iso_2022_cn_inputText4, sizeof(iso_2022_cn_inputText4)/sizeof(iso_2022_cn_inputText4[0]),
+                to_iso_2022_cn4, sizeof(to_iso_2022_cn4), "iso-2022-cn",
+                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs4, NULL, 0 ))
+            log_err("u-> iso_2022_cn with subst with value did not match.\n");
         if(!testConvertFromUnicode(iso_2022_kr_inputText, sizeof(iso_2022_kr_inputText)/sizeof(iso_2022_kr_inputText[0]),
                 to_iso_2022_kr, sizeof(to_iso_2022_kr), "iso-2022-kr",
                 (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_krOffs, NULL, 0 ))
             log_err("u-> iso_2022_kr with subst with value did not match.\n");
-
+        if(!testConvertFromUnicode(iso_2022_kr_inputText2, sizeof(iso_2022_kr_inputText2)/sizeof(iso_2022_kr_inputText2[0]),
+                to_iso_2022_kr2, sizeof(to_iso_2022_kr2), "iso-2022-kr",
+                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_krOffs2, NULL, 0 ))
+            log_err("u-> iso_2022_kr2 with subst with value did not match.\n");
         if(!testConvertFromUnicode(hz_inputText, sizeof(hz_inputText)/sizeof(hz_inputText[0]),
                 to_hz, sizeof(to_hz), "HZ",
                 (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_hzOffs, NULL, 0 ))
+            log_err("u-> hz with subst with value did not match.\n");
+         if(!testConvertFromUnicode(hz_inputText2, sizeof(hz_inputText2)/sizeof(hz_inputText2[0]),
+                to_hz2, sizeof(to_hz2), "HZ",
+                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, from_hzOffs2, NULL, 0 ))
             log_err("u-> hz with subst with value did not match.\n");
     }
 
@@ -1705,7 +2006,6 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const uint8_t 
         return FALSE;
     }
 }
-
 UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const UChar *expect, int expectlen, 
                const char *codepage, UConverterToUCallback callback, const int32_t *expectOffsets,
                const char *mySubChar, int8_t len)
@@ -1810,6 +2110,363 @@ UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const UChar *e
     /* allow failure codes for the stop callback */
     if(U_FAILURE(status) &&
        (callback != UCNV_TO_U_CALLBACK_STOP || (status != U_INVALID_CHAR_FOUND && status != U_ILLEGAL_CHAR_FOUND && status != U_TRUNCATED_CHAR_FOUND)))
+    {
+        log_err("Problem doing toUnicode, errcode %s %s\n", myErrorName(status), gNuConvTestName);
+        return FALSE;
+    }
+
+    log_verbose("\nConversion done. %d bytes -> %d chars.\nResult :",
+        sourcelen, targ-junkout);
+    if(VERBOSITY)
+    {
+
+        junk[0] = 0;
+        offset_str[0] = 0;
+
+        for(p = junkout;p<targ;p++)
+        {
+            sprintf(junk + strlen(junk), "0x%04x, ", (0xFFFF) & (unsigned int)*p);
+            sprintf(offset_str + strlen(offset_str), "0x%04x, ", (0xFFFF) & (unsigned int)junokout[p-junkout]);
+        }
+
+        log_verbose(junk);
+        printUSeq(expect, expectlen);
+        if ( checkOffsets )
+        {
+            log_verbose("\nOffsets:");
+            log_verbose(offset_str);
+        }
+        log_verbose("\n");
+    }
+    ucnv_close(conv);
+
+    log_verbose("comparing %d uchars (%d bytes)..\n",expectlen,expectlen*2);
+
+    if (checkOffsets && (expectOffsets != 0))
+    {
+        if(memcmp(junokout,expectOffsets,(targ-junkout) * sizeof(int32_t)))
+        {
+            log_err("did not get the expected offsets while %s \n", gNuConvTestName);
+            log_err("Got offsets:      ");
+            for(p=junkout;p<targ;p++)
+                log_err("  %2d,", junokout[p-junkout]); 
+            log_err("\n");
+            log_err("Expected offsets: ");
+            for(i=0; i<(targ-junkout); i++)
+                log_err("  %2d,", expectOffsets[i]);
+            log_err("\n");
+            log_err("Got output:       ");
+            for(i=0; i<(targ-junkout); i++)
+                log_err("0x%04x,", junkout[i]);
+            log_err("\n");
+            log_err("From source:      ");
+            for(i=0; i<(src-source); i++)
+                log_err("  0x%02x,", (unsigned char)source[i]);
+            log_err("\n");
+        }
+    }
+
+    if(!memcmp(junkout, expect, expectlen*2))
+    {
+        log_verbose("Matches!\n");
+        return TRUE;
+    }
+    else
+    {
+        log_err("String does not match. %s\n", gNuConvTestName);
+        log_verbose("String does not match. %s\n", gNuConvTestName);
+        log_err("Got:      ");
+        printUSeqErr(junkout, expectlen);
+        log_err("Expected: ");
+        printUSeqErr(expect, expectlen);
+        log_err("\n");
+        return FALSE;
+    }
+}
+
+UBool testConvertFromUnicodeWithContext(const UChar *source, int sourceLen,  const uint8_t *expect, int expectLen, 
+                const char *codepage, UConverterFromUCallback callback , const int32_t *expectOffsets, 
+                const char *mySubChar, int8_t len, void* context, UErrorCode expectedError)
+{
+
+
+    UErrorCode status = U_ZERO_ERROR;
+    UConverter *conv = 0;
+    uint8_t junkout[NEW_MAX_BUFFER]; /* FIX */
+    int32_t junokout[NEW_MAX_BUFFER]; /* FIX */
+    const UChar *src;
+    uint8_t *end;
+    uint8_t *targ;
+    int32_t *offs;
+    int i;
+    int32_t  realBufferSize;
+    uint8_t *realBufferEnd;
+    const UChar *realSourceEnd;
+    const UChar *sourceLimit;
+    UBool checkOffsets = TRUE;
+    UBool doFlush;
+    char junk[9999];
+    char offset_str[9999];
+    uint8_t *p;
+    UConverterFromUCallback oldAction = NULL;
+    void* oldContext = NULL;
+
+
+    for(i=0;i<NEW_MAX_BUFFER;i++)
+        junkout[i] = 0xF0;
+    for(i=0;i<NEW_MAX_BUFFER;i++)
+        junokout[i] = 0xFF;
+    setNuConvTestName(codepage, "FROM");
+
+    log_verbose("\nTesting========= %s  FROM \n  inputbuffer= %d   outputbuffer= %d\n", codepage, gInBufferSize, 
+            gOutBufferSize);
+
+    conv = ucnv_open(codepage, &status);
+    if(U_FAILURE(status))
+    {
+        log_err("Couldn't open converter %s\n",codepage);
+        return FALSE;
+    }
+
+    log_verbose("Converter opened..\n");
+
+    /*----setting the callback routine----*/
+    ucnv_setFromUCallBack (conv, callback, context, &oldAction, &oldContext, &status);
+    if (U_FAILURE(status)) 
+    { 
+        log_err("FAILURE in setting the callback Function! %s\n", myErrorName(status));
+    }
+    /*------------------------*/
+    /*setting the subChar*/
+    if(mySubChar != NULL){
+        ucnv_setSubstChars(conv, mySubChar, len, &status);
+        if (U_FAILURE(status))  { 
+            log_err("FAILURE in setting the callback Function! %s\n", myErrorName(status));
+        }
+    }
+    /*------------*/
+
+    src = source;
+    targ = junkout;
+    offs = junokout;
+
+    realBufferSize = (sizeof(junkout)/sizeof(junkout[0]));
+    realBufferEnd = junkout + realBufferSize;
+    realSourceEnd = source + sourceLen;
+
+    if ( gOutBufferSize != realBufferSize )
+      checkOffsets = FALSE;
+
+    if( gInBufferSize != NEW_MAX_BUFFER )
+      checkOffsets = FALSE;
+
+    do
+    {
+        end = nct_min(targ + gOutBufferSize, realBufferEnd);
+        sourceLimit = nct_min(src + gInBufferSize, realSourceEnd);
+
+        doFlush = (UBool)(sourceLimit == realSourceEnd);
+
+        if(targ == realBufferEnd)
+        {
+            log_err("Error, overflowed the real buffer while about to call fromUnicode! targ=%08lx %s", targ, gNuConvTestName);
+            return FALSE;
+        }
+        log_verbose("calling fromUnicode @ SOURCE:%08lx to %08lx  TARGET: %08lx to %08lx, flush=%s\n", src,sourceLimit, targ,end, doFlush?"TRUE":"FALSE");
+
+
+        status = U_ZERO_ERROR;
+
+        ucnv_fromUnicode (conv,
+                  (char **)&targ,
+                  (const char *)end,
+                  &src,
+                  sourceLimit,
+                  checkOffsets ? offs : NULL,
+                  doFlush, /* flush if we're at the end of the input data */
+                  &status);
+    } while ( (status == U_BUFFER_OVERFLOW_ERROR) || (U_SUCCESS(status) && (sourceLimit < realSourceEnd)) );
+
+    /* allow failure codes for the stop callback */
+    if(U_FAILURE(status) && status != expectedError)
+    {
+        log_err("Problem in fromUnicode, errcode %s %s\n", myErrorName(status), gNuConvTestName);
+        return FALSE;
+    }
+
+    log_verbose("\nConversion done [%d uchars in -> %d chars out]. \nResult :",
+        sourceLen, targ-junkout);
+    if(VERBOSITY)
+    {
+
+        junk[0] = 0;
+        offset_str[0] = 0;
+        for(p = junkout;p<targ;p++)
+        {
+            sprintf(junk + strlen(junk), "0x%02x, ", (0xFF) & (unsigned int)*p);
+            sprintf(offset_str + strlen(offset_str), "0x%02x, ", (0xFF) & (unsigned int)junokout[p-junkout]);
+        }
+
+        log_verbose(junk);
+        printSeq(expect, expectLen);
+        if ( checkOffsets )
+        {
+            log_verbose("\nOffsets:");
+            log_verbose(offset_str);
+        }
+        log_verbose("\n");
+    }
+    ucnv_close(conv);
+
+
+    if(expectLen != targ-junkout)
+    {
+        log_err("Expected %d chars out, got %d %s\n", expectLen, targ-junkout, gNuConvTestName);
+        log_verbose("Expected %d chars out, got %d %s\n", expectLen, targ-junkout, gNuConvTestName);
+        printSeqErr(junkout, targ-junkout);
+        printSeqErr(expect, expectLen);
+        return FALSE;
+    }
+
+    if (checkOffsets && (expectOffsets != 0) )
+    {
+        log_verbose("comparing %d offsets..\n", targ-junkout);
+        if(memcmp(junokout,expectOffsets,(targ-junkout) * sizeof(int32_t) )){
+            log_err("did not get the expected offsets while %s \n", gNuConvTestName);
+            log_err("Got Output : ");
+            printSeqErr(junkout, targ-junkout);
+            log_err("Got Offsets:      ");
+            for(p=junkout;p<targ;p++)
+                log_err("%d,", junokout[p-junkout]); 
+            log_err("\n");
+            log_err("Expected Offsets: ");
+            for(i=0; i<(targ-junkout); i++)
+                log_err("%d,", expectOffsets[i]);
+            log_err("\n");
+            return FALSE;
+        }
+    }
+
+    if(!memcmp(junkout, expect, expectLen))
+    {
+        log_verbose("String matches! %s\n", gNuConvTestName);
+        return TRUE;
+    }
+    else
+    {
+        log_err("String does not match. %s\n", gNuConvTestName);
+        log_err("source: ");
+        printUSeqErr(source, sourceLen);
+        log_err("Got:      ");
+        printSeqErr(junkout, expectLen);
+        log_err("Expected: ");
+        printSeqErr(expect, expectLen);
+        return FALSE;
+    }
+}
+UBool testConvertToUnicodeWithContext( const uint8_t *source, int sourcelen, const UChar *expect, int expectlen, 
+               const char *codepage, UConverterToUCallback callback, const int32_t *expectOffsets,
+               const char *mySubChar, int8_t len, void* context, UErrorCode expectedError)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    UConverter *conv = 0;
+    UChar   junkout[NEW_MAX_BUFFER]; /* FIX */
+    int32_t junokout[NEW_MAX_BUFFER]; /* FIX */
+    const uint8_t *src;
+    const uint8_t *realSourceEnd;
+    const uint8_t *srcLimit;
+    UChar *targ;
+    UChar *end;
+    int32_t *offs;
+    int i;
+    UBool   checkOffsets = TRUE;
+    char junk[9999];
+    char offset_str[9999];
+    UChar *p;
+    UConverterToUCallback oldAction = NULL;
+    void* oldContext = NULL;
+
+    int32_t   realBufferSize;
+    UChar *realBufferEnd;
+
+
+    for(i=0;i<NEW_MAX_BUFFER;i++)
+        junkout[i] = 0xFFFE;
+
+    for(i=0;i<NEW_MAX_BUFFER;i++)
+        junokout[i] = -1;
+
+    setNuConvTestName(codepage, "TO");
+
+    log_verbose("\n=========  %s\n", gNuConvTestName);
+
+    conv = ucnv_open(codepage, &status);
+    if(U_FAILURE(status))
+    {
+        log_err("Couldn't open converter %s\n",gNuConvTestName);
+        return FALSE;
+    }
+
+    log_verbose("Converter opened..\n");
+
+    src = source;
+    targ = junkout;
+    offs = junokout;
+
+    realBufferSize = (sizeof(junkout)/sizeof(junkout[0]));
+    realBufferEnd = junkout + realBufferSize;
+    realSourceEnd = src + sourcelen;
+    /*----setting the callback routine----*/
+    ucnv_setToUCallBack (conv, callback, context, &oldAction, &oldContext, &status);
+    if (U_FAILURE(status)) 
+    { 
+        log_err("FAILURE in setting the callback Function! %s\n", myErrorName(status));  
+    }
+    /*-------------------------------------*/
+    /*setting the subChar*/
+    if(mySubChar != NULL){
+        ucnv_setSubstChars(conv, mySubChar, len, &status);
+        if (U_FAILURE(status))  { 
+            log_err("FAILURE in setting the callback Function! %s\n", myErrorName(status)); 
+        }
+    }
+    /*------------*/
+
+
+    if ( gOutBufferSize != realBufferSize )
+        checkOffsets = FALSE;
+
+    if( gInBufferSize != NEW_MAX_BUFFER )
+        checkOffsets = FALSE;
+
+    do
+    {
+        end = nct_min( targ + gOutBufferSize, realBufferEnd);
+        srcLimit = nct_min(realSourceEnd, src + gInBufferSize);
+
+        if(targ == realBufferEnd)
+        {
+            log_err("Error, the end would overflow the real output buffer while about to call toUnicode! tarjey=%08lx %s",targ,gNuConvTestName);
+            return FALSE;
+        }
+        log_verbose("calling toUnicode @ %08lx to %08lx\n", targ,end);
+
+
+
+        status = U_ZERO_ERROR;
+
+        ucnv_toUnicode (conv,
+                &targ,
+                end,
+                (const char **)&src,
+                (const char *)srcLimit,
+                checkOffsets ? offs : NULL,
+                (UBool)(srcLimit == realSourceEnd), /* flush if we're at the end of the source data */
+                &status);
+    } while ( (status == U_BUFFER_OVERFLOW_ERROR) || (U_SUCCESS(status) && (srcLimit < realSourceEnd)) ); /* while we just need another buffer */
+
+    /* allow failure codes for the stop callback */
+    if(U_FAILURE(status) && status!=expectedError)
     {
         log_err("Problem doing toUnicode, errcode %s %s\n", myErrorName(status), gNuConvTestName);
         return FALSE;

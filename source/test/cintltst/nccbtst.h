@@ -48,6 +48,13 @@ UBool testConvertToUnicode( const uint8_t *source, int sourcelen, const UChar *e
                const char *codepage, UConverterToUCallback callback, const int32_t *expectOffsets,
                const char *mySubChar, int8_t len);
 
+UBool testConvertFromUnicodeWithContext(const UChar *source, int sourceLen,  const uint8_t *expect, int expectLen, 
+                const char *codepage, UConverterFromUCallback callback , const int32_t *expectOffsets, 
+                const char *mySubChar, int8_t len, void* context, UErrorCode expectedError);
+
+UBool testConvertToUnicodeWithContext( const uint8_t *source, int sourcelen, const UChar *expect, int expectlen, 
+               const char *codepage, UConverterToUCallback callback, const int32_t *expectOffsets,
+               const char *mySubChar, int8_t len, void* context, UErrorCode expectedError);
 
 static void printSeq(const uint8_t* a, int len);
 static void printUSeq(const UChar* a, int len);
