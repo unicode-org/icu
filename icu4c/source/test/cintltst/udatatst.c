@@ -56,13 +56,16 @@ void TestUDataOpen(){
    const char* type="dat";
    
    char* path=malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("icudata") +1 ) );
+   char* testPath=malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("base") +1 ) );
+
    strcat(strcpy(path, u_getDataDirectory()), "icudata");
+   strcat(strcpy(testPath, u_getDataDirectory()), "base");
 
     
    log_verbose("Testing udata_open()\n");
-   result=udata_open(NULL, type, name, &status);
+   result=udata_open(testPath, type, name, &status);
    if(U_FAILURE(status)){
- 	  log_err("FAIL: udata_open() failed for path = %s, name=%s, type=%s, \n errorcode=%s\n", u_getDataDirectory(), name, type, myErrorName(status));
+ 	  log_err("FAIL: udata_open() failed for path = %s, name=%s, type=%s, \n errorcode=%s\n", testPath, name, type, myErrorName(status));
    } else {
 	   log_verbose("PASS: udata_open worked\n");
 	   udata_close(result);
@@ -98,6 +101,7 @@ void TestUDataOpen(){
 	}
 
 	free(path);
+	free(testPath);
 }
 static UBool
 isAcceptable1(void *context,
@@ -191,6 +195,10 @@ void TestUDataOpenChoiceDemo1() {
 	};
     char* type="dat";
    
+   char* testPath=malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("base") +1 ) );
+
+   strcat(strcpy(testPath, u_getDataDirectory()), "base");
+
     result=udata_openChoice(NULL, type, name[0], isAcceptable1, NULL, &status);
     if(U_FAILURE(status)){
         log_err("FAIL: udata_openChoice() failed name=%s, type=%s, \n errorcode=%s\n", name[0], type, myErrorName(status));
@@ -212,18 +220,20 @@ void TestUDataOpenChoiceDemo1() {
 		udata_close(result);
 	}
 
-    result=udata_openChoice(NULL, type, name[2], isAcceptable1, NULL, &status);
+    result=udata_openChoice(testPath, type, name[2], isAcceptable1, NULL, &status);
 	if(U_FAILURE(status)){
 		status=U_ZERO_ERROR;
-		result=udata_openChoice(NULL, type, name[2], isAcceptable3, NULL, &status);
+		result=udata_openChoice(testPath, type, name[2], isAcceptable3, NULL, &status);
 		if(U_FAILURE(status)){
-			log_err("FAIL: udata_openChoice() failed name=%s, type=%s, \n errorcode=%s\n", name[2], type, myErrorName(status));
+			log_err("FAIL: udata_openChoice() failed path=%s name=%s, type=%s, \n errorcode=%s\n", testPath, name[2], type, myErrorName(status));
 		}
     }
     
 	if(U_SUCCESS(status)){
 		udata_close(result);
 	}
+
+	free(testPath);
 
 }
 static UBool
@@ -258,19 +268,18 @@ void TestUDataOpenChoiceDemo2() {
     const char* name="test";
     char* type="dat";
 
-	const char* base[]={
-		"base_dat",
-		"base_test_dat",
-		 NULL,
+      const char* base[]={  /* these are the common base names to use for the test */
+	"base",   /* corresponds to something like 'base.dat', 'base.dll', 'libbase.so', etc.. */
+	"base_test"  /* libbase_test.so, libbase_test.a, etc... */
 	};
 	
-	char* path=malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("base[0]") + 1) );
+	char* path=malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen(base[0]) + 1) );
     strcpy(path, u_getDataDirectory());
-	strcat(path, "base[0]");	
+	strcat(path, base[0]);	
 	
 	result=udata_openChoice(path, type, name, isAcceptable, &p, &status);
 	if(U_FAILURE(status)){
-		log_err("failed to load data");
+		log_err("failed to load data at p=%s t=%s n=%s, isAcceptable", path, type, name);
 	}
 	if(U_SUCCESS(status) ) {
 		udata_close(result);
@@ -279,8 +288,8 @@ void TestUDataOpenChoiceDemo2() {
 	
 	p=0;
 	for(i=0;i<sizeof(base)/sizeof(base[0]); i++){
-		path=realloc(path, sizeof(char) * (strlen(u_getDataDirectory()) + strlen("base[i]") +1 ) );
-		strcat(strcpy(path, u_getDataDirectory()), "base[i]");
+		path=realloc(path, sizeof(char) * (strlen(u_getDataDirectory()) + strlen(base[i]) +1 ) );
+		strcat(strcpy(path, u_getDataDirectory()), base[i]);
 		result=udata_openChoice(path, type, name, isAcceptable, &p, &status);
 		if(p<2) {
 			if(U_FAILURE(status) && status==U_INVALID_FORMAT_ERROR){
@@ -334,7 +343,10 @@ void TestUDataGetInfo() {
     const char* type="dat";
     
 	char* path=malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("icudata") +1 ) );
+	char* testPath=malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("base") +1 ) );
+
 	strcat(strcpy(path, u_getDataDirectory()), "icudata");
+	strcat(strcpy(testPath, u_getDataDirectory()), "base");
 
 
     log_verbose("Testing udata_getInfo() for cnvalias.dat\n");
@@ -362,9 +374,9 @@ void TestUDataGetInfo() {
 	
 
     log_verbose("Testing udata_getInfo() for test.dat\n");
-	result=udata_open(NULL, type, name2, &status);
+	result=udata_open(testPath, type, name2, &status);
     if(U_FAILURE(status)) {
-	   log_err("FAIL: udata_open() failed for name2=%s, type=%s, \n errorcode=%s\n", name2, type, myErrorName(status));
+	   log_err("FAIL: udata_open() failed for path=%s name2=%s, type=%s, \n errorcode=%s\n", testPath, name2, type, myErrorName(status));
 	   return;
 	}
 	udata_getInfo(result, &dataInfo);
@@ -384,7 +396,7 @@ void TestUDataGetInfo() {
 			}
 	udata_close(result);
 	free(path);
-	
+	free(testPath);
 }
 
 void TestUDataGetMemory() {
@@ -398,6 +410,10 @@ void TestUDataGetMemory() {
     const char* type="dat";
 
 	const char* name2="test";
+
+   char* testPath=malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("base") +1 ) );
+
+   strcat(strcpy(testPath, u_getDataDirectory()), "base");
 
     log_verbose("Testing udata_getMemory for \"cnvalias.dat()\"\n");
     result=udata_openChoice(NULL, type, name, isAcceptable1, NULL, &status);
@@ -413,9 +429,9 @@ void TestUDataGetMemory() {
 	udata_close(result);
     
     log_verbose("Testing udata_getMemory for \"test.dat\"()\n");
-    result=udata_openChoice(NULL, type, name2, isAcceptable3, NULL, &status);
+    result=udata_openChoice(testPath, type, name2, isAcceptable3, NULL, &status);
     if(U_FAILURE(status)){
-		 log_err("FAIL: udata_openChoice() failed for name=%s, type=%s, \n errorcode=%s\n", name2, type, myErrorName(status));
+		 log_err("FAIL: udata_openChoice() failed for path=%s name=%s, type=%s, \n errorcode=%s\n", testPath, name2, type, myErrorName(status));
          return;
 	}
     intValue=(uint16_t *)udata_getMemory(result);
@@ -424,6 +440,8 @@ void TestUDataGetMemory() {
 		log_err("FAIL: udata_getMemory() failed: intValue :- Expected:2000 Got:%d \n\tstringValue:- Expected:YEAR Got:%s\n", *intValue, (intValue+1));
     
    	 udata_close(result);
+
+	 free(testPath);
  }
 
 
