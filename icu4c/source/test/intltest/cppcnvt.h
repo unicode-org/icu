@@ -5,9 +5,10 @@
  ********************************************************************/
 
 #include "intltest.h"
-#include "unicode/convert.h"
 
 #ifdef ICU_UNICODECONVERTER_USE_DEPRECATES
+#include "unicode/convert.h"
+
 /**
  * Test for APIs of CPPUnicodeConverter
  **/

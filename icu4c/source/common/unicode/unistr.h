@@ -42,9 +42,12 @@ U_NAMESPACE_BEGIN
 
 class Locale;               // unicode/locid.h
 class UCharReference;
-class UnicodeConverter;     // unicode/convert.h
 class StringCharacterIterator;
 class BreakIterator;        // unicode/brkiter.h
+
+#ifdef ICU_UNICODECONVERTER_USE_DEPRECATES
+class UnicodeConverter;     // unicode/convert.h
+#endif
 
 /* The <iostream> include has been moved to unicode/ustream.h */
 
@@ -3085,7 +3088,9 @@ private:
     kWritableAlias=0
   };
 
+#ifdef ICU_UNICODECONVERTER_USE_DEPRECATES
   friend class UnicodeConverter;
+#endif
 
   friend class StringCharacterIterator;
   friend class StringThreadTest;

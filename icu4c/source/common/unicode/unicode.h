@@ -1353,6 +1353,10 @@ Unicode::getUnicodeVersion(UVersionInfo versionArray) {
     u_getUnicodeVersion(versionArray);
 }
 U_NAMESPACE_END
+#else
+
+#error "The unicode/unicode.h header is deprecated. Please use the Unicode C API in unicode/uchar.h instead."
+
 #endif /* ICU_UNICODE_CLASS_USE_DEPRECATES */
 
 #endif
