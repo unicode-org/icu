@@ -1,0 +1,36 @@
+// *******************************************************************************
+// *
+// *   Copyright (C) 2001-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+tt_TA{
+
+ LocaleID{ "0444"}
+ ShortCountry{
+  "TAT"
+ }
+ CurrencyElements{
+  "\u0440.",
+  "RUR",
+  ","
+ }
+
+ DateTimePatterns{
+  "h:mm:ss a",
+  "H:mm:ss",
+  "H:mm:ss",
+  "H:mm:ss",
+  "d MMMM yyyy",
+  "d MMMM yyyy",
+  "dd.MM.yyyy",
+  "dd.MM.yyyy",
+  "{1} {0}",
+ }
+
+ DateTimeElements{
+  "0",
+  "1"
+ }
+}

@@ -1,0 +1,11 @@
+== Copyright (c) 2000 IBM, Inc. All rights reserved. ==
+
+
+This directory contains the intermediate, generated ICU data. For example,
+.res, .cnv, and some .dat files end up here.
+
+It is also used as a temporary directory by some ICU tools build processes.
+
+You should NOT set your ICU_DATA directory to point here. Instead,
+point it to ".." (that is, icu/source/data).
+
