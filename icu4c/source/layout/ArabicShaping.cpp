@@ -64,25 +64,25 @@ ArabicShaping::ShapeType ArabicShaping::getShapeType(LEUnicode c)
     return ST_NOSHAPE_NONE;
 }
 
-const LETag isolFeatureTag = LE_ISOL_FEATURE_TAG;
-const LETag initFeatureTag = LE_INIT_FEATURE_TAG;
-const LETag mediFeatureTag = LE_MEDI_FEATURE_TAG;
-const LETag finaFeatureTag = LE_FINA_FEATURE_TAG;
-const LETag ligaFeatureTag = LE_LIGA_FEATURE_TAG;
-const LETag msetFeatureTag = LE_MSET_FEATURE_TAG;
-const LETag markFeatureTag = LE_MARK_FEATURE_TAG;
-const LETag ccmpFeatureTag = LE_CCMP_FEATURE_TAG;
-const LETag rligFeatureTag = LE_RLIG_FEATURE_TAG;
-const LETag caltFeatureTag = LE_CALT_FEATURE_TAG;
-const LETag dligFeatureTag = LE_DLIG_FEATURE_TAG;
-const LETag cswhFeatureTag = LE_CSWH_FEATURE_TAG;
-const LETag cursFeatureTag = LE_CURS_FEATURE_TAG;
-const LETag kernFeatureTag = LE_KERN_FEATURE_TAG;
-const LETag mkmkFeatureTag = LE_MKMK_FEATURE_TAG;
+static const LETag isolFeatureTag = LE_ISOL_FEATURE_TAG;
+static const LETag initFeatureTag = LE_INIT_FEATURE_TAG;
+static const LETag mediFeatureTag = LE_MEDI_FEATURE_TAG;
+static const LETag finaFeatureTag = LE_FINA_FEATURE_TAG;
+static const LETag ligaFeatureTag = LE_LIGA_FEATURE_TAG;
+static const LETag msetFeatureTag = LE_MSET_FEATURE_TAG;
+static const LETag markFeatureTag = LE_MARK_FEATURE_TAG;
+static const LETag ccmpFeatureTag = LE_CCMP_FEATURE_TAG;
+static const LETag rligFeatureTag = LE_RLIG_FEATURE_TAG;
+static const LETag caltFeatureTag = LE_CALT_FEATURE_TAG;
+static const LETag dligFeatureTag = LE_DLIG_FEATURE_TAG;
+static const LETag cswhFeatureTag = LE_CSWH_FEATURE_TAG;
+static const LETag cursFeatureTag = LE_CURS_FEATURE_TAG;
+static const LETag kernFeatureTag = LE_KERN_FEATURE_TAG;
+static const LETag mkmkFeatureTag = LE_MKMK_FEATURE_TAG;
 
-const LETag emptyTag       = 0x00000000; // ''
+static const LETag emptyTag       = 0x00000000; // ''
 
-const LETag featureOrder[] = 
+static const LETag featureOrder[] = 
 {
     ccmpFeatureTag, isolFeatureTag, finaFeatureTag, mediFeatureTag, initFeatureTag, rligFeatureTag,
     caltFeatureTag, ligaFeatureTag, dligFeatureTag, cswhFeatureTag, msetFeatureTag, cursFeatureTag,
