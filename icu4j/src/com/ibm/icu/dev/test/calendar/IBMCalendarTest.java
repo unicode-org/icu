@@ -4,8 +4,8 @@
  * others. All Rights Reserved.
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/IBMCalendarTest.java,v $ 
- * $Date: 2002/12/18 00:44:39 $ 
- * $Revision: 1.12 $
+ * $Date: 2003/02/18 21:11:22 $ 
+ * $Revision: 1.13 $
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
@@ -138,6 +138,11 @@ public class IBMCalendarTest extends CalendarTest {
      * { era, year, gregorianYear, month, dayOfMonth, ... }
      */
     void quasiGregorianTest(Calendar cal, int[] data) {
+        // As of JDK 1.4.1_01, using the Sun JDK GregorianCalendar as
+        // a reference throws us off by one hour.  This is most likely
+        // due to the JDK 1.4 incorporation of historical time zones.
+        //java.util.Calendar grego = java.util.Calendar.getInstance();
+        Calendar grego = Calendar.getInstance();
         for (int i=0; i<data.length; ) {
             int era = data[i++];
             int year = data[i++];
@@ -145,10 +150,9 @@ public class IBMCalendarTest extends CalendarTest {
             int month = data[i++];
             int dayOfMonth = data[i++];
 
-            java.util.Calendar tempcal = java.util.Calendar.getInstance();
-            tempcal.clear();
-            tempcal.set(gregorianYear, month, dayOfMonth);
-            Date D = tempcal.getTime();
+            grego.clear();
+            grego.set(gregorianYear, month, dayOfMonth);
+            Date D = grego.getTime();
 
             cal.clear();
             cal.set(Calendar.ERA, era);
@@ -256,6 +260,17 @@ public class IBMCalendarTest extends CalendarTest {
      * behaves like GregorianCalendar.
      */
     public void TestJapanese() {
+        // First make sure this test works for GregorianCalendar
+        int[] control = {
+            GregorianCalendar.AD, 1868, 1868, Calendar.SEPTEMBER, 8,
+            GregorianCalendar.AD, 1868, 1868, Calendar.SEPTEMBER, 9,
+            GregorianCalendar.AD, 1869, 1869, Calendar.JUNE, 4,
+            GregorianCalendar.AD, 1912, 1912, Calendar.JULY, 29,
+            GregorianCalendar.AD, 1912, 1912, Calendar.JULY, 30,
+            GregorianCalendar.AD, 1912, 1912, Calendar.AUGUST, 1,
+        };
+        quasiGregorianTest(new GregorianCalendar(), control);
+
         int[] data = {
             JapaneseCalendar.MEIJI, 1, 1868, Calendar.SEPTEMBER, 8,
             JapaneseCalendar.MEIJI, 1, 1868, Calendar.SEPTEMBER, 9,
