@@ -5,11 +5,13 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteHTMLCollation.java,v $ 
-* $Date: 2002/05/31 01:41:03 $ 
-* $Revision: 1.7 $
+* $Date: 2002/06/15 02:47:12 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
+
+WARNING: OLD FILE. DON"T COMPILE.
 
 package com.ibm.text.UCA;
 
@@ -21,6 +23,7 @@ import com.ibm.text.UCD.*;
 import com.ibm.text.utility.*;
 
 public class WriteHTMLCollation implements UCD_Types {
+
     public static final String copyright = 
       "Copyright (C) 2000, IBM Corp. and others. All Rights Reserved.";
       
@@ -74,8 +77,8 @@ public class WriteHTMLCollation implements UCD_Types {
         */
         
         // DO FOLLOWING
-        writeConformance("CollationTest_NON_IGNORABLE.txt", UCA.NON_IGNORABLE);
-        writeConformance("CollationTest_SHIFTED.txt", UCA.SHIFTED);
+        //writeConformance("CollationTest_NON_IGNORABLE.txt", UCA.NON_IGNORABLE);
+        //writeConformance("CollationTest_SHIFTED.txt", UCA.SHIFTED);
        
         // SKIP BELOW
         if (true) return;
@@ -178,7 +181,7 @@ public class WriteHTMLCollation implements UCD_Types {
         }
         return result.toString();
     }
-    
+    /*
     static void writeConformance(String filename, byte option)  throws IOException {
         PrintWriter log = Utility.openPrintWriter(filename);
 
@@ -193,6 +196,7 @@ public class WriteHTMLCollation implements UCD_Types {
             addStringX(c, option);
         }
         
+
         Hashtable multiTable = collator.getContracting();
         Enumeration enum = multiTable.keys();
         while (enum.hasMoreElements()) {
@@ -248,7 +252,8 @@ public class WriteHTMLCollation implements UCD_Types {
         sortedD.clear();
         System.out.println("Done");
     }
-
+    */
+    
     static void addStringX(int x, byte option) {
         addStringX(String.valueOf((char)x), option);
     }
@@ -382,7 +387,7 @@ public class WriteHTMLCollation implements UCD_Types {
             
             if (!arraysMatch(kenCes, kenLen, markCes, markLen)) {
                 int kenCLen = fixCompatibilityCE(s, true, kenComp, true);
-                String comp = collator.ceToString(kenComp, kenCLen);
+                String comp = CEList.toString(kenComp, kenCLen);
                 
                 if (arraysMatch(kenCes, kenLen, kenComp, kenCLen)) {
                     forLater.put((char)(COMPRESSED | type) + s, comp);
@@ -422,10 +427,10 @@ public class WriteHTMLCollation implements UCD_Types {
             String comp = (String)forLater.get(key);
             
             int kenLen = collator.getCEs(s, decompType, kenCes);
-            String kenStr = collator.ceToString(kenCes, kenLen);
+            String kenStr = CEList.toString(kenCes, kenLen);
             
             int markLen = fixCompatibilityCE(s, true, markCes, false);
-            String markStr = collator.ceToString(markCes, markLen);
+            String markStr = CEList.toString(markCes, markLen);
             
             if ((type & COMPRESSED) != 0) {
                 log.println("COMPRESSED #" + (++count) + ": " + ucd.getCodeAndName(s));
@@ -444,7 +449,7 @@ public class WriteHTMLCollation implements UCD_Types {
                     log.println("NFD       : " + ucd.getCodeAndName(nfdstr));
                 }
                 //kenCLen = collator.getCEs(decomp, true, kenComp);
-                //log.println("decomp ce: " + collator.ceToString(kenComp, kenCLen));                   
+                //log.println("decomp ce: " + CEList.toString(kenComp, kenCLen));                   
             }
             log.println();
         }
@@ -569,7 +574,7 @@ public class WriteHTMLCollation implements UCD_Types {
         
         {
         int len2 = collator.getCEs("\u2474", true, ces);
-        System.out.println(UCA.ceToString(ces, len2));
+        System.out.println(CEList.toString(ces, len2));
 
         String a = collator.getSortKey("a");
         String b = collator.getSortKey("A");
@@ -640,7 +645,7 @@ public class WriteHTMLCollation implements UCD_Types {
             else if (collator.getTertiary(ce) != collator.getTertiary(lastCE)) relation = "    <<<";
             lastCE = ce;
             if (chr.equals("\u2474")) {
-                System.out.println(UCA.ceToString(ces, len));
+                System.out.println(CEList.toString(ces, len));
             }
             
             // check expansions
@@ -653,7 +658,7 @@ public class WriteHTMLCollation implements UCD_Types {
                     int probe = ces[i];
                     String s = getFromBackMap(backMap, probe);
                     if (s == null) {
-                        System.out.println("No back map for " + collator.ceToString(ces[i])
+                        System.out.println("No back map for " + CEList.toString(ces[i])
                             + ": " + ucd.getCodeAndName(chr));
                         expansion += "[" + Utility.hex(ces[i]) + "]";
                     } else {
@@ -943,7 +948,7 @@ public class WriteHTMLCollation implements UCD_Types {
                 }
                 if (sampleEq[sec] == null) sampleEq[sec] = chr;
                 if (sampleEq[ter] == null) sampleEq[ter] = chr;
-                oldStr.append(UCA.ceToString(ces[q]));// + "," + Integer.toString(ces[q],16);
+                oldStr.append(CEList.toString(ces[q]));// + "," + Integer.toString(ces[q],16);
                 int np = primaryDelta[UCA.getPrimary(ces[q])];
                 hexBytes(np, newPrimary);
                 hexBytes(fixSecondary(UCA.getSecondary(ces[q])), newSecondary);
@@ -968,7 +973,7 @@ public class WriteHTMLCollation implements UCD_Types {
             }
             if (nonePrinted) {
                 log.print("[,,]");
-                oldStr.append(UCA.ceToString(0));
+                oldStr.append(CEList.toString(0));
             }
             log.println("    # " + oldStr + " # " + ucd.getName(chr.charAt(0)));
             lastChr = chr;
@@ -1017,7 +1022,7 @@ public class WriteHTMLCollation implements UCD_Types {
             summary.print("# " + Utility.hex(i) + ": (" + Utility.hex(newval) + ") "
                 + Utility.hex(sampleEq[i]) + " ");
             for (int q = 0; q < len; ++q) {
-                summary.print(UCA.ceToString(ces[q]));
+                summary.print(CEList.toString(ces[q]));
             }
             summary.println(" " + ucd.getName(sampleEq[i]));
         }
@@ -1438,7 +1443,7 @@ public class WriteHTMLCollation implements UCD_Types {
         
         for (int i = 0; i <= 0xFFFF; ++i) {
             char c = (char)i;
-            if (EXCLUDE_UNSUPPORTED && !collator.found.get(c)) continue;
+            if (EXCLUDE_UNSUPPORTED && !collator.found.contains(c)) continue;
             if (0xD800 <= i && i <= 0xF8FF) continue; // skip surrogates and private use
             //if (0xA000 <= c && c <= 0xA48F) continue; // skip YI
             addString(String.valueOf(c), option);

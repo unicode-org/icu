@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2002/06/13 21:14:05 $
-* $Revision: 1.13 $
+* $Date: 2002/06/15 02:47:13 $
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -146,7 +146,7 @@ public final class UCD implements UCD_Types {
      * Get the character names for the code points in a string, separated by ", "
      */
     public String getName(String s, byte style) {
-        if (s.length() == 1) return get(s.charAt(0), true).name;
+        if (s.length() == 1) return getName(s.charAt(0), style);
         StringBuffer result = new StringBuffer();
         int cp;
         for (int i = 0; i < s.length(); i += UTF32.count16(cp)) {
@@ -182,15 +182,15 @@ public final class UCD implements UCD_Types {
     /**
      * Get the name and number (U+xxxx NAME) for a code point
      */
-    public String getCodeAndName(int codePoint) {
-        return getCode(codePoint) + " " + getName(codePoint);
+    public String getCodeAndName(int codePoint, byte type) {
+        return getCode(codePoint) + " " + getName(codePoint, type);
     }
 
     /**
      * Get the name and number (U+xxxx NAME) for the code points in a string,
      * separated by ", "
      */
-    public String getCodeAndName(String s) {
+    public String getCodeAndName(String s, byte type) {
         if (s == null || s.length() == 0) return "NULL";
         if (s.length() == 1) return getCodeAndName(s.charAt(0)); // fast path
         StringBuffer result = new StringBuffer();
@@ -201,6 +201,20 @@ public final class UCD implements UCD_Types {
             result.append(getCodeAndName(cp));
         }
         return result.toString();
+    }
+
+    /**
+     * Get the name and number (U+xxxx NAME) for a code point
+     */
+    public String getCodeAndName(int codePoint) {
+        return getCodeAndName(codePoint, NORMAL);
+    }
+
+    /**
+     * Get the name and number (U+xxxx NAME) for a code point
+     */
+    public String getCodeAndName(String s) {
+        return getCodeAndName(s, NORMAL);
     }
 
     /**
@@ -990,10 +1004,20 @@ to guarantee identifier closure.
             result = getRaw(codePoint);
             if (result == null) {
                 result = UData.UNASSIGNED;
-                if (fixStrings) result.name = "<unassigned-" + Utility.hex(codePoint, 4) + ">";
+                result.name = null; // clean this up, since we reuse UNASSIGNED
+                result.shortName = null;
+                if (fixStrings) {
+                    result.name = "<unassigned-" + Utility.hex(codePoint, 4) + ">";
+                }
             }
-            if (result.shortName != null && result.shortName.length() == 0) {
-                result.shortName = Utility.replace(result.name, UCD_Names.NAME_ABBREVIATIONS);
+            if (fixStrings) {
+                if (result.name == null) {
+                    result.name = "<unassigned-" + Utility.hex(codePoint, 4) + ">";
+                    System.out.println("Warning: fixing name for " + result.name);
+                }
+                if (result.shortName == null) {
+                    result.shortName = Utility.replace(result.name, UCD_Names.NAME_ABBREVIATIONS);
+                }
             }
             return result;
           case 0x3400: // CJK Ideograph Extension A
@@ -1024,6 +1048,8 @@ to guarantee identifier closure.
         result = getRaw(rangeStart);
         if (result == null) {
             result = UData.UNASSIGNED;
+            result.name = null; // clean this up, since we reuse UNASSIGNED
+            result.shortName = null;
             if (fixStrings) {
                 result.name = "<reserved-" + Utility.hex(codePoint, 4) + ">";
                 result.shortName = Utility.replace(result.name, UCD_Names.NAME_ABBREVIATIONS);
@@ -1045,6 +1071,32 @@ to guarantee identifier closure.
             result.decompositionType = CANONICAL;
         }
         return result;
+    }
+    
+    // Neither Mapped nor Composite CJK: [\u3400-\u4DB5\u4E00-\u9FA5\U00020000-\U0002A6D6]
+    
+    public static final boolean isCJK_AB(int bigChar) {
+        return (CJK_A_BASE <= bigChar && bigChar < CJK_A_LIMIT
+             || CJK_B_BASE <= bigChar && bigChar < CJK_B_LIMIT);
+    }
+    
+    public static boolean isCJK_BASE(int cp) {
+        return (CJK_BASE <= cp && cp < CJK_LIMIT 
+        || cp == 0xFA0E	// compat characters that don't decompose.
+        || cp == 0xFA0F
+        || cp == 0xFA11
+        || cp == 0xFA13
+        || cp == 0xFA14
+        || cp == 0xFA1F
+        || cp == 0xFA21
+        || cp == 0xFA23
+        || cp == 0xFA24
+        || cp == 0xFA27
+        || cp == 0xFA28
+        || cp == 0xFA29
+        || cp == 0xFA2E
+        || cp == 0xFA2F
+        );
     }
     
     // Hangul constants
@@ -1108,7 +1160,7 @@ to guarantee identifier closure.
         return 0xFFFF; // no composition
     }
     
-    static boolean isHangulSyllable(int char1) {
+    static public boolean isHangulSyllable(int char1) {
         return SBase <= char1 && char1 < SLimit;
     }
 

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2002/06/13 21:14:05 $
-* $Revision: 1.15 $
+* $Date: 2002/06/15 02:47:14 $
+* $Revision: 1.16 $
 *
 *******************************************************************************
 */
@@ -63,6 +63,7 @@ public final class Main implements UCD_Types {
             else if (arg.equalsIgnoreCase("diffIgnorable")) VerifyUCD.diffIgnorable();
             else if (arg.equalsIgnoreCase("generateXML")) VerifyUCD.generateXML();
             else if (arg.equalsIgnoreCase("checkSpeed")) VerifyUCD.checkSpeed();
+            else if (arg.equalsIgnoreCase("onetime")) VerifyUCD.oneTime();
             else if (arg.equalsIgnoreCase("verifyNormalizationStability")) VerifyUCD.verifyNormalizationStability();
             
             else if (arg.equalsIgnoreCase("definitionTransliterator")) GenerateHanTransliterator.main(0);

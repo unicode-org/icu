@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2002/06/13 21:14:05 $ 
-* $Revision: 1.18 $
+* $Date: 2002/06/15 02:47:12 $ 
+* $Revision: 1.19 $
 *
 *******************************************************************************
 */
@@ -31,9 +31,12 @@ import com.ibm.text.UCD.UCD_Types;
 import com.ibm.text.utility.*;
 import com.ibm.text.UCD.Normalizer;
 
-public class WriteCollationData implements UCD_Types {
+public class WriteCollationData implements UCD_Types, UCA_Types {
 	
 	static final boolean DEBUG = false;
+	static final boolean DEBUG_SHOW_ITERATION = true;
+	
+	
 	
     public static final String copyright = 
       "Copyright (C) 2000, IBM Corp. and others. All Rights Reserved.";
@@ -289,7 +292,21 @@ public class WriteCollationData implements UCD_Types {
     
     
     static void writeConformance(String filename, byte option, boolean shortPrint)  throws IOException {
-        UCD ucd30 = UCD.make("3.0.0");
+        //UCD ucd30 = UCD.make("3.0.0");
+        
+/*
+U+01D5 LATIN CAPITAL LETTER U WITH DIAERESIS AND MACRON
+ => U+00DC LATIN CAPITAL LETTER U WITH DIAERESIS, U+0304 COMBINING MACRON
+*/
+        String[] testList = {"\uF934", "U", "U\u0308", "\u00DC", "\u00DC\u0304", "U\u0308\u0304"};
+        for (int jj = 0; jj < testList.length; ++jj) {
+            String t = testList[jj];
+            System.out.println(ucd.getCodeAndName(t));
+            String test = collator.getSortKey(t, UCA.NON_IGNORABLE);
+            System.out.println("Decomp: " + collator.toString(test));
+            test = collator.getSortKey(t, UCA.NON_IGNORABLE, false);
+            System.out.println("No Dec: " + collator.toString(test));
+        }
         
         PrintWriter log = Utility.openPrintWriter(filename + (shortPrint ? "_SHORT" : "") + ".txt", true, false);
         if (!shortPrint) log.write('\uFEFF');
@@ -297,9 +314,39 @@ public class WriteCollationData implements UCD_Types {
         System.out.println("Sorting");
         int counter = 0;
         
-        for (int i = 0; i <= 0x10FFFF; ++i) {
+        UCA.UCAContents cc = collator.getContents(UCA.FIXED_CE, null);
+        cc.enableSamples();
+        UnicodeSet found2 = new UnicodeSet();
+        
+        while (true) {
+            String s = cc.next();
+            if (s == null) break;
+            
+            found2.addAll(s);
+            
+            if (DEBUG_SHOW_ITERATION) {
+                int cp = UTF16.charAt(s, 0);
+                if (cp == 0x220 || !ucd.isAssigned(cp) || ucd.isCJK_BASE(cp)) {
+                    System.out.println(ucd.getCodeAndName(s));
+                }
+            }
             Utility.dot(counter++);
-            if (!ucd.isRepresented(i)) continue;
+            addStringX(s, option);
+            // TODO: add other accents with Cyrillic
+        }
+        
+        UnicodeSet found = collator.found;
+        if (!found2.containsAll(found2)) {
+            System.out.println("In both: " + new UnicodeSet(found).retainAll(found2).toPattern(true));
+            System.out.println("In UCA but not iteration: " + new UnicodeSet(found).removeAll(found2).toPattern(true));
+            System.out.println("In iteration but not UCA: " + new UnicodeSet(found2).removeAll(found).toPattern(true));
+            throw new IllegalArgumentException("Inconsistent data");
+            
+        }
+        
+        /*
+        for (int i = 0; i <= 0x10FFFF; ++i) {
+            if (!ucd.isAssigned(i)) continue;
             addStringX(UTF32.valueOf32(i), option);
         }
         
@@ -318,15 +365,6 @@ public class WriteCollationData implements UCD_Types {
             addStringX(s, option);
         }
         
-        for (int i = 0; ; ++i) { // add first unallocated character
-            if (!ucd.isAssigned(i)) {
-                String s = UTF32.valueOf32(i);
-                Utility.fixDot();
-                System.out.println("Adding: " + Utility.hex(s));
-                addStringX(s, option);
-                break;
-            }
-        }
         
         
         for (int i = 0; i < extraConformanceRanges.length; ++i) {
@@ -343,6 +381,7 @@ public class WriteCollationData implements UCD_Types {
             addStringX(end-1, option);
             addStringX(end, option);
         }
+        */
         
         Utility.fixDot();
         System.out.println("Total: " + sortedD.size());
@@ -364,12 +403,12 @@ public class WriteCollationData implements UCD_Types {
             //String status = key.equals(lastKey) ? "*" : "";
             //lastKey = key;
             //log.println(source);
+            char extra = source.charAt(source.length()-1);
             String clipped = source.substring(0, source.length()-1);
-            String stren = source.substring(source.length()-1);
             if (!shortPrint) {
                 log.print(Utility.hex(source));
                 log.print(
-                    ";\t#" + ucd.getName(clipped) + "\t" + UCA.toString(key));
+                    ";\t# " + (extra != LOW_ACCENT ? extra : '.') + " " + ucd.getName(clipped, SHORT) + "\t" + UCA.toString(key));
             } else {
                 log.print(source + "\t" + Utility.hex(clipped));
             }
@@ -384,13 +423,15 @@ public class WriteCollationData implements UCD_Types {
     static void addStringX(int x, byte option) {
         addStringX(UTF32.valueOf32(x), option);
     }
+    
+    static final char LOW_ACCENT = '\u0325';
    
     static void addStringX(String s, byte option) {
         addStringY(s + 'a', option);
         addStringY(s + 'A', option);
         addStringY(s + 'á', option);
         addStringY(s + 'b', option);
-        addStringY(s + '\u0325', option);
+        addStringY(s + LOW_ACCENT, option);
         addStringY(s + '!', option);
     }
     
@@ -527,7 +568,7 @@ public class WriteCollationData implements UCD_Types {
             
             if (!arraysMatch(kenCes, kenLen, markCes, markLen)) {
                 int kenCLen = fixCompatibilityCE(s, true, kenComp, true);
-                String comp = collator.ceToString(kenComp, kenCLen);
+                String comp = CEList.toString(kenComp, kenCLen);
                 
                 if (arraysMatch(kenCes, kenLen, kenComp, kenCLen)) {
                     forLater.put((char)(COMPRESSED | type) + s, comp);
@@ -567,10 +608,10 @@ public class WriteCollationData implements UCD_Types {
             String comp = (String)forLater.get(key);
             
             int kenLen = collator.getCEs(s, decompType, kenCes);
-            String kenStr = collator.ceToString(kenCes, kenLen);
+            String kenStr = CEList.toString(kenCes, kenLen);
             
             int markLen = fixCompatibilityCE(s, true, markCes, false);
-            String markStr = collator.ceToString(markCes, markLen);
+            String markStr = CEList.toString(markCes, markLen);
             
             if ((type & COMPRESSED) != 0) {
                 log.println("COMPRESSED #" + (++count) + ": " + ucd.getCodeAndName(s));
@@ -589,7 +630,7 @@ public class WriteCollationData implements UCD_Types {
                     log.println("NFD       : " + ucd.getCodeAndName(nfd));
                 }
                 //kenCLen = collator.getCEs(decomp, true, kenComp);
-                //log.println("decomp ce: " + collator.ceToString(kenComp, kenCLen));                   
+                //log.println("decomp ce: " + CEList.toString(kenComp, kenCLen));                   
             }
             log.println();
         }
@@ -785,7 +826,7 @@ public class WriteCollationData implements UCD_Types {
             
             if (s.length() > 1) {
                 diLog.println(Utility.hex(s, " ")
-                    + ";\t #" + collator.ceToString(ces, len)
+                    + ";\t #" + CEList.toString(ces, len)
                     + " ( " + s + " )"
                     + " " + ucd.getName(s));
             }
@@ -859,7 +900,7 @@ public class WriteCollationData implements UCD_Types {
                 ccc = UTF32.char32At(s,kk);
                 byte cat = ucd.getCategory(ccc);
                 if (cat == Cf || cat == Cc || cat == Zs || cat == Zl || cat == Zp) {
-                    sortedCodes.add(UCA.ceToString(ces, lenArray[0]) + "\t" + ucd.getCodeAndName(s));
+                    sortedCodes.add(CEList.toString(ces, lenArray[0]) + "\t" + ucd.getCodeAndName(s));
                     break;
                 }
             }
@@ -882,7 +923,7 @@ public class WriteCollationData implements UCD_Types {
                 if (collator.isVariable(ce)) haveMixture |= 1;
                 else haveMixture |= 2;
                 if (haveMixture == 3) {
-                    mixedCEs.add(UCA.ceToString(ces, len) + "\t" + ucd.getCodeAndName(s));
+                    mixedCEs.add(CEList.toString(ces, len) + "\t" + ucd.getCodeAndName(s));
                 }
             }
         }
@@ -1030,7 +1071,7 @@ public class WriteCollationData implements UCD_Types {
                 ccc = UTF32.char32At(s,kk);
                 byte cat = ucd.getCategory(ccc);
                 if (cat == Cf || cat == Cc || cat == Zs || cat == Zl || cat == Zp) {
-                    sortedCodes.add(UCA.ceToString(ces, lenArray[0]) + "\t" + ucd.getCodeAndName(s));
+                    sortedCodes.add(CEList.toString(ces, lenArray[0]) + "\t" + ucd.getCodeAndName(s));
                     break;
                 }
             }
@@ -1053,7 +1094,7 @@ public class WriteCollationData implements UCD_Types {
                 if (collator.isVariable(ce)) haveMixture |= 1;
                 else haveMixture |= 2;
                 if (haveMixture == 3) {
-                    mixedCEs.add(UCA.ceToString(ces, len) + "\t" + ucd.getCodeAndName(s));
+                    mixedCEs.add(CEList.toString(ces, len) + "\t" + ucd.getCodeAndName(s));
                 }
             }
         }
@@ -1130,8 +1171,8 @@ public class WriteCollationData implements UCD_Types {
             + "\t" + head
             //+ "\t" + Utility.hex(oldWeight)
             //+ " => " + Utility.hex(newWeight)
-            + "\t" + collator.ceToString(ces, len)
-            + (doNew ? " => " + collator.ceToString(newCes, newLen) : "")
+            + "\t" + CEList.toString(ces, len)
+            + (doNew ? " => " + CEList.toString(newCes, newLen) : "")
             + "\t( " + src + " )"
             + "\t" + ucd.getName(src)
             );
@@ -1198,7 +1239,7 @@ public class WriteCollationData implements UCD_Types {
         
         if (false) {
         int len2 = collator.getCEs("\u2474", true, ces);
-        System.out.println(UCA.ceToString(ces, len2));
+        System.out.println(CEList.toString(ces, len2));
 
         String a = collator.getSortKey("a");
         String b = collator.getSortKey("A");
@@ -1442,9 +1483,9 @@ F900..FAFF; CJK Compatibility Ideographs
            
             
             if (false) System.out.println(
-                collator.ceToString(lastCE) + " " 
-                + collator.ceToString(ce) + " " 
-                + collator.ceToString(nextCE) + " " 
+                CEList.toString(lastCE) + " " 
+                + CEList.toString(ce) + " " 
+                + CEList.toString(nextCE) + " " 
                 + ucd.getCodeAndName(chr)
                 );
             
@@ -1513,7 +1554,7 @@ F900..FAFF; CJK Compatibility Ideographs
             */
 
             if (chr.equals("\u2F00")) {
-                System.out.println(UCA.ceToString(ces, len));
+                System.out.println(CEList.toString(ces, len));
             }
             
             // There are double-CEs, so we have to know what the length of the first bit is.
@@ -1561,7 +1602,7 @@ F900..FAFF; CJK Compatibility Ideographs
                 if (expansion.length() > 0) log.print(" / " + quoteOperand(expansion));
                 if (option == WITH_NAMES) {
                     log.print("\t# " 
-                        + collator.ceToString(ces, len) + " " 
+                        + CEList.toString(ces, len) + " " 
                         + ucd.getCodeAndName(chr));
                     if (expansion.length() > 0) log.print(" / " + Utility.hex(expansion));
                 }
@@ -1801,7 +1842,7 @@ F900..FAFF; CJK Compatibility Ideographs
                     
                     // we failed completely. Print error message, and bail
                     
-                    System.out.println("No back map for " + collator.ceToString(ces[i])
+                    System.out.println("No back map for " + CEList.toString(ces[i])
                         + " from " + CEList.toString(ces, len));
                     System.out.println("\t" + ucd.getCodeAndName(chr)
                         + " => " + ucd.getCodeAndName(nfkdNew.normalize(chr))
@@ -2126,6 +2167,7 @@ F900..FAFF; CJK Compatibility Ideographs
                 continue;
             }
             canIt.setSource(key);
+            
             boolean first = true;
             while (true) {
                 String s = canIt.next();
@@ -2134,9 +2176,6 @@ F900..FAFF; CJK Compatibility Ideographs
                 if (contentsForCanonicalIteration.contains(s)) continue;
                 if (additionalSet.contains(s)) continue;
                 
-                if (s.equals("\u01EC")) {
-                    System.out.println("01ec");
-                }
                 
                 // Skip anything that is not FCD.
                 if (!NFD.isFCD(s)) continue;
@@ -2234,7 +2273,7 @@ F900..FAFF; CJK Compatibility Ideographs
         log.println("#  - Differs from previous version in that MAX value was introduced at 1F.");
         log.println("#    All tertiary values are shifted down by 1, filling the gap at 7!");
         
-        int firstImplicit = getImplicitPrimary(UCA.CJK_BASE) >>> 24;
+        int firstImplicit = getImplicitPrimary(CJK_BASE) >>> 24;
         int lastImplicit = getImplicitPrimary(0x10FFFF) >>> 24;
         log.println("[FIRST_IMPLICIT= " + Utility.hex(firstImplicit) + "]");
         log.println("[LAST_IMPLICIT= " + Utility.hex(lastImplicit) + "]");
@@ -2285,13 +2324,15 @@ F900..FAFF; CJK Compatibility Ideographs
                 int sec = UCA.getSecondary(ces[q]); 
                 int ter = UCA.getTertiary(ces[q]);
                 
-                oldStr.append(UCA.ceToString(ces[q]));// + "," + Integer.toString(ces[q],16);
+                oldStr.append(CEList.toString(ces[q]));// + "," + Integer.toString(ces[q],16);
                 
                 // special treatment for unsupported!
                 
                 if (UCA.isImplicitLeadPrimary(pri)) {
+                    System.out.println("DEBUG: " + CEList.toString(ces, len) 
+                        + ", Current: " + q + ", " + ucd.getCodeAndName(chr));
                     ++q;
-                    oldStr.append(UCA.ceToString(ces[q]));// + "," + Integer.toString(ces[q],16);
+                    oldStr.append(CEList.toString(ces[q]));// + "," + Integer.toString(ces[q],16);
                 
                     int pri2 = UCA.getPrimary(ces[q]);
                     // get old code point
@@ -2301,7 +2342,7 @@ F900..FAFF; CJK Compatibility Ideographs
                     // double check results!
                     
                     int[] testImplicit = new int[2];
-                    UCA.CodepointToImplicit(cp, testImplicit);
+                    collator.CodepointToImplicit(cp, testImplicit);
                     boolean gotError = pri != testImplicit[0] || pri2 != testImplicit[1];
                     if (gotError) {
                     	System.out.println("ERROR");
@@ -2360,7 +2401,7 @@ F900..FAFF; CJK Compatibility Ideographs
             }
             if (nonePrinted) {
                 log.print("[,,]");
-                oldStr.append(UCA.ceToString(0));
+                oldStr.append(CEList.toString(0));
             }
             longLog.print("    # " + oldStr + " # " + ucd.getName(UTF16.charAt(chr, 0)));
             log.println();
@@ -2386,7 +2427,7 @@ F900..FAFF; CJK Compatibility Ideographs
         
         boolean lastOne = false;
         for (int i = 0; i < 0x10FFFF; ++i) {
-            boolean thisOne = UCA.isCJK(i) || UCA.isCJK_AB(i);
+            boolean thisOne = ucd.isCJK_BASE(i) || ucd.isCJK_AB(i);
             if (thisOne != lastOne) {
                 summary.println("# Implicit Cusp: CJK=" + lastOne + ": " + Utility.hex(i-1) + " => " + Utility.hex(0xFFFFFFFFL & getImplicitPrimary(i-1)));
                 summary.println("# Implicit Cusp: CJK=" + thisOne + ": " + Utility.hex(i) + " => " + Utility.hex(0xFFFFFFFFL & getImplicitPrimary(i)));
@@ -2425,7 +2466,7 @@ F900..FAFF; CJK Compatibility Ideographs
             summary.print("# " + Utility.hex(i) + ": (" + Utility.hex(newval) + ") "
                 + Utility.hex(sampleEq[i]) + " ");
             for (int q = 0; q < len; ++q) {
-                summary.print(UCA.ceToString(ces[q]));
+                summary.print(CEList.toString(ces[q]));
             }
             summary.println(" " + ucd.getName(sampleEq[i]));
         }
@@ -2499,24 +2540,24 @@ F900..FAFF; CJK Compatibility Ideographs
 	*/
 static int swapCJK(int i) {
     	
-	if (i >= UCA.CJK_BASE) {
-		if (i < UCA.CJK_LIMIT)				return i - UCA.CJK_BASE;
+	if (i >= CJK_BASE) {
+		if (i < CJK_LIMIT)				return i - CJK_BASE;
 			
-		if (i < UCA.CJK_COMPAT_USED_BASE)	return i + NON_CJK_OFFSET;
+		if (i < CJK_COMPAT_USED_BASE)	return i + NON_CJK_OFFSET;
     		
-		if (i < UCA.CJK_COMPAT_USED_LIMIT)	return i - UCA.CJK_COMPAT_USED_BASE
-												+ (UCA.CJK_LIMIT - UCA.CJK_BASE);
-		if (i < UCA.CJK_B_BASE)				return i + NON_CJK_OFFSET;
+		if (i < CJK_COMPAT_USED_LIMIT)	return i - CJK_COMPAT_USED_BASE
+												+ (CJK_LIMIT - CJK_BASE);
+		if (i < CJK_B_BASE)				return i + NON_CJK_OFFSET;
     		
-		if (i < UCA.CJK_B_LIMIT)			return i; // non-BMP-CJK
+		if (i < CJK_B_LIMIT)			return i; // non-BMP-CJK
     		
 		return i + NON_CJK_OFFSET;	// non-CJK
 	}
-	if (i < UCA.CJK_A_BASE)					return i + NON_CJK_OFFSET;
+	if (i < CJK_A_BASE)					return i + NON_CJK_OFFSET;
 		
-	if (i < UCA.CJK_A_LIMIT)				return i - UCA.CJK_A_BASE
-												+ (UCA.CJK_LIMIT - UCA.CJK_BASE) 
-												+ (UCA.CJK_COMPAT_USED_LIMIT - UCA.CJK_COMPAT_USED_BASE);
+	if (i < CJK_A_LIMIT)				return i - CJK_A_BASE
+												+ (CJK_LIMIT - CJK_BASE) 
+												+ (CJK_COMPAT_USED_LIMIT - CJK_COMPAT_USED_BASE);
     return i + NON_CJK_OFFSET; // non-CJK
 }
     
@@ -2642,14 +2683,14 @@ static int swapCJK(int i) {
             oldPrimary = newPrimary;
     	}
     	
-        showImplicit("# First CJK", UCA.CJK_BASE);
-        showImplicit("# Last CJK", UCA.CJK_LIMIT-1);
-        showImplicit("# First CJK-compat", UCA.CJK_COMPAT_USED_BASE);
-        showImplicit("# Last CJK-compat", UCA.CJK_COMPAT_USED_LIMIT-1);
-        showImplicit("# First CJK_A", UCA.CJK_A_BASE);
-        showImplicit("# Last CJK_A", UCA.CJK_A_LIMIT-1);
-        showImplicit("# First CJK_B", UCA.CJK_B_BASE);
-        showImplicit("# Last CJK_B", UCA.CJK_B_LIMIT-1);
+        showImplicit("# First CJK", CJK_BASE);
+        showImplicit("# Last CJK", CJK_LIMIT-1);
+        showImplicit("# First CJK-compat", CJK_COMPAT_USED_BASE);
+        showImplicit("# Last CJK-compat", CJK_COMPAT_USED_LIMIT-1);
+        showImplicit("# First CJK_A", CJK_A_BASE);
+        showImplicit("# Last CJK_A", CJK_A_LIMIT-1);
+        showImplicit("# First CJK_B", CJK_B_BASE);
+        showImplicit("# Last CJK_B", CJK_B_LIMIT-1);
         showImplicit("# First Other Implicit", 0);
         showImplicit("# Last Other Implicit", 0x10FFFF);
         
@@ -2667,9 +2708,9 @@ static int swapCJK(int i) {
         		
         		// separate the three groups
         		
-        		if (UCA.isCJK(i) || UCA.CJK_COMPAT_USED_BASE <= i && i < UCA.CJK_COMPAT_USED_LIMIT) {
+        		if (ucd.isCJK_BASE(i) || CJK_COMPAT_USED_BASE <= i && i < CJK_COMPAT_USED_LIMIT) {
         			if (batch != 0) continue;
-        		} else if (UCA.isCJK_AB(i)) {
+        		} else if (ucd.isCJK_AB(i)) {
         			if (batch != 1) continue;
         		} else if (batch != 2) continue;
         		
@@ -2993,7 +3034,7 @@ static int swapCJK(int i) {
          
         for (char ch = 0; ch < 0xFFFF; ++ch) {
             byte type = collator.getCEType(ch);
-            if (type < UCA.FIXED_CE) {
+            if (type < FIXED_CE) {
                 int len = collator.getCEs(String.valueOf(ch), true, ces);
                 int primary = UCA.getPrimary(ces[0]);
                 if (primary < variableHigh) continue;
@@ -3088,36 +3129,22 @@ static int swapCJK(int i) {
         System.out.println("Sorting");
         
         for (int i = 0; i <= 0xFFFF; ++i) {
-            if (EXCLUDE_UNSUPPORTED && !collator.found.get(i)) continue;
+            if (EXCLUDE_UNSUPPORTED && !collator.found.contains(i)) continue;
             if (0xD800 <= i && i <= 0xF8FF) continue; // skip surrogates and private use
             //if (0xA000 <= c && c <= 0xA48F) continue; // skip YI
             addString(UTF32.valueOf32(i), option);
         }
         
-        Hashtable multiTable = collator.getContracting();
-        Enumeration enum = multiTable.keys();
-        while (enum.hasMoreElements()) {
-            addString((String)enum.nextElement(), option);
-        }
+
+        UCA.UCAContents cc = collator.getContents(UCA.FIXED_CE, null);
+        cc.enableSamples();
         
-        for (int i = 0; i < extraConformanceTests.length; ++i) { // put in sample non-characters
-            addString(extraConformanceTests[i], option);
+        while (true) {
+            String s = cc.next();
+            if (s == null) break;
+            addString(s, option);
         }
-        
-        for (int i = 0; i < extraConformanceRanges.length; ++i) {
-            int start = extraConformanceRanges[i][0];
-            int end = extraConformanceRanges[i][1];
-            int increment = ((end - start + 1) / 303) + 1;
-            //System.out.println("Range: " + start + ", " + end + ", " + increment);
-            addString(start, option);
-            for (int j = start+1; j < end-1; j += increment) {
-                addString(j, option);
-                addString(j+1, option);
-            }
-            addString(end-1, option);
-            addString(end, option);
-        }
-        
+                
         System.out.println("Total: " + sortedD.size());
         Iterator it;
         
