@@ -2676,10 +2676,10 @@ TestNumericProperties(void) {
         nv=u_getNumericValue(c);
 
         if(type!=values[i].type) {
-            log_err("UCHAR_NUMERIC_TYPE(U+%04lx)=%d should be %d\n", type, values[i].type);
+            log_err("UCHAR_NUMERIC_TYPE(U+%04lx)=%d should be %d\n", c, type, values[i].type);
         }
-        if(nv!=values[i].numValue) {
-            log_err("u_getNumericValue(U+%04lx)=%g should be %g\n", nv, values[i].numValue);
+        if(uprv_fabs(nv - values[i].numValue) >= 0.000001) {
+            log_err("u_getNumericValue(U+%04lx)=%g should be %g\n", c, nv, values[i].numValue);
         }
     }
 }
