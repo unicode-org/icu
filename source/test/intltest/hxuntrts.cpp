@@ -166,9 +166,12 @@ void HexToUniTransliteratorTest::TestCloneEqual(){
 	}
 	
 	logln("Testing the =operator of the HexToUnicodeTransliterator");
-    HexToUnicodeTransliterator *transdefaultequal=transdefault;
-	HexToUnicodeTransliterator *trans1equal=trans1;
-	HexToUnicodeTransliterator *trans2equal=trans2;
+    HexToUnicodeTransliterator *transdefaultequal=new HexToUnicodeTransliterator();
+    HexToUnicodeTransliterator *trans1equal=new HexToUnicodeTransliterator();
+	HexToUnicodeTransliterator *trans2equal=new HexToUnicodeTransliterator();
+    *transdefaultequal=*transdefault;
+    *trans1equal=*trans1;
+    *trans2equal=*trans2;
 	if(transdefault->toPattern() != transdefaultequal->toPattern()      ||
 		trans1->toPattern() != trans1equal->toPattern()      ||
 		trans2->toPattern() != trans2equal->toPattern()      ||
@@ -215,14 +218,14 @@ void HexToUniTransliteratorTest::TestPattern(){
     
 	/*apply patterns for transdefault*/
 	UnicodeString str("abKf");
-	expectPattern(*transdefault,  pattern1,  "\\U+0061\\U+0062\\U+004B\\U+0066", str);
-	expectPattern(*transdefault,  "\\U##00,", "U61,U62,U4B,U66,", str);
-	expectPattern(*transdefault, defaultpattern, "\\u0061\\u0062\\u004B\\u0066",  str);
-	expectPattern(*trans1, "\\uni0000",  "uni0061uni0062uni004Buni0066",  str);
-	expectPattern(*trans1, "\\\\S-0000-E", "\\S-0061-E\\S-0062-E\\S-004B-E\\S-0066-E",  str);
-	expectPattern(*trans1, "\\u##0000", "\\u##0061\\u##0062", "FAIL");
-	expectPattern(*trans1, "\\*0000",  "*0061*0062*004B*0066",  str); 
-	expectPattern(*trans1, "\\u####", "\\u##0061\\u##0062", "FAIL");
+	expectPattern(*transdefault,  pattern1,  (UnicodeString)"\\U+0061\\U+0062\\U+004B\\U+0066", str);
+	expectPattern(*transdefault,  (UnicodeString)"\\U##00,", (UnicodeString)"U61,U62,U4B,U66,", str);
+	expectPattern(*transdefault, defaultpattern, (UnicodeString)"\\u0061\\u0062\\u004B\\u0066",  str);
+	expectPattern(*trans1, (UnicodeString)"\\uni0000",  (UnicodeString)"uni0061uni0062uni004Buni0066",  str);
+	expectPattern(*trans1, (UnicodeString)"\\\\S-0000-E", (UnicodeString)"\\S-0061-E\\S-0062-E\\S-004B-E\\S-0066-E",  str);
+	expectPattern(*trans1, (UnicodeString)"\\u##0000", (UnicodeString)"\\u##0061\\u##0062", "FAIL");
+	expectPattern(*trans1, (UnicodeString)"\\*0000",  (UnicodeString)"*0061*0062*004B*0066",  str); 
+	expectPattern(*trans1, (UnicodeString)"\\u####", (UnicodeString)"\\u##0061\\u##0062", "FAIL");
 
 	delete trans1;
 	delete transdefault;
@@ -244,7 +247,7 @@ void HexToUniTransliteratorTest::TestSimpleTransliterate(){
 	UnicodeString expected("Hello");
 	trans1->handleTransliterate(rsource, index, FALSE);
 	expectAux(trans1->getID() + ":handleTransliterator ", source + "-->" + rsource, rsource==expected, expected);
-    expect(*trans1, "", "\\U+0048\\U+0065\\U+006C\\U+006C\\U+006F", expected);
+    expect(*trans1, "", (UnicodeString)"\\U+0048\\U+0065\\U+006C\\U+006C\\U+006F", expected);
 	delete trans1;
 
 	HexToUnicodeTransliterator *trans2=new HexToUnicodeTransliterator(new TestHexFilter);
@@ -257,12 +260,12 @@ void HexToUniTransliteratorTest::TestTransliterate(){
     UErrorCode status=U_ZERO_ERROR;
 	UnicodeString Data[]={
 		//pattern, source, index.start, index.limit, index.cursor, expectedResult,
-		"U+##00",    "abU+63", "1", "7", "2",  "abc", 	
-		"\\\\u0000", "a\\u0062c", "1", "7", "1",  "abc", 
-		"Uni0000",   "abUni0063", "1", "9", "2",  "abc", 
-		"U[0000]",   "heU[006C]U[006C]o", "0", "16", "2", "hello", 
-		"prefix-0000-suffix", "aprefix-0062-suffixprefix-0063-suffix", "1", "39", "1", "abc", 
-		"*##00*",    "hell*6F**74**68**65*re",  "1", "20", "4", "hellothere", 
+		(UnicodeString)"U+##00",    (UnicodeString)"abU+63", "1", "7", "2",  (UnicodeString)"abc", 	
+		(UnicodeString)"\\\\u0000", (UnicodeString)"a\\u0062c", "1", "7", "1",  (UnicodeString)"abc", 
+		(UnicodeString)"Uni0000",   (UnicodeString)"abUni0063", "1", "9", "2",  (UnicodeString)"abc", 
+		(UnicodeString)"U[0000]",   (UnicodeString)"heU[006C]U[006C]o", "0", "16", "2", (UnicodeString)"hello", 
+		(UnicodeString)"prefix-0000-suffix", (UnicodeString)"aprefix-0062-suffixprefix-0063-suffix", "1", "39", "1", (UnicodeString)"abc", 
+		(UnicodeString)"*##00*",    (UnicodeString)"hell*6F**74**68**65*re",  "1", "20", "4", (UnicodeString)"hellothere", 
 	
 	};
 	int i;

@@ -15,6 +15,7 @@
 #include "unicode/rbt.h"
 #include "unicode/unifilt.h"
 #include "unicode/cpdtrans.h"
+#include "unicode/nultrans.h"
 #include <string.h>
 #include <stdio.h>
 #include "unicode/rep.h"
@@ -52,6 +53,7 @@ void TransliteratorAPITest::runIndexedTest( int32_t index, UBool exec, char* &na
         case 9: name = "TestKeyboardTransliterator3"; if (exec) TestKeyboardTransliterator3(); break;
 		case 10: name = "TestGetAdoptFilter"; if (exec) TestGetAdoptFilter(); break;
 		case 11: name = "TestClone"; if (exec) TestClone(); break;
+        case 12: name = "TestNullTransliterator"; if (exec) TestNullTransliterator(); break;
                  
         default: name = ""; break; /*needed to end loop*/
     }
@@ -525,6 +527,33 @@ void TransliteratorAPITest::TestKeyboardTransliterator3(){
 
 	delete t;
 }
+void TransliteratorAPITest::TestNullTransliterator(){
+    UnicodeString s("Transliterate using null transliterator");
+    UErrorCode status=U_ZERO_ERROR;
+    NullTransliterator *nullTrans=new NullTransliterator();
+    int32_t transLimit;
+    int32_t start=0;
+    int32_t limit=s.length();
+    UnicodeString replaceable=s;
+    transLimit=nullTrans->transliterate(replaceable, start, limit);
+    if(transLimit != limit){
+        errln("ERROR: NullTransliterator->transliterate() failed");
+    }
+    doTest((UnicodeString)"nulTrans->transliterate", replaceable, s);
+    replaceable.remove();
+    replaceable.append(s);
+    Transliterator::Position index(start, limit, 0);
+    nullTrans->handleTransliterate(replaceable, index, TRUE);
+    if(index.cursor != limit){
+        errln("ERROR: NullTransliterator->handleTransliterate() failed");
+    }
+    doTest((UnicodeString)"NullTransliterator->handleTransliterate", replaceable, s);
+
+    
+}
+    
+
+
 
 /**
  * Used by TestFiltering().

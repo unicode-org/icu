@@ -111,8 +111,10 @@ void JamoToHangTransliteratorTest::TestCloneEqual(){
 		return;
 	}
     
-	JamoHangulTransliterator *trans1equal=trans1;
-	JamoHangulTransliterator *trans2equal=trans2;
+	JamoHangulTransliterator *trans1equal=new JamoHangulTransliterator();
+    JamoHangulTransliterator *trans2equal=new JamoHangulTransliterator();
+    *trans1equal=*trans1;
+    *trans2equal=*trans2;
 	if(trans1equal == 0 || trans2equal==0 ){
 		errln("=Operator failed");
 		delete trans1;
@@ -146,6 +148,8 @@ void JamoToHangTransliteratorTest::TestCloneEqual(){
 
 	delete trans1;
 	delete trans2;
+    delete trans1equal;
+    delete trans2equal;
 }
 
 void JamoToHangTransliteratorTest::TestSimpleTransliterate(){
