@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2003, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.198 2003/10/15 22:56:02 grhoten-oss Exp $
+dnl $Id: configure.in,v 1.199 2003/10/15 23:12:24 grhoten-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -828,7 +828,7 @@ dnl static constructors in C++ libs.  Hack around that here
 dnl by renaming some .c files to .cpp
 case "${host}" in
 	*-*-hpux*) 	
-		if test "$ac_cv_prog_gcc" != yes; then
+		if test "${icu_cv_host_frag}" = "mh-hpux-cc"; then
 			for file in samples/date/date \
 			  samples/cal/cal test/cintltst/cintltst \
 			  tools/makeconv/makeconv tools/genrb/genrb \
