@@ -547,6 +547,7 @@
 #define ucol_assembleTailoringTable ucol_assembleTailoringTable_3_2
 #define ucol_calcSortKey ucol_calcSortKey_3_2
 #define ucol_calcSortKeySimpleTertiary ucol_calcSortKeySimpleTertiary_3_2
+#define ucol_cloneBinary ucol_cloneBinary_3_2
 #define ucol_cloneRuleData ucol_cloneRuleData_3_2
 #define ucol_close ucol_close_3_2
 #define ucol_closeElements ucol_closeElements_3_2
@@ -607,6 +608,7 @@
 #define ucol_normalizeShortDefinitionString ucol_normalizeShortDefinitionString_3_2
 #define ucol_open ucol_open_3_2
 #define ucol_openAvailableLocales ucol_openAvailableLocales_3_2
+#define ucol_openBinary ucol_openBinary_3_2
 #define ucol_openElements ucol_openElements_3_2
 #define ucol_openFromIdentifier ucol_openFromIdentifier_3_2
 #define ucol_openFromShortString ucol_openFromShortString_3_2
@@ -770,6 +772,8 @@
 #define uiter_setString uiter_setString_3_2
 #define uiter_setUTF16BE uiter_setUTF16BE_3_2
 #define uiter_setUTF8 uiter_setUTF8_3_2
+#define uloc_acceptLanguage uloc_acceptLanguage_3_2
+#define uloc_acceptLanguageFromHTTP uloc_acceptLanguageFromHTTP_3_2
 #define uloc_canonicalize uloc_canonicalize_3_2
 #define uloc_countAvailable uloc_countAvailable_3_2
 #define uloc_getAvailable uloc_getAvailable_3_2
@@ -949,6 +953,7 @@
 #define uprv_sortArray uprv_sortArray_3_2
 #define uprv_strCompare uprv_strCompare_3_2
 #define uprv_strdup uprv_strdup_3_2
+#define uprv_strndup uprv_strndup_3_2
 #define uprv_syntaxError uprv_syntaxError_3_2
 #define uprv_timezone uprv_timezone_3_2
 #define uprv_toupper uprv_toupper_3_2
@@ -1126,6 +1131,9 @@
 #define utf8_countTrailBytes utf8_countTrailBytes_3_2
 #define utf8_nextCharSafeBody utf8_nextCharSafeBody_3_2
 #define utf8_prevCharSafeBody utf8_prevCharSafeBody_3_2
+#define utmscale_fromInt64 utmscale_fromInt64_3_2
+#define utmscale_getTimeScaleValue utmscale_getTimeScaleValue_3_2
+#define utmscale_toInt64 utmscale_toInt64_3_2
 #define utrace_cleanup utrace_cleanup_3_2
 #define utrace_data utrace_data_3_2
 #define utrace_entry utrace_entry_3_2
