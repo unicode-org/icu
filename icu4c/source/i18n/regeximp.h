@@ -71,7 +71,7 @@ enum {
      URX_UNUSED        = 15,   
      URX_BACKSLASH_B   = 16,   // Value field:  0:  \b    1:  \B
      URX_BACKSLASH_G   = 17, 
-     URX_BACKSLASH_W   = 18,   // Value field:  0:  \w    1:  \W
+     URX_UNUSED_1      = 18,   // Value field:  0:  \w    1:  \W
      URX_BACKSLASH_X   = 19,
      URX_BACKSLASH_Z   = 20,   // \z   Unconditional end of line.
 
@@ -169,7 +169,7 @@ enum {
         "URX_UNUSED",          \
         "URX_BACKSLASH_B",     \
         "URX_BACKSLASH_G",     \
-        "URX_BACKSLASH_W",     \
+        "URX_UNUSED_1",        \
         "URX_BACKSLASH_X",     \
         "URX_BACKSLASH_Z",     \
         "URX_DOTANY_ALL",      \
@@ -258,6 +258,14 @@ enum StartOfMatch {
     START_LINE,                // Match starts with ^ in multi-line mode.
     START_STRING               // Match starts with a literal string.
 };
+
+#define START_OF_MATCH_STR(v) ((v)==START_NO_INFO? "START_NO_INFO" : \
+                               (v)==START_CHAR?    "START_CHAR"    : \
+                               (v)==START_SET?     "START_SET"     : \
+                               (v)==START_START?   "START_START"   : \
+                               (v)==START_LINE?    "START_LINE"    : \
+                               (v)==START_STRING?  "START_STRING"  : \
+                                                   "ILLEGAL")
     
 U_NAMESPACE_END
 #endif

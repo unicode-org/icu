@@ -69,9 +69,13 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
     fMinMatchLen      = other.fMinMatchLen;
     fMaxMatchLen      = other.fMaxMatchLen;
     fMaxCaptureDigits = other.fMaxCaptureDigits;
-    fStaticSets       = other.fStaticSets;    
+    fStaticSets       = other.fStaticSets; 
+    
     fStartType        = other.fStartType;
-    fStartInfo        = other.fStartInfo;
+    fInitialStringIdx = other.fInitialStringIdx;
+    fInitialStringLen = other.fInitialStringLen;
+    fInitialChars     = new UnicodeSet(*other.fInitialChars);
+    fInitialChar      = other.fInitialChar;
     if (fBadState) {
         return *this;
     }
@@ -123,14 +127,18 @@ void RegexPattern::init() {
     fFrameSize        = 0;
     fDataSize         = 0;
     fStartType        = START_NO_INFO;
-    fStartInfo        = 0;
+    fInitialStringIdx = 0;
+    fInitialStringLen = 0;
+    fInitialChars     = NULL;
+    fInitialChar      = 0;
     
     UErrorCode status=U_ZERO_ERROR;
     // Init of a completely new RegexPattern.
-    fCompiledPat = new UVector32(status);
-    fGroupMap    = new UVector32(status);
-    fSets        = new UVector(status);
-    if (U_FAILURE(status) || fCompiledPat == NULL || fSets == NULL) {
+    fCompiledPat  = new UVector32(status);
+    fGroupMap     = new UVector32(status);
+    fSets         = new UVector(status);
+    fInitialChars = new UnicodeSet;
+    if (U_FAILURE(status) || fCompiledPat == NULL || fSets == NULL || fInitialChars == NULL) {
         fBadState = TRUE;
         return;
     }
@@ -162,6 +170,8 @@ void RegexPattern::zap() {
     fSets = NULL;
     delete fGroupMap;
     fGroupMap = NULL;
+    delete fInitialChars;
+    fInitialChars = NULL;
 }
 
 
@@ -478,7 +488,6 @@ void   RegexPattern::dumpOp(int32_t index) const {
     case URX_JMP:
     case URX_BACKSLASH_B:
     case URX_BACKSLASH_D:
-    case URX_BACKSLASH_W:
     case URX_BACKSLASH_Z:
     case URX_STRING_LEN:
     case URX_CTR_INIT:
@@ -576,6 +585,41 @@ void   RegexPattern::dump() const {
     REGEX_DUMP_DEBUG_PRINTF("Pattern Valid?:     %s\n"  , fBadState? "no" : "yes");
     REGEX_DUMP_DEBUG_PRINTF("   Min Match Length:  %d\n", fMinMatchLen);
     REGEX_DUMP_DEBUG_PRINTF("   Max Match Length:  %d\n", fMaxMatchLen);
+    REGEX_DUMP_DEBUG_PRINTF("   Match Start Type:  %s\n", START_OF_MATCH_STR(fStartType));   
+    if (fStartType == START_STRING) {
+        REGEX_DUMP_DEBUG_PRINTF("    Initial match sting: \"");
+        for (i=fInitialStringIdx; i<fInitialStringIdx+fInitialStringLen; i++) {
+            REGEX_DUMP_DEBUG_PRINTF("%c", fLiteralText[i]);   // TODO:  non-printables, surrogates.
+        }
+
+    } else if (fStartType == START_SET) {
+        int32_t numSetChars = fInitialChars->size();
+        if (numSetChars > 20) {
+            numSetChars = 20;
+        }
+        REGEX_DUMP_DEBUG_PRINTF("     Match First Chars : ");
+        for (i=0; i<numSetChars; i++) {
+            UChar32 c = fInitialChars->charAt(i);
+            if (0x20<c && c <0x7e) { 
+                REGEX_DUMP_DEBUG_PRINTF("%c ", c);
+            } else {
+                REGEX_DUMP_DEBUG_PRINTF("%#x ", c);
+            }
+        }
+        if (numSetChars < fInitialChars->size()) {
+            REGEX_DUMP_DEBUG_PRINTF(" ...");
+        }
+        REGEX_DUMP_DEBUG_PRINTF("\n");
+
+    } else if (fStartType == START_CHAR) {
+        REGEX_DUMP_DEBUG_PRINTF("    First char of Match : ");
+        if (0x20 < fInitialChar && fInitialChar<0x7e) {
+                REGEX_DUMP_DEBUG_PRINTF("%c\n", fInitialChar);
+            } else {
+                REGEX_DUMP_DEBUG_PRINTF("%#x\n", fInitialChar);
+            }
+    }
+
     REGEX_DUMP_DEBUG_PRINTF("\nIndex   Binary     Type             Operand\n"
            "-------------------------------------------\n");
     for (index = 0; index<fCompiledPat->size(); index++) {
@@ -583,6 +627,8 @@ void   RegexPattern::dump() const {
     }
     REGEX_DUMP_DEBUG_PRINTF("\n\n");
 };
+
+
 
 const char RegexPattern::fgClassID = 0;
 
