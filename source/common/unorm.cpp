@@ -32,6 +32,12 @@
 #include "umutex.h"
 #include "unormimp.h"
 
+/*
+ * This new implementation of the normalization code loads its data from
+ * unorm.dat, which is generated with the gennorm tool.
+ * The format of that file is described in unormimp.h .
+ */
+
 /* -------------------------------------------------------------------------- */
 
 /* Korean Hangul and Jamo constants */
@@ -50,14 +56,51 @@ enum {
 };
 
 inline UBool
-isHangulWithoutJamo3(UChar c) {
+isHangulWithoutJamoT(UChar c) {
     c-=HANGUL_BASE;
     return c<HANGUL_COUNT && c%JAMO_T_COUNT==0;
 }
 
+/* norm32 helpers */
+
+/* is this a norm32 with a regular index? */
+inline UBool
+isNorm32Regular(uint32_t norm32) {
+    return norm32<_NORM_MIN_SPECIAL;
+}
+
+/* is this a norm32 with a special index for a lead surrogate? */
+inline UBool
+isNorm32LeadSurrogate(uint32_t norm32) {
+    return _NORM_MIN_SPECIAL<=norm32 && norm32<_NORM_SURROGATES_TOP;
+}
+
+/* is this a norm32 with a special index for a Hangul syllable or a Jamo? */
+inline UBool
+isNorm32HangulOrJamo(uint32_t norm32) {
+    return norm32>=_NORM_MIN_HANGUL;
+}
+
+/*
+ * Given isNorm32HangulOrJamo(),
+ * is this a Hangul syllable or a Jamo?
+ */
+inline UBool
+isHangulJamoNorm32HangulOrJamoL(uint32_t norm32) {
+    return norm32<_NORM_MIN_JAMO_V;
+}
+
+/*
+ * Given norm32 for Jamo V or T,
+ * is this a Jamo V?
+ */
+inline UBool
+isJamoVTNorm32JamoV(uint32_t norm32) {
+    return norm32<_NORM_JAMO_V_TOP;
+}
+
 /* load unorm.dat ----------------------------------------------------------- */
 
-/* for a description of the file format, see icu/source/tools/gennorm/store.c */
 #define DATA_NAME "unorm"
 #define DATA_TYPE "dat"
 
@@ -304,7 +347,7 @@ _getNextCC(const UChar *&p, const UChar *limit, UChar &c, UChar &c2) {
         c2=0;
         return 0;
     } else {
-        if(norm32<_NORM_MIN_SPECIAL || _NORM_SURROGATES_TOP<=norm32) {
+        if(!isNorm32LeadSurrogate(norm32)) {
             c2=0;
         } else {
             /* c is a lead surrogate, get the real norm32 */
@@ -719,7 +762,7 @@ unorm_quickCheck(const UChar *src,
         }
 
         /* check one above-minimum, relevant code unit */
-        if(_NORM_MIN_SPECIAL<=norm32 && norm32<_NORM_SURROGATES_TOP) {
+        if(isNorm32LeadSurrogate(norm32)) {
             /* c is a lead surrogate, get the real norm32 */
             if((limit==NULL || src!=limit) && UTF_IS_SECOND_SURROGATE(c2=*src)) {
                 ++src;
@@ -853,7 +896,7 @@ unorm_decompose(UChar *dest, int32_t destCapacity,
          * in all cases, set cc to the lead and trailCC to the trail combining class
          * ### TODO say that c, c2 is either (BMP, 0) or (lead surr, trail surr) - for optimized single-char bubble sort
          */
-        if(norm32>=_NORM_MIN_HANGUL) {
+        if(isNorm32HangulOrJamo(norm32)) {
             if(ignoreHangul) {
                 c2=0;
                 p=NULL;
@@ -878,7 +921,7 @@ unorm_decompose(UChar *dest, int32_t destCapacity,
                 buffer[0]=(UChar)(JAMO_L_BASE+c/JAMO_V_COUNT);
             }
         } else {
-            if(norm32<_NORM_MIN_SPECIAL) {
+            if(isNorm32Regular(norm32)) {
                 c2=0;
                 length=1;
             } else {
@@ -1080,7 +1123,7 @@ _decomposeFCD(const UChar *src, const UChar *decompLimit, const UChar *limit,
     while(src<decompLimit) {
         c=*src++;
         norm32=_getNorm32(c);
-        if(norm32<_NORM_MIN_SPECIAL) {
+        if(isNorm32Regular(norm32)) {
             c2=0;
             length=1;
         } else {
@@ -1389,9 +1432,9 @@ _getNextCombining(UChar *&p, const UChar *limit,
         cc=0;
         return 0;
     } else {
-        if(norm32<_NORM_MIN_SPECIAL) {
+        if(isNorm32Regular(norm32)) {
             c2=0;
-        } else if(norm32>=_NORM_MIN_HANGUL) {
+        } else if(isNorm32HangulOrJamo(norm32)) {
             /* a compatibility decomposition contained Jamos */
             c2=0;
             combiningIndex=(uint16_t)(0xfff0|(norm32>>_NORM_EXTRA_SHIFT));
@@ -1440,6 +1483,69 @@ _getCombiningIndexFromStarter(UChar c, UChar c2) {
 }
 
 /*
+ * Find the recomposition result for
+ * a forward-combining character
+ * (specified with a pointer to its part of the combiningTable[])
+ * and a backward-combining character
+ * (specified with its combineBackIndex).
+ *
+ * If these two characters combine, then set (value, value2)
+ * with the code unit(s) of the composition character.
+ *
+ * Return value:
+ * 0    do not combine
+ * 1    combine
+ * >1   combine, and the composition is a forward-combining starter
+ *
+ * See unormimp.h for a description of the composition table format.
+ */
+inline uint16_t
+_combine(const uint16_t *table, uint16_t combineBackIndex,
+         uint16_t &value, uint16_t &value2) {
+    uint16_t key;
+
+    /* search in the starter's composition table */
+    for(;;) {
+        key=*table++;
+        if(key>=combineBackIndex) {
+            break;
+        }
+        table+= *table&0x8000 ? 2 : 1;
+    }
+
+    /* mask off bit 15, the last-entry-in-the-list flag */
+    if((key&0x7fff)==combineBackIndex) {
+        /* found! combine! */
+        value=*table;
+
+        /* is the composition a starter that combines forward? */
+        key=(value&0x2000)+1;
+
+        /* get the composition result code point from the variable-length result value */
+        if(value&0x8000) {
+            if(value&0x4000) {
+                /* surrogate pair composition result */
+                value=(value&0x3ff)|0xd800;
+                value2=*(table+1);
+            } else {
+                /* BMP composition result U+2000..U+ffff */
+                value=*(table+1);
+                value2=0;
+            }
+        } else {
+            /* BMP composition result U+0000..U+1fff */
+            value&=0x1fff;
+            value2=0;
+        }
+
+        return key;
+    } else {
+        /* not found */
+        return 0;
+    }
+}
+
+/*
  * recompose the characters in [p..limit[ (which is canonically ordered),
  * adjust limit, and return the trailing cc
  *
@@ -1454,10 +1560,10 @@ _getCombiningIndexFromStarter(UChar c, UChar c2) {
 static uint8_t
 _recompose(UChar *p, UChar *&limit) {
     UChar *starter, *pRemove, *q, *r;
-    const uint16_t *table;
     uint32_t combineFlags;
     UChar c, c2;
     uint16_t combineFwdIndex, combineBackIndex;
+    uint16_t result, value, value2;
     uint8_t cc, prevCC;
     UBool starterIsSupplementary;
 
@@ -1470,11 +1576,11 @@ _recompose(UChar *p, UChar *&limit) {
         combineFlags=_getNextCombining(p, limit, c, c2, combineBackIndex, cc);
         if((combineFlags&_NORM_COMBINES_BACK) && starter!=NULL) {
             if(combineBackIndex&0x8000) {
-                /* c is a Jamo 2 or 3, see if we can compose it with the previous character */
+                /* c is a Jamo V/T, see if we can compose it with the previous character */
                 pRemove=NULL; /* NULL while no Hangul composition */
                 c2=*starter;
                 if(combineBackIndex==0xfff2) {
-                    /* Jamo 2, compose with previous Jamo 1 and following Jamo 3 */
+                    /* Jamo V, compose with previous Jamo L and following Jamo T */
                     c2=(UChar)(c2-JAMO_L_BASE);
                     if(c2<JAMO_L_COUNT) {
                         pRemove=p-1;
@@ -1486,8 +1592,8 @@ _recompose(UChar *p, UChar *&limit) {
                         *starter=c;
                     }
                 } else {
-                    /* Jamo 3, compose with previous Hangul that does not have a Jamo 3 */
-                    if(isHangulWithoutJamo3(c2)) {
+                    /* Jamo T, compose with previous Hangul that does not have a Jamo T */
+                    if(isHangulWithoutJamoT(c2)) {
                         pRemove=p-1;
                         *starter=(UChar)(c2+(c-JAMO_T_BASE));
                     }
@@ -1504,107 +1610,84 @@ _recompose(UChar *p, UChar *&limit) {
                     limit=q;
                 }
 
-                c2=0;
+                c2=0; /* c2 held *starter temporarily */
+
                 /*
                  * now: cc==0 and the combining index does not include "forward" ->
-                 * the rest of the loop body will reset starter;
+                 * the rest of the loop body will reset starter to NULL;
                  * technically, a composed Hangul syllable is a starter, but it
-                 * does not combine forward now that we have consumed all eligible Jamos
+                 * does not combine forward now that we have consumed all eligible Jamos;
+                 * for Jamo V/T, combineFlags does not contain _NORM_COMBINES_FWD
                  */
-            } else if(!(combineFwdIndex&0x8000) && (prevCC<cc || prevCC==0)) {
-                /* try to combine the starter with (c, c2) */
-                uint16_t key, value, value2;
 
-                /* search in the starter's composition table */
-                table=combiningTable+combineFwdIndex;
-                for(;;) {
-                    key=*table++;
-                    if(key>=combineBackIndex) {
-                        break;
-                    }
-                    table+= *table&0x8000 ? 2 : 1;
-                }
+            } else if(
+                /* the starter is not a Jamo V/T and */
+                !(combineFwdIndex&0x8000) &&
+                /* the combining mark is not blocked and */
+                (prevCC<cc || prevCC==0) &&
+                /* the starter and the combining mark (c, c2) do combine */
+                0!=(result=_combine(combiningTable+combineFwdIndex, combineBackIndex, value, value2))
+            ) {
+                /* replace the starter with the composition, remove the combining mark */
+                pRemove= c2==0 ? p-1 : p-2; /* pointer to the combining mark */
 
-                if((key&0x7fff)==combineBackIndex) {
-                    /* found! combine! */
-                    value=*table;
-
-                    /* is the composition a starter that combines forward? */
-                    key=value&0x2000;
-
-                    /* get the composition result code point from the variable-length result value */
-                    if(value&0x8000) {
-                        if(value&0x4000) {
-                            /* surrogate pair composition result */
-                            value=(value&0x3ff)|0xd800;
-                            value2=*(table+1);
-                        } else {
-                            /* BMP composition result U+2000..U+ffff */
-                            value=*(table+1);
-                            value2=0;
-                        }
+                /* replace the starter with the composition */
+                *starter=(UChar)value;
+                if(starterIsSupplementary) {
+                    if(value2!=0) {
+                        /* both are supplementary */
+                        *(starter+1)=(UChar)value2;
                     } else {
-                        /* BMP composition result U+0000..U+1fff */
-                        value&=0x1fff;
-                        value2=0;
-                    }
-
-                    /* replace the starter with the composition, remove the combining mark */
-                    *starter=(UChar)value;
-                    pRemove= c2==0 ? p-1 : p-2;
-
-                    if(starterIsSupplementary) {
-                        if(value2!=0) {
-                            *(starter+1)=(UChar)value2;
-                        } else {
-                            /* the composition is shorter than the starter, move the intermediate characters forward one */
-                            starterIsSupplementary=FALSE;
-                            q=starter+1;
-                            r=q+1;
-                            while(r<pRemove) {
-                                *q++=*r++;
-                            }
-                            --pRemove;
-                        }
-                    } else if(value2!=0) {
-                        /* the composition is longer than the starter, move the intermediate characters back one */
-                        starterIsSupplementary=TRUE;
-                        ++starter; /* temporarily increment for the loop boundary */
-                        q=pRemove;
-                        r=++pRemove;
-                        while(starter<q) {
-                            *--r=*--q;
-                        }
-                        *starter=(UChar)value2;
-                        --starter; /* undo the temporary increment */
-                    }
-
-                    /* remove the combining mark */
-                    if(pRemove<p) {
-                        q=pRemove;
-                        r=p;
-                        while(r<limit) {
+                        /* the composition is shorter than the starter, move the intermediate characters forward one */
+                        starterIsSupplementary=FALSE;
+                        q=starter+1;
+                        r=q+1;
+                        while(r<pRemove) {
                             *q++=*r++;
                         }
-                        p=pRemove;
-                        limit=q;
+                        --pRemove;
                     }
-
-                    /* keep prevCC because we removed the combining mark */
-                    if(p==limit) {
-                        return prevCC;
+                } else if(value2!=0) {
+                    /* the composition is longer than the starter, move the intermediate characters back one */
+                    starterIsSupplementary=TRUE;
+                    ++starter; /* temporarily increment for the loop boundary */
+                    q=pRemove;
+                    r=++pRemove;
+                    while(starter<q) {
+                        *--r=*--q;
                     }
-
-                    /* is the composition a starter that combines forward? */
-                    if(key!=0) {
-                        combineFwdIndex=_getCombiningIndexFromStarter((UChar)value, (UChar)value2);
-                    } else {
-                        starter=NULL;
-                    }
-
-                    /* we combined and set prevCC, continue with looking for compositions */
-                    continue;
+                    *starter=(UChar)value2;
+                    --starter; /* undo the temporary increment */
+                /* } else { both are on the BMP, nothing more to do */
                 }
+
+                /* remove the combining mark by moving the following text over it */
+                if(pRemove<p) {
+                    q=pRemove;
+                    r=p;
+                    while(r<limit) {
+                        *q++=*r++;
+                    }
+                    p=pRemove;
+                    limit=q;
+                }
+
+                /* keep prevCC because we removed the combining mark */
+
+                /* done? */
+                if(p==limit) {
+                    return prevCC;
+                }
+
+                /* is the composition a starter that combines forward? */
+                if(result>1) {
+                    combineFwdIndex=_getCombiningIndexFromStarter((UChar)value, (UChar)value2);
+                } else {
+                    starter=NULL;
+                }
+
+                /* we combined and set prevCC, continue with looking for compositions */
+                continue;
             }
         }
 
@@ -1642,7 +1725,7 @@ _recompose(UChar *p, UChar *&limit) {
 inline uint32_t
 _getNorm32(const UChar *p, uint32_t mask) {
     uint32_t norm32=_getNorm32(*p);
-    if((norm32&mask) && _NORM_MIN_SPECIAL<=norm32 && norm32<_NORM_SURROGATES_TOP) {
+    if((norm32&mask) && isNorm32LeadSurrogate(norm32)) {
         /* *p is a lead surrogate, get the real norm32 */
         norm32=_getNorm32FromSurrogatePair(norm32, *(p+1));
     }
@@ -1686,19 +1769,19 @@ _decomposeBeforeNextStarter(const UChar *&src, const UChar *limit,
         return NULL;
     }
 
-    if(norm32>=_NORM_MIN_HANGUL) {
-        if(norm32<_NORM_MIN_JAMO2) {
-            /* Hangul decomposes but is all starters, Jamo 1 are starters */
+    if(isNorm32HangulOrJamo(norm32)) {
+        if(isHangulJamoNorm32HangulOrJamoL(norm32)) {
+            /* Hangul decomposes but is all starters, Jamo L are starters */
             return NULL;
         }
 
-        /* Jamo 2/3 are not starters but cc==0 */
+        /* Jamo V/T are not starters but cc==0 */
         cc=trailCC=0;
         length=1;
         return src++;
     }
 
-    if(norm32<_NORM_MIN_SPECIAL) {
+    if(isNorm32Regular(norm32)) {
         c2=0;
         length=1;
     } else {
@@ -1758,12 +1841,17 @@ _decomposeBackFindStarter(const UChar *start, const UChar *&src,
         return src;
     } else if(!UTF_IS_SURROGATE(c)) {
         norm32=_getNorm32(c);
-        if(norm32>=_NORM_MIN_HANGUL) {
-            /* Hangul decomposes but is all starters, Jamo 1 are starters */
+        if(isNorm32HangulOrJamo(norm32)) {
+            /* Hangul decomposes but is all starters, Jamo L are starters */
 #if 0
-            /* we should never get Jamo 2/3 here because we go back through quick check "yes" text */
-            if(norm32>=_NORM_MIN_JAMO2) {
-                /* Jamo 2/3 are not starters */
+            /*
+             * this is commented out because
+             * we should never get Jamo V/T here because
+             * we go back through quick check "yes" text
+             * and Jamo V/T have NFC_MAYBE
+             */
+            if(!isHangulJamoNorm32HangulOrJamoL(norm32)) {
+                /* Jamo V/T are not starters */
                 starterIndex=-1;
             }
 #endif
@@ -2104,13 +2192,13 @@ unorm_compose(UChar *dest, int32_t destCapacity,
         /* check one above-minimum, relevant code unit */
         /*
          * norm32 is for c=*(src-1), and the quick check flag is "no" or "maybe", and/or cc!=0
-         * check for Jamo 2/3, then for surrogates and regular characters
+         * check for Jamo V/T, then for surrogates and regular characters
          * c is not a Hangul syllable because they are not marked with no/maybe for NFC & NFKC (and their cc==0)
          */
-        if(norm32>=_NORM_MIN_HANGUL) {
+        if(isNorm32HangulOrJamo(norm32)) {
             /*
-             * Jamo 2 or 3:
-             * try to compose with the previous character, Jamo 2 also with a following Jamo 3,
+             * Jamo V/T:
+             * try to compose with the previous character, Jamo V also with a following Jamo T,
              * and set values here right now in case we just continue with the main loop
              */
             length=1;
@@ -2119,11 +2207,10 @@ unorm_compose(UChar *dest, int32_t destCapacity,
             reorderStart=dest+destIndex;
 
             if(/* ### TODO: do we need to do this? !ignoreHangul && ### */ destIndex>0) {
-                /* c is a Jamo 2 or 3, see if we can compose it with the previous character */
+                /* c is a Jamo V/T, see if we can compose it with the previous character */
                 c2=*(prevSrc-1);
-                if(norm32<_NORM_JAMO2_TOP) {
-                    /* ### TODO change comments of Jamo 2 etc. to Jamo V etc. */
-                    /* Jamo 2, compose with previous Jamo 1 and following Jamo 3 */
+                if(isJamoVTNorm32JamoV(norm32)) {
+                    /* Jamo V, compose with previous Jamo L and following Jamo T */
                     c2=(UChar)(c2-JAMO_L_BASE);
                     if(c2<JAMO_L_COUNT) {
                         c=(UChar)(HANGUL_BASE+(c2*JAMO_V_COUNT+(c-JAMO_V_BASE))*JAMO_T_COUNT);
@@ -2137,8 +2224,8 @@ unorm_compose(UChar *dest, int32_t destCapacity,
                         continue;
                     }
                 } else {
-                    /* Jamo 3, compose with previous Hangul that does not have a Jamo 3 */
-                    if(isHangulWithoutJamo3(c2)) {
+                    /* Jamo T, compose with previous Hangul that does not have a Jamo T */
+                    if(isHangulWithoutJamoT(c2)) {
                         if(destIndex<=destCapacity) {
                             dest[destIndex-1]=(UChar)(c2+(c-JAMO_T_BASE));
                         }
@@ -2148,7 +2235,7 @@ unorm_compose(UChar *dest, int32_t destCapacity,
             }
             c2=0;
         } else {
-            if(norm32<_NORM_MIN_SPECIAL) {
+            if(isNorm32Regular(norm32)) {
                 c2=0;
                 length=1;
             } else {
@@ -2475,7 +2562,7 @@ _findNextDecomposeBoundary(CharacterIterator &src,
             break;
         }
 
-        if(norm32<_NORM_MIN_SPECIAL || _NORM_SURROGATES_TOP<=norm32) {
+        if(!isNorm32LeadSurrogate(norm32)) {
             /* BMP character with cc!=0, write c into the buffer */
             if( bufferIndex<bufferCapacity ||
                 /* attempt to grow the buffer */
