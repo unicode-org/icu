@@ -1071,10 +1071,11 @@ public:
      * currency format.  If this format is not a currency format, then
      * the currency is used if and when this object becomes a
      * currency format through the application of a new pattern.
-     * @param theCurrency new currency to use
+     * @param theCurrency a 3-letter ISO code indicating new currency
+     * to use.  It need not be null-terminated.
      * @since ICU 2.2
      */
-    void setCurrency(const char* theCurrency);
+    void setCurrency(const UChar* theCurrency);
 
     /**
      * Gets the currency used to display currency
@@ -1083,9 +1084,12 @@ public:
      * custom DecimalFormatSymbols object.  A custom
      * DecimalFormatSymbols object has currency symbols that are not
      * the standard ones for its locale.
+     * @return a 3-letter null-terminated ISO code indicating
+     * the currency in use, or a pointer to the empty string.
+
      * @since ICU 2.2
      */
-    const char* getCurrency() const;
+    const UChar* getCurrency() const;
 
     /**
      * The resource tags we use to retrieve decimal format data from
@@ -1219,6 +1223,8 @@ private:
 
     void setCurrencyForSymbols();
 
+    void setCurrencyForLocale(const char* locale, UErrorCode& ec);
+
     /**
      * Constants.
      */
@@ -1258,7 +1264,7 @@ private:
     EPadPosition            fPadPosition;
 
     // ISO currency code
-    char                    currency[4];
+    UChar                   currency[4];
 
     // Constants for characters used in programmatic (unlocalized) patterns.
     static const UChar    kPatternZeroDigit;
