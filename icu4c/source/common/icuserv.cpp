@@ -480,12 +480,13 @@ public:
 };
 
 // UObjectDeleter for serviceCache
-
-U_CAPI void U_EXPORT2
+U_CDECL_BEGIN
+static void U_CALLCONV
 cacheDeleter(void* obj) {
   U_NAMESPACE_USE
     ((CacheEntry*)obj)->unref();
 }
+U_CDECL_END
 
 /**
  * Deleter for UObjects
