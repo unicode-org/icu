@@ -64,6 +64,8 @@ class MergeCollation;
 class CollationElementIterator;
 class RuleBasedCollatorStreamer;
 class NormalizerIterator; // see tblcoll.cpp
+class Collator;
+class TableCollationData;
 
 /**
  * The RuleBasedCollator class provides the simple implementation of Collator,

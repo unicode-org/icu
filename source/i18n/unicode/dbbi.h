@@ -13,6 +13,9 @@
 
 #include "unicode/rbbi.h"
 
+/* forward declaration */
+class DictionaryBasedBreakIteratorTables;
+
 /**
  * A subclass of RuleBasedBreakIterator that adds the ability to use a dictionary
  * to further subdivide ranges of text beyond what is possible using just the

@@ -32,6 +32,7 @@
 
 class Locale;
 class UCharReference;
+class UnicodeStringStreamer;
 
 /**
  * Unicode String literals in C++.
