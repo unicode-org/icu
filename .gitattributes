@@ -103,6 +103,7 @@ icu4c/source/data/xml/main/en_MH.xml svneol=native#text/xml
 icu4c/source/data/xml/main/en_MP.xml svneol=native#text/xml
 icu4c/source/data/xml/main/en_TT.xml svneol=native#text/xml
 icu4c/source/data/xml/main/en_UM.xml svneol=native#text/xml
+icu4c/source/data/xml/main/en_US_POSIX.xml svneol=native#text/xml
 icu4c/source/data/xml/main/eo.xml svneol=native#text/xml
 icu4c/source/data/xml/main/es.xml svneol=native#text/xml
 icu4c/source/data/xml/main/et.xml svneol=native#text/xml
