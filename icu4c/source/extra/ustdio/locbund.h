@@ -24,7 +24,6 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/unum.h"
-#include "unicode/udat.h"
 
 #define ULOCALEBUNDLE_NUMBERFORMAT_COUNT ((int32_t)UNUM_SPELLOUT)
 
@@ -32,9 +31,6 @@ typedef struct ULocaleBundle {
     char            *fLocale;
 
     UNumberFormat   *fNumberFormat[ULOCALEBUNDLE_NUMBERFORMAT_COUNT];
-
-    UDateFormat     *fDateFormat;
-    UDateFormat     *fTimeFormat;
 } ULocaleBundle;
 
 
@@ -77,22 +73,6 @@ u_locbund_close(ULocaleBundle *bundle);
  */
 UNumberFormat*        
 u_locbund_getNumberFormat(ULocaleBundle *bundle, UNumberFormatStyle style);
-
-/**
- * Get the DateFormat used to format and parse dates in a ULocaleBundle.
- * @param bundle The ULocaleBundle to use
- * @return A pointer to the DateFormat used for date formatting and parsing.
- */
-UDateFormat*
-u_locbund_getDateFormat(ULocaleBundle *bundle);
-
-/**
- * Get the DateFormat used to format and parse times in a ULocaleBundle.
- * @param bundle The ULocaleBundle to use
- * @return A pointer to the DateFormat used for time formatting and parsing.
- */
-UDateFormat*
-u_locbund_getTimeFormat(ULocaleBundle *bundle);
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
