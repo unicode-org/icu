@@ -666,8 +666,17 @@ UCollator *ucol_openState(const uint8_t *state, UErrorCode *status);
 
 
 /********************************* Deprecated API ********************************/
+/**
+ *@deprecated Remove after Aug 2002
+ */
 #ifdef U_USE_DEPRECATED_FORMAT_API
-#define ucol_openRules_1_9(rules,rulesLength,modes,strength,status) ucol_openRules(rules,rulesLength,modes,strength,NULL,status)
+
+#if ((U_ICU_VERSION_MAJOR_NUM != 1) || (U_ICU_VERSION_MINOR_NUM !=9))
+#   error "ICU version has changed. Please redefine the macros under U_USE_DEPRECATED_FORMAT_API pre-processor definition"
+#else 
+#   define ucol_openRules_1_9(rules,rulesLength,modes,strength,status) ucol_openRules(rules,rulesLength,modes,strength,NULL,status)
+#endif
+
 #endif
 /********************************* End *******************************************/
 
