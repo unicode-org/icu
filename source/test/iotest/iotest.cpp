@@ -178,7 +178,7 @@ public:
 const char* DataDrivenLogger::fgDataDir = NULL;
 char* DataDrivenLogger::fgTestDataPath = NULL;
 
-int64_t
+static int64_t
 uto64(const UChar     *buffer)
 {
     int64_t result = 0;
@@ -196,7 +196,9 @@ uto64(const UChar     *buffer)
 }
 
 
-static void DataDrivenPrintf(void) {
+U_CDECL_BEGIN
+static void U_CALLCONV DataDrivenPrintf(void)
+{
     UErrorCode errorCode;
     TestDataModule *dataModule;
     TestData *testData;
@@ -354,8 +356,11 @@ static void DataDrivenPrintf(void) {
         log_err("Failed: could not load test icuio data\n");
     }
 }
+U_CDECL_END
 
-static void DataDrivenScanf(void) {
+U_CDECL_BEGIN
+static void U_CALLCONV DataDrivenScanf(void)
+{
     UErrorCode errorCode;
     TestDataModule *dataModule;
     TestData *testData;
@@ -541,8 +546,11 @@ static void DataDrivenScanf(void) {
         log_err("Failed: could not load test icuio data\n");
     }
 }
+U_CDECL_END
 
-static void DataDrivenPrintfPrecision(void) {
+U_CDECL_BEGIN
+static void U_CALLCONV DataDrivenPrintfPrecision(void)
+{
     UErrorCode errorCode;
     TestDataModule *dataModule;
     TestData *testData;
@@ -659,8 +667,11 @@ static void DataDrivenPrintfPrecision(void) {
         log_err("Failed: could not load test icuio data\n");
     }
 }
+U_CDECL_END
 
-static void TestStream(void) {
+U_CDECL_BEGIN
+static void U_CALLCONV TestStream(void)
+{
 #if U_IOSTREAM_SOURCE >= 198506
     char testStreamBuf[512];
     static const char testStr[] = "\x42\x65\x67\x69\x6E\x6E\x69\x6E\x67\x20\x6F\x66\x20\x74\x65\x73\x74\x20\x73\x74\x72\x31\x20\x20\x20\x3C\x3C\x32\x31\x20" UTF8_NEW_LINE "\x20\x55\x54\x46\x2D\x38\x20\xCE\xBC\xF0\x90\x80\x81\xF0\x90\x80\x82";
@@ -727,6 +738,7 @@ static void TestStream(void) {
     log_info("U_IOSTREAM_SOURCE is disabled\n");
 #endif
 }
+U_CDECL_END
 
 static void addAllTests(TestNode** root) {
     addFileTest(root);
