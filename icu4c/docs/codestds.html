@@ -48,7 +48,7 @@
    <li>Tabs and indentation: no tab characters (\x09), save files with spaces 
      instead.<br>
      Indentation is of size 4.</li>
-   <li>Documentation: We use Javadoc-style in-file documentation with <a href="http://www.zib.de/Visual/software/doc++/index.html">doc++</a>. 
+   <li>Documentation: We use Javadoc-style in-file documentation with <a href="http://www.doxygen.org">doxygen</a>. 
      We have a printed version of the manual in our "library", and our files 
      use this.</li>
    <li>You should not place multiple statements into one line. You should 
@@ -156,6 +156,8 @@ ubidi_close(UBiDi *pBiDi);
    <li>File names begin with a "u".</li>
    <li>For memory allocation in C implementation files for ICU, the functions/macros 
      in <code>cmemory.h</code> must be used. </li>
+   <li>Do not use C++ style comments in C files and in headers that will be included in C files. 
+     Some of the supported platforms are allergic to C++ style comments in C files.</li>
  </ul>
  <h3>C++ Guidelines</h3>
  <ul>
