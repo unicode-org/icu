@@ -133,7 +133,8 @@ void TestSurrogateBehaviour(){
     {
         UChar sampleText[]       = {0x00a1, 0xd801, 0xdc01, 0x00a4};
         const uint8_t expected[] = {0xa2, 0xae, 0xa1, 0xe0, 0xa2, 0xb4};
-        int32_t offsets[]        = {0x00, 0x00, 0x01, 0x01, 0x03 };
+        int32_t offsets[]        = {0x00, 0x00, 0x01, 0x01, 0x02, 0x02 };
+        int32_t offsets2[]        = {0x00, 0x00, 0x01, 0x01, 0x03, 0x03 };
 
         /*DBCS*/
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
@@ -147,7 +148,7 @@ void TestSurrogateBehaviour(){
                 expected, sizeof(expected), "ibm-1363", 0 , TRUE, U_ZERO_ERROR))
             log_err("u-> ibm-1363 [UCNV_MBCS] not match.\n");
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-                expected, sizeof(expected), "ibm-1363", offsets , TRUE, U_ZERO_ERROR))
+                expected, sizeof(expected), "ibm-1363", offsets2 , TRUE, U_ZERO_ERROR))
             log_err("u-> ibm-1363 [UCNV_MBCS] not match.\n");
     }
     /*UTF-8*/
@@ -236,18 +237,19 @@ void TestErrorBehaviour(){
     {
         UChar    sampleText[]    = { 0x00a1, 0xd801};
         const uint8_t expected[] = { 0xa2, 0xae};
-        int32_t offsets[]        = { 0x00, 0x01, 0x02};
+        int32_t offsets[]        = { 0x00, 0x00, 0x01, 0x01,};
 
         UChar       sampleText2[] = { 0x00a1, 0xd801, 0x00a4};
         const uint8_t expected2[] = { 0xa2, 0xae, 0xa1, 0xe0, 0xa2, 0xb4};
+        int32_t offsets2[]        = { 0x00, 0x00, 0x01, 0x01, 0x02, 0x02};
 
         UChar       sampleText3MBCS[] = { 0x0001, 0x00a4, 0xdc01};
         const uint8_t expected3MBCS[] = { 0x01, 0xa2, 0xb4, 0xa1, 0xe0};
-        int32_t offsets3MBCS[]        = { 0x00, 0x01, 0x02 };
+        int32_t offsets3MBCS[]        = { 0x00, 0x01, 0x01, 0x02, 0x02, };
 
         UChar       sampleText4MBCS[] = { 0x0061, 0x00a6, 0xdc01};
         const uint8_t expected4MBCS[] = { 0x61, 0x8f, 0xa2, 0xc3, 0xf4, 0xfe};
-        int32_t offsets4MBCS[]        = { 0x00, 0x01, 0x02 };
+        int32_t offsets4MBCS[]        = { 0x00, 0x01, 0x01, 0x01, 0x02, 0x02 };
 
 
 
@@ -286,7 +288,7 @@ void TestErrorBehaviour(){
                 expected2, sizeof(expected2), "ibm-1363", 0, FALSE, U_ZERO_ERROR))
             log_err("u-> ibm-1363 [UCNV_DBCS] did not match\n");
         if(!convertFromU(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
-                expected2, sizeof(expected2), "ibm-1363", offsets, FALSE, U_ZERO_ERROR))
+                expected2, sizeof(expected2), "ibm-1363", offsets2, FALSE, U_ZERO_ERROR))
             log_err("u-> ibm-1363 [UCNV_DBCS] did not match\n");
 
         if(!convertFromU(sampleText3MBCS, sizeof(sampleText3MBCS)/sizeof(sampleText3MBCS[0]),
@@ -667,7 +669,20 @@ UBool convertFromU( const UChar *source, int sourceLen,  const uint8_t *expect, 
         printSeqErr((const unsigned char*)expect, expectLen);
         return FALSE;
     }
-    
+    if (expectOffsets != 0){
+        log_verbose("comparing %d offsets..\n", targ-buffer);
+        if(memcmp(offsetBuffer,expectOffsets,(targ-buffer) * sizeof(int32_t) )){
+            log_err("did not get the expected offsets. for FROM Unicode to %s\n", codepage);
+            printf("\nGot  : ");
+            printSeqErr((const unsigned char*)buffer, targ-buffer);
+            for(p=buffer;p<targ;p++)
+                printf("%d, ", offsetBuffer[p-buffer]); 
+            printf("\nExpected: ");
+            for(i=0; i< (targ-buffer); i++)
+                printf("%d,", expectOffsets[i]);
+        }
+    }
+
     if(!memcmp(buffer, expect, expectLen)){
         log_verbose("Matches!\n");
         return TRUE;
@@ -681,19 +696,7 @@ UBool convertFromU( const UChar *source, int sourceLen,  const uint8_t *expect, 
         return FALSE;
     }
 
-   if (expectOffsets != 0){
-        log_verbose("comparing %d offsets..\n", targ-buffer);
-        if(memcmp(offsetBuffer,expectOffsets,(targ-buffer) * sizeof(int32_t) )){
-            log_err("did not get the expected offsets. for FROM Unicode to %s\n", codepage);
-            printf("\nGot  : ");
-            printSeqErr((const unsigned char*)buffer, targ-buffer);
-            for(p=buffer;p<targ;p++)
-                printf("%d, ", offsetBuffer[p-buffer]); 
-            printf("\nExpected: ");
-            for(i=0; i< (targ-buffer); i++)
-                printf("%d,", expectOffsets[i]);
-        }
-    }
+   
     
 }
 
