@@ -311,7 +311,8 @@ protected:
         
   const UChar*            text;
 
-  static char             fgClassID;
+private:
+  static const char       fgClassID;
 };
 
 #endif
