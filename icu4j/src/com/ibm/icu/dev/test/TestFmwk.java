@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $
- * $Date: 2003/02/05 22:44:34 $
- * $Revision: 1.40 $
+ * $Date: 2003/02/10 21:16:44 $
+ * $Revision: 1.41 $
  *
  *****************************************************************************************
  */
@@ -129,10 +129,10 @@ public class TestFmwk extends AbstractTestLog {
         }
 
         protected Target getTargets(String targetName)  {
-            finishInit();
-        
             Target target = null;
             if (targetName != null) {
+                finishInit(); // hmmm, want to get subtest without initializing all tests
+        
                 try {
                     TestFmwk test = getSubtest(targetName);
                     if (test != null) {
@@ -144,11 +144,33 @@ public class TestFmwk extends AbstractTestLog {
                     target = this.new Target(targetName);
                 }
             } else if (params.doRecurse()) {
+                finishInit();
+                boolean groupOnly = params.doRecurseGroupsOnly();
                 for (int i = names.length; --i >= 0;) {
-                    TestFmwk test = getSubtest(i);
-                    Target newTarget = test == null ? this.new Target(names[i]) : test.new ClassTarget();
-                    newTarget.setNext(target);
-                    target = newTarget;
+                    Target newTarget = null;
+                    Class cls = tests[i];
+                    if (cls == null) { // hack no warning for missing tests
+                        if (params.warnings) {
+                            continue;
+                        } else {
+                            newTarget = this.new Target(names[i]);
+                        }
+                    } else {
+                        TestFmwk test = getSubtest(i, groupOnly);
+                        if (test != null) {
+                            newTarget = test.new ClassTarget();
+                        } else {
+                            if (groupOnly) {
+                                newTarget = this.new EmptyTarget(names[i]);
+                            } else {
+                                newTarget = this.new Target(names[i]);
+                            }
+                        }
+                    }
+                    if (newTarget != null) {
+                        newTarget.setNext(target);
+                        target = newTarget;
+                    }
                 }
             }
 
@@ -159,17 +181,21 @@ public class TestFmwk extends AbstractTestLog {
             finishInit();
 
             for (int i = 0; i < names.length; ++i) {
-                if (names[i].equals(testName)) {
-                    return getSubtest(i);
+                if (names[i].equalsIgnoreCase(testName)) { // allow case-insensitive matching
+                    return getSubtest(i, false);
                 }
             }
 
             throw new TestFmwkException(testName);
         }
 
-        private TestFmwk getSubtest(int i) {
+        private TestFmwk getSubtest(int i, boolean groupOnly) {
             Class cls = tests[i];
             if (cls != null) {
+                if (groupOnly && !TestGroup.class.isAssignableFrom(cls)) {
+                    return null;
+                }
+
                 try {
                     TestFmwk subtest = (TestFmwk)cls.newInstance();
                     subtest.params = params;
@@ -258,6 +284,17 @@ public class TestFmwk extends AbstractTestLog {
         }
 
         protected void execute() {
+        }
+    }
+
+    public class EmptyTarget extends Target {
+        public EmptyTarget(String name) {
+            super(name);
+        }
+
+        public void run() {
+            params.writeTestName(name);
+            params.writeTestResult(params.errorCount, params.invalidCount);
         }
     }
 
@@ -690,11 +727,11 @@ public class TestFmwk extends AbstractTestLog {
         System.out.println("Usage: " + getClass().getName() + " option* target*");
         System.out.println();
         System.out.println("Options:");
+        System.out.println(" -describe Print a short descriptive string for this test and all");
+        System.out.println("       listed targets.");
         System.out.println(" -e<n> Set exhaustiveness from 0..10.  Default is 0, fewest tests.\n" +
                            "       To run all tests, specify -e10.  Giving -e with no <n> is\n" +
                            "       the same as -e5.");
-        System.out.println(" -describe Print a short descriptive string for this test and all");
-        System.out.println("       listed targets.");
         System.out.println(" -filter:<str> ?");
         System.out.println(" -h[elp] Print this help text and exit.");
         System.out.println(" -l[ist] List immediate targets of this test");
@@ -705,7 +742,7 @@ public class TestFmwk extends AbstractTestLog {
         System.out.println(" -q[uiet] Do not show warnings");
         System.out.println(" -r[andom][:<n>] If present, randomize targets.  If n is present, use it as the seed.");
         System.out.println(" -v[erbose] Show log messages");
-        System.out.println(" -w[arning] Report warnings (default treats them like errors)");
+        System.out.println(" -w[arning] Continue in presence of warnings, and disable missing test warnings.");
         System.out.println();
         System.out.println(" If a list or describe option is provided, no tests are run.");
         System.out.println();
@@ -714,7 +751,7 @@ public class TestFmwk extends AbstractTestLog {
         System.out.println(" If a target contains no '/' characters, and matches a target");
         System.out.println(" of this test, the target is run.  Otherwise, the part before the");
         System.out.println(" '/' is used to match a subtest, which then evaluates the");
-        System.out.println(" remainder of the target as above.");
+        System.out.println(" remainder of the target as above.  Target matching is case-insensitive.");
         System.out.println();
         System.out.println(" If multiple targets are provided, each is executed in order.");
     }
@@ -841,6 +878,10 @@ public class TestFmwk extends AbstractTestLog {
         public boolean doRecurse() {
             return !inDocMode() || listlevel > 1 || (indentLevel == 1 && listlevel > 0);
         }
+
+        public boolean doRecurseGroupsOnly() {
+            return inDocMode() && (listlevel == 2 || (indentLevel == 1 && listlevel > 0));
+        }
         
         public void msg(String message, int level, boolean incCount, boolean newln) {
             if (level == WARN && !warnings) {
@@ -889,12 +930,12 @@ public class TestFmwk extends AbstractTestLog {
             if (inDocMode()) {
                 if (!warnings) {
                     writeTestName(name);
-                    log.println(" *** Target is invalid.");
+                    log.println(" *** Target not found or not valid.");
                     log.flush();
                     needLineFeed = false;
                 }
             } else {
-                msg("Test " + name + " skipped.", WARN, true, true);
+                msg("Test " + name + " not found or not valid.", WARN, true, true);
             }
         }
 
