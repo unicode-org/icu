@@ -363,9 +363,11 @@ GregorianCalendar::getGregorianChange() const
 UBool 
 GregorianCalendar::isLeapYear(int32_t year) const
 {
+    // MSVC complains bitterly if we try to use Grego::isLeapYear here
+    // NOTE: year&0x3 == year%4
     return (year >= fGregorianCutoverYear ?
-        ((year%4 == 0) && ((year%100 != 0) || (year%400 == 0))) : // Gregorian
-        (year%4 == 0)); // Julian
+        (((year&0x3) == 0) && ((year%100 != 0) || (year%400 == 0))) : // Gregorian
+        ((year&0x3) == 0)); // Julian
 }
 
 
@@ -407,8 +409,7 @@ GregorianCalendar::timeToFields(UDate theTime, UBool quick, UErrorCode& status)
         else 
             ++rawYear;
         
-        isLeap = ((rawYear&0x3) == 0) && // equiv. to (rawYear%4 == 0)
-            (rawYear%100 != 0 || rawYear%400 == 0);
+        isLeap = Grego::isLeapYear(rawYear);
         
         // Gregorian day zero is a Monday
         dayOfWeek = (int32_t)uprv_fmod(gregorianEpochDay + 1, 7);

@@ -112,7 +112,8 @@ inline double Math::floorDivide(double numerator, double denominator) {
 }
 
 inline UBool Grego::isLeapYear(int32_t year) {
-    return (year%4 == 0) && ((year%100 != 0) || (year%400 == 0));
+    // year&0x3 == year%4
+    return ((year&0x3) == 0) && ((year%100 != 0) || (year%400 == 0));
 }
 
 inline int8_t
