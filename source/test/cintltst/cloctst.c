@@ -238,7 +238,6 @@ static void TestBasicGetters() {
             log_err(" Mismatch in getName:  %s  versus   %s\n", name, rawData2[NAME][i]);
         }
 
-
         free(temp);
         free(name);
 
@@ -259,6 +258,47 @@ static void TestNullDefault() {
     if (uprv_strcmp(uloc_getDefault(), original) != 0) {
         log_err(" uloc_setDefault(NULL, &status) didn't get the default locale back!\n");
     }
+
+    {
+    /* Test that set & get of default locale work, and that
+     * default locales are cached and reused, and not overwritten.
+     */
+        const char *n_en_US;
+        const char *n_fr_FR;
+        const char *n2_en_US;
+        
+        status = U_ZERO_ERROR;
+        uloc_setDefault("en_US", &status);
+        n_en_US = uloc_getDefault();
+        if (strcmp(n_en_US, "en_US") != 0) {
+            log_err("Wrong result from uloc_getDefault().  Expected \"en_US\", got \"%s\"\n", n_en_US);
+        }
+        
+        uloc_setDefault("fr_FR", &status);
+        n_fr_FR = uloc_getDefault();
+        if (strcmp(n_en_US, "en_US") != 0) {
+            log_err("uloc_setDefault altered previously default string."
+                "Expected \"en_US\", got \"%s\"\n",  n_en_US);
+        }
+        if (strcmp(n_fr_FR, "fr_FR") != 0) {
+            log_err("Wrong result from uloc_getDefault().  Expected \"fr_FR\", got %s\n",  n_fr_FR);
+        }
+        
+        uloc_setDefault("en_US", &status);
+        n2_en_US = uloc_getDefault();
+        if (strcmp(n2_en_US, "en_US") != 0) {
+            log_err("Wrong result from uloc_getDefault().  Expected \"en_US\", got \"%s\"\n", n_en_US);
+        }
+        if (n2_en_US != n_en_US) {
+            log_err("Default locale cache failed to reuse en_US locale.\n");
+        }
+        
+        if (U_FAILURE(status)) {
+            log_err("Failure returned from uloc_setDefault - \"%s\"\n", u_errorName(status));
+        }
+        
+    }
+    
 }
 /* Test the i- and x- and @ and . functionality 
 */

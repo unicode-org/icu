@@ -67,12 +67,21 @@ typedef enum ELocalePos {
     eMAX_LOCALES
 } ELocalePos;
 
-/* Use void * to make it properly aligned */
-/* Add 1 for rounding */
-// static void *gByteLocaleCache[(eMAX_LOCALES + 1) * sizeof(Locale) / sizeof(void*)];
 
-static Locale *gLocaleCache   = NULL;
-static Locale *gDefaultLocale = NULL;
+static Locale        *gLocaleCache         = NULL;
+static const Locale  *gDefaultLocale       = NULL;
+static UHashtable    *gDefaultLocalesHashT = NULL;
+
+U_CDECL_BEGIN
+//
+// Deleter function for Locales owned by the default Locale hash table/
+//
+static void U_CALLCONV
+deleteLocale(void *obj) {
+    delete (Locale *) obj;    
+}
+U_CDECL_END
+
 
 UBool
 locale_cleanup(void)
@@ -89,39 +98,113 @@ locale_cleanup(void)
         delete [] gLocaleCache;
         gLocaleCache = NULL;
     }
-    if (gDefaultLocale) {
-        delete gDefaultLocale;
-        gDefaultLocale = NULL;
+
+    if (gDefaultLocalesHashT) {
+        uhash_close(gDefaultLocalesHashT);   // Automatically deletes all elements, using deleter func.
+        gDefaultLocalesHashT = NULL;
     }
+    gDefaultLocale = NULL;
+
     return TRUE;
 }
 
 U_NAMESPACE_BEGIN
 const char Locale::fgClassID=0;
 
+//
+//  locale_set_default_internal.   
+//
 void locale_set_default_internal(const char *id)
 {
     U_NAMESPACE_USE
-    Locale tempLocale(Locale::eBOGUS);
+    UErrorCode   status = U_ZERO_ERROR;
 
-    if (id == NULL) 
-    {
+    // If given a NULL string for the locale id, grab the default
+    //   name from the system.
+    //   (Different from most other locale APIs, where a null name means use
+    //    the current ICU default locale.)
+    if (id == NULL) {
         umtx_lock(NULL);
         id = uprv_getDefaultLocaleID();
         umtx_unlock(NULL);
     }
 
-    tempLocale.init(id);   // Note:  we do not want to hold the mutex through init(),
-                           //        which is a relatively large, complex function.
-                           //        Hence, the use of a temporary locale.
-    const Locale *defLocale = &Locale::getDefault();
-    
+    // put the locale id into a canonical form, 
+    //   in preparation for looking up this locale in the hash table of
+    //   already-created locale objects.
+    //
+    status = U_ZERO_ERROR;
+    char localeNameBuf[1000];
+
+    uloc_getName(id, localeNameBuf, sizeof(localeNameBuf)-1, &status);
+    localeNameBuf[sizeof(localeNameBuf)-1] = 0;  // Force null termination in event of
+                                                 //   a long name filling the buffer.
+                                                 //   (long names are truncated.)
+
+    // Lazy creation of the hash table itself, if needed.
+    //
     umtx_lock(NULL);
-    Locale *ncDefLocale = (Locale *)defLocale;
-    *ncDefLocale = tempLocale;
+    UBool hashTableNeedsInit = (gDefaultLocalesHashT == NULL);
     umtx_unlock(NULL);
+    if (hashTableNeedsInit) {
+        status = U_ZERO_ERROR;
+        UHashtable *tHashTable = uhash_open(uhash_hashChars, uhash_compareChars, &status);
+        if (U_FAILURE(status)) {
+            return;
+        }
+        uhash_setValueDeleter(tHashTable, deleteLocale);
+        umtx_lock(NULL);
+        if (gDefaultLocalesHashT == NULL) {
+            gDefaultLocalesHashT = tHashTable;
+            umtx_unlock(NULL);
+        } else {
+            umtx_unlock(NULL);
+            uhash_close(tHashTable);
+        }
+    }
+
+    // Hash table lookup, key is the locale full name
+    umtx_lock(NULL);
+    Locale *newDefault = (Locale *)uhash_get(gDefaultLocalesHashT, localeNameBuf);
+    if (newDefault != NULL) {
+        // We have the requested locale in the hash table already.
+        // Just set it as default.  Inside the mutex lock, for those troublesome processors.
+        gDefaultLocale = newDefault;
+        umtx_unlock(NULL);
+    } else {
+        umtx_unlock(NULL);
+        // We haven't seen this locale id before.
+        // Create a new Locale object for it.
+        newDefault = new Locale(Locale::eBOGUS);
+        if (newDefault == NULL) {
+            // No way to report errors from here.  
+            return;
+        }
+        newDefault->init(localeNameBuf);
+
+        // Add newly created Locale to the hash table of default Locales
+        const char *key = newDefault->getName();
+        U_ASSERT(uprv_strcmp(key, localeNameBuf) == 0);
+        umtx_lock(NULL);
+        const Locale *hashTableVal = (const Locale *)uhash_get(gDefaultLocalesHashT, key);
+        if (hashTableVal == NULL) {
+            uhash_put(gDefaultLocalesHashT, (void *)key, newDefault, &status);
+            gDefaultLocale = newDefault; 
+            umtx_unlock(NULL);
+            // ignore errors from hash table insert.  (Couldn't do anything anyway)
+            // We can still set the default Locale,
+            //  it just wont be cached, and will eventually leak.
+        } else {
+            // Some other thread raced us through here, and got the new Locale
+            //   into the hash table before us.  Use that one.
+            gDefaultLocale = hashTableVal;  // Assignment to gDefaultLocale must happen inside mutex
+            umtx_unlock(NULL);
+            delete newDefault;
+        }
+    }
 }
 U_NAMESPACE_END
+
 
 /* sfb 07/21/99 */
 U_CFUNC void
@@ -465,40 +548,30 @@ Locale::getDefault()
     UBool needInit = (gDefaultLocale == NULL);
     umtx_unlock(NULL);
     if (needInit) {
-        Locale *tLocale = new Locale(Locale::eBOGUS);
-        if (tLocale != NULL) {
-            const char *cLocale;
-
-            umtx_lock(NULL);
-            /* uprv_getDefaultLocaleID is not thread safe, so we surround it with a mutex */
-            cLocale = uprv_getDefaultLocaleID();
-            umtx_unlock(NULL);
-
-            tLocale->init(cLocale);
-            umtx_lock(NULL);
-            if (gDefaultLocale == NULL) {
-                gDefaultLocale = tLocale;
-                tLocale = NULL;
-            }
-            umtx_unlock(NULL);
-            delete tLocale;
-        }
+        umtx_lock(NULL);
+        /* uprv_getDefaultLocaleID is not thread safe, so we surround it with a mutex */
+        const char *cLocale = uprv_getDefaultLocaleID();
+        umtx_unlock(NULL);
+        locale_set_default_internal(cLocale);
     }
     return *gDefaultLocale;
 }
+   
 
+        
 void 
 Locale::setDefault( const   Locale&     newLocale, 
                             UErrorCode&  status) 
 {
-    if (U_FAILURE(status))
+    if (U_FAILURE(status)) {
         return;
+    }
     
-    const Locale *defLocale = &Locale::getDefault();
-    umtx_lock(NULL);
-    Locale *ncDefLocale = (Locale *)defLocale;
-    *ncDefLocale = newLocale;
-    umtx_unlock(NULL);
+    /* Set the default from the full name string of the supplied locale.
+     * This is a convenient way to access the default locale caching mechanisms.
+     */
+    const char *localeID = newLocale.getName();
+    locale_set_default_internal(localeID);
 }
 
 Locale
