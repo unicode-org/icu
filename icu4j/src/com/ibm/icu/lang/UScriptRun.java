@@ -9,8 +9,7 @@
 
 package com.ibm.icu.lang;
 
-import com.ibm.icu.text.UCharacterIterator;
-import com.ibm.icu.text.UForwardCharacterIterator;
+import com.ibm.icu.text.UTF16;
 
 /**
  * <code>UScriptRun</code> is used to find runs of characters in
@@ -148,7 +147,7 @@ public final class UScriptRun
         pushCount   =  0;
         fixupCount  =  0;
         
-        text.setToStart();
+        textIndex = textStart;
     }
 
     /**
@@ -168,7 +167,7 @@ public final class UScriptRun
         int len = 0;
         
         if (text != null) {
-            len = text.getLength();
+            len = text.length;
         }
         
         if (start < 0 || count < 0 || start > len - count) {
@@ -188,7 +187,7 @@ public final class UScriptRun
      *
      * @param chars the new array of characters over which to iterate.
      * @param start the index of the first character over which to iterate.
-     * @param count the nuber of characters over which to iterate.
+     * @param count the number of characters over which to iterate.
      *
      * @internal
      */
@@ -198,7 +197,7 @@ public final class UScriptRun
             chars = emptyCharArray;
         }
         
-        text = UCharacterIterator.getInstance(chars, start, start + count);
+        text = chars;
 
         reset(start, count);
     }
@@ -322,12 +321,14 @@ public final class UScriptRun
         
         syncFixup();
         
-        int ch;
-        
-        while ((ch = text.nextCodePoint()) != UForwardCharacterIterator.DONE) {
+        while (textIndex < textLimit) {
+            int ch = UTF16.charAt(text, textStart, textLimit, textIndex - textStart);
+            int codePointCount = UTF16.getCharCount(ch);
             int sc = UScript.getScript(ch);
             int pairIndex = getPairIndex(ch);
 
+            textIndex += codePointCount;
+            
             // Paired character handling:
             //
             // if it's an open character, push it onto the stack.
@@ -366,12 +367,12 @@ public final class UScriptRun
                 // We've just seen the first character of
                 // the next run. Back over it so we'll see
                 // it again the next time.
-                text.previousCodePoint();
+                textIndex -= codePointCount;
                 break;
             }
         }
 
-        scriptLimit = textStart + text.getIndex();
+        scriptLimit = textIndex;
         return true;
     }
 
@@ -502,8 +503,9 @@ public final class UScriptRun
     
     private char[] emptyCharArray = {};
 
-    private UCharacterIterator text;
+    private char[] text;
 
+    private int textIndex;
     private int  textStart;
     private int  textLimit;
     
