@@ -1246,8 +1246,7 @@ typedef struct
 
 static TSCCContext *TSCC_clone(TSCCContext *ctx)
 {
-    TSCCContext *newCtx;
-    newCtx = malloc(sizeof(TSCCContext));
+    TSCCContext *newCtx = (TSCCContext *)malloc(sizeof(TSCCContext));
     
     newCtx->serial = TSCC_nextSerial();
     newCtx->wasClosed = 0;
