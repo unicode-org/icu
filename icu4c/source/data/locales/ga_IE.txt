@@ -11,6 +11,9 @@ ga_IE {
 //        2,
 //        1,
 //    }
+    Currencies {
+        IEP { "\u00A3","Punt \u00C9ireannach"      } // 1922-2001
+    }
     DateTimePatterns { 
         "HH:mm:ss z",
         "HH:mm:ss z",
