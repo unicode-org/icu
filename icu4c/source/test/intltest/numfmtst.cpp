@@ -227,7 +227,7 @@ NumberFormatTest::TestExponential(void)
             (*(NumberFormat*)&fmt).format(lval[v], s);
             logln((UnicodeString)" " + lval[v] + "L -format-> " + s);
             if (s != lvalFormat[v+ilval])
-                errln((UnicodeString)"ERROR: Expected " + lvalFormat[v+ilval]);
+                errln((UnicodeString)"ERROR: Expected " + lvalFormat[v+ilval] + " Got: " + s);
 
             ParsePosition pos(0);
             Formattable af;
@@ -244,7 +244,9 @@ NumberFormatTest::TestExponential(void)
                     errln((UnicodeString)"FAIL: Partial parse (" + pos.getIndex() + " chars) -> " + a);
             }
             else
-                errln((UnicodeString)"FAIL: Non-long Formattable returned for " + s);
+                errln((UnicodeString)"FAIL: Non-long Formattable returned for " + s
+                    + " Double: " + af.getDouble()
+                    + ", Long: " + af.getLong());
         }
         ival += val_length;
         ilval += lval_length;
