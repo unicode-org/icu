@@ -4,6 +4,7 @@ static const char delim = '/';
 static int32_t execCount = 0;
 UPerfTest* UPerfTest::gTest = NULL;
 static const int MAXLINES       = 40000;
+//static const char *currDir = ".";
                 
 enum
 {
@@ -18,7 +19,8 @@ enum
     ITERATIONS,
     TIME,
     LINE_MODE,
-    BULK_MODE
+    BULK_MODE,
+    LOCALE
 };
 
 
@@ -35,6 +37,7 @@ UOption options[]={
                       UOPTION_DEF( "time",          't', UOPT_REQUIRES_ARG),
                       UOPTION_DEF( "line-mode",     'l', UOPT_NO_ARG),
                       UOPTION_DEF( "bulk-mode",     'b', UOPT_NO_ARG),
+                      UOPTION_DEF( "locale",        'L', UOPT_REQUIRES_ARG)
                   };
 
 UPerfTest::UPerfTest(int32_t argc, const char* argv[], UErrorCode& status){
@@ -45,7 +48,7 @@ UPerfTest::UPerfTest(int32_t argc, const char* argv[], UErrorCode& status){
     encoding = "";
     uselen = FALSE;
     fileName = NULL;
-    sourceDir = NULL;
+    sourceDir = ".";
     lines = NULL;
     numLines = 0;
     line_mode = FALSE;
@@ -54,6 +57,7 @@ UPerfTest::UPerfTest(int32_t argc, const char* argv[], UErrorCode& status){
     verbose = FALSE;
     bulk_mode = FALSE;
     passes = iterations = time = 0;
+    locale = NULL;
     
     //initialize the argument list
     U_MAIN_INIT_ARGS(argc, argv);
@@ -109,6 +113,10 @@ UPerfTest::UPerfTest(int32_t argc, const char* argv[], UErrorCode& status){
         line_mode = FALSE;
     }
     
+    if(options[LOCALE].doesOccur) {
+      locale = options[LOCALE].value;
+    }
+
     if(time > 0 && iterations >0){
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
@@ -181,7 +189,8 @@ UBool UPerfTest::run(){
         if (_argv[i][0] != '-') {
             char* name = (char*) _argv[i];
             if(verbose==TRUE){
-                fprintf(stdout, "\n=== Handling test: %s: ===\n", name);
+                //fprintf(stdout, "\n=== Handling test: %s: ===\n", name);
+                //fprintf(stdout, "\n%s:\n", name);
             }
             char* parameter = strchr( name, '@' );
             if (parameter) {
@@ -260,6 +269,9 @@ UBool UPerfTest::runTestLoop( char* testname, char* par )
     UErrorCode status = U_ZERO_ERROR;
     UPerfTest* saveTest = gTest;
     gTest = this;
+    int32_t loops = 0;
+    double t=0;
+    int32_t n = 1;
     do {
         this->runIndexedTest( index, FALSE, name );
         if (!name || (name[0] == 0))
@@ -281,72 +293,86 @@ UBool UPerfTest::runTestLoop( char* testname, char* par )
                 fprintf(stderr, "%s returned an illegal operations/iteration()\n", name);
                 return FALSE;
             }
-            double t=0;
-            int32_t n = 1;
-            long events = -1;
-            if (iterations > 0) {
-                n = iterations;
-                // print info only if in verbose mode
-                if(verbose==TRUE){
-                    fprintf(stdout,"= %s begin %i \n" ,name, n);
-                }
-                // Run the test function for specified of passe and iterations
-                for(int32_t ps =0; ps < passes; ps++){
-                    t = testFunction->time(n,&status);
-					if(U_FAILURE(status)){
-						printf("Performance test failed with error: %s \n", u_errorName(status));
-						break;
-					}
-                }
-                events = testFunction->getEventsPerIteration();
-            } else {
-                n = time;
-                // Run for specified duration in seconds
-                if(verbose==TRUE){
-                    fprintf(stdout,"= %s begin %i seconds \n" ,name, n);
-                }
+            if(iterations == 0) {
+              n = time;
+              // Run for specified duration in seconds
+              if(verbose==TRUE){
+                  fprintf(stdout,"= %s calibrating %i seconds \n" ,name, n);
+              }
 
-                //n *=  1000; // s => ms
-                //System.out.println("# " + meth.getName() + " " + n + " sec");                            
-                for(int32_t ps=0;ps<passes;ps++){ 
-                    int32_t loops = 0;
-                    int32_t failsafe = 1; // last resort for very fast methods
-                    t = 0;
-                    while (t < (int)(n * 0.9)) { // 90% is close enough
-                        if (loops == 0 || t == 0) {
-                            loops = failsafe;
-                            failsafe *= 10;
-                        } else {
-                            //System.out.println("# " + meth.getName() + " x " + loops + " = " + t);                            
-                            loops = (int)((double)n / t * loops + 0.5);
-                            if (loops == 0) {
-                                fprintf(stderr,"Unable to converge on desired duration");
-                                return FALSE;
-                            }
-                        }
-                        //System.out.println("# " + meth.getName() + " x " + loops);
+              //n *=  1000; // s => ms
+              //System.out.println("# " + meth.getName() + " " + n + " sec");                            
+              int32_t failsafe = 1; // last resort for very fast methods
+              t = 0;
+              while (t < (int)(n * 0.9)) { // 90% is close enough
+                  if (loops == 0 || t == 0) {
+                      loops = failsafe;
+                      failsafe *= 10;
+                  } else {
+                      //System.out.println("# " + meth.getName() + " x " + loops + " = " + t);                            
+                      loops = (int)((double)n / t * loops + 0.5);
+                      if (loops == 0) {
+                          fprintf(stderr,"Unable to converge on desired duration");
+                          return FALSE;
+                      }
+                  }
+                  //System.out.println("# " + meth.getName() + " x " + loops);
                         t = testFunction->time(loops,&status);
 						if(U_FAILURE(status)){
 							printf("Performance test failed with error: %s \n", u_errorName(status));
 							break;
 						}
-                    }
-                }
-                events = testFunction->getEventsPerIteration();
+              }
+            } else {
+              loops = iterations;
             }
-            //print info only in verbose mode
-            if(verbose==TRUE){
-                if(events == -1){
-                    fprintf(stdout,"= %s end: %f operations: %i \n",name , t , testFunction->getOperationsPerIteration());
-                }else{
-                    fprintf(stdout,"= %s end: %f operations: %i events: %i\n",name , t , testFunction->getOperationsPerIteration(), events);
-                }
-            }else{
-                 if(events == -1){
-                    fprintf(stdout,"= %f %i \n", t , testFunction->getOperationsPerIteration());
-                }else{
-                    fprintf(stdout,"= %f %i %i\n", t , testFunction->getOperationsPerIteration(), events);
-                }                   
+
+            for(int32_t ps =0; ps < passes; ps++){
+              long events = -1;
+              fprintf(stdout,"= %s begin " ,name);
+              if(verbose==TRUE){
+                  if(iterations > 0) {
+                    fprintf(stdout, "%i\n", loops);
+                  } else {
+                    fprintf(stdout, "%i\n", n);
+                  }
+              } else {
+                fprintf(stdout, "\n");
+              }
+              t = testFunction->time(loops, &status);
+						if(U_FAILURE(status)){
+							printf("Performance test failed with error: %s \n", u_errorName(status));
+							break;
+						}
+              events = testFunction->getEventsPerIteration();
+              //print info only in verbose mode
+              if(verbose==TRUE){
+/*
+                  if(events == -1){
+                      fprintf(stdout,"= %s end %f %i %i\n",name , t , loops, testFunction->getOperationsPerIteration());
+                  }else{
+                      fprintf(stdout,"= %s end %f %i %i %i\n",name , t , loops, testFunction->getOperationsPerIteration(), events);
+                  }
+*/
+                  if(events == -1){
+                      fprintf(stdout,"= %s end: %f loops: %i operations: %i \n",name , t , loops, testFunction->getOperationsPerIteration());
+                  }else{
+                      fprintf(stdout,"= %s end: %f loops: %i operations: %i events: %i\n",name , t , loops, testFunction->getOperationsPerIteration(), events);
+                  }
+              }else{
+/*
+                   if(events == -1){
+                      fprintf(stdout,"= %f %i %i \n", t , loops, testFunction->getOperationsPerIteration());
+                  }else{
+                      fprintf(stdout,"= %f %i %i %i\n", t , loops, testFunction->getOperationsPerIteration(), events);
+                  }                   
+*/
+                  if(events == -1){
+                      fprintf(stdout,"= %s end %f %i %i\n",name , t , loops, testFunction->getOperationsPerIteration());
+                  }else{
+                      fprintf(stdout,"= %s end %f %i %i %i\n",name , t , loops, testFunction->getOperationsPerIteration(), events);
+                  }
+              }
             }
             delete testFunction;
         }

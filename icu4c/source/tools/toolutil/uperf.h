@@ -30,12 +30,22 @@ U_NAMESPACE_USE
 //|             return NULL;
 //|     }
 //| }
+#if 0
 #define TESTCASE(id,test)                       \
     case id:                                    \
         name = #test;                           \
         if (exec) {                             \
             fprintf(stdout,#test "---");        \
             fprintf(stdout,"\n");               \
+            return test();                      \
+        }                                       \
+        break
+
+#endif
+#define TESTCASE(id,test)                       \
+    case id:                                    \
+        name = #test;                           \
+        if (exec) {                             \
             return test();                      \
         }                                       \
         break
@@ -134,6 +144,7 @@ protected:
     UBool        bulk_mode;
     UChar* buffer;
     int32_t      bufferLen;
+    const char*  locale;
 private:
     UPerfTest*   caller;
     char*        path;           // specifies subtests
@@ -159,7 +170,8 @@ const char* UPerfTest::gUsageString =
                 "\t-i or --iterations       Number of iterations to be performed. Requires Numeric argument\n"
                 "\t-t or --time             Threshold time for looping until in seconds. Requires Numeric argument.Cannot be used with --iterations\n"
                 "\t-l or --line-mode        The data file should be processed in line mode\n"
-                "\t-b or --bulk-mode        The data file should be processed in file based. Cannot be used with --line-mode\n";
+                "\t-b or --bulk-mode        The data file should be processed in file based. Cannot be used with --line-mode\n"
+                "\t-L or --locale           Locale for the test\n";
 
 #endif
 
