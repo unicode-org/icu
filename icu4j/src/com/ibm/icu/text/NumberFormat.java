@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NumberFormat.java,v $ 
- * $Date: 2002/10/04 19:49:10 $ 
- * $Revision: 1.17 $
+ * $Date: 2002/11/16 00:59:32 $ 
+ * $Revision: 1.18 $
  *
  *****************************************************************************************
  */
@@ -163,7 +163,7 @@ import com.ibm.icu.impl.LocaleUtility;
  *
  * see          DecimalFormat
  * see          java.text.ChoiceFormat
- * @version      $Revision: 1.17 $
+ * @version      $Revision: 1.18 $
  * @author       Mark Davis
  * @author       Helena Shih
  * @author       Alan Liu
@@ -476,7 +476,8 @@ public abstract class NumberFormat extends Format{
 
     // ===== Factory stuff =====
 
-    public static abstract class NumberFormatFactory {
+    /* @prototype */
+    /* public */ static abstract class NumberFormatFactory {
         public static final int FORMAT_NUMBER = NUMBERSTYLE;
         public static final int FORMAT_CURRENCY = CURRENCYSTYLE;
         public static final int FORMAT_PERCENT = PERCENTSTYLE;
@@ -503,7 +504,8 @@ public abstract class NumberFormat extends Format{
         public abstract NumberFormat createFormat(Locale loc, int formatType);
     }
 
-    public static abstract class SimpleNumberFormatFactory extends NumberFormatFactory {
+    /* @prototype */
+    /* public */ static abstract class SimpleNumberFormatFactory extends NumberFormatFactory {
         final Set localeNames;
         final boolean visible;
 
@@ -559,8 +561,9 @@ public abstract class NumberFormat extends Format{
      * Registers a new NumberFormat for the provided locale of the defined
      * type.  The returned object is a key that can be used to unregister this
      * NumberFormat object.
+     * @prototype
      */
-    public static Object register(NumberFormatFactory factory) {
+    /* public */ static Object register(NumberFormatFactory factory) {
         if (factory == null) {
             throw new IllegalArgumentException("factory must not be null");
         }
@@ -570,8 +573,9 @@ public abstract class NumberFormat extends Format{
     /**
      * Unregister the currency associated with this key (obtained from
      * registerInstance).
+     * @prototype
      */
-    public static boolean unregister(Object registryKey) {
+    /* public */ static boolean unregister(Object registryKey) {
         if (service == null) {
             return false;
         } else {
