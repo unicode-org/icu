@@ -13,6 +13,7 @@
 #include "unicode/uloc.h"
 #include "unicode/calendar.h"
 #include "unicode/timezone.h"
+#include "unicode/simpletz.h"
 #include "unicode/ustring.h"
 #include "unicode/strenum.h"
 #include "cmemory.h"
@@ -20,9 +21,67 @@
 
 U_NAMESPACE_USE
 
+static TimeZone*
+_createTimeZone(const UChar* zoneID, int32_t len, UErrorCode* ec) {
+    TimeZone* zone = NULL;
+    if (ec!=NULL && U_SUCCESS(*ec)) {
+        // Note that if zoneID is invalid, we get back GMT. This odd
+        // behavior is by design and goes back to the JDK. The only
+        // failure we will see is a memory allocation failure.
+        int32_t l = (len<0 ? u_strlen(zoneID) : len);
+        zone = TimeZone::createTimeZone(UnicodeString(zoneID, l));
+        if (zone == NULL) {
+            *ec = U_MEMORY_ALLOCATION_ERROR;
+        }
+    }
+    return zone;
+}
+
 U_CAPI UEnumeration* U_EXPORT2
-ucal_openTimeZoneEnumeration(int32_t rawOffset, UErrorCode* ec) {
-    return uenum_openStringEnumeration(TimeZone::createEnumeration(rawOffset), ec);
+ucal_openTimeZones(UErrorCode* ec) {
+    return uenum_openStringEnumeration(TimeZone::createEnumeration(), ec);
+}
+
+U_CAPI UEnumeration* U_EXPORT2
+ucal_openCountryTimeZones(const char* country, UErrorCode* ec) {
+    return uenum_openStringEnumeration(TimeZone::createEnumeration(country), ec);
+}
+
+U_CAPI int32_t U_EXPORT2
+ucal_getDefaultTimeZone(UChar* result, int32_t resultCapacity, UErrorCode* ec) {
+    int32_t len = 0;
+    if (ec!=NULL && U_SUCCESS(*ec)) {
+        TimeZone* zone = TimeZone::createDefault();
+        if (zone == NULL) {
+            *ec = U_MEMORY_ALLOCATION_ERROR;
+        } else {
+            UnicodeString id;
+            zone->getID(id);
+            delete zone;
+            len = id.extract(result, resultCapacity, *ec);
+        }
+    }
+    return len;
+}
+
+U_CAPI void U_EXPORT2
+ucal_setDefaultTimeZone(const UChar* zoneID, UErrorCode* ec) {
+    TimeZone* zone = _createTimeZone(zoneID, -1, ec);
+    if (zone != NULL) {
+        TimeZone::adoptDefault(zone);
+    }
+}
+
+U_CAPI int32_t U_EXPORT2
+ucal_getDSTSavings(const UChar* zoneID, UErrorCode* ec) {
+    int32_t result = 0;
+    TimeZone* zone = _createTimeZone(zoneID, -1, ec);
+    if (U_SUCCESS(*ec) &&
+        zone->getDynamicClassID() == SimpleTimeZone::getStaticClassID()) {
+        result = ((SimpleTimeZone*) zone)->getDSTSavings();
+    }
+    delete zone;
+    return result;
 }
 
 U_CAPI const UChar* U_EXPORT2
@@ -89,18 +148,11 @@ ucal_open(    const    UChar*          zoneID,
 
   if(U_FAILURE(*status)) return 0;
   
-  TimeZone *zone = 0;
-  if(zoneID == 0) {
-    zone = TimeZone::createDefault();
-  }
-  else {
-    int32_t length = (len == -1 ? u_strlen(zoneID) : len);
+  TimeZone* zone = (zoneID==NULL) ? TimeZone::createDefault()
+      : _createTimeZone(zoneID, len, status);
 
-    zone = TimeZone::createTimeZone(UnicodeString(zoneID, length));
-  }
-  if(zone == 0) {
-    *status = U_MEMORY_ALLOCATION_ERROR;
-    return 0;
+  if (U_FAILURE(*status)) {
+      return NULL;
   }
   
   return (UCalendar*)Calendar::createInstance(zone, Locale(locale), *status);
@@ -123,21 +175,12 @@ ucal_setTimeZone(    UCalendar*      cal,
   if(U_FAILURE(*status))
     return;
 
-  TimeZone *zone;
-  if(zoneID == NULL) {
-    zone = TimeZone::createDefault();
-  }
-  else {
-    int32_t length = (len == -1 ? u_strlen(zoneID) : len);
-    zone = TimeZone::createTimeZone(UnicodeString((UChar*)zoneID, 
-                          length, length));
-  }
-  if(zone == 0) {
-    *status = U_MEMORY_ALLOCATION_ERROR;
-    return;
-  }
+  TimeZone* zone = (zoneID==NULL) ? TimeZone::createDefault()
+      : _createTimeZone(zoneID, len, status);
 
-  ((Calendar*)cal)->adoptTimeZone(zone);
+  if (zone != NULL) {
+      ((Calendar*)cal)->adoptTimeZone(zone);
+  }
 }
 
 U_CAPI int32_t U_EXPORT2
