@@ -75,7 +75,7 @@ void RBBIAPITest::TestCloneEquals()
     //    source and dest iterator produce the same next() after assignment.
     //    deleting one doesn't disable the other.
     logln("Testing assignment");
-    RuleBasedBreakIterator *bix = (RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale::getEnglish(), status);
+    RuleBasedBreakIterator *bix = (RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale::getDefault(), status);
     if(U_FAILURE(status)){
         errln((UnicodeString)"FAIL : in construction");
         return;
@@ -590,7 +590,7 @@ void RBBIAPITest::TestRuleStatus() {
 
      UErrorCode status=U_ZERO_ERROR;
      
-     RuleBasedBreakIterator *bi = (RuleBasedBreakIterator *)BreakIterator::createWordInstance(Locale::getDefault(), status);
+     RuleBasedBreakIterator *bi = (RuleBasedBreakIterator *)BreakIterator::createWordInstance(Locale::getEnglish(), status);
      if(U_FAILURE(status)) {
          errln("FAIL : in construction");
      } else {
@@ -879,7 +879,7 @@ void RBBIAPITest::TestRegistration() {
     }
     
     {
-        BreakIterator* result = BreakIterator::createWordInstance("xx", status);
+        BreakIterator* result = BreakIterator::createWordInstance("en_US", status);
         BreakIterator* root = BreakIterator::createWordInstance("", status);
         UBool fail = TRUE;
         if(root){
@@ -991,16 +991,14 @@ void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
         case  2: name = "TestHashCode"; if (exec) TestHashCode(); break;
         case  3: name = "TestGetSetAdoptText"; if (exec) TestGetSetAdoptText(); break;
         case  4: name = "TestIteration"; if (exec) TestIteration(); break;
-        case  5: name = "extra"; break;   // Extra
-        case  6: name = "extra"; break;   // Extra
-        case  7: name = "TestBuilder"; if (exec) TestBuilder(); break;
-        case  8: name = "TestQuoteGrouping"; if (exec) TestQuoteGrouping(); break;
-        case  9: name = "TestRuleStatus"; if (exec) TestRuleStatus(); break;
-        case 10: name = "TestRuleStatusVec"; if (exec) TestRuleStatusVec(); break;
-        case 11: name = "TestBug2190"; if (exec) TestBug2190(); break;
-        case 12: name = "TestRegistration"; if (exec) TestRegistration(); break;
-        case 13: name = "TestBoilerPlate"; if (exec) TestBoilerPlate(); break;
-        case 14: name = "TestRoundtripRules"; if (exec) TestRoundtripRules(); break;
+        case  5: name = "TestBuilder"; if (exec) TestBuilder(); break;
+        case  6: name = "TestQuoteGrouping"; if (exec) TestQuoteGrouping(); break;
+        case  7: name = "TestRuleStatus"; if (exec) TestRuleStatus(); break;
+        case  8: name = "TestRuleStatusVec"; if (exec) TestRuleStatusVec(); break;
+        case  9: name = "TestBug2190"; if (exec) TestBug2190(); break;
+        case 10: name = "TestRegistration"; if (exec) TestRegistration(); break;
+        case 11: name = "TestBoilerPlate"; if (exec) TestBoilerPlate(); break;
+        case 12: name = "TestRoundtripRules"; if (exec) TestRoundtripRules(); break;
 
         default: name = ""; break; // needed to end loop
     }
