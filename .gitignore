@@ -23,6 +23,7 @@ icu4c/data/word_th.brk
 icu4c/debian/*.debhelper
 icu4c/debian/*.substvars
 icu4c/debian/*files
+icu4c/debian/*libicu[0-9]*
 icu4c/debian/control
 icu4c/debian/docs
 icu4c/debian/icu
@@ -33,8 +34,6 @@ icu4c/debian/icu-locales
 icu4c/debian/icu.postinst
 icu4c/debian/icu.prerm
 icu4c/debian/libicu-dev
-icu4c/debian/libicu[0-9]*
-icu4c/debian/libicu[0-9]*.p*
 icu4c/debian/postinst
 icu4c/debian/prerm
 icu4c/debian/tmp
