@@ -53,7 +53,6 @@ U_STRING_DECL(k_type_array,     "array",     5);
 U_STRING_DECL(k_type_alias,     "alias",     5);
 U_STRING_DECL(k_type_intvector, "intvector", 9);
 U_STRING_DECL(k_type_import,    "import",    6);
-U_STRING_DECL(k_type_include,   "include",   7);
 U_STRING_DECL(k_type_reserved,  "reserved",  8);
 
 enum EResourceType
@@ -67,7 +66,6 @@ enum EResourceType
      RT_ALIAS,
      RT_INTVECTOR,
      RT_IMPORT,
-     RT_INCLUDE,
      RT_RESERVED
 };
 
@@ -83,7 +81,6 @@ const char *resourceNames[] =
      "Alias",
      "Int vector",
      "Import",
-     "Include",
      "Reserved",
 };
 
@@ -135,7 +132,6 @@ void initParser(void)
     U_STRING_INIT(k_type_intvector, "intvector", 9);
     U_STRING_INIT(k_type_import,    "import",    6);
     U_STRING_INIT(k_type_reserved,  "reserved",  8);
-    U_STRING_INIT(k_type_include,   "include",   7);
     for (i = 0; i < MAX_LOOKAHEAD + 1; i++)
     {
         ustr_init(&lookahead[i].value);
@@ -329,9 +325,7 @@ parseResourceType(UErrorCode *status)
         result = RT_INTVECTOR;
     } else if (u_strcmp(tokenValue->fChars, k_type_import) == 0) {
         result = RT_IMPORT;
-    } else if (u_strcmp(tokenValue->fChars, k_type_include) == 0) {
-        result = RT_INCLUDE;
-    } else if (u_strcmp(tokenValue->fChars, k_type_reserved) == 0) {
+    }else if (u_strcmp(tokenValue->fChars, k_type_reserved) == 0) {
         result = RT_RESERVED;
     } else {
         char tokenBuffer[1024];
@@ -1230,86 +1224,7 @@ parseImport(char *tag, uint32_t startline, UErrorCode *status)
     return result;
 }
 
-static struct SResource *
-parseInclude(char *tag, uint32_t startline, UErrorCode *status)
-{
-    struct SResource *result;
-    int32_t           len=0;
-    char             *filename;
-    uint32_t          line;
-    UChar *pTarget     = NULL;
 
-    UCHARBUF *ucbuf;
-    char     *fullname = NULL;
-    int32_t  count     = 0;
-    const char* cp = NULL;
-    
-    filename = getInvariantString(&line, status);
-    count     = uprv_strlen(filename);
-    
-    if (U_FAILURE(*status))
-    {
-        return NULL;
-    }
-
-    expect(TOK_CLOSE_BRACE, NULL, NULL, status);
-
-    if (U_FAILURE(*status))
-    {
-        uprv_free(filename);
-        return NULL;
-    }
-
-    if(isVerbose()){
-        printf(" include %s at line %i \n",  (tag == NULL) ? "(null)" : tag,startline);
-    }
-
-    fullname = (char *) uprv_malloc(inputdirLength + count + 2);
-    /* test for NULL */
-    if(fullname == NULL)
-    {
-        *status = U_MEMORY_ALLOCATION_ERROR;
-        uprv_free(filename);
-        return NULL;
-	}
-
-    if(inputdir!=NULL){
-        if (inputdir[inputdirLength - 1] != U_FILE_SEP_CHAR)
-        {
-        
-            uprv_strcpy(fullname, inputdir);
-
-            fullname[inputdirLength]      = U_FILE_SEP_CHAR;
-            fullname[inputdirLength + 1] = '\0';
-
-            uprv_strcat(fullname, filename);
-        }
-        else
-        {
-            uprv_strcpy(fullname, inputdir);
-            uprv_strcat(fullname, filename);
-        }
-    }else{
-        uprv_strcpy(fullname,filename);
-    }
-
-    ucbuf = ucbuf_open(fullname, &cp,getShowWarning(),FALSE,status);
-
-    if (U_FAILURE(*status)) {
-        error(line, "couldn't open input file %s\n", filename);
-        return NULL;
-    }
-
-
-    result = string_open(bundle, tag,(UChar*) ucbuf_getBuffer(ucbuf,&len,status),len, status);
-
-    uprv_free(pTarget);
-
-    uprv_free(filename);
-    uprv_free(fullname);
-
-    return result;
-}
 
 static struct SResource *
 parseResource(char *tag, UErrorCode *status)
@@ -1434,7 +1349,6 @@ parseResource(char *tag, UErrorCode *status)
     case RT_BINARY:     return parseBinary    (tag, startline, status);
     case RT_INTEGER:    return parseInteger   (tag, startline, status);
     case RT_IMPORT:     return parseImport    (tag, startline, status);
-    case RT_INCLUDE:    return parseInclude   (tag, startline, status);
     case RT_INTVECTOR:  return parseIntVector (tag, startline, status);
 
     default:
