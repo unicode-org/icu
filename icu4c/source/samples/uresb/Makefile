@@ -1,5 +1,5 @@
 # Copyright (c) 2000 IBM, Inc. and others
-# conversion sample code $Revision: 1.2 $
+# conversion sample code $Revision: 1.3 $
 
 
 # Usage:
@@ -9,7 +9,7 @@
 #  - do 'make install' of icu 
 #
 #  - change ICU_DEFAULT_PREFIX line to point to the $(prefix) that 
-#    was used (will look for $(prefix)/share/icu/Makefile.inc )
+#    was used (will look for $(prefix)/lib/icu/Makefile.inc )
 #      OR 
 #   set the variable ICU_PREFIX to point at $(prefix)
 #  
@@ -24,10 +24,10 @@ ICU_DEFAULT_PREFIX=/home/weiv/build/workshop
 ICU_DEFAULT_PATH=/home/weiv/dev/icu
 
 ifeq ($(strip $(ICU_PREFIX)),)
-  ICU_INC=$(ICU_DEFAULT_PREFIX)/share/icu/Makefile.inc
+  ICU_INC=$(ICU_DEFAULT_PREFIX)/lib/icu/Makefile.inc
   GENRB = $(ICU_DEFAULT_PREFIX)/sbin/genrb
 else
-  ICU_INC=$(ICU_PREFIX)/share/icu/Makefile.inc
+  ICU_INC=$(ICU_PREFIX)/lib/icu/Makefile.inc
   GENRB = $(ICU_PREFIX)/sbin/genrb
 endif
 
@@ -58,7 +58,7 @@ $(ICU_PATH)/source/tools/toolutil/uoptions.h:
 	@false
 
 CPPFLAGS += -I$(ICU_PATH)/source/tools/toolutil
-LDFLAGS += -L$(ICU_PATH)/source/tools/toolutil -licu-toolutil -lustdio
+LDFLAGS += -L$(ICU_PATH)/source/tools/toolutil -licutoolutil -lustdio
 
 $(GENRB):
 	@echo "Please read the directions at the top of this file (Makefile)"
