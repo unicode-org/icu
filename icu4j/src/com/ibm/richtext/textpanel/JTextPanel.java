@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: JTextPanel.java,v $ $Revision: 1.2 $ $Date: 2000/04/22 17:10:10 $
+ * @(#)$RCSfile: JTextPanel.java,v $ $Revision: 1.3 $ $Date: 2001/03/07 02:39:01 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -15,6 +15,7 @@
 package com.ibm.richtext.textpanel;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.lang.reflect.InvocationTargetException;
 
@@ -567,5 +568,15 @@ public final class JTextPanel extends JPanel implements MTextPanel {
     ATextPanelImpl getImpl() {
         
         return fImpl;
+    }
+
+    public void setBackground(Color color) {
+        super.setBackground (color);
+        java.awt.Component[] compList = getComponents();
+        for (int i = 0; i < compList.length; i++) {
+            if (!(compList[i] instanceof JScrollBar)) {
+                compList[i].setBackground (color);
+            }
+        }
     }
 }
