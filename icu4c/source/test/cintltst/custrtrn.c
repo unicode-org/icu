@@ -151,7 +151,7 @@ static void Test_UChar_UTF32_API(void){
         }*/
         for(i=0; i< u32SrcLen; i++){
             if(u32Target[i] != src32[i]){
-                log_verbose("u_strToUTF32() failed expected: \\U%08X got: \\U%08X \n", src32[i], u32Target[i]);
+                log_verbose("u_strToUTF32() failed expected: \\U%08X got: \\U%08X at index: %i \n", src32[i], u32Target[i],i);
                 failed =TRUE;
             }
         }
@@ -177,7 +177,7 @@ static void Test_UChar_UTF32_API(void){
         
         for(i=0; i< uDestLen; i++){
             if(uTarget[i] != src16[i]){
-                log_verbose("u_strFromUTF32() failed expected: \\U%08X got: \\U%08X \n", src16[i] ,uTarget[i]);
+                log_verbose("u_strFromUTF32() failed expected: \\U%08X got: \\U%08X at index: %i \n", src16[i] ,uTarget[i],i);
                 failed =TRUE;
             }
         }
@@ -271,6 +271,10 @@ static void Test_UChar_UTF8_API(void){
             u8TargetLength = u8DestLen;
         
             u_strToUTF8(u8Target,u8TargetLength, &u8DestLen, uSrc, uSrcLen,&err);
+            if(U_FAILURE(err)){
+                log_err("u_strToUTF8 failed after preflight. Error: %s\n", u_errorName(err));
+                return;
+            }
 
         }
         else {
@@ -461,14 +465,18 @@ static void Test_UChar_WCHART_API(void){
 
         /* pre-flight */
         u_strFromWCS(uDest, uDestLen,&reqLen,wDest,reqLen,&err);
+        
 
         if(err == U_BUFFER_OVERFLOW_ERROR){
             err =U_ZERO_ERROR;
             uDest = (UChar*) uprv_malloc(sizeof(UChar) * (reqLen+1));
             uDestLen = reqLen + 1;
             u_strFromWCS(uDest, uDestLen,&reqLen,wDest,reqLen,&err);
+        }else if(U_FAILURE(err)){
+
+            log_err("u_strFromWCS() failed. Error: %s \n", u_errorName(err));
+            return;
         }
-    
 
         for(i=0; i< uSrcLen; i++){
             if(uDest[i] != src16j[i]){
