@@ -122,12 +122,17 @@ static int dotestconv(const char *name, const char *standard, const char *expect
     if (tag && !expected) {
         log_err("FAIL: Unexpectedly found %s canonical name for %s, got %s\n", standard, name, tag);
         res = 0;
-    } else if (!tag && expected) {
+    }
+    else if (!tag && expected) {
         log_err("FAIL: could not find %s canonical name for %s\n", (standard ? "\"\"" : standard), name);
         res = 0;
-    } else if (expected && (name == tag || uprv_strcmp(expected, tag)) && error == U_ZERO_ERROR) {
+    }
+    else if (expected && (name == tag || uprv_strcmp(expected, tag) != 0)) {
         log_err("FAIL: expected %s for %s canonical name for %s, got %s\n", expected, standard, name, tag);
         res = 0;
+    }
+    else {
+        log_verbose("PASS: (\"%s\", \"%s\") -> %s == %s \n", name, standard, tag, expected);
     }
 
     return res;
@@ -148,9 +153,9 @@ static void TestCanonicalName()
         dotestconv("cp1208", "", "UTF-8") &&        /* default name due to ordering */
         dotestconv("UTF16_BigEndian", "", "UTF-16BE") &&        /* non-default name due to ordering */
         dotestconv("ISO-2022-CN", "MIME", "ISO_2022,locale=zh,version=0") &&/* default name */
-        dotestconv("Shift_JIS", "MIME", "ibm-943_P14A-1999") &&/* ambiguous alias */
+        dotestconv("Shift_JIS", "MIME", "ibm-943_P15A-2003") &&/* ambiguous alias */
         dotestconv("Shift_JIS", "", "ibm-943_P130-1999") &&/* ambiguous alias */
-        dotestconv("ibm-943", "", "ibm-943_P14A-1999") &&/* ambiguous alias */
+        dotestconv("ibm-943", "", "ibm-943_P15A-2003") &&/* ambiguous alias */
         dotestconv("ibm-943", "IBM", "ibm-943_P130-1999") &&/* ambiguous alias */
         dotestconv("ibm-1363", "", "ibm-1363_P11B-1998") &&/* ambiguous alias */
         dotestconv("ibm-1363", "IBM", "ibm-1363_P110-1997") &&/* ambiguous alias */
