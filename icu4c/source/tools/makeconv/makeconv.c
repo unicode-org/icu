@@ -241,9 +241,7 @@ int main(int argc, char* argv[])
 
    if(!options[6].doesOccur)
     {
-        fprintf(stderr, "%s :  option -p (package name) is required.\n",
-                argv[0]);
-        exit(1);
+      pkgName=NULL;
     }
     else
     {

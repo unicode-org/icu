@@ -386,7 +386,14 @@ writeCCode(const char *filename, const char *destdir) {
         exit(U_FILE_ACCESS_ERROR);
     }
 
-    getOutFilename(filename, destdir, buffer, entry, ".c");
+    if(options[kOptName].doesOccur) { /* prepend  'icudt28_' */
+      strcpy(entry, options[kOptName].value);
+      strcat(entry, "_");
+    } else {
+      entry[0] = 0;
+    }
+
+    getOutFilename(filename, destdir, buffer, entry+uprv_strlen(entry), ".c");
     out=T_FileStream_open(buffer, "w");
     if(out==NULL) {
         fprintf(stderr, "genccode: unable to open output file %s\n", buffer);
@@ -400,7 +407,7 @@ writeCCode(const char *filename, const char *destdir) {
             entry[i]='_';
         }
     }
-
+    
 #ifdef OS400
     /*
     TODO: Fix this once the compiler implements this feature. Keep in sync with udatamem.c

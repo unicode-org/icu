@@ -1809,7 +1809,7 @@ generateData(const char *dataDir) {
 #endif
 
     /* write the data */
-    pData=udata_create(dataDir, DATA_TYPE, U_ICUDATA_NAME "_" DATA_NAME, &dataInfo,
+    pData=udata_create(dataDir, DATA_TYPE, DATA_NAME, &dataInfo,
                        haveCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "gennorm: unable to create the output file, error %d\n", errorCode);

@@ -1095,7 +1095,7 @@ int genpname::MMain(int argc, char* argv[])
        debug < 0 || debug > 9) {
         fprintf(stderr,
             "usage: %s [-options]\n"
-            "\tcreate " U_ICUDATA_NAME "_" PNAME_DATA_NAME "." PNAME_DATA_TYPE "\n"
+            "\tcreate " PNAME_DATA_NAME "." PNAME_DATA_TYPE "\n"
             "options:\n"
             "\t-h or -? or --help  this usage text\n"
             "\t-v or --verbose     turn on verbose output\n"
@@ -1196,7 +1196,7 @@ int32_t genpname::writeDataFile(const char *destdir, const Builder& builder) {
     UNewDataMemory *pdata;
     UErrorCode status = U_ZERO_ERROR;
 
-    pdata = udata_create(destdir, PNAME_DATA_TYPE, U_ICUDATA_NAME "_" PNAME_DATA_NAME, &dataInfo,
+    pdata = udata_create(destdir, PNAME_DATA_TYPE, PNAME_DATA_NAME, &dataInfo,
                          useCopyright ? U_COPYRIGHT_STRING : 0, &status);
     if (U_FAILURE(status)) {
         die("Unable to create data memory");

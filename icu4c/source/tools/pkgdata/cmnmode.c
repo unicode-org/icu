@@ -75,8 +75,13 @@ void pkg_mode_common(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   sprintf(tmp, "all: $(TARGET)\n\n");
   T_FileStream_writeLine(makefile, tmp);
   
+  if(!o->embed) {
   T_FileStream_writeLine(makefile, "$(TARGET): $(CMNLIST) $(DATAFILEPATHS)\n"
-               "\t$(INVOKE) $(GENCMN) -n $(CNAME) -c -d $(TARGETDIR) 0 $(CMNLIST)\n\n");
+               "\t$(INVOKE) $(GENCMN) -n $(CNAME) -c -s $(SRCDIR) -d $(TARGETDIR) 0 $(CMNLIST)\n\n");
+  } else {
+    T_FileStream_writeLine(makefile, "$(TARGET): $(CMNLIST) $(DATAFILEPATHS)\n"
+              "\t$(INVOKE) $(GENCMN) -n $(CNAME) -c -d $(TARGETDIR) 0 -E $(CMNLIST)\n\n");
+  }
 
   if(o->hadStdin == FALSE) { /* shortcut */
     T_FileStream_writeLine(makefile, "$(CMNLIST): $(LISTFILES)\n"

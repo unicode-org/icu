@@ -615,9 +615,13 @@ generateData(const char *dataDir, const char *packageName, const char* bundleNam
     }
 
 #endif
-    
-    uprv_strcpy(fileName,packageName);
-    uprv_strcat(fileName,"_");
+
+    if(packageName != NULL) {
+      uprv_strcpy(fileName,packageName);
+      uprv_strcat(fileName,"_");
+    } else {
+      fileName[0]=0;
+    }
     uprv_strcat(fileName,bundleName);
     /* write the data */
     pData=udata_create(dataDir, DATA_TYPE, fileName, &dataInfo,

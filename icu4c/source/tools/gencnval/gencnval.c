@@ -277,7 +277,7 @@ main(int argc, char* argv[]) {
     T_FileStream_close(in);
 
     /* create the output file */
-    out=udata_create(options[DESTDIR].value, DATA_TYPE, U_ICUDATA_NAME "_" DATA_NAME, &dataInfo,
+    out=udata_create(options[DESTDIR].value, DATA_TYPE, DATA_NAME, &dataInfo,
                      options[COPYRIGHT].doesOccur ? U_COPYRIGHT_STRING : NULL, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "gencnval: unable to open output file - error %s\n", u_errorName(errorCode));
