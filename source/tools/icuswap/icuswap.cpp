@@ -43,6 +43,7 @@
 #include "ucnv_bld.h"
 #include "unormimp.h"
 #include "sprpimpl.h"
+#include "propname.h"
 
 /* swapping implementations in i18n */
 
@@ -297,6 +298,7 @@ static const struct {
     { { 0x55, 0x43, 0x6f, 0x6c }, ucol_swap },          /* dataFormat="UCol" */
     { { 0x49, 0x6e, 0x76, 0x43 }, ucol_swapInverseUCA },/* dataFormat="InvC" */
 #endif
+    { { 0x70, 0x6e, 0x61, 0x6d }, upname_swap },        /* dataFormat="pnam" */
     { { 0x75, 0x6e, 0x61, 0x6d }, uchar_swapNames }     /* dataFormat="unam" */
 };
 
