@@ -2129,10 +2129,6 @@ private:
     RegexMatcher  *fMatcher;
 
     const UnicodeString  *fText;
-    UChar32              *fMungedText;
-    int32_t               fMungedLen;
-    int32_t              *fMungedPositions;
-    int32_t              *fOrigPositions;
 
     RegexMatcher         *fGCFMatcher;
     RegexMatcher         *fGCMatcher;
@@ -2140,10 +2136,7 @@ private:
 };
 
 
-RBBIWordMonkey::RBBIWordMonkey() : fMungedText(0),
-                                   fMungedPositions(0),
-                                   fOrigPositions(0),
-                                   fGCFMatcher(0),
+RBBIWordMonkey::RBBIWordMonkey() : fGCFMatcher(0),
                                    fGCMatcher(0)
 {
     UErrorCode  status = U_ZERO_ERROR;
@@ -2185,12 +2178,8 @@ RBBIWordMonkey::RBBIWordMonkey() : fMungedText(0),
     fSets->addElement(fFormatSet,    status);
     fSets->addElement(fOtherSet,     status);
 
-    fMungedText      = NULL;
-    fMungedLen       = 0;
-    fMungedPositions = NULL;
-    fOrigPositions   = NULL;
 
-    fGCFMatcher = new RegexMatcher("\\X(?:\\p{Format}\\p{Grapheme_Extend}*)*", 0, status);
+    fGCFMatcher = new RegexMatcher("\\X(?:\\p{Format})*", 0, status);
     fGCMatcher  = new RegexMatcher("\\X", 0, status);
 
     if (U_FAILURE(status)) {
@@ -2200,162 +2189,141 @@ RBBIWordMonkey::RBBIWordMonkey() : fMungedText(0),
 
 void RBBIWordMonkey::setText(const UnicodeString &s) {
     fText       = &s;
-
-    delete [] fMungedText;
-    fMungedText = new UChar32[s.length()];
-    fMungedLen  = 0;
-    delete [] fMungedPositions;
-    fMungedPositions = new int32_t[s.length()];
-    delete [] fOrigPositions;
-    fOrigPositions = new int32_t[s.length()];
-    memset(fOrigPositions, -1, s.length()*4);
-
-    // Precompute the "Munged Text", which is the test text,
-    //   converted to an array of UChar32 for easier indexing,
-    //   and with all but the first char of each Graphem Cluster removed (rule 3)
-    //   and with format chars removed (rule 4)
-    fGCFMatcher->reset(s);
-    fGCMatcher ->reset(s);
-    int32_t pos=0;
-    while (fGCFMatcher->find()) {
-        pos = fGCFMatcher->start(deferredStatus);
-        UChar32  c = s.char32At(pos);
-        fMungedPositions[fMungedLen] = pos;
-        fOrigPositions[pos] = fMungedLen;
-        fMungedText[fMungedLen++] = c;
-    }
+    fGCMatcher->reset(*fText);
+    fGCFMatcher->reset(*fText);
 }
 
 
 int32_t RBBIWordMonkey::next(int32_t prevPos) {
     UErrorCode status = U_ZERO_ERROR;
 
+    int    p0, p1, p2, p3;    // Indices of the significant code points around the 
+                              //   break position being tested.  The candidate break
+                              //   locatoin is before p2.
+
+    int     breakPos = -1;
+
+    UChar32 c0, c1, c2, c3;   // The code points at p0, p1, p2 & p3.
+
+    // Prev break at end of string.  return DONE.
     if (prevPos >= fText->length()) {
         return -1;
     }
+    p0 = p1 = p2 = p3 = prevPos;
+    c3 =  fText->char32At(prevPos);
+    c0 = c1 = c2 = 0;
 
-    // If the previous position doesn't map to a  position in the munged text,
-    //   it means that the prev position was pointing to a trailing format char
-    //   Advance, looking for additional format chars while doing so.
-    if (fOrigPositions[prevPos] == -1) {
-        // Advance by one grapheme cluster (could include combining marks)
-        fGCMatcher->reset();
-        fGCMatcher->find(prevPos, status);
-        int32_t pos = fGCMatcher->end(status);
-        if (U_FAILURE(status)) {
-            pos = -1;
-        }
-        // TODO:  Don't return extend chars here!!!
-        return pos;
+
+    // Format char after prev break?  Special case, see last Note for Word Boundaries TR.
+    //    break immdiately after the format char.
+    if (fFormatSet->contains(c3)) {
+        breakPos = fText->moveIndex32(prevPos, 1);
+        return breakPos;
     }
 
 
-    // Loop runs once per position in the munged test text, until a break position
-    //  is found.
-    int32_t mpos = fOrigPositions[prevPos];
-    for (; ; mpos++) {
-        UChar32 letter = fMungedText[mpos];
-
-        // Break at end of text.
-        if (mpos >= fMungedLen-1) {
-            mpos = fMungedLen;
+    // Loop runs once per "significant" character position in the input text.
+    for (;;) {
+        // Move all of the positions forward in the input string.
+        p0 = p1;  c0 = c1;
+        p1 = p2;  c1 = c2;
+        p2 = p3;  c2 = c3;
+        // Advancd p3 by    (GC Format*)   Rules 3, 4
+        status = U_ZERO_ERROR;
+        if  (fGCFMatcher->find(p3, status) == FALSE) {
+            p3 = fText->length();
+            c3 = 0;
+        } else {
+            p3 = fGCFMatcher->end(0, status);
+            U_ASSERT(U_SUCCESS(status));
+            c3 = fText->char32At(p3);
+        }
+        
+        if (p1 == p2) {
+            // Still warming up the loop.  (won't work with zero length strings, but we don't care)
+            continue;
+        }
+        if (p2 == fText->length()) {
+            // Reached end of string.  Always a break position.
             break;
         }
 
+ 
         // Rule (5).   ALetter x ALetter
-        if (fALetterSet->contains(fMungedText[mpos]) &&
-            fALetterSet->contains(fMungedText[mpos+1]))  {
+        if (fALetterSet->contains(c1) &&
+            fALetterSet->contains(c2))  {
             continue;
         }
 
         // Rule (6)  ALetter  x  (MidLetter | MidNumLet) ALetter
-        if ((mpos+2) < fMungedLen &&
-            fALetterSet->contains(fMungedText[mpos]) &&
-              (fMidLetterSet->contains(fMungedText[mpos+1]) ||
-               fMidNumLetSet->contains(fMungedText[mpos+1]) ) &&
-            fALetterSet->contains(fMungedText[mpos+2]))
+        //
+        //    Also incorporates rule 7 by skipping pos ahead to position of the
+        //    terminating ALetter.
+        if ( fALetterSet->contains(c1) &&
+            (fMidLetterSet->contains(c2) || fMidNumLetSet->contains(c2)) &&
+             fALetterSet->contains(c3)) {
             continue;
+        }
+
 
         // Rule (7)  ALetter (MidLetter | MidNumLet)  x  ALetter
-        if (mpos >= 1 &&
-            fALetterSet->contains(fMungedText[mpos-1]) &&
-              (fMidLetterSet->contains(fMungedText[mpos]) ||
-               fMidNumLetSet->contains(fMungedText[mpos]) ) &&
-            fALetterSet->contains(fMungedText[mpos+1]))
+        if (fALetterSet->contains(c0) &&
+            (fMidLetterSet->contains(c1) || fMidNumLetSet->contains(c1) ) &&
+            fALetterSet->contains(c2)) {
             continue;
+        }
 
         // Rule (8)    Numeric x Numeric
-        if (fNumericSet->contains(fMungedText[mpos]) &&
-            fNumericSet->contains(fMungedText[mpos+1]))  {
+        if (fNumericSet->contains(c1) &&
+            fNumericSet->contains(c2))  {
             continue;
         }
 
         // Rule (9)    ALetter x Numeric
-        if (fALetterSet->contains(fMungedText[mpos]) &&
-            fNumericSet->contains(fMungedText[mpos+1]))  {
+        if (fALetterSet->contains(c1) &&
+            fNumericSet->contains(c2))  {
             continue;
         }
 
         // Rule (10)    Numeric x ALetter
-        if (fNumericSet->contains(fMungedText[mpos]) &&
-            fALetterSet->contains(fMungedText[mpos+1]))  {
+        if (fNumericSet->contains(c1) &&
+            fALetterSet->contains(c2))  {
             continue;
         }
 
         // Rule (11)   Numeric (MidNum | MidNumLet)  x  Numeric
-        if (mpos >= 1 &&
-            fNumericSet->contains(fMungedText[mpos-1]) &&
-              (fMidNumSet->contains(fMungedText[mpos]) ||
-               fMidNumLetSet->contains(fMungedText[mpos]) ) &&
-            fNumericSet->contains(fMungedText[mpos+1]))
+        if ( fNumericSet->contains(c0) &&
+            (fMidNumSet->contains(c1) || fMidNumLetSet->contains(c1)) && 
+            fNumericSet->contains(c2)) {
             continue;
+        }
 
         // Rule (12)  Numeric x (MidNum | MidNumLet) Numeric
-        if ((mpos+2) < fMungedLen &&
-            fNumericSet->contains(fMungedText[mpos]) &&
-              (fMidNumSet->contains(fMungedText[mpos+1]) ||
-               fMidNumLetSet->contains(fMungedText[mpos+1]) ) &&
-            fNumericSet->contains(fMungedText[mpos+2]))
+        if (fNumericSet->contains(c1) &&
+            (fMidNumSet->contains(c2) || fMidNumLetSet->contains(c2)) &&
+            fNumericSet->contains(c3)) {
             continue;
-
+        }
+        
         // Rule (13)  Katakana x Katakana
-        if (fKatakanaSet->contains(fMungedText[mpos]) &&
-            fKatakanaSet->contains(fMungedText[mpos+1]))  {
+        if (fKatakanaSet->contains(c1) &&
+            fKatakanaSet->contains(c2))  {
             continue;
         }
 
         // Rule 14.  Break found here.
-        mpos++;
         break;
     }
 
-    // We have a break position in terms of an index in the munged data.
-    // Get the corresponding index in the original test text.
-    int32_t breakPos;
-    if (mpos == fMungedLen) {
-        breakPos = fText->length();
-    } else {
-        breakPos = fMungedPositions[mpos];
-    }
 
     //  Rule 4 fixup,  back up before any trailing
-    //  format characters at the end of the word.
-    int32_t t = breakPos;
-    for (;;) {
-        t = fText->moveIndex32(t, -1);
-        if (t <= prevPos) {
-            break;
-        }
-        UChar32  prevC = fText->char32At(t);
-        if (fExtendSet->contains(prevC)) {
-            continue;
-        }
-        if (fFormatSet->contains(prevC) == FALSE) {
-            break;
-        }
-        breakPos = t;
+    //                 format characters at the end of the word.
+    breakPos = p2;
+    status = U_ZERO_ERROR;
+    if  (fGCMatcher->find(p1, status)) {
+        breakPos = fGCMatcher->end(0, status);
+        U_ASSERT(U_SUCCESS(status));
     }
-
     return breakPos;
 }
 
@@ -2376,10 +2344,6 @@ RBBIWordMonkey::~RBBIWordMonkey() {
     delete fFormatSet;
     delete fExtendSet;
     delete fOtherSet;
-
-    delete [] fMungedText;
-    delete [] fMungedPositions;
-    delete [] fOrigPositions;
 
     delete fGCFMatcher;
     delete fGCMatcher;
@@ -2798,7 +2762,7 @@ fall_through_11:
                 nextPos = numEndIdx;
                 pos     = numEndIdx;
                 do {
-                    pos = fText->moveIndex32(nextPos, -1);
+                    pos = fText->moveIndex32(pos, -1);
                     lastCharInNumber = fText->char32At(pos);
                 } while (fCM->contains(lastCharInNumber));
                 continue;
@@ -2879,7 +2843,7 @@ RBBILineMonkey::~RBBILineMonkey() {
 //                         -1:  run forever.
 //                          0 or greater:  run length.
 //
-//       type = char | work | line | sent | title
+//       type = char | word | line | sent | title
 //
 //-------------------------------------------------------------------------------------------
 
@@ -2966,6 +2930,10 @@ void RBBITest::TestMonkey(char *params) {
         logln("Line Break Monkey Test");
         RBBILineMonkey  m;
         BreakIterator  *bi = BreakIterator::createLineInstance(locale, status);
+        if (params == NULL) {
+            // TODO:  Resolve rule ambiguities, unpin loop count.
+            loopCount = 2;
+        }
         RunMonkey(bi, m, "line", seed, loopCount);
         delete bi;
     }
