@@ -59,6 +59,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         CASE(16,TestCursorOffset);
         CASE(17,TestArbitraryVariableValues);
         CASE(18,TestPositionHandling);
+        CASE(19,TestHiraganaKatakana);
         default: name = ""; break;
     }
 }
@@ -780,6 +781,51 @@ void TransliteratorTest::TestPositionHandling(void) {
                   DATA[3*i+2]);
         delete t;
     }
+}
+
+/**
+ * Test the Hiragana-Katakana transliterator.
+ */
+void TransliteratorTest::TestHiraganaKatakana(void) {
+    Transliterator* hk = Transliterator::createInstance("Hiragana-Katakana");
+    Transliterator* kh = Transliterator::createInstance("Katakana-Hiragana");
+    if (hk == 0 || kh == 0) {
+        errln("FAIL: createInstance failed");
+        delete hk;
+        delete kh;
+        return;
+    }
+
+    // Array of 3n items
+    // Each item is "hk"|"kh"|"both", <Hiragana>, <Katakana>
+    const char* DATA[] = {
+        "both",
+        "\\u3042\\u3090\\u3099\\u3092\\u3050",
+        "\\u30A2\\u30F8\\u30F2\\u30B0",
+
+        "kh",
+        "\\u307C\\u3051\\u3060\\u3042\\u3093\\u30FC",
+        "\\u30DC\\u30F6\\u30C0\\u30FC\\u30F3\\u30FC",
+    };
+    int32_t DATA_length = sizeof(DATA) / sizeof(DATA[0]);
+
+    for (int32_t i=0; i<DATA_length; i+=3) {
+        UnicodeString h = CharsToUnicodeString(DATA[i+1]);
+        UnicodeString k = CharsToUnicodeString(DATA[i+2]);
+        switch (*DATA[i]) {
+        case 0x68: //'h': // Hiragana-Katakana
+            expect(*hk, h, k);
+            break;
+        case 0x6B: //'k': // Katakana-Hiragana
+            expect(*kh, k, h);
+            break;
+        case 0x62: //'b': // both
+            expect(*hk, h, k);
+            expect(*kh, k, h);
+            break;
+        }
+    }
+
 }
 
 //======================================================================
