@@ -282,11 +282,11 @@ derivedNormalizationPropertiesLineFn(void *context,
             return;
         }
 
-        if(0==uprv_memcmp(s, "NO", 2)) {
+        if(0==uprv_strncmp(s, "NO", 2)) {
             qcFlags&=0xf;
-        } else if(0==uprv_memcmp(s, "MAYBE", 5)) {
+        } else if(0==uprv_strncmp(s, "MAYBE", 5)) {
             qcFlags&=0x30;
-        } else if(0==uprv_memcmp(s, "QC", 2) && *(s=(char *)u_skipWhitespace(s+2))==';') {
+        } else if(0==uprv_strncmp(s, "QC", 2) && *(s=(char *)u_skipWhitespace(s+2))==';') {
             /*
              * Unicode 4.0.1:
              * changes single field "NFD_NO" -> two fields "NFD_QC; N" etc.
