@@ -5,9 +5,6 @@
  ********************************************************************/
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
 #include "unicode/locid.h"
 #include "unicode/unistr.h"
 #include "unicode/convert.h"
