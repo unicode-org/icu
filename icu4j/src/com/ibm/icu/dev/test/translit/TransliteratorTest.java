@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2001/10/25 00:02:24 $
- * $Revision: 1.56 $
+ * $Date: 2001/10/26 22:59:26 $
+ * $Revision: 1.57 $
  *
  *****************************************************************************************
  */
@@ -1590,61 +1590,6 @@ public class TransliteratorTest extends TestFmwk {
         } catch (IllegalArgumentException e) {
             errln("FAIL: " + rule + " => " + e);
         }
-    }
-
-    public void TestDebugIndic() {
-//      Transliterator a = 
-//          Transliterator.getInstance("Latin-Devanagari",
-//                                     Transliterator.FORWARD);
-//      Transliterator b = 
-//          Transliterator.getInstance("Devanagari-Latin",
-//                                     Transliterator.FORWARD);
-      Transliterator ab = 
-          Transliterator.getInstance("Latin-Devanagari;Devanagari-Latin",
-                                     Transliterator.FORWARD);
-
-//      //expect(a, "rjuna", "\u0930\u094d\u091c\u0941\u0928");
-//      //expect(b, "\u0930\u094d\u091c\u0941\u0928", "rjuna");
-      expect(ab, "arjuna", "arjuna");
-
-//      expect(ab, "\ue030\ue04d\u091c\u0941na", "rjuna");
-
-//      expect(Transliterator.getInstance("Latin-InterIndic; InterIndic-Devanagari; Devanagari-InterIndic; InterIndic-Latin"),
-//             "\ue030\ue04d\u091c\u0941na", "rjuna");
-
-//      expect(Transliterator.getInstance("Latin-InterIndic"),
-//             "\ue030\ue04d\u091c\u0941na", "rjuna");
-
-        expect(
-               Transliterator.getInstance("Latin-InterIndic; InterIndic-Latin"),
-               //Transliterator.getInstance("InterIndic-Latin"),
-               "u\ue028\ue04d", "un");
-
-        /*
-    (InterIndic-Devanagari;Devanagari-InterIndic;InterIndic-Latin:Keyboard) 
-\ue030 ->
-{|\ue030|} + \ue04d ->
-{|\ue030\ue04d|} + \u091c ->
-{|\ue030\ue04d\u091c|} + \u0941 ->
-{rju||} + n ->
-{rju|n|} + a ->
-{rjun|a|} =>
-rjuna
-
-    FAIL: (Latin-InterIndic;InterIndic-Devanagari;Devanagari-InterIndic;InterIndic-Latin:Keyboard)
-\ue030 ->
-{|\ue030|} + \ue04d ->
-{|\ue030\ue04d|} + \u091c ->
-{|\ue030\u091c|} + \u0941 ->
-{raju||} + n ->
-{raju|n|} + a ->
-{raju|\ue028\ue04da|} =>
-rajuna, expected rjuna
-    */
-    
-        Transliterator t = Transliterator.getInstance("Latin-Devanagari;Devanagari-Latin");
-        String s = "rmk\u1E63\u0113t";
-        expect(t, s, s);
     }
 
     //======================================================================
