@@ -142,10 +142,12 @@ typedef void U_CALLCONV UMtxFn   (const void *context, UMTX  *mutex);
   *  This function may be used even when ICU has been built without multi-threaded
   *  support  (see ICU_USE_THREADS pre-processor variable, umutex.h)
   *  @param context This pointer value will be saved, and then (later) passed as
-  *                 a parameter to the increment and decrement functions each time they
-  *                 are called.  This function can only be called 
-  *  @param inc     Pointer to a function to do an atomic increment operation.  Must be non-null.
-  *  @param dec     Pointer to a function to do an atomic decrement operation.  Must be non-null.
+  *                 a parameter to the user-supplied mutex functions each time they
+  *                 are called. 
+  *  @param init    Pointer to a mutex initialization function.  Must be non-null.
+  *  @param destroy Pointer to the mutex destroy function.  Must be non-null.
+  *  @param lock    pointer to the mutex lock function.  Must be non-null.
+  *  @param unlock  Pointer to the mutex unlock function.  Must be non-null.
   *  @param status  Receives error values.
   *  @draft ICU 2.8
   *  @system
