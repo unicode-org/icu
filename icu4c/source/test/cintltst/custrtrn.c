@@ -22,6 +22,8 @@
 #include "cmemory.h"
 #include "unicode/ustring.h"
 
+#define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
+
 void addUCharTransformTest(TestNode** root);
 
 static void Test_UChar_UTF32_API(void);
@@ -400,6 +402,27 @@ static void Test_UChar_UTF8_API(void){
 
         free(u8Target);
         free(uTarget);
+    }
+
+    /* test UTF-8 with single surrogates - illegal in Unicode 3.2 */
+    {
+        static const UChar
+            withLead16[]={ 0x1800, 0xd89a, 0x0061 },
+            withTrail16[]={ 0x1800, 0xdcba, 0x0061, 0 };
+        static const uint8_t
+            withLead8[]={ 0xe1, 0xa0, 0x80, 0xed, 0xa2, 0x9a, 0x61 },
+            withTrail8[]={ 0xe1, 0xa0, 0x80, 0xed, 0xb2, 0xba, 0x61 };
+        UChar out16[10];
+        char out8[10];
+
+        if(
+            (err=U_ZERO_ERROR, u_strToUTF8(out8, LENGTHOF(out8), NULL, withLead16, LENGTHOF(withLead16), &err), err!=U_INVALID_CHAR_FOUND) ||
+            (err=U_ZERO_ERROR, u_strToUTF8(out8, LENGTHOF(out8), NULL, withTrail16, -1, &err), err!=U_INVALID_CHAR_FOUND) ||
+            (err=U_ZERO_ERROR, u_strFromUTF8(out16, LENGTHOF(out16), NULL, (const char *)withLead8, LENGTHOF(withLead8), &err), err!=U_INVALID_CHAR_FOUND) ||
+            (err=U_ZERO_ERROR, u_strFromUTF8(out16, LENGTHOF(out16), NULL, (const char *)withTrail8, -1, &err), err!=U_INVALID_CHAR_FOUND)
+        ) {
+            log_err("error: u_strTo/FromUTF8(string with single surrogate) fails to report error\n");
+        }
     }
 }
 static const uint16_t src16j[] = {
