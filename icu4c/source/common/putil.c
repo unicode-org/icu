@@ -602,6 +602,7 @@ uprv_digitsAfterDecimal(double x)
     return numDigits;
 }
 
+#ifdef ICU_NEXTDOUBLE_USE_DEPRECATES
 U_CAPI double U_EXPORT2
 uprv_nextDouble(double d, UBool next)
 {
@@ -708,6 +709,7 @@ uprv_nextDouble(double d, UBool next)
   return d + last_eps;
 #endif
 }
+#endif /* ICU_NEXTDOUBLE_USE_DEPRECATES */
 
 static char*
 u_topNBytesOfDouble(double* d, int n)

@@ -805,7 +805,7 @@ udata_setCommonData(const void *data, UErrorCode *pErrorCode) {
 
     /* do we already have common ICU data set? */
     if(gCommonICUData != NULL) {
-        *pErrorCode=U_USING_DEFAULT_ERROR;
+        *pErrorCode=U_USING_DEFAULT_WARNING;
         return;
     }
 

@@ -7,6 +7,10 @@
 *   11/17/99    aliu        Creation.
 **********************************************************************
 */
+
+/* These APIs are becoming private */
+#define ICU_COMPOUNDTRANSLITERATOR_USE_DEPRECATES 1
+
 #include "unicode/cpdtrans.h"
 #include "unicode/unifilt.h"
 #include "unicode/unifltlg.h"

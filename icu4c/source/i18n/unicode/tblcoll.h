@@ -545,6 +545,7 @@ public:
   */
   virtual void setStrength(ECollationStrength newStrength);
 
+#ifdef ICU_NORMALIZER_USE_DEPRECATES
   // deprecated functions ---------------------------------------------------
 
   /**
@@ -593,6 +594,7 @@ public:
   * @deprecated To be removed after 2002-sep-30; use getAttribute().
   */
   virtual Normalizer::EMode getDecomposition(void) const;
+#endif /* ICU_NORMALIZER_USE_DEPRECATES */
 
 private:
 

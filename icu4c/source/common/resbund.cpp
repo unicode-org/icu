@@ -190,6 +190,7 @@ ResourceBundle::ResourceBundle( const UnicodeString&    path,
     constructForLocale(path, Locale::getDefault(), error);
 }
 
+#ifdef ICU_RESOURCEBUNDLE_USE_DEPRECATES
 ResourceBundle::ResourceBundle(const wchar_t* path,
                                const Locale& locale, 
                                UErrorCode& err)
@@ -197,6 +198,7 @@ ResourceBundle::ResourceBundle(const wchar_t* path,
 {
     constructForLocale(path, locale, err);
 }
+#endif /* ICU_RESOURCEBUNDLE_USE_DEPRECATES */
 
 ResourceBundle::ResourceBundle(const ResourceBundle &other)
                               :UObject(other), locName(NULL)
@@ -273,6 +275,7 @@ ResourceBundle::constructForLocale(const UnicodeString& path,
     }
 }
 
+#ifdef ICU_RESOURCEBUNDLE_USE_DEPRECATES
 void 
 ResourceBundle::constructForLocale(const wchar_t* path,
                                    const Locale& locale,
@@ -284,6 +287,7 @@ ResourceBundle::constructForLocale(const wchar_t* path,
         resource = ures_open(0, locale.getName(), &error);
     }
 }
+#endif /* ICU_RESOURCEBUNDLE_USE_DEPRECATES */
 
 UnicodeString ResourceBundle::getString(UErrorCode& status) const {
     int32_t len = 0;

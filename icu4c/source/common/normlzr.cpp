@@ -50,6 +50,7 @@ Normalizer::Normalizer(const CharacterIterator& iter, UNormalizationMode mode) :
 
 // deprecated constructors
 
+#ifdef ICU_NORMALIZER_USE_DEPRECATES
 Normalizer::Normalizer(const UnicodeString& str, 
                        EMode mode) :
     UObject(), fUMode(getUMode(mode)), fOptions(0),
@@ -95,6 +96,7 @@ Normalizer::Normalizer(const CharacterIterator& iter,
 {
     init(iter.clone());
 }
+#endif /* ICU_NORMALIZER_USE_DEPRECATES */
 
 Normalizer::Normalizer(const Normalizer &copy) :
     UObject(copy), fUMode(copy.fUMode), fOptions(copy.fOptions),
@@ -356,6 +358,7 @@ Normalizer::setIndexOnly(int32_t index) {
     clearBuffer();
 }
 
+#ifdef ICU_NORMALIZER_USE_DEPRECATES
 /**
  * Set the iteration position in the input text that is being normalized
  * and return the first normalized character at that position.
@@ -379,6 +382,7 @@ UChar32 Normalizer::setIndex(int32_t index) {
     setIndexOnly(index);
     return current();
 }
+#endif  /* ICU_NORMALIZER_USE_DEPRECATES */
 
 /**
  * Return the first character in the normalized text->  This resets

@@ -11,6 +11,8 @@
 #define RBT_H
 
 #include "unicode/translit.h"
+
+#ifdef ICU_RULEBASEDTRANSLITERATOR_USE_DEPRECATES
 #include "unicode/utypes.h"
 #include "unicode/parseerr.h"
 
@@ -557,5 +559,6 @@ inline RuleBasedTransliterator::RuleBasedTransliterator(
 }
 
 U_NAMESPACE_END
+#endif /* ICU_RULEBASEDTRANSLITERATOR_USE_DEPRECATES */
 
 #endif

@@ -19,8 +19,10 @@
 
 static UBool i18n_cleanup(void)
 {
-    transliterator_cleanup();
+#ifdef ICU_DATEFORMATSYMBOLS_USE_DEPRECATES
     dateFormatSymbols_cleanup();
+#endif
+    transliterator_cleanup();
     timeZone_cleanup();
     ucol_cleanup();
     ucol_bld_cleanup();

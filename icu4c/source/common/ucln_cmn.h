@@ -33,9 +33,11 @@ U_CFUNC UBool uloc_cleanup(void);
 
 U_CFUNC UBool ustring_cleanup(void);
 
+#ifdef ICU_UNICODECONVERTER_USE_DEPRECATES
 /* @deprecated this functionality is going away */
 /* @return true if cleanup complete successfully*/
 U_CFUNC UBool UnicodeConverter_cleanup(void);
+#endif /* ICU_UNICODECONVERTER_USE_DEPRECATES */
 
 U_CAPI UBool U_EXPORT2 ucnv_cleanup(void);
 

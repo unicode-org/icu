@@ -8,6 +8,9 @@
 *******************************************************************************
 */
 
+/* These APIs are becoming private */
+#define ICU_RULEBASEDTRANSLITERATOR_USE_DEPRECATES 1
+
 #include "unicode/utrans.h"
 #include "unicode/putil.h"
 #include "unicode/rbt.h"

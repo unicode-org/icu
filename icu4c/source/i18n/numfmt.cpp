@@ -425,7 +425,7 @@ NumberFormat::createInstance(const Locale& desiredLocale,
     if (U_FAILURE(status))
     {
         // We don't appear to have resource data available -- use the last-resort data
-        status = U_USING_FALLBACK_ERROR;
+        status = U_USING_FALLBACK_WARNING;
 
         // Use the DecimalFormatSymbols constructor which uses last-resort data
         DecimalFormatSymbols* symbolsToAdopt = new DecimalFormatSymbols(status);

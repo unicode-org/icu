@@ -17,9 +17,10 @@
 * 
 */
 
+#include "unicode/ucoleitr.h"
+#include "unicode/uchar.h"
 #include "ucol_bld.h" 
 #include "ucln_in.h" 
-#include "unicode/uchar.h"
 #include "umutex.h"
 
 

@@ -8,6 +8,11 @@
 **********************************************************************
 */
 
+/* These APIs are becoming private */
+#define ICU_RULEBASEDTRANSLITERATOR_USE_DEPRECATES 1
+#define ICU_COMPOUNDTRANSLITERATOR_USE_DEPRECATES 1
+#define ICU_NULLTRANSLITERATOR_USE_DEPRECATES 1
+
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
 #include "unicode/cpdtrans.h"
@@ -181,8 +186,7 @@ Spec::Spec(const UnicodeString& theSpec) : top(theSpec) {
     if (res == 0) {
         return;
     }
-    if (U_FAILURE(status) ||
-        status == U_USING_DEFAULT_ERROR) {
+    if (U_FAILURE(status) || status == U_USING_DEFAULT_WARNING) {
         delete res;
         res = 0;
     }
@@ -860,8 +864,7 @@ Entry* TransliteratorRegistry::findInBundle(const Spec& specToOpen,
         
         UErrorCode status = U_ZERO_ERROR;
         ResourceBundle subres(specToOpen.getBundle().get(tag, status));
-        if (U_FAILURE(status) ||
-            status == U_USING_DEFAULT_ERROR) {
+        if (U_FAILURE(status) || status == U_USING_DEFAULT_WARNING) {
             continue;
         }
         

@@ -12,6 +12,8 @@
 
 #include "unicode/translit.h"
 
+#ifdef ICU_COMPOUNDTRANSLITERATOR_USE_DEPRECATES
+
 U_NAMESPACE_BEGIN
 
 class U_I18N_API UVector;
@@ -311,5 +313,6 @@ inline CompoundTransliterator::CompoundTransliterator(const UnicodeString& id,
 #endif
 
 U_NAMESPACE_END
+#endif /* ICU_COMPOUNDTRANSLITERATOR_USE_DEPRECATES */
 
 #endif

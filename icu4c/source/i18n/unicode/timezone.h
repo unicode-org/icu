@@ -315,11 +315,14 @@ public:
      */
     virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                               uint8_t dayOfWeek, int32_t millis, UErrorCode& status) const = 0;
+
+#ifdef ICU_TIMEZONE_USE_DEPRECATES
     /**
      * @deprecated Remove after 2000-dec-31. Use the other getOffset().
      */
     virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                               uint8_t dayOfWeek, int32_t millis) const = 0;
+#endif /* ICU_TIMEZONE_USE_DEPRECATES */
 
     /**
      * Gets the time zone offset, for current date, modified in case of
