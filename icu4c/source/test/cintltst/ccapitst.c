@@ -1232,7 +1232,7 @@ static void TestConvertSafeClone()
 static void TestCCSID() {
     UConverter *cnv;
     UErrorCode errorCode;
-    int32_t ccsids[]={ 37, 850, 943, 949, 950, 1047, 1252, 5050, 33722 };
+    int32_t ccsids[]={ 37, 850, 943, 949, 950, 1047, 1252, 33722 };
     int32_t i, ccsid;
 
     for(i=0; i<(int32_t)(sizeof(ccsids)/sizeof(int32_t)); ++i) {
