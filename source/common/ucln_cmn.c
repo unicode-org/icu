@@ -26,7 +26,7 @@
 #include "uassert.h"
 
 static UBool gICUInitialized = FALSE;
-static UMTX  gICUInitMutex;
+static UMTX  gICUInitMutex   = NULL;
 
 
 static cleanupFunc *gCleanupFunctions[UCLN_COMMON] = {
