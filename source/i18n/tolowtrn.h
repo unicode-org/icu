@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2003, International Business Machines
+*   Copyright (C) 2001-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -53,7 +53,7 @@ class U_I18N_API LowercaseTransliterator : public Transliterator {
      * Transliterator API.
      * @return a copy of the object.
      */
-    Transliterator* clone(void) const;
+    virtual Transliterator* clone(void) const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.

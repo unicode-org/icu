@@ -64,7 +64,7 @@ public:
     /**
      * Transliterator API.
      */
-    Transliterator* clone() const;
+    virtual Transliterator* clone() const;
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
