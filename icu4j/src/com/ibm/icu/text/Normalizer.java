@@ -5,13 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Normalizer.java,v $ 
- * $Date: 2003/04/09 20:03:43 $ 
- * $Revision: 1.29 $
+ * $Date: 2003/04/09 21:38:57 $ 
+ * $Revision: 1.30 $
  *
  *******************************************************************************
  */
 package com.ibm.icu.text;
-import com.ibm.icu.impl.*;
 import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.lang.UCharacter;
