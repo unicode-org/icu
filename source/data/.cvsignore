@@ -1,0 +1,10 @@
+Makefile
+.links
+*.cnv
+*.dat
+*.res
+*.brk
+*.dll
+*.exp
+*.obj
+*.lib

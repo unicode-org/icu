@@ -1,0 +1,60 @@
+Note: now has error messages, see root.txt.. more submissions wanted!
+For now, we're just using OS level error messages for file access
+email them to: srl@jtcsv.com thanks!
+-----------------------------------------
+
+
+uconv
+=====
+
+uconv demonstration example of ICU and codepage conversion.
+The purpose is to be a replacement tool for the UNIX iconv program, and
+to show how to use the class UnicodeConverterCPP.
+
+Compiling
+=========
+
+See the README in the parent (icuapps) directory.
+
+Running
+=======
+
+uconv converts files from one encoding to another. Just type uconv and it
+will tell you the usage. It works similar to the iconv found in UNIX98 
+compliant systems.
+
+TESTING uconv
+=============
+
+In the utf8 and charset  directories you can find some texts, which you can use to test uconv
+with. In the charset directory you can find texts encoded in different codepages. 
+Not all the codepages are supported by uconv yet, i.e. no euc* are supported.
+
+Note on running the example in Linux/UNIX (1999)
+================================================
+
+The i18n support  in Linux isn't as good as it should be, so to display other
+than ISO-8859-x on your console means problems. But there is much work in
+progress to eliminate this. In the meantime, please have a look at the 
+"UTF8 and Unicode FAQ for UNIX/Linux":  http://www.cl.cam.ac.uk/~mgk25/unicode.html
+
+To be able to display Unicode characters from far-away languages 
+you need a suitable font. The easiest is to use Roman Czyborra's free unicode
+font. The font is not beautiful, but useful for testing purposes. Have a look at: 
+"Proposal for GNU Unicode font" http://czyborra.com/unifont/. This is
+not a TrueType font so it won't work in Windows and on Macs.
+
+
+Note on TMAKE (and those strange *.pro files)
+=============================================
+
+Maybe you noticed the *.pro file. This is a source-file for the
+Makefile-generator tmake, which was written by Troll Tech. 
+It works in both UNIX and Windows, but you need to have Perl 
+installed. More information can be found on 
+http://www.troll.no/freebies/tmake.html.
+Usage: tmake uconv.pro > Makefile
+
+Hope this will get you going with the ICU library
+
+Jonas Utterström <jonas.utterstrom@vittran.norrnod.se>

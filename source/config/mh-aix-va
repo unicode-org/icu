@@ -1,0 +1,101 @@
+## -*-makefile-*-
+## Aix-specific setup (for xlC)
+## Copyright (c) 1999-2000, International Business Machines Corporation and
+## others. All Rights Reserved.
+##
+## $Id: mh-aix-va,v 1.17.2.1 2002/02/22 01:34:09 srl Exp $
+
+## Commands to generate dependency files
+GEN_DEPS.c=	$(CC) -E -M $(DEFS) $(CPPFLAGS)
+GEN_DEPS.cc=	$(CXX) -E -M $(DEFS) $(CPPFLAGS)
+
+## Commands to compile
+COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -qroconst -c
+COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -qroconst -c
+
+## Commands to link
+## We need to use the C++ linker, even when linking C programs, since
+##  our libraries contain C++ code (C++ static init not called)
+LINK.c=		$(CXX) -brtl $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+LINK.cc=	$(CXX) -brtl -bh:5 $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+
+## Commands to make a shared library
+## -G means -berok -brtl -bnortllib -bnosymbolic -bnoautoexp
+## -bh:8 means halt on errors or worse.  We don't display warnings about
+##      duplicate inline symbols.
+SHLIB.c=	$(CXX) -qmkshrobj -G -brtl
+SHLIB.cc=	$(CXX) -qmkshrobj -G -brtl -bh:5
+
+## Compiler switch to embed a runtime search path
+LD_RPATH=	-I
+LD_RPATH_PRE=	
+
+## Environment variable to set a runtime search path
+LDLIBRARYPATH_ENVVAR = LIBPATH
+
+## Override Versioned target for a shared library.
+FINAL_SO_TARGET=  $(basename $(SO_TARGET))$(SO_TARGET_VERSION)$(ICULIBSUFFIX).$(SO)
+MIDDLE_SO_TARGET= $(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR)$(ICULIBSUFFIX).$(SO)
+
+## Special AIX rules
+## Override the library calls because  AIX doesn't have library versioning. 
+LIBICUDT=       -L$(top_builddir)/data -L$(top_builddir)/stubdata -l$(ICUDATA_NAME)$(ICULIBSUFFIX)
+LIBICUUC=       -L$(top_builddir)/common -l$(ICUPREFIX)uc$(SO_TARGET_VERSION_MAJOR)$(ICULIBSUFFIX) $(LIBICUDT)
+LIBICUI18N=     -L$(top_builddir)/i18n -l$(ICUPREFIX)i18n$(SO_TARGET_VERSION_MAJOR)$(ICULIBSUFFIX)
+LIBICULE=       -L$(top_builddir)/layout -l$(ICUPREFIX)le$(ICULIBSSUFFIX)
+LIBCTESTFW=     -L$(top_builddir)/tools/ctestfw -l$(ICUPREFIX)ctestfw$(SO_TARGET_VERSION_MAJOR)$(ICULIBSUFFIX)
+LIBICUTOOLUTIL= -L$(top_builddir)/tools/toolutil -l$(ICUPREFIX)toolutil$(SO_TARGET_VERSION_MAJOR)$(ICULIBSUFFIX)
+LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio$(SO_TARGET_VERSION_MAJOR)$(ICULIBSUFFIX)
+ICULIBSUFFIX_VERSION = $(SO_TARGET_VERSION_MAJOR)
+
+LD_SONAME = 
+
+## Shared object suffix
+SO=		so
+## Non-shared intermediate object suffix
+STATIC_O = o
+
+## Build archive from shared object
+%.a : %.so
+	$(AR) $(ARFLAGS) $@ $<
+
+## Build import list from export list
+%.e : %.exp
+	@echo "Building an import list for $<"
+	@$(SHELL) -ec "echo '#! $*.a($*.so)' | cat - $< > $@"
+
+## Compilation rules
+%.$(STATIC_O): $(srcdir)/%.c
+	$(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS) -o $@ $<
+%.o: $(srcdir)/%.c
+	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
+
+%.$(STATIC_O): $(srcdir)/%.cpp
+	$(COMPILE.cc) $(STATICCPPFLAGS) $(STATICCXXFLAGS) -o $@ $<
+%.o: $(srcdir)/%.cpp
+	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<
+
+../data/%.o: ../data/%.c
+	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
+
+## Dependency rules
+%.d : %.u
+	@$(SHELL) -ec 'cat $<  \
+		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
+		[ -s $@ ] || rm -f $@ ; rm -f $<'
+
+%.u : $(srcdir)/%.c
+	@echo "Generating dependency information for $<"
+	@$(SHELL) -ec '$(GEN_DEPS.c) $< > /dev/null'
+
+%.u : $(srcdir)/%.cpp
+	@echo "Generating dependency information for $<"
+	@$(SHELL) -ec '$(GEN_DEPS.cc) $< > /dev/null'
+
+## Versioned libraries rules
+%$(SO_TARGET_VERSION_MAJOR).$(SO): %$(SO_TARGET_VERSION)$(ICULIBSUFFIX).$(SO)
+	$(RM) $@ && ln -s $*$(SO_TARGET_VERSION)$(ICULIBSUFFIX).$(SO) $@
+%.$(SO): %$(SO_TARGET_VERSION)$(ICULIBSUFFIX).$(SO)
+	$(RM) $@ && ln -s $*$(SO_TARGET_VERSION)$(ICULIBSUFFIX).$(SO) $@
+
+## End Aix-specific setup
