@@ -264,9 +264,9 @@ static const char* const escSeqStateTable_Result_2022[MAX_STATES_2022] = {
 
      NULL                   ,NULL                   ,NULL                   ,NULL               ,NULL               ,NULL                   ,NULL                   ,NULL                   ,"latin1"               ,"latin1"
     ,"latin1"               ,"ibm-865"              ,"ibm-865"              ,"ibm-865"          ,"ibm-865"          ,"ibm-865"              ,"ibm-865"              ,"JISX-201"             ,"JISX-201"             ,"latin1"
-    ,"latin1"               ,NULL                   ,"JISX-208"             ,"gb_2312_80-1"     ,"JISX-208"         ,NULL                   ,NULL                   ,NULL                   ,NULL                   ,"UTF8"
+    ,"latin1"               ,NULL                   ,"JISX-208"             ,"ibm-5478"         ,"JISX-208"         ,NULL                   ,NULL                   ,NULL                   ,NULL                   ,"UTF8"
     ,"ISO-8859-1"           ,"ISO-8859-7"           ,"JIS-X-208"            ,NULL               ,"ibm-955"          ,"ibm-367"              ,"ibm-952"              ,"ibm-949"              ,"JISX-212"             ,"ibm-1383"
-    ,"ibm-952"              ,"ibm-964"              ,"ibm-964"              ,"ibm-964"          ,"ibm-964"          ,"ibm-964"              ,"ibm-964"              ,"gb_2312_80-1"         ,"ibm-949"              ,"ISO-IR-165"
+    ,"ibm-952"              ,"ibm-964"              ,"ibm-964"              ,"ibm-964"          ,"ibm-964"          ,"ibm-964"              ,"ibm-964"              ,"ibm-5478"         ,"ibm-949"              ,"ISO-IR-165"
     ,"CNS-11643-1992,1"     ,"CNS-11643-1992,2"     ,"CNS-11643-1992,3"     ,"CNS-11643-1992,4" ,"CNS-11643-1992,5" ,"CNS-11643-1992,6"     ,"CNS-11643-1992,7"     ,"UTF16_PlatformEndian" ,"UTF16_PlatformEndian" ,"UTF16_PlatformEndian"
     ,"UTF16_PlatformEndian" ,"UTF16_PlatformEndian" ,"UTF16_PlatformEndian" ,NULL               ,"latin1"           ,"ibm-912"              ,"ibm-913"              ,"ibm-914"              ,"ibm-813"              ,"ibm-1089"
     ,"ibm-920"              ,"ibm-915"              ,"ibm-915"              ,"latin1"
@@ -580,7 +580,7 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
             myConverterData->myConverterArray[3]=   ucnv_open("jisx-201", errorCode);
             myConverterData->myConverterArray[4]=   ucnv_open("jisx-208", errorCode);
             myConverterData->myConverterArray[5]=   ucnv_open("jisx-212", errorCode);
-            myConverterData->myConverterArray[6]=   ucnv_open("gb_2312_80-1", errorCode);
+            myConverterData->myConverterArray[6]=   ucnv_open("ibm-5478", errorCode);   /* gb_2312_80-1 */
             myConverterData->myConverterArray[7]=   ucnv_open("ksc_5601", errorCode);
             myConverterData->myConverterArray[8]=   ucnv_open("jisx-201", errorCode);
             myConverterData->myConverterArray[9]=   NULL;
@@ -627,7 +627,7 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
 
             /* open the required converters and cache them */
             myConverterData->myConverterArray[0] = ucnv_open("ASCII",errorCode);
-            myConverterData->myConverterArray[1] = ucnv_open("gb_2312_80-1",errorCode);
+            myConverterData->myConverterArray[1] = ucnv_open("ibm-5478",errorCode);   /* gb_2312_80-1 */
             myConverterData->myConverterArray[2] = ucnv_open("iso-ir-165",errorCode);
             myConverterData->myConverterArray[3] = ucnv_open("cns-11643-1992",errorCode);
             myConverterData->myConverterArray[4] = NULL;
