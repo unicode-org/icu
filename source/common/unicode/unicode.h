@@ -529,6 +529,32 @@ public:
     static  UChar             toTitleCase(UChar     ch);
 
     /**
+     * Determines if the specified character is ISO-LATIN-1 white space. 
+     * This method returns <code>true</code> for the following five 
+     * characters only: 
+     * <table>
+     * <tr><td>'\t'</td>            <td>&#92;u0009</td>
+     *     <td><code>HORIZONTAL TABULATION</code></td></tr>
+     * <tr><td>'\n'</td>            <td>&#92;u000A</td>
+     *     <td><code>NEW LINE</code></td></tr>
+     * <tr><td>'\f'</td>            <td>&#92;u000C</td>
+     *     <td><code>FORM FEED</code></td></tr>
+     * <tr><td>'\r'</td>            <td>&#92;u000D</td>
+     *     <td><code>CARRIAGE RETURN</code></td></tr>
+     * <tr><td>'&nbsp;&nbsp;'</td>  <td>&#92;u0020</td>
+     *     <td><code>SPACE</code></td></tr>
+     * </table>
+     *
+     * @param      ch   the character to be tested.
+     * @return     <code>true</code> if the character is ISO-LATIN-1 white
+     *             space; <code>false</code> otherwise.
+     * @see        #isSpaceChar
+     * @see        #isWhitespace
+     * @deprecated Replaced by isWhitespace(char).
+     */
+    static bool_t isSpace(UChar ch);
+
+    /**
      * Determines if the specified character is a Unicode space character
      * according to Unicode 2.1.2.
      *
@@ -536,6 +562,33 @@ public:
      * @return  true if the character is a space character; false otherwise.
      */
     static  bool_t              isSpaceChar(UChar     ch);
+
+    /**
+     * Determines if the specified character is white space according to ICU.
+     * A character is considered to be an ICU whitespace character if and only
+     * if it satisfies one of the following criteria:
+     * <ul>
+     * <li> It is a Unicode space separator (category "Zs"), but is not
+     *      a no-break space (&#92;u00A0 or &#92;uFEFF).
+     * <li> It is a Unicode line separator (category "Zl").
+     * <li> It is a Unicode paragraph separator (category "Zp").
+     * <li> It is &#92;u0009, HORIZONTAL TABULATION.
+     * <li> It is &#92;u000A, LINE FEED.
+     * <li> It is &#92;u000B, VERTICAL TABULATION.
+     * <li> It is &#92;u000C, FORM FEED.
+     * <li> It is &#92;u000D, CARRIAGE RETURN.
+     * <li> It is &#92;u001C, FILE SEPARATOR.
+     * <li> It is &#92;u001D, GROUP SEPARATOR.
+     * <li> It is &#92;u001E, RECORD SEPARATOR.
+     * <li> It is &#92;u001F, UNIT SEPARATOR.
+     * </ul>
+     *
+     * @param   ch	the character to be tested.
+     * @return  true if the character is a Java whitespace character;
+     *          false otherwise.
+     * @see     #isSpaceChar
+     */
+    static bool_t isWhitespace(UChar ch);
 
    /**
      * Returns a value indicating a character category according to Unicode
