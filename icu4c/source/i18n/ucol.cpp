@@ -1106,7 +1106,7 @@ ucol_openRules(    const    UChar                  *rules,
     ucol_setOptionsFromHeader(result, src.image, status);
     result->hasRealData = FALSE;
   }
-
+  result->dataInfo.dataVersion[0] = UCOL_BUILDER_VERSION;
   if(U_SUCCESS(*status)) {
     result->rules = (UChar *)uprv_malloc((u_strlen(rules)+1)*sizeof(UChar));
     u_strcpy(result->rules, rules);
@@ -1252,9 +1252,6 @@ void ucol_initUCA(UErrorCode *status) {
     if(result != NULL) { /* It looks like sometimes we can fail to find the data file */
       newUCA = ucol_initCollator((const UCATableHeader *)udata_getMemory(result), newUCA, status);
       newUCA->rb = NULL;
-      newUCA->dataInfo.size = sizeof(UDataInfo);
-      udata_getInfo(result,&newUCA->dataInfo);
-
       umtx_lock(NULL);
       if(UCA == NULL) {
           UCA = newUCA;
@@ -3164,9 +3161,6 @@ ucol_getVersion(const UCollator* coll,
 
     /* combine the version info */
     uint16_t cmbVersion = (rtVersion<<11) | (bdVersion<<6) | (csVersion);
-    
-    /* UCA table version info */
-    uint8_t ucaVersion = UCA->dataInfo.dataVersion[0];
 
     /* Tailoring rules */
     versionInfo[0] = cmbVersion>>8;
