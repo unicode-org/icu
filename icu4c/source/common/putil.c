@@ -812,7 +812,7 @@ getLibraryPath(char *path, int size) {
         }
 #   elif defined(LINUX)
 #   elif defined(AIX)
-        void *handle=load(U_COMMON_LIBNAME, L_LIBPATH_EXEC, "."); /* "libicu-uc.a" */
+        void *handle=(void*)load(U_COMMON_LIBNAME, L_LIBPATH_EXEC, "."); /* "libicu-uc.a" */
         if(handle!=NULL) {
             uint8_t buffer[4096];
             struct ld_info *p=NULL;
@@ -845,7 +845,7 @@ getLibraryPath(char *path, int size) {
                         }
                         break;
                     }
-                    p=p->l_next;
+                    /* p=p->l_next; */
                 }
             }
             unload(handle);
