@@ -64,7 +64,7 @@ void TestMemoryStreamAPI(){
     if(x != sizeof(buffer)/sizeof(buffer[0])){
         log_err("uprv_mstrm_write() wrote %d characters instead of %d\n", x, sizeof(buffer)/sizeof(buffer[0]));
     }
-
+    
     log_verbose("Testing the function uprv_mstrm_getBuffer())\n");
     x=0;
     gotBuffer=uprv_mstrm_getBuffer(memStream, &x);
@@ -144,11 +144,21 @@ void TestMemoryStreamAPI(){
     }
     uprv_mstrm_close(memStream);
 
-    log_verbose("Testing how different functions behave when error is set to true using setError\n");
-    memStream=uprv_mstrm_openBuffer(buffer, size);
+   
+    memStream=uprv_mstrm_openNew(1);
     if(memStream == NULL){
-        log_err("uprv_mstrm_openBuffer() failed\n");
+        log_err("uprv_mstrm_openNew() failed\n");
     }
+    log_verbose("Testing the function uprv_mstrm_write() when position > size\n");
+    x=uprv_mstrm_write(memStream, buffer, sizeof(buffer)/sizeof(buffer[0]) );
+    if(x == -1){
+        log_err("uprv_mstrm_write() failed\n");
+    }
+    if(x != sizeof(buffer)/sizeof(buffer[0])){
+        log_err("uprv_mstrm_write() wrote %d characters instead of %d\n", x, sizeof(buffer)/sizeof(buffer[0]));
+    }
+    
+    log_verbose("Testing how different functions behave when error is set to true using setError\n");
     uprv_mstrm_setError(memStream);
     gotBuffer=uprv_mstrm_getBuffer(memStream, &x);
     if(gotBuffer != NULL || x !=0 ){
