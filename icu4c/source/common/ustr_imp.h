@@ -26,6 +26,18 @@
 #endif
 
 /**
+ * Compare two strings in code point order.
+ * Works in strcmp style (both lengths -1),
+ * strncmp style (lengths equal and >=0, flag TRUE),
+ * and memcmp/UnicodeString style (at least one length >=0).
+ * @internal
+ */
+U_CFUNC int32_t
+u_strCompareCodePointOrder(const UChar *s1, int32_t length1,
+                           const UChar *s2, int32_t length2,
+                           UBool strncmpStyle);
+
+/**
  * Are the Unicode properties loaded?
  * This must be used before internal functions are called that do
  * not perform this check.
