@@ -35,17 +35,6 @@
 
 /* -------------------------------------------------------------------------- */
 
-/*
-### TODO
-allow file without fallback indicators for backward compatibility
-only for makeconv
-must not sort such mappings
-disallow when using extension tables because that requires sorting
-
-rptp2ucm has its own mapping parser and sets all-|1 and |3 mappings; normalization function generates |0 and |2
-
-*/
-
 static void
 printMapping(UCMapping *m, UChar32 *codePoints, uint8_t *bytes, FILE *f) {
     int32_t j;
