@@ -45,7 +45,7 @@ U_NAMESPACE_END
 
 U_NAMESPACE_BEGIN
 
-typedef const void* UBreakRegistryKey;
+typedef const void* URegistryKey;
 
 /**
  * The BreakIterator class implements methods for finding the location
@@ -522,18 +522,31 @@ public:
      * The break iterator will be adoped.  Clones of the iterator will be returned
      * if a request for a break iterator of the given kind matches or falls back to
      * this locale.
+     * @param toAdopt the BreakIterator instance to be adopted
+     * @param locale the Locale for which this instance is to be registered
+     * @param kind the type of iterator for which this instance is to be registered
+     * @param status the in/out status code, no special meanings are assigned
+     * @return a registry key that can be used to unregister this instance
+     * @draft ICU 2.4
      */
-    static UBreakRegistryKey registerBreak(BreakIterator* toAdopt, const Locale& locale, UBreakIteratorType kind, UErrorCode& status);
+    static URegistryKey registerInstance(BreakIterator* toAdopt, const Locale& locale, UBreakIteratorType kind, UErrorCode& status);
 
     /**
      * Unregister a previously-registered BreakIterator using the key returned from the
      * register call.  Key becomes invalid after this call and should not be used again.
-     * Returns TRUE if the iterator for the key was successfully unregistered.
+     * The BreakIterator corresponding to the key will be deleted.
+     * @param key the registry key returned by a previous call to registerInstance
+     * @param status the in/out status code, no special meanings are assigned
+     * @return TRUE if the iterator for the key was successfully unregistered
+     * @draft ICU 2.4
      */
-    static UBool unregisterBreak(UBreakRegistryKey key, UErrorCode& status);
+    static UBool unregister(URegistryKey key, UErrorCode& status);
 
     /**
-     * Return a StringEnumeration over the available locales, including registered locales.
+     * Return a StringEnumeration over the locales available at the time of the call, 
+     * including registered locales.
+     * @return a StringEnumeration over the locales available at the time of the call
+     * @draft ICU 2.4
      */
     static StringEnumeration* getAvailableLocales(void);
 
