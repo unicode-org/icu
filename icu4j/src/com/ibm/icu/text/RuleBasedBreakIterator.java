@@ -251,7 +251,7 @@ import java.io.*;
  * &nbsp; For examples, see the resource data (which is annotated).</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.3 $ $Date: 2000/03/08 23:50:19 $
+ * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.4 $ $Date: 2000/03/08 23:56:21 $
  */
 public class RuleBasedBreakIterator extends BreakIterator {
 
@@ -1417,7 +1417,7 @@ visitedChars = 0;
                 if (replaceWith.charAt(0) == '(') {
                     error("Ignore group can't be enclosed in (", startPos, description);
                 }
-                ignoreChars = new UnicodeSet(replaceWith);
+                ignoreChars = new UnicodeSet(replaceWith, false);
             }
         }
 
@@ -1465,7 +1465,7 @@ visitedChars = 0;
                             }
                             if (expressions.get(line.substring(p, q)) == null) {
                                 expressions.put(line.substring(p, q), new UnicodeSet(line.
-                                                substring(p, q)));
+                                                substring(p, q), false));
 //Test.debugPrintln("1. Adding expression: " + line.substring(p, q));
                             }
                             p = q - 1;
