@@ -1788,7 +1788,7 @@ static void TestShortString(void)
 
             /* test identifiers */
             identifier = ucol_collatorToIdentifier(coll, locale, &status);
-            if(identifier < 0xC0000000) {
+            if(identifier < UCOL_SIT_COLLATOR_NOT_ENCODABLE) {
                 ucol_identifierToShortString(identifier, fromIDBuffer, 256, FALSE, &status);
                 fromID = ucol_openFromIdentifier(identifier, FALSE, &status);
                 if(!ucol_equals(coll, fromID)) {
@@ -1872,27 +1872,27 @@ TestGetContractionsAndUnsafes(void)
         { "ru", 
             "[{\\u0474\\u030F}{\\u0475\\u030F}{\\u04D8\\u0308}{\\u04D9\\u0308}{\\u04E8\\u0308}{\\u04E9\\u0308}]", 
             "[{\\u0430\\u0306}{\\u0410\\u0306}{\\u0430\\u0308}{\\u0410\\u0306}{\\u0433\\u0301}{\\u0413\\u0301}]",
-            "[\\u0306\\u0308]",
-            "[\\u0474\\u0430\\u0410\\u0433\\u0413aAbB]"
+            "[\\u0474\\u0475\\u04d8\\u04d9\\u04e8\\u04e9]",
+            "[aAbB\\u0430\\u0410\\u0433\\u0413]"
         },
         { "uk",
             "[{\\u0474\\u030F}{\\u0475\\u030F}{\\u04D8\\u0308}{\\u04D9\\u0308}{\\u04E8\\u0308}{\\u04E9\\u0308}" 
             "{\\u0430\\u0306}{\\u0410\\u0306}{\\u0430\\u0308}{\\u0410\\u0306}{\\u0433\\u0301}{\\u0413\\u0301}]",
             "[]",
-            "[\\u0306\\u030f\\u0308]",
-            "[\\u0474\\u0475\\u04D8\\u04D9\\u04E8\\u04E9\\u0430\\u0410\\u0433\\u0413aAbBxv]"
+            "[\\u0474\\u0475\\u04D8\\u04D9\\u04E8\\u04E9\\u0430\\u0410\\u0433\\u0413]",
+            "[aAbBxv]",
         },
         { "ja",
             "[{\\u309d\\u3099}{\\u30fd\\u3099}]",
             "[{lj}{nj}]",
-            "[\\u3099]",
+            "[\\u3099\\u309d\\u30fd]",
             "[\\u30a6\\u3044\\uff73]"
         },
         { "sh",
             "[{C\\u0301}{C\\u030C}{C\\u0341}{DZ\\u030C}{Dz\\u030C}{D\\u017D}{D\\u017E}{lj}{nj}]",
             "[{\\u309d\\u3099}{\\u30fd\\u3099}]",
-            "[j]",
-            "[n]"
+            "[nlcdzNLCDZ]",
+            "[jabv]"
         }
     };
 

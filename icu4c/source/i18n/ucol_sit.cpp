@@ -105,6 +105,7 @@ struct CollatorSpec {
     UColAttributeValue options[UCOL_ATTRIBUTE_COUNT];
     uint32_t variableTopValue;
     UChar variableTopString[locElementCapacity];
+    int32_t variableTopStringLen;
     UBool variableTopSet;
     struct {
         const char *start;
@@ -198,7 +199,7 @@ _processRFC3066Locale(CollatorSpec *spec, uint32_t, const char* string,
     char terminator = *string;
     string++;
     const char *end = uprv_strchr(string+1, terminator);
-    if(end - string > loc3066Capacity) {
+    if(end == NULL || end - string >= loc3066Capacity) {
         *status = U_BUFFER_OVERFLOW_ERROR;
         return string;
     } else {
@@ -245,6 +246,10 @@ readHexCodeUnit(const char **string, UErrorCode *status)
         noDigits++;
         (*string)++;
     }
+    // if the string was terminated before we read 4 digits, set an error
+    if(noDigits < 4) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+    }
     return result;
 }
 
@@ -255,8 +260,12 @@ _processVariableTop(CollatorSpec *spec, uint32_t value1, const char* string, UEr
     // get four digits
     int32_t i = 0;
     if(!value1) {
-        while(U_SUCCESS(*status) && *string != 0 && *string != '_') {
+        while(U_SUCCESS(*status) && i < locElementCapacity && *string != 0 && *string != '_') {
             spec->variableTopString[i++] = readHexCodeUnit(&string, status);
+        }
+        spec->variableTopStringLen = i;
+        if(i == locElementCapacity && (*string != 0 || *string != '_')) {
+            *status = U_BUFFER_OVERFLOW_ERROR;
         }
     } else {
         spec->variableTopValue = readHexCodeUnit(&string, status);
@@ -346,7 +355,7 @@ ucol_sit_readSpecs(CollatorSpec *s, const char *string,
 }
 
 static
-int32_t ucol_sit_dumpSpecs(CollatorSpec *s, char *destination, UErrorCode *status)
+int32_t ucol_sit_dumpSpecs(CollatorSpec *s, char *destination, int32_t capacity, UErrorCode *status)
 {
     int32_t i = 0, j = 0;
     int32_t len = 0;
@@ -355,17 +364,24 @@ int32_t ucol_sit_dumpSpecs(CollatorSpec *s, char *destination, UErrorCode *statu
         for(i = 0; i < UCOL_SIT_ITEMS_COUNT; i++) {
             if(s->entries[i].start) {
                 if(len) {
-                    uprv_strcat(destination, "_");
+                    if(len < capacity) {
+                        uprv_strcat(destination, "_");
+                    }
                     len++;
                 } 
                 optName = *(s->entries[i].start);
                 if(optName == languageArg || optName == regionArg || optName == variantArg || optName == keywordArg) {
                     for(j = 0; j < s->entries[i].len; j++) {
-                        destination[len++] = uprv_toupper(*(s->entries[i].start+j));
+                        if(len + j < capacity) {
+                            destination[len+j] = uprv_toupper(*(s->entries[i].start+j));
+                        }
                     }
-                } else {
-                    uprv_strncat(destination,s->entries[i].start, s->entries[i].len);
                     len += s->entries[i].len;
+                } else {
+                    len += s->entries[i].len;
+                    if(len < capacity) {
+                        uprv_strncat(destination,s->entries[i].start, s->entries[i].len);
+                    }
                 }
             }
         }
@@ -450,7 +466,7 @@ ucol_openFromShortString( const char *definition,
 
     for(i = 0; i < UCOL_ATTRIBUTE_COUNT; i++) {
         if(s.options[i] != UCOL_DEFAULT) {
-            if(ucol_getAttribute(result, (UColAttribute)i, status) != s.options[i] || forceDefaults) {
+            if(forceDefaults || ucol_getAttribute(result, (UColAttribute)i, status) != s.options[i]) {
                 ucol_setAttribute(result, (UColAttribute)i, s.options[i], status);
             }
 
@@ -464,7 +480,7 @@ ucol_openFromShortString( const char *definition,
     }
     if(s.variableTopSet) {
         if(s.variableTopString[0]) {
-            ucol_setVariableTop(result, s.variableTopString, u_strlen(s.variableTopString), status);
+            ucol_setVariableTop(result, s.variableTopString, s.variableTopStringLen, status);
         } else { // we set by value, using 'B'
             ucol_restoreVariableTop(result, s.variableTopValue, status);
         }
@@ -481,16 +497,20 @@ ucol_openFromShortString( const char *definition,
 }
 
 
-static void appendShortStringElement(const char *src, int32_t len, char *result, int32_t *resultSize, char arg)
+static void appendShortStringElement(const char *src, int32_t len, char *result, int32_t *resultSize, int32_t capacity, char arg)
 {
     if(len) {
         if(*resultSize) {
-            uprv_strcat(result, "_");
+            if(*resultSize < capacity) {
+                uprv_strcat(result, "_");
+            }
             (*resultSize)++;
         }
         *resultSize += len + 1;
-        uprv_strncat(result, &arg, 1);
-        uprv_strncat(result, src, len);
+        if(*resultSize < capacity) {
+            uprv_strncat(result, &arg, 1);
+            uprv_strncat(result, src, len);
+        }
     }
 }
 
@@ -521,15 +541,15 @@ ucol_getShortDefinitionString(const UCollator *coll,
     if(elementSize) {
         // we should probably canonicalize here...
         elementSize = uloc_getLanguage(locBuff, tempbuff, internalBufferSize, status);
-        appendShortStringElement(tempbuff, elementSize, buffer, &resultSize, languageArg);
+        appendShortStringElement(tempbuff, elementSize, buffer, &resultSize, capacity, languageArg);
         elementSize = uloc_getCountry(locBuff, tempbuff, internalBufferSize, status);
-        appendShortStringElement(tempbuff, elementSize, buffer, &resultSize, regionArg);
+        appendShortStringElement(tempbuff, elementSize, buffer, &resultSize, capacity, regionArg);
         elementSize = uloc_getScript(locBuff, tempbuff, internalBufferSize, status);
-        appendShortStringElement(tempbuff, elementSize, buffer, &resultSize, scriptArg);
+        appendShortStringElement(tempbuff, elementSize, buffer, &resultSize, capacity, scriptArg);
         elementSize = uloc_getVariant(locBuff, tempbuff, internalBufferSize, status);
-        appendShortStringElement(tempbuff, elementSize, buffer, &resultSize, variantArg);
+        appendShortStringElement(tempbuff, elementSize, buffer, &resultSize, capacity, variantArg);
         elementSize = uloc_getKeywordValue(locBuff, "collation", tempbuff, internalBufferSize, status);
-        appendShortStringElement(tempbuff, elementSize, buffer, &resultSize, keywordArg);
+        appendShortStringElement(tempbuff, elementSize, buffer, &resultSize, capacity, keywordArg);
     } 
 
     int32_t i = 0;
@@ -540,14 +560,14 @@ ucol_getShortDefinitionString(const UCollator *coll,
             if(attribute != UCOL_DEFAULT) {
                 char letter = ucol_sit_attributeValueToLetter(attribute, status);
                 appendShortStringElement(&letter, 1, 
-                    buffer, &resultSize, options[i].optionStart);
+                    buffer, &resultSize, capacity, options[i].optionStart);
             }
         }
     }
     if(coll->variableTopValueisDefault == FALSE) {
         //s.variableTopValue = ucol_getVariableTop(coll, status);
         elementSize = T_CString_integerToString(tempbuff, coll->variableTopValue, 16);
-        appendShortStringElement(tempbuff, elementSize, buffer, &resultSize, variableTopValArg);
+        appendShortStringElement(tempbuff, elementSize, buffer, &resultSize, capacity, variableTopValArg);
     }
 
     UParseError parseError;
@@ -565,16 +585,16 @@ ucol_normalizeShortDefinitionString(const char *definition,
     if(U_FAILURE(*status)) {
         return 0;
     }
-    if(capacity == 0 || destination == NULL) {
-        return uprv_strlen(definition);
+
+    if(destination) {
+        uprv_memset(destination, 0, capacity*sizeof(char));
     }
-    uprv_memset(destination, 0, capacity*sizeof(char));
 
     // validate
     CollatorSpec s;
     ucol_sit_initCollatorSpecs(&s);
     ucol_sit_readSpecs(&s, definition, parseError, status);
-    return ucol_sit_dumpSpecs(&s, destination, status);
+    return ucol_sit_dumpSpecs(&s, destination, capacity, status);
 }
 
 // structure for packing the bits of the attributes in the
@@ -604,8 +624,6 @@ static const uint32_t keywordWidth =   5;
 static const uint32_t localeShift =    0;
 static const uint32_t localeWidth =    7;
 
-static const uint32_t needExpansion = 0xC0000000;
-
 
 static uint32_t ucol_sit_putLocaleInIdentifier(uint32_t result, const char* locale, UErrorCode* status) {
     char buffer[internalBufferSize], keywordBuffer[internalBufferSize], 
@@ -634,7 +652,7 @@ static uint32_t ucol_sit_putLocaleInIdentifier(uint32_t result, const char* loca
             mid = (high+low) >> 1; /*Finds median*/
 
             if (mid == oldmid) 
-                return needExpansion; // we didn't find it
+                return UCOL_SIT_COLLATOR_NOT_ENCODABLE; // we didn't find it
 
             compVal = uprv_strcmp(baseName, locales[mid]);
             if (compVal < 0){
@@ -674,7 +692,7 @@ ucol_collatorToIdentifier(const UCollator *coll,
 
     // if variable top is not default, we need to use strings
     if(coll->variableTopValueisDefault != TRUE) {
-        return needExpansion;
+        return UCOL_SIT_COLLATOR_NOT_ENCODABLE;
     }
 
     if(locale == NULL) {
@@ -726,8 +744,8 @@ ucol_openFromIdentifier(uint32_t identifier,
         // the collator is all default, so we will set only the values that will differ from 
         // the default values.
         if(attrValue != UCOL_DEFAULT) {
-            if(ucol_getAttribute(result, attributesToBits[i].attribute, status) != attrValue 
-                || forceDefaults) {
+            if(forceDefaults ||
+                ucol_getAttribute(result, attributesToBits[i].attribute, status) != attrValue) {
                 ucol_setAttribute(result, attributesToBits[i].attribute, attrValue, status);
             }
         }
@@ -778,7 +796,7 @@ ucol_identifierToShortString(uint32_t identifier,
                 uprv_strncat(buffer, &letter, 1);
             }
         }
-        return ucol_sit_dumpSpecs(&s, buffer, status);
+        return ucol_sit_dumpSpecs(&s, buffer, capacity, status);
     }
 #endif
 }
@@ -877,7 +895,7 @@ addContraction(const UCollator *coll, USet *contractions, UChar *buffer, int32_t
     uint32_t newCE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
     // we might have a contraction that ends from previous level
     if(newCE != UCOL_NOT_FOUND && rightIndex > 1) {
-            uset_addString(contractions, buffer, rightIndex + 1);
+            uset_addString(contractions, buffer, rightIndex);
     }
 
     UCharOffset++;
@@ -948,6 +966,14 @@ ucol_getContractions( const UCollator *coll,
                   USet *contractions,
                   UErrorCode *status)
 {
+    if(U_FAILURE(*status)) {
+        return 0;
+    }
+    if(coll == NULL || contractions == NULL) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
     uset_clear(contractions);
     int32_t rulesLen = 0;
     const UChar* rules = ucol_getRules(coll, &rulesLen);
@@ -1007,14 +1033,19 @@ ucol_getUnsafeSet( const UCollator *coll,
 
     int32_t i = 0, j = 0;
     int32_t contsSize = ucol_getContractions(coll, contractions, status);
+    UChar32 c = 0;
     // Contraction set consists only of strings
     // to get unsafe code points, we need to 
     // break the strings apart and add them to the unsafe set
     for(i = 0; i < contsSize; i++) {
         len = uset_getItem(contractions, i, NULL, NULL, buffer, internalBufferSize, status);
         if(len > 0) {
-            for(j = 1; j < len; j++) {
-                uset_add(unsafe, buffer[j]);
+            j = 0;
+            while(j < len) {
+                U16_NEXT(buffer, j, len, c);
+                if(j < len) {
+                    uset_add(unsafe, c);
+                }
             }
         }
     }
