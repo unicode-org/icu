@@ -346,7 +346,7 @@ SOURCE=.\unistr.cpp
 # Begin Source File
 
 SOURCE=.\unorm.cpp
-# ADD CPP /Za
+# ADD CPP /Za /W4
 # End Source File
 # Begin Source File
 
