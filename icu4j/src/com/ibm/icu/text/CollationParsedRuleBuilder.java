@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationParsedRuleBuilder.java,v $ 
-* $Date: 2003/05/14 22:37:36 $ 
-* $Revision: 1.17 $
+* $Date: 2003/05/14 22:45:59 $ 
+* $Revision: 1.18 $
 *
 *******************************************************************************
 */
@@ -3152,7 +3152,8 @@ final class CollationParsedRuleBuilder
     
         // set the middle range
         m_utilWeightRange_.m_length_ = 1;
-        if (m_utilWeightRange_.m_end_ >= m_utilWeightRange_.m_start_) {
+        if (Utility.compareUnsigned(m_utilWeightRange_.m_end_, m_utilWeightRange_.m_start_) >= 0) {
+        //if (m_utilWeightRange_.m_end_ >= m_utilWeightRange_.m_start_) {
             m_utilWeightRange_.m_count_ 
                    = ((m_utilWeightRange_.m_end_ - m_utilWeightRange_.m_start_) 
                       >> 24) + 1;
