@@ -468,7 +468,7 @@ void TimeZoneTest::TestShortZoneIDs()
         {"EAT", 180, FALSE},
         {"MET", 60, TRUE}, // updated 12/3/99 aliu
         {"NET", 240, TRUE}, // updated 12/3/99 aliu
-        {"PLT", 300, FALSE},
+        {"PLT", 300, TRUE}, // updated 12/3/02 aliu; Pakistan using DST as of 2002
         {"IST", 330, FALSE},
         {"BST", 360, FALSE},
         {"VST", 420, FALSE},
