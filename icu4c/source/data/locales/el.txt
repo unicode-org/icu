@@ -11,10 +11,10 @@ el {
             "\u03BC\u03BC",
     }
     CollationElements { 
-	    Version { "1.0" }
+	    Version { "2.0" }
 		Override { "FALSE" }
 		Normalize { "TRUE" }
-		Sequence { "& \u0361 = \u0387 = \u03F3 & \u00B5 < \u0374 < \u0375 <"
+		Sequence { "[normalization on]& \u0361 = \u0387 = \u03F3 & \u00B5 < \u0374 < \u0375 <"
         " \u037A < \u037E < \u0384 < \u0385 & Z < \u03B1 , \u0391 ; \u03AC , \u0386 < \u03B2"
         " , \u0392 ; \u03D0 < \u03B3 , \u0393 < \u03B4 , \u0394 < \u03B5 , \u0395 ; \u03AD"
         " , \u0388 < \u03B6 , \u0396 < \u03B7 , \u0397 ; \u03AE , \u0389 < \u03B8 , \u0398"

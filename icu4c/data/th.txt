@@ -16,9 +16,8 @@ th {
     // First put in all of the consonants, after Z
     //
     CollationElements {
-	    Version { "1.0" }
-		Override { "FALSE" }
-		Sequence { "& Z "
+	    Version { "2.0" }
+		Sequence { "[normalization on]& Z "
         "< \u0E01 "                   //  KO KAI
         "< \u0E02 "                   //  KHO KHAI
         "< \u0E03 "                   //  KHO KHUAT

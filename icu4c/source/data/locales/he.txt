@@ -7,9 +7,9 @@
 
 he {
     CollationElements { 
-	    Version { "1.0" }
+	    Version { "2.0" }
 		Override { "FALSE" }
-		Sequence { "& \u0361 = \u05C4 & \u030D = \u0591 ; \u0592 ; \u0593 ;"
+		Sequence { "[normalization on]& \u0361 = \u05C4 & \u030D = \u0591 ; \u0592 ; \u0593 ;"
         " \u0594 ; \u0595 ; \u0596 ; \u0597 ; \u0598 ; \u0599 & \u0301 = \u059A & \u0300"
         " = \u059B & \u0307 = \u059C ; \u059D & \u0302 = \u059E & \u0308 = \u059F & \u030C"
         " = \u05A0 & \u0306 = \u05A1 & \u0304 = \u05A3 ; \u05A4 & \u0303 = \u05A5 & \u030A"

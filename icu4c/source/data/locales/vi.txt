@@ -7,10 +7,8 @@
 
 vi {
     CollationElements { 
-        Version { "1.0" }
-		Override { "FALSE" }
-		Normalize { "TRUE" }
-		Sequence { "&\u009F,' ','_',\u00AF,\u00AD,'-',',',';',':','!',\u00A1"
+        Version { "2.0" }
+		Sequence { "[normalization on]&\u009F,' ','_',\u00AF,\u00AD,'-',',',';',':','!',\u00A1"
         ",'?',\u00BF,'/','.','^','~',\u00B7,''','\u0022',\u00AB,\u00BB,'(',')','[',']','"
         "{','}',\u00A7,\u00B6,\u00A9,\u00AE,'@',\u00A4,\u00A2,'$',\u00A3,\u00A5,'*','\u005C"
         "','&','#','%','+',\u00B1,\u00F7,\u00D7,'<','=','>',\u00AC,'|',\u00A6,\u00B0,\u00B5"
