@@ -70,6 +70,7 @@ static UChar buffer[BUFFER_SIZE_];
 void UCAConformanceTest::initRbUCA() 
 {
   if(!rbUCA) {
+    UParseError parseError;
     UChar      *ucarules = buffer;
     int32_t size = ucol_getRulesEx(UCA, UCOL_FULL_RULES, ucarules, 
                                    BUFFER_SIZE_);
@@ -78,7 +79,7 @@ void UCAConformanceTest::initRbUCA()
         size = ucol_getRulesEx(UCA, UCOL_FULL_RULES, ucarules, size);
     }
     rbUCA = ucol_openRules(ucarules, size, UCOL_DEFAULT, UCOL_TERTIARY, 
-                          NULL, &status);
+                          &parseError, &status);
     if (U_FAILURE(status)) {
         errln("Failure creating UCA rule-based collator.");
         return;
