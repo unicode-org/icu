@@ -3064,6 +3064,10 @@ void TransliteratorTest::TestAnchorMasking(){
  * Make sure display names of variants look reasonable.
  */
 void TransliteratorTest::TestDisplayName() {
+#if UCONFIG_NO_FORMATTING
+    logln("Skipping, UCONFIG_NO_FORMATTING is set\n");
+    return;
+#else
     static const char* DATA[] = {
         // ID, forward name, reverse name
         // Update the text as necessary -- the important thing is
@@ -3109,6 +3113,7 @@ void TransliteratorTest::TestDisplayName() {
         }
         delete t;
     }
+#endif
 }
 
 void TransliteratorTest::TestSpecialCases(void) {

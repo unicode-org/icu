@@ -235,6 +235,12 @@ void TransliteratorAPITest::TestGetDisplayName() {
     UnicodeString message;
     UErrorCode status = U_ZERO_ERROR;
     UParseError parseError;
+
+#if UCONFIG_NO_FORMATTING
+    logln("Skipping, UCONFIG_NO_FORMATTING is set\n");
+    return;
+#else
+
     for (uint32_t i=0; i<sizeof(dispNames)/sizeof(dispNames[0]); i=i+2 ) {
         t = Transliterator::createInstance(dispNames[i+0], UTRANS_FORWARD, parseError, status);
         if(t==0){
@@ -256,7 +262,7 @@ void TransliteratorAPITest::TestGetDisplayName() {
 
         delete t;
     }
-
+#endif
 
 }
 

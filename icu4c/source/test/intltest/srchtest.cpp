@@ -333,6 +333,11 @@ UBool StringSearchTest::assertEqual(const SearchData *search)
     StringSearch  *strsrch; 
     UChar          temp[128];
     
+#if UCONFIG_NO_BREAK_ITERATION
+    if(search->breaker) {
+      return TRUE; /* skip test */
+    }
+#endif
     u_unescape(search->text, temp, 128);
     UnicodeString text;
     text.setTo(temp);
@@ -371,6 +376,12 @@ UBool StringSearchTest::assertCanonicalEqual(const SearchData *search)
     StringSearch  *strsrch; 
     UChar          temp[128];
     
+#if UCONFIG_NO_BREAK_ITERATION
+    if(search->breaker) {
+      return TRUE; /* skip test */
+    }
+#endif
+
     u_unescape(search->text, temp, 128);
     UnicodeString text;
     text.setTo(temp);
@@ -412,6 +423,13 @@ UBool StringSearchTest::assertEqualWithAttribute(const SearchData *search,
     StringSearch  *strsrch; 
     UChar          temp[128];
     
+
+#if UCONFIG_NO_BREAK_ITERATION
+    if(search->breaker) {
+      return TRUE; /* skip test */
+    }
+#endif
+
     u_unescape(search->text, temp, 128);
     UnicodeString text;
     text.setTo(temp);
