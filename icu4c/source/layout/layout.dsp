@@ -234,6 +234,10 @@ SOURCE=.\GXLayoutEngine.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\HanLayoutEngine.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\HebrewLigatureData.cpp
 # End Source File
 # Begin Source File
@@ -502,6 +506,10 @@ SOURCE=.\GXLayoutEngine.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\HanLayoutEngine.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\HebrewShaping.h
 # End Source File
 # Begin Source File
@@ -662,6 +670,53 @@ InputPath=.\LEGlyphFilter.h
 InputPath=.\LEGlyphFilter.h
 
 "..\..\include\layout\LEGlyphFilter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy  $(InputPath)  ..\..\include\layout
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\LELanguages.h
+
+!IF  "$(CFG)" == "layout - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\LELanguages.h
+
+"..\..\include\layout\LELanguages.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy  $(InputPath)  ..\..\include\layout
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\LELanguages.h
+
+"..\..\include\layout\LELanguages.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy  $(InputPath)  ..\..\include\layout
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "layout - Win64 Release"
+
+# Begin Custom Build
+InputPath=.\LELanguages.h
+
+"..\..\include\layout\LELanguages.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy  $(InputPath)  ..\..\include\layout
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "layout - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\LELanguages.h
+
+"..\..\include\layout\LELanguages.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy  $(InputPath)  ..\..\include\layout
 
 # End Custom Build

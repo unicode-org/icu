@@ -35,6 +35,7 @@ struct GlyphSubstitutionTableHeader
                  const LEGlyphFilter *filter = NULL, const LETag *featureOrder = NULL) const;
 
     le_bool coversScript(LETag scriptTag) const;
+    le_bool coversScriptAndLanguage(LETag scriptTag, LETag languageTag) const;
 };
 
 enum GlyphSubstitutionSubtableTypes

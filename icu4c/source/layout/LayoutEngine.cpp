@@ -7,9 +7,12 @@
  */
 
 #include "LETypes.h"
+#include "LEScripts.h"
+#include "LELanguages.h"
+
 #include "LayoutEngine.h"
 #include "ArabicLayoutEngine.h"
-//#include "HebrewLayoutEngine.h"
+#include "HanLayoutEngine.h"
 #include "IndicLayoutEngine.h"
 #include "ThaiLayoutEngine.h"
 #include "GXLayoutEngine.h"
@@ -320,8 +323,8 @@ void LayoutEngine::reset()
     
 LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, LEErrorCode &success)
 {
-    static le_uint32 gsubTableTag = 0x47535542; // "GSUB"
-    static le_uint32 mortTableTag = 0x6D6F7274; // 'mort'
+    static le_uint32 gsubTableTag = LE_MAKE_TAG('G', 'S', 'U', 'B');
+    static le_uint32 mortTableTag = LE_MAKE_TAG('m', 'o', 'r', 't');
 
     if (LE_FAILURE(success)) {
         return NULL;
@@ -329,8 +332,10 @@ LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstan
 
     const GlyphSubstitutionTableHeader *gsubTable = (const GlyphSubstitutionTableHeader *) fontInstance->getFontTable(gsubTableTag);
     LayoutEngine *result = NULL;
+    LETag scriptTag   = 0x00000000;
+    LETag languageTag = 0x00000000;
 
-    if (gsubTable != NULL && gsubTable->coversScript(OpenTypeLayoutEngine::getScriptTag(scriptCode))) {
+    if (gsubTable != NULL && gsubTable->coversScript(scriptTag = OpenTypeLayoutEngine::getScriptTag(scriptCode))) {
         switch (scriptCode) {
         case bengScriptCode:
         case devaScriptCode:
@@ -346,6 +351,27 @@ LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstan
 
         case arabScriptCode:
             result = new ArabicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, gsubTable);
+            break;
+
+        case haniScriptCode:
+            languageTag = OpenTypeLayoutEngine::getLangSysTag(languageCode);
+
+            switch (languageCode) {
+            case korLanguageCode:
+            case janLanguageCode:
+            case zhtLanguageCode:
+            case zhsLanguageCode:
+                if (gsubTable->coversScriptAndLanguage(scriptTag, languageTag)) {
+                    result = new HanOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, gsubTable);
+                    break;
+                }
+
+                // note: falling through to default case.
+            default:
+                result = new OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, gsubTable);
+                break;
+            }
+
             break;
 
         default:

@@ -295,7 +295,7 @@ typedef struct LEPoint LEPoint;
  *
  * @draft ICU 2.6
  */
-#define LE_GROW_ARRAY(array, newSize) uprv_realloc((void *) (array), newSize * sizeof (array)[0])
+#define LE_GROW_ARRAY(array, newSize) uprv_realloc((void *) (array), (newSize) * sizeof (array)[0])
 
  /**
  * Free an array of basic types. This is used to isolate the rest of
@@ -304,6 +304,19 @@ typedef struct LEPoint LEPoint;
  * @draft ICU 2.6
  */
 #define LE_DELETE_ARRAY(array) uprv_free((void *) (array))
+
+/**
+ * A macro to construct the four-letter tags used to
+ * label TrueType tables, and for script, language and
+ * feature tags in OpenType tables.
+ *
+ * @draft ICU 2.6
+ */
+#define LE_MAKE_TAG(a, b, c, d) \
+    (((le_uint32)(a) << 24) |   \
+     ((le_uint32)(b) << 16) |   \
+     ((le_uint32)(c) << 8)  |   \
+      (le_uint32)(d))
 
 /**
  * Error codes returned by the LayoutEngine.
