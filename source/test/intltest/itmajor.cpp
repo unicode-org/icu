@@ -1,8 +1,15 @@
-/********************************************************************
- * COPYRIGHT: 
- * Copyright (c) 1997-1999, International Business Machines Corporation and
- * others. All Rights Reserved.
- ********************************************************************/
+/*
+*****************************************************************************************
+*                                                                                       *
+* COPYRIGHT:                                                                            *
+*   (C) Copyright Taligent, Inc.,  1997                                                 *
+*   (C) Copyright International Business Machines Corporation,  1997-1998               *
+*   Licensed Material - Program-Property of IBM - All Rights Reserved.                  *
+*   US Government Users Restricted Rights - Use, duplication, or disclosure             *
+*   restricted by GSA ADP Schedule Contract with IBM Corp.                              *
+*                                                                                       *
+*****************************************************************************************
+*/
 
 /**
  * MajorTestLevel is the top level test class for everything in the directory "IntlWork".
@@ -16,7 +23,7 @@
 #include "ittxtbd.h"
 #include "itformat.h"
 #include "itconv.h"
-#include "transtst.h"
+#include "ittrans.h"
 #include "itrbbi.h"
 
 void MajorTestLevel::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
@@ -65,7 +72,7 @@ void MajorTestLevel::runIndexedTest( int32_t index, bool_t exec, char* &name, ch
         case 5: name = "translit"; 
                 if (exec) {
                     logln("TestSuite Transliterator----"); logln();
-                    TransliteratorTest test;
+                    IntlTestTransliterator test;
                     callTest( test, par );
                 }
                 break;

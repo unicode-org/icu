@@ -203,6 +203,10 @@ SOURCE=.\itrbbi.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\ittrans.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\ittxtbd.cpp
 # End Source File
 # Begin Source File
@@ -288,6 +292,10 @@ SOURCE=.\thcoll.cpp
 # Begin Source File
 
 SOURCE=.\tmsgfmt.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\transapi.cpp
 # End Source File
 # Begin Source File
 
@@ -475,6 +483,10 @@ SOURCE=.\itmajor.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\ittrans.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\ittxtbd.h
 # End Source File
 # Begin Source File
@@ -560,6 +572,10 @@ SOURCE=.\thcoll.h
 # Begin Source File
 
 SOURCE=.\tmsgfmt.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\transapi.h
 # End Source File
 # Begin Source File
 
