@@ -168,6 +168,7 @@ public class LDMLConstants {
     public static final String ROUNDING          = "rounding";
     public static final String REGION            = "region";
     public static final String ISO_3166          = "iso3166";
+    public static final String VALID_SUBLOCALE   = "validSubLocales";
     
     
 }

@@ -667,6 +667,26 @@ public class LDMLUtilities {
         }
         return false;
     }
+    
+    public static void appendAllAttributes(Node node, StringBuffer xpath){
+        NamedNodeMap attr = node.getAttributes();
+        int len = attr.getLength();
+        if(len>0){
+            xpath.append("[");
+            for(int i=0; i<len; i++){
+                if(i>0){
+                    xpath.append(" and ");
+                }
+                Node item = attr.item(i);
+                xpath.append("@");
+                xpath.append(item.getNodeName());
+                xpath.append("='");
+                xpath.append(item.getNodeValue());
+                xpath.append("'");
+            }
+            xpath.append("]");
+        }
+    }
     /**
      * Appends the attribute values that make differentiate 2 siblings
      * in LDML
