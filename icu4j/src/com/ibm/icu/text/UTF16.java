@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UTF16.java,v $ 
-* $Date: 2002/12/03 02:14:21 $ 
-* $Revision: 1.26 $
+* $Date: 2002/12/05 02:37:27 $ 
+* $Revision: 1.27 $
 *
 *******************************************************************************
 */
@@ -2642,7 +2642,8 @@ public final class UTF16
     * points, 2 otherwise.</p>
     * @param ch code point
     * @return string representation of the code point
-    * @deprecated ICU 2.4. Use UCharater.toString(int) instead
+    * @obsolete ICU 2.4. Use UCharacter.toString(int) instead since it will be
+    *           removed in that release.
     */
     public static String toString(int ch)
     {   
