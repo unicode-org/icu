@@ -31,7 +31,7 @@ void test_ParsePosition( void )
 {
     ParsePosition* pp1 = new ParsePosition();
     if (pp1 && (pp1->getIndex() == 0)) {
-        it_out << "PP constructor() tested." << endl;
+        it_logln("PP constructor() tested.");
     }else{
         it_errln("*** PP getIndex or constructor() result");
     }
@@ -42,13 +42,13 @@ void test_ParsePosition( void )
         int32_t to = 5;
         ParsePosition pp2( to );
         if (pp2.getIndex() == 5) {
-            it_out << "PP getIndex and constructor(int32_t) tested." << endl;
+            it_logln("PP getIndex and constructor(int32_t) tested.");
         }else{
             it_errln("*** PP getIndex or constructor(int32_t) result");
         }
         pp2.setIndex( 3 );
         if (pp2.getIndex() == 3) {
-            it_out << "PP setIndex tested." << endl;
+            it_logln("PP setIndex tested.");
         }else{
             it_errln("*** PP getIndex or setIndex result");
         }
@@ -59,7 +59,7 @@ void test_ParsePosition( void )
     pp3 = 5;
     ParsePosition pp4( pp3 );
     if ((pp2 != pp3) && (pp3 == pp4)) {
-        it_out << "PP copy contructor, operator== and operator != tested." << endl;
+        it_logln("PP copy contructor, operator== and operator != tested.");
     }else{
         it_errln("*** PP operator== or operator != result");
     }
@@ -67,7 +67,7 @@ void test_ParsePosition( void )
     ParsePosition pp5;
     pp5 = pp4;
     if ((pp4 == pp5) && (!(pp4 != pp5))) {
-        it_out << "PP operator= tested." << endl;
+        it_logln("PP operator= tested.");
     }else{
         it_errln("*** PP operator= operator== or operator != result");
     }
@@ -102,11 +102,11 @@ void test_FieldPosition_example( void )
         int32_t tempOffset = (tempLen <= (tempLen - pos.getEndIndex())) ? 
             tempLen : (tempLen - pos.getEndIndex());
         temp[tempOffset] = '\0';
-        it_out << "FP " << temp << res << endl;
+        it_logln(UnicodeString("FP ") + UnicodeString(temp) + res);
     }
     delete fmt;
     
-    it_out << endl;
+    it_logln("");
 
 }
 
@@ -116,7 +116,7 @@ void test_FieldPosition( void )
     FieldPosition fp( 7 );
 
     if (fp.getField() == 7) {
-        it_out << "FP constructor(int32_t) and getField tested." << endl;
+        it_logln("FP constructor(int32_t) and getField tested.");
     }else{
         it_errln("*** FP constructor(int32_t) or getField");
     }
@@ -137,22 +137,22 @@ void test_FieldPosition( void )
         if (fp.getEndIndex() != i+7) err3 = TRUE;
     }
     if (!err1) {
-        it_out << "FP setField and getField tested." << endl;
+        it_logln("FP setField and getField tested.");
     }else{
         it_errln("*** FP setField or getField");
     }
     if (!err2) {
-        it_out << "FP setBeginIndex and getBeginIndex tested." << endl;
+        it_logln("FP setBeginIndex and getBeginIndex tested.");
     }else{
         it_errln("*** FP setBeginIndex or getBeginIndex");
     }
     if (!err3) {
-        it_out << "FP setEndIndex and getEndIndex tested." << endl;
+        it_logln("FP setEndIndex and getEndIndex tested.");
     }else{
         it_errln("*** FP setEndIndex or getEndIndex");
     }
 
-    it_out << endl;
+    it_logln("");
 
 }
 
@@ -167,27 +167,27 @@ void test_Formattable( void )
     Formattable fta, ftb;
     fta.setLong(1); ftb.setLong(2);
     if ((fta != ftb) || !(fta == ftb)) {
-        it_out << "FT setLong, operator== and operator!= tested." << endl;
+        it_logln("FT setLong, operator== and operator!= tested.");
     }else{
         it_errln("*** Formattable setLong or operator== or !=");
     }
     fta = ftb;
     if ((fta == ftb) || !(fta != ftb)) {
-        it_out << "FT operator= tested." << endl;
+        it_logln("FT operator= tested.");
     }else{
         it_errln("*** FT operator= or operator== or operator!=");
     }
     
     fta.setDouble( 3.0 );
     if ((fta.getType() == Formattable::kDouble) && (fta.getDouble() == 3.0)) {
-        it_out << "FT set- and getDouble tested." << endl;
+        it_logln("FT set- and getDouble tested.");
     }else{
         it_errln("*** FT set- or getDouble");
     }
 
     fta.setDate( 4.0 );
     if ((fta.getType() == Formattable::kDate) && (fta.getDate() == 4.0)) {
-        it_out << "FT set- and getDate tested." << endl;
+        it_logln("FT set- and getDate tested.");
     }else{
         it_errln("*** FT set- or getDate");
     }
@@ -195,7 +195,7 @@ void test_Formattable( void )
     fta.setString("abc");
     UnicodeString res;
     if ((fta.getType() == Formattable::kString) && (fta.getString(res) == "abc")) {
-        it_out << "FT set- and getString tested." << endl;
+        it_logln("FT set- and getString tested.");
     }else{
         it_errln("*** FT set- or getString");
     }
@@ -220,7 +220,7 @@ void test_Formattable( void )
      && (ft_arr[2].getType() == Formattable::kLong)   && (ft_arr[2].getLong()   == (int32_t)3)
      && (ft_arr[3].getType() == Formattable::kString) && (ft_arr[3].getString(temp) == ucs)
      && (ft_arr[4].getType() == Formattable::kString) && (ft_arr[4].getString(temp) == *ucs_ptr) ) {
-        it_out << "FT constr. for date, double, long, ustring, ustring* and array tested" << endl;
+        it_logln("FT constr. for date, double, long, ustring, ustring* and array tested");
     }else{
         it_errln("*** FT constr. for date, double, long, ustring, ustring* or array");
     }
@@ -235,13 +235,12 @@ void test_Formattable( void )
             }
         }
         if (same) {
-            it_out << "FT getArray tested" << endl;
+            it_logln("FT getArray tested");
         }else{
             it_errln("*** FT getArray comparison");
         }
     }else{
-        it_out << res_cnt << " " << ft_cnt << endl;
-        it_errln("*** FT getArray count");
+        it_errln(UnicodeString("*** FT getArray count res_cnt=") + res_cnt + UnicodeString("ft_cnt=") + ft_cnt);
     }
 
     const Formattable ftarr1[] = { Formattable( (int32_t)1 ), Formattable( (int32_t)2 ) };
@@ -252,7 +251,7 @@ void test_Formattable( void )
 
     ft_arr.setArray( ftarr1, ftarr1_cnt );
     if ((ft_arr[0].getType() == Formattable::kLong) && (ft_arr[0].getLong() == (int32_t)1)) {
-        it_out << "FT setArray tested" << endl;
+        it_logln("FT setArray tested");
     }else{
         it_errln("*** FT setArray");
     }
@@ -263,7 +262,7 @@ void test_Formattable( void )
     }
     if ((ft_dynarr[0].getType() == Formattable::kLong) && (ft_dynarr[0].getLong() == (int32_t)3)
      && (ft_dynarr[1].getType() == Formattable::kLong) && (ft_dynarr[1].getLong() == (int32_t)4)) {
-        it_out << "FT operator= and array operations tested" << endl;
+        it_logln("FT operator= and array operations tested");
     }else{
         it_errln("*** FT operator= or array operations");
     }
@@ -271,7 +270,7 @@ void test_Formattable( void )
     ft_arr.adoptArray( ft_dynarr, ftarr2_cnt );
     if ((ft_arr[0].getType() == Formattable::kLong) && (ft_arr[0].getLong() == (int32_t)3)
      && (ft_arr[1].getType() == Formattable::kLong) && (ft_arr[1].getLong() == (int32_t)4)) {
-        it_out << "FT adoptArray tested" << endl;
+        it_logln("FT adoptArray tested");
     }else{
         it_errln("*** FT adoptArray or operator[]");
     }
@@ -283,14 +282,13 @@ void test_Formattable( void )
 
     fta.adoptString( ucs_dyn );
     if ((fta.getType() == Formattable::kString) && (fta.getString(tmp2) == "ttt")) {
-        it_out << "FT adoptString tested" << endl;
+        it_logln("FT adoptString tested");
     }else{
         it_errln("*** FT adoptString or getString");
     }
     fta.setLong(0);   // calls 'dispose' and deletes adopted string !
 
-    it_out << endl;
-
+    it_logln();
 }
 
 void TestFormatSmallClasses::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )

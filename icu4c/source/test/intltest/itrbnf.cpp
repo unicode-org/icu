@@ -43,25 +43,25 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
     if (exec) logln("TestSuite RuleBasedNumberFormat");
     switch (index) {
 #if U_HAVE_RBNF
-      TESTCASE(0, TestEnglishSpellout);
-      TESTCASE(1, TestOrdinalAbbreviations);
-      TESTCASE(2, TestDurations);
-      TESTCASE(3, TestSpanishSpellout);
-      TESTCASE(4, TestFrenchSpellout);
-      TESTCASE(5, TestSwissFrenchSpellout);
-      TESTCASE(6, TestItalianSpellout);
-      TESTCASE(7, TestGermanSpellout);
-      TESTCASE(8, TestThaiSpellout);
-      TESTCASE(9, TestAPI);
-      TESTCASE(10, TestFractionalRuleSet);
-      TESTCASE(11, TestSwedishSpellout);
-	  TESTCASE(12, TestBelgianFrenchSpellout);
+        TESTCASE(0, TestEnglishSpellout);
+        TESTCASE(1, TestOrdinalAbbreviations);
+        TESTCASE(2, TestDurations);
+        TESTCASE(3, TestSpanishSpellout);
+        TESTCASE(4, TestFrenchSpellout);
+        TESTCASE(5, TestSwissFrenchSpellout);
+        TESTCASE(6, TestItalianSpellout);
+        TESTCASE(7, TestGermanSpellout);
+        TESTCASE(8, TestThaiSpellout);
+        TESTCASE(9, TestAPI);
+        TESTCASE(10, TestFractionalRuleSet);
+        TESTCASE(11, TestSwedishSpellout);
+        TESTCASE(12, TestBelgianFrenchSpellout);
 #else
-      TESTCASE(0, TestRBNFDisabled);
+        TESTCASE(0, TestRBNFDisabled);
 #endif
     default:
-      name = "";
-      break;
+        name = "";
+        break;
     }
 }
 
@@ -1174,33 +1174,33 @@ IntlTestRBNF::TestFrenchSpellout()
 }
 
 static const char* swissFrenchTestData[][2] = {
-	{ "1", "un" },
-	{ "15", "quinze" },
-	{ "20", "vingt" },
-	{ "21", "vingt-et-un" },
-	{ "23", "vingt-trois" },
-	{ "62", "soixante-deux" },
-	{ "70", "septante" },
-	{ "71", "septante-et-un" },
-	{ "73", "septante-trois" },
-	{ "80", "huitante" },
-	{ "88", "huitante-huit" },
-	{ "100", "cent" },
-	{ "106", "cent six" },
-	{ "127", "cent vingt-sept" },
-	{ "200", "deux cents" },
-	{ "579", "cinq cents septante-neuf" },
-	{ "1,000", "mille" },
-	{ "1,123", "onze cents vingt-trois" },
-	{ "1,594", "mille cinq cents nonante-quatre" },
-	{ "2,000", "deux mille" },
-	{ "3,004", "trois mille quatre" },
-	{ "4,567", "quatre mille cinq cents soixante-sept" },
-	{ "15,943", "quinze mille neuf cents quarante-trois" },
-	{ "2,345,678", "deux million trois cents quarante-cinq mille six cents septante-huit" },
-	{ "-36", "moins trente-six" },
-	{ "234.567", "deux cents trente-quatre virgule cinq six sept" },
-	{ NULL, NULL}
+    { "1", "un" },
+    { "15", "quinze" },
+    { "20", "vingt" },
+    { "21", "vingt-et-un" },
+    { "23", "vingt-trois" },
+    { "62", "soixante-deux" },
+    { "70", "septante" },
+    { "71", "septante-et-un" },
+    { "73", "septante-trois" },
+    { "80", "huitante" },
+    { "88", "huitante-huit" },
+    { "100", "cent" },
+    { "106", "cent six" },
+    { "127", "cent vingt-sept" },
+    { "200", "deux cents" },
+    { "579", "cinq cents septante-neuf" },
+    { "1,000", "mille" },
+    { "1,123", "onze cents vingt-trois" },
+    { "1,594", "mille cinq cents nonante-quatre" },
+    { "2,000", "deux mille" },
+    { "3,004", "trois mille quatre" },
+    { "4,567", "quatre mille cinq cents soixante-sept" },
+    { "15,943", "quinze mille neuf cents quarante-trois" },
+    { "2,345,678", "deux million trois cents quarante-cinq mille six cents septante-huit" },
+    { "-36", "moins trente-six" },
+    { "234.567", "deux cents trente-quatre virgule cinq six sept" },
+    { NULL, NULL}
 };
 
 void 
@@ -1226,10 +1226,10 @@ IntlTestRBNF::TestBelgianFrenchSpellout()
         = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale("fr", "BE", ""), status);
     
     if (U_FAILURE(status)) {
-		fprintf(stderr, "rbnf status: %d (%x)\n", status, status);
+        errln("rbnf status: 0x%x (%s)\n", status, u_errorName(status));
         errln("FAIL: could not construct formatter");
     } else {
-		// Belgian french should match Swiss french.
+        // Belgian french should match Swiss french.
         doTest(formatter, swissFrenchTestData, TRUE);
     }
     delete formatter;
@@ -1469,9 +1469,7 @@ IntlTestRBNF::doTest(RuleBasedNumberFormat* formatter, const char* testData[][2]
                             UnicodeString msg = "FAIL: formatter could not parse ";
                             msg.append(actualString);
                             msg.append(" status code: " );
-                            char buffer[32];
-                            sprintf(buffer, "0x%x", status);
-                            msg.append(buffer);
+                            msg.append(u_errorName(status));
                             errln(msg);
                             break;
                         } else {
