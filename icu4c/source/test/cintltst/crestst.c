@@ -573,8 +573,9 @@ TestTable32(void) {
     }
 
     /* get the items by index */
+    item=NULL;
     for(i=0; i<count; ++i) {
-        item=ures_getByIndex(res, i, NULL, &errorCode);
+        item=ures_getByIndex(res, i, item, &errorCode);
         if(U_FAILURE(errorCode)) {
             log_err("unable to get item %d of %d in testdata/testtable32.res - %s\n",
                     i, count, u_errorName(errorCode));
@@ -615,13 +616,11 @@ TestTable32(void) {
             log_err("\"%s\" at %d in testdata/testtable32.res has a string/int value of %d, expected %d\n",
                     key, i, number, parsedNumber);
         }
-
-        ures_close(item);
     }
 
     /* search for some items by key */
     for(i=0; i<LENGTHOF(testcases); ++i) {
-        item=ures_getByKey(res, testcases[i].key, NULL, &errorCode);
+        item=ures_getByKey(res, testcases[i].key, item, &errorCode);
         if(U_FAILURE(errorCode)) {
             log_err("unable to find the key \"%s\" in testdata/testtable32.res - %s\n",
                     testcases[i].key, u_errorName(errorCode));
@@ -665,10 +664,9 @@ TestTable32(void) {
             log_err("\"%s\" in testdata/testtable32.res claims to have the key \"%s\"\n",
                     testcases[i].key, key);
         }
-
-        ures_close(item);
     }
 
+    ures_close(item);
     ures_close(res);
 }
 
