@@ -18,8 +18,8 @@
 *     Madhu Katragadda            Converted to C
 *********************************************************************************
 */
-#ifndef _CCAPITSTST
-#define _CCAPITSTST
+#ifndef _CU_CAPITSTST
+#define _CU_CAPITSTST
 /* C API TEST FOR CODESET CONVERSION COMPONENT */
 #include "cintltst.h"
 #include "utypes.h"
