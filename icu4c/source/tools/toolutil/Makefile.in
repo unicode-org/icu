@@ -63,6 +63,10 @@ endif
 
 ALL_TARGETS = $(TARGET) $(ALL_SO_TARGETS)
 
+DYNAMICCPPFLAGS = $(SHAREDLIBCPPFLAGS)
+DYNAMICCFLAGS = $(SHAREDLIBCFLAGS)
+DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
+
 DEFS = @DEFS@
 CPPFLAGS = @CPPFLAGS@ $(LIBCPPFLAGS) -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/ctestfw
 CFLAGS = @CFLAGS@
@@ -75,6 +79,8 @@ LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
 LIBS = $(LIBICU-UC) @LIBS@ 
 
 OBJECTS = toolutil.o unewdata.o ucmpwrit.o uoptions.o uparse.o
+
+STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 
 DEPS = $(OBJECTS:.o=.d)
 
@@ -114,7 +120,7 @@ dist-local:
 
 clean-local:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
-	$(RMV) $(OBJECTS) $(ALL_TARGETS)
+	$(RMV) $(OBJECTS) $(STATIC_OBJECTS) $(ALL_TARGETS)
 
 distclean-local: clean-local
 	$(RMV) Makefile
@@ -126,7 +132,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 ifneq ($(ENABLE_STATIC),)
-$(TARGET): $(TARGET)($(OBJECTS))
+$(TARGET): $(TARGET)($(STATIC_OBJECTS))
 	$(RANLIB) $@
 endif
 

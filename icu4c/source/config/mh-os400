@@ -41,6 +41,8 @@ TO=		o
 
 ## Shared object suffix
 SO=		o
+## Non-shared intermediate object suffix
+STATIC_O = o
 
 ## Platform command to remove or move executable target
 RMV = del
@@ -67,11 +69,15 @@ LIBUSTDIO=      $(top_builddir)/extra/ustdio/libustdio.o
 	@$(SHELL) -ec "echo '#! $*.a($*.so)' | cat - $< > $@"
 
 ## Compilation rules
-%.o : $(srcdir)/%.c
-	$(COMPILE.c) -o $@ $<
+%.$(STATIC_O): $(srcdir)/%.c
+	$(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS) -o $@ $<
+%.o: $(srcdir)/%.c
+	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
 
-%.o : $(srcdir)/%.cpp
-	$(COMPILE.cc) -o $@ $<
+%.$(STATIC_O): $(srcdir)/%.cpp
+	$(COMPILE.cc) $(STATICCPPFLAGS) $(STATICCXXFLAGS) -o $@ $<
+%.o: $(srcdir)/%.cpp
+	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<
 
 %.qwobj : $(srcdir)/%.c
 	$(COMPILE.c) -o $@ $<

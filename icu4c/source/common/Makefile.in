@@ -68,6 +68,10 @@ endif
 
 ALL_TARGETS = $(TARGET) $(ALL_SO_TARGETS)
 
+DYNAMICCPPFLAGS = $(SHAREDLIBCPPFLAGS)
+DYNAMICCFLAGS = $(SHAREDLIBCFLAGS)
+DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
+
 DEFS = @DEFS@
 CPPFLAGS = @CPPFLAGS@ $(LIBCPPFLAGS) -I. -I$(srcdir) -DICU_DATA_DIR=\"$(pkgdatadir)/$(VERSION)/\" -DUDATA_SO_SUFFIX=\".$(SO)\" -DU_COMMON_LIBNAME=\"$(FINAL_SO_TARGET)\"
 CFLAGS = @CFLAGS@
@@ -86,6 +90,8 @@ ucnv_cnv.o ucnv_err.o ucnv_io.o uhash.o uhash_us.o uloc.o unicode.o unistr.o	\
 uresbund.o uresdata.o ustring.o rbdata.o ubidi.o ubidiwrt.o ubidiln.o \
 bidi.o ushape.o uvector.o udata.o unames.o utf_impl.o \
 ucnv2022.o ucnvebdc.o ucnvlat1.o ucnv_utf.o ucnvsbcs.o ucnvmbcs.o ucnv_lmb.o
+
+STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 
 DEPS = $(OBJECTS:.o=.d)
 
@@ -136,7 +142,7 @@ dist-local:
 
 clean-local:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
-	$(RMV) $(OBJECTS) $(ALL_TARGETS)
+	$(RMV) $(OBJECTS) $(STATIC_OBJECTS) $(ALL_TARGETS)
 
 distclean-local: clean-local
 	$(RMV) Makefile
@@ -152,7 +158,7 @@ unicode/platform.h: $(srcdir)/unicode/platform.h.in $(top_builddir)/config.statu
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 ifneq ($(ENABLE_STATIC),)
-$(TARGET): $(TARGET)($(OBJECTS))
+$(TARGET): $(TARGET)($(STATIC_OBJECTS))
 	$(RANLIB) $@
 endif
 
