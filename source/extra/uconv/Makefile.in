@@ -108,7 +108,9 @@ $(RESDIR)/%.res: $(srcdir)/%.txt
 	@$(MKINSTALLDIRS) $(RESDIR)
 	$(INVOKE) $(top_builddir)/tools/genrb/genrb -eutf-8 -d $(RESDIR) $^
 
-ifneq ($(MAKECMDGOALS),distclean)
--include $(DEPS)
-endif
+
+# Don't do this.  This is a problem when changing platforms.
+#ifneq ($(MAKECMDGOALS),distclean)
+#-include $(DEPS)
+#endif
 
