@@ -34,6 +34,12 @@
 
 #define DO_DEBUG_OUT 0
 
+/*
+ * The new implementation of the normalization code loads its data from
+ * unorm.dat, which is generated with this gennorm tool.
+ * The format of that file is described in unormimp.h .
+ */
+
 /* file data ---------------------------------------------------------------- */
 
 /* UDataInfo cf. udata.h */
@@ -157,8 +163,8 @@ typedef struct CombiningTriple {
     uint32_t lead, trail, combined;
 } CombiningTriple;
 
-/* 15b in the combining index -> <=0x8000 pairs of uint16_t in the combining table */
-static uint16_t combiningTable[2*0x8000];
+/* 15b in the combining index -> <=0x8000 uint16_t values in the combining table */
+static uint16_t combiningTable[0x8000];
 static uint16_t combiningTableTop=0;
 
 /* stage 2 table after turning Norm structs into 32-bit words */
@@ -465,7 +471,7 @@ processCombining() {
 
         /* calculate the length of the combining data for this lead code point in the combiningTable */
         while(j<count && i==triples[j].leadIndex) {
-            /* count 2 16-bit units per composition code unit */
+            /* count 2 to 3 16-bit units per composition entry (back-index, code point) */
             combined=triples[j++].combined;
             if(combined<=0x1fff) {
                 tableTop+=2;
@@ -481,8 +487,8 @@ processCombining() {
         createNorm(combiningCPs[i]&0xffffff)->combiningIndex=combiningIndexes[i]=finalIndex++;
     }
 
-    /* it must be tableTop<=0x7fff because bit 15 is used in combiningTable as an end-for-this-lead marker */
-    if(tableTop>=sizeof(combiningTable)/4) {
+    /* it must be finalIndex<=0x8000 because bit 15 is used in combiningTable as an end-for-this-lead marker */
+    if(finalIndex>0x8000) {
         fprintf(stderr, "error: gennorm combining table - trying to use %u units, more than the %ld units available\n",
                 tableTop, (long)(sizeof(combiningTable)/4));
         exit(U_MEMORY_ALLOCATION_ERROR);
@@ -804,24 +810,24 @@ setHangulJamoSpecials() {
      * The quick check flags are parsed, except for Hangul.
      */
 
-    /* set Jamo 1 specials */
+    /* set Jamo L specials */
     for(c=0x1100; c<=0x1112; ++c) {
         norm=createNorm(c);
-        norm->specialTag=_NORM_EXTRA_INDEX_TOP+_NORM_EXTRA_JAMO_1;
+        norm->specialTag=_NORM_EXTRA_INDEX_TOP+_NORM_EXTRA_JAMO_L;
         norm->combiningFlags=1;
     }
 
-    /* set Jamo 2 specials */
+    /* set Jamo V specials */
     for(c=0x1161; c<=0x1175; ++c) {
         norm=createNorm(c);
-        norm->specialTag=_NORM_EXTRA_INDEX_TOP+_NORM_EXTRA_JAMO_2;
+        norm->specialTag=_NORM_EXTRA_INDEX_TOP+_NORM_EXTRA_JAMO_V;
         norm->combiningFlags=2;
     }
 
-    /* set Jamo 3 specials */
+    /* set Jamo T specials */
     for(c=0x11a8; c<=0x11c2; ++c) {
         norm=createNorm(c);
-        norm->specialTag=_NORM_EXTRA_INDEX_TOP+_NORM_EXTRA_JAMO_3;
+        norm->specialTag=_NORM_EXTRA_INDEX_TOP+_NORM_EXTRA_JAMO_T;
         norm->combiningFlags=2;
     }
 
