@@ -130,6 +130,18 @@ static UVersionInfo dataVersion={ 3, 1, 0, 0 };
 
 U_CDECL_BEGIN
 
+U_CFUNC UBool U_CALLCONV
+unorm_cleanup() {
+    if(normData!=NULL) {
+        udata_close(normData);
+        normData=NULL;
+    }
+    dataErrorCode=U_ZERO_ERROR;
+    haveNormData=0;
+
+    return TRUE;
+}
+
 static UBool U_CALLCONV
 isAcceptable(void * /* context */,
              const char * /* type */, const char * /* name */,
@@ -2055,7 +2067,8 @@ unorm_compose(UChar *dest, int32_t destCapacity,
                                pErrorCode);
 
                 if(p==NULL) {
-                    return 0;   /* an error occurred (out of memory) */
+                    destIndex=0;   /* an error occurred (out of memory) */
+                    break;
                 }
 
                 /* append the recomposed buffer contents to the destination buffer */
@@ -2110,6 +2123,11 @@ unorm_compose(UChar *dest, int32_t destCapacity,
             destIndex+=length;
             prevCC=cc;
         }
+    }
+
+    /* cleanup */
+    if(buffer!=stackBuffer) {
+        uprv_free(buffer);
     }
 
     return u_terminateUChars(dest, destCapacity, destIndex, pErrorCode);
