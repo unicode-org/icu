@@ -770,6 +770,11 @@ void UnicodeSetTest::TestPropertySet() {
         "[:Age=3.2:]",
         "\\u03D8\\u03D9",
         "\\u03D6", // 1.1
+
+        // JB#2350: Case_Sensitive
+        "[:Case Sensitive:]",
+        "A\\u1FFC\\U00010410",
+        ";\\u00B4\\U00010500",
     };
 
     static const int32_t DATA_LEN = sizeof(DATA)/sizeof(DATA[0]);
