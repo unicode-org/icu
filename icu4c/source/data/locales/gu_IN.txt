@@ -6,7 +6,7 @@
 // ***************************************************************************
 
 gu_IN {
-    Version { "x0.4" }
+    Version { "1.0" }
     LocaleID:int { 0x0447 }
     //ShortCountry { IND }
     CurrencyElements {

@@ -6,7 +6,7 @@
 // ***************************************************************************
 
 kn {
-    Version{ "x0.3" }
+    Version{ "1.0" }
     LocaleID:int { 0x4B }
     Countries {
         IN { "\u0cad\u0cbe\u0cb0\u0ca4" }

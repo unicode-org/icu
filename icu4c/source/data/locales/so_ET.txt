@@ -12,7 +12,7 @@
 
 
 so_ET {
-    Version{ "x0.2" }
+    Version{ "1.0" }
     // CountryISBNNumber { "231" }
     // CountryNumber { "231" }
     CurrencyElements {
