@@ -562,6 +562,33 @@ public final class ICUResourceBundleTest extends TestFmwk {
             errln("Did not get the expected result from getObjectWithFallback method.");
         }  
     }
-
+    
+    public void TestKeywordsAndTrees(){
+        String kwVals[];
+        boolean foundStandard = false;
+        int n;
+        
+        logln("Testing getting collation values:");
+        kwVals = ICUResourceBundle.getKeywordValues(UResourceBundle.ICU_COLLATION_BASE_NAME,"collations");
+        for(n=0;n<kwVals.length;n++) {
+            logln(new Integer(n).toString() + ": " + kwVals[n]);
+            if(("default").equals(kwVals[n])) {
+                errln("getKeywordValues for collation returned 'default' in the list.");
+            } else if(("standard").equals(kwVals[n])) {
+            	if(foundStandard == false) {
+            		foundStandard = true;
+            		logln("found 'standard'");
+            	} else {
+            		errln("Error - 'standard' is in the keyword list twice!");
+            	}
+            }
+        }
+        
+        if(foundStandard == false) {
+        	errln("Error - 'standard' was not in the collation tree as a keyword.");
+        } else {
+        	logln("'standard' was found as a collation keyword.");
+        }
+    }
 }
 
