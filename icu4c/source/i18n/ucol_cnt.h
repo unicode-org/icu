@@ -52,8 +52,6 @@ void uprv_cnttab_close(CntTable *table);
 
 /* construct the table for output */
 int32_t uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorCode *status); 
-/* moves table around... since we have absolute offsets from the start of the table */
-int32_t uprv_cnttab_moveTable(CntTable *table, uint32_t oldOffset, uint32_t newOffset, UErrorCode *status);
 /* adds more contractions in table. If element is non existant, it creates on. Returns element handle */
 uint32_t uprv_cnttab_addContraction(CntTable *table, uint32_t element, UChar codePoint, uint32_t value, UErrorCode *status);
 /* sets a part of contraction sequence in table. If element is non existant, it creates on. Returns element handle */

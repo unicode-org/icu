@@ -45,8 +45,6 @@ CntTable *uprv_cnttab_open(CompactIntArray *mapping, UErrorCode *status) {
     }
     CntTable *tbl = (CntTable *)uprv_malloc(sizeof(CntTable));
     tbl->mapping = mapping;
-    //tbl->elements = uhash_open(uhash_hashLong, uhash_compareLong, status);
-    //uhash_setValueDeleter(tbl->elements, deleteCntElement);
     tbl->elements = (ContractionTable **)uprv_malloc(INIT_EXP_TABLE_SIZE*sizeof(ContractionTable *));
     tbl->capacity = INIT_EXP_TABLE_SIZE;
     uprv_memset(tbl->elements, 0, INIT_EXP_TABLE_SIZE*sizeof(ContractionTable *));
@@ -88,23 +86,6 @@ ContractionTable *addATableElement(CntTable *table, uint32_t *key, UErrorCode *s
     }
 
     return el;
-}
-
-
-int32_t uprv_cnttab_moveTable(CntTable *table, uint32_t oldOffset, uint32_t newOffset, UErrorCode *status) {
-    uint32_t i, CE;
-    int32_t difference = newOffset - oldOffset;
-    if(U_FAILURE(*status)) {
-        return 0;
-    }
-    for(i = 0; i<=0xFFFF; i++) {
-        CE = ucmp32_get(table->mapping, i);
-        if(isContraction(CE)) {
-            CE = constructContractCE(getContractOffset(CE)+difference);
-            ucmp32_set(table->mapping, (UChar)i, CE);
-        }
-    }
-    return table->position;
 }
 
 int32_t uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorCode *status) {
@@ -158,7 +139,6 @@ int32_t uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorC
         }
         *cpPointer = ((ccMin==ccMax)?1:0 << 8) | ccMax;
 
-        /*uprv_memcpy(cpPointer, table->elements[i]->codePoints, size*sizeof(UChar));*/
         uprv_memcpy(CEPointer, table->elements[i]->CEs, size*sizeof(uint32_t));
         for(j = 0; j<size; j++) {
             if(isContraction(*(CEPointer+j))) {
@@ -407,14 +387,7 @@ int32_t uprv_cnttab_findCP(CntTable *table, uint32_t element, UChar codePoint, U
         return 0;
     }
 
-    /*int32_t pos =*/ return _cnttab_findCP(_cnttab_getContractionTable(table, element), codePoint);
-/*    
-    if(pos < 0) {
-      return 0;
-    } else {
-      return pos;
-    }
-*/
+    return _cnttab_findCP(_cnttab_getContractionTable(table, element), codePoint);
 }
 
 uint32_t uprv_cnttab_getCE(CntTable *table, uint32_t element, uint32_t position, UErrorCode *status) {
