@@ -27,6 +27,7 @@ public:
     // The following are test functions that are visible from the intltest test framework.
     void UVector_API();
     void UStack_API();
+    void Hashtable_API();
 
 };
 
