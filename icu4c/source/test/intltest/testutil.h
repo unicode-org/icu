@@ -23,19 +23,19 @@ public:
     static int8_t getScript(UChar c);
 
     static int8_t getScript(int8_t block);
-    
+
     static int8_t getBlock(UChar c);
-               
+
     // returns next letter of script, or 0xFFFF if done
-    
+
     static UChar getNextLetter(UChar c, int8_t script);
-    
+
     static UnicodeString hex(UChar ch);
-    
+
     static UnicodeString hex(const UnicodeString& s);
-	
+
     static UnicodeString hex(const UnicodeString& s, UChar sep);
-    
+
     enum { // SCRIPT CODE
         COMMON_SCRIPT = 0,
         LATIN_SCRIPT = 1,
@@ -76,7 +76,7 @@ public:
         HAN_SCRIPT = 36,
         YI_SCRIPT = 37
     };
-    
+
     enum { // block code
         RESERVED_BLOCK = 0,
         BASIC_LATIN = 1,

@@ -22,7 +22,7 @@ class Calendar;
 class DateFormatRoundTripTest : public IntlTest {    
     
     // IntlTest override
-    void runIndexedTest( int32_t index, UBool exec, char* &name, char* par );
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par );
 
 public:
     void TestDateFormatRoundTrip(void);

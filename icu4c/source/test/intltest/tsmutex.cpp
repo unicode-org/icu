@@ -54,7 +54,7 @@ MutexTest::~MutexTest() {
 }
 
 void MutexTest::runIndexedTest( int32_t index, UBool exec, 
-                char* &name, char* par ) {
+                const char* &name, char* par ) {
   if (exec) logln("TestSuite MutexTest: ");
   switch (index) {
   case 0: name = "TestMutex"; if (exec) TestMutex(); break;

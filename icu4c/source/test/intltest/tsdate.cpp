@@ -19,7 +19,7 @@ const double IntlTestDateFormat::ONEYEAR = 365.25 * ONEDAY; // Approximate
  * DateFormat.
  */
 // par is ignored throughout this file
-void IntlTestDateFormat::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
+void IntlTestDateFormat::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     if (exec) logln("TestSuite DateFormat");
     switch (index) {
@@ -203,20 +203,23 @@ double IntlTestDateFormat::randDouble()
     // that the system rand() function is very poor, which it always is.
     double d=0.0;
     int32_t i;
+    char* poke = (char*)&d;
     do {
         for (i=0; i < sizeof(double); ++i)
         {
-            char* poke = (char*)&d;
-            poke[i] = (rand() & 0xFF);
+            poke[i] = (char)(rand() & 0xFF);
         }
     } while (uprv_isNaN(d) || uprv_isInfinite(d));
 
-    if (d < 0.0) d = -d;
+    if (d < 0.0)
+        d = -d;
     if (d > 0.0)
     {
         double e = uprv_floor(uprv_log10(d));
-        if (e < -2.0) d *= uprv_pow10((long)-e-2);
-        else if (e > -1.0) d /= uprv_pow10((long)e+1);
+        if (e < -2.0)
+            d *= uprv_pow10((long)-e-2);
+        else if (e > -1.0)
+            d /= uprv_pow10((long)e+1);
     }
     return d;
 }

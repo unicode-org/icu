@@ -17,7 +17,7 @@
 
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
 
-void DateFormatTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
+void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     // if (exec) logln((UnicodeString)"TestSuite DateFormatTest");
     switch (index) {
@@ -180,7 +180,7 @@ DateFormatTest::TestTwoDigitYearDSTParse(void)
  
 // -------------------------------------
  
-UChar toHexString(int32_t i) { return i + (i < 10 ? 0x30 : (0x41 - 10)); }
+UChar toHexString(int32_t i) { return (UChar)(i + (i < 10 ? 0x30 : (0x41 - 10))); }
 
 UnicodeString&
 DateFormatTest::escape(UnicodeString& s)

@@ -167,9 +167,12 @@ void CollationFrenchTest::TestSecondary( char* par )
     {
         for (j = 0; j < testAcuteSize; j++)
         {
-            if (i <  j) expected = Collator::LESS;
-            if (i == j) expected = Collator::EQUAL;
-            if (i >  j) expected = Collator::GREATER;
+            if (i <  j)
+                expected = Collator::LESS;
+            else if (i == j)
+                expected = Collator::EQUAL;
+            else // (i >  j)
+                expected = Collator::GREATER;
             doTest(testAcute[i], testAcute[j], expected );
         }
     }
@@ -188,7 +191,7 @@ void CollationFrenchTest::TestExtra( char* par )
     }
 }
 
-void CollationFrenchTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
+void CollationFrenchTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     if (exec) logln("TestSuite CollationFrenchTest: ");
     switch (index) {

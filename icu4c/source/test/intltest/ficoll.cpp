@@ -93,7 +93,7 @@ void CollationFinnishTest::TestPrimary( char* par )
     }
 }
 
-void CollationFinnishTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
+void CollationFinnishTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     if (exec) logln("TestSuite CollationFinnishTest: ");
     switch (index) {

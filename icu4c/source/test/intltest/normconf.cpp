@@ -23,7 +23,7 @@
                           }                             \
                           break
 
-void NormalizerConformanceTest::runIndexedTest(int32_t index, UBool exec, char* &name, char* par) {
+void NormalizerConformanceTest::runIndexedTest(int32_t index, UBool exec, const char* &name, char* par) {
     switch (index) {
         CASE(0,TestConformance);
         // CASE(1,TestCase6);
@@ -223,7 +223,7 @@ static UChar parseInt(const UnicodeString& s, int32_t pos) {
         if (digit < 0) {
             return (UChar) -1; // Bogus hex digit -- shouldn't happen
         }
-        value = (value << 4) | digit;
+        value = (UChar)((value << 4) | digit);
     }
     return value;
 }

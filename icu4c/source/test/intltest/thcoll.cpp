@@ -52,7 +52,7 @@ CollationThaiTest::~CollationThaiTest() {
     delete coll;
 }
 
-void CollationThaiTest::runIndexedTest(int32_t index, UBool exec, char* &name,
+void CollationThaiTest::runIndexedTest(int32_t index, UBool exec, const char* &name,
                                        char* par) {
     switch (index) {
         CASE(0,TestDictionary)

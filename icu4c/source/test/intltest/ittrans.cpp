@@ -40,7 +40,7 @@
                           }                                   \
                           break
 
-void IntlTestTransliterator::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
+void IntlTestTransliterator::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     if (exec) logln("TestSuite Transliterator");
     switch (index) {

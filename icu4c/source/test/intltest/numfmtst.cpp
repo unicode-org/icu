@@ -22,7 +22,7 @@
 
 #define CHECK(status,str) if (U_FAILURE(status)) { errln(UnicodeString("FAIL: ") + str); return; }
 
-void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
+void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
     // if (exec) logln((UnicodeString)"TestSuite DateFormatTest");
     switch (index) {
@@ -191,7 +191,8 @@ NumberFormatTest::TestExponential(void)
             fmt.parse(s, af, pos);
             double a;
             UBool useEpsilon = FALSE;
-            if (af.getType() == Formattable::kLong) a = af.getLong();
+            if (af.getType() == Formattable::kLong)
+                a = af.getLong();
             else if (af.getType() == Formattable::kDouble) {
                 a = af.getDouble();
 #if defined(OS390)
@@ -205,7 +206,8 @@ NumberFormatTest::TestExponential(void)
                 useEpsilon = TRUE;
 #endif
             }
-            else errln((UnicodeString)"FAIL: Non-numeric Formattable returned");
+            else
+                errln((UnicodeString)"FAIL: Non-numeric Formattable returned");
             if (pos.getIndex() == s.length())
             {
                 logln((UnicodeString)"  -parse-> " + a);
@@ -228,17 +230,19 @@ NumberFormatTest::TestExponential(void)
             ParsePosition pos(0);
             Formattable af;
             fmt.parse(s, af, pos);
-            int32_t a;
-            if (af.getType() == Formattable::kLong) a = af.getLong();
-            else errln((UnicodeString)"FAIL: Non-long Formattable returned");
-            if (pos.getIndex() == s.length())
-            {
-                logln((UnicodeString)"  -parse-> " + a);
-                if (a != lvalParse[v+ilval])
-                errln((UnicodeString)"FAIL: Expected " + lvalParse[v+ilval]);
+            if (af.getType() == Formattable::kLong) {
+                int32_t a = af.getLong();
+                if (pos.getIndex() == s.length())
+                {
+                    logln((UnicodeString)"  -parse-> " + a);
+                    if (a != lvalParse[v+ilval])
+                        errln((UnicodeString)"FAIL: Expected " + lvalParse[v+ilval]);
+                }
+                else
+                    errln((UnicodeString)"FAIL: Partial parse (" + pos.getIndex() + " chars) -> " + a);
             }
             else
-                errln((UnicodeString)"FAIL: Partial parse (" + pos.getIndex() + " chars) -> " + a);
+                errln((UnicodeString)"FAIL: Non-long Formattable returned");
         }
         ival += val_length;
         ilval += lval_length;
@@ -326,7 +330,7 @@ NumberFormatTest::TestCurrencySign(void)
  
 // -------------------------------------
 
-static UChar toHexString(int32_t i) { return i + (i < 10 ? 0x30 : (0x41 - 10)); }
+static UChar toHexString(int32_t i) { return (UChar)(i + (i < 10 ? 0x30 : (0x41 - 10))); }
 
 UnicodeString&
 NumberFormatTest::escape(UnicodeString& s)

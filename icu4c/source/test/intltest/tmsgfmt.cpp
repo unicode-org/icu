@@ -1040,7 +1040,7 @@ static void testCopyConstructor2()
 }
 
 
-void TestMessageFormat::runIndexedTest( int32_t index, UBool exec, char* &name, char* parm )
+void TestMessageFormat::runIndexedTest( int32_t index, UBool exec, const char* &name, char* parm )
 {
     if (exec) logln("TestSuite MessageFormat");
 

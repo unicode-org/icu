@@ -32,7 +32,7 @@ public:
 
     CollationFinnishTest();
     virtual ~CollationFinnishTest();
-    void runIndexedTest( int32_t index, UBool exec, char* &name, char* par = NULL );
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
 
     // main test routine, tests rules specific to the finish locale
     void doTest( UnicodeString source, UnicodeString target, Collator::EComparisonResult result);

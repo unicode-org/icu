@@ -28,7 +28,7 @@ public:
     StringTest() {}
     ~StringTest() {}
 
-    void runIndexedTest(int32_t index, UBool exec, char *&name, char *par=NULL);
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par=NULL);
 
 private:
     void TestEndian(void);

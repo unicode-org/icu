@@ -21,7 +21,7 @@
 static UErrorCode status = U_ZERO_ERROR;
 
 void BasicNormalizerTest::runIndexedTest(int32_t index, UBool exec,
-                                         char* &name, char* par) {
+                                         const char* &name, char* par) {
     switch (index) {
         CASE(0,TestDecomp);
         CASE(1,TestCompatDecomp);

@@ -29,7 +29,7 @@ UnicodeString operator+(const UnicodeString& left, const UnicodeSet& set) {
 
 void
 UnicodeSetTest::runIndexedTest(int32_t index, UBool exec,
-                               char* &name, char* par) {
+                               const char* &name, char* par) {
     // if (exec) logln((UnicodeString)"TestSuite UnicodeSetTest");
     switch (index) {
         CASE(0,TestPatterns);
@@ -99,108 +99,108 @@ UnicodeSetTest::TestCategories(void) {
 }
 void
 UnicodeSetTest::TestCloneEqualHash(void) {
-	UErrorCode status = U_ZERO_ERROR;
-	int8_t category=Unicode::LOWERCASE_LETTER;
-	UnicodeSet *set1=new UnicodeSet(category, status); //  :Li: Letter, lowercase
-	if (U_FAILURE(status)){
-		errln((UnicodeString)"FAIL: Can't construst set with cateegory->Ll");
-		return;
-	}
-	category=Unicode::DECIMAL_DIGIT_NUMBER;
-	UnicodeSet *set2=new UnicodeSet(category, status);   //Number, Decimal digit
-	if (U_FAILURE(status)){
-		errln((UnicodeString)"FAIL: Can't construct set with cateegory->Nd");
-		return;
-	}
-	
-	logln("Testing copy construction");
-	UnicodeSet *set1copy=new UnicodeSet(*set1);
-	if(*set1 != *set1copy || *set1 == *set2 || 
-		getPairs(*set1) != getPairs(*set1copy) ||
-		set1->hashCode() != set1copy->hashCode()){
-		errln("FAIL : Error in copy construction");
-		return;
-	}
+    UErrorCode status = U_ZERO_ERROR;
+    int8_t category=Unicode::LOWERCASE_LETTER;
+    UnicodeSet *set1=new UnicodeSet(category, status); //  :Li: Letter, lowercase
+    if (U_FAILURE(status)){
+        errln((UnicodeString)"FAIL: Can't construst set with cateegory->Ll");
+        return;
+    }
+    category=Unicode::DECIMAL_DIGIT_NUMBER;
+    UnicodeSet *set2=new UnicodeSet(category, status);   //Number, Decimal digit
+    if (U_FAILURE(status)){
+        errln((UnicodeString)"FAIL: Can't construct set with cateegory->Nd");
+        return;
+    }
 
-	logln("Testing =operator");
-	UnicodeSet set1equal=*set1;
-	UnicodeSet set2equal=*set2;
-	if(set1equal != *set1 || set1equal != *set1copy || set2equal != *set2 || 
-		set2equal == *set1 || set2equal == *set1copy || set2equal == set1equal){
-		errln("FAIL: Error in =operator");
-	}
-	
-	logln("Testing clone()");
-	UnicodeSet *set1clone=(UnicodeSet*)set1->clone();
-	UnicodeSet *set2clone=(UnicodeSet*)set2->clone();
-	if(*set1clone != *set1 || *set1clone != *set1copy || *set1clone != set1equal || 
-		*set2clone != *set2 || *set2clone == *set1copy || *set2clone != set2equal || 
-		*set2clone == *set1 || *set2clone == set1equal || *set2clone == *set1clone){
-		errln("FAIL: Error in clone");
-	}
-	
-	logln("Testing hashcode");
+    logln("Testing copy construction");
+    UnicodeSet *set1copy=new UnicodeSet(*set1);
+    if(*set1 != *set1copy || *set1 == *set2 || 
+        getPairs(*set1) != getPairs(*set1copy) ||
+        set1->hashCode() != set1copy->hashCode()){
+        errln("FAIL : Error in copy construction");
+        return;
+    }
+
+    logln("Testing =operator");
+    UnicodeSet set1equal=*set1;
+    UnicodeSet set2equal=*set2;
+    if(set1equal != *set1 || set1equal != *set1copy || set2equal != *set2 || 
+        set2equal == *set1 || set2equal == *set1copy || set2equal == set1equal){
+        errln("FAIL: Error in =operator");
+    }
+
+    logln("Testing clone()");
+    UnicodeSet *set1clone=(UnicodeSet*)set1->clone();
+    UnicodeSet *set2clone=(UnicodeSet*)set2->clone();
+    if(*set1clone != *set1 || *set1clone != *set1copy || *set1clone != set1equal || 
+        *set2clone != *set2 || *set2clone == *set1copy || *set2clone != set2equal || 
+        *set2clone == *set1 || *set2clone == set1equal || *set2clone == *set1clone){
+        errln("FAIL: Error in clone");
+    }
+
+    logln("Testing hashcode");
     if(set1->hashCode() != set1equal.hashCode() || set1->hashCode() != set1clone->hashCode() ||
-		set2->hashCode() != set2equal.hashCode() || set2->hashCode() != set2clone->hashCode() ||
-		set1copy->hashCode() != set1equal.hashCode() || set1copy->hashCode() != set1clone->hashCode() ||
-		set1->hashCode() == set2->hashCode()  || set1copy->hashCode() == set2->hashCode() ||
-		set2->hashCode() == set1clone->hashCode() || set2->hashCode() == set1equal.hashCode() ){
-		errln("FAIL: Error in hashCode()");
-	}
+        set2->hashCode() != set2equal.hashCode() || set2->hashCode() != set2clone->hashCode() ||
+        set1copy->hashCode() != set1equal.hashCode() || set1copy->hashCode() != set1clone->hashCode() ||
+        set1->hashCode() == set2->hashCode()  || set1copy->hashCode() == set2->hashCode() ||
+        set2->hashCode() == set1clone->hashCode() || set2->hashCode() == set1equal.hashCode() ){
+        errln("FAIL: Error in hashCode()");
+    }
 
-	delete set1;
-	delete set1copy;
-	delete set2;
-    
+    delete set1;
+    delete set1copy;
+    delete set2;
+
 
 
 }
 void
 UnicodeSetTest::TestAddRemove(void) {
     UnicodeSet set; // Construct empty set
-	doAssert(set.isEmpty() == TRUE, "set should be empty");
-	doAssert(set.size() == 0, "size should be 0");
+    doAssert(set.isEmpty() == TRUE, "set should be empty");
+    doAssert(set.size() == 0, "size should be 0");
     set.add(0x0061, 0x007a);
     expectPairs(set, "az");
-	doAssert(set.isEmpty() == FALSE, "set should not be empty");
+    doAssert(set.isEmpty() == FALSE, "set should not be empty");
     doAssert(set.size() != 0, "size should not be equal to 0");
-	doAssert(set.size() == 26, "size should be equal to 26");
+    doAssert(set.size() == 26, "size should be equal to 26");
     set.remove(0x006d, 0x0070);
-	expectPairs(set, "alqz");
-	doAssert(set.size() == 22, "size should be equal to 22");
+    expectPairs(set, "alqz");
+    doAssert(set.size() == 22, "size should be equal to 22");
     set.remove(0x0065, 0x0067);
     expectPairs(set, "adhlqz");
-	doAssert(set.size() == 19, "size should be equal to 19");
+    doAssert(set.size() == 19, "size should be equal to 19");
     set.remove(0x0064, 0x0069);
     expectPairs(set, "acjlqz");
-	doAssert(set.size() == 16, "size should be equal to 16");
+    doAssert(set.size() == 16, "size should be equal to 16");
     set.remove(0x0063, 0x0072);
     expectPairs(set, "absz");
-	doAssert(set.size() == 10, "size should be equal to 10");
+    doAssert(set.size() == 10, "size should be equal to 10");
     set.add(0x0066, 0x0071);
     expectPairs(set, "abfqsz");
-	doAssert(set.size() == 22, "size should be equal to 22");
+    doAssert(set.size() == 22, "size should be equal to 22");
     set.remove(0x0061, 0x0067);
     expectPairs(set, "hqsz");
     set.remove(0x0061, 0x007a);
     expectPairs(set, "");
-	doAssert(set.isEmpty() == TRUE, "set should be empty");
-	doAssert(set.size() == 0, "size should be 0");
-	set.add(0x0061);
-	doAssert(set.isEmpty() == FALSE, "set should not be empty");
+    doAssert(set.isEmpty() == TRUE, "set should be empty");
+    doAssert(set.size() == 0, "size should be 0");
+    set.add(0x0061);
+    doAssert(set.isEmpty() == FALSE, "set should not be empty");
     doAssert(set.size() == 1, "size should not be equal to 1");
-	set.add(0x0062);
-	set.add(0x0063);
-	expectPairs(set, "ac");
-	doAssert(set.size() == 3, "size should not be equal to 3");
-	set.add(0x0070);
-	set.add(0x0071);
-	expectPairs(set, "acpq");
-	doAssert(set.size() == 5, "size should not be equal to 5");
-	set.clear();
+    set.add(0x0062);
+    set.add(0x0063);
+    expectPairs(set, "ac");
+    doAssert(set.size() == 3, "size should not be equal to 3");
+    set.add(0x0070);
+    set.add(0x0071);
+    expectPairs(set, "acpq");
+    doAssert(set.size() == 5, "size should not be equal to 5");
+    set.clear();
     expectPairs(set, "");
-	doAssert(set.isEmpty() == TRUE, "set should be empty");
-	doAssert(set.size() == 0, "size should be 0");
+    doAssert(set.isEmpty() == TRUE, "set should be empty");
+    doAssert(set.size() == 0, "size should be 0");
 
     // Try removing an entire set from another set
     expectPattern(set, "[c-x]", "cx");
@@ -216,26 +216,26 @@ UnicodeSetTest::TestAddRemove(void) {
     expectPairs(set, "aacehort");
     doAssert(set.containsAll(set2) == TRUE, "set should contain all the elements in set2");
 
-	// Try retaining an set of elements contained in another set (intersection)
-	UnicodeSet set3;
-	expectPattern(set3, "[a-c]", "ac");
-	doAssert(set.containsAll(set3) == FALSE, "set doesn't contain all the elements in set3");
-	set3.remove(0x0062);
-	expectPairs(set3, "aacc");
-	doAssert(set.containsAll(set3) == TRUE, "set should contain all the elements in set3");
-	set.retainAll(set3);
-	expectPairs(set, "aacc");
-	doAssert(set.size() == set3.size(), "set.size() should be set3.size()");
-	doAssert(set.containsAll(set3) == TRUE, "set should contain all the elements in set3");
-	set.clear();
-	doAssert(set.size() != set3.size(), "set.size() != set3.size()");
+    // Try retaining an set of elements contained in another set (intersection)
+    UnicodeSet set3;
+    expectPattern(set3, "[a-c]", "ac");
+    doAssert(set.containsAll(set3) == FALSE, "set doesn't contain all the elements in set3");
+    set3.remove(0x0062);
+    expectPairs(set3, "aacc");
+    doAssert(set.containsAll(set3) == TRUE, "set should contain all the elements in set3");
+    set.retainAll(set3);
+    expectPairs(set, "aacc");
+    doAssert(set.size() == set3.size(), "set.size() should be set3.size()");
+    doAssert(set.containsAll(set3) == TRUE, "set should contain all the elements in set3");
+    set.clear();
+    doAssert(set.size() != set3.size(), "set.size() != set3.size()");
 
     // Test commutativity
     expectPattern(set, "[hitoshinamekatajamesanderson]", "aadehkmort");
     expectPattern(set2, "[jackiemclean]", "aacceein");
     set.addAll(set2);
     expectPairs(set, "aacehort");
-	doAssert(set.containsAll(set2) == TRUE, "set should contain all the elements in set2");
+    doAssert(set.containsAll(set2) == TRUE, "set should contain all the elements in set2");
 
 
 
@@ -591,12 +591,12 @@ UnicodeSetTest::expectPattern(UnicodeSet& set,
                               const UnicodeString& pattern,
                               const UnicodeString& expectedPairs){
     UErrorCode status = U_ZERO_ERROR;
-	set.applyPattern(pattern, status);
-	if (U_FAILURE(status)) {
-		errln(UnicodeString("FAIL: applyPattern(\"") + pattern +
+    set.applyPattern(pattern, status);
+    if (U_FAILURE(status)) {
+        errln(UnicodeString("FAIL: applyPattern(\"") + pattern +
               "\") failed");
-		return;
-	} else {
+        return;
+    } else {
         if (getPairs(set) != expectedPairs ) {
             errln(UnicodeString("FAIL: applyPattern(\"") + pattern +
                   "\") => pairs \"" +
@@ -608,25 +608,25 @@ UnicodeSetTest::expectPattern(UnicodeSet& set,
                   escape(getPairs(set)) + "\"");
         }
     }
-	// the result of calling set.toPattern(), which is the string representation of
-	// this set(set), is passed to a  UnicodeSet constructor, and tested that it 
-	// will produce another set that is equal to this one.
-	UnicodeString temppattern;
-	set.toPattern(temppattern);
-	UnicodeSet *tempset=new UnicodeSet(temppattern, status);
-	if (U_FAILURE(status)) {
-		errln(UnicodeString("FAIL: Construction with the pattern derived from toPattern() failed"));
+    // the result of calling set.toPattern(), which is the string representation of
+    // this set(set), is passed to a  UnicodeSet constructor, and tested that it 
+    // will produce another set that is equal to this one.
+    UnicodeString temppattern;
+    set.toPattern(temppattern);
+    UnicodeSet *tempset=new UnicodeSet(temppattern, status);
+    if (U_FAILURE(status)) {
+        errln(UnicodeString("FAIL: Construction with the pattern derived from toPattern() failed"));
         return;
-	}
-	if(*tempset != set || getPairs(*tempset) != getPairs(set)){
-		errln(UnicodeString("FAIL: "+ pattern + "!=>" + temppattern + ". Pairs \""+ escape(getPairs(*tempset)) + "\" expected->\"" +
-			escape(getPairs(set)) + "\""));
-	} else{
-		logln(UnicodeString("OK:  "+ pattern + "==>" + temppattern + ".  Pairs \"" + escape(getPairs(*tempset)) + "\""));
-	}
-	
-	delete tempset;
-    	
+    }
+    if(*tempset != set || getPairs(*tempset) != getPairs(set)){
+        errln(UnicodeString("FAIL: "+ pattern + "!=>" + temppattern + ". Pairs \""+ escape(getPairs(*tempset)) + "\" expected->\"" +
+            escape(getPairs(set)) + "\""));
+    } else{
+        logln(UnicodeString("OK:  "+ pattern + "==>" + temppattern + ".  Pairs \"" + escape(getPairs(*tempset)) + "\""));
+    }
+
+    delete tempset;
+
 }
 
 void
