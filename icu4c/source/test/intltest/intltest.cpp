@@ -382,8 +382,11 @@ IntlTest::pathnameInContext( char* fullname, int32_t maxsize, const char* relPat
             mainDirBuffer[0]='\0';
         }
         mainDir=mainDirBuffer;
-    #elif defined(_AIX) || defined(SOLARIS) || defined(LINUX) || defined(HPUX)
-        mainDir = getenv("HOME");
+    #elif defined(_AIX) || defined(SOLARIS) || defined(LINUX) || defined(HPUX) || defined(POSIX)
+        char mainDirBuffer[200];
+        strcpy(mainDirBuffer, u_getDataDirectory());
+        strcat(mainDirBuffer, "/../");
+        mainDir = mainDirBuffer;
     #elif defined(XP_MAC)
         Str255 volName;
         int16_t volNum;
@@ -446,7 +449,11 @@ IntlTest::getTestDirectory()
 {
        if (_testDirectory == NULL) 
     {
+#if defined(_AIX) || defined(SOLARIS) || defined(LINUX) || defined(HPUX) || defined(POSIX)
+      setTestDirectory("source|test|testdata|");
+#else
       setTestDirectory("icu|source|test|testdata|");
+#endif
     }
     return _testDirectory;
 }

@@ -5,7 +5,7 @@ dnl others. All Rights Reserved.
 dnl Stephen F. Booth
 
 dnl Process this file with autoconf to produce a configure script
-AC_INIT(common/utypes.h)
+AC_INIT(common/unicode/utypes.h)
 
 AC_CONFIG_HEADER(common/icucfg.h)
 PACKAGE="icu"
@@ -354,7 +354,19 @@ dnl END special
 if test "$ac_cv_lib_dld_shl_load" = "yes"; then
 	CPPFLAGS="${CPPFLAGS} -DICU_USE_SHL_LOAD"
 fi
-	
+
+if test -f ./configure.in
+then
+        # they are normal. Build is in .. (note this is mostly for the top level script)
+        DATABUILDDIR=`pwd`/../data/
+        RELATIVEDATADIR=../data/
+else
+        DATABUILDDIR=`pwd`/data/
+        RELATIVEDATADIR=data/
+fi
+
+AC_SUBST(DATABUILDDIR)
+AC_SUBST(RELATIVEDATADIR)
 
 dnl output the Makefiles
 AC_OUTPUT([Makefile \
@@ -369,23 +381,32 @@ AC_OUTPUT([Makefile \
 		samples/Makefile samples/date/Makefile samples/cal/Makefile \
 		samples/XMLConverter/Makefile])
 
+
 dnl create the data directory
-if test -d data
+if test -d $DATABUILDDIR
 then
     :
 else
-    echo creating data
-    mkdir data
+    echo creating $DATABUILDDIR
+    mkdir -p $DATABUILDDIR
 fi
-if test -d data/translit
+
+if test -d $DATABUILDDIR/translit
 then
     :
 else
-    echo creating data/translit
-    mkdir data/translit
+    echo creating $DATABUILDDIR/translit
+    mkdir $DATABUILDDIR/translit
+fi
+
+if test -d $DATABUILDDIR/../source/test/testdata
+then
+    :
+else
+    echo creating $DATABUILDDIR/../source/test/testdata
+    mkdir -p $DATABUILDDIR/../source/test/testdata
 fi
 
 if test $ICU_USE_THREADS = 0; then
   echo  " *** Note: configuring the ICU without pthread support or testing. If this isn't what you want, then run configure with --enable-threads=yes or check the messages [above] to see why we couldn't find pthread_create()" 1>&6
 fi
-

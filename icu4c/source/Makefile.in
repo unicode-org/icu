@@ -65,7 +65,7 @@ EXTRA_DATA = convrtrs.txt UnicodeData-$(UNICODE_VERSION).txt
 .PHONY : all all-local all-recursive install install-local install-udata install-udata-files install-udata-dlls		\
 install-recursive clean clean-local clean-recursive distclean		\
 distclean-local distclean-recursive doc dist dist-local dist-recursive	\
-check check-local check-recursive
+check check-local check-recursive builddata
 
 ## Clear suffix list
 .SUFFIXES :
@@ -96,8 +96,7 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 	  $(MAKE) "$$target-local" || exit 1; \
 	fi
 
-all-local: $(srcdir)/configure
-
+all-local: $(srcdir)/configure builddata
 
 install-local:
 	@for file in $(EXTRA_DATA); do \
@@ -128,7 +127,6 @@ clean-local:
 distclean-local:
 	rm -f Makefile config.cache config.log config.status config/Makefile
 	rm -f common/unicode/platform.h common/icucfg.h
-	rm -rf data
 
 check-local:
 
@@ -141,3 +139,16 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 
 config.status: $(srcdir)/configure
 	$(SHELL) ./config.status --recheck
+
+builddata: @DATABUILDDIR@/UnicodeData-$(UNICODE_VERSION).txt @DATABUILDDIR@/thaidict.brk @DATABUILDDIR@/../source/test/testdata/default.goo
+
+@DATABUILDDIR@/UnicodeData-$(UNICODE_VERSION).txt: $(srcdir)/../data/UnicodeData-$(UNICODE_VERSION).txt
+	ln -s `pwd`/$< @DATABUILDDIR@
+
+@DATABUILDDIR@/thaidict.brk: $(srcdir)/../data/thaidict.brk
+	ln -s `pwd`/$< @DATABUILDDIR@
+
+@DATABUILDDIR@/../source/test/testdata/default.goo: $(srcdir)/test/testdata/default.goo
+	ln -s `pwd`/$(srcdir)/test/testdata/*.goo `pwd`/$(srcdir)/test/testdata/*.txt `pwd`/$(srcdir)/test/testdata/*.uni  @DATABUILDDIR@/../source/test/testdata/
+
+

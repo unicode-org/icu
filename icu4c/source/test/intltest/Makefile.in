@@ -98,7 +98,7 @@ distclean-local: clean-local
 	rm -f Makefile $(DEPS)
 
 check-local: $(TARGET)
-	HOME=$(top_srcdir)/../.. ICU_DATA=$(top_srcdir)/../data/ TZ=PST8PDT ./$(TARGET)
+	 ICU_DATA=@DATABUILDDIR@/ TZ=PST8PDT ./$(TARGET)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
