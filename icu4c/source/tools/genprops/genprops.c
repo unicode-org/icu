@@ -208,12 +208,12 @@ main(int argc, char* argv[]) {
 
 U_CFUNC void
 writeUCDFilename(char *basename, const char *filename, const char *suffix) {
-    int32_t length=uprv_strlen(filename);
+    int32_t length=(int32_t)uprv_strlen(filename);
     uprv_strcpy(basename, filename);
     if(suffix!=NULL) {
         basename[length++]='-';
         uprv_strcpy(basename+length, suffix);
-        length+=uprv_strlen(suffix);
+        length+=(int32_t)uprv_strlen(suffix);
     }
     uprv_strcpy(basename+length, ".txt");
 }

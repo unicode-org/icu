@@ -402,7 +402,7 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UE
     char *endCodePoint = NULL;
     char *spacePointer = NULL;
     char *result = fgets(buffer, 2048, data);
-    int32_t buflen = uprv_strlen(buffer);
+    int32_t buflen = (int32_t)uprv_strlen(buffer);
     if(U_FAILURE(*status)) {
         return 0;
     }

@@ -411,7 +411,7 @@ int main(int argc, char* argv[])
 
                 else
                 {
-                    T_FileStream_write(q, msg, uprv_strlen(msg));
+                    T_FileStream_write(q, msg, (int32_t)uprv_strlen(msg));
                     T_FileStream_close(q);
                 }
             }

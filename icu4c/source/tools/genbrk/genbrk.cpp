@@ -213,7 +213,7 @@ int  main(int argc, char **argv) {
     //
     //  Read in the rule source file
     //
-    int         result;
+    long        result;
     long        ruleFileSize;
     FILE        *file;
     char        *ruleBufferC;
@@ -228,7 +228,7 @@ int  main(int argc, char **argv) {
     fseek(file, 0, SEEK_SET);
     ruleBufferC = new char[ruleFileSize+10];
 
-    result = fread(ruleBufferC, 1, ruleFileSize, file);
+    result = (long)fread(ruleBufferC, 1, ruleFileSize, file);
     if (result != ruleFileSize)  {
         fprintf(stderr, "Error reading file \"%s\"\n", ruleFileName);
         exit (-1);

@@ -988,7 +988,7 @@ allocString(StringBlock *block, const char *s, int32_t length) {
     char *p;
 
     if(length<0) {
-        length=uprv_strlen(s);
+        length=(int32_t)uprv_strlen(s);
     }
 
     /*
@@ -1027,7 +1027,7 @@ compareAliases(const void *alias1, const void *alias2) {
     int result = ucnv_compareNames(GET_ALIAS_STR(*(uint16_t*)alias1), GET_ALIAS_STR(*(uint16_t*)alias2));
     if (!result) {
         /* Sort the shortest first */
-        return uprv_strlen(GET_ALIAS_STR(*(uint16_t*)alias1)) - uprv_strlen(GET_ALIAS_STR(*(uint16_t*)alias2));
+        return (int)uprv_strlen(GET_ALIAS_STR(*(uint16_t*)alias1)) - (int)uprv_strlen(GET_ALIAS_STR(*(uint16_t*)alias2));
     }
     return result;
 }
