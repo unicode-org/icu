@@ -34,7 +34,7 @@ alpha*-*-linux-gnu)
 *-*-*bsd*) 	icu_cv_host_frag=mh-bsd-gcc ;;
 *-*-aix*)
        if test "$ac_cv_prog_gcc" = yes; then
-               icu_cv_host_frag=mh-aix-gcc
+        icu_cv_host_frag=mh-aix-gcc
        else
 	if test -n "`$CXX --help 2>&1 | grep 'IBM C and C++ Compilers$'`"; then
 		icu_cv_host_frag=mh-aix
@@ -145,6 +145,8 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
             ;;
         *-*-aix*)
             if test "$ac_cv_prog_gcc" = no; then
+             # Note: Have not tested 64-bitness with gcc.
+             # Maybe the flag "-maix64" could be used with gcc?
              OLD_CFLAGS="${CFLAGS}"
              OLD_CXXFLAGS="${CXXFLAGS}"
              OLD_LDFLAGS="${LDFLAGS}"
