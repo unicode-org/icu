@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2002/08/28 20:22:00 $ 
- * $Revision: 1.31 $
+ * $Date: 2002/09/19 23:00:18 $ 
+ * $Revision: 1.32 $
  *
  *****************************************************************************************
  */
@@ -15,7 +15,6 @@ import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.impl.Utility;
-import java.text.*;
 import java.util.*;
 
 /**
@@ -798,6 +797,180 @@ public class UnicodeSetTest extends TestFmwk {
                 _testXor(i,j);
                 _testRetain(i,j);
                 _testRemove(i,j);
+            }
+        }
+    }
+
+    class BitSet2 extends BitSet {
+        public BitSet2() {
+            super();
+        }
+
+        public void reset() {
+            xor(this);
+        }
+
+        public int count = 0;
+    };
+
+    public void TestPerformance() {
+        // Only run in exhaustive mode
+        if (getInclusion() == 0) {
+            logln("Skipping performance tests in non-exhaustive mode");
+            return;
+        }
+
+        NumberFormat usFmt = NumberFormat.getNumberInstance();
+        ((DecimalFormat)usFmt).setMultiplier(1000000);
+        ((DecimalFormat)usFmt).setPositiveSuffix(" us");
+        ((DecimalFormat)usFmt).setNegativeSuffix(" us");
+        NumberFormat percent = NumberFormat.getPercentInstance();
+
+        int PROPS[] = {
+            UCharacterCategory.TITLECASE_LETTER,
+            UCharacterCategory.UNASSIGNED,
+        };
+
+        final Set s = new HashSet();
+        final UnicodeSet us = new UnicodeSet();
+        final BitSet2 bs = new BitSet2();
+
+        PerfTest setAdd = new PerfTest() {
+            protected int test() {
+                s.clear();
+                for (int cp = 0; cp <= 0x10FFFF; ++cp) {
+                    if (bs.get(cp)) {
+                        s.add(new Integer(cp));
+                    }
+                }
+                return bs.count;
+            }
+        };
+            
+        PerfTest usAdd = new PerfTest() {
+            protected int test() {
+                us.clear();
+                for (int cp = 0; cp <= 0x10FFFF; ++cp) {
+                    if (bs.get(cp)) {
+                        us.add(cp);
+                    }
+                }
+                return bs.count;
+            }
+        };
+
+        PerfTest setContains = new PerfTest() {
+            protected int test() {
+                int temp = 0;
+                for (int cp = 0; cp <= 0x10FFFF; ++cp) {
+                    if (s.contains(new Integer(cp))) {
+                        temp += cp;
+                    }
+                }
+                return 0x110000;
+            }
+        };
+        
+        PerfTest usContains = new PerfTest() {
+            protected int test() {
+                int temp = 0;
+                for (int cp = 0; cp <= 0x10FFFF; ++cp) {
+                    if (us.contains(cp)) {
+                        temp += cp;
+                    }
+                }
+                return 0x110000;
+            }
+        };
+
+        PerfTest setIterate = new PerfTest() {
+            protected int test() {
+                int n = 0;
+                int temp = 0;
+                Iterator it = s.iterator();
+                while (it.hasNext()) {
+                    temp += ((Integer)it.next()).intValue();
+                    ++n;
+                }
+                return n;
+            }
+        };
+            
+        PerfTest usIterate = new PerfTest() {
+            protected int test() {
+                int n = 0;
+                int temp = 0;
+                UnicodeSetIterator uit = new UnicodeSetIterator(us);
+                while (uit.next()) {
+                    temp += uit.codepoint;
+                    ++n;
+                }
+                return n;
+            }
+        };
+            
+        for (int j=0; j<PROPS.length; ++j) {
+            int prop = PROPS[j];
+
+            logln("Getting characters for character category " + prop);
+            bs.reset();
+            int total = 0;
+            for (int cp = 0; cp < 0x10FFFF; ++cp) {
+                if (UCharacter.getType(cp) == prop) {
+                    bs.set(cp);
+                    ++total;
+                }
+            }
+            logln("Total characters: " + total);
+            bs.count = total;
+        
+            logln("Testing Add speed");
+        
+            int n = 1;
+            if (total < 10000) {
+                n = 100;
+            }
+
+            double setAddTime = setAdd.measure(n);
+            double usAddTime = usAdd.measure(n);
+            double ratio = usAddTime / setAddTime;
+
+            logln("Set add time: " + usFmt.format(setAddTime));
+            if (ratio >= 1.5) {
+                errln("FAIL: UnicodeSet add time: " + usFmt.format(usAddTime) +
+                      " = " + percent.format(ratio) + ", expect < 150%");
+            } else {
+                logln("UnicodeSet add time: " + usFmt.format(usAddTime) +
+                      " = " + percent.format(ratio));
+            }
+
+            double setContainsTime = setContains.measure(4);
+            double usContainsTime = usContains.measure(4);
+            ratio = usContainsTime / setContainsTime;
+
+            logln("Set contains time: " + usFmt.format(setContainsTime));
+            if (ratio >= 1.0) {
+                errln("FAIL: UnicodeSet contains time: " + usFmt.format(usContainsTime) +
+                      " = " + percent.format(ratio) + ", expect < 100%");
+            } else {
+                logln("UnicodeSet contains time: " + usFmt.format(usContainsTime) +
+                      " = " + percent.format(ratio));
+            }
+
+            double setIterateTime = setIterate.measure(10);
+            double usIterateTime = usIterate.measure(10);
+            ratio = usIterateTime / setIterateTime;
+
+            logln("Set iterate time: " + usFmt.format(setIterateTime));
+            if (setIterateTime == 0) {
+                logln("UnicodeSet iterate time: " + usFmt.format(usIterateTime) +
+                      ": WARNING, unable to measure percent change ");
+            } else if (ratio >= 1.5) {
+                errln("FAIL: UnicodeSet iterate time: " + usFmt.format(usIterateTime) +
+                      " = " + percent.format(ratio) + ", expect < 150%");
+            } else {
+                logln("UnicodeSet iterate time: " + usFmt.format(usIterateTime) +
+                      " = " + percent.format(ratio));
             }
         }
     }
