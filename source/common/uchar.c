@@ -20,6 +20,7 @@
 *   4/15/99     Madhu        Updated all the function definitions for C Implementation
 *   5/20/99     Madhu		Added the function u_getVersion()
 *   8/19/1999   srl            Upgraded scripts to Unicode3.0 
+*   11/11/1999  weiv        added u_isalnum(), cleaned comments
 ********************************************************************************************
 */
 #include "utypes.h"
@@ -4848,6 +4849,14 @@ u_istitle(UChar ch)
     }
     return (ucmp8_get(tables, ch) == U_TITLECASE_LETTER);
 }
+
+/* Checks if ch is a letter or a decimal digit */
+bool_t 
+u_isalnum(UChar ch)
+{
+	return (u_isdigit(ch) || u_isalpha(ch));
+}
+
 
 /* Checks if ch is a decimal digit. */
 bool_t
