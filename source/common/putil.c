@@ -590,6 +590,11 @@ uprv_longBitsFromDouble(double d, int32_t *hi, uint32_t *lo)
 int16_t 
 uprv_log10(double d)
 {
+#ifdef OS400
+    /* We don't use the normal implementation because you can't underflow */
+    /* a double otherwise an underflow exception occurs */
+    return log10(d);
+#else
     /* The reason this routine is needed is that simply taking the*/
     /* log and dividing by log10 yields a result which may be off*/
     /* by 1 due to rounding errors.  For example, the naive log10*/
@@ -606,6 +611,7 @@ uprv_log10(double d)
         --ailog10;
 
     return ailog10;
+#endif
 }
 
 int32_t 
@@ -1474,6 +1480,10 @@ uprv_nextDouble(double d, UBool next)
                      sizeof(uint32_t));
     
     *plowBits = 1;
+#ifdef OS400
+    /* Don't get an underflow exception */
+    *(plowBits-1) = 0x00100000;
+#endif
     
     if (next) {
       return smallestPositiveDouble;
@@ -1497,7 +1507,7 @@ uprv_nextDouble(double d, UBool next)
     if (highMagnitude != 0x7FF00000L || lowMagnitude != 0x00000000L) {
       lowMagnitude += 1;
       if (lowMagnitude == 0) {
-    highMagnitude += 1;
+        highMagnitude += 1;
       }
     }
   }
@@ -1507,6 +1517,15 @@ uprv_nextDouble(double d, UBool next)
     if (lowMagnitude > lowBits) {
       highMagnitude -= 1;
     }
+#ifdef OS400
+    /* Don't get an underflow exception */
+    if (highMagnitude <  0x00100000 ||
+       (highMagnitude == 0x00100000 && lowMagnitude == 0))
+    {
+        highMagnitude = 0;
+        lowMagnitude = 0;
+    }
+#endif
   }
   
   /* construct result and return */
