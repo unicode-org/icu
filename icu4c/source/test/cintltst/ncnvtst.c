@@ -214,6 +214,7 @@ UBool convertFromU( const UChar *source, int sourceLen,  const char *expect, int
                   NULL,/*offs,*/
                   TRUE, /* flush if we're at the end of the input data */
                   &status);
+    ucnv_close(conv);
     if(U_FAILURE(status)){
         if(status == expectedStatus){
             return TRUE;
@@ -243,6 +244,7 @@ UBool convertFromU( const UChar *source, int sourceLen,  const char *expect, int
         printSeqErr((const unsigned char *)expect, expectLen);
         return FALSE;
     }
+
 
 
     

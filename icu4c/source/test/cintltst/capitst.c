@@ -450,6 +450,10 @@ void TestHashCode()
     free(sortk1);
     free(sortk2);
     free(sortk3);
+    free(test1);
+    free(test2);
+    free(test3);
+
 
 }
 /*
