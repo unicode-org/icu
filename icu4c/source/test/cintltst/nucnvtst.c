@@ -625,6 +625,7 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
     int32_t fmUTF8Offs[] =
      { 0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0007, 0x000a, 0x000d };
 
+#ifdef U_ENABLE_GENERIC_ISO_2022
     /* Same as UTF8, but with ^[%B preceeding */
     const uint8_t expectedISO2022[] =
      { 0x1b, 0x25, 0x42, 0x31, 0x32, 0x33, 0x00, 0xe4, 0xb8, 0x80, 0xe4, 0xba, 0x8c, 0xe4, 0xb8, 0x89, 0x2E };
@@ -633,6 +634,7 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
        0x04, 0x05, 0x05, 0x05, 0x06, 0x06, 0x06, 0x07 }; /* right? */
     int32_t fmISO2022Offs[] =
      { 0x0003, 0x0004, 0x0005, 0x0006, 0x0007, 0x000a, 0x000d, 0x0010 }; /* is this right? */
+#endif
 
     /*  1 2 3 0, <SO> h1 h2 h3 <SI> . EBCDIC_STATEFUL */
     const uint8_t expectedIBM930[] =
