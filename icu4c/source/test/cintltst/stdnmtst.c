@@ -19,7 +19,7 @@
 
 #include <stdio.h>
 
-void TestStandardNames();
+static void TestStandardNames(void);
 
 
 
@@ -48,7 +48,7 @@ static int dotestname(const char *name, const char *standard, const char *expect
     return res;
 }
 
-void TestStandardNames()
+static void TestStandardNames()
 {
     int res = 1;
 

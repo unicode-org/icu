@@ -26,6 +26,7 @@ struct Vector1;
 /* Internal functions used */
     void addElement(struct Vector1*, const char*);
     UChar * addElement2(struct Vector1*, const UChar*);
+    void cleanupVector(struct Vector1*);
     int32_t Count(struct Vector1*);
     UChar* elementAt(struct Vector1*, int32_t);
 /* Internal Functions used */
