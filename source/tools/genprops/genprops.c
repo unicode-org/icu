@@ -84,19 +84,6 @@ main(int argc, char* argv[]) {
     char *basename=NULL;
     UErrorCode errorCode=U_ZERO_ERROR;
 
-    /* Initialize ICU */
-    u_init(&errorCode);
-    if (U_FAILURE(errorCode) && errorCode != U_FILE_ACCESS_ERROR) {
-        /* Note: u_init() will try to open ICU property data.
-         *       failures here are expected when building ICU from scratch.
-         *       ignore them.
-        */
-        fprintf(stderr, "%s: can not initialize ICU.  errorCode = %s\n",
-            argv[0], u_errorName(errorCode));
-        exit(1);
-    }
-    errorCode = U_ZERO_ERROR;
-
     U_MAIN_INIT_ARGS(argc, argv);
 
     /* preset then read command line options */
