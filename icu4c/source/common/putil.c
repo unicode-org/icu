@@ -31,6 +31,7 @@
 *   06/28/99    stephen     Removed mutex locking in u_isBigEndian().
 *   08/04/99    jeffrey R.  Added OS/2 changes
 *   11/15/99    helena      Integrated S/390 IEEE support.
+*   04/26/01    barry n.    OS/400 support for uprv_getDefaultLocaleID
 ******************************************************************************
 */
 
@@ -1457,61 +1458,61 @@ const char*
 uprv_getDefaultLocaleID()
 {
 #if U_POSIX_LOCALE
-  char *correctedPOSIXLocale = 0;
-  const char* posixID = uprv_getPOSIXID();
-  const char *p;
-
-  /* Format: (no spaces)
-     ll [ _CC ] [ . MM ] [ @ VV]
-
-     l = lang, C = ctry, M = charmap, V = variant
-  */
-
-  if((p = uprv_strchr(posixID, '.')) != NULL)
-  {
-    /* assume new locale can't be larger than old one? */
-    correctedPOSIXLocale = uprv_malloc(uprv_strlen(posixID));
-    uprv_strncpy(correctedPOSIXLocale, posixID, p-posixID);
-    correctedPOSIXLocale[p-posixID] = 0;
-
-    posixID = correctedPOSIXLocale;
-  }
-  
-  if((p = uprv_strchr(posixID, '@')) != NULL)
-  {
-    if(correctedPOSIXLocale == NULL) {
-      correctedPOSIXLocale = uprv_malloc(uprv_strlen(posixID));
-      uprv_strncpy(correctedPOSIXLocale, posixID, p-posixID);
-      correctedPOSIXLocale[p-posixID] = 0;
-    }
-    p++;
-
-    /* Take care of any special cases here.. */
-    if(!uprv_strcmp(p, "nynorsk"))
-      {
-        p = "NY";
-        
-        /*      Should we assume no_NO_NY instead of possible no__NY?
-         * if(!uprv_strcmp(correctedPOSIXLocale, "no")) {
-         *         uprv_strcpy(correctedPOSIXLocale, "no_NO");
-         *         }
-         */
-      }
-
-    if(uprv_strchr(correctedPOSIXLocale,'_') == NULL)
-      uprv_strcat(correctedPOSIXLocale, "__"); /* aa@b -> aa__b */
-    else
-      uprv_strcat(correctedPOSIXLocale, "_"); /* aa_CC@b -> aa_CC_b */
-    uprv_strcat(correctedPOSIXLocale, p);
-
-    /* Should there be a map from 'no@nynorsk' -> no_NO_NY here?
-       How about 'russian' -> 'ru'?
+    char *correctedPOSIXLocale = 0;
+    const char* posixID = uprv_getPOSIXID();
+    const char *p;
+    
+    /* Format: (no spaces)
+    ll [ _CC ] [ . MM ] [ @ VV]
+    
+      l = lang, C = ctry, M = charmap, V = variant
     */
 
-    posixID = correctedPOSIXLocale;
-  }
-  
-  return posixID;
+    if((p = uprv_strchr(posixID, '.')) != NULL)
+    {
+        /* assume new locale can't be larger than old one? */
+        correctedPOSIXLocale = uprv_malloc(uprv_strlen(posixID));
+        uprv_strncpy(correctedPOSIXLocale, posixID, p-posixID);
+        correctedPOSIXLocale[p-posixID] = 0;
+        
+        posixID = correctedPOSIXLocale;
+    }
+
+    if((p = uprv_strchr(posixID, '@')) != NULL)
+    {
+        if(correctedPOSIXLocale == NULL) {
+            correctedPOSIXLocale = uprv_malloc(uprv_strlen(posixID));
+            uprv_strncpy(correctedPOSIXLocale, posixID, p-posixID);
+            correctedPOSIXLocale[p-posixID] = 0;
+        }
+        p++;
+
+        /* Take care of any special cases here.. */
+        if(!uprv_strcmp(p, "nynorsk"))
+        {
+            p = "NY";
+            
+            /*      Should we assume no_NO_NY instead of possible no__NY?
+            * if(!uprv_strcmp(correctedPOSIXLocale, "no")) {
+            *         uprv_strcpy(correctedPOSIXLocale, "no_NO");
+            *         }
+            */
+        }
+
+        if(uprv_strchr(correctedPOSIXLocale,'_') == NULL)
+            uprv_strcat(correctedPOSIXLocale, "__"); /* aa@b -> aa__b */
+        else
+            uprv_strcat(correctedPOSIXLocale, "_"); /* aa_CC@b -> aa_CC_b */
+        uprv_strcat(correctedPOSIXLocale, p);
+
+        /* Should there be a map from 'no@nynorsk' -> no_NO_NY here?
+        How about 'russian' -> 'ru'?
+        */
+
+        posixID = correctedPOSIXLocale;
+    }
+
+    return posixID;
 
 #elif defined(WIN32)
     UErrorCode status = U_ZERO_ERROR;
@@ -1524,38 +1525,39 @@ uprv_getDefaultLocaleID()
     return locID;
 
 #elif defined(XP_MAC)
-  int32_t script = MAC_LC_INIT_NUMBER; 
-  /* = IntlScript(); or GetScriptManagerVariable(smSysScript);*/
-  int32_t region = MAC_LC_INIT_NUMBER; 
-  /* = GetScriptManagerVariable(smRegionCode);*/
-  int32_t lang = MAC_LC_INIT_NUMBER;   
-  /* = GetScriptManagerVariable(smScriptLang);*/
-  int32_t date_region = MAC_LC_INIT_NUMBER;
-  char* posixID = 0;
-  int32_t count = sizeof(mac_lc_recs) / sizeof(mac_lc_rec);
-  int32_t i;
-  Intl1Hndl ih;
-  
-  ih = (Intl1Hndl) GetIntlResource(1);
-  if (ih)
-    date_region = ((uint16_t)(*ih)->intl1Vers) >> 8;
-  
-  for (i = 0; i < count; i++) {
-    if ( ((mac_lc_recs[i].script == MAC_LC_MAGIC_NUMBER)      
-      || (mac_lc_recs[i].script == script))
-     && ((mac_lc_recs[i].region == MAC_LC_MAGIC_NUMBER)
-         || (mac_lc_recs[i].region == region))
-     && ((mac_lc_recs[i].lang == MAC_LC_MAGIC_NUMBER)
-         || (mac_lc_recs[i].lang == lang))
-     && ((mac_lc_recs[i].date_region == MAC_LC_MAGIC_NUMBER) 
-         || (mac_lc_recs[i].date_region == date_region))
-     ) {
-      posixID = mac_lc_recs[i].posixID;
-      break;
+    int32_t script = MAC_LC_INIT_NUMBER; 
+    /* = IntlScript(); or GetScriptManagerVariable(smSysScript);*/
+    int32_t region = MAC_LC_INIT_NUMBER; 
+    /* = GetScriptManagerVariable(smRegionCode);*/
+    int32_t lang = MAC_LC_INIT_NUMBER;   
+    /* = GetScriptManagerVariable(smScriptLang);*/
+    int32_t date_region = MAC_LC_INIT_NUMBER;
+    char* posixID = 0;
+    int32_t count = sizeof(mac_lc_recs) / sizeof(mac_lc_rec);
+    int32_t i;
+    Intl1Hndl ih;
+
+    ih = (Intl1Hndl) GetIntlResource(1);
+    if (ih)
+        date_region = ((uint16_t)(*ih)->intl1Vers) >> 8;
+
+    for (i = 0; i < count; i++) {
+        if (   ((mac_lc_recs[i].script == MAC_LC_MAGIC_NUMBER)      
+             || (mac_lc_recs[i].script == script))
+            && ((mac_lc_recs[i].region == MAC_LC_MAGIC_NUMBER)
+             || (mac_lc_recs[i].region == region))
+            && ((mac_lc_recs[i].lang == MAC_LC_MAGIC_NUMBER)
+             || (mac_lc_recs[i].lang == lang))
+            && ((mac_lc_recs[i].date_region == MAC_LC_MAGIC_NUMBER) 
+             || (mac_lc_recs[i].date_region == date_region))
+            )
+        {
+            posixID = mac_lc_recs[i].posixID;
+            break;
+        }
     }
-  }
-  
-  return posixID;
+
+    return posixID;
 
 #elif defined(OS2)
     char * locID;
@@ -1572,9 +1574,89 @@ uprv_getDefaultLocaleID()
     return locID;
 
 #elif defined(OS400)
-    /* Todo: TBD needs to be implemented */
-    return "";
+    /* locales are process scoped and are by definition thread safe */
+    static char correctedLocale[64];
+    const  char *localeID = uprv_getPOSIXID();
+           char *p;
 
+    /* Make sure we have something... */
+    if (localeID == NULL)
+        return "en_US_POSIX";
+
+    /* Extract the locale name from the path. */
+    if((p = uprv_strrchr(localeID, '/')) != NULL)
+    {
+        /* Increment p to start of locale name. */
+        p++;
+        localeID = p;
+    }
+
+    /* Copy to work location. */
+    uprv_strcpy(correctedLocale, localeID);
+
+    /* Strip off the '.locale' extension. */
+    if((p = uprv_strchr(correctedLocale, '.')) != NULL) {
+        *p = 0;
+    }
+
+    /* Upper case the locale name. */
+    T_CString_toUpperCase(correctedLocale);
+
+    /* See if we are using the POSIX locale.  Any of the
+    * following are equivalent and use the same QLGPGCMA
+    * (POSIX) locale.
+    */
+    if ((uprv_strcmp("C", correctedLocale) == 0) ||
+        (uprv_strcmp("POSIX", correctedLocale) == 0) ||
+        (uprv_strcmp("QLGPGCMA", correctedLocale) == 0))
+    {
+        uprv_strcpy(correctedLocale, "en_US_POSIX");
+    }
+    else
+    {
+        int16_t LocaleLen;
+
+        /* Lower case the lang portion. */
+        for(p = correctedLocale; *p != 0 && *p != '_'; p++)
+        {
+            *p = uprv_tolower(*p);
+        }
+
+        /* Adjust for Euro.  After '_E' add 'URO'. */
+        LocaleLen = uprv_strlen(correctedLocale);
+        if (correctedLocale[LocaleLen - 2] == '_' &&
+            correctedLocale[LocaleLen - 1] == 'E')
+        {
+            uprv_strcat(correctedLocale, "URO");
+        }
+
+        /* If using Lotus-based locale then convert to
+         * equivalent non Lotus.
+         */
+        else if (correctedLocale[LocaleLen - 2] == '_' &&
+            correctedLocale[LocaleLen - 1] == 'L')
+        {
+            correctedLocale[LocaleLen - 2] = 0;
+        }
+
+        /* There are separate simplified and traditional
+         * locales called zh_HK_S and zh_HK_T.
+         */
+        else if (uprv_strncmp(correctedLocale, "zh_HK", 5) == 0)
+        {
+            uprv_strcpy(correctedLocale, "zh_HK");
+        }
+
+        /* A special zh_CN_GBK locale...
+        */
+        else if (uprv_strcmp(correctedLocale, "zh_CN_GBK") == 0)
+        {
+            uprv_strcpy(correctedLocale, "zh_CN");
+        }
+        
+    }
+    
+    return correctedLocale;
 #endif
 
 }
