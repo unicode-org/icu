@@ -21,6 +21,8 @@
 
 #include "sfnt.h"
 
+#include <string.h>
+
 //
 // Finds the high bit by binary searching
 // through the bits in n.
@@ -62,7 +64,8 @@ le_int8 PortableFontInstance::highBit(le_int32 value)
 }
 
 PortableFontInstance::PortableFontInstance(char *fileName, float pointSize, PFIErrorCode &status)
-    : fFile(NULL), fUnitsPerEM(0), fPointSize(pointSize), fDirectory(NULL), fCMAPMapper(NULL),
+    : fFile(NULL), fUnitsPerEM(0), fPointSize(pointSize), fDirectory(NULL),
+      fTableCache(NULL), fTableCacheCurr(0), fTableCacheSize(0), fCMAPMapper(NULL),
 	  fHMTXTable(NULL), fNumGlyphs(0), fNumLongHorMetrics(0)
 {
 	le_uint32 length;
@@ -125,6 +128,8 @@ PortableFontInstance::PortableFontInstance(char *fileName, float pointSize, PFIE
         goto error_exit;
     }
 
+    status = initFontTableCache();
+
     return;
 
 error_exit:
@@ -139,7 +144,11 @@ PortableFontInstance::~PortableFontInstance()
 	    fclose(fFile);
 
 	    deleteTable(fHMTXTable);
+
+        flushFontTableCache();
 	    delete fCMAPMapper;
+
+        delete[] (void *) fDirectory;
     }
 };
 
@@ -174,6 +183,32 @@ const DirectoryEntry *PortableFontInstance::findTable(LETag tag) const
 	return NULL;
 }
 
+PFIErrorCode PortableFontInstance::initFontTableCache()
+{
+    fTableCacheSize = TABLE_CACHE_INIT;
+    fTableCache = new TableCacheEntry[fTableCacheSize];
+
+    if (fTableCache == 0) {
+        return PFI_OUT_OF_MEMORY_ERROR;
+    }
+
+    for (int i = 0; i < fTableCacheSize; i += 1) {
+        fTableCache[i].tag = 0;
+        fTableCache[i].table = NULL;
+    }
+
+    return PFI_NO_ERROR;
+}
+
+void PortableFontInstance::flushFontTableCache()
+{
+    for (int i = fTableCacheCurr - 1; i >= 0; i -= 1) {
+        delete[] (char *) fTableCache[i].table;
+    }
+
+    fTableCacheCurr = 0;
+}
+
 const void *PortableFontInstance::readTable(LETag tag, le_uint32 *length) const
 {
 	const DirectoryEntry *entry = findTable(tag);
@@ -194,6 +229,45 @@ const void *PortableFontInstance::readTable(LETag tag, le_uint32 *length) const
 
 	return table;
 }
+
+const void *PortableFontInstance::getFontTable(LETag tableTag) const
+{
+    for (int i = 0; i < fTableCacheCurr; i += 1) {
+        if (fTableCache[i].tag == tableTag) {
+            return fTableCache[i].table;
+        }
+    }
+
+    PortableFontInstance *realThis = (PortableFontInstance *) this;
+
+    if (realThis->fTableCacheCurr >= realThis->fTableCacheSize) {
+        le_int32 newSize = realThis->fTableCacheSize + TABLE_CACHE_GROW;
+        TableCacheEntry *newTable = new TableCacheEntry[newSize];
+
+        // FIXME: need a better strategy than this...
+        if (newTable == NULL) {
+            return NULL;
+        }
+
+        memcpy(newTable, realThis->fTableCache, realThis->fTableCacheSize * sizeof realThis->fTableCache[0]);
+        delete[] realThis->fTableCache;
+
+        for (int i = realThis->fTableCacheSize; i < newSize; i += 1) {
+            newTable[i].tag = 0;
+            newTable[i].table = NULL;
+        }
+
+        realThis->fTableCache = newTable;
+        realThis->fTableCacheSize = newSize;
+    }
+
+    le_uint32 tableLength;
+
+    realThis->fTableCache[realThis->fTableCacheCurr].tag = tableTag;
+    realThis->fTableCache[realThis->fTableCacheCurr].table = (void *) realThis->readTable(tableTag, &tableLength);
+
+    return fTableCache[realThis->fTableCacheCurr++].table;
+};
 
 CMAPMapper *PortableFontInstance::findUnicodeMapper()
 {
