@@ -23,6 +23,6 @@
       <icu:word icu:class="RuleBased" icu:import="word_th"/>
       <icu:line icu:class="RuleBased" icu:import="line_th" />
     </icu:boundaries>
-    <icu:breakDictionaryData icu:class="DictionaryBased" icu:import="thaidict.brk"/>
+    <icu:breakDictionaryData icu:class="DictionaryBased" icu:importFile="../brkitr/thaidict.brk"/>
   </special>
 </ldml>
