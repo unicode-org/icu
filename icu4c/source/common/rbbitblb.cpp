@@ -4,7 +4,7 @@
 
 /*
 **********************************************************************
-*   Copyright (c) 2002-2004, International Business Machines
+*   Copyright (c) 2002-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -343,7 +343,7 @@ void RBBITableBuilder::calcChainedFollowPos(RBBINode *tree) {
     // get a list of all endmarker nodes.
     tree->findNodes(&endMarkerNodes, RBBINode::endMark, *fStatus);
 
-    // get a list all leaf nodes 
+    // get a list all leaf nodes
     tree->findNodes(&leafNodes, RBBINode::leafChar, *fStatus);
     if (U_FAILURE(*fStatus)) {
         return;
@@ -383,10 +383,12 @@ void RBBITableBuilder::calcChainedFollowPos(RBBINode *tree) {
         //        into the rule file.
         if (fRB->fLBCMNoChain) {
             UChar32 c = this->fRB->fSetBuilder->getFirstChar(endNode->fVal);
-            U_ASSERT(c != -1);
-            ULineBreak cLBProp = (ULineBreak)u_getIntPropertyValue(c, UCHAR_LINE_BREAK);
-            if (cLBProp == U_LB_COMBINING_MARK) {
-                continue;
+            if (c != -1) {
+                // c == -1 occurs with sets containing only the {eof} marker string.
+                ULineBreak cLBProp = (ULineBreak)u_getIntPropertyValue(c, UCHAR_LINE_BREAK);
+                if (cLBProp == U_LB_COMBINING_MARK) {
+                    continue;
+                }
             }
         }
 
@@ -572,14 +574,29 @@ void     RBBITableBuilder::flagAcceptingStates() {
                 // Any non-zero value for fAccepting means this is an accepting node.
                 // The value is what will be returned to the user as the break status.
                 // If no other value was specified, force it to -1.
-                sd->fAccepting = endMarker->fVal;
-                if (sd->fAccepting == 0) {
-                    sd->fAccepting = -1;
+
+                if (sd->fAccepting==0) {
+					// State hasn't been marked as accepting yet.  Do it now.
+                    sd->fAccepting = endMarker->fVal;
+                    if (sd->fAccepting == 0) {
+                        sd->fAccepting = -1;
+					}
                 }
+                if (sd->fAccepting==-1 && endMarker->fVal != 0) {
+					// Both lookahead and non-lookahead accepting for this state.
+					// Favor the look-ahead.  Expedient for line break.
+					// TODO:  need a more elegant resolution for conflicting rules.
+					sd->fAccepting = endMarker->fVal;
+				}
+				    // implicit else:
+				    // if sd->fAccepting already had a value other than 0 or -1, leave it be.
 
                 // If the end marker node is from a look-ahead rule, set
                 //   the fLookAhead field or this state also.
                 if (endMarker->fLookAheadEnd) {
+					// TODO:  don't change value if already set?
+					// TODO:  allow for more than one active look-ahead rule in engine.
+					//        Make value here an index to a side array in engine?
                     sd->fLookAhead = sd->fAccepting;
                 }
             }
@@ -644,7 +661,7 @@ void     RBBITableBuilder::flagTaggedStates() {
     }
     for (i=0; i<tagNodes.size(); i++) {                   // For each tag node t (all of 'em)
         tagNode = (RBBINode *)tagNodes.elementAt(i);
-        
+
         for (n=0; n<fDStates->size(); n++) {              //    For each state  s (row in the state table)
             RBBIStateDescriptor *sd = (RBBIStateDescriptor *)fDStates->elementAt(n);
             if (sd->fPositions->indexOf(tagNode) >= 0) {  //       if  s include the tag node t
@@ -686,9 +703,9 @@ void  RBBITableBuilder::mergeRuleStatusVals() {
         fRB->fRuleStatusVals->addElement(1, *fStatus);  // Num of statuses in group
         fRB->fRuleStatusVals->addElement((int32_t)0, *fStatus);  //   and our single status of zero
     }
-        
-    //    For each state 
-    for (n=0; n<fDStates->size(); n++) {     
+
+    //    For each state
+    for (n=0; n<fDStates->size(); n++) {
         RBBIStateDescriptor *sd = (RBBIStateDescriptor *)fDStates->elementAt(n);
         UVector *thisStatesTagValues = sd->fTagVals;
         if (thisStatesTagValues == NULL) {
@@ -704,7 +721,7 @@ void  RBBITableBuilder::mergeRuleStatusVals() {
         sd->fTagsIdx = -1;
         int32_t  thisTagGroupStart = 0;   // indexes into the global rule status vals list
         int32_t  nextTagGroupStart = 0;
-        
+
         // Loop runs once per group of tags in the global list
         while (nextTagGroupStart < fRB->fRuleStatusVals->size()) {
             thisTagGroupStart = nextTagGroupStart;
@@ -718,21 +735,21 @@ void  RBBITableBuilder::mergeRuleStatusVals() {
             // The lengths match, go ahead and compare the actual tag values
             //    between this state and the group from the global list.
             for (i=0; i<thisStatesTagValues->size(); i++) {
-                if (thisStatesTagValues->elementAti(i) != 
+                if (thisStatesTagValues->elementAti(i) !=
                     fRB->fRuleStatusVals->elementAti(thisTagGroupStart + 1 + i) ) {
-                    // Mismatch.  
+                    // Mismatch.
                     break;
                 }
             }
-            
+
             if (i == thisStatesTagValues->size()) {
                 // We found a set of tag values in the global list that match
                 //   those for this state.  Use them.
                 sd->fTagsIdx = thisTagGroupStart;
-                break;   
+                break;
             }
         }
-        
+
         if (sd->fTagsIdx == -1) {
             // No suitable entry in the global tag list already.  Add one
             sd->fTagsIdx = fRB->fRuleStatusVals->size();
@@ -1027,7 +1044,7 @@ void RBBITableBuilder::printRuleStatusTable() {
 
     RBBIDebugPrintf("index |  tags \n");
     RBBIDebugPrintf("-------------------\n");
-    
+
     while (nextRecord < tbl->size()) {
         thisRecord = nextRecord;
         nextRecord = thisRecord + tbl->elementAti(thisRecord) + 1;
@@ -1057,7 +1074,7 @@ RBBIStateDescriptor::RBBIStateDescriptor(int lastInputSymbol, UErrorCode *fStatu
     fTagVals   = NULL;
     fPositions = NULL;
     fDtran     = NULL;
-    
+
     fDtran     = new UVector(lastInputSymbol+1, *fStatus);
     if (U_FAILURE(*fStatus)) {
         return;

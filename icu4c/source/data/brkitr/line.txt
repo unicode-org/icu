@@ -14,7 +14,43 @@
 
 !!chain;
 !!LBCMNoChain;
+
+
 !!lookAheadHardBreak;
+#
+#  !!lookAheadHardBreak    Described here because it is (as yet) undocumented elsewhere
+#                          and only used for the line break rules.
+#
+#           It is used in the implementation of the incredibly annoying rule LB 7c
+#           which says to treat any combining mark that is not attached to a base
+#           character as if it were of class AL  (alphabetic).
+#
+#           The problem occurs in the reverse rules.
+#
+#           Consider a sequence like, with correct breaks as shown
+#               LF  ID  CM  AL  AL
+#                  ^       ^       ^
+#           Then consider the sequence without the initial ID (ideographic)
+#                 LF  CM  AL  AL
+#                    ^           ^
+#           Our CM, which in the first example was attached to the ideograph,
+#           is now unattached, becomes an alpha, and joins in with the other
+#           alphas.
+#
+#           When interating forwards, these sequences do not present any problems
+#           When interating backwards, we need to look ahead when encountering
+#           a CM to see whether it attaches to something further on or not.
+#           (Look-ahead in a reverse rule is looking towards the start)
+#
+#           If the CM is unattached, we need to force a break.
+#
+#           !!lookAheadHardBreak forces the run time state machine to
+#           stop immediately when a look ahead rule ( '/' operator) matches,
+#           and set the match position to that of the look-ahead operator,
+#           no matter what other rules may be in play at the time.
+#
+#           See rule LB 19 for an example.
+#
 
 $AI = [:LineBreak =  Ambiguous:];
 $AL = [:LineBreak =  Alphabetic:];
@@ -60,7 +96,7 @@ $ZW = [:LineBreak =  ZWSpace:];
 #                               XX  (Unknown, unassigned)
 #                         as $AL  (Alphabetic)
 #
-$ALPlus = $AL | $AI | $SA | $XX;
+$ALPlus = [$AL $AI $SA $XX];
 
 #
 #  Combining Marks.   X $CM*  behaves as if it were X.  Rule LB6.
@@ -87,7 +123,6 @@ $OPcm = $OP $CM*;
 $POcm = $PO $CM*;
 $PRcm = $PR $CM*;
 $QUcm = $QU $CM*;
-$SPcm = $SP $CM*;
 $SYcm = $SY $CM*;
 $WJcm = $WJ $CM*;
 
@@ -120,45 +155,87 @@ $OP $CM+;
 $PO $CM+;
 $PR $CM+;
 $QU $CM+;
-$SP $CM+;
 $SY $CM+;
 $WJ $CM+;
 
+#
+# CAN_CM  is the set of characters that may combine with CM combining chars.
+#         Note that Linebreak UAX 14's concept of a combining char and the rules
+#         for what they can combine with are _very_ different from the rest of Unicode.
+#
+#         Note that $CM itself is left out of this set.  If CM is needed as a base
+#         it must be listed separately in the rule.
+#
+$CAN_CM  = [^$BK $CR $LF $NL $ZW $SP $CM];       # Bases that can   take CMs
+$CANT_CM = [ $BK $CR $LF $NL $ZW $SP $CM];       # Bases that can't take CMs
 
 #
-#  Rule LB 3
-$LB3Breaks = [$BK $CR $LF $NL];
-$LB3NonBreaks = [^$BK $CR $LF $NL];
-$LB5NonBreaks = [[$LB3NonBreaks] - [$ZW]];
+# AL_FOLLOW  set of chars that can unconditionally follow an AL
+#            Needed in rules where stand-alone $CM s are treated as AL.
+#            Chaining is disabled with CM because it causes other failures,
+#            so for this one case we need to manually list out longer sequences.
+#
+$AL_FOLLOW_NOCM = [$BK $CR $LF $NL $ZW $SP];
+$AL_FOLLOW_CM   = [$CL $EX $IS $SY $WJ $GL $QU $BA $HY $NS $IN $NU $ALPlus];
+$AL_FOLLOW      = [$AL_FOLLOW_NOCM $AL_FOLLOW_CM];
 
-$LB3NonBreaks?     $LB3Breaks {100};
-$LB5NonBreaks $CM* $LB3Breaks {100};
+
+#
+#  Rule LB 3    Mandatory (Hard) breaks.
+#
+$LB3Breaks    = [$BK $CR $LF $NL];
+$LB3NonBreaks = [^$BK $CR $LF $NL];
+
+$LB3NonBreaks?  $LB3Breaks {100};    # LB 3c  do not break before hard breaks.
+$CAN_CM $CM*    $LB3Breaks {100};
+$CM+            $LB3Breaks {100};
 $CR $LF {100};
 
 # LB 4         x SP
 #              x ZW
-$ZW [$SP $ZW];
-$LB5NonBreaks $CM* [$SP $ZW];
+$LB3NonBreaks [$SP $ZW];
+$CAN_CM $CM*  [$SP $ZW];
+$CM+          [$SP $ZW];
 
 # LB 5         Break after zero width space
-$LB5Breaks = [$LB3Breaks $ZW];
+$LB5Breaks    = [$LB3Breaks $ZW];
+$LB5NonBreaks = [[$LB3NonBreaks] - [$ZW]];
 
 
-# LB 7     Combining marks.      $SP $CM needs to behave like $ID.
-#                                X   $CM needs to behave like X, where X is not $SP.   
+# LB 7     Combining marks.      X   $CM needs to behave like X, where X is not $SP, $BK $CR $LF $NL 
 #                                $CM not covered by the above needs to behave like $AL   
-#                                
-$LB5NonBreaks $CM+;    #  Stick together any combining sequences that don't match other rules.
+#                                See definition of $CAN_CM.
 
+$CAN_CM $CM+;              #  Stick together any combining sequences that don't match other rules.
+$CM+;
+
+#
 # LB 8
-$LB5NonBreaks $CM* $CL;
-$LB5NonBreaks $CM* $EX;
-$LB5NonBreaks $CM* $IS;
-$LB5NonBreaks $CM* $SY;
+#
+$LB5NonBreaks $CL;
+$CAN_CM $CM*  $CL;
+$CM+          $CL;              # by rule 7c, stand-alone CM behaves as AL
 
+$LB5NonBreaks $EX;
+$CAN_CM $CM*  $EX;
+$CM+          $EX;              # by rule 7c, stand-alone CM behaves as AL
+
+$LB5NonBreaks $IS;
+$CAN_CM $CM*  $IS;
+$CM+          $IS;              # by rule 7c, stand-alone CM behaves as AL
+
+$LB5NonBreaks $SY;
+$CAN_CM $CM*  $SY;
+$CM+          $SY;              # by rule 7c, stand-alone CM behaves as AL
+
+
+#
 # LB 9
-$OPcm $SP* .?;
-$OPcm $SP* $LB5NonBreaks $CM*;
+#
+$OPcm $SP* $CAN_CM $CM*;
+$OPcm $SP* $CANT_CM;
+
+$OPcm $SP+ $CM+ $AL_FOLLOW?;    # by rule 7c, stand-alone CM behaves as AL
 
 # LB 10
 $QUcm $SP* $OPcm;
@@ -167,58 +244,71 @@ $QUcm $SP* $OPcm;
 $CLcm $SP* $NScm;
 
 # LB 11a
-($B2cm)+;
+$B2cm $SP* $B2cm;
 
 # LB 11b  Word Joiner
-$LB5NonBreaks $CM* $WJcm;
-$WJcm .?;
+#
+$CAN_CM $CM*  $WJcm;
+$LB5NonBreaks $WJcm;
+$CM+          $WJcm;
+
+$WJcm [^$CAN_CM];
+$WJcm $CAN_CM $CM*;
 
 # LB 12
-$LB12NonBreaks = [$LB5NonBreaks - $SP];
+$LB12NonBreaks = [$LB5NonBreaks - [$SP]];
+$LB12Breaks    = [$LB5Breaks $SP];
 
 # LB 13
 #         x GL
 $LB12NonBreaks $CM* $GLcm;
-$SP $CM+            $GLcm;                      # LB7a  SP CM+ behaves as ID
+$CM+                $GLcm;
+
 
 #         GL  x
-$GLcm .?;
+#
+$GLcm $LB12Breaks;
 $GLcm $LB12NonBreaks $CM*;    # Don't let a combining mark go onto $CR, $BK, etc.
-$GLcm $SP $CM+;               # SP CM+ behaves as ID
+                              #  TODO:  I don't think we need this rule.
+                              #         All but $CM will chain off of preceding rule.
+                              #         $GLcm will pick up the CM case by itself.
 
 # LB 14
 #         x QU
 $LB12NonBreaks $CM* $QUcm;
-$SP $CM+            $QUcm;                      # LB7a  SP CM+ behaves as ID
+$CM+                $QUcm;
 
 #         QU  x
 $QUcm .?;
 $QUcm $LB12NonBreaks $CM*;    # Don't let a combining mark go onto $CR, $BK, etc.
-$QUcm $SP $CM+;               # SP CM+ behaves as ID
+                              #  TODO:  I don't think this rule is needed.
+
 
 # LB 14a
+#        <break>  $CB
+#        $CB   <break>
+
 $LB14NonBreaks = [$LB12NonBreaks - $CB];
-$LB14CanBreakAfter = $LB14NonBreaks $CM* | $SP $CM+;
 
 # LB 15
-$LB14CanBreakAfter ($BAcm | $HYcm | $NScm);
-$BBcm [^$CB];
-$BBcm [^$CB $CR $LF $BK $NL $ZW] $CM*;
+$LB14NonBreaks $CM* ($BAcm | $HYcm | $NScm); 
+
+$BBcm [^$CB];                                  #  $BB  x
+$BBcm $LB14NonBreaks $CM*;
 
 # LB 16
 $ALcm    $INcm;
 $CM+     $INcm;     #  by rule 7c, any otherwise unattached CM behaves as AL
 $IDcm    $INcm;
-$SP $CM+ $INcm;     # by rule 7a, $SP $CM behaves like ID
 $INcm    $INcm;
 $NUcm    $INcm;
 
 
 # $LB 17
-($IDcm | $SP $CM+) $POcm;
-$ALcm+ $NUcm;       # includes $LB19
-$CM+   $NUcm;       # Rule 7c
-$NUcm $ALcm+;
+$IDcm  $POcm;
+$ALcm  $NUcm;       # includes $LB19
+$CM+   $NUcm;       # Rule 7c, any otherwise unattached CM behaves as AL
+$NUcm  $ALcm;
 
 # LB 18
 $PRcm? ($OPcm | $HYcm)? $NUcm ($NUcm | $SYcm | $IScm)* $CLcm? $POcm?;
@@ -237,7 +327,10 @@ $PRcm ($JLcm | $JVcm | $JTcm | $H2cm | $H3cm);
 
 
 # LB 19
-$CM* $ALcm+;    # The $CM* is from rule 7C, and unattached CM is treated as AL
+$ALcm $ALcm;
+$CM+ $ALcm;      # The $CM+ is from rule 7C, and unattached CM is treated as AL
+
+# LB 19b
 $IScm $ALcm;
 
 #
@@ -269,39 +362,86 @@ $CM+ $OP;
 $CM+ $PO;
 $CM+ $PR;
 $CM+ $QU;
-$CM+ $SP;
 $CM+ $SY;
 $CM+ $WJ;
+$CM+;
+ 
+
+#
+#  Sequences of the form  (shown forwards)
+#      [CANT_CM]  <break>  [CM]  [whatever]
+#  The CM needs to behave as an AL
+#
+$AL_FOLLOW $CM+ / (
+          [$BK $CR $LF $NL $ZW {eof}] |
+          $SP+ $CM+ $SP |
+          $SP+ $CM* ([^$OP $CM $SP] | [$AL {eof}]));   # if LB9 will match, need to surpress this break.
+                                               #  LB9 says     OP SP* x .        
+                                               #    becomes    OP SP* x AL
+                                               #    becomes    OP SP* x CM+ AL_FOLLOW
+                                               #
+                                               # Further note:  the $AL in [$AL {eof}] is only to work around
+                                               #                a rule compiler bug which complains about
+                                               #                empty sets otherwise.
+          
+#
+#  Sequences of the form  (shown forwards)
+#      [CANT_CM]  <break> [CM]  <break>  [PR]
+#  The CM needs to behave as an AL
+#  This rule is concerned about getting the second of the two <breaks> in place.
+#
+[$PR   ] / $CM+ [$BK $CR $LF $NL $ZW $SP {eof}];
+
+
 
 # LB 3
 
-$LB3Breaks $LB3NonBreaks;
-$LB3Breaks $CM* $LB5NonBreaks;
+$LB3Breaks [$LB3NonBreaks-$CM];
+$LB3Breaks $CM+ $CAN_CM;
 $LF $CR;
+
 
 # LB 4         x SP
 #              x ZW
-[$SP $ZW] $LB3NonBreaks;
-[$SP $ZW] $CM* $LB5NonBreaks;
+[$SP $ZW] [$LB3NonBreaks-$CM];
+[$SP $ZW] $CM+ $CAN_CM;
 
 # LB 5 Break after zero width space
 
 
 # LB 7 Combining marks.
-#    $SP $CM needs to behave like $ID.
-#    X   $CM needs to behave like X, where X is not $SP.
+#    X   $CM needs to behave like X, where X is not $SP or controls.
 #    $CM not covered by the above needs to behave like $AL
 # Stick together any combining sequences that don't match other rules.
-$CM+ $LB5NonBreaks;
+$CM+ $CAN_CM;
 
 # LB 8
-$CL $CM* $LB5NonBreaks;
-$EX $CM* $LB5NonBreaks;
-$IS $CM* $LB5NonBreaks;
-$SY $CM* $LB5NonBreaks;
+$CL $CM+ $CAN_CM;
+$EX $CM+ $CAN_CM;
+$IS $CM+ $CAN_CM;
+$SY $CM+ $CAN_CM;
 
-# LB 9
-$LB5NonBreaks $SP* $CM* $OP;
+$CL [$LB5NonBreaks-$CM];
+$EX [$LB5NonBreaks-$CM];
+$IS [$LB5NonBreaks-$CM];
+$SY [$LB5NonBreaks-$CM];
+
+# Rule 9 & 8 together.
+#   This really wants to chain at the $CM+ (which is acting as an $AL)
+#   except for $CM chaining being disabled.
+[$CL $EX $IS $SY] $CM+ $SP+ $CM* $OP;  
+
+# LB 9    OP SP* x
+#
+$CM* $CAN_CM    $SP* $CM* $OP;
+     $CANT_CM   $SP* $CM* $OP;
+$AL_FOLLOW? $CM+  $SP $SP* $CM* $OP;     #  by LB 7, behaves like $AL_FOLLOW? $AL $SP* $CM* $OP
+     
+     $AL_FOLLOW_NOCM $CM+ $SP+ $CM* $OP;
+$CM* $AL_FOLLOW_CM   $CM+ $SP+ $CM* $OP;
+$SY $CM $SP+ $OP;   # Experiment.  Remove.
+
+
 
 # LB 10
 $CM* $OP $SP* $CM* $QU;
@@ -310,48 +450,57 @@ $CM* $OP $SP* $CM* $QU;
 $CM* $NS $SP* $CM* $CL;
 
 # LB 11a
-($CM* $B2)+;
+$CM* $B2 $SP* $CM* $B2;
 
 # LB 11b
-$CM* $WJ $CM* $LB5NonBreaks;
-$CM* $LB5NonBreaks $CM* $WJ;
-. $CM* $WJ;
+$CM* $WJ $CM* $CAN_CM;
+$CM* $WJ      [$LB5NonBreaks-$CM];
+
+     $CANT_CM $CM* $WJ;
+$CM* $CAN_CM  $CM* $WJ;
 
 # LB 12
 
-# LB 14
-$CM* $GL $CM* $LB12NonBreaks;
-$CM* $GL $CM+ $SP;
-$CM* $LB5NonBreaks $CM* $GL;
+# LB 13
+#         x GL
+#
+$CM* $GL $CM* [$LB12NonBreaks-$CM];
 
-# LB 14
-$CM* $QU $CM* $LB12NonBreaks;
-$CM* $QU $CM+ $SP;    # CM+ SP behaves as ID
-$CM* $LB5NonBreaks $CM* $QU;
+#
+#     GL  x
+#
+$CANT_CM $CM* $GL;
+$CM* $CAN_CM $CM* $GL;
 
-# LB 14a
-$BackLB14CanBreakAfter = ($CM* [$LB14NonBreaks - $CM]) | ($CM+ $SP);
+
+
+#
+# LB 14
+#
+$CM* $QU $CM* $CAN_CM;                                #   . x QU
+$CM* $QU      $LB12NonBreaks;
+
+
+$CM* $CAN_CM  $CM* $QU;                               #   QU x .
+     $CANT_CM $CM* $QU;
 
 # LB 15
-$CM* ($BA | $HY | $NS) $BackLB14CanBreakAfter;
-($CM* ($BA | $HY | $NS))+ $CM+ / $LB5Breaks;
-[$CR $LF $BK $NL $ZW] $CM* $BB;
-$CM* [^$CB $CR $LF $BK $NL $ZW] $CM* $BB;
+$CM* ($BA | $HY | $NS) $CM* [$LB14NonBreaks-$CM];     #  . x (BA | HY | NS)
+
+$CM* [$LB14NonBreaks-$CM] $CM* $BB;                   #  BB x .
+[^$CB] $CM* $BB;                                      # 
+
+
 
 # LB 16
 $CM* $IN $CM* $ALPlus;
-# by rule 7c, any otherwise unattached CM behaves as AL
-$CM* $IN $CM+ / $LB5Breaks;
-
-$CM* $IN $CM* ($ID | $CM $SP);
+$CM* $IN $CM* $ID;
 $CM* $IN $CM* $IN;
 $CM* $IN $CM* $NU;
 
 # $LB 17
-$CM* $PO $CM* ($ID | $CM $SP);
-$CM* $NU ($CM* $ALPlus)+; # includes $LB19
-$CM* $NU $CM+ / $LB5Breaks;        # Rule 7c
-
+$CM* $PO $CM* $ID;
+$CM* $NU $CM* $ALPlus;
 $CM* $ALPlus $CM* $NU;
 
 # LB 18
@@ -371,13 +520,13 @@ $CM* ($H3 | $H2 | $JT | $JV | $JL) $CM* $PR;
 
 # LB 19
 $CM* $ALPlus $CM* $ALPlus;
-# The $CM* is from rule 7C, and unattached CM is treated as AL
-$CM* $ALPlus $CM* $IS;
-$CM* $ALPlus $CM+ / $LB5Breaks;
 
-## problem state table can't handle lookahead when it is at the
-## start of the string, currently handled in the rbbi code
-## todo fix this
+
+# LB 19b
+$CM* $ALPlus $CM* $IS;
+
+
+
 
 ## -------------------------------------------------
 
@@ -395,6 +544,7 @@ $SP+ $CM* $QU;
 
 # LB 11
 $SP+ $CM* $CL;
+$SP+ $CM* $B2;
 
 # LB 18
 ($CM* ($IS | $SY))+ $CM* $NU;
@@ -404,18 +554,14 @@ $CL $CM* ($NU | $IS | $SY);
 
 !!safe_forward;
 
-# LB 7
-[^$BK $CR $LF $NL $ZW $SP] $CM+;
-$SP $CM+ / [^$CM];
+# Skip forward over all character classes that are involved in
+#   rules containing patterns with possibly more than one char
+#   of context.
+#
+#  It might be slightly more efficient to have specific rules
+#  instead of one generic one, but only if we could
+#  turn off rule chaining.  We don't want to move more
+#  than necessary.
+#
+[$CM $OP $QU $CL $B2 $PR $HY $SP]+ [^$CM $OP $QU $CL $B2 $PR $HY];
 
-# LB 9
-$OP $CM* $SP+;
-
-# LB 10
-$QU $CM* $SP+;
-
-# LB 11
-$CL $CM* $SP+;
-
-# LB 18
-$CM* $PRcm? ($OPcm | $HYcm)? $NU;

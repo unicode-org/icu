@@ -1,6 +1,6 @@
 /********************************************************************
- * COPYRIGHT: 
- * Copyright (c) 1999-2004, International Business Machines Corporation and
+ * COPYRIGHT:
+ * Copyright (c) 1999-2005, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /************************************************************************
@@ -31,20 +31,20 @@ class  RBBIMonkeyKind;
  */
 class RBBITest: public IntlTest {
 public:
-  
+
     RBBITest();
     virtual ~RBBITest();
 
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
- 
+
     /**
      * Tests rule status return values
-     **/  
+     **/
     void TestStatusReturn();
 
     /**
      * Run the Unicode Line Break test data.
-     **/  
+     **/
     void TestLineBreakData();
 
     /**
@@ -58,8 +58,8 @@ public:
     void TestBug4153072();
     void TestJapaneseLineBreak();
     void TestThaiLineBreak();
-    void TestMixedThaiLineBreak(); 
-    void TestMaiyamok(); 
+    void TestMixedThaiLineBreak();
+    void TestMaiyamok();
     void TestThaiWordBreak();
     void TestMonkey(char *params);
 
@@ -73,16 +73,17 @@ public:
     void TestSentBreaks();
     void TestBug3818();
     void TestJapaneseWordBreak();
-    
-    
+    void TestDebug();
+
+
 /***********************/
 private:
     /**
      * internal methods to prepare test data
      **/
-   
+
     /**
-     * Perform tests of BreakIterator forward and backward functionality 
+     * Perform tests of BreakIterator forward and backward functionality
      * on different kinds of iterators (word, sentence, line and character).
      * It tests the methods first(), next(), current(), preceding(), following()
      * previous() and isBoundary().
@@ -110,7 +111,7 @@ private:
      **/
     void testIsBoundary(RuleBasedBreakIterator& bi, BITestData &td);
     /**
-     * Internal method to perform tests of BreakIterator multiple selection functionality 
+     * Internal method to perform tests of BreakIterator multiple selection functionality
      * on different kinds of iterators (word, sentence, line and character)
      **/
     void doMultipleSelectionTest(RuleBasedBreakIterator& iterator, BITestData &td);

@@ -3,7 +3,7 @@
 //
 /*
 ***************************************************************************
-*   Copyright (C) 2002-2004 International Business Machines Corporation   *
+*   Copyright (C) 2002-2005 International Business Machines Corporation   *
 *   and others. All rights reserved.                                      *
 ***************************************************************************
 */
@@ -147,7 +147,7 @@ void RBBISetBuilder::build() {
     //  Find the set of non-overlapping ranges of characters
     //
     int  ni;
-    for (ni=0; ; ni++) {
+    for (ni=0; ; ni++) {        // Loop over each of the UnicodeSets encountered in the input rules
         usetNode = (RBBINode *)this->fRB->fUSetNodes->elementAt(ni);
         if (usetNode==NULL) {
             break;
@@ -222,6 +222,10 @@ void RBBISetBuilder::build() {
     //    The groups are numbered, and these group numbers are the set of
     //    input symbols recognized by the run-time state machine.
     //
+    //    Numbering: # 0  (state table column 0) is unused.
+    //               # 1  is reserved - table column 1 is for end-of-input
+    //               # 2  is the first range list.
+    //
     RangeDescriptor *rlSearchRange;
     for (rlRange = fRangeList; rlRange!=0; rlRange=rlRange->fNext) {
         for (rlSearchRange=fRangeList; rlSearchRange != rlRange; rlSearchRange=rlSearchRange->fNext) {
@@ -232,11 +236,31 @@ void RBBISetBuilder::build() {
         }
         if (rlRange->fNum == 0) {
             fGroupCount ++;
-            rlRange->fNum = fGroupCount;
+            rlRange->fNum = fGroupCount+1; 
             rlRange->setDictionaryFlag();
-            addValToSets(rlRange->fIncludesSets, fGroupCount);
+            addValToSets(rlRange->fIncludesSets, fGroupCount+1);
         }
     }
+
+    // Handle input sets that contain the special string {eof}.
+    //   Column 1 of the state table is reserved for EOF on input.
+    //   Add this column value (1) to the equivalent expression
+    //     subtree for each UnicodeSet that contains the string {eof}
+    //   Because EOF is not a character in the normal sense, it doesn't
+    //   affect the computation of ranges or TRIE.
+    static UChar eofUString[] = {0x65, 0x6f, 0x66, 0};
+    UnicodeString eofString(eofUString);
+    for (ni=0; ; ni++) {        // Loop over each of the UnicodeSets encountered in the input rules
+        usetNode = (RBBINode *)this->fRB->fUSetNodes->elementAt(ni);
+        if (usetNode==NULL) {
+            break;
+        }
+        UnicodeSet      *inputSet = usetNode->fInputSet;
+        if (inputSet->contains(eofString)) {
+            addValToSet(usetNode, 1);
+        }
+    }
+
 
     if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "rgroup")) {printRangeGroups();}
     if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "esets")) {printSets();}
@@ -296,7 +320,7 @@ void RBBISetBuilder::serializeTrie(uint8_t *where) {
 //------------------------------------------------------------------------
 //
 //  addValToSets     Add a runtime-mapped input value to each uset from a
-//                   list of uset nodes.
+//                   list of uset nodes. (val corresponds to a state table column.)
 //                   For each of the original Unicode sets - which correspond
 //                   directly to uset nodes - a logically equivalent expression
 //                   is constructed in terms of the remapped runtime input
@@ -312,35 +336,38 @@ void  RBBISetBuilder::addValToSets(UVector *sets, uint32_t val) {
 
     for (ix=0; ix<sets->size(); ix++) {
         RBBINode *usetNode = (RBBINode *)sets->elementAt(ix);
-        RBBINode *leafNode = new RBBINode(RBBINode::leafChar);
-        leafNode->fVal = (unsigned short)val;
-        if (usetNode->fLeftChild == NULL) {
-            usetNode->fLeftChild = leafNode;
-            leafNode->fParent    = usetNode;
-        } else {
-            // There are already input symbols present for this set.
-            // Set up an OR node, with the previous stuff as the left child
-            //   and the new value as the right child.
-            RBBINode *orNode = new RBBINode(RBBINode::opOr);
-            orNode->fLeftChild  = usetNode->fLeftChild;
-            orNode->fRightChild = leafNode;
-            orNode->fLeftChild->fParent  = orNode;
-            orNode->fRightChild->fParent = orNode;
-            usetNode->fLeftChild = orNode;
-            orNode->fParent = usetNode;
-        }
+        addValToSet(usetNode, val);
+    }
+}
+
+void  RBBISetBuilder::addValToSet(RBBINode *usetNode, uint32_t val) {
+    RBBINode *leafNode = new RBBINode(RBBINode::leafChar);
+    leafNode->fVal = (unsigned short)val;
+    if (usetNode->fLeftChild == NULL) {
+        usetNode->fLeftChild = leafNode;
+        leafNode->fParent    = usetNode;
+    } else {
+        // There are already input symbols present for this set.
+        // Set up an OR node, with the previous stuff as the left child
+        //   and the new value as the right child.
+        RBBINode *orNode = new RBBINode(RBBINode::opOr);
+        orNode->fLeftChild  = usetNode->fLeftChild;
+        orNode->fRightChild = leafNode;
+        orNode->fLeftChild->fParent  = orNode;
+        orNode->fRightChild->fParent = orNode;
+        usetNode->fLeftChild = orNode;
+        orNode->fParent = usetNode;
     }
 }
 
 
-
 //------------------------------------------------------------------------
 //
-//   getNumOutputSets
+//   getNumCharCategories
 //
 //------------------------------------------------------------------------
 int32_t  RBBISetBuilder::getNumCharCategories() const {
-    return fGroupCount + 1;
+    return fGroupCount + 2;
 }
 
 

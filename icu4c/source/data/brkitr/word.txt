@@ -17,62 +17,30 @@
 
 !!chain;
 
-$Katakana  = [[:Script = KATAKANA:]
-			  [:name = VERTICAL KANA REPEAT MARK:]
-			  [:name = VERTICAL KANA REPEAT WITH VOICED SOUND MARK:]
-			  [:name = VERTICAL KANA REPEAT MARK UPPER HALF:]
-			  [:name = VERTICAL KANA REPEAT WITH VOICED SOUND MARK UPPER HALF:]
-			  [:name = VERTICAL KANA REPEAT MARK LOWER HALF:]
-			  [:name = KATAKANA-HIRAGANA VOICED SOUND MARK:]
-			  [:name = KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK:]
-			  [:name = KATAKANA-HIRAGANA DOUBLE HYPHEN:]
-			  [:name = KATAKANA-HIRAGANA PROLONGED SOUND MARK:]
-			  [:name = HALFWIDTH KATAKANA-HIRAGANA PROLONGED SOUND MARK:]
-			  [:name = HALFWIDTH KATAKANA VOICED SOUND MARK:]
-			  [:name = HALFWIDTH KATAKANA SEMI-VOICED SOUND MARK:]];
-
-
-$ALetter   = [[:Alphabetic:] [:name= HEBREW PUNCTUATION GERESH:]
-						   - [:Ideographic:]
-						   - $Katakana
-						   - [:Script = Hiragana:]
-						   - [:Script = Thai:]
-						   - [:Script = Lao:]
-						   - [:Grapheme_Extend = TRUE:]];
-						   
-$MidLetter = [[:name = APOSTROPHE:] [:name = MIDDLE DOT:]
-			  [:name = HEBREW PUNCTUATION GERSHAYIM:]
-			  [:name = RIGHT SINGLE QUOTATION MARK:]
-			  [:name = HYPHENATION POINT:]
-			  [:name = COLON:]];
-
-			
-$MidNum    = [[:LineBreak = Infix_Numeric:] - [:name = COLON:]];
-$Numeric   = [:LineBreak = Numeric:];
-$ExtendNumLet = [[:Connector_Punctuation:] 
-			- [:name = KATAKANA MIDDLE DOT:]
-			- [:name = HALFWIDTH KATAKANA MIDDLE DOT:]];
-			
-			
 
 #
 #  Character Class Definitions.
-#    The names are those from TR29.
 #
+
+$Format       = [\p{Word_Break = Format}];
+$Katakana     = [\p{Word_Break = Katakana}];
+$ALetter      = [\p{Word_Break = ALetter}];
+$MidLetter    = [\p{Word_Break = MidLetter}];
+$MidNum       = [\p{Word_Break = MidNum}];
+$Numeric      = [\p{Word_Break = Numeric}];
+$ExtendNumLet = [\p{General_Category=Connector_Punctuation}];
+
 
 $CR             = \u000d;
 $LF             = \u000a;
-$Extend         = [[:Grapheme_Extend = TRUE:]];
-$Control        = [[:Zl:] [:Zp:] [:Cc:] [:Cf:] - $Extend];
-$Format         = [[:Cf:] - $Extend];
-$Hiragana       = [:Hiragana:];
-$Ideographic    = [:IDEOGRAPHIC:];
+$Extend         = [\p{Grapheme_Cluster_Break = Extend}];
+$Control        = [\p{Grapheme_Cluster_Break = Control}];
 
-$ALetterEx      = $ALetter     $Extend*;
-$NumericEx      = $Numeric     $Extend*;
-$MidNumEx       = $MidNum      $Extend*;
-$MidLetterEx    = $MidLetter   $Extend*;
-$KatakanaEx     = $Katakana    $Extend*;
+$KatakanaEx     = $Katakana     $Extend*;
+$ALetterEx      = $ALetter      $Extend*;
+$MidLetterEx    = $MidLetter    $Extend*;
+$MidNumEx       = $MidNum       $Extend*;
+$NumericEx      = $Numeric      $Extend*;
 $ExtendNumLetEx = $ExtendNumLet $Extend*;
 
 ## -------------------------------------------------
@@ -81,7 +49,7 @@ $ExtendNumLetEx = $ExtendNumLet $Extend*;
 
 
 # Rule 3 - don't break grapheme clusters.
-# see character breaks
+#          see character breaks.
 
 $CR $LF;
 [^$Control] $Extend+;
@@ -114,8 +82,9 @@ $NumericEx $Format* $MidNumEx $Format* $NumericEx {100};
 # rule 13
 
 $KatakanaEx  $Format* $KatakanaEx {300};
-$Hiragana    $Extend* {300};
-$Ideographic $Extend* {400};
+
+[\p{Hiragana}]    $Extend* {300};     # To get tag values.
+[\p{Ideographic}] $Extend* {400};
 
 # rule 13a/b
 
