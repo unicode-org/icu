@@ -28,7 +28,7 @@ es {
         PE { "Per\u00FA" }
         PR { "Puerto Rico" }
         PY { "Paraguay" }
-        SV { "El SalvadorUY" }
+        SV { "El Salvador" }
         UY { "Uruguay" }
         VE { "Venezuela" }
     }
