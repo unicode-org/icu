@@ -1,15 +1,21 @@
 * text=auto !eol
+icu4c/data/char.brk -text
 icu4c/data/charBE.brk -text
 icu4c/data/charLE.brk -text
+icu4c/data/line.brk -text
 icu4c/data/lineBE.brk -text
 icu4c/data/lineLE.brk -text
+icu4c/data/line_th.brk -text
 icu4c/data/line_thBE.brk -text
 icu4c/data/line_thLE.brk -text
+icu4c/data/sent.brk -text
 icu4c/data/sentBE.brk -text
 icu4c/data/sentLE.brk -text
 icu4c/data/thaidict.brk -text
+icu4c/data/word.brk -text
 icu4c/data/wordBE.brk -text
 icu4c/data/wordLE.brk -text
+icu4c/data/word_th.brk -text
 icu4c/data/word_thBE.brk -text
 icu4c/data/word_thLE.brk -text
 icu4c/docs/BreakIterator.html svneol=native#text/html
