@@ -1864,7 +1864,7 @@ uint32_t getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, collIterate 
         UChar schar, tchar;
         //UChar  *sourcePointer = source->pos;
         UChar32 normOutput = 0;
-        Normalizer n(source->string, source->pos-source->string, UNORM_NFKC);
+        Normalizer n(source->string, source->pos-source->string, UNORM_NFC);
         n.last();
         for(;;) {
         // This loop will run once per source string character, for as long as we
@@ -2479,7 +2479,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
         UChar schar, tchar;
         //UChar *sourcePointer = source->pos;
         UChar32 normOutput = 0;
-        Normalizer n(source->string, source->pos-source->string+1, UNORM_NFKC);
+        Normalizer n(source->string, source->pos-source->string+1, UNORM_NFC);
         n.last();
         for(;;) {
         // This loop will run once per source string character, for as long as we
