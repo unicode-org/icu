@@ -1,5 +1,5 @@
 #
-# @(#)$RCSfile: makefile.gmk,v $ $Revision: 1.2 $ $Date: 2000/02/17 05:14:59 $
+# @(#)$RCSfile: makefile.gmk,v $ $Revision: 1.3 $ $Date: 2000/02/18 00:29:08 $
 # 
 
 TOPDIR=..
@@ -11,7 +11,7 @@ SUBDIRS=	com
 
 default: classes
 
-DOCDIR=	 	$(TOPDIR)\docs
+DOCDIR=	 	$(TOPDIR)/docs
 DOCINDEX=	$(DOCDIR)/index.html
 
 javadoc: FORCE
@@ -24,7 +24,7 @@ javadoc: FORCE
 		-encoding "iso-8859-1" \
 		-docencoding "iso-8859-1" \
 		-bottom "<font size=-1>Copyright &copy; 1998-2000 IBM Corporation.</font>" \
-	    com/ibm/text/*.java com/ibm/util/*.java
+	    $(TOPDIR)/src/com/ibm/text/*.java $(TOPDIR)/src/com/ibm/util/*.java
 
 
 tools: classes toolsinternal
@@ -34,13 +34,13 @@ tests: classes testsinternal
 demos: classes demosinternal
 
 toolsinternal: FORCE
-	cd com\ibm\test && nmake -nologo classes && cd ..\..\..
+	cd com/ibm/test ; gnumake -f makefile.gmk classes ; cd ../../..
 
 testsinternal: FORCE
-	cd com\ibm\test && nmake -nologo classes && cd ..\..\..
+	cd com/ibm/test ; gnumake -f makefile.gmk classes ; cd ../../..
 
 demosinternal: FORCE
-	cd com\ibm\demo && nmake -nologo classes && cd ..\..\..
+	cd com/ibm/demo ; gnumake -f makefile.gmk classes ; cd ../../..
 
 
 complete: classes testsinternal toolsinternal demosinternal javadoc
