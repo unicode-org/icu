@@ -27,10 +27,15 @@
 #include "unicode/unistr.h"
 #include "uhash.h"
 
+#if U_IOSTREAM_SOURCE >= 199711
+#include <iostream>
+using namespace std;
+#elif U_IOSTREAM_SOURCE >= 198506
+#include <iostream.h>
+#endif
+
 #if 0
 //DEBUGGING
-#include <iostream.h>
-
 void
 print(const UnicodeString& s,
       const char *name)
@@ -1490,7 +1495,6 @@ UnicodeString::releaseDefaultConverter(UConverter *converter)
 // Streaming (to be removed)
 //========================================
 
-#include <iostream.h>
 #include "unistrm.h"
 #include "filestrm.h"
 
@@ -1620,6 +1624,8 @@ UnicodeStringStreamer::streamIn(UnicodeString *s,
 
 // console IO
 
+#if U_IOSTREAM_SOURCE
+
 ostream&
 operator<<(ostream& stream,
            const UnicodeString& s)
@@ -1651,3 +1657,5 @@ operator<<(ostream& stream,
   stream.flush();
   return stream;
 }
+
+#endif
