@@ -17,35 +17,50 @@ es {
         AF { "Afganist\u00E1n" }
         AG { "Antigua y Barbuda" }
         AI { "Anguila" }
+        //AL { "Albania" }
+        //AM { "Armenia" }
         AN { "Antillas Neerlandesas" }
+        //AO { "Angola" }
         AQ { "Ant\u00E1rtica" }
         //AR { "Argentina" }
         AS { "Samoa Americana" }
+        //AT { "Austria" }
+        //AU { "Australia" }
+        //AW { "Aruba" }
         AZ { "Azerbaiy\u00E1n" }
         BA { "Bosnia y Hercegovina" }
+        //BB { "Barbados" }
+        //BD { "Bangladesh" }
         BE { "B\u00E9lgica" }
+        //BF { "Burkina Faso" }
+        //BG { "Bulgaria" }
         BH { "Bahr\u00E1in" }
+        //BI { "Burundi" }
         BJ { "Ben\u00EDn" }
         BM { "Bermudas" }
         BN { "Brun\u00E9i" }
         //BO { "Bolivia" }
         BR { "Brasil" }
+        //BS { "Bahamas" }
         BT { "But\u00E1n" }
         BV { "Isla Bouvet" }
-        BZ { "Belice" }
         BW { "Botsuana" }
         BY { "Bielorrusia" }
+        BZ { "Belice" }
         CA { "Canad\u00E1" }
         CC { "Islas Cocos (Keeling)" }
         CD { "Rep\u00FAblica Democr\u00E1tica del Congo" }
         CF { "Rep\u00FAblica Centroafricana" }
+        //CG { "Congo" }
         CH { "Suiza" }
         CI { "Costa de Marfil" }
         CK { "Islas Cook" }
         //CL { "Chile" }
         CM { "Camer\u00FAn" }
+        //CN { "China" }
         //CO { "Colombia" }
         //CR { "Costa Rica" }
+        //CU { "Cuba" }
         CV { "Cabo Verde" }
         CX { "Isla de Christmas" }
         CY { "Chipre" }
@@ -54,72 +69,112 @@ es {
         DE { "Alemania" }
         DJ { "Yibuti" }
         DK { "Dinamarca" }
+        //DM { "Dominica" }
         DO { "Rep\u00FAblica Dominicana" }
         DZ { "Argelia" }
         //EC { "Ecuador" }
+        //EE { "Estonia" }
         EG { "Egipto" }
         EH { "S\u00E1hara Occidental" }
+        //ER { "Eritrea" }
         ES { "Espa\u00F1a" }
+        ET { "Etiop\u00EDa" }
         FI { "Finlandia" }
         FJ { "Fidji" }
+        FK { "Islas Falkland (Malvinas)" }    // alternate name { "Islas Malvinas" }
+        FM { "Micronesia, Estados Federados de" }
         FO { "Islas Feroe" }
         FR { "Francia" }
         GA { "Gab\u00F3n" }
         GB { "Reino Unido" }
         GD { "Granada" }
+        //GE { "Georgia" }
         GF { "Guayana Francesa" }
+        //GH { "Ghana" }
+        //GI { "Gibraltar" }
         GL { "Groenlandia" }
+        //GM { "Gambia" }
+        //GN { "Guinea" }
         GP { "Guadalupe" }
         GQ { "Guinea Ecuatorial" }
         GR { "Grecia" }
         GS { "Islas Georgia del Sur y Sandwich del Sur" }
         //GT { "Guatemala" }
+        //GU { "Guam" }
+        //GW { "Guinea-Bissau" }
+        //GY { "Guyana" }
         //HK { "Hong Kong, Regi\u00F3n administrativa especial de China" }
+        HM { "Islas Heard y McDonald" }
         //HN { "Honduras" }
         HR { "Croacia" }
         HT { "Hait\u00ED" }
         HU { "Hungr\u00EDa" }
+        //ID { "Indonesia" }
         IE { "Irlanda" }
+        //IL { "Israel" }
+        //IN { "India" }
         IO { "Territorios Brit\u00E1nicos del Oc\u00E9ano \u00CDndico" }
         IQ { "Irak" }
         IR { "Ir\u00E1n" }
         IS { "Islandia" }
         IT { "Italia" }
+        //JM { "Jamaica" }
         JO { "Jordania" }
         JP { "Jap\u00F3n" }
         KE { "Kenia" }
         KG { "Kirguizist\u00E1n" }
         KH { "Camboya" }
+        //KI { "Kiribati" }
         KM { "Comores" }
         KN { "San Crist\u00F3bal y Nieves" }
-        KP { "Corea del Norte" }
-        //KR { "Corea, Rep\u00FAblica de " } // From translation center
-        KR { "Corea del Sur" }
+        KP { "Corea del Norte" }    // alternate name { "Corea, Rep\u00FAblica Popular Democr\u00E1tica de" }
+        KR { "Corea del Sur" }    // alternate name { "Corea, Rep\u00FAblica de " }
+        //KW { "Kuwait" }
         KY { "Islas Caim\u00E1n" }
         KZ { "Kazajist\u00E1n" }
         //LA { "Rep\u00FAblica Democr\u00E1tica Popular Lao" } // From translation center
         LB { "L\u00EDbano" }
+        //LC { "Santa Lucia" }
+        //LI { "Liechtenstein" }
+        //LK { "Sri Lanka" }
+        //LR { "Liberia" }
+        LS { "Lesoto" }
         LT { "Lituania" }
         LU { "Luxemburgo" }
         LV { "Letonia" }
+        LY { "Libia" }
         MA { "Marruecos" }
         MC { "M\u00F3naco" }
+        MD { "Moldavia, Rep\u00FAblica de" }
+        //MG { "Madagascar" }
         MH { "Islas Marshall" }
+        MK { "Macedonia, Antigua Rep\u00FAblica Yugoslava de" }    // alternate name { "Macedonia, Rep\u00FAblica de" }
         ML { "Mal\u00ED" }
+        //MM { "Myanmar" }
+        //MN { "Mongolia" }
+        MO { "Macao, Regi\u00F3n administrativa especial de China" }
         MP { "Islas Marianas del Norte" }
         MQ { "Martinica" }
         //MR { "Mauritania" }
+        //MS { "Montserrat" }
+        //MT { "Malta" }
         MU { "Mauricio" }
         MV { "Maldivas" }
         MW { "Malaui" }
         MX { "M\u00E9xico" }
         MY { "Malasia" }
+        //MZ { "Mozambique" }
+        //NA { "Namibia" }
         NC { "Nueva Caledonia" }
         NE { "N\u00EDger" }
         NF { "Isla Norfolk" }
+        //NG { "Nigeria" }
         //NI { "Nicaragua" }
         NL { "Pa\u00EDses Bajos" }
         NO { "Noruega" }
+        //NP { "Nepal" }
+        //NR { "Nauru" }
+        //NU { "Niue" }
         NZ { "Nueva Zelanda" }
         OM { "Om\u00E1n" }
         PA { "Panam\u00E1" }
@@ -131,15 +186,21 @@ es {
         PK { "Pakist\u00E1n" }
         PL { "Polonia" }
         PM { "San Pedro y Miquel\u00F3n" }
+        //PN { "Pitcairn" }
         //PR { "Puerto Rico" }
         PS { "Territorios Palestinos" }
+        //PT { "Portugal" }
+        //PW { "Palau" }
         //PY { "Paraguay" }
+        //QA { "Qatar" }
+        //RE { "Reuni\u00F3n" }
         RO { "Rumania" }
         RU { "Rusia" }
         //RU { "Federaci\u00F3n Rusa" } // From translation center
         RW { "Ruanda" }
         SA { "Arabia Saud\u00ED" }
         SB { "Islas Salom\u00F3n" }
+        //SC { "Seychelles" }
         SD { "Sud\u00E1n" }
         SE { "Suecia" }
         SG { "Singapur" }
@@ -148,32 +209,52 @@ es {
         SJ { "Svalbard y Jan Mayen" }
         SK { "Eslovaquia" }
         SL { "Sierra Leona" }
+        //SM { "San Marino" }
+        //SN { "Senegal" }
+        //SO { "Somalia" }
         SP { "Servia" }
+        //SR { "Surinam" }
         ST { "Santo Tom\u00E9 y Pr\u00EDncipe" }
         //SV { "El Salvador" }
         SY { "Siria" }
         SZ { "Suazilandia" }
         TC { "Islas Turcas y Caicos" }
+        //TD { "Chad" }
         TF { "Territorios Australes Franceses" }
+        //TG { "Togo" }
         TH { "Tailandia" }
         TJ { "Tayikist\u00E1n" }
+        //TK { "Tokelau" }
+        TL { "Timor Oriental" }
+        TM { "Turkmenist\u00E1n" }
         TN { "T\u00FAnez" }
+        //TO { "Tonga" }
         TR { "Turqu\u00EDa" }
         TT { "Trinidad y Tabago" }
-        TW { "Taiw\u00E1n" }
+        //TV { "Tuvalu" }
+        TW { "Taiw\u00E1n, Rep\u00FAblica de China" }
+        //TZ { "Tanzania" }
         UA { "Ucrania" }
+        //UG { "Uganda" }
         UM { "Islas menores alejadas de Estados Unidos" }
         //UM { "Islas Perif\u00E9ricas Menores de los Estados Unidos" } // Old value
         US { "Estados Unidos" }
         //UY { "Uruguay" }
         UZ { "Uzbekist\u00E1n" }
-        //VE { "Venezuela" }
         VA { "Santa Sede (Ciudad del Vaticano)" }
         VC { "San Vicente y las Granadinas" }
+        //VE { "Venezuela" }
         VG { "Islas V\u00EDrgenes Brit\u00E1nicas" }
         VI { "Islas V\u00EDrgenes de los Estados Unidos" }
+        //VN { "Vietnam" }
+        //VU { "Vanuatu" }
         WF { "Wallis y Futuna" }
+        //WS { "Samoa" }
+        //YE { "Yemen" }
+        //YT { "Mayotte" }
+        //YU { "Yugoslavia" }
         ZA { "Sud\u00E1frica" }
+        //ZM { "Zambia" }
         ZW { "Zimbabue" }
     }
     DateTimeElements:intvector { 

@@ -63,6 +63,7 @@ nb {
         CN { "Kina" }
         //CO { "Colombia" }
         //CR { "Costa Rica" }
+        //CU { "Cuba" }
         CV { "Kapp Verde" }
         CX { "Christmas\u00F8ya" }
         CY { "Kypros" }
@@ -82,7 +83,7 @@ nb {
         ET { "Etiopia" }
         //FI { "Finland" }
         //FJ { "Fiji" }
-        FK { "Falklands\u00F8yene" }
+        FK { "Falklands\u00F8yene (Malvinas)" }    // alternate name { "Falklands\u00F8yene" }
         FM { "Mikronesiaf\u00F8derasjonen" }
         FO { "F\u00E6r\u00F8yene" }
         FR { "Frankrike" }
@@ -115,6 +116,8 @@ nb {
         //IL { "Israel" }
         //IN { "India" }
         IO { "Britiske omr\u00E5der i det indiske hav" }
+        IQ { "Irak" }
+        //IR { "Iran" }
         IS { "Island" }
         IT { "Italia" }
         //JM { "Jamaica" }
@@ -126,7 +129,8 @@ nb {
         //KI { "Kiribati" }
         KM { "Komorene" }
         KN { "St. Christopher og Nevis" }
-        KR { "Korea, Republikken" }
+        KP { "Korea (Nord)" }    // alternate name { "Korea, Den demokratiske republikken" }
+        KR { "Korea (S\u00F8r)" }    // alternate name { "Korea, Republikken" }
         //KW { "Kuwait" }
         KY { "Cayman\u00F8yene" }
         KZ { "Kasakhstan" }
@@ -140,6 +144,7 @@ nb {
         LT { "Litauen" }
         //LU { "Luxembourg" }
         //LV { "Latvia" }
+        //LY { "Libya, Den arabiske republikken" }
         MA { "Marokko" }
         //MC { "Monaco" }
         //MD { "Moldova" }
@@ -196,6 +201,7 @@ nb {
         //SA { "Saudi Arabia" }
         SB { "Salomon\u00F8yene" }
         SC { "Seychellene" }
+        //SD { "Sudan" }
         SE { "Sverige" }
         //SG { "Singapore" }
         //SH { "St. Helena" }
@@ -209,6 +215,7 @@ nb {
         SR { "Surinam" }
         ST { "Sao Tome og Principe" }
         //SV { "El Salvador" }
+        //SY { "Syria" }    // alternate name { "Syria, Den arabiske republikken" }
         //SZ { "Swaziland" }
         TC { "Turks- og Caicos\u00F8yene" }
         TD { "Tchad" }

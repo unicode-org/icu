@@ -42,7 +42,8 @@ pt_PT {
         KH { "Camboja" }
         //KM { "Comoros" }
         KN { "Saint Kitts e Nevis" }
-        KR { "Coreia, Rep\u00FAblica da" }
+        KP { "Coreia do Norte" }    // alternate name { "Coreia, Rep\u00FAblica Popular Democr\u00E1tica da" }
+        KR { "Coreia do Sul" }    // alternate name { "Coreia, Rep\u00FAblica da" }
         KY { "Ilhas Caim\u00E3o" }
         KZ { "Cazaquist\u00E3o" }
         LA { "Lao, Rep\u00FAblica Popular Democr\u00E1tica" }
@@ -74,7 +75,7 @@ pt_PT {
         TF { "Territ\u00F3rios Franceses a Sul" }
         TJ { "Tajiquist\u00E3o" }
         TM { "Turquemenist\u00E3o" }
-        TW { "Formosa" }
+        TW { "Formosa, Prov\u00EDncia Chinesa" }
         UM { "Ilhas Minor Outlying (E.U.A)" }
         UZ { "Uzbaquist\u00E3o" }
         VA { "Santa S\u00E9 (Estado da Cidade do Vaticano)" }

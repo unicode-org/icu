@@ -62,6 +62,7 @@ ro {
         //CN { "China" }
         CO { "Columbia" }
         //CR { "Costa Rica" }
+        //CU { "Cuba" }
         CV { "Capul Verde" }
         CX { "Insula Christmas" }
         CY { "Cipru" }
@@ -114,6 +115,8 @@ ro {
         //IL { "Israel" }
         //IN { "India" }
         IO { "Teritoriile Britanice din Oceanul Indian" }
+        //IQ { "Iraq" }
+        //IR { "Iran, Republica Islamic\u0103" }
         IS { "Islanda" }
         IT { "Italia" }
         //JM { "Jamaica" }
@@ -125,7 +128,8 @@ ro {
         //KI { "Kiribati" }
         //KM { "Comoros" }
         KN { "Saint Kitts \u015Fi Nevis" }
-        KR { "Coreea, Republica" }
+        KP { "Coreea de Nord" }    // alternate name { "Coreea, Republica Popular\u0103 Democratic\u0103" }
+        KR { "Coreea de Sud" }    // alternate name { "Coreea, Republica" }
         KW { "Kuweit" }
         KY { "Insulele Cayman" }
         KZ { "Kazahstan" }
@@ -139,6 +143,7 @@ ro {
         LT { "Lituania" }
         LU { "Luxemburg" }
         LV { "Letonia" }
+        LY { "Libia, Jamahiriya Arab\u0103" }
         MA { "Maroc" }
         //MC { "Monaco" }
         MD { "Moldova, Republica" }
@@ -196,6 +201,7 @@ ro {
         SA { "Arabia Saudit\u0103" }
         SB { "Insulele Solomon" }
         //SC { "Seychelles" }
+        //SD { "Sudan" }
         SE { "Suedia" }
         //SG { "Singapore" }
         //SH { "Saint Helena" }
@@ -209,6 +215,7 @@ ro {
         SR { "Surinam" }
         ST { "Sao Tome \u015Fi Principe" }
         //SV { "El Salvador" }
+        SY { "Siria" }    // alternate name { "Republica Arab\u0103 Siria" }
         //SZ { "Swaziland" }
         TC { "Insulele Turks \u015Fi Caicos" }
         TD { "Ciad" }
@@ -224,7 +231,7 @@ ro {
         TR { "Turcia" }
         TT { "Trinidad \u015Fi Tobago" }
         //TV { "Tuvalu" }
-        //TW { "Taiwan" }
+        TW { "Taiwan, Provincia Chinez\u0103" }    // alternate name { "Taiwan" }
         //TZ { "Tanzania" }
         UA { "Ucraina" }
         //UG { "Uganda" }
