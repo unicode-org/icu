@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/UnicodeFilterLogicTest.java,v $ 
- * $Date: 2000/10/04 21:58:12 $ 
- * $Revision: 1.1 $
+ * $Date: 2000/10/04 23:12:33 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -175,11 +175,9 @@ public class UnicodeFilterLogicTest extends TestFmwk {
 
     }  
     void expect(Transliterator t,  String message,  String source,  String expectedResult) {
-
-
-        String rsource=source;
+        String rsource = source;
         t.transliterate(rsource);
-        expectAux(t.getID() + ":Replaceable " + message, source + "->" + rsource, rsource==expectedResult, expectedResult);
+        expectAux(t.getID() + ":Replaceable " + message, source + "->" + rsource, expectedResult.equals(rsource), expectedResult);
 
     }
     void expectAux(String tag, String summary, boolean pass, String expectedResult) {
