@@ -20,188 +20,94 @@
 UClassID StringCharacterIterator::fgClassID = 0;
 
 StringCharacterIterator::StringCharacterIterator()
-  : CharacterIterator(),
-    text(),
-    pos(0),
-    begin(0),
-    end(0)
+  : UCharCharacterIterator(),
+    text()
 {
   // NEVER DEFAULT CONSTRUCT!
 }
 
 StringCharacterIterator::StringCharacterIterator(const UnicodeString& text)
-  : CharacterIterator(),
-    text(text),
-    pos(0),
-    begin(0),
-    end(text.length())
-{}
-
-StringCharacterIterator::StringCharacterIterator(const UnicodeString&    text,
-                         UTextOffset              pos)
-  : CharacterIterator(),
-    text(text),
-    pos(pos),
-    begin(0),
-    end(text.length())
+  : UCharCharacterIterator(text.fArray, text.length()),
+    text(text)
 {
-  // the Java code checks the parameters and throws exceptions we've
-  // decided to punt on this for the time being because changing this
-  // constructor to accept an error code is an API change with
-  // significant impact
+    // we had set the input parameter's array, now we need to set our copy's array
+    UCharCharacterIterator::text = this->text.fArray;
 }
 
-StringCharacterIterator::StringCharacterIterator(const UnicodeString&    text,
-                         UTextOffset             begin,
-                         UTextOffset              end,
-                         UTextOffset              pos)
-  : CharacterIterator(),
-    text(text),
-    pos(pos),
-    begin(begin),
-    end(end)
+StringCharacterIterator::StringCharacterIterator(const UnicodeString& text,
+                                                 UTextOffset pos)
+  : UCharCharacterIterator(text.fArray, text.length(), pos),
+    text(text)
 {
-  // the Java code checks the parameters and throws exceptions we've
-  // decided to punt on this for the time being because changing this
-  // constructor to accept an error code is an API change with
-  // significant impact
+    // we had set the input parameter's array, now we need to set our copy's array
+    UCharCharacterIterator::text = this->text.fArray;
+}
+
+StringCharacterIterator::StringCharacterIterator(const UnicodeString& text,
+                                                 UTextOffset begin,
+                                                 UTextOffset end,
+                                                 UTextOffset pos)
+  : UCharCharacterIterator(text.fArray, text.length(), begin, end, pos),
+    text(text)
+{
+    // we had set the input parameter's array, now we need to set our copy's array
+    UCharCharacterIterator::text = this->text.fArray;
 }
 
 StringCharacterIterator::StringCharacterIterator(const StringCharacterIterator& that)
-  : CharacterIterator(that),
-    text(that.text),
-    pos(that.pos),
-    begin(that.begin),
-    end(that.end)
+  : UCharCharacterIterator(that),
+    text(that.text)
 {
+    // we had set the input parameter's array, now we need to set our copy's array
+    UCharCharacterIterator::text = this->text.fArray;
 }
 
-StringCharacterIterator::~StringCharacterIterator()
-{}
+StringCharacterIterator::~StringCharacterIterator() {
+}
 
 StringCharacterIterator&
-StringCharacterIterator::operator=(const StringCharacterIterator&   that)
-{
-  text = that.text;
-  pos = that.pos;
-  begin = that.begin;
-  end = that.end;
-  return *this;
+StringCharacterIterator::operator=(const StringCharacterIterator& that) {
+    UCharCharacterIterator::operator=(that);
+    text = that.text;
+    // we had set the input parameter's array, now we need to set our copy's array
+    UCharCharacterIterator::text = this->text.fArray;
+    return *this;
 }
 
 bool_t
-StringCharacterIterator::operator==(const CharacterIterator& that) const
-{
-  if (this == &that)
-  return TRUE;
-    
-  if (getDynamicClassID() != that.getDynamicClassID())
-  return FALSE;
+StringCharacterIterator::operator==(const CharacterIterator& that) const {
+    if (this == &that) {
+        return TRUE;
+    }
 
-  StringCharacterIterator&    realThat = (StringCharacterIterator&)that;
+    // do not call UCharCharacterIterator::operator==()
+    // because that checks for array pointer equality
+    // while we compare UnicodeString objects
 
-  return text == realThat.text
-  && pos == realThat.pos
-  && begin == realThat.begin
-  && end == realThat.end;
-}
+    if (getDynamicClassID() != that.getDynamicClassID()) {
+        return FALSE;
+    }
 
-int32_t
-StringCharacterIterator::hashCode() const
-{
-  return text.hashCode() ^ pos ^ begin ^ end;
+    StringCharacterIterator&    realThat = (StringCharacterIterator&)that;
+
+    return text == realThat.text
+        && pos == realThat.pos
+        && begin == realThat.begin
+        && end == realThat.end;
 }
 
 CharacterIterator*
-StringCharacterIterator::clone() const
-{
-  return new StringCharacterIterator(*this);
-}
-
-UChar
-StringCharacterIterator::first()
-{
-  pos = begin;
-  return text.charAt(pos);
-}
-
-UChar
-StringCharacterIterator::last()
-{
-  pos = end - 1;
-  return text.charAt(pos);
-}
-
-UChar
-StringCharacterIterator::setIndex(UTextOffset pos)
-{
-  // should check "pos" here and return an error code, but changing
-  // this function would have significant impact across TIFC, so we
-  // decided to hold off
-  this->pos = pos;
-  return text.charAt(pos);
-}
-
-UChar
-StringCharacterIterator::current() const
-{
-  if (pos >= begin && pos < end)
-    return text.charAt(pos);
-  else
-    return CharacterIterator::DONE;
-}
-
-UChar
-StringCharacterIterator::next()
-{
-  if(pos < end - 1) {
-    return text.charAt(++pos);
-  }
-  else {
-    pos = end;
-    return CharacterIterator::DONE;
-  }
-}
-
-UChar
-StringCharacterIterator::previous()
-{
-  if (pos > begin)
-    return text.charAt(--pos);
-  else
-    return DONE;
-}
-
-UTextOffset
-StringCharacterIterator::startIndex() const
-{
-  return begin;
-}
-
-UTextOffset
-StringCharacterIterator::endIndex() const
-{
-  return end;
-}
-
-UTextOffset
-StringCharacterIterator::getIndex() const
-{
-  return pos;
+StringCharacterIterator::clone() const {
+    return new StringCharacterIterator(*this);
 }
 
 void
-StringCharacterIterator::setText(const UnicodeString& newText)
-{
+StringCharacterIterator::setText(const UnicodeString& newText) {
     text = newText;
-    begin = 0;
-    end = newText.length();
-    pos = begin;
+    UCharCharacterIterator::setText(text.fArray, text.length());
 }
 
 void
-StringCharacterIterator::getText(UnicodeString& result)
-{
-  result = text;
+StringCharacterIterator::getText(UnicodeString& result) {
+    result = text;
 }
-
