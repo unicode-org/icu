@@ -37,6 +37,8 @@ compareMapping(UStringPrepProfile* data, uint32_t codepoint, uint32_t* mapping, 
 static void
 compareFlagsForRange(UStringPrepProfile* data, uint32_t start, uint32_t end,UStringPrepType option);
 
+void
+doStringPrepTest(const char* binFileName, const char* txtFileName, int32_t options, UErrorCode* errorCode);
 
 static void U_CALLCONV
 strprepProfileLineFn(void *context,
@@ -49,7 +51,6 @@ strprepProfileLineFn(void *context,
     UStringPrepProfile* data = (UStringPrepProfile*) context;
     const char* typeName;
     uint32_t rangeStart=0,rangeEnd =0;
-    const char* filename = (const char*) context;
 
     typeName = fields[2][0];
     map = fields[1][0];
