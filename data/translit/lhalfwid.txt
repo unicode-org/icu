@@ -6,2262 +6,265 @@
 //  11/17/99    aliu        Creation.
 //--------------------------------------------------------------------
 
-// Latin-HalfWidth
-
 lhalfwid {
     Rule {
-        //# $Revision: 1.1 $
-        // Transliteration rules for Japanese Hiragana and Katakana to
-        // romaji
-        // lower case roman generates hiragana.
-        // upper case roman generates katakana.
-        //#######################################
-        //
-        //	Romaji to Hiragana
-        //
-        //#######################################
-        // Definitions of variables to be substituted
-        //#######################################
-
-        //start with halfwidth romaji
-
-        "A=\uFF21\n"
-        "B=\uFF22\n"
-        "C=\uFF23\n"
-        "D=\uFF24\n"
-        "E=\uFF25\n"
-        "F=\uFF26\n"
-        "G=\uFF27\n"
-        "H=\uFF28\n"
-        "I=\uFF29\n"
-        "J=\uFF2A\n"
-        "K=\uFF2B\n"
-        "L=\uFF2C\n"
-        "M=\uFF2D\n"
-        "N=\uFF2E\n"
-        "O=\uFF2F\n"
-        "P=\uFF30\n"
-        "Q=\uFF31\n"
-        "R=\uFF32\n"
-        "S=\uFF33\n"
-        "T=\uFF34\n"
-        "U=\uFF35\n"
-        "V=\uFF36\n"
-        "W=\uFF37\n"
-        "X=\uFF38\n"
-        "Y=\uFF39\n"
-        "Z=\uFF3A\n"
-        "a=\uFF41\n"
-        "b=\uFF42\n"
-        "c=\uFF43\n"
-        "d=\uFF44\n"
-        "e=\uFF45\n"
-        "f=\uFF46\n"
-        "g=\uFF47\n"
-        "h=\uFF48\n"
-        "i=\uFF49\n"
-        "j=\uFF4A\n"
-        "k=\uFF4B\n"
-        "l=\uFF4C\n"
-        "m=\uFF4D\n"
-        "n=\uFF4E\n"
-        "o=\uFF4F\n"
-        "p=\uFF50\n"
-        "q=\uFF51\n"
-        "r=\uFF52\n"
-        "s=\uFF53\n"
-        "t=\uFF54\n"
-        "u=\uFF55\n"
-        "v=\uFF56\n"
-        "w=\uFF57\n"
-        "x=\uFF58\n"
-        "y=\uFF59\n"
-        "z=\uFF5A\n"
-        "quote=\uFF07\n"
-        "-=\uFF70\n" // Liu
-
-        // Also permit full-width Unicode character input as well
-        "A1=\u0041\n"
-        "B1=\u0042\n"
-        "C1=\u0043\n"
-        "D1=\u0044\n"
-        "E1=\u0045\n"
-        "F1=\u0046\n"
-        "G1=\u0047\n"
-        "H1=\u0048\n"
-        "I1=\u0049\n"
-        "J1=\u004A\n"
-        "K1=\u004B\n"
-        "L1=\u004C\n"
-        "M1=\u004D\n"
-        "N1=\u004E\n"
-        "O1=\u004F\n"
-        "P1=\u0050\n"
-        "Q1=\u0051\n"
-        "R1=\u0052\n"
-        "S1=\u0053\n"
-        "T1=\u0054\n"
-        "U1=\u0055\n"
-        "V1=\u0056\n"
-        "W1=\u0057\n"
-        "X1=\u0058\n"
-        "Y1=\u0059\n"
-        "Z1=\u005A\n"
-        "a1=\u0061\n"
-        "b1=\u0062\n"
-        "c1=\u0063\n"
-        "d1=\u0064\n"
-        "e1=\u0065\n"
-        "f1=\u0066\n"
-        "g1=\u0067\n"
-        "h1=\u0068\n"
-        "i1=\u0069\n"
-        "j1=\u006A\n"
-        "k1=\u006B\n"
-        "l1=\u006C\n"
-        "m1=\u006D\n"
-        "n1=\u006E\n"
-        "o1=\u006F\n"
-        "p1=\u0070\n"
-        "q1=\u0071\n"
-        "r1=\u0072\n"
-        "s1=\u0073\n"
-        "t1=\u0074\n"
-        "u1=\u0075\n"
-        "v1=\u0076\n"
-        "w1=\u0077\n"
-        "x1=\u0078\n"
-        "y1=\u0079\n"
-        "z1=\u007A\n"
-        "quote1=''\n"
-
-        // now the kana
-
-        "xa=\u3041\n"
-        "^a=\u3042\n"
-        "xi=\u3043\n"
-        "^i=\u3044\n"
-        "xu=\u3045\n"
-        "^u=\u3046\n"
-        "xe=\u3047\n"
-        "^e=\u3048\n"
-        "xo=\u3049\n"
-        "^o=\u304A\n"
-
-        "ka=\u304B\n"
-        "ga=\u304C\n"
-        "ki=\u304D\n"
-        "gi=\u304E\n"
-        "ku=\u304F\n"
-        "gu=\u3050\n"
-        "ke=\u3051\n"
-        "ge=\u3052\n"
-        "ko=\u3053\n"
-        "go=\u3054\n"
-
-        //these are small katakana
-        "xka=\u30F5\n"
-        "xke=\u30F6\n"
-
-        "sa=\u3055\n"
-        "za=\u3056\n"
-        "si=\u3057\n"
-        "zi=\u3058\n"
-        "su=\u3059\n"
-        "zu=\u305A\n"
-        "se=\u305B\n"
-        "ze=\u305C\n"
-        "so=\u305D\n"
-        "zo=\u305E\n"
-
-        "ta=\u305F\n"
-        "da=\u3060\n"
-        "ti=\u3061\n"
-        "di=\u3062\n"
-        "xtu=\u3063\n"
-        "tu=\u3064\n"
-        "du=\u3065\n"
-        "te=\u3066\n"
-        "de=\u3067\n"
-        "to=\u3068\n"
-        "do=\u3069\n"
-
-        "na=\u306A\n"
-        "ni=\u306B\n"
-        "nu=\u306C\n"
-        "ne=\u306D\n"
-        "no=\u306E\n"
-
-        "ha=\u306F\n"
-        "ba=\u3070\n"
-        "pa=\u3071\n"
-        "hi=\u3072\n"
-        "bi=\u3073\n"
-        "pi=\u3074\n"
-        "hu=\u3075\n"
-        "bu=\u3076\n"
-        "pu=\u3077\n"
-        "he=\u3078\n"
-        "be=\u3079\n"
-        "pe=\u307A\n"
-        "ho=\u307B\n"
-        "bo=\u307C\n"
-        "po=\u307D\n"
-
-        "ma=\u307E\n"
-        "mi=\u307F\n"
-        "mu=\u3080\n"
-        "me=\u3081\n"
-        "mo=\u3082\n"
-
-        "xya=\u3083\n"
-        "ya=\u3084\n"
-        "xyu=\u3085\n"
-        "yu=\u3086\n"
-        "xyo=\u3087\n"
-        "yo=\u3088\n"
-
-        "ra=\u3089\n"
-        "ri=\u308A\n"
-        "ru=\u308B\n"
-        "re=\u308C\n"
-        "ro=\u308D\n"
-
-        "xwa=\u308E\n"
-        "wa=\u308F\n"
-        "wi=\u3090\n"
-        "we=\u3091\n"
-        "wo=\u3092\n"
-        "wu={u}\n" // Liu
-
-        "^n=\u3093\n"
-
-        // these are katakana
-        "va=\u30F7\n"
-        "vi=\u30F8\n"
-        "vu=\u30F4\n"
-        "ve=\u30F9\n"
-        "vo=\u30FA\n"
-
-
-        //#######################################
-        // Conversions from roman to kana
-        //#######################################
-        // here are alternate mappings used in some word processors
-        //kwa>{ku}{xa}
-        //gwa>{gu}{xa}
-        //wi>{u}{xi}
-        //wi>{u}{xe}
-        //va>{vu}{xa}
-        //vi>{vu}{xi}
-        //ve>{vu}{xe}
-        //vo>{vu}{xo}
-
-        // remember that the order is very significant: always put longer before shorter elements
-
-        "{a}>{^a}\n"
-
-        "{b}{a}>{ba}\n"
-        "{b}{i}>{bi}\n"
-        "{b}{u}>{bu}\n"
-        "{b}{e}>{be}\n"
-        "{b}{o}>{bo}\n"
-        "{b}{y}{a}>{bi}{xya}\n"
-        "{b}{y}{i}>{bi}{xi}\n"
-        "{b}{y}{u}>{bi}{xyu}\n"
-        "{b}{y}{e}>{bi}{xe}\n"
-        "{b}{y}{o}>{bi}{xyo}\n"
-        "{b}[{b}>{xtu}\n"
-
-
-        "{d}{a}>{da}\n"
-        "{d}{i}>{di}\n"
-        "{d}{u}>{du}\n"
-        "{d}{e}>{de}\n"
-        "{d}{o}>{do}\n"
-        "{d}{y}{a}>{di}{xya}\n"
-        "{d}{y}{i}>{di}{xi}\n"
-        "{d}{y}{u}>{di}{xyu}\n"
-        "{d}{y}{e}>{di}{xe}\n"
-        "{d}{y}{o}>{di}{xyo}\n"
-        "{d}{h}{a}>{de}{xya}\n"
-        "{d}{h}{i}>{de}{xi}\n"
-        "{d}{h}{u}>{de}{xyu}\n"
-        "{d}{h}{e}>{de}{xe}\n"
-        "{d}{h}{o}>{de}{xyo}\n"
-        "{d}[{d}>{xtu}\n"
-
-        "{e}>{^e}\n"
-
-        "{f}{a}>{hu}{xa}\n"
-        "{f}{i}>{hu}{xi}\n"
-        "{f}{e}>{hu}{xe}\n"
-        "{f}{o}>{hu}{xo}\n"
-        "{f}{y}{a}>{hu}{xya}\n"
-        "{f}{y}{i}>{hu}{xi}\n"
-        "{f}{y}{u}>{hu}{xyu}\n"
-        "{f}{y}{e}>{hu}{xe}\n"
-        "{f}{y}{o}>{hu}{xyo}\n"
-        "{f}[{f}>{xtu}\n"
-
-        "{g}{a}>{ga}\n"
-        "{g}{i}>{gi}\n"
-        "{g}{u}>{gu}\n"
-        "{g}{e}>{ge}\n"
-        "{g}{o}>{go}\n"
-        "{g}{y}{a}>{gi}{xya}\n"
-        "{g}{y}{i}>{gi}{xi}\n"
-        "{g}{y}{u}>{gi}{xyu}\n"
-        "{g}{y}{e}>{gi}{xe}\n"
-        "{g}{y}{o}>{gi}{xyo}\n"
-        "{g}{w}{a}>{gu}{xwa}\n"
-        "{g}{w}{i}>{gu}{xi}\n"
-        "{g}{w}{u}>{gu}{xu}\n"
-        "{g}{w}{e}>{gu}{xe}\n"
-        "{g}{w}{o}>{gu}{xo}\n"
-        "{g}[{g}>{xtu}\n"
-
-        "{h}{a}>{ha}\n"
-        "{h}{i}>{hi}\n"
-        "{h}{u}>{hu}\n"
-        "{h}{e}>{he}\n"
-        "{h}{o}>{ho}\n"
-        "{h}{y}{a}>{hi}{xya}\n"
-        "{h}{y}{i}>{hi}{xi}\n"
-        "{h}{y}{u}>{hi}{xyu}\n"
-        "{h}{y}{e}>{hi}{xe}\n"
-        "{h}{y}{o}>{hi}{xyo}\n"
-        "{h}[{h}>{xtu}\n"
-
-        "{i}>{^i}\n"
-
-        "{k}{a}>{ka}\n"
-        "{k}{i}>{ki}\n"
-        "{k}{u}>{ku}\n"
-        "{k}{e}>{ke}\n"
-        "{k}{o}>{ko}\n"
-        "{k}{w}{a}>{ku}{xwa}\n"
-        "{k}{w}{i}>{ku}{xi}\n"
-        "{k}{w}{u}>{ku}{xu}\n"
-        "{k}{w}{e}>{ku}{xe}\n"
-        "{k}{w}{o}>{ku}{xo}\n"
-        "{k}{y}{a}>{ki}{xya}\n"
-        "{k}{y}{i}>{ki}{xi}\n"
-        "{k}{y}{u}>{ki}{xyu}\n"
-        "{k}{y}{e}>{ki}{xe}\n"
-        "{k}{y}{o}>{ki}{xyo}\n"
-        "{k}[{k}>{xtu}\n"
-
-
-        "{m}{a}>{ma}\n"
-        "{m}{i}>{mi}\n"
-        "{m}{u}>{mu}\n"
-        "{m}{e}>{me}\n"
-        "{m}{o}>{mo}\n"
-        "{m}{y}{a}>{mi}{xya}\n"
-        "{m}{y}{i}>{mi}{xi}\n"
-        "{m}{y}{u}>{mi}{xyu}\n"
-        "{m}{y}{e}>{mi}{xe}\n"
-        "{m}{y}{o}>{mi}{xyo}\n"
-        "{m}[{m}>{^n}\n"
-        "{m}{quote}>{^n}\n"
-        "{m}[{p}>{^n}\n"
-        "{m}[{b}>{^n}\n"
-        "{m}[{f}>{^n}\n"
-        "{m}[{v}>{^n}\n"
-
-        "{n}{a}>{na}\n"
-        "{n}{i}>{ni}\n"
-        "{n}{u}>{nu}\n"
-        "{n}{e}>{ne}\n"
-        "{n}{o}>{no}\n"
-        "{n}{y}{a}>{ni}{xya}\n"
-        "{n}{y}{i}>{ni}{xi}\n"
-        "{n}{y}{u}>{ni}{xyu}\n"
-        "{n}{y}{e}>{ni}{xe}\n"
-        "{n}{y}{o}>{ni}{xyo}\n"
-        "{n}{n}>{^n}\n"
-        "{n}{quote}>{^n}\n"
-        "{n}>{^n}\n"
-
-        "{o}>{^o}\n"
-
-        "{p}{a}>{pa}\n"
-        "{p}{i}>{pi}\n"
-        "{p}{u}>{pu}\n"
-        "{p}{e}>{pe}\n"
-        "{p}{o}>{po}\n"
-        "{p}{y}{a}>{pi}{xya}\n"
-        "{p}{y}{i}>{pi}{xi}\n"
-        "{p}{y}{u}>{pi}{xyu}\n"
-        "{p}{y}{e}>{pi}{xe}\n"
-        "{p}{y}{o}>{pi}{xyo}\n"
-        "{p}[{p}>{xtu}\n"
-
-        "{q}{a}>{ku}{xa}\n"
-        "{q}{i}>{ku}{xi}\n"
-        "{q}{u}>{ku}{xu}\n"
-        "{q}{e}>{ku}{xe}\n"
-        "{q}{o}>{ku}{xo}\n"
-        "{q}{y}{a}>{ku}{xya}\n"
-        "{q}{y}{i}>{ku}{xi}\n"
-        "{q}{y}{u}>{ku}{xyu}\n"
-        "{q}{y}{e}>{ku}{xe}\n"
-        "{q}{y}{o}>{ku}{xyo}\n"
-        "{q}[{q}>{xtu}\n"
-
-        "{r}{a}>{ra}\n"
-        "{r}{i}>{ri}\n"
-        "{r}{u}>{ru}\n"
-        "{r}{e}>{re}\n"
-        "{r}{o}>{ro}\n"
-        "{r}{y}{a}>{ri}{xya}\n"
-        "{r}{y}{i}>{ri}{xi}\n"
-        "{r}{y}{u}>{ri}{xyu}\n"
-        "{r}{y}{e}>{ri}{xe}\n"
-        "{r}{y}{o}>{ri}{xyo}\n"
-        "{r}[{r}>{xtu}\n"
-
-        "{s}{a}>{sa}\n"
-        "{s}{i}>{si}\n"
-        "{s}{u}>{su}\n"
-        "{s}{e}>{se}\n"
-        "{s}{o}>{so}\n"
-        "{s}{y}{a}>{si}{xya}\n"
-        "{s}{y}{i}>{si}{xi}\n"
-        "{s}{y}{u}>{si}{xyu}\n"
-        "{s}{y}{e}>{si}{xe}\n"
-        "{s}{y}{o}>{si}{xyo}\n"
-        "{s}[{s}{h}>{xtu}\n"
-        "{s}[{s}>{xtu}\n"
-
-        "{t}{a}>{ta}\n"
-        "{t}{i}>{ti}\n"
-        "{t}{u}>{tu}\n"
-        "{t}{e}>{te}\n"
-        "{t}{o}>{to}\n"
-        "{t}{h}{a}>{te}{xya}\n"
-        "{t}{h}{i}>{te}{xi}\n"
-        "{t}{h}{u}>{te}{xyu}\n"
-        "{t}{h}{e}>{te}{xe}\n"
-        "{t}{h}{o}>{te}{xyo}\n"
-        "{t}{s}{a}>{tu}{xa}\n"
-        "{t}{s}{i}>{tu}{xi}\n"
-        "{t}{s}{e}>{tu}{xe}\n"
-        "{t}{s}{o}>{tu}{xo}\n"
-
-        "{t}{y}{a}>{ti}{xya}\n"
-        "{t}{y}{i}>{ti}{xi}\n"
-        "{t}{y}{u}>{ti}{xyu}\n"
-        "{t}{y}{e}>{ti}{xe}\n"
-        "{t}{y}{o}>{ti}{xyo}\n"
-        "{t}[{t}{s}>{xtu}\n"
-        "{t}[{c}{h}>{xtu}\n"
-        "{t}[{t}>{xtu}\n"
-
-        "{u}>{^u}\n"
-
-        "{v}{a}>{va}\n"
-        "{v}{i}>{vi}\n"
-        "{v}{u}>{vu}\n"
-        "{v}{e}>{ve}\n"
-        "{v}{o}>{vo}\n"
-
-
-        "{v}{y}{a}>{vi}{xya}\n"
-        "{v}{y}{i}>{vi}{xi}\n"
-        "{v}{y}{u}>{vi}{xyu}\n"
-        "{v}{y}{e}>{vi}{xe}\n"
-        "{v}{y}{o}>{vi}{xyo}\n"
-        "{v}[{v}>{xtu}\n"
-
-        "{w}{a}>{wa}\n"
-        "{w}{i}>{wi}\n"
-        "{w}{u}>{^u}\n"
-        "{w}{e}>{we}\n"
-        "{w}{o}>{wo}\n"
-        "{w}[{w}>{xtu}\n"
-
-        "{y}{a}>{ya}\n"
-        "{y}{u}>{yu}\n"
-        "{y}{e}>{^i}{xe}\n"
-        "{y}{o}>{yo}\n"
-        "{y}[{y}>{xtu}\n"
-
-        "{z}{a}>{za}\n"
-        "{z}{i}>{zi}\n"
-        "{z}{u}>{zu}\n"
-        "{z}{e}>{ze}\n"
-        "{z}{o}>{zo}\n"
-        "{z}{y}{a}>{zi}{xya}\n"
-        "{z}{y}{i}>{zi}{xi}\n"
-        "{z}{y}{u}>{zi}{xyu}\n"
-        "{z}{y}{e}>{zi}{xe}\n"
-        "{z}{y}{o}>{zi}{xyo}\n"
-        "{z}[{z}>{xtu}\n"
-
-        "{x}{a}>{xa}\n"
-        "{x}{i}>{xi}\n"
-        "{x}{u}>{xu}\n"
-        "{x}{e}>{xe}\n"
-        "{x}{o}>{xo}\n"
-        "{x}{k}{a}>{xka}\n"
-        "{x}{k}{e}>{xke}\n"
-        "{x}{t}{u}>{xtu}\n"
-        "{x}{w}{a}>{xwa}\n"
-        "{x}{y}{a}>{xya}\n"
-        "{x}{y}{u}>{xyu}\n"
-        "{x}{y}{o}>{xyo}\n"
-
-        // optional mappings
-        "{c}{a}>{ka}\n"
-        "{c}{i}>{si}\n"
-        "{c}{u}>{ku}\n"
-        "{c}{e}>{se}\n"
-        "{c}{o}>{ko}\n"
-        "{c}{h}{a}>{ti}{xya}\n"
-        "{c}{h}{i}>{ti}\n"
-        "{c}{h}{u}>{ti}{xyu}\n"
-        "{c}{h}{e}>{ti}{xe}\n"
-        "{c}{h}{o}>{ti}{xyo}\n"
-        "{c}{y}{a}>{ti}{xya}\n"
-        "{c}{y}{i}>{ti}{xi}\n"
-        "{c}{y}{u}>{ti}{xyu}\n"
-        "{c}{y}{e}>{ti}{xe}\n"
-        "{c}{y}{o}>{ti}{xyo}\n"
-        "{c}[{k}>{xtu}\n"
-        "{c}[{c}>{xtu}\n"
-
-        "{f}{u}>{hu}\n"
-
-        "{j}{a}>{zi}{xya}\n"
-        "{j}{u}>{zi}{xyu}\n"
-        "{j}{e}>{zi}{xe}\n"
-        "{j}{o}>{zi}{xyo}\n"
-        "{j}{y}{a}>{zi}{xya}\n"
-        "{j}{y}{i}>{zi}{xi}\n"
-        "{j}{y}{u}>{zi}{xyu}\n"
-        "{j}{y}{e}>{zi}{xe}\n"
-        "{j}{y}{o}>{zi}{xyo}\n"
-        "{j}{i}>{zi}\n"
-        "{j}[{j}>{xtu}\n"
-
-        "{l}{a}>{ra}\n"
-        "{l}{i}>{ri}\n"
-        "{l}{u}>{ru}\n"
-        "{l}{e}>{re}\n"
-        "{l}{o}>{ro}\n"
-        "{l}{y}{a}>{ri}{xya}\n"
-        "{l}{y}{i}>{ri}{xi}\n"
-        "{l}{y}{u}>{ri}{xyu}\n"
-        "{l}{y}{e}>{ri}{xe}\n"
-        "{l}{y}{o}>{ri}{xyo}\n"
-        "{l}[{l}>{xtu}\n"
-
-        "{s}{h}{a}>{si}{xya}\n"
-        "{s}{h}{i}>{si}\n"
-        "{s}{h}{u}>{si}{xyu}\n"
-        "{s}{h}{e}>{si}{xe}\n"
-        "{s}{h}{o}>{si}{xyo}\n"
-
-        "{t}{s}{u}>{tu}\n"
-
-        "{y}{i}>{^i}\n"
-
-        "{x}{t}{s}{u}>{xtu}\n"
-        "{x}{y}{i}>{xi}\n"
-        "{x}{y}{e}>{xe}\n"
-
-        //#######################################
-        // Conversions from full width roman to kana
-        //#######################################
-        // here are alternate mappings used in some word processors
-        //kwa>{ku}{xa}
-        //gwa>{gu}{xa}
-        //wi>{u}{xi}
-        //wi>{u}{xe}
-        //va>{vu}{xa}
-        //vi>{vu}{xi}
-        //ve>{vu}{xe}
-        //vo>{vu}{xo}
-
-        // remember that the order is very significant: always put longer before shorter elements
-
-        "{a1}>{^a}\n"
-
-        "{b1}{a1}>{ba}\n"
-        "{b1}{i1}>{bi}\n"
-        "{b1}{u1}>{bu}\n"
-        "{b1}{e1}>{be}\n"
-        "{b1}{o1}>{bo}\n"
-        "{b1}{y1}{a1}>{bi}{xya}\n"
-        "{b1}{y1}{i1}>{bi}{xi}\n"
-        "{b1}{y1}{u1}>{bi}{xyu}\n"
-        "{b1}{y1}{e1}>{bi}{xe}\n"
-        "{b1}{y1}{o1}>{bi}{xyo}\n"
-        "{b1}[{b1}>{xtu}\n"
-
-
-        "{d1}{a1}>{da}\n"
-        "{d1}{i1}>{di}\n"
-        "{d1}{u1}>{du}\n"
-        "{d1}{e1}>{de}\n"
-        "{d1}{o1}>{do}\n"
-        "{d1}{y1}{a1}>{di}{xya}\n"
-        "{d1}{y1}{i1}>{di}{xi}\n"
-        "{d1}{y1}{u1}>{di}{xyu}\n"
-        "{d1}{y1}{e1}>{di}{xe}\n"
-        "{d1}{y1}{o1}>{di}{xyo}\n"
-        "{d1}{h1}{a1}>{de}{xya}\n"
-        "{d1}{h1}{i1}>{de}{xi}\n"
-        "{d1}{h1}{u1}>{de}{xyu}\n"
-        "{d1}{h1}{e1}>{de}{xe}\n"
-        "{d1}{h1}{o1}>{de}{xyo}\n"
-        "{d1}[{d1}>{xtu}\n"
-
-        "{e1}>{^e}\n"
-
-        "{f1}{a1}>{hu}{xa}\n"
-        "{f1}{i1}>{hu}{xi}\n"
-        "{f1}{e1}>{hu}{xe}\n"
-        "{f1}{o1}>{hu}{xo}\n"
-        "{f1}{y1}{a1}>{hu}{xya}\n"
-        "{f1}{y1}{i1}>{hu}{xi}\n"
-        "{f1}{y1}{u1}>{hu}{xyu}\n"
-        "{f1}{y1}{e1}>{hu}{xe}\n"
-        "{f1}{y1}{o1}>{hu}{xyo}\n"
-        "{f1}[{f1}>{xtu}\n"
-
-        "{g1}{a1}>{ga}\n"
-        "{g1}{i1}>{gi}\n"
-        "{g1}{u1}>{gu}\n"
-        "{g1}{e1}>{ge}\n"
-        "{g1}{o1}>{go}\n"
-        "{g1}{y1}{a1}>{gi}{xya}\n"
-        "{g1}{y1}{i1}>{gi}{xi}\n"
-        "{g1}{y1}{u1}>{gi}{xyu}\n"
-        "{g1}{y1}{e1}>{gi}{xe}\n"
-        "{g1}{y1}{o1}>{gi}{xyo}\n"
-        "{g1}{w1}{a1}>{gu}{xwa}\n"
-        "{g1}{w1}{i1}>{gu}{xi}\n"
-        "{g1}{w1}{u1}>{gu}{xu}\n"
-        "{g1}{w1}{e1}>{gu}{xe}\n"
-        "{g1}{w1}{o1}>{gu}{xo}\n"
-        "{g1}[{g1}>{xtu}\n"
-
-        "{h1}{a1}>{ha}\n"
-        "{h1}{i1}>{hi}\n"
-        "{h1}{u1}>{hu}\n"
-        "{h1}{e1}>{he}\n"
-        "{h1}{o1}>{ho}\n"
-        "{h1}{y1}{a1}>{hi}{xya}\n"
-        "{h1}{y1}{i1}>{hi}{xi}\n"
-        "{h1}{y1}{u1}>{hi}{xyu}\n"
-        "{h1}{y1}{e1}>{hi}{xe}\n"
-        "{h1}{y1}{o1}>{hi}{xyo}\n"
-        "{h1}[{h1}>{xtu}\n"
-
-        "{i1}>{^i}\n"
-
-        "{k1}{a1}>{ka}\n"
-        "{k1}{i1}>{ki}\n"
-        "{k1}{u1}>{ku}\n"
-        "{k1}{e1}>{ke}\n"
-        "{k1}{o1}>{ko}\n"
-        "{k1}{w1}{a1}>{ku}{xwa}\n"
-        "{k1}{w1}{i1}>{ku}{xi}\n"
-        "{k1}{w1}{u1}>{ku}{xu}\n"
-        "{k1}{w1}{e1}>{ku}{xe}\n"
-        "{k1}{w1}{o1}>{ku}{xo}\n"
-        "{k1}{y1}{a1}>{ki}{xya}\n"
-        "{k1}{y1}{i1}>{ki}{xi}\n"
-        "{k1}{y1}{u1}>{ki}{xyu}\n"
-        "{k1}{y1}{e1}>{ki}{xe}\n"
-        "{k1}{y1}{o1}>{ki}{xyo}\n"
-        "{k1}[{k1}>{xtu}\n"
-
-
-        "{m1}{a1}>{ma}\n"
-        "{m1}{i1}>{mi}\n"
-        "{m1}{u1}>{mu}\n"
-        "{m1}{e1}>{me}\n"
-        "{m1}{o1}>{mo}\n"
-        "{m1}{y1}{a1}>{mi}{xya}\n"
-        "{m1}{y1}{i1}>{mi}{xi}\n"
-        "{m1}{y1}{u1}>{mi}{xyu}\n"
-        "{m1}{y1}{e1}>{mi}{xe}\n"
-        "{m1}{y1}{o1}>{mi}{xyo}\n"
-        "{m1}[{m1}>{^n}\n"
-        "{m1}{quote1}>{^n}\n"
-        "{m1}[{p1}>{^n}\n"
-        "{m1}[{b1}>{^n}\n"
-        "{m1}[{f1}>{^n}\n"
-        "{m1}[{v1}>{^n}\n"
-
-        "{n1}{a1}>{na}\n"
-        "{n1}{i1}>{ni}\n"
-        "{n1}{u1}>{nu}\n"
-        "{n1}{e1}>{ne}\n"
-        "{n1}{o1}>{no}\n"
-        "{n1}{y1}{a1}>{ni}{xya}\n"
-        "{n1}{y1}{i1}>{ni}{xi}\n"
-        "{n1}{y1}{u1}>{ni}{xyu}\n"
-        "{n1}{y1}{e1}>{ni}{xe}\n"
-        "{n1}{y1}{o1}>{ni}{xyo}\n"
-        "{n1}{n1}>{^n}\n"
-        "{n1}{quote1}>{^n}\n"
-        "{n1}>{^n}\n"
-
-        "{o1}>{^o}\n"
-
-        "{p1}{a1}>{pa}\n"
-        "{p1}{i1}>{pi}\n"
-        "{p1}{u1}>{pu}\n"
-        "{p1}{e1}>{pe}\n"
-        "{p1}{o1}>{po}\n"
-        "{p1}{y1}{a1}>{pi}{xya}\n"
-        "{p1}{y1}{i1}>{pi}{xi}\n"
-        "{p1}{y1}{u1}>{pi}{xyu}\n"
-        "{p1}{y1}{e1}>{pi}{xe}\n"
-        "{p1}{y1}{o1}>{pi}{xyo}\n"
-        "{p1}[{p1}>{xtu}\n"
-
-        "{q1}{a1}>{ku}{xa}\n"
-        "{q1}{i1}>{ku}{xi}\n"
-        "{q1}{u1}>{ku}{xu}\n"
-        "{q1}{e1}>{ku}{xe}\n"
-        "{q1}{o1}>{ku}{xo}\n"
-        "{q1}{y1}{a1}>{ku}{xya}\n"
-        "{q1}{y1}{i1}>{ku}{xi}\n"
-        "{q1}{y1}{u1}>{ku}{xyu}\n"
-        "{q1}{y1}{e1}>{ku}{xe}\n"
-        "{q1}{y1}{o1}>{ku}{xyo}\n"
-        "{q1}[{q1}>{xtu}\n"
-
-        "{r1}{a1}>{ra}\n"
-        "{r1}{i1}>{ri}\n"
-        "{r1}{u1}>{ru}\n"
-        "{r1}{e1}>{re}\n"
-        "{r1}{o1}>{ro}\n"
-        "{r1}{y1}{a1}>{ri}{xya}\n"
-        "{r1}{y1}{i1}>{ri}{xi}\n"
-        "{r1}{y1}{u1}>{ri}{xyu}\n"
-        "{r1}{y1}{e1}>{ri}{xe}\n"
-        "{r1}{y1}{o1}>{ri}{xyo}\n"
-        "{r1}[{r1}>{xtu}\n"
-
-        "{s1}{a1}>{sa}\n"
-        "{s1}{i1}>{si}\n"
-        "{s1}{u1}>{su}\n"
-        "{s1}{e1}>{se}\n"
-        "{s1}{o1}>{so}\n"
-        "{s1}{y1}{a1}>{si}{xya}\n"
-        "{s1}{y1}{i1}>{si}{xi}\n"
-        "{s1}{y1}{u1}>{si}{xyu}\n"
-        "{s1}{y1}{e1}>{si}{xe}\n"
-        "{s1}{y1}{o1}>{si}{xyo}\n"
-        "{s1}[{s1}{h1}>{xtu}\n"
-        "{s1}[{s1}>{xtu}\n"
-
-        "{t1}{a1}>{ta}\n"
-        "{t1}{i1}>{ti}\n"
-        "{t1}{u1}>{tu}\n"
-        "{t1}{e1}>{te}\n"
-        "{t1}{o1}>{to}\n"
-        "{t1}{h1}{a1}>{te}{xya}\n"
-        "{t1}{h1}{i1}>{te}{xi}\n"
-        "{t1}{h1}{u1}>{te}{xyu}\n"
-        "{t1}{h1}{e1}>{te}{xe}\n"
-        "{t1}{h1}{o1}>{te}{xyo}\n"
-        "{t1}{s1}{a1}>{tu}{xa}\n"
-        "{t1}{s1}{i1}>{tu}{xi}\n"
-        "{t1}{s1}{e1}>{tu}{xe}\n"
-        "{t1}{s1}{o1}>{tu}{xo}\n"
-
-        "{t1}{y1}{a1}>{ti}{xya}\n"
-        "{t1}{y1}{i1}>{ti}{xi}\n"
-        "{t1}{y1}{u1}>{ti}{xyu}\n"
-        "{t1}{y1}{e1}>{ti}{xe}\n"
-        "{t1}{y1}{o1}>{ti}{xyo}\n"
-        "{t1}[{t1}{s1}>{xtu}\n"
-        "{t1}[{c1}{h1}>{xtu}\n"
-        "{t1}[{t1}>{xtu}\n"
-
-        "{u1}>{^u}\n"
-
-        "{v1}{a1}>{va}\n"
-        "{v1}{i1}>{vi}\n"
-        "{v1}{u1}>{vu}\n"
-        "{v1}{e1}>{ve}\n"
-        "{v1}{o1}>{vo}\n"
-
-
-        "{v1}{y1}{a1}>{vi}{xya}\n"
-        "{v1}{y1}{i1}>{vi}{xi}\n"
-        "{v1}{y1}{u1}>{vi}{xyu}\n"
-        "{v1}{y1}{e1}>{vi}{xe}\n"
-        "{v1}{y1}{o1}>{vi}{xyo}\n"
-        "{v1}[{v1}>{xtu}\n"
-
-        "{w1}{a1}>{wa}\n"
-        "{w1}{i1}>{wi}\n"
-        "{w1}{u1}>{^u}\n"
-        "{w1}{e1}>{we}\n"
-        "{w1}{o1}>{wo}\n"
-        "{w1}[{w1}>{xtu}\n"
-
-        "{y1}{a1}>{ya}\n"
-        "{y1}{u1}>{yu}\n"
-        "{y1}{e1}>{^i}{xe}\n"
-        "{y1}{o1}>{yo}\n"
-        "{y1}[{y1}>{xtu}\n"
-
-        "{z1}{a1}>{za}\n"
-        "{z1}{i1}>{zi}\n"
-        "{z1}{u1}>{zu}\n"
-        "{z1}{e1}>{ze}\n"
-        "{z1}{o1}>{zo}\n"
-        "{z1}{y1}{a1}>{zi}{xya}\n"
-        "{z1}{y1}{i1}>{zi}{xi}\n"
-        "{z1}{y1}{u1}>{zi}{xyu}\n"
-        "{z1}{y1}{e1}>{zi}{xe}\n"
-        "{z1}{y1}{o1}>{zi}{xyo}\n"
-        "{z1}[{z1}>{xtu}\n"
-
-        "{x1}{a1}>{xa}\n"
-        "{x1}{i1}>{xi}\n"
-        "{x1}{u1}>{xu}\n"
-        "{x1}{e1}>{xe}\n"
-        "{x1}{o1}>{xo}\n"
-        "{x1}{k1}{a1}>{xka}\n"
-        "{x1}{k1}{e1}>{xke}\n"
-        "{x1}{t1}{u1}>{xtu}\n"
-        "{x1}{w1}{a1}>{xwa}\n"
-        "{x1}{y1}{a1}>{xya}\n"
-        "{x1}{y1}{u1}>{xyu}\n"
-        "{x1}{y1}{o1}>{xyo}\n"
-
-        // optional mappings
-        "{c1}{a1}>{ka}\n"
-        "{c1}{i1}>{si}\n"
-        "{c1}{u1}>{ku}\n"
-        "{c1}{e1}>{se}\n"
-        "{c1}{o1}>{ko}\n"
-        "{c1}{h1}{a1}>{ti}{xya}\n"
-        "{c1}{h1}{i1}>{ti}\n"
-        "{c1}{h1}{u1}>{ti}{xyu}\n"
-        "{c1}{h1}{e1}>{ti}{xe}\n"
-        "{c1}{h1}{o1}>{ti}{xyo}\n"
-        "{c1}{y1}{a1}>{ti}{xya}\n"
-        "{c1}{y1}{i1}>{ti}{xi}\n"
-        "{c1}{y1}{u1}>{ti}{xyu}\n"
-        "{c1}{y1}{e1}>{ti}{xe}\n"
-        "{c1}{y1}{o1}>{ti}{xyo}\n"
-        "{c1}[{k1}>{xtu}\n"
-        "{c1}[{c1}>{xtu}\n"
-
-        "{f1}{u1}>{hu}\n"
-
-        "{j1}{a1}>{zi}{xya}\n"
-        "{j1}{u1}>{zi}{xyu}\n"
-        "{j1}{e1}>{zi}{xe}\n"
-        "{j1}{o1}>{zi}{xyo}\n"
-        "{j1}{y1}{a1}>{zi}{xya}\n"
-        "{j1}{y1}{i1}>{zi}{xi}\n"
-        "{j1}{y1}{u1}>{zi}{xyu}\n"
-        "{j1}{y1}{e1}>{zi}{xe}\n"
-        "{j1}{y1}{o1}>{zi}{xyo}\n"
-        "{j1}{i1}>{zi}\n"
-        "{j1}[{j1}>{xtu}\n"
-
-        "{l1}{a1}>{ra}\n"
-        "{l1}{i1}>{ri}\n"
-        "{l1}{u1}>{ru}\n"
-        "{l1}{e1}>{re}\n"
-        "{l1}{o1}>{ro}\n"
-        "{l1}{y1}{a1}>{ri}{xya}\n"
-        "{l1}{y1}{i1}>{ri}{xi}\n"
-        "{l1}{y1}{u1}>{ri}{xyu}\n"
-        "{l1}{y1}{e1}>{ri}{xe}\n"
-        "{l1}{y1}{o1}>{ri}{xyo}\n"
-        "{l1}[{l1}>{xtu}\n"
-
-        "{s1}{h1}{a1}>{si}{xya}\n"
-        "{s1}{h1}{i1}>{si}\n"
-        "{s1}{h1}{u1}>{si}{xyu}\n"
-        "{s1}{h1}{e1}>{si}{xe}\n"
-        "{s1}{h1}{o1}>{si}{xyo}\n"
-
-        "{t1}{s1}{u1}>{tu}\n"
-
-        "{y1}{i1}>{^i}\n"
-
-        "{x1}{t1}{s1}{u1}>{xtu}\n"
-        "{x1}{y1}{i1}>{xi}\n"
-        "{x1}{y1}{e1}>{xe}\n"
-
-        // Katakana
-
-        "XA=\u30A1\n"
-        "^A=\u30A2\n"
-        "XI=\u30A3\n"
-        "^I=\u30A4\n"
-        "XU=\u30A5\n"
-        "^U=\u30A6\n"
-        "XE=\u30A7\n"
-        "^E=\u30A8\n"
-        "XO=\u30A9\n"
-        "^O=\u30AA\n"
-        "TYOUON=\u30FC\n"
-
-        "KA=\u30AB\n"
-        "GA=\u30AC\n"
-        "KI=\u30AD\n"
-        "GI=\u30AE\n"
-        "KU=\u30AF\n"
-        "GU=\u30B0\n"
-        "KE=\u30B1\n"
-        "GE=\u30B2\n"
-        "KO=\u30B3\n"
-        "GO=\u30B4\n"
-
-        //these generate small katakana
-        "XKA=\u30F5\n"
-        "XKE=\u30F6\n"
-
-        "SA=\u30B5\n"
-        "ZA=\u30B6\n"
-        "SI=\u30B7\n"
-        "ZI=\u30B8\n"
-        "SU=\u30B9\n"
-        "ZU=\u30BA\n"
-        "SE=\u30BB\n"
-        "ZE=\u30BC\n"
-        "SO=\u30BD\n"
-        "ZO=\u30BE\n"
-
-        "TA=\u30BF\n"
-        "DA=\u30C0\n"
-        "TI=\u30C1\n"
-        "DI=\u30C2\n"
-        "XTU=\u30C3\n"
-        "TU=\u30C4\n"
-        "DU=\u30C5\n"
-        "TE=\u30C6\n"
-        "DE=\u30C7\n"
-        "TO=\u30C8\n"
-        "DO=\u30C9\n"
-
-        "NA=\u30CA\n"
-        "NI=\u30CB\n"
-        "NU=\u30CC\n"
-        "NE=\u30CD\n"
-        "NO=\u30CE\n"
-
-        "HA=\u30CF\n"
-        "BA=\u30D0\n"
-        "PA=\u30D1\n"
-        "HI=\u30D2\n"
-        "BI=\u30D3\n"
-        "PI=\u30D4\n"
-        "HU=\u30D5\n"
-        "BU=\u30D6\n"
-        "PU=\u30D7\n"
-        "HE=\u30D8\n"
-        "BE=\u30D9\n"
-        "PE=\u30DA\n"
-        "HO=\u30DB\n"
-        "BO=\u30DC\n"
-        "PO=\u30DD\n"
-
-        "MA=\u30DE\n"
-        "MI=\u30DF\n"
-        "MU=\u30E0\n"
-        "ME=\u30E1\n"
-        "MO=\u30E2\n"
-
-        "XYA=\u30E3\n"
-        "YA=\u30E4\n"
-        "XYU=\u30E5\n"
-        "YU=\u30E6\n"
-        "XYO=\u30E7\n"
-        "YO=\u30E8\n"
-        "XWA=\u30EE\n"
-
-        "RA=\u30E9\n"
-        "RI=\u30EA\n"
-        "RU=\u30EB\n"
-        "RE=\u30EC\n"
-        "RO=\u30ED\n"
-
-        "VA=\u30F7\n"
-        "VI=\u30F8\n"
-        "VU=\u30F4\n"
-        "VE=\u30F9\n"
-        "VO=\u30FA\n"
-
-        "WA=\u30EF\n"
-        "WI=\u30F0\n"
-        "WE=\u30F1\n"
-        "WO=\u30F2\n"
-        "WU={^U}\n"
-
-        "^N=\u30F3\n"
-
-        //OPTIONAL
-        "YI={^I}\n"
-        // + "YE={^I}{XE}\n" // Synax error; not used anyway - Liu
-        "XYI={XI}\n"
-
-        //CONVERSIONS FROM ROMAN TO KANA
-        //#######################################
-        // HERE ARE ALTERNATE MAPPINGS USED IN SOME WORD PROCESSORS
-        //KWA>{KU}{XA}
-        //GWA>{GU}{XA}
-        //WI>{^U}{XI}
-        //WI>{^U}{XE}
-        //VA>{VU}{XA}
-        //VI>{VU}{XI}
-        //VE>{VU}{XE}
-        //VO>{VU}{XO}
-
-        // REMEMBER THAT THE ORDER IS VERY SIGNIFICANT: ALWAYS PUT LONGER BEFORE SHORTER ELEMENTS
-
-        "{-}>{TYOUON}\n"
-
-        "{A}>{^A}\n"
-
-        "{B}{A}>{BA}\n"
-        "{B}{I}>{BI}\n"
-        "{B}{U}>{BU}\n"
-        "{B}{E}>{BE}\n"
-        "{B}{O}>{BO}\n"
-        "{B}{Y}{A}>{BI}{XYA}\n"
-        "{B}{Y}{I}>{BI}{XI}\n"
-        "{B}{Y}{U}>{BI}{XYU}\n"
-        "{B}{Y}{E}>{BI}{XE}\n"
-        "{B}{Y}{O}>{BI}{XYO}\n"
-        "{B}[{B}>{XTU}\n"
-
-
-        "{D}{A}>{DA}\n"
-        "{D}{I}>{DI}\n"
-        "{D}{U}>{DU}\n"
-        "{D}{E}>{DE}\n"
-        "{D}{O}>{DO}\n"
-        "{D}{Y}{A}>{DI}{XYA}\n"
-        "{D}{Y}{I}>{DI}{XI}\n"
-        "{D}{Y}{U}>{DI}{XYU}\n"
-        "{D}{Y}{E}>{DI}{XE}\n"
-        "{D}{Y}{O}>{DI}{XYO}\n"
-        "{D}{H}{A}>{DE}{XYA}\n"
-        "{D}{H}{I}>{DE}{XI}\n"
-        "{D}{H}{U}>{DE}{XYU}\n"
-        "{D}{H}{E}>{DE}{XE}\n"
-        "{D}{H}{O}>{DE}{XYO}\n"
-        "{D}[{D}>{XTU}\n"
-
-        "{E}>{^E}\n"
-
-        "{F}{A}>{HU}{XA}\n"
-        "{F}{I}>{HU}{XI}\n"
-        "{F}{E}>{HU}{XE}\n"
-        "{F}{O}>{HU}{XO}\n"
-        "{F}{Y}{A}>{HU}{XYA}\n"
-        "{F}{Y}{I}>{HU}{XI}\n"
-        "{F}{Y}{U}>{HU}{XYU}\n"
-        "{F}{Y}{E}>{HU}{XE}\n"
-        "{F}{Y}{O}>{HU}{XYO}\n"
-        "{F}[{F}>{XTU}\n"
-
-        "{G}{A}>{GA}\n"
-        "{G}{I}>{GI}\n"
-        "{G}{U}>{GU}\n"
-        "{G}{E}>{GE}\n"
-        "{G}{O}>{GO}\n"
-        "{G}{Y}{A}>{GI}{XYA}\n"
-        "{G}{Y}{I}>{GI}{XI}\n"
-        "{G}{Y}{U}>{GI}{XYU}\n"
-        "{G}{Y}{E}>{GI}{XE}\n"
-        "{G}{Y}{O}>{GI}{XYO}\n"
-        "{G}{W}{A}>{GU}{XWA}\n"
-        "{G}{W}{I}>{GU}{XI}\n"
-        "{G}{W}{U}>{GU}{XU}\n"
-        "{G}{W}{E}>{GU}{XE}\n"
-        "{G}{W}{O}>{GU}{XO}\n"
-        "{G}[{G}>{XTU}\n"
-
-        "{H}{A}>{HA}\n"
-        "{H}{I}>{HI}\n"
-        "{H}{U}>{HU}\n"
-        "{H}{E}>{HE}\n"
-        "{H}{O}>{HO}\n"
-        "{H}{Y}{A}>{HI}{XYA}\n"
-        "{H}{Y}{I}>{HI}{XI}\n"
-        "{H}{Y}{U}>{HI}{XYU}\n"
-        "{H}{Y}{E}>{HI}{XE}\n"
-        "{H}{Y}{O}>{HI}{XYO}\n"
-        "{H}[{H}>{XTU}\n"
-
-        "{I}>{^I}\n"
-
-        "{K}{A}>{KA}\n"
-        "{K}{I}>{KI}\n"
-        "{K}{U}>{KU}\n"
-        "{K}{E}>{KE}\n"
-        "{K}{O}>{KO}\n"
-        "{K}{W}{A}>{KU}{XWA}\n"
-        "{K}{W}{I}>{KU}{XI}\n"
-        "{K}{W}{U}>{KU}{XU}\n"
-        "{K}{W}{E}>{KU}{XE}\n"
-        "{K}{W}{O}>{KU}{XO}\n"
-        "{K}{Y}{A}>{KI}{XYA}\n"
-        "{K}{Y}{I}>{KI}{XI}\n"
-        "{K}{Y}{U}>{KI}{XYU}\n"
-        "{K}{Y}{E}>{KI}{XE}\n"
-        "{K}{Y}{O}>{KI}{XYO}\n"
-        "{K}[{K}>{XTU}\n"
-
-
-        "{M}{A}>{MA}\n"
-        "{M}{I}>{MI}\n"
-        "{M}{U}>{MU}\n"
-        "{M}{E}>{ME}\n"
-        "{M}{O}>{MO}\n"
-        "{M}{Y}{A}>{MI}{XYA}\n"
-        "{M}{Y}{I}>{MI}{XI}\n"
-        "{M}{Y}{U}>{MI}{XYU}\n"
-        "{M}{Y}{E}>{MI}{XE}\n"
-        "{M}{Y}{O}>{MI}{XYO}\n"
-        "{M}[{M}>{^N}\n"
-        "{M}{quote}>{^N}\n"
-        "{M}[{P}>{^N}\n"
-        "{M}[{B}>{^N}\n"
-        "{M}[{F}>{^N}\n"
-        "{M}[{V}>{^N}\n"
-
-        "{N}{A}>{NA}\n"
-        "{N}{I}>{NI}\n"
-        "{N}{U}>{NU}\n"
-        "{N}{E}>{NE}\n"
-        "{N}{O}>{NO}\n"
-        "{N}{Y}{A}>{NI}{XYA}\n"
-        "{N}{Y}{I}>{NI}{XI}\n"
-        "{N}{Y}{U}>{NI}{XYU}\n"
-        "{N}{Y}{E}>{NI}{XE}\n"
-        "{N}{Y}{O}>{NI}{XYO}\n"
-        "{N}{N}>{^N}\n"
-        "{N}{quote}>{^N}\n"
-        "{N}>{^N}\n"
-
-        "{O}>{^O}\n"
-
-        "{P}{A}>{PA}\n"
-        "{P}{I}>{PI}\n"
-        "{P}{U}>{PU}\n"
-        "{P}{E}>{PE}\n"
-        "{P}{O}>{PO}\n"
-        "{P}{Y}{A}>{PI}{XYA}\n"
-        "{P}{Y}{I}>{PI}{XI}\n"
-        "{P}{Y}{U}>{PI}{XYU}\n"
-        "{P}{Y}{E}>{PI}{XE}\n"
-        "{P}{Y}{O}>{PI}{XYO}\n"
-        "{P}[{P}>{XTU}\n"
-
-        "{Q}{A}>{KU}{XA}\n"
-        "{Q}{I}>{KU}{XI}\n"
-        "{Q}{U}>{KU}{XU}\n"
-        "{Q}{E}>{KU}{XE}\n"
-        "{Q}{O}>{KU}{XO}\n"
-        "{Q}{Y}{A}>{KU}{XYA}\n"
-        "{Q}{Y}{I}>{KU}{XI}\n"
-        "{Q}{Y}{U}>{KU}{XYU}\n"
-        "{Q}{Y}{E}>{KU}{XE}\n"
-        "{Q}{Y}{O}>{KU}{XYO}\n"
-        "{Q}[{Q}>{XTU}\n"
-
-        "{R}{A}>{RA}\n"
-        "{R}{I}>{RI}\n"
-        "{R}{U}>{RU}\n"
-        "{R}{E}>{RE}\n"
-        "{R}{O}>{RO}\n"
-        "{R}{Y}{A}>{RI}{XYA}\n"
-        "{R}{Y}{I}>{RI}{XI}\n"
-        "{R}{Y}{U}>{RI}{XYU}\n"
-        "{R}{Y}{E}>{RI}{XE}\n"
-        "{R}{Y}{O}>{RI}{XYO}\n"
-        "{R}[{R}>{XTU}\n"
-
-        "{S}{A}>{SA}\n"
-        "{S}{I}>{SI}\n"
-        "{S}{U}>{SU}\n"
-        "{S}{E}>{SE}\n"
-        "{S}{O}>{SO}\n"
-        "{S}{Y}{A}>{SI}{XYA}\n"
-        "{S}{Y}{I}>{SI}{XI}\n"
-        "{S}{Y}{U}>{SI}{XYU}\n"
-        "{S}{Y}{E}>{SI}{XE}\n"
-        "{S}{Y}{O}>{SI}{XYO}\n"
-        "{S}[{S}{H}>{XTU}\n"
-        "{S}[{S}>{XTU}\n"
-
-        "{T}{A}>{TA}\n"
-        "{T}{I}>{TI}\n"
-        "{T}{U}>{TU}\n"
-        "{T}{E}>{TE}\n"
-        "{T}{O}>{TO}\n"
-        "{T}{H}{A}>{TE}{XYA}\n"
-        "{T}{H}{I}>{TE}{XI}\n"
-        "{T}{H}{U}>{TE}{XYU}\n"
-        "{T}{H}{E}>{TE}{XE}\n"
-        "{T}{H}{O}>{TE}{XYO}\n"
-        "{T}{S}{A}>{TU}{XA}\n"
-        "{T}{S}{I}>{TU}{XI}\n"
-        "{T}{S}{E}>{TU}{XE}\n"
-        "{T}{S}{O}>{TU}{XO}\n"
-
-        "{T}{Y}{A}>{TI}{XYA}\n"
-        "{T}{Y}{I}>{TI}{XI}\n"
-        "{T}{Y}{U}>{TI}{XYU}\n"
-        "{T}{Y}{E}>{TI}{XE}\n"
-        "{T}{Y}{O}>{TI}{XYO}\n"
-        "{T}[{T}{S}>{XTU}\n"
-        "{T}[{C}{H}>{XTU}\n"
-        "{T}[{T}>{XTU}\n"
-
-        "{U}>{^U}\n"
-
-        "{V}{A}>{VA}\n"
-        "{V}{I}>{VI}\n"
-        "{V}{U}>{VU}\n"
-        "{V}{E}>{VE}\n"
-        "{V}{O}>{VO}\n"
-
-
-        "{V}{Y}{A}>{VI}{XYA}\n"
-        "{V}{Y}{I}>{VI}{XI}\n"
-        "{V}{Y}{U}>{VI}{XYU}\n"
-        "{V}{Y}{E}>{VI}{XE}\n"
-        "{V}{Y}{O}>{VI}{XYO}\n"
-        "{V}[{V}>{XTU}\n"
-
-        "{W}{A}>{WA}\n"
-        "{W}{I}>{WI}\n"
-        "{W}{U}>{^U}\n"
-        "{W}{E}>{WE}\n"
-        "{W}{O}>{WO}\n"
-        "{W}[{W}>{XTU}\n"
-
-        "{Y}{A}>{YA}\n"
-        "{Y}{U}>{YU}\n"
-        "{Y}{E}>{^I}{XE}\n"
-        "{Y}{O}>{YO}\n"
-        "{Y}[{Y}>{XTU}\n"
-
-        "{Z}{A}>{ZA}\n"
-        "{Z}{I}>{ZI}\n"
-        "{Z}{U}>{ZU}\n"
-        "{Z}{E}>{ZE}\n"
-        "{Z}{O}>{ZO}\n"
-        "{Z}{Y}{A}>{ZI}{XYA}\n"
-        "{Z}{Y}{I}>{ZI}{XI}\n"
-        "{Z}{Y}{U}>{ZI}{XYU}\n"
-        "{Z}{Y}{E}>{ZI}{XE}\n"
-        "{Z}{Y}{O}>{ZI}{XYO}\n"
-        "{Z}[{Z}>{XTU}\n"
-
-        "{X}{A}>{XA}\n"
-        "{X}{I}>{XI}\n"
-        "{X}{U}>{XU}\n"
-        "{X}{E}>{XE}\n"
-        "{X}{O}>{XO}\n"
-        "{X}{K}{A}>{XKA}\n"
-        "{X}{K}{E}>{XKE}\n"
-        "{X}{T}{U}>{XTU}\n"
-        "{X}{W}{A}>{XWA}\n"
-        "{X}{Y}{A}>{XYA}\n"
-        "{X}{Y}{U}>{XYU}\n"
-        "{X}{Y}{O}>{XYO}\n"
-
-        // OPTIONAL MAPPINGS
-        "{C}{A}>{KA}\n"
-        "{C}{I}>{SI}\n"
-        "{C}{U}>{KU}\n"
-        "{C}{E}>{SE}\n"
-        "{C}{O}>{KO}\n"
-        "{C}{H}{A}>{TI}{XYA}\n"
-        "{C}{H}{U}>{TI}{XYU}\n"
-        "{C}{H}{E}>{TI}{XE}\n"
-        "{C}{H}{O}>{TI}{XYO}\n"
-        "{C}{Y}{A}>{TI}{XYA}\n"
-        "{C}{Y}{I}>{TI}{XI}\n"
-        "{C}{Y}{U}>{TI}{XYU}\n"
-        "{C}{Y}{E}>{TI}{XE}\n"
-        "{C}{Y}{O}>{TI}{XYO}\n"
-        "{C}{H}{I}>{TI}\n"
-        "{C}[{K}>{XTU}\n"
-        "{C}[{C}>{XTU}\n"
-
-        "{F}{U}>{HU}\n"
-
-        "{J}{A}>{ZI}{XYA}\n"
-        "{J}{U}>{ZI}{XYU}\n"
-        "{J}{E}>{ZI}{XE}\n"
-        "{J}{O}>{ZI}{XYO}\n"
-        "{J}{Y}{A}>{ZI}{XYA}\n"
-        "{J}{Y}{I}>{ZI}{XI}\n"
-        "{J}{Y}{U}>{ZI}{XYU}\n"
-        "{J}{Y}{E}>{ZI}{XE}\n"
-        "{J}{Y}{O}>{ZI}{XYO}\n"
-        "{J}{I}>{ZI}\n"
-        "{J}[{J}>{XTU}\n"
-
-        "{L}{A}>{RA}\n"
-        "{L}{I}>{RI}\n"
-        "{L}{U}>{RU}\n"
-        "{L}{E}>{RE}\n"
-        "{L}{O}>{RO}\n"
-        "{L}{Y}{A}>{RI}{XYA}\n"
-        "{L}{Y}{I}>{RI}{XI}\n"
-        "{L}{Y}{U}>{RI}{XYU}\n"
-        "{L}{Y}{E}>{RI}{XE}\n"
-        "{L}{Y}{O}>{RI}{XYO}\n"
-        "{L}[{L}>{XTU}\n"
-        "{L}>{RU}\n"
-
-        "{S}{H}{A}>{SI}{XYA}\n"
-        "{S}{H}{I}>{SI}\n"
-        "{S}{H}{U}>{SI}{XYU}\n"
-        "{S}{H}{E}>{SI}{XE}\n"
-        "{S}{H}{O}>{SI}{XYO}\n"
-
-        "{T}{S}{U}>{TU}\n"
-
-        "{Y}{I}>{^I}\n"
-
-        "{X}{T}{S}{U}>{XTU}\n"
-        "{X}{Y}{I}>{XI}\n"
-        "{X}{Y}{E}>{XE}\n"
-
-
-        //CONVERSIONS FROM full width ROMAN TO KANA
-        //#######################################
-        // HERE ARE ALTERNATE MAPPINGS USED IN SOME WORD PROCESSORS
-        //KWA>{KU}{XA}
-        //GWA>{GU}{XA}
-        //WI>{^U}{XI}
-        //WI>{^U}{XE}
-        //VA>{VU}{XA}
-        //VI>{VU}{XI}
-        //VE>{VU}{XE}
-        //VO>{VU}{XO}
-
-        // REMEMBER THAT THE ORDER IS VERY SIGNIFICANT: ALWAYS PUT LONGER BEFORE SHORTER ELEMENTS
-
-        // {-}>{TYOUON}	  # already there in previous section
-
-        "{A1}>{^A}\n"
-
-        "{B1}{A1}>{BA}\n"
-        "{B1}{I1}>{BI}\n"
-        "{B1}{U1}>{BU}\n"
-        "{B1}{E1}>{BE}\n"
-        "{B1}{O1}>{BO}\n"
-        "{B1}{Y1}{A1}>{BI}{XYA}\n"
-        "{B1}{Y1}{I1}>{BI}{XI}\n"
-        "{B1}{Y1}{U1}>{BI}{XYU}\n"
-        "{B1}{Y1}{E1}>{BI}{XE}\n"
-        "{B1}{Y1}{O1}>{BI}{XYO}\n"
-        "{B1}[{B1}>{XTU}\n"
-
-
-        "{D1}{A1}>{DA}\n"
-        "{D1}{I1}>{DI}\n"
-        "{D1}{U1}>{DU}\n"
-        "{D1}{E1}>{DE}\n"
-        "{D1}{O1}>{DO}\n"
-        "{D1}{Y1}{A1}>{DI}{XYA}\n"
-        "{D1}{Y1}{I1}>{DI}{XI}\n"
-        "{D1}{Y1}{U1}>{DI}{XYU}\n"
-        "{D1}{Y1}{E1}>{DI}{XE}\n"
-        "{D1}{Y1}{O1}>{DI}{XYO}\n"
-        "{D1}{H1}{A1}>{DE}{XYA}\n"
-        "{D1}{H1}{I1}>{DE}{XI}\n"
-        "{D1}{H1}{U1}>{DE}{XYU}\n"
-        "{D1}{H1}{E1}>{DE}{XE}\n"
-        "{D1}{H1}{O1}>{DE}{XYO}\n"
-        "{D1}[{D1}>{XTU}\n"
-
-        "{E1}>{^E}\n"
-
-        "{F1}{A1}>{HU}{XA}\n"
-        "{F1}{I1}>{HU}{XI}\n"
-        "{F1}{E1}>{HU}{XE}\n"
-        "{F1}{O1}>{HU}{XO}\n"
-        "{F1}{Y1}{A1}>{HU}{XYA}\n"
-        "{F1}{Y1}{I1}>{HU}{XI}\n"
-        "{F1}{Y1}{U1}>{HU}{XYU}\n"
-        "{F1}{Y1}{E1}>{HU}{XE}\n"
-        "{F1}{Y1}{O1}>{HU}{XYO}\n"
-        "{F1}[{F1}>{XTU}\n"
-
-        "{G1}{A1}>{GA}\n"
-        "{G1}{I1}>{GI}\n"
-        "{G1}{U1}>{GU}\n"
-        "{G1}{E1}>{GE}\n"
-        "{G1}{O1}>{GO}\n"
-        "{G1}{Y1}{A1}>{GI}{XYA}\n"
-        "{G1}{Y1}{I1}>{GI}{XI}\n"
-        "{G1}{Y1}{U1}>{GI}{XYU}\n"
-        "{G1}{Y1}{E1}>{GI}{XE}\n"
-        "{G1}{Y1}{O1}>{GI}{XYO}\n"
-        "{G1}{W1}{A1}>{GU}{XWA}\n"
-        "{G1}{W1}{I1}>{GU}{XI}\n"
-        "{G1}{W1}{U1}>{GU}{XU}\n"
-        "{G1}{W1}{E1}>{GU}{XE}\n"
-        "{G1}{W1}{O1}>{GU}{XO}\n"
-        "{G1}[{G1}>{XTU}\n"
-
-        "{H1}{A1}>{HA}\n"
-        "{H1}{I1}>{HI}\n"
-        "{H1}{U1}>{HU}\n"
-        "{H1}{E1}>{HE}\n"
-        "{H1}{O1}>{HO}\n"
-        "{H1}{Y1}{A1}>{HI}{XYA}\n"
-        "{H1}{Y1}{I1}>{HI}{XI}\n"
-        "{H1}{Y1}{U1}>{HI}{XYU}\n"
-        "{H1}{Y1}{E1}>{HI}{XE}\n"
-        "{H1}{Y1}{O1}>{HI}{XYO}\n"
-        "{H1}[{H1}>{XTU}\n"
-
-        "{I1}>{^I}\n"
-
-        "{K1}{A1}>{KA}\n"
-        "{K1}{I1}>{KI}\n"
-        "{K1}{U1}>{KU}\n"
-        "{K1}{E1}>{KE}\n"
-        "{K1}{O1}>{KO}\n"
-        "{K1}{W1}{A1}>{KU}{XWA}\n"
-        "{K1}{W1}{I1}>{KU}{XI}\n"
-        "{K1}{W1}{U1}>{KU}{XU}\n"
-        "{K1}{W1}{E1}>{KU}{XE}\n"
-        "{K1}{W1}{O1}>{KU}{XO}\n"
-        "{K1}{Y1}{A1}>{KI}{XYA}\n"
-        "{K1}{Y1}{I1}>{KI}{XI}\n"
-        "{K1}{Y1}{U1}>{KI}{XYU}\n"
-        "{K1}{Y1}{E1}>{KI}{XE}\n"
-        "{K1}{Y1}{O1}>{KI}{XYO}\n"
-        "{K1}[{K1}>{XTU}\n"
-
-
-        "{M1}{A1}>{MA}\n"
-        "{M1}{I1}>{MI}\n"
-        "{M1}{U1}>{MU}\n"
-        "{M1}{E1}>{ME}\n"
-        "{M1}{O1}>{MO}\n"
-        "{M1}{Y1}{A1}>{MI}{XYA}\n"
-        "{M1}{Y1}{I1}>{MI}{XI}\n"
-        "{M1}{Y1}{U1}>{MI}{XYU}\n"
-        "{M1}{Y1}{E1}>{MI}{XE}\n"
-        "{M1}{Y1}{O1}>{MI}{XYO}\n"
-        "{M1}[{M1}>{^N}\n"
-        "{M1}{quote1}>{^N}\n"
-        "{M1}[{P1}>{^N}\n"
-        "{M1}[{B1}>{^N}\n"
-        "{M1}[{F1}>{^N}\n"
-        "{M1}[{V1}>{^N}\n"
-
-        "{N1}{A1}>{NA}\n"
-        "{N1}{I1}>{NI}\n"
-        "{N1}{U1}>{NU}\n"
-        "{N1}{E1}>{NE}\n"
-        "{N1}{O1}>{NO}\n"
-        "{N1}{Y1}{A1}>{NI}{XYA}\n"
-        "{N1}{Y1}{I1}>{NI}{XI}\n"
-        "{N1}{Y1}{U1}>{NI}{XYU}\n"
-        "{N1}{Y1}{E1}>{NI}{XE}\n"
-        "{N1}{Y1}{O1}>{NI}{XYO}\n"
-        "{N1}{N1}>{^N}\n"
-        "{N1}{quote1}>{^N}\n"
-        "{N1}>{^N}\n"
-
-        "{O1}>{^O}\n"
-
-        "{P1}{A1}>{PA}\n"
-        "{P1}{I1}>{PI}\n"
-        "{P1}{U1}>{PU}\n"
-        "{P1}{E1}>{PE}\n"
-        "{P1}{O1}>{PO}\n"
-        "{P1}{Y1}{A1}>{PI}{XYA}\n"
-        "{P1}{Y1}{I1}>{PI}{XI}\n"
-        "{P1}{Y1}{U1}>{PI}{XYU}\n"
-        "{P1}{Y1}{E1}>{PI}{XE}\n"
-        "{P1}{Y1}{O1}>{PI}{XYO}\n"
-        "{P1}[{P1}>{XTU}\n"
-
-        "{Q1}{A1}>{KU}{XA}\n"
-        "{Q1}{I1}>{KU}{XI}\n"
-        "{Q1}{U1}>{KU}{XU}\n"
-        "{Q1}{E1}>{KU}{XE}\n"
-        "{Q1}{O1}>{KU}{XO}\n"
-        "{Q1}{Y1}{A1}>{KU}{XYA}\n"
-        "{Q1}{Y1}{I1}>{KU}{XI}\n"
-        "{Q1}{Y1}{U1}>{KU}{XYU}\n"
-        "{Q1}{Y1}{E1}>{KU}{XE}\n"
-        "{Q1}{Y1}{O1}>{KU}{XYO}\n"
-        "{Q1}[{Q1}>{XTU}\n"
-
-        "{R1}{A1}>{RA}\n"
-        "{R1}{I1}>{RI}\n"
-        "{R1}{U1}>{RU}\n"
-        "{R1}{E1}>{RE}\n"
-        "{R1}{O1}>{RO}\n"
-        "{R1}{Y1}{A1}>{RI}{XYA}\n"
-        "{R1}{Y1}{I1}>{RI}{XI}\n"
-        "{R1}{Y1}{U1}>{RI}{XYU}\n"
-        "{R1}{Y1}{E1}>{RI}{XE}\n"
-        "{R1}{Y1}{O1}>{RI}{XYO}\n"
-        "{R1}[{R1}>{XTU}\n"
-
-        "{S1}{A1}>{SA}\n"
-        "{S1}{I1}>{SI}\n"
-        "{S1}{U1}>{SU}\n"
-        "{S1}{E1}>{SE}\n"
-        "{S1}{O1}>{SO}\n"
-        "{S1}{Y1}{A1}>{SI}{XYA}\n"
-        "{S1}{Y1}{I1}>{SI}{XI}\n"
-        "{S1}{Y1}{U1}>{SI}{XYU}\n"
-        "{S1}{Y1}{E1}>{SI}{XE}\n"
-        "{S1}{Y1}{O1}>{SI}{XYO}\n"
-        "{S1}[{S1}{H1}>{XTU}\n"
-        "{S1}[{S1}>{XTU}\n"
-
-        "{T1}{A1}>{TA}\n"
-        "{T1}{I1}>{TI}\n"
-        "{T1}{U1}>{TU}\n"
-        "{T1}{E1}>{TE}\n"
-        "{T1}{O1}>{TO}\n"
-        "{T1}{H1}{A1}>{TE}{XYA}\n"
-        "{T1}{H1}{I1}>{TE}{XI}\n"
-        "{T1}{H1}{U1}>{TE}{XYU}\n"
-        "{T1}{H1}{E1}>{TE}{XE}\n"
-        "{T1}{H1}{O1}>{TE}{XYO}\n"
-        "{T1}{S1}{A1}>{TU}{XA}\n"
-        "{T1}{S1}{I1}>{TU}{XI}\n"
-        "{T1}{S1}{E1}>{TU}{XE}\n"
-        "{T1}{S1}{O1}>{TU}{XO}\n"
-
-        "{T1}{Y1}{A1}>{TI}{XYA}\n"
-        "{T1}{Y1}{I1}>{TI}{XI}\n"
-        "{T1}{Y1}{U1}>{TI}{XYU}\n"
-        "{T1}{Y1}{E1}>{TI}{XE}\n"
-        "{T1}{Y1}{O1}>{TI}{XYO}\n"
-        "{T1}[{T1}{S1}>{XTU}\n"
-        "{T1}[{C1}{H1}>{XTU}\n"
-        "{T1}[{T1}>{XTU}\n"
-
-        "{U1}>{^U}\n"
-
-        "{V1}{A1}>{VA}\n"
-        "{V1}{I1}>{VI}\n"
-        "{V1}{U1}>{VU}\n"
-        "{V1}{E1}>{VE}\n"
-        "{V1}{O1}>{VO}\n"
-
-
-        "{V1}{Y1}{A1}>{VI}{XYA}\n"
-        "{V1}{Y1}{I1}>{VI}{XI}\n"
-        "{V1}{Y1}{U1}>{VI}{XYU}\n"
-        "{V1}{Y1}{E1}>{VI}{XE}\n"
-        "{V1}{Y1}{O1}>{VI}{XYO}\n"
-        "{V1}[{V1}>{XTU}\n"
-
-        "{W1}{A1}>{WA}\n"
-        "{W1}{I1}>{WI}\n"
-        "{W1}{U1}>{^U}\n"
-        "{W1}{E1}>{WE}\n"
-        "{W1}{O1}>{WO}\n"
-        "{W1}[{W1}>{XTU}\n"
-
-        "{Y1}{A1}>{YA}\n"
-        "{Y1}{U1}>{YU}\n"
-        "{Y1}{E1}>{^I}{XE}\n"
-        "{Y1}{O1}>{YO}\n"
-        "{Y1}[{Y1}>{XTU}\n"
-
-        "{Z1}{A1}>{ZA}\n"
-        "{Z1}{I1}>{ZI}\n"
-        "{Z1}{U1}>{ZU}\n"
-        "{Z1}{E1}>{ZE}\n"
-        "{Z1}{O1}>{ZO}\n"
-        "{Z1}{Y1}{A1}>{ZI}{XYA}\n"
-        "{Z1}{Y1}{I1}>{ZI}{XI}\n"
-        "{Z1}{Y1}{U1}>{ZI}{XYU}\n"
-        "{Z1}{Y1}{E1}>{ZI}{XE}\n"
-        "{Z1}{Y1}{O1}>{ZI}{XYO}\n"
-        "{Z1}[{Z1}>{XTU}\n"
-
-        "{X1}{A1}>{XA}\n"
-        "{X1}{I1}>{XI}\n"
-        "{X1}{U1}>{XU}\n"
-        "{X1}{E1}>{XE}\n"
-        "{X1}{O1}>{XO}\n"
-        "{X1}{K1}{A1}>{XKA}\n"
-        "{X1}{K1}{E1}>{XKE}\n"
-        "{X1}{T1}{U1}>{XTU}\n"
-        "{X1}{W1}{A1}>{XWA}\n"
-        "{X1}{Y1}{A1}>{XYA}\n"
-        "{X1}{Y1}{U1}>{XYU}\n"
-        "{X1}{Y1}{O1}>{XYO}\n"
-
-        // OPTIONAL MAPPINGS
-        "{C1}{A1}>{KA}\n"
-        "{C1}{I1}>{SI}\n"
-        "{C1}{U1}>{KU}\n"
-        "{C1}{E1}>{SE}\n"
-        "{C1}{O1}>{KO}\n"
-        "{C1}{H1}{A1}>{TI}{XYA}\n"
-        "{C1}{H1}{U1}>{TI}{XYU}\n"
-        "{C1}{H1}{E1}>{TI}{XE}\n"
-        "{C1}{H1}{O1}>{TI}{XYO}\n"
-        "{C1}{Y1}{A1}>{TI}{XYA}\n"
-        "{C1}{Y1}{I1}>{TI}{XI}\n"
-        "{C1}{Y1}{U1}>{TI}{XYU}\n"
-        "{C1}{Y1}{E1}>{TI}{XE}\n"
-        "{C1}{Y1}{O1}>{TI}{XYO}\n"
-        "{C1}{H1}{I1}>{TI}\n"
-        "{C1}[{K1}>{XTU}\n"
-        "{C1}[{C1}>{XTU}\n"
-
-        "{F1}{U1}>{HU}\n"
-
-        "{J1}{A1}>{ZI}{XYA}\n"
-        "{J1}{U1}>{ZI}{XYU}\n"
-        "{J1}{E1}>{ZI}{XE}\n"
-        "{J1}{O1}>{ZI}{XYO}\n"
-        "{J1}{Y1}{A1}>{ZI}{XYA}\n"
-        "{J1}{Y1}{I1}>{ZI}{XI}\n"
-        "{J1}{Y1}{U1}>{ZI}{XYU}\n"
-        "{J1}{Y1}{E1}>{ZI}{XE}\n"
-        "{J1}{Y1}{O1}>{ZI}{XYO}\n"
-        "{J1}{I1}>{ZI}\n"
-        "{J1}[{J1}>{XTU}\n"
-
-        "{L1}{A1}>{RA}\n"
-        "{L1}{I1}>{RI}\n"
-        "{L1}{U1}>{RU}\n"
-        "{L1}{E1}>{RE}\n"
-        "{L1}{O1}>{RO}\n"
-        "{L1}{Y1}{A1}>{RI}{XYA}\n"
-        "{L1}{Y1}{I1}>{RI}{XI}\n"
-        "{L1}{Y1}{U1}>{RI}{XYU}\n"
-        "{L1}{Y1}{E1}>{RI}{XE}\n"
-        "{L1}{Y1}{O1}>{RI}{XYO}\n"
-        "{L1}[{L1}>{XTU}\n"
-        "{L1}>{RU}\n"
-
-        "{S1}{H1}{A1}>{SI}{XYA}\n"
-        "{S1}{H1}{I1}>{SI}\n"
-        "{S1}{H1}{U1}>{SI}{XYU}\n"
-        "{S1}{H1}{E1}>{SI}{XE}\n"
-        "{S1}{H1}{O1}>{SI}{XYO}\n"
-
-        "{T1}{S1}{U1}>{TU}\n"
-
-        "{Y1}{I1}>{^I}\n"
-
-        "{X1}{T1}{S1}{U1}>{XTU}\n"
-        "{X1}{Y1}{I1}>{XI}\n"
-        "{X1}{Y1}{E1}>{XE}\n"
-
-
-        //generally the last rule (moved here)
-        "{quote}>\n"
-
-
-        //#######################################
-        // Conversions from hiragana to roman
-        //#######################################
-        // remember that the order is very significant: always put longer before shorter elements
-
-        "{g}{a}<{ga}\n"
-        "{g}{y}{a}<{gi}{xya}\n"
-        "{g}{y}{i}<{gi}{xi}\n"
-        "{g}{y}{u}<{gi}{xyu}\n"
-        "{g}{y}{e}<{gi}{xe}\n"
-        "{g}{y}{o}<{gi}{xyo}\n"
-        "{g}{i}<{gi}\n"
-        "{g}{w}{a}<{gu}{xwa}\n"
-        "{g}{w}{i}<{gu}{xi}\n"
-        "{g}{w}{u}<{gu}{xu}\n"
-        "{g}{w}{e}<{gu}{xe}\n"
-        "{g}{w}{o}<{gu}{xo}\n"
-        "{g}{u}<{gu}\n"
-        "{g}{e}<{ge}\n"
-        "{g}{o}<{go}\n"
-
-        "{k}{a}<{ka}\n"
-        "{k}{y}{a}<{ki}{xya}\n"
-        "{k}{y}{i}<{ki}{xi}\n"
-        "{k}{y}{u}<{ki}{xyu}\n"
-        "{k}{y}{e}<{ki}{xe}\n"
-        "{k}{y}{o}<{ki}{xyo}\n"
-        "{k}{i}<{ki}\n"
-        "{k}{w}{a}<{ku}{xwa}\n"
-        "{k}{w}{i}<{ku}{xi}\n"
-        "{k}{w}{u}<{ku}{xu}\n"
-        "{k}{w}{e}<{ku}{xe}\n"
-        "{k}{w}{o}<{ku}{xo}\n"
-        "{q}{a}<{ku}{xa}\n"
-        "{q}{y}{a}<{ku}{xya}\n"
-        "{q}{y}{u}<{ku}{xyu}\n"
-        "{q}{y}{o}<{ku}{xyo}\n"
-        "{k}{u}<{ku}\n"
-        "{k}{e}<{ke}\n"
-        "{k}{o}<{ko}\n"
-
-
-        "{z}{a}<{za}\n"
-        "{z}{y}{a}<{zi}{xya}\n"
-        "{z}{y}{i}<{zi}{xi}\n"
-        "{z}{y}{u}<{zi}{xyu}\n"
-        "{z}{y}{e}<{zi}{xe}\n"
-        "{z}{y}{o}<{zi}{xyo}\n"
-        "{z}{i}<{zi}\n"
-        "{z}{u}<{zu}\n"
-        "{z}{e}<{ze}\n"
-        "{z}{o}<{zo}\n"
-
-        "{s}{a}<{sa}\n"
-        "{s}{y}{a}<{si}{xya}\n"
-        "{s}{y}{i}<{si}{xi}\n"
-        "{s}{y}{u}<{si}{xyu}\n"
-        "{s}{y}{e}<{si}{xe}\n"
-        "{s}{y}{o}<{si}{xyo}\n"
-        "{s}{i}<{si}\n"
-        "{s}{u}<{su}\n"
-        "{s}{e}<{se}\n"
-        "{s}{o}<{so}\n"
-
-        "{d}{a}<{da}\n"
-        "{d}{y}{a}<{di}{xya}\n"
-        "{d}{i}<{di}{xi}\n"
-        "{d}{y}{u}<{di}{xyu}\n"
-        "{d}{y}{e}<{di}{xe}\n"
-        "{d}{y}{o}<{di}{xyo}\n"
-        "{d}{i}<{di}\n"
-        "{d}{u}<{du}\n"
-        "{d}{h}{a}<{de}{xya}\n"
-        "{d}{h}{i}<{de}{xi}\n"
-        "{d}{h}{u}<{de}{xyu}\n"
-        "{d}{h}{e}<{de}{xe}\n"
-        "{d}{h}{o}<{de}{xyo}\n"
-        "{d}{e}<{de}\n"
-        "{d}{o}<{do}\n"
-
-        "{t}{a}<{ta}\n"
-        "{t}{y}{a}<{ti}{xya}\n"
-        "{t}{y}{i}<{ti}{xi}\n"
-        "{t}{y}{u}<{ti}{xyu}\n"
-        "{t}{y}{e}<{ti}{xe}\n"
-        "{t}{y}{o}<{ti}{xyo}\n"
-        "{t}{i}<{ti}\n"
-        "{t}{s}{a}<{tu}{xa}\n"
-        "{t}{s}{i}<{tu}{xi}\n"
-        "{t}{s}{e}<{tu}{xe}\n"
-        "{t}{s}{o}<{tu}{xo}\n"
-        "{t}{u}<{tu}\n"
-        "{t}{h}{a}<{te}{xya}\n"
-        "{t}{h}{i}<{te}{xi}\n"
-        "{t}{h}{u}<{te}{xyu}\n"
-        "{t}{h}{e}<{te}{xe}\n"
-        "{t}{h}{o}<{te}{xyo}\n"
-        "{t}{e}<{te}\n"
-        "{t}{o}<{to}\n"
-
-        "{n}{a}<{na}\n"
-        "{n}{y}{a}<{ni}{xya}\n"
-        "{n}{y}{i}<{ni}{xi}\n"
-        "{n}{y}{u}<{ni}{xyu}\n"
-        "{n}{y}{e}<{ni}{xe}\n"
-        "{n}{y}{o}<{ni}{xyo}\n"
-        "{n}{i}<{ni}\n"
-        "{n}{u}<{nu}\n"
-        "{n}{e}<{ne}\n"
-        "{n}{o}<{no}\n"
-
-        "{b}{a}<{ba}\n"
-        "{b}{y}{a}<{bi}{xya}\n"
-        "{b}{y}{i}<{bi}{xi}\n"
-        "{b}{y}{u}<{bi}{xyu}\n"
-        "{b}{y}{e}<{bi}{xe}\n"
-        "{b}{y}{o}<{bi}{xyo}\n"
-        "{b}{i}<{bi}\n"
-        "{b}{u}<{bu}\n"
-        "{b}{e}<{be}\n"
-        "{b}{o}<{bo}\n"
-
-        "{p}{a}<{pa}\n"
-        "{p}{y}{a}<{pi}{xya}\n"
-        "{p}{y}{i}<{pi}{xi}\n"
-        "{p}{y}{u}<{pi}{xyu}\n"
-        "{p}{y}{e}<{pi}{xe}\n"
-        "{p}{y}{o}<{pi}{xyo}\n"
-        "{p}{i}<{pi}\n"
-        "{p}{u}<{pu}\n"
-        "{p}{e}<{pe}\n"
-        "{p}{o}<{po}\n"
-
-        "{h}{a}<{ha}\n"
-        "{h}{y}{a}<{hi}{xya}\n"
-        "{h}{y}{i}<{hi}{xi}\n"
-        "{h}{y}{u}<{hi}{xyu}\n"
-        "{h}{y}{e}<{hi}{xe}\n"
-        "{h}{y}{o}<{hi}{xyo}\n"
-        "{h}{i}<{hi}\n"
-        "{f}{y}{a}<{hu}{xya}\n"
-        "{f}{y}{u}<{hu}{xyu}\n"
-        "{f}{y}{o}<{hu}{xyo}\n"
-        "{f}{a}<{hu}{xa}\n"
-        "{f}{i}<{hu}{xi}\n"
-        "{f}{e}<{hu}{xe}\n"
-        "{f}{o}<{hu}{xo}\n"
-        "{h}{u}<{hu}\n"
-        "{h}{e}<{he}\n"
-        "{h}{o}<{ho}\n"
-
-        "{m}{a}<{ma}\n"
-        "{m}{y}{a}<{mi}{xya}\n"
-        "{m}{y}{i}<{mi}{xi}\n"
-        "{m}{y}{u}<{mi}{xyu}\n"
-        "{m}{y}{e}<{mi}{xe}\n"
-        "{m}{y}{o}<{mi}{xyo}\n"
-        "{m}{i}<{mi}\n"
-        "{m}{u}<{mu}\n"
-        "{m}{e}<{me}\n"
-        "{m}{o}<{mo}\n"
-
-        "{y}{a}<{ya}\n"
-        "{y}{u}<{yu}\n"
-        "{y}{e}<{^i}{xe}\n"
-        "{y}{o}<{yo}\n"
-        "{x}{y}{a}<{xya}\n"
-        "{x}{y}{u}<{xyu}\n"
-        "{x}{y}{o}<{xyo}\n"
-
-        "{r}{a}<{ra}\n"
-        "{r}{y}{a}<{ri}{xya}\n"
-        "{r}{y}{i}<{ri}{xi}\n"
-        "{r}{y}{u}<{ri}{xyu}\n"
-        "{r}{y}{e}<{ri}{xe}\n"
-        "{r}{y}{o}<{ri}{xyo}\n"
-        "{r}{i}<{ri}\n"
-        "{r}{u}<{ru}\n"
-        "{r}{e}<{re}\n"
-        "{r}{o}<{ro}\n"
-
-        "{w}{a}<{wa}\n"
-        "{w}{i}<{wi}\n"
-        "{w}{e}<{we}\n"
-        "{w}{o}<{wo}\n"
-        "{w}{u}<{wu}\n"
-
-        "{v}{a}<{va}\n"
-        "{v}{y}{a}<{vi}{xya}\n"
-        "{v}{y}{i}<{vi}{xi}\n"
-        "{v}{y}{u}<{vi}{xyu}\n"
-        "{v}{y}{e}<{vi}{xe}\n"
-        "{v}{y}{o}<{vi}{xyo}\n"
-        // + "{v}{u}<{vu}\n" // Conflicts with Katakana [LIU]
-        // + "{v}{i}<{vi}\n"
-        // + "{v}{e}<{ve}\n"
-        // + "{v}{o}<{vo}\n"
-        "{v}<{xtu}[{vu}\n"
-
-        "{x}{a}<{xa}\n"
-        "{x}{i}<{xi}\n"
-        "{x}{u}<{xu}\n"
-        "{x}{e}<{xe}\n"
-        "{x}{o}<{xo}\n"
-        "{x}{k}{a}<{xka}\n"
-        "{x}{k}{e}<{xke}\n"
-
-        "{n}''<{^n}[{^a}\n"
-        "{n}''<{^n}[{^i}\n"
-        "{n}''<{^n}[{^u}\n"
-        "{n}''<{^n}[{^e}\n"
-        "{n}''<{^n}[{^o}\n"
-        "{n}''<{^n}[{na}\n"
-        "{n}''<{^n}[{ni}\n"
-        "{n}''<{^n}[{nu}\n"
-        "{n}''<{^n}[{ne}\n"
-        "{n}''<{^n}[{no}\n"
-        "{n}''<{^n}[{ya}\n"
-        "{n}''<{^n}[{yu}\n"
-        "{n}''<{^n}[{yo}\n"
-        "{n}''<{^n}[{^n}\n"
-        "{n}<{^n}\n"
-
-
-        "{g}<{xtu}[{ga}\n"
-        "{g}<{xtu}[{gi}\n"
-        "{g}<{xtu}[{gu}\n"
-        "{g}<{xtu}[{ge}\n"
-        "{g}<{xtu}[{go}\n"
-        "{k}<{xtu}[{ka}\n"
-        "{k}<{xtu}[{ki}\n"
-        "{k}<{xtu}[{ku}\n"
-        "{k}<{xtu}[{ke}\n"
-        "{k}<{xtu}[{ko}\n"
-
-        "{z}<{xtu}[{za}\n"
-        "{z}<{xtu}[{zi}\n"
-        "{z}<{xtu}[{zu}\n"
-        "{z}<{xtu}[{ze}\n"
-        "{z}<{xtu}[{zo}\n"
-        "{s}<{xtu}[{sa}\n"
-        "{s}<{xtu}[{si}\n"
-        "{s}<{xtu}[{su}\n"
-        "{s}<{xtu}[{se}\n"
-        "{s}<{xtu}[{so}\n"
-
-        "{d}<{xtu}[{da}\n"
-        "{d}<{xtu}[{di}\n"
-        "{d}<{xtu}[{du}\n"
-        "{d}<{xtu}[{de}\n"
-        "{d}<{xtu}[{do}\n"
-        "{t}<{xtu}[{ta}\n"
-        "{t}<{xtu}[{ti}\n"
-        "{t}<{xtu}[{tu}\n"
-        "{t}<{xtu}[{te}\n"
-        "{t}<{xtu}[{to}\n"
-
-
-        "{b}<{xtu}[{ba}\n"
-        "{b}<{xtu}[{bi}\n"
-        "{b}<{xtu}[{bu}\n"
-        "{b}<{xtu}[{be}\n"
-        "{b}<{xtu}[{bo}\n"
-        "{p}<{xtu}[{pa}\n"
-        "{p}<{xtu}[{pi}\n"
-        "{p}<{xtu}[{pu}\n"
-        "{p}<{xtu}[{pe}\n"
-        "{p}<{xtu}[{po}\n"
-        "{h}<{xtu}[{ha}\n"
-        "{h}<{xtu}[{hi}\n"
-        "{h}<{xtu}[{hu}\n"
-        "{h}<{xtu}[{he}\n"
-        "{h}<{xtu}[{ho}\n"
-
-
-        "{r}<{xtu}[{ra}\n"
-        "{r}<{xtu}[{ri}\n"
-        "{r}<{xtu}[{ru}\n"
-        "{r}<{xtu}[{re}\n"
-        "{r}<{xtu}[{ro}\n"
-
-        "{w}<{xtu}[{wa}\n"
-        "{x}{t}{u}<{xtu}\n"
-
-        "{a}<{^a}\n" // Moved this block down [LIU]
-        "{i}<{^i}\n"
-        "{u}<{^u}\n"
-        "{e}<{^e}\n"
-        "{o}<{^o}\n"
-
-        //#######################################
-        // CONVERSIONS FROM KANA TO ROMAN
-        //#######################################
-        // REMEMBER THAT THE ORDER IS VERY SIGNIFICANT: ALWAYS PUT LONGER BEFORE SHORTER ELEMENTS
-
-        "{-}<{TYOUON}\n" // Liu
-
-        "{G}{A}<{GA}\n"
-        "{G}{Y}{A}<{GI}{XYA}\n"
-        "{G}{Y}{I}<{GI}{XI}\n"
-        "{G}{Y}{U}<{GI}{XYU}\n"
-        "{G}{Y}{E}<{GI}{XE}\n"
-        "{G}{Y}{O}<{GI}{XYO}\n"
-        "{G}{I}<{GI}\n"
-        "{G}{W}{A}<{GU}{XWA}\n"
-        "{G}{W}{I}<{GU}{XI}\n"
-        "{G}{W}{U}<{GU}{XU}\n"
-        "{G}{W}{E}<{GU}{XE}\n"
-        "{G}{W}{O}<{GU}{XO}\n"
-        "{G}{U}<{GU}\n"
-        "{G}{E}<{GE}\n"
-        "{G}{O}<{GO}\n"
-
-        "{K}{A}<{KA}\n"
-        "{K}{Y}{A}<{KI}{XYA}\n"
-        "{K}{Y}{I}<{KI}{XI}\n"
-        "{K}{Y}{U}<{KI}{XYU}\n"
-        "{K}{Y}{E}<{KI}{XE}\n"
-        "{K}{Y}{O}<{KI}{XYO}\n"
-        "{K}{I}<{KI}\n"
-        "{K}{W}{A}<{KU}{XWA}\n"
-        "{K}{W}{I}<{KU}{XI}\n"
-        "{K}{W}{U}<{KU}{XU}\n"
-        "{K}{W}{E}<{KU}{XE}\n"
-        "{K}{W}{O}<{KU}{XO}\n"
-        "{Q}{A}<{KU}{XA}\n"
-        "{Q}{Y}{A}<{KU}{XYA}\n"
-        "{Q}{Y}{U}<{KU}{XYU}\n"
-        "{Q}{Y}{O}<{KU}{XYO}\n"
-        "{K}{U}<{KU}\n"
-        "{K}{E}<{KE}\n"
-        "{K}{O}<{KO}\n"
-
-
-        "{Z}{A}<{ZA}\n"
-        "{Z}{Y}{A}<{ZI}{XYA}\n"
-        "{Z}{Y}{I}<{ZI}{XI}\n"
-        "{Z}{Y}{U}<{ZI}{XYU}\n"
-        "{Z}{Y}{E}<{ZI}{XE}\n"
-        "{Z}{Y}{O}<{ZI}{XYO}\n"
-        "{Z}{I}<{ZI}\n"
-        "{Z}{U}<{ZU}\n"
-        "{Z}{E}<{ZE}\n"
-        "{Z}{O}<{ZO}\n"
-
-        "{S}{A}<{SA}\n"
-        "{S}{Y}{A}<{SI}{XYA}\n"
-        "{S}{Y}{I}<{SI}{XI}\n"
-        "{S}{Y}{U}<{SI}{XYU}\n"
-        "{S}{Y}{E}<{SI}{XE}\n"
-        "{S}{Y}{O}<{SI}{XYO}\n"
-        "{S}{I}<{SI}\n"
-        "{S}{U}<{SU}\n"
-        "{S}{E}<{SE}\n"
-        "{S}{O}<{SO}\n"
-
-        "{D}{A}<{DA}\n"
-        "{D}{Y}{A}<{DI}{XYA}\n"
-        "{D}{I}<{DI}{XI}\n"
-        "{D}{Y}{U}<{DI}{XYU}\n"
-        "{D}{Y}{E}<{DI}{XE}\n"
-        "{D}{Y}{O}<{DI}{XYO}\n"
-        "{D}{I}<{DI}\n"
-        "{D}{U}<{DU}\n"
-        "{D}{H}{A}<{DE}{XYA}\n"
-        "{D}{H}{I}<{DE}{XI}\n"
-        "{D}{H}{U}<{DE}{XYU}\n"
-        "{D}{H}{E}<{DE}{XE}\n"
-        "{D}{H}{O}<{DE}{XYO}\n"
-        "{D}{E}<{DE}\n"
-        "{D}{O}<{DO}\n"
-
-        "{T}{A}<{TA}\n"
-        "{T}{Y}{A}<{TI}{XYA}\n"
-        "{T}{Y}{I}<{TI}{XI}\n"
-        "{T}{Y}{U}<{TI}{XYU}\n"
-        "{T}{Y}{E}<{TI}{XE}\n"
-        "{T}{Y}{O}<{TI}{XYO}\n"
-        "{T}{I}<{TI}\n"
-        "{T}{S}{A}<{TU}{XA}\n"
-        "{T}{S}{I}<{TU}{XI}\n"
-        "{T}{S}{E}<{TU}{XE}\n"
-        "{T}{S}{O}<{TU}{XO}\n"
-        "{T}{U}<{TU}\n"
-        "{T}{H}{A}<{TE}{XYA}\n"
-        "{T}{H}{I}<{TE}{XI}\n"
-        "{T}{H}{U}<{TE}{XYU}\n"
-        "{T}{H}{E}<{TE}{XE}\n"
-        "{T}{H}{O}<{TE}{XYO}\n"
-        "{T}{E}<{TE}\n"
-        "{T}{O}<{TO}\n"
-
-        "{N}{A}<{NA}\n"
-        "{N}{Y}{A}<{NI}{XYA}\n"
-        "{N}{Y}{I}<{NI}{XI}\n"
-        "{N}{Y}{U}<{NI}{XYU}\n"
-        "{N}{Y}{E}<{NI}{XE}\n"
-        "{N}{Y}{O}<{NI}{XYO}\n"
-        "{N}{I}<{NI}\n"
-        "{N}{U}<{NU}\n"
-        "{N}{E}<{NE}\n"
-        "{N}{O}<{NO}\n"
-
-        "{B}{A}<{BA}\n"
-        "{B}{Y}{A}<{BI}{XYA}\n"
-        "{B}{Y}{I}<{BI}{XI}\n"
-        "{B}{Y}{U}<{BI}{XYU}\n"
-        "{B}{Y}{E}<{BI}{XE}\n"
-        "{B}{Y}{O}<{BI}{XYO}\n"
-        "{B}{I}<{BI}\n"
-        "{B}{U}<{BU}\n"
-        "{B}{E}<{BE}\n"
-        "{B}{O}<{BO}\n"
-
-        "{P}{A}<{PA}\n"
-        "{P}{Y}{A}<{PI}{XYA}\n"
-        "{P}{Y}{I}<{PI}{XI}\n"
-        "{P}{Y}{U}<{PI}{XYU}\n"
-        "{P}{Y}{E}<{PI}{XE}\n"
-        "{P}{Y}{O}<{PI}{XYO}\n"
-        "{P}{I}<{PI}\n"
-        "{P}{U}<{PU}\n"
-        "{P}{E}<{PE}\n"
-        "{P}{O}<{PO}\n"
-
-        "{H}{A}<{HA}\n"
-        "{H}{Y}{A}<{HI}{XYA}\n"
-        "{H}{Y}{I}<{HI}{XI}\n"
-        "{H}{Y}{U}<{HI}{XYU}\n"
-        "{H}{Y}{E}<{HI}{XE}\n"
-        "{H}{Y}{O}<{HI}{XYO}\n"
-        "{H}{I}<{HI}\n"
-        "{F}{Y}{A}<{HU}{XYA}\n"
-        "{F}{Y}{U}<{HU}{XYU}\n"
-        "{F}{Y}{O}<{HU}{XYO}\n"
-        "{F}{A}<{HU}{XA}\n"
-        "{F}{I}<{HU}{XI}\n"
-        "{F}{E}<{HU}{XE}\n"
-        "{F}{O}<{HU}{XO}\n"
-        "{H}{U}<{HU}\n"
-        "{H}{E}<{HE}\n"
-        "{H}{O}<{HO}\n"
-
-        "{M}{A}<{MA}\n"
-        "{M}{Y}{A}<{MI}{XYA}\n"
-        "{M}{Y}{I}<{MI}{XI}\n"
-        "{M}{Y}{U}<{MI}{XYU}\n"
-        "{M}{Y}{E}<{MI}{XE}\n"
-        "{M}{Y}{O}<{MI}{XYO}\n"
-        "{M}{I}<{MI}\n"
-        "{M}{U}<{MU}\n"
-        "{M}{E}<{ME}\n"
-        "{M}{O}<{MO}\n"
-
-        "{Y}{A}<{YA}\n"
-        "{Y}{U}<{YU}\n"
-        "{Y}{E}<{^I}{XE}\n"
-        "{Y}{O}<{YO}\n"
-        "{X}{Y}{A}<{XYA}\n"
-        "{X}{Y}{U}<{XYU}\n"
-        "{X}{Y}{O}<{XYO}\n"
-
-        "{R}{A}<{RA}\n"
-        "{R}{Y}{A}<{RI}{XYA}\n"
-        "{R}{Y}{I}<{RI}{XI}\n"
-        "{R}{Y}{U}<{RI}{XYU}\n"
-        "{R}{Y}{E}<{RI}{XE}\n"
-        "{R}{Y}{O}<{RI}{XYO}\n"
-        "{R}{I}<{RI}\n"
-        "{R}{U}<{RU}\n"
-        "{R}{E}<{RE}\n"
-        "{R}{O}<{RO}\n"
-
-        "{W}{A}<{WA}\n"
-        "{W}{I}<{WI}\n"
-        "{W}{E}<{WE}\n"
-        "{W}{O}<{WO}\n"
-        "{W}{U}<{WU}\n"
-
-        "{V}{A}<{VA}\n"
-        "{V}{Y}{A}<{VI}{XYA}\n"
-        "{V}{Y}{I}<{VI}{XI}\n"
-        "{V}{Y}{U}<{VI}{XYU}\n"
-        "{V}{Y}{E}<{VI}{XE}\n"
-        "{V}{Y}{O}<{VI}{XYO}\n"
-        "{V}{U}<{VU}\n"
-        "{V}{I}<{VI}\n"
-        "{V}{E}<{VE}\n"
-        "{V}{O}<{VO}\n"
-        "{V}<{XTU}[{VU}\n"
-
-        "{X}{A}<{XA}\n"
-        "{X}{I}<{XI}\n"
-        "{X}{U}<{XU}\n"
-        "{X}{E}<{XE}\n"
-        "{X}{O}<{XO}\n"
-        "{X}{K}{A}<{XKA}\n"
-        "{X}{K}{E}<{XKE}\n"
-
-        "{N}{quote}<{^N}[{^A}\n"
-        "{N}{quote}<{^N}[{^I}\n"
-        "{N}{quote}<{^N}[{^U}\n"
-        "{N}{quote}<{^N}[{^E}\n"
-        "{N}{quote}<{^N}[{^O}\n"
-        "{N}{quote}<{^N}[{NA}\n"
-        "{N}{quote}<{^N}[{NI}\n"
-        "{N}{quote}<{^N}[{NU}\n"
-        "{N}{quote}<{^N}[{NE}\n"
-        "{N}{quote}<{^N}[{NO}\n"
-        "{N}{quote}<{^N}[{YA}\n"
-        "{N}{quote}<{^N}[{YU}\n"
-        "{N}{quote}<{^N}[{YO}\n"
-        "{N}{quote}<{^N}[{^N}\n"
-        "{N}<{^N}\n"
-
-
-        "{G}<{XTU}[{GA}\n"
-        "{G}<{XTU}[{GI}\n"
-        "{G}<{XTU}[{GU}\n"
-        "{G}<{XTU}[{GE}\n"
-        "{G}<{XTU}[{GO}\n"
-        "{K}<{XTU}[{KA}\n"
-        "{K}<{XTU}[{KI}\n"
-        "{K}<{XTU}[{KU}\n"
-        "{K}<{XTU}[{KE}\n"
-        "{K}<{XTU}[{KO}\n"
-
-        "{Z}<{XTU}[{ZA}\n"
-        "{Z}<{XTU}[{ZI}\n"
-        "{Z}<{XTU}[{ZU}\n"
-        "{Z}<{XTU}[{ZE}\n"
-        "{Z}<{XTU}[{ZO}\n"
-        "{S}<{XTU}[{SA}\n"
-        "{S}<{XTU}[{SI}\n"
-        "{S}<{XTU}[{SU}\n"
-        "{S}<{XTU}[{SE}\n"
-        "{S}<{XTU}[{SO}\n"
-
-        "{D}<{XTU}[{DA}\n"
-        "{D}<{XTU}[{DI}\n"
-        "{D}<{XTU}[{DU}\n"
-        "{D}<{XTU}[{DE}\n"
-        "{D}<{XTU}[{DO}\n"
-        "{T}<{XTU}[{TA}\n"
-        "{T}<{XTU}[{TI}\n"
-        "{T}<{XTU}[{TU}\n"
-        "{T}<{XTU}[{TE}\n"
-        "{T}<{XTU}[{TO}\n"
-
-
-        "{B}<{XTU}[{BA}\n"
-        "{B}<{XTU}[{BI}\n"
-        "{B}<{XTU}[{BU}\n"
-        "{B}<{XTU}[{BE}\n"
-        "{B}<{XTU}[{BO}\n"
-        "{P}<{XTU}[{PA}\n"
-        "{P}<{XTU}[{PI}\n"
-        "{P}<{XTU}[{PU}\n"
-        "{P}<{XTU}[{PE}\n"
-        "{P}<{XTU}[{PO}\n"
-        "{H}<{XTU}[{HA}\n"
-        "{H}<{XTU}[{HI}\n"
-        "{H}<{XTU}[{HU}\n"
-        "{H}<{XTU}[{HE}\n"
-        "{H}<{XTU}[{HO}\n"
-
-
-        "{R}<{XTU}[{RA}\n"
-        "{R}<{XTU}[{RI}\n"
-        "{R}<{XTU}[{RU}\n"
-        "{R}<{XTU}[{RE}\n"
-        "{R}<{XTU}[{RO}\n"
-
-        "{W}<{XTU}[{WA}\n"
-        "{X}{T}{U}<{XTU}\n"
-
-        "{A}<{^A}\n" // Moved this block down [LIU]
-        "{I}<{^I}\n"
-        "{U}<{^U}\n"
-        "{E}<{^E}\n"
-        "{O}<{^O}\n"
-
-        //generally the last rule
-        "<{quote}\n"
+    // Mechanically generated from Unicode Character Database
+
+    // multicharacter
+
+    "\u30AC<>\uFF76\uFF9E;"   //  to KATAKANA LETTER GA
+    "\u30AE<>\uFF77\uFF9E;"   //  to KATAKANA LETTER GI
+    "\u30B0<>\uFF78\uFF9E;"   //  to KATAKANA LETTER GU
+    "\u30B2<>\uFF79\uFF9E;"   //  to KATAKANA LETTER GE
+    "\u30B4<>\uFF7A\uFF9E;"   //  to KATAKANA LETTER GO
+    "\u30B6<>\uFF7B\uFF9E;"   //  to KATAKANA LETTER ZA
+    "\u30B8<>\uFF7C\uFF9E;"   //  to KATAKANA LETTER ZI
+    "\u30BA<>\uFF7D\uFF9E;"   //  to KATAKANA LETTER ZU
+    "\u30BC<>\uFF7E\uFF9E;"   //  to KATAKANA LETTER ZE
+    "\u30BE<>\uFF7F\uFF9E;"   //  to KATAKANA LETTER ZO
+    "\u30C0<>\uFF80\uFF9E;"   //  to KATAKANA LETTER DA
+    "\u30C2<>\uFF81\uFF9E;"   //  to KATAKANA LETTER DI
+    "\u30C5<>\uFF82\uFF9E;"   //  to KATAKANA LETTER DU
+    "\u30C7<>\uFF83\uFF9E;"   //  to KATAKANA LETTER DE
+    "\u30C9<>\uFF84\uFF9E;"   //  to KATAKANA LETTER DO
+    "\u30D0<>\uFF8A\uFF9E;"   //  to KATAKANA LETTER BA
+    "\u30D1<>\uFF8A\uFF9F;"   //  to KATAKANA LETTER PA
+    "\u30D3<>\uFF8B\uFF9E;"   //  to KATAKANA LETTER BI
+    "\u30D4<>\uFF8B\uFF9F;"   //  to KATAKANA LETTER PI
+    "\u30D6<>\uFF8C\uFF9E;"   //  to KATAKANA LETTER BU
+    "\u30D7<>\uFF8C\uFF9F;"   //  to KATAKANA LETTER PU
+    "\u30D9<>\uFF8D\uFF9E;"   //  to KATAKANA LETTER BE
+    "\u30DA<>\uFF8D\uFF9F;"   //  to KATAKANA LETTER PE
+    "\u30DC<>\uFF8E\uFF9E;"   //  to KATAKANA LETTER BO
+    "\u30DD<>\uFF8E\uFF9F;"   //  to KATAKANA LETTER PO
+    "\u30F4<>\uFF73\uFF9E;"   //  to KATAKANA LETTER VU
+    "\u30F7<>\uFF9C\uFF9E;"   //  to KATAKANA LETTER VA
+    "\u30FA<>\uFF66\uFF9E;"   //  to KATAKANA LETTER VO
+    
+    // single character
+
+    "\uFF01<>'!';"    //  from FULLWIDTH EXCLAMATION MARK
+    "\uFF02<>'\"';"   //  from FULLWIDTH QUOTATION MARK
+    "\uFF03<>'#';"    //  from FULLWIDTH NUMBER SIGN
+    "\uFF04<>'$';"    //  from FULLWIDTH DOLLAR SIGN
+    "\uFF05<>'%';"    //  from FULLWIDTH PERCENT SIGN
+    "\uFF06<>'&';"    //  from FULLWIDTH AMPERSAND
+    "\uFF07<>'';" //  from FULLWIDTH APOSTROPHE
+    "\uFF08<>'(';"    //  from FULLWIDTH LEFT PARENTHESIS
+    "\uFF09<>')';"    //  from FULLWIDTH RIGHT PARENTHESIS
+    "\uFF0A<>'*';"    //  from FULLWIDTH ASTERISK
+    "\uFF0B<>'+';"    //  from FULLWIDTH PLUS SIGN
+    "\uFF0C<>',';"    //  from FULLWIDTH COMMA
+    "\uFF0D<>'-';"    //  from FULLWIDTH HYPHEN-MINUS
+    "\uFF0E<>'.';"    //  from FULLWIDTH FULL STOP
+    "\uFF0F<>'/';"    //  from FULLWIDTH SOLIDUS
+    "\uFF10<>'0';"    //  from FULLWIDTH DIGIT ZERO
+    "\uFF11<>'1';"    //  from FULLWIDTH DIGIT ONE
+    "\uFF12<>'2';"    //  from FULLWIDTH DIGIT TWO
+    "\uFF13<>'3';"    //  from FULLWIDTH DIGIT THREE
+    "\uFF14<>'4';"    //  from FULLWIDTH DIGIT FOUR
+    "\uFF15<>'5';"    //  from FULLWIDTH DIGIT FIVE
+    "\uFF16<>'6';"    //  from FULLWIDTH DIGIT SIX
+    "\uFF17<>'7';"    //  from FULLWIDTH DIGIT SEVEN
+    "\uFF18<>'8';"    //  from FULLWIDTH DIGIT EIGHT
+    "\uFF19<>'9';"    //  from FULLWIDTH DIGIT NINE
+    "\uFF1A<>':';"    //  from FULLWIDTH COLON
+    "\uFF1B<>';';"    //  from FULLWIDTH SEMICOLON
+    "\uFF1C<>'<';"    //  from FULLWIDTH LESS-THAN SIGN
+    "\uFF1D<>'=';"    //  from FULLWIDTH EQUALS SIGN
+    "\uFF1E<>'>';"    //  from FULLWIDTH GREATER-THAN SIGN
+    "\uFF1F<>'?';"    //  from FULLWIDTH QUESTION MARK
+    "\uFF20<>'@';"    //  from FULLWIDTH COMMERCIAL AT
+    "\uFF21<>A;"  //  from FULLWIDTH LATIN CAPITAL LETTER A
+    "\uFF22<>B;"  //  from FULLWIDTH LATIN CAPITAL LETTER B
+    "\uFF23<>C;"  //  from FULLWIDTH LATIN CAPITAL LETTER C
+    "\uFF24<>D;"  //  from FULLWIDTH LATIN CAPITAL LETTER D
+    "\uFF25<>E;"  //  from FULLWIDTH LATIN CAPITAL LETTER E
+    "\uFF26<>F;"  //  from FULLWIDTH LATIN CAPITAL LETTER F
+    "\uFF27<>G;"  //  from FULLWIDTH LATIN CAPITAL LETTER G
+    "\uFF28<>H;"  //  from FULLWIDTH LATIN CAPITAL LETTER H
+    "\uFF29<>I;"  //  from FULLWIDTH LATIN CAPITAL LETTER I
+    "\uFF2A<>J;"  //  from FULLWIDTH LATIN CAPITAL LETTER J
+    "\uFF2B<>K;"  //  from FULLWIDTH LATIN CAPITAL LETTER K
+    "\uFF2C<>L;"  //  from FULLWIDTH LATIN CAPITAL LETTER L
+    "\uFF2D<>M;"  //  from FULLWIDTH LATIN CAPITAL LETTER M
+    "\uFF2E<>N;"  //  from FULLWIDTH LATIN CAPITAL LETTER N
+    "\uFF2F<>O;"  //  from FULLWIDTH LATIN CAPITAL LETTER O
+    "\uFF30<>P;"  //  from FULLWIDTH LATIN CAPITAL LETTER P
+    "\uFF31<>Q;"  //  from FULLWIDTH LATIN CAPITAL LETTER Q
+    "\uFF32<>R;"  //  from FULLWIDTH LATIN CAPITAL LETTER R
+    "\uFF33<>S;"  //  from FULLWIDTH LATIN CAPITAL LETTER S
+    "\uFF34<>T;"  //  from FULLWIDTH LATIN CAPITAL LETTER T
+    "\uFF35<>U;"  //  from FULLWIDTH LATIN CAPITAL LETTER U
+    "\uFF36<>V;"  //  from FULLWIDTH LATIN CAPITAL LETTER V
+    "\uFF37<>W;"  //  from FULLWIDTH LATIN CAPITAL LETTER W
+    "\uFF38<>X;"  //  from FULLWIDTH LATIN CAPITAL LETTER X
+    "\uFF39<>Y;"  //  from FULLWIDTH LATIN CAPITAL LETTER Y
+    "\uFF3A<>Z;"  //  from FULLWIDTH LATIN CAPITAL LETTER Z
+    "\uFF3B<>'[';"    //  from FULLWIDTH LEFT SQUARE BRACKET
+    "\uFF3C<>'\\';"    //  from FULLWIDTH REVERSE SOLIDUS {double escape - aliu}
+    "\uFF3D<>']';"    //  from FULLWIDTH RIGHT SQUARE BRACKET
+    "\uFF3E<>'^';"    //  from FULLWIDTH CIRCUMFLEX ACCENT
+    "\uFF3F<>'_';"    //  from FULLWIDTH LOW LINE
+    "\uFF40<>'`';"    //  from FULLWIDTH GRAVE ACCENT
+    "\uFF41<>a;"  //  from FULLWIDTH LATIN SMALL LETTER A
+    "\uFF42<>b;"  //  from FULLWIDTH LATIN SMALL LETTER B
+    "\uFF43<>c;"  //  from FULLWIDTH LATIN SMALL LETTER C
+    "\uFF44<>d;"  //  from FULLWIDTH LATIN SMALL LETTER D
+    "\uFF45<>e;"  //  from FULLWIDTH LATIN SMALL LETTER E
+    "\uFF46<>f;"  //  from FULLWIDTH LATIN SMALL LETTER F
+    "\uFF47<>g;"  //  from FULLWIDTH LATIN SMALL LETTER G
+    "\uFF48<>h;"  //  from FULLWIDTH LATIN SMALL LETTER H
+    "\uFF49<>i;"  //  from FULLWIDTH LATIN SMALL LETTER I
+    "\uFF4A<>j;"  //  from FULLWIDTH LATIN SMALL LETTER J
+    "\uFF4B<>k;"  //  from FULLWIDTH LATIN SMALL LETTER K
+    "\uFF4C<>l;"  //  from FULLWIDTH LATIN SMALL LETTER L
+    "\uFF4D<>m;"  //  from FULLWIDTH LATIN SMALL LETTER M
+    "\uFF4E<>n;"  //  from FULLWIDTH LATIN SMALL LETTER N
+    "\uFF4F<>o;"  //  from FULLWIDTH LATIN SMALL LETTER O
+    "\uFF50<>p;"  //  from FULLWIDTH LATIN SMALL LETTER P
+    "\uFF51<>q;"  //  from FULLWIDTH LATIN SMALL LETTER Q
+    "\uFF52<>r;"  //  from FULLWIDTH LATIN SMALL LETTER R
+    "\uFF53<>s;"  //  from FULLWIDTH LATIN SMALL LETTER S
+    "\uFF54<>t;"  //  from FULLWIDTH LATIN SMALL LETTER T
+    "\uFF55<>u;"  //  from FULLWIDTH LATIN SMALL LETTER U
+    "\uFF56<>v;"  //  from FULLWIDTH LATIN SMALL LETTER V
+    "\uFF57<>w;"  //  from FULLWIDTH LATIN SMALL LETTER W
+    "\uFF58<>x;"  //  from FULLWIDTH LATIN SMALL LETTER X
+    "\uFF59<>y;"  //  from FULLWIDTH LATIN SMALL LETTER Y
+    "\uFF5A<>z;"  //  from FULLWIDTH LATIN SMALL LETTER Z
+    "\uFF5B<>'{';"    //  from FULLWIDTH LEFT CURLY BRACKET
+    "\uFF5C<>'|';"    //  from FULLWIDTH VERTICAL LINE
+    "\uFF5D<>'}';"    //  from FULLWIDTH RIGHT CURLY BRACKET
+    "\uFF5E<>'~';"    //  from FULLWIDTH TILDE
+    "\u3002<>\uFF61;" //  to HALFWIDTH IDEOGRAPHIC FULL STOP
+    "\u300C<>\uFF62;" //  to HALFWIDTH LEFT CORNER BRACKET
+    "\u300D<>\uFF63;" //  to HALFWIDTH RIGHT CORNER BRACKET
+    "\u3001<>\uFF64;" //  to HALFWIDTH IDEOGRAPHIC COMMA
+    "\u30FB<>\uFF65;" //  to HALFWIDTH KATAKANA MIDDLE DOT
+    "\u30F2<>\uFF66;" //  to HALFWIDTH KATAKANA LETTER WO
+    "\u30A1<>\uFF67;" //  to HALFWIDTH KATAKANA LETTER SMALL A
+    "\u30A3<>\uFF68;" //  to HALFWIDTH KATAKANA LETTER SMALL I
+    "\u30A5<>\uFF69;" //  to HALFWIDTH KATAKANA LETTER SMALL U
+    "\u30A7<>\uFF6A;" //  to HALFWIDTH KATAKANA LETTER SMALL E
+    "\u30A9<>\uFF6B;" //  to HALFWIDTH KATAKANA LETTER SMALL O
+    "\u30E3<>\uFF6C;" //  to HALFWIDTH KATAKANA LETTER SMALL YA
+    "\u30E5<>\uFF6D;" //  to HALFWIDTH KATAKANA LETTER SMALL YU
+    "\u30E7<>\uFF6E;" //  to HALFWIDTH KATAKANA LETTER SMALL YO
+    "\u30C3<>\uFF6F;" //  to HALFWIDTH KATAKANA LETTER SMALL TU
+    "\u30FC<>\uFF70;" //  to HALFWIDTH KATAKANA-HIRAGANA PROLONGED SOUND MARK
+    "\u30A2<>\uFF71;" //  to HALFWIDTH KATAKANA LETTER A
+    "\u30A4<>\uFF72;" //  to HALFWIDTH KATAKANA LETTER I
+    "\u30A6<>\uFF73;" //  to HALFWIDTH KATAKANA LETTER U
+    "\u30A8<>\uFF74;" //  to HALFWIDTH KATAKANA LETTER E
+    "\u30AA<>\uFF75;" //  to HALFWIDTH KATAKANA LETTER O
+    "\u30AB<>\uFF76;" //  to HALFWIDTH KATAKANA LETTER KA
+    "\u30AD<>\uFF77;" //  to HALFWIDTH KATAKANA LETTER KI
+    "\u30AF<>\uFF78;" //  to HALFWIDTH KATAKANA LETTER KU
+    "\u30B1<>\uFF79;" //  to HALFWIDTH KATAKANA LETTER KE
+    "\u30B3<>\uFF7A;" //  to HALFWIDTH KATAKANA LETTER KO
+    "\u30B5<>\uFF7B;" //  to HALFWIDTH KATAKANA LETTER SA
+    "\u30B7<>\uFF7C;" //  to HALFWIDTH KATAKANA LETTER SI
+    "\u30B9<>\uFF7D;" //  to HALFWIDTH KATAKANA LETTER SU
+    "\u30BB<>\uFF7E;" //  to HALFWIDTH KATAKANA LETTER SE
+    "\u30BD<>\uFF7F;" //  to HALFWIDTH KATAKANA LETTER SO
+    "\u30BF<>\uFF80;" //  to HALFWIDTH KATAKANA LETTER TA
+    "\u30C1<>\uFF81;" //  to HALFWIDTH KATAKANA LETTER TI
+    "\u30C4<>\uFF82;" //  to HALFWIDTH KATAKANA LETTER TU
+    "\u30C6<>\uFF83;" //  to HALFWIDTH KATAKANA LETTER TE
+    "\u30C8<>\uFF84;" //  to HALFWIDTH KATAKANA LETTER TO
+    "\u30CA<>\uFF85;" //  to HALFWIDTH KATAKANA LETTER NA
+    "\u30CB<>\uFF86;" //  to HALFWIDTH KATAKANA LETTER NI
+    "\u30CC<>\uFF87;" //  to HALFWIDTH KATAKANA LETTER NU
+    "\u30CD<>\uFF88;" //  to HALFWIDTH KATAKANA LETTER NE
+    "\u30CE<>\uFF89;" //  to HALFWIDTH KATAKANA LETTER NO
+    "\u30CF<>\uFF8A;" //  to HALFWIDTH KATAKANA LETTER HA
+    "\u30D2<>\uFF8B;" //  to HALFWIDTH KATAKANA LETTER HI
+    "\u30D5<>\uFF8C;" //  to HALFWIDTH KATAKANA LETTER HU
+    "\u30D8<>\uFF8D;" //  to HALFWIDTH KATAKANA LETTER HE
+    "\u30DB<>\uFF8E;" //  to HALFWIDTH KATAKANA LETTER HO
+    "\u30DE<>\uFF8F;" //  to HALFWIDTH KATAKANA LETTER MA
+    "\u30DF<>\uFF90;" //  to HALFWIDTH KATAKANA LETTER MI
+    "\u30E0<>\uFF91;" //  to HALFWIDTH KATAKANA LETTER MU
+    "\u30E1<>\uFF92;" //  to HALFWIDTH KATAKANA LETTER ME
+    "\u30E2<>\uFF93;" //  to HALFWIDTH KATAKANA LETTER MO
+    "\u30E4<>\uFF94;" //  to HALFWIDTH KATAKANA LETTER YA
+    "\u30E6<>\uFF95;" //  to HALFWIDTH KATAKANA LETTER YU
+    "\u30E8<>\uFF96;" //  to HALFWIDTH KATAKANA LETTER YO
+    "\u30E9<>\uFF97;" //  to HALFWIDTH KATAKANA LETTER RA
+    "\u30EA<>\uFF98;" //  to HALFWIDTH KATAKANA LETTER RI
+    "\u30EB<>\uFF99;" //  to HALFWIDTH KATAKANA LETTER RU
+    "\u30EC<>\uFF9A;" //  to HALFWIDTH KATAKANA LETTER RE
+    "\u30ED<>\uFF9B;" //  to HALFWIDTH KATAKANA LETTER RO
+    "\u30EF<>\uFF9C;" //  to HALFWIDTH KATAKANA LETTER WA
+    "\u30F3<>\uFF9D;" //  to HALFWIDTH KATAKANA LETTER N
+    "\u3099<>\uFF9E;" //  to HALFWIDTH KATAKANA VOICED SOUND MARK
+    "\u309A<>\uFF9F;" //  to HALFWIDTH KATAKANA SEMI-VOICED SOUND MARK
+    "\u1160<>\uFFA0;" //  to HALFWIDTH HANGUL FILLER
+    "\u1100<>\uFFA1;" //  to HALFWIDTH HANGUL LETTER KIYEOK
+    "\u1101<>\uFFA2;" //  to HALFWIDTH HANGUL LETTER SSANGKIYEOK
+    "\u11AA<>\uFFA3;" //  to HALFWIDTH HANGUL LETTER KIYEOK-SIOS
+    "\u1102<>\uFFA4;" //  to HALFWIDTH HANGUL LETTER NIEUN
+    "\u11AC<>\uFFA5;" //  to HALFWIDTH HANGUL LETTER NIEUN-CIEUC
+    "\u11AD<>\uFFA6;" //  to HALFWIDTH HANGUL LETTER NIEUN-HIEUH
+    "\u1103<>\uFFA7;" //  to HALFWIDTH HANGUL LETTER TIKEUT
+    "\u1104<>\uFFA8;" //  to HALFWIDTH HANGUL LETTER SSANGTIKEUT
+    "\u1105<>\uFFA9;" //  to HALFWIDTH HANGUL LETTER RIEUL
+    "\u11B0<>\uFFAA;" //  to HALFWIDTH HANGUL LETTER RIEUL-KIYEOK
+    "\u11B1<>\uFFAB;" //  to HALFWIDTH HANGUL LETTER RIEUL-MIEUM
+    "\u11B2<>\uFFAC;" //  to HALFWIDTH HANGUL LETTER RIEUL-PIEUP
+    "\u11B3<>\uFFAD;" //  to HALFWIDTH HANGUL LETTER RIEUL-SIOS
+    "\u11B4<>\uFFAE;" //  to HALFWIDTH HANGUL LETTER RIEUL-THIEUTH
+    "\u11B5<>\uFFAF;" //  to HALFWIDTH HANGUL LETTER RIEUL-PHIEUPH
+    "\u111A<>\uFFB0;" //  to HALFWIDTH HANGUL LETTER RIEUL-HIEUH
+    "\u1106<>\uFFB1;" //  to HALFWIDTH HANGUL LETTER MIEUM
+    "\u1107<>\uFFB2;" //  to HALFWIDTH HANGUL LETTER PIEUP
+    "\u1108<>\uFFB3;" //  to HALFWIDTH HANGUL LETTER SSANGPIEUP
+    "\u1121<>\uFFB4;" //  to HALFWIDTH HANGUL LETTER PIEUP-SIOS
+    "\u1109<>\uFFB5;" //  to HALFWIDTH HANGUL LETTER SIOS
+    "\u110A<>\uFFB6;" //  to HALFWIDTH HANGUL LETTER SSANGSIOS
+    "\u110B<>\uFFB7;" //  to HALFWIDTH HANGUL LETTER IEUNG
+    "\u110C<>\uFFB8;" //  to HALFWIDTH HANGUL LETTER CIEUC
+    "\u110D<>\uFFB9;" //  to HALFWIDTH HANGUL LETTER SSANGCIEUC
+    "\u110E<>\uFFBA;" //  to HALFWIDTH HANGUL LETTER CHIEUCH
+    "\u110F<>\uFFBB;" //  to HALFWIDTH HANGUL LETTER KHIEUKH
+    "\u1110<>\uFFBC;" //  to HALFWIDTH HANGUL LETTER THIEUTH
+    "\u1111<>\uFFBD;" //  to HALFWIDTH HANGUL LETTER PHIEUPH
+    "\u1112<>\uFFBE;" //  to HALFWIDTH HANGUL LETTER HIEUH
+    "\u1161<>\uFFC2;" //  to HALFWIDTH HANGUL LETTER A
+    "\u1162<>\uFFC3;" //  to HALFWIDTH HANGUL LETTER AE
+    "\u1163<>\uFFC4;" //  to HALFWIDTH HANGUL LETTER YA
+    "\u1164<>\uFFC5;" //  to HALFWIDTH HANGUL LETTER YAE
+    "\u1165<>\uFFC6;" //  to HALFWIDTH HANGUL LETTER EO
+    "\u1166<>\uFFC7;" //  to HALFWIDTH HANGUL LETTER E
+    "\u1167<>\uFFCA;" //  to HALFWIDTH HANGUL LETTER YEO
+    "\u1168<>\uFFCB;" //  to HALFWIDTH HANGUL LETTER YE
+    "\u1169<>\uFFCC;" //  to HALFWIDTH HANGUL LETTER O
+    "\u116A<>\uFFCD;" //  to HALFWIDTH HANGUL LETTER WA
+    "\u116B<>\uFFCE;" //  to HALFWIDTH HANGUL LETTER WAE
+    "\u116C<>\uFFCF;" //  to HALFWIDTH HANGUL LETTER OE
+    "\u116D<>\uFFD2;" //  to HALFWIDTH HANGUL LETTER YO
+    "\u116E<>\uFFD3;" //  to HALFWIDTH HANGUL LETTER U
+    "\u116F<>\uFFD4;" //  to HALFWIDTH HANGUL LETTER WEO
+    "\u1170<>\uFFD5;" //  to HALFWIDTH HANGUL LETTER WE
+    "\u1171<>\uFFD6;" //  to HALFWIDTH HANGUL LETTER WI
+    "\u1172<>\uFFD7;" //  to HALFWIDTH HANGUL LETTER YU
+    "\u1173<>\uFFDA;" //  to HALFWIDTH HANGUL LETTER EU
+    "\u1174<>\uFFDB;" //  to HALFWIDTH HANGUL LETTER YI
+    "\u1175<>\uFFDC;" //  to HALFWIDTH HANGUL LETTER I
+    "\uFFE0<>'\u00a2';"    //  from FULLWIDTH CENT SIGN
+    "\uFFE1<>'\u00a3';"    //  from FULLWIDTH POUND SIGN
+    "\uFFE2<>'\u00ac';"    //  from FULLWIDTH NOT SIGN
+    "\uFFE3<>' '\u0304;"  //  from FULLWIDTH MACRON
+    "\uFFE4<>'\u00a6';"    //  from FULLWIDTH BROKEN BAR
+    "\uFFE5<>'\u00a5';"    //  from FULLWIDTH YEN SIGN
+    "\uFFE6<>\u20A9;" //  from FULLWIDTH WON SIGN
+    "\u2502<>\uFFE8;" //  to HALFWIDTH FORMS LIGHT VERTICAL
+    "\u2190<>\uFFE9;" //  to HALFWIDTH LEFTWARDS ARROW
+    "\u2191<>\uFFEA;" //  to HALFWIDTH UPWARDS ARROW
+    "\u2192<>\uFFEB;" //  to HALFWIDTH RIGHTWARDS ARROW
+    "\u2193<>\uFFEC;" //  to HALFWIDTH DOWNWARDS ARROW
+    "\u25A0<>\uFFED;" //  to HALFWIDTH BLACK SQUARE
+    "\u25CB<>\uFFEE;" //  to HALFWIDTH WHITE CIRCLE
     }
 }
