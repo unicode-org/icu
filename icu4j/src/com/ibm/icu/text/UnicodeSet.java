@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2000/05/24 22:29:51 $
- * $Revision: 1.25 $
+ * $Date: 2000/05/24 22:53:34 $
+ * $Revision: 1.26 $
  *
  *****************************************************************************************
  */
@@ -241,7 +241,7 @@ import java.text.*;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.25 $ $Date: 2000/05/24 22:29:51 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.26 $ $Date: 2000/05/24 22:53:34 $
  */
 public class UnicodeSet implements UnicodeFilter {
 
@@ -1391,13 +1391,8 @@ public class UnicodeSet implements UnicodeFilter {
                 if (a < b) { // take a
                     // Back up over overlapping ranges in buffer[]
                     if (k > 0 && a <= buffer[k-1]) {
-                        --k;
-                        a = list[i];
-                        // Pick the latter end value between
-                        // buffer[] and list[]
-                        if (buffer[k] > a) {
-                            a = buffer[k];
-                        }
+                        // Pick latter end value in buffer[] vs. list[]
+                        a = max(list[i], buffer[--k]);
                     } else {
                         // No overlap
                         buffer[k++] = a;
@@ -1407,11 +1402,7 @@ public class UnicodeSet implements UnicodeFilter {
                     polarity ^= 1;
                 } else if (b < a) { // take b
                     if (k > 0 && b <= buffer[k-1]) {
-                        --k;
-                        b = other[j];
-                        if (buffer[k] > b) {
-                            b = buffer[k];
-                        }
+                        b = max(other[j], buffer[--k]);
                     } else {
                         buffer[k++] = b;
                         b = other[j];
@@ -1423,13 +1414,7 @@ public class UnicodeSet implements UnicodeFilter {
                     // This is symmetrical; it doesn't matter if
                     // we backtrack with a or b. - liu
                     if (k > 0 && a <= buffer[k-1]) {
-                        --k;
-                        a = list[i];
-                        // Pick the latter end value between
-                        // buffer[] and list[]
-                        if (buffer[k] > a) {
-                            a = buffer[k];
-                        }
+                        a = max(list[i], buffer[--k]);
                     } else {
                         // No overlap
                         buffer[k++] = a;
@@ -1552,5 +1537,9 @@ public class UnicodeSet implements UnicodeFilter {
         list = buffer;
         buffer = temp;
         return this;
+    }
+
+    private static final int max(int a, int b) {
+        return (a > b) ? a : b;
     }
 }
