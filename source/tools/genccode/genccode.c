@@ -64,8 +64,10 @@ static uint32_t column=MAX_COLUMN;
 static void
 writeCCode(const char *filename, const char *destdir);
 
+#ifdef CAN_GENERATE_OBJECTS
 static void
 writeObjectCode(const char *filename, const char *destdir);
+#endif
 
 static void
 getOutFilename(const char *inFilename, const char *destdir, char *outFilename, char *entryName, const char *newSuffix);
