@@ -859,25 +859,25 @@ void UnicodeSetTest::TestPropertySet() {
         "abcd\\uDC00",
         "ef\\uD800\\U00010000",
 
-		"[:^lccc=0:]", // Lead canonical class
-		"\\u0300\\u0301",
-		"abcd\\u00c0\\u00c5",
+        "[:^lccc=0:]", // Lead canonical class
+        "\\u0300\\u0301",
+        "abcd\\u00c0\\u00c5",
 
-		"[:^tccc=0:]", // Trail canonical class
-		"\\u0300\\u0301\\u00c0\\u00c5",
-		"abcd",
+        "[:^tccc=0:]", // Trail canonical class
+        "\\u0300\\u0301\\u00c0\\u00c5",
+        "abcd",
 
-		"[[:^lccc=0:][:^tccc=0:]]", // Lead and trail canonical class
-		"\\u0300\\u0301\\u00c0\\u00c5",
-		"abcd",
+        "[[:^lccc=0:][:^tccc=0:]]", // Lead and trail canonical class
+        "\\u0300\\u0301\\u00c0\\u00c5",
+        "abcd",
 
-		"[[:^lccc=0:]-[:^tccc=0:]]", // Stuff that starts with an accent but ends with a base (none right now)
-		"",
-		"abcd\\u0300\\u0301\\u00c0\\u00c5",
-		
-		"[[:ccc=0:]-[:lccc=0:]-[:tccc=0:]]", // Weirdos. Complete canonical class is zero, but both lead and trail are not
-		"\\u0F73\\u0F75\\u0F81",
-		"abcd\\u0300\\u0301\\u00c0\\u00c5",
+        "[[:^lccc=0:]-[:^tccc=0:]]", // Stuff that starts with an accent but ends with a base (none right now)
+        "",
+        "abcd\\u0300\\u0301\\u00c0\\u00c5",
+        
+        "[[:ccc=0:]-[:lccc=0:]-[:tccc=0:]]", // Weirdos. Complete canonical class is zero, but both lead and trail are not
+        "\\u0F73\\u0F75\\u0F81",
+        "abcd\\u0300\\u0301\\u00c0\\u00c5",
 
     };
 
@@ -933,6 +933,7 @@ void UnicodeSetTest::TestCloseOver() {
     UErrorCode ec = U_ZERO_ERROR;
 
     char CASE[] = {(char)USET_CASE};
+    char CASE_MAPPINGS[] = {(char)USET_ADD_CASE_MAPPINGS};
     const char* DATA[] = {
         // selector, input, output
         CASE,
@@ -961,6 +962,18 @@ void UnicodeSetTest::TestCloseOver() {
         "[abc]","[A-Ca-c]",
         CASE,
         "[ABC]","[A-Ca-c]",
+
+        CASE_MAPPINGS,
+        "[aq\\u00DF{Bc}{bC}{Fi}]",
+        "[aAqQ\\u00DF{Ss}{SS}{Bc}{BC}{bc}{FI}{Fi}{fi}]",
+
+        CASE_MAPPINGS,
+        "[\\u01F1]", // 'DZ'
+        "[\\u01F1\\u01F2\\u01F3]",
+        
+        CASE_MAPPINGS,
+        "[a-z]",
+        "[A-Za-z]",
 
         NULL
     };
@@ -999,6 +1012,12 @@ void UnicodeSetTest::TestCloseOver() {
         errln("FAIL: constructor failed");
     } else {
         expectContainment(v, "defDEF", "abcABC");
+    }
+    UnicodeSet cm("[abck]", USET_ADD_CASE_MAPPINGS, NULL, ec);
+    if (U_FAILURE(ec)) {
+        errln("FAIL: construct w/case mappings failed");
+    } else {
+        expectContainment(cm, "abckABCK", CharsToUnicodeString("defDEF\\u212A"));
     }
 }
 
