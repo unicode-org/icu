@@ -43,7 +43,7 @@ nfs4_prepare( const char* src, int32_t srcLength,
           b2Stack[NFS4_MAX_BUFFER_SIZE]; 
     char  b3Stack[NFS4_MAX_BUFFER_SIZE];
 
-    //initialize pointers to stack buffers
+    /* initialize pointers to stack buffers */
     UChar *b1 = b1Stack, *b2 = b2Stack;
     char  *b3=b3Stack;
     int32_t b1Len=0, b2Len=0, b3Len=0,
@@ -141,17 +141,17 @@ syntaxError( const UChar* rules,
         pos--;
     }
     parseError->offset = pos;
-    parseError->line = 0 ; // we are not using line numbers 
+    parseError->line = 0 ; /* we are not using line numbers */
     
-    // for pre-context
+    /* for pre-context */
     start = (pos <=U_PARSE_CONTEXT_LEN)? 0 : (pos - (U_PARSE_CONTEXT_LEN-1));
     stop  = pos;
     
     u_memcpy(parseError->preContext,rules+start,stop-start);
-    //null terminate the buffer
+    /* null terminate the buffer */
     parseError->preContext[stop-start] = 0;
     
-    //for post-context
+    /* for post-context */
     start = pos;
     if(start<rulesLen) {
         U16_FWD_1(rules, start, rulesLen);
@@ -161,7 +161,7 @@ syntaxError( const UChar* rules,
                                                             rulesLen;
     if(start < stop){
         u_memcpy(parseError->postContext,rules+start,stop-start);
-        //null terminate the buffer
+        /* null terminate the buffer */
         parseError->postContext[stop-start]= 0;
     }
     

@@ -71,9 +71,6 @@ getFoldingOffset(uint32_t data) {
 
 }
 
-U_CDECL_END
-
-
 /* hashes an entry  */
 static int32_t U_EXPORT2 U_CALLCONV 
 hashEntry(const UHashTok parm) {
@@ -98,7 +95,7 @@ compareEntries(const UHashTok p1, const UHashTok p2) {
         uhash_compareChars(path1, path2)));
 }
 
-
+U_CDECL_END
 
 U_CFUNC void 
 usprep_init(UErrorCode *status) {
