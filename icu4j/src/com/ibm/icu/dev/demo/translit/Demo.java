@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/translit/Demo.java,v $ 
- * $Date: 2002/05/29 00:43:43 $ 
- * $Revision: 1.16 $
+ * $Date: 2002/06/13 17:33:09 $ 
+ * $Revision: 1.17 $
  *
  *****************************************************************************************
  */
@@ -18,6 +18,7 @@ import java.util.*;
 import com.ibm.icu.dev.demo.impl.*;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
+import java.io.*;
 
 /**
  * A frame that allows the user to experiment with keyboard
@@ -28,7 +29,7 @@ import com.ibm.icu.text.*;
  * <p>Copyright (c) IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Demo.java,v $ $Revision: 1.16 $ $Date: 2002/05/29 00:43:43 $
+ * @version $RCSfile: Demo.java,v $ $Revision: 1.17 $ $Date: 2002/06/13 17:33:09 $
  */
 public class Demo extends Frame {
 
@@ -335,6 +336,11 @@ public class Demo extends Frame {
             }
         });
         
+        
+        translitMenu.add(mitem = new MenuItem("From File...", 
+            new MenuShortcut(KeyEvent.VK_F)));
+        mitem.addActionListener(new FileListener(this));
+        
         // Flesh out the menu with the installed transliterators
         
         translitMenu.addSeparator();
@@ -367,6 +373,44 @@ public class Demo extends Frame {
         }
         
         
+    }
+    
+    static class FileListener implements ActionListener {
+        Demo frame;
+        FileListener(Demo frame) {
+            this.frame = frame;
+        }
+        
+        public void actionPerformed(ActionEvent e) {
+            FileDialog fileDialog = new FileDialog(frame, "Rules File");
+            fileDialog.show();
+            String fileName = fileDialog.getFile();
+            String fileDirectory = fileDialog.getDirectory();
+            if (fileName != null) {
+                StringBuffer buffer = new StringBuffer();
+                try {
+                    File f = new File(fileDirectory, fileName);
+                    FileInputStream fis = new FileInputStream(f);
+                    InputStreamReader isr = new InputStreamReader(fis, "UTF8");
+                    BufferedReader br = new BufferedReader(isr, 32*1024);
+                    while (true) {
+                        String line = br.readLine();
+                        if (line == null) break;
+                        if (line.length() > 0 && line.charAt(0) == '\uFEFF') line = line.substring(1); // strip BOM
+                        buffer.append('\n');
+                        buffer.append(line);
+                    }
+                    br.close();
+                } catch (Exception e2) {
+                    System.out.println("Problem opening/reading: " + fileDirectory + ", " + fileName);
+                }
+                String id = fileName;
+                int pos = id.indexOf('.');
+                if (pos >= 0) id = id.substring(0, pos);
+                frame.setTransliterator(buffer.toString(), id);
+            }
+            fileDialog.dispose();
+        }
     }
     
     boolean transliterateTyping = true;
