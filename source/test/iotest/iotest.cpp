@@ -193,15 +193,14 @@ static void DataDrivenPrintf(void) {
     TestData *testData;
     const DataMap *testCase;
     DataDrivenLogger logger;
-    UChar uBuffer[2048];
-    char cBuffer[2048];
+    UChar uBuffer[512];
+    char cBuffer[512];
     char cFormat[sizeof(cBuffer)];
     char cExpected[sizeof(cBuffer)];
     UnicodeString tempStr;
-    UChar format[2048];
-    //char locale[ULOC_FULLNAME_CAPACITY];
-    UChar expectedResult[2048];
-    UChar argument[2048];
+    UChar format[512];
+    UChar expectedResult[512];
+    UChar argument[512];
     int32_t i;
     int8_t i8;
     int16_t i16;
@@ -223,16 +222,20 @@ static void DataDrivenPrintf(void) {
                     continue;
                 }
                 u_memset(uBuffer, 0x2A, sizeof(uBuffer)/sizeof(uBuffer[0]));
+                uBuffer[sizeof(uBuffer)/sizeof(uBuffer[0])-1] = 0;
                 tempStr=testCase->getString("format", errorCode);
                 tempStr.extract(format, sizeof(format)/sizeof(format[0]), errorCode);
-//                tempStr=testCase->getString("locale", errorCode);
-//                tempStr.append((UChar)0);
-//                tempStr.extract(0, tempStr.length(), locale, sizeof(locale), "");
                 tempStr=testCase->getString("result", errorCode);
                 tempStr.extract(expectedResult, sizeof(expectedResult)/sizeof(expectedResult[0]), errorCode);
                 tempStr=testCase->getString("argument", errorCode);
                 tempStr.extract(argument, sizeof(argument)/sizeof(argument[0]), errorCode);
                 u_austrncpy(cBuffer, format, sizeof(cBuffer));
+                if(U_FAILURE(errorCode)) {
+                    log_err("error retrieving icuio/printf test case %d - %s\n",
+                            i, u_errorName(errorCode));
+                    errorCode=U_ZERO_ERROR;
+                    continue;
+                }
                 log_verbose("Test %d: format=\"%s\"\n", i, cBuffer);
                 switch (testCase->getString("argumentType", errorCode)[0]) {
                 case 0x64:  // 'd' double
@@ -261,6 +264,121 @@ static void DataDrivenPrintf(void) {
                     break;
                 case 0x53:  // 'S' UChar *
                     uBufferLenReturned = u_sprintf_u(uBuffer, format, argument);
+                    break;
+                }
+                if (u_strcmp(uBuffer, expectedResult) != 0) {
+                    u_austrncpy(cBuffer, uBuffer, sizeof(cBuffer));
+                    u_austrncpy(cFormat, format, sizeof(cFormat));
+                    u_austrncpy(cExpected, expectedResult, sizeof(cExpected));
+                    cBuffer[sizeof(cBuffer)-1] = 0;
+                    log_err("FAILURE test case %d \"%s\" - Got: \"%s\" Expected: \"%s\"\n",
+                            i, cFormat, cBuffer, cExpected);
+                }
+                if (uBuffer[uBufferLenReturned-1] == 0
+                    || uBuffer[uBufferLenReturned] != 0
+                    || uBuffer[uBufferLenReturned+1] != 0x2A
+                    || uBuffer[uBufferLenReturned+2] != 0x2A)
+                {
+                    u_austrncpy(cBuffer, uBuffer, sizeof(cBuffer));
+                    cBuffer[sizeof(cBuffer)-1] = 0;
+                    log_err("FAILURE test case %d - \"%s\" wrong amount of characters was written. Got %d.\n",
+                            i, cBuffer, uBufferLenReturned);
+                }
+                if(U_FAILURE(errorCode)) {
+                    log_err("error running icuio/printf test case %d - %s\n",
+                            i, u_errorName(errorCode));
+                    errorCode=U_ZERO_ERROR;
+                    continue;
+                }
+            }
+            delete testData;
+        }
+        delete dataModule;
+    }
+    else {
+        log_err("Failed: could not load test icuio data\n");
+    }
+}
+
+static void DataDrivenPrintfPrecision(void) {
+    UErrorCode errorCode;
+    TestDataModule *dataModule;
+    TestData *testData;
+    const DataMap *testCase;
+    DataDrivenLogger logger;
+    UChar uBuffer[512];
+    char cBuffer[512];
+    char cFormat[sizeof(cBuffer)];
+    char cExpected[sizeof(cBuffer)];
+    UnicodeString tempStr;
+    UChar format[512];
+    UChar expectedResult[512];
+    UChar argument[512];
+    int32_t precision;
+    int32_t i;
+    int8_t i8;
+    int16_t i16;
+    int32_t i32;
+    int64_t i64;
+    double dbl;
+    int32_t uBufferLenReturned;
+
+    errorCode=U_ZERO_ERROR;
+    dataModule=TestDataModule::getTestDataModule("icuio", logger, errorCode);
+    if(U_SUCCESS(errorCode)) {
+        testData=dataModule->createTestData("printfPrecision", errorCode);
+        if(U_SUCCESS(errorCode)) {
+            for(i=0; testData->nextCase(testCase, errorCode); ++i) {
+                if(U_FAILURE(errorCode)) {
+                    log_err("error retrieving icuio/printf test case %d - %s\n",
+                            i, u_errorName(errorCode));
+                    errorCode=U_ZERO_ERROR;
+                    continue;
+                }
+                u_memset(uBuffer, 0x2A, sizeof(uBuffer)/sizeof(uBuffer[0]));
+                uBuffer[sizeof(uBuffer)/sizeof(uBuffer[0])-1] = 0;
+                tempStr=testCase->getString("format", errorCode);
+                tempStr.extract(format, sizeof(format)/sizeof(format[0]), errorCode);
+                tempStr=testCase->getString("result", errorCode);
+                tempStr.extract(expectedResult, sizeof(expectedResult)/sizeof(expectedResult[0]), errorCode);
+                tempStr=testCase->getString("argument", errorCode);
+                tempStr.extract(argument, sizeof(argument)/sizeof(argument[0]), errorCode);
+                precision=testCase->getInt28("precision", errorCode);
+                u_austrncpy(cBuffer, format, sizeof(cBuffer));
+                if(U_FAILURE(errorCode)) {
+                    log_err("error retrieving icuio/printf test case %d - %s\n",
+                            i, u_errorName(errorCode));
+                    errorCode=U_ZERO_ERROR;
+                    continue;
+                }
+                log_verbose("Test %d: format=\"%s\"\n", i, cBuffer);
+                switch (testCase->getString("argumentType", errorCode)[0]) {
+                case 0x64:  // 'd' double
+                    dbl = atof(u_austrcpy(cBuffer, argument));
+                    uBufferLenReturned = u_sprintf_u(uBuffer, format, precision, dbl);
+                    break;
+                case 0x31:  // '1' int8_t
+                    i8 = (int8_t)uto64(argument);
+                    uBufferLenReturned = u_sprintf_u(uBuffer, format, precision, i8);
+                    break;
+                case 0x32:  // '2' int16_t
+                    i16 = (int16_t)uto64(argument);
+                    uBufferLenReturned = u_sprintf_u(uBuffer, format, precision, i16);
+                    break;
+                case 0x34:  // '4' int32_t
+                    i32 = (int32_t)uto64(argument);
+                    uBufferLenReturned = u_sprintf_u(uBuffer, format, precision, i32);
+                    break;
+                case 0x38:  // '8' int64_t
+                    i64 = uto64(argument);
+                    uBufferLenReturned = u_sprintf_u(uBuffer, format, precision, i64);
+                    break;
+                case 0x73:  // 's' char *
+                    u_austrncpy(cBuffer, uBuffer, sizeof(cBuffer));
+                    uBufferLenReturned = u_sprintf_u(uBuffer, format, precision, cBuffer);
+                    break;
+                case 0x53:  // 'S' UChar *
+                    uBufferLenReturned = u_sprintf_u(uBuffer, format, precision, argument);
                     break;
                 }
                 if (u_strcmp(uBuffer, expectedResult) != 0) {
@@ -364,7 +482,9 @@ static void TestStream(void) {
 static void addAllTests(TestNode** root) {
     addFileTest(root);
     addStringTest(root);
+
     addTest(root, &DataDrivenPrintf, "data/DataDrivenPrintf");
+    addTest(root, &DataDrivenPrintfPrecision, "data/DataDrivenPrintfPrecision");
     addTest(root, &TestStream, "stream/TestStream");
 }
 

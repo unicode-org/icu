@@ -305,21 +305,6 @@ static void TestSnprintf(void) {
         log_err("%" uFormat " too much stored\n");\
     }\
 
-#define TestSPrintFormat2(format, precision, value) \
-    /* Reinitialize the buffer to verify null termination works. */\
-    u_memset(uBuffer, 0x2a, sizeof(uBuffer)/sizeof(*uBuffer));\
-    memset(buffer, 0x2a, sizeof(buffer)/sizeof(*buffer));\
-    \
-    uNumPrinted = u_sprintf(uBuffer, format, precision, value);\
-    u_austrncpy(compBuffer, uBuffer, sizeof(uBuffer)/sizeof(uBuffer[0]));\
-    cNumPrinted = sprintf(buffer, format, precision, value);\
-    if (strcmp(buffer, compBuffer) != 0) {\
-        log_err("%" format " Got: \"%s\", Expected: \"%s\"\n", compBuffer, buffer);\
-    }\
-    if (cNumPrinted != uNumPrinted) {\
-        log_err("%" format " number printed Got: %d, Expected: %d\n", uNumPrinted, cNumPrinted);\
-    }\
-
 static void TestSprintfFormat(void) {
     static const UChar abcUChars[] = {0x61,0x62,0x63,0};
     static const char abcChars[] = "abc";
@@ -397,9 +382,6 @@ static void TestSprintfFormat(void) {
     TestSPrintFormat("%8i", 123456, "%8i", 123456);
     TestSPrintFormat("%-8i", 123456, "%-8i", 123456);
     TestSPrintFormat("%08i", 123456, "%08i", 123456);
-
-    TestSPrintFormat2("%+1.*e", 4, 1.2345678);
-    TestSPrintFormat2("%+2.*e", 6, 1.2345678);
 
     log_verbose("Get really crazy with the formatting.\n");
 
