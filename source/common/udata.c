@@ -147,7 +147,7 @@
 #       include <dlfcn.h>
 #   endif
 
-    typedef const void *Library;
+    typedef void *Library;
 
 #   define NO_LIBRARY NULL
 #   define IS_LIBRARY(lib) ((lib)!=NULL)
@@ -377,7 +377,7 @@ typedef struct {
     static void
     uprv_unmapFile(UDataMemory *pData) {
         if(pData!=NULL && pData->map>0) {
-            if(munmap(pData->pHeader, pData->map)==-1) {
+            if(munmap((void *)pData->pHeader, pData->map)==-1) {
                 perror("munmap");
             }
             pData->pHeader=NULL;
@@ -540,7 +540,7 @@ setCommonICUData(UDataMemory *pData) {
     umtx_lock(NULL);
     if(!IS_DATA_MEMORY_LOADED(&commonICUData)) {
         uprv_memcpy(&commonICUData, pData, sizeof(UDataMemory));
-        commonICUData.flags&=~(1<<DYNAMIC_DATA_MEMORY_SHIFT);
+        commonICUData.flags&=~(1UL<<DYNAMIC_DATA_MEMORY_SHIFT);
         uprv_memset(pData, 0, sizeof(UDataMemory));
         setThisLib=TRUE;
     }
@@ -828,7 +828,7 @@ udata_setCommonData(const void *data, UErrorCode *pErrorCode) {
         }
 
         /* we have common data */
-        dataMemory.flags|=1<<SET_DATA_POINTER_SHIFT;
+        dataMemory.flags|=1UL<<SET_DATA_POINTER_SHIFT;
         setCommonICUData(&dataMemory);
         if(dataMemory.flags!=0) {
             /* some thread passed us */
@@ -913,7 +913,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
                 uprv_memset(pEntryData, 0, sizeof(UDataMemory));
                 pEntryData->parent=pCommonData;
                 pEntryData->pHeader=pHeader;
-                pEntryData->flags=pCommonData->flags&DATA_MEMORY_TYPE_MASK|1<<DYNAMIC_DATA_MEMORY_SHIFT;
+                pEntryData->flags=pCommonData->flags&DATA_MEMORY_TYPE_MASK|1UL<<DYNAMIC_DATA_MEMORY_SHIFT;
                 return pEntryData;
             } else {
                 /* the data is not acceptable, look further */
@@ -954,7 +954,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
                     *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
                     return NULL;
                 }
-                dataMemory.flags|=1<<DYNAMIC_DATA_MEMORY_SHIFT;
+                dataMemory.flags|=1UL<<DYNAMIC_DATA_MEMORY_SHIFT;
                 uprv_memcpy(pEntryData, &dataMemory, sizeof(UDataMemory));
                 return pEntryData;
             } else {
@@ -980,7 +980,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
                 *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
                 return NULL;
             }
-            dataMemory.flags|=1<<DYNAMIC_DATA_MEMORY_SHIFT;
+            dataMemory.flags|=1UL<<DYNAMIC_DATA_MEMORY_SHIFT;
             uprv_memcpy(pEntryData, &dataMemory, sizeof(UDataMemory));
             return pEntryData;
         } else {
@@ -1005,7 +1005,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
 
 static void
 unloadDataMemory(UDataMemory *pData) {
-    if(!(pData->flags&(1<<SET_DATA_POINTER_SHIFT))) {
+    if(!(pData->flags&(1UL<<SET_DATA_POINTER_SHIFT))) {
         switch(pData->flags&DATA_MEMORY_TYPE_MASK) {
         case FLAT_DATA_MEMORY:
             if(IS_MAP(pData->map)) {
@@ -1056,7 +1056,7 @@ U_CAPI void U_EXPORT2
 udata_close(UDataMemory *pData) {
     if(pData!=NULL && IS_DATA_MEMORY_LOADED(pData)) {
         unloadDataMemory(pData);
-        if(pData->flags&(1<<DYNAMIC_DATA_MEMORY_SHIFT)) {
+        if(pData->flags&(1UL<<DYNAMIC_DATA_MEMORY_SHIFT)) {
             if(pData->parent==pData+1) {
                 /* this data entry was allocated together with its parent */
                 unloadDataMemory(pData+1);
