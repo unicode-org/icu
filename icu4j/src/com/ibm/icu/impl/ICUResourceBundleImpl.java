@@ -347,6 +347,12 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
 			}
 			return strings;
 		}
+        /**
+         * @internal ICU 3.0
+         */
+        public String[] getStringArray() {
+            return handleGetStringArray();
+        }
 		protected ICUResourceBundle handleGet(String index) {
 			return handleGet(index, null);
 		}
