@@ -319,6 +319,96 @@ static void TestCodepage() {
 }
 
 
+static void TestfgetsBuffers() {
+    UChar buffer[2048];
+    UChar expectedBuffer[2048];
+    static const char testStr[] = "This is a test string that tests u_fgets. It makes sure that we don't try to read too much!";
+    UFILE *myFile = u_fopen(STANDARD_TEST_FILE, "w", NULL, "UTF-16");
+    int32_t expectedSize = strlen(testStr);
+    int32_t readSize;
+    int32_t repetitions;
+
+    u_fputc(0x3BC, myFile);
+    u_fputc(0xFF41, myFile);
+    u_memset(buffer, 0xDEAD, sizeof(buffer)/sizeof(buffer[0]));
+    u_memset(expectedBuffer, 0, sizeof(expectedBuffer)/sizeof(expectedBuffer[0]));
+    u_uastrcpy(buffer, testStr);
+    for (repetitions = 0; repetitions < 16; repetitions++) {
+        u_file_write(buffer, expectedSize, myFile);
+        u_strcat(expectedBuffer, buffer);
+    }
+    u_fclose(myFile);
+
+    myFile = u_fopen(STANDARD_TEST_FILE, "r", NULL, "UTF-16");
+    if (u_fgetc(myFile) != 0x3BC) {
+        log_err("The first character is wrong\n");
+    }
+    if (u_fgetc(myFile) != 0xFF41) {
+        log_err("The second character is wrong\n");
+    }
+    if (u_fgets(myFile, sizeof(buffer)/sizeof(buffer[0]), buffer) != buffer) {
+        log_err("Didn't get the buffer back\n");
+        return;
+    }
+    readSize = u_strlen(buffer);
+    if (readSize != expectedSize*repetitions) {
+        log_err("Buffer is the wrong size. Got %d Expected %d\n", u_strlen(buffer), expectedSize*repetitions);
+    }
+    if (buffer[(expectedSize*repetitions) + 1] != 0xDEAD) {
+        log_err("u_fgets wrote too much data\n");
+    }
+    if (u_strcmp(buffer, expectedBuffer) != 0) {
+        log_err("Did get expected string back\n");
+    }
+    u_fclose(myFile);
+
+
+    log_verbose("Now trying a multi-byte encoding (UTF-8).\n");
+
+    myFile = u_fopen(STANDARD_TEST_FILE, "w", NULL, "UTF-8");
+
+    u_fputc(0x3BC, myFile);
+    u_fputc(0xFF41, myFile);
+    u_memset(buffer, 0xDEAD, sizeof(buffer)/sizeof(buffer[0]));
+    u_memset(expectedBuffer, 0, sizeof(expectedBuffer)/sizeof(expectedBuffer[0]));
+    u_uastrcpy(buffer, testStr);
+    for (repetitions = 0; repetitions < 16; repetitions++) {
+        u_file_write(buffer, expectedSize, myFile);
+        u_strcat(expectedBuffer, buffer);
+    }
+    u_fclose(myFile);
+
+    myFile = u_fopen(STANDARD_TEST_FILE, "r", NULL, "UTF-8");
+    if (u_fgetc(myFile) != 0x3BC) {
+        log_err("The first character is wrong\n");
+    }
+    if (u_fgetc(myFile) != 0xFF41) {
+        log_err("The second character is wrong\n");
+    }
+    if (u_fgets(myFile, sizeof(buffer)/sizeof(buffer[0]), buffer) != buffer) {
+        log_err("Didn't get the buffer back\n");
+        return;
+    }
+    readSize = u_strlen(buffer);
+    if (readSize != expectedSize*repetitions) {
+        log_err("Buffer is the wrong size. Got %d Expected %d\n", u_strlen(buffer), expectedSize*repetitions);
+    }
+    if (buffer[(expectedSize*repetitions) + 1] != 0xDEAD) {
+        log_err("u_fgets wrote too much data\n");
+    }
+    if (u_strcmp(buffer, expectedBuffer) != 0) {
+        log_err("Did get expected string back\n");
+    }
+    u_fclose(myFile);
+
+
+
+
+
+
+}
+
+
 static void TestFilePrintCompatibility() {
     UFILE *myFile = u_fopen(STANDARD_TEST_FILE, "wb", "en_US_POSIX", NULL);
     FILE *myCFile;
@@ -1250,8 +1340,10 @@ static void TestTranslitOut()
 static void addAllTests(TestNode** root) {
     addTest(root, &TestFile, "file/TestFile");
     addTest(root, &TestCodepage, "file/TestCodepage");
+    addTest(root, &TestfgetsBuffers, "file/TestfgetsBuffers");
     addTest(root, &TestFprintfFormat, "file/TestFprintfFormat");
     addTest(root, &TestFilePrintCompatibility, "file/TestFilePrintCompatibility");
+
     addTest(root, &TestString, "string/TestString");
     addTest(root, &TestSprintfFormat, "string/TestSprintfFormat");
     addTest(root, &TestSnprintf, "string/TestSnprintf");
