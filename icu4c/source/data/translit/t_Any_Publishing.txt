@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Any_Publishing.txt
-// Date: Thu Oct 25 22:17:21 2001
+// Date: Wed Nov  7 09:34:03 2001
 //--------------------------------------------------------------------
 
 // Any_Publishing
@@ -18,8 +18,8 @@ translit_Any_Publishing {
 // Corporation and others. All Rights Reserved.
 //--------------------------------------------------------------------
 // $Source: /xsrl/Nsvn/icu/icu/source/data/translit/Attic/t_Any_Publishing.txt,v $
-// $Date: 2001/10/26 05:41:16 $
-// $Revision: 1.1 $
+// $Date: 2001/11/07 18:50:25 $
+// $Revision: 1.2 $
 //--------------------------------------------------------------------
 
 // Test case
@@ -27,10 +27,10 @@ translit_Any_Publishing {
 
 // Variables
 
-"$single = \' ;"
+"$single = \\\' ;"
 "$space = ' ' ;"
-"$double = \" ;"
-"$back = \` ;"
+"$double = \\\" ;"
+"$back = \\\` ;"
 "$tab = '\u0008' ;"
 "$makeRight = [[:Z:][:Ps:][:Pi:]$] ;"
 

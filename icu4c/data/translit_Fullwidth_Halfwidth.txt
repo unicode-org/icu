@@ -5,8 +5,8 @@
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
-// Source: ../../text/resources/Transliterator_Fullwidth_Halfwidth.utf8.txt
-// Date: Thu Oct 25 22:17:21 2001
+// Source: ../../text/resources/Transliterator_Fullwidth_Halfwidth.txt
+// Date: Wed Nov  7 09:34:03 2001
 //--------------------------------------------------------------------
 
 // Fullwidth_Halfwidth
@@ -58,7 +58,7 @@ translit_Fullwidth_Halfwidth {
 // single character
 
 "！<>'!';" //  from FULLWIDTH EXCLAMATION MARK
-"＂<>'\"';" //  from FULLWIDTH QUOTATION MARK
+"＂<>'\\\"';" //  from FULLWIDTH QUOTATION MARK
 "＃<>'#';" //  from FULLWIDTH NUMBER SIGN
 "＄<>'$';" //  from FULLWIDTH DOLLAR SIGN
 "％<>'%';" //  from FULLWIDTH PERCENT SIGN

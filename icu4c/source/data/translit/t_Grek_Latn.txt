@@ -4,9 +4,9 @@
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Greek_Latin.txt
-// Date: Mon Nov  5 12:28:37 2001
+// Date: Wed Nov  7 09:34:04 2001
 //--------------------------------------------------------------------
 
 // Greek_Latin
@@ -18,8 +18,8 @@ translit_Greek_Latin {
 // Corporation and others. All Rights Reserved.
 //--------------------------------------------------------------------
 // $Source: /xsrl/Nsvn/icu/icu/source/data/translit/Attic/t_Grek_Latn.txt,v $
-// $Date: 2001/11/05 20:39:12 $
-// $Revision: 1.2 $
+// $Date: 2001/11/07 18:50:25 $
+// $Revision: 1.3 $
 //--------------------------------------------------------------------
 
 // Rules are predicated on running NFD first, and NFC afterwards
@@ -65,13 +65,13 @@ translit_Greek_Latin {
 
 "$caron = \u030C;"
 
-"$afterLetter = [:^L:] [\'[:M:]]* ;"
-"$beforeLetter = [\'[:M:]]* [:^L:] ;"
+"$afterLetter = [:^L:] [\\\'[:M:]]* ;"
+"$beforeLetter = [\\\'[:M:]]* [:^L:] ;"
 
 // Fix punctuation
 
-"\; <> \? ;"
-"· <> \: ;"
+"\\\; <> \\\? ;"
+"· <> \\\: ;"
 
 // CIRCUMFLEX: convert greek circumflex to normal one. Could use tilde or inverted breve
 
@@ -230,9 +230,9 @@ translit_Greek_Latin {
 "μ <> m ;" 
 "Μ <> M ;" 
 
-"ν } $gammaLike > n\' ;" 
+"ν } $gammaLike > n\\\' ;" 
 "ν <> n ;" 
-"Ν } $gammaLike <> N\' ;" 
+"Ν } $gammaLike <> N\\\' ;" 
 "Ν <> N ;" 
 
 "ξ <> x ;" 
@@ -252,8 +252,8 @@ translit_Greek_Latin {
 
 // insert separator
 
-"[Pp] { } ς > \' ;" 
-"[Pp] { } σ > \' ;"
+"[Pp] { } ς > \\\' ;" 
+"[Pp] { } σ > \\\' ;"
 
 // Caron means exception
 
@@ -269,7 +269,7 @@ translit_Greek_Latin {
 "ς <> s $caron;"
 "σ <> s ;"
 
-"[Pp] { Σ <> \'S ;" 
+"[Pp] { Σ <> \\\'S ;" 
 "Σ <> S ;" 
 
 "τ <> t ;" 
@@ -327,8 +327,8 @@ translit_Greek_Latin {
 
 // delete any trailing ' marks used for roundtripping
 
- "< [Ππ] { \' } [Ss] ;"
- "< [Νν] { \' } $egammaLike ;"
+ "< [Ππ] { \\\' } [Ss] ;"
+ "< [Νν] { \\\' } $egammaLike ;"
 
 "::NFC (NFD) ;" 
   }
