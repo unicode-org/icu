@@ -202,12 +202,12 @@ uprv_loadPropsData(UErrorCode *pErrorCode) {
             }
 
             havePropsData=1;
-            ucln_common_registerCleanup(UCLN_COMMON_UCHAR, uchar_cleanup);
             umtx_unlock(NULL);
         } else {
             dataErrorCode=*pErrorCode;
             havePropsData=-1;
         }
+        ucln_common_registerCleanup(UCLN_COMMON_UCHAR, uchar_cleanup);
 
         /* if a different thread set it first, then close the extra data */
         udata_close(ucp.propsData); /* NULL if it was set correctly */
