@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2001/11/16 21:59:42 $
- * $Revision: 1.56 $
+ * $Date: 2001/11/17 05:24:58 $
+ * $Revision: 1.57 $
  *
  *****************************************************************************************
  */
@@ -242,7 +242,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.56 $ $Date: 2001/11/16 21:59:42 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.57 $ $Date: 2001/11/17 05:24:58 $
  */
 public abstract class Transliterator {
     /**
@@ -1173,8 +1173,7 @@ public abstract class Transliterator {
      * @param regenID regenerated ID, reversed if appropriate, which
      * should be applied to the final created transliterator.  This method
      * will append to this parameter for FORWARD direction and insert
-     * addition text at offset 0 for REVERSE direction.  If create is
-     * false then this parameter is not used.
+     * addition text at offset 0 for REVERSE direction.
      * @param pos INPUT-OUTPUT parameter.  On input, the position of the
      * first character to parse.  On output, the position after the last
      * character parsed.  This will be a semicolon or ID.length().  In the
@@ -1183,7 +1182,7 @@ public abstract class Transliterator {
      * filter, if one is parsed.  When a non-null compound filter is
      * returned then a null Transliterator pointer is returned.
      * @param create if true, create and return the result.  If false,
-     * only scan the ID, and return NULL.
+     * only scan the ID, and return NULL (but still form the regenID).
      * @return a newly created transliterator, or NULL.  NULL is returned
      * in all cases if create is false.  If create is true, then NULL is
      * returned on error, or if the ID is effectively empty.
