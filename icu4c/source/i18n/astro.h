@@ -1,4 +1,3 @@
-
 /************************************************************************
  * Copyright (C) 1996-2003, International Business Machines Corporation *
  * and others. All Rights Reserved.                                     *
@@ -72,7 +71,6 @@ public:
    * @see CalendarAstronomer.Equatorial
    * @see CalendarAstronomer.Horizon
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   class U_I18N_API Ecliptic : public UMemory {
   public:
@@ -82,35 +80,34 @@ public:
      * @param lat The ecliptic latitude, measured in radians.
      * @param lon The ecliptic longitude, measured in radians.
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     Ecliptic(double lat = 0, double lon = 0) {
       latitude = lat;
       longitude = lon;
     }
-
+    
+    /**
+     * Setter for Ecliptic Coordinate object
+     * @param lat The ecliptic latitude, measured in radians.
+     * @param lon The ecliptic longitude, measured in radians.
+     * @internal
+     */
     void set(double lat, double lon) {
       latitude = lat;
       longitude = lon;
     }
-
+    
     /**
      * Return a string representation of this object
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
-    UnicodeString toString() {
-      char tmp[800];
-      sprintf(tmp, "[%.5f,%.5f]", longitude*RAD_DEG, latitude*RAD_DEG);
-      return UnicodeString(tmp);
-    }
-        
+    UnicodeString toString() const;
+    
     /**
      * The ecliptic latitude, in radians.  This specifies an object's
      * position north or south of the plane of the ecliptic,
      * with positive angles representing north.
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     double latitude;
         
@@ -124,7 +121,6 @@ public:
      * A bit of trivia: the first point of Aries is currently in the
      * constellation Pisces, due to the precession of the earth's axis.
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     double longitude;
   };
@@ -144,7 +140,6 @@ public:
    * @see CalendarAstronomer.Ecliptic
    * @see CalendarAstronomer.Horizon
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   class U_I18N_API Equatorial : public UMemory {
   public:
@@ -154,34 +149,32 @@ public:
      * @param asc The right ascension, measured in radians.
      * @param dec The declination, measured in radians.
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     Equatorial(double asc = 0, double dec = 0)
       : ascension(asc), declination(dec) { }
 
-      void set(double asc, double dec) {
-        ascension = asc;
-        declination = dec;
-      }
+    /**
+     * Setter 
+     * @param asc The right ascension, measured in radians.
+     * @param dec The declination, measured in radians.
+     * @internal
+     */
+    void set(double asc, double dec) {
+      ascension = asc;
+      declination = dec;
+    }
 
     /**
      * Return a string representation of this object, with the
      * angles measured in degrees.
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
-    UnicodeString toString() const {
-      char tmp[400];
-      sprintf(tmp, "%f,%f", 
-              (ascension*RAD_DEG), (declination*RAD_DEG));
-      return UnicodeString(tmp);
-    }
-        
+    UnicodeString toString() const;
+      
     /**
      * Return a string representation of this object with the right ascension
      * measured in hours, minutes, and seconds.
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     //String toHmsString() {
     //return radToHms(ascension) + "," + radToDms(declination);
@@ -193,7 +186,6 @@ public:
      * relative to the sun's position at the vernal equinox,
      * with positive angles representing East.
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     double ascension;
         
@@ -202,7 +194,6 @@ public:
      * This is the position north or south of the equatorial plane,
      * with positive angles representing north.
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     double declination;
   };
@@ -223,7 +214,6 @@ public:
    * @see CalendarAstronomer.Ecliptic
    * @see CalendarAstronomer.Equatorial
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   class U_I18N_API Horizon : public UMemory {
   public:
@@ -233,39 +223,37 @@ public:
      * @param alt  The altitude, measured in radians above the horizon.
      * @param azim The azimuth, measured in radians clockwise from north.
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     Horizon(double alt=0, double azim=0)
       : altitude(alt), azimuth(azim) { }
 
-      void set(double alt, double azim) {
-        altitude = alt; 
-        azimuth = azim;
-      }
-
+    /**
+     * Setter for Ecliptic Coordinate object
+     * @param alt  The altitude, measured in radians above the horizon.
+     * @param azim The azimuth, measured in radians clockwise from north.
+     * @internal
+     */
+    void set(double alt, double azim) {
+      altitude = alt; 
+      azimuth = azim;
+    }
+      
     /**
      * Return a string representation of this object, with the
      * angles measured in degrees.
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
-    UnicodeString toString() {
-      char tmp[800];
-      sprintf(tmp, "[%.5f,%.5f]", altitude*RAD_DEG, azimuth*RAD_DEG);
-      return UnicodeString(tmp);
-    }
+    UnicodeString toString() const;
         
     /** 
      * The object's altitude above the horizon, in radians. 
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     double altitude;
         
     /** 
      * The object's direction, in radians clockwise from north. 
      * @internal
-     * @deprecated ICU 2.4. This class may be removed or modified.
      */
     double azimuth;
   };
@@ -278,7 +266,6 @@ public:
    * The number of standard hours in one sidereal day.
    * Approximately 24.93.
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   static const double SIDEREAL_DAY;
     
@@ -286,7 +273,6 @@ public:
    * The number of sidereal hours in one mean solar day.
    * Approximately 24.07.
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   static const double SOLAR_DAY;
     
@@ -299,7 +285,6 @@ public:
    *
    * @see #SIDEREAL_MONTH
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   static const double SYNODIC_MONTH;
     
@@ -313,7 +298,6 @@ public:
    *
    * @see #SYNODIC_MONTH
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   static const double SIDEREAL_MONTH;
     
@@ -325,7 +309,6 @@ public:
    *
    * @see #SIDEREAL_YEAR
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   static const double TROPICAL_YEAR;
     
@@ -340,7 +323,6 @@ public:
    *
    * @see #TROPICAL_YEAR
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   static const double SIDEREAL_YEAR;
 
@@ -351,28 +333,24 @@ public:
   /** 
    * The number of milliseconds in one second. 
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   static const int32_t  SECOND_MS;
 
   /** 
    * The number of milliseconds in one minute. 
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   static const int32_t  MINUTE_MS;
 
   /** 
    * The number of milliseconds in one hour. 
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   static const int32_t  HOUR_MS;
 
   /** 
    * The number of milliseconds in one day. 
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   static const double DAY_MS;
 
@@ -384,7 +362,6 @@ public:
    * the Julian calendar are <em>not</em> the same thing.  Also note that
    * julian days start at <em>noon</em>, not midnight.
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   static const double JULIAN_EPOCH_MS;
     
@@ -431,7 +408,6 @@ public:
    * Construct a new <code>CalendarAstronomer</code> object that is initialized to
    * the current date and time.
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   CalendarAstronomer();
     
@@ -439,11 +415,9 @@ public:
    * Construct a new <code>CalendarAstronomer</code> object that is initialized to
    * the specified date and time.
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   CalendarAstronomer(UDate d);
-    
-    
+      
   /**
    * Construct a new <code>CalendarAstronomer</code> object with the given
    * latitude and longitude.  The object's time is set to the current
@@ -457,7 +431,6 @@ public:
    *
    * @see java.util.Date#getTime()
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   CalendarAstronomer(double longitude, double latitude);
 
@@ -481,7 +454,6 @@ public:
    * @see #setDate
    * @see #getTime
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   void setTime(UDate aTime);
   
@@ -495,7 +467,6 @@ public:
    *
    * @see #getTime
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   void setDate(UDate aDate) { setTime(aDate); }
     
@@ -512,7 +483,6 @@ public:
    * @see #getJulianDay
    * @see #JULIAN_EPOCH_MS
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   void setJulianDay(double jdn);
     
@@ -524,7 +494,6 @@ public:
    * @see #setTime
    * @see #getDate
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   UDate getTime();
     
@@ -536,7 +505,6 @@ public:
    * @see #setJulianDay
    * @see #JULIAN_EPOCH_MS
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   double getJulianDay();
 
@@ -546,14 +514,12 @@ public:
    *
    * @see #getJulianDay
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   double getJulianCentury();
 
   /**
    * Returns the current Greenwich sidereal time, measured in hours
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   double getGreenwichSidereal();
 
@@ -563,7 +529,6 @@ public:
   /**
    * Returns the current local sidereal time, measured in hours
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   double getLocalSidereal();
     
@@ -587,7 +552,7 @@ public:
    * @param result       Fillin result 
    * @return reference to result
    */
-   Equatorial& eclipticToEquatorial(Equatorial& result, const Ecliptic& ecliptic);
+  Equatorial& eclipticToEquatorial(Equatorial& result, const Ecliptic& ecliptic);
 
   /**
    * Convert from ecliptic to equatorial coordinates.
@@ -597,9 +562,8 @@ public:
    *
    * @return              The corresponding point in equatorial coordinates.
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
-   Equatorial& eclipticToEquatorial(Equatorial& result, double eclipLong, double eclipLat);
+  Equatorial& eclipticToEquatorial(Equatorial& result, double eclipLong, double eclipLat);
 
   /**
    * Convert from ecliptic longitude to equatorial coordinates.
@@ -608,15 +572,13 @@ public:
    *
    * @return              The corresponding point in equatorial coordinates.
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   Equatorial& eclipticToEquatorial(Equatorial& result, double eclipLong) ;
 
   /**
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
-   Horizon& eclipticToHorizon(Horizon& result, double eclipLong) ;
+  Horizon& eclipticToHorizon(Horizon& result, double eclipLong) ;
 
   //-------------------------------------------------------------------------
   // The Sun
@@ -689,7 +651,6 @@ public:
    * equation for the earth and the sun.  It does not take into account the
    * perturbations caused by the other planets, the moon, etc.
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   double getSunLongitude();
   
@@ -703,7 +664,6 @@ public:
    * in equatorial coordinates.
    * @param result fillin for the result
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   Equatorial& getSunPosition(Equatorial& result);
     
@@ -712,7 +672,7 @@ public:
   public: 
     SolarLongitude(double l)
       :  value(l) { }
-      void set(double l) { value = l; }
+    void set(double l) { value = l; }
     double value;
   };
     
@@ -722,7 +682,6 @@ public:
    * For use with {@link #getSunTime getSunTime}. 
    * Note: In this case, "vernal" refers to the northern hemisphere's seasons.
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   static const SolarLongitude VERNAL_EQUINOX;
     
@@ -731,7 +690,6 @@ public:
    * For use with {@link #getSunTime getSunTime}.
    * Note: In this case, "summer" refers to the northern hemisphere's seasons.
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   static const SolarLongitude SUMMER_SOLSTICE;
     
@@ -740,7 +698,6 @@ public:
    * For use with {@link #getSunTime getSunTime}.
    * Note: In this case, "autumn" refers to the northern hemisphere's seasons.
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   static const SolarLongitude AUTUMN_EQUINOX;
     
@@ -749,7 +706,6 @@ public:
    * For use with {@link #getSunTime getSunTime}.
    * Note: In this case, "winter" refers to the northern hemisphere's seasons.
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   static const SolarLongitude WINTER_SOLSTICE;
     
@@ -757,14 +713,12 @@ public:
    * Find the next time at which the sun's ecliptic longitude will have
    * the desired value.  
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   UDate getSunTime(UDate desired, UBool next);
   /**
    * Find the next time at which the sun's ecliptic longitude will have
    * the desired value.  
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   UDate getSunTime(const SolarLongitude& desired, UBool next);
     
@@ -779,7 +733,6 @@ public:
    * is set to a time near local midnight.
    * 
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   UDate getSunRiseSet(UBool rise);
 
@@ -1066,7 +1019,7 @@ public:
   static const double moonI;   // Inclination of orbit
   static const double moonE;            // Eccentricity of orbit
     
-  // These aren't used right now
+                                        // These aren't used right now
   static const double moonA;           // semi-major axis (km)
   static const double moonT0;     // Angular size at distance A
   static const double moonPi;     // Parallax at distance A
@@ -1076,7 +1029,6 @@ public:
    * object, in equatorial coordinates.
    * @internal
    * @return const reference to internal field of calendar astronomer. Do not use outside of the lifetime of this astronomer.
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   const Equatorial& getMoonPosition();
   
@@ -1088,7 +1040,6 @@ public:
    *
    * @see #getMoonPhase
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   double getMoonAge();
     
@@ -1105,7 +1056,6 @@ public:
    *
    * @see #getMoonAge
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   double getMoonPhase();
     
@@ -1113,7 +1063,7 @@ public:
   public: 
     MoonAge(double l)
       :  value(l) { }
-      void set(double l) { value = l; }
+    void set(double l) { value = l; }
     double value;
   };
 
@@ -1121,7 +1071,6 @@ public:
    * Constant representing a new moon.
    * For use with {@link #getMoonTime getMoonTime}
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   static const MoonAge NEW_MOON;
 
@@ -1129,7 +1078,6 @@ public:
    * Constant representing the moon's first quarter.
    * For use with {@link #getMoonTime getMoonTime}
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   static const MoonAge FIRST_QUARTER;
     
@@ -1137,7 +1085,6 @@ public:
    * Constant representing a full moon.
    * For use with {@link #getMoonTime getMoonTime}
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   static const MoonAge FULL_MOON;
     
@@ -1145,7 +1092,6 @@ public:
    * Constant representing the moon's last quarter.
    * For use with {@link #getMoonTime getMoonTime}
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   static const MoonAge LAST_QUARTER;
     
@@ -1157,7 +1103,6 @@ public:
    * @param next      <tt>true</tt> if the next occurrance of the phase
    *                  is desired, <tt>false</tt> for the previous occurrance. 
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   UDate getMoonTime(double desired, UBool next);
   UDate getMoonTime(const MoonAge& desired, UBool next);
@@ -1166,7 +1111,6 @@ public:
    * Returns the time (GMT) of sunrise or sunset on the local date to which
    * this calendar is currently set.
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   UDate getMoonRiseSet(UBool rise);
 
@@ -1300,7 +1244,6 @@ private:
 
   /**
    * @internal
-   * @deprecated ICU 2.4. This class may be removed or modified.
    */
   UDate local(UDate localMillis);
 };
