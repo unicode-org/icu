@@ -8,6 +8,9 @@
 tt{
     Version{ "x0.3" }
     LocaleID:int { 0x44 }
+    Languages {
+        tt { "\u0422\u0430\u0442\u0430\u0440" }
+    }
 //    ShortLanguage{
 //        "TTT"
 //    }

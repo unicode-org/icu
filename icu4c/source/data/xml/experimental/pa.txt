@@ -8,6 +8,9 @@
 pa {
     Version{ "x2.1"}
     LocaleID:int { 0x46 }
+    Languages {
+        pa { "\u0A2A\u0A70\u0A1C\u0A3E\u0A2C\u0A40" }
+    }
     AmPmMarkers{
         "\u0A38\u0A35\u0A47\u0A30\u0A47",
         "\u0A36\u0A3E\u0A2E"

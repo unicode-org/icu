@@ -8,6 +8,9 @@
 ka{
     Version{ "x0.2" }
     LocaleID:int { 0x37 }
+    Languages {
+        ka { "\u10E5\u10D0\u10E0\u10D7\u10E3\u10DA\u10D8" }
+    }
 //    ShortLanguage{
 //        "KAT"
 //    }
