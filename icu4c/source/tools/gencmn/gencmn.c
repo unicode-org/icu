@@ -85,7 +85,9 @@ static UOption options[]={
 /*6*/ UOPTION_DEF( "name", 'n', UOPT_REQUIRES_ARG),
 /*7*/ UOPTION_DEF( "type", 't', UOPT_REQUIRES_ARG),
 /*8*/ UOPTION_DEF( "source", 'S', UOPT_NO_ARG),
-/*9*/ UOPTION_DEF( "entrypoint", 'e', UOPT_REQUIRES_ARG)
+/*9*/ UOPTION_DEF( "entrypoint", 'e', UOPT_REQUIRES_ARG),
+/*10*/ UOPTION_DEF( "revision", 'r', UOPT_REQUIRES_ARG)
+
 };
 
 char symPrefix[100];
@@ -109,20 +111,36 @@ main(int argc, char* argv[]) {
     options[7].value=DATA_TYPE;
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
 
-#ifndef U_HAVE_BIND_INTERNAL_REFERENCES
-    /* if it is ICU data.. no prefix. */
-    if(!uprv_strcmp(options[6].value, COMMON_DATA_NAME))
+    if(options[6].doesOccur) /* name */
     {
-        symPrefix[0] = 0;
+      uprv_strcpy(symPrefix, options[6].value);
     }
     else
     {
-        uprv_strcpy(symPrefix, options[6].value);
-        uprv_strcat(symPrefix, "_");
+      symPrefix[0] = 0;
     }
-#else
-    symPrefix[0] = 0;
-#endif
+
+    if(options[10].doesOccur) /* revision */
+    {
+      int len;
+      int i;
+      uprv_strcat(symPrefix, options[10].value); 
+      /* Convert non alpha numeric symbols to underscores */
+
+      /* turn dots in the entry name into underscores */
+      len=uprv_strlen(symPrefix);
+      for(i=0; i<len; ++i) {
+        if(symPrefix[i]=='.') {
+          symPrefix[i]='_';
+        }
+      }
+    }
+
+    /* add an underscore to the prefix if non empty */
+    if(symPrefix[0] != 0)
+    {
+      uprv_strcat(symPrefix, "_");
+    }
 
     /* error handling, printing usage message */
     if(argc<0) {
@@ -158,7 +176,8 @@ main(int argc, char* argv[]) {
             "                                     defaults to \"" DATA_TYPE "\"\n"
             "         -S, --source tocfile        write a .c source file with the table of contents\n"
             "         -e, --entrypoint name       override the c entrypoint name\n"
-            "                                     defaults to \"<name>_<type>\" ");
+            "                                     defaults to \"<name>_<type>\" \n"
+            "         -r, --revision x.x          Set a version (example: 20.1)\n");
         }
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }

@@ -99,7 +99,7 @@ const char options_help[][160]={
     "Install the data (specify target)",
     "Specify a custom source directory",
     "Specify a custom entrypoint name (default: short name)",
-    "Specify a version when packaging in DLL mode",
+    "Specify a version when packaging in DLL or static mode",
     "Pass the next argument to make(1)"
 };
 
