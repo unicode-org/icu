@@ -247,6 +247,7 @@ void CollationIteratorTest::TestSetText(/* char* par */)
         assertEqual(*iter1, *iter2);
     }
    
+    delete chariter;
     delete iter2;
     delete iter1;
 }
