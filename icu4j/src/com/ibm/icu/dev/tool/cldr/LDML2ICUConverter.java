@@ -156,7 +156,7 @@ public class LDML2ICUConverter {
                 }
                 
             }catch (Throwable se) {
-                System.err.println("ERROR: " + se.toString());
+                System.err.println(fileName + ": ERROR: " + se.toString());
                 se.printStackTrace();
                 System.exit(1);
             }    
@@ -263,7 +263,7 @@ public class LDML2ICUConverter {
              writeAliasedResource();
           }
          catch (Throwable se) {
-             System.err.println("ERROR: " + se.toString());
+             System.err.println(xmlfileName + ": ERROR: " + se.toString());
              se.printStackTrace();
              System.exit(1);
          }    
@@ -2858,7 +2858,7 @@ public class LDML2ICUConverter {
             
             FileOutputStream file = new FileOutputStream(outputFileName);
             BufferedOutputStream writer = new BufferedOutputStream(file);
-            System.out.println("INFO: Creating ICU ResourceBundle: "+outputFileName);
+            System.err.println(sourceFileName + ": INFO: Creating ICU ResourceBundle: "+outputFileName);
             //TODO: fix me
             writeHeader(writer,sourceFileName);
             
@@ -2877,7 +2877,7 @@ public class LDML2ICUConverter {
             writer.flush();
             writer.close();
         } catch (Exception ie) {
-            System.err.println("ERROR :" + ie.toString());
+            System.err.println(sourceFileName + ": ERROR :" + ie.toString());
             return;
         }
     }

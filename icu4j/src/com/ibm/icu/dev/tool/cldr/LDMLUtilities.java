@@ -970,9 +970,12 @@ public class LDMLUtilities {
         
         // Local class: cheap non-printing ErrorHandler
         // This is used to suppress validation warnings
+        final String filename2 = filename;
         ErrorHandler nullHandler = new ErrorHandler() {
-            public void warning(SAXParseException e) throws SAXException {System.err.println("WARNING: " + e.getMessage());}
-            public void error(SAXParseException e) throws SAXException {System.err.println("ERROR: " + e.getMessage());}
+            public void warning(SAXParseException e) throws SAXException {                int col = e.getColumnNumber();
+ System.err.println(filename2 + ":" + e.getLineNumber() +  (col>=0?":" + col:"") + ": WARNING: " + e.getMessage());}
+            public void error(SAXParseException e) throws SAXException {                int col = e.getColumnNumber();
+System.err.println(filename2 + ":" + e.getLineNumber() +  (col>=0?":" + col:"") + ": ERROR: " + e.getMessage());}
             public void fatalError(SAXParseException e) throws SAXException 
             {
                 throw e;
@@ -984,13 +987,14 @@ public class LDMLUtilities {
         {
             // First, attempt to parse as XML (preferred)...
             DocumentBuilder docBuilder = dfactory.newDocumentBuilder();
+            docBuilder.setEntityResolver(new CachingEntityResolver());
             docBuilder.setErrorHandler(nullHandler);
             doc = docBuilder.parse(docSrc);
         }
         catch (Throwable se)
         {
             // ... if we couldn't parse as XML, attempt parse as HTML...
-            System.out.println("ERROR :" + se.getMessage());
+            System.err.println(filename + ": ERROR :" + se.getMessage());
             if(!ignoreError){
                 throw new RuntimeException(se);
             }
