@@ -368,7 +368,7 @@ Print the name of a Unicode code point whose value is known (\fBU+30AB\fP
 in this example):
 
 .RS 4
-.B \fR$ \fPecho '\u30ab' | uconv \-x 'hex-any; any-name'; echo
+.B \fR$ \fPecho '\eu30ab' | uconv \-x 'hex-any; any-name'; echo
 .br
 {KATAKANA LETTER KA}{<control-000A>}
 .br
