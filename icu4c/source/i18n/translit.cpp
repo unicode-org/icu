@@ -19,7 +19,6 @@
 #include "unicode/rep.h"
 #include "unicode/resbund.h"
 #include "unicode/unifilt.h"
-#include "unicode/unifltlg.h"
 #include "unicode/uniset.h"
 #include "unicode/uscript.h"
 #include "unicode/strenum.h"
@@ -1088,6 +1087,28 @@ UnicodeString& Transliterator::toRules(UnicodeString& rulesSource,
     rulesSource.insert(0, UNICODE_STRING_SIMPLE("::"));
     rulesSource.append(ID_DELIM);
     return rulesSource;
+}
+
+int32_t Transliterator::countElements() const {
+    return (this->getDynamicClassID() ==
+            CompoundTransliterator::getStaticClassID()) ?
+        ((const CompoundTransliterator*) this)->getCount() : 0;
+}
+
+const Transliterator& Transliterator::getElement(int32_t index, UErrorCode& ec) const {
+    if (U_FAILURE(ec)) {
+        return *this;
+    }
+    const CompoundTransliterator* cpd =
+        (this->getDynamicClassID() == CompoundTransliterator::getStaticClassID()) ?
+        (const CompoundTransliterator*) this : 0;
+    int32_t n = (cpd == NULL) ? 1 : cpd->getCount();
+    if (index < 0 || index >= n) {
+        ec = U_INDEX_OUTOFBOUNDS_ERROR;
+        return *this;
+    } else {
+        return (n == 1) ? *this : cpd->getTransliterator(index);
+    }
 }
 
 UnicodeSet& Transliterator::getSourceSet(UnicodeSet& result) const {

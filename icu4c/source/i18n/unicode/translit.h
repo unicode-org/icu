@@ -274,14 +274,14 @@ private:
     /**
      * Return a token containing an integer.
      * @return a token containing an integer.
-     * @draft ICU 2.4
+     * @internal
      */
     inline static Token integerToken(int32_t);
 
     /**
      * Return a token containing a pointer.
      * @return a token containing a pointer.
-     * @draft ICU 2.4
+     * @internal
      */
     inline static Token pointerToken(void*);
 
@@ -870,6 +870,41 @@ public:
      */
     virtual UnicodeString& toRules(UnicodeString& result,
                                    UBool escapeUnprintable) const;
+
+    /**
+     * Return the number of elements that make up this transliterator.
+     * For example, if the transliterator "NFD;Jamo-Latin;Latin-Greek"
+     * were created, the return value of this method would be 3.
+     *
+     * <p>If this transliterator is not composed of other
+     * transliterators, then this method returns 1.
+     * @return the number of transliterators that compose this
+     * transliterator, or 1 if this transliterator is not composed of
+     * multiple transliterators
+     * @draft ICU 3.0
+     */
+    int32_t countElements() const;
+
+    /**
+     * Return an element that makes up this transliterator.  For
+     * example, if the transliterator "NFD;Jamo-Latin;Latin-Greek"
+     * were created, the return value of this method would be one
+     * of the three transliterator objects that make up that
+     * transliterator: [NFD, Jamo-Latin, Latin-Greek].
+     *
+     * <p>If this transliterator is not composed of other
+     * transliterators, then this method will return a reference to
+     * this transliterator when given the index 0.
+     * @param index a value from 0..countElements()-1 indicating the
+     * transliterator to return
+     * @param ec input-output error code
+     * @return one of the transliterators that makes up this
+     * transliterator, if this transliterator is made up of multiple
+     * transliterators, otherwise a reference to this object if given
+     * an index of 0
+     * @draft ICU 3.0
+     */
+    const Transliterator& getElement(int32_t index, UErrorCode& ec) const;
 
     /**
      * Returns the set of all characters that may be modified in the
