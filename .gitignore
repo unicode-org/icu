@@ -172,8 +172,10 @@ icu4c/source/tools/rbdump/Release
 icu4c/source/tools/rbdump/pkgdata
 icu4c/source/tools/rbdump/tmp
 icu4c/source/tools/tmp
+icu4c/source/tools/toolutil/*.a
 icu4c/source/tools/toolutil/*.d
 icu4c/source/tools/toolutil/*.pdb
+icu4c/source/tools/toolutil/*.so*
 icu4c/source/tools/toolutil/Debug
 icu4c/source/tools/toolutil/Makefile
 icu4c/source/tools/toolutil/Release
