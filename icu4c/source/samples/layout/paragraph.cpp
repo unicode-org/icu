@@ -16,14 +16,14 @@
 #include "unicode/ubidi.h"
 #include "usc_impl.h" /* this is currently private! */
 
+#include "layout/ParagraphLayout.h"
+
 #include "RenderingSurface.h"
 #include "ScriptCompositeFontInstance.h"
 
 #include "paragraph.h"
 #include "UnicodeReader.h"
 #include "FontMap.h"
-
-#include "ParagraphLayout.h"
 
 #define MARGIN 10
 #define LINE_GROW 32

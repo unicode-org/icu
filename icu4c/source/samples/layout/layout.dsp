@@ -50,7 +50,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 ..\..\..\lib\icule.lib ..\..\..\lib\icuuc.lib ..\..\..\lib\icuin.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /machine:I386
+# ADD LINK32 ..\..\..\lib\iculx.lib ..\..\..\lib\icule.lib ..\..\..\lib\icuuc.lib ..\..\..\lib\icuin.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /machine:I386
 # SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "layout - Win32 Debug"
@@ -75,7 +75,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 ..\..\..\lib\iculed.lib ..\..\..\lib\icuucd.lib ..\..\..\lib\icuind.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
+# ADD LINK32 ..\..\..\lib\iculxd.lib ..\..\..\lib\iculed.lib ..\..\..\lib\icuucd.lib ..\..\..\lib\icuind.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
 # SUBTRACT LINK32 /pdb:none
 
 !ENDIF 
@@ -125,23 +125,11 @@ SOURCE=.\paragraph.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ParagraphLayout.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\RunArrays.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\ScriptCompositeFontInstance.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\UnicodeReader.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\Utilities.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -181,19 +169,11 @@ SOURCE=.\paragraph.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\ParagraphLayout.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\RenderingSurface.h
 # End Source File
 # Begin Source File
 
 SOURCE=.\resource.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\RunArrays.h
 # End Source File
 # Begin Source File
 
@@ -206,10 +186,6 @@ SOURCE=.\sfnt.h
 # Begin Source File
 
 SOURCE=.\UnicodeReader.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\Utilities.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
