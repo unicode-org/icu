@@ -22,7 +22,6 @@
 #include "unicode/ustdio.h"
 #include "ufile.h"
 #include "unicode/uloc.h"
-#include "loccache.h"
 #include "unicode/ures.h"
 #include "unicode/ucnv.h"
 #include "cstring.h"
@@ -53,28 +52,6 @@ static UBool hasICUData(const char *cp) {
 }
 
 
-
-U_CAPI UFILE* U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
-u_fopen(const char    *filename,
-        const char    *perm,
-        const char    *locale,
-        const char    *codepage)
-{
-    UFILE     *result;
-    FILE     *systemFile = fopen(filename, perm);
-    if(systemFile == 0) {
-        return 0;
-    }
-
-    result = u_finit(systemFile, locale, codepage);
-
-    if (result) {
-        result->fOwnFile = TRUE;
-    }
-
-    return result;
-}
-
 U_CAPI UFILE* U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_finit(FILE        *f,
         const char    *locale,
@@ -104,8 +81,7 @@ u_finit(FILE        *f,
             locale = uloc_getDefault();
         }
 
-        result->fBundle = u_loccache_get(locale);
-        if(result->fBundle == 0) {
+        if(u_locbund_init(&result->fBundle, locale) == 0) {
             /* DO NOT FCLOSE HERE! */
             uprv_free(result);
             return 0;
@@ -140,6 +116,27 @@ u_finit(FILE        *f,
     return result;
 }
 
+U_CAPI UFILE* U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
+u_fopen(const char    *filename,
+        const char    *perm,
+        const char    *locale,
+        const char    *codepage)
+{
+    UFILE     *result;
+    FILE     *systemFile = fopen(filename, perm);
+    if(systemFile == 0) {
+        return 0;
+    }
+
+    result = u_finit(systemFile, locale, codepage);
+
+    if (result) {
+        result->fOwnFile = TRUE;
+    }
+
+    return result;
+}
+
 
 U_CAPI void U_EXPORT2
 u_fflush(UFILE *file)
@@ -159,8 +156,7 @@ u_fclose(UFILE *file)
         fclose(file->fFile);
 
 #if !UCONFIG_NO_FORMATTING
-    if(file->fOwnBundle)
-        u_locbund_delete(file->fBundle);
+    u_locbund_close(&file->fBundle);
 #endif
 
     ucnv_close(file->fConverter);
@@ -178,20 +174,16 @@ u_fgetfile(    UFILE         *f)
 U_CAPI const char*  U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_fgetlocale(    UFILE        *file)
 {
-    return file->fBundle->fLocale;
+    return file->fBundle.fLocale;
 }
 
 U_CAPI int32_t U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_fsetlocale(const char        *locale,
              UFILE        *file)
 {
-    if(file->fOwnBundle)
-        u_locbund_delete(file->fBundle);
+    u_locbund_close(&file->fBundle);
 
-    file->fBundle     = u_loccache_get(locale);
-    file->fOwnBundle     = FALSE;
-
-    return file->fBundle == 0 ? -1 : 0;
+    return u_locbund_init(&file->fBundle, locale) == 0 ? -1 : 0;
 }
 
 #endif
@@ -219,7 +211,7 @@ u_fsetcodepage(    const char    *codepage,
 #if !UCONFIG_NO_FORMATTING
     /* if the codepage is 0, use the default for the locale */
     if(codepage == 0) {
-        codepage = uprv_defaultCodePageForLocale(file->fBundle->fLocale);
+        codepage = uprv_defaultCodePageForLocale(file->fBundle.fLocale);
 
         /* if the codepage is still 0, fall back on the default codepage */
     }

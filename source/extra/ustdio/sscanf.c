@@ -30,7 +30,6 @@
 #include "uscanf_p.h"
 #include "uscanset.h"
 #include "locbund.h"
-#include "loccache.h"
 
 #include "cmemory.h"
 #include "ustr_imp.h"
@@ -286,7 +285,7 @@ u_sscanf_double_handler(u_localized_string    *input,
         len = ufmt_min(len, info->fWidth);
 
     /* get the formatter */
-    format = u_locbund_getNumberFormat(input->fBundle);
+    format = u_locbund_getNumberFormat(&input->fBundle, UNUM_DECIMAL);
 
     /* handle error */
     if(format == 0)
@@ -331,7 +330,7 @@ u_sscanf_scientific_handler(u_localized_string    *input,
         len = ufmt_min(len, info->fWidth);
 
     /* get the formatter */
-    format = u_locbund_getScientificFormat(input->fBundle);
+    format = u_locbund_getNumberFormat(&input->fBundle, UNUM_SCIENTIFIC);
 
     /* handle error */
     if(format == 0)
@@ -385,8 +384,8 @@ u_sscanf_scidbl_handler(u_localized_string    *input,
         len = ufmt_min(len, info->fWidth);
 
     /* get the formatters */
-    scientificFormat = u_locbund_getScientificFormat(input->fBundle);
-    genericFormat = u_locbund_getNumberFormat(input->fBundle);
+    scientificFormat = u_locbund_getNumberFormat(&input->fBundle, UNUM_SCIENTIFIC);
+    genericFormat = u_locbund_getNumberFormat(&input->fBundle, UNUM_DECIMAL);
 
     /* handle error */
     if(scientificFormat == 0 || genericFormat == 0)
@@ -447,7 +446,7 @@ u_sscanf_integer_handler(u_localized_string    *input,
         len = ufmt_min(len, info->fWidth);
 
     /* get the formatter */
-    format = u_locbund_getNumberFormat(input->fBundle);
+    format = u_locbund_getNumberFormat(&input->fBundle, UNUM_DECIMAL);
 
     /* handle error */
     if(format == 0)
@@ -514,7 +513,7 @@ u_sscanf_currency_handler(u_localized_string    *input,
         len = ufmt_min(len, info->fWidth);
 
     /* get the formatter */
-    format = u_locbund_getCurrencyFormat(input->fBundle);
+    format = u_locbund_getNumberFormat(&input->fBundle, UNUM_CURRENCY);
 
     /* handle error */
     if(format == 0)
@@ -559,7 +558,7 @@ u_sscanf_percent_handler(u_localized_string    *input,
         len = ufmt_min(len, info->fWidth);
 
     /* get the formatter */
-    format = u_locbund_getPercentFormat(input->fBundle);
+    format = u_locbund_getNumberFormat(&input->fBundle, UNUM_PERCENT);
 
     /* handle error */
     if(format == 0)
@@ -604,7 +603,7 @@ u_sscanf_date_handler(u_localized_string    *input,
         len = ufmt_min(len, info->fWidth);
 
     /* get the formatter */
-    format = u_locbund_getDateFormat(input->fBundle);
+    format = u_locbund_getDateFormat(&input->fBundle);
 
     /* handle error */
     if(format == 0)
@@ -645,7 +644,7 @@ u_sscanf_time_handler(u_localized_string    *input,
         len = ufmt_min(len, info->fWidth);
 
     /* get the formatter */
-    format = u_locbund_getTimeFormat(input->fBundle);
+    format = u_locbund_getTimeFormat(&input->fBundle);
 
     /* handle error */
     if(format == 0)
@@ -743,7 +742,7 @@ u_sscanf_spellout_handler(u_localized_string    *input,
         len = ufmt_min(len, info->fWidth);
 
     /* get the formatter */
-    format = u_locbund_getSpelloutFormat(input->fBundle);
+    format = u_locbund_getNumberFormat(&input->fBundle, UNUM_SPELLOUT);
 
     /* handle error */
     if(format == 0)
@@ -1079,12 +1078,10 @@ u_vsscanf_u(const UChar *buffer,
     if(locale == 0) {
         locale = uloc_getDefault();
     }
-    inStr.fBundle = u_loccache_get(locale);
 
-    if(inStr.fBundle == 0) {
+    if(u_locbund_init(&inStr.fBundle, locale) == 0) {
         return 0;
     }
-    inStr.fOwnBundle     = FALSE;
 
     /* iterate through the pattern */
     for(;;) {
@@ -1188,6 +1185,7 @@ u_vsscanf_u(const UChar *buffer,
 
         /* just ignore unknown tags */
     }
+    u_locbund_close(&inStr.fBundle);
 
     /* return # of items converted */
     return converted;
