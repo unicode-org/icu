@@ -1784,7 +1784,6 @@ void Transliterator::initializeRegistry(void) {
     // added to the system.
 
     registry->put(new NullTransliterator(), TRUE);
-    registry->put(new RemoveTransliterator(), TRUE);
     registry->put(new LowercaseTransliterator(), TRUE);
     registry->put(new UppercaseTransliterator(), TRUE);
     registry->put(new TitlecaseTransliterator(), TRUE);
@@ -1792,6 +1791,7 @@ void Transliterator::initializeRegistry(void) {
     _registerSpecialInverse("Title", "Lower", FALSE);
     registry->put(new UnicodeNameTransliterator(), TRUE);
     registry->put(new NameUnicodeTransliterator(), TRUE);
+    RemoveTransliterator::registerIDs();
     EscapeTransliterator::registerIDs();
     UnescapeTransliterator::registerIDs();
     NormalizationTransliterator::registerIDs();
