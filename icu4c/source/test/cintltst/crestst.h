@@ -39,6 +39,10 @@
 
     static void TestGetLocaleByType(void);
 
+    static void TestGetFunctionalEquivalent(void);
+
+    static void TestGetKeywordValues(void);
+
     /**
      * extensive subtests called by TestResourceBundles
      **/
