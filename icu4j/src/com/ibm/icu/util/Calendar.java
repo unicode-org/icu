@@ -3258,10 +3258,15 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     public void setMinimalDaysInFirstWeek(int value)
     {
+        // Values less than 1 have the same effect as 1; values greater
+        // than 7 have the same effect as 7. However, we normalize values
+        // so operator== and so forth work.
+        if (value < 1) {
+            value = 1;
+        } else if (value > 7) {
+            value = 7;
+        }
         if (minimalDaysInFirstWeek != value) {
-            if (value < 1 || value > 7) {
-                throw new IllegalArgumentException("Invalid days in first week");
-            }
             minimalDaysInFirstWeek = value;
             areFieldsSet = false;
         }
