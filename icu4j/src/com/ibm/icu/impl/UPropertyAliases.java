@@ -354,8 +354,8 @@ public final class UPropertyAliases implements ICUBinary.Authenticate {
 
         int getEnum(String nameProbe) {
             for (int i=0; i<nameArray.length; ++i) {
-                int c = comparePropertyNames(nameProbe,
-                                             stringPool[nameArray[i]]);
+                int c = UPropertyAliases.compare(nameProbe,
+                                                 stringPool[nameArray[i]]);
                 if (c > 0) continue;
                 if (c < 0) break;
                 return enumArray[i];
@@ -385,7 +385,7 @@ public final class UPropertyAliases implements ICUBinary.Authenticate {
      * comparison is that described as "loose" matching in the
      * Property*Aliases.txt files.
      */
-    private static int comparePropertyNames(String stra, String strb) {
+    public static int compare(String stra, String strb) {
         // Note: This implementation is a literal copy of
         // uprv_comparePropertyNames.  It can probably be improved.
         int istra=0, istrb=0, rc;
