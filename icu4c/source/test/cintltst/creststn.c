@@ -365,8 +365,10 @@ static void TestNewTypes() {
         int len =0;
         const UChar* str = ures_getStringByKey(theBundle,"testescape",&len,&status);
         CONFIRM_ErrorCode(status, U_ZERO_ERROR);
-        if(u_strcmp(uExpect,str)){
-            log_err("Did not get the expected string for testescape");
+        if(U_SUCCESS(status)){
+            if(u_strcmp(uExpect,str)){
+                log_err("Did not get the expected string for testescape");
+            }
         }
     }
     ures_close(res);
