@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-os390,v 1.43 2002/07/18 22:01:30 grhoten-oss Exp $
+## $Id: mh-os390,v 1.44 2002/07/27 07:58:30 grhoten-oss Exp $
 
 ###################################################################
 #                    IMPORTANT NOTE                               #
@@ -36,7 +36,7 @@ endif
 # TODO: Consider using  -Wc,roc,rent for making the data readonly
 CFLAGS          += -Wc,"langlvl(extended),spill(2000)" $(ICU_BUILD_OPTIONS) $(ICU_IEEE) -Wc,dll,expo
 CXXFLAGS        += -Wc,"langlvl(extended),spill(2000)" $(ICU_BUILD_OPTIONS) $(ICU_IEEE) -Wc,dll,expo
-DEFS            += -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED -D_MSE_PROTOS -D_SHR_TZNAME -D_SHR_TIMEZONE
+DEFS            += -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED -D_MSE_PROTOS -D_SHR_TZNAME -D_SHR_TIMEZONE -DU_LIBICUDATA_NAME=\"$(ICUDATA_NAME)\"
 ARFLAGS         = -cr
 
 ## OS390BATCH
@@ -84,12 +84,21 @@ STATIC_O = o
 ifeq ($(OS390_STUBDATA),1)
 ## Suffix of the subset data library for dual common library support
 STUB_SUFFIX=_stub
+DEFS      += -DOS390_STUBDATA
 endif
 
 ifeq ($(OS390BATCH),1)
+ifeq ($(OS390_STUBDATA),1)
 BATCH_STUB_TARGET=	"//'${LOADMOD}(IXMI${SO_TARGET_VERSION_MAJOR}D1)'"
-BATCH_LIBICUUC=		"//'${LOADEXP}(IXMI${SO_TARGET_VERSION_MAJOR}UC)'"
 BATCH_LIBICUDT=		"//'${LOADEXP}(IXMI${SO_TARGET_VERSION_MAJOR}D1)'"
+else
+BATCH_STUB_TARGET=	"//'${LOADMOD}(IXMI${SO_TARGET_VERSION_MAJOR}DA)'"
+BATCH_LIBICUDT=		"//'${LOADEXP}(IXMI${SO_TARGET_VERSION_MAJOR}DA)'"
+endif
+BATCH_LIBICUUC=		"//'${LOADEXP}(IXMI${SO_TARGET_VERSION_MAJOR}UC)'"
+BATCH_LIBICUI18N=	"//'${LOADEXP}(IXMI${SO_TARGET_VERSION_MAJOR}IN)'"
+BATCH_LIBICUSTDIO=	"//'${LOADEXP}(IXMI${SO_TARGET_VERSION_MAJOR}IO)'"
+BATCH_LIBICULE=		"//'${LOADEXP}(IXMI${SO_TARGET_VERSION_MAJOR}LE)'"
 endif
 
 ## Link commands to link to ICU libs
