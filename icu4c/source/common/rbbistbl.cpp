@@ -27,7 +27,9 @@ U_NAMESPACE_BEGIN
 //
 //  Forward Declarations
 //
+U_CDECL_BEGIN
 static void  U_EXPORT2 U_CALLCONV RBBISymbolTableEntry_deleter(void *p);
+U_CDECL_END
 
 
 
@@ -199,10 +201,12 @@ void            RBBISymbolTable::addEntry  (const UnicodeString &key, RBBINode *
 //  RBBISymbolTableEntry_deleter    Used by the UHashTable to delete the contents
 //                                  when the hash table is deleted.
 //
+U_CDECL_BEGIN
 static void  U_EXPORT2 U_CALLCONV RBBISymbolTableEntry_deleter(void *p) {
     RBBISymbolTableEntry *px = (RBBISymbolTableEntry *)p;
     delete px;
 };
+U_CDECL_END
 
 RBBISymbolTableEntry::~RBBISymbolTableEntry() {
     // The "val" of a symbol table entry is a variable reference node.

@@ -41,7 +41,9 @@ U_NAMESPACE_BEGIN
 //
 //  Forward Declarations
 //
+U_CDECL_BEGIN
 static void  U_EXPORT2 U_CALLCONV RBBISetTable_deleter(void *p);
+U_CDECL_END
 
 //----------------------------------------------------------------------------------------
 //
@@ -623,6 +625,7 @@ void RBBIRuleScanner::fixOpStack(RBBINode::OpPrecedence p) {
 //                 If the string is "any", return a set containing all chars.
 //
 //----------------------------------------------------------------------------------------
+U_CDECL_BEGIN
 static void  U_EXPORT2 U_CALLCONV RBBISetTable_deleter(void *p) {
     RBBISetTableEl *px = (RBBISetTableEl *)p;
     delete px->key;
@@ -630,6 +633,7 @@ static void  U_EXPORT2 U_CALLCONV RBBISetTable_deleter(void *p) {
     //        Don't delete the value nodes here.
     delete px;
 };
+U_CDECL_END
 
 void RBBIRuleScanner::findSetFor(const UnicodeString &s, RBBINode *node, UnicodeSet *setToAdopt) {
 

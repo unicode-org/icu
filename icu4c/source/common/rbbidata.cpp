@@ -44,6 +44,7 @@ RBBIDataWrapper::RBBIDataWrapper(UDataMemory* udm, UErrorCode &status) {
 //   Trie access folding function.  Copied as-is from properties code in uchar.c
 //
 //-----------------------------------------------------------------------------------
+U_CDECL_BEGIN
 static int32_t U_CALLCONV
 getFoldingOffset(uint32_t data) {
     /* if bit 15 is set, then the folding offset is in bits 14..0 of the 16-bit trie result */
@@ -53,6 +54,7 @@ getFoldingOffset(uint32_t data) {
         return 0;
     }
 }
+U_CDECL_END
 
 //-----------------------------------------------------------------------------
 //
