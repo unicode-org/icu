@@ -698,7 +698,7 @@ HebrewCalendar::initializeSystemDefaultCentury()
   if (fgSystemDefaultCenturyStart == fgSystemDefaultCentury)
   {
     UErrorCode status = U_ZERO_ERROR;
-    HebrewCalendar calendar(Locale("he@calendar=hebrew"),status);
+    HebrewCalendar calendar(Locale("@calendar=hebrew"),status);
     if (U_SUCCESS(status))
     {
       calendar.setTime(Calendar::getNow(), status);
