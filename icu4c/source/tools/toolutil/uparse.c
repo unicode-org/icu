@@ -23,6 +23,14 @@
 #include "filestrm.h"
 #include "uparse.h"
 
+U_CAPI const char * U_EXPORT2
+u_skipWhitespace(const char *s) {
+    while(*s==' ' || *s=='\t') {
+        ++s;
+    }
+    return s;
+}
+
 U_CAPI void U_EXPORT2
 u_parseDelimitedFile(const char *filename, char delimiter,
                      char *fields[][2], int32_t fieldCount,

@@ -25,13 +25,14 @@
 
 U_CDECL_BEGIN
 
-static U_INLINE const char *
-u_skipWhitespace(const char *s) {
-    while(*s==' ' || *s=='\t') {
-        ++s;
-    }
-    return s;
-}
+/**
+ * Skip space ' ' and TAB '\t' characters.
+ *
+ * @param s Pointer to characters.
+ * @return Pointer to first character at or after s that is not a space or TAB.
+ */
+U_CAPI const char * U_EXPORT2
+u_skipWhitespace(const char *s);
 
 /** Function type for u_parseDelimitedFile(). */
 typedef void U_CALLCONV
