@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/RuleBasedTransliterator.java,v $ 
- * $Date: 2000/05/18 22:49:51 $ 
- * $Revision: 1.30 $
+ * $Date: 2000/05/23 16:48:27 $ 
+ * $Revision: 1.31 $
  *
  *****************************************************************************************
  */
@@ -18,7 +18,7 @@ import java.text.ParsePosition;
 import com.ibm.util.Utility;
 
 /**
- * <strong>RuleBasedTransliterator</strong> is a transliterator
+ * <code>RuleBasedTransliterator</code> is a transliterator
  * that reads a set of rules in order to determine how to perform
  * translations. Rule sets are stored in resource bundles indexed by
  * name. Rules within a rule set are separated by semicolons (';').
@@ -252,7 +252,7 @@ import com.ibm.util.Utility;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  * 
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.30 $ $Date: 2000/05/18 22:49:51 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.31 $ $Date: 2000/05/23 16:48:27 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -1080,7 +1080,6 @@ public class RuleBasedTransliterator extends Transliterator {
             // Check integrity of segments and segment references.  Each
             // segment's start must have a corresponding limit, and the
             // references must not refer to segments that do not exist.
-            int[] segmentsArray = null;
             if (left.segments != null) {
                 int n = left.segments.size();
                 if (n % 2 != 0) {
@@ -1343,6 +1342,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.31  2000/05/23 16:48:27  alan4j
+ * Fix doc; remove unused auto
+ *
  * Revision 1.30  2000/05/18 22:49:51  alan
  * Update docs
  *
