@@ -231,4 +231,27 @@ U_CDECL_END
 U_CFUNC UChar32
 ucnv_getUChar32KeepOverflow(UConverter *cnv, const UChar *buffer, int32_t length);
 
+/**
+ * This helper function updates the offsets array after a callback function call.
+ * It adds the sourceIndex to each offsets item, or sets each of them to -1 if
+ * sourceIndex==-1.
+ *
+ * @param offsets The pointer to offsets entry that corresponds to the first target
+ *                unit that the callback wrote.
+ * @param length  The number of output units that the callback wrote.
+ * @param sourceIndex The sourceIndex of the input sequence that the callback
+ *                    function was called for.
+ * @return offsets+length if offsets!=NULL, otherwise NULL
+ */
+U_CFUNC int32_t *
+ucnv_updateCallbackOffsets(int32_t *offsets, int32_t length, int32_t sourceIndex);
+
+/** Always use fallbacks from codepage to Unicode */
+#define TO_U_USE_FALLBACK(useFallback) TRUE
+#define UCNV_TO_U_USE_FALLBACK(cnv) TRUE
+
+/** Use fallbacks from Unicode to codepage when cnv->useFallback or for private-use code points */
+#define FROM_U_USE_FALLBACK(useFallback, c) ((useFallback) || (uint32_t)((c)-0xe000)<0x1900 || (uint32_t)((c)-0xf0000)<0x20000)
+#define UCNV_FROM_U_USE_FALLBACK(cnv, c) FROM_U_USE_FALLBACK((cnv)->useFallback, c)
+
 #endif /* UCNV_CNV */
