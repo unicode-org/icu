@@ -940,6 +940,26 @@ void RegexTest::API_Match() {
         delete p;
     }
 
+    //
+    // Compilation error on reset with UChar *
+    //   These were a hazard that people were stumbling over with runtime errors.
+    //   Changed them to compiler errors by adding private methods that more closely
+    //   matched the incorrect use of the functions.
+    //
+#if 0
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        UChar ucharString[20];
+        RegexMatcher m(".", 0, status);
+        m.reset(ucharString);  // should not compile.
+
+        RegexPattern *p = RegexPattern::compile(".", 0, status);
+        RegexMatcher *m2 = p->matcher(ucharString, status);    //  should not compile.
+
+        RegexMatcher m3(".", ucharString, 0, status);  //  Should not compile
+    }
+#endif
+
 }
 
 
@@ -1362,7 +1382,8 @@ void RegexTest::API_Pattern() {
     REGEX_CHECK_STATUS;
     REGEX_ASSERT(pat1->getDynamicClassID() == RegexPattern::getStaticClassID());
     REGEX_ASSERT(pat1->getDynamicClassID() != NULL);
-    RegexMatcher *m = pat1->matcher("Hello, World", status);
+    UnicodeString Hello("Hello, world.");
+    RegexMatcher *m = pat1->matcher(Hello, status);
     REGEX_ASSERT(pat1->getDynamicClassID() != m->getDynamicClassID());
     REGEX_ASSERT(m->getDynamicClassID() == RegexMatcher::getStaticClassID());
     REGEX_ASSERT(m->getDynamicClassID() != NULL);
@@ -1766,7 +1787,7 @@ void RegexTest::PerlTests() {
     //   Coming out, capture group 2 is the pattern, capture group 3 is the flags.
     //
     RegexPattern *flagPat = RegexPattern::compile("('?)(.*)\\1(.*)", 0, pe, status);
-    RegexMatcher* flagMat = flagPat->matcher("", status);
+    RegexMatcher* flagMat = flagPat->matcher(status);
 
     //
     // The Perl tests reference several perl-isms, which are evaluated/substituted
@@ -1783,11 +1804,11 @@ void RegexTest::PerlTests() {
 
     //  regexp for $-[0], $+[2], etc.
     RegexPattern *groupsPat = RegexPattern::compile("\\$([+\\-])\\[(\\d+)\\]", 0, pe, status);
-    RegexMatcher *groupsMat = groupsPat->matcher("", status);
+    RegexMatcher *groupsMat = groupsPat->matcher(status);
     
     //  regexp for $0, $1, $2, etc.
     RegexPattern *cgPat = RegexPattern::compile("\\$(\\d+)", 0, pe, status);
-    RegexMatcher *cgMat = cgPat->matcher("", status);
+    RegexMatcher *cgMat = cgPat->matcher(status);
 
 
     //

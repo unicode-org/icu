@@ -247,6 +247,22 @@ public:
     virtual RegexMatcher *matcher(const UnicodeString &input,
         UErrorCode          &status) const;
 
+private:
+    /**
+     * Cause a compilation error if an application accidently attempts to
+     *   create a matcher with a (UChar *) string as input rather than
+     *   a UnicodeString.  Avoids a dangling reference to a temporary string.
+     * <p>
+     * To efficiently work with UChar *strings, wrap the data in a UnicodeString
+     * using one of the aliasing constructors, such as
+     * <code>UnicodeString(UBool isTerminated, const UChar *text, int32_t textLength);</code>
+     *
+     * @internal
+     */
+    virtual RegexMatcher *matcher(const UChar *input,
+        UErrorCode          &status) const;
+public:
+
 
    /**
     * Creates a RegexMatcher that will match against this pattern.  The
@@ -445,6 +461,22 @@ public:
       */
     RegexMatcher(const UnicodeString &regexp, const UnicodeString &input,
         uint32_t flags, UErrorCode &status);
+
+private:
+    /**
+     * Cause a compilation error if an application accidently attempts to
+     *   create a matcher with a (UChar *) string as input rather than
+     *   a UnicodeString.    Avoids a dangling reference to a temporary string.
+     * <p>
+     * To efficiently work with UChar *strings, wrap the data in a UnicodeString
+     * using one of the aliasing constructors, such as
+     * <code>UnicodeString(UBool isTerminated, const UChar *text, int32_t textLength);</code>
+     *
+     * @internal
+     */
+    RegexMatcher(const UnicodeString &regexp, const UChar *input,
+        uint32_t flags, UErrorCode &status);
+public:
 
 
    /**
@@ -654,6 +686,20 @@ public:
     */
     virtual RegexMatcher &reset(const UnicodeString &input);
 
+private:
+    /**
+     * Cause a compilation error if an application accidently attempts to
+     *   reset a matcher with a (UChar *) string as input rather than
+     *   a UnicodeString.    Avoids a dangling reference to a temporary string.
+     * <p>
+     * To efficiently work with UChar *strings, wrap the data in a UnicodeString
+     * using one of the aliasing constructors, such as
+     * <code>UnicodeString(UBool isTerminated, const UChar *text, int32_t textLength);</code>
+     *
+     * @internal
+     */
+    virtual RegexMatcher &reset(const UChar *input);
+public:
 
    /**
     *   Returns the input string being matched.  The returned string is not a copy,
@@ -820,7 +866,6 @@ private:
     RegexMatcher &operator =(const RegexMatcher &rhs);
     friend class RegexPattern;
     friend class RegexCImpl;
-
 
     //
     //  MatchAt   This is the internal interface to the match engine itself.
