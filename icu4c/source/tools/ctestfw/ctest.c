@@ -33,7 +33,7 @@ typedef enum { RUNTESTS, SHOWTESTS } TestMode;
 
 #include "unicode/ctest.h"
 
-char ERROR_LOG[MAX_TEST_LOG][MAXTESTNAME];
+static char ERROR_LOG[MAX_TEST_LOG][MAXTESTNAME];
 
 static TestNode* addTestNode( TestNode *root, const char *name );
 
