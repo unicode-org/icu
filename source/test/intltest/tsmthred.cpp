@@ -673,7 +673,7 @@ public:
         int32_t iteration;
 
         UErrorCode status = U_ZERO_ERROR;
-        NumberFormat *formatter = NumberFormat::createInstance(Locale::ENGLISH,status);
+        NumberFormat *formatter = NumberFormat::createInstance(Locale::getEnglish(),status);
 
         if(U_FAILURE(status))
         {
@@ -681,7 +681,7 @@ public:
             return;
         }
 
-        NumberFormat *percentFormatter = NumberFormat::createPercentInstance(Locale::FRENCH,status);
+        NumberFormat *percentFormatter = NumberFormat::createPercentInstance(Locale::getFrench(),status);
 
         if(U_FAILURE(status))
         {

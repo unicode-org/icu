@@ -785,7 +785,7 @@ void
 TimeZoneRegressionTest::Test4162593() 
 {
     UErrorCode status = U_ZERO_ERROR;
-    SimpleDateFormat *fmt = new SimpleDateFormat("z", Locale::US, status);
+    SimpleDateFormat *fmt = new SimpleDateFormat("z", Locale::getUS(), status);
     const int32_t ONE_HOUR = 60*60*1000;
 
     SimpleTimeZone *asuncion = new SimpleTimeZone(-4*ONE_HOUR, "America/Asuncion" /*PY%sT*/,

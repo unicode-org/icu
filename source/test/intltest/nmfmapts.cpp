@@ -23,7 +23,7 @@ void IntlTestNumberFormatAPI::runIndexedTest( int32_t index, UBool exec, const c
                 if (exec) {
                     logln("NumberFormat API test---"); logln("");
                     UErrorCode status = U_ZERO_ERROR;
-                    Locale::setDefault(Locale::ENGLISH, status);
+                    Locale::setDefault(Locale::getEnglish(), status);
                     if(U_FAILURE(status)) {
                         errln("ERROR: Could not set default locale, test may not give correct results");
                     }
@@ -53,7 +53,7 @@ void IntlTestNumberFormatAPI::testAPI(/* char* par */)
     }
 
     status = U_ZERO_ERROR;
-    NumberFormat *fr = NumberFormat::createInstance(Locale::FRENCH, status);
+    NumberFormat *fr = NumberFormat::createInstance(Locale::getFrench(), status);
     if(U_FAILURE(status)) {
         errln("ERROR: Could not create NumberFormat (French)");
     }
@@ -64,7 +64,7 @@ void IntlTestNumberFormatAPI::testAPI(/* char* par */)
     }
 
     status = U_ZERO_ERROR;
-    NumberFormat *cur_fr = NumberFormat::createCurrencyInstance(Locale::FRENCH, status);
+    NumberFormat *cur_fr = NumberFormat::createCurrencyInstance(Locale::getFrench(), status);
     if(U_FAILURE(status)) {
         errln("ERROR: Could not create NumberFormat (currency, French)");
     }
@@ -75,7 +75,7 @@ void IntlTestNumberFormatAPI::testAPI(/* char* par */)
     }
 
     status = U_ZERO_ERROR;
-    NumberFormat *per_fr = NumberFormat::createPercentInstance(Locale::FRENCH, status);
+    NumberFormat *per_fr = NumberFormat::createPercentInstance(Locale::getFrench(), status);
     if(U_FAILURE(status)) {
         errln("ERROR: Could not create NumberFormat (percent, French)");
     }

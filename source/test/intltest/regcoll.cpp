@@ -17,7 +17,7 @@ CollationRegressionTest::CollationRegressionTest()
 {
     UErrorCode status = U_ZERO_ERROR;
 
-    en_us = (RuleBasedCollator *)Collator::createInstance(Locale::US, status);
+    en_us = (RuleBasedCollator *)Collator::createInstance(Locale::getUS(), status);
 }
 
 CollationRegressionTest::~CollationRegressionTest()
@@ -790,7 +790,7 @@ void CollationRegressionTest::Test4124632(/* char* par */)
     UErrorCode status = U_ZERO_ERROR;
     Collator *coll = NULL;
     
-    coll = Collator::createInstance(Locale::JAPAN, status);
+    coll = Collator::createInstance(Locale::getJapan(), status);
     
     if (coll == NULL || U_FAILURE(status))
     {

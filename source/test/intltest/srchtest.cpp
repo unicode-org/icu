@@ -51,9 +51,9 @@ StringSearchTest::StringSearchTest()
     m_es_ = new RuleBasedCollator(rules, status); 
         
     m_en_wordbreaker_      = BreakIterator::createWordInstance(
-                                                    Locale::ENGLISH, status);
+                                                    Locale::getEnglish(), status);
     m_en_characterbreaker_ = BreakIterator::createCharacterInstance(
-                                                    Locale::ENGLISH, status);
+                                                    Locale::getEnglish(), status);
 }
 
 StringSearchTest::~StringSearchTest() 
@@ -503,14 +503,14 @@ void StringSearchTest::TestOpenClose()
     delete result;
 
     status = U_ZERO_ERROR;
-    result = new StringSearch(pattern, text, Locale::ENGLISH, NULL, status);
+    result = new StringSearch(pattern, text, Locale::getEnglish(), NULL, status);
     if (U_FAILURE(status) || result == NULL) {
         errln("Error: NULL break iterator is valid for opening search");
     }
     delete result;
 
     status = U_ZERO_ERROR;
-    result = new StringSearch(pattern, chariter, Locale::ENGLISH, NULL, status);
+    result = new StringSearch(pattern, chariter, Locale::getEnglish(), NULL, status);
     if (U_FAILURE(status)) {
         errln("Error: NULL break iterator is valid for opening search");
     }
