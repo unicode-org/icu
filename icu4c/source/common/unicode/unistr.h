@@ -31,7 +31,7 @@ class  StringThreadTest;
 /**
  * Option bit for u_strCaseCompare, u_strcasecmp, unorm_compare, etc:
  * Compare strings in code point order instead of code unit order.
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */
 #define U_COMPARE_CODE_POINT_ORDER  0x8000
 #endif
@@ -1622,7 +1622,7 @@ public:
    * @param srcStart the offset into <TT>srcText</TT> where new characters
    * will be obtained
    * @return a reference to this
-   * @draft ICU2.2
+   * @stable ICU 2.2
    */
   inline UnicodeString& setTo(const UnicodeString& srcText, 
                int32_t srcStart);
@@ -2550,7 +2550,7 @@ public:
    *
    * @see getBuffer(int32_t minCapacity)
    * @see getBuffer()
-   * @draft ICU 2.2
+   * @stable ICU 2.2
    */
   inline const UChar *getTerminatedBuffer();
 
@@ -2719,7 +2719,7 @@ public:
    * 'Substring' constructor from tail of source string.
    * @param src The UnicodeString object to copy.
    * @param srcStart The offset into <tt>src</tt> at which to start copying.
-   * @draft ICU2.2
+   * @stable ICU 2.2
    */
   UnicodeString(const UnicodeString& src, int32_t srcStart);
 
@@ -2728,7 +2728,7 @@ public:
    * @param src The UnicodeString object to copy.
    * @param srcStart The offset into <tt>src</tt> at which to start copying.
    * @param srcLength The number of characters from <tt>src</tt> to copy.
-   * @draft ICU2.2
+   * @stable ICU 2.2
    */
   UnicodeString(const UnicodeString& src, int32_t srcStart, int32_t srcLength);
 
@@ -2818,14 +2818,14 @@ public:
   /**
    * ICU "poor man's RTTI", returns a UClassID for this class.
    *
-   * @draft ICU 2.2
+   * @stable ICU 2.2
    */
   static UClassID getStaticClassID();
 
   /**
    * ICU "poor man's RTTI", returns a UClassID for the actual class.
    *
-   * @draft ICU 2.2
+   * @stable ICU 2.2
    */
   virtual UClassID getDynamicClassID() const;
 

@@ -34,7 +34,7 @@ U_NAMESPACE_BEGIN
  *         applications that statically link the C Runtime library, meaning that
  *         the app and ICU will be using different heaps.
  *
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */                              
 #ifndef U_OVERRIDE_CXX_ALLOCATION
 #define U_OVERRIDE_CXX_ALLOCATION 1
@@ -151,21 +151,21 @@ public:
  * This is because some compilers do not support covariant (same-as-this)
  * return types; cast to the appropriate subclass if necessary.
  *
- * @draft ICU 2.2
+ * @stable ICU 2.2
  */
 class U_COMMON_API UObject : public UMemory {
 public:
     /**
      * Destructor.
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.2
      */
     virtual ~UObject();
 
     /**
      * ICU4C "poor man's RTTI", returns a UClassID for the actual ICU class.
      *
-     * @draft ICU 2.2
+     * @stable ICU 2.2
      */
     virtual UClassID getDynamicClassID() const = 0;
 

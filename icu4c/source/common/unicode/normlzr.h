@@ -300,7 +300,7 @@ public:
    *         "mode" normalization form.
    *
    * @see quickCheck
-   * @draft ICU 2.2
+   * @stable ICU 2.2
    */
   static inline UBool
   isNormalized(const UnicodeString &src, UNormalizationMode mode, UErrorCode &errorCode);
@@ -420,7 +420,7 @@ public:
    * @see u_strCompare
    * @see u_strCaseCompare
    *
-   * @draft ICU 2.2
+   * @stable ICU 2.2
    */
   static inline int32_t
   compare(const UnicodeString &s1, const UnicodeString &s2,
@@ -694,14 +694,14 @@ public:
   /**
    * ICU "poor man's RTTI", returns a UClassID for this class.
    * @returns a UClassID for this class.
-   * @draft ICU 2.2
+   * @stable ICU 2.2
    */
   static UClassID getStaticClassID();
 
   /**
    * ICU "poor man's RTTI", returns a UClassID for the actual class.
    * @return a UClassID for the actual class.
-   * @draft ICU 2.2
+   * @stable ICU 2.2
    */
   virtual UClassID getDynamicClassID() const;
 

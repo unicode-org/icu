@@ -118,7 +118,7 @@ public:
 
     /** Default constructor.  Creates an empty shell of an iterator, with no
      *  rules or text to iterate over.   Object can subsequently be assigned to.
-     *  @draft ICU 2.2
+     *  @stable ICU 2.2
      */
     RuleBasedBreakIterator();
 
@@ -136,7 +136,7 @@ public:
      * @param parseError  In the event of a syntax error in the rules, provides the location
      *                    within the rules of the problem.
      * @param status Information on any errors encountered.
-     * @draft ICU 2.2
+     * @stable ICU 2.2
      */
     RuleBasedBreakIterator( const UnicodeString    &rules,
                              UParseError           &parseError,
@@ -343,7 +343,7 @@ public:
      * returned break position.
      *
      * @see UWordBreak
-     * @draft ICU 2.2
+     * @stable ICU 2.2
      */
     virtual int32_t getRuleStatus() const;
 
