@@ -302,21 +302,6 @@ U_CAPI const char*  U_EXPORT2 uprv_getDefaultCodepage(void);
  */
 U_CAPI const char*  U_EXPORT2 uprv_getDefaultLocaleID(void);
 
-#ifdef ICU_NEXTDOUBLE_USE_DEPRECATES
-/*
- * Finds the least double greater than d (if positive == true),
- * or the greatest double less than d (if positive == false).
- *
- * This is a special purpose function defined by the ChoiceFormat API
- * documentation.
- * It is not a general purpose function and not defined for NaN or Infinity
- * @return the least double greater than d (if positive == true),
- * or the greatest double less than d (if positive == false).
- * @obsolete ICU 2.2. Use the ChoiceFormat closures API instead since this API will be removed in that release.
- */
-U_CAPI double       U_EXPORT2 uprv_nextDouble(double d, UBool positive);
-#endif /* ICU_NEXTDOUBLE_USE_DEPRECATES */
-
 /**
  * Filesystem file and path separator characters.
  * Example: '/' and ':' on Unix, '\\' and ';' on Windows.
