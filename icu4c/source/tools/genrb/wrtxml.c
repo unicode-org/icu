@@ -776,7 +776,7 @@ array_write_xml( struct SResource *res, const char* id, const char* language, UE
         T_FileStream_write(out, srBundle->fKeys+res->fKey, (int32_t) uprv_strlen(srBundle->fKeys+res->fKey));
         T_FileStream_write(out, "\"", 1);
         if(res->fComment!=NULL && res->fComment->fChars != NULL){
-            printComments(res->fComment, sid, FALSE, status);
+            printComments(res->fComment, srBundle->fKeys+res->fKey, FALSE, status);
             printNoteElements(res->fComment, status);
         }else{
             T_FileStream_write(out,">\n", 2);
@@ -847,7 +847,7 @@ intvector_write_xml( struct SResource *res, const char* id, const char* language
         T_FileStream_write(out, srBundle->fKeys+res->fKey, (int32_t) uprv_strlen(srBundle->fKeys+res->fKey));
         T_FileStream_write(out, "\"", 1);    
         if(res->fComment!=NULL && res->fComment->fChars != NULL){
-            printComments(res->fComment, sid, FALSE, status);
+            printComments(res->fComment, srBundle->fKeys+res->fKey, FALSE, status);
             printNoteElements(res->fComment, status);
         }else{
             T_FileStream_write(out,">\n", 2);
@@ -928,7 +928,7 @@ int_write_xml(struct SResource *res, const char* id, const char* language, UErro
         T_FileStream_write(out,"\"", 1);
 
         if(res->fComment!=NULL && res->fComment->fChars != NULL){
-            printComments(res->fComment, sid, TRUE, status);
+            printComments(res->fComment, srBundle->fKeys+res->fKey, TRUE, status);
 
         }else{
             T_FileStream_write(out,">\n", 2);
@@ -1007,7 +1007,7 @@ bin_write_xml( struct SResource *res, const char* id, const char* language, UErr
         T_FileStream_write(out, m_type, (int32_t)uprv_strlen(m_type));
         if(!(res->fKey<0 || uprv_strcmp(srBundle->fKeys+res->fKey ,"")==0)){
             T_FileStream_write(out, key, (int32_t)uprv_strlen(key));
-            T_FileStream_write(out, sid, (int32_t) uprv_strlen(srBundle->fKeys+res->fKey));
+            T_FileStream_write(out, srBundle->fKeys+res->fKey, (int32_t) uprv_strlen(srBundle->fKeys+res->fKey));
         } 
         T_FileStream_write(out,"\"", 1);
         tabCount++;
@@ -1163,7 +1163,7 @@ table_write_xml(struct SResource *res, const char* id, const char* language, UEr
             T_FileStream_write(out, "\" ", 2);
             
             if(res->fComment!=NULL && res->fComment->fChars != NULL){
-                printComments(res->fComment, sid, FALSE, status);
+                printComments(res->fComment, srBundle->fKeys+res->fKey, FALSE, status);
                 printNoteElements(res->fComment, status);
             }else{
                 T_FileStream_write(out,">\n", 2);
@@ -1205,7 +1205,7 @@ table_write_xml(struct SResource *res, const char* id, const char* language, UEr
             T_FileStream_write(out, srBundle->fKeys+res->fKey, (int32_t) uprv_strlen(srBundle->fKeys+res->fKey));
 
             if(res->fComment!=NULL && res->fComment->fChars != NULL){
-                printComments(res->fComment, sid, FALSE, status);
+                printComments(res->fComment, srBundle->fKeys+res->fKey, FALSE, status);
                 printNoteElements(res->fComment, status);
             }else{
                 T_FileStream_write(out,">\n", 2);
@@ -1262,7 +1262,7 @@ res_write_xml(struct SResource *res, const char* id, const char* language, UErro
 void 
 bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outputEnc, const char* filename,
                   char *writtenFilename, int writtenFilenameLen, 
-                  const char* language, const char* package, UErrorCode *status) {
+                  const char* language, const char* outFileName, UErrorCode *status) {
 
     char* xmlfileName = NULL;
     char* outputFileName = NULL;
@@ -1278,7 +1278,7 @@ bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outpu
     const char* headerEnd = "</header>\n";
     const char* bodyStart = "<body>\n";
     const char* bodyEnd = "</body>\n";
-    const char* defaultLang = "en";
+
     char* pid = NULL;
     char* temp = NULL;
     char* lang = NULL;
@@ -1318,9 +1318,29 @@ bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outpu
     if (language == NULL) {
         lang = parseFilename(filename, lang);
         if (lang == NULL) {
-            lang = uprv_malloc(sizeof(char)*uprv_strlen(defaultLang) +1);
-            uprv_memset(lang, 0, sizeof(char)*uprv_strlen(defaultLang) +1);
-            uprv_strcpy(lang, defaultLang);
+            /* now check if locale name is valid or not
+             * this is to cater for situation where
+             * pegasusServer.txt contains
+             *
+             * en{
+             *      ..
+             * }
+             */
+             lang = parseFilename(srBundle->fLocale, lang);
+             /*
+              * Neither  the file name nor the table name inside the 
+              * txt file contain a valid country and language codes
+              * throw an error.
+              * pegasusServer.txt contains
+              * 
+              * testelements{
+              *     ....
+              * }
+              */
+             if(lang==NULL){
+                 fprintf(stderr, "Error: The file name and table name do not contain a valid language code. Please use -l option to specify it.\n");
+                 exit(U_ILLEGAL_ARGUMENT_ERROR);
+             }
         }
     } else {
         lang = uprv_malloc(sizeof(char)*uprv_strlen(language) +1);
@@ -1328,10 +1348,10 @@ bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outpu
         uprv_strcpy(lang, language);
     }
 
-    if(package) {
-        outputFileName = uprv_malloc(sizeof(char)*uprv_strlen(package) + 1);
-        uprv_memset(outputFileName, 0, sizeof(char)*uprv_strlen(package) + 1);
-        uprv_strcpy(outputFileName,package);
+    if(outFileName) {
+        outputFileName = uprv_malloc(sizeof(char)*uprv_strlen(outFileName) + 1);
+        uprv_memset(outputFileName, 0, sizeof(char)*uprv_strlen(outFileName) + 1);
+        uprv_strcpy(outputFileName,outFileName);
     } else {
         outputFileName = uprv_malloc(sizeof(char)*uprv_strlen(srBundle->fLocale) + 1);
         uprv_memset(outputFileName, 0, sizeof(char)*uprv_strlen(srBundle->fLocale) + 1);
@@ -1382,6 +1402,10 @@ bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outpu
     T_FileStream_write(out,bundleStart,uprv_strlen(bundleStart));
     write_tabs(out);
     T_FileStream_write(out, fileStart, uprv_strlen(fileStart));
+    /* check if lang and language are the same */
+    if(language != NULL && uprv_strcmp(lang, srBundle->fLocale)!=0){
+        fprintf(stderr,"Warning: The top level tag in the resource and language specified are not the same. Please check the input.\n");
+    }
     T_FileStream_write(out,lang,uprv_strlen(lang));
     T_FileStream_write(out,file1, uprv_strlen(file1));
     T_FileStream_write(out,file2, uprv_strlen(file2));
@@ -1393,10 +1417,6 @@ bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outpu
     strftime(timeBuf, sizeof(timeBuf), "%Y-%m-%dT%H:%M:%SZ", gmtime(&currTime));
     T_FileStream_write(out,timeBuf, uprv_strlen(timeBuf));
 
-    if(package) {
-        T_FileStream_write(out,file5, uprv_strlen(file5));
-        T_FileStream_write(out,package, uprv_strlen(package));    
-    }
     T_FileStream_write(out,"\">\n", 3);
 
     tabCount++;
@@ -1407,14 +1427,8 @@ bundle_write_xml(struct SRBRoot *bundle, const char *outputDir,const char* outpu
     tabCount++;
     T_FileStream_write(out,bodyStart, uprv_strlen(bodyStart));
     
-    if(package) {
-        pid = uprv_malloc(sizeof(char) * uprv_strlen(package)+1);
-        uprv_memset(pid, 0, sizeof(char) * uprv_strlen(package)+1);
-        uprv_strcpy(pid, package);
-        res_write_xml(bundle->fRoot, pid, lang, status);
-    } else {
-        res_write_xml(bundle->fRoot, "", lang, status);
-    }
+
+    res_write_xml(bundle->fRoot, srBundle->fLocale, lang, status);
 
     tabCount--;
     write_tabs(out);
