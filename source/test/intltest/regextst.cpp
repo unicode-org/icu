@@ -373,7 +373,7 @@ void RegexTest::Basic() {
 //
 #if 0
     {
-    REGEX_TESTLM("\\W", "a", FALSE, FALSE);
+    REGEX_TESTLM("(a)|\\1", "x", FALSE, FALSE);
     // REGEX_FIND("(?>(abc{2,4}?))(c*)", "<0>ab<1>cc</1><2>ccc</2></0>ddd");
     // REGEX_FIND("(X([abc=X]+)+X)|(y[abc=]+)", "=XX====================");
     }
@@ -1258,7 +1258,7 @@ void RegexTest::Extended() {
 
     // Back Reference
     REGEX_FIND("(?:ab(..)cd\\1)*", "<0>ab23cd23ab<1>ww</1>cdww</0>abxxcdyy");
-    REGEX_FIND("ab(?:c|(d?))(\\1)", "<0>abc<2></2></0>");
+    REGEX_FIND("ab(?:c|(d?))(\\1)", "<0>ab<1><2></2></1></0>c");
     REGEX_FIND("ab(?:c|(d?))(\\1)", "<0>ab<1>d</1><2>d</2></0>");
     REGEX_FIND("ab(?:c|(d?))(\\1)", "<0>ab<1></1><2></2></0>e");
     REGEX_FIND("ab(?:c|(d?))(\\1)", "<0>ab<1></1><2></2></0>");
@@ -1512,6 +1512,16 @@ void RegexTest::PerlTests() {
     RegexPattern *bangPat = RegexPattern::compile("\\$\\{bang\\}", 0, pe, status);
     RegexMatcher *bangMat = bangPat->matcher("", status);
     
+    //
+    // Regex to find ${nulnul}.  Perl doesn't put \u0000\u0000 into patterns.
+    //
+    RegexPattern *nulnulPat = RegexPattern::compile("\\$\\{nulnul\\}", 0, pe, status);
+    RegexMatcher *nulnulMat = nulnulPat->matcher("", status);
+    //
+    // Regex to find ${ffff}.  Perl doesn't put \uffff into patterns.
+    //
+    RegexPattern *ffffPat = RegexPattern::compile("\\$\\{ffff\\}", 0, pe, status);
+    RegexMatcher *ffffMat = ffffPat->matcher("", status);
 
     int32_t  lineNum = 0;
     int32_t  skippedUnimplementedCount = 0;
@@ -1525,7 +1535,11 @@ void RegexTest::PerlTests() {
         flagMat->matches(status);
         UnicodeString pattern  = flagMat->group(2, status);
         bangMat->reset(pattern);
-        pattern = bangMat->replaceAll("\\u0021", status);
+        pattern = bangMat->replaceAll("!", status);
+        nulnulMat->reset(pattern);
+        pattern = nulnulMat->replaceAll("\\u0000\\u0000", status);
+        ffffMat->reset(pattern);
+        pattern = ffffMat->replaceAll("\\uffff", status);
         UnicodeString flagStr = flagMat->group(3, status);
         // printf("pattern = %s\n", cstar(pattern));
         // printf("   flags = %s\n", cstar(flags));
@@ -1588,11 +1602,26 @@ void RegexTest::PerlTests() {
             continue;
         }
 
+        //
+        // replace the Perl variables that appear in some of the
+        //   match data strings.  
+        //
+        nulnulMat->reset(fields[1]);
+        UnicodeString matchString = nulnulMat->replaceAll("\\u0000\\u0000", status);
+        ffffMat->reset(matchString);
+        matchString = ffffMat->replaceAll("\\uffff", status);
+
+        // Replace any \n in the match string with an actual new-line char.
+        //  Don't do full unescape, as this unescapes more than Perl does, which
+        //  causes other spurious failures in the tests.
+        matchString.findAndReplace("\\n", "\n");
+        
+
 
         //
         // Run the test
         //
-        RegexMatcher *testMat = testPat->matcher(fields[1], status);
+        RegexMatcher *testMat = testPat->matcher(matchString, status);
         UBool found = testMat->find();
         UBool expected = FALSE;
         if (fields[2].indexOf(UChar_y) >=0) {
