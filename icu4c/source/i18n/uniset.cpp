@@ -73,8 +73,8 @@ const UChar UnicodeSet::UPPER_U      = 0x0055; /*U*/
  */
 UnicodeSet::UnicodeSet() :
     len(1), capacity(1 + START_EXTRA), bufferCapacity(0),
-    buffer(0) {
-
+    buffer(0)
+{
     list = new UChar32[capacity];
     list[0] = HIGH;
 }
@@ -88,8 +88,8 @@ UnicodeSet::UnicodeSet() :
  */
 UnicodeSet::UnicodeSet(UChar32 start, UChar32 end) :
     len(1), capacity(1 + START_EXTRA), bufferCapacity(0),
-    buffer(0) {
-
+    buffer(0)
+{
     list = new UChar32[capacity];
     list[0] = HIGH;
     complement(start, end);
@@ -104,8 +104,8 @@ UnicodeSet::UnicodeSet(UChar32 start, UChar32 end) :
 UnicodeSet::UnicodeSet(const UnicodeString& pattern,
                        UErrorCode& status) :
     len(0), capacity(START_EXTRA), bufferCapacity(0),
-    buffer(0) {
-
+    buffer(0)
+{
     list = new UChar32[capacity];
     applyPattern(pattern, status);
 }
@@ -115,8 +115,8 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
                        const SymbolTable& symbols,
                        UErrorCode& status) :
     len(0), capacity(START_EXTRA), bufferCapacity(0),
-    buffer(0) {
-
+    buffer(0)
+{
     list = new UChar32[capacity];
     applyPattern(pattern, pos, &symbols, status);
 }
@@ -130,7 +130,6 @@ UnicodeSet::UnicodeSet(int8_t category, UErrorCode& status) :
     len(0), capacity(START_EXTRA), bufferCapacity(0), list(0),
     buffer(0)
 {
-
     if (U_SUCCESS(status)) {
         if (category < 0 || category >= Unicode::GENERAL_TYPES_COUNT) {
             status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -145,6 +144,7 @@ UnicodeSet::UnicodeSet(int8_t category, UErrorCode& status) :
  * Constructs a set that is identical to the given UnicodeSet.
  */
 UnicodeSet::UnicodeSet(const UnicodeSet& o) :
+    UnicodeFilter(o),
     capacity(o.len + GROW_EXTRA), bufferCapacity(0),
     buffer(0)
 {
