@@ -444,6 +444,13 @@ public final class CollationElementIterator
 	 * will cause this value to be reset to 0.
 	 */
   	protected int m_CEBufferOffset_;
+  	/** 
+  	 * This is the position to which we have stored processed CEs.
+  	 * Initial value is 0.
+  	 * The next/previous after we reach the end/beginning of the m_CEBuffer_
+	 * will cause this value to be reset to 0.
+  	 */
+  	protected int m_CEBufferSize_; 
   	
 	// protected constructors -----------------------------------------------
 	
@@ -498,17 +505,14 @@ public final class CollationElementIterator
     }
     
     /**
-     * Checks if the are anymore buffered CEs to be returned.
-     * @return true if there are more buffered CEs to be returned.
+     * Sets the collator used.
+     * Internal use, all data members will be reset to the default values
+     * @param collator to set
      */
-    protected boolean hasBufferedCE()
+    protected void setCollator(RuleBasedCollator collator) 
     {
-    	if (m_isForwards_) {
-    		// m_CEBufferOffset_ is never negative
-    		// if there is no expansion, m_CEBufferSize_ = 0
-    		return m_CEBufferOffset_ < m_CEBufferSize_;
-    	}
-    	return m_CEBufferOffset_ > 0;
+    	m_collator_ = collator;
+    	updateInternalState();
     }
     
     // private data members -------------------------------------------------
@@ -571,13 +575,6 @@ public final class CollationElementIterator
      * This is position to the m_buffer_, -1 if iterator is not in m_buffer_
      */
     private int m_bufferOffset_;
-  	/** 
-  	 * This is the position to which we have stored processed CEs.
-  	 * Initial value is 0.
-  	 * The next/previous after we reach the end/beginning of the m_CEBuffer_
-	 * will cause this value to be reset to 0.
-  	 */
-  	private int m_CEBufferSize_; 
   	/**
   	 * Buffer for temporary storage of normalized characters, discontiguous
   	 * characters and Thai characters

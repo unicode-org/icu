@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $ 
-* $Date: 2002/05/16 20:04:49 $ 
-* $Revision: 1.5 $
+* $Date: 2002/05/20 23:43:01 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -291,17 +291,22 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
      * @see CollationElementIterator
      * @draft 2.2
      */
-    public CollationElementIterator getCollationElementIterator(String source) {
+    public CollationElementIterator getCollationElementIterator(String source) 
+    {
         return new CollationElementIterator(source, this);
     }
 
     /**
-     * Return a CollationElementIterator for the given String.
+     * Return a CollationElementIterator for the given CharacterIterator.
+     * Argument source's integrity will be preserved since a new copy of source 
+     * will be created for use instead.
      * @see CollationElementIterator
      * @draft 2.2
      */
     public CollationElementIterator getCollationElementIterator(
-                                                CharacterIterator source) {
+                                                CharacterIterator source) 
+    {	
+     	CharacterIterator newsource = (CharacterIterator)source.clone();   
         return new CollationElementIterator(source, this);
     }
     
@@ -736,12 +741,15 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 		// Find the length of any leading portion that is equal
 		int offset = getFirstUnmatchedOffset(source, target);
 		if (offset == source.length()) {
-			if (offset == target.length()) {
-	        	return 0;
+			if (offset == target.length() || checkIgnorable(target, offset)) {
+				return 0;
 			}
 			return -1;
 	    }
 	    else if (target.length() == offset) {
+	    	if (checkIgnorable(source, offset)) {
+	    		return 0;
+	    	}
 	    	return 1;
 	    }
 
@@ -1623,7 +1631,8 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
      */
     private static final boolean isContinuation(int ce) 
     {
-    	return (ce & CE_CONTINUATION_TAG_) == CE_CONTINUATION_TAG_;
+    	return ce != CollationElementIterator.NULLORDER 
+    					&& (ce & CE_CONTINUATION_TAG_) == CE_CONTINUATION_TAG_;
     }
     
     /**
@@ -2331,8 +2340,7 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 			minlength = target.length();
 		}
 		while (result < minlength 
-				&& source.charAt(result) == target.charAt(result) 
-				&& source.charAt(result) != 0) {
+				&& source.charAt(result) == target.charAt(result)) {
 			result ++;
 	    }
 	    if (result > 0 && result < minlength) {
@@ -2477,7 +2485,8 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	        	} 
 	        	else {
 	            	// if two primaries are different, we are done
-	            	return endCompare(sorder, torder, cebuffer, cebuffersize);
+	            	return endPrimaryCompare(sorder, torder, cebuffer, 
+	            								cebuffersize);
 	        	}
 	      	} 
 	      	// no primary difference... do the rest from the buffers
@@ -2499,7 +2508,8 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	            	}
 	        	} 
 	        	else {
-	    			return endCompare(sorder, torder, cebuffer, cebuffersize);
+	    			return endPrimaryCompare(sorder, torder, cebuffer, 
+	    														cebuffersize);
 	        	}
 	      	} // no primary difference... do the rest from the buffers
 	    }
@@ -2507,8 +2517,8 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	}
 	
 	/**
-	 * This is used only when we know that sorder is already different from
-	 * torder.
+	 * This is used only for primary strength when we know that sorder is 
+	 * already different from torder.
 	 * Compares sorder and torder, returns -1 if sorder is less than torder.
 	 * Clears the cebuffer at the same time.
 	 * @param sorder source strength order
@@ -2517,13 +2527,25 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	 * @param cebuffersize array of cebuffer offsets
 	 * @return the comparison result of sorder and torder
 	 */
-	private static final int endCompare(int sorder, int torder, 
-										int cebuffer[][], int cebuffersize[])
+	private static final int endPrimaryCompare(int sorder, int torder, 
+										       int cebuffer[][], 
+										       int cebuffersize[])
 	{
+		// if we reach here, the ce offset accessed is the last ce
+		// appended to the buffer
+		boolean isNullOrder = (cebuffer[0][cebuffersize[0] - 1] 
+			 					== CollationElementIterator.NULLORDER);
+			 					
 		cebuffer[0] = null;
 	    cebuffer[1] = null;
 	    cebuffersize[0] = 0;
 	    cebuffersize[1] = 0;
+	    if (isNullOrder) {
+	    	return -1;
+	    }
+	    // getting rid of the sign
+	    sorder >>>= CE_PRIMARY_SHIFT_;
+	    torder >>>= CE_PRIMARY_SHIFT_;
 	    if (sorder < torder) {
 	    	return -1;
 	    }
@@ -2659,6 +2681,10 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	            	}
 	          	} 
 	          	else {
+	          		if (cebuffer[0][soffset - 1] == 
+	          				CollationElementIterator.NULLORDER) {
+	          			return -1;
+	          		}
 	               	return (sorder < torder) ? -1 : 1;
 	          	}
 	        }
@@ -2734,11 +2760,11 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	 */
 	private final int doCaseCompare(int cebuffer[][])
 	{
-		int sorder = CollationElementIterator.IGNORABLE;
-		int torder = CollationElementIterator.IGNORABLE;
 		int soffset = 0;
 		int toffset = 0;
 	    while (true) {
+	    	int sorder = CollationElementIterator.IGNORABLE;
+	        int torder = CollationElementIterator.IGNORABLE;
 	        while ((sorder & CE_REMOVE_CASE_) 
 	        						== CollationElementIterator.IGNORABLE) {
 	        	sorder = cebuffer[0][soffset ++];
@@ -2763,22 +2789,21 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	          	}
 	        }
 	
-	        if ((sorder & CE_CASE_BIT_MASK_) < (torder & CE_CASE_BIT_MASK_)) {
-	          	return -1;
-	        } 
-	        else if ((sorder & CE_CASE_BIT_MASK_) 
-	        							> (torder & CE_CASE_BIT_MASK_)) {
-	          	return 1;
-	        }
-	
-	        if (cebuffer[0][soffset - 1] == CollationElementIterator.NULLORDER) 
-	        {
-	          	break;
-	        } 
-	        else {
-	          	sorder = CollationElementIterator.IGNORABLE;
-	          	torder = CollationElementIterator.IGNORABLE;
-	        }
+			if (sorder == torder) {
+				if (cebuffer[0][soffset - 1] 
+										== CollationElementIterator.NULLORDER) {
+	          		break;
+	        	} 
+			}
+			else {
+	        	if (cebuffer[0][soffset - 1] 
+	        						== CollationElementIterator.NULLORDER) {
+	          		return -1;
+	        	}
+	        
+	        	return ((sorder & CE_CASE_BIT_MASK_) 
+	        			< (torder & CE_CASE_BIT_MASK_)) ? -1 : 1;
+			}
 	    }
 	    return 0;
 	}
@@ -2819,11 +2844,15 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	
 	        if (sorder == torder) {
 	          	if (cebuffer[0][soffset - 1] 
-	          		== (CollationElementIterator.NULLORDER & CE_REMOVE_CASE_)) {
+	          						== CollationElementIterator.NULLORDER) {
 	            	break;
 	          	} 
 	        } 
 	        else {
+	        	if (cebuffer[0][soffset - 1] == 
+	          							CollationElementIterator.NULLORDER) {
+	          		return -1;
+	          	}
 	            return (sorder < torder) ? -1 : 1;
 	        }
 	    }
@@ -2846,8 +2875,7 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	    while (true) {
 	    	int sorder = CollationElementIterator.IGNORABLE;
 	    	int torder = CollationElementIterator.IGNORABLE;
-	        while (sorder == CollationElementIterator.IGNORABLE 
-	        		&& sorder != CollationElementIterator.NULLORDER 
+	        while (sorder == CollationElementIterator.IGNORABLE
 	        		|| (isContinuation(sorder) && !sShifted)) {
 	          	sorder = cebuffer[0][soffset ++];
 	          	if (isContinuation(sorder)) {
@@ -2868,7 +2896,6 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	        }
 	        sorder &= CE_PRIMARY_MASK_;
 			while (torder == CollationElementIterator.IGNORABLE 
-	        		&& torder != CollationElementIterator.NULLORDER 
 	        		|| (isContinuation(torder) && !tShifted)) {
 	          	torder = cebuffer[0][toffset ++];
 	          	if (isContinuation(torder)) {
@@ -2890,12 +2917,16 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
 	        torder &= CE_PRIMARY_MASK_;
 	
 	        if (sorder == torder) {
-	          	if (cebuffer[0][soffset -1] 
+	          	if (cebuffer[0][soffset - 1] 
 	          		== CollationElementIterator.NULLORDER) {
 	            	break;
 	          	}
 	        } 
 	        else {
+	        	if (cebuffer[0][soffset - 1] == 
+	          		CollationElementIterator.NULLORDER) {
+	          		return -1;
+	          	}
 	            return (sorder < torder) ? -1 : 1;
 	        }
 	    }
@@ -2987,5 +3018,27 @@ public class RuleBasedCollator extends Collator implements Trie.DataManipulate
         	ch += 0x2000;                 
     	}     
     	return ch;                             
+	}
+	
+	/**
+	 * Checks that the source after offset is ignorable
+	 * @param source text string to check
+	 * @param offset 
+	 * @return true if source after offset is ignorable. false otherwise
+	 */
+	private final boolean checkIgnorable(String source, int offset)
+	{
+		StringCharacterIterator siter = new StringCharacterIterator(source,
+											offset, source.length(), offset);
+		CollationElementIterator coleiter = new CollationElementIterator(
+	    														siter, this);
+	    int ce = coleiter.next();
+	    while (ce != CollationElementIterator.NULLORDER) {
+	    	if (ce != CollationElementIterator.IGNORABLE) {
+	    		return false;
+	    	}
+	    	ce = coleiter.next();
+	    }
+	    return true; 
 	}
 }
