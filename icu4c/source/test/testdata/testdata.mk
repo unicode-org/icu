@@ -14,7 +14,7 @@ TESTDT=$(TESTPKG)_
 ALL : "$(TESTDATAOUT)\testdata.dat" 
 	@echo Test data is built.
 
-"$(TESTDATAOUT)\testdata.dat" : "$(TESTDATABLD)\casing.res" "$(TESTDATABLD)\conversion.res" "$(TESTDATABLD)\mc.res" "$(TESTDATABLD)\root.res" "$(TESTDATABLD)\te.res" "$(TESTDATABLD)\te_IN.res" "$(TESTDATABLD)\testaliases.res" "$(TESTDATABLD)\testtypes.res" "$(TESTDATABLD)\testempty.res" "$(TESTDATABLD)\$(TESTDT)iscii.res" "$(TESTDATABLD)\$(TESTDT)idna_rules.res" "$(TESTDATABLD)\DataDrivenCollationTest.res" $(TESTDATABLD)\$(TESTDT)test.icu "$(TESTDATABLD)\$(TESTDT)test1.cnv" "$(TESTDATABLD)\$(TESTDT)test3.cnv" "$(TESTDATABLD)\$(TESTDT)test4.cnv" "$(TESTDATABLD)\$(TESTDT)ibm9027.cnv" "$(TESTDATABLD)\$(TESTDT)nfscsi.spp" "$(TESTDATABLD)\$(TESTDT)nfscss.spp" "$(TESTDATABLD)\$(TESTDT)nfscis.spp" "$(TESTDATABLD)\$(TESTDT)nfsmxs.spp" "$(TESTDATABLD)\$(TESTDT)nfsmxp.spp"
+"$(TESTDATAOUT)\testdata.dat" : "$(TESTDATABLD)\casing.res" "$(TESTDATABLD)\conversion.res" "$(TESTDATABLD)\mc.res" "$(TESTDATABLD)\root.res" "$(TESTDATABLD)\te.res" "$(TESTDATABLD)\te_IN.res" "$(TESTDATABLD)\testaliases.res" "$(TESTDATABLD)\testtypes.res" "$(TESTDATABLD)\testempty.res" "$(TESTDATABLD)\$(TESTDT)iscii.res" "$(TESTDATABLD)\$(TESTDT)idna_rules.res" "$(TESTDATABLD)\DataDrivenCollationTest.res" $(TESTDATABLD)\$(TESTDT)test.icu   $(TESTDATABLD)\$(TESTDT)testtable32.res "$(TESTDATABLD)\$(TESTDT)test1.cnv" "$(TESTDATABLD)\$(TESTDT)test3.cnv" "$(TESTDATABLD)\$(TESTDT)test4.cnv" "$(TESTDATABLD)\$(TESTDT)ibm9027.cnv" "$(TESTDATABLD)\$(TESTDT)nfscsi.spp" "$(TESTDATABLD)\$(TESTDT)nfscss.spp" "$(TESTDATABLD)\$(TESTDT)nfscis.spp" "$(TESTDATABLD)\$(TESTDT)nfsmxs.spp" "$(TESTDATABLD)\$(TESTDT)nfsmxp.spp"
 	@echo Building test data
 	@copy "$(TESTDATABLD)\$(TESTDT)te.res" "$(TESTDATAOUT)\$(TESTDT)nam.typ"
 	@"$(ICUP)\bin\pkgdata" -f -v -m common -c -p"$(TESTPKG)" -d "$(TESTDATAOUT)" -T "$(TESTDATABLD)" -s "$(TESTDATABLD)" <<
@@ -22,6 +22,7 @@ $(TESTDT)casing.res
 $(TESTDT)conversion.res
 $(TESTDT)mc.res
 $(TESTDT)root.res
+$(TESTDT)testtable32.res
 $(TESTDT)te.res
 $(TESTDT)te_IN.res
 $(TESTDT)testtypes.res
@@ -61,6 +62,14 @@ $(TESTDT)nfsmxp.spp
 
 $(TESTDATABLD)\$(TESTDT)test.icu : {"$(ICUTOOLS)\gentest\$(CFG)"}gentest.exe
 	"$(ICUTOOLS)\gentest\$(CFG)\gentest" -d"$(TESTDATABLD)"
+
+# testtable32 resource file
+$(TESTDATABLD)\testtable32.txt : {"$(ICUTOOLS)\gentest\$(CFG)"}gentest.exe
+	"$(ICUTOOLS)\gentest\$(CFG)\gentest" -r -d"$(TESTDATABLD)"
+
+"$(TESTDATABLD)\$(TESTDT)testtable32.res": "$(TESTDATABLD)\testtable32.txt"
+	@echo Making Test Resource Bundle file for IDNA reference implementation
+	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -p"$(TESTPKG)" -q -s"$(TESTDATABLD)" -d"$(TESTDATABLD)" testtable32.txt
 
 # Targets for nfscsi.spp
 "$(TESTDATABLD)\$(TESTDT)nfscsi.spp" : {"$(ICUTOOLS)\gensprep\$(CFG)"}gensprep.exe "$(TESTDATA)\nfs4_cs_prep_ci.txt"
