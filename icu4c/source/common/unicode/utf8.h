@@ -31,8 +31,13 @@
 
 /* internal definitions ----------------------------------------------------- */
 
-U_CAPI uint8_t U_EXPORT2
+#ifdef U_COMMON_IMPLEMENTATION
+U_CAPI  uint8_t U_EXPORT2 
 utf8_countTrailBytes[256];
+#else
+uint8_t /* U_IMPORT2? */ U_IMPORT
+utf8_countTrailBytes[256];
+#endif
 
 /*
  * Count the trail bytes for a lead byte -
