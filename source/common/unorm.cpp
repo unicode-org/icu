@@ -31,6 +31,8 @@
 #include "cmemory.h"
 #include "ustr_imp.h"
 #include "umutex.h"
+#include "utrie.h"
+#include "uset.h"
 #include "unormimp.h"
 
 /*
@@ -116,7 +118,8 @@ static UTrie normTrie={ 0,0,0,0,0,0,0 }, fcdTrie={ 0,0,0,0,0,0,0 }, auxTrie={ 0,
  * pointers into the memory-mapped unorm.dat
  */
 static const uint16_t *extraData=NULL,
-                      *combiningTable=NULL;
+                      *combiningTable=NULL,
+                      *canonStartSets=NULL;
 
 static uint8_t formatVersion[4]={ 0, 0, 0, 0 };
 static UBool formatVersion_2_1=FALSE;
@@ -246,6 +249,9 @@ loadNormData(UErrorCode &errorCode) {
         extraData=(uint16_t *)((uint8_t *)(p+_NORM_INDEX_TOP)+indexes[_NORM_INDEX_TRIE_SIZE]);
         combiningTable=extraData+indexes[_NORM_INDEX_UCHAR_COUNT];
         formatVersion_2_1=formatVersion[0]>2 || (formatVersion[0]==2 && formatVersion[1]>=1);
+        if(formatVersion_2_1) {
+            canonStartSets=combiningTable+(indexes[_NORM_INDEX_FCD_TRIE_SIZE]+indexes[_NORM_INDEX_AUX_TRIE_SIZE])/2;
+        }
         haveNormData=1;
 
         /* if a different thread set it first, then close the extra data */
@@ -539,6 +545,36 @@ unorm_internalIsFullCompositionExclusion(UChar32 c) {
 
         UTRIE_GET32(&auxTrie, c, aux32);
         return (UBool)((aux32&_NORM_AUX_COMP_EX_MASK)!=0);
+    } else {
+        return FALSE;
+    }
+}
+
+U_CAPI UBool U_EXPORT2
+unorm_isCanonSafeStart(UChar32 c) {
+    UErrorCode errorCode=U_ZERO_ERROR;
+    if(_haveData(errorCode) && formatVersion_2_1) {
+        uint32_t aux32;
+
+        UTRIE_GET32(&auxTrie, c, aux32);
+        return (UBool)((aux32&_NORM_AUX_UNSAFE_MASK)==0);
+    } else {
+        return FALSE;
+    }
+}
+
+U_CAPI UBool U_EXPORT2
+unorm_getCanonStartSet(UChar32 c, USerializedSet *fillSet) {
+    UErrorCode errorCode=U_ZERO_ERROR;
+    if(fillSet!=NULL && _haveData(errorCode) && canonStartSets!=NULL) {
+        uint32_t aux32;
+
+        UTRIE_GET32(&auxTrie, c, aux32);
+        aux32&=_NORM_AUX_CANON_SET_MASK;
+        return aux32!=0 &&
+            uset_getSerializedSet(fillSet,
+                                canonStartSets+aux32,
+                                indexes[indexes[_NORM_INDEX_CANON_SET_COUNT]]-aux32);
     } else {
         return FALSE;
     }
