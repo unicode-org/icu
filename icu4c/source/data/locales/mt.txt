@@ -2,12 +2,12 @@
 // Copyright (c) 1998-2000 IBM, Inc. and others.
 //
 // Maltese locale.
-// by srl@monkey.sbay.org, thanks to Mirka Mifsud Bonnici for much of the translation
-//                         thanks to Karmenu Attard for additional help
-//                         thanks to MaxMan for additional help
+// Maintained by srl@monkey.sbay.org [See below for full credits]
 //
 // For information about this country please see: http://www.magnet.mt/
 //
+// For information about Maltese Computing please see:
+//         http://www.quadrantFive.com/SMC/
 //
 // Search for 'Sources' below for source abbreviations
 
@@ -23,7 +23,7 @@
 //  but, U+0307 is the DOT ABOVE needed for z., c., and g. (in collation rules)
 
 mt {
-    Version { "0.7" }
+    Version { "0.9" } // Tue, Jul 20, 2000 srl
     ShortLanguage { mlt }
     Languages {
 
@@ -34,8 +34,8 @@ mt {
  ar { G\u0127arbi }
  bg { "Bulgaru" }
  cs { "\u010Aek" }
- cy { \u010Aymraeg } 
- da { Dansk } 
+ cy { "Welx" }  // [rc]
+ da { "Dani\u017C" }  // [rc]
  de { "\u0120ermani\u017C" } // [CI]
  el { "Grieg" }
  en { "Ingli\u017C" }
@@ -43,17 +43,17 @@ mt {
  et { "Estonjan" }
  eu { "Bask" }
  fa { "Persjan" }
- fi { Suomi } // <-- FIX?
+ fi { "Finlandi\u017C" } // [rc]
  fr { "Fran\u010Bi\u017c" } 
- hr { Hrvatski } 
+ hr { "Kroat" }
  hu { "Ungeri\u017C" }
  hy { "Armenjan" }
  id { "Indone\u017Cjan" }
- is { "Íslenska" }  // <-- FIX
+ is { "Islandi\u017C" }
  it { Taljan }  // CI dictionary
  ja { "\u0120appuni\u017C" } // srl, after [BM]
- lt { Lietuviskai } 
- lv { Latviski } 
+ lt { "Litwanjan" }
+ lv { "Latvjan" }
  mt { Malti }
  pl { "Pollakk" }
  pt { "Portugi\u017c" }
@@ -88,7 +88,7 @@ mt {
         BA { Bo\u017Cnija/\u0126erzegovina  }
         BE { Bel\u0121ju }
         BG { Bulgarija }
-        BO { Bolivia }  
+        BO { "Bolivja" } // [rc]
         BR { Bra\u017Cil }
         CA { Kanada }
         CH { \u017Bvizzera }
@@ -105,8 +105,8 @@ mt {
         FI { Finlandja }
         FR { Franza }
         GB { Gran Brittanja }
-        GL { \u0120roenlandja }
-        GR { \u0120re\u010Bja }
+        GL { "Grinlandja" } // [rc]
+        GR { "Grecja" } // [rc]
         HR { Kroazja }
         HU { Ungerija }
         IE { Irlanda }
@@ -117,7 +117,7 @@ mt {
         IS { Islanda }
         IT { Italja }
         JP { \u0120appun }
-        LB { "Lebanon" }
+        LB { "Libanu" }
         LT { Litwanja }
         LU { Lussemburgu }
         LV { Latvja }
@@ -132,7 +132,7 @@ mt {
         PL { Polonja }
         PT { Portugall } // [KA]
         RO { Rumanija }
-        RU { Federazzjoni Russa }
+        RU { "Russja" } // [rc]
         SA { "Sawdi Arabja" }
         SE { \u017Bvezja }
         SI { Slovenja }
@@ -163,21 +163,21 @@ mt {
 	Di\u010Bembru
         ""
     }
+//Jan Fra Mar Apr Mej Gun Lul Aww* Set Ott Nov Dic
 
-//  FIX - month abbrevs.
    MonthAbbreviations {
-        Jan.,
-        Frar,
-        Marzu,
-        April,
-        Mejju,
-        \u0120unju,
-        Lulju,
-        Awissu,
-        Sett.,
-        Ott.,
-        Nov.,
-        Di\u010B.,
+        "Jan",
+        "Fra",
+        "Mar",
+        "Apr",
+        "Mej",
+        "\u0120un",
+        "Lul",
+        "Awi", // jew Aww?
+        "Set",
+        "Ott",
+        "Nov",
+        "Di\u010B"
         ""
     }
     DayNames {
@@ -196,13 +196,13 @@ mt {
     }
 
     DayAbbreviations { 
-        "\u0126add",
-	Tnejn,
-	Tlieta,
-	"Erbg\u0127a", 
-	"\u0126amis",
-	"\u0120img\u0127a",
-	Sibt 
+        "\u0126ad",
+	"Tne",
+	"Tli",
+	"Erb", 
+	"\u0126am",
+	"\u0120im",
+	"Sib"
     }
 
 
@@ -234,7 +234,7 @@ mt {
         "{1} {0}"
     }
     DateTimeElements {
-        "2",
+        "1",
         "1"
     }
 
@@ -266,7 +266,7 @@ mt {
         "Europe/Malta", 
         "\u0126in ta' L-Ewropa Centrali", 
         "CET", 
-        "\u0126in ta' L-Ewropa Centrali ta' sajfx",
+        "\u0126in ta' L-Ewropa Centrali ta' sajf",
         "CET-summer"
         }
     }
@@ -300,3 +300,9 @@ mt {
 // Casha, Charles: 'Kun Af - aktar dwar ilsienna'                       -- [KA]
 //   (Blata l-Bajda, Malta: Merlin Library Ltd., 1987)
 
+// CREDITS: above sources and also..
+// - Mirka Mifsud Bonnici for much of the initial translation
+// - Karmenu Attard
+// - MaxMan (Manuel)
+// - Ramon Casha
+// - Angelo Dalli
