@@ -218,14 +218,6 @@ SOURCE=.\currcoll.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\dacoll.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\dacoll.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\dadrcoll.cpp
 # End Source File
 # Begin Source File
