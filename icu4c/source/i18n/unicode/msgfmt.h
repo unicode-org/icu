@@ -197,7 +197,20 @@ class NumberFormat;
  */
 class U_I18N_API MessageFormat : public Format {
 public:
-    enum EFormatNumber { kMaxFormat = 10 };
+    /**
+     * Enum type for kMaxFormat.
+     * @obsolete ICU 3.0.  The 10-argument limit was removed as of ICU 2.6,
+     * rendering this enum type obsolete.
+     */
+    enum EFormatNumber {
+        /**
+         * The maximum number of arguments.
+         * @obsolete ICU 3.0.  The 10-argument limit was removed as of ICU 2.6,
+         * rendering this constant obsolete.
+         */
+        kMaxFormat = 10
+    };
+
     /**
      * Construct a new MessageFormat using the given pattern.
      *
@@ -322,9 +335,10 @@ public:
      * Sets formats to use on parameters.
      * See the class description about format numbering.
      * The caller should not delete the Format objects after this call.
-     * Note that the array formatsToAdopt is not itself adopted, its
-     * ownership is retained by the caller. If the count is over 
-     * the maximum allowed (10), any additional items will be deleted.
+     * Note that the array formatsToAdopt is not itself adopted. Its
+     * ownership is retained by the caller. If the call fails because
+     * memory cannot be allocated, then the formats will be deleted
+     * by this method, and this object will remain unchanged.
      * 
      * @stable ICU 2.0
      * @param formatsToAdopt    the format to be adopted.
@@ -336,8 +350,8 @@ public:
      * Sets formats to use on parameters.
      * See the class description about format numbering.
      * Each item in the array is cloned into the internal array.
-     * If the count is over the maximum allowed (10), any additional
-     *  items will be ignored.
+     * If the call fails because memory cannot be allocated, then this
+     * object will remain unchanged.
      * 
      * @stable ICU 2.0
      * @param newFormats the new format to be set.
@@ -561,36 +575,74 @@ public:
      * @internal
      */
     const Formattable::Type* getFormatTypeList(int32_t& listCount){
-        listCount=fListCount;
-        return fFormatTypeList; 
+        argTypeCount;
+        return argTypes; 
     }
 
 private:
     static const char fgClassID;
-    //static NumberFormat* fgNumberFormat;
 
-    /* stores types of formattable objects in the pattern
-     * is for umsg_* CAPI 
-     */
-    Formattable::Type fFormatTypeList[kMaxFormat];
-    int32_t fListCount;
+    Locale              fLocale;
+    UnicodeString       fPattern;
+    Format              *fFormats[kMaxFormat];
 
-    // fgNumberFormat is held in a cache of one.
     /**
-     * get the NumberFormat
-     * @param status    Output param to receive success/error code.
+     * A structure representing one subformat of this MessageFormat.
+     * Each subformat has a Format object, an offset into the plain
+     * pattern text fPattern, and an argument number.  The argument
+     * number corresponds to the array of arguments to be formatted.
      */
-    static NumberFormat* getNumberFormat(UErrorCode &status); // call this function to 'check out' a numberformat from the cache.
-    static void          releaseNumberFormat(NumberFormat *adopt); // call this function to 'return' the number format to the cache.
+    class Subformat {
+    public:
+        Format* format; // formatter
+        int32_t offset; // offset into fPattern
+        int32_t arg;    // 0-based argument number
 
-    Locale                 fLocale;
-    UnicodeString         fPattern;
-    // later, allow more than ten items
-    Format                 *fFormats[kMaxFormat];
-    int32_t             *fOffsets;
-    int32_t             fCount;
-    int32_t             *fArgumentNumbers;
-    int32_t             fMaxOffset;
+        // Clone that.format and assign it to this.format
+        // Do NOT delete this.format
+        Subformat& operator=(const Subformat& that) {
+            format = that.format ? that.format->clone() : NULL;
+            offset = that.offset;
+            arg = that.arg;
+            return *this;
+        }
+
+        UBool operator==(const Subformat& that) const {
+            // Do cheap comparisons first
+            return offset == that.offset &&
+                   arg == that.arg &&
+                   ((format == that.format) || // handles NULL
+                    (*format == *that.format));
+        }
+
+        UBool operator!=(const Subformat& that) const {
+            return !operator==(that);
+        }
+    };
+
+    /**
+     * A MessageFormat contains an array of subformats.  This array
+     * needs to grow dynamically if the MessageFormat is modified.
+     */
+    Subformat* subformats;
+    int32_t    subformatCount;
+    int32_t    subformatCapacity;
+
+    /**
+     * A MessageFormat formats an array of arguments.  Each argument
+     * has an expected type, based on the pattern.  For example, if
+     * the pattern contains the subformat "{3,number,integer}", then
+     * we expect argument 3 to have type Formattable::kLong.  This
+     * array needs to grow dynamically if the MessageFormat is
+     * modified.
+     */
+    Formattable::Type* argTypes;
+    int32_t            argTypeCount;
+    int32_t            argTypeCapacity;
+
+    // Variable-size array management
+    UBool allocateSubformats(int32_t capacity);
+    UBool allocateArgTypes(int32_t capacity);
 
     /**
      * Finds the word s, in the keyword list and returns the located index.
@@ -599,7 +651,7 @@ private:
      * @return the index of the list which matches the keyword s.
      */
     static int32_t findKeyword( const UnicodeString& s,
-                            const UChar * const *list);
+                                const UChar * const *list);
 
     /**
      * Formats the array of arguments and copies the result into the
@@ -624,16 +676,7 @@ private:
                             int32_t recursionProtection,
                             UErrorCode& success) const;
 
-    /**
-     * Checks the segments for the closest matched format instance and
-     * updates the format array with the new format instance.
-     * @param offsetNumber the offset number of the last processed segment
-     * @param segments the string that contains the parsed pattern segments.
-     * @param success the error code
-     * @return argument number that was parsed.
-     */
-    int32_t          makeFormat( /*int32_t position, */
-                                int32_t offsetNumber,
+    void             makeFormat(int32_t offsetNumber,
                                 UnicodeString* segments,
                                 UParseError& parseError,
                                 UErrorCode& success);
@@ -653,26 +696,6 @@ private:
      *                  Result is appended to existing contents.
      */
     static void copyAndFixQuotes(const UnicodeString& appendTo, int32_t start, int32_t end, UnicodeString& target);
-
-    /**
-     * Converts a string to an integer value using a default NumberFormat object
-     * which is static (shared by all MessageFormat instances).  This replaces
-     * a call to wtoi().
-     * @param string the source string to convert with
-     * @return the converted number.
-     */
-    static int32_t stoi(const UnicodeString& string);
-
-    /**
-     * Converts an integer value to a string using a default NumberFormat object
-     * which is static (shared by all MessageFormat instances).  This replaces
-     * a call to wtoi().
-     * @param i         The integer to format
-     * @param appendTo  Output parameter to receive result.
-     *                  Result is appended to existing contents.
-     * @return          Reference to 'appendTo' parameter.
-     */
-    static UnicodeString& itos(int32_t i, UnicodeString& appendTo);
 };
 
 inline UClassID
