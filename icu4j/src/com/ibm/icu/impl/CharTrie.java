@@ -48,7 +48,67 @@ public class CharTrie extends Trie
         }
         m_friendAgent_ = new FriendAgent();
     }
-    
+
+    /**
+     * Make a dummy CharTrie.
+     * A dummy trie is an empty runtime trie, used when a real data trie cannot
+     * be loaded.
+     *
+     * The trie always returns the initialValue,
+     * or the leadUnitValue for lead surrogate code points.
+     * The Latin-1 part is always set up to be linear.
+     *
+     * @param initialValue the initial value that is set for all code points
+     * @param leadUnitValue the value for lead surrogate code _units_ that do not
+     *                      have associated supplementary data
+     * @param dataManipulate object which provides methods to parse the char data
+     */
+    public CharTrie(int initialValue, int leadUnitValue, DataManipulate dataManipulate) {
+        super(new char[BMP_INDEX_LENGTH+SURROGATE_BLOCK_COUNT], HEADER_OPTIONS_LATIN1_IS_LINEAR_MASK_, dataManipulate);
+
+        int dataLength, latin1Length, i, limit;
+        char block;
+
+        /* calculate the actual size of the dummy trie data */
+
+        /* max(Latin-1, block 0) */
+        dataLength=latin1Length= INDEX_STAGE_1_SHIFT_<=8 ? 256 : DATA_BLOCK_LENGTH;
+        if(leadUnitValue!=initialValue) {
+            dataLength+=DATA_BLOCK_LENGTH;
+        }
+        m_data_=new char[dataLength];
+        m_dataLength_=dataLength;
+
+        m_initialValue_=(char)initialValue;
+
+        /* fill the index and data arrays */
+
+        /* indexes are preset to 0 (block 0) */
+
+        /* Latin-1 data */
+        for(i=0; i<latin1Length; ++i) {
+            m_data_[i]=(char)initialValue;
+        }
+
+        if(leadUnitValue!=initialValue) {
+            /* indexes for lead surrogate code units to the block after Latin-1 */
+            block=(char)(latin1Length>>INDEX_STAGE_2_SHIFT_);
+            i=0xd800>>INDEX_STAGE_1_SHIFT_;
+            limit=0xdc00>>INDEX_STAGE_1_SHIFT_;
+            for(; i<limit; ++i) {
+                m_index_[i]=block;
+            }
+
+            /* data for lead surrogate code units */
+            limit=latin1Length+DATA_BLOCK_LENGTH;
+            for(i=latin1Length; i<limit; ++i) {
+                m_data_[i]=(char)leadUnitValue;
+            }
+        }
+
+        m_friendAgent_ = new FriendAgent();
+    }
+
     /**
      * Java friend implementation
      */

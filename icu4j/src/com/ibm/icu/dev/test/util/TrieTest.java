@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and    *
+* Copyright (C) 1996-2005, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -515,5 +515,58 @@ public final class TrieTest extends TestFmwk
             }        
         }
     }
-}
 
+    private static class DummyGetFoldingOffset implements Trie.DataManipulate {
+        public int getFoldingOffset(int value) {
+            return -1; /* never get non-initialValue data for supplementary code points */
+        }
+    }
+
+    public void TestDummyCharTrie() {
+        CharTrie trie;
+        final int initialValue=0x313, leadUnitValue=0xaffe; 
+        int value;
+        int c;
+        trie=new CharTrie(initialValue, leadUnitValue, new DummyGetFoldingOffset());
+
+        /* test that all code points have initialValue */
+        for(c=0; c<=0x10ffff; ++c) {
+            value=trie.getCodePointValue(c);
+            if(value!=initialValue) {
+                errln("CharTrie/dummy.getCodePointValue(c)(U+"+hex(c)+")=0x"+hex(value)+" instead of 0x"+hex(initialValue));
+            }
+        }
+
+        /* test that the lead surrogate code units have leadUnitValue */
+        for(c=0xd800; c<=0xdbff; ++c) {
+            value=trie.getLeadValue((char)c);
+            if(value!=leadUnitValue) {
+                errln("CharTrie/dummy.getLeadValue(c)(U+"+hex(c)+")=0x"+hex(value)+" instead of 0x"+hex(leadUnitValue));
+            }
+        }
+    }
+
+    public void TestDummyIntTrie() {
+        IntTrie trie;
+        final int initialValue=0x01234567, leadUnitValue=0x89abcdef; 
+        int value;
+        int c;
+        trie=new IntTrie(initialValue, leadUnitValue, new DummyGetFoldingOffset());
+
+        /* test that all code points have initialValue */
+        for(c=0; c<=0x10ffff; ++c) {
+            value=trie.getCodePointValue(c);
+            if(value!=initialValue) {
+                errln("IntTrie/dummy.getCodePointValue(c)(U+"+hex(c)+")=0x"+hex(value)+" instead of 0x"+hex(initialValue));
+            }
+        }
+
+        /* test that the lead surrogate code units have leadUnitValue */
+        for(c=0xd800; c<=0xdbff; ++c) {
+            value=trie.getLeadValue((char)c);
+            if(value!=leadUnitValue) {
+                errln("IntTrie/dummy.getLeadValue(c)(U+"+hex(c)+")=0x"+hex(value)+" instead of 0x"+hex(leadUnitValue));
+            }
+        }
+    }
+}

@@ -3200,11 +3200,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @stable ICU 2.1
      */
     public static int toLowerCase(int ch) {
-        try {
-            return UCaseProps.getSingleton().tolower(ch);
-        } catch(IOException e) {
-        }
-        return ch;
+        return gCsp.tolower(ch);
     }
 
     /**
@@ -3254,11 +3250,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @stable ICU 2.1
      */
     public static int toTitleCase(int ch) {
-        try {
-            return UCaseProps.getSingleton().totitle(ch);
-        } catch(IOException e) {
-        }
-        return ch;
+        return gCsp.totitle(ch);
     }
        
     /**
@@ -3276,11 +3268,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @stable ICU 2.1
      */
     public static int toUpperCase(int ch) {
-        try {
-            return UCaseProps.getSingleton().toupper(ch);
-        } catch(IOException e) {
-        }
-        return ch;
+        return gCsp.toupper(ch);
     }
        
     // extra methods not in java.lang.Character --------------------------
@@ -3368,11 +3356,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static int getDirection(int ch)
     {
-		try {
-			return UBiDiProps.getSingleton().getClass(ch);
-		} catch (IOException e) {
-		}
-        return UCharacterEnums.ECharacterDirection.LEFT_TO_RIGHT;
+        return gBdp.getClass(ch);
     }
 
     /**
@@ -3386,11 +3370,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static boolean isMirrored(int ch)
     {
-        try {
-            return UBiDiProps.getSingleton().isMirrored(ch);
-        } catch (IOException e) {
-        }
-        return false;
+        return gBdp.isMirrored(ch);
     }
 
     /**
@@ -3409,11 +3389,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static int getMirror(int ch)
     {
-        try {
-            return UBiDiProps.getSingleton().getMirror(ch);
-        } catch (IOException e) {
-        }
-        return ch;
+        return gBdp.getMirror(ch);
     }
       
     /**
@@ -4051,13 +4027,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String toUpperCase(ULocale locale, String str) {
-        UCaseProps csp;
-        try {
-            csp=UCaseProps.getSingleton();
-        } catch (IOException e) {
-            return str;
-        }
-
         StringContextIterator iter = new StringContextIterator(str);
         StringBuffer result = new StringBuffer(str.length());
         int[] locCache = new int[1];
@@ -4069,7 +4038,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         locCache[0]=0;
 
         while((c=iter.nextCaseMapCP())>=0) {
-            c=csp.toFullUpper(c, iter, result, locale, locCache);
+            c=gCsp.toFullUpper(c, iter, result, locale, locCache);
 
             /* decode the result */
             if(c<0) {
@@ -4112,13 +4081,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String toLowerCase(ULocale locale, String str) {
-        UCaseProps csp;
-        try {
-            csp=UCaseProps.getSingleton();
-        } catch (IOException e) {
-            return str;
-        }
-
         StringContextIterator iter = new StringContextIterator(str);
         StringBuffer result = new StringBuffer(str.length());
         int[] locCache = new int[1];
@@ -4130,7 +4092,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         locCache[0]=0;
 
         while((c=iter.nextCaseMapCP())>=0) {
-            c=csp.toFullLower(c, iter, result, locale, locCache);
+            c=gCsp.toFullLower(c, iter, result, locale, locCache);
 
             /* decode the result */
             if(c<0) {
@@ -4197,13 +4159,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static String toTitleCase(ULocale locale, String str, 
                                      BreakIterator titleIter) {
-        UCaseProps csp;
-        try {
-            csp=UCaseProps.getSingleton();
-        } catch (IOException e) {
-            return str;
-        }
-
         StringContextIterator iter = new StringContextIterator(str);
         StringBuffer result = new StringBuffer(str.length());
         int[] locCache = new int[1];
@@ -4241,7 +4196,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             /* lowercase up to index */
             iter.setLimit(index);
             while((c=iter.nextCaseMapCP())>=0) {
-                c=csp.toFullLower(c, iter, result, locale, locCache);
+                c=gCsp.toFullLower(c, iter, result, locale, locCache);
 
                 /* decode the result */
                 if(c<0) {
@@ -4269,7 +4224,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             if(c<0) {
                 break; // reached end of str
             }
-            c=csp.toFullTitle(c, iter, result, locale, locCache);
+            c=gCsp.toFullTitle(c, iter, result, locale, locCache);
 
             /* decode the result */
             if(c<0) {
@@ -4359,11 +4314,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @stable ICU 2.6
      */
     public static int foldCase(int ch, int options) {
-		try {
-			return UCaseProps.getSingleton().fold(ch, options);
-		} catch (IOException e) {
-		}
-        return ch;
+        return gCsp.fold(ch, options);
     }
     
     /**
@@ -4382,13 +4333,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @stable ICU 2.6
      */
     public static final String foldCase(String str, int options) {
-        UCaseProps csp;
-        try {
-            csp=UCaseProps.getSingleton();
-        } catch (IOException e) {
-            return str;
-        }
-
         StringBuffer result = new StringBuffer(str.length());
         int c, i, length;
 
@@ -4396,7 +4340,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         for(i=0; i<length;) {
             c=UTF16.charAt(str, i);
             i+=UTF16.getCharCount(c);
-            c=csp.toFullFolding(c, result, options);
+            c=gCsp.toFullFolding(c, result, options);
 
             /* decode the result */
             if(c<0) {
@@ -4759,17 +4703,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             case UProperty.GENERAL_CATEGORY:
                 return getType(ch);
             case UProperty.JOINING_GROUP:
-                try {
-                    return UBiDiProps.getSingleton().getJoiningGroup(ch);
-                } catch (IOException e) {
-                }
-                return 0;
+                return gBdp.getJoiningGroup(ch);
             case UProperty.JOINING_TYPE:
-                try {
-                    return UBiDiProps.getSingleton().getJoiningType(ch);
-                } catch (IOException e) {
-                }
-                return 0;
+                return gBdp.getJoiningType(ch);
             case UProperty.LINE_BREAK:
                 return (int)(PROPERTY_.getAdditional(ch, 0)& LINE_BREAK_MASK_)>>LINE_BREAK_SHIFT_;
             case UProperty.NUMERIC_TYPE:
@@ -4938,11 +4874,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             case UProperty.BIDI_CLASS:
             case UProperty.JOINING_GROUP:
             case UProperty.JOINING_TYPE:
-                try {
-                    return UBiDiProps.getSingleton().getMaxValue(type);
-                } catch (IOException e) {
-                }
-                return 0;
+                return gBdp.getMaxValue(type);
             case UProperty.BLOCK:
                 return (PROPERTY_.getMaxValues(0) & BLOCK_MASK_) >> BLOCK_SHIFT_;
             case UProperty.CANONICAL_COMBINING_CLASS:
@@ -5572,20 +5504,39 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     private static final char[] PROPERTY_TRIE_DATA_;
     private static final int PROPERTY_INITIAL_VALUE_;
 
+    private static final UCaseProps gCsp;
+    private static final UBiDiProps gBdp;
+
     // block to initialise character property database
     static
     {
         try
         {
-        PROPERTY_ = UCharacterProperty.getInstance();
-        PROPERTY_TRIE_INDEX_ = PROPERTY_.m_trieIndex_;
-        PROPERTY_TRIE_DATA_ = PROPERTY_.m_trieData_;
-        PROPERTY_INITIAL_VALUE_ = PROPERTY_.m_trieInitialValue_;
+            PROPERTY_ = UCharacterProperty.getInstance();
+            PROPERTY_TRIE_INDEX_ = PROPERTY_.m_trieIndex_;
+            PROPERTY_TRIE_DATA_ = PROPERTY_.m_trieData_;
+            PROPERTY_INITIAL_VALUE_ = PROPERTY_.m_trieInitialValue_;
         }
         catch (Exception e)
         {
-        throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
+
+        UCaseProps csp;
+        try {
+            csp=UCaseProps.getSingleton();
+        } catch(IOException e) {
+            csp=UCaseProps.getDummy();
+        }
+        gCsp=csp;
+
+        UBiDiProps bdp;
+        try {
+            bdp=UBiDiProps.getSingleton();
+        } catch(IOException e) {
+            bdp=UBiDiProps.getDummy();
+        }
+        gBdp=bdp;
     }
     
     /**

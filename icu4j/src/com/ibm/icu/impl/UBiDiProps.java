@@ -103,6 +103,30 @@ public final class UBiDiProps {
         return gBdp;
     }
 
+    // UBiDiProps dummy singleton
+    private static UBiDiProps gBdpDummy=null;
+
+    private UBiDiProps(boolean makeDummy) { // ignore makeDummy, only creates a unique signature
+        formatVersion=new byte[] { 1, 0, Trie.INDEX_STAGE_1_SHIFT_, Trie.INDEX_STAGE_2_SHIFT_ };
+        unicodeVersion=new byte[] { 2, 0, 0, 0 };
+        indexes=new int[IX_TOP];
+        indexes[0]=IX_TOP;
+        trie=new CharTrie(0, 0, null); // dummy trie, always returns 0
+    }
+
+    /**
+     * Get a singleton dummy object, one that works with no real data.
+     * This can be used when the real data is not available.
+     * Using the dummy can reduce checks for available data after an initial failure.
+     * Port of ucase_getDummy().
+     */
+    public static final synchronized UBiDiProps getDummy() {
+        if(gBdpDummy==null) {
+            gBdpDummy=new UBiDiProps(true);
+        }
+        return gBdpDummy;
+    }
+
     // set of property starts for UnicodeSet ------------------------------- ***
 
     public final void addPropertyStarts(UnicodeSet set) {

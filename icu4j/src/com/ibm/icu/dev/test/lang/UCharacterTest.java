@@ -7,6 +7,9 @@
 
 package com.ibm.icu.dev.test.lang;
 
+import com.ibm.icu.impl.UBiDiProps;
+import com.ibm.icu.impl.UCaseProps;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.lang.UCharacter;
@@ -2306,4 +2309,17 @@ public final class UCharacterTest extends TestFmwk
         assertEquals("UCharacter.forDigit ", "h", String.valueOf(ch2));
     }
 
+    public void TestCasePropsDummy() {
+        // code coverage for UCaseProps.getDummy() 
+        if(UCaseProps.getDummy().tolower(0x41)!=0x41) {
+            errln("UCaseProps.getDummy().tolower(0x41)!=0x41");
+        }
+    }
+
+    public void TestBiDiPropsDummy() {
+        // code coverage for UBiDiProps.getDummy() 
+        if(UBiDiProps.getDummy().getClass(0x20)!=0) {
+            errln("UBiDiProps.getDummy().getClass(0x20)!=0");
+        }
+    }
 }

@@ -46,7 +46,7 @@ public final class UCaseProps {
         is.close();
     }
 
-    private void readData(InputStream is) throws IOException {
+    private final void readData(InputStream is) throws IOException {
         DataInputStream inputStream=new DataInputStream(is);
 
         // read the header
@@ -105,6 +105,30 @@ public final class UCaseProps {
             gCsp=new UCaseProps();
         }
         return gCsp;
+    }
+
+    // UCaseProps dummy singleton
+    private static UCaseProps gCspDummy=null;
+
+    private UCaseProps(boolean makeDummy) { // ignore makeDummy, only creates a unique signature
+        formatVersion=new byte[] { 1, 0, Trie.INDEX_STAGE_1_SHIFT_, Trie.INDEX_STAGE_2_SHIFT_ };
+        unicodeVersion=new byte[] { 2, 0, 0, 0 };
+        indexes=new int[IX_TOP];
+        indexes[0]=IX_TOP;
+        trie=new CharTrie(0, 0, null); // dummy trie, always returns 0
+    }
+
+    /**
+     * Get a singleton dummy object, one that works with no real data.
+     * This can be used when the real data is not available.
+     * Using the dummy can reduce checks for available data after an initial failure.
+     * Port of ucase_getDummy().
+     */
+    public static final synchronized UCaseProps getDummy() {
+        if(gCspDummy==null) {
+            gCspDummy=new UCaseProps(true);
+        }
+        return gCspDummy;
     }
 
     // set of property starts for UnicodeSet ------------------------------- ***
