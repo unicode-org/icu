@@ -6,7 +6,7 @@
 // ***************************************************************************
 
 ms{
-    Version{ "x1.0" }
+    Version{ "x1.1" }
     DayAbbreviations { 
         "Aha",
         "Isn",
@@ -55,7 +55,7 @@ ms{
     }
     LocaleID:int { 0x3e }
 //    LocaleString{ "ms" }
-    LocaleScript{ 
-        "Latn",  // ISO 15924 Name 
-    }
+//    LocaleScript{ 
+//        "Latn",  // ISO 15924 Name 
+//    }
 }

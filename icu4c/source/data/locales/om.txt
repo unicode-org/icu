@@ -1,9 +1,9 @@
-// *******************************************************************************
+// ***************************************************************************
 // *
-// *   Copyright (C) 2001-2004, International Business Machines
+// *   Copyright (C) 2001-2002, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
-// *******************************************************************************
+// ***************************************************************************
 // * Oromo language locale.
 // * Contributed by Daniel Yacob <yacob@geez.org>
 // *
@@ -16,59 +16,57 @@
 // * of the month and day names.
 
 om{
-    Version{ "x0.1" }
+    Version{ "x0.2" }
     DayAbbreviations {
-            "Dil",
-            "Wix",
-            "Qib",
-            "Rob",
-            "Kam",
-            "Jim",
-            "San",
+        "Dil",
+        "Wix",
+        "Qib",
+        "Rob",
+        "Kam",
+        "Jim",
+        "San",
     }
     DayNames {
-            "Dilbata",
-            "Wiixata",
-            "Qibxata",
-            "Roobii",
-            "Kamiisa",
-            "Jimaata",
-            "Sanbata",
+        "Dilbata",
+        "Wiixata",
+        "Qibxata",
+        "Roobii",
+        "Kamiisa",
+        "Jimaata",
+        "Sanbata",
     }
-    LanguageLibraryUse { "orm" }
+//    LanguageLibraryUse { "orm" }
     MonthAbbreviations {
-            "Ama",
-            "Gur",
-            "Bit",
-            "Elb",
-            "Cam",
-            "Wax",
-            "Ado",
-            "Hag",
-            "Ful",
-            "Onk",
-            "Sad",
-            "Mud",
-            "",
+        "Ama",
+        "Gur",
+        "Bit",
+        "Elb",
+        "Cam",
+        "Wax",
+        "Ado",
+        "Hag",
+        "Ful",
+        "Onk",
+        "Sad",
+        "Mud",
     }
     MonthNames {
-            "Amajjii",
-            "Guraandhala",
-            "Bitooteessa",
-            "Elba",
-            "Caamsa",
-            "Waxabajjii",
-            "Adooleessa",
-            "Hagayya",
-            "Fuulbana",
-            "Onkololeessa",
-            "Sadaasa",
-            "Muddee",
-            "",
+        "Amajjii",
+        "Guraandhala",
+        "Bitooteessa",
+        "Elba",
+        "Caamsa",
+        "Waxabajjii",
+        "Adooleessa",
+        "Hagayya",
+        "Fuulbana",
+        "Onkololeessa",
+        "Sadaasa",
+        "Muddee",
     }
     Eras { 
-            "KD",  // KD = Kiristoos Dura = Before Christ
-            "KB",  // KB = Kiristoos Booda = After Christ
+        "KD",  // KD = Kiristoos Dura = Before Christ
+        "KB",  // KB = Kiristoos Booda = After Christ
     }
     Languages { 
         om { "Oromoo" }

@@ -9,16 +9,16 @@
 
 
 sw_KE {
-    Version { "1.0" }
+    Version { "1.1" }
     CurrencyElements { 
         "KSh",
         "KES",
         ".",
     }
 //    LocaleString { "sw_KE" }
-    NumberPatterns { 
+    NumberPatterns {
         "#,##0.###;-#,##0.###",
-        "#,##0.00 \u00A4;-#,##0.00 \u00A4",
+        "\u00A4#,##0.00;-\u00A4#,##0.00",
         "#,##0%",
         "#E0",
     }

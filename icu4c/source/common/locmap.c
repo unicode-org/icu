@@ -255,10 +255,10 @@ static const ILcidPosixElement ar[] = {
 
 ILCID_POSIX_ELEMENT_ARRAY(0x044d, as, as_IN)    /*Todo: Data does not exist*/
 
-static const ILcidPosixElement az[] = {         /*Todo: Data does not exist*/
+static const ILcidPosixElement az[] = {
     {0x2c,   "az"},
-    {0x082c, "az_AZ_C"},
-    {0x042c, "az_AZ_L"}
+    {0x082c, "az_AZ"},  /* Cyrillic based */
+    {0x042c, "az_AZ_L"} /* Latin based */
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0423, be, be_BY)
@@ -273,7 +273,7 @@ static const ILcidPosixElement de[] = {
     {0x0c07, "de_AT"},
     {0x0807, "de_CH"},
     {0x0407, "de_DE"},
-    {0x1407, "de_LI"},    /*Todo: Data does not exist*/
+    {0x1407, "de_LI"},
     {0x1007, "de_LU"},
     {0x10407,"de__PHONEBOOK"}  /*This is really de_DE_PHONEBOOK on Windows, maybe 10007*/
 };
@@ -288,14 +288,14 @@ ILCID_POSIX_ELEMENT_ARRAY(0x0408, el, el_GR)
 static const ILcidPosixElement en[] = {
     {0x09,   "en"},
     {0x0c09, "en_AU"},
-    {0x2809, "en_BZ"},    /*Todo: Data does not exist*/
+    {0x2809, "en_BZ"},
     {0x1009, "en_CA"},
     {0x0809, "en_GB"},
     {0x1809, "en_IE"},
-    {0x2009, "en_JM"},    /*Todo: Data does not exist*/
+    {0x2009, "en_JM"},
     {0x1409, "en_NZ"},
     {0x3409, "en_PH"},
-    {0x2C09, "en_TT"},    /*Todo: Data does not exist*/
+    {0x2C09, "en_TT"},
     {0x0409, "en_US"},
     {0x007f, "en_US_POSIX"}, /* duplicate for roundtripping */
     {0x2409, "en_VI"},
@@ -328,7 +328,7 @@ static const ILcidPosixElement es[] = {
     {0x440a, "es_SV"},
     {0x380a, "es_UY"},
     {0x200a, "es_VE"},
-    {0x040a, "es__TRADITIONAL"}  /*This is really es_ES_PHONEBOOK on Windows */
+    {0x040a, "es__TRADITIONAL"}  /*This is really es_ES_TRADITIONAL on Windows */
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0425, et, et_EE)
@@ -344,11 +344,11 @@ static const ILcidPosixElement fr[] = {
     {0x100c, "fr_CH"},
     {0x040c, "fr_FR"},
     {0x140c, "fr_LU"},
-    {0x180c, "fr_MC"}    /*Todo: Data does not exist*/
+    {0x180c, "fr_MC"}
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0456, gl, gl_ES)
-ILCID_POSIX_ELEMENT_ARRAY(0x0447, gu, gu_IN)    /*Todo: Data does not exist*/
+ILCID_POSIX_ELEMENT_ARRAY(0x0447, gu, gu_IN)
 ILCID_POSIX_ELEMENT_ARRAY(0x040d, he, he_IL)
 ILCID_POSIX_ELEMENT_ARRAY(0x0439, hi, hi_IN)
 
@@ -363,7 +363,7 @@ static const ILcidPosixElement hr[] = {
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x040e, hu, hu_HU)
-ILCID_POSIX_ELEMENT_ARRAY(0x042b, hy, hy_AM)    /*Todo: Data does not exist*/
+ILCID_POSIX_ELEMENT_ARRAY(0x042b, hy, hy_AM)
 ILCID_POSIX_ELEMENT_ARRAY(0x0421, id, id_ID)
 ILCID_POSIX_ELEMENT_ARRAY(0x040f, is, is_IS)
 
@@ -375,9 +375,9 @@ static const ILcidPosixElement it[] = {
 
 ILCID_POSIX_ELEMENT_ARRAY(0x040d, iw, iw_IL)    /*Left in for compatibility*/
 ILCID_POSIX_ELEMENT_ARRAY(0x0411, ja, ja_JP)
-ILCID_POSIX_ELEMENT_ARRAY(0x0437, ka, ka_GE)    /*Todo: Data does not exist*/
-ILCID_POSIX_ELEMENT_ARRAY(0x043f, kk, kk_KZ)    /*Todo: Data does not exist*/
-ILCID_POSIX_ELEMENT_ARRAY(0x044b, kn, kn_IN)    /*Todo: Data does not exist*/
+ILCID_POSIX_ELEMENT_ARRAY(0x0437, ka, ka_GE)
+ILCID_POSIX_ELEMENT_ARRAY(0x043f, kk, kk_KZ)
+ILCID_POSIX_ELEMENT_ARRAY(0x044b, kn, kn_IN)
 
 static const ILcidPosixElement ko[] = {
     {0x12,   "ko"},
@@ -387,12 +387,12 @@ static const ILcidPosixElement ko[] = {
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0457, kok, kok_IN)
 ILCID_POSIX_ELEMENT_ARRAY(0x0460, ks,  ks_IN)   /*Todo: Data does not exist*/
-ILCID_POSIX_ELEMENT_ARRAY(0x0440, ky,  ky_KG)   /*Todo: Data does not exist*/
+ILCID_POSIX_ELEMENT_ARRAY(0x0440, ky,  ky_KG)
 ILCID_POSIX_ELEMENT_ARRAY(0x0427, lt,  lt_LT)
 ILCID_POSIX_ELEMENT_ARRAY(0x0426, lv,  lv_LV)
 ILCID_POSIX_ELEMENT_ARRAY(0x042f, mk,  mk_MK)
 ILCID_POSIX_ELEMENT_ARRAY(0x044c, ml,  ml_IN)   /*Todo: Data does not exist*/
-ILCID_POSIX_ELEMENT_ARRAY(0x0450, mn,  mn_MN)   /*Todo: Data does not exist*/
+ILCID_POSIX_ELEMENT_ARRAY(0x0450, mn,  mn_MN)
 ILCID_POSIX_ELEMENT_ARRAY(0x0458, mni, mni_IN)  /*Todo: Data does not exist*/
 ILCID_POSIX_ELEMENT_ARRAY(0x044e, mr,  mr_IN)
 
@@ -426,12 +426,12 @@ static const ILcidPosixElement no[] = {
 };
 
 /* Declared as or_IN to get around compiler errors*/
-static const ILcidPosixElement or_IN[] = {      /*Todo: Data does not exist*/
+static const ILcidPosixElement or_IN[] = {
     {0x48,   "or"},
     {0x0448, "or_IN"},
 };
 
-ILCID_POSIX_ELEMENT_ARRAY(0x0446, pa, pa_IN)    /*Todo: Data does not exist*/
+ILCID_POSIX_ELEMENT_ARRAY(0x0446, pa, pa_IN)
 ILCID_POSIX_ELEMENT_ARRAY(0x0415, pl, pl_PL)
 
 static const ILcidPosixElement pt[] = {
@@ -447,7 +447,7 @@ static const ILcidPosixElement root[] = {
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0419, ru, ru_RU)
-ILCID_POSIX_ELEMENT_ARRAY(0x044f, sa, sa_IN)    /*Todo: Data does not exist*/
+ILCID_POSIX_ELEMENT_ARRAY(0x044f, sa, sa_IN)
 ILCID_POSIX_ELEMENT_ARRAY(0x0459, sd, sd_IN)    /*Todo: Data does not exist*/
 ILCID_POSIX_ELEMENT_ARRAY(0x041b, sk, sk_SK)
 ILCID_POSIX_ELEMENT_ARRAY(0x0424, sl, sl_SI)
@@ -465,19 +465,19 @@ ILCID_POSIX_ELEMENT_ARRAY(0x0449, ta, ta_IN)
 ILCID_POSIX_ELEMENT_ARRAY(0x044a, te, te_IN)
 ILCID_POSIX_ELEMENT_ARRAY(0x041e, th, th_TH)
 ILCID_POSIX_ELEMENT_ARRAY(0x041f, tr, tr_TR)
-ILCID_POSIX_ELEMENT_ARRAY(0x0444, tt, tt_RU)    /*Todo: Data does not exist*/
+ILCID_POSIX_ELEMENT_ARRAY(0x0444, tt, tt_RU)
 ILCID_POSIX_ELEMENT_ARRAY(0x0422, uk, uk_UA)
 
-static const ILcidPosixElement ur[] = {         /*Todo: Data does not exist*/
+static const ILcidPosixElement ur[] = {
     {0x20,   "ur"},
     {0x0820, "ur_IN"},
     {0x0420, "ur_PK"}
 };
 
-static const ILcidPosixElement uz[] = {      /*Todo: Data does not exist*/
+static const ILcidPosixElement uz[] = {
     {0x43,   "uz"},
-    {0x0843, "uz_UZ_C"},
-    {0x0443, "uz_UZ_L"}
+    {0x0843, "uz_UZ"},  /* Cyrillic based */
+    {0x0443, "uz_UZ_L"} /* Latin based */
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x042a, vi, vi_VN)
