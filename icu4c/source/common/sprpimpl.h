@@ -34,9 +34,8 @@ enum UStringPrepType{
     USPREP_UNASSIGNED           = 0x0000 ,
     USPREP_MAP                  = 0x0001 ,
     USPREP_PROHIBITED           = 0x0002 , 
-    USPREP_LABEL_SEPARATOR      = 0x0003 ,
-    USPREP_DELETE               = 0x0004 ,
-    USPREP_TYPE_LIMIT           = 0x0005  
+    USPREP_DELETE               = 0x0003 ,
+    USPREP_TYPE_LIMIT           = 0x0004  
 };
 
 typedef enum UStringPrepType UStringPrepType;
@@ -46,7 +45,6 @@ static const char* usprepTypeNames[] ={
     "UNASSIGNED" ,          
     "MAP" , 
     "PROHIBITED" ,        
-    "LABEL_SEPARATOR" ,
     "DELETE",
     "TYPE_LIMIT" 
 };
@@ -150,13 +148,6 @@ usprep_normalize(   UStringPrepProfile* prep,
                     const UChar* src, int32_t srcLength, 
                     UChar* dest, int32_t destCapacity,
                     UErrorCode* status );
-
-
-U_CFUNC UBool 
-usprep_isLabelSeparator(UStringPrepProfile* profile, 
-                        UChar32 ch, UErrorCode* status);
-
-
 
 /**
  * Swap StringPrep .spp profile data. See udataswp.h.

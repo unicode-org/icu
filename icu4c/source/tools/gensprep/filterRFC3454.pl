@@ -121,9 +121,6 @@ sub main(){
             createProhibitedTable($inFH,$outfile,$line);
       }
   }
-  if( defined $writeLDHChars){
-      createLDHCharTable($inFH, $outfile);
-  }
   if( defined $writeISCSIChars){
       create_iSCSIExtraProhibitedTable($inFH, $outfile);
   }
@@ -238,21 +235,7 @@ sub createProhibitedTable{
     readPrint($inFH,$outFH,$comment, "C");
     close($outFH);
 }
-#-----------------------------------------------------------------------
-sub createLDHCharTable{
-    ($inFH,$outfile,$line) = @_;
-    $comment ="# code points for LDH chars \n";
 
-    $outFH = IO::File->new($outfile, "a")
-            or die  "could not open the file $outfile for writing: $! \n";
-    print $outFH $comment;
-    print $outFH "002E; ; LABEL_SEPARATOR\n";
-    print $outFH "3002; ; LABEL_SEPARATOR\n";
-    print $outFH "FF0E; ; LABEL_SEPARATOR\n";
-    print $outFH "FF61; ; LABEL_SEPARATOR\n";
-    print $outFH "\n# Total code points 4\n";
-    close($outFH);
-}
 #-----------------------------------------------------------------------
 sub create_iSCSIExtraProhibitedTable{
     ($inFH,$outfile,$line) = @_;
@@ -295,12 +278,11 @@ Options:
         --C7             Generate data for table C.7
         --C8             Generate data for table C.8
         --C9             Generate data for table C.9
-        --ldh-chars      Generate data for LDH chars used in IDNA
         --iscsi          Generate data for extra prohibited iSCSI chars
 
 Note, --B2 and --B3 are mutually exclusive.
 
-e.g.: filterRFC3454.pl --sourcedir=. --destdir=./output --src-filename=rfc3454.txt  --dest-filename=NamePrepProfile.txt --A1 --B2 --C12 --C21 --C22 --C3 --C4 --C5 --C6 --C7 --C8 --C9  --ldh-chars
+e.g.: filterRFC3454.pl --sourcedir=. --destdir=./output --src-filename=rfc3454.txt  --dest-filename=NamePrepProfile.txt --A1 --B2 --C12 --C22 --C3 --C4 --C5 --C6 --C7 --C8 --C9
 
 filterRFC3454.pl filters the RFC file and creates String prep table files.
 The RFC text can be downloaded from ftp://ftp.rfc-editor.org/in-notes/rfc3454.txt

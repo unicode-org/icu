@@ -381,15 +381,6 @@ strprepProfileLineFn(void *context,
         /* store the mapping */
         storeMapping(code,mapping, length,USPREP_MAP, pErrorCode);
 
-    }else if(uprv_strstr(typeName, usprepTypeNames[USPREP_LABEL_SEPARATOR])!=NULL){
-
-        u_parseCodePointRange(fields[0][0], &rangeStart,&rangeEnd, pErrorCode);
-        if(U_FAILURE(*pErrorCode)){
-            fprintf(stderr, "Could not parse code point range. Error: %s\n",u_errorName(*pErrorCode));
-            return;
-        }
-        /* store the range */
-        storeRange(rangeStart,rangeEnd,USPREP_LABEL_SEPARATOR, pErrorCode);
     }else{
         *pErrorCode = U_INVALID_FORMAT_ERROR;
     }
