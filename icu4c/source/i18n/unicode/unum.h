@@ -164,7 +164,7 @@ typedef enum UNumberFormatStyle {
     /** Default format */
     UNUM_DEFAULT = UNUM_DECIMAL,
     /** (Alias for UNUM_PATTERN_DECIMAL) */
-    UNUM_IGNORE = UNUM_PATTERN_DECIMAL,
+    UNUM_IGNORE = UNUM_PATTERN_DECIMAL
 } UNumberFormatStyle;
 
 /** The possible number format rounding modes. 
@@ -497,7 +497,7 @@ typedef enum UNumberFormatAttribute {
   /** Lenient parse mode used by rule-based formats.
    * @draft ICU 3.0
    */
-  UNUM_LENIENT_PARSE,
+  UNUM_LENIENT_PARSE
 } UNumberFormatAttribute;
 
 /**
@@ -607,7 +607,7 @@ typedef enum UNumberFormatTextAttribute {
    * single string, with each ruleset name delimited by ';' (semicolon).
    * @draft ICU 3.0
    */
-  UNUM_PUBLIC_RULESETS,
+  UNUM_PUBLIC_RULESETS
 } UNumberFormatTextAttribute;
 
 /**
