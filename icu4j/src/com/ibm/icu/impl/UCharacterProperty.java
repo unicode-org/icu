@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2002/10/03 23:42:02 $ 
-* $Revision: 1.17 $
+* $Date: 2002/10/12 00:10:56 $ 
+* $Revision: 1.18 $
 *
 *******************************************************************************
 */
@@ -694,7 +694,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
     * @return size of the lower case character in UTF16 format
     */
     public int getSpecialLowerCase(Locale locale, int index, int ch, 
-                                   UnicodeCharacterIterator uchariter,
+                                   UCharacterIterator uchariter,
                                    StringBuffer buffer)
     {
     	int exception = getException(index, 
@@ -867,7 +867,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
      * @return size of the lowercased codepoint in UTF16 format
      */
     public int toLowerCase(Locale locale, int ch, 
-                                   UnicodeCharacterIterator uchariter, 
+                                   UCharacterIterator uchariter, 
                                    StringBuffer buffer)
     {
     	int props = getProperty(ch);
@@ -902,7 +902,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
      * @return size oflowercased codepoint in UTF16 format
      */
     public int toLowerCase(Locale locale, int ch, 
-                           UnicodeCharacterIterator uchariter, char buffer[])
+                           UCharacterIterator uchariter, char buffer[])
     {
         int props = getProperty(ch);
         if ((props & EXCEPTION_MASK) == 0) {
@@ -946,7 +946,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
     public void toLowerCase(Locale locale, String str, int start, int limit, 
                             StringBuffer result) 
     {
-        UnicodeCharacterIterator ucharIter = new UnicodeCharacterIterator(str);
+        UCharacterIterator ucharIter = UCharacterIterator.getInstance(str);
         int                strIndex  = start;
         
         while (strIndex < limit) { 
@@ -973,7 +973,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
     * @return size of uppercased codepoint in UTF16 format
     */
     public int getSpecialUpperOrTitleCase(Locale locale, int index, int ch, 
-                                          UnicodeCharacterIterator uchariter, 
+                                          UCharacterIterator uchariter, 
                                           boolean upperflag, 
                                           StringBuffer buffer)
     {
@@ -1045,7 +1045,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
      * @return size of uppercased codepoint in UTF16 format
      */
 	public int toUpperOrTitleCase(Locale locale, int ch, 
-	                              UnicodeCharacterIterator uchariter, 
+	                              UCharacterIterator uchariter, 
 	                              boolean upperflag, StringBuffer buffer) 
     {
         int props = getProperty(ch);
@@ -1087,7 +1087,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
      * @return size of uppercased codepoint in UTF16 format
      */
 	public int toUpperOrTitleCase(Locale locale, int ch, 
-	                              UnicodeCharacterIterator uchariter, 
+	                              UCharacterIterator uchariter, 
 	                              boolean upperflag, char buffer[]) 
     {
         int props = getProperty(ch);
@@ -1137,7 +1137,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
      */
     public String toUpperCase(Locale locale, String str, int start, int limit) 
     {
-        UnicodeCharacterIterator ucharIter = new UnicodeCharacterIterator(str);
+        UCharacterIterator ucharIter = UCharacterIterator.getInstance(str);
         int                strIndex  = start;
         StringBuffer       result    = new StringBuffer(limit - start);
         
@@ -1174,7 +1174,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
  	public String toTitleCase(Locale locale, String str, 
  	                          BreakIterator breakiter)
  	{
- 		UnicodeCharacterIterator ucharIter = new UnicodeCharacterIterator(str);
+ 		UCharacterIterator ucharIter = UCharacterIterator.getInstance(str);
 		int                length    = str.length();
         StringBuffer       result    = new StringBuffer();
         
@@ -1680,13 +1680,13 @@ public final class UCharacterProperty implements Trie.DataManipulate
     * @see SpecialCasing.txt
     */
     private boolean isPrecededBySoftDotted(
-                                UnicodeCharacterIterator uchariter, int offset) 
+                                UCharacterIterator uchariter, int offset) 
     {
     	uchariter.setIndex(offset);
     	
     	int ch = uchariter.previousCodePoint();
     	
-        while (ch != UnicodeCharacterIterator.DONE_CODEPOINT) {
+        while (ch != UCharacterIterator.DONE) {
             if (isSoftDotted(ch)) {
                 return true; // preceded by TYPE_i
             }
@@ -1712,14 +1712,14 @@ public final class UCharacterProperty implements Trie.DataManipulate
     * @return false if any character after offset in src is a cased letter
     * @see SpecialCasing.txt
     */
-    private boolean isCFINAL(UnicodeCharacterIterator uchariter, int offset) 
+    private boolean isCFINAL(UCharacterIterator uchariter, int offset) 
     {
     	// iterator should have been determined to be not null by caller
         uchariter.setIndex(offset);
     	uchariter.nextCodePoint(); // rid of current codepoint
         int ch = uchariter.nextCodePoint(); // start checking
     	
-    	while (ch != UnicodeCharacterIterator.DONE_CODEPOINT) {
+    	while (ch != UCharacterIterator.DONE) {
             int cat = getProperty(ch) & TYPE_MASK;
             if (isCased(ch, cat)) {
                 return false; // followed by cased letter
@@ -1741,13 +1741,13 @@ public final class UCharacterProperty implements Trie.DataManipulate
     * @return true if any character before index in src is a cased letter
     * @see SpecialCasing.txt
     */
-    private boolean isNotCINITIAL(UnicodeCharacterIterator uchariter, 
+    private boolean isNotCINITIAL(UCharacterIterator uchariter, 
                                          int offset) 
     {
     	uchariter.setIndex(offset);
     	int ch = uchariter.previousCodePoint();
     	
-        while (ch != UnicodeCharacterIterator.DONE_CODEPOINT) {
+        while (ch != UCharacterIterator.DONE) {
             int cat = getProperty(ch) & TYPE_MASK;
             if (isCased(ch, cat)) {
                 return true; // preceded by cased letter
@@ -1770,14 +1770,14 @@ public final class UCharacterProperty implements Trie.DataManipulate
     *         of combining class = 230.
     * @see SpecialCasing.txt
     */
-    private static boolean isFollowedByMOREABOVE(UnicodeCharacterIterator uchariter, 
+    private static boolean isFollowedByMOREABOVE(UCharacterIterator uchariter, 
                                                  int offset) 
     {
         uchariter.setIndex(offset);
         uchariter.nextCodePoint(); // rid of current codepoint
         int ch = uchariter.nextCodePoint(); // start checking
         
-        while (ch != UnicodeCharacterIterator.DONE_CODEPOINT) {
+        while (ch != UCharacterIterator.DONE) {
             int cc = NormalizerImpl.getCombiningClass(ch);
             if (cc == COMBINING_MARK_ABOVE_CLASS_) {
                 return true; // at least one cc==230 following 
@@ -1800,14 +1800,14 @@ public final class UCharacterProperty implements Trie.DataManipulate
     *         with no characters of combining class == 230 in between
     * @see SpecialCasing.txt
     */
-    private static boolean isFollowedByDotAbove(UnicodeCharacterIterator uchariter, 
+    private static boolean isFollowedByDotAbove(UCharacterIterator uchariter, 
                                                 int offset) 
     {
         uchariter.setIndex(offset);
         uchariter.nextCodePoint(); // rid off current character
         int ch = uchariter.nextCodePoint(); // start checking
         
-        while (ch != UnicodeCharacterIterator.DONE_CODEPOINT) {
+        while (ch != UCharacterIterator.DONE) {
             if (ch == COMBINING_DOT_ABOVE_) {
                 return true;
             }
