@@ -78,6 +78,15 @@ writeCCode(const char *filename) {
     }
 
     T_FileStream_writeLine(out, "#include \"utypes.h\"\nU_CAPI const uint8_t U_EXPORT2 ");
+
+    for(i=0;i<strlen(entry);i++)
+      {
+	if(entry[i]=='-')
+        {
+	  entry[i]='_';
+        }
+      }
+
     T_FileStream_writeLine(out, entry);
     T_FileStream_writeLine(out, "[]={\n");
 
