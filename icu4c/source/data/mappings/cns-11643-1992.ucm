@@ -1,6 +1,6 @@
 # *******************************************************************************
 # *
-# *   Copyright (C) 1997-2001, International Business Machines
+# *   Copyright (C) 1997-2003, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # *
 # *******************************************************************************
@@ -27,7 +27,7 @@
 <code_set_name>	      "CNS-11643-1992"
 <char_name_mask>	      "AXXXX"
 <mb_cur_max>	      3
-<mb_cur_min>	      1
+<mb_cur_min>	      3
 <uconv_class>	      "MBCS"
 <subchar>		      \x81\x7e\x7e
 
