@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="3.0"/>
-		<generation date="2003-09-30" />
+		<generation date="2003-12-03" />
 		<language type="cs" /> 
 	</identity>
 	<localeDisplayNames>
@@ -409,8 +409,6 @@
 			</dateTimeFormats>
 		</calendar>
 	</calendars>
-	<timeZoneNames>
-	</timeZoneNames>
 </dates>
 <numbers>
 	<symbols>
@@ -434,27 +432,4 @@
 		</currency>
 	</currencies>
 </numbers>
-<collations version="3.1.1">
-	<collation  >
-		<rules>
-			<reset>C</reset>
-			<p>č</p>
-			<t>Č</t>
-			<reset>H</reset>
-			<p>ch</p>
-			<t>cH</t>
-			<t>Ch</t>
-			<t>CH</t>
-			<reset>R</reset>
-			<p>ř</p>
-			<t>Ř</t>
-			<reset>S</reset>
-			<p>š</p>
-			<t>Š</t>
-			<reset>Z</reset>
-			<p>ž</p>
-		</rules>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
-	</collation  >
-</collations >
 </ldml>

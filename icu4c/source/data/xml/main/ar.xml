@@ -8,32 +8,249 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-09-30" />
+		<generation date="2003-12-03" />
 		<language type="ar" /> 
 	</identity>
 	<localeDisplayNames>
 		<languages>
 			<language type="ar">العربية</language>
+			<language type="be">البيلوروسية</language>
+			<language type="bg">البلغارية</language>
+			<language type="bn">البنغالية</language>
+			<language type="bo">التبتية</language>
+			<language type="ca">الكاتالوينية</language>
+			<language type="da">الدانماركية</language>
+			<language type="de">الالمانية</language>
+			<language type="dv">المالديفية</language>
+			<language type="dz">الزونخاية</language>
+			<language type="el">اليونانية</language>
+			<language type="en">الانجليزية</language>
+			<language type="es">الاسبانية</language>
+			<language type="fa">الفارسية</language>
+			<language type="fi">الفنلندية</language>
+			<language type="fr">الفرنسية</language>
+			<language type="gu">الغوجاراتية</language>
+			<language type="he">العبرية</language>
+			<language type="hi">الهندية</language>
+			<language type="hr">الكرواتية</language>
+			<language type="id">الاندونيسية</language>
+			<language type="it">الايطالية</language>
+			<language type="ja">اليابانية</language>
+			<language type="km">الخميرية</language>
+			<language type="ko">الكورية</language>
+			<language type="lt">اللتوانية</language>
+			<language type="mn">المنغولية</language>
+			<language type="ms">لغة الملايو</language>
+			<language type="my">البورمية</language>
+			<language type="ne">النيبالية</language>
+			<language type="nl">الهولندية</language>
+			<language type="pa">البنجابية</language>
+			<language type="pt">البرتغالية</language>
+			<language type="ro">الرومانية</language>
+			<language type="ru">الروسية</language>
+			<language type="sq">الالبانية</language>
+			<language type="sr">الصربية</language>
+			<language type="sw">السواحلية</language>
+			<language type="th">التايلاندية</language>
+			<language type="tl">التاغالوغية</language>
+			<language type="tr">التركية</language>
+			<language type="ug">الاغورية</language>
+			<language type="uk">الاوكرانية</language>
+			<language type="ur">الاردية</language>
+			<language type="vi">الفيتنامية</language>
+			<language type="zh">الصينية</language>
 		</languages>
 		<territories>
-			<territory type="AE">الإمارات</territory>
+			<territory type="AD">اندورا</territory>
+			<territory type="AE">الامارات العربية المتحدة</territory>
+			<territory type="AF">افغانستان</territory>
+			<territory type="AG">انتيغوا وبربودا</territory>
+			<territory type="AI">البانيا</territory>
+			<territory type="AM">ارمينيا</territory>
+			<territory type="AO">انغولا</territory>
+			<territory type="AR">الارجنتين</territory>
+			<territory type="AT">النمسا</territory>
+			<territory type="AU">استراليا</territory>
+			<territory type="AZ">آذربيجان</territory>
+			<territory type="BA">البوسنة والهرسك</territory>
+			<territory type="BB">بربادوس</territory>
+			<territory type="BD">بنغلاديش</territory>
+			<territory type="BE">بلجيكا</territory>
+			<territory type="BF">بوركينا فاسو</territory>
+			<territory type="BG">بلغاريا</territory>
 			<territory type="BH">البحرين</territory>
+			<territory type="BI">بوروندي</territory>
+			<territory type="BJ">بنين</territory>
+			<territory type="BN">بروناي</territory>
+			<territory type="BO">بوليفيا</territory>
+			<territory type="BR">البرازيل</territory>
+			<territory type="BS">البهاما</territory>
+			<territory type="BT">بوتان</territory>
+			<territory type="BW">بوتسوانا</territory>
+			<territory type="BY">روسيا البيضاء</territory>
+			<territory type="BZ">بليز</territory>
+			<territory type="CA">كندا</territory>
+			<territory type="CF">جمهورية افريقيا الوسطى</territory>
+			<territory type="CG">الكونغو</territory>
+			<territory type="CH">سويسرا</territory>
+			<territory type="CL">تشيلي</territory>
+			<territory type="CM">الكاميرون</territory>
+			<territory type="CN">الصين</territory>
+			<territory type="CO">كولومبيا</territory>
+			<territory type="CR">كوستاريكا</territory>
+			<territory type="CU">كوبا</territory>
+			<territory type="CV">الرأس الاخضر</territory>
+			<territory type="CY">قبرص</territory>
+			<territory type="CZ">جمهورية التشيك</territory>
+			<territory type="DE">المانيا</territory>
+			<territory type="DJ">جيبوتي</territory>
+			<territory type="DK">الدانمرك</territory>
+			<territory type="DM">دومينيكا</territory>
+			<territory type="DO">الجمهورية الدومينيكية</territory>
 			<territory type="DZ">الجزائر</territory>
+			<territory type="EC">اكوادور</territory>
+			<territory type="EE">استونيا</territory>
 			<territory type="EG">مصر</territory>
+			<territory type="EH">الصحراء الغربية</territory>
+			<territory type="ER">ارتيريا</territory>
+			<territory type="ES">اسبانيا</territory>
+			<territory type="ET">اثيوبيا</territory>
+			<territory type="FI">فنلندا</territory>
+			<territory type="FJ">فيجي</territory>
+			<territory type="FM">ميكرونيزيا</territory>
+			<territory type="FR">فرنسا</territory>
+			<territory type="GA">غابون</territory>
+			<territory type="GB">المملكة المتحدة</territory>
+			<territory type="GD">غرينادا</territory>
+			<territory type="GE">جورجيا</territory>
+			<territory type="GH">غانا</territory>
+			<territory type="GM">غامبيا</territory>
+			<territory type="GN">غينيا</territory>
+			<territory type="GQ">غينيا الاستوائية</territory>
+			<territory type="GR">اليونان</territory>
+			<territory type="GT">غواتيمالا</territory>
+			<territory type="GW">غينيا بيساو</territory>
+			<territory type="GY">غوايانا</territory>
+			<territory type="HN">هندوراس</territory>
+			<territory type="HR">كرواتيا</territory>
+			<territory type="HT">هايتي</territory>
+			<territory type="HU">هنغاريا</territory>
+			<territory type="ID">اندونيسيا</territory>
+			<territory type="IE">ايرلندا</territory>
+			<territory type="IL">اسرائيل</territory>
 			<territory type="IN">الهند</territory>
 			<territory type="IQ">العراق</territory>
-			<territory type="JO">الأردن</territory>
+			<territory type="IR">ايران</territory>
+			<territory type="IS">ايسلندا</territory>
+			<territory type="IT">ايطاليا</territory>
+			<territory type="JM">جامايكا</territory>
+			<territory type="JO">الاردن</territory>
+			<territory type="JP">اليابان</territory>
+			<territory type="KE">كينيا</territory>
+			<territory type="KG">قيرغيزستان</territory>
+			<territory type="KH">كمبوديا</territory>
+			<territory type="KI">كيريباتي</territory>
+			<territory type="KM">جزر القمر</territory>
+			<territory type="KN">سانت كيتس ونيفيس</territory>
+			<territory type="KP">كوريا الشمالية</territory>
+			<territory type="KR">كوريا الجنوبية</territory>
 			<territory type="KW">الكويت</territory>
+			<territory type="KZ">كازاخستان</territory>
+			<territory type="LA">لاوس</territory>
 			<territory type="LB">لبنان</territory>
+			<territory type="LC">سانت لوسيا</territory>
+			<territory type="LI">ليختنشتاين</territory>
+			<territory type="LK">سري لانكا</territory>
+			<territory type="LR">ليبيريا</territory>
+			<territory type="LS">ليسوتو</territory>
+			<territory type="LT">ليتوانيا</territory>
+			<territory type="LU">لوكسومبرغ</territory>
+			<territory type="LV">لاتفيا</territory>
 			<territory type="LY">ليبيا</territory>
 			<territory type="MA">المغرب</territory>
-			<territory type="OM">سلطنة عمان</territory>
+			<territory type="MC">موناكو</territory>
+			<territory type="MD">مولدوفا</territory>
+			<territory type="MG">مدغشقر</territory>
+			<territory type="MH">جزر المارشال</territory>
+			<territory type="MK">مقدونيا</territory>
+			<territory type="ML">مالي</territory>
+			<territory type="MM">ميانمار</territory>
+			<territory type="MN">منغوليا</territory>
+			<territory type="MR">موريتانيا</territory>
+			<territory type="MT">مالطة</territory>
+			<territory type="MU">موريشوس</territory>
+			<territory type="MV">مالديف</territory>
+			<territory type="MW">ملاوي</territory>
+			<territory type="MX">المكسيك</territory>
+			<territory type="MY">ماليزيا</territory>
+			<territory type="MZ">موزمبيق</territory>
+			<territory type="NA">ناميبيا</territory>
+			<territory type="NE">النيجر</territory>
+			<territory type="NG">نيجيريا</territory>
+			<territory type="NI">نيكاراغوا</territory>
+			<territory type="NL">هولندا</territory>
+			<territory type="NO">النرويج</territory>
+			<territory type="NP">النيبال</territory>
+			<territory type="NR">ناورو</territory>
+			<territory type="NZ">زيلندا الجديدة</territory>
+			<territory type="OM">عمان</territory>
+			<territory type="PA">بنما</territory>
+			<territory type="PE">بيرو</territory>
+			<territory type="PG">بابوا غينيا الجديدة</territory>
+			<territory type="PH">الفيلبين</territory>
+			<territory type="PK">الباكستان</territory>
+			<territory type="PL">بولندا</territory>
+			<territory type="PT">البرتغال</territory>
+			<territory type="PW">بالاو</territory>
+			<territory type="PY">باراغواي</territory>
 			<territory type="QA">قطر</territory>
-			<territory type="SA">السعودية</territory>
+			<territory type="RO">رومانيا</territory>
+			<territory type="RU">روسيا</territory>
+			<territory type="RW">رواندا</territory>
+			<territory type="SA">العربية السعودية</territory>
+			<territory type="SB">جزر سليمان</territory>
+			<territory type="SC">سيشل</territory>
 			<territory type="SD">السودان</territory>
-			<territory type="SY">سوريا</territory>
+			<territory type="SE">السويد</territory>
+			<territory type="SG">سنغافورة</territory>
+			<territory type="SI">سلوفينيا</territory>
+			<territory type="SK">سلوفاكيا</territory>
+			<territory type="SL">سيراليون</territory>
+			<territory type="SM">سان مارينو</territory>
+			<territory type="SN">السنغال</territory>
+			<territory type="SO">الصومال</territory>
+			<territory type="SR">سورينام</territory>
+			<territory type="ST">سان تومي وبرينسيبي</territory>
+			<territory type="SV">السلفادور</territory>
+			<territory type="SY">سورية</territory>
+			<territory type="SZ">سوازيلاند</territory>
+			<territory type="TD">تشاد</territory>
+			<territory type="TG">توغو</territory>
+			<territory type="TH">تايلند</territory>
+			<territory type="TJ">تاجيكستان</territory>
+			<territory type="TM">تركمانستان</territory>
 			<territory type="TN">تونس</territory>
+			<territory type="TO">تونغا</territory>
+			<territory type="TR">تركيا</territory>
+			<territory type="TT">ترينيداد وتوباغو</territory>
+			<territory type="TV">توفالو</territory>
+			<territory type="TW">تايوان</territory>
+			<territory type="TZ">تانزانيا</territory>
+			<territory type="UA">اوكرانيا</territory>
+			<territory type="UG">اوغندا</territory>
+			<territory type="US">الاولايات المتحدة الامريكية</territory>
+			<territory type="UY">اروغواي</territory>
+			<territory type="UZ">ازبكستان</territory>
+			<territory type="VA">الفاتيكان</territory>
+			<territory type="VC">سانت فنسنت وجزر غرينادين</territory>
+			<territory type="VE">فنزويلا</territory>
+			<territory type="VN">فيتنام</territory>
+			<territory type="VU">فانوآتو</territory>
+			<territory type="WS">ساموا</territory>
 			<territory type="YE">اليمن</territory>
+			<territory type="ZA">جنوب افريقيا</territory>
+			<territory type="ZM">زامبيا</territory>
+			<territory type="ZW">زيمبابوي</territory>
 		</territories>
 </localeDisplayNames>
 <layout>
@@ -89,13 +306,13 @@
 				<day type="sat">السبت</day>
 			</dayNames>
 			<dayAbbr>
-				<day type="sun">الأحد</day>
-				<day type="mon">الاثنين</day>
-				<day type="tue">الثلاثاء</day>
-				<day type="wed">الأربعاء</day>
-				<day type="thu">الخميس</day>
-				<day type="fri">الجمعة</day>
-				<day type="sat">السبت</day>
+				<day type="sun">ح</day>
+				<day type="mon">ن</day>
+				<day type="tue">ث</day>
+				<day type="wed">ر</day>
+				<day type="thu">خ</day>
+				<day type="fri">ج</day>
+				<day type="sat">س</day>
 			</dayAbbr>
 			<week>
 				<minDays count="1"/>
@@ -164,10 +381,22 @@
 			</dateTimeFormats>
 		</calendar>
 	</calendars>
-	<timeZoneNames>
-	</timeZoneNames>
 </dates>
 <numbers>
+	<symbols>
+		<decimal>٫</decimal>
+		<group>٬</group>
+		<list>;</list>
+		<percentSign>٪</percentSign>
+		<nativeZeroDigit>٠</nativeZeroDigit>
+		<patternDigit>#</patternDigit>
+		<plusSign>+</plusSign>
+		<minusSign>-</minusSign>
+		<exponential>E</exponential>
+		<perMille>‰</perMille>
+		<infinity>∞</infinity>
+		<nan>�</nan>
+	</symbols>
 	<decimalFormats>
 		<decimalFormatLength >
 			<decimalFormat >
@@ -267,20 +496,4 @@
 		</currency>
 	</currencies>
 </numbers>
-<collations version="3.1.1">
-	<collation  >
-		<settings normalization="on"  />
-		<rules>
-			<reset>Z</reset>
-			<p>ء</p>
-			<sc>آأؤإئ</sc>
-			<pc>ابپة</pc>
-			<i>ت</i>
-			<pc>ثجچحخدذرزژسشصضطظعغفقكگلمنهوى</pc>
-			<s>ي</s>
-			<pc>ٰٱٲٳٴٵٶٷٸٹٺٻټٽٿڀځڂڃڄڅڇڈډڊڋڌڍڎڏڐڑڒړڔڕږڗڙښڛڜڝڞڟڠڡڢڣڤڥڦڧڨکڪګڬڭڮڰڱڲڳڴڵڶڷںڻڼڽھۀہۂۃۄۅۆۇۈۉۊۋیۍێېۑےۓە</pc>
-		</rules>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="2.0" />
-	</collation  >
-</collations >
 </ldml>

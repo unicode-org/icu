@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-09-30" />
+		<generation date="2003-12-03" />
 		<language type="th" /> 
 	</identity>
 	<localeDisplayNames>
@@ -499,60 +499,39 @@
 		</currency>
 	</currencies>
 </numbers>
-<collations version="3.1.1">
-	<collation  >
-		<settings normalization="on"  />
-		<rules>
-			<reset>ฤ</reset>
-			<p>ฤๅ</p>
-			<reset>ฦ</reset>
-			<p>ฦๅ</p>
-			<reset>ไ</reset>
-			<p>ๅ</p>
-			<reset before="secondary">็</reset>
-			<s>๎</s>
-			<reset>๋</reset>
-			<sc>์ํ</sc>
-			<reset last="unknown"></reset>
-			<tc> -.</tc>
-			<tc>...ฯๆ๏๚</tc>
-		</rules>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="3.0" />
-	</collation  >
-</collations >
 <special xmlns:icu="http://oss.software.ibm.com/icu/"  >
 	<icu:ruleBasedNumberFormats>
 		<icu:ruleBasedNumberFormat type="spellout">
 %default:
-  -x: ลบ&gt;&gt;;
-  x.x: &lt;&lt;จุด&gt;&gt;&gt;;
-  ศูนย์; หนึ่ง; สอง; สาม;
-  สี่; ห้า; หก; เจ็ด; แปด;
-  เก้า; สิบ; สิบเอ็ด;
-  สิบสอง; สิบสาม;
-  สิบสี่; สิบห้า;
-  สิบหก; สิบเจ็ด;
-  สิบแปด; สิบเก้า;
-  20: ยี่สิบ[&gt;%%alt-ones&gt;];
-  30: สามสิบ[&gt;%%alt-ones&gt;];
-  40: สี่สิบ[&gt;%%alt-ones&gt;];
-  50: ห้าสิบ[&gt;%%alt-ones&gt;];
-  60: หกสิบ[&gt;%%alt-ones&gt;];
-  70: เจ็ดสิบ[&gt;%%alt-ones&gt;];
-  80: แปดสิบ[&gt;%%alt-ones&gt;];
-  90: เก้าสิบ[&gt;%%alt-ones&gt;];
-  100: &lt;&lt;ร้อย[&gt;&gt;];
-  1000: &lt;&lt;พัน[&gt;&gt;];
-  10000: &lt;&lt;หมื่น[&gt;&gt;];
-  100000: &lt;&lt;แสน[&gt;&gt;];
-  1,000,000: &lt;&lt;ล้าน[&gt;&gt;];
-  1,000,000,000: &lt;&lt;พันล้าน[&gt;&gt;];
-  1,000,000,000,000: &lt;&lt;ล้านล้าน[&gt;&gt;];
-  1,000,000,000,000,000: =#,##0=;
+-x: ลบ&gt;&gt;;
+x.x: &lt;&lt;จุด&gt;&gt;&gt;;
+ศูนย์; หนึ่ง; สอง; สาม;
+สี่; ห้า; หก; เจ็ด; แปด;
+เก้า; สิบ; สิบเอ็ด;
+สิบสอง; สิบสาม;
+สิบสี่; สิบห้า;
+สิบหก; สิบเจ็ด;
+สิบแปด; สิบเก้า;
+20: ยี่สิบ[&gt;%%alt-ones&gt;];
+30: สามสิบ[&gt;%%alt-ones&gt;];
+40: สี่สิบ[&gt;%%alt-ones&gt;];
+50: ห้าสิบ[&gt;%%alt-ones&gt;];
+60: หกสิบ[&gt;%%alt-ones&gt;];
+70: เจ็ดสิบ[&gt;%%alt-ones&gt;];
+80: แปดสิบ[&gt;%%alt-ones&gt;];
+90: เก้าสิบ[&gt;%%alt-ones&gt;];
+100: &lt;&lt;ร้อย[&gt;&gt;];
+1000: &lt;&lt;พัน[&gt;&gt;];
+10000: &lt;&lt;หมื่น[&gt;&gt;];
+100000: &lt;&lt;แสน[&gt;&gt;];
+1,000,000: &lt;&lt;ล้าน[&gt;&gt;];
+1,000,000,000: &lt;&lt;พันล้าน[&gt;&gt;];
+1,000,000,000,000: &lt;&lt;ล้านล้าน[&gt;&gt;];
+1,000,000,000,000,000: =#,##0=;
 %%alt-ones:
-  ศูนย์;
-  เอ็ด;
-  =%default=;
+ศูนย์;
+เอ็ด;
+=%default=;
 
 		</icu:ruleBasedNumberFormat>
 	</icu:ruleBasedNumberFormats>

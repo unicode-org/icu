@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="3.0"/>
-		<generation date="2003-09-30" />
+		<generation date="2003-12-03" />
 		<language type="fa" /> 
 	</identity>
 	<localeDisplayNames>
@@ -221,41 +221,41 @@
 			<language type="zu">زولویی</language>
 		</languages>
 		<scripts>
-			<script type="ARAB">عربی</script>
-			<script type="ARMN">ارمنی</script>
-			<script type="BENG">بنگالی</script>
-			<script type="BOPO">بوپوموفو</script>
-			<script type="CHER">چروکیایی</script>
-			<script type="CYRL">سیریلی</script>
-			<script type="DEVA">دوناگری</script>
-			<script type="ETHI">اتیوپیایی</script>
-			<script type="GEOR">گرجی</script>
-			<script type="GOTH">گوتیک</script>
-			<script type="GREK">یونانی</script>
-			<script type="GUJR">گجراتی</script>
-			<script type="HANG">هانگول</script>
-			<script type="HANI">هان</script>
-			<script type="HEBR">عبری</script>
-			<script type="HIRA">هیراگانا</script>
-			<script type="KANA">کاتاکانا</script>
-			<script type="KHMR">خمری</script>
-			<script type="KNDA">کاناده‌ای</script>
-			<script type="LAOO">لائوسی</script>
-			<script type="LATN">لاتین</script>
-			<script type="MLYM">مالایالامی</script>
-			<script type="MONG">مغولی</script>
-			<script type="MYMR">میانمار</script>
-			<script type="ORYA">اوریه‌ای</script>
-			<script type="QAAC">قبطی</script>
-			<script type="QAAI">موروثی</script>
-			<script type="RUNR">رونی</script>
-			<script type="SYRC">آسوری</script>
-			<script type="TAML">تامیل</script>
-			<script type="TELU">تلوگویی</script>
-			<script type="THAI">تایلندی</script>
-			<script type="TIBT">تبتی</script>
-			<script type="YIII">یی</script>
-			<script type="ZYYY">مشترک</script>
+			<script type="Arab">عربی</script>
+			<script type="Armn">ارمنی</script>
+			<script type="Beng">بنگالی</script>
+			<script type="Bopo">بوپوموفو</script>
+			<script type="Cher">چروکیایی</script>
+			<script type="Cyrl">سیریلی</script>
+			<script type="Deva">دوناگری</script>
+			<script type="Ethi">اتیوپیایی</script>
+			<script type="Geor">گرجی</script>
+			<script type="Goth">گوتیک</script>
+			<script type="Grek">یونانی</script>
+			<script type="Gujr">گجراتی</script>
+			<script type="Hang">هانگول</script>
+			<script type="Hani">هان</script>
+			<script type="Hebr">عبری</script>
+			<script type="Hira">هیراگانا</script>
+			<script type="Kana">کاتاکانا</script>
+			<script type="Khmr">خمری</script>
+			<script type="Knda">کاناده‌ای</script>
+			<script type="Laoo">لائوسی</script>
+			<script type="Latn">لاتین</script>
+			<script type="Mlym">مالایالامی</script>
+			<script type="Mong">مغولی</script>
+			<script type="Mymr">میانمار</script>
+			<script type="Orya">اوریه‌ای</script>
+			<script type="Qaac">قبطی</script>
+			<script type="Qaai">موروثی</script>
+			<script type="Runr">رونی</script>
+			<script type="Syrc">آسوری</script>
+			<script type="Taml">تامیل</script>
+			<script type="Telu">تلوگویی</script>
+			<script type="Thai">تایلندی</script>
+			<script type="Tibt">تبتی</script>
+			<script type="Yiii">یی</script>
+			<script type="Zyyy">مشترک</script>
 		</scripts>
 		<territories>
 			<territory type="AD">آندورا</territory>
@@ -499,6 +499,9 @@
 			<territory type="ZW">زیمبابوه</territory>
 		</territories>
 </localeDisplayNames>
+<layout>
+	<orientation lines="top-to-bottom" characters="right-to-left" />
+</layout>
 <characters>
 	<exemplarCharacters>[ء-ؤئ-غفقل-وً-ْٰٔپچژکگی‌‍‏‎]</exemplarCharacters>
 	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
@@ -647,60 +650,36 @@
 		</currency>
 	</currencies>
 </numbers>
-<collations version="3.1.1">
-	<collation  >
-		<settings normalization="on"  />
-		<rules>
-			<reset>َ</reset>
-			<sc>ًٌٍُِ</sc>
-			<reset>آ</reset>
-			<p>ا</p>
-			<s>ٱ</s>
-			<p>ء</p>
-			<sc>أٲإٳؤ</sc>
-			<s>یٔ</s>
-			<tc>ىٔئ</tc>
-			<reset>ک</reset>
-			<sc>ڪګكڬڭڮ</sc>
-			<reset>ۏ</reset>
-			<p>ه</p>
-			<sc>ەہةۃۀھ</sc>
-			<reset>ی</reset>
-			<sc>ىےيېۑۍ</sc>
-		</rules>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="2.0" />
-	</collation  >
-</collations >
 <special xmlns:icu="http://oss.software.ibm.com/icu/"  >
 	<icu:ruleBasedNumberFormats>
 		<icu:ruleBasedNumberFormat type="spellout">
 %main:
-    -x: منفی &gt;&gt;;
-    x.x: &lt;&lt; ممیز &gt;&gt;;
-    صفر; یک; دو; سه; چهار; پنج; شش; هفت; هشت; نه;
-    ده; یازده; دوازده; سیزده; چهارده; پانزده; شانزده;
-        هفده; هجده; نوزده;
-    20: بیست[ و &gt;&gt;];
-    30: سی[ و &gt;&gt;];
-    40: چهل[ و &gt;&gt;];
-    50: پنجاه[ و &gt;&gt;];
-    60: شصت[ و &gt;&gt;];
-    70: هفتاد[ و &gt;&gt;];
-    80: هشتاد[ و &gt;&gt;];
-    90: نود[ و &gt;&gt;];
-    100: صد[ و &gt;&gt;];
-    200: دویست[ و &gt;&gt;];
-    300: سیصد[ و &gt;&gt;];
-    400: چهارصد[ و &gt;&gt;];
-    500: پانصد[ و &gt;&gt;];
-    600: ششصد[ و &gt;&gt;];
-    700: هفتصد[ و &gt;&gt;];
-    800: هشتصد[ و &gt;&gt;];
-    900: نهصد[ و &gt;&gt;];
-    1000: &lt;&lt; هزار[ و &gt;&gt;];
-    1,000,000: &lt;&lt; میلیون[ و &gt;&gt;];
-    1,000,000,000: &lt;&lt; میلیارد[ و &gt;&gt;];
-    1,000,000,000,000: =#,##0=;
+-x: منفی &gt;&gt;;
+x.x: &lt;&lt; ممیز &gt;&gt;;
+صفر; یک; دو; سه; چهار; پنج; شش; هفت; هشت; نه;
+ده; یازده; دوازده; سیزده; چهارده; پانزده; شانزده;
+    هفده; هجده; نوزده;
+20: بیست[ و &gt;&gt;];
+30: سی[ و &gt;&gt;];
+40: چهل[ و &gt;&gt;];
+50: پنجاه[ و &gt;&gt;];
+60: شصت[ و &gt;&gt;];
+70: هفتاد[ و &gt;&gt;];
+80: هشتاد[ و &gt;&gt;];
+90: نود[ و &gt;&gt;];
+100: صد[ و &gt;&gt;];
+200: دویست[ و &gt;&gt;];
+300: سیصد[ و &gt;&gt;];
+400: چهارصد[ و &gt;&gt;];
+500: پانصد[ و &gt;&gt;];
+600: ششصد[ و &gt;&gt;];
+700: هفتصد[ و &gt;&gt;];
+800: هشتصد[ و &gt;&gt;];
+900: نهصد[ و &gt;&gt;];
+1000: &lt;&lt; هزار[ و &gt;&gt;];
+1,000,000: &lt;&lt; میلیون[ و &gt;&gt;];
+1,000,000,000: &lt;&lt; میلیارد[ و &gt;&gt;];
+1,000,000,000,000: =#,##0=;
 
 		</icu:ruleBasedNumberFormat>
 	</icu:ruleBasedNumberFormats>

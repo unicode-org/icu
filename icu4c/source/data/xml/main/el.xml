@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-09-30" />
+		<generation date="2003-12-03" />
 		<language type="el" /> 
 	</identity>
 	<localeDisplayNames>
@@ -415,8 +415,6 @@
 			</dateTimeFormats>
 		</calendar>
 	</calendars>
-	<timeZoneNames>
-	</timeZoneNames>
 </dates>
 <numbers>
 	<symbols>
@@ -440,9 +438,4 @@
 		</currency>
 	</currencies>
 </numbers>
-<collations version="3.1.1">
-	<collation  >
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="2.0" />
-	</collation  >
-</collations >
 </ldml>

@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-09-30" />
+		<generation date="2003-12-03" />
 		<language type="is" /> 
 	</identity>
 	<localeDisplayNames>
@@ -20,7 +20,7 @@
 		</territories>
 </localeDisplayNames>
 <characters>
-	<exemplarCharacters>[a-z á é í ó ú ý ö æ ð þ]</exemplarCharacters>
+	<exemplarCharacters>[a-záéíóúýöæðþ]</exemplarCharacters>
 	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
 		<icu:scripts>
 			<icu:script type="1">Latn</icu:script>
@@ -45,18 +45,18 @@
 				<month type="12">desember</month>
 			</monthNames>
 			<monthAbbr>
-				<month type="1">jan.</month>
-				<month type="2">feb.</month>
-				<month type="3">mar.</month>
-				<month type="4">apr.</month>
+				<month type="1">jan</month>
+				<month type="2">feb</month>
+				<month type="3">mar</month>
+				<month type="4">apr</month>
 				<month type="5">maí</month>
-				<month type="6">jún.</month>
-				<month type="7">júl.</month>
-				<month type="8">ágú.</month>
-				<month type="9">sep.</month>
-				<month type="10">okt.</month>
-				<month type="11">nóv.</month>
-				<month type="12">des.</month>
+				<month type="6">jún</month>
+				<month type="7">júl</month>
+				<month type="8">ágú</month>
+				<month type="9">sep</month>
+				<month type="10">okt</month>
+				<month type="11">nóv</month>
+				<month type="12">des</month>
 			</monthAbbr>
 			<dayNames>
 				<day type="sun">sunnudagur</day>
@@ -68,19 +68,19 @@
 				<day type="sat">laugardagur</day>
 			</dayNames>
 			<dayAbbr>
-				<day type="sun">sun.</day>
-				<day type="mon">mán.</day>
-				<day type="tue">þri.</day>
-				<day type="wed">mið.</day>
-				<day type="thu">fim.</day>
-				<day type="fri">fös.</day>
-				<day type="sat">lau.</day>
+				<day type="sun">sun</day>
+				<day type="mon">mán</day>
+				<day type="tue">þri</day>
+				<day type="wed">mið</day>
+				<day type="thu">fim</day>
+				<day type="fri">fös</day>
+				<day type="sat">lau</day>
 			</dayAbbr>
 			<dateFormats>
 				<default type="medium"/>
 				<dateFormatLength type="full">
 					<dateFormat >
-						<pattern>d. MMMM yyyy</pattern>
+						<pattern>EEEE, d. MMMM yyyy</pattern>
 					</dateFormat>
 				</dateFormatLength >
 				<dateFormatLength type="long">
@@ -131,8 +131,6 @@
 			</dateTimeFormats>
 		</calendar>
 	</calendars>
-	<timeZoneNames>
-	</timeZoneNames>
 </dates>
 <numbers>
 	<symbols>
@@ -156,41 +154,4 @@
 		</currency>
 	</currencies>
 </numbers>
-<collations version="3.1.1">
-	<collation  >
-		<settings backwards="on"  />
-		<rules>
-			<reset>A</reset>
-			<p>á</p>
-			<t>Á</t>
-			<reset>D</reset>
-			<p>ð</p>
-			<t>Ð</t>
-			<reset>E</reset>
-			<p>é</p>
-			<t>É</t>
-			<reset>I</reset>
-			<p>í</p>
-			<t>Í</t>
-			<reset>O</reset>
-			<p>ó</p>
-			<t>Ó</t>
-			<reset>U</reset>
-			<p>ú</p>
-			<t>Ú</t>
-			<reset>Y</reset>
-			<p>ý</p>
-			<t>Ý</t>
-			<reset>Z</reset>
-			<p>þ</p>
-			<t>Þ</t>
-			<p>æ</p>
-			<t>Æ</t>
-			<p>ö</p>
-			<t>Ö</t>
-			<s>ø</s>
-		</rules>
-		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
-	</collation  >
-</collations >
 </ldml>

@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-09-30" />
+		<generation date="2003-12-03" />
 		<language type="so" /> 
 	</identity>
 	<localeDisplayNames>
@@ -16,10 +16,106 @@
 			<language type="so">Soomaali</language>
 		</languages>
 		<territories>
+			<territory type="AE">Imaaraadka Carabta ee Midoobay</territory>
+			<territory type="AF">Afgaanistaan</territory>
+			<territory type="AM">Armeeniya</territory>
+			<territory type="AO">Angoola</territory>
+			<territory type="AT">Osteeriya</territory>
+			<territory type="AU">Awstraaliya</territory>
+			<territory type="BA">Boosniya Heersigoviina</territory>
+			<territory type="BB">Baarbadoos</territory>
+			<territory type="BD">Bangaala-Deesh</territory>
+			<territory type="BE">Beljiyam</territory>
+			<territory type="BH">Baxrayn</territory>
+			<territory type="BJ">Beniin</territory>
+			<territory type="BR">Braasiil</territory>
+			<territory type="CA">Kanada</territory>
+			<territory type="CH">Swiiserlaand</territory>
+			<territory type="CL">Jili</territory>
+			<territory type="CM">Kameruun</territory>
+			<territory type="CN">Shiinaha</territory>
+			<territory type="CU">Kuuba</territory>
+			<territory type="DE">Jarmal</territory>
 			<territory type="DJ">Jabuuti</territory>
+			<territory type="DK">Danmaark</territory>
+			<territory type="EG">Masar</territory>
+			<territory type="ES">Isbeyn</territory>
 			<territory type="ET">Itoobiya</territory>
+			<territory type="FI">Fiinlaand</territory>
+			<territory type="FR">Faransiis</territory>
+			<territory type="GD">Giriinaada</territory>
+			<territory type="GN">Gini</territory>
+			<territory type="GR">Giriigga</territory>
+			<territory type="HR">Korweeshiya</territory>
+			<territory type="HU">Hangeri</territory>
+			<territory type="ID">Indoneesiya</territory>
+			<territory type="IE">Ayrlaanda</territory>
+			<territory type="IL">Israa'iil</territory>
+			<territory type="IN">Hindiya</territory>
+			<territory type="IQ">Ciraaq</territory>
+			<territory type="IR">Iiraan</territory>
+			<territory type="IS">Iislaand</territory>
+			<territory type="IT">Talyaani</territory>
+			<territory type="JM">Jameyka</territory>
+			<territory type="JO">Urdun</territory>
+			<territory type="JP">Jabbaan</territory>
 			<territory type="KE">Kiiniya</territory>
+			<territory type="KH">Kamboodiya</territory>
+			<territory type="KP">Kuuriyada Waqooyi</territory>
+			<territory type="KR">Kuuriyada Koonfureed</territory>
+			<territory type="KW">Kuwayt</territory>
+			<territory type="KZ">Kasaakhistaan</territory>
+			<territory type="LB">Lubnaan</territory>
+			<territory type="LK">Siirilaanka</territory>
+			<territory type="LR">Laybeeriya</territory>
+			<territory type="LS">Losooto</territory>
+			<territory type="LU">Luksemboorg</territory>
+			<territory type="LV">Laatfiya</territory>
+			<territory type="LY">Liibiya</territory>
+			<territory type="MA">Marooko</territory>
+			<territory type="MC">Moonako</territory>
+			<territory type="MK">Makadooniya</territory>
+			<territory type="ML">Maali</territory>
+			<territory type="MR">Muritaaniya</territory>
+			<territory type="MT">Maalda</territory>
+			<territory type="MV">Maaldiqeen</territory>
+			<territory type="MW">Malaawi</territory>
+			<territory type="MX">Meksiko</territory>
+			<territory type="MZ">Musambiig</territory>
+			<territory type="NA">Namiibiya</territory>
+			<territory type="NG">Nayjeeriya</territory>
+			<territory type="NI">Nikaraaguwa</territory>
+			<territory type="NO">Noorweey</territory>
+			<territory type="NZ">Neyuusilaand</territory>
+			<territory type="OM">Cumaan</territory>
+			<territory type="PH">Filibiin</territory>
+			<territory type="PK">Bakistaan</territory>
+			<territory type="PL">Booland</territory>
+			<territory type="PT">Bortuqaal</territory>
+			<territory type="QA">Qadar</territory>
+			<territory type="RO">Rumaaniya</territory>
+			<territory type="RU">Ruush</territory>
+			<territory type="SA">Sacuudi Carabiya</territory>
+			<territory type="SD">Sudaan</territory>
+			<territory type="SE">Iswidhan</territory>
+			<territory type="SL">Siraaliyoon</territory>
 			<territory type="SO">Soomaaliya</territory>
+			<territory type="SY">Suuriya</territory>
+			<territory type="TD">Jaad</territory>
+			<territory type="TG">Toogo</territory>
+			<territory type="TH">Taylaand</territory>
+			<territory type="TN">Tuniisiya</territory>
+			<territory type="TR">Turki</territory>
+			<territory type="TZ">Tansaaniya</territory>
+			<territory type="UG">Ugaanda</territory>
+			<territory type="US">Qaramada Midoobey ee Maraykanka</territory>
+			<territory type="VA">Faatikaan</territory>
+			<territory type="VE">Fenisuweela</territory>
+			<territory type="VN">Fiyetnaam</territory>
+			<territory type="YE">Yaman</territory>
+			<territory type="ZA">Koonfur Afrika</territory>
+			<territory type="ZM">Saambiya</territory>
+			<territory type="ZW">Simbaabwe</territory>
 		</territories>
 </localeDisplayNames>
 <characters>
@@ -105,7 +201,7 @@
 				</dateFormatLength >
 				<dateFormatLength type="medium">
 					<dateFormat >
-						<pattern>dd-MMM-yy</pattern>
+						<pattern>dd-MMM-yyyy</pattern>
 					</dateFormat>
 				</dateFormatLength >
 				<dateFormatLength type="short">

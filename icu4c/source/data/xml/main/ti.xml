@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-09-30" />
+		<generation date="2003-12-03" />
 		<language type="ti" /> 
 	</identity>
 	<localeDisplayNames>
@@ -16,7 +16,7 @@
 			<language type="aa">አፋርኛ</language>
 			<language type="ab">አብሐዚኛ</language>
 			<language type="af">አፍሪቃንስኛ</language>
-			<language type="am">አምሐረኛ</language>
+			<language type="am">አማርኛ</language>
 			<language type="ar">ዐርቢኛ</language>
 			<language type="as">አሳሜዛዊ</language>
 			<language type="ay">አያማርኛ</language>
@@ -29,6 +29,7 @@
 			<language type="bn">በንጋሊኛ</language>
 			<language type="bo">ትበትንኛ</language>
 			<language type="br">ብሬቶንኛ</language>
+			<language type="byn">ብሊን</language>
 			<language type="ca">ካታላንኛ</language>
 			<language type="co">ኮርሲካኛ</language>
 			<language type="cs">ቼክኛ</language>

@@ -8,7 +8,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2003-09-30" />
+		<generation date="2003-12-03" />
 		<language type="ga" /> 
 		<territory type="IE" /> 
 	</identity>
@@ -100,5 +100,11 @@
 			</currencyFormat>
 		</currencyFormatLength >
 	</currencyFormats>
+	<currencies>
+		<currency type="IEP">
+			<displayName>Punt Éireannach</displayName>
+			<symbol>£</symbol>
+		</currency>
+	</currencies>
 </numbers>
 </ldml>
