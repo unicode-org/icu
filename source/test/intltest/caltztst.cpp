@@ -72,8 +72,9 @@ void CalendarTimeZoneTest::releaseDateFormat(DateFormat *adopt)
             adopt = 0;
         }
     }
-
-    delete adopt;
+    else {
+        delete adopt;
+    }
 }
 
 Calendar*  CalendarTimeZoneTest::getCalendar()
@@ -117,8 +118,10 @@ void CalendarTimeZoneTest::releaseCalendar(Calendar* adopt)
             adopt = 0;
         }
     }
-
-    delete adopt;
+    else
+    {
+        delete adopt;
+    }
 }
 
 // Utility method for formatting dates for printing; useful for Java->C++ conversion.
