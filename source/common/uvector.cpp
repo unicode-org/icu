@@ -166,6 +166,19 @@ int32_t UVector::indexOf(void* obj, int32_t startIndex) const {
     return -1;
 }
 
+int32_t UVector::indexOf(int32_t obj, int32_t startIndex) const {
+    if (comparer != 0) {
+        UHashTok key;
+        key.integer = obj;
+        for (int32_t i=startIndex; i<count; ++i) {
+            if ((*comparer)(key, elements[i])) {
+                return i;
+            }
+        }
+    }
+    return -1;
+}
+
 UBool UVector::ensureCapacity(int32_t minimumCapacity, UErrorCode &status) {
     if (capacity >= minimumCapacity) {
         return TRUE;

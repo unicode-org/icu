@@ -49,7 +49,7 @@ DictionaryBasedBreakIterator::DictionaryBasedBreakIterator(UDataMemory* tablesIm
  */
 DictionaryBasedBreakIterator::~DictionaryBasedBreakIterator()
 {
-    delete [] cachedBreakPositions;
+    uprv_free(cachedBreakPositions);
 }
 
 /**
@@ -241,7 +241,7 @@ DictionaryBasedBreakIterator::handleNext()
 void
 DictionaryBasedBreakIterator::reset()
 {
-    delete [] cachedBreakPositions;
+    uprv_free(cachedBreakPositions);
     cachedBreakPositions = NULL;
     numCachedBreakPositions = 0;
     dictionaryCharCount = 0;
@@ -421,7 +421,7 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
         // on the last character of a legal word.  Push that position onto
         // the possible-break-positions stack
         if (dictionaryTables->dictionary.at(state, (int32_t)0) == -1) {
-            possibleBreakPositions.push((void*)text->getIndex(), status);
+            possibleBreakPositions.push(text->getIndex(), status);
         }
 
         // look up the new state to transition to in the dictionary
@@ -432,7 +432,7 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
         // and we've successfully traversed the whole range.  Drop out
         // of the loop.
         if (state == -1) {
-            currentBreakPositions.push((void*)text->getIndex(), status);
+            currentBreakPositions.push(text->getIndex(), status);
             break;
         }
 
@@ -449,7 +449,7 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
                 bestBreakPositions.removeAllElements();
                 bestBreakPositionsInitialized = TRUE;
                 for (int32_t i = 0; i < currentBreakPositions.size(); i++) {
-                    bestBreakPositions.push(currentBreakPositions.elementAt(i), status);
+                    bestBreakPositions.push(currentBreakPositions.elementAti(i), status);
                 }
             }
 
@@ -464,8 +464,8 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
             // a starting point the last time we tried it (this is to prevent a bunch of
             // repetitive checks from slowing down some extreme cases)
             while (!possibleBreakPositions.isEmpty() && wrongBreakPositions.contains(
-                        possibleBreakPositions.peek())) {
-                possibleBreakPositions.pop();
+                        possibleBreakPositions.peeki())) {
+                possibleBreakPositions.popi();
             }
             
             // if we've used up all possible break-position combinations, there's
@@ -477,7 +477,7 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
                 if (bestBreakPositionsInitialized) {
                     currentBreakPositions.removeAllElements();
                     for (int32_t i = 0; i < bestBreakPositions.size(); i++) {
-                        currentBreakPositions.push(bestBreakPositions.elementAt(i), status);
+                        currentBreakPositions.push(bestBreakPositions.elementAti(i), status);
                     }
                     bestBreakPositions.removeAllElements();
                     if (farthestEndPoint < endPos) {
@@ -489,12 +489,12 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
                 }
                 else {
                     if ((currentBreakPositions.isEmpty()
-                            || (int32_t)(unsigned long)currentBreakPositions.peek() != text->getIndex())
+                            || currentBreakPositions.peeki() != text->getIndex())
                             && text->getIndex() != startPos) {
-                        currentBreakPositions.push((void*)text->getIndex(), status);
+                        currentBreakPositions.push(text->getIndex(), status);
                     }
                     text->next();
-                    currentBreakPositions.push((void*)text->getIndex(), status);
+                    currentBreakPositions.push(text->getIndex(), status);
                 }
             }
 
@@ -504,15 +504,15 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
             // it.  Then back up to that position and start over from there (i.e.,
             // treat that position as the beginning of a new word)
             else {
-                int32_t temp = (int32_t)(unsigned long)possibleBreakPositions.pop();
-                void* temp2 = NULL;
+                int32_t temp = possibleBreakPositions.popi();
+                int32_t temp2 = 0;
                 while (!currentBreakPositions.isEmpty() && temp <
-                       (int32_t)(unsigned long)currentBreakPositions.peek()) {
-                    temp2 = currentBreakPositions.pop();
+                       currentBreakPositions.peeki()) {
+                    temp2 = currentBreakPositions.popi();
                     wrongBreakPositions.addElement(temp2, status);
                 }
-                currentBreakPositions.push((void*)temp, status);
-                text->setIndex((int32_t)(unsigned long)currentBreakPositions.peek());
+                currentBreakPositions.push(temp, status);
+                text->setIndex(currentBreakPositions.peeki());
             }
 
             // re-sync "c" for the next go-round, and drop out of the loop if
@@ -535,9 +535,9 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
     // because the range actually ended with non-dictionary characters we want to
     // keep with the word)
     if (!currentBreakPositions.isEmpty()) {
-        currentBreakPositions.pop();
+        currentBreakPositions.popi();
     }
-    currentBreakPositions.push((void*)endPos, status);
+    currentBreakPositions.push(endPos, status);
 
     // create a regular array to hold the break positions and copy
     // the break positions from the stack to the array (in addition,
@@ -545,14 +545,14 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
     // This array becomes the cache of break positions used by next()
     // and previous(), so this is where we actually refresh the cache.
     if (cachedBreakPositions != NULL) {
-        delete []cachedBreakPositions;
+        uprv_free(cachedBreakPositions);
     }
-    cachedBreakPositions = new int32_t[currentBreakPositions.size() + 1];
+    cachedBreakPositions = (int32_t *)uprv_malloc((currentBreakPositions.size() + 1) * sizeof(int32_t));
     numCachedBreakPositions = currentBreakPositions.size() + 1;
     cachedBreakPositions[0] = startPos;
 
     for (int32_t i = 0; i < currentBreakPositions.size(); i++) {
-        cachedBreakPositions[i + 1] = (int32_t)(unsigned long)currentBreakPositions.elementAt(i);
+        cachedBreakPositions[i + 1] = currentBreakPositions.elementAti(i);
     }
     positionInCache = 0;
 }

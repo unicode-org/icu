@@ -118,9 +118,15 @@ public:
 
     void* lastElement(void) const;
 
+    int32_t lastElementi(void) const;
+
     int32_t indexOf(void* obj, int32_t startIndex = 0) const;
 
+    int32_t indexOf(int32_t obj, int32_t startIndex = 0) const;
+
     UBool contains(void* obj) const;
+
+    UBool contains(int32_t obj) const;
 
     void removeElementAt(int32_t index);
 
@@ -211,6 +217,8 @@ public:
     UBool empty(void) const;
 
     void* peek(void) const;
+
+    int32_t peeki(void) const;
     
     void* pop(void);
     
@@ -245,12 +253,20 @@ inline UBool UVector::contains(void* obj) const {
     return indexOf(obj) >= 0;
 }
 
+inline UBool UVector::contains(int32_t obj) const {
+    return indexOf(obj) >= 0;
+}
+
 inline void* UVector::firstElement(void) const {
     return elementAt(0);
 }
 
 inline void* UVector::lastElement(void) const {
     return elementAt(count-1);
+}
+
+inline int32_t UVector::lastElementi(void) const {
+    return elementAti(count-1);
 }
 
 inline void* UVector::operator[](int32_t index) const {
@@ -265,6 +281,10 @@ inline UBool UStack::empty(void) const {
 
 inline void* UStack::peek(void) const {
     return lastElement();
+}
+
+inline int32_t UStack::peeki(void) const {
+    return lastElementi();
 }
 
 inline void* UStack::push(void* obj, UErrorCode &status) {
