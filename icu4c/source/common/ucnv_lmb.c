@@ -782,7 +782,7 @@ _LMBCSFromUnicode(UConverterFromUnicodeArgs*     args,
    {
       if (args->target >= args->targetLimit)
       {
-         *err = U_INDEX_OUTOFBOUNDS_ERROR;
+         *err = U_BUFFER_OVERFLOW_ERROR;
          break;
       }
       uniChar = *(args->source);
@@ -928,7 +928,7 @@ _LMBCSFromUnicode(UConverterFromUnicodeArgs*     args,
             enough target room
          */
          uint8_t * pErrorBuffer = args->converter->charErrorBuffer;
-         *err = U_INDEX_OUTOFBOUNDS_ERROR;
+         *err = U_BUFFER_OVERFLOW_ERROR;
          args->converter->charErrorBufferLength = (int8_t)bytes_written;
          while (bytes_written--)
          {
@@ -1189,7 +1189,7 @@ _LMBCSToUnicodeWithOffsets(UConverterToUnicodeArgs*    args,
 
    if (args->targetLimit == args->target)         /* error check may belong in common code */
    {
-      *err = U_INDEX_OUTOFBOUNDS_ERROR;
+      *err = U_BUFFER_OVERFLOW_ERROR;
       return;
    }
    
@@ -1262,10 +1262,10 @@ _LMBCSToUnicodeWithOffsets(UConverterToUnicodeArgs*    args,
          }
       }
    }
-   /* if target ran out before source, return U_INDEX_OUTOFBOUNDS_ERROR */
+   /* if target ran out before source, return U_BUFFER_OVERFLOW_ERROR */
    if (U_SUCCESS(*err) && args->sourceLimit > args->source && args->targetLimit <= args->target)
    {
-      *err = U_INDEX_OUTOFBOUNDS_ERROR;
+      *err = U_BUFFER_OVERFLOW_ERROR;
    }
 
    /* If character incomplete, store away partial char if more to come */

@@ -74,7 +74,7 @@ void ucnv_cbFromUWriteBytes (UConverterFromUnicodeArgs *args,
                 toerr * sizeof(source[0]));
     args->converter->charErrorBufferLength += toerr;
 
-    *err = U_INDEX_OUTOFBOUNDS_ERROR;
+    *err = U_BUFFER_OVERFLOW_ERROR;
 
   }
 }
@@ -127,7 +127,7 @@ void ucnv_cbFromUWriteUChars(UConverterFromUnicodeArgs *args,
   /* Note, if you did something like used a Stop subcallback, things would get interesting.  
      In fact, here's where we want to return the partially consumed in-source! 
   */
-  if(*err == U_INDEX_OUTOFBOUNDS_ERROR)
+  if(*err == U_BUFFER_OVERFLOW_ERROR)
          /* && (*source < sourceLimit && args->target >= args->targetLimit) 
                     -- S. Hrcek */
   {
@@ -175,7 +175,7 @@ void ucnv_cbFromUWriteUChars(UConverterFromUnicodeArgs *args,
     args->converter->charErrorBufferLength = (int8_t)(
       newTarget - (char*)args->converter->charErrorBuffer);
 
-    if((newTarget >= newTargetLimit) || (err2 == U_INDEX_OUTOFBOUNDS_ERROR))
+    if((newTarget >= newTargetLimit) || (err2 == U_BUFFER_OVERFLOW_ERROR))
     {
       /* now we're REALLY in trouble.
          Internal program error - callback oughtn't to have written this much
@@ -188,7 +188,7 @@ void ucnv_cbFromUWriteUChars(UConverterFromUnicodeArgs *args,
     {
       /* sub errs could be invalid/truncated/illegal chars or w/e.
          These might want to be passed on up.. But the problem is, we already
-         need to pass U_INDEXOUTOFBOUNDS_ERROR. That has to override these 
+         need to pass U_BUFFER_OVERFLOW_ERROR. That has to override these 
          other errs.. */
 
       /*
@@ -294,7 +294,7 @@ void ucnv_cbToUWriteUChars (UConverterToUnicodeArgs *args,
                 toerr * sizeof(source[0]));
     args->converter->UCharErrorBufferLength += toerr;
 
-    *err = U_INDEX_OUTOFBOUNDS_ERROR;
+    *err = U_BUFFER_OVERFLOW_ERROR;
   }
 }
 

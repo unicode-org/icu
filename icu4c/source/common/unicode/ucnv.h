@@ -504,8 +504,9 @@ U_CAPI void U_EXPORT2
  * For output data carried across calls -1 will be placed for offsets.
  * @param flush <TT>TRUE</TT> if the buffer is the last buffer of the conversion interation
  * and the conversion will finish with this call, FALSE otherwise.
- * @param err the error status.  <TT>U_ILLEGAL_ARGUMENT_ERROR</TT> will be returned if the
+ * @param err the error status.  <TT>U_ILLEGAL_ARGUMENT_ERROR</TT> will be set if the
  * converter is <TT>NULL</TT>.
+ * <code>U_BUFFER_OVERFLOW_ERROR</code> will be set if the target is full and there is still input left in the source.
  * @see ucnv_fromUChars
  * @see ucnv_convert
  * @see ucnv_getMinCharSize
@@ -546,6 +547,7 @@ U_CAPI
  * in this call, FALSE otherwise. 
  * @param err the error code status  <TT>U_ILLEGAL_ARGUMENT_ERROR</TT> will be returned if the
  * converter is <TT>NULL</TT>, or if <TT>targetLimit</TT> and <TT>sourceLimit</TT> are misaligned.
+ * <code>U_BUFFER_OVERFLOW_ERROR</code> will be set if the target is full and there is still input left in the source.
  * @see ucnv_toUChars
  * @see ucnv_getNextUChar
  * @see ucnv_convert
@@ -581,10 +583,8 @@ U_CAPI
  * @param sourceLength the length of the source buffer. If -1 is passed in as the value, 
  * the source buffer is NULL terminated string and whole source buffer will be converted.
  * @param err the error status code.
- * <TT>U_INDEX_OUTOFBOUNDS_ERROR</TT> will be returned if the
- * the # of bytes provided are not enough for transcoding.
  * <TT>U_ILLEGAL_ARGUMENT_ERROR</TT> is returned if the converter is <TT>NULL</TT> or the source or target string is empty.
- * <TT>U_BUFFER_OVERFLOW_ERROR</TT> when <TT>targetSize</TT> turns out to be bigger than <TT>targetCapacity</TT>
+ * <code>U_BUFFER_OVERFLOW_ERROR</code> will be set if the target is full and there is still input left in the source.
  * @return number of bytes needed in target, regardless of <TT>targetCapacity</TT>
  * @see ucnv_fromUnicode
  * @see ucnv_convert
@@ -622,7 +622,7 @@ U_CAPI
  * the internal process buffer cannot be allocated for transcoding.
  * <TT>U_ILLEGAL_ARGUMENT_ERROR</TT> is returned if the converter is <TT>NULL</TT> or
  * if the source or target string is empty.
- * <TT>U_BUFFER_OVERFLOW_ERROR</TT> when the input buffer is prematurely exhausted and targetSize non-<TT>NULL</TT>.
+ * <code>U_BUFFER_OVERFLOW_ERROR</code> will be set if the target is full and there is still input left in the source.
  * @return the number of UChar needed in target (including the zero terminator)
  * @see ucnv_getNextUChar
  * @see ucnv_toUnicode
@@ -647,7 +647,13 @@ U_CAPI
  *the bytes consumed in the conversion call.
  *@param points to the end of the input buffer
  *@param err fills in error status (see ucnv_toUnicode)
- *@return a UChar resulting from the partial conversion of source
+ * <code>U_INDEX_OUTOFBOUNDS_ERROR</code> will be set if the input is empty or does not convert
+ * to any output (e.g.: pure state-change codes SI/SO, escape sequences for ISO 2022,
+ * callback did not output anything, ...).
+ * This function will not set a <code>U_BUFFER_OVERFLOW_ERROR</code> because the "buffer" is
+ * the return code. However, there might be subsequent output stored in the converter object
+ * that will be returned in following calls to this function.
+ *@return a UChar32 resulting from the partial conversion of source
  *@see ucnv_toUnicode
  *@see ucnv_toUChars
  *@see ucnv_convert
@@ -671,6 +677,7 @@ U_CAPI
 * @param source: Pointer to the input buffer
 * @param sourceLength: on input contains the capacity of source
 * @param err: fills in an error status
+* <code>U_BUFFER_OVERFLOW_ERROR</code> will be set if the target is full and there is still input left in the source.
 * @return  will be filled in with the number of bytes needed in target
 * @see ucnv_fromUnicode
 * @see ucnv_toUnicode

@@ -1355,7 +1355,7 @@ UnicodeString::doCodepageCreate(const char *codepageData,
     fLength = myTarget - fArray;
 
     // allocate more space and copy data, if needed
-    if(status == U_INDEX_OUTOFBOUNDS_ERROR) {
+    if(status == U_BUFFER_OVERFLOW_ERROR) {
       // reset the error code
       status = U_ZERO_ERROR;
 
@@ -1765,7 +1765,7 @@ operator<<(ostream& stream, const UnicodeString& s)
         if(s > buffer) {
           stream.write(buffer, s - buffer);
         }
-      } while(errorCode == U_INDEX_OUTOFBOUNDS_ERROR);
+      } while(errorCode == U_BUFFER_OVERFLOW_ERROR);
       UnicodeString::releaseDefaultConverter(converter);
     }
   }

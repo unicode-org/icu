@@ -770,7 +770,7 @@ U_CFUNC void T_UConverter_toUnicode_EBCDIC_STATEFUL (UConverterToUnicodeArgs *ar
         }
       else
         {
-          *err = U_INDEX_OUTOFBOUNDS_ERROR;
+          *err = U_BUFFER_OVERFLOW_ERROR;
           break;
         }
     }
@@ -908,7 +908,7 @@ U_CFUNC void T_UConverter_toUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverterToU
         }
       else
         {
-          *err = U_INDEX_OUTOFBOUNDS_ERROR;
+          *err = U_BUFFER_OVERFLOW_ERROR;
           break;
         }
     }
@@ -973,7 +973,7 @@ U_CFUNC void T_UConverter_fromUnicode_EBCDIC_STATEFUL (UConverterFromUnicodeArgs
                   if ((!isTargetUCharDBCS)&&(myTargetIndex+1 >= targetLength))
                     {
                       args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = (char) targetUniChar;
-                      *err = U_INDEX_OUTOFBOUNDS_ERROR;
+                      *err = U_BUFFER_OVERFLOW_ERROR;
                       break;
                     }
                   else if (myTargetIndex+1 >= targetLength)
@@ -981,7 +981,7 @@ U_CFUNC void T_UConverter_fromUnicode_EBCDIC_STATEFUL (UConverterFromUnicodeArgs
                       args->converter->charErrorBuffer[0] = (char) (targetUniChar >> 8);
                       args->converter->charErrorBuffer[1] = (char) targetUniChar & 0x00FF;
                       args->converter->charErrorBufferLength = 2;
-                      *err = U_INDEX_OUTOFBOUNDS_ERROR;
+                      *err = U_BUFFER_OVERFLOW_ERROR;
                       break;
                     }
                   
@@ -1002,7 +1002,7 @@ U_CFUNC void T_UConverter_fromUnicode_EBCDIC_STATEFUL (UConverterFromUnicodeArgs
                     {
                       args->converter->charErrorBuffer[0] = (char) targetUniChar;
                       args->converter->charErrorBufferLength = 1;
-                      *err = U_INDEX_OUTOFBOUNDS_ERROR;
+                      *err = U_BUFFER_OVERFLOW_ERROR;
                       break;
                     }
                 }
@@ -1038,7 +1038,7 @@ U_CFUNC void T_UConverter_fromUnicode_EBCDIC_STATEFUL (UConverterFromUnicodeArgs
         }
       else
         {
-          *err = U_INDEX_OUTOFBOUNDS_ERROR;
+          *err = U_BUFFER_OVERFLOW_ERROR;
           break;
         }
 
@@ -1095,7 +1095,7 @@ U_CFUNC void T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverterF
                     {
                       args->converter->charErrorBuffer[0] = (char) targetUniChar;
                       args->converter->charErrorBufferLength = 1;
-                      *err = U_INDEX_OUTOFBOUNDS_ERROR;
+                      *err = U_BUFFER_OVERFLOW_ERROR;
                       break;
                     }
                   else if (myTargetIndex+1 >= targetLength)
@@ -1103,7 +1103,7 @@ U_CFUNC void T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverterF
                       args->converter->charErrorBuffer[0] = (char) (targetUniChar >> 8);
                       args->converter->charErrorBuffer[1] = (char) targetUniChar & 0x00FF;
                       args->converter->charErrorBufferLength = 2;
-                      *err = U_INDEX_OUTOFBOUNDS_ERROR;
+                      *err = U_BUFFER_OVERFLOW_ERROR;
                       break;
                     }
                 }
@@ -1126,7 +1126,7 @@ U_CFUNC void T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverterF
                     {
                       args->converter->charErrorBuffer[0] = (char) targetUniChar;
                       args->converter->charErrorBufferLength = 1;
-                      *err = U_INDEX_OUTOFBOUNDS_ERROR;
+                      *err = U_BUFFER_OVERFLOW_ERROR;
                       break;
                     }
                 }
@@ -1165,7 +1165,7 @@ U_CFUNC void T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverterF
         }
       else
         {
-          *err = U_INDEX_OUTOFBOUNDS_ERROR;
+          *err = U_BUFFER_OVERFLOW_ERROR;
           break;
         }
 
@@ -1264,7 +1264,7 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_EBCDIC_STATEFUL(UConverterToUnicodeArg
                                     err);
       
       /*makes the internal caching transparent to the user*/
-      if (*err == U_INDEX_OUTOFBOUNDS_ERROR) *err = U_ZERO_ERROR;
+      if (*err == U_BUFFER_OVERFLOW_ERROR) *err = U_ZERO_ERROR;
       
       return myUChar;
     }
