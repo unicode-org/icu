@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2002/03/13 18:15:44 $ 
-* $Revision: 1.4 $
+* $Date: 2002/03/13 18:32:19 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -510,8 +510,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
         		                         EXTENDER_);
     		}
     		case UProperty.FULL_COMPOSITION_EXCLUSION: {
-        		// return unorm_internalIsFullCompositionExclusion(codepoint);
-        		return true;
+        		return NormalizerImpl.isFullCompositionExclusion(codepoint);
     		}
     		case UProperty.GRAPHEME_BASE: {
     			int generaltype = getPropType(getProperty(codepoint));

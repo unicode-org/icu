@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2002/03/13 05:44:14 $ 
-* $Revision: 1.33 $
+* $Date: 2002/03/13 18:32:21 $ 
+* $Revision: 1.34 $
 *
 *******************************************************************************
 */
@@ -60,9 +60,9 @@ public final class UCharacterTest extends TestFmwk
     try
     {
       UCharacterTest test = new UCharacterTest();
-      //test.run(arg);
+      test.run(arg);
       //test.TestGetAge();
-      test.TestAdditionalProperties();
+      //test.TestAdditionalProperties();
     }
     catch (Exception e)
     {
@@ -1109,8 +1109,7 @@ public final class UCharacterTest extends TestFmwk
         			  0x220,   3, 2, 0, 0,
         			  0xff60,  3, 2, 0, 0};
   		for (int i = 0; i < ages.length; i += 5) {
-  			System.out.println(i);
-        	VersionInfo age = UCharacter.getAge(ages[i]);
+  			VersionInfo age = UCharacter.getAge(ages[i]);
         	if (age != VersionInfo.getInstance(ages[i + 1], ages[i + 2],
         	                                   ages[i + 3], ages[i + 4])) {
             	errln("error: getAge(\\u" + Integer.toHexString(ages[i]) +
@@ -1286,10 +1285,6 @@ public final class UCharacterTest extends TestFmwk
 	    	    continue;
 	        }
 	        
-	        // synwee: todo to be removed
-	        if (props[i][1] == UProperty.FULL_COMPOSITION_EXCLUSION) {
-	        	continue;
-	        }
 	        if (UCharacter.hasBinaryProperty(props[i][0], props[i][1])
 	            != expected[i]) {
 	            errln("error: UCharacter.hasBinaryProperty(\\u" + 
