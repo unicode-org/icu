@@ -58,6 +58,7 @@ void IntlTestDecimalFormatAPI::testAPI(/*char *par*/)
     DecimalFormat def(status);
     if(U_FAILURE(status)) {
         errln((UnicodeString)"ERROR: Could not create DecimalFormat (default)");
+        return;
     }
 
     status = U_ZERO_ERROR;
@@ -65,12 +66,14 @@ void IntlTestDecimalFormatAPI::testAPI(/*char *par*/)
     DecimalFormat pat(pattern, status);
     if(U_FAILURE(status)) {
         errln((UnicodeString)"ERROR: Could not create DecimalFormat (pattern)");
+        return;
     }
 
     status = U_ZERO_ERROR;
     DecimalFormatSymbols *symbols = new DecimalFormatSymbols(Locale::getFrench(), status);
     if(U_FAILURE(status)) {
         errln((UnicodeString)"ERROR: Could not create DecimalFormatSymbols (French)");
+        return;
     }
 
     status = U_ZERO_ERROR;
@@ -341,7 +344,8 @@ void IntlTestDecimalFormatAPI::testRounding(/*char *par*/)
     };
     DecimalFormat pat(status);
     if(U_FAILURE(status)) {
-        errln((UnicodeString)"ERROR: Could not create DecimalFormat (default)");
+      errln((UnicodeString)"ERROR: Could not create DecimalFormat (default)");
+      return;
     }
     uint16_t mode;
     uint16_t i=0;
