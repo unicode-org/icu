@@ -1,0 +1,8 @@
+el{
+
+    TransliterateLATIN {
+        "UNGEGN",
+        "::Greek-Latin/UNGEGN;"
+    }
+}
+    

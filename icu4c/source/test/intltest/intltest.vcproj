@@ -346,16 +346,6 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="conversion"
-			Filter="">
-			<File
-				RelativePath=".\convtest.cpp">
-			</File>
-			<File
-				RelativePath=".\convtest.h">
-			</File>
-		</Filter>
-		<Filter
 			Name="data &amp; memory"
 			Filter="">
 			<File
@@ -814,6 +804,16 @@
 			</File>
 			<File
 				RelativePath=".\trnserr.h">
+			</File>
+		</Filter>
+		<Filter
+			Name="conversion"
+			Filter="">
+			<File
+				RelativePath=".\convtest.cpp">
+			</File>
+			<File
+				RelativePath=".\convtest.h">
 			</File>
 		</Filter>
 	</Files>
