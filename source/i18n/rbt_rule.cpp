@@ -481,18 +481,21 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
     if (segments == NULL) {
         text.handleReplaceBetween(pos.start, keyLimit, output);
         lenDelta = output.length() - (keyLimit - pos.start);
-        newStart = pos.start;
-        int32_t n = cursorPos;
-        // cursorPos counts 16-bit code units
-        while (n > 0) {
-            int32_t l = UTF_CHAR_LENGTH(text.char32At(newStart));
-            n -= l;
-            newStart += l;
-        }
-        while (n < 0) {
-            int32_t l = UTF_CHAR_LENGTH(text.char32At(newStart-1));
-            n += l;
-            newStart -= l;
+        if (cursorPos >= 0 && cursorPos < keyLength) {
+            // Within the key, the cursor refers to 16-bit code units
+            newStart = pos.start + cursorPos;
+        } else {
+            newStart = pos.start;
+            int32_t n = cursorPos;
+            // Outside the key, cursorPos counts code points
+            while (n > 0) {
+                newStart += UTF_CHAR_LENGTH(text.char32At(newStart));
+                --n;
+            }
+            while (n < 0) {
+                newStart -= UTF_CHAR_LENGTH(text.char32At(newStart-1));
+                ++n;
+            }
         }
     } else {
         /* When there are segments to be copied, use the Replaceable.copy()
@@ -549,19 +552,19 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
         if (cursorPos > output.length()) {
             newStart = pos.start + (dest - keyLimit);
             int32_t n = cursorPos - output.length();
-            // cursorPos counts 16-bit code units
+            // cursorPos counts code points
             while (n > 0) {
-                int32_t l = UTF_CHAR_LENGTH(text.char32At(newStart));
-                n -= l;
-                newStart += l;
+                newStart += UTF_CHAR_LENGTH(text.char32At(newStart));
+                n--;
             }
         }
     }
     
+    cursor += lenDelta;
     pos.limit += lenDelta;
     pos.contextLimit += lenDelta;
-    // Restrict new value of start to [minCursor, pos.limit].
-    pos.start = uprv_max(minCursor, uprv_min(pos.limit, newStart));
+    // Restrict new value of start to [minCursor, min(cursor, pos.limit)].
+    pos.start = uprv_max(minCursor, uprv_min(uprv_min(cursor, pos.limit), newStart));
     m = U_MATCH;
     
   exit:
