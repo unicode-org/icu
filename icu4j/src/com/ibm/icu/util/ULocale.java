@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/ULocale.java,v $
-* $Date: 2003/11/24 22:24:28 $
-* $Revision: 1.6 $
+* $Date: 2003/12/01 21:23:07 $
+* $Revision: 1.7 $
 *
 ******************************************************************************
 */
@@ -78,7 +78,7 @@ public final class ULocale implements Serializable {
     }
     
     /**
-     * Consturct a ULocale object from a string representing the locale
+     * Construct a ULocale object from a string representing the locale
      * @param locName String representation of the locale, e.g: en_US, sy-Cyrl-YU
      * @draft ICU 2.8
      */ 
@@ -87,14 +87,22 @@ public final class ULocale implements Serializable {
         this.locale = new Locale(locName, "");
     }
 
+    /**
+     * Return the current default ULocale.
+     * @draft ICU 2.8
+     */ 
     public static ULocale getDefault() {
-	return new ULocale(Locale.getDefault());
+	    return new ULocale(Locale.getDefault());
     }
 
+    /**
+     * Return the root ULocale.
+     * @draft ICU 2.8
+     */ 
     public static final ULocale ROOT = new ULocale("");
 
     private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-	out.writeObject(locName);
+	    out.writeObject(locName);
     }
 
     private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/SimpleHoliday.java,v $ 
- * $Date: 2002/12/04 01:03:39 $ 
- * $Revision: 1.6 $
+ * $Date: 2003/12/01 21:22:19 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -18,10 +18,10 @@ import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
 
 /**
- * A holiday whose date can be represented by a SimpleDateRule object
+ * A holiday whose date can be represented by a month, day, and optionally day of week
+ * in the Gregorian calendar.
  *
- * @see SimpleDateRule
- * @draft ICU 2.2
+ * @draft ICU 2.8
  */
 public class SimpleHoliday extends Holiday {
     /**
@@ -35,9 +35,8 @@ public class SimpleHoliday extends Holiday {
      *              If the name is not found in the resource bundle,
      *              getDisplayName will return this string instead.
      *
-     * @see SimpleDateRule
      * @see Holiday#getDisplayName(java.util.Locale)
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public SimpleHoliday(int month, int dayOfMonth, String name)
     {
@@ -55,17 +54,14 @@ public class SimpleHoliday extends Holiday {
      *              If the name is not found in the resource bundle,
      *              getDisplayName will return this string instead.
      *
-     * @see SimpleDateRule
      * @see Holiday#getDisplayName(java.util.Locale)
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      *
      */
     public SimpleHoliday(int month, int dayOfMonth, String name,
                             int startYear)
     {
-        super(name, null);
-
-        setRange(startYear, 0, new SimpleDateRule(month, dayOfMonth) );
+        super(name, rangeRule(startYear, 0, new SimpleDateRule(month, dayOfMonth)));
     }
 
     /**
@@ -79,17 +75,13 @@ public class SimpleHoliday extends Holiday {
      *              If the name is not found in the resource bundle,
      *              getDisplayName will return this string instead.
      *
-     * @see SimpleDateRule
      * @see Holiday#getDisplayName(java.util.Locale)
-     * @draft ICU 2.2
-     *
+     * @draft ICU 2.8
      */
     public SimpleHoliday(int month, int dayOfMonth, String name,
                             int startYear, int endYear)
     {
-        super(name, null);
-
-        setRange(startYear, endYear, new SimpleDateRule(month, dayOfMonth) );
+        super(name, rangeRule(startYear, endYear, new SimpleDateRule(month, dayOfMonth)));
     }
 
     /** // TODO: remove
@@ -113,47 +105,48 @@ public class SimpleHoliday extends Holiday {
      *              If the name is not found in the resource bundle,
      *              getDisplayName will return this string instead.
      *
-     * @see SimpleDateRule
      * @see Holiday#getDisplayName(java.util.Locale)
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      *
      */
     public SimpleHoliday(int month, int dayOfMonth, int dayOfWeek, String name)
     {
         super(name, new SimpleDateRule(month, dayOfMonth,
                                         dayOfWeek > 0 ? dayOfWeek : - dayOfWeek,
-                                        dayOfWeek > 0) );
+                                        dayOfWeek > 0));
     }
 
     /**
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public SimpleHoliday(int month, int dayOfMonth, int dayOfWeek, String name,
                         int startYear)
     {
-        super(name, null);
-
-        setRange(startYear, 0, new SimpleDateRule(month, dayOfMonth,
-                                            dayOfWeek > 0 ? dayOfWeek : - dayOfWeek,
-                                            dayOfWeek > 0) );
+        super(name, rangeRule(startYear, 0, 
+                              new SimpleDateRule(month, dayOfMonth,
+                                                 dayOfWeek > 0 ? dayOfWeek : - dayOfWeek,
+                                                 dayOfWeek > 0)));
     }
 
 
     /**
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public SimpleHoliday(int month, int dayOfMonth, int dayOfWeek, String name,
                         int startYear, int endYear)
     {
-        super(name, null);
-
-        setRange(startYear, endYear, new SimpleDateRule(month, dayOfMonth,
-                                            dayOfWeek > 0 ? dayOfWeek : - dayOfWeek,
-                                            dayOfWeek > 0) );
+        super(name, rangeRule(startYear, endYear, 
+                              new SimpleDateRule(month, dayOfMonth,
+                                                 dayOfWeek > 0 ? dayOfWeek : - dayOfWeek,
+                                                 dayOfWeek > 0)));
     }
 
-    private void setRange(int startYear, int endYear, DateRule rule)
+    private static DateRule rangeRule(int startYear, int endYear, DateRule rule)
     {
+        if (startYear == 0 && endYear == 0) {
+            return rule;
+        }
+
         RangeDateRule rangeRule = new RangeDateRule();
 
         if (startYear != 0) {
@@ -167,7 +160,7 @@ public class SimpleHoliday extends Holiday {
             rangeRule.add(end, null);
         }
 
-        setRule(rangeRule);
+        return rangeRule;
     }
 
     /* Constants for holidays that are common throughout the Western
@@ -175,84 +168,84 @@ public class SimpleHoliday extends Holiday {
 
     /**
      * New Year's Day - January 1st
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public static final SimpleHoliday NEW_YEARS_DAY =
         new SimpleHoliday(Calendar.JANUARY,    1,  "New Year's Day");
 
     /**
      * Epiphany, January 6th
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public static final SimpleHoliday EPIPHANY =
         new SimpleHoliday(Calendar.JANUARY,    6,  "Epiphany");
 
     /**
      * May Day, May 1st
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public static final SimpleHoliday MAY_DAY =
         new SimpleHoliday(Calendar.MAY,        1,  "May Day");
 
     /**
      * Assumption, August 15th
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public static final SimpleHoliday ASSUMPTION =
         new SimpleHoliday(Calendar.AUGUST,    15,  "Assumption");
 
     /**
      * All Saints' Day, November 1st
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public static final SimpleHoliday ALL_SAINTS_DAY =
         new SimpleHoliday(Calendar.NOVEMBER,   1,  "All Saints' Day");
 
     /**
      * All Souls' Day, November 1st
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public static final SimpleHoliday ALL_SOULS_DAY =
         new SimpleHoliday(Calendar.NOVEMBER,   2,  "All Souls' Day");
 
     /**
      * Immaculate Conception, December 8th
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public static final SimpleHoliday IMMACULATE_CONCEPTION =
         new SimpleHoliday(Calendar.DECEMBER,   8,  "Immaculate Conception");
 
     /**
      * Christmas Eve, December 24th
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public static final SimpleHoliday CHRISTMAS_EVE =
         new SimpleHoliday(Calendar.DECEMBER,  24,  "Christmas Eve");
 
     /**
      * Christmas, December 25th
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public static final SimpleHoliday CHRISTMAS =
         new SimpleHoliday(Calendar.DECEMBER,  25,  "Christmas");
 
     /**
      * Boxing Day, December 26th
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public static final SimpleHoliday BOXING_DAY =
         new SimpleHoliday(Calendar.DECEMBER,  26,  "Boxing Day");
 
     /**
      * Saint Stephen's Day, December 26th
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public static final SimpleHoliday ST_STEPHENS_DAY =
         new SimpleHoliday(Calendar.DECEMBER,  26,  "St. Stephen's Day");
 
     /**
      * New Year's Eve, December 31st
-     * @draft ICU 2.2
+     * @draft ICU 2.8
      */
     public static final SimpleHoliday NEW_YEARS_EVE =
         new SimpleHoliday(Calendar.DECEMBER,  31,  "New Year's Eve");
