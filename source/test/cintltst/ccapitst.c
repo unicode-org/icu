@@ -22,6 +22,7 @@
 #include "unicode/ustring.h"
 #include "cstring.h"
 #include "cmemory.h"
+#include "ustr_imp.h"
 
 #define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
 
@@ -374,9 +375,11 @@ static void TestConvert()
             }
             err=U_ZERO_ERROR;
             free(target);
-            ucnv_flushCache();
         }
     }
+
+    ucnv_close(u_getDefaultConverter(&err));    /* Just in case the default converter was one of the previously opened converters */
+    ucnv_flushCache();
 
     /*Testing ucnv_open()*/
     /* Note: These converters have been chosen because they do NOT
