@@ -61,7 +61,7 @@ cpdtrans.o hextouni.o rbt.o rbt_data.o rbt_pars.o rbt_rule.o rbt_set.o \
 nultrans.o remtrans.o titletrn.o tolowtrn.o toupptrn.o anytrans.o \
 name2uni.o uni2name.o unitohex.o nortrans.o quant.o transreg.o \
 nfrs.o nfrule.o nfsubs.o rbnf.o esctrn.o unesctrn.o \
-funcrepl.o strrepl.o tridpars.o caniter.o \
+funcrepl.o strrepl.o tridpars.o \
 ucurr.o
 
 
