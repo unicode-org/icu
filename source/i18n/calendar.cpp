@@ -714,7 +714,7 @@ int32_t Calendar::stringToDayNumber(const UnicodeString& string, UErrorCode& sta
 
     string.extract(0, len, number);
     number[len] = 0;
-    int32_t value = strtol(number, &end, 10); // Radix 10
+    int32_t value = (int32_t)strtol(number, &end, 10); // Radix 10
 
     if (end-number != len || len == 0 || value < 1 || value > 7)
         status = U_INVALID_FORMAT_ERROR;
