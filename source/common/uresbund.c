@@ -1061,8 +1061,23 @@ U_CAPI UResourceBundle* ures_open(const char* path,
                     const char* localeID,
                     UErrorCode* status)
 {
+    char canonLocaleID[100];
     UResourceDataEntry *hasData = NULL;
-    UResourceBundle *r = (UResourceBundle *)uprv_malloc(sizeof(UResourceBundle));
+    UResourceBundle *r;
+    int32_t length;
+
+    if(status == NULL || U_FAILURE(*status)) {
+        return NULL;
+    }
+
+    /* first "canonicalize" the locale ID */
+    length = uloc_getName(localeID, canonLocaleID, sizeof(canonLocaleID), status);
+    if(U_FAILURE(*status) || *status == U_STRING_NOT_TERMINATED_WARNING) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
+
+    r = (UResourceBundle *)uprv_malloc(sizeof(UResourceBundle));
     if(r == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
@@ -1074,7 +1089,7 @@ U_CAPI UResourceBundle* ures_open(const char* path,
     r->fKey = NULL;
     r->fVersion = NULL;
     r->fIndex = -1;
-    r->fData = entryOpen(path, localeID, status);
+    r->fData = entryOpen(path, canonLocaleID, status);
     if(U_FAILURE(*status)) {
         uprv_free(r);
         return NULL;
@@ -1150,7 +1165,13 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_openU(const UChar* myPath,
  *  or sought.
  */
 U_CFUNC UResourceBundle* ures_openDirect(const char* path, const char* localeID, UErrorCode* status) {
-    UResourceBundle *r = (UResourceBundle *)uprv_malloc(sizeof(UResourceBundle));
+    UResourceBundle *r;
+
+    if(status == NULL || U_FAILURE(*status)) {
+        return NULL;
+    }
+
+    r = (UResourceBundle *)uprv_malloc(sizeof(UResourceBundle));
     if(r == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
