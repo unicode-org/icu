@@ -47,7 +47,7 @@ U_CFUNC U_IMPORT const uint8_t /* U_IMPORT2? */ /*U_IMPORT*/
 utf8_countTrailBytes[256];
 #endif
 
-/*
+/**
  * Count the trail bytes for a lead byte -
  * this macro should be used so that the assembler code
  * that is mentioned in utf_impl.c could be used here.
@@ -78,15 +78,18 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
 
 /* single-code point definitions -------------------------------------------- */
 
-/* classes of code unit values */
+/** Is this this code point a single code unit (byte)? */
 #define UTF8_IS_SINGLE(uchar) (((uchar)&0x80)==0)
+/** Is this this code unit the lead code unit (byte) of a code point? */
 #define UTF8_IS_LEAD(uchar) ((uint8_t)((uchar)-0xc0)<0x3e)
+/** Is this this code unit a trailing code unit (byte) of a code point? */
 #define UTF8_IS_TRAIL(uchar) (((uchar)&0xc0)==0x80)
 
-/* number of code units per code point */
+/** Does this scalar Unicode value need multiple code units for storage? */
 #define UTF8_NEED_MULTIPLE_UCHAR(c) ((uint32_t)(c)>0x7f)
 
-/*
+/**
+ * Given the lead character, how many bytes are taken by this code point.
  * ICU does not deal with code points >0x10ffff
  * unless necessary for advancing in the byte stream.
  *
@@ -118,9 +121,10 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
         )
 #endif
 
+/** The maximum number of bytes per code point */
 #define UTF8_MAX_CHAR_LENGTH 4
 
-/* average number of code units compared to UTF-16 */
+/** Average number of code units compared to UTF-16 */
 #define UTF8_ARRAY_SIZE(size) ((5*(size))/2)
 
 #define UTF8_GET_CHAR_UNSAFE(s, i, c) { \
@@ -137,7 +141,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
 
 /* definitions with forward iteration --------------------------------------- */
 
-/*
+/**
  * Read a Unicode scalar value from an array of UTF-8 bytes.
  * Only values <=0x10ffff are accepted, and if an error occurs,
  * then c will be set such that UTF_IS_ERROR(c).
