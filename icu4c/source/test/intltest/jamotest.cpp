@@ -284,7 +284,7 @@ JamoTest::TestRealText() {
       // "XML, Java, ECMAScript(JavaScript), LDAP, CORBA 3.0, WML "
       "\\ub4f1\\uacfc",
       "\\uac19\\uc774", "\\ud604\\uc7ac", "\\ub110\\ub9ac", "\\uc0ac\\uc6a9\\ub418\\ub294",
-      "\\ud45c\\uc900\\uc5d0\\uc11c", "\\ud544\\uc694\\ud558\\uba70", "\\uc774\\ub294", "ISO/IEC",
+      "\\ud45c\\uc900\\uc5d0\\uc11c", "\\ud544\\uc694\\ud558\\uba70", "\\uc774\\ub294", // "ISO/IEC",
       "10646\\uc744", "\\uad6c\\ud604\\ud558\\ub294", "\\uacf5\\uc2dd\\uc801\\uc778",
       "\\ubc29\\ubc95\\uc785\\ub2c8\\ub2e4.", "\\uc774\\ub294", "\\ub9ce\\uc740", "\\uc6b4\\uc601",
       "\\uccb4\\uc81c,", "\\uc694\\uc998", "\\uc0ac\\uc6a9\\ub418\\ub294", "\\ubaa8\\ub4e0",

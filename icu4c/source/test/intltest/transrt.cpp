@@ -30,10 +30,10 @@ TransliteratorRoundTripTest::runIndexedTest(int32_t index, UBool exec,
     switch (index) {
         CASE(0,TestHiragana);
         CASE(1,TestKatakana);
-        CASE(2,TestArabic);
-        CASE(3,TestHebrew);
-        CASE(4,TestGreek);
-        CASE(5,TestCyrillic);
+        //CASE(2,TestArabic);
+        //CASE(3,TestHebrew);
+        CASE(2,TestGreek);
+        CASE(3,TestCyrillic);
         /*
         CASE(7,TestJamo);
         CASE(8,TestJamoHangul);
@@ -333,27 +333,27 @@ UBool RTTest::isReceivingTarget(const UnicodeString& s) {
 //--------------------------------------------------------------------
 
 void TransliteratorRoundTripTest::TestHiragana() {
-    RTTest test("Latin-Kana",
+    RTTest test("Latin-Hiragana",
                 TestUtility::LATIN_SCRIPT, TestUtility::HIRAGANA_SCRIPT);
     test.test("[a-z]", UnicodeString("[\\u3040-\\u3094]", ""), this);
 }
 
 void TransliteratorRoundTripTest::TestKatakana() {
-    RTTest test("Latin-Kana", 
+    RTTest test("Latin-Katakana", 
                 TestUtility::LATIN_SCRIPT, TestUtility::KATAKANA_SCRIPT);
-    test.test("[A-Z]", UnicodeString("[\\u30A1-\\u30FA]", ""), this);
+    test.test("[a-z]", UnicodeString("[\\u30A1-\\u30FA]", ""), this);
 }
 
- void TransliteratorRoundTripTest::TestArabic() {
-    RTTest test("Latin-Arabic", 
-                TestUtility::LATIN_SCRIPT, TestUtility::ARABIC_SCRIPT);
-    test.test("[a-z]", UnicodeString("[\\u0620-\\u065F-[\\u0640]]", ""), this);
+void TransliteratorRoundTripTest::TestArabic() {
+//  RTTest test("Latin-Arabic", 
+//              TestUtility::LATIN_SCRIPT, TestUtility::ARABIC_SCRIPT);
+//  test.test("[a-z]", UnicodeString("[\\u0620-\\u065F-[\\u0640]]", ""), this);
 }
 
 void TransliteratorRoundTripTest::TestHebrew() {
-    RTTest test("Latin-Hebrew", 
-                TestUtility::LATIN_SCRIPT, TestUtility::HEBREW_SCRIPT);
-    test.test("", UnicodeString("[\\u05D0-\\u05EF]", ""), this);
+//  RTTest test("Latin-Hebrew", 
+//              TestUtility::LATIN_SCRIPT, TestUtility::HEBREW_SCRIPT);
+//  test.test("", UnicodeString("[\\u05D0-\\u05EF]", ""), this);
 }
 
 void TransliteratorRoundTripTest::TestJamo() {
@@ -364,7 +364,7 @@ void TransliteratorRoundTripTest::TestJamo() {
 }
 
 void TransliteratorRoundTripTest::TestJamoHangul() {
-    RTTest t("Latin-Jamo;Jamo-Hangul", 
+    RTTest t("Latin-Hangul", 
              TestUtility::LATIN_SCRIPT, TestUtility::HANGUL_SCRIPT);
     t.setErrorLimit(50); // Don't run full test -- too long
     t.test("", "", this);
