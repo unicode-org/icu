@@ -3224,16 +3224,16 @@ static void TestContractionClosure() {
     const char *data[50];
     const uint32_t len;
   } tests[] = {  
-    {   "&b<\\u00e4\\u00e4",
+    {   "&b=\\u00e4\\u00e4",
       { "b", "\\u00e4\\u00e4", "a\\u0308a\\u0308", "\\u00e4a\\u0308", "a\\u0308\\u00e4" }, 5},
-    {   "&b<\\u00C5",
+    {   "&b=\\u00C5",
       { "b", "\\u00C5", "A\\u030A", "\\u212B" }, 4},
   };
   uint32_t i;
 
 
   for(i = 0; i<(sizeof(tests)/sizeof(tests[0])); i++) {
-    genericRulesStarter(tests[i].rules, tests[i].data, tests[i].len);
+    genericRulesTestWithResult(tests[i].rules, tests[i].data, tests[i].len, UCOL_EQUAL);
   }
 }
 
@@ -3450,7 +3450,7 @@ void addMiscCollTest(TestNode** root)
 {
 
     addTest(root, &TestBeforePrefixFailure, "tscoll/cmsccoll/TestBeforePrefixFailure");
-    /*addTest(root, &TestContractionClosure, "tscoll/cmsccoll/TestContractionClosure");*/
+    addTest(root, &TestContractionClosure, "tscoll/cmsccoll/TestContractionClosure");
     addTest(root, &TestMergeSortKeys, "tscoll/cmsccoll/TestMergeSortKeys");
     addTest(root, &TestPrefixCompose, "tscoll/cmsccoll/TestPrefixCompose");
     addTest(root, &TestStrCollIdenticalPrefix, "tscoll/cmsccoll/TestStrCollIdenticalPrefix");
