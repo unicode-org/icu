@@ -19,7 +19,7 @@ class NullFilter : public UnicodeFilter {
     UBool result;
 public:
     NullFilter(UBool r) { result = r; }
-    NullFilter(const NullFilter& f) { result = f.result; }
+    NullFilter(const NullFilter& f) : UnicodeFilter(f) { result = f.result; }
     virtual ~NullFilter() {}
     virtual UBool contains(UChar /*c*/) const { return result; }
     virtual UnicodeFilter* clone() const { return new NullFilter(*this); }
@@ -36,7 +36,8 @@ public:
 };
 
 UnicodeNotFilter::UnicodeNotFilter(UnicodeFilter* adopted) : filt(adopted) {}
-UnicodeNotFilter::UnicodeNotFilter(const UnicodeNotFilter& f) : filt(f.filt->clone()) {}
+UnicodeNotFilter::UnicodeNotFilter(const UnicodeNotFilter& f)
+ : UnicodeFilter(f), filt(f.filt->clone()) {}
 UnicodeNotFilter::~UnicodeNotFilter() { delete filt; }
 UBool UnicodeNotFilter::contains(UChar c) const { return !filt->contains(c); }
 UnicodeFilter* UnicodeNotFilter::clone() const { return new UnicodeNotFilter(*this); }
@@ -65,8 +66,8 @@ public:
 };
 
 UnicodeAndFilter::UnicodeAndFilter(UnicodeFilter* f1, UnicodeFilter* f2) : filt1(f1), filt2(f2) {}
-UnicodeAndFilter::UnicodeAndFilter(const UnicodeAndFilter& f) :
-    filt1(f.filt1->clone()), filt2(f.filt2->clone()) {}
+UnicodeAndFilter::UnicodeAndFilter(const UnicodeAndFilter& f)
+ : UnicodeFilter(f), filt1(f.filt1->clone()), filt2(f.filt2->clone()) {}
 UnicodeAndFilter::~UnicodeAndFilter() { delete filt1; delete filt2; }
 UBool UnicodeAndFilter::contains(UChar c) const { return filt1->contains(c) && filt2->contains(c); }
 UnicodeFilter* UnicodeAndFilter::clone() const { return new UnicodeAndFilter(*this); }
@@ -103,8 +104,8 @@ public:
 };
 
 UnicodeOrFilter::UnicodeOrFilter(UnicodeFilter* f1, UnicodeFilter* f2) : filt1(f1), filt2(f2) {}
-UnicodeOrFilter::UnicodeOrFilter(const UnicodeOrFilter& f) :
-    filt1(f.filt1->clone()), filt2(f.filt2->clone()) {}
+UnicodeOrFilter::UnicodeOrFilter(const UnicodeOrFilter& f)
+ : UnicodeFilter(f), filt1(f.filt1->clone()), filt2(f.filt2->clone()) {}
 UnicodeOrFilter::~UnicodeOrFilter() { delete filt1; delete filt2; }
 UBool UnicodeOrFilter::contains(UChar c) const { return filt1->contains(c) || filt2->contains(c); }
 UnicodeFilter* UnicodeOrFilter::clone() const { return new UnicodeOrFilter(*this); }
