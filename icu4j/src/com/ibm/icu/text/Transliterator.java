@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2001/11/16 21:49:10 $
- * $Revision: 1.55 $
+ * $Date: 2001/11/16 21:59:42 $
+ * $Revision: 1.56 $
  *
  *****************************************************************************************
  */
@@ -242,7 +242,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.55 $ $Date: 2001/11/16 21:49:10 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.56 $ $Date: 2001/11/16 21:59:42 $
  */
 public abstract class Transliterator {
     /**
@@ -424,10 +424,6 @@ public abstract class Transliterator {
      * <= limit</code>.
      * @param limit the ending index, exclusive; <code>start <= limit
      * <= text.length()</code>.
-     * @param filter the filter.  Any character for which
-     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
-     * altered by this transliterator.  If <tt>filter</tt> is
-     * <tt>null</tt> then no filtering is applied.
      * @return The new limit index.  The text previously occupying <code>[start,
      * limit)</code> has been transliterated, possibly to a string of a different
      * length, at <code>[start, </code><em>new-limit</em><code>)</code>, where
