@@ -22,7 +22,7 @@ include @platform_make_fragment@
 subdir = common
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(DEPS) icucfg.h unicode/platform.h
+CLEANFILES = *~ $(DEPS)
 
 ## Target information
 
@@ -45,7 +45,7 @@ endif   # OS390BATCH
 
 endif   # ENABLE_SHARED
 
-ALL_TARGETS = $(TARGET) $(ALL_SO_TARGETS) $(BATCH_TARGET) unicode/platform.h
+ALL_TARGETS = $(TARGET) $(ALL_SO_TARGETS) $(BATCH_TARGET)
 
 DYNAMICCPPFLAGS = $(SHAREDLIBCPPFLAGS)
 DYNAMICCFLAGS = $(SHAREDLIBCFLAGS)
@@ -101,7 +101,7 @@ distclean : distclean-local
 dist: dist-local
 check: all check-local
 
-all-local: $(ALL_TARGETS)
+all-local: $(ALL_TARGETS) unicode/platform.h
 
 install-local: install-headers install-library
 
@@ -132,7 +132,7 @@ clean-local:
 	$(RMV) $(OBJECTS) $(STATIC_OBJECTS) $(ALL_TARGETS)
 
 distclean-local: clean-local
-	$(RMV) Makefile
+	$(RMV) Makefile icucfg.h unicode/platform.h
 
 check-local:
 
