@@ -315,7 +315,7 @@ parseConverterOptions(const char *inName,
     /* copy the converter name itself to cnvName */
     while((c=*inName)!=0 && c!=UCNV_OPTION_SEP_CHAR) {
         if (++len>=UCNV_MAX_CONVERTER_NAME_LENGTH) {
-            *err = U_BUFFER_OVERFLOW_ERROR;
+            *err = U_ILLEGAL_ARGUMENT_ERROR;    /* bad name */
             *cnvName=0;
             return;
         }
@@ -342,7 +342,7 @@ parseConverterOptions(const char *inName,
                         len++;
                         inName++;
                         if (++len>=ULOC_FULLNAME_CAPACITY) {
-                            *err = U_BUFFER_OVERFLOW_ERROR;
+                            *err = U_ILLEGAL_ARGUMENT_ERROR;    /* bad name */
                             *dest=0;
                             return;
                         }
