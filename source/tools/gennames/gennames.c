@@ -395,9 +395,12 @@ parseDB(const char *filename, UBool store10Names) {
     }
 
     if(!beQuiet) {
-        printf("size of all names in the database: %lu\n", lineTop);
-        printf("number of named Unicode characters: %lu\n", lineCount);
-        printf("number of words in the dictionary from these names: %lu\n", wordCount);
+        printf("size of all names in the database: %lu\n",
+            (unsigned long)lineTop);
+        printf("number of named Unicode characters: %lu\n",
+            (unsigned long)lineCount);
+        printf("number of words in the dictionary from these names: %lu\n",
+            (unsigned long)wordCount);
     }
 }
 
@@ -512,7 +515,7 @@ compress() {
                 tokens[i]=wordNumber;
                 if(beVerbose) {
                     printf("tokens[0x%03x]: word%8ld \"%.*s\"\n",
-                            i, words[wordNumber].weight,
+                            i, (long)words[wordNumber].weight,
                             words[wordNumber].length, words[wordNumber].s);
                 }
                 ++wordNumber;
@@ -555,7 +558,7 @@ compress() {
         tokens[0]=0;
         if(beVerbose) {
             printf("tokens[0x000]: word%8ld \"%.*s\"\n",
-                    words[0].weight,
+                    (long)words[0].weight,
                     words[0].length, words[0].s);
         }
         wordNumber=1;
@@ -571,7 +574,7 @@ compress() {
                 tokens[i]=wordNumber;
                 if(beVerbose) {
                     printf("tokens[0x%03x]: word%8ld \"%.*s\"\n",
-                            i, words[wordNumber].weight,
+                            i, (long)words[wordNumber].weight,
                             words[wordNumber].length, words[wordNumber].s);
                 }
                 ++wordNumber;
@@ -583,7 +586,7 @@ compress() {
             tokens[i]=wordNumber;
             if(beVerbose) {
                 printf("tokens[0x%03x]: word%8ld \"%.*s\"\n",
-                        i, words[wordNumber].weight,
+                        i, (long)words[wordNumber].weight,
                         words[wordNumber].length, words[wordNumber].s);
             }
             ++wordNumber;
@@ -592,8 +595,9 @@ compress() {
 
     if(!beQuiet) {
         printf("number of lead bytes: %d\n", leadByteCount);
-        printf("number of single-byte tokens: %lu\n", 256-letterCount-leadByteCount);
-        printf("number of tokens: %lu\n", tokenCount);
+        printf("number of single-byte tokens: %lu\n",
+            (unsigned long)256-letterCount-leadByteCount);
+        printf("number of tokens: %lu\n", (unsigned long)tokenCount);
     }
 
     compressLines();
@@ -674,7 +678,7 @@ compressLines() {
     }
 
     if(!beQuiet) {
-        printf("number of groups: %lu\n", lineCount);
+        printf("number of groups: %lu\n", (unsigned long)lineCount);
     }
 }
 
@@ -782,7 +786,8 @@ generateData(const char *dataDir) {
     if(!beQuiet) {
         printf("size of the Unicode Names data:\n"
                "total data length %lu, token strings %lu, compressed strings %lu, algorithmic names %lu\n",
-                size, (lineTop-groupTop), groupTop, offset);
+                (unsigned long)size, (unsigned long)(lineTop-groupTop),
+                (unsigned long)groupTop, (unsigned long)offset);
     }
 
     /* write the data to the file */
@@ -832,7 +837,8 @@ generateData(const char *dataDir) {
     }
 
     if(dataLength!=(long)size) {
-        fprintf(stderr, "gennames: data length %ld != calculated size %lu\n", dataLength, size);
+        fprintf(stderr, "gennames: data length %ld != calculated size %lu\n",
+dataLength, (unsigned long)size);
         exit(U_INTERNAL_PROGRAM_ERROR);
     }
 }
