@@ -302,7 +302,7 @@ da {
         am { "Amharisk" }
         ar { "Arabisk" }
         az { "Aserbajdsjan" }
-		be { "Hviderussisk" }
+        be { "Hviderussisk" }
         bg { "Bulgarsk" }
         bn { "Bengalsk" }
         ca { "Katalansk" }
