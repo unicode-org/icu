@@ -265,7 +265,7 @@ public class RoundTripTest extends TestFmwk {
                 if (!isReceivingSource(targ)) {
                     logWrongScript("Target-Source", cs, targ);
                     failTargSource.set(c);
-                } else if (!cs.equalsIgnoreCase(reverse)) {
+                } else if (!cs.equals(reverse)) { // (!cs.equalsIgnoreCase(reverse)) {
                     logRoundTripFailure(cs, targ, reverse);
                     failRound.set(c);
                 }
