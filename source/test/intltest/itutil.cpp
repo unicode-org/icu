@@ -21,6 +21,7 @@
 #include "tsmutex.h"
 #include "tsmthred.h"
 #include "tsputil.h"
+#include "biditst.h"
 //#include "custrtest.h"
 //#include "ccitrtst.h"
 //#include "cloctest.h"
@@ -119,6 +120,16 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
                 callTest( test, par );
             }
             break;
+
+        case 10:
+            name = "BiDiTest";
+            if(exec){
+               logln("BiDiTest----"); logln("");
+               BiDiTest test;
+               callTest(test,par);
+            }
+            break;
+
         /*
         case 8:
             name = "LocaleTest"; 

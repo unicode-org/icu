@@ -96,6 +96,10 @@ SOURCE=.\apicoll.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\biditst.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\callimts.cpp
 # End Source File
 # Begin Source File
@@ -455,6 +459,10 @@ SOURCE=.\allcoll.h
 # Begin Source File
 
 SOURCE=.\apicoll.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\biditst.h
 # End Source File
 # Begin Source File
 
