@@ -6,7 +6,20 @@
 */
 
 /*
-* Created by: Syn Wee Quek
+* File coleitr.cpp
+*
+* 
+*
+* Created by: Helena Shih
+*
+* Modification History:
+*
+*  Date         Name          Description
+*
+*  6/23/97     helena      Adding comments to make code more readable.
+* 08/03/98     erm         Synched with 1.2 version of CollationElementIterator.java
+* 12/10/99      aliu          Ported Thai collation support from Java.
+* 01/25/01     swquek      Modified to a C++ wrapper calling C APIs (ucoliter.h)
 */
 
 // #include "unicode/sortkey.h"

@@ -1,12 +1,54 @@
 /*
 ******************************************************************************
-* Copyright © {1996-1999}, International Business Machines Corporation and 
+* Copyright © {1996-2001}, International Business Machines Corporation and 
 * others. All Rights Reserved.
 ******************************************************************************
 */
 
 /**
-* Created by : Syn Wee Quek
+* File tblcoll.h
+*
+* Created by: Helena Shih
+*
+* Modification History:
+*
+*  Date        Name        Description
+*  2/5/97      aliu        Added streamIn and streamOut methods.  Added
+*                          constructor which reads RuleBasedCollator object from
+*                          a binary file.  Added writeToFile method which streams
+*                          RuleBasedCollator out to a binary file.  The streamIn
+*                          and streamOut methods use istream and ostream objects
+*                          in binary mode.
+*  2/12/97     aliu        Modified to use TableCollationData sub-object to
+*                          hold invariant data.
+*  2/13/97     aliu        Moved several methods into this class from Collation.
+*                          Added a private RuleBasedCollator(Locale&) constructor,
+*                          to be used by Collator::createDefault().  General
+*                          clean up.
+*  2/20/97     helena      Added clone, operator==, operator!=, operator=, and copy
+*                          constructor and getDynamicClassID.
+*  3/5/97      aliu        Modified constructFromFile() to add parameter
+*                          specifying whether or not binary loading is to be
+*                          attempted.  This is required for dynamic rule loading.
+* 05/07/97     helena      Added memory allocation error detection.
+*  6/17/97     helena      Added IDENTICAL strength for compare, changed getRules to 
+*                          use MergeCollation::getPattern.
+*  6/20/97     helena      Java class name change.
+*  8/18/97     helena      Added internal API documentation.
+* 09/03/97     helena      Added createCollationKeyValues().
+* 02/10/98     damiba      Added compare with "length" parameter
+* 08/05/98     erm         Synched with 1.2 version of RuleBasedCollator.java
+* 04/23/99     stephen     Removed EDecompositionMode, merged with
+*                          Normalizer::EMode
+* 06/14/99     stephen     Removed kResourceBundleSuffix
+* 11/02/99     helena      Collator performance enhancements.  Eliminates the 
+*                          UnicodeString construction and special case for NO_OP.
+* 11/23/99     srl         More performance enhancements. Updates to NormalizerIterator
+*                          internal state management.
+* 12/15/99     aliu        Update to support Thai collation.  Move NormalizerIterator
+*                          to implementation file.
+* 01/29/01     synwee      Modified into a C++ wrapper which calls C API 
+*                          (ucol.h)
 */
 
 #ifndef TBLCOLL_H
@@ -710,7 +752,7 @@ public:
   virtual Normalizer::EMode getDecomposition(void) const;
 
 private:
-
+  
   // private static constants -----------------------------------------------
 
   static const int32_t UNMAPPED;
@@ -757,6 +799,11 @@ private:
   */
   UCollator *ucollator;
 
+  /**
+  * Rule UnicodeString
+  */
+  UnicodeString *urulestring;
+
   // friend classes --------------------------------------------------------
 
   /** 
@@ -786,7 +833,7 @@ private:
   * Constructor that takes in a UCollator struct
   * @param collator UCollator struct
   */
-  RuleBasedCollator(UCollator *collator);
+  RuleBasedCollator(UCollator *collator, UnicodeString *rule);
 
   /**
    * RuleBasedCollator constructor. This constructor takes a locale. The 
