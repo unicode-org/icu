@@ -10,168 +10,276 @@
 *
 *   created on: 2000feb07
 *   created by: Markus W. Scherer
-*   Change history:
-*
-*   06/29/2000  helena      Major rewrite of the callback APIs.
 */
 
 #include "unicode/utypes.h"
-#include "ucmp16.h"
-#include "ucmp8.h"
+#include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
 #include "ucnv_bld.h"
-#include "unicode/ucnv.h"
 #include "ucnv_cnv.h"
 
 /* ISO 8859-1 --------------------------------------------------------------- */
 
-U_CFUNC void  T_UConverter_toUnicode_LATIN_1 (UConverterToUnicodeArgs * args,
-                                      UErrorCode * err)
-{
-  unsigned char *mySource = (unsigned char *)  args->source;
-  UChar *myTarget = args->target;
-  int32_t sourceLength = args->sourceLimit - (char *) mySource;
-  int32_t readLen = 0;
-  int32_t i = 0;
+/* This is a table-less and callback-less version of _MBCSSingleToBMPWithOffsets(). */
+U_CFUNC void
+_Latin1ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
+                            UErrorCode *pErrorCode) {
+    const uint8_t *source;
+    UChar *target;
+    int32_t targetCapacity, length;
+    int32_t *offsets;
 
-  /*Since there is no risk of encountering illegal Chars
-   *we need to pad our latin1 chars to create Unicode codepoints
-   *we need to go as far a min(targetLen, sourceLen)
-   *in case we don't have enough buffer space
-   *we set the error flag accordingly
-   */
-  if ((args->targetLimit - args->target) < sourceLength)
-    {
-      readLen = args->targetLimit - args->target;
-      *err = U_BUFFER_OVERFLOW_ERROR;
+    /* set up the local pointers */
+    source=(const uint8_t *)pArgs->source;
+    target=pArgs->target;
+    targetCapacity=pArgs->targetLimit-pArgs->target;
+
+    /*
+     * since the conversion here is 1:1 UChar:uint8_t, we need only one counter
+     * for the minimum of the sourceLength and targetCapacity
+     */
+    length=(const uint8_t *)pArgs->sourceLimit-source;
+    if(length<=targetCapacity) {
+        targetCapacity=length;
+    } else {
+        /* target will be full */
+        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+        length=targetCapacity;
     }
-  else
-    {
-      readLen = args->sourceLimit - (char *) mySource;
+
+    /* conversion loop */
+    while(targetCapacity>0) {
+        *target++=*source++;
+        --targetCapacity;
     }
 
-  for (i = 0; i < readLen; i++) myTarget[i] = (UChar) mySource[i];
+    /* write back the updated pointers */
+    pArgs->source=(const char *)source;
+    pArgs->target=target;
 
-  args->target += i;
-  args->source += i;
-  return;
+    /* set offsets */
+    offsets=pArgs->offsets;
+    if(offsets!=NULL) {
+        int32_t sourceIndex=0;
+
+        while(length>0) {
+            *offsets++=sourceIndex++;
+            --length;
+        }
+        pArgs->offsets=offsets;
+    }
 }
 
-U_CFUNC void   T_UConverter_fromUnicode_LATIN_1 (UConverterFromUnicodeArgs * args,
-                                         UErrorCode * err)
-{
-  const UChar *mySource = args->source;
-  unsigned char *myTarget = (unsigned char *) args->target;
-  int32_t mySourceIndex = 0;
-  int32_t myTargetIndex = 0;
-  int32_t targetLength = args->targetLimit - (char *) myTarget;
-  int32_t sourceLength = args->sourceLimit - mySource;
-  UConverterCallbackReason reason;
-
-  /*writing the char to the output stream */
-  while (mySourceIndex < sourceLength)
-    {
-      if (myTargetIndex < targetLength)
-        {
-          if (mySource[mySourceIndex] < 0x0100)
-            {
-              /*writes the char to the output stream */
-              myTarget[myTargetIndex++] = (char) mySource[mySourceIndex++];
-            }
-          else
-            {
-              *err = U_INVALID_CHAR_FOUND;
-              reason = UCNV_UNASSIGNED;
-              args->converter->invalidUCharBuffer[0] = (UChar)mySource[mySourceIndex];
-              args->converter->invalidUCharLength = 1;
-              if (UTF_IS_LEAD(mySource[mySourceIndex++]))
-              {
-                  if (mySourceIndex < sourceLength)
-                  {
-                      if (UTF_IS_TRAIL(mySource[mySourceIndex]))
-                      {
-                          args->converter->invalidUCharBuffer[1] = (UChar)mySource[mySourceIndex];
-                          args->converter->invalidUCharLength++;
-                          mySourceIndex++;
-                      }
-                      else 
-                      {
-                          reason = UCNV_ILLEGAL;
-                      }                          
-                  }
-                  else if (args->flush == TRUE)
-                  {
-                      reason = UCNV_ILLEGAL;
-                      *err = U_TRUNCATED_CHAR_FOUND;
-                  } 
-                  else 
-                  {
-                      args->converter->fromUSurrogateLead = args->converter->invalidUCharBuffer[0];
-                      /* do not call the callback */
-                  }
-              }
-              if (args->converter->fromUSurrogateLead == 0) 
-              {
-                  const UChar *saveSource = args->source;
-                  char *saveTarget = args->target;
-                  int32_t *saveOffset = args->offsets;
-                  
-    /* Needed explicit cast for myTarget on MVS to make compiler happy - JJD */
-                  
-                  args->target = (char*)myTarget + myTargetIndex;;
-                  args->source = mySource + mySourceIndex;                  
-
-                  FromU_CALLBACK_MACRO(args->converter->fromUContext,
-                                     args,
-                                     args->converter->invalidUCharBuffer,
-                                     args->converter->invalidUCharLength,
-                                     (UChar32) (args->converter->invalidUCharLength == 2 ? 
-                                         UTF16_GET_PAIR_VALUE(args->converter->invalidUCharBuffer[0], 
-                                                              args->converter->invalidUCharBuffer[1]) 
-                                                : args->converter->invalidUCharBuffer[0]),
-                                     reason,
-                                     err);
-                  args->source = saveSource;
-                  args->target = saveTarget;
-                  args->offsets = saveOffset;
-                  if (U_FAILURE (*err)) 
-                  {
-                      break;
-                  }
-                  args->converter->invalidUCharLength = 0;
-              }
-            }
-        }
-      else
-        {
-          *err = U_BUFFER_OVERFLOW_ERROR;
-          break;
-        }
+/* This is a table-less and callback-less version of _MBCSSingleGetNextUChar(). */
+U_CFUNC UChar32
+_Latin1GetNextUChar(UConverterToUnicodeArgs *pArgs,
+                    UErrorCode *pErrorCode) {
+    const uint8_t *source=(const uint8_t *)pArgs->source;
+    if(source<(const uint8_t *)pArgs->sourceLimit) {
+        pArgs->source=(const char *)(source+1);
+        return *source;
     }
 
-  args->target += myTargetIndex;
-  args->source += mySourceIndex;;
-
-  return;
+    /* no output because of empty input */
+    *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+    return 0xffff;
 }
 
-U_CFUNC UChar32 T_UConverter_getNextUChar_LATIN_1(UConverterToUnicodeArgs* args,
-                                                UErrorCode* err)
-{
-  
-  /* Empties the internal buffers if need be
-   * In this case since ErrorFunctors are never called 
-   * (LATIN_1 is a subset of Unicode)
-   */
-  
-  if (args->source+1 > args->sourceLimit) 
-    {
-      *err = U_INDEX_OUTOFBOUNDS_ERROR;
-      return 0xffff;
+/* This is a table-less version of _MBCSSingleFromBMPWithOffsets(). */
+U_CFUNC void
+_Latin1FromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
+                              UErrorCode *pErrorCode) {
+    UConverter *cnv;
+    const UChar *source, *sourceLimit, *lastSource;
+    uint8_t *target;
+    int32_t targetCapacity, length;
+    int32_t *offsets;
+
+    UChar32 c, max;
+
+    int32_t sourceIndex;
+
+    UConverterCallbackReason reason;
+    int32_t i;
+
+    /* set up the local pointers */
+    cnv=pArgs->converter;
+    source=pArgs->source;
+    sourceLimit=pArgs->sourceLimit;
+    target=(uint8_t *)pArgs->target;
+    targetCapacity=pArgs->targetLimit-pArgs->target;
+    offsets=pArgs->offsets;
+
+    max=0xff; /* ### 0x7f for US-ASCII */
+
+    /* get the converter state from UConverter */
+    c=cnv->fromUSurrogateLead;
+
+    /* sourceIndex=-1 if the current character began in the previous buffer */
+    sourceIndex= c==0 ? 0 : -1;
+    lastSource=source;
+
+    /*
+     * since the conversion here is 1:1 UChar:uint8_t, we need only one counter
+     * for the minimum of the sourceLength and targetCapacity
+     */
+    length=sourceLimit-source;
+    if(length<targetCapacity) {
+        targetCapacity=length;
     }
 
-  /* make sure that we zero-extend, not sign-extend, the byte */
-  return  (UChar)(uint8_t)*(args->source++);
+    /* conversion loop */
+    if(c!=0 && targetCapacity>0) {
+        goto getTrail;
+    }
+
+    while(targetCapacity>0) {
+        /*
+         * Get a correct Unicode code point:
+         * a single UChar for a BMP code point or
+         * a matched surrogate pair for a "surrogate code point".
+         */
+        c=*source++;
+        if(c<=max) {
+            /* convert the Unicode code point */
+            *target++=(uint8_t)c;
+            --targetCapacity;
+
+            /* normal end of conversion: prepare for a new character */
+            c=0;
+        } else {
+            if(!UTF_IS_SURROGATE(c)) {
+                /* callback(unassigned) */
+                reason=UCNV_UNASSIGNED;
+                *pErrorCode=U_INVALID_CHAR_FOUND;
+            } else if(UTF_IS_SURROGATE_FIRST(c)) {
+getTrail:
+                if(source<sourceLimit) {
+                    /* test the following code unit */
+                    UChar trail=*source;
+                    if(UTF_IS_SECOND_SURROGATE(trail)) {
+                        ++source;
+                        c=UTF16_GET_PAIR_VALUE(c, trail);
+                        /* this codepage does not map supplementary code points */
+                        /* callback(unassigned) */
+                        reason=UCNV_UNASSIGNED;
+                        *pErrorCode=U_INVALID_CHAR_FOUND;
+                    } else {
+                        /* this is an unmatched lead code unit (1st surrogate) */
+                        /* callback(illegal) */
+                        reason=UCNV_ILLEGAL;
+                        *pErrorCode=U_ILLEGAL_CHAR_FOUND;
+                    }
+                } else {
+                    /* no more input */
+                    break;
+                }
+            } else {
+                /* this is an unmatched trail code unit (2nd surrogate) */
+                /* callback(illegal) */
+                reason=UCNV_ILLEGAL;
+                *pErrorCode=U_ILLEGAL_CHAR_FOUND;
+            }
+
+            /* call the callback function with all the preparations and post-processing */
+            /* get the number of code units for c to correctly advance sourceIndex after the callback call */
+            length=UTF_CHAR_LENGTH(c);
+
+            /* set offsets since the start or the last callback */
+            if(offsets!=NULL) {
+                int32_t count=(int32_t)(source-lastSource);
+
+                /* do not set the offset for the callback-causing character */
+                count-=length;
+
+                while(count>0) {
+                    *offsets++=sourceIndex++;
+                    --count;
+                }
+                /* offset and sourceIndex are now set for the current character */
+            }
+
+            /* update the arguments structure */
+            pArgs->source=source;
+            pArgs->target=(char *)target;
+            pArgs->offsets=offsets;
+
+            /* set the converter state in UConverter to deal with the next character */
+            cnv->fromUSurrogateLead=0;
+
+            /* write the code point as code units */
+            i=0;
+            UTF_APPEND_CHAR_UNSAFE(cnv->invalidUCharBuffer, i, c);
+            cnv->invalidUCharLength=(int8_t)i;
+            /* i==length */
+
+            /* call the callback function */
+            cnv->fromUCharErrorBehaviour(cnv->fromUContext, pArgs, cnv->invalidUCharBuffer, i, c, reason, pErrorCode);
+
+            /* get the converter state from UConverter */
+            c=cnv->fromUSurrogateLead;
+
+            /* update target and deal with offsets if necessary */
+            offsets=ucnv_updateCallbackOffsets(offsets, ((uint8_t *)pArgs->target)-target, sourceIndex);
+            target=(uint8_t *)pArgs->target;
+
+            /* update the source pointer and index */
+            sourceIndex+=length+(pArgs->source-source);
+            source=lastSource=pArgs->source;
+            targetCapacity=(uint8_t *)pArgs->targetLimit-target;
+            length=sourceLimit-source;
+            if(length<targetCapacity) {
+                targetCapacity=length;
+            }
+
+            /*
+             * If the callback overflowed the target, then we need to
+             * stop here with an overflow indication.
+             */
+            if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+                break;
+            } else if(U_FAILURE(*pErrorCode)) {
+                /* break on error */
+                c=0;
+                break;
+            } else if(cnv->charErrorBufferLength>0) {
+                /* target is full */
+                *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+                break;
+            }
+        }
+    }
+
+    if(U_SUCCESS(*pErrorCode) && source<sourceLimit && target>=(uint8_t *)pArgs->targetLimit) {
+        /* target is full */
+        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+    }
+
+    /* set offsets since the start or the last callback */
+    if(offsets!=NULL) {
+        size_t count=source-lastSource;
+        while(count>0) {
+            *offsets++=sourceIndex++;
+            --count;
+        }
+    }
+
+    if(pArgs->flush && source>=sourceLimit) {
+        /* reset the state for the next conversion */
+        if(c!=0 && U_SUCCESS(*pErrorCode)) {
+            /* a Unicode code point remains incomplete (only a first surrogate) */
+            *pErrorCode=U_TRUNCATED_CHAR_FOUND;
+        }
+        cnv->fromUSurrogateLead=0;
+    } else {
+        /* set the converter state back into UConverter */
+        cnv->fromUSurrogateLead=(UChar)c;
+    }
+
+    /* write back the updated pointers */
+    pArgs->source=source;
+    pArgs->target=(char *)target;
+    pArgs->offsets=offsets;
 }
 
 static const UConverterImpl _Latin1Impl={
@@ -184,11 +292,11 @@ static const UConverterImpl _Latin1Impl={
     NULL,
     NULL,
 
-    T_UConverter_toUnicode_LATIN_1,
-    NULL,
-    T_UConverter_fromUnicode_LATIN_1,
-    NULL,
-    T_UConverter_getNextUChar_LATIN_1,
+    _Latin1ToUnicodeWithOffsets,
+    _Latin1ToUnicodeWithOffsets,
+    _Latin1FromUnicodeWithOffsets,
+    _Latin1FromUnicodeWithOffsets,
+    _Latin1GetNextUChar,
 
     NULL,
     NULL
