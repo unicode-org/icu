@@ -58,7 +58,7 @@ coleitr.o coll.o colrules.o datefmt.o dcfmtsym.o decimfmt.o dtfmtsym.o	\
 fmtable.o format.o gregocal.o lnbkdat.o mergecol.o msgfmt.o numfmt.o	\
 ptnentry.o simpletz.o simtxbd.o smpdtfmt.o snbkdat.o sortkey.o		\
 tables.o tblcoll.o tcoldata.o timezone.o txtbdat.o txtbdry.o ubrk.o	\
-ucal.o ucol.o udat.o umsg.o unicdcm.o unum.o wdbkdat.o wdbktbl.o
+ucal.o ucol.o udat.o umsg.o unicdcm.o uniset.o unum.o wdbkdat.o wdbktbl.o
 
 DEPS = $(OBJECTS:.o=.d)
 
@@ -67,7 +67,7 @@ HEADERS= ucal.h unum.h udat.h umsg.h calendar.h choicfmt.h datefmt.h	\
 dcfmtsym.h decimfmt.h dtfmtsym.h fieldpos.h fmtable.h format.h		\
 gregocal.h msgfmt.h numfmt.h parsepos.h simpletz.h smpdtfmt.h		\
 timezone.h ucol.h coll.h tblcoll.h sortkey.h coleitr.h ubrk.h		\
-brkiter.h
+brkiter.h uniset.h
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local	\
