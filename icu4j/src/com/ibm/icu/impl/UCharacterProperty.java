@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2003/04/09 22:58:37 $ 
-* $Revision: 1.28 $
+* $Date: 2003/04/10 23:24:29 $ 
+* $Revision: 1.29 $
 *
 *******************************************************************************
 */
@@ -1360,7 +1360,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
 	/**
 	 * 
 	 */
-	private static final int NUMERIC_TYPE_SHIFT = 11;
+	private static final int NUMERIC_TYPE_SHIFT = 12;
 	/**
 	 * 
 	 */
@@ -2218,8 +2218,8 @@ public final class UCharacterProperty implements Trie.DataManipulate
      */
     public UnicodeSet getInclusions() {
         UnicodeSet set = new UnicodeSet();
-        addPropertyStarts(set);
         NormalizerImpl.addPropertyStarts(set);
+        addPropertyStarts(set);
         return set;
     }
 
