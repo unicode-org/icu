@@ -211,9 +211,15 @@ CLEAN :
 	-@erase "*.res"
 	@cd "$(ICUTOOLS)"
 
+$(TESTDATA)\root.res:$(TESTDATA)\root.txt
+        @echo Making Special Test Resource Bundle files
+        @"$(ICUTOOLS)\genrb\$(CFG)\genrb" -s$(TESTDATA) -d$(TESTDATA) $(?F)
+$(TESTDATA)\te.res:$(TESTDATA)\te.txt
+        @echo Making Special Test Resource Bundle files
+        @"$(ICUTOOLS)\genrb\$(CFG)\genrb" -s$(TESTDATA) -d$(TESTDATA) $(?F)
 # Inference rule for creating resource bundles
 {$(TESTDATA)}.txt.res:
-        @echo Making Resource Bundle files
+        @echo Making Test Resource Bundle files
         @"$(ICUTOOLS)\genrb\$(CFG)\genrb" -s$(TESTDATA) -d$(TESTDATA) $(?F)
 
 {$(ICUDATA)}.txt.res:
