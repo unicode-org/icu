@@ -1,0 +1,16 @@
+// *******************************************************************************
+// *
+// *   Copyright (C) 2001-2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+ 
+fr_MC{
+ Version{ "x0.1" }
+ LocaleID{ "180C"}
+ CurrencyElements{
+  "\u20AC",
+  "EUR",
+  ","
+ }
+}

@@ -1,0 +1,7 @@
+# This is a sample FontMap file for Linux.
+# Fonts are specified by file names.
+
+     LATIN: Times.TTF
+DEVANAGARI: Devamt.ttf
+    ARABIC: Times.TTF
+      THAI: THONBURI.TTF
