@@ -65,7 +65,7 @@ enum {
      * the original set to their full case folding equivalents.
      *
      * This is designed for case-insensitive matches, for example
-     * in regular expressions. The full code point case closure allows to check
+     * in regular expressions. The full code point case closure allows checking of
      * an input character directly against the closure set.
      * Strings are matched by comparing the case-folded form from the closure
      * set with an incremental case folding of the string in question.
