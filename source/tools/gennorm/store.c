@@ -1412,7 +1412,7 @@ generateData(const char *dataDir) {
         exit(errorCode);
     }
 
-    auxTrieSize=utrie_serialize(&auxTrie, auxTrieBlock, sizeof(auxTrieBlock), getFoldedAuxValue, TRUE, &errorCode);
+    auxTrieSize=utrie_serialize(&auxTrie, auxTrieBlock, sizeof(auxTrieBlock), getFoldedAuxValue, FALSE, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "error: utrie_serialize(auxiliary data) failed, %s\n", u_errorName(errorCode));
         exit(errorCode);

@@ -250,7 +250,9 @@ loadNormData(UErrorCode &errorCode) {
         combiningTable=extraData+indexes[_NORM_INDEX_UCHAR_COUNT];
         formatVersion_2_1=formatVersion[0]>2 || (formatVersion[0]==2 && formatVersion[1]>=1);
         if(formatVersion_2_1) {
-            canonStartSets=combiningTable+(indexes[_NORM_INDEX_FCD_TRIE_SIZE]+indexes[_NORM_INDEX_AUX_TRIE_SIZE])/2;
+            canonStartSets=combiningTable+
+                indexes[_NORM_INDEX_COMBINE_DATA_COUNT]+
+                (indexes[_NORM_INDEX_FCD_TRIE_SIZE]+indexes[_NORM_INDEX_AUX_TRIE_SIZE])/2;
         }
         haveNormData=1;
 
@@ -574,7 +576,7 @@ unorm_getCanonStartSet(UChar32 c, USerializedSet *fillSet) {
         return aux32!=0 &&
             uset_getSerializedSet(fillSet,
                                 canonStartSets+aux32,
-                                indexes[indexes[_NORM_INDEX_CANON_SET_COUNT]]-aux32);
+                                indexes[_NORM_INDEX_CANON_SET_COUNT]-aux32);
     } else {
         return FALSE;
     }
