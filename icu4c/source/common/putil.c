@@ -1285,7 +1285,7 @@ uprv_getDefaultCodepage()
 {
 #if defined(OS400)
     uint32_t ccsid = 37; /* Default to ibm-37 */
-    static char codepage[16];
+    static char codepage[64];
     Qwc_JOBI0400_t jobinfo;
     Qus_EC_t error = { sizeof(Qus_EC_t) }; /* SPI error code */
 
@@ -1305,7 +1305,7 @@ uprv_getDefaultCodepage()
     return codepage;
 
 #elif defined(OS390)
-    static char codepage[16];
+    static char codepage[64];
     sprintf(codepage,"%s" UCNV_SWAP_LFNL_OPTION_STRING, nl_langinfo(CODESET));
     return codepage;
 
@@ -1313,8 +1313,8 @@ uprv_getDefaultCodepage()
     return "ibm-1275"; /* TODO: Macintosh Roman. There must be a better way. fixme! */
 
 #elif defined(WIN32)
-    static char codepage[16];
-    sprintf(codepage, "cp%d", GetACP());
+    static char codepage[64];
+    sprintf(codepage, "windows-%d", GetACP());
     return codepage;
 
 #elif U_POSIX_LOCALE

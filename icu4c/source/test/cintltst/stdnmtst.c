@@ -145,14 +145,14 @@ static void TestCanonicalName()
         dotestconv("ibm-1208", "IANA", NULL) &&     /* mapping does not exist */
         dotestconv("ibm-5305", "IANA", NULL) &&     /* mapping does not exist */
         dotestconv("cp1208", "", "UTF-8") &&        /* default name due to ordering */
-        dotestconv("cp65001", "", "UTF-8") &&        /* non-default name due to ordering */
+        dotestconv("UTF16_BigEndian", "", "UTF-16BE") &&        /* non-default name due to ordering */
         dotestconv("ISO-2022", "MIME", "ISO_2022") &&/* default name */
-        dotestconv("Shift_JIS", "MIME", "ibm-943_P14A-2000") &&/* ambiguous alias */
-        dotestconv("Shift_JIS", "", "ibm-943_P130-2000") &&/* ambiguous alias */
-        dotestconv("ibm-943", "", "ibm-943_P14A-2000") &&/* ambiguous alias */
-        dotestconv("ibm-943", "IBM", "ibm-943_P130-2000") &&/* ambiguous alias */
-        dotestconv("ibm-1363", "", "ibm-1363_P11B-2000") &&/* ambiguous alias */
-        dotestconv("ibm-1363", "IBM", "ibm-1363_P110-2000") &&/* ambiguous alias */
+        dotestconv("Shift_JIS", "MIME", "ibm-943_P14A-1999") &&/* ambiguous alias */
+        dotestconv("Shift_JIS", "", "ibm-943_P130-1999") &&/* ambiguous alias */
+        dotestconv("ibm-943", "", "ibm-943_P14A-1999") &&/* ambiguous alias */
+        dotestconv("ibm-943", "IBM", "ibm-943_P130-1999") &&/* ambiguous alias */
+        dotestconv("ibm-1363", "", "ibm-1363_P11B-1998") &&/* ambiguous alias */
+        dotestconv("ibm-1363", "IBM", "ibm-1363_P110-1997") &&/* ambiguous alias */
         dotestconv("crazy", "MIME", NULL) &&
         dotestconv("ASCII", "crazy", NULL))
     {
