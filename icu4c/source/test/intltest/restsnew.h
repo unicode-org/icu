@@ -27,6 +27,8 @@ public:
 
 	void TestIteration(void);
 
+    void TestOtherAPI(void);
+
 private:
     /**
      * extensive subtests called by TestResourceBundles
