@@ -5,6 +5,9 @@
 # Yves Arrouye <yves@debian.org>. They are part of Debian GNU/Linux
 # since the Debian woody release.
 
+# Decide whether we want to ship individual files or not
+ICU_AUTO_COMMON=NO
+
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
@@ -32,6 +35,12 @@ icudatadir = $(pkgdatadir)/$(version)
 pkglibdir = usr/lib/icu
 iculibdir = $(pkglibdir)/$(version)
 datasrcdir = usr/share/icu/$(version)/data
+# This is where data needs to be moved
+ifneq ($(ICU_AUTO_COMMON),YES)
+icufildir = $(iculibdir)/files
+else
+icufildir = $(iculibdir)
+endif
 
 # Build flags
 
@@ -59,7 +68,7 @@ $(builddir)/configure-stamp:
 build: $(builddir)/configure-stamp debian-files $(builddir)/build-stamp
 
 # Build some Debian files
-DEBIAN_FILES=icu.conffiles postinst prerm icu.postinst icu.prerm libicu$(major).postinst
+DEBIAN_FILES=icu.conffiles postinst prerm icu.postinst icu.prerm libicu$(major).postinst icurepackage
 
 debian/%: debian/%.in
 	cd $(builddir) \
@@ -144,6 +153,16 @@ binary-arch: build install
 	    usr/lib/*.so.*
 	mkdir debian/libicu$(major)/usr/lib/icu
 	#
+	# massage data files
+	#
+	$(RM) debian/tmp/$(iculibdir)/cnvalias.dat
+ifneq ($(iculibdir),$(icufildir))
+	test -d debian/tmp/$(icufildir) || mkdir debian/tmp/$(icufildir)
+	mv debian/tmp/$(iculibdir)/*.* debian/tmp/$(icufildir)
+	mv debian/tmp/$(icufildir)/*msg.dat debian/tmp/$(iculibdir)
+	mv debian/tmp/$(icufildir)/*.inc debian/tmp/$(iculibdir)
+endif
+	#
 	# build icu package by moving files from icu-dev
 	#
 	$(RM) debian/tmp/$(iculibdir)/../Makefile.inc debian/tmp/$(iculibdir)/../current
@@ -152,18 +171,17 @@ binary-arch: build install
 	    usr/bin \
 	    usr/sbin \
 	    $(icudatadir)/README \
-	    $(iculibdir)/*.cnv \
-	    $(iculibdir)/u*.dat \
-	    $(iculibdir)/tz.dat \
+	    $(icufildir)/*.cnv \
+	    $(icufildir)/u*.dat $(icufildir)invu*.dat \
+	    $(icufildir)/tz.dat \
 	    $(iculibdir)/Makefile.inc \
 	    usr/share/man
-	$(RM) debian/tmp/$(iculibdir)/cnvalias.dat
 	#
 	# build icu-locales package by moving files from icu-dev
 	#
 	dh_movefiles -picu-locales \
-	    $(iculibdir)/*.res \
-	    $(iculibdir)/*.brk
+	    $(icufildir)/*.res \
+	    $(icufildir)/*.brk
 	#
 	# move the rest of the development files
 	# in their package
@@ -208,7 +226,7 @@ update-debian-files:
 	cvers=`sed -n 's/^icu (\([^)]*\)).*/\1/p' debian/changelog | head -1`; if dpkg --compare-versions $$cvers lt $(version)-1; then \
 	    dch -v $(version)-1 "Update to ICU version $(version). (This comment is generated.)"; \
 	    sed 's/libicu[0-9][0-9]*/libicu$(major)/g' debian/control >debian/control.new && mv debian/control.new debian/control; \
- 	fi
+	fi
 
 binary: update-debian-files binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary install debian-files update-changelog
