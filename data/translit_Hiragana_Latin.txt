@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Hiragana_Latin.txt
-// Date: Thu Oct 25 22:17:21 2001
+// Date: Wed Nov 21 18:58:49 2001
 //--------------------------------------------------------------------
 
 // Hiragana_Latin
@@ -18,8 +18,8 @@ translit_Hiragana_Latin {
 // Corporation and others. All Rights Reserved.
 //--------------------------------------------------------------------
 // $Source: /xsrl/Nsvn/icu/icu/data/Attic/translit_Hiragana_Latin.txt,v $
-// $Date: 2001/10/26 05:41:16 $
-// $Revision: 1.1 $
+// $Date: 2001/11/22 05:50:50 $
+// $Revision: 1.2 $
 //--------------------------------------------------------------------
 
 ":: [:^Katakana:] ;" // don't touch any katakana that was in the text!
