@@ -22,8 +22,18 @@ public class LocaleScript extends ListResourceBundle {
                                }
            },
            {
+               "am", new int[] {
+                                  UScript.ETHIOPIC,
+                               }
+           },
+           {
                "ar", new int[] {
                                   UScript.ARABIC,
+                               }
+           },
+           {
+               "az", new int[] {
+                                  UScript.CYRILLIC,
                                }
            },
            {
@@ -34,6 +44,11 @@ public class LocaleScript extends ListResourceBundle {
            {
                "bg", new int[] {
                                   UScript.CYRILLIC,
+                               }
+           },
+           {
+               "bn", new int[] {
+                                  UScript.BENGALI,
                                }
            },
            {
@@ -54,6 +69,11 @@ public class LocaleScript extends ListResourceBundle {
            {
                "de", new int[] {
                                   UScript.LATIN,
+                               }
+           },
+           {
+               "div", new int[] {
+                                  UScript.THAANA,
                                }
            },
            {
@@ -117,6 +137,11 @@ public class LocaleScript extends ListResourceBundle {
                                }
            },
            {
+               "gu", new int[] {
+                                  UScript.GUJARATI,
+                               }
+           },
+           {
                "gv", new int[] {
                                   UScript.LATIN,
                                }
@@ -142,6 +167,11 @@ public class LocaleScript extends ListResourceBundle {
                                }
            },
            {
+               "hy", new int[] {
+                                  UScript.ARMENIAN,
+                               }
+           },
+           {
                "id", new int[] {
                                   UScript.LATIN,
                                }
@@ -157,6 +187,11 @@ public class LocaleScript extends ListResourceBundle {
                                }
            },
            {
+               "iw", new int[] {
+                                  UScript.HEBREW,
+                               }
+           },
+           {
                "ja", new int[] {
                                   UScript.KATAKANA,
                                   UScript.HIRAGANA,
@@ -164,8 +199,23 @@ public class LocaleScript extends ListResourceBundle {
                                }
            },
            {
+               "ka", new int[] {
+                                  UScript.GEORGIAN,
+                               }
+           },
+           {
+               "kk", new int[] {
+                                  UScript.CYRILLIC,
+                               }
+           },
+           {
                "kl", new int[] {
                                   UScript.LATIN,
+                               }
+           },
+           {
+               "kn", new int[] {
+                                  UScript.KANNADA,
                                }
            },
            {
@@ -185,6 +235,11 @@ public class LocaleScript extends ListResourceBundle {
                                }
            },
            {
+               "ky", new int[] {
+                                  UScript.LATIN,
+                               }
+           },
+           {
                "lt", new int[] {
                                   UScript.LATIN,
                                }
@@ -200,8 +255,18 @@ public class LocaleScript extends ListResourceBundle {
                                }
            },
            {
+               "mn", new int[] {
+                                  UScript.CYRILLIC,
+                               }
+           },
+           {
                "mr", new int[] {
                                   UScript.DEVANAGARI,
+                               }
+           },
+           {
+               "ms", new int[] {
+                                  UScript.LATIN,
                                }
            },
            {
@@ -225,6 +290,11 @@ public class LocaleScript extends ListResourceBundle {
                                }
            },
            {
+               "pa", new int[] {
+                                  UScript.GURMUKHI,
+                               }
+           },
+           {
                "pl", new int[] {
                                   UScript.LATIN,
                                }
@@ -240,8 +310,18 @@ public class LocaleScript extends ListResourceBundle {
                                }
            },
            {
+               "root", new int[] {
+                                  UScript.LATIN,
+                               }
+           },
+           {
                "ru", new int[] {
                                   UScript.CYRILLIC,
+                               }
+           },
+           {
+               "sa", new int[] {
+                                  UScript.DEVANAGARI,
                                }
            },
            {
@@ -280,6 +360,11 @@ public class LocaleScript extends ListResourceBundle {
                                }
            },
            {
+               "syr", new int[] {
+                                  UScript.SYRIAC,
+                               }
+           },
+           {
                "ta", new int[] {
                                   UScript.TAMIL,
                                }
@@ -300,7 +385,22 @@ public class LocaleScript extends ListResourceBundle {
                                }
            },
            {
+               "tt", new int[] {
+                                  UScript.CYRILLIC,
+                               }
+           },
+           {
                "uk", new int[] {
+                                  UScript.CYRILLIC,
+                               }
+           },
+           {
+               "ur", new int[] {
+                                  UScript.ARABIC,
+                               }
+           },
+           {
+               "uz", new int[] {
                                   UScript.CYRILLIC,
                                }
            },
@@ -315,10 +415,10 @@ public class LocaleScript extends ListResourceBundle {
                                }
            },
            {
-               "zh_TW", new int[]{
+               "zh_TW", new int[] {
                                   UScript.HAN,
                                   UScript.BOPOMOFO,
-                                 }
+                               }
            },
       };
 }
