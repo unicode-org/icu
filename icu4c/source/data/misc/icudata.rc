@@ -50,7 +50,7 @@ BEGIN
             VALUE "FileDescription", "ICU Data DLL\0"
             VALUE "FileVersion",  CommaVersionString(U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM, U_ICU_VERSION_PATCHLEVEL_NUM, 0)
             VALUE "LegalCopyright", U_COPYRIGHT_STRING "\0"
-            VALUE "OriginalFilename", U_ICUDATA_NAME ".dll\0"
+            VALUE "OriginalFilename", "icudt" U_ICU_VERSION_SHORT ".dll\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "International Components for Unicode\0"
             VALUE "ProductVersion", CommaVersionString(U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM, U_ICU_VERSION_PATCHLEVEL_NUM, 0)
