@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2003, International Business Machines
+* Copyright (c) 2002-2004, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -152,6 +152,40 @@ ucurr_getDefaultFractionDigits(const UChar* currency,
 U_DRAFT double U_EXPORT2
 ucurr_getRoundingIncrement(const UChar* currency,
                            UErrorCode* ec);
+
+#ifdef XP_CPLUSPLUS
+#include "unicode/unistr.h"
+#include "unicode/parsepos.h"
+U_NAMESPACE_BEGIN
+
+/**
+ * Attempt to parse the given string as a currency, either as a
+ * display name in the given locale, or as a 3-letter ISO 4217
+ * code.  If multiple display names match, then the longest one is
+ * selected.  If both a display name and a 3-letter ISO code
+ * match, then the display name is preferred, unless it's length
+ * is less than 3.
+ *
+ * @param locale the locale of the display names to match
+ * @param text the text to parse
+ * @param pos input-output position; on input, the position within
+ * text to match; must have 0 <= pos.getIndex() < text.length();
+ * on output, the position after the last matched character. If
+ * the parse fails, the position in unchanged upon output.
+ * @return the ISO 4217 code, as a string, of the best match, or
+ * null if there is no match
+ *
+ * @internal
+ */
+void
+uprv_parseCurrency(const char* locale,
+                   const UnicodeString& text,
+                   ParsePosition& pos,
+                   UChar* result,
+                   UErrorCode& ec);
+
+U_NAMESPACE_END
+#endif
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 

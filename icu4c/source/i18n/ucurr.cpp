@@ -14,6 +14,7 @@
 #include "unicode/resbund.h"
 #include "unicode/ustring.h"
 #include "unicode/choicfmt.h"
+#include "unicode/parsepos.h"
 #include "ustr_imp.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -412,7 +413,7 @@ ucurr_getName(const UChar* currency,
     //|  }
     //|}
 
-    if (ec == NULL || U_FAILURE(*ec)) {
+    if (U_FAILURE(*ec)) {
         return 0;
     }
 
@@ -486,6 +487,138 @@ ucurr_getName(const UChar* currency,
     *len = u_strlen(currency); // Should == ISO_COUNTRY_CODE_LENGTH, but maybe not...?
     return currency;
 }
+
+U_NAMESPACE_BEGIN
+
+void
+uprv_parseCurrency(const char* locale,
+                   const UnicodeString& text,
+                   ParsePosition& pos,
+                   UChar* result,
+                   UErrorCode& ec) {
+
+    // TODO: There is a slight problem with the pseudo-multi-level
+    // fallback implemented here.  More-specific locales don't
+    // properly shield duplicate entries in less-specific locales.
+    // This problem will go away when real multi-level fallback is
+    // implemented.  We could also fix this by recording (in a
+    // hash) which codes are used at each level of fallback, but
+    // this doesn't seem warranted.
+
+    if (U_FAILURE(ec)) {
+        return;
+    }
+
+    // Look up the Currencies resource for the given locale.  The
+    // Currencies locale data looks like this:
+    //|en {
+    //|  Currencies {
+    //|    USD { "US$", "US Dollar" }
+    //|    CHF { "Sw F", "Swiss Franc" }
+    //|    INR { "=0#Rs|1#Re|1<Rs", "=0#Rupees|1#Rupee|1<Rupees" }
+    //|    //...
+    //|  }
+    //|}
+
+    // In the future, resource bundles may implement multi-level
+    // fallback.  That is, if a currency is not found in the en_US
+    // Currencies data, then the en Currencies data will be searched.
+    // Currently, if a Currencies datum exists in en_US and en, the
+    // en_US entry hides that in en.
+
+    // We want multi-level fallback for this resource, so we implement
+    // it manually.
+
+    // Use a separate UErrorCode here that does not propagate out of
+    // this function.
+    UErrorCode ec2 = U_ZERO_ERROR;
+
+    char loc[ULOC_FULLNAME_CAPACITY];
+    uloc_getName(locale, loc, sizeof(loc), &ec2);
+    if (U_FAILURE(ec2) || ec2 == U_STRING_NOT_TERMINATED_WARNING) {
+        ec = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
+    int32_t start = pos.getIndex();
+    const UChar* s = NULL;
+
+    const char* iso = NULL;
+    int32_t max = 0;
+
+    // Multi-level resource inheritance fallback loop
+    for (;;) {
+        ec2 = U_ZERO_ERROR;
+        UResourceBundle* rb = ures_open(NULL, loc, &ec2);
+        UResourceBundle* curr = ures_getByKey(rb, CURRENCIES, NULL, &ec2);
+        int32_t n = ures_getSize(curr);
+        for (int32_t i=0; i<n; ++i) {
+            UResourceBundle* names = ures_getByIndex(curr, i, NULL, &ec2);
+            int32_t len;
+            s = ures_getStringByIndex(names, UCURR_SYMBOL_NAME, &len, &ec2);
+            UBool isChoice = FALSE;
+            if (len > 0 && s[0] == CHOICE_FORMAT_MARK) {
+                ++s;
+                --len;
+                if (len > 0 && s[0] != CHOICE_FORMAT_MARK) {
+                    isChoice = TRUE;
+                }
+            }
+            if (isChoice) {
+                Formattable temp;
+                ChoiceFormat fmt(s, ec2);
+                fmt.parse(text, temp, pos);
+                len = pos.getIndex() - start;
+                pos.setIndex(start);
+            } else if (len > max &&
+                       text.compare(pos.getIndex(), len, s) != 0) {
+                len = 0;
+            }
+            if (len > max) {
+                iso = ures_getKey(names);
+                max = len;
+            }
+            ures_close(names);
+        }
+        ures_close(curr);
+        ures_close(rb);
+
+        // Try to fallback.  If that fails (because we are already at
+        // root) then exit.
+        if (!fallback(loc)) {
+            break;
+        }
+    }
+
+    if (iso != NULL) {
+        u_charsToUChars(iso, result, 4);
+    }
+
+    // If display name parse fails or if it matches fewer than 3
+    // characters, try to parse 3-letter ISO.  Do this after the
+    // display name processing so 3-letter display names are
+    // preferred.  Consider /[A-Z]{3}/ to be valid ISO, and parse
+    // it manually--UnicodeSet/regex are too slow and heavy.
+    if (max < 3 && (text.length() - start) >= 3) {
+        UBool valid = TRUE;
+        for (int32_t k=0; k<3; ++k) {
+            UChar ch = text.charAt(start + k); // 16-bit ok
+            if (ch < 0x41/*'A'*/ || ch > 0x5A/*'Z'*/) {
+                valid = FALSE;
+                break;
+            }
+        }
+        if (valid) {
+            text.extract(start, 3, result);
+            result[3] = 0;
+            max = 3;
+        }
+    }
+
+    pos.setIndex(start + max);
+}
+
+U_NAMESPACE_END
 
 /**
  * Internal method.  Given a currency ISO code and a locale, return
