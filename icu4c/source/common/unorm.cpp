@@ -16,6 +16,7 @@
 #include "unicode/normlzr.h"
 #include "unicode/ustring.h"
 #include "cpputils.h"
+#include "ustr_imp.h"
 
 // added by synwee
 #include "unicode/uchar.h"
@@ -6672,10 +6673,15 @@ u_quickCheck(const UChar*       source,
   UChar32 codepoint;
   UQUICK_CHECK_VALUES result = UQUICK_CHECK_YES;
 
+  if(u_getCombiningClass(0x300) == 0) {
+    return UQUICK_CHECK_NO;
+  }
+
   while (count != sourcelength)
   {
-    UTF16_NEXT_CHAR_SAFE(source, count, sourcelength, codepoint, TRUE);
-    combiningclass = u_getCombiningClass(codepoint);
+    /*UTF16_NEXT_CHAR_SAFE(source, count, sourcelength, codepoint, TRUE);*/
+    UTF_NEXT_CHAR(source, count, sourcelength, codepoint);
+    combiningclass = u_internalGetCombiningClass(codepoint);
 
     // not in canonical order
     if (oldcombiningclass > combiningclass && combiningclass != 0)
