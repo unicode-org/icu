@@ -96,7 +96,7 @@ ALL_TEST_FILES = $(TEST_DAT_FILES) $(TEST_BRK_FILES) $(TEST_CNV_FILES) $(TEST_RE
 # General data build rules
 
 ## Files to remove for 'make clean'
-CLEANFILES = *~ $(ALL_FILES) $(ALL_TEST_FILES) *.o *.c thaidict.brk icudata.lst $(TESTOBJDATADIR)/testdata.lst $(OS390LIST)
+CLEANFILES = *~ $(ALL_FILES) $(ALL_TEST_FILES) *.o *.c thaidict.brk
 
 icudata.lst: $(SRCLISTDEPS)
 	@echo "generating $@ (list of data files)"
