@@ -1116,7 +1116,7 @@ _findSafeFCD(const UChar *src, const UChar *limit, uint16_t fcd16) {
 }
 
 static uint8_t
-_decomposeFCD(const UChar *src, const UChar *decompLimit, const UChar *limit,
+_decomposeFCD(const UChar *src, const UChar *decompLimit,
               UChar *dest, int32_t &destIndex, int32_t destCapacity) {
     const UChar *p;
     uint32_t norm32;
@@ -1389,7 +1389,7 @@ unorm_makeFCD(UChar *dest, int32_t destCapacity,
              * the source text does not fulfill the conditions for FCD;
              * decompose and reorder a limited piece of the text
              */
-            prevCC=_decomposeFCD(decompStart, src, limit,
+            prevCC=_decomposeFCD(decompStart, src,
                                  dest, destIndex, destCapacity);
             decompStart=src;
         }
