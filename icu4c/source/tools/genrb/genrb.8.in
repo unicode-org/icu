@@ -70,11 +70,10 @@ Display extra informative messages during execution.
 Set the encoding used to read input files to
 .IR encoding .
 The default encoding is the invariant (subset of ASCII or EBCDIC)
-codepage for the system. See section
-.BR "INVARIANT CHARACTERS" .
-.B genrb
-does automatically detect UTF-8, UTF-16BE, and UTF-16LE if a byte order mark
-(BOM) is present.
+codepage for the system (see section
+.BR "INVARIANT CHARACTERS" ).
+The encodings UTF-8, UTF-16BE, and UTF-16LE are automatically detected
+if a byte order mark (BOM) is present.
 .TP
 .BI "\-s\fP, \fB\-\-sourcedir" " source"
 Set the source directory to
