@@ -4,8 +4,8 @@
  * others. All Rights Reserved.
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/IBMCalendarTest.java,v $ 
- * $Date: 2002/03/29 19:33:56 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/03/29 19:42:43 $ 
+ * $Revision: 1.8 $
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
@@ -222,10 +222,23 @@ public class IBMCalendarTest extends CalendarTest {
     public void TestLeapFieldDifference() {
         Calendar cal = Calendar.getInstance();
         cal.set(2004, Calendar.FEBRUARY, 29);
-        Date target = cal.getTime();
+        Date date2004 = cal.getTime();
         cal.set(2000, Calendar.FEBRUARY, 29);
-        int y = cal.fieldDifference(target, Calendar.YEAR);
-        int d = cal.fieldDifference(target, Calendar.DAY_OF_YEAR);
-        logln("2004/Feb/29 - 2000/Feb/29 = " + y + " years, " + d + " days");
+        Date date2000 = cal.getTime();
+        int y = cal.fieldDifference(date2004, Calendar.YEAR);
+        int d = cal.fieldDifference(date2004, Calendar.DAY_OF_YEAR);
+        if (d == 0) {
+            logln("Ok: 2004/Feb/29 - 2000/Feb/29 = " + y + " years, " + d + " days");
+        } else {
+            errln("FAIL: 2004/Feb/29 - 2000/Feb/29 = " + y + " years, " + d + " days");
+        }
+        cal.setTime(date2004);
+        y = cal.fieldDifference(date2000, Calendar.YEAR);
+        d = cal.fieldDifference(date2000, Calendar.DAY_OF_YEAR);
+        if (d == 0) {
+            logln("Ok: 2000/Feb/29 - 2004/Feb/29 = " + y + " years, " + d + " days");
+        } else {
+            errln("FAIL: 2000/Feb/29 - 2004/Feb/29 = " + y + " years, " + d + " days");
+        }        
     }
 }
