@@ -532,8 +532,8 @@ optimization group. So, we put the common stuff into a worker function,
 and set up another macro to stamp out the 12 open functions:*/
 #define DEFINE_LMBCS_OPEN(n) \
 static void \
-   _LMBCSOpen##n(UConverter*  _this,const char* name,const char* locale,UErrorCode*  err) \
-{ _LMBCSOpenWorker(_this, name,locale, err, n);} 
+   _LMBCSOpen##n(UConverter*  _this,const char* name,const char* locale,uint32_t* version,UErrorCode*  err) \
+{ _LMBCSOpenWorker(_this, name,locale,version, err, n);} 
 
 
 
@@ -558,7 +558,8 @@ _LMBCSGetNextUChar(UConverterToUnicodeArgs *args,
 static void 
 _LMBCSOpenWorker(UConverter*  _this, 
                        const char*  name, 
-                       const char*  locale, 
+                       const char*  locale,
+                       uint32_t* version,
                        UErrorCode*  err,
                        ulmbcs_byte_t OptGroup
                        )
