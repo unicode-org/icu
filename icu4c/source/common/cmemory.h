@@ -73,15 +73,6 @@ U_CFUNC UBool
 cmemory_inUse(void);
 
 /**
-  *  Mark the ICU heap as not being in use, even if it is.
-  *  Needed so that we can ignore any allocations triggered by ICU 
-  *    static initialization, and still pretend that we are in a pristine state.
-  *    TODO:  this is awkward.  Think about something cleaner.
-  */
-U_CFUNC void 
-cmemory_clearInUse(void);
-
-/**
   *  Heap clean up function, called from u_cleanup()
   *    Clears any user heap functions from u_setMemoryFunctions()
   *    Does NOT deallocate any remaining allocated memory.
