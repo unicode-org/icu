@@ -12,9 +12,9 @@ fr_FR {
         "EUR",
         ",",
     }
-    DateTimeElements {
-        "2",
-        "1",
+    DateTimeElements:intvector {
+        2,
+        1,
     }
 //    LocaleString { "fr_FR" }
 //    ShortCountry { "FRA" }

@@ -26,9 +26,9 @@ sa_IN {
         "d-m-yy",
         "{1} {0}"
     }
-    DateTimeElements {
-        "1",
-        "1"
+    DateTimeElements:intvector {
+        1,
+        1
     }
     NumberPatterns {
         "#,##,##0.###;-#,##,##0.###",

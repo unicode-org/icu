@@ -21,9 +21,9 @@ tr {
     Countries { 
         TR { "T\u00FCrkiye" }
     }
-    DateTimeElements { 
-        "2",
-        "1",
+    DateTimeElements:intvector { 
+        2,
+        1,
     }
     DateTimePatterns { 
         "HH:mm:ss z",

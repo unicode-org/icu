@@ -1273,6 +1273,43 @@ TestKeyInRootRecursive(UResourceBundle *root, UResourceBundle *currentBundle, co
                     ures_getType(subBundle));
             continue;
         }
+        else if (ures_getType(subBundle) == RES_INT_VECTOR) {
+            int32_t minSize;
+            int32_t subBundleSize;
+            int32_t idx;
+            UBool sameArray = TRUE;
+            const int32_t *subRootBundleArr = ures_getIntVector(subRootBundle, &minSize, &errorCode);
+            const int32_t *subBundleArr = ures_getIntVector(subBundle, &subBundleSize, &errorCode);
+
+            if (minSize > subBundleSize) {
+                minSize = subBundleSize;
+                log_err("Arrays are different size with key \"%s\" in \"%s\" from root for locale \"%s\"\n",
+                        subBundleKey,
+                        ures_getKey(currentBundle),
+                        locale);
+            }
+
+            for (idx = 0; idx < minSize && sameArray; idx++) {
+                if (subRootBundleArr[idx] != subBundleArr[idx]) {
+                    sameArray = FALSE;
+                }
+                if (strcmp(subBundleKey, "DateTimeElements") == 0
+                    && subBundleArr[idx] < 1 || 7 < subBundleArr[idx])
+                {
+                    log_err("Value out of range with key \"%s\" at index %d in \"%s\" for locale \"%s\"\n",
+                            subBundleKey,
+                            idx,
+                            ures_getKey(currentBundle),
+                            locale);
+                }
+            }
+            if (sameArray) {
+                log_err("Arrays are the same with key \"%s\" in \"%s\" from root for locale \"%s\"\n",
+                        subBundleKey,
+                        ures_getKey(currentBundle),
+                        locale);
+            }
+        }
         else if (ures_getType(subBundle) == RES_ARRAY) {
             UResourceBundle *subSubBundle = ures_getByIndex(subBundle, 0, NULL, &errorCode);
             UResourceBundle *subSubRootBundle = ures_getByIndex(subRootBundle, 0, NULL, &errorCode);

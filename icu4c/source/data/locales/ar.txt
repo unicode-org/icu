@@ -47,9 +47,9 @@ ar {
         AE { "\u0627\u0644\u0625\u0645\u0627\u0631\u0627\u062A" }
         YE { "\u0627\u0644\u064A\u0645\u0646" }
     }
-    DateTimeElements { 
-        "7",
-        "1",
+    DateTimeElements:intvector { 
+        7,
+        1,
     }
     DateTimePatterns { 
         "z hh:mm:ss a",

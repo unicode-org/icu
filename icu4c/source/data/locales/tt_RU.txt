@@ -29,8 +29,8 @@ tt_RU {
         "{1} {0}",
     }
 
-    DateTimeElements{
-        "0",
-        "1"
+    DateTimeElements:intvector {
+        1,
+        2
     }
 }

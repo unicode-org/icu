@@ -270,9 +270,9 @@ de {
         // Zaire is now the Democratic Republic of Congo (CD)
         // same as in root: ZR { "Zaire" }
     }
-    DateTimeElements { 
-        "2",
-        "4",
+    DateTimeElements:intvector { 
+        2,
+        4,
     }
     DateTimePatterns { 
         "H:mm' Uhr 'z",
