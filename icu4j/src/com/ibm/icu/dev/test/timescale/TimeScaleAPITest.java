@@ -116,6 +116,8 @@ public class TimeScaleAPITest extends TestFmwk
         
         for (int scale = 0; scale < UniversalTimeScale.MAX_SCALE; scale += 1) {
             UniversalTimeScale.TimeScaleData data = UniversalTimeScale.getTimeScaleData(scale);
+            double fromMin = (double) data.fromMin;
+            double fromMax = (double) data.fromMax;
             
             try {
                 result = UniversalTimeScale.from(0.0, scale);
@@ -124,12 +126,13 @@ public class TimeScaleAPITest extends TestFmwk
             }
             
             try {
-                result = UniversalTimeScale.from(data.fromMin, scale);
+                result = UniversalTimeScale.from(fromMin, scale);
             } catch (IllegalArgumentException iae) {
                 errln("from(fromMin, " + scale + ") threw IllegalArgumentException.");
             }
-             
-            if (data.fromMin > Long.MIN_VALUE) {
+            
+            // Only do this test if we can exactly represent fromMin - 1 
+            if (fromMin - 1 > fromMin) {
                 try {
                     result = UniversalTimeScale.from(data.fromMin - 1, scale);
                     errln("from(fromMin - 1, " + scale + ") did not throw IllegalArgumentException.");
@@ -138,12 +141,13 @@ public class TimeScaleAPITest extends TestFmwk
             }
              
             try {
-                result = UniversalTimeScale.from(data.fromMax, scale);
+                result = UniversalTimeScale.from(fromMax, scale);
             } catch (IllegalArgumentException iae) {
                 errln("from(fromMax, " + scale + ") threw IllegalArgumentException.");
             }
-              
-            if (data.fromMax < Long.MAX_VALUE) {
+            
+            // Only do this test if we can exactly represent fromMax + 1
+            if (data.fromMax < fromMax + 1) {
                 try {
                     result = UniversalTimeScale.from(data.fromMax + 1, scale);
                     errln("from(fromMax + 1, " + scale + ") did not throw IllegalArgumentException.");
