@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/DecimalFormat.java,v $ 
- * $Date: 2000/05/26 21:38:55 $ 
- * $Revision: 1.6 $
+ * $Date: 2000/06/01 01:21:34 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -283,6 +283,15 @@ import java.util.Hashtable;
  * <ul><li>The grouping separator ',' can occur inside the integer portion between the
  * most significant digit and the least significant digit.
  *
+ * <li><font color=red face=helvetica><strong>NEW</strong></font>
+ *     Two grouping intervals are recognized: That between the
+ *     decimal point and the first grouping symbol, and that
+ *     between the first and second grouping symbols. These
+ *     intervals are identical in most locales, but in some
+ *     locales they differ. For example, the pattern
+ *     &quot;#,##,###&quot; formats the number 123456789 as
+ *     &quot;12,34,56,789&quot;.</li>
+ * 
  * <li>
  * <strong><font face=helvetica color=red>NEW</font></strong>
  * The pad specifier <code>padSpec</code> may appear before the prefix,
@@ -867,9 +876,16 @@ public class DecimalFormat extends NumberFormat {
                 // Output grouping separator if necessary.  Don't output a
                 // grouping separator if i==0 though; that's at the end of
                 // the integer part.
-                if (isGroupingUsed() && i>0 && (groupingSize != 0) && (i % groupingSize == 0))
-                {
-                    result.append(grouping);
+                if (isGroupingUsed() && i>0 && (groupingSize != 0)) {
+                    boolean group;
+                    if ((groupingSize2 > 0) && (i > groupingSize)) {
+                        group = ((i - groupingSize) % groupingSize2) == 0;
+                    } else {
+                        group = i % groupingSize == 0;
+                    }
+                    if (group) {
+                        result.append(grouping);
+                    }
                 }
             }
 
@@ -1758,6 +1774,36 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
+     * Return the secondary grouping size. This is usually equal to
+     * the primary grouping size returned by
+     * <code>getGroupingSize()</code>, but in some locales it is
+     * different.  If the primary and secondary grouping sizes differ,
+     * then the primary grouping applies to the first group, and the
+     * secondary grouping applies to all other groups.  E.g., a
+     * primary grouping of 3 and a secondary grouping of 2 yields the
+     * number "12,34,567".
+     * [NEW]
+     * @see #setSecondaryGroupingSize
+     * @see NumberFormat#isGroupingUsed
+     * @see DecimalFormatSymbols#getGroupingSeparator
+     */
+    public int getSecondaryGroupingSize () {
+        return groupingSize2;
+    }
+
+    /**
+     * Set the secondary grouping size. If set to a value less than 1,
+     * then secondary grouping is turned off.
+     * [NEW]
+     * @see #getSecondaryGroupingSize
+     * @see NumberFormat#setGroupingUsed
+     * @see DecimalFormatSymbols#setGroupingSeparator
+     */
+    public void setSecondaryGroupingSize (int newValue) {
+        groupingSize2 = (byte)newValue;
+    }
+
+    /**
      * Allows you to get the behavior of the decimal separator with integers.
      * (The decimal separator will always appear with decimals.)
      * <P>Example: Decimal ON: 12345 -> 12345.; OFF: 12345 -> 12345
@@ -1910,15 +1956,21 @@ public class DecimalFormat extends NumberFormat {
                 result.append(padSpec);
             }
             int sub0Start = result.length();
+            int g = isGroupingUsed() ? Math.max(0, groupingSize) : 0;
+            if (g > 0 && groupingSize2 > 0 && groupingSize2 != groupingSize) {
+                g += groupingSize2;
+            }
             int maxIntDig = useExponentialNotation ? getMaximumIntegerDigits() :
-                (Math.max(Math.max(groupingSize, getMinimumIntegerDigits()),
+                (Math.max(Math.max(g, getMinimumIntegerDigits()),
                           roundingDecimalPos) + 1);
             for (i = maxIntDig; i > 0; --i) {
-                if (isGroupingUsed() && groupingSize != 0
-                    && i % groupingSize == 0
-                    && i < maxIntDig
-                    && !useExponentialNotation) {
-                    result.append(group);
+                if (isGroupingUsed() && groupingSize != 0 &&
+                    i < maxIntDig && !useExponentialNotation) {
+                    if ((groupingSize2 > 0 && i > groupingSize) ?
+                        ((i - groupingSize) % groupingSize2) == 0 :
+                        i % groupingSize == 0) {
+                        result.append(group);
+                    }
                 }
                 if (roundingDigits != null) {
                     int pos = roundingDecimalPos - i;
@@ -2093,6 +2145,7 @@ public class DecimalFormat extends NumberFormat {
             int multiplier = 1;
             int digitLeftCount = 0, zeroDigitCount = 0, digitRightCount = 0;
             byte groupingCount = -1;
+            byte groupingCount2 = -1;
             int padPos = -1;
             char padChar = 0;
             int incrementPos = -1;
@@ -2158,6 +2211,7 @@ public class DecimalFormat extends NumberFormat {
                                     "Grouping separator after decimal in pattern \"" +
                                     pattern + '"');
                         }
+                        groupingCount2 = groupingCount;
                         groupingCount = 0;
                     } else if (ch == decimalSeparator) {
                         if (decimalPos >= 0) {
@@ -2398,6 +2452,8 @@ public class DecimalFormat extends NumberFormat {
                         ? (digitLeftCount + zeroDigitCount - decimalPos) : 0);
                 setGroupingUsed(groupingCount > 0);
                 this.groupingSize = (groupingCount > 0) ? groupingCount : 0;
+                this.groupingSize2 = (groupingCount2 > 0 && groupingCount2 != groupingCount)
+                    ? groupingCount2 : 0;
                 this.multiplier = multiplier;
                 setDecimalSeparatorAlwaysShown(decimalPos == 0
                         || decimalPos == digitTotalCount);
@@ -2529,6 +2585,15 @@ public class DecimalFormat extends NumberFormat {
      * @see NumberFormat#isGroupingUsed
      */
     private byte    groupingSize = 3;  // invariant, > 0 if useThousands
+
+    /**
+     * The secondary grouping size.  This is only used for Hindi
+     * numerals, which use a primary grouping of 3 and a secondary
+     * grouping of 2, e.g., "12,34,567".  If this value is less than
+     * 1, then secondary grouping is equal to the primary grouping.
+     * [NEW]
+     */
+    private byte    groupingSize2 = 0;
     
     /**
      * If true, forces the decimal separator to always appear in a formatted
