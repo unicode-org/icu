@@ -598,8 +598,9 @@ ResourceBundle::getDataForTag(const char *tag,
 
     
     if(fData[i] != 0) {
+      UnicodeString t(tag, "");
       const ResourceBundleData* s = 
-	(const ResourceBundleData*)uhash_get(fData[i], &UnicodeString(tag, ""));
+	(const ResourceBundleData*)uhash_get(fData[i], &t);
       if(s != 0) {
 	err = fDataStatus[i];  /* restore the error from the original lookup. */
 	return s;
