@@ -38,7 +38,8 @@ DateFormat::DateFormat()
 //----------------------------------------------------------------------
 
 DateFormat::DateFormat(const DateFormat& other)
-:   fCalendar(0),
+:   Format(other),
+    fCalendar(0),
     fNumberFormat(0)
 {
     *this = other;
