@@ -812,9 +812,6 @@ u_scanf_scanset_handler(UFILE             *input,
     UChar           *alias, *limit;
 
 
-    /* fill the input's internal buffer */
-    ufile_fill_uchar_buffer(input);
-
     /* Create an empty set */
     scanset = uset_open(0, -1);
 
