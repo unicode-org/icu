@@ -817,23 +817,21 @@ UBool putil_cleanup(void)
 U_CAPI void U_EXPORT2
 u_setDataDirectory(const char *directory) {
     char *newDataDir;
+    int length;
 
-    if(directory!=NULL) {
-        int length=uprv_strlen(directory);
-        newDataDir = (char *)uprv_malloc(length + 2);
-        uprv_strcpy(newDataDir, directory);
-        if(newDataDir[length-1]!=U_FILE_SEP_CHAR) {
-            newDataDir[length++]=U_FILE_SEP_CHAR;
-            newDataDir[length] = 0;
-        }
-
-        umtx_lock(NULL);
-        if (gDataDirectory) {
-            uprv_free(gDataDirectory);
-        }
-        gDataDirectory = newDataDir;
-        umtx_unlock(NULL);
+    if(directory==NULL) {
+        directory = "";
     }
+    length=uprv_strlen(directory);
+    newDataDir = (char *)uprv_malloc(length + 2);
+    uprv_strcpy(newDataDir, directory);
+
+    umtx_lock(NULL);
+    if (gDataDirectory) {
+        uprv_free(gDataDirectory);
+    }
+    gDataDirectory = newDataDir;
+    umtx_unlock(NULL);
 }
 
 U_CAPI const char * U_EXPORT2
