@@ -263,7 +263,7 @@ public:
                                   UErrorCode& status) const;
 
     /**
-     * Redeclared Format method.
+     * Redeclared NumberFormat method.
      */
     UnicodeString& format(const Formattable& obj,
                           UnicodeString& result,
@@ -409,7 +409,9 @@ inline UnicodeString&
 ChoiceFormat::format(const Formattable& obj,
                      UnicodeString& result,
                      UErrorCode& status) const {
-    return Format::format(obj, result, status);
+    // Don't use Format:: - use NumberFormat:: in case base class
+    // modified behavior in future.
+    return NumberFormat::format(obj, result, status);
 }
 
 inline UnicodeString&
