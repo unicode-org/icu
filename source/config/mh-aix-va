@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2002, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-aix-va,v 1.28 2003/08/08 23:53:43 grhoten-oss Exp $
+## $Id: mh-aix-va,v 1.29 2003/08/27 01:00:01 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -M $(DEFS) $(CPPFLAGS)
@@ -15,7 +15,7 @@ GEN_DEPS.cc=	$(CXX) -E -M $(DEFS) $(CPPFLAGS)
 CFLAGS += -qproto -qroconst
 CXXFLAGS += -qproto -qroconst
 
-LDFLAGS += -brtl -bh:5
+LDFLAGS += -brtl
 
 ## We need to delete things prior to linking, or else we'll get
 ## SEVERE ERROR: output file in use ..  on AIX. 
