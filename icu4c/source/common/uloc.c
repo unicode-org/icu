@@ -28,11 +28,9 @@
 
 
 #include "unicode/uloc.h"
-#include "unicode/locid.h"
 
 #include "unicode/utypes.h"
 #include "uresimp.h"
-#include "unicode/uchar.h"
 #include "umutex.h"
 #include "cstring.h"
 #include "unicode/ustring.h"
@@ -44,7 +42,8 @@
 *****************************************************************************/
 
 /* Locale stuff from locid.cpp */
-U_CAPI void locale_set_default(const char *id);
+U_CFUNC void locale_set_default(const char *id);
+U_CFUNC const char *locale_get_default(void);
 
 /* These strings describe the resources we attempt to load from
  the locale ResourceBundle data file.*/
@@ -65,10 +64,6 @@ static const char* _kShortCountry   = "ShortCountry";
 static const UChar openParen[]  = { 0x20, 0x28, 0}; /* " (" */
 static const UChar comma[]      = { 0x2C, 0x20, 0}; /* ", " */
 static const UChar closeParen[] = { 0x29, 0};       /* ")" */
-
-
-static char _defaultLocale[ULOC_FULLNAME_CAPACITY] = "en_US";
-static UBool _emptyDefaultLocale = TRUE;
 
 static char** _installedLocales = NULL;
 static int32_t _installedLocalesCount = 0;
@@ -218,15 +213,7 @@ static int16_t _findIndex(const char* const* list, const char* key)
 
 const char* uloc_getDefault()
 {
-    UErrorCode err = U_ZERO_ERROR;
-    
-    /*lazy evaluates _defaultLocale*/
-    if (_emptyDefaultLocale) 
-    {
-        uloc_setDefault(NULL, &err);
-    }
-    
-    return _defaultLocale;
+    return locale_get_default();
 }
 
 void uloc_setDefault(const char*   newDefaultLocale,
@@ -240,12 +227,6 @@ void uloc_setDefault(const char*   newDefaultLocale,
     {
         newDefaultLocale = uprv_getDefaultLocaleID();
     }
-    
-    umtx_lock(NULL);
-    uprv_strncpy(_defaultLocale, newDefaultLocale, ULOC_FULLNAME_CAPACITY - 1);
-    _defaultLocale[ULOC_FULLNAME_CAPACITY - 1] = 0;
-    _emptyDefaultLocale = FALSE;
-    umtx_unlock(NULL);
     
     /* propagate change to C++ */
     locale_set_default(newDefaultLocale);

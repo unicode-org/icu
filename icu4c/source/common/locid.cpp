@@ -148,12 +148,13 @@ Locale::~Locale()
     if (fullName != fullNameBuffer) 
     {
         delete []fullName;
+        fullName = NULL;
     }
 }
 
 Locale::Locale()
 {
-    init(uloc_getDefault());
+    *this = getLocale(eDEFAULT);
 }
 
 Locale::Locale( const   char * newLanguage, 
@@ -415,7 +416,7 @@ Locale::getDefault()
 }
 
 
-void locale_set_default_internal(const char *id)
+static void locale_set_default_internal(const char *id)
 {
 #ifdef ICU_LOCID_USE_DEPRECATES
     Locale::fgDefaultLocale.init(id);
@@ -424,7 +425,10 @@ void locale_set_default_internal(const char *id)
         Locale::initLocaleCache();
     }
 
-    gLocaleCache[eDEFAULT].init(id);
+    {
+        Mutex lock;
+        gLocaleCache[eDEFAULT].init(id);
+    }
 #endif
 }
 
@@ -436,6 +440,11 @@ locale_set_default(const char *id)
 }
 /* end */
 
+U_CFUNC const char *
+locale_get_default(void)
+{
+    return Locale::getDefault().getName();
+}
 
 void 
 Locale::setDefault( const   Locale&     newLocale, 
@@ -444,8 +453,6 @@ Locale::setDefault( const   Locale&     newLocale,
     if (U_FAILURE(status))
         return;
 
-    uloc_setDefault(newLocale.fullName, &status);
-
 #ifdef ICU_LOCID_USE_DEPRECATES
     fgDefaultLocale = newLocale;
 #else
@@ -453,7 +460,10 @@ Locale::setDefault( const   Locale&     newLocale,
         initLocaleCache();
     }
 
-    gLocaleCache[eDEFAULT] = newLocale;
+    {
+        Mutex lock;
+        gLocaleCache[eDEFAULT] = newLocale;
+    }
 #endif
 }
 
@@ -692,6 +702,8 @@ locale_cleanup(void)
         availableLocaleList = NULL;
     }
     availableLocaleListCount = 0;
+    gLocaleCache[eDEFAULT].~Locale();
+    gLocaleCache = NULL;
     return TRUE;
 }
 
@@ -904,7 +916,7 @@ Locale::initLocaleCache(void)
         Locale("en", "US"),
         Locale("en", "CA"),
         Locale("fr", "CA"),
-        Locale()    // This can use a mutex
+        Locale(uprv_getDefaultLocaleID())    // This can use a mutex
     };
     Locale *localeCache = (Locale *)(gByteLocaleCache);
 
@@ -917,8 +929,20 @@ Locale::initLocaleCache(void)
 
         for (int idx = 0; idx < eMAX_LOCALES; idx++)
         {
-            /* Buffers should be small enough that no leaks occur */
-            localeCache[idx].fullName = localeCache[idx].fullNameBuffer;
+            if (localeCache[idx].fullName == newLocales[idx].fullNameBuffer)
+            {
+                localeCache[idx].fullName = localeCache[idx].fullNameBuffer;
+            }
+            else
+            {
+                // Since we did a memcpy we need to make sure that the local
+                // Locales do not destroy the memory of the permanent locales.
+                //
+                // This can be a memory leak for an extra long default locale,
+                // but this code shouldn't normally get executed.
+                localeCache[idx].fullName = new char[uprv_strlen(localeCache[idx].fullNameBuffer) + 1];
+                uprv_strcpy(localeCache[idx].fullName, localeCache[idx].fullNameBuffer);
+            }
         }
         gLocaleCache = localeCache;
     }
