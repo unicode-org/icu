@@ -817,7 +817,7 @@ GregorianCalendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& s
   double cMonthStart=0.0; // in ms
 
   // Common code - see if we're in the cutover month of the cutover year
-  if(internalGet(UCAL_EXTENDED_YEAR) == fGregorianCutoverYear) {
+  if(get(UCAL_EXTENDED_YEAR, status) == fGregorianCutoverYear) {
     switch (field) {
     case UCAL_DAY_OF_MONTH:
     case UCAL_WEEK_OF_MONTH:
