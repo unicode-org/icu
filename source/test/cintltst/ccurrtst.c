@@ -63,7 +63,7 @@ void currTest()
     UCollator *c;
     uint8_t *sortKey1, *sortKey2;
     UErrorCode status = U_ZERO_ERROR;
-    UCollationResult compareResult, keyResult;
+    UCollationResult compareResult, keyResult, incResult;
     UCollationResult expectedResult = UCOL_EQUAL;
     log_verbose("Testing currency of all locales\n");
     c = ucol_open(NULL, &status);
@@ -96,6 +96,7 @@ void currTest()
             }
 
             compareResult = ucol_strcoll(c, source, u_strlen(source), target, u_strlen(target));
+            incResult = ctst_strcollTestIncremental(c, source, u_strlen(source), target, u_strlen(target));
 
             
             status = U_ZERO_ERROR;
@@ -113,8 +114,7 @@ void currTest()
             else if (res > 0) keyResult = (UCollationResult)1;
             else keyResult = (UCollationResult)0;
             
-            reportCResult(source, target, sortKey1, sortKey2,
-                          compareResult, keyResult, expectedResult);
+            reportCResult( source, target, sortKey1, sortKey2, compareResult, keyResult, incResult, expectedResult );
 
             free(sortKey1);
             free(sortKey2);

@@ -24,11 +24,20 @@ void reportCResult( const UChar source[], const UChar target[],
                          uint8_t *sourceKey, uint8_t *targetKey,
                          UCollationResult compareResult,
                          UCollationResult keyResult,
+                         UCollationResult incResult,
                          UCollationResult expectedResult );
 
 UChar* appendCompareResult(UCollationResult result, UChar* target);
 
 
 UChar* CharsToUChars(const char* chars);
+
+UCollationResult
+ctst_strcollTestIncremental(    const    UCollator    *coll,
+        const    UChar        *source,
+        int32_t            sourceLength,
+        const    UChar        *target,
+        int32_t            targetLength);
+
 
 #endif
