@@ -44,58 +44,90 @@ sub printLeg {
   }
 }
 
+sub outputDist {
+  my $value = shift;
+  my $percent = shift;
+  my $mean = $value->getMean;
+  my $error = $value->getError;
+  print HTML "<td class=\"";
+  if($mean > 0) {
+    print HTML "value";
+  } else {
+    print HTML "worse";
+  }
+  print HTML "\">";
+  if($percent) {
+    print HTML formatPercent(2, $mean);
+  } else {
+    print HTML formatNumber(2, $mult, $mean);
+  }
+  print HTML "</td>\n";  
+  print HTML "<td class=\"";
+  if((($error*$mult < 10)&&!$percent) || (($error<10)&&$percent)) {
+    print HTML "error";
+  } else {
+    print HTML "errorLarge";
+  }
+  print HTML "\">&plusmn;";
+  if($percent) {
+    print HTML formatPercent(2, $error);
+  } else {
+    print HTML formatNumber(2, $mult, $error);
+  }
+  print HTML "</td>\n";  
+}
+  
+sub outputValue {
+  my $value = shift;
+  print HTML "<td class=\"sepvalue\">";
+  print HTML $value;
+  #print HTML formatNumber(2, 1, $value);
+  print HTML "</td>\n";  
+}
+
 sub startTable {
   #my $printEvents = shift;
   $inTable = 1;
   my $i;
-  print HTML "<font size=3>";
   print HTML "<table $TABLEATTR>\n";
+  print HTML "<tbody>\n";
   if($#headers >= 0) {
     my ($header, $i);
-    print HTML "<tr>";
-    print HTML "<th><a href=\"#Test Name\">Test Name</a></th>";
-    print HTML "<th><a href=\"#Ops\">Ops</a></th>";
-    printLeg("<a name=\"Test Name\">Test Name</a> - name of the test as set by the test writer", "<a name=\"Ops\">Ops</a> - number of ".$operationIs."s per iteration");
+    print HTML "<tr>\n";
+    print HTML "<th rowspan=\"2\" class=\"testNameHeader\"><a href=\"#TestName\">Test Name</a></th>\n";
+    print HTML "<th rowspan=\"2\" class=\"testNameHeader\"><a href=\"#Ops\">Ops</a></th>\n";
+    printLeg("<a name=\"Test Name\">TestName</a> - name of the test as set by the test writer\n", "<a name=\"Ops\">Ops</a> - number of ".$operationIs."s per iteration\n");
+    if(!$printEvents) {
+      print HTML "<th colspan=".((4*($#headers+1))-2)." class=\"sourceType\">Per Operation</th>\n";
+    } else {
+      print HTML "<th colspan=".((2*($#headers+1))-2)." class=\"sourceType\">Per Operation</th>\n";
+      print HTML "<th colspan=".((5*($#headers+1))-2)." class=\"sourceType\">Per Event</th>\n";
+    }
+    print HTML "</tr>\n<tr>\n";
     if(!$printEvents) {
       foreach $header (@headers) {
-	print HTML "<th><a href=\"#meanop $header\">$header<br>mean/op</a></th>";
-	print HTML "<th><a href=\"#errorop $header\">$header<br>error/op</a></th>";
-	printLeg("<a name=\"meanop $header\">$header mean/op</a> - mean time for $header per $operationIs");
-	printLeg("<a name=\"errorop $header\">$header error/op - error range for mean time");
+	print HTML "<th class=\"source\" colspan=2><a href=\"#meanop_$header\">$header<br>/op</a></th>\n";
+	printLeg("<a name=\"meanop_$header\">$header /op</a> - mean time and error for $header per $operationIs");
       }
     }
     for $i (1 .. $#headers) {
-      print HTML "<th><a href=\"#mean $i op\">ratio $i<br>mean/op</a></th>";
-      print HTML "<th><a href=\"#error $i op\">ratio $i<br>error/op</a></th>";      
-      printLeg("<a name=\"mean $i op\">ratio $i mean/op</a> - ratio of per $operationIs time, calculated as: (($headers[0] - $headers[$i])/$headers[$i])*100%, mean value");
-      printLeg("<a name=\"error $i op\">ratio $i error/op</a> - error range of the above value");
+      print HTML "<th class=\"source\" colspan=2><a href=\"#mean_op_$i\">ratio $i<br>/op</a></th>\n";
+      printLeg("<a name=\"mean_op_$i\">ratio $i /op</a> - ratio and error of per $operationIs time, calculated as: (($headers[0] - $headers[$i])/$headers[$i])*100%, mean value");
     }
     if($printEvents) {
       foreach $header (@headers) {
-	print HTML "<th><a href=\"#events $header\">$header<br>events</a></th>";
-	printLeg("<a name=\"events $header\">$header events</a> - number of ".$eventIs."s for $header per iteration");
+	print HTML "<th class=\"source\"><a href=\"#events_$header\">$header<br>events</a></th>\n";
+	printLeg("<a name=\"events_$header\">$header events</a> - number of ".$eventIs."s for $header per iteration");
       }
       foreach $header (@headers) {
-	print HTML "<th><a href=\"#mean ev $header\">$header<br>mean/ev</a></th>";
-	print HTML "<th><a href=\"#error ev $header\">$header<br>error/ev</a></th>";      
-	printLeg("<a name=\"mean $header mean/op - mean time for $header per $eventIs");
-	printLeg("$header error/op - error range for mean time");
+	print HTML "<th class=\"source\" colspan=2><a href=\"#mean_ev_$header\">$header<br>/ev</a></th>\n";
+	printLeg("<a name=\"mean_ev_$header\">$header /ev</a> - mean time and error for $header per $eventIs");
       }
       for $i (1 .. $#headers) {
-	print HTML "<th><a href=\"#mean $i ev\">ratio $i<br>mean/ev</a></th>";
-	print HTML "<th><a href=\"#error $i ev\">ratio $i<br>error/ev</a></th>";      
-	printLeg("<a name=\"mean $i ev\">ratio $i mean/ev</a> - ratio of per $eventIs time, calculated as: (($headers[0] - $headers[$i])/$headers[$i])*100%, mean value");
-	printLeg("<a name=\"error $i ev\">ratio $i error/ev</a> - error range of the above value");
+	print HTML "<th class=\"source\" colspan=2><a href=\"#mean_ev_$i\">ratio $i<br>/ev</a></th>\n";
+	printLeg("<a name=\"mean_ev_$i\">ratio $i /ev</a> - ratio and error of per $eventIs time, calculated as: (($headers[0] - $headers[$i])/$headers[$i])*100%, mean value");
       }
     }
-    
-    
-    
-#     foreach $i (@timetypes) {
-#       foreach $header (@headers) {
-# 	print HTML "<th>$header<br>$i</th>" unless ($i =~ /event/ && !$printEvents);
-#       }
-#     }
     print HTML "</tr>\n";
   }
   $legendDone = 1;
@@ -105,8 +137,8 @@ sub closeTable {
   if($inTable) {
     undef $inTable;
     print HTML "</tr>\n";
+    print HTML "</tbody>";
     print HTML "</table>\n";
-    print HTML "</font>";
   }
 }
 
@@ -165,25 +197,41 @@ sub setupOutput {
     if($options{ "outputDir" }) {
       $html = $options{ "outputDir" }."/".$html;
     }
+    $html =~ s/ /_/g;
 
     open(HTML,">$html") or die "Can't write to $html: $!";
 
+#<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
     print HTML <<EOF;
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-   "http://www.w3.org/TR/html4/strict.dtd">
 <HTML>
    <HEAD>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
       <TITLE>$title</TITLE>
-<!--
 <style>
 <!--
-td { text-align: "." }
-td:before { content: "$" }
+body         { font-size: 10pt; font-family: sans-serif }
+th           { font-size: 10pt; border: 0 solid #000080; padding: 5 }
+th.testNameHeader { border-width: 1 }
+th.testName  { text-align: left; border-left-width: 1; border-right-width: 1; 
+               border-bottom-width: 1 }
+th.source    { border-right-width: 1; border-bottom-width: 1 }
+th.sourceType { border-right-width: 1; border-top-width: 1; border-bottom-width: 1 }
+td           { font-size: 10pt; text-align: Right; border: 0 solid #000080; padding: 5 }
+td.string    { text-align: Left; border-bottom-width:1; border-right-width:1 }
+td.sepvalue  { border-bottom-width: 1; border-right-width: 1 }
+td.value     { border-bottom-width: 1 }
+td.worse     { color: #FF0000; font-weight: bold; border-bottom-width: 1 }
+td.error     { font-size: 75%; border-right-width: 1; border-bottom-width: 1 }
+td.errorLarge { font-size: 75%; color: #FF0000; font-weight: bold; border-right-width: 1; 
+               border-bottom-width: 1 }
+A:link    { color: black; font-weight: normal; text-decoration: none}    /* unvisited links */
+A:visited { color: blue; font-weight: normal; text-decoration: none }   /* visited links   */
+A:hover   { color: red; font-weight: normal; text-decoration: none } /* user hovers     */
+A:active  { color: lime; font-weight: normal; text-decoration: none }   /* active links    */
 -->
 </style>
--->
    </HEAD>
-   <BODY>
+   <BODY bgcolor="#FFFFFF" LINK="#006666" VLINK="#000000">
 EOF
     print HTML "<H1>$title</H1>\n";
 
@@ -198,7 +246,7 @@ sub closeOutput {
     }
     $legend .= "</ul>\n";
     print HTML $legend;
-    printRaw();
+    outputRaw();
     print HTML <<EOF;
    </BODY>
 </HTML>
@@ -208,7 +256,7 @@ EOF
 }
 
 
-sub printRaw {
+sub outputRaw {
   print HTML "<h2>Raw data</h2>";
   my $key;
   my $i;
@@ -217,42 +265,51 @@ sub printRaw {
   print HTML "<table $TABLEATTR>\n";
   for $key (sort keys %raw) {
     my $printkey = $key;
-    $printkey =~ s/\<br\>/ /;
+    $printkey =~ s/\<br\>/ /g;
     if($printEvents) {
-      print HTML "<tr><td colspan = 7>$printkey</td></tr>\n"; # locale and data file
-      print HTML "<tr><th>test name</th><th>interesting arguments</th><th>iterations</th><th>operations</th><th>mean time (ns)</th><th>error (ns)</th><th>events</th></tr>\n";
+      if($key ne "") {
+	print HTML "<tr><th class=\"testNameHeader\" colspan = 7>$printkey</td></tr>\n"; # locale and data file
+      }
+      print HTML "<tr><th class=\"testName\">test name</th><th class=\"testName\">interesting arguments</th><th class=\"testName\">iterations</th><th class=\"testName\">operations</th><th class=\"testName\">mean time (ns)</th><th class=\"testName\">error (ns)</th><th class=\"testName\">events</th></tr>\n";
     } else {
-      print HTML "<tr><td colspan = 6>$printkey</td></tr>\n"; # locale and data file
-      print HTML "<tr><th>test name</th><th>interesting arguments</th><th>iterations</th><th>operations</th><th>mean time (ns)</th><th>error (ns)</th></tr>\n";
+      if($key ne "") {
+	print HTML "<tr><th class=\"testName\" colspan = 6>$printkey</td></tr>\n"; # locale and data file
+      }
+      print HTML "<tr><th class=\"testName\">test name</th><th class=\"testName\">interesting arguments</th><th class=\"testName\">iterations</th><th class=\"testName\">operations</th><th class=\"testName\">mean time (ns)</th><th class=\"testName\">error (ns)</th></tr>\n";
     }
+    $printkey =~ s/[\<\>\/ ]//g;
       
-
+    my %done;
     for $i ( $raw{$key} ) {
       print HTML "<tr>";
       for $j ( @$i ) {
 	my ($test, $args);
 	($test, $args) = split(/,/, shift(@$j));
-	print HTML "<td>".$test."</td>";
-	print HTML "<td>".$args."</td>";
+
+	print HTML "<th class=\"testName\">";
+	if(!$done{$test}) {
+	  print HTML "<a name=\"".$printkey."_".$test."\">".$test."</a>";
+	  $done{$test} = 1;
+	} else {
+	  print HTML $test;
+	}
+	print HTML "</th>";
+
+	print HTML "<td class=\"string\">".$args."</td>";
 	
-	#print HTML "<td>".shift(@$j)."</td>";
-	print HTML "<td align=\"right\">".shift(@$j)."</td>";
-	print HTML "<td align=\"right\">".shift(@$j)."</td>";
+	print HTML "<td class=\"sepvalue\">".shift(@$j)."</td>";
+	print HTML "<td class=\"sepvalue\">".shift(@$j)."</td>";
+
 	my @data = @{ shift(@$j) };
-# 	for $k (@data) {
-# 	  print HTML "$k, ";
-# 	}
 	my $ds = Dataset->new(@data);
-	print HTML "<td align=\"right\">".formatNumber(4, $mult, $ds->getMean)."</td><td align=\"right\">".formatNumber(4, $mult, $ds->getError)."</td>";
+	print HTML "<td class=\"sepvalue\">".formatNumber(4, $mult, $ds->getMean)."</td><td class=\"sepvalue\">".formatNumber(4, $mult, $ds->getError)."</td>";
 	if($#{ $j } >= 0) {
-	  print HTML "<td align=\"right\">".shift(@$j)."</td>";
+	  print HTML "<td class=\"sepvalue\">".shift(@$j)."</td>";
 	}
 	print HTML "</tr>\n";
       }
     }
-#    print HTML "<br>\n";
   }
-#  print %raw;
 }
 
 sub store {
@@ -271,30 +328,32 @@ sub outputRow {
   }
   if(!$inTable) {
     if(@noevents) {
-      debug("Have events header\n");
       $printEvents = 1;
       startTable;
     } else {
-      debug("No events header\n");
       startTable;
     }
   }
   debug("No events: @noevents, $#noevents\n");
 
   my $j;
+  my $loc = $current;
+  $loc =~ s/\<br\>/ /g;
+  $loc =~ s/[\<\>\/ ]//g;
 
   # Finished one row of results. Outputting
   newRow;
-  outputData($testName, "LEFT");
+  #outputData($testName, "LEFT");
+  print HTML "<th class=\"testName\"><a href=\"#".$loc."_".$testName."\">$testName</a></th>\n";
   #outputData($iterCount);
-  outputData($noopers[0], "RIGHT");
+  #outputData($noopers[0], "RIGHT");
+  outputValue($noopers[0]);
 
   if(!$printEvents) {
     for $j ( 0 .. $#timedata ) {
       my $perOperation = $timedata[$j]->divideByScalar($iterPerPass[$j]*$noopers[$j]); # time per operation
       #debug("Time per operation: ".formatSeconds(4, $perOperation->getMean, $perOperation->getError)."\n");
-      outputData(formatNumber(2, $mult, $perOperation->getMean), "RIGHT");
-      outputData(formatNumber(2, $mult, $perOperation->getError), "RIGHT");
+      outputDist($perOperation);
     }
   }
   my $baseLinePO = $timedata[0]->divideByScalar($iterPerPass[0]*$noopers[0]);
@@ -302,26 +361,24 @@ sub outputRow {
     my $perOperation = $timedata[$j]->divideByScalar($iterPerPass[$j]*$noopers[$j]); # time per operation
     my $ratio = $baseLinePO->subtract($perOperation);
     $ratio = $ratio->divide($perOperation);
-    outputData(formatPercent(2, $ratio->getMean), "RIGHT"); 
-    outputData(formatPercent(2, $ratio->getError), "RIGHT"); 
+    outputDist($ratio, "%");
   }   
   if (@noevents) {
     for $j ( 0 .. $#timedata ) {
-      outputData($noevents[$j], "RIGHT");
+      #outputData($noevents[$j], "RIGHT");
+      outputValue($noevents[$j]);
     }
     for $j ( 0 .. $#timedata ) {
       my $perEvent =  $timedata[$j]->divideByScalar($iterPerPass[$j]*$noevents[$j]); # time per event
       #debug("Time per operation: ".formatSeconds(4, $perEvent->getMean, $perEvent->getError)."\n");
-      outputData(formatNumber(2, $mult, $perEvent->getMean), "RIGHT");
-      outputData(formatNumber(2, $mult, $perEvent->getError), "RIGHT");
+      outputDist($perEvent);
     }   
     my $baseLinePO = $timedata[0]->divideByScalar($iterPerPass[0]*$noevents[0]);
     for $j ( 1 .. $#timedata ) {
       my $perOperation = $timedata[$j]->divideByScalar($iterPerPass[$j]*$noevents[$j]); # time per operation
       my $ratio = $baseLinePO->subtract($perOperation);
       $ratio = $ratio->divide($perOperation);
-      outputData(formatPercent(2, $ratio->getMean), "RIGHT"); 
-      outputData(formatPercent(2, $ratio->getError), "RIGHT"); 
+      outputDist($ratio, "%");
     }   
   }
 }

@@ -118,7 +118,7 @@ sub formatPercent {
     my $a = shift;
     my $delta = shift; # may be undef
     
-    formatNumber($sigdig, 100, $a, $delta) . ' %';
+    formatNumber($sigdig, 100, $a, $delta) . '%';
 }
 
 #---------------------------------------------------------------------
