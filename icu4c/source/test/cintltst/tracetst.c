@@ -95,7 +95,7 @@ void testTraceEntry(const void *context, int32_t fnNumber) {
 }
 
 void testTraceExit(const void *context, int32_t fnNumber,
-                   int32_t argType, va_list args) {
+                   const char *fmt, va_list args) {
 }
 
 void testTraceData(const void *context, int32_t fnNumber, int32_t level,
@@ -185,11 +185,12 @@ static void TestTraceAPI() {
         test_format("a 32 bit val %d...", 50, 0, "a 32 bit val 6789abcd...", __LINE__, 0x6789abcd);
         test_format("a 64 bit val %l", 50, 0, "a 64 bit val 123456780abcdef0"
             , __LINE__, INT64_C(0x123456780abcdef0));
+
         if (sizeof(ptr) == 4) {
             ptr = (void *)0xdeadbeef;
             test_format("a 32 bit ptr %p", 50, 0, "a 32 bit ptr deadbeef", __LINE__, ptr);
-        } else if (sizeof(ptr) == 8) {
-            ptr = (void *)0x1000200030004000;
+        } else if (sizeof(void *) == 8) {
+            ptr = (void *) INT64_C(0x1000200030004000);
             test_format("a 64 bit ptr %p", 50, 0, "a 64 bit ptr 1000200030004000", __LINE__, ptr);
         } else {
             TEST_ASSERT(FALSE);
@@ -202,6 +203,12 @@ static void TestTraceAPI() {
 
         test_format("%vb", 100, 0, "41 42 43 [00000003]", __LINE__, "ABC", 3);
 
+        /* Null ptrs for strings, vectors  */
+        test_format("Null string - %s", 50, 0, "Null string - *NULL*", __LINE__, NULL);
+        test_format("Null string - %S", 50, 0, "Null string - *NULL*", __LINE__, NULL);
+        test_format("Null vector - %vc", 50, 0, "Null vector - *NULL* [00000002]", __LINE__, NULL, 2);
+        test_format("Null vector - %vC", 50, 0, "Null vector - *NULL* [00000002]", __LINE__, NULL, 2);
+        test_format("Null vector - %vd", 50, 0, "Null vector - *NULL* [00000002]", __LINE__, NULL, 2);
 
     }
 

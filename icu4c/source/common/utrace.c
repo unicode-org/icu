@@ -11,6 +11,7 @@
 
 #define   UTRACE_IMPL
 #include "unicode/utrace.h"
+#include "utracimp.h"
 #include "cstring.h"
 #include "uassert.h"
 
@@ -31,13 +32,41 @@ utrace_entry(int32_t fnNumber) {
 }
 
 
+static const char gExitFmt[]             = "Returns.";
+static const char gExitFmtValue[]        = "Returns %d.";
+static const char gExitFmtStatus[]       = "Returns.  Status = %d.";
+static const char gExitFmtValueStatus[]  = "Returns %d.  Status = %d.";
+static const char gExitFmtPtrStatus[]    = "Returns %d.  Status = %p.";
 
 U_CAPI void U_EXPORT2
 utrace_exit(int32_t fnNumber, int32_t returnType, ...) {
     if (pTraceExitFunc != NULL) {
-        va_list args;
+        va_list     args;
+        const char *fmt;
+
+        switch (returnType) {
+        case 0:
+            fmt = gExitFmt;
+            break;
+        case UTRACE_EXITV_I32:
+            fmt = gExitFmtValue;
+            break;
+        case UTRACE_EXITV_STATUS:
+            fmt = gExitFmtStatus;
+            break;
+        case UTRACE_EXITV_I32 | UTRACE_EXITV_STATUS:
+            fmt = gExitFmtValueStatus;
+            break;
+        case UTRACE_EXITV_PTR | UTRACE_EXITV_STATUS:
+            fmt = gExitFmtPtrStatus;
+            break;
+        default:
+            U_ASSERT(FALSE);
+            fmt = gExitFmt;
+        }
+
         va_start(args, returnType);
-        (*pTraceExitFunc)(gTraceContext, fnNumber, returnType, args);
+        (*pTraceExitFunc)(gTraceContext, fnNumber, fmt, args);
         va_end(args);
     }
 }
@@ -57,6 +86,28 @@ utrace_data(int32_t fnNumber, int32_t level, const char *fmt, ...) {
 
 static void outputChar(char c, char *outBuf, int32_t *outIx, int32_t capacity, int32_t indent) {
     int32_t i;
+    /* Check whether a start of line indenting is needed.  Three cases:
+     *   1.  At the start of the first line  (output index == 0).
+     *   2.  At the start of subsequent lines  (preceeding char in buffer == '\n')
+     *   3.  When preflighting buffer len (buffer capacity is exceeded), when
+     *       a \n is output.  Ideally we wouldn't do the indent until the following char
+     *       is received, but that won't work because there's no place to remember that
+     *       the preceding char was \n.  Meaning that we may overstimate the
+     *       buffer size needed.  No harm done.
+     */
+    if (*outIx==0 ||   /* case 1. */
+        c!='\n' && c!=0 && *outIx < capacity && outBuf[(*outIx)-1]=='\n' ||  /* case 2. */
+        c=='\n' && *outIx>=capacity)    /* case 3 */
+    {
+        /* At the start of a line.  Indent. */
+        for(i=0; i<indent; i++) {
+            if (*outIx < capacity) {
+                outBuf[*outIx] = ' ';
+            }
+            (*outIx)++;
+        }
+    }
+
     if (*outIx < capacity) {
         outBuf[*outIx] = c;
     }
@@ -65,16 +116,6 @@ static void outputChar(char c, char *outBuf, int32_t *outIx, int32_t capacity, i
          *  buffer, but do not update the length of the buffer, so that any
          *  following output will overwrite the null. */
         (*outIx)++;
-    }
-
-    /* Handle indenting at the start of lines */
-    if (c == '\n') {
-        for(i=0; i<indent; i++) {
-            if (*outIx < capacity) {
-                outBuf[*outIx] = ' ';
-            }
-            (*outIx)++;
-        }
     }
 }
 
@@ -261,7 +302,7 @@ utrace_format(char *outBuf, int32_t capacity, int32_t indent, const char *fmt, v
                 ptrPtr = (void **)i8Ptr;
                 vectorLen =(int32_t)va_arg(args, int32_t);
                 if (ptrPtr == NULL) {
-                    outputString("NULL", outBuf, &outIx, capacity, indent);
+                    outputString("*NULL* ", outBuf, &outIx, capacity, indent);
                 } else {
                     for (i=0; i<vectorLen || vectorLen==-1; i++) { 
                         switch (vectorType) {
@@ -340,41 +381,17 @@ utrace_format(char *outBuf, int32_t capacity, int32_t indent, const char *fmt, v
 }
 
 
-U_CAPI void U_EXPORT2 
-utrace_formatExit(char *outBuf, int32_t capacity, int32_t indent, 
-                                  int32_t fnNumber, int32_t argType, va_list args) {
-    int32_t      outIx = 0;
-    int32_t      intVal;
-    UBool        boolVal;
-    void        *ptrVal;
-    UErrorCode   status;
 
-    outputString(utrace_functionName(fnNumber), outBuf, &outIx, capacity, indent);
-    outputString(" returns", outBuf, &outIx, capacity, indent);
-    switch (argType & UTRACE_EXITV_MASK) {
-    case UTRACE_EXITV_I32:
-        outputChar(' ', outBuf, &outIx, capacity, indent);
-        intVal = (int32_t)va_arg(args, int32_t);
-        outputHexBytes(intVal, 8, outBuf, &outIx, capacity);
-        break;
-    case UTRACE_EXITV_PTR:
-        outputChar(' ', outBuf, &outIx, capacity, indent);
-        ptrVal = (void *)va_arg(args, void *);
-        outputPtrBytes(ptrVal, outBuf, &outIx, capacity);
-        break;
-    case UTRACE_EXITV_BOOL:
-        outputChar(' ', outBuf, &outIx, capacity, indent);
-        boolVal = (UBool)va_arg(args, int32_t);    /* gcc wants int, not UBool */
-        outputString(boolVal? "TRUE": "FALSE", outBuf, &outIx, capacity, indent);
-    }
 
-    outputString(".", outBuf, &outIx, capacity, indent);
-    if (argType & UTRACE_EXITV_STATUS) {
-        outputString("  Status = ", outBuf, &outIx, capacity, indent);
-        status = (UErrorCode)va_arg(args, UErrorCode);
-        outputString(u_errorName(status), outBuf, &outIx, capacity, indent);
-    }
-    outputChar(0, outBuf, &outIx, capacity, indent);
+U_CAPI int32_t U_EXPORT2
+utrace_formatA(char *outBuf, int32_t capacity,
+                int32_t indent, const char *fmt,  ...) {
+    int32_t retVal;
+    va_list args;
+    va_start(args, fmt ); 
+    retVal = utrace_format(outBuf, capacity, indent, fmt, args);
+    va_end(args);
+    return retVal;
 }
 
 

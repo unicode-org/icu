@@ -8613,16 +8613,8 @@ ucol_strcoll( const UCollator    *coll,
     UTRACE_ENTRY(UTRACE_UCOL_STRCOLL);
     if (UTRACE_LEVEL(UTRACE_VERBOSE)) {
       UTRACE_DATA3(UTRACE_VERBOSE, "coll=%p, source=%p, target=%p", coll, source, target);
-      int32_t actualLen = sourceLength;
-      if (actualLen==-1 && source!=NULL) {
-          actualLen = u_strlen(source);
-      }
-      UTRACE_DATA2(UTRACE_VERBOSE, "source string = %vh ", source, actualLen);
-      actualLen = targetLength;
-      if (actualLen==-1 && target!=NULL) {
-          actualLen = u_strlen(target);
-      }
-      UTRACE_DATA2(UTRACE_VERBOSE, "target string = %vh ", target, actualLen);
+      UTRACE_DATA2(UTRACE_VERBOSE, "source string = %vh ", source, sourceLength);
+      UTRACE_DATA2(UTRACE_VERBOSE, "target string = %vh ", target, targetLength);
     }
 
     UErrorCode status = U_ZERO_ERROR;

@@ -31,21 +31,20 @@ U_CDECL_BEGIN
  * @draft ICU 2.8
  */
 
-enum UTraceLevel {
-    /** Disable all tracing */
+typedef enum UTraceLevel {
+    /** Disable all tracing  @draft ICU 2.8*/
     UTRACE_OFF=-1,
-    /** Trace error conditions only */
+    /** Trace error conditions only  @draft ICU 2.8*/
     UTRACE_ERROR=0,
-    /** Trace errors and warnings */
+    /** Trace errors and warnings  @draft ICU 2.8*/
     UTRACE_WARNING=3,
-    /** Trace opens and closes of ICU services */
+    /** Trace opens and closes of ICU services  @draft ICU 2.8*/
     UTRACE_OPEN_CLOSE=5,
-    /** Trace an intermediate number of ICU operations */
+    /** Trace an intermediate number of ICU operations  @draft ICU 2.8*/
     UTRACE_INFO=7,
-    /** Trace the maximum number of ICU operations */
+    /** Trace the maximum number of ICU operations  @draft ICU 2.8*/
     UTRACE_VERBOSE=9
-};
-typedef enum UTraceLevel UTraceLevel;
+} UTraceLevel;
 
 
 /**
@@ -89,7 +88,7 @@ UTraceEntry(const void *context, int32_t fnNumber);
   */
 typedef void U_CALLCONV
 UTraceExit(const void *context, int32_t fnNumber, 
-           int32_t argType, va_list args);
+           const char *fmt, va_list args);
 
 /**
   *  Type signature for the trace function to be called from within an ICU function
@@ -109,6 +108,12 @@ UTraceData(const void *context, int32_t fnNumber, int32_t level,
   *  of the use of ICU.  Passing a NULL pointer for a tracing function
   *  is allowed, and inhibits tracing action at points where that function
   *  would be called.
+  *  <p>
+  *  Tracing and Threads:  Tracing functions are global to a process, and
+  *  will be called in response to ICU operations performed by any
+  *  thread.  If tracing of an individual thread is desired, the
+  *  tracing functions must themselves filter by checking that the
+  *  current thread is the desired thread.
   *
   *  @param context an uninterpretted pointer.  Whatever is passed in
   *                 here will in turn be passed to each of the tracing
@@ -244,8 +249,8 @@ utrace_getFunctions(const void **context,
 /**
   *  Trace output Formatter.  An application's UTraceData tracing functions may call
   *                 back to this function to format the trace output in a
-  *                 human readable form.  Note that a UTraceData function is not
-  *                 required to format the data;  it could, for example, save it in
+  *                 human readable form.  Note that a UTraceData function may choose
+  *                 to not format the data;  it could, for example, save it in
   *                 in the raw form it was received (more compact), leaving
   *                 formatting for a later trace analyis tool.
   *  @param outBuf  pointer to a buffer to receive the formatted output.  Output
@@ -264,56 +269,28 @@ U_CAPI int32_t U_EXPORT2
 utrace_format(char *outBuf, int32_t capacity,
               int32_t indent, const char *fmt,  va_list args);
 
-
-/** 
- *   Traced Function Exit return types.  
- *   Flags indicating the number and types of varargs included in a call
- *   to a UTraceExit function.
- *   Bits 0-3:  The function return type.  First variable param.
- *   Bit    4:  Flag for presence of U_ErrorCode status param.
- *   @draft ICU 2.8
- */
-enum UTraceExitVal {
-    /** The traced function returns no value */
-    UTRACE_EXITV_NONE   = 0,
-    /** The traced function returns an int32_t, or compatible, type. */
-    UTRACE_EXITV_I32    = 1,
-    /** The traced function returns a pointer */
-    UTRACE_EXITV_PTR    = 2,
-    /** The traced function returns a UBool */
-    UTRACE_EXITV_BOOL   = 3,
-    /** Mask to extract the return type values from a UTraceExitVal */
-    UTRACE_EXITV_MASK   = 0xf,
-    /** Bit indicating that the traced function includes a UErrorCode parameter */
-    UTRACE_EXITV_STATUS = 0x10
-};
-typedef enum UTraceExitVal UTraceExitVal;
-
-
 /**
-  *  Trace formatter for UTraceExit, function exit tracing.
-  *  UTraceExit may optionally receive two data items:  a function return value
-  *  and a UErrorCode status value.
-  *
-  *  @param outBuf   pointer to a buffer to receive the formatted output.Output
+  *  Trace output Formatter.  An application's UTraceData tracing functions may call
+  *                 this function to format any additional trace data, beyond that
+  *                 provided by default, in human readable form with the same
+  *                 formatting conventions used by utrace_format().
+  *  @param outBuf  pointer to a buffer to receive the formatted output.  Output
   *                 will be nul terminated if there is space in the buffer -
   *                 if the length of the requested output < the output buffer size.
   *  @param capacity  Length of the output buffer.
   *  @param indent  Number of spaces to indent the output.  Intended to allow
   *                 data displayed from nested functions to be indented for readability.
-  *  @param fnNumber  An index specifying the function that is exiting.
-  *  @param argType Flags specifying the number and types of data values.
-  *  @param args    Data to be formatted.  If argType parameter indicates that a function
-  *                 return value exists, it will be the first varargs param.  The
-  *                 function's UErrorCode status will be next, when applicable.
+  *  @param fmt     Format specification for the data to output
+  *  @param ...     Data to be formatted.
   *  @return        Length of formatted output, including the terminating NUL.
   *                 If buffer capacity is insufficient, the required capacity is returned. 
   *  @draft ICU 2.8
   */
+U_CAPI int32_t U_EXPORT2
+utrace_formatA(char *outBuf, int32_t capacity,
+              int32_t indent, const char *fmt,  ...);
 
-U_CAPI void U_EXPORT2
-utrace_formatExit(char *outBuf, int32_t capacity, int32_t indent, 
-                                  int32_t fnNumber, int32_t argtype, va_list args);
+
 
 /* Trace function numbers --------------------------------------------------- */
 
@@ -331,8 +308,9 @@ utrace_functionName(int32_t fnNumber);
 
 /**
  *  These are the ICU functions that will be traced when tracing is enabled.
+ *  @draft ICU 2.8
  */
-enum UTraceFunctionNumber {
+typedef enum UTraceFunctionNumber {
     UTRACE_FUNCTION_START=0,
     UTRACE_U_INIT=UTRACE_FUNCTION_START,
     UTRACE_U_CLEANUP,
@@ -353,8 +331,7 @@ enum UTraceFunctionNumber {
     UTRACE_UCOL_NEXTSORTKEYPART,
     UTRACE_UCOL_STRCOLLITER,
     UTRACE_COLLATION_LIMIT
-};
-typedef enum UTraceFunctionNumber UTraceFunctionNumber;
+} UTraceFunctionNumber;
 
 U_CDECL_END
 

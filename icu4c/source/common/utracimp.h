@@ -127,6 +127,31 @@ utrace_level;
     }
 
 
+/** 
+ *   Traced Function Exit return types.  
+ *   Flags indicating the number and types of varargs included in a call
+ *   to a UTraceExit function.
+ *   Bits 0-3:  The function return type.  First variable param.
+ *   Bit    4:  Flag for presence of U_ErrorCode status param.
+ *   @internal
+ */
+typedef enum UTraceExitVal {
+    /** The traced function returns no value  @internal */
+    UTRACE_EXITV_NONE   = 0,
+    /** The traced function returns an int32_t, or compatible, type.  @internal */
+    UTRACE_EXITV_I32    = 1,
+    /** The traced function returns a pointer  @internal */
+    UTRACE_EXITV_PTR    = 2,
+    /** The traced function returns a UBool  @internal */
+    UTRACE_EXITV_BOOL   = 3,
+    /** Mask to extract the return type values from a UTraceExitVal  @internal */
+    UTRACE_EXITV_MASK   = 0xf,
+    /** Bit indicating that the traced function includes a UErrorCode parameter  @internal */
+    UTRACE_EXITV_STATUS = 0x10
+} UTraceExitVal;
+
+
+
 /**
  * Trace statement for each exit point of a function that has a UTRACE_ENTRY()
  * statement.
