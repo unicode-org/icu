@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/11/14 19:30:45 $ 
-* $Revision: 1.52 $
+* $Date: 2002/11/22 22:53:13 $ 
+* $Revision: 1.53 $
 *
 *******************************************************************************
 */
@@ -2893,6 +2893,7 @@ public final class UCharacter
      * @see UProperty
      * @see UProperty.NameChoice
      * @since ICU 2.4
+     * @draft 2.4
      */
     public static String getPropertyName(int property,
                                          int nameChoice) {
@@ -2915,6 +2916,7 @@ public final class UCharacter
      *
      * @see UProperty
      * @since ICU 2.4
+     * @draft 2.4
      */
     public static int getPropertyEnum(String propertyAlias) {
         return PNAMES_.getPropertyEnum(propertyAlias);
@@ -2959,6 +2961,7 @@ public final class UCharacter
      * @see UProperty
      * @see UProperty.NameChoice
      * @since ICU 2.4
+     * @draft 2.4
      */
     public static String getPropertyValueName(int property,
                                               int value,
@@ -2988,6 +2991,7 @@ public final class UCharacter
      *
      * @see UProperty
      * @since ICU 2.4
+     * @draft 2.4
      */
     public static int getPropertyValueEnum(int property,
                                            String valueAlias) {
