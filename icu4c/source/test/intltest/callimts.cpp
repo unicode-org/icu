@@ -55,17 +55,18 @@ CalendarLimitTest::test(UDate millis, Calendar* cal, DateFormat* fmt)
  
 // -------------------------------------
 
-double
-CalendarLimitTest::nextDouble(double a)
-{
-    return uprv_nextDouble(a, TRUE);
-}
-
-double
-CalendarLimitTest::previousDouble(double a)
-{
-    return uprv_nextDouble(a, FALSE);
-}
+// bug 986c: deprecate nextDouble/previousDouble
+//|double
+//|CalendarLimitTest::nextDouble(double a)
+//|{
+//|    return uprv_nextDouble(a, TRUE);
+//|}
+//|
+//|double
+//|CalendarLimitTest::previousDouble(double a)
+//|{
+//|    return uprv_nextDouble(a, FALSE);
+//|}
 
 UBool
 CalendarLimitTest::withinErr(double a, double b, double err)
@@ -102,10 +103,14 @@ CalendarLimitTest::TestCalendarLimit()
     UDate VERY_EARLY_MILLIS = - 4503599627370495.0;
     UDate VERY_LATE_MILLIS  =   4503599627370495.0;
 
+    // I am removing the previousDouble and nextDouble calls below for
+    // two reasons: 1. As part of jitterbug 986, I am deprecating
+    // these methods and removing calls to them.  2. This test is a
+    // non-critical boundary behavior test.
     test(VERY_EARLY_MILLIS, cal, fmt);
-    test(previousDouble(VERY_EARLY_MILLIS), cal, fmt);
+    //test(previousDouble(VERY_EARLY_MILLIS), cal, fmt);
     test(VERY_LATE_MILLIS, cal, fmt);
-    test(nextDouble(VERY_LATE_MILLIS), cal, fmt);
+    //test(nextDouble(VERY_LATE_MILLIS), cal, fmt);
     delete fmt;
 }
 
