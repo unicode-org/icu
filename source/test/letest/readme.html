@@ -1,0 +1,74 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Eric Mader">
+   <meta name="GENERATOR" content="Mozilla/4.72 [en] (Windows NT 5.0; U) [Netscape]">
+   <title>Readme file for letest and gendata</title>
+</head>
+<body>
+
+<h2>
+What are letest and gendata?</h2>
+letest is a program you can use to verify that you have built and installed
+the ICU LayoutEngine correctly. The test is not comprehensive, it just
+verifies that the results of laying out some Devanagari, Arabic and Thai
+text are as expected. Once this test has passed, you can use the ICU LayoutEngine
+in your application knowing that it has been correctly installed and that
+the basic functionality is in place.
+<p>gendata is a program that is used by the ICU team to build the source
+file testdata.cpp, which contains the expected results of running letest.
+Unless you have changed your copy of the LayoutEngine and want to validate
+the changes on other platforms, there's no reason for you to run this program.
+<p>(The ICU team first runs a Windows application which uses the ICU LayoutEngine
+to display the text that letest uses. Once it has been verified that the
+text is displayed correctly, gendata is run to produce testdata.cpp, and
+then letest is run on Windows to verify that letest still works with the
+new data.)
+<br>&nbsp;
+<h2>
+How do I build letest?</h2>
+First, you need to build ICU, including the LayoutEngine.
+<p>On Windows, the layout project should be listed as a dependency of all,
+so layout will build when you build all. If it doesn't for some reason,
+just select the layout project in the project toolbar and build it.
+<p>On UNIX systems, you need to add the "--enable-layout=yes" option when
+you invoke the runConfigureICU script. When you've do that, layout should
+build when you do "make all install"
+<p>To build letest on Windows, just open the letest project in &lt;icu>\source\test\letest
+and build it. On UNIX systems, connect to &lt;top-build-dir>/test/letest
+and do "make all"
+<br>&nbsp;
+<h2>
+How do I run letest?</h2>
+Before you can run letest, you'll need to get the fonts it uses. For legal
+reasons, we can't include them with ICU, but you can get them for free
+from the web. Do do this, you'll need access to a computer running Windows.
+Here's how to get the fonts:
+<p>Download the 1.3 version of the JDK from the <a href="http://www7b.boulder.ibm.com/wsdd/wspvtindex.html">IBM
+WebSphere preview technologies</a> page. From this page, follow the "Download"
+link on the right had side. You'll need to register with them if you haven't
+downloaded before. Download and install the "Runtime Environment Package."
+You'll need three fonts from this package. If you've let the installer
+use it's defaults, the fonts will be in C:\Program Files\IBM\Java13\jre\lib\fonts.
+The files you want are "Devamt.ttf" "LucidaSansRegular.ttf" and "Thornburi.ttf"
+Copy these to the directory from which you'll run letest.
+<p>There's still one more font to get. Go to the Microsoft <a href="http://www.microsoft.com/typography/fontpack/default.htm">TrueType
+core fonts for the Web</a> page and download the "Times New Roman" font.
+This will download an installer program, called "Times32.exe" which will
+install the Times New Roman fonts in your fonts folder. (If you've already
+got these fonts in you fonts folder, you may want to move them to another
+folder before you install these fonts.) After you run the installer program,
+it will add the Times Roman fonts to your fonts folder. Open the fonts
+folder and copy the "Times New Roman" font (the file name will be "Times.TTF")
+to the directory from which you'll run letest.
+<p>That's it! Now all you have to do is run letest (CTRL+F5 in Visual C++,
+or "./letest" in UNIX) If&nbsp; everything's OK you should see something
+like this:
+<blockquote><tt>Test 0, font = Devamt.ttf... passed.</tt>
+<br><tt>Test 1, font = Times.TTF... passed.</tt>
+<br><tt>Test 2, font = LucidaSansRegular.ttf... passed.</tt>
+<br><tt>Test 3, font = Thonburi.ttf... passed.</tt></blockquote>
+
+</body>
+</html>
