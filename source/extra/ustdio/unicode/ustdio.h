@@ -99,18 +99,30 @@
     APIs.
  * The width '*' parameter for all scanf formats, including scanset, needs
     better testing. This prevents buffer overflows.
+ * u_fgetc() and u_fungetc() should use UChar32 instead of UChar, or at
+    least 32-bit versions should be available.
  * More testing is needed.
 */
 
 
+/**
+ * When an end of file is encountered, this value can be returned.
+ * @see u_fgetc
+ * @draft
+ */
 #define U_EOF 0xFFFF
 
-/** Forward declaration of a Unicode-aware file */
+/** Forward declaration of a Unicode-aware file @draft */
 typedef struct UFILE UFILE;
 
-/** Enum for which direction of stream a transliterator applies to. */
+/**
+ * Enum for which direction of stream a transliterator applies to.
+ * @see u_fsettransliterator
+ * @draft
+ */
 typedef enum { 
-   U_READ = 1, U_WRITE = 2, 
+   U_READ = 1,
+   U_WRITE = 2, 
    U_READWRITE =3  /* == (U_READ | U_WRITE) */ 
 } UFileDirection;
 
