@@ -102,6 +102,37 @@ ucol_next(UCollationElements *elems,
 
   int32_t result;
   UCOL_GETNEXTCE(result, elems->collator_, elems->iteratordata_, status);
+  /*
+  if ((elems->iteratordata_).CEpos > (elems->iteratordata_).toReturn) 
+  {                       
+    result = *((elems->iteratordata_).toReturn++);                                      
+    if ((elems->iteratordata_).CEpos == (elems->iteratordata_).toReturn)
+      (elems->iteratordata_).CEpos = (elems->iteratordata_).toReturn = 
+      (elems->iteratordata_).CEs; 
+  } 
+  else 
+    if ((elems->iteratordata_).pos < (elems->iteratordata_).len) 
+    {                        
+      UChar ch = *(elems->iteratordata_).pos++;     
+      if (ch <= 0xFF)
+        (result) = (elems->collator_)->latinOneMapping[ch];                                          
+      else
+        (result) = ucmp32_get((elems->collator_)->mapping, ch);                                      
+                                                                                    
+      if((result) >= UCOL_NOT_FOUND) 
+      {
+        (result) = getSpecialCE((elems->collator_), (result), 
+                                &(elems->iteratordata_), (status));        
+        if ((result) == UCOL_NOT_FOUND)
+          (result) = ucol_getNextUCA(ch, &(elems->iteratordata_), (status));                                                                            
+      }                                                                               
+    } 
+    else
+      (result) = UCOL_NO_MORE_CES;                                                     
+  */
+    
+  if (result == UCOL_NO_MORE_CES)
+    result = UCOL_NULLORDER;
   return result;
 }
 
@@ -113,28 +144,28 @@ ucol_previous(UCollationElements *elems,
     return UCOL_NULLORDER;
 
   int32_t result;
-  /* UCOL_GETPREVCE(result, elems->collator_, elems->iteratordata_, 
-                 elems->length_, status); */
+  UCOL_GETPREVCE(result, elems->collator_, elems->iteratordata_, 
+                 elems->length_, status);
 
-  /* synwee : to be removed, only for testing */
+  /* synwee : to be removed, only for testing 
   const UCollator   *coll  = elems->collator_;
         collIterate *data  = &(elems->iteratordata_);
         int32_t     length = elems->length_;
 
   if (data->CEpos > data->CEs) 
-  {                                               
-    (result) = *(data->toReturn --);                                           
+  {              
+    data->toReturn --;
+    (result) = *(data->toReturn);                                           
     if (data->CEs == data->toReturn)                                
-      data->CEpos = data->toReturn = data->CEs;                                                                        
+      data->CEpos = data->toReturn = data->CEs; 
   }                                                                          
   else 
   {                    
-    /* 
-    pointers are always at the next position to be retrieved for getnextce 
+    /* pointers are always at the next position to be retrieved for getnextce 
     for every first previous step after a next, value returned will the same 
     as the last next value
     */
-    if (data->len - data->pos == length)
+    /*if (data->len - data->pos == length)
       (result) = UCOL_NO_MORE_CES;                                                                                                                    
     else 
     {                  
@@ -161,7 +192,10 @@ ucol_previous(UCollationElements *elems,
           (result) = ucol_getPrevUCA(ch, data, length, status);                                      
       }                                                                      
     }                                                                        
-  }                     
+  }   */
+
+  if (result == UCOL_NO_MORE_CES)
+    result = UCOL_NULLORDER;
 
   return result;
 }
