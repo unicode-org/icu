@@ -91,6 +91,12 @@ typedef enum _UTransDirection {
  * details.
  *
  * <p>contextStart <= start <= limit <= contextLimit
+ *
+ * <p>Note: All index values in this structure must be at code point
+ * boundaries.  That is, none of them may occur between two code units
+ * of a surrogate pair.  If any index does split a surrogate pair,
+ * results are unspecified.
+ *
  * @stable
  */
 typedef struct _UTransPosition {

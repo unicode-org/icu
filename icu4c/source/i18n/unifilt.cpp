@@ -14,7 +14,8 @@ U_NAMESPACE_BEGIN
 
 /**
  * Default implementation of UnicodeMatcher::matches() for Unicode
- * filters.  Matches a single 16-bit code unit at offset.
+ * filters.  Matches a single code point at offset (either one or
+ * two 16-bit code units).
  */
 UMatchDegree UnicodeFilter::matches(const Replaceable& text,
                                     int32_t& offset,
