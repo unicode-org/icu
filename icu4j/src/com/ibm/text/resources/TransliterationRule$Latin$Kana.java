@@ -12,7 +12,7 @@ public class TransliterationRule$Latin$Kana extends ListResourceBundle {
             // Uppercase Latin to katakana
 
             { "Rule", ""
-                //# $Revision: 1.6 $
+                //# $Revision: 1.7 $
                 // Transliteration rules for Japanese Hiragana and Katakana to
                 // romaji
                 // lower case roman generates hiragana.
@@ -375,8 +375,8 @@ public class TransliterationRule$Latin$Kana extends ListResourceBundle {
                 + "CHI>{TI};"
                 + "CH>{TI}|~Y;"
 
-                + "C[I>|S;"
-                + "C[E>|S;"
+                + "C(I>|S;"
+                + "C(E>|S;"
 
                 + "DA>{DA};"
                 + "DI>{DE}{~I};"
@@ -422,10 +422,10 @@ public class TransliterationRule$Latin$Kana extends ListResourceBundle {
                 + "MO>{MO};"
                 + "MY>{MI}|~Y;"
                 
-                + "M[P>{^N};"
-                + "M[B>{^N};"
-                + "M[F>{^N};"
-                + "M[V>{^N};"
+                + "M(P>{^N};"
+                + "M(B>{^N};"
+                + "M(F>{^N};"
+                + "M(V>{^N};"
 
                 + "NA>{NA};"
                 + "NI>{NI};"
@@ -509,31 +509,31 @@ public class TransliterationRule$Latin$Kana extends ListResourceBundle {
 
                 // DOUBLE CONSONANTS
                 
-                + "B[B>{~TU};"
-                + "C[K>{~TU};"
-                + "C[C>{~TU};"
-                + "C[Q>{~TU};"
-                + "D[D>{~TU};"
-                + "F[F>{~TU};"
-                + "G[G>{~TU};"
-                + "H[H>{~TU};"
-                + "J[J>{~TU};"
-                + "K[K>{~TU};"
-                + "L[L>{~TU};"
-                + "M[M>{~TU};"
-                + "N[N>{~TU};"
-                + "P[P>{~TU};"
-                + "Q[Q>{~TU};"
-                + "R[R>{~TU};"
-                + "S[SH>{~TU};"
-                + "S[S>{~TU};"
-                + "T[CH>{~TU};"
-                + "T[T>{~TU};"
-                + "V[V>{~TU};"
-                + "W[W>{~TU};"
-                + "X[X>{~TU};"
-                + "Y[Y>{~TU};"
-                + "Z[Z>{~TU};"
+                + "B(B>{~TU};"
+                + "C(K>{~TU};"
+                + "C(C>{~TU};"
+                + "C(Q>{~TU};"
+                + "D(D>{~TU};"
+                + "F(F>{~TU};"
+                + "G(G>{~TU};"
+                + "H(H>{~TU};"
+                + "J(J>{~TU};"
+                + "K(K>{~TU};"
+                + "L(L>{~TU};"
+                + "M(M>{~TU};"
+                + "N(N>{~TU};"
+                + "P(P>{~TU};"
+                + "Q(Q>{~TU};"
+                + "R(R>{~TU};"
+                + "S(SH>{~TU};"
+                + "S(S>{~TU};"
+                + "T(CH>{~TU};"
+                + "T(T>{~TU};"
+                + "V(V>{~TU};"
+                + "W(W>{~TU};"
+                + "X(X>{~TU};"
+                + "Y(Y>{~TU};"
+                + "Z(Z>{~TU};"
                 
                 // ########################################
                 // CATCH MISSING VOWELS!
@@ -772,41 +772,41 @@ public class TransliterationRule$Latin$Kana extends ListResourceBundle {
                 
                 // DOUBLED LETTERS
 
-                + "N''<{^N}[{^A};"
-                + "N''<{^N}[{^I};"
-                + "N''<{^N}[{^U};"
-                + "N''<{^N}[{^E};"
-                + "N''<{^N}[{^O};"
-                + "N''<{^N}[{NA};"
-                + "N''<{^N}[{NI};"
-                + "N''<{^N}[{NU};"
-                + "N''<{^N}[{NE};"
-                + "N''<{^N}[{NO};"
-                + "N''<{^N}[{YA};"
-                + "N''<{^N}[{YU};"
-                + "N''<{^N}[{YO};"
-                + "N''<{^N}[{^N};"
+                + "N''<{^N}({^A};"
+                + "N''<{^N}({^I};"
+                + "N''<{^N}({^U};"
+                + "N''<{^N}({^E};"
+                + "N''<{^N}({^O};"
+                + "N''<{^N}({NA};"
+                + "N''<{^N}({NI};"
+                + "N''<{^N}({NU};"
+                + "N''<{^N}({NE};"
+                + "N''<{^N}({NO};"
+                + "N''<{^N}({YA};"
+                + "N''<{^N}({YU};"
+                + "N''<{^N}({YO};"
+                + "N''<{^N}({^N};"
                 + "N<{^N};"
                 
-                + "N<{~TU}[{N-START};"
-                + "M<{~TU}[{M-START};"
-                + "W<{~TU}[{W-START};"
-                + "Y<{~TU}[{Y-START};"
-                + "G<{~TU}[{G-START};"
-                + "K<{~TU}[{K-START};"
-                + "Z<{~TU}[{Z-START};"
-                + "J<{~TU}[{J-START};"
-                + "S<{~TU}[{S-START};"
-                + "D<{~TU}[{D-START};"
-                + "T<{~TU}[{T-START};"
-                + "B<{~TU}[{B-START};"
-                + "P<{~TU}[{P-START};"
-                + "H<{~TU}[{H-START};"
-                + "F<{~TU}[{F-START};"
-                + "R<{~TU}[{R-START};"
-                + "V<{~TU}[{V-START};"
+                + "N<{~TU}({N-START};"
+                + "M<{~TU}({M-START};"
+                + "W<{~TU}({W-START};"
+                + "Y<{~TU}({Y-START};"
+                + "G<{~TU}({G-START};"
+                + "K<{~TU}({K-START};"
+                + "Z<{~TU}({Z-START};"
+                + "J<{~TU}({J-START};"
+                + "S<{~TU}({S-START};"
+                + "D<{~TU}({D-START};"
+                + "T<{~TU}({T-START};"
+                + "B<{~TU}({B-START};"
+                + "P<{~TU}({P-START};"
+                + "H<{~TU}({H-START};"
+                + "F<{~TU}({F-START};"
+                + "R<{~TU}({R-START};"
+                + "V<{~TU}({V-START};"
 
-                + "A<{^A};" // MOVED THIS BLOCK DOWN [LIU]
+                + "A<{^A};" // MOVED THIS BLOCK DOWN {aliu}
                 + "I<{^I};"
                 + "U<{^U};"
                 + "E<{^E};"
@@ -829,11 +829,11 @@ public class TransliterationRule$Latin$Kana extends ListResourceBundle {
                 
                 // LENGTH MARK. LATER, COULD USE CIRCUMFLEX
 
-                + "A<A]{LONG};" // LIU
-                + "E<E]{LONG};" // LIU
-                + "I<I]{LONG};" // LIU
-                + "O<O]{LONG};" // LIU
-                + "U<U]{LONG};" // LIU
+                + "A<A){LONG};" // LIU
+                + "E<E){LONG};" // LIU
+                + "I<I){LONG};" // LIU
+                + "O<O){LONG};" // LIU
+                + "U<U){LONG};" // LIU
 
                 //#######################################
                 // HIRAGANA
@@ -852,8 +852,8 @@ public class TransliterationRule$Latin$Kana extends ListResourceBundle {
                 + "chi>{ti};"
                 + "ch>{ti}|~y;"
 
-                + "c[i>|s;"
-                + "c[e>|s;"
+                + "c(i>|s;"
+                + "c(e>|s;"
 
                 + "da>{da};"
                 + "di>{de}{~i};"
@@ -899,10 +899,10 @@ public class TransliterationRule$Latin$Kana extends ListResourceBundle {
                 + "mo>{mo};"
                 + "my>{mi}|~y;"
                 
-                + "m[p>{^n};"
-                + "m[b>{^n};"
-                + "m[f>{^n};"
-                + "m[v>{^n};"
+                + "m(p>{^n};"
+                + "m(b>{^n};"
+                + "m(f>{^n};"
+                + "m(v>{^n};"
 
                 + "na>{na};"
                 + "ni>{ni};"
@@ -986,31 +986,31 @@ public class TransliterationRule$Latin$Kana extends ListResourceBundle {
 
                 // Double Consonants
                 
-                + "b[b>{~tu};"
-                + "c[k>{~tu};"
-                + "c[c>{~tu};"
-                + "c[q>{~tu};"
-                + "d[d>{~tu};"
-                + "f[f>{~tu};"
-                + "g[g>{~tu};"
-                + "h[h>{~tu};"
-                + "j[j>{~tu};"
-                + "k[k>{~tu};"
-                + "l[l>{~tu};"
-                + "m[m>{~tu};"
-                + "n[n>{~tu};"
-                + "p[p>{~tu};"
-                + "q[q>{~tu};"
-                + "r[r>{~tu};"
-                + "s[sh>{~tu};"
-                + "s[s>{~tu};"
-                + "t[ch>{~tu};"
-                + "t[t>{~tu};"
-                + "v[v>{~tu};"
-                + "w[w>{~tu};"
-                + "x[x>{~tu};"
-                + "y[y>{~tu};"
-                + "z[z>{~tu};"
+                + "b(b>{~tu};"
+                + "c(k>{~tu};"
+                + "c(c>{~tu};"
+                + "c(q>{~tu};"
+                + "d(d>{~tu};"
+                + "f(f>{~tu};"
+                + "g(g>{~tu};"
+                + "h(h>{~tu};"
+                + "j(j>{~tu};"
+                + "k(k>{~tu};"
+                + "l(l>{~tu};"
+                + "m(m>{~tu};"
+                + "n(n>{~tu};"
+                + "p(p>{~tu};"
+                + "q(q>{~tu};"
+                + "r(r>{~tu};"
+                + "s(sh>{~tu};"
+                + "s(s>{~tu};"
+                + "t(ch>{~tu};"
+                + "t(t>{~tu};"
+                + "v(v>{~tu};"
+                + "w(w>{~tu};"
+                + "x(x>{~tu};"
+                + "y(y>{~tu};"
+                + "z(z>{~tu};"
                 
                 // ########################################
                 // catch missing vowels!
@@ -1249,41 +1249,41 @@ public class TransliterationRule$Latin$Kana extends ListResourceBundle {
                 
                 // Doubled letters
 
-                + "n''<{^n}[{^a};"
-                + "n''<{^n}[{^i};"
-                + "n''<{^n}[{^u};"
-                + "n''<{^n}[{^e};"
-                + "n''<{^n}[{^o};"
-                + "n''<{^n}[{na};"
-                + "n''<{^n}[{ni};"
-                + "n''<{^n}[{nu};"
-                + "n''<{^n}[{ne};"
-                + "n''<{^n}[{no};"
-                + "n''<{^n}[{ya};"
-                + "n''<{^n}[{yu};"
-                + "n''<{^n}[{yo};"
-                + "n''<{^n}[{^n};"
+                + "n''<{^n}({^a};"
+                + "n''<{^n}({^i};"
+                + "n''<{^n}({^u};"
+                + "n''<{^n}({^e};"
+                + "n''<{^n}({^o};"
+                + "n''<{^n}({na};"
+                + "n''<{^n}({ni};"
+                + "n''<{^n}({nu};"
+                + "n''<{^n}({ne};"
+                + "n''<{^n}({no};"
+                + "n''<{^n}({ya};"
+                + "n''<{^n}({yu};"
+                + "n''<{^n}({yo};"
+                + "n''<{^n}({^n};"
                 + "n<{^n};"
                 
-                + "n<{~tu}[{n-start};"
-                + "m<{~tu}[{m-start};"
-                + "w<{~tu}[{w-start};"
-                + "y<{~tu}[{y-start};"
-                + "g<{~tu}[{g-start};"
-                + "k<{~tu}[{k-start};"
-                + "z<{~tu}[{z-start};"
-                + "j<{~tu}[{j-start};"
-                + "s<{~tu}[{s-start};"
-                + "d<{~tu}[{d-start};"
-                + "t<{~tu}[{t-start};"
-                + "b<{~tu}[{b-start};"
-                + "p<{~tu}[{p-start};"
-                + "h<{~tu}[{h-start};"
-                + "f<{~tu}[{f-start};"
-                + "r<{~tu}[{r-start};"
-                + "v<{~tu}[{v-start};"
+                + "n<{~tu}({n-start};"
+                + "m<{~tu}({m-start};"
+                + "w<{~tu}({w-start};"
+                + "y<{~tu}({y-start};"
+                + "g<{~tu}({g-start};"
+                + "k<{~tu}({k-start};"
+                + "z<{~tu}({z-start};"
+                + "j<{~tu}({j-start};"
+                + "s<{~tu}({s-start};"
+                + "d<{~tu}({d-start};"
+                + "t<{~tu}({t-start};"
+                + "b<{~tu}({b-start};"
+                + "p<{~tu}({p-start};"
+                + "h<{~tu}({h-start};"
+                + "f<{~tu}({f-start};"
+                + "r<{~tu}({r-start};"
+                + "v<{~tu}({v-start};"
 
-                + "a<{^a};" // Moved this block down [LIU]
+                + "a<{^a};" // Moved this block down {aliu}
                 + "i<{^i};"
                 + "u<{^u};"
                 + "e<{^e};"
@@ -1306,11 +1306,11 @@ public class TransliterationRule$Latin$Kana extends ListResourceBundle {
                 
                 // length mark. Later, could use circumflex
 
-                + "a<a]{long};" // Liu
-                + "e<e]{long};" // Liu
-                + "i<i]{long};" // Liu
-                + "o<o]{long};" // Liu
-                + "u<u]{long};" // Liu
+                + "a<a){long};" // Liu
+                + "e<e){long};" // Liu
+                + "i<i){long};" // Liu
+                + "o<o){long};" // Liu
+                + "u<u){long};" // Liu
 
                 //#######################################
                 // Non-shared stuff goes here

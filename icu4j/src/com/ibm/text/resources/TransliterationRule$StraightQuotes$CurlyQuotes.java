@@ -11,8 +11,8 @@ public class TransliterationRule$StraightQuotes$CurlyQuotes extends ListResource
             {   "Rule",
                 // Rewritten using character codes [LIU]
                 "white=[[:Zs:][:Zl:][:Zp:]];"
-                + "black=[^[:Zs:][:Zl:][:Zp:]];"
-                + "open=[[:Ps:]];"
+                + "black=[^{white}];"
+                + "open=[:Ps:];"
                 + "dquote=\";"
 
                 + "lAng=\u3008;"
@@ -43,15 +43,15 @@ public class TransliterationRule$StraightQuotes$CurlyQuotes extends ListResource
                 + "{rquote}{rquote}>{rdquote};"
 
                 //smart single quotes
-                + "{white}]''>{lquote};"
-                + "{open}]''>{lquote};"
-                + "{black}]''>{rquote};"
+                + "{white})''>{lquote};"
+                + "{open})''>{lquote};"
+                + "{black})''>{rquote};"
                 + "''>{lquote};"
 
                 //smart doubles
-                + "{white}]{dquote}>{ldquote};"
-                + "{open}]{dquote}>{ldquote};"
-                + "{black}]{dquote}>{rdquote};"
+                + "{white}){dquote}>{ldquote};"
+                + "{open}){dquote}>{ldquote};"
+                + "{black}){dquote}>{rdquote};"
                 + "{dquote}>{ldquote};"
 
                 // join single guillemets
@@ -61,7 +61,7 @@ public class TransliterationRule$StraightQuotes$CurlyQuotes extends ListResource
                 + "'<<'>{ldguill};"
 
                 // prevent double spaces
-                + " ] >;"
+                + "\\ )\\ >;"
 
                 // join hyphens into dash
                 + "-->{mdash};"

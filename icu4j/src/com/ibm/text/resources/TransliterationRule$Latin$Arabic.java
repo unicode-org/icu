@@ -60,11 +60,11 @@ public class TransliterationRule$Latin$Arabic extends ListResourceBundle {
 
                 // convert English to Arabic
                 "Arabic>"+
-                "\u062a\u062a\u0645\u062a\u0639\u0020"+
-                "\u0627\u0644\u0644\u063a\u0629\u0020"+
-                "\u0627\u0644\u0639\u0631\u0628\u0628\u064a\u0629\u0020"+
-                "\u0628\u0628\u0646\u0638\u0645\u0020"+
-                "\u0643\u062a\u0627\u0628\u0628\u064a\u0629\u0020"+
+                "\u062a\u062a\u0645\u062a\u0639' '"+
+                "\u0627\u0644\u0644\u063a\u0629' '"+
+                "\u0627\u0644\u0639\u0631\u0628\u0628\u064a\u0629' '"+
+                "\u0628\u0628\u0646\u0638\u0645' '"+
+                "\u0643\u062a\u0627\u0628\u0628\u064a\u0629' '"+
                 "\u062c\u0645\u064a\u0644\u0629;"+
 
                 "ai>{alefmadda};"+
@@ -75,11 +75,11 @@ public class TransliterationRule$Latin$Arabic extends ListResourceBundle {
                 "a>{fatha};"+
                 "b>{beh};"+
                 "c>{kaf};"+
-                "{dhal}]dh>{shadda};"+
+                "{dhal})dh>{shadda};"+
                 "dh>{dhal};"+
-                "{dad}]dd>{shadda};"+
+                "{dad})dd>{shadda};"+
                 "dd>{dad};"+
-                "{dal}]d>{shadda};"+
+                "{dal})d>{shadda};"+
                 "d>{dal};"+
                 "e>{ein};"+
                 "f>{feh};"+
@@ -153,88 +153,88 @@ public class TransliterationRule$Latin$Arabic extends ListResourceBundle {
 
                 // now Arabic to English
 
-                "''ai<a]{alefmadda};"+
+                "''ai<a){alefmadda};"+
                 "ai<{alefmadda};"+
-                "''ae<a]{alefuhamza};"+
+                "''ae<a){alefuhamza};"+
                 "ae<{alefuhamza};"+
-                "''ao<a]{alefhamza};"+
+                "''ao<a){alefhamza};"+
                 "ao<{alefhamza};"+
-                "''aa<a]{alef};"+
+                "''aa<a){alef};"+
                 "aa<{alef};"+
-                "''an<a]{fathatein};"+
+                "''an<a){fathatein};"+
                 "an<{fathatein};"+
-                "''a<a]{fatha};"+
+                "''a<a){fatha};"+
                 "a<{fatha};"+
                 "b<{beh};"+
-                "''dh<d]{dhal};"+
+                "''dh<d){dhal};"+
                 "dh<{dhal};"+
-                "''dd<d]{dad};"+
+                "''dd<d){dad};"+
                 "dd<{dad};"+
-                "''d<d]{dal};"+
+                "''d<d){dal};"+
                 "d<{dal};"+
-                "''e<a]{ein};"+
-                "''e<w]{ein};"+
-                "''e<y]{ein};"+
+                "''e<a){ein};"+
+                "''e<w){ein};"+
+                "''e<y){ein};"+
                 "e<{ein};"+
                 "f<{feh};"+
                 "gh<{ghein};"+
-                "''hh<d]{hah};"+
-                "''hh<t]{hah};"+
-                "''hh<k]{hah};"+
-                "''hh<s]{hah};"+
+                "''hh<d){hah};"+
+                "''hh<t){hah};"+
+                "''hh<k){hah};"+
+                "''hh<s){hah};"+
                 "hh<{hah};"+
-                "''h<d]{heh};"+
-                "''h<t]{heh};"+
-                "''h<k]{heh};"+
-                "''h<s]{heh};"+
+                "''h<d){heh};"+
+                "''h<t){heh};"+
+                "''h<k){heh};"+
+                "''h<s){heh};"+
                 "h<{heh};"+
-                "''ii<i]{kasratein};"+
+                "''ii<i){kasratein};"+
                 "ii<{kasratein};"+
-                "''i<i]{kasra};"+
+                "''i<i){kasra};"+
                 "i<{kasra};"+
                 "j<{geem};"+
                 "kh<{kha};"+
                 "x<{kaf}{shadda}{seen};"+
                 "k<{kaf};"+
                 "l<{lam};"+
-                "''m<y]{meem};"+
-                "''m<t]{meem};"+
+                "''m<y){meem};"+
+                "''m<t){meem};"+
                 "m<{meem};"+
                 "n<{noon};"+
-                "''o<a]{hamza};"+
+                "''o<a){hamza};"+
                 "o<{hamza};"+
                 "p<{peh};"+
                 "q<{qaaf};"+
                 "r<{reh};"+
                 "sh<{sheen};"+
-                "''ss<s]{sad};"+
+                "''ss<s){sad};"+
                 "ss<{sad};"+
-                "''s<s]{seen};"+
+                "''s<s){seen};"+
                 "s<{seen};"+
                 "th<{theh};"+
                 "tm<{tehmarbuta};"+
-                "''tt<t]{tah};"+
+                "''tt<t){tah};"+
                 "tt<{tah};"+
-                "''t<t]{teh};"+
+                "''t<t){teh};"+
                 "t<{teh};"+
-                "''uu<u]{dammatein};"+
+                "''uu<u){dammatein};"+
                 "uu<{dammatein};"+
-                "''u<u]{damma};"+
+                "''u<u){damma};"+
                 "u<{damma};"+
                 "we<{wauuhamza};"+
                 "w<{wau};"+
                 "ye<{yehuhamza};"+
                 "ym<{yehmaqsura};"+
-                "''y<y]{yeh};"+
+                "''y<y){yeh};"+
                 "y<{yeh};"+
-                "''zz<z]{zah};"+
+                "''zz<z){zah};"+
                 "zz<{zah};"+
-                "''z<z]{zain};"+
+                "''z<z){zain};"+
                 "z<{zain};"+
 
-                "dh<dh]{shadda};"+
-                "dd<dd]{shadda};"+
-                "''d<d]{shadda};"
+                "dh<dh){shadda};"+
+                "dd<dd){shadda};"+
+                "''d<d){shadda};"
             }
         };
     }

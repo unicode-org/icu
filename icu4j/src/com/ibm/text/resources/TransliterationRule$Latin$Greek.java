@@ -177,10 +177,10 @@ public class TransliterationRule$Latin$Greek extends ListResourceBundle {
                 // not be copied when duplicating the lowercase
                 // ==============================================
                 
-                + "Th<{THETA}[{lower};"
-                + "Ph<{PHI}[{lower};"
-                + "Ch<{CHI}[{lower};"
-              //masked: + "Ps<{PHI}[{lower};"
+                + "Th<{THETA}({lower};"
+                + "Ph<{PHI}({lower};"
+                + "Ch<{CHI}({lower};"
+              //masked: + "Ps<{PHI}({lower};"
                 
                 // Because there is no uppercase forms for final sigma,
                 // we had to move all the sigma rules up here.
@@ -189,12 +189,12 @@ public class TransliterationRule$Latin$Greek extends ListResourceBundle {
                 // don't need to do this for the digraphs with h,
                 // since it is not created when mapping back from greek
                 
-                + "''S<{pp}]{SIGMA};" // for PS
-                + "''s<{pp}]{sigma};" // for ps
-                + "''s<{pp}]{sigma+};" // for ps
+                + "''S<{pp}){SIGMA};" // for PS
+                + "''s<{pp}){sigma};" // for ps
+                + "''s<{pp}){sigma+};" // for ps
                 
-                + "S[{letter}>{SIGMA};"    + "S<{SIGMA};"
-                + "s[{letter}>{sigma};"    + "s<{sigma};"
+                + "S({letter}>{SIGMA};"    + "S<{SIGMA};"
+                + "s({letter}>{sigma};"    + "s<{sigma};"
                 + "s<>{sigma+};"
                 
                 // because there are no uppercase forms, had to move these up too.
@@ -203,7 +203,7 @@ public class TransliterationRule$Latin$Greek extends ListResourceBundle {
                 + "y\"`>{ypsilon\u00a8+};"
                 
                 + "{\u00ef-acute}<>{iota\u00a8+};"
-                + "{vowel}]{\u00fc-acute}>{ypsilon\u00a8+};"  + "{\u00fc-acute}<{vowel}]{ypsilon\u00a8+};"
+                + "{vowel}){\u00fc-acute}>{ypsilon\u00a8+};"  + "{\u00fc-acute}<{vowel}){ypsilon\u00a8+};"
                 + "{y-umlaut-acute}<>{ypsilon\u00a8+};"
                                 
                 // ==============================================
@@ -229,7 +229,7 @@ public class TransliterationRule$Latin$Greek extends ListResourceBundle {
                 + "A<>{ALPHA};"
                 + "\u00c1<>{ALPHA+};"
                 + "B<>{BETA};"
-                + "N]{n-gamma}>{GAMMA};"  + "N<{GAMMA}[{gamma-n};"
+                + "N){n-gamma}>{GAMMA};"  + "N<{GAMMA}({gamma-n};"
                 + "G<>{GAMMA};"
                 + "D<>{DELTA};"
                 + "E<>{EPSILON};"
@@ -253,9 +253,9 @@ public class TransliterationRule$Latin$Greek extends ListResourceBundle {
                 + "P<>{PI};"
                 + "R<>{RHO};"
                 + "T<>{TAU};"
-                + "{vowel}]U>{YPSILON};"    + "U<{vowel}]{YPSILON};"
-                + "{vowel}]\u00da>{YPSILON+};"  + "\u00da<{vowel}]{YPSILON+};"
-                + "{vowel}]\u00dc>{YPSILON\u00a8};"    + "\u00dc<{vowel}]{YPSILON\u00a8};"
+                + "{vowel})U>{YPSILON};"    + "U<{vowel}){YPSILON};"
+                + "{vowel})\u00da>{YPSILON+};"  + "\u00da<{vowel}){YPSILON+};"
+                + "{vowel})\u00dc>{YPSILON\u00a8};"    + "\u00dc<{vowel}){YPSILON\u00a8};"
                 + "Y<>{YPSILON};"
                 + "\u00dd<>{YPSILON+};"
                 + "{Y-UMLAUT}<>{YPSILON\u00a8};"
@@ -265,9 +265,9 @@ public class TransliterationRule$Latin$Greek extends ListResourceBundle {
 
                 // Extra English Letters. Mapped for completeness
                 
-                + "C[I>{SIGMA};"
-                + "C[E>{SIGMA};"
-                + "C[Y>{SIGMA};"
+                + "C(I>{SIGMA};"
+                + "C(E>{SIGMA};"
+                + "C(Y>{SIGMA};"
                 + "C>{KAPPA};"
                 + "F>{PHI};"
                 + "H>{CHI};"
@@ -298,7 +298,7 @@ public class TransliterationRule$Latin$Greek extends ListResourceBundle {
                 + "a<>{alpha};"
                 + "\u00e1<>{alpha+};"
                 + "b<>{beta};"
-                + "n]{n-gamma}>{gamma};"  + "n<{gamma}[{gamma-n};"
+                + "n){n-gamma}>{gamma};"  + "n<{gamma}({gamma-n};"
                 + "g<>{gamma};"
                 + "d<>{delta};"
                 + "e<>{epsilon};"
@@ -322,9 +322,9 @@ public class TransliterationRule$Latin$Greek extends ListResourceBundle {
                 + "p<>{pi};"
                 + "r<>{rho};"
                 + "t<>{tau};"
-                + "{vowel}]u>{ypsilon};"    + "u<{vowel}]{ypsilon};"
-                + "{vowel}]\u00fa>{ypsilon+};"  + "\u00fa<{vowel}]{ypsilon+};"
-                + "{vowel}]\u00fc>{ypsilon\u00a8};"  + "\u00fc<{vowel}]{ypsilon\u00a8};"
+                + "{vowel})u>{ypsilon};"    + "u<{vowel}){ypsilon};"
+                + "{vowel})\u00fa>{ypsilon+};"  + "\u00fa<{vowel}){ypsilon+};"
+                + "{vowel})\u00fc>{ypsilon\u00a8};"  + "\u00fc<{vowel}){ypsilon\u00a8};"
                 + "y<>{ypsilon};"
                 + "\u00fd<>{ypsilon+};"
                 + "{y-umlaut}<>{ypsilon\u00a8};"
@@ -334,9 +334,9 @@ public class TransliterationRule$Latin$Greek extends ListResourceBundle {
 
                 // extra english letters. mapped for completeness
                 
-                + "c[i>{sigma};"
-                + "c[e>{sigma};"
-                + "c[y>{sigma};"
+                + "c(i>{sigma};"
+                + "c(e>{sigma};"
+                + "c(y>{sigma};"
                 + "c>{kappa};"
                 + "f>{phi};"
                 + "h>{chi};"

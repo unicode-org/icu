@@ -32,7 +32,7 @@ public class TransliterationRule$KeyboardEscape$Latin1 extends ListResourceBundl
                 + "mul{esc}>\u00D7;"
                 + "div{esc}>\u00F7;"
 
-                + " {esc}>\u00A0;" // non-breaking space
+                + "\\ {esc}>\u00A0;" // non-breaking space
                 + "!{esc}>\u00A1;" // inverted exclamation
                 + "c/{esc}>\u00A2;" // cent sign
                 + "lb{esc}>\u00A3;" // pound sign
