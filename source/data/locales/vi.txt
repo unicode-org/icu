@@ -265,7 +265,7 @@ vi {
         "HH:mm:ss",
         "HH:mm",
         "EEEE, 'ng\u00E0y' dd MMMM 'n\u0103m' yyyy",
-        "'Ng\u00E0y' dd MMM 'n\u0103m' yyyy",
+        "'Ng\u00E0y' dd 'th\u00E1ng' M 'n\u0103m' yyyy",
         "dd-MM-yyyy",
         "dd/MM/yyyy",
         "{0} {1}",
