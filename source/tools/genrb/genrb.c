@@ -78,6 +78,9 @@ UOption options[]={
 };
 
 
+#ifdef XP_MAC_CONSOLE
+#include <console.h>
+#endif
 
 int
 main(int argc,
@@ -90,6 +93,10 @@ main(int argc,
   const char *inputDir = NULL;
   const char *encoding = ""; 
   UBool verbose;
+
+#ifdef XP_MAC_CONSOLE
+  argc = ccommand(&argv);
+#endif
 
   argc = u_parseArgs(argc, (const char**)argv, sizeof(options)/sizeof(options[0]), options);
 

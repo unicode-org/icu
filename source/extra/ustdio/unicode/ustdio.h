@@ -25,7 +25,7 @@
 #include <stdarg.h>
 
 #include "unicode/utypes.h"
-#include <unicode/ucnv.h>
+#include "unicode/ucnv.h"
 
 
 #define U_EOF 0xFFFF

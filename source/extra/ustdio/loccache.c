@@ -61,7 +61,7 @@ u_loccache_get(const char *loc)
   /* since we know the cache will be empty.  But, it simplifies */
   /* the code a great deal. */
   
-  result = uhash_get(gLocaleCache, loc);
+  result = (ULocaleBundle*)uhash_get(gLocaleCache, loc);
 
   /* If the bundle wasn't found, create it and add it to the cache */
   if(result == 0) {
@@ -72,7 +72,7 @@ u_loccache_get(const char *loc)
     umtx_lock(0);
     
     /* Make sure the cache didn't change while we were locking it */
-    result = uhash_get(gLocaleCache, loc);
+    result = (ULocaleBundle*)uhash_get(gLocaleCache, loc);
     if(result == 0) {
       result = tempBundle;
       uhash_put(gLocaleCache, tempBundle->fLocale, tempBundle, &status);

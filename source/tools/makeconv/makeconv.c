@@ -33,6 +33,10 @@
 #include "unewdata.h"
 #include "ucmpwrit.h"
 
+#ifdef XP_MAC_CONSOLE
+# include <console.h>
+#endif
+
 #define DEBUG 0
 
 /*
@@ -255,6 +259,11 @@ int main(int argc, const char *argv[])
   size_t destdirlen;
   char* dot = NULL, *outBasename;
   char cnvName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
+  int i;
+
+#ifdef XP_MAC_CONSOLE
+   argc = ccommand((char***)&argv);
+#endif
 
     /* preset then read command line options */
     options[4].value=u_getDataDirectory();

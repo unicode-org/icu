@@ -158,14 +158,14 @@ static UBool get(UHashtable *hash, const struct UString* tag) {
 
 static void put(UHashtable *hash, const struct UString *tag,
                 UErrorCode* status) {
-    struct UString* key = uprv_malloc(sizeof(struct UString));
+    struct UString* key = (struct UString*)uprv_malloc(sizeof(struct UString));
     ustr_init(key);
     ustr_cpy(key, tag, status);
     uhash_put(hash, key, (void*)1, status);
 }
 
 static void freeUString(void* ustr) {
-    ustr_deinit(ustr);
+    ustr_deinit((struct UString*)ustr);
     uprv_free(ustr);
 }
 
