@@ -50,7 +50,7 @@ class U_COMMON_API UnicodeConverter
 
   /**
  * Creates Unicode Conversion Object will default to LATIN1 <-> encoding
- * @return An object Handle if successful or a NULL if the creation failed
+ * @return the created Unicode converter object
  * @deprecated
  */
  UnicodeConverter();
@@ -62,7 +62,7 @@ class U_COMMON_API UnicodeConverter
  * @param UErrorCode Error status (I/O) IILLEGAL_ARGUMENT_ERROR will be returned if the string is empty.
  * If the internal program does not work correctly, for example, if there's no such codepage,
  * U_INTERNAL_PROGRAM_ERROR will be returned.
- * @return An object Handle if successful or a NULL if the creation failed
+ * @return the created Unicode converter object
  * @deprecated
  */
  UnicodeConverter(const char*             name,
@@ -88,7 +88,7 @@ class U_COMMON_API UnicodeConverter
   * @UErrorCode Error status (I/O) IILLEGAL_ARGUMENT_ERROR will be returned if the string is empty.
   * If the internal program does not work correctly, for example, if there's no such codepage,
   * U_INTERNAL_PROGRAM_ERROR will be returned.
-  * @return An object Handle if successful or a NULL if failed
+  * @return the Unicode converter object
   * @deprecated
   */
  UnicodeConverter(int32_t                      codepageNumber,
@@ -149,6 +149,15 @@ void  toUnicodeString(UnicodeString&    target,
  * @param targetLimit the pointer to the end of the target array
  * @param source the source Unicode character array
  * @param sourceLimit the pointer to the end of the source array
+ * @param offsets if NULL is passed, nothing will happen to it, otherwise it needs to have the same number
+ * of allocated cells as <TT>target</TT>. Will fill in offsets from target to source pointer
+ * e.g: <TT>offsets[3]</TT> is equal to 6, it means that the <TT>target[3]</TT> was a result of transcoding <TT>source[6]</TT>
+ * For output data carried across calls, and other data without a specific source character
+ * (such as from escape sequences or callbacks)  -1 will be placed for offsets. 
+ * @param flush set to <TT>TRUE</TT> if the current source buffer is the last available
+ * chunk of the source, <TT>FALSE</TT> otherwise. Note that if a failing status is returned,
+ * this function may have to be called multiple times wiht flush set to <TT>TRUE</TT> until
+ * the source buffer is consumed.
  * @param flush TRUE if the buffer is the last buffer and the conversion will finish
  * in this call, FALSE otherwise.  (future feature pending)
  * @param UErrorCode the error status.  U_ILLEGAL_ARGUMENT_ERROR will be returned if the
@@ -177,6 +186,15 @@ void fromUnicode(char*&         target,
  * @param targetLimit the pointer to the end of the target array
  * @param source the source codepage character array
  * @param sourceLimit the pointer to the end of the source array
+ * @param offsets if NULL is passed, nothing will happen to it, otherwise it needs to have the same number
+ * of allocated cells as <TT>target</TT>. Will fill in offsets from target to source pointer
+ * e.g: <TT>offsets[3]</TT> is equal to 6, it means that the <TT>target[3]</TT> was a result of transcoding <TT>source[6]</TT>
+ * For output data carried across calls, and other data without a specific source character
+ * (such as from escape sequences or callbacks)  -1 will be placed for offsets. 
+ * @param flush set to <TT>TRUE</TT> if the current source buffer is the last available
+ * chunk of the source, <TT>FALSE</TT> otherwise. Note that if a failing status is returned,
+ * this function may have to be called multiple times wiht flush set to <TT>TRUE</TT> until
+ * the source buffer is consumed.
  * @param flush TRUE if the buffer is the last buffer and the conversion will finish
  * in this call, FALSE otherwise.  (future feature pending)
  * @param err the error code status  U_ILLEGAL_ARGUMENT_ERROR will be returned if the
