@@ -28,6 +28,7 @@ static UBool i18n_cleanup(void)
 #endif
 
 #if !UCONFIG_NO_FORMATTING
+    calendar_cleanup();
     numfmt_cleanup();
     currency_cleanup();
     timeZone_cleanup();

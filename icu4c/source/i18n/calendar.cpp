@@ -31,9 +31,11 @@
 #include "unicode/resbund.h"
 #include "unicode/gregocal.h"
 #include "buddhcal.h"
+#include "japancal.h"
 #include "unicode/calendar.h"
 #include "cpputils.h"
 #include "iculserv.h"
+#include "ucln_in.h"
 
 U_NAMESPACE_BEGIN
 
@@ -113,10 +115,8 @@ protected:
 
   if(!fType || !*fType || !strcmp(fType,"gregorian")) {  // Gregorian (default)
     return new GregorianCalendar(canLoc, status);
-# if 0
   } else if(!strcmp(fType, "japanese")) {
-    return new JapaneseCalendar(loc, status);
-#endif
+    return new JapaneseCalendar(canLoc, status);
   } else if(!strcmp(fType, "buddhist")) {
     return new BuddhistCalendar(canLoc, status);
   } else { 
@@ -250,7 +250,12 @@ static UMTX gnLock = 0;
 static ICULocaleService* 
 getService(void)
 {
-  if (gService == NULL) {
+  UBool needInit;
+  {
+    Mutex mutex(&gnLock);
+    needInit = (UBool)(gService == NULL);
+  }
+  if (needInit) {
     UErrorCode status = U_ZERO_ERROR;
 #ifdef U_DEBUG_CALSVC
     fprintf(stderr, "Spinning up Calendar Service\n");
@@ -287,6 +292,7 @@ getService(void)
     if (newservice) {
       delete newservice;
     }
+    ucln_i18n_registerCleanup();
   }
   return gService;
 }
@@ -1170,6 +1176,15 @@ Calendar::updateTime(UErrorCode& status)
 
 
 U_NAMESPACE_END
+
+U_CFUNC UBool calendar_cleanup(void) {
+  if (gService) {
+    delete gService;
+    gService = NULL;
+  }
+  umtx_destroy(&gnLock);
+  return TRUE;
+}
 
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
