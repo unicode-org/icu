@@ -1998,6 +1998,70 @@ static void TestResourceLevelAliasing(void) {
 
 #endif
   }
+  /* test getting aliased string by index */
+  {
+    const char* keys[] = {
+        "KeyAlias0PST",
+        "KeyAlias1PacificStandardTime",
+        "KeyAlias2PDT",
+        "KeyAlias3LosAngeles"
+    };
+
+    const char* strings[] = {
+      "PST",
+      "Pacific Standard Time",
+      "PDT",
+      "Los Angeles",
+    };
+    UChar buffer[256];
+    const UChar* result;
+    int32_t bufferLen = 0, resultLen = 0;
+    int32_t i = 0;
+    const char *key = NULL;
+    tb = ures_getByKey(aliasB, "testGetStringByKeyAliasing", tb, &status);
+    if(U_FAILURE(status)) {
+      log_err("Couldn't get testGetStringByKeyAliasing resource\n");
+    }
+    for(i = 0; i < sizeof(strings)/sizeof(strings[0]); i++) {
+      result = ures_getStringByKey(tb, keys[i], &resultLen, &status);
+      bufferLen = u_unescape(strings[i], buffer, 256);
+      if(resultLen != bufferLen || u_strncmp(result, buffer, resultLen) != 0) {
+        log_err("Didn't get correct string while accesing alias table by key\n");
+      }
+    }
+    for(i = 0; i < sizeof(strings)/sizeof(strings[0]); i++) {
+      result = ures_getStringByIndex(tb, i, &resultLen, &status);
+      bufferLen = u_unescape(strings[i], buffer, 256);
+      if(resultLen != bufferLen || u_strncmp(result, buffer, resultLen) != 0) {
+        log_err("Didn't get correct string while accesing alias table by index\n");
+      }
+    }
+    for(i = 0; i < sizeof(strings)/sizeof(strings[0]); i++) {
+      result = ures_getNextString(tb, &resultLen, &key, &status);
+      bufferLen = u_unescape(strings[i], buffer, 256);
+      if(resultLen != bufferLen || u_strncmp(result, buffer, resultLen) != 0) {
+        log_err("Didn't get correct string while iterating over alias table\n");
+      }
+    }
+    tb = ures_getByKey(aliasB, "testGetStringByIndexAliasing", tb, &status);
+    if(U_FAILURE(status)) {
+      log_err("Couldn't get testGetStringByIndexAliasing resource\n");
+    }
+    for(i = 0; i < sizeof(strings)/sizeof(strings[0]); i++) {
+      result = ures_getStringByIndex(tb, i, &resultLen, &status);
+      bufferLen = u_unescape(strings[i], buffer, 256);
+      if(resultLen != bufferLen || u_strncmp(result, buffer, resultLen) != 0) {
+        log_err("Didn't get correct string while accesing alias by index in an array\n");
+      }
+    }
+    for(i = 0; i < sizeof(strings)/sizeof(strings[0]); i++) {
+      result = ures_getNextString(tb, &resultLen, &key, &status);
+      bufferLen = u_unescape(strings[i], buffer, 256);
+      if(resultLen != bufferLen || u_strncmp(result, buffer, resultLen) != 0) {
+        log_err("Didn't get correct string while iterating over aliases in an array\n");
+      }
+    }
+  }
 
   ures_close(aliasB);
   ures_close(tb);
