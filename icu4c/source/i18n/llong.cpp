@@ -119,7 +119,7 @@ llong& llong::operator*=(const llong& rhs)
                 if (b.lo & 0x1) {
                     r += a;
                 }
-                b >>= 1;
+                b.ushr(1); // in case someone came in with 0x80000000, 0x80000000 for b
                 a <<= 1;
             }
         }
@@ -149,7 +149,7 @@ llong& llong::operator/=(const llong& rhs)
     }
 
     if (b.isZero()) { // should throw div by zero error
-        *this = sign < 0 ? -uprv_maxMantissa() : uprv_maxMantissa();
+        *this = sign < 0 ? llong(0x80000000, 0) : llong(0x7fffffff, 0xffffffff);
     } else if (a.hi == 0 && b.hi == 0) {
         *this = (int32_t)(sign * (a.lo / b.lo));
     } else if (b > a) {
@@ -194,8 +194,6 @@ static const uint8_t asciiDigits[] = {
 };
 
 static const UChar kUMinus = (UChar)0x002d;
-
-#if LLONG_STRING_CONVERSION
 
 static const char kMinus = '-';
 
@@ -244,7 +242,7 @@ llong llong::atoll(const char* str, uint32_t radix)
     return result;
 }
 
-llong llong::u_atoll(const UChar* str, uint32_t radix)
+llong llong::utoll(const UChar* str, uint32_t radix)
 {
     if (radix > 36) {
         radix = 36;
@@ -282,10 +280,13 @@ uint32_t llong::lltoa(char* buf, uint32_t len, uint32_t radix, UBool raw) const
 
     char* p = buf;
     llong w(*this);
-    if (len && w.isNegative()) {
+    if (len && w.isNegative() && (radix == 10) && !raw) {
         w.negate();
         *p++ = kMinus;
         --len;
+    } else if (len && w.isZero()) {
+		*p++ = (char)raw ? 0 : asciiDigits[0];
+		--len;
     }
 
     while (len && w.notZero()) {
@@ -314,9 +315,7 @@ uint32_t llong::lltoa(char* buf, uint32_t len, uint32_t radix, UBool raw) const
     return len;
 }
 
-#endif
-
-uint32_t llong::u_lltoa(UChar* buf, uint32_t len, uint32_t radix, UBool raw) const
+uint32_t llong::lltou(UChar* buf, uint32_t len, uint32_t radix, UBool raw) const
 {    
     if (radix > 36) {
         radix = 36;
