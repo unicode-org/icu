@@ -1023,7 +1023,9 @@ private:
     
     static double round(double a, ERoundingMode mode, UBool isNegative);
 
-    void addPadding(UnicodeString& result, UBool hasAffixes,
+    void addPadding(UnicodeString& result,
+                    FieldPosition& fieldPosition,
+                    UBool hasAffixes,
                     UBool isNegative) const;
 
     UBool isGroupingPosition(int32_t pos) const;
