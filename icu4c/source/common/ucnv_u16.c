@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2002, International Business Machines
+*   Copyright (C) 2002-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnv_u16.c
@@ -705,6 +705,8 @@ _UTF16ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
         }
     }
 
+    pArgs->source=source;
+
     if(source==sourceLimit && pArgs->flush) {
         /* handle truncated input */
         switch(state) {
@@ -723,7 +725,7 @@ _UTF16ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
 
             /* no offsets: not enough for output */
             _UTF16BEToUnicodeWithOffsets(pArgs, pErrorCode);
-            /* pArgs->source restored below */
+            pArgs->source=source;
             pArgs->sourceLimit=sourceLimit;
             break;
         }
@@ -731,8 +733,6 @@ _UTF16ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     } else {
         cnv->mode=state;
     }
-
-    pArgs->source=source;
 }
 
 static UChar32
