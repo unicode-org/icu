@@ -792,7 +792,7 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, UHashtable *tailored, UErro
   }
 }
 
-U_CFUNC ucol_getFirstCE(UCollator *coll, UChar u, UErrorCode *status) {
+U_CFUNC uint32_t ucol_getFirstCE(UCollator *coll, UChar u, UErrorCode *status) {
   collIterate colIt;
   uint32_t order;
   init_collIterate(&u, 1, &colIt, FALSE);
