@@ -63,7 +63,7 @@ public class SearchTest extends TestFmwk {
         new SearchData("a\u0300\u0325",                 "\u0300",       null, Collator.TERTIARY, null, new int[]{-1},             new int[]{0}),
         new SearchData("a\u0300\u0325",                 "\u0300\u0325", null, Collator.TERTIARY, null, new int[]{1, -1},          new int[]{2}),
         new SearchData("a\u0300b",                      "\u0300",       null, Collator.TERTIARY, null, new int[]{1, -1},          new int[]{1}),
-        new SearchData("É",                             "e",            null, Collator.PRIMARY,  null, new int[]{0, -1},          new int[]{1}),
+        new SearchData("\u00c9",                        "e",            null, Collator.PRIMARY,  null, new int[]{0, -1},          new int[]{1}),
         new SearchData(null,                            null,           null, Collator.TERTIARY, null, new int[]{-1},             new int[]{0})
     };
     
@@ -79,7 +79,7 @@ public class SearchTest extends TestFmwk {
             "characterbreaker", new int[] {1, 17, 30, -1}, new int[] {1, 1, 1}),
         new SearchData("testing that string ab\u00e9cd does not match e", "e", null, Collator.TERTIARY, 
             "characterbreaker", new int[] {1, 28, 41, -1}, new int[] {1, 1, 1}),
-        new SearchData("É", "e", "fr", Collator.PRIMARY,  "characterbreaker", new int[]{0, -1}, new int[]{1}),
+        new SearchData("\u00c9", "e", "fr", Collator.PRIMARY,  "characterbreaker", new int[]{0, -1}, new int[]{1}),
         new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
     };
     
@@ -95,7 +95,7 @@ public class SearchTest extends TestFmwk {
             "characterbreaker", new int[] {1, 17, 30, -1}, new int[] {1, 1, 1}),
         new SearchData("testing that string ab\u00e9cd does not match e", "e", null, 
              Collator.TERTIARY, "characterbreaker", new int[] {1, 28, 41, -1}, new int[] {1, 1, 1}),
-        new SearchData("É", "e", "fr", Collator.PRIMARY,  "characterbreaker", new int[]{0, -1}, new int[]{1}),
+        new SearchData("\u00c9", "e", "fr", Collator.PRIMARY,  "characterbreaker", new int[]{0, -1}, new int[]{1}),
         new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
     };
     
