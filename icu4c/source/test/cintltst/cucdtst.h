@@ -8,7 +8,7 @@
 * File CUCDTST.H
 *
 * Modification History:
-*        Name                     Description            
+*        Name                     Description 
 *     Madhu Katragadda            Converted to C, added tests for string functions
 *********************************************************************************
 */
