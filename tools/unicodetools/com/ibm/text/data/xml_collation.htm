@@ -1,0 +1,497 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>XML Collation Specification</title>
+<style>
+<!--
+th           { background-color: #9999CC; border-style: solid; border-width: 1px; padding: 4 }
+td           { background-color: #CCCCFF; border-style: solid; border-width: 1px; padding: 4 }
+table        { border-style: solid; border-width: 1px }
+-->
+</style>
+</head>
+
+<body style="margin:2em">
+
+<h1 align="center">XML Collation Specification</h1>
+<p align="center"><i><font size="4"><b><font color="#FF0000">Early Draft:</font></b>
+MED 2002-06-21</font></i></p>
+<p>This document defines an XML vocabulary for exchanging tailoring rules, and
+specifying comparison options. It allows any two implementations to exchange a
+specification of collation. Using the same specification, the two
+implementations will achieve the same results in comparing strings.</p>
+<p>&nbsp;The rules are defined by correspondence with the <i>basic</i> <a href="http://oss.software.ibm.com/icu/userguide/Collate_Customization.html">ICU
+rule syntax</a> (used in ICU and Java) and/or the ICU parameterizations. You
+should be familiar with the UCA and the ICU implementation of it before
+continuing with the rest of this document.</p>
+<blockquote>
+  <p><b>Note: </b>ICU provides a concise format for specifying orderings, based
+  on tailorings to the UCA. For example, to specify that k and q follow 'c', one
+  can use the rule: &quot;&amp; c &lt; k &lt; q&quot;. The rules also allow
+  people to set default general parameter values, such as whether uppercase is
+  before lowercase or not.</p>
+  <p>Java contains an earlier version of ICU, and has not been updated recently.
+  It does not support any of the basic syntax marked with [...], and its default
+  table is not the UCA.</p>
+  <p>It is not necessary for ICU to be used in the underlying implementation.
+  The features are simply described here in terms of the ICU capabilities, since
+  that is easier than duplicating the text.</p>
+</blockquote>
+<p>Like the ICU rules, the tailoring syntax is designed to be independent of the
+actual weights used in any particular UCA table. That way the same rules can be
+applied to UCA versions over time, even if the underlying weights change.</p>
+<h3><a name="Document_Structure">Document Structure</a></h3>
+<p>The following describes the overall document structure used to specify a
+collation in XML.</p>
+<p><code>&lt;collation name=&quot;somename&quot;&gt;<br>
+&nbsp;&lt;base .../&gt;<br>
+&nbsp;&lt;settings .../&gt;<br>
+&nbsp;&lt;rules&gt;<br>
+&nbsp; &lt;!-- rules go here, if there are any --&gt;<br>
+&nbsp;&lt;/rules&gt;<br>
+&lt;/collation&gt;</code></p>
+<table border="1" width="100%">
+  <tr>
+    <td width="100%"><b>TBD:</b>
+      <ul>
+        <li><b>Add DTD</b></li>
+        <li><b>Clarify how versions work.</b></li>
+        <li><b>Add Namespace</b></li>
+      </ul>
+    </td>
+  </tr>
+</table>
+<h3><a name="Base">Base</a></h3>
+<p>There must be exactly one base element. The base element indicates the
+collation ordering that is to be used as a foundation. This base collation
+ordering can be modified (tailored) by a rules element, and the settings in the
+base can be overridden by the settings element. The rules are treated as if they
+were appended to the rules in the URL. When the xml:lang is used, then the rules
+in the ICU repository with that version are specified. There are two alternative
+attributes:</p>
+<table>
+  <tr>
+    <th>Attribute</th>
+    <th>Options</th>
+    <th>XML Example</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>uca</td>
+    <td><i>uca version/unicode version</i></td>
+    <td>uca=&quot;3.1.1d1/3.2.0&quot;</td>
+    <td>Specifies the UCA version</td>
+  </tr>
+  <tr>
+    <td>src</td>
+    <td><i>URL</i></td>
+    <td>src=&quot;http://www.foo.com/sort_en_us.xml&quot;</td>
+    <td>Points to a different collation specification.</td>
+  </tr>
+</table>
+<p>The first one is used for a direct table, one that either uses the UCA alone,
+or modifies it with settings and/or rules. The second one is used to refer to a
+pre-existing document in this format, which can also be modified with settings
+and/or rules.</p>
+<p><i>Example 1:<br>
+The following specifies a German phonebook ordering, by setting the umlauted
+letters to be equivalent to base + e.</i></p>
+<blockquote>
+  <pre>&lt;collation name=&quot;German Phonebook Ordering&quot;&gt;
+ &lt;base uca=&quot;3.1.1d1/3.2.0&quot;/&gt;
+ &lt;rules&gt;
+  &lt;reset/&gt; ae &lt;t/&gt; ä
+  &lt;reset/&gt; AE &lt;t/&gt; Ä
+  &lt;reset/&gt; oe &lt;t/&gt; ö
+  &lt;reset/&gt; OE &lt;t/&gt; Ö
+  &lt;reset/&gt; ue &lt;t/&gt; ü
+  &lt;reset/&gt; UE &lt;t/&gt; Ü
+ &lt;/rules&gt;
+&lt;/collation&gt;</pre>
+</blockquote>
+<p><i>Example 2:<br>
+Supposing the above is on the web at <a href="http://www.foo.com/de_de_phonebook.xml">http://www.foo.com/de_de_phonebook.xml</a>,
+the following modifies that to sort uppercase first, and sort the character '@'
+as if it were spelled out.</i></p>
+<blockquote>
+  <pre>&lt;collation name=&quot;German Phonebook Ordering, Uppercase First with Ampersand&quot;&gt;
+ &lt;base src=&quot;http://www.foo.com/de_de_phonebook.xml&quot;/&gt;
+ &lt;setting caseFirst=&quot;upper&quot;/&gt;
+ &lt;rules&gt;
+  &lt;reset/&gt; @ &lt;t/&gt; Affenschwanz
+ &lt;/rules&gt;
+&lt;/collation&gt;</pre>
+</blockquote>
+<h3><a name="Setting_Options">Setting Options</a></h3>
+<p>There must be exactly one settings element. It contains global settings on
+the collation sequence. For example, &lt;setting
+strength=&quot;secondary&quot;&gt; will only compare strings based on their
+primary and secondary weights, ignoring any weaker weights.</p>
+<p>The following table provides a list of valid attributes. If any of the
+attributes is not present, the default for the base is used. The default for the
+UCA is listed in italics below, but it may be modified by the base. The effect
+of these attributes is defined by reference to the effect of the <a href="http://oss.software.ibm.com/icu/apiref/ucol_8h.html#a69">setAttributes</a>
+API (except for variableTop, which corresponds to the <a href="http://oss.software.ibm.com/icu/apiref/classCollator.html#a21">setVariableTop</a>
+API). <i>[Ed. Note: This is temporary, until the textual description is brought
+in here]. </i>The basic example is given where the setting can also be given
+with rules in the basic syntax.</p>
+<table>
+  <tbody>
+    <tr>
+      <th>Attribute</th>
+      <th>Options</th>
+      <th>Basic Example &nbsp;</th>
+      <th>XML Example</th>
+    </tr>
+    <tr>
+      <td>alternate</td>
+      <td><i>non-ignorable</i><br>
+        shifted</td>
+      <td><font color="#000000"><code>[alternate non-ignorable]</code></font></td>
+      <td><code>alternate=&quot;non-ignorable&quot;</code></td>
+    </tr>
+    <tr>
+      <td>backwards</td>
+      <td>on<br>
+        <i>off</i></td>
+      <td><font color="#000000"><code>[backwards on] &nbsp;</code></font></td>
+      <td><code>backwards=&quot;on&quot;</code></td>
+    </tr>
+    <tr>
+      <td>normalization</td>
+      <td>on<br>
+        off</td>
+      <td><font color="#000000"><code>[normalization on]&nbsp;</code></font></td>
+      <td><code>normalization=&quot;off&quot;</code></td>
+    </tr>
+    <tr>
+      <td>caseLevel</td>
+      <td>on<br>
+        off</td>
+      <td><font color="#000000"><code>[caseLevel on]</code></font></td>
+      <td><code>caseLevel=&quot;off&quot;</code></td>
+    </tr>
+    <tr>
+      <td>caseFirst</td>
+      <td>upper<br>
+        lower<br>
+        off</td>
+      <td><font color="#000000"><code>[caseFirst off]</code></font></td>
+      <td><code>caseFirst=&quot;off&quot;</code></td>
+    </tr>
+    <tr>
+      <td>hiraganaQ</td>
+      <td>on<br>
+        off</td>
+      <td><code>[hiraganaQ on]</code></td>
+      <td><code>hiraganaQuarternary=&quot;on&quot;</code></td>
+    </tr>
+    <tr>
+      <td><font color="#000000">strength</font></td>
+      <td>primary (1)<br>
+        secondary (2)<br>
+        tertiary (3)<br>
+        quarternary (4)<br>
+        identical (5)</td>
+      <td><code>[strength 1]</code></td>
+      <td><code>strength=&quot;primary&quot;</code></td>
+    </tr>
+    <tr>
+      <td>variableTop<sup>1</sup></td>
+      <td><font color="#000000">at character(s)<br>
+        before character(s)<br>
+        after character(s)</font></td>
+      <td><code>&amp; x = [variable top]</code></td>
+      <td><code>variableTopAfter=&quot;x&quot;</code></td>
+    </tr>
+  </tbody>
+</table>
+<blockquote>
+  <p><b>Issue:</b> This syntax might limit the characters in variableTop, since
+  attributes can't handle all characters. Perhaps this needs to be a separate
+  element.</p>
+  <ol>
+    <li>The default value for variableTop depends on the UCA setting. For
+      example, in 3.1.1d1, the value is:<br>
+      U+1D7C3 MATHEMATICAL SANS-SERIF BOLD ITALIC PARTIAL DIFFERENTIAL. See
+      below for the layout.</li>
+  </ol>
+</blockquote>
+<h2><a name="Rules">Rules</a></h2>
+<p>The rules section, if there is one, contains rules that tailor whatever was
+in the base. The rule syntax, while valid XML, is somewhat unusual. The goal is
+to have clearly expressed rules, with a concise format, that parallels the Basic
+syntax as much as possible.</p>
+<h3><a name="Orderings">Orderings</a></h3>
+<p>The following are the normal orderings used for the bulk of characters.</p>
+<table>
+  <tr>
+    <th>Basic Symbol</th>
+    <th>Basic Example</th>
+    <th>XML Symbol</th>
+    <th>XML Example</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td align="center"><code>&lt; &nbsp;</code></td>
+    <td><code>a &lt; b &nbsp;</code></td>
+    <td><code>&lt;p/&gt;</code></td>
+    <td><code>a &lt;p/&gt; b</code></td>
+    <td>Make 'b' sort after 'a', as a <i>primary</i> (base-character) difference</td>
+  </tr>
+  <tr>
+    <td align="center"><code>&lt;&lt; &nbsp;</code></td>
+    <td><code>a &lt;&lt; ä &nbsp;</code></td>
+    <td><code>&lt;s/&gt;</code></td>
+    <td><code>a &lt;s/&gt; ä</code></td>
+    <td>Make 'ä' sort after 'a' as a <i>secondary</i> (accent) difference</td>
+  </tr>
+  <tr>
+    <td align="center"><code>&lt;&lt;&lt; &nbsp;</code></td>
+    <td><code>a &lt;&lt;&lt; A &nbsp;</code></td>
+    <td><code>&lt;t/&gt;</code></td>
+    <td><code>a &lt;t/&gt; A</code></td>
+    <td>Make 'A' sort after 'a' as a <i>tertiary</i> (case) difference</td>
+  </tr>
+  <tr>
+    <td align="center"><code>= &nbsp;</code></td>
+    <td><code>x = y &nbsp;</code></td>
+    <td><code>&lt;eq/&gt;</code></td>
+    <td><code>v &lt;eq/&gt; w</code></td>
+    <td>Make 'w' sort exactly the same as 'v'</td>
+  </tr>
+  <tr>
+    <td align="center"><code>&amp; &nbsp;</code></td>
+    <td><code>&amp; Z &nbsp;</code></td>
+    <td><code>&lt;reset/&gt;</code></td>
+    <td><code>&lt;reset/&gt; Z</code></td>
+    <td>Don't change the ordering of Z, but place subsequent characters relative
+      to it.</td>
+  </tr>
+</table>
+<p>Note that each character is placed relative to the characters <i>before</i>
+it. Thus the following means &quot;change the weight of W so that it comes after
+Z, and with a primary difference.</p>
+<blockquote>
+  <pre>&lt;reset/&gt; Z &lt;p&gt; W</pre>
+</blockquote>
+<h3><a name="Escaping_Characters">Escaping Characters</a></h3>
+<p>Unfortunately, XML does not have the capability to contain all Unicode code
+points. Due to this, extra syntax is required to represent those code points
+that cannot be otherwise represented. This corresponds to the quoting mechanism
+used in the basic syntax. This also must be used where spaces are significant
+(otherwise they are stripped).</p>
+<table>
+  <tr>
+    <th>Basic Example</th>
+    <th>XML Example</th>
+  </tr>
+  <tr>
+    <td><code>'\u0000'</code></td>
+    <td><code>&lt;cp hex=&quot;0&quot;&gt;</code></td>
+  </tr>
+</table>
+<h3><a name="Contractions">Contractions</a></h3>
+<p>To sort a sequence as a single item (contraction), just use the sequence,
+e.g.</p>
+<table>
+  <tr>
+    <th>BASIC Example</th>
+    <th>XML Example</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><code>&amp; k &lt; ch</code></td>
+    <td><code>&lt;reset/&gt;&nbsp;k&nbsp;&lt;p/&gt;&nbsp;ch</code></td>
+    <td>Make the sequence 'ch' sort after 'k', as a primary (base-character)
+      difference</td>
+  </tr>
+</table>
+<h3><a name="Expansions">Expansions</a></h3>
+<p>There are two ways to handle expansions (where a character sorts as a
+sequence) with both the basic syntax and the XML syntax. The first method is to
+reset to the sequence of characters. The second is to use the extension
+sequence. Both are equivalent in practice (unless the reset sequence happens to
+be a contraction).</p>
+<table>
+  <tr>
+    <th>Basic</th>
+    <th>XML</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td><code>&amp; ae &lt; </code>ä</td>
+    <td><code>&lt;reset/&gt;&nbsp;ae&nbsp;&lt;p/&gt;&nbsp;</code>ä</td>
+    <td>Make 'k' sort after the sequence 'ch'; thus 'k' will behave as if it
+      expands to a character after 'c' followed by an 'h'. (unless 'ch' is
+      defined beforehand as a contraction).</td>
+  </tr>
+  <tr>
+    <td><code>&amp;&nbsp;a&nbsp;&lt;&nbsp;</code>ä<code>&nbsp;/&nbsp;e</code></td>
+    <td><code>&lt;reset/&gt;&nbsp;a&nbsp;&lt;p/&gt;&nbsp;</code>ä<code>&nbsp;&lt;x/&gt;&nbsp;e</code></td>
+    <td>Make 'k' sort after the sequence 'ch'; thus 'k' will behave as if it
+      expands to a character after 'c' followed by an 'h'.</td>
+  </tr>
+</table>
+<p>In the basic syntax, you can reset variable top by treating it as if it were
+a character. In XML, it is always an option on settings, as described above.</p>
+<h3><a name="Context_Before">Context Before</a></h3>
+<p>The context before a character can affect how it is ordered, such as in
+Japanese. This could be expressed with a combination of contractions and
+expansions, but is faster using a context. (The actual weights produced are
+different, but the resulting string comparisons are the same.)</p>
+<table>
+  <tr>
+    <th>Basic</th>
+    <th>XML</th>
+  </tr>
+  <tr>
+    <td><code>&amp; &#12449;<br>
+      &lt;&lt;&lt; &#12449; | &#12540;<br>
+      = &#65383; | &#12540;<br>
+      = &#12353; | &#12540;</code></td>
+    <td><code>&lt;reset/&gt;</code><code>&nbsp;</code><code>&#12449;<br>
+      &lt;t&gt;</code><code>&nbsp;</code><code>&#12449;</code><code>&nbsp;</code><code>&lt;context/&gt;</code><code>&nbsp;</code><code>&#12540;<br>
+      &lt;eq&gt;</code><code>&nbsp;</code><code>&#65383;</code><code>&nbsp;</code><code>&lt;context/&gt;</code><code>&nbsp;</code><code>&#12540;<br>
+      &lt;eq&gt;</code><code>&nbsp;</code><code>&#12353;</code><code>&nbsp;</code><code>&lt;context/&gt;</code><code>&nbsp;</code><code>&#12540;</code></td>
+  </tr>
+</table>
+<h3><a name="Placing_Characters_Before_Others">Placing Characters Before Others</a></h3>
+<p>There are certain circumstances where characters need to be placed before a
+given character, rather than after. This is the case with Pinyin, for example,
+where certain accented letters are positioned before the base letter. That is
+accomplished with the following syntax.</p>
+<table>
+  <tbody>
+    <tr>
+      <th>Item</th>
+      <th>Options</th>
+      <th>Basic Example &nbsp;</th>
+      <th>XML Example</th>
+    </tr>
+    <tr>
+      <td>before&nbsp;</td>
+      <td>primary<br>
+        secondary<br>
+        tertiary<br>
+        identical</td>
+      <td><code>&amp; [before 1] a<br>
+        &lt;&lt; à</code></td>
+      <td><code>&lt;reset before=&quot;primary&quot;/&gt;&nbsp;a<br>
+        &lt;s/&gt;&nbsp;à</code></td>
+    </tr>
+  </tbody>
+</table>
+<h3><a name="Logical_Reset_Positions">Logical Reset Positions</a></h3>
+<p>The UCA has the following structure for primary weights, going from low to
+high.</p>
+<table>
+  <tr>
+    <th valign="top" align="center" bgcolor="#CCCCFF">Items</th>
+    <th valign="top" align="center" bgcolor="#CCCCFF">Description</th>
+    <th valign="top" align="center" bgcolor="#CCCCFF">UCA Examples</th>
+  </tr>
+  <tr>
+    <td>first tertiary ignorable<br>
+      ...<br>
+      last tertiary ignorable</td>
+    <td>primary, secondary, tertiary weights = ignore</td>
+    <td>Control Codes<br>
+      Format Characters<br>
+      Hebrew Points<br>
+      Tibetan Signs<br>
+      ...</td>
+  </tr>
+  <tr>
+    <td>first secondary ignorable<br>
+      ...<br>
+      last secondary ignorable</td>
+    <td>primary, secondary weights = ignore</td>
+    <td>None in UCA</td>
+  </tr>
+  <tr>
+    <td>first primary ignorable<br>
+      ...<br>
+      last primary ignorable</td>
+    <td>primary weights = ignore</td>
+    <td>Most combining marks</td>
+  </tr>
+  <tr>
+    <td>first variable<br>
+      ...<br>
+      last variable</td>
+    <td>primary weights != ignore,<br>
+      <i>&nbsp;<b>if</b> alternate = non-ignorable<br>
+      </i><br>
+      primary, secondary, tertiary weights = ignore,<br>
+      &nbsp;<i><b>if</b> alternate = shifted</i></td>
+    <td>Whitespace,<br>
+      Punctuation,<br>
+      Symbols</td>
+  </tr>
+  <tr>
+    <td>first non-ignorable<br>
+      ...<br>
+      last non-ignorable</td>
+    <td>primary weights != ignore</td>
+    <td>Small number of exceptional symbols<br>
+      [e.g. U+02D0 MODIFIER LETTER TRIANGULAR COLON]<br>
+      Numbers<br>
+      Latin<br>
+      Greek<br>
+      ...</td>
+  </tr>
+  <tr>
+    <td><i>implicits</i></td>
+    <td>primary weights != ignore,<br>
+      <i>assigned automatically</i></td>
+    <td>CJK, CJK compatibility (that are not decomposed)<br>
+      CJK Extension A, B<br>
+      Unassigned</td>
+  </tr>
+  <tr>
+    <td>first trailing<br>
+      ...<br>
+      last trailing</td>
+    <td>primary weights != ignore,<br>
+      <i>used for trailing syllable components</i></td>
+    <td>Jamo Trailing<br>
+      Jamo Leading</td>
+  </tr>
+</table>
+<p>Each of the above values (except <i>implicits</i>) can be used with a reset
+to position characters after (or before) that logical position. That allows
+characters to be ordered before or after a logical position rather than a
+specific character.</p>
+<blockquote>
+  <p>The reason for this is so that tailorings can be more stable. A future
+  version of the UCA might add characters at any point in the above list.
+  Suppose that you set character X to be after Y. It could be that you want X to
+  come after Y, no matter what future characters are added; or it could be that
+  you just want Y to come after a given logical position, e.g. after the last
+  primary ignorable.</p>
+</blockquote>
+<p>Here is an example of the syntax:</p>
+<table>
+  <tr>
+    <th>Basic</th>
+    <th>XML</th>
+  </tr>
+  <tr>
+    <td><code>&amp;&nbsp;[first&nbsp;tertiary&nbsp;ignorable]<br>
+      &lt;&lt;&nbsp;à</code></td>
+    <td><code>&lt;reset/&gt;&lt;position at=&quot;first tertiary
+      ignorable&quot;/&gt;<br>
+      &lt;s/&gt;&nbsp;à</code></td>
+  </tr>
+</table>
+<p>For example, to make a character be a secondary ignorable, one can make it be
+immediately after (at a secondary level) a specific character (like a combining
+dieresis), or one can make it be immediately after the last secondary ignorable.</p>
+
+</body>
+
+</html>
