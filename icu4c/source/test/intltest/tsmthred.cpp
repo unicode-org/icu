@@ -1049,83 +1049,57 @@ private:
 
 void MultithreadTest::TestThreadedIntl()
 {
-    int32_t patience;
-    int terrs;
+    int i;
+    UnicodeString theErr;
+    UBool   haveDisplayedInfo[kFormatThreadThreads];
 
-    // FormatThreadTest tests[kFormatThreadThreads];
+    //
+    //  Create and start the test threads
+    //
+    logln("Spawning: %d threads * %d iterations each.",
+                kFormatThreadThreads, kFormatThreadIterations);
     FormatThreadTest  *tests = new FormatThreadTest[kFormatThreadThreads];
- 
-	// Lock the test mutex once, before firing up the threads.  This is an experiment.
-	// umtx_lock(&gDebugMutex);
-	// umtx_unlock(&gDebugMutex);
-	
-    logln(UnicodeString("Spawning: ") + kFormatThreadThreads + " threads * " + kFormatThreadIterations + " iterations each.");
     for(int32_t j = 0; j < kFormatThreadThreads; j++) {
         tests[j].fNum = j;
         int32_t threadStatus = tests[j].start();
         if (threadStatus != 0) {
             errln("System Error %d starting thread number %d.", threadStatus, j);
-            SimpleThread::errorFunc();  
+            SimpleThread::errorFunc();
             goto cleanupAndReturn;
         }
+        haveDisplayedInfo[j] = FALSE;
     }
 
-    for(patience = kFormatThreadPatience;patience > 0; patience --)
-    {
-        logln("Waiting...");
 
-        int32_t i;
-        terrs = 0;
-        int32_t completed =0;
-
+    // Spin, waiting for the test threads to finish.
+    //   (An earlier version used a wait in this loop, but that seems to trigger
+    //    a bug in some versions of AIX.)
+    UBool   stillRunning;
+    do {
+        /*  Spin until the test threads  complete. */
+        stillRunning = FALSE;
         for(i=0;i<kFormatThreadThreads;i++) {
-            if (tests[i].isRunning() == FALSE)
-            {
-                completed++;
-                
-                logln(UnicodeString("Test #") + i + " is complete.. ");
-                
-                UnicodeString theErr;
-                if(tests[i].getError(theErr))
-                {
-                    terrs++;
+            if (tests[i].isRunning()) {
+                stillRunning = TRUE;
+            } else if (haveDisplayedInfo[i] == FALSE) {
+                logln("Thread # %d is complete..", i);
+                if(tests[i].getError(theErr)) {
                     errln(UnicodeString("#") + i + ": " + theErr);
+                    SimpleThread::errorFunc();
                 }
-                // print out the error, too, if any.
+                haveDisplayedInfo[i] = TRUE;
             }
         }
-        
-        if(completed == kFormatThreadThreads)
-        {
-            logln("Done!");
+    } while (stillRunning);
 
-            if(terrs)
-            {
-                errln("There were errors.");
-            }
-
-            break;
-        }
-
-        SimpleThread::sleep(900);
-    }
-
-    if (patience <= 0) {
-        errln("patience exceeded. ");
-        // while (TRUE) {SimpleThread::sleep(10000);}   // TODO:   for debugging.  Sleep forever on failure.
-        terrs++;
-    }
-
-    if (terrs > 0) {
-        SimpleThread::errorFunc();  
-    }
-
+    //
+    //  All threads have finished.
+    //
 cleanupAndReturn:
     delete [] tests;
     return;
 
 }
-
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 
