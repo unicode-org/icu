@@ -29,7 +29,7 @@ testtypes
     emptyarray:array 
     {
     }
-    testescape{ "tab:\t cr:\r ff:\f newline:\n backslash:\\ quote=\' doubleQuote=\" singlequoutes=''" }
+    testescape{ "tab:\t cr:\r ff:\f newline:\n backslash:\\\\ quote=\\\' doubleQuote=\\\" singlequoutes=''" }
     string{ }
     stringTable{{}}
     //nested table
