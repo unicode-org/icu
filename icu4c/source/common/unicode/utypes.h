@@ -625,6 +625,8 @@ typedef enum UErrorCode {
      U_REGEX_PROPERTY_SYNTAX,              /**< Incorrect Unicode property                */
      U_REGEX_UNIMPLEMENTED,                /**< Use of regexp feature that is not yet implemented. */
      U_REGEX_MISMATCHED_PAREN,             /**< Incorrectly nested parentheses in regexp pattern. */
+     U_REGEX_NUMBER_TOO_BIG,               /**< Decimal number is too large.              */
+     U_REGEX_BAD_INTERVAL,                 /**< Error in {min,max} interval        */
      U_REGEX_ERROR_LIMIT,                  /**< This must always be the last value to indicate the limit for regexp errors */
 
     U_ERROR_LIMIT=U_REGEX_ERROR_LIMIT      /**< This must always be the last value to indicate the limit for UErrorCode (last error code +1) */
