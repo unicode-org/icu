@@ -69,7 +69,7 @@ public:
 
     UVector32(int32_t initialCapacity, UErrorCode &status);
 
-    ~UVector32();
+    virtual ~UVector32();
 
     /**
      * Assign this object to another (make this a copy of 'other').
