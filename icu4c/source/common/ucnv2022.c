@@ -1349,11 +1349,8 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP(UConverterFromUnicodeArgs* args,
             else{
                 
                 iterCount = (iterCount<8)? iterCount+1 : 0;
-                if(mySourceChar>0x00ff && currentState==7){
-                    myConverterData->currentState=currentState=(StateEnum)4;
-                }
-                else
-                    myConverterData->currentState=currentState=(StateEnum)(currentState<7)? currentState+1:0;
+      
+                myConverterData->currentState=currentState=(StateEnum)(currentState<7)? currentState+1:0;
                 
                 if((currentState!= initIterState) ){
                     
