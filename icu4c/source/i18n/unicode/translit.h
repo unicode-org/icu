@@ -20,8 +20,6 @@ class Hashtable;
 class U_I18N_API UVector;
 class CompoundTransliterator;
 
-U_CFUNC UBool transliterator_cleanup();
-
 /**
  * <code>Transliterator</code> is an abstract class that
  * transliterates text from one format to another.  The most common
