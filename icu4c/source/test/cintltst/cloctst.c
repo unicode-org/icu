@@ -470,7 +470,7 @@ static void TestGetAvailableLocales()
 static void TestDataDirectory()
 {
 
-    char            oldDirectory[80];
+    char            oldDirectory[512];
     const char     *temp,*testValue1,*testValue2,*testValue3;
     const char path[40] ="d:\\icu\\source\\test\\intltest" U_FILE_SEP_STRING; /*give the required path */
 
