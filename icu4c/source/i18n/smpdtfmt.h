@@ -725,6 +725,8 @@ inline UnicodeString&
 SimpleDateFormat::format(const Formattable& obj,
                          UnicodeString& result,
                          UErrorCode& status) const {
+    // Don't use Format:: - use immediate base class only,
+    // in case immediate base modifies behavior later.
     return DateFormat::format(obj, result, status);
 }
 
