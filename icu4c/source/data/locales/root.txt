@@ -54,11 +54,20 @@ root {
     // this is a special tag that makes genrb include UCARules.txt for collation
     "%%UCARULES" { "UCARules.txt"} // UCARules
 
-    // Here are empty collation rules just for the consistency. UCA is used instead... 01/16/2001 by weiv
-    CollationElements {
-        Version { "0.0" }
-        Sequence{ ""  }
+    
+    collations {
+       standard {
+          Version  { "0.0" }
+          Sequence { "" }
+       }
+       default { "standard" }
     }
+
+    // Here are empty collation rules just for the consistency. UCA is used instead... 01/16/2001 by weiv
+    //CollationElements {
+        //Version { "0.0" }
+        //Sequence{ ""  }
+    //}
 
     //------------------------------------------------------------
     // BEGIN Transliterator support
