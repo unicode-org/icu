@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakIterator.java,v $
- * $Date: 2003/01/28 18:55:41 $
- * $Revision: 1.15 $
+ * $Date: 2003/02/15 00:29:03 $
+ * $Revision: 1.16 $
  *
  *****************************************************************************************
  */
@@ -545,53 +545,6 @@ public abstract class BreakIterator implements Cloneable
         return getBreakInstance(where, KIND_TITLE);
     }
 
-
-    private static  Class BI_FACTORY               = null;
-    private static  Method REGISTER_INSTANCE       = null;
-    private static  Method UNREGISTER              = null;
-    private static  Method CREATE_BREAK_INSTANCE   = null;
-    private static  Method GET_AVAILABLE_LOCALES   = null;
-    
-    private static final void setupService(){
-        try{
-            // load the class
-            BI_FACTORY = Class.forName("com.ibm.icu.text.BreakIteratorFactory");
-            
-            // get the reference to registerInstance method
-            Class[] argTypes  = { BreakIterator.class, Locale.class, int.class};
-            REGISTER_INSTANCE = BI_FACTORY.getDeclaredMethod("registerInstance",argTypes);
-            
-            // get the reference to unregister method 
-            argTypes = new Class[1];
-            argTypes[0] = Object.class;
-            UNREGISTER = BI_FACTORY.getDeclaredMethod("unregisterFactory",argTypes);
-            
-            // get the reference to create instance method
-            argTypes = new Class[2];
-            argTypes[0] = Locale.class;
-            argTypes[1] = int.class;
-
-            CREATE_BREAK_INSTANCE = BI_FACTORY.getDeclaredMethod("createBreakInstance",argTypes);
-            
-            // get the reference to getAvailableLocales
-            GET_AVAILABLE_LOCALES = BI_FACTORY.getDeclaredMethod("getAvailableLocales",null);
-            
-        }catch(Exception e){
-            e.printStackTrace();
-            throw new RuntimeException(e.getMessage());
-        }
-    
-    }
-    private static final Object invoke(Method method, Object[] args){
-        try{
-
-            return method.invoke(null,args);
-        }catch(Exception e){
-            e.printStackTrace();
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-    
     /**
      * Register a new break iterator of the indicated kind, to use in the given locale.
      * Clones of the iterator will be returned
@@ -604,21 +557,7 @@ public abstract class BreakIterator implements Cloneable
      * @draft ICU 2.4
      */
     public static Object registerInstance(BreakIterator iter, Locale locale, int kind) {
-       /* try {
-            Class[] argTypes = { BreakIterator.class, Locale.class, int.class };
-            Method regInstance = BI_FACTORY.getMethod("registerInstance",argTypes);
-            Object[] args = {iter,locale, new Integer(kind)};
-            return regInstance.invoke(null,args);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e.getMessage());
-        }*/
-        Object[] args = {iter,locale, new Integer(kind)};
-        if(BI_FACTORY==null){
-            setupService();
-        }
-        return invoke(REGISTER_INSTANCE,args);
+        return getShim().registerInstance(iter, locale, kind);
     }
 
     /**
@@ -629,26 +568,11 @@ public abstract class BreakIterator implements Cloneable
      * @draft ICU 2.4
      */
     public static boolean unregister(Object key) {
-        /*try {
-            Class[] argTypes = { Object.class };
-            Method unregister = BI_FACTORY.getMethod("unregister",argTypes);
-            Object[] args = {key};
-            Boolean retVal = (Boolean) unregister.invoke(null,args);
-            return retVal.booleanValue();
+        if (shim == null) {
+            return false;
         }
-        catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e.getMessage());
-        }*/
-        Object[] args = {key};
-        if(BI_FACTORY==null){
-            setupService();
-        }
-        return ((Boolean)invoke(UNREGISTER,args)).booleanValue();
+        return shim.unregister(key);
     }
-
-
-
 
     // end of registration
 
@@ -662,13 +586,10 @@ public abstract class BreakIterator implements Cloneable
                 }
             }
         }
-        Object[] args = new Object[]{where, new Integer(kind)};
-        
-        if(BI_FACTORY==null){
-            setupService();
-        }
-        BreakIterator result = (BreakIterator)invoke(CREATE_BREAK_INSTANCE,
-                                                     args);
+
+        // sigh, all to avoid linking in ICULocaleData...
+        BreakIterator result = getShim().createBreakIterator(where, kind);
+
         BreakIteratorCache cache = new BreakIteratorCache(where, result);
         iterCache[kind] = new SoftReference(cache);
         return result;
@@ -682,10 +603,8 @@ public abstract class BreakIterator implements Cloneable
      */
     public static synchronized Locale[] getAvailableLocales()
     {
-        if(BI_FACTORY==null){
-            setupService();
-        }
-        return (Locale[]) invoke(GET_AVAILABLE_LOCALES, null);
+        // to avoid linking ICULocaleData
+        return getShim().getAvailableLocales();
     }
 
     private static final class BreakIteratorCache {
@@ -705,5 +624,32 @@ public abstract class BreakIterator implements Cloneable
         BreakIterator createBreakInstance() {
             return (BreakIterator) iter.clone();
         }
+    }
+
+    static abstract class BreakIteratorServiceShim {
+        public abstract Object registerInstance(BreakIterator iter, Locale l, int k);
+        public abstract boolean unregister(Object key);
+        public abstract Locale[] getAvailableLocales();
+        public abstract BreakIterator createBreakIterator(Locale l, int k);
+    }
+
+    private static BreakIteratorServiceShim shim;
+    private static BreakIteratorServiceShim getShim() {
+        if (shim == null) {
+            try {
+                Class cls = Class.forName("com.ibm.icu.text.BreakIteratorFactory");
+                BreakIteratorServiceShim newshim = (BreakIteratorServiceShim)cls.newInstance();
+                synchronized(BreakIterator.class) {
+                    if (shim == null) {
+                        shim = newshim;
+                    }
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException(e.getMessage());
+            }
+        }
+        return shim;
     }
 }
