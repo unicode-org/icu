@@ -40,12 +40,47 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
         CASE(10,TestPatterns2);
         CASE(11,TestSecondaryGrouping);
         CASE(12,TestSurrogateSupport);
+        CASE(13,TestAPI);
 
         default: name = ""; break;
     }
 }
  
 // -------------------------------------
+
+// Test API (increase code coverage)
+void
+NumberFormatTest::TestAPI(void)
+{
+  logln("Test API");
+  UErrorCode status = U_ZERO_ERROR;
+  NumberFormat *test = NumberFormat::createInstance("root", status);
+  if(U_FAILURE(status)) {
+    errln("unable to create format object");
+  }
+  if(test != NULL) {
+    test->setMinimumIntegerDigits(10);
+    test->setMaximumIntegerDigits(2);
+
+    test->setMinimumFractionDigits(10);
+    test->setMaximumFractionDigits(2);
+
+    UnicodeString result;
+    FieldPosition pos;
+    Formattable bla("Paja Patak"); // Donald Duck for non Serbian speakers
+    test->format(bla, result, pos, status);
+    if(U_SUCCESS(status)) {
+      errln("Yuck... Formatted a duck... As a number!");
+    } else {
+      status = U_ZERO_ERROR;
+    }
+
+    delete test;  
+  }
+
+
+
+}
 
 // Test various patterns
 void
@@ -632,6 +667,18 @@ void NumberFormatTest::TestScientific(void) {
                   DIGITS[4*i+3]);
         }
     }
+
+
+    // Test the constructor for default locale. We have to
+    // manually set the default locale, as there is no 
+    // guarantee that the default locale has the same 
+    // scientific format.
+    Locale def = Locale::getDefault();
+    Locale::setDefault(Locale::US, status);
+    expect(NumberFormat::createScientificInstance(status),
+           12345.678901,
+           "1.2345678901E4", status);
+    Locale::setDefault(def, status);
 
     expect(new DecimalFormat("#E0", US, status),
            12345.0,
