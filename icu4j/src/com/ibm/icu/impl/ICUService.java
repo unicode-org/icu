@@ -699,7 +699,7 @@ public class ICUService extends ICUNotifier {
         LocaleRef ref = dnref;
 
         if (ref != null) {
-            dncache = (SortedMap)ref.get(locale, com);
+            dncache = ref.get(locale, com);
         }
 
         while (dncache == null) {

@@ -16,7 +16,6 @@ import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
 import com.ibm.icu.util.RangeValueIterator;
-import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.lang.UCharacter;
 

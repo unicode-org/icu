@@ -12,6 +12,8 @@ import java.util.MissingResourceException;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
+
+
 /**
  * This class abstracts access to calendar (Calendar and DateFormat) data.
  * @internal ICU 3.0
@@ -22,7 +24,6 @@ public class CalendarData {
      * @param loc locale to use. The 'calendar' keyword will be ignored.
      * @param type calendar type. NULL indicates the gregorian calendar. 
      * No default lookup is done.
-     * @param status error code
      */
     public CalendarData(ULocale loc, String type) {
         this((ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, loc), type);
@@ -43,18 +44,17 @@ public class CalendarData {
      * Load data for calendar. Note, this object owns the resources, do NOT call ures_close()!
      *
      * @param key Resource key to data
-     * @param status Error Status
      * @internal
      */
     public ICUResourceBundle get(String key) {
         try {
-            return (ICUResourceBundle)fBundle.getWithFallback("calendar/" + fMainType + "/" + key);
+            return fBundle.getWithFallback("calendar/" + fMainType + "/" + key);
         } catch(MissingResourceException m) {
             if(fFallbackType != null) {
-                return (ICUResourceBundle)fBundle.getWithFallback("calendar/" + fFallbackType + "/" + key);
-            } else {
-                throw m;
+                return fBundle.getWithFallback("calendar/" + fFallbackType + "/" + key);
             }
+            throw m;
+            
         }       
     }
 
@@ -66,18 +66,17 @@ public class CalendarData {
      *
      * @param key Resource key to data
      * @param subKey Resource key to data
-     * @param status Error Status
      * @internal
      */
     public ICUResourceBundle get(String key, String subKey) {
         try {
-            return (ICUResourceBundle)fBundle.getWithFallback("calendar/" + fMainType + "/" + key + "/format/" + subKey);
+            return fBundle.getWithFallback("calendar/" + fMainType + "/" + key + "/format/" + subKey);
         } catch(MissingResourceException m) {
             if(fFallbackType != null) {
-                return (ICUResourceBundle)fBundle.getWithFallback("calendar/" + fFallbackType + "/" + key + "/format/" + subKey);
-            } else {
-                throw m;
+                return fBundle.getWithFallback("calendar/" + fFallbackType + "/" + key + "/format/" + subKey);
             }
+            throw m;
+            
         }       
     }
     
