@@ -1865,5 +1865,17 @@ TestUnicodeSet() {
         ucnv_close(cnv);
     }
 
+    errorCode = U_ZERO_ERROR;
+    ucnv_getUnicodeSet(NULL, set, UCNV_ROUNDTRIP_SET, &errorCode);
+    if (errorCode != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("error: ucnv_getUnicodeSet(NULL) returned wrong status code %s\n", u_errorName(errorCode));
+    }
+    errorCode = U_PARSE_ERROR;
+    /* Make sure that it does nothing if an error is passed in. Difficult to proper test for. */
+    ucnv_getUnicodeSet(NULL, NULL, UCNV_ROUNDTRIP_SET, &errorCode);
+    if (errorCode != U_PARSE_ERROR) {
+        log_err("error: ucnv_getUnicodeSet(NULL) returned wrong status code %s\n", u_errorName(errorCode));
+    }
+
     uset_close(set);
 }
