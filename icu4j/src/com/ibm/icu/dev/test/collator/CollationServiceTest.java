@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003, International Business Machines Corporation and         *
+ * Copyright (C) 2003-2004, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -19,6 +19,7 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.Collator.CollatorFactory;
+import com.ibm.icu.util.ULocale;
 
 public class CollationServiceTest extends TestFmwk {
     public static void main(String[] args) {
@@ -29,12 +30,7 @@ public class CollationServiceTest extends TestFmwk {
         // register a singleton
         Collator frcol = Collator.getInstance(Locale.FRANCE);
         Collator uscol = Collator.getInstance(Locale.US);
-        
-	{
-	    // coverage 
-	    Locale[] locales = Collator.getAvailableLocales();
-	}
-	
+        	
         { // try override en_US collator
             Object key = Collator.registerInstance(frcol, Locale.US);
             Collator ncol = Collator.getInstance(Locale.US);
@@ -42,8 +38,8 @@ public class CollationServiceTest extends TestFmwk {
                 errln("register of french collator for en_US failed");
             }
 
-	    // coverage
-	    Collator test = Collator.getInstance(Locale.GERMANY); // CollatorFactory.handleCreate
+    	    // coverage
+    	    Collator test = Collator.getInstance(Locale.GERMANY); // CollatorFactory.handleCreate
 
             if (!Collator.unregister(key)) {
                 errln("failed to unregister french collator");
@@ -95,12 +91,12 @@ public class CollationServiceTest extends TestFmwk {
             }
         }
 
-	{
-	    // coverage after return to default 
-	    Locale[] locales = Collator.getAvailableLocales();
-
-	    Collator ncol = Collator.getInstance(Locale.US);
-	}
+    	{
+    	    // coverage after return to default 
+    	    Locale[] locales = Collator.getAvailableLocales();
+    
+    	    Collator ncol = Collator.getInstance(Locale.US);
+    	}
     }
 
     public void TestRegisterFactory() {
@@ -171,23 +167,23 @@ public class CollationServiceTest extends TestFmwk {
             }
         }
 	
-	class TestFactoryWrapper extends CollatorFactory {
-	    CollatorFactory delegate;
-
-	    TestFactoryWrapper(CollatorFactory delegate) {
-		this.delegate = delegate;
-	    }
-
-            public Collator createCollator(Locale loc) {
-		return delegate.createCollator(loc);
-	    }
-
-	    // use CollatorFactory getDisplayName(Locale, Locale) for coverage
-
-            public Set getSupportedLocaleIDs() {
-		return delegate.getSupportedLocaleIDs();
-	    }
-	}
+    	class TestFactoryWrapper extends CollatorFactory {
+    	    CollatorFactory delegate;
+    
+    	    TestFactoryWrapper(CollatorFactory delegate) {
+    		this.delegate = delegate;
+    	    }
+    
+                public Collator createCollator(Locale loc) {
+    		return delegate.createCollator(loc);
+    	    }
+    
+    	    // use CollatorFactory getDisplayName(Locale, Locale) for coverage
+    
+                public Set getSupportedLocaleIDs() {
+    		return delegate.getSupportedLocaleIDs();
+    	    }
+    	}
 
         Locale fu_FU = new Locale("fu", "FU", "");
         Locale fu_FU_FOO = new Locale("fu", "FU", "FOO");
@@ -211,19 +207,24 @@ public class CollationServiceTest extends TestFmwk {
 
         TestFactory factory = new TestFactory(info);
 
-	// coverage
-	{
-	    TestFactoryWrapper wrapper = new TestFactoryWrapper(factory); // in java, gc lets us easily multiply reference!
-	    Object key = Collator.registerFactory(wrapper);
-	    String name = Collator.getDisplayName(fu_FU, fu_FU_FOO);
-	    logln("*** default name: " + name);
-	    Collator.unregister(key);
+    	// coverage
+    	{
+    	    TestFactoryWrapper wrapper = new TestFactoryWrapper(factory); // in java, gc lets us easily multiply reference!
+    	    Object key = Collator.registerFactory(wrapper);
+    	    String name = Collator.getDisplayName(fu_FU, fu_FU_FOO);
+    	    logln("*** default name: " + name);
+    	    Collator.unregister(key);
+    
+    	    Collator col = Collator.getInstance(new Locale("bar", "BAR"));
+    	}
 
-	    Collator col = Collator.getInstance(new Locale("bar", "BAR"));
-	}
-
+        int n1 = checkAvailable("before registerFactory");
+        
         {
             Object key = Collator.registerFactory(factory);
+            
+            int n2 = checkAvailable("after registerFactory");
+            
             Collator ncol = Collator.getInstance(Locale.US);
             if (!frcol.equals(ncol)) {
                 errln("frcoll for en_US failed");
@@ -260,10 +261,68 @@ public class CollationServiceTest extends TestFmwk {
                 errln("failed to unregister factory");
             }
 
+            int n3 = checkAvailable("after unregister");
+            assertTrue("register increases count", n2>n1);
+            assertTrue("unregister restores count", n3==n1);
+            
             ncol = Collator.getInstance(fu_FU);
             if (!fucol.equals(ncol)) {
                 errln("collator after unregister does not match original fu_FU");
             }
         }
+    }
+
+    /**
+     * Check the integrity of the results of Collator.getAvailableLocales().
+     * Return the number of items returned.
+     */
+    int checkAvailable(String msg) {
+        Locale locs[] = Collator.getAvailableLocales();
+        if (!assertTrue("getAvailableLocales != null", locs!=null)) return -1;
+        checkArray(msg, locs, null);
+        ULocale ulocs[] = Collator.getAvailableULocales();
+        if (!assertTrue("getAvailableULocales != null", ulocs!=null)) return -1;
+        checkArray(msg, ulocs, null);
+        assertTrue("getAvailableLocales().length == getAvailableULocales().length",
+                   locs.length == ulocs.length);
+        return locs.length;
+    }
+    
+    private static final String KW[] = {
+        "collation"
+    };
+
+    private static final String KWVAL[] = {
+        "phonebook",
+        "stroke"
+    };
+
+    public void TestSeparateTrees() {
+        String kw[] = Collator.getKeywords();
+        if (!assertTrue("getKeywords != null", kw!=null)) return;
+        checkArray("getKeywords", kw, KW);
+        
+        String kwval[] = Collator.getKeywordValues(KW[0]);
+        if (!assertTrue("getKeywordValues != null", kwval!=null)) return;
+        checkArray("getKeywordValues", kwval, KWVAL);
+
+        boolean isAvailable[] = new boolean[1];
+        ULocale equiv = Collator.getFunctionalEquivalent(KW[0],
+                                                         new ULocale("fr"),
+                                                         isAvailable);
+        if (assertTrue("getFunctionalEquivalent(fr)!=null", equiv!=null)) {
+            assertEquals("getFunctionalEquivalent(fr)", "fr", equiv.toString());
+        }
+        assertTrue("getFunctionalEquivalent(fr).isAvailable==true",
+                   isAvailable[0] == true);
+        
+        equiv = Collator.getFunctionalEquivalent(KW[0],
+                                                 new ULocale("fr_FR"),
+                                                 isAvailable);
+        if (assertTrue("getFunctionalEquivalent(fr_FR)!=null", equiv!=null)) {
+            assertEquals("getFunctionalEquivalent(fr_FR)", "fr", equiv.toString());
+        }
+        assertTrue("getFunctionalEquivalent(fr_FR).isAvailable==false",
+                   isAvailable[0] == false);
     }
 }
