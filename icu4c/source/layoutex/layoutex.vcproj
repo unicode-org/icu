@@ -152,17 +152,15 @@
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy  $(InputPath)  ..\..\include\layout
-"
-						Outputs="..\..\include\layout\ParagraphLayout.h"/>
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout"
+						Outputs="..\..\include\layout\$(InputFileName)"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy  $(InputPath)  ..\..\include\layout
-"
-						Outputs="..\..\include\layout\ParagraphLayout.h"/>
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout"
+						Outputs="..\..\include\layout\$(InputFileName)"/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -171,17 +169,15 @@
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy  $(InputPath)  ..\..\include\layout
-"
-						Outputs="..\..\include\layout\RunArrays.h"/>
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout"
+						Outputs="..\..\include\layout\$(InputFileName)"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy  $(InputPath)  ..\..\include\layout
-"
-						Outputs="..\..\include\layout\RunArrays.h"/>
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout"
+						Outputs="..\..\include\layout\$(InputFileName)"/>
 				</FileConfiguration>
 			</File>
 		</Filter>
