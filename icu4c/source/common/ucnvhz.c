@@ -79,6 +79,7 @@ static UConverterImpl _HZImpl={
     UConverter_fromUnicode_HZ_OFFSETS_LOGIC,
     UConverter_getNextUChar_HZ,
     
+    NULL,
     NULL
 };
 

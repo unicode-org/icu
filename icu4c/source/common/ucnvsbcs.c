@@ -354,6 +354,7 @@ static const UConverterImpl _SBCSImpl={
     NULL,
     T_UConverter_getNextUChar_SBCS,
 
+    NULL,
     NULL
 };
 
@@ -764,6 +765,7 @@ static const UConverterImpl _DBCSImpl={
     NULL,
     T_UConverter_getNextUChar_DBCS,
 
+    NULL,
     NULL
 };
 

@@ -670,6 +670,7 @@ static const UConverterImpl _EBCDICStatefulImpl={
     T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC,
     T_UConverter_getNextUChar_EBCDIC_STATEFUL,
 
+    NULL,
     NULL
 };
 

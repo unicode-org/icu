@@ -155,7 +155,7 @@ typedef void (*UConverterGetStarters)(const UConverter* converter,
  * the name field in static data struct should be returned by 
  * ucnv_getName() API function
  */
-typedef const char * (*UConverterGetName) (UConverter *cnv);
+typedef const char * (*UConverterGetName) (const UConverter *cnv);
 
 UBool CONVERSION_U_SUCCESS (UErrorCode err);
 
