@@ -87,6 +87,7 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
     //  Copy the Unicode Sets.  
     //    Could be made more efficient if the sets were reference counted and shared,
     //    but I doubt that pattern copying will be particularly common. 
+    fSets->addElement((UnicodeSet *)NULL, status);
     for (i=1; i<other.fSets->size(); i++) {
         UnicodeSet *sourceSet = (UnicodeSet *)other.fSets->elementAt(i);
         UnicodeSet *newSet    = new UnicodeSet(*sourceSet);
@@ -94,7 +95,7 @@ RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
             fBadState = TRUE;
             break;
         }
-        fCompiledPat->addElement(other.fCompiledPat->elementAti(i), status);
+        fSets->addElement(newSet, status);
     }
     if (U_FAILURE(status)) {
         fBadState = TRUE;
@@ -510,6 +511,17 @@ breakFromLoop:
 
 const char RegexPattern::fgClassID = 0;
 
+//----------------------------------------------------------------------------------
+//
+//   regex_cleanup      Memory cleanup function, free/delete all
+//                      cached memory.  Called by ICU's u_cleanup() function.
+//
+//----------------------------------------------------------------------------------
+U_CFUNC UBool 
+regex_cleanup(void) {
+    RegexCompile::cleanup();
+    return TRUE;
+};
 
 U_NAMESPACE_END
 #endif  // !UCONFIG_NO_REGULAR_EXPRESSIONS
