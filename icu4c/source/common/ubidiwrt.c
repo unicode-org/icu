@@ -359,9 +359,9 @@ ubidi_writeReordered(UBiDi *pBiDi,
     }
 
     /* do input and output overlap? */
-    if( text>=dest && text<dest+destSize ||
-        dest>=text && dest<text+length
-    ) {
+    if((text>=dest && text<dest+destSize) ||
+       (dest>=text && dest<text+length))
+    {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
