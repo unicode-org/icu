@@ -224,7 +224,7 @@ public:
      * Get the non-localized date-time pattern characters.
      * @stable
      */
-    static const UnicodeString& getPatternChars(void) { return fgPatternChars; }
+    static const UnicodeString& getPatternChars(void);
 
     /**
      * Gets localized date-time pattern characters. For example: 'u', 't', etc.
@@ -291,12 +291,6 @@ private:
      * Localized date-time pattern characters. For example: use 'u' as 'y'.
      */
     UnicodeString   fLocalPatternChars;
-
-    /**
-     * Unlocalized date-time pattern characters. For example: 'y', 'd', etc. All
-     * locales use the same these unlocalized pattern characters.
-     */
-    static UnicodeString fgPatternChars;
 
 private:
 
@@ -381,17 +375,6 @@ private:
      * method does NOT modify fIsOwned; the caller must handle that.
      */
     void disposeZoneStrings(void);
-
-    /**
-     * These are static arrays we use only in the case where we have no
-     * resource data.
-     */
-    static const UChar            fgLastResortMonthNames[kMonthNum][kMonthLen];
-    static const UChar            fgLastResortDayNames[kDayNum][kDayLen];
-    static const UChar            fgLastResortAmPmMarkers[kAmPmNum][kAmPmLen];
-    static const UChar            fgLastResortEras[kEraNum][kEraLen];
-    static const UChar            fgLastResortZoneStrings[kZoneNum][kZoneLen];
-
 };
 
 #endif // _DTFMTSYM
