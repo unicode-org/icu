@@ -1796,9 +1796,11 @@ static void TestExpansionSyntax() {
   for(i = 0; i<sizeof(rules)/sizeof(rules[0]); i++) {
     log_verbose("testing rule %s, expected to be %s\n", rules[i], expectedRules[i]);
     rlen = u_unescape(rules[i], rlz, 2048);
-    credundant = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT, &status);
+
+    /* Changed UCOL_DEFAULT -> UCOL_DEFAULT_NORMALIZATION due to an inconsistent API and compiler errors */
+    credundant = ucol_openRules(rlz, rlen, UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT, &status);
     rlen = u_unescape(expectedRules[i], rlz, 2048);
-    cresulting = ucol_openRules(rlz, rlen, UCOL_DEFAULT, UCOL_DEFAULT, &status);
+    cresulting = ucol_openRules(rlz, rlen, UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT, &status);
 
     /* testAgainstUCA still doesn't handle expansions correctly, so this is not run */
     /* as a hard error test, but only in information mode */
