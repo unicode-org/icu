@@ -54,25 +54,6 @@
 /* TODO: 
  * Add getName() function.
  */
-/*********** ISCII Converter Protos ***********/
-static void 
-_ISCIIOpen(UConverter *cnv, const char *name, const char *locale, uint32_t options,UErrorCode *errorCode);
-
-static void 
-_ISCIIClose(UConverter *converter);
-
-U_CFUNC void 
-_ISCIIReset(UConverter *converter, UConverterResetChoice choice);
-
-U_CFUNC UConverter * 
-_ISCII_SafeClone(const UConverter *cnv, void *stackBuffer, int32_t *pBufferSize, UErrorCode *status);
-
-U_CFUNC void 
-UConverter_toUnicode_ISCII_OFFSETS_LOGIC (UConverterToUnicodeArgs *args,UErrorCode *err);
-
-U_CFUNC void 
-UConverter_fromUnicode_ISCII_OFFSETS_LOGIC (UConverterFromUnicodeArgs *args,UErrorCode *err);
-
 
 typedef enum  {
     DEVANAGARI =0,
@@ -124,58 +105,6 @@ typedef enum{
     TML_MASK =0x01,
     ZERO     =0x00
 }MaskEnum;
-
-static const UConverterImpl _ISCIIImpl={
-
-    UCNV_ISCII,
-    
-    NULL,
-    NULL,
-    
-    _ISCIIOpen,
-    _ISCIIClose,
-    _ISCIIReset,
-    
-    UConverter_toUnicode_ISCII_OFFSETS_LOGIC,
-    UConverter_toUnicode_ISCII_OFFSETS_LOGIC,
-    UConverter_fromUnicode_ISCII_OFFSETS_LOGIC,
-    UConverter_fromUnicode_ISCII_OFFSETS_LOGIC,
-    NULL,
-    
-    NULL,
-    NULL,
-    NULL,
-    _ISCII_SafeClone
-};
-
-const UConverterStaticData _ISCIIStaticData={
-    sizeof(UConverterStaticData),
-        "ISCII",
-         0, 
-         UCNV_IBM, 
-         UCNV_ISCII, 
-         1, 
-         4,
-        { 0x1a, 0, 0, 0 },
-        0x1,
-        FALSE, 
-        FALSE,
-        0x0,
-        0x0,
-        { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }, /* reserved */
-
-};
-   
-const UConverterSharedData _ISCIIData={
-    sizeof(UConverterSharedData),
-        ~((uint32_t) 0),
-        NULL, 
-        NULL, 
-        &_ISCIIStaticData, 
-        FALSE, 
-        &_ISCIIImpl, 
-        0
-};
 
 typedef struct{
     UChar contextCharToUnicode;      /* previous Unicode codepoint for contextual analysis */
@@ -236,7 +165,7 @@ _ISCIIClose(UConverter *cnv){
     }
 }
 
-U_CFUNC void 
+static void 
 _ISCIIReset(UConverter *cnv, UConverterResetChoice choice){
     UConverterDataISCII* data =(UConverterDataISCII *) (cnv->extraInfo);
     if(choice<=UCNV_RESET_TO_UNICODE) {
@@ -825,7 +754,7 @@ static const uint16_t nuktaSpecialCases[][2]={
  *                      <HALANT> + <ZWJ>                    
  */
 
-U_CFUNC void 
+static void 
 UConverter_fromUnicode_ISCII_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
                                                       UErrorCode * err){
     const UChar *source = args->source;
@@ -1129,7 +1058,7 @@ static const int32_t lookupTable[][2]={
     }                                                                                   \
 }
 
-U_CFUNC void 
+static void 
 UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                                                             UErrorCode* err){
     const char *source = ( char *) args->source;
@@ -1426,7 +1355,7 @@ struct cloneStruct
 };
 
 
-U_CFUNC UConverter * 
+static UConverter * 
 _ISCII_SafeClone(const UConverter *cnv, 
               void *stackBuffer, 
               int32_t *pBufferSize, 
@@ -1453,3 +1382,56 @@ _ISCII_SafeClone(const UConverter *cnv,
 
     return &localClone->cnv;
 }
+
+static const UConverterImpl _ISCIIImpl={
+
+    UCNV_ISCII,
+    
+    NULL,
+    NULL,
+    
+    _ISCIIOpen,
+    _ISCIIClose,
+    _ISCIIReset,
+    
+    UConverter_toUnicode_ISCII_OFFSETS_LOGIC,
+    UConverter_toUnicode_ISCII_OFFSETS_LOGIC,
+    UConverter_fromUnicode_ISCII_OFFSETS_LOGIC,
+    UConverter_fromUnicode_ISCII_OFFSETS_LOGIC,
+    NULL,
+    
+    NULL,
+    NULL,
+    NULL,
+    _ISCII_SafeClone
+};
+
+static const UConverterStaticData _ISCIIStaticData={
+    sizeof(UConverterStaticData),
+        "ISCII",
+         0, 
+         UCNV_IBM, 
+         UCNV_ISCII, 
+         1, 
+         4,
+        { 0x1a, 0, 0, 0 },
+        0x1,
+        FALSE, 
+        FALSE,
+        0x0,
+        0x0,
+        { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 }, /* reserved */
+
+};
+   
+const UConverterSharedData _ISCIIData={
+    sizeof(UConverterSharedData),
+        ~((uint32_t) 0),
+        NULL, 
+        NULL, 
+        &_ISCIIStaticData, 
+        FALSE, 
+        &_ISCIIImpl, 
+        0
+};
+

@@ -41,55 +41,6 @@ U_CFUNC void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC(UConverterFromUnicodeAr
 U_CFUNC UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
                                                UErrorCode *err);
 
-U_CFUNC void _UTF16PEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
-                                          UErrorCode *pErrorCode);
-U_CFUNC void _UTF16PEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
-                                            UErrorCode *pErrorCode);
-U_CFUNC void _UTF16OEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
-                                          UErrorCode *pErrorCode);
-U_CFUNC void _UTF16OEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
-                                            UErrorCode *pErrorCode);
-U_CFUNC UChar32 T_UConverter_getNextUChar_UTF16_BE(UConverterToUnicodeArgs* args,
-                                                   UErrorCode* err);
-U_CFUNC UChar32 T_UConverter_getNextUChar_UTF16_LE(UConverterToUnicodeArgs* args,
-                                                   UErrorCode* err);
-
-U_CFUNC void T_UConverter_toUnicode_UTF32_BE(UConverterToUnicodeArgs *args,
-                                             UErrorCode *err);
-U_CFUNC void T_UConverter_toUnicode_UTF32_BE_OFFSET_LOGIC(UConverterToUnicodeArgs *args,
-                                                          UErrorCode *err);
-U_CFUNC void T_UConverter_fromUnicode_UTF32_BE(UConverterFromUnicodeArgs *args,
-                                               UErrorCode *err);
-U_CFUNC void T_UConverter_fromUnicode_UTF32_BE_OFFSET_LOGIC(UConverterFromUnicodeArgs *args,
-                                                            UErrorCode *err);
-U_CFUNC UChar32 T_UConverter_getNextUChar_UTF32_BE(UConverterToUnicodeArgs *args,
-                                                   UErrorCode *err);
-
-U_CFUNC void T_UConverter_toUnicode_UTF32_LE(UConverterToUnicodeArgs *args,
-                                             UErrorCode *err);
-U_CFUNC void T_UConverter_toUnicode_UTF32_LE_OFFSET_LOGIC(UConverterToUnicodeArgs *args,
-                                                          UErrorCode *err);
-U_CFUNC void T_UConverter_fromUnicode_UTF32_LE(UConverterFromUnicodeArgs *args,
-                                               UErrorCode *err);
-U_CFUNC void T_UConverter_fromUnicode_UTF32_LE_OFFSET_LOGIC(UConverterFromUnicodeArgs *args,
-                                                            UErrorCode *err);
-U_CFUNC UChar32 T_UConverter_getNextUChar_UTF32_LE(UConverterToUnicodeArgs *args,
-                                                   UErrorCode *err);
-
-U_CFUNC void _UTF7Reset(UConverter *cnv, UConverterResetChoice choice);
-U_CFUNC void _UTF7Open(UConverter *cnv,
-                       const char *name,
-                       const char *locale,
-                       uint32_t options,
-                       UErrorCode *pErrorCode);
-U_CFUNC void _UTF7ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
-                                       UErrorCode *pErrorCode);
-U_CFUNC UChar32 _UTF7GetNextUChar(UConverterToUnicodeArgs *pArgs,
-                                  UErrorCode *pErrorCode);
-U_CFUNC void _UTF7FromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
-                                         UErrorCode *pErrorCode);
-U_CFUNC const char * _UTF7GetName(const UConverter *cnv);
-
 
 /* UTF-8 -------------------------------------------------------------------- */
 
@@ -849,7 +800,7 @@ static const UConverterImpl _UTF8Impl={
 };
 
 /* Todo: verify that UTF-8 == (ccsid (ibm-codepage) 1208) for unicode version 2.0 and 3.0 */
-const UConverterStaticData _UTF8StaticData={
+static const UConverterStaticData _UTF8StaticData={
     sizeof(UConverterStaticData),
     "UTF8",
     1208, UCNV_IBM, UCNV_UTF8, 1, 4,
@@ -868,7 +819,7 @@ const UConverterSharedData _UTF8Data={
 
 /* UTF-16 Platform Endian --------------------------------------------------- */
 
-U_CFUNC void
+static void
 _UTF16PEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                              UErrorCode *pErrorCode) {
     UConverter *cnv         = pArgs->converter;
@@ -949,7 +900,7 @@ _UTF16PEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     pArgs->offsets = offsets;
 }
 
-U_CFUNC void
+static void
 _UTF16PEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                                UErrorCode *pErrorCode) {
     UConverter *cnv         = pArgs->converter;
@@ -1029,7 +980,7 @@ _UTF16PEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
  * and copy two bytes at a time and reverse them.
  */
 
-U_CFUNC void
+static void
 _UTF16OEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                              UErrorCode *pErrorCode) {
     UConverter *cnv         = pArgs->converter;
@@ -1119,7 +1070,7 @@ _UTF16OEToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     pArgs->offsets = offsets;
 }
 
-U_CFUNC void
+static void
 _UTF16OEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                                UErrorCode *pErrorCode) {
     UConverter *cnv         = pArgs->converter;
@@ -1203,7 +1154,7 @@ _UTF16OEFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
 
 /* UTF-16BE ----------------------------------------------------------------- */
 
-U_CFUNC UChar32 T_UConverter_getNextUChar_UTF16_BE(UConverterToUnicodeArgs* args,
+static UChar32 T_UConverter_getNextUChar_UTF16_BE(UConverterToUnicodeArgs* args,
                                                    UErrorCode* err)
 {
     UChar32 myUChar;
@@ -1279,7 +1230,7 @@ static const UConverterImpl _UTF16BEImpl={
 };
 
 /* Todo: verify that UTF-16BE == (ccsid (ibm-codepage) 1200) for unicode version 2.0 and 3.0 */
-const UConverterStaticData _UTF16BEStaticData={
+static const UConverterStaticData _UTF16BEStaticData={
     sizeof(UConverterStaticData),
     "UTF16_BigEndian",
     1200, UCNV_IBM, UCNV_UTF16_BigEndian, 2, 2,
@@ -1298,7 +1249,7 @@ const UConverterSharedData _UTF16BEData={
 
 /* UTF-16LE ----------------------------------------------------------------- */
 
-U_CFUNC UChar32 T_UConverter_getNextUChar_UTF16_LE(UConverterToUnicodeArgs* args,
+static UChar32 T_UConverter_getNextUChar_UTF16_LE(UConverterToUnicodeArgs* args,
                                                    UErrorCode* err)
 {
     UChar32 myUChar;
@@ -1380,7 +1331,7 @@ static const UConverterImpl _UTF16LEImpl={
 
 
 /* Todo: verify that UTF-16LE == (ccsid (ibm-codepage) 1200) for unicode version 2.0 and 3.0 */
-const UConverterStaticData _UTF16LEStaticData={
+static const UConverterStaticData _UTF16LEStaticData={
     sizeof(UConverterStaticData),
     "UTF16_LittleEndian",
     1200, UCNV_IBM, UCNV_UTF16_LittleEndian, 2, 2,
@@ -1399,7 +1350,7 @@ const UConverterSharedData _UTF16LEData={
 
 /* UTF-32BE ----------------------------------------------------------------- */
 
-U_CFUNC void
+static void
 T_UConverter_toUnicode_UTF32_BE(UConverterToUnicodeArgs * args,
                                 UErrorCode * err)
 {
@@ -1507,7 +1458,7 @@ donefornow:
     args->source = (const char *) mySource;
 }
 
-U_CFUNC void
+static void
 T_UConverter_toUnicode_UTF32_BE_OFFSET_LOGIC(UConverterToUnicodeArgs * args,
                                              UErrorCode * err)
 {
@@ -1622,7 +1573,7 @@ donefornow:
     args->source = (const char *) mySource;
 }
 
-U_CFUNC void
+static void
 T_UConverter_fromUnicode_UTF32_BE(UConverterFromUnicodeArgs * args,
                                   UErrorCode * err)
 {
@@ -1695,7 +1646,7 @@ lowsurogate:
     args->source = mySource;
 }
 
-U_CFUNC void
+static void
 T_UConverter_fromUnicode_UTF32_BE_OFFSET_LOGIC(UConverterFromUnicodeArgs * args,
                                                UErrorCode * err)
 {
@@ -1772,7 +1723,7 @@ lowsurogate:
     args->source = mySource;
 }
 
-U_CFUNC UChar32
+static UChar32
 T_UConverter_getNextUChar_UTF32_BE(UConverterToUnicodeArgs* args,
                                    UErrorCode* err)
 {
@@ -1858,7 +1809,7 @@ static const UConverterImpl _UTF32BEImpl = {
     NULL
 };
 
-const UConverterStaticData _UTF32BEStaticData = {
+static const UConverterStaticData _UTF32BEStaticData = {
     sizeof(UConverterStaticData),
     "UTF32_BigEndian",
     0,  /* TODO: Change this number to the UTF-32 CCSID which currently does not exist */
@@ -1877,7 +1828,7 @@ const UConverterSharedData _UTF32BEData = {
 
 /* UTF-32LE ---------------------------------------------------------- */
 
-U_CFUNC void
+static void
 T_UConverter_toUnicode_UTF32_LE(UConverterToUnicodeArgs * args,
                                 UErrorCode * err)
 {
@@ -1986,7 +1937,7 @@ donefornow:
     args->source = (const char *) mySource;
 }
 
-U_CFUNC void
+static void
 T_UConverter_toUnicode_UTF32_LE_OFFSET_LOGIC(UConverterToUnicodeArgs * args,
                                              UErrorCode * err)
 {
@@ -2102,7 +2053,7 @@ donefornow:
     args->source = (const char *) mySource;
 }
 
-U_CFUNC void
+static void
 T_UConverter_fromUnicode_UTF32_LE(UConverterFromUnicodeArgs * args,
                                   UErrorCode * err)
 {
@@ -2175,7 +2126,7 @@ lowsurogate:
     args->source = mySource;
 }
 
-U_CFUNC void
+static void
 T_UConverter_fromUnicode_UTF32_LE_OFFSET_LOGIC(UConverterFromUnicodeArgs * args,
                                                UErrorCode * err)
 {
@@ -2252,7 +2203,7 @@ lowsurogate:
     args->source = mySource;
 }
 
-U_CFUNC UChar32
+static UChar32
 T_UConverter_getNextUChar_UTF32_LE(UConverterToUnicodeArgs* args,
                                    UErrorCode* err)
 {
@@ -2338,7 +2289,7 @@ static const UConverterImpl _UTF32LEImpl = {
     NULL
 };
 
-const UConverterStaticData _UTF32LEStaticData = {
+static const UConverterStaticData _UTF32LEStaticData = {
     sizeof(UConverterStaticData),
     "UTF32_LittleEndian",
     0,    /* TODO: Change this number to the UTF-32 CCSID which currently does not exist */
@@ -2508,7 +2459,7 @@ fromBase64[128]={
  *
  */
 
-U_CFUNC void
+static void
 _UTF7Reset(UConverter *cnv, UConverterResetChoice choice) {
     if(choice<=UCNV_RESET_TO_UNICODE) {
         /* reset toUnicode */
@@ -2521,7 +2472,7 @@ _UTF7Reset(UConverter *cnv, UConverterResetChoice choice) {
     }
 }
 
-U_CFUNC void
+static void
 _UTF7Open(UConverter *cnv,
           const char *name,
           const char *locale,
@@ -2535,7 +2486,7 @@ _UTF7Open(UConverter *cnv,
     }
 }
 
-U_CFUNC void
+static void
 _UTF7ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                           UErrorCode *pErrorCode) {
     UConverter *cnv;
@@ -2831,13 +2782,13 @@ callback:
     }
 }
 
-U_CFUNC UChar32
+static UChar32
 _UTF7GetNextUChar(UConverterToUnicodeArgs *pArgs,
                   UErrorCode *pErrorCode) {
     return ucnv_getNextUCharFromToUImpl(pArgs, _UTF7ToUnicodeWithOffsets, TRUE, pErrorCode);
 }
 
-U_CFUNC void
+static void
 _UTF7FromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
                             UErrorCode *pErrorCode) {
     UConverter *cnv;
@@ -3101,7 +3052,7 @@ unicodeMode:
     return;
 }
 
-U_CFUNC const char *
+static const char *
 _UTF7GetName(const UConverter *cnv) {
     switch(cnv->fromUnicodeStatus>>28) {
     case 1:

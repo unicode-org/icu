@@ -368,7 +368,7 @@ static const UConverterImpl _ISO2022Impl={
     _ISO_2022_WriteSub,
     _ISO_2022_SafeClone
 };
-const UConverterStaticData _ISO2022StaticData={
+static const UConverterStaticData _ISO2022StaticData={
     sizeof(UConverterStaticData),
     "ISO_2022",
     2022,
@@ -417,7 +417,7 @@ static const UConverterImpl _ISO2022JPImpl={
     _ISO_2022_WriteSub,
     _ISO_2022_SafeClone
 };
-const UConverterStaticData _ISO2022JPStaticData={
+static const UConverterStaticData _ISO2022JPStaticData={
     sizeof(UConverterStaticData),
     "ISO_2022_JP",
     0,
@@ -466,7 +466,7 @@ static const UConverterImpl _ISO2022KRImpl={
     _ISO_2022_WriteSub,
     _ISO_2022_SafeClone
 };
-const UConverterStaticData _ISO2022KRStaticData={
+static const UConverterStaticData _ISO2022KRStaticData={
     sizeof(UConverterStaticData),
     "ISO_2022_KR",
     0,
@@ -516,7 +516,7 @@ static const UConverterImpl _ISO2022CNImpl={
     _ISO_2022_WriteSub,
     _ISO_2022_SafeClone
 };
-const UConverterStaticData _ISO2022CNStaticData={
+static const UConverterStaticData _ISO2022CNStaticData={
     sizeof(UConverterStaticData),
     "ISO_2022_CN",
     0,
