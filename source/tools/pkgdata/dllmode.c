@@ -28,7 +28,8 @@
 #include "pkgtypes.h"
 #include "makefile.h"
 
-void writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
+static void
+writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
 {
   const char *p, *baseName;
   char tmp[1024];
@@ -87,7 +88,6 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   char tmp[1024];
   CharList *tail = NULL;
   CharList *objects = NULL;
-  CharList *iter;
 
   if(U_FAILURE(*status)) {
     return;
