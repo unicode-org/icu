@@ -400,6 +400,7 @@ ibm-943_P14A-2000 { UTR22* }
                         932 { WINDOWS* }
                         cp932 { WINDOWS }   # This isn't really windows, but it's used by ICU for Windows.
                         cp943c { JAVA* }    # This is slightly different, but the backslash mapping is the same.
+                        ms932
                         pck     # Probably SOLARIS
                         sjis    # This might be for ibm-1351
                         ibm-943_VSUB_VPUA
@@ -484,7 +485,9 @@ ibm-949_P11A-2000 { UTR22* }
                         cp949c { JAVA* }
                         ibm-949_VSUB_VPUA
 
-ibm-970_P110-2000 { UTR22* }        # Java and Solaris use euc-kr to also mean ksc5601.
+# ibm-970 is a almost a subset of ibm-1363.
+# Java, Solaris and AIX use euc-kr to also mean ksc5601.
+ibm-970_P110-2000 { UTR22* }
                         ibm-970 { IBM* }
                         EUC-KR { IANA* MIME* WINDOWS JAVA* }
                         51949 { WINDOWS* }
@@ -496,7 +499,8 @@ ibm-1363_P110-2000 { UTR22* } # Korean KSC MBCS with \ <-> Won mapping
                         ibm-1363 { IBM* }
                         ibm-1363_VASCII_VSUB_VPUA
 
-# Java and Solaris use euc-kr to also mean ksc5601, and _sometimes_ for Windows too.
+# Java, Solaris and AIX use euc-kr to also mean ksc5601, and _sometimes_ for Windows too.
+# ibm-1363 is almost a superset of ibm-970.
 # Johab seems to be ksc5601-1992 and windows-1361, which is not this.
 ibm-1363_P11B-2000 { UTR22* }        
                         ibm-1363 # Leave untagged because this isn't the default
@@ -522,7 +526,9 @@ ibm-1162_P100-1999 { UTR22* }   # Thai (w/ euro update)
                         874 { WINDOWS* }
                         cp874 { WINDOWS }   # This isn't really windows, but it's used by ICU for Windows.
                         windows-874 { JAVA* WINDOWS }
-                        # iso-8859-11 { WINDOWS } # iso-8859-11 is similar to TIS-620, but it's not the same. ibm-13162 is a closer match.
+                        tis620.2533 { JAVA }
+                        eucTH               # eucTH is an unusual alias from Solaris.  eucTH has fewer mappings than TIS620
+                        # iso-8859-11 { WINDOWS } # iso-8859-11 is similar to TIS-620. ibm-13162 is a closer match.
 
 ibm-874 { IBM* }        ibm-9066 { IBM }    # Thai PC (w/o euro update). Yes ibm-874 == ibm-9066. ibm-1161 has the euro update.
                         874 { JAVA }
