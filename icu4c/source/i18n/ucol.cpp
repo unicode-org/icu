@@ -587,7 +587,7 @@ void ucol_setOptionsFromHeader(UCollator* result, UColOptionSet * opts, UErrorCo
     result->frenchCollation = (UColAttributeValue)opts->frenchCollation;
     result->normalizationMode = (UColAttributeValue)opts->normalizationMode;
     result->strength = (UColAttributeValue)opts->strength;
-    result->variableTopValue = (UColAttributeValue)opts->variableTopValue;
+    result->variableTopValue = opts->variableTopValue;
     result->alternateHandling = (UColAttributeValue)opts->alternateHandling;
     result->hiraganaQ = (UColAttributeValue)opts->hiraganaQ;
 
@@ -726,7 +726,7 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UEr
     result->frenchCollation = (UColAttributeValue)result->options->frenchCollation;
     result->normalizationMode = (UColAttributeValue)result->options->normalizationMode;
     result->strength = (UColAttributeValue)result->options->strength;
-    result->variableTopValue = (UColAttributeValue)result->options->variableTopValue;
+    result->variableTopValue = result->options->variableTopValue;
     result->alternateHandling = (UColAttributeValue)result->options->alternateHandling;
     result->hiraganaQ = (UColAttributeValue)result->options->hiraganaQ;
 
