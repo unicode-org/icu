@@ -157,7 +157,11 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
         /* not a known binary property */
         return FALSE;
     } else if(which==UCHAR_FULL_COMPOSITION_EXCLUSION) {
+#if !UCONFIG_NO_NORMALIZATION
         return unorm_internalIsFullCompositionExclusion(c);
+#else
+        return FALSE;
+#endif
     } else {
         /* systematic, directly stored properties */
         return (u_getUnicodeProperties(c, binProps[which].column)&binProps[which].mask)!=0;
@@ -221,7 +225,11 @@ u_getIntPropertyValue(UChar32 c, UProperty which) {
         case UCHAR_BLOCK:
             return (int32_t)ublock_getCode(c);
         case UCHAR_CANONICAL_COMBINING_CLASS:
+#if !UCONFIG_NO_NORMALIZATION
             return u_getCombiningClass(c);
+#else
+            return 0;
+#endif
         case UCHAR_DECOMPOSITION_TYPE:
             return (int32_t)(u_getUnicodeProperties(c, 2)&UPROPS_DT_MASK);
         case UCHAR_EAST_ASIAN_WIDTH:
@@ -429,6 +437,8 @@ uprv_getInclusions(USet* set, UErrorCode *pErrorCode) {
 
     uset_clear(set);
 
+#if !UCONFIG_NO_NORMALIZATION
     unorm_addPropertyStarts(set, pErrorCode);
+#endif
     uchar_addPropertyStarts(set, pErrorCode);
 }

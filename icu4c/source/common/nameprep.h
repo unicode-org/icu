@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2002, International Business Machines
+ *   Copyright (C) 2003, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -18,6 +18,9 @@
 #define NAMEPREP_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_IDNA
+
 #include "strprep.h"
 #include "unicode/uniset.h"
 
@@ -83,6 +86,8 @@ private:
 
 U_NAMESPACE_END
 
+#endif /* #if !UCONFIG_NO_IDNA */
+
 #endif
 
 /*
@@ -93,5 +98,3 @@ U_NAMESPACE_END
  * End:
  *
  */
-
-

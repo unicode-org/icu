@@ -16,6 +16,9 @@
 #define UNORM_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_NORMALIZATION
+
 #include "unicode/uiter.h"
 
 /**
@@ -566,5 +569,7 @@ unorm_compare(const UChar *s1, int32_t length1,
               const UChar *s2, int32_t length2,
               uint32_t options,
               UErrorCode *pErrorCode);
+
+#endif /* #if !UCONFIG_NO_NORMALIZATION */
 
 #endif

@@ -1,11 +1,11 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2002, International Business Machines
+*   Copyright (C) 2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
-*   file name:  genidn.c
+*   file name:  genidna.c
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4
@@ -88,7 +88,9 @@ static UOption options[]={
 
 extern int
 main(int argc, char* argv[]) {
+#if !UCONFIG_NO_IDNA
     char* filename = NULL;
+#endif
     const char *srcDir=NULL, *destDir=NULL, *suffix=NULL;
     char *basename=NULL;
     char *saveBasename = NULL;
@@ -145,6 +147,16 @@ main(int argc, char* argv[]) {
     } else {
         suffix=NULL;
     }
+
+#if UCONFIG_NO_IDNA
+
+    fprintf(stderr,
+        "genidna writes dummy " U_ICUDATA_NAME "_" DATA_NAME "." DATA_TYPE
+        " because UCONFIG_NO_IDNA is set, \n"
+        "see icu/source/common/unicode/uconfig.h\n");
+    generateData(destDir);
+
+#else
 
     setUnicodeVersion(options[6].value);
     filename = (char* ) uprv_malloc(uprv_strlen(srcDir) + 300); /* hopefully this should be enough */
@@ -242,8 +254,13 @@ main(int argc, char* argv[]) {
     }
 
     uprv_free(filename);
+
+#endif
+
     return errorCode;
 }
+
+#if !UCONFIG_NO_IDNA
 
 static void U_CALLCONV
 normalizationCorrectionsLineFn(void *context,
@@ -518,6 +535,8 @@ setLabelSeperators(UErrorCode *pErrorCode){
         printf(" ]\"}\n\n");
     }
 }
+
+#endif /* #if !UCONFIG_NO_IDNA */
 
 /*
  * Hey, Emacs, please set the following:

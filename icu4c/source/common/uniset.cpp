@@ -2706,6 +2706,34 @@ UnicodeSet::applyIntPropertyValue(UProperty prop, int32_t value, UErrorCode& ec)
 
     if (prop == UCHAR_GENERAL_CATEGORY_MASK) {
         applyFilter(generalCategoryMaskFilter, &value, ec);
+#if UCONFIG_NO_NORMALIZATION
+    } else if(prop == UCHAR_HANGUL_SYLLABLE_TYPE) {
+        /*
+         * Special code for when normalization is off.
+         * HST is still available because it is hardcoded in uprops.c, but
+         * the inclusions set does not have the necessary code points
+         * for normalization properties.
+         * I am hardcoding HST in this case because it is the only property
+         * that prevents genbrk from compiling char.txt when normalization is off.
+         * This saves me from turning off break iteration or making more
+         * complicated changes in genbrk.
+         *
+         * This code is not efficient. For efficiency turn on normalization.
+         *
+         * markus 20030505
+         */
+        UChar32 c;
+
+        clear();
+        for(c=0x1100; c<=0xd7a3; ++c) {
+            if(c==0x1200) {
+                c=0xac00;
+            }
+            if(value == u_getIntPropertyValue(c, UCHAR_HANGUL_SYLLABLE_TYPE)) {
+                add(c);
+            }
+        }
+#endif
     } else {
         IntPropertyContext c = {prop, value};
         applyFilter(intPropertyFilter, &c, ec);

@@ -19,7 +19,7 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_COLLATION
+#if !UCONFIG_NO_COLLATION && !UCONFIG_NO_NORMALIZATION
 
 #include "unicode/uiter.h"
 #include "unicode/unorm.h"
@@ -143,5 +143,6 @@ unorm_closeIter(UNormIterator *uni);
 U_CAPI UCharIterator * U_EXPORT2
 unorm_setIter(UNormIterator *uni, UCharIterator *iter, UNormalizationMode mode, UErrorCode *pErrorCode);
 
-#endif
+#endif /* uconfig.h switches */
+
 #endif

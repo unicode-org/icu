@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2002, International Business Machines
+*   Copyright (C) 2001-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -18,6 +18,9 @@
 #define __UNORMIMP_H__
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_NORMALIZATION
+
 #include "unicode/uiter.h"
 #include "unicode/unorm.h"
 #include "unicode/uset.h"
@@ -147,6 +150,8 @@ enum {
     _NORM_DECOMP_LENGTH_MASK=0x7f
 };
 
+#endif /* #if !UCONFIG_NO_NORMALIZATION */
+
 /* Korean Hangul and Jamo constants */
 enum {
     JAMO_L_BASE=0x1100,     /* "lead" jamo */
@@ -161,6 +166,8 @@ enum {
 
     HANGUL_COUNT=JAMO_L_COUNT*JAMO_V_COUNT*JAMO_T_COUNT
 };
+
+#if !UCONFIG_NO_NORMALIZATION
 
 /* Constants for options flags for normalization. @draft ICU 2.6 */
 enum {
@@ -216,12 +223,24 @@ unorm_compose(UChar *dest, int32_t destCapacity,
               UBool compat, int32_t options,
               UErrorCode *pErrorCode);
 
+#endif /* #if !UCONFIG_NO_NORMALIZATION */
+
 /**
  * Internal option for unorm_cmpEquivFold() for decomposing.
  * If not set, just do strcasecmp().
  * @internal
  */
 #define _COMPARE_EQUIV 0x80000
+
+#ifndef U_COMPARE_IGNORE_CASE
+/* see also unorm.h */
+/**
+ * Option bit for unorm_compare:
+ * Perform case-insensitive comparison.
+ * @draft ICU 2.2
+ */
+#define U_COMPARE_IGNORE_CASE       0x10000
+#endif
 
 /**
  * Internal option for unorm_cmpEquivFold() for strncmp style.
@@ -242,6 +261,8 @@ unorm_cmpEquivFold(const UChar *s1, int32_t length1,
                    const UChar *s2, int32_t length2,
                    uint32_t options,
                    UErrorCode *pErrorCode);
+
+#if !UCONFIG_NO_NORMALIZATION
 
 /**
  * Internal API, used by collation code.
@@ -642,5 +663,7 @@ unorm_addPropertyStarts(USet *set, UErrorCode *pErrorCode);
  *     which is (((high16(cp)&0x1f00)<<8)|result;
  *     else there is a USerializedSet at canonStartSets+result
  */
+
+#endif /* #if !UCONFIG_NO_NORMALIZATION */
 
 #endif
