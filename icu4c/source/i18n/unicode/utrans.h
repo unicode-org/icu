@@ -165,7 +165,7 @@ typedef struct UTransPosition {
  * @param status a pointer to the UErrorCode
  * @return a transliterator pointer that may be passed to other
  * utrans_xxx() functions, or NULL if the open call fails.
- * @draft ICU 2.0
+ * @stable
  */
 U_CAPI UTransliterator* U_EXPORT2 
 utrans_open(const char* id,
