@@ -1,5 +1,5 @@
 /*
- * $RCSfile: IBMCalendar.java,v $ $Revision: 1.2 $ $Date: 2000/03/01 01:23:26 $
+ * $RCSfile: IBMCalendar.java,v $ $Revision: 1.3 $ $Date: 2000/03/01 17:31:17 $
  *
  * (C) Copyright IBM Corp. 1998 - All Rights Reserved
  *
@@ -1118,7 +1118,6 @@ public abstract class IBMCalendar extends java.util.Calendar {
     }
     
     protected DateFormat getDateTimeFormat(int dateStyle, int timeStyle, Locale loc) {
-        System.out.println("in IBMCalendar.getDateTimeFormat(dateStyle,timeStyle,loc)");
         return formatHelper(this, loc, dateStyle, timeStyle);
     }
     
@@ -1161,7 +1160,7 @@ public abstract class IBMCalendar extends java.util.Calendar {
             } catch (MissingResourceException e) {
                 // No custom patterns
                 result = SimpleDateFormat.getDateTimeInstance(dateStyle, timeStyle, loc);
-                ((SimpleDateFormat)result).setDateFormatSymbols(symbols);
+                ((java.text.SimpleDateFormat)result).setDateFormatSymbols(oldStyleSymbols(symbols, loc));
             }
         } else {
             result = DateFormat.getDateTimeInstance(dateStyle, timeStyle, loc);
@@ -1170,6 +1169,19 @@ public abstract class IBMCalendar extends java.util.Calendar {
         return result;
     }
     
+    private static final java.text.DateFormatSymbols oldStyleSymbols(DateFormatSymbols syms, Locale loc) {
+        java.text.DateFormatSymbols result = new java.text.DateFormatSymbols(loc);
+        result.setAmPmStrings(syms.getAmPmStrings());
+        result.setEras(syms.getEras());
+        result.setLocalPatternChars(syms.getLocalPatternChars());
+        result.setMonths(syms.getMonths());
+        result.setShortMonths(syms.getShortMonths());
+        result.setShortWeekdays(syms.getShortWeekdays());
+        result.setWeekdays(syms.getWeekdays());
+        result.setZoneStrings(syms.getZoneStrings());
+        return result;
+    }
+
     /**
      * Find the ResourceBundle containing the date format information for
      * a specified calendar subclass in a given locale.
