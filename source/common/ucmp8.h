@@ -127,7 +127,7 @@ U_CAPI  void U_EXPORT2 ucmp8_compact(CompactByteArray* array,
 U_CAPI  void U_EXPORT2 ucmp8_expand(CompactByteArray* array);
 
 /** (more) INTERNAL USE ONLY **/
-U_CAPI  uint32_t U_EXPORT2 uprv_mstrm_write_ucmp8 (UMemoryStream *MS, const CompactByteArray* array);
+U_CAPI  uint32_t U_EXPORT2 ucmp8_flattenMem (const CompactByteArray* array, UMemoryStream *MS);
 /* initializes an existing CBA from memory.  Will cause ucmp8_close() to not deallocate anything. */
 U_CAPI  void U_EXPORT2 ucmp8_initFromData(CompactByteArray* array, const uint8_t **source, UErrorCode *status);
 

@@ -124,7 +124,7 @@ U_CAPI int32_t U_EXPORT2 uprv_mstrm_write(UMemoryStream *MS, const void *buffer,
     }
 }
 
-U_CAPI uint8_t * U_EXPORT2 uprv_mstrm_getBuffer(UMemoryStream *MS, int32_t *len){
+U_CAPI const uint8_t * U_EXPORT2 uprv_mstrm_getBuffer(UMemoryStream *MS, int32_t *len){
     if(MS->fError == FALSE) {
         *len = MS->fPos;
         return MS->fStart;
@@ -132,6 +132,44 @@ U_CAPI uint8_t * U_EXPORT2 uprv_mstrm_getBuffer(UMemoryStream *MS, int32_t *len)
         *len = 0;
         return NULL;
     }
+}
+
+U_CAPI const uint8_t * U_EXPORT2 uprv_mstrm_getCurrentBuffer(UMemoryStream *MS, int32_t *len){
+    if(MS->fError == FALSE) {
+        *len = MS->fPos-MS->fReadPos;
+        return MS->fStart+MS->fReadPos;
+    } else {
+        *len = 0;
+        return NULL;
+    }
+}
+
+U_CAPI int32_t U_EXPORT2 uprv_mstrm_skip(UMemoryStream *MS, int32_t len){
+    if(MS->fError == FALSE) {
+		MS->fReadPos+=len;
+    } else {
+		return 0;
+    }
+	if(MS->fReadPos>MS->fPos) {
+		MS->fError = TRUE;
+		return 0;
+	} else {
+		return len;
+	}
+}
+
+U_CAPI int32_t U_EXPORT2 uprv_mstrm_jump(UMemoryStream *MS, const uint8_t *where){
+    if(MS->fError == FALSE) {
+		MS->fReadPos=(where-MS->fStart);
+    } else {
+		return 0;
+    }
+	if(MS->fReadPos>MS->fPos) {
+		MS->fError = TRUE;
+		return 0;
+	} else {
+		return where-MS->fStart;
+	}
 }
 
 U_CAPI void U_EXPORT2

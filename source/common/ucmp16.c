@@ -564,7 +564,7 @@ const uint16_t* ucmp16_getIndex(const CompactShortArray* this_obj)
     return this_obj->fIndex;
 }
 
-U_CAPI  uint32_t U_EXPORT2 uprv_mstrm_write_ucmp16 (UMemoryStream *MS, const CompactShortArray* array)
+U_CAPI  uint32_t U_EXPORT2 ucmp16_flattenMem (const CompactShortArray* array, UMemoryStream *MS)
 {
   int32_t size = 0;
 
