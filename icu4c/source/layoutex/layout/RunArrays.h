@@ -221,22 +221,6 @@ inline RunArray::RunArray(const le_int32 *limits, le_int32 count)
     // nothing else to do...
 }
 
-inline RunArray::RunArray(le_int32 initialCapacity)
-    : fClientArrays(false), fLimits(NULL), fCount(0), fCapacity(initialCapacity)
-{
-    if (initialCapacity > 0) {
-        fLimits = LE_NEW_ARRAY(le_int32, fCapacity);
-    }
-}
-
-inline RunArray::~RunArray()
-{
-    if (! fClientArrays) {
-        LE_DELETE_ARRAY(fLimits);
-        fLimits = NULL;
-    }
-}
-
 inline le_int32 RunArray::getCount() const
 {
     return fCount;
@@ -389,22 +373,6 @@ inline FontRuns::FontRuns(const LEFontInstance **fonts, const le_int32 *limits, 
     // nothing else to do...
 }
 
-inline FontRuns::FontRuns(le_int32 initialCapacity)
-    : RunArray(initialCapacity), fFonts(NULL)
-{
-    if (initialCapacity > 0) {
-        fFonts = LE_NEW_ARRAY(const LEFontInstance *, initialCapacity);
-    }
-}
-
-inline FontRuns::~FontRuns()
-{
-    if (! fClientArrays) {
-        LE_DELETE_ARRAY(fFonts);
-        fFonts = NULL;
-    }
-}
-
 /**
  * The <code>LocaleRuns</code> class associates pointers to <code>Locale</code>
  * objects with runs of text.
@@ -538,22 +506,6 @@ inline LocaleRuns::LocaleRuns(const Locale **locales, const le_int32 *limits, le
     // nothing else to do...
 }
 
-inline LocaleRuns::LocaleRuns(le_int32 initialCapacity)
-    : RunArray(initialCapacity), fLocales(NULL)
-{
-    if (initialCapacity > 0) {
-        fLocales = LE_NEW_ARRAY(const Locale *, initialCapacity);
-    }
-}
-
-inline LocaleRuns::~LocaleRuns()
-{
-    if (! fClientArrays) {
-        LE_DELETE_ARRAY(fLocales);
-        fLocales = NULL;
-    }
-}
-
 /**
  * The <code>ValueRuns</code> class associates integer values with runs of text.
  *
@@ -684,22 +636,6 @@ inline ValueRuns::ValueRuns(const le_int32 *values, const le_int32 *limits, le_i
     : RunArray(limits, count), fValues(values)
 {
     // nothing else to do...
-}
-
-inline ValueRuns::ValueRuns(le_int32 initialCapacity)
-    : RunArray(initialCapacity), fValues(NULL)
-{
-    if (initialCapacity > 0) {
-        fValues = LE_NEW_ARRAY(le_int32, initialCapacity);
-    }
-}
-
-inline ValueRuns::~ValueRuns()
-{
-    if (! fClientArrays) {
-        LE_DELETE_ARRAY(fValues);
-        fValues = NULL;
-    }
 }
 
 U_NAMESPACE_END

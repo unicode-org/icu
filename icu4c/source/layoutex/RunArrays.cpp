@@ -16,6 +16,22 @@ U_NAMESPACE_BEGIN
 
 const char RunArray::fgClassID = 0;
 
+RunArray::RunArray(le_int32 initialCapacity)
+    : fClientArrays(false), fLimits(NULL), fCount(0), fCapacity(initialCapacity)
+{
+    if (initialCapacity > 0) {
+        fLimits = LE_NEW_ARRAY(le_int32, fCapacity);
+    }
+}
+
+RunArray::~RunArray()
+{
+    if (! fClientArrays) {
+        LE_DELETE_ARRAY(fLimits);
+        fLimits = NULL;
+    }
+}
+
 le_int32 RunArray::ensureCapacity()
 {
     if (fCount >= fCapacity) {
@@ -57,6 +73,22 @@ le_int32 RunArray::add(le_int32 limit)
 
 const char FontRuns::fgClassID = 0;
 
+FontRuns::FontRuns(le_int32 initialCapacity)
+    : RunArray(initialCapacity), fFonts(NULL)
+{
+    if (initialCapacity > 0) {
+        fFonts = LE_NEW_ARRAY(const LEFontInstance *, initialCapacity);
+    }
+}
+
+FontRuns::~FontRuns()
+{
+    if (! fClientArrays) {
+        LE_DELETE_ARRAY(fFonts);
+        fFonts = NULL;
+    }
+}
+
 void FontRuns::init(le_int32 capacity)
 {
     RunArray::init(capacity);
@@ -93,6 +125,22 @@ const LEFontInstance *FontRuns::getFont(le_int32 run) const
 
 const char LocaleRuns::fgClassID = 0;
 
+LocaleRuns::LocaleRuns(le_int32 initialCapacity)
+    : RunArray(initialCapacity), fLocales(NULL)
+{
+    if (initialCapacity > 0) {
+        fLocales = LE_NEW_ARRAY(const Locale *, initialCapacity);
+    }
+}
+
+LocaleRuns::~LocaleRuns()
+{
+    if (! fClientArrays) {
+        LE_DELETE_ARRAY(fLocales);
+        fLocales = NULL;
+    }
+}
+
 void LocaleRuns::init(le_int32 capacity)
 {
     RunArray::init(capacity);
@@ -128,6 +176,22 @@ const Locale *LocaleRuns::getLocale(le_int32 run) const
 }
 
 const char ValueRuns::fgClassID = 0;
+
+ValueRuns::ValueRuns(le_int32 initialCapacity)
+    : RunArray(initialCapacity), fValues(NULL)
+{
+    if (initialCapacity > 0) {
+        fValues = LE_NEW_ARRAY(le_int32, initialCapacity);
+    }
+}
+
+ValueRuns::~ValueRuns()
+{
+    if (! fClientArrays) {
+        LE_DELETE_ARRAY(fValues);
+        fValues = NULL;
+    }
+}
 
 void ValueRuns::init(le_int32 capacity)
 {

@@ -699,13 +699,6 @@ inline ParagraphLayout::VisualRun::VisualRun(const LEFontInstance *font, UBiDiDi
     // nothing else needs to be done!
 }
 
-inline ParagraphLayout::VisualRun::~VisualRun()
-{
-    LE_DELETE_ARRAY(fGlyphToCharMap);
-    LE_DELETE_ARRAY(fPositions);
-    LE_DELETE_ARRAY(fGlyphs);
-}
-
 U_NAMESPACE_END
 #endif
 #endif
