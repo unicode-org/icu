@@ -372,8 +372,8 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
         i = 1;
         detectedContraction = TRUE;
         while(spacePointer != NULL) {
-            sscanf(spacePointer+1, "%04X", (element->cPoints+i));
-            i++;
+            sscanf(spacePointer+1, "%04X", &theValue);
+            element->cPoints[i++] = (UChar)theValue;
             spacePointer = strchr(spacePointer+1, ' ');
         }
 
