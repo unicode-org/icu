@@ -48,7 +48,7 @@ endif
 LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
 LIBS = $(LIBUSTDIO) $(LIBICUI18N) $(LIBICUTOOLUTIL) $(LIBICUUC) @LIBS@ @LIB_M@ 
 
-OBJECTS = UCAData.o cnttable.o
+OBJECTS = genuca.o cnttable.o
 
 DEPS = $(OBJECTS:.o=.d)
 
