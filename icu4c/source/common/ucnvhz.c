@@ -120,6 +120,7 @@ static void _HZOpen(UConverter *cnv, const char *name,const char* locale, UError
         ((UConverterDataHZ*)cnv->extraInfo)->isEscapeAppended = FALSE;
         ((UConverterDataHZ*)cnv->extraInfo)->targetIndex = 0;
         ((UConverterDataHZ*)cnv->extraInfo)->sourceIndex = 0;
+        ((UConverterDataHZ*)cnv->extraInfo)->isTargetUCharDBCS = FALSE;
     }
 
 
@@ -140,6 +141,7 @@ static void _HZReset(UConverter *cnv){
         ((UConverterDataHZ*)cnv->extraInfo)->isEscapeAppended = FALSE;
         ((UConverterDataHZ*)cnv->extraInfo)->targetIndex = 0;
         ((UConverterDataHZ*)cnv->extraInfo)->sourceIndex = 0;
+        ((UConverterDataHZ*)cnv->extraInfo)->isTargetUCharDBCS = FALSE;
     }
 }
 
@@ -596,7 +598,6 @@ U_CFUNC void UConverter_fromUnicode_HZ(UConverterFromUnicodeArgs *args, UErrorCo
     UBool oldIsTargetUCharDBCS = isTargetUCharDBCS;
     UConverterCallbackReason reason;
     UBool isEscapeAppended =FALSE;
-    isTargetUCharDBCS   = (UBool) args->converter->fromUnicodeStatus;
     
     /*Arguments Check*/
     if (U_FAILURE(*err)) 
@@ -657,7 +658,7 @@ U_CFUNC void UConverter_fromUnicode_HZ(UConverterFromUnicodeArgs *args, UErrorCo
             }
             
             
-            isTargetUCharDBCS = (UBool)(targetUniChar>0x00FF);
+            myConverterData->isTargetUCharDBCS = isTargetUCharDBCS = (UBool)(targetUniChar>0x00FF);
             
             if (targetUniChar != missingCharMarker){
                     
