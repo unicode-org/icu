@@ -25,6 +25,16 @@
 
 #include "uprint.h"
 
+#if UCONFIG_NO_FORMATTING
+
+int main(int argc, char **argv)
+{
+  printf("%s: Sorry, UCONFIG_NO_FORMATTING was turned on (see uconfig.h). No formatting can be done. \n", argv[0]);
+  return 0;
+}
+#else
+
+
 /* Protos */
 static void usage(void);
 static void version(void);
@@ -690,3 +700,4 @@ print_year(UCalendar *c,
   ucal_close(right_cal);
 }
 
+#endif
