@@ -26,7 +26,7 @@
 #include "unicode/cpdtrans.h"
 #include "unicode/jamohang.h"
 #include "unicode/hangjamo.h"
-#include <stdio.h>
+
 const UChar Transliterator::ID_SEP   = 0x002D; /*-*/
 const UChar Transliterator::ID_DELIM = 0x003B; /*;*/
 
@@ -391,8 +391,8 @@ UnicodeString& Transliterator::getDisplayName(const UnicodeString& ID,
     // build the char* key
     char key[100];
     uprv_strcpy(key, RB_DISPLAY_NAME_PREFIX);
-    int32_t length=uprv_strlen(RB_DISPLAY_NAME_PREFIX);
-    key[length + ID.extract(0, sizeof(key)-length-1, key+length, "")]=0;
+    int32_t length=(int32_t)uprv_strlen(RB_DISPLAY_NAME_PREFIX);
+    key[length + ID.extract(0, (int32_t)(sizeof(key)-length-1), key+length, "")]=0;
 
     // Try to retrieve a UnicodeString* from the bundle.  The result,
     // if any, should NOT be deleted.
@@ -441,10 +441,10 @@ UnicodeString& Transliterator::getDisplayName(const UnicodeString& ID,
 
         // Use display names for the scripts, if they exist
         UnicodeString s;
+        length=(int32_t)uprv_strlen(RB_SCRIPT_DISPLAY_NAME_PREFIX);
         for (int j=1; j<=((i<0)?1:2); ++j) {
             status = U_ZERO_ERROR;
             uprv_strcpy(key, RB_SCRIPT_DISPLAY_NAME_PREFIX);
-            length=uprv_strlen(RB_SCRIPT_DISPLAY_NAME_PREFIX);
             args[j].getString(s);
             key[length + s.extract(0, sizeof(key)-length-1, key+length, "")]=0;
 
