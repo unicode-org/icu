@@ -58,6 +58,7 @@ static UBool s390dll = TRUE;
 
 #ifdef WIN32
 #   define WIN32_LEAN_AND_MEAN
+#   define NOGDI
 #   define NOUSER
 #   define NOSERVICE
 #   define NOIME
