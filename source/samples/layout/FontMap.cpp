@@ -22,7 +22,7 @@
 FontMap::FontMap(const char *fileName, le_int16 pointSize, GUISupport *guiSupport, RFIErrorCode &status)
     : fPointSize(pointSize), fFontCount(0), fGUISupport(guiSupport)
 {
-    le_int32 i, script;
+    le_int32 defaultFont = -1, i, script;
 
     for (i = 0; i < scriptCodeCount; i += 1) {
         fFontIndices[i] = -1;
@@ -34,7 +34,7 @@ FontMap::FontMap(const char *fileName, le_int16 pointSize, GUISupport *guiSuppor
         return;
     }
 
-    char *c, *s, *line, buffer[BUFFER_SIZE];
+    char *c, *scriptName, *fontName, *line, buffer[BUFFER_SIZE];
     FILE *file;
 
     file = fopen(fileName, "r");
@@ -57,9 +57,16 @@ FontMap::FontMap(const char *fileName, le_int16 pointSize, GUISupport *guiSuppor
 
         c = strchr(line, ':');
         c[0] = 0;
-        s = strip(&c[1]);
 
-        uscript_getCode(strip(line), &scriptCode, 1, &scriptStatus);
+        fontName   = strip(&c[1]);
+        scriptName = strip(line);
+
+        if (strcmp(scriptName, "DEFAULT") == 0) {
+            defaultFont = getFontIndex(fontName);
+            continue;
+        }
+
+        uscript_getCode(scriptName, &scriptCode, 1, &scriptStatus);
 
         if (U_FAILURE(scriptStatus) || scriptStatus == U_USING_FALLBACK_WARNING ||
             scriptStatus == U_USING_DEFAULT_WARNING) {
@@ -77,7 +84,15 @@ FontMap::FontMap(const char *fileName, le_int16 pointSize, GUISupport *guiSuppor
             fFontIndices[script] = -1;
         }
 
-        fFontIndices[script] = getFontIndex(s);
+        fFontIndices[script] = getFontIndex(fontName);
+    }
+
+    if (defaultFont >= 0) {
+        for (script = 0; script < scriptCodeCount; script += 1) {
+            if (fFontIndices[script] < 0) {
+                fFontIndices[script] = defaultFont;
+            }
+        }
     }
 
     fclose(file);
