@@ -274,11 +274,15 @@ public class ICULocaleService extends ICUService {
 
         /**
          * Return the (canonical) current descriptor, or null if no current id.
+         * Includes the keywords, whereas the ID does not include keywords.
          */
         public String currentDescriptor() {
             String result = currentID();
             if (result != null) {
                 result = "/" + result;
+                if (varstart != -1) {
+                    result += primaryID.substring(varstart);
+                }
                 if (kind != KIND_ANY) {
                     result = prefix() + result;
                 }
