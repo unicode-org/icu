@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-hpux-acc,v 1.24 2001/09/28 00:31:53 aheninger-oss Exp $
+## $Id: mh-hpux-acc,v 1.25 2001/10/03 23:32:11 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	:
@@ -34,32 +34,10 @@ LDLIBRARYPATH_ENVVAR = SHLIB_PATH
 ## Compiler switch to embed a library name
 LD_SONAME = -Wl,+h,$(MIDDLE_SO_TARGET)
 
-## Versioned target for a shared library.
-FINAL_SO_TARGET = $(basename $(SO_TARGET)).$(SO_TARGET_VERSION)
-MIDDLE_SO_TARGET = $(basename $(SO_TARGET)).$(SO_TARGET_VERSION_MAJOR)
-
-###  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
-## Prefix for the ICU library names
-ICUPREFIX = icu
-LIBICU = lib$(ICUPREFIX)
 ## Shared object suffix
 SO=		sl
 ## Non-shared intermediate object suffix
 STATIC_O = o
-
-## Force removal [for make clean]
-RMV = rm -rf
-## Platform commands to remove or move executable and library targets
-INSTALL-S = $(INSTALL_PROGRAM)
-INSTALL-L = $(INSTALL_DATA)
-
-## Link commands to link to ICU libs
-LIBICUDT=       -L$(top_builddir)/data -L$(top_builddir)/stubdata -l$(ICUPREFIX)data
-LIBICUUC= 	-L$(top_builddir)/common -l$(ICUPREFIX)uc $(LIBICUDT)
-LIBICUI18N= 	-L$(top_builddir)/i18n -l$(ICUPREFIX)i18n
-LIBCTESTFW= 	-L$(top_builddir)/tools/ctestfw -l$(ICUPREFIX)ctestfw
-LIBICUTOOLUTIL=-L$(top_builddir)/tools/toolutil -l$(ICUPREFIX)toolutil
-LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio
 
 ## Compilation rules
 %.$(STATIC_O): $(srcdir)/%.c
@@ -86,9 +64,9 @@ LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio
 
 ## Versioned libraries rules
 
-%.$(SO_TARGET_VERSION_MAJOR): %.$(SO_TARGET_VERSION)
+%.$(SO).$(SO_TARGET_VERSION_MAJOR): %.$(SO).$(SO_TARGET_VERSION)
 	$(RM) $@ && ln -s $< $@
-%.$(SO): %.$(SO_TARGET_VERSION_MAJOR)
-	$(RM) $@ && ln -s $*.$(SO_TARGET_VERSION) $@
+%.$(SO): %.$(SO).$(SO_TARGET_VERSION_MAJOR)
+	$(RM) $@ && ln -s $*.$(SO).$(SO_TARGET_VERSION) $@
 
 ## End HP/UX-specific setup

@@ -4,7 +4,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-darwin,v 1.17 2001/09/28 00:31:53 aheninger-oss Exp $
+## $Id: mh-darwin,v 1.18 2001/10/03 23:32:11 grhoten-oss Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -dynamic
@@ -19,10 +19,6 @@ GEN_DEPS.cc=	$(CXX) -E -MM $(DEFS) $(CPPFLAGS)
 COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -fno-common -c
 COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -fno-common -c
 
-## Commands to link
-LINK.c=		$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
-LINK.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
-
 ## Commands to make a shared library
 SHLIB.c=	$(CC) -dynamiclib -dynamic $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -install_name $(DESTDIR)$(libdir)/$(TARGET)
 SHLIB.cc=	$(CXX) -dynamiclib -dynamic $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -install_name $(DESTDIR)$(libdir)/$(TARGET)
@@ -31,34 +27,14 @@ SHLIB.cc=	$(CXX) -dynamiclib -dynamic $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 LD_RPATH=	-L
 LD_RPATH_PRE=	
 
-## Environment variable to set a runtime search path
-LDLIBRARYPATH_ENVVAR = LD_LIBRARY_PATH
-
 ## Versioned target for a shared library.
 FINAL_SO_TARGET = $(SO_TARGET)
 MIDDLE_SO_TARGET = 
 
-###  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
-## Prefix for the ICU library names
-ICUPREFIX = icu
-LIBICU = lib$(ICUPREFIX)
 ## Shared object suffix
 SO=		dylib
 ## Non-shared intermediate object suffix
 STATIC_O = ao
-
-## Force removal [for make clean]
-RMV = rm -rf
-## Platform commands to remove or move executable and library targets
-INSTALL-S = $(INSTALL_PROGRAM)
-INSTALL-L = $(INSTALL_DATA)
-
-## Link commands to link to ICU libs
-LIBICUUC= 	-L$(top_builddir)/common -l$(ICUPREFIX)uc
-LIBICUI18N= 	-L$(top_builddir)/i18n -l$(ICUPREFIX)i18n
-LIBCTESTFW= 	-L$(top_builddir)/tools/ctestfw -l$(ICUPREFIX)ctestfw
-LIBICUTOOLUTIL=-L$(top_builddir)/tools/toolutil -l$(ICUPREFIX)toolutil
-LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio
 
 ## Compilation rules
 %.$(STATIC_O): $(srcdir)/%.c

@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-aix,v 1.22 2001/09/28 00:31:53 aheninger-oss Exp $
+## $Id: mh-aix,v 1.23 2001/10/03 23:32:11 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -M $(DEFS) $(CPPFLAGS)
@@ -34,34 +34,11 @@ LDLIBRARYPATH_ENVVAR = LIBPATH
 ## Compiler switch to embed a library name
 #LD_SONAME = -Wl, 
 
-## Versioned target for a shared library.
-FINAL_SO_TARGET = $(SO_TARGET).$(SO_TARGET_VERSION_MAJOR)
-MIDDLE_SO_TARGET = $(SO_TARGET).$(SO_TARGET_VERSION_MAJOR)
-
-###  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
-## Prefix for the ICU library names
-ICUPREFIX = icu
-LIBICU = lib$(ICUPREFIX)
 ## Shared object suffix
-#AIX does not have versioning support
-#so we tag the major and minor versions to so
 SO=		so
 
 ## Non-shared intermediate object suffix
 STATIC_O = o
-
-RMV = rm -rf
-## Platform commands to remove or move executable and library targets
-INSTALL-S = $(INSTALL_PROGRAM)
-INSTALL-L = $(INSTALL_DATA)
-
-## Link commands to link to ICU libs
-LIBICUDT=       -L$(top_builddir)/data -L$(top_builddir)/stubdata -l$(ICUPREFIX)data
-LIBICUUC=       -brtl -L$(top_builddir)/common -l$(ICUPREFIX)uc $(LIBICUDT)
-LIBICUI18N= 	-brtl -L$(top_builddir)/i18n -l$(ICUPREFIX)i18n
-LIBCTESTFW= 	-brtl -L$(top_builddir)/tools/ctestfw -l$(ICUPREFIX)ctestfw
-LIBICUTOOLUTIL= -brtl -L$(top_builddir)/tools/toolutil -l$(ICUPREFIX)toolutil
-LIBUSTDIO=      -brtl -L$(top_builddir)/extra/ustdio -lustdio
 
 ## Special AIX rules
 
@@ -103,9 +80,10 @@ LIBUSTDIO=      -brtl -L$(top_builddir)/extra/ustdio -lustdio
 	@$(SHELL) -ec '$(GEN_DEPS.cc) $< > /dev/null 2>&1'
 
 ## Versioned libraries rules
-%.$(SO): 
-	@echo "Generating symbolic link for $@ : $<"
-	@$(SHELL) -ec  'rm -f $@; ln -fs $(FINAL_SO_TARGET) $@'
+%.$(SO).$(SO_TARGET_VERSION_MAJOR): %.$(SO).$(SO_TARGET_VERSION)
+	$(RM) $@ && ln -s $< $@
+%.$(SO): %.$(SO).$(SO_TARGET_VERSION_MAJOR)
+	$(RM) $@ && ln -s $*.$(SO).$(SO_TARGET_VERSION) $@
 
 ## BIR  - bind with internal references [so app data and icu data doesn't collide]
 BIR_LDFLAGS= -E$(NAME).map -bnoexpall

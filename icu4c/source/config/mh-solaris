@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-solaris,v 1.23 2001/09/28 00:31:53 aheninger-oss Exp $
+## $Id: mh-solaris,v 1.24 2001/10/03 23:32:11 grhoten-oss Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -KPIC
@@ -11,12 +11,12 @@ SHAREDLIBCXXFLAGS = -KPIC
 SHAREDLIBCPPFLAGS = -DPIC
 
 ## Commands to generate dependency files
-GEN_DEPS.c=	$(CC) -xM $(DEFS) $(CPPFLAGS)
-GEN_DEPS.cc=	$(CXX) -xM $(DEFS) $(CPPFLAGS)
+GEN_DEPS.c=  $(CC) -xM $(DEFS) $(CPPFLAGS)
+GEN_DEPS.cc= $(CXX) -xM $(DEFS) $(CPPFLAGS)
 
 ## Commands to compile
-COMPILE.c=	$(CC) -mt $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
-COMPILE.cc=	$(CXX) -mt $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
+COMPILE.c=  $(CC) -mt $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
+COMPILE.cc= $(CXX) -mt $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
 
 ## Commands to link
 #LINK.c=		$(CC) -mt $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
@@ -38,32 +38,10 @@ LDLIBRARYPATH_ENVVAR = LD_LIBRARY_PATH
 ## Compiler switch to embed a library name
 LD_SONAME = -h $(MIDDLE_SO_TARGET)
 
-## Versioned target for a shared library.
-FINAL_SO_TARGET = $(SO_TARGET).$(SO_TARGET_VERSION)
-MIDDLE_SO_TARGET = $(SO_TARGET).$(SO_TARGET_VERSION_MAJOR) 
-
-###  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
-## Prefix for the ICU library names
-ICUPREFIX = icu
-LIBICU = lib$(ICUPREFIX)
 ## Shared object suffix
 SO=		so
 ## Non-shared intermediate object suffix
 STATIC_O = ao
-
-## Force removal [for make clean]
-RMV = rm -rf
-## Platform commands to remove or move executable and library targets
-INSTALL-S = $(INSTALL_PROGRAM)
-INSTALL-L = $(INSTALL_DATA)
-
-## Link commands to link to ICU libs
-LIBICUDT=       -L$(top_builddir)/data -L$(top_builddir)/stubdata -licudata
-LIBICUUC= 	-L$(top_builddir)/common -l$(ICUPREFIX)uc $(LIBICUDT)
-LIBICUI18N= 	-L$(top_builddir)/i18n -l$(ICUPREFIX)i18n
-LIBCTESTFW= 	-L$(top_builddir)/tools/ctestfw -l$(ICUPREFIX)ctestfw
-LIBICUTOOLUTIL=-L$(top_builddir)/tools/toolutil -l$(ICUPREFIX)toolutil
-LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio
 
 ## Compilation rules
 %.$(STATIC_O): $(srcdir)/%.c
