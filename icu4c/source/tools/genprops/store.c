@@ -36,6 +36,16 @@
 The file format prepared and written here contains several data
 structures that store indexes or data.
 
+Before the data contents described below, there are the headers required by
+the udata API for loading ICU data. Especially, a UDataInfo structure
+precedes the actual data. It contains platform properties values and the
+file format version.
+
+The following is a description of format version 1.0 .
+
+
+Data contents:
+
 The contents is a parsed, binary form of several Unicode character
 database files, mose prominently UnicodeData.txt.
 
@@ -58,25 +68,26 @@ another pointer variable for this:
 
 Formally, the file contains the following structures:
 
-    A0 const uint16_t STAGE_1_BITS(=11);
-    A1 const uint16_t STAGE_2_BITS(=6);
-    A2 const uint16_t STAGE_3_BITS(=4);
-    A3 const uint16_t exceptionsIndex;  -- 32-bit unit index
-    A4 const uint16_t ucharsIndex;      -- 32-bit unit index
+    A0 const uint16_t STAGE_2_BITS(=6);
+    A1 const uint16_t STAGE_3_BITS(=4);
+      (STAGE_1_BITS(=11) not stored, implicitly=21-(STAGE_2_BITS+STAGE_3_BITS))
+    A2 const uint16_t exceptionsIndex;  -- 32-bit unit index
+    A3 const uint16_t ucharsIndex;      -- 32-bit unit index
+    A4 const uint16_t reservedIndex;
     A5 const uint16_t reservedIndex;
     A6 const uint16_t reservedIndex;
     A7 const uint16_t reservedIndex;
 
     S1 const uint16_t stage1[0x440];    -- 0x440=0x110000>>10
-    S2 const uint16_t stage2[variable];
-    S3 const uint16_t stage3[variable];
+    S2 const uint16_t stage2[variable size];
+    S3 const uint16_t stage3[variable size];
        (possible 1*uint16_t for padding to 4-alignment)
 
-    P  const uint32_t props32[variable];
-    E  const uint16_t exceptions[variable];
+    P  const uint32_t props32[variable size];
+    E  const uint16_t exceptions[variable size];
        (possible 1*uint16_t for padding to 4-alignment)
 
-    U  const UChar uchars[variable];
+    U  const UChar uchars[variable size];
 
 3-stage lookup and properties:
 
@@ -174,6 +185,43 @@ Each 32-bit properties word contains:
         case N*: numeric value;
         default: *;
         }
+
+Exception values:
+
+The first uint16_t word of exception values for a code point contains flags
+that indicate which values follow:
+
+ 0      has uppercase mapping
+ 1      has lowercase mapping
+ 2      has titlecase mapping
+ 3      has canonical category
+ 4      has numeric value (numerator)
+ 5      has denominator value
+
+According to the flags in this word, one or more uint16_t words follow it
+in the sequence of the bit flags in the flags word; if a flag is not set,
+then the value is missing or 0:
+
+For the case mappings, one uint16_t word each is an index into uchars[],
+pointing to a zero-terminated UChar string for the case mapping.
+
+For the canonical category, the lower 8 bits of a uint16_t word give the
+category value directly. The upper 8 bits are currently reserved.
+
+For the numeric/numerator value, a uint16_t word contains the value directly,
+except for when there is no numerator but a denominator, then the numerator
+is 1.
+
+For the denominator value, a uint16_t word contains the value directly.
+
+Example:
+U+2160, ROMAN NUMERAL ONE, needs an exception because it has a lowercase
+mapping and a numeric value.
+Its exception values would be stored as 3 uint16_t words:
+
+- flags=0x12 (see above)
+- lowercase index into uchars[]
+- numeric value=1
 
 ----------------------------------------------------------------------------- */
 
@@ -835,9 +883,9 @@ compareProps(const void *l, const void *r) {
 extern void
 generateData() {
     static uint16_t indexes[8]={
-        STAGE_1_BITS, STAGE_2_BITS, STAGE_3_BITS,
+        STAGE_2_BITS, STAGE_3_BITS,
         0, 0,
-        0, 0, 0
+        0, 0, 0, 0
     };
 
     UNewDataMemory *pData;
@@ -862,8 +910,8 @@ generateData() {
         stage3[i]+=offset;
     }
 
-    indexes[3]=offset+=propsTop;            /* uint32_t offset to exceptions[] */
-    indexes[4]=offset+=(exceptionsTop+1)/2; /* uint32_t offset to uchars[], include padding */
+    indexes[2]=offset+=propsTop;            /* uint32_t offset to exceptions[] */
+    indexes[3]=offset+=(exceptionsTop+1)/2; /* uint32_t offset to uchars[], include padding */
 
     size=4*offset+ucharsTop*U_SIZEOF_UCHAR; /* total size of data */
 
