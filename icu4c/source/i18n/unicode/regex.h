@@ -54,6 +54,7 @@ class UVector;
 class UVector32;
 class UnicodeSet;
 struct REStackFrame;
+struct Regex8BitSet;
 
 
 /**
@@ -358,6 +359,8 @@ private:
                                    //   after un-escaping, for use during the match.
 
     UVector         *fSets;        // Any UnicodeSets referenced from the pattern.
+    Regex8BitSet    *fSets8;       //      (and fast sets for latin-1 range.)
+
 
     UErrorCode      fDeferredStatus; // status if some prior error has left this
                                    //  RegexPattern in an unusable state.
@@ -382,11 +385,15 @@ private:
     UnicodeSet     **fStaticSets;  // Ptr to static (shared) sets for predefined
                                    //   regex character classes, e.g. Word.
 
+    Regex8BitSet   *fStaticSets8;  // Ptr to the static (shared) latin-1 only
+                                   //  sets for predefined regex classes.
+
     int32_t         fStartType;    // Info on how a match must start.
     int32_t         fInitialStringIdx;     //  
     int32_t         fInitialStringLen;
     UnicodeSet     *fInitialChars;  
     UChar32         fInitialChar;
+    Regex8BitSet   *fInitialChars8;
 
     /**
      * The address of this static class variable serves as this class's ID

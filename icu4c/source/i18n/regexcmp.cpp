@@ -137,7 +137,8 @@ static const UChar gIsWordPattern[] = {
     0x5b, 0x5c, 0x75, 0x31, 0x31, 0x61, 0x38, 0x2d, 0x5c, 0x75, 0x31, 0x31, 0x66, 0x39, 0x5d, 0}; 
 
 
-static UnicodeSet *gPropSets[URX_LAST_SET];
+static UnicodeSet  *gPropSets[URX_LAST_SET];
+static Regex8BitSet gPropSets8[URX_LAST_SET];
 
 
 //----------------------------------------------------------------------------------------
@@ -229,6 +230,8 @@ static void InitGraphemeClusterSets(UErrorCode &status) {
             delete LV;
             delete LVT;
         }
+
+        
     }
 }
 
@@ -281,6 +284,12 @@ RegexCompile::RegexCompile(RegexPattern *rxp, UErrorCode &status) : fParenStack(
     ThreadSafeUnicodeSetInit(&gPropSets[URX_ISSPACE_SET],          gIsSpacePattern,             status);    
 
     InitGraphemeClusterSets(status);
+
+    int32_t i;
+    for (i=0; i<URX_LAST_SET; i++) {
+        gPropSets8[i].init(gPropSets[i]);
+    }
+  
 }
 
 
@@ -346,6 +355,7 @@ void    RegexCompile::compile(
     // Prepare the RegexPattern object to receive the compiled pattern.
     fRXPat->fPattern        = pat;
     fRXPat->fStaticSets     = gPropSets;
+    fRXPat->fStaticSets8    = gPropSets8;
 
 
     // Initialize the pattern scanning state machine
@@ -528,6 +538,17 @@ void    RegexCompile::compile(
     OptDotStar();
     stripNOPs();
     OptEndingLoop();
+
+    //
+    // Set up fast latin-1 range sets
+    //
+    int32_t numSets = fRXPat->fSets->size();
+    fRXPat->fSets8 = new Regex8BitSet[numSets];
+    int32_t i;
+    for (i=0; i<numSets; i++) {
+        UnicodeSet *s = (UnicodeSet *)fRXPat->fSets->elementAt(i);
+        fRXPat->fSets8[i].init(s);
+    }
 
     //
     // A stupid bit of non-sense to prevent code coverage testing from complaining
@@ -1214,7 +1235,7 @@ UBool RegexCompile::doParseActions(EParseAction action)
 
     case doBackslashS:
         fRXPat->fCompiledPat->addElement(
-            URX_BUILD(URX_STATIC_SETREF, URX_ISSPACE_SET | URX_NEG_SET), *fStatus);
+            URX_BUILD(URX_STAT_SETREF_N, URX_ISSPACE_SET), *fStatus);
         break;
 
     case doBackslashs:
@@ -1224,7 +1245,7 @@ UBool RegexCompile::doParseActions(EParseAction action)
 
     case doBackslashW:
         fRXPat->fCompiledPat->addElement(
-            URX_BUILD(URX_STATIC_SETREF, URX_ISWORD_SET | URX_NEG_SET), *fStatus);
+            URX_BUILD(URX_STAT_SETREF_N, URX_ISWORD_SET), *fStatus);
         break;
 
     case doBackslashw:
@@ -2215,17 +2236,24 @@ void   RegexCompile::matchStartType() {
         case URX_STATIC_SETREF:    
             if (currentLen == 0) {
                 int32_t  sn = URX_VAL(op);
-                UBool negated = ((sn & URX_NEG_SET) == URX_NEG_SET);  
-                sn &= ~URX_NEG_SET;
-
+                U_ASSERT(sn>0 && sn<URX_LAST_SET);
                 const UnicodeSet *s = fRXPat->fStaticSets[sn];
-                if (negated) {
-                    UnicodeSet sc(*s);
-                    sc.complement();
-                    fRXPat->fInitialChars->addAll(sc);
-                } else {
-                    fRXPat->fInitialChars->addAll(*s);
-                }
+                fRXPat->fInitialChars->addAll(*s);
+                numInitialStrings += 2;
+            }
+            currentLen++;
+            atStart = FALSE;
+            break;
+
+
+
+        case URX_STAT_SETREF_N:    
+            if (currentLen == 0) {
+                int32_t  sn = URX_VAL(op);
+                const UnicodeSet *s = fRXPat->fStaticSets[sn];
+                UnicodeSet sc(*s);
+                sc.complement();
+                fRXPat->fInitialChars->addAll(sc);
                 numInitialStrings += 2;
             }
             currentLen++;
@@ -2482,6 +2510,9 @@ void   RegexCompile::matchStartType() {
     }
 
 
+    fRXPat->fInitialChars8->init(fRXPat->fInitialChars);
+
+
     // Sort out what we should check for when looking for candidate match start positions.
     // In order of preference,
     //     1.   Start of input text buffer.
@@ -2611,6 +2642,7 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
             //   
         case URX_ONECHAR:
         case URX_STATIC_SETREF:
+        case URX_STAT_SETREF_N:
         case URX_SETREF:
         case URX_BACKSLASH_D:
         case URX_ONECHAR_I:
@@ -2854,6 +2886,7 @@ int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
             // Ops that match a max of one character (possibly two 16 bit code units.)
             //   
         case URX_STATIC_SETREF:
+        case URX_STAT_SETREF_N:
         case URX_SETREF:
         case URX_BACKSLASH_D:
         case URX_ONECHAR_I:
@@ -3064,6 +3097,7 @@ void RegexCompile::stripNOPs() {
         case URX_START_CAPTURE:
         case URX_END_CAPTURE:
         case URX_STATIC_SETREF:
+        case URX_STAT_SETREF_N:
         case URX_SETREF:
         case URX_DOTANY:
         case URX_FAIL:

@@ -12,6 +12,8 @@
 #ifndef _REGEXIMP_H
 #define _REGEXIMP_H
 
+#include "cmemory.h"
+
 U_NAMESPACE_BEGIN
 
 //
@@ -152,9 +154,10 @@ enum {
                                //   Param 1:  The minimum length of the look-behind match
                                //   Param 2:  The max     length of the look-behind match
                                //   Param 3:  The pattern loc following the look-behind block.
-     URX_LBN_END       = 48    // Negative LookBehind end
+     URX_LBN_END       = 48,   // Negative LookBehind end
                                //   Parameter is the data location.
                                //   Check that the match ended at the right spot.
+     URX_STAT_SETREF_N = 49    // Operand is index of set in array of sets.   
 
 };           
 
@@ -209,7 +212,9 @@ enum {
         "LB_CONT",             \
         "LB_END",              \
         "LBN_CONT",            \
-        "LBN_END"
+        "LBN_END",             \
+        "STAT_SETREF_N"        \
+
 
 //
 //  Convenience macros for assembling and disassembling a compiled operation.
@@ -277,6 +282,38 @@ enum StartOfMatch {
                                (v)==START_STRING?  "START_STRING"  : \
                                                    "ILLEGAL")
     
+
+//
+//  8 bit set, to fast-path latin-1 set membership tests.
+//
+struct Regex8BitSet {
+    inline void init(const UnicodeSet *src);
+    inline UBool contains(UChar32 c);
+    inline void  add(UChar32 c);
+    int8_t d[32];
+};
+
+inline UBool Regex8BitSet::contains(UChar32 c) {
+    // No bounds checking!  This is deliberate.
+    return ((d[c>>3] & 1 <<(c&7)) != 0);
+};
+
+inline void  Regex8BitSet::add(UChar32 c) {
+    d[c>>3] |= 1 << (c&7);
+};
+
+inline void Regex8BitSet::init(const UnicodeSet *s) {
+    uprv_memset(d, 0, sizeof(d));
+    if (s != NULL) {
+        for (int i=0; i<255; i++) {
+            if (s->contains(i)) {
+                this->add(i);
+            }
+        }
+    }
+}
+
+
 U_NAMESPACE_END
 #endif
 
