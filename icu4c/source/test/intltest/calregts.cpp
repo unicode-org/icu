@@ -75,6 +75,7 @@ CalendarRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &
         CASE(37,TestJ438);
         CASE(38,TestLeapFieldDifference);
         CASE(39,TestMalaysianInstance);
+        CASE(40,test4092362);
     default: name = ""; break;
     }
 }
