@@ -5,15 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/util/Attic/JapaneseCalendar.java,v $ 
- * $Date: 2000/03/10 04:17:59 $ 
- * $Revision: 1.2 $
+ * $Date: 2000/03/21 02:19:32 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
 package com.ibm.util;
 
 import java.util.Date;
-import java.util.GregorianCalendar;
+import com.ibm.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.SimpleTimeZone;
 import java.util.TimeZone;

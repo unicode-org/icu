@@ -5,22 +5,22 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/util/Attic/IBMCalendar.java,v $ 
- * $Date: 2000/03/14 18:07:42 $ 
- * $Revision: 1.6 $
+ * $Date: 2000/03/21 02:19:32 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
 package com.ibm.util;
 
-import java.util.Calendar;
+import com.ibm.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
+import com.ibm.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 import java.text.MessageFormat;
-import java.text.DateFormat;
+import com.ibm.text.DateFormat;
 import com.ibm.text.DateFormatSymbols;
 import com.ibm.text.SimpleDateFormat;
 
@@ -97,7 +97,7 @@ import com.ibm.text.SimpleDateFormat;
  *
  * @author Laura Werner
  */
-public abstract class IBMCalendar extends java.util.Calendar {
+public abstract class IBMCalendar extends Calendar {
 
     /**
      * Value returned by getDayOfWeekType(int dayOfWeek) to indicate a
@@ -1189,7 +1189,8 @@ public abstract class IBMCalendar extends java.util.Calendar {
 	            } else {
 	                result = SimpleDateFormat.getDateTimeInstance(dateStyle, timeStyle, loc);
 	            }
-                ((java.text.SimpleDateFormat)result).setDateFormatSymbols(oldStyleSymbols(symbols, loc));
+                //((java.text.SimpleDateFormat)result).setDateFormatSymbols(oldStyleSymbols(symbols, loc));
+                ((SimpleDateFormat)result).setDateFormatSymbols(symbols); // aliu
             }
         } else {
             if (dateStyle == -1) {

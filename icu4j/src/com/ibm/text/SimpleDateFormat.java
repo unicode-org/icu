@@ -5,15 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/SimpleDateFormat.java,v $ 
- * $Date: 2000/03/10 04:07:23 $ 
- * $Revision: 1.2 $
+ * $Date: 2000/03/21 02:19:56 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
 
 package com.ibm.text;
 
-import java.text.DateFormat;
+import com.ibm.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
@@ -21,12 +21,12 @@ import java.text.FieldPosition;
 import java.text.ParsePosition;
 
 import java.util.TimeZone;
-import java.util.Calendar;
+import com.ibm.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.SimpleTimeZone;
-import java.util.GregorianCalendar;
+import com.ibm.util.GregorianCalendar;
 import java.io.ObjectInputStream;
 import java.io.IOException;
 import java.lang.ClassNotFoundException;
