@@ -298,27 +298,31 @@ ucol_open(    const    char         *loc,
   if(*status == U_MISSING_RESOURCE_ERROR) { /* if we don't find tailoring, we'll fallback to UCA */
     result = UCA;
     *status = U_USING_DEFAULT_ERROR;
+    result->trVersion=NULL;
+    ures_close(binary);
   } else if(U_SUCCESS(*status)) { /* otherwise, we'll pick a collation data that exists */
     int32_t len = 0;
     const uint8_t *inData = ures_getBinary(binary, &len, status);
     result = ucol_initCollator((const UCATableHeader *)inData, result, status); 
     result->rb = b;
+
+    resB = ures_getByKey(result->rb,"CollationElements",NULL,status);
+    trDataVersion=ures_get(resB,"Version",status); 
+    if(trDataVersion){
+      char tVer[10]={'\0'};
+      UVersionInfo trVInfo;
+      u_UCharsToChars(trDataVersion, tVer, 10);
+      u_versionFromString(trVInfo,tVer );
+      result->trVersion=(uint8_t)trVInfo[0]; 
+    }
+    ures_close(resB);
   }
 
-  resB = ures_getByKey(b,"CollationElements",NULL,status);
-  trDataVersion=ures_get(resB,"Version",status); 
-  if(trDataVersion){
-   char tVer[10]={'\0'};
-   UVersionInfo trVInfo;
-   u_UCharsToChars(trDataVersion, tVer, 10);
-   u_versionFromString(trVInfo,tVer );
-   result->trVersion=(uint8_t)trVInfo[0]; 
-  }
-  ures_close(resB);
   ures_close(binary);
 
   return result;
 }
+
 
 U_CAPI void
 ucol_close(UCollator *coll)
