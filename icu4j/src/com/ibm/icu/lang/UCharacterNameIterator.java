@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacterNameIterator.java,v $
-* $Date: 2002/03/08 02:04:00 $
-* $Revision: 1.1 $
+* $Date: 2002/03/13 01:09:33 $
+* $Revision: 1.2 $
 *
 ******************************************************************************
 */
@@ -205,7 +205,7 @@ class UCharacterNameIterator implements ValueIterator
  	 *         bail from further iteration, true to continue on with the 
  	 *         iteration
      */
-    private boolean iterateSingleGroup(Element result, int limit) 
+    private boolean iterateSingleGroup(ValueIterator.Element result, int limit) 
     {
     	synchronized(GROUP_OFFSETS_) {
     	synchronized(GROUP_LENGTHS_) {
@@ -241,7 +241,7 @@ class UCharacterNameIterator implements ValueIterator
  	 *         bail from further iteration, true to continue on with the 
  	 *         iteration
      */
-    private boolean iterateGroup(Element result, int limit)
+    private boolean iterateGroup(ValueIterator.Element result, int limit)
     {
     	if (m_groupIndex_ < 0) {
     		m_groupIndex_ = m_name_.getGroup(m_current_);
@@ -296,7 +296,7 @@ class UCharacterNameIterator implements ValueIterator
  	 *         bail from further iteration, true to continue on with the 
  	 *         iteration (this will always be false for valid codepoints)
  	 */ 
-	private boolean iterateExtended(UCharacterNameIterator.Element result,
+	private boolean iterateExtended(ValueIterator.Element result,
 	                                int limit)
 	{
         while (m_current_ < limit) {
