@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $ 
-* $Date: 2002/08/07 20:54:56 $ 
-* $Revision: 1.15 $
+* $Date: 2002/08/07 23:53:38 $ 
+* $Revision: 1.16 $
 *
 *******************************************************************************
 */
@@ -569,13 +569,12 @@ public final class RuleBasedCollator extends Collator
     		return null;
     	}
     	int strength = getStrength();
-    	boolean compare[] = {m_isCaseLevel_,
-    						 true,
-    						 strength >= SECONDARY,
-    						 strength >= TERTIARY,
-    						 strength >= QUATERNARY,
-							 strength == IDENTICAL
-							};
+    	m_utilCompare0_ = m_isCaseLevel_;
+        m_utilCompare1_ = true;
+    	m_utilCompare2_ = strength >= SECONDARY;
+    	m_utilCompare3_ = strength >= TERTIARY;
+    	m_utilCompare4_ = strength >= QUATERNARY;
+		m_utilCompare5_ = strength == IDENTICAL;
 
 		byte bytes[][] = {new byte[SORT_BUFFER_INIT_SIZE_CASE_], // case
     					new byte[SORT_BUFFER_INIT_SIZE_1_], // primary 
@@ -585,13 +584,13 @@ public final class RuleBasedCollator extends Collator
     	};
     	int bytescount[] = {0, 0, 0, 0, 0};
     	int count[] = {0, 0, 0, 0, 0};
-    	boolean doFrench = m_isFrenchCollation_ && compare[2];
+    	boolean doFrench = m_isFrenchCollation_ && m_utilCompare2_;
     	// TODO: UCOL_COMMON_BOT4 should be a function of qShifted. 
 	    // If we have no qShifted, we don't need to set UCOL_COMMON_BOT4 so 
 	    // high.
    		int commonBottom4 = ((m_variableTopValue_ >>> 8) + 1) & LAST_BYTE_MASK_;
     	byte hiragana4 = 0;
-    	if (m_isHiragana4_ && compare[4]) {
+    	if (m_isHiragana4_ && m_utilCompare4_) {
     		// allocate one more space for hiragana, value for hiragana
       		hiragana4 = (byte)commonBottom4;
       		commonBottom4 ++;
@@ -599,7 +598,7 @@ public final class RuleBasedCollator extends Collator
     	
     	int bottomCount4 = 0xFF - commonBottom4;
     	// If we need to normalize, we'll do it all at once at the beginning!
-    	if (compare[5] && Normalizer.quickCheck(source, Normalizer.NFD) 
+    	if (m_utilCompare5_ && Normalizer.quickCheck(source, Normalizer.NFD) 
                                                     != Normalizer.YES) {
             // if it is identical strength, we have to normalize the string to
             // NFD so that it will be appended correctly to the end of the sort
@@ -613,9 +612,9 @@ public final class RuleBasedCollator extends Collator
             // enough for us to work on.
         	source = Normalizer.normalize(source,Normalizer.FCD);
     	}
-		getSortKeyBytes(source, compare, bytes, bytescount, count, doFrench,
+		getSortKeyBytes(source, bytes, bytescount, count, doFrench,
 						hiragana4, commonBottom4, bottomCount4);
-		byte sortkey[] = getSortKey(source, compare, bytes, bytescount, count, 
+		byte sortkey[] = getSortKey(source, bytes, bytescount, count, 
 									doFrench, commonBottom4, bottomCount4);
 		return new CollationKey(source, sortkey);
     }
@@ -814,16 +813,15 @@ public final class RuleBasedCollator extends Collator
 
         int strength = getStrength();
 		// setting up the collator parameters	
-		boolean compare[] = {m_isCaseLevel_,
-    						 true,
-    						 strength >= SECONDARY,
-    						 strength >= TERTIARY,
-    						 strength >= QUATERNARY,
-							 strength == IDENTICAL
-							};
-		boolean doFrench = m_isFrenchCollation_ && compare[2];
-    	boolean doShift4 = m_isAlternateHandlingShifted_ && compare[4];
-	    boolean doHiragana4 = m_isHiragana4_ && compare[4];
+		m_utilCompare0_ = m_isCaseLevel_;
+        m_utilCompare1_ = true;
+    	m_utilCompare2_ = strength >= SECONDARY;
+    	m_utilCompare3_ = strength >= TERTIARY;
+    	m_utilCompare4_ = strength >= QUATERNARY;
+		m_utilCompare5_ = strength == IDENTICAL;
+		boolean doFrench = m_isFrenchCollation_ && m_utilCompare2_;
+    	boolean doShift4 = m_isAlternateHandlingShifted_ && m_utilCompare4_;
+	    boolean doHiragana4 = m_isHiragana4_ && m_utilCompare4_;
 	
 	    if (doHiragana4 && doShift4) {
 	    	String sourcesub = source.substring(offset);
@@ -848,21 +846,21 @@ public final class RuleBasedCollator extends Collator
 		
 		int hiraganaresult = result;
 		
-		if (compare[2]) {
+		if (m_utilCompare2_) {
 			result = doSecondaryCompare(cebuffer, cebuffersize, doFrench);
 			if (result != 0) {
 				return result;
 			}
 		}
 		// doing the case bit
-	    if (compare[0]) {
+	    if (m_utilCompare0_) {
 	    	result = doCaseCompare(cebuffer);
 			if (result != 0) {
 				return result;
 			}	
 	    }
 		// Tertiary level
-	    if (compare[3]) {
+	    if (m_utilCompare3_) {
 	      	result = doTertiaryCompare(cebuffer);
 	      	if (result != 0) {
 	      		return result;
@@ -885,7 +883,7 @@ public final class RuleBasedCollator extends Collator
 	    // as a tiebreaker if all else is equal.                                
 	    // Getting here  should be quite rare - strings are not identical -     
 	    // that is checked first, but compared == through all other checks.  
-	    if (compare[5]) {
+	    if (m_utilCompare5_) {
 	        return doIdenticalCompare(source, target, offset, true);
 	    }
 	    return 0;
@@ -1703,6 +1701,15 @@ public final class RuleBasedCollator extends Collator
     private CollationElementIterator m_srcUtilColEIter_;   
     private StringCharacterIterator m_tgtUtilIter_;
     private CollationElementIterator m_tgtUtilColEIter_;
+    /**
+     * Utility comparison flags
+     */
+    private boolean m_utilCompare0_;
+    private boolean m_utilCompare1_;
+    private boolean m_utilCompare2_;
+    private boolean m_utilCompare3_;
+    private boolean m_utilCompare4_;
+    private boolean m_utilCompare5_; 
     
     // private methods -------------------------------------------------------
     
@@ -2048,8 +2055,6 @@ public final class RuleBasedCollator extends Collator
 	 * Iterates through the argument string for all ces.
 	 * Split the ces into their relevant primaries, secondaries etc.
 	 * @param source normalized string
-	 * @param compare array of flags indicating if a particular strength is 
-	 * 			to be processed
 	 * @param bytes an array of byte arrays corresponding to the strengths
 	 * @param bytescount an array of the size of the byte arrays
 	 * @param count array of compression counters for each strength
@@ -2059,7 +2064,7 @@ public final class RuleBasedCollator extends Collator
 	 * @param commonBottom4 smallest common quaternary byte
 	 * @param bottomCount4 smallest quaternary byte
 	 */
-	private final void getSortKeyBytes(String source, boolean compare[], 
+	private final void getSortKeyBytes(String source, 
 									   byte bytes[][], int bytescount[], 
 									   int count[], boolean doFrench,
 									   byte hiragana4, int commonBottom4, 
@@ -2124,7 +2129,7 @@ public final class RuleBasedCollator extends Collator
             if (doShift) {
                 continue;
             }
-			if (compare[2]) {
+			if (m_utilCompare2_) {
         		doSecondaryBytes(ce, bytes, bytescount, count, 
         						 notIsContinuation,	doFrench, frenchOffset);
 			}
@@ -2134,7 +2139,7 @@ public final class RuleBasedCollator extends Collator
               	t = ce & CE_REMOVE_CONTINUATION_MASK_;
             }
             	
-            if (compare[0]) {
+            if (m_utilCompare0_) {
               	caseShift = doCaseBytes(t, bytes, bytescount, 
               							notIsContinuation, caseShift);
             }
@@ -2144,12 +2149,12 @@ public final class RuleBasedCollator extends Collator
 
             t &= m_mask3_;
               	
-            if (compare[3]) {
+            if (m_utilCompare3_) {
             	doTertiaryBytes(t, bytes, bytescount, count, 
             					notIsContinuation);
             }
                 
-            if (compare[4] && notIsContinuation) { // compare quad
+            if (m_utilCompare4_ && notIsContinuation) { // compare quad
                 doQuaternaryBytes(bytes, bytescount, count, 
                 			 	coleiter.m_isCodePointHiragana_, 
                 			 	commonBottom4, bottomCount4, hiragana4);
@@ -2166,8 +2171,6 @@ public final class RuleBasedCollator extends Collator
 	 * From the individual strength byte results the final compact sortkey 
 	 * will be calculated.
 	 * @param source text string
-	 * @param compare array of flags indicating if a particular strength is 
-	 * 			to be processed
 	 * @param bytes an array of byte arrays corresponding to the strengths
 	 * @param bytescount an array of the size of the byte arrays
 	 * @param count array of compression counters for each strength
@@ -2177,24 +2180,24 @@ public final class RuleBasedCollator extends Collator
 	 * @param bottomCount4 smallest quaternary byte
 	 * @return the compact sortkey
 	 */
-	private final byte[] getSortKey(String source, boolean compare[], 
+	private final byte[] getSortKey(String source, 
 									byte bytes[][], int bytescount[], 
 									int count[], boolean doFrench, 
 									int commonBottom4, int bottomCount4)
 	{
 		// we have done all the CE's, now let's put them together to form 
       	// a key 
-      	if (compare[2]) {
+      	if (m_utilCompare2_) {
         	doSecondary(bytes, bytescount, count, doFrench);
-      		if (compare[0]) {
+      		if (m_utilCompare0_) {
 				doCase(bytes, bytescount);        
       		}
-      		if (compare[3]) {
+      		if (m_utilCompare3_) {
       			doTertiary(bytes, bytescount, count);
-      			if (compare[4]) {
+      			if (m_utilCompare4_) {
       				doQuaternary(bytes, bytescount, count, commonBottom4,
       							 bottomCount4);
-        			if (compare[5]) {
+        			if (m_utilCompare5_) {
           				doIdentical(source, bytes, bytescount);
         			}
 
