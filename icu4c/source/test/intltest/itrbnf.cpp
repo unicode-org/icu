@@ -41,6 +41,7 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
       TESTCASE(7, TestGermanSpellout);
       TESTCASE(8, TestThaiSpellout);
       TESTCASE(9, TestAPI);
+      TESTCASE(10, TestFractionalRuleSet);
     default:
       name = "";
       break;
@@ -116,7 +117,6 @@ IntlTestRBNF::TestAPI() {
   }
 
 
-  // test copy constructor
   {
     logln("Testing copy constructor");
     RuleBasedNumberFormat copyCtorResult(*formatter);
@@ -191,92 +191,78 @@ IntlTestRBNF::TestAPI() {
   delete formatter;
 }
 
+void IntlTestRBNF::TestFractionalRuleSet()
+{
+    UnicodeString fracRules(
+        "%main:\n"
+               // this rule formats the number if it's 1 or more.  It formats
+               // the integral part using a DecimalFormat ("#,##0" puts
+               // thousands separators in the right places) and the fractional
+               // part using %%frac.  If there is no fractional part, it
+               // just shows the integral part.
+        "    x.0: <#,##0<[ >%%frac>];\n"
+               // this rule formats the number if it's between 0 and 1.  It
+               // shows only the fractional part (0.5 shows up as "1/2," not
+               // "0 1/2")
+        "    0.x: >%%frac>;\n"
+        // the fraction rule set.  This works the same way as the one in the
+        // preceding example: We multiply the fractional part of the number
+        // being formatted by each rule's base value and use the rule that
+        // produces the result closest to 0 (or the first rule that produces 0).
+        // Since we only provide rules for the numbers from 2 to 10, we know
+        // we'll get a fraction with a denominator between 2 and 10.
+        // "<0<" causes the numerator of the fraction to be formatted
+        // using numerals
+        "%%frac:\n"
+        "    2: 1/2;\n"
+        "    3: <0</3;\n"
+        "    4: <0</4;\n"
+        "    5: <0</5;\n"
+        "    6: <0</6;\n"
+        "    7: <0</7;\n"
+        "    8: <0</8;\n"
+        "    9: <0</9;\n"
+        "   10: <0</10;\n");
+
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError perror;
+    RuleBasedNumberFormat formatter(fracRules, Locale::ENGLISH, perror, status);
+    if (U_FAILURE(status)) {
+        errln("FAIL: could not construct formatter");
+    } else {
+        static const char* testData[][2] = {
+			{ "0", "0" },
+            { ".1", "1/10" },
+			{ ".11", "1/9" },
+            { ".125", "1/8" },
+			{ ".1428", "1/7" },
+			{ ".1667", "1/6" },
+			{ ".2", "1/5" },
+			{ ".25", "1/4" },
+            { ".333", "1/3" },
+            { ".5", "1/2" },
+			{ "1.1", "1 1/10" },
+			{ "2.11", "2 1/9" },
+            { "3.125", "3 1/8" },
+			{ "4.1428", "4 1/7" },
+			{ "5.1667", "5 1/6" },
+			{ "6.2", "6 1/5" },
+			{ "7.25", "7 1/4" },
+            { "8.333", "8 1/3" },
+            { "9.5", "9 1/2" },
+			{ ".2222", "2/9" },
+			{ ".4444", "4/9" },
+			{ ".5555", "5/9" },
+			{ "1.2856", "1 2/7" },
+			{ NULL, NULL }
+		};
+       doTest(&formatter, testData, FALSE); // exact values aren't parsable from fractions
+	}
+}
+
 void 
 IntlTestRBNF::TestEnglishSpellout() 
 {
-#if 0
-    // temporary test code
-    int32_t result = 0;
-    UErrorCode status = U_ZERO_ERROR;
-    Collator* temp = Collator::createInstance(Locale::US, status);
-    if (U_SUCCESS(status) &&
-        temp->getDynamicClassID() == RuleBasedCollator::getStaticClassID()) {
-
-        RuleBasedCollator* collator = (RuleBasedCollator*)temp;
-        UnicodeString rules(collator->getRules());
-        UnicodeString tailoring("&'\\u0000' << ' ' << '-'\n");
-        tailoring = tailoring.unescape();
-        rules.append(tailoring);
-
-        collator = new RuleBasedCollator(rules, status);
-        if (U_SUCCESS(status)) {
-            collator->setDecomposition(Normalizer::DECOMP);
-
-            UnicodeString prefix(" hundred");
-            UnicodeString str("hundred-fifty");
-
-            CollationElementIterator* strIter = collator->createCollationElementIterator(str);
-            CollationElementIterator* prefixIter = collator->createCollationElementIterator(prefix);
-
-            // match collation elements between the strings
-            int32_t oStr = strIter->next(status);
-            int32_t oPrefix = prefixIter->next(status);
-
-            while (oPrefix != CollationElementIterator::NULLORDER) {
-                // skip over ignorable characters in the target string
-                while (CollationElementIterator::primaryOrder(oStr) == 0 
-                    && oStr != CollationElementIterator::NULLORDER) {
-                    oStr = strIter->next(status);
-                }
-
-                // skip over ignorable characters in the prefix
-                while (CollationElementIterator::primaryOrder(oPrefix) == 0 
-                    && oPrefix != CollationElementIterator::NULLORDER) {
-                    oPrefix = prefixIter->next(status);
-                }
-
-                // if skipping over ignorables brought us to the end
-                // of the target string, we didn't match and return 0
-                if (oStr == CollationElementIterator::NULLORDER) {
-                    result = -1;
-                    break;
-                }
-
-                // if skipping over ignorables brought to the end of
-                // the prefix, we DID match: drop out of the loop
-                else if (oPrefix == CollationElementIterator::NULLORDER) {
-                    break;
-                }
-
-                // match collation elements from the two strings
-                // (considering only primary differences).  If we
-                // get a mismatch, dump out and return 0
-                if (CollationElementIterator::primaryOrder(oStr) 
-                    != CollationElementIterator::primaryOrder(oPrefix)) {
-                    result = -1;
-                    break;
-
-                    // otherwise, advance to the next character in each string
-                    // and loop (we drop out of the loop when we exhaust
-                    // collation elements in the prefix)
-                } else {
-                    oStr = strIter->next(status);
-                    oPrefix = prefixIter->next(status);
-                }
-            }
-            if (result == 0) {
-                result = strIter->getOffset();
-            }
-            delete prefixIter;
-            delete strIter;
-        }
-        delete collator;
-    }
-    delete temp;
-
-    printf("result: %d\n", result);
-#endif
-
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedNumberFormat* formatter
         = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale::US, status);
