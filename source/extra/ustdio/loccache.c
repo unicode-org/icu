@@ -96,12 +96,13 @@ u_loccache_get(const char *loc)
     return result;
 }
 
-static loccache_cleanup()
+static UBool loccache_cleanup()
 {
     if (gLocaleCache) {
         uhash_close(gLocaleCache);
         gLocaleCache = NULL;
     }
+    return TRUE;                   /* Everything was cleaned up */
 }
 
 static UBool ustdio_cleanup(void)

@@ -106,7 +106,7 @@ u_fsettransliterator(UFILE *file, UFileDirection direction,
 }
 
 
-const UChar * u_file_translit(UFILE *f, const UChar *src, int32_t *count, UBool flush)
+static const UChar * u_file_translit(UFILE *f, const UChar *src, int32_t *count, UBool flush)
 {
     int32_t newlen;
     int32_t junkCount = 0;
