@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2001/10/24 13:35:21 $
- * $Revision: 1.49 $
+ * $Date: 2001/10/25 00:01:14 $
+ * $Revision: 1.50 $
  *
  *****************************************************************************************
  */
@@ -242,7 +242,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.49 $ $Date: 2001/10/24 13:35:21 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.50 $ $Date: 2001/10/25 00:01:14 $
  */
 public abstract class Transliterator {
     /**
@@ -664,7 +664,7 @@ public abstract class Transliterator {
         // characters (which are ignored) and a subsequent run of
         // unfiltered characters (which are transliterated).  If, at any
         // point, we fail to consume our entire segment, we stop.
-        do {
+        for (;;) {
             // Narrow the range to be transliterated to the first segment
             // of unfiltered characters at or after index.start.
 
@@ -693,22 +693,101 @@ public abstract class Transliterator {
 
             int limit = index.limit;
 
-            // Delegate to subclass for actual transliteration.  If there
-            // is additional filtered text (if limit < globalLimit) then
-            // we pass in an incremental value of FALSE to force the subclass
-            // to complete the transliteration for this segment.
-            handleTransliterate(text, index,
-                                limit < globalLimit ? false : incremental);
+            // Is this segment incremental?  If there is additional
+            // filtered text (if limit < globalLimit) then we pass in
+            // an incremental value of FALSE to force the subclass to
+            // complete the transliteration for this segment.
+            boolean isIncrementalSegment =
+                (limit < globalLimit ? false : incremental);
+
+            // Implement rollback.  To understand the need for rollback,
+            // consider the following transliterator:
+            //
+            //  "t" is "a > A;"
+            //  "u" is "A > b;"
+            //  "v" is a compound of "t; NFD; u" with a filter [:Ll:]
+            //
+            // Now apply "c" to the input text "a".  The result is "b".  But if
+            // the transliteration is done incrementally, then the NFD holds
+            // things up after "t" has already transformed "a" to "A".  When
+            // finishTransliterate() is called, "A" is _not_ processed because
+            // it gets excluded by the [:Ll:] filter, and the end result is "A"
+            // -- incorrect.  The problem is that the filter is applied to a
+            // partially-transliterated result, when we only want it to apply to
+            // input text.  Although this example hinges on a compound
+            // transliterator containing NFD and a specific filter, it can
+            // actually happen with any transliterator which may do a partial
+            // transformation in incremental mode into characters outside its
+            // filter.
+            //
+            // There are two solutions.  The first is to add two new index
+            // values to the position structure, a filteredStart and a
+            // filteredLimit.  Then filteredTransliterate() can set and read
+            // these, and avoid filtering partially transliterated results.  A
+            // variant of this solution is to retain an internal state object
+            // with the filtered range that is indexed by the text pointer and
+            // the position object pointer, in analogy to strtok().  The third
+            // solution involves no change to the API and no internal state
+            // cache.  It is to roll back any partially transliterated results
+            // if (a) there is a filter, and (b) the transliteration is
+            // incremental.  This is the solution implemented here.
+            int rollbackStart = 0;
+            int rollbackCopy = 0;
+            if (isIncrementalSegment) {
+                // Make a rollback copy at the end of the string
+                rollbackStart = index.start;
+                rollbackCopy = text.length();
+                text.copy(rollbackStart, limit, rollbackCopy);
+            }
+
+            // Delegate to subclass for actual transliteration.
+            handleTransliterate(text, index, isIncrementalSegment);
+
+            int delta = index.limit - limit; // change in length
 
             // Adjust overall limit for insertions/deletions.  Don't need
             // to worry about contextLimit because handleTransliterate()
             // maintains that.
-            globalLimit += index.limit - limit;
+            globalLimit += delta;
 
-            // If we failed to complete transliterate this segment, then
-            // we are done.  If we did completely transliterate this
+            // If we failed to complete transliterate this segment,
+            // then we are done.  If rollback is required, then do so.
+            if (index.start != index.limit) {
+                if (isIncrementalSegment) {
+                    // Replace [rollbackStart, limit) -- this is the
+                    // original filtered segment -- with
+                    // [rollbackCopy, text.length()), the rollback
+                    // copy, then delete the rollback copy.
+                    rollbackCopy += delta;
+                    int rollbackLen = text.length() - rollbackCopy;
+                    
+                    // Delete the partially transliterated segment
+                    rollbackCopy -= index.limit - rollbackStart;
+                    text.replace(rollbackStart, index.limit, "");
+                    
+                    // Copy the rollback copy back
+                    text.copy(rollbackCopy, text.length(), rollbackStart);
+                    
+                    // Delete the rollback copy
+                    rollbackCopy += rollbackLen;
+                    text.replace(rollbackCopy, text.length(), "");
+                    
+                    // Restore indices
+                    index.start = rollbackStart;
+                    index.limit = limit;
+                    index.contextLimit -= delta;
+                    globalLimit -= delta;
+                }
+                break;
+            } else if (isIncrementalSegment) {
+                // We finished this segment; delete the rollback copy
+                rollbackCopy += delta;
+                text.replace(rollbackCopy, text.length(), "");
+            }
+
+            // If we did completely transliterate this
             // segment, then repeat with the next unfiltered segment.
-        } while (index.start == index.limit);
+        }
 
         // Start is valid where it is.  Limit needs to be put back where
         // it was, modulo adjustments for deletions/insertions.
