@@ -102,6 +102,58 @@ void ucol_tok_initTokenList(UColTokenParser *src, UErrorCode *status) {
   uhash_setValueDeleter(uchars2tokens, deleteToken);
 }
 
+/*
+ * &#32;   U_STRING_DECL(ustringVar1, "Quick-Fox 2", 11);
+ * &#32;   U_STRING_DECL(ustringVar2, "jumps 5%", 8);
+ * &#32;   static UBool didInit=FALSE;
+ * &#32;
+ * &#32;   int32_t function() {
+ * &#32;       if(!didInit) {
+ * &#32;           U_STRING_INIT(ustringVar1, "Quick-Fox 2", 11);
+ * &#32;           U_STRING_INIT(ustringVar2, "jumps 5%", 8);
+ * &#32;           didInit=TRUE;
+ * &#32;       }
+ * &#32;       return u_strcmp(ustringVar1, ustringVar2);
+ * &#32;   }
+ */
+#define UTOK_MAX_OPTION_LEN 20
+
+static didInit = FALSE;
+
+ U_STRING_DECL(option_01, "rearrange",    9);  U_STRING_DECL(option_02, "alternate",      9);
+ U_STRING_DECL(option_03, "backwards",    9);  U_STRING_DECL(option_04, "variable top",  12); 
+ U_STRING_DECL(option_05, "top",          3);  U_STRING_DECL(option_06, "normalization", 13); 
+ U_STRING_DECL(option_07, "caseLevel",    9);  U_STRING_DECL(option_08, "caseFirst",      9); 
+ U_STRING_DECL(option_09, "scriptOrder", 11);  U_STRING_DECL(option_10, "charsetname",   11); 
+ U_STRING_DECL(option_11, "charset",      7);  U_STRING_DECL(option_12, "undefined",      9);
+
+const UChar *options[] = {
+     option_01,
+     option_02,
+     option_03,
+     option_04,
+     option_05,
+     option_06,
+     option_07,
+     option_08,
+     option_09,
+     option_10,
+     option_11,
+     option_12
+ };
+
+
+UBool ucol_uprv_tok_readAndSetOption(UCATableHeader *image, const UChar* start, const UChar *end, UBool *variableTop, UErrorCode *status) {
+  if(!didInit) {
+    U_STRING_INIT(option_01, "rearrange",    9);  U_STRING_INIT(option_02, "alternate",      9);
+    U_STRING_INIT(option_03, "backwards",    9);  U_STRING_INIT(option_04, "variable top",  12); 
+    U_STRING_INIT(option_05, "top",          3);  U_STRING_INIT(option_06, "normalization", 13); 
+    U_STRING_INIT(option_07, "caseLevel",    9);  U_STRING_INIT(option_08, "caseFirst",      9); 
+    U_STRING_INIT(option_09, "scriptOrder", 11);  U_STRING_INIT(option_10, "charsetname",   11); 
+    U_STRING_INIT(option_11, "charset",      7);  U_STRING_INIT(option_12, "undefined",      9);
+  }
+  return FALSE;
+}
 
 #define UCOL_TOK_UNSET 0xFFFFFFFF
 #define UCOL_TOK_RESET 0xDEADBEEF
@@ -120,7 +172,7 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
   uint32_t newCharsLen = 0, newExtensionsLen = 0;
   uint32_t charsOffset = 0, extensionOffset = 0;
   uint32_t expandNext = 0;
-  UBool caseBit = FALSE;
+  UBool variableTop = FALSE;
 
   UColTokListHeader *ListList = NULL;
 
@@ -130,11 +182,14 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
 
   ListList = src->lh;
 
+  src->image->variableTopValue = 0;
+
   while(src->current < src->end) {
     { /* parsing part */
 
       UBool inChars = TRUE;
       UBool inQuote = FALSE;
+      UChar *optionEnd = NULL;
 
       newStrength = UCOL_TOK_UNSET; 
       newCharsLen = 0; newExtensionsLen = 0;
@@ -152,9 +207,6 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
                 charsOffset = src->current - src->source;
               }
               newCharsLen++;
-              if(u_tolower(ch)!=ch) {
-                caseBit = TRUE;
-              }
             } else {
               if(newExtensionsLen == 0) {
                 extensionOffset = src->current - src->source;
@@ -194,7 +246,19 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
                 goto EndOfLoop;
               }
 
-              newStrength = UCOL_PRIMARY;
+              /* before this, do a scan to verify whether this is */
+              /* another strength */
+              if(*(src->current+1) == 0x003C) {
+                src->current++;
+                if(*(src->current+1) == 0x003C) {
+                  src->current++; /* three in a row! */
+                  newStrength = UCOL_TERTIARY;
+                } else { /* two in a row */
+                  newStrength = UCOL_SECONDARY;
+                }
+              } else { /* just one */
+                newStrength = UCOL_PRIMARY;
+              }
               break;
 
             case 0x0026/*'&'*/:  
@@ -203,6 +267,14 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
               }
 
               newStrength = UCOL_TOK_RESET; /* PatternEntry::RESET = 0 */
+              break;
+
+            case 0x005b/*'['*/:
+              /* options - read an option, analyze it */
+              if((optionEnd = u_strchr(src->current, 0x005d /*']'*/)) != NULL) {
+                ucol_uprv_tok_readAndSetOption(src->image, src->current, optionEnd, &variableTop, status);
+                src->current = optionEnd+1;
+              }
               break;
 
             /* Ignore the white spaces */
@@ -225,17 +297,11 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
               if (newCharsLen == 0) {
                 charsOffset = src->current - src->source;
                 newCharsLen++;
-                if(u_tolower(ch)!=ch) {
-                  caseBit = TRUE;
-                }
               } else if (inChars) {
                 if(newCharsLen == 0) {
                   charsOffset = src->current - src->source;
                 }
                 newCharsLen++;
-                if(u_tolower(ch)!=ch) {
-                  caseBit = TRUE;
-                }
               } else {
                 newExtensionsLen++;
               }
@@ -268,17 +334,11 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
                   charsOffset = src->current - src->source;
                 }
                 newCharsLen++;
-                if(u_tolower(ch)!=ch) {
-                  caseBit = TRUE;
-                }
               } else {
                 if(newExtensionsLen == 0) {
                   extensionOffset = src->current - src->source;
                 }
                 newExtensionsLen++;
-                if(u_tolower(ch)!=ch) {
-                  caseBit = TRUE;
-                }
               }
 
               break;
@@ -303,6 +363,12 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
       UColToken *sourceToken = NULL;
       UColToken key;
 
+      /* if we had a variable top, we're gonna put it in */
+      if(variableTop == TRUE && src->image->variableTopValue == 0) {
+        variableTop = FALSE;
+        src->image->variableTopValue = *(src->source + charsOffset);
+      }
+
       key.source = newCharsLen << 24 | charsOffset;
       key.expansion = newExtensionsLen << 24 | extensionOffset;
 
@@ -320,7 +386,6 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
           sourceToken = (UColToken *)uprv_malloc(sizeof(UColToken));
           sourceToken->source = newCharsLen << 24 | charsOffset;
           sourceToken->expansion = newExtensionsLen << 24 | extensionOffset;
-          sourceToken->caseBit = caseBit;
 
           sourceToken->debugSource = *(src->source + charsOffset);
           if(newExtensionsLen > 0) {
@@ -523,4 +588,4 @@ void ucol_tok_closeTokenList(UColTokenParser *src) {
   uhash_close(uchars2tokens);
   uprv_free(src->lh);
 }
-  
+
