@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/tools/localeconverter/Attic/EOLTransition.java,v $ 
- * $Date: 2002/01/31 01:21:32 $ 
- * $Revision: 1.1 $
+ * $Date: 2002/01/31 03:24:29 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -29,7 +29,7 @@ import java.util.*;
  * COMMENT_BODY = [ ~<EOF> & ~<EOL_CHARS> ]*
  */
 public class EOLTransition extends ComplexTransition {
-    public static final String EOL_CHARS = "\r\n\u2028\u2029";
+    public static final String EOL_CHARS = "\f\r\n\u2028\u2029";
     public static final char DEFAULT_COMMENT_CHAR = '#';
     public static char COMMENT_CHAR = DEFAULT_COMMENT_CHAR;
     public static final EOLTransition GLOBAL = new EOLTransition(SUCCESS);
