@@ -142,6 +142,7 @@
 struct UStringSearch;
 /**
 * Data structure for searching
+* @stable ICU 2.4
 */
 typedef struct UStringSearch UStringSearch;
 
