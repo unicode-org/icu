@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CompoundTransliterator.java,v $ 
- * $Date: 2002/06/26 18:12:39 $ 
- * $Revision: 1.30 $
+ * $Date: 2002/12/03 18:57:36 $ 
+ * $Revision: 1.31 $
  *
  *****************************************************************************************
  */
@@ -30,7 +30,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.30 $ $Date: 2002/06/26 18:12:39 $
+ * @deprecated ICU 2.4 This class to become private after 2003-12-01. Use the Transliterator factory methods.
  */
 public class CompoundTransliterator extends Transliterator {
 
@@ -58,6 +58,7 @@ public class CompoundTransliterator extends Transliterator {
      * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
+     * @deprecated ICU 2.4 This class to become private after 2003-12-01. Use the Transliterator factory methods.
      */
     public CompoundTransliterator(Transliterator[] transliterators,
                                   UnicodeFilter filter) {
@@ -74,6 +75,7 @@ public class CompoundTransliterator extends Transliterator {
      * transliterators have at least two components.
      * @param transliterators array of <code>Transliterator</code>
      * objects
+     * @deprecated ICU 2.4 This class to become private after 2003-12-01. Use the Transliterator factory methods.
      */
     public CompoundTransliterator(Transliterator[] transliterators) {
         this(transliterators, null);
@@ -85,6 +87,7 @@ public class CompoundTransliterator extends Transliterator {
      * @param direction either Transliterator.FORWARD or Transliterator.REVERSE
      * @param filter a global filter for this compound transliterator
      * or null
+     * @deprecated ICU 2.4 This class to become private after 2003-12-01. Use the Transliterator factory methods.
      */
     public CompoundTransliterator(String ID, int direction,
                                   UnicodeFilter filter) {
@@ -96,6 +99,7 @@ public class CompoundTransliterator extends Transliterator {
      * Constructs a new compound transliterator with no filter.
      * @param ID compound ID
      * @param direction either Transliterator.FORWARD or Transliterator.REVERSE
+     * @deprecated ICU 2.4 This class to become private after 2003-12-01. Use the Transliterator factory methods.
      */
     public CompoundTransliterator(String ID, int direction) {
         this(ID, direction, null);
@@ -104,6 +108,7 @@ public class CompoundTransliterator extends Transliterator {
     /**
      * Constructs a new forward compound transliterator with no filter.
      * @param ID compound ID
+     * @deprecated ICU 2.4 This class to become private after 2003-12-01. Use the Transliterator factory methods.
      */
     public CompoundTransliterator(String ID) {
         this(ID, FORWARD, null);
@@ -243,6 +248,7 @@ public class CompoundTransliterator extends Transliterator {
     /**
      * Returns the number of transliterators in this chain.
      * @return number of transliterators in this chain.
+     * @deprecated ICU 2.4 This class to become private after 2003-12-01. Use the Transliterator factory methods.
      */
     public int getCount() {
         return trans.length;
@@ -252,6 +258,7 @@ public class CompoundTransliterator extends Transliterator {
      * Returns the transliterator at the given index in this chain.
      * @param index index into chain, from 0 to <code>getCount() - 1</code>
      * @return transliterator at the given index
+     * @deprecated ICU 2.4 This class to become private after 2003-12-01. Use the Transliterator factory methods.
      */
     public Transliterator getTransliterator(int index) {
         return trans[index];
@@ -276,7 +283,7 @@ public class CompoundTransliterator extends Transliterator {
      * \\Uxxxxxxxx.  Unprintable characters are those other than
      * U+000A, U+0020..U+007E.
      * @return the rule string
-     * @deprecated To be removed after 2002-sep-30.
+     * @deprecated ICU 2.4 This class to become private after 2002-sep-30.
      */
     public String toRules(boolean escapeUnprintable) {
         // We do NOT call toRules() on our component transliterators, in
@@ -308,6 +315,7 @@ public class CompoundTransliterator extends Transliterator {
     /**
      * Return the set of all characters that may be modified by this
      * Transliterator, ignoring the effect of our filter.
+     * @deprecated ICU 2.4 This class to become private after 2003-12-01. Use the Transliterator factory methods.
      */
     protected UnicodeSet handleGetSourceSet() {
         UnicodeSet set = new UnicodeSet();
@@ -331,6 +339,7 @@ public class CompoundTransliterator extends Transliterator {
     /**
      * Returns the set of all characters that may be generated as
      * replacement text by this transliterator.
+     * @deprecated ICU 2.4 This class to become private after 2003-12-01. Use the Transliterator factory methods.
      */
     public UnicodeSet getTargetSet() {
         UnicodeSet set = new UnicodeSet();
@@ -343,6 +352,7 @@ public class CompoundTransliterator extends Transliterator {
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
+     * @deprecated ICU 2.4 This class to become private after 2003-12-01. Use the Transliterator factory methods.
      */
     protected void handleTransliterate(Replaceable text,
                                        Position index, boolean incremental) {
