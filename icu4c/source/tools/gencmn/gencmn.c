@@ -151,7 +151,7 @@ main(int argc, char* argv[]) {
 
     sourceTOC=options[8].doesOccur;
 
-    maxSize=uprv_strtoul(argv[1], NULL, 0);
+    maxSize=(uint32_t)uprv_strtoul(argv[1], NULL, 0);
     if(maxSize==0 && !sourceTOC) {
         fprintf(stderr, "gencmn: maxSize %s not valid\n", argv[1]);
         exit(U_ILLEGAL_ARGUMENT_ERROR);
