@@ -328,7 +328,9 @@ static void TestControlPrint()
     const UChar sampleNonControl[] = {0x61, 0x0031, 0x00e2};
     const UChar samplePrintable[] = {0x0042, 0x005f, 0x2014};
     const UChar sampleNonPrintable[] = {0x200c, 0x009f, 0x001b};
+    UChar32 c;
     int i;
+
     for (i = 0; i < 3; i++) {
         log_verbose("Testing for iscontrol\n");
         if (!u_iscntrl(sampleControl[i]))
@@ -349,6 +351,20 @@ static void TestControlPrint()
         if (u_isprint(sampleNonPrintable[i]))
         {
             log_err("Printable char test error : %d should not be printable but is\n", (int32_t)sampleNonPrintable[i]);
+        }
+    }
+
+    /* test all ISO 8 controls */
+    for(c=0; c<=0x9f; ++c) {
+        if(c==0x20) {
+            /* skip ASCII graphic characters and continue with DEL */
+            c=0x7f;
+        }
+        if(!u_iscntrl(c)) {
+            log_err("error: u_iscntrl(ISO 8 control U+%04x)=FALSE\n", c);
+        }
+        if(u_isprint(c)) {
+            log_err("error: u_isprint(ISO 8 control U+%04x)=TRUE\n", c);
         }
     }
 }

@@ -29,6 +29,12 @@
 #include "cstring.h"
 #include "ustr_imp.h"
 
+/*
+ * Since genprops overrides the general category for some control codes,
+ * we need to hardcode ISO 8 controls for u_iscntrl(), u_isprint(), etc.
+ */
+#define IS_ISO_8_CONTROL(c) ((uint32_t)(c)<0x20 || (uint32_t)((c)-0x7f)<=0x20)
+
 /* dynamically loaded Unicode character properties -------------------------- */
 
 /* fallback properties for the ASCII range if the data cannot be loaded */
@@ -227,8 +233,17 @@ enum {
     INDEX_UCHARS
 };
 
-/* access values calculated from indexes */
-static uint16_t stage23Bits, stage2Mask, stage3Mask;
+#ifdef UCHAR_VARIABLE_TRIE_BITS
+    /* access values calculated from indexes */
+    static uint16_t stage23Bits, stage2Mask, stage3Mask;
+#   define stage3Bits   indexes[INDEX_STAGE_3_BITS]
+#else
+    /* We are now hardcoding the bit distribution for the trie table access. */
+#   define stage23Bits  10
+#   define stage2Mask   0x3f
+#   define stage3Mask   0xf
+#   define stage3Bits   4
+#endif
 
 static UBool
 isAcceptable(void *context,
@@ -268,6 +283,18 @@ loadPropsData() {
 
         p=(const uint16_t *)udata_getMemory(data);
 
+#ifndef UCHAR_VARIABLE_TRIE_BITS
+        /*
+         * We are now hardcoding the bit distribution for the trie table access.
+         * Check that the file is stored accordingly.
+         */
+        if(p[INDEX_STAGE_2_BITS]!=6 || p[INDEX_STAGE_3_BITS]!=4) {
+            udata_close(data);
+            errorCode=U_INVALID_FORMAT_ERROR;
+            return havePropsData=-1;
+        }
+#endif
+
         /* in the mutex block, set the data for this process */
         umtx_lock(NULL);
         if(propsData==NULL) {
@@ -280,9 +307,11 @@ loadPropsData() {
 
         /* initialize some variables */
         uprv_memcpy(indexes, propsTable, 16);
+#ifdef UCHAR_VARIABLE_TRIE_BITS
         stage23Bits=(uint16_t)(indexes[INDEX_STAGE_2_BITS]+indexes[INDEX_STAGE_3_BITS]);
         stage2Mask=(uint16_t)((1<<indexes[INDEX_STAGE_2_BITS])-1);
         stage3Mask=(uint16_t)((1<<indexes[INDEX_STAGE_3_BITS])-1);
+#endif
         ucharsTable=(const UChar *)(props32Table+indexes[INDEX_UCHARS]);
         havePropsData=1;
 
@@ -325,7 +354,7 @@ enum {
         propsTable[ \
             propsTable[ \
                 propsTable[8+((c)>>stage23Bits)]+ \
-                ((c)>>indexes[INDEX_STAGE_3_BITS]&stage2Mask)]+ \
+                (((c)>>stage3Bits)&stage2Mask)]+ \
             ((c)&stage3Mask) \
         ] \
     ]
@@ -451,7 +480,9 @@ u_isbase(UChar32 c) {
 /* Checks if the Unicode character is a control character.*/
 U_CAPI UBool U_EXPORT2
 u_iscntrl(UChar32 c) {
-    return (UBool)(((1UL<<GET_CATEGORY(GET_PROPS(c)))&
+    return (UBool)(
+           IS_ISO_8_CONTROL(c) ||
+           ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
             (1UL<<U_CONTROL_CHAR|1UL<<U_FORMAT_CHAR|1UL<<U_LINE_SEPARATOR|1UL<<U_PARAGRAPH_SEPARATOR)
            )!=0);
 }
@@ -475,8 +506,9 @@ u_isWhitespace(UChar32 c) {
 
 /* Checks if the Unicode character is printable.*/
 U_CAPI UBool U_EXPORT2
-u_isprint(UChar32 c) {    
+u_isprint(UChar32 c) {
     return (UBool)(
+            !IS_ISO_8_CONTROL(c) &&
             ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
             (1UL<<U_DECIMAL_DIGIT_NUMBER|1UL<<U_OTHER_NUMBER|1UL<<U_LETTER_NUMBER|
              1UL<<U_UPPERCASE_LETTER|1UL<<U_LOWERCASE_LETTER|1UL<<U_TITLECASE_LETTER|1UL<<U_MODIFIER_LETTER|1UL<<U_OTHER_LETTER|
@@ -908,6 +940,9 @@ u_charCellWidth(UChar32 ch)
 
     /* these Unicode character types are scattered throughout the Unicode range, so
      special-case for them*/
+    if(IS_ISO_8_CONTROL(ch)) {
+        return U_ZERO_WIDTH;
+    }
     switch (type) {
         case U_UNASSIGNED:
         case U_NON_SPACING_MARK:
