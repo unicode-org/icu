@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2004, International Business Machines
+*   Copyright (C) 1997-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -87,11 +87,6 @@
 #elif defined(U_CYGWIN) && defined(__STRICT_ANSI__)
 /* tzset isn't defined in strict ANSI on Cygwin. */
 #   undef __STRICT_ANSI__
-#elif defined(OS2)
-#   define INCL_DOSMISC
-#   define INCL_DOSERRORS
-#   define INCL_DOSMODULEMGR
-#   include <os2.h>
 #elif defined(OS400)
 #   include <float.h>
 #   include <qusec.h>       /* error code structure */
@@ -104,6 +99,7 @@
 #   include <Folders.h>
 #   include <MacTypes.h>
 #   include <TextUtils.h>
+#   define ICU_PREVENT_USER_DATA_OVERRIDE 1
 #elif defined(OS390)
 #include "unicode/ucnv.h"   /* Needed for UCNV_SWAP_LFNL_OPTION_STRING */
 #elif defined(U_AIX)
@@ -140,10 +136,11 @@ static const char copyright[] = U_COPYRIGHT_STRING;
 
 /* We return QNAN rather than SNAN*/
 #define SIGN 0x80000000U
-#if defined(__GNUC__)
+#if defined(__GNUC__) || defined(_MSC_VER)
 /*
     This is an optimization for when u_topNBytesOfDouble
-    and u_bottomNBytesOfDouble can't be properly optimized by the compiler.
+    and u_bottomNBytesOfDouble can't be properly optimized by the compiler
+    or when faster infinity and NaN usage is helpful.
 */
 #define USE_64BIT_DOUBLE_OPTIMIZATION 1
 #else
@@ -152,10 +149,10 @@ static const char copyright[] = U_COPYRIGHT_STRING;
 
 #if USE_64BIT_DOUBLE_OPTIMIZATION
 /* gcc 3.2 has an optimization bug */
-static const int64_t gNan64 = 0x7FF8000000000000LL;
-static const int64_t gInf64 = 0x7FF0000000000000LL;
-static const double * const fgNan = (const double *)(&gNan64);
-static const double * const fgInf = (const double *)(&gInf64);
+static const int64_t gNan64 = INT64_C(0x7FF8000000000000);
+static const int64_t gInf64 = INT64_C(0x7FF0000000000000);
+static const double * fgNan = (const double *)(&gNan64);
+static const double * fgInf = (const double *)(&gInf64);
 #else
 
 #if IEEE_754
@@ -171,8 +168,8 @@ static UBool fgNaNInitialized = FALSE;
 static UBool fgInfInitialized = FALSE;
 static double gNan;
 static double gInf;
-static double * const fgNan = &gNan;
-static double * const fgInf = &gInf;
+static double * fgNan = &gNan;
+static double * fgInf = &gInf;
 #endif
 
 /*---------------------------------------------------------------------------
@@ -183,13 +180,14 @@ static double * const fgInf = &gInf;
   functions).
   ---------------------------------------------------------------------------*/
 
-#if defined(_WIN32) || defined(XP_MAC) || defined(OS400) || defined(OS2)
+#if defined(_WIN32) || defined(XP_MAC) || defined(OS400)
 #   undef U_POSIX_LOCALE
 #else
 #   define U_POSIX_LOCALE    1
 #endif
 
 /* Utilities to get the bits from a double */
+#if !USE_64BIT_DOUBLE_OPTIMIZATION
 static char*
 u_topNBytesOfDouble(double* d, int n)
 {
@@ -199,6 +197,7 @@ u_topNBytesOfDouble(double* d, int n)
     return (char*)(d + 1) - n;
 #endif
 }
+#endif
 
 static char*
 u_bottomNBytesOfDouble(double* d, int n)
@@ -1356,97 +1355,33 @@ uprv_pathIsAbsolute(const char *path)
 U_CAPI const char * U_EXPORT2
 u_getDataDirectory(void) {
     const char *path = NULL;
-    char pathBuffer[1024];
-    const char *dataDir;
 
     /* if we have the directory, then return it immediately */
     umtx_lock(NULL);
-    dataDir = gDataDirectory;
+    path = gDataDirectory;
     umtx_unlock(NULL);
 
-    if(dataDir) {
-        return dataDir;
+    if(path) {
+        return path;
     }
 
-    /* we need to look for it */
-    pathBuffer[0] = 0;                     /* Shuts up compiler warnings about unreferenced */
-                                           /*   variables when the code using it is ifdefed out */
-#   if !defined(XP_MAC)
-    /* first try to get the environment variable */
+    /*
+    When ICU_PREVENT_USER_DATA_OVERRIDE is defined, users aren't allowed to
+    override ICU's data with the ICU_DATA environment variable. This prevents
+    problems where multiple custom copies of ICU's specific version of data
+    are installed on a system. Either the application must define the data
+    directory with u_setDataDirectory, define ICU_DATA_DIR when compiling
+    ICU, set the data with udata_setCommonData or trust that all of the
+    required data is contained in ICU's data library that contains
+    the entry point defined by U_ICUDATA_ENTRY_POINT.
+
+    There may also be some platforms where environment variables
+    are not allowed.
+    */
+#   if !defined(ICU_PREVENT_USER_DATA_OVERRIDE)
+    /* First try to get the environment variable */
     path=getenv("ICU_DATA");
-#   else    /* XP_MAC */
-    {
-        OSErr myErr;
-        short vRef;
-        long  dir,newDir;
-        int16_t volNum;
-        Str255 xpath;
-        FSSpec spec;
-        short  len;
-        Handle full;
-
-        xpath[0]=0;
-
-        myErr = HGetVol(xpath, &volNum, &dir);
-
-        if(myErr == noErr) {
-            myErr = FindFolder(volNum, kApplicationSupportFolderType, TRUE, &vRef, &dir);
-            newDir=-1;
-            if (myErr == noErr) {
-                myErr = DirCreate(volNum,
-                    dir,
-                    "\pICU",
-                    &newDir);
-                if( (myErr == noErr) || (myErr == dupFNErr) ) {
-                    spec.vRefNum = volNum;
-                    spec.parID = dir;
-                    uprv_memcpy(spec.name, "\pICU", 4);
-
-                    myErr = FSpGetFullPath(&spec, &len, &full);
-                    if(full != NULL)
-                    {
-                        HLock(full);
-                        uprv_memcpy(pathBuffer,  ((char*)(*full)), len);
-                        pathBuffer[len] = 0;
-                        path = pathBuffer;
-                        DisposeHandle(full);
-                    }
-                }
-            }
-        }
-    }
-#       endif
-
-
-#       if defined WIN32 && defined ICU_ENABLE_DEPRECATED_WIN_REGISTRY
-    /* next, try to read the path from the registry */
-    if(path==NULL || *path==0) {
-        HKEY key;
-
-        if(ERROR_SUCCESS==RegOpenKeyEx(HKEY_LOCAL_MACHINE, "SOFTWARE\\ICU\\Unicode\\Data", 0, KEY_QUERY_VALUE, &key)) {
-            DWORD type=REG_EXPAND_SZ, size=sizeof(pathBuffer);
-
-            if(ERROR_SUCCESS==RegQueryValueEx(key, "Path", NULL, &type, (unsigned char *)pathBuffer, &size) && size>1) {
-                if(type==REG_EXPAND_SZ) {
-                    /* replace environment variable references by their values */
-                    char temporaryPath[1024];
-
-                    /* copy the path with variables to the temporary one */
-                    uprv_memcpy(temporaryPath, pathBuffer, size);
-
-                    /* do the replacement and store it in the pathBuffer */
-                    size=ExpandEnvironmentStrings(temporaryPath, pathBuffer, sizeof(pathBuffer));
-                    if(size>0 && size<sizeof(pathBuffer)) {
-                        path=pathBuffer;
-                    }
-                } else if(type==REG_SZ) {
-                    path=pathBuffer;
-                }
-            }
-            RegCloseKey(key);
-        }
-    }
-#       endif
+#   endif
 
     /* ICU_DATA_DIR may be set as a compile option */
 #   ifdef ICU_DATA_DIR
@@ -1773,20 +1708,6 @@ The leftmost codepage (.xxx) wins.
     }
 
     return posixID;
-
-#elif defined(OS2)
-    char * locID;
-
-    locID = getenv("LC_ALL");
-    if (!locID || !*locID)
-        locID = getenv("LANG");
-    if (!locID || !*locID) {
-        locID = "en_US";
-    }
-    if (!stricmp(locID, "c") || !stricmp(locID, "posix") ||
-        !stricmp(locID, "univ"))
-        locID = "en_US_POSIX";
-    return locID;
 
 #elif defined(OS400)
     /* locales are process scoped and are by definition thread safe */
