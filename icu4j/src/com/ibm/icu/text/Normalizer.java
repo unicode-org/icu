@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Normalizer.java,v $ 
- * $Date: 2002/11/21 01:39:07 $ 
- * $Revision: 1.26 $
+ * $Date: 2002/11/21 18:19:48 $ 
+ * $Revision: 1.27 $
  *
  *******************************************************************************
  */
@@ -347,7 +347,7 @@ public final class Normalizer implements Cloneable{
     public static final Mode DEFAULT = NFC; 
     
     /** Compatibility decomposition followed by canonical composition.  */
-    public static final Mode NFKC =new Mode(5);
+    public static final Mode NFKC =new NFKCMode(5);
     
     private static final class NFKCMode extends Mode{
         private NFKCMode(int value){
