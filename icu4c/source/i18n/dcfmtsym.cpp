@@ -13,7 +13,7 @@
 *   03/18/97    clhuang     Implemented with C++ APIs.
 *   03/27/97    helena      Updated to pass the simple test after code review.
 *   08/26/97    aliu        Added currency/intl currency symbol support.
-*    07/20/98    stephen        Slightly modified initialization of monetarySeparator
+*   07/20/98    stephen     Slightly modified initialization of monetarySeparator
 ********************************************************************************
 */
  
@@ -199,16 +199,16 @@ DecimalFormatSymbols::initialize(const UnicodeString* numberElements, int32_t nu
     fSymbols[kPercentSymbol].fastCopyFrom(numberElements[3]);
     fSymbols[kZeroDigitSymbol].fastCopyFrom(numberElements[4]);
     fSymbols[kDigitSymbol].fastCopyFrom(numberElements[5]);
-    fSymbols[kMinusSignSymbol].fastCopyFrom(numberElements[6]);
-    fSymbols[kPlusSignSymbol] = (UChar)0x002b; // '+' Hard coded for now; get from resource later
-    fSymbols[kExponentialSymbol].fastCopyFrom(numberElements[7]);
-    fSymbols[kPerMillSymbol].fastCopyFrom(numberElements[8]);
+    fSymbols[kPlusSignSymbol].fastCopyFrom(numberElements[6]);
+    fSymbols[kMinusSignSymbol].fastCopyFrom(numberElements[7]);
+    fSymbols[kExponentialSymbol].fastCopyFrom(numberElements[8]);
+    fSymbols[kPerMillSymbol].fastCopyFrom(numberElements[9]);
     fSymbols[kPadEscapeSymbol] = (UChar)0x002a; // '*' Hard coded for now; get from resource later
-    fSymbols[kInfinitySymbol].fastCopyFrom(numberElements[9]);
-    fSymbols[kNaNSymbol].fastCopyFrom(numberElements[10]);
+    fSymbols[kInfinitySymbol].fastCopyFrom(numberElements[10]);
+    fSymbols[kNaNSymbol].fastCopyFrom(numberElements[11]);
 
     // If there is a currency decimal, use it.
-    fSymbols[kMonetarySeparatorSymbol].fastCopyFrom(numberElements[numberElementsLength >= 12 ? 11 : 0]);
+    fSymbols[kMonetarySeparatorSymbol].fastCopyFrom(numberElements[numberElementsLength >= 13 ? 12 : 0]);
 
     // Default values until it's set later on.
     fSymbols[kCurrencySymbol] = (UChar)0xa4;            // 'OX' currency symbol
@@ -229,8 +229,8 @@ DecimalFormatSymbols::initialize() {
     fSymbols[kPercentSymbol] = (UChar)0x25;             // '%' percent sign
     fSymbols[kZeroDigitSymbol] = (UChar)0x30;           // '0' native 0 digit
     fSymbols[kDigitSymbol] = (UChar)0x23;               // '#' pattern digit
-    fSymbols[kMinusSignSymbol] = (UChar)0x2d;           // '-' minus sign
     fSymbols[kPlusSignSymbol] = (UChar)0x002b;          // '+' plus sign
+    fSymbols[kMinusSignSymbol] = (UChar)0x2d;           // '-' minus sign
     fSymbols[kCurrencySymbol] = (UChar)0xa4;            // 'OX' currency symbol
     fSymbols[kIntlCurrencySymbol] = INTL_CURRENCY_SYMBOL_STR;
     fSymbols[kMonetarySeparatorSymbol] = (UChar)0x2e;   // '.' monetary decimal separator
