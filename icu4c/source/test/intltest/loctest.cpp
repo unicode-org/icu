@@ -301,6 +301,13 @@ void LocaleTest::TestBasicGetters() {
     ) {
         errln("assignment to bogus Locale does not unbogus it or sets bad data");
     }
+
+    Locale a("eo_DE@currency=DEM");
+    Locale *pb=a.clone();
+    if(pb==&a || *pb!=a) {
+        errln("Locale.clone() failed");
+    }
+    delete pb;
 }
 
 void LocaleTest::TestParallelAPIValues() {
@@ -1526,6 +1533,17 @@ LocaleTest::TestKeywordVariants(void) {
             err("Expected to get keyword value %s, got %s\n", testCases[i].expectedKeywords[j], keyword);
           }
           j++;
+
+          if(j == keyCount / 2) {
+            // replace keywords with a clone of itself
+            StringEnumeration *k2 = keywords->clone();
+            if(k2 == NULL || keyCount != k2->count(status)) {
+              errln("KeywordEnumeration.clone() failed");
+            } else {
+              delete keywords;
+              keywords = k2;
+            }
+          }
         }
       }
       delete keywords;

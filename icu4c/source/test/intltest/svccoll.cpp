@@ -97,7 +97,7 @@ void CollationServiceTest::TestRegister()
         UnicodeString locName = fu_FU.getName();
         StringEnumeration* localeEnum = Collator::getAvailableLocales();
         UBool found = FALSE;
-        const UnicodeString* locStr;
+        const UnicodeString* locStr, *ls2;
         for (locStr = localeEnum->snext(status);
         !found && locStr != NULL;
         locStr = localeEnum->snext(status)) {
@@ -106,7 +106,32 @@ void CollationServiceTest::TestRegister()
                 found = TRUE;
             }
         }
+
+        StringEnumeration *le2 = NULL;
+        localeEnum->reset(status);
+        int32_t i, count;
+        count = localeEnum->count(status);
+        for(i = 0; i < count; ++i) {
+            if(i == count / 2) {
+                le2 = localeEnum->clone();
+                if(le2 == NULL || count != le2->count(status)) {
+                    errln("ServiceEnumeration.clone() failed");
+                    break;
+                }
+            }
+            if(i >= count / 2) {
+                locStr = localeEnum->snext(status);
+                ls2 = le2->snext(status);
+                if(*locStr != *ls2) {
+                    errln("ServiceEnumeration.clone() failed for item %d", i);
+                }
+            } else {
+                localeEnum->snext(status);
+            }
+        }
+
         delete localeEnum;
+        delete le2;
         
         if (!found) {
             errln("new locale fu_FU not reported as supported locale");
