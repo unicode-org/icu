@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2003, International Business Machines Corporation and         *
+* Copyright (C) 2003-2004, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -81,10 +81,18 @@ final class CollatorServiceShim extends Collator.ServiceShim {
     }
 
     Locale[] getAvailableLocales() {
+        // TODO rewrite this to just wrap getAvailableULocales later
         if (service.isDefault()) {
             return ICUResourceBundle.getAvailableLocales(UResourceBundle.ICU_COLLATION_BASE_NAME);
         }
         return service.getAvailableLocales();
+    }
+
+    ULocale[] getAvailableULocales() {
+        if (service.isDefault()) {
+            return ICUResourceBundle.getAvailableULocales(UResourceBundle.ICU_COLLATION_BASE_NAME);
+        }
+        return service.getAvailableULocales();
     }
 
     String getDisplayName(Locale objectLocale, Locale displayLocale) {
