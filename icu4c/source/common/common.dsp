@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "COMMON_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /Zi /O2 /I "..\..\include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "COMMON_EXPORTS" /D "U_COMMON_IMPLEMENTATION" /YX /FD /c
+# ADD CPP /nologo /MD /Za /W3 /GX /Zi /O2 /I "..\..\include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "COMMON_EXPORTS" /D "U_COMMON_IMPLEMENTATION" /YX /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -96,12 +96,15 @@ LINK32=link.exe
 # Begin Source File
 
 SOURCE=.\bidi.cpp
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\chariter.cpp
 
 !IF  "$(CFG)" == "common - Win32 Release"
+
+# ADD CPP /Ze
 
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
 
@@ -113,12 +116,15 @@ SOURCE=.\chariter.cpp
 # Begin Source File
 
 SOURCE=.\compdata.cpp
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\compitr.cpp
 
 !IF  "$(CFG)" == "common - Win32 Release"
+
+# ADD CPP /Ze
 
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
 
@@ -133,6 +139,8 @@ SOURCE=.\convert.cpp
 
 !IF  "$(CFG)" == "common - Win32 Release"
 
+# ADD CPP /Ze
+
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
 
 # ADD CPP /Ze
@@ -146,6 +154,8 @@ SOURCE=.\cpputils.cpp
 
 !IF  "$(CFG)" == "common - Win32 Release"
 
+# ADD CPP /Ze
+
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
 
 # ADD CPP /Ze
@@ -156,24 +166,35 @@ SOURCE=.\cpputils.cpp
 # Begin Source File
 
 SOURCE=.\cstring.c
+# ADD CPP /Za
+# End Source File
+# Begin Source File
+
+SOURCE=.\cwchar.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\dcmpdata.cpp
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\digitlst.cpp
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\filestrm.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\locid.cpp
 
 !IF  "$(CFG)" == "common - Win32 Release"
+
+# ADD CPP /Ze
 
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
 
@@ -188,6 +209,8 @@ SOURCE=.\locmap.cpp
 
 !IF  "$(CFG)" == "common - Win32 Release"
 
+# ADD CPP /Ze
+
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
 
 # ADD CPP /Ze
@@ -198,12 +221,15 @@ SOURCE=.\locmap.cpp
 # Begin Source File
 
 SOURCE=.\mutex.cpp
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\normlzr.cpp
 
 !IF  "$(CFG)" == "common - Win32 Release"
+
+# ADD CPP /Ze
 
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
 
@@ -223,6 +249,8 @@ SOURCE=.\rbdata.cpp
 
 !IF  "$(CFG)" == "common - Win32 Release"
 
+# ADD CPP /Ze
+
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
 
 # ADD CPP /Ze
@@ -241,6 +269,8 @@ SOURCE=.\schriter.cpp
 
 !IF  "$(CFG)" == "common - Win32 Release"
 
+# ADD CPP /Ze
+
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
 
 # ADD CPP /Ze
@@ -251,28 +281,35 @@ SOURCE=.\schriter.cpp
 # Begin Source File
 
 SOURCE=.\scsu.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ubidi.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ubidiln.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ubidiwrt.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\uchar.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\uchriter.cpp
 
 !IF  "$(CFG)" == "common - Win32 Release"
+
+# ADD CPP /Ze
 
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
 
@@ -284,66 +321,82 @@ SOURCE=.\uchriter.cpp
 # Begin Source File
 
 SOURCE=.\ucmp16.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucmp32.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucmp8.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucnv.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucnv2022.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucnv_bld.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucnv_cb.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucnv_cnv.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucnv_err.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucnv_io.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucnv_lmb.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucnv_utf.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucnvhz.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucnvlat1.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucnvmbcs.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucnvscsu.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
@@ -353,12 +406,15 @@ SOURCE=.\udata.c
 # Begin Source File
 
 SOURCE=.\uhash.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\uhash_us.cpp
 
 !IF  "$(CFG)" == "common - Win32 Release"
+
+# ADD CPP /Ze
 
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
 
@@ -370,10 +426,12 @@ SOURCE=.\uhash_us.cpp
 # Begin Source File
 
 SOURCE=.\uloc.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\umemstrm.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
@@ -383,16 +441,20 @@ SOURCE=.\umutex.c
 # Begin Source File
 
 SOURCE=.\unames.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\unicode.cpp
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\unistr.cpp
 
 !IF  "$(CFG)" == "common - Win32 Release"
+
+# ADD CPP /Ze
 
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
 
@@ -407,6 +469,8 @@ SOURCE=.\unorm.cpp
 
 !IF  "$(CFG)" == "common - Win32 Release"
 
+# ADD CPP /Ze
+
 !ELSEIF  "$(CFG)" == "common - Win32 Debug"
 
 # ADD CPP /Ze
@@ -417,26 +481,32 @@ SOURCE=.\unorm.cpp
 # Begin Source File
 
 SOURCE=.\uresbund.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\uresdata.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ushape.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ustring.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\utf_impl.c
+# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\uvector.cpp
+# ADD CPP /Za
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -542,6 +612,10 @@ SOURCE=.\cpputils.h
 # Begin Source File
 
 SOURCE=.\cstring.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\cwchar.h
 # End Source File
 # Begin Source File
 
