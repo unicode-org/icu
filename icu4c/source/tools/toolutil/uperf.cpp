@@ -24,7 +24,7 @@ enum
 };
 
 
-UOption options[]={
+static UOption options[]={
                       UOPTION_HELP_H,
                       UOPTION_HELP_QUESTION_MARK,
                       UOPTION_VERBOSE,
