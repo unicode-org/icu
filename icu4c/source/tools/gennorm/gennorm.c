@@ -274,8 +274,9 @@ derivedNormalizationPropertiesLineFn(void *context,
             setCompositionExclusion(start++);
         }
     } else if(
-        (0==uprv_memcmp(s, "FNC", 3) || 0==uprv_memcmp(s, "FC_NFKC", 7))
-        && *(s=(char *)u_skipWhitespace(s+3))==';'
+        ((0==uprv_memcmp(s, "FNC", 3) && *(s=(char *)u_skipWhitespace(s+3))==';') || 
+        (0==uprv_memcmp(s, "FC_NFKC", 7) && *(s=(char *)u_skipWhitespace(s+7))==';'))
+        
     ) {
         /* FC_NFKC_Closure, parse field 2 to get the string */
         char *t;
