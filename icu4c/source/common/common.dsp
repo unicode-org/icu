@@ -914,6 +914,52 @@ InputPath=.\unicode\uconfig.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\unicode\udeprctd.h
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\udeprctd.h
+
+"..\..\include\unicode\udeprctd.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "common - Win64 Debug"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\udraft.h
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\udraft.h
+
+"..\..\include\unicode\udraft.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "common - Win64 Debug"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\unicode\umachine.h
 
 !IF  "$(CFG)" == "common - Win32 Release"
@@ -975,6 +1021,29 @@ SOURCE=.\umutex.c
 # Begin Source File
 
 SOURCE=.\umutex.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\uobslete.h
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\uobslete.h
+
+"..\..\include\unicode\uobslete.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "common - Win64 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 

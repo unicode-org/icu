@@ -4,7 +4,7 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/unicode/ucurr.h,v $ 
-* $Revision: 1.12 $
+* $Revision: 1.13 $
 **********************************************************************
 */
 #ifndef _UCURR_H_
@@ -48,7 +48,7 @@ typedef const void* UCurrRegistryKey;
  *                invalid. 
  * @draft ICU 2.8
  */
-U_CAPI int32_t U_EXPORT2
+U_DRAFT int32_t U_EXPORT2
 ucurr_forLocale(const char* locale,
                 UChar* buff,
                 int32_t buffCapacity,
@@ -87,7 +87,7 @@ typedef enum UCurrNameStyle {
  * if there was an error.
  * @draft ICU 2.6
  */
-U_CAPI UCurrRegistryKey U_EXPORT2
+U_DRAFT UCurrRegistryKey U_EXPORT2
     ucurr_register(const UChar* isoCode, 
                    const char* locale,  
                    UErrorCode* status);
@@ -101,7 +101,7 @@ U_CAPI UCurrRegistryKey U_EXPORT2
  * @param status the in/out status code, no special meanings are assigned
  * @return TRUE if the currency for this key was successfully unregistered
  */
-U_CAPI UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
     ucurr_unregister(UCurrRegistryKey key, UErrorCode* status);
 
 /**
@@ -121,7 +121,7 @@ U_CAPI UBool U_EXPORT2
  * ChoiceFormat pattern.  Otherwise it is a static string.
  * @draft ICU 2.6
  */
-U_CAPI const UChar* U_EXPORT2
+U_DRAFT const UChar* U_EXPORT2
 ucurr_getName(const UChar* currency,
               const char* locale,
               UCurrNameStyle nameStyle,
@@ -138,7 +138,7 @@ ucurr_getName(const UChar* currency,
  * displayed, or 0 if there is an error
  * @draft ICU 3.0
  */
-U_CAPI int32_t U_EXPORT2
+U_DRAFT int32_t U_EXPORT2
 ucurr_getDefaultFractionDigits(const UChar* currency,
                                UErrorCode* ec);
 
@@ -151,7 +151,7 @@ ucurr_getDefaultFractionDigits(const UChar* currency,
  * or 0.0 if there is an error
  * @draft ICU 3.0
  */
-U_CAPI double U_EXPORT2
+U_DRAFT double U_EXPORT2
 ucurr_getRoundingIncrement(const UChar* currency,
                            UErrorCode* ec);
 

@@ -338,66 +338,66 @@ typedef enum UProperty {
         When used with u_getPropertyValueName() and u_getPropertyValueEnum(),
         a multi-bit mask is used for sets of categories like "Letters".
         Mask values should be cast to uint32_t.
-        @draft ICU 2.4 */
+        @stable ICU 2.4 */
     UCHAR_GENERAL_CATEGORY_MASK=0x2000,
-    /** First constant for bit-mask Unicode properties. @draft ICU 2.4 */
+    /** First constant for bit-mask Unicode properties. @stable ICU 2.4 */
     UCHAR_MASK_START=UCHAR_GENERAL_CATEGORY_MASK,
-    /** One more than the last constant for bit-mask Unicode properties. @draft ICU 2.4 */
+    /** One more than the last constant for bit-mask Unicode properties. @stable ICU 2.4 */
     UCHAR_MASK_LIMIT,
 
     /** Double property Numeric_Value.
-        Corresponds to u_getNumericValue. @draft ICU 2.4 */
+        Corresponds to u_getNumericValue. @stable ICU 2.4 */
     UCHAR_NUMERIC_VALUE=0x3000,
-    /** First constant for double Unicode properties. @draft ICU 2.4 */
+    /** First constant for double Unicode properties. @stable ICU 2.4 */
     UCHAR_DOUBLE_START=UCHAR_NUMERIC_VALUE,
-    /** One more than the last constant for double Unicode properties. @draft ICU 2.4 */
+    /** One more than the last constant for double Unicode properties. @stable ICU 2.4 */
     UCHAR_DOUBLE_LIMIT,
 
     /** String property Age.
-        Corresponds to u_charAge. @draft ICU 2.4 */
+        Corresponds to u_charAge. @stable ICU 2.4 */
     UCHAR_AGE=0x4000,
-    /** First constant for string Unicode properties. @draft ICU 2.4 */
+    /** First constant for string Unicode properties. @stable ICU 2.4 */
     UCHAR_STRING_START=UCHAR_AGE,
     /** String property Bidi_Mirroring_Glyph.
-        Corresponds to u_charMirror. @draft ICU 2.4 */
+        Corresponds to u_charMirror. @stable ICU 2.4 */
     UCHAR_BIDI_MIRRORING_GLYPH,
     /** String property Case_Folding.
-        Corresponds to u_strFoldCase in ustring.h. @draft ICU 2.4 */
+        Corresponds to u_strFoldCase in ustring.h. @stable ICU 2.4 */
     UCHAR_CASE_FOLDING,
     /** String property ISO_Comment.
-        Corresponds to u_getISOComment. @draft ICU 2.4 */
+        Corresponds to u_getISOComment. @stable ICU 2.4 */
     UCHAR_ISO_COMMENT,
     /** String property Lowercase_Mapping.
-        Corresponds to u_strToLower in ustring.h. @draft ICU 2.4 */
+        Corresponds to u_strToLower in ustring.h. @stable ICU 2.4 */
     UCHAR_LOWERCASE_MAPPING,
     /** String property Name.
-        Corresponds to u_charName. @draft ICU 2.4 */
+        Corresponds to u_charName. @stable ICU 2.4 */
     UCHAR_NAME,
     /** String property Simple_Case_Folding.
-        Corresponds to u_foldCase. @draft ICU 2.4 */
+        Corresponds to u_foldCase. @stable ICU 2.4 */
     UCHAR_SIMPLE_CASE_FOLDING,
     /** String property Simple_Lowercase_Mapping.
-        Corresponds to u_tolower. @draft ICU 2.4 */
+        Corresponds to u_tolower. @stable ICU 2.4 */
     UCHAR_SIMPLE_LOWERCASE_MAPPING,
     /** String property Simple_Titlecase_Mapping.
-        Corresponds to u_totitle. @draft ICU 2.4 */
+        Corresponds to u_totitle. @stable ICU 2.4 */
     UCHAR_SIMPLE_TITLECASE_MAPPING,
     /** String property Simple_Uppercase_Mapping.
-        Corresponds to u_toupper. @draft ICU 2.4 */
+        Corresponds to u_toupper. @stable ICU 2.4 */
     UCHAR_SIMPLE_UPPERCASE_MAPPING,
     /** String property Titlecase_Mapping.
-        Corresponds to u_strToTitle in ustring.h. @draft ICU 2.4 */
+        Corresponds to u_strToTitle in ustring.h. @stable ICU 2.4 */
     UCHAR_TITLECASE_MAPPING,
     /** String property Unicode_1_Name.
-        Corresponds to u_charName. @draft ICU 2.4 */
+        Corresponds to u_charName. @stable ICU 2.4 */
     UCHAR_UNICODE_1_NAME,
     /** String property Uppercase_Mapping.
-        Corresponds to u_strToUpper in ustring.h. @draft ICU 2.4 */
+        Corresponds to u_strToUpper in ustring.h. @stable ICU 2.4 */
     UCHAR_UPPERCASE_MAPPING,
-    /** One more than the last constant for string Unicode properties. @draft ICU 2.4 */
+    /** One more than the last constant for string Unicode properties. @stable ICU 2.4 */
     UCHAR_STRING_LIMIT,
 
-    /** Represents a nonexistent or invalid property or property value. @draft ICU 2.4 */
+    /** Represents a nonexistent or invalid property or property value. @stable ICU 2.4 */
     UCHAR_INVALID_CODE = -1
 } UProperty;
 
@@ -642,6 +642,7 @@ typedef enum UCharDirection {
  * @stable ICU 2.0
  */
 enum UBlockCode {
+
     /** New No_Block value in Unicode 4. @draft ICU 2.6 */
     UBLOCK_NO_BLOCK = 0, /*[none]*/ /* Special range indicating No_Block */
 
@@ -1075,7 +1076,7 @@ typedef enum UCharNameChoice {
  *
  * @see u_getPropertyName()
  * @see u_getPropertyValueName()
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 typedef enum UPropertyNameChoice {
     U_SHORT_PROPERTY_NAME,
@@ -1288,7 +1289,7 @@ typedef enum UHangulSyllableType {
  * @see u_getUnicodeVersion
  * @stable ICU 2.1
  */
-U_CAPI UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 u_hasBinaryProperty(UChar32 c, UProperty which);
 
 /**
@@ -1303,7 +1304,7 @@ u_hasBinaryProperty(UChar32 c, UProperty which);
  * @see u_hasBinaryProperty
  * @stable ICU 2.1
  */
-U_CAPI UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 u_isUAlphabetic(UChar32 c);
 
 /**
@@ -1318,7 +1319,7 @@ u_isUAlphabetic(UChar32 c);
  * @see u_hasBinaryProperty
  * @stable ICU 2.1
  */
-U_CAPI UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 u_isULowercase(UChar32 c);
 
 /**
@@ -1333,7 +1334,7 @@ u_isULowercase(UChar32 c);
  * @see u_hasBinaryProperty
  * @stable ICU 2.1
  */
-U_CAPI UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 u_isUUppercase(UChar32 c);
 
 /**
@@ -1354,7 +1355,7 @@ u_isUUppercase(UChar32 c);
  * @see u_hasBinaryProperty
  * @stable ICU 2.1
  */
-U_CAPI UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 u_isUWhiteSpace(UChar32 c);
 
 /**
@@ -1394,7 +1395,7 @@ u_isUWhiteSpace(UChar32 c);
  * @see u_getUnicodeVersion
  * @stable ICU 2.2
  */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 u_getIntPropertyValue(UChar32 c, UProperty which);
 
 /**
@@ -1415,7 +1416,7 @@ u_getIntPropertyValue(UChar32 c, UProperty which);
  * @see u_getIntPropertyValue
  * @stable ICU 2.2
  */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 u_getIntPropertyMinValue(UProperty which);
 
 /**
@@ -1444,7 +1445,7 @@ u_getIntPropertyMinValue(UProperty which);
  * @see u_getIntPropertyValue
  * @stable ICU 2.2
  */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 u_getIntPropertyMaxValue(UProperty which);
 
 /**
@@ -1467,7 +1468,7 @@ u_getIntPropertyMaxValue(UProperty which);
  * @see U_NO_NUMERIC_VALUE
  * @stable ICU 2.2
  */
-U_CAPI double U_EXPORT2
+U_STABLE double U_EXPORT2
 u_getNumericValue(UChar32 c);
 
 /**
@@ -1503,7 +1504,7 @@ u_getNumericValue(UChar32 c);
  * @see u_islower
  * @stable ICU 2.0
  */
-U_CAPI UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 u_islower(UChar32 c);
 
 /**
@@ -1530,7 +1531,7 @@ u_islower(UChar32 c);
  * @see u_tolower
  * @stable ICU 2.0
  */
-U_CAPI UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 u_isupper(UChar32 c);
 
 /**
@@ -1547,7 +1548,7 @@ u_isupper(UChar32 c);
  * @see u_totitle
  * @stable ICU 2.0
  */
-U_CAPI UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 u_istitle(UChar32 c);
 
 /**
@@ -1568,7 +1569,7 @@ u_istitle(UChar32 c);
  *
  * @stable ICU 2.0
  */
-U_CAPI UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 u_isdigit(UChar32 c);
 
 /**
@@ -1589,7 +1590,7 @@ u_isdigit(UChar32 c);
  * @see u_isalnum
  * @stable ICU 2.0
  */
-U_CAPI UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 u_isalpha(UChar32 c);
 
 /**
@@ -1610,7 +1611,7 @@ u_isalpha(UChar32 c);
  *
  * @stable ICU 2.0
  */
-U_CAPI UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 u_isalnum(UChar32 c);
 
 /**
@@ -1633,7 +1634,7 @@ u_isalnum(UChar32 c);
  *
  * @draft ICU 2.6
  */
-U_CAPI UBool U_EXPORT2
+U_DRAFT UBool U_EXPORT2
 u_isxdigit(UChar32 c);
 
 /**
@@ -1649,7 +1650,7 @@ u_isxdigit(UChar32 c);
  *
  * @draft ICU 2.6
  */
-U_CAPI UBool U_EXPORT2
+U_DRAFT UBool U_EXPORT2
 u_ispunct(UChar32 c);
 
 /**
@@ -1668,7 +1669,7 @@ u_ispunct(UChar32 c);
  *
  * @draft ICU 2.6
  */
-U_CAPI UBool U_EXPORT2
+U_DRAFT UBool U_EXPORT2
 u_isgraph(UChar32 c);
 
 /**
@@ -1697,7 +1698,7 @@ u_isgraph(UChar32 c);
  *
  * @draft ICU 2.6
  */
-U_CAPI UBool U_EXPORT2
+U_DRAFT UBool U_EXPORT2
 u_isblank(UChar32 c);
 
 /**
@@ -1722,7 +1723,7 @@ u_isblank(UChar32 c);
  * @see u_istitle
  * @stable ICU 2.0
  */
-U_CAPI UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 u_isdefined(UChar32 c);
 
 /**
@@ -1743,7 +1744,7 @@ u_isdefined(UChar32 c);
  * @see u_isUWhiteSpace
  * @stable ICU 2.0
  */
-U_CAPI UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 u_isspace(UChar32 c);
 
 /**
@@ -1764,7 +1765,7 @@ u_isspace(UChar32 c);
  * @see u_isUWhiteSpace
  * @draft ICU 2.6
  */
-U_CAPI UBool U_EXPORT2
+U_DRAFT UBool U_EXPORT2
 u_isJavaSpaceChar(UChar32 c);
 
 /**
@@ -1798,7 +1799,7 @@ u_isJavaSpaceChar(UChar32 c);
  * @see u_isUWhiteSpace
  * @stable ICU 2.0
  */
-U_CAPI UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 u_isWhitespace(UChar32 c);
 
 /**
@@ -1822,7 +1823,7 @@ u_isWhitespace(UChar32 c);
  * @see u_isprint
  * @stable ICU 2.0
  */
-U_CAPI UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 u_iscntrl(UChar32 c);
 
 /**
@@ -1837,7 +1838,7 @@ u_iscntrl(UChar32 c);
  * @see u_iscntrl
  * @draft ICU 2.6
  */
-U_CAPI UBool U_EXPORT2
+U_DRAFT UBool U_EXPORT2
 u_isISOControl(UChar32 c);
 
 /**
@@ -1855,7 +1856,7 @@ u_isISOControl(UChar32 c);
  * @see u_iscntrl
  * @stable ICU 2.0
  */
-U_CAPI UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 u_isprint(UChar32 c);
 
 /**
@@ -1876,7 +1877,7 @@ u_isprint(UChar32 c);
  * @see u_isdigit
  * @stable ICU 2.0
  */
-U_CAPI UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 u_isbase(UChar32 c);
 
 /**
@@ -1895,7 +1896,7 @@ u_isbase(UChar32 c);
  * @see UCharDirection
  * @stable ICU 2.0
  */
-U_CAPI UCharDirection U_EXPORT2
+U_STABLE UCharDirection U_EXPORT2
 u_charDirection(UChar32 c);
 
 /**
@@ -1913,7 +1914,7 @@ u_charDirection(UChar32 c);
  * @see UCHAR_BIDI_MIRRORED
  * @stable ICU 2.0
  */
-U_CAPI UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 u_isMirrored(UChar32 c);
 
 /**
@@ -1935,7 +1936,7 @@ u_isMirrored(UChar32 c);
  * @see u_isMirrored
  * @stable ICU 2.0
  */
-U_CAPI UChar32 U_EXPORT2
+U_STABLE UChar32 U_EXPORT2
 u_charMirror(UChar32 c);
 
 /**
@@ -1949,7 +1950,7 @@ u_charMirror(UChar32 c);
  * @see UCharCategory
  * @stable ICU 2.0
  */
-U_CAPI int8_t U_EXPORT2
+U_STABLE int8_t U_EXPORT2
 u_charType(UChar32 c);
 
 /**
@@ -2006,7 +2007,7 @@ UCharEnumTypeRange(const void *context, UChar32 start, UChar32 limit, UCharCateg
  * @see UCharCategory
  * @see UCharEnumTypeRange
  */
-U_CAPI void U_EXPORT2
+U_STABLE void U_EXPORT2
 u_enumCharTypes(UCharEnumTypeRange *enumRange, const void *context);
 
 #if !UCONFIG_NO_NORMALIZATION
@@ -2018,7 +2019,7 @@ u_enumCharTypes(UCharEnumTypeRange *enumRange, const void *context);
  * @return the combining class of the character
  * @stable ICU 2.0
  */
-U_CAPI uint8_t U_EXPORT2
+U_STABLE uint8_t U_EXPORT2
 u_getCombiningClass(UChar32 c);
 
 #endif
@@ -2046,7 +2047,7 @@ u_getCombiningClass(UChar32 c);
  * @see u_getNumericValue
  * @stable ICU 2.0
  */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 u_charDigitValue(UChar32 c);
 
 /**
@@ -2058,7 +2059,7 @@ u_charDigitValue(UChar32 c);
  * @see UBlockCode
  * @stable ICU 2.0
  */
-U_CAPI UBlockCode U_EXPORT2
+U_STABLE UBlockCode U_EXPORT2
 ublock_getCode(UChar32 c);
 
 /**
@@ -2093,7 +2094,7 @@ ublock_getCode(UChar32 c);
  * @see u_enumCharNames
  * @stable ICU 2.0
  */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 u_charName(UChar32 code, UCharNameChoice nameChoice,
            char *buffer, int32_t bufferLength,
            UErrorCode *pErrorCode);
@@ -2120,7 +2121,7 @@ u_charName(UChar32 code, UCharNameChoice nameChoice,
  *
  * @stable ICU 2.2
  */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 u_getISOComment(UChar32 c,
                 char *dest, int32_t destCapacity,
                 UErrorCode *pErrorCode);
@@ -2145,7 +2146,7 @@ u_getISOComment(UChar32 c,
  * @see u_enumCharNames
  * @stable ICU 1.7
  */
-U_CAPI UChar32 U_EXPORT2
+U_STABLE UChar32 U_EXPORT2
 u_charFromName(UCharNameChoice nameChoice,
                const char *name,
                UErrorCode *pErrorCode);
@@ -2194,7 +2195,7 @@ typedef UBool UEnumCharNamesFn(void *context,
  * @see u_charFromName
  * @stable ICU 1.7
  */
-U_CAPI void U_EXPORT2
+U_STABLE void U_EXPORT2
 u_enumCharNames(UChar32 start, UChar32 limit,
                 UEnumCharNamesFn *fn,
                 void *context,
@@ -2230,9 +2231,9 @@ u_enumCharNames(UChar32 start, UChar32 limit,
  *
  * @see UProperty
  * @see UPropertyNameChoice
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
-U_CAPI const char* U_EXPORT2
+U_STABLE const char* U_EXPORT2
 u_getPropertyName(UProperty property,
                   UPropertyNameChoice nameChoice);
 
@@ -2253,9 +2254,9 @@ u_getPropertyName(UProperty property,
  *         does not match any property.
  *
  * @see UProperty
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
-U_CAPI UProperty U_EXPORT2
+U_STABLE UProperty U_EXPORT2
 u_getPropertyEnum(const char* alias);
 
 /**
@@ -2303,9 +2304,9 @@ u_getPropertyEnum(const char* alias);
  *
  * @see UProperty
  * @see UPropertyNameChoice
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
-U_CAPI const char* U_EXPORT2
+U_STABLE const char* U_EXPORT2
 u_getPropertyValueName(UProperty property,
                        int32_t value,
                        UPropertyNameChoice nameChoice);
@@ -2339,9 +2340,9 @@ u_getPropertyValueName(UProperty property,
  *         categories such as [:L:] to be represented.
  *
  * @see UProperty
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 u_getPropertyValueEnum(UProperty property,
                        const char* alias);
 
@@ -2362,7 +2363,7 @@ u_getPropertyValueEnum(UProperty property,
  * @see u_isIDPart
  * @stable ICU 2.0
  */
-U_CAPI UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 u_isIDStart(UChar32 c);
 
 /**
@@ -2386,7 +2387,7 @@ u_isIDStart(UChar32 c);
  * @see u_isIDIgnorable
  * @stable ICU 2.0
  */
-U_CAPI UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 u_isIDPart(UChar32 c);
 
 /**
@@ -2411,7 +2412,7 @@ u_isIDPart(UChar32 c);
  * @see u_isIDPart
  * @stable ICU 2.0
  */
-U_CAPI UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 u_isIDIgnorable(UChar32 c);
 
 /**
@@ -2430,7 +2431,7 @@ u_isIDIgnorable(UChar32 c);
  * @see     u_isIDStart
  * @stable ICU 2.0
  */
-U_CAPI UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 u_isJavaIDStart(UChar32 c);
 
 /**
@@ -2451,7 +2452,7 @@ u_isJavaIDStart(UChar32 c);
  * @see     u_isIDPart
  * @stable ICU 2.0
  */
-U_CAPI UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 u_isJavaIDPart(UChar32 c);
 
 /**
@@ -2472,7 +2473,7 @@ u_isJavaIDPart(UChar32 c);
  *         otherwise the code point itself.
  * @stable ICU 2.0
  */
-U_CAPI UChar32 U_EXPORT2
+U_STABLE UChar32 U_EXPORT2
 u_tolower(UChar32 c);
 
 /**
@@ -2493,7 +2494,7 @@ u_tolower(UChar32 c);
  *         otherwise the code point itself.
  * @stable ICU 2.0
  */
-U_CAPI UChar32 U_EXPORT2
+U_STABLE UChar32 U_EXPORT2
 u_toupper(UChar32 c);
 
 /**
@@ -2514,7 +2515,7 @@ u_toupper(UChar32 c);
  *         otherwise the code point itself.
  * @stable ICU 2.0
  */
-U_CAPI UChar32 U_EXPORT2
+U_STABLE UChar32 U_EXPORT2
 u_totitle(UChar32 c);
 
 /** Option value for case folding: use default mappings defined in CaseFolding.txt. @stable ICU 2.0 */
@@ -2556,7 +2557,7 @@ u_totitle(UChar32 c);
  *         otherwise the code point itself.
  * @stable ICU 2.0
  */
-U_CAPI UChar32 U_EXPORT2
+U_STABLE UChar32 U_EXPORT2
 u_foldCase(UChar32 c, uint32_t options);
 
 /**
@@ -2597,7 +2598,7 @@ u_foldCase(UChar32 c, uint32_t options);
  * @see     u_isdigit
  * @stable ICU 2.0
  */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 u_digit(UChar32 ch, int8_t radix);
 
 /**
@@ -2628,7 +2629,7 @@ u_digit(UChar32 ch, int8_t radix);
  * @see     u_isdigit
  * @stable ICU 2.0
  */
-U_CAPI UChar32 U_EXPORT2
+U_STABLE UChar32 U_EXPORT2
 u_forDigit(int32_t digit, int8_t radix);
 
 /**
@@ -2645,7 +2646,7 @@ u_forDigit(int32_t digit, int8_t radix);
  *
  * @stable ICU 2.1
  */
-U_CAPI void U_EXPORT2
+U_STABLE void U_EXPORT2
 u_charAge(UChar32 c, UVersionInfo versionArray);
 
 /**
@@ -2659,7 +2660,7 @@ u_charAge(UChar32 c, UVersionInfo versionArray);
  *                     the Unicode version number
  * @stable ICU 2.0
  */
-U_CAPI void U_EXPORT2
+U_STABLE void U_EXPORT2
 u_getUnicodeVersion(UVersionInfo versionArray);
 
 /**
@@ -2683,7 +2684,7 @@ u_getUnicodeVersion(UVersionInfo versionArray);
  *
  * @stable ICU 2.2
  */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 u_getFC_NFKC_Closure(UChar32 c, UChar *dest, int32_t destCapacity, UErrorCode *pErrorCode);
 
 U_CDECL_END

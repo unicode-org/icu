@@ -539,7 +539,7 @@ public:
      * @param kind the type of iterator for which this instance is to be registered
      * @param status the in/out status code, no special meanings are assigned
      * @return a registry key that can be used to unregister this instance
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     static URegistryKey registerInstance(BreakIterator* toAdopt, const Locale& locale, UBreakIteratorType kind, UErrorCode& status);
 
@@ -550,7 +550,7 @@ public:
      * @param key the registry key returned by a previous call to registerInstance
      * @param status the in/out status code, no special meanings are assigned
      * @return TRUE if the iterator for the key was successfully unregistered
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     static UBool unregister(URegistryKey key, UErrorCode& status);
 
@@ -558,7 +558,7 @@ public:
      * Return a StringEnumeration over the locales available at the time of the call, 
      * including registered locales.
      * @return a StringEnumeration over the locales available at the time of the call
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     static StringEnumeration* getAvailableLocales(void);
 

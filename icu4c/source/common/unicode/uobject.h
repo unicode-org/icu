@@ -62,7 +62,7 @@ U_NAMESPACE_BEGIN
  * UMemory does not contain any virtual functions.
  * Common "boilerplate" functions are defined in UObject.
  *
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 class U_COMMON_API UMemory {
 public:
@@ -74,14 +74,14 @@ public:
      * (uprv_malloc(), uprv_free(), uprv_realloc());
      * they or something else could be used here to implement C++ new/delete
      * for ICU4C C++ classes
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     static void *operator new(size_t size);
 
     /**
      * Override for ICU4C C++ memory management.
      * See new().
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     static void *operator new[](size_t size);
 
@@ -91,14 +91,14 @@ public:
      * (uprv_malloc(), uprv_free(), uprv_realloc());
      * they or something else could be used here to implement C++ new/delete
      * for ICU4C C++ classes
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     static void operator delete(void *p);
 
     /**
      * Override for ICU4C C++ memory management.
      * See delete().
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     static void operator delete[](void *p);
 

@@ -23,7 +23,7 @@ class TransliterationRuleData;
  * <code>UnicodeFunctor</code> is an abstract base class for objects
  * that perform match and/or replace operations on Unicode strings.
  * @author Alan Liu
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 class U_COMMON_API UnicodeFunctor : public UObject {
 
@@ -31,7 +31,7 @@ public:
 
     /**
      * Destructor
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     virtual ~UnicodeFunctor();
 
@@ -39,7 +39,7 @@ public:
      * Return a copy of this object.  All UnicodeFunctor objects
      * have to support cloning in order to allow classes using
      * UnicodeFunctor to implement cloning.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     virtual UnicodeFunctor* clone() const = 0;
 
@@ -51,7 +51,7 @@ public:
      * cannot be cast to a pointer to a UnicodeMatcher, since
      * UnicodeMatcher is a mixin that does not derive from
      * UnicodeFunctor.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     virtual UnicodeMatcher* toMatcher() const;
 
@@ -63,7 +63,7 @@ public:
      * cannot be cast to a pointer to a UnicodeReplacer, since
      * UnicodeReplacer is a mixin that does not derive from
      * UnicodeFunctor.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     virtual UnicodeReplacer* toReplacer() const;
 
@@ -101,7 +101,7 @@ public:
      * @return The class ID for this object. All objects of a given
      * class have the same class ID.  Objects of other classes have
      * different class IDs.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     virtual UClassID getDynamicClassID(void) const = 0;
 

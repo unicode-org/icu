@@ -247,12 +247,7 @@
  * @stable ICU 2.0
  */
 #define ULOC_LANG_CAPACITY 12
-/**
- * Useful constant for the maximum size of the script part of a locale ID
- * (including the terminating NULL).
- * @draft ICU 2.8
- */
-#define ULOC_SCRIPT_CAPACITY 6
+
 /**
  * Useful constant for the maximum size of the country part of a locale ID
  * (including the terminating NULL).
@@ -265,16 +260,47 @@
  * @stable ICU 2.0
  */
 #define ULOC_FULLNAME_CAPACITY 56
+
+
+#ifndef U_HIDE_DRAFT_API
+
+/**
+ * Useful constant for the maximum size of the script part of a locale ID
+ * (including the terminating NULL).
+ * @draft ICU 2.8
+ */
+#define ULOC_SCRIPT_CAPACITY 6
+
 /**
  * Useful constant for the maximum size of keywords in a locale
  * @draft ICU 2.8
  */
 #define ULOC_KEYWORDS_CAPACITY 50
+
 /**
  * Useful constant for the maximum size of keywords in a locale
  * @draft ICU 2.8
  */
 #define ULOC_KEYWORD_AND_VALUES_CAPACITY 100
+
+/**
+ * Character separating keywords from the locale string
+ * different for EBCDIC - TODO
+ * @draft ICU 2.8
+ */
+#define ULOC_KEYWORD_SEPARATOR '@'
+/**
+ * Character for assigning value to a keyword
+ * @draft ICU 2.8
+ */
+#define ULOC_KEYWORD_ASSIGN '='
+/**
+ * Character separating keywords
+ * @draft ICU 2.8
+ */
+#define ULOC_KEYWORD_ITEM_SEPARATOR ';'
+
+#endif /*U_HIDE_DRAFT_API*/
 
 /**
  * Constants for *_getLocale()
@@ -299,10 +325,14 @@ typedef enum {
    * @stable ICU 2.1
    */
   ULOC_VALID_LOCALE    = 1,
+
+#ifndef U_HIDE_DEPRECATED_API
   /** This is the requested locale
    *  @deprecated ICU 2.8 
    */
   ULOC_REQUESTED_LOCALE = 2,
+#endif /* U_HIDE_DEPRECATED_API */
+
   ULOC_DATA_LOCALE_TYPE_LIMIT
 } ULocDataLocaleType ;
 
@@ -318,7 +348,7 @@ typedef enum {
  * @system
  * @stable ICU 2.0
  */
-U_CAPI const char* U_EXPORT2
+U_STABLE const char* U_EXPORT2
 uloc_getDefault(void);
 
 /**
@@ -338,7 +368,7 @@ uloc_getDefault(void);
  * @system
  * @stable ICU 2.0
  */
-U_CAPI void U_EXPORT2
+U_STABLE void U_EXPORT2
 uloc_setDefault(const char* localeID,
         UErrorCode*       status);
 
@@ -354,7 +384,7 @@ uloc_setDefault(const char* localeID,
  * than languageCapacity, the returned language code will be truncated.  
  * @stable ICU 2.0
  */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uloc_getLanguage(const char*    localeID,
          char* language,
          int32_t languageCapacity,
@@ -372,7 +402,7 @@ uloc_getLanguage(const char*    localeID,
  * than scriptCapacity, the returned language code will be truncated.  
  * @draft ICU 2.8
  */
-U_CAPI int32_t U_EXPORT2
+U_DRAFT int32_t U_EXPORT2
 uloc_getScript(const char*    localeID,
          char* script,
          int32_t scriptCapacity,
@@ -390,7 +420,7 @@ uloc_getScript(const char*    localeID,
  * than countryCapacity, the returned country code will be truncated.  
  * @stable ICU 2.0
  */
-U_CAPI int32_t U_EXPORT2
+U_DRAFT int32_t U_EXPORT2
 uloc_getCountry(const char*    localeID,
         char* country,
         int32_t countryCapacity,
@@ -408,7 +438,7 @@ uloc_getCountry(const char*    localeID,
  * than variantCapacity, the returned variant code will be truncated.  
  * @stable ICU 2.0
  */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uloc_getVariant(const char*    localeID,
         char* variant,
         int32_t variantCapacity,
@@ -431,7 +461,7 @@ uloc_getVariant(const char*    localeID,
  * than nameCapacity, the returned full name will be truncated.  
  * @stable ICU 2.0
  */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uloc_getName(const char*    localeID,
          char* name,
          int32_t nameCapacity,
@@ -454,7 +484,7 @@ uloc_getName(const char*    localeID,
  * than nameCapacity, the returned full name will be truncated.  
  * @stable ICU 2.0
  */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uloc_canonicalize(const char*    localeID,
          char* name,
          int32_t nameCapacity,
@@ -467,7 +497,7 @@ uloc_canonicalize(const char*    localeID,
  * @return language the ISO language code for localeID
  * @stable ICU 2.0
  */
-U_CAPI const char* U_EXPORT2
+U_STABLE const char* U_EXPORT2
 uloc_getISO3Language(const char* localeID);
 
 
@@ -478,7 +508,7 @@ uloc_getISO3Language(const char* localeID);
  * @return country the ISO country code for localeID
  * @stable ICU 2.0
  */
-U_CAPI const char* U_EXPORT2
+U_STABLE const char* U_EXPORT2
 uloc_getISO3Country(const char* localeID);
 
 /**
@@ -489,7 +519,7 @@ uloc_getISO3Country(const char* localeID);
  * @return country the Win32 LCID for localeID
  * @stable ICU 2.0
  */
-U_CAPI uint32_t U_EXPORT2
+U_STABLE uint32_t U_EXPORT2
 uloc_getLCID(const char* localeID);
 
 /**
@@ -508,7 +538,7 @@ uloc_getLCID(const char* localeID);
  * than languageCapacity, the returned language code will be truncated.  
  * @stable ICU 2.0
  */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uloc_getDisplayLanguage(const char* locale,
             const char* displayLocale,
             UChar* language,
@@ -531,7 +561,7 @@ uloc_getDisplayLanguage(const char* locale,
  * than scriptCapacity, the returned displayable script code will be truncated.  
  * @draft ICU 2.8
  */
-U_CAPI int32_t U_EXPORT2
+U_DRAFT int32_t U_EXPORT2
 uloc_getDisplayScript(const char* locale,
             const char* displayLocale,
             UChar* script,
@@ -554,7 +584,7 @@ uloc_getDisplayScript(const char* locale,
  * than countryCapacity, the returned displayable country code will be truncated.  
  * @stable ICU 2.0
  */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uloc_getDisplayCountry(const char* locale,
                        const char* displayLocale,
                        UChar* country,
@@ -578,7 +608,7 @@ uloc_getDisplayCountry(const char* locale,
  * than variantCapacity, the returned displayable variant code will be truncated.  
  * @stable ICU 2.0
  */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uloc_getDisplayVariant(const char* locale,
                        const char* displayLocale,
                        UChar* variant,
@@ -625,7 +655,7 @@ uloc_getDisplayVariant(const char* locale,
  * @see #uloc_getKeywords
  * @draft ICU 2.8
  */
-U_CAPI int32_t U_EXPORT2
+U_DRAFT int32_t U_EXPORT2
 uloc_getDisplayKeyword(const char* keyword,
                        const char* displayLocale,
                        UChar* dest,
@@ -651,7 +681,7 @@ uloc_getDisplayKeyword(const char* keyword,
  * @return the actual buffer size needed for the displayable variant code.  
  * @draft ICU 2.8
  */
-U_CAPI int32_t U_EXPORT2
+U_DRAFT int32_t U_EXPORT2
 uloc_getDisplayKeywordValue(   const char* locale,
                                const char* keyword,
                                const char* displayLocale,
@@ -674,7 +704,7 @@ uloc_getDisplayKeywordValue(   const char* locale,
  * than variantCapacity, the returned displayable name will be truncated.  
  * @stable ICU 2.0
  */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uloc_getDisplayName(const char* localeID,
             const char* inLocaleID,
             UChar* result,
@@ -692,7 +722,7 @@ uloc_getDisplayName(const char* localeID,
  * @return a specified locale name of all available locales
  * @stable ICU 2.0
  */
-U_CAPI const char* U_EXPORT2
+U_STABLE const char* U_EXPORT2
 uloc_getAvailable(int32_t n);
 
 /**
@@ -701,7 +731,7 @@ uloc_getAvailable(int32_t n);
  * @return the size of the locale list
  * @stable ICU 2.0
  */
-U_CAPI int32_t U_EXPORT2 uloc_countAvailable(void);
+U_STABLE int32_t U_EXPORT2 uloc_countAvailable(void);
 
 /**
  *
@@ -712,7 +742,7 @@ U_CAPI int32_t U_EXPORT2 uloc_countAvailable(void);
  * @return a list of all available language codes
  * @stable ICU 2.0
  */
-U_CAPI const char* const* U_EXPORT2
+U_STABLE const char* const* U_EXPORT2
 uloc_getISOLanguages(void);
 
 /**
@@ -724,7 +754,7 @@ uloc_getISOLanguages(void);
  * @return a list of all available country codes
  * @stable ICU 2.0
  */
-U_CAPI const char* const* U_EXPORT2
+U_STABLE const char* const* U_EXPORT2
 uloc_getISOCountries(void);
 
 /**
@@ -740,29 +770,14 @@ uloc_getISOCountries(void);
  * @return The length of the parent locale ID.
  * @stable ICU 2.0
  */
-U_CAPI int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uloc_getParent(const char*    localeID,
                  char* parent,
                  int32_t parentCapacity,
                  UErrorCode* err);
 
 
-/**
- * Character separating keywords from the locale string
- * different for EBCDIC - TODO
- * @draft ICU 2.8
- */
-#define ULOC_KEYWORD_SEPARATOR '@'
-/**
- * Character for assigning value to a keyword
- * @draft ICU 2.8
- */
-#define ULOC_KEYWORD_ASSIGN '='
-/**
- * Character separating keywords
- * @draft ICU 2.8
- */
-#define ULOC_KEYWORD_ITEM_SEPARATOR ';'
+
 
 /**
  * Gets the full name for the specified locale.
@@ -783,7 +798,7 @@ uloc_getParent(const char*    localeID,
  * than nameCapacity, the returned full name will be truncated.  
  * @draft ICU 2.8
  */
-U_CAPI int32_t U_EXPORT2
+U_DRAFT int32_t U_EXPORT2
 uloc_getBaseName(const char*    localeID,
          char* name,
          int32_t nameCapacity,
@@ -798,7 +813,7 @@ uloc_getBaseName(const char*    localeID,
  * @return enumeration of keywords or NULL if there are no keywords.
  * @draft ICU 2.8
  */
-U_CAPI UEnumeration* U_EXPORT2
+U_DRAFT UEnumeration* U_EXPORT2
 uloc_openKeywords(const char* localeID,
                         UErrorCode* status);
 
@@ -813,7 +828,7 @@ uloc_openKeywords(const char* localeID,
  * @return the length of keyword value
  * @draft ICU 2.8
  */
-U_CAPI int32_t U_EXPORT2
+U_DRAFT int32_t U_EXPORT2
 uloc_getKeywordValue(const char* localeID,
                      const char* keywordName,
                      char* buffer, int32_t bufferCapacity,

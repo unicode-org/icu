@@ -45,13 +45,13 @@ U_NAMESPACE_BEGIN
  * ICU 2.8 adds some default implementations and helper functions
  * for subclasses.
  *
- * @draft ICU 2.4 
+ * @stable ICU 2.4 
  */
 class U_COMMON_API StringEnumeration : public UObject { 
 public:
     /**
      * Destructor.
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     virtual ~StringEnumeration();
 
@@ -88,7 +88,7 @@ public:
      * @param status the error code.
      * @return number of elements in the iterator.
      *
-     * @draft ICU 2.4 */
+     * @stable ICU 2.4 */
     virtual int32_t count(UErrorCode& status) const = 0;
 
     /**
@@ -118,7 +118,7 @@ public:
      * @param resultLength a pointer to receive the length, can be NULL.
      * @return a pointer to the string, or NULL.
      *
-     * @draft ICU 2.4 
+     * @stable ICU 2.4 
      */
     virtual const char* next(int32_t *resultLength, UErrorCode& status);
 
@@ -143,7 +143,7 @@ public:
      * @param resultLength a ponter to receive the length, can be NULL.
      * @return a pointer to the string, or NULL.
      *
-     * @draft ICU 2.4 
+     * @stable ICU 2.4 
      */
     virtual const UChar* unext(int32_t *resultLength, UErrorCode& status);
 
@@ -161,7 +161,7 @@ public:
      * @param status the error code.
      * @return a pointer to the string, or NULL.
      *
-     * @draft ICU 2.4 
+     * @stable ICU 2.4 
      */
     virtual const UnicodeString* snext(UErrorCode& status) = 0;
 
@@ -175,7 +175,7 @@ public:
      *
      * @param status the error code.
      *
-     * @draft ICU 2.4 
+     * @stable ICU 2.4 
      */
     virtual void reset(UErrorCode& status) = 0;
 

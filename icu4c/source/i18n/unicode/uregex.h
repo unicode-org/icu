@@ -22,6 +22,7 @@
 
 #include "unicode/parseerr.h"
 
+#ifndef U_HIDE_DRAFT_API
 
 struct URegularExpression;
 /**
@@ -31,30 +32,31 @@ struct URegularExpression;
   */
 typedef struct URegularExpression URegularExpression;
 
+#endif /* U_HIDE_DRAFT_API */
 
 
 /**
  * Constants for Regular Expression Match Modes.
- * @draft ICU 2.4
+ * @stable ICU 2.4
  */
 typedef enum URegexpFlag{
-    /** Forces normalization of pattern and strings.  @draft ICU 2.4 */
+    /** Forces normalization of pattern and strings.  @draft ICU 3.0 */
     UREGEX_CANON_EQ         = 128,
 
-    /**  Enable case insensitive matching.  @draft ICU 2.4 */
+    /**  Enable case insensitive matching.  @stable ICU 2.4 */
     UREGEX_CASE_INSENSITIVE = 2,
 
-    /**  Allow white space and comments within patterns  @draft ICU 2.4 */
+    /**  Allow white space and comments within patterns  @stable ICU 2.4 */
     UREGEX_COMMENTS         = 4,
 
     /**  If set, '.' matches line terminators,  otherwise '.' matching stops at line end.
-      *  @draft ICU 2.4 */
+      *  @stable ICU 2.4 */
     UREGEX_DOTALL           = 32,
 
     /**   Control behavior of "$" and "^"
       *    If set, recognize line terminators within string,
       *    otherwise, match only at start and end of input string.
-      *   @draft ICU 2.4 */
+      *   @stable ICU 2.4 */
     UREGEX_MULTILINE        = 8,
 
     /**  Unicode word boundaries.
@@ -87,7 +89,7 @@ typedef enum URegexpFlag{
   * @param status         Receives error detected by this function.
   *
   */
-U_CAPI URegularExpression * U_EXPORT2
+U_STABLE URegularExpression * U_EXPORT2
 uregex_open( const  UChar          *pattern,
                     int32_t         patternLength,
                     uint32_t        flags,
@@ -116,7 +118,7 @@ uregex_open( const  UChar          *pattern,
   *                       pattern.
   *
   */
-U_CAPI URegularExpression * U_EXPORT2
+U_STABLE URegularExpression * U_EXPORT2
 uregex_openC( const char           *pattern,
                     uint32_t        flags,
                     UParseError    *pe,
@@ -131,7 +133,7 @@ uregex_openC( const char           *pattern,
   *
   * @param regexp   The regular expression to be closed.
   */
-U_CAPI void U_EXPORT2 
+U_STABLE void U_EXPORT2 
 uregex_close(URegularExpression *regexp);
 
 /**
@@ -151,7 +153,7 @@ uregex_close(URegularExpression *regexp);
  * @param status   Receives indication of any errors encountered
  * @return the cloned copy of the compiled regular expression.
  */
-U_CAPI URegularExpression * U_EXPORT2 
+U_STABLE URegularExpression * U_EXPORT2 
 uregex_clone(const URegularExpression *regexp, UErrorCode *status);
 
 /**
@@ -169,7 +171,7 @@ uregex_clone(const URegularExpression *regexp, UErrorCode *status);
  *                   altered or deleted by the application.  The returned string
  *                   will remain valid until the regular expression is closed.
  */
-U_CAPI const UChar * U_EXPORT2 
+U_STABLE const UChar * U_EXPORT2 
 uregex_pattern(const  URegularExpression   *regexp,
                          int32_t           *patLength,
                          UErrorCode        *status);
@@ -182,7 +184,7 @@ uregex_pattern(const  URegularExpression   *regexp,
   * @param return     The match mode flags
   * @see URegexpFlag
   */
-U_CAPI int32_t U_EXPORT2 
+U_STABLE int32_t U_EXPORT2 
 uregex_flags(const  URegularExpression   *regexp,
                     UErrorCode           *status);
 
@@ -206,7 +208,7 @@ uregex_flags(const  URegularExpression   *regexp,
   *                   is NUL terminated.
   * @param status     Receives errors detected by this function.
   */
-U_CAPI void U_EXPORT2 
+U_STABLE void U_EXPORT2 
 uregex_setText(URegularExpression *regexp,
                const UChar        *text,
                int32_t             textLength,
@@ -227,7 +229,7 @@ uregex_setText(URegularExpression *regexp,
   * @return            Poiner to the subject text string currently associated with
   *                    this regular expression.
   */
-U_CAPI const UChar * U_EXPORT2 
+U_DRAFT const UChar * U_EXPORT2 
 uregex_getText(URegularExpression *regexp,
                int32_t            *textLength,
                UErrorCode         *status);
@@ -242,7 +244,7 @@ uregex_getText(URegularExpression *regexp,
   *    @return             TRUE if there is a match
   *    @draft ICU 3.0
   */
-U_CAPI UBool U_EXPORT2 
+U_DRAFT UBool U_EXPORT2 
 uregex_matches(URegularExpression *regexp,
                 int32_t            startIndex,
                 UErrorCode        *status);
@@ -262,7 +264,7 @@ uregex_matches(URegularExpression *regexp,
   *    @return  TRUE if there is a match.
   *    @draft ICU 3.0
   */
-U_CAPI UBool U_EXPORT2 
+U_DRAFT UBool U_EXPORT2 
 uregex_lookingAt(URegularExpression *regexp,
                  int32_t             startIndex,
                  UErrorCode         *status);
@@ -279,7 +281,7 @@ uregex_lookingAt(URegularExpression *regexp,
   *   @return              TRUE if a match is found.
   *   @draft ICU 3.0
   */
-U_CAPI UBool U_EXPORT2 
+U_DRAFT UBool U_EXPORT2 
 uregex_find(URegularExpression *regexp,
             int32_t             startIndex, 
             UErrorCode         *status);
@@ -297,7 +299,7 @@ uregex_find(URegularExpression *regexp,
   *  @see uregex_reset
   *  @draft ICU 3.0
   */
-U_CAPI UBool U_EXPORT2 
+U_DRAFT UBool U_EXPORT2 
 uregex_findNext(URegularExpression *regexp,
                 UErrorCode         *status);
 
@@ -308,7 +310,7 @@ uregex_findNext(URegularExpression *regexp,
   *   @return the number of capture groups
   *   @draft ICU 3.0
   */
-U_CAPI int32_t U_EXPORT2 
+U_DRAFT int32_t U_EXPORT2 
 uregex_groupCount(URegularExpression *regexp,
                   UErrorCode         *status);
 
@@ -328,7 +330,7 @@ uregex_groupCount(URegularExpression *regexp,
   *                         or -1 if no applicable match.
   *   @draft ICU 3.0
   */
-U_CAPI int32_t U_EXPORT2 
+U_DRAFT int32_t U_EXPORT2 
 uregex_group(URegularExpression *regexp,
              int32_t             groupNum,
              UChar              *dest,
@@ -350,7 +352,7 @@ uregex_group(URegularExpression *regexp,
   *                         by the specified group.
   *    @draft ICU 3.0
   */
-U_CAPI int32_t U_EXPORT2 
+U_DRAFT int32_t U_EXPORT2 
 uregex_start(URegularExpression *regexp,
              int32_t             groupNum,
              UErrorCode          *status);
@@ -368,7 +370,7 @@ uregex_start(URegularExpression *regexp,
   *    @return              the index of the position following the last matched character.
   *    @draft ICU 3.0
   */
-U_CAPI int32_t U_EXPORT2 
+U_DRAFT int32_t U_EXPORT2 
 uregex_end(URegularExpression   *regexp,
            int32_t               groupNum,
            UErrorCode           *status);
@@ -385,7 +387,7 @@ uregex_end(URegularExpression   *regexp,
   *    @param   status      A reference to a UErrorCode to receive any errors.
   *    @draft ICU 3.0
   */
-U_CAPI void U_EXPORT2 
+U_DRAFT void U_EXPORT2 
 uregex_reset(URegularExpression    *regexp,
              int32_t               index,
              UErrorCode            *status);
@@ -414,7 +416,7 @@ uregex_reset(URegularExpression    *regexp,
   *                                is still the full length of the untruncated string.
   *    @draft ICU 3.0
   */
-U_CAPI int32_t U_EXPORT2 
+U_DRAFT int32_t U_EXPORT2 
 uregex_replaceAll(URegularExpression    *regexp,
                   UChar                 *replacementText,
                   int32_t                replacementLength,
@@ -447,7 +449,7 @@ uregex_replaceAll(URegularExpression    *regexp,
   *                                is still the full length of the untruncated string.
   *    @draft ICU 3.0
   */
-U_CAPI int32_t U_EXPORT2 
+U_DRAFT int32_t U_EXPORT2 
 uregex_replaceFirst(URegularExpression  *regexp,
                     UChar               *replacementText,
                     int32_t              replacementLength,
@@ -502,7 +504,7 @@ uregex_replaceFirst(URegularExpression  *regexp,
   *   @draft ICU 3.0
   *
   */
-U_CAPI int32_t U_EXPORT2 
+U_DRAFT int32_t U_EXPORT2 
 uregex_appendReplacement(URegularExpression    *regexp,
                   UChar                 *replacementText,
                   int32_t                replacementLength,
@@ -535,7 +537,7 @@ uregex_appendReplacement(URegularExpression    *regexp,
   *
   *   @draft ICU 3.0
   */
-U_CAPI int32_t U_EXPORT2 
+U_DRAFT int32_t U_EXPORT2 
 uregex_appendTail(URegularExpression    *regexp,
                   UChar                **destBuf,
                   int32_t               *destCapacity,
@@ -598,7 +600,7 @@ uregex_appendTail(URegularExpression    *regexp,
    *                could cause the fields to not correspond exactly to
    *                a range of the source text.
    */
-U_CAPI int32_t U_EXPORT2 
+U_DRAFT int32_t U_EXPORT2 
 uregex_split(   URegularExpression      *regexp,
                   UChar                 *destBuf,
                   int32_t                destCapacity,

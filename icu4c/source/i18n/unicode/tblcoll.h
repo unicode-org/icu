@@ -552,7 +552,7 @@ public:
      * @return a pointer to a UnicodeSet object containing all the 
      *         code points and sequences that may sort differently than
      *         in the UCA. The object must be disposed of by using delete
-     * @draft ICU 2.4
+     * @stable ICU 2.4
      */
     virtual UnicodeSet *getTailoredSet(UErrorCode &status) const;
 

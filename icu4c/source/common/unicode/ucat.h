@@ -101,7 +101,7 @@ typedef UResourceBundle* u_nl_catd;
  * 
  * @draft ICU 2.6
  */
-U_CAPI u_nl_catd U_EXPORT2
+U_DRAFT u_nl_catd U_EXPORT2
 u_catopen(const char* name, const char* locale, UErrorCode* ec);
 
 /**
@@ -112,7 +112,7 @@ u_catopen(const char* name, const char* locale, UErrorCode* ec);
  * 
  * @draft ICU 2.6
  */
-U_CAPI void U_EXPORT2
+U_DRAFT void U_EXPORT2
 u_catclose(u_nl_catd catd);
 
 /**
@@ -147,7 +147,7 @@ u_catclose(u_nl_catd catd);
  * 
  * @draft ICU 2.6
  */
-U_CAPI const UChar* U_EXPORT2
+U_DRAFT const UChar* U_EXPORT2
 u_catgets(u_nl_catd catd, int32_t set_num, int32_t msg_num,
           const UChar* s,
           int32_t* len, UErrorCode* ec);

@@ -137,6 +137,8 @@
  * @deprecated ICU 2.4. Use the macros in utf.h, utf16.h, utf8.h instead.
  */
 
+#ifndef U_HIDE_DEPRECATED_API
+
 /* utf.h must be included first. */
 #ifndef __UTF_H__
 #   include "unicode/utf.h"
@@ -1157,4 +1159,7 @@ typedef int32_t UTextOffset;
  */
 #define UTF_SET_CHAR_LIMIT(s, start, i, length) U16_SET_CP_LIMIT(s, start, i, length)
 
+#endif /* U_HIDE_DEPRECATED_API */
+
 #endif
+
