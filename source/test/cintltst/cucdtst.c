@@ -1800,7 +1800,7 @@ static void TestUScriptCodeAPI(){
     
         /* test names */
         "CYRILLIC","DESERET","DEVANAGARI","ETHIOPIC","GEORGIAN", 
-        "GOTHIC",  "GREEK",  "GUJARATI", 
+        "GOTHIC",  "GREEK",  "GUJARATI", "COMMON", "INHERITED", 
         /* test lower case names */
         "malayalam", "mongolian", "myanmar", "ogham", "old-italic",
         "oriya",     "runic",     "sinhala", "syriac","tamil",     
@@ -1822,7 +1822,7 @@ static void TestUScriptCodeAPI(){
             USCRIPT_MALAYALAM, USCRIPT_MONGOLIAN,
             /* names should return */
             USCRIPT_CYRILLIC, USCRIPT_DESERET, USCRIPT_DEVANAGARI, USCRIPT_ETHIOPIC, USCRIPT_GEORGIAN,
-            USCRIPT_GOTHIC, USCRIPT_GREEK, USCRIPT_GUJARATI,
+            USCRIPT_GOTHIC, USCRIPT_GREEK, USCRIPT_GUJARATI, USCRIPT_COMMON, USCRIPT_INHERITED,
             /* lower case names should return */    
             USCRIPT_MALAYALAM, USCRIPT_MONGOLIAN, USCRIPT_MYANMAR, USCRIPT_OGHAM, USCRIPT_OLD_ITALIC,
             USCRIPT_ORIYA, USCRIPT_RUNIC, USCRIPT_SINHALA, USCRIPT_SYRIAC, USCRIPT_TAMIL,
@@ -1941,29 +1941,29 @@ static void TestUScriptCodeAPI(){
     {
 #define MAX_ARRAY_SIZE 23
         uint32_t codepoints[] = {
-                0x0000FF9D, 
-                0x0000FFBE, 
-                0x0000FFC7, 
-                0x0000FFCF, 
-                0x0000FFD7, 
-                0x0000FFDC, 
-                0x00010300,
-                0x00010330,
-                0x0001034A,
-                0x00010400,
-                0x00010428,
-                0x0001D167,
-                0x0001D17B,
-                0x0001D185,
-                0x0001D1AA,
-                0x00020000,
-                0x00000D02,
-                0x00000D00,
-                0x00000000,
-                0x0001D169, 
-                0x0001D182, 
-                0x0001D18B, 
-                0x0001D1AD, 
+                0x0000FF9D, /* USCRIPT_KATAKANA*/
+                0x0000FFBE, /* USCRIPT_HANGUL*/
+                0x0000FFC7, /* USCRIPT_HANGUL*/
+                0x0000FFCF, /* USCRIPT_HANGUL*/
+                0x0000FFD7, /* USCRIPT_HANGUL*/
+                0x0000FFDC, /* USCRIPT_HANGUL*/
+                0x00010300, /* USCRIPT_OLD_ITALIC*/
+                0x00010330, /* USCRIPT_GOTHIC*/
+                0x0001034A, /* USCRIPT_GOTHIC*/
+                0x00010400, /* USCRIPT_DESERET*/
+                0x00010428, /* USCRIPT_DESERET*/
+                0x0001D167, /* USCRIPT_INHERITED*/
+                0x0001D17B, /* USCRIPT_INHERITED*/
+                0x0001D185, /* USCRIPT_INHERITED*/
+                0x0001D1AA, /* USCRIPT_INHERITED*/
+                0x00020000, /* USCRIPT_HAN*/
+                0x00000D02, /* USCRIPT_MALAYALAM*/
+                0x00000D00, /* USCRIPT_INVALID_CODE */
+                0x00000000, /* USCRIPT_COMMON*/
+                0x0001D169, /* USCRIPT_INHERITED*/
+                0x0001D182, /* USCRIPT_INHERITED*/
+                0x0001D18B, /* USCRIPT_INHERITED*/
+                0x0001D1AD, /* USCRIPT_INHERITED*/
         };
 
         UScriptCode expected[] = {
@@ -2014,6 +2014,14 @@ static void TestUScriptCodeAPI(){
         if(passed==FALSE){
            log_err("uscript_getScript failed.\n");
         }      
+    }
+    { 	
+        UScriptCode code= USCRIPT_INVALID_CODE;
+	    UErrorCode  status = U_ZERO_ERROR;
+        code = uscript_getScript(0x001D169,&status);
+	    if(code != USCRIPT_INHERITED){
+		    log_err("\\U001D169 is not contained in USCRIPT_INHERITED");
+	    }
     }
  }
 
