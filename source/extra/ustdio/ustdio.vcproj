@@ -41,11 +41,11 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="icuuc.lib icuin.lib"
-				OutputFile="..\..\..\bin\icuio26.dll"
+				OutputFile="..\..\..\bin\icuio28.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\..\lib\"
-				ProgramDatabaseFile=".\..\..\..\lib/icuio26.pdb"
+				ProgramDatabaseFile=".\..\..\..\lib/icuio28.pdb"
 				ImportLibrary="..\..\..\lib/icuio.lib"/>
 			<Tool
 				Name="VCMIDLTool"
@@ -103,12 +103,12 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="icuucd.lib icuind.lib"
-				OutputFile="..\..\..\bin\icuio26d.dll"
+				OutputFile="..\..\..\bin\icuio28d.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="debug,..\..\..\lib\"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\..\..\..\lib/icuio26d.pdb"
+				ProgramDatabaseFile=".\..\..\..\lib/icuio28d.pdb"
 				ImportLibrary="..\..\..\lib\icuiod.lib"/>
 			<Tool
 				Name="VCMIDLTool"
