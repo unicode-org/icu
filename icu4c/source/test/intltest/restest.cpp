@@ -133,7 +133,7 @@ randul()
     }
     // Assume rand has at least 12 bits of precision
     uint32_t l = 0;
-    for (int32_t i=0; i<sizeof(l); ++i)
+    for (uint32_t i=0; i<sizeof(l); ++i)
         ((char*)&l)[i] = (char)((rand() & 0x0FF0) >> 4);
     return l;
 }

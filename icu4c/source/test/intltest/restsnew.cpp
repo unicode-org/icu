@@ -133,7 +133,7 @@ randul()
     }
     // Assume rand has at least 12 bits of precision
     uint32_t l = 0;
-    for (int32_t i=0; i<sizeof(l); ++i)
+    for (uint32_t i=0; i<sizeof(l); ++i)
         ((char*)&l)[i] = (char)((rand() & 0x0FF0) >> 4);
     return l;
 }
@@ -349,7 +349,8 @@ NewResourceBundleTest::TestIteration()
     if(U_FAILURE(err)){
         errln("Construction failed");
     }
-    int32_t i, count, row=0, col=0;
+    uint32_t i;
+    int32_t count, row=0, col=0;
     char buf[5];
     UnicodeString expected;
     UnicodeString element("TE_IN");

@@ -60,7 +60,7 @@ void CollationCurrencyTest::currencyTest(char *par)
     };
     
 
-    int32_t i, j;
+    uint32_t i, j;
     UErrorCode status = U_ZERO_ERROR;
     Collator::EComparisonResult expectedResult = Collator::EQUAL;
     RuleBasedCollator *c = (RuleBasedCollator *)Collator::createInstance(status);
