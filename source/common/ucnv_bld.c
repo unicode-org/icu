@@ -43,7 +43,7 @@ extern void UCNV_DEBUG_LOG(char *what, char *who, void *p, int l);
 # define UCNV_DEBUG_LOG(x,y,z)
 #endif
 
-static const UConverterSharedData *
+static const UConverterSharedData * const
 converterData[UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES]={
     NULL, NULL, &_MBCSData, &_Latin1Data,
     &_UTF8Data, &_UTF16BEData, &_UTF16LEData, &_UTF32BEData, &_UTF32LEData,
@@ -55,8 +55,8 @@ converterData[UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES]={
 
 static struct {
   const char *name;
-  UConverterType type;
-} cnvNameType[] = {
+  const UConverterType type;
+} const cnvNameType[] = {
   { "LATIN_1", UCNV_LATIN_1 },
   { "UTF8", UCNV_UTF8 },
   { "UTF16_BigEndian", UCNV_UTF16_BigEndian },
