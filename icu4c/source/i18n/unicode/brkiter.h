@@ -445,8 +445,8 @@ private:
      * The copy constructor and assignment operator have no real implementation.
      * They are provided to make the compiler happy. Do not call.
      */
-    BreakIterator& operator=(const BreakIterator& other) { return *this; }
-    BreakIterator (const BreakIterator& other) {}
+    BreakIterator& operator=(const BreakIterator&) { return *this; }
+    BreakIterator (const BreakIterator&) {}
 };
 
 #endif // _BRKITER
