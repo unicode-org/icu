@@ -1,14 +1,14 @@
-﻿// *******************************************************************************
+// *******************************************************************************
 // *
-// *   Copyright (C) 1997-2000, International Business Machines
+// *   Copyright (C) 1997-2001, International Business Machines
 // *   Corporation and others.  All Rights Reserved.
 // *
 // *******************************************************************************
 
 af{
     Version { "x0.1" }
-            
-            AmPmMarkers { 
+
+    AmPmMarkers { 
             "VM",
             "NM",
     }
@@ -60,7 +60,7 @@ af{
             "Desember",
             "",
     }
-            
+
     NumberElements { 
             ",",
             ".",
@@ -70,9 +70,9 @@ af{
             "#",
             "-",
             "E",
-            "‰",
-            "∞",
-            "�",
+            "\u2030",
+            "\u221e",
+            "\ufffd",
     }
     LocaleID {"36"}
     LocaleScript{ 
@@ -82,7 +82,7 @@ af{
                 "Latg",  // ISO 15924 Name 
     }
     LocaleString{ "af" }
-            
+
             // /**************** Info Below is needed ****************/
             // CollationElements{}
             // Countries{}
