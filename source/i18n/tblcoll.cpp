@@ -683,12 +683,13 @@ RuleBasedCollator::RuleBasedCollator(const Locale& desiredLocale,
       status = U_ZERO_ERROR;
 
       unsigned long size = 0;
+      /*
       const UChar * defaultrules = ucol_getDefaultRulesArray(&size);
 
       ucollator = ucol_openRules(defaultrules, size, 
                                  UCOL_DEFAULT_NORMALIZATION, 
                                  UCOL_DEFAULT_STRENGTH, &status);
-      
+      */      
       if (status == U_ZERO_ERROR)
         status = U_USING_DEFAULT_ERROR;
       
