@@ -184,7 +184,7 @@ static void outputUString(const UChar *s, int32_t len,
 }
         
 U_CAPI int32_t U_EXPORT2
-utrace_format(char *outBuf, int32_t capacity, int32_t indent, const char *fmt, va_list args) {
+utrace_vformat(char *outBuf, int32_t capacity, int32_t indent, const char *fmt, va_list args) {
     int32_t   outIx  = 0;
     int32_t   fmtIx  = 0;
     int32_t   tbufIx = 0;
@@ -384,12 +384,12 @@ utrace_format(char *outBuf, int32_t capacity, int32_t indent, const char *fmt, v
 
 
 U_CAPI int32_t U_EXPORT2
-utrace_formatA(char *outBuf, int32_t capacity,
+utrace_format(char *outBuf, int32_t capacity,
                 int32_t indent, const char *fmt,  ...) {
     int32_t retVal;
     va_list args;
     va_start(args, fmt ); 
-    retVal = utrace_format(outBuf, capacity, indent, fmt, args);
+    retVal = utrace_vformat(outBuf, capacity, indent, fmt, args);
     va_end(args);
     return retVal;
 }
