@@ -9,6 +9,7 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.impl.Utility;
 
 import java.util.Locale;
+import java.util.Vector;
 
 public class CollationTest extends ModuleTest 
 {
@@ -191,7 +192,7 @@ public class CollationTest extends ModuleTest
             // object array of string arrays.
             String sequence[] = testcase.getStringArray("sequence");
             for (int i = 0; i < sequence.length; i ++) {
-                 processSequence(col, sequence[i]);
+                processSequence(col, sequence[i]);
             }
        }
     }
@@ -204,10 +205,17 @@ public class CollationTest extends ModuleTest
         m_sequenceIndex_ = 0;
         m_nextRelation_ = -1;
         m_target_.delete(0, m_target_.length());
+        Vector vector = new Vector();
     
         while (getNextInSequence()) {    
-            System.out.println(m_source_);
-            doTest(col, m_source_, m_target_.toString(), m_relation_);
+            String target = m_target_.toString();
+            doTest(col, m_source_, target, m_relation_);
+            int vsize = vector.size();
+            for (int i = 0; i < vsize; i ++) {
+                String source = (String)vector.elementAt(i);   
+                doTest(col, source, target, m_relation_);
+            }
+            vector.addElement(target);
         }
     }
     
