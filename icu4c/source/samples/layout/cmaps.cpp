@@ -129,7 +129,7 @@ LEGlyphID CMAPFormat4Mapper::unicodeToGlyph(LEUnicode32 unicode32) const
     LEUnicode16 unicode = (LEUnicode16) unicode32;
     le_uint16 index = 0;
     le_uint16 probe = 1 << fEntrySelector;
-    LEGlyphID result = 0;
+    TTGlyphID result = 0;
 
     if (SWAPU16(fStartCodes[fRangeShift]) <= unicode) {
         index = fRangeShift;
@@ -145,7 +145,7 @@ LEGlyphID CMAPFormat4Mapper::unicodeToGlyph(LEUnicode32 unicode32) const
 
     if (unicode >= SWAPU16(fStartCodes[index]) && unicode <= SWAPU16(fEndCodes[index])) {
         if (fIdRangeOffset[index] == 0) {
-            result = (LEGlyphID) unicode;
+            result = (TTGlyphID) unicode;
         } else {
             le_uint16 offset = unicode - SWAPU16(fStartCodes[index]);
             le_uint16 rangeOffset = SWAPW(fIdRangeOffset[index]);
@@ -159,7 +159,7 @@ LEGlyphID CMAPFormat4Mapper::unicodeToGlyph(LEUnicode32 unicode32) const
         result = 0;
     }
 
-    return result;
+    return LE_SET_GLYPH(0, result);
 }
 
 CMAPFormat4Mapper::~CMAPFormat4Mapper()

@@ -31,7 +31,7 @@ struct SubstitutionLookupRecord
 struct ContextualSubstitutionBase : GlyphSubstitutionSubtable
 {
     static le_bool matchGlyphIDs(
-        const LEGlyphID *glyphArray, le_uint16 glyphCount, GlyphIterator *glyphIterator,
+        const TTGlyphID *glyphArray, le_uint16 glyphCount, GlyphIterator *glyphIterator,
         le_bool backtrack = false);
 
     static le_bool matchGlyphClasses(
@@ -76,7 +76,7 @@ struct SubRuleTable
 {
     le_uint16  glyphCount;
     le_uint16  substCount;
-    LEGlyphID inputGlyphArray[ANY_NUMBER];
+    TTGlyphID inputGlyphArray[ANY_NUMBER];
   //SubstitutionLookupRecord substLookupRecordArray[ANY_NUMBER];
 };
 
@@ -143,11 +143,11 @@ struct ChainSubRuleSetTable
 struct ChainSubRuleTable
 {
     le_uint16  backtrackGlyphCount;
-    LEGlyphID backtrackGlyphArray[ANY_NUMBER];
+    TTGlyphID backtrackGlyphArray[ANY_NUMBER];
   //le_uint16  inputGlyphCount;
-  //LEGlyphID inputGlyphArray[ANY_NUMBER];
+  //TTGlyphID inputGlyphArray[ANY_NUMBER];
   //le_uint16  lookaheadGlyphCount;
-  //LEGlyphID lookaheadGlyphArray[ANY_NUMBER];
+  //TTGlyphID lookaheadGlyphArray[ANY_NUMBER];
   //le_uint16  substCount;
   //SubstitutionLookupRecord substLookupRecordArray[ANY_NUMBER];
 };

@@ -18,21 +18,19 @@ U_NAMESPACE_BEGIN
 le_uint32 AlternateSubstitutionSubtable::process(GlyphIterator *glyphIterator, const LEGlyphFilter *filter) const
 {
     // NOTE: For now, we'll just pick the first alternative...
-    LEGlyphID glyph = (LEGlyphID) glyphIterator->getCurrGlyphID();
+    LEGlyphID glyph = glyphIterator->getCurrGlyphID();
     le_int32 coverageIndex = getGlyphCoverage(glyph);
 
-    if (coverageIndex >= 0)
-    {
+    if (coverageIndex >= 0) {
         le_uint16 altSetCount = SWAPW(alternateSetCount);
 
-        if (coverageIndex < altSetCount)
-        {
+        if (coverageIndex < altSetCount) {
             Offset alternateSetTableOffset = SWAPW(alternateSetTableOffsetArray[coverageIndex]);
             const AlternateSetTable *alternateSetTable =
                 (const AlternateSetTable *) ((char *) this + alternateSetTableOffset);
             LEGlyphID alternate = SWAPW(alternateSetTable->alternateArray[0]);
 
-            if (filter != NULL || filter->accept(alternate)) {
+            if (filter == NULL || filter->accept(alternate)) {
                 glyphIterator->setCurrGlyphID(SWAPW(alternateSetTable->alternateArray[0]));
             }
             

@@ -65,11 +65,12 @@ le_bool ClassDefinitionTable::hasGlyphClass(le_int32 glyphClass) const
 
 le_int32 ClassDefFormat1Table::getGlyphClass(LEGlyphID glyphID) const
 {
-    LEGlyphID firstGlyph = SWAPW(startGlyph);
-    LEGlyphID lastGlyph  = firstGlyph + SWAPW(glyphCount);
+    TTGlyphID ttGlyphID  = (TTGlyphID) LE_GET_GLYPH(glyphID);
+    TTGlyphID firstGlyph = SWAPW(startGlyph);
+    TTGlyphID lastGlyph  = firstGlyph + SWAPW(glyphCount);
 
-    if (glyphID > firstGlyph && glyphID < lastGlyph) {
-        return SWAPW(classValueArray[glyphID - firstGlyph]);
+    if (ttGlyphID > firstGlyph && ttGlyphID < lastGlyph) {
+        return SWAPW(classValueArray[ttGlyphID - firstGlyph]);
     }
 
     return 0;
@@ -91,9 +92,10 @@ le_bool ClassDefFormat1Table::hasGlyphClass(le_int32 glyphClass) const
 
 le_int32 ClassDefFormat2Table::getGlyphClass(LEGlyphID glyphID) const
 {
+    TTGlyphID ttGlyph    = (TTGlyphID) LE_GET_GLYPH(glyphID);
     le_uint16 rangeCount = SWAPW(classRangeCount);
     le_int32  rangeIndex =
-        OpenTypeUtilities::getGlyphRangeIndex(glyphID, classRangeRecordArray, rangeCount);
+        OpenTypeUtilities::getGlyphRangeIndex(ttGlyph, classRangeRecordArray, rangeCount);
 
     if (rangeIndex < 0) {
         return 0;

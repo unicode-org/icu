@@ -24,7 +24,7 @@ U_NAMESPACE_BEGIN
 struct SequenceTable
 {
     le_uint16 glyphCount;
-    LEGlyphID substituteArray[ANY_NUMBER];
+    TTGlyphID substituteArray[ANY_NUMBER];
 };
 
 struct MultipleSubstitutionSubtable : GlyphSubstitutionSubtable

@@ -24,7 +24,7 @@ U_NAMESPACE_BEGIN
 struct AlternateSetTable
 {
     le_uint16 glyphCount;
-    LEGlyphID alternateArray[ANY_NUMBER];
+    TTGlyphID alternateArray[ANY_NUMBER];
 };
 
 struct AlternateSubstitutionSubtable : GlyphSubstitutionSubtable

@@ -165,7 +165,7 @@ public:
      *
      * @draft ICU 2.2
      */
-    void getGlyphs(uint16_t glyphs[], UErrorCode &success);
+    void getGlyphs(uint32_t glyphs[], UErrorCode &success);
 
     /**
      * This method copies the character index array into a caller supplied array.
@@ -324,7 +324,7 @@ inline int32_t ICULayoutEngine::countGlyphs() const
     return fLayoutEngine->getGlyphCount();
 }
 
-inline void ICULayoutEngine::getGlyphs(uint16_t glyphs[], UErrorCode &success)
+inline void ICULayoutEngine::getGlyphs(uint32_t glyphs[], UErrorCode &success)
 {
     fLayoutEngine->getGlyphs(glyphs, (LEErrorCode &) success);
 }

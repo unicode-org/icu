@@ -40,10 +40,12 @@ void TrimmedArrayProcessor::process(LEGlyphID *glyphs, le_int32 *charIndices, le
     le_int32 glyph;
 
     for (glyph = 0; glyph < glyphCount; glyph += 1) {
-        if ((glyphs[glyph] > firstGlyph) && (glyphs[glyph] < lastGlyph)) {
-            le_int16 newGlyph = trimmedArrayLookupTable->valueArray[glyphs[glyph] - firstGlyph];
+        TTGlyphID ttGlyph = (TTGlyphID) LE_GET_GLYPH(glyphs[glyph]);
 
-            glyphs[glyph] = SWAPW(newGlyph);
+        if ((ttGlyph > firstGlyph) && (ttGlyph < lastGlyph)) {
+            TTGlyphID newGlyph = SWAPW(trimmedArrayLookupTable->valueArray[ttGlyph - firstGlyph]);
+
+            glyphs[glyph] = LE_SET_GLYPH(glyphs[glyph], newGlyph);
         }
     }
 } 

@@ -44,8 +44,8 @@ protected:
     ByteOffset entryTableOffset;
 
     const ClassTable *classTable;
-    le_int16 firstGlyph;
-    le_int16 lastGlyph;
+    TTGlyphID firstGlyph;
+    TTGlyphID lastGlyph;
 
     const MorphStateTableHeader *stateTableHeader;
 

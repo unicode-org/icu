@@ -31,7 +31,7 @@ StateTableProcessor::StateTableProcessor(const MorphSubtableHeader *morphSubtabl
 
     classTable = (const ClassTable *) ((char *) &stateTableHeader->stHeader + classTableOffset);
     firstGlyph = SWAPW(classTable->firstGlyph);
-    lastGlyph = firstGlyph + SWAPW(classTable->nGlyphs);
+    lastGlyph  = firstGlyph + SWAPW(classTable->nGlyphs);
 }
 
 StateTableProcessor::~StateTableProcessor()
@@ -55,7 +55,7 @@ void StateTableProcessor::process(LEGlyphID *glyphs, le_int32 *charIndices, le_i
             // XXX: How do we handle EOT vs. EOL?
             classCode = classCodeEOT;
         } else {
-            LEGlyphID glyphCode = glyphs[currGlyph];
+            TTGlyphID glyphCode = LE_GET_GLYPH(glyphs[currGlyph]);
 
             if (glyphCode == 0xFFFF) {
                 classCode = classCodeDEL;

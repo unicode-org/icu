@@ -17,12 +17,11 @@ U_NAMESPACE_BEGIN
 
 le_uint32 MultipleSubstitutionSubtable::process(GlyphIterator *glyphIterator, const LEGlyphFilter *filter) const
 {
-    LEGlyphID glyph = (LEGlyphID) glyphIterator->getCurrGlyphID();
+    LEGlyphID glyph = glyphIterator->getCurrGlyphID();
     le_int32 coverageIndex = getGlyphCoverage(glyph);
     le_uint16 seqCount = SWAPW(sequenceCount);
 
-    if (coverageIndex >= 0 && coverageIndex < seqCount)
-    {
+    if (coverageIndex >= 0 && coverageIndex < seqCount) {
         Offset sequenceTableOffset = SWAPW(sequenceTableOffsetArray[coverageIndex]);
         const SequenceTable *sequenceTable = (const SequenceTable *) ((char *) this + sequenceTableOffset);
         le_uint16 glyphCount = SWAPW(sequenceTable->glyphCount);

@@ -28,7 +28,7 @@ struct ClassDefinitionTable
 
 struct ClassDefFormat1Table : ClassDefinitionTable
 {
-    LEGlyphID  startGlyph;
+    TTGlyphID  startGlyph;
     le_uint16  glyphCount;
     le_uint16  classValueArray[ANY_NUMBER];
 
@@ -38,8 +38,8 @@ struct ClassDefFormat1Table : ClassDefinitionTable
 
 struct ClassRangeRecord
 {
-    LEGlyphID start;
-    LEGlyphID end;
+    TTGlyphID start;
+    TTGlyphID end;
     le_uint16 classValue;
 };
 
