@@ -90,11 +90,11 @@ typedef struct
 
 static const UAmbiguousConverter UCNV_AMBIGUOUSCONVERTERS[UCNV_MAX_AMBIGUOUSCCSIDS] =
 {
-     943, 0x00A5, 0x005C, 
-     949, 0x20A9, 0x005C,
-     1361, 0x20A9, 0x005C,
-     942, 0x00A5, 0x005C, 
-     1363, 0x20A9, 0x005C 
+    { 943, 0x00A5, 0x005C },
+    { 949, 0x20A9, 0x005C },
+    { 1361, 0x20A9, 0x005C },
+    { 942, 0x00A5, 0x005C },
+    { 1363, 0x20A9, 0x005C }
 };
 
 typedef enum {
