@@ -108,16 +108,6 @@ typedef unsigned short uint16_t;
 
 #endif
 
-#include <limits.h>
-#if defined(_LP64)
-#   define T_INT32_MAX (INT_MAX)
-#   define T_INT32_MIN (INT_MIN)
-#else
-#   define T_INT32_MAX (LONG_MAX)
-#   define T_INT32_MIN (LONG_MIN)
-#endif
-
-
 /*===========================================================================*/
 /* Character data types                                                      */
 /*===========================================================================*/
