@@ -235,7 +235,7 @@ UnicodeString::UnicodeString(const char *codepageData,
     fFlags(kShortString)
 {
   if(codepageData != 0) {
-    doCodepageCreate(codepageData, uprv_strlen(codepageData), codepage);
+    doCodepageCreate(codepageData, (int32_t)uprv_strlen(codepageData), codepage);
   }
 }
 
@@ -275,7 +275,7 @@ UnicodeString::allocate(int32_t capacity) {
     // count bytes for the refCounter and the string capacity, and
     // round up to a multiple of 16; then divide by 4 and allocate int32_t's
     // to be safely aligned for the refCount
-    int32_t words = ((sizeof(int32_t) + capacity * U_SIZEOF_UCHAR + 15) & ~15) >> 2;
+    int32_t words = (int32_t)(((sizeof(int32_t) + capacity * U_SIZEOF_UCHAR + 15) & ~15) >> 2);
     int32_t *array = new int32_t[words];
     if(array != 0) {
       // set initial refCount and point behind the refCount
@@ -283,7 +283,7 @@ UnicodeString::allocate(int32_t capacity) {
 
       // have fArray point to the first UChar
       fArray = (UChar *)array;
-      fCapacity = (words - 1) * (sizeof(int32_t) / U_SIZEOF_UCHAR);
+      fCapacity = (int32_t)((words - 1) * (sizeof(int32_t) / U_SIZEOF_UCHAR));
       fFlags = kLongString;
     } else {
       fLength = 0;
@@ -578,10 +578,8 @@ UnicodeString::doCompareCodePointOrder(UTextOffset start,
 
   /* rotate each code unit's value so that surrogates get the highest values */
   while(minLength>0) {
-    c1=*chars;
-    c1+=utf16Fixup[c1>>11]; /* additional "fix-up" line */
-    c2=*srcChars;
-    c2+=utf16Fixup[c2>>11]; /* additional "fix-up" line */
+    c1 = (UChar)(*chars + utf16Fixup[*chars>>11]); /* additional "fix-up" line */
+    c2 = (UChar)(*srcChars + utf16Fixup[*srcChars>>11]); /* additional "fix-up" line */
 
     /* now c1 and c2 are in UTF-32-compatible order */
     diff=(int32_t)c1-(int32_t)c2;
@@ -1283,7 +1281,7 @@ UnicodeString::extract(UTextOffset start,
       length = fLength - start;
     }
     if (target != NULL) {
-      if (length > dstSize) {
+      if ((uint32_t)length > dstSize) {
         length = dstSize;
       }
       u_UCharsToChars(getArrayStart() + start, target, length);
@@ -1635,17 +1633,11 @@ writeLong(FileStream *os,
 inline int32_t
 readLong(FileStream *is)
 {
-  int32_t x = 0;
-  uint16_t byte;
+  int32_t x = T_FileStream_getc(is);
 
-  byte = T_FileStream_getc(is);
-  x |= byte;
-  byte = T_FileStream_getc(is);
-  x = (x << 8) | byte;
-  byte = T_FileStream_getc(is);
-  x = (x << 8) | byte;
-  byte = T_FileStream_getc(is);
-  x = (x << 8) | byte;
+  x = (x << 8) | T_FileStream_getc(is);
+  x = (x << 8) | T_FileStream_getc(is);
+  x = (x << 8) | T_FileStream_getc(is);
 
   return x;
 }
@@ -1661,15 +1653,9 @@ writeUChar(FileStream *os,
 inline UChar
 readUChar(FileStream *is)
 {
-  UChar c = 0;
-  uint16_t byte;
+  UChar c = (UChar)T_FileStream_getc(is);
 
-  byte = T_FileStream_getc(is);
-  c |= byte;
-  byte = T_FileStream_getc(is);
-  c = (c << 8) | byte;
-
-  return c;
+  return (UChar)((c << 8) | T_FileStream_getc(is));
 }
 
 void
@@ -1732,14 +1718,14 @@ UnicodeStringStreamer::streamOut(const UnicodeString *s,
                  UMemoryStream *os)
 {
   if(!uprv_mstrm_error(os)) {
-    uprv_mstrm_write(os, (uint8_t*)&s->fLength, sizeof(s->fLength));
+    uprv_mstrm_write(os, (uint8_t*)&s->fLength, (int32_t)sizeof(s->fLength));
   }
 
   const UChar *c   = s->getArrayStart();
   const UChar *end = c + s->fLength;
 
   while(c != end && ! uprv_mstrm_error(os)) {
-    uprv_mstrm_write(os, (uint8_t*)c, sizeof(*c));
+    uprv_mstrm_write(os, (uint8_t*)c, (int32_t)sizeof(*c));
     c++;
   }
 }
@@ -1755,7 +1741,7 @@ UnicodeStringStreamer::streamIn(UnicodeString *s,
     s->setToBogus();
     return;
   }
-  uprv_mstrm_read(is, (uint8_t *)&newSize, sizeof(int32_t));
+  uprv_mstrm_read(is, (uint8_t *)&newSize, (int32_t)sizeof(int32_t));
   if((newSize < 0) || uprv_mstrm_error(is)
      || ((newSize > 0) && uprv_mstrm_eof(is))) {
     s->setToBogus(); //error condition
@@ -1771,7 +1757,7 @@ UnicodeStringStreamer::streamIn(UnicodeString *s,
   UChar *end = c + newSize;
 
   while(c < end && ! (uprv_mstrm_error(is) || uprv_mstrm_eof(is))) {
-    uprv_mstrm_read(is, (uint8_t *)c, sizeof(*c));
+    uprv_mstrm_read(is, (uint8_t *)c, (int32_t)sizeof(*c));
     c++;
   }
 
