@@ -230,24 +230,24 @@ U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_SUBSTITUTE (
  * DO NOT CALL THIS FUNCTION DIRECTLY!
  * This From Unicode callback will Substitute the ILLEGAL SEQUENCE with the
  * hexadecimal representation of the illegal codepoints
-
+ *
  * @param context: the function currently recognizes the callback options:
  *        
  *        UCNV_ESCAPE_ICU: Substitues the  ILLEGAL SEQUENCE with the hexadecimal 
  *          representation in the format  %UXXXX, e.g. "%uFFFE%u00AC%uC8FE"). 
- *          In the Event the converter doesn't support the characters {u,%}[A-F][0-9], 
+ *          In the Event the converter doesn't support the characters {%,U}[A-F][0-9], 
  *          it will  substitute  the illegal sequence with the substitution characters.
  *          Note that  codeUnit(32bit int eg: unit of a surrogate pair) is represented as
  *          %UD84D%UDC56
  *        UCNV_ESCAPE_JAVA: Substitues the  ILLEGAL SEQUENCE with the hexadecimal 
  *          representation in the format  \uXXXX, e.g. "\uFFFE\u00AC\uC8FE"). 
- *          In the Event the converter doesn't support the characters {u,\}[A-F][0-9], 
+ *          In the Event the converter doesn't support the characters {\,u}[A-F][0-9], 
  *          it will  substitute  the illegal sequence with the substitution characters.
  *          Note that  codeUnit(32bit int eg: unit of a surrogate pair) is represented as
  *          \uD84D\uDC56
  *        UCNV_ESCAPE_C: Substitues the  ILLEGAL SEQUENCE with the hexadecimal 
  *          representation in the format  \uXXXX, e.g. "\uFFFE\u00AC\uC8FE"). 
- *          In the Event the converter doesn't support the characters {u,U,\}[A-F][0-9], 
+ *          In the Event the converter doesn't support the characters {\,u,U}[A-F][0-9], 
  *          it will  substitute  the illegal sequence with the substitution characters.
  *          Note that  codeUnit(32bit int eg: unit of a surrogate pair) is represented as
  *          \U00023456
