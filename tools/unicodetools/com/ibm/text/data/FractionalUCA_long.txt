@@ -1,5 +1,5 @@
 # Fractional UCA Table, generated from standard UCA
-# M. Davis, Fri Jun 14 20:11:34 PDT 2002
+# M. Davis, Fri Jun 21 16:56:12 PDT 2002
 # VERSION: UCA=3.1.1d1, UCD=3.2.0
 
 # Generated processed version, as described in ICU design document.
@@ -16,8 +16,6 @@
 # WARNING
 #  - Differs from previous version in that MAX value was introduced at 1F.
 #    All tertiary values are shifted down by 1, filling the gap at 7!
-[FIRST_IMPLICIT= 00E0]
-[LAST_IMPLICIT= 00E3]
 
 0000; [,,]    # [0000.0000.0000] # <NULL>
 0001; [,,]    # [0000.0000.0000] # <START OF HEADING>
@@ -17047,3 +17045,26 @@ D87E DE13; [E1 31 58 57, 05, 05]    # [FF85.0020.0002][A20E.0020.0002] # CJK COM
 D87E DE14; [E1 31 63 42, 05, 05]    # [FF85.0020.0002][A291.0020.0002] # CJK COMPATIBILITY IDEOGRAPH-2FA14
 D87E DC8F; [E1 31 78 AB, 05, 05]    # [FF85.0020.0002][A392.0020.0002] # CJK COMPATIBILITY IDEOGRAPH-2F88F
 D87E DE1D; [E1 31 AC 81, 05, 05]    # [FF85.0020.0002][A600.0020.0002] # CJK COMPATIBILITY IDEOGRAPH-2FA1D
+# VALUES BASED ON UCA
+[first tertiary ignorable [,,]]
+[last tertiary ignorable [,,]]
+[first secondary ignorable [,, 05]]
+[last secondary ignorable [,, 05]]
+[first primary ignorable [, 87, 05]]
+[last primary ignorable [, E1 B1, 05]]
+[first variable [05 07, 05, 05]]
+[last variable [17 9B, 05, 05]]
+[first non-ignorable [1A 20, 05, 05]]
+[last non-ignorable [78 AA B2, 05, 05]]
+[first implicit [E0 03 03, 05, 05]]
+[last implicit [E3 DC 70 C0, 05, 05]]
+[first trailing [E5, 05, 05]]
+[last trailing [E5, 05, 05]]
+# FIXED VALUES
+[top A0]
+[first implicit byte E0]
+[last implicit byte E4]
+[first trail byteE5]
+[last implicit byteEF]
+[first special byteF0]
+[last special byteFF]

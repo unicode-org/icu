@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2002/05/31 01:41:04 $
-* $Revision: 1.19 $
+* $Date: 2002/06/22 01:21:09 $
+* $Revision: 1.20 $
 *
 *******************************************************************************
 */
@@ -1083,6 +1083,9 @@ public class GenerateData implements UCD_Types {
         String newFile = directory + filename + getFileSuffix(true);
         PrintWriter log = Utility.openPrintWriter(newFile);
         String mostRecent = generateBat(directory, filename, getFileSuffix(true));
+        DiffPropertyLister dpl;
+        UnicodeSet cummulative = new UnicodeSet();
+        
         try {
         	for (int i = 0; i < list.length; ++i) {
         		int prop = list[i];
@@ -1094,29 +1097,60 @@ public class GenerateData implements UCD_Types {
             	//new DiffPropertyLister("3.2.0", "1.1.0", log, prop).print();
             	log.println();
             	log.println(HORIZONTAL_LINE);
-            	new DiffPropertyLister("3.2.0", "2.0.0", log, prop).print();
+            	
             	log.println();
+            	dpl = new DiffPropertyLister("3.2.0", "2.0.0", log, prop);
+            	dpl.print();
+            	cummulative.addAll(dpl.getSet());
             	log.println(HORIZONTAL_LINE);
-            	new DiffPropertyLister("3.2.0", "2.1.2", log, prop).print();
+            	
             	log.println();
+            	dpl = new DiffPropertyLister("3.2.0", "2.1.2", log, prop);
+            	dpl.print();
+            	cummulative.addAll(dpl.getSet());
             	log.println(HORIZONTAL_LINE);
-            	new DiffPropertyLister("3.2.0", "2.1.5", log, prop).print();
+            	
             	log.println();
+            	dpl = new DiffPropertyLister("3.2.0", "2.1.5", log, prop);
+            	dpl.print();
+            	cummulative.addAll(dpl.getSet());
             	log.println(HORIZONTAL_LINE);
-            	new DiffPropertyLister("3.2.0", "2.1.8", log, prop).print();
+            	
             	log.println();
+            	dpl = new DiffPropertyLister("3.2.0", "2.1.8", log, prop);
+            	dpl.print();
+            	cummulative.addAll(dpl.getSet());
             	log.println(HORIZONTAL_LINE);
-            	new DiffPropertyLister("3.2.0", "3.0.0", log, prop).print();
-            	log.println(HORIZONTAL_LINE);
+            	
             	log.println();
-            	new DiffPropertyLister("3.2.0", "3.0.1", log, prop).print();
+            	dpl = new DiffPropertyLister("3.2.0", "3.0.0", log, prop);
+            	dpl.print();
+            	cummulative.addAll(dpl.getSet());
             	log.println(HORIZONTAL_LINE);
+            	
             	log.println();
-            	new DiffPropertyLister("3.2.0", "3.1.0", log, prop).print();
+            	dpl = new DiffPropertyLister("3.2.0", "3.0.1", log, prop);
+            	dpl.print();
+            	cummulative.addAll(dpl.getSet());
             	log.println(HORIZONTAL_LINE);
+            	
             	log.println();
-            	new DiffPropertyLister("3.2.0", "3.1.1", log, prop).print();
+            	dpl = new DiffPropertyLister("3.2.0", "3.1.0", log, prop);
+            	dpl.print();
+            	cummulative.addAll(dpl.getSet());
             	log.println(HORIZONTAL_LINE);
+            	
+            	log.println();
+            	dpl = new DiffPropertyLister("3.2.0", "3.1.1", log, prop);
+            	dpl.print();
+            	cummulative.addAll(dpl.getSet());
+            	log.println(HORIZONTAL_LINE);
+            	
+            	log.println();
+            	log.println("Cummulative differences");
+            	UnicodeProperty up = DerivedProperty.make(prop, Default.ucd);
+            	UnicodeSet newProp = up.getSet();
+            	Utility.showSetNames(log, "", cummulative.removeAll(newProp), false, false, Default.ucd);
             }
         } finally {
             if (log != null) {

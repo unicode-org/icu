@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2002/06/15 03:15:55 $ 
-* $Revision: 1.20 $
+* $Date: 2002/06/22 01:21:08 $ 
+* $Revision: 1.21 $
 *
 *******************************************************************************
 */
@@ -1411,7 +1411,7 @@ F900..FAFF; CJK Compatibility Ideographs
         int lastLen = -1;
         int[] lastCes = new int[50];
         
-        long variableTop = collator.getVariableHigh() & 0xFFFFFFFFL;
+        long variableTop = collator.getVariableHigh() & INT_MASK;
         
         // for debugging ordering
         String lastSortKey = "";
@@ -1683,7 +1683,7 @@ F900..FAFF; CJK Compatibility Ideographs
     
     // static final String[] RELATION_NAMES = {" <", "   <<", "     <<<", "         ="};
     static final String[] RELATION_NAMES = {" <\t", "  <<\t", "   <<<\t", "    =\t"};
-    static final String[] XML_RELATION_NAMES = {"g1", "g2", "g3", "eq"};
+    static final String[] XML_RELATION_NAMES = {"p", "s", "t", "eq"};
     
     static class ArrayWrapper {
     	int[] array;
@@ -2278,17 +2278,27 @@ F900..FAFF; CJK Compatibility Ideographs
         log.println("#  - Differs from previous version in that MAX value was introduced at 1F.");
         log.println("#    All tertiary values are shifted down by 1, filling the gap at 7!");
         
-        int firstImplicit = getImplicitPrimary(CJK_BASE) >>> 24;
-        int lastImplicit = getImplicitPrimary(0x10FFFF) >>> 24;
-        log.println("[FIRST_IMPLICIT= " + Utility.hex(firstImplicit) + "]");
-        log.println("[LAST_IMPLICIT= " + Utility.hex(lastImplicit) + "]");
         
         String lastChr = "";
         int lastNp = 0;
         boolean doVariable = false;
         char[] codeUnits = new char[100];
         
-        
+        FCE firstSecondaryIgnorable = new FCE(false);
+        FCE lastSecondaryIgnorable = new FCE(true);
+
+        FCE firstPrimaryIgnorable = new FCE(false);
+        FCE lastPrimaryIgnorable = new FCE(true);
+                    
+        FCE firstVariable = new FCE(false);
+        FCE lastVariable = new FCE(true);
+                    
+        FCE firstNonIgnorable = new FCE(false);
+        FCE lastNonIgnorable = new FCE(true);
+                    
+        FCE firstTrailing = new FCE(false);
+        FCE lastTrailing = new FCE(true);
+                            
         while (it.hasNext()) {
             Object sortKey = it.next();
             String chr = (String)ordered.get(sortKey);
@@ -2334,7 +2344,7 @@ F900..FAFF; CJK Compatibility Ideographs
                 // special treatment for unsupported!
                 
                 if (UCA.isImplicitLeadPrimary(pri)) {
-                    System.out.println("DEBUG: " + CEList.toString(ces, len) 
+                    if (DEBUG) System.out.println("DEBUG: " + CEList.toString(ces, len) 
                         + ", Current: " + q + ", " + ucd.getCodeAndName(chr));
                     ++q;
                     oldStr.append(CEList.toString(ces[q]));// + "," + Integer.toString(ces[q],16);
@@ -2359,7 +2369,7 @@ F900..FAFF; CJK Compatibility Ideographs
                         	+ " => " + Utility.hex(cp)
                         	+ " => " + Utility.hex(testImplicit[0])
                         	+ ", " + Utility.hex(testImplicit[1])
-                        	// + ", " + Utility.hex(fixPrimary(pri) & 0xFFFFFFFFL)
+                        	// + ", " + Utility.hex(fixPrimary(pri) & INT_MASK)
                         );
                     }
                     
@@ -2377,24 +2387,26 @@ F900..FAFF; CJK Compatibility Ideographs
                 
                 // int oldPrimaryValue = UCA.getPrimary(ces[q]);
                 int np = fixPrimary(pri);
+                int ns = fixSecondary(sec);
+                int nt = fixTertiary(ter);
                 
                 try {
                 	hexBytes(np, newPrimary);
-                	hexBytes(fixSecondary(sec), newSecondary);
-                	hexBytes(fixTertiary(ter), newTertiary);
+                	hexBytes(ns, newSecondary);
+                	hexBytes(nt, newTertiary);
                 } catch (Exception e) {
                 	throw new ChainException("Character is {0}", new String[] {Utility.hex(chr)}, e);
                 }
                 if (isFirst) {
                     if (!sameTopByte(np, lastNp)) {
-                        summary.println("Last:  " + Utility.hex(lastNp & 0xFFFFFFFFL) + " " + ucd.getName(UTF16.charAt(lastChr,0)));
+                        summary.println("Last:  " + Utility.hex(lastNp & INT_MASK) + " " + ucd.getName(UTF16.charAt(lastChr,0)));
                         summary.println();
                         if (doVariable) {
                             doVariable = false;
                             summary.println("[variable top = " + Utility.hex(primaryDelta[firstPrimary]) + "] # END OF VARIABLE SECTION!!!");
                             summary.println();
                         }
-                        summary.println("First: " + Utility.hex(np & 0xFFFFFFFFL) + ", " + ucd.getCodeAndName(UTF16.charAt(chr,0)));
+                        summary.println("First: " + Utility.hex(np & INT_MASK) + ", " + ucd.getCodeAndName(UTF16.charAt(chr,0)));
                     }
                     lastNp = np;
                     isFirst = false;
@@ -2403,6 +2415,27 @@ F900..FAFF; CJK Compatibility Ideographs
                     + ", " + newSecondary 
                     + ", " + newTertiary 
                     + "]");
+                    
+                // RECORD STATS
+                
+                if (np == 0 && ns == 0) {
+                    firstSecondaryIgnorable.setValue(np, ns, nt);
+                    lastSecondaryIgnorable.setValue(np, ns, nt); 
+                } else if (np == 0) {
+                    firstPrimaryIgnorable.setValue(np, ns, nt);
+                    lastPrimaryIgnorable.setValue(np, ns, nt); 
+                } else if (collator.isVariable(ces[q])) {
+                    firstVariable.setValue(np, ns, nt);
+                    lastVariable.setValue(np, ns, nt); 
+                } else if (UCA.getPrimary(ces[q]) > UNSUPPORTED_LIMIT) {        // Trailing (none currently)
+                    System.out.println("Trailing: " + CEList.toString(ces[q]) 
+                        + ", " + Utility.hex(pri) + ", " + Utility.hex(UNSUPPORTED_LIMIT));
+                    firstTrailing.setValue(np, ns, nt);
+                    lastTrailing.setValue(np, ns, nt); 
+                } else if ((pri & MARK_CODE_POINT) == 0) {          // skip implicits
+                    firstNonIgnorable.setValue(np, ns, nt);
+                    lastNonIgnorable.setValue(np, ns, nt); 
+                }
             }
             if (nonePrinted) {
                 log.print("[,,]");
@@ -2412,6 +2445,61 @@ F900..FAFF; CJK Compatibility Ideographs
             log.println();
             lastChr = chr;
         }
+        
+        int firstImplicit = getImplicitPrimary(CJK_BASE);
+        int lastImplicit = getImplicitPrimary(0x10FFFF);
+        
+        log.println("# VALUES BASED ON UCA");
+        
+        log.println("[first tertiary ignorable " + new FCE(false,0,0, 0).formatFCE() + "]");
+        log.println("[last tertiary ignorable " + new FCE(true,0,0, 0).formatFCE() + "]");
+        
+        // Since the UCA doesn't have secondary ignorables, fake them.
+        
+        if (firstSecondaryIgnorable.isUnset()) {
+            System.out.println("No first/last secondary ignorable: resetting");
+            firstSecondaryIgnorable = new FCE(false, 0, 0, COMMON<<24);
+            lastSecondaryIgnorable = new FCE(true, 0, 0, COMMON<<24);
+            System.out.println(firstSecondaryIgnorable.formatFCE());
+        }
+        
+        log.println("[first secondary ignorable " + firstSecondaryIgnorable.formatFCE() + "]");
+        log.println("[last secondary ignorable " + lastSecondaryIgnorable.formatFCE() + "]");
+        
+        log.println("[first primary ignorable " + firstPrimaryIgnorable.formatFCE() + "]");
+        log.println("[last primary ignorable " + lastPrimaryIgnorable.formatFCE() + "]");
+        
+        log.println("[first variable " + firstVariable.formatFCE() + "]");
+        log.println("[last variable " + lastVariable.formatFCE() + "]");
+        
+        log.println("[first non-ignorable " + firstNonIgnorable.formatFCE() + "]");
+        log.println("[last non-ignorable " + lastNonIgnorable.formatFCE() + "]");
+        
+        
+        log.println("[first implicit " + (new FCE(false,firstImplicit, COMMON<<24, COMMON<<24)).formatFCE() + "]");
+        log.println("[last implicit " + (new FCE(false,lastImplicit, COMMON<<24, COMMON<<24)).formatFCE() + "]");
+        
+        if (firstTrailing.isUnset()) {
+            System.out.println("No first/last trailing: resetting");
+            firstTrailing = new FCE(false, (IMPLICIT_LIMIT_BYTE+1)<<24, COMMON<<24, COMMON<<24);
+            lastTrailing = new FCE(true, (IMPLICIT_LIMIT_BYTE+1)<<24, COMMON<<24, COMMON<<24);
+            System.out.println(firstTrailing.formatFCE());        
+        }
+        
+        log.println("[first trailing " + firstTrailing.formatFCE() + "]");
+        log.println("[last trailing " + lastTrailing.formatFCE() + "]");
+        
+        log.println("# FIXED VALUES");
+        
+        log.println("[top "  + Utility.hex(0xA0,2) + "]");
+        log.println("[first implicit byte " + Utility.hex(IMPLICIT_BASE_BYTE,2) + "]");
+        log.println("[last implicit byte " + Utility.hex(IMPLICIT_LIMIT_BYTE,2) + "]");
+        log.println("[first trail byte" + Utility.hex(IMPLICIT_LIMIT_BYTE+1,2) + "]");
+        log.println("[last implicit byte" + Utility.hex(SPECIAL_BASE-1,2) + "]");
+        log.println("[first special byte" + Utility.hex(SPECIAL_BASE,2) + "]");
+        log.println("[last special byte" + Utility.hex(0xFF,2) + "]");
+
+        
         summary.println("Last:  " + Utility.hex(lastNp) + ", " + ucd.getCodeAndName(UTF16.charAt(lastChr, 0)));
         
         /*
@@ -2423,19 +2511,19 @@ F900..FAFF; CJK Compatibility Ideographs
         }
         */
         summary.println();
-        summary.println("# First Implicit: " + Utility.hex(0xFFFFFFFFL & getImplicitPrimary(0)));
-        summary.println("# Last Implicit: " + Utility.hex(0xFFFFFFFFL & getImplicitPrimary(0x10FFFF)));
-        summary.println("# First CJK: " + Utility.hex(0xFFFFFFFFL & getImplicitPrimary(0x4E00)));
-        summary.println("# Last CJK: " + Utility.hex(0xFFFFFFFFL & getImplicitPrimary(0xFA2F)));
-        summary.println("# First CJK_A: " + Utility.hex(0xFFFFFFFFL & getImplicitPrimary(0x3400)));
-        summary.println("# Last CJK_A: " + Utility.hex(0xFFFFFFFFL & getImplicitPrimary(0x4DBF)));
+        summary.println("# First Implicit: " + Utility.hex(INT_MASK & getImplicitPrimary(0)));
+        summary.println("# Last Implicit: " + Utility.hex(INT_MASK & getImplicitPrimary(0x10FFFF)));
+        summary.println("# First CJK: " + Utility.hex(INT_MASK & getImplicitPrimary(0x4E00)));
+        summary.println("# Last CJK: " + Utility.hex(INT_MASK & getImplicitPrimary(0xFA2F)));
+        summary.println("# First CJK_A: " + Utility.hex(INT_MASK & getImplicitPrimary(0x3400)));
+        summary.println("# Last CJK_A: " + Utility.hex(INT_MASK & getImplicitPrimary(0x4DBF)));
         
         boolean lastOne = false;
         for (int i = 0; i < 0x10FFFF; ++i) {
             boolean thisOne = ucd.isCJK_BASE(i) || ucd.isCJK_AB(i);
             if (thisOne != lastOne) {
-                summary.println("# Implicit Cusp: CJK=" + lastOne + ": " + Utility.hex(i-1) + " => " + Utility.hex(0xFFFFFFFFL & getImplicitPrimary(i-1)));
-                summary.println("# Implicit Cusp: CJK=" + thisOne + ": " + Utility.hex(i) + " => " + Utility.hex(0xFFFFFFFFL & getImplicitPrimary(i)));
+                summary.println("# Implicit Cusp: CJK=" + lastOne + ": " + Utility.hex(i-1) + " => " + Utility.hex(INT_MASK & getImplicitPrimary(i-1)));
+                summary.println("# Implicit Cusp: CJK=" + thisOne + ": " + Utility.hex(i) + " => " + Utility.hex(INT_MASK & getImplicitPrimary(i)));
                 lastOne = thisOne;
             }
         }
@@ -2478,6 +2566,104 @@ F900..FAFF; CJK Compatibility Ideographs
         log.close();
         summary.close();
     }
+    
+    static final long INT_MASK = 0xFFFFFFFFL;
+    
+    static class FCE {
+        static final long UNDEFINED_MAX = Long.MAX_VALUE;
+        static final long UNDEFINED_MIN = Long.MIN_VALUE;
+        long[] key;
+        boolean max;
+        boolean debugShow = false;
+        
+        FCE (boolean max) {
+            this.max = max;
+            if (max) key = new long[] {UNDEFINED_MIN, UNDEFINED_MIN, UNDEFINED_MIN};    // make small!
+            else key = new long[] {UNDEFINED_MAX, UNDEFINED_MAX, UNDEFINED_MAX};
+        }
+        
+        FCE (boolean max, int primary, int secondary, int tertiary) {
+            this(max);
+            key[0] = primary & INT_MASK;
+            key[1] = secondary & INT_MASK;
+            key[2] = tertiary & INT_MASK;
+        }
+        
+        FCE (boolean max, int primary) {
+            this(max);
+            key[0] = primary & INT_MASK;
+        }
+        
+        boolean isUnset() {
+            return key[0] == UNDEFINED_MIN || key[0] == UNDEFINED_MAX;
+        }
+        
+        String formatFCE() {
+            String b0 = getBuffer(key[0], false);
+            boolean key0Defined = key[0] != UNDEFINED_MIN && key[0] != UNDEFINED_MAX;
+            
+            String b1 = getBuffer(key[1], key0Defined);
+            boolean key1Defined = key[1] != UNDEFINED_MIN && key[1] != UNDEFINED_MAX;
+            if (b1.length() != 0) b1 = " " + b1;
+
+            String b2 = getBuffer(key[2], key0Defined || key1Defined);
+            if (b2.length() != 0) b2 = " " + b2;
+            return "[" + b0 + "," + b1  + "," + b2 + "]";
+        }
+        
+        String getBuffer(long val, boolean haveHigher) {
+            if (val == UNDEFINED_MIN) return "?"; 
+            if (val == UNDEFINED_MAX) if (haveHigher) val = COMMON << 24; else return "?";
+            StringBuffer result = new StringBuffer();
+            hexBytes(val, result);
+            return result.toString();
+        }
+        
+        void setValue(int npInt, int nsInt, int ntInt) {
+            if (debugShow) System.out.println("Setting FCE: " 
+                + Utility.hex(npInt) + ", "  + Utility.hex(nsInt) + ", "  + Utility.hex(ntInt));
+            // to get the sign right!
+            long np = npInt & INT_MASK;
+            long ns = nsInt & INT_MASK;
+            long nt = ntInt & INT_MASK;
+            if (max) {
+                if (np < key[0]) return;
+                if (np > key[0]) {
+                    key[0] = np;
+                    key[1] = ns;
+                    key[2] = nt;
+                    return;
+                }
+                if (ns < key[1]) return;
+                if (ns > key[1]) {
+                    key[1] = ns;
+                    key[2] = nt;
+                    return;
+                }
+                if (nt > key[2]) {
+                    key[2] = nt;
+                }
+            } else {
+                if (np > key[0]) return;
+                if (np < key[0]) {
+                    key[0] = np;
+                    key[1] = ns;
+                    key[2] = nt;
+                    return;
+                }
+                if (ns > key[1]) return;
+                if (ns < key[1]) {
+                    key[1] = ns;
+                    key[2] = nt;
+                    return;
+                }
+                if (nt > key[2]) {
+                    key[2] = nt;
+                }
+            }
+        }
+    }
+       
     
     /*
     static boolean isFixedIdeograph(int cp) {
@@ -2566,9 +2752,12 @@ static int swapCJK(int i) {
     return i + NON_CJK_OFFSET; // non-CJK
 }
     
-    // CONSTANTS
+    // Fractional UCA Generation Constants
     
     static final int
+        TOP = 0xA0,
+        SPECIAL_BASE = 0xF0,
+    
     	NON_CJK_OFFSET = 0x110000,
         BYTES_TO_AVOID = 3,
         OTHER_COUNT = 256 - BYTES_TO_AVOID,
@@ -2659,12 +2848,12 @@ static int swapCJK(int i) {
     static void showImplicit2(String title, int cp) {
         System.out.println(title + ":\t" + Utility.hex(cp)
         	+ " => " + Utility.hex(swapCJK(cp))
-        	+ " => " + Utility.hex(0xFFFFFFFFL & getImplicitPrimary(cp)));
+        	+ " => " + Utility.hex(INT_MASK & getImplicitPrimary(cp)));
     }
     
     static void showImplicit3(String title, int cp) {
         System.out.println("*" + title + ":\t" + Utility.hex(cp)
-        	+ " => " + Utility.hex(0xFFFFFFFFL & getImplicitPrimaryFromSwapped(cp)));
+        	+ " => " + Utility.hex(INT_MASK & getImplicitPrimaryFromSwapped(cp)));
     }
     
     // TEST PROGRAM
@@ -2679,7 +2868,7 @@ static int swapCJK(int i) {
     	// test monotonically increasing
     	
     	for (int i = 0; i < 0x21FFFF; ++i) {
-    		long newPrimary = 0xFFFFFFFFL & getImplicitPrimaryFromSwapped(i);
+    		long newPrimary = INT_MASK & getImplicitPrimaryFromSwapped(i);
             if (newPrimary < oldPrimary) {
                 throw new IllegalArgumentException(Utility.hex(i) + ": overlap: "
                 	+ Utility.hex(oldChar) + " (" + Utility.hex(oldPrimary) + ")"
@@ -2730,7 +2919,7 @@ static int swapCJK(int i) {
         		}
         	
         		
-            	long newPrimary = 0xFFFFFFFFL & getImplicitPrimary(i);
+            	long newPrimary = INT_MASK & getImplicitPrimary(i);
 	            
             	// test correct values
 	            
