@@ -291,6 +291,10 @@ Locale::Locale(const Locale &other)
 
 Locale &Locale::operator=(const Locale &other)
 {
+    if (*this == other) {
+        return *this;
+    }
+
     /* Free our current storage */
     if(fullName != fullNameBuffer) {
         uprv_free(fullName);
