@@ -136,7 +136,7 @@ static char* u_bottomNBytesOfDouble(double* d, int n);
 #   define U_POSIX_LOCALE	1
 #endif
 
-#ifdef U_HAVE_NL_LANGINFO
+#if U_HAVE_NL_LANGINFO
 #include <langinfo.h>
 #endif
 
