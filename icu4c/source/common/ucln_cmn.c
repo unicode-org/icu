@@ -20,10 +20,11 @@
 
 void u_cleanup(void)
 {
-    ucln_uloc();
-    ucln_ustring();
-    ucln_ucnv();
-    ucln_ures();
+    uloc_cleanup();
+    ustring_cleanup();
+    ucnv_cleanup();
+    ucnv_io_cleanup();
+    ures_cleanup();
     udata_cleanup();
 }
 
