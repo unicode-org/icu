@@ -491,7 +491,7 @@ unicodeDataLineFn(void *context,
         log_err("error: syntax error in field 0 at %s\n", fields[0][0]);
         return;
     }
-    if((uint32_t)c>=0x110000) {
+    if((uint32_t)c>=UCHAR_MAX_VALUE + 1) {
         log_err("error in UnicodeData.txt: code point %lu out of range\n", c);
         return;
     }
@@ -1452,10 +1452,38 @@ enumCharNamesFn(void *context,
     return TRUE;
 }
 
+struct enumExtCharNamesContext {
+    uint32_t length;
+    int32_t last;
+};
+
+static UBool
+enumExtCharNamesFn(void *context,
+                UChar32 code, UCharNameChoice nameChoice,
+                const char *name, UTextOffset length) {
+    struct enumExtCharNamesContext *ecncp = (struct enumExtCharNamesContext *) context;
+
+    if (ecncp->last != (int32_t) code - 1) {
+        if (ecncp->last < 0) {
+            log_err("u_enumCharName(0x%lx - Ext) after u_enumCharName(0x%lx - Ext) instead of u_enumCharName(0x%lx - Ext)\n", code, ecncp->last, ecncp->last + 1);
+        } else {
+            log_err("u_enumCharName(0x%lx - Ext) instead of u_enumCharName(0x0 - Ext)\n", code);
+        }
+    }
+    ecncp->last = (int32_t) code;
+
+    if (!*name) {
+        log_err("u_enumCharName(0x%lx - Ext) should not be an empty string\n", code);
+    }
+
+    return enumCharNamesFn(&ecncp->length, code, nameChoice, name, length);
+}
+
 static void
 TestCharNames() {
     static char name[80];
     UErrorCode errorCode=U_ZERO_ERROR;
+    struct enumExtCharNamesContext extContext;
     UTextOffset length;
     UChar32 c;
     int i;
@@ -1510,16 +1538,17 @@ TestCharNames() {
     /* test u_enumCharNames() */
     length=0;
     errorCode=U_ZERO_ERROR;
-    u_enumCharNames(0, 0x110000, enumCharNamesFn, &length, U_UNICODE_CHAR_NAME, &errorCode);
+    u_enumCharNames(UCHAR_MIN_VALUE, UCHAR_MAX_VALUE + 1, enumCharNamesFn, &length, U_UNICODE_CHAR_NAME, &errorCode);
     if(U_FAILURE(errorCode) || length<94140) {
-        log_err("u_enumCharNames(0..0x1100000) error %s names count=%ld\n", u_errorName(errorCode), length);
+        log_err("u_enumCharNames(%ld..%lx) error %s names count=%ld\n", UCHAR_MIN_VALUE, UCHAR_MAX_VALUE, u_errorName(errorCode), length);
     }
 
-    length=0;
+    extContext.length = 0;
+    extContext.last = -1;
     errorCode=U_ZERO_ERROR;
-    u_enumCharNames(0, 0x110000, enumCharNamesFn, &length, U_EXTENDED_CHAR_NAME, &errorCode);
-    if(U_FAILURE(errorCode) || length<94140) {
-        log_err("u_enumCharNames(0..0x1100000 - Extended) error %s names count=%ld\n", u_errorName(errorCode), length);
+    u_enumCharNames(UCHAR_MIN_VALUE, UCHAR_MAX_VALUE + 1, enumExtCharNamesFn, &extContext, U_EXTENDED_CHAR_NAME, &errorCode);
+    if(U_FAILURE(errorCode) || extContext.length<UCHAR_MAX_VALUE + 1) {
+        log_err("u_enumCharNames(%ld..0x%lx - Extended) error %s names count=%ld\n", UCHAR_MIN_VALUE, UCHAR_MAX_VALUE + 1, u_errorName(errorCode), extContext.length);
     }
 
     /* test that u_charFromName() uppercases the input name, i.e., works with mixed-case names (new in 2.0) */
