@@ -671,6 +671,23 @@ inline void getVirginBefore(UColTokenParser *src, UColToken *sourceToken, uint32
   *src->extraCurrent++ = (UChar)ch;        
   *charsOffset = src->extraCurrent - src->source - 1;
   *newCharsLen = 1;
+
+  // We got an UCA before. However, this might have been tailored.
+  // example:
+  // &\u30ca = \u306a
+  // &[before 3]\u306a<<<\u306a|\u309d
+  
+  uint32_t key = (*newCharsLen << 24) | *charsOffset;
+
+  sourceToken = (UColToken *)uhash_geti(src->tailored, (int32_t)key);
+  
+  // if we found a tailored thing, we have to get one further down the line
+  if(sourceToken != NULL && sourceToken->strength != UCOL_TOK_RESET) {
+    src->extraCurrent--;
+    getVirginBefore(src, sourceToken, strength, charsOffset, newCharsLen, status);
+  }
+
+
 }
 
 /*
