@@ -448,25 +448,27 @@ ibm-1386_P100-2002  { UTR22* }
                         936 { WINDOWS* }
                         cp936 { WINDOWS }   # This isn't really windows, but it's used by ICU for Windows.
                         ibm-1386_VSUB_VPUA
-                        zh_cn
+                        # zh_cn
 
-ibm-1383_P110-2000 { UTR22* }
+ibm-1383_P110-2000 { UTR22* }       # China EUC.
                         ibm-1383 { IBM* }
-                        GB_2312-80 { IANA* }
+                        GB2312 { IANA* MIME* }
+                        csGB2312 { IANA }
+                        EUC-CN  # According to other platforms, windows-20936 looks more like euc-cn. x-euc-cn is also a MIME name
+                        ibm-eucCN
+                        hp15CN  # From HP-UX?
+                        cp1383
+                        1383
+                        ibm-1383_VPUA
+                        # gb          # This is not an IANA name. gb in IANA means Great Britain.
+
+ibm-5478_P100-1995 { UTR22* } ibm-5478 { IBM* } # This gb_2312_80 DBCS mapping is needed by iso-2022.
+                        GB_2312-80 { IANA* }    # Windows maps this alias incorrectly
                         chinese { IANA }
                         iso-ir-58 { IANA }
                         csISO58GB231280 { IANA }
-                        GB2312 { MIME* }
-                        EUC-CN
-                        ibm-eucCN
                         gb2312-1980
-                        cp1383
-                        1383
-                        gb          # This is not an IANA name. gb in IANA means Great Britain.
-                        csGB2312    # China EUC. x-euc-cn is a MIME name
-                        ibm-1383_VPUA
-
-ibm-5478_P100-1995 { UTR22* } ibm-5478 { IBM* } # This gb_2312_80 DBCS mapping is needed by iso-2022.
+                        GB2312.1980-0   # From X11R6
 
 ibm-964_P110-2000 { UTR22* }                # Taiwan EUC. x-euc-tw is a MIME name
                         ibm-964 { IBM* JAVA }
@@ -477,6 +479,7 @@ ibm-964_P110-2000 { UTR22* }                # Taiwan EUC. x-euc-tw is a MIME nam
                         964 { JAVA }
                         ibm-964_VPUA
 
+# TODO Both flavors of ibm-949 are PC, OS/2 based. Only one is really needed.
 ibm-949_P110-2000 { UTR22* }
                         ibm-949 { IBM* JAVA }
                         cp949 { JAVA* }
@@ -646,6 +649,7 @@ ibm-930_P120-1999 { UTR22* }    # EBCDIC_STATEFUL Katakana-Kanji Host Mixed.
                         cp930
                         930
 ibm-933_P110-1995 { UTR22* }    ibm-933 { IBM* } cp933 cpibm933 933   # Korea EBCDIC MIXED
+ibm-935_P110-1999 { UTR22* }    ibm-935 { IBM* } cp935 cpibm935 935   # China EBCDIC MIXED. Need to use Unicode, ibm-1388 or gb18030 instead because it is required by the government of China.
 ibm-937_P110-1999 { UTR22* }    ibm-937 { IBM* } cp937 cpibm937 937   # Taiwan EBCDIC MIXED
 ibm-939_P120-1999 { UTR22* }    # EBCDIC_STATEFUL Latin-Kanji Host Mixed.
                         ibm-939 { IBM* }
@@ -694,7 +698,7 @@ ibm-16804_X110-1999 { UTR22* }  ibm-16804 { IBM* } cpibm16804 ebcdic-ar # EBCDIC
 
 
 # TODO: Consider removing the mappings in this section
-ibm-935_P110-1999 { UTR22* }    ibm-935 { IBM* } cp935 cpibm935 935   # China EBCDIC MIXED. Need to use Unicode, ibm-1388 or gb18030 instead because it is required by the government of China.
+# one of the ibm-949 variants should be removed
 ibm-1137_P100-1999 { UTR22* }   ibm-1137 { IBM* }   # Devanagari EBCDIC (based on Unicode character set)
 ibm-1159_P100-1999 { UTR22* }   ibm-1159 { IBM* }   # SBCS T-Ch Host. Euro update of ibm-28709. This is used in combination with another CCSID mapping.
 ibm-5123_P100-1999 { UTR22* }   ibm-5123 { IBM* }   # Host Roman Jis. Euro update of ibm-1027
