@@ -1789,10 +1789,15 @@ inline uint32_t getImplicit(UChar32 cp, collIterate *collationSource, uint32_t h
   return (r & UCOL_PRIMARYMASK) | 0x00000505; // This was 'order'
 }
 
+inline UChar getPrevNormalizedChar(collIterate *data);
+
 /* This function handles the special CEs like contractions, expansions, surrogates, Thai */
 /* It is called by getNextCE */
 uint32_t getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, collIterate *source, UErrorCode *status) {
+  collIterateState entryState;
+  backupState(source, &entryState);
 
+  //UChar *entryPos = source->pos;
   for (;;) {
     // This loop will repeat only in the case of contractions, and only when a contraction
     //   is found and the first CE resulting from that contraction is itself a special
@@ -1862,74 +1867,61 @@ uint32_t getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, collIterate 
         // prefix data is stored backwards in the table.
         const UChar *UCharOffset;
         UChar schar, tchar;
-        //UChar  *sourcePointer = source->pos;
         UChar32 normOutput = 0;
-        Normalizer n(source->string, source->pos-source->string, UNORM_NFC);
-        //Normalizer n(source->string, source->pos-source->string, UNORM_NFD);
-        n.last();
+        collIterateState prefixState;
+        backupState(source, &prefixState);
+        loadState(source, &entryState, TRUE);
+        source->pos--;
+
+        //UChar  *sourcePointer = --entryPos; //source->pos; // We want to look at the point where we entered - actually one
+        // before that...
+
         for(;;) {
         // This loop will run once per source string character, for as long as we
         //  are matching a potential contraction sequence                  
 
-        // First we position ourselves at the begining of contraction sequence 
-        const UChar *ContractionStart = UCharOffset = (UChar *)coll->image+getContractOffset(CE);
-#if 0
-        if(sourcePointer == source->string) {
-          CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
-          break;
-        }
-        schar = *sourcePointer--;
-#endif
-
-        if(normOutput <= 0xFFFF) { // if the previous normalized char was a BMP, we continue processing
-          normOutput = n.previous();
-          if(normOutput==Normalizer::DONE) {
+          // First we position ourselves at the begining of contraction sequence 
+          const UChar *ContractionStart = UCharOffset = (UChar *)coll->image+getContractOffset(CE);
+          if (source->pos == source->string ||
+              ((source->flags & UCOL_ITER_INNORMBUF) &&
+              *(source->pos - 1) == 0 && source->fcdPosition == NULL)) {
+          // if(sourcePointer == source->string) {
             CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
             break;
-          } else {
-            if(normOutput > 0xFFFF) { // Character is a supplementary
-              // we need to do surrogate processing
-              // get the trailing  surrogate, since the code points
-              // in the prefix table are in the reverse order
-              schar = UTF16_TRAIL(normOutput);
-            } else {
-              schar = (UChar)normOutput;
-            }
           }
-        } else { // previous normalized codepoint was a supplementary
-          // get the leading  surrogate
-          schar = UTF16_LEAD(normOutput);
+          schar = getPrevNormalizedChar(source);
+          source->pos--;
+          //schar = *(--sourcePointer);
+
+          while(schar > (tchar = *UCharOffset)) { /* since the contraction codepoints should be ordered, we skip all that are smaller */
+            UCharOffset++;
+          }
+
+          if (schar == tchar) {
+              // Found the source string char in the table.
+              //  Pick up the corresponding CE from the table.
+              CE = *(coll->contractionCEs +
+                  (UCharOffset - coll->contractionIndex));
+          }
+          else
+          {
+              // Source string char was not in the table.
+              //   We have not found the prefix.
+              CE = *(coll->contractionCEs +
+                  (ContractionStart - coll->contractionIndex));
+          }
+
+          if(!isPrefix(CE)) {
+              // The source string char was in the contraction table, and the corresponding
+              //   CE is not a prefix CE.  We found the prefix, break
+              //   out of loop, this CE will end up being returned.  This is the normal
+              //   way out of prefix handling when the source actually contained
+              //   the prefix.
+              break;
+          }
         }
 
-
-        while(schar > (tchar = *UCharOffset)) { /* since the contraction codepoints should be ordered, we skip all that are smaller */
-          UCharOffset++;
-        }
-
-        if (schar == tchar) {
-            // Found the source string char in the table.
-            //  Pick up the corresponding CE from the table.
-            CE = *(coll->contractionCEs +
-                (UCharOffset - coll->contractionIndex));
-        }
-        else
-        {
-            // Source string char was not in the table.
-            //   We have not found the prefix.
-            CE = *(coll->contractionCEs +
-                (ContractionStart - coll->contractionIndex));
-        }
-
-        if(!isPrefix(CE)) {
-            // The source string char was in the contraction table, and the corresponding
-            //   CE is not a prefix CE.  We found the prefix, break
-            //   out of loop, this CE will end up being returned.  This is the normal
-            //   way out of prefix handling when the source actually contained
-            //   the prefix.
-            break;
-        }
-      }
-
+      loadState(source, &prefixState, TRUE);
       break;
       }
     case CONTRACTION_TAG:
@@ -2487,64 +2479,56 @@ uint32_t getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
         // prefix data is stored backwards in the table.
         const UChar *UCharOffset;
         UChar schar, tchar;
+        collIterateState prefixState;
+        backupState(source, &prefixState);
         //UChar *sourcePointer = source->pos;
         UChar32 normOutput = 0;
-        //Normalizer n(source->string, source->pos-source->string+1, UNORM_NFD);
-        Normalizer n(source->string, source->pos-source->string+1, UNORM_NFC);
-        n.last();
         for(;;) {
         // This loop will run once per source string character, for as long as we
         //  are matching a potential contraction sequence                  
 
-        // First we position ourselves at the begining of contraction sequence 
-        const UChar *ContractionStart = UCharOffset = (UChar *)coll->image+getContractOffset(CE);
-        if(normOutput <= 0xFFFF) { // if the previous normalized char was a BMP, we continue processing
-          normOutput = n.previous();
-          if(normOutput==Normalizer::DONE) {
+          // First we position ourselves at the begining of contraction sequence 
+          const UChar *ContractionStart = UCharOffset = (UChar *)coll->image+getContractOffset(CE);
+
+          if (source->pos == source->string ||
+              ((source->flags & UCOL_ITER_INNORMBUF) &&
+              *(source->pos - 1) == 0 && source->fcdPosition == NULL)) {
+          //if(sourcePointer == source->string) {
             CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
             break;
-          } else {
-            if(normOutput > 0xFFFF) { // Character is a supplementary
-              // we need to do surrogate processing
-              // get the trailing surrogate - as code points in the
-              // prefix table are in the reverse order
-              schar = UTF16_TRAIL(normOutput);
-            } else {
-              schar = (UChar)normOutput;
-            }
           }
-        } else { // previous normalized codepoint was a supplementary
-          // get the leading surrogate
-          schar = UTF16_LEAD(normOutput);
-        }
+          schar = getPrevNormalizedChar(source);
+          source->pos--;
+          //schar = *(--sourcePointer);
 
-        while(schar > (tchar = *UCharOffset)) { /* since the contraction codepoints should be ordered, we skip all that are smaller */
-          UCharOffset++;
-        }
+          while(schar > (tchar = *UCharOffset)) { /* since the contraction codepoints should be ordered, we skip all that are smaller */
+            UCharOffset++;
+          }
 
-        if (schar == tchar) {
-            // Found the source string char in the table.
-            //  Pick up the corresponding CE from the table.
-            CE = *(coll->contractionCEs +
-                (UCharOffset - coll->contractionIndex));
-        }
-        else
-        {
-            // Source string char was not in the table.
-            //   We have not found the prefix.
-            CE = *(coll->contractionCEs +
-                (ContractionStart - coll->contractionIndex));
-        }
+          if (schar == tchar) {
+              // Found the source string char in the table.
+              //  Pick up the corresponding CE from the table.
+              CE = *(coll->contractionCEs +
+                  (UCharOffset - coll->contractionIndex));
+          }
+          else
+          {
+              // Source string char was not in the table.
+              //   We have not found the prefix.
+              CE = *(coll->contractionCEs +
+                  (ContractionStart - coll->contractionIndex));
+          }
 
-        if(!isPrefix(CE)) {
-            // The source string char was in the contraction table, and the corresponding
-            //   CE is not a prefix CE.  We found the prefix, break
-            //   out of loop, this CE will end up being returned.  This is the normal
-            //   way out of prefix handling when the source actually contained
-            //   the prefix.
-            break;
+          if(!isPrefix(CE)) {
+              // The source string char was in the contraction table, and the corresponding
+              //   CE is not a prefix CE.  We found the prefix, break
+              //   out of loop, this CE will end up being returned.  This is the normal
+              //   way out of prefix handling when the source actually contained
+              //   the prefix.
+              break;
+          }
         }
-      }
+      loadState(source, &prefixState, TRUE);
       break;
       }
 
