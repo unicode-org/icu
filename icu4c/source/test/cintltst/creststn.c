@@ -1238,30 +1238,39 @@ static void TestErrorConditions(){
 }
 
 static void TestGetVersion(){
-    UVersionInfo minVersionArray = {0x01, 0x01, 0x00, 0x00};
+    UVersionInfo minVersionArray = {0x01, 0x00, 0x00, 0x00};
     UVersionInfo maxVersionArray = {0x50, 0x80, 0xcf, 0xcf};
     UVersionInfo versionArray;
     UErrorCode status= U_ZERO_ERROR;
-    UResourceBundle* resB = ures_open(NULL,"root", &status);
-    int i=0;
+    UResourceBundle* resB = NULL; 
+    int i=0, j = 0;
+    int locCount = uloc_countAvailable();
+    const char *locName = "root";
     log_verbose("The ures_getVersion tests begin : \n");
-
-    if (U_FAILURE(status)) {
-        log_err("Default en_US resource bundle creation failed.: %s\n", myErrorName(status));
-        return;
+  
+    for(j = -1; j < locCount; j++) {
+      if(j >= 0) {
+        locName = uloc_getAvailable(j);
+      }
+      log_verbose("Testing version number for locale %s\n", locName);
+      resB = ures_open(NULL,locName, &status);
+      if (U_FAILURE(status)) {
+          log_err("Resource bundle creation for locale %s failed.: %s\n", locName, myErrorName(status));
+          ures_close(resB);
+          return;
+      }
+      ures_getVersion(resB, versionArray);
+      for (i=0; i<4; ++i) {
+          if (versionArray[i] < minVersionArray[i] ||
+              versionArray[i] > maxVersionArray[i])
+          {
+              log_err("Testing ures_getVersion() - unexpected result: %d.%d.%d.%d\n", 
+                  versionArray[0], versionArray[1], versionArray[2], versionArray[3]);
+              break;
+          }
+      }
+      ures_close(resB);
     }
-
-    ures_getVersion(resB, versionArray);
-    for (i=0; i<4; ++i) {
-        if (versionArray[i] < minVersionArray[i] ||
-            versionArray[i] > maxVersionArray[i])
-        {
-            log_err("Testing ucol_getVersion() - unexpected result: %d.%d.%d.%d\n", 
-                versionArray[0], versionArray[1], versionArray[2], versionArray[3]);
-            break;
-        }
-    }
-    ures_close(resB);
 }
 
 static void TestResourceBundles()
