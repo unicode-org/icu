@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2003, International Business Machines Corporation 
+ * Copyright (c) 2003-2004, International Business Machines Corporation 
  * and others. All Rights Reserved.
  ********************************************************************
  * Calendar Case Test is a type of CalendarTest which compares the 
