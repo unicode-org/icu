@@ -1011,6 +1011,42 @@ public final class ULocale implements Serializable {
     }
 
     /**
+     * Returns the fallback locale for the specified locale, which might be the empty string.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static String getFallback(String localeID) {
+	return getFallbackString(getName(localeID));
+    }
+
+    /**
+     * Returns the fallback locale for this locale.  If this locale is root, returns null.
+     * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public ULocale getFallback() {
+	if (localeID.length() == 0 || localeID.charAt(0) == '@') {
+	    return null;
+	}
+	return new ULocale(getFallbackString(localeID), null);
+    }
+
+    /**
+     * Return the given (canonical) locale id minus the last part before the tags.
+     */
+    private static String getFallbackString(String fallback) {
+	int limit = fallback.indexOf('@');
+	if (limit == -1) {
+	    limit = fallback.length();
+	}
+	int start = fallback.lastIndexOf('_', limit);
+	if (start == -1) {
+	    start = 0;
+	}
+	return fallback.substring(0, start) + fallback.substring(limit);
+    }
+
+    /**
      * Returns the (normalized) base name for this locale.
      * @return the base name as a String.
      * @draft ICU 3.0
