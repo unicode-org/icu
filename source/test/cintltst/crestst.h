@@ -22,13 +22,13 @@
 
     void addTestResourceBundleTest(TestNode**);
 
- /**
- *Perform several extensive tests using the subtest routine testTag
- */
+    /**
+     * Perform several extensive tests using the subtest routine testTag
+     */
     void TestResourceBundles(void);
     /** 
      * Test construction of ResourceBundle accessing a custom test resource-file
-     **/
+     */
     void TestConstruction1(void);
 
     void TestConstruction2(void);
@@ -37,14 +37,13 @@
     /**
      * extensive subtests called by TestResourceBundles
      **/
-     
-    void setUpDataTable(void);
+
     UBool testTag(const char* frag, UBool in_Root, UBool in_te, UBool in_te_IN);
 
     void record_pass(void);
     void record_fail(void);
 
-    
+
     int32_t pass;
     int32_t fail;
 

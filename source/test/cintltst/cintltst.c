@@ -8,7 +8,7 @@
 * File CINTLTST.C
 *
 * Modification History:
-*        Name                     Description            
+*        Name                     Description
 *     Madhu Katragadda               Creation
 *********************************************************************************
 */
@@ -21,9 +21,6 @@
 #include "unicode/utypes.h"
 
 #include "cintltst.h"
-U_CDECL_BEGIN
-#include "cucdtst.h"
-U_CDECL_END
 
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
@@ -95,7 +92,6 @@ int main(int argc, const char* const argv[])
     addAllTests(&root);
     nerrors = processArgs(root, argc, argv);
     cleanUpTestTree(root);
-    cleanUpDataTable();
 #ifdef CTST_LEAK_CHECK
     ctst_freeAll();
 
@@ -112,35 +108,30 @@ int main(int argc, const char* const argv[])
 void 
 ctest_pathnameInContext( char* fullname, int32_t maxsize, const char* relPath ) 
 {
-    char mainDirBuffer[200];
+    char mainDirBuffer[1024];
     char* mainDir = NULL;
+    const char *dataDirectory = u_getDataDirectory();
     const char inpSepChar = '|';
     char* tmp;
     int32_t lenMainDir;
-    int32_t lenRelPath ;   
+    int32_t lenRelPath;
 
-#if defined(_WIN32) || defined(WIN32) || defined(__OS2__) || defined(OS2)
-	   /* This should always be u_getDataDirectory().
-	    */
-        mainDir= u_getDataDirectory();
-		if(mainDir!=NULL) {
-            strcpy(mainDirBuffer, mainDir);
-            strcat(mainDirBuffer, "..");
-        } else {
-            mainDirBuffer[0]='\0';
-        }
-        mainDir=mainDirBuffer;
-#elif defined(XP_MAC)
-        Str255 volName;
-        int16_t volNum;
-        OSErr err = GetVol( volName, &volNum );
-        if (err != noErr) volName[0] = 0;
-        mainDir = (char*) &(volName[1]);
-        mainDir[volName[0]] = 0;
+#ifdef XP_MAC
+    Str255 volName;
+    int16_t volNum;
+    OSErr err = GetVol( volName, &volNum );
+    if (err != noErr)
+        volName[0] = 0;
+    mainDir = (char*) &(volName[1]);
+    mainDir[volName[0]] = 0;
 #else
-        strcpy(mainDirBuffer, u_getDataDirectory());
+    if (dataDirectory != NULL) {
+        strcpy(mainDirBuffer, dataDirectory);
         strcat(mainDirBuffer, ".." U_FILE_SEP_STRING);
-        mainDir = mainDirBuffer;
+    } else {
+        mainDirBuffer[0]='\0';
+    }
+    mainDir = mainDirBuffer;
 #endif
 
     lenMainDir = strlen( mainDir );
@@ -149,9 +140,13 @@ ctest_pathnameInContext( char* fullname, int32_t maxsize, const char* relPath )
         mainDir[lenMainDir] = 0;
     }
 
-    if (relPath[0] == '|') relPath++;
+    if (relPath[0] == '|')
+        relPath++;
     lenRelPath = strlen( relPath );
-    if (maxsize < lenMainDir + lenRelPath + 2) { fullname[0] = 0; return; }
+    if (maxsize < lenMainDir + lenRelPath + 2) {
+        fullname[0] = 0;
+        return;
+    }
     strcpy( fullname, mainDir );
     /*strcat( fullname, U_FILE_SEP_STRING );*/
     strcat( fullname, relPath );
@@ -193,7 +188,7 @@ char *austrdup(const UChar* unichars)
     length    = u_strlen ( unichars );
     /*newString = (char*)malloc  ( sizeof( char ) * 4 * ( length + 1 ) );*/ /* this leaks for now */
     newString = (char*)ctst_malloc  ( sizeof( char ) * 4 * ( length + 1 ) ); /* this shouldn't */
- 
+
     if ( newString == NULL )
         return NULL;
 
