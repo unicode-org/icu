@@ -109,18 +109,18 @@ void DateFormatRegressionTest::Test4052408(void)
 {
 
     DateFormat *fmt = DateFormat::createDateTimeInstance(DateFormat::SHORT,
-                                                DateFormat::SHORT, Locale::US);
+                                                DateFormat::SHORT, Locale::getUS());
     UDate dt = date(97, Calendar::MAY, 3, 8, 55);
     UnicodeString str;
     str = fmt->format(dt, str);
     logln(str);
     
-    if(str != "5/3/97 8:55 AM")
-        errln("Fail: Test broken; Want 5/3/97 8:55 AM Got " + str);   
+    if(str != "5/3/1997 8:55 AM")
+        errln("Fail: Test broken; Want 5/3/1997 8:55 AM Got " + str);   
     
     UnicodeString expected[] = {
         (UnicodeString) "", //"ERA_FIELD",
-        (UnicodeString) "97", //"YEAR_FIELD",
+        (UnicodeString) "1997", //"YEAR_FIELD",
         (UnicodeString) "5", //"MONTH_FIELD",
         (UnicodeString) "3", //"DATE_FIELD",
         (UnicodeString) "", //"HOUR_OF_DAY1_FIELD",
@@ -186,7 +186,7 @@ void DateFormatRegressionTest::Test4052408(void)
         if((exp.length() == 0 && str.length() == 0) || str == exp)
             logln(" ok");
         else {
-            logln(UnicodeString(" expected ") + exp);
+            errln(UnicodeString(" expected ") + exp);
             pass = FALSE;
         }
         
@@ -206,7 +206,7 @@ void DateFormatRegressionTest::Test4056591(void)
     UErrorCode status = U_ZERO_ERROR;
 
     //try {
-        SimpleDateFormat *fmt = new SimpleDateFormat(UnicodeString("yyMMdd"), Locale::US, status);
+        SimpleDateFormat *fmt = new SimpleDateFormat(UnicodeString("yyMMdd"), Locale::getUS(), status);
         failure(status, "new SimpleDateFormat");
         UDate start = date(1809-1900, Calendar::DECEMBER, 25);
         fmt->set2DigitYearStart(start, status);
@@ -513,7 +513,7 @@ void DateFormatRegressionTest::Test4071441(void)
 void DateFormatRegressionTest::Test4073003(void) 
 {
     //try {
-    DateFormat *fmt = DateFormat::createDateInstance(DateFormat::SHORT, Locale::US);
+    DateFormat *fmt = DateFormat::createDateInstance(DateFormat::SHORT, Locale::getUK());
         UnicodeString tests [] = { 
             (UnicodeString) "12/25/61", 
             (UnicodeString) "12/25/1961", 
@@ -647,7 +647,7 @@ void DateFormatRegressionTest::Test4100302(void)
 void DateFormatRegressionTest::Test4101483(void) 
 {
     UErrorCode status = U_ZERO_ERROR;
-    SimpleDateFormat *sdf = new SimpleDateFormat(UnicodeString("z"), Locale::US, status);
+    SimpleDateFormat *sdf = new SimpleDateFormat(UnicodeString("z"), Locale::getUS(), status);
     failure(status, "new SimpleDateFormat");
     FieldPosition fp(DateFormat::TIMEZONE_FIELD);
     //Date d = date(9234567890L);
@@ -680,7 +680,7 @@ void DateFormatRegressionTest::Test4103340(void)
     // choose a date that is the FIRST of some month 
     // and some arbitrary time 
     UDate d = date(97, 3, 1, 1, 1, 1); 
-    SimpleDateFormat *df = new SimpleDateFormat(UnicodeString("MMMM"), Locale::US, status); 
+    SimpleDateFormat *df = new SimpleDateFormat(UnicodeString("MMMM"), Locale::getUS(), status); 
     failure(status, "new SimpleDateFormat");
 
     UnicodeString s;
@@ -943,7 +943,7 @@ void DateFormatRegressionTest::Test4151631(void)
     UnicodeString pattern = "'TO_DATE('''dd'-'MM'-'yyyy HH:mm:ss''' , ''DD-MM-YYYY HH:MI:SS'')'";
     logln("pattern=" + pattern);
     UErrorCode status = U_ZERO_ERROR;
-    SimpleDateFormat *format = new SimpleDateFormat(pattern, Locale::US, status);
+    SimpleDateFormat *format = new SimpleDateFormat(pattern, Locale::getUS(), status);
     failure(status, "new SimpleDateFormat");
     UnicodeString result;
     FieldPosition pos(FieldPosition::DONT_CARE);
@@ -967,7 +967,7 @@ void DateFormatRegressionTest::Test4151706(void)
 {
     UnicodeString dateString("Thursday, 31-Dec-98 23:00:00 GMT");
     UErrorCode status = U_ZERO_ERROR;
-    SimpleDateFormat fmt(UnicodeString("EEEE, dd-MMM-yy HH:mm:ss z"), Locale::US, status);
+    SimpleDateFormat fmt(UnicodeString("EEEE, dd-MMM-yy HH:mm:ss z"), Locale::getUS(), status);
     failure(status, "new SimpleDateFormat");
     //try {
         UDate d = fmt.parse(dateString, status);
@@ -994,7 +994,7 @@ DateFormatRegressionTest::Test4162071(void)
     UnicodeString dateString("Thu, 30-Jul-1999 11:51:14 GMT");
     UnicodeString format("EEE', 'dd-MMM-yyyy HH:mm:ss z"); // RFC 822/1123
     UErrorCode status = U_ZERO_ERROR;
-    SimpleDateFormat df(format, Locale::US, status);
+    SimpleDateFormat df(format, Locale::getUS(), status);
     if(U_FAILURE(status))
         errln("Couldn't create SimpleDateFormat");
     
@@ -1017,8 +1017,8 @@ DateFormatRegressionTest::Test4162071(void)
  */
 void DateFormatRegressionTest::Test4182066(void) {
     UErrorCode status = U_ZERO_ERROR;
-    SimpleDateFormat fmt("MM/dd/yy", Locale::US, status);
-    SimpleDateFormat dispFmt("MMM dd yyyy GG", Locale::US, status);
+    SimpleDateFormat fmt("MM/dd/yy", Locale::getUS(), status);
+    SimpleDateFormat dispFmt("MMM dd yyyy GG", Locale::getUS(), status);
     if (U_FAILURE(status)) {
         errln("Couldn't create SimpleDateFormat");
         return;
@@ -1100,8 +1100,8 @@ void
 DateFormatRegressionTest::Test4210209(void) {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString pattern("MMM d, yyyy");
-    SimpleDateFormat sfmt(pattern, Locale::US, status);
-    SimpleDateFormat sdisp("MMM dd yyyy GG", Locale::US, status);
+    SimpleDateFormat sfmt(pattern, Locale::getUS(), status);
+    SimpleDateFormat sdisp("MMM dd yyyy GG", Locale::getUS(), status);
     DateFormat& fmt = *(DateFormat*)&sfmt; // Yuck: See j25
     DateFormat& disp = *(DateFormat*)&sdisp; // Yuck: See j25
     if (U_FAILURE(status)) {
@@ -1149,7 +1149,7 @@ void DateFormatRegressionTest::Test714(void)
      UDate d(978103543000.);
     DateFormat *fmt = DateFormat::createDateTimeInstance(DateFormat::NONE,
                                                          DateFormat::MEDIUM,
-                                                         Locale::US);
+                                                         Locale::getUS());
     UnicodeString s;
         UnicodeString tests = 
           (UnicodeString) "7:25:43 AM" ;
