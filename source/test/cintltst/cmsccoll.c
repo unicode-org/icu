@@ -26,6 +26,10 @@
 #include "string.h"
 
 static UCollator *myCollation;
+const static UChar rules[MAX_TOKEN_LEN] =
+/*" & 0 < 1,\u2461<a,A"*/
+{ 0x0026, 0x0030, 0x003C, 0x0031, 0x002C, 0x2460, 0x003C, 0x0061, 0x002C, 0x0041, 0x0000 };
+
 const static UChar testCase[][MAX_TOKEN_LEN] =
 {
     /*0*/ {0x0031 /*'1'*/, 0x0061/*'a'*/, 0x0000},     
@@ -74,7 +78,27 @@ static void TestCase( )
         }
       }
     }
-    ucol_close(myCollation);
+    ucol_close(myCollation);    
+    
+    myCollation = ucol_openRules(rules, u_strlen(rules), UNORM_NONE, UCOL_TERTIARY, &status);
+    if(U_FAILURE(status)){
+        log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
+	return;
+    }
+    log_verbose("Testing different case settings with custom rules\n");
+    ucol_setStrength(myCollation, UCOL_TERTIARY);
+
+    for(k = 0; k<4; k++) {
+      ucol_setAttribute(myCollation, UCOL_CASE_FIRST, caseTestAttributes[k][0], &status);
+      ucol_setAttribute(myCollation, UCOL_CASE_LEVEL, caseTestAttributes[k][1], &status);
+      for (i = 0; i < 3 ; i++) {
+        for(j = i+1; j<4; j++) {
+          doTest(myCollation, testCase[i], testCase[j], caseTestResults[k][3*i+j-1]);
+        }
+      }
+    }
+    ucol_close(myCollation);    
+
 }
 
 

@@ -792,6 +792,15 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, UHashtable *tailored, UErro
   }
 }
 
+U_CFUNC ucol_getFirstCE(UCollator *coll, UChar u, UErrorCode *status) {
+  collIterate colIt;
+  uint32_t order;
+  init_collIterate(&u, 1, &colIt, FALSE);
+  order = ucol_getNextCE(coll, &colIt, status);
+  /*UCOL_GETNEXTCE(order, coll, colIt, status);*/
+  return order;
+}
+
 U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokListHeader *lh, UHashtable *tailored, UErrorCode *status) {
   UCAElements el;
   UColToken *tok = lh->first[UCOL_TOK_POLARITY_POSITIVE];
@@ -862,6 +871,21 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
       el.isThai = FALSE;
     }
 
+    /* we also need a case bit here, and we'll fish it out from the UCA for the first codepoint */
+    uint32_t caseCE = ucol_getFirstCE(UCA, el.cPoints[0], status);
+    if((caseCE & 0x40) != 0) {
+      el.caseBit = TRUE;
+/*      el.CEs[0] |= 0x40;*/
+      for(i = 0; i<el.noOfCEs; i++) {
+        el.CEs[i] |= 0x40;
+      }
+    } else {
+      el.caseBit = FALSE;
+/*      el.CEs[0] &= 0xFFFFFFBF;*/
+      for(i = 0; i<el.noOfCEs; i++) {
+        el.CEs[i] &= 0xFFFFFFBF;
+      }
+    }
 
 
     /* and then, add it */
