@@ -440,6 +440,7 @@ sub check_versions {
 
         # append ".0" if necessary, to standardize to X.Y.Z
         $v .= '.0' unless ($v =~ /\.\d+\./);
+        $v .= '.0' unless ($v =~ /\.\d+\./);
         if ($version) {
             die "Error: Mismatched Unicode versions"
                 unless ($version eq $v);
