@@ -16,6 +16,15 @@
 .BR "\-h\fP, \fB\-?\fP, \fB\-\-help"
 ]
 [
+.BI "\-V\fP, \fB\-\-version"
+]
+[
+.BI "\-s\fP, \fB\-\-silent"
+]
+[
+.BI "\-v\fP, \fB\-\-verbose"
+]
+[
 .BI "\-l\fP, \fB\-\-list"
 |
 .BI "\-l\fP, \fB\-\-list\-code" " code"
@@ -40,14 +49,24 @@
 |
 .B "\-i"
 ]
+[
+.BI "\-\-callback" " callback"
+]
 .BI "\-f\fP, \fB\-\-from\-code" " encoding"
 .BI "\-t\fP, \fB\-\-to\-code" " encoding"
 [
-.I file
+.IR file 
+]
+[
+.BI "\-o\fP, \fB\-\-output" " file"
 ]
 .SH DESCRIPTION
 .B uconv
-converts its input from one given
+converts each given
+.I file
+(or its standard input if no
+.I file
+is specified) from one
 .I encoding
 to another. The transcoding is done using Unicode as a pivot encoding
 (e.g. the data are first transcoded from their original encoding to
@@ -65,6 +84,12 @@ after the data have been transcoded to Unicode.
 .TP
 .BR \-h\fP, \fB\-?\fP, \fB\-\-help
 Print help about usage and exit.
+.TP
+.BI "\-s\fP, \fB\-\-silent"
+Suppress messages during execution.
+.TP
+.BI "\-v\fP, \fB\-\-verbose"
+Display extra informative messages during execution.
 .TP
 .BI "\-l\fP, \fB\-\-list"
 List all the available encodings and exit.
@@ -125,6 +150,15 @@ Ignore invalid sequences in the input.
 Same as
 .BR "\-\-from\-callback skip" .
 .TP
+.BI "\-\-callback" " callback"
+Use
+.I callback
+to handle both characters that cannot be transcoded from the original
+encoding and characters that cannot be transcoded to the destination
+encoding. See section
+.B CALLBACKS
+for details on valid callbacks.
+.TP
 .BI "\-f\fP, \fB\-\-from\-code" " encoding"
 Set the original encoding of the data to 
 .IR encoding .
@@ -132,6 +166,10 @@ Set the original encoding of the data to
 .BI "\-t\fP, \fB\-\-to\-code" " encoding"
 Transcode the data to
 .IR encoding .
+.TP
+.BI "\-o\fP, \fB\-\-output" " file"
+Write the transcode data to
+.IR file .
 .SH CALLBACKS
 .B uconv
 supports specifying callbacks to handle invalid data. Callbacks can be
@@ -150,19 +188,19 @@ callbacks actually supported by
 is displayed when it is called with
 .BR "\-h\fP, \fB\-\-help" .
 .PP
-.TP \w'\fBescape-xml-hex'u+3n
+.TP \w'\fBescape-codepoint'u+3n
 .B substitute
 Write the the encoding's substitute sequence, or the Unicode
 replacement character
 .B U+FFFD
 when transcoding to Unicode.
-This is the default callback.
 .TP
 .B skip
 Ignore the invalid data.
 .TP
 .B stop
 Stop with an error when encountering invalid data.
+This is the default callback.
 .TP
 .B escape
 Same as
@@ -210,6 +248,14 @@ Replace the missing characters with a string of the format
 where
 .I hhhh
 is the hexadecimal value of the character.
+.TP
+.B escape-codepoint
+Replace the missing characters with a string of the format
+.BR U+\fIhhhh\fP ,
+where
+.I hhhh
+is the hexadecimal value of the character. This is the format
+universally used to denote a Unicode codepoint in the litterature.
 .SH VERSION
 @VERSION@
 .SH COPYRIGHT
