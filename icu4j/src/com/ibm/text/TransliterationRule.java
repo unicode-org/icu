@@ -21,7 +21,12 @@ import java.util.Dictionary;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.1 $ $Date: 1999/12/20 18:29:21 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.2 $ $Date: 1999/12/21 23:58:44 $
+ *
+ * $Log: TransliterationRule.java,v $
+ * Revision 1.2  1999/12/21 23:58:44  Alan
+ * Detect a>x masking a>y
+ *
  */
 class TransliterationRule {
     /**
@@ -188,7 +193,8 @@ class TransliterationRule {
         /* There are three cases of masking.  In each instance, rule1
          * masks rule2.
          *
-         * 1. KEY mask: len(key1) < len(key2), key2 starts with key1.
+         * 1. KEY mask: len(key1) <= len(key2), key2 starts with key1.
+         * 1<2 detects a>b masking ab>c; 1=2 detects a>b masking a>c.
          *
          * 2. PREFIX mask: key1 == key2, len(prefix1) < len(prefix2),
          * prefix2 ends with prefix1, suffix2 starts with suffix1.
@@ -203,7 +209,9 @@ class TransliterationRule {
          * we need a subset operator on UnicodeSet objects, which we
          * currently do not have.  This can be added later.
          */
-        return ((maskKey.length() < r2.maskKey.length() &&
+
+        // maskKey = key + postContext
+        return ((maskKey.length() <= r2.maskKey.length() &&
                  r2.maskKey.startsWith(maskKey)) ||
                 (r2.anteContext != null && maskKey.equals(r2.maskKey) &&
                  ((anteContext == null) ||
