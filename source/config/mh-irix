@@ -57,10 +57,10 @@ INSTALL-S = $(INSTALL_PROGRAM)
 INSTALL-L = $(INSTALL_DATA)
 
 ## Link commands to link to ICU libs
-LIBICU-UC= 	-L$(top_builddir)/common -licu-uc
-LIBICU-I18N= 	-L$(top_builddir)/i18n -licu-i18n
+LIBICU-UC= 	-L$(top_builddir)/common -licuuc
+LIBICU-I18N= 	-L$(top_builddir)/i18n -licui18n
 LIBCTESTFW= 	-L$(top_builddir)/tools/ctestfw -lctestfw
-LIBICU-TOOLUTIL=-L$(top_builddir)/tools/toolutil -licu-toolutil
+LIBICU-TOOLUTIL=-L$(top_builddir)/tools/toolutil -licutoolutil
 LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio
 
 ## Compilation rules
