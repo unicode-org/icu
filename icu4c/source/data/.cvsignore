@@ -1,8 +1,4 @@
 Makefile
-.links
-*.exp
-*.obj
-*.lib
 *.plg
 icupkg.inc
 out
