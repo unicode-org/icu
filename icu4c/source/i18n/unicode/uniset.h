@@ -545,7 +545,7 @@ public:
      * @param end last character, inclusive, of range to be removed
      * from this set.
      */
-    virtual void xor(UChar32 start, UChar32 end);
+    virtual void exclusiveOr(UChar32 start, UChar32 end);
 
 
     /**
@@ -553,7 +553,7 @@ public:
      * will be removed if it is in this set, or will be added if it is
      * not in this set.
      */
-    void xor(UChar32 c);
+    void exclusiveOr(UChar32 c);
 
     /**
      * Returns <tt>true</tt> if the specified set is a <i>subset</i>
@@ -611,7 +611,7 @@ public:
      * @param c set that defines which elements will be xor'ed from
      *          this set.
      */
-    virtual void xorAll(const UnicodeSet& c);
+    virtual void exclusiveOrAll(const UnicodeSet& c);
 
     /**
      * Inverts this set.  This operation modifies this set so that
@@ -783,7 +783,7 @@ private:
     // Implementation: Fundamental operators
     //----------------------------------------------------------------
 
-    void xor(const UChar32* other, int32_t otherLen, int8_t polarity);
+    void exclusiveOr(const UChar32* other, int32_t otherLen, int8_t polarity);
         
     void add(const UChar32* other, int32_t otherLen, int8_t polarity);
             
