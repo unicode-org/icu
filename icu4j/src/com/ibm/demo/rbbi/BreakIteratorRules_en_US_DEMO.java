@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/demo/rbbi/Attic/BreakIteratorRules_en_US_DEMO.java,v $ 
- * $Date: 2000/05/09 22:54:31 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/05/12 01:29:02 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -45,55 +45,166 @@ public class BreakIteratorRules_en_US_DEMO extends ListResourceBundle {
         // resource, except that the Latin letters, apostrophe, and hyphen are
         // specified as dictionary characters
         { "WordBreakRules",
+            // ignore non-spacing marks, enclosing marks, and format characters,
+            // all of which should not influence the algorithm
             "$ignore=[[:Mn:][:Me:][:Cf:]];"
+
+            // lower and upper case Roman letters, apostrophy and dash are
+            // in the English dictionary
             + "$dictionary=[a-zA-Z\\'\\-];"
+
+            // Hindi phrase separator, kanji, katakana, hiragana, CJK diacriticals,
+            // other letters, and digits
+            + "danda=[\u0964\u0965];"
             + "kanji=[\u3005\u4e00-\u9fa5\uf900-\ufa2d];"
-            + "kata=[\u30a1-\u30fa];"
-            + "hira=[\u3041-\u3094];"
-            + "cjk-diacrit=[\u3099-\u309c];"
-            + "let=[[:L:]-[{kanji}{kata}{hira}{cjk-diacrit}{$dictionary}]];"
+            + "kata=[\u3099-\u309c\u30a1-\u30fe];"
+            + "hira=[\u3041-\u309e\u30fc];"
+            + "let=[[[:L:][:Mc:]]-[{kanji}{kata}{hira}]];"
             + "dgt=[:N:];"
-            + "mid-word=[[:Pd:]\u00ad\u2027\\\"\\\'\\.];"
+
+            // punctuation that can occur in the middle of a word: currently
+            // dashes, apostrophes, and quotation marks
+            + "mid-word=[[:Pd:]\u00ad\u2027\\\"\\\'];"
+
+            // punctuation that can occur in the middle of a number: currently
+            // apostrophes, qoutation marks, periods, commas, and the Arabic
+            // decimal point
             + "mid-num=[\\\"\\\'\\,\u066b\\.];"
-            + "pre-num=[[:Sc:]-[\u00a2]\\#\\.];"
+
+            // punctuation that can occur at the beginning of a number: currently
+            // the period, the number sign, and all currency symbols except the cents sign
+            + "pre-num=[[[:Sc:]-[\u00a2]]\\#\\.];"
+
+            // punctuation that can occur at the end of a number: currently
+            // the percent, per-thousand, per-ten-thousand, and Arabic percent
+            // signs, the cents sign, and the ampersand
             + "post-num=[\\%\\&\u00a2\u066a\u2030\u2031];"
+
+            // line separators: currently LF, FF, PS, and LS
             + "ls=[\n\u000c\u2028\u2029];"
+
+            // whitespace: all space separators and the tab character
             + "ws=[[:Zs:]\t];"
-            + "word=({let}{let}*({mid-word}{let}{let}*)*|[a-zA-Z][a-z\\'\\-]*);"
-            + "number=({dgt}{dgt}*({mid-num}{dgt}{dgt}*)*);"
+
+            // a word is a sequence of letters that may contain internal
+            // punctuation, as long as it begins and ends with a letter and
+            // never contains two punctuation marks in a row
+            + "word=({let}+({mid-word}{let}+)*{danda}?);"
+
+            // a number is a sequence of digits that may contain internal
+            // punctuation, as long as it begins and ends with a digit and
+            // never contains two punctuation marks in a row.
+            + "number=({dgt}+({mid-num}{dgt}+)*);"
+
+            // break after every character, with the following exceptions
+            // (this will cause punctuation marks that aren't considered
+            // part of words or numbers to be treated as words unto themselves)
             + ".;"
+
+            // keep together any sequence of contiguous words and numbers
+            // (including just one of either), plus an optional trailing
+            // number-suffix character
             + "{word}?({number}{word})*({number}{post-num}?)?;"
+
+            // keep together and sequence of contiguous words and numbers
+            // that starts with a number-prefix character and a number,
+            // and may end with a number-suffix character
             + "{pre-num}({number}{word})*({number}{post-num}?)?;"
+
+            // keep together runs of whitespace (optionally with a single trailing
+            // line separator or CRLF sequence)
             + "{ws}*\r?{ls}?;"
-            + "[{kata}{cjk-diacrit}]*;"
-            + "[{hira}{cjk-diacrit}]*;"
-            + "{kanji}*;" },
+
+            // keep together runs of Katakana
+            + "{kata}*;"
+
+            // keep together runs of Hiragana
+            + "{hira}*;"
+
+            // keep together runs of Kanji
+            + "{kanji}*;"},
         
         // These are the same line-breaking rules as are specified in the default
         // resource, except that the Latin letters, apostrophe, and hyphen are
         // specified as dictionary characters
         { "LineBreakRules",
+            // ignore non-spacing marks, enclosing marks, and format characters
             "$ignore=[[:Mn:][:Me:][:Cf:]];"
+
+            // lower and upper case Roman letters, apostrophy and dash
+            // are in the English dictionary
             + "$dictionary=[a-zA-Z\\'\\-];"
+
+            // Hindi phrase separators
+            + "danda=[\u0964\u0965];"
+
+            // characters that always cause a break: ETX, tab, LF, FF, LS, and PS
             + "break=[\u0003\t\n\f\u2028\u2029];"
+
+            // characters that always prevent a break: the non-breaking space
+            // and similar characters
             + "nbsp=[\u00a0\u2007\u2011\ufeff];"
+
+            // whitespace: space separators and control characters, except for
+            // CR and the other characters mentioned above
             + "space=[[[:Zs:][:Cc:]]-[{nbsp}{break}\r]];"
+
+            // dashes: dash punctuation and the discretionary hyphen, except for
+            // non-breaking hyphens
             + "dash=[[[:Pd:]\u00ad]-[{nbsp}]];"
-            + "pre-word=[[:Sc:]-[\u00a2][:Ps:]\\\"\\\'];"
-            + "post-word=[[:Pe:]\\!\\%\\.\\,\\:\\;\\?\u00a2\u00b0\u066a\u2030-\u2034\u2103"
-                    + "\u2105\u2109\u3001\u3002\u3005\u3041\u3043\u3045\u3047\u3049\u3063"
+
+            // characters that stick to a word if they precede it: currency symbols
+            // (except the cents sign) and starting punctuation
+            + "pre-word=[[[:Sc:]-[\u00a2]][:Ps:]\\\"\\\'];"
+
+            // characters that stick to a word if they follow it: ending punctuation,
+            // other punctuation that usually occurs at the end of a sentence,
+            // small Kana characters, some CJK diacritics, etc.
+            + "post-word=[[:Pe:]\\!\\\"\\\'\\%\\.\\,\\:\\;\\?\u00a2\u00b0\u066a\u2030-\u2034"
+                    + "\u2103\u2105\u2109\u3001\u3002\u3005\u3041\u3043\u3045\u3047\u3049\u3063"
                     + "\u3083\u3085\u3087\u308e\u3099-\u309e\u30a1\u30a3\u30a5\u30a7\u30a9"
-                    + "\u30c3\u30e3\u30e5\u30e7\u30ee\u30f5\u30f6\u30fc-\u30fe\uff01\uff0e"
-                    + "\uff1f];"
+                    + "\u30c3\u30e3\u30e5\u30e7\u30ee\u30f5\u30f6\u30fc-\u30fe\uff01\uff0c"
+                    + "\uff0e\uff1f];"
+
+            // Kanji: actually includes both Kanji and Kana, except for small Kana and
+            // CJK diacritics
             + "kanji=[[\u4e00-\u9fa5\uf900-\ufa2d\u3041-\u3094\u30a1-\u30fa]-[{post-word}{$ignore}]];"
+
+            // digits
             + "digit=[[:Nd:][:No:]];"
+
+            // punctuation that can occur in the middle of a number: periods and commas
             + "mid-num=[\\.\\,];"
-            + "char=[^{break}{space}{dash}{kanji}{nbsp}{$dictionary}\r];"
-            + "number=([{pre-word}{dash}]*{digit}{digit}*({mid-num}{digit}{digit}*)*);"
-            + "word-core=({char}*|{kanji}|{number}|[a-zA-Z][a-z\\'\\-]*);"
-            + "word-suffix=(({dash}{dash}*|{post-word}*){space}*);"
+
+            // everything not mentioned above, plus the quote marks (which are both
+            // <pre-word>, <post-word>, and <char>)
+            + "char=[^{break}{space}{dash}{kanji}{nbsp}{$ignore}{pre-word}{post-word}{mid-num}{danda}\r\\\"\\\'];"
+
+            // a "number" is a run of prefix characters and dashes, followed by one or
+            // more digits with isolated number-punctuation characters interspersed
+            + "number=([{pre-word}{dash}]*{digit}+({mid-num}{digit}+)*);"
+
+            // the basic core of a word can be either a "number" as defined above, a single
+            // "Kanji" character, or a run of any number of not-explicitly-mentioned
+            // characters (this includes Latin letters)
+            + "word-core=([{pre-word}{char}]*|{kanji}|{number});"
+
+            // a word may end with an optional suffix that be either a run of one or
+            // more dashes or a run of word-suffix characters, followed by an optional
+            // run of whitespace
+            + "word-suffix=(({dash}+|{post-word}*){space}*);"
+
+            // a word, thus, is an optional run of word-prefix characters, followed by
+            // a word core and a word suffix (the syntax of <word-core> and <word-suffix>
+            // actually allows either of them to match the empty string, putting a break
+            // between things like ")(" or "aaa(aaa"
             + "word=({pre-word}*{word-core}{word-suffix});"
-            + "{word}({nbsp}{nbsp}*{word})*\r?{break}?;" },
+
+            // finally, the rule that does the work: Keep together any run of words that
+            // are joined by runs of one of more non-spacing mark.  Also keep a trailing
+            // line-break character or CRLF combination with the word.  (line separators
+            // "win" over nbsp's)
+            + "{word}({nbsp}+{word})*\r?{break}?;" },
             
         // these two resources specify the pathnames of the dictionary files to
         // use for word breaking and line breaking.  Both currently refer to 
