@@ -16,6 +16,7 @@
 #include "strmatch.h"
 #include "symtable.h"
 #include "unirange.h"
+#include "uvector.h"
 #include "unicode/parseerr.h"
 #include "unicode/parsepos.h"
 #include "unicode/putil.h"
@@ -795,88 +796,62 @@ int32_t* RuleHalf::createSegments(UErrorCode& status) const {
 }
 
 //----------------------------------------------------------------------
-// END RuleHalf
+// PUBLIC API
 //----------------------------------------------------------------------
 
-TransliterationRuleData*
-TransliteratorParser::parse(const UnicodeString& rules,
-                            UTransDirection direction,
-                            UParseError& parseError,
-                            UErrorCode& ec) {
-    TransliteratorParser parser(rules, direction, parseError);
-    UnicodeString idBlock;
-    int32_t idSplitPoint, count;
-    parser.parseRules(idBlock, idSplitPoint, count);
-    if (U_FAILURE(parser.status) || idBlock.length() != 0) {
-        delete parser.data;
-        parser.data = 0;
-        ec = U_FAILURE(parser.status) ? parser.status : U_ILLEGAL_ARGUMENT_ERROR;
-    }
-    return parser.data;
-}
-
 /**
- * Parse a given set of rules.  Return up to three pieces of
- * parsed data.  These are the header ::id block, the rule block,
- * and the footer ::id block.  Any or all of these may be empty.
- * If the ::id blocks are empty, their corresponding parameters
- * are returned as the empty string.  If there are no rules, the
- * TransliterationRuleData result is 0.
- * @param ruleDataResult caller owns the pointer stored here.
- * May be NULL.
- * @param headerRule string including semicolons for the header
- * ::id block.  May be empty.
- * @param footerRule string including semicolons for the footer
- * ::id block.  May be empty.
+ * Constructor.
  */
-void TransliteratorParser::parse(const UnicodeString& rules,
-                                 UTransDirection direction,
-                                 TransliterationRuleData*& ruleDataResult,
-                                 UnicodeString& idBlockResult,
-                                 int32_t& idSplitPointResult,
-                                 UParseError& parseError,
-                                 UErrorCode& ec) {
-    if (U_FAILURE(ec)) {
-        ruleDataResult = 0;
-        return;
-    }
-    TransliteratorParser parser(rules, direction, parseError);
-    int32_t count;
-    parser.parseRules(idBlockResult, idSplitPointResult, count);
-    if (U_FAILURE(parser.status) || count == 0) {
-        delete parser.data;
-        parser.data = 0;
-    }
-    ruleDataResult = parser.data;
-    ec = parser.status;
-}
-
-/**
- * @param rules list of rules, separated by newline characters
- * @exception IllegalArgumentException if there is a syntax error in the
- * rules
- */
-
-/* Ram: Reordered member initializers to match declaration order and make GCC happy */
-TransliteratorParser::TransliteratorParser(
-                                     const UnicodeString& theRules,
-                                     UTransDirection theDirection,
-                                     UParseError& theParseError)
- :  
-    rules(theRules), direction(theDirection),data(0),parseError(theParseError), variablesVector(status) 
-{
-    parseData = new ParseData(0, &variablesVector);
-    if (parseData == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-    }
+TransliteratorParser::TransliteratorParser() {
+    data = NULL;
+    compoundFilter = NULL;
+    parseData = NULL;
+    variablesVector = NULL;
 }
 
 /**
  * Destructor.
  */
 TransliteratorParser::~TransliteratorParser() {
+    delete data;
+    delete compoundFilter;
     delete parseData;
+    delete variablesVector;
 }
+
+void
+TransliteratorParser::parse(const UnicodeString& rules,
+                            UTransDirection direction,
+                            UParseError& pe,
+                            UErrorCode& ec) {
+    if (U_SUCCESS(ec)) {
+        parseRules(rules, direction);
+        pe = parseError;
+        ec = status;
+    }
+}
+
+/**
+ * Return the compound filter parsed by parse().  Caller owns result.
+ */ 
+UnicodeSet* TransliteratorParser::orphanCompoundFilter() {
+    UnicodeSet* f = compoundFilter;
+    compoundFilter = NULL;
+    return f;
+}
+
+/**
+ * Return the data object parsed by parse().  Caller owns result.
+ */
+TransliterationRuleData* TransliteratorParser::orphanData() {
+    TransliterationRuleData* d = data;
+    data = NULL;
+    return d;
+}
+
+//----------------------------------------------------------------------
+// Private implementation
+//----------------------------------------------------------------------
 
 /**
  * Parse the given string as a sequence of rules, separated by newline
@@ -886,18 +861,12 @@ TransliteratorParser::~TransliteratorParser() {
  * @exception IllegalArgumentException if there is a syntax error in the
  * rules
  */
-void TransliteratorParser::parseRules(UnicodeString& idBlockResult,
-                                      int32_t& idSplitPointResult,
-                                      int32_t& ruleCount) {
-    status = U_ZERO_ERROR;
-    ruleCount = 0;
-
+void TransliteratorParser::parseRules(const UnicodeString& rules,
+                                      UTransDirection theDirection) {
     // Clear error struct
-    //if (parseError != 0) {
-        //parseError->code = parseError->line = 0;
-        parseError.offset = 0;
-        parseError.preContext[0] = parseError.postContext[0] = (UChar)0;
-    //}
+    parseError.line = parseError.offset = 0;
+    parseError.preContext[0] = parseError.postContext[0] = (UChar)0;
+    status = U_ZERO_ERROR;
 
     delete data;
     data = new TransliterationRuleData(status);
@@ -905,17 +874,28 @@ void TransliteratorParser::parseRules(UnicodeString& idBlockResult,
         return;
     }
 
-    parseData->data = data;
-    variablesVector.removeAllElements();
-/*    if (parseError != 0) {
-        parseError->code = 0;
+    direction = theDirection;
+    ruleCount = 0;
+
+    delete compoundFilter;
+    compoundFilter = NULL;
+
+    if (variablesVector == NULL) {
+        variablesVector = new UVector(status);
+    } else {
+        variablesVector->removeAllElements();
     }
-*/
-    determineVariableRange();
+    parseData = new ParseData(0, variablesVector);
+    if (parseData == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    parseData->data = data;
+    determineVariableRange(rules);
 
     UnicodeString str; // scratch
-    idBlockResult.truncate(0);
-    idSplitPointResult = -1;
+    idBlock.truncate(0);
+    idSplitPoint = -1;
     int32_t pos = 0;
     int32_t limit = rules.length();
     // The mode marks whether we are in the header ::id block, the
@@ -924,6 +904,15 @@ void TransliteratorParser::parseRules(UnicodeString& idBlockResult,
     // mode == 1: in rules: rule->1, ::id->2
     // mode == 2: in footer rule block: rule->ERROR, ::id->2
     int32_t mode = 0;
+
+    // The compound filter offset is an index into idBlockResult.
+    // If it is 0, then the compound filter occurred at the start,
+    // and it is the offset to the _start_ of the compound filter
+    // pattern.  Otherwise it is the offset to the _limit_ of the
+    // compound filter pattern within idBlockResult.
+    compoundFilter = NULL;
+    int32_t compoundFilterOffset = -1;
+
     while (pos < limit && U_SUCCESS(status)) {
         UChar c = rules.charAt(pos++);
         if (u_isWhitespace(c)) {
@@ -954,25 +943,39 @@ void TransliteratorParser::parseRules(UnicodeString& idBlockResult,
             int32_t p = pos;
             UBool sawDelim;
             UnicodeString regenID;
-            Transliterator::parseID(rules, regenID, p, sawDelim, direction,parseError, FALSE,status);
+            UnicodeSet* cpdFilter = NULL;
+            Transliterator::parseID(rules, regenID, p, sawDelim, cpdFilter, direction,parseError, FALSE,status);
             if (p == pos || !sawDelim) {
                 // Invalid ::id
+                delete cpdFilter;
                 syntaxError(U_ILLEGAL_ARGUMENT_ERROR, rules, pos);
             } else {
                 if (mode == 1) {
                     mode = 2;
-                    idSplitPointResult = idBlockResult.length();
+                    idSplitPoint = idBlock.length();
+                }
+                if (cpdFilter != NULL) {
+                    if (compoundFilter != NULL) {
+                        syntaxError(U_MULTIPLE_COMPOUND_FILTERS, rules, pos);
+                    }
+                    compoundFilter = cpdFilter;
+                    if (idBlock.length() == 0) {
+                        compoundFilterOffset = 0;
+                    }
                 }
                 rules.extractBetween(pos, p, str);
-                idBlockResult.append(str);
+                idBlock.append(str);
                 if (!sawDelim) {
-                    idBlockResult.append((UChar)0x003B /*;*/);
+                    idBlock.append((UChar)0x003B /*;*/);
+                }
+                if (cpdFilter != NULL && compoundFilterOffset < 0) {
+                    compoundFilterOffset = idBlock.length();
                 }
                 pos = p;
             }
         } else {
             // Parse a rule
-            pos = parseRule(pos, limit);
+            pos = parseRule(rules, pos, limit);
             if (U_SUCCESS(status)) {
                 ++ruleCount;
                 if (mode == 2) {
@@ -988,7 +991,7 @@ void TransliteratorParser::parseRules(UnicodeString& idBlockResult,
     }
     
     // Convert the set vector to an array
-    data->variablesLength = variablesVector.size();
+    data->variablesLength = variablesVector->size();
     data->variables = data->variablesLength == 0 ? 0 : new UnicodeMatcher*[data->variablesLength];
     // orphanElement removes the given element and shifts all other
     // elements down.  For performance (and code clarity) we work from
@@ -997,14 +1000,29 @@ void TransliteratorParser::parseRules(UnicodeString& idBlockResult,
     for (i=data->variablesLength; i>0; ) {
         --i;
         data->variables[i] =
-            (UnicodeSet*) variablesVector.orphanElementAt(i);
+            (UnicodeSet*) variablesVector->orphanElementAt(i);
     }
 
     // Index the rules
     if (U_SUCCESS(status)) {
+        if (compoundFilter != NULL) {
+            if ((direction == UTRANS_FORWARD &&
+                 compoundFilterOffset != 0) ||
+                (direction == UTRANS_REVERSE &&
+                 compoundFilterOffset != idBlock.length())) {
+                status = U_MISPLACED_COMPOUND_FILTER;
+            }
+        }        
+
         data->ruleSet.freeze(parseError,status);
-        if (idSplitPointResult < 0) {
-            idSplitPointResult = idBlockResult.length();
+
+        if (idSplitPoint < 0) {
+            idSplitPoint = idBlock.length();
+        }
+
+        if (ruleCount == 0) {
+            delete data;
+            data = NULL;
         }
     }
 }
@@ -1022,11 +1040,10 @@ void TransliteratorParser::parseRules(UnicodeString& idBlockResult,
  * indicators.  Once it does a lexical breakdown of the rule at pos, it
  * creates a rule object and adds it to our rule list.
  */
-int32_t TransliteratorParser::parseRule(int32_t pos, int32_t limit) {
+int32_t TransliteratorParser::parseRule(const UnicodeString& rule, int32_t pos, int32_t limit) {
     // Locate the left side, operator, and right side
     int32_t start = pos;
     UChar op = 0;
-    const UnicodeString& rule = rules; // TEMPORARY: FIX LATER
 
     // Use pointers to automatics to make swapping possible.
     RuleHalf _left(*this), _right(*this);
@@ -1188,41 +1205,26 @@ int32_t TransliteratorParser::parseRule(int32_t pos, int32_t limit) {
 int32_t TransliteratorParser::syntaxError(UErrorCode parseErrorCode,
                                                const UnicodeString& rule,
                                                int32_t pos) {
-   // if (parseError != 0) {
-   /*     parseError->line = 0; // We don't return a line #
-        parseError->offset = start; // Character offset from rule start
-        int32_t end = quotedIndexOf(rule, start, rule.length(), END_OF_RULE);
-        if (end < 0) {
-            end = rule.length();
-        }
-        int32_t len = uprv_min(end - start, U_PARSE_CONTEXT_LEN-1);
-        // Extract everything into the preContext and leave the postContext
-        // blank, since we don't have precise error position.
-        // TODO: Fix this.
-        rule.extract(start, len, parseError->preContext); // Current rule
-        parseError->preContext[len] = 0;
-        parseError->postContext[0] = 0;
-   */
-        parseError.offset = pos;
-        parseError.line = 0 ; /* we are not using line numbers */
+    parseError.offset = pos;
+    parseError.line = 0 ; /* we are not using line numbers */
     
-        // for pre-context
-        int32_t start = (pos <=U_PARSE_CONTEXT_LEN)? 0 : (pos - (U_PARSE_CONTEXT_LEN-1));
-        int32_t stop  = pos;
+    // for pre-context
+    int32_t start = (pos <=U_PARSE_CONTEXT_LEN)? 0 : (pos - (U_PARSE_CONTEXT_LEN-1));
+    int32_t stop  = pos;
     
-        rule.extract(start,stop-start,parseError.preContext);
-        //null terminate the buffer
-        parseError.preContext[stop-start] = 0;
+    rule.extract(start,stop-start,parseError.preContext);
+    //null terminate the buffer
+    parseError.preContext[stop-start] = 0;
     
-        //for post-context
-        start = pos+1;
-        stop  = ((pos+U_PARSE_CONTEXT_LEN)<= rule.length() )? (pos+(U_PARSE_CONTEXT_LEN-1)) : 
-                                                                rule.length();
+    //for post-context
+    start = pos+1;
+    stop  = ((pos+U_PARSE_CONTEXT_LEN)<= rule.length() )? (pos+(U_PARSE_CONTEXT_LEN-1)) : 
+        rule.length();
+    
+    rule.extract(start,stop-start,parseError.postContext);
+    //null terminate the buffer
+    parseError.postContext[stop-start]= 0;
 
-        rule.extract(start,stop-start,parseError.postContext);
-        //null terminate the buffer
-        parseError.postContext[stop-start]= 0;
-   // }
     status = (UErrorCode)parseErrorCode;
     return pos;
 
@@ -1251,7 +1253,7 @@ UChar TransliteratorParser::generateStandInFor(UnicodeMatcher* adopted) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
-    variablesVector.addElement(adopted, status);
+    variablesVector->addElement(adopted, status);
     return variableNext++;
 }
 
@@ -1306,7 +1308,7 @@ UChar TransliteratorParser::getSegmentStandin(int32_t r) {
  * When done, everything not in the hash is available for use.  In practice,
  * this method may employ some other algorithm for improved speed.
  */
-void TransliteratorParser::determineVariableRange(void) {
+void TransliteratorParser::determineVariableRange(const UnicodeString& rules) {
     UnicodeRange privateUse(0xE000, 0x1900); // Private use area
 
     UnicodeRange* r = privateUse.largestUnusedSubrange(rules, status);
