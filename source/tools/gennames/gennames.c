@@ -89,7 +89,7 @@ typedef struct {
 } Line;
 
 typedef struct {
-    int32_t weight; // -(cost for token) + (number of occurences) * (length-1)
+    int32_t weight; /* -(cost for token) + (number of occurences) * (length-1) */
     int16_t count;
     int16_t length;
     uint8_t *s;
