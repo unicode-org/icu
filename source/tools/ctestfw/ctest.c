@@ -68,7 +68,7 @@ int strncmp_nullcheck( const char* s1,
                const char* s2,
                int n )
 {
-  if ( s2[n] != 0 )    return 3; /* null check fails */
+  if ( ( (int)strlen(s2)>=n) && s2[n] != 0 )    return 3; /* null check fails */
   else  return strncmp ( s1, s2, n );
 }
 
