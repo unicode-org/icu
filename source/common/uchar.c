@@ -5174,9 +5174,7 @@ u_charDigitValue(UChar ch)
 void
 createTables()
 {
-    Mutex* lock = NULL;
     CompactByteArray* newTables;
-	lock = NULL;
     if (tables == 0) {
       newTables = ucmp8_openAdopt((uint16_t*)indicies, (int8_t*)values, offsetCount);    
       umtx_lock(NULL);
@@ -5225,7 +5223,6 @@ createUlTables()
 void
 createDirTables()
 {
-  Mutex* lock=NULL;
   CompactByteArray* newTables;
   if (dirTables == 0)
     {

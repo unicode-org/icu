@@ -414,7 +414,6 @@ int32_t uhash_hashSharedData (void *sharedData)
 /*Puts the shared data in the static hashtable SHARED_DATA_HASHTABLE */
 void   shareConverterData (UConverterSharedData * data)
 {
-  Mutex *sharedData = NULL;
   UErrorCode err = U_ZERO_ERROR;
   /*Lazy evaluates the Hashtable itself */
 
@@ -506,7 +505,6 @@ int32_t uhash_hashIString(const void* name)
 }
 bool_t   isDataBasedConverter (const char *name)
 {
-  Mutex *createHashTableMutex = NULL;
   int32_t i = 0;
   bool_t result = FALSE;
   UErrorCode err = U_ZERO_ERROR;
@@ -567,7 +565,6 @@ UConverter *
   char realName[UCNV_MAX_CONVERTER_NAME_LENGTH];
   UConverter *myUConverter = NULL;
   UConverterSharedData *mySharedConverterData = NULL;
-  Mutex *updatingReferenceCounterMutex = NULL;
 
   if (U_FAILURE (*err))
     return NULL;

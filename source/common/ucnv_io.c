@@ -144,7 +144,6 @@ void
 void 
   doSetupAliasTableAndAvailableConverters (FileStream * converterFile, UErrorCode * err)
 {
-  Mutex *convertrsFileOpenMutex = NULL;
   char myLine[UCNV_MAX_LINE_TEXT];
   char *line = myLine;
   char actualNameToken[UCNV_MAX_CONVERTER_NAME_LENGTH];
