@@ -3,7 +3,7 @@
  * Copyright (c) 1997-2001, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
-/********************************************************************************
+/*******************************************************************************
 *
 * File CRESTST.C
 *
@@ -11,17 +11,13 @@
 *        Name                     Description
 *     Madhu Katragadda            Ported for C API
 *  06/14/99     stephen           Updated for RB API changes (no suffix).
-*********************************************************************************
+********************************************************************************
 */
 
 
-#include <stdlib.h>
-#include <time.h>
 #include "unicode/utypes.h"
 #include "cintltst.h"
-#include "unicode/utypes.h"
 #include "unicode/ustring.h"
-#include "string.h"
 #include "cstring.h"
 
 #define RESTEST_HEAP_CHECK 0
@@ -120,6 +116,8 @@ static int32_t bundles_count = sizeof(param) / sizeof(param[0]);
 /***************************************************************************************/
 
 /* Array of our test objects */
+
+void addResourceBundleTest(TestNode** root);
 
 void addResourceBundleTest(TestNode** root)
 {
