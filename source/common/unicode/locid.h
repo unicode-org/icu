@@ -276,7 +276,7 @@ public:
      * Destructor
      * @stable ICU 2.0
      */
-    ~Locale() ;
+    virtual ~Locale() ;
 
     /**
      * Replaces the entire contents of *this with the specified value.

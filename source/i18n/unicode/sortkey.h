@@ -121,7 +121,7 @@ public:
     * Sort key destructor.
     * @deprecated ICU 2.8 Use Collator::getSortKey(...) instead
     */
-    ~CollationKey();
+    virtual ~CollationKey();
 
     /**
     * Assignment operator
