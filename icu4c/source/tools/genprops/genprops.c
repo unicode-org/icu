@@ -41,9 +41,6 @@ UBool beVerbose=FALSE, haveCopyright=TRUE;
 /* prototypes --------------------------------------------------------------- */
 
 static void
-init(void);
-
-static void
 parseMirror(const char *filename, UErrorCode *pErrorCode);
 
 static void
@@ -127,7 +124,6 @@ main(int argc, char* argv[]) {
     }
 
     /* initialize */
-    init();
     initStore();
 
     /* process Mirror.txt */
@@ -185,10 +181,6 @@ main(int argc, char* argv[]) {
     }
 
     return errorCode;
-}
-
-static void
-init(void) {
 }
 
 static const char *
