@@ -531,7 +531,7 @@ void CollationIteratorTest::assertEqual(CollationElementIterator &i1, CollationE
     while (c1 != CollationElementIterator::NULLORDER);
 }
 
-void CollationIteratorTest::runIndexedTest(int32_t index, bool_t exec, char* &name, char* par)
+void CollationIteratorTest::runIndexedTest(int32_t index, UBool exec, char* &name, char* par)
 {
     if (exec)
     {

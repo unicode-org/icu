@@ -87,7 +87,7 @@ getSingleRun(UBiDi *pBiDi, UBiDiLevel level);
 static void
 reorderLine(UBiDi *pBiDi, UBiDiLevel minLevel, UBiDiLevel maxLevel);
 
-static bool_t
+static UBool
 prepareReorder(const UBiDiLevel *levels, UTextOffset length,
                UTextOffset *indexMap,
                UBiDiLevel *pMinLevel, UBiDiLevel *pMaxLevel);
@@ -376,7 +376,7 @@ ubidi_getVisualRun(UBiDi *pBiDi, UTextOffset runIndex,
  * Odd-level runs have visualStart on their visual right edge and
  * they progress visually to the left.
  */
-U_CFUNC bool_t
+U_CFUNC UBool
 ubidi_getRuns(UBiDi *pBiDi) {
     if(pBiDi->direction!=UBIDI_MIXED) {
         /* simple, single-run case - this covers length==0 */
@@ -764,7 +764,7 @@ ubidi_reorderVisual(const UBiDiLevel *levels, UTextOffset length, UTextOffset *i
     } while(--maxLevel>=minLevel);
 }
 
-static bool_t
+static UBool
 prepareReorder(const UBiDiLevel *levels, UTextOffset length,
                UTextOffset *indexMap,
                UBiDiLevel *pMinLevel, UBiDiLevel *pMaxLevel) {

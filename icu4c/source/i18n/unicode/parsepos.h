@@ -76,14 +76,14 @@ public:
      * @return TRUE if the two parse positions are equal, FALSE otherwise.
      * @stable
      */
-    bool_t              operator==(const ParsePosition& that) const;
+    UBool              operator==(const ParsePosition& that) const;
 
     /** 
      * Equality operator.
      * @return TRUE if the two parse positions are not equal, FALSE otherwise.
      * @stable
      */
-    bool_t              operator!=(const ParsePosition& that) const;
+    UBool              operator!=(const ParsePosition& that) const;
 
     /**
      * Retrieve the current parse position.  On input to a parse method, this
@@ -140,7 +140,7 @@ ParsePosition::operator=(const ParsePosition& copy)
   return *this;
 }
 
-inline bool_t
+inline UBool
 ParsePosition::operator==(const ParsePosition& copy) const
 {
   if(index != copy.index || errorIndex != copy.errorIndex) 
@@ -149,7 +149,7 @@ ParsePosition::operator==(const ParsePosition& copy) const
   return TRUE;
 }
 
-inline bool_t
+inline UBool
 ParsePosition::operator!=(const ParsePosition& copy) const
 {
   return !operator==(copy);

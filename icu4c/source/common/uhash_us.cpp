@@ -25,7 +25,7 @@ uhash_deleteUnicodeString(void *obj) {
     delete (UnicodeString*) obj;
 }
 
-U_CAPI bool_t
+U_CAPI UBool
 uhash_compareUnicodeString(const void *key1, const void *key2) {
     if (key1 == key2) {
         return TRUE;

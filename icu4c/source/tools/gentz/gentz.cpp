@@ -99,7 +99,7 @@ class gentz {
     int32_t offsetIndexSize; // Total bytes in offset index table
     int32_t nameTableSize; // Total bytes in name table
 
-    bool_t useCopyright;
+    UBool useCopyright;
 
 public:
     int     main(int argc, const char *argv[]);
@@ -361,7 +361,7 @@ OffsetIndex* gentz::parseOffsetIndexTable(FileStream* in) {
         index->defaultZone = (uint16_t)parseInteger(p, SEP, 0, header.count-1);
         index->count = (uint16_t)parseInteger(p, SEP, 1, maxPerOffset);
         uint16_t* zoneNumberArray = &(index->zoneNumber);
-        bool_t sawOffset = FALSE; // Sanity check - make sure offset is in zone list
+        UBool sawOffset = FALSE; // Sanity check - make sure offset is in zone list
         for (uint16_t j=0; j<index->count; ++j) {
             zoneNumberArray[j] = (uint16_t)
                 parseInteger(p, (j==(index->count-1))?NUL:SEP,
@@ -548,7 +548,7 @@ int32_t gentz::_parseInteger(char*& p) {
     int32_t n = 0;
     int32_t digitCount = 0;
     int32_t digit;
-    bool_t negative = FALSE;
+    UBool negative = FALSE;
     if (*p == MINUS) {
         ++p;
         negative = TRUE;

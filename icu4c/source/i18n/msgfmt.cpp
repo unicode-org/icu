@@ -147,7 +147,7 @@ MessageFormat::operator=(const MessageFormat& that)
     return *this;
 }
 
-bool_t
+UBool
 MessageFormat::operator==(const Format& that) const 
 {
     if (this == &that) return TRUE;
@@ -217,7 +217,7 @@ MessageFormat::applyPattern(const UnicodeString& newPattern,
     UnicodeString segments[4];
     int32_t part = 0;
     int32_t formatNumber = 0;
-    bool_t inQuote = FALSE;
+    UBool inQuote = FALSE;
     int32_t braceStack = 0;
     fMaxOffset = -1;
     for (int i = 0; i < newPattern.length(); ++i) {
@@ -603,7 +603,7 @@ MessageFormat::format(const Formattable* arguments,
 
         Formattable obj = arguments[argumentNumber];
         UnicodeString arg;
-        bool_t tryRecursion = FALSE;
+        UBool tryRecursion = FALSE;
         // Recursively calling the format process only if the current format argument
         // refers to a ChoiceFormat object.
         if (fFormats[i] != NULL) {
@@ -1095,7 +1095,7 @@ MessageFormat::copyAndFixQuotes(const UnicodeString& source,
                                 int32_t end, 
                                 UnicodeString& target)
 {
-  bool_t gotLB = FALSE;
+  UBool gotLB = FALSE;
   
   for (UTextOffset i = start; i < end; ++i) {
     UChar ch = source[i];

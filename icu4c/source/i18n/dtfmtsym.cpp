@@ -106,7 +106,7 @@ DateFormatSymbols::assignArray(UnicodeString*& dstArray,
 {
     // duplicates or aliases the source array, depending on the status of
     // the appropriate isOwned flag
-    bool_t owned = other.isOwned(which);
+    UBool owned = other.isOwned(which);
     setIsOwned(which, owned);
     dstCount = srcCount;
     if (owned)
@@ -153,7 +153,7 @@ DateFormatSymbols& DateFormatSymbols::operator=(const DateFormatSymbols& other)
     assignArray(fShortWeekdays, fShortWeekdaysCount, other.fShortWeekdays, other.fShortWeekdaysCount, other, kShortWeekdays);
     assignArray(fAmPms, fAmPmsCount, other.fAmPms, other.fAmPmsCount, other, kAmPms);
 
-    bool_t owned = other.isOwned(kZoneStrings);
+    UBool owned = other.isOwned(kZoneStrings);
     setIsOwned(kZoneStrings, owned);
     fZoneStringsRowCount = other.fZoneStringsRowCount;
     fZoneStringsColCount = other.fZoneStringsColCount;
@@ -196,7 +196,7 @@ void DateFormatSymbols::disposeZoneStrings()
     }
 }
 
-bool_t
+UBool
 DateFormatSymbols::arrayCompare(const UnicodeString* array1,
                                 const UnicodeString* array2,
                                 int32_t count)
@@ -210,7 +210,7 @@ DateFormatSymbols::arrayCompare(const UnicodeString* array1,
     return TRUE;
 }
 
-bool_t
+UBool
 DateFormatSymbols::operator==(const DateFormatSymbols& other) const
 {
     // First do cheap comparisons
@@ -429,7 +429,7 @@ DateFormatSymbols::initField(UnicodeString **field, int32_t& length, const Resou
 }
 
 void
-DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, bool_t useLastResortData)
+DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBool useLastResortData)
 {
     if (U_FAILURE(status)) return;
 

@@ -52,7 +52,7 @@ CollationThaiTest::~CollationThaiTest() {
     delete coll;
 }
 
-void CollationThaiTest::runIndexedTest(int32_t index, bool_t exec, char* &name,
+void CollationThaiTest::runIndexedTest(int32_t index, UBool exec, char* &name,
                                        char* par) {
     switch (index) {
         CASE(0,TestDictionary)
@@ -67,7 +67,7 @@ void CollationThaiTest::runIndexedTest(int32_t index, bool_t exec, char* &name,
  * characters long or less.  This is true for th18057.txt, which
  * has 80-char or shorter lines.  DOES NOT HANDLE ^M^J sequence.
  */
-static bool_t readLine(FileStream *in, UnicodeString& line) {
+static UBool readLine(FileStream *in, UnicodeString& line) {
     if (T_FileStream_eof(in)) {
         return FALSE;
     }

@@ -337,7 +337,7 @@ void CollationEnglishTest::TestSecondary( char* par )
     }
 }
 
-void CollationEnglishTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void CollationEnglishTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     if (exec) logln("TestSuite CollationEnglishTest: ");
     switch (index) {

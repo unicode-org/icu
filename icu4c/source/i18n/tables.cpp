@@ -151,13 +151,13 @@ VectorOfInt::operator=(const VectorOfInt&   that)
     return *this;
 }
 
-bool_t
+UBool
 VectorOfInt::isBogus() const
 {
     return fBogus;
 }
 
-bool_t
+UBool
 VectorOfInt::operator==(const VectorOfInt&  that)
 {
     if (this == &that) return TRUE;
@@ -169,7 +169,7 @@ VectorOfInt::operator==(const VectorOfInt&  that)
     return TRUE;
 }
 
-bool_t
+UBool
 VectorOfInt::operator!=(const VectorOfInt& that)
 {
     return !(*this == that);
@@ -370,14 +370,14 @@ VectorOfPointer::operator=(const VectorOfPointer&   that)
     return *this;
 }
 
-bool_t
+UBool
 
 VectorOfPointer::isBogus() const
 {
     return fBogus;
 }
 
-bool_t
+UBool
 VectorOfPointer::operator==(const VectorOfPointer&  that)
 {
     if (this == &that) return TRUE;
@@ -389,7 +389,7 @@ VectorOfPointer::operator==(const VectorOfPointer&  that)
     return TRUE;
 }
 
-bool_t
+UBool
 VectorOfPointer::operator!=(const VectorOfPointer& that)
 {
     return !(*this == that);
@@ -530,7 +530,7 @@ VectorOfPToExpandTable::~VectorOfPToExpandTable()
     delete [] fElements;
 }
 
-bool_t
+UBool
 VectorOfPToExpandTable::isBogus() const
 {
     return fBogus;
@@ -754,7 +754,7 @@ VectorOfPToContractElement::~VectorOfPToContractElement()
     delete [] fElements;
 }
 
-bool_t
+UBool
 VectorOfPToContractElement::isBogus() const
 {
     return fBogus;
@@ -992,7 +992,7 @@ VectorOfPToContractTable::~VectorOfPToContractTable()
     delete [] fElements;
 }
 
-bool_t
+UBool
 VectorOfPToContractTable::isBogus() const
 {
     return fBogus;
@@ -1250,7 +1250,7 @@ VectorOfPointersToPatternEntry::~VectorOfPointersToPatternEntry()
     delete [] fElements;
 }
 
-bool_t
+UBool
 VectorOfPointersToPatternEntry::isBogus() const
 {
     return fBogus;

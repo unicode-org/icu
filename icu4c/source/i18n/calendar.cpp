@@ -245,7 +245,7 @@ Calendar::createInstance(const TimeZone& zone, const Locale& aLocale, UErrorCode
 
 // -------------------------------------
 
-bool_t
+UBool
 Calendar::operator==(const Calendar& that) const
 {
     UErrorCode status = U_ZERO_ERROR;
@@ -284,7 +284,7 @@ Calendar::operator==(const Calendar& that) const
 
 // -------------------------------------
 
-bool_t
+UBool
 Calendar::equals(const Calendar& when, UErrorCode& status) const
 {
     return (this == &when ||
@@ -293,7 +293,7 @@ Calendar::equals(const Calendar& when, UErrorCode& status) const
 
 // -------------------------------------
 
-bool_t
+UBool
 Calendar::before(const Calendar& when, UErrorCode& status) const
 {
     return (this != &when &&
@@ -302,7 +302,7 @@ Calendar::before(const Calendar& when, UErrorCode& status) const
 
 // -------------------------------------
 
-bool_t
+UBool
 Calendar::after(const Calendar& when, UErrorCode& status) const
 {
     return (this != &when &&
@@ -310,7 +310,7 @@ Calendar::after(const Calendar& when, UErrorCode& status) const
 }
 
 // {sfb} not in Java API, but looks similar to operator==
-bool_t 
+UBool 
 Calendar::equivalentTo(const Calendar& other) const
 {
     // Return true if another Calendar object is equivalent to this one.  An equivalent
@@ -469,7 +469,7 @@ Calendar::clear(EDateFields field)
 
 // -------------------------------------
 
-bool_t
+UBool
 Calendar::isSet(EDateFields field) const
 {
     return fStamp[field] != kUnset;
@@ -534,14 +534,14 @@ Calendar::orphanTimeZone()
 // -------------------------------------
 
 void
-Calendar::setLenient(bool_t lenient)
+Calendar::setLenient(UBool lenient)
 {
     fLenient = lenient;
 }
 
 // -------------------------------------
 
-bool_t
+UBool
 Calendar::isLenient() const
 {
     return fLenient;

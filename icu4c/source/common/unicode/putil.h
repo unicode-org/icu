@@ -44,10 +44,10 @@
 /* Floating point utilities 
  * @draft
  */
-U_CAPI bool_t  U_EXPORT2  uprv_isNaN(double);
-U_CAPI bool_t  U_EXPORT2 uprv_isInfinite(double);
-U_CAPI bool_t   U_EXPORT2 uprv_isPositiveInfinity(double);
-U_CAPI bool_t   U_EXPORT2 uprv_isNegativeInfinity(double);
+U_CAPI UBool  U_EXPORT2  uprv_isNaN(double);
+U_CAPI UBool  U_EXPORT2 uprv_isInfinite(double);
+U_CAPI UBool   U_EXPORT2 uprv_isPositiveInfinity(double);
+U_CAPI UBool   U_EXPORT2 uprv_isNegativeInfinity(double);
 U_CAPI double   U_EXPORT2 uprv_getNaN(void);
 U_CAPI double   U_EXPORT2 uprv_getInfinity(void);
 
@@ -173,7 +173,7 @@ U_CAPI const char*  U_EXPORT2 uprv_getDefaultLocaleID(void);
  * It is not a general purpose function and not defined for NaN or Infinity
  * @draft
  */
-U_CAPI double           U_EXPORT2 uprv_nextDouble(double d, bool_t positive);
+U_CAPI double           U_EXPORT2 uprv_nextDouble(double d, UBool positive);
 
 /**
  * Filesystem file and path separator characters.

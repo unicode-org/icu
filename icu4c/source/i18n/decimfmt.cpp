@@ -306,7 +306,7 @@ DecimalFormat::operator=(const DecimalFormat& rhs)
 
 //------------------------------------------------------------------------------
 
-bool_t
+UBool
 DecimalFormat::operator==(const Format& that) const
 {
     if (this == &that) return TRUE;
@@ -318,7 +318,7 @@ DecimalFormat::operator==(const Format& that) const
 #if 0
     // This code makes it easy to determine why two format objects that should
     // be equal aren't.
-    bool_t first = TRUE;
+    UBool first = TRUE;
     if (!NumberFormat::operator==(that)) {
         if (first) { printf("[ "); first = FALSE; } else { printf(", "); }
         debug("NumberFormat::!=");
@@ -471,7 +471,7 @@ DecimalFormat::format(int32_t number,
         return format((double) number, result, fieldPosition);
     }
 
-    bool_t isNegative = (number < 0);
+    UBool isNegative = (number < 0);
     if (isNegative) number = -number; // NOTE: number will still be negative if it is LONG_MIN
 
     // In general, long values always represent real finite numbers, so
@@ -482,7 +482,7 @@ DecimalFormat::format(int32_t number,
     // instead, trading off accuracy for range.
     if (fMultiplier != 1 && fMultiplier != 0)
     {
-        bool_t useDouble = FALSE;
+        UBool useDouble = FALSE;
 
         if (number < 0) // This can only happen if number == Long.MIN_VALUE
         {
@@ -549,7 +549,7 @@ DecimalFormat::format(  double number,
      * -Infinity.  Proper detection of -0.0 is needed to deal with the
      * issues raised by bugs 4106658, 4106667, and 4147706.  Liu 7/6/98.
      */
-    bool_t isNegative = uprv_isNegative(number);
+    UBool isNegative = uprv_isNegative(number);
     if (isNegative) number = -number;
 
     // Do this BEFORE checking to see if value is infinite! Sets the
@@ -606,7 +606,7 @@ DecimalFormat::format(  double number,
  * @param isNegative true if the number to be rounded is negative
  * @return the absolute value of the rounded result
  */
-double DecimalFormat::round(double a, ERoundingMode mode, bool_t isNegative) {
+double DecimalFormat::round(double a, ERoundingMode mode, UBool isNegative) {
     switch (mode) {
     case kRoundCeiling:
         return isNegative ? uprv_floor(a) : uprv_ceil(a);
@@ -651,8 +651,8 @@ DecimalFormat::format(  const Formattable& obj,
 UnicodeString&
 DecimalFormat::subformat(UnicodeString& result,
                          FieldPosition& fieldPosition,
-                         bool_t         isNegative,
-                         bool_t         isInteger) const
+                         UBool         isNegative,
+                         UBool         isInteger) const
 {
     // Gets the localized zero Unicode character.
     UChar zero = fSymbols->getZeroDigit();
@@ -775,7 +775,7 @@ DecimalFormat::subformat(UnicodeString& result,
         // is used to determine integer digit count above.
         if (fDigitList->isZero()) exponent = 0;
 
-        bool_t negativeExponent = exponent < 0;
+        UBool negativeExponent = exponent < 0;
         if (negativeExponent) {
             exponent = -exponent;
             result += fSymbols->getMinusSign();
@@ -851,7 +851,7 @@ DecimalFormat::subformat(UnicodeString& result,
 
         // Determine whether or not there are any printable fractional
         // digits.  If we've used up the digits we know there aren't.
-        bool_t fractionPresent = (getMinimumFractionDigits() > 0) ||
+        UBool fractionPresent = (getMinimumFractionDigits() > 0) ||
             (!isInteger && digitIndex < fDigitList->fCount);
 
         // If there is no fraction present, and we haven't printed any
@@ -921,8 +921,8 @@ DecimalFormat::subformat(UnicodeString& result,
  * @param isNegative must be true if result contains a formatted negative
  * number, and false otherwise.  Ignored if hasAffixes is false.
  */
-void DecimalFormat::addPadding(UnicodeString& result, bool_t hasAffixes,
-                               bool_t isNegative) const {
+void DecimalFormat::addPadding(UnicodeString& result, UBool hasAffixes,
+                               UBool isNegative) const {
     if (fFormatWidth > 0) {
         int32_t len = fFormatWidth - result.length();
         if (len > 0) {
@@ -1000,7 +1000,7 @@ DecimalFormat::parse(const UnicodeString& text,
 
     // status is used to record whether a number is
     // infinite or positive.
-    bool_t status[fgStatusLength];
+    UBool status[fgStatusLength];
 
     if (!subparse(text, parsePosition, *fDigitList, FALSE, status)) {
         parsePosition.setIndex(backup);
@@ -1059,18 +1059,18 @@ DecimalFormat::parse(const UnicodeString& text,
  * @param status Upon return contains boolean status flags indicating
  * whether the value was infinite and whether it was positive.
  */
-bool_t DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePosition,
-                               DigitList& digits, bool_t isExponent,
-                               bool_t* status) const
+UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePosition,
+                               DigitList& digits, UBool isExponent,
+                               UBool* status) const
 {
     int32_t position = parsePosition.getIndex();
     int32_t oldStart = parsePosition.getIndex();
     int32_t backup;
 
     // check for positivePrefix; take longest
-    bool_t gotPositive = text.compare(position,fPositivePrefix.length(),fPositivePrefix,0,
+    UBool gotPositive = text.compare(position,fPositivePrefix.length(),fPositivePrefix,0,
                                       fPositivePrefix.length()) == 0;
-    bool_t gotNegative = text.compare(position,fNegativePrefix.length(),fNegativePrefix,0,
+    UBool gotNegative = text.compare(position,fNegativePrefix.length(),fNegativePrefix,0,
                                       fNegativePrefix.length()) == 0;
     // If the number is positive and negative at the same time,
     // 1. the number is positive if the positive prefix is longer
@@ -1115,9 +1115,9 @@ bool_t DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePo
             fSymbols->getMonetaryDecimalSeparator() : fSymbols->getDecimalSeparator();
         UChar grouping = fSymbols->getGroupingSeparator();
         UChar exponentChar = fSymbols->getExponentialSymbol();
-        bool_t sawDecimal = FALSE;
-        bool_t sawExponent = FALSE;
-        bool_t sawDigit= FALSE;
+        UBool sawDecimal = FALSE;
+        UBool sawExponent = FALSE;
+        UBool sawDigit= FALSE;
         int32_t exponent = 0; // Set to the exponent value, if any
 
         // We have to track digitCount ourselves, because digits.fCount will
@@ -1195,7 +1195,7 @@ bool_t DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePo
             else if (!isExponent && ch == exponentChar && !sawExponent)
             {
                 // Parse sign, if present
-                bool_t negExp = FALSE;
+                UBool negExp = FALSE;
                 int32_t pos = position + 1; // position + exponentSep.length();
                 if (pos < text.length()) {
                     ch = text[(UTextOffset) pos];
@@ -1602,7 +1602,7 @@ void DecimalFormat::setPadPosition(EPadPosition padPos) {
  * @see #isExponentSignAlwaysShown
  * @see #setExponentSignAlwaysShown
  */
-bool_t DecimalFormat::isScientificNotation() {
+UBool DecimalFormat::isScientificNotation() {
     return fUseExponentialNotation;
 }
 
@@ -1616,7 +1616,7 @@ bool_t DecimalFormat::isScientificNotation() {
  * @see #isExponentSignAlwaysShown
  * @see #setExponentSignAlwaysShown
  */
-void DecimalFormat::setScientificNotation(bool_t useScientific) {
+void DecimalFormat::setScientificNotation(UBool useScientific) {
     fUseExponentialNotation = useScientific;
     if (fUseExponentialNotation && fMinExponentDigits < 1) {
         fMinExponentDigits = 1;
@@ -1662,7 +1662,7 @@ void DecimalFormat::setMinimumExponentDigits(int8_t minExpDig) {
  * @see #getMinimumExponentDigits
  * @see #setExponentSignAlwaysShown
  */
-bool_t DecimalFormat::isExponentSignAlwaysShown() {
+UBool DecimalFormat::isExponentSignAlwaysShown() {
     return fExponentSignAlwaysShown;
 }
 
@@ -1678,7 +1678,7 @@ bool_t DecimalFormat::isExponentSignAlwaysShown() {
  * @see #getMinimumExponentDigits
  * @see #isExponentSignAlwaysShown
  */
-void DecimalFormat::setExponentSignAlwaysShown(bool_t expSignAlways) {
+void DecimalFormat::setExponentSignAlwaysShown(UBool expSignAlways) {
     fExponentSignAlwaysShown = expSignAlways;
 }
 
@@ -1704,7 +1704,7 @@ DecimalFormat::setGroupingSize(int32_t newValue)
 //------------------------------------------------------------------------------
 // Checks if to show the decimal separator.
  
-bool_t
+UBool
 DecimalFormat::isDecimalSeparatorAlwaysShown() const
 {
     return fDecimalSeparatorAlwaysShown;
@@ -1714,7 +1714,7 @@ DecimalFormat::isDecimalSeparatorAlwaysShown() const
 // Sets to always show the decimal separator.
  
 void
-DecimalFormat::setDecimalSeparatorAlwaysShown(bool_t newValue)
+DecimalFormat::setDecimalSeparatorAlwaysShown(UBool newValue)
 {
     fDecimalSeparatorAlwaysShown = newValue;
 }
@@ -1839,7 +1839,7 @@ void DecimalFormat::expandAffix(const UnicodeString& pattern,
 void DecimalFormat::appendAffix(UnicodeString& buffer,
                                 const UnicodeString* affixPattern,
                                 const UnicodeString& expAffix,
-                                bool_t localized) const {
+                                UBool localized) const {
     if (affixPattern == 0) {
         appendAffix(buffer, expAffix, localized);
     } else {
@@ -1897,8 +1897,8 @@ void DecimalFormat::appendAffix(UnicodeString& buffer,
 void
 DecimalFormat::appendAffix(    UnicodeString& buffer,
                             const UnicodeString& affix,
-                            bool_t localized) const {
-    bool_t needQuote;
+                            UBool localized) const {
+    UBool needQuote;
     if(localized) {
         needQuote = affix.indexOf(fSymbols->getZeroDigit()) >= 0
             || affix.indexOf(fSymbols->getGroupingSeparator()) >= 0
@@ -1946,7 +1946,7 @@ DecimalFormat::appendAffix(    UnicodeString& buffer,
 #endif
 
 UnicodeString&
-DecimalFormat::toPattern(UnicodeString& result, bool_t localized) const
+DecimalFormat::toPattern(UnicodeString& result, UBool localized) const
 {
     result.remove();
     UChar zero = localized ? fSymbols->getZeroDigit() : kPatternZeroDigit;
@@ -2050,7 +2050,7 @@ DecimalFormat::toPattern(UnicodeString& result, bool_t localized) const
             if (fPadPosition == kPadAfterSuffix && ! padSpec.empty()) {
                 result.append(padSpec);
             }
-            bool_t isDefault = FALSE;
+            UBool isDefault = FALSE;
             if ((fNegSuffixPattern == fPosSuffixPattern && // both null
                  fNegativeSuffix == fPositiveSuffix)
                 || (fNegSuffixPattern != 0 && fPosSuffixPattern != 0 &&
@@ -2107,7 +2107,7 @@ DecimalFormat::applyLocalizedPattern(const UnicodeString& pattern, UErrorCode& s
 
 void
 DecimalFormat::applyPattern(const UnicodeString& pattern,
-                            bool_t localized,
+                            UBool localized,
                             UErrorCode& status)
 {
     if (U_FAILURE(status)) return;
@@ -2167,14 +2167,14 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
         int32_t roundingPos = -1;
         DigitList roundingInc;
         int8_t expDigits = -1;
-        bool_t expSignAlways = FALSE;
-        bool_t isCurrency = FALSE;
+        UBool expSignAlways = FALSE;
+        UBool isCurrency = FALSE;
         
         // The affix is either the prefix or the suffix.
         UnicodeString* affix = &prefix;
         
         int32_t start = pos;
-        bool_t isPartDone = FALSE;
+        UBool isPartDone = FALSE;
 
         for (; !isPartDone && pos < pattern.length(); ++pos) {
             UChar ch = pattern[(UTextOffset) pos];
@@ -2297,7 +2297,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                 } else if (ch == kCurrencySign) {
                     // Use lookahead to determine if the currency sign is
                     // doubled or not.
-                    bool_t doubled = (pos + 1) < pattern.length() &&
+                    UBool doubled = (pos + 1) < pattern.length() &&
                         pattern[(UTextOffset) (pos+1)] == kCurrencySign;
                     affix->append(kQuote); // Encode currency
                     if (doubled) {

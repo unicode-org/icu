@@ -37,7 +37,7 @@ U_STRING_DECL(k_start_array, "array", 5);
 U_STRING_DECL(k_start_intvector, "intvector", 9);
 U_STRING_DECL(k_start_reserved, "reserved", 8);
 
-static bool_t didInit=FALSE;
+static UBool didInit=FALSE;
 
 /* Node IDs for the state transition table. */
 enum ENode {
@@ -150,7 +150,7 @@ static struct STransition gTransitionTable [] = {
  * Hashtable glue
  ********************************************************************/
 
-static bool_t get(UHashtable *hash, const struct UString* tag) {
+static UBool get(UHashtable *hash, const struct UString* tag) {
     return uhash_get(hash, tag) != NULL;
 }
 
@@ -171,7 +171,7 @@ static int32_t hashUString(const void* ustr) {
     return uhash_hashUChars(((struct UString*)ustr)->fChars);
 }
 
-static bool_t compareUString(const void* ustr1, const void* ustr2) {
+static UBool compareUString(const void* ustr1, const void* ustr2) {
     return uhash_compareUChars(((struct UString*)ustr1)->fChars,
                                ((struct UString*)ustr2)->fChars);
 }
@@ -199,7 +199,7 @@ parse(FileStream *f, const char *cp,
     struct SResource *temp = NULL;
     struct SResource *temp1 = NULL;
     struct SResource *temp2 = NULL;
-	bool_t colEl = FALSE;
+	UBool colEl = FALSE;
 
     /* Hashtable for keeping track of seen tag names */
     struct UHashtable *data;

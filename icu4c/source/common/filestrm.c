@@ -75,7 +75,7 @@ T_FileStream_close(FileStream* fileStream)
     if (fileStream != 0) fclose((FILE*)fileStream);
 }
 
-U_CAPI bool_t
+U_CAPI UBool
 T_FileStream_file_exists(const char* filename)
 {
     FILE* temp = fopen(filename, "r");

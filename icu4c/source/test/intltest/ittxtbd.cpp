@@ -18,7 +18,7 @@
  */
 class Enumeration { // text enumeration
 public:
-  virtual bool_t hasMoreElements() = 0;
+  virtual UBool hasMoreElements() = 0;
   virtual UnicodeString nextElement() = 0;
 };
 
@@ -44,7 +44,7 @@ public:
   public:
     VectorEnumeration(Vector* vector) : fVector(vector), fPos(&vector->fBase) {}
     
-    bool_t hasMoreElements() { return fPos->fLink != &fVector->fBase; }
+    UBool hasMoreElements() { return fPos->fLink != &fVector->fBase; }
     UnicodeString nextElement() { fPos = fPos->fLink; return fPos->fText; }
 
     Vector* fVector;
@@ -715,7 +715,7 @@ void IntlTestTextBoundary::TestLineInvariants()
                     continue;
                 work[2] = c;
                 e->setText(&work);
-                bool_t saw2 = FALSE;
+                UBool saw2 = FALSE;
                 for (int l = e->first(); l != BreakIterator::DONE; l = e->next())
                     if (l == 2)
                         saw2 = TRUE;
@@ -1010,8 +1010,8 @@ void IntlTestTextBoundary::TestBug4153072() {
     UnicodeString str("...Hello, World!...");
     int32_t begin = 3;
     int32_t end = str.length() - 3;
-    bool_t gotException = FALSE;
-    bool_t dummy;
+    UBool gotException = FALSE;
+    UBool dummy;
 
     StringCharacterIterator* textIterator = new StringCharacterIterator(str, begin, end, begin);
     iter->adoptText(textIterator);
@@ -1058,7 +1058,7 @@ void IntlTestTextBoundary::TestPreceding()
 // runIndexedTest
 //---------------------------------------------
 
-void IntlTestTextBoundary::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void IntlTestTextBoundary::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     if (exec) logln("TestSuite TextBoundary: ");
     switch (index) {
@@ -1285,7 +1285,7 @@ void IntlTestTextBoundary::testPreceding(BreakIterator& bi, UnicodeString& text,
 void IntlTestTextBoundary::testIsBoundary(BreakIterator& bi, UnicodeString& text, int32_t *boundaries) {
     logln("testIsBoundary():");
     int p = 1;
-    bool_t isB;
+    UBool isB;
     for (int i = 0; i < text.length(); i++) {
         isB = bi.isBoundary(i);
         logln((UnicodeString)"bi.isBoundary(" + i + ") -> " + isB);
@@ -1374,7 +1374,7 @@ void IntlTestTextBoundary::doBreakInvariantTest(BreakIterator& tb, UnicodeString
 
                 work[2] = testChars[k];
                 tb.setText(&work);
-                bool_t seen2 = FALSE;
+                UBool seen2 = FALSE;
                 for (int l = tb.first(); l != BreakIterator::DONE; l = tb.next()) {
                     if (l == 2)
                         seen2 = TRUE;
@@ -1447,7 +1447,7 @@ void IntlTestTextBoundary::sample(BreakIterator& tb,
                                   UnicodeString& title)
 {
     UnicodeString   substring;
-    bool_t verboseWas = verbose;
+    UBool verboseWas = verbose;
     verbose = TRUE;
     logln("-------------------------"+title+" length = "+text.length());
     tb.setText(&text);

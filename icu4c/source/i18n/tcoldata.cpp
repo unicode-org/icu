@@ -52,7 +52,7 @@ TableCollationData::~TableCollationData()
     delete expandTable;
 }
 
-bool_t
+UBool
 TableCollationData::isBogus() const
 {
     return fBogus;

@@ -17,17 +17,17 @@
 // class NumberFormatRoundTripTest
 // *****************************************************************************
 
-bool_t NumberFormatRoundTripTest::verbose                    = FALSE;
-bool_t NumberFormatRoundTripTest::STRING_COMPARE            = TRUE;
-bool_t NumberFormatRoundTripTest::EXACT_NUMERIC_COMPARE        = FALSE;
-bool_t NumberFormatRoundTripTest::DEBUG                        = FALSE;
+UBool NumberFormatRoundTripTest::verbose                    = FALSE;
+UBool NumberFormatRoundTripTest::STRING_COMPARE            = TRUE;
+UBool NumberFormatRoundTripTest::EXACT_NUMERIC_COMPARE        = FALSE;
+UBool NumberFormatRoundTripTest::DEBUG                        = FALSE;
 double NumberFormatRoundTripTest::MAX_ERROR                    = 1e-14;
 double NumberFormatRoundTripTest::max_numeric_error            = 0.0;
 double NumberFormatRoundTripTest::min_numeric_error            = 1.0;
 
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
 
-void NumberFormatRoundTripTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void NumberFormatRoundTripTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     // if (exec) logln((UnicodeString)"TestSuite NumberFormatRoundTripTest");
     switch (index) {
@@ -36,7 +36,7 @@ void NumberFormatRoundTripTest::runIndexedTest( int32_t index, bool_t exec, char
     }
 }
 
-bool_t 
+UBool 
 NumberFormatRoundTripTest::failure(UErrorCode status, const char* msg)
 {
     if(U_FAILURE(status)) {
@@ -212,7 +212,7 @@ NumberFormatRoundTripTest::test(NumberFormat *fmt, const Formattable& value)
         s = fmt->format(value.getLong(), s);
 
     Formattable n;
-    bool_t show = verbose;
+    UBool show = verbose;
     if(DEBUG)
         logln(UnicodeString("  ") + /*value.getString(temp) +*/ " F> " + escape(s));
 

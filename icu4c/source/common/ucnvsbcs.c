@@ -62,7 +62,7 @@ void T_UConverter_toUnicode_SBCS (UConverter * _this,
                                   const char **source,
                                   const char *sourceLimit,
                                   int32_t *offsets,
-                                  bool_t flush,
+                                  UBool flush,
                                   UErrorCode * err)
 {
   char *mySource = (char *) *source;
@@ -143,7 +143,7 @@ void T_UConverter_fromUnicode_SBCS (UConverter * _this,
                                  const UChar ** source,
                                  const UChar * sourceLimit,
                                  int32_t *offsets,
-                                 bool_t flush,
+                                 UBool flush,
                                  UErrorCode * err)
 {
   const UChar *mySource = *source;
@@ -350,7 +350,7 @@ void   T_UConverter_toUnicode_DBCS (UConverter * _this,
                                     const char **source,
                                     const char *sourceLimit,
                                     int32_t *offsets,
-                                    bool_t flush,
+                                    UBool flush,
                                     UErrorCode * err)
 {
   const char *mySource = ( char *) *source;
@@ -461,7 +461,7 @@ void   T_UConverter_fromUnicode_DBCS (UConverter * _this,
                                       const UChar ** source,
                                       const UChar * sourceLimit,
                                       int32_t *offsets,
-                                      bool_t flush,
+                                      UBool flush,
                                       UErrorCode * err)
 {
   const UChar *mySource = *source;

@@ -175,7 +175,7 @@ SpecialMapping TextBoundaryData::kCharacterExceptionChar[] = {
 const int32_t TextBoundaryData::kCharacterExceptionChar_length = 
     sizeof(TextBoundaryData::kCharacterExceptionChar) / sizeof(TextBoundaryData::kCharacterExceptionChar[0]);
 
-const bool_t TextBoundaryData::kCharacterExceptionFlags[] = {
+const UBool TextBoundaryData::kCharacterExceptionFlags[] = {
         FALSE,          // kNonCharacter            = 0,
         FALSE,          // kUppercaseLetter         = 1,
         FALSE,          // kLowercaseLetter         = 2,

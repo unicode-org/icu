@@ -17,7 +17,7 @@
 
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
 
-void DateFormatTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void DateFormatTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     // if (exec) logln((UnicodeString)"TestSuite DateFormatTest");
     switch (index) {
@@ -112,7 +112,7 @@ void DateFormatTest::TestWallyWedel()
         /*
          * Show our result.
          */
-        bool_t ok = fmtDstOffset == 0 || *fmtDstOffset == dstOffset;
+        UBool ok = fmtDstOffset == 0 || *fmtDstOffset == dstOffset;
         if (ok)
         {
             logln(UnicodeString() + i + " " + *ids[i] + " " + dstOffset +
@@ -388,7 +388,7 @@ DateFormatTest::TestRunTogetherPattern985()
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString format("yyyyMMddHHmmssSSS");
     UnicodeString now, then;
-    //bool_t flag;
+    //UBool flag;
     SimpleDateFormat *formatter = new SimpleDateFormat(format, status);
     UDate date1 = Calendar::getNow();
     ((DateFormat*)formatter)->format(date1, now);

@@ -80,7 +80,7 @@ char convertersToCheck[][15] = {
   "cp28709",
   ""};
 
-bool_t isEuroAware(const UConverter*);
+UBool isEuroAware(const UConverter*);
 
 void TestEuroRegression()
 {
@@ -100,7 +100,7 @@ void TestEuroRegression()
     } while (convertersToCheck[++i][0]);
 }
 
-bool_t isEuroAware(const UConverter* myConv)
+UBool isEuroAware(const UConverter* myConv)
 {
   static const UChar euroString[2] = { 0x20AC, 0x0000 };
   char target[2];

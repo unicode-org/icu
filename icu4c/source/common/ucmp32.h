@@ -75,7 +75,7 @@
  * @see                CompactIntArray
  * @see                CompactCharArray
  * @see                CompactStringArray
- * @version            $Revision: 1.8 $ 8/25/98
+ * @version            $Revision: 1.9 $ 8/25/98
  * @author             Helena Shih
  */
 /*====================================*/
@@ -89,8 +89,8 @@ typedef struct{
     int32_t* fArray;
     uint16_t* fIndex;
     int32_t fCount;
-    bool_t fCompact;    
-    bool_t fBogus;
+    UBool fCompact;    
+    UBool fBogus;
 } CompactIntArray;
 
     U_CAPI int32_t U_EXPORT2 ucmp32_getkUnicodeCount(void);
@@ -125,7 +125,7 @@ U_CAPI void U_EXPORT2 ucmp32_close(CompactIntArray* array);
   * Returns TRUE if the creation of the compact array fails.
   */
 
-U_CAPI  bool_t U_EXPORT2 ucmp32_isBogus(const CompactIntArray* array);
+U_CAPI  UBool U_EXPORT2 ucmp32_isBogus(const CompactIntArray* array);
 /**
   *
   * Get the mapped value of a Unicode character.

@@ -127,7 +127,7 @@ public:
    * FALSE otherwise.
    * @stable
    */
-  inline bool_t operator== (const UnicodeString& text) const;
+  inline UBool operator== (const UnicodeString& text) const;
   
   /**
    * Inequality operator. Performs only bitwise comparison.
@@ -136,7 +136,7 @@ public:
    * TRUE otherwise.
    * @stable
    */
-  inline bool_t operator!= (const UnicodeString& text) const;
+  inline UBool operator!= (const UnicodeString& text) const;
 
   /**
    * Greater than operator. Performs only bitwise comparison.
@@ -145,7 +145,7 @@ public:
    * greater than the characters in this, FALSE otherwise
    * @stable
    */
-  inline bool_t operator> (const UnicodeString& text) const;
+  inline UBool operator> (const UnicodeString& text) const;
 
   /**
    * Less than operator. Performs only bitwise comparison.
@@ -154,7 +154,7 @@ public:
    * less than the characters in this, FALSE otherwise
    * @stable
    */
-  inline bool_t operator< (const UnicodeString& text) const;
+  inline UBool operator< (const UnicodeString& text) const;
 
   /**
    * Greater than or equal operator. Performs only bitwise comparison.
@@ -163,7 +163,7 @@ public:
    * greater than or equal to the characters in this, FALSE otherwise
    * @stable
    */
-  inline bool_t operator>= (const UnicodeString& text) const;
+  inline UBool operator>= (const UnicodeString& text) const;
 
   /**
    * Less than or equal operator. Performs only bitwise comparison.
@@ -172,7 +172,7 @@ public:
    * less than or equal to the characters in this, FALSE otherwise
    * @stable
    */
-  inline bool_t operator<= (const UnicodeString& text) const;
+  inline UBool operator<= (const UnicodeString& text) const;
 
   /**
    * Compare the characters bitwise in this UnicodeString to
@@ -314,7 +314,7 @@ public:
    * FALSE otherwise
    * @stable
    */
-  inline bool_t startsWith(const UnicodeString& text) const;
+  inline UBool startsWith(const UnicodeString& text) const;
 
   /**
    * Determine if this starts with the characters in <TT>srcText</TT> 
@@ -326,7 +326,7 @@ public:
    * FALSE otherwise
    * @stable
    */
-  inline bool_t startsWith(const UnicodeString& srcText,
+  inline UBool startsWith(const UnicodeString& srcText,
             UTextOffset srcStart,
             int32_t srcLength) const;
   
@@ -338,7 +338,7 @@ public:
    * FALSE otherwise
    * @stable
    */
-  inline bool_t startsWith(const UChar *srcChars,
+  inline UBool startsWith(const UChar *srcChars,
             int32_t srcLength) const;
  
   /**
@@ -351,7 +351,7 @@ public:
    FALSE otherwise
    * @stable
   */
-  inline bool_t startsWith(const UChar *srcChars,
+  inline UBool startsWith(const UChar *srcChars,
             UTextOffset srcStart,
             int32_t srcLength) const;
 
@@ -362,7 +362,7 @@ public:
    * FALSE otherwise
    * @stable
    */
-  inline bool_t endsWith(const UnicodeString& text) const;
+  inline UBool endsWith(const UnicodeString& text) const;
 
   /**
    * Determine if this ends with the characters in <TT>srcText</TT> 
@@ -374,7 +374,7 @@ public:
    * FALSE otherwise
    * @stable
    */
-  inline bool_t endsWith(const UnicodeString& srcText,
+  inline UBool endsWith(const UnicodeString& srcText,
           UTextOffset srcStart,
           int32_t srcLength) const;
 
@@ -386,7 +386,7 @@ public:
    * FALSE otherwise
    * @stable
    */
-  inline bool_t endsWith(const UChar *srcChars,
+  inline UBool endsWith(const UChar *srcChars,
           int32_t srcLength) const;
  
   /**
@@ -399,7 +399,7 @@ public:
    * FALSE otherwise
    * @stable
    */
-  inline bool_t endsWith(const UChar *srcChars,
+  inline UBool endsWith(const UChar *srcChars,
           UTextOffset srcStart,
           int32_t srcLength) const;
 
@@ -929,7 +929,7 @@ public:
    * @return TRUE if this string contains 0 characters, FALSE otherwise.
    * @stable
    */
-  inline bool_t empty(void) const;
+  inline UBool empty(void) const;
 
  
   /* Other operations */
@@ -946,7 +946,7 @@ public:
    * @return TRUE if the string is valid, FALSE otherwise
    * @draft
    */
-  inline bool_t isBogus(void) const;
+  inline UBool isBogus(void) const;
 
   
   //========================================
@@ -1040,7 +1040,7 @@ public:
    *                   by calling <code>u_strlen()</code>.
    * @draft
    */
-  UnicodeString &setTo(bool_t isTerminated,
+  UnicodeString &setTo(UBool isTerminated,
                        const UChar *text,
                        int32_t textLength);
 
@@ -1498,7 +1498,7 @@ public:
    * @return TRUE if the text was padded, FALSE otherwise.
    * @draft
    */
-  bool_t padLeading(int32_t targetLength,
+  UBool padLeading(int32_t targetLength,
                     UChar padChar = 0x0020);
 
   /**
@@ -1512,7 +1512,7 @@ public:
    * @return TRUE if the text was padded, FALSE otherwise.
    * @draft
    */
-  bool_t padTrailing(int32_t targetLength,
+  UBool padTrailing(int32_t targetLength,
                      UChar padChar = 0x0020);
 
   /**
@@ -1521,7 +1521,7 @@ public:
    * @return TRUE if the text was truncated, FALSE otherwise
    * @stable
    */
-  inline bool_t truncate(int32_t targetLength);
+  inline UBool truncate(int32_t targetLength);
 
   /**
    * Trims leading and trailing whitespace from this UnicodeString.
@@ -1659,7 +1659,7 @@ public:
    *                   by calling <code>u_strlen()</code>.
    * @stable
    */
-  UnicodeString(bool_t isTerminated,
+  UnicodeString(UBool isTerminated,
                 const UChar *text,
                 int32_t textLength);
 
@@ -1752,7 +1752,7 @@ public:
    */
   int32_t numDisplayCells(UTextOffset start = 0,
               int32_t length = INT32_MAX,
-              bool_t asian = TRUE) const;
+              UBool asian = TRUE) const;
 
 
   UCharReference operator[] (UTextOffset pos);
@@ -1824,7 +1824,7 @@ private:
   // sets refCount to 1 if appropriate
   // sets fArray, fCapacity, and fFlags
   // returns boolean for success or failure
-  bool_t allocate(int32_t capacity);
+  UBool allocate(int32_t capacity);
 
   // release the array if owned
   inline void releaseArray();
@@ -1861,9 +1861,9 @@ private:
    *
    * Return FALSE if memory could not be allocated.
    */
-  bool_t cloneArrayIfNeeded(int32_t newCapacity = -1,
+  UBool cloneArrayIfNeeded(int32_t newCapacity = -1,
                             int32_t growCapacity = -1,
-                            bool_t doCopyArray = TRUE,
+                            UBool doCopyArray = TRUE,
                             int32_t **pBufferToDelete = 0);
 
   // ref counting
@@ -1990,7 +1990,7 @@ uprv_arrayCopy(const UnicodeString *src, int32_t srcStart,
 //========================================
 // Read-only alias methods
 //========================================
-inline bool_t
+inline UBool
 UnicodeString::operator== (const UnicodeString& text) const
 {
   if(isBogus()) {
@@ -2003,23 +2003,23 @@ UnicodeString::operator== (const UnicodeString& text) const
   }
 }
 
-inline bool_t
+inline UBool
 UnicodeString::operator!= (const UnicodeString& text) const
 { return (! operator==(text)); }
 
-inline bool_t
+inline UBool
 UnicodeString::operator> (const UnicodeString& text) const
 { return doCompare(0, fLength, text, 0, text.fLength) == 1; }
 
-inline bool_t
+inline UBool
 UnicodeString::operator< (const UnicodeString& text) const
 { return doCompare(0, fLength, text, 0, text.fLength) == -1; }
 
-inline bool_t
+inline UBool
 UnicodeString::operator>= (const UnicodeString& text) const
 { return doCompare(0, fLength, text, 0, text.fLength) != -1; }
 
-inline bool_t
+inline UBool
 UnicodeString::operator<= (const UnicodeString& text) const
 { return doCompare(0, fLength, text, 0, text.fLength) != 1; }
 
@@ -2282,46 +2282,46 @@ UnicodeString::lastIndexOf(UChar32 c,
   }
 }
 
-inline bool_t 
+inline UBool 
 UnicodeString::startsWith(const UnicodeString& text) const
 { return compare(0, text.fLength, text, 0, text.fLength) == 0; }
 
-inline bool_t 
+inline UBool 
 UnicodeString::startsWith(const UnicodeString& srcText,
               UTextOffset srcStart,
               int32_t srcLength) const
 { return doCompare(0, srcLength, srcText, srcStart, srcLength) == 0; }
 
-inline bool_t 
+inline UBool 
 UnicodeString::startsWith(const UChar *srcChars,
               int32_t srcLength) const
 { return doCompare(0, srcLength, srcChars, 0, srcLength) == 0; }
 
-inline bool_t 
+inline UBool 
 UnicodeString::startsWith(const UChar *srcChars,
               UTextOffset srcStart,
               int32_t srcLength) const
 { return doCompare(0, srcLength, srcChars, srcStart, srcLength) == 0;}
 
-inline bool_t 
+inline UBool 
 UnicodeString::endsWith(const UnicodeString& text) const
 { return doCompare(fLength - text.fLength, text.fLength, 
            text, 0, text.fLength) == 0; }
 
-inline bool_t 
+inline UBool 
 UnicodeString::endsWith(const UnicodeString& srcText,
             UTextOffset srcStart,
             int32_t srcLength) const
 { return doCompare(fLength - srcLength, srcLength, 
            srcText, srcStart, srcLength) == 0; }
 
-inline bool_t 
+inline UBool 
 UnicodeString::endsWith(const UChar *srcChars,
             int32_t srcLength) const
 { return doCompare(fLength - srcLength, srcLength, 
            srcChars, 0, srcLength) == 0; }
 
-inline bool_t 
+inline UBool 
 UnicodeString::endsWith(const UChar *srcChars,
             UTextOffset srcStart,
             int32_t srcLength) const
@@ -2478,7 +2478,7 @@ UnicodeString::getCharLimit(UTextOffset offset) {
   }
 }
 
-inline bool_t
+inline UBool
 UnicodeString::empty() const
 { return fLength == 0; }
 
@@ -2613,7 +2613,7 @@ UnicodeString::removeBetween(UTextOffset start,
                 UTextOffset limit)
 { return doReplace(start, limit - start, 0, 0, 0); }
 
-inline bool_t 
+inline UBool 
 UnicodeString::truncate(int32_t targetLength)
 {
   if((uint32_t)targetLength < (uint32_t)fLength) {
@@ -2637,7 +2637,7 @@ UnicodeString::reverse(UTextOffset start,
 //========================================
 // Write implementation methods
 //========================================
-inline bool_t 
+inline UBool 
 UnicodeString::isBogus() const
 { return fFlags & kIsBogus; }
 

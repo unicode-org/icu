@@ -48,7 +48,7 @@
 #endif
 
 void
-CollationAPITest::doAssert(bool_t condition, const char *message)
+CollationAPITest::doAssert(UBool condition, const char *message)
 {
     if (!condition) {
         errln(UnicodeString("ERROR : ") + message);
@@ -587,7 +587,7 @@ CollationAPITest::TestGetAll( char* par )
 }
 
 
-void CollationAPITest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void CollationAPITest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     if (exec) logln("TestSuite CollationAPITest: ");
     switch (index) {

@@ -140,7 +140,7 @@ void fromUnicode(char*&         target,
                  const UChar*&      source,
                  const UChar* sourceLimit,
 		 int32_t * offsets,
-                 bool_t         flush,
+                 UBool         flush,
                  UErrorCode&     err);
 
 
@@ -168,7 +168,7 @@ void fromUnicode(char*&         target,
         const char*&     source,
         const char*      sourceLimit,
 		int32_t * offsets,
-        bool_t           flush,
+        UBool           flush,
         UErrorCode&       err);
 
 
@@ -207,7 +207,7 @@ UConverterType getType(void) const;
  * @see ucnv_getType
  * @stable
  */
- void getStarters(bool_t starters[256],
+ void getStarters(UBool starters[256],
 		  UErrorCode& err) const;
  /**
  * Fills in the output parameter, subChars, with the substitution characters
@@ -325,8 +325,8 @@ UConverterPlatform  getCodepagePlatform(UErrorCode& err) const;
 
 
  UnicodeConverterCPP&   operator=(const UnicodeConverterCPP& that);
- bool_t              operator==(const UnicodeConverterCPP& that) const;
- bool_t              operator!=(const UnicodeConverterCPP& that) const;
+ UBool              operator==(const UnicodeConverterCPP& that) const;
+ UBool              operator!=(const UnicodeConverterCPP& that) const;
  UnicodeConverterCPP(const UnicodeConverterCPP&  that);
 
 /**
@@ -364,7 +364,7 @@ void fixFileSeparator(UnicodeString& source) const;
  * character, FALSE otherwise.
  * @draft
  */
-bool_t isAmbiguous(void) const;
+UBool isAmbiguous(void) const;
 
 };
 #endif

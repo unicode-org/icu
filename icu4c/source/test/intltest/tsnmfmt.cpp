@@ -17,7 +17,7 @@
  * This test does round-trip testing (format -> parse -> format -> parse -> etc.) of
  * NumberFormat.
  */
-void IntlTestNumberFormat::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void IntlTestNumberFormat::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
 
     if (exec) logln((UnicodeString)"TestSuite NumberFormat");
@@ -215,7 +215,7 @@ IntlTestNumberFormat::tryIt(double aNumber)
 
     int32_t numberMatch = 0;
     int32_t stringMatch = 0;
-    bool_t dump = FALSE;
+    UBool dump = FALSE;
     int32_t i;
     for (i=0; i<DEPTH; ++i)
     {
@@ -283,7 +283,7 @@ IntlTestNumberFormat::tryIt(int32_t aNumber)
 
     int32_t numberMatch = 0;
     int32_t stringMatch = 0;
-    bool_t dump = FALSE;
+    UBool dump = FALSE;
     int32_t i;
     for (i=0; i<DEPTH; ++i)
     {

@@ -216,7 +216,7 @@ SimpleTimeZone::operator=(const SimpleTimeZone &right)
 
 // -------------------------------------
 
-bool_t
+UBool
 SimpleTimeZone::operator==(const TimeZone& that) const
 {
     SimpleTimeZone* other = (SimpleTimeZone*)&that;
@@ -317,7 +317,7 @@ SimpleTimeZone::setStartRule(int32_t month, int32_t dayOfMonth,
 
 void 
 SimpleTimeZone::setStartRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek, 
-                             int32_t time, TimeMode mode, bool_t after, UErrorCode& status)
+                             int32_t time, TimeMode mode, UBool after, UErrorCode& status)
 {
     setStartRule(month, after ? dayOfMonth : -dayOfMonth,
                  -dayOfWeek, time, mode, status);
@@ -368,7 +368,7 @@ SimpleTimeZone::setEndRule(int32_t month, int32_t dayOfMonth,
 
 void 
 SimpleTimeZone::setEndRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek, 
-                           int32_t time, TimeMode mode, bool_t after, UErrorCode& status)
+                           int32_t time, TimeMode mode, UBool after, UErrorCode& status)
 {
     setEndRule(month, after ? dayOfMonth : -dayOfMonth,
                -dayOfWeek, time, mode, status);
@@ -460,7 +460,7 @@ SimpleTimeZone::getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
 
     // Check for southern hemisphere.  We assume that the start and end
     // month are different.
-    bool_t southern = (startMonth > endMonth);
+    UBool southern = (startMonth > endMonth);
 
     // Compare the date to the starting and ending rules.+1 = date>rule, -1
     // = date<rule, 0 = date==rule.
@@ -647,7 +647,7 @@ SimpleTimeZone::getDSTSavings() const
 
 // -------------------------------------
 
-bool_t
+UBool
 SimpleTimeZone::useDaylightTime() const
 {
     return useDaylight;
@@ -659,7 +659,7 @@ SimpleTimeZone::useDaylightTime() const
  * Overrides TimeZone
  * Queries if the given date is in Daylight Savings Time.
  */
-bool_t SimpleTimeZone::inDaylightTime(UDate date, UErrorCode& status) const
+UBool SimpleTimeZone::inDaylightTime(UDate date, UErrorCode& status) const
 {
     // This method is wasteful since it creates a new GregorianCalendar and
     // deletes it each time it is called.  However, this is a deprecated method
@@ -667,7 +667,7 @@ bool_t SimpleTimeZone::inDaylightTime(UDate date, UErrorCode& status) const
     if (U_FAILURE(status)) return FALSE;
     GregorianCalendar *gc = new GregorianCalendar(*this, status);
     gc->setTime(date, status);
-    bool_t result = gc->inDaylightTime(status);
+    UBool result = gc->inDaylightTime(status);
     delete gc;
     return result;
 }
@@ -679,7 +679,7 @@ bool_t SimpleTimeZone::inDaylightTime(UDate date, UErrorCode& status) const
  * @param other the TimeZone object to be compared with
  * @return true if the given zone has the same rules and offset as this one
  */
-bool_t 
+UBool 
 SimpleTimeZone::hasSameRules(const TimeZone& other) const
 {
     if (this == &other) return TRUE;

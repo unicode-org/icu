@@ -16,7 +16,7 @@
  **/
 class PUtilTest : public IntlTest {
     // IntlTest override
-    void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par );
+    void runIndexedTest( int32_t index, UBool exec, char* &name, char* par );
 public:
 
     void testIEEEremainder(void);
@@ -24,7 +24,7 @@ public:
 
 private:
     void remainderTest(double x, double y, double exp);
-    void maxMinTest(double a, double b, double exp, bool_t max);
+    void maxMinTest(double a, double b, double exp, UBool max);
 
 };
  

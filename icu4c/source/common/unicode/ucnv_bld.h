@@ -153,7 +153,7 @@ typedef struct {
     int8_t subCharLen;
   
     uint8_t subChar[UCNV_MAX_SUBCHAR_LEN]; 
-    uint8_t hasToUnicodeFallback;              /* bool_t needs to be changed to UBool to be consistent across platform */
+    uint8_t hasToUnicodeFallback;              /* UBool needs to be changed to UBool to be consistent across platform */
     uint8_t hasFromUnicodeFallback;
     uint8_t reserved[19];  /* to round out the structure */
 
@@ -171,7 +171,7 @@ typedef struct {
     UConverterTable *table;         /* Pointer to conversion data */
 
     const UConverterStaticData *staticData; /* pointer to the static (non changing) data. */
-    bool_t                staticDataOwned; /* T if we own the staticData */
+    UBool                staticDataOwned; /* T if we own the staticData */
     const UConverterImpl *impl;     /* vtable-style struct of mostly function pointers */
 
     /*initial values of some members of the mutable part of object */
@@ -185,7 +185,7 @@ struct UConverter {
     uint32_t toUnicodeStatus;           /* Used to internalize stream status information */
     uint32_t fromUnicodeStatus;
     int32_t mode;
-    bool_t  useFallback;
+    UBool  useFallback;
 
     int8_t subCharLen;                  /* length of the codepage specific character sequence */
     int8_t invalidCharLength;
@@ -210,7 +210,7 @@ struct UConverter {
                                      const UChar **,
                                      const UChar *,
                                      int32_t* offsets,
-                                     bool_t,
+                                     UBool,
                                      UErrorCode *);
     /*
      * Error function pointer called when conversion issues
@@ -222,7 +222,7 @@ struct UConverter {
                                     const char **,
                                     const char *,
                                     int32_t* offsets,
-                                    bool_t,
+                                    UBool,
                                     UErrorCode *);
 
     UConverterSharedData *sharedData;   /* Pointer to the shared immutable part of the converter object */

@@ -28,7 +28,7 @@ void T_UConverter_fromUnicode_UTF8 (UConverter * converter,
 				    const UChar ** source,
 				    const UChar * sourceLimit,
 				    int32_t* offsets,
-				    bool_t flush,
+				    UBool flush,
 				    UErrorCode * err);
 
 void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverter * converter,
@@ -37,7 +37,7 @@ void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverter * converter,
 				    const UChar ** source,
 				    const UChar * sourceLimit,
 				    int32_t* offsets,
-				    bool_t flush,
+				    UBool flush,
 				    UErrorCode * err);
 
 #define ESC_2022 0x1B /*ESC*/
@@ -107,13 +107,13 @@ UCNV_TableStates_2022 escSeqStateTable_Value_2022[MAX_STATES_2022] = {
  *data stream*/
 static const char* getEndOfBuffer_2022(const char* source,
                                        const char* sourceLimit,
-                                       bool_t flush); 
+                                       UBool flush); 
 /*runs through a state machine to determine the escape sequence - codepage correspondance
  *changes the pointer pointed to be _this->extraInfo*/
 static  void changeState_2022(UConverter* _this,
                              const char** source, 
                              const char* sourceLimit,
-                             bool_t flush,
+                             UBool flush,
                              UErrorCode* err); 
 
 UCNV_TableStates_2022 getKey_2022(char source,
@@ -165,7 +165,7 @@ static void T_UConverter_fromUnicode_ISO_2022(UConverter* _this,
                                        const UChar** source,
                                        const UChar* sourceLimit,
                                        int32_t *offsets,
-                                       bool_t flush,
+                                       UBool flush,
                                        UErrorCode* err)
 {
   char const* targetStart = *target;
@@ -186,7 +186,7 @@ static void T_UConverter_fromUnicode_ISO_2022_OFFSETS_LOGIC(UConverter* _this,
                                                      const UChar** source,
                                                      const UChar* sourceLimit,
                                                      int32_t *offsets,
-                                                     bool_t flush,
+                                                     UBool flush,
                                                      UErrorCode* err)
 {
 
@@ -258,7 +258,7 @@ UCNV_TableStates_2022 getKey_2022(char c,
 void changeState_2022(UConverter* _this,
                       const char** source, 
                       const char* sourceLimit,
-                      bool_t flush,
+                      UBool flush,
                       UErrorCode* err)
 {
   UConverter* myUConverter;
@@ -436,7 +436,7 @@ void changeState_2022(UConverter* _this,
  */
 const char* getEndOfBuffer_2022(const char* source,
                                 const char* sourceLimit,
-                                bool_t flush)
+                                UBool flush)
 {
   const char* mySource = source;
   
@@ -477,7 +477,7 @@ static void T_UConverter_toUnicode_ISO_2022(UConverter* _this,
                                      const char** source,
                                      const char* sourceLimit,
                                      int32_t *offsets,
-                                     bool_t flush,
+                                     UBool flush,
                                      UErrorCode* err)
 {
   int32_t base = 0;
@@ -550,7 +550,7 @@ static void T_UConverter_toUnicode_ISO_2022_OFFSETS_LOGIC(UConverter* _this,
                                                    const char** source,
                                                    const char* sourceLimit,
                                                    int32_t *offsets,
-                                                   bool_t flush,
+                                                   UBool flush,
                                                    UErrorCode* err)
 {
   int32_t myOffset=0;
@@ -716,7 +716,7 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL (UConverter * _this,
                                              const char **source,
                                              const char *sourceLimit,
                                              int32_t *offsets,
-                                             bool_t flush,
+                                             UBool flush,
                                              UErrorCode * err)
 {
   const char *mySource = *source;
@@ -833,7 +833,7 @@ void T_UConverter_toUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
                                                            const char **source,
                                                            const char *sourceLimit,
                                                            int32_t *offsets,
-                                                           bool_t flush,
+                                                           UBool flush,
                                                            UErrorCode * err)
 {
   const char *mySource = *source;
@@ -960,7 +960,7 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL (UConverter * _this,
                                                const UChar ** source,
                                                const UChar * sourceLimit,
                                                int32_t *offsets,
-                                               bool_t flush,
+                                               UBool flush,
                                                UErrorCode * err)
 
 {
@@ -974,8 +974,8 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL (UConverter * _this,
   UChar targetUniChar = 0x0000;
   int8_t targetUniCharByteNum = 0;
   UChar mySourceChar = 0x0000;
-  bool_t isTargetUCharDBCS = (bool_t)_this->fromUnicodeStatus;
-  bool_t oldIsTargetUCharDBCS = isTargetUCharDBCS;
+  UBool isTargetUCharDBCS = (UBool)_this->fromUnicodeStatus;
+  UBool oldIsTargetUCharDBCS = isTargetUCharDBCS;
   myFromUnicode = &_this->sharedData->table->dbcs.fromUnicode;
   
   /*writing the char to the output stream */
@@ -1080,7 +1080,7 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
                                                              const UChar ** source,
                                                              const UChar * sourceLimit,
                                                              int32_t *offsets,
-                                                             bool_t flush,
+                                                             UBool flush,
                                                              UErrorCode * err)
 
 {
@@ -1094,8 +1094,8 @@ void T_UConverter_fromUnicode_EBCDIC_STATEFUL_OFFSETS_LOGIC (UConverter * _this,
   UChar targetUniChar = 0x0000;
   int8_t targetUniCharByteNum = 0;
   UChar mySourceChar = 0x0000;
-  bool_t isTargetUCharDBCS = (bool_t)_this->fromUnicodeStatus;
-  bool_t oldIsTargetUCharDBCS = isTargetUCharDBCS;
+  UBool isTargetUCharDBCS = (UBool)_this->fromUnicodeStatus;
+  UBool oldIsTargetUCharDBCS = isTargetUCharDBCS;
   int32_t* originalOffsets = offsets;
   
   myFromUnicode = &_this->sharedData->table->dbcs.fromUnicode;

@@ -183,7 +183,7 @@ CollationElementIterator::~CollationElementIterator()
     delete reorderBuffer;
 }
 
-bool_t
+UBool
 CollationElementIterator::operator==(const CollationElementIterator& that) const
 {
     if (this == &that)
@@ -215,7 +215,7 @@ CollationElementIterator::operator==(const CollationElementIterator& that) const
     return TRUE;
 }
 
-bool_t
+UBool
 CollationElementIterator::operator!=(const CollationElementIterator& other) const
 {
     return !(*this == other);
@@ -598,7 +598,7 @@ int32_t CollationElementIterator::prevContractChar(UChar ch,
 VectorOfInt* CollationElementIterator::makeReorderedBuffer(UChar colFirst,
                                                            int32_t lastValue,
                                                            VectorOfInt* lastExpansion,
-                                                           bool_t forward,
+                                                           UBool forward,
                                                            UErrorCode& status) {
 
     VectorOfInt* result;

@@ -89,7 +89,7 @@ main(int argc,
   const char *outputDir = NULL; /* NULL = no output directory, use current */
   const char *inputDir = NULL;
   const char *encoding = ""; 
-  bool_t verbose;
+  UBool verbose;
 
   argc = u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
 

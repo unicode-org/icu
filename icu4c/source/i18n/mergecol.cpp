@@ -143,7 +143,7 @@ MergeCollation::~MergeCollation()
  * before & and <
  */
 UnicodeString&
-MergeCollation::getPattern(UnicodeString& result, bool_t withWhiteSpace) const
+MergeCollation::getPattern(UnicodeString& result, UBool withWhiteSpace) const
 {
 
   int32_t i;
@@ -219,7 +219,7 @@ MergeCollation::getPattern(UnicodeString& result, bool_t withWhiteSpace) const
  * builder.
  */
 UnicodeString&
-MergeCollation::emitPattern(UnicodeString& result, bool_t withWhiteSpace) const 
+MergeCollation::emitPattern(UnicodeString& result, UBool withWhiteSpace) const 
 {
   int32_t i;
 
@@ -339,7 +339,7 @@ void MergeCollation::fixEntry(PatternEntry* newEntry,
                               UErrorCode&    success)
 {
   UnicodeString excess;
-  bool_t changeLastEntry = TRUE;
+  UBool changeLastEntry = TRUE;
 
   if (newEntry->strength != PatternEntry::RESET)
     {

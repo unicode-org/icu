@@ -22,7 +22,7 @@ class UnicodeString;
  */
 class UnicodeSetTest: public IntlTest {
 
-    void runIndexedTest(int32_t index, bool_t exec, char* &name, char* par=NULL);
+    void runIndexedTest(int32_t index, UBool exec, char* &name, char* par=NULL);
     
 private:
 
@@ -31,7 +31,7 @@ private:
     void TestAddRemove(void);
 	void TestCloneEqualHash(void);
 
-	void doAssert(bool_t, const char*);
+	void doAssert(UBool, const char*);
 
     void expectContainment(const UnicodeSet& set,
                            const UnicodeString& setName,

@@ -135,7 +135,7 @@ int16_t TransliterationRule::getIndexValue(const TransliterationRuleData& data) 
  * value.  If the rule contains only ante context, as in foo)>bar,
  * then it will match any key.
  */
-bool_t TransliterationRule::matchesIndexValue(uint8_t v,
+UBool TransliterationRule::matchesIndexValue(uint8_t v,
                                    const TransliterationRuleData& data) {
     if (anteContextLength == pattern.length()) {
         // A pattern with just ante context {such as foo)>bar} can
@@ -153,7 +153,7 @@ bool_t TransliterationRule::matchesIndexValue(uint8_t v,
  * r1 then r1 == r2.  Examples: "a>x" masks "ab>y".  "a>x" masks "a[b]>y".
  * "[c]a>x" masks "[dc]a>y".
  */
-bool_t TransliterationRule::masks(const TransliterationRule& r2) const {
+UBool TransliterationRule::masks(const TransliterationRule& r2) const {
     /* Rule r1 masks rule r2 if the string formed of the
      * antecontext, key, and postcontext overlaps in the following
      * way:
@@ -200,7 +200,7 @@ bool_t TransliterationRule::masks(const TransliterationRule& r2) const {
  * altered by this transliterator.  If <tt>filter</tt> is
  * <tt>null</tt> then no filtering is applied.
  */
-bool_t TransliterationRule::matches(const Replaceable& text,
+UBool TransliterationRule::matches(const Replaceable& text,
                                     int32_t start, int32_t limit,
                                     int32_t cursor,
                                     const TransliterationRuleData& data,
@@ -311,7 +311,7 @@ int32_t TransliterationRule::getRegionMatchLength(const Replaceable& text,
  * altered by this transliterator.  If <tt>filter</tt> is
  * <tt>null</tt> then no filtering is applied.
  */
-bool_t TransliterationRule::charMatches(UChar keyChar, UChar textChar,
+UBool TransliterationRule::charMatches(UChar keyChar, UChar textChar,
                                         const TransliterationRuleData& data,
                                         const UnicodeFilter* filter) const {
     const UnicodeSet* set = 0;

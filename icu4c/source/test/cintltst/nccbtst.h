@@ -34,11 +34,11 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize);
 static void TestLegalAndOthers(int32_t inputsize, int32_t outputsize);
 static void TestSingleByte(int32_t inputsize, int32_t outputsize);
 
-bool_t testConvertFromUnicode(const UChar *source, int sourceLen,  const char *expect, int expectLen, 
+UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const char *expect, int expectLen, 
 			    const char *codepage, UConverterFromUCallback callback, int32_t *expectOffsets);
 
 
-bool_t testConvertToUnicode( const char *source, int sourcelen, const UChar *expect, int expectlen, 
+UBool testConvertToUnicode( const char *source, int sourcelen, const UChar *expect, int expectlen, 
 		       const char *codepage, UConverterToUCallback callback, int32_t *expectOffsets);
 
 

@@ -87,7 +87,7 @@ U_CAPI  UConverterSharedData* U_EXPORT2 ucnv_data_unFlattenClone(UDataMemory *pD
 /*initializes some global variables */
 UHashtable *SHARED_DATA_HASHTABLE = NULL;
 
-static bool_t
+static UBool
 isCnvAcceptable(void *context,
              const char *type, const char *name,
              const UDataInfo *pInfo) {
@@ -207,7 +207,7 @@ UConverterSharedData *getSharedConverterData (const char *name)
 /*frees the string of memory blocks associates with a sharedConverter
  *if and only if the referenceCounter == 0
  */
-bool_t   deleteSharedConverterData (UConverterSharedData * deadSharedData)
+UBool   deleteSharedConverterData (UConverterSharedData * deadSharedData)
 {
     if (deadSharedData->referenceCounter > 0)
         return FALSE;

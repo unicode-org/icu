@@ -556,7 +556,7 @@ void TestISOFunctions()
 
     int32_t count  = 0;
     
-    bool_t done = FALSE;
+    UBool done = FALSE;
     
     const char* const* str=uloc_getISOLanguages();
     const char* const* str1=uloc_getISOCountries();

@@ -307,7 +307,7 @@ SpecialMapping TextBoundaryData::kWordExceptionChar[] = {
     SpecialMapping(TextBoundaryData::END_OF_STRING, TextBoundaryData::kwEOS)
 };
 
-const bool_t TextBoundaryData::kWordExceptionFlags[] = {
+const UBool TextBoundaryData::kWordExceptionFlags[] = {
     FALSE,          // kNonCharacter            = 0,
     FALSE,          // kUppercaseLetter         = 1,
     FALSE,          // kLowercaseLetter         = 2,

@@ -23,7 +23,7 @@
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
 
 void 
-NumberFormatRegressionTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+NumberFormatRegressionTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     // if (exec) logln((UnicodeString)"TestSuite NumberFormatRegressionTest");
     switch (index) {
@@ -92,7 +92,7 @@ NumberFormatRegressionTest::runIndexedTest( int32_t index, bool_t exec, char* &n
     }
 }
 
-bool_t 
+UBool 
 NumberFormatRegressionTest::failure(UErrorCode status, const UnicodeString& msg)
 {
     if(U_FAILURE(status)) {

@@ -35,7 +35,7 @@ int32_t getInt(UnicodeString str)
 // runIndexedTest
 //---------------------------------------------
 
-void TransliteratorAPITest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void TransliteratorAPITest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     if (exec) logln((UnicodeString)"TestSuite Transliterator API ");
     switch (index) {
@@ -528,7 +528,7 @@ class TestFilter1 : public UnicodeFilter {
     virtual UnicodeFilter* clone() const {
         return new TestFilter1(*this);
     }
-    virtual bool_t contains(UChar c) const {
+    virtual UBool contains(UChar c) const {
        if(c==0x63 || c==0x61 || c==0x43 || c==0x41)
           return FALSE;
        else
@@ -539,7 +539,7 @@ class TestFilter2 : public UnicodeFilter {
     virtual UnicodeFilter* clone() const {
         return new TestFilter2(*this);
     }
-    virtual bool_t contains(UChar c) const {
+    virtual UBool contains(UChar c) const {
         if(c==0x65 || c==0x6c)
            return FALSE;
         else
@@ -550,7 +550,7 @@ class TestFilter3 : public UnicodeFilter {
     virtual UnicodeFilter* clone() const {
         return new TestFilter3(*this);
     }
-    virtual bool_t contains(UChar c) const {
+    virtual UBool contains(UChar c) const {
         if(c==0x6f || c==0x77)
            return FALSE;
         else

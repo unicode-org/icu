@@ -46,7 +46,7 @@ static void T_UConverter_fromCodepageToCodepage (UConverter * outConverter,
 						 const char **source,
 						 const char *sourceLimit,
 						 int32_t* offsets,
-						 bool_t flush,
+						 UBool flush,
 						 UErrorCode * err);
 
 
@@ -426,7 +426,7 @@ void   ucnv_fromUnicode (UConverter * _this,
 			 const UChar ** source,
 			 const UChar * sourceLimit,
 			 int32_t* offsets,
-			 bool_t flush,
+			 UBool flush,
 			 UErrorCode * err)
 {
   /*
@@ -518,7 +518,7 @@ void   ucnv_toUnicode (UConverter * _this,
 		       const char **source,
 		       const char *sourceLimit,
 		       int32_t* offsets,
-		       bool_t flush,
+		       UBool flush,
 		       UErrorCode * err)
 {
   /*
@@ -876,7 +876,7 @@ T_UConverter_fromCodepageToCodepage (UConverter * outConverter,
 				     const char **source,
 				     const char *sourceLimit,
 				     int32_t* offsets,
-				     bool_t flush,
+				     UBool flush,
 				     UErrorCode * err)
 {
 
@@ -1049,7 +1049,7 @@ UConverterType ucnv_getType(const UConverter* converter)
 }
 
 void ucnv_getStarters(const UConverter* converter, 
-		      bool_t starters[256],
+		      UBool starters[256],
 		      UErrorCode* err)
 {
     if (err == NULL || U_FAILURE(*err)) {
@@ -1108,17 +1108,17 @@ void ucnv_fixFileSeparator(const UConverter *cnv,
     }
 }
 
-bool_t ucnv_isAmbiguous(const UConverter *cnv)
+UBool ucnv_isAmbiguous(const UConverter *cnv)
 {
     return (ucnv_getAmbiguousCCSID(cnv) == -1 ? FALSE : TRUE);
 }
 
-void ucnv_setFallback(UConverter *cnv, bool_t usesFallback)
+void ucnv_setFallback(UConverter *cnv, UBool usesFallback)
 {
     cnv->useFallback = usesFallback;
 }
 
-bool_t ucnv_usesFallback(const UConverter *cnv)
+UBool ucnv_usesFallback(const UConverter *cnv)
 {
     return cnv->useFallback;
 }

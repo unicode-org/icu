@@ -63,7 +63,7 @@ static UDataInfo dataInfo={
     3, 0, 0, 0                  /* dataVersion */
 };
 
-static bool_t beVerbose=FALSE, beQuiet=FALSE, haveCopyright=TRUE;
+static UBool beVerbose=FALSE, beQuiet=FALSE, haveCopyright=TRUE;
 
 static uint8_t stringStore[STRING_STORE_SIZE],
                groupStore[GROUP_STORE_SIZE],
@@ -102,7 +102,7 @@ static void
 init();
 
 static void
-parseDB(const char *filename, bool_t store10Names);
+parseDB(const char *filename, UBool store10Names);
 
 static void
 parseName(char *name, int16_t length);
@@ -209,7 +209,7 @@ static UOption options[]={
 extern int
 main(int argc, const char *argv[]) {
     UVersionInfo version;
-    bool_t store10Names=FALSE;
+    UBool store10Names=FALSE;
 
     /* preset then read command line options */
     options[5].value=u_getDataDirectory();
@@ -298,7 +298,7 @@ lineFn(void *context,
     /* get the second character name, the one from Unicode 1.0 */
     /* do not store pseudo-names in <> brackets */
     name2Start=fields[10][0];
-    if(*(bool_t *)context && fields[10][0][0]!='<') {
+    if(*(UBool *)context && fields[10][0][0]!='<') {
         name2Length=fields[10][1]-name2Start;
     } else {
         name2Length=0;
@@ -315,7 +315,7 @@ lineFn(void *context,
 }
 
 static void
-parseDB(const char *filename, bool_t store10Names) {
+parseDB(const char *filename, UBool store10Names) {
     char *fields[11][2];
     UErrorCode errorCode=U_ZERO_ERROR;
 

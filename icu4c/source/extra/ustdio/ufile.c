@@ -120,7 +120,7 @@ ufile_lookup_codepage(const char *locale)
   return 0;
 }
 
-bool_t hasICUData() {
+UBool hasICUData() {
     UErrorCode status = U_ZERO_ERROR;
     UConverter *cnv = NULL;
     UResourceBundle *r = NULL;
@@ -151,7 +151,7 @@ u_fopen(const char    *filename,
     const char    *codepage)
 {
   UErrorCode     status = U_ZERO_ERROR;
-  bool_t     useSysCP = (locale == 0 && codepage == 0);
+  UBool     useSysCP = (locale == 0 && codepage == 0);
   UFILE     *result = (UFILE*) malloc(sizeof(UFILE));
   if(result == 0)
     return 0;
@@ -206,7 +206,7 @@ u_finit(FILE        *f,
     const char    *codepage)
 {
   UErrorCode     status         = U_ZERO_ERROR;
-  bool_t     useSysCP     = (locale == NULL && codepage == NULL);
+  UBool     useSysCP     = (locale == NULL && codepage == NULL);
   UFILE     *result     = (UFILE*) malloc(sizeof(UFILE));
   if(result == 0)
     return 0;

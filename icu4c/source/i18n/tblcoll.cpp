@@ -515,7 +515,7 @@ RuleBasedCollator::RuleBasedCollator(const  RuleBasedCollator&  that)
 {
 }
 
-bool_t
+UBool
 RuleBasedCollator::operator==(const Collator& that) const
 {
     if (this == &that)
@@ -824,7 +824,7 @@ RuleBasedCollator::RuleBasedCollator(   const Locale& desiredLocale,
 	    UnicodeString defLocaleName = UnicodeString(ResourceBundle::kDefaultFilename,""); 
 	    char *binaryFilePath = createPathName(UnicodeString(u_getDataDirectory(),""), 
 						  defLocaleName, UnicodeString(kFilenameSuffix,""));
-	    bool_t ok = writeToFile(binaryFilePath);
+	    UBool ok = writeToFile(binaryFilePath);
 	    delete [] binaryFilePath;
 #ifdef COLLDEBUG
 	    cerr << defLocaleName << " [default] binary write " << (ok? "OK" : "Failed") << endl;
@@ -919,7 +919,7 @@ RuleBasedCollator::RuleBasedCollator(   const Locale& desiredLocale,
 void
 RuleBasedCollator::constructFromFile(   const Locale&           locale,
                                     const UnicodeString&    localeFileName,
-                                    bool_t                  tryBinaryFile,
+                                    UBool                  tryBinaryFile,
                                     UErrorCode&              status)
 {
   // constructFromFile creates a collation object by reading from a
@@ -1046,7 +1046,7 @@ RuleBasedCollator::constructFromFile(   const Locale&           locale,
     // binary file to the disk.  The next time the system wants to
     // get this collation, it will load up very quickly from the
     // binary file.
-    bool_t ok = writeToFile(binaryFilePath);
+    UBool ok = writeToFile(binaryFilePath);
     delete [] binaryFilePath;
 #ifdef COLLDEBUG
     cerr << localeFileName << " binary write " << (ok? "OK" : "Failed") << endl;
@@ -1256,11 +1256,11 @@ RuleBasedCollator::compare(const   UChar* source,
 
     int32_t sOrder, tOrder;
     //    int32_t sOrder = CollationElementIterator::NULLORDER, tOrder = CollationElementIterator::NULLORDER;
-    bool_t gets = TRUE, gett = TRUE;
-    bool_t initialCheckSecTer = getStrength() >= Collator::SECONDARY;
-    bool_t checkSecTer = initialCheckSecTer;
-    bool_t checkTertiary = getStrength() >= Collator::TERTIARY;
-    bool_t isFrenchSec = data->isFrenchSec;
+    UBool gets = TRUE, gett = TRUE;
+    UBool initialCheckSecTer = getStrength() >= Collator::SECONDARY;
+    UBool checkSecTer = initialCheckSecTer;
+    UBool checkTertiary = getStrength() >= Collator::TERTIARY;
+    UBool isFrenchSec = data->isFrenchSec;
     uint32_t pSOrder, pTOrder;
 
     while(TRUE)
@@ -1652,9 +1652,9 @@ RuleBasedCollator::getCollationKey( const   UChar*  source,
         return sortkey.setToBogus();
     }
 
-    bool_t  compareSec   = (getStrength() >= Collator::SECONDARY);
-    bool_t  compareTer   = (getStrength() >= Collator::TERTIARY);
-    bool_t  compareIdent = (getStrength() == Collator::IDENTICAL);
+    UBool  compareSec   = (getStrength() >= Collator::SECONDARY);
+    UBool  compareTer   = (getStrength() >= Collator::TERTIARY);
+    UBool  compareIdent = (getStrength() == Collator::IDENTICAL);
     int32_t order        = 0;
     int32_t totalPrimary = 0;
     int32_t totalSec     = 0;
@@ -1857,7 +1857,7 @@ RuleBasedCollator::build(const UnicodeString&   pattern,
     }
 
     Collator::ECollationStrength aStrength = Collator::IDENTICAL;
-    bool_t isSource = TRUE;
+    UBool isSource = TRUE;
     int32_t i = 0;
     UnicodeString lastGroupChars;
     UnicodeString expChars;
@@ -2003,7 +2003,7 @@ RuleBasedCollator::build(const UnicodeString&   pattern,
                 // for each individual character, we can add an expanding
                 // table entry for the pre-composed character 
                 //
-                bool_t allThere = TRUE;
+                UBool allThere = TRUE;
                 int32_t i;
 
                 for (i = 0; i < decomp.length(); i += 1)
@@ -2230,7 +2230,7 @@ int32_t RuleBasedCollator::addExpansion(int32_t anOrder, const UnicodeString &ex
 void
 RuleBasedCollator::addContractOrder(const   UnicodeString& groupChars,
                                     int32_t anOrder,
-                                    bool_t fwd,
+                                    UBool fwd,
                                     UErrorCode& status)
 {
     if (U_FAILURE(status))
@@ -2426,7 +2426,7 @@ RuleBasedCollator::hashCode() const
 int32_t
 RuleBasedCollator::getEntry(VectorOfPToContractElement* list,
                          const UnicodeString& name,
-                         bool_t fwd)
+                         UBool fwd)
 {
     int32_t i;
 
@@ -2598,7 +2598,7 @@ void RuleBasedCollatorStreamer::streamOut(const RuleBasedCollator* collator, Fil
     }
 }
 
-bool_t RuleBasedCollator::writeToFile(const char* fileName) const
+UBool RuleBasedCollator::writeToFile(const char* fileName) const
 {
     FileStream* ofs = T_FileStream_open(fileName, "wb");
     if (ofs != 0)
@@ -2611,7 +2611,7 @@ bool_t RuleBasedCollator::writeToFile(const char* fileName) const
         (!T_FileStream_error(ofs) ? ", OK" : ", FAIL"));
 #endif
 
-    bool_t err = T_FileStream_error(ofs) == 0;
+    UBool err = T_FileStream_error(ofs) == 0;
 
     T_FileStream_close(ofs);
     return err;

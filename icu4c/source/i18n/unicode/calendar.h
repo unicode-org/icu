@@ -361,7 +361,7 @@ public:
      *              otherwise.
      * @stable
      */
-    virtual bool_t operator==(const Calendar& that) const;
+    virtual UBool operator==(const Calendar& that) const;
 
     /**
      * Compares the inequality of two Calendar objects.
@@ -371,7 +371,7 @@ public:
      *              otherwise.
      * @stable
      */
-    bool_t operator!=(const Calendar& that) const {return !operator==(that);}
+    UBool operator!=(const Calendar& that) const {return !operator==(that);}
 
     /**
      * Compares the Calendar time, whereas Calendar::operator== compares the equality of
@@ -387,7 +387,7 @@ public:
      *                Calendar when; false otherwise.
      * @stable
      */
-    bool_t equals(const Calendar& when, UErrorCode& status) const;
+    UBool equals(const Calendar& when, UErrorCode& status) const;
 
     /**
      * Returns true if this Calendar's current time is before "when"'s current time.
@@ -402,7 +402,7 @@ public:
      *                Calendar when; false otherwise.
      * @stable
      */
-    bool_t before(const Calendar& when, UErrorCode& status) const;
+    UBool before(const Calendar& when, UErrorCode& status) const;
 
     /**
      * Returns true if this Calendar's current time is after "when"'s current time.
@@ -417,14 +417,14 @@ public:
      *                Calendar when; false otherwise.
      * @stable
      */
-    bool_t after(const Calendar& when, UErrorCode& status) const;
+    UBool after(const Calendar& when, UErrorCode& status) const;
 
     /**
      * Return true if another Calendar object is equivalent to this one.  An equivalent
      * Calendar will behave exactly as this one does, but may be set to a different time.
      * @deprecated not in Java API!
      */
-    virtual bool_t equivalentTo(const Calendar& other) const;
+    virtual UBool equivalentTo(const Calendar& other) const;
 
     /**
      * UDate Arithmetic function. Adds the specified (signed) amount of time to the given
@@ -468,7 +468,7 @@ public:
      *                leniency, this will be set to an error status.
      * @stable
      */
-    void roll(EDateFields field, bool_t up, UErrorCode& status);
+    void roll(EDateFields field, UBool up, UErrorCode& status);
 
     /**
      * Time Field Rolling function. Rolls by the given amount on the given
@@ -541,7 +541,7 @@ public:
      *           false, otherwise.
      * @stable
      */
-    virtual bool_t inDaylightTime(UErrorCode& status) const = 0;
+    virtual UBool inDaylightTime(UErrorCode& status) const = 0;
 
     /**
      * Specifies whether or not date/time interpretation is to be lenient. With lenient
@@ -555,7 +555,7 @@ public:
      * @see            DateFormat#setLenient
      * @stable
      */
-    void setLenient(bool_t lenient);
+    void setLenient(UBool lenient);
 
     /**
      * Tells whether date/time interpretation is to be lenient.
@@ -563,7 +563,7 @@ public:
      * @return   True tells that date/time interpretation is to be lenient.
      * @stable
      */
-    bool_t isLenient(void) const;
+    UBool isLenient(void) const;
 
     /**
      * Sets what the first day of the week is; e.g., Sunday in US, Monday in France.
@@ -697,7 +697,7 @@ public:
      * @return   True if the given time field has a value set; false otherwise.
      * @stable
      */
-    bool_t isSet(EDateFields field) const;
+    UBool isSet(EDateFields field) const;
 
     /**
      * Sets the given time field with the given value.
@@ -897,7 +897,7 @@ protected:
     /**
      * The flag which indicates if the current time is set in the calendar.
      */
-    bool_t      fIsTimeSet;
+    UBool      fIsTimeSet;
 
     /**
      * True if the fields are in sync with the currently set time of this Calendar.
@@ -908,13 +908,13 @@ protected:
      * This should really be named areFieldsInSync, but the old name is retained
      * for backward compatibility.
      */
-    bool_t      fAreFieldsSet;
+    UBool      fAreFieldsSet;
 
     /**
      * True if all of the fields have been set.  This is initially false, and set to
      * true by computeFields().
      */
-    bool_t      fAreAllFieldsSet;
+    UBool      fAreAllFieldsSet;
 
     /**
      * Get the current time without recomputing.
@@ -936,7 +936,7 @@ protected:
     /**
      * The flags which tell if a specified time field for the calendar is set.
      */
-    bool_t      fIsSet[FIELD_COUNT];
+    UBool      fIsSet[FIELD_COUNT];
 
     // Special values of stamp[]
     enum {
@@ -965,7 +965,7 @@ private:
     /**
      * @see   #setLenient
      */
-    bool_t      fLenient;
+    UBool      fLenient;
 
     /**
      * Time zone affects the time calculation done by Calendar. Calendar subclasses use
@@ -1028,7 +1028,7 @@ Calendar::createInstance(TimeZone* zone, UErrorCode& errorCode)
 // -------------------------------------
 
 inline void 
-Calendar::roll(EDateFields field, bool_t up, UErrorCode& status)
+Calendar::roll(EDateFields field, UBool up, UErrorCode& status)
 {
     roll(field, (int32_t)(up ? +1 : -1), status);
 }

@@ -244,9 +244,9 @@ typedef enum UErrorCode UErrorCode;
 /* operational success or failure. */
 #ifdef XP_CPLUSPLUS
 /** @stable */
-inline bool_t U_SUCCESS(UErrorCode code) { return (bool_t)(code<=U_ZERO_ERROR); }
+inline UBool U_SUCCESS(UErrorCode code) { return (UBool)(code<=U_ZERO_ERROR); }
 /** @stable */
-inline bool_t U_FAILURE(UErrorCode code) { return (bool_t)(code>U_ZERO_ERROR); }
+inline UBool U_FAILURE(UErrorCode code) { return (UBool)(code>U_ZERO_ERROR); }
 #else
 /** @stable */
 #define U_SUCCESS(x) ((x)<=U_ZERO_ERROR)

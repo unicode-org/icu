@@ -18,7 +18,7 @@ class SimpleTimeZone;
  */
 class TimeZoneBoundaryTest: public CalendarTimeZoneTest {
     // IntlTest override
-    void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par );
+    void runIndexedTest( int32_t index, UBool exec, char* &name, char* par );
 public: // package
     static UDate ONE_SECOND;
     static UDate ONE_MINUTE;
@@ -42,8 +42,8 @@ public: // package
      * internal routines used by major test routines to perform subtests
      **/
     virtual void findDaylightBoundaryUsingDate(UDate d, const char* startMode, UDate expectedBoundary);
-    virtual void findDaylightBoundaryUsingTimeZone(UDate d, bool_t startsInDST, UDate expectedBoundary);
-    virtual void findDaylightBoundaryUsingTimeZone(UDate d, bool_t startsInDST, UDate expectedBoundary, TimeZone* tz);
+    virtual void findDaylightBoundaryUsingTimeZone(UDate d, UBool startsInDST, UDate expectedBoundary);
+    virtual void findDaylightBoundaryUsingTimeZone(UDate d, UBool startsInDST, UDate expectedBoundary, TimeZone* tz);
  
 private:
     //static UnicodeString* showDate(long l);
@@ -55,7 +55,7 @@ public: // package
      * Given a date, a TimeZone, and expected values for inDaylightTime,
      * useDaylightTime, zone and DST offset, verify that this is the case.
      */
-    virtual void verifyDST(UDate d, TimeZone* time_zone, bool_t expUseDaylightTime, bool_t expInDaylightTime, UDate expZoneOffset, UDate expDSTOffset);
+    virtual void verifyDST(UDate d, TimeZone* time_zone, UBool expUseDaylightTime, UBool expInDaylightTime, UDate expZoneOffset, UDate expDSTOffset);
  
 public:
     /**

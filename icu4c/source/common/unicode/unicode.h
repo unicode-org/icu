@@ -254,7 +254,7 @@ public:
      * @param c The code unit to be tested.
      * @return Boolean value.
      */
-    static inline bool_t isSingle(UChar c);
+    static inline UBool isSingle(UChar c);
 
     /**
      * Is this code unit the first of a multiple-unit sequence?
@@ -263,7 +263,7 @@ public:
      * @param c The code unit to be tested.
      * @return Boolean value.
      */
-    static inline bool_t isLead(UChar c);
+    static inline UBool isLead(UChar c);
 
     /**
      * Is this code unit one of, but not the first, of a multiple-unit sequence?
@@ -272,7 +272,7 @@ public:
      * @param c The code unit to be tested.
      * @return Boolean value.
      */
-    static inline bool_t isTrail(UChar c);
+    static inline UBool isTrail(UChar c);
 
     /**
      * Is this code point a surrogate character?
@@ -283,7 +283,7 @@ public:
      * @param c The code point to be tested.
      * @return Boolean value.
      */
-    static inline bool_t isSurrogate(UChar32 c);
+    static inline UBool isSurrogate(UChar32 c);
 
     /**
      * Is this code point a Unicode character?
@@ -296,7 +296,7 @@ public:
      * @param c The code point to be tested.
      * @return Boolean value.
      */
-    static inline bool_t isUnicodeChar(UChar32 c);
+    static inline UBool isUnicodeChar(UChar32 c);
 
     /**
      * Is this code point an error value?
@@ -308,7 +308,7 @@ public:
      * @param c The code point to be tested.
      * @return Boolean value.
      */
-    static inline bool_t isError(UChar32 c);
+    static inline UBool isError(UChar32 c);
 
     /**
      * Is this code point a Unicode character, and not an error value?
@@ -318,7 +318,7 @@ public:
      * @param c The code point to be tested.
      * @return Boolean value.
      */
-    static inline bool_t isValid(UChar32 c);
+    static inline UBool isValid(UChar32 c);
 
     /**
      * When writing code units for a given code point, is more than one
@@ -330,7 +330,7 @@ public:
      * @param c The code point to be tested.
      * @return Boolean value.
      */
-    static inline bool_t needMultipleUChar(UChar32 c);
+    static inline UBool needMultipleUChar(UChar32 c);
 
     /**
      * When writing code units for a given code point, how many
@@ -367,7 +367,7 @@ public:
      * @see Unicode#toLowerCase
      * @draft
      */
-    static inline bool_t isLowerCase(UChar32 ch);
+    static inline UBool isLowerCase(UChar32 ch);
 
     /**
      * Determines whether the specified character is an uppercase character
@@ -380,7 +380,7 @@ public:
      * @see Unicode#toUpperCase
      * @draft
      */
-    static inline bool_t isUpperCase(UChar32 ch);
+    static inline UBool isUpperCase(UChar32 ch);
 
     /**
      * Determines whether the specified character is a titlecase character
@@ -393,7 +393,7 @@ public:
      * @see Unicode#toTitleCase
      * @draft
      */
-    static inline bool_t isTitleCase(UChar32 ch);
+    static inline UBool isTitleCase(UChar32 ch);
 
     /**
      * Determines whether the specified character is a digit according to Unicode
@@ -406,7 +406,7 @@ public:
      * @see     Unicode#digitValue
      * @draft
      */
-    static inline bool_t isDigit(UChar32 ch);
+    static inline UBool isDigit(UChar32 ch);
 
     /**
      * Determines whether the specified numeric value is actually a defined character
@@ -423,7 +423,7 @@ public:
      * @see Unicode#isTitleCase
      * @draft
      */
-    static inline bool_t isDefined(UChar32 ch);
+    static inline UBool isDefined(UChar32 ch);
 
     /**
      * Determines whether the specified character is a control character according 
@@ -435,7 +435,7 @@ public:
      * @see Unicode#isPrintable
      * @draft
      */
-    static inline bool_t isControl(UChar32 ch);
+    static inline UBool isControl(UChar32 ch);
 
     /**
      * Determines whether the specified character is a printable character according 
@@ -447,7 +447,7 @@ public:
      * @see Unicode#isControl
      * @draft
      */
-    static inline bool_t isPrintable(UChar32 ch);
+    static inline UBool isPrintable(UChar32 ch);
 
     /**
      * Determines whether the specified character is of the base form according 
@@ -460,7 +460,7 @@ public:
      * @see Unicode#isDigit
      * @draft
      */
-     static inline bool_t isBaseForm(UChar32 ch);
+     static inline UBool isBaseForm(UChar32 ch);
 
     /**
      * Determines whether the specified character is a letter
@@ -477,7 +477,7 @@ public:
      * @see Unicode#isTitleCase
      * @draft
      */
-    static inline bool_t isLetter(UChar32 ch);
+    static inline UBool isLetter(UChar32 ch);
 
     /**
      * A convenience method for determining if a Unicode character
@@ -499,7 +499,7 @@ public:
      * @see     isUnicodeIdentifierStart
      * @draft
      */
-    static inline bool_t isJavaIdentifierStart(UChar32 ch);
+    static inline UBool isJavaIdentifierStart(UChar32 ch);
 
     /**
      * A convenience method for determining if a Unicode character 
@@ -529,7 +529,7 @@ public:
      * @see     isUnicodeIdentifierPart
      * @draft
      */
-    static inline bool_t isJavaIdentifierPart(UChar32 ch);
+    static inline UBool isJavaIdentifierPart(UChar32 ch);
 
     /**
      * A convenience method for determining if a Unicode character 
@@ -545,7 +545,7 @@ public:
      * @see     isUnicodeIdentifierPart
      * @draft
      */
-    static inline bool_t isUnicodeIdentifierStart(UChar32 ch);
+    static inline UBool isUnicodeIdentifierStart(UChar32 ch);
 
     /**
      * A convenience method for determining if a Unicode character
@@ -573,7 +573,7 @@ public:
      * @see     isUnicodeIdentifierStart
      * @draft
      */
-    static inline bool_t isUnicodeIdentifierPart(UChar32 ch);
+    static inline UBool isUnicodeIdentifierPart(UChar32 ch);
 
     /**
      * A convenience method for determining if a Unicode character 
@@ -600,7 +600,7 @@ public:
      * @see     isUnicodeIdentifierPart
      * @draft
      */
-    static inline bool_t isIdentifierIgnorable(UChar32 ch);
+    static inline UBool isIdentifierIgnorable(UChar32 ch);
 
     /**
      * The given character is mapped to its lowercase equivalent according to
@@ -678,7 +678,7 @@ public:
      * @return  true if the character is a space character; false otherwise.
      * @draft
      */
-    static inline bool_t isSpaceChar(UChar32 ch);
+    static inline UBool isSpaceChar(UChar32 ch);
 
     /**
      * Determines if the specified character is white space according to ICU.
@@ -708,7 +708,7 @@ public:
      * @see     #isSpaceChar
      * @draft
      */
-    static inline bool_t isWhitespace(UChar32 ch);
+    static inline UBool isWhitespace(UChar32 ch);
 
    /**
      * Returns a value indicating a character category according to Unicode
@@ -766,7 +766,7 @@ public:
      * @param c the character (code point, Unicode scalar value) to be tested
      * @return TRUE if the character has the "mirrored" property
      */
-    static inline bool_t isMirrored(UChar32 c);
+    static inline UBool isMirrored(UChar32 c);
 
     /**
      * Maps the specified character to a "mirror-image" character.
@@ -978,42 +978,42 @@ protected:
 
 /* inline implementations --------------------------------------------------- */
 
-inline bool_t
+inline UBool
 Unicode::isSingle(UChar c) {
     return UTF_IS_SINGLE(c);
 }
 
-inline bool_t
+inline UBool
 Unicode::isLead(UChar c) {
     return UTF_IS_LEAD(c);
 }
 
-inline bool_t
+inline UBool
 Unicode::isTrail(UChar c) {
     return UTF_IS_TRAIL(c);
 }
 
-inline bool_t
+inline UBool
 Unicode::isSurrogate(UChar32 c) {
     return UTF_IS_SURROGATE(c);
 }
 
-inline bool_t
+inline UBool
 Unicode::isUnicodeChar(UChar32 c) {
     return UTF_IS_UNICODE_CHAR(c);
 }
 
-inline bool_t
+inline UBool
 Unicode::isError(UChar32 c) {
     return UTF_IS_ERROR(c);
 }
 
-inline bool_t
+inline UBool
 Unicode::isValid(UChar32 c) {
     return UTF_IS_VALID(c);
 }
 
-inline bool_t
+inline UBool
 Unicode::needMultipleUChar(UChar32 c) {
     return UTF_NEED_MULTIPLE_UCHAR(c);
 }
@@ -1029,87 +1029,87 @@ Unicode::arraySize(int32_t size) {
 }
 
 // Checks if ch is a lower case letter.
-inline bool_t
+inline UBool
 Unicode::isLowerCase(UChar32 ch) {
     return u_islower(ch);
 }
 
 // Checks if ch is a upper case letter.
-inline bool_t
+inline UBool
 Unicode::isUpperCase(UChar32 ch) {
     return u_isupper(ch);
 }
 
 // Checks if ch is a title case letter; usually upper case letters.
-inline bool_t
+inline UBool
 Unicode::isTitleCase(UChar32 ch) {
     return u_istitle(ch);
 }
 
 // Checks if ch is a decimal digit.
-inline bool_t
+inline UBool
 Unicode::isDigit(UChar32 ch) {
     return u_isdigit(ch);
 }
 
 // Checks if ch is a unicode character with assigned character type.
-inline bool_t
+inline UBool
 Unicode::isDefined(UChar32 ch) {
     return u_isdefined(ch);
 }
 
 // Checks if the Unicode character is a control character.
-inline bool_t
+inline UBool
 Unicode::isControl(UChar32 ch) {
     return u_iscntrl(ch);
 }
 
 // Checks if the Unicode character is printable.
-inline bool_t
+inline UBool
 Unicode::isPrintable(UChar32 ch) {
     return u_isprint(ch);
 }
 
 // Checks if the Unicode character is a base form character that can take a diacritic.
-inline bool_t
+inline UBool
 Unicode::isBaseForm(UChar32 ch) {
     return u_isbase(ch);
 }
 
 // Checks if the Unicode character is a letter.
-inline bool_t
+inline UBool
 Unicode::isLetter(UChar32 ch) {
     return u_isalpha(ch);
 }
 
 // Checks if the Unicode character can start a Java identifier.
-inline bool_t
+inline UBool
 Unicode::isJavaIdentifierStart(UChar32 ch) {
     return u_isJavaIDStart(ch);
 }
 
 // Checks if the Unicode character can be a Java identifier part other than starting the
 // identifier.
-inline bool_t
+inline UBool
 Unicode::isJavaIdentifierPart(UChar32 ch) {
     return u_isJavaIDPart(ch);
 }
 
 // Checks if the Unicode character can start a Unicode identifier.
-inline bool_t
+inline UBool
 Unicode::isUnicodeIdentifierStart(UChar32 ch) {
     return u_isIDStart(ch);
 }
 
 // Checks if the Unicode character can be a Unicode identifier part other than starting the
 // identifier.
-inline bool_t
+inline UBool
 Unicode::isUnicodeIdentifierPart(UChar32 ch) {
     return u_isIDPart(ch);
 }
 
 // Checks if the Unicode character can be ignorable in a Java or Unicode identifier.
-inline bool_t
+inline UBool
 Unicode::isIdentifierIgnorable(UChar32 ch) {
     return u_isIDIgnorable(ch);
 }
@@ -1133,13 +1133,13 @@ Unicode::toTitleCase(UChar32 ch) {
 }
 
 // Checks if the Unicode character is a space character.
-inline bool_t
+inline UBool
 Unicode::isSpaceChar(UChar32 ch) {
     return u_isspace(ch);
 }
 
 // Determines if the specified character is white space according to ICU.
-inline bool_t
+inline UBool
 Unicode::isWhitespace(UChar32 ch) {
     return u_isWhitespace(ch);
 }
@@ -1157,7 +1157,7 @@ Unicode::characterDirection(UChar32 ch) {
 }
 
 // Determines if the character has the "mirrored" property.
-inline bool_t
+inline UBool
 Unicode::isMirrored(UChar32 ch) {
     return u_isMirrored(ch);
 }

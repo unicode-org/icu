@@ -29,7 +29,7 @@
 
 #define ToOffset(a) a<=9?(0x0030+a):(0x0030+a+7)
 
-bool_t 
+UBool 
   CONVERSION_U_SUCCESS (UErrorCode err)
 {
   if ((err == U_INVALID_CHAR_FOUND) || (err == U_ILLEGAL_CHAR_FOUND))    return FALSE;
@@ -78,7 +78,7 @@ void   UCNV_FROM_U_CALLBACK_STOP (UConverter * _this,
 				  const UChar ** source,
 				  const UChar * sourceLimit,
 				  int32_t *offsets,
-				  bool_t flush,
+				  UBool flush,
 				  UErrorCode * err)
 {
   return;
@@ -92,7 +92,7 @@ void   UCNV_TO_U_CALLBACK_STOP (UConverter * _this,
 			       const char **source,
 			       const char *sourceLimit,
 			       int32_t *offsets,
-			       bool_t flush,
+			       UBool flush,
 			       UErrorCode * err)
 {
   return;
@@ -104,7 +104,7 @@ void   UCNV_FROM_U_CALLBACK_SKIP (UConverter * _this,
 				  const UChar ** source,
 				  const UChar * sourceLimit,
 				  int32_t *offsets,
-				  bool_t flush,
+				  UBool flush,
 				  UErrorCode * err)
 {
   if (CONVERSION_U_SUCCESS (*err))    return;
@@ -117,7 +117,7 @@ void   UCNV_FROM_U_CALLBACK_SUBSTITUTE (UConverter * _this,
 					const UChar ** source,
 					const UChar * sourceLimit,
 					int32_t *offsets,
-					bool_t flush,
+					UBool flush,
 					UErrorCode * err)
 {
   char togo[5];
@@ -200,7 +200,7 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (UConverter * _this,
 						 const UChar ** source,
 						 const UChar * sourceLimit,
 						 int32_t *offsets,
-						 bool_t flush,
+						 UBool flush,
 						 UErrorCode * err)
 {
 
@@ -320,7 +320,7 @@ void UCNV_TO_U_CALLBACK_SKIP (UConverter * _this,
 			     const char **source,
 			     const char *sourceLimit,
 			     int32_t *offsets,
-			     bool_t flush,
+			     UBool flush,
 			     UErrorCode * err)
 {
   if (CONVERSION_U_SUCCESS (*err))   return;
@@ -333,7 +333,7 @@ void   UCNV_TO_U_CALLBACK_SUBSTITUTE (UConverter * _this,
 				     const char **source,
 				     const char *sourceLimit,
 				     int32_t *offsets,
-				     bool_t flush,
+				     UBool flush,
 				     UErrorCode * err)
 {
   
@@ -366,7 +366,7 @@ void  UCNV_TO_U_CALLBACK_ESCAPE (UConverter * _this,
 					     const char **source,
 					     const char *sourceLimit,
 					     int32_t *offsets,
-					     bool_t flush,
+					     UBool flush,
 					     UErrorCode * err)
 {
   UChar uniValueString[VALUE_STRING_LENGTH];

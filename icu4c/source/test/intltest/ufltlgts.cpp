@@ -24,7 +24,7 @@
 // runIndexedTest
 //---------------------------------------------
 
-void UnicodeFilterLogicTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void UnicodeFilterLogicTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     if (exec) logln((UnicodeString)"TestSuite UnicodeFilterLogic API ");
     switch (index) {
@@ -39,7 +39,7 @@ class Filter1: public UnicodeFilter{
 	virtual UnicodeFilter* clone() const{
 		return new Filter1(*this);
 	}
-	virtual bool_t contains(UChar c) const {
+	virtual UBool contains(UChar c) const {
 		if(c == 'a' || c == 'A' || c == 'c' || c == 'C')
 			return FALSE;
 		else
@@ -50,7 +50,7 @@ class Filter2: public UnicodeFilter{
 	virtual UnicodeFilter* clone() const{
 		return new Filter2(*this);
 	}
-	virtual bool_t contains(UChar c) const {
+	virtual UBool contains(UChar c) const {
 		if(c == 'y' || c == 'Y' || c == 'z' || c == 'Z'  || c =='a' || c == 'c')
 			return FALSE;
 		else
@@ -210,7 +210,7 @@ void UnicodeFilterLogicTest::expect(const Transliterator& t,
 
 }
 void UnicodeFilterLogicTest::expectAux(const UnicodeString& tag,
-                                   const UnicodeString& summary, bool_t pass,
+                                   const UnicodeString& summary, UBool pass,
                                    const UnicodeString& expectedResult) {
     if (pass) {
         logln(UnicodeString("(")+tag+") " + prettify(summary));

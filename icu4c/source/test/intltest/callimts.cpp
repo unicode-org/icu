@@ -12,7 +12,7 @@
 #include <float.h>
 #include <math.h>
 
-void CalendarLimitTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void CalendarLimitTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     if (exec) logln("TestSuite TestCalendarLimit");
     switch (index) {
@@ -74,7 +74,7 @@ CalendarLimitTest::previousDouble(double a)
     return uprv_nextDouble(a, FALSE);
 }
 
-bool_t
+UBool
 CalendarLimitTest::withinErr(double a, double b, double err)
 {
     return ( uprv_fabs(a - b) < uprv_fabs(a * err) ); 
@@ -288,7 +288,7 @@ const int32_t CalendarLimitTest::kMonthLength[]
 const int32_t CalendarLimitTest::kLeapMonthLength[]
     = {31,29,31,30,31,30,31,31,30,31,30,31}; // 0-based
 
-bool_t
+UBool
 CalendarLimitTest::timeToFields(UDate theTime, int32_t* fields)
 {
     if(uprv_isInfinite(theTime))
@@ -296,7 +296,7 @@ CalendarLimitTest::timeToFields(UDate theTime, int32_t* fields)
 
     int32_t rawYear;
     int32_t year, month, date, dayOfWeek, dayOfYear, era;
-    bool_t isLeap;
+    UBool isLeap;
 
     // Compute the year, month, and day of month from the given millis
     // {sfb} for simplicity's sake, assume no one will change the cutover date
@@ -380,14 +380,14 @@ CalendarLimitTest::timeToFields(UDate theTime, int32_t* fields)
     fields[MONTH] = month;
     fields[DATE] = date;
     // month: 0 <= m <= 11
-    bool_t monthLegal = (    (month - Calendar::JANUARY) >= 0 &&
+    UBool monthLegal = (    (month - Calendar::JANUARY) >= 0 &&
                             (month - Calendar::JANUARY) <= 11 );
 
-    bool_t dateLegal = (    date >= 1 && 
+    UBool dateLegal = (    date >= 1 && 
                             date <= (isLeap ? kLeapMonthLength[month - Calendar::JANUARY] 
                                             : kMonthLength[month - Calendar::JANUARY]));
     
-    bool_t yearLegal = (year >= 0);
+    UBool yearLegal = (year >= 0);
     
     return monthLegal && dateLegal && yearLegal;
 }

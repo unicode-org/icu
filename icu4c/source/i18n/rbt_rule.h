@@ -180,7 +180,7 @@ public:
      * value.  If the rule contains only ante context, as in foo)>bar,
      * then it will match any key.
      */
-    bool_t matchesIndexValue(uint8_t v,
+    UBool matchesIndexValue(uint8_t v,
                              const TransliterationRuleData& data);
 
     /**
@@ -189,7 +189,7 @@ public:
      * r1 then r1 == r2.  Examples: "a>x" masks "ab>y".  "a>x" masks "a[b]>y".
      * "[c]a>x" masks "[dc]a>y".
      */
-    virtual bool_t masks(const TransliterationRule& r2) const;
+    virtual UBool masks(const TransliterationRule& r2) const;
 
     /**
      * Return true if this rule matches the given text.
@@ -206,7 +206,7 @@ public:
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
      */
-    virtual bool_t matches(const Replaceable& text,
+    virtual UBool matches(const Replaceable& text,
                            int32_t start, int32_t limit,
                            int32_t cursor,
                            const TransliterationRuleData& data,
@@ -286,7 +286,7 @@ public:
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
      */
-    virtual bool_t charMatches(UChar keyChar, UChar textChar,
+    virtual UBool charMatches(UChar keyChar, UChar textChar,
                                const TransliterationRuleData& data,
                                const UnicodeFilter* filter) const;
 };

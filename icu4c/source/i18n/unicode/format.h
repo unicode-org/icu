@@ -89,14 +89,14 @@ public:
      * Objects of different subclasses are considered unequal.
      * @stable
      */
-    virtual bool_t operator==(const Format& other) const = 0;
+    virtual UBool operator==(const Format& other) const = 0;
 
     /**
      * Return true if the given Format objects are not semantically
      * equal.
      * @stable
      */
-    bool_t operator!=(const Format& other) const { return !operator==(other); }
+    UBool operator!=(const Format& other) const { return !operator==(other); }
 
     /**
      * Clone this object polymorphically.  The caller is responsible

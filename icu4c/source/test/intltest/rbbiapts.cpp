@@ -534,7 +534,7 @@ void RBBIAPITest::TestIsBoundary(){
 // runIndexedTest
 //---------------------------------------------
 
-void RBBIAPITest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     if (exec) logln((UnicodeString)"TestSuite RuleBasedBreakIterator API ");
     switch (index) {
@@ -558,7 +558,7 @@ void RBBIAPITest::runIndexedTest( int32_t index, bool_t exec, char* &name, char*
 void RBBIAPITest::doBoundaryTest(RuleBasedBreakIterator& bi, UnicodeString& text, int32_t *boundaries){
      logln((UnicodeString)"testIsBoundary():");
         int32_t p = 0;
-        bool_t isB;
+        UBool isB;
         for (int32_t i = 0; i < text.length(); i++) {
             isB = bi.isBoundary(i);
             logln((UnicodeString)"bi.isBoundary(" + i + ") -> " + isB);

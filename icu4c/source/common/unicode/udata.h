@@ -99,7 +99,7 @@ typedef struct UDataMemory UDataMemory;
  * @return TRUE if the current data memory is acceptable
  * @stable
  */
-typedef bool_t
+typedef UBool
 UDataMemoryIsAcceptable(void *context,
                         const char *type, const char *name,
                         const UDataInfo *pInfo);

@@ -354,7 +354,7 @@ int32_t ResourceBundle::getSize(void) const {
     return ures_getSize(resource);
 }
 
-bool_t ResourceBundle::hasNext(void) const {
+UBool ResourceBundle::hasNext(void) const {
     return ures_hasNext(resource);
 }
 

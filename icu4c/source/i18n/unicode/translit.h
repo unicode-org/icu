@@ -337,7 +337,7 @@ private:
      * the code as part of a shared library, and (2) to avoid static
      * intialization problems.
      */
-    static bool_t cacheInitialized;
+    static UBool cacheInitialized;
 
     /**
      * In Java, the cache stores objects of different types and
@@ -634,7 +634,7 @@ protected:
      */
     virtual void handleTransliterate(Replaceable& text,
                                      Position& index,
-                                     bool_t incremental) const = 0;
+                                     UBool incremental) const = 0;
 
     // C++ requires this friend declaration so CompoundTransliterator
     // can access handleTransliterate.  Alternatively, we could
@@ -917,7 +917,7 @@ private:
      * Comparison function for UVector.  Compares two UnicodeString
      * objects given void* pointers to them.
      */
-    static bool_t compareIDs(void* a, void* b);
+    static UBool compareIDs(void* a, void* b);
 
     static void initializeCache(void);
 

@@ -41,7 +41,7 @@
      **/
      
    
-    static bool_t testTag(const char* frag, bool_t in_Root, bool_t in_te, bool_t in_te_IN);
+    static UBool testTag(const char* frag, UBool in_Root, UBool in_te, UBool in_te_IN);
 
     static void record_pass(void);
     static void record_fail(void);

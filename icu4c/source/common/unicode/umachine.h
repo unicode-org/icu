@@ -141,6 +141,8 @@
     typedef int8_t bool_t;
 #endif
 
+typedef int8_t UBool;
+
 #ifndef TRUE
 #   define TRUE  1
 #endif

@@ -70,7 +70,7 @@
  * @see                CompactIntArray
  * @see                CompactCharArray
  * @see                CompactStringArray
- * @version            $Revision: 1.10 $ 8/25/98
+ * @version            $Revision: 1.11 $ 8/25/98
  * @author             Helena Shih
  */
 
@@ -81,12 +81,12 @@ typedef struct CompactShortArray {
   int32_t* fHashes;
   int32_t fCount;
   int16_t fDefaultValue;
-  bool_t fCompact;    
-  bool_t fBogus;
-  bool_t fAlias;
+  UBool fCompact;    
+  UBool fBogus;
+  UBool fAlias;
   int32_t kBlockShift;
   int32_t kBlockMask;
-  bool_t fIAmOwned; /* don't free CSA on close */
+  UBool fIAmOwned; /* don't free CSA on close */
 } CompactShortArray;
 
 
@@ -135,7 +135,7 @@ U_CAPI  void U_EXPORT2 ucmp16_close(CompactShortArray* array);
   * Returns TRUE if the creation of the compact array fails.
   */
 
-U_CAPI  bool_t U_EXPORT2 ucmp16_isBogus(const CompactShortArray* array);
+U_CAPI  UBool U_EXPORT2 ucmp16_isBogus(const CompactShortArray* array);
 
 /**
  *

@@ -94,8 +94,8 @@ static struct
   const char* name;
   UErrorCode expected_constructor_status;
   E_Where where;
-  bool_t like[e_Where_count];
-  bool_t inherits[e_Where_count];
+  UBool like[e_Where_count];
+  UBool inherits[e_Where_count];
 }
 param[] =
 {
@@ -284,16 +284,16 @@ void TestConstruction2()
 /*****************************************************************************/
 /*****************************************************************************/
 
-bool_t testTag(const char* frag,
-           bool_t in_Root,
-           bool_t in_te,
-           bool_t in_te_IN)
+UBool testTag(const char* frag,
+           UBool in_Root,
+           UBool in_te,
+           UBool in_te_IN)
 {
-  bool_t pass=TRUE;
+  UBool pass=TRUE;
 
   /* Make array from input params */
 
-  bool_t is_in[3];
+  UBool is_in[3];
   const char *NAME[] = { "ROOT", "TE", "TE_IN" };
 
   /* Now try to load the desired items */

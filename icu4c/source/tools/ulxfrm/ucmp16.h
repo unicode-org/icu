@@ -72,7 +72,7 @@
  * @see                CompactIntArray
  * @see                CompactCharArray
  * @see                CompactStringArray
- * @version            $Revision: 1.5 $ 8/25/98
+ * @version            $Revision: 1.6 $ 8/25/98
  * @author             Helena Shih
  */
 
@@ -83,8 +83,8 @@ typedef struct
   int32_t* fHashes;
   int32_t fCount;
   int16_t fDefaultValue;
-  bool_t fCompact;    
-  bool_t fBogus;
+  UBool fCompact;    
+  UBool fBogus;
   int32_t kBlockShift;
   int32_t kBlockMask;
 } CompactShortArray;
@@ -137,7 +137,7 @@ U_CAPI  void ucmp16_close(CompactShortArray* array);
   * Returns TRUE if the creation of the compact array fails.
   */
 
-U_CAPI  bool_t ucmp16_isBogus(const CompactShortArray* array);
+U_CAPI  UBool ucmp16_isBogus(const CompactShortArray* array);
 
 /**
  *

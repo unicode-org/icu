@@ -108,13 +108,13 @@ public:
      * Return true if another object is semantically equal to this one.
      * @stable
      */
-    bool_t operator==(const DateFormatSymbols& other) const;
+    UBool operator==(const DateFormatSymbols& other) const;
 
     /**
      * Return true if another object is semantically unequal to this one.
      * @stable
      */
-    bool_t operator!=(const DateFormatSymbols& other) const { return !operator==(other); }
+    UBool operator!=(const DateFormatSymbols& other) const { return !operator==(other); }
 
     /**
      * Gets era strings. For example: "AD" and "BC".
@@ -304,7 +304,7 @@ private:
     /**
      * Called by the constructors to actually load data from the resources
      */
-    void initializeData(const Locale&, UErrorCode& status, bool_t useLastResortData = FALSE);
+    void initializeData(const Locale&, UErrorCode& status, UBool useLastResortData = FALSE);
 
     /**
      * Copy or alias an array in another object, as appropriate.
@@ -320,7 +320,7 @@ private:
      * Return true if the given arrays' contents are equal, or if the arrays are
      * identical (pointers are equal).
      */
-    static bool_t arrayCompare(const UnicodeString* array1,
+    static UBool arrayCompare(const UnicodeString* array1,
                              const UnicodeString* array2,
                              int32_t count);
 
@@ -388,21 +388,21 @@ private:
     /**
      * Sets the fIsOwned flag for the specfied string array
      */
-    void                    setIsOwned(int32_t which, bool_t isOwned);
+    void                    setIsOwned(int32_t which, UBool isOwned);
 
     /**
      * Tests the fIsOwned flag for the specified string array
      */
-    bool_t                  isOwned(int32_t which) const;
+    UBool                  isOwned(int32_t which) const;
 };
 
 inline void
-DateFormatSymbols::setIsOwned(int32_t which, bool_t isOwned)
+DateFormatSymbols::setIsOwned(int32_t which, UBool isOwned)
 {
     fIsOwned = ( fIsOwned & ~(1 << which) ) | ( (isOwned ? 1 : 0) << which );
 }
 
-inline bool_t
+inline UBool
 DateFormatSymbols::isOwned(int32_t which) const
 {
     return ( (fIsOwned >> which) & 1 ) != 0;

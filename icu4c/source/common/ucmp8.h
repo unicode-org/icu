@@ -34,10 +34,10 @@ typedef struct CompactByteArray {
   int8_t* fArray;
   uint16_t* fIndex;
   int32_t fCount;
-  bool_t fCompact;
-  bool_t fBogus;
-  bool_t fAlias;
-  bool_t fIAmOwned; /* don't free CBA on close */
+  UBool fCompact;
+  UBool fBogus;
+  UBool fAlias;
+  UBool fIAmOwned; /* don't free CBA on close */
 } CompactByteArray;
 
 #define UCMP8_kUnicodeCount 65536
@@ -60,7 +60,7 @@ U_CAPI  CompactByteArray* U_EXPORT2 ucmp8_openAlias(uint16_t* indexArray,
                                int8_t* newValues,
                                int32_t count);
 U_CAPI  void U_EXPORT2 ucmp8_close(CompactByteArray* array);
-U_CAPI  bool_t U_EXPORT2 isBogus(const CompactByteArray* array);
+U_CAPI  UBool U_EXPORT2 isBogus(const CompactByteArray* array);
 
 #define ucmp8_get(array, index)  (array->fArray[(array->fIndex[index >> UCMP8_kBlockShift] & 0xFFFF) + (index & UCMP8_kBlockMask)])
 

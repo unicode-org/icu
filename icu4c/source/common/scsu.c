@@ -107,12 +107,12 @@
 
 /* Local function prototypes */
 static int32_t scsu_makeIndex(int32_t c);
-static bool_t scsu_inDynamicWindow(const UnicodeCompressor *comp,
+static UBool scsu_inDynamicWindow(const UnicodeCompressor *comp,
 				   int32_t c, 
 				   int32_t whichWindow);
-static bool_t scsu_inStaticWindow(int32_t c, 
+static UBool scsu_inStaticWindow(int32_t c, 
 				  int32_t whichWindow);
-static bool_t scsu_isCompressible(int32_t c);
+static UBool scsu_isCompressible(int32_t c);
 static int32_t scsu_findDynamicWindow(const UnicodeCompressor *comp,
 				      int32_t c);
 static int32_t scsu_findStaticWindow(int32_t c);
@@ -153,7 +153,7 @@ static int32_t sOffsetTable [] = {
 };
 
 /** For quick identification of a byte as a single-byte mode tag */
-static bool_t sSingleTagTable [] = {
+static UBool sSingleTagTable [] = {
   FALSE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE,
   FALSE, TRUE, TRUE, FALSE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE,
   TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE,
@@ -185,7 +185,7 @@ static bool_t sSingleTagTable [] = {
 };
 
 /** For quick identification of a byte as a unicode mode tag */
-static bool_t sUnicodeTagTable [] = {
+static UBool sUnicodeTagTable [] = {
   FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
   FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
   FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
@@ -1306,7 +1306,7 @@ scsu_makeIndex(int32_t c)
  * @return TRUE if <TT>c</TT> will fit in <TT>whichWindow</TT>, FALSE
  * otherwise.  
  */
-static bool_t 
+static UBool 
 scsu_inDynamicWindow(const UnicodeCompressor *comp,
 		     int32_t c, 
 		     int32_t whichWindow)
@@ -1322,7 +1322,7 @@ scsu_inDynamicWindow(const UnicodeCompressor *comp,
  * @return TRUE if <TT>c</TT> will fit in <TT>whichWindow</TT>, FALSE 
  * otherwise.
  */
-static bool_t 
+static UBool 
 scsu_inStaticWindow(int32_t c, 
 		    int32_t whichWindow)
 {
@@ -1334,7 +1334,7 @@ scsu_inStaticWindow(int32_t c,
  * @param c The character to test.
  * @return TRUE if the <TT>c</TT> is compressible, FALSE otherwise.
  */
-static bool_t 
+static UBool 
 scsu_isCompressible(int32_t c)
 {
   return (c < 0x3400 || c >= 0xE000);

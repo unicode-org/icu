@@ -22,12 +22,12 @@ class Calendar;
 class DateFormatRoundTripTest : public IntlTest {    
     
     // IntlTest override
-    void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par );
+    void runIndexedTest( int32_t index, UBool exec, char* &name, char* par );
 
 public:
     void TestDateFormatRoundTrip(void);
     void test(const Locale& loc);
-    void test(DateFormat *fmt, bool_t timeOnly = FALSE );
+    void test(DateFormat *fmt, UBool timeOnly = FALSE );
     int32_t getField(UDate d, int32_t f);
     UnicodeString& escape(const UnicodeString& src, UnicodeString& dst);
     UDate generateDate(void); 
@@ -74,11 +74,11 @@ static double randDouble(double range)
 }
 
 protected:
-    bool_t failure(UErrorCode status, const char* msg);
+    UBool failure(UErrorCode status, const char* msg);
 
 private:
 
-    static bool_t INFINITE;
+    static UBool INFINITE;
     static int32_t SPARSENESS;
     static int32_t TRIALS;
     static int32_t DEPTH;

@@ -68,7 +68,7 @@ RuleBasedBreakIteratorTables::~RuleBasedBreakIteratorTables() {
  * Equality operator.  Returns TRUE if both tables objects are of the
  * same class, have the same behavior, and iterate over the same text.
  */
-bool_t
+UBool
 RuleBasedBreakIteratorTables::operator==(const RuleBasedBreakIteratorTables& that) const {
     return this->description == that.description;
 }
@@ -115,7 +115,7 @@ RuleBasedBreakIteratorTables::lookupBackwardState(int32_t state, int32_t categor
 /**
  * Returns true if the specified state is an accepting state.
  */
-bool_t
+UBool
 RuleBasedBreakIteratorTables::isEndState(int32_t state) const {
     return endStates[state];
 }
@@ -123,7 +123,7 @@ RuleBasedBreakIteratorTables::isEndState(int32_t state) const {
 /**
  * Returns true if the specified state is a lookahead state.
  */
-bool_t
+UBool
 RuleBasedBreakIteratorTables::isLookaheadState(int32_t state) const {
     return lookaheadStates[state];
 }

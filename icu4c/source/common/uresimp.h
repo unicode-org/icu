@@ -51,9 +51,9 @@ struct UResourceDataEntry {
 struct UResourceBundle {
     const char *fKey; /*tag*/
     char *fVersion;
-    bool_t fHasFallback;
-    bool_t fIsTopLevel;
-    bool_t fIsStackObject;
+    UBool fHasFallback;
+    UBool fIsTopLevel;
+    UBool fIsStackObject;
     UResourceDataEntry *fData; /*for low-level access*/
     int32_t fIndex;
     int32_t fSize;
@@ -67,7 +67,7 @@ U_CFUNC const char* ures_getRealLocale(const UResourceBundle* resourceBundle, UE
 /*U_CFUNC UChar** ures_listInstalledLocales(const char *path, int32_t* count);*/
 U_CFUNC const ResourceData *getFallbackData(const UResourceBundle* resBundle, const char* * resTag, Resource *res, UErrorCode *status);
 U_CFUNC int32_t hashBundle(const void *parm);
-U_CFUNC bool_t compareBundles(const void *p1, const void *p2);
+U_CFUNC UBool compareBundles(const void *p1, const void *p2);
 
 /* Candidates for export */
 U_CFUNC UResourceBundle *copyResb(UResourceBundle *r, const UResourceBundle *original);

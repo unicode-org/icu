@@ -17,7 +17,7 @@ UnicodeStringTest::~UnicodeStringTest()
 {
 }
 
-void UnicodeStringTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void UnicodeStringTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     if (exec) logln("TestSuite LocaleTest: ");
     switch (index) {
@@ -475,7 +475,7 @@ UnicodeStringTest::TestSpacePadding()
     UnicodeString test2("   there");
     UnicodeString test3("Hi!  How ya doin'?  Beautiful day, isn't it?");
     UnicodeString test4;
-    bool_t returnVal;
+    UBool returnVal;
     UnicodeString expectedValue;
 
     returnVal = test1.padLeading(15);

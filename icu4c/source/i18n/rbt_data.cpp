@@ -56,7 +56,7 @@ TransliterationRuleData::lookupSet(UChar standIn) const {
     return (i >= 0 && i < setVariablesLength) ? setVariables[i] : 0;
 }
 
-bool_t
+UBool
 TransliterationRuleData::isVariableDefined(const UnicodeString& name) const {
     return 0 != variableNames->get(name);
 }

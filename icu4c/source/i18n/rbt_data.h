@@ -92,7 +92,7 @@ public:
     
 	const UnicodeSet* lookupSet(UChar standIn) const;
 
-    bool_t isVariableDefined(const UnicodeString& name) const;
+    UBool isVariableDefined(const UnicodeString& name) const;
 };
 
 #endif

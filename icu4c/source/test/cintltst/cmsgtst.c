@@ -47,7 +47,7 @@ static UChar* testCasePatterns[5];
 
 static UChar* testResultStrings[5];
 
-static bool_t strings_initialized = FALSE;
+static UBool strings_initialized = FALSE;
 /* function used to create the test patterns for testing Message formatting */
 static void InitStrings( void )
 {

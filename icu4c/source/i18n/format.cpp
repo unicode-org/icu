@@ -92,7 +92,7 @@ Format::parseObject(const UnicodeString& source,
  
 // -------------------------------------
 
-bool_t
+UBool
 Format::operator==(const Format& that) const
 {
     // Add this implementation to make linker happy.

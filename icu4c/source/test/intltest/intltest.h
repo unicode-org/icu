@@ -50,12 +50,12 @@ public:
 
     IntlTest();
 
-    virtual bool_t runTest( char* name = NULL, char* par = NULL ); // not to be overidden
+    virtual UBool runTest( char* name = NULL, char* par = NULL ); // not to be overidden
 
-    virtual bool_t setVerbose( bool_t verbose = TRUE );
-    virtual bool_t setNoErrMsg( bool_t no_err_msg = TRUE );
-    virtual bool_t setQuick( bool_t quick = TRUE );
-    virtual bool_t setLeaks( bool_t leaks = TRUE );
+    virtual UBool setVerbose( UBool verbose = TRUE );
+    virtual UBool setNoErrMsg( UBool no_err_msg = TRUE );
+    virtual UBool setQuick( UBool quick = TRUE );
+    virtual UBool setLeaks( UBool leaks = TRUE );
 
     virtual int32_t getErrors( void );
 
@@ -91,27 +91,27 @@ public:
     FILE *testoutfp;
 
 protected:
-    virtual void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par = NULL ); // overide !
+    virtual void runIndexedTest( int32_t index, UBool exec, char* &name, char* par = NULL ); // overide !
 
-    virtual bool_t runTestLoop( char* testname, char* par );
+    virtual UBool runTestLoop( char* testname, char* par );
 
     virtual int32_t IncErrorCount( void );
 
-    virtual bool_t callTest( IntlTest& testToBeCalled, char* par );
+    virtual UBool callTest( IntlTest& testToBeCalled, char* par );
 
 
-    bool_t      LL_linestart;
+    UBool      LL_linestart;
     int32_t     LL_indentlevel;
 
-    bool_t      verbose;
-    bool_t      no_err_msg;
-    bool_t      quick;
-    bool_t      leaks;
+    UBool      verbose;
+    UBool      no_err_msg;
+    UBool      quick;
+    UBool      leaks;
     int32_t     errorCount;
     IntlTest*   caller;
     char*       path;           // specifies subtests
 
-    virtual void LL_message( UnicodeString message, bool_t newline );
+    virtual void LL_message( UnicodeString message, UBool newline );
 
     // used for collation result reporting, defined here for convenience
     virtual void reportCResult( UnicodeString &source, UnicodeString &target,
@@ -135,7 +135,7 @@ protected:
     static const char* getTestDirectory(void);
 
 public:
-    bool_t run_phase2( char* name, char* par ); // internally, supports reporting memory leaks
+    UBool run_phase2( char* name, char* par ); // internally, supports reporting memory leaks
 
 // static members
 public:

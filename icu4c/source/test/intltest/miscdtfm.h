@@ -16,7 +16,7 @@
 class DateFormatMiscTests : public IntlTest {    
     
     // IntlTest override
-    void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par );
+    void runIndexedTest( int32_t index, UBool exec, char* &name, char* par );
 public:
 
     void test4097450(void);
@@ -24,7 +24,7 @@ public:
     void test4117335(void);
 
 protected:
-    bool_t failure(UErrorCode status, const char* msg);
+    UBool failure(UErrorCode status, const char* msg);
 
 };
  

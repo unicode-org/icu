@@ -41,7 +41,7 @@ extern const UConverterStaticData * ucnv_converterStaticData[UCNV_NUMBER_OF_SUPP
 /*
  * Global - verbosity
  */
-bool_t VERBOSE = FALSE;
+UBool VERBOSE = FALSE;
 
 
 /*Reads the header of the table file and fills in basic knowledge about the converter
@@ -84,7 +84,7 @@ static void WriteConverterSharedData(UNewDataMemory *pData, const UConverterShar
 /*
  * Deletes the static data, table. Ignores any other options in the shareddata.
  */
-bool_t makeconv_deleteSharedConverterData(UConverterSharedData* deadSharedData);
+UBool makeconv_deleteSharedConverterData(UConverterSharedData* deadSharedData);
 
 /*
  * Utility functions
@@ -136,7 +136,7 @@ char *
 
 /* Returns true in c is a in set 'setOfChars', false otherwise
  */
-bool_t 
+UBool 
   isInSet (char c, const char *setOfChars)
 {
   uint8_t i = 0;
@@ -178,7 +178,7 @@ char *
   return line + i;
 }
 
-bool_t haveCopyright=TRUE;
+UBool haveCopyright=TRUE;
 
 static const UDataInfo dataInfo={
     sizeof(UDataInfo),
@@ -422,9 +422,9 @@ void readHeaderFromFile(UConverterStaticData* myConverter,
   char key[15];
   char value[30];
   char* line = storeLine;
-  bool_t endOfHeader = FALSE;
-  bool_t hasConvClass = FALSE;
-  bool_t hasSubChar = FALSE;
+  UBool endOfHeader = FALSE;
+  UBool hasConvClass = FALSE;
+  UBool hasSubChar = FALSE;
   char codepointByte[3];
 
   if (U_FAILURE(*err)) return;
@@ -578,7 +578,7 @@ UConverterTable *loadSBCSTableFromFile(FileStream* convFile, UConverterStaticDat
   UConverterTable* myUConverterTable = NULL;
   UChar unicodeValue = 0xFFFF;
   int32_t sbcsCodepageValue = 0, fallback = 0;
-  bool_t seenFallback = FALSE;
+  UBool seenFallback = FALSE;
   char codepointBytes[5];
   unsigned char replacementChar = '\0';
   int32_t i = 0;
@@ -695,7 +695,7 @@ UConverterTable *loadMBCSTableFromFile(FileStream* convFile, UConverterStaticDat
   int32_t mbcsCodepageValue = '\0';
   char codepointBytes[6];
   int32_t replacementChar = 0x0000, fallback = 0;
-  bool_t seenFallback = FALSE;
+  UBool seenFallback = FALSE;
   uint16_t i = 0;
   CompactShortArray *myFromUnicode = NULL, *myFromUnicodeFallback = NULL;
   CompactShortArray *myToUnicode = NULL, *myToUnicodeFallback = NULL;
@@ -712,7 +712,7 @@ UConverterTable *loadMBCSTableFromFile(FileStream* convFile, UConverterStaticDat
 
   uprv_memset(myUConverterTable, 0, sizeof(UConverterMBCSTable));
   
-  myUConverterTable->mbcs.starters = (bool_t*)(uprv_malloc(sizeof(bool_t)*256));
+  myUConverterTable->mbcs.starters = (UBool*)(uprv_malloc(sizeof(UBool)*256));
   if (myUConverterTable->mbcs.starters == NULL) 
     {
       *err = U_MEMORY_ALLOCATION_ERROR;
@@ -826,7 +826,7 @@ UConverterTable *loadEBCDIC_STATEFULTableFromFile(FileStream* convFile, UConvert
   char codepointBytes[6];
   int32_t replacementChar = 0x0000, fallback = 0;
   uint8_t i = 0;
-  bool_t seenFallback = FALSE;
+  UBool seenFallback = FALSE;
   CompactShortArray* myFromUnicode = NULL;
   CompactShortArray* myToUnicode = NULL;
   CompactShortArray* myFromUnicodeFallback = NULL;
@@ -939,7 +939,7 @@ UConverterTable * loadDBCSTableFromFile(FileStream* convFile, UConverterStaticDa
   char codepointBytes[6];
   int32_t replacementChar = 0x0000, fallback = 0;
   uint8_t i = 0;
-  bool_t seenFallback = FALSE;
+  UBool seenFallback = FALSE;
   CompactShortArray* myFromUnicode = NULL;
   CompactShortArray* myToUnicode = NULL;
   CompactShortArray* myFromUnicodeFallback = NULL;
@@ -1041,7 +1041,7 @@ UConverterTable * loadDBCSTableFromFile(FileStream* convFile, UConverterStaticDa
 }
 
 /*deletes the "shared" type object*/
-bool_t makeconv_deleteSharedConverterData(UConverterSharedData* deadSharedData)
+UBool makeconv_deleteSharedConverterData(UConverterSharedData* deadSharedData)
 {
   if (deadSharedData->staticData->conversionType == UCNV_SBCS)
     {
@@ -1242,8 +1242,8 @@ static void WriteConverterSharedData(UNewDataMemory *pData, const UConverterShar
 
     case UCNV_MBCS:
       {
-        udata_writeBlock(pData, data->table->mbcs.starters, 256*sizeof(bool_t));
-        size += 256*sizeof(bool_t);
+        udata_writeBlock(pData, data->table->mbcs.starters, 256*sizeof(UBool));
+        size += 256*sizeof(UBool);
         size += udata_write_ucmp16(pData,&data->table->mbcs.toUnicode);
         if(size%4)
         {

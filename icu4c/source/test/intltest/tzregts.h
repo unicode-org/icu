@@ -22,7 +22,7 @@ class SimpleTimeZone;
 class TimeZoneRegressionTest: public IntlTest {    
     
     // IntlTest override
-    void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par );
+    void runIndexedTest( int32_t index, UBool exec, char* &name, char* par );
 public:
     
     void Test4052967(void);
@@ -42,13 +42,13 @@ public:
     void TestJ186(void);
     void TestJDK12API(void);
 
-    bool_t checkCalendar314(GregorianCalendar *testCal, TimeZone *testTZ);
+    UBool checkCalendar314(GregorianCalendar *testCal, TimeZone *testTZ);
 
 
 protected:
     UDate findTransitionBinary(const SimpleTimeZone& tz, UDate min, UDate max);
     UDate findTransitionStepwise(const SimpleTimeZone& tz, UDate min, UDate max);
-    bool_t failure(UErrorCode status, const char* msg);
+    UBool failure(UErrorCode status, const char* msg);
 };
 
  

@@ -91,7 +91,7 @@ public:
      *              otherwise.
      * @stable
      */
-    virtual bool_t operator==(const TimeZone& that) const;
+    virtual UBool operator==(const TimeZone& that) const;
 
     /**
      * Constructs a SimpleTimeZone with the given raw GMT offset and time zone ID,
@@ -264,10 +264,10 @@ public:
      * @stable
      */
     void setStartRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek, 
-                      int32_t time, bool_t after, UErrorCode& status);
+                      int32_t time, UBool after, UErrorCode& status);
 
     void setStartRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek, 
-                      int32_t time, TimeMode mode, bool_t after, UErrorCode& status);
+                      int32_t time, TimeMode mode, UBool after, UErrorCode& status);
 
     /**
      * Sets the daylight savings ending rule. For example, in the U.S., Daylight
@@ -336,10 +336,10 @@ public:
      * @stable
      */
     void setEndRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek, 
-                    int32_t time, bool_t after, UErrorCode& status);
+                    int32_t time, UBool after, UErrorCode& status);
 
     void setEndRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek, 
-                    int32_t time, TimeMode mode, bool_t after, UErrorCode& status);
+                    int32_t time, TimeMode mode, UBool after, UErrorCode& status);
 
     /**
      * Returns the TimeZone's adjusted GMT offset (i.e., the number of milliseconds to add
@@ -436,7 +436,7 @@ public:
      * @return   True if this TimeZone uses Daylight Savings Time; false otherwise.
      * @stable
      */
-    virtual bool_t useDaylightTime(void) const;
+    virtual UBool useDaylightTime(void) const;
 
     /**
      * Returns true if the given date is within the period when daylight savings time
@@ -447,7 +447,7 @@ public:
      * false otherwise.
      * @stable
      */
-    virtual bool_t inDaylightTime(UDate date, UErrorCode& status) const;
+    virtual UBool inDaylightTime(UDate date, UErrorCode& status) const;
 
     /**
      * Return true if this zone has the same rules and offset as another zone.
@@ -455,7 +455,7 @@ public:
      * @return true if the given zone has the same rules and offset as this one
      * @stable
      */
-    bool_t hasSameRules(const TimeZone& other) const;
+    UBool hasSameRules(const TimeZone& other) const;
 
     /**
      * Clones TimeZone objects polymorphically. Clients are responsible for deleting
@@ -566,7 +566,7 @@ private:
     int32_t endTime;
     int32_t startYear;  // the year these DST rules took effect
     int32_t rawOffset;  // the TimeZone's raw GMT offset
-    bool_t useDaylight; // flag indicating whether this TimeZone uses DST
+    UBool useDaylight; // flag indicating whether this TimeZone uses DST
     static const int8_t staticMonthLength[12]; // lengths of the months
     EMode startMode, endMode;   // flags indicating what kind of rules the DST rules are
 
@@ -591,7 +591,7 @@ inline void SimpleTimeZone::setStartRule(int32_t month, int32_t dayOfMonth,
 
 inline void SimpleTimeZone::setStartRule(int32_t month, int32_t dayOfMonth,
                                          int32_t dayOfWeek, 
-                                         int32_t time, bool_t after, UErrorCode& status) {
+                                         int32_t time, UBool after, UErrorCode& status) {
     setStartRule(month, dayOfMonth, dayOfWeek, time, WALL_TIME, after, status);
 }
 
@@ -607,7 +607,7 @@ inline void SimpleTimeZone::setEndRule(int32_t month, int32_t dayOfMonth,
 }
 
 inline void SimpleTimeZone::setEndRule(int32_t month, int32_t dayOfMonth, int32_t dayOfWeek, 
-                                       int32_t time, bool_t after, UErrorCode& status) {
+                                       int32_t time, UBool after, UErrorCode& status) {
     setEndRule(month, dayOfMonth, dayOfWeek, time, WALL_TIME, after, status);
 }
 

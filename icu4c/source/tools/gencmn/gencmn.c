@@ -64,7 +64,7 @@ static uint32_t fileCount=0;
 /* prototypes --------------------------------------------------------------- */
 
 static void
-addFile(const char *filename, bool_t sourceTOC);
+addFile(const char *filename, UBool sourceTOC);
 
 static char *
 allocString(uint32_t length);
@@ -96,7 +96,7 @@ main(int argc, const char *argv[]) {
     char *s;
     UErrorCode errorCode=U_ZERO_ERROR;
     uint32_t i, fileOffset, basenameOffset, length;
-    bool_t sourceTOC;
+    UBool sourceTOC;
 
     /* preset then read command line options */
     options[4].value=u_getDataDirectory();
@@ -344,7 +344,7 @@ main(int argc, const char *argv[]) {
 }
 
 static void
-addFile(const char *filename, bool_t sourceTOC) {
+addFile(const char *filename, UBool sourceTOC) {
     char *s;
     uint32_t length;
 

@@ -65,12 +65,12 @@ U_CAPI void U_EXPORT2 uprv_mstrm_close(UMemoryStream *MS){
     uprv_free(MS);
 }
 
-U_CAPI bool_t U_EXPORT2 uprv_mstrm_setError(UMemoryStream *MS){
+U_CAPI UBool U_EXPORT2 uprv_mstrm_setError(UMemoryStream *MS){
     MS->fError = TRUE;
     return MS->fError;
 }
 
-U_CAPI bool_t U_EXPORT2 uprv_mstrm_error(UMemoryStream *MS){
+U_CAPI UBool U_EXPORT2 uprv_mstrm_error(UMemoryStream *MS){
     return MS->fError;
 }
 

@@ -28,20 +28,20 @@
 static void usage();
 static void version();
 static void cal(int32_t month, int32_t year,
-		bool_t useLongNames, UErrorCode *status);
-static void get_days(const UChar *days [], bool_t useLongNames, 
+		UBool useLongNames, UErrorCode *status);
+static void get_days(const UChar *days [], UBool useLongNames, 
 		     int32_t fdow, UErrorCode *status);
-static void get_months(const UChar *months [], bool_t useLongNames,
+static void get_months(const UChar *months [], UBool useLongNames,
 		       UErrorCode *status);
 static void indent(int32_t count, FILE *f);
 static void print_days(const UChar *days [], FILE *f, UErrorCode *status);
 static void  print_month(UCalendar *c, 
 			 const UChar *days [], 
-			 bool_t useLongNames, int32_t fdow, 
+			 UBool useLongNames, int32_t fdow, 
 			 UErrorCode *status);
 static void  print_year(UCalendar *c, 
 			const UChar *days [], const UChar *months [],
-			bool_t useLongNames, int32_t fdow, 
+			UBool useLongNames, int32_t fdow, 
 			UErrorCode *status);
 
 /* The version of cal */
@@ -187,7 +187,7 @@ version()
 static void
 cal(int32_t month,
     int32_t year,
-    bool_t useLongNames,
+    UBool useLongNames,
     UErrorCode *status)
 {
   UCalendar *c;
@@ -250,7 +250,7 @@ cal(int32_t month,
    weeks start on Monday) */
 static void
 get_days(const UChar *days [],
-	 bool_t useLongNames,
+	 UBool useLongNames,
 	 int32_t fdow,
 	 UErrorCode *status)
 {
@@ -278,7 +278,7 @@ get_days(const UChar *days [],
    short form. */
 static void
 get_months(const UChar *months [],
-	   bool_t useLongNames,
+	   UBool useLongNames,
 	   UErrorCode *status)
 {
   UResourceBundle *bundle;
@@ -337,7 +337,7 @@ print_days(const UChar *days [],
 static void
 print_month(UCalendar *c, 
 	    const UChar *days [], 
-	    bool_t useLongNames,
+	    UBool useLongNames,
 	    int32_t fdow,
 	    UErrorCode *status)
 {
@@ -447,7 +447,7 @@ static void
 print_year(UCalendar *c, 
 	   const UChar *days [], 
 	   const UChar *months [],
-	   bool_t useLongNames, 
+	   UBool useLongNames, 
 	   int32_t fdow, 
 	   UErrorCode *status)
 {

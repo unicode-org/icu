@@ -297,13 +297,13 @@ printBytes(const uint8_t *byteBuffer,
   puts("");
 }
 
-static bool_t
+static UBool
 printDiffs(const UChar *s1, 
 	   int32_t s1len, 
 	   const UChar *s2, 
 	   int32_t s2len)
 {
-  bool_t result  = FALSE;
+  UBool result  = FALSE;
   int32_t len;
   int32_t i;
 

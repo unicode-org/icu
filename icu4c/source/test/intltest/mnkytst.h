@@ -33,7 +33,7 @@ public:
 
     CollationMonkeyTest();
     ~CollationMonkeyTest();
-    void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par = NULL );
+    void runIndexedTest( int32_t index, UBool exec, char* &name, char* par = NULL );
 
     // utility function used in tests, returns absolute value
     int32_t checkValue(int32_t value);

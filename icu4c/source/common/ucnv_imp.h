@@ -49,11 +49,11 @@ UConverterSharedData *getSharedConverterData (const char *name);
  * returns TRUE,
  * otherwise returns FALSE
  */
-bool_t deleteSharedConverterData (UConverterSharedData * sharedConverterData);
+UBool deleteSharedConverterData (UConverterSharedData * sharedConverterData);
 
 /* returns true if "name" is in algorithmicConverterNames
  */
-bool_t isDataBasedConverter (const char *name);
+UBool isDataBasedConverter (const char *name);
 
 void copyPlatformString (char *platformString, UConverterPlatform pltfrm);
 

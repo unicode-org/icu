@@ -15,7 +15,7 @@
 
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
 
-void ParsePositionTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void ParsePositionTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     // if (exec) logln((UnicodeString)"TestSuite ParsePositionTest");
     switch (index) {
@@ -28,7 +28,7 @@ void ParsePositionTest::runIndexedTest( int32_t index, bool_t exec, char* &name,
     }
 }
 
-bool_t 
+UBool 
 ParsePositionTest::failure(UErrorCode status, const char* msg)
 {
     if(U_FAILURE(status)) {
@@ -103,9 +103,9 @@ void ParsePositionTest::TestFieldPosition()
     if ( fph.getField() != 3) 
         errln("*** FP getField or heap constr.");
 
-    bool_t err1 = FALSE;
-    bool_t err2 = FALSE;
-    bool_t err3 = FALSE;
+    UBool err1 = FALSE;
+    UBool err2 = FALSE;
+    UBool err3 = FALSE;
 //        for (long i = -50; i < 50; i++ ) {
 //            fp.setField( i+8 );
 //            fp.setBeginIndex( i+6 );

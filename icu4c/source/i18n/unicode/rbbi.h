@@ -254,13 +254,13 @@ RuleBasedBreakIterator(const void* image);
      * Equality operator.  Returns TRUE if both BreakIterators are of the
      * same class, have the same behavior, and iterate over the same text.
      */
-    virtual bool_t operator==(const BreakIterator& that) const;
+    virtual UBool operator==(const BreakIterator& that) const;
 
     /**
      * Not-equal operator.  If operator== returns TRUE, this returns FALSE,
      * and vice versa.
      */
-    bool_t operator!=(const BreakIterator& that) const;
+    UBool operator!=(const BreakIterator& that) const;
 
     /**
      * Returns a newly-constructed RuleBasedBreakIterator with the same
@@ -386,7 +386,7 @@ RuleBasedBreakIterator(const void* image);
      * @param offset the offset to check.
      * @return True if "offset" is a boundary position.
      */
-    virtual bool_t isBoundary(int32_t offset);
+    virtual UBool isBoundary(int32_t offset);
 
     /**
      * Returns the current iteration position.
@@ -458,7 +458,7 @@ private:
     friend class BreakIterator;
 };
 
-inline bool_t RuleBasedBreakIterator::operator!=(const BreakIterator& that) const {
+inline UBool RuleBasedBreakIterator::operator!=(const BreakIterator& that) const {
     return !operator==(that);
 }
 

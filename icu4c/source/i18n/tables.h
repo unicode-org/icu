@@ -47,11 +47,11 @@ public:
      * Constructor
      */
     EntryPair();
-    EntryPair(const UnicodeString &name, int32_t aValue, bool_t aFwd = TRUE);
+    EntryPair(const UnicodeString &name, int32_t aValue, UBool aFwd = TRUE);
 
     UnicodeString entryName;        // Contracting characters
     int32_t value;                  // Collation order
-    bool_t fwd;                        // true if this pair is for the forward direction
+    UBool fwd;                        // true if this pair is for the forward direction
 
     /**
      * The streamIn and streamOut methods read and write objects of this
@@ -101,8 +101,8 @@ class VectorOfInt {
         /**
          * Equality operators.
          */
-        bool_t                  operator==(const VectorOfInt& that);
-        bool_t                  operator!=(const VectorOfInt& that);
+        UBool                  operator==(const VectorOfInt& that);
+        UBool                  operator!=(const VectorOfInt& that);
 
         /**
          * Gets a read-only reference to the element at the specified index.
@@ -157,7 +157,7 @@ class VectorOfInt {
          * Checks if this vector object is valid.
          * @return TRUE if the vector object is valid, FALSE otherwise.
          */
-        bool_t                  isBogus(void) const;
+        UBool                  isBogus(void) const;
 
         /**
          * The streamIn and streamOut methods read and write objects of this
@@ -179,7 +179,7 @@ class VectorOfInt {
         int32_t                     fSize;
         int32_t                     fCapacity;
         int32_t*                    fElements;
-        bool_t                      fBogus;
+        UBool                      fBogus;
 };
 
 /**
@@ -227,8 +227,8 @@ class VectorOfPointer {
         /**
          * Equality operators.
          */
-        bool_t                      operator==(const VectorOfPointer& that);
-        bool_t                      operator!=(const VectorOfPointer& that);
+        UBool                      operator==(const VectorOfPointer& that);
+        UBool                      operator!=(const VectorOfPointer& that);
 
         /**
          * Gets a read-only reference to the element at the specified index.
@@ -272,7 +272,7 @@ class VectorOfPointer {
          * Checks if this vector object is valid.
          * @return TRUE if the vector object is valid, FALSE otherwise.
          */
-        bool_t                      isBogus(void) const;
+        UBool                      isBogus(void) const;
 
     private:
         /**
@@ -284,7 +284,7 @@ class VectorOfPointer {
         int32_t                     fSize;
         int32_t                     fCapacity;
         void**                      fElements;
-        bool_t                      fBogus;
+        UBool                      fBogus;
 };
 
 //=================================================================================================
@@ -463,7 +463,7 @@ class VectorOfPToExpandTable {
          * Checks if this vector object is valid.
          * @return TRUE if the vector object is valid, FALSE otherwise.
          */
-        bool_t              isBogus(void) const;
+        UBool              isBogus(void) const;
 
     /**
      * The streamIn and streamOut methods read and write objects of this
@@ -485,7 +485,7 @@ class VectorOfPToExpandTable {
         int32_t             fSize;
         int32_t             fCapacity;
         VectorOfInt**       fElements;
-        bool_t              fBogus;
+        UBool              fBogus;
 };
 
 class VectorOfPToContractElement;
@@ -639,7 +639,7 @@ class VectorOfPToContractElement {
          * Checks if this vector object is valid.
          * @return TRUE if the vector object is valid, FALSE otherwise.
          */
-        bool_t              isBogus(void) const;
+        UBool              isBogus(void) const;
 
         /**
          * The streamIn and streamOut methods read and write objects of this
@@ -661,7 +661,7 @@ class VectorOfPToContractElement {
         int32_t             fSize;
         int32_t             fCapacity;
         EntryPair**         fElements;
-        bool_t              fBogus;
+        UBool              fBogus;
 };
 
 class VectorOfPToContractTable;
@@ -799,7 +799,7 @@ class VectorOfPToContractTable {
          * Checks if this vector object is valid.
          * @return TRUE if the vector object is valid, FALSE otherwise.
          */
-        bool_t              isBogus(void) const;
+        UBool              isBogus(void) const;
         /**
          * The streamIn and streamOut methods read and write objects of this
          * class as binary, platform-dependent data in the iostream.  The stream
@@ -820,7 +820,7 @@ class VectorOfPToContractTable {
         int32_t             fSize;
         int32_t             fCapacity;
         VectorOfPToContractElement**        fElements;
-        bool_t              fBogus;
+        UBool              fBogus;
 };
 
 class PatternEntry;
@@ -991,7 +991,7 @@ class VectorOfPointersToPatternEntry {
          * Checks if this vector object is valid.
          * @return TRUE if the vector object is valid, FALSE otherwise.
          */
-        bool_t                              isBogus(void) const;
+        UBool                              isBogus(void) const;
     private:
         /**
          * Resizes the vector if necessary when compared to a new size.
@@ -1002,7 +1002,7 @@ class VectorOfPointersToPatternEntry {
         int32_t                             fSize;
         int32_t                             fCapacity;
         PatternEntry**                      fElements;
-        bool_t                              fBogus;
+        UBool                              fBogus;
 };
 
 inline
@@ -1012,7 +1012,7 @@ EntryPair::EntryPair()
 }
 
 inline
-EntryPair::EntryPair(const UnicodeString &name, int32_t aValue, bool_t aFwd)
+EntryPair::EntryPair(const UnicodeString &name, int32_t aValue, UBool aFwd)
   : entryName(name), value(aValue), fwd(aFwd)
 {
 }

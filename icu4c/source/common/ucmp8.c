@@ -322,7 +322,7 @@ findOverlappingPosition(CompactByteArray* this_obj,
   return i;
 }
 
-bool_t
+UBool
 ucmp8_isBogus(const CompactByteArray* this_obj)
 {
   return this_obj == NULL || this_obj->fBogus;

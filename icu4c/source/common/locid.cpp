@@ -276,7 +276,7 @@ Locale::Locale(const    Locale& other)
   variant = fullName + (other.variant - other.fullName) ;
 }
 
-bool_t
+UBool
 Locale::operator==( const   Locale& other) const
 {
   if (uprv_strcmp(other.language, language) == 0)    

@@ -44,5 +44,5 @@ class TestChoiceFormat: public IntlTest {
     /** 
      *    runs tests in local funtions:
      **/
-    void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par = NULL );
+    void runIndexedTest( int32_t index, UBool exec, char* &name, char* par = NULL );
 };

@@ -23,7 +23,7 @@ UnicodeRange* UnicodeRange::clone() const {
 /**
  * CALLER OWNS RESULT.
  */
-bool_t UnicodeRange::contains(UChar c) const {
+UBool UnicodeRange::contains(UChar c) const {
     return c >= start && (c - start) < length;
 }
 

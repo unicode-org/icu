@@ -394,7 +394,7 @@ addProps(Props *p) {
     uint32_t x;
     int32_t value;
     uint16_t count;
-    bool_t isNumber;
+    UBool isNumber;
 
     /*
      * Simple ideas for reducing the number of bits for one character's

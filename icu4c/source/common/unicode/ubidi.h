@@ -264,7 +264,7 @@ ubidi_close(UBiDi *pBiDi);
  * @see ubidi_writeReordered
  */
 U_CAPI void U_EXPORT2
-ubidi_setInverse(UBiDi *pBiDi, bool_t isInverse);
+ubidi_setInverse(UBiDi *pBiDi, UBool isInverse);
 
 /**
  * Is this BiDi object set to perform the inverse BiDi algorithm?
@@ -273,7 +273,7 @@ ubidi_setInverse(UBiDi *pBiDi, bool_t isInverse);
  *
  * @see ubidi_setInverse
  */
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 ubidi_isInverse(UBiDi *pBiDi);
 
 /**

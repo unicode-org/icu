@@ -77,7 +77,7 @@ private:
      * If TRUE, output uppercase hex digits; otherwise output
      * lowercase.  Set by setUppercase() and returned by isUppercase().
      */
-    bool_t uppercase;
+    UBool uppercase;
 
 public:
 
@@ -94,7 +94,7 @@ public:
      * @stable
      */
     UnicodeToHexTransliterator(const UnicodeString& pattern,
-                               bool_t isUppercase,
+                               UBool isUppercase,
                                UnicodeFilter* adoptedFilter,
                                UErrorCode& status);
 
@@ -178,20 +178,20 @@ public:
      * Returns true if this transliterator outputs uppercase hex digits.
      * @stable
      */
-    virtual bool_t isUppercase(void) const;
+    virtual UBool isUppercase(void) const;
 
     /**
      * Sets if this transliterator outputs uppercase hex digits.
      * @stable
      */
-    virtual void setUppercase(bool_t outputUppercase);
+    virtual void setUppercase(UBool outputUppercase);
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
      * @draft
      */
     virtual void handleTransliterate(Replaceable& text, Position& offsets,
-                                     bool_t isIncremental) const;
+                                     UBool isIncremental) const;
 };
 
 inline UnicodeToHexTransliterator::~UnicodeToHexTransliterator() {}
