@@ -24,6 +24,8 @@
 #include "unormimp.h"
 #include "uprops.h"
 
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+
 /**
  * Unicode property names and property value names are compared
  * "loosely". Property[Value]Aliases.txt say:
@@ -102,124 +104,65 @@ ublock_getCode(UChar32 c) {
     return (UBlockCode)((u_getUnicodeProperties(c, 0)&UPROPS_BLOCK_MASK)>>UPROPS_BLOCK_SHIFT);
 }
 
+static const struct {
+    int32_t column;
+    uint32_t mask;
+} binProps[]={
+    /*
+     * column and mask values for binary properties from u_getUnicodeProperties().
+     * Must be in order of corresponding UProperty,
+     * and there must be exacly one entry per binary UProperty.
+     */
+    {  1, U_MASK(UPROPS_ALPHABETIC) },
+    {  1, U_MASK(UPROPS_ASCII_HEX_DIGIT) },
+    {  1, U_MASK(UPROPS_BIDI_CONTROL) },
+    { -1, U_MASK(UPROPS_MIRROR_SHIFT) },
+    {  1, U_MASK(UPROPS_DASH) },
+    {  1, U_MASK(UPROPS_DEFAULT_IGNORABLE_CODE_POINT) },
+    {  1, U_MASK(UPROPS_DEPRECATED) },
+    {  1, U_MASK(UPROPS_DIACRITIC) },
+    {  1, U_MASK(UPROPS_EXTENDER) },
+    {  0, 0 },                                  /* UCHAR_FULL_COMPOSITION_EXCLUSION */
+    {  1, U_MASK(UPROPS_GRAPHEME_BASE) },
+    {  1, U_MASK(UPROPS_GRAPHEME_EXTEND) },
+    {  1, U_MASK(UPROPS_GRAPHEME_LINK) },
+    {  1, U_MASK(UPROPS_HEX_DIGIT) },
+    {  1, U_MASK(UPROPS_HYPHEN) },
+    {  1, U_MASK(UPROPS_ID_CONTINUE) },
+    {  1, U_MASK(UPROPS_ID_START) },
+    {  1, U_MASK(UPROPS_IDEOGRAPHIC) },
+    {  1, U_MASK(UPROPS_IDS_BINARY_OPERATOR) },
+    {  1, U_MASK(UPROPS_IDS_TRINARY_OPERATOR) },
+    {  1, U_MASK(UPROPS_JOIN_CONTROL) },
+    {  1, U_MASK(UPROPS_LOGICAL_ORDER_EXCEPTION) },
+    {  1, U_MASK(UPROPS_LOWERCASE) },
+    {  1, U_MASK(UPROPS_MATH) },
+    {  1, U_MASK(UPROPS_NONCHARACTER_CODE_POINT) },
+    {  1, U_MASK(UPROPS_QUOTATION_MARK) },
+    {  1, U_MASK(UPROPS_RADICAL) },
+    {  1, U_MASK(UPROPS_SOFT_DOTTED) },
+    {  1, U_MASK(UPROPS_TERMINAL_PUNCTUATION) },
+    {  1, U_MASK(UPROPS_UNIFIED_IDEOGRAPH) },
+    {  1, U_MASK(UPROPS_UPPERCASE) },
+    {  1, U_MASK(UPROPS_WHITE_SPACE) },
+    {  1, U_MASK(UPROPS_XID_CONTINUE) },
+    {  1, U_MASK(UPROPS_XID_START) },
+    { -1, U_MASK(UPROPS_CASE_SENSITIVE_SHIFT) }
+};
+
 U_CAPI UBool U_EXPORT2
 u_hasBinaryProperty(UChar32 c, UProperty which) {
-    uint32_t props;
-
     /* c is range-checked in the functions that are called from here */
-    switch(which) {
-    case UCHAR_ALPHABETIC:
-        /* Lu+Ll+Lt+Lm+Lo+Nl+Other_Alphabetic */
-        return (FLAG(u_charType(c))&(_Lu|_Ll|_Lt|_Lm|_Lo|_Nl))!=0 ||
-                (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_OTHER_ALPHABETIC))!=0;
-    case UCHAR_ASCII_HEX_DIGIT:
-        return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_ASCII_HEX_DIGIT))!=0;
-    case UCHAR_BIDI_CONTROL:
-        return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_BIDI_CONTROL))!=0;
-    case UCHAR_BIDI_MIRRORED:
-        return u_isMirrored(c);
-    case UCHAR_DASH:
-        return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_DASH))!=0;
-    case UCHAR_DEFAULT_IGNORABLE_CODE_POINT:
-        /* <2060..206F, FFF0..FFFB, E0000..E0FFF>+Other_Default_Ignorable_Code_Point+(Cf+Cc+Cs-White_Space) */
-        if( (0x2060<=c && c<=0x206f) ||
-            (0xfff0<=c && c<=0xfffb) ||
-            (0xe0000<=c && c<=0xe0fff)
-        ) {
-            return TRUE;
-        }
-
-        props=u_getUnicodeProperties(c, 1);
-        return (props&FLAG(UPROPS_OTHER_DEFAULT_IGNORABLE_CODE_POINT))!=0 ||
-                    ((props&FLAG(UPROPS_WHITE_SPACE))==0 &&
-                    (FLAG(u_charType(c))&(_Cf|_Cc|_Cs))!=0);
-    case UCHAR_DEPRECATED:
-        return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_DEPRECATED))!=0;
-    case UCHAR_DIACRITIC:
-        return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_DIACRITIC))!=0;
-    case UCHAR_EXTENDER:
-        return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_EXTENDER))!=0;
-    case UCHAR_FULL_COMPOSITION_EXCLUSION:
-        return unorm_internalIsFullCompositionExclusion(c);
-    case UCHAR_GRAPHEME_BASE:
-        /*
-         * [0..10FFFF]-Cc-Cf-Cs-Co-Cn-Zl-Zp-Grapheme_Link-Grapheme_Extend-CGJ ==
-         * [0..10FFFF]-Cc-Cf-Cs-Co-Cn-Zl-Zp-Grapheme_Link-(Me+Mn+Mc+Other_Grapheme_Extend)-CGJ ==
-         * [0..10FFFF]-Cc-Cf-Cs-Co-Cn-Zl-Zp-Me-Mn-Mc-Grapheme_Link-Other_Grapheme_Extend-CGJ
-         *
-         * u_charType(c out of range) returns Cn so we need not check for the range
-         */
-        return c!=CGJ &&
-                (FLAG(u_charType(c))&(_Cc|_Cf|_Cs|_Co|_Cn|_Zl|_Zp|_Me|_Mn|_Mc))==0 &&
-                ((u_getUnicodeProperties(c, 1)&
-                    (FLAG(UPROPS_GRAPHEME_LINK)|FLAG(UPROPS_OTHER_GRAPHEME_EXTEND)))==0);
-    case UCHAR_GRAPHEME_EXTEND:
-        /* Me+Mn+Mc+Other_Grapheme_Extend-Grapheme_Link-CGJ */
-        if(c==CGJ) {
-            return FALSE; /* fastest check first */
-        }
-
-        props=u_getUnicodeProperties(c, 1);
-        return (props&FLAG(UPROPS_GRAPHEME_LINK))==0 &&
-                    ((props&FLAG(UPROPS_OTHER_GRAPHEME_EXTEND))!=0 ||
-                    (FLAG(u_charType(c))&(_Me|_Mn|_Mc))!=0);
-    case UCHAR_GRAPHEME_LINK:
-        return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_GRAPHEME_LINK))!=0;
-    case UCHAR_HEX_DIGIT:
-        return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_HEX_DIGIT))!=0;
-    case UCHAR_HYPHEN:
-        return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_HYPHEN))!=0;
-    case UCHAR_ID_CONTINUE:
-        /* ID_Start+Mn+Mc+Nd+Pc == Lu+Ll+Lt+Lm+Lo+Nl+Mn+Mc+Nd+Pc */
-        return (FLAG(u_charType(c))&(_Lu|_Ll|_Lt|_Lm|_Lo|_Nl|_Mn|_Mc|_Nd|_Pc))!=0;
-    case UCHAR_ID_START:
-        /* Lu+Ll+Lt+Lm+Lo+Nl */
-        return (FLAG(u_charType(c))&(_Lu|_Ll|_Lt|_Lm|_Lo|_Nl))!=0;
-    case UCHAR_IDEOGRAPHIC:
-        return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_IDEOGRAPHIC))!=0;
-    case UCHAR_IDS_BINARY_OPERATOR:
-        return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_IDS_BINARY_OPERATOR))!=0;
-    case UCHAR_IDS_TRINARY_OPERATOR:
-        return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_IDS_TRINARY_OPERATOR))!=0;
-    case UCHAR_JOIN_CONTROL:
-        return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_JOIN_CONTROL))!=0;
-    case UCHAR_LOGICAL_ORDER_EXCEPTION:
-        return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_LOGICAL_ORDER_EXCEPTION))!=0;
-    case UCHAR_LOWERCASE:
-        /* Ll+Other_Lowercase */
-        return u_charType(c)==U_LOWERCASE_LETTER ||
-                (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_OTHER_LOWERCASE))!=0;
-    case UCHAR_MATH:
-        /* Sm+Other_Math */
-        return u_charType(c)==U_MATH_SYMBOL ||
-                (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_OTHER_MATH))!=0;
-    case UCHAR_NONCHARACTER_CODE_POINT:
-        return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_NONCHARACTER_CODE_POINT))!=0;
-    case UCHAR_QUOTATION_MARK:
-        return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_QUOTATION_MARK))!=0;
-    case UCHAR_RADICAL:
-        return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_RADICAL))!=0;
-    case UCHAR_SOFT_DOTTED:
-        return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_SOFT_DOTTED))!=0;
-    case UCHAR_TERMINAL_PUNCTUATION:
-        return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_TERMINAL_PUNCTUATION))!=0;
-    case UCHAR_UNIFIED_IDEOGRAPH:
-        return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_UNIFIED_IDEOGRAPH))!=0;
-    case UCHAR_UPPERCASE:
-        /* Lu+Other_Uppercase */
-        return u_charType(c)==U_UPPERCASE_LETTER ||
-                (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_OTHER_UPPERCASE))!=0;
-    case UCHAR_WHITE_SPACE:
-        return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_WHITE_SPACE))!=0;
-    case UCHAR_XID_CONTINUE:
-        return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_XID_CONTINUE))!=0;
-    case UCHAR_XID_START:
-        return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_XID_START))!=0;
-    case UCHAR_CASE_SENSITIVE:
-        return uprv_isCaseSensitive(c);
-    default:
+    if(which<UCHAR_BINARY_START || UCHAR_BINARY_LIMIT<=which) {
         /* not a known binary property */
         return FALSE;
+    } else if(which==UCHAR_CASE_SENSITIVE) {
+        return uprv_isCaseSensitive(c);
+    } else if(which==UCHAR_FULL_COMPOSITION_EXCLUSION) {
+        return unorm_internalIsFullCompositionExclusion(c);
+    } else {
+        /* systematic, directly stored properties */
+        return (u_getUnicodeProperties(c, binProps[which].column)&binProps[which].mask)!=0;
     }
 }
 
@@ -266,8 +209,6 @@ uprv_openRuleWhiteSpaceSet(UErrorCode* ec) {
 U_CAPI int32_t U_EXPORT2
 u_getIntPropertyValue(UChar32 c, UProperty which) {
     UErrorCode errorCode;
-    int32_t i;
-    int8_t type;
 
     if(which<UCHAR_BINARY_START) {
         return 0; /* undefined */
@@ -292,35 +233,9 @@ u_getIntPropertyValue(UChar32 c, UProperty which) {
         case UCHAR_JOINING_GROUP:
             return (int32_t)(u_getUnicodeProperties(c, 2)&UPROPS_JG_MASK)>>UPROPS_JG_SHIFT;
         case UCHAR_JOINING_TYPE:
-            /*
-             * ArabicShaping.txt:
-             * Note: Characters of joining type T and most characters of 
-             * joining type U are not explicitly listed in this file.
-             *
-             * Characters of joining type T can [be] derived by the following formula:
-             *   T = Mn + Cf - ZWNJ - ZWJ
-             */
-            i=(int32_t)(u_getUnicodeProperties(c, 2)&UPROPS_JT_MASK)>>UPROPS_JT_SHIFT;
-            if(i==0 && c!=ZWNJ && c!=ZWJ && (FLAG(u_charType(c))&(_Mn|_Cf))!=0) {
-                i=(int32_t)U_JT_TRANSPARENT;
-            }
-            return i;
+            return (int32_t)(u_getUnicodeProperties(c, 2)&UPROPS_JT_MASK)>>UPROPS_JT_SHIFT;
         case UCHAR_LINE_BREAK:
-            /*
-             * LineBreak.txt:
-             *  - Assigned characters that are not listed explicitly are given the value
-             *    "AL".
-             *  - Unassigned characters are given the value "XX".
-             * ...
-             * E000..F8FF;XX # <Private Use, First>..<Private Use, Last>
-             * F0000..FFFFD;XX # <Plane 15 Private Use, First>..<Plane 15 Private Use, Last>
-             * 100000..10FFFD;XX # <Plane 16 Private Use, First>..<Plane 16 Private Use, Last>
-             */
-            i=(int32_t)(u_getUnicodeProperties(c, 0)&UPROPS_LB_MASK)>>UPROPS_LB_SHIFT;
-            if(i==0 && (type=u_charType(c))!=0 && type!=(int8_t)U_PRIVATE_USE_CHAR) {
-                i=(int32_t)U_LB_ALPHABETIC;
-            }
-            return i;
+            return (int32_t)(u_getUnicodeProperties(c, 0)&UPROPS_LB_MASK)>>UPROPS_LB_SHIFT;
         case UCHAR_NUMERIC_TYPE:
             return (int32_t)GET_NUMERIC_TYPE(u_getUnicodeProperties(c, -1));
         case UCHAR_SCRIPT:
@@ -356,33 +271,32 @@ u_getIntPropertyMaxValue(UProperty which) {
         case UCHAR_BIDI_CLASS:
             return (int32_t)U_CHAR_DIRECTION_COUNT-1;
         case UCHAR_BLOCK:
-            max=(uprv_getMaxValues()&UPROPS_BLOCK_MASK)>>UPROPS_BLOCK_SHIFT;
-            if(max==0) {
-                max=(int32_t)UBLOCK_COUNT-1;
-            }
-            return max;
+            max=(uprv_getMaxValues(0)&UPROPS_BLOCK_MASK)>>UPROPS_BLOCK_SHIFT;
+            return max!=0 ? max : (int32_t)UBLOCK_COUNT-1;
         case UCHAR_CANONICAL_COMBINING_CLASS:
             return 0xff; /* TODO do we need to be more precise, getting the actual maximum? */
         case UCHAR_DECOMPOSITION_TYPE:
-            return (int32_t)U_DT_COUNT-1;
+            max=uprv_getMaxValues(0)&UPROPS_DT_MASK;
+            return max!=0 ? max : (int32_t)U_DT_COUNT-1;
         case UCHAR_EAST_ASIAN_WIDTH:
-            return (int32_t)U_EA_COUNT-1;
+            max=(uprv_getMaxValues(0)&UPROPS_EA_MASK)>>UPROPS_EA_SHIFT;
+            return max!=0 ? max : (int32_t)U_EA_COUNT-1;
         case UCHAR_GENERAL_CATEGORY:
             return (int32_t)U_CHAR_CATEGORY_COUNT-1;
         case UCHAR_JOINING_GROUP:
-            return (int32_t)U_JG_COUNT-1;
+            max=(uprv_getMaxValues(0)&UPROPS_JG_MASK)>>UPROPS_JG_SHIFT;
+            return max!=0 ? max : (int32_t)U_JG_COUNT-1;
         case UCHAR_JOINING_TYPE:
-            return (int32_t)U_JT_COUNT-1;
+            max=(uprv_getMaxValues(0)&UPROPS_JT_MASK)>>UPROPS_JT_SHIFT;
+            return max!=0 ? max : (int32_t)U_JT_COUNT-1;
         case UCHAR_LINE_BREAK:
-            return (int32_t)U_LB_COUNT-1;
+            max=(uprv_getMaxValues(0)&UPROPS_LB_MASK)>>UPROPS_LB_SHIFT;
+            return max!=0 ? max : (int32_t)U_LB_COUNT-1;
         case UCHAR_NUMERIC_TYPE:
             return (int32_t)U_NT_COUNT-1;
         case UCHAR_SCRIPT:
-            max=uprv_getMaxValues()&UPROPS_SCRIPT_MASK;
-            if(max==0) {
-                max=(int32_t)USCRIPT_CODE_LIMIT-1;
-            }
-            return max;
+            max=uprv_getMaxValues(0)&UPROPS_SCRIPT_MASK;
+            return max!=0 ? max : (int32_t)USCRIPT_CODE_LIMIT-1;
         default:
             return -1; /* undefined */
         }
