@@ -108,8 +108,8 @@ DataHeader dh ={
         0,                          //     reserved
 
     { 0x42, 0x72, 0x6b, 0x20 },     //     dataFormat="Brk "
-    { 2, 1, 0, 0 },                 //     formatVersion
-        { 3, 1, 0, 0 }                //   dataVersion (Unicode version)
+    { 3, 0, 0, 0 },                 //     formatVersion
+        { 4, 0, 0, 0 }                //   dataVersion (Unicode version)
     }};
 
 #endif

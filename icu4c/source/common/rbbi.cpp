@@ -405,6 +405,10 @@ int32_t RuleBasedBreakIterator::previous(void) {
         return BreakIterator::DONE;
     }
 
+    if (fData->fSafeRevTable != NULL) {
+        return handleNewPrevious();
+    }
+
     // old rule syntax
     // set things up.  handlePrevious() will back us up to some valid
     // break position before the current position (we back our internal
@@ -415,8 +419,7 @@ int32_t RuleBasedBreakIterator::previous(void) {
     int32_t start = current();
 
     fText->previous32();
-    int32_t lastResult    = (fData->fSafeRevTable != NULL) ? 
-                            handleNewPrevious(): handlePrevious();
+    int32_t lastResult    = handlePrevious();
     int32_t result        = lastResult;
     int32_t lastTag       = 0;
     UBool   breakTagValid = FALSE;
@@ -449,9 +452,6 @@ int32_t RuleBasedBreakIterator::previous(void) {
     fLastBreakTagValid = breakTagValid;
     return lastResult;
 }
-
-
-
 
 /**
  * Sets the iterator to refer to the first boundary position following
@@ -954,6 +954,10 @@ int32_t RuleBasedBreakIterator::handleNewPrevious(void) {
         // if (c == CharacterIterator::DONE && fText->hasPrevious()==FALSE) {
         if (hasPassedStartText) { 
             // if we have already considered the start of the text
+            if (fData->fLookAheadHardBreak == TRUE 
+                && row->fLookAhead != 0) {
+                result = 0;
+            }
             break;
         }
 
@@ -1007,6 +1011,17 @@ int32_t RuleBasedBreakIterator::handleNewPrevious(void) {
                 /// we need to make the lookahead rules not chain eventually.
                 /// return result;
                 /// this is going to be the longest match again
+
+                /// syn wee todo hard coded for line breaks stuff
+                /// needs to provide a tag in rules to ensure a stop.
+
+                if (fData->fLookAheadHardBreak == TRUE) {
+                    fText->setIndex(result);
+                    return result;
+                }
+                category = lastCategory;
+                fText->setIndex(result);
+              
                 goto continueOn;
             }
 

@@ -127,6 +127,14 @@ public:
     const UChar              *fRuleSource;
 
     UTrie               fTrie;
+    // if fLookAheadHardBreak is true, we will break at the first lookahead match
+    // the search does not go on further to look for a longer match
+    // this also allows breaks at both ends of the string
+    // e.g. rule "ABC / D; ABCDE" and 
+    // text "ABCD ABCDE ABC" will give breaks at
+    //       01234567890123
+    // {0, 3, 4, 5, 8, 9, 10, 11, 14}
+    UBool               fLookAheadHardBreak;
 
 private:
     int32_t             fRefCount;
