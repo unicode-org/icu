@@ -222,8 +222,14 @@ import com.ibm.icu.util.UResourceBundle;
     }
     
     String filename;
+    GenerateSidewaysView parent = null;
         
     private GenerateSidewaysView(String filename) throws SAXException, IOException {
+        // make sure the parents are loaded into cache before we are
+        String parentName = getParentFilename(filename);
+        if (parentName != null) {
+            parent = getCLDR(parentName);
+        }
         //System.out.println("Creating " + filename);
         this.filename = filename;
 
@@ -231,15 +237,37 @@ import com.ibm.icu.util.UResourceBundle;
         xmlReader.setProperty("http://xml.org/sax/properties/lexical-handler",DEFAULT_HANDLER);
 
         readFrom(options[SOURCEDIR].value, filename);
-        String current = filename;
-        while (true) {
-            current = getParent(current);
-            if (current == null) break;
-            GenerateSidewaysView temp = getCLDR(current);
-            this.removeAll(temp);
-       }
+        // walk through the map removing anything that is inherited from a parent.
+        // changed so that we stop when the parent has an element
+        if (parent != null) {
+            Set toRemove = new TreeSet();
+            for (Iterator it = data.iterator(); it.hasNext();) {
+                Object key = it.next();
+                if (((ElementChain)key).containsElement("identity")) continue;
+                Object value = data.get(key);
+                Object inheritedValue = getInheritedValue(key);
+                if (value.equals(inheritedValue)) {
+                    // debugging: data.get(key);
+                    //getInheritedValue(key);
+                    //value.equals(inheritedValue);
+                    toRemove.add(key);
+                }
+            }
+            for (Iterator it = toRemove.iterator(); it.hasNext();) {
+                Object key = it.next();
+                Object value = data.get(key);
+                log.println("Removing " + ((ElementChain)key).toString(true, 0) + "\t" + value);
+                data.remove(key);
+            }
+        }
     }
     
+    private Object getInheritedValue(Object key) {
+        if (parent == null) return null;
+        Object value = parent.data.get(key);
+        if (value != null) return value;
+        return parent.getInheritedValue(key);
+    }
     
     /*
     Set badTimezoneIDs = null;
@@ -269,11 +297,13 @@ import com.ibm.icu.util.UResourceBundle;
         }
     } */
     
+    /*
     private void removeAll(GenerateSidewaysView temp) {
         data.removeAll(temp.data);
     }
+    */
 
-    private static String getParent(String filename) {
+    private static String getParentFilename(String filename) {
         if (filename.equals("zh_TW")) return "zh_Hant";
         int pos = filename.lastIndexOf('_');
         if (pos >= 0) {
@@ -350,10 +380,13 @@ import com.ibm.icu.util.UResourceBundle;
     }
     
 
-    public static final Set IGNOREABLE = new HashSet(Arrays.asList(new String[] {
+    public static final Set IGNOREABLE = new HashSet();
+    /*
+        new HashSet(Arrays.asList(new String[] {
             "draft", 
             "references",
             "standard"}));
+            */
 
     static class SimpleAttribute implements Comparable {
         String name;
@@ -426,8 +459,10 @@ import com.ibm.icu.util.UResourceBundle;
         public String toString(boolean path, boolean isZone) {
             StringBuffer buffer = new StringBuffer();
             for (Iterator it = contents.iterator(); it.hasNext();) {
-                SimpleAttribute a = (SimpleAttribute)it.next();
-                if (path && IGNOREABLE.contains(a.name)) continue;
+                SimpleAttribute a = getSkipping(it);
+                if (a == null) continue;
+                //SimpleAttribute a = (SimpleAttribute)it.next();
+                //if (path && IGNOREABLE.contains(a.name)) continue;
                 if (isZone && a.name.equals("type")) {
                     String replacement = TimeZoneAliases.get(a.value);
                     if (replacement != null) a = new SimpleAttribute("type", replacement);
@@ -909,10 +944,10 @@ import com.ibm.icu.util.UResourceBundle;
             contexts.remove(last);
         }
         
-        public String toString() {return toString(true);}
-        public String toString(boolean path) {
+        public String toString() {return toString(true, 0);}
+        public String toString(boolean path, int startLevel) {
             StringBuffer buffer = new StringBuffer();
-            for (int i = 0; i < contexts.size(); ++i) {
+            for (int i = startLevel; i < contexts.size(); ++i) {
                 //if (i != 0) buffer.append(' ');
                 Element e = (Element) contexts.get(i);
                 if (path) buffer.append("/" + e.toString(path));
@@ -1143,8 +1178,16 @@ import com.ibm.icu.util.UResourceBundle;
             list.add(a);
         }
         /**
+		 * @param object
+		 */
+		public void remove(Object object) {
+			map.remove(object);
+            list.remove(object);
+		}
+		/**
          * @param map
          */
+        /*
         public void removeAll(OrderedMap other) {
             for (Iterator it = other.iterator(); it.hasNext();) {
                 Object key = it.next();
@@ -1152,11 +1195,13 @@ import com.ibm.icu.util.UResourceBundle;
                 Object value = map.get(key);
                 if (value == null || !value.equals(otherValue)) continue;
                 if (((ElementChain)key).containsElement("identity")) continue;
-                log.println("Removing " + ((ElementChain)key).toString(true) + "\t" + value);
+                value.equals(otherValue);
+                log.println("Removing " + ((ElementChain)key).toString(true, 0) + "\t" + value);
                 map.remove(key);
                 while(list.remove(key)) {}
             }
         }
+        */
         public Object get(Object a) {
             return map.get(a);
         }
@@ -1173,6 +1218,7 @@ import com.ibm.icu.util.UResourceBundle;
     
     ElementChain putData(ElementChain stack, String associatedData) {
         ElementChain result = new ElementChain(stack);
+        // log.println("Adding: " + result.toString(true,0) + "\t" + associatedData);
         data.put(result, associatedData);
         return result;
     }
@@ -1232,6 +1278,7 @@ import com.ibm.icu.util.UResourceBundle;
             writeStyleSheet();
             PrintWriter out = null;
             String lastChainName = "";
+            int lineCounter = 1;
             for (Iterator it = contextCache.keySet().iterator(); it.hasNext();) {
                 ElementChain stack = (ElementChain) it.next();
                 String chainName = getChainName(stack);
@@ -1243,8 +1290,16 @@ import com.ibm.icu.util.UResourceBundle;
                     allTypes.add(chainName); // add to the list
                 	out = openAndDoHeader(chainName);
                     lastChainName = chainName;
+                    lineCounter = 1;
                 }
-                out.println("<tr><td colspan='2' class='head'>" + BagFormatter.toHTML.transliterate(stack.toString(true)) + "</td></tr>");
+                String key = stack.toString(true, 1);
+                // strip    /ldml@version="1.2"/;
+                
+                out.println("<tr><td colspan='2' class='head'>" + 
+                        "<a href='#" + lineCounter + "' name='" + lineCounter + "'>" 
+                        + lineCounter + "</a>&nbsp;" + 
+                        BagFormatter.toHTML.transliterate(key) + "</td></tr>");
+                lineCounter++;
                 Map dataToFile = (Map) contextCache.get(stack);
                 // walk through once, and gather all the filenames
                 Set remainingFiles = new TreeSet(fileNames);
@@ -1268,7 +1323,11 @@ import com.ibm.icu.util.UResourceBundle;
                     for (Iterator it3 = files.iterator(); it3.hasNext();) {
                         if (first) first = false;
                         else out.print(" ");
-                        out.print("\u00B7" + it3.next() + "\u00B7");
+                        String localeID = (String)it3.next();
+                        boolean emphasize = localeID.equals("root") || localeID.indexOf('_') >= 0;
+                        if (emphasize) out.print("<b>");
+                        out.print("\u00B7" + localeID + "\u00B7");
+                        if (emphasize) out.print("</b>");
                     }
                     out.println("</td></tr>");
                 }
@@ -1293,7 +1352,7 @@ import com.ibm.icu.util.UResourceBundle;
 			PrintWriter out = BagFormatter.openUTF8Writer(options[DESTDIR].value, "by_type" + File.separator + fileName);
             out.println("<html><head>");
             out.println("<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
-			out.println("<title>Comparison By Type: " + type + "</title>");
+			out.println("<title>Comparison By Type: " + BagFormatter.toHTML.transliterate(type) + "</title>");
             out.println("<link rel='stylesheet' type='text/css' href='http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/common.css'>");
             out.println("<link rel='stylesheet' type='text/css' href='by_type.css'>");
 			out.println("</head>");
@@ -1509,6 +1568,14 @@ import com.ibm.icu.util.UResourceBundle;
 			result.setFeature("http://xml.org/sax/features/validation", validating);
 		} catch (SAXException e) {
 			System.out.println("WARNING: Can't set parser validation to: " + validating);
+		}
+        try {
+			result.setEntityResolver(new CachingEntityResolver());
+		} catch (Throwable e) {
+			System.out
+					.println("WARNING: Can't set caching entity resolver  -  error "
+							+ e.toString());
+			e.printStackTrace();
 		}
         return result;
 	}
