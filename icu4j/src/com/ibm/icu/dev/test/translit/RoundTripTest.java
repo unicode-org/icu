@@ -130,7 +130,7 @@ public class RoundTripTest extends TestFmwk {
         String nukta = "\u093c\u09bc\u0a3c\u0abc\u0b3c";
         String virama = "\u094d\u09cd\u0a4d\u0acd\u0b4d\u0bcd\u0c4d\u0ccd\u0d4d";
         String sanskritStressSigns = "\u0951\u0952\u0953\u0954";
-        
+        String chandrabindu = "\u0901\u0981\u0A81\u0b01";
         public boolean is(String sourceString){
             int cp=sourceString.charAt(0);
             
@@ -145,15 +145,35 @@ public class RoundTripTest extends TestFmwk {
                 return false;
             }else if(sanskritStressSigns.indexOf(cp)!=-1){
                 return false;
+            }else if((chandrabindu.indexOf(cp)!=-1) && 
+                        (sourceString.length() >1 && 
+                            vowelSignSet.contains(sourceString.charAt(1)))){
+                return false;
             }
             return true;
         }
     }
-    static String latinForIndic = "[['.0-9A-Za-z~\u00C0-\u00C5\u00C7-\u00CF\u00D1-\u00D6\u00D9-\u00DD\u00E0-\u00E5\u00E7-\u00EF\u00F1-\u00F6\u00F9-\u00FD\u00FF-\u010F\u0112-\u0125\u0128-\u0130\u0134-\u0137\u0139-\u013E\u0143-\u0148\u014C-\u0151\u0154-\u0165\u0168-\u017E\u01A0-\u01A1\u01AF-\u01B0\u01CD-\u01DC\u01DE-\u01E3\u01E6-\u01ED\u01F0\u01F4-\u01F5\u01F8-\u01FB\u0200-\u021B\u021E-\u021F\u0226-\u0233\u0303-\u0304\u0306\u0314-\u0315\u0325\u040E\u0419\u0439\u045E\u04C1-\u04C2\u04D0-\u04D1\u04D6-\u04D7\u04E2-\u04E3\u04EE-\u04EF\u1E00-\u1E99\u1EA0-\u1EF9\u1F01\u1F03\u1F05\u1F07\u1F09\u1F0B\u1F0D\u1F0F\u1F11\u1F13\u1F15\u1F19\u1F1B\u1F1D\u1F21\u1F23\u1F25\u1F27\u1F29\u1F2B\u1F2D\u1F2F\u1F31\u1F33\u1F35\u1F37\u1F39\u1F3B\u1F3D\u1F3F\u1F41\u1F43\u1F45\u1F49\u1F4B\u1F4D\u1F51\u1F53\u1F55\u1F57\u1F59\u1F5B\u1F5D\u1F5F\u1F61\u1F63\u1F65\u1F67\u1F69\u1F6B\u1F6D\u1F6F\u1F81\u1F83\u1F85\u1F87\u1F89\u1F8B\u1F8D\u1F8F\u1F91\u1F93\u1F95\u1F97\u1F99\u1F9B\u1F9D\u1F9F\u1FA1\u1FA3\u1FA5\u1FA7\u1FA9\u1FAB\u1FAD\u1FAF-\u1FB1\u1FB8-\u1FB9\u1FD0-\u1FD1\u1FD8-\u1FD9\u1FE0-\u1FE1\u1FE5\u1FE8-\u1FE9\u1FEC\u212A-\u212B\uE04D\uE064]"
-                            +"-[\uE000-\uE080 \u01E2\u01E3]& [[:latin:][:mark:]]]";
+    static String latinForIndic = "[['.0-9A-Za-z~\u00C0-\u00C5\u00C7-\u00CF\u00D1-\u00D6\u00D9-\u00DD"+
+                                   "\u00E0-\u00E5\u00E7-\u00EF\u00F1-\u00F6\u00F9-\u00FD\u00FF-\u010F"+
+                                   "\u0112-\u0125\u0128-\u0130\u0134-\u0137\u0139-\u013E\u0143-\u0148"+
+                                   "\u014C-\u0151\u0154-\u0165\u0168-\u017E\u01A0-\u01A1\u01AF-\u01B0"+
+                                   "\u01CD-\u01DC\u01DE-\u01E3\u01E6-\u01ED\u01F0\u01F4-\u01F5\u01F8-\u01FB"+
+                                   "\u0200-\u021B\u021E-\u021F\u0226-\u0233\u0303-\u0304\u0306\u0314-\u0315"+
+                                   "\u0325\u040E\u0419\u0439\u045E\u04C1-\u04C2\u04D0-\u04D1\u04D6-\u04D7"+
+                                   "\u04E2-\u04E3\u04EE-\u04EF\u1E00-\u1E99\u1EA0-\u1EF9\u1F01\u1F03\u1F05"+
+                                   "\u1F07\u1F09\u1F0B\u1F0D\u1F0F\u1F11\u1F13\u1F15\u1F19\u1F1B\u1F1D\u1F21"+
+                                   "\u1F23\u1F25\u1F27\u1F29\u1F2B\u1F2D\u1F2F\u1F31\u1F33\u1F35\u1F37\u1F39"+
+                                   "\u1F3B\u1F3D\u1F3F\u1F41\u1F43\u1F45\u1F49\u1F4B\u1F4D\u1F51\u1F53\u1F55"+
+                                   "\u1F57\u1F59\u1F5B\u1F5D\u1F5F\u1F61\u1F63\u1F65\u1F67\u1F69\u1F6B\u1F6D"+
+                                   "\u1F6F\u1F81\u1F83\u1F85\u1F87\u1F89\u1F8B\u1F8D\u1F8F\u1F91\u1F93\u1F95"+
+                                   "\u1F97\u1F99\u1F9B\u1F9D\u1F9F\u1FA1\u1FA3\u1FA5\u1FA7\u1FA9\u1FAB\u1FAD"+
+                                   "\u1FAF-\u1FB1\u1FB8-\u1FB9\u1FD0-\u1FD1\u1FD8-\u1FD9\u1FE0-\u1FE1\u1FE5"+
+                                   "\u1FE8-\u1FE9\u1FEC\u212A-\u212B\uE04D\uE064]"+
+                                   "-[\uE000-\uE080 \u01E2\u01E3]& [[:latin:][:mark:]]]";
+                                   
     public void TestDevanagariLatin() throws IOException, ParseException {
         new Test("Latin-DEVANAGARI")
-          .test(latinForIndic, "[[:Devanagari:][\u094d]]", null, this, new LegalIndic());
+          .test(latinForIndic, "[[:Devanagari:][\u094d][\u0964\u0965]]", "[\u0965]", this, new LegalIndic());
     }
     
     private static final String [][] array= new String[][]{
@@ -195,7 +215,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "Tamil-DEVANAGARI",
           "[:tamil:]", "[:Devanagari:]", 
-                  "[\u0030\u093c\u0943-\u094a\u0951-\u0954\u0962\u0963\u090B\u090C\u090D\u0911\u0916\u0917\u0918\u091B\u091D\u0920\u0921\u0922\u0925\u0926\u0927\u092B\u092C\u092D\u0936\u093d\u0950[\u0958-\u0961]]", /*roundtrip exclusions*/
+                  "[\u093c\u0943-\u094a\u0951-\u0954\u0962\u0963\u090B\u090C\u090D\u0911\u0916\u0917\u0918\u091B\u091D\u0920\u0921\u0922\u0925\u0926\u0927\u092B\u092C\u092D\u0936\u093d\u0950[\u0958-\u0961]]", /*roundtrip exclusions*/
                   },
         new String [] {  "DEVANAGARI-Tamil",
            "[:Devanagari:]", "[:tamil:]",
@@ -258,7 +278,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "Tamil-BENGALI",
           "[:tamil:]", "[:BENGALI:]", 
-                  "[\u0030\u09bc\u09c3\u09c4\u09e2\u09e3\u09f0\u09f1\u098B\u098C\u0996\u0997\u0998\u099B\u099D\u09A0\u09A1\u09A2\u09A5\u09A6\u09A7\u09AB\u09AC\u09AD\u09B6\u09DC\u09DD\u09DF\u09E0\u09E1]", /*roundtrip exclusions*/
+                  "[\u09bc\u09c3\u09c4\u09e2\u09e3\u09f0\u09f1\u098B\u098C\u0996\u0997\u0998\u099B\u099D\u09A0\u09A1\u09A2\u09A5\u09A6\u09A7\u09AB\u09AC\u09AD\u09B6\u09DC\u09DD\u09DF\u09E0\u09E1]", /*roundtrip exclusions*/
                   },
         new String [] {  "BENGALI-Tamil",
            "[:BENGALI:]", "[:tamil:]",
@@ -312,7 +332,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "TAMIL-GURMUKHI",
           "[:TAMIL:]", "[:GURMUKHI:]", 
-                "[\u0030\u0a33\u0a36\u0a3c\u0a70\u0a71\u0a47\u0A16\u0A17\u0A18\u0A1B\u0A1D\u0A20\u0A21\u0A22\u0A25\u0A26\u0A27\u0A2B\u0A2C\u0A2D\u0A59\u0A5A\u0A5B\u0A5C\u0A5E\u0A72\u0A73\u0A74]", /*roundtrip exclusions*/
+                "[\u0a33\u0a36\u0a3c\u0a70\u0a71\u0a47\u0A16\u0A17\u0A18\u0A1B\u0A1D\u0A20\u0A21\u0A22\u0A25\u0A26\u0A27\u0A2B\u0A2C\u0A2D\u0A59\u0A5A\u0A5B\u0A5C\u0A5E\u0A72\u0A73\u0A74]", /*roundtrip exclusions*/
                 },
         new String [] {  "GURMUKHI-TAMIL",
            "[:GURMUKHI:]", "[:TAMIL:]",
@@ -356,7 +376,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "TAMIL-GUJARATI",
           "[:TAMIL:]", "[:GUJARATI:]", 
-                "[\u0030\u0abc\u0ac3\u0Ac4\u0Ac5\u0Ac9\u0Ac7\u0A8B\u0A8D\u0A91\u0A96\u0A97\u0A98\u0A9B\u0A9D\u0AA0\u0AA1\u0AA2\u0AA5\u0AA6\u0AA7\u0AAB\u0AAC\u0AAD\u0AB6\u0ABD\u0AD0\u0AE0]", /*roundtrip exclusions*/
+                "[\u0abc\u0ac3\u0Ac4\u0Ac5\u0Ac9\u0Ac7\u0A8B\u0A8D\u0A91\u0A96\u0A97\u0A98\u0A9B\u0A9D\u0AA0\u0AA1\u0AA2\u0AA5\u0AA6\u0AA7\u0AAB\u0AAC\u0AAD\u0AB6\u0ABD\u0AD0\u0AE0]", /*roundtrip exclusions*/
                 },
         new String [] {  "GUJARATI-TAMIL",
            "[:GUJARATI:]", "[:TAMIL:]",
@@ -392,7 +412,7 @@ public class RoundTripTest extends TestFmwk {
 
         new String [] {  "TAMIL-ORIYA",
           "[:TAMIL:]", "[:ORIYA:]", 
-                "[\u0030\u0b3c\u0b43\u0b56\u0B0B\u0B0C\u0B16\u0B17\u0B18\u0B1B\u0B1D\u0B20\u0B21\u0B22\u0B25\u0B26\u0B27\u0B2B\u0B2C\u0B2D\u0B36\u0B3D\u0B5C\u0B5D\u0B5F\u0B60\u0B61]", /*roundtrip exclusions*/
+                "[\u0b3c\u0b43\u0b56\u0B0B\u0B0C\u0B16\u0B17\u0B18\u0B1B\u0B1D\u0B20\u0B21\u0B22\u0B25\u0B26\u0B27\u0B2B\u0B2C\u0B2D\u0B36\u0B3D\u0B5C\u0B5D\u0B5F\u0B60\u0B61]", /*roundtrip exclusions*/
                 },
         new String [] {  "ORIYA-TAMIL",
            "[:ORIYA:]", "[:TAMIL:]",
@@ -432,7 +452,7 @@ public class RoundTripTest extends TestFmwk {
                 },
         new String [] {  "TAMIL-TELUGU",
            "[:TAMIL:]", "[:TELUGU:]",
-                  "[\u0030\u0c43\u0c44\u0c46\u0c47\u0c55\u0c56\u0c66\u0C0B\u0C0C\u0C16\u0C17\u0C18\u0C1B\u0C1D\u0C20\u0C21\u0C22\u0C25\u0C26\u0C27\u0C2B\u0C2C\u0C2D\u0C36\u0C60\u0C61]", /*roundtrip exclusions*/
+                  "[\u0c43\u0c44\u0c46\u0c47\u0c55\u0c56\u0c66\u0C0B\u0C0C\u0C16\u0C17\u0C18\u0C1B\u0C1D\u0C20\u0C21\u0C22\u0C25\u0C26\u0C27\u0C2B\u0C2C\u0C2D\u0C36\u0C60\u0C61]", /*roundtrip exclusions*/
                   },
 
         new String [] {  "KANNADA-TAMIL",
@@ -441,7 +461,7 @@ public class RoundTripTest extends TestFmwk {
                 },
         new String [] {  "TAMIL-KANNADA",
            "[:TAMIL:]", "[:KANNADA:]",
-                  "[\u0030\u0cc3\u0cc4\u0cc6\u0cc7\u0cd5\u0cd6\u0C8B\u0C8C\u0C96\u0C97\u0C98\u0C9B\u0C9D\u0CA0\u0CA1\u0CA2\u0CA5\u0CA6\u0CA7\u0CAB\u0CAC\u0CAD\u0CB6\u0CDE\u0CE0\u0CE1]", /*roundtrip exclusions*/
+                  "[\u0cc3\u0cc4\u0cc6\u0cc7\u0cd5\u0cd6\u0C8B\u0C8C\u0C96\u0C97\u0C98\u0C9B\u0C9D\u0CA0\u0CA1\u0CA2\u0CA5\u0CA6\u0CA7\u0CAB\u0CAC\u0CAD\u0CB6\u0CDE\u0CE0\u0CE1]", /*roundtrip exclusions*/
                   },
 
         new String [] {  "MALAYALAM-TAMIL",
@@ -450,7 +470,7 @@ public class RoundTripTest extends TestFmwk {
                 },
         new String [] {  "TAMIL-MALAYALAM",
            "[:TAMIL:]", "[:MALAYALAM:]",
-                  "[\u0030\u0d43\u0d12\u0D0B\u0D0C\u0D16\u0D17\u0D18\u0D1B\u0D1D\u0D20\u0D21\u0D22\u0D25\u0D26\u0D27\u0D2B\u0D2C\u0D2D\u0D36\u0D60\u0D61]", /*roundtrip exclusions*/
+                  "[\u0d43\u0d12\u0D0B\u0D0C\u0D16\u0D17\u0D18\u0D1B\u0D1D\u0D20\u0D21\u0D22\u0D25\u0D26\u0D27\u0D2B\u0D2C\u0D2D\u0D36\u0D60\u0D61]", /*roundtrip exclusions*/
                   },
 
         new String [] {  "KANNADA-TELUGU",
@@ -476,20 +496,20 @@ public class RoundTripTest extends TestFmwk {
                 "[\u0cc4\u0cc6\u0cca\u0ccc\u0ccb\u0cd5\u0cd6\u0cDe]", /*roundtrip exclusions*/
                 },
         new String [] {  "Latin-Bengali",
-            latinForIndic, "[:Bengali:]", 
-               "[\u09f0\u09f1]", /*roundtrip exclusions*/
+            latinForIndic, "[[:Bengali:][\u0964\u0965]]", 
+               "[\u0965\u09f0\u09f1\u0965]", /*roundtrip exclusions*/
                 },
         new String [] {  "Latin-Gurmukhi",
-           latinForIndic, "[:Gurmukhi:]", 
-               "[\u0a72\u0a73\u0a74]", /*roundtrip exclusions*/
+           latinForIndic, "[[:Gurmukhi:][\u0964\u0965]]", 
+               "[\u0965\u0a72\u0a73\u0a74]", /*roundtrip exclusions*/
                 },
         new String [] {  "Latin-Gujarati",
-            latinForIndic, "[:Gujarati:]", 
-               null, /*roundtrip exclusions*/
+            latinForIndic, "[[:Gujarati:][\u0964\u0965]]", 
+               "[\u0965]", /*roundtrip exclusions*/
                 },
         new String [] {  "Latin-Oriya",
-            latinForIndic, "[:Oriya:]", 
-               null, /*roundtrip exclusions*/
+            latinForIndic, "[[:Oriya:][\u0964\u0965]]", 
+               "[\u0965]", /*roundtrip exclusions*/
                 },
         new String [] {  "Latin-Tamil",
             latinForIndic, "[:Tamil:]", 
@@ -1092,21 +1112,20 @@ public class RoundTripTest extends TestFmwk {
             if (++errorCount > errorLimit) {
                 throw new TestTruncated("Test truncated; too many failures");
             }
-            out.println("<br>Fail " + label);
+            out.println("<br>Fail (can.equiv)" + label);
         }
 
-        final void logToRulesFails(String label, String from, String to, String otherTo) {
+        final void logToRulesFails(String label, String from, String to, String toCan) {
             if (++errorCount > errorLimit) {
                 throw new TestTruncated("Test truncated; too many failures");
             }
-            out.println("<br>Fail " + label + ": " +
+            out.println("<br>Fail (can.equiv)" + label + ": " +
                         from + " (" +
                         TestUtility.hex(from) + ") => " +
                         to + " (" +
                         TestUtility.hex(to) + ")" +
-                        " != " +
-                        otherTo + " (" +
-                        TestUtility.hex(otherTo) + ")"
+                        toCan + " (" +
+                        TestUtility.hex(toCan) + ")"
                         );
         }
 
