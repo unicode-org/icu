@@ -22,6 +22,7 @@ import java.util.Set;
 import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.text.UFormat;
 
@@ -193,6 +194,8 @@ public abstract class NumberFormat extends UFormat {
             return format((java.math.BigDecimal) number, toAppendTo, pos);
         } else if (number instanceof com.ibm.icu.math.BigDecimal) {
             return format((com.ibm.icu.math.BigDecimal) number, toAppendTo, pos);
+        } else if (number instanceof CurrencyAmount) {
+            return format((CurrencyAmount)number, toAppendTo, pos);
         } else if (number instanceof Number) {
             return format(((Number)number).doubleValue(), toAppendTo, pos);
         } else {
@@ -209,22 +212,22 @@ public abstract class NumberFormat extends UFormat {
         return parse(source, parsePosition);
     }
 
-   /**
+    /**
      * Specialization of format.
      * @see java.text.Format#format(Object)
      * @stable ICU 2.0
      */
-    public final String format (double number) {
+    public final String format(double number) {
         return format(number,new StringBuffer(),
                       new FieldPosition(0)).toString();
     }
 
-   /**
+    /**
      * Specialization of format.
      * @see java.text.Format#format(Object)
      * @stable ICU 2.0
      */
-    public final String format (long number) {
+    public final String format(long number) {
         return format(number,new StringBuffer(),
                       new FieldPosition(0)).toString();
     }
@@ -259,7 +262,17 @@ public abstract class NumberFormat extends UFormat {
                       new FieldPosition(0)).toString();
     }
 
-   /**
+    /**
+     * <strong><font face=helvetica color=red>NEW</font></strong>
+     * Convenience method to format a CurrencyAmount.
+     * @draft ICU 3.0
+     */
+    public final String format(CurrencyAmount currAmt) {
+        return format(currAmt, new StringBuffer(),
+                      new FieldPosition(0)).toString();
+    }
+
+    /**
      * Specialization of format.
      * @see java.text.Format#format(Object, StringBuffer, FieldPosition)
      * @stable ICU 2.0
@@ -268,7 +281,7 @@ public abstract class NumberFormat extends UFormat {
                                         StringBuffer toAppendTo,
                                         FieldPosition pos);
 
-   /**
+    /**
      * Specialization of format.
      * @see java.text.Format#format(Object, StringBuffer, FieldPosition)
      * @stable ICU 2.0
@@ -306,8 +319,26 @@ public abstract class NumberFormat extends UFormat {
     public abstract StringBuffer format(com.ibm.icu.math.BigDecimal number,
                                         StringBuffer toAppendTo,
                                         FieldPosition pos);
-   
-   /**
+
+    /**
+     * <strong><font face=helvetica color=red>NEW</font></strong>
+     * Format a CurrencyAmount.
+     * @see java.text.Format#format(Object, StringBuffer, FieldPosition)
+     * @draft ICU 3.0
+     */
+    public StringBuffer format(CurrencyAmount currAmt,
+                               StringBuffer toAppendTo,
+                               FieldPosition pos) {
+        // Default implementation -- subclasses may override
+        Currency save = getCurrency(), curr = currAmt.getCurrency();
+        boolean same = curr.equals(save);
+        if (!same) setCurrency(curr);
+        format(currAmt.getNumber(), toAppendTo, pos);
+        if (!same) setCurrency(save);
+        return toAppendTo;
+    }
+
+    /**
      * Returns a Long if possible (e.g., within the range [Long.MIN_VALUE,
      * Long.MAX_VALUE] and with no decimals), otherwise a Double.
      * If IntegerOnly is set, will stop at a decimal
@@ -337,9 +368,53 @@ public abstract class NumberFormat extends UFormat {
         ParsePosition parsePosition = new ParsePosition(0);
         Number result = parse(text, parsePosition);
         if (parsePosition.getIndex() == 0) {
-            throw new ParseException("Unparseable number: \"" + text + "\"",
-                                     //PP:parsePosition.errorIndex);
-                                     0);
+            throw new ParseException("Unparseable number: \"" + text + '"',
+                                     parsePosition.getErrorIndex());
+        }
+        return result;
+    }
+
+    /**
+     * <strong><font face=helvetica color=red>NEW</font></strong>
+     * Parses text from the given string as a CurrencyAmount.  This
+     * method will fail if this format is not a currency format, that
+     * is, if it does not contain the currency pattern symbol (U+00A4)
+     * in its prefix or suffix.
+     *
+     * @param text the string to parse
+     * @param pos input-output position; on input, the position within
+     * text to match; must have 0 <= pos.getIndex() < text.length();
+     * on output, the position after the last matched character. If
+     * the parse fails, the position in unchanged upon output.
+     * @return a CurrencyAmount, or null upon failure
+     * @draft ICU 3.0
+     */
+    public CurrencyAmount parseCurrency(String text, ParsePosition pos) {
+        // Default implementation only -- subclasses should override
+        Number n = parse(text, pos);
+        return n == null ? null : new CurrencyAmount(n, getEffectiveCurrency());
+    }
+
+    /**
+     * <strong><font face=helvetica color=red>NEW</font></strong>
+     * Parses text from the beginning of the given string as a
+     * CurrencyAmount.  The method might not use the entire text of
+     * the given string.  This method will fail if this format is not
+     * a currency format, that is, if it does not contain the currency
+     * pattern symbol (U+00A4) in its prefix or suffix.
+     *
+     * @param text the string to parse
+     * @return a non-null CurrencyAmount
+     * @exception ParseException if the beginning of the specified string 
+     * cannot be parsed.
+     * @draft ICU 3.0
+     */
+    public CurrencyAmount parseCurrency(String text) throws ParseException {
+        ParsePosition pos = new ParsePosition(0);
+        CurrencyAmount result = parseCurrency(text, pos);
+        if (pos.getIndex() == 0) {
+            throw new ParseException("Unparseable currency: \"" + text + '"',
+                                     pos.getErrorIndex());
         }
         return result;
     }
@@ -912,21 +987,20 @@ public abstract class NumberFormat extends UFormat {
     }
     
     /**
-     * Sets the minimum integer digits count directly, with no range
-     * pinning. For use by subclasses.
+     * Returns the currency in effect for this formatter.  Subclasses
+     * should override this method as needed.  Unlike getCurrency(),
+     * this method should never return null.
+     * @return a non-null Currency
      * @internal
      */
-    protected void internalSetMinimumIntegerDigits(int n) {
-        minimumIntegerDigits = n;
-    }
-
-    /**
-     * Sets the maximum integer digits count directly, with no range
-     * pinning. For use by subclasses.
-     * @internal
-     */
-    protected void internalSetMaximumIntegerDigits(int n) {
-        maximumIntegerDigits = n;
+    protected Currency getEffectiveCurrency() {
+        Currency c = getCurrency();
+        if (c == null) {
+            ULocale uloc = getLocale(ULocale.VALID_LOCALE);
+            Locale loc = uloc != null ? uloc.toLocale() : Locale.getDefault();
+            c = Currency.getInstance(loc);
+        }
+        return c;
     }
 
     // =======================privates===============================

@@ -7,6 +7,8 @@
 package com.ibm.icu.text;
 
 import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.CurrencyAmount;
+import com.ibm.icu.util.ULocale;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.impl.UCharacterProperty;
 import java.text.ParsePosition;
@@ -1309,8 +1311,42 @@ public class DecimalFormat extends NumberFormat {
      * <code>null</code> if the parse failed
      * @stable ICU 2.0
      */
-    public Number parse(String text, ParsePosition parsePosition)
-    {
+    public Number parse(String text, ParsePosition parsePosition) {
+       return (Number) parse(text, parsePosition, false);
+    }
+
+    /**
+     * <strong><font face=helvetica color=red>NEW</font></strong>
+     * Parses text from the given string as a CurrencyAmount.  This
+     * method will fail if this format is not a currency format, that
+     * is, if it does not contain the currency pattern symbol (U+00A4)
+     * in its prefix or suffix.
+     *
+     * @param text the string to parse
+     * @param pos input-output position; on input, the position within
+     * text to match; must have 0 <= pos.getIndex() < text.length();
+     * on output, the position after the last matched character. If
+     * the parse fails, the position in unchanged upon output.
+     * @return a CurrencyAmount, or null upon failure
+     * @draft ICU 3.0
+     */
+    public CurrencyAmount parseCurrency(String text, ParsePosition pos) {
+        return (CurrencyAmount) parse(text, pos, true);
+    }
+
+    /**
+     * Parses the given text as either a Number or a CurrencyAmount.
+     * @param text the string to parse
+     * @param parsePosition input-output position; on input, the
+     * position within text to match; must have 0 <= pos.getIndex() <
+     * text.length(); on output, the position after the last matched
+     * character. If the parse fails, the position in unchanged upon
+     * output.
+     * @param parseCurrency if true, a CurrencyAmount is parsed and
+     * returned; otherwise a Number is parsed and returned
+     * @return a Number or CurrencyAmount or null
+     */
+    private Object parse(String text, ParsePosition parsePosition, boolean parseCurrency) {
         int backup;
         int i = backup = parsePosition.getIndex();
 
@@ -1337,46 +1373,55 @@ public class DecimalFormat extends NumberFormat {
         i = backup;
 
         boolean[] status = new boolean[STATUS_LENGTH];
-        if (!subparse(text, parsePosition, digitList, false, status)) {
+        Currency[] currency = parseCurrency ? new Currency[1] : null;
+        if (!subparse(text, parsePosition, digitList, false, status, currency)) {
             parsePosition.setIndex(backup);
             return null;
         }
 
+        Number n = null;
+
         // Handle infinity
         if (status[STATUS_INFINITE]) {
-            return new Double(status[STATUS_POSITIVE]
-                              ? Double.POSITIVE_INFINITY
-                              : Double.NEGATIVE_INFINITY);
+            n = new Double(status[STATUS_POSITIVE]
+                           ? Double.POSITIVE_INFINITY
+                           : Double.NEGATIVE_INFINITY);
         }
 
         // Handle -0.0
-        if (!status[STATUS_POSITIVE] && digitList.isZero()) {
-            return new Double(-0.0);
+        else if (!status[STATUS_POSITIVE] && digitList.isZero()) {
+            n = new Double(-0.0);
         }
 
-        // Do as much of the multiplier conversion as possible without
-        // losing accuracy.
-        int mult = multiplier; // Don't modify this.multiplier
-        while (mult % 10 == 0) {
-            --digitList.decimalAt;
-            mult /= 10;
+        else {
+            // Do as much of the multiplier conversion as possible without
+            // losing accuracy.
+            int mult = multiplier; // Don't modify this.multiplier
+            while (mult % 10 == 0) {
+                --digitList.decimalAt;
+                mult /= 10;
+            }
+
+            // Handle integral values
+            if (mult == 1 && digitList.isIntegral()) {
+                BigInteger big = digitList.getBigInteger(status[STATUS_POSITIVE]);
+                n = (big.bitLength() < 64) ?
+                    (Number) new Long(big.longValue()) : (Number) big;
+            }
+
+            // Handle non-integral values
+            else {
+                java.math.BigDecimal big = digitList.getBigDecimal(status[STATUS_POSITIVE]);
+                n = big;
+                if (mult != 1) {
+                    n = big.divide(java.math.BigDecimal.valueOf(mult),
+                                   java.math.BigDecimal.ROUND_HALF_EVEN);
+                }
+            }
         }
 
-        // Handle integral values
-        if (mult == 1 && digitList.isIntegral()) {
-            BigInteger n = digitList.getBigInteger(status[STATUS_POSITIVE]);
-            return (n.bitLength() < 64)
-                ? (Number) new Long(n.longValue()) 
-                : (Number) n;
-        }
-
-        // Handle non-integral values
-        java.math.BigDecimal n = digitList.getBigDecimal(status[STATUS_POSITIVE]);
-        if (mult != 1) {
-            n = n.divide(java.math.BigDecimal.valueOf(mult),
-                         java.math.BigDecimal.ROUND_HALF_EVEN);
-        }
-        return n;
+        // Assemble into CurrencyAmount if necessary
+        return parseCurrency ? new CurrencyAmount(n, currency[0]) : n;
     }
 
     private static final int STATUS_INFINITE = 0;
@@ -1395,10 +1440,14 @@ public class DecimalFormat extends NumberFormat {
      * infinite values and integer only.
      * @param status Upon return contains boolean status flags indicating
      * whether the value was infinite and whether it was positive.
+     * @param currency return value for parsed currency, for generic
+     * currency parsing mode, or null for normal parsing. In generic
+     * currency parsing mode, any currency is parsed, not just the
+     * currency that this formatter is set to.
      */
     private final boolean subparse(String text, ParsePosition parsePosition,
                    DigitList digits, boolean isExponent,
-                   boolean status[])
+                   boolean status[], Currency currency[])
     {
         int position = parsePosition.getIndex();
         int oldStart = parsePosition.getIndex();
@@ -1409,8 +1458,8 @@ public class DecimalFormat extends NumberFormat {
         }
 
         // Match positive and negative prefixes; prefer longest match.
-        int posMatch = compareAffix(text, position, false, true);
-        int negMatch = compareAffix(text, position, true, true);
+        int posMatch = compareAffix(text, position, false, true, currency);
+        int negMatch = compareAffix(text, position, true, true, currency);
         if (posMatch >= 0 && negMatch >= 0) {
             if (posMatch > negMatch) {
                 negMatch = -1;
@@ -1611,10 +1660,10 @@ public class DecimalFormat extends NumberFormat {
 
         // Match positive and negative suffixes; prefer longest match.
         if (posMatch >= 0) {
-            posMatch = compareAffix(text, position, false, false);
+            posMatch = compareAffix(text, position, false, false, currency);
         }
         if (negMatch >= 0) {
-            negMatch = compareAffix(text, position, true, false);
+            negMatch = compareAffix(text, position, true, false, currency);
         }
         if (posMatch >= 0 && negMatch >= 0) {
             if (posMatch > negMatch) {
@@ -1669,17 +1718,21 @@ public class DecimalFormat extends NumberFormat {
      * @param pos offset into input at which to begin matching
      * @param isNegative
      * @param isPrefix
+     * @param currency return value for parsed currency, for generic
+     * currency parsing mode, or null for normal parsing. In generic
+     * currency parsing mode, any currency is parsed, not just the
+     * currency that this formatter is set to.
      * @return length of input that matches, or -1 if match failure
      */
-    private int compareAffix(String text, int pos,
-                             boolean isNegative, boolean isPrefix) {
-        if (currencyChoice != null) {
+    private int compareAffix(String text, int pos, boolean isNegative,
+                             boolean isPrefix, Currency[] currency) {
+        if (currency != null || currencyChoice != null) {
             if (isPrefix) {
                 return compareComplexAffix(isNegative ? negPrefixPattern : posPrefixPattern,
-                                           text, pos);
+                                           text, pos, currency);
             } else {
                 return compareComplexAffix(isNegative ? negSuffixPattern : posSuffixPattern,
-                                           text, pos);
+                                           text, pos, currency);
             }
         }
 
@@ -1789,9 +1842,14 @@ public class DecimalFormat extends NumberFormat {
      * @param affixPat pattern string
      * @param text input text
      * @param pos offset into input at which to begin matching
+     * @param currency return value for parsed currency, for generic
+     * currency parsing mode, or null for normal parsing. In generic
+     * currency parsing mode, any currency is parsed, not just the
+     * currency that this formatter is set to.
      * @return length of input that matches, or -1 if match failure
      */
-    private int compareComplexAffix(String affixPat, String text, int pos) {
+    private int compareComplexAffix(String affixPat, String text, int pos,
+                                    Currency[] currency) {
 
         for (int i=0; i<affixPat.length() && pos >= 0; ) {
             char c = affixPat.charAt(i++);
@@ -1824,17 +1882,43 @@ public class DecimalFormat extends NumberFormat {
 
             switch (c) {
             case CURRENCY_SIGN:
-                // assert(currency != null);
-                // assert(currencyChoice != null);
+                // If currency != null, then perform generic currency matching.
+                // Otherwise, do currency choice parsing.
+                //assert(currency != null ||
+                //       (getCurrency() != null && currencyChoice != null));
                 boolean intl = i<affixPat.length() &&
                     affixPat.charAt(i) == CURRENCY_SIGN;
-                if (intl) {
-                    ++i;
-                    pos = match(text, pos, getCurrency().getCurrencyCode());
-                } else {
+
+                // Parse generic currency -- anything for which we
+                // have a display name, or any 3-letter ISO code.
+                if (currency != null) {
+                    // Try to parse display name for our locale; first
+                    // determine our locale.
+                    ULocale uloc = getLocale(ULocale.VALID_LOCALE);
+                    if (uloc == null) {
+                        // applyPattern has been called; use the symbols
+                        uloc = symbols.getLocale(ULocale.VALID_LOCALE);
+                    }
+                    // Delegate parse of display name => ISO code to Currency
                     ParsePosition ppos = new ParsePosition(pos);
-                   /* Number n = */currencyChoice.parse(text, ppos);
-                    pos = (ppos.getIndex() == pos) ? -1 : ppos.getIndex();
+                    String iso = Currency.parse(uloc.toLocale(), text, ppos);
+
+                    // If parse succeeds, populate currency[0]
+                    if (iso != null) {
+                        currency[0] = Currency.getInstance(iso);
+                        pos = ppos.getIndex();
+                    } else {
+                        pos = -1;
+                    }
+                } else {
+                    if (intl) {
+                        ++i;
+                        pos = match(text, pos, getCurrency().getCurrencyCode());
+                    } else {
+                        ParsePosition ppos = new ParsePosition(pos);
+                        /* Number n = */currencyChoice.parse(text, ppos);
+                        pos = (ppos.getIndex() == pos) ? -1 : ppos.getIndex();
+                    }
                 }
                 continue;
             case PATTERN_PERCENT:
@@ -2526,6 +2610,10 @@ public class DecimalFormat extends NumberFormat {
             && useExponentialNotation == other.useExponentialNotation
             && (!useExponentialNotation ||
                 minExponentDigits == other.minExponentDigits)
+            && useSignificantDigits == other.useSignificantDigits
+            && (!useSignificantDigits ||
+                minSignificantDigits == other.minSignificantDigits &&
+                maxSignificantDigits == other.maxSignificantDigits)
             && symbols.equals(other.symbols));
     }
 
@@ -3683,10 +3771,22 @@ public class DecimalFormat extends NumberFormat {
                 setMinimumFractionDigits(d);
                 setMaximumFractionDigits(d);
             }
-
-
             expandAffixes();
         }
+    }
+
+    /**
+     * Returns the currency in effect for this formatter.  Subclasses
+     * should override this method as needed.  Unlike getCurrency(),
+     * this method should never return null.
+     * @internal
+     */
+    protected Currency getEffectiveCurrency() {
+        Currency c = getCurrency();
+        if (c == null) {
+            c = Currency.getInstance(symbols.getInternationalCurrencySymbol());
+        }
+        return c;
     }
 
     /**
