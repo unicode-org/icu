@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/TransliterationRule_Latin_Kana.java,v $ 
- * $Date: 2000/04/26 21:22:25 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/05/23 16:47:48 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -24,53 +24,53 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
             // Uppercase Latin to katakana
 
             { "Rule", ""
-                //# $Revision: 1.5 $
+                //# $Revision: 1.6 $
                 // Transliteration rules for Japanese Hiragana and Katakana to
                 // romaji
                 // lower case roman generates hiragana.
                 // upper case roman generates katakana.
                 // Uses modified Hepburn. Small changes to make unambiguous.
                 // Kunrei-shiki: Hepburn/MHepburn
-                /*
-                si:     shi
-                si ~ya: sha
-                si ~yu: shu
-                si ~yo: sho
-                zi:     ji
-                zi ~ya: ja
-                zi ~yu: ju
-                zi ~yo: jo
-                ti:     chi
-                ti ~ya: cha
-                ti ~yu: chu
-                ti ~yu: cho
-                tu:     tsu
-                di:     ji/dji
-                du:     zu/dzu
-                hu:     fu
-                // for foreign words
-                se ~i   si
-                si ~e   she
-                
-                ze ~i   zi
-                zi ~e   je
-                
-                te ~i   ti
-                ti ~e   che
-                te ~u   tu
-                
-                de ~i   di
-                de ~u   du
-                de ~i   di
-                
-                he ~u:  hu
-                hu ~a   fa
-                hu ~i   fi
-                hu ~e   he
-                hu ~o   ho
-                // Most small forms are generated, but if necessary
-                // explicit small forms are given with ~a, ~ya, etc.
-                */
+
+                //| si:     shi
+                //| si ~ya: sha
+                //| si ~yu: shu
+                //| si ~yo: sho
+                //| zi:     ji
+                //| zi ~ya: ja
+                //| zi ~yu: ju
+                //| zi ~yo: jo
+                //| ti:     chi
+                //| ti ~ya: cha
+                //| ti ~yu: chu
+                //| ti ~yu: cho
+                //| tu:     tsu
+                //| di:     ji/dji
+                //| du:     zu/dzu
+                //| hu:     fu
+                //| // for foreign words
+                //| se ~i   si
+                //| si ~e   she
+                //| 
+                //| ze ~i   zi
+                //| zi ~e   je
+                //| 
+                //| te ~i   ti
+                //| ti ~e   che
+                //| te ~u   tu
+                //| 
+                //| de ~i   di
+                //| de ~u   du
+                //| de ~i   di
+                //| 
+                //| he ~u:  hu
+                //| hu ~a   fa
+                //| hu ~i   fi
+                //| hu ~e   he
+                //| hu ~o   ho
+                //| // Most small forms are generated, but if necessary
+                //| // explicit small forms are given with ~a, ~ya, etc.
+
                 //#######################################
                 // Definitions of variables to be substituted
                 //#######################################
@@ -548,13 +548,11 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 // ALL ROMAJI MAPS TO KANA
                 // ########################################
 
-                /*
-                + "SH>$SI;"
-                + "TS>$TU;"
-                + "CH>$TI;"
-                + "DJ>$DI;"
-                + "DZ>$DU;"
-                */
+                //| + "SH>$SI;"
+                //| + "TS>$TU;"
+                //| + "CH>$TI;"
+                //| + "DJ>$DI;"
+                //| + "DZ>$DU;"
                 
                 // THE FOLLOWING ARE NOT REALLY NECESSARY, BUT PRODUCE
                 // SLIGHTLY MORE NATURAL RESULTS.
@@ -1025,13 +1023,11 @@ public class TransliterationRule_Latin_Kana extends ListResourceBundle {
                 // all romaji maps to kana
                 // ########################################
 
-                /*
-                + "sh>$si;"
-                + "ts>$tu;"
-                + "ch>$ti;"
-                + "dj>$di;"
-                + "dz>$du;"
-                */
+                //| + "sh>$si;"
+                //| + "ts>$tu;"
+                //| + "ch>$ti;"
+                //| + "dj>$di;"
+                //| + "dz>$du;"
                 
                 // the following are not really necessary, but produce
                 // slightly more natural results.

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/TransliterationRule_Latin_Cyrillic.java,v $ 
- * $Date: 2000/04/26 21:34:16 $ 
- * $Revision: 1.4 $
+ * $Date: 2000/05/23 16:47:48 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -22,12 +22,11 @@ public class TransliterationRule_Latin_Cyrillic extends ListResourceBundle {
         return new Object[][] {
             { "Rule", "" 
             
-                /* This class is designed to be a general Latin-Cyrillic
-                   transliteration. The standard Russian transliterations
-                   are generally used for the letters from Russian,
-                   with additional Cyrillic characters given consistent
-                   mappings.
-                */
+                // This class is designed to be a general Latin-Cyrillic
+                // transliteration. The standard Russian transliterations
+                // are generally used for the letters from Russian,
+                // with additional Cyrillic characters given consistent
+                // mappings.
             
                 + "$S_hacek=\u0160;"
                 + "$s_hacek=\u0161;"
@@ -126,12 +125,10 @@ public class TransliterationRule_Latin_Cyrillic extends ListResourceBundle {
                 + "$letter=[[:Lu:][:Ll:]];"
                 + "$lower=[[:Ll:]];"     
                 
-                /*
-                    Modified to combine display transliterator and typing transliterator.
-                    The display mapping uses accents for the "soft" vowels.
-                    It does not, although it could, use characters like \u0161 instead of digraphs
-                    like sh.
-                */
+                // Modified to combine display transliterator and typing transliterator.
+                // The display mapping uses accents for the "soft" vowels.
+                // It does not, although it could, use characters like \u0161 instead of digraphs
+                // like sh.
                 
                 // #############################################
                 // Special titlecase forms, not duplicated
