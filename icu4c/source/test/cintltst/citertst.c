@@ -27,8 +27,7 @@
 
 #define ARRAY_LENGTH(array) (sizeof array / sizeof array[0])
 
-static UErrorCode status = U_ZERO_ERROR;
-UCollator *en_us=0;
+static UCollator *en_us=0;
 
 
 void addCollIterTest(TestNode** root)
