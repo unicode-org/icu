@@ -188,6 +188,12 @@
 "(ABC){2,3}?AX"                "<0>ABCABC<1>ABC</1>AX</0>"
 "(ABC){2,3}?AX"                "ABC<0>ABCABC<1>ABC</1>AX</0>"
 
+# Possessive {min,max}+ intervals
+"(ABC){2,3}+ABC"               "ABCABCABC"
+"(ABC){1,2}+ABC"               "<0>ABC<1>ABC</1>ABC</0>"
+"(?:(.)\1){2,5}+."              "<0>aabbcc<1>d</1>de</0>x"
+
+
 # Atomic Grouping
 "(?>.*)abc"                    "abcabcabc"  # no match.  .* consumed entire string.
 "(?>(abc{2,4}?))(c*)"          "<0><1>abcc</1><2>ccc</2></0>ddd"

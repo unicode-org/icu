@@ -520,7 +520,6 @@ void    RegexCompile::compile(
     //   are too short.
     //
     fRXPat->fMinMatchLen = minMatchLength(3, fRXPat->fCompiledPat->size()-1);
-    fRXPat->fMaxMatchLen = maxMatchLength(3, fRXPat->fCompiledPat->size()-1);
 
     //
     // Optimization pass:  Categorize how a match can start, for use by find()
@@ -1114,7 +1113,36 @@ UBool RegexCompile::doParseActions(EParseAction action)
 
     case doPossesiveInterval:
         // Finished scanning a Possessive {lower,upper}+ interval.  Generate the code for it.
-        compileInterval(URX_CTR_INIT_P, URX_CTR_LOOP_P);
+        {
+            // Remember the loc for the top of the block being looped over.
+            //   (Can not reserve a slot in the compiled pattern at this time, becuase 
+            //    compileInterval needs to reserve also, and blockTopLoc can only reserve 
+            //    once per block.)
+            int32_t topLoc = blockTopLoc(FALSE);
+
+            // Produce normal looping code.
+            compileInterval(URX_CTR_INIT, URX_CTR_LOOP);
+
+            // Surround the just-emitted normal looping code with a STO_SP ... LD_SP
+            //  just as if the loop was inclosed in atomic parentheses.
+
+            // First the STO_SP before the start of the loop
+            insertOp(topLoc);
+            int32_t  varLoc    = fRXPat->fDataSize;    // Reserve a data location for saving the
+            fRXPat->fDataSize += 1;                    //  state stack ptr.
+            int32_t  op        = URX_BUILD(URX_STO_SP, varLoc);
+            fRXPat->fCompiledPat->setElementAt(op, topLoc);
+
+            int32_t loopOp = fRXPat->fCompiledPat->popi();
+            U_ASSERT(URX_TYPE(loopOp) == URX_CTR_LOOP && URX_VAL(loopOp) == topLoc);
+            loopOp++;     // point LoopOp after the just-inserted STO_SP
+            fRXPat->fCompiledPat->push(loopOp, *fStatus);
+
+            // Then the LD_SP after the end of the loop
+            op = URX_BUILD(URX_LD_SP, varLoc);
+            fRXPat->fCompiledPat->addElement(op, *fStatus);
+        }
+
         break;
 
     case doNGInterval:
@@ -1685,7 +1713,6 @@ void   RegexCompile::insertOp(int32_t where) {
             opType == URX_STATE_SAVE   ||
             opType == URX_CTR_LOOP     ||
             opType == URX_CTR_LOOP_NG  ||
-            opType == URX_CTR_LOOP_P   ||
             opType == URX_JMP_SAV      ||
             opType == URX_RELOC_OPRND)    && opValue > where) {
             // Target location for this opcode is after the insertion point and
@@ -1704,6 +1731,13 @@ void   RegexCompile::insertOp(int32_t where) {
             x++;
             fParenStack.setElementAt(x, loc);
         }
+    }
+
+    if (fMatchCloseParen > where) {
+        fMatchCloseParen++;
+    }
+    if (fMatchOpenParen > where) {
+        fMatchOpenParen++;
     }
 }
 
@@ -2011,6 +2045,15 @@ void        RegexCompile::compileSet(UnicodeSet *theSet)
 //                      for all three types (greedy, non-greedy, possessive) of
 //                      intervals.  The opcodes are supplied as parameters.
 //
+//                      The code for interval loops has this form:
+//                         0  CTR_INIT   counter loc (in stack frame)
+//                         1             5  patt address of CTR_LOOP at bottom of block
+//                         2             min count
+//                         3             max count   (-1 for unbounded)
+//                         4  ...        block to be iterated over
+//                         5  CTR_LOOP   
+//    
+//                       In                                 
 //----------------------------------------------------------------------------------------
 void        RegexCompile::compileInterval(int32_t InitOp,  int32_t LoopOp)
 {
@@ -2049,6 +2092,8 @@ void        RegexCompile::compileInterval(int32_t InitOp,  int32_t LoopOp)
     if (fIntervalLow > fIntervalUpper && fIntervalUpper != -1) {
         error(U_REGEX_MAX_LT_MIN);
     }
+
+
 
 }
 
@@ -2348,7 +2393,6 @@ void   RegexCompile::matchStartType() {
 
         case URX_CTR_INIT:
         case URX_CTR_INIT_NG:
-        case URX_CTR_INIT_P:
             {
                 // Loop Init Ops.  These don't change the min length, but they are 4 word ops
                 //   so location must be updated accordingly.
@@ -2372,7 +2416,6 @@ void   RegexCompile::matchStartType() {
 
         case URX_CTR_LOOP:
         case URX_CTR_LOOP_NG:
-        case URX_CTR_LOOP_P:
             // Loop ops. 
             //  The jump is conditional, backwards only.
             atStart = FALSE;
@@ -2631,7 +2674,6 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
 
         case URX_CTR_INIT:
         case URX_CTR_INIT_NG:
-        case URX_CTR_INIT_P:
             {
                 // Loop Init Ops.  
                 //   If the min loop count == 0
@@ -2652,7 +2694,6 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
 
         case URX_CTR_LOOP:
         case URX_CTR_LOOP_NG:
-        case URX_CTR_LOOP_P:
             // Loop ops. 
             //  The jump is conditional, backwards only.
             break;
@@ -2882,10 +2923,8 @@ int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
 
         case URX_CTR_INIT:
         case URX_CTR_INIT_NG:
-        case URX_CTR_INIT_P:
         case URX_CTR_LOOP:
         case URX_CTR_LOOP_NG:
-        case URX_CTR_LOOP_P:
             // For anything to do with loops, make the match length unbounded.
             //  TODO, possibly later, special case short loops like {0,1}.
             //   Note:  INIT instructions are multi-word.  Can ignore because
@@ -2992,7 +3031,6 @@ void RegexCompile::stripNOPs() {
         case URX_JMP:
         case URX_CTR_LOOP:
         case URX_CTR_LOOP_NG:
-        case URX_CTR_LOOP_P:
         case URX_RELOC_OPRND:
         case URX_JMPX:
         case URX_JMP_SAV:
@@ -3007,14 +3045,59 @@ void RegexCompile::stripNOPs() {
                 break;
             }
 
-        default:
-            // The remaining instructions are unaltered by the relocation.
+        case URX_RESERVED_OP:
+        case URX_RESERVED_OP_N:
+        case URX_BACKTRACK:
+        case URX_END:
+        case URX_ONECHAR:
+        case URX_STRING:
+        case URX_STRING_LEN:
+        case URX_START_CAPTURE:
+        case URX_END_CAPTURE:
+        case URX_STATIC_SETREF:
+        case URX_SETREF:
+        case URX_DOTANY:
+        case URX_FAIL:
+        case URX_BACKSLASH_B:
+        case URX_BACKSLASH_G:
+        case URX_UNUSED_1:
+        case URX_BACKSLASH_X:
+        case URX_BACKSLASH_Z:
+        case URX_DOTANY_ALL:
+        case URX_BACKSLASH_D:
+        case URX_CARET:
+        case URX_DOLLAR:
+        case URX_CTR_INIT:
+        case URX_CTR_INIT_NG:
+        case URX_STO_SP:
+        case URX_LD_SP:
+        case URX_BACKREF:
+        case URX_STO_INP_LOC:
+        case URX_LA_START:
+        case URX_LA_END:
+        case URX_ONECHAR_I:
+        case URX_STRING_I:
+        case URX_BACKREF_I:
+        case URX_DOLLAR_M:
+        case URX_CARET_M:
+        case URX_LB_START:
+        case URX_LB_CONT:
+        case URX_LB_END:
+        case URX_LBN_CONT:
+        case URX_LBN_END:
+            // These instructions are unaltered by the relocation.
             fRXPat->fCompiledPat->setElementAt(op, dst);
             dst++;
             break;
+
+        default:
+            // Some op is unaccounted for.
+            U_ASSERT(FALSE);
+            error(U_REGEX_INTERNAL_ERROR);
         }
     }
 
+    fRXPat->fCompiledPat->setSize(dst);
 }
 
 
