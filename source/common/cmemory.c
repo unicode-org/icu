@@ -6,25 +6,47 @@
 *
 ******************************************************************************
 *
-* File cmemory.c
+* File cmemory.c      ICU Heap allocation.
+*                     All ICU heap allocation, both for C and C++ new of ICU
+*                     class types, comes through these functions.
+*
+*                     If you have a need to replace ICU allocation, this is the
+*                     place to do it.
+*
+*                     Note that uprv_malloc(0) returns a non-NULL pointer, and
+*                     that a subsequent free of that pointer value is a NOP.
 *
 ******************************************************************************
 */
 #include "unicode/utypes.h"
 #include <stdlib.h>
 
+// uprv_malloc(0) returns a pointer to this read-only data.
+//                
+static const int32_t zeroMem[] = {0, 0, 0, 0, 0, 0};
+
 U_CAPI void * U_EXPORT2
 uprv_malloc(size_t s) {
-    return malloc(s);
+    if (s > 0) {
+        return malloc(s);
+    } else {
+        return (void *)zeroMem;
+    }
 }
 
 U_CAPI void * U_EXPORT2
 uprv_realloc(void * buffer, size_t size) {
-    return realloc(buffer, size);
+    if (buffer == zeroMem || size == 0) {
+        return uprv_malloc(size);
+    } else {
+        return realloc(buffer, size);
+    }
 }
 
 U_CAPI void U_EXPORT2
 uprv_free(void *buffer) {
-  free(buffer);
+    if (buffer != zeroMem) {
+        free(buffer);
+    }
 }
 
