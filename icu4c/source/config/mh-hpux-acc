@@ -42,6 +42,9 @@ LIBICU-TOOLUTIL=-L$(top_builddir)/tools/toolutil -licu-toolutil
 %.o : $(srcdir)/%.cpp
 	$(COMPILE.cc) -o $@ $<
 
+../data/%.o : ../data/%.c
+	$(COMPILE.c) -o $@ $<
+
 ## Dependency rules
 %.d : $(srcdir)/%.c
 	@echo "Generating dependency information for $<"

@@ -94,6 +94,8 @@ LIBICU-TOOLUTIL=$(top_builddir)/tools/toolutil/libicu-toolutil.x
 %.o :$(srcdir)/%.cpp
 	$(COMPILE.cc) -o $@ $<
 
+../data/%.o : ../data/%.c
+	$(COMPILE.c) -o $@ $<
 
 ## Dependency rules
 %.d : %.u
