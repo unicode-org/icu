@@ -7,6 +7,83 @@
 
 sl {
     Version{"2.0"}
+    calendar{
+        gregorian{
+            DateTimeElements:intvector {
+                2,
+                1, // "Minimal Days in First Week" is unknown. Root value used instead
+            }
+            DateTimePatterns{
+                "H:mm:ss z",
+                "H:mm:ss z",
+                "H:mm:ss",
+                "H:mm",
+                "EEEE, dd. MMMM yyyy",
+                "dd. MMMM yyyy",
+                "yyyy.M.d",
+                "yy.M.d",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "ned",
+                        "pon",
+                        "tor",
+                        "sre",
+                        "\u010det",
+                        "pet",
+                        "sob",
+                    }
+                    wide{
+                        "nedelja",
+                        "ponedeljek",
+                        "torek",
+                        "sreda",
+                        "\u010detrtek",
+                        "petek",
+                        "sobota",
+                    }
+                }
+            }
+            eras{
+                "pr.n.\u0161.",
+                "po Kr.",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "jan",
+                        "feb",
+                        "mar",
+                        "apr",
+                        "maj",
+                        "jun",
+                        "jul",
+                        "avg",
+                        "sep",
+                        "okt",
+                        "nov",
+                        "dec",
+                    }
+                    wide{
+                        "januar",
+                        "februar",
+                        "marec",
+                        "april",
+                        "maj",
+                        "junij",
+                        "julij",
+                        "avgust",
+                        "september",
+                        "oktober",
+                        "november",
+                        "december",
+                    }
+                }
+            }
+        }
+    }
     Countries { 
         Fallback{ "en"}
         AD { "Andora" }
@@ -162,7 +239,7 @@ sl {
         MZ { "Mozambik" }
         NA { "Namibija" }
         NC { "Nova Kaledonija" }
-        NE { "Nigerija" }
+        NE { "Niger" }
         NF { "Otok Norfolk" }
         NG { "Nigerija" }
         NI { "Nikaragva" }
@@ -250,6 +327,10 @@ sl {
         ZW { "Zimbabve" }
     }
 
+    // Currency display names
+    Currencies {
+        SIT { "SIT", "SIT" }
+    }
 
     Languages { 
         ar { "Arab\u0161\u010Dina" }
@@ -305,87 +386,5 @@ sl {
     LocaleScript{ 
         "Latn",  // ISO 15924 Name 
     }
-    ExemplarCharacters { "[a-p r-v z \u010d \u0161 \u017e]" }
-
-    // Currency display names
-    Currencies {
-        SIT { "SIT", "SIT" }
-    }
-    calendar{
-        gregorian{
-            DateTimeElements:intvector {
-                2,
-                1, // "Minimal Days in First Week" is unknown. Root value used instead
-            }
-            DateTimePatterns{
-                "H:mm:ss z",
-                "H:mm:ss z",
-                "H:mm:ss",
-                "H:mm",
-                "EEEE, dd. MMMM yyyy",
-                "dd. MMMM yyyy",
-                "yyyy.M.d",
-                "yy.M.d",
-                "{1} {0}",
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "ned",
-                        "pon",
-                        "tor",
-                        "sre",
-                        "\u010det",
-                        "pet",
-                        "sob",
-                    }
-                    wide{
-                        "nedelja",
-                        "ponedeljek",
-                        "torek",
-                        "sreda",
-                        "\u010detrtek",
-                        "petek",
-                        "sobota",
-                    }
-                }
-            }
-            eras{
-                "pr.n.\u0161.",
-                "po Kr.",
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "jan",
-                        "feb",
-                        "mar",
-                        "apr",
-                        "maj",
-                        "jun",
-                        "jul",
-                        "avg",
-                        "sep",
-                        "okt",
-                        "nov",
-                        "dec",
-                    }
-                    wide{
-                        "januar",
-                        "februar",
-                        "marec",
-                        "april",
-                        "maj",
-                        "junij",
-                        "julij",
-                        "avgust",
-                        "september",
-                        "oktober",
-                        "november",
-                        "december",
-                    }
-                }
-            }
-        }
-    }
+    ExemplarCharacters { "[a-pr-vz\u010d\u0161\u017e]" }
 }
