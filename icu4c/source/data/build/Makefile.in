@@ -54,7 +54,7 @@ all-local: thaidict.brk build-local
 ##### Define all the data files. the build rule that depends on them is below.
 
 ## DAT files - Misc. data files.
-DAT_FILES=uprops.dat unames.dat cnvalias.dat tz.dat
+DAT_FILES=uprops.dat unames.dat cnvalias.dat tz.dat ucadata.dat invuca.dat
 TEST_DAT_FILES=$(TESTOBJDATADIR)/test.dat
 
 ## BRK files
