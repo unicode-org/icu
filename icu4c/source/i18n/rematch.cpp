@@ -313,16 +313,27 @@ UBool RegexMatcher::find() {
     }
 
     int32_t startPos = fMatchEnd;
-    if (fMatchStart == fMatchEnd && fMatch) {
-        // Previous match had zero length.  Move start position up one position
-        //  to avoid sending find() into a loop on zero-length matches.
-        if (startPos == fInput->length()) {
-            fMatch = FALSE;
-            return FALSE;
+
+    if (fMatch) {
+        // Save the position of any previous successful match for use by the appendTail()
+        //  functions.
+        fLastMatchEnd = fMatchEnd;
+
+        if (fMatchStart == fMatchEnd) {
+            // Previous match had zero length.  Move start position up one position
+            //  to avoid sending find() into a loop on zero-length matches.
+            if (startPos == fInput->length()) {
+                fMatch = FALSE;
+                return FALSE;
+            }
+            startPos = fInput->moveIndex32(startPos, 1);
         }
-        startPos = fInput->moveIndex32(startPos, 1);
     }
+
     int32_t inputLen = fInput->length();
+
+    // Compute the position in the input string beyond which a match can not begin, because
+    //   the minimum length match would extend past the end of the input.
     int32_t testLen  = inputLen - fPattern->fMinMatchLen;
     if (startPos > testLen) {
         fMatch = FALSE;
