@@ -32,121 +32,59 @@ public:
     ~IntlTestTextBoundary();
     
     void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par = NULL );
-
     /**
-     * Test sentence break using doForwardSelectionTest
+     * Test sentence break using generalIteratorTest()
      **/
-    void TestForwardSentenceSelection(void);
+	void TestSentenceIteration(void);
     /**
-     * Test sentence break using doFirstSelectionTest
+     * Test word break using generalIteratorTest()
      **/
-    void TestFirstSentenceSelection(void);
+	void TestWordIteration(void);
     /**
-     * Test sentence break using doLastSelectionTest
+     * Test line break using generalIteratorTest()
+     **/ 
+	void TestLineIteration(void);
+    /**
+     * Test character break using generalIteratorTest()
      **/
-    void TestLastSentenceSelection(void);
+	void TestCharacterIteration(void);
     /**
-     * Test sentence break using doBackwardSelectionTest
+     * Test sentence break using ()
      **/
-    void TestBackwardSentenceSelection(void);
-    /**
-     * Test sentence break using doForwardIndexSelectionTest
+    void TestSentenceInvariants(void);
+     /**
+     * Test sentence break Invariants using generalIteratorTest()
+     **/ 
+    void TestWordInvariants(void);
+     /**
+     * Test sentence break Invariants using generalIteratorTest()
      **/
-    void TestForwardSentenceIndexSelection(void);
-    /**
-     * Test sentence break using doBackwardIndexSelectionTest
+    void TestLineInvariants(void);
+     /**
+     * Test sentence break Invariants using generalIteratorTest()
      **/
-    void TestBackwardSentenceIndexSelection(void);
-    /**
-     * Test sentence break using doMultipleSelectionTest
+    void TestCharacterInvariants(void);
+     /**
+     * Test Japanese line break Invariants using generalIteratorTest()
      **/
-    void TestSentenceMultipleSelection(void);
-    /**
-     * Test word break using doForwardSelectionTest
+	void TestJapaneseLineBreak(void);
+     /**
+     * Test Thai line break using generalIteratorTest()
      **/
-    void TestForwardWordSelection(void);
-    /**
-     * Test word break using doFirstSelectionTest
+	void TestThaiLineBreak(void);
+     /**
+     * Test Mixed Thai (thai with other languages like english)line break using generalIteratorTest()
      **/
-    void TestFirstWordSelection(void);
+	void TestMixedThaiLineBreak(void);
     /**
-     * Test word break using doLastSelectionTest
+     * Test Thai Line break with Maiyamok using generalIteratorTest()
+	 * The Thai maiyamok character is a shorthand symbol that means "repeat the previous
+     * word".  Instead of appearing as a word unto itself, however, it's kept together
+     * with the word before it
      **/
-    void TestLastWordSelection(void);
+	void TestMaiyamok(void);
     /**
-     * Test word break using doBackwardSelectionTest
-     **/
-    void TestBackwardWordSelection(void);
-    /**
-     * Test word break using doForwardIndexSelectionTest
-     **/
-    void TestForwardWordIndexSelection(void);
-    /**
-     * Test word break using doBackwardIndexSelectionTest
-     **/
-    void TestBackwardWordIndexSelection(void);
-    /**
-     * Test word break using doMultipleSelectionTest
-     **/
-    void TestWordMultipleSelection(void);
-    /**
-     * Test line break using doLastSelectionTest
-     **/
-    void TestForwardLineSelection(void);
-    /**
-     * Test line break using doFirstSelectionTest
-     **/
-    void TestFirstLineSelection(void);
-    /**
-     * Test line break using doLastSelectionTest
-     **/
-    void TestLastLineSelection(void);
-    /**
-     * Test line break using doBackwardSelectionTest
-     **/
-    void TestBackwardLineSelection(void);
-    /**
-     * Test line break using doForwardIndexSelectionTest
-     **/
-    void TestForwardLineIndexSelection(void);
-    /**
-     * Test line break using doBackwardIndexSelectionTest
-     **/
-    void TestBackwardLineIndexSelection(void);
-    /**
-     * Test line break using doMultipleSelectionTest
-     **/
-    void TestLineMultipleSelection(void);
-    /**
-     * Test word break using doForwardIndexSelectionTest
-     **/
-    void TestForwardCharacterSelection(void);
-    /**
-     * Test character break using doFirstSelectionTest
-     **/
-    void TestFirstCharacterSelection(void);
-    /**
-     * Test character break using doLastSelectionTest
-     **/
-    void TestLastCharacterSelection(void);
-    /**
-     * Test character break using doBackwardSelectionTest
-     **/
-    void TestBackwardCharacterSelection(void);
-    /**
-     * Test character break using doForwardIndexSelectionTest
-     **/
-    void TestForwardCharacterIndexSelection(void);
-    /**
-     * Test character break using doBackwardIndexSelectionTest
-     **/
-    void TestBackwardCharacterIndexSelection(void);
-    /**
-     * Test character break using doMultipleSelectionTest
-     **/
-    void TestCharacterMultipleSelection(void);
-    /**
-     * test behaviour of BrakIteraor on an empty string
+     * test behaviour of BreakIterator on an empty string
      **/
     void TestEmptyString(void);
     /**
@@ -162,20 +100,14 @@ public:
      **/
     void TestPreceding(void);
 
-    void TestJapaneseLineBreak(void);
-
     void TestBug4153072(void);
-
-    void TestEndBehavior(void);
-
-    void TestSentenceInvariants(void);
-
-    void TestWordInvariants(void);
+    /**
+	 * Test End Behaviour
+	 * @bug 4068137
+	 **/
+	void TestEndBehaviour(void);
     
-    void TestLineInvariants(void);
-
-    void TestCharacterInvariants(void);
-
+/***********************/
 private:
     /**
      * internal methods to prepare test data
@@ -184,62 +116,68 @@ private:
     void addTestSentenceData(void);
     void addTestLineData(void);
     void addTestCharacterData(void);
-
     UnicodeString createTestData(Enumeration* e);
-
-
+	
     /**
-     * Perform tests of BreakIterator forward functionality 
-     * on different kinds of iterators (word, sentence, line and character)
+     * Perform tests of BreakIterator forward and backward functionality 
+     * on different kinds of iterators (word, sentence, line and character).
+	 * It tests the methods first(), next(), current(), preceding(), following()
+	 * previous() and isBoundary().
+	 * It makes use of internal functions to achieve this.
      **/
-    void doForwardSelectionTest(BreakIterator& iterator, UnicodeString& testText, Vector* result);
+    void generalIteratorTest(BreakIterator& bi, Vector* expectedResult);
     /**
-     * Perform tests of BreakIterator backward functionality 
-     * on different kinds of iterators (word, sentence, line and character)
-     **/
-    void doBackwardSelectionTest(BreakIterator& iterator, UnicodeString& testText, Vector* result);
+	 * Internal method to perform iteration and test the first() and next() functions
+	 **/
+	Vector* testFirstAndNext(BreakIterator& bi, UnicodeString& text);
     /**
-     * Perform tests of BreakIterator first selection functionality 
-     * on different kinds of iterators (word, sentence, line and character)
-     **/
-    void doFirstSelectionTest(BreakIterator& iterator, UnicodeString& testText, Vector* result);
+	 * Internal method to perform iteration and test the last() and previous() functions
+	 **/
+    Vector* testLastAndPrevious(BreakIterator& bi, UnicodeString& text);
+	/**
+	 * Internal method to perform iteration and test the following() function
+	 **/
+	void testFollowing(BreakIterator& bi, UnicodeString& text, int32_t *boundaries);
     /**
-     * Perform tests of BreakIterator last selection functionality 
-     * on different kinds of iterators (word, sentence, line and character)
-     **/
-    void doLastSelectionTest(BreakIterator& iterator, UnicodeString& testText, Vector* result);
+	 * Internal method to perform iteration and test the preceding() function
+	 **/
+	void testPreceding(BreakIterator& bi, UnicodeString& text, int32_t *boundaries);
+	/**
+	 * Internal method to perform iteration and test the isBoundary() function
+	 **/
+	void testIsBoundary(BreakIterator& bi, UnicodeString& text, int32_t *boundaries);
+    /** 
+	 * Internal method which does the comparision of expected and got results.
+	 **/
+	void compareFragmentLists(UnicodeString& f1Name, UnicodeString& f2Name, Vector* f1, Vector* f2);
     /**
-     * Perform tests of BreakIterator forward index functionality 
-     * on different kinds of iterators (word, sentence, line and character)
-     **/
-    void doForwardIndexSelectionTest(BreakIterator& iterator, UnicodeString& testText, Vector* result);
-    /**
-     * Perform tests of BreakIterator backward index functionality 
-     * on different kinds of iterators (word, sentence, line and character)
-     **/
-    void doBackwardIndexSelectionTest(BreakIterator& iterator, UnicodeString& testText, Vector* result);
-    /**
-     * Perform tests of BreakIterator multiple selection functionality 
+     * Internal method to perform tests of BreakIterator multiple selection functionality 
      * on different kinds of iterators (word, sentence, line and character)
      **/
     void doMultipleSelectionTest(BreakIterator& iterator, UnicodeString& testText);
     /**
-     * Perform tests with short sample code
+     * Internal method to perform tests of BreakIterator break Invariants 
+     * on different kinds of iterators (word, sentence, line and character)
      **/
-    void sample(BreakIterator& tb, UnicodeString& text, UnicodeString& title);
-
     void doBreakInvariantTest(BreakIterator& tb, UnicodeString& testChars);
-
+    /**
+     * Internal method to perform tests of BreakIterator other invariants 
+     * on different kinds of iterators (word, sentence, line and character)
+     **/
     void doOtherInvariantTest(BreakIterator& tb, UnicodeString& testChars);
-
+    /**
+     * Perform tests with short sample code
+     **/ 
+	void sample(BreakIterator& tb, UnicodeString& text, UnicodeString& title);
+	/**
+	 * The vectors holding test data for testing 
+	 * different kinds of iterators( word, sentence, line and character)
+	 **/
     Vector* lineSelectionData;
-    UnicodeString testLineText;
     Vector* sentenceSelectionData;
-    UnicodeString testSentenceText;
     Vector* wordSelectionData;
-    UnicodeString testWordText;
     Vector* characterSelectionData;
-    UnicodeString testCharacterText;
+    
     static const UChar cannedTestArray[];
     static UnicodeString *cannedTestChars;
 };

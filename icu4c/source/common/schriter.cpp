@@ -191,6 +191,15 @@ StringCharacterIterator::getIndex() const
 }
 
 void
+StringCharacterIterator::setText(const UnicodeString& newText)
+{
+    text = newText;
+    begin = 0;
+    end = newText.length();
+    pos = begin;
+}
+
+void
 StringCharacterIterator::getText(UnicodeString& result)
 {
   result = text;

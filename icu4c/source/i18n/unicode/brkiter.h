@@ -177,53 +177,73 @@ public:
      * BreakIterator, as the argument.  Text is considered the same if
      * it contains the same characters, it need not be the same
      * object, and styles are not considered.
+     * @stable
      */
     virtual bool_t operator==(const BreakIterator&) const = 0;
 
+    /**
+     * Returns the complement of the result of operator==
+     * @stable
+     */
     bool_t operator!=(const BreakIterator& rhs) const { return !operator==(rhs); }
 
     /**
      * Return a polymorphic copy of this object.  This is an abstract
      * method which subclasses implement.
+     * @stable
      */
     virtual BreakIterator* clone(void) const = 0;
 
     /**
      * Return a polymorphic class ID for this object. Different subclasses
      * will return distinct unequal values.
+     * @stable
      */
     virtual UClassID getDynamicClassID(void) const = 0;
 
     /**
+     * Return a CharacterIterator over the text being analyzed.
+     * @draft
+     */
+    virtual const CharacterIterator& getText() const = 0;
+
+    /**
      * Get the text for which this object is finding the boundaries.
+     * @draft
      */
     virtual CharacterIterator* createText(void) const = 0;
 
     /**
      * Change the text over which this operates. The text boundary is
      * reset to the start.
+     * [This function should be modified to take a const UnicodeString& agrument.]
+     * @deprecate
      */
     virtual void  setText(const UnicodeString* it) = 0;
 
     /**
      * Change the text over which this operates. The text boundary is
      * reset to the start.
+     * @stable
      */
     virtual void  adoptText(CharacterIterator* it) = 0;
 
     /**
      * DONE is returned by previous() and next() after all valid
      * boundaries have been returned.
+     @stable
      */
     static const UTextOffset DONE;
 
     /**
      * Return the index of the first character in the text being scanned.
+     * @stable
      */
     virtual UTextOffset first(void) = 0;
 
     /**
      * Return the index immediately BEYOND the last character in the text being scanned.
+     * @stable
      */
     virtual UTextOffset last(void) = 0;
 
@@ -231,6 +251,7 @@ public:
      * Return the boundary preceding the current boundary.
      * @return The character index of the previous text boundary or DONE if all
      * boundaries have been returned.
+     * @stable
      */
     virtual UTextOffset previous(void) = 0;
 
@@ -238,6 +259,7 @@ public:
      * Return the boundary following the current boundary.
      * @return The character index of the next text boundary or DONE if all
      * boundaries have been returned.
+     * @stable
      */
     virtual UTextOffset next(void) = 0;
 
@@ -245,6 +267,7 @@ public:
      * Return character index of the text boundary that was most recently
      * returned by next(), previous(), first(), or last()
      * @return The boundary most recently returned.
+     * @stable
      */
     virtual UTextOffset current(void) const = 0;
 
@@ -254,6 +277,7 @@ public:
      * the value BreakIterator.DONE
      * @param offset the offset to begin scanning.
      * @return The first boundary after the specified offset.
+     * @stable
      */
     virtual UTextOffset following(UTextOffset offset) = 0;
 
@@ -263,6 +287,7 @@ public:
      * the value BreakIterator.DONE
      * @param offset the offset to begin scanning.
      * @return The first boundary before the specified offset.
+     * @stable
      */
     virtual UTextOffset preceding(UTextOffset offset) = 0;
  
@@ -270,6 +295,7 @@ public:
      * Return true if the specfied position is a boundary position.
      * @param offset the offset to check.
      * @return True if "offset" is a boundary position.
+     * @stable
      */
     virtual bool_t isBoundary(UTextOffset offset) = 0;
 
@@ -280,6 +306,7 @@ public:
      * and positive values move to later boundaries.
      * @return The index of the nth boundary from the current position, or
      * DONE if there are fewer than |n| boundaries in the specfied direction.
+     * @stable
      */
     virtual UTextOffset next(int32_t n) = 0;
 
@@ -290,6 +317,7 @@ public:
      * @param where the locale. If a specific WordBreak is not
      * avaliable for the specified locale, a default WordBreak is returned.
      * @return A BreakIterator for word-breaks
+     * @stable
      */
     static BreakIterator* createWordInstance(const Locale& where = Locale::getDefault());
 
@@ -302,6 +330,7 @@ public:
      * @param where the locale. If a specific LineBreak is not
      * avaliable for the specified locale, a default LineBreak is returned.
      * @return A BreakIterator for line-breaks
+     * @stable
      */
     static BreakIterator* createLineInstance(const Locale& where = Locale::getDefault());
 
@@ -312,6 +341,7 @@ public:
      * @param where the locale. If a specific character break is not
      * avaliable for the specified locale, a default character break is returned.
      * @return A BreakIterator for character-breaks
+     * @stable
      */
     static BreakIterator* createCharacterInstance(const Locale& where = Locale::getDefault());
 
@@ -321,6 +351,7 @@ public:
      * @param where the locale. If a specific SentenceBreak is not
      * avaliable for the specified locale, a default SentenceBreak is returned.
      * @return A BreakIterator for sentence-breaks
+     * @stable
      */
     static BreakIterator* createSentenceInstance(const Locale& where = Locale::getDefault());
 
@@ -328,6 +359,7 @@ public:
      * Get the set of Locales for which TextBoundaries are installed
      * @param count the output parameter of number of elements in the locale list
      * @return available locales
+     * @stable
      */
     static const Locale* getAvailableLocales(int32_t& count);
 
@@ -338,6 +370,7 @@ public:
      * @param name the fill-in parameter of the return value
      * Uses best match.
      * @return user-displayable name
+     * @stable
      */
     static UnicodeString& getDisplayName(const Locale& objectLocale,
                                          const Locale& displayLocale,
@@ -349,6 +382,7 @@ public:
      * @param objectLocale must be from getMatchingLocales
      * @param name the fill-in parameter of the return value
      * @return user-displayable name
+     * @stable
      */
     static UnicodeString& getDisplayName(const Locale& objectLocale,
                                          UnicodeString& name);

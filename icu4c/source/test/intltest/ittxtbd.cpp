@@ -69,8 +69,28 @@ public:
   }
 
   void addElement(UnicodeString text) { fEnd->fLink = new TextLink(&fBase, text); fEnd = fEnd->fLink; ++fSize; }
+  void insertElementAt(UnicodeString text, int pos) { 
+	  if(pos >= fSize || pos < 0)
+		  ;
+	  else if(pos == 0){
+          TextLink* insert = new TextLink(&fBase, text);
+		  insert->fLink=fBase.fLink;
+		  ++fSize;
+		  fBase.fLink=insert;
+	  }
+	  else{
+          TextLink* link = fBase.fLink; 
+		  while(--pos > 0)
+             link=link->fLink;
+          TextLink* insert = new TextLink(&fBase, text);
+		  insert->fLink =link->fLink;
+          link->fLink=insert;
+		  ++fSize;
 
-  UnicodeString elementAt(int32_t pos) {
+	  }
+
+  }
+    UnicodeString elementAt(int32_t pos) {
         if (pos >= fSize)
           return UnicodeString();
 
@@ -97,7 +117,7 @@ public:
 #include "unicode/schriter.h"
 
 // [HSYS] Just to make it easier to use with UChar array.
-UnicodeString CharsToUnicodeString(const char* chars)
+UnicodeString CharsToUnicodeString2(const char* chars)
 {
     int len = strlen(chars);
     int i;
@@ -238,7 +258,7 @@ void IntlTestTextBoundary::addTestWordData()
     wordSelectionData->addElement(" ");
 
     // to test for bug #4097779
-    wordSelectionData->addElement(CharsToUnicodeString("aa\\u0300a"));
+    wordSelectionData->addElement(CharsToUnicodeString2("aa\\u0300a"));
     wordSelectionData->addElement(" ");
 
     // to test for bug #4098467
@@ -247,33 +267,31 @@ void IntlTestTextBoundary::addTestWordData()
     // it correctly), first as precomposed syllables, and then as conjoining jamo.
     // Both sequences should be semantically identical and break the same way.
     // precomposed syllables...
-    wordSelectionData->addElement(CharsToUnicodeString("\\uc0c1\\ud56d"));
+    wordSelectionData->addElement(CharsToUnicodeString2("\\uc0c1\\ud56d"));
     wordSelectionData->addElement(" ");
-    wordSelectionData->addElement(CharsToUnicodeString("\\ud55c\\uc778"));
+    wordSelectionData->addElement(CharsToUnicodeString2("\\ud55c\\uc778"));
     wordSelectionData->addElement(" ");
-    wordSelectionData->addElement(CharsToUnicodeString("\\uc5f0\\ud569"));
+    wordSelectionData->addElement(CharsToUnicodeString2("\\uc5f0\\ud569"));
     wordSelectionData->addElement(" ");
-    wordSelectionData->addElement(CharsToUnicodeString("\\uc7a5\\ub85c\\uad50\\ud68c"));
+    wordSelectionData->addElement(CharsToUnicodeString2("\\uc7a5\\ub85c\\uad50\\ud68c"));
     wordSelectionData->addElement(" ");
     // conjoining jamo...
-    wordSelectionData->addElement(CharsToUnicodeString("\\u1109\\u1161\\u11bc\\u1112\\u1161\\u11bc"));
+    wordSelectionData->addElement(CharsToUnicodeString2("\\u1109\\u1161\\u11bc\\u1112\\u1161\\u11bc"));
     wordSelectionData->addElement(" ");
-    wordSelectionData->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11ab\\u110b\\u1175\\u11ab"));
+    wordSelectionData->addElement(CharsToUnicodeString2("\\u1112\\u1161\\u11ab\\u110b\\u1175\\u11ab"));
     wordSelectionData->addElement(" ");
-    wordSelectionData->addElement(CharsToUnicodeString("\\u110b\\u1167\\u11ab\\u1112\\u1161\\u11b8"));
+    wordSelectionData->addElement(CharsToUnicodeString2("\\u110b\\u1167\\u11ab\\u1112\\u1161\\u11b8"));
     wordSelectionData->addElement(" ");
-    wordSelectionData->addElement(CharsToUnicodeString("\\u110c\\u1161\\u11bc\\u1105\\u1169\\u1100\\u116d\\u1112\\u116c"));
+    wordSelectionData->addElement(CharsToUnicodeString2("\\u110c\\u1161\\u11bc\\u1105\\u1169\\u1100\\u116d\\u1112\\u116c"));
     wordSelectionData->addElement(" ");
 
     // this is a test for bug #4117554: the ideographic iteration mark (U+3005) should
     // count as a Kanji character for the purposes of word breaking
     wordSelectionData->addElement("abc");
-    wordSelectionData->addElement(CharsToUnicodeString("\\u4e01\\u4e02\\u3005\\u4e03\\u4e03"));
+    wordSelectionData->addElement(CharsToUnicodeString2("\\u4e01\\u4e02\\u3005\\u4e03\\u4e03"));
     wordSelectionData->addElement("abc");
 
-    Enumeration *elems = wordSelectionData->elements();
-    testWordText = createTestData(elems);
-    delete elems;
+    
 }
 
 const UChar kParagraphSeparator = 0x2029;
@@ -315,68 +333,65 @@ void IntlTestTextBoundary::addTestSentenceData()
     sentenceSelectionData->addElement("Yes, I am definatelly 12\" tall!!");
 
     // test for bug #4113835: \n and \r count as spaces, not as paragraph breaks
-    sentenceSelectionData->addElement(CharsToUnicodeString("Now\ris\nthe\r\ntime\n\rfor\r\rall\\u2029"));
+    sentenceSelectionData->addElement(CharsToUnicodeString2("Now\ris\nthe\r\ntime\n\rfor\r\rall\\u2029"));
 
     // test for bug #4111338: Don't break sentences at the boundary between CJK
     // and other letters
-    sentenceSelectionData->addElement(CharsToUnicodeString("\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165:\"JAVA\\u821c")
-        + CharsToUnicodeString("\\u8165\\u7fc8\\u51ce\\u306d,\\u2494\\u56d8\\u4ec0\\u60b1\\u8560\\u51ba")
-        + CharsToUnicodeString("\\u611d\\u57b6\\u2510\\u5d46\".\\u2029"));
-    sentenceSelectionData->addElement(CharsToUnicodeString("\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165\\u9de8")
-        + CharsToUnicodeString("\\u97e4JAVA\\u821c\\u8165\\u7fc8\\u51ce\\u306d\\ue30b\\u2494\\u56d8\\u4ec0")
-        + CharsToUnicodeString("\\u60b1\\u8560\\u51ba\\u611d\\u57b6\\u2510\\u5d46\\u97e5\\u7751\\u2029"));
-    sentenceSelectionData->addElement(CharsToUnicodeString("\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165\\u9de8\\u97e4")
-        + CharsToUnicodeString("\\u6470\\u8790JAVA\\u821c\\u8165\\u7fc8\\u51ce\\u306d\\ue30b\\u2494\\u56d8")
-        + CharsToUnicodeString("\\u4ec0\\u60b1\\u8560\\u51ba\\u611d\\u57b6\\u2510\\u5d46\\u97e5\\u7751\\u2029"));
-    sentenceSelectionData->addElement(CharsToUnicodeString("He said, \"I can go there.\"\\u2029"));
+    sentenceSelectionData->addElement(CharsToUnicodeString2("\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165:\"JAVA\\u821c")
+        + CharsToUnicodeString2("\\u8165\\u7fc8\\u51ce\\u306d,\\u2494\\u56d8\\u4ec0\\u60b1\\u8560\\u51ba")
+        + CharsToUnicodeString2("\\u611d\\u57b6\\u2510\\u5d46\".\\u2029"));
+    sentenceSelectionData->addElement(CharsToUnicodeString2("\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165\\u9de8")
+        + CharsToUnicodeString2("\\u97e4JAVA\\u821c\\u8165\\u7fc8\\u51ce\\u306d\\ue30b\\u2494\\u56d8\\u4ec0")
+        + CharsToUnicodeString2("\\u60b1\\u8560\\u51ba\\u611d\\u57b6\\u2510\\u5d46\\u97e5\\u7751\\u2029"));
+    sentenceSelectionData->addElement(CharsToUnicodeString2("\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165\\u9de8\\u97e4")
+        + CharsToUnicodeString2("\\u6470\\u8790JAVA\\u821c\\u8165\\u7fc8\\u51ce\\u306d\\ue30b\\u2494\\u56d8")
+        + CharsToUnicodeString2("\\u4ec0\\u60b1\\u8560\\u51ba\\u611d\\u57b6\\u2510\\u5d46\\u97e5\\u7751\\u2029"));
+    sentenceSelectionData->addElement(CharsToUnicodeString2("He said, \"I can go there.\"\\u2029"));
 
     // test for bug #4117554: Treat fullwidth variants of .!? the same as their
     // normal counterparts
-    sentenceSelectionData->addElement(CharsToUnicodeString("I know I'm right\\uff0e "));
-    sentenceSelectionData->addElement(CharsToUnicodeString("Right\\uff1f "));
-    sentenceSelectionData->addElement(CharsToUnicodeString("Right\\uff01 "));
+    sentenceSelectionData->addElement(CharsToUnicodeString2("I know I'm right\\uff0e "));
+    sentenceSelectionData->addElement(CharsToUnicodeString2("Right\\uff1f "));
+    sentenceSelectionData->addElement(CharsToUnicodeString2("Right\\uff01 "));
 
     // test for bug #4117554: Don't break sentences at boundary between CJK and digits
-    sentenceSelectionData->addElement(CharsToUnicodeString("\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165\\u9de8")
-        + CharsToUnicodeString("\\u97e48888\\u821c\\u8165\\u7fc8\\u51ce\\u306d\\ue30b\\u2494\\u56d8\\u4ec0")
-        + CharsToUnicodeString("\\u60b1\\u8560\\u51ba\\u611d\\u57b6\\u2510\\u5d46\\u97e5\\u7751\\u2029"));
+    sentenceSelectionData->addElement(CharsToUnicodeString2("\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165\\u9de8")
+        + CharsToUnicodeString2("\\u97e48888\\u821c\\u8165\\u7fc8\\u51ce\\u306d\\ue30b\\u2494\\u56d8\\u4ec0")
+        + CharsToUnicodeString2("\\u60b1\\u8560\\u51ba\\u611d\\u57b6\\u2510\\u5d46\\u97e5\\u7751\\u2029"));
 
     // test for bug #4117554: Break sentence between a sentence terminator and
     // opening punctuation
     sentenceSelectionData->addElement("no?");
-    sentenceSelectionData->addElement("(yes)" + CharsToUnicodeString("\\u2029"));
+    sentenceSelectionData->addElement("(yes)" + CharsToUnicodeString2("\\u2029"));
 
     // test for bug #4158381: Don't break sentence after period if it isn't
     // followed by a space
     sentenceSelectionData->addElement("Test <code>Flags.Flag</code> class.  ");
-    sentenceSelectionData->addElement("Another test." + CharsToUnicodeString("\\u2029"));
+    sentenceSelectionData->addElement("Another test." + CharsToUnicodeString2("\\u2029"));
 
     // test for bug #4158381: No breaks when there are no terminators around
     sentenceSelectionData->addElement("<P>Provides a set of &quot;lightweight&quot; (all-java<FONT SIZE=\"-2\"><SUP>TM</SUP></FONT> language) components that, to the maximum degree possible, work the same on all platforms.  ");
-    sentenceSelectionData->addElement("Another test." + CharsToUnicodeString("\\u2029"));
+    sentenceSelectionData->addElement("Another test." + CharsToUnicodeString2("\\u2029"));
 
     // test for bug #4143071: Make sure sentences that end with digits
     // work right
     sentenceSelectionData->addElement("Today is the 27th of May, 1998.  ");
     sentenceSelectionData->addElement("Tomorrow with be 28 May 1998.  ");
     sentenceSelectionData->addElement("The day after will be the 30th." 
-                                        + CharsToUnicodeString("\\u2029"));
+                                        + CharsToUnicodeString2("\\u2029"));
 
     // test for bug #4152416: Make sure sentences ending with a capital
     // letter are treated correctly
     sentenceSelectionData->addElement("The type of all primitive <code>boolean</code> values accessed in the target VM.  ");
-    sentenceSelectionData->addElement("Calls to xxx will return an implementor of this interface." + CharsToUnicodeString("\\u2029"));
+    sentenceSelectionData->addElement("Calls to xxx will return an implementor of this interface." + CharsToUnicodeString2("\\u2029"));
 
     // test for bug #4152117: Make sure sentence breaking is handling
     // punctuation correctly [COULD NOT REPRODUCE THIS BUG, BUT TEST IS
     // HERE TO MAKE SURE IT DOESN'T CROP UP]
     sentenceSelectionData->addElement("Constructs a randomly generated BigInteger, uniformly distributed over the range <tt>0</tt> to <tt>(2<sup>numBits</sup> - 1)</tt>, inclusive.  ");
     sentenceSelectionData->addElement("The uniformity of the distribution assumes that a fair source of random bits is provided in <tt>rnd</tt>.  ");
-    sentenceSelectionData->addElement("Note that this constructor always constructs a non-negative BigInteger." + CharsToUnicodeString("\\u2029"));
+    sentenceSelectionData->addElement("Note that this constructor always constructs a non-negative BigInteger." + CharsToUnicodeString2("\\u2029"));
 
-    Enumeration *elems = sentenceSelectionData->elements();
-    testSentenceText = createTestData(elems);
-    delete elems;
 }
 
 /**
@@ -416,18 +431,18 @@ void IntlTestTextBoundary::addTestLineData()
     lineSelectionData->addElement("all");
 
     // to test for bug #4068133
-    lineSelectionData->addElement(CharsToUnicodeString("\\u96f6"));
-    lineSelectionData->addElement(CharsToUnicodeString("\\u4e00\\u3002"));
-    lineSelectionData->addElement(CharsToUnicodeString("\\u4e8c\\u3001"));
-    lineSelectionData->addElement(CharsToUnicodeString("\\u4e09\\u3002\\u3001"));
-    lineSelectionData->addElement(CharsToUnicodeString("\\u56db\\u3001\\u3002\\u3001"));
-    lineSelectionData->addElement(CharsToUnicodeString("\\u4e94,"));
-    lineSelectionData->addElement(CharsToUnicodeString("\\u516d."));
-    lineSelectionData->addElement(CharsToUnicodeString("\\u4e03.\\u3001,\\u3002"));
-    lineSelectionData->addElement(CharsToUnicodeString("\\u516b"));
+    lineSelectionData->addElement(CharsToUnicodeString2("\\u96f6"));
+    lineSelectionData->addElement(CharsToUnicodeString2("\\u4e00\\u3002"));
+    lineSelectionData->addElement(CharsToUnicodeString2("\\u4e8c\\u3001"));
+    lineSelectionData->addElement(CharsToUnicodeString2("\\u4e09\\u3002\\u3001"));
+    lineSelectionData->addElement(CharsToUnicodeString2("\\u56db\\u3001\\u3002\\u3001"));
+    lineSelectionData->addElement(CharsToUnicodeString2("\\u4e94,"));
+    lineSelectionData->addElement(CharsToUnicodeString2("\\u516d."));
+    lineSelectionData->addElement(CharsToUnicodeString2("\\u4e03.\\u3001,\\u3002"));
+    lineSelectionData->addElement(CharsToUnicodeString2("\\u516b"));
 
     // to test for bug #4086052
-    lineSelectionData->addElement(CharsToUnicodeString("foo\\u00a0bar "));
+    lineSelectionData->addElement(CharsToUnicodeString2("foo\\u00a0bar "));
 //        lineSelectionData->addElement("foo\\ufeffbar");
 
     // to test for bug #4097920
@@ -451,24 +466,21 @@ void IntlTestTextBoundary::addTestLineData()
     // it correctly), first as precomposed syllables, and then as conjoining jamo.
     // Both sequences should be semantically identical and break the same way.
     // precomposed syllables...
-    lineSelectionData->addElement(CharsToUnicodeString("\\uc0c1\\ud56d "));
-    lineSelectionData->addElement(CharsToUnicodeString("\\ud55c\\uc778 "));
-    lineSelectionData->addElement(CharsToUnicodeString("\\uc5f0\\ud569 "));
-    lineSelectionData->addElement(CharsToUnicodeString("\\uc7a5\\ub85c\\uad50\\ud68c "));
+    lineSelectionData->addElement(CharsToUnicodeString2("\\uc0c1\\ud56d "));
+    lineSelectionData->addElement(CharsToUnicodeString2("\\ud55c\\uc778 "));
+    lineSelectionData->addElement(CharsToUnicodeString2("\\uc5f0\\ud569 "));
+    lineSelectionData->addElement(CharsToUnicodeString2("\\uc7a5\\ub85c\\uad50\\ud68c "));
     // conjoining jamo...
-    lineSelectionData->addElement(CharsToUnicodeString("\\u1109\\u1161\\u11bc\\u1112\\u1161\\u11bc "));
-    lineSelectionData->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11ab\\u110b\\u1175\\u11ab "));
-    lineSelectionData->addElement(CharsToUnicodeString("\\u110b\\u1167\\u11ab\\u1112\\u1161\\u11b8 "));
-    lineSelectionData->addElement(CharsToUnicodeString("\\u110c\\u1161\\u11bc\\u1105\\u1169\\u1100\\u116d\\u1112\\u116c"));
+    lineSelectionData->addElement(CharsToUnicodeString2("\\u1109\\u1161\\u11bc\\u1112\\u1161\\u11bc "));
+    lineSelectionData->addElement(CharsToUnicodeString2("\\u1112\\u1161\\u11ab\\u110b\\u1175\\u11ab "));
+    lineSelectionData->addElement(CharsToUnicodeString2("\\u110b\\u1167\\u11ab\\u1112\\u1161\\u11b8 "));
+    lineSelectionData->addElement(CharsToUnicodeString2("\\u110c\\u1161\\u11bc\\u1105\\u1169\\u1100\\u116d\\u1112\\u116c"));
 
     // to test for bug #4117554: Fullwidth .!? should be treated as postJwrd
-    lineSelectionData->addElement(CharsToUnicodeString("\\u4e01\\uff0e"));
-    lineSelectionData->addElement(CharsToUnicodeString("\\u4e02\\uff01"));
-    lineSelectionData->addElement(CharsToUnicodeString("\\u4e03\\uff1f"));
+    lineSelectionData->addElement(CharsToUnicodeString2("\\u4e01\\uff0e"));
+    lineSelectionData->addElement(CharsToUnicodeString2("\\u4e02\\uff01"));
+    lineSelectionData->addElement(CharsToUnicodeString2("\\u4e03\\uff1f"));
 
-    Enumeration *elems = lineSelectionData->elements();
-    testLineText = createTestData(elems);
-    delete elems;
 }
 
 /*
@@ -516,38 +528,35 @@ void IntlTestTextBoundary::addTestCharacterData()
     // it correctly), first as precomposed syllables, and then as conjoining jamo.
     // Both sequences should be semantically identical and break the same way.
     // precomposed syllables...
-    characterSelectionData->addElement(CharsToUnicodeString("\\uc0c1"));
-    characterSelectionData->addElement(CharsToUnicodeString("\\ud56d"));
+    characterSelectionData->addElement(CharsToUnicodeString2("\\uc0c1"));
+    characterSelectionData->addElement(CharsToUnicodeString2("\\ud56d"));
     characterSelectionData->addElement(" ");
-    characterSelectionData->addElement(CharsToUnicodeString("\\ud55c"));
-    characterSelectionData->addElement(CharsToUnicodeString("\\uc778"));
+    characterSelectionData->addElement(CharsToUnicodeString2("\\ud55c"));
+    characterSelectionData->addElement(CharsToUnicodeString2("\\uc778"));
     characterSelectionData->addElement(" ");
-    characterSelectionData->addElement(CharsToUnicodeString("\\uc5f0"));
-    characterSelectionData->addElement(CharsToUnicodeString("\\ud569"));
+    characterSelectionData->addElement(CharsToUnicodeString2("\\uc5f0"));
+    characterSelectionData->addElement(CharsToUnicodeString2("\\ud569"));
     characterSelectionData->addElement(" ");
-    characterSelectionData->addElement(CharsToUnicodeString("\\uc7a5"));
-    characterSelectionData->addElement(CharsToUnicodeString("\\ub85c"));
-    characterSelectionData->addElement(CharsToUnicodeString("\\uad50"));
-    characterSelectionData->addElement(CharsToUnicodeString("\\ud68c"));
+    characterSelectionData->addElement(CharsToUnicodeString2("\\uc7a5"));
+    characterSelectionData->addElement(CharsToUnicodeString2("\\ub85c"));
+    characterSelectionData->addElement(CharsToUnicodeString2("\\uad50"));
+    characterSelectionData->addElement(CharsToUnicodeString2("\\ud68c"));
     characterSelectionData->addElement(" ");
     // conjoining jamo...
-    characterSelectionData->addElement(CharsToUnicodeString("\\u1109\\u1161\\u11bc"));
-    characterSelectionData->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11bc"));
+    characterSelectionData->addElement(CharsToUnicodeString2("\\u1109\\u1161\\u11bc"));
+    characterSelectionData->addElement(CharsToUnicodeString2("\\u1112\\u1161\\u11bc"));
     characterSelectionData->addElement(" ");
-    characterSelectionData->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11ab"));
-    characterSelectionData->addElement(CharsToUnicodeString("\\u110b\\u1175\\u11ab"));
+    characterSelectionData->addElement(CharsToUnicodeString2("\\u1112\\u1161\\u11ab"));
+    characterSelectionData->addElement(CharsToUnicodeString2("\\u110b\\u1175\\u11ab"));
     characterSelectionData->addElement(" ");
-    characterSelectionData->addElement(CharsToUnicodeString("\\u110b\\u1167\\u11ab"));
-    characterSelectionData->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11b8"));
+    characterSelectionData->addElement(CharsToUnicodeString2("\\u110b\\u1167\\u11ab"));
+    characterSelectionData->addElement(CharsToUnicodeString2("\\u1112\\u1161\\u11b8"));
     characterSelectionData->addElement(" ");
-    characterSelectionData->addElement(CharsToUnicodeString("\\u110c\\u1161\\u11bc"));
-    characterSelectionData->addElement(CharsToUnicodeString("\\u1105\\u1169"));
-    characterSelectionData->addElement(CharsToUnicodeString("\\u1100\\u116d"));
-    characterSelectionData->addElement(CharsToUnicodeString("\\u1112\\u116c"));
+    characterSelectionData->addElement(CharsToUnicodeString2("\\u110c\\u1161\\u11bc"));
+    characterSelectionData->addElement(CharsToUnicodeString2("\\u1105\\u1169"));
+    characterSelectionData->addElement(CharsToUnicodeString2("\\u1100\\u116d"));
+    characterSelectionData->addElement(CharsToUnicodeString2("\\u1112\\u116c"));
 
-    Enumeration *elems = characterSelectionData->elements();
-    testCharacterText = createTestData(elems);
-    delete elems;
 }
 
 UnicodeString IntlTestTextBoundary::createTestData(Enumeration* e)
@@ -557,7 +566,6 @@ UnicodeString IntlTestTextBoundary::createTestData(Enumeration* e)
   while (e->hasMoreElements()) {
     result += e->nextElement();
   }
-
   return result;
 }
 
@@ -565,182 +573,70 @@ UnicodeString IntlTestTextBoundary::createTestData(Enumeration* e)
 // SentenceBreak tests
 //---------------------------------------------
 
-void IntlTestTextBoundary::TestForwardSentenceSelection()
+void IntlTestTextBoundary::TestSentenceIteration()
 {
     BreakIterator* e = BreakIterator::createSentenceInstance();
-    doForwardSelectionTest(*e, testSentenceText, sentenceSelectionData);
-    delete e;
-}
-
-void IntlTestTextBoundary::TestFirstSentenceSelection()
-{
-    BreakIterator* e = BreakIterator::createSentenceInstance();
-    doFirstSelectionTest(*e, testSentenceText, sentenceSelectionData);
-    delete e;
-}
-
-void IntlTestTextBoundary::TestLastSentenceSelection()
-{
-    BreakIterator* e = BreakIterator::createSentenceInstance();
-    doLastSelectionTest(*e, testSentenceText, sentenceSelectionData);
-    delete e;
-}
-
-void IntlTestTextBoundary::TestBackwardSentenceSelection()
-{
-    BreakIterator* e = BreakIterator::createSentenceInstance();
-    doBackwardSelectionTest(*e, testSentenceText, sentenceSelectionData);
-    delete e;
-}
-
-void IntlTestTextBoundary::TestForwardSentenceIndexSelection()
-{
-    BreakIterator* e = BreakIterator::createSentenceInstance();
-    doForwardIndexSelectionTest(*e, testSentenceText, sentenceSelectionData);
-    delete e;
-}
-
-void IntlTestTextBoundary::TestBackwardSentenceIndexSelection()
-{
-    BreakIterator* e = BreakIterator::createSentenceInstance();
-    doBackwardIndexSelectionTest(*e, testSentenceText, sentenceSelectionData);
-    delete e;
-}
-
-void IntlTestTextBoundary::TestSentenceMultipleSelection()
-{
-    BreakIterator* e = BreakIterator::createSentenceInstance();
-    doMultipleSelectionTest(*e, testSentenceText);
+    generalIteratorTest(*e, sentenceSelectionData);
     delete e;
 }
 
 void IntlTestTextBoundary::TestSentenceInvariants()
 {
     BreakIterator *e = BreakIterator::createSentenceInstance();
-    UnicodeString s = *cannedTestChars + CharsToUnicodeString(".,\\u3001\\u3002\\u3041\\u3042\\u3043\\ufeff");
+    UnicodeString s = *cannedTestChars + CharsToUnicodeString2(".,\\u3001\\u3002\\u3041\\u3042\\u3043\\ufeff");
     doOtherInvariantTest(*e, s);
     delete e;
 }
 //---------------------------------------------
 // WordBreak tests
 //---------------------------------------------
-
-void IntlTestTextBoundary::TestForwardWordSelection()
+void IntlTestTextBoundary::TestWordIteration()
 {
     BreakIterator* e = BreakIterator::createWordInstance();
-    doForwardSelectionTest(*e, testWordText, wordSelectionData);
+    generalIteratorTest(*e, wordSelectionData);
     delete e;
 }
-
-void IntlTestTextBoundary::TestFirstWordSelection()
-{
-    BreakIterator* e = BreakIterator::createWordInstance();
-    doFirstSelectionTest(*e, testWordText, wordSelectionData);
-    delete e;
-}
-
-void IntlTestTextBoundary::TestLastWordSelection()
-{
-    BreakIterator* e = BreakIterator::createWordInstance();
-    doLastSelectionTest(*e, testWordText, wordSelectionData);
-    delete e;
-}
-
-void IntlTestTextBoundary::TestBackwardWordSelection()
-{
-    BreakIterator* e = BreakIterator::createWordInstance();
-    doBackwardSelectionTest(*e, testWordText, wordSelectionData);
-    delete e;
-}
-
-void IntlTestTextBoundary::TestForwardWordIndexSelection()
-{
-    BreakIterator* e = BreakIterator::createWordInstance();
-    doForwardIndexSelectionTest(*e, testWordText, wordSelectionData);
-    delete e;
-}
-
-void IntlTestTextBoundary::TestBackwardWordIndexSelection()
-{
-    BreakIterator* e = BreakIterator::createWordInstance();
-    doBackwardIndexSelectionTest(*e, testWordText, wordSelectionData);
-    delete e;
-}
-
-void IntlTestTextBoundary::TestWordMultipleSelection()
-{
-    BreakIterator* e = BreakIterator::createWordInstance();
-    doMultipleSelectionTest(*e, testWordText);
-    delete e;
-}
-
 void IntlTestTextBoundary::TestWordInvariants()
 {
     BreakIterator *e = BreakIterator::createWordInstance();
-    UnicodeString s = *cannedTestChars + CharsToUnicodeString("\',.\\u3041\\u3042\\u3043\\u309b\\u309c\\u30a1\\u30a2\\u30a3\\u4e00\\u4e01\\u4e02");
+    UnicodeString s = *cannedTestChars + CharsToUnicodeString2("\',.\\u3041\\u3042\\u3043\\u309b\\u309c\\u30a1\\u30a2\\u30a3\\u4e00\\u4e01\\u4e02");
     doBreakInvariantTest(*e, s);
-    s = *cannedTestChars + CharsToUnicodeString("\',.\\u3041\\u3042\\u3043\\u309b\\u309c\\u30a1\\u30a2\\u30a3\\u4e00\\u4e01\\u4e02");
+    s = *cannedTestChars + CharsToUnicodeString2("\',.\\u3041\\u3042\\u3043\\u309b\\u309c\\u30a1\\u30a2\\u30a3\\u4e00\\u4e01\\u4e02");
     doOtherInvariantTest(*e, s);
     delete e;
 }
-
+//---------------------------------------------
+// CharacterBreak tests
+//---------------------------------------------
+void IntlTestTextBoundary::TestCharacterIteration()
+{
+    BreakIterator* e = BreakIterator::createCharacterInstance();
+   // generalIteratorTest(*e, testCharacterText, characterSelectionData);
+	generalIteratorTest(*e, characterSelectionData);
+    delete e;
+}
+void IntlTestTextBoundary::TestCharacterInvariants()
+{
+    BreakIterator *e = BreakIterator::createCharacterInstance();
+    UnicodeString s = *cannedTestChars + CharsToUnicodeString2("\\u1100\\u1101\\u1102\\u1160\\u1161\\u1162\\u11a8\\u11a9\\u11aa");
+    doBreakInvariantTest(*e, s);
+    s = *cannedTestChars + CharsToUnicodeString2("\\u1100\\u1101\\u1102\\u1160\\u1161\\u1162\\u11a8\\u11a9\\u11aa");
+    doOtherInvariantTest(*e, s);
+    delete e;
+}
 //---------------------------------------------
 // LineBreak tests
 //---------------------------------------------
-
-void IntlTestTextBoundary::TestForwardLineSelection()
+void IntlTestTextBoundary::TestLineIteration()
 {
     BreakIterator* e = BreakIterator::createLineInstance();
-    doForwardSelectionTest(*e, testLineText, lineSelectionData);
+    generalIteratorTest(*e, lineSelectionData);
     delete e;
 }
-
-void IntlTestTextBoundary::TestFirstLineSelection()
-{
-    BreakIterator* e = BreakIterator::createLineInstance();
-    doFirstSelectionTest(*e, testLineText, lineSelectionData);
-    delete e;
-}
-
-void IntlTestTextBoundary::TestLastLineSelection()
-{
-    BreakIterator* e = BreakIterator::createLineInstance();
-    doLastSelectionTest(*e, testLineText, lineSelectionData);
-    delete e;
-}
-
-void IntlTestTextBoundary::TestBackwardLineSelection()
-{
-    BreakIterator* e = BreakIterator::createLineInstance();
-    doBackwardSelectionTest(*e, testLineText, lineSelectionData);
-    delete e;
-}
-
-void IntlTestTextBoundary::TestForwardLineIndexSelection()
-{
-    BreakIterator* e = BreakIterator::createLineInstance();
-    doForwardIndexSelectionTest(*e, testLineText, lineSelectionData);
-    delete e;
-}
-
-void IntlTestTextBoundary::TestBackwardLineIndexSelection()
-{
-    BreakIterator* e = BreakIterator::createLineInstance();
-    doBackwardIndexSelectionTest(*e, testLineText, lineSelectionData);
-    delete e;
-}
-
-void IntlTestTextBoundary::TestLineMultipleSelection()
-{
-    BreakIterator* e = BreakIterator::createLineInstance();
-    doMultipleSelectionTest(*e, testLineText);
-    delete e;
-}
-
 void IntlTestTextBoundary::TestLineInvariants()
 {
     BreakIterator *e = BreakIterator::createLineInstance();
-    UnicodeString s = CharsToUnicodeString(".,;:\\u3001\\u3002\\u3041\\u3042\\u3043\\u3044\\u3045\\u30a3\\u4e00\\u4e01\\u4e02");
+    UnicodeString s = CharsToUnicodeString2(".,;:\\u3001\\u3002\\u3041\\u3042\\u3043\\u3044\\u3045\\u30a3\\u4e00\\u4e01\\u4e02");
     UnicodeString testChars = *cannedTestChars + s;
     doBreakInvariantTest(*e, testChars);
     doOtherInvariantTest(*e, testChars);
@@ -750,7 +646,7 @@ void IntlTestTextBoundary::TestLineInvariants()
 
     // in addition to the other invariants, a line-break iterator should make sure that:
     // it doesn't break around the non-breaking characters
-    UnicodeString noBreak = CharsToUnicodeString("\\u00a0\\u2007\\u2011\\ufeff");
+    UnicodeString noBreak = CharsToUnicodeString2("\\u00a0\\u2007\\u2011\\ufeff");
     UnicodeString work("aaa");
     for (i = 0; i < testChars.length(); i++) {
         UChar c = testChars[i];
@@ -776,7 +672,7 @@ void IntlTestTextBoundary::TestLineInvariants()
 
     // it does break after hyphens (unless they're followed by a digit, a non-spacing mark,
     // a currency symbol, a non-breaking space, or a line or paragraph separator)
-    UnicodeString dashes = CharsToUnicodeString("-\\u00ad\\u2010\\u2012\\u2013\\u2014");
+    UnicodeString dashes = CharsToUnicodeString2("-\\u00ad\\u2010\\u2012\\u2013\\u2014");
     for (i = 0; i < testChars.length(); i++) {
         work[0] = testChars[i];
         for (j = 0; j < dashes.length(); j++) {
@@ -788,6 +684,10 @@ void IntlTestTextBoundary::TestLineInvariants()
                     Unicode::getType(c) == Unicode::NON_SPACING_MARK ||
                     Unicode::getType(c) == Unicode::ENCLOSING_MARK ||
                     Unicode::getType(c) == Unicode::CURRENCY_SYMBOL ||
+                    Unicode::getType(c) == Unicode::SPACE_SEPARATOR ||
+                    Unicode::getType(c) == Unicode::DASH_PUNCTUATION ||
+                    Unicode::getType(c) == Unicode::CONTROL ||
+                    Unicode::getType(c) == Unicode::FORMAT ||
                     c == '\n' || c == '\r' || c == 0x2028 || c == 0x2029 ||
                     c == 0x0003 || c == 0x00a0 || c == 0x2007 || c == 0x2011 ||
                     c == 0xfeff)
@@ -811,113 +711,144 @@ void IntlTestTextBoundary::TestLineInvariants()
 
 }
 
-//---------------------------------------------
-// CharacterBreak tests
-//---------------------------------------------
+void IntlTestTextBoundary::TestThaiLineBreak() {
+        Vector* thaiLineSelection = new Vector();
 
-void IntlTestTextBoundary::TestForwardCharacterSelection()
+        // \u0e2f-- the Thai paiyannoi character-- isn't a letter.  It's a symbol that
+        // represents elided letters at the end of a long word.  It should be bound to
+        // the end of the word and not treated as an independent punctuation mark.
+        
+
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e2a\\u0e16\\u0e32\\u0e19\\u0e35\\u0e2f"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e08\\u0e30"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e23\\u0e30\\u0e14\\u0e21"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e40\\u0e08\\u0e49\\u0e32"));
+//        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e2b\\u0e19\\u0e49\\u0e32"));
+//        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e17\\u0e35\\u0e48"));
+thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e2b\\u0e19\\u0e49\\u0e32\\u0e17\\u0e35\\u0e48"));
+// the commented-out lines (I think) are the preferred result; this line is what our current dictionary is giving us
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e2d\\u0e2d\\u0e01"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e21\\u0e32"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e40\\u0e23\\u0e48\\u0e07"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e23\\u0e30\\u0e1a\\u0e32\\u0e22"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e2d\\u0e22\\u0e48\\u0e32\\u0e07"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e40\\u0e15\\u0e47\\u0e21"));
+
+        // the one time where the paiyannoi occurs somewhere other than at the end
+        // of a word is in the Thai abbrevation for "etc.", which both begins and
+        // ends with a paiyannoi
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e2f\\u0e25\\u0e2f"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e17\\u0e35\\u0e48"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e19\\u0e31\\u0e49\\u0e19"));
+
+	    BreakIterator* e = BreakIterator::createLineInstance(
+                                                Locale(UnicodeString("th", (char*)0))); 
+			
+        generalIteratorTest(*e, thaiLineSelection);
+		delete e;
+		delete thaiLineSelection;
+    }
+
+void IntlTestTextBoundary::TestMixedThaiLineBreak() 
 {
-    BreakIterator* e = BreakIterator::createCharacterInstance();
-    doForwardSelectionTest(*e, testCharacterText, characterSelectionData);
-    delete e;
+        Vector*  thaiLineSelection= new Vector();
+
+        // Arabic numerals should always be separated from surrounding Thai text
+/*
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e04\\u0e48\\u0e32"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e40\\u0e07\\u0e34\\u0e19"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e1a\\u0e32\\u0e17"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e41\\u0e15\\u0e30"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e23\\u0e30\\u0e14\\u0e31\\u0e1a"));
+        thaiLineSelection->addElement("39");
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e1a\\u0e32\\u0e17 "));
+
+        // words in non-Thai scripts should always be separated from surrounding Thai text
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e17\\u0e14"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e2a\\u0e2d\\u0e1a"));
+        thaiLineSelection->addElement("Java");
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e1a\\u0e19"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e40\\u0e04\\u0e23\\u0e37\\u0e48\\u0e2d\\u0e07"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e44\\u0e2d\\u0e1a\\u0e35\\u0e40\\u0e2d\\u0e47\\u0e21 "));
+
+        // Thai numerals should always be separated from the text surrounding them
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e04\\u0e48\\u0e32"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e40\\u0e07\\u0e34\\u0e19"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e1a\\u0e32\\u0e17"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e41\\u0e15\\u0e30"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e23\\u0e30\\u0e14\\u0e31\\u0e1a"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e53\\u0e59"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e1a\\u0e32\\u0e17 "));
+
+        // Thai text should interact correctly with punctuation and symbols
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e44\\u0e2d\\u0e1a\\u0e35\\u0e40\\u0e2d\\u0e47\\u0e21"));
+//        thaiLineSelection->addElement(CharsToUnicodeString2("(\\u0e1b\\u0e23\\u0e30\\u0e40\\u0e17\\u0e28"));
+//        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e44\\u0e17\\u0e22)"));
+thaiLineSelection->addElement(CharsToUnicodeString2("(\\u0e1b\\u0e23\\u0e30\\u0e40\\u0e17\\u0e28\\u0e44\\u0e17\\u0e22)"));
+// I believe the commented-out reading above to be the correct one, but this is what passes with our current dictionary
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e08\\u0e33\\u0e01\\u0e31\\u0e14"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e40\\u0e1b\\u0e34\\u0e14"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e15\\u0e31\\u0e27\""));
+*/
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e2e\\u0e32\\u0e23\\u0e4c\\u0e14\\u0e14\\u0e34\\u0e2a\\u0e01\\u0e4c\""));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e23\\u0e38\\u0e48\\u0e19"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e43\\u0e2b\\u0e21\\u0e48"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e40\\u0e14\\u0e37\\u0e2d\\u0e19\\u0e21\\u0e34."));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e22."));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e19\\u0e35\\u0e49"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e23\\u0e32\\u0e04\\u0e32"));
+        thaiLineSelection->addElement("$200");
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e40\\u0e17\\u0e48\\u0e32"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e19\\u0e31\\u0e49\\u0e19 "));
+        thaiLineSelection->addElement(CharsToUnicodeString2("(\"\\u0e2e\\u0e32\\u0e23\\u0e4c\\u0e14\\u0e14\\u0e34\\u0e2a\\u0e01\\u0e4c\")."));
+
+	    BreakIterator* e = BreakIterator::createLineInstance(
+                                                Locale(UnicodeString("th", (char*)0))); 
+			
+        generalIteratorTest(*e, thaiLineSelection);
+		delete e;
+		delete thaiLineSelection;
 }
 
-void IntlTestTextBoundary::TestFirstCharacterSelection()
-{
-    BreakIterator* e = BreakIterator::createCharacterInstance();
-    doFirstSelectionTest(*e, testCharacterText, characterSelectionData);
-    delete e;
-}
 
-void IntlTestTextBoundary::TestLastCharacterSelection()
+void IntlTestTextBoundary::TestMaiyamok() 
 {
-    BreakIterator* e = BreakIterator::createCharacterInstance();
-    doLastSelectionTest(*e, testCharacterText, characterSelectionData);
-    delete e;
-}
+        Vector*  thaiLineSelection= new Vector();
+        // the Thai maiyamok character is a shorthand symbol that means "repeat the previous
+        // word".  Instead of appearing as a word unto itself, however, it's kept together
+        // with the word before it
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e44\\u0e1b\\u0e46"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e21\\u0e32\\u0e46"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e23\\u0e30\\u0e2b\\u0e27\\u0e48\\u0e32\\u0e07"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e01\\u0e23\\u0e38\\u0e07\\u0e40\\u0e17\\u0e1e"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e41\\u0e25\\u0e30"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e40\\u0e03\\u0e35\\u0e22\\u0e07"));
+        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e43\\u0e2b\\u0e21\\u0e48"));
 
-void IntlTestTextBoundary::TestBackwardCharacterSelection()
-{
-    BreakIterator* e = BreakIterator::createCharacterInstance();
-    doBackwardSelectionTest(*e, testCharacterText, characterSelectionData);
-    delete e;
-}
-
-void IntlTestTextBoundary::TestForwardCharacterIndexSelection()
-{
-    BreakIterator* e = BreakIterator::createCharacterInstance();
-    doForwardIndexSelectionTest(*e, testCharacterText, characterSelectionData);
-    delete e;
-}
-
-void IntlTestTextBoundary::TestBackwardCharacterIndexSelection()
-{
-    BreakIterator* e = BreakIterator::createCharacterInstance();
-    doBackwardIndexSelectionTest(*e, testCharacterText, characterSelectionData);
-    delete e;
-}
-
-void IntlTestTextBoundary::TestCharacterMultipleSelection()
-{
-    BreakIterator* e = BreakIterator::createCharacterInstance();
-    doMultipleSelectionTest(*e, testCharacterText);
-    delete e;
-}
-
-void IntlTestTextBoundary::TestCharacterInvariants()
-{
-    BreakIterator *e = BreakIterator::createCharacterInstance();
-    UnicodeString s = *cannedTestChars + CharsToUnicodeString("\\u1100\\u1101\\u1102\\u1160\\u1161\\u1162\\u11a8\\u11a9\\u11aa");
-    doBreakInvariantTest(*e, s);
-    s = *cannedTestChars + CharsToUnicodeString("\\u1100\\u1101\\u1102\\u1160\\u1161\\u1162\\u11a8\\u11a9\\u11aa");
-    doOtherInvariantTest(*e, s);
-    delete e;
-}
-//---------------------------------------------
-// other tests
-//---------------------------------------------
-
-void IntlTestTextBoundary::TestEmptyString()
-{
-    UnicodeString text = "";
-    Vector x;
-    x.addElement(text);
-    BreakIterator* bi = BreakIterator::createLineInstance();
-    doForwardSelectionTest(*bi, text, &x);
-    doFirstSelectionTest(*bi, text, &x);
-    doLastSelectionTest(*bi, text, &x);
-    doBackwardSelectionTest(*bi, text, &x);
-    doForwardIndexSelectionTest(*bi, text, &x);
-    doBackwardIndexSelectionTest(*bi, text, &x);
-    delete bi;
-}
-
-void IntlTestTextBoundary::TestGetAvailableLocales()
-{
-    int32_t locCount = 0;
-    const Locale* locList = BreakIterator::getAvailableLocales(locCount);
-
-    if (locCount == 0)
-        errln("getAvailableLocales() returned an empty list!");
-    // I have no idea how to test this function...
+	    BreakIterator* e = BreakIterator::createLineInstance(
+                                                Locale(UnicodeString("th", (char*)0))); 
+			
+        generalIteratorTest(*e, thaiLineSelection);
+		delete e;
+		delete thaiLineSelection;
 }
 
 /**
+ * Test Japanese Line Break
  * @bug 4095322
  */
 void IntlTestTextBoundary::TestJapaneseLineBreak()
 {
-    UnicodeString testString = CharsToUnicodeString("\\u4e00x\\u4e8c");
-    UnicodeString precedingChars = CharsToUnicodeString("([{\\u00ab$\\u00a5\\u00a3\\u00a4\\u2018\\u201a\\u201c\\u201e\\u201b\\u201f");
-    UnicodeString followingChars = CharsToUnicodeString(")]}\\u00bb!%,.\\u3001\\u3002\\u3063\\u3083\\u3085\\u3087\\u30c3\\u30e3\\u30e5\\u30e7\\u30fc:;\\u309b\\u309c\\u3005\\u309d\\u309e\\u30fd\\u30fe\\u2019\\u201d\\u00b0\\u2032\\u2033\\u2034\\u2030\\u2031\\u2103\\u2109\\u00a2\\u0300\\u0301\\u0302");
+    UnicodeString testString = CharsToUnicodeString2("\\u4e00x\\u4e8c");
+    UnicodeString precedingChars = CharsToUnicodeString2("([{\\u00ab$\\u00a5\\u00a3\\u00a4\\u2018\\u201a\\u201c\\u201e\\u201b\\u201f");
+    UnicodeString followingChars = CharsToUnicodeString2(")]}\\u00bb!%,.\\u3001\\u3002\\u3063\\u3083\\u3085\\u3087\\u30c3\\u30e3\\u30e5\\u30e7\\u30fc:;\\u309b\\u309c\\u3005\\u309d\\u309e\\u30fd\\u30fe\\u2019\\u201d\\u00b0\\u2032\\u2033\\u2034\\u2030\\u2031\\u2103\\u2109\\u00a2\\u0300\\u0301\\u0302");
     BreakIterator *iter = BreakIterator::createLineInstance(Locale::JAPAN);
-    StringCharacterIterator* it = new StringCharacterIterator(testString);
 
     UTextOffset i;
 
     for (i = 0; i < precedingChars.length(); i++) {
         testString[1] = precedingChars[i];
-        iter->adoptText(it);
+        iter->setText(&testString);
         int32_t j = iter->first();
         if (j != 0)
             errln("ja line break failure: failed to start at 0");
@@ -933,8 +864,7 @@ void IntlTestTextBoundary::TestJapaneseLineBreak()
 
     for (i = 0; i < followingChars.length(); i++) {
         testString[1] = followingChars[i];
-        it = new StringCharacterIterator(testString);
-        iter->adoptText(it);
+        iter->setText(&testString);
         int j = iter->first();
         if (j != 0)
             errln("ja line break failure: failed to start at 0");
@@ -950,8 +880,32 @@ void IntlTestTextBoundary::TestJapaneseLineBreak()
     delete iter;
 }
 
-    // [serialization test has been removed pursuant to bug #4152965]
+//---------------------------------------------
+// other tests
+//---------------------------------------------/
 
+void IntlTestTextBoundary::TestEmptyString()
+{
+    UnicodeString text = "";
+    Vector x;
+    x.addElement(text);
+    BreakIterator* bi = BreakIterator::createLineInstance();
+    generalIteratorTest(*bi, &x);
+   
+    delete bi;
+}
+
+void IntlTestTextBoundary::TestGetAvailableLocales()
+{
+    int32_t locCount = 0;
+    const Locale* locList = BreakIterator::getAvailableLocales(locCount);
+
+    if (locCount == 0)
+        errln("getAvailableLocales() returned an empty list!");
+    // I have no idea how to test this function...
+}
+
+//Testing the BreakIterator::getDisplayName() function 
 void IntlTestTextBoundary::TestGetDisplayName()
 {
     UnicodeString   result;
@@ -966,11 +920,11 @@ void IntlTestTextBoundary::TestGetDisplayName()
         errln("BreakIterator::getDisplayName() failed: expected \"French (France)\", got \""
                 + result);
 }
-
 /**
+ * Test End Behaviour
  * @bug 4068137
  */
-void IntlTestTextBoundary::TestEndBehavior()
+void IntlTestTextBoundary::TestEndBehaviour()
 {
     UnicodeString testString("boo.");
     BreakIterator *wb = BreakIterator::createWordInstance();
@@ -984,352 +938,6 @@ void IntlTestTextBoundary::TestEndBehavior()
         errln("Didn't get break at end of string.");
     delete wb;
 }
-
-//---------------------------------------------
-// runIndexedTest
-//---------------------------------------------
-
-void IntlTestTextBoundary::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
-{
-    if (exec) logln("TestSuite TextBoundary: ");
-    switch (index) {
-        case 0: name = "TestForwardSentenceSelection"; if (exec) TestForwardSentenceSelection(); break;
-        case 1: name = "TestFirstSentenceSelection"; if (exec) TestFirstSentenceSelection(); break;
-        case 2: name = "TestLastSentenceSelection"; if (exec) TestLastSentenceSelection(); break;
-        case 3: name = "TestBackwardSentenceSelection"; if (exec) TestBackwardSentenceSelection(); break;
-        case 4: name = "TestForwardSentenceIndexSelection"; if (exec) TestForwardSentenceIndexSelection(); break;
-        case 5: name = "TestBackwardSentenceIndexSelection"; if (exec) TestBackwardSentenceIndexSelection(); break;
-        case 6: name = "TestSentenceMultipleSelection"; if (exec) TestSentenceMultipleSelection(); break;
-        case 7: name = "TestForwardWordSelection"; if (exec) TestForwardWordSelection(); break;
-        case 8: name = "TestFirstWordSelection"; if (exec) TestFirstWordSelection(); break;
-        case 9: name = "TestLastWordSelection"; if (exec) TestLastWordSelection(); break;
-        case 10: name = "TestBackwardWordSelection"; if (exec) TestBackwardWordSelection(); break;
-        case 11: name = "TestForwardWordIndexSelection"; if (exec) TestForwardWordIndexSelection(); break;
-        case 12: name = "TestBackwardWordIndexSelection"; if (exec) TestBackwardWordIndexSelection(); break;
-        case 13: name = "TestWordMultipleSelection"; if (exec) TestWordMultipleSelection(); break;
-        case 14: name = "TestForwardLineSelection"; if (exec) TestForwardLineSelection(); break;
-        case 15: name = "TestFirstLineSelection"; if (exec) TestFirstLineSelection(); break;
-        case 16: name = "TestLastLineSelection"; if (exec) TestLastLineSelection(); break;
-        case 17: name = "TestBackwardLineSelection"; if (exec) TestBackwardLineSelection(); break;
-        case 18: name = "TestForwardLineIndexSelection"; if (exec) TestForwardLineIndexSelection(); break;
-        case 19: name = "TestBackwardLineIndexSelection"; if (exec) TestBackwardLineIndexSelection(); break;
-        case 20: name = "TestLineMultipleSelection"; if (exec) TestLineMultipleSelection(); break;
-        case 21: name = "TestForwardCharacterSelection"; if (exec) TestForwardCharacterSelection(); break;
-        case 22: name = "TestFirstCharacterSelection"; if (exec) TestFirstCharacterSelection(); break;
-        case 23: name = "TestLastCharacterSelection"; if (exec) TestLastCharacterSelection(); break;
-        case 24: name = "TestBackwardCharacterSelection"; if (exec) TestBackwardCharacterSelection(); break;
-        case 25: name = "TestForwardCharacterIndexSelection"; if (exec) TestForwardCharacterIndexSelection(); break;
-        case 26: name = "TestBackwardCharacterIndexSelection"; if (exec) TestBackwardCharacterIndexSelection(); break;
-        case 27: name = "TestCharacterMultipleSelection"; if (exec) TestCharacterMultipleSelection(); break;
-        case 28: name = "TestEmptyString"; if (exec) TestEmptyString(); break;
-        case 29: name = "TestGetAvailableLocales"; if (exec) TestGetAvailableLocales(); break;
-        case 30: name = "TestGetDisplayName"; if (exec) TestGetDisplayName(); break;
-        case 31: name = "TestPreceding"; if (exec) TestPreceding(); break;
-        case 32: name = "TestBug4153072"; if (exec) TestBug4153072(); break;
-      /*
-        case 33: 
-            name = "BreakIteratorCAPI"; 
-            if (exec) {
-                logln("BreakIterator C API test---"); logln("");
-                IntlTestBreakIteratorFormatU_CAPI test;
-                callTest( test, par );
-            }
-            break;
-      */
-        default: name = ""; break; //needed to end loop
-    }
-}
-
-//---------------------------------------------
-// Test implementation routines
-//---------------------------------------------
-
-void IntlTestTextBoundary::doForwardSelectionTest(BreakIterator& iterator,
-                                                  UnicodeString& testText,
-                                                  Vector* result)
-{
-    int32_t forwardSelectionCounter = 0;
-    int32_t forwardSelectionOffset = 0;
-    CharacterIterator *itSource = 0;
-    CharacterIterator *itTarget = 0;
-
-    logln("doForwardSelectionTest text of length: "+testText.length());
-
-    // check to make sure setText() and getText() work right
-    iterator.setText(&testText);
-    itSource = iterator.createText();
-    itTarget = new StringCharacterIterator(testText);
-
-    if (*itSource != *itTarget)
-        errln("createText() didn't return what we passed to setText!");
-    delete itSource;
-    delete itTarget;
-    UnicodeString expectedResult;
-    UnicodeString selectionResult;
-    
-    int32_t lastOffset = iterator.first();
-    int32_t offset = iterator.next();
-    while(offset != BreakIterator::DONE && forwardSelectionCounter < result->size()) {
-        if (offset != iterator.current())
-            errln((UnicodeString)"current() failed: it returned " + iterator.current() + " and offset was " + offset);
-
-        expectedResult = result->elementAt(forwardSelectionCounter);
-        forwardSelectionOffset += expectedResult.length();
-        testText.extractBetween(lastOffset, offset, selectionResult);
-        if (offset != forwardSelectionOffset) {
-            errln((UnicodeString)"\n*** Selection #" +
-                  forwardSelectionCounter +
-                  "\nExpected : " +
-                  expectedResult +
-                  " - length : " +
-                  expectedResult.length() +
-                  "\nSelected : " +
-                  selectionResult +
-                  " - length : " +
-                  selectionResult.length());
-        }
-        logln((UnicodeString)"#" + forwardSelectionCounter + " ["+lastOffset+", "+offset+"] : " + selectionResult);
-
-        forwardSelectionCounter++;
-        lastOffset = offset;
-        offset = iterator.next();
-    }
-    if (forwardSelectionCounter < result->size() - 1)
-        errln((UnicodeString)"\n*** Selection #" + forwardSelectionCounter + " not found at offset "+offset+"!!!");
-    else if (forwardSelectionCounter >= result->size() && offset != BreakIterator::DONE)
-        errln((UnicodeString)"\n*** Selection #" + forwardSelectionCounter + " should not exist at offset "+offset+"!!!");
-}
-
-void IntlTestTextBoundary::doBackwardSelectionTest(BreakIterator& iterator,
-                                                   UnicodeString& testText,
-                                                   Vector* result)
-{
-    int32_t backwardSelectionCounter = (result->size() - 1);
-    int32_t neededOffset = testText.length();
-    int32_t lastOffset = iterator.last();
-    iterator.setText(&testText);
-    int32_t offset = iterator.previous();
-    
-    UnicodeString expectedResult;
-    UnicodeString selectionResult;
-    
-    while(offset != BreakIterator::DONE)
-    {
-        expectedResult = (UnicodeString)result->elementAt(backwardSelectionCounter);
-        neededOffset -= expectedResult.length();
-        testText.extractBetween(offset, lastOffset, selectionResult);
-        if(offset != neededOffset) {
-            errln(
-                (UnicodeString)"\n*** Selection #" +
-                backwardSelectionCounter +
-                "\nExpected "+neededOffset+"> "  +
-                expectedResult +
-                " <" +
-                "\nSelected "+offset+"> " +
-                selectionResult +
-                " <");
-        }
-
-        logln((UnicodeString)"#" + backwardSelectionCounter + " : " + selectionResult);
-        backwardSelectionCounter--;
-        lastOffset = offset;
-        offset = iterator.previous();
-    }
-    if (backwardSelectionCounter >= 0 && offset != BreakIterator::DONE)
-        errln((UnicodeString)"*** Selection #" + backwardSelectionCounter + " not found!!!");
-}
-
-void IntlTestTextBoundary::doFirstSelectionTest(BreakIterator& iterator,
-                                                UnicodeString& testText,
-                                                Vector* result)
-{
-    bool_t success = TRUE;
-    UnicodeString expectedFirstSelection;
-    UnicodeString tempFirst;
-
-    iterator.setText(&testText);
-    int32_t selectionStart = iterator.first();
-    int32_t selectionEnd = iterator.next();
-    if(selectionEnd != BreakIterator::DONE) {
-        testText.extractBetween(selectionStart, selectionEnd, tempFirst);
-
-        expectedFirstSelection = result->elementAt(0);
-        if(tempFirst != expectedFirstSelection) {
-            errln(
-                (UnicodeString)"\n\n" +
-                "### Error in TestFindWord::doFirstSelectionTest. First selection not equal to what expected." +
-                "\nExpexcted : " +
-                expectedFirstSelection +
-                " - length : " +
-                expectedFirstSelection.length() +
-                "\nSelected : " +
-                tempFirst +
-                " - length : " +
-                tempFirst.length() +
-                "\n");
-            success = FALSE;
-        }
-    }
-    else if (selectionStart != 0 || testText.length() != 0) {
-        errln((UnicodeString)"\n### Error in TTestFindWord::doFirstSelectionTest. Could not get first selection.\n"+
-            "start = "+selectionStart+"  end = "+selectionEnd);
-        success = FALSE;
-    }
-
-    if(success) {
-        logln(
-            (UnicodeString)"IntlTestTextBoundary::doFirstSelectionTest \n" +
-            "\nExpexcted first selection: " +
-            expectedFirstSelection +
-            "\nCalculated first selection: " +
-            tempFirst +
-            " is correct\n");
-    }
-}
-
-void IntlTestTextBoundary::doLastSelectionTest(BreakIterator& iterator,
-                                               UnicodeString& testText,
-                                               Vector* result)
-{
-    bool_t success = TRUE;
-    UnicodeString expectedLastSelection;
-    UnicodeString tempLast;
-
-    iterator.setText(&testText);
-    int32_t selectionEnd = iterator.last();
-    int32_t selectionStart = iterator.previous();
-    if(selectionStart != BreakIterator::DONE) {
-        testText.extractBetween(selectionStart, selectionEnd, tempLast);
-        expectedLastSelection = result->lastElement();
-        if(tempLast != expectedLastSelection) {
-            errln(
-                (UnicodeString)"\n\n" +
-                "### Error in TTestFindWord::doLastSelectionTest. Last selection not equal to what expected." +
-                "\nExpexcted : " +
-                expectedLastSelection +
-                " - length : " +
-                expectedLastSelection.length() +
-                "\nSelected : " +
-                 tempLast +
-                 " - length : " +
-                tempLast.length() +
-                 "\n");
-            success = FALSE;
-        }
-    }
-    else if (selectionEnd != 0 || testText.length() != 0) {
-        errln((UnicodeString)"\n### Error in TTestFindWord::doLastSelectionTest. Could not get last selection."+
-            "["+selectionStart+","+selectionEnd+"]");
-        success = FALSE;
-    }
-
-    if(success) {
-        logln(
-            (UnicodeString)"TTestFindWord::doLastSelectionTest \n" +
-            "\nExpexcted last selection: " +
-            expectedLastSelection +
-            "\nCalculated last selection: " +
-            tempLast +
-            "\n");
-    }
-}
-
-/**
- * @bug 4052418 4068139
- */
-void IntlTestTextBoundary::doForwardIndexSelectionTest(BreakIterator& iterator,
-                                                       UnicodeString& testText,
-                                                       Vector* result)
-{
-    int32_t arrayCount = result->size();
-    int32_t textLength = testText.length();
-    iterator.setText(&testText);
-    for(UTextOffset offset = 0; offset < textLength; offset++) {
-        int32_t selBegin = iterator.preceding(offset);
-        int32_t selEnd = iterator.following(offset);
-        bool_t isBound = iterator.isBoundary(offset);
-
-        int32_t entry = 0;
-        int32_t pos = 0;
-        if (selBegin != BreakIterator::DONE) {
-            while (pos < selBegin && entry < arrayCount) {
-                pos += ((UnicodeString)(result->elementAt(entry))).length();
-                ++entry;
-            }
-            if (pos != selBegin) {
-                errln((UnicodeString)"With offset = " + offset + ", got back spurious " + selBegin + " from preceding.");
-                continue;
-            }
-            else {
-                pos += ((UnicodeString)(result->elementAt(entry))).length();
-                ++entry;
-            }
-        }
-        if (isBound) {
-            if (pos != offset) {
-                errln((UnicodeString)"isBoundary() erroneously returned true with offset = " + offset);
-                continue;
-            }
-            else {
-                pos += ((UnicodeString)(result->elementAt(entry))).length();
-                ++entry;
-            }
-        }
-        if (pos != selEnd) {
-            errln((UnicodeString)"With offset = " + offset + ", got back erroneous " + selEnd + " from following.");
-            continue;
-        }
-    }
-}
-
-/**
- * @bug 4052418 4068139
- */
-void IntlTestTextBoundary::doBackwardIndexSelectionTest(BreakIterator& iterator,
-                                                        UnicodeString& testText,
-                                                        Vector* result)
-{
-    int32_t arrayCount = result->size();
-    int32_t textLength = testText.length();
-    iterator.setText(&testText);
-    for(UTextOffset offset = textLength - 1; offset >= 0; offset--) {
-        int32_t selBegin = iterator.preceding(offset);
-        int32_t selEnd = iterator.following(offset);
-        bool_t isBound = iterator.isBoundary(offset);
-
-        int32_t entry = 0;
-        int32_t pos = 0;
-        if (selBegin != BreakIterator::DONE) {
-            while (pos < selBegin && entry < arrayCount) {
-                pos += ((UnicodeString)(result->elementAt(entry))).length();
-                ++entry;
-            }
-            if (pos != selBegin) {
-                errln((UnicodeString)"With offset = " + offset + ", got back spurious " + selBegin + " from preceding.");
-                continue;
-            }
-            else {
-                pos += ((UnicodeString)(result->elementAt(entry))).length();
-                ++entry;
-            }
-        }
-        if (isBound) {
-            if (pos != offset) {
-                errln((UnicodeString)"isBoundary() erroneously returned true with offset = " + offset);
-                continue;
-            }
-            else {
-                pos += ((UnicodeString)(result->elementAt(entry))).length();
-                ++entry;
-            }
-        }
-        if (pos != selEnd) {
-            errln((UnicodeString)"With offset = " + offset + ", got back erroneous " + selEnd + " from following.");
-            continue;
-        }
-    }
-}
-
 /*
  * @bug 4153072
  */
@@ -1341,8 +949,8 @@ void IntlTestTextBoundary::TestBug4153072() {
     bool_t gotException = FALSE;
     bool_t dummy;
 
-    StringCharacterIterator textIterator(str, begin, end, begin);
-    iter->adoptText(&textIterator);
+    StringCharacterIterator* textIterator = new StringCharacterIterator(str, begin, end, begin);
+    iter->adoptText(textIterator);
     for (int index = -1; index < begin + 1; ++index) {
         dummy = iter->isBoundary(index);
         if (index < begin && dummy == TRUE) {
@@ -1351,6 +959,272 @@ void IntlTestTextBoundary::TestBug4153072() {
         }
     }
     delete iter;
+}
+/*
+ * Test Preceding()
+ */
+void IntlTestTextBoundary::TestPreceding()
+{
+    UnicodeString words3("aaa bbb ccc");
+    BreakIterator* e = BreakIterator::createWordInstance();
+    e->setText( &words3 );
+    e->first();
+    UTextOffset p1 = e->next();
+    UTextOffset p2 = e->next();
+    UTextOffset p3 = e->next();
+    UTextOffset p4 = e->next();
+    UTextOffset f = e->following( p2+1 );
+    UTextOffset p = e->preceding( p2+1 );
+    if (f!=p3) errln("IntlTestTextBoundary::TestPreceding: f!=p3");
+    if (p!=p2) errln("IntlTestTextBoundary::TestPreceding: p!=p2");
+    if (!e->isBoundary(p2) || e->isBoundary(p2+1) || !e->isBoundary(p3))
+    {
+        errln("IntlTestTextBoundary::TestPreceding: isBoundary err");
+    }
+    delete e;
+}
+//---------------------------------------------
+// runIndexedTest
+//---------------------------------------------
+
+void IntlTestTextBoundary::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+{
+    if (exec) logln("TestSuite TextBoundary: ");
+    switch (index) {
+    	case 0: name = "TestSentenceIteration"; if(exec) TestSentenceIteration(); break;
+		case 1: name = "TestWordIteration"; if(exec) TestWordIteration(); break;
+        case 2: name = "TestLineIteration"; if(exec) TestLineIteration(); break;
+		case 3: name = "TestCharacterIteration"; if(exec) TestCharacterIteration(); break;
+		case 4: name = "TestSentenceInvariants"; if(exec) TestSentenceInvariants();break;
+		case 5: name = "TestWordInvariants"; if(exec) TestWordInvariants();break;
+		case 6: name = "TestLineInvariants"; if(exec) TestLineInvariants();break;
+		case 7: name = "TestCharacterInvariants"; if(exec) TestCharacterInvariants();break;
+    
+		case 8: name = "TestEmptyString"; if (exec) TestEmptyString(); break;
+        case 9: name = "TestGetAvailableLocales"; if (exec) TestGetAvailableLocales(); break;
+        case 10: name = "TestGetDisplayName"; if (exec) TestGetDisplayName(); break;
+        case 11: name = "TestPreceding"; if (exec) TestPreceding(); break;
+        case 12: name = "TestBug4153072"; if (exec) TestBug4153072(); break;
+        case 13: name = "TestEndBehaviour"; if (exec) TestEndBehaviour(); break;
+
+	
+        case 14: name = "TestJapaneseLineBreak"; if (exec) TestJapaneseLineBreak(); break;
+        case 15: name = "TestThaiLineBreak"; if(exec) TestThaiLineBreak(); break;
+        case 16: name = "TestMixedThaiLineBreak"; if(exec) TestMixedThaiLineBreak(); break;
+        case 17: name = "TestMaiyamok"; if(exec) TestMaiyamok(); break;
+   
+
+      
+       
+        default: name = ""; break; //needed to end loop
+    }
+}
+
+//---------------------------------------------
+// Test implementation routines
+//---------------------------------------------
+
+// general test Implementation subroutines
+void IntlTestTextBoundary::generalIteratorTest(BreakIterator& bi, Vector* expectedResult) 
+{
+    Enumeration *elems = expectedResult->elements();
+	UnicodeString text = createTestData(elems);
+	delete elems;
+
+    bi.setText(&text);
+
+    Vector *nextResults = testFirstAndNext(bi, text);
+    Vector *previousResults = testLastAndPrevious(bi, text);
+
+    logln("comparing forward and backward...");
+    int errs = getErrors();
+    compareFragmentLists((UnicodeString)"forward iteration", (UnicodeString)"backward iteration", nextResults,
+                    previousResults);
+    if (getErrors() == errs) {
+        logln("comparing expected and actual...");
+        compareFragmentLists((UnicodeString)"expected result", (UnicodeString)"actual result", expectedResult,
+                        nextResults);
+    }
+
+    int32_t *boundaries = new int32_t[expectedResult->size() + 3];
+    boundaries[0] = BreakIterator.DONE;
+    boundaries[1] = 0;
+    for (int i = 0; i < expectedResult->size(); i++)
+        boundaries[i + 2] = boundaries[i + 1] + ((UnicodeString)expectedResult->elementAt(i)).
+                        length();
+	
+    int len = expectedResult->size() + 3 -1;
+	boundaries[len] = BreakIterator.DONE;
+  
+    testFollowing(bi, text, boundaries);
+    testPreceding(bi, text, boundaries);
+    testIsBoundary(bi, text, boundaries);
+
+    doMultipleSelectionTest(bi, text);
+}
+
+Vector* IntlTestTextBoundary::testFirstAndNext(BreakIterator& bi, UnicodeString& text) 
+{
+    int32_t p = bi.first();
+    int32_t lastP = p;
+    Vector *result = new Vector();
+    UnicodeString selection;
+
+    if (p != 0)
+        errln((UnicodeString)"first() returned " + p + (UnicodeString)" instead of 0");
+    while (p != BreakIterator.DONE) {
+        p = bi.next();
+        if (p != BreakIterator.DONE) {
+            if (p <= lastP)
+                errln((UnicodeString)"next() failed to move forward: next() on position "
+                                + lastP + (UnicodeString)" yielded " + p);
+
+            text.extractBetween(lastP, p, selection);  
+            result->addElement(selection);
+        }
+        else {
+            if (lastP != text.length())
+                errln((UnicodeString)"next() returned DONE prematurely: offset was "
+                                + lastP + (UnicodeString)" instead of " + text.length());
+        }
+        lastP = p;
+    }
+    return result;
+}
+
+Vector* IntlTestTextBoundary::testLastAndPrevious(BreakIterator& bi, UnicodeString& text) 
+{
+    int32_t p = bi.last();
+    int32_t lastP = p;
+    Vector *result = new Vector();
+	UnicodeString selection;
+
+    if (p != text.length())
+        errln((UnicodeString)"last() returned " + p + (UnicodeString)" instead of " + text.length());
+    while (p != BreakIterator.DONE) {
+        p = bi.previous();
+        if (p != BreakIterator.DONE) {
+            if (p >= lastP)
+                errln((UnicodeString)"previous() failed to move backward: previous() on position "
+                                + lastP + (UnicodeString)" yielded " + p);
+            text.extractBetween(p, lastP, selection);
+            result->insertElementAt(selection, 0);
+        }
+        else {
+            if (lastP != 0)
+                errln((UnicodeString)"previous() returned DONE prematurely: offset was "
+                                + lastP + (UnicodeString)" instead of 0");
+        }
+        lastP = p;
+    }
+	return result;
+}
+
+void IntlTestTextBoundary::compareFragmentLists(UnicodeString& f1Name, UnicodeString& f2Name, Vector* f1, Vector* f2) 
+{
+    int32_t p1 = 0;
+    int32_t p2 = 0;
+    UnicodeString s1;
+    UnicodeString s2;
+    int32_t t1 = 0;
+    int32_t t2 = 0;
+	UnicodeString target;
+
+    while (p1 < f1->size() && p2 < f2->size()) {
+        s1 = (UnicodeString)f1->elementAt(p1);
+        s2 = (UnicodeString)f2->elementAt(p2);
+        t1 += s1.length();
+        t2 += s2.length();
+
+        if (s1.compare(s2) == 0) {
+            logln(prettify((UnicodeString)"   >" + s1 + (UnicodeString)"<", target));
+            ++p1;
+            ++p2;
+        }
+        else {
+            int32_t tempT1 = t1;
+            int32_t tempT2 = t2;
+            int32_t tempP1 = p1;
+            int32_t tempP2 = p2;
+
+            while (tempT1 != tempT2 && tempP1 < f1->size() && tempP2 < f2->size()) {
+                while (tempT1 < tempT2 && tempP1 < f1->size()) {
+                    tempT1 += ((UnicodeString)f1->elementAt(tempP1)).length();
+                    ++tempP1;
+                }
+                while (tempT2 < tempT1 && tempP2 < f2->size()) {
+                    tempT2 += ((UnicodeString)f2->elementAt(tempP2)).length();
+                    ++tempP2;
+                }
+            }
+            logln((UnicodeString)"*** " + f1Name + (UnicodeString)" has:");
+            while (p1 <= tempP1 && p1 < f1->size()) {
+                s1 = (UnicodeString)f1->elementAt(p1);
+                t1 += s1.length();
+                logln(prettify((UnicodeString)" *** >" + s1 + (UnicodeString)"<", target));
+                ++p1;
+            }
+            logln("***** " + f2Name + " has:");
+            while (p2 <= tempP2 && p2 < f2->size()) {
+                s2 = (UnicodeString)f2->elementAt(p2);
+                t2 += s2.length();
+                logln(prettify(" ***** >" + s2 + "<", target));
+                ++p2;
+            }
+            errln((UnicodeString)"Discrepancy between " + f1Name + (UnicodeString)" and " + f2Name);
+        }
+        }
+}
+
+void IntlTestTextBoundary::testFollowing(BreakIterator& bi, UnicodeString& text, int32_t *boundaries) 
+{
+    logln("testFollowing():");
+    int p = 2;
+    for (int i = 0; i <= text.length(); i++) {
+        if (i == boundaries[p])
+            ++p;
+
+        int32_t b = bi.following(i);
+        logln((UnicodeString)"bi.following(" + i + ") -> " + b);
+        if (b != boundaries[p])
+            errln((UnicodeString)"Wrong result from following() for " + i + (UnicodeString)": expected " + boundaries[p]
+                            + (UnicodeString)", got " + b);
+    }
+}
+
+void IntlTestTextBoundary::testPreceding(BreakIterator& bi, UnicodeString& text, int32_t *boundaries) {
+    logln("testPreceding():");
+    int p = 0;
+    for (int i = 0; i <= text.length(); i++) {
+        int32_t b = bi.preceding(i);
+        logln((UnicodeString)"bi.preceding(" + i + ") -> " + b);
+        if (b != boundaries[p])
+            errln((UnicodeString)"Wrong result from preceding() for " + i + (UnicodeString)": expected " + boundaries[p]
+                            + (UnicodeString)", got " + b);
+
+        if (i == boundaries[p + 1])
+            ++p;
+    }
+}
+
+void IntlTestTextBoundary::testIsBoundary(BreakIterator& bi, UnicodeString& text, int32_t *boundaries) {
+    logln("testIsBoundary():");
+    int p = 1;
+    bool_t isB;
+    for (int i = 0; i < text.length(); i++) {
+        isB = bi.isBoundary(i);
+        logln((UnicodeString)"bi.isBoundary(" + i + ") -> " + isB);
+
+        if (i == boundaries[p]) {
+            if (!isB)
+                errln((UnicodeString)"Wrong result from isBoundary() for " + i + (UnicodeString)": expected true, got false");
+            p++;
+        }
+        else {
+            if (isB)
+                errln((UnicodeString)"Wrong result from isBoundary() for " + i + (UnicodeString)": expected false, got true");
+        }
+    }
 }
 
 void IntlTestTextBoundary::doMultipleSelectionTest(BreakIterator& iterator,
@@ -1407,7 +1281,7 @@ void IntlTestTextBoundary::doBreakInvariantTest(BreakIterator& tb, UnicodeString
     int errorCount = 0;
 
     // a break should always occur after CR (unless followed by LF), LF, PS, and LS
-    UnicodeString breaks = CharsToUnicodeString("\r\n\\u2029\\u2028");
+    UnicodeString breaks = CharsToUnicodeString2("\r\n\\u2029\\u2028");
     UTextOffset i, j;
 
     for (i = 0; i < breaks.length(); i++) {
@@ -1512,24 +1386,5 @@ void IntlTestTextBoundary::sample(BreakIterator& tb,
     verbose = verboseWas;
 }
 
-void IntlTestTextBoundary::TestPreceding()
-{
-    UnicodeString words3("aaa bbb ccc");
-    BreakIterator* e = BreakIterator::createWordInstance();
-    e->setText( &words3 );
-    e->first();
-    UTextOffset p1 = e->next();
-    UTextOffset p2 = e->next();
-    UTextOffset p3 = e->next();
-    UTextOffset p4 = e->next();
-    UTextOffset f = e->following( p2+1 );
-    UTextOffset p = e->preceding( p2+1 );
-    if (f!=p3) errln("IntlTestTextBoundary::TestPreceding: f!=p3");
-    if (p!=p2) errln("IntlTestTextBoundary::TestPreceding: p!=p2");
-    if (!e->isBoundary(p2) || e->isBoundary(p2+1) || !e->isBoundary(p3))
-    {
-        errln("IntlTestTextBoundary::TestPreceding: isBoundary err");
-    }
-    delete e;
-}
+
 

@@ -11,7 +11,7 @@
 !IF "$(CFG)" == ""
 CFG=Debug
 !MESSAGE No configuration specified. Defaulting to common - Win32 Debug.
-!ENDIF 
+!ENDIF
 
 !IF [cl.exe]
 !MESSAGE Could not find build tools!
@@ -24,7 +24,7 @@ CFG=Debug
 #Let's see if user has given us a path to ICU
 #This could be found according to the path to makefile, but for now it is this way
 !MESSAGE ICUP=$(ICUP)
-!IF "$(ICUP)"=="" 
+!IF "$(ICUP)"==""
 !ERROR Can't find path!
 !ELSE
 ICUDATA=$(ICUP)\icu\data
@@ -38,47 +38,47 @@ LINK32 = link.exe
 LINK32_FLAGS = /out:"$(ICUDATA)/icudata.dll" /DLL /NOENTRY /base:"0x4ad00000" /comment:" Copyright (C) 1999 International Business Machines Corporation and others.  All Rights Reserved. "
 CPP_FLAGS = /I$(ICUP)\icu\include /GD /c
 
-#Here we test if configuration is given 
+#Here we test if configuration is given
 !IF "$(CFG)" != "Release" && "$(CFG)" != "release" && "$(CFG)" != "Debug" && "$(CFG)" != "debug"
 !MESSAGE Invalid configuration "$(CFG)" specified.
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
-!MESSAGE 
+!MESSAGE
 !MESSAGE NMAKE /f "makedata.mak" CFG="Debug"
-!MESSAGE 
+!MESSAGE
 !MESSAGE Possible choices for configuration are:
-!MESSAGE 
+!MESSAGE
 !MESSAGE "Release"
 !MESSAGE "Debug"
-!MESSAGE 
+!MESSAGE
 !ERROR An invalid configuration is specified.
-!ENDIF 
+!ENDIF
 
 # This appears in original Microsofts makefiles
 !IF "$(OS)" == "Windows_NT"
 NULL=
-!ELSE 
+!ELSE
 NULL=nul
-!ENDIF 
+!ENDIF
 
 PATH = $(PATH);$(ICUP)\icu\bin\$(CFG)
 
 # Suffixes for data files
 .SUFFIXES : .ucm .cnv .dll .dat .col .res .txt .c
 
-# We're including a list of ucm files. There are two lists, one is essential 'ucmfiles.mk' and 
+# We're including a list of ucm files. There are two lists, one is essential 'ucmfiles.mk' and
 # the other is optional 'ucmlocal.mk'
 !IF EXISTS("$(ICUTOOLS)\makeconv\ucmfiles.mk")
 !INCLUDE "$(ICUTOOLS)\makeconv\ucmfiles.mk"
 !IF EXISTS("$(ICUTOOLS)\makeconv\ucmlocal.mk")
 !INCLUDE "$(ICUTOOLS)\makeconv\ucmlocal.mk"
 $(UCM_SOURCE)=$(UCM_SOURCE) $(UCM_SOURCE_LOCAL)
-!ELSE 
+!ELSE
 #!MESSAGE Warning: cannot find "ucmlocal.mk"
 !ENDIF
-!ELSE 
+!ELSE
 !ERROR ERROR: cannot find "ucmfiles.mk"
-!ENDIF 
+!ENDIF
 
 # According to the read files, we will generate CNV and C files
 CNV_FILES=$(UCM_SOURCE:.ucm=.cnv)
@@ -91,12 +91,12 @@ OBJ_CNV_FILES = $(C_CNV_FILES:.c=.obj)
 !IF EXISTS("$(ICUTOOLS)\genrb\genrblocal.mk")
 !INCLUDE "$(ICUTOOLS)\genrb\genrblocal.mk"
 GENRB_SOURCE=$(GENRB_SOURCE) $(GENRB_SOURCE_LOCAL)
-!ELSE 
+!ELSE
 #!MESSAGE Warning: cannot find "genrblocal.mk"
 !ENDIF
-!ELSE 
+!ELSE
 !ERROR ERROR: cannot find "genrbfiles.mk"
-!ENDIF 
+!ENDIF
 RB_FILES = $(GENRB_SOURCE:.txt=.res)
 
 # Read list of resource bundle files for colation
@@ -105,48 +105,81 @@ RB_FILES = $(GENRB_SOURCE:.txt=.res)
 !IF EXISTS("$(ICUTOOLS)\gencol\gencollocal.mk")
 !INCLUDE "$(ICUTOOLS)\gencol\gencollocal.mk"
 GENCOL_SOURCE=$(GENCOL_SOURCE) $(GENCOL_SOURCE_LOCAL)
-!ELSE 
+!ELSE
 #!MESSAGE Warning: cannot find "gencollocal.mk"
 !ENDIF
-!ELSE 
+!ELSE
 !ERROR ERROR: cannot find "gencolfiles.mk"
-!ENDIF 
+!ENDIF
 COL_FILES = $(GENCOL_SOURCE:.txt=.col)
+
 
 # This target should build all the data files
 ALL : GODATA $(RB_FILES) $(CNV_FILES) $(COL_FILES) icudata.dll icudata.dat GOBACK
 	@echo All targets are up to date
-	
-CPP_SOURCES = $(C_CNV_FILES) unames_dat.c cnvalias_dat.c tz_dat.c 
+
+BRK_FILES = sent.brk char.brk line.brk word.brk line_th.brk word_th.brk
+BRK_CSOURCES = $(BRK_FILES:.brk=_brk.c)
+
+CPP_SOURCES = $(C_CNV_FILES) unames_dat.c cnvalias_dat.c tz_dat.c $(BRK_CSOURCES)
 LINK32_OBJS = $(CPP_SOURCES:.c=.obj)
 
 # target for DLL
 icudata.dll : $(LINK32_OBJS) $(CNV_FILES)
-	@echo Creating DLL file 
+	@echo Creating DLL file
 	@cd $(ICUDATA)
 	@$(LINK32) @<<
 $(LINK32_FLAGS) $(LINK32_OBJS)
 <<
 
+$(ICUDATA)\sent.brk : $(ICUDATA)\sentLE.brk
+    copy $(ICUDATA)\sentLE.brk $(ICUDATA)\sent.brk
+
+$(ICUDATA)\char.brk : $(ICUDATA)\charLE.brk
+    copy $(ICUDATA)\charLE.brk $(ICUDATA)\char.brk
+
+$(ICUDATA)\line.brk : $(ICUDATA)\lineLE.brk
+    copy $(ICUDATA)\lineLE.brk $(ICUDATA)\line.brk
+
+$(ICUDATA)\word.brk : $(ICUDATA)\wordLE.brk
+    copy $(ICUDATA)\wordLE.brk $(ICUDATA)\word.brk
+
+$(ICUDATA)\line_th.brk : $(ICUDATA)\line_thLE.brk
+    copy $(ICUDATA)\line_thLE.brk $(ICUDATA)\line_th.brk
+
+$(ICUDATA)\word_th.brk : $(ICUDATA)\word_thLE.brk
+    copy $(ICUDATA)\word_thLE.brk $(ICUDATA)\word_th.brk
+
 # target for memory mapped file
-icudata.dat : $(CNV_FILES) unames.dat cnvalias.dat tz.dat 
+icudata.dat : $(CNV_FILES) unames.dat cnvalias.dat tz.dat
 	@echo Creating memory-mapped file
 	@cd $(ICUDATA)
  	@$(ICUTOOLS)\gencmn\$(CFG)\gencmn 1000000 <<
 $(ICUDATA)\unames.dat
 $(ICUDATA)\cnvalias.dat
 $(ICUDATA)\tz.dat
+$(ICUDATA)\sent.brk
+$(ICUDATA)\char.brk
+$(ICUDATA)\line.brk
+$(ICUDATA)\word.brk
+$(ICUDATA)\line_th.brk
+$(ICUDATA)\word_th.brk
 $(CNV_FILES:.cnv =.cnv
 )
 <<
 
-# nothing works without this target, but we're making 
+# nothing works without this target, but we're making
 # these files while creating converters
 $(C_CNV_FILES) : $(CNV_FILES)
 	@$(ICUTOOLS)\genccode\$(CFG)\genccode $(CNV_FILES)
 
+# nothing works without this target, but we're making
+# these files while creating converters
+$(BRK_CSOURCES) : $(BRK_FILES)
+	@$(ICUTOOLS)\genccode\$(CFG)\genccode $(BRK_FILES)
+
 # utility to send us to the right dir
-GODATA : 
+GODATA :
 	@cd $(ICUDATA)
 
 # utility to get us back to the right dir
@@ -164,8 +197,15 @@ CLEAN :
 	-@erase "cnvalias*.*"
 	-@erase "tz*.*"
 	-@erase "ibm*_cnv.c"
+	-@erase "*_brk.c"
 	-@erase "icudata.*"
 	-@erase "*.obj"
+	-@erase "sent.brk"
+	-@erase "char.brk"
+	-@erase "line.brk"
+	-@erase "word.brk"
+	-@erase "line_th.brk"
+	-@erase "word_th.brk"
 	@cd $(TEST)
 	-@erase "*.res"
 	@cd $(ICUTOOLS)
@@ -184,7 +224,7 @@ CLEAN :
 	@$(ICUTOOLS)\makeconv\$(CFG)\makeconv $<
 #	@$(ICUTOOLS)\genccode\$(CFG)\genccode $(CNV_FILES)
 
-# Inference rule for creating collation files - 
+# Inference rule for creating collation files -
 # this should be integrated in genrb
 .txt.col::
 	@echo Making Collation files
@@ -203,7 +243,7 @@ unames.dat : UnicodeData-3.0.0.txt
 	@echo Creating data file for Unicode Names
 	@$(ICUTOOLS)\gennames\$(CFG)\gennames -v- -c- UnicodeData-3.0.0.txt
 
-unames_dat.c : unames.dat 
+unames_dat.c : unames.dat
 	@echo Creating C source file for Unicode Names
 	@$(ICUTOOLS)\genccode\$(CFG)\genccode $(ICUDATA)\$?
 
@@ -211,8 +251,8 @@ unames_dat.c : unames.dat
 cnvalias.dat : convrtrs.txt
 	@echo Creating data file for Converter Aliases
 	@$(ICUTOOLS)\gencnval\$(CFG)\gencnval -c-
-	
-cnvalias_dat.c : cnvalias.dat 
+
+cnvalias_dat.c : cnvalias.dat
 	@echo Creating C source file for Converter Aliases
 	@$(ICUTOOLS)\genccode\$(CFG)\genccode $(ICUDATA)\$?
 

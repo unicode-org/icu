@@ -1023,6 +1023,7 @@ AllocateTextBoundary();
 
     /* in addition to the other invariants, a line-break iterator should make sure that:
        it doesn't break around the non-breaking characters */
+    e = ubrk_open(UBRK_LINE, "en_US", work, u_strlen(work), &status);
     errorCount=0;
     status=U_ZERO_ERROR;
     u_strcpy(noBreak, CharsToUCharArray("\\u00a0\\u2007\\u2011\\ufeff"));
@@ -1035,9 +1036,8 @@ AllocateTextBoundary();
         for (j = 0; j < u_strlen(noBreak); j++) {
             work[1] = noBreak[j];
             for (k = 0; k < u_strlen(s); k++) {
-                work[2] = s[k];
-                
-                e = ubrk_open(UBRK_LINE, "en_US", work, u_strlen(work), &status);
+                work[2] = s[k];                
+                ubrk_setText(e, work, u_strlen(work), &status);
                 if(U_FAILURE(status)){
                 log_err("FAIL: Error in opening the word break Iterator in testLineInvaiants:\n %s\n", myErrorName(status));
                 return;
@@ -1530,7 +1530,8 @@ void doBreakInvariantTest(UBreakIteratorType type, UChar* testChars)
       
     u_strcpy(breaks, CharsToUCharArray("\r\n\\u2029\\u2028"));
     
-
+    tb = ubrk_open(type, "en_US", work, u_strlen(work), &status);
+    
     for (i = 0; i < u_strlen(breaks); i++) {
         work[1] = breaks[i];
         for (j = 0; j < u_strlen(testChars); j++) {
@@ -1545,7 +1546,7 @@ void doBreakInvariantTest(UBreakIteratorType type, UChar* testChars)
                     continue;
 
                 work[2] = testChars[k];
-                tb=ubrk_open(type, "en_US", work, u_strlen(work), &status);
+                ubrk_setText(tb, work, u_strlen(work), &status);
                 if(U_FAILURE(status)){
                     log_err("ERROR in opening the breakIterator in doVariant Function: %s\n", myErrorName(status));
                 }
@@ -1582,12 +1583,14 @@ void doOtherInvariantTest(UBreakIteratorType type , UChar* testChars)
     
     log_verbose("doOtherInvariantTest text of length: %d\n", u_strlen(testChars));
     
+    tb = ubrk_open(type, "en_us", work, u_strlen(work), &status);
+    
     /* a break should never occur between CR and LF */
     for (i = 0; i < u_strlen(testChars); i++) {
         work[0] = testChars[i];
         for (j = 0; j < u_strlen(testChars); j++) {
             work[3] = testChars[j];
-            tb=ubrk_open(type, "en_US", work, u_strlen(work), &status);
+            ubrk_setText(tb, work, u_strlen(work), &status);
                 if(U_FAILURE(status)){
                     log_err("ERROR in opening the breakIterator in doVariant Function: %s\n", myErrorName(status));
                     }
@@ -1601,7 +1604,7 @@ void doOtherInvariantTest(UBreakIteratorType type , UChar* testChars)
                 }
         }
     }
-    ubrk_close(tb);
+
     /* a break should never occur before a non-spacing mark, unless the preceding
        character is CR, LF, PS, or LS */
     u_uastrcpy(work,"aaaa");
@@ -1616,7 +1619,7 @@ void doOtherInvariantTest(UBreakIteratorType type , UChar* testChars)
                 (u_charType(c) != U_ENCLOSING_MARK))
                 continue;
             work[2] = c;
-            tb=ubrk_open(type, "en_US", work, u_strlen(work), &status);
+            ubrk_setText(tb, work, u_strlen(work), &status);
                 if(U_FAILURE(status)){
                     log_err("ERROR in opening the breakIterator in doOtherVariant Function %s\n", myErrorName(status));
                     }
@@ -1630,6 +1633,7 @@ void doOtherInvariantTest(UBreakIteratorType type , UChar* testChars)
                 }
         }
     }
+    ubrk_close(tb);
 }
 
 void sample(UBreakIterator* tb, UChar* text)
