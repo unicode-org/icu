@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/DigitList.java,v $ 
- * $Date: 2000/03/10 04:07:20 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/04/05 17:40:54 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -592,7 +592,6 @@ final class DigitList implements Cloneable {
         setBigDecimalDigits(source.toString(), maximumDigits, fixedPoint);
     }
 
-    //This has been removed pending addition of com.ibm.math package to ICU4J
     /*
      * Set the digit list to a representation of the given BigDecimal value.
      * [bnf]
@@ -602,12 +601,11 @@ final class DigitList implements Cloneable {
      * in source, the representation will be rounded.  Ignored if <= 0.
      * @param fixedPoint If true, then maximumDigits is the maximum
      * fractional digits to be converted.  If false, total digits.
-     *
+     */
     public final void set(com.ibm.math.BigDecimal source,
                           int maximumDigits, boolean fixedPoint) {
         setBigDecimalDigits(source.toString(), maximumDigits, fixedPoint);
     }
-    */
 
     /**
      * equality test between two digit lists.
