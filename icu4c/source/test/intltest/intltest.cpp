@@ -64,7 +64,7 @@ operator+(const UnicodeString& left,
     char buffer[64];    // nos changed from 10 to 64
     char danger = 'p';  // guard against overrunning the buffer (rtg)
 
-    sprintf(buffer, "%d", num);
+    sprintf(buffer, "%ld", num);
     assert(danger == 'p');
 
     return left + buffer;
@@ -77,7 +77,7 @@ operator+(const UnicodeString& left,
     char buffer[64];    // nos changed from 10 to 64
     char danger = 'p';  // guard against overrunning the buffer (rtg)
 
-    sprintf(buffer, "%u", num);
+    sprintf(buffer, "%lu", num);
     assert(danger == 'p');
 
     return left + buffer;
