@@ -55,7 +55,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
-# ADD LINK32 ..\..\lib\icuuc.lib /nologo /dll /machine:I386 /out:"..\..\bin\icule21.dll" /implib:"..\..\lib\icule.lib"
+# ADD LINK32 ..\..\lib\icuuc.lib /nologo /dll /machine:I386 /out:"..\..\bin\icule22.dll" /implib:"..\..\lib\icule.lib"
 # SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "layout - Win32 Debug"
@@ -82,7 +82,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 ..\..\lib\icuucd.lib /nologo /dll /debug /machine:I386 /out:"..\..\bin\icule21d.dll" /implib:"..\..\lib\iculed.lib" /pdbtype:sept
+# ADD LINK32 ..\..\lib\icuucd.lib /nologo /dll /debug /machine:I386 /out:"..\..\bin\icule22d.dll" /implib:"..\..\lib\iculed.lib" /pdbtype:sept
 # SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "layout - Win64 Release"
@@ -109,7 +109,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:IA64
-# ADD LINK32 ..\..\lib\icuuc.lib /nologo /dll /machine:IA64 /out:"..\..\bin\icule21.dll" /implib:"..\..\lib\icule.lib" /incremental:no
+# ADD LINK32 ..\..\lib\icuuc.lib /nologo /dll /machine:IA64 /out:"..\..\bin\icule22.dll" /implib:"..\..\lib\icule.lib" /incremental:no
 
 !ELSEIF  "$(CFG)" == "layout - Win64 Debug"
 
@@ -135,7 +135,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:IA64 /pdbtype:sept
-# ADD LINK32 ..\..\lib\icuucd.lib /nologo /dll /debug /machine:IA64 /out:"..\..\bin\icule21d.dll" /implib:"..\..\lib\iculed.lib" /pdbtype:sept /incremental:no
+# ADD LINK32 ..\..\lib\icuucd.lib /nologo /dll /debug /machine:IA64 /out:"..\..\bin\icule22d.dll" /implib:"..\..\lib\iculed.lib" /pdbtype:sept /incremental:no
 
 !ENDIF 
 
