@@ -31,7 +31,7 @@
     <h1>International Components for Unicode<br>
      ICU 2.2 ReadMe</h1>
 
-    <p>Version: 2002-Jul-25<br>
+    <p>Version: 2002-Aug-07<br>
      Copyright &copy; 1997-2002 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -991,31 +991,44 @@
 
     <h4>z/OS Batch (PDS) support</h4>
 
-    <p>By default, ICU builds its libraries into the HFS. However, there is a
-    z/OS specific switch to build some libraries into PDS files. The switch is
-    the environmental variable OS390BATCH, and if set, the following libraries
-    are built into PDS files: libicuuc<i>XX</i>.dll, libicudt<i>XX</i>e.dll,
-    libicudt<i>XX</i>e_stub.dll, and libtestdata.dll. Turning on OS390BATCH
-    does not turn off the normal HFS build, thus the HFS dlls will always be
-    created.</p>
+    <p>By default, ICU builds its libraries into the HFS. In addition, there is
+    a z/OS specific environment variable to build some libraries into the z/OS
+    native file system. This is useful, for example, when your application is
+    externalized via Job Control Language (JCL).</p>
 
-    <p>The names of the PDS files are determined by the value of the
-    environmental variables LOADMOD and LOADEXP. These variables must contain
-    the target PDS names whenever the OS390BATCH variable is set. LOADMOD is
-    the library (.dll) target dataset and LOADEXP is the side deck (.x) target
-    dataset.</p>
+    <p>The OS390BATCH environment variable enables batch support. When
+    OS390BATCH is set, the libicuuc<i>XX</i>.dll, libicudt<i>XX</i>e.dll, and
+    libicudt<i>XX</i>e_stub.dll binaries are built into the native file system.
+    Turning on OS390BATCH does not turn off the normal HFS build. This means
+    that the HFS dlls will always be created.</p>
+
+    <p>Two additional environment variables indicate the names of the z/OS data
+    sets to use. The LOADMOD environment variable identifies the name of the
+    data set that contains the dynamic link libraries (DLLs) and the LOADEXP
+    environment variable identifies the name of the data set that contains the
+    side decks, which are normally the files with the .x suffix in the HFS.</p>
+
+    <p>Here is an example of some environment variables that you can set prior
+    to building ICU:</p>
+<pre>
+<samp>OS390BATCH=1
+LOADMOD=<i>USER</i>.ICU.LOAD
+LOADEXP=<i>USER</i>.ICU.EXP</samp>
+</pre>
 
     <p>The PDS member names are as follows:</p>
 <pre>
 <samp>IXMI<i>XX</i>UC --&gt; libicuuc<i>XX</i>.dll
 IXMI<i>XX</i>DA --&gt; libicudt<i>XX</i>e.dll
-IXMI<i>XX</i>D1 --&gt; libicudt<i>XX</i>e_stub.dll <i>(When OS390_STUBDATA = 1)</i></samp>
+IXMI<i>XX</i>D1 --&gt; libicudt<i>XX</i>e_stub.dll <i>(When OS390_STUBDATA=1)</i></samp>
 </pre>
 
-    <p>Example PDS attributes are as follows:</p>
+    <p>You should point the LOADMOD environment variable at a partitioned data
+    set extended (PDS/E) and point the LOADEXP environment variable at a
+    partitioned data set (PDS). The PDS/E can be allocated with the following
+    attributes:</p>
 <pre>
 <samp>Data Set Name . . . : <i>USER</i>.ICU.LOAD
-General Data
 Management class. . : **None**
 Storage class . . . : BASE
 Volume serial . . . : TSO007
@@ -1025,12 +1038,14 @@ Organization  . . . : PO
 Record format . . . : U
 Record length . . . : 0
 Block size  . . . . : 32760
-1st extent cylinders: 40
-Secondary cylinders : 59
-Data set name type  : PDS
+1st extent cylinders: 1
+Secondary cylinders : 5
+Data set name type  : LIBRARY</samp>
+</pre>
 
-Data Set Name . . . : <i>USER</i>.ICU.EXP
-General Data
+    <p>The PDS can be allocated with the following attributes:</p>
+<pre>
+<samp>Data Set Name . . . : <i>USER</i>.ICU.EXP
 Management class. . : **None**
 Storage class . . . : BASE
 Volume serial . . . : TSO007
@@ -1103,7 +1118,7 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
             <br>
           </li>
           <!--li>Add QCXXN, to your build process library list. This results in
-                                                                                                                                                                                                                                                                                                            the resolution of CRTCPPMOD used by the icc compiler</li-->
+                                                                                                                                                                                                                                                                                                                                                                        the resolution of CRTCPPMOD used by the icc compiler</li-->
 
           <li>
             In order to get the tests to run correctly, the QUTCOFFSET needs to
