@@ -87,7 +87,7 @@ distclean-local: clean-local
 	$(RMV) Makefile $(DEPS)
 
 check-local: all-local
-	ICU_DATA=$(top_srcdir)/../data/ ./$(TARGET)
+	- ICU_DATA=$(top_srcdir)/../data/ ./$(TARGET)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
