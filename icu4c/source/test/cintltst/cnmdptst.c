@@ -479,7 +479,7 @@ static void TestCurrencyPreEuro(void)
         log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status) );
       }
       res=(UChar*)uprv_malloc(sizeof(UChar) * (strlen(result[i])+1) );
-      u_unescape(result[i],res,strlen(result[i])+1);
+      u_unescape(result[i],res,(int32_t)(strlen(result[i])+1));
       u_UCharsToChars(str,cStr,u_strlen(str));
       if (u_strcmp(str, res) != 0){
           log_err("FAIL: Expected %s Got: %s for locale: %s\n", result[i],cStr,locale[i]);
@@ -560,7 +560,7 @@ static void TestCurrencyObject(void)
         log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status) );
       }
       res=(UChar*)uprv_malloc(sizeof(UChar) * (strlen(result[i])+1) );
-      u_unescape(result[i],res,strlen(result[i])+1);
+      u_unescape(result[i],res, (int32_t)(strlen(result[i])+1));
       u_UCharsToChars(str,cStr,u_strlen(str));
       if (u_strcmp(str, res) != 0){
           log_err("FAIL: Expected %s Got: %s for locale: %s\n", result[i],cStr,locale[i]);

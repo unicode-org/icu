@@ -1473,7 +1473,7 @@ static void TestDiscontiguos() {
             if (e == 0) {
                 e = u_strchr(s, 0);
             }
-            ucol_setText(resultiter, s, e - s, &status);
+            ucol_setText(resultiter, s, (int32_t)(e - s), &status);
             ce = ucol_next(resultiter, &status);
             if (U_FAILURE(status)) {
                 log_err("Error manipulating collation iterator\n");
