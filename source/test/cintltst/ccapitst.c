@@ -174,7 +174,7 @@ static void TestConvert()
     log_verbose("Testing ucnv_countAvailable()...");
 
     testLong1=ucnv_countAvailable();
-    log_verbose("Number of available Codepages:    %d\n", testLong1);
+    log_info("Number of available Codepages: %d\n", testLong1);
 
     log_verbose("\n---Testing ucnv_getAvailableName..");  /*need to check this out */
 
