@@ -1,18 +1,18 @@
 /*
-*******************************************************************************
-*
-*   Copyright (C) 1999-2000, International Business Machines
-*   Corporation and others.  All Rights Reserved.
-*
-*******************************************************************************
-*   file name:  reader.c
-*   encoding:   US-ASCII
-*   tab size:   8 (not used)
-*   indentation:4
-*
-*   created on: 2000sep5
-*   created by: Vladimir Weinstein
-*/
+ *******************************************************************************
+ *
+ *   Copyright (C) 1999-2004, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *
+ *******************************************************************************
+ *   file name:  reader.c
+ *   encoding:   US-ASCII
+ *   tab size:   8 (not used)
+ *   indentation:4
+ *
+ *   created on: 2000sep5
+ *   created by: Vladimir Weinstein
+ */
 
 /*******************************************************************************
  * Derived from Madhu Katragadda gentest
