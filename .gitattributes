@@ -168,6 +168,7 @@ icu4j/src/com/ibm/icu/math/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/text/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/util/package.html svneol=native#text/html
 icu4j/src/com/ibm/math/package.html svneol=native#text/html
+icu4j/src/com/ibm/richtext/awtui/package.html svneol=native#text/html
 icu4j/src/com/ibm/test/bnf/package.html svneol=native#text/html
 icu4j/src/com/ibm/test/calendar/package.html svneol=native#text/html
 icu4j/src/com/ibm/test/compression/package.html svneol=native#text/html
