@@ -132,17 +132,6 @@ ures_findSubResource(const UResourceBundle *resB,
                      UResourceBundle *fillIn, UErrorCode *status);
 
 /**
- * Create a string enumerator, owned by the caller, of all locales located within 
- * the specified resource tree.
- * @param path path to the tree, such as (NULL) or U_ICUDATA or U_ICUDATA_COLL.  If NULL,
- * this call is similar to uloc_getAvailable().
- * @param status error code
- * @internal ICU 3.0
- */
-U_INTERNAL UEnumeration* U_EXPORT2
-ures_openAvailableLocales(const char *path, UErrorCode *status);
-
-/**
  * Returns a functionally equivalent locale (considering keywords) for the specified keyword.
  * @param result fillin for the equivalent locale
  * @param resultCapacity capacity of the fillin buffer
