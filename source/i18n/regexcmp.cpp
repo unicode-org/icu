@@ -955,6 +955,11 @@ UBool RegexCompile::doParseActions(EParseAction action)
         //     1.   stuff to be repeated  (already built)
         //     2.   jmp-sav 1
         //     3.   ...
+        //
+        //  Or, if the item to be repeated is simple
+        //     1.   Item to be repeated.
+        //     2.   LOOP_SR_I    set number  (assuming repeated item is a set ref)
+        //     3.   LOOP_C       stack location
         {
             int32_t  topLoc = blockTopLoc(FALSE);        // location of item #1
             int32_t  jmpOp  = URX_BUILD(URX_JMP_SAV, topLoc);
