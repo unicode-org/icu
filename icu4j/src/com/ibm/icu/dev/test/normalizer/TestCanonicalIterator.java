@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/TestCanonicalIterator.java,v $ 
- * $Date: 2002/03/14 22:34:40 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/03/14 22:43:03 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -86,7 +86,9 @@ public class TestCanonicalIterator extends TestFmwk {
         		);
         
         // check permute
-        expectEqual("Simple permutation ", "", collectionToString(CanonicalIterator.permute("ABC")), "ABC, ACB, BAC, BCA, CAB, CBA");
+        // NOTE: we use a TreeSet below to sort the output, which is not guaranteed to be sorted!
+        
+        expectEqual("Simple permutation ", "", collectionToString(new TreeSet(CanonicalIterator.permute("ABC"))), "ABC, ACB, BAC, BCA, CAB, CBA");
         
         // try samples
         SortedSet set = new TreeSet();
