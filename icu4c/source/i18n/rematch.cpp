@@ -119,7 +119,9 @@ RegexMatcher::~RegexMatcher() {
         fPatternOwned = NULL;
         fPattern = NULL;
     }
+    #if UCONFIG_NO_BREAK_ITERATION==0
     delete fWordBreakItr;
+    #endif
 }
 
 
@@ -679,7 +681,9 @@ RegexMatcher &RegexMatcher::reset(const UnicodeString &input) {
     fInput          = &input;
     reset();
     if (fWordBreakItr != NULL) {
+        #if UCONFIG_NO_BREAK_ITERATION==0
         fWordBreakItr->setText(input);
+        #endif
     }
     return *this;
 }
@@ -937,8 +941,9 @@ UBool RegexMatcher::isWordBoundary(int32_t pos) {
 //
 //--------------------------------------------------------------------------------
 UBool RegexMatcher::isUWordBoundary(int32_t pos) {
-    UErrorCode  status    = U_ZERO_ERROR;  
     UBool       returnVal = FALSE;
+#if UCONFIG_NO_BREAK_ITERATION==0
+    UErrorCode  status    = U_ZERO_ERROR;  
     
     // If we haven't yet created a break iterator for this matcher, do it now.
     if (fWordBreakItr == NULL) {
@@ -952,6 +957,7 @@ UBool RegexMatcher::isUWordBoundary(int32_t pos) {
     }
 
     returnVal = fWordBreakItr->isBoundary(pos);
+#endif
     return   returnVal;
 }
 

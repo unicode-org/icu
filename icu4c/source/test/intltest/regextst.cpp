@@ -244,6 +244,13 @@ void RegexTest::regex_find(const UnicodeString &pattern,
 
     callerPattern = RegexPattern::compile(pattern, bflags, pe, status);
     if (status != U_ZERO_ERROR) {
+        #if UCONFIG_NO_BREAK_ITERATION==1
+        // 'v' test flag means that the test pattern should not compile if ICU was configured
+        //     to not include break iteration.  RBBI is needed for Unicode word boundaries.
+        if (flags.indexOf((UChar)0x76) >= 0 /*'v'*/ && status == U_UNSUPPORTED_ERROR) {
+            goto cleanupAndReturn;
+        }
+        #endif
         errln("Line %d: error %s compiling pattern.", line, u_errorName(status));
         goto cleanupAndReturn;
     }
@@ -1288,7 +1295,7 @@ void RegexTest::Extended() {
 
     RegexMatcher    quotedStuffMat("\\s*([\\'\\\"/])(.+?)\\1", 0, status);
     RegexMatcher    commentMat    ("\\s*(#.*)?$", 0, status); 
-    RegexMatcher    flagsMat      ("\\s*([ixsmdtG]*)([:letter:]*)", 0, status);
+    RegexMatcher    flagsMat      ("\\s*([ixsmdtGv]*)([:letter:]*)", 0, status);
 
     RegexMatcher    lineMat("(.*?)\\r?\\n", testString, 0, status);
     UnicodeString   testPattern;   // The pattern for test from the test file.
