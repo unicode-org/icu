@@ -187,13 +187,16 @@ utf8_appendCharSafeBody(uint8_t *s, UTextOffset i, UTextOffset length, UChar32 c
     /* c>0x10ffff or not enough space, write an error value */
     length-=i;
     if(length>0) {
+        UTextOffset offset;
         if(length>3) {
             length=3;
         }
         s+=i;
+        offset=0;
         c=utf8_errorValue[length-1];
-        UTF8_APPEND_CHAR_SAFE(s, i, length, c);
-    }
+        UTF8_APPEND_CHAR_SAFE(s, offset, length, c);
+        i=i+offset;
+     }
     return i;
 }
 
